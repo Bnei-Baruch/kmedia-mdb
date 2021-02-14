@@ -3,14 +3,16 @@ import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import { noop } from '../../../helpers/utils';
 import { Accordion, Button, Flag, Header, Menu, Segment } from 'semantic-ui-react';
-import { ALL_LANGUAGES, AUDIO_BLOG_LANGUAGES, LANGUAGES } from '../../../helpers/consts';
+import { ALL_LANGUAGES, AUDIO_BLOG_LANGUAGES, LANGUAGES, POPULAR_LANGUAGES } from '../../../helpers/consts';
 
-const LanguageFilter = ({ t, value = null, namespace, onCancel = noop, onApply = noop }) => {
+const LanguageFilter = ({ t, value = null, namespace, onCancel = noop, onApply = noop, contentLanguage }) => {
   const onLanguageChange = (event, data) => onApply(data.name);
 
   const displayedLanguages = namespace === 'publications-audio-blog'
     ? AUDIO_BLOG_LANGUAGES
-    : ALL_LANGUAGES;
+    : POPULAR_LANGUAGES.includes(contentLanguage)
+      ? ALL_LANGUAGES.filter(l => !POPULAR_LANGUAGES.includes(l))
+      : ALL_LANGUAGES;
 
   return (
     <Segment.Group>
