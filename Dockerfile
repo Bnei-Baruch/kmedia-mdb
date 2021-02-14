@@ -17,7 +17,9 @@ ENV REACT_APP_ENV=production \
     REACT_APP_IMAGINARY_INTERNAL_HOST=nginx \
     REACT_APP_LOCALES_BACKEND=/ \
     REACT_APP_CDN_URL=${cdn_url} \
-    REACT_APP_PUBLIC_BASE=${public_base}
+    REACT_APP_PUBLIC_BASE=${public_base} \
+    REACT_APP_RECOMMENDED=https://kabbalahmedia.info/feed_api/recommend \
+    REACT_APP_CHRONICLES_BACKEND=https://chronicles.kli.one/
 
 COPY . .
 
@@ -44,7 +46,9 @@ ENV NODE_ENV=production \
     REACT_APP_IMAGINARY_URL=${public_base}imaginary/ \
     REACT_APP_IMAGINARY_INTERNAL_HOST=nginx \
     REACT_APP_CDN_URL=${cdn_url} \
-    REACT_APP_PUBLIC_BASE=${public_base}
+    REACT_APP_PUBLIC_BASE=${public_base} \
+    REACT_APP_RECOMMENDED=https://kabbalahmedia.info/feed_api/recommend \
+    REACT_APP_CHRONICLES_BACKEND=https://chronicles.kli.one/
 
 EXPOSE 3001
 ENTRYPOINT ["/app/misc/docker-entrypoint.sh"]
