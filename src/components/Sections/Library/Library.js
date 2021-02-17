@@ -58,7 +58,18 @@ const Library = ({ data, source, language = null, languages = [], langSelectorMo
   const { isMobileDevice }                                              = useContext(DeviceInfoContext);
   const { enableShareText: { isShareTextEnabled, setEnableShareText } } = useContext(SessionInfoContext);
 
-  const content = useSelector(state => selectors.getAsset(state.assets));
+  const doc2htmlById = useSelector(state => selectors.getDoc2htmlById(state.assets));
+
+  const getContent = () => {
+    if (!data?.[language])
+      return null;
+    const docId = data[language].docx || data[language].doc;
+    if (!docId)
+      return null;
+    return doc2htmlById[docId];
+  };
+
+  const content = getContent() || {};
 
   //use  early definition for use in useEffect
   const updateSelection = () => {

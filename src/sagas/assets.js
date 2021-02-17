@@ -32,8 +32,8 @@ export function* sourceIndex(action) {
       const result = /^gr-(.+)/.exec(id);
       id           = result[1];
     }
-    const { data } = yield call(Api.getAsset, `sources/${id}/index.json`);
-    yield put(actions.sourceIndexSuccess(action.payload, data));
+    const cu = yield call(Api.unit, { id });
+    yield put(actions.sourceIndexSuccess(action.payload, cuFilesToData(cu.data)));
   } catch (err) {
     yield put(actions.sourceIndexFailure(action.payload, err));
   }
@@ -78,6 +78,17 @@ function* watchFetchAsset() {
 
 function* watchFetchPerson() {
   yield takeLatest([types.FETCH_PERSON], fetchPerson);
+}
+
+function cuFilesToData(cu) {
+  return !cu.files ? {} : cu.files.reduce((acc, { language, name, id }) => {
+    if (!acc[language])
+      acc[language] = {};
+
+    const ext          = name.split('.').slice(-1);
+    acc[language][ext] = ext === 'pdf' ? name : id;
+    return acc;
+  }, {});
 }
 
 export const sagas = [
