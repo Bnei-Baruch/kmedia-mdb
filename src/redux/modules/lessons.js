@@ -144,8 +144,8 @@ const $$sortTree = (node) => {
   };
 };
 
-const getSeriesBySource = (state, mdbState, sourcesState) => {
-  const srcPathById = sources.getPathByID(sourcesState);
+const getSeriesBySource = state => {
+  const srcPathById = sources.getPathByID(state.sources);
 
   // sources might not have been loaded by now
   if (!srcPathById) {
@@ -153,8 +153,8 @@ const getSeriesBySource = (state, mdbState, sourcesState) => {
   }
 
   // construct the folder-like tree
-  const tree = state.seriesIDs.reduce((acc, val) => {
-    const series = mdb.getCollectionById(mdbState, val);
+  const tree = state.lessons.seriesIDs.reduce((acc, serId) => {
+    const series = mdb.getCollectionById(state.mdb, serId);
 
     // mdb might not have been loaded by now
     if (!series) {
@@ -174,10 +174,12 @@ const getSeriesBySource = (state, mdbState, sourcesState) => {
     // mkdir -p path[:]
     let dir = acc;
     for (let i = 0; i < path.length; i++) {
-      dir[path[i].id] = dir[path[i].id] || {};
-      dir             = dir[path[i].id];
+      const { id, name } = path[i]
 
-      dir.name = path[i].name;
+      dir[id] = dir[id] || {};
+      dir = dir[id];
+
+      dir.name = name;
     }
 
     // mv series path.items

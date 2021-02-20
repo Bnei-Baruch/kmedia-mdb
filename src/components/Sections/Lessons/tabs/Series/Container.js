@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
+import isEqual from 'react-fast-compare';
 import { Container, Divider, Header, List } from 'semantic-ui-react';
 
 import { canonicalLink } from '../../../../../helpers/links';
@@ -32,14 +33,15 @@ const renderTree = (nodes, level) => (
 });
 
 const SeriesContainer = ({ t }) => {
-  const bySource = useSelector(state => selectors.getSeriesBySource(state.lessons, state.mdb, state.sources)) || [];
+  const bySource = useSelector(state => selectors.getSeriesBySource(state), isEqual) || [];
   const language = useSelector(state => settings.getLanguage(state.settings));
   const wip      = useSelector(state => selectors.getWip(state.lessons).series);
   const err      = useSelector(state => selectors.getErrors(state.lessons).series);
+  
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (isEmpty(bySource) && !(wip || err)) {
+    if (isEmpty(bySource) && !wip && !err) {
       dispatch(actions.fetchAllSeries());
     }
   }, [bySource, wip, err, language, dispatch]);
@@ -53,10 +55,10 @@ const SeriesContainer = ({ t }) => {
   );
 
   return (
-    <div>
+    <>
       <Divider fitted />
       {content}
-    </div>
+    </>
   );
 };
 
