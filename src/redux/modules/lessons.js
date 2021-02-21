@@ -119,28 +119,32 @@ const getWip            = state => state.wip;
 const getErrors         = state => state.errors;
 const getLecturesByType = state => state.lecturesByType;
 
-const $$sortTree = (node) => {
+const $$sortTree = node => {
   if (isEmpty(node)) {
     return [];
   }
 
+  const { name, children, id, parent_id } = node;
+
   // leaf nodes has array of items
   // we sort them by start_date
-  if (Array.isArray(node.items)) {
-    node.items.sort((a, b) => strCmp(a.start_date, b.start_date));
+  if (Array.isArray(children)) {
+    children.sort((a, b) => strCmp(a.start_date, b.start_date));
     return node;
   }
 
   // non-leaf nodes are reshaped to {name, items}
   // instead of {name, item, item, item...}
   const l = Object.keys(node)
-    .filter(x => x !== 'name')
+    .filter(x => x !== 'name' && x !== 'id' && x !== 'parent_id')
     .map(x => node[x]);
   l.sort(x => x.name);
 
   return {
-    name: node.name,
-    items: l.map($$sortTree),
+    id,
+    parent_id,
+    name,
+    children: l.map($$sortTree),
   };
 };
 
@@ -174,22 +178,24 @@ const getSeriesBySource = state => {
     // mkdir -p path[:]
     let dir = acc;
     for (let i = 0; i < path.length; i++) {
-      const { id, name } = path[i]
+      const { id, name, parent_id } = path[i]
 
       dir[id] = dir[id] || {};
       dir = dir[id];
 
       dir.name = name;
+      dir.id = id;
+      dir.parent_id = parent_id;
     }
 
     // mv series path.items
-    dir.items = dir.items || [];
-    dir.items.push(series);
+    dir.children = dir.children || [];
+    dir.children.push(series);
 
     return acc;
   }, {});
 
-  return $$sortTree(tree).items;
+  return $$sortTree(tree).children;
 };
 
 export const selectors = {
