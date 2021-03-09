@@ -34,6 +34,9 @@ import ShareFormDesktop from './Share/ShareFormDesktop';
 import { isLanguageRtl } from '../../helpers/i18n-utils';
 import { PlayerStartEnum } from './playerStartEnum';
 import { DeviceInfoContext } from '../../helpers/app-contexts';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { actions } from '../../redux/modules/player';
 
 const DEFAULT_PLAYER_VOLUME       = 0.8;
 const PLAYER_VOLUME_STORAGE_KEY   = '@@kmedia_player_volume';
@@ -77,6 +80,9 @@ class AVPlayer extends Component {
 
     onMediaEditModeChange: PropTypes.func.isRequired,
     onDropdownOpenedChange: PropTypes.func.isRequired,
+
+    // Player actions.
+    actionPlayerPlay: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -363,13 +369,15 @@ class AVPlayer extends Component {
   }
 
   onPlay = () => {
-    const { onPlay, item } = this.props;
+    const { onPlay, item, actionPlayerPlay } = this.props;
     if (onPlay) {
       onPlay();
     }
-    if (item?.unit?.id) {
+    const unitId = item?.unit?.id;
+    if (unitId) {
       const {unit, item: { mediaType }, selectedLanguage, uiLanguage } = this.props;
       this.props.chronicles.append('player-play', this.buildAppendData(item, this.state.src, this.props.media));
+      actionPlayerPlay(unitId);
     }
   };
 
@@ -879,4 +887,10 @@ class AVPlayer extends Component {
   }
 }
 
-export default withNamespaces()(withMediaProps(withRouter(AVPlayer)));
+const mapDispatch = dispatch => (
+  bindActionCreators({
+    actionPlayerPlay: actions.playerPlay,
+  }, dispatch)
+);
+
+export default withNamespaces()(withMediaProps(withRouter(connect(() => ({}), mapDispatch)(AVPlayer))));
