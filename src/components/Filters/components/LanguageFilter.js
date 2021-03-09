@@ -10,9 +10,7 @@ const LanguageFilter = ({ t, value = null, namespace, onCancel = noop, onApply =
 
   const displayedLanguages = namespace === 'publications-audio-blog'
     ? AUDIO_BLOG_LANGUAGES
-    : POPULAR_LANGUAGES.includes(contentLanguage)
-      ? ALL_LANGUAGES.filter(l => !POPULAR_LANGUAGES.includes(l))
-      : ALL_LANGUAGES;
+    : ALL_LANGUAGES.filter(l => !POPULAR_LANGUAGES.includes(l));
 
   return (
     <Segment.Group>
