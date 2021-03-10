@@ -17,9 +17,6 @@ import FiltersHydrator from './FiltersHydrator';
 import { DeviceInfoContext } from '../../helpers/app-contexts';
 import { POPULAR_LANGUAGES } from '../../helpers/consts';
 
-const filterMediaLanguageFilter = (filter, language) =>
-  filter.name !== 'language-filter' || !POPULAR_LANGUAGES.includes(language);
-
 class Filters extends Component {
   static contextType = DeviceInfoContext;
 
@@ -89,7 +86,7 @@ class Filters extends Component {
     const { activeFilter }                                                  = this.state;
     const { isMobileDevice }                                                = this.context;
 
-    return filters.filter(x => filterMediaLanguageFilter(x, contentLanguage)).map(item => {
+    return filters.map(item => {
       const { component: FilterComponent, name } = item;
 
       const isActive = name === activeFilter;
@@ -101,7 +98,7 @@ class Filters extends Component {
         : t('filters.all');
 
       const len = ((name === 'topics-filter' || name === 'sources-filter') && value) ? label.length : 0;
-      const cn = classNames('filter-popup', { mobile: isMobileDevice });
+      const cn  = classNames('filter-popup', { mobile: isMobileDevice });
 
       return (
         <Popup
@@ -164,6 +161,7 @@ class Filters extends Component {
               onCancel={this.handlePopupClose}
               onApply={x => this.handleApply(name, x)}
               language={language}
+              contentLanguage={contentLanguage}
             />
           </Popup.Content>
         </Popup>
@@ -174,7 +172,7 @@ class Filters extends Component {
   render() {
     const { namespace, onHydrated, t, rightItems, language } = this.props;
 
-    const langDir = getLanguageDirection(language);
+    const langDir    = getLanguageDirection(language);
     const popupStyle = {
       direction: langDir,
     };
