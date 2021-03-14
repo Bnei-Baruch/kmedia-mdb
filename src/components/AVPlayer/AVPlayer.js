@@ -360,7 +360,7 @@ class AVPlayer extends Component {
       current_time: media.currentTime,
       duration: media.duration,
     };
-  }
+  };
 
   onPlay = () => {
     const { onPlay, item } = this.props;
@@ -368,13 +368,13 @@ class AVPlayer extends Component {
       onPlay();
     }
     if (item?.unit?.id) {
-      const {unit, item: { mediaType }, selectedLanguage, uiLanguage } = this.props;
+      const { unit, item: { mediaType }, selectedLanguage, uiLanguage } = this.props;
       this.props.chronicles.append('player-play', this.buildAppendData(item, this.state.src, this.props.media));
     }
   };
 
   onPause = (e) => {
-    const { browserName }       = this.state;
+    const { browserName }             = this.state;
     const { onPause, onFinish, item } = this.props;
     // when we're close to the end regard this as finished
     if (browserName !== 'IE'
@@ -858,6 +858,7 @@ class AVPlayer extends Component {
               onSelect={this.onLanguageChange}
               onDropdownOpenedChange={onDropdownOpenedChange}
               t={t}
+              cuId={item.unit?.id}
             />
             {!isEditMode && <AVEditSlice onActivateSlice={() => this.setSliceMode(PLAYER_MODE.SLICE_EDIT)} />}
             {isEditMode && <AVEditSlice onActivateSlice={() => this.setSliceMode(PLAYER_MODE.NORMAL)} />}

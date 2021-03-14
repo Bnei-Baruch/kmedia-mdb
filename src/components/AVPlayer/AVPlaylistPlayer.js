@@ -12,9 +12,10 @@ import AVMobileCheck from './AVMobileCheck';
 import { getQuery } from '../../helpers/url';
 import { DeviceInfoContext } from '../../helpers/app-contexts';
 
-const AVPlaylistPlayer = ({ items, selected, language, onSelectedChange, onLanguageChange, onSwitchAV } ) => {
+const AVPlaylistPlayer = ({ items, selected, onSelectedChange, onLanguageChange, onSwitchAV } ) => {
   const { undefinedDevice } = useContext(DeviceInfoContext);
   const uiLanguage = useSelector(state => settings.getLanguage(state.settings));
+  const contentLanguage = useSelector(state => settings.getContentLanguage(state.settings));
 
   const location = useLocation();
   const query = getQuery(location);
@@ -76,7 +77,7 @@ const AVPlaylistPlayer = ({ items, selected, language, onSelectedChange, onLangu
             languages={currentItem.availableLanguages}
             uiLanguage={uiLanguage}
             selectedLanguage={currentItem.language}
-            requestedLanguage={language}
+            requestedLanguage={contentLanguage}
             onLanguageChange={onLanguageChange}
             // Playlist props
             showNextPrev
@@ -99,7 +100,6 @@ const AVPlaylistPlayer = ({ items, selected, language, onSelectedChange, onLangu
 AVPlaylistPlayer.propTypes   = {
   items: PropTypes.arrayOf(shapes.VideoItem).isRequired,
   selected: PropTypes.number.isRequired,
-  language: PropTypes.string.isRequired,
   onSelectedChange: PropTypes.func.isRequired,
   onLanguageChange: PropTypes.func.isRequired,
   onSwitchAV: PropTypes.func.isRequired,
