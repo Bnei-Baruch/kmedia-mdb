@@ -76,6 +76,7 @@ AVLanguage.propTypes = {
 const areEqual = (prevProps, nextProps) =>
   prevProps.selectedLanguage === nextProps.selectedLanguage
   && prevProps.requestedLanguage === nextProps.requestedLanguage
-  && prevProps.uiLanguage === nextProps.uiLanguage;
+  && prevProps.uiLanguage === nextProps.uiLanguage
+  && prevProps.languages === nextProps.languages;
 
 export default React.memo(AVLanguage, areEqual);

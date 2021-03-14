@@ -89,13 +89,13 @@ class Transcription extends Component {
     if (newLanguage !== undefined && state.language && state.language !== newLanguage) {
       newLanguage = state.language;
     }
-    if (state.selectedFile) {
+    if (state.selectedFile && unit.id === state.unit_id) {
       return { selectedFile: state.selectedFile, languages, language: newLanguage, textFiles };
     }
 
     const fileFromLocation = textFiles.find(f => f.id === selectedFileId);
     const selectedFile     = fileFromLocation ? fileFromLocation : Transcription.selectFile(textFiles, newLanguage);
-    return { selectedFile, languages, language: newLanguage, textFiles };
+    return { selectedFile, languages, language: newLanguage, textFiles, unit_id: unit.id };
   }
 
   shouldComponentUpdate(nextProps, nextState) {
