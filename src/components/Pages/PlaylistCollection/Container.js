@@ -10,7 +10,7 @@ import { actions, selectors } from '../../../redux/modules/mdb';
 import WipErr from '../../shared/WipErr/WipErr';
 import Page from './Page';
 
-const PlaylistCollectionContainer = ({ cId, t }) => {
+const PlaylistCollectionContainer = ({ cId, t, ap }) => {
   const collection = useSelector(state => selectors.getDenormCollectionWUnits(state.mdb, cId));
   const wipMap = useSelector(state => selectors.getWip(state.mdb));
   const errorMap = useSelector(state => selectors.getErrors(state.mdb));
@@ -117,6 +117,7 @@ const PlaylistCollectionContainer = ({ cId, t }) => {
 
   return (
     <Page
+      ap={ap}
       collection={collection}
       nextLink={nextLink}
       prevLink={prevLink}

@@ -201,10 +201,10 @@ const setLanguageInQuery = (history, language) =>
     language
   }));
 
-const getActivePartFromQuery = (location) => {
+const getActivePartFromQuery = (location, def= 0) => {
   const q = getQuery(location);
-  const p = q.ap ? parseInt(q.ap, 10) : 0;
-  return Number.isNaN(p) || p < 0 ? 0 : p;
+  const p = q.ap ? parseInt(q.ap, 10) : def;
+  return Number.isNaN(p) || p < 0 ? def : p;
 };
 
 const setActivePartInQuery = (history, ap) =>
