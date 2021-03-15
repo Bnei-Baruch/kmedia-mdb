@@ -125,10 +125,10 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
 
   const computerWidth = isMobileDevice ? 16 : 10;
 
-  return !embed ? (
+  return !embed ?
+    (
       <Grid padded={!isMobileDevice} className="avbox">
-        <Grid.Column mobile={16} tablet={computerWidth} computer={computerWidth}
-                     className={classNames({ 'is-fitted': isMobileDevice })}>
+        <Grid.Column mobile={16} tablet={computerWidth} computer={computerWidth} className={classNames({ 'is-fitted': isMobileDevice })}>
           <AVPlaylistPlayer
             items={items}
             selected={selected}
