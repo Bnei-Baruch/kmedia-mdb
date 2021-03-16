@@ -20,6 +20,7 @@ import AVPlaylistPlayer from '../../AVPlayer/AVPlaylistPlayer';
 
 import { usePrevious } from '../../../helpers/utils';
 import { ClientChroniclesContext } from '../../../helpers/app-contexts';
+import { COLLECTION_LESSONS_TYPE } from '../../../helpers/consts';
 
 const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, ap = 0 }) => {
   const location           = useLocation();
@@ -39,7 +40,13 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
 
   const handleSelectedChange = useCallback(nSelected => {
     if (nSelected !== selected) {
-      playerHelper.setActivePartInQuery(history, nSelected);
+      const isLesson = COLLECTION_LESSONS_TYPE.includes(collection.content_type);
+      if (isLesson && playlist) {
+        const x = playlist.items[nSelected];
+        history.push(x.shareUrl);
+      }
+
+      if (!isLesson) playerHelper.setActivePartInQuery(history, nSelected);
       setSelected(nSelected);
     }
   }, [history, selected]);
@@ -84,7 +91,13 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
   }, [collection, contentLanguage, location, playlist?.language, uiLanguage]);
 
   useEffect(() => {
-    let nSelected = playerHelper.getActivePartFromQuery(location, null) ?? ap;
+    let nSelected;
+    if (COLLECTION_LESSONS_TYPE.includes(collection.content_type)) {
+      nSelected = selected;
+    } else {
+      nSelected = playerHelper.getActivePartFromQuery(location, null);
+    }
+    nSelected = nSelected ?? ap;
 
     if (nSelected >= playlist?.items.length) {
       nSelected = 0;
