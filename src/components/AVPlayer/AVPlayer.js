@@ -203,10 +203,10 @@ class AVPlayer extends Component {
   }
 
   componentDidUpdate() {
-    const { item } = this.props;
+    const { item, chronicles } = this.props;
     if (!isEqual(this.state.item, item)) {
       if (this.isUnitExistAndPlaying()) {
-        this.props.chronicles.append('player-stop', this.buildAppendData(this.props.item, this.state.src, this.props.media));
+        chronicles.append('player-stop', this.buildAppendData());
       }
       this.setState({
         error: false,
@@ -219,13 +219,14 @@ class AVPlayer extends Component {
   }
 
   componentWillUnmount() {
+    const { chronicles } = this.props;
     if (this.autohideTimeoutId) {
       clearTimeout(this.autohideTimeoutId);
       this.autohideTimeoutId = null;
     }
     window.removeEventListener('message', this.receiveMessageFunc, false);
     if (this.isUnitExistAndPlaying()) {
-      this.props.chronicles.append('player-stop', this.buildAppendData(this.props.item, this.state.src, this.props.media));
+      chronicles.append('player-stop', this.buildAppendData());
     }
   }
 
@@ -359,31 +360,36 @@ class AVPlayer extends Component {
     }
   };
 
-  buildAppendData = (item, src, media) => {
+  buildAppendData = () => {
+    const { autoPlay, item, media } = this.props;
+    const { src } = this.state;
     return {
-      unit_uid: item.unit.id,
+      unit_uid: item?.unit?.id,
       file_src: src,
       current_time: media.currentTime,
       duration: media.duration,
+      auto_play: autoPlay,
+      // media.isMuted is actually the state before the action, so we call it was_muted.
+      // This is specifically relevant for the mute-unmute action.
+      was_muted: media.isMuted,
     };
   }
 
   onPlay = () => {
-    const { onPlay, item, actionPlayerPlay } = this.props;
+    const { chronicles, onPlay, item, actionPlayerPlay } = this.props;
     if (onPlay) {
       onPlay();
     }
     const unitId = item?.unit?.id;
     if (unitId) {
-      const {unit, item: { mediaType }, selectedLanguage, uiLanguage } = this.props;
-      this.props.chronicles.append('player-play', this.buildAppendData(item, this.state.src, this.props.media));
+      chronicles.append('player-play', this.buildAppendData());
       actionPlayerPlay(unitId);
     }
   };
 
   onPause = (e) => {
-    const { browserName }       = this.state;
-    const { onPause, onFinish, item } = this.props;
+    const { browserName } = this.state;
+    const { onPause, onFinish, item, chronicles } = this.props;
     // when we're close to the end regard this as finished
     if (browserName !== 'IE'
       && Math.abs(e.currentTime - e.duration) < 0.1 && onFinish) {
@@ -393,7 +399,7 @@ class AVPlayer extends Component {
       onPause();
     }
     if (item?.unit?.id) {
-      this.props.chronicles.append('player-stop', this.buildAppendData(item, this.state.src, this.props.media));
+      chronicles.append('player-stop', this.buildAppendData());
     }
   };
 
@@ -414,7 +420,11 @@ class AVPlayer extends Component {
   };
 
   onMuteUnmute = () => {
+    const { chronicles } = this.props;
     this.removeUnMuteButton();
+    if (this.isUnitExistAndPlaying()) {
+      chronicles.append('mute-unmute', this.buildAppendData());
+    }
   };
 
   static getSliceModeState(media, mode, properties = {}, state) {
