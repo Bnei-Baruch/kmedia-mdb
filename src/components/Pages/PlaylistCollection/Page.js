@@ -22,7 +22,7 @@ import { usePrevious } from '../../../helpers/utils';
 import { ClientChroniclesContext } from '../../../helpers/app-contexts';
 import { COLLECTION_LESSONS_TYPE } from '../../../helpers/consts';
 
-const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, ap = 0 }) => {
+const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, cuId }) => {
   const location           = useLocation();
   const history            = useHistory();
   const { isMobileDevice } = useContext(DeviceInfoContext);
@@ -36,18 +36,17 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
   const [selected, setSelected] = useState();
   const [playlist, setPlaylist] = useState(null);
 
-  const prev = usePrevious({ unit, collection });
+  const prev     = usePrevious({ unit, collection });
+  const isLesson = COLLECTION_LESSONS_TYPE.includes(collection.content_type);
 
   const handleSelectedChange = useCallback(nSelected => {
     if (nSelected !== selected) {
-      const isLesson = COLLECTION_LESSONS_TYPE.includes(collection.content_type);
-      if (isLesson && playlist) {
-        const x = playlist.items[nSelected];
-        history.push(x.shareUrl);
+      if (isLesson) {
+        history.push(playlist.items[nSelected].shareUrl);
+      } else {
+        playerHelper.setActivePartInQuery(history, nSelected);
+        setSelected(nSelected);
       }
-
-      if (!isLesson) playerHelper.setActivePartInQuery(history, nSelected);
-      setSelected(nSelected);
     }
   }, [history, selected]);
 
@@ -64,6 +63,15 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
       chronicles.append('collection-unit-unselected', { unit_uid: unit.id });
     }
   }, [unit, prev?.unit]);
+
+  useEffect(() => {
+    if (playlist && isLesson) {
+      const nIndex = playlist.items.findIndex(i => i.unit.id === cuId);
+      if (nIndex !== -1) {
+        setSelected(nIndex);
+      }
+    }
+  }, [cuId, playlist]);
 
   const handleLanguageChange = useCallback((e, language) => {
     playerHelper.setLanguageInQuery(history, language);
@@ -91,19 +99,14 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
   }, [collection, contentLanguage, location, playlist?.language, uiLanguage]);
 
   useEffect(() => {
-    let nSelected;
-    if (COLLECTION_LESSONS_TYPE.includes(collection.content_type)) {
-      nSelected = selected;
-    } else {
-      nSelected = playerHelper.getActivePartFromQuery(location, null);
-    }
-    nSelected = nSelected ?? ap;
+    if (!isLesson) {
+      let nSelected = playerHelper.getActivePartFromQuery(location);
 
-    if (nSelected >= playlist?.items.length) {
-      nSelected = 0;
+      if (nSelected >= playlist?.items.length) {
+        nSelected = 0;
+      }
+      handleSelectedChange(nSelected);
     }
-
-    handleSelectedChange(nSelected);
   }, [handleSelectedChange, location, playlist]);
 
   useEffect(() => {
@@ -197,6 +200,7 @@ const isEqualLink = (link1, link2) =>
 
 const areEqual = (prevProps, nextProps) =>
   isEqual(prevProps.collection, nextProps.collection)
+  && (prevProps.cuId === nextProps.cuId)
   && isEqualLink(prevProps.prevLink, nextProps.prevLink)
   && isEqualLink(prevProps.nextLink, nextProps.nextLink);
 

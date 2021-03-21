@@ -46,8 +46,7 @@ const LessonPage = ({ t }) => {
   if (!c)
     return <UnitPage section="lessons" />;
 
-  const ap = c.cuIDs.findIndex(u => u === unit.id);
-  return <PlaylistCollectionContainer cId={'Jca62Dmy'} ap={ap} />;
+  return <PlaylistCollectionContainer cId={c.id} cuId={id} />;
 };
 
 export default withNamespaces()(LessonPage);

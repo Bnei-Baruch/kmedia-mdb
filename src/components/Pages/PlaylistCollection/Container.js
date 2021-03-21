@@ -10,7 +10,7 @@ import { actions, selectors } from '../../../redux/modules/mdb';
 import WipErr from '../../shared/WipErr/WipErr';
 import Page from './Page';
 
-const PlaylistCollectionContainer = ({ cId, t, ap }) => {
+const PlaylistCollectionContainer = ({ cId, t, cuId }) => {
   const collection = useSelector(state => selectors.getDenormCollectionWUnits(state.mdb, cId));
   const wipMap = useSelector(state => selectors.getWip(state.mdb));
   const errorMap = useSelector(state => selectors.getErrors(state.mdb));
@@ -117,7 +117,7 @@ const PlaylistCollectionContainer = ({ cId, t, ap }) => {
 
   return (
     <Page
-      ap={ap}
+      cuId={cuId}
       collection={collection}
       nextLink={nextLink}
       prevLink={prevLink}
@@ -127,10 +127,11 @@ const PlaylistCollectionContainer = ({ cId, t, ap }) => {
 
 PlaylistCollectionContainer.propTypes = {
   cId: PropTypes.string.isRequired,
+  cuId: PropTypes.string,
   t: PropTypes.func.isRequired
 };
 
 const areEqual = (prevProps, nextProps) =>
-  prevProps.cId === nextProps.cId;
+  (prevProps.cId === nextProps.cId) && (prevProps.cuId === nextProps.cuId);
 
 export default React.memo(withNamespaces()(PlaylistCollectionContainer), areEqual);
