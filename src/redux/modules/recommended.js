@@ -1,5 +1,7 @@
 import { createAction, handleActions } from 'redux-actions';
 import { types as ssr } from './ssr';
+import { types as player } from './player';
+import { types as chronicles } from './chronicles';
 
 const FETCH_RECOMMENDED           = 'FETCH_RECOMMENDED';
 const FETCH_RECOMMENDED_SUCCESS   = 'FETCH_RECOMMENDED_SUCCESS';
@@ -27,6 +29,7 @@ const initialState = {
   wip: false,
   err: null,
   recommendedItems: [],
+  skipUids: [],
 };
 
 const onSuccess = (state, action) => {
@@ -51,20 +54,35 @@ const onSSRPrepare = state => {
   }
 };
 
+const onPlayerPlay = (state, action) => {
+  const unitUid = action.payload;
+  if (unitUid && !state.skipUids.includes(unitUid)) {
+    state.skipUids.push(unitUid);
+  }
+}
+
+const onUserInactive = (state) => {
+  state.skipUids.length = 0;
+}
+
 export const reducer = handleActions({
   [ssr.PREPARE]: onSSRPrepare,
+  [player.PLAYER_PLAY]: onPlayerPlay,
+  [chronicles.USER_INACTIVE]: onUserInactive,
 
   [FETCH_RECOMMENDED]: state => { state.wip = true; },
   [FETCH_RECOMMENDED_SUCCESS]: onSuccess,
   [FETCH_RECOMMENDED_FAILURE]: onFailure,
 }, initialState);
 
-const getWip          = state => state.wip;
-const getError        = state => state.err;
+const getWip              = state => state.wip;
+const getError            = state => state.err;
 const getRecommendedItems = state => state.recommendedItems;
+const getSkipUids         = state => state.skipUids;
 
 export const selectors = {
   getWip,
   getError,
-  getRecommendedItems
+  getRecommendedItems,
+  getSkipUids,
 }

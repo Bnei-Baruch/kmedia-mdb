@@ -42,7 +42,7 @@ const language = i18nData.initialLanguage ?? DEFAULT_LANGUAGE;
 moment.locale(language === LANG_UKRAINIAN ? 'uk' : language);
 
 const deviceInfo = new UAParser().getResult();
-const clientChronicles = new ClientChronicles(history);
+const clientChronicles = new ClientChronicles(history, store);
 
 ReactDOM.hydrate(
   <React.StrictMode>

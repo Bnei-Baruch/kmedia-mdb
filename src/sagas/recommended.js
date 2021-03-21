@@ -2,16 +2,17 @@ import { all, call, put, takeLatest, select } from 'redux-saga/effects';
 
 import Api from '../helpers/Api';
 import {IsCollectionContentType} from '../helpers/consts';
-import { actions, types } from '../redux/modules/recommended';
+import { actions, types, selectors as recommended } from '../redux/modules/recommended';
 import { actions as mdbActions, selectors as mdbSelectors } from '../redux/modules/mdb';
 import { selectors as settings } from '../redux/modules/settings';
 
 
-export function* fetchRecommended(action){
+export function* fetchRecommended(action) {
   const id = action.payload;
   try {
     const language = yield select(state => settings.getContentLanguage(state.settings));
-    const { data } = yield call(Api.recommended, {uid: id, languages: [language]});
+    const skipUids = yield select(state => recommended.getSkipUids(state.recommended));
+    const { data } = yield call(Api.recommended, {uid: id, languages: [language], skipUids});
     const recommendedItems = data.feed;
 
     if (Array.isArray(recommendedItems) && recommendedItems.length > 0){
