@@ -6,16 +6,18 @@ import { Dropdown } from 'semantic-ui-react';
 import { LANG_HEBREW, LANGUAGE_OPTIONS } from '../../helpers/consts';
 import TimedPopup from '../shared/TimedPopup';
 
-const AVLanguage = ({
-                      languages = [],
-                      selectedLanguage = LANG_HEBREW,
-                      requestedLanguage = LANG_HEBREW,
-                      uiLanguage = LANG_HEBREW,
-                      onSelect = noop,
-                      onDropdownOpenedChange,
-                      t,
-                      cuId,
-                    }) => {
+const AVLanguage = (
+  {
+    languages = [],
+    selectedLanguage = LANG_HEBREW,
+    requestedLanguage = LANG_HEBREW,
+    uiLanguage = LANG_HEBREW,
+    onSelect = noop,
+    onDropdownOpenedChange,
+    t,
+    cuId,
+  }
+) => {
   const [lastRequestedLanguage, setLastRequestedLanguage] = useState();
   const [openPopup, setOpenPopup]                         = useState(false);
   const [langSelectRef, setLangSelectRef]                 = useState();
