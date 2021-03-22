@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { withNamespaces } from 'react-i18next';
 import WipErr from '../../../shared/WipErr/WipErr';
 import UnitPage from '../../../Pages/Unit/Page';
-import { COLLECTION_LESSONS_TYPE } from '../../../../helpers/consts';
+import { CT_DAILY_LESSON } from '../../../../helpers/consts';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { actions, selectors } from '../../../../redux/modules/mdb';
@@ -37,7 +37,7 @@ const LessonPage = ({ t }) => {
 
   let c;
   for (const _c in unit.collections) {
-    if (COLLECTION_LESSONS_TYPE.includes(unit.collections[_c].content_type)) {
+    if (unit.collections[_c].content_type === CT_DAILY_LESSON) {
       c = unit.collections[_c];
       break;
     }

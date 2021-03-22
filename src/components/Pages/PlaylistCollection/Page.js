@@ -20,7 +20,7 @@ import AVPlaylistPlayer from '../../AVPlayer/AVPlaylistPlayer';
 
 import { usePrevious } from '../../../helpers/utils';
 import { ClientChroniclesContext } from '../../../helpers/app-contexts';
-import { COLLECTION_LESSONS_TYPE } from '../../../helpers/consts';
+import { CT_DAILY_LESSON } from '../../../helpers/consts';
 
 const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, cuId }) => {
   const location           = useLocation();
@@ -39,18 +39,18 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
   const prev     = usePrevious({ unit, collection });
   //check if come from lesson CU rotate
   const { path } = useRouteMatch();
-  const isLesson = COLLECTION_LESSONS_TYPE.includes(collection.content_type) && (path.indexOf('lessons/cu/:id') !== -1);
+  const isLesson = collection.content_type === CT_DAILY_LESSON && (path.indexOf('lessons/cu/:id') !== -1);
 
   const handleSelectedChange = useCallback(nSelected => {
     if (nSelected !== selected) {
       if (isLesson) {
-        history.push(playlist.items[nSelected].shareUrl);
+        playlist.items[nSelected] && history.push(playlist.items[nSelected].shareUrl);
       } else {
         playerHelper.setActivePartInQuery(history, nSelected);
         setSelected(nSelected);
       }
     }
-  }, [history, selected]);
+  }, [history, selected, collection]);
 
   useEffect(() => {
     if (prev?.unit?.id !== unit?.id) {
@@ -65,15 +65,6 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
       chronicles.append('collection-unit-unselected', { unit_uid: unit.id });
     }
   }, [unit, prev?.unit]);
-
-  useEffect(() => {
-    if (playlist && isLesson) {
-      const nIndex = playlist.items.findIndex(i => i.unit.id === cuId);
-      if (nIndex !== -1) {
-        setSelected(nIndex);
-      }
-    }
-  }, [cuId, playlist]);
 
   const handleLanguageChange = useCallback((e, language) => {
     playerHelper.setLanguageInQuery(history, language);
@@ -98,7 +89,14 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
 
     const nPlaylist = playerHelper.playlist(collection, mediaType, contentLang, uiLang);
     setPlaylist(nPlaylist);
-  }, [collection, contentLanguage, location, playlist?.language, uiLanguage]);
+
+    if (nPlaylist && isLesson) {
+      const nIndex = nPlaylist.items.findIndex(i => i.unit.id === cuId);
+      if (nIndex !== -1) {
+        setSelected(nIndex);
+      }
+    }
+  }, [collection, contentLanguage, location, playlist?.language, uiLanguage, cuId]);
 
   useEffect(() => {
     if (!isLesson) {
