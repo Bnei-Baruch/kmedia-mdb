@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext, useCallback } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useHistory, useLocation, useRouteMatch } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { useSelector } from 'react-redux';
@@ -37,7 +37,9 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
   const [playlist, setPlaylist] = useState(null);
 
   const prev     = usePrevious({ unit, collection });
-  const isLesson = COLLECTION_LESSONS_TYPE.includes(collection.content_type);
+  //check if come from lesson CU rotate
+  const { path } = useRouteMatch();
+  const isLesson = COLLECTION_LESSONS_TYPE.includes(collection.content_type) && (path.indexOf('lessons/cu/:id') !== -1);
 
   const handleSelectedChange = useCallback(nSelected => {
     if (nSelected !== selected) {
