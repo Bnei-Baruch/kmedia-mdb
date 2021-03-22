@@ -18,7 +18,7 @@ const LessonPage = ({ t }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!wip && !err && !unit && unit.id !== id) {
+    if ((!wip && !err && !unit) || unit?.id !== id) {
       dispatch(actions.fetchUnit(id));
     }
   }, [dispatch, err, id, unit, wip]);
