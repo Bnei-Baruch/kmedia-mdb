@@ -20,7 +20,7 @@ import AVPlaylistPlayer from '../../AVPlayer/AVPlaylistPlayer';
 
 import { usePrevious } from '../../../helpers/utils';
 import { ClientChroniclesContext } from '../../../helpers/app-contexts';
-import { COLLECTION_NO_COLLECTION_VIEW_TYPE, CT_DAILY_LESSON } from '../../../helpers/consts';
+import { NO_COLLECTION_VIEW_TYPE, CT_DAILY_LESSON } from '../../../helpers/consts';
 
 const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, cuId }) => {
   const location           = useLocation();
@@ -39,7 +39,7 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
   const prev     = usePrevious({ unit, collection });
   //check if come from lesson CU rotate
   const { path } = useRouteMatch();
-  const isLesson = COLLECTION_NO_COLLECTION_VIEW_TYPE.includes(collection.content_type) && (path.indexOf('lessons/cu/:id') !== -1);
+  const isLesson = NO_COLLECTION_VIEW_TYPE.includes(collection.content_type) && (path.indexOf('lessons/cu/:id') !== -1);
 
   const handleSelectedChange = useCallback(nSelected => {
     if (nSelected !== selected) {

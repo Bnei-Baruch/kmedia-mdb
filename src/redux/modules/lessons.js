@@ -190,17 +190,9 @@ const getSeriesBySource = (state, mdbState, sourcesState) => {
   return $$sortTree(tree).items;
 };
 
-const getSerieBySourceId = (state, mdbState, sourcesState) => (sId) => {
-  const source      = sources.getSourceById(sourcesState)(sId);
-  const collections = state.seriesIDs.map(id => mdb.getCollectionById(mdbState, id)).filter(({ source_id }) => source_id === sId);
-  return { ...source, collections };
-
-};
-
 export const selectors = {
   getWip,
   getErrors,
   getLecturesByType,
   getSeriesBySource,
-  getSerieBySourceId,
 };
