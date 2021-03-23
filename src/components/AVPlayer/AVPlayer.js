@@ -205,7 +205,7 @@ class AVPlayer extends Component {
   componentDidUpdate() {
     const { item, chronicles } = this.props;
     if (!isEqual(this.state.item, item)) {
-      if (this.isUnitExistAndPlaying()) {
+      if (this.isUnitExistAndPlaying() && this.state?.item?.unit?.id !== item?.unit?.id) {
         chronicles.append('player-stop', this.buildAppendData());
       }
       this.setState({

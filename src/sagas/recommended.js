@@ -8,11 +8,18 @@ import { selectors as settings } from '../redux/modules/settings';
 
 
 export function* fetchRecommended(action) {
-  const id = action.payload;
+  const {id, size, skip} = action.payload;
   try {
     const language = yield select(state => settings.getContentLanguage(state.settings));
     const skipUids = yield select(state => recommended.getSkipUids(state.recommended));
-    const { data } = yield call(Api.recommended, {uid: id, languages: [language], skipUids});
+    const skipSet = new Set(skipUids);
+    skip.forEach((uid) => {
+      if (!skipSet.has(uid)) {
+        skipUids.push(uid);
+      }
+    });
+
+    const { data } = yield call(Api.recommended, {uid: id, languages: [language], skipUids, size});
     const recommendedItems = data.feed;
 
     if (Array.isArray(recommendedItems) && recommendedItems.length > 0){
