@@ -2,18 +2,21 @@ import axios from 'axios';
 import {ulid} from 'ulid'
 import {chroniclesUrl, chroniclesBackendEnabled} from './Api';
 import { noop } from './utils';
+import { handleActions } from 'redux-actions';
 
 import { actions } from '../redux/modules/chronicles';
+import { types as recommendedTypes } from '../redux/modules/recommended';
 
 //An array of DOM events that should be interpreted as user activity.
 const ACTIVITY_EVENTS = ['mousedown', 'mousemove', 'keydown', 'scroll', 'touchstart'];
 
 const FLOWS = [
-  {start: 'page-enter',               end: 'page-leave',                 subFlows: []},
-  {start: 'unit-page-enter',          end: 'unit-page-leave',            subFlows: ['player-play']},
-  {start: 'collection-page-enter',    end: 'collection-page-leave',      subFlows: ['collection-unit-selected']},
+  {start: 'page-enter',               end: 'page-leave',                 subFlows: ['recommend']},
+  {start: 'unit-page-enter',          end: 'unit-page-leave',            subFlows: ['player-play', 'recommend']},
+  {start: 'collection-page-enter',    end: 'collection-page-leave',      subFlows: ['collection-unit-selected', 'recommend']},
   {start: 'collection-unit-selected', end: 'collection-unit-unselected', subFlows: ['player-play']},
   {start: 'player-play',              end: 'player-stop',                subFlows: ['mute-unmute']},
+  {start: 'recommend',                end: '',                           subFlows: ['recommend-selected']},
 ];
 
 const FLOWS_BY_END = new Map(FLOWS.map(flow => [flow.end, flow]));
@@ -32,7 +35,10 @@ const SUBFLOWS = new Map(Object.entries(FLOWS.reduce((acc, flow) => {
 const MAX_INACTIVITY_MS = 60 * 1000; // Minute in milliseconds.
 
 export default class ClientChronicles {
-  constructor(history, store) {
+  constructor(history) {
+    // Store is set after it is created, see setStore.
+    this.store = null;
+
     // If chronicles backed not defined in env.
     if (!chroniclesBackendEnabled) {
       this.append = noop;
@@ -55,7 +61,7 @@ export default class ClientChronicles {
         // if the user has been inactive or idle for longer then the seconds specified in MAX_INACTIVITY_MS.
         console.log(`User has been inactive for more than ${MAX_INACTIVITY_MS} ms.`);
         this.append('user-inactive', {activities: Array.from(this.sessionActivities)});
-        store.dispatch(actions.userInactive());
+        if (this.store) this.store.dispatch(actions.userInactive());
       }
     }, 1000);
 
@@ -65,7 +71,7 @@ export default class ClientChronicles {
         this.appendPage('leave');
       }
       this.append('user-inactive', {activities: Array.from(this.sessionActivities)});
-      store.dispatch(actions.userInactive());
+      if (this.store) this.store.dispatch(actions.userInactive());
     }, true);
 
     // Handle events to update activity.
@@ -96,6 +102,27 @@ export default class ClientChronicles {
         this.prevHref = window.location.href;
       }
     });
+  }
+
+  setStore(store) {
+    this.store = store;
+  }
+  
+  // Handles custom redux actions to append events on them.
+  storeMiddlware() {
+    return ({ dispatch, getState }) => next => action => {
+      if (action.type == recommendedTypes.FETCH_RECOMMENDED_SUCCESS) {
+        const recommendations = action.payload;
+        if (Array.isArray(recommendations)) {
+          this.append('recommend', {recommendations: recommendations.map(({uid, content_type}) => ({uid, content_type}))});
+        }
+      }
+      return next(action);
+    }
+  }
+
+  recommendSelected(uid) {
+    this.append('recommend-selected', {uid});
   }
 
   appendPage(suffix) {
