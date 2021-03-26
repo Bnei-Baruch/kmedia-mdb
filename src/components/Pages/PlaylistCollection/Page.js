@@ -122,7 +122,7 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
     return null;
   }
 
-  const { items, language } = playlist;
+  const { items } = playlist;
 
   const filterOutUnits = items.map(item => item.unit).filter(u => !!u) || [];
 
@@ -148,7 +148,6 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
           <AVPlaylistPlayer
             items={items}
             selected={selected}
-            language={language}
             onSelectedChange={handleSelectedChange}
             onLanguageChange={handleLanguageChange}
             onSwitchAV={handleSwitchAV}
@@ -181,7 +180,6 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
       <AVPlaylistPlayer
         items={items}
         selected={selected}
-        language={language}
         onSelectedChange={handleSelectedChange}
         onLanguageChange={handleLanguageChange}
         onSwitchAV={handleSwitchAV}

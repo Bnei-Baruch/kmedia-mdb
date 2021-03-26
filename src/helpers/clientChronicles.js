@@ -3,6 +3,8 @@ import {ulid} from 'ulid'
 import {chroniclesUrl, chroniclesBackendEnabled} from './Api';
 import { noop } from './utils';
 
+import { actions } from '../redux/modules/chronicles';
+
 //An array of DOM events that should be interpreted as user activity.
 const ACTIVITY_EVENTS = ['mousedown', 'mousemove', 'keydown', 'scroll', 'touchstart'];
 
@@ -11,7 +13,7 @@ const FLOWS = [
   {start: 'unit-page-enter',          end: 'unit-page-leave',            subFlows: ['player-play']},
   {start: 'collection-page-enter',    end: 'collection-page-leave',      subFlows: ['collection-unit-selected']},
   {start: 'collection-unit-selected', end: 'collection-unit-unselected', subFlows: ['player-play']},
-  {start: 'player-play',              end: 'player-stop',                subFlows: []},
+  {start: 'player-play',              end: 'player-stop',                subFlows: ['mute-unmute']},
 ];
 
 const FLOWS_BY_END = new Map(FLOWS.map(flow => [flow.end, flow]));
@@ -30,7 +32,7 @@ const SUBFLOWS = new Map(Object.entries(FLOWS.reduce((acc, flow) => {
 const MAX_INACTIVITY_MS = 60 * 1000; // Minute in milliseconds.
 
 export default class ClientChronicles {
-  constructor(history) {
+  constructor(history, store) {
     // If chronicles backed not defined in env.
     if (!chroniclesBackendEnabled) {
       this.append = noop;
@@ -53,6 +55,7 @@ export default class ClientChronicles {
         // if the user has been inactive or idle for longer then the seconds specified in MAX_INACTIVITY_MS.
         console.log(`User has been inactive for more than ${MAX_INACTIVITY_MS} ms.`);
         this.append('user-inactive', {activities: Array.from(this.sessionActivities)});
+        store.dispatch(actions.userInactive());
       }
     }, 1000);
 
@@ -62,6 +65,7 @@ export default class ClientChronicles {
         this.appendPage('leave');
       }
       this.append('user-inactive', {activities: Array.from(this.sessionActivities)});
+      store.dispatch(actions.userInactive());
     }, true);
 
     // Handle events to update activity.
