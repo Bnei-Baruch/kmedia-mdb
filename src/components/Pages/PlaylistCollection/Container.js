@@ -10,30 +10,25 @@ import { actions, selectors } from '../../../redux/modules/mdb';
 import WipErr from '../../shared/WipErr/WipErr';
 import Page from './Page';
 
-const PlaylistCollectionContainer = ({ cId, t }) => {
-  const collection = useSelector(state => selectors.getDenormCollectionWUnits(state.mdb, cId));
-  const wipMap = useSelector(state => selectors.getWip(state.mdb));
-  const errorMap = useSelector(state => selectors.getErrors(state.mdb));
-  const cWindow = useSelector(state => selectors.getWindow(state.mdb));
+const PlaylistCollectionContainer = ({ cId, t, cuId }) => {
+  const collection  = useSelector(state => selectors.getDenormCollectionWUnits(state.mdb, cId));
+  const wipMap      = useSelector(state => selectors.getWip(state.mdb));
+  const errorMap    = useSelector(state => selectors.getErrors(state.mdb));
+  const cWindow     = useSelector(state => selectors.getWindow(state.mdb));
+  const collections = useSelector(state => cWindow?.data?.map(id => selectors.getDenormCollection(state.mdb, id)));
 
   const [nextLink, setNextLink] = useState(null);
   const [prevLink, setPrevLink] = useState(null);
 
   const dispatch = useDispatch();
 
-  const createPrevNextLinks = (collections, curIndex) => {
-    const prevCollectionId = curIndex < collections.length - 1 ? collections[curIndex + 1] : null;
-    const prevLnk = prevCollectionId
-      ? canonicalLink({ id: prevCollectionId, content_type: CT_DAILY_LESSON })
-      : null;
-
+  const createPrevNextLinks = (curIndex) => {
+    const prevCollection   = curIndex < collections.length - 1 ? collections[curIndex + 1] : null;
+    const prevLnk = prevCollection ? canonicalLink(prevCollection) : null;
     setPrevLink(prevLnk);
 
-    const nextCollectionId = curIndex > 0 ? collections[curIndex - 1] : null;
-    const nextLnk = nextCollectionId
-      ? canonicalLink({ id: nextCollectionId, content_type: CT_DAILY_LESSON })
-      : null;
-
+    const nextCollection = curIndex > 0 ? collections[curIndex - 1] : null;
+    let nextLnk = nextCollection ? canonicalLink(nextCollection) : null;
     setNextLink(nextLnk);
   };
 
@@ -68,7 +63,7 @@ const PlaylistCollectionContainer = ({ cId, t }) => {
             start_date: filmDate.subtract(5, 'days').format(DATE_FORMAT),
             end_date: filmDate.add(10, 'days').format(DATE_FORMAT)
           }));
-        }
+        };
 
         // empty or no window
         if (!cWindow.data || cWindow.data.length === 0) {
@@ -77,8 +72,8 @@ const PlaylistCollectionContainer = ({ cId, t }) => {
             fetchWindow(id, film_date);
           }
         } else {
-          const { id: cWindowId, data: collections } = cWindow;
-          const curIndex = collections.indexOf(cId);
+          const { id: cWindowId, data } = cWindow;
+          const curIndex          = data.indexOf(cId);
           // console.log('cWindow:', cWindowId, curIndex, collections);
 
           if (cId !== cWindowId
@@ -90,13 +85,12 @@ const PlaylistCollectionContainer = ({ cId, t }) => {
             fetchWindow(id, film_date);
           } else {
             // it's a good window, extract the previous and next links
-            createPrevNextLinks(collections, curIndex);
+            createPrevNextLinks(curIndex);
           }
         }
       }
     }
   }, [cId, cWindow, collection, dispatch, errorMap.units, wipMap]);
-
 
   if (!cId || !collection || !Array.isArray(collection.content_units)) {
     return null;
@@ -107,7 +101,7 @@ const PlaylistCollectionContainer = ({ cId, t }) => {
   let err = errorMap.collections[cId];
   if (!err) {
     const cuIDwithError = Array.isArray(collection.cuIDs) && collection.cuIDs.find(cuID => errorMap.units[cuID]);
-    err = cuIDwithError ? errorMap.units[cuIDwithError] : null;
+    err                 = cuIDwithError ? errorMap.units[cuIDwithError] : null;
   }
 
   const wipErr = WipErr({ wip, err, t });
@@ -117,6 +111,7 @@ const PlaylistCollectionContainer = ({ cId, t }) => {
 
   return (
     <Page
+      cuId={cuId}
       collection={collection}
       nextLink={nextLink}
       prevLink={prevLink}
@@ -126,10 +121,11 @@ const PlaylistCollectionContainer = ({ cId, t }) => {
 
 PlaylistCollectionContainer.propTypes = {
   cId: PropTypes.string.isRequired,
+  cuId: PropTypes.string,
   t: PropTypes.func.isRequired
 };
 
 const areEqual = (prevProps, nextProps) =>
-  prevProps.cId === nextProps.cId;
+  (prevProps.cId === nextProps.cId) && (prevProps.cuId === nextProps.cuId);
 
 export default React.memo(withNamespaces()(PlaylistCollectionContainer), areEqual);

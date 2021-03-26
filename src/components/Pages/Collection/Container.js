@@ -6,8 +6,9 @@ import { actions, selectors as mdb } from '../../../redux/modules/mdb';
 import { actions as statsActions } from '../../../redux/modules/stats';
 import Page from './Page';
 
-const CollectionContainer = ({ namespace, renderUnit }) => {
-  const { id } = useParams();
+const CollectionContainer = ({ namespace, renderUnit, id }) => {
+  const { id: _id } = useParams();
+  id ??= _id;
 
   const collection = useSelector(state => mdb.getCollectionById(state.mdb, id));
   const wip        = useSelector(state => mdb.getWip(state.mdb));

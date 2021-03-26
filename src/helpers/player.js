@@ -3,7 +3,16 @@ import groupBy from 'lodash/groupBy';
 import mapValues from 'lodash/mapValues';
 
 import { assetUrl } from './Api';
-import { CT_FULL_LESSON, CT_LESSON_PART, EVENT_PREPARATION_TAG, EVENT_TYPES, LANG_ENGLISH, MT_AUDIO, MT_VIDEO, VS_DEFAULT, } from './consts';
+import {
+  CT_FULL_LESSON,
+  CT_LESSON_PART,
+  EVENT_PREPARATION_TAG,
+  EVENT_TYPES,
+  LANG_ENGLISH,
+  MT_AUDIO,
+  MT_VIDEO,
+  VS_DEFAULT,
+} from './consts';
 import { getQuery, updateQuery } from './url';
 import { canonicalLink } from './links';
 import MediaHelper from './media';
@@ -160,9 +169,8 @@ const playlist = (collection, mediaType, contentLanguage, uiLanguage) => {
   // don't include items without unit
   items = items.filter(item => !!item.unit);
 
-  const shareUrl = canonicalLink(collection);
   items.forEach((x) => {
-    x.shareUrl = shareUrl;
+    x.shareUrl = canonicalLink(x.unit);
   });
 
   const language = items[0]?.language || contentLanguage;
@@ -201,10 +209,10 @@ const setLanguageInQuery = (history, language) =>
     language
   }));
 
-const getActivePartFromQuery = (location) => {
+const getActivePartFromQuery = (location, def = 0) => {
   const q = getQuery(location);
-  const p = q.ap ? parseInt(q.ap, 10) : 0;
-  return Number.isNaN(p) || p < 0 ? 0 : p;
+  const p = q.ap ? parseInt(q.ap, 10) : def;
+  return Number.isNaN(p) || p < 0 ? def : p;
 };
 
 const setActivePartInQuery = (history, ap) =>
@@ -226,7 +234,7 @@ const switchAV = (selectedItem, history) => {
     setMediaTypeInQuery(history, MT_AUDIO);
     persistPreferredMediaType(MT_AUDIO);
   }
-}
+};
 
 const exportMethods = {
   playableItem,

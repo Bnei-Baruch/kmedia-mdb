@@ -416,7 +416,7 @@ export const reducer = handleActions({
   [FETCH_LATEST_LESSON_FAILURE]: setStatus,
   [FETCH_WINDOW]: setStatus,
   [FETCH_WINDOW_SUCCESS]: (state, action) => (
-    setStatus(onFetchWindow(onReceiveCollections(state, action.payload.data), action), action)
+    setStatus(onFetchWindow(onReceiveCollections(state, { payload: action.payload.data?.collections }), action), action)
   ),
   [FETCH_WINDOW_FAILURE]: setStatus,
   [FETCH_SQDATA]: setStatus,

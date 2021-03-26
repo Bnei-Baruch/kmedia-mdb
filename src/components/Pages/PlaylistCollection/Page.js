@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext, useCallback } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useHistory, useLocation, useRouteMatch } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { useSelector } from 'react-redux';
@@ -14,47 +14,55 @@ import Recommended from '../Unit/widgets/Recommended/Main/Recommended';
 import Playlist from './widgets/Playlist/Playlist';
 import PlaylistHeader from './widgets/Playlist/PlaylistHeader';
 import playerHelper from '../../../helpers/player';
-import { DeviceInfoContext } from "../../../helpers/app-contexts";
+import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { selectors as settings } from '../../../redux/modules/settings';
 import AVPlaylistPlayer from '../../AVPlayer/AVPlaylistPlayer';
 
 import { usePrevious } from '../../../helpers/utils';
 import { ClientChroniclesContext } from '../../../helpers/app-contexts';
+import { NO_COLLECTION_VIEW_TYPE, CT_DAILY_LESSON } from '../../../helpers/consts';
 
-const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null }) => {
-  const location = useLocation();
-  const history  = useHistory();
+const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, cuId }) => {
+  const location           = useLocation();
+  const history            = useHistory();
   const { isMobileDevice } = useContext(DeviceInfoContext);
-  const chronicles = useContext(ClientChroniclesContext);
+  const chronicles         = useContext(ClientChroniclesContext);
 
-  const uiLanguage = useSelector(state => settings.getLanguage(state.settings));
+  const uiLanguage      = useSelector(state => settings.getLanguage(state.settings));
   const contentLanguage = useSelector(state => settings.getContentLanguage(state.settings));
 
-  const embed = playerHelper.getEmbedFromQuery(location);
-  const [unit, setUnit]   = useState(null);
-  const [selected, setSelected] = useState(0);
+  const embed                   = playerHelper.getEmbedFromQuery(location);
+  const [unit, setUnit]         = useState(null);
+  const [selected, setSelected] = useState();
   const [playlist, setPlaylist] = useState(null);
 
-  const prev = usePrevious({unit, collection});
+  const prev     = usePrevious({ unit, collection });
+  //check if come from lesson CU rotate
+  const { path } = useRouteMatch();
+  const isLesson = NO_COLLECTION_VIEW_TYPE.includes(collection.content_type) && (path.indexOf('lessons/cu/:id') !== -1);
 
   const handleSelectedChange = useCallback(nSelected => {
-    if (nSelected !== selected){
-      playerHelper.setActivePartInQuery(history, nSelected);
-      setSelected(nSelected);
+    if (nSelected !== selected) {
+      if (isLesson) {
+        playlist.items[nSelected] && history.push(playlist.items[nSelected].shareUrl);
+      } else {
+        playerHelper.setActivePartInQuery(history, nSelected);
+        setSelected(nSelected);
+      }
     }
-  }, [history, selected]);
+  }, [history, selected, collection]);
 
   useEffect(() => {
     if (prev?.unit?.id !== unit?.id) {
       if (prev?.unit?.id) {
-        chronicles.append('collection-unit-unselected', {unit_uid: prev.unit.id});
+        chronicles.append('collection-unit-unselected', { unit_uid: prev.unit.id });
       }
       if (unit?.id) {
-        chronicles.append('collection-unit-selected', {unit_uid: unit.id});
+        chronicles.append('collection-unit-selected', { unit_uid: unit.id });
       }
     }
     if (prev?.unit?.id && !unit?.id) {
-      chronicles.append('collection-unit-unselected', {unit_uid: unit.id});
+      chronicles.append('collection-unit-unselected', { unit_uid: unit.id });
     }
   }, [unit, prev?.unit]);
 
@@ -65,7 +73,7 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null }
   const handleSwitchAV = useCallback(() => {
     const selectedItem = playlist?.items[selected];
 
-    if (selectedItem){
+    if (selectedItem) {
       playerHelper.switchAV(selectedItem, history);
     }
   }, [history, playlist, selected]);
@@ -73,39 +81,44 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null }
   // we need to calculate the playlist here, so we can filter items out of recommended
   // playlist { collection, language, mediaType, items, groups };
   useEffect(() => {
-    const preferredMT     = playerHelper.restorePreferredMediaType();
-    const mediaType       = playerHelper.getMediaTypeFromQuery(location, preferredMT);
-    const playerLanguage  = playlist?.language || contentLanguage;
-    const uiLang          = playlist?.language || uiLanguage;
-    const contentLang     = playerHelper.getLanguageFromQuery(location, playerLanguage);
+    const preferredMT    = playerHelper.restorePreferredMediaType();
+    const mediaType      = playerHelper.getMediaTypeFromQuery(location, preferredMT);
+    const playerLanguage = playlist?.language || contentLanguage;
+    const uiLang         = playlist?.language || uiLanguage;
+    const contentLang    = playerHelper.getLanguageFromQuery(location, playerLanguage);
 
-    const nPlaylist  = playerHelper.playlist(collection, mediaType, contentLang, uiLang);
+    const nPlaylist = playerHelper.playlist(collection, mediaType, contentLang, uiLang);
     setPlaylist(nPlaylist);
-  }, [collection, contentLanguage, location, playlist?.language, uiLanguage]);
 
+    if (nPlaylist && isLesson) {
+      const nIndex = nPlaylist.items.findIndex(i => i.unit.id === cuId);
+      if (nIndex !== -1) {
+        setSelected(nIndex);
+      }
+    }
+  }, [collection, contentLanguage, location, playlist?.language, uiLanguage, cuId]);
 
   useEffect(() => {
-    let nSelected = playerHelper.getActivePartFromQuery(location);
+    if (!isLesson) {
+      let nSelected = playerHelper.getActivePartFromQuery(location);
 
-    if (nSelected >= playlist?.items.length) {
-      nSelected = 0;
+      if (nSelected >= playlist?.items.length) {
+        nSelected = 0;
+      }
+      handleSelectedChange(nSelected);
     }
-
-    handleSelectedChange(nSelected);
   }, [handleSelectedChange, location, playlist]);
-
 
   useEffect(() => {
     const newUnit = playlist?.items[selected]?.unit;
     setUnit(newUnit);
   }, [playlist, selected]);
 
-
   if (!collection || !Array.isArray(collection.content_units)) {
     return null;
   }
 
-  if (!playlist || !unit){
+  if (!playlist || !unit) {
     return null;
   }
 
@@ -128,24 +141,24 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null }
 
   const computerWidth = isMobileDevice ? 16 : 10;
 
-  return !embed ? (
-    <Grid padded={!isMobileDevice} className="avbox">
-      <Grid.Column mobile={16} tablet={computerWidth} computer={computerWidth}
-        className={classNames({"is-fitted": isMobileDevice})}>
-        <AVPlaylistPlayer
-          items={items}
-          selected={selected}
-          onSelectedChange={handleSelectedChange}
-          onLanguageChange={handleLanguageChange}
-          onSwitchAV={handleSwitchAV}
-        />
-        {
-          unit &&
+  return !embed ?
+    (
+      <Grid padded={!isMobileDevice} className="avbox">
+        <Grid.Column mobile={16} tablet={computerWidth} computer={computerWidth} className={classNames({ 'is-fitted': isMobileDevice })}>
+          <AVPlaylistPlayer
+            items={items}
+            selected={selected}
+            onSelectedChange={handleSelectedChange}
+            onLanguageChange={handleLanguageChange}
+            onSwitchAV={handleSwitchAV}
+          />
+          {
+            unit &&
             <>
-              { isMobileDevice &&
-                <div id="avbox_playlist">
-                  <PlaylistHeader collection={collection} prevLink={prevLink} nextLink={nextLink} />
-                </div>
+              {isMobileDevice &&
+              <div id="avbox_playlist">
+                <PlaylistHeader collection={collection} prevLink={prevLink} nextLink={nextLink} />
+              </div>
               }
               <Container id="unit_container">
                 <Helmets.AVUnit unit={unit} language={uiLanguage} />
@@ -153,16 +166,16 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null }
                 <Materials unit={unit} playlistComponent={PlaylistData} />
               </Container>
             </>
-        }
-      </Grid.Column>
-      {
-        !isMobileDevice &&
+          }
+        </Grid.Column>
+        {
+          !isMobileDevice &&
           <Grid.Column mobile={16} tablet={6} computer={6}>
             {PlaylistData()}
           </Grid.Column>
-      }
-    </Grid>
-  ) :
+        }
+      </Grid>
+    ) :
     <Container mobile={16} tablet={16} computer={16} className="avbox">
       <AVPlaylistPlayer
         items={items}
@@ -171,7 +184,7 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null }
         onLanguageChange={handleLanguageChange}
         onSwitchAV={handleSwitchAV}
       />
-    </Container>
+    </Container>;
 };
 
 PlaylistCollectionPage.propTypes = {
@@ -185,6 +198,7 @@ const isEqualLink = (link1, link2) =>
 
 const areEqual = (prevProps, nextProps) =>
   isEqual(prevProps.collection, nextProps.collection)
+  && (prevProps.cuId === nextProps.cuId)
   && isEqualLink(prevProps.prevLink, nextProps.prevLink)
   && isEqualLink(prevProps.nextLink, nextProps.nextLink);
 
