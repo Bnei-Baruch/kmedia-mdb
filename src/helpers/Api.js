@@ -126,9 +126,9 @@ class Api {
     Requests.get(`simple?${Requests.makeParams({ language, start_date, end_date })}`)
   );
 
-  static recommended = ({uid, languages, skipUids: skip_uids, size: more_items}) => {
+  static recommended = ({uid, languages, skipUids: skip_uids}) => {
     const data = JSON.stringify({
-      more_items,
+      "more_items": 20,
       "current_feed": [],
       "options": {
         "recommend": {

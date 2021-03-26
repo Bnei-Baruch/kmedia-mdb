@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Header, List, Table } from 'semantic-ui-react';
 
@@ -8,7 +8,9 @@ import { canonicalLink } from '../../../../../../helpers/links';
 import { formatDuration, canonicalCollection } from '../../../../../../helpers/utils';
 import Link from '../../../../../Language/MultiLanguageLink';
 import UnitLogo from '../../../../../shared/Logo/UnitLogo';
-import { ClientChroniclesContext } from "../../../../../../helpers/app-contexts";
+
+// items to show
+const N = 12;
 
 const getCollectionId = unit => {
   const unitCollection = canonicalCollection(unit);
@@ -44,7 +46,7 @@ export const renderPlaylistUnit = (unit, t) =>
   </Table>;
 
 
-const renderPlaylist = (unitsToDisplay, selected, t, chronicles) =>
+const renderPlaylist = (unitsToDisplay, selected, t) =>
   <div className="avbox__playlist-view">
     <List selection size="tiny">
       {
@@ -55,7 +57,6 @@ const renderPlaylist = (unitsToDisplay, selected, t, chronicles) =>
             active={index === selected}
             as={Link}
             to={canonicalLink(unit)}
-            onClick={() => chronicles.recommendSelected(unit.id)}
           >
             {renderPlaylistUnit(unit, t)}
           </List.Item>
@@ -66,14 +67,16 @@ const renderPlaylist = (unitsToDisplay, selected, t, chronicles) =>
 
 
 const DisplayRecommended = ({ unit, t, recommendedUnits, displayTitle = true }) => {
-  const chronicles = useContext(ClientChroniclesContext);
+  // display only N units
+  const unitsToDisplay = recommendedUnits.length > N ? recommendedUnits.slice(0, N) : recommendedUnits;
+
   const unitCollection = canonicalCollection(unit);
   const unitCollectionId = unitCollection ? unitCollection.id : null;
 
   return (
     <div className="avbox__playlist-wrapper">
       { displayTitle && <Header as="h3" content={t('materials.recommended.header')} /> }
-      {renderPlaylist(recommendedUnits, unitCollectionId, t, chronicles)}
+      {renderPlaylist(unitsToDisplay, unitCollectionId, t)}
     </div>
   );
 }
