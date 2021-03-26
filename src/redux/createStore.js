@@ -13,11 +13,10 @@ const isProduction          = process.env.NODE_ENV === 'production';
 const devToolsArePresent    = typeof window === 'object' && typeof window.__REDUX_DEVTOOLS_EXTENSION__ !== 'undefined';
 const devToolsStoreEnhancer = () => (isBrowser && devToolsArePresent ? window.__REDUX_DEVTOOLS_EXTENSION__() : f => f);
 
-export default function createStore(initialState, history, chroniclesMiddlware) {
+export default function createStore(initialState, history) {
   const middlewares = [
     // createDeferredSagasMiddleware(),
-    createMultiLanguageRouterMiddleware(history),
-    chroniclesMiddlware,
+    createMultiLanguageRouterMiddleware(history)
   ];
 
   const sagaMiddlewareOptions = isProduction ? {} : { sagaMonitor: sagaMonitor(), logger: console.log };

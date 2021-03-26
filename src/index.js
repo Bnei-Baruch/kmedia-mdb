@@ -30,10 +30,8 @@ import ClientChronicles from './helpers/clientChronicles'
 
 ReactGA.initialize('UA-108372395-1', { gaOptions: { transport: 'beacon' } });
 
-const history          = createBrowserHistory();
-const clientChronicles = new ClientChronicles(history);
-const store            = createStore(window.__data, history, clientChronicles.storeMiddlware());
-clientChronicles.setStore(store);
+const history = createBrowserHistory();
+const store   = createStore(window.__data, history);
 store.dispatch(ssr.hydrate());
 // console.log('window.__data', window.__data);
 
@@ -44,6 +42,7 @@ const language = i18nData.initialLanguage ?? DEFAULT_LANGUAGE;
 moment.locale(language === LANG_UKRAINIAN ? 'uk' : language);
 
 const deviceInfo = new UAParser().getResult();
+const clientChronicles = new ClientChronicles(history, store);
 
 ReactDOM.hydrate(
   <React.StrictMode>

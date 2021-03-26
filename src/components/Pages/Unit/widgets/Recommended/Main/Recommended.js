@@ -10,12 +10,14 @@ import * as shapes from '../../../../../shapes';
 import WipErr from '../../../../../shared/WipErr/WipErr';
 import DisplayRecommended from './DisplayRecommended';
 
-// Number of items to try to recommend.
-const N = 12;
-
 // a custom hook to get loaded recommended
-export const useRecommendedUnits = () => {
+export const useRecommendedUnits = ({ filterOutUnits = null }) => {
   let recommendedItems = useSelector(state => selectors.getRecommendedItems(state.recommended)) || [];
+
+  // filter out the given units
+  if (Array.isArray(filterOutUnits) && filterOutUnits.length > 0) {
+    recommendedItems = recommendedItems.filter(item => !filterOutUnits.some(fUnit => fUnit.id === item.uid));
+  }
 
   const recommendedUnits = useSelector(state => recommendedItems
     .map(item => mdbSelectors.getDenormContentUnit(state.mdb, item.uid) || mdbSelectors.getDenormCollection(state.mdb, item.uid))
@@ -30,19 +32,15 @@ const Recommended = ({ unit, t, filterOutUnits = [], displayTitle = true }) => {
   const wip = useSelector(state => selectors.getWip(state.recommended));
   const err = useSelector(state => selectors.getError(state.recommended));
 
-  useEffect(() => {
-    if (unit?.id && unit.id !== unitId) {
-      setUnitId(unit.id);
-    }
-  }, [unit, unitId])
   const dispatch = useDispatch();
   useEffect(() => {
-    if (unitId && !err) {
-      dispatch(actions.fetchRecommended({id: unitId, size: N, skip: filterOutUnits.map((unit) => unit.id)}));
+    if (unit?.id && unit.id !== unitId && !wip && !err) {
+      dispatch(actions.fetchRecommended(unit.id));
+      setUnitId(unit.id);
     }
-  }, [dispatch, err, unitId]);
+  }, [dispatch, unit, wip, err, unitId]);
 
-  const recommendedUnits = useRecommendedUnits();
+  const recommendedUnits = useRecommendedUnits({ unit, filterOutUnits });
 
   const wipErr = WipErr({ wip, err, t });
 
@@ -50,7 +48,7 @@ const Recommended = ({ unit, t, filterOutUnits = [], displayTitle = true }) => {
     return wipErr;
   }
 
-  if (recommendedUnits.length === 0) {
+  if (recommendedUnits.length === 0){
     return null;
   }
 
