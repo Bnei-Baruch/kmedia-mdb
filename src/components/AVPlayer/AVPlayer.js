@@ -373,7 +373,7 @@ class AVPlayer extends Component {
       // This is specifically relevant for the mute-unmute action.
       was_muted: media.isMuted,
     };
-  }
+  };
 
   onPlay = () => {
     const { chronicles, onPlay, item, actionPlayerPlay } = this.props;
@@ -876,6 +876,7 @@ class AVPlayer extends Component {
               onSelect={this.onLanguageChange}
               onDropdownOpenedChange={onDropdownOpenedChange}
               t={t}
+              cuId={item.unit?.id}
             />
             {!isEditMode && <AVEditSlice onActivateSlice={() => this.setSliceMode(PLAYER_MODE.SLICE_EDIT)} />}
             {isEditMode && <AVEditSlice onActivateSlice={() => this.setSliceMode(PLAYER_MODE.NORMAL)} />}
