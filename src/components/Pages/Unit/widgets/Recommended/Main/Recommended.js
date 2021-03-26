@@ -5,26 +5,13 @@ import { withNamespaces } from 'react-i18next';
 import isEqual from 'react-fast-compare';
 
 import { actions, selectors } from '../../../../../../redux/modules/recommended';
-import { selectors as mdbSelectors } from '../../../../../../redux/modules/mdb';
 import * as shapes from '../../../../../shapes';
 import WipErr from '../../../../../shared/WipErr/WipErr';
 import DisplayRecommended from './DisplayRecommended';
+import useRecommendedUnits from './UseRecommendedUnits';
 
-// a custom hook to get loaded recommended
-export const useRecommendedUnits = ({ filterOutUnits = null }) => {
-  let recommendedItems = useSelector(state => selectors.getRecommendedItems(state.recommended)) || [];
-
-  // filter out the given units
-  if (Array.isArray(filterOutUnits) && filterOutUnits.length > 0) {
-    recommendedItems = recommendedItems.filter(item => !filterOutUnits.some(fUnit => fUnit.id === item.uid));
-  }
-
-  const recommendedUnits = useSelector(state => recommendedItems
-    .map(item => mdbSelectors.getDenormContentUnit(state.mdb, item.uid) || mdbSelectors.getDenormCollection(state.mdb, item.uid))
-    .filter(item => !!item)) || [];
-
-  return recommendedUnits;
-};
+// Number of items to try to recommend.
+const N = 12;
 
 const Recommended = ({ unit, t, filterOutUnits = [], displayTitle = true }) => {
   const [unitId, setUnitId] = useState(null);
@@ -32,15 +19,19 @@ const Recommended = ({ unit, t, filterOutUnits = [], displayTitle = true }) => {
   const wip = useSelector(state => selectors.getWip(state.recommended));
   const err = useSelector(state => selectors.getError(state.recommended));
 
-  const dispatch = useDispatch();
   useEffect(() => {
-    if (unit?.id && unit.id !== unitId && !wip && !err) {
-      dispatch(actions.fetchRecommended(unit.id));
+    if (unit?.id && unit.id !== unitId) {
       setUnitId(unit.id);
     }
-  }, [dispatch, unit, wip, err, unitId]);
+  }, [unit, unitId])
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (unitId && !err) {
+      dispatch(actions.fetchRecommended({id: unitId, size: N, skip: filterOutUnits.map((unit) => unit.id)}));
+    }
+  }, [dispatch, err, unitId]);
 
-  const recommendedUnits = useRecommendedUnits({ unit, filterOutUnits });
+  const recommendedUnits = useRecommendedUnits();
 
   const wipErr = WipErr({ wip, err, t });
 
@@ -48,7 +39,7 @@ const Recommended = ({ unit, t, filterOutUnits = [], displayTitle = true }) => {
     return wipErr;
   }
 
-  if (recommendedUnits.length === 0){
+  if (recommendedUnits.length === 0) {
     return null;
   }
 

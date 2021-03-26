@@ -1,19 +1,25 @@
+import React, { useContext, useEffect } from 'react';
+import { useSelector, shallowEqual } from 'react-redux';
 import axios from 'axios';
 import {ulid} from 'ulid'
 import {chroniclesUrl, chroniclesBackendEnabled} from './Api';
 import { noop } from './utils';
+import { handleActions } from 'redux-actions';
 
 import { actions } from '../redux/modules/chronicles';
+import { types as recommendedTypes } from '../redux/modules/recommended';
+import { ClientChroniclesContext } from './app-contexts';
 
 //An array of DOM events that should be interpreted as user activity.
 const ACTIVITY_EVENTS = ['mousedown', 'mousemove', 'keydown', 'scroll', 'touchstart'];
 
 const FLOWS = [
-  {start: 'page-enter',               end: 'page-leave',                 subFlows: []},
-  {start: 'unit-page-enter',          end: 'unit-page-leave',            subFlows: ['player-play']},
-  {start: 'collection-page-enter',    end: 'collection-page-leave',      subFlows: ['collection-unit-selected']},
+  {start: 'page-enter',               end: 'page-leave',                 subFlows: ['recommend']},
+  {start: 'unit-page-enter',          end: 'unit-page-leave',            subFlows: ['player-play', 'recommend']},
+  {start: 'collection-page-enter',    end: 'collection-page-leave',      subFlows: ['collection-unit-selected', 'recommend']},
   {start: 'collection-unit-selected', end: 'collection-unit-unselected', subFlows: ['player-play']},
   {start: 'player-play',              end: 'player-stop',                subFlows: ['mute-unmute']},
+  {start: 'recommend',                end: '',                           subFlows: ['recommend-selected']},
 ];
 
 const FLOWS_BY_END = new Map(FLOWS.map(flow => [flow.end, flow]));
@@ -96,6 +102,20 @@ export default class ClientChronicles {
         this.prevHref = window.location.href;
       }
     });
+  }
+  
+  // Handles custom redux actions to append events on them.
+  onAction(action) {
+    if (action.type == recommendedTypes.FETCH_RECOMMENDED_SUCCESS) {
+      const recommendations = action.payload;
+      if (Array.isArray(recommendations)) {
+        this.append('recommend', {recommendations: recommendations.map(({uid, content_type}) => ({uid, content_type}))});
+      }
+    }
+  }
+
+  recommendSelected(uid) {
+    this.append('recommend-selected', {uid});
   }
 
   appendPage(suffix) {
@@ -198,4 +218,16 @@ export default class ClientChronicles {
         .catch((error) => { console.warn(error); });
     }
   }
+}
+
+export const ChroniclesActions = () => {
+  const clientChronicles = useContext(ClientChroniclesContext);
+  const action = useSelector(state => state.chronicles.lastAction);
+  const actionsCount = useSelector(state => state.chronicles.actionsCount);
+  useEffect(() => {
+    if (action) {
+      clientChronicles.onAction(action);
+    }
+  }, [actionsCount]);
+  return null;
 }
