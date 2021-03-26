@@ -13,7 +13,7 @@ const FLOWS = [
   {start: 'unit-page-enter',          end: 'unit-page-leave',            subFlows: ['player-play']},
   {start: 'collection-page-enter',    end: 'collection-page-leave',      subFlows: ['collection-unit-selected']},
   {start: 'collection-unit-selected', end: 'collection-unit-unselected', subFlows: ['player-play']},
-  {start: 'player-play',              end: 'player-stop',                subFlows: []},
+  {start: 'player-play',              end: 'player-stop',                subFlows: ['mute-unmute']},
 ];
 
 const FLOWS_BY_END = new Map(FLOWS.map(flow => [flow.end, flow]));
