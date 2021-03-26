@@ -8,7 +8,7 @@ import Page from './Page';
 
 const CollectionContainer = ({ namespace, renderUnit, id }) => {
   const { id: _id } = useParams();
-  if (!id) id = _id;
+  id ??= _id;
 
   const collection = useSelector(state => mdb.getCollectionById(state.mdb, id));
   const wip        = useSelector(state => mdb.getWip(state.mdb));
