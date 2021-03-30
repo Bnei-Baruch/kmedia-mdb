@@ -8,7 +8,7 @@ import AVUnit from './AVUnit';
 import ArticleUnit from './ArticleUnit';
 import NoIndex from './NoIndex';
 
-export default {
+const Helmets = {
   TopMost,
   Basic,
   Image,
@@ -19,3 +19,5 @@ export default {
   ArticleUnit,
   NoIndex,
 };
+
+export default Helmets;

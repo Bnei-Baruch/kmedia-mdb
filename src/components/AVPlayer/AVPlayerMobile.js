@@ -227,7 +227,6 @@ class AVPlayerMobile extends Component {
     this.media.autoplay = true;
 
     if (this.props?.item?.unit?.id) {
-      const {unit, item: { mediaType }, selectedLanguage, uiLanguage } = this.props;
       this.props.chronicles.append('player-play', this.buildAppendData(this.props.item, this.media));
     }
   };

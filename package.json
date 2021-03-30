@@ -137,7 +137,7 @@
     "react-image-gallery": "^1.0.8",
     "react-media-player": "github:Bnei-Baruch/react-media-player",
     "react-pdf": "^5.0.0",
-    "react-redux": "^7.0.2",
+    "react-redux": "7.2.3",
     "react-router": "^5.2.0",
     "react-router-config": "^5.1.1",
     "react-router-dom": "^5.2.0",

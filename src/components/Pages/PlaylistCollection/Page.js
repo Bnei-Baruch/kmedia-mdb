@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, useCallback } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useHistory, useLocation, useRouteMatch } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
@@ -14,13 +14,12 @@ import Recommended from '../Unit/widgets/Recommended/Main/Recommended';
 import Playlist from './widgets/Playlist/Playlist';
 import PlaylistHeader from './widgets/Playlist/PlaylistHeader';
 import playerHelper from '../../../helpers/player';
-import { DeviceInfoContext } from '../../../helpers/app-contexts';
+import { ClientChroniclesContext, DeviceInfoContext } from '../../../helpers/app-contexts';
 import { selectors as settings } from '../../../redux/modules/settings';
 import AVPlaylistPlayer from '../../AVPlayer/AVPlaylistPlayer';
 
 import { usePrevious } from '../../../helpers/utils';
-import { ClientChroniclesContext } from '../../../helpers/app-contexts';
-import { NO_COLLECTION_VIEW_TYPE, CT_DAILY_LESSON } from '../../../helpers/consts';
+import { NO_COLLECTION_VIEW_TYPE } from '../../../helpers/consts';
 
 const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, cuId }) => {
   const location           = useLocation();
