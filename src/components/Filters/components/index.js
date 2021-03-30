@@ -10,7 +10,7 @@ import YearsFilter from './YearsFilter';
 import CollectionsFilter from './CollectionsFilter';
 import LanguageFilter from './LanguageFilter';
 
-export default {
+const Filters = {
   DateFilter,
   LocationsFilter,
   HolidaysFilter,
@@ -23,3 +23,5 @@ export default {
   CollectionsFilter,
   LanguageFilter,
 };
+
+export default Filters;

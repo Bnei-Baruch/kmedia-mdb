@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { withNamespaces } from 'react-i18next';
 import WipErr from '../../../shared/WipErr/WipErr';
 import UnitPage from '../../../Pages/Unit/Page';
-import { NO_COLLECTION_VIEW_TYPE, CT_DAILY_LESSON } from '../../../../helpers/consts';
+import { NO_COLLECTION_VIEW_TYPE } from '../../../../helpers/consts';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { actions, selectors } from '../../../../redux/modules/mdb';
@@ -32,8 +32,9 @@ const LessonPage = ({ t }) => {
     return null;
   }
 
-  if (!unit?.collections)
+  if (!unit?.collections) {
     return <UnitPage section="lessons" />;
+  }
 
   let c;
   for (const _c in unit.collections) {
@@ -43,8 +44,9 @@ const LessonPage = ({ t }) => {
     }
   }
 
-  if (!c)
+  if (!c) {
     return <UnitPage section="lessons" />;
+  }
 
   return <PlaylistCollectionContainer cId={c.id} cuId={id} />;
 };

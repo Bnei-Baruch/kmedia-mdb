@@ -15,7 +15,6 @@ import { selectors as settings } from '../../redux/modules/settings';
 import * as shapes from '../shapes';
 import FiltersHydrator from './FiltersHydrator';
 import { DeviceInfoContext } from '../../helpers/app-contexts';
-import { POPULAR_LANGUAGES } from '../../helpers/consts';
 
 class Filters extends Component {
   static contextType = DeviceInfoContext;
