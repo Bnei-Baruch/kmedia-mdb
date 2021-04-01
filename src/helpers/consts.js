@@ -1,20 +1,21 @@
 // Collection Types
-export const CT_DAILY_LESSON       = 'DAILY_LESSON';
-export const CT_SPECIAL_LESSON     = 'SPECIAL_LESSON';
-export const CT_FRIENDS_GATHERINGS = 'FRIENDS_GATHERINGS';
-export const CT_VIDEO_PROGRAM      = 'VIDEO_PROGRAM';
-export const CT_LECTURE_SERIES     = 'LECTURE_SERIES';
-export const CT_CHILDREN_LESSONS   = 'CHILDREN_LESSONS';
-export const CT_WOMEN_LESSONS      = 'WOMEN_LESSONS';
-export const CT_VIRTUAL_LESSONS    = 'VIRTUAL_LESSONS';
-export const CT_MEALS              = 'MEALS';
-export const CT_CONGRESS           = 'CONGRESS';
-export const CT_HOLIDAY            = 'HOLIDAY';
-export const CT_PICNIC             = 'PICNIC';
-export const CT_UNITY_DAY          = 'UNITY_DAY';
-export const CT_CLIPS              = 'CLIPS';
-export const CT_ARTICLES           = 'ARTICLES';
-export const CT_LESSONS_SERIES     = 'LESSONS_SERIES';
+export const CT_DAILY_LESSON            = 'DAILY_LESSON';
+export const CT_SPECIAL_LESSON          = 'SPECIAL_LESSON';
+export const CT_FRIENDS_GATHERINGS      = 'FRIENDS_GATHERINGS';
+export const CT_VIDEO_PROGRAM           = 'VIDEO_PROGRAM';
+export const CT_LECTURE_SERIES          = 'LECTURE_SERIES';
+export const CT_CHILDREN_LESSONS        = 'CHILDREN_LESSONS';
+export const CT_WOMEN_LESSONS           = 'WOMEN_LESSONS';
+export const CT_VIRTUAL_LESSONS         = 'VIRTUAL_LESSONS';
+export const CT_MEALS                   = 'MEALS';
+export const CT_CONGRESS                = 'CONGRESS';
+export const CT_HOLIDAY                 = 'HOLIDAY';
+export const CT_PICNIC                  = 'PICNIC';
+export const CT_UNITY_DAY               = 'UNITY_DAY';
+export const CT_CLIPS                   = 'CLIPS';
+export const CT_ARTICLES                = 'ARTICLES';
+export const CT_LESSONS_SERIES          = 'LESSONS_SERIES';
+export const CT_COMBINED_LESSONS_SERIES = 'COMBINED_LESSONS_SERIES';
 
 export const CT_COLLECTIONS = [
   CT_DAILY_LESSON,

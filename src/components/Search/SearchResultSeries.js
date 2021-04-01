@@ -7,7 +7,7 @@ import { isDebMode } from '../../helpers/url';
 import Link from '../Language/MultiLanguageLink';
 import ScoreDebug from './ScoreDebug';
 import SearchResultBase from './SearchResultBase';
-import { COLLECTION_LESSONS_TYPE, CT_LESSONS_SERIES } from '../../helpers/consts';
+import { CT_COMBINED_LESSONS_SERIES } from '../../helpers/consts';
 import { connect } from 'react-redux';
 import { selectors as sourcesSelectors } from '../../redux/modules/sources';
 
@@ -85,7 +85,7 @@ class SearchResultSeries extends SearchResultBase {
             </Container>
 
             <Container className="content">
-              {this.iconByContentType(CT_LESSONS_SERIES, t, true)}
+              {this.iconByContentType(CT_COMBINED_LESSONS_SERIES, t, true)}
             </Container>
             <div className="clear" />
           </Container>

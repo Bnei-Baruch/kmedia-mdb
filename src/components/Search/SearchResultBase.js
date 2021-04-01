@@ -22,7 +22,7 @@ import {
   CT_LECTURE_SERIES,
   CT_LELO_MIKUD,
   CT_LESSON_PART,
-  CT_LESSONS_SERIES,
+  CT_COMBINED_LESSONS_SERIES,
   CT_LECTURE,
   CT_MEAL,
   CT_MEALS,
@@ -67,7 +67,7 @@ const iconByContentTypeMap = new Map([
   [CT_CHILDREN_LESSONS, 'lessons'],
   [CT_WOMEN_LESSONS, 'lessons'],
   [CT_VIRTUAL_LESSONS, 'lessons'],
-  [CT_LESSONS_SERIES, 'lessons'],
+  [CT_COMBINED_LESSONS_SERIES, 'lessons'],
   [CT_LECTURE, 'lessons'],
   [CT_FRIENDS_GATHERING, 'events'],
   [CT_MEAL, 'events'],
@@ -291,8 +291,8 @@ class SearchResultBase extends Component {
   highlightWrapToLink = (__html, index, pathname, search, logLinkParams) => {
     const searchArr = this.clearStringForLink(__html).split(' ');
 
-    search.srchstart       = searchArr.slice(0, MIN_NECESSARY_WORDS_FOR_SEARCH).join(' ');
-    search.srchend         = searchArr.slice(-1 * MIN_NECESSARY_WORDS_FOR_SEARCH).join(' ');
+    search.srchstart    = searchArr.slice(0, MIN_NECESSARY_WORDS_FOR_SEARCH).join(' ');
+    search.srchend      = searchArr.slice(-1 * MIN_NECESSARY_WORDS_FOR_SEARCH).join(' ');
     search.highlightAll = true;
 
     return (<Link
