@@ -125,6 +125,16 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
 
   const filterOutUnits = items.map(item => item.unit).filter(u => !!u) || [];
 
+  // Don't recommend lesson preparation, skip to next unit.
+  let recommendUnit = unit;
+  const isUnitPrep = collection?.ccuNames?.[unit?.id] === '0';
+  if (isUnitPrep && Array.isArray(playlist?.items)) {
+    const indexOfUnit = playlist.items.findIndex((item) => item?.unit?.id === unit.id);
+    if (indexOfUnit !== -1 && indexOfUnit + 1 < playlist.items.length) {
+      recommendUnit = playlist.items[indexOfUnit + 1].unit;
+    }
+  }
+
   const PlaylistData = () =>
     <>
       <Playlist
@@ -135,7 +145,7 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
         prevLink={prevLink}
       />
       <br />
-      <Recommended unit={unit} filterOutUnits={filterOutUnits} />
+      <Recommended unit={recommendUnit} filterOutUnits={filterOutUnits} />
     </>;
 
   const computerWidth = isMobileDevice ? 16 : 10;

@@ -35,7 +35,7 @@ const initialState = {
 const onSuccess = (state, action) => {
   state.wip = false;
   state.err = null;
-  state.recommendedItems = action.payload;
+  state.recommendedItems = action.payload.recommendedItems;
 
   return state;
 };
