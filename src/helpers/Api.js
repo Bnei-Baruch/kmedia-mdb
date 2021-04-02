@@ -126,28 +126,28 @@ class Api {
     Requests.get(`simple?${Requests.makeParams({ language, start_date, end_date })}`)
   );
 
-  static recommended = ({uid, languages, skipUids: skip_uids, size: more_items}) => {
-    const data = JSON.stringify({
-      more_items,
-      "current_feed": [],
-      "options": {
-        "recommend": {
-          uid,
-        },
-        languages,
-        skip_uids,
-      }
-    });
+  static recommendedRequestData = ({uid, languages, skipUids: skip_uids, size: more_items}) => ({
+    more_items,
+    "current_feed": [],
+    "options": {
+      "recommend": {
+        uid,
+      },
+      languages,
+      skip_uids,
+    }
+  });
 
+  static recommended = (requestData) => {
     const config = {
       method: 'post',
       url: `${API_RECOMMENDED}`, 
       headers: { 'Content-Type': 'application/json' },
-      data: data
+      data: JSON.stringify(requestData),
     };
 
     return axios(config);
-  }
+  };
 }
 
 export default Api;

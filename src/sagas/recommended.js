@@ -19,7 +19,8 @@ export function* fetchRecommended(action) {
       }
     });
 
-    const { data } = yield call(Api.recommended, {uid: id, languages: [language], skipUids, size});
+    const requestData = Api.recommendedRequestData({uid: id, languages: [language], skipUids, size})
+    const { data } = yield call(Api.recommended, requestData);
     const recommendedItems = data.feed;
 
     if (Array.isArray(recommendedItems) && recommendedItems.length > 0){
@@ -29,7 +30,7 @@ export function* fetchRecommended(action) {
       ]);
     }
 
-    yield put(actions.fetchRecommendedSuccess(recommendedItems));
+    yield put(actions.fetchRecommendedSuccess({recommendedItems, requestData}));
   }
   catch (err) {
     yield put(actions.fetchRecommendedFailure(err));
