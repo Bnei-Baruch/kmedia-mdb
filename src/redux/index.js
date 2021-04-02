@@ -16,6 +16,7 @@ import { reducer as home } from './modules/home';
 import { reducer as stats } from './modules/stats';
 import { reducer as simpleMode } from './modules/simpleMode';
 import { reducer as recommended } from './modules/recommended';
+import { reducer as chronicles } from './modules/chronicles';
 
 const reducers = history => combineReducers({
   router: connectRouter(history),
@@ -34,7 +35,8 @@ const reducers = history => combineReducers({
   home,
   stats,
   simpleMode,
-  recommended
+  recommended,
+  chronicles,
 });
 
 export default reducers;
