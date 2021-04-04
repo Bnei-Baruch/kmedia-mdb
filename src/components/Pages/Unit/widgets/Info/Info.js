@@ -51,7 +51,7 @@ const makeTagLinks = (tags = [], getTagById, filteredListPath) =>
       if (!label) {
         return '';
       }
-      return filteredListPath ? <Link key={id} to={`/topics/${id}`}>{label}</Link> : <span key={id}>{label}</span>;
+      return <Link key={id} to={`/topics/${id}`}>{label}</Link>;
     }), ', '));
 
 const makeSourcesLinks = (sources = [], getSourceById, filteredListPath) => Array.from(intersperse(
@@ -116,7 +116,7 @@ const Info = ({ unit = {}, section = '', t }) => {
     filteredListPath += filterLessons(ct, filmDate);
   }
 
-  const tagLinks = makeTagLinks(tags, getTagById, filteredListPath);
+  const tagLinks = makeTagLinks(tags, getTagById);
 
   const sourcesLinks = makeSourcesLinks(sources, getSourceById, filteredListPath);
 
