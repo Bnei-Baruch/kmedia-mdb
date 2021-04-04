@@ -44,14 +44,14 @@ const filterLessons = (ct, filmDate) => {
   }
 };
 
-const makeTagLinks = (tags = [], getTagById, filteredListPath) => {
+const makeTagLinks = (tags = [], getTagById) => {
   return Array.from(intersperse(
     tags.map((x) => {
       const { id, label } = getTagById(x);
       if (!label) {
         return '';
       }
-      return filteredListPath ? <Link key={id} to={`/topics/${id}`}>{label}</Link> : <span key={id}>{label}</span>;
+      return <Link key={id} to={`/topics/${id}`}>{label}</Link>;
     }), ', '));
 };
 
@@ -121,7 +121,7 @@ const Info = ({ unit = {}, section = '', t }) => {
     filteredListPath += filterLessons(ct, filmDate);
   }
 
-  const tagLinks = makeTagLinks(tags, getTagById, filteredListPath);
+  const tagLinks = makeTagLinks(tags, getTagById);
 
   const sourcesLinks = makeSourcesLinks(sources, getSourceById, filteredListPath);
 
