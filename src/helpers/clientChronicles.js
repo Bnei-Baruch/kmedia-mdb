@@ -14,11 +14,11 @@ import { ClientChroniclesContext } from './app-contexts';
 const ACTIVITY_EVENTS = ['mousedown', 'mousemove', 'keydown', 'scroll', 'touchstart'];
 
 const FLOWS = [
-  {start: 'page-enter',               end: 'page-leave',                 subFlows: ['recommend']},
-  {start: 'unit-page-enter',          end: 'unit-page-leave',            subFlows: ['player-play', 'recommend']},
-  {start: 'collection-page-enter',    end: 'collection-page-leave',      subFlows: ['collection-unit-selected', 'recommend']},
-  {start: 'collection-unit-selected', end: 'collection-unit-unselected', subFlows: ['player-play']},
-  {start: 'player-play',              end: 'player-stop',                subFlows: ['mute-unmute']},
+  {start: 'page-enter',               end: 'page-leave',                 subFlows: ['recommend', 'user-inactive']},
+  {start: 'unit-page-enter',          end: 'unit-page-leave',            subFlows: ['player-play', 'recommend', 'user-inactive']},
+  {start: 'collection-page-enter',    end: 'collection-page-leave',      subFlows: ['collection-unit-selected', 'recommend', 'user-inactive']},
+  {start: 'collection-unit-selected', end: 'collection-unit-unselected', subFlows: ['player-play', 'user-inactive']},
+  {start: 'player-play',              end: 'player-stop',                subFlows: ['mute-unmute', 'user-inactive']},
   {start: 'recommend',                end: '',                           subFlows: ['recommend-selected']},
 ];
 
@@ -52,7 +52,10 @@ export default class ClientChronicles {
 
     this.namespace = 'archive';
 
-    this.initSession({reinit: false});
+    this.initSession(/* reinit= */ false);
+
+    // Store all appends in order to send them in bulks.
+    this.timestampedAppends = [];
 
     // Setup the setInterval method to run every second.
     setInterval(() => {
@@ -65,12 +68,20 @@ export default class ClientChronicles {
       }
     }, 1000);
 
+    setInterval(() => {
+      // Send all appends to chronicles server.
+      if (this.timestampedAppends.length) {
+        this.flushAppends(/* sync */ false);
+      }
+    }, 60000);
+
     window.addEventListener('beforeunload', (event) => {
       this.sessionActivities.add('beforeunload');
       if (this.currentPathname) {
-        this.appendPage('leave');
+        // Sync is false here because it will be sent together with user-inactive append.
+        this.appendPage('leave', /* sync= */ false);
       }
-      this.append('user-inactive', {activities: Array.from(this.sessionActivities)});
+      this.append('user-inactive', {activities: Array.from(this.sessionActivities)}, /* sync= */ true);
       store.dispatch(actions.userInactive());
     }, true);
 
@@ -79,7 +90,7 @@ export default class ClientChronicles {
       document.addEventListener(eventName, () => {
         if (!this.isUserActive()) {
           // User back from inactive state. This is a new session.
-          this.initSession({reinit: true});
+          this.initSession(/* reinit */ true);
         } else {
           this.lastActivityTimestampMs = Date.now();
         }
@@ -118,7 +129,7 @@ export default class ClientChronicles {
     this.append('recommend-selected', {uid});
   }
 
-  appendPage(suffix) {
+  appendPage(suffix, sync = false) {
     const data = {
       pathname: this.currentPathname,
     };
@@ -136,12 +147,12 @@ export default class ClientChronicles {
         prefix = '';
       }
     }
-    this.append(`${prefix}page-${suffix}`, data);
+    this.append(`${prefix}page-${suffix}`, data, sync);
   }
 
-  initSession(options) {
+  initSession(reinit) {
     const sessionStorage = window.sessionStorage;
-    if (options?.reinit || sessionStorage.getItem('session_id') === null) {
+    if (reinit || sessionStorage.getItem('session_id') === null) {
       sessionStorage.setItem('session_id', `local:${ulid()}`);
     }
     this.sessionId = sessionStorage.getItem('session_id');
@@ -172,6 +183,19 @@ export default class ClientChronicles {
 
   isUserActive() {
     return this.isPlayerPlaying() || this.lastEventType().eventType !== 'user-inactive';
+  }
+
+  flushAppends(sync = false) {
+    const nowTimestampMs = Date.now();
+    const appends = { append_requests: this.timestampedAppends.map((timestampAppend) => ({append: timestampAppend.append, offset: timestampAppend.timestamp - nowTimestampMs})) };
+    // Clear bulk without checking if post worked or not.
+    this.timestampedAppends.length = 0;
+    if (sync) {
+      (async () => { return await axios.post(chroniclesUrl('appends'), appends); })();
+    } else {
+      axios.post(chroniclesUrl('appends'), appends)
+        .catch((error) => { console.warn(error); });
+    }
   }
 
   append(eventType, data, sync = false) {
@@ -211,11 +235,9 @@ export default class ClientChronicles {
 
     this.LastEntriesByType.set(eventType, {timestamp: nowTimestampMs, eventId});
 
+    this.timestampedAppends.push({timestamp: nowTimestampMs, append});
     if (sync) {
-      (async () => { return await axios.post(chroniclesUrl('append'), append); })();
-    } else {
-      axios.post(chroniclesUrl('append'), append)
-        .catch((error) => { console.warn(error); });
+      this.flushAppends(sync);
     }
   }
 }
