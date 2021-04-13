@@ -256,7 +256,11 @@
       "lectures": "Vorträge",
       "women": "Lektionen für Frauen",
       "children": "Unterricht für Kinder",
-      "series": "Ausgewählte Trainingsserien"
+      "series": "Ausgewählte Trainingsserien",
+      "seriesTree": {
+        "byKabbalist": "Various Kabbalists",
+        "byTopics": "By Topics"
+      }
     },
     "list": {
       "related": "Bezogen auf",

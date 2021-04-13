@@ -238,7 +238,11 @@
       "lectures": "Přednášky",
       "women": "Ženské lekce",
       "children": "Dětské lekce",
-      "series": "Vybrané studijní série"
+      "series": "Vybrané studijní série",
+      "seriesTree": {
+        "byKabbalist": "Various Kabbalists",
+        "byTopics": "By Topics"
+      }
     },
     "list": {
       "related": "Související s",

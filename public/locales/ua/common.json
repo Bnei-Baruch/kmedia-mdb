@@ -258,7 +258,11 @@
       "women": "Уроки для жінок",
       "rabash": "Уроки Рабаша",
       "children": "Уроки для дітей",
-      "series": "Избранные серии обучения"
+      "series": "Избранные серии обучения",
+      "seriesTree": {
+        "byKabbalist": "Various Kabbalists",
+        "byTopics": "By Topics"
+      }
     },
     "list": {
       "related": "Відносяться до:",
