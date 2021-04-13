@@ -2,11 +2,15 @@ import { createAction } from 'redux-actions';
 import groupBy from 'lodash/groupBy';
 import mapValues from 'lodash/mapValues';
 
-import { isEmpty, strCmp } from '../../helpers/utils';
+import { isEmpty, isNotEmptyArray, strCmp, getEscapedRegExp } from '../../helpers/utils';
 import { selectors as mdb } from './mdb';
 import { handleActions, types as settings } from './settings';
 import { selectors as sources } from './sources';
+import { selectors as tags } from './tags';
 import { types as ssr } from './ssr';
+
+// use to filter out TES VOLUME
+const tesKey = "xtKmrbb9";
 
 /* Types */
 
@@ -118,89 +122,184 @@ export const reducer = handleActions({
 const getWip            = state => state.wip;
 const getErrors         = state => state.errors;
 const getLecturesByType = state => state.lecturesByType;
+const getSeriesIDs      = state => state.seriesIDs;
 
 const $$sortTree = node => {
   if (isEmpty(node)) {
     return [];
   }
 
-  const { name, children, id, parent_id } = node;
-
-  // leaf nodes has array of items
+  // leaf nodes has array of children
   // we sort them by start_date
-  if (Array.isArray(children)) {
-    children.sort((a, b) => strCmp(a.start_date, b.start_date));
+  if (Array.isArray(node.children) && node.children.length > 0) {
+    node.children.sort((a, b) => strCmp(a.start_date, b.start_date));
     return node;
   }
 
-  // non-leaf nodes are reshaped to {name, items}
+  // non-leaf nodes are reshaped to {name, children}
   // instead of {name, item, item, item...}
-  const l = Object.keys(node)
-    .filter(x => x !== 'name' && x !== 'id' && x !== 'parent_id')
+  const children = Object.keys(node)
+    .filter(x => x !== 'name' && x !== 'id' && x !== 'parent_id' && x !== 'type')
     .map(x => node[x]);
-  l.sort(x => x.name);
+
+  children.sort(x => x.name);
+
+  const { id, parent_id, name, type } = node;
 
   return {
     id,
-    parent_id,
     name,
-    children: l.map($$sortTree),
+    parent_id,
+    type,
+    children: children.map($$sortTree),
   };
 };
 
-const getSeriesBySource = state => {
+const getTree = (state, match) => {
   const srcPathById = sources.getPathByID(state.sources);
+  const tagPathById = tags.getPathByID(state.tags);
 
   // sources might not have been loaded by now
-  if (!srcPathById) {
+  if (!srcPathById || !tagPathById) {
     return [];
   }
 
-  // construct the folder-like tree
-  const tree = state.lessons.seriesIDs.reduce((acc, serId) => {
-    const series = mdb.getCollectionById(state.mdb, serId);
+  const regExp = match && getEscapedRegExp(match);
 
-    // mdb might not have been loaded by now
-    if (!series) {
-      return acc;
+  const allSeries = state.lessons.seriesIDs
+    .map(serId => mdb.getCollectionById(state.mdb, serId))
+    .filter(series => !!series);
+
+  const byTag = allSeries.reduce((acc, series) => {
+    const { tag_id, name } = series;
+
+    if (isNotEmptyArray(tag_id)){
+      const tagPaths = tag_id.map(tagId => tagPathById(tagId));
+
+      for (let i = 0; i < tagPaths.length; i++) {
+        // check filter
+        const exists = match
+          ? tagPaths[i].map(x => x.label).find(n => regExp.test(n)) || regExp.test(name)
+          : true;
+
+        if (exists){
+          addTagsToTree(acc, tagPaths[i], series);
+        }
+      }
     }
-
-    const { source_id: sourceID } = series;
-    if (!sourceID) {
-      return acc;
-    }
-
-    const path = srcPathById(sourceID);
-    if (!Array.isArray(path) || path.length === 0) {
-      return acc;
-    }
-
-    // mkdir -p path[:]
-    let dir = acc;
-    for (let i = 0; i < path.length; i++) {
-      const { id, name, parent_id } = path[i]
-
-      dir[id] = dir[id] || {};
-      dir = dir[id];
-
-      dir.name = name;
-      dir.id = id;
-      dir.parent_id = parent_id;
-    }
-
-    // mv series path.items
-    dir.children = dir.children || [];
-    dir.children.push(series);
 
     return acc;
   }, {});
 
-  return $$sortTree(tree).children;
+  // construct the folder-like tree
+  const bySourceTree = allSeries.reduce((acc, series) => {
+    const { source_id, name } = series;
+    if (!source_id) {
+      return acc;
+    }
+
+    const path = srcPathById(source_id);
+    if (!Array.isArray(path) || path.length === 0) {
+      return acc;
+    }
+
+    // check filter
+    const exists = match
+      ? path.map(x => x.name).find(n => regExp.test(n)) || regExp.test(name)
+      : true;
+
+    if (exists){
+      addSeriesToTree(acc, path, series);
+    }
+
+    return acc;
+  }, {});
+
+  return { bySourceTree, byTag };
+}
+
+const addTagsToTree = (acc, path, series) => {
+  let dir = acc;
+  for (let i = 0; i < path.length; i++) {
+    const { id, label, parent_id, type } = path[i];
+
+    dir[id] = dir[id] || {};
+    dir = dir[id];
+
+    dir.id = id;
+    dir.parent_id = parent_id;
+    dir.name = label;
+    dir.type = type;
+  }
+
+  dir.children = dir.children || [];
+  dir.children.push(series);
+}
+
+const addSeriesToTree = (acc, path, series) => {
+  const isTaas = path.some(p => p.id === tesKey);
+  let volumeId, volumeParentId;
+
+  let dir = acc;
+  for (let i = 0; i < path.length; i++) {
+    let { id, name, parent_id, type } = path[i];
+
+    if (isTaas) {
+      // save volume data for later and skip the path part
+      if (type === 'VOLUME'){
+        volumeId = id;
+        volumeParentId = parent_id;
+        continue;
+      }
+
+      // for volume child - set the parent to be grandparent, e.g. skip the volume in the tree
+      if (parent_id === volumeId) {
+        parent_id = volumeParentId;
+      }
+    }
+
+    dir[id] = dir[id] || {};
+    dir = dir[id];
+
+    dir.id = id;
+    dir.parent_id = parent_id;
+    dir.name = name;
+    dir.type = type;
+  }
+  // mv series path.children
+  dir.children = dir.children || [];
+  dir.children.push(series);
+};
+
+const getSeriesTree = (state, match) => {
+  const { bySourceTree, byTag } = getTree(state, match);
+
+  if (isEmpty(bySourceTree) && isEmpty(byTag)){
+    return null;
+  }
+
+  const fullTree = {
+    'bs': bySourceTree['bs'],
+    'byKabbalist': { 'id': 'byKabbalist', 'name': 'byKabbalist' },
+    'byTopics': { 'id': 'byTopics', 'name': 'By Topics' }
+  }
+
+  Object.keys(bySourceTree).filter(key => key !== 'bs').forEach(key => {
+    fullTree['byKabbalist'][key] = bySourceTree[key]
+  });
+
+  Object.keys(byTag).forEach(key => {
+    fullTree['byTopics'][key] = byTag[key]
+  });
+
+  const sortedTree = $$sortTree(fullTree);
+  return sortedTree.children;
 };
 
 export const selectors = {
   getWip,
   getErrors,
   getLecturesByType,
-  getSeriesBySource,
+  getSeriesIDs,
+  getSeriesTree,
 };
