@@ -8,7 +8,7 @@ import { Button, Container, Divider, Grid, Header, Input, List } from 'semantic-
 
 import { actions as topicsActions, selectors as topicsSelectors } from '../../../redux/modules/tags';
 import { selectors as statsSelectors } from '../../../redux/modules/stats';
-import { getEscapedRegExp, isEmpty } from '../../../helpers/utils';
+import { getEscapedRegExp, isEmpty, isNotEmptyArray } from '../../../helpers/utils';
 import SectionHeader from '../../shared/SectionHeader';
 import Link from '../../Language/MultiLanguageLink';
 import {
@@ -40,13 +40,82 @@ const contentType    = [
   CT_PUBLICATION,
 ];
 
-const hasChildren = node => Array.isArray(node.children) && node.children.length > 0;
+const hasChildren = node => node && isNotEmptyArray(node.children);
 
 const sortRootsPosition = roots => {
   const extra = roots.filter(node => !TOPICS_FOR_DISPLAY.includes(node));
 
   return roots.length ? [...TOPICS_FOR_DISPLAY, ...extra] : roots;
 };
+
+const getAllVisibleById = (byId, expandedNodes) => {
+  const visibleItemsCount = 3;
+  const list = produce(byId || {}, draft => {
+    Object.keys(draft).forEach(key => {
+      const { id, parent_id } = draft[key];
+
+      // make node visible when its parent is in expandedNodes and its index less then visible items count
+      const visible = parent_id
+        ? expandedNodes.has(parent_id) || draft[parent_id].children.indexOf(id) < visibleItemsCount
+        : true
+
+      draft[key].visible = visible;
+    });
+  });
+
+  return list;
+}
+
+const filterData = (byId, match, sortedRoots) => {
+  const filteredById  = {};
+  const parentIdsArr = [];
+  const regExp = getEscapedRegExp(match);
+
+  // filter objects
+  Object.keys(byId).forEach(key => {
+    const { label, parent_id } = byId[key];
+
+    // add object that includes the match
+    if (label && regExp.test(label)) {
+      filteredById[key] = { ...byId[key], visible: true };
+
+      // keep its parent_id key
+      if (parent_id) {
+        parentIdsArr.push(parent_id);
+      }
+    }
+  });
+
+  // add grand parents ids till the root to parentIdsArr
+  const displayRootIndexes = []; // to keep the same order of the roots
+  let i                    = 0;
+  let index;
+  while (i < parentIdsArr.length) {
+    const { id, parent_id } = byId[parentIdsArr[i]];
+
+    // keep displayRoot index for the order of the roots
+    if (!parent_id) {
+      index = sortedRoots.indexOf(id);
+      if (index > -1 && !displayRootIndexes.includes(index)) {
+        displayRootIndexes.push(index);
+      }
+    } else if (!parentIdsArr.includes(parent_id)) {
+      parentIdsArr.push(parent_id);
+    }
+
+    i++;
+  }
+
+  displayRootIndexes.sort();
+  const filteredRoots = displayRootIndexes.map(ind => sortedRoots[ind]);
+
+  // add the parents to filteredById
+  parentIdsArr.forEach(parentKey => {
+    filteredById[parentKey] = byId[parentKey];
+  });
+
+  return [filteredById, filteredRoots];
+}
 
 /* root will be main title
   subroot will be subtitle
@@ -60,10 +129,6 @@ const TopicContainer = ({ t }) => {
 
   const [match, setMatch] = useState('');
   const [expandedNodes, setExpandedNodes] = useState(new Set());
-
-  console.log('stats:', stats);
-  console.log('roots:', roots);
-  console.log('byID:', byId);
 
   const dispatch = useDispatch();
 
@@ -81,87 +146,19 @@ const TopicContainer = ({ t }) => {
     }
   };
 
-  const getAllVisibleById = () => {
-    const visibleItemsCount = 3;
-    const list = produce(byId || {}, draft => {
-      Object.keys(draft).forEach(key => {
-        const { id, parent_id } = draft[key];
-
-        // make node visible when its parent is in expandedNodes and its index less then visible items count
-        const visible = parent_id
-          ? expandedNodes.has(parent_id) || draft[parent_id].children.indexOf(id) < visibleItemsCount
-          : true
-
-        draft[key].visible = visible;
-      });
-    });
-
-    return list;
-  }
-
-
-  let filteredById = {};
-
   const filterTagsById = () => {
     const sortedRoots = sortRootsPosition(roots);
 
     if (!match) {
-      filteredById = getAllVisibleById();
-      return sortedRoots;
+      const filteredById = getAllVisibleById(byId, expandedNodes);
+      return [filteredById, sortedRoots];
     }
 
-    filteredById  = {};
-    const parentIdsArr = [];
-    const regExp = getEscapedRegExp(match);
-
-    // filter objects
-    Object.keys(byId).forEach(key => {
-      const { label, parent_id } = byId[key];
-
-      // add object that includes the match
-      if (label && regExp.test(label)) {
-        filteredById[key] = { ...byId[key], visible: true };
-
-        // keep its parent_id key
-        if (parent_id) {
-          parentIdsArr.push(parent_id);
-        }
-      }
-    });
-
-    // add grand parents ids till the root to parentIdsArr
-    const displayRootIndexes = []; // to keep the same order of the roots
-    let i                    = 0;
-    let index;
-    while (i < parentIdsArr.length) {
-      const { id, parent_id } = byId[parentIdsArr[i]];
-
-      // keep displayRoot index for the order of the roots
-      if (!parent_id) {
-        index = sortedRoots.indexOf(id);
-        if (index > -1 && !displayRootIndexes.includes(index)) {
-          displayRootIndexes.push(index);
-        }
-      } else if (parent_id && !parentIdsArr.includes(parent_id)) {
-        parentIdsArr.push(parent_id);
-      }
-
-      i++;
-    }
-
-    displayRootIndexes.sort();
-    const filteredRoots = displayRootIndexes.map(ind => sortedRoots[ind]);
-
-    // add the parents to filteredById
-    parentIdsArr.forEach(parentKey => {
-      filteredById[parentKey] = byId[parentKey];
-    });
-
-    return filteredRoots;
+    return filterData(byId, match, sortedRoots);
   }
 
   // run filter
-  const filteredRoots = filterTagsById();
+  const [filteredById, filteredRoots] = filterTagsById();
 
   const isIncluded = id => !!filteredById[id];
 
@@ -170,11 +167,9 @@ const TopicContainer = ({ t }) => {
       // a new set has to be created to update the state
       const newSet = new Set(expNodes);
 
-      if (newSet.has(nodeId)){
-        newSet.delete(nodeId)
-      } else {
-        newSet.add(nodeId)
-      }
+      newSet.has(nodeId)
+        ? newSet.delete(nodeId)
+        : newSet.add(nodeId);
 
       return newSet;
     })
@@ -187,26 +182,31 @@ const TopicContainer = ({ t }) => {
     </Link>
 
   const renderNode = (node, grandchildrenClass = '') => {
-    const showExpandButton = node?.children?.length > 3;
-    const expanded = expandedNodes.has(node.id);
+    if (!node) {
+      return null;
+    }
 
-    return node ? (
-      <Fragment key={`f-${node.id}`}>
+    const { id, label, children } = node;
+    const showExpandButton = children?.length > 3;
+    const expanded = expandedNodes.has(id);
+
+    return (
+      <Fragment key={`f-${id}`}>
         {
-          hasChildren(node) ? (
-            <div key={node.id} className={`topics__card ${grandchildrenClass}`}>
+          isNotEmptyArray(children) ? (
+            <div key={id} className={`topics__card ${grandchildrenClass}`}>
               <Header as="h4" className="topics__subtitle">
-                <Link to={`/topics/${node.id}`}>
-                  {node.label}
+                <Link to={`/topics/${id}`}>
+                  {label}
                 </Link>
               </Header>
               <List>
                 {
-                  node.children
+                  children
                     .filter(isIncluded)
-                    .map(id => (
-                      <List.Item key={id} className={filteredById[id].visible ? '' : 'hide-topic'}>
-                        {renderNode(filteredById[id], 'grandchildren')}
+                    .map(cId => (
+                      <List.Item key={cId} className={filteredById[cId].visible ? '' : 'hide-topic'}>
+                        {renderNode(filteredById[cId], 'grandchildren')}
                       </List.Item>
                     ))
                 }
@@ -217,13 +217,13 @@ const TopicContainer = ({ t }) => {
                 className={`topics__button ${showExpandButton ? '' : 'hide-button'}`}
                 size="mini"
                 content={t(`topics.show-${expanded ? 'less' : 'more'}`)}
-                onClick={() => handleShowMoreClick(node.id)}
+                onClick={() => handleShowMoreClick(id)}
               />
             </div>
           ) : renderLeaf(node)
         }
       </Fragment>
-    ) : null;
+    );
   };
 
   const renderSubHeader = node => hasChildren(node) ? renderNode(node) : null;
