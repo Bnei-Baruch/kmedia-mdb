@@ -3,17 +3,14 @@ import groupBy from 'lodash/groupBy';
 import mapValues from 'lodash/mapValues';
 
 import { isEmpty, isNotEmptyArray, strCmp, getEscapedRegExp } from '../../helpers/utils';
+import { SRC_VOLUME } from '../../helpers/consts';
 import { selectors as mdb } from './mdb';
 import { handleActions, types as settings } from './settings';
 import { selectors as sources } from './sources';
 import { selectors as tags } from './tags';
 import { types as ssr } from './ssr';
 
-// use to filter out TES VOLUME
-const tesKey = "xtKmrbb9";
-
 /* Types */
-
 const SET_TAB = 'Lessons/SET_TAB';
 
 const RECEIVE_LECTURES         = 'Lessons/RECEIVE_LECTURES';
@@ -31,7 +28,6 @@ export const types = {
 };
 
 /* Actions */
-
 const setTab = createAction(SET_TAB);
 
 const receiveLectures       = createAction(RECEIVE_LECTURES);
@@ -237,16 +233,16 @@ const addTagsToTree = (acc, path, series) => {
 }
 
 const addSeriesToTree = (acc, path, series) => {
-  const isTaas = path.some(p => p.id === tesKey);
-  let volumeId, volumeParentId;
+  const hasVolume = path.some(p => p.type === SRC_VOLUME);
 
+  let volumeId, volumeParentId;
   let dir = acc;
   for (let i = 0; i < path.length; i++) {
     let { id, name, parent_id, type } = path[i];
 
-    if (isTaas) {
+    if (hasVolume) {
       // save volume data for later and skip the path part
-      if (type === 'VOLUME'){
+      if (type === SRC_VOLUME){
         volumeId = id;
         volumeParentId = parent_id;
         continue;
