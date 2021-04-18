@@ -193,37 +193,39 @@ const TopicContainer = ({ t }) => {
     return (
       <Fragment key={`f-${id}`}>
         {
-          isNotEmptyArray(children) ? (
-            <div key={id} className={`topics__card ${grandchildrenClass}`}>
-              <Header as="h4" className="topics__subtitle">
-                <Link to={`/topics/${id}`}>
-                  {label}
-                </Link>
-              </Header>
-              <List>
+          isNotEmptyArray(children)
+            ? (
+              <div key={id} className={`topics__card ${grandchildrenClass}`}>
+                <Header as="h4" className="topics__subtitle">
+                  <Link to={`/topics/${id}`}>
+                    {label}
+                  </Link>
+                </Header>
+                <List>
+                  {
+                    children
+                      .filter(isIncluded)
+                      .map(cId => (
+                        <List.Item key={cId} className={filteredById[cId].visible ? '' : 'hide-topic'}>
+                          {renderNode(filteredById[cId], 'grandchildren')}
+                        </List.Item>
+                      ))
+                  }
+                </List>
                 {
-                  children
-                    .filter(isIncluded)
-                    .map(cId => (
-                      <List.Item key={cId} className={filteredById[cId].visible ? '' : 'hide-topic'}>
-                        {renderNode(filteredById[cId], 'grandchildren')}
-                      </List.Item>
-                    ))
+                  showExpandButton &&
+                  <Button
+                    basic
+                    icon={expanded ? 'minus' : 'plus'}
+                    className={`topics__button ${showExpandButton ? '' : 'hide-button'}`}
+                    size="mini"
+                    content={t(`topics.show-${expanded ? 'less' : 'more'}`)}
+                    onClick={() => handleShowMoreClick(id)}
+                  />
                 }
-              </List>
-              {
-                showExpandButton &&
-                <Button
-                  basic
-                  icon={expanded ? 'minus' : 'plus'}
-                  className={`topics__button ${showExpandButton ? '' : 'hide-button'}`}
-                  size="mini"
-                  content={t(`topics.show-${expanded ? 'less' : 'more'}`)}
-                  onClick={() => handleShowMoreClick(id)}
-                />
-              }
-            </div>
-          ) : renderLeaf(node)
+              </div>
+            )
+            : renderLeaf(node)
         }
       </Fragment>
     );
