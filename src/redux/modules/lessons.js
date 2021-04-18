@@ -178,8 +178,8 @@ const getTree = (state, match) => {
           ? tagPaths[i].map(x => x.label).find(n => regExp.test(n)) || regExp.test(name)
           : true;
 
-        if (exists){
-          addTagsToTree(acc, tagPaths[i], series);
+        if (exists) {
+          addToTagsTree(acc, tagPaths[i], series);
         }
       }
     }
@@ -204,8 +204,8 @@ const getTree = (state, match) => {
       ? path.map(x => x.name).find(n => regExp.test(n)) || regExp.test(name)
       : true;
 
-    if (exists){
-      addSeriesToTree(acc, path, series);
+    if (exists) {
+      addToSourcesTree(acc, path, series);
     }
 
     return acc;
@@ -214,7 +214,7 @@ const getTree = (state, match) => {
   return { bySourceTree, byTag };
 }
 
-const addTagsToTree = (acc, path, series) => {
+const addToTagsTree = (acc, path, series) => {
   let dir = acc;
   for (let i = 0; i < path.length; i++) {
     const { id, label, parent_id, type } = path[i];
@@ -232,7 +232,7 @@ const addTagsToTree = (acc, path, series) => {
   dir.children.push(series);
 }
 
-const addSeriesToTree = (acc, path, series) => {
+const addToSourcesTree = (acc, path, series) => {
   const hasVolume = path.some(p => p.type === SRC_VOLUME);
 
   let volumeId, volumeParentId;
@@ -274,15 +274,18 @@ const getSeriesTree = (state, match) => {
     return null;
   }
 
-  const fullTree = {
-    'bs': bySourceTree['bs'],
-    'byKabbalist': { 'id': 'byKabbalist', 'name': 'byKabbalist' },
-    'byTopics': { 'id': 'byTopics', 'name': 'By Topics' }
-  }
+  const roots         = sources.getRoots(state.sources);
+  const getSourceById = sources.getSourceById(state.sources);
+  const authors = roots.map(getSourceById);
 
-  Object.keys(bySourceTree).filter(key => key !== 'bs').forEach(key => {
-    fullTree['byKabbalist'][key] = bySourceTree[key]
+  const fullTree = {}
+
+  Object.keys(bySourceTree).filter(key => key !== 'vk').forEach(key => {
+    bySourceTree[key].name = authors.find(a => a.id === key).full_name;
+    fullTree[key] = bySourceTree[key];
   });
+
+  fullTree['byTopics'] = { 'id': 'byTopics', 'name': 'By Topics' };
 
   Object.keys(byTag).forEach(key => {
     fullTree['byTopics'][key] = byTag[key]

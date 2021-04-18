@@ -66,7 +66,7 @@ const SeriesContainer = ({ t }) => {
           isEmpty(children)
             ? <List.Item key={id} as={NavLink} to={canonicalLink(node)} content={name} />
             : (
-              <div key={key} className={`topics__card ${grandchildrenClass}`}>
+              <div key={key} className={`topics__card no_height ${grandchildrenClass}`}>
                 <Header as={`h${level > 6 ? 6 : level}`} className="topics__subtitle" content={name} />
                 <List.List>
                   {
@@ -74,14 +74,17 @@ const SeriesContainer = ({ t }) => {
                     children.map((n, i) => renderNode(n, level + 1, 'grandchildren', expanded || i < visibleItemsCount))
                   }
                 </List.List>
-                <Button
-                  basic
-                  icon={expanded ? 'minus' : 'plus'}
-                  className={`topics__button ${showExpandButton ? '' : 'hide-button'}`}
-                  size="mini"
-                  content={t(`topics.show-${expanded ? 'less' : 'more'}`)}
-                  onClick={() => handleShowMoreClick(node.id)}
-                />
+                {
+                  showExpandButton &&
+                  <Button
+                    basic
+                    icon={expanded ? 'minus' : 'plus'}
+                    className="topics__button"
+                    size="mini"
+                    content={t(`topics.show-${expanded ? 'less' : 'more'}`)}
+                    onClick={() => handleShowMoreClick(node.id)}
+                  />
+                }
               </div>
             )
         }
@@ -89,34 +92,65 @@ const SeriesContainer = ({ t }) => {
     )
   };
 
-  const getBranchHeader = node =>
-    node.id === 'bs'
-      ? node.name
-      : t(`lessons.tabs.seriesTree.${node.id}`);
+  const getHeader = node => node.id === "byTopics"
+    ? t(`lessons.tabs.seriesTree.byTopics`)
+    : t(`lessons.tabs.seriesTree.bySourcesOf`) + ' ' + node.name;
 
-  const renderBranch = node => {
+  const renderKabbalist = node => {
     if (node?.children?.length > 0){
-      const { name, children } = node;
       const initLevel = 2;
 
       return (
-        <Grid.Column key={name + '#' + initLevel} className="topics__section">
+        <div key={node.id + '#' + initLevel}>
           <Header as={`h${initLevel}`} className="topics__title">
-            {getBranchHeader(node)}
+            {getHeader(node)}
           </Header>
           <div className="topics__list">
             <List>
               {
-                children.map(n => renderNode(n, initLevel + 1))
+                node.children.map(n => renderNode(n, initLevel + 1))
               }
             </List>
           </div>
-        </Grid.Column>
+        </div>
       )
     }
 
     return null;
   }
+
+  const orderArray = ['rb', 'ml', 'rh'];
+
+  const sortKabbalists = (k1, k2) => {
+    const k1_index = orderArray.indexOf(k1.id);
+    const k2_index = orderArray.indexOf(k2.id);
+
+    // place the existing item first
+    return k1_index >= 0 && k2_index >= 0
+      ? k1_index - k2_index
+      : k1_index > k2_index
+        ? k1_index
+        : k2_index;
+  }
+
+  const renderGrid = () => (
+    <Grid columns={3} padded>
+      <Grid.Row>
+        <Grid.Column key='bs#1' className="topics__section">
+          {renderKabbalist(dataTree.find(node => node.id === 'bs'))}
+        </Grid.Column>
+        <Grid.Column key='various#1' className="topics__section">
+          {dataTree
+            .filter(node => node.id !== 'bs' && node.id !== 'byTopics')
+            .sort(sortKabbalists)
+            .map(renderKabbalist)}
+        </Grid.Column>
+        <Grid.Column key='byTopics#1' className="topics__section">
+          {renderKabbalist(dataTree.find(node => node.id === 'byTopics'))}
+        </Grid.Column>
+      </Grid.Row>
+    </Grid>
+  )
 
   const dispatch = useDispatch();
 
@@ -126,7 +160,7 @@ const SeriesContainer = ({ t }) => {
     }
   }, [dataTree, wip, err, language, dispatch, seriesIDs]);
 
-  //console.log('data tree:', dataTree, wip, err, language);
+  // console.log('data tree:', dataTree, wip, err, language);
 
   const wipErr = WipErr({ wip, err, t });
 
@@ -148,12 +182,7 @@ const SeriesContainer = ({ t }) => {
         />
       </Container>
       {
-        !isEmpty(dataTree) &&
-          <Grid columns={dataTree.length} padded>
-            <Grid.Row>
-              {dataTree.map(renderBranch)}
-            </Grid.Row>
-          </Grid>
+        !isEmpty(dataTree) && renderGrid()
       }
     </>
   )

@@ -35,10 +35,6 @@
       background-color: #f3f4f5;
       min-height: 176px;
 
-      .list {
-        margin: 0 !important;
-      }
-
       .header.topics__subtitle {
         padding: 10px 8px !important;
         font-size: 18px !important;
@@ -64,7 +60,6 @@
         font-size: 16px !important;
         padding: 0 !important;
         margin-bottom: 4px !important;
-        // color: #1a4179 !important;
 
         &.hide-topic {
           display: none !important;
@@ -93,6 +88,10 @@
         .icon {
           color: #00aced !important;
         }
+      }
+
+      &.no_height {
+        min-height: unset;
       }
 
       &.grandchildren {
