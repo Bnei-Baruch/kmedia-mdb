@@ -211,14 +211,17 @@ const TopicContainer = ({ t }) => {
                     ))
                 }
               </List>
-              <Button
-                basic
-                icon={expanded ? 'minus' : 'plus'}
-                className={`topics__button ${showExpandButton ? '' : 'hide-button'}`}
-                size="mini"
-                content={t(`topics.show-${expanded ? 'less' : 'more'}`)}
-                onClick={() => handleShowMoreClick(id)}
-              />
+              {
+                showExpandButton &&
+                <Button
+                  basic
+                  icon={expanded ? 'minus' : 'plus'}
+                  className={`topics__button ${showExpandButton ? '' : 'hide-button'}`}
+                  size="mini"
+                  content={t(`topics.show-${expanded ? 'less' : 'more'}`)}
+                  onClick={() => handleShowMoreClick(id)}
+                />
+              }
             </div>
           ) : renderLeaf(node)
         }
