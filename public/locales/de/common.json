@@ -258,8 +258,8 @@
       "children": "Unterricht für Kinder",
       "series": "Ausgewählte Trainingsserien",
       "seriesTree": {
-        "byKabbalist": "Various Kabbalists",
-        "byTopics": "By Topics"
+        "byTopics": "By Topics",
+        "bySourcesOf": "By Sources Of"
       }
     },
     "list": {

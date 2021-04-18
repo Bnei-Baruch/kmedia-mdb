@@ -240,8 +240,8 @@
       "children": "Dětské lekce",
       "series": "Vybrané studijní série",
       "seriesTree": {
-        "byKabbalist": "Various Kabbalists",
-        "byTopics": "By Topics"
+        "byTopics": "By Topics",
+        "bySourcesOf": "By Sources Of"
       }
     },
     "list": {

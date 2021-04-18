@@ -259,8 +259,8 @@
       "children": "Lección de Niños",
       "series": "Serie de Estudios",
       "seriesTree": {
-        "byKabbalist": "Various Kabbalists",
-        "byTopics": "By Topics"
+        "byTopics": "By Topics",
+        "bySourcesOf": "By Sources Of"
       }
     },
     "list": {

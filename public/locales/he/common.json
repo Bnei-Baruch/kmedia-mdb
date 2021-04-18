@@ -262,8 +262,8 @@
       "children": "שיעורי ילדים",
       "series": "סדרות לימוד נבחרות",
       "seriesTree": {
-        "byKabbalist": "מקובלים שונים",
-        "byTopics": "לפי נושאים"
+        "byTopics": "לפי נושאים",
+        "bySourcesOf": "לפי מקורות של"
       }
     },
     "list": {

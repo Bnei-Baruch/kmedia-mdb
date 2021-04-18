@@ -263,8 +263,8 @@
       "children": "Çocuk Dersleri",
       "series": "Seçilmiş Ders Serileri",
       "seriesTree": {
-        "byKabbalist": "Various Kabbalists",
-        "byTopics": "By Topics"
+        "byTopics": "By Topics",
+        "bySourcesOf": "By Sources Of"
       }
     },
     "list": {

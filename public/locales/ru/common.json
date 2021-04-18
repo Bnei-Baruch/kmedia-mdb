@@ -272,8 +272,8 @@
       "children": "Уроки для детей",
       "series": "Избранные серии обучения",
       "seriesTree": {
-        "byKabbalist": "Разные Каббалисты",
-        "byTopics": "По Темам"
+        "byTopics": "По Темам",
+        "bySourcesOf": "По Первоисточникам"
       }
     },
     "list": {

@@ -263,8 +263,8 @@
       "children": "Children Lessons",
       "series": "Selected Study Series",
       "seriesTree": {
-        "byKabbalist": "Various Kabbalists",
-        "byTopics": "By Topics"
+        "byTopics": "By Topics",
+        "bySourcesOf": "By Sources Of"
       }
     },
     "list": {
@@ -427,7 +427,7 @@
     "recommended": {
       "header": "Recommended"
     },
-    "playlist":{
+    "playlist": {
       "header": "Up Next"
     }
   },
