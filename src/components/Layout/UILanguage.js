@@ -35,8 +35,7 @@ const DesktopLanguage = ({ language, contentLanguage, t }) => (
             contentLanguage={contentLanguage}
             onClick={() => storeUILanguage(lang)}
           >
-            <Flag name={LANGUAGES[lang].flag} />
-            {t(`constants.languages.${lang}`)}
+            {LANGUAGES[lang].name}
           </Dropdown.Item>
         )
       }

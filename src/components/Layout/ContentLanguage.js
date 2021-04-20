@@ -35,8 +35,7 @@ const DesktopLanguage = ({ language, contentLanguage, setContentLanguage, t }) =
             language={language}
             contentLanguage={lang}
           >
-            <Flag name={LANGUAGES[lang].flag} />
-            {t(`constants.languages.${lang}`)}
+            {LANGUAGES[lang].name}
           </Dropdown.Item>
         )
       }
