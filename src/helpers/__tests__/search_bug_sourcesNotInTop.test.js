@@ -1,4 +1,4 @@
-import { localeCompareWithYear, SuggestionsHelper } from '../search';
+import { SuggestionsHelper } from '../search';
 
 const data = {
   'suggest': {
