@@ -1,10 +1,9 @@
-import React, { useContext, useEffect } from 'react';
-import { useSelector, shallowEqual } from 'react-redux';
+import { useContext, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import axios from 'axios';
 import {ulid} from 'ulid'
 import {chroniclesUrl, chroniclesBackendEnabled} from './Api';
 import { noop } from './utils';
-import { handleActions } from 'redux-actions';
 
 import { actions } from '../redux/modules/chronicles';
 import { types as recommendedTypes } from '../redux/modules/recommended';
@@ -117,7 +116,7 @@ export default class ClientChronicles {
   
   // Handles custom redux actions to append events on them.
   onAction(action) {
-    if (action.type == recommendedTypes.FETCH_RECOMMENDED_SUCCESS) {
+    if (action.type === recommendedTypes.FETCH_RECOMMENDED_SUCCESS) {
       const {recommendedItems, requestData} = action.payload;
       if (Array.isArray(recommendedItems)) {
         this.append('recommend', {request_data: requestData, recommendations: recommendedItems.map(({uid, content_type}) => ({uid, content_type}))});
@@ -250,6 +249,6 @@ export const ChroniclesActions = () => {
     if (action) {
       clientChronicles.onAction(action);
     }
-  }, [actionsCount]);
+  }, [action, actionsCount, clientChronicles]);
   return null;
 }

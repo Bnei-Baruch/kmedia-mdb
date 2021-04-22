@@ -63,7 +63,7 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
     if (prev?.unit?.id && !unit?.id) {
       chronicles.append('collection-unit-unselected', { unit_uid: unit.id });
     }
-  }, [unit, prev?.unit]);
+  }, [unit, prev?.unit, chronicles]);
 
   const handleLanguageChange = useCallback((e, language) => {
     playerHelper.setLanguageInQuery(history, language);
