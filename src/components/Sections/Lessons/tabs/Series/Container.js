@@ -56,7 +56,7 @@ const SeriesContainer = ({ t }) => {
 
     const { id, children, name } = node;
 
-    const showExpandButton = children?.length > 3;
+    const showExpandButton = children?.length > visibleItemsCount;
     const expanded = expandedNodes.has(id);
     const key = id + '#' + level;
 
@@ -82,7 +82,7 @@ const SeriesContainer = ({ t }) => {
                     className="topics__button"
                     size="mini"
                     content={t(`topics.show-${expanded ? 'less' : 'more'}`)}
-                    onClick={() => handleShowMoreClick(node.id)}
+                    onClick={() => handleShowMoreClick(id)}
                   />
                 }
               </div>
@@ -140,10 +140,12 @@ const SeriesContainer = ({ t }) => {
           {renderKabbalist(dataTree.find(node => node.id === 'bs'))}
         </Grid.Column>
         <Grid.Column key='various#1' className="topics__section">
-          {dataTree
-            .filter(node => node.id !== 'bs' && node.id !== 'byTopics')
-            .sort(sortKabbalists)
-            .map(renderKabbalist)}
+          {
+            dataTree
+              .filter(node => node.id !== 'bs' && node.id !== 'byTopics')
+              .sort(sortKabbalists)
+              .map(renderKabbalist)
+          }
         </Grid.Column>
         <Grid.Column key='byTopics#1' className="topics__section">
           {renderKabbalist(dataTree.find(node => node.id === 'byTopics'))}
