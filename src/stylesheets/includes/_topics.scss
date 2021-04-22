@@ -40,7 +40,7 @@
         font-size: 18px !important;
         line-height: 22px !important;
         font-weight: 700;
-        position: -webkit-sticky;
+        // position: -webkit-sticky;
         position: sticky;
         top: 58px;
         z-index: 9;
@@ -103,6 +103,7 @@
           margin-bottom: 0 !important;
           padding-bottom: 0 !important;
           color: #1a4179 !important;
+          position: static !important;
         }
 
         .hide-button {
