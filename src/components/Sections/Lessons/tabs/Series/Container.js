@@ -56,7 +56,8 @@ const SeriesContainer = ({ t }) => {
 
     const { id, children, name } = node;
 
-    const showExpandButton = children?.length > visibleItemsCount;
+    const expandedLevel = level <= 3;
+    const showExpandButton = !expandedLevel && children?.length > visibleItemsCount;
     const expanded = expandedNodes.has(id);
     const key = id + '#' + level;
 
@@ -71,7 +72,7 @@ const SeriesContainer = ({ t }) => {
                 <List.List>
                   {
                     // display child node if expanded or its index less than visible items count
-                    children.map((n, i) => renderNode(n, level + 1, 'grandchildren', expanded || i < visibleItemsCount))
+                    children.map((n, i) => renderNode(n, level + 1, 'grandchildren', expandedLevel || expanded || i < visibleItemsCount))
                   }
                 </List.List>
                 {
@@ -161,8 +162,6 @@ const SeriesContainer = ({ t }) => {
       dispatch(actions.fetchAllSeries());
     }
   }, [dataTree, wip, err, language, dispatch, seriesIDs]);
-
-  // console.log('data tree:', dataTree, wip, err, language);
 
   const wipErr = WipErr({ wip, err, t });
 
