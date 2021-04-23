@@ -56,7 +56,8 @@ const SeriesContainer = ({ t }) => {
 
     const { id, children, name } = node;
 
-    const expandedLevel = level <= 3;
+    // expand all levels excluding the leafs
+    const expandedLevel = !isEmpty(children) && children.some(ch => !isEmpty(ch.children));
     const showExpandButton = !expandedLevel && children?.length > visibleItemsCount;
     const expanded = expandedNodes.has(id);
     const key = id + '#' + level;
