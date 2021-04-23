@@ -44,7 +44,7 @@ const filterLessons = (ct, filmDate) => {
   }
 };
 
-const makeTagLinks = (tags = [], getTagById) =>
+const makeTagLinks = (tags = [], getTagById, filteredListPath) =>
   Array.from(intersperse(
     tags.map((x) => {
       const { id, label } = getTagById(x);
