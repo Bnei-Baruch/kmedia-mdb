@@ -15,7 +15,7 @@ const activeFromLocation = location => {
 
 const activeFromDefault = items => (items.length > 0 ? items[0].name : null);
 
-const TabsMenu = ({ items = [], active = ''}) => {
+const TabsMenu = ({ items = [], active = '' }) => {
   const location = useLocation();
 
   const computedActive = active
@@ -23,7 +23,7 @@ const TabsMenu = ({ items = [], active = ''}) => {
     || activeFromDefault(items);
 
   const [internalActive, setInternalActive] = useState(computedActive);
-  const handleActiveChange = useCallback((e, {name}) => setInternalActive(name), []);
+  const handleActiveChange = useCallback((e, { name }) => setInternalActive(name), []);
 
   const activeItem = items.find(x => x.name === internalActive);
 
@@ -32,7 +32,7 @@ const TabsMenu = ({ items = [], active = ''}) => {
       <Menu tabular secondary pointing color="blue" >
         {
           items.map(item => {
-            const {name, label} = item;
+            const { name, label } = item;
             return (
               <Menu.Item
                 key={name}

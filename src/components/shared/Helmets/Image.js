@@ -8,7 +8,7 @@ import * as shapes from '../../shapes';
 
 const buildImage = (url, width, height) => {
   // TODO: enlarge is the most expensive op, use another one!
-  const imageUrl = Requests.imaginary('enlarge',{ url, width, height, nocrop: true });
+  const imageUrl = Requests.imaginary('enlarge', { url, width, height, nocrop: true });
 
   // TODO: BUG !!!, when a new image overrides the old one,
   // it breaks the helmet structure (separate the image properties

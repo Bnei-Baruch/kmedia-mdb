@@ -74,7 +74,7 @@ export class SuggestionsHelper {
         }
         const aSuggestion = a.suggestLC.startsWith(query);
         const bSuggestion = a.suggestLC.startsWith(query);
-        
+
         if (aSuggestion && !bSuggestion) {
           return -1;
         }

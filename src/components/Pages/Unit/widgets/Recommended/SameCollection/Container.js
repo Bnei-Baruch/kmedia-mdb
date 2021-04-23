@@ -31,8 +31,8 @@ export class SameCollectionContainer extends Component {
     this.askForDataIfNeeded(this.props);
   }
 
-  componentDidUpdate(prevProps){
-    if (this.props.collectionID !== prevProps.collectionID){
+  componentDidUpdate(prevProps) {
+    if (this.props.collectionID !== prevProps.collectionID) {
       this.askForDataIfNeeded(this.props);
     }
   }

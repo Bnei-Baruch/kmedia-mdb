@@ -242,12 +242,12 @@ class MediaDownloads extends Component {
       typeOverrides += '.';
     }
 
-    let rows = this.getRows(byType, t, typeOverrides);
-    let derivedRows = this.getDerivedRows(derivedGroups, language, t, typeOverrides, publisherById);
+    const rows        = this.getRows(byType, t, typeOverrides);
+    const derivedRows = this.getDerivedRows(derivedGroups, language, t, typeOverrides, publisherById);
 
     return (
       <div className="media-downloads content__aside-unit">
-        { languages.length > 1 
+        { languages.length > 1
           ? <Grid columns="equal">
             <Grid.Row>
               <Grid.Column>
@@ -259,8 +259,8 @@ class MediaDownloads extends Component {
               </Grid.Column>
             </Grid.Row>
           </Grid>
-          : displayDivider && 
-            <Divider></Divider> 
+          : displayDivider &&
+            <Divider></Divider>
         }
         <Table unstackable className="media-downloads__files" basic="very" compact="very">
           <Table.Body>
@@ -334,8 +334,7 @@ class MediaDownloads extends Component {
           <Table.Cell>{t('messages.no-files')}</Table.Cell>
         </Table.Row>
       ];
-    }
-    else {
+    } else {
       rows = MEDIA_ORDER.reduce((acc, val) => {
         const baseLabel = t(`media-downloads.${typeOverrides}type-labels.${val}`);
         const files = (byType.get(val) || []).map((file) => {

@@ -38,7 +38,7 @@ const getComplexCards = (getCard) => {
 
   const wl  = getCard(consts.CT_WOMEN_LESSON);
   const vl  = getCard(consts.CT_VIRTUAL_LESSON);
-  let cards = [];
+  const cards = [];
 
   if (wl && moment().diff(moment(wl.props.unit.film_date), 'days') < 14) {
     cards.push(wl);

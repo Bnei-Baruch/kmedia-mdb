@@ -70,7 +70,9 @@ export const reducer = handleActions({
   [player.PLAYER_PLAY]: onPlayerPlay,
   [chronicles.USER_INACTIVE]: onUserInactive,
 
-  [FETCH_RECOMMENDED]: state => { state.wip = true; },
+  [FETCH_RECOMMENDED]: state => {
+    state.wip = true;
+  },
   [FETCH_RECOMMENDED_SUCCESS]: onSuccess,
   [FETCH_RECOMMENDED_FAILURE]: onFailure,
 }, initialState);

@@ -161,14 +161,12 @@ class AVPlayerMobile extends Component {
     return this.props.media?.isPlaying && this.state.item?.unit?.id;
   }
 
-  buildAppendData = (item, media) => {
-    return {
-      unit_uid: item.unit.id,
-      file_src: item.src,
-      current_time: media.currentTime,
-      duration: media.duration,
-    };
-  }
+  buildAppendData = (item, media) => ({
+    unit_uid: item.unit.id,
+    file_src: item.src,
+    current_time: media.currentTime,
+    duration: media.duration,
+  })
 
   onSwitchAV = (...params) => {
     // We only keep the current time.

@@ -88,7 +88,7 @@ const Sources = ({ unit, indexMap, t, options }) => {
 
 
   useEffect(() => {
-    if (languages.length > 0){
+    if (languages.length > 0) {
       const newLanguage = selectSuitableLanguage(contentLanguage, uiLanguage, languages);
 
       // use existing state language if included in available languages
@@ -101,8 +101,8 @@ const Sources = ({ unit, indexMap, t, options }) => {
       return;
     }
 
-    const newFetch = selected + '#' + language;
-    if (newFetch === fetched){
+    const newFetch = `${selected  }#${  language}`;
+    if (newFetch === fetched) {
       // console.log('fetched already', newFetch);
       return;
     }
@@ -183,7 +183,7 @@ const Sources = ({ unit, indexMap, t, options }) => {
     <>
       <Grid container padded={isMobileDevice ? "vertically" : true} columns={2}>
         <Grid.Column
-          className={classNames({"is-fitted": isMobileDevice})}
+          className={classNames({ "is-fitted": isMobileDevice })}
           width={isMobileDevice ? 16 : 16 - languages.length}
         >
           <Dropdown

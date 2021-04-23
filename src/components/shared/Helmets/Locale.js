@@ -4,18 +4,16 @@ import { Helmet } from 'react-helmet-async';
 
 import { getLanguageLocale } from '../../../helpers/i18n-utils';
 
-const Locale = ({ mainLang, alternateLang = []}) => {
-  return (
-    <Helmet>
-      {<meta property="og:locale" content={getLanguageLocale(mainLang)} />}
-      {
-        alternateLang
-          .filter(x => x !== mainLang)
-          .map(lang => <meta name="og:locale:alternate" content={getLanguageLocale(lang)} key={lang} />)
-      }
-    </Helmet>
-  );
-};
+const Locale = ({ mainLang, alternateLang = [] }) => (
+  <Helmet>
+    {<meta property="og:locale" content={getLanguageLocale(mainLang)} />}
+    {
+      alternateLang
+        .filter(x => x !== mainLang)
+        .map(lang => <meta name="og:locale:alternate" content={getLanguageLocale(lang)} key={lang} />)
+    }
+  </Helmet>
+);
 
 Locale.propTypes = {
   mainLang: PropTypes.string.isRequired,
