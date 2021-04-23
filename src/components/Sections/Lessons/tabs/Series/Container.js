@@ -60,7 +60,7 @@ const SeriesContainer = ({ t }) => {
     const expandedLevel = !isEmpty(children) && children.some(ch => !isEmpty(ch.children));
     const showExpandButton = !expandedLevel && children?.length > visibleItemsCount;
     const expanded = expandedNodes.has(id);
-    const key = id + '#' + level;
+    const key = `${id}#${level}`;
 
     return (
       <Fragment key={`f-${key}`}>
@@ -103,7 +103,7 @@ const SeriesContainer = ({ t }) => {
       const initLevel = 2;
 
       return (
-        <div key={node.id + '#' + initLevel}>
+        <div key={`${node.id}#${initLevel}`} >
           <Header as={`h${initLevel}`} className="topics__title">
             {getHeader(node)}
           </Header>
@@ -138,10 +138,10 @@ const SeriesContainer = ({ t }) => {
   const renderGrid = () => (
     <Grid columns={3} padded>
       <Grid.Row>
-        <Grid.Column key='bs#1' className="topics__section">
+        <Grid.Column className="topics__section">
           {renderKabbalist(dataTree.find(node => node.id === 'bs'))}
         </Grid.Column>
-        <Grid.Column key='various#1' className="topics__section">
+        <Grid.Column className="topics__section">
           {
             dataTree
               .filter(node => node.id !== 'bs' && node.id !== 'byTopics')
@@ -149,7 +149,7 @@ const SeriesContainer = ({ t }) => {
               .map(renderKabbalist)
           }
         </Grid.Column>
-        <Grid.Column key='byTopics#1' className="topics__section">
+        <Grid.Column className="topics__section">
           {renderKabbalist(dataTree.find(node => node.id === 'byTopics'))}
         </Grid.Column>
       </Grid.Row>
