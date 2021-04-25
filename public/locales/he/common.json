@@ -13,6 +13,7 @@
       "topic": "נושא",
       "not-found": "לא נמצא",
       "publications": "פרסומים",
+      "music": "מוסיקה",
       "simple-mode": "הורדות",
       "photos": "תמונות",
       "design": "עיצוב",
@@ -346,6 +347,12 @@
       }
     },
     "read-more": "קרא עוד"
+  },
+  "music": {
+    "header": {
+      "text": "מוסיקה",
+      "subtext": ""
+    }
   },
   "simple-mode": {
     "header": {

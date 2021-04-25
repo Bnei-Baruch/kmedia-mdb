@@ -11,6 +11,7 @@
       "books": "Knihy",
       "topics": "Témata",
       "publications": "Publikace",
+      "music": "Music",
       "photos": "Fotky",
       "design": "Design",
       "design2": "Nákresy",
@@ -315,6 +316,12 @@
           "title": "Další publikované články v této sbírce"
         }
       }
+    }
+  },
+  "music": {
+    "header": {
+      "text": "Music",
+      "subtext": ""
     }
   },
   "help": {
