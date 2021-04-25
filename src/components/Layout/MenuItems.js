@@ -17,7 +17,7 @@ const ITEMS = [
   // 'books',
   'topics',
   'publications',
-  // 'music',
+  'music',
   'simple-mode',
   // 'project-status',
   'help',
