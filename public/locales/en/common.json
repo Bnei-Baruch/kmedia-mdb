@@ -261,7 +261,11 @@
       "women": "Women Lessons",
       "rabash": "Rabash Lessons",
       "children": "Children Lessons",
-      "series": "Selected Study Series"
+      "series": "Selected Study Series",
+      "seriesTree": {
+        "byTopics": "By Topics",
+        "bySourcesOf": "By Sources Of"
+      }
     },
     "list": {
       "related": "Related to:",
@@ -423,7 +427,7 @@
     "recommended": {
       "header": "Recommended"
     },
-    "playlist":{
+    "playlist": {
       "header": "Up Next"
     }
   },
