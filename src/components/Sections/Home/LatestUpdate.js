@@ -25,7 +25,7 @@ import {
 const LatestUpdate = ({ unit, label, t }) => {
   const link       = canonicalLink(unit);
   const name           = unit.name ||
-    `${t('constants.content-types.' + unit.content_type)} ${t('lessons.list.number')} ${unit.name_in_collection}`;
+    `${t(`constants.content-types.${  unit.content_type}`)} ${t('lessons.list.number')} ${unit.name_in_collection}`;
   let canonicalSection;
 
   // collections -- prepare random image

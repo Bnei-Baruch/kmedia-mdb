@@ -125,7 +125,7 @@ class LibraryContainer extends Component {
     this.replaceOrFetch(sourceId);
     this.updateSticky();
 
-    let { isReadable, scrollTopPosition, tocIsActive, doScroll = (!assetWIP && prevProps.assetWIP) } = this.state;
+    const { isReadable, scrollTopPosition, tocIsActive, doScroll = (!assetWIP && prevProps.assetWIP) } = this.state;
 
     const { srchstart }    = getQuery(location);
     const scrollingElement = isReadable ? this.articleRef : document.scrollingElement;
@@ -353,11 +353,9 @@ class LibraryContainer extends Component {
     return path;
   };
 
-  static getErrContent = (err, t) => {
-    return (err.response && err.response.status === 404)
-      ? <FrownSplash text={t('messages.source-content-not-found')} />
-      : <ErrorSplash text={t('messages.server-error')} subtext={formatError(err)} />;
-  };
+  static getErrContent = (err, t) => (err.response && err.response.status === 404)
+    ? <FrownSplash text={t('messages.source-content-not-found')} />
+    : <ErrorSplash text={t('messages.server-error')} subtext={formatError(err)} />;
 
   getContent = () => {
     const { sourceId, indexMap, language, contentLanguage, t, history } = this.props;
@@ -403,7 +401,7 @@ class LibraryContainer extends Component {
     if (activeIndex === -1) {
       return null;
     }
-    const children = fullPath[len - 2].children;
+    const { children } = fullPath[len - 2];
     return (
       <div className="library__nextPrevButtons">
         {LibraryContainer.nextPrevLink(children, activeIndex - 1, false, props)}

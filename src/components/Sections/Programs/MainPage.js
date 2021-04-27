@@ -19,11 +19,9 @@ const content = (active) => {
   }
 };
 
-const MainPage = () => {
-  return <MainTabPage
-    tabs={tabs}
-    content={content}
-    section="programs" />;
-};
+const MainPage = () => <MainTabPage
+  tabs={tabs}
+  content={content}
+  section="programs" />;
 
 export default MainPage;

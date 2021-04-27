@@ -28,7 +28,7 @@ const PlaylistCollectionContainer = ({ cId, t, cuId }) => {
     setPrevLink(prevLnk);
 
     const nextCollection = curIndex > 0 ? collections[curIndex - 1] : null;
-    let nextLnk = nextCollection ? canonicalLink(nextCollection) : null;
+    const nextLnk = nextCollection ? canonicalLink(nextCollection) : null;
     setNextLink(nextLnk);
   };
 
@@ -97,8 +97,8 @@ const PlaylistCollectionContainer = ({ cId, t, cuId }) => {
   }
 
   // We're wip / err if some request is wip / err
-  let wip = wipMap.collections[cId] || (Array.isArray(collection.cuIDs) && collection.cuIDs.some(cuID => wipMap.units[cuID]));
-  let err = errorMap.collections[cId];
+  const wip = wipMap.collections[cId] || (Array.isArray(collection.cuIDs) && collection.cuIDs.some(cuID => wipMap.units[cuID]));
+  let err   = errorMap.collections[cId];
   if (!err) {
     const cuIDwithError = Array.isArray(collection.cuIDs) && collection.cuIDs.find(cuID => errorMap.units[cuID]);
     err                 = cuIDwithError ? errorMap.units[cuIDwithError] : null;

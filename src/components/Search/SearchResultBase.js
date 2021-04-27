@@ -133,15 +133,13 @@ class SearchResultBase extends Component {
   }
 
   // Extract from derived units all kitei makor text and audio files.
-  static getKiteiMakor = (units, contentLanguage) => {
-    return Object.values(units || {})
-      .filter(unit => unit.content_type === CT_KITEI_MAKOR)
-      .map(unit => unit.files.filter(file => file.language === contentLanguage && [MT_AUDIO, MT_TEXT].includes(file.type)))
-      .reduce((acc, files) => {
-        files.forEach((file) => acc.push(file));
-        return acc;
-      }, []);
-  };
+  static getKiteiMakor = (units, contentLanguage) => Object.values(units || {})
+    .filter(unit => unit.content_type === CT_KITEI_MAKOR)
+    .map(unit => unit.files.filter(file => file.language === contentLanguage && [MT_AUDIO, MT_TEXT].includes(file.type)))
+    .reduce((acc, files) => {
+      files.forEach((file) => acc.push(file));
+      return acc;
+    }, []);
 
   logClick = (mdbUid, index, type, rank, searchId) => {
     const { click, location } = this.props;
@@ -284,9 +282,7 @@ class SearchResultBase extends Component {
     return <span dangerouslySetInnerHTML={{ __html }} />;
   };
 
-  clearStringForLink = (str) => {
-    return str.replace(/(\r?\n|\r){1,}/g, ' ').replace(/<.+?>/gi, '');
-  };
+  clearStringForLink = (str) => str.replace(/(\r?\n|\r){1,}/g, ' ').replace(/<.+?>/gi, '');
 
   highlightWrapToLink = (__html, index, pathname, search, logLinkParams) => {
     const searchArr = this.clearStringForLink(__html).split(' ');

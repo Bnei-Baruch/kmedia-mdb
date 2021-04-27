@@ -68,7 +68,7 @@ function* fetchList(action) {
 
 function* updatePageInQuery(action) {
   const { pageNo }   = action.payload;
-  let currentQuery = yield* getQuery();
+  const currentQuery = yield* getQuery();
   const page = currentQuery.page || 1;
   if (pageNo === +page) {
     return;

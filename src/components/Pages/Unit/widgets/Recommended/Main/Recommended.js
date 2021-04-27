@@ -29,7 +29,7 @@ const Recommended = ({ unit, t, filterOutUnits = [], displayTitle = true }) => {
   const dispatch = useDispatch();
   useEffect(() => {
     if (unitId && !err && prevUnitId !== unitId) {
-      dispatch(actions.fetchRecommended({id: unitId, size: N, skip: filterOutUnits.map((unit) => unit.id)}));
+      dispatch(actions.fetchRecommended({ id: unitId, size: N, skip: filterOutUnits.map((unit) => unit.id) }));
     }
   }, [dispatch, err, unitId, filterOutUnits, prevUnitId]);
 

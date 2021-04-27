@@ -115,6 +115,3 @@ ContentLanguage.propTypes = {
 };
 
 export default withNamespaces()(ContentLanguage);
-
-
-

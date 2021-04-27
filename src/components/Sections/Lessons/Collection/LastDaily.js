@@ -22,7 +22,7 @@ const LastLessonCollection = ({ t }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!wip && !err && !lastLessonId){
+    if (!wip && !err && !lastLessonId) {
       dispatch(actions.fetchLatestLesson());
     }
   }, [dispatch, err, lastLessonId, wip]);

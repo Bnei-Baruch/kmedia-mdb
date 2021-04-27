@@ -29,6 +29,7 @@
     "test": "react-scripts test --verbose --watchAll",
     "test:coverage": "react-scripts test --verbose --watchAll --coverage",
     "lint": "yarn run eslint -c .prepush.eslintrc.json src",
+    "lint-fix": "yarn run lint --fix",
     "postinstall": "patch-package"
   },
   "husky": {

@@ -28,13 +28,9 @@ export const prepareScrollToSearch = (data, { srchstart: start, srchend: end }, 
   return render.build();
 };
 
-export const getPositionInHtml = (pos, tags) => {
-  return tags
-    .filter(t => t.noHtmlPos <= pos)
-    .reduce((acc, t) => {
-      return acc + t.str.length;
-    }, pos);
-};
+export const getPositionInHtml = (pos, tags) => tags
+  .filter(t => t.noHtmlPos <= pos)
+  .reduce((acc, t) => acc + t.str.length, pos);
 
 export const filterTagsByBorder = (from, to, tags) => {
   const result = [];
@@ -129,7 +125,7 @@ export const wrapSeekingPlace = (data, tags, fromNohtml, toNoHtml) => {
   before += data.slice(openTagP.pos, from).replace(/<p|<h/, x => `<div class="scroll-to-search" id="${SCROLL_SEARCH_ID}">${x}`);
 
   let after = data.slice(to, closeTagP.pos);
-  after += data.slice(closeTagP.pos).replace(/<\/p>|<\/h\d>/, x => x + '</div>');
+  after += data.slice(closeTagP.pos).replace(/<\/p>|<\/h\d>/, x => `${x  }</div>`);
 
   return { before, after };
 };
@@ -153,13 +149,13 @@ export const buildSearchLinkFromSelection = (language) => {
     return buildLinkForShortSelect(words, sel, isForward, language);
 
   const { protocol, hostname, port, pathname } = window.location;
-  let sStart                                   = words.slice(0, MIN_NUMBER_WORDS_IN_LINK).join(' ');
-  let sEnd                                     = words.slice(-1 * MIN_NUMBER_WORDS_IN_LINK).join(' ');
+  const sStart                                   = words.slice(0, MIN_NUMBER_WORDS_IN_LINK).join(' ');
+  const sEnd                                     = words.slice(-1 * MIN_NUMBER_WORDS_IN_LINK).join(' ');
 
-  let start = isForward ? { node: sel.anchorNode, offset: sel.anchorOffset }
+  const start = isForward ? { node: sel.anchorNode, offset: sel.anchorOffset }
     : { node: sel.focusNode, offset: sel.focusOffset };
 
-  let end = isForward ? { node: sel.focusNode, offset: sel.focusOffset }
+  const end = isForward ? { node: sel.focusNode, offset: sel.focusOffset }
     : { node: sel.anchorNode, offset: sel.anchorOffset };
 
   const sOffset = findOffsetOfDOMNode(start.node, start.offset);

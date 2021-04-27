@@ -16,7 +16,7 @@ const convertImages = content => {
   const regex = /<img[^>]*src="([^"]*)"/g;
   let arr;
   while ((arr = regex.exec(content))) {
-    let img = arr[1];
+    const img = arr[1];
     if (!img.startsWith('http') && !img.startsWith('/static/')) {
       let imageFile = cmsUrl(img);
       if (!/^http/.exec(imageFile)) {
