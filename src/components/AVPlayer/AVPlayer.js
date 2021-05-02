@@ -867,6 +867,7 @@ class AVPlayer extends Component {
               fallbackMedia={fallbackMedia}
               uiLanguage={uiLanguage}
               t={t}
+              cuId={item.unit?.id}
             />
             <AVLanguage
               languages={languages}

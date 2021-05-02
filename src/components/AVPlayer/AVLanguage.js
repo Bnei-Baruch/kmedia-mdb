@@ -22,26 +22,16 @@ const AVLanguage = (
   const [openPopup, setOpenPopup]                         = useState(false);
   const [langSelectRef, setLangSelectRef]                 = useState();
 
-  const handleChange  = (e, data) => onSelect(e, data.value);
+  const handleChange  = (e, data) => {
+    setLastRequestedLanguage(data.value);
+    onSelect(e, data.value);
+  };
   const handleOnOpen  = () => onDropdownOpenedChange(true);
   const handleOnClose = () => onDropdownOpenedChange(false);
 
   useEffect(() => {
-    requestedLanguage && setOpenPopup(selectedLanguage !== requestedLanguage);
-  }, [cuId]);
-
-  useEffect(() => {
-    if (!requestedLanguage) {
-      return;
-    }
-
-    if (lastRequestedLanguage === requestedLanguage) {
-      setOpenPopup(false);
-      return;
-    }
-
-    setOpenPopup(selectedLanguage !== requestedLanguage);
-    setLastRequestedLanguage(requestedLanguage);
+    const requested = lastRequestedLanguage ? lastRequestedLanguage : requestedLanguage;
+    setOpenPopup(selectedLanguage !== requested);
   }, [selectedLanguage, requestedLanguage, lastRequestedLanguage]);
 
   const options = LANGUAGE_OPTIONS
@@ -57,6 +47,7 @@ const AVLanguage = (
         timeout={7000}
         language={uiLanguage}
         refElement={langSelectRef}
+        updateTrigger={cuId}
       />
       <Dropdown
         floating
