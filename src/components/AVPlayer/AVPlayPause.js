@@ -59,6 +59,7 @@ const AVPlayPause = ({
 export default memo(AVPlayPause, (prevProps, nextProps) => {
   const { media, hasNext, hasPrev, showNextPrev } = prevProps;
   return nextProps.media.isPlaying === media.isPlaying
+    && nextProps.media.isLoading === media.isLoading
     && nextProps.hasNext === hasNext
     && nextProps.hasPrev === hasPrev
     && nextProps.showNextPrev === showNextPrev;
