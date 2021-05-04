@@ -4,7 +4,14 @@ import { withNamespaces } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Header, List } from 'semantic-ui-react';
 
-import { CT_DAILY_LESSON, CT_LECTURE, CT_LESSON_PART, CT_SPECIAL_LESSON, CT_VIRTUAL_LESSON, CT_WOMEN_LESSON } from '../../../../../helpers/consts';
+import {
+  CT_DAILY_LESSON,
+  CT_LECTURE,
+  CT_LESSON_PART,
+  CT_SPECIAL_LESSON,
+  CT_VIRTUAL_LESSON,
+  CT_WOMEN_LESSON
+} from '../../../../../helpers/consts';
 import { canonicalLink } from '../../../../../helpers/links';
 import { intersperse, tracePath } from '../../../../../helpers/utils';
 import { stringify as urlSearchStringify } from '../../../../../helpers/url';
@@ -40,33 +47,11 @@ const filterLessons = (ct, filmDate) => {
 const makeTagLinks = (tags = [], getTagById, filteredListPath) =>
   Array.from(intersperse(
     tags.map((x) => {
-      const tag = getTagById(x);
-      if (!tag) {
+      const { id, label } = getTagById(x);
+      if (!label) {
         return '';
       }
-
-      const path    = tracePath(tag, getTagById);
-      const display = path[path.length - 1].label;
-
-      if (filteredListPath) {
-        const query = filtersTransformer.toQueryParams([
-          { name: 'topics-filter', values: [path.map(y => y.id)] }
-        ]);
-
-        return (
-          <Link
-            key={x}
-            to={{
-              pathname: `/${filteredListPath}`,
-              search: urlSearchStringify(query)
-            }}
-          >
-            {display}
-          </Link>
-        );
-      }
-
-      return <span key={x}>{display}</span>;
+      return <Link key={id} to={`/topics/${id}`}>{label}</Link>;
     }), ', '));
 
 const makeSourcesLinks = (sources = [], getSourceById, filteredListPath) => Array.from(intersperse(
@@ -131,7 +116,7 @@ const Info = ({ unit = {}, section = '', t }) => {
     filteredListPath += filterLessons(ct, filmDate);
   }
 
-  const tagLinks = makeTagLinks(tags, getTagById, filteredListPath);
+  const tagLinks = makeTagLinks(tags, getTagById);
 
   const sourcesLinks = makeSourcesLinks(sources, getSourceById, filteredListPath);
 
