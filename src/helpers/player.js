@@ -173,7 +173,7 @@ const playlist = (collection, mediaType, contentLanguage, uiLanguage) => {
     x.shareUrl = canonicalLink(x.unit);
   });
 
-  const language = items[0]?.language || contentLanguage;
+  const language = contentLanguage;
 
   return {
     collection,
