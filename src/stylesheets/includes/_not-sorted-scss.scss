@@ -1575,6 +1575,24 @@
   min-width: 140px;
 }
 
+.library__languagesContainer {
+  height:50px;
+
+  .languages {
+    display:block;
+    float:left;
+  }
+
+}
+
+.ltr {
+  .library__languagesContainer {
+    .languages {
+      float:right;
+    }
+  }
+}
+
 .align-right {
   float: right;
 }

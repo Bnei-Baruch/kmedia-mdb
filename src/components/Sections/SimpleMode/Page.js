@@ -74,7 +74,7 @@ const dropDownContainer = ({ language, blinkLangSelect, onLanguageChange }, lang
       <select className={blinkLangSelect ? 'blink' : ''} value={language} onChange={onLanguageChange}>
         {
           languages.map(x => (
-            <option key={`opt-${x.flag}`} value={x.value}>
+            <option key={`opt-${x.value}`} value={x.value}>
               {x.text}
             </option>
           ))

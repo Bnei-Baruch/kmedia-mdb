@@ -3,12 +3,11 @@ import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import { useHistory, useLocation } from 'react-router-dom';
-import { Container, Portal, Segment } from 'semantic-ui-react';
+import {Container, Grid, Portal, Segment} from 'semantic-ui-react';
 
 import { selectors } from '../../../redux/modules/assets';
 import { assetUrl } from '../../../helpers/Api';
 import { isEmpty } from '../../../helpers/utils';
-import AnchorsLanguageSelector from '../../Language/Selector/AnchorsLanguageSelector';
 import PDF, { isTaas, startsFrom } from '../../shared/PDF/PDF';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import { getQuery, updateQuery } from '../../../helpers/url';
@@ -22,6 +21,7 @@ import Download from '../../shared/Download/Download';
 import WipErr from '../../shared/WipErr/WipErr';
 import ShareBar from '../../shared/ShareSelected';
 import { DeviceInfoContext, SessionInfoContext } from '../../../helpers/app-contexts';
+import DropdownLanguageSelector from "../../Language/Selector/DropdownLanguageSelector";
 
 export const checkRabashGroupArticles = (source) => {
   if (/^gr-/.test(source)) { // Rabash Group Articles
@@ -166,15 +166,22 @@ const Library = ({ data, source, language = null, languages = [], langSelectorMo
   }
 
   let languageBar = null;
+
   if (languages.length > 0) {
     languageBar = (
-      <Container fluid textAlign="right">
-        <AnchorsLanguageSelector
-          languages={languages}
-          defaultValue={language}
-          onSelect={handleLanguageChanged}
-        />
-      </Container>
+      <Grid container padded={isMobileDevice ? "vertically" : true} columns={isMobileDevice ? 1 : 2}>
+        {!isMobileDevice &&
+        <Grid.Column width={12}>
+        </Grid.Column>}
+        <Grid.Column width={isMobileDevice ? 16 : 4}>
+          <DropdownLanguageSelector
+            languages={languages}
+            defaultValue={language}
+            onSelect={handleLanguageChanged}
+            fluid={isMobileDevice}
+          />
+        </Grid.Column>
+      </Grid>
     );
   }
 

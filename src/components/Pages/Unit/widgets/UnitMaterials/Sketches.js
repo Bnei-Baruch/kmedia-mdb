@@ -15,7 +15,7 @@ import { actions, selectors } from '../../../../../redux/modules/assets';
 import { selectors as settings } from '../../../../../redux/modules/settings';
 import * as shapes from '../../../../shapes';
 import WipErr from '../../../../shared/WipErr/WipErr';
-import ButtonsLanguageSelector from '../../../../Language/Selector/ButtonsLanguageSelector';
+import DropdownLanguageSelector from "../../../../Language/Selector/DropdownLanguageSelector";
 
 class Sketches extends React.Component {
   static propTypes = {
@@ -283,10 +283,11 @@ class Sketches extends React.Component {
               languages && languages.length > 1
                 ? (
                   <Container fluid textAlign="center">
-                    <ButtonsLanguageSelector
+                    <DropdownLanguageSelector
                       languages={languages}
                       defaultValue={language}
                       onSelect={this.handleLanguageChanged}
+                      fluid={true}
                     />
                   </Container>
                 )

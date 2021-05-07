@@ -14,9 +14,9 @@ import { getLanguageDirection } from '../../../../../../helpers/i18n-utils';
 import { formatError } from '../../../../../../helpers/utils';
 import * as shapes from '../../../../../shapes';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../../../../../shared/Splash/Splash';
-import ButtonsLanguageSelector from '../../../../../Language/Selector/ButtonsLanguageSelector';
 import PDF, { isTaas, startsFrom } from '../../../../../shared/PDF/PDF';
 import { DeviceInfoContext } from '../../../../../../helpers/app-contexts';
+import DropdownLanguageSelector from "../../../../../Language/Selector/DropdownLanguageSelector";
 
 export const getKiteiMakorUnits = unit => (
   Object.values(unit.derived_units || {})
@@ -184,7 +184,7 @@ const Sources = ({ unit, indexMap, t, options }) => {
       <Grid container padded={isMobileDevice ? "vertically" : true} columns={2}>
         <Grid.Column
           className={classNames({"is-fitted": isMobileDevice})}
-          width={isMobileDevice ? 16 : 16 - languages.length}
+          width={isMobileDevice ? 16 : 12}
         >
           <Dropdown
             fluid
@@ -200,12 +200,13 @@ const Sources = ({ unit, indexMap, t, options }) => {
           languages.length > 0 &&
             <Grid.Column
               textAlign="center"
-              width={isMobileDevice ? 16 : languages.length}
+              width={isMobileDevice ? 16 : 4}
             >
-              <ButtonsLanguageSelector
+              <DropdownLanguageSelector
                 languages={languages}
-                defaultValue={contentLanguage}
+                defaultValue={language}
                 onSelect={handleLanguageChanged}
+                fluid={false}
               />
             </Grid.Column>
         }

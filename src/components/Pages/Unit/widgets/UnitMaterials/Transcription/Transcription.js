@@ -11,7 +11,6 @@ import { selectSuitableLanguage } from '../../../../../../helpers/language';
 import MediaHelper from '../../../../../../helpers/media';
 import playerHelper from '../../../../../../helpers/player';
 import * as shapes from '../../../../../shapes';
-import ButtonsLanguageSelector from '../../../../../Language/Selector/ButtonsLanguageSelector';
 import WipErr from '../../../../../shared/WipErr/WipErr';
 import {
   prepareScrollToSearch,
@@ -20,6 +19,7 @@ import {
 } from '../../../../../../helpers/scrollToSearch/helper';
 import { getQuery } from '../../../../../../helpers/url';
 import ShareBar from '../../../../../shared/ShareSelected';
+import DropdownLanguageSelector from "../../../../../Language/Selector/DropdownLanguageSelector";
 
 const scrollToSearch = () => {
   const element = document.getElementById(SCROLL_SEARCH_ID);
@@ -285,10 +285,11 @@ class Transcription extends Component {
       return (
         <div>
           <Container fluid textAlign="center">
-            <ButtonsLanguageSelector
+            <DropdownLanguageSelector
               languages={languages}
               defaultValue={language}
               onSelect={this.handleLanguageChanged}
+              fluid={true}
             />
           </Container>
           <Divider hidden />
