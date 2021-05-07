@@ -41,8 +41,6 @@ AVVideoSize.propTypes = {
   onSelect: PropTypes.func,
 };
 
-const areEqualProps = (props, nextProps) => {
-  return props.value === nextProps.value;
-};
+const areEqualProps = (props, nextProps) => props.value === nextProps.value;
 
 export default React.memo(AVVideoSize, areEqualProps);

@@ -257,7 +257,11 @@
       "women": "Lección de Mujeres",
       "rabash": "Lecciones de Rabash",
       "children": "Lección de Niños",
-      "series": "Serie de Estudios"
+      "series": "Serie de Estudios",
+      "seriesTree": {
+        "byTopics": "By Topics",
+        "bySourcesOf": "By Sources Of"
+      }
     },
     "list": {
       "related": "Relacionado con:",

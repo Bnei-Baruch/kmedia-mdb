@@ -261,7 +261,11 @@
       "women": "Kadın Dersleri",
       "rabash": "Rabaş Dersleri",
       "children": "Çocuk Dersleri",
-      "series": "Seçilmiş Ders Serileri"
+      "series": "Seçilmiş Ders Serileri",
+      "seriesTree": {
+        "byTopics": "By Topics",
+        "bySourcesOf": "By Sources Of"
+      }
     },
     "list": {
       "related": "İlgili:",

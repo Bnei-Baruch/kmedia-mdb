@@ -4,14 +4,14 @@ import { useSelector, useDispatch } from 'react-redux';
 import { selectors, actions } from '../../redux/modules/filters';
 
 const FiltersHydrator = ({ namespace, onHydrated }) => {
-    
+
   const isHydrated  = useSelector(state => selectors.getIsHydrated(state.filters, namespace));
   const [hydrated, setHydrated] = useState(false);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (isHydrated){
+    if (isHydrated) {
       dispatch(actions.filtersHydrated(namespace));
 
       if (onHydrated) {
@@ -23,7 +23,7 @@ const FiltersHydrator = ({ namespace, onHydrated }) => {
       setHydrated(true);
     }
   }, [dispatch, hydrated, isHydrated, namespace, onHydrated]);
-  
+
   return null;
 }
 

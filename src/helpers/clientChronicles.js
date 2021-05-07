@@ -1,10 +1,9 @@
-import React, { useContext, useEffect } from 'react';
-import { useSelector, shallowEqual } from 'react-redux';
+import { useContext, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import axios from 'axios';
-import {ulid} from 'ulid'
-import {chroniclesUrl, chroniclesBackendEnabled} from './Api';
+import { ulid } from 'ulid'
+import { chroniclesUrl, chroniclesBackendEnabled } from './Api';
 import { noop } from './utils';
-import { handleActions } from 'redux-actions';
 
 import { actions } from '../redux/modules/chronicles';
 import { types as recommendedTypes } from '../redux/modules/recommended';
@@ -14,12 +13,12 @@ import { ClientChroniclesContext } from './app-contexts';
 const ACTIVITY_EVENTS = ['mousedown', 'mousemove', 'keydown', 'scroll', 'touchstart'];
 
 const FLOWS = [
-  {start: 'page-enter',               end: 'page-leave',                 subFlows: ['recommend', 'user-inactive']},
-  {start: 'unit-page-enter',          end: 'unit-page-leave',            subFlows: ['player-play', 'recommend', 'user-inactive']},
-  {start: 'collection-page-enter',    end: 'collection-page-leave',      subFlows: ['collection-unit-selected', 'recommend', 'user-inactive']},
-  {start: 'collection-unit-selected', end: 'collection-unit-unselected', subFlows: ['player-play', 'user-inactive']},
-  {start: 'player-play',              end: 'player-stop',                subFlows: ['mute-unmute', 'user-inactive']},
-  {start: 'recommend',                end: '',                           subFlows: ['recommend-selected']},
+  { start: 'page-enter',               end: 'page-leave',                 subFlows: ['recommend', 'user-inactive'] },
+  { start: 'unit-page-enter',          end: 'unit-page-leave',            subFlows: ['player-play', 'recommend', 'user-inactive'] },
+  { start: 'collection-page-enter',    end: 'collection-page-leave',      subFlows: ['collection-unit-selected', 'recommend', 'user-inactive'] },
+  { start: 'collection-unit-selected', end: 'collection-unit-unselected', subFlows: ['player-play', 'user-inactive'] },
+  { start: 'player-play',              end: 'player-stop',                subFlows: ['mute-unmute', 'user-inactive'] },
+  { start: 'recommend',                end: '',                           subFlows: ['recommend-selected'] },
 ];
 
 const FLOWS_BY_END = new Map(FLOWS.map(flow => [flow.end, flow]));
@@ -44,7 +43,7 @@ export default class ClientChronicles {
       this.append = noop;
       return;
     }
-    const localStorage = window.localStorage;
+    const { localStorage } = window;
     if (localStorage.getItem('user_id') === null) {
       localStorage.setItem('user_id', `local:${ulid()}`);
     }
@@ -63,7 +62,7 @@ export default class ClientChronicles {
       if (this.isUserActive() && !this.isPlayerPlaying() && Date.now() - this.lastActivityTimestampMs > MAX_INACTIVITY_MS) {
         // if the user has been inactive or idle for longer then the seconds specified in MAX_INACTIVITY_MS.
         console.log(`User has been inactive for more than ${MAX_INACTIVITY_MS} ms.`);
-        this.append('user-inactive', {activities: Array.from(this.sessionActivities)});
+        this.append('user-inactive', { activities: Array.from(this.sessionActivities) });
         store.dispatch(actions.userInactive());
       }
     }, 1000);
@@ -81,7 +80,7 @@ export default class ClientChronicles {
         // Sync is false here because it will be sent together with user-inactive append.
         this.appendPage('leave', /* sync= */ false);
       }
-      this.append('user-inactive', {activities: Array.from(this.sessionActivities)}, /* sync= */ true);
+      this.append('user-inactive', { activities: Array.from(this.sessionActivities) }, /* sync= */ true);
       store.dispatch(actions.userInactive());
     }, true);
 
@@ -114,19 +113,19 @@ export default class ClientChronicles {
       }
     });
   }
-  
+
   // Handles custom redux actions to append events on them.
   onAction(action) {
-    if (action.type == recommendedTypes.FETCH_RECOMMENDED_SUCCESS) {
-      const {recommendedItems, requestData} = action.payload;
+    if (action.type === recommendedTypes.FETCH_RECOMMENDED_SUCCESS) {
+      const { recommendedItems, requestData } = action.payload;
       if (Array.isArray(recommendedItems)) {
-        this.append('recommend', {request_data: requestData, recommendations: recommendedItems.map(({uid, content_type}) => ({uid, content_type}))});
+        this.append('recommend', { request_data: requestData, recommendations: recommendedItems.map(({ uid, content_type }) => ({ uid, content_type })) });
       }
     }
   }
 
   recommendSelected(uid) {
-    this.append('recommend-selected', {uid});
+    this.append('recommend-selected', { uid });
   }
 
   appendPage(suffix, sync = false) {
@@ -151,7 +150,7 @@ export default class ClientChronicles {
   }
 
   initSession(reinit) {
-    const sessionStorage = window.sessionStorage;
+    const { sessionStorage } = window;
     if (reinit || sessionStorage.getItem('session_id') === null) {
       sessionStorage.setItem('session_id', `local:${ulid()}`);
     }
@@ -167,12 +166,12 @@ export default class ClientChronicles {
   }
 
   lastEventType() {
-    return Array.from(this.LastEntriesByType.entries()).reduce((max, [eventType, {timestamp}]) => {
+    return Array.from(this.LastEntriesByType.entries()).reduce((max, [eventType, { timestamp }]) => {
       if (timestamp > max.timestamp) {
-        return {eventType, timestamp};
+        return { eventType, timestamp };
       }
       return max;
-    }, {eventType: '', timestamp: this.firstActivityTimestampMs});
+    }, { eventType: '', timestamp: this.firstActivityTimestampMs });
   }
 
   isPlayerPlaying() {
@@ -187,14 +186,16 @@ export default class ClientChronicles {
 
   flushAppends(sync = false) {
     const nowTimestampMs = Date.now();
-    const appends = { append_requests: this.timestampedAppends.map((timestampAppend) => ({append: timestampAppend.append, offset: timestampAppend.timestamp - nowTimestampMs})) };
+    const appends = { append_requests: this.timestampedAppends.map((timestampAppend) => ({ append: timestampAppend.append, offset: timestampAppend.timestamp - nowTimestampMs })) };
     // Clear bulk without checking if post worked or not.
     this.timestampedAppends.length = 0;
     if (sync) {
-      (async () => { return await axios.post(chroniclesUrl('appends'), appends); })();
+      (async () => await axios.post(chroniclesUrl('appends'), appends))();
     } else {
       axios.post(chroniclesUrl('appends'), appends)
-        .catch((error) => { console.warn(error); });
+        .catch((error) => {
+          console.warn(error);
+        });
     }
   }
 
@@ -213,7 +214,7 @@ export default class ClientChronicles {
       // Subflow.
       let latest = 0;
       (SUBFLOWS.get(eventType) || []).forEach(flowStart => {
-        const {timestamp = 0, eventId = null} = this.LastEntriesByType.get(flowStart) || {};
+        const { timestamp = 0, eventId = null } = this.LastEntriesByType.get(flowStart) || {};
         if (timestamp > latest) {
           latest = timestamp;
           flowId = eventId;
@@ -233,9 +234,9 @@ export default class ClientChronicles {
       data,
     };
 
-    this.LastEntriesByType.set(eventType, {timestamp: nowTimestampMs, eventId});
+    this.LastEntriesByType.set(eventType, { timestamp: nowTimestampMs, eventId });
 
-    this.timestampedAppends.push({timestamp: nowTimestampMs, append});
+    this.timestampedAppends.push({ timestamp: nowTimestampMs, append });
     if (sync) {
       this.flushAppends(sync);
     }
@@ -250,6 +251,6 @@ export const ChroniclesActions = () => {
     if (action) {
       clientChronicles.onAction(action);
     }
-  }, [actionsCount]);
+  }, [action, actionsCount, clientChronicles]);
   return null;
 }

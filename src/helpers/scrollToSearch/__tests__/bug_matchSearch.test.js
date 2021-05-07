@@ -1,5 +1,5 @@
-import {OFFSET_TEXT_SEPARATOR, prepareScrollToSearch} from '../helper';
-import {RenderHighlightBorder} from "../RenderHighlightBorder";
+import { OFFSET_TEXT_SEPARATOR, prepareScrollToSearch } from '../helper';
+import { RenderHighlightBorder } from "../RenderHighlightBorder";
 
 
 describe('Bug - multi matches', () => {
@@ -141,7 +141,7 @@ describe('Bug - multi matches', () => {
     const srchstart = 'בחכמת הקבלה:$:370';
     const srchend = "(בעל הסולם:$:1630";
 
-    expect(prepareScrollToSearch(data, {srchstart, srchend})).toEqual(expected);
+    expect(prepareScrollToSearch(data, { srchstart, srchend })).toEqual(expected);
   });
 
 

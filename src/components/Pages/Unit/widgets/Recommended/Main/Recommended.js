@@ -9,12 +9,14 @@ import * as shapes from '../../../../../shapes';
 import WipErr from '../../../../../shared/WipErr/WipErr';
 import DisplayRecommended from './DisplayRecommended';
 import useRecommendedUnits from './UseRecommendedUnits';
+import { usePrevious } from '../../../../../../helpers/utils';
 
 // Number of items to try to recommend.
 const N = 12;
 
 const Recommended = ({ unit, t, filterOutUnits = [], displayTitle = true }) => {
   const [unitId, setUnitId] = useState(null);
+  const prevUnitId = usePrevious(unitId);
 
   const wip = useSelector(state => selectors.getWip(state.recommended));
   const err = useSelector(state => selectors.getError(state.recommended));
@@ -26,10 +28,10 @@ const Recommended = ({ unit, t, filterOutUnits = [], displayTitle = true }) => {
   }, [unit, unitId])
   const dispatch = useDispatch();
   useEffect(() => {
-    if (unitId && !err) {
-      dispatch(actions.fetchRecommended({id: unitId, size: N, skip: filterOutUnits.map((unit) => unit.id)}));
+    if (unitId && !err && prevUnitId !== unitId) {
+      dispatch(actions.fetchRecommended({ id: unitId, size: N, skip: filterOutUnits.map((unit) => unit.id) }));
     }
-  }, [dispatch, err, unitId]);
+  }, [dispatch, err, unitId, filterOutUnits, prevUnitId]);
 
   const recommendedUnits = useRecommendedUnits();
 

@@ -40,56 +40,52 @@ const getNavBarElement = (props, language, onDayClick) => {
   );
 };
 
-const datePickerButton = (nativeDateInput, handleNativeDateInputChange, data, isMobileDevice, deviceInfo) => {
-  return isMobileDevice
-    ? (
-      <div>
-        <div className="ui input">
-          <Input
-            icon="dropdown"
-            type="text"
-            readOnly
-            value={data.selectedInLocaleFormat}
-            onClick={() => openNativeDatePicker(nativeDateInput, deviceInfo)}
-          />
-        </div>
-        <input
-          className="hide-native-date-input"
-          type="date"
-          value={data.selectedToString}
-          max={today().format('YYYY-MM-DD')}
-          step="1"
-          pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}"
-          onChange={handleNativeDateInputChange}
-          ref={nativeDateInput}
+const datePickerButton = (nativeDateInput, handleNativeDateInputChange, data, isMobileDevice, deviceInfo) => isMobileDevice
+  ? (
+    <div>
+      <div className="ui input">
+        <Input
+          icon="dropdown"
+          type="text"
+          readOnly
+          value={data.selectedInLocaleFormat}
+          onClick={() => openNativeDatePicker(nativeDateInput, deviceInfo)}
         />
       </div>
-    )
-    : <span>{moment(data.selectedDate).format(data.dateFormat)}</span>;
-};
-
-const dropDownContainer = ({ language, blinkLangSelect, onLanguageChange }, languages, isMobileDevice) => {
-  return isMobileDevice
-    ? (
-      <select className={blinkLangSelect ? 'blink' : ''} value={language} onChange={onLanguageChange}>
-        {
-          languages.map(x => (
-            <option key={`opt-${x.value}`} value={x.value}>
-              {x.text}
-            </option>
-          ))
-        }
-      </select>
-    )
-    : (
-      <DropdownLanguageSelector
-        languages={ALL_LANGUAGES}
-        defaultValue={language}
-        onSelect={onLanguageChange}
-        blink={blinkLangSelect}
+      <input
+        className="hide-native-date-input"
+        type="date"
+        value={data.selectedToString}
+        max={today().format('YYYY-MM-DD')}
+        step="1"
+        pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}"
+        onChange={handleNativeDateInputChange}
+        ref={nativeDateInput}
       />
-    );
-};
+    </div>
+  )
+  : <span>{moment(data.selectedDate).format(data.dateFormat)}</span>;
+
+const dropDownContainer = ({ language, blinkLangSelect, onLanguageChange }, languages, isMobileDevice) => isMobileDevice
+  ? (
+    <select className={blinkLangSelect ? 'blink' : ''} value={language} onChange={onLanguageChange}>
+      {
+        languages.map(x => (
+          <option key={`opt-${x.flag}`} value={x.value}>
+            {x.text}
+          </option>
+        ))
+      }
+    </select>
+  )
+  : (
+    <DropdownLanguageSelector
+      languages={ALL_LANGUAGES}
+      defaultValue={language}
+      onSelect={onLanguageChange}
+      blink={blinkLangSelect}
+    />
+  );
 
 const openNativeDatePicker = (nativeDateInput, deviceInfo) => {
   if (deviceInfo.os.name === 'Android') {
@@ -171,22 +167,20 @@ const SimpleModePage = (props) => {
     }
   };
 
-  const renderDatePicker = () => {
-    return isClient && <Card>
-      <DayPicker
-        locale={uiLanguage}
-        modifiers={data.DayPickerModifiers}
-        localeUtils={MomentLocaleUtils}
-        selectedDays={selectedDate}
-        month={selectedDate}
-        disabledDays={{ after: new Date() }}
-        onDayClick={onDayClick}
-        captionElement={() => null}
-        navbarElement={props => getNavBarElement(props, uiLanguage, onDayClick)}
-      />
-      <Button className="inline-button" onClick={() => onDayClick(new Date())} content={t('simple-mode.today-button')} />
-    </Card>;
-  };
+  const renderDatePicker = () => isClient && <Card>
+    <DayPicker
+      locale={uiLanguage}
+      modifiers={data.DayPickerModifiers}
+      localeUtils={MomentLocaleUtils}
+      selectedDays={selectedDate}
+      month={selectedDate}
+      disabledDays={{ after: new Date() }}
+      onDayClick={onDayClick}
+      captionElement={() => null}
+      navbarElement={props => getNavBarElement(props, uiLanguage, onDayClick)}
+    />
+    <Button className="inline-button" onClick={() => onDayClick(new Date())} content={t('simple-mode.today-button')} />
+  </Card>;
 
   return (
     <div>

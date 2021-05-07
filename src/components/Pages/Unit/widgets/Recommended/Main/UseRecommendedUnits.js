@@ -1,4 +1,3 @@
-import React from 'react';
 import { useSelector } from 'react-redux';
 import { selectors } from '../../../../../../redux/modules/recommended';
 import { selectors as mdbSelectors } from '../../../../../../redux/modules/mdb';

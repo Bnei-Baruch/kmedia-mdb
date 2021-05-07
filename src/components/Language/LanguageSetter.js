@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { actions, selectors } from '../../redux/modules/settings';
@@ -7,15 +7,9 @@ import * as shapes from '../shapes';
 
 // NOTE: yaniv -> edo: should we block rendering until language changed?
 
-const catchLanguageChange = ({ language: newLanguage, setLanguage }) => {
-  const actualLanguage = LANGUAGES[newLanguage] ? newLanguage : DEFAULT_LANGUAGE;
-  setLanguage(actualLanguage);
-};
-
 const LanguageSetter = ({ language, children }) => {
   const currentLanguage = useSelector(state => selectors.getLanguage(state.settings));
   const dispatch        = useDispatch();
-  const setLanguage     = useCallback(language => dispatch(actions.setLanguage(language)), [dispatch]);
 
   useEffect(() => {
     // catch language change only on client
@@ -24,9 +18,10 @@ const LanguageSetter = ({ language, children }) => {
     }
 
     if (language && language !== currentLanguage) {
-      catchLanguageChange({ language, setLanguage });
+      const actualLanguage = LANGUAGES[language] ? language : DEFAULT_LANGUAGE;
+      dispatch(actions.setLanguage(actualLanguage));
     }
-  }, [language, currentLanguage, setLanguage]);
+  }, [language, currentLanguage, dispatch]);
 
   return children;
 };

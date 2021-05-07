@@ -58,17 +58,15 @@ class SearchResultTwitters extends SearchResultBase {
     };
   };
 
-  renderItem = ({ twitter, highlight }) => {
-    return (
-      <Card key={twitter.twitter_id} className="search__card bg_hover_grey home-twitter" raised>
-        <Card.Content>
-          <Feed className="min-height-200">
-            <TwitterFeed snippetVersion withDivider={false} twitter={twitter} highlight={highlight && highlight[0]} />
-          </Feed>
-        </Card.Content>
-      </Card>
-    );
-  };
+  renderItem = ({ twitter, highlight }) => (
+    <Card key={twitter.twitter_id} className="search__card bg_hover_grey home-twitter" raised>
+      <Card.Content>
+        <Feed className="min-height-200">
+          <TwitterFeed snippetVersion withDivider={false} twitter={twitter} highlight={highlight && highlight[0]} />
+        </Feed>
+      </Card.Content>
+    </Card>
+  );
 
   renderScrollPagination = () => {
     const { pageNo, pageSize } = this.state;
@@ -146,15 +144,13 @@ class SearchResultTwitters extends SearchResultBase {
   }
 }
 
-const twitterMapFromState = (state, tweets) => {
-  return tweets.map(tweet => {
-    const content = tweet && tweet.highlight && tweet.highlight.content;
-    const mdb_uid = tweet && tweet._source && tweet._source.mdb_uid;
-    //const { highlight: { content }, _source: { mdb_uid } } = tweet;
-    const twitter = selectors.getTwitter(state.publications, mdb_uid);
-    return { twitter, highlight: content };
-  });
-};
+const twitterMapFromState = (state, tweets) => tweets.map(tweet => {
+  const content = tweet && tweet.highlight && tweet.highlight.content;
+  const mdb_uid = tweet && tweet._source && tweet._source.mdb_uid;
+  //const { highlight: { content }, _source: { mdb_uid } } = tweet;
+  const twitter = selectors.getTwitter(state.publications, mdb_uid);
+  return { twitter, highlight: content };
+});
 
 const mapState = (state, ownProps) => {
   const { hit: { _source } } = ownProps;

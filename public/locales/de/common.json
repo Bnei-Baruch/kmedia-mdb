@@ -256,7 +256,11 @@
       "lectures": "Vorträge",
       "women": "Lektionen für Frauen",
       "children": "Unterricht für Kinder",
-      "series": "Ausgewählte Trainingsserien"
+      "series": "Ausgewählte Trainingsserien",
+      "seriesTree": {
+        "byTopics": "By Topics",
+        "bySourcesOf": "By Sources Of"
+      }
     },
     "list": {
       "related": "Bezogen auf",

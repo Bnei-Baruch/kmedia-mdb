@@ -258,7 +258,11 @@
       "women": "Уроки для жінок",
       "rabash": "Уроки Рабаша",
       "children": "Уроки для дітей",
-      "series": "Избранные серии обучения"
+      "series": "Избранные серии обучения",
+      "seriesTree": {
+        "byTopics": "By Topics",
+        "bySourcesOf": "By Sources Of"
+      }
     },
     "list": {
       "related": "Відносяться до:",

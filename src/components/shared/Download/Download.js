@@ -54,7 +54,7 @@ const downloadAsset = (path, mimeType, downloadAllowed) => {
 };
 
 const Download = (props) => {
-  const { children = null, path = null, mimeType, downloadAllowed} = props;
+  const { children = null, path = null, mimeType, downloadAllowed } = props;
   if (path === null) {
     return null;
   }

@@ -295,7 +295,7 @@ class AVPlayer extends Component {
       }
       this.sendCallbackMessage(event.data, { status: 'ok' });
     } catch (e) {
-      console.error('Error while receive external message in AVPlayer: ' + e);
+      console.error(`Error while receive external message in AVPlayer: ${  e}`);
     }
   }
 

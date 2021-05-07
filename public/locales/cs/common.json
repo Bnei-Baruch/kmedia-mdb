@@ -238,7 +238,11 @@
       "lectures": "Přednášky",
       "women": "Ženské lekce",
       "children": "Dětské lekce",
-      "series": "Vybrané studijní série"
+      "series": "Vybrané studijní série",
+      "seriesTree": {
+        "byTopics": "By Topics",
+        "bySourcesOf": "By Sources Of"
+      }
     },
     "list": {
       "related": "Související s",

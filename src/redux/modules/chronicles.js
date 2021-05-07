@@ -26,7 +26,7 @@ const onAction = (draft, payload) => {
 };
 
 export const reducer = handleActions({
-  ['FETCH_RECOMMENDED_SUCCESS']: onAction,
+  'FETCH_RECOMMENDED_SUCCESS': onAction,
 }, initialState);
 
 const getLastAction = state => state.lastAction;
