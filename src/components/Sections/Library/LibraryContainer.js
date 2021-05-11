@@ -387,15 +387,17 @@ class LibraryContainer extends Component {
   static nextPrevButtons = props => {
     const { sourceId, getPathByID } = props;
 
-    if (isTaas(sourceId))
+    if (isTaas(sourceId)) {
       return null;
+    }
 
     const fullPath = LibraryContainer.getFullPath(sourceId, getPathByID);
 
     const len = fullPath.length;
 
-    if (len < 2)
+    if (len < 2) {
       return null;
+    }
 
     const activeIndex = getIndex(fullPath[len - 2], fullPath[len - 1]);
     if (activeIndex === -1) {
@@ -539,7 +541,7 @@ class LibraryContainer extends Component {
                 <Ref innerRef={this.handleContextRef}>
                   <div
                     className="source__content"
-                    style={{ minHeight: `calc(100vh - 14px)` }}
+                    style={{ minHeight: `calc(100vh - 14px)`, marginTop: '15px', }}
                   >
                     {content}
                     {LibraryContainer.nextPrevButtons(this.props)}
