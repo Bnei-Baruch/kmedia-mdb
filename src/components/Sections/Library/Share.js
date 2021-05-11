@@ -23,10 +23,7 @@ const LibraryShare = ({ t, position }) => {
 
   useEffect(() => {
     window.addEventListener('resize', closePopup);
-  }, []);
-
-  useEffect(() => () => {
-    window.removeEventListener('resize', closePopup);
+    return () => window.removeEventListener('resize', closePopup);
   }, []);
 
   const closePopup = () => {
