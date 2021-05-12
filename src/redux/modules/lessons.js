@@ -238,7 +238,8 @@ const addToSourcesTree = (acc, path, series) => {
   let volumeId, volumeParentId;
   let dir = acc;
   for (let i = 0; i < path.length; i++) {
-    let { id, name, parent_id, type } = path[i];
+    const { id, name, type } = path[i];
+    let { parent_id } = path[i];
 
     if (hasVolume) {
       // save volume data for later and skip the path part
