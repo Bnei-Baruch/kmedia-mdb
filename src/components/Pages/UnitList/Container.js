@@ -72,7 +72,7 @@ export class UnitListContainer extends withPagination {
 
         if (pageNo !== nextProps.pageNo) {
           this.setPage(nextProps, pageNo);
-        } 
+        }
       }
     }
 

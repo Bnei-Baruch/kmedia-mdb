@@ -189,17 +189,11 @@ const onSetLanguage = draft => {
   draft.publishers.byID = {};
   draft.collections     = {};
 
-  let { pageNo } = draft.twitter;
-  let { total } = draft.twitter;
-  draft.twitter        = { ...initialState.twitter };
-  draft.twitter.pageNo = pageNo;
-  draft.twitter.total  = total;
+  let { pageNo, total } = draft.twitter;
+  draft.twitter         = { ...initialState.twitter, pageNo, total };
 
-  pageNo            = draft.blog.pageNo;
-  total             = draft.blog.total;
-  draft.blog        = { ...initialState.blog };
-  draft.blog.pageNo = pageNo;
-  draft.blog.total  = total;
+  ({ pageNo, total } = draft.blog)
+  draft.blog         = { ...initialState.blog, pageNo, total };
 };
 
 const onSSRPrepare = draft => {

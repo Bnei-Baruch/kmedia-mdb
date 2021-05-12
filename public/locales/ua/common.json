@@ -13,6 +13,7 @@
       "topic": "Тема",
       "not-found": "Не знайдена",
       "publications": "Публікації",
+      "music": "Music",
       "simple-mode": "Завантаження",
       "photos": "Фотографії",
       "design": "Дизайн",
@@ -343,6 +344,12 @@
       }
     },
     "read-more": "Прочитайте больше"
+  },
+  "music": {
+    "header": {
+      "text": "Music",
+      "subtext": ""
+    }
   },
   "simple-mode": {
     "header": {
