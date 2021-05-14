@@ -68,7 +68,8 @@ const routes = [
     options: { ssrData: ssrDataLoaders.collectionPage('publications-collection') }
   },
   { path: 'publications/blog/:blog/:id', component: BlogPost, options: { ssrData: ssrDataLoaders.blogPostPage } },
-  { path: 'music', component: Music },
+  { path: 'music', component: Music, options: { ssrData: ssrDataLoaders.musicPage } },
+  { path: 'music/c/:id', component: PlaylistCollectionIdCheck, options: { ssrData: ssrDataLoaders.playlistCollectionPage } },
   { path: 'sources', component: LibraryHomepage },
   { path: 'sources/:id', component: LibraryContainer, options: { ssrData: ssrDataLoaders.libraryPage } },
   { path: 'topics', component: Topics },

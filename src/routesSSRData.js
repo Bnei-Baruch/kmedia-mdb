@@ -34,6 +34,7 @@ import { actions as assetsActions, selectors as assetsSelectors } from './redux/
 import { actions as tagsActions } from './redux/modules/tags';
 import { actions as publicationsActions } from './redux/modules/publications';
 import { actions as simpleModeActions } from './redux/modules/simpleMode';
+import { actions as musicActions } from './redux/modules/music';
 import * as mdbSagas from './sagas/mdb';
 import * as filtersSagas from './sagas/filters';
 import * as eventsSagas from './sagas/events';
@@ -42,6 +43,7 @@ import * as searchSagas from './sagas/search';
 import * as assetsSagas from './sagas/assets';
 import * as tagsSagas from './sagas/tags';
 import * as publicationsSagas from './sagas/publications';
+import * as musicSagas from './sagas/music';
 import { getPageFromLocation } from './components/Pagination/withPagination';
 import { isTaas } from './components/shared/PDF/PDF';
 
@@ -157,6 +159,10 @@ export const latestLesson = store => (
       });
     })
 );
+
+export const musicPage = (store, match) => {
+  return store.sagaMiddleWare.run(musicSagas.fetchMusic, musicActions.fetchMusic).done;
+}
 
 export const eventsPage = (store, match) => {
   // hydrate tab

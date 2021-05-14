@@ -30,6 +30,7 @@ import {
   CT_MEAL,
   CT_MEALS,
   CT_PICNIC,
+  CT_SONGS,
   CT_SPECIAL_LESSON,
   CT_UNITY_DAY,
   CT_VIDEO_PROGRAM,
@@ -149,6 +150,8 @@ export const canonicalLink = (entity, mediaLang) => {
   case CT_PICNIC:
   case CT_UNITY_DAY:
     return `/events/c/${entity.id}`;
+  case CT_SONGS:
+    return `/music/c/${entity.id}`;
   default:
     break;
   }
