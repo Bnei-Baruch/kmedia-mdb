@@ -171,7 +171,7 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
               }
               <Container id="unit_container">
                 <Helmets.AVUnit unit={unit} language={uiLanguage} />
-                <Info unit={unit} />
+                <Info unit={unit} currentCollection={collection} />
                 <Materials unit={unit} playlistComponent={PlaylistData} />
               </Container>
             </>
