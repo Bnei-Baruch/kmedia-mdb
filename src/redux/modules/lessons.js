@@ -279,10 +279,19 @@ const getSeriesTree = (state, match) => {
   const getSourceById = sources.getSourceById(state.sources);
   const authors = roots.map(getSourceById);
 
+  const getAuthorsDisplayName = authorId => {
+    const author = authors.find(a => a.id === authorId);
+    const { name, full_name } = author;
+    const displayName = full_name.includes(name)
+      ? full_name
+      : `${name} (${full_name}) `;
+    return displayName;
+  };
+
   const fullTree = {}
 
   Object.keys(bySourceTree).filter(key => key !== 'vk').forEach(key => {
-    bySourceTree[key].name = authors.find(a => a.id === key).full_name;
+    bySourceTree[key].name = getAuthorsDisplayName(key);
     fullTree[key] = bySourceTree[key];
   });
 

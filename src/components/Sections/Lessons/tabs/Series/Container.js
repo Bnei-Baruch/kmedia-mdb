@@ -96,7 +96,7 @@ const SeriesContainer = ({ t }) => {
 
   const getHeader = node => node.id === "byTopics"
     ? t(`lessons.tabs.seriesTree.byTopics`)
-    : `${t(`lessons.tabs.seriesTree.bySourcesOf`)}${node.name}`;
+    : `${t(`lessons.tabs.seriesTree.bySourcesOf`)}${` `}${node.name}`;
 
   const renderKabbalist = node => {
     if (node?.children?.length > 0) {
