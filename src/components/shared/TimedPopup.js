@@ -47,7 +47,7 @@ class TimedPopup extends Component {
     return toUpdate;
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (this.props.updateTrigger !== nextProps.updateTrigger || this.props.openOnInit !== nextProps.openOnInit) {
       if (nextProps.openOnInit) {
         this.open();
