@@ -282,9 +282,12 @@ const getSeriesTree = (state, match) => {
   const getAuthorsDisplayName = authorId => {
     const author = authors.find(a => a.id === authorId);
     const { name, full_name } = author;
+
+    // don't display the long names like Rabbi Yehuda Leib Ashlag
+    // but display full name of Rav - Michael Laitman, Ph.D
     const displayName = full_name.includes(name)
       ? full_name
-      : `${name} (${full_name}) `;
+      : name
     return displayName;
   };
 
