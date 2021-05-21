@@ -100,7 +100,7 @@ const SeriesContainer = ({ t }) => {
 
   const renderKabbalist = node => {
     if (node?.children?.length > 0) {
-      const initLevel = 2;
+      const initLevel = 3;
 
       return (
         <div key={`${node.id}#${initLevel}`} >
@@ -110,7 +110,7 @@ const SeriesContainer = ({ t }) => {
           <div className="topics__list">
             <List>
               {
-                node.children.map(n => renderNode(n, initLevel + 1))
+                node.children.map(n => renderNode(n, initLevel))
               }
             </List>
           </div>
