@@ -32,7 +32,7 @@ export function* sourceIndex(action) {
       const result = /^gr-(.+)/.exec(id);
       id           = result[1];
     }
-    const cu = yield call(Api.sourceUnit, { id });
+    const cu = yield call(Api.unit, { id });
     yield put(actions.sourceIndexSuccess(action.payload, cuFilesToData(cu.data)));
   } catch (err) {
     yield put(actions.sourceIndexFailure(action.payload, err));

@@ -74,8 +74,6 @@ class Api {
 
   static unit = ({ id, language }) => Requests.get(`content_units/${id}?${Requests.makeParams({ language })}`);
 
-  static sourceUnit = ({ id }) => Requests.get(`source_units/${id}`);
-
   static home = ({ language }) => Requests.get(`home?${Requests.makeParams({ language })}`);
 
   static latestLesson = ({ language }) => Requests.get(`latestLesson?${Requests.makeParams({ language })}`);
