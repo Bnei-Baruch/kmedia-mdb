@@ -181,7 +181,7 @@ const Sources = ({ unit, indexMap, t, options }) => {
 
   return (
     <>
-      <Grid container padded={isMobileDevice ? "vertically" : true} columns={2}>
+      <Grid container padded={isMobileDevice} columns={2} className={classNames({"no-margin-top": !isMobileDevice})}>
         <Grid.Column
           className={classNames({"is-fitted": isMobileDevice})}
           width={isMobileDevice ? 16 : 12}
@@ -200,13 +200,14 @@ const Sources = ({ unit, indexMap, t, options }) => {
           languages.length > 0 &&
             <Grid.Column
               textAlign="center"
+              className={classNames({"padding_r_l_0": isMobileDevice, "no-padding-bottom": isMobileDevice})}
               width={isMobileDevice ? 16 : 4}
             >
               <DropdownLanguageSelector
                 languages={languages}
                 defaultValue={language}
                 onSelect={handleLanguageChanged}
-                fluid={false}
+                fluid={isMobileDevice}
               />
             </Grid.Column>
         }

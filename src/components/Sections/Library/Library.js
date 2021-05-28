@@ -169,11 +169,11 @@ const Library = ({ data, source, language = null, languages = [], langSelectorMo
 
   if (languages.length > 0) {
     languageBar = (
-      <Grid container padded={isMobileDevice ? "vertically" : true} columns={isMobileDevice ? 1 : 2}>
+      <Grid container padded={false} columns={isMobileDevice ? 1 : 2} className="no-margin-top">
         {!isMobileDevice &&
         <Grid.Column width={12}>
         </Grid.Column>}
-        <Grid.Column width={isMobileDevice ? 16 : 4}>
+        <Grid.Column width={isMobileDevice ? 16 : 4} className="library-language-column">
           <DropdownLanguageSelector
             languages={languages}
             defaultValue={language}

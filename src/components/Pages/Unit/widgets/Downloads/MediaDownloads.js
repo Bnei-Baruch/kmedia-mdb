@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component, useContext} from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import { connect } from 'react-redux';
@@ -27,6 +27,8 @@ import { selectors as settings } from '../../../../../redux/modules/settings';
 import { selectors } from '../../../../../redux/modules/publications';
 import * as shapes from '../../../../shapes';
 import DropdownLanguageSelector from '../../../../Language/Selector/DropdownLanguageSelector';
+import {DeviceInfoContext} from "../../../../../helpers/app-contexts";
+import classNames from "classnames";
 
 const MEDIA_ORDER = [
   MT_VIDEO,
@@ -38,6 +40,8 @@ const MEDIA_ORDER = [
 const POPOVER_CONFIRMATION_TIMEOUT = 2500;
 
 class MediaDownloads extends Component {
+  static contextType = DeviceInfoContext;
+
   static propTypes = {
     unit: shapes.ContentUnit,
     publisherById: PropTypes.objectOf(shapes.Publisher).isRequired,
@@ -234,6 +238,7 @@ class MediaDownloads extends Component {
   render() {
     const { t, publisherById, unit, displayDivider }     = this.props;
     const { language, languages, groups, derivedGroups } = this.state;
+    const { isMobileDevice }                             = this.context;
 
     const byType = groups.get(language) || new Map();
 
@@ -246,18 +251,20 @@ class MediaDownloads extends Component {
     const derivedRows = this.getDerivedRows(derivedGroups, language, t, typeOverrides, publisherById);
 
     return (
-      <div className="media-downloads content__aside-unit">
-        { languages.length > 1
-          ? <Grid columns="equal">
-            <Grid.Row>
-              <Grid.Column>
-                <DropdownLanguageSelector
-                  languages={languages}
-                  defaultValue={language}
-                  onSelect={this.handleChangeLanguage}
-                />
-              </Grid.Column>
-            </Grid.Row>
+      <div className="media-downloads">
+        { languages.length > 1 ?
+          <Grid container padded={false} columns={isMobileDevice ? 1 : 2} className={classNames({"padding_r_l_0": !isMobileDevice})}>
+            {!isMobileDevice &&
+            <Grid.Column width={12}>
+            </Grid.Column>}
+            <Grid.Column width={isMobileDevice ? 16 : 4} textAlign={"right"} className={classNames({"padding_r_l_0": !isMobileDevice})}>
+              <DropdownLanguageSelector
+                languages={languages}
+                defaultValue={language}
+                onSelect={this.handleChangeLanguage}
+                fluid={isMobileDevice}
+              />
+            </Grid.Column>
           </Grid>
           : displayDivider &&
             <Divider></Divider>
