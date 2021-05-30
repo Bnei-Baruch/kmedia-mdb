@@ -10,6 +10,7 @@ import DonateNow, { VirtualHomeButton } from './DonateNow';
 import FeedBurner from './FeedBurner';
 
 const ITEMS = [
+  'personal',
   'lessons',
   'programs',
   'sources',

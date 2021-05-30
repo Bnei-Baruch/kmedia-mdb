@@ -4,6 +4,7 @@
       "header": "Каббала Медиа"
     },
     "sidebar": {
+      "personal": "Мои мультимедиа",
       "lessons": "Уроки и лекции",
       "programs": "Программы и Клипы",
       "sources": "Библиотека",
@@ -449,7 +450,7 @@
     "recommended": {
       "header": "Рекомендуемые"
     },
-    "playlist":{
+    "playlist": {
       "header": "Следующий"
     }
   },
