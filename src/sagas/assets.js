@@ -81,12 +81,13 @@ function* watchFetchPerson() {
 }
 
 function cuFilesToData(cu) {
-  return !cu.files ? {} : cu.files.reduce((acc, { language, name, id }) => {
+  return !cu.files ? {} : cu.files.reduce((acc, f) => {
+    const { language, name, id } = f;
     if (!acc[language])
       acc[language] = {};
 
     const ext          = name.split('.').slice(-1);
-    acc[language][ext] = ext === 'pdf' ? name : id;
+    acc[language][ext] = ext?.[0] === 'pdf' ? f : id;
     return acc;
   }, {});
 }
