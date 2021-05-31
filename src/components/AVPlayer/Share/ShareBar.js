@@ -47,9 +47,6 @@ const ShareBar = ({ t,  url = '', buttonSize = 'big', messageTitle = '', embedCo
     clearEmbedTimeout();
     setIsEmbedPopupOpen(true);
     embedTimeout = setTimeout(() => setIsEmbedPopupOpen(false), POPOVER_CONFIRMATION_TIMEOUT);
-    // this.setState({ isEmbedPopupOpen: true }, () => {
-    //   this.embedTimeout = setTimeout(() => this.setState({ isEmbedPopupOpen: false }), POPOVER_CONFIRMATION_TIMEOUT);
-    // });
   };
 
   if (!url) {
