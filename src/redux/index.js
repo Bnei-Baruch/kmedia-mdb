@@ -17,6 +17,7 @@ import { reducer as stats } from './modules/stats';
 import { reducer as simpleMode } from './modules/simpleMode';
 import { reducer as recommended } from './modules/recommended';
 import { reducer as chronicles } from './modules/chronicles';
+import { reducer as music } from './modules/music';
 
 const reducers = history => combineReducers({
   router: connectRouter(history),
@@ -37,6 +38,7 @@ const reducers = history => combineReducers({
   simpleMode,
   recommended,
   chronicles,
+  music,
 });
 
 export default reducers;

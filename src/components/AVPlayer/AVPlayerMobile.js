@@ -549,6 +549,7 @@ class AVPlayerMobile extends Component {
               fallbackMedia={fallbackMedia}
               uiLanguage={uiLanguage}
               t={t}
+              cuId={item.unit?.id}
             />
             <AVLanguageMobile
               languages={languages}
@@ -557,6 +558,7 @@ class AVPlayerMobile extends Component {
               requestedLanguage={requestedLanguage}
               onSelect={this.onLanguageChange}
               t={t}
+              cuId={item.unit?.id}
             />
           </div>
         </div>

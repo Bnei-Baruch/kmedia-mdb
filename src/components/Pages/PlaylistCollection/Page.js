@@ -127,7 +127,7 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
 
   // Don't recommend lesson preparation, skip to next unit.
   let recommendUnit = unit;
-  const isUnitPrep = collection?.ccuNames?.[unit?.id] === '0';
+  const isUnitPrep  = collection?.ccuNames?.[unit?.id] === '0';
   if (isUnitPrep && Array.isArray(playlist?.items)) {
     const indexOfUnit = playlist.items.findIndex((item) => item?.unit?.id === unit.id);
     if (indexOfUnit !== -1 && indexOfUnit + 1 < playlist.items.length) {
@@ -171,7 +171,7 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
               }
               <Container id="unit_container">
                 <Helmets.AVUnit unit={unit} language={uiLanguage} />
-                <Info unit={unit} />
+                <Info unit={unit} currentCollection={collection} />
                 <Materials unit={unit} playlistComponent={PlaylistData} />
               </Container>
             </>

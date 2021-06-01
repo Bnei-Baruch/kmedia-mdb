@@ -13,6 +13,7 @@
       "topic": "Thema",
       "not-found": "nicht gefunden",
       "publications": "Veröffentlichungen",
+      "music": "Music",
       "simple-mode": "Downloads",
       "photos": "Fotos",
       "design": "Design",
@@ -341,6 +342,12 @@
       }
     },
     "read-more": "Weiterlesen"
+  },
+  "music": {
+    "header": {
+      "text": "Music",
+      "subtext": ""
+    }
   },
   "simple-mode": {
     "header": {

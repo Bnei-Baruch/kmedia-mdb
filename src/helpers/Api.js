@@ -8,11 +8,11 @@ const IMAGINARY_INTERNAL_HOST = process.env.REACT_APP_IMAGINARY_INTERNAL_HOST ||
 const API_RECOMMENDED         = process.env.REACT_APP_RECOMMENDED;
 const CHRONICLES_BACKEND      = process.env.REACT_APP_CHRONICLES_BACKEND;
 
-export const backendUrl    = path => `${API_BACKEND}${path}`;
-export const assetUrl      = path => `${ASSETS_BACKEND}${path}`;
-export const cmsUrl        = path => `${CMS_BACKEND}${path}`;
-export const imaginaryUrl  = path => `${IMAGINARY_URL}${path}`;
-export const chroniclesUrl = path => `${CHRONICLES_BACKEND}${path}`;
+export const backendUrl               = path => `${API_BACKEND}${path}`;
+export const assetUrl                 = path => `${ASSETS_BACKEND}${path}`;
+export const cmsUrl                   = path => `${CMS_BACKEND}${path}`;
+export const imaginaryUrl             = path => `${IMAGINARY_URL}${path}`;
+export const chroniclesUrl            = path => `${CHRONICLES_BACKEND}${path}`;
 export const chroniclesBackendEnabled = CHRONICLES_BACKEND !== undefined;
 
 export class Requests {
@@ -110,7 +110,16 @@ class Api {
 
   static autocomplete = ({ q, language }) => Requests.get(`autocomplete?${Requests.makeParams({ q, language })}`);
 
-  static search = ({ q, language, pageNo: page_no, pageSize: page_size, sortBy: sort_by, deb, suggest, searchId: search_id }) => (
+  static search = ({
+                     q,
+                     language,
+                     pageNo: page_no,
+                     pageSize: page_size,
+                     sortBy: sort_by,
+                     deb,
+                     suggest,
+                     searchId: search_id
+                   }) => (
     Requests.get(`search?${Requests.makeParams({ q, language, page_no, page_size, sort_by, deb, suggest, search_id })}`)
   );
 
@@ -128,9 +137,9 @@ class Api {
 
   static recommendedRequestData = ({ uid, languages, skipUids: skip_uids, size: more_items }) => ({
     more_items,
-    "current_feed": [],
-    "options": {
-      "recommend": {
+    'current_feed': [],
+    'options': {
+      'recommend': {
         uid,
       },
       languages,

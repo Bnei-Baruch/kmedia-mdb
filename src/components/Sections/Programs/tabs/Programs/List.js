@@ -35,13 +35,11 @@ const renderUnit = (unit, t) => {
 };
 
 const ProgramsList = () =>
-  <div>
-    <UnitList
-      key="programs-main"
-      namespace="programs-main"
-      renderUnit={renderUnit}
-      extraFetchParams={{ content_type: CT_VIDEO_PROGRAM_CHAPTER }}
-    />
-  </div>;
+  <UnitList
+    key="programs-main"
+    namespace="programs-main"
+    renderUnit={renderUnit}
+    extraFetchParams={{ content_type: CT_VIDEO_PROGRAM_CHAPTER }}
+  />;
 
 export default ProgramsList;

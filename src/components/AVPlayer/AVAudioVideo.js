@@ -1,26 +1,15 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import TimedPopup from '../shared/TimedPopup';
 
-const AVAudioVideo = ({ isAudio, isVideo, fallbackMedia, uiLanguage, onSwitch, t }) => {
+const AVAudioVideo = ({ isAudio, isVideo, fallbackMedia, uiLanguage, onSwitch, t, cuId }) => {
   const [audioVideoContainerRef, setAudioVideoContainerRef]       = useState();
-  const [didShowFallbackMediaPopup, setDidShowFallbackMediaPopup] = useState();
   const [openPopup, setOpenPopup]                                 = useState();
 
-  const handleFallbackMedia = useCallback(fallbackMedia => {
-    if (didShowFallbackMediaPopup) {
-      setOpenPopup(false);
-      return;
-    }
-
-    setOpenPopup(!!fallbackMedia);
-    setDidShowFallbackMediaPopup(!!fallbackMedia);
-  }, [didShowFallbackMediaPopup]);
-
   useEffect(() => {
-    handleFallbackMedia(fallbackMedia);
-  }, [fallbackMedia, handleFallbackMedia]);
+    setOpenPopup(fallbackMedia);
+  }, [fallbackMedia]);
 
   return (
     <div ref={setAudioVideoContainerRef} className="mediaplayer__audiovideo">
@@ -31,6 +20,7 @@ const AVAudioVideo = ({ isAudio, isVideo, fallbackMedia, uiLanguage, onSwitch, t
         timeout={7000}
         language={uiLanguage}
         refElement={audioVideoContainerRef}
+        updateTrigger={cuId}
       />
       <button type="button" onClick={onSwitch}>
         <span className={isAudio ? 'is-active' : ''}>{t('buttons.audio')}</span>
@@ -54,7 +44,8 @@ const areEqual = (prevProps, nextProps) => {
   const equal = prevProps.isAudio === nextProps.isAudio
     && prevProps.isVideo === nextProps.isVideo
     && prevProps.fallbackMedia === nextProps.fallbackMedia
-    && prevProps.uiLanguage === nextProps.uiLanguage;
+    && prevProps.uiLanguage === nextProps.uiLanguage
+    && prevProps.cuId === nextProps.cuId;
 
   return equal;
 };

@@ -26,6 +26,7 @@ import Topics from './components/Sections/Topics/TopicContainer';
 import Topic from './components/Sections/Topics/TopicPage';
 import SearchResults from './components/Search/SearchResultsContainer';
 import HomePage from './components/Sections/Home/Container';
+import Music from './components/Sections/Music/Music';
 // import ProjectStatus from './components/Sections/ProjectStatus/ProjectStatus';
 import Help from './components/Sections/Help/Help';
 import SimpleMode from './components/Sections/SimpleMode/Container';
@@ -67,6 +68,8 @@ const routes = [
     options: { ssrData: ssrDataLoaders.collectionPage('publications-collection') }
   },
   { path: 'publications/blog/:blog/:id', component: BlogPost, options: { ssrData: ssrDataLoaders.blogPostPage } },
+  { path: 'music', component: Music, options: { ssrData: ssrDataLoaders.musicPage } },
+  { path: 'music/c/:id', component: PlaylistCollectionIdCheck, options: { ssrData: ssrDataLoaders.playlistCollectionPage } },
   { path: 'sources', component: LibraryHomepage },
   { path: 'sources/:id', component: LibraryContainer, options: { ssrData: ssrDataLoaders.libraryPage } },
   { path: 'topics', component: Topics },

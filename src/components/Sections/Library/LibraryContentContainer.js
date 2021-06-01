@@ -7,7 +7,7 @@ import { selectSuitableLanguage } from '../../../helpers/language';
 import { updateQuery } from '../../../helpers/url';
 import { actions } from '../../../redux/modules/assets';
 import * as shapes from '../../shapes';
-import Library, { checkRabashGroupArticles } from './Library';
+import Library from './Library';
 import { isTaas } from '../../shared/PDF/PDF';
 
 const LibraryContentContainer = (props) => {
@@ -48,9 +48,9 @@ const LibraryContentContainer = (props) => {
       // In case of TAS we prefer PDF, otherwise HTML
       // pdf.js fetch it on his own (smarter than us), we fetch it for nothing.
       if (lData && (!lData.pdf || !isTaas(source))) {
-        const id = checkRabashGroupArticles(source);
 
-        dispatch(actions.fetchAsset(`sources/${id}/${lData.html}`));
+        const id = lData.docx || lData.doc || null;
+        id && dispatch(actions.doc2html(id));
       }
     }
   }, [data, language, source, dispatch]);

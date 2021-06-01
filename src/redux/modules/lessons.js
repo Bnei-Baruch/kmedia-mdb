@@ -169,7 +169,7 @@ const getTree = (state, match) => {
   const byTag = allSeries.reduce((acc, series) => {
     const { tag_id, name } = series;
 
-    if (isNotEmptyArray(tag_id)){
+    if (isNotEmptyArray(tag_id)) {
       const tagPaths = tag_id.map(tagId => tagPathById(tagId));
 
       for (let i = 0; i < tagPaths.length; i++) {
@@ -238,11 +238,12 @@ const addToSourcesTree = (acc, path, series) => {
   let volumeId, volumeParentId;
   let dir = acc;
   for (let i = 0; i < path.length; i++) {
-    let { id, name, parent_id, type } = path[i];
+    const { id, name, type } = path[i];
+    let { parent_id } = path[i];
 
     if (hasVolume) {
       // save volume data for later and skip the path part
-      if (type === SRC_VOLUME){
+      if (type === SRC_VOLUME) {
         volumeId = id;
         volumeParentId = parent_id;
         continue;
@@ -270,7 +271,7 @@ const addToSourcesTree = (acc, path, series) => {
 const getSeriesTree = (state, match) => {
   const { bySourceTree, byTag } = getTree(state, match);
 
-  if (isEmpty(bySourceTree) && isEmpty(byTag)){
+  if (isEmpty(bySourceTree) && isEmpty(byTag)) {
     return null;
   }
 
@@ -278,10 +279,22 @@ const getSeriesTree = (state, match) => {
   const getSourceById = sources.getSourceById(state.sources);
   const authors = roots.map(getSourceById);
 
+  const getAuthorsDisplayName = authorId => {
+    const author = authors.find(a => a.id === authorId);
+    const { name, full_name } = author;
+
+    // don't display the long names like Rabbi Yehuda Leib Ashlag
+    // but display full name of Rav - Michael Laitman, Ph.D
+    const displayName = full_name.includes(name)
+      ? full_name
+      : name
+    return displayName;
+  };
+
   const fullTree = {}
 
   Object.keys(bySourceTree).filter(key => key !== 'vk').forEach(key => {
-    bySourceTree[key].name = authors.find(a => a.id === key).full_name;
+    bySourceTree[key].name = getAuthorsDisplayName(key);
     fullTree[key] = bySourceTree[key];
   });
 

@@ -101,7 +101,7 @@ const Sources = ({ unit, indexMap, t, options }) => {
       return;
     }
 
-    const newFetch = `${selected  }#${  language}`;
+    const newFetch = `${selected}#${language}`;
     if (newFetch === fetched) {
       // console.log('fetched already', newFetch);
       return;

@@ -46,7 +46,7 @@ const filterLessons = (ct, filmDate) => {
 
 const makeTagLinks = (tags = [], getTagById) =>
   Array.from(intersperse(
-    tags.map((x) => {
+    tags.map(x => {
       const { id, label } = getTagById(x);
       if (!label) {
         return '';
@@ -55,7 +55,7 @@ const makeTagLinks = (tags = [], getTagById) =>
     }), ', '));
 
 const makeSourcesLinks = (sources = [], getSourceById, filteredListPath) => Array.from(intersperse(
-  sources.map((x) => {
+  sources.map(x => {
     const source = getSourceById(x);
     if (!source) {
       return '';
@@ -85,26 +85,33 @@ const makeSourcesLinks = (sources = [], getSourceById, filteredListPath) => Arra
     return <span key={x}>{display}</span>;
   }), ', '));
 
-const makeCollectionsLinks = (collections = {}, t) => Array.from(intersperse(
-  (Object.values(collections) || []).map((x) => {
-    let display;
-    switch (x.content_type) {
-    case CT_DAILY_LESSON:
-    case CT_SPECIAL_LESSON: {
-      const ctLabel = t(`constants.content-types.${CT_DAILY_LESSON}`);
-      const fd      = t('values.date', { date: x.film_date });
-      display       = `${ctLabel} ${fd}`;
-      break;
-    }
-    default:
-      display = x.name;
-      break;
-    }
+const makeCollectionsLinks = (collections = {}, t, currentCollection) => {
+  // filter out the current collection
+  let collectionsForLinks = currentCollection
+    ? Object.values(collections).filter(col => col.id !== currentCollection.id)
+    : Object.values(collections);
 
-    return <Link key={x.id} to={canonicalLink(x)}>{display}</Link>;
-  }), ', '));
+  return Array.from(intersperse(
+    collectionsForLinks.map(x => {
+      let display;
+      switch (x.content_type) {
+      case CT_DAILY_LESSON:
+      case CT_SPECIAL_LESSON: {
+        const ctLabel = t(`constants.content-types.${CT_DAILY_LESSON}`);
+        const fd      = t('values.date', { date: x.film_date });
+        display       = `${ctLabel} ${fd}`;
+        break;
+      }
+      default:
+        display = x.name;
+        break;
+      }
 
-const Info = ({ unit = {}, section = '', t }) => {
+      return <Link key={x.id} to={canonicalLink(x)}>{display}</Link>;
+    }), ', '));
+};
+
+const Info = ({ unit = {}, section = '', t, currentCollection = null }) => {
   const getSourceById = useSelector(state => sourcesSelectors.getSourceById(state.sources));
   const getTagById    = useSelector(state => tagsSelectors.getTagById(state.tags));
 
@@ -117,10 +124,8 @@ const Info = ({ unit = {}, section = '', t }) => {
   }
 
   const tagLinks = makeTagLinks(tags, getTagById);
-
   const sourcesLinks = makeSourcesLinks(sources, getSourceById, filteredListPath);
-
-  const collectionsLinks = makeCollectionsLinks(collections, t);
+  const collectionsLinks = makeCollectionsLinks(collections, t, currentCollection);
 
   return (
     <div className="unit-info">

@@ -17,8 +17,6 @@ const LastLessonCollection = ({ t }) => {
   const wip = wipMap.lastLesson;
   const err = errorMap.lastLesson;
 
-  // console.log('lastLessonId:', lastLessonId, wip, err);
-
   const dispatch = useDispatch();
 
   useEffect(() => {
