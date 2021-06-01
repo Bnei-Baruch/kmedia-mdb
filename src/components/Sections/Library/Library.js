@@ -22,6 +22,7 @@ import WipErr from '../../shared/WipErr/WipErr';
 import ShareBar from '../../shared/ShareSelected';
 import { DeviceInfoContext, SessionInfoContext } from '../../../helpers/app-contexts';
 import DropdownLanguageSelector from "../../Language/Selector/DropdownLanguageSelector";
+import classNames from "classnames";
 
 export const checkRabashGroupArticles = (source) => {
   if (/^gr-/.test(source)) { // Rabash Group Articles
@@ -169,12 +170,13 @@ const Library = ({ data, source, language = null, languages = [], langSelectorMo
 
   if (languages.length > 0) {
     languageBar = (
-      <Grid container padded={false} columns={isMobileDevice ? 1 : 2} className="no-margin-top">
+      <Grid container padded={false} columns={isMobileDevice ? 1 : 2} className={classNames("no-margin-top", "no-padding-top")}>
         {!isMobileDevice &&
         <Grid.Column width={12}>
         </Grid.Column>}
         <Grid.Column width={isMobileDevice ? 16 : 4} className="library-language-column">
           <DropdownLanguageSelector
+            className="no-padding"
             languages={languages}
             defaultValue={language}
             onSelect={handleLanguageChanged}

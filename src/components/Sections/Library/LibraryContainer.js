@@ -207,7 +207,7 @@ class LibraryContainer extends Component {
 
   handleContentHeaderRef = (ref) => this.contentHeaderRef = ref;
 
-  handleLangContainerRef = (ref) => this.langContainerRef = ref;
+  // handleLangContainerRef = (ref) => this.langContainerRef = ref;
 
   handleTocIsActive = () => {
     const { tocIsActive } = this.state;
@@ -376,7 +376,6 @@ class LibraryContainer extends Component {
           index={index}
           uiLanguage={language}
           contentLanguage={contentLanguage}
-          langSelectorMount={this.langContainerRef}
           history={history}
           downloadAllowed={downloadAllowed}
         />
@@ -538,7 +537,7 @@ class LibraryContainer extends Component {
                   [`size${fontSize}`]: true,
                 })}
               >
-                <div ref={this.handleLangContainerRef}></div>
+                {/*<div ref={this.handleLangContainerRef}></div>*/}
                 <Ref innerRef={this.handleContextRef}>
                   <div
                     className="source__content"
