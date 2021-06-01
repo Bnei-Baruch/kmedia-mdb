@@ -3,8 +3,18 @@ import PropTypes from 'prop-types';
 import { Dropdown } from 'semantic-ui-react';
 import 'react-day-picker/lib/style.css';
 
-const fromMonth = new Date(1970, 0);
-const toMonth   = new Date(new Date().getFullYear(), 11);
+
+const getYears = () => {
+  const fromYear = 1970;
+  const toYear   = new Date().getFullYear();
+  const years = [];
+
+  for (let i = toYear; i >= fromYear; i -= 1) {
+    years.push({ text: i, value: i });
+  }
+
+  return years;
+};
 
 const YearMonthForm = ({ date, onChange, localeUtils, language, className }) => {
   const month = date.getMonth();
@@ -19,11 +29,7 @@ const YearMonthForm = ({ date, onChange, localeUtils, language, className }) => 
   };
 
   const months = localeUtils.getMonths(language);
-
-  const years = [];
-  for (let i = toMonth.getFullYear(); i >= fromMonth.getFullYear(); i -= 1) {
-    years.push(i);
-  }
+  const years = getYears();
 
   return (
     <span className={className}>
@@ -40,7 +46,7 @@ const YearMonthForm = ({ date, onChange, localeUtils, language, className }) => 
         compact
         inline
         scrolling
-        options={years.map(yea => ({ text: yea, value: yea }))}
+        options={years}
         value={year}
         onChange={handleYearChange}
       />
