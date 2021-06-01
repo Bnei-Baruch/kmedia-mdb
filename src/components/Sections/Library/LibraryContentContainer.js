@@ -48,8 +48,7 @@ const LibraryContentContainer = (props) => {
       // In case of TAS we prefer PDF, otherwise HTML
       // pdf.js fetch it on his own (smarter than us), we fetch it for nothing.
       if (lData && (!lData.pdf || !isTaas(source))) {
-
-        const id = lData.docx || lData.doc || null;
+        const { id } = lData.docx || lData.doc || {};
         id && dispatch(actions.doc2html(id));
       }
     }
