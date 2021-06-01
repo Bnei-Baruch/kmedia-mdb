@@ -5,7 +5,7 @@ import { actions, selectors } from '../../../redux/modules/home';
 import { selectors as mdb } from '../../../redux/modules/mdb';
 import Template from './Template';
 
-const History = () => {
+const Playlists = () => {
   const dispatch  = useDispatch();
 
   useEffect(() => {
@@ -21,8 +21,8 @@ const History = () => {
   const latestUnits   = useSelector(latestUnitsFn(latestUnitIDs));
 
   return (
-    <Template units={latestUnits} title={"History"} />
+    <Template units={latestUnits} title={"Playlists"} />
   )
 }
 
-export default History;
+export default Playlists;

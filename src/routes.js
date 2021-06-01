@@ -35,11 +35,11 @@ import NotImplemented from './components/NotImplemented';
 // import Design from './components/Design/Design';
 import * as ssrDataLoaders from './routesSSRData';
 import * as shapes from './components/shapes';
-import History from './components/Sections/Personal/History';
+import Main from './components/Sections/Personal/Main';
 
 const routes = [
   { path: '', component: HomePage, options: { ssrData: ssrDataLoaders.home } },
-  { path: 'personal', component: History },
+  { path: 'personal', component: Main },
   { path: 'lessons', component: Lessons, options: { ssrData: ssrDataLoaders.lessonsPage } },
   { path: 'lessons/:tab', component: Lessons, options: { ssrData: ssrDataLoaders.lessonsPage } },
   {
