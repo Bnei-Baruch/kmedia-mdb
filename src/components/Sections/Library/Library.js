@@ -32,16 +32,6 @@ export const checkRabashGroupArticles = (source) => {
   }
 };
 
-const getFullUrl = (data, language, source) => {
-  if (isEmpty(data) || isEmpty(data[language])) {
-    return null;
-  }
-
-  const id = checkRabashGroupArticles(source);
-
-  return assetUrl(`sources/${id}/${data[language].docx}`);
-};
-
 const Library = ({
                    data,
                    source,
@@ -68,12 +58,14 @@ const Library = ({
   const getContent = () => {
     if (!data?.[language])
       return null;
-    if (data[language].pdf && isTaas(source))
-      return { isPDF: true, url: physicalFile(data[language].pdf) };
-    const docId = data[language].docx || data[language].doc;
-    if (!docId)
-      return null;
-    return doc2htmlById[docId];
+    const { pdf, docx, doc } = data[language];
+    const file               = docx || doc;
+    if (!file) return null;
+
+    if (pdf && isTaas(source))
+      return { url: physicalFile(pdf), isPDF: true, name: pdf.name };
+    else
+      return { url: physicalFile(file, true), name: file.name, ...doc2htmlById[file.id] };
   };
 
   const content = getContent() || {};
@@ -185,8 +177,6 @@ const Library = ({
     );
   }
 
-  const fullUrlPath = content.isPDF ? content.url : getFullUrl(data, language, source);
-
   // PDF.js will fetch file by itself
   const mimeType = content.isPDF
     ? 'application/pdf'
@@ -199,7 +189,7 @@ const Library = ({
           ? <Portal open preprend mountNode={langSelectorMount}>{languageBar}</Portal>
           : languageBar
       }
-      <Download path={fullUrlPath} mimeType={mimeType} downloadAllowed={downloadAllowed} />
+      <Download path={content.url} mimeType={mimeType} downloadAllowed={downloadAllowed} filename={content.name} />
       {contentsToDisplay}
     </div>
   );
