@@ -228,12 +228,12 @@ class Transcription extends Component {
     const { language, selectedFile } = this.state;
     const { location, activeTab }    = this.props;
 
-    const ap                      = playerHelper.getActivePartFromQuery(location);
-    let { url, text: searchText } = buildSearchLinkFromSelection(language);
+    const ap                        = playerHelper.getActivePartFromQuery(location);
+    const { url, text: searchText } = buildSearchLinkFromSelection(language);
     if (!url)
       return;
     const selectedFileProps = selectedFile ? `&selectedFileId=${selectedFile.id}` : '';
-    const searchUrl         = `${url}&activeTab=${activeTab}${selectedFileProps}${!ap ? '' : '&ap=' + ap}`;
+    const searchUrl         = `${url}&activeTab=${activeTab}${selectedFileProps}${!ap ? '' : `&ap=${  ap}`}`;
     this.setState({ searchUrl, searchText });
   };
 

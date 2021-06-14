@@ -17,12 +17,10 @@ const LastLessonCollection = ({ t }) => {
   const wip = wipMap.lastLesson;
   const err = errorMap.lastLesson;
 
-  // console.log('lastLessonId:', lastLessonId, wip, err);
-
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!wip && !err && !lastLessonId){
+    if (!wip && !err && !lastLessonId) {
       dispatch(actions.fetchLatestLesson());
     }
   }, [dispatch, err, lastLessonId, wip]);

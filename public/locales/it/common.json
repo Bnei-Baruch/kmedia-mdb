@@ -13,6 +13,7 @@
       "topic": "Argomento",
       "not-found": "Non trovato",
       "publications": "Pubblicazioni",
+      "music": "Music",
       "simple-mode": "Downloads",
       "photos": "Fotografie",
       "design": "Design",
@@ -260,7 +261,12 @@
       "women": "Women Lessons",
       "rabash": "Rabash Lessons",
       "children": "Children Lessons",
-      "series": "Selected Study Series"
+      "series": "Selected Study Series",
+      "seriesTree": {
+        "byKabbalist": "Various Kabbalists",
+        "byTopics": "By Topics",
+        "bySourcesOf": "By Sources Of"
+      }
     },
     "list": {
       "related": "Related to:",
@@ -341,6 +347,12 @@
       }
     },
     "read-more": "Read more"
+  },
+  "music": {
+    "header": {
+      "text": "Music",
+      "subtext": ""
+    }
   },
   "simple-mode": {
     "header": {

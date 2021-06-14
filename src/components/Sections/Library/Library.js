@@ -7,7 +7,7 @@ import { Container, Portal, Segment } from 'semantic-ui-react';
 
 import { selectors } from '../../../redux/modules/assets';
 import { assetUrl } from '../../../helpers/Api';
-import { isEmpty } from '../../../helpers/utils';
+import { isEmpty, physicalFile } from '../../../helpers/utils';
 import AnchorsLanguageSelector from '../../Language/Selector/AnchorsLanguageSelector';
 import PDF, { isTaas, startsFrom } from '../../shared/PDF/PDF';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
@@ -32,21 +32,16 @@ export const checkRabashGroupArticles = (source) => {
   }
 };
 
-const getFullUrl = (pdfFile, data, language, source) => {
-  if (pdfFile) {
-    return assetUrl(`sources/${pdfFile}`);
-  }
-
-  if (isEmpty(data) || isEmpty(data[language])) {
-    return null;
-  }
-
-  const id = checkRabashGroupArticles(source);
-
-  return assetUrl(`sources/${id}/${data[language].docx}`);
-};
-
-const Library = ({ data, source, language = null, languages = [], langSelectorMount = null, downloadAllowed, handleLanguageChanged, t, }) => {
+const Library = ({
+                   data,
+                   source,
+                   language = null,
+                   languages = [],
+                   langSelectorMount = null,
+                   downloadAllowed,
+                   handleLanguageChanged,
+                   t,
+                 }) => {
   const location                             = useLocation();
   const history                              = useHistory();
   const [pageNumber, setPageNumber]          = useState(getPageFromLocation(location));
@@ -58,7 +53,22 @@ const Library = ({ data, source, language = null, languages = [], langSelectorMo
   const { isMobileDevice }                                              = useContext(DeviceInfoContext);
   const { enableShareText: { isShareTextEnabled, setEnableShareText } } = useContext(SessionInfoContext);
 
-  const content = useSelector(state => selectors.getAsset(state.assets));
+  const doc2htmlById = useSelector(state => selectors.getDoc2htmlById(state.assets));
+
+  const getContent = () => {
+    if (!data?.[language])
+      return null;
+    const { pdf, docx, doc } = data[language];
+    const file               = docx || doc;
+    if (!file) return null;
+
+    if (pdf && isTaas(source))
+      return { url: physicalFile(pdf), isPDF: true, name: pdf.name };
+    else
+      return { url: physicalFile(file, true), name: file.name, ...doc2htmlById[file.id] };
+  };
+
+  const content = getContent() || {};
 
   //use  early definition for use in useEffect
   const updateSelection = () => {
@@ -94,17 +104,6 @@ const Library = ({ data, source, language = null, languages = [], langSelectorMo
     return <Segment basic>&nbsp;</Segment>;
   }
 
-  const taas = isTaas(source);
-
-  let pdfFile;
-  if (data && taas) {
-    const langData = data[language];
-
-    if (langData && langData.pdf) {
-      pdfFile = `${source}/${langData.pdf}`;
-    }
-  }
-
   const pageNumberHandler = pageNumber => {
     setPageNumber(pageNumber);
     updateQuery(history, query => ({
@@ -125,18 +124,18 @@ const Library = ({ data, source, language = null, languages = [], langSelectorMo
   };
 
   const getContentToDisplay = () => {
-    const { wip, err, data: contentData } = content;
-    const starts                          = startsFrom(source) || 1;
+    const { wip, err, data: contentData, isPDF, url } = content;
+    const starts                                      = startsFrom(source) || 1;
 
     const wipErr = WipErr({ wip, err, t });
     if (wipErr) {
       return wipErr;
     }
 
-    if (pdfFile) {
+    if (isPDF) {
       return (
         <PDF
-          pdfFile={assetUrl(`sources/${pdfFile}`)}
+          pdfFile={url}
           pageNumber={pageNumber || 1}
           startsFrom={starts}
           pageNumberHandler={pageNumberHandler}
@@ -178,10 +177,8 @@ const Library = ({ data, source, language = null, languages = [], langSelectorMo
     );
   }
 
-  const fullUrlPath = getFullUrl(pdfFile, data, language, source);
-
   // PDF.js will fetch file by itself
-  const mimeType = pdfFile
+  const mimeType = content.isPDF
     ? 'application/pdf'
     : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
 
@@ -192,7 +189,7 @@ const Library = ({ data, source, language = null, languages = [], langSelectorMo
           ? <Portal open preprend mountNode={langSelectorMount}>{languageBar}</Portal>
           : languageBar
       }
-      <Download path={fullUrlPath} mimeType={mimeType} downloadAllowed={downloadAllowed} />
+      <Download path={content.url} mimeType={mimeType} downloadAllowed={downloadAllowed} filename={content.name} />
       {contentsToDisplay}
     </div>
   );

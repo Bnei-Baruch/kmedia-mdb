@@ -127,7 +127,7 @@ const onFetchTweets = draft => {
 };
 
 const onFetchTweetsSuccess = (draft, { tweets = [], total }) => {
-  let { twitter } = draft;
+  const { twitter } = draft;
 
   twitter.tweets.length = 0;
   tweets.forEach((x) => {
@@ -149,8 +149,8 @@ const onFetchBlogList = draft => {
 
 const onFetchBlogListSuccess = (draft, { total, posts }) => {
   const { blog } = draft;
-  const byID     = blog.byID;
-  let blogPosts  = blog.posts;
+  const { byID } = blog;
+  const blogPosts  = blog.posts;
 
   blogPosts.length = 0;
   posts.forEach((x) => {
@@ -189,17 +189,11 @@ const onSetLanguage = draft => {
   draft.publishers.byID = {};
   draft.collections     = {};
 
-  let pageNo           = draft.twitter.pageNo;
-  let total            = draft.twitter.total;
-  draft.twitter        = { ...initialState.twitter };
-  draft.twitter.pageNo = pageNo;
-  draft.twitter.total  = total;
+  let { pageNo, total } = draft.twitter;
+  draft.twitter         = { ...initialState.twitter, pageNo, total };
 
-  pageNo            = draft.blog.pageNo;
-  total             = draft.blog.total;
-  draft.blog        = { ...initialState.blog };
-  draft.blog.pageNo = pageNo;
-  draft.blog.total  = total;
+  ({ pageNo, total } = draft.blog)
+  draft.blog         = { ...initialState.blog, pageNo, total };
 };
 
 const onSSRPrepare = draft => {

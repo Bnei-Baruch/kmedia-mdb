@@ -240,7 +240,7 @@ export const getRSSFeedByLang = language => {
   }
 };
 
-export const getRSSLinkByLang = language => 'https://feeds.feedburner.com/' + getRSSFeedByLang(language);
+export const getRSSLinkByLang = language => `https://feeds.feedburner.com/${  getRSSFeedByLang(language)}`;
 
 export const getRSSLinkByTopic = (topicId, language) => `https://kabbalahmedia.info/feeds/collections/${LANGUAGES[language].lang3}/${topicId}`;
 
@@ -255,7 +255,7 @@ const podcastLinks = new Map([
 
 export const getPodcastLinkByLang = language => {
   const hash = podcastLinks.get(language) || 'kabbalah-media-mp3-kab-eng/id1109845884?l=iw';
-  return 'https://podcasts.apple.com/il/podcast/' + hash;
+  return `https://podcasts.apple.com/il/podcast/${  hash}`;
 };
 
 // Compare properties without functions

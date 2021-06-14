@@ -1,17 +1,24 @@
+import { useContext, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import axios from 'axios';
-import {ulid} from 'ulid'
-import {chroniclesUrl, chroniclesBackendEnabled} from './Api';
+import { ulid } from 'ulid'
+import { chroniclesUrl, chroniclesBackendEnabled } from './Api';
 import { noop } from './utils';
+
+import { actions } from '../redux/modules/chronicles';
+import { types as recommendedTypes } from '../redux/modules/recommended';
+import { ClientChroniclesContext } from './app-contexts';
 
 //An array of DOM events that should be interpreted as user activity.
 const ACTIVITY_EVENTS = ['mousedown', 'mousemove', 'keydown', 'scroll', 'touchstart'];
 
 const FLOWS = [
-  {start: 'page-enter',               end: 'page-leave',                 subFlows: []},
-  {start: 'unit-page-enter',          end: 'unit-page-leave',            subFlows: ['player-play']},
-  {start: 'collection-page-enter',    end: 'collection-page-leave',      subFlows: ['collection-unit-selected']},
-  {start: 'collection-unit-selected', end: 'collection-unit-unselected', subFlows: ['player-play']},
-  {start: 'player-play',              end: 'player-stop',                subFlows: []},
+  { start: 'page-enter',               end: 'page-leave',                 subFlows: ['recommend', 'user-inactive'] },
+  { start: 'unit-page-enter',          end: 'unit-page-leave',            subFlows: ['player-play', 'recommend', 'user-inactive'] },
+  { start: 'collection-page-enter',    end: 'collection-page-leave',      subFlows: ['collection-unit-selected', 'recommend', 'user-inactive'] },
+  { start: 'collection-unit-selected', end: 'collection-unit-unselected', subFlows: ['player-play', 'user-inactive'] },
+  { start: 'player-play',              end: 'player-stop',                subFlows: ['mute-unmute', 'user-inactive'] },
+  { start: 'recommend',                end: '',                           subFlows: ['recommend-selected'] },
 ];
 
 const FLOWS_BY_END = new Map(FLOWS.map(flow => [flow.end, flow]));
@@ -30,13 +37,13 @@ const SUBFLOWS = new Map(Object.entries(FLOWS.reduce((acc, flow) => {
 const MAX_INACTIVITY_MS = 60 * 1000; // Minute in milliseconds.
 
 export default class ClientChronicles {
-  constructor(history) {
+  constructor(history, store) {
     // If chronicles backed not defined in env.
     if (!chroniclesBackendEnabled) {
       this.append = noop;
       return;
     }
-    const localStorage = window.localStorage;
+    const { localStorage } = window;
     if (localStorage.getItem('user_id') === null) {
       localStorage.setItem('user_id', `local:${ulid()}`);
     }
@@ -44,7 +51,10 @@ export default class ClientChronicles {
 
     this.namespace = 'archive';
 
-    this.initSession({reinit: false});
+    this.initSession(/* reinit= */ false);
+
+    // Store all appends in order to send them in bulks.
+    this.timestampedAppends = [];
 
     // Setup the setInterval method to run every second.
     setInterval(() => {
@@ -52,16 +62,26 @@ export default class ClientChronicles {
       if (this.isUserActive() && !this.isPlayerPlaying() && Date.now() - this.lastActivityTimestampMs > MAX_INACTIVITY_MS) {
         // if the user has been inactive or idle for longer then the seconds specified in MAX_INACTIVITY_MS.
         console.log(`User has been inactive for more than ${MAX_INACTIVITY_MS} ms.`);
-        this.append('user-inactive', {activities: Array.from(this.sessionActivities)});
+        this.append('user-inactive', { activities: Array.from(this.sessionActivities) });
+        store.dispatch(actions.userInactive());
       }
     }, 1000);
+
+    setInterval(() => {
+      // Send all appends to chronicles server.
+      if (this.timestampedAppends.length) {
+        this.flushAppends(/* sync */ false);
+      }
+    }, 60000);
 
     window.addEventListener('beforeunload', (event) => {
       this.sessionActivities.add('beforeunload');
       if (this.currentPathname) {
-        this.appendPage('leave');
+        // Sync is false here because it will be sent together with user-inactive append.
+        this.appendPage('leave', /* sync= */ false);
       }
-      this.append('user-inactive', {activities: Array.from(this.sessionActivities)});
+      this.append('user-inactive', { activities: Array.from(this.sessionActivities) }, /* sync= */ true);
+      store.dispatch(actions.userInactive());
     }, true);
 
     // Handle events to update activity.
@@ -69,7 +89,7 @@ export default class ClientChronicles {
       document.addEventListener(eventName, () => {
         if (!this.isUserActive()) {
           // User back from inactive state. This is a new session.
-          this.initSession({reinit: true});
+          this.initSession(/* reinit */ true);
         } else {
           this.lastActivityTimestampMs = Date.now();
         }
@@ -94,7 +114,21 @@ export default class ClientChronicles {
     });
   }
 
-  appendPage(suffix) {
+  // Handles custom redux actions to append events on them.
+  onAction(action) {
+    if (action.type === recommendedTypes.FETCH_RECOMMENDED_SUCCESS) {
+      const { recommendedItems, requestData } = action.payload;
+      if (Array.isArray(recommendedItems)) {
+        this.append('recommend', { request_data: requestData, recommendations: recommendedItems.map(({ uid, content_type }) => ({ uid, content_type })) });
+      }
+    }
+  }
+
+  recommendSelected(uid) {
+    this.append('recommend-selected', { uid });
+  }
+
+  appendPage(suffix, sync = false) {
     const data = {
       pathname: this.currentPathname,
     };
@@ -112,12 +146,12 @@ export default class ClientChronicles {
         prefix = '';
       }
     }
-    this.append(`${prefix}page-${suffix}`, data);
+    this.append(`${prefix}page-${suffix}`, data, sync);
   }
 
-  initSession(options) {
-    const sessionStorage = window.sessionStorage;
-    if (options?.reinit || sessionStorage.getItem('session_id') === null) {
+  initSession(reinit) {
+    const { sessionStorage } = window;
+    if (reinit || sessionStorage.getItem('session_id') === null) {
       sessionStorage.setItem('session_id', `local:${ulid()}`);
     }
     this.sessionId = sessionStorage.getItem('session_id');
@@ -132,12 +166,12 @@ export default class ClientChronicles {
   }
 
   lastEventType() {
-    return Array.from(this.LastEntriesByType.entries()).reduce((max, [eventType, {timestamp}]) => {
+    return Array.from(this.LastEntriesByType.entries()).reduce((max, [eventType, { timestamp }]) => {
       if (timestamp > max.timestamp) {
-        return {eventType, timestamp};
+        return { eventType, timestamp };
       }
       return max;
-    }, {eventType: '', timestamp: this.firstActivityTimestampMs});
+    }, { eventType: '', timestamp: this.firstActivityTimestampMs });
   }
 
   isPlayerPlaying() {
@@ -148,6 +182,21 @@ export default class ClientChronicles {
 
   isUserActive() {
     return this.isPlayerPlaying() || this.lastEventType().eventType !== 'user-inactive';
+  }
+
+  flushAppends(sync = false) {
+    const nowTimestampMs = Date.now();
+    const appends = { append_requests: this.timestampedAppends.map((timestampAppend) => ({ append: timestampAppend.append, offset: timestampAppend.timestamp - nowTimestampMs })) };
+    // Clear bulk without checking if post worked or not.
+    this.timestampedAppends.length = 0;
+    if (sync) {
+      (async () => await axios.post(chroniclesUrl('appends'), appends))();
+    } else {
+      axios.post(chroniclesUrl('appends'), appends)
+        .catch((error) => {
+          console.warn(error);
+        });
+    }
   }
 
   append(eventType, data, sync = false) {
@@ -165,7 +214,7 @@ export default class ClientChronicles {
       // Subflow.
       let latest = 0;
       (SUBFLOWS.get(eventType) || []).forEach(flowStart => {
-        const {timestamp = 0, eventId = null} = this.LastEntriesByType.get(flowStart) || {};
+        const { timestamp = 0, eventId = null } = this.LastEntriesByType.get(flowStart) || {};
         if (timestamp > latest) {
           latest = timestamp;
           flowId = eventId;
@@ -185,13 +234,23 @@ export default class ClientChronicles {
       data,
     };
 
-    this.LastEntriesByType.set(eventType, {timestamp: nowTimestampMs, eventId});
+    this.LastEntriesByType.set(eventType, { timestamp: nowTimestampMs, eventId });
 
+    this.timestampedAppends.push({ timestamp: nowTimestampMs, append });
     if (sync) {
-      (async () => { return await axios.post(chroniclesUrl('append'), append); })();
-    } else {
-      axios.post(chroniclesUrl('append'), append)
-        .catch((error) => { console.warn(error); });
+      this.flushAppends(sync);
     }
   }
+}
+
+export const ChroniclesActions = () => {
+  const clientChronicles = useContext(ClientChroniclesContext);
+  const action = useSelector(state => state.chronicles.lastAction);
+  const actionsCount = useSelector(state => state.chronicles.actionsCount);
+  useEffect(() => {
+    if (action) {
+      clientChronicles.onAction(action);
+    }
+  }, [action, actionsCount, clientChronicles]);
+  return null;
 }

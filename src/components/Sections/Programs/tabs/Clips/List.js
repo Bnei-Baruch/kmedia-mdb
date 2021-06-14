@@ -25,13 +25,11 @@ const renderUnit = (unit, t) => {
 };
 
 const ClipsList = () =>
-  <div>
-    <UnitList
-      key="programs-clips"
-      namespace="programs-clips"
-      renderUnit={renderUnit}
-      extraFetchParams={{ content_type: CT_CLIP }}
-    />
-  </div>;
+  <UnitList
+    key="programs-clips"
+    namespace="programs-clips"
+    renderUnit={renderUnit}
+    extraFetchParams={{ content_type: CT_CLIP }}
+  />;
 
 export default ClipsList;

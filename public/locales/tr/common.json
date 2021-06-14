@@ -13,6 +13,7 @@
       "topic": "Konu",
       "not-found": "bulunamadı",
       "publications": "Yayınlar",
+      "music": "Music",
       "simple-mode": "İndirilenler",
       "photos": "Fotoğraflar",
       "design": "Tasarım",
@@ -261,7 +262,11 @@
       "women": "Kadın Dersleri",
       "rabash": "Rabaş Dersleri",
       "children": "Çocuk Dersleri",
-      "series": "Seçilmiş Ders Serileri"
+      "series": "Seçilmiş Ders Serileri",
+      "seriesTree": {
+        "byTopics": "By Topics",
+        "bySourcesOf": "By Sources Of"
+      }
     },
     "list": {
       "related": "İlgili:",
@@ -343,6 +348,12 @@
       }
     },
     "read-more": "Daha çok okuyun"
+  },
+  "music": {
+    "header": {
+      "text": "Music",
+      "subtext": ""
+    }
   },
   "simple-mode": {
     "header": {

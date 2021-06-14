@@ -13,6 +13,7 @@
       "topic": "Tema",
       "not-found": "no encontrado",
       "publications": "Publicaciones",
+      "music": "Music",
       "simple-mode": "Descargas",
       "photos": "Fotos",
       "design": "Diseño",
@@ -257,7 +258,11 @@
       "women": "Lección de Mujeres",
       "rabash": "Lecciones de Rabash",
       "children": "Lección de Niños",
-      "series": "Serie de Estudios"
+      "series": "Serie de Estudios",
+      "seriesTree": {
+        "byTopics": "By Topics",
+        "bySourcesOf": "By Sources Of"
+      }
     },
     "list": {
       "related": "Relacionado con:",
@@ -339,6 +344,12 @@
       }
     },
     "read-more": "Lee mas"
+  },
+  "music": {
+    "header": {
+      "text": "Music",
+      "subtext": ""
+    }
   },
   "simple-mode": {
     "header": {

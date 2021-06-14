@@ -25,14 +25,12 @@ const renderUnit = (unit, t) => {
 };
 
 const ArticlesList = () =>
-  <div>
-    <UnitList
-      key="publications-articles"
-      namespace="publications-articles"
-      extraFetchParams={{ content_type: CT_ARTICLE }}
-      renderUnit={renderUnit}
-    />
-  </div>
+  <UnitList
+    key="publications-articles"
+    namespace="publications-articles"
+    extraFetchParams={{ content_type: CT_ARTICLE }}
+    renderUnit={renderUnit}
+  />
 ;
 
 export default ArticlesList;

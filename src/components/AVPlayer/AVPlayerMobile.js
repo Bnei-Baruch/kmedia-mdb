@@ -161,14 +161,12 @@ class AVPlayerMobile extends Component {
     return this.props.media?.isPlaying && this.state.item?.unit?.id;
   }
 
-  buildAppendData = (item, media) => {
-    return {
-      unit_uid: item.unit.id,
-      file_src: item.src,
-      current_time: media.currentTime,
-      duration: media.duration,
-    };
-  }
+  buildAppendData = (item, media) => ({
+    unit_uid: item.unit.id,
+    file_src: item.src,
+    current_time: media.currentTime,
+    duration: media.duration,
+  })
 
   onSwitchAV = (...params) => {
     // We only keep the current time.
@@ -227,7 +225,6 @@ class AVPlayerMobile extends Component {
     this.media.autoplay = true;
 
     if (this.props?.item?.unit?.id) {
-      const {unit, item: { mediaType }, selectedLanguage, uiLanguage } = this.props;
       this.props.chronicles.append('player-play', this.buildAppendData(this.props.item, this.media));
     }
   };
@@ -552,6 +549,7 @@ class AVPlayerMobile extends Component {
               fallbackMedia={fallbackMedia}
               uiLanguage={uiLanguage}
               t={t}
+              cuId={item.unit?.id}
             />
             <AVLanguageMobile
               languages={languages}
@@ -560,6 +558,7 @@ class AVPlayerMobile extends Component {
               requestedLanguage={requestedLanguage}
               onSelect={this.onLanguageChange}
               t={t}
+              cuId={item.unit?.id}
             />
           </div>
         </div>

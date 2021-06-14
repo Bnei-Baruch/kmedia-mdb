@@ -15,7 +15,7 @@ import { DeviceInfoContext } from '../../../../../helpers/app-contexts';
 import { canonicalLink } from '../../../../../helpers/links';
 import * as shapes from '../../../../shapes';
 import AVMobileCheck from '../../../../AVPlayer/AVMobileCheck';
-import { useRecommendedUnits } from '../Recommended/Main/Recommended';
+import useRecommendedUnits from '../Recommended/Main/UseRecommendedUnits';
 
 
 const AVBox = ({ unit, t }) => {
@@ -50,7 +50,7 @@ const AVBox = ({ unit, t }) => {
   }, [history, playableItem]);
 
 
-  const recommendedUnits = useRecommendedUnits({});
+  const recommendedUnits = useRecommendedUnits();
 
   const onFinish = () => {
     const nextRecommendedUnit = recommendedUnits?.length > 0 ? recommendedUnits[0] : null;

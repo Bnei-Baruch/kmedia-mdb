@@ -74,7 +74,7 @@ const Materials = ({ unit = undefined, t, playlistComponent = null }) => {
     });
   }
 
-  if (isMobileDevice){
+  if (isMobileDevice) {
     const item = playlistComponent === null
       ? {
         name: 'recommended',

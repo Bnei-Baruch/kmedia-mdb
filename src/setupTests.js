@@ -27,15 +27,13 @@ jest.mock('react-i18next', () => ({
   },
 }));
 
-window.matchMedia = jest.fn().mockImplementation(query => {
-  return {
-    matches: false,
-    media: query,
-    onchange: null,
-    addListener: jest.fn(),
-    removeListener: jest.fn(),
-  };
-});
+window.matchMedia = jest.fn().mockImplementation(query => ({
+  matches: false,
+  media: query,
+  onchange: null,
+  addListener: jest.fn(),
+  removeListener: jest.fn(),
+}));
 
 export function mountWrapRouter(node) {
   return mount(<Router>{node}</Router>);

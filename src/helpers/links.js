@@ -30,6 +30,7 @@ import {
   CT_MEAL,
   CT_MEALS,
   CT_PICNIC,
+  CT_SONGS,
   CT_SPECIAL_LESSON,
   CT_UNITY_DAY,
   CT_VIDEO_PROGRAM,
@@ -49,9 +50,9 @@ import {
 
 export const landingPageSectionLink = (landingPage, filterValues) => {
   const linkParts = [SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_LINK[landingPage]];
-  const params = filterValues &&
-        filterValues.filter((filterValue) => filterValue.name !== 'text')
-          .map((filterValue) => `${filterValue.name}=${filterValue.value}`).join('&');
+  const params    = filterValues &&
+    filterValues.filter((filterValue) => filterValue.name !== 'text')
+      .map((filterValue) => `${filterValue.name}=${filterValue.value}`).join('&');
   if (params) {
     linkParts.push(params);
   }
@@ -123,7 +124,10 @@ export const canonicalLink = (entity, mediaLang) => {
   switch (entity.content_type) {
   case CT_DAILY_LESSON:
   case CT_SPECIAL_LESSON:
-    return `/lessons/daily/c/${entity.id}`;
+    const cuId = entity.cuIDs?.[0];
+    if (!cuId)
+      return `/lessons/daily/c/${entity.id}?ap=0`;
+    return `/lessons/cu/${cuId}`;
   case CT_VIRTUAL_LESSONS:
     return `/lessons/virtual/c/${entity.id}`;
   case CT_LECTURE_SERIES:
@@ -146,6 +150,8 @@ export const canonicalLink = (entity, mediaLang) => {
   case CT_PICNIC:
   case CT_UNITY_DAY:
     return `/events/c/${entity.id}`;
+  case CT_SONGS:
+    return `/music/c/${entity.id}`;
   default:
     break;
   }
@@ -189,12 +195,12 @@ export const canonicalContentType = (entity) => {
 export const canonicalSectionByUnit = unit => {
   const link = canonicalLink(unit);
   return canonicalSectionByLink(link);
-}
+};
 
 export const canonicalSectionByLink = link => {
-  const s = link.split('/');
+  const s                = link.split('/');
   const canonicalSection = s.length > 2 ? s[1] : null;
 
   return canonicalSection;
-}
+};
 

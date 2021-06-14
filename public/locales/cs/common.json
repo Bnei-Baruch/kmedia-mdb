@@ -11,6 +11,7 @@
       "books": "Knihy",
       "topics": "Témata",
       "publications": "Publikace",
+      "music": "Music",
       "photos": "Fotky",
       "design": "Design",
       "design2": "Nákresy",
@@ -238,7 +239,11 @@
       "lectures": "Přednášky",
       "women": "Ženské lekce",
       "children": "Dětské lekce",
-      "series": "Vybrané studijní série"
+      "series": "Vybrané studijní série",
+      "seriesTree": {
+        "byTopics": "By Topics",
+        "bySourcesOf": "By Sources Of"
+      }
     },
     "list": {
       "related": "Související s",
@@ -311,6 +316,12 @@
           "title": "Další publikované články v této sbírce"
         }
       }
+    }
+  },
+  "music": {
+    "header": {
+      "text": "Music",
+      "subtext": ""
     }
   },
   "help": {

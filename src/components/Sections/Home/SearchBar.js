@@ -20,7 +20,7 @@ class MyOmniBox extends OmniBox {
   }
 
   handleFromInputChange = (value) => {
-    window.location.href = '/' + this.props.language + '/simple-mode?date=' + moment(value).format('YYYY-MM-DD');
+    window.location.href = `/${  this.props.language  }/simple-mode?date=${  moment(value).format('YYYY-MM-DD')}`;
   };
 
   renderInput() {

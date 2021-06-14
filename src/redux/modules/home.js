@@ -72,7 +72,7 @@ const onData = (draft, payload) => {
 };
 
 const onDataSuccess = (draft, payload) => {
-  const id          = payload.latest_daily_lesson.id;
+  const { id } = payload.latest_daily_lesson;
   const latestUnits = payload.latest_units.map(x => x.id);
 
   if (draft.latestLesson !== id || !isEqual(draft.latestLesson, latestUnits)) {

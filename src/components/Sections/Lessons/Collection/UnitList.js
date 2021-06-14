@@ -7,16 +7,16 @@ import Collection from '../../../Pages/Collection/Container';
 const renderUnit = (unit, t) =>
   <Table.Row key={unit.id} verticalAlign="top">
     <Table.Cell collapsing singleLine>
-      { renderUnitHelper.renderUnitLogo(unit, 'lectures')}
+      {renderUnitHelper.renderUnitLogo(unit, 'lectures')}
     </Table.Cell>
     <Table.Cell>
-      { renderUnitHelper.renderUnitFilmDate(unit, t) }
-      { renderUnitHelper.renderUnitNameLink(unit) }
-      { renderUnitHelper.renderUnitDescription(unit) }
+      {renderUnitHelper.renderUnitFilmDate(unit, t)}
+      {renderUnitHelper.renderUnitNameLink(unit)}
+      {renderUnitHelper.renderUnitDescription(unit)}
     </Table.Cell>
-  </Table.Row>
+  </Table.Row>;
 
-const LectureCollection = () =>
-  <Collection namespace="lessons-collection" renderUnit={renderUnit} />;
+const LectureCollection = ({ id }) =>
+  <Collection namespace="lessons-collection" renderUnit={renderUnit} id={id} />;
 
 export default LectureCollection;

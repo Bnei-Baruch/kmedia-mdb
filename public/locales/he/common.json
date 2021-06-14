@@ -13,6 +13,7 @@
       "topic": "נושא",
       "not-found": "לא נמצא",
       "publications": "פרסומים",
+      "music": "מוסיקה",
       "simple-mode": "הורדות",
       "photos": "תמונות",
       "design": "עיצוב",
@@ -260,7 +261,11 @@
       "women": "שיעורי נשים",
       "rabash": "שיעורים עם הרב\"ש",
       "children": "שיעורי ילדים",
-      "series": "סדרות לימוד נבחרות"
+      "series": "סדרות לימוד נבחרות",
+      "seriesTree": {
+        "byTopics": "לפי נושאים",
+        "bySourcesOf": "לפי מקורות של"
+      }
     },
     "list": {
       "related": "קשור ל:",
@@ -342,6 +347,12 @@
       }
     },
     "read-more": "קרא עוד"
+  },
+  "music": {
+    "header": {
+      "text": "מוסיקה",
+      "subtext": ""
+    }
   },
   "simple-mode": {
     "header": {

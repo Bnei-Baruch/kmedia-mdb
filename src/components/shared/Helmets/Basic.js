@@ -5,31 +5,27 @@ import { Helmet } from 'react-helmet-async';
 import { isEmpty, publicFile } from '../../../helpers/utils';
 import Image from './Image';
 
-const buildTitle = (title) => {
-  return (
-    <Helmet>
-      <title>{title}</title>
-      {/* Open Graph */}
-      <meta property="og:title" content={title} />
-      {/* Schema.org */}
-      {/* <meta itemProp="name" content={title} /> */}
-    </Helmet>
-  );
-};
+const buildTitle = title => (
+  <Helmet>
+    <title>{title}</title>
+    {/* Open Graph */}
+    <meta property="og:title" content={title} />
+    {/* Schema.org */}
+    {/* <meta itemProp="name" content={title} /> */}
+  </Helmet>
+);
 
-const buildDescription = (description) => {
-  return (
-    <Helmet>
-      <meta name="description" content={description} />
-      <meta property="og:description" content={description} />
-      {/* <meta itemProp="description" content={description} /> */}
-      {/* <meta name="twitter:description" content={description} /> */}
-    </Helmet>
-  );
-};
+const buildDescription = description => (
+  <Helmet>
+    <meta name="description" content={description} />
+    <meta property="og:description" content={description} />
+    {/* <meta itemProp="description" content={description} /> */}
+    {/* <meta name="twitter:description" content={description} /> */}
+  </Helmet>
+);
 
 const Basic = (props) => {
-  const { title = null, description = null, keywords = null, /* url = null, */ imageUrl = publicFile('seo/default2.png')} = props;
+  const { title = null, description = null, keywords = null, /* url = null, */ imageUrl = publicFile('seo/default2.png') } = props;
 
   return (
     <Fragment>

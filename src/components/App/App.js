@@ -9,6 +9,7 @@ import routes from '../../routes';
 import ScrollToTop from '../shared/ScrollToTop/ScrollToTop';
 import '../../stylesheets/Kmedia.scss';
 import * as shapes from '../shapes';
+import { ChroniclesActions } from '../../helpers/clientChronicles';
 import { ClientChroniclesContext, DeviceInfoContext, SessionInfoContext } from '../../helpers/app-contexts';
 
 const App = (props) => {
@@ -29,6 +30,7 @@ const App = (props) => {
         <ClientChroniclesContext.Provider value={clientChronicles}>
           <DeviceInfoContext.Provider value={deviceInfoContext}>
             <SessionInfoContext.Provider value={sessionInfo}>
+              <ChroniclesActions />
               <ConnectedRouter history={history}>
                 <ScrollToTop>
                   {renderRoutes(routes)}

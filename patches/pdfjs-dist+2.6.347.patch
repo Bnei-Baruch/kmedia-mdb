@@ -1,8 +1,8 @@
 diff --git a/node_modules/pdfjs-dist/lib/web/ui_utils.js b/node_modules/pdfjs-dist/lib/web/ui_utils.js
-index 9659642..e462ea7 100644
+index c22aae8..a16b533 100644
 --- a/node_modules/pdfjs-dist/lib/web/ui_utils.js
 +++ b/node_modules/pdfjs-dist/lib/web/ui_utils.js
-@@ -560,6 +560,9 @@ function waitOnEventOrTimeout({
+@@ -566,6 +566,9 @@ function waitOnEventOrTimeout({
  }
  
  const animationStarted = new Promise(function (resolve) {

@@ -57,7 +57,7 @@ const UnitPage = ({ section = '', t }) => {
         <Helmets.AVUnit unit={unit} language={uiLanguage} />
         <Grid padded={!isMobileDevice} className="avbox">
           <Grid.Column mobile={16} tablet={computerWidth} computer={computerWidth}
-            className={classNames({"is-fitted": isMobileDevice})}>
+            className={classNames({ "is-fitted": isMobileDevice })}>
             <Grid.Row>
               {renderPlayer(unit)}
             </Grid.Row>

@@ -4,7 +4,14 @@ import { withNamespaces } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Header, List } from 'semantic-ui-react';
 
-import { CT_DAILY_LESSON, CT_LECTURE, CT_LESSON_PART, CT_SPECIAL_LESSON, CT_VIRTUAL_LESSON, CT_WOMEN_LESSON } from '../../../../../helpers/consts';
+import {
+  CT_DAILY_LESSON,
+  CT_LECTURE,
+  CT_LESSON_PART,
+  CT_SPECIAL_LESSON,
+  CT_VIRTUAL_LESSON,
+  CT_WOMEN_LESSON
+} from '../../../../../helpers/consts';
 import { canonicalLink } from '../../../../../helpers/links';
 import { intersperse, tracePath } from '../../../../../helpers/utils';
 import { stringify as urlSearchStringify } from '../../../../../helpers/url';
@@ -37,75 +44,55 @@ const filterLessons = (ct, filmDate) => {
   }
 };
 
-const makeTagLinks = (tags = [], getTagById, filteredListPath) => {
-  return Array.from(intersperse(
-    tags.map((x) => {
-      const tag = getTagById(x);
-      if (!tag) {
+const makeTagLinks = (tags = [], getTagById) =>
+  Array.from(intersperse(
+    tags.map(x => {
+      const { id, label } = getTagById(x);
+      if (!label) {
         return '';
       }
-
-      const path    = tracePath(tag, getTagById);
-      const display = path[path.length - 1].label;
-
-      if (filteredListPath) {
-        const query = filtersTransformer.toQueryParams([
-          { name: 'topics-filter', values: [path.map(y => y.id)] }
-        ]);
-
-        return (
-          <Link
-            key={x}
-            to={{
-              pathname: `/${filteredListPath}`,
-              search: urlSearchStringify(query)
-            }}
-          >
-            {display}
-          </Link>
-        );
-      }
-
-      return <span key={x}>{display}</span>;
+      return <Link key={id} to={`/topics/${id}`}>{label}</Link>;
     }), ', '));
-};
 
-const makeSourcesLinks = (sources = [], getSourceById, filteredListPath) => {
+const makeSourcesLinks = (sources = [], getSourceById, filteredListPath) => Array.from(intersperse(
+  sources.map(x => {
+    const source = getSourceById(x);
+    if (!source) {
+      return '';
+    }
+
+    const path    = tracePath(source, getSourceById);
+    const display = path.map(y => y.name).join(' > ');
+
+    if (filteredListPath) {
+      const query = filtersTransformer.toQueryParams([
+        { name: 'sources-filter', values: [path.map(y => y.id)] }
+      ]);
+
+      return (
+        <Link
+          key={x}
+          to={{
+            pathname: `/${filteredListPath}`,
+            search: urlSearchStringify(query)
+          }}
+        >
+          {display}
+        </Link>
+      );
+    }
+
+    return <span key={x}>{display}</span>;
+  }), ', '));
+
+const makeCollectionsLinks = (collections = {}, t, currentCollection) => {
+  // filter out the current collection
+  let collectionsForLinks = currentCollection
+    ? Object.values(collections).filter(col => col.id !== currentCollection.id)
+    : Object.values(collections);
+
   return Array.from(intersperse(
-    sources.map((x) => {
-      const source = getSourceById(x);
-      if (!source) {
-        return '';
-      }
-
-      const path    = tracePath(source, getSourceById);
-      const display = path.map(y => y.name).join(' > ');
-
-      if (filteredListPath) {
-        const query = filtersTransformer.toQueryParams([
-          { name: 'sources-filter', values: [path.map(y => y.id)] }
-        ]);
-
-        return (
-          <Link
-            key={x}
-            to={{
-              pathname: `/${filteredListPath}`,
-              search: urlSearchStringify(query)
-            }}
-          >
-            {display}
-          </Link>
-        );
-      }
-
-      return <span key={x}>{display}</span>;
-    }), ', '));
-};
-
-const makeCollectionsLinks = (collections = {}, t) => {
-  return Array.from(intersperse(
-    (Object.values(collections) || []).map((x) => {
+    collectionsForLinks.map(x => {
       let display;
       switch (x.content_type) {
       case CT_DAILY_LESSON:
@@ -124,7 +111,7 @@ const makeCollectionsLinks = (collections = {}, t) => {
     }), ', '));
 };
 
-const Info = ({ unit = {}, section = '', t }) => {
+const Info = ({ unit = {}, section = '', t, currentCollection = null }) => {
   const getSourceById = useSelector(state => sourcesSelectors.getSourceById(state.sources));
   const getTagById    = useSelector(state => tagsSelectors.getTagById(state.tags));
 
@@ -136,11 +123,9 @@ const Info = ({ unit = {}, section = '', t }) => {
     filteredListPath += filterLessons(ct, filmDate);
   }
 
-  const tagLinks = makeTagLinks(tags, getTagById, filteredListPath);
-
+  const tagLinks = makeTagLinks(tags, getTagById);
   const sourcesLinks = makeSourcesLinks(sources, getSourceById, filteredListPath);
-
-  const collectionsLinks = makeCollectionsLinks(collections, t);
+  const collectionsLinks = makeCollectionsLinks(collections, t, currentCollection);
 
   return (
     <div className="unit-info">

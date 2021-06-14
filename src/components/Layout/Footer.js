@@ -31,7 +31,7 @@ const Footer = ({ t }) => {
                 {t('nav.top.header')}
                 <br/>
                 <small className="text grey">
-                  {t('nav.footer.copyright', {year})}
+                  {t('nav.footer.copyright', { year })}
                   {' '}
                   {t('nav.footer.rights')}
                   {t('nav.footer.bottomTextStart') && getBottomText()}

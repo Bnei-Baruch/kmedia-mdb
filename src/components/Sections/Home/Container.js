@@ -57,28 +57,39 @@ const fetchSocialMedia = (type, fetchFn, language) => {
   });
 };
 
+const latestLessonIDFn  = state => selectors.getLatestLesson(state.home);
+const latestLessonFn    = latestLessonID => state => latestLessonID ? mdb.getCollectionById(state.mdb, latestLessonID) : null;
+const latestUnitIDsFn   = state => selectors.getLatestUnits(state.home);
+const latestUnitsFn     = latestUnitIDs => state => Array.isArray(latestUnitIDs) ? latestUnitIDs.map(x => mdb.getDenormContentUnit(state.mdb, x)) : [];
+const latestBlogPostsFn = state => publications.getBlogPosts(state.publications);
+const latestTweetsFn    = state => publications.getTweets(state.publications);
+const bannerFn          = state => selectors.getBanner(state.home);
+const languageFn        = state => settings.getLanguage(state.settings);
+const wipFn             = state => selectors.getWip(state.home);
+const errFn             = state => selectors.getError(state.home);
+
 const HomePageContainer = ({ location, t }) => {
   const dispatch  = useDispatch();
   const fetchData = useCallback(flag => dispatch(actions.fetchData(flag)), [dispatch]);
 
-  const latestLessonID = useSelector(state => selectors.getLatestLesson(state.home));
-  const latestLesson   = useSelector(state => latestLessonID ? mdb.getCollectionById(state.mdb, latestLessonID) : null);
+  const latestLessonID = useSelector(latestLessonIDFn);
+  const latestLesson   = useSelector(latestLessonFn(latestLessonID));
 
-  const latestUnitIDs = useSelector(state => selectors.getLatestUnits(state.home));
-  const latestUnits   = useSelector(state => Array.isArray(latestUnitIDs) ? latestUnitIDs.map(x => mdb.getDenormContentUnit(state.mdb, x)) : [], [latestUnitIDs]);
+  const latestUnitIDs = useSelector(latestUnitIDsFn);
+  const latestUnits   = useSelector(latestUnitsFn(latestUnitIDs));
 
   const fetchBlogList   = useCallback((type, id, options) => dispatch(publicationsActions.fetchBlogList(type, id, options)), [dispatch]);
-  const latestBlogPosts = useSelector(state => publications.getBlogPosts(state.publications));
+  const latestBlogPosts = useSelector(latestBlogPostsFn);
 
   const fetchTweetsList = useCallback((type, id, options) => dispatch(publicationsActions.fetchTweets(type, id, options)), [dispatch]);
-  const latestTweets    = useSelector(state => publications.getTweets(state.publications));
+  const latestTweets    = useSelector(latestTweetsFn);
 
-  const banner      = useSelector(state => selectors.getBanner(state.home));
+  const banner      = useSelector(bannerFn);
   const fetchBanner = useCallback(language => dispatch(actions.fetchBanner(language)), [dispatch]);
 
-  const language = useSelector(state => settings.getLanguage(state.settings));
-  const wip      = useSelector(state => selectors.getWip(state.home));
-  const err      = useSelector(state => selectors.getError(state.home));
+  const language = useSelector(languageFn);
+  const wip      = useSelector(wipFn);
+  const err      = useSelector(errFn);
 
   useEffect(() => {
     fetchData(true);

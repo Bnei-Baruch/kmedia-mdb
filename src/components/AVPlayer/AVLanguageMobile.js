@@ -5,10 +5,17 @@ import { noop } from '../../helpers/utils';
 import { LANG_HEBREW, LANGUAGE_OPTIONS } from '../../helpers/consts';
 import TimedPopup from '../shared/TimedPopup';
 
-const AVLanguageMobile = ({
-  languages = [], selectedLanguage = LANG_HEBREW, requestedLanguage = LANG_HEBREW, uiLanguage = LANG_HEBREW,
-  onSelect = noop, t
-}) => {
+const AVLanguageMobile = (
+  {
+    languages = [],
+    selectedLanguage = LANG_HEBREW,
+    requestedLanguage = LANG_HEBREW,
+    uiLanguage = LANG_HEBREW,
+    onSelect = noop,
+    t,
+    cuId
+  }
+) => {
   const [lastRequestedLanguage, setLastRequestedLanguage] = useState();
   const [openPopup, setOpenPopup]                         = useState(false);
   const [langSelectRef, setLangSelectRef]                 = useState();
@@ -16,18 +23,9 @@ const AVLanguageMobile = ({
   const handleChange = (e) => onSelect(e, e.currentTarget.value);
 
   useEffect(() => {
-    if (!requestedLanguage) {
-      return;
-    }
-
-    if (lastRequestedLanguage === requestedLanguage) {
-      setOpenPopup(false);
-      return;
-    }
-
-    setOpenPopup(selectedLanguage !== requestedLanguage);
-    setLastRequestedLanguage(requestedLanguage);
-  }, [selectedLanguage, requestedLanguage, lastRequestedLanguage]);
+    const requested = lastRequestedLanguage ? lastRequestedLanguage : requestedLanguage;
+    setOpenPopup(selectedLanguage !== requested);
+  }, [selectedLanguage, requestedLanguage]);
 
   const options = LANGUAGE_OPTIONS
     .filter(x => languages.includes(x.value))
@@ -42,6 +40,7 @@ const AVLanguageMobile = ({
         timeout={7000}
         language={uiLanguage}
         refElement={langSelectRef}
+        updateTrigger={cuId}
       />
       <select value={selectedLanguage} onChange={handleChange}>
         {
@@ -63,11 +62,13 @@ AVLanguageMobile.propTypes = {
   requestedLanguage: PropTypes.string,
   languages: PropTypes.arrayOf(PropTypes.string),
   uiLanguage: PropTypes.string,
+  cuId: PropTypes.string
 };
 
 const areEqual = (prevProps, nextProps) =>
   prevProps.selectedLanguage === nextProps.selectedLanguage
   && prevProps.requestedLanguage === nextProps.requestedLanguage
-  && prevProps.uiLanguage === nextProps.uiLanguage;
+  && prevProps.uiLanguage === nextProps.uiLanguage
+  && prevProps.cuId === nextProps.cuId;
 
 export default React.memo(AVLanguageMobile, areEqual);

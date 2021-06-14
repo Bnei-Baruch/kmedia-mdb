@@ -15,6 +15,8 @@ class TimedPopup extends Component {
     timeout: PropTypes.number,
     language: PropTypes.string.isRequired,
     refElement: Reference,
+    updateTrigger: PropTypes.string
+
   };
 
   static defaultProps = {
@@ -30,10 +32,11 @@ class TimedPopup extends Component {
   confirmTimeoutHandle = null;
 
   shouldComponentUpdate(nextProps, nextState) {
-    const { message, downward, openOnInit, timeout, language, refElement } = this.props;
-    const { opened }                                                       = this.state;
+    const { message, downward, openOnInit, timeout, language, refElement, updateTrigger } = this.props;
+    const { opened }                                                                      = this.state;
 
     const toUpdate = openOnInit !== nextProps.openOnInit
+      || updateTrigger !== nextProps.updateTrigger
       || message !== nextProps.message
       || downward !== nextProps.downward
       || language !== nextProps.language
@@ -44,11 +47,13 @@ class TimedPopup extends Component {
     return toUpdate;
   }
 
-  componentDidUpdate() {
-    const { openOnInit } = this.props;
-
-    if (openOnInit) {
-      this.open();
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    if (this.props.updateTrigger !== nextProps.updateTrigger || this.props.openOnInit !== nextProps.openOnInit) {
+      if (nextProps.openOnInit) {
+        this.open();
+      } else {
+        this.setState({ opened: false });
+      }
     }
   }
 

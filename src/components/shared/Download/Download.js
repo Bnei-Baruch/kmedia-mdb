@@ -4,9 +4,7 @@ import axios from 'axios';
 import PropTypes from 'prop-types';
 import { Button } from 'semantic-ui-react';
 
-const fileDownload = (data, path, mimeType) => {
-  const [filename] = path.split('/').slice(-1);
-
+const fileDownload = (data, path, mimeType, filename = path.split('/').slice(-1)[0]) => {
   const blob = new Blob([data], { type: mimeType || 'application/octet-stream' });
   if (typeof window.navigator.msSaveBlob !== 'undefined') {
     // IE workaround for "HTML7007: One or more blob URLs were
@@ -37,7 +35,7 @@ const fileDownload = (data, path, mimeType) => {
   window.URL.revokeObjectURL(blobURL);
 };
 
-const downloadAsset = (path, mimeType, downloadAllowed) => {
+const downloadAsset = (path, mimeType, downloadAllowed, name) => {
   if (downloadAllowed) {
     axios({
       url: path,
@@ -46,7 +44,7 @@ const downloadAsset = (path, mimeType, downloadAllowed) => {
       },
       responseType: 'blob'
     }).then((response) => {
-      fileDownload(response.data, path, mimeType);
+      fileDownload(response.data, path, mimeType, name);
     });
   } else {
     window.open(path, '_blank');
@@ -54,12 +52,8 @@ const downloadAsset = (path, mimeType, downloadAllowed) => {
 };
 
 const Download = (props) => {
-  const { children = null, path = null, mimeType, downloadAllowed} = props;
-  if (path === null) {
-    return null;
-  }
-  const [filename] = path.split('/').slice(-1);
-  if (typeof filename === 'undefined') {
+  let { children = null, path = null, mimeType, downloadAllowed, filename = path?.split('/').slice(-1)[0] } = props;
+  if (path === null || typeof filename === 'undefined') {
     return null;
   }
 
@@ -69,7 +63,7 @@ const Download = (props) => {
   }
 
   return ReactDOM.createPortal(
-    <Button compact size="small" icon="download" onClick={() => downloadAsset(path, mimeType, downloadAllowed)}>{children}</Button>,
+    <Button compact size="small" icon="download" onClick={() => downloadAsset(path, mimeType, downloadAllowed, filename)}>{children}</Button>,
     mountPoint,
   );
 };

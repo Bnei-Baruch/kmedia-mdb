@@ -11,7 +11,7 @@ import { assetUrl } from '../../../../../../helpers/Api';
 import { CT_KITEI_MAKOR, MT_TEXT } from '../../../../../../helpers/consts';
 import { selectSuitableLanguage } from '../../../../../../helpers/language';
 import { getLanguageDirection } from '../../../../../../helpers/i18n-utils';
-import { formatError } from '../../../../../../helpers/utils';
+import { formatError, physicalFile } from '../../../../../../helpers/utils';
 import * as shapes from '../../../../../shapes';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../../../../../shared/Splash/Splash';
 import ButtonsLanguageSelector from '../../../../../Language/Selector/ButtonsLanguageSelector';
@@ -48,26 +48,24 @@ const checkIsKiteiMakor = (options, selected) => {
   return val && val.type === CT_KITEI_MAKOR;
 };
 
-
 const Sources = ({ unit, indexMap, t, options }) => {
   const uiLanguage      = useSelector(state => settings.getLanguage(state.settings));
   const contentLanguage = useSelector(state => settings.getContentLanguage(state.settings));
   const content         = useSelector(state => assetsSelectors.getAsset(state.assets));
   const doc2htmlById    = useSelector(state => assetsSelectors.getDoc2htmlById(state.assets));
 
-  const dispatch        = useDispatch();
-  const fetchAsset      = useCallback(name => dispatch(assetsActions.fetchAsset(name)), [dispatch]);
-  const doc2html        = useCallback(deriveId => dispatch(assetsActions.doc2html(deriveId)), [dispatch]);
+  const dispatch = useDispatch();
+  const doc2html = useCallback(deriveId => dispatch(assetsActions.doc2html(deriveId)), [dispatch]);
 
-  const [fetched, setFetched] = useState(null);
+  const [fetched, setFetched]           = useState(null);
   const [isKiteiMakor, setIsKiteiMakor] = useState(false);
-  const [languages, setLanguages] = useState([]);
-  const [language, setLanguage] = useState(contentLanguage);
-  const [selected, setSelected] = useState(null);
+  const [languages, setLanguages]       = useState([]);
+  const [language, setLanguage]         = useState(contentLanguage);
+  const [selected, setSelected]         = useState(null);
 
   // when options are changed, must change selected
   useEffect(() => {
-    const available = options.filter(x => !x.disabled);
+    const available   = options.filter(x => !x.disabled);
     const newSelected = available.length > 0 ? available[0].value : null;
     setSelected(newSelected);
   }, [options]);
@@ -77,7 +75,6 @@ const Sources = ({ unit, indexMap, t, options }) => {
     setIsKiteiMakor(isKiteiMakor);
   }, [options, selected]);
 
-
   useEffect(() => {
     const newLanguages = isKiteiMakor
       ? getKiteiMakorLanguages(unit)
@@ -86,9 +83,8 @@ const Sources = ({ unit, indexMap, t, options }) => {
     setLanguages(newLanguages);
   }, [indexMap, isKiteiMakor, selected, unit]);
 
-
   useEffect(() => {
-    if (languages.length > 0){
+    if (languages.length > 0) {
       const newLanguage = selectSuitableLanguage(contentLanguage, uiLanguage, languages);
 
       // use existing state language if included in available languages
@@ -101,8 +97,8 @@ const Sources = ({ unit, indexMap, t, options }) => {
       return;
     }
 
-    const newFetch = selected + '#' + language;
-    if (newFetch === fetched){
+    const newFetch = `${selected}#${language}`;
+    if (newFetch === fetched) {
       // console.log('fetched already', newFetch);
       return;
     }
@@ -117,61 +113,53 @@ const Sources = ({ unit, indexMap, t, options }) => {
       const data = indexMap[selected].data[language];
 
       if (data) {
-        const { pdf, html } = data;
-
+        const { pdf, docx, doc } = data;
         if (pdf && isTaas(selected)) {
-        // pdf.js fetch it on his own (smarter than us), we fetch it for nothing.
+          // pdf.js fetch it on his own (smarter than us), we fetch it for nothing.
           return;
         }
-
-        fetchAsset(`sources/${selected}/${html}`);
+        const { id } = docx || doc || {};
+        doc2html(id);
         setFetched(newFetch);
       }
     }
-  }, [doc2html, fetchAsset, fetched, indexMap, isKiteiMakor, language, selected, unit]);
-
+  }, [doc2html, fetched, indexMap, isKiteiMakor, language, selected, unit]);
 
   const handleLanguageChanged = (e, lang) => setLanguage(lang);
-  const handleSourceChanged = (e, data) => setSelected(data.value);
-
-  const getPdfFile = () => {
-    let pdfFile;
-    if (isTaas(selected) && indexMap[selected]?.data) {
-      pdfFile = indexMap[selected].data[language]?.pdf;
-    }
-
-    return pdfFile;
-  }
+  const handleSourceChanged   = (e, data) => setSelected(data.value);
 
   const getContents = () => {
-    const pdfFile = getPdfFile();
 
-    let contentStatus = content;
+    let file;
     if (isKiteiMakor) {
-      const actualFile = getKiteiMakorFiles(unit, selected).find(x => x.language === language);
-      contentStatus = doc2htmlById[actualFile?.id] || {};
+      file = getKiteiMakorFiles(unit, selected).find(x => x.language === language);
+    } else {
+      const selectedLang = indexMap[selected]?.data?.[language];
+      if (!selectedLang) return null;
+      const { pdf, doc, docx } = selectedLang;
+      if (isTaas(selected) && pdf) {
+        return <PDF pdfFile={physicalFile(pdf)} pageNumber={1} startsFrom={startsFrom(selected)} />;
+      }
+      file = docx || doc || {};
     }
 
-    const { wip, err, data } = contentStatus;
-    let contents;
+    const { wip, err, data } = doc2htmlById[file?.id] || {};
+
     if (err) {
       if (err.response && err.response.status === 404) {
-        contents = <FrownSplash text={t('messages.source-content-not-found')} />;
+        return <FrownSplash text={t('messages.source-content-not-found')} />;
       } else {
-        contents = <ErrorSplash text={t('messages.server-error')} subtext={formatError(err)} />;
+        return <ErrorSplash text={t('messages.server-error')} subtext={formatError(err)} />;
       }
     } else if (wip) {
-      contents = <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
-    } else if (pdfFile) {
-      contents = <PDF pdfFile={assetUrl(`sources/${selected}/${pdfFile}`)} pageNumber={1} startsFrom={startsFrom(selected)} />;
+      return <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
     } else {
       const direction = getLanguageDirection(language);
-      contents = <div className="doc2html" style={{ direction }} dangerouslySetInnerHTML={{ __html: data }} />;
+      return <div className="doc2html" style={{ direction }} dangerouslySetInnerHTML={{ __html: data }} />;
     }
-    return contents;
-  }
+  };
 
-  const { isMobileDevice } = useContext(DeviceInfoContext)
+  const { isMobileDevice } = useContext(DeviceInfoContext);
 
   if (!selected) {
     return <Segment basic>{t('materials.sources.no-source-available')}</Segment>;
@@ -181,9 +169,9 @@ const Sources = ({ unit, indexMap, t, options }) => {
 
   return (
     <>
-      <Grid container padded={isMobileDevice ? "vertically" : true} columns={2}>
+      <Grid container padded={isMobileDevice ? 'vertically' : true} columns={2}>
         <Grid.Column
-          className={classNames({"is-fitted": isMobileDevice})}
+          className={classNames({ 'is-fitted': isMobileDevice })}
           width={isMobileDevice ? 16 : 16 - languages.length}
         >
           <Dropdown
@@ -198,23 +186,23 @@ const Sources = ({ unit, indexMap, t, options }) => {
         </Grid.Column>
         {
           languages.length > 0 &&
-            <Grid.Column
-              textAlign="center"
-              width={isMobileDevice ? 16 : languages.length}
-            >
-              <ButtonsLanguageSelector
-                languages={languages}
-                defaultValue={contentLanguage}
-                onSelect={handleLanguageChanged}
-              />
-            </Grid.Column>
+          <Grid.Column
+            textAlign="center"
+            width={isMobileDevice ? 16 : languages.length}
+          >
+            <ButtonsLanguageSelector
+              languages={languages}
+              defaultValue={contentLanguage}
+              onSelect={handleLanguageChanged}
+            />
+          </Grid.Column>
         }
       </Grid>
       <Divider hidden fitted />
       {contents}
     </>
   );
-}
+};
 
 Sources.propTypes = {
   unit: shapes.ContentUnit.isRequired,
