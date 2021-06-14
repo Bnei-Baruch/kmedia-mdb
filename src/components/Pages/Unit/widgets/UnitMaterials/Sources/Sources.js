@@ -8,7 +8,7 @@ import classNames from 'classnames';
 import { selectors as assetsSelectors, actions as assetsActions } from '../../../../../../redux/modules/assets';
 import { selectors as settings } from '../../../../../../redux/modules/settings';
 import { assetUrl } from '../../../../../../helpers/Api';
-import { CT_KITEI_MAKOR, MT_TEXT } from '../../../../../../helpers/consts';
+import { MT_TEXT, CT_LIKUTIM } from '../../../../../../helpers/consts';
 import { selectSuitableLanguage } from '../../../../../../helpers/language';
 import { getLanguageDirection } from '../../../../../../helpers/i18n-utils';
 import { formatError, physicalFile } from '../../../../../../helpers/utils';
@@ -18,16 +18,16 @@ import ButtonsLanguageSelector from '../../../../../Language/Selector/ButtonsLan
 import PDF, { isTaas, startsFrom } from '../../../../../shared/PDF/PDF';
 import { DeviceInfoContext } from '../../../../../../helpers/app-contexts';
 
-export const getKiteiMakorUnits = unit => (
+export const getLikutimUnits = unit => (
   Object.values(unit.derived_units || {})
     .filter(x => (
-      x.content_type === CT_KITEI_MAKOR
+      x.content_type === CT_LIKUTIM
       && (x.files || []).some(f => f.type === MT_TEXT))
     )
 );
 
-const getKiteiMakorFiles = (unit, ktCUID) => {
-  const ktCUs = getKiteiMakorUnits(unit);
+const getLikutimFiles = (unit, ktCUID) => {
+  const ktCUs = getLikutimUnits(unit);
 
   const cu = ktCUID
     ? ktCUs.find(x => x.id === ktCUID)
@@ -38,14 +38,14 @@ const getKiteiMakorFiles = (unit, ktCUID) => {
 
 const getSourceLanguages = idx => idx?.data ? [...Object.keys(idx.data)] : [];
 
-const getKiteiMakorLanguages = unit => {
-  const files = getKiteiMakorFiles(unit);
+const getLikutimLanguages = unit => {
+  const files = getLikutimFiles(unit);
   return files.length > 0 ? files.map(f => f.language) : [];
 };
 
-const checkIsKiteiMakor = (options, selected) => {
+const checkIsLikutim = (options, selected) => {
   const val = options.find(o => o.value === selected);
-  return val && val.type === CT_KITEI_MAKOR;
+  return val && val.type === CT_LIKUTIM;
 };
 
 const Sources = ({ unit, indexMap, t, options }) => {
@@ -57,11 +57,11 @@ const Sources = ({ unit, indexMap, t, options }) => {
   const dispatch = useDispatch();
   const doc2html = useCallback(deriveId => dispatch(assetsActions.doc2html(deriveId)), [dispatch]);
 
-  const [fetched, setFetched]           = useState(null);
-  const [isKiteiMakor, setIsKiteiMakor] = useState(false);
-  const [languages, setLanguages]       = useState([]);
-  const [language, setLanguage]         = useState(contentLanguage);
-  const [selected, setSelected]         = useState(null);
+  const [fetched, setFetched]     = useState(null);
+  const [isLikutim, setIsLikutim] = useState(false);
+  const [languages, setLanguages] = useState([]);
+  const [language, setLanguage]   = useState(contentLanguage);
+  const [selected, setSelected]   = useState(null);
 
   // when options are changed, must change selected
   useEffect(() => {
@@ -71,17 +71,17 @@ const Sources = ({ unit, indexMap, t, options }) => {
   }, [options]);
 
   useEffect(() => {
-    const isKiteiMakor = checkIsKiteiMakor(options, selected);
-    setIsKiteiMakor(isKiteiMakor);
+    const isLikutim = checkIsLikutim(options, selected);
+    setIsLikutim(isLikutim);
   }, [options, selected]);
 
   useEffect(() => {
-    const newLanguages = isKiteiMakor
-      ? getKiteiMakorLanguages(unit)
+    const newLanguages = isLikutim
+      ? getLikutimLanguages(unit)
       : getSourceLanguages(indexMap[selected]);
 
     setLanguages(newLanguages);
-  }, [indexMap, isKiteiMakor, selected, unit]);
+  }, [indexMap, isLikutim, selected, unit]);
 
   useEffect(() => {
     if (languages.length > 0) {
@@ -103,8 +103,8 @@ const Sources = ({ unit, indexMap, t, options }) => {
       return;
     }
 
-    if (isKiteiMakor) {
-      const file = getKiteiMakorFiles(unit, selected).find(x => x.language === language);
+    if (isLikutim) {
+      const file = getLikutimFiles(unit, selected).find(x => x.language === language);
       if (file?.id) {
         doc2html(file.id);
         setFetched(newFetch);
@@ -123,7 +123,7 @@ const Sources = ({ unit, indexMap, t, options }) => {
         setFetched(newFetch);
       }
     }
-  }, [doc2html, fetched, indexMap, isKiteiMakor, language, selected, unit]);
+  }, [doc2html, fetched, indexMap, isLikutim, language, selected, unit]);
 
   const handleLanguageChanged = (e, lang) => setLanguage(lang);
   const handleSourceChanged   = (e, data) => setSelected(data.value);
@@ -131,8 +131,8 @@ const Sources = ({ unit, indexMap, t, options }) => {
   const getContents = () => {
 
     let file;
-    if (isKiteiMakor) {
-      file = getKiteiMakorFiles(unit, selected).find(x => x.language === language);
+    if (isLikutim) {
+      file = getLikutimFiles(unit, selected).find(x => x.language === language);
     } else {
       const selectedLang = indexMap[selected]?.data?.[language];
       if (!selectedLang) return null;
