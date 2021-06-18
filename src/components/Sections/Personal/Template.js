@@ -1,9 +1,31 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Card, Container, Button, Grid } from 'semantic-ui-react';
+
+import { actions, selectors } from '../../../redux/modules/home';
+import { selectors as mdb } from '../../../redux/modules/mdb';
+
 import * as shapes from '../../shapes';
 import LatestUpdate from './../Home/LatestUpdate';
 import { withNamespaces } from 'react-i18next';
+
+export const GetTempUnitIds = () => {
+  const dispatch  = useDispatch();
+
+  useEffect(() => {
+    dispatch(actions.fetchData(true));
+  }, [dispatch]);
+
+  const latestUnitsFn = latestUnitIDs => state => Array.isArray(latestUnitIDs)
+    ? latestUnitIDs.map(x => mdb.getDenormContentUnit(state.mdb, x))
+    : [];
+
+  const latestUnitIDs = useSelector(state => selectors.getLatestUnits(state.home));
+  const latestUnits   = useSelector(latestUnitsFn(latestUnitIDs));
+
+  return latestUnits;
+}
 
 const displayUnit = (unit, label, t) =>
   <LatestUpdate key={unit.id} unit={unit} label={label} t={t} />;
