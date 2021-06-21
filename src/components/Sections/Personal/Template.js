@@ -30,12 +30,12 @@ export const GetTempUnitIds = () => {
 const displayUnit = (unit, label, t) =>
   <LatestUpdate key={unit.id} unit={unit} label={label} t={t} />;
 
-const Template = ({ units, title, t }) => {
+const Template = ({ units, title, t, rowsNumber = 2 }) => {
   const [seeAll, setSeeAll] = useState(false);
   const onClick = useCallback(() => setSeeAll(!seeAll), [seeAll]);
 
   const itemsPerRow = 4;
-  const displayUnits = seeAll ? units : units.slice(0, itemsPerRow * 2);
+  const displayUnits = seeAll ? units : units.slice(0, itemsPerRow * rowsNumber);
 
   console.log('units:', units)
 
