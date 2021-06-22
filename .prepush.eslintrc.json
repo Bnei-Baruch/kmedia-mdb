@@ -42,7 +42,8 @@
       {
         "ignoredNodes": [
           "TemplateLiteral"
-        ]
+        ],
+        "SwitchCase": 1
       }
     ],
     "keyword-spacing": "warn",

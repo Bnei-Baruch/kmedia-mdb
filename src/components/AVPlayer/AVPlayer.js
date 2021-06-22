@@ -123,6 +123,22 @@ class AVPlayer extends Component {
 
   static persistVolume = debounce(volume => localStorage.setItem(PLAYER_VOLUME_STORAGE_KEY, volume), 200);
 
+  static getSliceModeState(media, mode, properties = {}, state) {
+    let { sliceStart, sliceEnd } = properties;
+    if (typeof sliceStart === 'undefined') {
+      sliceStart = state.sliceStart || 0;
+    }
+    if (typeof sliceEnd === 'undefined') {
+      sliceEnd = state.sliceEnd || media.duration || Infinity;
+    }
+
+    return {
+      mode,
+      sliceStart,
+      sliceEnd
+    };
+  }
+
   state = {
     controlsVisible: true,
     error: false,
@@ -134,6 +150,7 @@ class AVPlayer extends Component {
     isClient: false,
     currentTime: 0,
     firstSeek: true,
+    unMuteButton: false
   };
 
   constructor(props) {
@@ -174,13 +191,12 @@ class AVPlayer extends Component {
   // so no need to shouldComponentUpdate here
 
   componentDidMount() {
-    const { history } = this.props;
-    const query       = getQuery(history.location);
-    const start       = PlayerStartEnum.GetFromQuery(query);
+    const { history: { location }, media, item, autoPlay } = this.props;
+    const query = getQuery(location);
+    const start = PlayerStartEnum.GetFromQuery(query);
     // By default hide controls after a while if player playing.
     this.hideControlsTimeout();
 
-    const { media, item, autoPlay }                          = this.props;
     const { deviceInfo: { browser: { name: browserName } } } = this.context;
     this.setState({
       isClient: true,
@@ -202,8 +218,9 @@ class AVPlayer extends Component {
     window.addEventListener('message', this.receiveMessageFunc, false);
   }
 
-  componentDidUpdate() {
-    const { item, chronicles } = this.props;
+  componentDidUpdate(prevProps) {
+    const { item, chronicles, media } = this.props;
+
     if (!isEqual(this.state.item, item)) {
       if (this.isUnitExistAndPlaying() && this.state?.item?.unit?.id !== item?.unit?.id) {
         chronicles.append('player-stop', this.buildAppendData());
@@ -212,9 +229,15 @@ class AVPlayer extends Component {
         error: false,
         errorReason: '',
         firstSeek: true,
-        item: item,
+        item,
         ...AVPlayer.chooseSource(this.props),
       });
+    }
+
+    if (media.isMuted !== prevProps.media.isMuted
+      && (this.state.unMuteButton && !media.isMuted)) {
+      // console.log('mute back');
+      media.mute(true);
     }
   }
 
@@ -338,7 +361,7 @@ class AVPlayer extends Component {
       // Mute the video if auto play video
       if (start === PlayerStartEnum.Start && this.props.item.mediaType === MT_VIDEO) {
         media.mute(true);
-        this.setState({ unMuteButton: true });
+        this.setUnMuteButton(true);
       }
       media.play();
     }
@@ -363,6 +386,7 @@ class AVPlayer extends Component {
   buildAppendData = () => {
     const { autoPlay, item, media } = this.props;
     const { src } = this.state;
+
     return {
       unit_uid: item?.unit?.id,
       file_src: src,
@@ -406,42 +430,27 @@ class AVPlayer extends Component {
   handleUnMute = () => {
     const { media } = this.props;
     media.mute(false);
-    this.removeUnMuteButton();
+    this.setUnMuteButton(false);
   };
 
-  removeUnMuteButton = () => {
-    this.setState({ unMuteButton: false });
+  setUnMuteButton = (unMuteButton) => {
+    this.setState({ unMuteButton });
   };
 
   onVolumeChange = (volume) => {
     const { persistenceFn } = this.state;
     persistenceFn && persistenceFn(volume);
-    this.removeUnMuteButton();
+    this.setUnMuteButton(volume === 0);
   };
 
   onMuteUnmute = () => {
     const { chronicles } = this.props;
-    this.removeUnMuteButton();
+    const { unMuteButton } = this.state;
+    this.setUnMuteButton(!unMuteButton);
     if (this.isUnitExistAndPlaying()) {
       chronicles.append('mute-unmute', this.buildAppendData());
     }
   };
-
-  static getSliceModeState(media, mode, properties = {}, state) {
-    let { sliceStart, sliceEnd } = properties;
-    if (typeof sliceStart === 'undefined') {
-      sliceStart = state.sliceStart || 0;
-    }
-    if (typeof sliceEnd === 'undefined') {
-      sliceEnd = state.sliceEnd || media.duration || Infinity;
-    }
-
-    return {
-      mode,
-      sliceStart,
-      sliceEnd
-    };
-  }
 
   videoSizeChange = (e, vs) => {
     const { videoSize } = this.state;
@@ -732,10 +741,9 @@ class AVPlayer extends Component {
         unMuteButton,
       } = this.state;
 
-    const { isPlaying }      = media;
     const [isVideo, isAudio] = [item.mediaType === MT_VIDEO, item.mediaType === MT_AUDIO];
     const isEditMode         = mode === PLAYER_MODE.SLICE_EDIT;
-    const forceShowControls  = item.mediaType === MT_AUDIO || !isPlaying || isEditMode;
+    const forceShowControls  = isAudio || !media.isPlaying || isEditMode;
     const fallbackMedia      = item.mediaType !== item.requestedMediaType;
     const isRtl              = isLanguageRtl(uiLanguage);
 
@@ -835,6 +843,7 @@ class AVPlayer extends Component {
             <AVJumpBack jumpSpan={5} getMedia={this.getMedia} />
             <div className="mediaplayer__spacer" />
             <AvSeekBar
+              media={media}
               buffers={this.buffers()}
               playerMode={mode}
               sliceStart={sliceStart}
@@ -857,6 +866,7 @@ class AVPlayer extends Component {
             <AVMuteUnmute
               media={media}
               isAudio={isAudio}
+              muted={unMuteButton}
               onMuteUnmute={this.onMuteUnmute}
               onVolumeChange={this.onVolumeChange}
             />
