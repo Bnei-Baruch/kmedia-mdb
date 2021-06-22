@@ -27,15 +27,15 @@ const CT_DAILY_LESSON_I18N_KEY = `constants.content-types.${CT_DAILY_LESSON}`;
 
 const getI18nTypeOverridesKey = (contentType) => {
   switch (contentType) {
-  case CT_LESSON_PART:
-  case CT_FULL_LESSON:
-    return 'lesson.';
-  case CT_VIDEO_PROGRAM_CHAPTER:
-    return 'program.';
-  case CT_ARTICLE:
-    return 'publication.';
-  default:
-    return '';
+    case CT_LESSON_PART:
+    case CT_FULL_LESSON:
+      return 'lesson.';
+    case CT_VIDEO_PROGRAM_CHAPTER:
+      return 'program.';
+    case CT_ARTICLE:
+      return 'publication.';
+    default:
+      return '';
   }
 };
 
@@ -171,12 +171,12 @@ export const renderCollection = (collection, language, t, helpChooseLang) => {
 
 export const matchIconToType = (type) => {
   switch (type) {
-  case 'programs':
-  case 'events':
-  case 'publications':
-    return type;
-  default:
-    return 'lectures';
+    case 'programs':
+    case 'events':
+    case 'publications':
+      return type;
+    default:
+      return 'lectures';
   }
 };
 

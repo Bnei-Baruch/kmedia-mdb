@@ -7,7 +7,6 @@ import classNames from 'classnames';
 
 import { selectors as assetsSelectors, actions as assetsActions } from '../../../../../../redux/modules/assets';
 import { selectors as settings } from '../../../../../../redux/modules/settings';
-import { assetUrl } from '../../../../../../helpers/Api';
 import { CT_KITEI_MAKOR, MT_TEXT } from '../../../../../../helpers/consts';
 import { selectSuitableLanguage } from '../../../../../../helpers/language';
 import { getLanguageDirection } from '../../../../../../helpers/i18n-utils';
@@ -51,7 +50,6 @@ const checkIsKiteiMakor = (options, selected) => {
 const Sources = ({ unit, indexMap, t, options }) => {
   const uiLanguage      = useSelector(state => settings.getLanguage(state.settings));
   const contentLanguage = useSelector(state => settings.getContentLanguage(state.settings));
-  const content         = useSelector(state => assetsSelectors.getAsset(state.assets));
   const doc2htmlById    = useSelector(state => assetsSelectors.getDoc2htmlById(state.assets));
 
   const dispatch = useDispatch();

@@ -17,29 +17,29 @@ const FETCH_TIMEOUT = 10 * 60 * 1000;// every 10 min
 
 const chooseTwitterByLanguage = (language) => {
   switch (language) {
-  case LANG_HEBREW:
-    return { username: 'laitman_co_il' };
-  case LANG_UKRAINIAN:
-  case LANG_RUSSIAN:
-    return { username: 'Michael_Laitman' };
-  case LANG_SPANISH:
-    return { username: 'laitman_es' };
-  default:
-    return { username: 'laitman' };
+    case LANG_HEBREW:
+      return { username: 'laitman_co_il' };
+    case LANG_UKRAINIAN:
+    case LANG_RUSSIAN:
+      return { username: 'Michael_Laitman' };
+    case LANG_SPANISH:
+      return { username: 'laitman_es' };
+    default:
+      return { username: 'laitman' };
   }
 };
 
 const chooseBlogByLanguage = (language) => {
   switch (language) {
-  case LANG_HEBREW:
-    return { blog: 'laitman-co-il' };
-  case LANG_UKRAINIAN:
-  case LANG_RUSSIAN:
-    return { blog: 'laitman-ru' };
-  case LANG_SPANISH:
-    return { blog: 'laitman-es' };
-  default:
-    return { blog: 'laitman-com' };
+    case LANG_HEBREW:
+      return { blog: 'laitman-co-il' };
+    case LANG_UKRAINIAN:
+    case LANG_RUSSIAN:
+      return { blog: 'laitman-ru' };
+    case LANG_SPANISH:
+      return { blog: 'laitman-es' };
+    default:
+      return { blog: 'laitman-com' };
   }
 };
 

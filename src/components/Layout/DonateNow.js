@@ -34,14 +34,14 @@ const DonateNow = ({ t, language }) => {
 
   let lang = language;
   switch (lang) {
-  case LANG_UKRAINIAN:
-    lang = LANG_RUSSIAN;
-    break;
-  case LANG_ENGLISH:
-    lang = '';
-    break;
-  default:
-    break;
+    case LANG_UKRAINIAN:
+      lang = LANG_RUSSIAN;
+      break;
+    case LANG_ENGLISH:
+      lang = '';
+      break;
+    default:
+      break;
   }
 
   return DButton({ content: t('home.donate'), href: `http://kab1.com/${lang}`, icon: 'heart', className: 'donate-button' });

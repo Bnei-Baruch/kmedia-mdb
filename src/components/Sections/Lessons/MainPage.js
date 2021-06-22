@@ -18,22 +18,22 @@ export const tabs = [
 const content = (active) => {
   let content = null;
   switch (active) {
-  case 'daily':
-    content = <Daily />;
-    break;
-  case 'virtual':
-  case 'lectures':
-  case 'women':
-  case 'rabash':
+    case 'daily':
+      content = <Daily />;
+      break;
+    case 'virtual':
+    case 'lectures':
+    case 'women':
+    case 'rabash':
     // case 'children':
-    content = <Lectures tab={active} />;
-    break;
-  case 'series':
-    content = <Series />;
-    break;
-  default:
-    content = <h1>Page not found</h1>;
-    break;
+      content = <Lectures tab={active} />;
+      break;
+    case 'series':
+      content = <Series />;
+      break;
+    default:
+      content = <h1>Page not found</h1>;
+      break;
   }
   return content;
 };

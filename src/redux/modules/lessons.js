@@ -64,19 +64,19 @@ const initialState = {
  */
 const setStatus = (draft, payload, type) => {
   switch (type) {
-  case FETCH_ALL_SERIES:
-    draft.wip.series = true;
-    break;
-  case FETCH_ALL_SERIES_SUCCESS:
-    draft.wip.series    = false;
-    draft.errors.series = null;
-    break;
-  case FETCH_ALL_SERIES_FAILURE:
-    draft.wip.series    = false;
-    draft.errors.series = payload;
-    break;
-  default:
-    break;
+    case FETCH_ALL_SERIES:
+      draft.wip.series = true;
+      break;
+    case FETCH_ALL_SERIES_SUCCESS:
+      draft.wip.series    = false;
+      draft.errors.series = null;
+      break;
+    case FETCH_ALL_SERIES_FAILURE:
+      draft.wip.series    = false;
+      draft.errors.series = payload;
+      break;
+    default:
+      break;
   }
 };
 

@@ -23,12 +23,12 @@ const POPOVER_CONFIRMATION_TIMEOUT = 2500;
 
 const getBsPixels = buttonSize => {
   switch (buttonSize) {
-  default:
-    return 46;
-  case 'small':
-    return 36;
-  case 'tiny':
-    return 26;
+    default:
+      return 46;
+    case 'small':
+      return 36;
+    case 'tiny':
+      return 26;
   }
 };
 

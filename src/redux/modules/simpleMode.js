@@ -43,20 +43,20 @@ const initialState = {
  */
 const setStatus = (draft, payload, type) => {
   switch (type) {
-  case FETCH_FOR_DATE:
-    draft.wip = true;
-    draft.err = null;
-    break;
-  case FETCH_FOR_DATE_SUCCESS:
-    draft.wip = false;
-    draft.err = null;
-    break;
-  case FETCH_FOR_DATE_FAILURE:
-    draft.wip = false;
-    draft.err = payload;
-    break;
-  default:
-    break;
+    case FETCH_FOR_DATE:
+      draft.wip = true;
+      draft.err = null;
+      break;
+    case FETCH_FOR_DATE_SUCCESS:
+      draft.wip = false;
+      draft.err = null;
+      break;
+    case FETCH_FOR_DATE_FAILURE:
+      draft.wip = false;
+      draft.err = payload;
+      break;
+    default:
+      break;
   }
 };
 
