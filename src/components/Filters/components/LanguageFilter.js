@@ -5,7 +5,7 @@ import { noop } from '../../../helpers/utils';
 import { Accordion, Button, Flag, Header, Menu, Segment } from 'semantic-ui-react';
 import { ALL_LANGUAGES, AUDIO_BLOG_LANGUAGES, LANGUAGES, POPULAR_LANGUAGES } from '../../../helpers/consts';
 
-const LanguageFilter = ({ t, value = null, namespace, onCancel = noop, onApply = noop, contentLanguage }) => {
+const LanguageFilter = ({ t, value = null, namespace, onCancel = noop, onApply = noop }) => {
   const onLanguageChange = (event, data) => onApply(data.name);
 
   const displayedLanguages = namespace === 'publications-audio-blog'

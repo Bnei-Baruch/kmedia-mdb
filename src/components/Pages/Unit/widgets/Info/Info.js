@@ -87,7 +87,7 @@ const makeSourcesLinks = (sources = [], getSourceById, filteredListPath) => Arra
 
 const makeCollectionsLinks = (collections = {}, t, currentCollection) => {
   // filter out the current collection
-  let collectionsForLinks = currentCollection
+  const collectionsForLinks = currentCollection
     ? Object.values(collections).filter(col => col.id !== currentCollection.id)
     : Object.values(collections);
 

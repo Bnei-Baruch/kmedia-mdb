@@ -167,20 +167,22 @@ const SimpleModePage = (props) => {
     }
   };
 
-  const renderDatePicker = () => isClient && <Card>
-    <DayPicker
-      locale={uiLanguage}
-      modifiers={data.DayPickerModifiers}
-      localeUtils={MomentLocaleUtils}
-      selectedDays={selectedDate}
-      month={selectedDate}
-      disabledDays={{ after: new Date() }}
-      onDayClick={onDayClick}
-      captionElement={() => null}
-      navbarElement={props => getNavBarElement(props, uiLanguage, onDayClick)}
-    />
-    <Button className="inline-button" onClick={() => onDayClick(new Date())} content={t('simple-mode.today-button')} />
-  </Card>;
+  const renderDatePicker = () =>
+    isClient &&
+    <Card>
+      <DayPicker
+        locale={uiLanguage}
+        modifiers={data.DayPickerModifiers}
+        localeUtils={MomentLocaleUtils}
+        selectedDays={selectedDate}
+        month={selectedDate}
+        disabledDays={{ after: new Date() }}
+        onDayClick={onDayClick}
+        captionElement={() => null}
+        navbarElement={props => getNavBarElement(props, uiLanguage, onDayClick)}
+      />
+      <Button className="inline-button" onClick={() => onDayClick(new Date())} content={t('simple-mode.today-button')} />
+    </Card>;
 
   return (
     <div>
