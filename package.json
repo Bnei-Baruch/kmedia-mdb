@@ -28,7 +28,7 @@
     "build:suitcase": "REACT_APP_ENV=suitcase yarn build",
     "test": "react-scripts test --verbose --watchAll",
     "test:coverage": "react-scripts test --verbose --watchAll --coverage",
-    "lint": "yarn run eslint -c .prepush.eslintrc.json src",
+    "lint": "yarn run eslint src",
     "lint-fix": "yarn run lint --fix",
     "postinstall": "patch-package"
   },
