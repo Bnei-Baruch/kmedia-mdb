@@ -87,6 +87,7 @@ export const renderUnitOrCollection = (item, t) => {
   if (!item) {
     return null;
   }
+
   return item.content_type === CT_LESSON_PART
     ? renderUnit(item, t)
     : renderCollection(item, t);

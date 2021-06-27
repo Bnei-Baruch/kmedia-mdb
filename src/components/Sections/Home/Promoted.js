@@ -9,6 +9,7 @@ const renderHeader = (header, subHeader) => {
   if (!header) {
     return null;
   }
+
   return (
     <Header as="h2" className="thumbnail__header">
       <Header.Content>
@@ -44,6 +45,7 @@ const Promoted = (props) => {
   if (!/^http/.exec(imageFile)) {
     imageFile = publicFile(imageFile);
   }
+
   const src = Requests.imaginary('resize', {
     url: imageFile,
     width: 512,

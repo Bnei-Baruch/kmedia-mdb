@@ -52,6 +52,7 @@ const setFilterState = (draft, namespace, name, newFilterStateReducer) => {
   if (!oldNamespace[name]) {
     oldNamespace[name] = {};
   }
+
   const newFilterState = isFunction(newFilterStateReducer)
     ? newFilterStateReducer(oldNamespace[name])
     : newFilterStateReducer;
@@ -59,6 +60,7 @@ const setFilterState = (draft, namespace, name, newFilterStateReducer) => {
   if (draft[namespace] === undefined) {
     draft[namespace] = {};
   }
+
   if (oldNamespace[name] !== newFilterState) {
     draft[namespace][name] = { ...oldNamespace[name], ...newFilterState };
   }
@@ -110,6 +112,7 @@ const $$hydrateFilters = (draft, { namespace }) => {
   if (draft.isHydrated === undefined) {
     draft.isHydrated = {};
   }
+
   if (draft.isHydrated[namespace] === undefined) {
     draft.isHydrated[namespace] = {};
   }

@@ -28,6 +28,7 @@ class PDFMenu extends Component {
     if (nextProps.pageNumber !== state.propsPageNumber) {
       return { inputValue: nextProps.pageNumber, propsPageNumber: nextProps.pageNumber };
     }
+
     return null;
   }
 

@@ -78,7 +78,7 @@ export class OmniBox extends Component {
     if (query
       && !nextProps.location.pathname.endsWith('search')
       && nextProps.location.pathname !== pathname) {
-      newState = Object.assign({}, newState, { pathname: nextProps.location.pathname, query: nextProps.query });
+      newState = { ...newState, pathname: nextProps.location.pathname, query: nextProps.query };
       updateQuery('');
       setSuggest('');
     }
@@ -136,6 +136,7 @@ export class OmniBox extends Component {
       if (deb) {
         params.append("deb", "true");
       }
+
       push({ search: params.toString() });
     }
 

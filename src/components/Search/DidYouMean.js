@@ -7,6 +7,7 @@ const DidYouMean = ({ typo_suggest, t }) => {
   if (!typo_suggest) {
     return null;
   }
+
   const to            = `?q=${typo_suggest}`;
   const didYouMeanStr = t('search.didYouMean');
 

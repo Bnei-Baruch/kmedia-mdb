@@ -34,6 +34,7 @@ export class RenderHighlightSingleString extends RenderBase {
         match = m;
       }
     }
+
     return match;
   }
 
@@ -41,6 +42,7 @@ export class RenderHighlightSingleString extends RenderBase {
     if (!this.match) {
       return this.source;
     }
+
     const from = this.match.index;
     const to   = this.match.index + this.match[0].length;
 

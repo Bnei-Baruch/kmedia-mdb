@@ -325,6 +325,7 @@ class LibraryContainer extends Component {
     if (NotToFilter.findIndex(a => a === parentId) !== -1) {
       return null;
     }
+
     return (
       <Input
         fluid
@@ -403,6 +404,7 @@ class LibraryContainer extends Component {
     if (activeIndex === -1) {
       return null;
     }
+
     const { children } = fullPath[len - 2];
     return (
       <div className="library__nextPrevButtons">
@@ -427,6 +429,7 @@ class LibraryContainer extends Component {
     if (index < 0 || index > children.length - 1) {
       return null;
     }
+
     const { title, labelPosition, buttonAlign, icon } = LibraryContainer.getNextPrevDetails(isNext, language, t);
     const sourceId                                    = children[index];
     const source                                      = getSourceById(sourceId);

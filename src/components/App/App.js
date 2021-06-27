@@ -20,7 +20,7 @@ const App = (props) => {
     enableShareText: { isShareTextEnabled, setEnableShareText }
   };
   const deviceInfoContext = {
-    deviceInfo: deviceInfo,
+    deviceInfo,
     isMobileDevice: deviceInfo.device?.type === 'mobile',
     undefinedDevice: deviceInfo.device?.type === undefined
   };

@@ -36,9 +36,11 @@ const shouldShowSearch = (location) => {
   if (parts.length === 0) {
     return false;
   }
+
   if (parts.length === 1) {
     return !ALL_LANGUAGES.includes(parts[0]);
   }
+
   return true;
 };
 

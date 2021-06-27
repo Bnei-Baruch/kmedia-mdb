@@ -40,6 +40,7 @@ const ShareSelected = ({ t, url, text, disable }) => {
     clearPopupTimeout();
     setCopyLinkOpen(true);
   };
+
   const handleTextCopied = () => {
     clearPopupTimeout();
     setCopyTextOpen(true);

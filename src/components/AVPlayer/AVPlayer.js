@@ -128,6 +128,7 @@ class AVPlayer extends Component {
     if (typeof sliceStart === 'undefined') {
       sliceStart = state.sliceStart || 0;
     }
+
     if (typeof sliceEnd === 'undefined') {
       sliceEnd = state.sliceEnd || media.duration || Infinity;
     }
@@ -167,10 +168,12 @@ class AVPlayer extends Component {
       playerMode = PLAYER_MODE.SLICE_VIEW;
       sstart     = fromHumanReadableTime(query.sstart).asSeconds();
     }
+
     if (query.send) {
       playerMode = PLAYER_MODE.SLICE_VIEW;
       send       = fromHumanReadableTime(query.send).asSeconds();
     }
+
     if (sstart > send) {
       playerMode = PLAYER_MODE.NORMAL;
     }
@@ -214,6 +217,7 @@ class AVPlayer extends Component {
         setTimeout(media.pause, 0);
       }
     }
+
     this.receiveMessageFunc = this.receiveMessage.bind(this);
     window.addEventListener('message', this.receiveMessageFunc, false);
   }
@@ -225,6 +229,7 @@ class AVPlayer extends Component {
       if (this.isUnitExistAndPlaying() && this.state?.item?.unit?.id !== item?.unit?.id) {
         chronicles.append('player-stop', this.buildAppendData());
       }
+
       this.setState({
         error: false,
         errorReason: '',
@@ -247,6 +252,7 @@ class AVPlayer extends Component {
       clearTimeout(this.autohideTimeoutId);
       this.autohideTimeoutId = null;
     }
+
     window.removeEventListener('message', this.receiveMessageFunc, false);
     if (this.isUnitExistAndPlaying()) {
       chronicles.append('player-stop', this.buildAppendData());
@@ -283,6 +289,7 @@ class AVPlayer extends Component {
           if (event.data.volume === undefined) {
             event.data.volume = 50;
           }
+
           media.setVolume(event.data.volume);
           break;
         case 'getVolume':
@@ -295,6 +302,7 @@ class AVPlayer extends Component {
           if (event.data.currentTime === undefined) {
             event.data.currentTime = 0;
           }
+
           media.seekTo(event.data.currentTime);
           break;
         case 'getInfo':
@@ -316,6 +324,7 @@ class AVPlayer extends Component {
         // Ignore commands that weren't sent to us
           return;
       }
+
       this.sendCallbackMessage(event.data, { status: 'ok' });
     } catch (e) {
       console.error(`Error while receive external message in AVPlayer: ${  e}`);
@@ -356,6 +365,7 @@ class AVPlayer extends Component {
         media.seekTo(savedTime);
       }
     }
+
     // Start the player if auto play needed
     if (firstSeek && ((autoPlay && start !== PlayerStartEnum.Stop) || start === PlayerStartEnum.Start)) {
       // Mute the video if auto play video
@@ -363,8 +373,10 @@ class AVPlayer extends Component {
         media.mute(true);
         this.setUnMuteButton(true);
       }
+
       media.play();
     }
+
     // restore playback from state when player instance changed (when src changes, e.g., playlist).
     this.player.instance.playbackRate = playbackToValue(playbackRate);
     this.setState({ wasCurrentTime: undefined, firstSeek: false });
@@ -404,6 +416,7 @@ class AVPlayer extends Component {
     if (onPlay) {
       onPlay();
     }
+
     const unitId = item?.unit?.id;
     if (unitId) {
       chronicles.append('player-play', this.buildAppendData());
@@ -422,6 +435,7 @@ class AVPlayer extends Component {
     } else if (onPause) {
       onPause();
     }
+
     if (item?.unit?.id) {
       chronicles.append('player-stop', this.buildAppendData());
     }
@@ -479,6 +493,7 @@ class AVPlayer extends Component {
       persistedVolume = DEFAULT_PLAYER_VOLUME.toString();
       localStorage.setItem(PLAYER_VOLUME_STORAGE_KEY, persistedVolume);
     }
+
     media.setVolume(persistedVolume);
   };
 
@@ -544,6 +559,7 @@ class AVPlayer extends Component {
         });
       }
     }
+
     return ret;
   };
 
@@ -568,6 +584,7 @@ class AVPlayer extends Component {
         clearTimeout(this.autohideTimeoutId);
         this.autohideTimeoutId = null;
       }
+
       this.hideControlsTimeout();
     }
   };
@@ -593,6 +610,7 @@ class AVPlayer extends Component {
     if (!controlsVisible) {
       this.showControls();
     }
+
     this.wrapperMouseY = e.pageY - this.wrapperRect.top;
   };
 
@@ -611,6 +629,7 @@ class AVPlayer extends Component {
       if (!isLoading) {
         playPause();
       }
+
       e.preventDefault();
     }
   };
@@ -694,6 +713,7 @@ class AVPlayer extends Component {
         return parseInt(savedTime, 10);
       }
     }
+
     return null;
   };
 

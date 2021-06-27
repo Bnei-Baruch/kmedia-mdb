@@ -37,6 +37,7 @@ export function* setTab(action) {
     if (x.page === 1) {
       delete x.page;
     }
+
     return x;
   });
 }

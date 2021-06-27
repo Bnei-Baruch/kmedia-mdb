@@ -38,6 +38,7 @@ const calcAvailableMediaTypes = (unit, language) => {
     if (val.language === language && isPlayable(val)) {
       acc.add(val.type);
     }
+
     return acc;
   }, new Set()));
 };

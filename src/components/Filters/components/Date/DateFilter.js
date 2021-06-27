@@ -46,6 +46,7 @@ const rangeToPreset = (from, to) => {
     if (mTo.isSame(mNow, 'day')) {
       return TODAY;
     }
+
     if (mTo.isSame(moment(mNow).subtract(1, 'days'), 'day')) {
       return YESTERDAY;
     }

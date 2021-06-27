@@ -263,11 +263,13 @@ class SearchResultBase extends Component {
     if (!prop) {
       return null;
     }
+
     const titleArr = prop.split(PATH_SEPARATOR);
     let title      = `${titleArr.splice(-1)}`;
     if (titleArr.length > 0) {
       title += ` / ${titleArr.join(PATH_SEPARATOR)}`;
     }
+
     return <span dangerouslySetInnerHTML={{ __html: title }} />;
   };
 
@@ -278,6 +280,7 @@ class SearchResultBase extends Component {
     if (!prop) {
       return null;
     }
+
     const __html = `...${highlight[prop].join('.....')}...`;
     return <span dangerouslySetInnerHTML={{ __html }} />;
   };
@@ -342,11 +345,13 @@ class SearchResultBase extends Component {
     if (!filters) {
       return null;
     }
+
     let mediaLanguage;
     const filteredLanguages = filters.find(f => f.name === 'language-filter');
     if (filteredLanguages && filteredLanguages.values.length > 0) {
       mediaLanguage = filteredLanguages.values[0];
     }
+
     return mediaLanguage;
   };
 
@@ -370,6 +375,7 @@ class SearchResultBase extends Component {
     if (!fileWithDuration) {
       return null;
     }
+
     return (
       <Label as="span" size="small">{formatDuration(fileWithDuration.duration)}</Label>
     );

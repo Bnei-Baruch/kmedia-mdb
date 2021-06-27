@@ -53,12 +53,14 @@ const labelTextByFile = (file, contentType, t) => {
   if (file.type === CT_KITEI_MAKOR) {
     return t(`constants.content-types.${CT_KITEI_MAKOR}`);
   }
+
   const typeOverrides = getI18nTypeOverridesKey(contentType);
   const fileType      = ['audio', 'video'].includes(file.type) ? `${file.type}-simple` : file.type;
   const label         = t(`media-downloads.${typeOverrides}type-labels.${fileType}`);
   if (file.video_size) {
     return `${label} [${VS_NAMES[file.video_size]}]`;
   }
+
   return label;
 };
 

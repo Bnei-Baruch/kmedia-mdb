@@ -29,6 +29,7 @@ function* fetchList(action) {
     Object.assign(args, filterParams);
     endpoint = namespace === 'lessons-daily' ? Api.lessons : Api.units;
   }
+
   delete args.namespace;
 
   const language = yield select(state => settings.getLanguage(state.settings));
@@ -39,6 +40,7 @@ function* fetchList(action) {
     if (Array.isArray(data.content_units)) {
       yield put(mdbActions.receiveContentUnits(data.content_units));
     }
+
     if (Array.isArray(data.collections)) {
       yield put(mdbActions.receiveCollections(data.collections));
 
@@ -53,6 +55,7 @@ function* fetchList(action) {
         if (Array.isArray(val.content_units)) {
           return acc.concat(val.content_units.map(x => x.id));
         }
+
         return acc;
       }, []);
       const pageSize     = cuIDsToFetch.length;
@@ -78,6 +81,7 @@ function* updatePageInQuery(action) {
     if (pageNo > 0) {
       return { ...query, page: pageNo };
     }
+
     const { _page, ...result } = query;
     return result;
   });

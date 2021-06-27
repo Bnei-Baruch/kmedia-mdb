@@ -142,6 +142,7 @@ export const playlistCollectionPage = (store, match) => {
           store.dispatch(mdbActions.fetchUnit(cuID));
         });
       }
+
       ;
     });
 };
@@ -425,6 +426,7 @@ export const articleCUPage = (store, match) => {
       if (!unit) {
         return;
       }
+
       const textFiles = (unit.files || []).filter(x => MediaHelper.IsText(x) && !MediaHelper.IsHtml(x));
       const languages = uniq(textFiles.map(x => x.language));
       if (languages.length > 0) {

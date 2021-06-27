@@ -26,11 +26,12 @@ const filterLessons = (ct, filmDate) => {
     case CT_LESSON_PART:
       if (filmDate && filmDate > '1980-01-01') {
         return '/daily';
-      } else {
+      }
+
       // dirty hack to determine if rabash lesson
       // a better way would use MDB data (require backend api support)
-        return '/rabash';
-      }
+      return '/rabash';
+
     case CT_VIRTUAL_LESSON:
       return '/virtual';
     case CT_LECTURE:
@@ -51,6 +52,7 @@ const makeTagLinks = (tags = [], getTagById) =>
       if (!label) {
         return '';
       }
+
       return <Link key={id} to={`/topics/${id}`}>{label}</Link>;
     }), ', '));
 
@@ -102,6 +104,7 @@ const makeCollectionsLinks = (collections = {}, t, currentCollection) => {
           display       = `${ctLabel} ${fd}`;
           break;
         }
+
         default:
           display = x.name;
           break;

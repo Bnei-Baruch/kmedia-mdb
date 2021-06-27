@@ -25,6 +25,7 @@ export class CollectionsBreakdown {
       } else {
         acc[val.content_type] = [val];
       }
+
       return acc;
     }, {});
   }

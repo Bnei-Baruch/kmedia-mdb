@@ -53,6 +53,7 @@ class PDF extends Component {
         numPages: null,
       };
     }
+
     return null;
   }
 
@@ -70,6 +71,7 @@ class PDF extends Component {
     } else {
       pageNo = startsFrom;
     }
+
     this.setState({ numPages, pageNumber: pageNo });
     pageNumberHandler(pageNo);
   };

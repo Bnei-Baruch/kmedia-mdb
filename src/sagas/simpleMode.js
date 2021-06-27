@@ -17,6 +17,7 @@ export function* fetchForDate(action) {
     if (Array.isArray(data.lessons) && data.lessons.length > 0) {
       yield put(mdbActions.receiveCollections(data.lessons));
     }
+
     if (Array.isArray(data.others) && data.others.length > 0) {
       yield put(mdbActions.receiveContentUnits(data.others));
     }

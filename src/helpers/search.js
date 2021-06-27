@@ -13,6 +13,7 @@ export class SuggestionsHelper {
         if (resultType === ES_RESULT_TYPE_TAGS) {
           splitChar = '-';
         }
+
         // These !! are redundant, see https://eslint.org/docs/rules/no-extra-boolean-cast,
         // but we don't have tests, so...
         /* eslint no-extra-boolean-cast: "off" */
@@ -27,6 +28,7 @@ export class SuggestionsHelper {
           suggestWords += reversedTitleParts[reverseIdx];
           reverseIdx++;
         }
+
         reverseIdx--;
 
         const titleWords              = title.split(' ');
@@ -35,6 +37,7 @@ export class SuggestionsHelper {
           if (titleWords[titleWords.length - 1 - suggestWordsWithSeparator] !== splitChar) {
             suggestWords--;
           }
+
           suggestWordsWithSeparator++;
         }
 
@@ -49,41 +52,49 @@ export class SuggestionsHelper {
           resultType,
           year,
           part: reverseIdx,
-          suggest: suggest,
-          suggestLC: suggestLC,
+          suggest,
+          suggestLC,
         };
       }).sort((a, b) => {
         if (a.part !== b.part) {
           return a.part - b.part;
         }
+
         if (a.resultType === SEARCH_GRAMMAR_HIT_TYPE_LANDING_PAGE &&
           b.resultType !== SEARCH_GRAMMAR_HIT_TYPE_LANDING_PAGE) {
           return -1;
         }
+
         if (a.resultType !== SEARCH_GRAMMAR_HIT_TYPE_LANDING_PAGE &&
           b.resultType === SEARCH_GRAMMAR_HIT_TYPE_LANDING_PAGE) {
           return 1;
         }
+
         if (a.resultType === ES_RESULT_TYPE_SOURCES &&
           b.resultType !== ES_RESULT_TYPE_SOURCES) {
           return -1;
         }
+
         if (a.resultType !== ES_RESULT_TYPE_SOURCES &&
           b.resultType === ES_RESULT_TYPE_SOURCES) {
           return 1;
         }
+
         const aSuggestion = a.suggestLC.startsWith(query);
         const bSuggestion = a.suggestLC.startsWith(query);
 
         if (aSuggestion && !bSuggestion) {
           return -1;
         }
+
         if (!aSuggestion && bSuggestion) {
           return 1;
         }
+
         if (a.year && b.year) {
           return localeCompareWithYear(a, b);
         }
+
         return a.suggest.localeCompare(b.suggest);
       }).map(o => o.suggest);
 
@@ -117,6 +128,7 @@ const GenerateUID = (n) => {
   while (times--) {
     ret[times] = uidBytes.charAt(Math.floor(Math.random() * uidBytes.length));
   }
+
   return ret.join('');
 };
 

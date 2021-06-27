@@ -170,6 +170,7 @@ class Sketches extends React.Component {
     } else {
       state = { zipFileId: null };
     }
+
     return state;
   };
 

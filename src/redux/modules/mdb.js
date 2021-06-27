@@ -341,6 +341,7 @@ const onReceiveContentUnits = (state, action) => {
         } else {
           updatedC.cuIDs = [y.id];
         }
+
         updatedC.ccuNames = { ...updatedC.ccuNames, [y.id]: ccuName };
         cById[v.id]       = updatedC;
 
@@ -448,6 +449,7 @@ const getDenormCollection = (state, id) => {
   } else {
     c.content_units = [];
   }
+
   return c;
 };
 
@@ -458,6 +460,7 @@ const denormalizeObject = (byID, obj) => (
     if (c) {
       acc[k] = c;
     }
+
     return acc;
   }, {})
 );
@@ -490,6 +493,7 @@ const getDenormCollectionWUnits = (state, id) => {
 
     c.content_units = c.cuIDs.map(x => getDenormContentUnit(state, x)).filter(x => !!x);
   }
+
   return c;
 };
 

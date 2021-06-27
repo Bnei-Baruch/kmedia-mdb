@@ -68,6 +68,7 @@ const AVMuteUnmute = ({ upward = true, media, media: { volume }, muted, isAudio,
       if (e.clientY) {
         setVolume(e.clientY);
       }
+
       e.preventDefault();
     }
   };

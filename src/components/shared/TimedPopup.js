@@ -97,6 +97,7 @@ class TimedPopup extends Component {
     } else {
       style.bottom = 0;
     }
+
     const rtlLang = isLanguageRtl(language);
 
     return (
