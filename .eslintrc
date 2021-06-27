@@ -30,6 +30,7 @@
   "rules": {
     "arrow-body-style": "warn",
     "array-bracket-spacing": "warn",
+    "arrow-parens": ["warn", "as-needed"],
     "arrow-spacing": "warn",
     "brace-style": "warn",
     "comma-spacing": "warn",
