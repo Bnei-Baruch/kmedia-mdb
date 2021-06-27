@@ -82,7 +82,7 @@ export default function createSagaMonitor(
 
     if (is.task(result)) {
       result.done.then(
-        (taskResult) => {
+        taskResult => {
           if (result.isCancelled()) {
             cancelEffect(effectId);
           } else {

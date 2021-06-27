@@ -13,7 +13,7 @@ const SectionsFilter = (value = null, onCancel = noop, onApply = noop, t) => {
 
   useEffect(() => setSValue(value), [value]);
 
-  const onSelectionChange = (section) => setSValue(`filters.sections-filter.${section}`);
+  const onSelectionChange = section => setSValue(`filters.sections-filter.${section}`);
 
   const apply = () => onApply(sValue);
 

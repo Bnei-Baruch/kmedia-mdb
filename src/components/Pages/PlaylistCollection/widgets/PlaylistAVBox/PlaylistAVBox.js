@@ -139,7 +139,7 @@ class PlaylistAVBox extends Component {
     );
   }
 
-  handleSelectedChange = (selected) => {
+  handleSelectedChange = selected => {
     const { history } = this.props;
     playerHelper.setActivePartInQuery(history, selected);
   };

@@ -78,7 +78,7 @@ class SearchResultsContainer extends Component {
     search(query, pageNo, pageSize, '' /* suggest */, deb);
   };
 
-  handlePageChange = (pageNo) => {
+  handlePageChange = pageNo => {
     const { setPage } = this.props;
     setPage(pageNo);
     this.callSearch(pageNo);
@@ -197,7 +197,7 @@ const postMapFromState = (state, results) => (
     : {}
 );
 
-const mapState = (state) => {
+const mapState = state => {
   const queryResult = selectors.getQueryResult(state.search);
   const results     = queryResult.search_result;
 

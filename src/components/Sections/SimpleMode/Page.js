@@ -95,7 +95,7 @@ const openNativeDatePicker = (nativeDateInput, deviceInfo) => {
   }
 };
 
-const isToday = (selectedDate) => moment().isSame(moment(selectedDate), 'date');
+const isToday = selectedDate => moment().isSame(moment(selectedDate), 'date');
 
 const list = ({ items = null, wip = false, err = null, t, language, renderUnit }) => {
   const errObject = { wip, err, t };
@@ -114,7 +114,7 @@ const list = ({ items = null, wip = false, err = null, t, language, renderUnit }
 const LocaleDateFormat = moment.localeData().longDateFormat('L');
 const ToDay            = today().toDate();
 
-const SimpleModePage = (props) => {
+const SimpleModePage = props => {
   const
     {
       selectedDate = new Date(),

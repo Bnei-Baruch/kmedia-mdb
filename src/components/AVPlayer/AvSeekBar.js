@@ -4,7 +4,7 @@ import isNumber from 'lodash/isNumber';
 import { PLAYER_MODE } from './constants';
 import { Media, playerModeProp } from '../shapes';
 
-const toPercentage = (l) => {
+const toPercentage = l => {
   const ret = 100 * l;
   if (ret > 100) {
     return '100%';
@@ -21,7 +21,7 @@ const AvSeekBar = ({ media, playerMode, buffers = [], sliceStart = 0, sliceEnd =
   const [wasMouseDown, setWasMouseDown] = useState(false);
   const divElement = useRef();
 
-  const getNormalizedSliceStart = (duration) => {
+  const getNormalizedSliceStart = duration => {
     if (!isNumber(sliceStart)) {
       return 0;
     }
@@ -41,7 +41,7 @@ const AvSeekBar = ({ media, playerMode, buffers = [], sliceStart = 0, sliceEnd =
     return sliceStart / duration;
   };
 
-  const getNormalizedSliceEnd = (duration) => {
+  const getNormalizedSliceEnd = duration => {
     if (!isNumber(sliceEnd)) {
       return 1;
     }
@@ -61,7 +61,7 @@ const AvSeekBar = ({ media, playerMode, buffers = [], sliceStart = 0, sliceEnd =
     return sliceEnd / duration;
   };
 
-  const handleStart = (e) => {
+  const handleStart = e => {
     // regard only left mouse button click (0). touch is undefined
     if (e.button) {
       e.preventDefault();
@@ -78,14 +78,14 @@ const AvSeekBar = ({ media, playerMode, buffers = [], sliceStart = 0, sliceEnd =
   useEffect(() => {
     let touchClientX = null;
 
-    const getSeekPositionFromClientX = (clientX) => {
+    const getSeekPositionFromClientX = clientX => {
       const { left, right } = divElement.current.getBoundingClientRect();
       const offset          = Math.min(Math.max(0, clientX - left), right - left);
 
       return (media.duration * offset) / (right - left);
     };
 
-    const handleMove = (e) => {
+    const handleMove = e => {
       if (wasMouseDown) {
         e.preventDefault();
         // Resolve clientX from mouse or touch event.
@@ -96,7 +96,7 @@ const AvSeekBar = ({ media, playerMode, buffers = [], sliceStart = 0, sliceEnd =
       }
     };
 
-    const handleEnd = (e) => {
+    const handleEnd = e => {
       if (wasMouseDown) {
         e.preventDefault();
         setWasMouseDown(false);

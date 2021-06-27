@@ -41,7 +41,7 @@ class ShareFormDesktop extends BaseShareForm {
     this.clearTimeout();
   }
 
-  static getEmbed = (url) => {
+  static getEmbed = url => {
     const appendChar = url.indexOf('?') !== -1 ? '&' : '?';
     return `<iframe width="680" height="420" src="${url}${appendChar}embed=1&autoPlay=1" frameBorder="0" scrolling="no" allowfullscreen />`;
   };

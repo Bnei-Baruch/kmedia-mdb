@@ -77,7 +77,7 @@ function* updatePageInQuery(action) {
     return;
   }
 
-  yield* pushQuery((query) => {
+  yield* pushQuery(query => {
     if (pageNo > 0) {
       return { ...query, page: pageNo };
     }

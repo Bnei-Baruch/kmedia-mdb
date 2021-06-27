@@ -109,7 +109,7 @@ class MediaDownloads extends Component {
     // we give them the images of their fallback language.
     const images = [];
 
-    files.forEach((file) => {
+    files.forEach(file => {
       if (!groups.has(file.language)) {
         groups.set(file.language, new Map());
       }
@@ -132,7 +132,7 @@ class MediaDownloads extends Component {
     // fill in images fallback into every language
     if (images.length > 0) {
       const fallbackImage = MediaDownloads.fallbackImage(images, contentLanguage, uiLanguage);
-      groups.forEach((byType) => {
+      groups.forEach(byType => {
         if (!byType.has(MT_IMAGE)) {
           byType.set(MT_IMAGE, fallbackImage);
         }
@@ -163,7 +163,7 @@ class MediaDownloads extends Component {
     }, {});
   };
 
-  static getI18nTypeOverridesKey = (unit) => {
+  static getI18nTypeOverridesKey = unit => {
     switch (unit.content_type) {
       case CT_LESSON_PART:
       case CT_FULL_LESSON:
@@ -181,7 +181,7 @@ class MediaDownloads extends Component {
     this.setState({ language });
   };
 
-  handleCopied = (url) => {
+  handleCopied = url => {
     this.setState({ isCopyPopupOpen: { ...this.state.isCopyPopupOpen, [url]: true } }, () => {
       setTimeout(() => this.setState({ isCopyPopupOpen: { ...this.state.isCopyPopupOpen, [url]: false } }), POPOVER_CONFIRMATION_TIMEOUT);
     });
@@ -306,7 +306,7 @@ class MediaDownloads extends Component {
     if (publicationsByType.size > 0) {
       derivedRows = MEDIA_ORDER.reduce((acc, val) => {
         const label = t(`media-downloads.${typeOverrides}type-labels.${val}`);
-        const files = (publicationsByType.get(val) || []).map((file) => {
+        const files = (publicationsByType.get(val) || []).map(file => {
           const publisher = publisherById[file.cu.publishers[0]];
           return this.renderRow(file, `${label} - ${publisher ? publisher.name : '???'}`, t);
         });
@@ -344,7 +344,7 @@ class MediaDownloads extends Component {
     } else {
       rows = MEDIA_ORDER.reduce((acc, val) => {
         const baseLabel = t(`media-downloads.${typeOverrides}type-labels.${val}`);
-        const files = (byType.get(val) || []).map((file) => {
+        const files = (byType.get(val) || []).map(file => {
           let label = baseLabel;
           if (file.video_size) {
             label = `${label} [${VS_NAMES[file.video_size]}]`;

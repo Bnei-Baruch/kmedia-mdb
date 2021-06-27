@@ -12,7 +12,7 @@ export const tabs = [
   'audio-blog'
 ];
 
-const content = (active) => {
+const content = active => {
   switch (active) {
     case 'articles':
       return <Articles />;

@@ -2,7 +2,7 @@ export const PlayerStartEnum = {
   'Start': 1,
   'Stop': 2,
   'UseParentLogic': 3,
-  GetFromQuery: (query) => {
+  GetFromQuery: query => {
     if (query.autoPlay === '0') {
       return PlayerStartEnum.Stop;
     }

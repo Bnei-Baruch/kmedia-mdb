@@ -16,7 +16,7 @@ export const isAbsoluteUrl = url => /^(?:[a-z]+:)?\/\//i.test(url);
 
 const ensureStartsWithSlash = str => str && (str[0] === '/' ? str : `/${str}`);
 
-export const splitPathByLanguage = (path) => {
+export const splitPathByLanguage = path => {
   const pathWithSlash = ensureStartsWithSlash(path);
   const parts = pathWithSlash.split('/');
 
@@ -86,7 +86,7 @@ export const prefixWithLanguage = (path, location, toLanguage) => {
   return language ? `/${language}${pathSuffix}` : pathSuffix;
 };
 
-export const getQuery = (location) => {
+export const getQuery = location => {
   if (location?.search) {
     const q = parse(location.search.slice(1));
     if ('deb' in q) {

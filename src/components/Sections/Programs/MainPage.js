@@ -8,7 +8,7 @@ export const tabs = [
   'clips'
 ];
 
-const content = (active) => {
+const content = active => {
   switch (active) {
     case 'main':
       return <ProgramList />;

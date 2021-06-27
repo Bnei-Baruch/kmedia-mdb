@@ -6,7 +6,7 @@ export class SuggestionsHelper {
 
     if (results?.suggest && results.suggest['title_suggest']) {
       const query      = results.suggest.title_suggest[0].text.toLowerCase();
-      this.suggestions = results.suggest.title_suggest[0].options.map((option) => {
+      this.suggestions = results.suggest.title_suggest[0].options.map(option => {
         const { text, _source: { title, result_type: resultType } } = option;
         const textParts                                             = text.split(' ');
         let splitChar                                               = null;
@@ -122,7 +122,7 @@ const localeCompareWithYear = (a, b) => {
 
 const uidBytes = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 
-const GenerateUID = (n) => {
+const GenerateUID = n => {
   const ret = new Array(n);
   let times = n;
   while (times--) {

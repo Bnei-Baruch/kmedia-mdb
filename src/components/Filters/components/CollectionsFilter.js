@@ -58,7 +58,7 @@ const mapNS2Tree = (state, namespace, t) => {
   return getTree(collections, t);
 };
 
-const CollectionsFilter = (props) => {
+const CollectionsFilter = props => {
   const { namespace, t } = props;
   const tree             = useSelector(state => mapNS2Tree(state, namespace, t));
 

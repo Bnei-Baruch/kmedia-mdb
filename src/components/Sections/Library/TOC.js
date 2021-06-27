@@ -12,7 +12,7 @@ import classNames from 'classnames';
 
 const titleKey = id => `title-${id}`;
 
-const hebrew = (number) => {
+const hebrew = number => {
   let n = 1 * number;
   switch (n) {
     case 16:
@@ -75,7 +75,7 @@ export const getIndex = (node1, node2) => {
   return node1.children.findIndex(x => x === node2.id);
 };
 
-const scrollToActive = (activeId) => {
+const scrollToActive = activeId => {
   if (activeId !== undefined) {
     return;
   }
@@ -297,7 +297,7 @@ class TOC extends Component {
     this.setState({ activeId: id });
   };
 
-  handleAccordionContext = (ref) => {
+  handleAccordionContext = ref => {
     this.accordionContext = ref;
   };
 

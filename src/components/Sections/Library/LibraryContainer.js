@@ -171,7 +171,7 @@ class LibraryContainer extends Component {
     }
   }
 
-  fetchIndices = (sourceId) => {
+  fetchIndices = sourceId => {
     const { indexMap, fetchIndex } = this.props;
     if (isEmpty(sourceId) || !isEmpty(indexMap[sourceId])) {
       return;
@@ -180,7 +180,7 @@ class LibraryContainer extends Component {
     fetchIndex(sourceId);
   };
 
-  firstLeafId = (sourceId) => {
+  firstLeafId = sourceId => {
     const { getSourceById } = this.props;
 
     const { children } = getSourceById(sourceId) || { children: [] };
@@ -201,11 +201,11 @@ class LibraryContainer extends Component {
     }
   };
 
-  handleContextRef = (ref) => this.contextRef = ref;
+  handleContextRef = ref => this.contextRef = ref;
 
-  handleContentArticleRef = (ref) => this.articleRef = ref;
+  handleContentArticleRef = ref => this.articleRef = ref;
 
-  handleContentHeaderRef = (ref) => this.contentHeaderRef = ref;
+  handleContentHeaderRef = ref => this.contentHeaderRef = ref;
 
   handleTocIsActive = () => {
     const { tocIsActive } = this.state;
@@ -226,7 +226,7 @@ class LibraryContainer extends Component {
     ? this.articleRef.scrollTop
     : document.scrollingElement.scrollTop;
 
-  handleSettings = (setting) => this.setState(setting);
+  handleSettings = setting => this.setState(setting);
 
   header = (sourceId, properParentId) => {
     const { getSourceById } = this.props;
@@ -285,7 +285,7 @@ class LibraryContainer extends Component {
     sourcesSortBy(sortOrder);
   };
 
-  switchSortingOrder = (parentId) => {
+  switchSortingOrder = parentId => {
     const { sortBy, NotToSort } = this.props;
 
     if (NotToSort.findIndex(a => a === parentId) !== -1) {
@@ -309,7 +309,7 @@ class LibraryContainer extends Component {
 
   handleFilterChange = (e, data) => this.setState({ match: data.value });
 
-  handleFilterKeyDown = (e) => {
+  handleFilterKeyDown = e => {
     if (e.keyCode === 27) { // Esc
       this.setState({ match: '' });
     }

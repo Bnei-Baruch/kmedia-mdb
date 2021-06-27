@@ -58,7 +58,7 @@ class SearchResultsFilters extends Component {
     this.setState({ isShowFilters: !isShowFilters });
   };
 
-  onSelectionChange = (section) => {
+  onSelectionChange = section => {
     const { setFilterValue, onChange } = this.props;
     const sValue                       = section !== 'all' ? `filters.sections-filter.${section}` : '';
     setFilterValue('search', 'sections-filter', sValue);

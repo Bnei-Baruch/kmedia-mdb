@@ -126,7 +126,7 @@ export const tracePath = (node, getById) => {
  * @param name {string}
  * @returns {string}
  */
-export const filenameExtension = (name) => {
+export const filenameExtension = name => {
   const lastDot = name.lastIndexOf('.');
   if (lastDot === -1) {
     return '';
@@ -265,7 +265,7 @@ export const getPodcastLinkByLang = language => {
 };
 
 // Compare properties without functions
-const removeFunctions = (fromObj) => {
+const removeFunctions = fromObj => {
   const obj = {};
   // @description it only removes functions that are not inside nested object properties.
   // you can improve with recursion to remove all functions inside an object.

@@ -80,7 +80,7 @@ class PDF extends Component {
     width: document.getElementById('pdfWrapper').getBoundingClientRect().width
   });
 
-  setPage = (pageNo) => {
+  setPage = pageNo => {
     const { pageNumberHandler } = this.props;
 
     this.setState({ pageNumber: pageNo });

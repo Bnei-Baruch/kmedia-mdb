@@ -4,7 +4,7 @@ import { withNamespaces } from 'react-i18next';
 
 import { ErrorSplash, FrownSplash, LoadingSplash } from './Splash/Splash';
 
-const Loading = (props) => {
+const Loading = props => {
   const { error = false, timedOut = false, pastDelay = false, retry = null, t } = props;
   if (error) {
     return <ErrorSplash text={t('messages.error')} item={<button onClick={retry} type="button">{t('messages.retry')}</button>} />;

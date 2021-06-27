@@ -89,7 +89,7 @@ const filters = {
   ]
 };
 
-const UnitListPage = (props) => {
+const UnitListPage = props => {
   const
     {
       namespace,

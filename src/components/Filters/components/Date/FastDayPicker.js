@@ -60,7 +60,7 @@ class FastDayPicker extends Component {
     return date ? formatDate(date, 'l', locale) : '';
   }
 
-  handleYearMonthChange = (month) => {
+  handleYearMonthChange = month => {
     this.setState({ month });
   };
 
@@ -73,11 +73,11 @@ class FastDayPicker extends Component {
     }
   };
 
-  handleNativeDateInputRef = (ref) => {
+  handleNativeDateInputRef = ref => {
     this.nativeDateInput = ref;
   };
 
-  handleNativeDateInputChange = (event) => {
+  handleNativeDateInputChange = event => {
     if (!event) {
       return;
     }
@@ -115,7 +115,7 @@ class FastDayPicker extends Component {
 
   closePopup = () => this.setState({ isOpen: false });
 
-  onPopupDayChange = (date) => {
+  onPopupDayChange = date => {
     if (date > today().add(1, 'days').toDate()) {
       return;
     }

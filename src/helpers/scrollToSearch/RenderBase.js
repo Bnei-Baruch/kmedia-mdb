@@ -43,8 +43,8 @@ export class RenderBase {
   }
 
   buildMatch(search, data) {
-    const words = search.replace(KEEP_LETTERS_RE, '.').split(' ').filter((word) => !!word);
-    const re    = new RegExp(words.map((word) => `(${word})`).join('(.{0,5})'), 'sg');
+    const words = search.replace(KEEP_LETTERS_RE, '.').split(' ').filter(word => !!word);
+    const re    = new RegExp(words.map(word => `(${word})`).join('(.{0,5})'), 'sg');
     return Array.from(data.matchAll(re), m => m);
   };
 

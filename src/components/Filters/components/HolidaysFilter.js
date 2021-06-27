@@ -31,7 +31,7 @@ const buildNode = (id, count, getTagById) => {
   };
 };
 
-const HolidaysFilter = (props) => {
+const HolidaysFilter = props => {
   const cIDs          = useSelector(state => selectors.getEventsByType(state.events)[CT_HOLIDAY]);
   const getTagById    = useSelector(state => tags.getTagById(state.tags));
   const holidayEvents = useSelector(state => (cIDs || []).map(x => mdb.getCollectionById(state.mdb, x)));

@@ -102,7 +102,7 @@ export const reducer = handleActions({
     draft.suggestions = null;
   },
   [SEARCH]: (draft, payload) => {
-    Object.keys(payload).forEach((key) => {
+    Object.keys(payload).forEach(key => {
       draft[key] = payload[key];
     });
     draft.wip = true;

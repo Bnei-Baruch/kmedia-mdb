@@ -13,7 +13,7 @@ const queryValuesToFilterValues = (definition, values = []) => compactMap(castAr
 function filterValuesToApiParams(definition, values = []) {
   const transformedValues = castArray(values).map(definition.valueToApiParam);
   return transformedValues.reduce((acc, param) => {
-    Object.keys(param).forEach((key) => {
+    Object.keys(param).forEach(key => {
       const value = param[key];
       if (Array.isArray(acc[key])) {
         acc[key].push(value);

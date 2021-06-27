@@ -19,7 +19,7 @@ class MyOmniBox extends OmniBox {
     props.updateQuery('');  // reset the query from search page
   }
 
-  handleFromInputChange = (value) => {
+  handleFromInputChange = value => {
     window.location.href = `/${  this.props.language  }/simple-mode?date=${  moment(value).format('YYYY-MM-DD')}`;
   };
 

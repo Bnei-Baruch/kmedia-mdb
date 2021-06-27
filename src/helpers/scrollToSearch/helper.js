@@ -64,7 +64,7 @@ export const textToHtml = (source, from, to, allTags, isBold = true) => {
   let currentPos = from;
   return source
     .split(' ')
-    .map((word) => {
+    .map(word => {
 
       const tags = allTags
         .filter((t, i) => currentPos < t.noHtmlPos && currentPos + word.length + 1 >= t.noHtmlPos);
@@ -138,7 +138,7 @@ export const wrapSeekingPlace = (data, tags, fromNohtml, toNoHtml) => {
  * help functions for build link
  */
 export const DOM_ROOT_ID                  = 'roodNodeOfShareText';
-export const buildSearchLinkFromSelection = (language) => {
+export const buildSearchLinkFromSelection = language => {
   if (!window?.getSelection) {
     return { url: null };
   }
@@ -218,7 +218,7 @@ const findOffsetOfDOMNode = (node, offset) => {
   return findOffsetOfDOMNode(parent, offset);
 };
 
-const countOffsetFromParent = (node) => {
+const countOffsetFromParent = node => {
   let offset = 0;
   for (; node.previousSibling !== null;) {
     offset += node.previousSibling.textContent.length;
@@ -240,7 +240,7 @@ const wholeEndWord = (text, offset) => {
   return text.slice(offset).split(KEEP_LETTERS_WITH_SPACE_RE)[0];
 };
 
-const isSelectionForward = (sel) => {
+const isSelectionForward = sel => {
   const range = document.createRange();
   range.setStart(sel.anchorNode, sel.anchorOffset);
   range.setEnd(sel.focusNode, sel.focusOffset);

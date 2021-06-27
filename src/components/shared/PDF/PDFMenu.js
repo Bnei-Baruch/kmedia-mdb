@@ -38,7 +38,7 @@ class PDFMenu extends Component {
     this.setState({ inputValue: pageNumber });
   }
 
-  onKeyDown = (e) => {
+  onKeyDown = e => {
     // Enter
     if (e.keyCode === 13) {
       this.handleSubmit();
@@ -86,7 +86,7 @@ class PDFMenu extends Component {
 
   restoreError = () => setTimeout(() => this.setState({ inputError: false }), 5000);
 
-  validateValue = (value) => {
+  validateValue = value => {
     const bad = { validated: false, parsed: 0 };
 
     if (value === '') {

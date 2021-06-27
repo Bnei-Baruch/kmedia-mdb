@@ -21,7 +21,7 @@ export const mountedRender = (component, props) => mount(React.createElement(com
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the withNamespaces HoC receive the t function as a prop
-  withNamespaces: () => (c) => {
+  withNamespaces: () => c => {
     c.defaultProps = { ...c.defaultProps, t: k => k };
     return c;
   },

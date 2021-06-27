@@ -95,7 +95,7 @@ class DateFilter extends Component {
     }
   };
 
-  static convertToStateObject = (props) => {
+  static convertToStateObject = props => {
     const { value } = props;
     if (!value) {
       return {};
@@ -153,7 +153,7 @@ class DateFilter extends Component {
     this.setRange(data.name);
   };
 
-  handleDayInputChange = (value) => {
+  handleDayInputChange = value => {
     if (!value) {
       return;
     }
@@ -161,7 +161,7 @@ class DateFilter extends Component {
     this.setRange(CUSTOM_DAY, value, value);
   };
 
-  handleFromInputChange = (value) => {
+  handleFromInputChange = value => {
     if (!value) {
       return;
     }
@@ -173,7 +173,7 @@ class DateFilter extends Component {
     }
   };
 
-  handleToInputChange = (value) => {
+  handleToInputChange = value => {
     if (!value) {
       return;
     }
@@ -228,7 +228,7 @@ class DateFilter extends Component {
         <Segment basic className="filter-popup__body date-filter">
           <Accordion as={Menu} vertical fluid size="small">
             {
-              datePresets.map((x) => {
+              datePresets.map(x => {
                 const text = t(`filters.date-filter.presets.${x}`);
                 return (
                   <Menu.Item

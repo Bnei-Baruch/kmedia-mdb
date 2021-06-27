@@ -197,7 +197,7 @@ const setStatus = (state, action) => {
 };
 
 // We remove old wmv and flv files which have been converted to mp4
-const stripOldFiles = (unit) => {
+const stripOldFiles = unit => {
   const { files } = unit;
 
   // no files in unit
@@ -261,14 +261,14 @@ const onReceiveCollections = (state, action) => {
   const cById = { ...state.cById };
   let cuById  = { ...state.cuById };
 
-  items.forEach((x) => {
+  items.forEach(x => {
     // make a copy of incoming data since we're about to mutate it
     const y = { ...x };
 
     // normalize content units
     if (y.content_units) {
       y.ccuNames = y.ccuNames || {};
-      y.cuIDs    = y.content_units.filter(cu => !!cu).map((cu) => {
+      y.cuIDs    = y.content_units.filter(cu => !!cu).map(cu => {
         const ccuName     = cu.name_in_collection;
         y.ccuNames[cu.id] = ccuName;
 
@@ -322,7 +322,7 @@ const onReceiveContentUnits = (state, action) => {
 
   const cById = { ...state.cById };
   let cuById  = { ...state.cuById };
-  items.forEach((x) => {
+  items.forEach(x => {
     // make a copy of incoming data since we're about to mutate it
     const y = { ...x };
 

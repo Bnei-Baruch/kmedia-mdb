@@ -32,7 +32,7 @@ export function* setTab(action) {
     ...filtersTransformer.toQueryParams(filters),
   };
 
-  yield* pushQuery((query) => {
+  yield* pushQuery(query => {
     const x = Object.assign(query, q);
     if (x.page === 1) {
       delete x.page;

@@ -74,7 +74,7 @@ class AVPlayerMobile extends Component {
     selectedLanguage: LANG_HEBREW,
   };
 
-  persistVolume = debounce((value) => {
+  persistVolume = debounce(value => {
     localStorage.setItem(PLAYER_VOLUME_STORAGE_KEY, value);
   }, 200);
 
@@ -128,7 +128,7 @@ class AVPlayerMobile extends Component {
     return diffInProps || updateState;
   }
 
-  updateState = (nextState) => {
+  updateState = nextState => {
     const { playbackRate, showControls, unMuteButton, error, isSliceMode, mode } = this.state;
 
     return (playbackRate !== nextState.playbackRate
@@ -185,7 +185,7 @@ class AVPlayerMobile extends Component {
     this.props.onLanguageChange(...params);
   };
 
-  handleMediaRef = (ref) => {
+  handleMediaRef = ref => {
     if (ref) {
       this.media = ref;
       this.restoreVolume();
@@ -233,7 +233,7 @@ class AVPlayerMobile extends Component {
     }
   };
 
-  handleVolumeChange = (e) => {
+  handleVolumeChange = e => {
     const { unMuteButton } = this.state;
     if (this.media.muted) {
       return;
@@ -307,7 +307,7 @@ class AVPlayerMobile extends Component {
     }
   };
 
-  handleTimeUpdate = (e) => {
+  handleTimeUpdate = e => {
     const { mode, sliceEnd, sliceStart, seeking, firstSeek, showControls } = this.state;
 
     if (!showControls) {
@@ -335,7 +335,7 @@ class AVPlayerMobile extends Component {
     }
   };
 
-  handleError = (e) => {
+  handleError = e => {
     const { t } = this.props;
     // Show error only on loading of video.
     if (!e.currentTarget.currentTime && this.media.paused) {
@@ -405,7 +405,7 @@ class AVPlayerMobile extends Component {
     this.seekTo(jumpTo, false);
   };
 
-  saveCurrentTime = (mediaTime) => {
+  saveCurrentTime = mediaTime => {
     const { currentTime, firstSeek } = this.state;
     const { item }                   = this.props;
     const currentMediaTime           = Math.round(mediaTime);

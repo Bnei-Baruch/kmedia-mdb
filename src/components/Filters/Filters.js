@@ -61,7 +61,7 @@ class Filters extends Component {
     document.getElementsByTagName('body')[0].classList.remove('noscroll--smallmobile');
   };
 
-  handlePopupOpen = (activeFilter) => {
+  handlePopupOpen = activeFilter => {
     this.setState({ activeFilter });
     document.getElementsByTagName('body')[0].classList.add('noscroll--smallmobile');
   };
