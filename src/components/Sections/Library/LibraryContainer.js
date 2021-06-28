@@ -543,7 +543,7 @@ class LibraryContainer extends Component {
                 <Ref innerRef={this.handleContextRef}>
                   <div
                     className="source__content"
-                    style={{ minHeight: `calc(100vh - 14px)`, marginTop: '15px', }}
+                    style={{ minHeight: `calc(100vh - 14px)` }}
                   >
                     {content}
                     {LibraryContainer.nextPrevButtons(this.props)}

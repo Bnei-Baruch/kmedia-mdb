@@ -36,6 +36,7 @@ class Transcription extends Component {
 
   state              = {};
 
+
   static selectFile = (textFiles, language) => {
     const selectedFiles = textFiles.filter(x => x.language === language);
 
@@ -297,7 +298,7 @@ class Transcription extends Component {
               <DropdownLanguageSelector
                 languages={languages}
                 defaultValue={language}
-                onSelect={this.handleChangeLanguage}
+                onSelect={this.handleLanguageChanged}
                 fluid={isMobileDevice}
               />
             </Grid.Column>

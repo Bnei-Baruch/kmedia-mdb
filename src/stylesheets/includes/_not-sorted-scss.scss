@@ -1148,6 +1148,13 @@
 
 /* ************* End of styles for homepage social media section ************* */
 
+.dropdown-language-selector {
+  border: none;
+}
+
+.dropdown-language-selector * {
+  line-height: 1;
+}
 .dropdown-language-selector.blink, .blink {
   box-shadow: 0 0 0 6px #7dcff5 inset;
   animation: dropdown-blink .8s ease-in-out;
@@ -1695,7 +1702,13 @@
   padding-bottom: 0 !important;
 }
 
-.library-language-column {
-  padding-left: 2em !important;
-  padding-right: 2em !important;;
+.library-language-container {
+  padding-right: 0;
+  padding-left: 0;
+  margin-bottom: 1em;
+  text-align:right;
+}
+
+.rtl .library-language-container {
+  text-align:left;
 }
