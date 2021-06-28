@@ -7,7 +7,7 @@ import { Grid, Portal, Segment} from 'semantic-ui-react';
 
 import { selectors } from '../../../redux/modules/assets';
 import { physicalFile } from '../../../helpers/utils';
-import AnchorsLanguageSelector from '../../Language/Selector/AnchorsLanguageSelector';
+
 import PDF, { isTaas, startsFrom } from '../../shared/PDF/PDF';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import { getQuery, updateQuery } from '../../../helpers/url';
