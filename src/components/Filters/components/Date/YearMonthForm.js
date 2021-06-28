@@ -1,81 +1,65 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown } from 'semantic-ui-react';
 import 'react-day-picker/lib/style.css';
 
-const fromMonth = new Date(1970, 0);
-const toMonth   = new Date(new Date().getFullYear(), 11);
 
-class YearMonthForm extends Component {
-  static propTypes = {
-    date: PropTypes.any.isRequired,
-    localeUtils: PropTypes.any.isRequired,
-    onChange: PropTypes.func.isRequired,
-    language: PropTypes.string.isRequired,
-    className: PropTypes.string.isRequired,
-  };
+const getYears = () => {
+  const fromYear = 1970;
+  const toYear   = new Date().getFullYear();
+  const years = [];
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      month: props.date.getMonth(),
-      year: props.date.getFullYear(),
-      date: props.date,
-    };
+  for (let i = toYear; i >= fromYear; i -= 1) {
+    years.push({ text: i, value: i });
   }
 
-  static getDerivedStateFromProps(nextProps, state) {
-    if (state.date !== nextProps.date) {
-      return {
-        month: nextProps.date.getMonth(),
-        year: nextProps.date.getFullYear(),
-        date: nextProps.date,
-      };
-    }
-    return null;
-  }
+  return years;
+};
 
-  handleMonthChange = (e, data) => {
-    const { props, state } = this;
-    props.onChange(new Date(state.year, data.value));
+const YearMonthForm = ({ date, onChange, localeUtils, language, className }) => {
+  const month = date.getMonth();
+  const year = date.getFullYear();
+
+  const handleMonthChange = (e, data) => {
+    onChange(new Date(year, data.value));
   };
 
-  handleYearChange = (e, data) => {
-    const { props, state } = this;
-    props.onChange(new Date(data.value, state.month));
+  const handleYearChange = (e, data) => {
+    onChange(new Date(data.value, month));
   };
 
-  render() {
-    const { state: { month, year }, props: { localeUtils, language, className } } = this;
-    const months                                                                  = localeUtils.getMonths(language);
+  const months = localeUtils.getMonths(language);
+  const years = getYears();
 
-    const years = [];
-    for (let i = toMonth.getFullYear(); i >= fromMonth.getFullYear(); i -= 1) {
-      years.push(i);
-    }
-
-    return (
-      <span className={className}>
-        <Dropdown
-          compact
-          inline
-          scrolling
-          options={months.map((mon, i) => ({ text: mon, value: i }))}
-          value={month}
-          onChange={this.handleMonthChange}
-        />
+  return (
+    <span className={className}>
+      <Dropdown
+        compact
+        inline
+        scrolling
+        options={months.map((mon, i) => ({ text: mon, value: i }))}
+        value={month}
+        onChange={handleMonthChange}
+      />
         &nbsp;&nbsp;
-        <Dropdown
-          compact
-          inline
-          scrolling
-          options={years.map(yea => ({ text: yea, value: yea }))}
-          value={year}
-          onChange={this.handleYearChange}
-        />
-      </span>
-    );
-  }
+      <Dropdown
+        compact
+        inline
+        scrolling
+        options={years}
+        value={year}
+        onChange={handleYearChange}
+      />
+    </span>
+  );
 }
+
+YearMonthForm.propTypes = {
+  date: PropTypes.any.isRequired,
+  localeUtils: PropTypes.any.isRequired,
+  onChange: PropTypes.func.isRequired,
+  language: PropTypes.string.isRequired,
+  className: PropTypes.string.isRequired,
+};
 
 export default YearMonthForm;

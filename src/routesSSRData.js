@@ -160,9 +160,7 @@ export const latestLesson = store => (
     })
 );
 
-export const musicPage = (store, match) => {
-  return store.sagaMiddleWare.run(musicSagas.fetchMusic, musicActions.fetchMusic).done;
-}
+export const musicPage = store => store.sagaMiddleWare.run(musicSagas.fetchMusic, musicActions.fetchMusic).done
 
 export const eventsPage = (store, match) => {
   // hydrate tab

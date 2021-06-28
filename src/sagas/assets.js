@@ -82,12 +82,12 @@ function* watchFetchPerson() {
 
 function cuFilesToData(cu) {
   return !cu.files ? {} : cu.files.reduce((acc, f) => {
-    const { language, name, id } = f;
+    const { language, name } = f;
     if (!acc[language])
       acc[language] = {};
 
     const ext          = name.split('.').slice(-1);
-    acc[language][ext] = ext?.[0] === 'pdf' ? f : id;
+    acc[language][ext] = f;
     return acc;
   }, {});
 }

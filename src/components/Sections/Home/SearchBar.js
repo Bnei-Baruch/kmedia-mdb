@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
+import { useLocation } from 'react-router';
 import { withNamespaces } from 'react-i18next';
 import { Button, Grid, Header, Icon, Input } from 'semantic-ui-react';
-import * as shapes from '../../shapes';
 import { mapState as obMS, OmniBox, wrap } from '../../Search/OmniBox';
 import ButtonDayPicker from '../../Filters/components/Date/ButtonDayPicker';
 import moment from 'moment';
@@ -57,30 +57,27 @@ const MyWrappedOmniBox = wrap(withNamespaces()(MyOmniBox), state => ({
   ...obMS(state)
 }));
 
-class SearchBar extends Component {
-  static propTypes = {
-    location: shapes.HistoryLocation.isRequired,
-    t: PropTypes.func.isRequired,
-  };
+const SearchBar = ({ t }) => {
+  const location = useLocation();
 
-  render() {
-    const { t, location } = this.props;
-
-    return (
-      <Grid centered>
-        <Grid.Row>
-          <Grid.Column computer={12} tablet={14} mobile={16}>
-            <Header as="h1" content={t('home.search')} className="homepage__title text white" />
-          </Grid.Column>
-          <Grid.Column computer={12} tablet={14} mobile={16}>
-            <div className="homepage__search">
-              <MyWrappedOmniBox location={location} />
-            </div>
-          </Grid.Column>
-        </Grid.Row>
-      </Grid>
-    );
-  }
+  return (
+    <Grid centered>
+      <Grid.Row>
+        <Grid.Column computer={12} tablet={14} mobile={16}>
+          <Header as="h1" content={t('home.search')} className="homepage__title text white" />
+        </Grid.Column>
+        <Grid.Column computer={12} tablet={14} mobile={16}>
+          <div className="homepage__search">
+            <MyWrappedOmniBox location={location} />
+          </div>
+        </Grid.Column>
+      </Grid.Row>
+    </Grid>
+  );
 }
+
+SearchBar.propTypes = {
+  t: PropTypes.func.isRequired,
+};
 
 export default withNamespaces()(SearchBar);
