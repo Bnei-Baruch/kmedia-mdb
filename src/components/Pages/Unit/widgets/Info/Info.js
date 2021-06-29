@@ -23,24 +23,24 @@ import * as shapes from '../../../../shapes';
 
 const filterLessons = (ct, filmDate) => {
   switch (ct) {
-  case CT_LESSON_PART:
-    if (filmDate && filmDate > '1980-01-01') {
-      return '/daily';
-    } else {
+    case CT_LESSON_PART:
+      if (filmDate && filmDate > '1980-01-01') {
+        return '/daily';
+      } else {
       // dirty hack to determine if rabash lesson
       // a better way would use MDB data (require backend api support)
-      return '/rabash';
-    }
-  case CT_VIRTUAL_LESSON:
-    return '/virtual';
-  case CT_LECTURE:
-    return '/lectures';
-  case CT_WOMEN_LESSON:
-    return '/women';
+        return '/rabash';
+      }
+    case CT_VIRTUAL_LESSON:
+      return '/virtual';
+    case CT_LECTURE:
+      return '/lectures';
+    case CT_WOMEN_LESSON:
+      return '/women';
     // case CT_CHILDREN_LESSON:
     //   return '/children';
-  default:
-    return '';
+    default:
+      return '';
   }
 };
 
@@ -95,16 +95,16 @@ const makeCollectionsLinks = (collections = {}, t, currentCollection) => {
     collectionsForLinks.map(x => {
       let display;
       switch (x.content_type) {
-      case CT_DAILY_LESSON:
-      case CT_SPECIAL_LESSON: {
-        const ctLabel = t(`constants.content-types.${CT_DAILY_LESSON}`);
-        const fd      = t('values.date', { date: x.film_date });
-        display       = `${ctLabel} ${fd}`;
-        break;
-      }
-      default:
-        display = x.name;
-        break;
+        case CT_DAILY_LESSON:
+        case CT_SPECIAL_LESSON: {
+          const ctLabel = t(`constants.content-types.${CT_DAILY_LESSON}`);
+          const fd      = t('values.date', { date: x.film_date });
+          display       = `${ctLabel} ${fd}`;
+          break;
+        }
+        default:
+          display = x.name;
+          break;
       }
 
       return <Link key={x.id} to={canonicalLink(x)}>{display}</Link>;

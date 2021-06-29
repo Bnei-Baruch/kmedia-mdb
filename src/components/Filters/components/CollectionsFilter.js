@@ -30,28 +30,28 @@ const mapNS2Tree = (state, namespace, t) => {
   let cIDs;
 
   switch (namespace) {
-  case 'lessons-virtual':
-    ct   = CT_VIRTUAL_LESSONS;
-    cIDs = lessons.getLecturesByType(state.lessons)[ct];
-    break;
-  case 'lessons-lectures':
-    ct   = CT_LECTURE_SERIES;
-    cIDs = lessons.getLecturesByType(state.lessons)[ct];
-    break;
-  case 'programs-main':
-    ct   = CT_VIDEO_PROGRAM;
-    cIDs = programs.getProgramsByType(state.programs)[ct];
-    break;
-  case 'programs-clips':
-    ct   = CT_CLIPS;
-    cIDs = programs.getProgramsByType(state.programs)[ct];
-    break;
-  case 'publications-articles':
-    ct   = CT_ARTICLES;
-    cIDs = publications.getCollections(state.publications)[ct];
-    break;
-  default:
-    break;
+    case 'lessons-virtual':
+      ct   = CT_VIRTUAL_LESSONS;
+      cIDs = lessons.getLecturesByType(state.lessons)[ct];
+      break;
+    case 'lessons-lectures':
+      ct   = CT_LECTURE_SERIES;
+      cIDs = lessons.getLecturesByType(state.lessons)[ct];
+      break;
+    case 'programs-main':
+      ct   = CT_VIDEO_PROGRAM;
+      cIDs = programs.getProgramsByType(state.programs)[ct];
+      break;
+    case 'programs-clips':
+      ct   = CT_CLIPS;
+      cIDs = programs.getProgramsByType(state.programs)[ct];
+      break;
+    case 'publications-articles':
+      ct   = CT_ARTICLES;
+      cIDs = publications.getCollections(state.publications)[ct];
+      break;
+    default:
+      break;
   }
   const collections = (cIDs || []).map(x => mdb.getCollectionById(state.mdb, x));
   return getTree(collections, t);

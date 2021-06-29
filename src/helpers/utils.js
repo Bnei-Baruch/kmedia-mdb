@@ -229,14 +229,14 @@ export const getEscapedRegExp = term => {
 
 export const getRSSFeedByLang = language => {
   switch (language) {
-  case consts.LANG_HEBREW:
-    return 'KabbalahVideoHeb';
-  case consts.LANG_RUSSIAN:
-    return 'KabbalahVideoRus';
-  case consts.LANG_SPANISH:
-    return 'kabbalah-archive/spa';
-  default:
-    return 'KabbalahVideoEng';
+    case consts.LANG_HEBREW:
+      return 'KabbalahVideoHeb';
+    case consts.LANG_RUSSIAN:
+      return 'KabbalahVideoRus';
+    case consts.LANG_SPANISH:
+      return 'kabbalah-archive/spa';
+    default:
+      return 'KabbalahVideoEng';
   }
 };
 
@@ -287,34 +287,34 @@ export const unitsBySection = units => units?.reduce((acc, u) => {
 // returns the value from common.json for translation
 export const getSectionForTranslation = content_type => {
   switch (content_type) {
-  case consts.CT_LESSON_PART:
-    return 'lessons.tabs.daily';
-  case consts.CT_LESSONS_SERIES:
-    return 'lessons.tabs.series';
-  case consts.CT_LECTURE_SERIES:
-    return 'lessons.tabs.series';
-  case consts.CT_DAILY_LESSON:
-    return 'lessons.tabs.daily';
-  case consts.CT_WOMEN_LESSON:
-    return 'lessons.tabs.women';
-  case consts.CT_VIRTUAL_LESSON:
-    return 'lessons.tabs.virtual';
-  case consts.CT_CONGRESS:
-    return 'events.tabs.conventions';
-  case consts.CT_HOLIDAY:
-    return 'events.tabs.holidays';
-  case consts.CT_FRIENDS_GATHERING:
-    return 'events.tabs.friends-gatherings';
-  case consts.CT_MEAL:
-    return 'events.tabs.meals';
-  case consts.CT_ARTICLE:
-    return 'publications.tabs.articles';
-  case consts.CT_VIDEO_PROGRAM_CHAPTER:
-    return 'programs.tabs.main';
-  case consts.CT_CLIP:
-    return 'programs.tabs.clips';
-  default:
-    return '';
+    case consts.CT_LESSON_PART:
+      return 'lessons.tabs.daily';
+    case consts.CT_LESSONS_SERIES:
+      return 'lessons.tabs.series';
+    case consts.CT_LECTURE_SERIES:
+      return 'lessons.tabs.series';
+    case consts.CT_DAILY_LESSON:
+      return 'lessons.tabs.daily';
+    case consts.CT_WOMEN_LESSON:
+      return 'lessons.tabs.women';
+    case consts.CT_VIRTUAL_LESSON:
+      return 'lessons.tabs.virtual';
+    case consts.CT_CONGRESS:
+      return 'events.tabs.conventions';
+    case consts.CT_HOLIDAY:
+      return 'events.tabs.holidays';
+    case consts.CT_FRIENDS_GATHERING:
+      return 'events.tabs.friends-gatherings';
+    case consts.CT_MEAL:
+      return 'events.tabs.meals';
+    case consts.CT_ARTICLE:
+      return 'publications.tabs.articles';
+    case consts.CT_VIDEO_PROGRAM_CHAPTER:
+      return 'programs.tabs.main';
+    case consts.CT_CLIP:
+      return 'programs.tabs.clips';
+    default:
+      return '';
   }
 };
 

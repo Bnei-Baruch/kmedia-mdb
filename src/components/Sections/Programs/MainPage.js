@@ -10,12 +10,12 @@ export const tabs = [
 
 const content = (active) => {
   switch (active) {
-  case 'main':
-    return <ProgramList />;
-  case 'clips':
-    return <ClipList />;
-  default:
-    return <h1>Page not found</h1>;
+    case 'main':
+      return <ProgramList />;
+    case 'clips':
+      return <ClipList />;
+    default:
+      return <h1>Page not found</h1>;
   }
 };
 

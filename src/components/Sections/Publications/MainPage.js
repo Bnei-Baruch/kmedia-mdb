@@ -14,16 +14,16 @@ export const tabs = [
 
 const content = (active) => {
   switch (active) {
-  case 'articles':
-    return <Articles />;
-  case 'blog':
-    return <Blog namespace="publications-blog" />;
-  case 'twitter':
-    return <Twitter namespace="publications-twitter" />;
-  case 'audio-blog':
-    return <AudioBlog />;
-  default:
-    return <h1>Page not found</h1>;
+    case 'articles':
+      return <Articles />;
+    case 'blog':
+      return <Blog namespace="publications-blog" />;
+    case 'twitter':
+      return <Twitter namespace="publications-twitter" />;
+    case 'audio-blog':
+      return <AudioBlog />;
+    default:
+      return <h1>Page not found</h1>;
   }
 };
 

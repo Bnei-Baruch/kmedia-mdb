@@ -15,12 +15,12 @@ const titleKey = id => `title-${id}`;
 const hebrew = (number) => {
   let n = 1 * number;
   switch (n) {
-  case 16:
-    return 'טז';
-  case 15:
-    return 'טו';
-  default:
-    break;
+    case 16:
+      return 'טז';
+    case 15:
+      return 'טו';
+    default:
+      break;
   }
 
   let ret = '';
@@ -41,21 +41,21 @@ const hebrew = (number) => {
     n -= 100;
   }
   switch (n) {
-  case 16:
-    ret += 'טז';
-    break;
-  case 15:
-    ret += 'טו';
-    break;
-  default:
-    if (n >= 10) {
-      ret += 'יכלמנסעפצ'.slice((n / 10) - 1)[0];
-      n %= 10;
-    }
-    if (n > 0) {
-      ret += 'אבגדהוזחט'.slice((n % 10) - 1)[0];
-    }
-    break;
+    case 16:
+      ret += 'טז';
+      break;
+    case 15:
+      ret += 'טו';
+      break;
+    default:
+      if (n >= 10) {
+        ret += 'יכלמנסעפצ'.slice((n / 10) - 1)[0];
+        n %= 10;
+      }
+      if (n > 0) {
+        ret += 'אבגדהוזחט'.slice((n % 10) - 1)[0];
+      }
+      break;
   }
 
   return ret;
@@ -200,20 +200,20 @@ class TOC extends Component {
 
     let leafTitle;
     switch (sourceId) {
-    case BS_SHAMATI:
-      leafTitle = isRTL
-        ? `${hebrew(number)}. ${name}`
-        : `${number}. ${name}`;
-      break;
-    case RH_RECORDS:
-      leafTitle = `${number}. ${name}`;
-      break;
-    case RH_ARTICLES:
-      leafTitle = `${name}. ${number} (${year})`;
-      break;
-    default:
-      leafTitle = name;
-      break;
+      case BS_SHAMATI:
+        leafTitle = isRTL
+          ? `${hebrew(number)}. ${name}`
+          : `${number}. ${name}`;
+        break;
+      case RH_RECORDS:
+        leafTitle = `${number}. ${name}`;
+        break;
+      case RH_ARTICLES:
+        leafTitle = `${name}. ${number} (${year})`;
+        break;
+      default:
+        leafTitle = name;
+        break;
     }
 
     return leafTitle;

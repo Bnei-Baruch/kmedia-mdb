@@ -112,16 +112,16 @@ const HelpPage = () => {
   let language = useSelector(state => settings.getLanguage(state.settings));
 
   switch (language) {
-  case LANG_HEBREW:
-    language = LANG_HEBREW;
-    break;
+    case LANG_HEBREW:
+      language = LANG_HEBREW;
+      break;
     // case LANG_UKRAINIAN:
-  case LANG_RUSSIAN:
-    language = LANG_RUSSIAN;
-    break;
-  default:
-    language = LANG_ENGLISH;
-    break;
+    case LANG_RUSSIAN:
+      language = LANG_RUSSIAN;
+      break;
+    default:
+      language = LANG_ENGLISH;
+      break;
   }
 
   let c    = clips;

@@ -328,13 +328,13 @@ class SearchResultBase extends Component {
   getFilterById = (index) => {
     const { getTagById, getSourceById } = this.props;
     switch (index) {
-    case SEARCH_INTENT_INDEX_TOPIC:
-      return getTagById;
-    case SEARCH_INTENT_INDEX_SOURCE:
-      return getSourceById;
-    default:
-      console.log('Using default filter:', index);
-      return x => x;
+      case SEARCH_INTENT_INDEX_TOPIC:
+        return getTagById;
+      case SEARCH_INTENT_INDEX_SOURCE:
+        return getSourceById;
+      default:
+        console.log('Using default filter:', index);
+        return x => x;
     }
   };
 
