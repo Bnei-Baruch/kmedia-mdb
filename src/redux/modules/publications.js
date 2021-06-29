@@ -200,9 +200,11 @@ const onSSRPrepare = draft => {
   if (draft.twitter.err) {
     draft.twitter.err = draft.twitter.err.toString();
   }
+
   if (draft.blog.err) {
     draft.blog.err = draft.blog.err.toString();
   }
+
   if (draft.blog.errPost) {
     draft.blog.errPost = draft.blog.errPost.toString();
   }

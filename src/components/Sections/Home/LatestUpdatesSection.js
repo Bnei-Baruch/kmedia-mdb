@@ -42,12 +42,15 @@ const getComplexCards = (getCard) => {
   if (wl && moment().diff(moment(wl.props.unit.film_date), 'days') < 14) {
     cards.push(wl);
   }
+
   if (vl && moment().diff(moment(vl.props.unit.film_date), 'days') < 14) {
     cards.push(vl);
   }
+
   if (cards.length < 2) {
     cards.push(getCard(consts.CT_LESSONS_SERIES));
   }
+
   if (cards.length < 2) {
     cards.push(getCard(consts.CT_LESSONS_SERIES, 1));
   }
@@ -64,6 +67,7 @@ const LatestUpdatesSection = ({ latestUnits = [], t }) => {
         if (a.film_date !== b.film_date) {
           return moment(a).diff(moment(b), 'days');
         }
+
         return a.name_in_collection - b.name_in_collection;
       },
     );

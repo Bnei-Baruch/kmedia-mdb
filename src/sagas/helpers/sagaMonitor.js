@@ -25,9 +25,10 @@ export default function createSagaMonitor(
   const time = () => {
     if (typeof performance !== 'undefined' && performance.now) {
       return performance.now();
-    } else {
-      return Date.now();
     }
+
+    return Date.now();
+
   };
 
   const effectsById = {};
@@ -37,13 +38,11 @@ export default function createSagaMonitor(
       console.log('Saga monitor: effectTriggered:', desc);
     }
 
-    effectsById[desc.effectId] = Object.assign({},
-      desc,
-      {
-        status: EFFECT_STATUS_PENDING,
-        start: time()
-      }
-    );
+    effectsById[desc.effectId] = {
+      ...desc,
+      status: EFFECT_STATUS_PENDING,
+      start: time()
+    };
   }
 
   function effectResolved(effectId, result) {
@@ -167,6 +166,7 @@ export default function createSagaMonitor(
       console.log(groupPrefix, 'Saga monitor: No effect data for', effectId);
       return;
     }
+
     const childEffects = getChildEffects(effectId);
 
     if (!childEffects.length) {
@@ -200,7 +200,7 @@ export default function createSagaMonitor(
       logResult(effect, log.formatter);
     } else if (data = asEffect.put(effect.effect)) {
       log = getLogPrefix('put', effect);
-      logResult(Object.assign({}, effect, { result: data }), log.formatter);
+      logResult({ ...effect, result: data }, log.formatter);
     } else if (data = asEffect.call(effect.effect)) {
       log = getLogPrefix('call', effect);
       log.formatter.addCall(data.fn.name, data.args);
@@ -338,6 +338,7 @@ export default function createSagaMonitor(
           args.shift();
         }
       }
+
       logs.push({ msg, args });
     }
 
@@ -376,6 +377,7 @@ export default function createSagaMonitor(
         msgs.push(logs[i].msg);
         msgsArgs = msgsArgs.concat(logs[i].args);
       }
+
       return [msgs.join('')].concat(msgsArgs).concat(suffix);
     }
 

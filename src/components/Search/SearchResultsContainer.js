@@ -158,6 +158,7 @@ const cuMapFromState = (state, results) => (
           acc[cuID] = cu;
         }
       }
+
       return acc;
     }, {})
     : {}
@@ -173,6 +174,7 @@ const cMapFromState = (state, results) => (
           acc[cID] = c;
         }
       }
+
       return acc;
     }, {})
     : {}
@@ -189,6 +191,7 @@ const postMapFromState = (state, results) => (
           acc[val._source.mdb_uid] = p;
         }
       }
+
       return acc;
     }, {})
     : {}

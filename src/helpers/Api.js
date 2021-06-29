@@ -32,6 +32,7 @@ export class Requests {
       default:
         return null;
     }
+
     return axios(url);
   };
 
@@ -63,6 +64,7 @@ export class Requests {
     if (!params.url.startsWith('http')) {
       params.url = `http://${IMAGINARY_INTERNAL_HOST}${params.url}`;
     }
+
     return `${imaginaryUrl('thumbnail')}?${Requests.makeParams(params)}`;
   };
 

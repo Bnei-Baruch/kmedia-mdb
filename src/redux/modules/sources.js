@@ -59,6 +59,7 @@ const sortSources = (items) => {
     if (!i.children) {
       return;
     }
+
     i.children.forEach((c) => {
       // The second level's id is the one that is used to distinguish
       // between sortable and not sortable sources
@@ -81,6 +82,7 @@ const buildById = (items) => {
     if (node.children) {
       s = s.concat(node.children);
     }
+
     byId[node.id] = {
       ...node,
       children: node.children ? node.children.map(x => x.id) : [],
@@ -133,7 +135,7 @@ const setRabash = (sources, language) => {
   const rbLetters  = rb.children.find(el => el.id === 'b8SHlrfH').children;
   const children   = groupRabash.map(gr => {
     const item = rbArticles.find(el => el.id === gr) || rbLetters.find(el => el.id === gr);
-    const el   = Object.assign({}, item, { parent_id: 'grRABASH', id: `gr-${item.id}` });
+    const el   = { ...item, parent_id: 'grRABASH', id: `gr-${item.id}` };
     return el;
   });
   rb.children.push({

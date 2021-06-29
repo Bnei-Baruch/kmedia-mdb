@@ -101,6 +101,7 @@ class HierarchicalFilter extends Component {
       } else {
         this.setState({ sValue });
       }
+
       return;
     }
 

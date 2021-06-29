@@ -36,6 +36,7 @@ const getTree = (congressEvents, t) => {
       if (byCity.length > 1) {
         res.children.sort(cmpFn);
       }
+
       return res;
     });
 

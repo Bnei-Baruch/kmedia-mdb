@@ -10,6 +10,7 @@ export const languageFilter = createFilterDefinition({
     if (!value) {
       return '';
     }
+
     return t(value);
   }
 });

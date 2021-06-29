@@ -27,6 +27,7 @@ function getIdsForFetch(hits, type) {
     if (val._source.result_type === type) {
       return acc.concat(val._source.mdb_uid);
     }
+
     return acc;
   }, []);
 }
@@ -52,6 +53,7 @@ export function* search(action) {
       yield put(actions.searchFailure(null));
       return;
     }
+
     const searchId = GenerateSearchId();
 
     const { data } = yield call(Api.search, {
@@ -90,9 +92,11 @@ export function* search(action) {
           with_derivations: true,
         }));
       }
+
       if (cIDsToFetch.length > 0) {
         requests.push(call(Api.collections, { id: cIDsToFetch, pageSize: cIDsToFetch.length, language: lang }));
       }
+
       if (postIDsToFetch.length > 0) {
         requests.push(call(Api.posts, { id: postIDsToFetch, pageSize: postIDsToFetch.length, language: lang }));
       }
@@ -102,15 +106,18 @@ export function* search(action) {
         const respCU = responses.shift();
         yield put(mdbActions.receiveContentUnits(respCU.data.content_units));
       }
+
       if (cIDsToFetch.length > 0) {
         const respC = responses.shift();
         yield put(mdbActions.receiveCollections(respC.data.collections));
       }
+
       if (postIDsToFetch.length > 0) {
         const respPost = responses.shift();
         yield put(postsActions.fetchBlogListSuccess(respPost.data));
       }
     }
+
     yield put(actions.searchSuccess(data));
   } catch (err) {
     yield put(actions.searchFailure(err));

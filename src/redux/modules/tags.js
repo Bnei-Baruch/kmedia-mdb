@@ -73,6 +73,7 @@ const buildById = (items) => {
     if (node.children) {
       s = s.concat(node.children);
     }
+
     byId[node.id] = {
       ...node,
       children: node.children ? node.children.map(x => x.id) : [],

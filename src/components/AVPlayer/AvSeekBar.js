@@ -9,6 +9,7 @@ const toPercentage = (l) => {
   if (ret > 100) {
     return '100%';
   }
+
   return (ret < 1) ? 0 : `${ret}%`;
 };
 

@@ -56,10 +56,12 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
       if (prev?.unit?.id) {
         chronicles.append('collection-unit-unselected', { unit_uid: prev.unit.id });
       }
+
       if (unit?.id) {
         chronicles.append('collection-unit-selected', { unit_uid: unit.id });
       }
     }
+
     if (prev?.unit?.id && !unit?.id) {
       chronicles.append('collection-unit-unselected', { unit_uid: unit.id });
     }
@@ -104,6 +106,7 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
       if (nSelected >= playlist?.items.length) {
         nSelected = 0;
       }
+
       handleSelectedChange(nSelected);
     }
   }, [handleSelectedChange, location, playlist]);

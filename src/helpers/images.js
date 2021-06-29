@@ -36,6 +36,7 @@ export const SectionLogo = ({ name, ...props }) => {
   if (!Logo) {
     return null;
   }
+
   return <Logo {...props} width="50" height="50" />;
 };
 

@@ -51,6 +51,7 @@ class FastDayPicker extends Component {
     if (props.value !== value) {
       return { value: props.value, stringValue: FastDayPicker.formatDateValue(props.value, props.language) };
     }
+
     return null;
   }
 
@@ -118,6 +119,7 @@ class FastDayPicker extends Component {
     if (date > today().add(1, 'days').toDate()) {
       return;
     }
+
     const { onDayChange, language } = this.props;
     this.setState({ stringValue: FastDayPicker.formatDateValue(date, language) });
     onDayChange(date);

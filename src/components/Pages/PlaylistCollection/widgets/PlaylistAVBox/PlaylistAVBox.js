@@ -46,6 +46,7 @@ class PlaylistAVBox extends Component {
         selected = 0;
         playerHelper.setActivePartInQuery(history, selected);
       }
+
       onSelectedChange(playlist.items[selected].unit);
     }
 
@@ -82,12 +83,14 @@ class PlaylistAVBox extends Component {
     if (nSelected >= nPlaylist.items.length) {
       nSelected = 0;
     }
+
     if (nSelected !== selected) {
       // case # 1
       playerHelper.setActivePartInQuery(nextProps.history, nSelected);
       nextProps.onSelectedChange(nPlaylist.items[nSelected].unit);
       return { selected: nSelected, playlist: nPlaylist };
     }
+
     if (
       playlist
       && nPlaylist
@@ -100,6 +103,7 @@ class PlaylistAVBox extends Component {
       // case # 2
       nextProps.onSelectedChange(nPlaylist.items[nSelected].unit);
     }
+
     return { playlist: nPlaylist };
   }
 

@@ -12,6 +12,7 @@ export const formatTime = (current) => {
   if (h > 0) {
     result.push(h < 10 ? `0${h}` : `${h}`);
   }
+
   result.push(m < 10 ? `0${m}` : `${m}`);
   result.push(s < 10 ? `0${s}` : `${s}`);
 

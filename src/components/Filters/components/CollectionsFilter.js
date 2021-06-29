@@ -53,6 +53,7 @@ const mapNS2Tree = (state, namespace, t) => {
     default:
       break;
   }
+
   const collections = (cIDs || []).map(x => mdb.getCollectionById(state.mdb, x));
   return getTree(collections, t);
 };

@@ -116,6 +116,7 @@ const Sources = ({ unit, indexMap, t, options }) => {
           // pdf.js fetch it on his own (smarter than us), we fetch it for nothing.
           return;
         }
+
         const { id } = docx || doc || {};
         doc2html(id);
         setFetched(newFetch);
@@ -138,6 +139,7 @@ const Sources = ({ unit, indexMap, t, options }) => {
       if (isTaas(selected) && pdf) {
         return <PDF pdfFile={physicalFile(pdf)} pageNumber={1} startsFrom={startsFrom(selected)} />;
       }
+
       file = docx || doc || {};
     }
 
@@ -146,15 +148,17 @@ const Sources = ({ unit, indexMap, t, options }) => {
     if (err) {
       if (err.response && err.response.status === 404) {
         return <FrownSplash text={t('messages.source-content-not-found')} />;
-      } else {
-        return <ErrorSplash text={t('messages.server-error')} subtext={formatError(err)} />;
       }
+
+      return <ErrorSplash text={t('messages.server-error')} subtext={formatError(err)} />;
+
     } else if (wip) {
       return <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
-    } else {
-      const direction = getLanguageDirection(language);
-      return <div className="doc2html" style={{ direction }} dangerouslySetInnerHTML={{ __html: data }} />;
     }
+
+    const direction = getLanguageDirection(language);
+    return <div className="doc2html" style={{ direction }} dangerouslySetInnerHTML={{ __html: data }} />;
+
   };
 
   const { isMobileDevice } = useContext(DeviceInfoContext);

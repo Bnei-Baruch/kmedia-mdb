@@ -24,6 +24,7 @@ export const isEmpty = obj => {
   if (obj.length > 0) {
     return false;
   }
+
   if (obj.length === 0) {
     return true;
   }
@@ -56,19 +57,23 @@ export const formatError = error => {
     const msg = error.response.data.error;
     return error.response.statusText + (msg ? `: ${msg}` : '');
   }
+
   if (error.request) {
     // The request was made but no response was received
     // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
     // http.ClientRequest in node.js
     return 'No response from server';
   }
+
   if (error.message) {
     // Something happened in setting up the request that triggered an Error
     return error.message;
   }
+
   if (typeof error.toString === 'function') {
     return error.toString();
   }
+
   return error;
 };
 
@@ -90,6 +95,7 @@ export function* intersperse(iterable, delimiter) {
     if (!first) {
       yield delimiter;
     }
+
     first = false;
     yield item;
   }
@@ -110,6 +116,7 @@ export const tracePath = (node, getById) => {
       path.unshift(x);
     }
   }
+
   return path;
 };
 
@@ -124,6 +131,7 @@ export const filenameExtension = (name) => {
   if (lastDot === -1) {
     return '';
   }
+
   return name.substring(lastDot + 1, name.length);
 };
 
@@ -137,6 +145,7 @@ export const physicalFile = (file, ext = false) => {
   if (ext) {
     suffix = `.${filenameExtension(file.name)}`;
   }
+
   return `${CDN_URL}${file.id}${suffix}`;
   // return `https://cdn.kabbalahmedia.info/${file.id}${suffix}`;
 };
@@ -208,15 +217,12 @@ export const neighborIndices = (idx, len, n) => {
  * @param a {string}
  * @param b {string}
  */
-export const strCmp = (a, b) => {
-  if (a < b) {
-    return -1;
-  }
-  if (a > b) {
-    return 1;
-  }
-  return 0;
-};
+export const strCmp = (a, b) =>
+  a < b
+    ? -1
+    : a > b
+      ? 1
+      : 0;
 
 export const getEscapedRegExp = term => {
   const escaped = term.replace(/[/)(.+\\]/g, '\\$&');

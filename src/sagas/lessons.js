@@ -14,6 +14,7 @@ function* fetchLecturesList(action) {
     && action.payload.namespace !== 'lessons-lectures') {
     return;
   }
+
   try {
     // fetch once
     const lectures = yield select(state => selectors.getLecturesByType(state.lessons));

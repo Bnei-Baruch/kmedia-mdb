@@ -56,6 +56,7 @@ export const landingPageSectionLink = (landingPage, filterValues) => {
   if (params) {
     linkParts.push(params);
   }
+
   return linkParts.join('?');
 };
 
@@ -66,6 +67,7 @@ export const intentSectionLink = (section, filters) => {
       if (!tagOrSource) {
         return null;
       }
+
       const path = tracePath(tagOrSource, getFilterById);
       return { name, values: [path.map(y => y.id)] };
     }

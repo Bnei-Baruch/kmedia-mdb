@@ -79,6 +79,7 @@ class SearchResultIntent extends SearchResultBase {
     if (pageNo < 0 || this.state.pageSize * pageNo >= this.props.unitCounter) {
       return;
     }
+
     this.setState({ pageNo });
   };
 

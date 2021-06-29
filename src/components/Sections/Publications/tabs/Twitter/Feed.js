@@ -84,12 +84,15 @@ const prepare = (raw, highlight) => {
             } else {
               html += fullText.slice(s, e);
             }
+
             break;
           }
+
           default:
             html += fullText.slice(s, e);
             break;
         }
+
         break;
       default:
         html += fullText.slice(s, e);
@@ -112,6 +115,7 @@ const TwitterFeed = ({ snippetVersion = false, withDivider = true, twitter = nul
   if (!twitter) {
     return null;
   }
+
   const { username, twitter_id: tID, created_at: ts, raw } = twitter;
   const mts                                                = moment(ts);
   const screenName                                         = screenNames[username];

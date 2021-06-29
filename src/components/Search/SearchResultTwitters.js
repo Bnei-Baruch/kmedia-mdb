@@ -46,6 +46,7 @@ class SearchResultTwitters extends SearchResultBase {
     if (pageNo < 0 || this.state.pageSize * pageNo >= this.props.tweetIds.length) {
       return;
     }
+
     this.setState({ pageNo });
     this.askForData(pageNo);
   };

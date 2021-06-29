@@ -6,9 +6,11 @@ export const PlayerStartEnum = {
     if (query.autoPlay === '0') {
       return PlayerStartEnum.Stop;
     }
+
     if (query.autoPlay === '1') {
       return PlayerStartEnum.Start;
     }
+
     return PlayerStartEnum.UseParentLogic;
   }
 };

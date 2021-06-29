@@ -61,6 +61,7 @@ class ButtonDayPicker extends Component {
         locale: getLanguageLocaleWORegion(props.language),
       };
     }
+
     return null;
   }
 
@@ -101,6 +102,7 @@ class ButtonDayPicker extends Component {
       this.nativeDateInput.click();
       return;
     }
+
     this.nativeDateInput.focus();
   };
 
@@ -146,6 +148,7 @@ class ButtonDayPicker extends Component {
     if (date > today().add(1, 'days').toDate()) {
       return;
     }
+
     const { onDayChange } = this.props;
     const { locale }      = this.state;
     this.setState({ stringValue: ButtonDayPicker.formatDateValue(date, locale) });

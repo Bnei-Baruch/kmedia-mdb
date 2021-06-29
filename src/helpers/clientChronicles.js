@@ -27,6 +27,7 @@ const SUBFLOWS = new Map(Object.entries(FLOWS.reduce((acc, flow) => {
     if (!(subflow in acc)) {
       acc[subflow] = [];
     }
+
     if (!acc[subflow].includes(flow.start)) {
       acc[subflow].push(flow.start);
     }
@@ -43,10 +44,12 @@ export default class ClientChronicles {
       this.append = noop;
       return;
     }
+
     const { localStorage } = window;
     if (localStorage.getItem('user_id') === null) {
       localStorage.setItem('user_id', `local:${ulid()}`);
     }
+
     this.userId = localStorage.getItem('user_id');
 
     this.namespace = 'archive';
@@ -80,6 +83,7 @@ export default class ClientChronicles {
         // Sync is false here because it will be sent together with user-inactive append.
         this.appendPage('leave', /* sync= */ false);
       }
+
       this.append('user-inactive', { activities: Array.from(this.sessionActivities) }, /* sync= */ true);
       store.dispatch(actions.userInactive());
     }, true);
@@ -93,6 +97,7 @@ export default class ClientChronicles {
         } else {
           this.lastActivityTimestampMs = Date.now();
         }
+
         this.sessionActivities.add(eventName);
       }, true);
     });
@@ -105,9 +110,11 @@ export default class ClientChronicles {
         if (this.currentPathname) {
           this.appendPage('leave');
         }
+
         this.currentPathname = historyEvent.pathname;
         this.appendPage('enter');
       }
+
       if (window.location.href !== this.prevHref) {
         this.prevHref = window.location.href;
       }
@@ -146,6 +153,7 @@ export default class ClientChronicles {
         prefix = '';
       }
     }
+
     this.append(`${prefix}page-${suffix}`, data, sync);
   }
 
@@ -154,6 +162,7 @@ export default class ClientChronicles {
     if (reinit || sessionStorage.getItem('session_id') === null) {
       sessionStorage.setItem('session_id', `local:${ulid()}`);
     }
+
     this.sessionId = sessionStorage.getItem('session_id');
 
     // Maps entry types to the last timestamp they happened. This is required to properly
@@ -170,6 +179,7 @@ export default class ClientChronicles {
       if (timestamp > max.timestamp) {
         return { eventType, timestamp };
       }
+
       return max;
     }, { eventType: '', timestamp: this.firstActivityTimestampMs });
   }

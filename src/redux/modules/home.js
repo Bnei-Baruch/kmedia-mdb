@@ -104,6 +104,7 @@ const onFetchBannerSuccess = (draft, payload) => {
     onFetchBannerFailure(draft, payload);
     return;
   }
+
   draft.banner.wip  = false;
   draft.banner.err  = null;
   draft.banner.data = payload;

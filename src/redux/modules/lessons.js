@@ -98,6 +98,7 @@ const onSSRPrepare = draft => {
   if (draft.errors.lectures) {
     draft.errors.lectures = draft.errors.lectures.toString();
   }
+
   if (draft.errors.series) {
     draft.errors.series = draft.errors.series.toString();
   }
@@ -263,6 +264,7 @@ const addToSourcesTree = (acc, path, series) => {
     dir.name = name;
     dir.type = type;
   }
+
   // mv series path.children
   dir.children = dir.children || [];
   dir.children.push(series);
