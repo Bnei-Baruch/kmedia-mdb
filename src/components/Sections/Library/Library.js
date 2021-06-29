@@ -22,7 +22,7 @@ import WipErr from '../../shared/WipErr/WipErr';
 import ShareBar from '../../shared/ShareSelected';
 import { DeviceInfoContext, SessionInfoContext } from '../../../helpers/app-contexts';
 
-export const checkRabashGroupArticles = (source) => {
+export const checkRabashGroupArticles = source => {
   if (/^gr-/.test(source)) { // Rabash Group Articles
     const result = /^gr-(.+)/.exec(source);
     return result[1];
@@ -78,7 +78,7 @@ const Library = ({
     setSearchUrl(url);
   };
 
-  const handleOnMouseUp = (e) => {
+  const handleOnMouseUp = e => {
     if (isMobileDevice || !isShareTextEnabled) {
       return false;
     }
@@ -87,7 +87,7 @@ const Library = ({
     return false;
   };
 
-  const handleOnMouseDown = (e) => {
+  const handleOnMouseDown = e => {
     if (isMobileDevice || !isShareTextEnabled) {
       return false;
     }

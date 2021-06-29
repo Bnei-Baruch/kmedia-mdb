@@ -154,7 +154,7 @@ class Transcription extends Component {
     }
   }
 
-  loadFile = (selectedFile) => {
+  loadFile = selectedFile => {
     if (selectedFile && selectedFile.id) {
       const { doc2htmlById, onContentChange } = this.props;
       const { data }                          = doc2htmlById[selectedFile.id] || {};
@@ -199,7 +199,7 @@ class Transcription extends Component {
     </select>;
   }
 
-  handleOnMouseUp = (e) => {
+  handleOnMouseUp = e => {
     if (this.context.isMobileDevice || !this.props.enableShareText.isShareTextEnabled) {
       return false;
     }
@@ -208,7 +208,7 @@ class Transcription extends Component {
     return false;
   };
 
-  handleOnMouseDown = (e) => {
+  handleOnMouseDown = e => {
     if (this.context.isMobileDevice || !this.props.enableShareText.isShareTextEnabled) {
       return false;
     }
@@ -242,7 +242,7 @@ class Transcription extends Component {
     this.setState({ searchUrl, searchText });
   };
 
-  prepareContent = (data) => {
+  prepareContent = data => {
     const { textFiles, selectedFile, language } = this.state;
     const direction                             = getLanguageDirection(language);
     const { srchstart, srchend, highlightAll }  = getQuery(this.props.location);

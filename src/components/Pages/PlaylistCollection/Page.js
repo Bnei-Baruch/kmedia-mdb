@@ -132,7 +132,7 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
   let recommendUnit = unit;
   const isUnitPrep  = collection?.ccuNames?.[unit?.id] === '0';
   if (isUnitPrep && Array.isArray(playlist?.items)) {
-    const indexOfUnit = playlist.items.findIndex((item) => item?.unit?.id === unit.id);
+    const indexOfUnit = playlist.items.findIndex(item => item?.unit?.id === unit.id);
     if (indexOfUnit !== -1 && indexOfUnit + 1 < playlist.items.length) {
       recommendUnit = playlist.items[indexOfUnit + 1].unit;
     }

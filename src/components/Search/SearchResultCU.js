@@ -12,7 +12,7 @@ class SearchResultCU extends SearchResultBase {
     cu: shapes.ContentUnit,
   };
 
-  renderSnippet = (highlight) => {
+  renderSnippet = highlight => {
     const content     = this.snippetFromHighlightWithLink(highlight);
     const description = this.snippetFromHighlight(highlight, ['description', 'description_language']);
 

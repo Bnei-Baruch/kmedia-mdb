@@ -137,7 +137,7 @@ class SearchResultBase extends Component {
     .filter(unit => unit.content_type === CT_KITEI_MAKOR)
     .map(unit => unit.files.filter(file => file.language === contentLanguage && [MT_AUDIO, MT_TEXT].includes(file.type)))
     .reduce((acc, files) => {
-      files.forEach((file) => acc.push(file));
+      files.forEach(file => acc.push(file));
       return acc;
     }, []);
 
@@ -285,7 +285,7 @@ class SearchResultBase extends Component {
     return <span dangerouslySetInnerHTML={{ __html }} />;
   };
 
-  clearStringForLink = (str) => str.replace(/(\r?\n|\r){1,}/g, ' ').replace(/<.+?>/gi, '');
+  clearStringForLink = str => str.replace(/(\r?\n|\r){1,}/g, ' ').replace(/<.+?>/gi, '');
 
   highlightWrapToLink = (__html, index, pathname, search, logLinkParams) => {
     const searchArr = this.clearStringForLink(__html).split(' ');
@@ -328,7 +328,7 @@ class SearchResultBase extends Component {
     };
   };
 
-  getFilterById = (index) => {
+  getFilterById = index => {
     const { getTagById, getSourceById } = this.props;
     switch (index) {
       case SEARCH_INTENT_INDEX_TOPIC:
@@ -341,7 +341,7 @@ class SearchResultBase extends Component {
     }
   };
 
-  getMediaLanguage = (filters) => {
+  getMediaLanguage = filters => {
     if (!filters) {
       return null;
     }
@@ -355,7 +355,7 @@ class SearchResultBase extends Component {
     return mediaLanguage;
   };
 
-  renderDebug = (name) => {
+  renderDebug = name => {
     const { location, hit }                            = this.props;
     const { _explanation: explanation, _score: score } = hit;
 
@@ -370,7 +370,7 @@ class SearchResultBase extends Component {
     );
   };
 
-  fileDuration = (files) => {
+  fileDuration = files => {
     const fileWithDuration = files ? files.find(f => f.type === 'video' || f.type === 'audio') : null;
     if (!fileWithDuration) {
       return null;

@@ -91,7 +91,7 @@ export class OmniBox extends Component {
     this.setState({ suggestions, query, pathname });
   }
 
-  isEmptyQuery = (query) => {
+  isEmptyQuery = query => {
     const { filters } = this.props;
     const params      = filtersTransformer.toApiParams(filters);
     return isEmpty(query) && isEmpty(params);
@@ -161,7 +161,7 @@ export class OmniBox extends Component {
     this.doSearch(title, prevQuery);
   };
 
-  handleSearchKeyDown = (e) => {
+  handleSearchKeyDown = e => {
     const { updateQuery, query } = this.props;
     const { getSelectedResult }  = this.search;
 
@@ -208,7 +208,7 @@ export class OmniBox extends Component {
 
     return (
       <Search
-        ref={(s) => {
+        ref={s => {
           this.search = s;
         }}
         fluid

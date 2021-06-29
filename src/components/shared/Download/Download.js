@@ -43,7 +43,7 @@ const downloadAsset = (path, mimeType, downloadAllowed, name) => {
         Accept: mimeType
       },
       responseType: 'blob'
-    }).then((response) => {
+    }).then(response => {
       fileDownload(response.data, path, mimeType, name);
     });
   } else {
@@ -51,7 +51,7 @@ const downloadAsset = (path, mimeType, downloadAllowed, name) => {
   }
 };
 
-const Download = (props) => {
+const Download = props => {
   const { children = null, path = null, mimeType, downloadAllowed, filename = path?.split('/').slice(-1)[0] } = props;
   if (path === null || typeof filename === 'undefined') {
     return null;

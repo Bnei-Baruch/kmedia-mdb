@@ -62,7 +62,7 @@ const initialState = {
   getSectionUnits: identity
 };
 
-const buildById = (items) => {
+const buildById = items => {
   const byId = {};
 
   // We BFS the tree, extracting each item by it's ID

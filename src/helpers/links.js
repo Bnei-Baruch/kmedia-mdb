@@ -51,8 +51,8 @@ import {
 export const landingPageSectionLink = (landingPage, filterValues) => {
   const linkParts = [SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_LINK[landingPage]];
   const params    = filterValues &&
-    filterValues.filter((filterValue) => filterValue.name !== 'text')
-      .map((filterValue) => `${filterValue.name}=${filterValue.value}`).join('&');
+    filterValues.filter(filterValue => filterValue.name !== 'text')
+      .map(filterValue => `${filterValue.name}=${filterValue.value}`).join('&');
   if (params) {
     linkParts.push(params);
   }
@@ -177,7 +177,7 @@ export const canonicalLink = (entity, mediaLang) => {
 /* WARNING!!!
    This function MUST be synchronized with the previous one: canonicalLink
  */
-export const canonicalContentType = (entity) => {
+export const canonicalContentType = entity => {
   switch (entity) {
     case 'sources':
       return ['SOURCE'];

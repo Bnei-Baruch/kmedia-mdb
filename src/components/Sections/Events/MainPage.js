@@ -11,7 +11,7 @@ export const tabs = [
   'meals',
 ];
 
-const content = (active) => {
+const content = active => {
   switch (active) {
     case 'conventions':
     case 'holidays':

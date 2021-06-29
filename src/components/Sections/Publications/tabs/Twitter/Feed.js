@@ -14,7 +14,7 @@ const screenNames = {
   laitman_es: 'Michael Laitman',
 };
 
-const getBestVideoVariant = (x) => {
+const getBestVideoVariant = x => {
   const { video_info: { variants } } = x;
   if (isEmpty(variants)) {
     return null;
@@ -57,7 +57,7 @@ const prepare = (raw, highlight) => {
 
   let html   = '';
   let offset = 0;
-  replacements.forEach((x) => {
+  replacements.forEach(x => {
     const { indices: [s, e], entityType } = x;
 
     html += fullText.slice(offset, s);

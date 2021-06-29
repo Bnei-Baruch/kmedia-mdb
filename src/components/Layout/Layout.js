@@ -30,7 +30,7 @@ const RenderHeaderSearch = React.forwardRef(({ t, location }, headerSearchElemen
   </div>
 ));
 
-const shouldShowSearch = (location) => {
+const shouldShowSearch = location => {
   // we don't show the search on home page
   const parts = location.pathname.split('/').filter(x => (x !== ''));
   if (parts.length === 0) {
@@ -100,7 +100,7 @@ class Layout extends Component {
   }
 
   // i.e, main, header of footer.
-  clickOutside = (e) => {
+  clickOutside = e => {
     if (this.isCloseSideBar(e)) {
       this.closeSidebar();
     }
@@ -110,7 +110,7 @@ class Layout extends Component {
     }
   };
 
-  isCloseHeaderSearch = (e) => {
+  isCloseHeaderSearch = e => {
     if (!this.state || !this.state.isShowHeaderSearch || e.target === headerSearchElement) {
       return false;
     }
@@ -123,7 +123,7 @@ class Layout extends Component {
     return !hasTarget;
   };
 
-  isCloseSideBar = (e) => {
+  isCloseSideBar = e => {
     if (!this.state || !this.state.sidebarActive || e.target === this.sidebarElement) {
       return false;
     }
@@ -230,7 +230,7 @@ class Layout extends Component {
         </div>
         <div
           className={classnames('layout__sidebar', { 'is-active': sidebarActive })}
-          ref={(el) => {
+          ref={el => {
             this.sidebarElement = el;
           }}
         >

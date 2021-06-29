@@ -21,13 +21,13 @@ import { selectSuitableLanguage } from './language';
 
 const restorePreferredMediaType = () => localStorage.getItem('@@kmedia_player_media_type') || MT_VIDEO;
 
-const persistPreferredMediaType = (value) => localStorage.setItem('@@kmedia_player_media_type', value);
+const persistPreferredMediaType = value => localStorage.setItem('@@kmedia_player_media_type', value);
 
 const restorePreferredVideoSize = () => localStorage.getItem('@@kmedia_player_video_size') || VS_DEFAULT;
 
-const persistPreferredVideoSize = (value) => localStorage.setItem('@@kmedia_player_video_size', value);
+const persistPreferredVideoSize = value => localStorage.setItem('@@kmedia_player_video_size', value);
 
-const isPlayable = (file) => MediaHelper.IsMp4(file) || MediaHelper.IsMp3(file);
+const isPlayable = file => MediaHelper.IsMp4(file) || MediaHelper.IsMp3(file);
 
 const calcAvailableMediaTypes = (unit, language) => {
   if (!unit || !Array.isArray(unit.files)) {
@@ -43,7 +43,7 @@ const calcAvailableMediaTypes = (unit, language) => {
   }, new Set()));
 };
 
-const calcAvailableLanguages = (unit) => {
+const calcAvailableLanguages = unit => {
   if (!unit || !Array.isArray(unit.files)) {
     return [];
   }
@@ -170,7 +170,7 @@ const playlist = (collection, mediaType, contentLanguage, uiLanguage) => {
   // don't include items without unit
   items = items.filter(item => !!item.unit);
 
-  items.forEach((x) => {
+  items.forEach(x => {
     x.shareUrl = canonicalLink(x.unit);
   });
 
@@ -222,7 +222,7 @@ const setActivePartInQuery = (history, ap) =>
     ap
   }));
 
-const getEmbedFromQuery = (location) => {
+const getEmbedFromQuery = location => {
   const query = getQuery(location);
   return query.embed === '1';
 };

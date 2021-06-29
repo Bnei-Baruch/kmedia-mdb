@@ -35,7 +35,7 @@ class SearchResultCollection extends SearchResultBase {
     );
   };
 
-  handleImageContextRef = (ref) => {
+  handleImageContextRef = ref => {
     if (ref) {
       this.imgRef = ref.children[0];
     }

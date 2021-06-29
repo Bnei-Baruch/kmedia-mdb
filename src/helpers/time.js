@@ -1,7 +1,7 @@
 import moment from 'moment';
 import 'moment-duration-format';
 
-export const formatTime = (current) => {
+export const formatTime = current => {
   if (!current) return '00:00';
 
   const h = Math.floor(current / 3600);
@@ -20,7 +20,7 @@ export const formatTime = (current) => {
 };
 
 
-export const toHumanReadableTime = (current) => {
+export const toHumanReadableTime = current => {
   if (!current) return '0s';
 
   const h = Math.floor(current / 3600);
@@ -35,7 +35,7 @@ export const toHumanReadableTime = (current) => {
   return result;
 };
 
-export const fromHumanReadableTime = (str) => {
+export const fromHumanReadableTime = str => {
   let h = str.match(/(\d+)h/i);
   let m = str.match(/(\d+)m/i);
   let s = str.match(/(\d+)s/i);

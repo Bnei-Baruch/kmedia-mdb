@@ -53,7 +53,7 @@ const initialState = {
   err: null,
 };
 
-const onSetLanguage = (draft) => {
+const onSetLanguage = draft => {
   draft.latestLesson = null;
   draft.latestUnits  = null;
   draft.banner       = {

@@ -29,7 +29,7 @@ const unitsByContentType = list => list.reduce((acc, val) => {
   return acc;
 }, {});
 
-const getComplexCards = (getCard) => {
+const getComplexCards = getCard => {
   //  Switch by created at between:
   //    women lesson unit CT_WOMEN_LESSON,
   //    virtual lesson unit CT_VIRTUAL_LESSON,

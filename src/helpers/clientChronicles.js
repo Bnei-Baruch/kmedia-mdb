@@ -77,7 +77,7 @@ export default class ClientChronicles {
       }
     }, 60000);
 
-    window.addEventListener('beforeunload', (event) => {
+    window.addEventListener('beforeunload', event => {
       this.sessionActivities.add('beforeunload');
       if (this.currentPathname) {
         // Sync is false here because it will be sent together with user-inactive append.
@@ -89,7 +89,7 @@ export default class ClientChronicles {
     }, true);
 
     // Handle events to update activity.
-    ACTIVITY_EVENTS.forEach((eventName) => {
+    ACTIVITY_EVENTS.forEach(eventName => {
       document.addEventListener(eventName, () => {
         if (!this.isUserActive()) {
           // User back from inactive state. This is a new session.
@@ -105,7 +105,7 @@ export default class ClientChronicles {
     this.prevHref = window.location.href;
     this.currentPathname = window.location.pathname;
     this.appendPage('enter');
-    history.listen((historyEvent) => {
+    history.listen(historyEvent => {
       if (historyEvent.pathname !== this.currentPathname) {
         if (this.currentPathname) {
           this.appendPage('leave');
@@ -196,14 +196,14 @@ export default class ClientChronicles {
 
   flushAppends(sync = false) {
     const nowTimestampMs = Date.now();
-    const appends = { append_requests: this.timestampedAppends.map((timestampAppend) => ({ append: timestampAppend.append, offset: timestampAppend.timestamp - nowTimestampMs })) };
+    const appends = { append_requests: this.timestampedAppends.map(timestampAppend => ({ append: timestampAppend.append, offset: timestampAppend.timestamp - nowTimestampMs })) };
     // Clear bulk without checking if post worked or not.
     this.timestampedAppends.length = 0;
     if (sync) {
       (async () => await axios.post(chroniclesUrl('appends'), appends))();
     } else {
       axios.post(chroniclesUrl('appends'), appends)
-        .catch((error) => {
+        .catch(error => {
           console.warn(error);
         });
     }

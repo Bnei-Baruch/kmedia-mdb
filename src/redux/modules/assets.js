@@ -98,7 +98,7 @@ const onSSRPrepare = draft => {
   draft.person.err      = draft.person.err ? draft.person.err.toString() : draft.person.err;
 };
 
-const getActionKey = (type) => {
+const getActionKey = type => {
   switch (type) {
     case UNZIP:
     case UNZIP_SUCCESS:

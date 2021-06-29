@@ -39,7 +39,7 @@ export class Requests {
   static makeParams = params => (
     `${Object.entries(params)
       .filter(([_, v]) => v !== undefined && v !== null)
-      .map((pair) => {
+      .map(pair => {
         const key   = pair[0];
         const value = pair[1];
 
@@ -149,7 +149,7 @@ class Api {
     }
   });
 
-  static recommended = (requestData) => {
+  static recommended = requestData => {
     const config = {
       method: 'post',
       url: `${API_RECOMMENDED}`,

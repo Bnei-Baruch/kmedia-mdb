@@ -15,7 +15,7 @@ import HomePage from './HomePage';
 
 const FETCH_TIMEOUT = 10 * 60 * 1000;// every 10 min
 
-const chooseTwitterByLanguage = (language) => {
+const chooseTwitterByLanguage = language => {
   switch (language) {
     case LANG_HEBREW:
       return { username: 'laitman_co_il' };
@@ -29,7 +29,7 @@ const chooseTwitterByLanguage = (language) => {
   }
 };
 
-const chooseBlogByLanguage = (language) => {
+const chooseBlogByLanguage = language => {
   switch (language) {
     case LANG_HEBREW:
       return { blog: 'laitman-co-il' };

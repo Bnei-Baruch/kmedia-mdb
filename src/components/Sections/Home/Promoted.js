@@ -26,7 +26,7 @@ const ExtLink = ({ to, children }) => (
   <a href={to} target="_blank" rel="noopener noreferrer">{children}</a>
 );
 
-const Promoted = (props) => {
+const Promoted = props => {
   const { banner: { wip, err, data } } = props;
 
   if (err || wip) {

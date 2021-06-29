@@ -98,7 +98,7 @@ class AVPlayer extends Component {
     requestedLanguage: 'en',
   };
 
-  static chooseSource = (props) => {
+  static chooseSource = props => {
     const { item, t } = props;
     if (isEmpty(item.byQuality)) {
       return { error: true, errorReason: t('messages.no-playable-files') };
@@ -382,7 +382,7 @@ class AVPlayer extends Component {
     this.setState({ wasCurrentTime: undefined, firstSeek: false });
   };
 
-  onError = (e) => {
+  onError = e => {
     const { t } = this.props;
     // Show error only on loading of video.
     if (!e.currentTime && !e.isPlaying) {
@@ -424,7 +424,7 @@ class AVPlayer extends Component {
     }
   };
 
-  onPause = (e) => {
+  onPause = e => {
     const { browserName } = this.state;
     const { onPause, onFinish, item, chronicles } = this.props;
     // when we're close to the end regard this as finished
@@ -447,11 +447,11 @@ class AVPlayer extends Component {
     this.setUnMuteButton(false);
   };
 
-  setUnMuteButton = (unMuteButton) => {
+  setUnMuteButton = unMuteButton => {
     this.setState({ unMuteButton });
   };
 
-  onVolumeChange = (volume) => {
+  onVolumeChange = volume => {
     const { persistenceFn } = this.state;
     persistenceFn && persistenceFn(volume);
     this.setUnMuteButton(volume === 0);
@@ -505,7 +505,7 @@ class AVPlayer extends Component {
     onMediaEditModeChange(mode);
   };
 
-  handleTimeUpdate = (timeData) => {
+  handleTimeUpdate = timeData => {
     const { media, onFinish }                                    = this.props;
     const { mode, sliceEnd, sliceStart, firstSeek, browserName } = this.state;
 
@@ -605,7 +605,7 @@ class AVPlayer extends Component {
     this.hideControls();
   };
 
-  handleWrapperMouseMove = (e) => {
+  handleWrapperMouseMove = e => {
     const { controlsVisible } = this.state;
     if (!controlsVisible) {
       this.showControls();
@@ -622,7 +622,7 @@ class AVPlayer extends Component {
     this.hideControlsTimeout();
   };
 
-  handleWrapperKeyDown = (e) => {
+  handleWrapperKeyDown = e => {
     const { media: { isLoading, playPause } } = this.props;
 
     if (e.keyCode === 32) {
@@ -634,7 +634,7 @@ class AVPlayer extends Component {
     }
   };
 
-  handleWrapperRef = (ref) => {
+  handleWrapperRef = ref => {
     if (ref) {
       this.wrapper = ref;
       this.wrapper.addEventListener('keydown', this.handleWrapperKeyDown);
@@ -645,7 +645,7 @@ class AVPlayer extends Component {
     }
   };
 
-  handlePlayerControlsRef = (ref) => {
+  handlePlayerControlsRef = ref => {
     this.playerControls = ref;
     if (this.playerControls) {
       this.controlsRect = ref.getBoundingClientRect();
@@ -668,14 +668,14 @@ class AVPlayer extends Component {
     }
   };
 
-  handleOnScreenKeyDown = (e) => {
+  handleOnScreenKeyDown = e => {
     if (e.keyCode === 32) {
       this.handleOnScreenClick();
       e.preventDefault();
     }
   };
 
-  handleOnScreenRef = (ref) => {
+  handleOnScreenRef = ref => {
     if (ref) {
       this.onScreen = ref;
       this.onScreen.addEventListener('click', this.handleOnScreenClick);
@@ -800,7 +800,7 @@ class AVPlayer extends Component {
 
     return (
       <div
-        ref={(c) => {
+        ref={c => {
           this.mediaElement = c;
         }}
         className={classNames('mediaplayer', { 'media-edit-mode': isEditMode })}
@@ -813,7 +813,7 @@ class AVPlayer extends Component {
         }
         <Player
           playsInline
-          ref={(c) => {
+          ref={c => {
             this.player = c;
             if (c && c.instance) {
               enableInlineVideo(c.instance);

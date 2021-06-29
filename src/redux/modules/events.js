@@ -86,7 +86,7 @@ const makeYearsPredicate = values => x => isEmpty(values)
   );
 
 const makeLocationsPredicate = values => x => isEmpty(values)
-  || values.some((v) => {
+  || values.some(v => {
     const [country, city] = v;
     return country === x.country && (!city || city === x.city);
   });
@@ -103,7 +103,7 @@ const predicateMap = {
 const getFilteredData = (state, type, filtersState, mdbState) => {
   const predicates = filtersState.map(x => predicateMap[x.name](x.values)) || [];
 
-  return (state.eventsByType[type] || []).filter((x) => {
+  return (state.eventsByType[type] || []).filter(x => {
     const collection = mdb.getCollectionById(mdbState, x);
     return predicates.every(p => p(collection));
   });

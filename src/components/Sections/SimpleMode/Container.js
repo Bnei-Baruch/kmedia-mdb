@@ -141,7 +141,7 @@ class SimpleModeContainer extends Component {
   }
 }
 
-export const mapState = (state) => {
+export const mapState = state => {
   const items = { ...selectors.getItems(state.simpleMode) };
 
   return {

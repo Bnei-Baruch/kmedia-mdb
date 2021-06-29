@@ -111,7 +111,7 @@ pageRoute.defaultProps = {
 };
 
 /** Creates a page route */
-const routesCreator = (prefix) => {
+const routesCreator = prefix => {
   const makePageRoute = (path, component, options = {}) => pageRoute(path, component, { prefix, ...options });
 
   return [{

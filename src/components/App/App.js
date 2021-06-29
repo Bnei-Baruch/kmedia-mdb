@@ -12,7 +12,7 @@ import * as shapes from '../shapes';
 import { ChroniclesActions } from '../../helpers/clientChronicles';
 import { ClientChroniclesContext, DeviceInfoContext, SessionInfoContext } from '../../helpers/app-contexts';
 
-const App = (props) => {
+const App = props => {
   const [isShareTextEnabled, setEnableShareText]                                                  = useState(true);
   const { i18n, store, history, initialI18nStore, initialLanguage, deviceInfo, clientChronicles } = props;
 

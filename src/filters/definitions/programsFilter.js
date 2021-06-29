@@ -8,7 +8,7 @@ const programsFilter = {
   queryKey: 'program',
   valueToQuery: value => value.join('_'),
   queryToValue: value => value.split('_'),
-  valueToApiParam: (value) => {
+  valueToApiParam: value => {
     const [genre, program] = value;
     return pickBy({ genre, program }, x => !!x);
   },

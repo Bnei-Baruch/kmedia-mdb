@@ -36,7 +36,7 @@ export const CT_COLLECTIONS = [
   CT_LESSONS_SERIES,
 ];
 
-export const IsCollectionContentType = (contentType) => CT_COLLECTIONS.includes(contentType);
+export const IsCollectionContentType = contentType => CT_COLLECTIONS.includes(contentType);
 
 // Content Unit Types
 export const CT_LESSON_PART           = 'LESSON_PART';

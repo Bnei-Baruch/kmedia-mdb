@@ -10,7 +10,7 @@ export default function multiLanguageRouterMidrdleware(history) {
   const routerMiddleware = createRouterMiddleware(history);
   const appliedRouterMiddleware = routerMiddleware(history);
 
-  return () => next => (action) => {
+  return () => next => action => {
     if (action.type !== CALL_HISTORY_METHOD) {
       return next(action);
     }

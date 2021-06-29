@@ -52,7 +52,7 @@ import { tabs as lessonsTabs } from './components/Sections/Lessons/MainPage';
 import { tabs as programsTabs } from './components/Sections/Programs/MainPage';
 import { tabs as pulicationsTabs } from './components/Sections/Publications/MainPage';
 
-export const home = (store) => {
+export const home = store => {
   store.dispatch(homeActions.fetchData(true));
   return Promise.resolve(null);
 };
@@ -138,7 +138,7 @@ export const playlistCollectionPage = (store, match) => {
 
       const c = mdbSelectors.getCollectionById(store.getState().mdb, cID);
       if (typeof c !== 'undefined') {
-        c.cuIDs.forEach((cuID) => {
+        c.cuIDs.forEach(cuID => {
           store.dispatch(mdbActions.fetchUnit(cuID));
         });
       }
@@ -155,7 +155,7 @@ export const latestLesson = store => (
       const state = store.getState();
       const cID   = mdbSelectors.getLastLessonId(state.mdb);
       const c     = mdbSelectors.getCollectionById(state.mdb, cID);
-      c.cuIDs.forEach((cuID) => {
+      c.cuIDs.forEach(cuID => {
         store.dispatch(mdbActions.fetchUnit(cuID));
       });
     })

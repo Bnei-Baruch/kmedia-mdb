@@ -15,7 +15,7 @@ export const tabs = [
   'series',
 ];
 
-const content = (active) => {
+const content = active => {
   let content = null;
   switch (active) {
     case 'daily':

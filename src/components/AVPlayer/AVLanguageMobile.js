@@ -20,7 +20,7 @@ const AVLanguageMobile = (
   const [openPopup, setOpenPopup]                         = useState(false);
   const [langSelectRef, setLangSelectRef]                 = useState();
 
-  const handleChange = (e) => onSelect(e, e.currentTarget.value);
+  const handleChange = e => onSelect(e, e.currentTarget.value);
 
   useEffect(() => {
     const requested = lastRequestedLanguage ? lastRequestedLanguage : requestedLanguage;

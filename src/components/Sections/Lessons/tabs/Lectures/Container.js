@@ -49,7 +49,7 @@ const mapTabToCt = new Map([
   // ['children', [CT_CHILDREN_LESSON, null]],
 ]);
 
-const Container = (props) => {
+const Container = props => {
   const { tab }          = props;
   const extraFetchParams = mapTabToCt.get(tab) || { content_type: CT_VIRTUAL_LESSON, };
   return (

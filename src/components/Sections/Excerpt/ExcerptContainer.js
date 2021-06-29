@@ -17,12 +17,12 @@ const renderer = ({ minutes, seconds, completed }) => {
 
 };
 
-const chooseExcerpt = (language) => {
+const chooseExcerpt = language => {
   const items = excerpts[language] || excerpts[DEFAULT_LANGUAGE];
   return items[Math.floor(Math.random() * items.length)];
 };
 
-const calculateTimeLeft = (finalDate) => {
+const calculateTimeLeft = finalDate => {
   const difference = (finalDate - +new Date()) / 1000;
 
   return {

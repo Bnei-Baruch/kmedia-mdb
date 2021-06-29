@@ -75,7 +75,7 @@ class SearchResultIntent extends SearchResultBase {
 
   onScrollLeft = () => this.onScrollChange(this.state.pageNo - 1);
 
-  onScrollChange = (pageNo) => {
+  onScrollChange = pageNo => {
     if (pageNo < 0 || this.state.pageSize * pageNo >= this.props.unitCounter) {
       return;
     }
@@ -83,7 +83,7 @@ class SearchResultIntent extends SearchResultBase {
     this.setState({ pageNo });
   };
 
-  renderItem = (cu) => {
+  renderItem = cu => {
     const { t, queryResult, hit, rank }                                = this.props;
     const { _index: index, _type: type, _source: { mdb_uid: mdbUid } } = hit;
     const { search_result: { searchId } }                              = queryResult;
