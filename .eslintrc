@@ -30,7 +30,10 @@
   "rules": {
     "arrow-body-style": "warn",
     "array-bracket-spacing": "warn",
-    "arrow-parens": ["warn", "as-needed"],
+    "arrow-parens": [
+      "warn",
+      "as-needed"
+    ],
     "arrow-spacing": "warn",
     "brace-style": "warn",
     "comma-spacing": "warn",
@@ -52,13 +55,19 @@
       "error",
       "unix"
     ],
-    "lines-between-class-members": ["warn", "always", { "exceptAfterSingleLine": true }],
+    "lines-between-class-members": [
+      "warn",
+      "always",
+      {
+        "exceptAfterSingleLine": true
+      }
+    ],
     "object-curly-spacing": [
       "warn",
       "always"
     ],
-    "no-await-in-loop":"warn",
-    "no-else-return":"warn",
+    "no-await-in-loop": "warn",
+    "no-else-return": "warn",
     "no-empty": "warn",
     "no-lonely-if": "warn",
     "no-multiple-empty-lines": "warn",
@@ -66,10 +75,14 @@
     "no-unneeded-ternary": "warn",
     "no-unreachable": "warn",
     "no-unused-vars": "warn",
-    "object-shorthand":"warn",
+    "object-shorthand": "warn",
     "padding-line-between-statements": [
       "warn",
-      { "blankLine": "always", "prev": "block-like", "next": "*" }
+      {
+        "blankLine": "always",
+        "prev": "multiline-block-like",
+        "next": "*"
+      }
     ],
     "prefer-arrow-callback": "warn",
     "prefer-const": "warn",
@@ -85,7 +98,7 @@
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
     "rest-spread-spacing": "warn",
-    "semi-style":"warn",
+    "semi-style": "warn",
     "space-before-blocks": "warn",
     "space-in-parens": "warn",
     "template-curly-spacing": [
