@@ -17,7 +17,6 @@ import * as shapes from '../../../../shapes';
 import AVMobileCheck from '../../../../AVPlayer/AVMobileCheck';
 import useRecommendedUnits from '../Recommended/Main/UseRecommendedUnits';
 
-
 const AVBox = ({ unit, t }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const history = useHistory();
@@ -49,11 +48,10 @@ const AVBox = ({ unit, t }) => {
     }
   }, [history, playableItem]);
 
-
-  const recommendedUnits = useRecommendedUnits();
+  const recommendedUnits = useRecommendedUnits(['default']);
 
   const onFinish = () => {
-    const nextRecommendedUnit = recommendedUnits?.length > 0 ? recommendedUnits[0] : null;
+    const nextRecommendedUnit = recommendedUnits['default'].length > 0 ? recommendedUnits[0] : null;
 
     if (nextRecommendedUnit) {
       const link = canonicalLink(nextRecommendedUnit);

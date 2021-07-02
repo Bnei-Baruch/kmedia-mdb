@@ -1,6 +1,7 @@
 ARG cdn_url="https://cdn.kabbalahmedia.info/"
 ARG public_base="https://kabbalahmedia.info/"
 ARG feed_api_url="https://kabbalahmedia.info/feed_api/recommend"
+ARG models_api_url="https://kabbalahmedia.info/feed_api/"
 ARG chronicles_url="https://chronicles.kli.one/"
 
 FROM bneibaruch/kmedia_base:latest as build
@@ -23,6 +24,7 @@ ENV REACT_APP_ENV=production \
     REACT_APP_CDN_URL=${cdn_url} \
     REACT_APP_PUBLIC_BASE=${public_base} \
     REACT_APP_RECOMMENDED=${feed_api_url} \
+    REACT_APP_MODELS=${models_api_url} \
     REACT_APP_CHRONICLES_BACKEND=${chronicles_url}
 
 COPY . .
@@ -54,6 +56,7 @@ ENV NODE_ENV=production \
     REACT_APP_CDN_URL=${cdn_url} \
     REACT_APP_PUBLIC_BASE=${public_base} \
     REACT_APP_RECOMMENDED=${feed_api_url} \
+    REACT_APP_MODELS=${models_api_url} \
     REACT_APP_CHRONICLES_BACKEND=${chronicles_url}
 
 EXPOSE 3001

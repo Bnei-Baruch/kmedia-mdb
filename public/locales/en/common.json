@@ -432,7 +432,16 @@
       "header": "Selected Highlights"
     },
     "recommended": {
-      "header": "Recommended"
+      "header": "Recommended for you",
+      "same-topic": "Same Topic",
+      "any-topic": "Any Topic",
+      "popular": "Popular",
+      "watching-now": "Watching now",
+      "views": "views",
+      "last": "Latest",
+      "next": "Next chapters",
+      "prev": "Prev chapters",
+      "rand": "Random content"
     },
     "playlist": {
       "header": "Up Next"
