@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { Media } from 'react-media-player';
@@ -58,7 +58,7 @@ const AVPlaylistPlayer = ({ items, selected, onSelectedChange, onLanguageChange,
 
   return (
     <div
-      className={classNames('avbox__player', {
+      className={clsx('avbox__player', {
         'avbox__player--is-audio': isAudio,
         'avbox__player--is-audio--edit-mode': isAudio && mediaEditMode === 2,
         'avbox__player--is-audio--normal-mode': isAudio && mediaEditMode === 0,

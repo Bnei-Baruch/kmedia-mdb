@@ -21,7 +21,7 @@ import AVPlaybackRateMobile from './AVPlaybackRateMobile';
 import AVSpinner from './AVSpinner';
 import playerHelper from '../../helpers/player';
 import { PlayerStartEnum } from './playerStartEnum';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { DeviceInfoContext } from '../../helpers/app-contexts';
 import { areEqual } from '../../helpers/utils';
 
@@ -452,7 +452,7 @@ class AVPlayerMobile extends Component {
   renderUnmuteButton(isRtl, embed, t) {
     return <Button
       icon="volume off"
-      className={classNames('', {
+      className={clsx('', {
         'mediaplayer__embedUnmuteButton': embed,
         'mediaplayer__unmuteButton': !embed,
         'rtl': isRtl

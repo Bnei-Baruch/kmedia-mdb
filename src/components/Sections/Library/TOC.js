@@ -8,7 +8,7 @@ import { BS_SHAMATI, RH_ARTICLES, RH_RECORDS, } from '../../../helpers/consts';
 import { getEscapedRegExp, isEmpty } from '../../../helpers/utils';
 import { isLanguageRtl } from '../../../helpers/i18n-utils';
 import { Reference } from '../../shapes';
-import classNames from 'classnames';
+import clsx from 'clsx';
 
 const titleKey = id => `title-${id}`;
 
@@ -316,7 +316,7 @@ class TOC extends Component {
     return (
       <Sticky
         context={contextRef}
-        className={classNames({
+        className={clsx({
           'source__toc': true,
           'mobile-hidden': !active,
           'tablet-hidden': !active,
