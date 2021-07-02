@@ -2,13 +2,14 @@ import { all, call, put, takeLatest, select } from 'redux-saga/effects';
 
 import Api from '../helpers/Api';
 import { IsCollectionContentType } from '../helpers/consts';
+import { AB_RECOMMEND_NEW } from '../helpers/ab-testing';
 import { actions, types, selectors as recommended } from '../redux/modules/recommended';
 import { actions as mdbActions, selectors as mdbSelectors } from '../redux/modules/mdb';
 import { selectors as settings } from '../redux/modules/settings';
 
 
 export function* fetchRecommended(action) {
-  const { id, size, skip } = action.payload;
+  const { id, size, skip, variant } = action.payload;
   try {
     const language = yield select(state => settings.getContentLanguage(state.settings));
     const skipUids = yield select(state => recommended.getSkipUids(state.recommended));
@@ -19,22 +20,61 @@ export function* fetchRecommended(action) {
       }
     });
 
-    const requestData = Api.recommendedRequestData({ uid: id, languages: [language], skipUids, size })
-    const { data } = yield call(Api.recommended, requestData);
-    const recommendedItems = data.feed;
+    const specs = [{name: 'Default'}];
+    if (variant === AB_RECOMMEND_NEW) {
+      specs.push({name: "DataContentUnitsSuggester", order_selector: 4});
+      specs.push({name: "DataContentUnitsSuggester", order_selector: 0});
+      specs.push({name: "RoundRobinSuggester", "specs": [
+        {name: "DataContentUnitsSuggester", filters: [{filter_selector: 5}, {filter_selector: 0, args: ["CLIP"]}]},
+        {name: "DataContentUnitsSuggester", filters: [{filter_selector: 5}, {filter_selector: 0, args: ["VIDEO_PROGRAM_CHAPTER"]}]},
+      ]});
+    }
+    const requestData = Api.recommendedRequestData({uid: id, languages: [language], skipUids, size, specs});
+    const {data} = yield call(Api.recommended, requestData);
 
-    if (Array.isArray(recommendedItems) && recommendedItems.length > 0) {
-      yield all([
-        fetchMissingUnits(recommendedItems.filter(item => !IsCollectionContentType(item.content_type))),
-        fetchMissingCollections(recommendedItems.filter(item => IsCollectionContentType(item.content_type))),
-      ]);
+    if (Array.isArray(data.feeds) && data.feeds.length > 0) {
+      const fetchList = [
+        fetchMissingUnits(data.feeds.flat().filter(item => item && !IsCollectionContentType(item.content_type))),
+        fetchMissingCollections(data.feeds.flat().filter(item => item && IsCollectionContentType(item.content_type))),
+      ];
+      if (variant === AB_RECOMMEND_NEW) {
+        for (let i = 1; i < data.feeds.length; ++i) {
+          if (Array.isArray(data.feeds[i]) && data.feeds[i].length > 0) {
+            fetchList.push(fetchViews(data.feeds[i]));
+          }
+        }
+      }
+      yield all(fetchList);
     }
 
-    yield put(actions.fetchRecommendedSuccess({ recommendedItems, requestData }));
+    const keysLength = Object.keys(data.feeds).length;
+    if ((variant === AB_RECOMMEND_NEW && keysLength !== 4) || (variant !== AB_RECOMMEND_NEW && keysLength !== 1)) {
+      throw `Exppected recommended feeds size to be ${variant === AB_RECOMMEND_NEW ? 2 : 1}`;
+    }
+    const feeds = {'default': data.feeds[0]};
+    if (variant === AB_RECOMMEND_NEW) {
+      feeds['most-viewed'] = data.feeds[1];
+      feeds['new'] = data.feeds[2];
+      feeds['same-tag'] = data.feeds[3];
+    }
+    yield put(actions.fetchRecommendedSuccess({ feeds, requestData }));
   } catch (err) {
     yield put(actions.fetchRecommendedFailure(err));
   }
 }
+
+function* fetchViews(recommendedItems) {
+  const uids = yield select(state => recommendedItems.map((item) => item.uid).filter((uid) => recommended.getViews(uid, state.recommended) === -1));
+  if (uids.length > 0) {
+    const {data} = yield call(Api.views, uids);
+    const views = uids.reduce((acc, uid, i) => {
+      acc[uid] = data.views[i];
+      return acc;
+    }, {});
+    yield put(actions.receiveViews(views));
+  }
+}
+
 
 function* fetchMissingUnits(recommendedItems) {
   const missingUnitIds = yield select(state => recommendedItems

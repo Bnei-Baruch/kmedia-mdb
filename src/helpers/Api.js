@@ -6,12 +6,14 @@ const CMS_BACKEND             = process.env.REACT_APP_CMS_BACKEND || `${API_BACK
 const IMAGINARY_URL           = process.env.REACT_APP_IMAGINARY_URL;
 const IMAGINARY_INTERNAL_HOST = process.env.REACT_APP_IMAGINARY_INTERNAL_HOST || 'localhost';
 const API_RECOMMENDED         = process.env.REACT_APP_RECOMMENDED;
+const API_MODELS              = process.env.REACT_APP_MODELS;
 const CHRONICLES_BACKEND      = process.env.REACT_APP_CHRONICLES_BACKEND;
 
 export const backendUrl    = path => `${API_BACKEND}${path}`;
 export const assetUrl      = path => `${ASSETS_BACKEND}${path}`;
 export const cmsUrl        = path => `${CMS_BACKEND}${path}`;
 export const imaginaryUrl  = path => `${IMAGINARY_URL}${path}`;
+export const modelsUrl     = path => `${API_MODELS}${path}`;
 export const chroniclesUrl = path => `${CHRONICLES_BACKEND}${path}`;
 export const chroniclesBackendEnabled = CHRONICLES_BACKEND !== undefined;
 
@@ -126,7 +128,7 @@ class Api {
     Requests.get(`simple?${Requests.makeParams({ language, start_date, end_date })}`)
   );
 
-  static recommendedRequestData = ({ uid, languages, skipUids: skip_uids, size: more_items }) => ({
+  static recommendedRequestData = ({ uid, languages, skipUids: skip_uids, size: more_items, spec, specs}) => ({
     more_items,
     "current_feed": [],
     "options": {
@@ -135,6 +137,8 @@ class Api {
       },
       languages,
       skip_uids,
+      spec,
+      specs,
     }
   });
 
@@ -144,6 +148,17 @@ class Api {
       url: `${API_RECOMMENDED}`,
       headers: { 'Content-Type': 'application/json' },
       data: JSON.stringify(requestData),
+    };
+
+    return axios(config);
+  };
+
+  static views = (uids) => {
+    const config = {
+      method: 'post',
+      url: modelsUrl('views'),
+      headers: { 'Content-Type': 'application/json' },
+      data: JSON.stringify({uids}),
     };
 
     return axios(config);

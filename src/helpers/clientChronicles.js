@@ -117,9 +117,11 @@ export default class ClientChronicles {
   // Handles custom redux actions to append events on them.
   onAction(action) {
     if (action.type === recommendedTypes.FETCH_RECOMMENDED_SUCCESS) {
-      const { recommendedItems, requestData } = action.payload;
-      if (Array.isArray(recommendedItems)) {
-        this.append('recommend', { request_data: requestData, recommendations: recommendedItems.map(({ uid, content_type }) => ({ uid, content_type })) });
+      const {feeds, requestData} = action.payload;
+      if (feeds && Object.keys(feeds).length) {
+        const recommendations = Object.fromEntries(Object.entries(action.payload.feeds).map(
+          ([key, items]) => [key, items.map(({ uid, content_type }) => ({ uid, content_type }))]));
+        this.append('recommend', {request_data: requestData, recommendations});
       }
     }
   }

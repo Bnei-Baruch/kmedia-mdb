@@ -19,6 +19,7 @@ ENV REACT_APP_ENV=production \
     REACT_APP_CDN_URL=${cdn_url} \
     REACT_APP_PUBLIC_BASE=${public_base} \
     REACT_APP_RECOMMENDED=https://kabbalahmedia.info/feed_api/recommend \
+    REACT_APP_MODELS=https://kabbalahmedia.info/feed_api/ \
     REACT_APP_CHRONICLES_BACKEND=https://chronicles.kli.one/
 
 COPY . .
@@ -48,6 +49,7 @@ ENV NODE_ENV=production \
     REACT_APP_CDN_URL=${cdn_url} \
     REACT_APP_PUBLIC_BASE=${public_base} \
     REACT_APP_RECOMMENDED=https://kabbalahmedia.info/feed_api/recommend \
+    REACT_APP_MODELS=https://kabbalahmedia.info/feed_api/models \
     REACT_APP_CHRONICLES_BACKEND=https://chronicles.kli.one/
 
 EXPOSE 3001

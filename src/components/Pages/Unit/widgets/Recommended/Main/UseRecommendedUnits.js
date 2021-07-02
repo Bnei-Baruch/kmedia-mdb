@@ -3,8 +3,8 @@ import { selectors } from '../../../../../../redux/modules/recommended';
 import { selectors as mdbSelectors } from '../../../../../../redux/modules/mdb';
 
 // A custom hook to get loaded recommended
-const useRecommendedUnits = () => {
-  const recommendedItems = useSelector(state => selectors.getRecommendedItems(state.recommended)) || [];
+const useRecommendedUnits = (feedName = 'default') => {
+  const recommendedItems = useSelector(state => selectors.getRecommendedItems(feedName, state.recommended)) || [];
 
   const recommendedUnits = useSelector(state => recommendedItems
     .map(item => mdbSelectors.getDenormContentUnit(state.mdb, item.uid) || mdbSelectors.getDenormCollection(state.mdb, item.uid))

@@ -432,7 +432,10 @@
       "header": "Selected Highlights"
     },
     "recommended": {
-      "header": "Recommended"
+      "header": "Recommended for you",
+      "most-viewed": "Most Viewed",
+      "new": "New",
+      "same-tag": "Same Topic"
     },
     "playlist": {
       "header": "Up Next"

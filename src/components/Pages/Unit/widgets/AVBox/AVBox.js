@@ -11,15 +11,16 @@ import { selectors as settings } from '../../../../../redux/modules/settings';
 import { MT_AUDIO } from '../../../../../helpers/consts';
 import playerHelper from '../../../../../helpers/player';
 import { isEmpty } from '../../../../../helpers/utils';
-import { DeviceInfoContext } from '../../../../../helpers/app-contexts';
+import { AbTestingContext, DeviceInfoContext } from '../../../../../helpers/app-contexts';
 import { canonicalLink } from '../../../../../helpers/links';
 import * as shapes from '../../../../shapes';
 import AVMobileCheck from '../../../../AVPlayer/AVMobileCheck';
+import { AB_RECOMMEND_EXPERIMENT, AB_RECOMMEND_NEW } from '../../../../../helpers/ab-testing';
 import useRecommendedUnits from '../Recommended/Main/UseRecommendedUnits';
-
 
 const AVBox = ({ unit, t }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
+  const abTesting = useContext(AbTestingContext);
   const history = useHistory();
   const location = useLocation();
 
@@ -49,8 +50,8 @@ const AVBox = ({ unit, t }) => {
     }
   }, [history, playableItem]);
 
-
-  const recommendedUnits = useRecommendedUnits();
+  const activeVariant = abTesting && abTesting.getVariant(AB_RECOMMEND_EXPERIMENT) || '';
+  const recommendedUnits = useRecommendedUnits(activeVariant === AB_RECOMMEND_NEW ? 'popular' : 'default');
 
   const onFinish = () => {
     const nextRecommendedUnit = recommendedUnits?.length > 0 ? recommendedUnits[0] : null;
