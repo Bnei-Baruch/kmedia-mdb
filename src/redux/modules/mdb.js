@@ -446,8 +446,6 @@ const getDenormCollection = (state, id) => {
     c = { ...c };
 
     c.content_units = c.cuIDs.map(x => state.cuById[x]).filter(x => !!x);
-  } else {
-    c.content_units = [];
   }
 
   return c;
