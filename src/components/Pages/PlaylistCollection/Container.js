@@ -15,7 +15,7 @@ const PlaylistCollectionContainer = ({ cId, t, cuId }) => {
   const wipMap      = useSelector(state => selectors.getWip(state.mdb));
   const errorMap    = useSelector(state => selectors.getErrors(state.mdb));
   const cWindow     = useSelector(state => selectors.getWindow(state.mdb));
-  const collections = useSelector(state => cWindow?.data?.map(id => selectors.getDenormCollection(state.mdb, id)).fiter(c => !!c));
+  const collections = useSelector(state => cWindow?.data?.map(id => selectors.getDenormCollection(state.mdb, id))?.fiter(c => !!c));
 
   const [nextLink, setNextLink] = useState(null);
   const [prevLink, setPrevLink] = useState(null);

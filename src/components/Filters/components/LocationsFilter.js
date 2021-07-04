@@ -60,7 +60,7 @@ const buildNode = (id, count, t) => ({
 
 const LocationsFilter = props => {
   const cIDs           = useSelector(state => selectors.getEventsByType(state.events)[CT_CONGRESS]);
-  const congressEvents = useSelector(state => (cIDs || []).map(x => mdb.getDenormCollection(state.mdb, x)).fiter(c => !!c));
+  const congressEvents = useSelector(state => (cIDs || []).map(x => mdb.getDenormCollection(state.mdb, x))?.fiter(c => !!c));
 
   const { t } = props;
   const tree  = useMemo(() => getTree(congressEvents, t), [congressEvents, t]);
