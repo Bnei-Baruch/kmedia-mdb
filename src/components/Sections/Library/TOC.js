@@ -12,15 +12,15 @@ import classNames from 'classnames';
 
 const titleKey = id => `title-${id}`;
 
-const hebrew = (number) => {
+const hebrew = number => {
   let n = 1 * number;
   switch (n) {
-  case 16:
-    return 'טז';
-  case 15:
-    return 'טו';
-  default:
-    break;
+    case 16:
+      return 'טז';
+    case 15:
+      return 'טו';
+    default:
+      break;
   }
 
   let ret = '';
@@ -28,34 +28,40 @@ const hebrew = (number) => {
     ret += 'ת';
     n -= 400;
   }
+
   if (n >= 300) {
     ret += 'ש';
     n -= 300;
   }
+
   if (n >= 200) {
     ret += 'ר';
     n -= 200;
   }
+
   if (n >= 100) {
     ret += 'ק';
     n -= 100;
   }
+
   switch (n) {
-  case 16:
-    ret += 'טז';
-    break;
-  case 15:
-    ret += 'טו';
-    break;
-  default:
-    if (n >= 10) {
-      ret += 'יכלמנסעפצ'.slice((n / 10) - 1)[0];
-      n %= 10;
-    }
-    if (n > 0) {
-      ret += 'אבגדהוזחט'.slice((n % 10) - 1)[0];
-    }
-    break;
+    case 16:
+      ret += 'טז';
+      break;
+    case 15:
+      ret += 'טו';
+      break;
+    default:
+      if (n >= 10) {
+        ret += 'יכלמנסעפצ'.slice((n / 10) - 1)[0];
+        n %= 10;
+      }
+
+      if (n > 0) {
+        ret += 'אבגדהוזחט'.slice((n % 10) - 1)[0];
+      }
+
+      break;
   }
 
   return ret;
@@ -65,17 +71,20 @@ export const getIndex = (node1, node2) => {
   if (!node1 || !node2 || !node1.children) {
     return -1;
   }
+
   return node1.children.findIndex(x => x === node2.id);
 };
 
-const scrollToActive = (activeId) => {
+const scrollToActive = activeId => {
   if (activeId !== undefined) {
     return;
   }
+
   const element = document.getElementById(titleKey(activeId));
   if (element === null) {
     return;
   }
+
   element.scrollIntoView();
   window.scrollTo(0, 0);
 };
@@ -107,6 +116,7 @@ const filterSources = (path, match) => {
       const name = el.leafTitle.replace(reg, '<em class="blue text">$&</em>');
       acc.push({ leafId: el.leafId, leafTitle: name });
     }
+
     return acc;
   }, []);
 };
@@ -146,6 +156,7 @@ class TOC extends Component {
     if (activeId !== stateActiveID) {
       return { activeId };
     }
+
     return null;
   }
 
@@ -168,8 +179,10 @@ class TOC extends Component {
       if (isNaN(stickyOffset)) {
         stickyOffset = 0;
       }
+
       el.style.height = `calc(100vh - ${stickyOffset}px)`;
     }
+
     const { activeId } = this.state;
     scrollToActive(activeId);
   }
@@ -200,20 +213,20 @@ class TOC extends Component {
 
     let leafTitle;
     switch (sourceId) {
-    case BS_SHAMATI:
-      leafTitle = isRTL
-        ? `${hebrew(number)}. ${name}`
-        : `${number}. ${name}`;
-      break;
-    case RH_RECORDS:
-      leafTitle = `${number}. ${name}`;
-      break;
-    case RH_ARTICLES:
-      leafTitle = `${name}. ${number} (${year})`;
-      break;
-    default:
-      leafTitle = name;
-      break;
+      case BS_SHAMATI:
+        leafTitle = isRTL
+          ? `${hebrew(number)}. ${name}`
+          : `${number}. ${name}`;
+        break;
+      case RH_RECORDS:
+        leafTitle = `${number}. ${name}`;
+        break;
+      case RH_ARTICLES:
+        leafTitle = `${name}. ${number} (${year})`;
+        break;
+      default:
+        leafTitle = name;
+        break;
     }
 
     return leafTitle;
@@ -284,7 +297,7 @@ class TOC extends Component {
     this.setState({ activeId: id });
   };
 
-  handleAccordionContext = (ref) => {
+  handleAccordionContext = ref => {
     this.accordionContext = ref;
   };
 

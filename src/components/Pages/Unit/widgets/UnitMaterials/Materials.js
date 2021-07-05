@@ -23,7 +23,7 @@ import { DeviceInfoContext } from "../../../../../helpers/app-contexts";
 import DerivedUnits from './DerivedUnits';
 import Recommended from '../Recommended/Main/Recommended';
 
-const derivedTextUnits = (unit) => {
+const derivedTextUnits = unit => {
   const types    = {};
   const callback = x => {
     types[x.content_type] = (x.files || []).some(f => f.type === MT_TEXT);

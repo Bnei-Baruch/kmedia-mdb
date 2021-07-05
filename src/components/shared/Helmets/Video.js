@@ -27,9 +27,7 @@ const Video = ({ url, releaseDate = undefined, duration = undefined, mimetype = 
       {duration ? <meta name="og:video:duration" content={duration} /> : null}
       {/* {tags.map((tag, index) => <meta name="og:video:tag" content={tag} key={index} />)} */}
     </Helmet>
-  )
-;
-
+  );
 Video.propTypes = {
   url: PropTypes.string.isRequired,
   releaseDate: PropTypes.string,

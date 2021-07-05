@@ -9,6 +9,7 @@ const renderUnit = (unit, t) => {
   if (!unit) {
     return null;
   }
+
   const { clips, relatedItems }
           = renderUnitHelper.commonRenderUnitForClips(unit, t);
   return <Table.Row key={unit.id} verticalAlign="top">

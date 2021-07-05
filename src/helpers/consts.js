@@ -36,7 +36,7 @@ export const CT_COLLECTIONS = [
   CT_LESSONS_SERIES,
 ];
 
-export const IsCollectionContentType = (contentType) => CT_COLLECTIONS.includes(contentType);
+export const IsCollectionContentType = contentType => CT_COLLECTIONS.includes(contentType);
 
 // Content Unit Types
 export const CT_LESSON_PART           = 'LESSON_PART';
@@ -223,12 +223,15 @@ export const getVideoRes = (vsType, date) => {
   if (date.getFullYear() < 2014) {
     return { width: 480, height: 360 };
   }
+
   if (vsType === VS_NHD) {
     return { width: 640, height: 360 };
   }
+
   if (vsType === VS_HD) {
     return { width: 1280, height: 720 };
   }
+
   // fHD
   return { width: 1920, height: 980 };
 };

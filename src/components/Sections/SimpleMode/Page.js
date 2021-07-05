@@ -95,7 +95,7 @@ const openNativeDatePicker = (nativeDateInput, deviceInfo) => {
   }
 };
 
-const isToday = (selectedDate) => moment().isSame(moment(selectedDate), 'date');
+const isToday = selectedDate => moment().isSame(moment(selectedDate), 'date');
 
 const list = ({ items = null, wip = false, err = null, t, language, renderUnit }) => {
   const errObject = { wip, err, t };
@@ -114,7 +114,7 @@ const list = ({ items = null, wip = false, err = null, t, language, renderUnit }
 const LocaleDateFormat = moment.localeData().longDateFormat('L');
 const ToDay            = today().toDate();
 
-const SimpleModePage = (props) => {
+const SimpleModePage = props => {
   const
     {
       selectedDate = new Date(),
@@ -167,20 +167,22 @@ const SimpleModePage = (props) => {
     }
   };
 
-  const renderDatePicker = () => isClient && <Card>
-    <DayPicker
-      locale={uiLanguage}
-      modifiers={data.DayPickerModifiers}
-      localeUtils={MomentLocaleUtils}
-      selectedDays={selectedDate}
-      month={selectedDate}
-      disabledDays={{ after: new Date() }}
-      onDayClick={onDayClick}
-      captionElement={() => null}
-      navbarElement={props => getNavBarElement(props, uiLanguage, onDayClick)}
-    />
-    <Button className="inline-button" onClick={() => onDayClick(new Date())} content={t('simple-mode.today-button')} />
-  </Card>;
+  const renderDatePicker = () =>
+    isClient &&
+    <Card>
+      <DayPicker
+        locale={uiLanguage}
+        modifiers={data.DayPickerModifiers}
+        localeUtils={MomentLocaleUtils}
+        selectedDays={selectedDate}
+        month={selectedDate}
+        disabledDays={{ after: new Date() }}
+        onDayClick={onDayClick}
+        captionElement={() => null}
+        navbarElement={props => getNavBarElement(props, uiLanguage, onDayClick)}
+      />
+      <Button className="inline-button" onClick={() => onDayClick(new Date())} content={t('simple-mode.today-button')} />
+    </Card>;
 
   return (
     <div>

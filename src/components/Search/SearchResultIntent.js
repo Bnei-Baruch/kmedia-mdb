@@ -75,14 +75,15 @@ class SearchResultIntent extends SearchResultBase {
 
   onScrollLeft = () => this.onScrollChange(this.state.pageNo - 1);
 
-  onScrollChange = (pageNo) => {
+  onScrollChange = pageNo => {
     if (pageNo < 0 || this.state.pageSize * pageNo >= this.props.unitCounter) {
       return;
     }
+
     this.setState({ pageNo });
   };
 
-  renderItem = (cu) => {
+  renderItem = cu => {
     const { t, queryResult, hit, rank }                                = this.props;
     const { _index: index, _type: type, _source: { mdb_uid: mdbUid } } = hit;
     const { search_result: { searchId } }                              = queryResult;
@@ -205,16 +206,16 @@ class SearchResultIntent extends SearchResultBase {
     const path      = tracePath(getFilterById(mdbUid), getFilterById);
     let display     = '';
     switch (index) {
-    case SEARCH_INTENT_INDEX_TOPIC:
-      display     = path[path.length - 1].label;
-      resultsType = SEARCH_INTENT_HIT_TYPE_PROGRAMS;
-      break;
-    case SEARCH_INTENT_INDEX_SOURCE:
-      display     = path.map(y => y.name).join(' > ');
-      resultsType = SEARCH_INTENT_HIT_TYPE_LESSONS;
-      break;
-    default:
-      display = name;
+      case SEARCH_INTENT_INDEX_TOPIC:
+        display     = path[path.length - 1].label;
+        resultsType = SEARCH_INTENT_HIT_TYPE_PROGRAMS;
+        break;
+      case SEARCH_INTENT_INDEX_SOURCE:
+        display     = path.map(y => y.name).join(' > ');
+        resultsType = SEARCH_INTENT_HIT_TYPE_LESSONS;
+        break;
+      default:
+        display = name;
     }
 
     return (

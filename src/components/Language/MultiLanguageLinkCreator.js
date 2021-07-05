@@ -22,7 +22,7 @@ import { useLocation } from 'react-router';
  * i.e - use <Component to="/some-path" language="ru" /> instead of <Component to="/ru/some-path" />
  */
 
-const multiLanguageLinkCreator = () => (WrappedComponent) => {
+const multiLanguageLinkCreator = () => WrappedComponent => {
   const MultiLanguageLinkHOC = ({ to = undefined, language = '', contentLanguage = undefined, staticContext, ...rest }) => {
 
     // We need to use "unused constants" in order to get proper "rest"

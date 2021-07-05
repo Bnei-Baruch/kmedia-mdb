@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { assetUrl } from '../../../helpers/Api';
 import FallbackImage from '../FallbackImage';
 
-const CollectionLogo = (props) => {
+const CollectionLogo = props => {
   const { collectionId = null, ...rest } = props;
 
   return (

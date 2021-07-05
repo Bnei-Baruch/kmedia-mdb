@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet-async';
 
 import { isEmpty } from '../../../helpers/utils';
 
-const Article = (props) => {
+const Article = props => {
   const { publishedTime = null, tags = [], section = '' } = props;
 
   return (

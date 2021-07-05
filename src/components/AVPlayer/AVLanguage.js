@@ -26,6 +26,7 @@ const AVLanguage = (
     setLastRequestedLanguage(data.value);
     onSelect(e, data.value);
   };
+
   const handleOnOpen  = () => onDropdownOpenedChange(true);
   const handleOnClose = () => onDropdownOpenedChange(false);
 

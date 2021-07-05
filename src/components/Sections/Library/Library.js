@@ -6,8 +6,7 @@ import { useHistory, useLocation } from 'react-router-dom';
 import { Container, Portal, Segment } from 'semantic-ui-react';
 
 import { selectors } from '../../../redux/modules/assets';
-import { assetUrl } from '../../../helpers/Api';
-import { isEmpty, physicalFile } from '../../../helpers/utils';
+import { physicalFile } from '../../../helpers/utils';
 import AnchorsLanguageSelector from '../../Language/Selector/AnchorsLanguageSelector';
 import PDF, { isTaas, startsFrom } from '../../shared/PDF/PDF';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
@@ -23,25 +22,26 @@ import WipErr from '../../shared/WipErr/WipErr';
 import ShareBar from '../../shared/ShareSelected';
 import { DeviceInfoContext, SessionInfoContext } from '../../../helpers/app-contexts';
 
-export const checkRabashGroupArticles = (source) => {
+export const checkRabashGroupArticles = source => {
   if (/^gr-/.test(source)) { // Rabash Group Articles
     const result = /^gr-(.+)/.exec(source);
     return result[1];
-  } else {
-    return source;
   }
+
+  return source;
+
 };
 
 const Library = ({
-                   data,
-                   source,
-                   language = null,
-                   languages = [],
-                   langSelectorMount = null,
-                   downloadAllowed,
-                   handleLanguageChanged,
-                   t,
-                 }) => {
+  data,
+  source,
+  language = null,
+  languages = [],
+  langSelectorMount = null,
+  downloadAllowed,
+  handleLanguageChanged,
+  t,
+}) => {
   const location                             = useLocation();
   const history                              = useHistory();
   const [pageNumber, setPageNumber]          = useState(getPageFromLocation(location));
@@ -64,8 +64,7 @@ const Library = ({
 
     if (pdf && isTaas(source))
       return { url: physicalFile(pdf), isPDF: true, name: pdf.name };
-    else
-      return { url: physicalFile(file, true), name: file.name, ...doc2htmlById[file.id] };
+    return { url: physicalFile(file, true), name: file.name, ...doc2htmlById[file.id] };
   };
 
   const content = getContent() || {};
@@ -79,18 +78,20 @@ const Library = ({
     setSearchUrl(url);
   };
 
-  const handleOnMouseUp = (e) => {
+  const handleOnMouseUp = e => {
     if (isMobileDevice || !isShareTextEnabled) {
       return false;
     }
+
     updateSelection();
     return false;
   };
 
-  const handleOnMouseDown = (e) => {
+  const handleOnMouseDown = e => {
     if (isMobileDevice || !isShareTextEnabled) {
       return false;
     }
+
     setSearchUrl(null);
     return false;
   };
@@ -154,9 +155,10 @@ const Library = ({
           />
         </div>
       );
-    } else {
-      return null;
     }
+
+    return null;
+
   };
 
   const contentsToDisplay = getContentToDisplay();

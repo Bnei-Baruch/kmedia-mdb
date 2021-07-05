@@ -78,7 +78,7 @@ class HierarchicalFilter extends Component {
     return [];
   };
 
-  handleActiveRef = (ref) => {
+  handleActiveRef = ref => {
     this.activeRef = ref;
   };
 
@@ -101,6 +101,7 @@ class HierarchicalFilter extends Component {
       } else {
         this.setState({ sValue });
       }
+
       return;
     }
 

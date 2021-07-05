@@ -14,7 +14,7 @@ const screenNames = {
   laitman_es: 'Michael Laitman',
 };
 
-const getBestVideoVariant = (x) => {
+const getBestVideoVariant = x => {
   const { video_info: { variants } } = x;
   if (isEmpty(variants)) {
     return null;
@@ -57,43 +57,46 @@ const prepare = (raw, highlight) => {
 
   let html   = '';
   let offset = 0;
-  replacements.forEach((x) => {
+  replacements.forEach(x => {
     const { indices: [s, e], entityType } = x;
 
     html += fullText.slice(offset, s);
 
     switch (entityType) {
-    case 'hashtag':
-      html += `<a href="https://twitter.com/hashtag/${x.text}" target="_blank" rel="noopener noreferrer">#${x.text}</a>`;
-      break;
-    case 'url':
-      html += `<a href="${x.expanded_url}" target="_blank" rel="noopener noreferrer">${x.display_url}</a>`;
-      break;
-    case 'user_mention':
-      html += `<a href="https://twitter.com/${x.screen_name}" target="_blank" title="${x.name}" rel="noopener noreferrer">@${x.screen_name}</a>`;
-      break;
-    case 'media':
-      switch (x.type) {
-      case 'photo':
-        html += `<img class="tweet--media" src="${x.media_url_https}" alt="${x.ext_alt_text}" />`;
+      case 'hashtag':
+        html += `<a href="https://twitter.com/hashtag/${x.text}" target="_blank" rel="noopener noreferrer">#${x.text}</a>`;
         break;
-      case 'video': {
-        const variant = getBestVideoVariant(x);
-        if (variant) {
-          html += `<video controls playsinline preload="none" poster="${x.media_url_https}" class="tweet--media" src="${variant.url}" />`;
-        } else {
-          html += fullText.slice(s, e);
+      case 'url':
+        html += `<a href="${x.expanded_url}" target="_blank" rel="noopener noreferrer">${x.display_url}</a>`;
+        break;
+      case 'user_mention':
+        html += `<a href="https://twitter.com/${x.screen_name}" target="_blank" title="${x.name}" rel="noopener noreferrer">@${x.screen_name}</a>`;
+        break;
+      case 'media':
+        switch (x.type) {
+          case 'photo':
+            html += `<img class="tweet--media" src="${x.media_url_https}" alt="${x.ext_alt_text}" />`;
+            break;
+          case 'video': {
+            const variant = getBestVideoVariant(x);
+            if (variant) {
+              html += `<video controls playsinline preload="none" poster="${x.media_url_https}" class="tweet--media" src="${variant.url}" />`;
+            } else {
+              html += fullText.slice(s, e);
+            }
+
+            break;
+          }
+
+          default:
+            html += fullText.slice(s, e);
+            break;
         }
+
         break;
-      }
       default:
         html += fullText.slice(s, e);
         break;
-      }
-      break;
-    default:
-      html += fullText.slice(s, e);
-      break;
     }
 
     offset = e;
@@ -112,6 +115,7 @@ const TwitterFeed = ({ snippetVersion = false, withDivider = true, twitter = nul
   if (!twitter) {
     return null;
   }
+
   const { username, twitter_id: tID, created_at: ts, raw } = twitter;
   const mts                                                = moment(ts);
   const screenName                                         = screenNames[username];

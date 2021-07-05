@@ -89,7 +89,7 @@ const filters = {
   ]
 };
 
-const UnitListPage = (props) => {
+const UnitListPage = props => {
   const
     {
       namespace,
@@ -112,15 +112,12 @@ const UnitListPage = (props) => {
       <Container className="padded">
         <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} />
         {
-          items.length > 0
-            ? (
-              <Table unstackable basic="very" className="index" sortable>
-                <Table.Body>
-                  {items.map(x => renderUnit(x, t, namespace))}
-                </Table.Body>
-              </Table>
-            )
-            : null
+          items.length > 0 &&
+            <Table unstackable basic="very" className="index" sortable>
+              <Table.Body>
+                {items.map(x => renderUnit(x, t, namespace))}
+              </Table.Body>
+            </Table>
         }
       </Container>
       <Divider fitted />
@@ -142,16 +139,13 @@ const UnitListPage = (props) => {
     <div className="unit-list">
       <Divider fitted />
       {
-        nsFilters.length > 0
-          ? (
-            <Filters
-              namespace={namespace}
-              filters={nsFilters}
-              onChange={onFiltersChanged}
-              onHydrated={onFiltersHydrated}
-            />
-          )
-          : null
+        nsFilters.length > 0 &&
+          <Filters
+            namespace={namespace}
+            filters={nsFilters}
+            onChange={onFiltersChanged}
+            onHydrated={onFiltersHydrated}
+          />
       }
       {content}
     </div>

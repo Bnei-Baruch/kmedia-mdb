@@ -7,11 +7,9 @@ import UnitList from './UnitList';
 const MainPage = () => {
   const { tab } = useParams();
 
-  if (tab === 'daily' || tab === 'series') {
-    return <PlaylistCollectionIdCheck />;
-  }
-
-  return <UnitList key={tab} />;
+  return tab === 'daily' || tab === 'series'
+    ? <PlaylistCollectionIdCheck />
+    : <UnitList key={tab} />;
 };
 
 export default MainPage;

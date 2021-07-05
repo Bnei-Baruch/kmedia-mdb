@@ -23,22 +23,23 @@ export class Requests {
   static getCMS = (item, options) => {
     let url;
     switch (item) {
-    case 'banner':
-      url = `${cmsUrl('banners')}/${options.language}`;
-      break;
-    case 'person':
-      url = `${cmsUrl('persons')}/${options.id}?language=${options.language}`;
-      break;
-    default:
-      return null;
+      case 'banner':
+        url = `${cmsUrl('banners')}/${options.language}`;
+        break;
+      case 'person':
+        url = `${cmsUrl('persons')}/${options.id}?language=${options.language}`;
+        break;
+      default:
+        return null;
     }
+
     return axios(url);
   };
 
   static makeParams = params => (
     `${Object.entries(params)
       .filter(([_, v]) => v !== undefined && v !== null)
-      .map((pair) => {
+      .map(pair => {
         const key   = pair[0];
         const value = pair[1];
 
@@ -63,6 +64,7 @@ export class Requests {
     if (!params.url.startsWith('http')) {
       params.url = `http://${IMAGINARY_INTERNAL_HOST}${params.url}`;
     }
+
     return `${imaginaryUrl('thumbnail')}?${Requests.makeParams(params)}`;
   };
 
@@ -111,15 +113,15 @@ class Api {
   static autocomplete = ({ q, language }) => Requests.get(`autocomplete?${Requests.makeParams({ q, language })}`);
 
   static search = ({
-                     q,
-                     language,
-                     pageNo: page_no,
-                     pageSize: page_size,
-                     sortBy: sort_by,
-                     deb,
-                     suggest,
-                     searchId: search_id
-                   }) => (
+    q,
+    language,
+    pageNo: page_no,
+    pageSize: page_size,
+    sortBy: sort_by,
+    deb,
+    suggest,
+    searchId: search_id
+  }) => (
     Requests.get(`search?${Requests.makeParams({ q, language, page_no, page_size, sort_by, deb, suggest, search_id })}`)
   );
 
@@ -147,7 +149,7 @@ class Api {
     }
   });
 
-  static recommended = (requestData) => {
+  static recommended = requestData => {
     const config = {
       method: 'post',
       url: `${API_RECOMMENDED}`,

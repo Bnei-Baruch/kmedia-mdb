@@ -13,7 +13,7 @@ export function* fetchRecommended(action) {
     const language = yield select(state => settings.getContentLanguage(state.settings));
     const skipUids = yield select(state => recommended.getSkipUids(state.recommended));
     const skipSet = new Set(skipUids);
-    skip.forEach((uid) => {
+    skip.forEach(uid => {
       if (!skipSet.has(uid)) {
         skipUids.push(uid);
       }

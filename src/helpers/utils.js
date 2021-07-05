@@ -24,6 +24,7 @@ export const isEmpty = obj => {
   if (obj.length > 0) {
     return false;
   }
+
   if (obj.length === 0) {
     return true;
   }
@@ -56,19 +57,23 @@ export const formatError = error => {
     const msg = error.response.data.error;
     return error.response.statusText + (msg ? `: ${msg}` : '');
   }
+
   if (error.request) {
     // The request was made but no response was received
     // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
     // http.ClientRequest in node.js
     return 'No response from server';
   }
+
   if (error.message) {
     // Something happened in setting up the request that triggered an Error
     return error.message;
   }
+
   if (typeof error.toString === 'function') {
     return error.toString();
   }
+
   return error;
 };
 
@@ -90,6 +95,7 @@ export function* intersperse(iterable, delimiter) {
     if (!first) {
       yield delimiter;
     }
+
     first = false;
     yield item;
   }
@@ -110,6 +116,7 @@ export const tracePath = (node, getById) => {
       path.unshift(x);
     }
   }
+
   return path;
 };
 
@@ -119,11 +126,12 @@ export const tracePath = (node, getById) => {
  * @param name {string}
  * @returns {string}
  */
-export const filenameExtension = (name) => {
+export const filenameExtension = name => {
   const lastDot = name.lastIndexOf('.');
   if (lastDot === -1) {
     return '';
   }
+
   return name.substring(lastDot + 1, name.length);
 };
 
@@ -137,6 +145,7 @@ export const physicalFile = (file, ext = false) => {
   if (ext) {
     suffix = `.${filenameExtension(file.name)}`;
   }
+
   return `${CDN_URL}${file.id}${suffix}`;
   // return `https://cdn.kabbalahmedia.info/${file.id}${suffix}`;
 };
@@ -208,15 +217,12 @@ export const neighborIndices = (idx, len, n) => {
  * @param a {string}
  * @param b {string}
  */
-export const strCmp = (a, b) => {
-  if (a < b) {
-    return -1;
-  }
-  if (a > b) {
-    return 1;
-  }
-  return 0;
-};
+export const strCmp = (a, b) =>
+  a < b
+    ? -1
+    : a > b
+      ? 1
+      : 0;
 
 export const getEscapedRegExp = term => {
   const escaped = term.replace(/[/)(.+\\]/g, '\\$&');
@@ -229,14 +235,14 @@ export const getEscapedRegExp = term => {
 
 export const getRSSFeedByLang = language => {
   switch (language) {
-  case consts.LANG_HEBREW:
-    return 'KabbalahVideoHeb';
-  case consts.LANG_RUSSIAN:
-    return 'KabbalahVideoRus';
-  case consts.LANG_SPANISH:
-    return 'kabbalah-archive/spa';
-  default:
-    return 'KabbalahVideoEng';
+    case consts.LANG_HEBREW:
+      return 'KabbalahVideoHeb';
+    case consts.LANG_RUSSIAN:
+      return 'KabbalahVideoRus';
+    case consts.LANG_SPANISH:
+      return 'kabbalah-archive/spa';
+    default:
+      return 'KabbalahVideoEng';
   }
 };
 
@@ -259,7 +265,7 @@ export const getPodcastLinkByLang = language => {
 };
 
 // Compare properties without functions
-const removeFunctions = (fromObj) => {
+const removeFunctions = fromObj => {
   const obj = {};
   // @description it only removes functions that are not inside nested object properties.
   // you can improve with recursion to remove all functions inside an object.
@@ -287,34 +293,34 @@ export const unitsBySection = units => units?.reduce((acc, u) => {
 // returns the value from common.json for translation
 export const getSectionForTranslation = content_type => {
   switch (content_type) {
-  case consts.CT_LESSON_PART:
-    return 'lessons.tabs.daily';
-  case consts.CT_LESSONS_SERIES:
-    return 'lessons.tabs.series';
-  case consts.CT_LECTURE_SERIES:
-    return 'lessons.tabs.series';
-  case consts.CT_DAILY_LESSON:
-    return 'lessons.tabs.daily';
-  case consts.CT_WOMEN_LESSON:
-    return 'lessons.tabs.women';
-  case consts.CT_VIRTUAL_LESSON:
-    return 'lessons.tabs.virtual';
-  case consts.CT_CONGRESS:
-    return 'events.tabs.conventions';
-  case consts.CT_HOLIDAY:
-    return 'events.tabs.holidays';
-  case consts.CT_FRIENDS_GATHERING:
-    return 'events.tabs.friends-gatherings';
-  case consts.CT_MEAL:
-    return 'events.tabs.meals';
-  case consts.CT_ARTICLE:
-    return 'publications.tabs.articles';
-  case consts.CT_VIDEO_PROGRAM_CHAPTER:
-    return 'programs.tabs.main';
-  case consts.CT_CLIP:
-    return 'programs.tabs.clips';
-  default:
-    return '';
+    case consts.CT_LESSON_PART:
+      return 'lessons.tabs.daily';
+    case consts.CT_LESSONS_SERIES:
+      return 'lessons.tabs.series';
+    case consts.CT_LECTURE_SERIES:
+      return 'lessons.tabs.series';
+    case consts.CT_DAILY_LESSON:
+      return 'lessons.tabs.daily';
+    case consts.CT_WOMEN_LESSON:
+      return 'lessons.tabs.women';
+    case consts.CT_VIRTUAL_LESSON:
+      return 'lessons.tabs.virtual';
+    case consts.CT_CONGRESS:
+      return 'events.tabs.conventions';
+    case consts.CT_HOLIDAY:
+      return 'events.tabs.holidays';
+    case consts.CT_FRIENDS_GATHERING:
+      return 'events.tabs.friends-gatherings';
+    case consts.CT_MEAL:
+      return 'events.tabs.meals';
+    case consts.CT_ARTICLE:
+      return 'publications.tabs.articles';
+    case consts.CT_VIDEO_PROGRAM_CHAPTER:
+      return 'programs.tabs.main';
+    case consts.CT_CLIP:
+      return 'programs.tabs.clips';
+    default:
+      return '';
   }
 };
 

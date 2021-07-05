@@ -18,6 +18,7 @@ export const prepareScrollToSearch = (data, { srchstart: start, srchend: end }, 
   if (!start?.length) {
     return data;
   }
+
   let render;
   if (!end?.length)
     render = new RenderHighlightSingleString(data, start);
@@ -55,6 +56,7 @@ export const filterTagsByBorder = (from, to, tags) => {
 
     result.push(p);
   }
+
   return { tagsPositionInner: result, from, to };
 };
 
@@ -62,7 +64,7 @@ export const textToHtml = (source, from, to, allTags, isBold = true) => {
   let currentPos = from;
   return source
     .split(' ')
-    .map((word) => {
+    .map(word => {
 
       const tags = allTags
         .filter((t, i) => currentPos < t.noHtmlPos && currentPos + word.length + 1 >= t.noHtmlPos);
@@ -83,6 +85,7 @@ export const textToHtml = (source, from, to, allTags, isBold = true) => {
           prevPosition += s.length;
           result.push(`<em class="${cssClass}">${s}</em>`);
         }
+
         result.push(t.str);
         if (i === tags.length - 1) {
           result.push(`<em class="${cssClass}">${word.slice(p)}</em>`);
@@ -118,6 +121,7 @@ export const wrapSeekingPlace = (data, tags, fromNohtml, toNoHtml) => {
       }
     }
   }
+
   openTagP  = openTagP ?? tags[0];
   closeTagP = closeTagP ?? tags[tags.length - 1];
 
@@ -134,14 +138,16 @@ export const wrapSeekingPlace = (data, tags, fromNohtml, toNoHtml) => {
  * help functions for build link
  */
 export const DOM_ROOT_ID                  = 'roodNodeOfShareText';
-export const buildSearchLinkFromSelection = (language) => {
+export const buildSearchLinkFromSelection = language => {
   if (!window?.getSelection) {
     return { url: null };
   }
+
   const sel = window.getSelection();
   if (sel.isCollapsed || !sel.anchorNode || !sel.focusNode) {
     return { url: null };
   }
+
   const isForward = isSelectionForward(sel);
 
   const words = sel.toString().replace(/\r?\n|\r{1,}/g, ' ').split(' ');
@@ -172,6 +178,7 @@ export const buildSearchLinkFromSelection = (language) => {
   if (language) {
     query.language = language;
   }
+
   const url = `${protocol}//${hostname}${port ? `:${port}` : ''}${pathname}?${stringify(query)}`;
   return { url, text: sel.toString() };
 };
@@ -195,6 +202,7 @@ const buildLinkForShortSelect = (words, sel, isForward, language) => {
   if (language) {
     query.language = language;
   }
+
   const url = `${protocol}//${hostname}${port ? `:${port}` : ''}${pathname}?${stringify(query)}`;
   return { url, text: sel.toString() };
 };
@@ -210,12 +218,13 @@ const findOffsetOfDOMNode = (node, offset) => {
   return findOffsetOfDOMNode(parent, offset);
 };
 
-const countOffsetFromParent = (node) => {
+const countOffsetFromParent = node => {
   let offset = 0;
   for (; node.previousSibling !== null;) {
     offset += node.previousSibling.textContent.length;
     node = node.previousSibling;
   }
+
   return offset;
 };
 
@@ -231,7 +240,7 @@ const wholeEndWord = (text, offset) => {
   return text.slice(offset).split(KEEP_LETTERS_WITH_SPACE_RE)[0];
 };
 
-const isSelectionForward = (sel) => {
+const isSelectionForward = sel => {
   const range = document.createRange();
   range.setStart(sel.anchorNode, sel.anchorOffset);
   range.setEnd(sel.focusNode, sel.focusOffset);

@@ -30,27 +30,27 @@ const LatestUpdate = ({ unit, label, t }) => {
 
   // collections -- prepare random image
   switch (unit.content_type) {
-  case CT_CONGRESS:
-  case CT_MEALS:
-  case CT_DAILY_LESSON:
-  case CT_SPECIAL_LESSON:
-  case CT_VIRTUAL_LESSONS:
-  case CT_WOMEN_LESSONS:
-  case CT_VIDEO_PROGRAM:
-  case CT_FRIENDS_GATHERINGS:
-  case CT_HOLIDAY:
-  case CT_PICNIC:
-  case CT_UNITY_DAY:
-  case CT_LESSONS_SERIES:
-    canonicalSection = Requests.imaginaryRandom('resize', {
-      width: 512,
-      height: 288,
-      nocrop: false,
-      stripmeta: true,
-    }, `lessons/latest_lesson_%s.jpg`);
-    break;
-  default:
-    canonicalSection = canonicalSectionByLink(link);
+    case CT_CONGRESS:
+    case CT_MEALS:
+    case CT_DAILY_LESSON:
+    case CT_SPECIAL_LESSON:
+    case CT_VIRTUAL_LESSONS:
+    case CT_WOMEN_LESSONS:
+    case CT_VIDEO_PROGRAM:
+    case CT_FRIENDS_GATHERINGS:
+    case CT_HOLIDAY:
+    case CT_PICNIC:
+    case CT_UNITY_DAY:
+    case CT_LESSONS_SERIES:
+      canonicalSection = Requests.imaginaryRandom('resize', {
+        width: 512,
+        height: 288,
+        nocrop: false,
+        stripmeta: true,
+      }, `lessons/latest_lesson_%s.jpg`);
+      break;
+    default:
+      canonicalSection = canonicalSectionByLink(link);
   }
 
   return (

@@ -14,7 +14,7 @@ const mapLinks = {
   rh: 'rashbi',
 };
 
-const renderBook = (book) => {
+const renderBook = book => {
   const { id, name, description } = book;
   return (
     <List.Item key={id}>

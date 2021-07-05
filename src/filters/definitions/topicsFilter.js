@@ -5,6 +5,7 @@ const breadCrumb = (x, index, lastIndex) => {
   if (index === lastIndex) {
     return `<span class="filter__breadcrumb" title="${x.label}">${x.label}</span>`;
   }
+
   return `<span class="filter__breadcrumb" title="${x.label}">&hellip;</span>`;
 };
 

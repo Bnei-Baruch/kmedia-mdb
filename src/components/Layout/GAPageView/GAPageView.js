@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import ReactGA from 'react-ga';
 
-const sendPageChange = (page) => {
+const sendPageChange = page => {
   ReactGA.set({ page });
   ReactGA.pageview(page);
 };

@@ -38,5 +38,4 @@ node_modules/
 # do not ignore main theme
 !src/**/semantic.min.css
 !src/**/semantic.rtl.min.css
-.eslintrc
 .eslintcache

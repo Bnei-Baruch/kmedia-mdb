@@ -74,15 +74,16 @@ class MediaDownloads extends Component {
 
       return null;
 
-    } else {
-      // no unit or a different unit - create new state
-      const groups        = MediaDownloads.getFilesByLanguage(unit.files, contentLanguage, uiLanguage);
-      const languages     = [...groups.keys()];
-      const language      = selectSuitableLanguage(contentLanguage, uiLanguage, languages);
-      const derivedGroups = MediaDownloads.getDerivedFilesByContentType(unit.derived_units, contentLanguage, uiLanguage);
-
-      return { groups, derivedGroups, isCopyPopupOpen, languages, language, uiLanguage, contentLanguage, unit };
     }
+
+    // no unit or a different unit - create new state
+    const groups        = MediaDownloads.getFilesByLanguage(unit.files, contentLanguage, uiLanguage);
+    const languages     = [...groups.keys()];
+    const language      = selectSuitableLanguage(contentLanguage, uiLanguage, languages);
+    const derivedGroups = MediaDownloads.getDerivedFilesByContentType(unit.derived_units, contentLanguage, uiLanguage);
+
+    return { groups, derivedGroups, isCopyPopupOpen, languages, language, uiLanguage, contentLanguage, unit };
+
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -108,7 +109,7 @@ class MediaDownloads extends Component {
     // we give them the images of their fallback language.
     const images = [];
 
-    files.forEach((file) => {
+    files.forEach(file => {
       if (!groups.has(file.language)) {
         groups.set(file.language, new Map());
       }
@@ -117,6 +118,7 @@ class MediaDownloads extends Component {
       if (!byType.has(file.type)) {
         byType.set(file.type, []);
       }
+
       byType.get(file.type).push(file);
 
       if (file.type === MT_IMAGE) {
@@ -130,7 +132,7 @@ class MediaDownloads extends Component {
     // fill in images fallback into every language
     if (images.length > 0) {
       const fallbackImage = MediaDownloads.fallbackImage(images, contentLanguage, uiLanguage);
-      groups.forEach((byType) => {
+      groups.forEach(byType => {
         if (!byType.has(MT_IMAGE)) {
           byType.set(MT_IMAGE, fallbackImage);
         }
@@ -161,17 +163,17 @@ class MediaDownloads extends Component {
     }, {});
   };
 
-  static getI18nTypeOverridesKey = (unit) => {
+  static getI18nTypeOverridesKey = unit => {
     switch (unit.content_type) {
-    case CT_LESSON_PART:
-    case CT_FULL_LESSON:
-      return 'lesson';
-    case CT_VIDEO_PROGRAM_CHAPTER:
-      return 'program';
-    case CT_ARTICLE:
-      return 'publication';
-    default:
-      return '';
+      case CT_LESSON_PART:
+      case CT_FULL_LESSON:
+        return 'lesson';
+      case CT_VIDEO_PROGRAM_CHAPTER:
+        return 'program';
+      case CT_ARTICLE:
+        return 'publication';
+      default:
+        return '';
     }
   };
 
@@ -179,7 +181,7 @@ class MediaDownloads extends Component {
     this.setState({ language });
   };
 
-  handleCopied = (url) => {
+  handleCopied = url => {
     this.setState({ isCopyPopupOpen: { ...this.state.isCopyPopupOpen, [url]: true } }, () => {
       setTimeout(() => this.setState({ isCopyPopupOpen: { ...this.state.isCopyPopupOpen, [url]: false } }), POPOVER_CONFIRMATION_TIMEOUT);
     });
@@ -301,6 +303,7 @@ class MediaDownloads extends Component {
         return acc.concat(files);
       }, derivedRows);
     }
+
     if (leloMikudByType.size > 0) {
       derivedRows = MEDIA_ORDER.reduce((acc, val) => {
         const label = `${t('constants.content-types.LELO_MIKUD')} - ${t(`constants.media-types.${val}`)}`;
@@ -308,16 +311,18 @@ class MediaDownloads extends Component {
         return acc.concat(files);
       }, derivedRows);
     }
+
     if (publicationsByType.size > 0) {
       derivedRows = MEDIA_ORDER.reduce((acc, val) => {
         const label = t(`media-downloads.${typeOverrides}type-labels.${val}`);
-        const files = (publicationsByType.get(val) || []).map((file) => {
+        const files = (publicationsByType.get(val) || []).map(file => {
           const publisher = publisherById[file.cu.publishers[0]];
           return this.renderRow(file, `${label} - ${publisher ? publisher.name : '???'}`, t);
         });
         return acc.concat(files);
       }, derivedRows);
     }
+
     if (articlesByType.size > 0) {
       derivedRows = MEDIA_ORDER.reduce((acc, val) => {
         const label = t(`media-downloads.${typeOverrides}type-labels.${val}-article`);
@@ -325,6 +330,7 @@ class MediaDownloads extends Component {
         return acc.concat(files);
       }, derivedRows);
     }
+
     if (researchMaterialsByType.size > 0) {
       derivedRows = MEDIA_ORDER.reduce((acc, val) => {
         const label = t(`media-downloads.${typeOverrides}type-labels.${val}-research-material`);
@@ -332,6 +338,7 @@ class MediaDownloads extends Component {
         return acc.concat(files);
       }, derivedRows);
     }
+
     return derivedRows;
   }
 
@@ -346,16 +353,18 @@ class MediaDownloads extends Component {
     } else {
       rows = MEDIA_ORDER.reduce((acc, val) => {
         const baseLabel = t(`media-downloads.${typeOverrides}type-labels.${val}`);
-        const files = (byType.get(val) || []).map((file) => {
+        const files = (byType.get(val) || []).map(file => {
           let label = baseLabel;
           if (file.video_size) {
             label = `${label} [${VS_NAMES[file.video_size]}]`;
           }
+
           return this.renderRow(file, label, t);
         });
         return acc.concat(files);
       }, []);
     }
+
     return rows;
   }
 }

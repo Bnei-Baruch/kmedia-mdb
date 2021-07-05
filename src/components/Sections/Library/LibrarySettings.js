@@ -31,11 +31,11 @@ class LibrarySettings extends Component {
     this.handlePopup(false);
   };
 
-  handlePopup = (isOpen) => {
+  handlePopup = isOpen => {
     this.setState({ isOpen });
   };
 
-  handleSettings = (newSettings) => {
+  handleSettings = newSettings => {
     const { handleSettings } = this.props;
     const savedState         = getItem();
     const settings           = { ...savedState, ...newSettings };
@@ -43,7 +43,7 @@ class LibrarySettings extends Component {
     handleSettings(settings);
   };
 
-  handleFontSize = (amount) => {
+  handleFontSize = amount => {
     const { fontSize } = this.props;
 
     if ((amount > 0 && fontSize >= 8) || (amount < 0 && fontSize <= -3)) {

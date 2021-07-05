@@ -1,35 +1,39 @@
 {
-  "extends":  [
+  "extends": [
     "react-app",
     "plugin:jest/recommended",
     "jest-enzyme"
   ],
-  "parser":   "babel-eslint",
-  "env":      {
-    "browser":      true,
-    "es6":          true,
-    "node":         true,
-    "jest":         true,
+  "parser": "babel-eslint",
+  "env": {
+    "browser": true,
+    "es6": true,
+    "node": true,
+    "jest": true,
     "jest/globals": true
   },
-  "plugins":  [
+  "plugins": [
     "react",
     "jest",
     "import",
     "react-hooks"
   ],
   "settings": {
-    "parser":         "babel-eslint",
-    "import/parser":  "babel-eslint",
+    "parser": "babel-eslint",
+    "import/parser": "babel-eslint",
     "import/resolve": {},
-    "ecmaFeatures":   {
+    "ecmaFeatures": {
       "classes": true,
-      "jsx":     true
+      "jsx": true
     }
   },
   "rules": {
     "arrow-body-style": "warn",
     "array-bracket-spacing": "warn",
+    "arrow-parens": [
+      "warn",
+      "as-needed"
+    ],
     "arrow-spacing": "warn",
     "brace-style": "warn",
     "comma-spacing": "warn",
@@ -51,30 +55,64 @@
       "error",
       "unix"
     ],
-    "object-curly-spacing": ["warn", "always"],
+    "lines-between-class-members": [
+      "warn",
+      "always",
+      {
+        "exceptAfterSingleLine": true
+      }
+    ],
+    "no-await-in-loop": "warn",
+    "no-else-return": "warn",
     "no-empty": "warn",
     "no-lonely-if": "warn",
-    "no-multiple-empty-lines": "warn",
+    "no-multiple-empty-lines": [
+      "warn",
+      {
+        "max": 2,
+        "maxEOF": 1
+      }
+    ],
     "no-trailing-spaces": "warn",
     "no-unneeded-ternary": "warn",
     "no-unreachable": "warn",
     "no-unused-vars": "warn",
+    "object-shorthand": "warn",
+    "object-curly-spacing": [
+      "warn",
+      "always"
+    ],
+    "padding-line-between-statements": [
+      "warn",
+      {
+        "blankLine": "always",
+        "prev": "multiline-block-like",
+        "next": "*"
+      }
+    ],
     "prefer-arrow-callback": "warn",
     "prefer-const": "warn",
-    "prefer-destructuring": ["warn", {"object": true, "array": false}],
+    "prefer-destructuring": [
+      "warn",
+      {
+        "object": true,
+        "array": false
+      }
+    ],
+    "prefer-object-spread": "warn",
     "prefer-template": "warn",
-    "react-hooks/rules-of-hooks":  "error",
+    "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
     "rest-spread-spacing": "warn",
+    "semi-style": "warn",
     "space-before-blocks": "warn",
     "space-in-parens": "warn",
-    "template-curly-spacing":[
+    "template-curly-spacing": [
       "off"
     ]
   },
-  "globals":  {
+  "globals": {
     "socket": true,
     "enzyme": true
   }
 }
-

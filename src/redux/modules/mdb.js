@@ -123,70 +123,70 @@ const setStatus = (state, action) => {
   const errors = { ...state.errors };
 
   switch (action.type) {
-  case FETCH_UNIT:
-    wip.units = { ...wip.units, [action.payload]: true };
-    break;
-  case FETCH_COLLECTION:
-    wip.collections = { ...wip.collections, [action.payload]: true };
-    break;
-  case FETCH_LATEST_LESSON:
-    wip.lastLesson = true;
-    break;
-  case FETCH_WINDOW:
-    wip.cWindow = { ...wip.cWindow, [action.payload.id]: true };
-    break;
-  case FETCH_SQDATA:
-    wip.sqData = true;
-    break;
+    case FETCH_UNIT:
+      wip.units = { ...wip.units, [action.payload]: true };
+      break;
+    case FETCH_COLLECTION:
+      wip.collections = { ...wip.collections, [action.payload]: true };
+      break;
+    case FETCH_LATEST_LESSON:
+      wip.lastLesson = true;
+      break;
+    case FETCH_WINDOW:
+      wip.cWindow = { ...wip.cWindow, [action.payload.id]: true };
+      break;
+    case FETCH_SQDATA:
+      wip.sqData = true;
+      break;
 
-  case FETCH_UNIT_SUCCESS:
-    wip.units    = { ...wip.units, [action.payload.id]: false };
-    errors.units = { ...errors.units, [action.payload.id]: null };
-    break;
-  case FETCH_COLLECTION_SUCCESS:
-    wip.collections    = { ...wip.collections, [action.payload.id]: false };
-    errors.collections = { ...errors.collections, [action.payload.id]: null };
-    break;
-  case FETCH_LATEST_LESSON_SUCCESS:
-    wip.lastLesson    = false;
-    errors.lastLesson = null;
+    case FETCH_UNIT_SUCCESS:
+      wip.units    = { ...wip.units, [action.payload.id]: false };
+      errors.units = { ...errors.units, [action.payload.id]: null };
+      break;
+    case FETCH_COLLECTION_SUCCESS:
+      wip.collections    = { ...wip.collections, [action.payload.id]: false };
+      errors.collections = { ...errors.collections, [action.payload.id]: null };
+      break;
+    case FETCH_LATEST_LESSON_SUCCESS:
+      wip.lastLesson    = false;
+      errors.lastLesson = null;
 
-    // update wip & errors map to mark this collection was requested fully (single)
-    wip.collections    = { ...wip.collections, [action.payload.id]: false };
-    errors.collections = { ...errors.collections, [action.payload.id]: null };
-    break;
-  case FETCH_WINDOW_SUCCESS:
-    wip.cWindow    = { ...wip.cWindow, [action.payload.id]: false };
-    errors.cWindow = { ...errors.cWindow, [action.payload.id]: null };
-    break;
-  case FETCH_SQDATA_SUCCESS:
-    wip.sqData    = false;
-    errors.sqData = null;
-    break;
+      // update wip & errors map to mark this collection was requested fully (single)
+      wip.collections    = { ...wip.collections, [action.payload.id]: false };
+      errors.collections = { ...errors.collections, [action.payload.id]: null };
+      break;
+    case FETCH_WINDOW_SUCCESS:
+      wip.cWindow    = { ...wip.cWindow, [action.payload.id]: false };
+      errors.cWindow = { ...errors.cWindow, [action.payload.id]: null };
+      break;
+    case FETCH_SQDATA_SUCCESS:
+      wip.sqData    = false;
+      errors.sqData = null;
+      break;
 
-  case FETCH_UNIT_FAILURE:
-    wip.units    = { ...wip.units, [action.payload.id]: false };
-    errors.units = { ...errors.units, [action.payload.id]: action.payload.err };
-    break;
-  case FETCH_COLLECTION_FAILURE:
-    wip.collections    = { ...wip.collections, [action.payload.id]: false };
-    errors.collections = { ...errors.collections, [action.payload.id]: action.payload.err };
-    break;
-  case FETCH_LATEST_LESSON_FAILURE:
-    wip.lastLesson    = false;
-    errors.lastLesson = action.payload.err;
-    break;
-  case FETCH_WINDOW_FAILURE:
-    wip.cWindow    = { ...wip.cWindow, [action.payload.id]: false };
-    errors.cWindow = { ...errors.cWindow, [action.payload.id]: action.payload.err };
-    break;
-  case FETCH_SQDATA_FAILURE:
-    wip.sqData    = false;
-    errors.sqData = action.payload.err;
-    break;
+    case FETCH_UNIT_FAILURE:
+      wip.units    = { ...wip.units, [action.payload.id]: false };
+      errors.units = { ...errors.units, [action.payload.id]: action.payload.err };
+      break;
+    case FETCH_COLLECTION_FAILURE:
+      wip.collections    = { ...wip.collections, [action.payload.id]: false };
+      errors.collections = { ...errors.collections, [action.payload.id]: action.payload.err };
+      break;
+    case FETCH_LATEST_LESSON_FAILURE:
+      wip.lastLesson    = false;
+      errors.lastLesson = action.payload.err;
+      break;
+    case FETCH_WINDOW_FAILURE:
+      wip.cWindow    = { ...wip.cWindow, [action.payload.id]: false };
+      errors.cWindow = { ...errors.cWindow, [action.payload.id]: action.payload.err };
+      break;
+    case FETCH_SQDATA_FAILURE:
+      wip.sqData    = false;
+      errors.sqData = action.payload.err;
+      break;
 
-  default:
-    break;
+    default:
+      break;
   }
 
   return {
@@ -197,7 +197,7 @@ const setStatus = (state, action) => {
 };
 
 // We remove old wmv and flv files which have been converted to mp4
-const stripOldFiles = (unit) => {
+const stripOldFiles = unit => {
   const { files } = unit;
 
   // no files in unit
@@ -261,14 +261,14 @@ const onReceiveCollections = (state, action) => {
   const cById = { ...state.cById };
   let cuById  = { ...state.cuById };
 
-  items.forEach((x) => {
+  items.forEach(x => {
     // make a copy of incoming data since we're about to mutate it
     const y = { ...x };
 
     // normalize content units
     if (y.content_units) {
       y.ccuNames = y.ccuNames || {};
-      y.cuIDs    = y.content_units.filter(cu => !!cu).map((cu) => {
+      y.cuIDs    = y.content_units.filter(cu => !!cu).map(cu => {
         const ccuName     = cu.name_in_collection;
         y.ccuNames[cu.id] = ccuName;
 
@@ -322,7 +322,7 @@ const onReceiveContentUnits = (state, action) => {
 
   const cById = { ...state.cById };
   let cuById  = { ...state.cuById };
-  items.forEach((x) => {
+  items.forEach(x => {
     // make a copy of incoming data since we're about to mutate it
     const y = { ...x };
 
@@ -341,6 +341,7 @@ const onReceiveContentUnits = (state, action) => {
         } else {
           updatedC.cuIDs = [y.id];
         }
+
         updatedC.ccuNames = { ...updatedC.ccuNames, [y.id]: ccuName };
         cById[v.id]       = updatedC;
 
@@ -448,6 +449,7 @@ const getDenormCollection = (state, id) => {
   } else {
     c.content_units = [];
   }
+
   return c;
 };
 
@@ -458,6 +460,7 @@ const denormalizeObject = (byID, obj) => (
     if (c) {
       acc[k] = c;
     }
+
     return acc;
   }, {})
 );
@@ -490,6 +493,7 @@ const getDenormCollectionWUnits = (state, id) => {
 
     c.content_units = c.cuIDs.map(x => getDenormContentUnit(state, x)).filter(x => !!x);
   }
+
   return c;
 };
 

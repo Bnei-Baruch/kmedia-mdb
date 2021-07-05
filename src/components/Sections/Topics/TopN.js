@@ -97,5 +97,3 @@ TopN.propTypes = {
 };
 
 export default withNamespaces()(TopN);
-
-

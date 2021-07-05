@@ -11,17 +11,17 @@ export const tabs = [
   'meals',
 ];
 
-const content = (active) => {
+const content = active => {
   switch (active) {
-  case 'conventions':
-  case 'holidays':
-  case 'unity-days':
-    return <CollectionList tabName={active} />;
-  case 'friends-gatherings':
-  case 'meals':
-    return <UnitList tab={active} />;
-  default:
-    return <h1>Page not found</h1>;
+    case 'conventions':
+    case 'holidays':
+    case 'unity-days':
+      return <CollectionList tabName={active} />;
+    case 'friends-gatherings':
+    case 'meals':
+      return <UnitList tab={active} />;
+    default:
+      return <h1>Page not found</h1>;
   }
 };
 

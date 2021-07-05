@@ -22,7 +22,7 @@ const PlaylistCollectionContainer = ({ cId, t, cuId }) => {
 
   const dispatch = useDispatch();
 
-  const createPrevNextLinks = (curIndex) => {
+  const createPrevNextLinks = curIndex => {
     const prevCollection   = curIndex < collections.length - 1 ? collections[curIndex + 1] : null;
     const prevLnk = prevCollection ? canonicalLink(prevCollection) : null;
     setPrevLink(prevLnk);

@@ -62,6 +62,7 @@ class SimpleModeContainer extends Component {
     if (state.filesLanguage !== nextProps.contentLanguage) {
       this.setState({ filesLanguage: nextProps.contentLanguage });
     }
+
     if (props.uiLanguage !== nextProps.uiLanguage) {
       this.handleDayClick(state.date, {}, nextProps);
     }
@@ -140,7 +141,7 @@ class SimpleModeContainer extends Component {
   }
 }
 
-export const mapState = (state) => {
+export const mapState = state => {
   const items = { ...selectors.getItems(state.simpleMode) };
 
   return {

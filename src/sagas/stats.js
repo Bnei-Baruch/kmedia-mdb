@@ -27,6 +27,7 @@ function* fetchCUStats(action) {
     if (namespace === 'lessons-daily') {
       args.content_type = [CT_LESSON_PART];
     }
+
     delete args.namespace;
 
     const { data } = yield call(Api.unitsStats, args);

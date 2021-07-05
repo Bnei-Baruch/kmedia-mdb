@@ -30,7 +30,5 @@ const ArticlesList = () =>
     namespace="publications-articles"
     extraFetchParams={{ content_type: CT_ARTICLE }}
     renderUnit={renderUnit}
-  />
-;
-
+  />;
 export default ArticlesList;

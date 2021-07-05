@@ -12,7 +12,7 @@ import * as shapes from '../shapes';
 import { ChroniclesActions } from '../../helpers/clientChronicles';
 import { ClientChroniclesContext, DeviceInfoContext, SessionInfoContext } from '../../helpers/app-contexts';
 
-const App = (props) => {
+const App = props => {
   const [isShareTextEnabled, setEnableShareText]                                                  = useState(true);
   const { i18n, store, history, initialI18nStore, initialLanguage, deviceInfo, clientChronicles } = props;
 
@@ -20,7 +20,7 @@ const App = (props) => {
     enableShareText: { isShareTextEnabled, setEnableShareText }
   };
   const deviceInfoContext = {
-    deviceInfo: deviceInfo,
+    deviceInfo,
     isMobileDevice: deviceInfo.device?.type === 'mobile',
     undefinedDevice: deviceInfo.device?.type === undefined
   };
