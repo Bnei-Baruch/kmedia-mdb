@@ -302,6 +302,7 @@ class MediaDownloads extends Component {
         return acc.concat(files);
       }, derivedRows);
     }
+
     if (likutimByType.size > 0) {
       derivedRows = MEDIA_ORDER.reduce((acc, val) => {
         const label = `${t('constants.content-types.LIKUTIM')} - ${t(`constants.media-types.${val}`)}`;

@@ -79,6 +79,7 @@ export const textToHtml = (source, from, to, allTags, isBold = true) => {
 
       const r = tags.reduce((acc, t, i) => {
         const p                      = t.noHtmlPos - from;
+        // eslint-disable-next-line prefer-const
         let { prevPosition, result } = acc;
         if (p !== 0) {
           const s = word.slice(prevPosition, p);
