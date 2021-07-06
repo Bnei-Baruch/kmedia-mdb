@@ -25,7 +25,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { noop } from '../../helpers/utils';
 import { Icon, Menu } from 'semantic-ui-react';
-import classNames from 'classnames';
+import clsx from 'clsx';
 
 import { DEFAULT_LANGUAGE } from '../../helpers/consts';
 import { isLanguageRtl } from '../../helpers/i18n-utils';
@@ -58,7 +58,7 @@ const visibleRange = (current, total, windowSize) => {
 };
 
 const renderPage = (content, value, key, disabled, onChange, active = false, exClass = []) => {
-  const classes = classNames(exClass);
+  const classes = clsx(exClass);
 
   if (disabled) {
     return <Menu.Item disabled className={classes}>{content}</Menu.Item>;

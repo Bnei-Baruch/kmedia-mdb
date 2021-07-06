@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
@@ -466,7 +466,7 @@ class LibraryContainer extends Component {
     return (
       <div
         ref={this.handleContentArticleRef}
-        className={classNames({
+        className={clsx({
           'headroom-z-index-801': true,
           source: true,
           'is-readable': isReadable,
@@ -536,7 +536,7 @@ class LibraryContainer extends Component {
                 mobile={16}
                 tablet={16}
                 computer={12}
-                className={classNames({
+                className={clsx({
                   'source__content-wrapper': true,
                   [`size${fontSize}`]: true,
                 })}

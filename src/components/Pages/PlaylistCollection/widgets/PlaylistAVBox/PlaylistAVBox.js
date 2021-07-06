@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { withNamespaces } from 'react-i18next';
 import { withRouter } from 'react-router-dom';
 import { Grid } from 'semantic-ui-react';
@@ -178,7 +178,7 @@ class PlaylistAVBox extends Component {
     const isAudio = playlist.items[selected].mediaType === MT_AUDIO;
 
     return <Grid.Row
-      className={classNames('', {
+      className={clsx('', {
         'layout--is-audio': isAudio,
       })}
     >

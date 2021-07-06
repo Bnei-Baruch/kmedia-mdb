@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classnames from 'classnames';
+import clsx from 'clsx';
 import { Header, Image, List, Table } from 'semantic-ui-react';
 
 import * as shapes from '../../shapes';
@@ -41,7 +41,7 @@ const Kabbalist = ({ author: { name, full_name: fullName, children: volumes, id 
   const kabbalist = mapLinks[id];
 
   return (
-    <Table.Row verticalAlign="top" className={classnames({ author: true, 'author--image': !!portrait })}>
+    <Table.Row verticalAlign="top" className={clsx({ author: true, 'author--image': !!portrait })}>
       <Table.Cell collapsing width={2}>
         {portrait ? <Image src={portrait} alt={fullName} /> : null}
       </Table.Cell>

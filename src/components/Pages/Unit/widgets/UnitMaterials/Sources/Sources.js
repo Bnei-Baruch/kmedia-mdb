@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
 import { Divider, Dropdown, Grid, Segment } from 'semantic-ui-react';
-import classNames from 'classnames';
+import clsx from 'clsx';
 
 import { selectors as assetsSelectors, actions as assetsActions } from '../../../../../../redux/modules/assets';
 import { selectors as settings } from '../../../../../../redux/modules/settings';
@@ -173,7 +173,7 @@ const Sources = ({ unit, indexMap, t, options }) => {
     <>
       <Grid container padded={isMobileDevice ? 'vertically' : true} columns={2}>
         <Grid.Column
-          className={classNames({ 'is-fitted': isMobileDevice })}
+          className={clsx({ 'is-fitted': isMobileDevice })}
           width={isMobileDevice ? 16 : 16 - languages.length}
         >
           <Dropdown

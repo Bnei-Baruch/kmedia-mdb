@@ -1,7 +1,7 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useHistory, useLocation, useRouteMatch } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { useSelector } from 'react-redux';
 import { Container, Grid } from 'semantic-ui-react';
 import isEqual from 'react-fast-compare';
@@ -156,7 +156,7 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
   return !embed ?
     (
       <Grid padded={!isMobileDevice} className="avbox">
-        <Grid.Column mobile={16} tablet={computerWidth} computer={computerWidth} className={classNames({ 'is-fitted': isMobileDevice })}>
+        <Grid.Column mobile={16} tablet={computerWidth} computer={computerWidth} className={clsx({ 'is-fitted': isMobileDevice })}>
           <AVPlaylistPlayer
             items={items}
             selected={selected}

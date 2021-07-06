@@ -1,6 +1,6 @@
 import React, { Component, createRef } from 'react';
 import PropTypes from 'prop-types';
-import classnames from 'classnames';
+import clsx from 'clsx';
 import { connect } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
 import { renderRoutes } from 'react-router-config';
@@ -229,7 +229,7 @@ class Layout extends Component {
           </Headroom>
         </div>
         <div
-          className={classnames('layout__sidebar', { 'is-active': sidebarActive })}
+          className={clsx('layout__sidebar', { 'is-active': sidebarActive })}
           ref={el => {
             this.sidebarElement = el;
           }}

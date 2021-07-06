@@ -6,7 +6,7 @@ import { withRouter } from 'react-router-dom';
 import { Player, utils, withMediaProps } from 'react-media-player';
 import enableInlineVideo from 'iphone-inline-video';
 import { withNamespaces } from 'react-i18next';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { Button, Icon } from 'semantic-ui-react';
 import isEqual from 'react-fast-compare';
 
@@ -803,7 +803,7 @@ class AVPlayer extends Component {
         ref={c => {
           this.mediaElement = c;
         }}
-        className={classNames('mediaplayer', { 'media-edit-mode': isEditMode })}
+        className={clsx('mediaplayer', { 'media-edit-mode': isEditMode })}
         onKeyDown={handleKeyDown}
         role="button"
         tabIndex="-1"
@@ -840,7 +840,7 @@ class AVPlayer extends Component {
         >
           <div
             ref={this.handlePlayerControlsRef}
-            className={classNames('mediaplayer__controls', {
+            className={clsx('mediaplayer__controls', {
               'mediaplayer__controls--is-fade': !controlsVisible && !forceShowControls
             })}
             onMouseEnter={this.handleControlsMouseEnter}

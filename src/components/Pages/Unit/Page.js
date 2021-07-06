@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { useLocation, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Grid } from 'semantic-ui-react';
@@ -57,7 +57,7 @@ const UnitPage = ({ section = '', t }) => {
         <Helmets.AVUnit unit={unit} language={uiLanguage} />
         <Grid padded={!isMobileDevice} className="avbox">
           <Grid.Column mobile={16} tablet={computerWidth} computer={computerWidth}
-            className={classNames({ "is-fitted": isMobileDevice })}>
+            className={clsx({ "is-fitted": isMobileDevice })}>
             <Grid.Row>
               {renderPlayer(unit)}
             </Grid.Row>
