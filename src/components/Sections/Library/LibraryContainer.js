@@ -69,7 +69,7 @@ class LibraryContainer extends Component {
   };
 
   shouldComponentUpdate(nextProps, nextState) {
-    const { sourceId, indexMap, language, contentLanguage, sortBy, areSourcesLoaded, assetWIP }          = this.props;
+    const { sourceId, indexMap, language, contentLanguage, sortBy, areSourcesLoaded }          = this.props;
     const { lastLoadedId, isReadable, fontSize, fontType, theme, tocIsActive, match, scrollTopPosition } = this.state;
 
     const equalProps = sourceId === nextProps.sourceId
@@ -77,7 +77,6 @@ class LibraryContainer extends Component {
       && contentLanguage === nextProps.contentLanguage
       && sortBy === nextProps.sortBy
       && areSourcesLoaded === nextProps.areSourcesLoaded
-      && assetWIP === nextProps.assetWIP;
 
     const equalIndexMap = indexMap && nextProps.indexMap && indexMap[sourceId] === nextProps.indexMap[sourceId];
 
@@ -113,8 +112,8 @@ class LibraryContainer extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { sourceId, areSourcesLoaded, getPathByID, location, assetWIP } = this.props;
-    if (!prevState.doScroll && !assetWIP && prevProps.assetWIP) {
+    const { sourceId, areSourcesLoaded, getPathByID, location } = this.props;
+    if (!prevState.doScroll && areSourcesLoaded && !prevProps.areSourcesLoaded) {
       this.setState({ doScroll: true });
     }
 
@@ -125,7 +124,7 @@ class LibraryContainer extends Component {
     this.replaceOrFetch(sourceId);
     this.updateSticky();
 
-    const { isReadable, scrollTopPosition, tocIsActive, doScroll = (!assetWIP && prevProps.assetWIP) } = this.state;
+    const { isReadable, scrollTopPosition, tocIsActive, doScroll = (areSourcesLoaded && !prevProps.areSourcesLoaded) } = this.state;
 
     const { srchstart }    = getQuery(location);
     const scrollingElement = isReadable ? this.articleRef : document.scrollingElement;
@@ -563,7 +562,6 @@ export default withRouter(connect(
   (state, ownProps) => ({
     sourceId: ownProps.match.params.id,
     indexMap: assets.getSourceIndexById(state.assets),
-    assetWIP: assets.getAsset(state.assets)?.wip,
     language: settings.getLanguage(state.settings),
     contentLanguage: settings.getContentLanguage(state.settings, ownProps.history.location),
     getSourceById: sources.getSourceById(state.sources),
