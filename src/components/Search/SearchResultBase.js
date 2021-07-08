@@ -41,7 +41,7 @@ import {
   MT_TEXT,
   MT_VIDEO,
   SEARCH_INTENT_INDEX_SOURCE,
-  SEARCH_INTENT_INDEX_TOPIC
+  SEARCH_INTENT_INDEX_TOPIC, CT_LIKUTIM
 } from '../../helpers/consts';
 import { SectionLogo } from '../../helpers/images';
 import { canonicalLink } from '../../helpers/links';
@@ -134,7 +134,7 @@ class SearchResultBase extends Component {
 
   // Extract from derived units all kitei makor text and audio files.
   static getKiteiMakor = (units, contentLanguage) => Object.values(units || {})
-    .filter(unit => unit.content_type === CT_KITEI_MAKOR)
+    .filter(unit => unit.content_type === CT_LIKUTIM)
     .map(unit => unit.files.filter(file => file.language === contentLanguage && [MT_AUDIO, MT_TEXT].includes(file.type)))
     .reduce((acc, files) => {
       files.forEach(file => acc.push(file));
