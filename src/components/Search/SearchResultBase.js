@@ -135,9 +135,15 @@ class SearchResultBase extends Component {
 
   // Extract from derived units all kitei makor text and audio files.
   static getKiteiMakor = (units, contentLanguage) => Object.values(units || {})
-    .filter(unit => [CT_LIKUTIM, CT_KITEI_MAKOR].includes(unit.content_type))
-    .flatMap(unit => unit.files)
-    .filter(file => file && file.language === contentLanguage && [MT_AUDIO, MT_TEXT].includes(file.type));
+    .filter(unit => [CT_KITEI_MAKOR, CT_LIKUTIM].includes(unit.content_type))
+    .filter(unit => {
+      return unit.files;
+    })
+    .map(unit => unit.files.filter(file => file.language === contentLanguage && ((unit.content_type === CT_KITEI_MAKOR && file.type === MT_AUDIO) || (unit.content_type === CT_LIKUTIM && file.type === MT_TEXT))))
+    .reduce((acc, files) => {
+      files.forEach(file => acc.push(file));
+      return acc;
+    }, []);
 
   logClick = (mdbUid, index, type, rank, searchId) => {
     const { click, location } = this.props;
