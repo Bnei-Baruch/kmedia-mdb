@@ -134,12 +134,9 @@ class SearchResultBase extends Component {
 
   // Extract from derived units all kitei makor text and audio files.
   static getKiteiMakor = (units, contentLanguage) => Object.values(units || {})
-    .filter(unit => unit.content_type === CT_LIKUTIM)
-    .map(unit => unit.files.filter(file => file.language === contentLanguage && [MT_AUDIO, MT_TEXT].includes(file.type)))
-    .reduce((acc, files) => {
-      files.forEach(file => acc.push(file));
-      return acc;
-    }, []);
+    .filter(unit => unit.content_type === CT_LIKUTIM || unit.content_type === CT_KITEI_MAKOR)
+    .flatMap(unit => unit.files)
+    .filter(file => file && file.language === contentLanguage && [MT_AUDIO, MT_TEXT].includes(file.type));
 
   logClick = (mdbUid, index, type, rank, searchId) => {
     const { click, location } = this.props;
@@ -290,8 +287,8 @@ class SearchResultBase extends Component {
   highlightWrapToLink = (__html, index, pathname, search, logLinkParams) => {
     const searchArr = this.clearStringForLink(__html).split(' ');
 
-    search.srchstart       = searchArr.slice(0, MIN_NECESSARY_WORDS_FOR_SEARCH).join(' ');
-    search.srchend         = searchArr.slice(-1 * MIN_NECESSARY_WORDS_FOR_SEARCH).join(' ');
+    search.srchstart    = searchArr.slice(0, MIN_NECESSARY_WORDS_FOR_SEARCH).join(' ');
+    search.srchend      = searchArr.slice(-1 * MIN_NECESSARY_WORDS_FOR_SEARCH).join(' ');
     search.highlightAll = true;
 
     return (<Link
@@ -331,13 +328,13 @@ class SearchResultBase extends Component {
   getFilterById = index => {
     const { getTagById, getSourceById } = this.props;
     switch (index) {
-      case SEARCH_INTENT_INDEX_TOPIC:
-        return getTagById;
-      case SEARCH_INTENT_INDEX_SOURCE:
-        return getSourceById;
-      default:
-        console.log('Using default filter:', index);
-        return x => x;
+    case SEARCH_INTENT_INDEX_TOPIC:
+      return getTagById;
+    case SEARCH_INTENT_INDEX_SOURCE:
+      return getSourceById;
+    default:
+      console.log('Using default filter:', index);
+      return x => x;
     }
   };
 
