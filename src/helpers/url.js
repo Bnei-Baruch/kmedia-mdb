@@ -16,7 +16,7 @@ export const isAbsoluteUrl = url => /^(?:[a-z]+:)?\/\//i.test(url);
 
 const ensureStartsWithSlash = str => str && (str[0] === '/' ? str : `/${str}`);
 
-export const splitPathByLanguage = (path) => {
+export const splitPathByLanguage = path => {
   const pathWithSlash = ensureStartsWithSlash(path);
   const parts = pathWithSlash.split('/');
 
@@ -39,6 +39,7 @@ export const getLanguageFromPath = (path, headers, userAgent) => {
   if (!language && isSocialUserAgent(userAgent)) {
     language = parse(path).shareLang;
   }
+
   if (language && LANG_UI_LANGUAGES.includes(language)) {
     // UI lang is set as first part of the url path. i,e, /:lang/...
     return { language, redirect: false };
@@ -85,12 +86,13 @@ export const prefixWithLanguage = (path, location, toLanguage) => {
   return language ? `/${language}${pathSuffix}` : pathSuffix;
 };
 
-export const getQuery = (location) => {
+export const getQuery = location => {
   if (location?.search) {
     const q = parse(location.search.slice(1));
     if ('deb' in q) {
       q.deb = q.deb !== 'false';
     }
+
     return q;
   }
 
@@ -106,6 +108,7 @@ export const updateQuery = (history, updater) => {
   if (!query.deb) {
     delete query.deb;
   }
+
   history.replace({ search: stringify(updater(query)), state: history.location?.state ?? '' });
 };
 

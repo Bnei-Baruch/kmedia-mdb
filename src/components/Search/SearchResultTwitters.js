@@ -42,10 +42,11 @@ class SearchResultTwitters extends SearchResultBase {
 
   onScrollLeft = () => this.onScrollChange(this.state.pageNo - 1);
 
-  onScrollChange = (pageNo) => {
+  onScrollChange = pageNo => {
     if (pageNo < 0 || this.state.pageSize * pageNo >= this.props.tweetIds.length) {
       return;
     }
+
     this.setState({ pageNo });
     this.askForData(pageNo);
   };

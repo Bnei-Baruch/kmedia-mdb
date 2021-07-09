@@ -17,7 +17,7 @@ const cmpFn = (a, b) => strCmp(a.text, b.text);
 const getTree = (congressEvents, t) => {
   let byCountry = groupBy(congressEvents, x => x.country || 'Unknown');
 
-  byCountry = mapValues(byCountry, (v) => {
+  byCountry = mapValues(byCountry, v => {
     const byCity = Object.entries(countBy(v, x => x.city || 'Unknown'));
     return {
       byCity,
@@ -36,6 +36,7 @@ const getTree = (congressEvents, t) => {
       if (byCity.length > 1) {
         res.children.sort(cmpFn);
       }
+
       return res;
     });
 
@@ -57,9 +58,9 @@ const buildNode = (id, count, t) => ({
   count,
 });
 
-const LocationsFilter = (props) => {
+const LocationsFilter = props => {
   const cIDs           = useSelector(state => selectors.getEventsByType(state.events)[CT_CONGRESS]);
-  const congressEvents = useSelector(state => (cIDs || []).map(x => mdb.getDenormCollection(state.mdb, x)));
+  const congressEvents = useSelector(state => (cIDs || []).map(x => mdb.getDenormCollection(state.mdb, x)).filter(c => !!c));
 
   const { t } = props;
   const tree  = useMemo(() => getTree(congressEvents, t), [congressEvents, t]);

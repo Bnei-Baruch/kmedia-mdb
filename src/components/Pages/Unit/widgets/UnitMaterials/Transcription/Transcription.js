@@ -28,6 +28,7 @@ const scrollToSearch = () => {
   if (element === null) {
     return;
   }
+
   setTimeout(() => element.scrollIntoView(), 0);
 };
 
@@ -88,12 +89,15 @@ class Transcription extends Component {
     if (!newLanguage) {
       return false;
     }
+
     if (textFiles.length === 0) {
       newLanguage = undefined;
     }
+
     if (newLanguage !== undefined && state.language && state.language !== newLanguage) {
       newLanguage = state.language;
     }
+
     if (state.selectedFile && unit.id === state.unit_id) {
       return { selectedFile: state.selectedFile, languages, language: newLanguage, textFiles };
     }
@@ -155,7 +159,7 @@ class Transcription extends Component {
     }
   }
 
-  loadFile = (selectedFile) => {
+  loadFile = selectedFile => {
     if (selectedFile && selectedFile.id) {
       const { doc2htmlById, onContentChange } = this.props;
       const { data }                          = doc2htmlById[selectedFile.id] || {};
@@ -200,15 +204,16 @@ class Transcription extends Component {
     </select>;
   }
 
-  handleOnMouseUp = (e) => {
+  handleOnMouseUp = e => {
     if (this.context.isMobileDevice || !this.props.enableShareText.isShareTextEnabled) {
       return false;
     }
+
     this.updateSelection();
     return false;
   };
 
-  handleOnMouseDown = (e) => {
+  handleOnMouseDown = e => {
     if (this.context.isMobileDevice || !this.props.enableShareText.isShareTextEnabled) {
       return false;
     }
@@ -242,7 +247,7 @@ class Transcription extends Component {
     this.setState({ searchUrl, searchText });
   };
 
-  prepareContent = (data) => {
+  prepareContent = data => {
     const { textFiles, selectedFile, language } = this.state;
     const direction                             = getLanguageDirection(language);
     const { srchstart, srchend, highlightAll }  = getQuery(this.props.location);

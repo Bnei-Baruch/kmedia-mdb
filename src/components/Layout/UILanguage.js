@@ -13,7 +13,7 @@ import Link from '../Language/MultiLanguageLink';
 import { DeviceInfoContext } from '../../helpers/app-contexts';
 
 
-const storeUILanguage = (language) => {
+const storeUILanguage = language => {
   if (!language) {
     return;
   }

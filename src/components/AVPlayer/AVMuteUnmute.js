@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Icon } from 'semantic-ui-react';
 
-const normalize = (l) => {
+const normalize = l => {
   const ret = 100 * l;
   return ret < 1 ? 0 : ret;
 };
@@ -26,7 +26,7 @@ const AVMuteUnmute = ({ upward = true, media, media: { volume }, muted, isAudio,
     };
   });
 
-  const setVolume = (clientY) => {
+  const setVolume = clientY => {
     const { top, bottom } = element.getBoundingClientRect();
     const offset          = Math.min(Math.max(0, clientY - top), bottom - top);
     const newVolume       = 1 - (offset / (bottom - top));
@@ -51,7 +51,7 @@ const AVMuteUnmute = ({ upward = true, media, media: { volume }, muted, isAudio,
     setWasMouseDown(true);
   };
 
-  const handleMove = (e) => {
+  const handleMove = e => {
     if (wasMouseDown) {
       // Resolve clientY from mouse or touch event.
       const clientY = e.touches ? e.touches[e.touches.length - 1].clientY : e.clientY;
@@ -60,7 +60,7 @@ const AVMuteUnmute = ({ upward = true, media, media: { volume }, muted, isAudio,
     }
   };
 
-  const handleEnd = (e) => {
+  const handleEnd = e => {
     if (wasMouseDown) {
       setWasMouseDown(false);
       setVolumeHover(false);
@@ -68,6 +68,7 @@ const AVMuteUnmute = ({ upward = true, media, media: { volume }, muted, isAudio,
       if (e.clientY) {
         setVolume(e.clientY);
       }
+
       e.preventDefault();
     }
   };

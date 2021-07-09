@@ -27,6 +27,7 @@ const SUBFLOWS = new Map(Object.entries(FLOWS.reduce((acc, flow) => {
     if (!(subflow in acc)) {
       acc[subflow] = [];
     }
+
     if (!acc[subflow].includes(flow.start)) {
       acc[subflow].push(flow.start);
     }
@@ -43,10 +44,12 @@ export default class ClientChronicles {
       this.append = noop;
       return;
     }
+
     const { localStorage } = window;
     if (localStorage.getItem('user_id') === null) {
       localStorage.setItem('user_id', `local:${ulid()}`);
     }
+
     this.userId = localStorage.getItem('user_id');
 
     this.namespace = 'archive';
@@ -74,18 +77,19 @@ export default class ClientChronicles {
       }
     }, 60000);
 
-    window.addEventListener('beforeunload', (event) => {
+    window.addEventListener('beforeunload', event => {
       this.sessionActivities.add('beforeunload');
       if (this.currentPathname) {
         // Sync is false here because it will be sent together with user-inactive append.
         this.appendPage('leave', /* sync= */ false);
       }
+
       this.append('user-inactive', { activities: Array.from(this.sessionActivities) }, /* sync= */ true);
       store.dispatch(actions.userInactive());
     }, true);
 
     // Handle events to update activity.
-    ACTIVITY_EVENTS.forEach((eventName) => {
+    ACTIVITY_EVENTS.forEach(eventName => {
       document.addEventListener(eventName, () => {
         if (!this.isUserActive()) {
           // User back from inactive state. This is a new session.
@@ -93,6 +97,7 @@ export default class ClientChronicles {
         } else {
           this.lastActivityTimestampMs = Date.now();
         }
+
         this.sessionActivities.add(eventName);
       }, true);
     });
@@ -100,14 +105,16 @@ export default class ClientChronicles {
     this.prevHref = window.location.href;
     this.currentPathname = window.location.pathname;
     this.appendPage('enter');
-    history.listen((historyEvent) => {
+    history.listen(historyEvent => {
       if (historyEvent.pathname !== this.currentPathname) {
         if (this.currentPathname) {
           this.appendPage('leave');
         }
+
         this.currentPathname = historyEvent.pathname;
         this.appendPage('enter');
       }
+
       if (window.location.href !== this.prevHref) {
         this.prevHref = window.location.href;
       }
@@ -146,6 +153,7 @@ export default class ClientChronicles {
         prefix = '';
       }
     }
+
     this.append(`${prefix}page-${suffix}`, data, sync);
   }
 
@@ -154,6 +162,7 @@ export default class ClientChronicles {
     if (reinit || sessionStorage.getItem('session_id') === null) {
       sessionStorage.setItem('session_id', `local:${ulid()}`);
     }
+
     this.sessionId = sessionStorage.getItem('session_id');
 
     // Maps entry types to the last timestamp they happened. This is required to properly
@@ -170,6 +179,7 @@ export default class ClientChronicles {
       if (timestamp > max.timestamp) {
         return { eventType, timestamp };
       }
+
       return max;
     }, { eventType: '', timestamp: this.firstActivityTimestampMs });
   }
@@ -186,14 +196,14 @@ export default class ClientChronicles {
 
   flushAppends(sync = false) {
     const nowTimestampMs = Date.now();
-    const appends = { append_requests: this.timestampedAppends.map((timestampAppend) => ({ append: timestampAppend.append, offset: timestampAppend.timestamp - nowTimestampMs })) };
+    const appends = { append_requests: this.timestampedAppends.map(timestampAppend => ({ append: timestampAppend.append, offset: timestampAppend.timestamp - nowTimestampMs })) };
     // Clear bulk without checking if post worked or not.
     this.timestampedAppends.length = 0;
     if (sync) {
       (async () => await axios.post(chroniclesUrl('appends'), appends))();
     } else {
       axios.post(chroniclesUrl('appends'), appends)
-        .catch((error) => {
+        .catch(error => {
           console.warn(error);
         });
     }

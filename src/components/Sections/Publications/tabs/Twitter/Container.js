@@ -62,15 +62,15 @@ class TwitterContainer extends withPagination {
 
   extraFetchParams(props) {
     switch (props.language) {
-    case LANG_HEBREW:
-      return { username: 'laitman_co_il' };
-    case LANG_UKRAINIAN:
-    case LANG_RUSSIAN:
-      return { username: 'Michael_Laitman' };
-    case LANG_SPANISH:
-      return { username: 'laitman_es' };
-    default:
-      return { username: 'laitman' };
+      case LANG_HEBREW:
+        return { username: 'laitman_co_il' };
+      case LANG_UKRAINIAN:
+      case LANG_RUSSIAN:
+        return { username: 'Michael_Laitman' };
+      case LANG_SPANISH:
+        return { username: 'laitman_es' };
+      default:
+        return { username: 'laitman' };
     }
   }
 
@@ -78,6 +78,7 @@ class TwitterContainer extends withPagination {
     if (typeof window !== 'undefined') {
       window.scrollTo(0, 0);
     }
+
     this.setPage(this.props, pageNo);
   }
 

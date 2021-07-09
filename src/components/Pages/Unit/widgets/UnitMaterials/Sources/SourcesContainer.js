@@ -8,7 +8,7 @@ import { tracePath, isEmpty } from '../../../../../../helpers/utils';
 import { selectors } from '../../../../../../redux/modules/sources';
 import { actions as assetsActions, selectors as assetsSelectors } from '../../../../../../redux/modules/assets';
 import * as shapes from '../../../../../shapes';
-import Sources, { getKiteiMakorUnits } from './Sources';
+import Sources, { getLikutimUnits } from './Sources';
 
 
 const SourcesContainer = ({ unit, t }) => {
@@ -35,7 +35,7 @@ const SourcesContainer = ({ unit, t }) => {
       })),
   [getSourceById, indexMap, unit.sources]);
 
-  const derivedOptions = useMemo(() => getKiteiMakorUnits(unit)
+  const derivedOptions = useMemo(() => getLikutimUnits(unit)
     .map(x => ({
       value: x.id,
       text: t(`constants.content-types.${x.content_type}`),

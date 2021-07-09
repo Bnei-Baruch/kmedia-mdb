@@ -36,7 +36,7 @@ export const CT_COLLECTIONS = [
   CT_LESSONS_SERIES,
 ];
 
-export const IsCollectionContentType = (contentType) => CT_COLLECTIONS.includes(contentType);
+export const IsCollectionContentType = contentType => CT_COLLECTIONS.includes(contentType);
 
 // Content Unit Types
 export const CT_LESSON_PART           = 'LESSON_PART';
@@ -59,6 +59,7 @@ export const CT_LELO_MIKUD            = 'LELO_MIKUD';
 export const CT_BLOG_POST             = 'BLOG_POST';
 export const CT_RESEARCH_MATERIAL     = 'RESEARCH_MATERIAL';
 export const CT_KTAIM_NIVCHARIM       = 'KTAIM_NIVCHARIM';
+export const CT_LIKUTIM               = 'LIKUTIM';
 
 // Content types for additional Elastic results
 export const SCT_BLOG_POST = 'R_BLOG_POST';
@@ -217,12 +218,15 @@ export const getVideoRes = (vsType, date) => {
   if (date.getFullYear() < 2014) {
     return { width: 480, height: 360 };
   }
+
   if (vsType === VS_NHD) {
     return { width: 640, height: 360 };
   }
+
   if (vsType === VS_HD) {
     return { width: 1280, height: 720 };
   }
+
   // fHD
   return { width: 1920, height: 980 };
 };
@@ -243,16 +247,16 @@ export const EVENT_TYPES = [
 ];
 
 // Required for Sections filter.
-export const COLLECTION_LESSONS_TYPE  = [CT_DAILY_LESSON, CT_SPECIAL_LESSON, /* CT_CHILDREN_LESSONS, */ CT_WOMEN_LESSONS, CT_VIRTUAL_LESSONS, CT_LECTURE_SERIES];
-export const NO_COLLECTION_VIEW_TYPE  = [CT_DAILY_LESSON, CT_SPECIAL_LESSON];
-export const COLLECTION_PROGRAMS_TYPE = [CT_VIDEO_PROGRAM, CT_CLIPS];
-export const COLLECTION_EVENTS_TYPE             = [CT_FRIENDS_GATHERINGS, CT_MEALS, ...EVENT_TYPES];
-export const COLLECTION_PUBLICATIONS_TYPE       = [CT_ARTICLES];
-export const UNIT_LESSONS_TYPE                  = [CT_LESSON_PART, /* CT_CHILDREN_LESSON, */ CT_WOMEN_LESSON, CT_VIRTUAL_LESSON, CT_FULL_LESSON, CT_LECTURE];
-export const UNIT_PROGRAMS_TYPE                 = [CT_VIDEO_PROGRAM_CHAPTER, CT_CLIP];
-export const UNIT_EVENTS_TYPE                   = [CT_EVENT_PART, CT_MEAL, CT_FRIENDS_GATHERING];
-export const UNIT_PUBLICATIONS_TYPE             = [CT_ARTICLE, CT_PUBLICATION, CT_BLOG_POST, SCT_BLOG_POST, SCT_TWEET];
-export const DERIVED_UNITS_CONTENT_TYPE         = [CT_VIDEO_PROGRAM_CHAPTER, CT_CLIP];
+export const COLLECTION_LESSONS_TYPE      = [CT_DAILY_LESSON, CT_SPECIAL_LESSON, /* CT_CHILDREN_LESSONS, */ CT_WOMEN_LESSONS, CT_VIRTUAL_LESSONS, CT_LECTURE_SERIES];
+export const NO_COLLECTION_VIEW_TYPE      = [CT_DAILY_LESSON, CT_SPECIAL_LESSON];
+export const COLLECTION_PROGRAMS_TYPE     = [CT_VIDEO_PROGRAM, CT_CLIPS];
+export const COLLECTION_EVENTS_TYPE       = [CT_FRIENDS_GATHERINGS, CT_MEALS, ...EVENT_TYPES];
+export const COLLECTION_PUBLICATIONS_TYPE = [CT_ARTICLES];
+export const UNIT_LESSONS_TYPE            = [CT_LESSON_PART, /* CT_CHILDREN_LESSON, */ CT_WOMEN_LESSON, CT_VIRTUAL_LESSON, CT_FULL_LESSON, CT_LECTURE];
+export const UNIT_PROGRAMS_TYPE           = [CT_VIDEO_PROGRAM_CHAPTER, CT_CLIP];
+export const UNIT_EVENTS_TYPE             = [CT_EVENT_PART, CT_MEAL, CT_FRIENDS_GATHERING];
+export const UNIT_PUBLICATIONS_TYPE       = [CT_ARTICLE, CT_PUBLICATION, CT_BLOG_POST, SCT_BLOG_POST, SCT_TWEET];
+export const DERIVED_UNITS_CONTENT_TYPE   = [CT_VIDEO_PROGRAM_CHAPTER, CT_CLIP];
 
 export const NO_NAME = '☠ no name';
 

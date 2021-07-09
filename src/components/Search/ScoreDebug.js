@@ -27,12 +27,14 @@ class ScoreDebug extends Component {
     if (!exp) {
       return (<div>Error, expected explanations, got null.</div>);
     }
+
     if (!open || !(key in open)) {
       open[key] = {
         open: true,
         details: {},
       };
     }
+
     return (
       <div key={key}>
         {!exp.details

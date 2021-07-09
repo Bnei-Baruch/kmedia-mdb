@@ -25,17 +25,17 @@ import { SectionLogo } from '../../../helpers/images';
 
 const CT_DAILY_LESSON_I18N_KEY = `constants.content-types.${CT_DAILY_LESSON}`;
 
-const getI18nTypeOverridesKey = (contentType) => {
+const getI18nTypeOverridesKey = contentType => {
   switch (contentType) {
-  case CT_LESSON_PART:
-  case CT_FULL_LESSON:
-    return 'lesson.';
-  case CT_VIDEO_PROGRAM_CHAPTER:
-    return 'program.';
-  case CT_ARTICLE:
-    return 'publication.';
-  default:
-    return '';
+    case CT_LESSON_PART:
+    case CT_FULL_LESSON:
+      return 'lesson.';
+    case CT_VIDEO_PROGRAM_CHAPTER:
+      return 'program.';
+    case CT_ARTICLE:
+      return 'publication.';
+    default:
+      return '';
   }
 };
 
@@ -53,17 +53,19 @@ const labelTextByFile = (file, contentType, t) => {
   if (file.type === CT_KITEI_MAKOR) {
     return t(`constants.content-types.${CT_KITEI_MAKOR}`);
   }
+
   const typeOverrides = getI18nTypeOverridesKey(contentType);
   const fileType      = ['audio', 'video'].includes(file.type) ? `${file.type}-simple` : file.type;
   const label         = t(`media-downloads.${typeOverrides}type-labels.${fileType}`);
   if (file.video_size) {
     return `${label} [${VS_NAMES[file.video_size]}]`;
   }
+
   return label;
 };
 
 const renderHorizontalFilesList = (files, contentType, t) => (
-  sortMediaFiles(files).map((file) => {
+  sortMediaFiles(files).map(file => {
     const url   = physicalFile(file);
     const label = labelTextByFile(file, contentType, t);
     return (
@@ -81,7 +83,7 @@ const renderHorizontalFilesList = (files, contentType, t) => (
   })
 );
 
-const filesForRenderByUnit = (unit) => {
+const filesForRenderByUnit = unit => {
   const leloMikudFiles  = unitDerivedFiles(unit, 'lelo-mikud', key => key.includes(CT_LELO_MIKUD), () => true);
   const kiteiMakorFiles = unitDerivedFiles(unit, 'KITEI_MAKOR', key => key.includes(CT_KITEI_MAKOR), f => f?.mimetype?.includes(MT_AUDIO));
 
@@ -169,14 +171,14 @@ export const renderCollection = (collection, language, t, helpChooseLang) => {
   );
 };
 
-export const matchIconToType = (type) => {
+export const matchIconToType = type => {
   switch (type) {
-  case 'programs':
-  case 'events':
-  case 'publications':
-    return type;
-  default:
-    return 'lectures';
+    case 'programs':
+    case 'events':
+    case 'publications':
+      return type;
+    default:
+      return 'lectures';
   }
 };
 
@@ -211,7 +213,7 @@ export const renderOtherCollection = (title, collectionArray, language, t, helpC
   );
 };
 
-export const mergeTypesToCollections = (byType) => {
+export const mergeTypesToCollections = byType => {
   const collections = {
     LESSONS: [],
     EVENTS: [],
@@ -219,7 +221,7 @@ export const mergeTypesToCollections = (byType) => {
     PUBLICATIONS: []
   };
 
-  Object.keys(byType).forEach((type) => {
+  Object.keys(byType).forEach(type => {
     if (UNIT_PROGRAMS_TYPE.includes(type)) {
       collections.PROGRAMS.push([...byType[type]]);
     } else if (UNIT_EVENTS_TYPE.includes(type)) {

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
@@ -171,7 +171,7 @@ class LibraryContainer extends Component {
     }
   }
 
-  fetchIndices = (sourceId) => {
+  fetchIndices = sourceId => {
     const { indexMap, fetchIndex } = this.props;
     if (isEmpty(sourceId) || !isEmpty(indexMap[sourceId])) {
       return;
@@ -180,7 +180,7 @@ class LibraryContainer extends Component {
     fetchIndex(sourceId);
   };
 
-  firstLeafId = (sourceId) => {
+  firstLeafId = sourceId => {
     const { getSourceById } = this.props;
 
     const { children } = getSourceById(sourceId) || { children: [] };
@@ -201,11 +201,11 @@ class LibraryContainer extends Component {
     }
   };
 
-  handleContextRef = (ref) => this.contextRef = ref;
+  handleContextRef = ref => this.contextRef = ref;
 
-  handleContentArticleRef = (ref) => this.articleRef = ref;
+  handleContentArticleRef = ref => this.articleRef = ref;
 
-  handleContentHeaderRef = (ref) => this.contentHeaderRef = ref;
+  handleContentHeaderRef = ref => this.contentHeaderRef = ref;
 
   // handleLangContainerRef = (ref) => this.langContainerRef = ref;
 
@@ -228,7 +228,7 @@ class LibraryContainer extends Component {
     ? this.articleRef.scrollTop
     : document.scrollingElement.scrollTop;
 
-  handleSettings = (setting) => this.setState(setting);
+  handleSettings = setting => this.setState(setting);
 
   header = (sourceId, properParentId) => {
     const { getSourceById } = this.props;
@@ -287,7 +287,7 @@ class LibraryContainer extends Component {
     sourcesSortBy(sortOrder);
   };
 
-  switchSortingOrder = (parentId) => {
+  switchSortingOrder = parentId => {
     const { sortBy, NotToSort } = this.props;
 
     if (NotToSort.findIndex(a => a === parentId) !== -1) {
@@ -311,7 +311,7 @@ class LibraryContainer extends Component {
 
   handleFilterChange = (e, data) => this.setState({ match: data.value });
 
-  handleFilterKeyDown = (e) => {
+  handleFilterKeyDown = e => {
     if (e.keyCode === 27) { // Esc
       this.setState({ match: '' });
     }
@@ -327,6 +327,7 @@ class LibraryContainer extends Component {
     if (NotToFilter.findIndex(a => a === parentId) !== -1) {
       return null;
     }
+
     return (
       <Input
         fluid
@@ -404,6 +405,7 @@ class LibraryContainer extends Component {
     if (activeIndex === -1) {
       return null;
     }
+
     const { children } = fullPath[len - 2];
     return (
       <div className="library__nextPrevButtons">
@@ -428,6 +430,7 @@ class LibraryContainer extends Component {
     if (index < 0 || index > children.length - 1) {
       return null;
     }
+
     const { title, labelPosition, buttonAlign, icon } = LibraryContainer.getNextPrevDetails(isNext, language, t);
     const sourceId                                    = children[index];
     const source                                      = getSourceById(sourceId);
@@ -464,7 +467,7 @@ class LibraryContainer extends Component {
     return (
       <div
         ref={this.handleContentArticleRef}
-        className={classNames({
+        className={clsx({
           'headroom-z-index-801': true,
           source: true,
           'is-readable': isReadable,
@@ -534,7 +537,7 @@ class LibraryContainer extends Component {
                 mobile={16}
                 tablet={16}
                 computer={12}
-                className={classNames({
+                className={clsx({
                   'source__content-wrapper': true,
                   [`size${fontSize}`]: true,
                 })}

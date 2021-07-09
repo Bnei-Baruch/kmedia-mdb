@@ -8,7 +8,7 @@ export const getCurrentDirection = () => {
   return document.getElementById('root').style.getPropertyValue('direction');
 };
 
-export const changeDirection = (direction) => {
+export const changeDirection = direction => {
   if (typeof window === 'undefined') {
     return;
   }

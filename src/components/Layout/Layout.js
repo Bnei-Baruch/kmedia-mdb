@@ -1,6 +1,6 @@
 import React, { Component, createRef } from 'react';
 import PropTypes from 'prop-types';
-import classnames from 'classnames';
+import clsx from 'clsx';
 import { connect } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
 import { renderRoutes } from 'react-router-config';
@@ -30,15 +30,17 @@ const RenderHeaderSearch = React.forwardRef(({ t, location }, headerSearchElemen
   </div>
 ));
 
-const shouldShowSearch = (location) => {
+const shouldShowSearch = location => {
   // we don't show the search on home page
   const parts = location.pathname.split('/').filter(x => (x !== ''));
   if (parts.length === 0) {
     return false;
   }
+
   if (parts.length === 1) {
     return !ALL_LANGUAGES.includes(parts[0]);
   }
+
   return true;
 };
 
@@ -98,7 +100,7 @@ class Layout extends Component {
   }
 
   // i.e, main, header of footer.
-  clickOutside = (e) => {
+  clickOutside = e => {
     if (this.isCloseSideBar(e)) {
       this.closeSidebar();
     }
@@ -108,7 +110,7 @@ class Layout extends Component {
     }
   };
 
-  isCloseHeaderSearch = (e) => {
+  isCloseHeaderSearch = e => {
     if (!this.state || !this.state.isShowHeaderSearch || e.target === headerSearchElement) {
       return false;
     }
@@ -121,7 +123,7 @@ class Layout extends Component {
     return !hasTarget;
   };
 
-  isCloseSideBar = (e) => {
+  isCloseSideBar = e => {
     if (!this.state || !this.state.sidebarActive || e.target === this.sidebarElement) {
       return false;
     }
@@ -227,8 +229,8 @@ class Layout extends Component {
           </Headroom>
         </div>
         <div
-          className={classnames('layout__sidebar', { 'is-active': sidebarActive })}
-          ref={(el) => {
+          className={clsx('layout__sidebar', { 'is-active': sidebarActive })}
+          ref={el => {
             this.sidebarElement = el;
           }}
         >

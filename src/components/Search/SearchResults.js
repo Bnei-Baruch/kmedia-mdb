@@ -25,7 +25,7 @@ import SearchResultSource from './SearchResultSource';
 import SearchResultPost from './SearchResultPost';
 import DidYouMean from './DidYouMean';
 
-const SearchResults = (props) => {
+const SearchResults = props => {
   /* Requested by Mizrahi
     const [showNote, setShowNote] = useState(true);
    */

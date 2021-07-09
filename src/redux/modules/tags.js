@@ -62,7 +62,7 @@ const initialState = {
   getSectionUnits: identity
 };
 
-const buildById = (items) => {
+const buildById = items => {
   const byId = {};
 
   // We BFS the tree, extracting each item by it's ID
@@ -73,6 +73,7 @@ const buildById = (items) => {
     if (node.children) {
       s = s.concat(node.children);
     }
+
     byId[node.id] = {
       ...node,
       children: node.children ? node.children.map(x => x.id) : [],

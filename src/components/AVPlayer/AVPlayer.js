@@ -6,7 +6,7 @@ import { withRouter } from 'react-router-dom';
 import { Player, utils, withMediaProps } from 'react-media-player';
 import enableInlineVideo from 'iphone-inline-video';
 import { withNamespaces } from 'react-i18next';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { Button, Icon } from 'semantic-ui-react';
 import isEqual from 'react-fast-compare';
 
@@ -98,7 +98,7 @@ class AVPlayer extends Component {
     requestedLanguage: 'en',
   };
 
-  static chooseSource = (props) => {
+  static chooseSource = props => {
     const { item, t } = props;
     if (isEmpty(item.byQuality)) {
       return { error: true, errorReason: t('messages.no-playable-files') };
@@ -128,6 +128,7 @@ class AVPlayer extends Component {
     if (typeof sliceStart === 'undefined') {
       sliceStart = state.sliceStart || 0;
     }
+
     if (typeof sliceEnd === 'undefined') {
       sliceEnd = state.sliceEnd || media.duration || Infinity;
     }
@@ -167,10 +168,12 @@ class AVPlayer extends Component {
       playerMode = PLAYER_MODE.SLICE_VIEW;
       sstart     = fromHumanReadableTime(query.sstart).asSeconds();
     }
+
     if (query.send) {
       playerMode = PLAYER_MODE.SLICE_VIEW;
       send       = fromHumanReadableTime(query.send).asSeconds();
     }
+
     if (sstart > send) {
       playerMode = PLAYER_MODE.NORMAL;
     }
@@ -214,6 +217,7 @@ class AVPlayer extends Component {
         setTimeout(media.pause, 0);
       }
     }
+
     this.receiveMessageFunc = this.receiveMessage.bind(this);
     window.addEventListener('message', this.receiveMessageFunc, false);
   }
@@ -225,6 +229,7 @@ class AVPlayer extends Component {
       if (this.isUnitExistAndPlaying() && this.state?.item?.unit?.id !== item?.unit?.id) {
         chronicles.append('player-stop', this.buildAppendData());
       }
+
       this.setState({
         error: false,
         errorReason: '',
@@ -247,6 +252,7 @@ class AVPlayer extends Component {
       clearTimeout(this.autohideTimeoutId);
       this.autohideTimeoutId = null;
     }
+
     window.removeEventListener('message', this.receiveMessageFunc, false);
     if (this.isUnitExistAndPlaying()) {
       chronicles.append('player-stop', this.buildAppendData());
@@ -261,61 +267,64 @@ class AVPlayer extends Component {
     const { media, item } = this.props;
     try {
       switch (event.data.command) {
-      case 'play':
-        media.play();
-        break;
-      case 'stop':
-        media.stop();
-        break;
-      case 'pause':
-        media.pause();
-        break;
-      case 'exitFullscreen':
-        media.exitFullscreen();
-        break;
-      case 'mute':
-        media.mute(true);
-        break;
-      case 'muteUnmute':
-        media.muteUnmute();
-        break;
-      case 'setVolume':
-        if (event.data.volume === undefined) {
-          event.data.volume = 50;
-        }
-        media.setVolume(event.data.volume);
-        break;
-      case 'getVolume':
-        this.sendCallbackMessage(event.data, { status: 'ok', result: media.volume });
-        return;
-      case 'getCurrentTime':
-        this.sendCallbackMessage(event.data, { status: 'ok', result: media.currentTime });
-        return;
-      case 'setCurrentTime':
-        if (event.data.currentTime === undefined) {
-          event.data.currentTime = 0;
-        }
-        media.seekTo(event.data.currentTime);
-        break;
-      case 'getInfo':
-        this.sendCallbackMessage(event.data, { status: 'ok', result: item });
-        return;
-      case 'isFullScreen':
-        this.sendCallbackMessage(event.data, { status: 'ok', result: media.isFullScreen });
-        return;
-      case 'isLoading':
-        this.sendCallbackMessage(event.data, { status: 'ok', result: media.isLoading });
-        return;
-      case 'isMuted':
-        this.sendCallbackMessage(event.data, { status: 'ok', result: media.isMuted });
-        return;
-      case 'isPlaying':
-        this.sendCallbackMessage(event.data, { status: 'ok', result: media.isPlaying });
-        return;
-      default:
+        case 'play':
+          media.play();
+          break;
+        case 'stop':
+          media.stop();
+          break;
+        case 'pause':
+          media.pause();
+          break;
+        case 'exitFullscreen':
+          media.exitFullscreen();
+          break;
+        case 'mute':
+          media.mute(true);
+          break;
+        case 'muteUnmute':
+          media.muteUnmute();
+          break;
+        case 'setVolume':
+          if (event.data.volume === undefined) {
+            event.data.volume = 50;
+          }
+
+          media.setVolume(event.data.volume);
+          break;
+        case 'getVolume':
+          this.sendCallbackMessage(event.data, { status: 'ok', result: media.volume });
+          return;
+        case 'getCurrentTime':
+          this.sendCallbackMessage(event.data, { status: 'ok', result: media.currentTime });
+          return;
+        case 'setCurrentTime':
+          if (event.data.currentTime === undefined) {
+            event.data.currentTime = 0;
+          }
+
+          media.seekTo(event.data.currentTime);
+          break;
+        case 'getInfo':
+          this.sendCallbackMessage(event.data, { status: 'ok', result: item });
+          return;
+        case 'isFullScreen':
+          this.sendCallbackMessage(event.data, { status: 'ok', result: media.isFullScreen });
+          return;
+        case 'isLoading':
+          this.sendCallbackMessage(event.data, { status: 'ok', result: media.isLoading });
+          return;
+        case 'isMuted':
+          this.sendCallbackMessage(event.data, { status: 'ok', result: media.isMuted });
+          return;
+        case 'isPlaying':
+          this.sendCallbackMessage(event.data, { status: 'ok', result: media.isPlaying });
+          return;
+        default:
         // Ignore commands that weren't sent to us
-        return;
+          return;
       }
+
       this.sendCallbackMessage(event.data, { status: 'ok' });
     } catch (e) {
       console.error(`Error while receive external message in AVPlayer: ${  e}`);
@@ -356,6 +365,7 @@ class AVPlayer extends Component {
         media.seekTo(savedTime);
       }
     }
+
     // Start the player if auto play needed
     if (firstSeek && ((autoPlay && start !== PlayerStartEnum.Stop) || start === PlayerStartEnum.Start)) {
       // Mute the video if auto play video
@@ -363,14 +373,16 @@ class AVPlayer extends Component {
         media.mute(true);
         this.setUnMuteButton(true);
       }
+
       media.play();
     }
+
     // restore playback from state when player instance changed (when src changes, e.g., playlist).
     this.player.instance.playbackRate = playbackToValue(playbackRate);
     this.setState({ wasCurrentTime: undefined, firstSeek: false });
   };
 
-  onError = (e) => {
+  onError = e => {
     const { t } = this.props;
     // Show error only on loading of video.
     if (!e.currentTime && !e.isPlaying) {
@@ -404,6 +416,7 @@ class AVPlayer extends Component {
     if (onPlay) {
       onPlay();
     }
+
     const unitId = item?.unit?.id;
     if (unitId) {
       chronicles.append('player-play', this.buildAppendData());
@@ -411,7 +424,7 @@ class AVPlayer extends Component {
     }
   };
 
-  onPause = (e) => {
+  onPause = e => {
     const { browserName } = this.state;
     const { onPause, onFinish, item, chronicles } = this.props;
     // when we're close to the end regard this as finished
@@ -422,6 +435,7 @@ class AVPlayer extends Component {
     } else if (onPause) {
       onPause();
     }
+
     if (item?.unit?.id) {
       chronicles.append('player-stop', this.buildAppendData());
     }
@@ -433,11 +447,11 @@ class AVPlayer extends Component {
     this.setUnMuteButton(false);
   };
 
-  setUnMuteButton = (unMuteButton) => {
+  setUnMuteButton = unMuteButton => {
     this.setState({ unMuteButton });
   };
 
-  onVolumeChange = (volume) => {
+  onVolumeChange = volume => {
     const { persistenceFn } = this.state;
     persistenceFn && persistenceFn(volume);
     this.setUnMuteButton(volume === 0);
@@ -479,6 +493,7 @@ class AVPlayer extends Component {
       persistedVolume = DEFAULT_PLAYER_VOLUME.toString();
       localStorage.setItem(PLAYER_VOLUME_STORAGE_KEY, persistedVolume);
     }
+
     media.setVolume(persistedVolume);
   };
 
@@ -490,7 +505,7 @@ class AVPlayer extends Component {
     onMediaEditModeChange(mode);
   };
 
-  handleTimeUpdate = (timeData) => {
+  handleTimeUpdate = timeData => {
     const { media, onFinish }                                    = this.props;
     const { mode, sliceEnd, sliceStart, firstSeek, browserName } = this.state;
 
@@ -544,6 +559,7 @@ class AVPlayer extends Component {
         });
       }
     }
+
     return ret;
   };
 
@@ -568,6 +584,7 @@ class AVPlayer extends Component {
         clearTimeout(this.autohideTimeoutId);
         this.autohideTimeoutId = null;
       }
+
       this.hideControlsTimeout();
     }
   };
@@ -588,11 +605,12 @@ class AVPlayer extends Component {
     this.hideControls();
   };
 
-  handleWrapperMouseMove = (e) => {
+  handleWrapperMouseMove = e => {
     const { controlsVisible } = this.state;
     if (!controlsVisible) {
       this.showControls();
     }
+
     this.wrapperMouseY = e.pageY - this.wrapperRect.top;
   };
 
@@ -604,18 +622,19 @@ class AVPlayer extends Component {
     this.hideControlsTimeout();
   };
 
-  handleWrapperKeyDown = (e) => {
+  handleWrapperKeyDown = e => {
     const { media: { isLoading, playPause } } = this.props;
 
     if (e.keyCode === 32) {
       if (!isLoading) {
         playPause();
       }
+
       e.preventDefault();
     }
   };
 
-  handleWrapperRef = (ref) => {
+  handleWrapperRef = ref => {
     if (ref) {
       this.wrapper = ref;
       this.wrapper.addEventListener('keydown', this.handleWrapperKeyDown);
@@ -626,7 +645,7 @@ class AVPlayer extends Component {
     }
   };
 
-  handlePlayerControlsRef = (ref) => {
+  handlePlayerControlsRef = ref => {
     this.playerControls = ref;
     if (this.playerControls) {
       this.controlsRect = ref.getBoundingClientRect();
@@ -649,14 +668,14 @@ class AVPlayer extends Component {
     }
   };
 
-  handleOnScreenKeyDown = (e) => {
+  handleOnScreenKeyDown = e => {
     if (e.keyCode === 32) {
       this.handleOnScreenClick();
       e.preventDefault();
     }
   };
 
-  handleOnScreenRef = (ref) => {
+  handleOnScreenRef = ref => {
     if (ref) {
       this.onScreen = ref;
       this.onScreen.addEventListener('click', this.handleOnScreenClick);
@@ -694,6 +713,7 @@ class AVPlayer extends Component {
         return parseInt(savedTime, 10);
       }
     }
+
     return null;
   };
 
@@ -780,10 +800,10 @@ class AVPlayer extends Component {
 
     return (
       <div
-        ref={(c) => {
+        ref={c => {
           this.mediaElement = c;
         }}
-        className={classNames('mediaplayer', { 'media-edit-mode': isEditMode })}
+        className={clsx('mediaplayer', { 'media-edit-mode': isEditMode })}
         onKeyDown={handleKeyDown}
         role="button"
         tabIndex="-1"
@@ -793,7 +813,7 @@ class AVPlayer extends Component {
         }
         <Player
           playsInline
-          ref={(c) => {
+          ref={c => {
             this.player = c;
             if (c && c.instance) {
               enableInlineVideo(c.instance);
@@ -820,7 +840,7 @@ class AVPlayer extends Component {
         >
           <div
             ref={this.handlePlayerControlsRef}
-            className={classNames('mediaplayer__controls', {
+            className={clsx('mediaplayer__controls', {
               'mediaplayer__controls--is-fade': !controlsVisible && !forceShowControls
             })}
             onMouseEnter={this.handleControlsMouseEnter}

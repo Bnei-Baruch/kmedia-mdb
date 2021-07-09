@@ -9,6 +9,7 @@ const renderHeader = (header, subHeader) => {
   if (!header) {
     return null;
   }
+
   return (
     <Header as="h2" className="thumbnail__header">
       <Header.Content>
@@ -25,7 +26,7 @@ const ExtLink = ({ to, children }) => (
   <a href={to} target="_blank" rel="noopener noreferrer">{children}</a>
 );
 
-const Promoted = (props) => {
+const Promoted = props => {
   const { banner: { wip, err, data } } = props;
 
   if (err || wip) {
@@ -44,6 +45,7 @@ const Promoted = (props) => {
   if (!/^http/.exec(imageFile)) {
     imageFile = publicFile(imageFile);
   }
+
   const src = Requests.imaginary('resize', {
     url: imageFile,
     width: 512,

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { Media } from 'react-media-player';
 import isEqual from 'react-fast-compare';
 
@@ -68,7 +68,7 @@ const AVBox = ({ unit, t }) => {
   const isAudio = playableItem.mediaType === MT_AUDIO;
 
   return (
-    <div className={classNames('avbox__player', {
+    <div className={clsx('avbox__player', {
       'avbox__player--is-audio': isAudio,
       'avbox__player--is-audio--edit-mode': isAudio && mediaEditMode === 2,
       'avbox__player--is-audio--normal-mode': isAudio && mediaEditMode === 0,

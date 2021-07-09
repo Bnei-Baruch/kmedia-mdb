@@ -31,7 +31,7 @@ const buildNode = (id, getTagById, cuStats) => {
   };
 };
 
-const TagsFilter = (props) => {
+const TagsFilter = props => {
   const roots      = useSelector(state => selectors.getRoots(state.tags));
   const getTagById = useSelector(state => selectors.getTagById(state.tags));
 

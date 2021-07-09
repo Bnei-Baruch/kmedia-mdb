@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { assetUrl, Requests } from '../../../helpers/Api';
 import FallbackImage from '../FallbackImage';
 
-const UnitLogo = (props) => {
+const UnitLogo = props => {
   const { unitId = null, collectionId = null, width = 120, className = '', fallbackImg = 'default', ...rest } = props;
 
   const src = Requests.imaginary('thumbnail', {

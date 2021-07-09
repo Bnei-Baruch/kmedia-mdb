@@ -53,6 +53,7 @@ class PDF extends Component {
         numPages: null,
       };
     }
+
     return null;
   }
 
@@ -70,6 +71,7 @@ class PDF extends Component {
     } else {
       pageNo = startsFrom;
     }
+
     this.setState({ numPages, pageNumber: pageNo });
     pageNumberHandler(pageNo);
   };
@@ -78,7 +80,7 @@ class PDF extends Component {
     width: document.getElementById('pdfWrapper').getBoundingClientRect().width
   });
 
-  setPage = (pageNo) => {
+  setPage = pageNo => {
     const { pageNumberHandler } = this.props;
 
     this.setState({ pageNumber: pageNo });

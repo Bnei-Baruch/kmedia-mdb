@@ -98,22 +98,22 @@ const onSSRPrepare = draft => {
   draft.person.err      = draft.person.err ? draft.person.err.toString() : draft.person.err;
 };
 
-const getActionKey = (type) => {
+const getActionKey = type => {
   switch (type) {
-  case UNZIP:
-  case UNZIP_SUCCESS:
-  case UNZIP_FAILURE:
-    return 'zipIndexById';
-  case DOC2HTML:
-  case DOC2HTML_SUCCESS:
-  case DOC2HTML_FAILURE:
-    return 'doc2htmlById';
-  case SOURCE_INDEX:
-  case SOURCE_INDEX_SUCCESS:
-  case SOURCE_INDEX_FAILURE:
-    return 'sourceIndexById';
-  default:
-    throw new Error(`Unknown action key: ${type}`);
+    case UNZIP:
+    case UNZIP_SUCCESS:
+    case UNZIP_FAILURE:
+      return 'zipIndexById';
+    case DOC2HTML:
+    case DOC2HTML_SUCCESS:
+    case DOC2HTML_FAILURE:
+      return 'doc2htmlById';
+    case SOURCE_INDEX:
+    case SOURCE_INDEX_SUCCESS:
+    case SOURCE_INDEX_FAILURE:
+      return 'sourceIndexById';
+    default:
+      throw new Error(`Unknown action key: ${type}`);
   }
 };
 

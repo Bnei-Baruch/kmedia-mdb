@@ -1,36 +1,35 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Card, Container } from 'semantic-ui-react';
+import { isEqual } from 'lodash';
+import moment from 'moment';
 import { getSectionForTranslation } from '../../../helpers/utils';
 import * as consts from '../../../helpers/consts';
 import * as shapes from '../../shapes';
 import Section from './Section';
 import LatestUpdate from './LatestUpdate';
-import { isEqual } from 'lodash';
-import moment from 'moment';
 
-const unitsByContentType = list =>
-  list.reduce((acc, val) => {
-    if (!acc[val.content_type]) {
-      acc[val.content_type] = [val];
-    } else {
-      // sort by film_date descending
-      let i = 0;
-      while (i < acc[val.content_type].length) {
-        if (acc[val.content_type][i].film_date > val.film_date) {
-          i++;
-        } else {
-          break;
-        }
+const unitsByContentType = list => list.reduce((acc, val) => {
+  if (!acc[val.content_type]) {
+    acc[val.content_type] = [val];
+  } else {
+    // sort by film_date descending
+    let i = 0;
+    while (i < acc[val.content_type].length) {
+      if (acc[val.content_type][i].film_date > val.film_date) {
+        i++;
+      } else {
+        break;
       }
-
-      acc[val.content_type].splice(i, 0, val);
     }
 
-    return acc;
-  }, {});
+    acc[val.content_type].splice(i, 0, val);
+  }
 
-const getComplexCards = (getCard) => {
+  return acc;
+}, {});
+
+const getComplexCards = getCard => {
   //  Switch by created at between:
   //    women lesson unit CT_WOMEN_LESSON,
   //    virtual lesson unit CT_VIRTUAL_LESSON,
@@ -43,12 +42,15 @@ const getComplexCards = (getCard) => {
   if (wl && moment().diff(moment(wl.props.unit.film_date), 'days') < 14) {
     cards.push(wl);
   }
+
   if (vl && moment().diff(moment(vl.props.unit.film_date), 'days') < 14) {
     cards.push(vl);
   }
+
   if (cards.length < 2) {
     cards.push(getCard(consts.CT_LESSONS_SERIES));
   }
+
   if (cards.length < 2) {
     cards.push(getCard(consts.CT_LESSONS_SERIES, 1));
   }
@@ -64,21 +66,19 @@ const LatestUpdatesSection = ({ latestUnits = [], t }) => {
       (a, b) => {
         if (a.film_date !== b.film_date) {
           return moment(a).diff(moment(b), 'days');
-        } else {
-          return a.name_in_collection - b.name_in_collection;
         }
-      }
+
+        return a.name_in_collection - b.name_in_collection;
+      },
     );
   }
 
-  const getCardArray = (content_type, itemsCount) =>
-    unitsByCT[content_type]?.slice(0, itemsCount).map(unit => getLatestUpdate(unit));
-
-  const getCard = (content_type, index = 0) =>
-    unitsByCT[content_type]?.length > index && getLatestUpdate(unitsByCT[content_type][index]);
-
   const getLatestUpdate = unit =>
     <LatestUpdate key={unit.id} unit={unit} label={t(getSectionForTranslation(unit.content_type))} t={t} />;
+
+  const getCardArray = (content_type, itemsCount) => unitsByCT[content_type]?.slice(0, itemsCount).map(unit => getLatestUpdate(unit));
+
+  const getCard = (content_type, index = 0) => unitsByCT[content_type]?.length > index && getLatestUpdate(unitsByCT[content_type][index]);
 
   const eventTypes = [consts.CT_CONGRESS, consts.CT_FRIENDS_GATHERING, consts.CT_MEAL, consts.CT_HOLIDAY];
 
@@ -118,7 +118,7 @@ const LatestUpdatesSection = ({ latestUnits = [], t }) => {
 
 LatestUpdatesSection.propTypes = {
   latestUnits: PropTypes.arrayOf(shapes.ContentUnit),
-  t: PropTypes.func.isRequired
+  t: PropTypes.func.isRequired,
 };
 
 const arePropsEqual = (prevProps, nextProps) => {
