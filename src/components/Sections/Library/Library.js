@@ -33,15 +33,15 @@ export const checkRabashGroupArticles = source => {
 };
 
 const Library = ({
-  data,
-  source,
-  language = null,
-  languages = [],
-  langSelectorMount = null,
-  downloadAllowed,
-  handleLanguageChanged,
-  t,
-}) => {
+                   data,
+                   source,
+                   language = null,
+                   languages = [],
+                   langSelectorMount = null,
+                   downloadAllowed,
+                   handleLanguageChanged,
+                   t,
+                 }) => {
   const location                             = useLocation();
   const history                              = useHistory();
   const [pageNumber, setPageNumber]          = useState(getPageFromLocation(location));
@@ -59,11 +59,12 @@ const Library = ({
     if (!data?.[language])
       return null;
     const { pdf, docx, doc } = data[language];
-    const file               = docx || doc;
-    if (!file) return null;
-
     if (pdf && isTaas(source))
       return { url: physicalFile(pdf), isPDF: true, name: pdf.name };
+
+    const file = docx || doc;
+    if (!file) return null;
+
     return { url: physicalFile(file, true), name: file.name, ...doc2htmlById[file.id] };
   };
 
