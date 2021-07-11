@@ -6,13 +6,12 @@ import Navbar from 'react-day-picker/build/Navbar';
 import MomentLocaleUtils from 'react-day-picker/moment';
 import { withNamespaces } from 'react-i18next';
 import { Button, Card, Container, Divider, Grid, Input } from 'semantic-ui-react';
+import { useSelector } from 'react-redux';
 
+import { selectors as settings } from '../../../redux/modules/settings';
 import { ALL_LANGUAGES } from '../../../helpers/consts';
 import { today } from '../../../helpers/date';
-import * as shapes from '../../shapes';
 import SectionHeader from '../../shared/SectionHeader';
-import WipErr from '../../shared/WipErr/WipErr';
-import { FrownSplash } from '../../shared/Splash/Splash';
 import DropdownLanguageSelector from '../../Language/Selector/DropdownLanguageSelector';
 import YearMonthForm from '../../Filters/components/Date/YearMonthForm';
 import SimpleModeList from './list';
@@ -40,52 +39,59 @@ const getNavBarElement = (props, language, onDayClick) => {
   );
 };
 
-const datePickerButton = (nativeDateInput, handleNativeDateInputChange, data, isMobileDevice, deviceInfo) => isMobileDevice
-  ? (
-    <div>
-      <div className="ui input">
-        <Input
-          icon="dropdown"
-          type="text"
-          readOnly
-          value={data.selectedInLocaleFormat}
-          onClick={() => openNativeDatePicker(nativeDateInput, deviceInfo)}
+const datePickerButton = (nativeDateInput, handleNativeDateInputChange, data, isMobileDevice, deviceInfo) =>
+  isMobileDevice
+    ? (
+      <div>
+        <div className="ui input">
+          <Input
+            icon="dropdown"
+            type="text"
+            readOnly
+            value={data.selectedInLocaleFormat}
+            onClick={() => openNativeDatePicker(nativeDateInput, deviceInfo)}
+          />
+        </div>
+        <input
+          className="hide-native-date-input"
+          type="date"
+          value={data.selectedToString}
+          max={today().format('YYYY-MM-DD')}
+          step="1"
+          pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}"
+          onChange={handleNativeDateInputChange}
+          ref={nativeDateInput}
         />
       </div>
-      <input
-        className="hide-native-date-input"
-        type="date"
-        value={data.selectedToString}
-        max={today().format('YYYY-MM-DD')}
-        step="1"
-        pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}"
-        onChange={handleNativeDateInputChange}
-        ref={nativeDateInput}
-      />
-    </div>
-  )
-  : <span>{moment(data.selectedDate).format(data.dateFormat)}</span>;
+    )
+    : <span>{moment(data.selectedDate).format(data.dateFormat)}</span>;
 
-const dropDownContainer = ({ language, blinkLangSelect, onLanguageChange }, languages, isMobileDevice) => isMobileDevice
-  ? (
-    <select className={blinkLangSelect ? 'blink' : ''} value={language} onChange={onLanguageChange}>
-      {
-        languages.map(x => (
-          <option key={`opt-${x.flag}`} value={x.value}>
-            {x.text}
-          </option>
-        ))
-      }
-    </select>
-  )
-  : (
+const languagesDropDownContainer = (filesLanguage, blinkLangSelect, onLanguageChange, t, isMobileDevice) => {
+  if (isMobileDevice) {
+    const languages = getOptions({ languages: ALL_LANGUAGES, t });
+
+    return (
+      <select className={blinkLangSelect ? 'blink' : ''} value={filesLanguage} onChange={onLanguageChange}>
+        {
+          languages.map(x => (
+            <option key={`opt-${x.flag}`} value={x.value}>
+              {x.text}
+            </option>
+          ))
+        }
+      </select>
+    )
+  }
+
+  return (
     <DropdownLanguageSelector
       languages={ALL_LANGUAGES}
-      defaultValue={language}
+      defaultValue={filesLanguage}
       onSelect={onLanguageChange}
       blink={blinkLangSelect}
     />
   );
+};
 
 const openNativeDatePicker = (nativeDateInput, deviceInfo) => {
   if (deviceInfo.os.name === 'Android') {
@@ -97,34 +103,22 @@ const openNativeDatePicker = (nativeDateInput, deviceInfo) => {
 
 const isToday = selectedDate => moment().isSame(moment(selectedDate), 'date');
 
-const list = ({ items = null, wip = false, err = null, t, language, renderUnit }) => {
-  const errObject = { wip, err, t };
-  return WipErr(errObject) ||
-    (
-      <div>
-        {
-          (items.lessons.length || items.others.length)
-            ? <SimpleModeList items={items} language={language} t={t} renderUnit={renderUnit} />
-            : <FrownSplash text={t('simple-mode.no-files-found-for-date')} />
-        }
-      </div>
-    );
-};
-
 const LocaleDateFormat = moment.localeData().longDateFormat('L');
 const ToDay            = today().toDate();
 
-const SimpleModePage = props => {
-  const
-    {
-      selectedDate = new Date(),
-      t,
-      uiLanguage,
-      onDayClick,
-    } = props;
+const SimpleModePage = ({
+  selectedDate = new Date(),
+  t,
+  filesLanguage,
+  blinkLangSelect,
+  onLanguageChange,
+  renderUnit,
+  onDayClick,
+}) => {
+  const uiLanguage = useSelector(state => settings.getLanguage(state.settings));
 
-  const [isClient, setIsClient]        = useState(false);
-  const [data, setData]                = useState({
+  const [isClient, setIsClient] = useState(false);
+  const [data, setData]         = useState({
     selected: ToDay,
     selectedDate,
     selectedToString: moment(ToDay).format('YYYY-MM-DD'),
@@ -134,16 +128,13 @@ const SimpleModePage = props => {
       selected: selectedDate,
     },
   });
-  const [languages, setLanguages]      = useState([]);
+
   const nativeDateInput                = useRef(null);
   const { isMobileDevice, deviceInfo } = useContext(DeviceInfoContext);
+
   useEffect(() => {
     setIsClient(typeof window !== 'undefined');
   }, []);
-
-  useEffect(() => {
-    setLanguages(getOptions({ languages: ALL_LANGUAGES, t }));
-  }, [t]);
 
   useEffect(() => {
     if (isClient) {
@@ -211,11 +202,11 @@ const SimpleModePage = props => {
                     {' '}
                   </h4>
                   <div className="dropdown-container">
-                    {dropDownContainer(props, languages, isMobileDevice)}
+                    {languagesDropDownContainer(filesLanguage, blinkLangSelect, onLanguageChange, t, isMobileDevice)}
                   </div>
                 </div>
               </div>
-              {list(props)}
+              <SimpleModeList language={filesLanguage} renderUnit={renderUnit} />
             </Grid.Column>
             <Grid.Column only="tablet computer" tablet={16} computer={4}>
               <div className="stick-calendar">
@@ -235,12 +226,8 @@ const SimpleModePage = props => {
 };
 
 SimpleModePage.propTypes = {
-  items: shapes.SimpleMode,
   selectedDate: PropTypes.objectOf(Date),
-  wip: shapes.WIP,
-  err: shapes.Error,
-  uiLanguage: PropTypes.string.isRequired,
-  language: PropTypes.string.isRequired,
+  filesLanguage: PropTypes.string.isRequired,
   t: PropTypes.func.isRequired,
   renderUnit: PropTypes.func.isRequired,
   onDayClick: PropTypes.func.isRequired,
