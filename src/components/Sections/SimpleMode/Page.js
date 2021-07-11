@@ -5,7 +5,7 @@ import DayPicker from 'react-day-picker';
 import Navbar from 'react-day-picker/build/Navbar';
 import MomentLocaleUtils from 'react-day-picker/moment';
 import { withNamespaces } from 'react-i18next';
-import { Button, Card, Container, Divider, Grid, Input } from 'semantic-ui-react';
+import { Button, Card, Divider, Grid, Input } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
 
 import { selectors as settings } from '../../../redux/modules/settings';
@@ -179,48 +179,46 @@ const SimpleModePage = ({
     <div>
       <SectionHeader section="simple-mode" />
       <Divider fitted />
-      <Container className="padded">
-        <Grid>
-          <Grid.Row className="no-padding-top">
-            <Grid.Column mobile={16} computer={12} tablet={16}>
-              <div className="summary-container">
-                <div className="controller">
-                  <h4>{t('simple-mode.date')}</h4>
-                  <div className="date-container">
-                    <button type="button" onClick={() => changeDay(-1, selectedDate, onDayClick)}>{t('simple-mode.prev')}</button>
-                    {datePickerButton(nativeDateInput, handleNativeDateInputChange, data, isMobileDevice, deviceInfo)}
-                    <button
-                      type="button"
-                      disabled={isToday(selectedDate)}
-                      className={isToday(selectedDate) ? 'disabled' : ''}
-                      onClick={() => changeDay(1, selectedDate, onDayClick)}>{t('simple-mode.next')}</button>
-                  </div>
-                </div>
-                <div className="controller">
-                  <h4>
-                    {t('simple-mode.media-language')}
-                    {' '}
-                  </h4>
-                  <div className="dropdown-container">
-                    {languagesDropDownContainer(filesLanguage, blinkLangSelect, onLanguageChange, t, isMobileDevice)}
-                  </div>
+      <Grid padded container>
+        <Grid.Row className="no-padding-top">
+          <Grid.Column mobile={16} computer={12} tablet={16}>
+            <div className="summary-container">
+              <div className="controller">
+                <h4>{t('simple-mode.date')}</h4>
+                <div className="date-container">
+                  <button type="button" onClick={() => changeDay(-1, selectedDate, onDayClick)}>{t('simple-mode.prev')}</button>
+                  {datePickerButton(nativeDateInput, handleNativeDateInputChange, data, isMobileDevice, deviceInfo)}
+                  <button
+                    type="button"
+                    disabled={isToday(selectedDate)}
+                    className={isToday(selectedDate) ? 'disabled' : ''}
+                    onClick={() => changeDay(1, selectedDate, onDayClick)}>{t('simple-mode.next')}</button>
                 </div>
               </div>
-              <SimpleModeList language={filesLanguage} renderUnit={renderUnit} />
-            </Grid.Column>
-            <Grid.Column only="tablet computer" tablet={16} computer={4}>
-              <div className="stick-calendar">
-                <div className="summary-container adjust-height">
-                  <div className="controller">
-                    <h4>{t('simple-mode.choose-date')}</h4>
-                  </div>
+              <div className="controller">
+                <h4>
+                  {t('simple-mode.media-language')}
+                  {' '}
+                </h4>
+                <div className="dropdown-container">
+                  {languagesDropDownContainer(filesLanguage, blinkLangSelect, onLanguageChange, t, isMobileDevice)}
                 </div>
-                {renderDatePicker()}
               </div>
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
-      </Container>
+            </div>
+            <SimpleModeList language={filesLanguage} renderUnit={renderUnit} />
+          </Grid.Column>
+          <Grid.Column only="tablet computer" tablet={16} computer={4}>
+            <div className="stick-calendar">
+              <div className="summary-container adjust-height">
+                <div className="controller">
+                  <h4>{t('simple-mode.choose-date')}</h4>
+                </div>
+              </div>
+              {renderDatePicker()}
+            </div>
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
     </div>
   );
 };
