@@ -44,7 +44,7 @@ const DonateNow = ({ t, language }) => {
       break;
   }
 
-  return DButton({ content: t('home.donate'), href: `http://kab1.com/${lang}`, icon: 'heart', className: 'donate-button' });
+  return DButton({ content: t('home.donate'), href: `https://kab1.com/${lang}`, icon: 'heart', className: 'donate-button' });
 };
 
 DonateNow.propTypes = {
