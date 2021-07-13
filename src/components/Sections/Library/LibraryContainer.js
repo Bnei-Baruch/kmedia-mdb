@@ -33,6 +33,7 @@ const waitForRenderElement = async (attempts = 0) => {
     await new Promise(resolve => setTimeout(resolve, 100));
     return waitForRenderElement(++attempts);
   }
+
   return element;
 };
 

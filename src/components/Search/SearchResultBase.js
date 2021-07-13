@@ -136,9 +136,7 @@ class SearchResultBase extends Component {
   // Extract from derived units all kitei makor text and audio files.
   static getKiteiMakor = (units, contentLanguage) => Object.values(units || {})
     .filter(unit => [CT_KITEI_MAKOR, CT_LIKUTIM].includes(unit.content_type))
-    .filter(unit => {
-      return unit.files;
-    })
+    .filter(unit => unit.files)
     .map(unit => unit.files.filter(file => file.language === contentLanguage && ((unit.content_type === CT_KITEI_MAKOR && file.type === MT_AUDIO) || (unit.content_type === CT_LIKUTIM && file.type === MT_TEXT))))
     .reduce((acc, files) => {
       files.forEach(file => acc.push(file));
@@ -335,13 +333,13 @@ class SearchResultBase extends Component {
   getFilterById = index => {
     const { getTagById, getSourceById } = this.props;
     switch (index) {
-    case SEARCH_INTENT_INDEX_TOPIC:
-      return getTagById;
-    case SEARCH_INTENT_INDEX_SOURCE:
-      return getSourceById;
-    default:
-      console.log('Using default filter:', index);
-      return x => x;
+      case SEARCH_INTENT_INDEX_TOPIC:
+        return getTagById;
+      case SEARCH_INTENT_INDEX_SOURCE:
+        return getSourceById;
+      default:
+        console.log('Using default filter:', index);
+        return x => x;
     }
   };
 
