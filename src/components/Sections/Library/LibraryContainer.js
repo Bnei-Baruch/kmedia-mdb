@@ -26,6 +26,16 @@ import { getQuery } from '../../../helpers/url';
 import { SCROLL_SEARCH_ID } from '../../../helpers/consts';
 import { isTaas } from '../../shared/PDF/PDF';
 
+const waitForRenderElement = async (attempts = 0) => {
+  if (attempts > 10) return Promise.reject();
+  const element = document.getElementById(SCROLL_SEARCH_ID);
+  if (!element) {
+    await new Promise(resolve => setTimeout(resolve, 100));
+    return waitForRenderElement(++attempts);
+  }
+  return element;
+};
+
 class LibraryContainer extends Component {
   static contextType = DeviceInfoContext;
 
@@ -69,15 +79,14 @@ class LibraryContainer extends Component {
   };
 
   shouldComponentUpdate(nextProps, nextState) {
-    const { sourceId, indexMap, language, contentLanguage, sortBy, areSourcesLoaded, assetWIP }          = this.props;
+    const { sourceId, indexMap, language, contentLanguage, sortBy, areSourcesLoaded }                    = this.props;
     const { lastLoadedId, isReadable, fontSize, fontType, theme, tocIsActive, match, scrollTopPosition } = this.state;
 
     const equalProps = sourceId === nextProps.sourceId
       && language === nextProps.language
       && contentLanguage === nextProps.contentLanguage
       && sortBy === nextProps.sortBy
-      && areSourcesLoaded === nextProps.areSourcesLoaded
-      && assetWIP === nextProps.assetWIP;
+      && areSourcesLoaded === nextProps.areSourcesLoaded;
 
     const equalIndexMap = indexMap && nextProps.indexMap && indexMap[sourceId] === nextProps.indexMap[sourceId];
 
@@ -113,11 +122,7 @@ class LibraryContainer extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { sourceId, areSourcesLoaded, getPathByID, location, assetWIP } = this.props;
-    if (!prevState.doScroll && !assetWIP && prevProps.assetWIP) {
-      this.setState({ doScroll: true });
-    }
-
+    const { sourceId, areSourcesLoaded, getPathByID, location } = this.props;
     if (!areSourcesLoaded) {
       return;
     }
@@ -125,14 +130,13 @@ class LibraryContainer extends Component {
     this.replaceOrFetch(sourceId);
     this.updateSticky();
 
-    const { isReadable, scrollTopPosition, tocIsActive, doScroll = (!assetWIP && prevProps.assetWIP) } = this.state;
+    const { isReadable, scrollTopPosition, tocIsActive, doScroll = true } = this.state;
 
     const { srchstart }    = getQuery(location);
     const scrollingElement = isReadable ? this.articleRef : document.scrollingElement;
 
     if (srchstart && doScroll) {
-      const element = document.getElementById(SCROLL_SEARCH_ID);
-      element && (scrollingElement.scrollTop = element.offsetTop);
+      waitForRenderElement(0).then(el => el && (scrollingElement.scrollTop = el.offsetTop));
       this.setState({ doScroll: false });
     }
 
@@ -565,7 +569,6 @@ export default withRouter(connect(
   (state, ownProps) => ({
     sourceId: ownProps.match.params.id,
     indexMap: assets.getSourceIndexById(state.assets),
-    assetWIP: assets.getAsset(state.assets)?.wip,
     language: settings.getLanguage(state.settings),
     contentLanguage: settings.getContentLanguage(state.settings, ownProps.history.location),
     getSourceById: sources.getSourceById(state.sources),

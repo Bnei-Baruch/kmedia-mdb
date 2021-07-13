@@ -169,15 +169,15 @@ class MediaDownloads extends Component {
 
   static getI18nTypeOverridesKey = unit => {
     switch (unit.content_type) {
-      case CT_LESSON_PART:
-      case CT_FULL_LESSON:
-        return 'lesson';
-      case CT_VIDEO_PROGRAM_CHAPTER:
-        return 'program';
-      case CT_ARTICLE:
-        return 'publication';
-      default:
-        return '';
+    case CT_LESSON_PART:
+    case CT_FULL_LESSON:
+      return 'lesson';
+    case CT_VIDEO_PROGRAM_CHAPTER:
+      return 'program';
+    case CT_ARTICLE:
+      return 'publication';
+    default:
+      return '';
     }
   };
 
@@ -187,7 +187,12 @@ class MediaDownloads extends Component {
 
   handleCopied = url => {
     this.setState({ isCopyPopupOpen: { ...this.state.isCopyPopupOpen, [url]: true } }, () => {
-      setTimeout(() => this.setState({ isCopyPopupOpen: { ...this.state.isCopyPopupOpen, [url]: false } }), POPOVER_CONFIRMATION_TIMEOUT);
+      setTimeout(() => this.setState({
+        isCopyPopupOpen: {
+          ...this.state.isCopyPopupOpen,
+          [url]: false
+        }
+      }), POPOVER_CONFIRMATION_TIMEOUT);
     });
   };
 
@@ -253,7 +258,7 @@ class MediaDownloads extends Component {
     const derivedRows = this.getDerivedRows(derivedGroups, language, t, typeOverrides, publisherById);
 
     return (
-      <div className="media-downloads">
+      <div className="media-downloads content__aside-unit">
         { languages.length > 1 ?
           <Grid container padded={false} columns={isMobileDevice ? 1 : 2} className={classNames({"padding_r_l_0": !isMobileDevice})}>
             {!isMobileDevice &&
@@ -269,7 +274,7 @@ class MediaDownloads extends Component {
             </Grid.Column>
           </Grid>
           : displayDivider &&
-            <Divider></Divider>
+          <Divider></Divider>
         }
         <Table unstackable className="media-downloads__files" basic="very" compact="very">
           <Table.Body>
@@ -282,22 +287,23 @@ class MediaDownloads extends Component {
   }
 
   getDerivedRows = (derivedGroups, language, t, typeOverrides, publisherById) => {
-    const kiteiMakor = derivedGroups[CT_KITEI_MAKOR];
-    const kiteiMakorByType = (kiteiMakor && kiteiMakor.get(language)) ?? new Map();
-    const likutim = derivedGroups[CT_LIKUTIM];
-    const likutimByType = (likutim && likutim.get(language)) ?? new Map();
-    const leloMikud = derivedGroups[CT_LELO_MIKUD];
-    const leloMikudByType = (leloMikud && leloMikud.get(language)) ?? new Map();
-    const publications = derivedGroups[CT_PUBLICATION];
-    const publicationsByType = (publications && publications.get(language)) ?? new Map();
-    const articles = derivedGroups[CT_ARTICLE];
-    const articlesByType = (articles && articles.get(language)) ?? new Map();
-    const researchMaterials = derivedGroups[CT_RESEARCH_MATERIAL];
+    const kiteiMakor              = derivedGroups[CT_KITEI_MAKOR];
+    const kiteiMakorByType        = (kiteiMakor && kiteiMakor.get(language)) ?? new Map();
+    const likutim                 = derivedGroups[CT_LIKUTIM];
+    const likutimByType           = (likutim && likutim.get(language)) ?? new Map();
+    const leloMikud               = derivedGroups[CT_LELO_MIKUD];
+    const leloMikudByType         = (leloMikud && leloMikud.get(language)) ?? new Map();
+    const publications            = derivedGroups[CT_PUBLICATION];
+    const publicationsByType      = (publications && publications.get(language)) ?? new Map();
+    const articles                = derivedGroups[CT_ARTICLE];
+    const articlesByType          = (articles && articles.get(language)) ?? new Map();
+    const researchMaterials       = derivedGroups[CT_RESEARCH_MATERIAL];
     const researchMaterialsByType = (researchMaterials && researchMaterials.get(language)) ?? new Map();
 
     let derivedRows = [];
     if (kiteiMakorByType.size > 0) {
       derivedRows = MEDIA_ORDER.reduce((acc, val) => {
+        if (val === MT_TEXT) return acc;
         const label = `${t('constants.content-types.KITEI_MAKOR')} - ${t(`constants.media-types.${val}`)}`;
         const files = (kiteiMakorByType.get(val) || []).map(file => this.renderRow(file, label, t));
         return acc.concat(files);
@@ -347,7 +353,7 @@ class MediaDownloads extends Component {
     }
 
     return derivedRows;
-  }
+  };
 
   getRows = (byType, t, typeOverrides) => {
     let rows;
@@ -360,7 +366,7 @@ class MediaDownloads extends Component {
     } else {
       rows = MEDIA_ORDER.reduce((acc, val) => {
         const baseLabel = t(`media-downloads.${typeOverrides}type-labels.${val}`);
-        const files = (byType.get(val) || []).map(file => {
+        const files     = (byType.get(val) || []).map(file => {
           let label = baseLabel;
           if (file.video_size) {
             label = `${label} [${VS_NAMES[file.video_size]}]`;
@@ -373,7 +379,7 @@ class MediaDownloads extends Component {
     }
 
     return rows;
-  }
+  };
 }
 
 export default connect(state => (

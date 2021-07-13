@@ -41,7 +41,8 @@ import {
   MT_TEXT,
   MT_VIDEO,
   SEARCH_INTENT_INDEX_SOURCE,
-  SEARCH_INTENT_INDEX_TOPIC
+  SEARCH_INTENT_INDEX_TOPIC,
+  CT_LIKUTIM
 } from '../../helpers/consts';
 import { SectionLogo } from '../../helpers/images';
 import { canonicalLink } from '../../helpers/links';
@@ -134,8 +135,11 @@ class SearchResultBase extends Component {
 
   // Extract from derived units all kitei makor text and audio files.
   static getKiteiMakor = (units, contentLanguage) => Object.values(units || {})
-    .filter(unit => unit.content_type === CT_KITEI_MAKOR)
-    .map(unit => unit.files.filter(file => file.language === contentLanguage && [MT_AUDIO, MT_TEXT].includes(file.type)))
+    .filter(unit => [CT_KITEI_MAKOR, CT_LIKUTIM].includes(unit.content_type))
+    .filter(unit => {
+      return unit.files;
+    })
+    .map(unit => unit.files.filter(file => file.language === contentLanguage && ((unit.content_type === CT_KITEI_MAKOR && file.type === MT_AUDIO) || (unit.content_type === CT_LIKUTIM && file.type === MT_TEXT))))
     .reduce((acc, files) => {
       files.forEach(file => acc.push(file));
       return acc;
@@ -290,8 +294,8 @@ class SearchResultBase extends Component {
   highlightWrapToLink = (__html, index, pathname, search, logLinkParams) => {
     const searchArr = this.clearStringForLink(__html).split(' ');
 
-    search.srchstart       = searchArr.slice(0, MIN_NECESSARY_WORDS_FOR_SEARCH).join(' ');
-    search.srchend         = searchArr.slice(-1 * MIN_NECESSARY_WORDS_FOR_SEARCH).join(' ');
+    search.srchstart    = searchArr.slice(0, MIN_NECESSARY_WORDS_FOR_SEARCH).join(' ');
+    search.srchend      = searchArr.slice(-1 * MIN_NECESSARY_WORDS_FOR_SEARCH).join(' ');
     search.highlightAll = true;
 
     return (<Link
@@ -331,13 +335,13 @@ class SearchResultBase extends Component {
   getFilterById = index => {
     const { getTagById, getSourceById } = this.props;
     switch (index) {
-      case SEARCH_INTENT_INDEX_TOPIC:
-        return getTagById;
-      case SEARCH_INTENT_INDEX_SOURCE:
-        return getSourceById;
-      default:
-        console.log('Using default filter:', index);
-        return x => x;
+    case SEARCH_INTENT_INDEX_TOPIC:
+      return getTagById;
+    case SEARCH_INTENT_INDEX_SOURCE:
+      return getSourceById;
+    default:
+      console.log('Using default filter:', index);
+      return x => x;
     }
   };
 
