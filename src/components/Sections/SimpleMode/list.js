@@ -30,7 +30,7 @@ const SimpleModeList = ({ language, t, renderUnit }) => {
   return (
     <div>
       {
-        lessons.length &&
+        lessons.length > 0 &&
           <div>
             <h2>
               <Image className="simple-mode-type-icon">
@@ -44,7 +44,7 @@ const SimpleModeList = ({ language, t, renderUnit }) => {
           </div>
       }
       {
-        others.length &&
+        others.length > 0 &&
           <List size="large">
             {renderUnit(others, language, t)}
           </List>
