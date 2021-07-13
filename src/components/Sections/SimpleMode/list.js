@@ -18,34 +18,38 @@ const SimpleModeList = ({ language, t, renderUnit }) => {
   const lessons = useSelector(state => reduxItems.lessons.map(x => mdb.getDenormCollectionWUnits(state.mdb, x)).filter(x => !isEmpty(x)));
   const others = useSelector(state => reduxItems.others.map(x => mdb.getDenormContentUnit(state.mdb, x)).filter(x => !isEmpty(x)));
 
+  const wipErr = WipErr({ wip, err, t });
+  if (wipErr) {
+    return wipErr;
+  }
+
+  if (lessons.length === 0 && others.length === 0) {
+    return <FrownSplash text={t('simple-mode.no-files-found-for-date')} />;
+  }
+
   return (
-    WipErr({ wip, err, t }) ||
-      (
-        lessons.length || others.length
-          ? <div>
-            {
-              lessons.length &&
-                <div>
-                  <h2>
-                    <Image className="simple-mode-type-icon">
-                      <SectionLogo name='lessons' />
-                    </Image>
-                    {t('simple-mode.today-lessons')}
-                  </h2>
-                  <List size="large">
-                    {lessons.map(x => renderUnit(x, language, t))}
-                  </List>
-                </div>
-            }
-            {
-              others.length &&
-                <List size="large">
-                  {renderUnit(others, language, t)}
-                </List>
-            }
+    <div>
+      {
+        lessons.length &&
+          <div>
+            <h2>
+              <Image className="simple-mode-type-icon">
+                <SectionLogo name='lessons' />
+              </Image>
+              {t('simple-mode.today-lessons')}
+            </h2>
+            <List size="large">
+              {lessons.map(x => renderUnit(x, language, t))}
+            </List>
           </div>
-          : <FrownSplash text={t('simple-mode.no-files-found-for-date')} />
-      )
+      }
+      {
+        others.length &&
+          <List size="large">
+            {renderUnit(others, language, t)}
+          </List>
+      }
+    </div>
   );
 };
 
