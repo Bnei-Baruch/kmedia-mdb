@@ -29,7 +29,6 @@ import { isTaas } from '../../shared/PDF/PDF';
 const waitForRenderElement = async (attempts = 0) => {
   if (attempts > 10) return Promise.reject();
   const element = document.getElementById(SCROLL_SEARCH_ID);
-  console.log(`waitForRenderElement element ${element} attempt number ${attempts}`);
   if (!element) {
     await new Promise(resolve => setTimeout(resolve, 100));
     return waitForRenderElement(++attempts);
