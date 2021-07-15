@@ -165,7 +165,7 @@ const SearchResults = props => {
 
   return (
     <Grid>
-      <Grid.Column key="1" computer={12} tablet={16} mobile={16}>
+      <Grid.Column key="1" computer={16} tablet={16} mobile={16}>
         {/* Requested by Mizrahi renderTopNote() */}
         {typo_suggest && <DidYouMean typo_suggest={typo_suggest} />}
 
@@ -185,7 +185,7 @@ const SearchResults = props => {
           />
         </Container>
       </Grid.Column>
-      <Grid.Column key="2" />
+      {/* <Grid.Column key="2" /> */}
     </Grid>
   );
 };
