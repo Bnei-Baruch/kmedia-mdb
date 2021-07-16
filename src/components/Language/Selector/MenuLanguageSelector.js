@@ -7,30 +7,27 @@ import { getOptions } from '../../../helpers/language';
 import {LANG_HEBREW, LANG_UI_LANGUAGES, LANGUAGES} from '../../../helpers/consts';
 import {DeviceInfoContext} from "../../../helpers/app-contexts";
 
-const DesktopLanguageSelector = (value, fluid, options, handleSelect, blink) => {
-  return (
-    <Dropdown item text={LANGUAGES[value].name} fluid={fluid}>
-      <Dropdown.Menu>
-        {
-          options.map(lang =>
-            <Dropdown.Item
-              key={lang.value}
-              language={`${lang}`}
-              active={lang.value === value}
-              onClick={(e) => handleSelect(e, lang)}
-              className={classNames('dropdown-language-selector', {blink: !!blink})}
-            >
-              {lang.text}
-            </Dropdown.Item>
-          )
-        }
-      </Dropdown.Menu>
-    </Dropdown>
-  );
-}
+const DesktopLanguageSelector = (value, fluid, options, handleSelect, blink) => (
+  <Dropdown item text={LANGUAGES[value].name} fluid={fluid}>
+    <Dropdown.Menu>
+      {
+        options.map(lang =>
+          <Dropdown.Item
+            key={lang.value}
+            language={`${lang}`}
+            active={lang.value === value}
+            onClick={(e) => handleSelect(e, lang)}
+            className={classNames('dropdown-language-selector', {blink: !!blink})}
+          >
+            {lang.text}
+          </Dropdown.Item>
+        )
+      }
+    </Dropdown.Menu>
+  </Dropdown>
+);
 
-const MobileLanguageSelector = (value, fluid, options, handleSelect) => {
-  return (
+const MobileLanguageSelector = (value, fluid, options, handleSelect) => (
     <select
       className="dropdown-container"
       value={value}
@@ -43,8 +40,7 @@ const MobileLanguageSelector = (value, fluid, options, handleSelect) => {
           </option>)
       }
     </select>
-  );
-}
+);
 
 const MenuLanguageSelector = ({ languages = [], defaultValue: value = LANG_HEBREW, blink, onSelect = noop, fluid = true }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
