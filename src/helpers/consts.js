@@ -117,7 +117,7 @@ export const LANGUAGES = {
   [LANG_ENGLISH]: { value: LANG_ENGLISH,  locale: 'en_US', lang3: 'ENG', name: 'English' },
   [LANG_RUSSIAN]: { value: LANG_RUSSIAN, locale: 'ru_RU', lang3: 'RUS', name: 'Русский' },
   [LANG_SPANISH]: { value: LANG_SPANISH, locale: 'es_ES', lang3: 'SPA', name: 'Español' },
-  [LANG_ITALIAN]: { value: LANG_ITALIAN, locale: 'it_IT', lang3: 'ITA', name: 'Français' },
+  [LANG_ITALIAN]: { value: LANG_ITALIAN, locale: 'it_IT', lang3: 'ITA', name: 'Italiano' },
   [LANG_GERMAN]: { value: LANG_GERMAN, locale: 'de_DE', lang3: 'GER', name: 'Deutsch' },
   [LANG_DUTCH]: { value: LANG_DUTCH, locale: 'nl_NL', lang3: 'DUT', name: 'Nederlands' },
   [LANG_FRENCH]: { value: LANG_FRENCH, locale: 'fr_FR', lang3: 'FRE', name: 'Français' },
