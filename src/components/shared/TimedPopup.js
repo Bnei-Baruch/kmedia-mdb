@@ -40,18 +40,6 @@ const TimedPopup = ({
     }
   }, [openOnInit, timeout, updateTrigger])
 
-  const style = {
-    position: 'absolute',
-    right: 0,
-    [downward ? 'top' : 'bottom']: 0,
-  };
-
-  if (downward) {
-    style.top = 0;
-  } else {
-    style.bottom = 0;
-  }
-
   const rtlLang = isLanguageRtl(language);
 
   return (
