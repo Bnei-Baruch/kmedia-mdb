@@ -73,7 +73,7 @@ export function* search(action) {
       // Server should return associated items (collections, units, posts...) together with search results
       // hmm, relay..., hmm ?
       const cIDsToFetch    = getIdsForFetch(data.search_result.hits.hits, 'collections');
-      const cuIDsToFetch   = getIdsForFetch(data.search_result.hits.hits, 'units');
+      const cuIDsToFetch   = [...getIdsForFetch(data.search_result.hits.hits, 'units'), ...getIdsForFetch(data.search_result.hits.hits, 'likutim')];
       const postIDsToFetch = getIdsForFetch(data.search_result.hits.hits, 'posts');
 
       if (cuIDsToFetch.length === 0 && cIDsToFetch.length === 0 && postIDsToFetch.length === 0) {

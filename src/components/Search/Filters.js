@@ -108,7 +108,7 @@ class SearchResultsFilters extends Component {
     const tabs      = (
       <Menu.Menu className="overflow_auto">
         {
-          ['all', 'lessons', 'programs', 'sources', 'events', 'publications']
+          ['all', 'lessons', 'programs', 'sources', 'likutim', 'events', 'publications']
             .map(x => (
               <Menu.Item
                 key={x}

@@ -151,7 +151,7 @@ class SearchResultsContainer extends Component {
 const cuMapFromState = (state, results) => (
   results && results.hits && Array.isArray(results.hits.hits)
     ? results.hits.hits.reduce((acc, val) => {
-      if (val._source.result_type === 'units') {
+      if (val._source.result_type === 'units' || val._source.result_type === 'likutim') {
         const cuID = val._source.mdb_uid;
         const cu   = mdbSelectors.getDenormContentUnit(state.mdb, cuID);
         if (cu) {

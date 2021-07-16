@@ -24,6 +24,7 @@ import SearchResultTwitters from './SearchResultTwitters';
 import SearchResultSource from './SearchResultSource';
 import SearchResultPost from './SearchResultPost';
 import DidYouMean from './DidYouMean';
+import SearchResultLikutim from './SearchResultLikutim';
 
 const SearchResults = props => {
   /* Requested by Mizrahi
@@ -84,7 +85,9 @@ const SearchResults = props => {
     const c    = cMap[mdbUid];
     const p    = postMap[mdbUid];
 
-    if (cu) {
+    if (cu && resultType === 'likutim') {
+      result = <SearchResultLikutim  {...newProps} cu={cu} />;
+    } else if (cu) {
       result = <SearchResultCU {...newProps} cu={cu} />;
     } else if (c) {
       result = <SearchResultCollection c={c} {...newProps} />;

@@ -6,7 +6,8 @@ import {
   UNIT_LESSONS_TYPE,
   UNIT_PROGRAMS_TYPE,
   UNIT_EVENTS_TYPE,
-  UNIT_PUBLICATIONS_TYPE
+  UNIT_PUBLICATIONS_TYPE,
+  CT_LIKUTIM
 } from '../../helpers/consts';
 import { createFilterDefinition } from './util';
 
@@ -29,6 +30,9 @@ export const options = {
   },
   'filters.sections-filter.sources': {
     filter_section_sources: [],  // No meaning for value.
+  },
+  'filters.sections-filter.likutim': {
+    units_content_types: [CT_LIKUTIM],
   },
 };
 

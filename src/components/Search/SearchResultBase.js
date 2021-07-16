@@ -87,6 +87,7 @@ const iconByContentTypeMap = new Map([
   [CT_CLIP, 'programs'],
   [CT_VIDEO_PROGRAM, 'programs'],
   [CT_CLIPS, 'programs'],
+  [CT_LIKUTIM, 'sources'],
   ['sources', 'sources'],
 ]);
 
@@ -181,15 +182,19 @@ class SearchResultBase extends Component {
         icon: 'images outline',
         title: t('materials.sketches.header'),
         to: { state: { active: 'sketches' } }
-      },
+      }
     ];
 
     const kiteiMakorFiles = SearchResultBase.getKiteiMakor(cu.derived_units, mediaContentLanguage);
+    const likutimFiles    = cu.content_type === CT_LIKUTIM ? SearchResultBase.getKiteiMakor([cu], mediaContentLanguage) : [];
 
     return fileTypes
+      //likutim files we add on the other way
+      .filter(() => cu.content_type !== CT_LIKUTIM)
       .filter(x => files.some(f => f.type === x.type))
       .map(x => this.renderFile(x, pathname, contentLanguage, mdbUid, index, resultType, rank, searchId))
-      .concat(kiteiMakorFiles.map(f => this.renderKiteiMakor(f, mdbUid, index, resultType, rank, searchId)));
+      .concat(kiteiMakorFiles.map(f => this.renderKiteiMakor(f, mdbUid, index, resultType, rank, searchId)))
+      .concat(likutimFiles.map(f => this.renderKiteiMakor(f, mdbUid, index, resultType, rank, searchId)));
   };
 
   renderKiteiMakor = (file, mdbUid, index, resultType, rank, searchId) => {
