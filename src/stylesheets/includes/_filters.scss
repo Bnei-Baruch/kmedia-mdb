@@ -127,10 +127,10 @@
     position: fixed !important;
     top: $main-menu-height !important;
   }
-  
+
   overflow: hidden !important;
   padding: 0 !important;
-  
+
   &__header {
     border-radius: 0 !important;
     .title {
@@ -166,7 +166,7 @@
 
   &__body {
     @include small-mobile {
-      max-height: none !important;
+      max-height: 100vh !important;
     }
 
     border-radius: 0 !important;
@@ -176,7 +176,7 @@
       box-shadow: none !important;
       border-radius: 0 !important;
     }
-    
+
     .item {
       color: $blue;
       .filter__count {
@@ -185,7 +185,7 @@
       &.active {
         background: $blue !important;
         color: $white !important;
-        
+
         .filter__count {
           color: $white !important;
         }
@@ -193,4 +193,5 @@
     }
   }
 }
+
 

@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
-import { Dropdown, Flag, Menu } from 'semantic-ui-react';
+import { Dropdown, Menu } from 'semantic-ui-react';
 import { useHistory, useLocation } from 'react-router';
 import { useSelector } from 'react-redux';
 
@@ -23,7 +23,7 @@ const storeUILanguage = language => {
 
 
 const DesktopLanguage = ({ language, contentLanguage, t }) => (
-  <Dropdown item text={t(`constants.languages.${language}`)}>
+  <Dropdown item text={LANGUAGES[language].name}>
     <Dropdown.Menu>
       {
         LANG_UI_LANGUAGES.map(lang =>
@@ -35,8 +35,7 @@ const DesktopLanguage = ({ language, contentLanguage, t }) => (
             contentLanguage={contentLanguage}
             onClick={() => storeUILanguage(lang)}
           >
-            <Flag name={LANGUAGES[lang].flag} />
-            {t(`constants.languages.${lang}`)}
+            {LANGUAGES[lang].name}
           </Dropdown.Item>
         )
       }
@@ -66,7 +65,7 @@ const MobileLanguage = ({ language, contentLanguage, t }) => {
       {
         LANG_UI_LANGUAGES.map(x =>
           <option key={`opt-${x}`} value={x}>
-            {t(`constants.languages.${x}`)}
+            {LANGUAGES[x].name}
           </option>)
       }
     </select>

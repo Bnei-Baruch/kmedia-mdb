@@ -13,9 +13,9 @@ import { getLanguageDirection } from '../../../../../../helpers/i18n-utils';
 import { formatError, physicalFile } from '../../../../../../helpers/utils';
 import * as shapes from '../../../../../shapes';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../../../../../shared/Splash/Splash';
-import ButtonsLanguageSelector from '../../../../../Language/Selector/ButtonsLanguageSelector';
 import PDF, { isTaas, startsFrom } from '../../../../../shared/PDF/PDF';
 import { DeviceInfoContext } from '../../../../../../helpers/app-contexts';
+import DropdownLanguageSelector from "../../../../../Language/Selector/DropdownLanguageSelector";
 
 export const getLikutimUnits = unit => (
   Object.values(unit.derived_units || {})
@@ -171,10 +171,10 @@ const Sources = ({ unit, indexMap, t, options }) => {
 
   return (
     <>
-      <Grid container padded={isMobileDevice ? 'vertically' : true} columns={2}>
+      <Grid container padded={isMobileDevice} columns={2} className={clsx({"no-margin-top": !isMobileDevice})}>
         <Grid.Column
-          className={clsx({ 'is-fitted': isMobileDevice })}
-          width={isMobileDevice ? 16 : 16 - languages.length}
+          className={clsx({"is-fitted": isMobileDevice})}
+          width={isMobileDevice ? 16 : 12}
         >
           <Dropdown
             fluid
@@ -188,16 +188,18 @@ const Sources = ({ unit, indexMap, t, options }) => {
         </Grid.Column>
         {
           languages.length > 0 &&
-          <Grid.Column
-            textAlign="center"
-            width={isMobileDevice ? 16 : languages.length}
-          >
-            <ButtonsLanguageSelector
-              languages={languages}
-              defaultValue={contentLanguage}
-              onSelect={handleLanguageChanged}
-            />
-          </Grid.Column>
+            <Grid.Column
+              textAlign="center"
+              className={clsx({"padding_r_l_0": isMobileDevice, "no-padding-bottom": isMobileDevice})}
+              width={isMobileDevice ? 16 : 4}
+            >
+              <DropdownLanguageSelector
+                languages={languages}
+                defaultValue={language}
+                onSelect={handleLanguageChanged}
+                fluid={isMobileDevice}
+              />
+            </Grid.Column>
         }
       </Grid>
       <Divider hidden fitted />

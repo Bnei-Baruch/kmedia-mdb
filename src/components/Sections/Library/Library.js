@@ -3,11 +3,11 @@ import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import { useHistory, useLocation } from 'react-router-dom';
-import { Container, Portal, Segment } from 'semantic-ui-react';
+import { Grid, Portal, Segment} from 'semantic-ui-react';
 
 import { selectors } from '../../../redux/modules/assets';
 import { physicalFile } from '../../../helpers/utils';
-import AnchorsLanguageSelector from '../../Language/Selector/AnchorsLanguageSelector';
+
 import PDF, { isTaas, startsFrom } from '../../shared/PDF/PDF';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import { getQuery, updateQuery } from '../../../helpers/url';
@@ -21,6 +21,7 @@ import Download from '../../shared/Download/Download';
 import WipErr from '../../shared/WipErr/WipErr';
 import ShareBar from '../../shared/ShareSelected';
 import { DeviceInfoContext, SessionInfoContext } from '../../../helpers/app-contexts';
+import MenuLanguageSelector from "../../Language/Selector/MenuLanguageSelector";
 
 export const checkRabashGroupArticles = source => {
   if (/^gr-/.test(source)) { // Rabash Group Articles
@@ -168,15 +169,17 @@ const Library = ({
   }
 
   let languageBar = null;
+
   if (languages.length > 0) {
     languageBar = (
-      <Container fluid textAlign="right">
-        <AnchorsLanguageSelector
-          languages={languages}
-          defaultValue={language}
-          onSelect={handleLanguageChanged}
-        />
-      </Container>
+      <div className="library-language-container">
+          <MenuLanguageSelector
+            languages={languages}
+            defaultValue={language}
+            onSelect={handleLanguageChanged}
+            fluid={false}
+          />
+      </div>
     );
   }
 

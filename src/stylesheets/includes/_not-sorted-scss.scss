@@ -1148,6 +1148,13 @@
 
 /* ************* End of styles for homepage social media section ************* */
 
+.dropdown-language-selector {
+  border: none;
+}
+
+.dropdown-language-selector * {
+  line-height: 1;
+}
 .dropdown-language-selector.blink, .blink {
   box-shadow: 0 0 0 6px #7dcff5 inset;
   animation: dropdown-blink .8s ease-in-out;
@@ -1575,6 +1582,24 @@
   min-width: 140px;
 }
 
+.library__languagesContainer {
+  height:50px;
+
+  .languages {
+    display:block;
+    float:left;
+  }
+
+}
+
+.ltr {
+  .library__languagesContainer {
+    .languages {
+      float:right;
+    }
+  }
+}
+
 .align-right {
   float: right;
 }
@@ -1663,4 +1688,27 @@
 
 .nowrap {
   white-space: nowrap;
+}
+
+.languagesGrid {
+  margin-top:0 !important;
+}
+
+.media-downloads {
+  margin-top: 1em;
+}
+
+.no-padding-bottom {
+  padding-bottom: 0 !important;
+}
+
+.library-language-container {
+  padding-right: 0;
+  padding-left: 0;
+  margin-bottom: 1em;
+  text-align:right;
+}
+
+.rtl .library-language-container {
+  text-align:left;
 }
