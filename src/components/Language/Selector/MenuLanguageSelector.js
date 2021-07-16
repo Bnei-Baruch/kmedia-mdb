@@ -7,7 +7,7 @@ import { getOptions } from '../../../helpers/language';
 import {LANG_HEBREW, LANG_UI_LANGUAGES, LANGUAGES} from '../../../helpers/consts';
 import {DeviceInfoContext} from "../../../helpers/app-contexts";
 
-function DesktopLanguageSelector(value, fluid, options, handleSelect, blink) {
+const DesktopLanguageSelector = (value, fluid, options, handleSelect, blink) => {
   return (
     <Dropdown item text={LANGUAGES[value].name} fluid={fluid}>
       <Dropdown.Menu>
@@ -29,7 +29,7 @@ function DesktopLanguageSelector(value, fluid, options, handleSelect, blink) {
   );
 }
 
-function MobileLanguageSelector(value, fluid, options, handleSelect) {
+const MobileLanguageSelector = (value, fluid, options, handleSelect) => {
   return (
     <select
       className="dropdown-container"
