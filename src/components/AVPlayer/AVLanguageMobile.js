@@ -16,16 +16,18 @@ const AVLanguageMobile = (
     cuId
   }
 ) => {
-  const [lastRequestedLanguage, setLastRequestedLanguage] = useState();
+  const [lastRequestedLanguage, setLastRequestedLanguage] = useState(requestedLanguage);
   const [openPopup, setOpenPopup]                         = useState(false);
   const [langSelectRef, setLangSelectRef]                 = useState();
 
-  const handleChange = e => onSelect(e, e.currentTarget.value);
+  const handleChange = e => {
+    setLastRequestedLanguage(e.currentTarget.value)
+    return onSelect(e, e.currentTarget.value);
+  };
 
   useEffect(() => {
-    const requested = lastRequestedLanguage ? lastRequestedLanguage : requestedLanguage;
-    setOpenPopup(selectedLanguage !== requested);
-  }, [selectedLanguage, requestedLanguage]);
+    setOpenPopup(selectedLanguage !== lastRequestedLanguage);
+  }, [selectedLanguage, lastRequestedLanguage]);
 
   const options = LANGUAGE_OPTIONS
     .filter(x => languages.includes(x.value))

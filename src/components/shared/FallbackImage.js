@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Image } from 'semantic-ui-react';
 
@@ -6,106 +6,83 @@ import { knownFallbackImages, SectionThumbnailFallback } from '../../helpers/ima
 
 // An adaptation of https://github.com/socialtables/react-image-fallback
 // for react semantic-ui
-class FallbackImage extends Component {
+const FallbackImage = props => {
+  const { src, fallbackImage = ['default'], className, onLoad, onError, width = 'auto', height = 'auto', ...rest } = props;
+  const [imageSource, setImageSource] = useState(src);
 
-  static propTypes = {
-    src: PropTypes.string,
-    fallbackImage: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.element, PropTypes.array])),
-    onLoad: PropTypes.func,
-    onError: PropTypes.func
-  };
+  useEffect(() => {
+    const displayImage = new window.Image();
 
-  static defaultProps = {
-    fallbackImage: ['default'],
-  };
+    const setDisplayImage = (image, fallbacks) => {
+      const imagesArray = [image].concat(fallbacks).filter(fallback => !!fallback);
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      imageSource: props.src
-    };
-  }
+      displayImage.onerror = () => {
+        if (imagesArray.length > 2 && typeof imagesArray[1] === 'string') {
+          const updatedFallbacks = imagesArray.slice(2);
+          setDisplayImage(imagesArray[1], updatedFallbacks);
+          return;
+        }
 
-  componentDidMount() {
-    this.displayImage = new window.Image();
-    this.setDisplayImage(this.props.src, this.props.fallbackImage);
-  }
+        setImageSource(imagesArray[1] || null);
 
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    if (nextProps.src !== this.props.src) {
-      this.setDisplayImage(nextProps.src, nextProps.fallbackImage);
-    }
-  }
+        if (onError) {
+          onError(src);
+        }
+      };
 
-  componentWillUnmount() {
-    if (this.displayImage) {
-      this.displayImage.onerror = null;
-      this.displayImage.onload  = null;
-      this.displayImage         = null;
-    }
-  }
+      displayImage.onload = () => {
+        setImageSource(imagesArray[0]);
 
-  setDisplayImage = (image, fallbacks) => {
-    const imagesArray = [image].concat(fallbacks).filter(fallback => !!fallback);
+        if (onLoad) {
+          onLoad(imagesArray[0]);
+        }
+      };
 
-    this.displayImage.onerror = () => {
-      if (imagesArray.length > 2 && typeof imagesArray[1] === 'string') {
-        const updatedFallbacks = imagesArray.slice(2);
-        this.setDisplayImage(imagesArray[1], updatedFallbacks);
-        return;
+      if (typeof imagesArray[0] === 'string') {
+        displayImage.src = imagesArray[0];
+      } else {
+        setImageSource(imagesArray[0]);
+
+        if (onLoad) {
+          onLoad(imagesArray[0]);
+        }
       }
-
-      this.setState({ imageSource: imagesArray[1] || null }, () => {
-        if (this.props.onError) {
-          this.props.onError(this.props.src);
-        }
-      });
     };
 
-    this.displayImage.onload = () => {
-      this.setState({
-        imageSource: imagesArray[0]
-      }, () => {
-        if (this.props.onLoad) {
-          this.props.onLoad(imagesArray[0]);
-        }
-      });
-    };
+    setDisplayImage(src, fallbackImage);
 
-    if (typeof imagesArray[0] === 'string') {
-      this.displayImage.src = imagesArray[0];
-    } else {
-      this.setState({
-        imageSource: imagesArray[0]
-      }, () => {
-        if (this.props.onLoad) {
-          this.props.onLoad(imagesArray[0]);
-        }
-      });
+    return () => {
+      displayImage.onerror = null;
+      displayImage.onload  = null;
     }
-  };
+  }, [fallbackImage, onError, onLoad, src]);
 
-  render() {
-    const { fallbackImage, className, onLoad, onError, width = 'auto', height = 'auto', ...rest } = this.props;
 
-    if (this.state.imageSource === null) {
-      /* There is no fallbacks and src was not found */
-      return null;
-    }
+  if (imageSource === null) {
+    /* There is no fallbacks and src was not found */
+    return null;
+  }
 
-    if (knownFallbackImages.includes(this.state.imageSource)) {
-      return (
-        <div className={className}>
-          <SectionThumbnailFallback name={this.state.imageSource} width={width} height={height} />
-        </div>);
-    }
+  if (knownFallbackImages.includes(imageSource)) {
+    return (
+      <div className={className}>
+        <SectionThumbnailFallback name={imageSource} width={width} height={height} />
+      </div>);
+  }
 
-    return <Image
+  return (
+    <Image
       className={className}
       {...rest}
-      src={this.state.imageSource}
-    />;
-  }
+      src={imageSource}
+    />);
 }
+
+FallbackImage.propTypes = {
+  src: PropTypes.string,
+  fallbackImage: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.element, PropTypes.array])),
+  onLoad: PropTypes.func,
+  onError: PropTypes.func
+};
 
 export default FallbackImage;
