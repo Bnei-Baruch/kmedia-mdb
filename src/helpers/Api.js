@@ -5,15 +5,14 @@ const ASSETS_BACKEND          = process.env.REACT_APP_ASSETS_BACKEND;
 const CMS_BACKEND             = process.env.REACT_APP_CMS_BACKEND || `${API_BACKEND}cms/`;
 const IMAGINARY_URL           = process.env.REACT_APP_IMAGINARY_URL;
 const IMAGINARY_INTERNAL_HOST = process.env.REACT_APP_IMAGINARY_INTERNAL_HOST || 'localhost';
-const API_RECOMMENDED         = process.env.REACT_APP_RECOMMENDED;
-const API_MODELS              = process.env.REACT_APP_MODELS;
+const API_FEED                = process.env.REACT_APP_FEED;
 const CHRONICLES_BACKEND      = process.env.REACT_APP_CHRONICLES_BACKEND;
 
 export const backendUrl               = path => `${API_BACKEND}${path}`;
 export const assetUrl                 = path => `${ASSETS_BACKEND}${path}`;
 export const cmsUrl                   = path => `${CMS_BACKEND}${path}`;
 export const imaginaryUrl             = path => `${IMAGINARY_URL}${path}`;
-export const modelsUrl                = path => `${API_MODELS}${path}`;
+export const feedUrl                  = path => `${API_FEED}${path}`;
 export const chroniclesUrl            = path => `${CHRONICLES_BACKEND}${path}`;
 export const chroniclesBackendEnabled = CHRONICLES_BACKEND !== undefined;
 
@@ -156,7 +155,7 @@ class Api {
   static recommended = requestData => {
     const config = {
       method: 'post',
-      url: `${API_RECOMMENDED}`,
+      url: feedUrl('recommend'),
       headers: { 'Content-Type': 'application/json' },
       data: JSON.stringify(requestData),
     };
@@ -167,7 +166,7 @@ class Api {
   static views = uids => {
     const config = {
       method: 'post',
-      url: modelsUrl('views'),
+      url: feedUrl('views'),
       headers: { 'Content-Type': 'application/json' },
       data: JSON.stringify({ uids }),
     };
@@ -178,7 +177,7 @@ class Api {
   static watchingNow = uids => {
     const config = {
       method: 'post',
-      url: modelsUrl('watchingnow'),
+      url: feedUrl('watchingnow'),
       headers: { 'Content-Type': 'application/json' },
       data: JSON.stringify({ uids }),
     };
