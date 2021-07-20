@@ -17,7 +17,7 @@ import * as shapes from '../../shapes';
 import { getSourceErrorSplash } from '../../shared/WipErr/WipErr';
 import Helmets from '../../shared/Helmets';
 import { isTaas } from '../../shared/PDF/PDF';
-import LibraryContentContainer from './LibraryContentContainer';
+import Library from './Library';
 import TOC, { getIndex } from './TOC';
 import LibraryBar from './LibraryBar';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
@@ -359,9 +359,9 @@ class LibraryContainer extends Component {
   };
 
   getContent = () => {
-    const { sourceId, indexMap, language, contentLanguage, t, history } = this.props;
-    const index                                                         = isEmpty(sourceId) ? {} : indexMap[sourceId];
-    const { err }                                                       = index || {};
+    const { sourceId, indexMap, t } = this.props;
+    const index                     = isEmpty(sourceId) ? {} : indexMap[sourceId];
+    const { err, data }             = index || {};
 
     let content;
 
@@ -369,16 +369,12 @@ class LibraryContainer extends Component {
       content = getSourceErrorSplash(err, t);
     } else {
       const downloadAllowed = this.context.deviceInfo.os.name !== 'iOS';
-      content               = (
-        <LibraryContentContainer
+      content =
+        <Library
           source={sourceId}
-          index={index}
-          uiLanguage={language}
-          contentLanguage={contentLanguage}
-          history={history}
+          data={data}
           downloadAllowed={downloadAllowed}
         />
-      );
     }
 
     return content;
