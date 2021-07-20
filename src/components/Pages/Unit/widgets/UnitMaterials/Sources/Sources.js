@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
@@ -17,35 +17,36 @@ import PDF, { isTaas, startsFrom } from '../../../../../shared/PDF/PDF';
 import { DeviceInfoContext } from '../../../../../../helpers/app-contexts';
 import DropdownLanguageSelector from '../../../../../Language/Selector/DropdownLanguageSelector';
 
-export const getLikutimUnits = unit => (
-  Object.values(unit.derived_units || {})
-    .filter(x => (
-      x.content_type === CT_LIKUTIM
-      && (x.files || []).some(f => f.type === MT_TEXT))
-    )
-);
 
-const getLikutimFiles = (unit, ktCUID) => {
-  const ktCUs = getLikutimUnits(unit);
+const isValidLikut = unit =>
+  unit.content_type === CT_LIKUTIM
+&& (unit.files || []).some(f => f.type === MT_TEXT)
 
-  const cu = ktCUID
-    ? ktCUs.find(x => x.id === ktCUID)
-    : ktCUs.length > 0 && ktCUs[0];
+export const getLikutimUnits = unit =>
+  Object.values(unit.derived_units || {}).filter(x => isValidLikut(x));
+
+const getLikutimFiles = (unit, cuId) => {
+  const likUnits = getLikutimUnits(unit);
+
+  const cu = cuId
+    ? likUnits.find(x => x.id === cuId)
+    : likUnits.length > 0 && likUnits[0];
 
   return cu?.files?.filter(f => f.type === MT_TEXT) || [];
 };
-
-const getSourceLanguages = idx => idx?.data ? [...Object.keys(idx.data)] : [];
 
 const getLikutimLanguages = unit => {
   const files = getLikutimFiles(unit);
   return files.length > 0 ? files.map(f => f.language) : [];
 };
 
+const getSourceLanguages = idx => idx?.data ? [...Object.keys(idx.data)] : [];
+
 const checkIsLikutim = (options, selected) => {
   const val = options.find(o => o.value === selected);
   return val && val.type === CT_LIKUTIM;
 };
+
 
 const Sources = ({ unit, indexMap, t, options }) => {
   const uiLanguage      = useSelector(state => settings.getLanguage(state.settings));
@@ -53,33 +54,32 @@ const Sources = ({ unit, indexMap, t, options }) => {
   const doc2htmlById    = useSelector(state => assetsSelectors.getDoc2htmlById(state.assets));
 
   const dispatch = useDispatch();
-  const doc2html = useCallback(deriveId => dispatch(assetsActions.doc2html(deriveId)), [dispatch]);
 
   const [fetched, setFetched]     = useState(null);
   const [isLikutim, setIsLikutim] = useState(false);
   const [languages, setLanguages] = useState([]);
   const [language, setLanguage]   = useState(contentLanguage);
-  const [selected, setSelected]   = useState(null);
+  const [selectedUnitId, setSelectedUnitId]   = useState(null);
 
   // when options are changed, must change selected
   useEffect(() => {
-    const available   = options.filter(x => !x.disabled);
-    const newSelected = available.length > 0 ? available[0].value : null;
-    setSelected(newSelected);
+    const available = options.filter(x => !x.disabled);
+    const newSelectedUnitId = available.length > 0 ? available[0].value : null;
+    setSelectedUnitId(newSelectedUnitId);
   }, [options]);
 
   useEffect(() => {
-    const isLikutim = checkIsLikutim(options, selected);
+    const isLikutim = checkIsLikutim(options, selectedUnitId);
     setIsLikutim(isLikutim);
-  }, [options, selected]);
+  }, [options, selectedUnitId]);
 
   useEffect(() => {
     const newLanguages = isLikutim
       ? getLikutimLanguages(unit)
-      : getSourceLanguages(indexMap[selected]);
+      : getSourceLanguages(indexMap[selectedUnitId]);
 
     setLanguages(newLanguages);
-  }, [indexMap, isLikutim, selected, unit]);
+  }, [indexMap, isLikutim, selectedUnitId, unit]);
 
   useEffect(() => {
     if (languages.length > 0) {
@@ -91,28 +91,31 @@ const Sources = ({ unit, indexMap, t, options }) => {
   }, [contentLanguage, languages, uiLanguage]);
 
   useEffect(() => {
-    if (!selected || !language) {
+    if (!selectedUnitId || !language) {
       return;
     }
 
-    const newFetch = `${selected}#${language}`;
+    const newFetch = `${selectedUnitId}#${language}`;
     if (newFetch === fetched) {
       // console.log('fetched already', newFetch);
       return;
     }
 
+    const doc2html = fileId => dispatch(assetsActions.doc2html(fileId));
+
     if (isLikutim) {
-      const file = getLikutimFiles(unit, selected).find(x => x.language === language);
+      const file = getLikutimFiles(unit, selectedUnitId).find(x => x.language === language);
       if (file?.id) {
+        // console.log('file:', file);
         doc2html(file.id);
         setFetched(newFetch);
       }
-    } else if (indexMap[selected]?.data) {
-      const data = indexMap[selected].data[language];
+    } else {
+      const langFiles = indexMap[selectedUnitId]?.data?.[language];
 
-      if (data) {
-        const { pdf, docx, doc } = data;
-        if (pdf && isTaas(selected)) {
+      if (langFiles) {
+        const { pdf, docx, doc } = langFiles;
+        if (pdf && isTaas(selectedUnitId)) {
           // pdf.js fetch it on his own (smarter than us), we fetch it for nothing.
           return;
         }
@@ -122,26 +125,32 @@ const Sources = ({ unit, indexMap, t, options }) => {
         setFetched(newFetch);
       }
     }
-  }, [doc2html, fetched, indexMap, isLikutim, language, selected, unit]);
+  }, [dispatch, fetched, indexMap, isLikutim, language, selectedUnitId, unit]);
 
   const handleLanguageChanged = (e, lang) => setLanguage(lang);
-  const handleSourceChanged   = (e, data) => setSelected(data.value);
+  const handleSourceChanged   = (e, data) => setSelectedUnitId(data.value);
 
   const getContents = () => {
     let file;
     if (isLikutim) {
-      file = getLikutimFiles(unit, selected).find(x => x.language === language);
+      file = getLikutimFiles(unit, selectedUnitId).find(x => x.language === language);
     } else {
-      const selectedLang = indexMap[selected]?.data?.[language];
-      if (!selectedLang) return null;
-      const { pdf, doc, docx } = selectedLang;
-      if (isTaas(selected) && pdf) {
-        return <PDF pdfFile={physicalFile(pdf)} pageNumber={1} startsFrom={startsFrom(selected)} />;
+      const langFiles = indexMap[selectedUnitId]?.data?.[language];
+      if (!langFiles)
+        return null;
+
+      const { pdf, doc, docx } = langFiles;
+      if (isTaas(selectedUnitId) && pdf) {
+        return <PDF pdfFile={physicalFile(pdf)} pageNumber={1} startsFrom={startsFrom(selectedUnitId)} />;
       }
 
       file = docx || doc || {};
     }
 
+    return getContentsDiv(file);
+  };
+
+  const getContentsDiv = file => {
     const { wip, err, data } = doc2htmlById[file?.id] || {};
 
     if (err) {
@@ -152,12 +161,11 @@ const Sources = ({ unit, indexMap, t, options }) => {
 
     const direction = getLanguageDirection(language);
     return <div className="doc2html" style={{ direction }} dangerouslySetInnerHTML={{ __html: data }} />;
-
-  };
+  }
 
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
-  if (!selected) {
+  if (!selectedUnitId) {
     return <Segment basic>{t('materials.sources.no-source-available')}</Segment>;
   }
 
@@ -171,7 +179,7 @@ const Sources = ({ unit, indexMap, t, options }) => {
           <Dropdown
             fluid
             selection
-            value={selected}
+            value={selectedUnitId}
             options={options}
             selectOnBlur={false}
             selectOnNavigation={false}
