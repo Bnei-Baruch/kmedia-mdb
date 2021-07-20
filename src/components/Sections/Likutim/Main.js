@@ -104,12 +104,11 @@ const Main = ({ t }) => {
                           sortedLikutim
                             .filter(sl => sl.name[0] === fl)
                             .map(lu =>
-                              <List.Item key={lu.id}>
-                                <List.Header>
-                                  <Link to={canonicalLink(lu)}>
-                                    {`${lu.name} | ${t('values.date', { date: lu.film_date })}`}
-                                  </Link>
-                                </List.Header>
+                              <List.Item key={lu.id} class="topics__item-font">
+                                <Link to={canonicalLink(lu)} >{lu.name} </Link>
+                                <span class="topics__item-smaller-font">
+                                    | {t('values.date', { date: lu.film_date })}
+                                </span>
                               </List.Item>
                             )
                         }
