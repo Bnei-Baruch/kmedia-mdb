@@ -1,5 +1,7 @@
 ARG cdn_url="https://cdn.kabbalahmedia.info/"
 ARG public_base="https://kabbalahmedia.info/"
+ARG feed_api_url="https://kabbalahmedia.info/feed_api/recommend"
+ARG chronicles_url="https://chronicles.kli.one/""
 
 FROM node:15 as build
 
@@ -7,6 +9,8 @@ LABEL maintainer="edoshor@gmail.com"
 
 ARG cdn_url
 ARG public_base
+ARG feed_api_url
+ARG chronicles_url
 
 WORKDIR /app
 
@@ -18,8 +22,8 @@ ENV REACT_APP_ENV=production \
     REACT_APP_LOCALES_BACKEND=/ \
     REACT_APP_CDN_URL=${cdn_url} \
     REACT_APP_PUBLIC_BASE=${public_base} \
-    REACT_APP_RECOMMENDED=https://kabbalahmedia.info/feed_api/recommend \
-    REACT_APP_CHRONICLES_BACKEND=https://chronicles.kli.one/
+    REACT_APP_RECOMMENDED=${feed_api_url} \
+    REACT_APP_CHRONICLES_BACKEND=${chronicles_url}
 
 COPY . .
 
@@ -34,6 +38,8 @@ FROM node:15-slim
 
 ARG cdn_url
 ARG public_base
+ARG feed_api_url
+ARG chronicles_url
 
 WORKDIR /app
 COPY --from=build /app .
@@ -47,8 +53,8 @@ ENV NODE_ENV=production \
     REACT_APP_IMAGINARY_INTERNAL_HOST=nginx \
     REACT_APP_CDN_URL=${cdn_url} \
     REACT_APP_PUBLIC_BASE=${public_base} \
-    REACT_APP_RECOMMENDED=https://kabbalahmedia.info/feed_api/recommend \
-    REACT_APP_CHRONICLES_BACKEND=https://chronicles.kli.one/
+    REACT_APP_RECOMMENDED=${feed_api_url} \
+    REACT_APP_CHRONICLES_BACKEND=${chronicles_url}
 
 EXPOSE 3001
 ENTRYPOINT ["/app/misc/docker-entrypoint.sh"]
