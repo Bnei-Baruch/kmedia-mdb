@@ -10,9 +10,9 @@ import { selectors as settings } from '../../../../../../redux/modules/settings'
 import { MT_TEXT, CT_LIKUTIM } from '../../../../../../helpers/consts';
 import { selectSuitableLanguage } from '../../../../../../helpers/language';
 import { getLanguageDirection } from '../../../../../../helpers/i18n-utils';
-import { formatError, physicalFile } from '../../../../../../helpers/utils';
+import { physicalFile } from '../../../../../../helpers/utils';
 import * as shapes from '../../../../../shapes';
-import { ErrorSplash, FrownSplash, LoadingSplash } from '../../../../../shared/Splash/Splash';
+import { getSourceErrorSplash, wipLoadingSplash } from '../../../../../shared/WipErr/WipErr';
 import PDF, { isTaas, startsFrom } from '../../../../../shared/PDF/PDF';
 import { DeviceInfoContext } from '../../../../../../helpers/app-contexts';
 import DropdownLanguageSelector from "../../../../../Language/Selector/DropdownLanguageSelector";
@@ -146,14 +146,9 @@ const Sources = ({ unit, indexMap, t, options }) => {
     const { wip, err, data } = doc2htmlById[file?.id] || {};
 
     if (err) {
-      if (err.response && err.response.status === 404) {
-        return <FrownSplash text={t('messages.source-content-not-found')} />;
-      }
-
-      return <ErrorSplash text={t('messages.server-error')} subtext={formatError(err)} />;
-
+      return getSourceErrorSplash(err, t);
     } else if (wip) {
-      return <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
+      return wipLoadingSplash(t);
     }
 
     const direction = getLanguageDirection(language);
