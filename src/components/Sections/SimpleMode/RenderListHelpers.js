@@ -103,7 +103,7 @@ const unitDerivedFiles = (unit, type, keyFilter, mimeFilter) => {
 };
 
 const renderUnits = (units, language, t, helpChooseLang) => (
-  units.filter((unit => unit)).map((unit, index, unitsArray) => {
+  units.filter(unit => unit).map((unit, index, unitsArray) => {
     const lastUnit  = unitsArray.length - 1;
     const filesList = filesForRenderByUnit(unit).filter(file => file.language === language);
     const files     = filesList && renderHorizontalFilesList(filesList, unit.content_type, t);

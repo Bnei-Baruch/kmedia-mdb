@@ -1,4 +1,4 @@
-import {DEFAULT_LANGUAGE, LANG_ENGLISH, LANGUAGE_OPTIONS} from './consts';
+import { DEFAULT_LANGUAGE, LANG_ENGLISH, LANGUAGE_OPTIONS } from './consts';
 
 /**
  * Select language to use

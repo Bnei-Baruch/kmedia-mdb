@@ -46,7 +46,7 @@ const prepare = (raw, highlight) => {
   ];
   //TODO:For now use highlight of search result just if no media and etc in the tweeter because of complicate parsing with <em />
   if (replacements.length === 0) {
-    return highlight ? highlight : fullText;
+    return highlight || fullText;
   }
 
   replacements.sort((a, b) => {
