@@ -128,7 +128,6 @@ const Sources = ({ unit, indexMap, t, options }) => {
   const handleSourceChanged   = (e, data) => setSelected(data.value);
 
   const getContents = () => {
-
     let file;
     if (isLikutim) {
       file = getLikutimFiles(unit, selected).find(x => x.language === language);
@@ -162,13 +161,11 @@ const Sources = ({ unit, indexMap, t, options }) => {
     return <Segment basic>{t('materials.sources.no-source-available')}</Segment>;
   }
 
-  const contents = getContents();
-
   return (
     <>
-      <Grid container padded={isMobileDevice} columns={2} className={clsx({"no-margin-top": !isMobileDevice})}>
+      <Grid container padded={isMobileDevice} columns={2} className={clsx({ "no-margin-top": !isMobileDevice })}>
         <Grid.Column
-          className={clsx({"is-fitted": isMobileDevice})}
+          className={clsx({ "is-fitted": isMobileDevice })}
           width={isMobileDevice ? 16 : 12}
         >
           <Dropdown
@@ -185,7 +182,7 @@ const Sources = ({ unit, indexMap, t, options }) => {
           languages.length > 0 &&
             <Grid.Column
               textAlign="center"
-              className={clsx({"padding_r_l_0": isMobileDevice, "no-padding-bottom": isMobileDevice})}
+              className={clsx({ "padding_r_l_0": isMobileDevice, "no-padding-bottom": isMobileDevice })}
               width={isMobileDevice ? 16 : 4}
             >
               <DropdownLanguageSelector
@@ -198,7 +195,7 @@ const Sources = ({ unit, indexMap, t, options }) => {
         }
       </Grid>
       <Divider hidden fitted />
-      {contents}
+      {getContents()}
     </>
   );
 };
