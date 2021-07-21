@@ -63,9 +63,14 @@
       }
     ],
     "no-await-in-loop": "warn",
+    "no-cond-assign": "error",
+    "no-confusing-arrow": "warn",
+    "no-constant-condition":"warn",
     "no-else-return": "warn",
     "no-empty": "warn",
+    "no-extra-parens": ["error", "all", { "ignoreJSX": "multi-line" }],
     "no-lonely-if": "warn",
+    "no-mixed-operators": ["warn", {"allowSamePrecedence": true}],
     "no-multiple-empty-lines": [
       "warn",
       {
@@ -74,9 +79,10 @@
       }
     ],
     "no-trailing-spaces": "warn",
-    "no-unneeded-ternary": "warn",
+    "no-unneeded-ternary": ["warn", { "defaultAssignment": false }],
     "no-unreachable": "warn",
     "no-unused-vars": "warn",
+    "no-useless-concat": "warn",
     "object-shorthand": "warn",
     "object-curly-spacing": [
       "warn",
