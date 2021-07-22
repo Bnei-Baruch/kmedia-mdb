@@ -8,6 +8,8 @@ import { getPodcastLinkByLang, getRSSLinkByLang } from '../../helpers/utils';
 import NavLink from '../Language/MultiLanguageNavLink';
 import DonateNow, { VirtualHomeButton } from './DonateNow';
 import FeedBurner from './FeedBurner';
+import { useSelector } from 'react-redux';
+import { selectors } from '../../redux/modules/auth';
 
 const ITEMS = [
   'personal',
@@ -28,7 +30,8 @@ const ITEMS = [
 ];
 
 const MenuItems = ({ simple = false, visible = false, t, onItemClick = identity, language }) => {
-  const items = ITEMS.map(x => (
+  const user  = useSelector(state => selectors.getUser(state.auth));
+  const items = ITEMS.filter(i => i !== 'personal' || !!user).map(x => (
     <Menu.Item
       key={x}
       as={NavLink}

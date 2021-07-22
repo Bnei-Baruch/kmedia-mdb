@@ -3,13 +3,13 @@ import { createAction } from 'redux-actions';
 import { handleActions } from './settings';
 
 /* Types */
-const FETCH_LIKES               = 'Lessons/FETCH_FETCH_LIKES';
-const FETCH_FETCH_LIKES_SUCCESS = 'Lessons/FETCH_FETCH_LIKES_SUCCESS';
-const FETCH_FETCH_LIKES_FAILURE = 'Lessons/FETCH_FETCH_LIKES_FAILURE';
+const FETCH_LIKES               = 'My/FETCH_FETCH_LIKES';
+const FETCH_FETCH_LIKES_SUCCESS = 'My/FETCH_FETCH_LIKES_SUCCESS';
+const FETCH_FETCH_LIKES_FAILURE = 'My/FETCH_FETCH_LIKES_FAILURE';
 
-const ADD_LIKE         = 'Lessons/ADD_LIKE';
-const ADD_LIKE_SUCCESS = 'Lessons/ADD_LIKE_SUCCESS';
-const ADD_LIKE_FAILURE = 'Lessons/ADD_LIKE_FAILURE';
+const ADD_LIKE         = 'My/ADD_LIKE';
+const ADD_LIKE_SUCCESS = 'My/ADD_LIKE_SUCCESS';
+const ADD_LIKE_FAILURE = 'My/ADD_LIKE_FAILURE';
 
 export const types = {
   FETCH_LIKES,
@@ -53,9 +53,10 @@ const initialState = {
 };
 
 const onFetchLikesSuccess = (draft, payload) => {
-  draft.likes        = payload.units;
+  draft.likes        = payload.content_units;
   draft.wip.likes    = false;
   draft.errors.likes = false;
+  return draft;
 };
 
 export const reducer = handleActions({

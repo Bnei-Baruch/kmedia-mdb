@@ -1,9 +1,9 @@
 import { createAction, handleActions } from 'redux-actions';
 
 /* Types */
-const LOGIN          = 'Auth/LOGIN';
-const LOGIN_SUCCESS  = 'Auth/LOGIN_SUCCESS';
-const LOGIN_FAILURE  = 'Auth/LOGIN_FAILURE';
+const LOGIN         = 'Auth/LOGIN';
+const LOGIN_SUCCESS = 'Auth/LOGIN_SUCCESS';
+const LOGIN_FAILURE = 'Auth/LOGIN_FAILURE';
 
 const LOGOUT         = 'Auth/LOGOUT';
 const LOGOUT_SUCCESS = 'Auth/LOGOUT_SUCCESS';
@@ -51,9 +51,9 @@ export const reducer = handleActions({
 }, initialState);
 
 /* Actions */
-const login         = createAction(LOGIN);
-const loginSuccess  = createAction(LOGIN_SUCCESS);
-const loginFailure  = createAction(LOGIN_FAILURE);
+const login        = createAction(LOGIN);
+const loginSuccess = createAction(LOGIN_SUCCESS);
+const loginFailure = createAction(LOGIN_FAILURE);
 
 const logout        = createAction(LOGOUT);
 const logoutSuccess = createAction(LOGOUT_SUCCESS);
@@ -63,4 +63,5 @@ export const actions = { login, loginSuccess, loginFailure, logout, logoutSucces
 
 /* Selectors */
 const getUser          = state => state.user;
-export const selectors = { getUser };
+const getToken         = state => state.token;
+export const selectors = { getUser, getToken };
