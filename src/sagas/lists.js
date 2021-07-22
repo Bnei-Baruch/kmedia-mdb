@@ -9,6 +9,11 @@ import Api from '../helpers/Api';
 import { CT_VIDEO_PROGRAM_CHAPTER } from '../helpers/consts';
 import { getQuery, pushQuery } from './helpers/url';
 
+const endpointByName = {
+  'lessons-daily': Api.lessons,
+  'like': Api.likes,
+};
+
 function* fetchList(action) {
   const { namespace } = action.payload;
 
@@ -27,7 +32,8 @@ function* fetchList(action) {
     const filters      = yield select(state => filterSelectors.getFilters(state.filters, namespace));
     const filterParams = filtersTransformer.toApiParams(filters) || {};
     Object.assign(args, filterParams);
-    endpoint = namespace === 'lessons-daily' ? Api.lessons : Api.units;
+
+    endpoint = endpointByName[namespace] || Api.likes;//Api.units;
   }
 
   delete args.namespace;
@@ -72,7 +78,7 @@ function* fetchList(action) {
 function* updatePageInQuery(action) {
   const { pageNo }   = action.payload;
   const currentQuery = yield* getQuery();
-  const page = currentQuery.page || 1;
+  const page         = currentQuery.page || 1;
   if (pageNo === +page) {
     return;
   }
