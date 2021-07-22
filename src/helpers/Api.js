@@ -36,6 +36,18 @@ export class Requests {
     return axios(url);
   };
 
+  static auth       = (data, url, token) => {
+    const config = {
+      url,
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': token
+      },
+      data: JSON.stringify(data),
+    };
+    return axios(config);
+  };
   static makeParams = params => (
     `${Object.entries(params)
       .filter(([_, v]) => v !== undefined && v !== null)
@@ -158,6 +170,11 @@ class Api {
     };
 
     return axios(config);
+  };
+
+  static likes = (data, token, page_num, page_size) => {
+    const url = `${API_BACKEND}/likes?${Requests.makeParams({ page_num, page_size })}`;
+    return Requests.auth(data, url, token);
   };
 }
 

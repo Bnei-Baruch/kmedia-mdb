@@ -21,6 +21,7 @@ import TopMost from './TopMost';
 import DonateNow, { VirtualHomeButton } from './DonateNow';
 import Logo from '../../images/icons/Logo';
 import { DeviceInfoContext } from '../../helpers/app-contexts';
+import Login from './Login';
 
 const RenderHeaderSearch = React.forwardRef(({ t, location }, headerSearchElement) => (
   <div ref={headerSearchElement}>
@@ -220,6 +221,7 @@ class Layout extends Component {
                   <Menu.Item position="right" className="mobile-hidden">
                     <DonateNow language={language} />
                     <VirtualHomeButton />
+                    <Login />
                   </Menu.Item>
                   <TopMost />
                 </Menu.Menu>
