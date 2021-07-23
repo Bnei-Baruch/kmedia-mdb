@@ -20,7 +20,7 @@ const Main = () => {
       <Subscriptions />
     </div>
   );
-  const notLogined = () => <h1>You must be Autorisate for enter to this page</h1>;
+  const notLogined = () => <h1>You must log in to view the page</h1>;
 
   return user ? isLogined() : notLogined();
 };
