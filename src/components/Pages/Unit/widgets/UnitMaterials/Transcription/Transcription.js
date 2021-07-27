@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import uniq from 'lodash/uniq';
-import {Container, Divider, Grid, Segment} from 'semantic-ui-react';
+import { Grid, Segment } from 'semantic-ui-react';
 import isEqual from 'react-fast-compare';
 
 import { CT_ARTICLE, CT_RESEARCH_MATERIAL, MT_TEXT, SCROLL_SEARCH_ID } from '../../../../../../helpers/consts';
@@ -20,7 +20,7 @@ import {
 import { getQuery } from '../../../../../../helpers/url';
 import ShareBar from '../../../../../shared/ShareSelected';
 import DropdownLanguageSelector from "../../../../../Language/Selector/DropdownLanguageSelector";
-import {DeviceInfoContext} from "../../../../../../helpers/app-contexts";
+import { DeviceInfoContext } from "../../../../../../helpers/app-contexts";
 import classNames from "classnames";
 
 const scrollToSearch = () => {
@@ -103,7 +103,7 @@ class Transcription extends Component {
     }
 
     const fileFromLocation = textFiles.find(f => f.id === selectedFileId);
-    const selectedFile     = fileFromLocation ? fileFromLocation : Transcription.selectFile(textFiles, newLanguage);
+    const selectedFile     = fileFromLocation || Transcription.selectFile(textFiles, newLanguage);
     return { selectedFile, languages, language: newLanguage, textFiles, unit_id: unit.id };
   }
 
@@ -295,11 +295,11 @@ class Transcription extends Component {
 
       return (
         <div>
-          <Grid container padded={false} columns={isMobileDevice ? 1 : 2} className={classNames({"no-margin-top" :true, "padding_r_l_0": !isMobileDevice})}>
+          <Grid container padded={false} columns={isMobileDevice ? 1 : 2} className={classNames({ "no-margin-top" :true, "padding_r_l_0": !isMobileDevice })}>
             {!isMobileDevice &&
             <Grid.Column width={12}>
             </Grid.Column>}
-            <Grid.Column width={isMobileDevice ? 16 : 4} textAlign={"right"} className={classNames({"padding_r_l_0": !isMobileDevice})}>
+            <Grid.Column width={isMobileDevice ? 16 : 4} textAlign={"right"} className={classNames({ "padding_r_l_0": !isMobileDevice })}>
               <DropdownLanguageSelector
                 languages={languages}
                 defaultValue={language}

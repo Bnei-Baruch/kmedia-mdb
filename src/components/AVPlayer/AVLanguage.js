@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { noop } from '../../helpers/utils';
 import { Dropdown } from 'semantic-ui-react';
 
-import {LANG_HEBREW, LANGUAGE_OPTIONS, LANGUAGES} from '../../helpers/consts';
+import { LANG_HEBREW, LANGUAGE_OPTIONS, LANGUAGES } from '../../helpers/consts';
 import TimedPopup from '../shared/TimedPopup';
 
 const AVLanguage = (
