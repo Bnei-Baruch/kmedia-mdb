@@ -1,7 +1,7 @@
 ARG cdn_url="https://cdn.kabbalahmedia.info/"
 ARG public_base="https://kabbalahmedia.info/"
 ARG feed_api_url="https://kabbalahmedia.info/feed_api/recommend"
-ARG chronicles_url="https://chronicles.kli.one/""
+ARG chronicles_url="https://chronicles.kli.one/"
 
 FROM node:15 as build
 
