@@ -44,7 +44,7 @@ export const renderUnitNameAsListItem = unit =>
     {unit.name || NO_NAME}
   </List.Item>
 
-export const renderUnitNameLink = (unit, className="index__title") =>
+export const renderUnitNameLink = (unit, className='index__title') =>
   unit && <Link className={className} to={canonicalLink(unit)}>
     {unit.name || NO_NAME}
   </Link>
@@ -70,7 +70,7 @@ export const renderUnitDescription = unit =>
     {ellipsize(unit.description)}
   </div>
 
-export const renderRelatedItems = (relatedItems, header, className="index__collections") =>
+export const renderRelatedItems = (relatedItems, header, className='index__collections') =>
   relatedItems.length === 0
     ? null
     : (

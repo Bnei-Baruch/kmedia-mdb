@@ -10,7 +10,7 @@ import {
   SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_TEXT,
   SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_SUBTEXT,
 } from '../../helpers/consts'
-import { DeviceInfoContext } from "../../helpers/app-contexts";
+import { DeviceInfoContext } from '../../helpers/app-contexts';
 
 class SearchResultLandingPage extends SearchResultBase {
   static contextType = DeviceInfoContext;

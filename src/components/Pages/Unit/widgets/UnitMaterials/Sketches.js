@@ -15,7 +15,7 @@ import { actions, selectors } from '../../../../../redux/modules/assets';
 import { selectors as settings } from '../../../../../redux/modules/settings';
 import * as shapes from '../../../../shapes';
 import WipErr from '../../../../shared/WipErr/WipErr';
-import DropdownLanguageSelector from "../../../../Language/Selector/DropdownLanguageSelector";
+import DropdownLanguageSelector from '../../../../Language/Selector/DropdownLanguageSelector';
 
 class Sketches extends React.Component {
   static propTypes = {

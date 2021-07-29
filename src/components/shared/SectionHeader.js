@@ -4,7 +4,7 @@ import { withNamespaces } from 'react-i18next';
 import { Container, Grid, Header, Menu } from 'semantic-ui-react';
 
 import Helmets from './Helmets';
-import i18next from "i18next";
+import i18next from 'i18next';
 
 const SectionHeader = ({ section, t, submenuItems }) => {
   const title   = t(`${section}.header.text`);

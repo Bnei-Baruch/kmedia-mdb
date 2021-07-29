@@ -134,7 +134,7 @@ export class OmniBox extends Component {
         resetFilterNS('search');
         const params = new URLSearchParams('');
         if (deb) {
-          params.append("deb", "true");
+          params.append('deb', 'true');
         }
 
         push({ search: params.toString() });

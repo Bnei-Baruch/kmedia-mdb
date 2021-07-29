@@ -94,7 +94,7 @@ const SeriesContainer = ({ t }) => {
     )
   };
 
-  const getHeader = node => node.id === "byTopics"
+  const getHeader = node => node.id === 'byTopics'
     ? t(`lessons.tabs.seriesTree.byTopics`)
     : `${t(`lessons.tabs.seriesTree.bySourcesOf`)}${` `}${node.name}`;
 
