@@ -1,12 +1,10 @@
 import React from 'react';
-import Template, { GetTempUnitIds } from './Template';
+import Template from './helper';
 
 const Subscriptions = () => {
-  const latestUnits = GetTempUnitIds();
 
-  return (
-    <Template units={latestUnits} title={"Subscriptions"} rowsNumber={3} />
-  )
-}
+  return null;
+
+};
 
 export default Subscriptions;

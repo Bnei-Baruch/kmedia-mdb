@@ -6,9 +6,23 @@ import isEqual from 'react-fast-compare';
 import { useEffect, useRef } from 'react';
 
 import { CollectionsBreakdown } from './mdb';
-import { canonicalSectionByUnit } from './links';
+import { canonicalSectionByLink, canonicalSectionByUnit } from './links';
 import * as consts from './consts';
-import { LANGUAGES } from './consts';
+import {
+  CT_CONGRESS,
+  CT_DAILY_LESSON,
+  CT_FRIENDS_GATHERINGS,
+  CT_HOLIDAY,
+  CT_LESSONS_SERIES,
+  CT_MEALS, CT_PICNIC,
+  CT_SPECIAL_LESSON,
+  CT_UNITY_DAY,
+  CT_VIDEO_PROGRAM,
+  CT_VIRTUAL_LESSONS,
+  CT_WOMEN_LESSONS,
+  LANGUAGES
+} from './consts';
+import { Requests } from './Api';
 
 const CDN_URL     = process.env.REACT_APP_CDN_URL;
 const PUBLIC_BASE = process.env.REACT_APP_PUBLIC_BASE;
@@ -221,8 +235,8 @@ export const strCmp = (a, b) =>
   a < b
     ? -1
     : a > b
-      ? 1
-      : 0;
+    ? 1
+    : 0;
 
 export const getEscapedRegExp = term => {
   const escaped = term.replace(/[/)(.+\\]/g, '\\$&');
@@ -235,18 +249,18 @@ export const getEscapedRegExp = term => {
 
 export const getRSSFeedByLang = language => {
   switch (language) {
-    case consts.LANG_HEBREW:
-      return 'KabbalahVideoHeb';
-    case consts.LANG_RUSSIAN:
-      return 'KabbalahVideoRus';
-    case consts.LANG_SPANISH:
-      return 'kabbalah-archive/spa';
-    default:
-      return 'KabbalahVideoEng';
+  case consts.LANG_HEBREW:
+    return 'KabbalahVideoHeb';
+  case consts.LANG_RUSSIAN:
+    return 'KabbalahVideoRus';
+  case consts.LANG_SPANISH:
+    return 'kabbalah-archive/spa';
+  default:
+    return 'KabbalahVideoEng';
   }
 };
 
-export const getRSSLinkByLang = language => `https://feeds.feedburner.com/${  getRSSFeedByLang(language)}`;
+export const getRSSLinkByLang = language => `https://feeds.feedburner.com/${getRSSFeedByLang(language)}`;
 
 export const getRSSLinkByTopic = (topicId, language) => `https://kabbalahmedia.info/feeds/collections/${LANGUAGES[language].lang3}/${topicId}`;
 
@@ -261,7 +275,7 @@ const podcastLinks = new Map([
 
 export const getPodcastLinkByLang = language => {
   const hash = podcastLinks.get(language) || 'kabbalah-media-mp3-kab-eng/id1109845884?l=iw';
-  return `https://podcasts.apple.com/il/podcast/${  hash}`;
+  return `https://podcasts.apple.com/il/podcast/${hash}`;
 };
 
 // Compare properties without functions
@@ -333,4 +347,32 @@ export const usePrevious = value => {
     ref.current = value;
   });
   return ref.current;
+};
+
+export const imageByUnit = (unit, link) => {
+  // collections -- prepare random image
+  switch (unit.content_type) {
+  case CT_CONGRESS:
+  case CT_MEALS:
+  case CT_DAILY_LESSON:
+  case CT_SPECIAL_LESSON:
+  case CT_VIRTUAL_LESSONS:
+  case CT_WOMEN_LESSONS:
+  case CT_VIDEO_PROGRAM:
+  case CT_FRIENDS_GATHERINGS:
+  case CT_HOLIDAY:
+  case CT_PICNIC:
+  case CT_UNITY_DAY:
+  case CT_LESSONS_SERIES:
+    return Requests.imaginaryRandom('resize', {
+      width: 512,
+      height: 288,
+      nocrop: false,
+      stripmeta: true,
+    }, `lessons/latest_lesson_%s.jpg`);
+    break;
+  default:
+    return canonicalSectionByLink(link);
+
+  }
 };

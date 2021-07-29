@@ -1,12 +1,11 @@
 import React from 'react';
-import Template, { GetTempUnitIds } from './Template';
+import Template from './helper';
 
 const Playlists = () => {
-  const latestUnits = GetTempUnitIds();
 
-  return (
-    <Template units={latestUnits} title={"Playlists"} />
-  )
-}
+  return null;
+
+
+};
 
 export default Playlists;

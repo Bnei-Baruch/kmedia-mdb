@@ -16,7 +16,7 @@ function* addLike(action) {
 }
 
 function* fetchLikes(action) {
-  const token    = yield select(state => authSelectors.getToken(state.auth));
+  const token = yield select(state => authSelectors.getToken(state.auth));
   try {
     const { data }                    = yield call(Api.likes, action.payload, token);
     const { data: { content_units } } = yield call(Api.units, {
@@ -30,6 +30,23 @@ function* fetchLikes(action) {
   }
 }
 
+function* fetchHistory(action) {
+  const token = yield select(state => authSelectors.getToken(state.auth));
+  try {
+    const { data } = yield call(Api.history, action.payload, token);
+    const uids     = data.history.map(h => h.unit_uid);
+
+    const { data: { content_units } } = yield call(Api.units, {
+      id: uids,
+      pageSize: uids.length
+    });
+    yield put(mdbActions.receiveContentUnits(content_units));
+    yield put(actions.fetchHistorySuccess(data));
+  } catch (err) {
+    yield put(actions.fetchHistoryFailure(err));
+  }
+}
+
 function* watchAddLike() {
   yield takeEvery(types.ADD_LIKE, addLike);
 }
@@ -38,7 +55,12 @@ function* watchFetchLikes() {
   yield takeEvery(types.FETCH_LIKES, fetchLikes);
 }
 
+function* watchFetchHistory() {
+  yield takeEvery(types.FETCH_HISTORY, fetchHistory);
+}
+
 export const sagas = [
   watchAddLike,
   watchFetchLikes,
+  watchFetchHistory,
 ];

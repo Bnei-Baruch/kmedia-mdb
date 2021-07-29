@@ -36,7 +36,7 @@ export class Requests {
     return axios(url);
   };
 
-  static auth       = (data, url, token, method = 'GET') => {
+  static auth = (data, url, token, method = 'GET') => {
     const config = {
       url,
       method,
@@ -48,6 +48,7 @@ export class Requests {
     };
     return axios(config);
   };
+
   static makeParams = params => (
     `${Object.entries(params)
       .filter(([_, v]) => v !== undefined && v !== null)
@@ -175,6 +176,11 @@ class Api {
   static likes = (data, token, page_num, page_size, method) => {
     const url = `${API_BACKEND}my/likes?${Requests.makeParams({ page_num, page_size })}`;
     return Requests.auth(data, url, token, method);
+  };
+
+  static history = (data, token, page_num, page_size) => {
+    const url = `${API_BACKEND}my/history?${Requests.makeParams({ page_num, page_size })}`;
+    return Requests.auth(data, url, token);
   };
 }
 

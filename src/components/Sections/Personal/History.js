@@ -1,26 +1,33 @@
-import React from 'react';
-import Template, { GetTempUnitIds } from './Template';
+import React, { useEffect } from 'react';
+import { actions, selectors } from '../../../redux/modules/my';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectors as mdb } from '../../../redux/modules/mdb';
+import Template, { renderHistoryItem } from './helper';
 
 const History = () => {
-  // const dispatch  = useDispatch();
+  const dispatch = useDispatch();
 
-  // useEffect(() => {
-  //   dispatch(actions.fetchData(true));
-  // }, [dispatch]);
+  useEffect(() => {
+    dispatch(actions.fetchHistory());
+  }, [dispatch]);
 
+  const hs = useSelector(state => selectors.getHistory(state.my));
 
-  // const latestUnitsFn     = latestUnitIDs => state => Array.isArray(latestUnitIDs)
-  //   ? latestUnitIDs.map(x => mdb.getDenormContentUnit(state.mdb, x))
-  //   : [];
+  const denormHistory = hs => state => {
+    if (!Array.isArray(hs)) return [];
+    return hs.map(({ unit_uid, data: { current_time } }) => {
+      const unit = mdb.getDenormContentUnit(state.mdb, unit_uid);
+      return { ...unit, current_time };
+    });
+  };
 
-  // const latestUnitIDs = useSelector(state => selectors.getLatestUnits(state.home));
-  // const latestUnits   = useSelector(latestUnitsFn(latestUnitIDs));
+  const histories = useSelector(denormHistory(hs));
 
-  const latestUnits = GetTempUnitIds();
+  if (histories.length === 0) return null;
 
   return (
-    <Template units={latestUnits} title={"History"} />
-  )
-}
+    <Template items={histories} title={'History'} renderUnit={renderHistoryItem} />
+  );
+};
 
 export default History;
