@@ -12,17 +12,24 @@ import Sources, { getLikutimUnits } from './Sources';
 
 
 const SourcesContainer = ({ unit, t }) => {
-  const dispatch        = useDispatch();
-  const sourceIndex     = useCallback(k => dispatch(assetsActions.sourceIndex(k)), [dispatch]);
+  const getSourceById  = useSelector(state => selectors.getSourceById(state.sources));
+  const indexById      = useSelector(state => assetsSelectors.getSourceIndexById(state.assets));
 
-  const getSourceById   = useSelector(state => selectors.getSourceById(state.sources));
-  const indexById       = useSelector(state => assetsSelectors.getSourceIndexById(state.assets));
-
-  const reducer         = useCallback((acc, val) => {
+  const reducer        = useCallback((acc, val) => {
     acc[val] = indexById[val];
     return acc;
   }, [indexById]);
-  const indexMap        = useCallback(sources => (sources || []).reduce(reducer, {}), [reducer]);
+  const indexMap       = useCallback(sources => (sources || []).reduce(reducer, {}), [reducer]);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    Object.entries(indexMap(unit.sources)).forEach(([k, v]) => {
+      if (isEmpty(v)) {
+        dispatch(assetsActions.sourceIndex(k))
+      }
+    });
+  }, [unit.sources, indexMap, dispatch]);
 
   const sourceOptions = useMemo(() =>
     (unit.sources || [])
@@ -44,14 +51,6 @@ const SourcesContainer = ({ unit, t }) => {
     })) || [], [t, unit]);
 
   const options = [...sourceOptions, ...derivedOptions];
-
-  useEffect(() => {
-    Object.entries(indexMap(unit.sources)).forEach(([k, v]) => {
-      if (isEmpty(v)) {
-        sourceIndex(k);
-      }
-    });
-  }, [unit.sources, indexMap, sourceIndex]);
 
   return options.length === 0
     ? <Segment basic>{t('materials.sources.no-sources')}</Segment>
