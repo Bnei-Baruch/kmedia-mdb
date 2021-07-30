@@ -132,13 +132,21 @@ const Info = ({ unit = {}, section = '', t, currentCollection = null }) => {
 
   return (
     <div className="unit-info">
+      {
+        collectionsLinks.length > 0 && (
+          <List.Item className="unit-info__collections">
+            {collectionsLinks}
+          </List.Item>
+        )
+      }
       <Header as="h2">
-        <small className="text grey unit-info__film-date">
-          {t('values.date', { date: filmDate })}
-        </small>
-        <br />
         <span className="unit-info__name">{name}</span>
       </Header>
+
+      <small className="text grey unit-info__film-date">
+        {t('values.date', { date: filmDate })}
+      </small>
+
       <List>
         {
           tagLinks.length > 0 && (
@@ -161,18 +169,6 @@ const Info = ({ unit = {}, section = '', t, currentCollection = null }) => {
               </strong>
               &nbsp;
               {sourcesLinks}
-            </List.Item>
-          )
-        }
-        {
-          collectionsLinks.length > 0 && (
-            <List.Item className="unit-info__collections">
-              <strong>
-                {t('pages.unit.info.collections')}
-                :
-              </strong>
-              &nbsp;
-              {collectionsLinks}
             </List.Item>
           )
         }
