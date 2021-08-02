@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { useLocation } from 'react-router';
 import { withNamespaces } from 'react-i18next';
@@ -6,7 +6,7 @@ import { Button, Grid, Header, Icon, Input } from 'semantic-ui-react';
 import { mapState as obMS, OmniBox, wrap } from '../../Search/OmniBox';
 import ButtonDayPicker from '../../Filters/components/Date/ButtonDayPicker';
 import moment from 'moment';
-import { DeviceInfoContext } from '../../../helpers/app-contexts';
+import { ClientChroniclesContext, DeviceInfoContext } from '../../../helpers/app-contexts';
 
 class MyOmniBox extends OmniBox {
   static contextType = DeviceInfoContext;
@@ -59,6 +59,7 @@ const MyWrappedOmniBox = wrap(withNamespaces()(MyOmniBox), state => ({
 
 const SearchBar = ({ t }) => {
   const location = useLocation();
+  const chronicles = useContext(ClientChroniclesContext);
 
   return (
     <Grid centered>
@@ -68,7 +69,7 @@ const SearchBar = ({ t }) => {
         </Grid.Column>
         <Grid.Column computer={12} tablet={14} mobile={16}>
           <div className="homepage__search">
-            <MyWrappedOmniBox location={location} />
+            <MyWrappedOmniBox location={location} chronicles={chronicles} />
           </div>
         </Grid.Column>
       </Grid.Row>

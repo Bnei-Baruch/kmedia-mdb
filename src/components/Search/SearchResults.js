@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Trans, withNamespaces } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -7,6 +7,7 @@ import { Container, Divider, Grid } from 'semantic-ui-react';
 import { SEARCH_GRAMMAR_HIT_TYPES, SEARCH_INTENT_HIT_TYPES } from '../../helpers/consts';
 import { isEmpty } from '../../helpers/utils';
 import { getQuery } from '../../helpers/url';
+import { ClientChroniclesContext } from "../../helpers/app-contexts";
 import { selectors as settings } from '../../redux/modules/settings';
 import { selectors as filterSelectors } from '../../redux/modules/filters';
 import { selectors as sourcesSelectors } from '../../redux/modules/sources';
@@ -35,6 +36,7 @@ const SearchResults = props => {
   const getSourcePath    = useSelector(state => sourcesSelectors.getSourceById(state.sources));
   const getSourceById    = useSelector(state => sourcesSelectors.getSourceById(state.sources));
   const contentLanguage  = useSelector(state => settings.getContentLanguage(state.settings));
+  const chronicles       = useContext(ClientChroniclesContext);
 
   const
     {
@@ -58,12 +60,13 @@ const SearchResults = props => {
   const searchLanguageByIndex = (index, def) => index.split('_')[2] ?? def;
 
   const renderHit = (hit, rank, searchLanguage) => {
-    const { _source: { mdb_uid: mdbUid, result_type: resultType, landing_page: landingPage }, _type: type, _index } = hit;
+    const { _source: { mdb_uid: mdbUid, result_type: resultType, landing_page: landingPage, filter_values: filterValues }, _type: type, _index } = hit;
+    const key = mdbUid ? `${mdbUid}_${type}`: `${landingPage}_${type}_${(filterValues || []).map(({ name, value }) => `${name}_${value}`).join('_')}`;
 
     searchLanguage = searchLanguageByIndex(_index, searchLanguage);
     const newProps = {
       ...props, filters, getTagById, getSourceById, contentLanguage, getSourcePath, searchLanguage,
-      hit, rank, key: `${mdbUid || landingPage}_${type}`
+      hit, rank, key, chronicles,
     };
 
     if (SEARCH_GRAMMAR_HIT_TYPES.includes(type)) {
