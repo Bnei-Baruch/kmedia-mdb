@@ -116,6 +116,7 @@ class SearchResultBase extends Component {
     rank: PropTypes.number,
     contentLanguage: PropTypes.string.isRequired,
     searchLanguage: PropTypes.string,
+    chronicles: PropTypes.shape(),
   };
 
   static defaultProps = {
@@ -144,8 +145,9 @@ class SearchResultBase extends Component {
     }, []);
 
   logClick = (mdbUid, index, type, rank, searchId) => {
-    const { click, location } = this.props;
-    const deb                 = isDebMode(location);
+    const { click, location, chronicles } = this.props;
+    const deb                             = isDebMode(location);
+    chronicles.searchSelected({ mdbUid, index, type, rank, searchId, deb });
     click(mdbUid, index, type, rank, searchId, deb);
   };
 

@@ -15,8 +15,11 @@ import { filtersTransformer } from '../filters';
 function* autocomplete(action) {
   try {
     const language = yield select(state => settings.getLanguage(state.settings));
-    const { data } = yield call(Api.autocomplete, { q: action.payload, language });
-    yield put(actions.autocompleteSuccess(data));
+    const autocompleteId = GenerateSearchId();
+    const request = { q: action.payload, language, autocompleteId };
+    const { data } = yield call(Api.autocomplete, request);
+    data.autocompleteId = autocompleteId;
+    yield put(actions.autocompleteSuccess({ suggestions: data, request }));
   } catch (err) {
     yield put(actions.autocompleteFailure(err));
   }
@@ -55,8 +58,7 @@ export function* search(action) {
     }
 
     const searchId = GenerateSearchId();
-
-    const { data } = yield call(Api.search, {
+    const request = {
       ...action.payload,
       q,
       sortBy,
@@ -64,7 +66,9 @@ export function* search(action) {
       deb,
       suggest: suggest === q ? '' : suggest,
       searchId
-    });
+    };
+
+    const { data } = yield call(Api.search, request);
 
     data.search_result.searchId = searchId;
 
@@ -77,7 +81,7 @@ export function* search(action) {
       const postIDsToFetch = getIdsForFetch(data.search_result.hits.hits, 'posts');
 
       if (cuIDsToFetch.length === 0 && cIDsToFetch.length === 0 && postIDsToFetch.length === 0) {
-        yield put(actions.searchSuccess(data));
+        yield put(actions.searchSuccess({ searchResults: data, searchRequest: request }));
         return;
       }
 
@@ -118,7 +122,7 @@ export function* search(action) {
       }
     }
 
-    yield put(actions.searchSuccess(data));
+    yield put(actions.searchSuccess({ searchResults: data, searchRequest: request }));
   } catch (err) {
     yield put(actions.searchFailure(err));
   }
