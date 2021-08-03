@@ -21,7 +21,7 @@ import Download from '../../shared/Download/Download';
 import WipErr from '../../shared/WipErr/WipErr';
 import ShareBar from '../../shared/ShareSelected';
 import { DeviceInfoContext, SessionInfoContext } from '../../../helpers/app-contexts';
-import MenuLanguageSelector from "../../Language/Selector/MenuLanguageSelector";
+import MenuLanguageSelector from '../../Language/Selector/MenuLanguageSelector';
 
 export const checkRabashGroupArticles = source => {
   if (/^gr-/.test(source)) { // Rabash Group Articles

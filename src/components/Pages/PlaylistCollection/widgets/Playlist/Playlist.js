@@ -4,7 +4,7 @@ import { withNamespaces } from 'react-i18next';
 import { List } from 'semantic-ui-react';
 import isEqual from 'react-fast-compare';
 
-import { DeviceInfoContext } from "../../../../../helpers/app-contexts";
+import { DeviceInfoContext } from '../../../../../helpers/app-contexts';
 import { renderPlaylistUnit } from '../../../Unit/widgets/Recommended/Main/DisplayRecommended';
 import PlaylistHeader from './PlaylistHeader';
 

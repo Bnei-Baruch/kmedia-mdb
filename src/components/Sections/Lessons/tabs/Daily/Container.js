@@ -56,7 +56,7 @@ export const renderCollection = (collection, t) => {
       return (
         <Table.Row key={`u-${unit.id}`} verticalAlign="top" className="no-thumbnail">
           <Table.Cell>
-            { renderUnitHelper.renderUnitNameLink(unit, "index__item") }
+            { renderUnitHelper.renderUnitNameLink(unit, 'index__item') }
             { renderUnitHelper.renderRelatedItems(relatedItems, t('lessons.list.related'))}
           </Table.Cell>
         </Table.Row>

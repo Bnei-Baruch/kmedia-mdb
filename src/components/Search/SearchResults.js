@@ -7,7 +7,7 @@ import { Container, Divider, Grid } from 'semantic-ui-react';
 import { SEARCH_GRAMMAR_HIT_TYPES, SEARCH_INTENT_HIT_TYPES } from '../../helpers/consts';
 import { isEmpty } from '../../helpers/utils';
 import { getQuery } from '../../helpers/url';
-import { ClientChroniclesContext } from "../../helpers/app-contexts";
+import { ClientChroniclesContext } from '../../helpers/app-contexts';
 import { selectors as settings } from '../../redux/modules/settings';
 import { selectors as filterSelectors } from '../../redux/modules/filters';
 import { selectors as sourcesSelectors } from '../../redux/modules/sources';

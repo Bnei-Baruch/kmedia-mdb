@@ -10,7 +10,7 @@ import { actions, selectors } from '../../redux/modules/publications';
 import TwitterFeed from '../Sections/Publications/tabs/Twitter/Feed';
 
 import SearchResultBase from './SearchResultBase';
-import { DeviceInfoContext } from "../../helpers/app-contexts";
+import { DeviceInfoContext } from '../../helpers/app-contexts';
 
 class SearchResultTwitters extends SearchResultBase {
   static contextType = DeviceInfoContext;
