@@ -4,12 +4,13 @@ import { Icon } from 'semantic-ui-react';
 
 const AVSpinner = ({ isLoading }) =>
   isLoading
-    && <Icon
+    ? <Icon
       loading
       name="spinner"
       color="grey"
       size="huge"
     />
+    : null;
 
 AVSpinner.propTypes = {
   isLoading: PropTypes.bool
