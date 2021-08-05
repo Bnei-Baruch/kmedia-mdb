@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { Media } from 'react-media-player';
 
 import { selectors as settings } from '../../redux/modules/settings';
 import { MT_AUDIO } from '../../helpers/consts';
@@ -14,20 +13,20 @@ import { DeviceInfoContext } from '../../helpers/app-contexts';
 
 const AVPlaylistPlayer = ({ items, selected, onSelectedChange, onLanguageChange, onSwitchAV }) => {
   const { undefinedDevice } = useContext(DeviceInfoContext);
-  const uiLanguage = useSelector(state => settings.getLanguage(state.settings));
-  const contentLanguage = useSelector(state => settings.getContentLanguage(state.settings));
+  const uiLanguage          = useSelector(state => settings.getLanguage(state.settings));
+  const contentLanguage     = useSelector(state => settings.getContentLanguage(state.settings));
 
   const location = useLocation();
-  const query = getQuery(location);
+  const query    = getQuery(location);
 
   const [autoPlay, setAutoPlay]                 = useState(!!query.sstart);
   const [mediaEditMode, setMediaEditMode]       = useState(null);
   const [isDropdownOpened, setIsDropdownOpened] = useState(false);
 
-  const handleMediaEditModeChange = mediaEditMode => setMediaEditMode(mediaEditMode);
+  const handleMediaEditModeChange  = mediaEditMode => setMediaEditMode(mediaEditMode);
   const handleDropdownOpenedChange = isDropdownOpened => setIsDropdownOpened(isDropdownOpened);
 
-  const onPlay = () => setAutoPlay(true);
+  const onPlay  = () => setAutoPlay(true);
   const onPause = () => setAutoPlay(false);
 
   const onPrev = () => {
@@ -69,35 +68,33 @@ const AVPlaylistPlayer = ({ items, selected, onSelectedChange, onLanguageChange,
       })}
     >
       <div className="avbox__media-wrapper">
-        <Media>
-          <AVMobileCheck
-            autoPlay={autoPlay}
-            item={currentItem}
-            onSwitchAV={onSwitchAV}
-            languages={currentItem.availableLanguages}
-            uiLanguage={uiLanguage}
-            selectedLanguage={currentItem.language}
-            requestedLanguage={contentLanguage}
-            onLanguageChange={onLanguageChange}
-            // Playlist props
-            showNextPrev
-            onFinish={onFinish}
-            hasNext={hasNext}
-            hasPrev={hasPrev}
-            onPrev={onPrev}
-            onNext={onNext}
-            onPause={onPause}
-            onPlay={onPlay}
-            onMediaEditModeChange={handleMediaEditModeChange}
-            onDropdownOpenedChange={handleDropdownOpenedChange}
-          />
-        </Media>
+        <AVMobileCheck
+          autoPlay={autoPlay}
+          item={currentItem}
+          onSwitchAV={onSwitchAV}
+          languages={currentItem.availableLanguages}
+          uiLanguage={uiLanguage}
+          selectedLanguage={currentItem.language}
+          requestedLanguage={contentLanguage}
+          onLanguageChange={onLanguageChange}
+          // Playlist props
+          showNextPrev
+          onFinish={onFinish}
+          hasNext={hasNext}
+          hasPrev={hasPrev}
+          onPrev={onPrev}
+          onNext={onNext}
+          onPause={onPause}
+          onPlay={onPlay}
+          onMediaEditModeChange={handleMediaEditModeChange}
+          onDropdownOpenedChange={handleDropdownOpenedChange}
+        />
       </div>
     </div>
   );
-}
+};
 
-AVPlaylistPlayer.propTypes   = {
+AVPlaylistPlayer.propTypes = {
   items: PropTypes.arrayOf(shapes.VideoItem).isRequired,
   selected: PropTypes.number.isRequired,
   onSelectedChange: PropTypes.func.isRequired,
