@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { Media } from 'react-media-player';
 
 import { selectors as settings } from '../../redux/modules/settings';
 import { MT_AUDIO } from '../../helpers/consts';
@@ -69,29 +68,27 @@ const AVPlaylistPlayer = ({ items, selected, onSelectedChange, onLanguageChange,
       })}
     >
       <div className="avbox__media-wrapper">
-        <Media>
-          <AVMobileCheck
-            autoPlay={autoPlay}
-            item={currentItem}
-            onSwitchAV={onSwitchAV}
-            languages={currentItem.availableLanguages}
-            uiLanguage={uiLanguage}
-            selectedLanguage={currentItem.language}
-            requestedLanguage={contentLanguage}
-            onLanguageChange={onLanguageChange}
-            // Playlist props
-            showNextPrev
-            onFinish={onFinish}
-            hasNext={hasNext}
-            hasPrev={hasPrev}
-            onPrev={onPrev}
-            onNext={onNext}
-            onPause={onPause}
-            onPlay={onPlay}
-            onMediaEditModeChange={handleMediaEditModeChange}
-            onDropdownOpenedChange={handleDropdownOpenedChange}
-          />
-        </Media>
+        <AVMobileCheck
+          autoPlay={autoPlay}
+          item={currentItem}
+          onSwitchAV={onSwitchAV}
+          languages={currentItem.availableLanguages}
+          uiLanguage={uiLanguage}
+          selectedLanguage={currentItem.language}
+          requestedLanguage={contentLanguage}
+          onLanguageChange={onLanguageChange}
+          // Playlist props
+          showNextPrev
+          onFinish={onFinish}
+          hasNext={hasNext}
+          hasPrev={hasPrev}
+          onPrev={onPrev}
+          onNext={onNext}
+          onPause={onPause}
+          onPlay={onPlay}
+          onMediaEditModeChange={handleMediaEditModeChange}
+          onDropdownOpenedChange={handleDropdownOpenedChange}
+        />
       </div>
     </div>
   );

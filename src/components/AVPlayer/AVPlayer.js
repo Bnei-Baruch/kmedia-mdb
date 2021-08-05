@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 import { isEmpty, noop } from '../../helpers/utils';
 import debounce from 'lodash/debounce';
 import { withRouter } from 'react-router-dom';
-import { Player, utils, withMediaProps } from 'react-media-player';
-import enableInlineVideo from 'iphone-inline-video';
+// TODO import enableInlineVideo from 'iphone-inline-video';
 import { withNamespaces } from 'react-i18next';
 import clsx from 'clsx';
 import { Button, Icon } from 'semantic-ui-react';
@@ -327,7 +326,7 @@ class AVPlayer extends Component {
 
       this.sendCallbackMessage(event.data, { status: 'ok' });
     } catch (e) {
-      console.error(`Error while receive external message in AVPlayer: ${  e}`);
+      console.error(`Error while receive external message in AVPlayer: ${e}`);
     }
   }
 
@@ -536,7 +535,6 @@ class AVPlayer extends Component {
   };
 
   // Correctly fetch loaded buffers from video to show loading progress.
-  // This code should be ported to react-media-player.
   buffers = () => {
     const videoElement = this.player && this.player.instance;
     const ret          = [];
@@ -786,7 +784,9 @@ class AVPlayer extends Component {
       );
     }
 
-    const handleKeyDown = utils.keyboardControls.bind(null, media);
+    // TODO const handleKeyDown = utils.keyboardControls.bind(null, media);
+    const handleKeyDown = () => {
+    };
 
     return (
       <div
@@ -801,14 +801,14 @@ class AVPlayer extends Component {
         {
           isVideo && unMuteButton && this.renderUnmuteButton(isRtl, t)
         }
-        <Player
+        {/* <Player */}
           playsInline
           ref={c => {
-            this.player = c;
-            if (c && c.instance) {
-              enableInlineVideo(c.instance);
-            }
-          }}
+          this.player = c;
+          // if (c && c.instance) {
+          //   enableInlineVideo(c.instance);
+          // }
+        }}
           src={file?.src}
           poster={isVideo ? item.preImageUrl : null}
           vendor={isVideo ? 'video' : 'audio'}
@@ -819,14 +819,16 @@ class AVPlayer extends Component {
           onPause={this.onPause}
           onPlay={this.onPlay}
           onTimeUpdate={this.handleTimeUpdate}
-          defaultCurrentTime={sliceStart || -1}  // -1 so RMP won't seek to 0 (browser won't fire seeked so we'll hang)
-        />
+          defaultCurrentTime={sliceStart || -1}
+        {/* -1 so RMP won't seek to 0 (browser won't fire seeked so we'll hang) */}
+        {/* /> */}
         <div
-          ref={this.handleWrapperRef}
-          className="mediaplayer__wrapper"
-          onMouseEnter={this.handleWrapperMouseEnter}
-          onMouseLeave={this.handleWrapperMouseLeave}
-          onMouseMove={this.handleWrapperMouseMove}
+          ref={this.handlePlayerControlsRef}
+          className={clsx('mediaplayer__controls', {
+            'mediaplayer__controls--is-fade': !controlsVisible && !forceShowControls
+          })}
+          onMouseEnter={this.handleControlsMouseEnter}
+          onMouseLeave={this.handleControlsMouseLeave}
         >
           <div
             ref={this.handlePlayerControlsRef}
@@ -925,4 +927,4 @@ const mapDispatch = dispatch => (
   }, dispatch)
 );
 
-export default withNamespaces()(withMediaProps(withRouter(connect(() => ({}), mapDispatch)(AVPlayer))));
+export default withNamespaces()(withRouter(connect(() => ({}), mapDispatch)(AVPlayer)));

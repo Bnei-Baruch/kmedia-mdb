@@ -136,12 +136,10 @@ $player-color: $black;
 
     &-play {
       background: rgba($white, .9);
-      border: .7em solid rgba($black, .9);
+      border: .3em solid rgba($black, .9);
       border-radius: 50%;
       color: $black;
-      height: 8em;
       padding: 0;
-      width: 8em;
       cursor: pointer;
 
       &:focus {
@@ -149,7 +147,10 @@ $player-color: $black;
       }
 
       .icon {
-        margin-left: .15em;
+        &.pause {
+          margin-left: 0;
+        }
+        margin-left: .2em;
         margin-right: 0;
       }
     }
