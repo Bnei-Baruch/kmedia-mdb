@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { useLocation } from 'react-router-dom';
 import { Menu } from 'semantic-ui-react';
 
-import { getQuery } from "../../helpers/url";
+import { getQuery } from '../../helpers/url';
 
 const activeFromLocation = location => {
   if (location.state && location.state.active)

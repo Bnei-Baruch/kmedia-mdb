@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { noop } from '../../helpers/utils';
 import { Dropdown } from 'semantic-ui-react';
 
-import { LANG_HEBREW, LANGUAGE_OPTIONS } from '../../helpers/consts';
+import { LANG_HEBREW, LANGUAGE_OPTIONS, LANGUAGES } from '../../helpers/consts';
 import TimedPopup from '../shared/TimedPopup';
 
 const AVLanguage = (
@@ -18,7 +18,7 @@ const AVLanguage = (
     cuId,
   }
 ) => {
-  const [lastRequestedLanguage, setLastRequestedLanguage] = useState();
+  const [lastRequestedLanguage, setLastRequestedLanguage] = useState(requestedLanguage);
   const [openPopup, setOpenPopup]                         = useState(false);
   const [langSelectRef, setLangSelectRef]                 = useState();
 
@@ -26,17 +26,17 @@ const AVLanguage = (
     setLastRequestedLanguage(data.value);
     onSelect(e, data.value);
   };
+
   const handleOnOpen  = () => onDropdownOpenedChange(true);
   const handleOnClose = () => onDropdownOpenedChange(false);
 
   useEffect(() => {
-    const requested = lastRequestedLanguage ? lastRequestedLanguage : requestedLanguage;
-    setOpenPopup(selectedLanguage !== requested);
-  }, [selectedLanguage, requestedLanguage, lastRequestedLanguage]);
+    setOpenPopup(selectedLanguage !== lastRequestedLanguage);
+  }, [selectedLanguage, lastRequestedLanguage]);
 
   const options = LANGUAGE_OPTIONS
     .filter(x => languages.includes(x.value))
-    .map(x => ({ value: x.value, text: x.value }));
+    .map(x => ({ value: x.value, text: x.name }));
 
   return (
     <div ref={setLangSelectRef} className="mediaplayer__languages">
@@ -58,7 +58,7 @@ const AVLanguage = (
         options={options}
         value={selectedLanguage}
         onChange={handleChange}
-        trigger={<button type="button">{selectedLanguage}</button>}
+        trigger={<button type="button">{LANGUAGES[selectedLanguage].name}</button>}
         onOpen={handleOnOpen}
         onClose={handleOnClose}
       />

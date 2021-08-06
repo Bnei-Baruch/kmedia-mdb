@@ -36,7 +36,7 @@ export const CT_COLLECTIONS = [
   CT_LESSONS_SERIES,
 ];
 
-export const IsCollectionContentType = (contentType) => CT_COLLECTIONS.includes(contentType);
+export const IsCollectionContentType = contentType => CT_COLLECTIONS.includes(contentType);
 
 // Content Unit Types
 export const CT_LESSON_PART           = 'LESSON_PART';
@@ -59,6 +59,7 @@ export const CT_LELO_MIKUD            = 'LELO_MIKUD';
 export const CT_BLOG_POST             = 'BLOG_POST';
 export const CT_RESEARCH_MATERIAL     = 'RESEARCH_MATERIAL';
 export const CT_KTAIM_NIVCHARIM       = 'KTAIM_NIVCHARIM';
+export const CT_LIKUTIM               = 'LIKUTIM';
 
 // Content types for additional Elastic results
 export const SCT_BLOG_POST = 'R_BLOG_POST';
@@ -112,45 +113,40 @@ export const LANG_AMHARIC    = 'am';
 export const LANG_UNKNOWN    = 'xx';
 
 export const LANGUAGES = {
-  [LANG_HEBREW]: { value: LANG_HEBREW, flag: 'il', locale: 'he_IL', lang3: 'HEB' },
-  [LANG_ENGLISH]: { value: LANG_ENGLISH, flag: 'us', locale: 'en_US', lang3: 'ENG' },
-  [LANG_RUSSIAN]: { value: LANG_RUSSIAN, flag: 'ru', locale: 'ru_RU', lang3: 'RUS' },
-  [LANG_SPANISH]: { value: LANG_SPANISH, flag: 'es', locale: 'es_ES', lang3: 'SPA' },
-  [LANG_ITALIAN]: { value: LANG_ITALIAN, flag: 'it', locale: 'it_IT', lang3: 'ITA' },
-  [LANG_GERMAN]: { value: LANG_GERMAN, flag: 'de', locale: 'de_DE', lang3: 'GER' },
-  [LANG_DUTCH]: { value: LANG_DUTCH, flag: 'nl', locale: 'nl_NL', lang3: 'DUT' },
-  [LANG_FRENCH]: { value: LANG_FRENCH, flag: 'fr', locale: 'fr_FR', lang3: 'FRE' },
-  [LANG_PORTUGUESE]: { value: LANG_PORTUGUESE, flag: 'pt', locale: 'pt_PT', lang3: 'POR' },
-  [LANG_TURKISH]: { value: LANG_TURKISH, flag: 'tr', locale: 'tr_TR', lang3: 'TRK' },
-  [LANG_POLISH]: { value: LANG_POLISH, flag: 'pl', locale: 'pl_PL', lang3: 'POL' },
-  [LANG_ARABIC]: { value: LANG_ARABIC, flag: 'sa', locale: 'ar_AR', lang3: 'ARB' },
-  [LANG_HUNGARIAN]: { value: LANG_HUNGARIAN, flag: 'hu', locale: 'hu_HU', lang3: 'HUN' },
-  [LANG_FINNISH]: { value: LANG_FINNISH, flag: 'fi', locale: 'fi_FI', lang3: 'FIN' },
-  [LANG_LITHUANIAN]: { value: LANG_LITHUANIAN, flag: 'lt', locale: 'lt_LT', lang3: 'LIT' },
-  [LANG_JAPANESE]: { value: LANG_JAPANESE, flag: 'jp', locale: 'ja_JP', lang3: 'JPN' },
-  [LANG_BULGARIAN]: { value: LANG_BULGARIAN, flag: 'bg', locale: 'bg_BG', lang3: 'BUL' },
-  [LANG_GEORGIAN]: { value: LANG_GEORGIAN, flag: 'ge', locale: 'ka_GE', lang3: 'GEO' },
+  [LANG_HEBREW]: { value: LANG_HEBREW, locale: 'he_IL', lang3: 'HEB', name: 'עברית' },
+  [LANG_ENGLISH]: { value: LANG_ENGLISH,  locale: 'en_US', lang3: 'ENG', name: 'English' },
+  [LANG_RUSSIAN]: { value: LANG_RUSSIAN, locale: 'ru_RU', lang3: 'RUS', name: 'Русский' },
+  [LANG_SPANISH]: { value: LANG_SPANISH, locale: 'es_ES', lang3: 'SPA', name: 'Español' },
+  [LANG_ITALIAN]: { value: LANG_ITALIAN, locale: 'it_IT', lang3: 'ITA', name: 'Italiano' },
+  [LANG_GERMAN]: { value: LANG_GERMAN, locale: 'de_DE', lang3: 'GER', name: 'Deutsch' },
+  [LANG_DUTCH]: { value: LANG_DUTCH, locale: 'nl_NL', lang3: 'DUT', name: 'Nederlands' },
+  [LANG_FRENCH]: { value: LANG_FRENCH, locale: 'fr_FR', lang3: 'FRE', name: 'Français' },
+  [LANG_PORTUGUESE]: { value: LANG_PORTUGUESE, locale: 'pt_PT', lang3: 'POR', name: 'Português' },
+  [LANG_TURKISH]: { value: LANG_TURKISH, locale: 'tr_TR', lang3: 'TRK', name: 'Türkçe' },
+  [LANG_POLISH]: { value: LANG_POLISH, locale: 'pl_PL', lang3: 'POL', name: 'Polski' },
+  [LANG_ARABIC]: { value: LANG_ARABIC, locale: 'ar_AR', lang3: 'ARB', name: 'اَلْعَرَبِيَّةُ' },
+  [LANG_HUNGARIAN]: { value: LANG_HUNGARIAN, locale: 'hu_HU', lang3: 'HUN', name: 'Magyar' },
+  [LANG_FINNISH]: { value: LANG_FINNISH, locale: 'fi_FI', lang3: 'FIN', name: 'Suo̯mi' },
+  [LANG_LITHUANIAN]: { value: LANG_LITHUANIAN, locale: 'lt_LT', lang3: 'LIT', name: 'Lietuvių' },
+  [LANG_JAPANESE]: { value: LANG_JAPANESE, locale: 'ja_JP', lang3: 'JPN', name: '日本語' },
+  [LANG_BULGARIAN]: { value: LANG_BULGARIAN, locale: 'bg_BG', lang3: 'BUL', name: 'Български' },
+  [LANG_GEORGIAN]: { value: LANG_GEORGIAN, locale: 'ka_GE', lang3: 'GEO', name: 'ქართული' },
   // TODO: choose from Norwegian Bokmål / Norwegian Nynorsk
-  [LANG_NORWEGIAN]: { value: LANG_NORWEGIAN, flag: 'no', locale: 'nb_NO', lang3: 'NOT' },
-  [LANG_SWEDISH]: { value: LANG_SWEDISH, flag: 'se', locale: 'sv_SE', lang3: 'SWE' },
-  [LANG_CROATIAN]: { value: LANG_CROATIAN, flag: 'hr', locale: 'hr_HR', lang3: 'HRV' },
-  [LANG_CHINESE]: { value: LANG_CHINESE, flag: 'cn', locale: 'zh_CN', lang3: 'CHN' },
-  [LANG_PERSIAN]: { value: LANG_PERSIAN, flag: 'ir', locale: 'fa_IR', lang3: 'PER' },
-  [LANG_ROMANIAN]: { value: LANG_ROMANIAN, flag: 'ro', locale: 'ro_RO', lang3: 'RON' },
-  [LANG_HINDI]: { value: LANG_HINDI, flag: 'in', locale: 'hi_IN', lang3: 'HIN' },
-  [LANG_UKRAINIAN]: { value: LANG_UKRAINIAN, flag: 'ua', locale: 'uk_UA', lang3: 'UKR' },
-  [LANG_MACEDONIAN]: { value: LANG_MACEDONIAN, flag: 'mk', locale: 'mk_MK', lang3: 'MKD' },
-  [LANG_SLOVENIAN]: { value: LANG_SLOVENIAN, flag: 'si', locale: 'sl_SI', lang3: 'SLV' },
-  [LANG_LATVIAN]: { value: LANG_LATVIAN, flag: 'lv', locale: 'lv_LV', lang3: 'LAV' },
-  [LANG_SLOVAK]: { value: LANG_SLOVAK, flag: 'sk', locale: 'sk_SK', lang3: 'SLK' },
-  [LANG_CZECH]: { value: LANG_CZECH, flag: 'cz', locale: 'cs_CZ', lang3: 'CZE' },
-  [LANG_AMHARIC]: { value: LANG_AMHARIC, flag: 'et', locale: 'am_ET', lang3: 'AMH' },
+  [LANG_NORWEGIAN]: { value: LANG_NORWEGIAN, locale: 'nb_NO', lang3: 'NOT', name: 'Norsk' },
+  [LANG_SWEDISH]: { value: LANG_SWEDISH, locale: 'sv_SE', lang3: 'SWE', name: 'Svenska' },
+  [LANG_CROATIAN]: { value: LANG_CROATIAN, locale: 'hr_HR', lang3: 'HRV', name: 'Hrvatski' },
+  [LANG_CHINESE]: { value: LANG_CHINESE, locale: 'zh_CN', lang3: 'CHN', name: '中文' },
+  [LANG_PERSIAN]: { value: LANG_PERSIAN, locale: 'fa_IR', lang3: 'PER', name: 'کبالا فارسی' },
+  [LANG_ROMANIAN]: { value: LANG_ROMANIAN, locale: 'ro_RO', lang3: 'RON', name: 'Românește' },
+  [LANG_HINDI]: { value: LANG_HINDI, locale: 'hi_IN', lang3: 'HIN', name: 'हिन्दी' },
+  [LANG_UKRAINIAN]: { value: LANG_UKRAINIAN, locale: 'uk_UA', lang3: 'UKR', name: 'Українська' },
+  [LANG_MACEDONIAN]: { value: LANG_MACEDONIAN, locale: 'mk_MK', lang3: 'MKD', name: 'Македонски' },
+  [LANG_SLOVENIAN]: { value: LANG_SLOVENIAN, locale: 'sl_SI', lang3: 'SLV', name: 'Slovenščina' },
+  [LANG_LATVIAN]: { value: LANG_LATVIAN, locale: 'lv_LV', lang3: 'LAV', name: 'Latviešu' },
+  [LANG_SLOVAK]: { value: LANG_SLOVAK, locale: 'sk_SK', lang3: 'SLK', name: 'slovenčina' },
+  [LANG_CZECH]: { value: LANG_CZECH, locale: 'cs_CZ', lang3: 'CZE', name: 'Čeština' },
+  [LANG_AMHARIC]: { value: LANG_AMHARIC, locale: 'am_ET', lang3: 'AMH', name: 'ኣማርኛ' },
 };
-
-export const FLAG_TO_LANGUAGE = Object.values(LANGUAGES).reduce((acc, language) => {
-  acc[language.flag] = language.value;
-  return acc;
-}, {});
 
 export const ALL_LANGUAGES = [
   LANG_HEBREW,
@@ -222,12 +218,15 @@ export const getVideoRes = (vsType, date) => {
   if (date.getFullYear() < 2014) {
     return { width: 480, height: 360 };
   }
+
   if (vsType === VS_NHD) {
     return { width: 640, height: 360 };
   }
+
   if (vsType === VS_HD) {
     return { width: 1280, height: 720 };
   }
+
   // fHD
   return { width: 1920, height: 980 };
 };
@@ -248,16 +247,16 @@ export const EVENT_TYPES = [
 ];
 
 // Required for Sections filter.
-export const COLLECTION_LESSONS_TYPE  = [CT_DAILY_LESSON, CT_SPECIAL_LESSON, /* CT_CHILDREN_LESSONS, */ CT_WOMEN_LESSONS, CT_VIRTUAL_LESSONS, CT_LECTURE_SERIES];
-export const NO_COLLECTION_VIEW_TYPE  = [CT_DAILY_LESSON, CT_SPECIAL_LESSON];
-export const COLLECTION_PROGRAMS_TYPE = [CT_VIDEO_PROGRAM, CT_CLIPS];
-export const COLLECTION_EVENTS_TYPE             = [CT_FRIENDS_GATHERINGS, CT_MEALS, ...EVENT_TYPES];
-export const COLLECTION_PUBLICATIONS_TYPE       = [CT_ARTICLES];
-export const UNIT_LESSONS_TYPE                  = [CT_LESSON_PART, /* CT_CHILDREN_LESSON, */ CT_WOMEN_LESSON, CT_VIRTUAL_LESSON, CT_FULL_LESSON, CT_LECTURE];
-export const UNIT_PROGRAMS_TYPE                 = [CT_VIDEO_PROGRAM_CHAPTER, CT_CLIP];
-export const UNIT_EVENTS_TYPE                   = [CT_EVENT_PART, CT_MEAL, CT_FRIENDS_GATHERING];
-export const UNIT_PUBLICATIONS_TYPE             = [CT_ARTICLE, CT_PUBLICATION, CT_BLOG_POST, SCT_BLOG_POST, SCT_TWEET];
-export const DERIVED_UNITS_CONTENT_TYPE         = [CT_VIDEO_PROGRAM_CHAPTER, CT_CLIP];
+export const COLLECTION_LESSONS_TYPE      = [CT_DAILY_LESSON, CT_SPECIAL_LESSON, /* CT_CHILDREN_LESSONS, */ CT_WOMEN_LESSONS, CT_VIRTUAL_LESSONS, CT_LECTURE_SERIES];
+export const NO_COLLECTION_VIEW_TYPE      = [CT_DAILY_LESSON, CT_SPECIAL_LESSON];
+export const COLLECTION_PROGRAMS_TYPE     = [CT_VIDEO_PROGRAM, CT_CLIPS];
+export const COLLECTION_EVENTS_TYPE       = [CT_FRIENDS_GATHERINGS, CT_MEALS, ...EVENT_TYPES];
+export const COLLECTION_PUBLICATIONS_TYPE = [CT_ARTICLES];
+export const UNIT_LESSONS_TYPE            = [CT_LESSON_PART, /* CT_CHILDREN_LESSON, */ CT_WOMEN_LESSON, CT_VIRTUAL_LESSON, CT_FULL_LESSON, CT_LECTURE];
+export const UNIT_PROGRAMS_TYPE           = [CT_VIDEO_PROGRAM_CHAPTER, CT_CLIP];
+export const UNIT_EVENTS_TYPE             = [CT_EVENT_PART, CT_MEAL, CT_FRIENDS_GATHERING];
+export const UNIT_PUBLICATIONS_TYPE       = [CT_ARTICLE, CT_PUBLICATION, CT_BLOG_POST, SCT_BLOG_POST, SCT_TWEET];
+export const DERIVED_UNITS_CONTENT_TYPE   = [CT_VIDEO_PROGRAM_CHAPTER, CT_CLIP];
 
 export const NO_NAME = '☠ no name';
 

@@ -15,20 +15,20 @@ const PlaylistCollectionContainer = ({ cId, t, cuId }) => {
   const wipMap      = useSelector(state => selectors.getWip(state.mdb));
   const errorMap    = useSelector(state => selectors.getErrors(state.mdb));
   const cWindow     = useSelector(state => selectors.getWindow(state.mdb));
-  const collections = useSelector(state => cWindow?.data?.map(id => selectors.getDenormCollection(state.mdb, id)));
+  const collections = useSelector(state => cWindow?.data?.map(id => selectors.getDenormCollection(state.mdb, id)).filter(c => !!c));
 
   const [nextLink, setNextLink] = useState(null);
   const [prevLink, setPrevLink] = useState(null);
 
   const dispatch = useDispatch();
 
-  const createPrevNextLinks = (curIndex) => {
-    const prevCollection   = curIndex < collections.length - 1 ? collections[curIndex + 1] : null;
-    const prevLnk = prevCollection ? canonicalLink(prevCollection) : null;
+  const createPrevNextLinks = curIndex => {
+    const prevCollection = curIndex < collections.length - 1 ? collections[curIndex + 1] : null;
+    const prevLnk        = prevCollection ? canonicalLink(prevCollection) : null;
     setPrevLink(prevLnk);
 
     const nextCollection = curIndex > 0 ? collections[curIndex - 1] : null;
-    const nextLnk = nextCollection ? canonicalLink(nextCollection) : null;
+    const nextLnk        = nextCollection ? canonicalLink(nextCollection) : null;
     setNextLink(nextLnk);
   };
 
@@ -73,7 +73,7 @@ const PlaylistCollectionContainer = ({ cId, t, cuId }) => {
           }
         } else {
           const { id: cWindowId, data } = cWindow;
-          const curIndex          = data.indexOf(cId);
+          const curIndex                = data.indexOf(cId);
           // console.log('cWindow:', cWindowId, curIndex, collections);
 
           if (cId !== cWindowId

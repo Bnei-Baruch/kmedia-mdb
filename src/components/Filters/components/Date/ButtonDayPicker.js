@@ -61,6 +61,7 @@ class ButtonDayPicker extends Component {
         locale: getLanguageLocaleWORegion(props.language),
       };
     }
+
     return null;
   }
 
@@ -68,7 +69,7 @@ class ButtonDayPicker extends Component {
     return date ? formatDate(date, 'l', locale) : '';
   }
 
-  handleYearMonthChange = (month) => {
+  handleYearMonthChange = month => {
     this.setState({ month });
   };
 
@@ -81,11 +82,11 @@ class ButtonDayPicker extends Component {
     }
   };
 
-  handleNativeDateInputRef = (ref) => {
+  handleNativeDateInputRef = ref => {
     this.nativeDateInput = ref;
   };
 
-  handleNativeDateInputChange = (event) => {
+  handleNativeDateInputChange = event => {
     const date            = event.target.valueAsDate;
     const { onDayChange } = this.props;
     const { deviceInfo }  = this.context;
@@ -101,6 +102,7 @@ class ButtonDayPicker extends Component {
       this.nativeDateInput.click();
       return;
     }
+
     this.nativeDateInput.focus();
   };
 
@@ -142,10 +144,11 @@ class ButtonDayPicker extends Component {
   openNativePopup  = () => this.setState({ isNativePopupOpen: true });
   closeNativePopup = () => this.setState({ isNativePopupOpen: false });
 
-  onPopupDayChange = (date) => {
+  onPopupDayChange = date => {
     if (date > today().add(1, 'days').toDate()) {
       return;
     }
+
     const { onDayChange } = this.props;
     const { locale }      = this.state;
     this.setState({ stringValue: ButtonDayPicker.formatDateValue(date, locale) });

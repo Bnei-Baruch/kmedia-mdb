@@ -5,7 +5,7 @@ import { Helmet } from 'react-helmet-async';
 import Basic from './Basic';
 import Locale from './Locale';
 
-const TopMost = (props) => {
+const TopMost = props => {
   const { titlePostfix } = props;
   const titleTemplate    = `%s | ${titlePostfix}`;
 

@@ -130,7 +130,7 @@ const onFetchTweetsSuccess = (draft, { tweets = [], total }) => {
   const { twitter } = draft;
 
   twitter.tweets.length = 0;
-  tweets.forEach((x) => {
+  tweets.forEach(x => {
     twitter.byID[x.twitter_id] = x;
     twitter.tweets.push(x);
   });
@@ -153,7 +153,7 @@ const onFetchBlogListSuccess = (draft, { total, posts }) => {
   const blogPosts  = blog.posts;
 
   blogPosts.length = 0;
-  posts.forEach((x) => {
+  posts.forEach(x => {
     const k = `${x.blog}${x.wp_id}`;
     byID[k] = x;
     blogPosts.push(k);
@@ -200,9 +200,11 @@ const onSSRPrepare = draft => {
   if (draft.twitter.err) {
     draft.twitter.err = draft.twitter.err.toString();
   }
+
   if (draft.blog.err) {
     draft.blog.err = draft.blog.err.toString();
   }
+
   if (draft.blog.errPost) {
     draft.blog.errPost = draft.blog.errPost.toString();
   }

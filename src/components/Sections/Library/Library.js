@@ -3,12 +3,11 @@ import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import { useHistory, useLocation } from 'react-router-dom';
-import { Container, Portal, Segment } from 'semantic-ui-react';
+import { Portal, Segment } from 'semantic-ui-react';
 
 import { selectors } from '../../../redux/modules/assets';
-import { assetUrl } from '../../../helpers/Api';
-import { isEmpty, physicalFile } from '../../../helpers/utils';
-import AnchorsLanguageSelector from '../../Language/Selector/AnchorsLanguageSelector';
+import { physicalFile } from '../../../helpers/utils';
+
 import PDF, { isTaas, startsFrom } from '../../shared/PDF/PDF';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import { getQuery, updateQuery } from '../../../helpers/url';
@@ -22,26 +21,28 @@ import Download from '../../shared/Download/Download';
 import WipErr from '../../shared/WipErr/WipErr';
 import ShareBar from '../../shared/ShareSelected';
 import { DeviceInfoContext, SessionInfoContext } from '../../../helpers/app-contexts';
+import MenuLanguageSelector from '../../Language/Selector/MenuLanguageSelector';
 
-export const checkRabashGroupArticles = (source) => {
+export const checkRabashGroupArticles = source => {
   if (/^gr-/.test(source)) { // Rabash Group Articles
     const result = /^gr-(.+)/.exec(source);
     return result[1];
-  } else {
-    return source;
   }
+
+  return source;
+
 };
 
 const Library = ({
-                   data,
-                   source,
-                   language = null,
-                   languages = [],
-                   langSelectorMount = null,
-                   downloadAllowed,
-                   handleLanguageChanged,
-                   t,
-                 }) => {
+  data,
+  source,
+  language = null,
+  languages = [],
+  langSelectorMount = null,
+  downloadAllowed,
+  handleLanguageChanged,
+  t,
+}) => {
   const location                             = useLocation();
   const history                              = useHistory();
   const [pageNumber, setPageNumber]          = useState(getPageFromLocation(location));
@@ -59,13 +60,13 @@ const Library = ({
     if (!data?.[language])
       return null;
     const { pdf, docx, doc } = data[language];
-    const file               = docx || doc;
-    if (!file) return null;
-
     if (pdf && isTaas(source))
       return { url: physicalFile(pdf), isPDF: true, name: pdf.name };
-    else
-      return { url: physicalFile(file, true), name: file.name, ...doc2htmlById[file.id] };
+
+    const file = docx || doc;
+    if (!file) return null;
+
+    return { url: physicalFile(file, true), name: file.name, ...doc2htmlById[file.id] };
   };
 
   const content = getContent() || {};
@@ -79,18 +80,20 @@ const Library = ({
     setSearchUrl(url);
   };
 
-  const handleOnMouseUp = (e) => {
+  const handleOnMouseUp = e => {
     if (isMobileDevice || !isShareTextEnabled) {
       return false;
     }
+
     updateSelection();
     return false;
   };
 
-  const handleOnMouseDown = (e) => {
+  const handleOnMouseDown = e => {
     if (isMobileDevice || !isShareTextEnabled) {
       return false;
     }
+
     setSearchUrl(null);
     return false;
   };
@@ -154,9 +157,10 @@ const Library = ({
           />
         </div>
       );
-    } else {
-      return null;
     }
+
+    return null;
+
   };
 
   const contentsToDisplay = getContentToDisplay();
@@ -165,15 +169,17 @@ const Library = ({
   }
 
   let languageBar = null;
+
   if (languages.length > 0) {
     languageBar = (
-      <Container fluid textAlign="right">
-        <AnchorsLanguageSelector
+      <div className="library-language-container">
+        <MenuLanguageSelector
           languages={languages}
           defaultValue={language}
           onSelect={handleLanguageChanged}
+          fluid={false}
         />
-      </Container>
+      </div>
     );
   }
 

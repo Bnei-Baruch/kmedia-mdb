@@ -96,13 +96,13 @@ export const reducer = handleActions({
     draft.acQ = payload;
   },
   [AUTOCOMPLETE_SUCCESS]: (draft, payload) => {
-    draft.suggestions = payload;
+    draft.suggestions = payload.suggestions;
   },
   [AUTOCOMPLETE_FAILURE]: draft => {
     draft.suggestions = null;
   },
   [SEARCH]: (draft, payload) => {
-    Object.keys(payload).forEach((key) => {
+    Object.keys(payload).forEach(key => {
       draft[key] = payload[key];
     });
     draft.wip = true;
@@ -110,7 +110,7 @@ export const reducer = handleActions({
   [SEARCH_SUCCESS]: (draft, payload) => {
     draft.wip         = false;
     draft.error       = null;
-    draft.queryResult = payload;
+    draft.queryResult = payload.searchResults;
   },
   [SEARCH_FAILURE]: (draft, payload) => {
     draft.wip   = false;

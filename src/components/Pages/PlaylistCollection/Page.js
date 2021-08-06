@@ -1,7 +1,7 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useHistory, useLocation, useRouteMatch } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { useSelector } from 'react-redux';
 import { Container, Grid } from 'semantic-ui-react';
 import isEqual from 'react-fast-compare';
@@ -56,10 +56,12 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
       if (prev?.unit?.id) {
         chronicles.append('collection-unit-unselected', { unit_uid: prev.unit.id });
       }
+
       if (unit?.id) {
         chronicles.append('collection-unit-selected', { unit_uid: unit.id });
       }
     }
+
     if (prev?.unit?.id && !unit?.id) {
       chronicles.append('collection-unit-unselected', { unit_uid: unit.id });
     }
@@ -104,6 +106,7 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
       if (nSelected >= playlist?.items.length) {
         nSelected = 0;
       }
+
       handleSelectedChange(nSelected);
     }
   }, [handleSelectedChange, location, playlist]);
@@ -129,7 +132,7 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
   let recommendUnit = unit;
   const isUnitPrep  = collection?.ccuNames?.[unit?.id] === '0';
   if (isUnitPrep && Array.isArray(playlist?.items)) {
-    const indexOfUnit = playlist.items.findIndex((item) => item?.unit?.id === unit.id);
+    const indexOfUnit = playlist.items.findIndex(item => item?.unit?.id === unit.id);
     if (indexOfUnit !== -1 && indexOfUnit + 1 < playlist.items.length) {
       recommendUnit = playlist.items[indexOfUnit + 1].unit;
     }
@@ -153,7 +156,7 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
   return !embed ?
     (
       <Grid padded={!isMobileDevice} className="avbox">
-        <Grid.Column mobile={16} tablet={computerWidth} computer={computerWidth} className={classNames({ 'is-fitted': isMobileDevice })}>
+        <Grid.Column mobile={16} tablet={computerWidth} computer={computerWidth} className={clsx({ 'is-fitted': isMobileDevice })}>
           <AVPlaylistPlayer
             items={items}
             selected={selected}

@@ -21,7 +21,7 @@ import AVPlaybackRateMobile from './AVPlaybackRateMobile';
 import AVSpinner from './AVSpinner';
 import playerHelper from '../../helpers/player';
 import { PlayerStartEnum } from './playerStartEnum';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { DeviceInfoContext } from '../../helpers/app-contexts';
 import { areEqual } from '../../helpers/utils';
 
@@ -74,7 +74,7 @@ class AVPlayerMobile extends Component {
     selectedLanguage: LANG_HEBREW,
   };
 
-  persistVolume = debounce((value) => {
+  persistVolume = debounce(value => {
     localStorage.setItem(PLAYER_VOLUME_STORAGE_KEY, value);
   }, 200);
 
@@ -128,7 +128,7 @@ class AVPlayerMobile extends Component {
     return diffInProps || updateState;
   }
 
-  updateState = (nextState) => {
+  updateState = nextState => {
     const { playbackRate, showControls, unMuteButton, error, isSliceMode, mode } = this.state;
 
     return (playbackRate !== nextState.playbackRate
@@ -144,6 +144,7 @@ class AVPlayerMobile extends Component {
       if (this.isUnitExistAndPlaying()) {
         this.props.chronicles.append('player-stop', this.buildAppendData(prevProps.item, this.media));
       }
+
       this.setState({ error: false, errorReason: '', firstSeek: true });
     }
   }
@@ -152,6 +153,7 @@ class AVPlayerMobile extends Component {
     if (this.seekTimeoutId) {
       clearTimeout(this.seekTimeoutId);
     }
+
     if (this.isUnitExistAndPlaying()) {
       this.props.chronicles.append('player-stop', this.buildAppendData(this.props.item, this.media));
     }
@@ -183,7 +185,7 @@ class AVPlayerMobile extends Component {
     this.props.onLanguageChange(...params);
   };
 
-  handleMediaRef = (ref) => {
+  handleMediaRef = ref => {
     if (ref) {
       this.media = ref;
       this.restoreVolume();
@@ -191,6 +193,7 @@ class AVPlayerMobile extends Component {
         if (this.props.item.mediaType === MT_VIDEO) {
           this.media.muted = true;
         }
+
         this.media.autoPlay = true;
         this.setState({ unMuteButton: true });
         if (this.context.deviceInfo.os.name !== 'iOS') {
@@ -199,6 +202,7 @@ class AVPlayerMobile extends Component {
       } else {
         this.showControls();
       }
+
       this.media.addEventListener('play', this.handlePlay);
       this.media.addEventListener('pause', this.handlePause);
       this.media.addEventListener('ended', this.handleEnded);
@@ -229,11 +233,12 @@ class AVPlayerMobile extends Component {
     }
   };
 
-  handleVolumeChange = (e) => {
+  handleVolumeChange = e => {
     const { unMuteButton } = this.state;
     if (this.media.muted) {
       return;
     }
+
     this.persistVolume(e.currentTarget.volume);
     if (unMuteButton) {
       this.setState({ unMuteButton: false });
@@ -246,6 +251,7 @@ class AVPlayerMobile extends Component {
       value = DEFAULT_PLAYER_VOLUME;
       localStorage.setItem(PLAYER_VOLUME_STORAGE_KEY, value);
     }
+
     this.media.volume = value;
   };
 
@@ -262,6 +268,7 @@ class AVPlayerMobile extends Component {
           this.seekTo(savedTime, true);
         }
       }
+
       this.setState({ firstSeek: false });
     } else if (this.wasCurrentTime) {
       this.seekTo(this.wasCurrentTime, true);
@@ -278,6 +285,7 @@ class AVPlayerMobile extends Component {
       this.media.autoplay = false;
       this.saveCurrentTime(this.media.currentTime);
     }
+
     if (this?.props?.item?.unit?.id) {
       this.props.chronicles.append('player-stop', this.buildAppendData(this.props.item, this.media));
     }
@@ -299,7 +307,7 @@ class AVPlayerMobile extends Component {
     }
   };
 
-  handleTimeUpdate = (e) => {
+  handleTimeUpdate = e => {
     const { mode, sliceEnd, sliceStart, seeking, firstSeek, showControls } = this.state;
 
     if (!showControls) {
@@ -327,7 +335,7 @@ class AVPlayerMobile extends Component {
     }
   };
 
-  handleError = (e) => {
+  handleError = e => {
     const { t } = this.props;
     // Show error only on loading of video.
     if (!e.currentTarget.currentTime && this.media.paused) {
@@ -338,6 +346,7 @@ class AVPlayerMobile extends Component {
       } else {
         errorReason = t('messages.unknown');
       }
+
       this.setState({ error: true, errorReason });
     }
   };
@@ -362,11 +371,13 @@ class AVPlayerMobile extends Component {
     if (this.seekTimeoutId) {
       clearTimeout(this.seekTimeoutId);
     }
+
     this.seekTimeoutId = setTimeout(() => {
       if (this.isSeekSuccess(t)) {
         this.setState({ seeking: false });
         return;
       }
+
       this.media.currentTime = t;
       if (!this.isSeekSuccess(t)) {
         this.seekTimeout(t, timeout);
@@ -394,7 +405,7 @@ class AVPlayerMobile extends Component {
     this.seekTo(jumpTo, false);
   };
 
-  saveCurrentTime = (mediaTime) => {
+  saveCurrentTime = mediaTime => {
     const { currentTime, firstSeek } = this.state;
     const { item }                   = this.props;
     const currentMediaTime           = Math.round(mediaTime);
@@ -422,6 +433,7 @@ class AVPlayerMobile extends Component {
         return parseInt(savedTime, 10);
       }
     }
+
     return null;
   };
 
@@ -440,7 +452,7 @@ class AVPlayerMobile extends Component {
   renderUnmuteButton(isRtl, embed, t) {
     return <Button
       icon="volume off"
-      className={classNames('', {
+      className={clsx('', {
         'mediaplayer__embedUnmuteButton': embed,
         'mediaplayer__unmuteButton': !embed,
         'rtl': isRtl

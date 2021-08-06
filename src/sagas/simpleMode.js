@@ -1,4 +1,5 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
+import moment from 'moment';
 
 import Api from '../helpers/Api';
 import { actions, types } from '../redux/modules/simpleMode';
@@ -6,10 +7,13 @@ import { actions as mdbActions } from '../redux/modules/mdb';
 
 export function* fetchForDate(action) {
   try {
+    const { date, language } = action.payload;
+    const formattedDate = moment(date).format('YYYY-MM-DD')
+
     const args = {
-      startDate: action.payload.date,
-      endDate: action.payload.date,
-      language: action.payload.language,
+      startDate: formattedDate,
+      endDate: formattedDate,
+      language
     };
 
     const { data } = yield call(Api.simpleMode, args);
@@ -17,6 +21,7 @@ export function* fetchForDate(action) {
     if (Array.isArray(data.lessons) && data.lessons.length > 0) {
       yield put(mdbActions.receiveCollections(data.lessons));
     }
+
     if (Array.isArray(data.others) && data.others.length > 0) {
       yield put(mdbActions.receiveContentUnits(data.others));
     }

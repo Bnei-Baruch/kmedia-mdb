@@ -32,9 +32,11 @@ export class RenderHighlightBorder extends RenderBase {
       if (nextDiff > diff) {
         break;
       }
+
       diff   = nextDiff;
       result = x;
     }
+
     return result;
   }
 
@@ -42,6 +44,7 @@ export class RenderHighlightBorder extends RenderBase {
     if (!this.matchStart || !this.matchEnd) {
       return this.source;
     }
+
     const fromStart = this.matchStart.index;
     const toStart   = this.matchStart.index + this.matchStart[0].length;
     const fromEnd   = this.matchEnd.index;

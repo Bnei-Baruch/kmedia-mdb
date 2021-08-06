@@ -61,7 +61,7 @@ const onPlayerPlay = (state, action) => {
   }
 }
 
-const onUserInactive = (state) => {
+const onUserInactive = state => {
   state.skipUids.length = 0;
 }
 

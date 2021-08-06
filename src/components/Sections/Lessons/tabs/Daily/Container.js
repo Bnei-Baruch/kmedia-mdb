@@ -56,7 +56,7 @@ export const renderCollection = (collection, t) => {
       return (
         <Table.Row key={`u-${unit.id}`} verticalAlign="top" className="no-thumbnail">
           <Table.Cell>
-            { renderUnitHelper.renderUnitNameLink(unit, "index__item") }
+            { renderUnitHelper.renderUnitNameLink(unit, 'index__item') }
             { renderUnitHelper.renderRelatedItems(relatedItems, t('lessons.list.related'))}
           </Table.Cell>
         </Table.Row>
@@ -87,6 +87,7 @@ export const renderUnitOrCollection = (item, t) => {
   if (!item) {
     return null;
   }
+
   return item.content_type === CT_LESSON_PART
     ? renderUnit(item, t)
     : renderCollection(item, t);

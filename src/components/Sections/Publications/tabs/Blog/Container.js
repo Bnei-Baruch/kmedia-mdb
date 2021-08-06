@@ -62,15 +62,15 @@ class BlogContainer extends withPagination {
 
   extraFetchParams({ language }) {
     switch (language) {
-    case LANG_HEBREW:
-      return { blog: 'laitman-co-il' };
-    case LANG_UKRAINIAN:
-    case LANG_RUSSIAN:
-      return { blog: 'laitman-ru' };
-    case LANG_SPANISH:
-      return { blog: 'laitman-es' };
-    default:
-      return { blog: 'laitman-com' };
+      case LANG_HEBREW:
+        return { blog: 'laitman-co-il' };
+      case LANG_UKRAINIAN:
+      case LANG_RUSSIAN:
+        return { blog: 'laitman-ru' };
+      case LANG_SPANISH:
+        return { blog: 'laitman-es' };
+      default:
+        return { blog: 'laitman-com' };
     }
   }
 
@@ -78,6 +78,7 @@ class BlogContainer extends withPagination {
     if (typeof window !== 'undefined') {
       window.scrollTo(0, 0);
     }
+
     this.setPage(this.props, pageNo);
   }
 

@@ -15,7 +15,7 @@ import { actions, selectors } from '../../../../../redux/modules/assets';
 import { selectors as settings } from '../../../../../redux/modules/settings';
 import * as shapes from '../../../../shapes';
 import WipErr from '../../../../shared/WipErr/WipErr';
-import ButtonsLanguageSelector from '../../../../Language/Selector/ButtonsLanguageSelector';
+import DropdownLanguageSelector from '../../../../Language/Selector/DropdownLanguageSelector';
 
 class Sketches extends React.Component {
   static propTypes = {
@@ -27,7 +27,7 @@ class Sketches extends React.Component {
     contentLanguage: PropTypes.string.isRequired,
   };
 
-  static getUnitSketchFiles = (unit) => {
+  static getUnitSketchFiles = unit => {
     if (!Array.isArray(unit.files)) {
       return null;
     }
@@ -68,7 +68,7 @@ class Sketches extends React.Component {
     return files;
   };
 
-  static isZipFile = (file) => file.name.endsWith('.zip');
+  static isZipFile = file => file.name.endsWith('.zip');
 
   static isZipOrImageFileType = file => file.type === 'image';
 
@@ -80,7 +80,7 @@ class Sketches extends React.Component {
     language: null,
   };
 
-  isPropsChanged = (prevProps) => {
+  isPropsChanged = prevProps => {
     const { unit, zipIndexById, contentLanguage, uiLanguage } = this.props;
 
     return prevProps.contentLanguage !== contentLanguage
@@ -89,7 +89,7 @@ class Sketches extends React.Component {
       || !isEqual(prevProps.zipIndexById, zipIndexById);
   };
 
-  isStateChanged = (prevState) => {
+  isStateChanged = prevState => {
     const { zipFileId, language, imageFiles } = this.state;
 
     return prevState.zipFileId !== zipFileId
@@ -154,7 +154,7 @@ class Sketches extends React.Component {
   };
 
   // get one zip file or array of image files or one image file
-  getStateByFile = (file) => {
+  getStateByFile = file => {
     let state = {};
     if (file) {
       // not zip, image files only
@@ -170,10 +170,11 @@ class Sketches extends React.Component {
     } else {
       state = { zipFileId: null };
     }
+
     return state;
   };
 
-  unzipFiles = (file) => {
+  unzipFiles = file => {
     const { zipIndexById, unzip } = this.props;
     const { data, wip, err }      = zipIndexById[file.id] || {};
 
@@ -189,11 +190,11 @@ class Sketches extends React.Component {
 
   handleImageError = event => console.log('Image Gallery loading error ', event.target);
 
-  removeErroneousImages = (item) =>
+  removeErroneousImages = item =>
     !item.path?.toUpperCase().includes('MACOSX');
 
   // converts images from server format (path, size) to ImageGallery format
-  imageGalleryItem = (item) => {
+  imageGalleryItem = item => {
     let src;
     let alt;
     if (item.path) {
@@ -283,10 +284,11 @@ class Sketches extends React.Component {
               languages && languages.length > 1
                 ? (
                   <Container fluid textAlign="center">
-                    <ButtonsLanguageSelector
+                    <DropdownLanguageSelector
                       languages={languages}
                       defaultValue={language}
                       onSelect={this.handleLanguageChanged}
+                      fluid={true}
                     />
                   </Container>
                 )

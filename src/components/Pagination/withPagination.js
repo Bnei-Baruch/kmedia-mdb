@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { getQuery } from '../../helpers/url';
 import * as shapes from '../shapes';
 
-export const getPageFromLocation = (location) => {
+export const getPageFromLocation = location => {
   const q = getQuery(location);
   const p = q.page ? Number.parseInt(q.page, 10) : 1;
   return Number.isNaN(p) || p <= 0 ? 1 : p;

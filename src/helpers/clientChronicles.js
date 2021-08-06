@@ -3,22 +3,25 @@ import { useSelector } from 'react-redux';
 import axios from 'axios';
 import { ulid } from 'ulid'
 import { chroniclesUrl, chroniclesBackendEnabled } from './Api';
-import { noop } from './utils';
+import { noop, partialAssign } from './utils';
 
 import { actions } from '../redux/modules/chronicles';
 import { types as recommendedTypes } from '../redux/modules/recommended';
+import { types as searchTypes } from '../redux/modules/search';
 import { ClientChroniclesContext } from './app-contexts';
 
 //An array of DOM events that should be interpreted as user activity.
 const ACTIVITY_EVENTS = ['mousedown', 'mousemove', 'keydown', 'scroll', 'touchstart'];
 
 const FLOWS = [
-  { start: 'page-enter',               end: 'page-leave',                 subFlows: ['recommend', 'user-inactive'] },
-  { start: 'unit-page-enter',          end: 'unit-page-leave',            subFlows: ['player-play', 'recommend', 'user-inactive'] },
-  { start: 'collection-page-enter',    end: 'collection-page-leave',      subFlows: ['collection-unit-selected', 'recommend', 'user-inactive'] },
+  { start: 'page-enter',               end: 'page-leave',                 subFlows: ['recommend', 'search', 'autocomplete', 'user-inactive'] },
+  { start: 'unit-page-enter',          end: 'unit-page-leave',            subFlows: ['player-play', 'recommend', 'search', 'autocomplete', 'user-inactive'] },
+  { start: 'collection-page-enter',    end: 'collection-page-leave',      subFlows: ['collection-unit-selected', 'recommend', 'search', 'autocomplete', 'user-inactive'] },
   { start: 'collection-unit-selected', end: 'collection-unit-unselected', subFlows: ['player-play', 'user-inactive'] },
   { start: 'player-play',              end: 'player-stop',                subFlows: ['mute-unmute', 'user-inactive'] },
   { start: 'recommend',                end: '',                           subFlows: ['recommend-selected'] },
+  { start: 'search',                   end: '',                           subFlows: ['search-selected'] },
+  { start: 'autocomplete',             end: '',                           subFlows: ['autocomplete-selected'] },
 ];
 
 const FLOWS_BY_END = new Map(FLOWS.map(flow => [flow.end, flow]));
@@ -27,6 +30,7 @@ const SUBFLOWS = new Map(Object.entries(FLOWS.reduce((acc, flow) => {
     if (!(subflow in acc)) {
       acc[subflow] = [];
     }
+
     if (!acc[subflow].includes(flow.start)) {
       acc[subflow].push(flow.start);
     }
@@ -43,10 +47,12 @@ export default class ClientChronicles {
       this.append = noop;
       return;
     }
+
     const { localStorage } = window;
     if (localStorage.getItem('user_id') === null) {
       localStorage.setItem('user_id', `local:${ulid()}`);
     }
+
     this.userId = localStorage.getItem('user_id');
 
     this.namespace = 'archive';
@@ -74,18 +80,19 @@ export default class ClientChronicles {
       }
     }, 60000);
 
-    window.addEventListener('beforeunload', (event) => {
+    window.addEventListener('beforeunload', event => {
       this.sessionActivities.add('beforeunload');
       if (this.currentPathname) {
         // Sync is false here because it will be sent together with user-inactive append.
         this.appendPage('leave', /* sync= */ false);
       }
+
       this.append('user-inactive', { activities: Array.from(this.sessionActivities) }, /* sync= */ true);
       store.dispatch(actions.userInactive());
     }, true);
 
     // Handle events to update activity.
-    ACTIVITY_EVENTS.forEach((eventName) => {
+    ACTIVITY_EVENTS.forEach(eventName => {
       document.addEventListener(eventName, () => {
         if (!this.isUserActive()) {
           // User back from inactive state. This is a new session.
@@ -93,6 +100,7 @@ export default class ClientChronicles {
         } else {
           this.lastActivityTimestampMs = Date.now();
         }
+
         this.sessionActivities.add(eventName);
       }, true);
     });
@@ -100,14 +108,16 @@ export default class ClientChronicles {
     this.prevHref = window.location.href;
     this.currentPathname = window.location.pathname;
     this.appendPage('enter');
-    history.listen((historyEvent) => {
+    history.listen(historyEvent => {
       if (historyEvent.pathname !== this.currentPathname) {
         if (this.currentPathname) {
           this.appendPage('leave');
         }
+
         this.currentPathname = historyEvent.pathname;
         this.appendPage('enter');
       }
+
       if (window.location.href !== this.prevHref) {
         this.prevHref = window.location.href;
       }
@@ -115,6 +125,7 @@ export default class ClientChronicles {
   }
 
   // Handles custom redux actions to append events on them.
+  // Note: Have to add the relevant actions to redux/modules/chronicles.js for this to work.
   onAction(action) {
     if (action.type === recommendedTypes.FETCH_RECOMMENDED_SUCCESS) {
       const { recommendedItems, requestData } = action.payload;
@@ -122,10 +133,78 @@ export default class ClientChronicles {
         this.append('recommend', { request_data: requestData, recommendations: recommendedItems.map(({ uid, content_type }) => ({ uid, content_type })) });
       }
     }
+
+    if (action.type === searchTypes.SEARCH_SUCCESS) {
+      const { searchResults, searchRequest } = action.payload;
+      const reducedResults = partialAssign({}, searchResults, {
+        language: true,
+        search_result: {
+          hits: {
+            hits: { // This is an array.
+              _index: true,
+              _type: true,
+              _source: {
+                mdb_uid: true,
+                result_type: true,
+                filter_values: true,
+                landing_page: true,
+              },
+              _score: true,
+            },
+            max_score: true,
+            total: true,
+          },
+          searchId: true,
+          timed_out: true,
+          took: true,
+        },
+        typo_suggest: true,
+      });
+      const appendData = { search_results: reducedResults, search_request: searchRequest };
+      this.append('search', appendData);
+    }
+
+    if (action.type === searchTypes.AUTOCOMPLETE_SUCCESS) {
+      const { suggestions, request } = action.payload;
+      const reducedSuggestions = partialAssign({}, suggestions, {
+        suggest: {
+          title_suggest: { // This is an array.
+            options: {  // This is an array.
+              text: true,
+              _source: {
+                result_type: true,
+                mdb_uid: true,
+              },
+            }
+          },
+          'title_suggest.language': { // This is an array.
+            options: {  // This is an array.
+              text: true,
+              _source: {
+                result_type: true,
+                mdb_uid: true,
+              },
+            }
+          },
+        },
+        timed_out: true,
+        took: true,
+      });
+      const appendData = { suggestions: reducedSuggestions, request };
+      this.append('autocomplete', appendData);
+    }
   }
 
   recommendSelected(uid) {
     this.append('recommend-selected', { uid });
+  }
+
+  searchSelected(data) {
+    this.append('search-selected', data);
+  }
+
+  autocompleteSelected(title, autocompleteId) {
+    this.append('autocomplete-selected', { title, autocompleteId });
   }
 
   appendPage(suffix, sync = false) {
@@ -146,6 +225,7 @@ export default class ClientChronicles {
         prefix = '';
       }
     }
+
     this.append(`${prefix}page-${suffix}`, data, sync);
   }
 
@@ -154,6 +234,7 @@ export default class ClientChronicles {
     if (reinit || sessionStorage.getItem('session_id') === null) {
       sessionStorage.setItem('session_id', `local:${ulid()}`);
     }
+
     this.sessionId = sessionStorage.getItem('session_id');
 
     // Maps entry types to the last timestamp they happened. This is required to properly
@@ -170,6 +251,7 @@ export default class ClientChronicles {
       if (timestamp > max.timestamp) {
         return { eventType, timestamp };
       }
+
       return max;
     }, { eventType: '', timestamp: this.firstActivityTimestampMs });
   }
@@ -186,14 +268,14 @@ export default class ClientChronicles {
 
   flushAppends(sync = false) {
     const nowTimestampMs = Date.now();
-    const appends = { append_requests: this.timestampedAppends.map((timestampAppend) => ({ append: timestampAppend.append, offset: timestampAppend.timestamp - nowTimestampMs })) };
+    const appends = { append_requests: this.timestampedAppends.map(timestampAppend => ({ append: timestampAppend.append, offset: timestampAppend.timestamp - nowTimestampMs })) };
     // Clear bulk without checking if post worked or not.
     this.timestampedAppends.length = 0;
     if (sync) {
       (async () => await axios.post(chroniclesUrl('appends'), appends))();
     } else {
       axios.post(chroniclesUrl('appends'), appends)
-        .catch((error) => {
+        .catch(error => {
           console.warn(error);
         });
     }
@@ -243,6 +325,7 @@ export default class ClientChronicles {
   }
 }
 
+// Have to add the relevant actions to redux/modules/chronicles.js for this to work.
 export const ChroniclesActions = () => {
   const clientChronicles = useContext(ClientChroniclesContext);
   const action = useSelector(state => state.chronicles.lastAction);

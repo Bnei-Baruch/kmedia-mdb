@@ -64,19 +64,19 @@ const initialState = {
  */
 const setStatus = (draft, payload, type) => {
   switch (type) {
-  case FETCH_ALL_SERIES:
-    draft.wip.series = true;
-    break;
-  case FETCH_ALL_SERIES_SUCCESS:
-    draft.wip.series    = false;
-    draft.errors.series = null;
-    break;
-  case FETCH_ALL_SERIES_FAILURE:
-    draft.wip.series    = false;
-    draft.errors.series = payload;
-    break;
-  default:
-    break;
+    case FETCH_ALL_SERIES:
+      draft.wip.series = true;
+      break;
+    case FETCH_ALL_SERIES_SUCCESS:
+      draft.wip.series    = false;
+      draft.errors.series = null;
+      break;
+    case FETCH_ALL_SERIES_FAILURE:
+      draft.wip.series    = false;
+      draft.errors.series = payload;
+      break;
+    default:
+      break;
   }
 };
 
@@ -98,6 +98,7 @@ const onSSRPrepare = draft => {
   if (draft.errors.lectures) {
     draft.errors.lectures = draft.errors.lectures.toString();
   }
+
   if (draft.errors.series) {
     draft.errors.series = draft.errors.series.toString();
   }
@@ -263,6 +264,7 @@ const addToSourcesTree = (acc, path, series) => {
     dir.name = name;
     dir.type = type;
   }
+
   // mv series path.children
   dir.children = dir.children || [];
   dir.children.push(series);

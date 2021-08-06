@@ -41,7 +41,8 @@ import {
   MT_TEXT,
   MT_VIDEO,
   SEARCH_INTENT_INDEX_SOURCE,
-  SEARCH_INTENT_INDEX_TOPIC
+  SEARCH_INTENT_INDEX_TOPIC,
+  CT_LIKUTIM
 } from '../../helpers/consts';
 import { SectionLogo } from '../../helpers/images';
 import { canonicalLink } from '../../helpers/links';
@@ -115,6 +116,7 @@ class SearchResultBase extends Component {
     rank: PropTypes.number,
     contentLanguage: PropTypes.string.isRequired,
     searchLanguage: PropTypes.string,
+    chronicles: PropTypes.shape(),
   };
 
   static defaultProps = {
@@ -134,16 +136,18 @@ class SearchResultBase extends Component {
 
   // Extract from derived units all kitei makor text and audio files.
   static getKiteiMakor = (units, contentLanguage) => Object.values(units || {})
-    .filter(unit => unit.content_type === CT_KITEI_MAKOR)
-    .map(unit => unit.files.filter(file => file.language === contentLanguage && [MT_AUDIO, MT_TEXT].includes(file.type)))
+    .filter(unit => [CT_KITEI_MAKOR, CT_LIKUTIM].includes(unit.content_type))
+    .filter(unit => unit.files)
+    .map(unit => unit.files.filter(file => file.language === contentLanguage && ((unit.content_type === CT_KITEI_MAKOR && file.type === MT_AUDIO) || (unit.content_type === CT_LIKUTIM && file.type === MT_TEXT))))
     .reduce((acc, files) => {
-      files.forEach((file) => acc.push(file));
+      files.forEach(file => acc.push(file));
       return acc;
     }, []);
 
   logClick = (mdbUid, index, type, rank, searchId) => {
-    const { click, location } = this.props;
-    const deb                 = isDebMode(location);
+    const { click, location, chronicles } = this.props;
+    const deb                             = isDebMode(location);
+    chronicles.searchSelected({ mdbUid, index, type, rank, searchId, deb });
     click(mdbUid, index, type, rank, searchId, deb);
   };
 
@@ -263,11 +267,13 @@ class SearchResultBase extends Component {
     if (!prop) {
       return null;
     }
+
     const titleArr = prop.split(PATH_SEPARATOR);
     let title      = `${titleArr.splice(-1)}`;
     if (titleArr.length > 0) {
       title += ` / ${titleArr.join(PATH_SEPARATOR)}`;
     }
+
     return <span dangerouslySetInnerHTML={{ __html: title }} />;
   };
 
@@ -278,11 +284,12 @@ class SearchResultBase extends Component {
     if (!prop) {
       return null;
     }
+
     const __html = `...${highlight[prop].join('.....')}...`;
     return <span dangerouslySetInnerHTML={{ __html }} />;
   };
 
-  clearStringForLink = (str) => str.replace(/(\r?\n|\r){1,}/g, ' ').replace(/<.+?>/gi, '');
+  clearStringForLink = str => str.replace(/(\r?\n|\r){1,}/g, ' ').replace(/<.+?>/gi, '');
 
   highlightWrapToLink = (__html, index, pathname, search, logLinkParams) => {
     const searchArr = this.clearStringForLink(__html).split(' ');
@@ -325,32 +332,34 @@ class SearchResultBase extends Component {
     };
   };
 
-  getFilterById = (index) => {
+  getFilterById = index => {
     const { getTagById, getSourceById } = this.props;
     switch (index) {
-    case SEARCH_INTENT_INDEX_TOPIC:
-      return getTagById;
-    case SEARCH_INTENT_INDEX_SOURCE:
-      return getSourceById;
-    default:
-      console.log('Using default filter:', index);
-      return x => x;
+      case SEARCH_INTENT_INDEX_TOPIC:
+        return getTagById;
+      case SEARCH_INTENT_INDEX_SOURCE:
+        return getSourceById;
+      default:
+        console.log('Using default filter:', index);
+        return x => x;
     }
   };
 
-  getMediaLanguage = (filters) => {
+  getMediaLanguage = filters => {
     if (!filters) {
       return null;
     }
+
     let mediaLanguage;
     const filteredLanguages = filters.find(f => f.name === 'language-filter');
     if (filteredLanguages && filteredLanguages.values.length > 0) {
       mediaLanguage = filteredLanguages.values[0];
     }
+
     return mediaLanguage;
   };
 
-  renderDebug = (name) => {
+  renderDebug = name => {
     const { location, hit }                            = this.props;
     const { _explanation: explanation, _score: score } = hit;
 
@@ -365,11 +374,12 @@ class SearchResultBase extends Component {
     );
   };
 
-  fileDuration = (files) => {
+  fileDuration = files => {
     const fileWithDuration = files ? files.find(f => f.type === 'video' || f.type === 'audio') : null;
     if (!fileWithDuration) {
       return null;
     }
+
     return (
       <Label as="span" size="small">{formatDuration(fileWithDuration.duration)}</Label>
     );

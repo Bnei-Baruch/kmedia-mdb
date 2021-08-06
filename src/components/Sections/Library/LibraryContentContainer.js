@@ -10,7 +10,7 @@ import * as shapes from '../../shapes';
 import Library from './Library';
 import { isTaas } from '../../shared/PDF/PDF';
 
-const LibraryContentContainer = (props) => {
+const LibraryContentContainer = props => {
   const
     {
       index: { data }   = { index: { data: null } },

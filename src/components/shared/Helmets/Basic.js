@@ -24,7 +24,7 @@ const buildDescription = description => (
   </Helmet>
 );
 
-const Basic = (props) => {
+const Basic = props => {
   const { title = null, description = null, keywords = null, /* url = null, */ imageUrl = publicFile('seo/default2.png') } = props;
 
   return (

@@ -43,6 +43,7 @@ const onSetPage = (draft, { namespace, pageNo }) => {
   if (draft[namespace] === undefined) {
     draft[namespace] = { ...defaultNSvalue };
   }
+
   draft[namespace].pageNo = pageNo;
 };
 
@@ -50,6 +51,7 @@ const onRequest = (draft, { namespace }) => {
   if (draft[namespace] === undefined) {
     draft[namespace] = { ...defaultNSvalue };
   }
+
   draft[namespace].wip = true;
 };
 
@@ -57,6 +59,7 @@ const onFailure = (draft, { namespace, err }) => {
   if (draft[namespace] === undefined) {
     draft[namespace] = { ...defaultNSvalue };
   }
+
   draft[namespace].wip = false;
   draft[namespace].err = err;
 };
@@ -68,6 +71,7 @@ const onSuccess = (draft, { namespace, data }) => {
   if (draft[namespace] === undefined) {
     draft[namespace] = { ...defaultNSvalue };
   }
+
   draft[namespace].wip   = false;
   draft[namespace].err   = null;
   draft[namespace].total = data.total;

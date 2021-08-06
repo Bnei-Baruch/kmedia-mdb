@@ -24,7 +24,5 @@ const AudioBlogList = () =>
     namespace="publications-audio-blog"
     extraFetchParams={{ content_type: CT_BLOG_POST }}
     renderUnit={renderUnit}
-  />
-;
-
+  />;
 export default AudioBlogList;

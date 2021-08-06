@@ -2,7 +2,12 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Icon } from 'semantic-ui-react';
 
-const AVMuteUnmute = ({ upward = true, media, media: { isMuted, volume }, isAudio, onVolumeChange, onMuteUnmute }) => {
+const normalize = l => {
+  const ret = 100 * l;
+  return ret < 1 ? 0 : ret;
+};
+
+const AVMuteUnmute = ({ upward = true, media, media: { volume }, muted, isAudio, onVolumeChange, onMuteUnmute }) => {
   const [element, setElement]           = useState(null);
   const [volumeHover, setVolumeHover]   = useState(false);
   const [wasMouseDown, setWasMouseDown] = useState(false);
@@ -21,7 +26,7 @@ const AVMuteUnmute = ({ upward = true, media, media: { isMuted, volume }, isAudi
     };
   });
 
-  const setVolume = (clientY) => {
+  const setVolume = clientY => {
     const { top, bottom } = element.getBoundingClientRect();
     const offset          = Math.min(Math.max(0, clientY - top), bottom - top);
     const newVolume       = 1 - (offset / (bottom - top));
@@ -46,7 +51,7 @@ const AVMuteUnmute = ({ upward = true, media, media: { isMuted, volume }, isAudi
     setWasMouseDown(true);
   };
 
-  const handleMove = (e) => {
+  const handleMove = e => {
     if (wasMouseDown) {
       // Resolve clientY from mouse or touch event.
       const clientY = e.touches ? e.touches[e.touches.length - 1].clientY : e.clientY;
@@ -55,7 +60,7 @@ const AVMuteUnmute = ({ upward = true, media, media: { isMuted, volume }, isAudi
     }
   };
 
-  const handleEnd = (e) => {
+  const handleEnd = e => {
     if (wasMouseDown) {
       setWasMouseDown(false);
       setVolumeHover(false);
@@ -63,16 +68,9 @@ const AVMuteUnmute = ({ upward = true, media, media: { isMuted, volume }, isAudi
       if (e.clientY) {
         setVolume(e.clientY);
       }
+
       e.preventDefault();
     }
-  };
-
-  const normalize = (l) => {
-    const ret = 100 * l;
-    if (ret < 1) {
-      return 0;
-    }
-    return ret;
   };
 
   const volumePopoverStyle = {
@@ -98,7 +96,7 @@ const AVMuteUnmute = ({ upward = true, media, media: { isMuted, volume }, isAudi
         onMouseLeave={handleMouseLeave}
       >
         {
-          isMuted && (
+          muted && (
             <Icon key="mute" name="volume off" />
           )
         }
@@ -145,16 +143,17 @@ AVMuteUnmute.propTypes = {
     setVolume: PropTypes.func.isRequired,
   }).isRequired,
   upward: PropTypes.bool,
+  muted: PropTypes.bool,
   isAudio: PropTypes.bool.isRequired,
   onMuteUnmute: PropTypes.func.isRequired,
   onVolumeChange: PropTypes.func.isRequired,
 };
 
 const arePropsEqual = (props, nextProps) => {
-  const { media, isAudio } = props;
+  const { media, isAudio, muted } = props;
 
-  return media.isMuted === nextProps.media.isMuted
-    && media.volume === nextProps.media.volume
+  return media.volume === nextProps.media.volume
+    && muted === nextProps.muted
     && isAudio === nextProps.isAudio;
 };
 

@@ -1,0 +1,124 @@
+{
+  "extends": [
+    "react-app",
+    "plugin:jest/recommended",
+    "jest-enzyme"
+  ],
+  "parser": "babel-eslint",
+  "env": {
+    "browser": true,
+    "es6": true,
+    "node": true,
+    "jest": true,
+    "jest/globals": true
+  },
+  "plugins": [
+    "react",
+    "jest",
+    "import",
+    "react-hooks"
+  ],
+  "settings": {
+    "parser": "babel-eslint",
+    "import/parser": "babel-eslint",
+    "import/resolve": {},
+    "ecmaFeatures": {
+      "classes": true,
+      "jsx": true
+    }
+  },
+  "rules": {
+    "arrow-body-style": "warn",
+    "array-bracket-spacing": "warn",
+    "arrow-parens": [
+      "warn",
+      "as-needed"
+    ],
+    "arrow-spacing": "warn",
+    "brace-style": "warn",
+    "comma-spacing": "warn",
+    "consistent-return": "error",
+    "eol-last": "warn",
+    "eqeqeq": "warn",
+    "indent": [
+      "warn",
+      2,
+      {
+        "ignoredNodes": [
+          "TemplateLiteral"
+        ],
+        "SwitchCase": 1
+      }
+    ],
+    "keyword-spacing": "warn",
+    "linebreak-style": [
+      "error",
+      "unix"
+    ],
+    "lines-between-class-members": [
+      "warn",
+      "always",
+      {
+        "exceptAfterSingleLine": true
+      }
+    ],
+    "no-await-in-loop": "warn",
+    "no-cond-assign": "error",
+    "no-constant-condition":"warn",
+    "no-else-return": "warn",
+    "no-empty": "warn",
+    "no-extra-parens": ["warn", "functions"],
+    "no-lonely-if": "warn",
+    "no-mixed-operators": "warn",
+    "no-multiple-empty-lines": [
+      "warn",
+      {
+        "max": 2,
+        "maxEOF": 1
+      }
+    ],
+    "no-trailing-spaces": "warn",
+    "no-unneeded-ternary": ["warn", { "defaultAssignment": false }],
+    "no-unreachable": "warn",
+    "no-unused-vars": "warn",
+    "no-useless-concat": "warn",
+    "object-shorthand": "warn",
+    "object-curly-spacing": [
+      "warn",
+      "always"
+    ],
+    "padding-line-between-statements": [
+      "warn",
+      {
+        "blankLine": "always",
+        "prev": "multiline-block-like",
+        "next": "*"
+      }
+    ],
+    "prefer-arrow-callback": "warn",
+    "prefer-const": "warn",
+    "prefer-destructuring": [
+      "warn",
+      {
+        "object": true,
+        "array": false
+      }
+    ],
+    "prefer-object-spread": "warn",
+    "prefer-template": "warn",
+    "quotes": ["warn", "single", { "allowTemplateLiterals": true }],
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn",
+    "rest-spread-spacing": "warn",
+    "semi-style": "warn",
+    "space-before-blocks": "warn",
+    "space-in-parens": "warn",
+    "template-curly-spacing": [
+      "off"
+    ]
+  },
+  "globals": {
+    "socket": true,
+    "enzyme": true
+  }
+}

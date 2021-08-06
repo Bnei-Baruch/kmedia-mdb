@@ -23,6 +23,7 @@ export class RenderHighlightAll extends RenderBase {
         }
       }
     }
+
     return { start, end };
   }
 
@@ -30,6 +31,7 @@ export class RenderHighlightAll extends RenderBase {
     if (!this.matchStart || !this.matchEnd) {
       return this.source;
     }
+
     const from = this.matchStart.index;
     const to   = this.matchEnd.index + this.matchEnd[0].length;
 

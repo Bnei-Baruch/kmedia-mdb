@@ -9,19 +9,20 @@ import { DEFAULT_LANGUAGE } from '../../../helpers/consts';
 const renderer = ({ minutes, seconds, completed }) => {
   if (completed) {
     return <span>You are good to go!</span>;
-  } else {
-    minutes = minutes > 10 ? minutes : `0${minutes}`;
-    seconds = seconds > 10 ? seconds : `0${seconds}`;
-    return <span style={{ direction: 'ltr', 'font-size': '3em' }}>{minutes}:{seconds}</span>;
   }
+
+  minutes = minutes > 10 ? minutes : `0${minutes}`;
+  seconds = seconds > 10 ? seconds : `0${seconds}`;
+  return <span style={{ direction: 'ltr', 'font-size': '3em' }}>{minutes}:{seconds}</span>;
+
 };
 
-const chooseExcerpt = (language) => {
+const chooseExcerpt = language => {
   const items = excerpts[language] || excerpts[DEFAULT_LANGUAGE];
   return items[Math.floor(Math.random() * items.length)];
 };
 
-const calculateTimeLeft = (finalDate) => {
+const calculateTimeLeft = finalDate => {
   const difference = (finalDate - +new Date()) / 1000;
 
   return {

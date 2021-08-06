@@ -19,11 +19,11 @@ import Sketches from './Sketches';
 import MediaDownloads from '../Downloads/MediaDownloads';
 import TranscriptionContainer from './Transcription/TranscriptionContainer';
 import { isEmpty } from '../../../../../helpers/utils';
-import { DeviceInfoContext } from "../../../../../helpers/app-contexts";
+import { DeviceInfoContext } from '../../../../../helpers/app-contexts';
 import DerivedUnits from './DerivedUnits';
 import Recommended from '../Recommended/Main/Recommended';
 
-const derivedTextUnits = (unit) => {
+const derivedTextUnits = unit => {
   const types    = {};
   const callback = x => {
     types[x.content_type] = (x.files || []).some(f => f.type === MT_TEXT);

@@ -16,20 +16,22 @@ const AVLanguageMobile = (
     cuId
   }
 ) => {
-  const [lastRequestedLanguage, setLastRequestedLanguage] = useState();
+  const [lastRequestedLanguage, setLastRequestedLanguage] = useState(requestedLanguage);
   const [openPopup, setOpenPopup]                         = useState(false);
   const [langSelectRef, setLangSelectRef]                 = useState();
 
-  const handleChange = (e) => onSelect(e, e.currentTarget.value);
+  const handleChange = e => {
+    setLastRequestedLanguage(e.currentTarget.value)
+    return onSelect(e, e.currentTarget.value);
+  };
 
   useEffect(() => {
-    const requested = lastRequestedLanguage ? lastRequestedLanguage : requestedLanguage;
-    setOpenPopup(selectedLanguage !== requested);
-  }, [selectedLanguage, requestedLanguage]);
+    setOpenPopup(selectedLanguage !== lastRequestedLanguage);
+  }, [selectedLanguage, lastRequestedLanguage]);
 
   const options = LANGUAGE_OPTIONS
     .filter(x => languages.includes(x.value))
-    .map(x => x.value);
+    .map(x => x);
 
   return (
     <div ref={setLangSelectRef} className="mediaplayer__languages">
@@ -45,8 +47,8 @@ const AVLanguageMobile = (
       <select value={selectedLanguage} onChange={handleChange}>
         {
           options.map(x => (
-            <option key={x} value={x}>
-              {x}
+            <option key={x.value} value={x.value}>
+              {x.name}
             </option>
           ))
         }

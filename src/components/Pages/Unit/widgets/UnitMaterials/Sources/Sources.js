@@ -3,31 +3,30 @@ import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
 import { Divider, Dropdown, Grid, Segment } from 'semantic-ui-react';
-import classNames from 'classnames';
+import clsx from 'clsx';
 
 import { selectors as assetsSelectors, actions as assetsActions } from '../../../../../../redux/modules/assets';
 import { selectors as settings } from '../../../../../../redux/modules/settings';
-import { assetUrl } from '../../../../../../helpers/Api';
-import { CT_KITEI_MAKOR, MT_TEXT } from '../../../../../../helpers/consts';
+import { MT_TEXT, CT_LIKUTIM } from '../../../../../../helpers/consts';
 import { selectSuitableLanguage } from '../../../../../../helpers/language';
 import { getLanguageDirection } from '../../../../../../helpers/i18n-utils';
-import { formatError, physicalFile } from '../../../../../../helpers/utils';
+import { physicalFile } from '../../../../../../helpers/utils';
 import * as shapes from '../../../../../shapes';
-import { ErrorSplash, FrownSplash, LoadingSplash } from '../../../../../shared/Splash/Splash';
-import ButtonsLanguageSelector from '../../../../../Language/Selector/ButtonsLanguageSelector';
+import { getSourceErrorSplash, wipLoadingSplash } from '../../../../../shared/WipErr/WipErr';
 import PDF, { isTaas, startsFrom } from '../../../../../shared/PDF/PDF';
 import { DeviceInfoContext } from '../../../../../../helpers/app-contexts';
+import DropdownLanguageSelector from '../../../../../Language/Selector/DropdownLanguageSelector';
 
-export const getKiteiMakorUnits = unit => (
+export const getLikutimUnits = unit => (
   Object.values(unit.derived_units || {})
     .filter(x => (
-      x.content_type === CT_KITEI_MAKOR
+      x.content_type === CT_LIKUTIM
       && (x.files || []).some(f => f.type === MT_TEXT))
     )
 );
 
-const getKiteiMakorFiles = (unit, ktCUID) => {
-  const ktCUs = getKiteiMakorUnits(unit);
+const getLikutimFiles = (unit, ktCUID) => {
+  const ktCUs = getLikutimUnits(unit);
 
   const cu = ktCUID
     ? ktCUs.find(x => x.id === ktCUID)
@@ -38,30 +37,29 @@ const getKiteiMakorFiles = (unit, ktCUID) => {
 
 const getSourceLanguages = idx => idx?.data ? [...Object.keys(idx.data)] : [];
 
-const getKiteiMakorLanguages = unit => {
-  const files = getKiteiMakorFiles(unit);
+const getLikutimLanguages = unit => {
+  const files = getLikutimFiles(unit);
   return files.length > 0 ? files.map(f => f.language) : [];
 };
 
-const checkIsKiteiMakor = (options, selected) => {
+const checkIsLikutim = (options, selected) => {
   const val = options.find(o => o.value === selected);
-  return val && val.type === CT_KITEI_MAKOR;
+  return val && val.type === CT_LIKUTIM;
 };
 
 const Sources = ({ unit, indexMap, t, options }) => {
   const uiLanguage      = useSelector(state => settings.getLanguage(state.settings));
   const contentLanguage = useSelector(state => settings.getContentLanguage(state.settings));
-  const content         = useSelector(state => assetsSelectors.getAsset(state.assets));
   const doc2htmlById    = useSelector(state => assetsSelectors.getDoc2htmlById(state.assets));
 
   const dispatch = useDispatch();
   const doc2html = useCallback(deriveId => dispatch(assetsActions.doc2html(deriveId)), [dispatch]);
 
-  const [fetched, setFetched]           = useState(null);
-  const [isKiteiMakor, setIsKiteiMakor] = useState(false);
-  const [languages, setLanguages]       = useState([]);
-  const [language, setLanguage]         = useState(contentLanguage);
-  const [selected, setSelected]         = useState(null);
+  const [fetched, setFetched]     = useState(null);
+  const [isLikutim, setIsLikutim] = useState(false);
+  const [languages, setLanguages] = useState([]);
+  const [language, setLanguage]   = useState(contentLanguage);
+  const [selected, setSelected]   = useState(null);
 
   // when options are changed, must change selected
   useEffect(() => {
@@ -71,17 +69,17 @@ const Sources = ({ unit, indexMap, t, options }) => {
   }, [options]);
 
   useEffect(() => {
-    const isKiteiMakor = checkIsKiteiMakor(options, selected);
-    setIsKiteiMakor(isKiteiMakor);
+    const isLikutim = checkIsLikutim(options, selected);
+    setIsLikutim(isLikutim);
   }, [options, selected]);
 
   useEffect(() => {
-    const newLanguages = isKiteiMakor
-      ? getKiteiMakorLanguages(unit)
+    const newLanguages = isLikutim
+      ? getLikutimLanguages(unit)
       : getSourceLanguages(indexMap[selected]);
 
     setLanguages(newLanguages);
-  }, [indexMap, isKiteiMakor, selected, unit]);
+  }, [indexMap, isLikutim, selected, unit]);
 
   useEffect(() => {
     if (languages.length > 0) {
@@ -103,8 +101,8 @@ const Sources = ({ unit, indexMap, t, options }) => {
       return;
     }
 
-    if (isKiteiMakor) {
-      const file = getKiteiMakorFiles(unit, selected).find(x => x.language === language);
+    if (isLikutim) {
+      const file = getLikutimFiles(unit, selected).find(x => x.language === language);
       if (file?.id) {
         doc2html(file.id);
         setFetched(newFetch);
@@ -118,21 +116,21 @@ const Sources = ({ unit, indexMap, t, options }) => {
           // pdf.js fetch it on his own (smarter than us), we fetch it for nothing.
           return;
         }
+
         const { id } = docx || doc || {};
         doc2html(id);
         setFetched(newFetch);
       }
     }
-  }, [doc2html, fetched, indexMap, isKiteiMakor, language, selected, unit]);
+  }, [doc2html, fetched, indexMap, isLikutim, language, selected, unit]);
 
   const handleLanguageChanged = (e, lang) => setLanguage(lang);
   const handleSourceChanged   = (e, data) => setSelected(data.value);
 
   const getContents = () => {
-
     let file;
-    if (isKiteiMakor) {
-      file = getKiteiMakorFiles(unit, selected).find(x => x.language === language);
+    if (isLikutim) {
+      file = getLikutimFiles(unit, selected).find(x => x.language === language);
     } else {
       const selectedLang = indexMap[selected]?.data?.[language];
       if (!selectedLang) return null;
@@ -140,23 +138,21 @@ const Sources = ({ unit, indexMap, t, options }) => {
       if (isTaas(selected) && pdf) {
         return <PDF pdfFile={physicalFile(pdf)} pageNumber={1} startsFrom={startsFrom(selected)} />;
       }
+
       file = docx || doc || {};
     }
 
     const { wip, err, data } = doc2htmlById[file?.id] || {};
 
     if (err) {
-      if (err.response && err.response.status === 404) {
-        return <FrownSplash text={t('messages.source-content-not-found')} />;
-      } else {
-        return <ErrorSplash text={t('messages.server-error')} subtext={formatError(err)} />;
-      }
+      return getSourceErrorSplash(err, t);
     } else if (wip) {
-      return <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
-    } else {
-      const direction = getLanguageDirection(language);
-      return <div className="doc2html" style={{ direction }} dangerouslySetInnerHTML={{ __html: data }} />;
+      return wipLoadingSplash(t);
     }
+
+    const direction = getLanguageDirection(language);
+    return <div className="doc2html" style={{ direction }} dangerouslySetInnerHTML={{ __html: data }} />;
+
   };
 
   const { isMobileDevice } = useContext(DeviceInfoContext);
@@ -165,14 +161,12 @@ const Sources = ({ unit, indexMap, t, options }) => {
     return <Segment basic>{t('materials.sources.no-source-available')}</Segment>;
   }
 
-  const contents = getContents();
-
   return (
     <>
-      <Grid container padded={isMobileDevice ? 'vertically' : true} columns={2}>
+      <Grid container padded={isMobileDevice} columns={2} className={clsx({ 'no-margin-top': !isMobileDevice })}>
         <Grid.Column
-          className={classNames({ 'is-fitted': isMobileDevice })}
-          width={isMobileDevice ? 16 : 16 - languages.length}
+          className={clsx({ 'is-fitted': isMobileDevice })}
+          width={isMobileDevice ? 16 : 12}
         >
           <Dropdown
             fluid
@@ -186,20 +180,22 @@ const Sources = ({ unit, indexMap, t, options }) => {
         </Grid.Column>
         {
           languages.length > 0 &&
-          <Grid.Column
-            textAlign="center"
-            width={isMobileDevice ? 16 : languages.length}
-          >
-            <ButtonsLanguageSelector
-              languages={languages}
-              defaultValue={contentLanguage}
-              onSelect={handleLanguageChanged}
-            />
-          </Grid.Column>
+            <Grid.Column
+              textAlign="center"
+              className={clsx({ 'padding_r_l_0': isMobileDevice, 'no-padding-bottom': isMobileDevice })}
+              width={isMobileDevice ? 16 : 4}
+            >
+              <DropdownLanguageSelector
+                languages={languages}
+                defaultValue={language}
+                onSelect={handleLanguageChanged}
+                fluid={isMobileDevice}
+              />
+            </Grid.Column>
         }
       </Grid>
       <Divider hidden fitted />
-      {contents}
+      {getContents()}
     </>
   );
 };

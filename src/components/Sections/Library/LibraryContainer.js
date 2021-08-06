@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
@@ -25,6 +25,17 @@ import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { getQuery } from '../../../helpers/url';
 import { SCROLL_SEARCH_ID } from '../../../helpers/consts';
 import { isTaas } from '../../shared/PDF/PDF';
+
+const waitForRenderElement = async (attempts = 0) => {
+  if (attempts > 10) return Promise.reject();
+  const element = document.getElementById(SCROLL_SEARCH_ID);
+  if (!element) {
+    await new Promise(resolve => setTimeout(resolve, 100));
+    return waitForRenderElement(++attempts);
+  }
+
+  return element;
+};
 
 class LibraryContainer extends Component {
   static contextType = DeviceInfoContext;
@@ -69,15 +80,14 @@ class LibraryContainer extends Component {
   };
 
   shouldComponentUpdate(nextProps, nextState) {
-    const { sourceId, indexMap, language, contentLanguage, sortBy, areSourcesLoaded, assetWIP }          = this.props;
+    const { sourceId, indexMap, language, contentLanguage, sortBy, areSourcesLoaded }                    = this.props;
     const { lastLoadedId, isReadable, fontSize, fontType, theme, tocIsActive, match, scrollTopPosition } = this.state;
 
     const equalProps = sourceId === nextProps.sourceId
       && language === nextProps.language
       && contentLanguage === nextProps.contentLanguage
       && sortBy === nextProps.sortBy
-      && areSourcesLoaded === nextProps.areSourcesLoaded
-      && assetWIP === nextProps.assetWIP;
+      && areSourcesLoaded === nextProps.areSourcesLoaded;
 
     const equalIndexMap = indexMap && nextProps.indexMap && indexMap[sourceId] === nextProps.indexMap[sourceId];
 
@@ -113,11 +123,7 @@ class LibraryContainer extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { sourceId, areSourcesLoaded, getPathByID, location, assetWIP } = this.props;
-    if (!prevState.doScroll && !assetWIP && prevProps.assetWIP) {
-      this.setState({ doScroll: true });
-    }
-
+    const { sourceId, areSourcesLoaded, getPathByID, location } = this.props;
     if (!areSourcesLoaded) {
       return;
     }
@@ -125,14 +131,13 @@ class LibraryContainer extends Component {
     this.replaceOrFetch(sourceId);
     this.updateSticky();
 
-    const { isReadable, scrollTopPosition, tocIsActive, doScroll = (!assetWIP && prevProps.assetWIP) } = this.state;
+    const { isReadable, scrollTopPosition, tocIsActive, doScroll = true } = this.state;
 
     const { srchstart }    = getQuery(location);
     const scrollingElement = isReadable ? this.articleRef : document.scrollingElement;
 
     if (srchstart && doScroll) {
-      const element = document.getElementById(SCROLL_SEARCH_ID);
-      element && (scrollingElement.scrollTop = element.offsetTop);
+      waitForRenderElement(0).then(el => el && (scrollingElement.scrollTop = el.offsetTop));
       this.setState({ doScroll: false });
     }
 
@@ -171,7 +176,7 @@ class LibraryContainer extends Component {
     }
   }
 
-  fetchIndices = (sourceId) => {
+  fetchIndices = sourceId => {
     const { indexMap, fetchIndex } = this.props;
     if (isEmpty(sourceId) || !isEmpty(indexMap[sourceId])) {
       return;
@@ -180,7 +185,7 @@ class LibraryContainer extends Component {
     fetchIndex(sourceId);
   };
 
-  firstLeafId = (sourceId) => {
+  firstLeafId = sourceId => {
     const { getSourceById } = this.props;
 
     const { children } = getSourceById(sourceId) || { children: [] };
@@ -201,11 +206,13 @@ class LibraryContainer extends Component {
     }
   };
 
-  handleContextRef = (ref) => this.contextRef = ref;
+  handleContextRef = ref => this.contextRef = ref;
 
-  handleContentArticleRef = (ref) => this.articleRef = ref;
+  handleContentArticleRef = ref => this.articleRef = ref;
 
-  handleContentHeaderRef = (ref) => this.contentHeaderRef = ref;
+  handleContentHeaderRef = ref => this.contentHeaderRef = ref;
+
+  // handleLangContainerRef = (ref) => this.langContainerRef = ref;
 
   handleTocIsActive = () => {
     const { tocIsActive } = this.state;
@@ -226,7 +233,7 @@ class LibraryContainer extends Component {
     ? this.articleRef.scrollTop
     : document.scrollingElement.scrollTop;
 
-  handleSettings = (setting) => this.setState(setting);
+  handleSettings = setting => this.setState(setting);
 
   header = (sourceId, properParentId) => {
     const { getSourceById } = this.props;
@@ -285,7 +292,7 @@ class LibraryContainer extends Component {
     sourcesSortBy(sortOrder);
   };
 
-  switchSortingOrder = (parentId) => {
+  switchSortingOrder = parentId => {
     const { sortBy, NotToSort } = this.props;
 
     if (NotToSort.findIndex(a => a === parentId) !== -1) {
@@ -309,7 +316,7 @@ class LibraryContainer extends Component {
 
   handleFilterChange = (e, data) => this.setState({ match: data.value });
 
-  handleFilterKeyDown = (e) => {
+  handleFilterKeyDown = e => {
     if (e.keyCode === 27) { // Esc
       this.setState({ match: '' });
     }
@@ -325,6 +332,7 @@ class LibraryContainer extends Component {
     if (NotToFilter.findIndex(a => a === parentId) !== -1) {
       return null;
     }
+
     return (
       <Input
         fluid
@@ -374,7 +382,6 @@ class LibraryContainer extends Component {
           index={index}
           uiLanguage={language}
           contentLanguage={contentLanguage}
-          langSelectorMount={this.headerMenuRef}
           history={history}
           downloadAllowed={downloadAllowed}
         />
@@ -403,6 +410,7 @@ class LibraryContainer extends Component {
     if (activeIndex === -1) {
       return null;
     }
+
     const { children } = fullPath[len - 2];
     return (
       <div className="library__nextPrevButtons">
@@ -427,6 +435,7 @@ class LibraryContainer extends Component {
     if (index < 0 || index > children.length - 1) {
       return null;
     }
+
     const { title, labelPosition, buttonAlign, icon } = LibraryContainer.getNextPrevDetails(isNext, language, t);
     const sourceId                                    = children[index];
     const source                                      = getSourceById(sourceId);
@@ -463,7 +472,7 @@ class LibraryContainer extends Component {
     return (
       <div
         ref={this.handleContentArticleRef}
-        className={classNames({
+        className={clsx({
           'headroom-z-index-801': true,
           source: true,
           'is-readable': isReadable,
@@ -533,15 +542,16 @@ class LibraryContainer extends Component {
                 mobile={16}
                 tablet={16}
                 computer={12}
-                className={classNames({
+                className={clsx({
                   'source__content-wrapper': true,
                   [`size${fontSize}`]: true,
                 })}
               >
+                {/*<div ref={this.handleLangContainerRef}></div>*/}
                 <Ref innerRef={this.handleContextRef}>
                   <div
                     className="source__content"
-                    style={{ minHeight: `calc(100vh - 14px)`, marginTop: '15px', }}
+                    style={{ minHeight: `calc(100vh - 14px)` }}
                   >
                     {content}
                     {LibraryContainer.nextPrevButtons(this.props)}
@@ -560,7 +570,6 @@ export default withRouter(connect(
   (state, ownProps) => ({
     sourceId: ownProps.match.params.id,
     indexMap: assets.getSourceIndexById(state.assets),
-    assetWIP: assets.getAsset(state.assets)?.wip,
     language: settings.getLanguage(state.settings),
     contentLanguage: settings.getContentLanguage(state.settings, ownProps.history.location),
     getSourceById: sources.getSourceById(state.sources),

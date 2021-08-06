@@ -3,16 +3,18 @@ import { ES_RESULT_TYPE_TAGS, SEARCH_GRAMMAR_HIT_TYPE_LANDING_PAGE, ES_RESULT_TY
 export class SuggestionsHelper {
   constructor(results) {
     this.suggestions = [];
+    this.autocompleteId = (results && results.autocompleteId) || '';
 
     if (results?.suggest && results.suggest['title_suggest']) {
       const query      = results.suggest.title_suggest[0].text.toLowerCase();
-      this.suggestions = results.suggest.title_suggest[0].options.map((option) => {
+      this.suggestions = results.suggest.title_suggest[0].options.map(option => {
         const { text, _source: { title, result_type: resultType } } = option;
         const textParts                                             = text.split(' ');
         let splitChar                                               = null;
         if (resultType === ES_RESULT_TYPE_TAGS) {
           splitChar = '-';
         }
+
         // These !! are redundant, see https://eslint.org/docs/rules/no-extra-boolean-cast,
         // but we don't have tests, so...
         /* eslint no-extra-boolean-cast: "off" */
@@ -27,6 +29,7 @@ export class SuggestionsHelper {
           suggestWords += reversedTitleParts[reverseIdx];
           reverseIdx++;
         }
+
         reverseIdx--;
 
         const titleWords              = title.split(' ');
@@ -35,6 +38,7 @@ export class SuggestionsHelper {
           if (titleWords[titleWords.length - 1 - suggestWordsWithSeparator] !== splitChar) {
             suggestWords--;
           }
+
           suggestWordsWithSeparator++;
         }
 
@@ -49,41 +53,49 @@ export class SuggestionsHelper {
           resultType,
           year,
           part: reverseIdx,
-          suggest: suggest,
-          suggestLC: suggestLC,
+          suggest,
+          suggestLC,
         };
       }).sort((a, b) => {
         if (a.part !== b.part) {
           return a.part - b.part;
         }
+
         if (a.resultType === SEARCH_GRAMMAR_HIT_TYPE_LANDING_PAGE &&
           b.resultType !== SEARCH_GRAMMAR_HIT_TYPE_LANDING_PAGE) {
           return -1;
         }
+
         if (a.resultType !== SEARCH_GRAMMAR_HIT_TYPE_LANDING_PAGE &&
           b.resultType === SEARCH_GRAMMAR_HIT_TYPE_LANDING_PAGE) {
           return 1;
         }
+
         if (a.resultType === ES_RESULT_TYPE_SOURCES &&
           b.resultType !== ES_RESULT_TYPE_SOURCES) {
           return -1;
         }
+
         if (a.resultType !== ES_RESULT_TYPE_SOURCES &&
           b.resultType === ES_RESULT_TYPE_SOURCES) {
           return 1;
         }
+
         const aSuggestion = a.suggestLC.startsWith(query);
         const bSuggestion = a.suggestLC.startsWith(query);
 
         if (aSuggestion && !bSuggestion) {
           return -1;
         }
+
         if (!aSuggestion && bSuggestion) {
           return 1;
         }
+
         if (a.year && b.year) {
           return localeCompareWithYear(a, b);
         }
+
         return a.suggest.localeCompare(b.suggest);
       }).map(o => o.suggest);
 
@@ -111,12 +123,13 @@ const localeCompareWithYear = (a, b) => {
 
 const uidBytes = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 
-const GenerateUID = (n) => {
+const GenerateUID = n => {
   const ret = new Array(n);
   let times = n;
   while (times--) {
     ret[times] = uidBytes.charAt(Math.floor(Math.random() * uidBytes.length));
   }
+
   return ret.join('');
 };
 

@@ -40,6 +40,7 @@ export const sectionsFilter = createFilterDefinition({
     if (!value) {
       return '';
     }
+
     return t(value);
   }
 });

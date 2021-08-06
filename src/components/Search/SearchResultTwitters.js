@@ -10,7 +10,7 @@ import { actions, selectors } from '../../redux/modules/publications';
 import TwitterFeed from '../Sections/Publications/tabs/Twitter/Feed';
 
 import SearchResultBase from './SearchResultBase';
-import { DeviceInfoContext } from "../../helpers/app-contexts";
+import { DeviceInfoContext } from '../../helpers/app-contexts';
 
 class SearchResultTwitters extends SearchResultBase {
   static contextType = DeviceInfoContext;
@@ -42,10 +42,11 @@ class SearchResultTwitters extends SearchResultBase {
 
   onScrollLeft = () => this.onScrollChange(this.state.pageNo - 1);
 
-  onScrollChange = (pageNo) => {
+  onScrollChange = pageNo => {
     if (pageNo < 0 || this.state.pageSize * pageNo >= this.props.tweetIds.length) {
       return;
     }
+
     this.setState({ pageNo });
     this.askForData(pageNo);
   };

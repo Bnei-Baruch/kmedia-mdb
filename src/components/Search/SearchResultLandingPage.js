@@ -10,7 +10,7 @@ import {
   SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_TEXT,
   SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_SUBTEXT,
 } from '../../helpers/consts'
-import { DeviceInfoContext } from "../../helpers/app-contexts";
+import { DeviceInfoContext } from '../../helpers/app-contexts';
 
 class SearchResultLandingPage extends SearchResultBase {
   static contextType = DeviceInfoContext;
@@ -30,7 +30,7 @@ class SearchResultLandingPage extends SearchResultBase {
         filter_values: filterValues,
       }
     } = hit;
-    const valuesTitleSuffix = (filterValues && filterValues.filter((filterValue) => filterValue.name !== 'text').map((filterValue) => filterValue.origin || filterValue.value).join(' ')) || '';
+    const valuesTitleSuffix = (filterValues && filterValues.filter(filterValue => filterValue.name !== 'text').map(filterValue => filterValue.origin || filterValue.value).join(' ')) || '';
     const linkTitle = SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_TEXT[landingPage] || 'home.sections';
     const subText = SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_SUBTEXT[landingPage];
 

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { bindActionCreators } from 'redux';
 import { connect, ReactReduxContext } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
@@ -61,7 +61,7 @@ class Filters extends Component {
     document.getElementsByTagName('body')[0].classList.remove('noscroll--smallmobile');
   };
 
-  handlePopupOpen = (activeFilter) => {
+  handlePopupOpen = activeFilter => {
     this.setState({ activeFilter });
     document.getElementsByTagName('body')[0].classList.add('noscroll--smallmobile');
   };
@@ -97,7 +97,7 @@ class Filters extends Component {
         : t('filters.all');
 
       const len = ((name === 'topics-filter' || name === 'sources-filter') && value) ? label.length : 0;
-      const cn  = classNames('filter-popup', { mobile: isMobileDevice });
+      const cn  = clsx('filter-popup', { mobile: isMobileDevice });
 
       return (
         <Popup
@@ -109,7 +109,7 @@ class Filters extends Component {
           trigger={(
             <Menu.Item
               style={{ flexShrink: len }}
-              className={classNames(`filter filter--${name}`,
+              className={clsx(`filter filter--${name}`,
                 { 'filter--is-empty': !value },
                 { 'filter--is-active': isActive })}
               name={name}

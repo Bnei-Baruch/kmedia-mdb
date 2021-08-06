@@ -6,7 +6,7 @@ import FlatListFilter from './FlatListFilter';
 
 const defToYear = (new Date()).getFullYear();
 
-const YearsFilter = (props) => {
+const YearsFilter = props => {
   const { fromYear = 1995, toYear = defToYear, ...rest } = props;
 
   const options = range(toYear, fromYear, -1).map(x => ({

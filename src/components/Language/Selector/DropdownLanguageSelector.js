@@ -1,19 +1,19 @@
 import React from 'react';
 import { withNamespaces } from 'react-i18next';
 import { Dropdown } from 'semantic-ui-react';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { noop } from '../../../helpers/utils';
 import { getOptions } from '../../../helpers/language';
 import { LANG_HEBREW } from '../../../helpers/consts';
 
-const DropdownLanguageSelector = ({ languages = [], defaultValue: value = LANG_HEBREW, blink, onSelect = noop, t }) => {
+const DropdownLanguageSelector = ({ languages = [], defaultValue: value = LANG_HEBREW, blink, onSelect = noop, fluid = true }) => {
   const handleSelect = (e, data) => onSelect(e, data.value);
 
-  const options = getOptions({ languages, t });
+  const options = getOptions({ languages });
 
   return (
     <Dropdown
-      fluid
+      fluid={fluid}
       item
       labeled
       selection
@@ -21,7 +21,7 @@ const DropdownLanguageSelector = ({ languages = [], defaultValue: value = LANG_H
       value={value}
       options={options}
       onChange={handleSelect}
-      className={classNames('dropdown-language-selector', { blink: !!blink })}
+      className={clsx('dropdown-language-selector', { blink: !!blink })}
     />
   );
 };

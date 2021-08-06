@@ -8,7 +8,7 @@ import { canonicalLink } from '../../../../../../helpers/links';
 import { formatDuration, canonicalCollection } from '../../../../../../helpers/utils';
 import Link from '../../../../../Language/MultiLanguageLink';
 import UnitLogo from '../../../../../shared/Logo/UnitLogo';
-import { ClientChroniclesContext } from "../../../../../../helpers/app-contexts";
+import { ClientChroniclesContext } from '../../../../../../helpers/app-contexts';
 
 const getCollectionId = unit => {
   const unitCollection = canonicalCollection(unit);

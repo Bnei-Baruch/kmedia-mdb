@@ -32,8 +32,8 @@ export const selectSuitableLanguage = (contentLanguage, uiLanguage, languages = 
   return languages[0];
 };
 
-export const getOptions = ({ languages, t }) =>
+export const getOptions = ({ languages }) =>
   LANGUAGE_OPTIONS
     .filter(x => languages.includes(x.value))
-    .map(x => ({ ...x, text: t(`constants.languages.${x.value}`) }));
+    .map(x => ({ ...x, text: x.name }));
 

@@ -1,6 +1,6 @@
 import React, { memo, useCallback } from 'react';
 import { Icon } from 'semantic-ui-react';
-import classNames from 'classnames';
+import clsx from 'clsx';
 
 const AVCenteredPlay = ({ media: { isPlaying, isLoading, playPause } }) => {
   const isHidden        = isPlaying || isLoading;
@@ -14,7 +14,7 @@ const AVCenteredPlay = ({ media: { isPlaying, isLoading, playPause } }) => {
     <button
       type="button"
       tabIndex="-1"
-      className={classNames('mediaplayer__onscreen-play', { transparent: isHidden })}
+      className={clsx('mediaplayer__onscreen-play', { transparent: isHidden })}
       onClick={() => handlePlayPause()}
     >
       <Icon name="play" size="huge" />

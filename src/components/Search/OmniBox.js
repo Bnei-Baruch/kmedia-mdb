@@ -33,6 +33,7 @@ export class OmniBox extends Component {
     filters: PropTypes.arrayOf(PropTypes.object).isRequired,
     resetFilterNS: PropTypes.func.isRequired,
     onSearch: PropTypes.func,
+    chronicles: PropTypes.shape(),
   };
 
   static defaultProps = {
@@ -78,7 +79,7 @@ export class OmniBox extends Component {
     if (query
       && !nextProps.location.pathname.endsWith('search')
       && nextProps.location.pathname !== pathname) {
-      newState = Object.assign({}, newState, { pathname: nextProps.location.pathname, query: nextProps.query });
+      newState = { ...newState, pathname: nextProps.location.pathname, query: nextProps.query };
       updateQuery('');
       setSuggest('');
     }
@@ -91,7 +92,7 @@ export class OmniBox extends Component {
     this.setState({ suggestions, query, pathname });
   }
 
-  isEmptyQuery = (query) => {
+  isEmptyQuery = query => {
     const { filters } = this.props;
     const params      = filtersTransformer.toApiParams(filters);
     return isEmpty(query) && isEmpty(params);
@@ -125,58 +126,56 @@ export class OmniBox extends Component {
       // to the search page when we redirect).
 
       push({ pathname: 'search', search: locationSearch });
-    }
+    } else {
+      const deb = isDebMode(location);
 
-    const deb = isDebMode(location);
+      // Reset filters for new search (query changed)
+      if (query && getQuery(location).q !== query) {
+        resetFilterNS('search');
+        const params = new URLSearchParams('');
+        if (deb) {
+          params.append('deb', 'true');
+        }
 
-    // Reset filters for new search (query changed)
-    if (query && getQuery(location).q !== query) {
-      resetFilterNS('search');
-      const params = new URLSearchParams('');
-      if (deb) {
-        params.append("deb", "true");
+        push({ search: params.toString() });
       }
-      push({ search: params.toString() });
-    }
 
-    search(query, 1, pageSize, suggest, deb);
-    if (isOpen) {
-      this.setState({ isOpen: false });
-    }
+      search(query, 1, pageSize, suggest, deb);
+      if (isOpen) {
+        this.setState({ isOpen: false });
+      }
 
-    onSearch();
-    // So as to close the suggestions on "enter search" (KeyDown 13)
-    this.setState({ suggestionsHelper: new SuggestionsHelper() });
+      onSearch();
+      // So as to close the suggestions on "enter search" (KeyDown 13)
+      this.setState({ suggestionsHelper: new SuggestionsHelper() });
+    }
   };
 
   handleResultSelect = (e, data) => {
-    const { updateQuery, setSuggest, query } = this.props;
+    const { updateQuery, setSuggest, query, chronicles } = this.props;
+    const { suggestionsHelper } = this.state;
 
     const { title } = data.result;
     const prevQuery = query;
+
+    chronicles.autocompleteSelected(title, suggestionsHelper.autocompleteId);
 
     updateQuery(title);
     setSuggest(prevQuery);
     this.doSearch(title, prevQuery);
   };
 
-  handleSearchKeyDown = (e) => {
-    const { updateQuery, query } = this.props;
+  handleSearchKeyDown = e => {
+    const { updateQuery } = this.props;
     const { getSelectedResult }  = this.search;
 
-    // Fix bug that did not allows to handleResultSelect when string is empty
-    // we have meaning for that when filters are not empty.
-    if (e.keyCode === 13 && query.trim()) {
-      const selectedResult = getSelectedResult();
-      if (!!selectedResult && !!selectedResult.title) {
-        this.doSearch(selectedResult.title);
-      } else {
-        this.doSearch();
-      }
+    // Only search when no suggest results as they are handled by handleResultSelect.
+    if (e.keyCode === 13 && !getSelectedResult()) {
+      this.doSearch();
     }
 
     if (e.keyCode === 27) { // Esc
-      updateQuery('');
+      this.setState({ query: '' }, () => updateQuery(''));
     }
   };
 
@@ -207,7 +206,7 @@ export class OmniBox extends Component {
 
     return (
       <Search
-        ref={(s) => {
+        ref={s => {
           this.search = s;
         }}
         fluid

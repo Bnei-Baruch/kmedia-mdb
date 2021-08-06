@@ -53,7 +53,7 @@ const initialState = {
   err: null,
 };
 
-const onSetLanguage = (draft) => {
+const onSetLanguage = draft => {
   draft.latestLesson = null;
   draft.latestUnits  = null;
   draft.banner       = {
@@ -104,6 +104,7 @@ const onFetchBannerSuccess = (draft, payload) => {
     onFetchBannerFailure(draft, payload);
     return;
   }
+
   draft.banner.wip  = false;
   draft.banner.err  = null;
   draft.banner.data = payload;

@@ -15,8 +15,11 @@ import { filtersTransformer } from '../filters';
 function* autocomplete(action) {
   try {
     const language = yield select(state => settings.getLanguage(state.settings));
-    const { data } = yield call(Api.autocomplete, { q: action.payload, language });
-    yield put(actions.autocompleteSuccess(data));
+    const autocompleteId = GenerateSearchId();
+    const request = { q: action.payload, language, autocompleteId };
+    const { data } = yield call(Api.autocomplete, request);
+    data.autocompleteId = autocompleteId;
+    yield put(actions.autocompleteSuccess({ suggestions: data, request }));
   } catch (err) {
     yield put(actions.autocompleteFailure(err));
   }
@@ -27,6 +30,7 @@ function getIdsForFetch(hits, type) {
     if (val._source.result_type === type) {
       return acc.concat(val._source.mdb_uid);
     }
+
     return acc;
   }, []);
 }
@@ -52,9 +56,9 @@ export function* search(action) {
       yield put(actions.searchFailure(null));
       return;
     }
-    const searchId = GenerateSearchId();
 
-    const { data } = yield call(Api.search, {
+    const searchId = GenerateSearchId();
+    const request = {
       ...action.payload,
       q,
       sortBy,
@@ -62,7 +66,9 @@ export function* search(action) {
       deb,
       suggest: suggest === q ? '' : suggest,
       searchId
-    });
+    };
+
+    const { data } = yield call(Api.search, request);
 
     data.search_result.searchId = searchId;
 
@@ -75,7 +81,7 @@ export function* search(action) {
       const postIDsToFetch = getIdsForFetch(data.search_result.hits.hits, 'posts');
 
       if (cuIDsToFetch.length === 0 && cIDsToFetch.length === 0 && postIDsToFetch.length === 0) {
-        yield put(actions.searchSuccess(data));
+        yield put(actions.searchSuccess({ searchResults: data, searchRequest: request }));
         return;
       }
 
@@ -90,9 +96,11 @@ export function* search(action) {
           with_derivations: true,
         }));
       }
+
       if (cIDsToFetch.length > 0) {
         requests.push(call(Api.collections, { id: cIDsToFetch, pageSize: cIDsToFetch.length, language: lang }));
       }
+
       if (postIDsToFetch.length > 0) {
         requests.push(call(Api.posts, { id: postIDsToFetch, pageSize: postIDsToFetch.length, language: lang }));
       }
@@ -102,16 +110,19 @@ export function* search(action) {
         const respCU = responses.shift();
         yield put(mdbActions.receiveContentUnits(respCU.data.content_units));
       }
+
       if (cIDsToFetch.length > 0) {
         const respC = responses.shift();
         yield put(mdbActions.receiveCollections(respC.data.collections));
       }
+
       if (postIDsToFetch.length > 0) {
         const respPost = responses.shift();
         yield put(postsActions.fetchBlogListSuccess(respPost.data));
       }
     }
-    yield put(actions.searchSuccess(data));
+
+    yield put(actions.searchSuccess({ searchResults: data, searchRequest: request }));
   } catch (err) {
     yield put(actions.searchFailure(err));
   }
