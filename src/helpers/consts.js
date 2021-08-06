@@ -114,7 +114,7 @@ export const LANG_UNKNOWN    = 'xx';
 
 export const LANGUAGES = {
   [LANG_HEBREW]: { value: LANG_HEBREW, locale: 'he_IL', lang3: 'HEB', name: 'עברית' },
-  [LANG_ENGLISH]: { value: LANG_ENGLISH,  locale: 'en_US', lang3: 'ENG', name: 'English' },
+  [LANG_ENGLISH]: { value: LANG_ENGLISH, locale: 'en_US', lang3: 'ENG', name: 'English' },
   [LANG_RUSSIAN]: { value: LANG_RUSSIAN, locale: 'ru_RU', lang3: 'RUS', name: 'Русский' },
   [LANG_SPANISH]: { value: LANG_SPANISH, locale: 'es_ES', lang3: 'SPA', name: 'Español' },
   [LANG_ITALIAN]: { value: LANG_ITALIAN, locale: 'it_IT', lang3: 'ITA', name: 'Italiano' },
@@ -442,3 +442,14 @@ export const SEARCH_INTENT_SECTIONS = {
 };
 
 export const SCROLL_SEARCH_ID = '__scrollSearchToHere__';
+
+export const MY_NAMESPACE_HISTORY = 'history';
+export const MY_NAMESPACE_LIKES          = 'likes';
+export const MY_NAMESPACE_PLAYLISTS      = 'playlists';
+export const MY_NAMESPACE_PLAYLIST_ITEMS = 'playlists_items';
+export const MY_NAMESPACE_SUBSCRIPTIONS  = 'subscriptions';
+
+export const MY_NAMESPACES = [MY_NAMESPACE_HISTORY, MY_NAMESPACE_LIKES, MY_NAMESPACE_PLAYLISTS, MY_NAMESPACE_SUBSCRIPTIONS];
+
+
+

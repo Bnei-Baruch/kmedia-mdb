@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
-import { useSelector } from 'react-redux';
-import { Header, List } from 'semantic-ui-react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Button, Header, List } from 'semantic-ui-react';
 
 import {
   CT_DAILY_LESSON,
@@ -10,7 +10,8 @@ import {
   CT_LESSON_PART,
   CT_SPECIAL_LESSON,
   CT_VIRTUAL_LESSON,
-  CT_WOMEN_LESSON
+  CT_WOMEN_LESSON,
+  MY_NAMESPACE_LIKES
 } from '../../../../../helpers/consts';
 import { canonicalLink } from '../../../../../helpers/links';
 import { intersperse, tracePath } from '../../../../../helpers/utils';
@@ -20,28 +21,30 @@ import { selectors as tagsSelectors } from '../../../../../redux/modules/tags';
 import { filtersTransformer } from '../../../../../filters/index';
 import Link from '../../../../Language/MultiLanguageLink';
 import * as shapes from '../../../../shapes';
+import { selectors } from '../../../../../redux/modules/auth';
+import { actions, selectors as myselector } from '../../../../../redux/modules/my';
 
 const filterLessons = (ct, filmDate) => {
   switch (ct) {
-    case CT_LESSON_PART:
-      if (filmDate && filmDate > '1980-01-01') {
-        return '/daily';
-      }
+  case CT_LESSON_PART:
+    if (filmDate && filmDate > '1980-01-01') {
+      return '/daily';
+    }
 
-      // dirty hack to determine if rabash lesson
-      // a better way would use MDB data (require backend api support)
-      return '/rabash';
+    // dirty hack to determine if rabash lesson
+    // a better way would use MDB data (require backend api support)
+    return '/rabash';
 
-    case CT_VIRTUAL_LESSON:
-      return '/virtual';
-    case CT_LECTURE:
-      return '/lectures';
-    case CT_WOMEN_LESSON:
-      return '/women';
+  case CT_VIRTUAL_LESSON:
+    return '/virtual';
+  case CT_LECTURE:
+    return '/lectures';
+  case CT_WOMEN_LESSON:
+    return '/women';
     // case CT_CHILDREN_LESSON:
     //   return '/children';
-    default:
-      return '';
+  default:
+    return '';
   }
 };
 
@@ -97,17 +100,17 @@ const makeCollectionsLinks = (collections = {}, t, currentCollection) => {
     collectionsForLinks.map(x => {
       let display;
       switch (x.content_type) {
-        case CT_DAILY_LESSON:
-        case CT_SPECIAL_LESSON: {
-          const ctLabel = t(`constants.content-types.${CT_DAILY_LESSON}`);
-          const fd      = t('values.date', { date: x.film_date });
-          display       = `${ctLabel} ${fd}`;
-          break;
-        }
+      case CT_DAILY_LESSON:
+      case CT_SPECIAL_LESSON: {
+        const ctLabel = t(`constants.content-types.${CT_DAILY_LESSON}`);
+        const fd      = t('values.date', { date: x.film_date });
+        display       = `${ctLabel} ${fd}`;
+        break;
+      }
 
-        default:
-          display = x.name;
-          break;
+      default:
+        display = x.name;
+        break;
       }
 
       return <Link key={x.id} to={canonicalLink(x)}>{display}</Link>;
@@ -115,10 +118,29 @@ const makeCollectionsLinks = (collections = {}, t, currentCollection) => {
 };
 
 const Info = ({ unit = {}, section = '', t, currentCollection = null }) => {
+  const dispatch      = useDispatch();
   const getSourceById = useSelector(state => sourcesSelectors.getSourceById(state.sources));
   const getTagById    = useSelector(state => tagsSelectors.getTagById(state.tags));
+  const user          = useSelector(state => selectors.getUser(state.auth));
 
-  const { name, film_date: filmDate, sources, tags, collections, content_type: ct } = unit;
+  const { name, film_date: filmDate, sources, tags, collections, content_type: ct, id } = unit;
+
+  const likes = useSelector(state => myselector.getItems(state.my, MY_NAMESPACE_LIKES));
+  const like  = likes?.find(l => l.content_unit_uid === id);
+  useEffect(() => {
+    if (id) {
+      dispatch(actions.fetch(MY_NAMESPACE_LIKES, { 'uids': [id] }));
+    }
+  }, [dispatch, id, user]);
+  const likeDislike = (l) => {
+    if (l)
+      dispatch(actions.remove(MY_NAMESPACE_LIKES, { ids: [l.id] }));
+    else
+      dispatch(actions.add(MY_NAMESPACE_LIKES, { uids: [id] }));
+  };
+  const likeButton  = user ? (
+    <Button floated={'right'} size={'tiny'} icon={`star ${!like ? 'outline' : ''}`} onClick={() => likeDislike(like)} />
+  ) : null;
 
   // take lessons section tabs into consideration
   let filteredListPath = section;
@@ -126,12 +148,13 @@ const Info = ({ unit = {}, section = '', t, currentCollection = null }) => {
     filteredListPath += filterLessons(ct, filmDate);
   }
 
-  const tagLinks = makeTagLinks(tags, getTagById);
-  const sourcesLinks = makeSourcesLinks(sources, getSourceById, filteredListPath);
+  const tagLinks         = makeTagLinks(tags, getTagById);
+  const sourcesLinks     = makeSourcesLinks(sources, getSourceById, filteredListPath);
   const collectionsLinks = makeCollectionsLinks(collections, t, currentCollection);
 
   return (
     <div className="unit-info">
+      {likeButton}
       <Header as="h2">
         <small className="text grey unit-info__film-date">
           {t('values.date', { date: filmDate })}

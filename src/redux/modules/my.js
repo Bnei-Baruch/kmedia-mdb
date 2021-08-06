@@ -1,101 +1,138 @@
 import { createAction } from 'redux-actions';
 
 import { handleActions } from './settings';
+import { MY_NAMESPACES } from '../../helpers/consts';
 
 /* Types */
-const FETCH_LIKES         = 'My/FETCH_LIKES';
-const FETCH_LIKES_SUCCESS = 'My/FETCH_LIKES_SUCCESS';
-const FETCH_LIKES_FAILURE = 'My/FETCH_LIKES_FAILURE';
+const SET_PAGE = 'My/SET_PAGE';
 
-const ADD_LIKE         = 'My/ADD_LIKE';
-const ADD_LIKE_SUCCESS = 'My/ADD_LIKE_SUCCESS';
-const ADD_LIKE_FAILURE = 'My/ADD_LIKE_FAILURE';
+const FETCH         = 'My/FETCH';
+const FETCH_SUCCESS = 'My/FETCH_SUCCESS';
+const FETCH_FAILURE = 'My/FETCH_FAILURE';
 
-const FETCH_HISTORY         = 'My/FETCH_HISTORY';
-const FETCH_HISTORY_SUCCESS = 'My/FETCH_HISTORY_SUCCESS';
-const FETCH_HISTORY_FAILURE = 'My/FETCH_HISTORY_FAILURE';
+const ADD         = 'My/ADD';
+const ADD_SUCCESS = 'My/ADD_SUCCESS';
+
+const REMOVE         = 'My/REMOVE';
+const REMOVE_SUCCESS = 'My/REMOVE_SUCCESS';
 
 export const types = {
-  FETCH_LIKES,
-  FETCH_LIKES_SUCCESS,
-  FETCH_LIKES_FAILURE,
+  SET_PAGE,
+  FETCH,
+  FETCH_SUCCESS,
+  FETCH_FAILURE,
 
-  ADD_LIKE,
-  ADD_LIKE_SUCCESS,
-  ADD_LIKE_FAILURE,
+  ADD,
+  ADD_SUCCESS,
 
-  FETCH_HISTORY,
-  FETCH_HISTORY_SUCCESS,
-  FETCH_HISTORY_FAILURE,
+  REMOVE,
+  REMOVE_SUCCESS,
 };
 
 /* Actions */
-const fetchLikes        = createAction(FETCH_LIKES);
-const fetchLikesSuccess = createAction(FETCH_LIKES_SUCCESS);
-const fetchLikesFailure = createAction(FETCH_LIKES_FAILURE);
-const addLike           = createAction(FETCH_LIKES);
 
-const addLikeSuccess = createAction(FETCH_LIKES_SUCCESS);
-const addLikeFailure = createAction(FETCH_LIKES_FAILURE);
+const setPage = createAction(SET_PAGE, (namespace, pageNo) => ({ namespace, pageNo }));
 
-const fetchHistory        = createAction(FETCH_HISTORY);
-const fetchHistorySuccess = createAction(FETCH_HISTORY_SUCCESS);
-const fetchHistoryFailure = createAction(FETCH_HISTORY_FAILURE);
+const fetch        = createAction(FETCH, (namespace, params) => ({ namespace, ...params }));
+const fetchSuccess = createAction(FETCH_SUCCESS);
+const fetchFailure = createAction(FETCH_FAILURE);
+
+const add        = createAction(ADD, (namespace, params) => ({ namespace, ...params }));
+const addSuccess = createAction(ADD_SUCCESS);
+
+const remove        = createAction(REMOVE, (namespace, params) => ({ namespace, ...params }));
+const removeSuccess = createAction(REMOVE_SUCCESS);
 
 export const actions = {
-  fetchLikes,
-  fetchLikesSuccess,
-  fetchLikesFailure,
+  setPage,
 
-  addLike,
-  addLikeSuccess,
-  addLikeFailure,
+  fetch,
+  fetchSuccess,
+  fetchFailure,
 
-  fetchHistory,
-  fetchHistorySuccess,
-  fetchHistoryFailure,
+  add,
+  addSuccess,
+
+  remove,
+  removeSuccess,
+
 };
 
 /* Reducer */
+const initialState = MY_NAMESPACES.reduce((acc, n) => {
+  acc[n] = {
+    items: [],
+    wip: false,
+    total: 0,
+    errors: null
+  };
+  return acc;
+}, {});
 
-const initialState = {
-  likes: [],
-  history: [],
-  wip: {
-    likes: false,
-    history: false
-  },
-  errors: {
-    likes: null,
-    history: null,
-  },
+const onSetPage = (draft, { namespace, pageNo }) => {
+  draft[namespace].pageNo = pageNo;
 };
 
-const onFetchLikesSuccess = (draft, payload) => {
-  draft.likes        = payload.content_units;
-  draft.wip.likes    = false;
-  draft.errors.likes = false;
+const onFetch = (draft, { namespace }) => {
+  draft[namespace].wip    = true;
+  draft[namespace].errors = false;
+  draft[namespace].total  = 0;
   return draft;
 };
 
-const onFetchHistorySuccess = (draft, payload) => {
-  draft.history        = payload.history;
-  draft.wip.history    = false;
-  draft.errors.history = false;
+const onFetchSuccess = (draft, { namespace, items, total }) => {
+  draft[namespace].items  = items;
+  draft[namespace].total  = total;
+  draft[namespace].wip    = false;
+  draft[namespace].errors = false;
+  return draft;
+};
+
+const onFetchFailure = (draft, { namespace }) => {
+  draft[namespace].wip    = false;
+  draft[namespace].errors = true;
+  return draft;
+};
+
+const onAddSuccess = (draft, { namespace, items, total }) => {
+  draft[namespace].items  = items;
+  draft[namespace].total  = total;
+  draft[namespace].wip    = false;
+  draft[namespace].errors = false;
+  return draft;
+};
+
+const onRemoveSuccess = (draft, { namespace, items, total }) => {
+  draft[namespace].items  = items;
+  draft[namespace].total  = total;
+  draft[namespace].wip    = false;
+  draft[namespace].errors = false;
   return draft;
 };
 
 export const reducer = handleActions({
-  [FETCH_LIKES_SUCCESS]: onFetchLikesSuccess,
-  [FETCH_HISTORY_SUCCESS]: onFetchHistorySuccess,
+  [SET_PAGE]: onSetPage,
+
+  [FETCH]: onFetch,
+  [FETCH_SUCCESS]: onFetchSuccess,
+  [FETCH_FAILURE]: onFetchFailure,
+
+  [ADD_SUCCESS]: onAddSuccess,
+  [REMOVE_SUCCESS]: onRemoveSuccess,
 }, initialState);
 
 /* Selectors */
-
-const getLikes   = state => state.likes;
-const getHistory = state => state.history;
+const getItems  = (state, namespace) => state[namespace].items;
+const getWIP    = (state, namespace) => state[namespace].wip;
+const getErr    = (state, namespace) => state[namespace].errors;
+const getPageNo = (state, namespace) => state[namespace].pageNo;
+const getTotal  = (state, namespace) => state[namespace].total;
 
 export const selectors = {
-  getLikes,
-  getHistory,
+  getItems,
+  getWIP,
+  getErr,
+  getPageNo,
+  setPage,
+  getTotal,
 };

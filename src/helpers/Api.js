@@ -7,6 +7,7 @@ const IMAGINARY_URL           = process.env.REACT_APP_IMAGINARY_URL;
 const IMAGINARY_INTERNAL_HOST = process.env.REACT_APP_IMAGINARY_INTERNAL_HOST || 'localhost';
 const API_RECOMMENDED         = process.env.REACT_APP_RECOMMENDED;
 const CHRONICLES_BACKEND      = process.env.REACT_APP_CHRONICLES_BACKEND;
+const MY_BACKEND              = process.env.REACT_APP_MY_BACKEND;
 
 export const backendUrl               = path => `${API_BACKEND}${path}`;
 export const assetUrl                 = path => `${ASSETS_BACKEND}${path}`;
@@ -23,29 +24,26 @@ export class Requests {
   static getCMS = (item, options) => {
     let url;
     switch (item) {
-      case 'banner':
-        url = `${cmsUrl('banners')}/${options.language}`;
-        break;
-      case 'person':
-        url = `${cmsUrl('persons')}/${options.id}?language=${options.language}`;
-        break;
-      default:
-        return null;
+    case 'banner':
+      url = `${cmsUrl('banners')}/${options.language}`;
+      break;
+    case 'person':
+      url = `${cmsUrl('persons')}/${options.id}?language=${options.language}`;
+      break;
+    default:
+      return null;
     }
 
     return axios(url);
   };
 
-  static auth = (data, url, token, method = 'GET') => {
-    const config = {
-      url,
-      method,
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `bearer ${token}`
-      },
-      data: JSON.stringify(data),
-    };
+  static auth = (params, url, token, method = 'GET') => {
+    const config = { url, method, headers: { 'Content-Type': 'application/json', 'Authorization': `bearer ${token}` } };
+    if (method === 'GET') {
+      config.url = `${url}?${Requests.makeParams(params)}`;
+    } else {
+      config.data = JSON.stringify(params);
+    }
     return axios(config);
   };
 
@@ -126,15 +124,15 @@ class Api {
   static autocomplete = ({ q, language }) => Requests.get(`autocomplete?${Requests.makeParams({ q, language })}`);
 
   static search = ({
-    q,
-    language,
-    pageNo: page_no,
-    pageSize: page_size,
-    sortBy: sort_by,
-    deb,
-    suggest,
-    searchId: search_id
-  }) => (
+                     q,
+                     language,
+                     pageNo: page_no,
+                     pageSize: page_size,
+                     sortBy: sort_by,
+                     deb,
+                     suggest,
+                     searchId: search_id
+                   }) => (
     Requests.get(`search?${Requests.makeParams({ q, language, page_no, page_size, sort_by, deb, suggest, search_id })}`)
   );
 
@@ -173,14 +171,9 @@ class Api {
     return axios(config);
   };
 
-  static likes = (data, token, page_num, page_size, method) => {
-    const url = `${API_BACKEND}my/likes?${Requests.makeParams({ page_num, page_size })}`;
-    return Requests.auth(data, url, token, method);
-  };
-
-  static history = (data, token, page_num, page_size) => {
-    const url = `${API_BACKEND}my/history?${Requests.makeParams({ page_num, page_size })}`;
-    return Requests.auth(data, url, token);
+  static my = (namespace, params, token, method) => {
+    const url = `${MY_BACKEND}rest/${namespace}`;
+    return Requests.auth(params, url, token, method);
   };
 }
 

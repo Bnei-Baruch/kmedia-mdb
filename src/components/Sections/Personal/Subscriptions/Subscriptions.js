@@ -1,5 +1,5 @@
 import React from 'react';
-import Template from './helper';
+import Template from '../helper';
 
 const Subscriptions = () => {
 
