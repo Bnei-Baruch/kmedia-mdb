@@ -19,6 +19,7 @@ const LibraryBar = ({ fontSize = 0, isReadable = false, handleIsReadable, handle
   return (
     <div className="source__header-toolbar">
       <Button compact size="small" className="mobile-hidden" icon="print" onClick={print} />
+      {/* a portal is used to put the download button here in this div */}
       <div id="download-button" />
       <LibrarySettings fontSize={fontSize} handleSettings={handleSettings} />
       <Button compact size="small" icon={isReadable ? 'compress' : 'expand'} onClick={handleIsReadable} />

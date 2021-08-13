@@ -12,9 +12,9 @@ import { selectors as tagSelectors } from '../../../redux/modules/tags';
 import { actions, selectors } from '../../../redux/modules/mdb';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
+import { physicalFile } from '../../../helpers/utils';
 
 // import { isEmpty } from '../../../helpers/utils';
-
 // import { MT_TEXT, CT_LIKUTIM } from '../../../helpers/consts';
 import LibraryBar from '../Library/LibraryBar';
 import DropdownLanguageSelector from '../../../components/Language/Selector/DropdownLanguageSelector';
@@ -22,6 +22,7 @@ import Link from '../../../components/Language/MultiLanguageLink';
 
 // import { getLikutimFiles, isValidLikut } from '../../Pages/Unit/widgets/UnitMaterials/Sources/Sources';
 import WipErr from '../../shared/WipErr/WipErr';
+import Download from '../../shared/Download/Download';
 
 
 // expected unit of type Likutim
@@ -49,7 +50,7 @@ const Likut = ({ t }) => {
 
   const [isReadable, setIsReadable] = useState(false);
   const [settings, setSettings] = useState(null);
-  const [fileId, setFileId] = useState(null);
+  const [file, setFile] = useState(null);
   const [language, setLanguage] = useState(contentLanguage);
 
   const articleRef = useRef();
@@ -77,17 +78,19 @@ const Likut = ({ t }) => {
       dispatch(actions.fetchUnit(id));
     } else if (unit) {
       const file = unit?.files?.find(x => x.language === language);
-      if (file?.id) {
-        setFileId(file.id);
+      if (file) {
+        setFile(file);
       }
     }
   }, [dispatch, err, id, language, unit, wip]);
 
 
   useEffect(() => {
-    console.log('dispatch file:', fileId)
-    dispatch(assetsActions.doc2html(fileId))
-  }, [dispatch, fileId]);
+    if (file) {
+      console.log('dispatch file:', file)
+      dispatch(assetsActions.doc2html(file.id))
+    }
+  }, [dispatch, file]);
 
   const wipErr = WipErr({ wip, err, t });
   if (wipErr) {
@@ -98,7 +101,9 @@ const Likut = ({ t }) => {
     return null;
   }
 
-  const { data } = doc2htmlById[fileId] || {};
+  console.log('doc2htmlById:', file, doc2htmlById)
+
+  const { data } = doc2htmlById[file?.id] || {};
 
   const { theme = 'light', fontType, fontSize = 0 } = settings || {};
   const direction = getLanguageDirection(language);
@@ -106,8 +111,6 @@ const Likut = ({ t }) => {
   const { name, film_date, files, tags } = unit;
   const languages = files.length > 0 ? files.map(f => f.language) : []
   const tagNames = tags.map(getTagById);
-
-  console.log('tagNames:', tagNames);
 
   const renderTags = () => (
     <ButtonGroup size='mini' compact basic>
@@ -122,10 +125,11 @@ const Likut = ({ t }) => {
     </ButtonGroup>
   )
 
+  const url = file && physicalFile(file, true)
+
   return (
     <div
       ref={articleRef}
-      style={{ direction }}
       className={clsx({
         source: true,
         'is-readable': isReadable,
@@ -136,19 +140,20 @@ const Likut = ({ t }) => {
       <Grid padded>
         <Grid.Column mobile={16} tablet={12} computer={12}>
           <div className="section-header">
-            <Header size='large'>
+            <Header size='large' className="likut">
               <Header.Content>
                 {name}
                 <Header.Subheader><b>{t('values.date', { date: film_date })}</b></Header.Subheader>
               </Header.Content>
             </Header>
-            <Grid padded>
+            <Grid padded stackable>
               <Grid.Row columns={2}>
                 <Grid.Column>
                   {renderTags()}
                 </Grid.Column>
                 <Grid.Column>
                   <div className="source__header-toolbar">
+                    { file && <Download path={url} mimeType={file.mimetype} downloadAllowed={true} filename={file.name} /> }
                     <LibraryBar fontSize={fontSize} isReadable={isReadable} handleIsReadable={handleIsReadable} handleSettings={setSettings} />
                     <DropdownLanguageSelector
                       languages={languages}
@@ -161,13 +166,13 @@ const Likut = ({ t }) => {
               </Grid.Row>
             </Grid>
           </div>
-          <div className={clsx({
-            'source__content-wrapper': true,
-            [`size${fontSize}`]: true,
-            // "doc2html": true
-          })}>
+          <div
+            style={{ direction }}
+            className={clsx({
+              'source__content-wrapper': true,
+              [`size${fontSize}`]: true,
+            })}>
             <div className="source__content"
-              style={{ direction }}
               dangerouslySetInnerHTML={{ __html: data }}
             />
           </div>
