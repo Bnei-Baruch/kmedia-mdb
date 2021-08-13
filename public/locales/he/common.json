@@ -391,7 +391,8 @@
       "info": {
         "sources": "מקורות",
         "topics": "נושאים",
-        "collections": "קשור ל"
+        "collections": "קשור ל",
+        "episode": "פרק {{name}}"
       },
       "recommended": {
         "same-collection": {

@@ -391,7 +391,8 @@
       "info": {
         "sources": "Kabbalah Sources",
         "topics": "Topics",
-        "collections": "Related to"
+        "collections": "Related to",
+        "episode": "Episode {{name}}"
       },
       "recommended": {
         "same-collection": {

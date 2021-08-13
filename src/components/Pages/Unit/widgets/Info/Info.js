@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { Header, List } from 'semantic-ui-react';
+import {Button, Header, List} from 'semantic-ui-react';
 
 import {
   CT_DAILY_LESSON,
@@ -52,9 +52,12 @@ const makeTagLinks = (tags = [], getTagById) =>
       if (!label) {
         return '';
       }
-
-      return <Link key={id} to={`/topics/${id}`}>{label}</Link>;
-    }), ', '));
+      return <Link key={id} to={`/topics/${id}`}>
+        <Button basic size="tiny" className="link_to_cu">
+          {label}
+        </Button>
+      </Link>;
+    }), ''));
 
 const makeSourcesLinks = (sources = [], getSourceById, filteredListPath) => Array.from(intersperse(
   sources.map(x => {
@@ -114,11 +117,21 @@ const makeCollectionsLinks = (collections = {}, t, currentCollection) => {
     }), ', '));
 };
 
+const getEpisodeInfo = (cIDs, filmDate, t) => {
+  const cId = Object.keys(cIDs)[0];
+  const episode = cId && cId.split('_').slice(-1).pop();
+  let episodeInfo = [];
+  if (episode !== '0')
+    episodeInfo.push(t('pages.unit.info.episode', {name: episode}));
+  episodeInfo.push(t('values.date', {date: filmDate}));
+  return episodeInfo.join(' | ');
+}
+
 const Info = ({ unit = {}, section = '', t, currentCollection = null }) => {
   const getSourceById = useSelector(state => sourcesSelectors.getSourceById(state.sources));
   const getTagById    = useSelector(state => tagsSelectors.getTagById(state.tags));
 
-  const { name, film_date: filmDate, sources, tags, collections, content_type: ct } = unit;
+  const { name, film_date: filmDate, sources, tags, collections, content_type: ct, cIDs } = unit;
 
   // take lessons section tabs into consideration
   let filteredListPath = section;
@@ -129,6 +142,8 @@ const Info = ({ unit = {}, section = '', t, currentCollection = null }) => {
   const tagLinks = makeTagLinks(tags, getTagById);
   const sourcesLinks = makeSourcesLinks(sources, getSourceById, filteredListPath);
   const collectionsLinks = makeCollectionsLinks(collections, t, currentCollection);
+
+  const episodeInfo = getEpisodeInfo(cIDs, filmDate, t);
 
   return (
     <div className="unit-info">
@@ -143,19 +158,14 @@ const Info = ({ unit = {}, section = '', t, currentCollection = null }) => {
         <span className="unit-info__name">{name}</span>
       </Header>
 
-      <small className="text grey unit-info__film-date">
-        {t('values.date', { date: filmDate })}
-      </small>
+      <div className="text grey unit-info__film-date">
+        {episodeInfo}
+      </div>
 
       <List>
         {
           tagLinks.length > 0 && (
             <List.Item className="unit-info__topics">
-              <strong>
-                {t('pages.unit.info.topics')}
-                :
-              </strong>
-              &nbsp;
               {tagLinks}
             </List.Item>
           )

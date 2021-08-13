@@ -343,7 +343,8 @@
       "info": {
         "sources": "Zdroje",
         "topics": "Témata",
-        "collections": "Související s"
+        "collections": "Související s",
+        "episode": "Epizoda {{name}}"
       },
       "recommended": {
         "same-collection": {

@@ -9,6 +9,36 @@
   &__name {
     font-weight: normal;
   }
+
+  &__film-date {
+    font-size: 1rem;
+  }
+
+  &__collections a {
+    font-size: 1.46rem;
+  }
+
+  &__topics {
+    padding: 0 1em !important;
+  }
+
+  .link_to_cu {
+    padding: .5em 1em;
+    margin-top: 8px !important;
+    margin-right: 8px !important;
+    margin-left: 0 !important;
+  }
+
+
+}
+
+.rtl {
+  .unit-info {
+    .link_to_cu {
+      margin-right: 0 !important;
+      margin-left: 8px !important;
+    }
+  }
 }
 
 .unit-materials {
