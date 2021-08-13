@@ -9,7 +9,7 @@ import { canonicalLink } from '../../../../../../helpers/links';
 import { formatDuration, canonicalCollection } from '../../../../../../helpers/utils';
 import Link from '../../../../../Language/MultiLanguageLink';
 import UnitLogo from '../../../../../shared/Logo/UnitLogo';
-import { ClientChroniclesContext } from "../../../../../../helpers/app-contexts";
+import { ClientChroniclesContext } from '../../../../../../helpers/app-contexts';
 import { selectors } from '../../../../../../redux/modules/recommended';
 
 const getCollectionId = unit => {
@@ -29,56 +29,53 @@ const viewsToString = views => {
   return `${views}`;
 }
 
-export const renderPlaylistUnit = (unit, t, views = -1, watchingNow = -1, suggesterLabel = '') => {
-  return (
-    <Table selectable compact unstackable>
-      <Table.Body>
-        <Table.Row verticalAlign="middle">
-          <Table.Cell textAlign="left" width={4}>
-            <UnitLogo
-              unitId={unit.id}
-              collectionId={getCollectionId(unit)}
-              fallbackImg='programs'
-            />
-          </Table.Cell>
-          <Table.Cell textAlign="left" width={10}>
-            <Header as="h5">
-              <small className="text grey uppercase">
-                {t('values.date', { date: unit.film_date })}
+export const renderPlaylistUnit = (unit, t, views = -1, watchingNow = -1, suggesterLabel = '') =>
+  <Table selectable compact unstackable>
+    <Table.Body>
+      <Table.Row verticalAlign="middle">
+        <Table.Cell textAlign="left" width={4}>
+          <UnitLogo
+            unitId={unit.id}
+            collectionId={getCollectionId(unit)}
+            fallbackImg='programs'
+          />
+        </Table.Cell>
+        <Table.Cell textAlign="left" width={10}>
+          <Header as="h5">
+            <small className="text grey uppercase">
+              {t('values.date', { date: unit.film_date })}
+            </small>
+            <br />
+            <span>{unit.name || NO_NAME}</span>
+            {(views !== -1 || watchingNow !== -1 || suggesterLabel) && <br />}
+            {watchingNow !== -1 &&
+              <small className="text">
+                <Popup content={`${t('materials.recommended.watching-now')} ${watchingNow}`}
+                  trigger={<span>{`${t('materials.recommended.watching-now')} ${viewsToString(watchingNow)}`}</span>}
+                />
               </small>
-              <br />
-              <span>{unit.name || NO_NAME}</span>
-              {(views !== -1 || watchingNow !== -1 || suggesterLabel) && <br />}
-              {watchingNow !== -1 &&
-                <small className="text">
-                  <Popup content={`${t('materials.recommended.watching-now')} ${watchingNow}`}
-                    trigger={<span>{`${t('materials.recommended.watching-now')} ${viewsToString(watchingNow)}`}</span>}
-                  />
-                </small>
-              }
-              {watchingNow === -1 && views !== -1 &&
-                <small className="text">
-                  <Popup content={`${t('materials.recommended.popular')} ${views} ${t('materials.recommended.views')}`}
-                    trigger={<span>{`${t('materials.recommended.popular')} ${viewsToString(views)} ${t('materials.recommended.views')}`}</span>}
-                  />
-                </small>
-              }
-              {watchingNow === -1 && views === -1 && suggesterLabel &&
-                <small className="text">
-                  <span>{suggesterLabel}</span>
-                </small>
-              }
-            </Header>
-          </Table.Cell>
-          {unit.duration &&
-          <Table.Cell textAlign="right" width={2}>
-            <span>{formatDuration(unit.duration)}</span>
-          </Table.Cell>}
-        </Table.Row>
-      </Table.Body>
-    </Table>
-  );
-}
+            }
+            {watchingNow === -1 && views !== -1 &&
+              <small className="text">
+                <Popup content={`${t('materials.recommended.popular')} ${views} ${t('materials.recommended.views')}`}
+                  trigger={<span>{`${t('materials.recommended.popular')} ${viewsToString(views)} ${t('materials.recommended.views')}`}</span>}
+                />
+              </small>
+            }
+            {watchingNow === -1 && views === -1 && suggesterLabel &&
+              <small className="text">
+                <span>{suggesterLabel}</span>
+              </small>
+            }
+          </Header>
+        </Table.Cell>
+        {unit.duration &&
+        <Table.Cell textAlign="right" width={2}>
+          <span>{formatDuration(unit.duration)}</span>
+        </Table.Cell>}
+      </Table.Row>
+    </Table.Body>
+  </Table>;
 
 
 const RecommendedPlaylist = (units, selected, t, chronicles, viewLimit, feedName) => {

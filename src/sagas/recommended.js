@@ -23,16 +23,16 @@ export function* fetchRecommended(action) {
     const specs = [];  // Order important due to skip uids.
     if (variant === AB_RECOMMEND_NEW) {
       // Same Topic - WatchingNow, Popular, Latest.
-      specs.push({ "name": "RoundRobinSuggester", "specs": [
-        { "name": "DataContentUnitsSuggester", "filters": [{ "filter_selector": 5 }, { "filter_selector": 8 }], "order_selector": 5 },
-        { "name": "DataContentUnitsSuggester", "filters": [{ "filter_selector": 5 }], "order_selector": 4 },
-        { "name": "DataContentUnitsSuggester", "filters": [{ "filter_selector": 5 }], "order_selector": 0 },
+      specs.push({ 'name': 'RoundRobinSuggester', 'specs': [
+        { 'name': 'DataContentUnitsSuggester', 'filters': [{ 'filter_selector': 5 }, { 'filter_selector': 8 }], 'order_selector': 5 },
+        { 'name': 'DataContentUnitsSuggester', 'filters': [{ 'filter_selector': 5 }], 'order_selector': 4 },
+        { 'name': 'DataContentUnitsSuggester', 'filters': [{ 'filter_selector': 5 }], 'order_selector': 0 },
       ] });
       // Any Topic - WatchingNow, Popular, Latest.
-      specs.push({ "name": "RoundRobinSuggester", "specs": [
-        { "name": "DataContentUnitsSuggester", "filters": [{ "filter_selector": 8 }], "order_selector": 5 },
-        { "name": "DataContentUnitsSuggester", "order_selector": 4 },
-        { "name": "DataContentUnitsSuggester", "order_selector": 0 },
+      specs.push({ 'name': 'RoundRobinSuggester', 'specs': [
+        { 'name': 'DataContentUnitsSuggester', 'filters': [{ 'filter_selector': 8 }], 'order_selector': 5 },
+        { 'name': 'DataContentUnitsSuggester', 'order_selector': 4 },
+        { 'name': 'DataContentUnitsSuggester', 'order_selector': 0 },
       ] });
     }
 
