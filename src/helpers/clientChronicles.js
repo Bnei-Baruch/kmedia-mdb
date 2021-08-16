@@ -3,22 +3,25 @@ import { useSelector } from 'react-redux';
 import axios from 'axios';
 import { ulid } from 'ulid'
 import { chroniclesUrl, chroniclesBackendEnabled } from './Api';
-import { noop } from './utils';
+import { noop, partialAssign } from './utils';
 
 import { actions } from '../redux/modules/chronicles';
 import { types as recommendedTypes } from '../redux/modules/recommended';
+import { types as searchTypes } from '../redux/modules/search';
 import { ClientChroniclesContext } from './app-contexts';
 
 //An array of DOM events that should be interpreted as user activity.
 const ACTIVITY_EVENTS = ['mousedown', 'mousemove', 'keydown', 'scroll', 'touchstart'];
 
 const FLOWS = [
-  { start: 'page-enter',               end: 'page-leave',                 subFlows: ['recommend', 'user-inactive'] },
-  { start: 'unit-page-enter',          end: 'unit-page-leave',            subFlows: ['player-play', 'recommend', 'user-inactive'] },
-  { start: 'collection-page-enter',    end: 'collection-page-leave',      subFlows: ['collection-unit-selected', 'recommend', 'user-inactive'] },
+  { start: 'page-enter',               end: 'page-leave',                 subFlows: ['recommend', 'search', 'autocomplete', 'user-inactive'] },
+  { start: 'unit-page-enter',          end: 'unit-page-leave',            subFlows: ['player-play', 'recommend', 'search', 'autocomplete', 'user-inactive'] },
+  { start: 'collection-page-enter',    end: 'collection-page-leave',      subFlows: ['collection-unit-selected', 'recommend', 'search', 'autocomplete', 'user-inactive'] },
   { start: 'collection-unit-selected', end: 'collection-unit-unselected', subFlows: ['player-play', 'user-inactive'] },
   { start: 'player-play',              end: 'player-stop',                subFlows: ['mute-unmute', 'user-inactive'] },
   { start: 'recommend',                end: '',                           subFlows: ['recommend-selected'] },
+  { start: 'search',                   end: '',                           subFlows: ['search-selected'] },
+  { start: 'autocomplete',             end: '',                           subFlows: ['autocomplete-selected'] },
 ];
 
 const FLOWS_BY_END = new Map(FLOWS.map(flow => [flow.end, flow]));
@@ -122,6 +125,7 @@ export default class ClientChronicles {
   }
 
   // Handles custom redux actions to append events on them.
+  // Note: Have to add the relevant actions to redux/modules/chronicles.js for this to work.
   onAction(action) {
     if (action.type === recommendedTypes.FETCH_RECOMMENDED_SUCCESS) {
       const { recommendedItems, requestData } = action.payload;
@@ -129,10 +133,78 @@ export default class ClientChronicles {
         this.append('recommend', { request_data: requestData, recommendations: recommendedItems.map(({ uid, content_type }) => ({ uid, content_type })) });
       }
     }
+
+    if (action.type === searchTypes.SEARCH_SUCCESS) {
+      const { searchResults, searchRequest } = action.payload;
+      const reducedResults = partialAssign({}, searchResults, {
+        language: true,
+        search_result: {
+          hits: {
+            hits: { // This is an array.
+              _index: true,
+              _type: true,
+              _source: {
+                mdb_uid: true,
+                result_type: true,
+                filter_values: true,
+                landing_page: true,
+              },
+              _score: true,
+            },
+            max_score: true,
+            total: true,
+          },
+          searchId: true,
+          timed_out: true,
+          took: true,
+        },
+        typo_suggest: true,
+      });
+      const appendData = { search_results: reducedResults, search_request: searchRequest };
+      this.append('search', appendData);
+    }
+
+    if (action.type === searchTypes.AUTOCOMPLETE_SUCCESS) {
+      const { suggestions, request } = action.payload;
+      const reducedSuggestions = partialAssign({}, suggestions, {
+        suggest: {
+          title_suggest: { // This is an array.
+            options: {  // This is an array.
+              text: true,
+              _source: {
+                result_type: true,
+                mdb_uid: true,
+              },
+            }
+          },
+          'title_suggest.language': { // This is an array.
+            options: {  // This is an array.
+              text: true,
+              _source: {
+                result_type: true,
+                mdb_uid: true,
+              },
+            }
+          },
+        },
+        timed_out: true,
+        took: true,
+      });
+      const appendData = { suggestions: reducedSuggestions, request };
+      this.append('autocomplete', appendData);
+    }
   }
 
   recommendSelected(uid) {
     this.append('recommend-selected', { uid });
+  }
+
+  searchSelected(data) {
+    this.append('search-selected', data);
+  }
+
+  autocompleteSelected(title, autocompleteId) {
+    this.append('autocomplete-selected', { title, autocompleteId });
   }
 
   appendPage(suffix, sync = false) {
@@ -253,6 +325,7 @@ export default class ClientChronicles {
   }
 }
 
+// Have to add the relevant actions to redux/modules/chronicles.js for this to work.
 export const ChroniclesActions = () => {
   const clientChronicles = useContext(ClientChroniclesContext);
   const action = useSelector(state => state.chronicles.lastAction);

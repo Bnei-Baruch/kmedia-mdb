@@ -63,9 +63,13 @@
       }
     ],
     "no-await-in-loop": "warn",
+    "no-cond-assign": "error",
+    "no-constant-condition":"warn",
     "no-else-return": "warn",
     "no-empty": "warn",
+    "no-extra-parens": ["warn", "functions"],
     "no-lonely-if": "warn",
+    "no-mixed-operators": "warn",
     "no-multiple-empty-lines": [
       "warn",
       {
@@ -74,9 +78,10 @@
       }
     ],
     "no-trailing-spaces": "warn",
-    "no-unneeded-ternary": "warn",
+    "no-unneeded-ternary": ["warn", { "defaultAssignment": false }],
     "no-unreachable": "warn",
     "no-unused-vars": "warn",
+    "no-useless-concat": "warn",
     "object-shorthand": "warn",
     "object-curly-spacing": [
       "warn",
@@ -101,6 +106,7 @@
     ],
     "prefer-object-spread": "warn",
     "prefer-template": "warn",
+    "quotes": ["warn", "single", { "allowTemplateLiterals": true }],
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
     "rest-spread-spacing": "warn",

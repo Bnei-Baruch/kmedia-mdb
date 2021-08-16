@@ -19,7 +19,7 @@ import Sketches from './Sketches';
 import MediaDownloads from '../Downloads/MediaDownloads';
 import TranscriptionContainer from './Transcription/TranscriptionContainer';
 import { isEmpty } from '../../../../../helpers/utils';
-import { DeviceInfoContext } from "../../../../../helpers/app-contexts";
+import { DeviceInfoContext } from '../../../../../helpers/app-contexts';
 import DerivedUnits from './DerivedUnits';
 import Recommended from '../Recommended/Main/Recommended';
 

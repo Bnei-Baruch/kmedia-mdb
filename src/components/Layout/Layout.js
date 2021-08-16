@@ -1,4 +1,4 @@
-import React, { Component, createRef } from 'react';
+import React, { Component, createRef, useContext } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { connect } from 'react-redux';
@@ -20,13 +20,17 @@ import Footer from './Footer';
 import TopMost from './TopMost';
 import DonateNow, { VirtualHomeButton } from './DonateNow';
 import Logo from '../../images/icons/Logo';
-import { DeviceInfoContext } from '../../helpers/app-contexts';
+import { ClientChroniclesContext, DeviceInfoContext } from '../../helpers/app-contexts';
 import Login from './Login';
 
+const WrappedOmniBoxWithChronicles = ({ location }) => {
+  const chronicles = useContext(ClientChroniclesContext);
+  return <WrappedOmniBox location={location} chronicles={chronicles} />;
+};
 const RenderHeaderSearch = React.forwardRef(({ t, location }, headerSearchElement) => (
   <div ref={headerSearchElement}>
     <Segment color="blue" inverted className="header_search">
-      <WrappedOmniBox t={t} location={location} />
+      <WrappedOmniBoxWithChronicles location={location} />
     </Segment>
   </div>
 ));
@@ -203,7 +207,7 @@ class Layout extends Component {
                 </Menu.Item>
                 <Menu.Item className={isMobileDevice ? 'layout__search mobile-hidden' : 'layout__search layout__search_max_width'}>
                   {
-                    showSearch && <WrappedOmniBox location={location} />
+                    showSearch && <WrappedOmniBoxWithChronicles location={location} />
                   }
                 </Menu.Item>
                 <Menu.Menu position="right" className="no-padding no-margin">

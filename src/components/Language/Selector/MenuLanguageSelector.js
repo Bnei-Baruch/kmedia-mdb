@@ -1,11 +1,11 @@
-import React, {useContext} from 'react';
+import React, { useContext } from 'react';
 import { withNamespaces } from 'react-i18next';
 import { Dropdown } from 'semantic-ui-react';
 import classNames from 'classnames';
 import { noop } from '../../../helpers/utils';
 import { getOptions } from '../../../helpers/language';
-import {LANG_HEBREW, LANG_UI_LANGUAGES, LANGUAGES} from '../../../helpers/consts';
-import {DeviceInfoContext} from "../../../helpers/app-contexts";
+import { LANG_HEBREW, LANGUAGES } from '../../../helpers/consts';
+import { DeviceInfoContext } from '../../../helpers/app-contexts';
 
 const DesktopLanguageSelector = (value, fluid, options, handleSelect, blink) => (
   <Dropdown item text={LANGUAGES[value].name} fluid={fluid}>
@@ -16,8 +16,8 @@ const DesktopLanguageSelector = (value, fluid, options, handleSelect, blink) => 
             key={lang.value}
             language={`${lang}`}
             active={lang.value === value}
-            onClick={(e) => handleSelect(e, lang)}
-            className={classNames('dropdown-language-selector', {blink: !!blink})}
+            onClick={e => handleSelect(e, lang)}
+            className={classNames('dropdown-language-selector', { blink: !!blink })}
           >
             {lang.text}
           </Dropdown.Item>
@@ -28,18 +28,18 @@ const DesktopLanguageSelector = (value, fluid, options, handleSelect, blink) => 
 );
 
 const MobileLanguageSelector = (value, fluid, options, handleSelect) => (
-    <select
-      className="dropdown-container"
-      value={value}
-      onChange={e => handleSelect(e, e.currentTarget)}
-    >
-      {
-        options.map(x =>
-          <option key={`opt-${x.value}`} value={x.value}>
-            {x.name}
-          </option>)
-      }
-    </select>
+  <select
+    className="dropdown-container"
+    value={value}
+    onChange={e => handleSelect(e, e.currentTarget)}
+  >
+    {
+      options.map(x =>
+        <option key={`opt-${x.value}`} value={x.value}>
+          {x.name}
+        </option>)
+    }
+  </select>
 );
 
 const MenuLanguageSelector = ({ languages = [], defaultValue: value = LANG_HEBREW, blink, onSelect = noop, fluid = true }) => {

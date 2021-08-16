@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import { useHistory, useLocation } from 'react-router-dom';
-import { Grid, Portal, Segment} from 'semantic-ui-react';
+import { Portal, Segment } from 'semantic-ui-react';
 
 import { selectors } from '../../../redux/modules/assets';
 import { physicalFile } from '../../../helpers/utils';
@@ -21,7 +21,7 @@ import Download from '../../shared/Download/Download';
 import WipErr from '../../shared/WipErr/WipErr';
 import ShareBar from '../../shared/ShareSelected';
 import { DeviceInfoContext, SessionInfoContext } from '../../../helpers/app-contexts';
-import MenuLanguageSelector from "../../Language/Selector/MenuLanguageSelector";
+import MenuLanguageSelector from '../../Language/Selector/MenuLanguageSelector';
 
 export const checkRabashGroupArticles = source => {
   if (/^gr-/.test(source)) { // Rabash Group Articles
@@ -173,12 +173,12 @@ const Library = ({
   if (languages.length > 0) {
     languageBar = (
       <div className="library-language-container">
-          <MenuLanguageSelector
-            languages={languages}
-            defaultValue={language}
-            onSelect={handleLanguageChanged}
-            fluid={false}
-          />
+        <MenuLanguageSelector
+          languages={languages}
+          defaultValue={language}
+          onSelect={handleLanguageChanged}
+          fluid={false}
+        />
       </div>
     );
   }

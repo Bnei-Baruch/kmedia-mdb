@@ -4,11 +4,11 @@ import { Table } from 'semantic-ui-react';
 import { CT_VIDEO_PROGRAM_CHAPTER } from '../../../../../helpers/consts';
 import * as renderUnitHelper from '../../../../../helpers/renderUnitHelper';
 import UnitList from '../../../../Pages/UnitList/Container';
-import { FrownSplash } from '../../../../shared/Splash/Splash';
+import { frownSplashContentNotFound } from '../../../../shared/WipErr/WipErr';
 
 const renderUnit = (unit, t) => {
   if (!unit) {
-    return <FrownSplash text={t('messages.source-content-not-found')} />;
+    return frownSplashContentNotFound(t);
   }
 
   const breakdown = renderUnitHelper.getUnitCollectionsBreakdown(unit);

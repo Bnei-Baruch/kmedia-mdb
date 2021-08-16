@@ -349,6 +349,45 @@ export const usePrevious = value => {
   return ref.current;
 };
 
+// Assigns properties from source to target, only if they exist in the what object.
+// what properties may have values of type:
+//   1. true - Take the whole property using assignment.
+//   2. false - Ignore the property.
+//   3. object - See inside object each property.
+// Example:
+//   target = {}
+//   source = {a: {b: 2, c: 3, d: {e: 1, f: 2}}}
+//   what {a: {b: true, f: }
+// will yield: {a: {b: 2}}
+export const partialAssign = (target, source, what = true) => {
+  if (what === true) {
+    target = source;
+    return source;
+  }
+
+  if (what === false) {
+    return undefined;
+  }
+
+  if (typeof what === 'object' && what !== null) {
+    for (const property in what) {
+      if (source.hasOwnProperty(property)) {
+        if (Array.isArray(source[property])) {
+          target[property] = source[property].map(sourceArrValue => partialAssign({}, sourceArrValue, what[property]));
+        } else {
+          target[property] = partialAssign({}, source[property], what[property])
+        }
+      }
+      // Ignore unexisting field
+    }
+
+    return target;
+  }
+
+  console.error('Unexpected what for partialAssign:', what);
+  return {};
+}
+
 export const imageByUnit = (unit, link) => {
   // collections -- prepare random image
   switch (unit.content_type) {

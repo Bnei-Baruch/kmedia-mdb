@@ -10,12 +10,12 @@ import { selectors as settings } from '../../../../../../redux/modules/settings'
 import { MT_TEXT, CT_LIKUTIM } from '../../../../../../helpers/consts';
 import { selectSuitableLanguage } from '../../../../../../helpers/language';
 import { getLanguageDirection } from '../../../../../../helpers/i18n-utils';
-import { formatError, physicalFile } from '../../../../../../helpers/utils';
+import { physicalFile } from '../../../../../../helpers/utils';
 import * as shapes from '../../../../../shapes';
-import { ErrorSplash, FrownSplash, LoadingSplash } from '../../../../../shared/Splash/Splash';
+import { getSourceErrorSplash, wipLoadingSplash } from '../../../../../shared/WipErr/WipErr';
 import PDF, { isTaas, startsFrom } from '../../../../../shared/PDF/PDF';
 import { DeviceInfoContext } from '../../../../../../helpers/app-contexts';
-import DropdownLanguageSelector from "../../../../../Language/Selector/DropdownLanguageSelector";
+import DropdownLanguageSelector from '../../../../../Language/Selector/DropdownLanguageSelector';
 
 export const getLikutimUnits = unit => (
   Object.values(unit.derived_units || {})
@@ -128,7 +128,6 @@ const Sources = ({ unit, indexMap, t, options }) => {
   const handleSourceChanged   = (e, data) => setSelected(data.value);
 
   const getContents = () => {
-
     let file;
     if (isLikutim) {
       file = getLikutimFiles(unit, selected).find(x => x.language === language);
@@ -146,14 +145,9 @@ const Sources = ({ unit, indexMap, t, options }) => {
     const { wip, err, data } = doc2htmlById[file?.id] || {};
 
     if (err) {
-      if (err.response && err.response.status === 404) {
-        return <FrownSplash text={t('messages.source-content-not-found')} />;
-      }
-
-      return <ErrorSplash text={t('messages.server-error')} subtext={formatError(err)} />;
-
+      return getSourceErrorSplash(err, t);
     } else if (wip) {
-      return <LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />;
+      return wipLoadingSplash(t);
     }
 
     const direction = getLanguageDirection(language);
@@ -167,13 +161,11 @@ const Sources = ({ unit, indexMap, t, options }) => {
     return <Segment basic>{t('materials.sources.no-source-available')}</Segment>;
   }
 
-  const contents = getContents();
-
   return (
     <>
-      <Grid container padded={isMobileDevice} columns={2} className={clsx({"no-margin-top": !isMobileDevice})}>
+      <Grid container padded={isMobileDevice} columns={2} className={clsx({ 'no-margin-top': !isMobileDevice })}>
         <Grid.Column
-          className={clsx({"is-fitted": isMobileDevice})}
+          className={clsx({ 'is-fitted': isMobileDevice })}
           width={isMobileDevice ? 16 : 12}
         >
           <Dropdown
@@ -190,7 +182,7 @@ const Sources = ({ unit, indexMap, t, options }) => {
           languages.length > 0 &&
             <Grid.Column
               textAlign="center"
-              className={clsx({"padding_r_l_0": isMobileDevice, "no-padding-bottom": isMobileDevice})}
+              className={clsx({ 'padding_r_l_0': isMobileDevice, 'no-padding-bottom': isMobileDevice })}
               width={isMobileDevice ? 16 : 4}
             >
               <DropdownLanguageSelector
@@ -203,7 +195,7 @@ const Sources = ({ unit, indexMap, t, options }) => {
         }
       </Grid>
       <Divider hidden fitted />
-      {contents}
+      {getContents()}
     </>
   );
 };
