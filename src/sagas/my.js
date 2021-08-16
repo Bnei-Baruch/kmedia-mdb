@@ -35,7 +35,7 @@ function* fetch(action) {
       cu_uids = data.items?.map(x => x.content_unit_uid) || [];
       break;
     case MY_NAMESPACE_PLAYLISTS:
-      cu_uids = data.items?.filter(p => p.PlaylistItems[0]).map(p => p.PlaylistItems[0].content_unit_uid) || [];
+      cu_uids = data.items?.filter(p => p.playlist_items?.[0]).map(p => p.playlist_items[0].content_unit_uid) || [];
     case MY_NAMESPACE_SUBSCRIPTIONS:
       co_uids       = data.items?.filter(s => s.collection_uid).map(s => s.collection_uid) || [];
       content_types = data.items?.filter(s => s.content_type).map(s => s.content_type) || [];

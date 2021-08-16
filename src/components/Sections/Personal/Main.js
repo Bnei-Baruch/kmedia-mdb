@@ -4,7 +4,6 @@ import { useSelector } from 'react-redux';
 import { Divider } from 'semantic-ui-react';
 
 import ItemsByNamespace from './helper';
-import Playlists from './Playlist/Playlists';
 import { selectors } from '../../../redux/modules/auth';
 import {
   MY_NAMESPACE_HISTORY,

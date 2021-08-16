@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
-import { Button, Header, List } from 'semantic-ui-react';
+import { useSelector } from 'react-redux';
+import { Header, List } from 'semantic-ui-react';
 
 import {
   CT_DAILY_LESSON,
@@ -10,8 +10,7 @@ import {
   CT_LESSON_PART,
   CT_SPECIAL_LESSON,
   CT_VIRTUAL_LESSON,
-  CT_WOMEN_LESSON,
-  MY_NAMESPACE_LIKES
+  CT_WOMEN_LESSON
 } from '../../../../../helpers/consts';
 import { canonicalLink } from '../../../../../helpers/links';
 import { intersperse, tracePath } from '../../../../../helpers/utils';
@@ -21,8 +20,7 @@ import { selectors as tagsSelectors } from '../../../../../redux/modules/tags';
 import { filtersTransformer } from '../../../../../filters/index';
 import Link from '../../../../Language/MultiLanguageLink';
 import * as shapes from '../../../../shapes';
-import { selectors } from '../../../../../redux/modules/auth';
-import { actions, selectors as myselector } from '../../../../../redux/modules/my';
+import PersonalInfo from './PersonalInfo';
 
 const filterLessons = (ct, filmDate) => {
   switch (ct) {
@@ -118,29 +116,10 @@ const makeCollectionsLinks = (collections = {}, t, currentCollection) => {
 };
 
 const Info = ({ unit = {}, section = '', t, currentCollection = null }) => {
-  const dispatch      = useDispatch();
   const getSourceById = useSelector(state => sourcesSelectors.getSourceById(state.sources));
   const getTagById    = useSelector(state => tagsSelectors.getTagById(state.tags));
-  const user          = useSelector(state => selectors.getUser(state.auth));
 
-  const { name, film_date: filmDate, sources, tags, collections, content_type: ct, id } = unit;
-
-  const likes = useSelector(state => myselector.getItems(state.my, MY_NAMESPACE_LIKES));
-  const like  = likes?.find(l => l.content_unit_uid === id);
-  useEffect(() => {
-    if (id) {
-      dispatch(actions.fetch(MY_NAMESPACE_LIKES, { 'uids': [id] }));
-    }
-  }, [dispatch, id, user]);
-  const likeDislike = (l) => {
-    if (l)
-      dispatch(actions.remove(MY_NAMESPACE_LIKES, { ids: [l.id] }));
-    else
-      dispatch(actions.add(MY_NAMESPACE_LIKES, { uids: [id] }));
-  };
-  const likeButton  = user ? (
-    <Button floated={'right'} size={'tiny'} icon={`star ${!like ? 'outline' : ''}`} onClick={() => likeDislike(like)} />
-  ) : null;
+  const { name, film_date: filmDate, sources, tags, collections, content_type: ct } = unit;
 
   // take lessons section tabs into consideration
   let filteredListPath = section;
@@ -154,7 +133,7 @@ const Info = ({ unit = {}, section = '', t, currentCollection = null }) => {
 
   return (
     <div className="unit-info">
-      {likeButton}
+      <PersonalInfo collection={currentCollection} unit={unit} />
       <Header as="h2">
         <small className="text grey unit-info__film-date">
           {t('values.date', { date: filmDate })}
