@@ -6,7 +6,7 @@ import { withRouter } from 'react-router-dom';
 import { actions, selectors } from '../../../../redux/modules/my';
 import { getPageFromLocation } from '../../../Pagination/withPagination';
 
-import History from '../HistoryAndLikes';
+import History from '../helper';
 import { MY_NAMESPACE_HISTORY } from '../../../../helpers/consts';
 import { Container, Divider } from 'semantic-ui-react';
 import Pagination from '../../../Pagination/Pagination';

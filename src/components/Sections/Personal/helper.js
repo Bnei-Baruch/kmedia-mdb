@@ -1,77 +1,20 @@
-import React, { useState, useCallback, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Card, Container, Button, Grid, Header } from 'semantic-ui-react';
+import { Card, Container, Button, Grid } from 'semantic-ui-react';
 
 import * as shapes from '../../shapes';
 import { withNamespaces } from 'react-i18next';
-import { canonicalLink } from '../../../helpers/links';
-import { imageByUnit } from '../../../helpers/utils';
 import Link from '../../Language/MultiLanguageLink';
-import UnitLogo from '../../shared/Logo/UnitLogo';
-import { toHumanReadableTime } from '../../../helpers/time';
-import { actions, selectors as myselector } from '../../../redux/modules/my';
-import { MY_NAMESPACE_HISTORY, MY_NAMESPACE_LIKES } from '../../../helpers/consts';
+import { useDispatch, useSelector } from 'react-redux';
+import { actions, selectors } from '../../../redux/modules/my';
+import { selectors as mdb } from '../../../redux/modules/mdb';
+import WipErr from '../../shared/WipErr/WipErr';
+import { MY_NAMESPACE_HISTORY, MY_NAMESPACE_LIKES, MY_NAMESPACE_PLAYLISTS } from '../../../helpers/consts';
+import { HistoryItem } from './History/HistoryItem';
+import { LikeItem } from './Like/LikeItem';
 
-export const HistoryItem = ({ data: { item: history, mdbItem: unit }, t }) => {
-  const dispatch         = useDispatch();
-  const link             = canonicalLink(unit);
-  const canonicalSection = imageByUnit(unit, link);
-
-  const remove = () => dispatch(actions.remove(MY_NAMESPACE_HISTORY, { ids: [history.id] }));
-
-  return (
-    <Card raised>
-      <UnitLogo width={512} unitId={unit.id} fallbackImg={canonicalSection} />
-      <Card.Content>
-        <Button floated={'right'} size={'tiny'} icon={'remove'} onClick={remove} />
-        <Header size="tiny">{unit.name}</Header>
-      </Card.Content>
-      <Card.Content extra>
-        <Card.Meta content={`${t('values.date', { date: unit.film_date })} - ${unit.name}`} />
-      </Card.Content>
-    </Card>
-  );
-};
-
-export const LikeItem = ({ data: { item: like, mdbItem: unit }, t }) => {
-  const dispatch         = useDispatch();
-  const link             = canonicalLink(unit);
-  const canonicalSection = imageByUnit(unit, link);
-
-  const likeDislike = () => {
-    if (like)
-      dispatch(actions.remove(MY_NAMESPACE_LIKES, { ids: [like.id] }));
-    else
-      dispatch(actions.add(MY_NAMESPACE_LIKES, { uids: [unit.id] }));
-  };
-
-  return (
-    <Card raised>
-      <UnitLogo width={512} unitId={unit.id} fallbackImg={canonicalSection} />
-      <Card.Content>
-        <Button floated="right" size="tiny" icon="remove" onClick={likeDislike} />
-        <Header size="tiny">{unit.name}</Header>
-      </Card.Content>
-      <Card.Content extra>
-        <Card.Meta content={`${t('values.date', { date: unit.film_date })} - ${unit.name}`} />
-      </Card.Content>
-    </Card>
-  );
-};
-
-const Template = ({ items, namespace, t }) => {
+const Template = ({ children, namespace, t }) => {
   const itemsPerRow = 4;
-
-  const renderUnit = (x) => {
-    switch (namespace) {
-    case MY_NAMESPACE_LIKES:
-      return <LikeItem data={x} t={t} />;
-    case MY_NAMESPACE_HISTORY:
-      return <HistoryItem data={x} t={t} />;
-    }
-    return null;
-  };
 
   return (
     <div className="homepage__thumbnails">
@@ -90,7 +33,7 @@ const Template = ({ items, namespace, t }) => {
         </Grid>
 
         <Card.Group itemsPerRow={itemsPerRow} doubling>
-          {items.map(renderUnit)}
+          {children}
         </Card.Group>
       </Container>
     </div>
@@ -102,4 +45,45 @@ Template.propTypes = {
   t: PropTypes.func.isRequired
 };
 
-export default withNamespaces()(Template);
+const ItemsByNamespace = ({ pageSize = 8, pageNo = 1, t, namespace }) => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(actions.fetch(namespace, { page_no: pageNo, page_size: pageSize }));
+  }, [dispatch, pageNo, pageSize]);
+
+  const hs  = useSelector(state => selectors.getItems(state.my, namespace));
+  const err = useSelector(state => selectors.getErr(state.my, namespace));
+  const wip = useSelector(state => selectors.getWIP(state.my, namespace));
+
+  const denormItems = hs => state => {
+    if (!Array.isArray(hs)) return [];
+    return hs.map(x => {
+      const unit = mdb.getDenormContentUnit(state.mdb, x.content_unit_uid);
+      return { mdbItem: unit, item: x };
+    });
+  };
+
+  const items = useSelector(denormItems(hs));
+
+  if (wip || err || items.length === 0) return WipErr({ wip, err, t });
+  let children = null;
+
+  switch (namespace) {
+  case MY_NAMESPACE_HISTORY:
+    children = items.map(d => <HistoryItem data={d} key={d.mdbItem.id} t={t} />);
+    break;
+  case MY_NAMESPACE_LIKES:
+    children = items.map(d => <LikeItem data={d} key={d.mdbItem.id} t={t} />);
+    break;
+  case MY_NAMESPACE_PLAYLISTS:
+    children = items.map(d => <LikeItem data={d} key={d.mdbItem.id} t={t} />);
+    break;
+  default:
+    break;
+  }
+
+  return <Template namespace={namespace} children={children} t={t} />;
+};
+
+export default withNamespaces()(ItemsByNamespace);

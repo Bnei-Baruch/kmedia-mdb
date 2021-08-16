@@ -36,6 +36,21 @@ export const CT_COLLECTIONS = [
   CT_LESSONS_SERIES,
 ];
 
+export const CT_SUBSCRIBE_BY_TYPE = [
+  CT_FRIENDS_GATHERINGS,
+  CT_WOMEN_LESSONS,
+  CT_MEALS,
+  CT_LESSONS_SERIES,
+];
+
+export const CT_SUBSCRIBE_BY_COLLECTION = [
+  CT_VIDEO_PROGRAM,
+  CT_LECTURE_SERIES,
+  CT_VIRTUAL_LESSONS,
+  CT_CLIPS,
+  CT_ARTICLES,
+];
+
 export const IsCollectionContentType = contentType => CT_COLLECTIONS.includes(contentType);
 
 // Content Unit Types
@@ -443,7 +458,7 @@ export const SEARCH_INTENT_SECTIONS = {
 
 export const SCROLL_SEARCH_ID = '__scrollSearchToHere__';
 
-export const MY_NAMESPACE_HISTORY = 'history';
+export const MY_NAMESPACE_HISTORY        = 'history';
 export const MY_NAMESPACE_LIKES          = 'likes';
 export const MY_NAMESPACE_PLAYLISTS      = 'playlists';
 export const MY_NAMESPACE_PLAYLIST_ITEMS = 'playlists_items';

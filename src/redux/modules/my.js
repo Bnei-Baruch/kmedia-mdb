@@ -80,8 +80,8 @@ const onFetch = (draft, { namespace }) => {
   return draft;
 };
 
-const onFetchSuccess = (draft, { namespace, items, total }) => {
-  draft[namespace].items  = items;
+const onFetchSuccess = (draft, { namespace, items = [], total }) => {
+  draft[namespace].items  = items || [];
   draft[namespace].total  = total;
   draft[namespace].wip    = false;
   draft[namespace].errors = false;
@@ -94,17 +94,17 @@ const onFetchFailure = (draft, { namespace }) => {
   return draft;
 };
 
-const onAddSuccess = (draft, { namespace, items, total }) => {
-  draft[namespace].items  = items;
-  draft[namespace].total  = total;
+const onAddSuccess = (draft, { namespace, items }) => {
+  draft[namespace].items  = draft[namespace].items.concat(items);
+  draft[namespace].total  = draft[namespace].total + items.length;
   draft[namespace].wip    = false;
   draft[namespace].errors = false;
   return draft;
 };
 
-const onRemoveSuccess = (draft, { namespace, items, total }) => {
-  draft[namespace].items  = items;
-  draft[namespace].total  = total;
+const onRemoveSuccess = (draft, { namespace, ids }) => {
+  draft[namespace].items  = draft[namespace].items.filter(a => !ids.includes(a.id));
+  draft[namespace].total  = draft[namespace].total - ids.length;
   draft[namespace].wip    = false;
   draft[namespace].errors = false;
   return draft;

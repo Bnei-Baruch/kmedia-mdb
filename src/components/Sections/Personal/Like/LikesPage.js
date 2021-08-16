@@ -6,7 +6,7 @@ import { withRouter } from 'react-router-dom';
 import { actions, selectors } from '../../../../redux/modules/my';
 import { getPageFromLocation } from '../../../Pagination/withPagination';
 
-import History from '../HistoryAndLikes';
+import ItemsByNamespace from '../helper';
 import { MY_NAMESPACE_LIKES } from '../../../../helpers/consts';
 import { Container, Divider } from 'semantic-ui-react';
 import Pagination from '../../../Pagination/Pagination';
@@ -28,7 +28,7 @@ const LikesPage = ({ location }) => {
 
   return (
     <div>
-      <History pageNo={pageNo} pageSize={PAGE_SIZE} namespace={MY_NAMESPACE_LIKES} />
+      <ItemsByNamespace pageNo={pageNo} pageSize={PAGE_SIZE} namespace={MY_NAMESPACE_LIKES} />
       <Divider fitted />
       <Container className="padded pagination-wrapper" textAlign="center">
         <Pagination

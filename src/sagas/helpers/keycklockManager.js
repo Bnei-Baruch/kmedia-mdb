@@ -41,8 +41,8 @@ export const initKC = (dispatch) => {
       }
     };
     return keycloak.init({
-      onLoad: 'check-sso',
-      checkLoginIframe: true,
+      //onLoad: 'check-sso',
+     // checkLoginIframe: true,
       flow: 'standard',
       pkceMethod: 'S256',
     }).then((ok) => {

@@ -57,7 +57,7 @@ function* add(action) {
   const { namespace, ...params } = action.payload;
   try {
     const { data } = yield call(Api.my, namespace, params, token, 'POST');
-    yield put(actions.addSuccess(data));
+    yield put(actions.addSuccess({ namespace, items: data }));
   } catch (err) {
   }
 }
@@ -67,7 +67,7 @@ function* remove(action) {
   const { namespace, ...params } = action.payload;
   try {
     const { data } = yield call(Api.my, namespace, params, token, 'DELETE');
-    yield put(actions.removeSuccess(data));
+    yield put(actions.removeSuccess({ namespace, ...params }));
   } catch (err) {
 
   }
