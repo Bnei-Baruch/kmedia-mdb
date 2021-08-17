@@ -36,6 +36,7 @@ import NotImplemented from './components/NotImplemented';
 import * as ssrDataLoaders from './routesSSRData';
 import * as shapes from './components/shapes';
 import Likut from './components/Sections/Likutim/Likut';
+import LikutimMain from './components/Sections/Likutim/Main';
 
 const routes = [
   { path: '', component: HomePage, options: { ssrData: ssrDataLoaders.home } },
@@ -83,7 +84,7 @@ const routes = [
   { path: 'help', component: Help },
   { path: 'simple-mode', component: SimpleModeContainer, options: { ssrData: ssrDataLoaders.simpleMode } },
   { path: 'excerpt', component: ExcerptContainer },
-  { path: 'likutim', component: Likut },
+  { path: 'likutim', component: LikutimMain },
   { path: 'likutim/:id', component: Likut, options: { ssrData: ssrDataLoaders.LikutPage } },
   // { path: 'design', component: Design },
   // { path: 'design2', component: Design2 },
