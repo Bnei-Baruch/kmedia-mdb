@@ -2,7 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { renderRoutes } from 'react-router-config';
 
-import { DEFAULT_LANGUAGE, MY_NAMESPACE_HISTORY, MY_NAMESPACE_LIKES } from './helpers/consts';
+import {
+  DEFAULT_LANGUAGE,
+  MY_NAMESPACE_HISTORY,
+  MY_NAMESPACE_LIKES,
+  MY_NAMESPACE_PLAYLISTS,
+  MY_NAMESPACE_SUBSCRIPTIONS
+} from './helpers/consts';
 import LanguageSetter from './components/Language/LanguageSetter';
 import Layout from './components/Layout/Layout';
 import Lessons from './components/Sections/Lessons/MainPage';
@@ -36,14 +42,21 @@ import NotImplemented from './components/NotImplemented';
 import * as ssrDataLoaders from './routesSSRData';
 import * as shapes from './components/shapes';
 import Main from './components/Sections/Personal/Main';
-import HistoryPage from './components/Sections/Personal/History/HistoryPage';
-import LikesPage from './components/Sections/Personal/Like/LikesPage';
+import PersonalPage from './components/Sections/Personal/PersonalPage';
+import PlaylistMyContainer from './components/Pages/PlaylistMy/Container';
 
 const routes = [
   { path: '', component: HomePage, options: { ssrData: ssrDataLoaders.home } },
   { path: 'personal', component: Main },
-  { path: `personal/${MY_NAMESPACE_HISTORY}`, component: HistoryPage },
-  { path: `personal/${MY_NAMESPACE_LIKES}`, component: LikesPage },
+  { path: `personal/${MY_NAMESPACE_HISTORY}`, component: () => <PersonalPage namespace={MY_NAMESPACE_HISTORY} /> },
+  { path: `personal/${MY_NAMESPACE_LIKES}`, component: () => <PersonalPage namespace={MY_NAMESPACE_LIKES} /> },
+  { path: `personal/${MY_NAMESPACE_PLAYLISTS}`, component: () => <PersonalPage namespace={MY_NAMESPACE_PLAYLISTS} /> },
+  {
+    path: `personal/${MY_NAMESPACE_SUBSCRIPTIONS}`,
+    component: () => <PersonalPage namespace={MY_NAMESPACE_SUBSCRIPTIONS} />
+  },
+  { path: `personal/${MY_NAMESPACE_PLAYLISTS}/:id`, component: PlaylistMyContainer },
+
   { path: 'lessons', component: Lessons, options: { ssrData: ssrDataLoaders.lessonsPage } },
   { path: 'lessons/:tab', component: Lessons, options: { ssrData: ssrDataLoaders.lessonsPage } },
   {

@@ -20,7 +20,7 @@ const PlaylistWidget = ({ playlist, selected = 0, onSelectedChange, t, prevLink 
 
   return (
     <div id="avbox_playlist" className="avbox__playlist-wrapper">
-      { !isMobileDevice &&
+      { !isMobileDevice && collection &&
         <PlaylistHeader collection={collection} prevLink={prevLink} nextLink={nextLink} />
       }
       <div className="avbox__playlist-view">

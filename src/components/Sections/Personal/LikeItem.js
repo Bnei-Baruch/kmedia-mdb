@@ -1,13 +1,13 @@
 import { useDispatch } from 'react-redux';
-import { canonicalLink } from '../../../../helpers/links';
-import { imageByUnit } from '../../../../helpers/utils';
-import { actions } from '../../../../redux/modules/my';
-import { MY_NAMESPACE_LIKES } from '../../../../helpers/consts';
+import { canonicalLink } from '../../../helpers/links';
+import { imageByUnit } from '../../../helpers/utils';
+import { actions } from '../../../redux/modules/my';
+import { MY_NAMESPACE_LIKES } from '../../../helpers/consts';
 import { Button, Card, Header } from 'semantic-ui-react';
-import UnitLogo from '../../../shared/Logo/UnitLogo';
+import UnitLogo from '../../shared/Logo/UnitLogo';
 import React from 'react';
 
-export const LikeItem = ({ data: { item: like, mdbItem: unit }, t }) => {
+export const LikeItem = ({ data: { item: like, unit }, t }) => {
   const dispatch         = useDispatch();
   const link             = canonicalLink(unit);
   const canonicalSection = imageByUnit(unit, link);
@@ -24,7 +24,7 @@ export const LikeItem = ({ data: { item: like, mdbItem: unit }, t }) => {
       <UnitLogo width={512} unitId={unit.id} fallbackImg={canonicalSection} />
       <Card.Content>
         <Button floated="right" size="tiny" icon="remove" onClick={likeDislike} />
-        <Header size="tiny">{unit.name}</Header>
+        <Header size="medium" floated="left">{unit.name}</Header>
       </Card.Content>
       <Card.Content extra>
         <Card.Meta content={`${t('values.date', { date: unit.film_date })} - ${unit.name}`} />

@@ -3,10 +3,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Button, Checkbox, Icon, Input, Label, Menu, Modal } from 'semantic-ui-react';
 
 import * as shapes from '../../../../shapes';
-import { selectors as settings } from '../../../../../redux/modules/settings';
-import { getLanguageDirection } from '../../../../../helpers/i18n-utils';
 import { actions, selectors } from '../../../../../redux/modules/my';
 import { MY_NAMESPACE_PLAYLIST_ITEMS, MY_NAMESPACE_PLAYLISTS } from '../../../../../helpers/consts';
+import AlertModal from '../../../../shared/AlertModal';
 
 const PlaylistInfo = ({ unit = {}, t, user }) => {
   const [isOpen, setIsOpen]               = useState(false);
@@ -14,13 +13,15 @@ const PlaylistInfo = ({ unit = {}, t, user }) => {
   const [saved, setSaved]                 = useState([]);
   const [newPlaylist, setNewPlaylist]     = useState('');
   const [isNewPlaylist, setIsNewPlaylist] = useState(false);
+  const [alertOpen, setAlertOpen]         = useState(false);
+  const [alertMsg, setAlertMsg]           = useState();
 
   const dispatch = useDispatch();
 
   const playlists = useSelector(state => selectors.getItems(state.my, MY_NAMESPACE_PLAYLISTS));
 
   useEffect(() => {
-    const _saved = playlists.filter(p => p.playlist_items?.find(pi => pi.content_unit_uid === unit.id)).map(p => p.id);
+    const _saved = playlists.filter(p => p.items?.find(pi => pi.content_unit_uid === unit.id)).map(p => p.id);
     setSaved(_saved);
     const ids = isNewPlaylist ? playlists.filter(p => p.name === newPlaylist).map(p => p.id) : [];
     setSelected(selected.concat(ids, _saved));
@@ -49,9 +50,15 @@ const PlaylistInfo = ({ unit = {}, t, user }) => {
 
   const handleSaveNewPlaylist = () => {
     !!newPlaylist && dispatch(actions.add(MY_NAMESPACE_PLAYLISTS, { name: newPlaylist }));
+
+    setAlertMsg(t('personal.newPlaylistSuccessful'));
+    setAlertOpen(true);
   };
 
-  const toggle = () => setIsOpen(!isOpen);
+  const toggle = () => {
+    setSelected([]);
+    setIsOpen(!isOpen);
+  };
 
   const save = () => {
     const aIds = selected.filter(id => !saved.includes(id));
@@ -59,6 +66,14 @@ const PlaylistInfo = ({ unit = {}, t, user }) => {
     const dIds = saved.filter(id => !selected.includes(id));
     dIds.forEach(id => dispatch(actions.remove(MY_NAMESPACE_PLAYLIST_ITEMS, { id, uids: [unit.id] })));
     toggle();
+
+    setAlertMsg(t('personal.addToPlaylistSuccessful'));
+    setAlertOpen(true);
+  };
+
+  const onAlertCloseHandler = () => {
+    setAlertOpen(false);
+    setAlertMsg('');
   };
 
   const renderPlaylist = (p) => (
@@ -103,43 +118,46 @@ const PlaylistInfo = ({ unit = {}, t, user }) => {
     );
 
   return (
-    <Modal
-      closeIcon
-      open={isOpen}
-      onOpen={onOpen}
-      onClose={toggle}
-      size={'mini'}
-      trigger={
-        <Button className="dateButton" onClick={toggle}>
-          <Icon name='calendar alternate outline' />
-          {t('personal.savePlaylist')}
-        </Button>
-      }
-    >
-      <Modal.Header>{t('personal.savePlaylist')}</Modal.Header>
-      <Modal.Content>
-        <Menu vertical borderless fluid secondary>
-          {playlists.map(renderPlaylist)}
-        </Menu>
-        {
-          isNewPlaylist
-            ? (
-              <Input
-                type="text"
-                fluid
-                maxLength={30}
-                onChange={handleChangeNewPlaylist}
-                placeholder={t('personal.newPlaylistName')}
-              />
-            )
-            : <Menu.Item icon="plus" name={t('personal.newPlaylist')} onClick={handleAddPlaylist} />
+    <>
+      <AlertModal message={alertMsg} open={alertOpen} onClose={onAlertCloseHandler} />
+      <Modal
+        closeIcon
+        open={isOpen}
+        onOpen={onOpen}
+        onClose={toggle}
+        size={'mini'}
+        trigger={
+          <Button className="dateButton" onClick={toggle}>
+            <Icon name='calendar alternate outline' />
+            {t('personal.savePlaylist')}
+          </Button>
         }
+      >
+        <Modal.Header>{t('personal.savePlaylist')}</Modal.Header>
+        <Modal.Content>
+          <Menu vertical borderless fluid secondary>
+            {playlists.map(renderPlaylist)}
+          </Menu>
+          {
+            isNewPlaylist
+              ? (
+                <Input
+                  type="text"
+                  fluid
+                  maxLength={30}
+                  onChange={handleChangeNewPlaylist}
+                  placeholder={t('personal.newPlaylistName')}
+                />
+              )
+              : <Menu.Item icon="plus" name={t('personal.newPlaylist')} onClick={handleAddPlaylist} />
+          }
 
-      </Modal.Content>
-      <Modal.Actions>
-        {buttons}
-      </Modal.Actions>
-    </Modal>
+        </Modal.Content>
+        <Modal.Actions>
+          {buttons}
+        </Modal.Actions>
+      </Modal>
+    </>
   );
 };
 

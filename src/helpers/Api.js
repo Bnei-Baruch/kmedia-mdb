@@ -176,10 +176,20 @@ class Api {
     let urlParam = namespace;
     if (namespace === MY_NAMESPACE_PLAYLIST_ITEMS) {
       urlParam = `${MY_NAMESPACE_PLAYLISTS}/${params.id}/units`;
-      delete params.id
+      delete params.id;
+    }
+    if (method === 'PATCH') {
+      urlParam = `${namespace}/${params.id}`;
+      delete params.id;
     }
     const url = `${MY_BACKEND}rest/${urlParam}`;
     return Requests.auth(params, url, token, method);
+  };
+
+  static likeCount = (params) => {
+    const url    = `${MY_BACKEND}like_count?${Requests.makeParams(params)}`;
+    const config = { url, method: 'GET' };
+    return axios(config);
   };
 }
 

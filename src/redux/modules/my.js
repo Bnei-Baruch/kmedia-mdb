@@ -1,7 +1,7 @@
 import { createAction } from 'redux-actions';
 
 import { handleActions } from './settings';
-import { MY_NAMESPACES } from '../../helpers/consts';
+import { MY_NAMESPACE_LIKES, MY_NAMESPACES } from '../../helpers/consts';
 
 /* Types */
 const SET_PAGE = 'My/SET_PAGE';
@@ -13,8 +13,14 @@ const FETCH_FAILURE = 'My/FETCH_FAILURE';
 const ADD         = 'My/ADD';
 const ADD_SUCCESS = 'My/ADD_SUCCESS';
 
+const EDIT         = 'My/EDIT';
+const EDIT_SUCCESS = 'My/EDIT_SUCCESS';
+
 const REMOVE         = 'My/REMOVE';
 const REMOVE_SUCCESS = 'My/REMOVE_SUCCESS';
+
+const LIKE_COUNT         = 'My/LIKE_COUNT';
+const LIKE_COUNT_SUCCESS = 'My/LIKE_COUNT_SUCCESS';
 
 export const types = {
   SET_PAGE,
@@ -25,8 +31,14 @@ export const types = {
   ADD,
   ADD_SUCCESS,
 
+  EDIT,
+  EDIT_SUCCESS,
+
   REMOVE,
   REMOVE_SUCCESS,
+
+  LIKE_COUNT,
+  LIKE_COUNT_SUCCESS,
 };
 
 /* Actions */
@@ -40,8 +52,14 @@ const fetchFailure = createAction(FETCH_FAILURE);
 const add        = createAction(ADD, (namespace, params) => ({ namespace, ...params }));
 const addSuccess = createAction(ADD_SUCCESS);
 
+const edit        = createAction(EDIT, (namespace, params) => ({ namespace, ...params }));
+const editSuccess = createAction(EDIT_SUCCESS);
+
 const remove        = createAction(REMOVE, (namespace, params) => ({ namespace, ...params }));
 const removeSuccess = createAction(REMOVE_SUCCESS);
+
+const likeCount        = createAction(LIKE_COUNT);
+const likeCountSuccess = createAction(LIKE_COUNT_SUCCESS);
 
 export const actions = {
   setPage,
@@ -53,8 +71,14 @@ export const actions = {
   add,
   addSuccess,
 
+  edit,
+  editSuccess,
+
   remove,
   removeSuccess,
+
+  likeCount,
+  likeCountSuccess,
 
 };
 
@@ -67,7 +91,7 @@ const initialState = MY_NAMESPACES.reduce((acc, n) => {
     errors: null
   };
   return acc;
-}, {});
+}, { likeCount: 0 });
 
 const onSetPage = (draft, { namespace, pageNo }) => {
   draft[namespace].pageNo = pageNo;
@@ -99,6 +123,17 @@ const onAddSuccess = (draft, { namespace, items }) => {
   draft[namespace].total  = draft[namespace].total + items.length;
   draft[namespace].wip    = false;
   draft[namespace].errors = false;
+  if (namespace === MY_NAMESPACE_LIKES) ++draft.likeCount;
+  return draft;
+};
+
+const onEditSuccess = (draft, { namespace, item }) => {
+  const index = draft[namespace].items.findIndex(x => x.id === item.id);
+  if (index < 0) return draft;
+
+  draft[namespace].items[index] = item;
+  draft[namespace].wip          = false;
+  draft[namespace].errors       = false;
   return draft;
 };
 
@@ -107,6 +142,12 @@ const onRemoveSuccess = (draft, { namespace, ids }) => {
   draft[namespace].total  = draft[namespace].total - ids.length;
   draft[namespace].wip    = false;
   draft[namespace].errors = false;
+  if (namespace === MY_NAMESPACE_LIKES) --draft.likeCount;
+  return draft;
+};
+
+const onLikeCountSuccess = (draft, count) => {
+  draft.likeCount = count;
   return draft;
 };
 
@@ -118,15 +159,19 @@ export const reducer = handleActions({
   [FETCH_FAILURE]: onFetchFailure,
 
   [ADD_SUCCESS]: onAddSuccess,
+  [EDIT_SUCCESS]: onEditSuccess,
   [REMOVE_SUCCESS]: onRemoveSuccess,
+
+  [LIKE_COUNT_SUCCESS]: onLikeCountSuccess,
 }, initialState);
 
 /* Selectors */
-const getItems  = (state, namespace) => state[namespace].items;
-const getWIP    = (state, namespace) => state[namespace].wip;
-const getErr    = (state, namespace) => state[namespace].errors;
-const getPageNo = (state, namespace) => state[namespace].pageNo;
-const getTotal  = (state, namespace) => state[namespace].total;
+const getItems     = (state, namespace) => state[namespace].items;
+const getWIP       = (state, namespace) => state[namespace].wip;
+const getErr       = (state, namespace) => state[namespace].errors;
+const getPageNo    = (state, namespace) => state[namespace].pageNo;
+const getTotal     = (state, namespace) => state[namespace].total;
+const getLikeCount = state => state.likeCount;
 
 export const selectors = {
   getItems,
@@ -135,4 +180,5 @@ export const selectors = {
   getPageNo,
   setPage,
   getTotal,
+  getLikeCount,
 };

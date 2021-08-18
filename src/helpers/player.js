@@ -185,6 +185,18 @@ const playlist = (collection, mediaType, contentLanguage, uiLanguage) => {
   };
 };
 
+const playlistFromUnits = (units, mediaType, contentLanguage, uiLanguage) => {
+  const items = units
+    .map(x => playableItem(x, mediaType, uiLanguage, contentLanguage))
+    .filter(item => !!item.unit)
+    .map(x => {
+      x.shareUrl = canonicalLink(x.unit);
+      return x;
+    });
+
+  return { items };
+};
+
 const getMediaTypeFromQuery = (location, defaultMediaType) => {
   const query = getQuery(location);
   const mt    = (query.mediaType || '').toLowerCase();
@@ -240,6 +252,7 @@ const switchAV = (selectedItem, history) => {
 const exportMethods = {
   playableItem,
   playlist,
+  playlistFromUnits,
   getMediaTypeFromQuery,
   setMediaTypeInQuery,
   getLanguageFromQuery,
