@@ -41,8 +41,8 @@ export const initKC = (dispatch) => {
       }
     };
     return keycloak.init({
-      //onLoad: 'check-sso',
-     // checkLoginIframe: true,
+      onLoad: 'check-sso',
+      checkLoginIframe: false,
       flow: 'standard',
       pkceMethod: 'S256',
     }).then((ok) => {
@@ -53,8 +53,11 @@ export const initKC = (dispatch) => {
   });
 };
 if (typeof window !== 'undefined') {
-
-  login = () => keycloak.login({ redirectUri: window.location.href/*, locale: kcLocale(this.props.i18n.language)*/ });
+  login = () => keycloak.login({
+    redirectUri: window.location.href,
+    //scope: 'offline_access',
+    // locale: kcLocale(this.props.i18n.language)
+  });
 
   logout = () => {
     keycloak.logout();

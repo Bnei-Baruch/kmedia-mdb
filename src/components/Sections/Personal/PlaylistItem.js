@@ -47,17 +47,18 @@ export const PlaylistItem = ({ data: { item: playlist, unit }, t }) => {
               </Table.Cell>
             </Table.Row>
           </Table>
-          <UnitLogo width="100%" unitId={unit.id} fallbackImg={canonicalSection} />
+          <UnitLogo unitId={unit.id} fallbackImg={canonicalSection} />
         </div>
       </>
       <Card.Content>
+        <Button color="red" floated={'right'} size={'tiny'} icon={'remove'} onClick={remove} />
         <Modal
           closeIcon
           onClose={toggle}
           onOpen={onOpen}
           open={isEdit}
           size={'mini'}
-          trigger={<Button floated={'right'} size={'tiny'} icon={'edit'} onClick={edit} />}
+          trigger={<Button primary floated={'right'} size={'tiny'} icon={'edit'} onClick={edit} />}
         >
           <Modal.Header>{t('personal.editPlaylist')}</Modal.Header>
           <Modal.Content>
@@ -75,7 +76,7 @@ export const PlaylistItem = ({ data: { item: playlist, unit }, t }) => {
           <Modal.Actions>
             <Button
               primary
-              content={t('buttons.apply')}
+              content={t('buttons.save')}
               onClick={save}
             />
             <Button
@@ -85,21 +86,15 @@ export const PlaylistItem = ({ data: { item: playlist, unit }, t }) => {
             />
           </Modal.Actions>
         </Modal>
-
-        <Button floated={'right'} size={'tiny'} icon={'remove'} onClick={remove} />
-        <Header size="medium" floated="left">{playlist.name}</Header>
+        <Header size="medium" floated="left"  className="no-margin-top">{playlist.name}</Header>
       </Card.Content>
       <Card.Content extra textAlign="center">
-        <Link
-          to={`/personal/${MY_NAMESPACE_PLAYLISTS}/${playlist.id}`}
-          className="avbox__playlist-next-button"
-          title={t('buttons.next')}
-        >
+        <Link to={`/personal/${MY_NAMESPACE_PLAYLISTS}/${playlist.id}`}>
           <Button
             basic
+            primary
             size="large"
             content={t('personal.playlistPlay')}
-            onClick={remove}
             color={'grey'}
           />
         </Link>

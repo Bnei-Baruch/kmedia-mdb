@@ -475,3 +475,17 @@ export const CT_SUBSCRIBE_BY_COLLECTION = [
   CT_KTAIM_NIVCHARIM,
   CT_LIKUTIM,
 ];
+
+export const SECTIONS_LINK_BY_CU_CONTENT_TYPE = {
+  [CT_LESSON_PART]: 'lessons/daily',
+  [CT_VIRTUAL_LESSON]: 'lessons/virtual',
+  [CT_LECTURE]: 'lessons/lectures',
+  [CT_WOMEN_LESSON]: 'lessons/women',
+  [CT_VIDEO_PROGRAM_CHAPTER]: 'programs/main',
+  [CT_CLIP]: 'programs/clips',
+  [CT_FRIENDS_GATHERING]: 'events/friends-gatherings',
+  [CT_MEAL]: 'events/meals',
+  [CT_BLOG_POST]: 'publications/blog',
+  [SCT_TWEET]: 'publications/twitter',
+  [CT_ARTICLE]: 'publications/articles',
+};

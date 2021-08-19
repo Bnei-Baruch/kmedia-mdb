@@ -114,7 +114,8 @@
     "previous": "Previous",
     "next": "Next",
     "copy": "Copy",
-    "view-all": "View All"
+    "view-all": "View All",
+    "save": "Save"
   },
   "player": {
     "messages": {
@@ -604,5 +605,29 @@
     "copy-link": "Copy link",
     "copy-text": "Copy text",
     "disable-share": "Cancel"
+  },
+  "personal": {
+    "viewedAt": "Last time viewed at",
+    "subsNewUnits": "From last view was added",
+    "unsubscribe": "Unsubscribe",
+    "subscribe": "Subscribe",
+    "unsubscribeSuccessful": "You was unsubscribe successful",
+    "subscribeSuccessful": "You was subscribe successful",
+    "newPlaylistSuccessful": "New play list {{name}} was successfully created",
+    "addToPlaylistSuccessful": "Unit was added to play list {{name}} successfully",
+    "history": "You History",
+    "likes": "You Likes",
+    "playlists": "You Playlists",
+    "subscriptions": "You Subscriptions",
+    "playlistPlay": "Play playlist",
+    "savePlaylist": "Save playlist",
+    "addToPlaylist": "Add to playlist",
+    "newPlaylistName": "New playlist name",
+    "newPlaylist": "Create new playlist",
+    "editPlaylist": "Edit playlist",
+    "removedHistory": "History {{name}} was remove successfully",
+    "removedLike": "Like {{name}} was remove successfully",
+    "removedPlaylist": "Playlist {{name}} was remove successfully",
+    "removedSubscribe": "Subscribe {{name}} was remove successfully"
   }
 }

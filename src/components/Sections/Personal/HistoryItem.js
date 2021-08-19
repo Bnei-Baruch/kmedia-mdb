@@ -6,6 +6,7 @@ import { MY_NAMESPACE_HISTORY } from '../../../helpers/consts';
 import { Button, Card, Header } from 'semantic-ui-react';
 import UnitLogo from '../../shared/Logo/UnitLogo';
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 export const HistoryItem = ({ data: { item: history, unit }, t }) => {
   const dispatch         = useDispatch();
@@ -18,9 +19,13 @@ export const HistoryItem = ({ data: { item: history, unit }, t }) => {
     <Card raised>
       <UnitLogo width={512} unitId={unit.id} fallbackImg={canonicalSection} />
       <Card.Content>
-        <Button floated={'right'} size={'tiny'} icon={'remove'} onClick={remove} />
-        <Card.Meta content={`${t('values.date', { date: unit.film_date })} - ${t('constants.content-types.' + unit.content_type)}`} />
-        <Header size="tiny" floated="left">{unit.name}</Header>
+        <Button floated={'right'} size={'tiny'} icon={'remove'} onClick={remove} color="red" />
+        <Header size="medium" className="no-margin-top">
+          <Link to={link}>
+            {unit.name}
+          </Link>
+        </Header>
+        <Card.Description content={`${t('values.date', { date: unit.film_date })} - ${t('constants.content-types.' + unit.content_type)}`} />
       </Card.Content>
       <Card.Content extra>
         <Card.Meta content={`${t('personal.viewedAt')} - ${t('values.date', { date: history.created_at })}`} />

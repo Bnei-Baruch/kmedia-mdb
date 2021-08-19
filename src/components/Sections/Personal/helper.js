@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Card, Container, Button, Grid } from 'semantic-ui-react';
 
@@ -19,6 +19,7 @@ import { HistoryItem } from './HistoryItem';
 import { LikeItem } from './LikeItem';
 import { PlaylistItem } from './PlaylistItem';
 import { SubscriptionsItem } from './SubscriptionsItem';
+import AlertModal from '../../shared/AlertModal';
 
 const Template = ({ children, namespace, t, withSeeAll = false }) => {
   const itemsPerRow = 4;
@@ -71,10 +72,8 @@ const ItemsByNamespace = ({ pageSize = 8, pageNo = 1, t, namespace, withSeeAll }
     return { unit, item };
   };
   const denormSubscribtions = (state, item) => {
-    const unit       = mdb.getDenormContentUnit(state.mdb, item.content_unit_uid);
     const collection = mdb.getDenormCollection(state.mdb, item.collection_uid);
-
-    return { unit, item, collection };
+    return { item, collection };
   };
   const denormPlaylist      = (state, item) => {
     const cuid = item.items?.[0]?.content_unit_uid;
@@ -105,16 +104,16 @@ const ItemsByNamespace = ({ pageSize = 8, pageNo = 1, t, namespace, withSeeAll }
 
   switch (namespace) {
   case MY_NAMESPACE_HISTORY:
-    children = items.map(d => <HistoryItem data={d} key={d.unit.id} t={t} />);
+    children = items.map(d => <HistoryItem data={d} key={`${namespace}_${d.item.id}`} t={t} />);
     break;
   case MY_NAMESPACE_LIKES:
-    children = items.map(d => <LikeItem data={d} key={d.unit.id} t={t} />);
+    children = items.map(d => <LikeItem data={d} key={`${namespace}_${d.item.id}`} t={t} />);
     break;
   case MY_NAMESPACE_PLAYLISTS:
-    children = items.map(d => <PlaylistItem data={d} key={d.unit.id} t={t} />);
+    children = items.map(d => <PlaylistItem data={d} key={`${namespace}_${d.item.id}`} t={t} />);
     break;
   case MY_NAMESPACE_SUBSCRIPTIONS:
-    children = items.map(d => <SubscriptionsItem data={d} key={d.unit.id} t={t} />);
+    children = items.map(d => <SubscriptionsItem data={d} key={`${namespace}_${d.item.id}`} t={t} />);
     break;
   default:
     break;
@@ -124,3 +123,27 @@ const ItemsByNamespace = ({ pageSize = 8, pageNo = 1, t, namespace, withSeeAll }
 };
 
 export default withNamespaces()(ItemsByNamespace);
+
+export const RemoveBtn = (remove, message) => {
+  const [alertOpen, setAlertOpen] = useState(false);
+  const [alertMsg, setAlertMsg]   = useState(message);
+
+  const onAlertCloseHandler = () => {
+    remove();
+    setAlertOpen(false);
+    setAlertMsg('');
+  };
+
+  return (
+    <>
+      <AlertModal message={alertMsg} open={alertOpen} onClose={onAlertCloseHandler} />
+      <Button
+        floated={'right'}
+        size={'tiny'}
+        icon={'remove'}
+        onClick={remove}
+        color="red"
+      />
+    </>
+  );
+};

@@ -86,7 +86,7 @@ const PersonalInfo = ({ unit = {}, t, collection }) => {
       primary
       size={'tiny'}
       onClick={() => subsUnsubs(sub)}
-      content={t(`personal.${!sub ? 'subcribe' : 'unsubcribe'}`)}
+      content={t(`personal.${!sub ? 'subscribe' : 'unsubscribe'}`)}
     />) : null;
 
   return (

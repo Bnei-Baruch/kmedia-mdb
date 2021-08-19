@@ -110,6 +110,8 @@ class Api {
     Requests.get(`stats/cu_class?${Requests.makeParams({ content_type, ...rest })}`)
   );
 
+  static countCU = (params) => Requests.get(`count_cu?${Requests.makeParams(params)}`);
+
   static tweets = ({ pageNo: page_no, pageSize: page_size, ...rest }) => (
     Requests.get(`tweets?${Requests.makeParams({ page_no, page_size, ...rest })}`)
   );

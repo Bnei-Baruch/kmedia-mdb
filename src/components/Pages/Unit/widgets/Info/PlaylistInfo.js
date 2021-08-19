@@ -51,7 +51,7 @@ const PlaylistInfo = ({ unit = {}, t, user }) => {
   const handleSaveNewPlaylist = () => {
     !!newPlaylist && dispatch(actions.add(MY_NAMESPACE_PLAYLISTS, { name: newPlaylist }));
 
-    setAlertMsg(t('personal.newPlaylistSuccessful'));
+    setAlertMsg(t('personal.newPlaylistSuccessful', { name: newPlaylist }));
     setAlertOpen(true);
   };
 
@@ -92,7 +92,7 @@ const PlaylistInfo = ({ unit = {}, t, user }) => {
       <>
         <Button
           primary
-          content={t('buttons.create')}
+          content={t('buttons.save')}
           onClick={handleSaveNewPlaylist}
         />
         <Button
@@ -106,7 +106,7 @@ const PlaylistInfo = ({ unit = {}, t, user }) => {
       <>
         <Button
           primary
-          content={t('buttons.apply')}
+          content={t('buttons.save')}
           onClick={save}
         />
         <Button
@@ -133,7 +133,7 @@ const PlaylistInfo = ({ unit = {}, t, user }) => {
           </Button>
         }
       >
-        <Modal.Header>{t('personal.savePlaylist')}</Modal.Header>
+        <Modal.Header>{t('personal.addToPlaylist')}</Modal.Header>
         <Modal.Content>
           <Menu vertical borderless fluid secondary>
             {playlists.map(renderPlaylist)}

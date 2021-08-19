@@ -42,7 +42,6 @@ function* fetch(action) {
       break;
     case MY_NAMESPACE_SUBSCRIPTIONS:
       co_uids = data.items?.filter(s => s.collection_uid).map(s => s.collection_uid) || [];
-      cu_uids = data.items?.filter(s => s.content_type && s.content_unit_uid).map(s => s.content_unit_uid) || [];
       break;
     }
 
@@ -84,7 +83,7 @@ function* remove(action) {
   const token                    = yield select(state => authSelectors.getToken(state.auth));
   const { namespace, ...params } = action.payload;
   try {
-    const { data } = yield call(Api.my, namespace, params, token, 'DELETE');
+    yield call(Api.my, namespace, params, token, 'DELETE');
     yield put(actions.removeSuccess({ namespace, ...params }));
   } catch (err) {
 
