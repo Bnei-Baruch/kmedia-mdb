@@ -42,7 +42,7 @@ export const PlaylistItem = ({ data: { item: playlist, unit }, t }) => {
           <Table className="over_layer">
             <Table.Row>
               <Table.Cell verticalAlign="middle" textAlign="center">
-                <h2>{playlist.items?.length || 0}</h2>
+                <h2>{playlist.count || 0}</h2>
                 <Icon name="list" size="big" />
               </Table.Cell>
             </Table.Row>

@@ -12,9 +12,11 @@ import { selectors as settings } from '../../../redux/modules/settings';
 import AVPlaylistPlayer from '../../AVPlayer/AVPlaylistPlayer';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import * as PropTypes from 'prop-types';
-import { selectors as mdbSelectors } from '../../../redux/modules/mdb';
 
-const PlaylistMyPage = ({ pId, playlistItems }) => {
+import Info from '../Unit/widgets/Info/Info';
+import PlaylistHeader from '../PlaylistCollection/widgets/Playlist/PlaylistHeader';
+
+const PlaylistMyPage = ({ collection, nextLink = null, prevLink = null, cuId }) => {
   const location           = useLocation();
   const history            = useHistory();
   const { isMobileDevice } = useContext(DeviceInfoContext);
@@ -27,7 +29,6 @@ const PlaylistMyPage = ({ pId, playlistItems }) => {
   const [selected, setSelected] = useState();
   const [playlist, setPlaylist] = useState(null);
 
-  const units = useSelector(state => playlistItems.map(x => mdbSelectors.getDenormContentUnit(state.mdb, x.content_unit_uid)));
 
   const handleSelectedChange = useCallback(nSelected => {
     if (nSelected !== selected) {
@@ -57,9 +58,9 @@ const PlaylistMyPage = ({ pId, playlistItems }) => {
     const uiLang         = playlist?.language || uiLanguage;
     const contentLang    = playerHelper.getLanguageFromQuery(location, playerLanguage);
 
-    const nPlaylist = playerHelper.playlistFromUnits(units, mediaType, contentLang, uiLang);
+    const nPlaylist = playerHelper.playlist(collection, mediaType, contentLang, uiLang);
     setPlaylist(nPlaylist);
-  }, [contentLanguage, location, playlist?.language, uiLanguage, pId]);
+  }, [collection, contentLanguage, location, playlist?.language, uiLanguage, cuId]);
 
   useEffect(() => {
     let nSelected = playerHelper.getActivePartFromQuery(location);
@@ -75,6 +76,10 @@ const PlaylistMyPage = ({ pId, playlistItems }) => {
     const newUnit = playlist?.items[selected]?.unit;
     setUnit(newUnit);
   }, [playlist, selected]);
+
+  if (!collection || !Array.isArray(collection.content_units)) {
+    return null;
+  }
 
   if (!playlist || !unit) {
     return null;
@@ -107,8 +112,14 @@ const PlaylistMyPage = ({ pId, playlistItems }) => {
           {
             unit &&
             <>
+              {isMobileDevice &&
+              <div id="avbox_playlist">
+                <PlaylistHeader collection={collection} prevLink={prevLink} nextLink={nextLink} />
+              </div>
+              }
               <Container id="unit_container">
                 <Helmets.AVUnit unit={unit} language={uiLanguage} />
+                <Info unit={unit} currentCollection={collection} />
                 <Materials unit={unit} playlistComponent={PlaylistData} />
               </Container>
             </>

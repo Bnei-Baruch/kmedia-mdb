@@ -446,7 +446,8 @@ export const SCROLL_SEARCH_ID = '__scrollSearchToHere__';
 export const MY_NAMESPACE_HISTORY        = 'history';
 export const MY_NAMESPACE_LIKES          = 'likes';
 export const MY_NAMESPACE_PLAYLISTS      = 'playlists';
-export const MY_NAMESPACE_PLAYLIST_ITEMS = 'playlists_items';
+export const MY_NAMESPACE_PLAYLIST_BY_ID = 'playlists_by_id';
+export const MY_NAMESPACE_PLAYLIST_ITEMS = 'playlist_items';
 export const MY_NAMESPACE_SUBSCRIPTIONS  = 'subscriptions';
 
 export const MY_NAMESPACES = [MY_NAMESPACE_HISTORY, MY_NAMESPACE_LIKES, MY_NAMESPACE_PLAYLISTS, MY_NAMESPACE_PLAYLIST_ITEMS, MY_NAMESPACE_SUBSCRIPTIONS];

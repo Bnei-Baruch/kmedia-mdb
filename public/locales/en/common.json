@@ -618,6 +618,7 @@
     "history": "You History",
     "likes": "You Likes",
     "playlists": "You Playlists",
+    "playlistNoResult": "Playlist {{name}} have not any video",
     "subscriptions": "You Subscriptions",
     "playlistPlay": "Play playlist",
     "savePlaylist": "Save playlist",

@@ -1,12 +1,18 @@
 import { createAction } from 'redux-actions';
 
 import { handleActions } from './settings';
-import { MY_NAMESPACE_LIKES, MY_NAMESPACES } from '../../helpers/consts';
+import {
+  MY_NAMESPACE_LIKES,
+  MY_NAMESPACE_PLAYLIST_BY_ID,
+  MY_NAMESPACE_PLAYLISTS,
+  MY_NAMESPACES
+} from '../../helpers/consts';
 
 /* Types */
 const SET_PAGE = 'My/SET_PAGE';
 
 const FETCH         = 'My/FETCH';
+const FETCH_BY_ID   = 'My/FETCH_BY_ID';
 const FETCH_SUCCESS = 'My/FETCH_SUCCESS';
 const FETCH_FAILURE = 'My/FETCH_FAILURE';
 
@@ -24,7 +30,9 @@ const LIKE_COUNT_SUCCESS = 'My/LIKE_COUNT_SUCCESS';
 
 export const types = {
   SET_PAGE,
+
   FETCH,
+  FETCH_BY_ID,
   FETCH_SUCCESS,
   FETCH_FAILURE,
 
@@ -46,6 +54,7 @@ export const types = {
 const setPage = createAction(SET_PAGE, (namespace, pageNo) => ({ namespace, pageNo }));
 
 const fetch        = createAction(FETCH, (namespace, params) => ({ namespace, ...params }));
+const fetchById    = createAction(FETCH_BY_ID, (namespace, params) => ({ namespace, ...params }));
 const fetchSuccess = createAction(FETCH_SUCCESS);
 const fetchFailure = createAction(FETCH_FAILURE);
 
@@ -65,6 +74,7 @@ export const actions = {
   setPage,
 
   fetch,
+  fetchById,
   fetchSuccess,
   fetchFailure,
 
@@ -91,22 +101,26 @@ const initialState = MY_NAMESPACES.reduce((acc, n) => {
     errors: null
   };
   return acc;
-}, { likeCount: 0 });
+}, { likeCount: 0, [MY_NAMESPACE_PLAYLIST_BY_ID]: { byID: {} } });
 
 const onSetPage = (draft, { namespace, pageNo }) => {
   draft[namespace].pageNo = pageNo;
 };
 
 const onFetch = (draft, { namespace }) => {
+  draft[namespace].total  = 0;
   draft[namespace].wip    = true;
   draft[namespace].errors = false;
-  draft[namespace].total  = 0;
   return draft;
 };
 
 const onFetchSuccess = (draft, { namespace, items = [], total }) => {
-  draft[namespace].items  = items || [];
-  draft[namespace].total  = total;
+  if (namespace === MY_NAMESPACE_PLAYLIST_BY_ID) {
+    items.forEach(x => draft[MY_NAMESPACE_PLAYLIST_BY_ID].byID[x.id] = x);
+  } else {
+    draft[namespace].items = items || [];
+    draft[namespace].total = total;
+  }
   draft[namespace].wip    = false;
   draft[namespace].errors = false;
   return draft;
@@ -128,8 +142,11 @@ const onAddSuccess = (draft, { namespace, items }) => {
 };
 
 const onEditSuccess = (draft, { namespace, item }) => {
-  const index = draft[namespace].items.findIndex(x => x.id === item.id);
-  if (index < 0) return draft;
+  let index = draft[namespace].items.findIndex(x => x.id === item.id);
+  if (index < 0) index = draft[namespace].items.length;
+
+  if (namespace === MY_NAMESPACE_PLAYLISTS)
+    draft[MY_NAMESPACE_PLAYLIST_BY_ID].byID[item.id] = item;
 
   draft[namespace].items[index] = item;
   draft[namespace].wip          = false;
@@ -155,6 +172,7 @@ export const reducer = handleActions({
   [SET_PAGE]: onSetPage,
 
   [FETCH]: onFetch,
+  [FETCH_BY_ID]: onFetch,
   [FETCH_SUCCESS]: onFetchSuccess,
   [FETCH_FAILURE]: onFetchFailure,
 
@@ -166,15 +184,19 @@ export const reducer = handleActions({
 }, initialState);
 
 /* Selectors */
-const getItems     = (state, namespace) => state[namespace].items;
-const getWIP       = (state, namespace) => state[namespace].wip;
-const getErr       = (state, namespace) => state[namespace].errors;
-const getPageNo    = (state, namespace) => state[namespace].pageNo;
-const getTotal     = (state, namespace) => state[namespace].total;
-const getLikeCount = state => state.likeCount;
+const getItems        = (state, namespace) => {
+  return state[namespace].items;
+};
+const getPlaylistById = (state, id) => state[MY_NAMESPACE_PLAYLIST_BY_ID].byID[id];
+const getWIP          = (state, namespace) => state[namespace].wip;
+const getErr          = (state, namespace) => state[namespace].errors;
+const getPageNo       = (state, namespace) => state[namespace].pageNo;
+const getTotal        = (state, namespace) => state[namespace].total;
+const getLikeCount    = state => state.likeCount;
 
 export const selectors = {
   getItems,
+  getPlaylistById,
   getWIP,
   getErr,
   getPageNo,

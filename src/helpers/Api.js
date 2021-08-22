@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { MY_NAMESPACE_PLAYLIST_ITEMS, MY_NAMESPACE_PLAYLISTS } from './consts';
+import { MY_NAMESPACE_PLAYLIST_BY_ID, MY_NAMESPACE_PLAYLISTS } from './consts';
 
 const API_BACKEND             = process.env.REACT_APP_API_BACKEND;
 const ASSETS_BACKEND          = process.env.REACT_APP_ASSETS_BACKEND;
@@ -176,12 +176,10 @@ class Api {
 
   static my = (namespace, params, token, method) => {
     let urlParam = namespace;
-    if (namespace === MY_NAMESPACE_PLAYLIST_ITEMS) {
-      urlParam = `${MY_NAMESPACE_PLAYLISTS}/${params.id}/units`;
-      delete params.id;
-    }
-    if (method === 'PATCH') {
-      urlParam = `${namespace}/${params.id}`;
+    if (namespace === MY_NAMESPACE_PLAYLIST_BY_ID) urlParam = MY_NAMESPACE_PLAYLISTS;
+
+    if (params.id) {
+      urlParam = `${urlParam}/${params.id}`;
       delete params.id;
     }
     const url = `${MY_BACKEND}rest/${urlParam}`;

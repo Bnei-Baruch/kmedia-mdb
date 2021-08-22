@@ -7,6 +7,7 @@ import { actions as mdbActions } from '../redux/modules/mdb';
 import {
   MY_NAMESPACE_HISTORY,
   MY_NAMESPACE_LIKES,
+  MY_NAMESPACE_PLAYLIST_BY_ID,
   MY_NAMESPACE_PLAYLIST_ITEMS,
   MY_NAMESPACE_PLAYLISTS,
   MY_NAMESPACE_SUBSCRIPTIONS
@@ -33,12 +34,16 @@ function* fetch(action) {
     switch (namespace) {
     case MY_NAMESPACE_HISTORY:
     case MY_NAMESPACE_LIKES:
+      cu_uids = data.items?.map(x => x.content_unit_uid) || [];
+      break;
     case MY_NAMESPACE_PLAYLIST_ITEMS:
       cu_uids    = data.items?.map(x => x.content_unit_uid) || [];
       with_files = true;
       break;
     case MY_NAMESPACE_PLAYLISTS:
-      cu_uids = data.items?.filter(p => p.items?.[0]).map(p => p.items[0].content_unit_uid) || [];
+      cu_uids = data.items?.filter(p => p.playlist_items).reduce((acc, p) => {
+        return acc.concat(p.playlist_items.flatMap(x => x.content_unit_uid));
+      }, []);
       break;
     case MY_NAMESPACE_SUBSCRIPTIONS:
       co_uids = data.items?.filter(s => s.collection_uid).map(s => s.collection_uid) || [];
@@ -54,6 +59,34 @@ function* fetch(action) {
       yield put(mdbActions.receiveCollections(collections));
     }
     yield put(actions.fetchSuccess({ namespace, ...data }));
+  } catch (err) {
+    yield put(actions.fetchFailure({ namespace, ...err }));
+  }
+}
+
+function* fetchById(action) {
+  const { namespace, ...params } = action.payload;
+  if (!params?.id) return;
+  const token = yield select(state => authSelectors.getToken(state.auth));
+  try {
+    const { data } = yield call(Api.my, namespace, params, token);
+
+    let cu_uids = [];
+    switch (namespace) {
+    case MY_NAMESPACE_PLAYLIST_BY_ID:
+      cu_uids = data.playlist_items?.map(x => x.content_unit_uid) || [];
+      break;
+    }
+
+    if (cu_uids.length > 0) {
+      const { data: { content_units } } = yield call(Api.units, {
+        id: cu_uids,
+        pageSize: cu_uids.length,
+        with_files: true
+      });
+      yield put(mdbActions.receiveContentUnits(content_units));
+    }
+    yield put(actions.fetchSuccess({ namespace, items: [data] }));
   } catch (err) {
     yield put(actions.fetchFailure({ namespace, ...err }));
   }
@@ -107,6 +140,10 @@ function* watchFetch() {
   yield takeEvery(types.FETCH, fetch);
 }
 
+function* watchFetchById() {
+  yield takeEvery(types.FETCH_BY_ID, fetchById);
+}
+
 function* watchAdd() {
   yield takeEvery(types.ADD, add);
 }
@@ -126,6 +163,7 @@ function* watchLikeCount() {
 export const sagas = [
   watchSetPage,
   watchFetch,
+  watchFetchById,
   watchAdd,
   watchEdit,
   watchRemove,

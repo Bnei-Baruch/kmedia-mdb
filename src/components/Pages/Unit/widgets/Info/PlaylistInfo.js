@@ -18,18 +18,22 @@ const PlaylistInfo = ({ unit = {}, t, user }) => {
 
   const dispatch = useDispatch();
 
-  const playlists = useSelector(state => selectors.getItems(state.my, MY_NAMESPACE_PLAYLISTS));
+  const playlists     = useSelector(state => selectors.getItems(state.my, MY_NAMESPACE_PLAYLISTS));
+  const playlistItems = useSelector(state => selectors.getItems(state.my, MY_NAMESPACE_PLAYLIST_ITEMS));
 
   useEffect(() => {
-    const _saved = playlists.filter(p => p.items?.find(pi => pi.content_unit_uid === unit.id)).map(p => p.id);
+    const _saved = playlistItems.filter(pi => pi.content_unit_uid === unit.id).map(p => p.playlist_id);
     setSaved(_saved);
     const ids = isNewPlaylist ? playlists.filter(p => p.name === newPlaylist).map(p => p.id) : [];
     setSelected(selected.concat(ids, _saved));
     setNewPlaylist('');
     setIsNewPlaylist(false);
-  }, [playlists]);
+  }, [playlists, playlistItems]);
 
-  const onOpen = () => dispatch(actions.fetch(MY_NAMESPACE_PLAYLISTS, { page_no: 1, page_size: 100 }));
+  const onOpen = () => {
+    dispatch(actions.fetch(MY_NAMESPACE_PLAYLISTS, { page_no: 1, page_size: 100 }));
+    dispatch(actions.fetch(MY_NAMESPACE_PLAYLIST_ITEMS, { uids: [unit.id] }));
+  };
 
   const handleChange = (e, d) => {
     if (d.checked) {
@@ -62,7 +66,7 @@ const PlaylistInfo = ({ unit = {}, t, user }) => {
 
   const save = () => {
     const aIds = selected.filter(id => !saved.includes(id));
-    aIds.forEach(id => dispatch(actions.add(MY_NAMESPACE_PLAYLIST_ITEMS, { id, uids: [unit.id] })));
+    aIds.forEach(id => dispatch(actions.add(MY_NAMESPACE_PLAYLISTS, { id, uids: [unit.id] })));
     const dIds = saved.filter(id => !selected.includes(id));
     dIds.forEach(id => dispatch(actions.remove(MY_NAMESPACE_PLAYLIST_ITEMS, { id, uids: [unit.id] })));
     toggle();

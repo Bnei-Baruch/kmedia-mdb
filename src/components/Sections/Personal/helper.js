@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Card, Container, Button, Grid } from 'semantic-ui-react';
+import { Card, Container, Button, Grid, Header } from 'semantic-ui-react';
 
 import * as shapes from '../../shapes';
 import { withNamespaces } from 'react-i18next';
@@ -71,12 +71,12 @@ const ItemsByNamespace = ({ pageSize = 8, pageNo = 1, t, namespace, withSeeAll }
     const unit = mdb.getDenormContentUnit(state.mdb, item.content_unit_uid);
     return { unit, item };
   };
-  const denormSubscribtions = (state, item) => {
+  const denormSubscriptions = (state, item) => {
     const collection = mdb.getDenormCollection(state.mdb, item.collection_uid);
     return { item, collection };
   };
   const denormPlaylist      = (state, item) => {
-    const cuid = item.items?.[0]?.content_unit_uid;
+    const cuid = item.playlist_items?.[0]?.content_unit_uid;
     const unit = cuid ? mdb.getDenormContentUnit(state.mdb, cuid) : {};
     return { unit, item };
   };
@@ -89,7 +89,7 @@ const ItemsByNamespace = ({ pageSize = 8, pageNo = 1, t, namespace, withSeeAll }
       case MY_NAMESPACE_HISTORY:
         return denormLikesHistory(state, x);
       case MY_NAMESPACE_SUBSCRIPTIONS:
-        return denormSubscribtions(state, x);
+        return denormSubscriptions(state, x);
       case MY_NAMESPACE_PLAYLISTS:
         return denormPlaylist(state, x);
       }
@@ -99,7 +99,8 @@ const ItemsByNamespace = ({ pageSize = 8, pageNo = 1, t, namespace, withSeeAll }
 
   const items = useSelector(denormItems(hs));
 
-  if (wip || err || items.length === 0) return WipErr({ wip, err, t });
+  if (wip || err) return WipErr({ wip, err, t });
+  if (items.length === 0) return null;
   let children = null;
 
   switch (namespace) {
