@@ -2,23 +2,23 @@
 // See TimedPopup.js, solves existing bug:
 // https://github.com/Semantic-Org/Semantic-UI-React/issues/1065
 // .popup {
-  // background: #fff;
-  // border: 1px solid #d4d4d5;
-  // border-radius: .28571429rem;
-  // box-shadow: 1px 1px 0 0 #bababc;
-  // color: rgba(0, 0, 0, .87);
-  // font-style: normal;
-  // font-weight: 400;
-  // line-height: 1.4285em;
-  // margin: 0 0 .71428571em;
-  // max-width: 250px;
-  // padding: .833em 1em;
-  // z-index: 1900;
+// background: #fff;
+// border: 1px solid #d4d4d5;
+// border-radius: .28571429rem;
+// box-shadow: 1px 1px 0 0 #bababc;
+// color: rgba(0, 0, 0, .87);
+// font-style: normal;
+// font-weight: 400;
+// line-height: 1.4285em;
+// margin: 0 0 .71428571em;
+// max-width: 250px;
+// padding: .833em 1em;
+// z-index: 1900;
 
-  // .content {
-    // text-align: center;
-    // width: 200px;
-  // }
+// .content {
+// text-align: center;
+// width: 200px;
+// }
 // }
 
 .search-omnibox {
@@ -366,8 +366,10 @@
       margin: 0 .25rem;
     }
   }
+
   .message-mobile {
     max-width: 200px;
+
     .content {
       overflow: hidden;
     }
@@ -1155,6 +1157,7 @@
 .dropdown-language-selector * {
   line-height: 1;
 }
+
 .dropdown-language-selector.blink, .blink {
   box-shadow: 0 0 0 6px #7dcff5 inset;
   animation: dropdown-blink .8s ease-in-out;
@@ -1583,11 +1586,11 @@
 }
 
 .library__languagesContainer {
-  height:50px;
+  height: 50px;
 
   .languages {
-    display:block;
-    float:left;
+    display: block;
+    float: left;
   }
 
 }
@@ -1595,7 +1598,7 @@
 .ltr {
   .library__languagesContainer {
     .languages {
-      float:right;
+      float: right;
     }
   }
 }
@@ -1691,7 +1694,7 @@
 }
 
 .languagesGrid {
-  margin-top:0 !important;
+  margin-top: 0 !important;
 }
 
 .media-downloads {
@@ -1706,11 +1709,11 @@
   padding-right: 0;
   padding-left: 0;
   margin-bottom: 1em;
-  text-align:right;
+  text-align: right;
 }
 
 .rtl .library-language-container {
-  text-align:left;
+  text-align: left;
 }
 
 .my_playlist_item {
@@ -1729,5 +1732,104 @@
 
   .unit-logo {
     width: 100%
+  }
+}
+
+
+.ui.four.cards > .card.cu_item {
+  width: calc(25% - 6em);
+  margin: 3em;
+}
+
+.cu_item {
+  overflow: hidden;
+  .cu_info_description {
+    margin: 1.5em 1em;
+
+    & > span {
+      display: inline-block;
+      padding: 0 0.5em;
+      font-size: .9em;
+      line-height: 1em;
+    }
+
+    &.ltr > span {
+      border-left: 1px rgb(170, 170, 170) solid;
+
+      &:first-child {
+        border-left: 0;
+        padding-left: 0;
+      }
+      &:last-child {
+        padding-right: 0;
+      }
+    }
+
+    &.rtl > span {
+      border-right: 1px rgb(170, 170, 170) solid;
+
+      &:first-child {
+        padding-right: 0;
+        border-right: 0;
+      }
+      &:last-child {
+        padding-left: 0;
+      }
+    }
+  }
+
+  .cu_item_img {
+    position: relative;
+    width: 100%;
+    height: auto;
+
+    .ui.image {
+      display: block;
+    }
+
+    .cu_item_duration {
+      border-radius: 0;
+      background-color: rgba(0, 0, 0, 0.63);
+      color: white;
+      margin: 1em;
+    }
+
+    .cu_item_info {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 100%;
+
+      .cu_item_info_co {
+        position: absolute;
+        bottom: 0.5em;
+        width: 100%;
+        display: flex;
+        flex: 3 30px;
+        flex-flow: nowrap;
+
+        .ui.image {
+          height: 3em !important;
+          margin: 0;
+        }
+
+        .header {
+          width: 100%;
+          color: white;
+          line-height: 3em;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          background-color: rgba(0, 0, 0, 0.63);
+          padding: 0 1.7em;
+          margin: 0;
+        }
+      }
+
+    }
+
+    .ui.card > .content, .ui.cards > .card > .content {
+      border-top: 0;
+    }
   }
 }

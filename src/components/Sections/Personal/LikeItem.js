@@ -1,39 +1,31 @@
+import React from 'react';
 import { useDispatch } from 'react-redux';
-import { canonicalLink } from '../../../helpers/links';
-import { imageByUnit } from '../../../helpers/utils';
+import { Button } from 'semantic-ui-react';
+
 import { actions } from '../../../redux/modules/my';
 import { MY_NAMESPACE_LIKES } from '../../../helpers/consts';
-import { Button, Card, Header } from 'semantic-ui-react';
-import UnitLogo from '../../shared/Logo/UnitLogo';
-import React from 'react';
-import { Link } from 'react-router-dom';
+import CUItem from '../../shared/CUItem';
 
-export const LikeItem = ({ data: { item: like, unit }, t }) => {
-  const dispatch         = useDispatch();
-  const link             = canonicalLink(unit);
-  const canonicalSection = imageByUnit(unit, link);
+export const LikeItem = ({ data: { item: like}}) => {
+  const dispatch = useDispatch();
 
   const likeDislike = () => {
     if (like)
       dispatch(actions.remove(MY_NAMESPACE_LIKES, { ids: [like.id] }));
     else
-      dispatch(actions.add(MY_NAMESPACE_LIKES, { uids: [unit.id] }));
+      dispatch(actions.add(MY_NAMESPACE_LIKES, { uids: [like.content_unit_uid] }));
   };
 
   return (
-    <Card raised>
-      <UnitLogo width={512} unitId={unit.id} fallbackImg={canonicalSection} />
-      <Card.Content>
-        <Button floated="right" size="tiny" icon="remove" onClick={likeDislike} color="red" />
-        <Header size="medium" className="no-margin-top">
-          <Link to={link}>
-            {unit.name}
-          </Link>
-        </Header>
-      </Card.Content>
-      <Card.Content extra>
-        <Card.Meta content={`${t('values.date', { date: unit.film_date })} - ${t('constants.content-types.' + unit.content_type)}`} />
-      </Card.Content>
-    </Card>
+    <CUItem id={like.content_unit_uid}>
+     {/* <Button
+        basic
+        floated="right"
+        size="medium"
+        icon="like"
+        onClick={likeDislike}
+        className="no-margin"
+      />*/}
+    </CUItem>
   );
 };

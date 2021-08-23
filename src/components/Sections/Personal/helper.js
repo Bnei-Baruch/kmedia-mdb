@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Card, Container, Button, Grid, Header } from 'semantic-ui-react';
 
@@ -20,10 +20,13 @@ import { LikeItem } from './LikeItem';
 import { PlaylistItem } from './PlaylistItem';
 import { SubscriptionsItem } from './SubscriptionsItem';
 import AlertModal from '../../shared/AlertModal';
+import { DeviceInfoContext } from '../../../helpers/app-contexts';
+import CUItem from '../../shared/CUItem';
 
 const Template = ({ children, namespace, t, withSeeAll = false }) => {
-  const itemsPerRow = 4;
-  const seeAll      = withSeeAll ? (
+  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const itemsPerRow        = isMobileDevice ? 1 : 4;
+  const seeAll             = withSeeAll ? (
     <Grid.Column>
       <Link to={`/personal/${namespace}`}>
         <Button floated='right' basic color='blue'>
@@ -43,7 +46,7 @@ const Template = ({ children, namespace, t, withSeeAll = false }) => {
           </Grid.Row>
         </Grid>
 
-        <Card.Group itemsPerRow={itemsPerRow} doubling>
+        <Card.Group itemsPerRow={itemsPerRow} stackable>
           {children}
         </Card.Group>
       </Container>
@@ -105,10 +108,8 @@ const ItemsByNamespace = ({ pageSize = 8, pageNo = 1, t, namespace, withSeeAll }
 
   switch (namespace) {
   case MY_NAMESPACE_HISTORY:
-    children = items.map(d => <HistoryItem data={d} key={`${namespace}_${d.item.id}`} t={t} />);
-    break;
   case MY_NAMESPACE_LIKES:
-    children = items.map(d => <LikeItem data={d} key={`${namespace}_${d.item.id}`} t={t} />);
+    children = items.map(d => <CUItem id={d.item.content_unit_uid} key={`${namespace}_${d.item.id}`} />);
     break;
   case MY_NAMESPACE_PLAYLISTS:
     children = items.map(d => <PlaylistItem data={d} key={`${namespace}_${d.item.id}`} t={t} />);

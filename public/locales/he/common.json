@@ -392,7 +392,9 @@
       "info": {
         "sources": "מקורות",
         "topics": "נושאים",
-        "collections": "קשור ל"
+        "collections": "קשור ל",
+        "episode": "פרק {{name}}",
+        "views": " {{views}} צפיות"
       },
       "recommended": {
         "same-collection": {
@@ -434,7 +436,7 @@
     "recommended": {
       "header": "מומלצים"
     },
-    "playlist":{
+    "playlist": {
       "header": "הבא בתור"
     }
   },

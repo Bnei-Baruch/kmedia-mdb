@@ -31,11 +31,11 @@ export const SubscriptionsItem = ({ data: { item: sub, collection }, t }) => {
 
   let logo, title, link;
   if (sub.collection_uid) {
-    logo  = <UnitLogo width={512} collectionId={collection.id} />;
+    logo  = <UnitLogo collectionId={collection.id} fallbackImg={'https://kabbalahmedia.info/imaginary/thumbnail?url=http%3A%2F%2Flocalhost%2Fassets%2Fapi%2Fthumbnail%2FEvPTLpdf&width=520&stripmeta=true'} />;
     title = collection.name;
     link  = canonicalLink(collection);
   } else {
-    logo  = <UnitLogo width={512} unitId={sub.content_unit_uid} />;
+    logo  = <UnitLogo unitId={sub.content_unit_uid} fallbackImg={'https://kabbalahmedia.info/imaginary/thumbnail?url=http%3A%2F%2Flocalhost%2Fassets%2Fapi%2Fthumbnail%2FEvPTLpdf&width=520&stripmeta=true'} />;
     title = t(`constants.content-types.${sub.content_type}`);
     link  = '/' + SECTIONS_LINK_BY_CU_CONTENT_TYPE[sub.content_type];
   }

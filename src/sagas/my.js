@@ -13,6 +13,7 @@ import {
   MY_NAMESPACE_SUBSCRIPTIONS
 } from '../helpers/consts';
 import { updateQuery } from './helpers/url';
+import { selectors as settings } from '../redux/modules/settings';
 
 function* updatePageInQuery(action) {
   const { pageNo } = action.payload;
@@ -23,7 +24,8 @@ function* updatePageInQuery(action) {
 function* fetch(action) {
   const { namespace, ...params } = action.payload;
 
-  const token = yield select(state => authSelectors.getToken(state.auth));
+  const token    = yield select(state => authSelectors.getToken(state.auth));
+  const language = yield select(state => settings.getLanguage(state.settings));
   try {
     const { data } = yield call(Api.my, namespace, params, token);
 
@@ -51,11 +53,20 @@ function* fetch(action) {
     }
 
     if (cu_uids.length > 0) {
-      const { data: { content_units } } = yield call(Api.units, { id: cu_uids, pageSize: cu_uids.length, with_files });
+      const { data: { content_units } } = yield call(Api.units, {
+        id: cu_uids,
+        pageSize: cu_uids.length,
+        with_files,
+        language
+      });
       yield put(mdbActions.receiveContentUnits(content_units));
     }
     if (co_uids.length > 0) {
-      const { data: { collections } } = yield call(Api.collections, { id: co_uids, pageSize: co_uids.length });
+      const { data: { collections } } = yield call(Api.collections, {
+        id: co_uids,
+        pageSize: co_uids.length,
+        language
+      });
       yield put(mdbActions.receiveCollections(collections));
     }
     yield put(actions.fetchSuccess({ namespace, ...data }));
@@ -67,7 +78,8 @@ function* fetch(action) {
 function* fetchById(action) {
   const { namespace, ...params } = action.payload;
   if (!params?.id) return;
-  const token = yield select(state => authSelectors.getToken(state.auth));
+  const token    = yield select(state => authSelectors.getToken(state.auth));
+  const language = yield select(state => settings.getLanguage(state.settings));
   try {
     const { data } = yield call(Api.my, namespace, params, token);
 
@@ -82,7 +94,8 @@ function* fetchById(action) {
       const { data: { content_units } } = yield call(Api.units, {
         id: cu_uids,
         pageSize: cu_uids.length,
-        with_files: true
+        with_files: true,
+        language,
       });
       yield put(mdbActions.receiveContentUnits(content_units));
     }

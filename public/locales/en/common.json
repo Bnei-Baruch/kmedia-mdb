@@ -115,7 +115,8 @@
     "next": "Next",
     "copy": "Copy",
     "view-all": "View All",
-    "save": "Save"
+    "save": "Save",
+    "remove": "Remove"
   },
   "player": {
     "messages": {
@@ -394,7 +395,9 @@
       "info": {
         "sources": "Kabbalah Sources",
         "topics": "Topics",
-        "collections": "Related to"
+        "collections": "Related to",
+        "episode": "Part {{name}}",
+        "views": "Views {{views}}"
       },
       "recommended": {
         "same-collection": {
@@ -630,5 +633,8 @@
     "removedLike": "Like {{name}} was remove successfully",
     "removedPlaylist": "Playlist {{name}} was remove successfully",
     "removedSubscribe": "Subscribe {{name}} was remove successfully"
+  },
+  "cu-card": {
+    "part": "part"
   }
 }

@@ -47,7 +47,7 @@ export const PlaylistItem = ({ data: { item: playlist, unit }, t }) => {
               </Table.Cell>
             </Table.Row>
           </Table>
-          <UnitLogo unitId={unit.id} fallbackImg={canonicalSection} />
+          <UnitLogo unitId={unit.id} fallbackImg={'https://kabbalahmedia.info/imaginary/thumbnail?url=http%3A%2F%2Flocalhost%2Fassets%2Fapi%2Fthumbnail%2FEvPTLpdf&width=520&stripmeta=true'} />
         </div>
       </>
       <Card.Content>
