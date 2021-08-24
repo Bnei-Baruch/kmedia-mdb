@@ -45,6 +45,7 @@ moment.locale(language === LANG_UKRAINIAN ? 'uk' : language);
 const deviceInfo = new UAParser().getResult();
 const clientChronicles = new ClientChronicles(history, store);
 const abTesting = CreateAbTesting(clientChronicles.userId);
+clientChronicles.setAbTesting(abTesting);
 
 ReactDOM.hydrate(
   <React.StrictMode>

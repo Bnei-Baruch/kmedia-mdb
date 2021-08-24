@@ -42,7 +42,7 @@ const MAX_INACTIVITY_MS = 60 * 1000; // Minute in milliseconds.
 
 export default class ClientChronicles {
   constructor(history, store) {
-    // If chronicles backed not defined in env.
+    // If chronicles backend not defined in env.
     if (!chroniclesBackendEnabled) {
       this.append = noop;
       return;
@@ -56,6 +56,8 @@ export default class ClientChronicles {
     this.userId = localStorage.getItem('user_id');
 
     this.namespace = 'archive';
+
+    this.abTesting = {};
 
     this.initSession(/* reinit= */ false);
 
@@ -122,6 +124,14 @@ export default class ClientChronicles {
         this.prevHref = window.location.href;
       }
     });
+  }
+
+  setAbTesting(abTesting) {
+    for (const key in abTesting) {
+      if (typeof abTesting[key] === 'string') {
+        this.abTesting[key] = abTesting[key];
+      }
+    }
   }
 
   // Handles custom redux actions to append events on them.
@@ -284,6 +294,7 @@ export default class ClientChronicles {
   }
 
   append(eventType, data, sync = false) {
+    data.ab = this.abTesting;
     data.location = eventType.endsWith('page-leave') ? this.prevHref : window.location.href;
     const eventId = ulid();
     const nowTimestampMs = Date.now();
