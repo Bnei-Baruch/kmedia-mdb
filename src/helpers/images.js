@@ -29,6 +29,7 @@ const sectionLogo = {
   downloads: DownloadIcon,
   info: InfoIcon,
   'simple-mode': SimpleModeIcon,
+  likutim: SourcesIcon
 };
 
 export const SectionLogo = ({ name, ...props }) => {
