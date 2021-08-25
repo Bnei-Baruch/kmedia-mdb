@@ -3,6 +3,9 @@ import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 
 import { actions, selectors } from '../../../redux/modules/likutim';
 import { selectors as settings } from '../../../redux/modules/settings';
+import { canonicalLink } from '../../../helpers/links';
+
+import Link from '../../Language/MultiLanguageLink';
 // import { actions as mdbActions, selectors as mdbSelectors } from '../../../redux/modules/mdb';
 // import { MT_TEXT, CT_LIKUTIM } from '../../../helpers/consts';
 
@@ -32,10 +35,12 @@ const Main = () => {
 
   return (
     <div>Likutim Page:
-      {likutim.map(l =>
-        <ul>
-          {`${l.name} ${l.film_date}`}
-        </ul>)}
+      {
+        likutim.map(lu =>
+          <ul key={lu.id}>
+            <Link key={lu.id} to={canonicalLink(lu)}>{`${lu.name} ${lu.film_date}`}</Link>;
+          </ul>)
+      }
     </div>
   )
 }

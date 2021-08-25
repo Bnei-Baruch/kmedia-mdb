@@ -10,52 +10,38 @@ import { selectors as assetsSelectors, actions as assetsActions } from '../../..
 import { selectors as siteSettings } from '../../../redux/modules/settings';
 import { selectors as tagSelectors } from '../../../redux/modules/tags';
 import { actions, selectors } from '../../../redux/modules/mdb';
-import { getLanguageDirection } from '../../../helpers/i18n-utils';
+import { getLanguageDirection, getLangPropertyDirection } from '../../../helpers/i18n-utils';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { physicalFile } from '../../../helpers/utils';
-
-// import { isEmpty } from '../../../helpers/utils';
-// import { MT_TEXT, CT_LIKUTIM } from '../../../helpers/consts';
+import { SectionLogo } from '../../../helpers/images';
+import { canonicalLink } from '../../../helpers/links';
+import { CT_LESSON_PART } from '../../../helpers/consts';
 import LibraryBar from '../Library/LibraryBar';
 import DropdownLanguageSelector from '../../../components/Language/Selector/DropdownLanguageSelector';
 import Link from '../../../components/Language/MultiLanguageLink';
-
-// import { getLikutimFiles, isValidLikut } from '../../Pages/Unit/widgets/UnitMaterials/Sources/Sources';
 import WipErr from '../../shared/WipErr/WipErr';
 import Download from '../../shared/Download/Download';
 
 
 // expected unit of type Likutim
 const Likut = ({ t }) => {
-  let { id } = useParams();
-
-  // TEMP - to remove!!!
-  if (!id) {
-    id = 'nM9pMrxD' // 'gfVMsqC2'
-  }
-
-  console.log('id:', id);
-
+  const { id }             = useParams();
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
-  const unit = useSelector(state => selectors.getDenormContentUnit(state.mdb, id));
-  const wip = useSelector(state => selectors.getWip(state.mdb).units[id]);
-  const err = useSelector(state => selectors.getErrors(state.mdb).units[id]);
-  const getTagById = useSelector(state => tagSelectors.getTagById(state.tags));
-
-  console.log(' unit:', unit);
-
+  const unit            = useSelector(state => selectors.getDenormContentUnit(state.mdb, id));
+  const wip             = useSelector(state => selectors.getWip(state.mdb).units[id]);
+  const err             = useSelector(state => selectors.getErrors(state.mdb).units[id]);
+  const getTagById      = useSelector(state => tagSelectors.getTagById(state.tags));
   const contentLanguage = useSelector(state => siteSettings.getContentLanguage(state.settings));
   const doc2htmlById    = useSelector(state => assetsSelectors.getDoc2htmlById(state.assets));
 
-  const [isReadable, setIsReadable] = useState(false);
-  const [settings, setSettings] = useState(null);
-  const [file, setFile] = useState(null);
-  const [language, setLanguage] = useState(contentLanguage);
-
-  const articleRef = useRef();
+  const [isReadable, setIsReadable]               = useState(false);
+  const [settings, setSettings]                   = useState(null);
+  const [file, setFile]                           = useState(null);
+  const [language, setLanguage]                   = useState(contentLanguage);
   const [scrollTopPosition, setScrollTopPosition] = useState(0);
 
+  const articleRef = useRef();
   const scrollingElement = isReadable ? articleRef.current : document?.scrollingElement;
 
   const handleIsReadable = () => {
@@ -74,7 +60,7 @@ const Likut = ({ t }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!wip && !err && !unit)  {
+    if (!wip && !err && (!unit || !unit.files))  {
       dispatch(actions.fetchUnit(id));
     } else if (unit) {
       const file = unit?.files?.find(x => x.language === language);
@@ -87,40 +73,37 @@ const Likut = ({ t }) => {
 
   useEffect(() => {
     if (file) {
-      console.log('dispatch file:', file)
       dispatch(assetsActions.doc2html(file.id))
     }
   }, [dispatch, file]);
+
+  if (!unit) {
+    return null;
+  }
 
   const wipErr = WipErr({ wip, err, t });
   if (wipErr) {
     return wipErr;
   }
 
-  if (!unit) {
-    return null;
-  }
-
-  console.log('doc2htmlById:', file, doc2htmlById)
-
   const { data } = doc2htmlById[file?.id] || {};
 
   const { theme = 'light', fontType, fontSize = 0 } = settings || {};
   const direction = getLanguageDirection(language);
+  const gridDirection = getLangPropertyDirection(language);
 
-  const { name, film_date, files, tags } = unit;
-  const languages = files.length > 0 ? files.map(f => f.language) : []
+  const { name, film_date, files = [], tags = [], source_units } = unit;
+  const languages = files.map(f => f.language)
   const tagNames = tags.map(getTagById);
 
   const renderTags = () => (
-    <ButtonGroup size='mini' compact basic>
+    <ButtonGroup size='small' basic floated='left'>
       {
         tagNames.map(tag =>
-          <Button key={tag.id}>
-            <Link to={`/topics/${tag.id}`}>
-              {tag.label}
-            </Link>
-          </Button>)
+          <Button key={tag.id} className='likut'>
+            <Link to={`/topics/${tag.id}`}>{tag.label}</Link>
+          </Button>
+        )
       }
     </ButtonGroup>
   )
@@ -138,9 +121,9 @@ const Likut = ({ t }) => {
         [`size${fontSize}`]: true,
       })}>
       <Grid padded>
-        <Grid.Column mobile={16} tablet={12} computer={12}>
-          <div className="section-header">
-            <Header size='large' className="likut">
+        <Grid.Column mobile={16} tablet={10} computer={10}>
+          <div className="section-header likut">
+            <Header size='large' >
               <Header.Content>
                 {name}
                 <Header.Subheader><b>{t('values.date', { date: film_date })}</b></Header.Subheader>
@@ -177,9 +160,24 @@ const Likut = ({ t }) => {
             />
           </div>
         </Grid.Column>
-        {/* <Grid.Column mobile={16} tablet={4} computer={4}>
+        <Grid.Column mobile={16} tablet={6} computer={6}>
           {/* links to other pages */}
-        {/* </Grid.Column> */}
+          <Grid padded relaxed='very' columns={3} className="section-header" doubling>
+            <Header icon textAlign={gridDirection} as='h3' className="display-inline">
+              <SectionLogo name='lessons' />
+              {`${t(`search.intent-prefix.lessons-topic`)}  ${name}`}
+            </Header>
+            {
+              Object.values(source_units)
+                .filter(u => u.content_type === CT_LESSON_PART)
+                .sort((u1, u2) => u1.film_date <= u2.film_date ? 1 : -1)
+                .map(u =>
+                  <Grid.Column>
+                    <Link to={canonicalLink(u)}>{t('values.date', { date: u.film_date })}</Link>
+                  </Grid.Column>)
+            }
+          </Grid>
+        </Grid.Column>
       </Grid>
     </div>
   )
