@@ -41,21 +41,19 @@ import NotImplemented from './components/NotImplemented';
 // import Design from './components/Design/Design';
 import * as ssrDataLoaders from './routesSSRData';
 import * as shapes from './components/shapes';
-import Main from './components/Sections/Personal/Main';
-import PersonalPage from './components/Sections/Personal/PersonalPage';
+import Main from './components/Sections/Personal/Main/Page';
 import PlaylistMyContainer from './components/Pages/PlaylistMy/Container';
+import PlaylistPage from './components/Sections/Personal/Playlist/Page';
+import LikePage from './components/Sections/Personal/LikePage';
+import HistoryPage from './components/Sections/Personal/HistoryPage';
 
 const routes = [
   { path: '', component: HomePage, options: { ssrData: ssrDataLoaders.home } },
   { path: 'personal', component: Main },
-  { path: `personal/${MY_NAMESPACE_HISTORY}`, component: () => <PersonalPage namespace={MY_NAMESPACE_HISTORY} /> },
-  { path: `personal/${MY_NAMESPACE_LIKES}`, component: () => <PersonalPage namespace={MY_NAMESPACE_LIKES} /> },
-  { path: `personal/${MY_NAMESPACE_PLAYLISTS}`, component: () => <PersonalPage namespace={MY_NAMESPACE_PLAYLISTS} /> },
-  {
-    path: `personal/${MY_NAMESPACE_SUBSCRIPTIONS}`,
-    component: () => <PersonalPage namespace={MY_NAMESPACE_SUBSCRIPTIONS} />
-  },
-  { path: `personal/${MY_NAMESPACE_PLAYLISTS}/:id`, component: PlaylistMyContainer },
+  { path: `personal/${MY_NAMESPACE_HISTORY}`, component: HistoryPage },
+  { path: `personal/${MY_NAMESPACE_LIKES}`, component: LikePage },
+  { path: `personal/${MY_NAMESPACE_PLAYLISTS}/:id`, component: PlaylistPage },
+  { path: `${MY_NAMESPACE_PLAYLISTS}/:id`, component: PlaylistMyContainer },
 
   { path: 'lessons', component: Lessons, options: { ssrData: ssrDataLoaders.lessonsPage } },
   { path: 'lessons/:tab', component: Lessons, options: { ssrData: ssrDataLoaders.lessonsPage } },

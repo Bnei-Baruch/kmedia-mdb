@@ -1577,6 +1577,10 @@
   display: inline;
 }
 
+.display-block {
+  display: block !important;
+}
+
 .library__nextPrevButtons {
   height: 20px;
 }
@@ -1736,13 +1740,13 @@
 }
 
 
-.ui.four.cards > .card.cu_item {
+.cu_items.ui.four.cards > .card {
   width: calc(25% - 6em);
   margin: 3em;
+  overflow: hidden;
 }
 
 .cu_item {
-  overflow: hidden;
   .cu_info_description {
     margin: 1.5em 1em;
 
@@ -1760,18 +1764,20 @@
         border-left: 0;
         padding-left: 0;
       }
+
       &:last-child {
         padding-right: 0;
       }
     }
 
     &.rtl > span {
-      border-right: 1px rgb(170, 170, 170) solid;
+      border-right: 1px $midGrey solid;
 
       &:first-child {
         padding-right: 0;
         border-right: 0;
       }
+
       &:last-child {
         padding-left: 0;
       }
@@ -1792,9 +1798,10 @@
       background-color: rgba(0, 0, 0, 0.63);
       color: white;
       margin: 1em;
+      box-shadow: 0 0 5px 1px $white;
     }
 
-    .cu_item_info {
+    .cu_item_img_info {
       position: absolute;
       top: 0;
       bottom: 0;
@@ -1808,8 +1815,8 @@
         flex: 3 30px;
         flex-flow: nowrap;
 
-        .ui.image {
-          height: 3em !important;
+        .ui.image, svg {
+          height: 3.5em !important;
           margin: 0;
         }
 
@@ -1832,4 +1839,113 @@
       border-top: 0;
     }
   }
+}
+
+.cu_item_info_co {
+  .ui.image, svg {
+    height: 2.5em !important;
+    margin: 0;
+  }
+}
+
+.cu_item_list {
+
+  .cu_item_info_co {
+    white-space: nowrap;
+
+    .ui.image, svg {
+      height: 2.5em !important;
+      margin: 0;
+    }
+
+    .header {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: inline-block;
+      vertical-align: top;
+      color: white;
+      line-height: 2.35em;
+      background-color: rgba(0, 0, 0, 0.63);
+      padding: 0 2em;
+      margin: 0 -1.5em;
+    }
+
+  }
+
+  .cu_item_img {
+    position: relative;
+    width: 100%;
+    height: auto;
+
+    .cu_item_duration {
+      background: #0f0f10;
+      box-shadow: 0 0 5px 1px $white;
+    }
+  }
+
+  td {
+    position: relative;
+  }
+
+  .cu_item_info {
+    padding-right: 2em !important;
+    padding-left: 2em !important;
+  }
+
+  .cu_info_description {
+    margin: 0;
+    position: absolute;
+    bottom: 1em;
+    opacity: 0.43;
+  }
+
+  .cu_item_name {
+    margin: 1em 0 1.5em;
+  }
+}
+
+.weight-normal {
+  font-weight: normal !important;
+}
+
+.vertical_bottom {
+  vertical-align: bottom;
+}
+
+.my_header.ui.header {
+  display: inline-block;
+  margin: 0 0 4px;
+  font-weight: normal;
+  vertical-align: bottom;
+
+  svg {
+    height: 1.5em;
+    width: 1.5em;
+    margin: 0 .4em -.3em;
+
+  }
+
+  .icon {
+    font-size: 1em;
+    vertical-align: top;
+  }
+}
+
+.my_playlist_actions {
+  position: absolute;
+  top: .5em;
+  bottom: .5em;
+  display: none;
+
+  & > div {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+}
+
+tr:hover .my_playlist_actions {
+  display: block;
 }

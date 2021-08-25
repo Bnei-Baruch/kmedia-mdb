@@ -6,17 +6,19 @@ import { withRouter } from 'react-router-dom';
 import { actions, selectors } from '../../../redux/modules/my';
 import { getPageFromLocation } from '../../Pagination/withPagination';
 
-import ItemsByNamespace from './helper';
+import ItemsByNamespace from './Main/ItemsByNamespace';
 import { Container, Divider } from 'semantic-ui-react';
 import Pagination from '../../Pagination/Pagination';
 import * as shapes from '../../shapes';
+import { selectors as settings } from '../../../redux/modules/settings';
 
 const PAGE_SIZE    = 12;
 const PersonalPage = ({ location, namespace }) => {
   const dispatch = useDispatch();
 
-  const pageNo = useSelector(state => selectors.getPageNo(state.my, namespace));
-  const total  = useSelector(state => selectors.getTotal(state.my, namespace));
+  const pageNo   = useSelector(state => selectors.getPageNo(state.my, namespace));
+  const total    = useSelector(state => selectors.getTotal(state.my, namespace));
+  const language = useSelector(state => settings.getLanguage(state.settings));
 
   const setPage = (pageNo) => dispatch(actions.setPage(namespace, pageNo));
 
@@ -24,7 +26,7 @@ const PersonalPage = ({ location, namespace }) => {
     const pageNoLocation = getPageFromLocation(location);
     if (pageNoLocation !== pageNo)
       setPage(pageNoLocation);
-  }, [dispatch, location, pageNo]);
+  }, [dispatch, location, pageNo, language]);
 
   return (
     <div>

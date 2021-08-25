@@ -68,7 +68,7 @@ const PlaylistInfo = ({ unit = {}, t, user }) => {
     const aIds = selected.filter(id => !saved.includes(id));
     aIds.forEach(id => dispatch(actions.add(MY_NAMESPACE_PLAYLISTS, { id, uids: [unit.id] })));
     const dIds = saved.filter(id => !selected.includes(id));
-    dIds.forEach(id => dispatch(actions.remove(MY_NAMESPACE_PLAYLIST_ITEMS, { id, uids: [unit.id] })));
+    dIds.forEach(id => dispatch(actions.remove(MY_NAMESPACE_PLAYLIST_ITEMS, { playlist_id: id, uids: [unit.id] })));
     toggle();
 
     setAlertMsg(t('personal.addToPlaylistSuccessful'));

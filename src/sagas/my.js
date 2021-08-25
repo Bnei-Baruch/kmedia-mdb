@@ -4,6 +4,7 @@ import { actions, types } from '../redux/modules/my';
 import Api from '../helpers/Api';
 import { selectors as authSelectors } from '../redux/modules/auth';
 import { actions as mdbActions } from '../redux/modules/mdb';
+import { actions as recommendedActions } from '../redux/modules/recommended';
 import {
   MY_NAMESPACE_HISTORY,
   MY_NAMESPACE_LIKES,
@@ -60,6 +61,12 @@ function* fetch(action) {
         language
       });
       yield put(mdbActions.receiveContentUnits(content_units));
+      const { data: viewData } = yield call(Api.views, cu_uids);
+      const views              = cu_uids.reduce((acc, uid, i) => {
+        acc[uid] = viewData.views[i];
+        return acc;
+      }, {});
+      yield put(recommendedActions.receiveViews(views));
     }
     if (co_uids.length > 0) {
       const { data: { collections } } = yield call(Api.collections, {

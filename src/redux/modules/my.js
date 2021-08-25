@@ -3,7 +3,7 @@ import { createAction } from 'redux-actions';
 import { handleActions } from './settings';
 import {
   MY_NAMESPACE_LIKES,
-  MY_NAMESPACE_PLAYLIST_BY_ID,
+  MY_NAMESPACE_PLAYLIST_BY_ID, MY_NAMESPACE_PLAYLIST_ITEMS,
   MY_NAMESPACE_PLAYLISTS,
   MY_NAMESPACES
 } from '../../helpers/consts';
@@ -116,7 +116,11 @@ const onFetch = (draft, { namespace }) => {
 
 const onFetchSuccess = (draft, { namespace, items = [], total }) => {
   if (namespace === MY_NAMESPACE_PLAYLIST_BY_ID) {
-    items.forEach(x => draft[MY_NAMESPACE_PLAYLIST_BY_ID].byID[x.id] = x);
+    items.forEach(x => {
+      draft[MY_NAMESPACE_PLAYLIST_BY_ID].byID[x.id] = x;
+      draft[MY_NAMESPACE_PLAYLIST_ITEMS].items      = x.playlist_items || [];
+    });
+
   } else {
     draft[namespace].items = items || [];
     draft[namespace].total = total;
@@ -148,13 +152,26 @@ const onEditSuccess = (draft, { namespace, item }) => {
   if (namespace === MY_NAMESPACE_PLAYLISTS)
     draft[MY_NAMESPACE_PLAYLIST_BY_ID].byID[item.id] = item;
 
+  if (namespace === MY_NAMESPACE_PLAYLIST_ITEMS) {
+    const playlist = draft[MY_NAMESPACE_PLAYLIST_BY_ID].byID[item.playlist_id];
+    let itemIndex  = playlist.playlist_items.findIndex(x => x.id === item.id);
+    if (itemIndex < 0) index = playlist.playlist_items.length;
+    playlist.playlist_items[itemIndex] = item;
+  }
+
   draft[namespace].items[index] = item;
   draft[namespace].wip          = false;
   draft[namespace].errors       = false;
   return draft;
 };
 
-const onRemoveSuccess = (draft, { namespace, ids }) => {
+const onRemoveSuccess = (draft, { namespace, ids, playlist_id }) => {
+  if (namespace === MY_NAMESPACE_PLAYLIST_ITEMS) {
+    draft[namespace].items.filter(x => ids.includes(x.id)).forEach(x => {
+      const playlist          = draft[MY_NAMESPACE_PLAYLIST_BY_ID].byID[x.playlist_id];
+      playlist.playlist_items = playlist.playlist_items.filter(a => !ids.includes(a.id));
+    });
+  }
   draft[namespace].items  = draft[namespace].items.filter(a => !ids.includes(a.id));
   draft[namespace].total  = draft[namespace].total - ids.length;
   draft[namespace].wip    = false;
@@ -184,9 +201,7 @@ export const reducer = handleActions({
 }, initialState);
 
 /* Selectors */
-const getItems        = (state, namespace) => {
-  return state[namespace].items;
-};
+const getItems        = (state, namespace) => state[namespace].items;
 const getPlaylistById = (state, id) => state[MY_NAMESPACE_PLAYLIST_BY_ID].byID[id];
 const getWIP          = (state, namespace) => state[namespace].wip;
 const getErr          = (state, namespace) => state[namespace].errors;
