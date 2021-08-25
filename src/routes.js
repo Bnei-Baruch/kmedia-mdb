@@ -85,7 +85,7 @@ const routes = [
   { path: 'simple-mode', component: SimpleModeContainer, options: { ssrData: ssrDataLoaders.simpleMode } },
   { path: 'excerpt', component: ExcerptContainer },
   { path: 'likutim', component: LikutimMain },
-  { path: 'likutim/:id', component: Likut, options: { ssrData: ssrDataLoaders.LikutPage } },
+  { path: 'likutim/:id', component: Likut, },
   // { path: 'design', component: Design },
   // { path: 'design2', component: Design2 },
 ];

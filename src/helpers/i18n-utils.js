@@ -60,6 +60,8 @@ export const getLanguageDirection = language => {
 
 export const isLanguageRtl = language => rtlLngs.indexOf(language) >= 0;
 
+export const getLangPropertyDirection = language => getLanguageDirection(language) === 'rtl' ? 'right' : 'left';
+
 export const getLanguageLocale = language => LANGUAGES[language].locale;
 
 export const getLanguageLocaleWORegion = language => LANGUAGES[language].locale.substring(0, 2);
