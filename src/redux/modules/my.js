@@ -150,7 +150,7 @@ const onEditSuccess = (draft, { namespace, item }) => {
   if (index < 0) index = draft[namespace].items.length;
 
   if (namespace === MY_NAMESPACE_PLAYLISTS)
-    draft[MY_NAMESPACE_PLAYLIST_BY_ID].byID[item.id] = item;
+    draft[MY_NAMESPACE_PLAYLIST_BY_ID].byID[item.id] = { ...item, playlist_items: draft[MY_NAMESPACE_PLAYLIST_BY_ID].byID[item.id].playlist_items };
 
   if (namespace === MY_NAMESPACE_PLAYLIST_ITEMS) {
     const playlist = draft[MY_NAMESPACE_PLAYLIST_BY_ID].byID[item.playlist_id];

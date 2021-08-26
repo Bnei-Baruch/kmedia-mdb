@@ -15,7 +15,7 @@ const CardTemplate = ({ unit, language, withCCUInfo, link, ccu, description, chi
     <div className="cu_item_info_co">
       <Divider style={{ width: '4em' }} />
       <div style={{ margin: '0 -1.5em' }}>
-        <UnitLogo collectionId={ccu.id} circular  fallbackImg={'https://kabbalahmedia.info/imaginary/thumbnail?width=120&nocrop=false&stripmeta=true&url=http%3A%2F%2Flocalhost%2Fassets%2Flessons%2Flatest_lesson_28.jpg'}/>
+        <UnitLogo collectionId={ccu.id} />
       </div>
       <Popup
         basic
@@ -28,7 +28,7 @@ const CardTemplate = ({ unit, language, withCCUInfo, link, ccu, description, chi
   return (
     <Card raised className="cu_item" link href={link}>
       <div className="cu_item_img">
-        <UnitLogo unitId={unit.id}  fallbackImg={'https://kabbalahmedia.info/imaginary/thumbnail?width=520&nocrop=false&stripmeta=true&url=http%3A%2F%2Flocalhost%2Fassets%2Flessons%2Flatest_lesson_28.jpg'} />
+        <UnitLogo unitId={unit.id} width={520} />
         <Container className="cu_item_img_info" textAlign="right">
           <Label className="cu_item_duration" content={formatDuration(unit.duration)} />
           {coInfo}

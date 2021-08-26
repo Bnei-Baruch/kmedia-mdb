@@ -2,21 +2,21 @@ import React, { useContext, useEffect } from 'react';
 import { withRouter } from 'react-router';
 import { withNamespaces } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { Container, Divider, Grid, Header, Icon, Label, Table } from 'semantic-ui-react';
+import { Button, Container, Divider, Grid, Header, Icon, Label, Table } from 'semantic-ui-react';
 import clsx from 'clsx';
 
-import { actions, selectors } from '../../../redux/modules/my';
-import { MY_NAMESPACE_HISTORY, MY_NAMESPACE_LIKES, MY_NAMESPACE_PLAYLISTS } from '../../../helpers/consts';
-import WipErr from '../../shared/WipErr/WipErr';
-import CUItemContainer from '../../shared/CUItem/CUItemContainer';
-import { DeviceInfoContext } from '../../../helpers/app-contexts';
-import Link from '../../Language/MultiLanguageLink';
-import { selectors as settings } from '../../../redux/modules/settings';
-import { getPageFromLocation } from '../../Pagination/withPagination';
-import Pagination from '../../Pagination/Pagination';
+import { actions, selectors } from '../../../../redux/modules/my';
+import { MY_NAMESPACE_LIKES, MY_NAMESPACE_PLAYLISTS } from '../../../../helpers/consts';
+import WipErr from '../../../shared/WipErr/WipErr';
+import CUItemContainer from '../../../shared/CUItem/CUItemContainer';
+import { DeviceInfoContext } from '../../../../helpers/app-contexts';
+import { selectors as settings } from '../../../../redux/modules/settings';
+import { getPageFromLocation } from '../../../Pagination/withPagination';
+import Pagination from '../../../Pagination/Pagination';
+import LikeActions from './Actions';
 
 const PAGE_SIZE = 20;
-const LikePage  = ({ location, t }) => {
+const Page      = ({ location, t }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
   const pageNo   = useSelector(state => selectors.getPageNo(state.my, MY_NAMESPACE_LIKES));
@@ -42,20 +42,20 @@ const LikePage  = ({ location, t }) => {
 
   const computerWidth = isMobileDevice ? 16 : 10;
 
-  const removeItem = (id) => dispatch(actions.remove(MY_NAMESPACE_LIKES, { ids: [id] }));
-
   return (
     <Grid padded={!isMobileDevice} className="avbox">
       <Grid.Column mobile={16} tablet={computerWidth} computer={computerWidth} className={clsx({ 'is-fitted': isMobileDevice })}>
         <Container>
-          <div className="summary-container">
-            <Header as={'h2'} icon="like outline" className="my_header" content={t('personal.likes')} />
-            <div>
-              <Link to={`/${MY_NAMESPACE_PLAYLISTS}/like`}>
-                <Icon name={'play circle outline'} className="margin-left-8 margin-right-8" size="large" />
-                {t('personal.playAll')}
-              </Link>
-            </div>
+          <div className="summary-container align_items_center">
+            <Header as={'h2'} icon="heart outline" className="my_header" content={t('personal.likes')} />
+            <Button
+              basic
+              className="clear_button"
+              href={`/${MY_NAMESPACE_PLAYLISTS}/like`}
+            >
+              <Icon name={'play circle outline'} className="margin-left-8 margin-right-8" size="big" />
+              {t('personal.playAll')}
+            </Button>
           </div>
           <Label content={`${total} ${t('pages.collection.items.programs-collection')}`} />
         </Container>
@@ -64,7 +64,9 @@ const LikePage  = ({ location, t }) => {
             <Table unstackable basic="very" className="index" sortable>
               <Table.Body>
                 {items.map((x, i) => (
-                    <CUItemContainer id={x.content_unit_uid} asList={true} />
+                    <CUItemContainer id={x.content_unit_uid} asList={true} key={i}>
+                      <LikeActions cuId={x.content_unit_uid} id={x.id} />
+                    </CUItemContainer>
                   )
                 )}
               </Table.Body>
@@ -87,4 +89,4 @@ const LikePage  = ({ location, t }) => {
   );
 };
 
-export default withNamespaces()(withRouter(LikePage));
+export default withNamespaces()(withRouter(Page));

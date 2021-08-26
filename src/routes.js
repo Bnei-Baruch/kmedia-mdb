@@ -44,8 +44,8 @@ import * as shapes from './components/shapes';
 import Main from './components/Sections/Personal/Main/Page';
 import PlaylistMyContainer from './components/Pages/PlaylistMy/Container';
 import PlaylistPage from './components/Sections/Personal/Playlist/Page';
-import LikePage from './components/Sections/Personal/LikePage';
-import HistoryPage from './components/Sections/Personal/HistoryPage';
+import LikePage from './components/Sections/Personal/Like/Page';
+import HistoryPage from './components/Sections/Personal/History/Page';
 
 const routes = [
   { path: '', component: HomePage, options: { ssrData: ssrDataLoaders.home } },

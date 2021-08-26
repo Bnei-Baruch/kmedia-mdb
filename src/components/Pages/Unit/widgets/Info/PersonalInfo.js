@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { withNamespaces } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Icon } from 'semantic-ui-react';
+import { Button, Icon, Menu } from 'semantic-ui-react';
 
 import {
   CT_SUBSCRIBE_BY_COLLECTION,
@@ -82,28 +82,27 @@ const PersonalInfo = ({ unit = {}, t, collection }) => {
   };
 
   const subBtn = subsByType || subsByCO ? (
-    <Button
-      primary
-      size={'tiny'}
-      onClick={() => subsUnsubs(sub)}
-      content={t(`personal.${!sub ? 'subscribe' : 'unsubscribe'}`)}
-    />) : null;
+    <Menu.Item>
+      <Button
+        primary
+        size={'tiny'}
+        onClick={() => subsUnsubs(sub)}
+        content={t(`personal.${!sub ? 'subscribe' : 'unsubscribe'}`)}
+      />
+    </Menu.Item>) : null;
 
   return (
-    <div>
+    <Menu secondary>
       <AlertModal message={alertMsg} open={alertOpen} onClose={onAlertCloseHandler} />
       {subBtn}
-      <span className="margin-right-8 margin-left-8">
-      <Icon
-        size={'big'}
-        onClick={() => likeDislike(like)}
-        name={`heart ${!like ? 'outline' : ''}`}
-      />
+      <Menu.Item>
+        <Icon size={'big'} onClick={() => likeDislike(like)} name={`heart ${!like ? 'outline' : ''}`} />
         <span>{likeCount}</span>
-      </span>
-
-      <PlaylistInfo unit={unit} user={user} t={t} />
-    </div>
+      </Menu.Item>
+      <Menu.Item>
+        <PlaylistInfo cuID={unit.id} user={user} t={t} />
+      </Menu.Item>
+    </Menu>
   );
 };
 

@@ -38,7 +38,7 @@ const PlaylistHeader = ({ playlist, t }) => {
         <PlaylistPlayIcon />
         <span>{playlist.name}</span>
       </Header>
-      <Button basic onClick={toggleEditName} className="no-shadow vertical_bottom">
+      <Button basic onClick={toggleEditName} className="clear_button vertical_bottom">
         <Icon name={'edit '} size="large" />
       </Button>
     </>
@@ -49,7 +49,7 @@ const PlaylistHeader = ({ playlist, t }) => {
       <div className="summary-container">
         <div>
           {nameTag}
-          <Button basic onClick={toggleEditName} className="no-shadow no-margin">
+          <Button basic onClick={toggleEditName} className="clear_button">
             <Icon name={'trash'} size="large" />
           </Button>
         </div>

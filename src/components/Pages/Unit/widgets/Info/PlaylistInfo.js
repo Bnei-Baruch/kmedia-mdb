@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Checkbox, Icon, Input, Label, Menu, Modal } from 'semantic-ui-react';
+import { Button, Checkbox, Input, Menu, Modal } from 'semantic-ui-react';
 
-import * as shapes from '../../../../shapes';
 import { actions, selectors } from '../../../../../redux/modules/my';
 import { MY_NAMESPACE_PLAYLIST_ITEMS, MY_NAMESPACE_PLAYLISTS } from '../../../../../helpers/consts';
 import AlertModal from '../../../../shared/AlertModal';
+import { ReactComponent as PlaylistAddIcon } from '../../../../../images/icons/playlist_add_black_24dp.svg';
+import * as PropTypes from 'prop-types';
 
-const PlaylistInfo = ({ unit = {}, t, user }) => {
+const PlaylistInfo = ({ cuID, t }) => {
   const [isOpen, setIsOpen]               = useState(false);
   const [selected, setSelected]           = useState([]);
   const [saved, setSaved]                 = useState([]);
@@ -22,7 +23,7 @@ const PlaylistInfo = ({ unit = {}, t, user }) => {
   const playlistItems = useSelector(state => selectors.getItems(state.my, MY_NAMESPACE_PLAYLIST_ITEMS));
 
   useEffect(() => {
-    const _saved = playlistItems.filter(pi => pi.content_unit_uid === unit.id).map(p => p.playlist_id);
+    const _saved = playlistItems.filter(pi => pi.content_unit_uid === cuID).map(p => p.playlist_id);
     setSaved(_saved);
     const ids = isNewPlaylist ? playlists.filter(p => p.name === newPlaylist).map(p => p.id) : [];
     setSelected(selected.concat(ids, _saved));
@@ -32,7 +33,7 @@ const PlaylistInfo = ({ unit = {}, t, user }) => {
 
   const onOpen = () => {
     dispatch(actions.fetch(MY_NAMESPACE_PLAYLISTS, { page_no: 1, page_size: 100 }));
-    dispatch(actions.fetch(MY_NAMESPACE_PLAYLIST_ITEMS, { uids: [unit.id] }));
+    dispatch(actions.fetch(MY_NAMESPACE_PLAYLIST_ITEMS, { uids: [cuID] }));
   };
 
   const handleChange = (e, d) => {
@@ -66,9 +67,9 @@ const PlaylistInfo = ({ unit = {}, t, user }) => {
 
   const save = () => {
     const aIds = selected.filter(id => !saved.includes(id));
-    aIds.forEach(id => dispatch(actions.add(MY_NAMESPACE_PLAYLISTS, { id, uids: [unit.id] })));
+    aIds.forEach(id => dispatch(actions.add(MY_NAMESPACE_PLAYLISTS, { id, uids: [cuID] })));
     const dIds = saved.filter(id => !selected.includes(id));
-    dIds.forEach(id => dispatch(actions.remove(MY_NAMESPACE_PLAYLIST_ITEMS, { playlist_id: id, uids: [unit.id] })));
+    dIds.forEach(id => dispatch(actions.remove(MY_NAMESPACE_PLAYLIST_ITEMS, { playlist_id: id, uids: [cuID] })));
     toggle();
 
     setAlertMsg(t('personal.addToPlaylistSuccessful'));
@@ -130,12 +131,12 @@ const PlaylistInfo = ({ unit = {}, t, user }) => {
         onOpen={onOpen}
         onClose={toggle}
         size={'mini'}
-        trigger={
-          <Button className="dateButton" onClick={toggle}>
-            <Icon name='calendar alternate outline' />
-            {t('personal.savePlaylist')}
-          </Button>
-        }
+        trigger={(
+          <span className="my_playlist_add" onClick={toggle}>
+            <PlaylistAddIcon />
+            <span>{t('personal.savePlaylist')}</span>
+          </span>
+        )}
       >
         <Modal.Header>{t('personal.addToPlaylist')}</Modal.Header>
         <Modal.Content>
@@ -166,8 +167,7 @@ const PlaylistInfo = ({ unit = {}, t, user }) => {
 };
 
 PlaylistInfo.propTypes = {
-  unit: shapes.ContentUnit,
-
+  cuID: PropTypes.string.isRequired,
 };
 
 export default PlaylistInfo;

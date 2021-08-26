@@ -15,7 +15,7 @@ import { ReactComponent as PlaylistPlayIcon } from '../../../../images/icons/pla
 import { ReactComponent as SubscriptionsIcon } from '../../../../images/icons/subscriptions_black_24dp.svg';
 
 const iconByNamespace = {
-  [MY_NAMESPACE_LIKES]: 'like outline',
+  [MY_NAMESPACE_LIKES]: 'heart outline',
   [MY_NAMESPACE_HISTORY]: 'history',
   [MY_NAMESPACE_SUBSCRIPTIONS]: <SubscriptionsIcon />,
   [MY_NAMESPACE_PLAYLISTS]: <PlaylistPlayIcon />,

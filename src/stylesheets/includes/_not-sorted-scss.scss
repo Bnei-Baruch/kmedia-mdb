@@ -1581,6 +1581,10 @@
   display: block !important;
 }
 
+.display-iblock {
+  display: inline-block !important;
+}
+
 .library__nextPrevButtons {
   height: 20px;
 }
@@ -1728,7 +1732,7 @@
     position: absolute;
     top: 0;
     right: 0;
-    width: 50%;
+    width: 30%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.6);
     z-index: 1;
@@ -1930,6 +1934,10 @@
     font-size: 1em;
     vertical-align: top;
   }
+
+  .parts {
+
+  }
 }
 
 .my_playlist_actions {
@@ -1946,6 +1954,31 @@
   }
 }
 
+.my_playlist_add {
+  display: flex;
+  flex-flow: nowrap;
+  align-items: center;
+
+  span {
+    margin: 0 8px;
+    display: inline-block;
+  }
+}
+
 tr:hover .my_playlist_actions {
   display: block;
+}
+
+.align_items_center {
+  align-items: center
+}
+
+.clear_button.ui.basic.button {
+  padding: 0;
+  box-shadow: none;
+
+  &:hover {
+    background: none !important;
+    box-shadow: none;
+  }
 }
