@@ -427,6 +427,13 @@
     flex: 1;
     flex-flow: row wrap;
     justify-content: space-between;
-    padding: 0 1em !important;
+    padding: 0 1em 0.5em !important;
+  }
+
+  &__grid {
+    .column {
+      padding-top: 0.5em !important;
+      padding-bottom: 0.5em !important;
+    }
   }
 }
