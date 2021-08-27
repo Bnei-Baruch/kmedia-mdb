@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
@@ -11,13 +11,12 @@ import { selectors as siteSettings } from '../../../redux/modules/settings';
 import { selectors as tagSelectors } from '../../../redux/modules/tags';
 import { actions, selectors } from '../../../redux/modules/mdb';
 import { getLanguageDirection, getLangPropertyDirection } from '../../../helpers/i18n-utils';
-import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { physicalFile } from '../../../helpers/utils';
 import { SectionLogo } from '../../../helpers/images';
 import { canonicalLink } from '../../../helpers/links';
 import { CT_LESSON_PART } from '../../../helpers/consts';
 import LibraryBar from '../Library/LibraryBar';
-import DropdownLanguageSelector from '../../../components/Language/Selector/DropdownLanguageSelector';
+import MenuLanguageSelector from '../../../components/Language/Selector/MenuLanguageSelector';
 import Link from '../../../components/Language/MultiLanguageLink';
 import WipErr from '../../shared/WipErr/WipErr';
 import Download from '../../shared/Download/Download';
@@ -25,8 +24,7 @@ import Download from '../../shared/Download/Download';
 
 // expected unit of type Likutim
 const Likut = ({ t }) => {
-  const { id }             = useParams();
-  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const { id }          = useParams();
 
   const unit            = useSelector(state => selectors.getDenormContentUnit(state.mdb, id));
   const wip             = useSelector(state => selectors.getWip(state.mdb).units[id]);
@@ -69,7 +67,6 @@ const Likut = ({ t }) => {
       }
     }
   }, [dispatch, err, id, language, unit, wip]);
-
 
   useEffect(() => {
     if (file) {
@@ -135,12 +132,14 @@ const Likut = ({ t }) => {
               <div className="source__header-toolbar">
                 { file && <Download path={url} mimeType={file.mimetype} downloadAllowed={true} filename={file.name} /> }
                 <LibraryBar fontSize={fontSize} isReadable={isReadable} handleIsReadable={handleIsReadable} handleSettings={setSettings} />
-                <DropdownLanguageSelector
-                  languages={languages}
-                  defaultValue={language}
-                  onSelect={handleLanguageChanged}
-                  fluid={isMobileDevice}
-                />
+                <div className="library-language-container">
+                  <MenuLanguageSelector
+                    languages={languages}
+                    defaultValue={language}
+                    onSelect={handleLanguageChanged}
+                    fluid={false}
+                  />
+                </div>
               </div>
             </div>
           </div>
