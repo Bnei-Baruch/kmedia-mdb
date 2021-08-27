@@ -97,15 +97,16 @@ const Likut = ({ t }) => {
   const tagNames = tags.map(getTagById);
 
   const renderTags = () => (
-    <ButtonGroup size='small' basic floated='left'>
-      {
-        tagNames.map(tag =>
-          <Button key={tag.id} className='likut'>
-            <Link to={`/topics/${tag.id}`}>{tag.label}</Link>
-          </Button>
-        )
-      }
-    </ButtonGroup>
+    tagNames.length > 0 &&
+      <ButtonGroup size='small' basic floated='left'>
+        {
+          tagNames.map(tag =>
+            <Button key={tag.id} className='likut'>
+              <Link to={`/topics/${tag.id}`}>{tag.label}</Link>
+            </Button>
+          )
+        }
+      </ButtonGroup>
   )
 
   const url = file && physicalFile(file, true)
@@ -123,32 +124,27 @@ const Likut = ({ t }) => {
       <Grid padded>
         <Grid.Column mobile={16} tablet={10} computer={10}>
           <div className="section-header likut">
-            <Header size='large' >
+            <Header as='h2' >
               <Header.Content>
                 {name}
                 <Header.Subheader><b>{t('values.date', { date: film_date })}</b></Header.Subheader>
               </Header.Content>
             </Header>
-            <Grid padded stackable>
-              <Grid.Row columns={2}>
-                <Grid.Column>
-                  {renderTags()}
-                </Grid.Column>
-                <Grid.Column>
-                  <div className="source__header-toolbar">
-                    { file && <Download path={url} mimeType={file.mimetype} downloadAllowed={true} filename={file.name} /> }
-                    <LibraryBar fontSize={fontSize} isReadable={isReadable} handleIsReadable={handleIsReadable} handleSettings={setSettings} />
-                    <DropdownLanguageSelector
-                      languages={languages}
-                      defaultValue={language}
-                      onSelect={handleLanguageChanged}
-                      fluid={isMobileDevice}
-                    />
-                  </div>
-                </Grid.Column>
-              </Grid.Row>
-            </Grid>
+            <div className="likut__toolbar">
+              {renderTags()}
+              <div className="source__header-toolbar">
+                { file && <Download path={url} mimeType={file.mimetype} downloadAllowed={true} filename={file.name} /> }
+                <LibraryBar fontSize={fontSize} isReadable={isReadable} handleIsReadable={handleIsReadable} handleSettings={setSettings} />
+                <DropdownLanguageSelector
+                  languages={languages}
+                  defaultValue={language}
+                  onSelect={handleLanguageChanged}
+                  fluid={isMobileDevice}
+                />
+              </div>
+            </div>
           </div>
+          {/* content */}
           <div
             style={{ direction }}
             className={clsx({

@@ -392,11 +392,26 @@
 }
 
 .likut {
+  @include mobile {
+    margin: 0 !important;
+
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    .button { padding: 0.5em !important }
+  }
+
   margin: 0 3em;
 
   .ui.header {
+    @include mobile {
+      padding: inherit 0 !important;
+      font-size: 1.3em !important;
+    }
+
     padding: 0.5em 1em 0 !important;
-    margin-bottom: 0 !important;
   }
 
   .sub.header {
@@ -405,5 +420,13 @@
 
    a {
     color: gray !important;
+  }
+
+  &__toolbar {
+    display: flex;
+    flex: 1;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    padding: 0 1em !important;
   }
 }
