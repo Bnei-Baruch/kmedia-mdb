@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { Button, ButtonGroup, Grid, Header } from 'semantic-ui-react';
+import { Button, ButtonGroup, Grid, Header, Image } from 'semantic-ui-react';
 import clsx from 'clsx';
 
 import { selectors as assetsSelectors, actions as assetsActions } from '../../../redux/modules/assets';
@@ -107,6 +107,8 @@ const Likut = ({ t }) => {
   )
 
   const url = file && physicalFile(file, true)
+  const relatedLessons =  Object.values(source_units).filter(u => u.content_type === CT_LESSON_PART);
+  const relatedLessonsSize = relatedLessons.length > 0 ? 6 : 0;
 
   return (
     <div
@@ -119,7 +121,7 @@ const Likut = ({ t }) => {
         [`size${fontSize}`]: true,
       })}>
       <Grid padded>
-        <Grid.Column mobile={16} tablet={10} computer={10}>
+        <Grid.Column mobile={16} tablet={16-relatedLessonsSize} computer={16-relatedLessonsSize}>
           <div className="section-header likut">
             <Header as='h2' >
               <Header.Content>
@@ -155,24 +157,31 @@ const Likut = ({ t }) => {
             />
           </div>
         </Grid.Column>
-        <Grid.Column mobile={16} tablet={6} computer={6}>
-          {/* links to other pages */}
-          <Grid padded relaxed='very' columns={3} className="section-header" doubling>
-            <Header icon textAlign={gridDirection} as='h3' className="display-inline">
-              <SectionLogo name='lessons' />
-              {`${t(`search.intent-prefix.lessons-topic`)}  ${name}`}
-            </Header>
-            {
-              Object.values(source_units)
-                .filter(u => u.content_type === CT_LESSON_PART)
-                .sort((u1, u2) => u1.film_date <= u2.film_date ? 1 : -1)
-                .map(u =>
-                  <Grid.Column>
-                    <Link to={canonicalLink(u)}>{t('values.date', { date: u.film_date })}</Link>
-                  </Grid.Column>)
-            }
-          </Grid>
-        </Grid.Column>
+        { relatedLessonsSize > 0 &&
+          <Grid.Column mobile={16} tablet={relatedLessonsSize} computer={relatedLessonsSize}>
+            {/* links to other pages */}
+            <Grid padded relaxed='very' columns={3} className="section-header likut__grid" stackable>
+              <Grid.Row>
+                <Header icon textAlign={gridDirection} as='h3'>
+                  <Image size="big" verticalAlign="middle">
+                    <SectionLogo name='lessons' />
+                  </Image>
+                  {`${t(`search.intent-prefix.lessons-topic`)}  ${name}`}
+                </Header>
+              </Grid.Row>
+              <Grid.Row>
+                {
+                  relatedLessons
+                    .sort((u1, u2) => u1.film_date <= u2.film_date ? 1 : -1)
+                    .map(u =>
+                      <Grid.Column>
+                        <Link to={canonicalLink(u)}>{t('values.date', { date: u.film_date })}</Link>
+                      </Grid.Column>)
+                }
+              </Grid.Row>
+            </Grid>
+          </Grid.Column>
+        }
       </Grid>
     </div>
   )
