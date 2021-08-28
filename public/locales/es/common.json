@@ -290,6 +290,9 @@
       "description": "Un acceso directo actualizado a la última lección diaria"
     }
   },
+  "likutim":{
+    "header": "Excerpts from the Sources:"
+  },
   "programs": {
     "header": {
       "text": "Programas",

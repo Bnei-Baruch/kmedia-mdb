@@ -294,6 +294,9 @@
       "description": "An up to date shortcut to the latest Daily Lesson"
     }
   },
+  "likutim":{
+    "header": "Excerpts from the Sources:"
+  },
   "programs": {
     "header": {
       "text": "Programs",
