@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { Button, ButtonGroup, Grid, Header, Image } from 'semantic-ui-react';
+import { Button, Grid, Header, Image } from 'semantic-ui-react';
 import clsx from 'clsx';
 
 import { selectors as assetsSelectors, actions as assetsActions } from '../../../redux/modules/assets';
@@ -95,15 +95,15 @@ const Likut = ({ t }) => {
 
   const renderTags = () => (
     tagNames.length > 0 &&
-      <ButtonGroup size='small' basic floated='left'>
+      <div>
         {
           tagNames.map(tag =>
-            <Button key={tag.id} className='likut'>
+            <Button key={tag.id} basic compact size='small'>
               <Link to={`/topics/${tag.id}`}>{tag.label}</Link>
             </Button>
           )
         }
-      </ButtonGroup>
+      </div>
   )
 
   const url = file && physicalFile(file, true)
@@ -160,7 +160,7 @@ const Likut = ({ t }) => {
         { relatedLessonsSize > 0 &&
           <Grid.Column mobile={16} tablet={relatedLessonsSize} computer={relatedLessonsSize}>
             {/* links to other pages */}
-            <Grid padded relaxed='very' columns={3} className="section-header likut__grid" stackable>
+            <Grid padded relaxed='very' className="section-header likut__grid" stackable>
               <Grid.Row>
                 <Header icon textAlign={gridDirection} as='h3'>
                   <Image size="big" verticalAlign="middle">
@@ -169,7 +169,7 @@ const Likut = ({ t }) => {
                   {`${t(`search.intent-prefix.lessons-topic`)}  ${name}`}
                 </Header>
               </Grid.Row>
-              <Grid.Row>
+              <Grid.Row columns={3}>
                 {
                   relatedLessons
                     .sort((u1, u2) => u1.film_date <= u2.film_date ? 1 : -1)
