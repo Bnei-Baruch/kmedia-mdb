@@ -431,6 +431,9 @@
   }
 
   &__grid {
+    .row {
+      padding-top: 0 !important;
+    }
     .column {
       padding-top: 0.5em !important;
       padding-bottom: 0.5em !important;
