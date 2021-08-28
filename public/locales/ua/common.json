@@ -291,6 +291,9 @@
       "description": "Оновлений ярлик до останнього денного уроку"
     }
   },
+  "likutim":{
+    "header": "Excerpts from the Sources:"
+  },
   "programs": {
     "header": {
       "text": "Програми",

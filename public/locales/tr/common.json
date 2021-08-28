@@ -294,6 +294,9 @@
       "description": "En son Günlük dersin güncel kısa yolu"
     }
   },
+  "likutim":{
+    "header": "Excerpts from the Sources:"
+  },
   "programs": {
     "header": {
       "text": "Programlar",
