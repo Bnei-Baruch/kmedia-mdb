@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import produce from 'immer';
-import { Button, Header, Table } from 'semantic-ui-react';
+import { Button, Header, Table, Image } from 'semantic-ui-react';
 
 import { SectionLogo } from '../../../helpers/images';
 import { isNotEmptyArray } from '../../../helpers/utils';
@@ -51,8 +51,10 @@ const renderTable = (topNUnits, section, url, t) => (
     <Table.Header>
       <Table.Row>
         <Table.HeaderCell>
-          <Header as="h3">
-            <SectionLogo name={section} />
+          <Header icon as="h3">
+            <Image size="big" verticalAlign="middle">
+              <SectionLogo name={section} />
+            </Image>
             {t(`nav.sidebar.${section}`)}
           </Header>
         </Table.HeaderCell>
