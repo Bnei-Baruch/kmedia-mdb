@@ -1,20 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Checkbox, Input, Menu, Modal } from 'semantic-ui-react';
+import * as PropTypes from 'prop-types';
+import { Button, Checkbox, Icon, Input, List, Modal, Divider } from 'semantic-ui-react';
 
 import { actions, selectors } from '../../../../../redux/modules/my';
 import { MY_NAMESPACE_PLAYLIST_ITEMS, MY_NAMESPACE_PLAYLISTS } from '../../../../../helpers/consts';
 import AlertModal from '../../../../shared/AlertModal';
 import { ReactComponent as PlaylistAddIcon } from '../../../../../images/icons/playlist_add_black_24dp.svg';
-import * as PropTypes from 'prop-types';
 
-const PlaylistInfo = ({ cuID, t }) => {
+const PlaylistInfo = ({ cuID, t, handleClose }) => {
   const [isOpen, setIsOpen]               = useState(false);
   const [selected, setSelected]           = useState([]);
   const [saved, setSaved]                 = useState([]);
   const [newPlaylist, setNewPlaylist]     = useState('');
   const [isNewPlaylist, setIsNewPlaylist] = useState(false);
-  const [alertOpen, setAlertOpen]         = useState(false);
   const [alertMsg, setAlertMsg]           = useState();
 
   const dispatch = useDispatch();
@@ -30,6 +29,8 @@ const PlaylistInfo = ({ cuID, t }) => {
     setNewPlaylist('');
     setIsNewPlaylist(false);
   }, [playlists, playlistItems]);
+
+  if (playlists) return null;
 
   const onOpen = () => {
     dispatch(actions.fetch(MY_NAMESPACE_PLAYLISTS, { page_no: 1, page_size: 100 }));
@@ -55,9 +56,7 @@ const PlaylistInfo = ({ cuID, t }) => {
 
   const handleSaveNewPlaylist = () => {
     !!newPlaylist && dispatch(actions.add(MY_NAMESPACE_PLAYLISTS, { name: newPlaylist }));
-
     setAlertMsg(t('personal.newPlaylistSuccessful', { name: newPlaylist }));
-    setAlertOpen(true);
   };
 
   const toggle = () => {
@@ -73,64 +72,37 @@ const PlaylistInfo = ({ cuID, t }) => {
     toggle();
 
     setAlertMsg(t('personal.addToPlaylistSuccessful'));
-    setAlertOpen(true);
   };
 
   const onAlertCloseHandler = () => {
-    setAlertOpen(false);
-    setAlertMsg('');
+    setAlertMsg(null);
+    handleClose && setTimeout(handleClose, 0);
   };
 
   const renderPlaylist = (p) => (
-    <Menu.Item key={p.id} name={p.name}>
-      <Checkbox
-        label={p.name}
-        value={p.id}
-        checked={selected.includes(p.id)}
-        onChange={handleChange}
-      />
-    </Menu.Item>
+    <List.Item key={p.id}>
+      <List.Content floated='left'>
+        <Checkbox
+          value={p.id}
+          checked={selected.includes(p.id)}
+          onChange={handleChange}
+        />
+      </List.Content>
+      <List.Content>
+        {p.name}
+      </List.Content>
+    </List.Item>
   );
-
-  const buttons = isNewPlaylist ?
-    (
-      <>
-        <Button
-          primary
-          content={t('buttons.save')}
-          onClick={handleSaveNewPlaylist}
-        />
-        <Button
-          primary
-          content={t('buttons.cancel')}
-          onClick={handleCancelNewPlaylist}
-        />
-      </>
-    )
-    : (
-      <>
-        <Button
-          primary
-          content={t('buttons.save')}
-          onClick={save}
-        />
-        <Button
-          primary
-          content={t('buttons.cancel')}
-          onClick={toggle}
-        />
-      </>
-    );
 
   return (
     <>
-      <AlertModal message={alertMsg} open={alertOpen} onClose={onAlertCloseHandler} />
+      <AlertModal message={alertMsg} open={!!alertMsg} onClose={onAlertCloseHandler} />
       <Modal
         closeIcon
         open={isOpen}
         onOpen={onOpen}
         onClose={toggle}
-        size={'mini'}
+        size={'tiny'}
         trigger={(
           <span className="my_playlist_add" onClick={toggle}>
             <PlaylistAddIcon />
@@ -140,26 +112,61 @@ const PlaylistInfo = ({ cuID, t }) => {
       >
         <Modal.Header>{t('personal.addToPlaylist')}</Modal.Header>
         <Modal.Content>
-          <Menu vertical borderless fluid secondary>
+          <List fluid secondary>
             {playlists.map(renderPlaylist)}
-          </Menu>
-          {
-            isNewPlaylist
-              ? (
-                <Input
-                  type="text"
-                  fluid
-                  maxLength={30}
-                  onChange={handleChangeNewPlaylist}
-                  placeholder={t('personal.newPlaylistName')}
-                />
-              )
-              : <Menu.Item icon="plus" name={t('personal.newPlaylist')} onClick={handleAddPlaylist} />
-          }
+            <Divider hidden />
+            {
+              isNewPlaylist
+                ? (
+                  <List.Item key="playlist_form">
+                    <List.Content floated='right'>
+                      <Button
+                        color="green"
+                        icon="check"
+                        onClick={handleSaveNewPlaylist}
+                        disabled={!newPlaylist}
+                      />
+                      <Button
+                        icon="close"
+                        onClick={handleCancelNewPlaylist}
+                      />
+                    </List.Content>
+                    <List.Content>
+                      <Input
+                        fluid
+                        type="text"
+                        maxLength={30}
+                        onChange={handleChangeNewPlaylist}
+                        placeholder={t('personal.newPlaylistName')}
+                      />
+                    </List.Content>
+                  </List.Item>
+                )
+                : (
+                  <List.Item key="add_playlist" onClick={handleAddPlaylist}>
+                    <List.Content floated='left'>
+                      <Icon name="plus" />
+                    </List.Content>
+                    <List.Content>
+                      {t('personal.newPlaylist')}
+                    </List.Content>
+                  </List.Item>
+                )
+            }
 
+          </List>
         </Modal.Content>
         <Modal.Actions>
-          {buttons}
+          <Button
+            primary
+            content={t('buttons.save')}
+            onClick={save}
+          />
+          <Button
+            primary
+            content={t('buttons.cancel')}
+            onClick={toggle}
+          />
         </Modal.Actions>
       </Modal>
     </>

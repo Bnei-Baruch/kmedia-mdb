@@ -397,7 +397,7 @@
         "topics": "Topics",
         "collections": "Related to",
         "episode": "Part {{name}}",
-        "views": "Views {{views}}"
+        "views": "{{views}} Views"
       },
       "recommended": {
         "same-collection": {
@@ -632,9 +632,14 @@
     "removedHistory": "History {{name}} was remove successfully",
     "removedLike": "Like {{name}} was remove successfully",
     "removedPlaylist": "Playlist {{name}} was remove successfully",
-    "removedSubscribe": "Subscribe {{name}} was remove successfully"
-  },
-  "cu-card": {
-    "part": "part"
+    "removedSubscribe": "Subscribe {{name}} was remove successfully",
+    "removeHistory": "Remove from history",
+    "removeLike": "Remove from likes",
+    "playAll": "Play All",
+    "confirmRemovePlaylist": "Are you sure on remove playlist",
+    "confirmRemovePlaylistItem": "Are you sure on remove playlist item",
+    "confirmRemoveHistory": "Are you sure on remove History",
+    "confirmRemoveLike": "Are you sure on remove Like",
+    "confirmUnsubscribe": "Are you sure on unsubscribe"
   }
 }

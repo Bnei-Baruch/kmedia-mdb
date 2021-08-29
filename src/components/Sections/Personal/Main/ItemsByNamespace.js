@@ -35,9 +35,15 @@ const ItemsByNamespace = ({ pageSize = 8, pageNo = 1, t, namespace, withSeeAll }
   let children = null;
 
   switch (namespace) {
-  case MY_NAMESPACE_HISTORY:
   case MY_NAMESPACE_LIKES:
-    children = items.map(x => <CUItem id={x.content_unit_uid} key={`${namespace}_${x.id}`}  />);
+    children = items.map(x => <CUItem id={x.content_unit_uid} key={`${namespace}_${x.id}`} />);
+    break;
+  case MY_NAMESPACE_HISTORY:
+    children = items.map(x => <CUItem
+      id={x.content_unit_uid}
+      key={`${namespace}_${x.id}`}
+      playTime={x.data.current_time}
+    />);
     break;
   case MY_NAMESPACE_PLAYLISTS:
     children = items.map(x => <PlaylistItem item={x} key={`${namespace}_${x.id}`} t={t} />);
@@ -49,7 +55,7 @@ const ItemsByNamespace = ({ pageSize = 8, pageNo = 1, t, namespace, withSeeAll }
     break;
   }
 
-  return <ItemTemplate namespace={namespace} children={children} t={t} withSeeAll={withSeeAll} />;
+  return <ItemTemplate namespace={namespace} children={children} t={t} withSeeAll={withSeeAll} language={language} />;
 };
 
 ItemsByNamespace.propTypes = {

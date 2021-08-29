@@ -42,7 +42,7 @@ import NotImplemented from './components/NotImplemented';
 import * as ssrDataLoaders from './routesSSRData';
 import * as shapes from './components/shapes';
 import Main from './components/Sections/Personal/Main/Page';
-import PlaylistMyContainer from './components/Pages/PlaylistMy/Container';
+import PlaylistDecorator from './components/Pages/PlaylistMy/Decorator';
 import PlaylistPage from './components/Sections/Personal/Playlist/Page';
 import LikePage from './components/Sections/Personal/Like/Page';
 import HistoryPage from './components/Sections/Personal/History/Page';
@@ -53,8 +53,7 @@ const routes = [
   { path: `personal/${MY_NAMESPACE_HISTORY}`, component: HistoryPage },
   { path: `personal/${MY_NAMESPACE_LIKES}`, component: LikePage },
   { path: `personal/${MY_NAMESPACE_PLAYLISTS}/:id`, component: PlaylistPage },
-  { path: `${MY_NAMESPACE_PLAYLISTS}/:id`, component: PlaylistMyContainer },
-
+  { path: `${MY_NAMESPACE_PLAYLISTS}/:id`, component: PlaylistDecorator },
   { path: 'lessons', component: Lessons, options: { ssrData: ssrDataLoaders.lessonsPage } },
   { path: 'lessons/:tab', component: Lessons, options: { ssrData: ssrDataLoaders.lessonsPage } },
   {

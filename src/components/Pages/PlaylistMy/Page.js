@@ -15,8 +15,9 @@ import * as PropTypes from 'prop-types';
 
 import Info from '../Unit/widgets/Info/Info';
 import PlaylistHeader from '../PlaylistCollection/widgets/Playlist/PlaylistHeader';
+import * as shapes from '../../shapes';
 
-const PlaylistMyPage = ({ collection, nextLink = null, prevLink = null, cuId }) => {
+const PlaylistMyPage = ({ collection }) => {
   const location           = useLocation();
   const history            = useHistory();
   const { isMobileDevice } = useContext(DeviceInfoContext);
@@ -28,7 +29,6 @@ const PlaylistMyPage = ({ collection, nextLink = null, prevLink = null, cuId }) 
   const [unit, setUnit]         = useState(null);
   const [selected, setSelected] = useState();
   const [playlist, setPlaylist] = useState(null);
-
 
   const handleSelectedChange = useCallback(nSelected => {
     if (nSelected !== selected) {
@@ -49,39 +49,36 @@ const PlaylistMyPage = ({ collection, nextLink = null, prevLink = null, cuId }) 
     }
   }, [history, playlist, selected]);
 
-  // we need to calculate the playlist here, so we can filter items out of recommended
-  // playlist {  language, mediaType, items, groups };
   useEffect(() => {
-    const preferredMT    = playerHelper.restorePreferredMediaType();
-    const mediaType      = playerHelper.getMediaTypeFromQuery(location, preferredMT);
-    const playerLanguage = playlist?.language || contentLanguage;
-    const uiLang         = playlist?.language || uiLanguage;
-    const contentLang    = playerHelper.getLanguageFromQuery(location, playerLanguage);
-
-    const nPlaylist = playerHelper.playlist(collection, mediaType, contentLang, uiLang);
+    const preferredMT = playerHelper.restorePreferredMediaType();
+    const mediaType   = playerHelper.getMediaTypeFromQuery(location, preferredMT);
+    const nPlaylist   = playerHelper.playlistFromUnits(collection, mediaType, contentLanguage, uiLanguage);
     setPlaylist(nPlaylist);
-  }, [collection, contentLanguage, location, playlist?.language, uiLanguage, cuId]);
+  }, []);
+
+  useEffect(() => {
+    const preferredMT = playerHelper.restorePreferredMediaType();
+    const mediaType   = playerHelper.getMediaTypeFromQuery(location, preferredMT);
+    if (mediaType !== playlist?.mediaType) {
+      const nPlaylist = playerHelper.playlistFromUnits(collection, mediaType, contentLanguage, uiLanguage);
+      setPlaylist(nPlaylist);
+    }
+  }, [location]);
 
   useEffect(() => {
     let nSelected = playerHelper.getActivePartFromQuery(location);
-
-    if (nSelected >= playlist?.items.length) {
+    if (nSelected >= playlist?.items.length || nSelected < 0) {
       nSelected = 0;
     }
-
-    handleSelectedChange(nSelected);
-  }, [handleSelectedChange, location, playlist]);
+    setSelected(nSelected);
+  }, [location, playlist]);
 
   useEffect(() => {
     const newUnit = playlist?.items[selected]?.unit;
     setUnit(newUnit);
-  }, [playlist, selected]);
+  }, [selected]);
 
-  if (!collection || !Array.isArray(collection.content_units)) {
-    return null;
-  }
-
-  if (!playlist || !unit) {
+  if (!collection || !Array.isArray(collection.content_units) || !playlist || !unit) {
     return null;
   }
 
@@ -114,7 +111,7 @@ const PlaylistMyPage = ({ collection, nextLink = null, prevLink = null, cuId }) 
             <>
               {isMobileDevice &&
               <div id="avbox_playlist">
-                <PlaylistHeader collection={collection} prevLink={prevLink} nextLink={nextLink} />
+                <PlaylistHeader collection={collection} />
               </div>
               }
               <Container id="unit_container">
@@ -145,16 +142,11 @@ const PlaylistMyPage = ({ collection, nextLink = null, prevLink = null, cuId }) 
 };
 
 PlaylistMyPage.propTypes = {
-  nextLink: PropTypes.string,
-  prevLink: PropTypes.string,
+  collection: shapes.GenericCollection,
 };
 
-const isEqualLink = (link1, link2) =>
-  (!link1 && !link2) || link1 === link2;
-
-const areEqual = (prevProps, nextProps) =>
-  (prevProps.pId === nextProps.pId)
-  && isEqualLink(prevProps.prevLink, nextProps.prevLink)
-  && isEqualLink(prevProps.nextLink, nextProps.nextLink);
+const areEqual = (prevProps, nextProps) => {
+  return prevProps.collection && (prevProps.collection.id === nextProps.collection.id);
+};
 
 export default React.memo(PlaylistMyPage, areEqual);

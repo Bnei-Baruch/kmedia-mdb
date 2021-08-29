@@ -43,21 +43,26 @@ const Page      = ({ location, t }) => {
   const computerWidth = isMobileDevice ? 16 : 10;
 
   return (
-    <Grid padded={!isMobileDevice} className="avbox">
+    <Grid padded={!isMobileDevice}>
       <Grid.Column mobile={16} tablet={computerWidth} computer={computerWidth} className={clsx({ 'is-fitted': isMobileDevice })}>
         <Container>
           <div className="summary-container align_items_center">
-            <Header as={'h2'} icon="heart outline" className="my_header" content={t('personal.likes')} />
+            <Header as={'h2'} className="my_header">
+              <Icon name="heart outline" className="display-iblock" />
+              {t('personal.likes')}
+              <Header.Subheader className="display-iblock margin-right-8 margin-left-8">
+                {`${t('personal.videos')} ${total}`}
+              </Header.Subheader>
+            </Header>
             <Button
               basic
               className="clear_button"
-              href={`/${MY_NAMESPACE_PLAYLISTS}/like`}
+              href={`/${MY_NAMESPACE_PLAYLISTS}/${MY_NAMESPACE_LIKES}`}
             >
               <Icon name={'play circle outline'} className="margin-left-8 margin-right-8" size="big" />
               {t('personal.playAll')}
             </Button>
           </div>
-          <Label content={`${total} ${t('pages.collection.items.programs-collection')}`} />
         </Container>
         {
           items?.length > 0 ? (

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Container, Header, Label, Table } from 'semantic-ui-react';
+import { Container, Header, Label, Progress, Table } from 'semantic-ui-react';
 
 import { NO_NAME } from '../../../helpers/consts';
 import * as shapes from '../../shapes';
@@ -8,8 +8,9 @@ import { formatDuration } from '../../../helpers/utils';
 import { isLanguageRtl } from '../../../helpers/i18n-utils';
 import UnitLogo from '../Logo/UnitLogo';
 import Link from '../../Language/MultiLanguageLink';
+import { toHumanReadableTime } from '../../../helpers/time';
 
-const ListTemplate = ({ unit, language, withCCUInfo, link, ccu, description, children }) => {
+const ListTemplate = ({ unit, language, withCCUInfo, link, ccu, description, children, playTime }) => {
   const dir = isLanguageRtl(language) ? 'rtl' : 'ltr';
 
   const ccu_info = ccu && withCCUInfo ? (
@@ -19,6 +20,21 @@ const ListTemplate = ({ unit, language, withCCUInfo, link, ccu, description, chi
       </span>
       <Header size="small" content={ccu.name || NO_NAME} textAlign="left" />
     </div>) : null;
+
+  let percent = null;
+  if (playTime) {
+    const sep = link.indexOf('?') > 0 ? `&` : '?';
+    link      = `${link}${sep}sstart=${toHumanReadableTime(playTime)}`;
+    percent   = (
+      <Progress
+        style={{ maxWidth: '300px' }}
+        size="tiny"
+        className="margin-top-8"
+        color="green"
+        percent={playTime * 100 / unit.duration}
+      />
+    );
+  }
 
   return (
     <Table.Row className="cu_item cu_item_list no-thumbnail" verticalAlign="top" key={unit.id}>
@@ -32,9 +48,10 @@ const ListTemplate = ({ unit, language, withCCUInfo, link, ccu, description, chi
       </Table.Cell>
       <Table.Cell verticalAlign={'top'} className={'cu_item_info'}>
         {ccu_info}
-        <div className="cu_item_name">
+        <Link to={link} className="cu_item_name">
           {unit.name}
-        </div>
+        </Link>
+        {percent}
         <div className={`cu_info_description ${dir}`}>
           {description.map((d, i) => (<span key={i}>{d}</span>))}
         </div>

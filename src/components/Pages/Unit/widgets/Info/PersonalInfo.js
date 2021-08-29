@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { withNamespaces } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Icon, Menu } from 'semantic-ui-react';
+import { Button, Confirm, Icon, Menu } from 'semantic-ui-react';
 
 import {
   CT_SUBSCRIBE_BY_COLLECTION,
@@ -16,8 +16,8 @@ import PlaylistInfo from './PlaylistInfo';
 import AlertModal from '../../../../shared/AlertModal';
 
 const PersonalInfo = ({ unit = {}, t, collection }) => {
-  const [alertOpen, setAlertOpen] = useState(false);
-  const [alertMsg, setAlertMsg]   = useState();
+  const [alertMsg, setAlertMsg] = useState();
+  const [confirm, setConfirm]   = useState();
 
   const dispatch = useDispatch();
   const user     = useSelector(state => selectors.getUser(state.auth));
@@ -25,44 +25,40 @@ const PersonalInfo = ({ unit = {}, t, collection }) => {
   const { collections, content_type: type, id } = unit;
 
   const likeCount = useSelector(state => myselector.getLikeCount(state.my));
-  const likes     = useSelector(state => myselector.getItems(state.my, MY_NAMESPACE_LIKES));
-  const like      = likes?.find(l => l.content_unit_uid === id);
+  const like      = useSelector(state => myselector.getItemByCU(state.my, MY_NAMESPACE_LIKES, id));
 
   const subsByType = CT_SUBSCRIBE_BY_TYPE.includes(type) ? type : null;
   const cId        = collection?.id || collections && Object.values(collections)[0]?.id;
   const subsByCO   = CT_SUBSCRIBE_BY_COLLECTION.includes(type) ? cId : null;
-  const subs       = useSelector(state => myselector.getItems(state.my, MY_NAMESPACE_SUBSCRIPTIONS));
-  const sub        = subs?.find(l => subsByCO && l.collection_uid === subsByCO || subsByType && l.content_type === subsByType);
+  const sub        = useSelector(state => myselector.getItemByCU(state.my, MY_NAMESPACE_SUBSCRIPTIONS, id));
 
   useEffect(() => {
     if (id) {
-      dispatch(actions.fetch(MY_NAMESPACE_LIKES, { 'uids': [id] }));
-      dispatch(actions.fetch(MY_NAMESPACE_SUBSCRIPTIONS, { 'uids': [id] }));
+      dispatch(actions.fetchByCU(MY_NAMESPACE_LIKES, { 'uids': [id] }));
+      dispatch(actions.fetchByCU(MY_NAMESPACE_SUBSCRIPTIONS, { 'uids': [id] }));
       dispatch(actions.likeCount({ 'uids': [id] }));
     }
   }, [dispatch, id, user]);
 
-  const needToLogin = () => {
-    alert('you need to login');
-  };
+  if (!unit) return null;
+
+  const needToLogin = () => setAlertMsg(t('personal.youNeedLogin'));
 
   const likeDislike = (l) => {
-    // if (!user) return needToLogin();
+    if (!user) return needToLogin();
 
     if (l)
       dispatch(actions.remove(MY_NAMESPACE_LIKES, { ids: [l.id] }));
     else
       dispatch(actions.add(MY_NAMESPACE_LIKES, { uids: [id] }));
-
     return null;
   };
 
   const subsUnsubs = (s) => {
-    //if (!user) return needToLogin();
+    if (!user) return needToLogin();
     let msg;
     if (s) {
-      dispatch(actions.remove(MY_NAMESPACE_SUBSCRIPTIONS, { ids: [s.id] }));
-      msg = t('personal.unsubscribeSuccessful');
+      setConfirm(true);
     } else {
       dispatch(actions.add(MY_NAMESPACE_SUBSCRIPTIONS, {
         collections: [subsByCO],
@@ -71,20 +67,30 @@ const PersonalInfo = ({ unit = {}, t, collection }) => {
       }));
       msg = t('personal.subscribeSuccessful');
     }
-    setAlertOpen(true);
     setAlertMsg(msg);
     return null;
   };
 
-  const onAlertCloseHandler = () => {
-    setAlertOpen(false);
-    setAlertMsg('');
+  const onAlertCloseHandler = () => setAlertMsg(null);
+
+  const handleConfirmCancel = () => setConfirm(false);
+
+  const handleConfirmSuccess = () => {
+    dispatch(actions.remove(MY_NAMESPACE_SUBSCRIPTIONS, { ids: [sub.id] }));
+    setConfirm(false);
   };
 
   const subBtn = subsByType || subsByCO ? (
     <Menu.Item>
+      <Confirm
+        size="tiny"
+        open={confirm}
+        onCancel={handleConfirmCancel}
+        onConfirm={handleConfirmSuccess}
+        content={t('personal.confirmUnsubscribe')}
+      />
       <Button
-        primary
+        primary={!sub}
         size={'tiny'}
         onClick={() => subsUnsubs(sub)}
         content={t(`personal.${!sub ? 'subscribe' : 'unsubscribe'}`)}
@@ -92,16 +98,16 @@ const PersonalInfo = ({ unit = {}, t, collection }) => {
     </Menu.Item>) : null;
 
   return (
-    <Menu secondary>
-      <AlertModal message={alertMsg} open={alertOpen} onClose={onAlertCloseHandler} />
-      {subBtn}
-      <Menu.Item>
-        <Icon size={'big'} onClick={() => likeDislike(like)} name={`heart ${!like ? 'outline' : ''}`} />
-        <span>{likeCount}</span>
-      </Menu.Item>
-      <Menu.Item>
+    <Menu secondary floated="right">
+      <AlertModal message={alertMsg} open={!!alertMsg} onClose={onAlertCloseHandler} />
+      <Menu.Item fitted="horizontally">
         <PlaylistInfo cuID={unit.id} user={user} t={t} />
       </Menu.Item>
+      <Menu.Item fitted="horizontally">
+        <Icon onClick={() => likeDislike(like)} name={`heart${!like ? ' outline' : ''}`} />
+        <span>{likeCount}</span>
+      </Menu.Item>
+      {subBtn}
     </Menu>
   );
 };

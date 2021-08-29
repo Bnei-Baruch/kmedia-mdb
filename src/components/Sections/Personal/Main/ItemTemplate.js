@@ -13,6 +13,7 @@ import {
 } from '../../../../helpers/consts';
 import { ReactComponent as PlaylistPlayIcon } from '../../../../images/icons/playlist_play_black_24dp.svg';
 import { ReactComponent as SubscriptionsIcon } from '../../../../images/icons/subscriptions_black_24dp.svg';
+import { isLanguageRtl } from '../../../../helpers/i18n-utils';
 
 const iconByNamespace = {
   [MY_NAMESPACE_LIKES]: 'heart outline',
@@ -20,34 +21,36 @@ const iconByNamespace = {
   [MY_NAMESPACE_SUBSCRIPTIONS]: <SubscriptionsIcon />,
   [MY_NAMESPACE_PLAYLISTS]: <PlaylistPlayIcon />,
 };
-const ItemTemplate    = ({ children, namespace, t, withSeeAll = false }) => {
-  const { isMobileDevice } = useContext(DeviceInfoContext);
-  const itemsPerRow        = isMobileDevice ? 1 : 4;
+const ItemTemplate    = ({ children, namespace, t, withSeeAll = false, language }) => {
+  const { isMobileDevice, isTablet } = useContext(DeviceInfoContext);
+  const itemsPerRow        = 4;
   const seeAll             = withSeeAll ? (
     <Grid.Column textAlign={'right'}>
       <Link to={`/personal/${namespace}`}>{t('search.showAll')}</Link>
     </Grid.Column>
   ) : null;
 
+  const isRtl     = isLanguageRtl(language);
+  let marginClass = null;
+  let icon        = null;
+  if ([MY_NAMESPACE_PLAYLISTS, MY_NAMESPACE_SUBSCRIPTIONS].includes(namespace)) {
+    icon        = iconByNamespace[namespace];
+    marginClass = isRtl ? ' margin-right-8' : ' margin-left-8';
+  } else {
+    icon = <Icon name={iconByNamespace[namespace]} />;
+  }
+
   return (
     <div className="homepage__thumbnails">
       <Container fluid className="padded">
-        <Grid columns='equal'>
-          <Grid.Row>
-            <Grid.Column>
-              <Header as={'h2'} className="my_header">
-                {
-                  [MY_NAMESPACE_PLAYLISTS, MY_NAMESPACE_SUBSCRIPTIONS].includes(namespace) ?
-                    iconByNamespace[namespace] :
-                    <Icon name={iconByNamespace[namespace]} />
-                }
-                {t(`personal.${namespace}`)}
-              </Header>
-            </Grid.Column>
-            {seeAll}
-          </Grid.Row>
-        </Grid>
-        <Card.Group itemsPerRow={itemsPerRow} stackable className="cu_items">
+        <Header as={'h2'} className="my_header">
+          <Header.Content className="display-iblock">
+            {icon}
+            <span className={`display-iblock${marginClass}`}>{t(`personal.${namespace}`)}</span>
+          </Header.Content>
+          <Header.Subheader className="display-iblock">{seeAll}</Header.Subheader>
+        </Header>
+        <Card.Group doubling itemsPerRow={itemsPerRow} stackable className="cu_items">
           {children}
         </Card.Group>
       </Container>

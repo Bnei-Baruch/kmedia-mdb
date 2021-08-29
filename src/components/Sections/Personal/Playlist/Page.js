@@ -1,9 +1,9 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { withRouter } from 'react-router';
 import { withNamespaces } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Grid, Icon, Table } from 'semantic-ui-react';
+import { Button, Confirm, Grid, Icon, Table } from 'semantic-ui-react';
 import clsx from 'clsx';
 
 import { actions, selectors } from '../../../../redux/modules/my';
@@ -16,20 +16,24 @@ import WipErr from '../../../shared/WipErr/WipErr';
 import CUItemContainer from '../../../shared/CUItem/CUItemContainer';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import PlaylistHeader from './Header';
+import { selectors as settings } from '../../../../redux/modules/settings';
 
-const Page = ({ t }) => {
-  const { id } = useParams();
+const Page = ({ t, history }) => {
+  const [confirm, setConfirm] = useState();
+  const { id }                = useParams();
 
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
-  const playlist = useSelector(state => selectors.getPlaylistById(state.my, id)) || {};
-  const wip      = useSelector(state => selectors.getWIP(state.my, MY_NAMESPACE_PLAYLIST_BY_ID));
+  const uiLanguage = useSelector(state => settings.getLanguage(state.settings));
+  const playlist   = useSelector(state => selectors.getPlaylistById(state.my, id));
+  const wip        = useSelector(state => selectors.getWIP(state.my, MY_NAMESPACE_PLAYLIST_BY_ID));
 
   const err      = useSelector(state => selectors.getErr(state.my, MY_NAMESPACE_PLAYLIST_BY_ID));
   const dispatch = useDispatch();
+
   useEffect(() => {
     id && dispatch(actions.fetchById(MY_NAMESPACE_PLAYLIST_BY_ID, { id }));
-  }, [id]);
+  }, [id, uiLanguage]);
 
   if (!playlist) return null;
 
@@ -41,7 +45,7 @@ const Page = ({ t }) => {
   const items         = [...playlist.playlist_items || []];
   items.sort((a, b) => b.position - a.position);
 
-  const removeItem = (id) => dispatch(actions.remove(MY_NAMESPACE_PLAYLIST_ITEMS, { ids: [id] }));
+  const removeItem = (id) => setConfirm(true);
 
   const changeItemPosition = (i, up) => {
     let { id: cid, position: cp } = items[i];
@@ -49,16 +53,18 @@ const Page = ({ t }) => {
     if (cp === np) {
       np = up ? np + 1 : np - 1;
     }
-
     dispatch(actions.edit(MY_NAMESPACE_PLAYLIST_ITEMS, { id: cid, position: np }));
     dispatch(actions.edit(MY_NAMESPACE_PLAYLIST_ITEMS, { id: nid, position: cp }));
-
   };
 
+  const handleConfirmCancel = () => setConfirm(false);
+
+  const handleConfirmSuccess = () => dispatch(actions.remove(MY_NAMESPACE_PLAYLIST_ITEMS, { ids: [id] }));
+
   return (
-    <Grid padded={!isMobileDevice} className="avbox">
+    <Grid padded={!isMobileDevice}>
       <Grid.Column mobile={16} tablet={computerWidth} computer={computerWidth} className={clsx({ 'is-fitted': isMobileDevice })}>
-        <PlaylistHeader playlist={playlist} t={t} />
+        <PlaylistHeader playlist={playlist} t={t} history={history} />
         {
           items?.length > 0 ? (
             <Table unstackable basic="very" className="index" sortable>
@@ -66,6 +72,13 @@ const Page = ({ t }) => {
                 {items.map((x, i) => (
                     <CUItemContainer id={x.content_unit_uid} link={`${link}?ap=${i}`} asList>
                       <div className="my_playlist_actions">
+                        <Confirm
+                          size="tiny"
+                          open={confirm}
+                          onCancel={handleConfirmCancel}
+                          onConfirm={handleConfirmSuccess}
+                          content={t('personal.removePlaylistItem')}
+                        />
                         <div>
                           <Button
                             basic

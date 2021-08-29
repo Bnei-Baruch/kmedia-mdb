@@ -23,16 +23,15 @@ function* updatePageInQuery(action) {
 }
 
 function* fetch(action) {
-  const { namespace, ...params } = action.payload;
+  let { namespace, with_files = false, ...params } = action.payload;
 
   const token    = yield select(state => authSelectors.getToken(state.auth));
   const language = yield select(state => settings.getLanguage(state.settings));
   try {
     const { data } = yield call(Api.my, namespace, params, token);
 
-    let cu_uids    = [];
-    let co_uids    = [];
-    let with_files = false;
+    let cu_uids = [];
+    let co_uids = [];
 
     switch (namespace) {
     case MY_NAMESPACE_HISTORY:
@@ -61,12 +60,6 @@ function* fetch(action) {
         language
       });
       yield put(mdbActions.receiveContentUnits(content_units));
-      const { data: viewData } = yield call(Api.views, cu_uids);
-      const views              = cu_uids.reduce((acc, uid, i) => {
-        acc[uid] = viewData.views[i];
-        return acc;
-      }, {});
-      yield put(recommendedActions.receiveViews(views));
     }
     if (co_uids.length > 0) {
       const { data: { collections } } = yield call(Api.collections, {
@@ -76,7 +69,21 @@ function* fetch(action) {
       });
       yield put(mdbActions.receiveCollections(collections));
     }
-    yield put(actions.fetchSuccess({ namespace, ...data }));
+    if (action.type === types.FETCH_BY_CU) {
+      yield put(actions.fetchByCUSuccess({ namespace, ...data, uids: params.uids }));
+    } else {
+      yield put(actions.fetchSuccess({ namespace, ...data }));
+    }
+    try {
+      const { data: viewData } = yield call(Api.views, cu_uids);
+      const views              = cu_uids.reduce((acc, uid, i) => {
+        acc[uid] = viewData.views[i];
+        return acc;
+      }, {});
+      yield put(recommendedActions.receiveViews(views));
+    } catch (err) {
+      console.error('error on recommendation service', err);
+    }
   } catch (err) {
     yield put(actions.fetchFailure({ namespace, ...err }));
   }
@@ -158,6 +165,7 @@ function* watchSetPage() {
 
 function* watchFetch() {
   yield takeEvery(types.FETCH, fetch);
+  yield takeEvery(types.FETCH_BY_CU, fetch);
 }
 
 function* watchFetchById() {

@@ -185,8 +185,8 @@ const playlist = (collection, mediaType, contentLanguage, uiLanguage) => {
   };
 };
 
-const playlistFromUnits = (units, mediaType, contentLanguage, uiLanguage) => {
-  const items = units
+const playlistFromUnits = (collection, mediaType, contentLanguage, uiLanguage) => {
+  const items = collection.content_units
     .map(x => playableItem(x, mediaType, uiLanguage, contentLanguage))
     .filter(item => !!item.unit)
     .map(x => {
@@ -194,7 +194,7 @@ const playlistFromUnits = (units, mediaType, contentLanguage, uiLanguage) => {
       return x;
     });
 
-  return { items };
+  return { items, collection, mediaType, contentLanguage, uiLanguage };
 };
 
 const getMediaTypeFromQuery = (location, defaultMediaType) => {

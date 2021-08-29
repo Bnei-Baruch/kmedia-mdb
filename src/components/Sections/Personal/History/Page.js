@@ -53,7 +53,7 @@ const Page      = ({ location, t }) => {
       newDay = <Header as="h3" content={t('values.date', { date: x.created_at })} />;
     }
     const item = (
-      <CUItemContainer id={x.content_unit_uid} asList={true} key={i}>
+      <CUItemContainer id={x.content_unit_uid} asList={true} key={i} playTime={x.data.current_time}>
         <Actions cuId={x.content_unit_uid} id={x.id} />
       </CUItemContainer>
     );
@@ -66,7 +66,7 @@ const Page      = ({ location, t }) => {
   };
 
   return (
-    <Grid padded={!isMobileDevice} className="avbox">
+    <Grid padded={!isMobileDevice}>
       <Grid.Column mobile={16} tablet={computerWidth} computer={computerWidth} className={clsx({ 'is-fitted': isMobileDevice })}>
         <Container>
           <div className="summary-container">

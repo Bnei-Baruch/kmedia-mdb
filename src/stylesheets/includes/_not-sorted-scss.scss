@@ -1745,9 +1745,12 @@
 
 
 .cu_items.ui.four.cards > .card {
-  width: calc(25% - 6em);
-  margin: 3em;
-  overflow: hidden;
+  width: calc(25% - 74px);
+  margin: 37px;
+  @include tablet {
+    width: calc(50% - 40px);
+    margin: 20px;
+  }
 }
 
 .cu_item {
@@ -1802,7 +1805,6 @@
       background-color: rgba(0, 0, 0, 0.63);
       color: white;
       margin: 1em;
-      box-shadow: 0 0 5px 1px $white;
     }
 
     .cu_item_img_info {
@@ -1884,7 +1886,6 @@
 
     .cu_item_duration {
       background: #0f0f10;
-      box-shadow: 0 0 5px 1px $white;
     }
   }
 
@@ -1906,6 +1907,8 @@
 
   .cu_item_name {
     margin: 1em 0 1.5em;
+    color: $fullBlack;
+    display: inline-block;
   }
 }
 
@@ -1917,8 +1920,15 @@
   vertical-align: bottom;
 }
 
+.homepage__thumbnails .my_header.ui.header {
+  margin-right: 1.5em;
+  margin-left: 1.5em;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
 .my_header.ui.header {
-  display: inline-block;
   margin: 0 0 4px;
   font-weight: normal;
   vertical-align: bottom;
@@ -1926,17 +1936,13 @@
   svg {
     height: 1.5em;
     width: 1.5em;
-    margin: 0 .4em -.3em;
+    margin: 0 0 -.3em;
 
   }
 
   .icon {
     font-size: 1em;
     vertical-align: top;
-  }
-
-  .parts {
-
   }
 }
 

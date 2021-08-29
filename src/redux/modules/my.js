@@ -16,6 +16,9 @@ const FETCH_BY_ID   = 'My/FETCH_BY_ID';
 const FETCH_SUCCESS = 'My/FETCH_SUCCESS';
 const FETCH_FAILURE = 'My/FETCH_FAILURE';
 
+const FETCH_BY_CU         = 'My/FETCH_BY_CU';
+const FETCH_BY_CU_SUCCESS = 'My/FETCH_BY_CU_SUCCESS';
+
 const ADD         = 'My/ADD';
 const ADD_SUCCESS = 'My/ADD_SUCCESS';
 
@@ -35,6 +38,9 @@ export const types = {
   FETCH_BY_ID,
   FETCH_SUCCESS,
   FETCH_FAILURE,
+
+  FETCH_BY_CU,
+  FETCH_BY_CU_SUCCESS,
 
   ADD,
   ADD_SUCCESS,
@@ -58,6 +64,9 @@ const fetchById    = createAction(FETCH_BY_ID, (namespace, params) => ({ namespa
 const fetchSuccess = createAction(FETCH_SUCCESS);
 const fetchFailure = createAction(FETCH_FAILURE);
 
+const fetchByCU        = createAction(FETCH_BY_CU, (namespace, params) => ({ namespace, ...params }));
+const fetchByCUSuccess = createAction(FETCH_BY_CU_SUCCESS);
+
 const add        = createAction(ADD, (namespace, params) => ({ namespace, ...params }));
 const addSuccess = createAction(ADD_SUCCESS);
 
@@ -77,6 +86,9 @@ export const actions = {
   fetchById,
   fetchSuccess,
   fetchFailure,
+
+  fetchByCU,
+  fetchByCUSuccess,
 
   add,
   addSuccess,
@@ -98,7 +110,8 @@ const initialState = MY_NAMESPACES.reduce((acc, n) => {
     items: [],
     wip: false,
     total: 0,
-    errors: null
+    errors: null,
+    byCU: {}
   };
   return acc;
 }, { likeCount: 0, [MY_NAMESPACE_PLAYLIST_BY_ID]: { byID: {} } });
@@ -114,17 +127,26 @@ const onFetch = (draft, { namespace }) => {
   return draft;
 };
 
-const onFetchSuccess = (draft, { namespace, items = [], total }) => {
+const onFetchSuccess = (draft, { namespace, items = [], total, uids }) => {
   if (namespace === MY_NAMESPACE_PLAYLIST_BY_ID) {
     items.forEach(x => {
       draft[MY_NAMESPACE_PLAYLIST_BY_ID].byID[x.id] = x;
       draft[MY_NAMESPACE_PLAYLIST_ITEMS].items      = x.playlist_items || [];
     });
-
   } else {
     draft[namespace].items = items || [];
     draft[namespace].total = total;
   }
+
+  draft[namespace].wip    = false;
+  draft[namespace].errors = false;
+  return draft;
+};
+
+const onFetchByCUSuccess = (draft, { namespace, items = [], uids }) => {
+  uids.forEach(uid => {
+    draft[namespace].byCU[uid] = items?.find(x => x.content_unit_uid === uid);
+  });
   draft[namespace].wip    = false;
   draft[namespace].errors = false;
   return draft;
@@ -137,8 +159,11 @@ const onFetchFailure = (draft, { namespace }) => {
 };
 
 const onAddSuccess = (draft, { namespace, items }) => {
-  draft[namespace].items  = draft[namespace].items.concat(items);
-  draft[namespace].total  = draft[namespace].total + items.length;
+  draft[namespace].items = draft[namespace].items.concat(items);
+  draft[namespace].total = draft[namespace].total + items.length;
+  items.forEach(x => {
+    draft[namespace].byCU[x.content_unit_uid] = x;
+  });
   draft[namespace].wip    = false;
   draft[namespace].errors = false;
   if (namespace === MY_NAMESPACE_LIKES) ++draft.likeCount;
@@ -150,7 +175,10 @@ const onEditSuccess = (draft, { namespace, item }) => {
   if (index < 0) index = draft[namespace].items.length;
 
   if (namespace === MY_NAMESPACE_PLAYLISTS)
-    draft[MY_NAMESPACE_PLAYLIST_BY_ID].byID[item.id] = { ...item, playlist_items: draft[MY_NAMESPACE_PLAYLIST_BY_ID].byID[item.id].playlist_items };
+    draft[MY_NAMESPACE_PLAYLIST_BY_ID].byID[item.id] = {
+      ...item,
+      playlist_items: draft[MY_NAMESPACE_PLAYLIST_BY_ID].byID[item.id].playlist_items
+    };
 
   if (namespace === MY_NAMESPACE_PLAYLIST_ITEMS) {
     const playlist = draft[MY_NAMESPACE_PLAYLIST_BY_ID].byID[item.playlist_id];
@@ -158,22 +186,41 @@ const onEditSuccess = (draft, { namespace, item }) => {
     if (itemIndex < 0) index = playlist.playlist_items.length;
     playlist.playlist_items[itemIndex] = item;
   }
-
-  draft[namespace].items[index] = item;
-  draft[namespace].wip          = false;
-  draft[namespace].errors       = false;
+  draft[namespace].byCU[item.content_unit_uid] = item;
+  draft[namespace].items[index]                = item;
+  draft[namespace].wip                         = false;
+  draft[namespace].errors                      = false;
   return draft;
 };
 
-const onRemoveSuccess = (draft, { namespace, ids, playlist_id }) => {
-  if (namespace === MY_NAMESPACE_PLAYLIST_ITEMS) {
+const onRemoveSuccess = (draft, { namespace, ids, playlist_id, uids }) => {
+  if (namespace === MY_NAMESPACE_PLAYLIST_ITEMS && !playlist_id) {
     draft[namespace].items.filter(x => ids.includes(x.id)).forEach(x => {
       const playlist          = draft[MY_NAMESPACE_PLAYLIST_BY_ID].byID[x.playlist_id];
       playlist.playlist_items = playlist.playlist_items.filter(a => !ids.includes(a.id));
     });
   }
-  draft[namespace].items  = draft[namespace].items.filter(a => !ids.includes(a.id));
-  draft[namespace].total  = draft[namespace].total - ids.length;
+
+  if (namespace === MY_NAMESPACE_PLAYLISTS) {
+    for (const id in ids) {
+      if (draft[MY_NAMESPACE_PLAYLIST_BY_ID][id])
+        delete draft[MY_NAMESPACE_PLAYLIST_BY_ID][id];
+    }
+  }
+  if (namespace === MY_NAMESPACE_PLAYLIST_ITEMS && playlist_id) {
+    draft[namespace].items = draft[namespace].items.filter(a => !(uids.includes(a.content_unit_uid) && a.playlist_id === playlist_id));
+  } else {
+    draft[namespace].items = draft[namespace].items.filter(a => !ids.includes(a.id));
+  }
+
+  for (const key in draft[namespace].byCU) {
+    const x = draft[namespace].byCU[key];
+    if (ids.includes(x.id)) {
+      delete draft[namespace].byCU[x.content_unit_uid];
+    }
+  }
+
+  draft[namespace].total  = draft[namespace].total - ids?.length;
   draft[namespace].wip    = false;
   draft[namespace].errors = false;
   if (namespace === MY_NAMESPACE_LIKES) --draft.likeCount;
@@ -193,6 +240,8 @@ export const reducer = handleActions({
   [FETCH_SUCCESS]: onFetchSuccess,
   [FETCH_FAILURE]: onFetchFailure,
 
+  [FETCH_BY_CU_SUCCESS]: onFetchByCUSuccess,
+
   [ADD_SUCCESS]: onAddSuccess,
   [EDIT_SUCCESS]: onEditSuccess,
   [REMOVE_SUCCESS]: onRemoveSuccess,
@@ -202,6 +251,7 @@ export const reducer = handleActions({
 
 /* Selectors */
 const getItems        = (state, namespace) => state[namespace].items;
+const getItemByCU     = (state, namespace, uid) => state[namespace].byCU[uid];
 const getPlaylistById = (state, id) => state[MY_NAMESPACE_PLAYLIST_BY_ID].byID[id];
 const getWIP          = (state, namespace) => state[namespace].wip;
 const getErr          = (state, namespace) => state[namespace].errors;
@@ -211,6 +261,7 @@ const getLikeCount    = state => state.likeCount;
 
 export const selectors = {
   getItems,
+  getItemByCU,
   getPlaylistById,
   getWIP,
   getErr,

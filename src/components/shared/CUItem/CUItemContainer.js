@@ -11,11 +11,10 @@ import { selectors as recommended } from '../../../redux/modules/recommended';
 import { canonicalLink } from '../../../helpers/links';
 import ListTemplate from './ListTemplate';
 import CardTemplate from './CardTemplate';
-import * as shapes from '../../shapes';
 
 const NOT_LESSONS_COLLECTIONS = [CT_VIDEO_PROGRAM, CT_VIRTUAL_LESSONS, CT_CLIPS];
 
-const CUItemContainer = ({ id, children, t, asList = false, link }) => {
+const CUItemContainer = ({ id, children, t, asList = false, link, playTime }) => {
   const unit     = useSelector(state => selectors.getDenormContentUnit(state.mdb, id));
   const language = useSelector(state => settings.getLanguage(state.settings));
   const views    = useSelector(state => recommended.getViews(id, state.recommended));
@@ -49,6 +48,7 @@ const CUItemContainer = ({ id, children, t, asList = false, link }) => {
     ccu,
     description,
     children,
+    playTime
   };
   return (asList ? <ListTemplate {...props} /> : <CardTemplate {...props} />);
 };
@@ -57,6 +57,7 @@ CUItemContainer.propTypes = {
   id: PropTypes.string.isRequired,
   link: PropTypes.string,
   asList: PropTypes.bool,
+  playTime: PropTypes.number,
 };
 
 export default withNamespaces()(CUItemContainer);
