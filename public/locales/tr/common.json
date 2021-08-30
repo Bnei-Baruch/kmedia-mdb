@@ -295,7 +295,11 @@
     }
   },
   "likutim":{
-    "header": "Excerpts from the Sources:"
+    "header": {
+      "text": "Excerpts from Kabbalistic Sources",
+      "subtext": "Excerpts from the Sources on various subjects"
+    },
+    "item-header": "Excerpts from the Sources:"
   },
   "programs": {
     "header": {
