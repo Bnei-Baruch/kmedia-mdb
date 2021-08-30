@@ -125,7 +125,7 @@ const Likut = ({ t }) => {
           <div className="section-header likut">
             <Header as='h2' >
               <Header.Content>
-                {`${t('likutim.header')} ${name}`}
+                {`${t('likutim.item-header')} ${name}`}
                 <Header.Subheader><b>{t('values.date', { date: film_date })}</b></Header.Subheader>
               </Header.Content>
             </Header>
