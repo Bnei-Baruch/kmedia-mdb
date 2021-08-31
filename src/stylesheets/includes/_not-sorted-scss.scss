@@ -2073,10 +2073,16 @@
 }
 
 .my_playlist_actions {
+  position: absolute;
+  top: .5em;
+  bottom: .5em;
+  left: 0;
+  right: 0;
   display: none;
 
   @include mobile {
     display: block;
+    margin-top: -15px;
   }
 
   & > div {

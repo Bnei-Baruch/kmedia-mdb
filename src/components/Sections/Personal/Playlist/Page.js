@@ -3,7 +3,7 @@ import { withRouter } from 'react-router';
 import { withNamespaces } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Confirm, Grid, Table } from 'semantic-ui-react';
+import { Button, Confirm, Container, Grid, Table } from 'semantic-ui-react';
 import clsx from 'clsx';
 
 import { actions, selectors } from '../../../../redux/modules/my';
@@ -67,46 +67,48 @@ const Page = ({ t }) => {
         <PlaylistHeaderContainer playlist={playlist} />
         {
           items?.length > 0 ? (
-            <Table unstackable basic="very" sortable>
-              <Table.Body>
-                {items.map((x, i) => (
-                    <CUItemContainer id={x.content_unit_uid} link={`${link}?ap=${i}`} asList>
-                      <div className="my_playlist_actions">
-                        <Confirm
-                          size="tiny"
-                          open={confirm}
-                          onCancel={handleConfirmCancel}
-                          onConfirm={handleConfirmSuccess}
-                          content={t('personal.confirmRemovePlaylistItem', { cu: x.name, playlist: playlist.name })}
-                        />
-                        <div>
-                          <Button
-                            basic
-                            icon="long arrow alternate up"
-                            className="no-shadow"
-                            disabled={i === 0}
-                            onClick={() => changeItemPosition(i, true)}
+            <Container className="padded">
+              <Table unstackable basic="very" sortable>
+                <Table.Body>
+                  {items.map((x, i) => (
+                      <CUItemContainer id={x.content_unit_uid} link={`${link}?ap=${i}`} asList>
+                        <div className="my_playlist_actions">
+                          <Confirm
+                            size="tiny"
+                            open={confirm}
+                            onCancel={handleConfirmCancel}
+                            onConfirm={handleConfirmSuccess}
+                            content={t('personal.confirmRemovePlaylistItem', { cu: x.name, playlist: playlist.name })}
                           />
-                          <Button
-                            basic
-                            icon="remove circle"
-                            className="no-shadow"
-                            onClick={() => removeItem(x.id)}
-                          />
-                          <Button
-                            basic
-                            icon="long arrow alternate down"
-                            className="no-shadow"
-                            disabled={i === items.length - 1}
-                            onClick={() => changeItemPosition(i, false)}
-                          />
+                          <div>
+                            <Button
+                              basic
+                              icon="long arrow alternate up"
+                              className="no-shadow"
+                              disabled={i === 0}
+                              onClick={() => changeItemPosition(i, true)}
+                            />
+                            <Button
+                              basic
+                              icon="remove circle"
+                              className="no-shadow"
+                              onClick={() => removeItem(x.id)}
+                            />
+                            <Button
+                              basic
+                              icon="long arrow alternate down"
+                              className="no-shadow"
+                              disabled={i === items.length - 1}
+                              onClick={() => changeItemPosition(i, false)}
+                            />
+                          </div>
                         </div>
-                      </div>
-                    </CUItemContainer>
-                  )
-                )}
-              </Table.Body>
-            </Table>) : null
+                      </CUItemContainer>
+                    )
+                  )}
+                </Table.Body>
+              </Table>
+            </Container>) : null
         }
       </Grid.Column>
       {
