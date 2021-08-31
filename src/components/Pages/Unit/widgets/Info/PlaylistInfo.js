@@ -6,9 +6,9 @@ import { Button, Checkbox, Icon, Input, List, Modal, Divider } from 'semantic-ui
 import { actions, selectors } from '../../../../../redux/modules/my';
 import { MY_NAMESPACE_PLAYLIST_ITEMS, MY_NAMESPACE_PLAYLISTS } from '../../../../../helpers/consts';
 import AlertModal from '../../../../shared/AlertModal';
-import { ReactComponent as PlaylistAddIcon } from '../../../../../images/icons/playlist_add_black_24dp.svg';
+import PlaylistAddIcon from '../../../../../images/icons/PlaylistAddBlack24Dp';
 
-const PlaylistInfo = ({ cuID, t, handleClose }) => {
+const PlaylistInfo = ({ cuID, t, handleClose = null }) => {
   const [isOpen, setIsOpen]               = useState(false);
   const [selected, setSelected]           = useState([]);
   const [saved, setSaved]                 = useState([]);
@@ -103,12 +103,12 @@ const PlaylistInfo = ({ cuID, t, handleClose }) => {
         onOpen={onOpen}
         onClose={toggle}
         size={'tiny'}
-        trigger={(
-          <span className="my_playlist_add" onClick={toggle}>
+        trigger={
+          <Button basic className="my_playlist_add clear_button" onClick={toggle}>
             <PlaylistAddIcon />
             <span>{t('personal.savePlaylist')}</span>
-          </span>
-        )}
+          </Button>
+        }
       >
         <Modal.Header>{t('personal.addToPlaylist')}</Modal.Header>
         <Modal.Content>
@@ -173,8 +173,9 @@ const PlaylistInfo = ({ cuID, t, handleClose }) => {
   );
 };
 
-PlaylistInfo.propTypes = {
-  cuID: PropTypes.string.isRequired,
-};
+PlaylistInfo.propTypes =
+  {
+    cuID: PropTypes.string.isRequired,
+  };
 
 export default PlaylistInfo;

@@ -1389,6 +1389,10 @@
   margin-right: 4px !important;
 }
 
+.margin-left-4 {
+  margin-left: 4px !important;
+}
+
 .margin-right-8 {
   margin-right: 8px !important;
 }
@@ -1701,6 +1705,14 @@
   white-space: nowrap;
 }
 
+.text_ellipsis {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  width: 100%;
+  white-space: nowrap;
+  display: inline-block;
+}
+
 .languagesGrid {
   margin-top: 0 !important;
 }
@@ -1711,6 +1723,10 @@
 
 .no-padding-bottom {
   padding-bottom: 0 !important;
+}
+
+.no-padding-top {
+  padding-top: 0 !important;
 }
 
 .library-language-container {
@@ -1728,7 +1744,6 @@
   position: relative;
 
   .over_layer {
-    color: white;
     position: absolute;
     top: 0;
     right: 0;
@@ -1736,6 +1751,20 @@
     height: 100%;
     background-color: rgba(0, 0, 0, 0.6);
     z-index: 1;
+    color: white;
+    display: flex;
+    vertical-align: middle;
+    align-items: center;
+    justify-content: center;
+    flex-flow: column;
+
+    .header {
+      margin: 0;
+      color: white;
+    }
+
+    @include mobile {
+    }
   }
 
   .unit-logo {
@@ -1751,46 +1780,16 @@
     width: calc(50% - 40px);
     margin: 20px;
   }
+  @include mobile {
+    width: calc(100% - 5em) !important;
+    margin: 2.5em;
+    &:first-child {
+      margin-top: 2.5em !important;
+    }
+  }
 }
 
 .cu_item {
-  .cu_info_description {
-    margin: 1.5em 1em;
-
-    & > span {
-      display: inline-block;
-      padding: 0 0.5em;
-      font-size: .9em;
-      line-height: 1em;
-    }
-
-    &.ltr > span {
-      border-left: 1px rgb(170, 170, 170) solid;
-
-      &:first-child {
-        border-left: 0;
-        padding-left: 0;
-      }
-
-      &:last-child {
-        padding-right: 0;
-      }
-    }
-
-    &.rtl > span {
-      border-right: 1px $midGrey solid;
-
-      &:first-child {
-        padding-right: 0;
-        border-right: 0;
-      }
-
-      &:last-child {
-        padding-left: 0;
-      }
-    }
-  }
-
   .cu_item_img {
     position: relative;
     width: 100%;
@@ -1800,12 +1799,6 @@
       display: block;
     }
 
-    .cu_item_duration {
-      border-radius: 0;
-      background-color: rgba(0, 0, 0, 0.63);
-      color: white;
-      margin: 1em;
-    }
 
     .cu_item_img_info {
       position: absolute;
@@ -1847,6 +1840,56 @@
   }
 }
 
+.cu_item_duration {
+  border-radius: 0;
+  background-color: $black;
+  color: white;
+  margin: 1em;
+  padding: 3px 7px;
+  display: inline-block;
+
+  @include mobile {
+    margin: 4px;
+  }
+}
+
+.cu_info_description {
+  margin: 1.5em 1em;
+
+  & > span {
+    display: inline-block;
+    padding: 0 0.5em;
+    font-size: .9em;
+    line-height: 1em;
+  }
+
+  &.ltr > span {
+    border-left: 1px rgb(170, 170, 170) solid;
+
+    &:first-child {
+      border-left: 0;
+      padding-left: 0;
+    }
+
+    &:last-child {
+      padding-right: 0;
+    }
+  }
+
+  &.rtl > span {
+    border-right: 1px $midGrey solid;
+
+    &:first-child {
+      padding-right: 0;
+      border-right: 0;
+    }
+
+    &:last-child {
+      padding-left: 0;
+    }
+  }
+}
+
 .cu_item_info_co {
   .ui.image, svg {
     height: 2.5em !important;
@@ -1854,10 +1897,51 @@
   }
 }
 
-.cu_item_list {
+.cu_item_progress.ui.progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 0;
+  background: $grey;
+  margin: 0;
+  border-radius: 0;
+  z-index: 2;
 
+  .bar {
+    background: #04eaf6;
+    border-radius: 0;
+    @include mobile {
+      height: 3px;
+    }
+  }
+}
+
+.ui.table .cu_item_list {
+
+  td {
+    position: relative;
+    margin: 0;
+    padding-bottom: 0;
+
+    @include mobile {
+      padding-bottom: 20px;
+      border-top: 0 none;
+    }
+  }
+
+  td.cu_item_info {
+    height: 100%;
+  }
+}
+
+.cu_item_list {
   .cu_item_info_co {
     white-space: nowrap;
+
+    @include mobile {
+      line-height: 0.7em;
+    }
 
     .ui.image, svg {
       height: 2.5em !important;
@@ -1879,23 +1963,42 @@
 
   }
 
+  .cu_item_duration {
+    position: absolute;
+    right: 0;
+    z-index: 2;
+    top: 0;
+  }
+
+  .cu_item_duration.rtl {
+    left: 0;
+    right: auto;
+  }
+
   .cu_item_img {
     position: relative;
     width: 100%;
     height: auto;
 
-    .cu_item_duration {
-      background: #0f0f10;
-    }
   }
 
-  td {
-    position: relative;
-  }
 
   .cu_item_info {
     padding-right: 2em !important;
     padding-left: 2em !important;
+    @include mobile {
+      padding-top: 0 !important;
+      padding-right: 0 !important;
+      padding-left: 8px !important;
+      max-width: 0;
+    }
+
+    &.rtl {
+      @include mobile {
+        padding-right: 8px !important;
+        padding-left: 0 !important;
+      }
+    }
   }
 
   .cu_info_description {
@@ -1903,14 +2006,28 @@
     position: absolute;
     bottom: 1em;
     opacity: 0.43;
+    @include mobile {
+      top: 75px;
+    }
   }
 
   .cu_item_name {
-    margin: 1em 0 1.5em;
+    margin: 1em 0 2.5em;
     color: $fullBlack;
     display: inline-block;
+    @include mobile {
+      margin-top: 0;
+      margin-bottom: 8px;
+      -webkit-line-clamp: 3;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      height: 60px;
+    }
   }
+
 }
+
 
 .weight-normal {
   font-weight: normal !important;
@@ -1920,12 +2037,21 @@
   vertical-align: bottom;
 }
 
+.no-background {
+  background-color: transparent !important;
+}
+
 .homepage__thumbnails .my_header.ui.header {
   margin-right: 1.5em;
   margin-left: 1.5em;
   display: flex;
   justify-content: space-between;
   align-items: baseline;
+
+  @include mobile {
+    margin-right: 0;
+    margin-left: 0;
+  }
 }
 
 .my_header.ui.header {
@@ -1947,16 +2073,25 @@
 }
 
 .my_playlist_actions {
-  position: absolute;
-  top: .5em;
-  bottom: .5em;
   display: none;
+
+  @include mobile {
+    display: block;
+  }
 
   & > div {
     height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+  }
+}
+
+.cu_item_dropdown {
+  margin-bottom: 30px;
+
+  & > .icon {
+    color: $midGrey;
   }
 }
 
@@ -1968,6 +2103,11 @@
   span {
     margin: 0 8px;
     display: inline-block;
+    vertical-align: middle;
+  }
+
+  svg {
+    vertical-align: middle;
   }
 }
 
@@ -1986,5 +2126,22 @@ tr:hover .my_playlist_actions {
   &:hover {
     background: none !important;
     box-shadow: none;
+  }
+}
+
+.my_playlist_header.ui.header {
+  @include mobile {
+    display: block;
+    svg {
+      vertical-align: bottom;
+    }
+    .content {
+      vertical-align: bottom;
+      margin: 0 8px;
+    }
+    .sub {
+      display: inline-block;
+      vertical-align: bottom;
+    }
   }
 }

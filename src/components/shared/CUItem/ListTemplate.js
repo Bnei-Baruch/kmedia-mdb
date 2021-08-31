@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
-import { Container, Header, Label, Progress, Table } from 'semantic-ui-react';
+import { Grid, Container, Header, Label, Progress, Table } from 'semantic-ui-react';
 
 import { NO_NAME } from '../../../helpers/consts';
 import * as shapes from '../../shapes';
@@ -9,17 +9,27 @@ import { isLanguageRtl } from '../../../helpers/i18n-utils';
 import UnitLogo from '../Logo/UnitLogo';
 import Link from '../../Language/MultiLanguageLink';
 import { toHumanReadableTime } from '../../../helpers/time';
+import { DeviceInfoContext } from '../../../helpers/app-contexts';
 
 const ListTemplate = ({ unit, language, withCCUInfo, link, ccu, description, children, playTime }) => {
-  const dir = isLanguageRtl(language) ? 'rtl' : 'ltr';
+  const dir                = isLanguageRtl(language) ? 'rtl' : 'ltr';
+  const { isMobileDevice } = useContext(DeviceInfoContext);
 
-  const ccu_info = ccu && withCCUInfo ? (
-    <div className="cu_item_info_co">
+  let ccu_info;
+  if (!isMobileDevice) {
+    ccu_info = ccu && withCCUInfo ? (
+      <div className="cu_item_info_co">
       <span style={{ display: 'inline-block' }}>
         <UnitLogo collectionId={ccu.id} />
       </span>
-      <Header size="small" content={ccu.name || NO_NAME} textAlign="left" />
-    </div>) : null;
+        <Header size="small" content={ccu.name || NO_NAME} textAlign="left" />
+      </div>) : null;
+  } else {
+    ccu_info = ccu && withCCUInfo ? (
+      <div className="cu_item_info_co ">
+        <h5 textAlign="left" className="weight-normal no-padding no-margin text_ellipsis">{ccu.name + ccu.name || NO_NAME}</h5>
+      </div>) : null;
+  }
 
   let percent = null;
   if (playTime) {
@@ -27,10 +37,8 @@ const ListTemplate = ({ unit, language, withCCUInfo, link, ccu, description, chi
     link      = `${link}${sep}sstart=${toHumanReadableTime(playTime)}`;
     percent   = (
       <Progress
-        style={{ maxWidth: '300px' }}
         size="tiny"
-        className="margin-top-8"
-        color="green"
+        className="cu_item_progress"
         percent={playTime * 100 / unit.duration}
       />
     );
@@ -38,25 +46,26 @@ const ListTemplate = ({ unit, language, withCCUInfo, link, ccu, description, chi
 
   return (
     <Table.Row className="cu_item cu_item_list no-thumbnail" verticalAlign="top" key={unit.id}>
-      <Table.Cell width={2} className={'no-padding'} verticalAlign={'top'} collapsing singleLine>
-        <Link to={link} className="cu_item_img">
-          <UnitLogo unitId={unit.id} width={287} />
-          <Container className="cu_item_img_info" textAlign="right">
-            <Label className="cu_item_duration" content={formatDuration(unit.duration)} />
-          </Container>
-        </Link>
+      <Table.Cell width={2} className={'padding_r_l_0 no-padding-top'} verticalAlign={'top'}>
+        <div style={{ position: 'relative' }}>
+          <div className="cu_item_duration">{formatDuration(unit.duration)}</div>
+          {percent}
+          <Link to={link} className="cu_item_img">
+            <UnitLogo unitId={unit.id} width={isMobileDevice ? 165 : 287} />
+          </Link>
+
+        </div>
       </Table.Cell>
-      <Table.Cell verticalAlign={'top'} className={'cu_item_info'}>
+      <Table.Cell verticalAlign={'top'} className={`cu_item_info ${dir}`}>
         {ccu_info}
         <Link to={link} className="cu_item_name">
           {unit.name}
         </Link>
-        {percent}
         <div className={`cu_info_description ${dir}`}>
           {description.map((d, i) => (<span key={i}>{d}</span>))}
         </div>
       </Table.Cell>
-      <Table.Cell width={1} verticalAlign="middle">
+      <Table.Cell width="1" verticalAlign="middle" textAlign="center" className="padding_r_l_0">
         {children}
       </Table.Cell>
     </Table.Row>

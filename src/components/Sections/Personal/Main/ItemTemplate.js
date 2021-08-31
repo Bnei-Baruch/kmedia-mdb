@@ -4,7 +4,6 @@ import { Card, Container, Button, Grid, Header, Icon } from 'semantic-ui-react';
 
 import * as shapes from '../../../shapes';
 import Link from '../../../Language/MultiLanguageLink';
-import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import {
   MY_NAMESPACE_HISTORY,
   MY_NAMESPACE_LIKES,
@@ -22,9 +21,7 @@ const iconByNamespace = {
   [MY_NAMESPACE_PLAYLISTS]: <PlaylistPlayIcon />,
 };
 const ItemTemplate    = ({ children, namespace, t, withSeeAll = false, language }) => {
-  const { isMobileDevice, isTablet } = useContext(DeviceInfoContext);
-  const itemsPerRow        = 4;
-  const seeAll             = withSeeAll ? (
+  const seeAll      = withSeeAll ? (
     <Grid.Column textAlign={'right'}>
       <Link to={`/personal/${namespace}`}>{t('search.showAll')}</Link>
     </Grid.Column>
@@ -41,7 +38,7 @@ const ItemTemplate    = ({ children, namespace, t, withSeeAll = false, language 
   }
 
   return (
-    <div className="homepage__thumbnails">
+    <div className="homepage__thumbnails avbox no-background">
       <Container fluid className="padded">
         <Header as={'h2'} className="my_header">
           <Header.Content className="display-iblock">
@@ -50,9 +47,7 @@ const ItemTemplate    = ({ children, namespace, t, withSeeAll = false, language 
           </Header.Content>
           <Header.Subheader className="display-iblock">{seeAll}</Header.Subheader>
         </Header>
-        <Card.Group doubling itemsPerRow={itemsPerRow} stackable className="cu_items">
-          {children}
-        </Card.Group>
+        {children}
       </Container>
     </div>
   );

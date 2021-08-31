@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from 'react';
 import { withRouter } from 'react-router';
 import { withNamespaces } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Container, Divider, Grid, Header, Icon, Label, Table } from 'semantic-ui-react';
+import { Button, Container, Grid, Header, Icon, Table } from 'semantic-ui-react';
 import clsx from 'clsx';
 
 import { actions, selectors } from '../../../../redux/modules/my';
@@ -43,21 +43,21 @@ const Page      = ({ location, t }) => {
   const computerWidth = isMobileDevice ? 16 : 10;
 
   return (
-    <Grid padded={!isMobileDevice}>
+    <Grid padded={!isMobileDevice} className="avbox no-background">
       <Grid.Column mobile={16} tablet={computerWidth} computer={computerWidth} className={clsx({ 'is-fitted': isMobileDevice })}>
-        <Container>
+        <Container className="padded">
           <div className="summary-container align_items_center">
             <Header as={'h2'} className="my_header">
               <Icon name="heart outline" className="display-iblock" />
               {t('personal.likes')}
               <Header.Subheader className="display-iblock margin-right-8 margin-left-8">
-                {`${t('personal.videos')} ${total}`}
+                {`${t('personal.videosOnList')} ${total}`}
               </Header.Subheader>
             </Header>
             <Button
               basic
               className="clear_button"
-              href={`/${MY_NAMESPACE_PLAYLISTS}/${MY_NAMESPACE_LIKES}`}
+              href={`/${language}/${MY_NAMESPACE_PLAYLISTS}/${MY_NAMESPACE_LIKES}`}
             >
               <Icon name={'play circle outline'} className="margin-left-8 margin-right-8" size="big" />
               {t('personal.playAll')}
@@ -66,18 +66,19 @@ const Page      = ({ location, t }) => {
         </Container>
         {
           items?.length > 0 ? (
-            <Table unstackable basic="very" className="index" sortable>
-              <Table.Body>
-                {items.map((x, i) => (
-                    <CUItemContainer id={x.content_unit_uid} asList={true} key={i}>
-                      <LikeActions cuId={x.content_unit_uid} id={x.id} />
-                    </CUItemContainer>
-                  )
-                )}
-              </Table.Body>
-            </Table>) : null
+            <Container className="padded">
+              <Table unstackable basic="very">
+                <Table.Body>
+                  {items.map((x, i) => (
+                      <CUItemContainer id={x.content_unit_uid} asList={true} key={i}>
+                        <LikeActions cuId={x.content_unit_uid} id={x.id} />
+                      </CUItemContainer>
+                    )
+                  )}
+                </Table.Body>
+              </Table>
+            </Container>) : null
         }
-        <Divider fitted />
         <Container className="padded pagination-wrapper" textAlign="center">
           <Pagination
             pageNo={pageNo}

@@ -78,13 +78,14 @@ const PlaylistMyPage = ({ collection }) => {
     setUnit(newUnit);
   }, [selected]);
 
-  if (!collection || !Array.isArray(collection.content_units) || !playlist || !unit) {
+  if (!collection ||
+    !Array.isArray(collection.content_units) ||
+    !playlist ||
+    !unit) {
     return null;
   }
 
   const { items } = playlist;
-
-  const filterOutUnits = items.map(item => item.unit).filter(u => !!u) || [];
 
   const PlaylistData = () =>
     <Playlist

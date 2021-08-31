@@ -1,15 +1,15 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
+import { Header } from 'semantic-ui-react';
 
-import { MY_NAMESPACE_LIKES, MY_NAMESPACE_PLAYLIST_BY_ID } from '../../../helpers/consts';
+import { MY_NAMESPACE_PLAYLIST_BY_ID } from '../../../helpers/consts';
 import { actions, selectors } from '../../../redux/modules/my';
 import { selectors as mdbSelectors } from '../../../redux/modules/mdb';
-import WipErr from '../../shared/WipErr/WipErr';
-import Page from '../PlaylistCollection/Page';
-import { Header } from 'semantic-ui-react';
-import playerHelper from '../../../helpers/player';
 import { selectors as settings } from '../../../redux/modules/settings';
+import playerHelper from '../../../helpers/player';
+import WipErr from '../../shared/WipErr/WipErr';
+import Page from './Page';
 
 const PlaylistMyContainer = ({ t, history, location, id }) => {
   const playlist      = useSelector(state => selectors.getPlaylistById(state.my, id)) || {};

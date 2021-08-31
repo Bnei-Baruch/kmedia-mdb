@@ -1,20 +1,20 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { withNamespaces } from 'react-i18next';
+import { Header } from 'semantic-ui-react';
 
 import { MY_NAMESPACE_LIKES } from '../../../helpers/consts';
 import { actions, selectors } from '../../../redux/modules/my';
+import { selectors as mdbSelectors } from '../../../redux/modules/mdb';
+import { selectors as settings } from '../../../redux/modules/settings';
 import WipErr from '../../shared/WipErr/WipErr';
 import Page from './Page';
-import { Header } from 'semantic-ui-react';
-import { selectors as mdbSelectors } from '../../../redux/modules/mdb';
-import { withNamespaces } from 'react-i18next';
-import { selectors as settings } from '../../../redux/modules/settings';
 
 const PlaylistLikeContainer = ({ t }) => {
-  const items = useSelector(state => selectors.getItems(state.my, MY_NAMESPACE_LIKES)) || [];
-  const wip   = useSelector(state => selectors.getWIP(state.my, MY_NAMESPACE_LIKES));
-  const err   = useSelector(state => selectors.getErr(state.my, MY_NAMESPACE_LIKES));
-  const uiLanguage    = useSelector(state => settings.getLanguage(state.settings));
+  const items      = useSelector(state => selectors.getItems(state.my, MY_NAMESPACE_LIKES)) || [];
+  const wip        = useSelector(state => selectors.getWIP(state.my, MY_NAMESPACE_LIKES));
+  const err        = useSelector(state => selectors.getErr(state.my, MY_NAMESPACE_LIKES));
+  const uiLanguage = useSelector(state => settings.getLanguage(state.settings));
 
   const content_units     = useSelector(state => items.map(x => mdbSelectors.getDenormContentUnit(state.mdb, x.content_unit_uid))) || [];
   const cuUIDs            = items.map(x => x.content_unit_uid);

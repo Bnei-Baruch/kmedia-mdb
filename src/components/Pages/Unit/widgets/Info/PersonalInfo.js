@@ -104,7 +104,13 @@ const PersonalInfo = ({ unit = {}, t, collection }) => {
         <PlaylistInfo cuID={unit.id} user={user} t={t} />
       </Menu.Item>
       <Menu.Item fitted="horizontally">
-        <Icon onClick={() => likeDislike(like)} name={`heart${!like ? ' outline' : ''}`} />
+        <Button
+          basic
+          className="clear_button"
+          onClick={() => likeDislike(like)}
+        >
+          <Icon name={`heart${!like ? ' outline' : ''}`} className="margin-right-4 margin-left-4" />
+        </Button>
         <span>{likeCount}</span>
       </Menu.Item>
       {subBtn}

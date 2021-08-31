@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { Divider } from 'semantic-ui-react';
 
-import ItemsByNamespace from './ItemsByNamespace';
+import ItemsContainer from './ItemsContainer';
 import { selectors } from '../../../../redux/modules/auth';
 import {
   MY_NAMESPACE_HISTORY,
@@ -17,13 +17,10 @@ const Page = () => {
 
   const isLogined  = () => (
     <>
-      <ItemsByNamespace namespace={MY_NAMESPACE_HISTORY} withSeeAll={true} />
-      <Divider hidden section />
-      <ItemsByNamespace namespace={MY_NAMESPACE_LIKES} withSeeAll={true} />
-      <Divider hidden section />
-      <ItemsByNamespace namespace={MY_NAMESPACE_PLAYLISTS} withSeeAll={false} />
-      <Divider hidden section />
-      <ItemsByNamespace namespace={MY_NAMESPACE_SUBSCRIPTIONS} withSeeAll={false} />
+      <ItemsContainer namespace={MY_NAMESPACE_HISTORY} withSeeAll={true} />
+      <ItemsContainer namespace={MY_NAMESPACE_LIKES} withSeeAll={true} />
+      <ItemsContainer namespace={MY_NAMESPACE_PLAYLISTS} withSeeAll={false} />
+      <ItemsContainer namespace={MY_NAMESPACE_SUBSCRIPTIONS} withSeeAll={false} />
 
     </>
   );

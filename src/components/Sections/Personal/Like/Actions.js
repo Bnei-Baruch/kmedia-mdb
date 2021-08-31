@@ -31,8 +31,16 @@ const Actions = ({ cuId, id, t }) => {
         onConfirm={handleConfirmSuccess}
         content={t('personal.confirmRemoveLike')}
       />
-      <Dropdown icon={'ellipsis vertical'} onClose={handleClose} onOpen={handleOpen} open={open} closeOnChange inline>
-        <Dropdown.Menu>
+      <Dropdown
+        icon={'ellipsis vertical'}
+        onClose={handleClose}
+        onOpen={handleOpen}
+        open={open}
+        closeOnChange
+        inline
+        className="cu_item_dropdown"
+      >
+        <Dropdown.Menu direction="left">
           <Dropdown.Item fitted="horizontally">
             <PlaylistInfo cuID={cuId} t={t} handleClose={handleClose} />
           </Dropdown.Item>

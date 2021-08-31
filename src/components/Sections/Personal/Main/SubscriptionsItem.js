@@ -1,21 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import moment from 'moment';
 import { Button, Card, Confirm, Header } from 'semantic-ui-react';
 
 import { actions } from '../../../../redux/modules/my';
 import { actions as mdbActions, selectors as mdb, selectors as mdbSelectors } from '../../../../redux/modules/mdb';
-import {
-  MY_NAMESPACE_SUBSCRIPTIONS,
-  SECTIONS_LINK_BY_CU_CONTENT_TYPE
-} from '../../../../helpers/consts';
+import { MY_NAMESPACE_SUBSCRIPTIONS, SECTIONS_LINK_BY_CU_CONTENT_TYPE } from '../../../../helpers/consts';
 import { canonicalLink } from '../../../../helpers/links';
-import { imageByUnit } from '../../../../helpers/utils';
+import Link from '../../../Language/MultiLanguageLink';
 import UnitLogo from '../../../shared/Logo/UnitLogo';
-import moment from 'moment';
-import { Link } from 'react-router-dom';
+import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 
-export const SubscriptionsItem = ({ item, t }) => {
+export const SubscriptionsItem = ({ item, t, language }) => {
   const [confirm, setConfirm] = useState();
+
+  const { isMobileDevice } = useContext(DeviceInfoContext);
 
   const namespace  = `${MY_NAMESPACE_SUBSCRIPTIONS}_${item.id}`;
   const collection = useSelector(state => mdb.getDenormCollection(state.mdb, item.collection_uid));
@@ -41,11 +40,11 @@ export const SubscriptionsItem = ({ item, t }) => {
 
   let logo, title, link;
   if (item.collection_uid) {
-    logo  = <UnitLogo collectionId={collection?.id} width={520} />;
+    logo  = <UnitLogo collectionId={collection?.id} width={isMobileDevice ? 300 : 520} />;
     title = collection?.name;
     link  = canonicalLink(collection);
   } else {
-    logo  = <UnitLogo unitId={item.content_unit_uid} width={520} />;
+    logo  = <UnitLogo unitId={item.content_unit_uid} width={isMobileDevice ? 300 : 520} />;
     title = t(`constants.content-types.${item.content_type}`);
     link  = '/' + SECTIONS_LINK_BY_CU_CONTENT_TYPE[item.content_type];
   }

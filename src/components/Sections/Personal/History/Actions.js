@@ -31,8 +31,8 @@ const Actions = ({ cuId, id, t }) => {
         onConfirm={handleConfirmSuccess}
         content={t('personal.confirmRemoveHistory')}
       />
-      <Dropdown icon={'ellipsis vertical'} onClose={handleClose} onOpen={handleOpen} open={open}>
-        <Dropdown.Menu>
+      <Dropdown className="cu_item_dropdown" icon={'ellipsis vertical'} onClose={handleClose} onOpen={handleOpen} open={open}>
+        <Dropdown.Menu direction="left">
           <Dropdown.Item fitted="horizontally">
             <PlaylistInfo cuID={cuId} t={t} handleClose={handleClose} />
           </Dropdown.Item>

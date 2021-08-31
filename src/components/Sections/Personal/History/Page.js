@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from 'react';
 import { withRouter } from 'react-router';
 import { withNamespaces } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { Container, Divider, Grid, Header, Icon, Label, Table } from 'semantic-ui-react';
+import { Container, Grid, Header, Icon, Table } from 'semantic-ui-react';
 import clsx from 'clsx';
 import moment from 'moment';
 
@@ -11,7 +11,6 @@ import { MY_NAMESPACE_HISTORY, MY_NAMESPACE_PLAYLISTS } from '../../../../helper
 import WipErr from '../../../shared/WipErr/WipErr';
 import CUItemContainer from '../../../shared/CUItem/CUItemContainer';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
-import Link from '../../../Language/MultiLanguageLink';
 import { selectors as settings } from '../../../../redux/modules/settings';
 import { getPageFromLocation } from '../../../Pagination/withPagination';
 import Pagination from '../../../Pagination/Pagination';
@@ -66,28 +65,27 @@ const Page      = ({ location, t }) => {
   };
 
   return (
-    <Grid padded={!isMobileDevice}>
+    <Grid padded={!isMobileDevice} className="avbox no-background">
       <Grid.Column mobile={16} tablet={computerWidth} computer={computerWidth} className={clsx({ 'is-fitted': isMobileDevice })}>
-        <Container>
-          <div className="summary-container">
+        <Container className="padded">
+          <div className="summary-container align_items_center">
             <Header as={'h2'} className="my_header">
               <Icon name="history" className="display-iblock" />
               {t('personal.history')}
-              <Header.Subheader className="display-iblock margin-right-8 margin-left-8">
-                {`${t('personal.videos')} ${total}`}
-              </Header.Subheader>
             </Header>
           </div>
         </Container>
         {
           items?.length > 0 ? (
-            <Table unstackable basic="very" className="index" sortable>
-              <Table.Body>
-                {items.map(renderItem)}
-              </Table.Body>
-            </Table>) : null
+            <Container className="padded">
+              <Table unstackable basic="very" sortable>
+                <Table.Body>
+                  {items.map(renderItem)}
+                </Table.Body>
+              </Table>
+            </Container>
+          ) : null
         }
-        <Divider fitted />
         <Container className="padded pagination-wrapper" textAlign="center">
           <Pagination
             pageNo={pageNo}
@@ -97,9 +95,6 @@ const Page      = ({ location, t }) => {
           />
         </Container>
       </Grid.Column>
-      {
-        !isMobileDevice && <Grid.Column mobile={16} tablet={6} computer={6} />
-      }
     </Grid>
   );
 };

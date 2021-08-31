@@ -636,10 +636,11 @@
     "removeHistory": "Remove from history",
     "removeLike": "Remove from likes",
     "playAll": "Play All",
-    "confirmRemovePlaylist": "Are you sure on remove playlist",
-    "confirmRemovePlaylistItem": "Are you sure on remove playlist item",
+    "confirmRemovePlaylist": "Are you sure on remove playlist {{name}}",
+    "confirmRemovePlaylistItem": "Are you sure on remove playlist item {{cu}} from {{playlist}}",
     "confirmRemoveHistory": "Are you sure on remove History",
     "confirmRemoveLike": "Are you sure on remove Like",
-    "confirmUnsubscribe": "Are you sure on unsubscribe"
+    "confirmUnsubscribe": "Are you sure on unsubscribe",
+    "videosOnList": "videos"
   }
 }

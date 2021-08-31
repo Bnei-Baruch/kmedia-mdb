@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
-import { Button, Confirm, Container, Header, Icon, Input } from 'semantic-ui-react';
+import { Button, Confirm, Container, Header, Icon, Input, List } from 'semantic-ui-react';
 
 import { actions } from '../../../../redux/modules/my';
 import { MY_NAMESPACE_PLAYLISTS } from '../../../../helpers/consts';
@@ -11,7 +11,7 @@ import { withNamespaces } from 'react-i18next';
 import Link from '../../../Language/MultiLanguageLink';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 
-const PlaylistHeader = ({ confirmSuccess, save, playlist, t }) => {
+const PlaylistHeaderMobile = ({ confirmSuccess, save, playlist, t }) => {
   const [isEditName, setIsEditName] = useState();
   const [name, setName]             = useState();
   const [confirm, setConfirm]       = useState();
@@ -36,23 +36,31 @@ const PlaylistHeader = ({ confirmSuccess, save, playlist, t }) => {
 
   const itemCount = playlist.playlist_items?.length || 0;
   const nameTag   = isEditName ? (
-    <>
+    <Header.Subheader>
       <Input type="text" value={name} onChange={handleChangeName} maxLength={30} />
-      <Button content={t('buttons.save')} onClick={handleSave} className="margin-right-8 margin-left-8" />
-      <Button content={t('buttons.cancel')} onClick={toggleEditName} />
-    </>
-  ) : playlist.name;
+      <Button
+        color="green"
+        icon="check"
+        onClick={handleSave}
+        className="margin-right-8 margin-left-8"
+      />
+      <Button
+        icon="close"
+        onClick={toggleEditName}
+      />
+    </Header.Subheader>
+  ) : <Header.Content className="vertical_bottom">{playlist.name}</Header.Content>;
 
   return (
-    <Container>
-      <div className="summary-container align_items_center">
-        <Header as={isMobileDevice ? 'h3' : 'h2'} className="my_header">
-          <PlaylistPlayIcon />
-          {nameTag}
-          <Header.Subheader className="display-iblock margin-right-8 margin-left-8">
-            {`${itemCount} ${t('pages.collection.items.programs-collection')}`}
-          </Header.Subheader>
-        </Header>
+    <Container className="padded">
+      <Header as={'h3'} className="my_playlist_header">
+        <PlaylistPlayIcon />
+        {nameTag}
+        <Header.Subheader>
+          {`${itemCount} ${t('pages.collection.items.programs-collection')}`}
+        </Header.Subheader>
+      </Header>
+      <div className="summary-container">
         <div>
           <Button basic onClick={toggleEditName} className="clear_button">
             <Icon name={'edit '} size="large" />
@@ -68,21 +76,21 @@ const PlaylistHeader = ({ confirmSuccess, save, playlist, t }) => {
             <Icon name={'trash'} size="large" />
           </Button>
         </div>
+        <Link to={`/${MY_NAMESPACE_PLAYLISTS}/${playlist.id}`}>
+          <Button basic className="clear_button">
+            <Icon name={'play circle outline'} className="margin-left-8 margin-right-8" size="big" />
+            {t('personal.playAll')}
+          </Button>
+        </Link>
       </div>
-      <Link to={`/${MY_NAMESPACE_PLAYLISTS}/${playlist.id}`}>
-        <Button basic className="clear_button">
-          <Icon name={'play circle outline'} className="margin-left-8 margin-right-8" size="big" />
-          {t('personal.playAll')}
-        </Button>
-      </Link>
     </Container>
   );
 };
 
-PlaylistHeader.propTypes = {
+PlaylistHeaderMobile.propTypes = {
   playlist: PropTypes.object.isRequired,
   confirmSuccess: PropTypes.func,
   save: PropTypes.func
 };
 
-export default withNamespaces()(PlaylistHeader);
+export default withNamespaces()(PlaylistHeaderMobile);
