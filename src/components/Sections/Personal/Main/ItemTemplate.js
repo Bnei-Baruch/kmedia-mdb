@@ -1,6 +1,6 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { Card, Container, Button, Grid, Header, Icon } from 'semantic-ui-react';
+import { Container, Grid, Header, Icon } from 'semantic-ui-react';
 
 import * as shapes from '../../../shapes';
 import Link from '../../../Language/MultiLanguageLink';
@@ -21,7 +21,7 @@ const iconByNamespace = {
   [MY_NAMESPACE_PLAYLISTS]: <PlaylistPlayIcon />,
 };
 const ItemTemplate    = ({ children, namespace, t, withSeeAll = false, language }) => {
-  const seeAll      = withSeeAll ? (
+  const seeAll = withSeeAll ? (
     <Grid.Column textAlign={'right'}>
       <Link to={`/personal/${namespace}`}>{t('search.showAll')}</Link>
     </Grid.Column>

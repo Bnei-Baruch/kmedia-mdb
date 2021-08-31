@@ -3,7 +3,7 @@ import { withRouter } from 'react-router';
 import { withNamespaces } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Confirm, Container, Divider, Grid, Icon, Table } from 'semantic-ui-react';
+import { Button, Confirm, Grid, Table } from 'semantic-ui-react';
 import clsx from 'clsx';
 
 import { actions, selectors } from '../../../../redux/modules/my';
@@ -13,9 +13,8 @@ import {
   MY_NAMESPACE_PLAYLISTS
 } from '../../../../helpers/consts';
 import WipErr from '../../../shared/WipErr/WipErr';
-import CUItemContainer from '../../../shared/CUItem/CUItemContainer';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
-import PlaylistHeader from './Header';
+import CUItemContainer from '../../../shared/CUItem/CUItemContainer';
 import { selectors as settings } from '../../../../redux/modules/settings';
 import PlaylistHeaderContainer from './HeaderContainer';
 
@@ -78,7 +77,7 @@ const Page = ({ t }) => {
                           open={confirm}
                           onCancel={handleConfirmCancel}
                           onConfirm={handleConfirmSuccess}
-                          content={t('personal.confirmRemovePlaylistItem', {cu: x.name, playlist: playlist.name})}
+                          content={t('personal.confirmRemovePlaylistItem', { cu: x.name, playlist: playlist.name })}
                         />
                         <div>
                           <Button

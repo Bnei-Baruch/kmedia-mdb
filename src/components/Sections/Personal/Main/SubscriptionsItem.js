@@ -4,12 +4,12 @@ import moment from 'moment';
 import { Button, Card, Confirm, Header } from 'semantic-ui-react';
 
 import { actions } from '../../../../redux/modules/my';
+import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import { actions as mdbActions, selectors as mdb, selectors as mdbSelectors } from '../../../../redux/modules/mdb';
 import { MY_NAMESPACE_SUBSCRIPTIONS, SECTIONS_LINK_BY_CU_CONTENT_TYPE } from '../../../../helpers/consts';
 import { canonicalLink } from '../../../../helpers/links';
 import Link from '../../../Language/MultiLanguageLink';
 import UnitLogo from '../../../shared/Logo/UnitLogo';
-import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 
 export const SubscriptionsItem = ({ item, t, language }) => {
   const [confirm, setConfirm] = useState();

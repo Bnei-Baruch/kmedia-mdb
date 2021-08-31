@@ -1,19 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Container, Card, Header, Label, Popup, Divider, Progress } from 'semantic-ui-react';
+import { Container, Card, Header, Popup, Divider, Progress } from 'semantic-ui-react';
 
-import { NO_NAME } from '../../../helpers/consts';
 import * as shapes from '../../shapes';
+import { NO_NAME } from '../../../helpers/consts';
+import { toHumanReadableTime } from '../../../helpers/time';
 import { formatDuration } from '../../../helpers/utils';
 import { isLanguageRtl } from '../../../helpers/i18n-utils';
 import UnitLogo from '../Logo/UnitLogo';
-import { toHumanReadableTime } from '../../../helpers/time';
 
 const CardTemplate = ({ unit, language, withCCUInfo, link, ccu, description, children, playTime }) => {
   const dir = isLanguageRtl(language) ? 'rtl' : 'ltr';
 
-  let percent  = null;
-  link      = `/${language}${link}`;
+  let percent = null;
+  link        = `/${language}${link}`;
   if (playTime) {
     const sep = link.indexOf('?') > 0 ? `&` : '?';
     link      = `${link}${sep}sstart=${toHumanReadableTime(playTime)}`;

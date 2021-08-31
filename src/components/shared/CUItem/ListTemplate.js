@@ -1,15 +1,15 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
-import { Grid, Container, Header, Label, Progress, Table } from 'semantic-ui-react';
+import { Header, Progress, Table } from 'semantic-ui-react';
 
+import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { NO_NAME } from '../../../helpers/consts';
-import * as shapes from '../../shapes';
+import { toHumanReadableTime } from '../../../helpers/time';
 import { formatDuration } from '../../../helpers/utils';
 import { isLanguageRtl } from '../../../helpers/i18n-utils';
+import * as shapes from '../../shapes';
 import UnitLogo from '../Logo/UnitLogo';
 import Link from '../../Language/MultiLanguageLink';
-import { toHumanReadableTime } from '../../../helpers/time';
-import { DeviceInfoContext } from '../../../helpers/app-contexts';
 
 const ListTemplate = ({ unit, language, withCCUInfo, link, ccu, description, children, playTime }) => {
   const dir                = isLanguageRtl(language) ? 'rtl' : 'ltr';

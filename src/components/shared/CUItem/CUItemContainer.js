@@ -4,14 +4,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import { CT_CLIPS, CT_VIDEO_PROGRAM, CT_VIRTUAL_LESSONS, NO_NAME } from '../../../helpers/consts';
-import { canonicalCollection, imageByUnit } from '../../../helpers/utils';
+import { canonicalCollection } from '../../../helpers/utils';
+import { DeviceInfoContext } from '../../../helpers/app-contexts';
+import { canonicalLink } from '../../../helpers/links';
 import { selectors, actions } from '../../../redux/modules/mdb';
 import { selectors as settings } from '../../../redux/modules/settings';
 import { selectors as recommended } from '../../../redux/modules/recommended';
-import { canonicalLink } from '../../../helpers/links';
 import ListTemplate from './ListTemplate';
 import CardTemplate from './CardTemplate';
-import { DeviceInfoContext } from '../../../helpers/app-contexts';
 
 const NOT_LESSONS_COLLECTIONS = [CT_VIDEO_PROGRAM, CT_VIRTUAL_LESSONS, CT_CLIPS];
 

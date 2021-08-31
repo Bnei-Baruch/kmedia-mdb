@@ -1,15 +1,12 @@
 import React, { useContext, useState } from 'react';
-import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
+import { withNamespaces } from 'react-i18next';
 import { Button, Confirm, Container, Header, Icon, Input } from 'semantic-ui-react';
 
-import { actions } from '../../../../redux/modules/my';
 import { MY_NAMESPACE_PLAYLISTS } from '../../../../helpers/consts';
-import { ReactComponent as PlaylistPlayIcon } from '../../../../images/icons/playlist_play_black_24dp.svg';
-import { withNamespaces } from 'react-i18next';
-import Link from '../../../Language/MultiLanguageLink';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
+import Link from '../../../Language/MultiLanguageLink';
+import { ReactComponent as PlaylistPlayIcon } from '../../../../images/icons/playlist_play_black_24dp.svg';
 
 const PlaylistHeader = ({ confirmSuccess, save, playlist, t }) => {
   const [isEditName, setIsEditName] = useState();
