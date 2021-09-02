@@ -49,11 +49,13 @@ import HistoryPage from './components/Sections/Personal/History/Page';
 
 const routes = [
   { path: '', component: HomePage, options: { ssrData: ssrDataLoaders.home } },
+
   { path: 'personal', component: Main },
   { path: `personal/${MY_NAMESPACE_HISTORY}`, component: HistoryPage },
   { path: `personal/${MY_NAMESPACE_LIKES}`, component: LikePage },
   { path: `personal/${MY_NAMESPACE_PLAYLISTS}/:id`, component: PlaylistPage },
   { path: `${MY_NAMESPACE_PLAYLISTS}/:id`, component: PlaylistDecorator },
+
   { path: 'lessons', component: Lessons, options: { ssrData: ssrDataLoaders.lessonsPage } },
   { path: 'lessons/:tab', component: Lessons, options: { ssrData: ssrDataLoaders.lessonsPage } },
   {

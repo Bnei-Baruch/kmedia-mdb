@@ -4,9 +4,11 @@ import * as PropTypes from 'prop-types';
 import { Button, Checkbox, Icon, Input, List, Modal, Divider } from 'semantic-ui-react';
 
 import { actions, selectors } from '../../../../../redux/modules/my';
+import { selectors as auth } from '../../../../../redux/modules/auth';
 import { MY_NAMESPACE_PLAYLIST_ITEMS, MY_NAMESPACE_PLAYLISTS } from '../../../../../helpers/consts';
 import AlertModal from '../../../../shared/AlertModal';
 import PlaylistAddIcon from '../../../../../images/icons/PlaylistAddBlack24Dp';
+import NeedToLogin from '../../../../Sections/Personal/NeedToLogin';
 
 const PlaylistInfo = ({ cuID, t, handleClose = null }) => {
   const [isOpen, setIsOpen]               = useState(false);
@@ -15,11 +17,13 @@ const PlaylistInfo = ({ cuID, t, handleClose = null }) => {
   const [newPlaylist, setNewPlaylist]     = useState('');
   const [isNewPlaylist, setIsNewPlaylist] = useState(false);
   const [alertMsg, setAlertMsg]           = useState();
+  const [isNeedLogin, setIsNeedLogin]     = useState();
 
   const dispatch = useDispatch();
 
   const playlists     = useSelector(state => selectors.getItems(state.my, MY_NAMESPACE_PLAYLISTS));
   const playlistItems = useSelector(state => selectors.getItems(state.my, MY_NAMESPACE_PLAYLIST_ITEMS));
+  const user          = useSelector(state => auth.getUser(state.auth));
 
   useEffect(() => {
     const _saved = playlistItems.filter(pi => pi.content_unit_uid === cuID).map(p => p.playlist_id);
@@ -29,8 +33,6 @@ const PlaylistInfo = ({ cuID, t, handleClose = null }) => {
     setNewPlaylist('');
     setIsNewPlaylist(false);
   }, [playlists, playlistItems]);
-
-  if (playlists) return null;
 
   const onOpen = () => {
     dispatch(actions.fetch(MY_NAMESPACE_PLAYLISTS, { page_no: 1, page_size: 100 }));
@@ -60,8 +62,11 @@ const PlaylistInfo = ({ cuID, t, handleClose = null }) => {
   };
 
   const toggle = () => {
+    if (!user)
+      return setIsNeedLogin(true);
     setSelected([]);
     setIsOpen(!isOpen);
+    return null;
   };
 
   const save = () => {
@@ -97,6 +102,18 @@ const PlaylistInfo = ({ cuID, t, handleClose = null }) => {
   return (
     <>
       <AlertModal message={alertMsg} open={!!alertMsg} onClose={onAlertCloseHandler} />
+      <Modal
+        closeIcon
+        open={isNeedLogin}
+        onClose={() => setIsNeedLogin(false)}
+        onOpen={() => setIsNeedLogin(true)}
+      >
+        <Modal.Content>
+          <NeedToLogin>
+            <div>For use this action</div>
+          </NeedToLogin>
+        </Modal.Content>
+      </Modal>
       <Modal
         closeIcon
         open={isOpen}

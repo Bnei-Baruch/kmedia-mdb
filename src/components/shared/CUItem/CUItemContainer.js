@@ -39,7 +39,7 @@ const CUItemContainer = ({ id, children, t, asList = false, link, playTime }) =>
 
   const description = [];
   if (part && withCCUInfo) description.push(t('pages.unit.info.episode', { name: part }));
-  if (unit.film_date && !isMobileDevice) description.push(t('values.date', { date: unit.film_date }));
+  if (unit.film_date) description.push(t('values.date', { date: unit.film_date }));
   if (views) description.push(t('pages.unit.info.views', { views }));
 
   const props = {

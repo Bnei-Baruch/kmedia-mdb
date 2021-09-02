@@ -7,7 +7,14 @@ let logout = () => console.error('Must be override on browser, keycloak');
 //because of keycloak-js module use windows on init we import it dynamic
 let keycloak;
 
-export const initKC = (dispatch) => {
+//demi authentication
+/*
+export const initKC_ = (dispatch) => {
+  dispatch(actions.loginSuccess({ user: { id: 'token.Subject', name: 'test_name' }, token: 'token.Subject' }));
+};
+*/
+
+export const initKC = (dispatch, language) => {
   import('keycloak-js').then(({ default: Keycloak }) => {
     const userManagerConfig = {
       url: 'https://accounts.kab.info/auth',
@@ -35,35 +42,48 @@ export const initKC = (dispatch) => {
     const renewRetry = (retry, err) => {
       if (retry > 5) {
         keycloak.clearToken();
-        dispatch(actions.loginFailure());
+        dispatch(actions.loginFailure({ error: null }));
       } else {
         setTimeout(() => renewToken(retry), 10000);
       }
     };
-    return keycloak.init({
-      onLoad: 'check-sso',
+
+    login = () => keycloak.login({ redirectUri: window.location.href, locale: language });
+
+    logout = () => {
+      keycloak.logout();
+      actions.logoutSuccess();
+    };
+
+    const options = {
       checkLoginIframe: false,
       flow: 'standard',
       pkceMethod: 'S256',
-    }).then((ok) => {
-      if (!ok) return;
+      enableLogging: true,
+    };
+
+    //if initial on return from KC server
+    const isBack = (window.location.hash.includes('state') && window.location.hash.includes('session_state'));
+    if (!isBack) options.onLoad = 'check-sso';
+
+    return keycloak.init(options).then((ok) => {
+      if (!ok && !isBack) return;
+
+      if (!ok && isBack) {
+        login().then(v => {
+          const { sub, name } = keycloak.tokenParsed;
+          dispatch(actions.loginSuccess({ user: { id: sub, name }, token: keycloak.token }));
+        });
+        return;
+      }
+
       const { sub, name } = keycloak.tokenParsed;
       dispatch(actions.loginSuccess({ user: { id: sub, name }, token: keycloak.token }));
+    }).catch(error => {
+      dispatch(actions.loginFailure({ error }));
     });
   });
 };
-if (typeof window !== 'undefined') {
-  login = () => keycloak.login({
-    redirectUri: window.location.href,
-    //scope: 'offline_access',
-    // locale: kcLocale(this.props.i18n.language)
-  });
-
-  logout = () => {
-    keycloak.logout();
-    actions.logoutSuccess();
-  };
-}
 
 export const kc = function () {
   return { login, logout };

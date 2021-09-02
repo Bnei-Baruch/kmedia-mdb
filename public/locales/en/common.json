@@ -641,6 +641,9 @@
     "confirmRemoveHistory": "Are you sure on remove History",
     "confirmRemoveLike": "Are you sure on remove Like",
     "confirmUnsubscribe": "Are you sure on unsubscribe",
-    "videosOnList": "videos"
+    "videosOnList": "videos",
+    "login": "login",
+    "logout": "logout",
+    "needToLogin": "For view this content you need login"
   }
 }

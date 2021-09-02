@@ -23,9 +23,11 @@ function* updatePageInQuery(action) {
 }
 
 function* fetch(action) {
+  const token = yield select(state => authSelectors.getToken(state.auth));
+  if (!token) return;
   let { namespace, with_files = false, ...params } = action.payload;
 
-  const token    = yield select(state => authSelectors.getToken(state.auth));
+
   const language = yield select(state => settings.getLanguage(state.settings));
   try {
     const { data } = yield call(Api.my, namespace, params, token);
@@ -90,9 +92,10 @@ function* fetch(action) {
 }
 
 function* fetchById(action) {
+  const token    = yield select(state => authSelectors.getToken(state.auth));
+  if (!token) return;
   const { namespace, ...params } = action.payload;
   if (!params?.id) return;
-  const token    = yield select(state => authSelectors.getToken(state.auth));
   const language = yield select(state => settings.getLanguage(state.settings));
   try {
     const { data } = yield call(Api.my, namespace, params, token);
@@ -121,6 +124,7 @@ function* fetchById(action) {
 
 function* add(action) {
   const token                    = yield select(state => authSelectors.getToken(state.auth));
+  if (!token) return;
   const { namespace, ...params } = action.payload;
   try {
     const { data } = yield call(Api.my, namespace, params, token, 'POST');
@@ -131,6 +135,7 @@ function* add(action) {
 
 function* edit(action) {
   const token                    = yield select(state => authSelectors.getToken(state.auth));
+  if (!token) return;
   const { namespace, ...params } = action.payload;
   try {
     const { data } = yield call(Api.my, namespace, params, token, 'PATCH');
@@ -141,6 +146,7 @@ function* edit(action) {
 
 function* remove(action) {
   const token                    = yield select(state => authSelectors.getToken(state.auth));
+  if (!token) return;
   const { namespace, ...params } = action.payload;
   try {
     yield call(Api.my, namespace, params, token, 'DELETE');

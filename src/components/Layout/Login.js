@@ -20,12 +20,8 @@ const Login = ({ t }) => {
   const user                    = useSelector(state => selectors.getUser(state.auth));
 
   useEffect(() => {
-    if (typeof window !== 'undefined') initKC(dispatch);
+    initKC(dispatch, language);
   }, []);
-
-  useEffect(() => {
-    console.log('keycloak user', user);
-  }, [user]);
 
   const login  = () => {
     dispatch(actions.login(language));
@@ -75,7 +71,7 @@ const Login = ({ t }) => {
             fluid
             basic
             size="small"
-            content={t('home.logout')}
+            content={t('personal.logout')}
             className={'donate-button'}
             color={'blue'}
             onClick={logout}
@@ -91,7 +87,7 @@ const Login = ({ t }) => {
       basic
       size="small"
       icon={'user circle'}
-      content={t('home.login')}
+      content={t('personal.login')}
       className={'donate-button'}
       color={'blue'}
       as="a"
@@ -107,4 +103,4 @@ Login.propTypes = {
   t: PropTypes.func.isRequired,
 };
 
-export default withNamespaces()(Login);
+export default React.memo(withNamespaces()(Login));

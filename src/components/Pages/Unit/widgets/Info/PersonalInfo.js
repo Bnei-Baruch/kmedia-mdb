@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { withNamespaces } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Confirm, Icon, Menu } from 'semantic-ui-react';
+import { Button, Confirm, Icon, Menu, Modal } from 'semantic-ui-react';
 
 import {
   CT_SUBSCRIBE_BY_COLLECTION,
@@ -14,10 +14,12 @@ import { selectors } from '../../../../../redux/modules/auth';
 import { actions, selectors as myselector } from '../../../../../redux/modules/my';
 import PlaylistInfo from './PlaylistInfo';
 import AlertModal from '../../../../shared/AlertModal';
+import NeedToLogin from '../../../../Sections/Personal/NeedToLogin';
 
 const PersonalInfo = ({ unit = {}, t, collection }) => {
   const [alertMsg, setAlertMsg] = useState();
   const [confirm, setConfirm]   = useState();
+  const [isNeedLogin, setIsNeedLogin]   = useState();
 
   const dispatch = useDispatch();
   const user     = useSelector(state => selectors.getUser(state.auth));
@@ -45,7 +47,8 @@ const PersonalInfo = ({ unit = {}, t, collection }) => {
   const needToLogin = () => setAlertMsg(t('personal.youNeedLogin'));
 
   const likeDislike = (l) => {
-    if (!user) return needToLogin();
+    if (!user)
+      return setIsNeedLogin(true);
 
     if (l)
       dispatch(actions.remove(MY_NAMESPACE_LIKES, { ids: [l.id] }));
@@ -55,7 +58,8 @@ const PersonalInfo = ({ unit = {}, t, collection }) => {
   };
 
   const subsUnsubs = (s) => {
-    if (!user) return needToLogin();
+    if (!user)
+      return setIsNeedLogin(true);
     let msg;
     if (s) {
       setConfirm(true);
@@ -98,23 +102,37 @@ const PersonalInfo = ({ unit = {}, t, collection }) => {
     </Menu.Item>) : null;
 
   return (
-    <Menu secondary floated="right">
-      <AlertModal message={alertMsg} open={!!alertMsg} onClose={onAlertCloseHandler} />
-      <Menu.Item fitted="horizontally">
-        <PlaylistInfo cuID={unit.id} user={user} t={t} />
-      </Menu.Item>
-      <Menu.Item fitted="horizontally">
-        <Button
-          basic
-          className="clear_button"
-          onClick={() => likeDislike(like)}
-        >
-          <Icon name={`heart${!like ? ' outline' : ''}`} className="margin-right-4 margin-left-4" />
-        </Button>
-        <span>{likeCount}</span>
-      </Menu.Item>
-      {subBtn}
-    </Menu>
+    <>
+      <Modal
+        closeIcon
+        open={isNeedLogin}
+        onClose={()=>setIsNeedLogin(false)}
+        onOpen={()=>setIsNeedLogin(true)}
+      >
+        <Modal.Content>
+          <NeedToLogin>
+            <div>For use this action</div>
+          </NeedToLogin>
+        </Modal.Content>
+      </Modal>
+      <Menu secondary floated="right">
+        <AlertModal message={alertMsg} open={!!alertMsg} onClose={onAlertCloseHandler} />
+        <Menu.Item fitted="horizontally">
+          <PlaylistInfo cuID={unit.id} t={t} />
+        </Menu.Item>
+        <Menu.Item fitted="horizontally">
+          <Button
+            basic
+            className="clear_button"
+            onClick={() => likeDislike(like)}
+          >
+            <Icon name={`heart${!like ? ' outline' : ''}`} className="margin-right-4 margin-left-4" />
+          </Button>
+          <span>{likeCount}</span>
+        </Menu.Item>
+        {subBtn}
+      </Menu>
+    </>
   );
 };
 

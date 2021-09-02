@@ -27,7 +27,7 @@ const ListTemplate = ({ unit, language, withCCUInfo, link, ccu, description, chi
   } else {
     ccu_info = ccu && withCCUInfo ? (
       <div className="cu_item_info_co ">
-        <h5 textAlign="left" className="weight-normal no-padding no-margin text_ellipsis">{ccu.name + ccu.name || NO_NAME}</h5>
+        <h5 textAlign="left" className="weight-normal no-padding no-margin text_ellipsis">{ccu.name || NO_NAME}</h5>
       </div>) : null;
   }
 

@@ -1,21 +1,20 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { Divider } from 'semantic-ui-react';
 
-import ItemsContainer from './ItemsContainer';
-import { selectors } from '../../../../redux/modules/auth';
 import {
   MY_NAMESPACE_HISTORY,
   MY_NAMESPACE_LIKES,
   MY_NAMESPACE_PLAYLISTS,
   MY_NAMESPACE_SUBSCRIPTIONS,
 } from '../../../../helpers/consts';
+import NeedToLogin from '../NeedToLogin';
+import ItemsContainer from './ItemsContainer';
 
-const Page = () => {
-  const user = useSelector(state => selectors.getUser(state.auth));
+const Page = ({ t }) => {
+  const needToLogin = NeedToLogin({ t });
+  if (needToLogin) return needToLogin;
 
-  const isLogined  = () => (
+  return (
     <>
       <ItemsContainer namespace={MY_NAMESPACE_HISTORY} withSeeAll={true} />
       <ItemsContainer namespace={MY_NAMESPACE_LIKES} withSeeAll={true} />
@@ -24,15 +23,6 @@ const Page = () => {
 
     </>
   );
-  const notLogined = () => (
-    <>
-      <Divider hidden section />
-      <h1>You must log in to view the page</h1>
-      <Divider hidden section />
-    </>
-  );
-
-  return user ? isLogined() : notLogined();
 };
 
 export default withRouter(Page);
