@@ -42,7 +42,7 @@ const MAX_INACTIVITY_MS = 60 * 1000; // Minute in milliseconds.
 
 export default class ClientChronicles {
   constructor(history, store) {
-    // If chronicles backed not defined in env.
+    // If chronicles backend not defined in env.
     if (!chroniclesBackendEnabled) {
       this.append = noop;
       return;
@@ -56,6 +56,8 @@ export default class ClientChronicles {
     this.userId = localStorage.getItem('user_id');
 
     this.namespace = 'archive';
+
+    this.abTesting = {};
 
     this.initSession(/* reinit= */ false);
 
@@ -124,13 +126,23 @@ export default class ClientChronicles {
     });
   }
 
+  setAbTesting(abTesting) {
+    for (const key in abTesting) {
+      if (typeof abTesting[key] === 'string') {
+        this.abTesting[key] = abTesting[key];
+      }
+    }
+  }
+
   // Handles custom redux actions to append events on them.
   // Note: Have to add the relevant actions to redux/modules/chronicles.js for this to work.
   onAction(action) {
     if (action.type === recommendedTypes.FETCH_RECOMMENDED_SUCCESS) {
-      const { recommendedItems, requestData } = action.payload;
-      if (Array.isArray(recommendedItems)) {
-        this.append('recommend', { request_data: requestData, recommendations: recommendedItems.map(({ uid, content_type }) => ({ uid, content_type })) });
+      const { feeds, requestData } = action.payload;
+      if (feeds && Object.keys(feeds).length) {
+        const recommendations = Object.fromEntries(Object.entries(action.payload.feeds).map(
+          ([key, items]) => [key, !items ? [] : items.map(({ uid, content_type }) => ({ uid, content_type }))]));
+        this.append('recommend', { request_data: requestData, recommendations });
       }
     }
 
@@ -282,6 +294,7 @@ export default class ClientChronicles {
   }
 
   append(eventType, data, sync = false) {
+    data.ab = this.abTesting;
     data.location = eventType.endsWith('page-leave') ? this.prevHref : window.location.href;
     const eventId = ulid();
     const nowTimestampMs = Date.now();

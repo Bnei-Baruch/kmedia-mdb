@@ -36,7 +36,7 @@ export const actions = {
 const initialState = {
   wip: false,
   err: null,
-  recommendedItems: [],
+  feeds: {},
   skipUids: [],
   views: {},
   watchingNow: {},
@@ -45,7 +45,7 @@ const initialState = {
 const onSuccess = (state, action) => {
   state.wip = false;
   state.err = null;
-  state.recommendedItems = action.payload.recommendedItems;
+  state.feeds = action.payload.feeds;
 
   return state;
 };
@@ -53,7 +53,7 @@ const onSuccess = (state, action) => {
 const onFailure = (state, payload) => {
   state.wip = false;
   state.err = payload;
-  state.recommendedItems = [];
+  state.feeds = {};
 
   return state;
 };
@@ -101,7 +101,7 @@ export const reducer = handleActions({
 
 const getWip                  = state => state.wip;
 const getError                = state => state.err;
-const getRecommendedItems = state => state.recommendedItems;
+const getRecommendedItems     = (feedName, state) => (state.feeds[feedName] || []);
 const getManyRecommendedItems = (feedNames, state) => feedNames.reduce((acc, feedName) => {
   acc[feedName] = state.feeds[feedName] || [];
   return acc;

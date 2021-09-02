@@ -78,7 +78,7 @@ const Materials = ({ unit = undefined, t, playlistComponent = null }) => {
     const item = playlistComponent === null
       ? {
         name: 'recommended',
-        label: t('materials.recommended.header'),
+        label: t('materials.recommended.default'),
         component: <Recommended unit={unit} displayTitle={false} />
       }
       : {

@@ -6,8 +6,7 @@ const ASSETS_BACKEND          = process.env.REACT_APP_ASSETS_BACKEND;
 const CMS_BACKEND             = process.env.REACT_APP_CMS_BACKEND || `${API_BACKEND}cms/`;
 const IMAGINARY_URL           = process.env.REACT_APP_IMAGINARY_URL;
 const IMAGINARY_INTERNAL_HOST = process.env.REACT_APP_IMAGINARY_INTERNAL_HOST || 'localhost';
-const API_RECOMMENDED         = process.env.REACT_APP_RECOMMENDED;
-const API_MODELS              = process.env.REACT_APP_MODELS;
+const API_FEED                = process.env.REACT_APP_FEED;
 const CHRONICLES_BACKEND      = process.env.REACT_APP_CHRONICLES_BACKEND;
 const MY_BACKEND              = process.env.REACT_APP_MY_BACKEND;
 
@@ -15,7 +14,7 @@ export const backendUrl               = path => `${API_BACKEND}${path}`;
 export const assetUrl                 = path => `${ASSETS_BACKEND}${path}`;
 export const cmsUrl                   = path => `${CMS_BACKEND}${path}`;
 export const imaginaryUrl             = path => `${IMAGINARY_URL}${path}`;
-export const modelsUrl                = path => `${API_MODELS}${path}`;
+export const feedUrl                  = path => `${API_FEED}${path}`;
 export const chroniclesUrl            = path => `${CHRONICLES_BACKEND}${path}`;
 export const chroniclesBackendEnabled = CHRONICLES_BACKEND !== undefined;
 
@@ -27,14 +26,14 @@ export class Requests {
   static getCMS = (item, options) => {
     let url;
     switch (item) {
-    case 'banner':
-      url = `${cmsUrl('banners')}/${options.language}`;
-      break;
-    case 'person':
-      url = `${cmsUrl('persons')}/${options.id}?language=${options.language}`;
-      break;
-    default:
-      return null;
+      case 'banner':
+        url = `${cmsUrl('banners')}/${options.language}`;
+        break;
+      case 'person':
+        url = `${cmsUrl('persons')}/${options.id}?language=${options.language}`;
+        break;
+      default:
+        return null;
     }
 
     return axios(url);
@@ -129,15 +128,15 @@ class Api {
   static autocomplete = ({ q, language }) => Requests.get(`autocomplete?${Requests.makeParams({ q, language })}`);
 
   static search = ({
-                     q,
-                     language,
-                     pageNo: page_no,
-                     pageSize: page_size,
-                     sortBy: sort_by,
-                     deb,
-                     suggest,
-                     searchId: search_id
-                   }) => (
+    q,
+    language,
+    pageNo: page_no,
+    pageSize: page_size,
+    sortBy: sort_by,
+    deb,
+    suggest,
+    searchId: search_id
+  }) => (
     Requests.get(`search?${Requests.makeParams({ q, language, page_no, page_size, sort_by, deb, suggest, search_id })}`)
   );
 
@@ -153,7 +152,7 @@ class Api {
     Requests.get(`simple?${Requests.makeParams({ language, start_date, end_date })}`)
   );
 
-  static recommendedRequestData = ({ uid, languages, skipUids: skip_uids, size: more_items }) => ({
+  static recommendedRequestData = ({ uid, languages, skipUids: skip_uids, size: more_items, spec, specs }) => ({
     more_items,
     'current_feed': [],
     'options': {
@@ -162,13 +161,15 @@ class Api {
       },
       languages,
       skip_uids,
+      spec,
+      specs,
     }
   });
 
   static recommended = requestData => {
     const config = {
       method: 'post',
-      url: `${API_RECOMMENDED}`,
+      url: feedUrl('recommend'),
       headers: { 'Content-Type': 'application/json' },
       data: JSON.stringify(requestData),
     };
@@ -179,7 +180,7 @@ class Api {
   static views = uids => {
     const config = {
       method: 'post',
-      url: modelsUrl('views'),
+      url: feedUrl('views'),
       headers: { 'Content-Type': 'application/json' },
       data: JSON.stringify({ uids }),
     };
@@ -190,7 +191,7 @@ class Api {
   static watchingNow = uids => {
     const config = {
       method: 'post',
-      url: modelsUrl('watchingnow'),
+      url: feedUrl('watchingnow'),
       headers: { 'Content-Type': 'application/json' },
       data: JSON.stringify({ uids }),
     };
