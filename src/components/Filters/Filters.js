@@ -180,7 +180,7 @@ class Filters extends Component {
       <div className="filters">
         <FiltersHydrator namespace={namespace} onHydrated={onHydrated} />
         <Container className="padded">
-          <Menu className="filters__menu" stackable>
+          <Menu className="filters__menu" stackable compact>
             <Menu.Item
               header
               className="filters__header"
