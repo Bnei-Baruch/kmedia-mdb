@@ -8,6 +8,7 @@ import { actions, selectors } from '../../../redux/modules/likutim';
 import { selectors as settings } from '../../../redux/modules/settings';
 import { canonicalLink } from '../../../helpers/links';
 import { noop } from '../../../helpers/utils';
+import { getFirstLetter } from '../../../helpers/strings';
 
 import Link from '../../Language/MultiLanguageLink';
 import SectionHeader from '../../shared/SectionHeader';
@@ -69,9 +70,14 @@ const Main = ({ t }) => {
   const sortedLikutim = likutim
     .filter(lk => lk.name.toLowerCase().includes(match))
     .sort((l1, l2) => l1.name < l2.name ? -1 : 1);
+
   const firstLetters = sortedLikutim
-    .map(lk => lk.name[0])
-    .filter((l, i, arr) => arr.indexOf(l) === i);
+    .map(lk => getFirstLetter(lk.name))
+    .filter((l, i, arr) => arr.indexOf(l) === i)
+    .sort();
+
+  // console.log('likutim:', likutim, ' sorted:', sortedLikutim)
+  // console.log('firstLetters:', firstLetters)
 
   return (
     <div>
