@@ -10,7 +10,7 @@
  * @param len {int} max amount of chars
  * @returns {string}
  */
-export function ellipsize(str, len = 200) {
+export const ellipsize = (str, len = 200) => {
   if (!str) {
     return '';
   }
@@ -18,4 +18,32 @@ export function ellipsize(str, len = 200) {
   return (str.length > len)
     ? `${str.substr(0, str.lastIndexOf(' ', len))}...`
     : str;
+};
+
+const isCharALetter = char => {
+  // this works for all languages that have upper and lower case letters
+  // eslint-disable-next-line eqeqeq
+  if (char.toLowerCase() != char.toUpperCase())
+    return true;
+
+  // check hebrew
+  const hebrewChars = new RegExp('^[\u0590-\u05FF]+$');
+  return hebrewChars.test(char)
+
+  // we need to add Arabic, Japanese, Chinese etc. when needed
+};
+
+// returns first letter of a string
+export const getFirstLetter = str => {
+  if (!str) {
+    return ''
+  }
+
+  for (const l of str) {
+    if (isCharALetter(l)) {
+      return l;
+    }
+  }
+
+  return str[0];
 }
