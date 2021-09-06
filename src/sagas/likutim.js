@@ -13,11 +13,14 @@ function* fetchLikutim() {
     const filters      = yield select(state => filterSelectors.getFilters(state.filters, 'likutim'));
     const filterParams = filtersTransformer.toApiParams(filters) || {};
 
+    const pageSize = 10000;
     const language = yield select(state => settings.getContentLanguage(state.settings));
-    const { data } = yield call(Api.units, { content_type: CT_LIKUTIM, language, ...filterParams });
+    const { data } = yield call(Api.units, { content_type: CT_LIKUTIM, language, pageSize, ...filterParams });
 
-    yield put(mdbActions.receiveContentUnits(data.content_units));
-    yield put(actions.fetchLikutimSuccess(data))
+    if (Array.isArray(data.content_units)) {
+      yield put(mdbActions.receiveContentUnits(data.content_units));
+      yield put(actions.fetchLikutimSuccess(data))
+    }
   } catch (err) {
     yield put(actions.fetchLikutimFailure(err));
   }
