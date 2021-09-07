@@ -138,7 +138,7 @@ class Api {
     Requests.get(`simple?${Requests.makeParams({ language, start_date, end_date })}`)
   );
 
-  static recommendedRequestData = ({ uid, languages, skipUids: skip_uids, size: more_items, spec, specs }) => ({
+  static recommendedRequestData = ({ uid, languages, skipUids: skip_uids, size: more_items, spec, specs, watchingNowMin: watching_now_min }) => ({
     more_items,
     'current_feed': [],
     'options': {
@@ -149,6 +149,7 @@ class Api {
       skip_uids,
       spec,
       specs,
+      watching_now_min,
     }
   });
 
