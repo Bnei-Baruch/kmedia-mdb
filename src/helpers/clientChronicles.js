@@ -127,6 +127,9 @@ export default class ClientChronicles {
   }
 
   setAbTesting(abTesting) {
+    if (!chroniclesBackendEnabled) {
+      return;
+    }
     for (const key in abTesting) {
       if (typeof abTesting[key] === 'string') {
         this.abTesting[key] = abTesting[key];
