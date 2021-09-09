@@ -7,7 +7,7 @@ import { actions, selectors } from '../../../../../redux/modules/my';
 import { selectors as auth } from '../../../../../redux/modules/auth';
 import { MY_NAMESPACE_PLAYLIST_ITEMS, MY_NAMESPACE_PLAYLISTS } from '../../../../../helpers/consts';
 import AlertModal from '../../../../shared/AlertModal';
-import PlaylistAddIcon from '../../../../../images/icons/PlaylistAddBlack24Dp';
+import PlaylistAddIcon from '../../../../../images/icons/PlaylistAdd';
 import NeedToLogin from '../../../../Sections/Personal/NeedToLogin';
 
 const PlaylistInfo = ({ cuID, t, handleClose = null }) => {
@@ -122,7 +122,7 @@ const PlaylistInfo = ({ cuID, t, handleClose = null }) => {
         size={'tiny'}
         trigger={
           <Button basic className="my_playlist_add clear_button" onClick={toggle}>
-            <PlaylistAddIcon />
+            <PlaylistAddIcon className="playlist_add" fill="#767676" />
             <span>{t('personal.savePlaylist')}</span>
           </Button>
         }

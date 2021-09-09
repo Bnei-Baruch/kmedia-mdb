@@ -10,15 +10,15 @@ import {
   MY_NAMESPACE_PLAYLISTS,
   MY_NAMESPACE_SUBSCRIPTIONS
 } from '../../../../helpers/consts';
-import { ReactComponent as PlaylistPlayIcon } from '../../../../images/icons/playlist_play_black_24dp.svg';
-import { ReactComponent as SubscriptionsIcon } from '../../../../images/icons/subscriptions_black_24dp.svg';
+import PlaylistPlayIcon from '../../../../images/icons/PlaylistPlay';
+import SubscriptionsIcon from '../../../../images/icons/Subscriptions';
 import { isLanguageRtl } from '../../../../helpers/i18n-utils';
 
 const iconByNamespace = {
   [MY_NAMESPACE_LIKES]: 'heart outline',
   [MY_NAMESPACE_HISTORY]: 'history',
-  [MY_NAMESPACE_SUBSCRIPTIONS]: <SubscriptionsIcon />,
-  [MY_NAMESPACE_PLAYLISTS]: <PlaylistPlayIcon />,
+  [MY_NAMESPACE_SUBSCRIPTIONS]: <SubscriptionsIcon className="playlist_icon" />,
+  [MY_NAMESPACE_PLAYLISTS]: <PlaylistPlayIcon className="playlist_icon" />,
 };
 const ItemTemplate    = ({ children, namespace, t, withSeeAll = false, language }) => {
   const seeAll = withSeeAll ? (

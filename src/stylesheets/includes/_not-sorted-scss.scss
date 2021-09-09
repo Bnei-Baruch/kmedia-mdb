@@ -1763,7 +1763,9 @@
       color: white;
     }
 
-    @include mobile {
+    &.rtl {
+      left: 0;
+      right: auto;
     }
   }
 
@@ -1925,7 +1927,7 @@
     padding-bottom: 0;
 
     @include mobile {
-      padding-bottom: 20px;
+      padding-bottom: 35px;
       border-top: 0 none;
     }
   }
@@ -2059,6 +2061,10 @@
   font-weight: normal;
   vertical-align: bottom;
 
+  &.my_playlist_header {
+    margin-bottom: 14px;
+  }
+
   svg {
     height: 1.5em;
     width: 1.5em;
@@ -2075,7 +2081,6 @@
 .my_playlist_actions {
   position: absolute;
   top: .5em;
-  bottom: .5em;
   left: 0;
   right: 0;
   display: none;
@@ -2091,6 +2096,16 @@
     flex-direction: column;
     justify-content: space-between;
   }
+}
+
+.playlist_icon {
+  height: 40px;
+  width: 38px;
+}
+
+.playlist_add {
+  height: 30px;
+  width: 28px;
 }
 
 .cu_item_dropdown {
@@ -2125,6 +2140,10 @@ tr:hover .my_playlist_actions {
   align-items: center
 }
 
+.background_grey {
+  background-color: $darkWhite;
+}
+
 .clear_button.ui.basic.button {
   padding: 0;
   box-shadow: none;
@@ -2145,9 +2164,10 @@ tr:hover .my_playlist_actions {
       vertical-align: bottom;
       margin: 0 8px;
     }
-    .sub {
+    .sub.header {
       display: inline-block;
-      vertical-align: bottom;
+      vertical-align: baseline;
+      font-size: 13px;
     }
   }
 }

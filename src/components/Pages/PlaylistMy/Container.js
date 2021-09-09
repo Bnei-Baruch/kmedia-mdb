@@ -3,10 +3,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
 import { Header } from 'semantic-ui-react';
 
-import { MY_NAMESPACE_PLAYLIST_BY_ID } from '../../../helpers/consts';
 import { actions, selectors } from '../../../redux/modules/my';
 import { selectors as mdbSelectors } from '../../../redux/modules/mdb';
 import { selectors as settings } from '../../../redux/modules/settings';
+import { selectors as auth } from '../../../redux/modules/auth';
+import { MY_NAMESPACE_PLAYLIST_BY_ID } from '../../../helpers/consts';
 import playerHelper from '../../../helpers/player';
 import WipErr from '../../shared/WipErr/WipErr';
 import Page from './Page';
@@ -17,6 +18,7 @@ const PlaylistMyContainer = ({ t, history, location, id }) => {
   const err           = useSelector(state => selectors.getErr(state.my, MY_NAMESPACE_PLAYLIST_BY_ID));
   const uiLanguage    = useSelector(state => settings.getLanguage(state.settings));
   const content_units = useSelector(state => playlist.playlist_items?.map(x => mdbSelectors.getDenormContentUnit(state.mdb, x.content_unit_uid)).filter(x => !!x)) || [];
+  const user          = useSelector(state => auth.getUser(state.auth));
 
   const cuUIDs            = content_units.map(c => c.id);
   const cuUID             = playlist.last_played || cuUIDs[0];
@@ -24,11 +26,11 @@ const PlaylistMyContainer = ({ t, history, location, id }) => {
 
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(actions.fetchById(MY_NAMESPACE_PLAYLIST_BY_ID, { id }));
-  }, [id, uiLanguage]);
+    user && dispatch(actions.fetchById(MY_NAMESPACE_PLAYLIST_BY_ID, { id }));
+  }, [id, uiLanguage, user]);
 
   useEffect(() => {
-    if (cuUID && !playerHelper.getActivePartFromQuery(location)) {
+    if (user && cuUID && !playerHelper.getActivePartFromQuery(location)) {
       const selected = content_units.findIndex(u => u.id === cuUID);
       playerHelper.setActivePartInQuery(history, selected);
     }

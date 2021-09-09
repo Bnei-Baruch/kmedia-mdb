@@ -4,8 +4,7 @@ import { withNamespaces } from 'react-i18next';
 import { Button, Confirm, Container, Header, Icon, Input } from 'semantic-ui-react';
 
 import { MY_NAMESPACE_PLAYLISTS } from '../../../../helpers/consts';
-import { DeviceInfoContext } from '../../../../helpers/app-contexts';
-import { ReactComponent as PlaylistPlayIcon } from '../../../../images/icons/playlist_play_black_24dp.svg';
+import PlaylistPlayIcon from '../../../../images/icons/PlaylistPlay';
 import Link from '../../../Language/MultiLanguageLink';
 
 const PlaylistHeaderMobile = ({ confirmSuccess, save, playlist, t }) => {
@@ -47,9 +46,9 @@ const PlaylistHeaderMobile = ({ confirmSuccess, save, playlist, t }) => {
   ) : <Header.Content className="vertical_bottom">{playlist.name}</Header.Content>;
 
   return (
-    <Container className="padded">
-      <Header as={'h3'} className="my_playlist_header">
-        <PlaylistPlayIcon />
+    <Container className="padded background_grey">
+      <Header as={'h2'} className="my_header my_playlist_header">
+        <PlaylistPlayIcon className="playlist_icon" />
         {nameTag}
         <Header.Subheader>
           {`${itemCount} ${t('pages.collection.items.programs-collection')}`}
@@ -57,8 +56,8 @@ const PlaylistHeaderMobile = ({ confirmSuccess, save, playlist, t }) => {
       </Header>
       <div className="summary-container">
         <div>
-          <Button basic onClick={toggleEditName} className="clear_button">
-            <Icon name={'edit '} size="large" />
+          <Button basic onClick={toggleEditName} className="clear_button  margin-right-8 margin-left-8">
+            <Icon name={'edit outline'} size="large" />
           </Button>
           <Confirm
             size="tiny"
@@ -68,7 +67,7 @@ const PlaylistHeaderMobile = ({ confirmSuccess, save, playlist, t }) => {
             content={t('personal.confirmRemovePlaylist', { name: playlist.name })}
           />
           <Button basic onClick={remove} className="clear_button">
-            <Icon name={'trash'} size="large" />
+            <Icon name={'trash alternate outline'} size="large" />
           </Button>
         </div>
         <Link to={`/${MY_NAMESPACE_PLAYLISTS}/${playlist.id}`}>

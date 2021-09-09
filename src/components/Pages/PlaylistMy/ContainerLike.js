@@ -7,6 +7,7 @@ import { MY_NAMESPACE_LIKES } from '../../../helpers/consts';
 import { actions, selectors } from '../../../redux/modules/my';
 import { selectors as mdbSelectors } from '../../../redux/modules/mdb';
 import { selectors as settings } from '../../../redux/modules/settings';
+import { selectors as auth } from '../../../redux/modules/auth';
 import WipErr from '../../shared/WipErr/WipErr';
 import Page from './Page';
 
@@ -15,6 +16,7 @@ const PlaylistLikeContainer = ({ t }) => {
   const wip        = useSelector(state => selectors.getWIP(state.my, MY_NAMESPACE_LIKES));
   const err        = useSelector(state => selectors.getErr(state.my, MY_NAMESPACE_LIKES));
   const uiLanguage = useSelector(state => settings.getLanguage(state.settings));
+  const user       = useSelector(state => auth.getUser(state.auth));
 
   const content_units     = useSelector(state => items.map(x => mdbSelectors.getDenormContentUnit(state.mdb, x.content_unit_uid))) || [];
   const cuUIDs            = items.map(x => x.content_unit_uid);
@@ -28,8 +30,8 @@ const PlaylistLikeContainer = ({ t }) => {
 
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(actions.fetch(MY_NAMESPACE_LIKES, { page_no: 1, page_size: 100, with_files: true }));
-  }, [uiLanguage]);
+    user && dispatch(actions.fetch(MY_NAMESPACE_LIKES, { page_no: 1, page_size: 100, with_files: true }));
+  }, [uiLanguage, user]);
 
   const wipErr = WipErr({ wip, err, t });
   if (wipErr) return wipErr;

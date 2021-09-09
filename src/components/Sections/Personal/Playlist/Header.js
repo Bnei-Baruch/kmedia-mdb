@@ -6,7 +6,7 @@ import { Button, Confirm, Container, Header, Icon, Input } from 'semantic-ui-rea
 import { MY_NAMESPACE_PLAYLISTS } from '../../../../helpers/consts';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import Link from '../../../Language/MultiLanguageLink';
-import { ReactComponent as PlaylistPlayIcon } from '../../../../images/icons/playlist_play_black_24dp.svg';
+import PlaylistPlayIcon from '../../../../images/icons/PlaylistPlay';
 
 const PlaylistHeader = ({ confirmSuccess, save, playlist, t }) => {
   const [isEditName, setIsEditName] = useState();
@@ -41,10 +41,10 @@ const PlaylistHeader = ({ confirmSuccess, save, playlist, t }) => {
   ) : playlist.name;
 
   return (
-    <Container>
+    <Container className="padded background_grey">
       <div className="summary-container align_items_center">
         <Header as={isMobileDevice ? 'h3' : 'h2'} className="my_header">
-          <PlaylistPlayIcon />
+          <PlaylistPlayIcon className="playlist_icon" />
           {nameTag}
           <Header.Subheader className="display-iblock margin-right-8 margin-left-8">
             {`${itemCount} ${t('pages.collection.items.programs-collection')}`}
@@ -52,7 +52,7 @@ const PlaylistHeader = ({ confirmSuccess, save, playlist, t }) => {
         </Header>
         <div>
           <Button basic onClick={toggleEditName} className="clear_button">
-            <Icon name={'edit '} size="large" />
+            <Icon name={'edit outline'} size="large" />
           </Button>
           <Confirm
             size="tiny"
@@ -62,7 +62,7 @@ const PlaylistHeader = ({ confirmSuccess, save, playlist, t }) => {
             content={t('personal.confirmRemovePlaylist', { name: playlist.name })}
           />
           <Button basic onClick={remove} className="clear_button">
-            <Icon name={'trash'} size="large" />
+            <Icon name={'trash alternate outline'} size="large" />
           </Button>
         </div>
       </div>

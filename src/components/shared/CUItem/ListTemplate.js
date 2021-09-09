@@ -65,9 +65,13 @@ const ListTemplate = ({ unit, language, withCCUInfo, link, ccu, description, chi
           {description.map((d, i) => (<span key={i}>{d}</span>))}
         </div>
       </Table.Cell>
-      <Table.Cell width="1" verticalAlign="middle" textAlign="center" className="padding_r_l_0">
-        {children}
-      </Table.Cell>
+      {
+        children ? (
+          <Table.Cell width="1" verticalAlign="middle" textAlign="center" className="padding_r_l_0">
+            {children}
+          </Table.Cell>
+        ) : null
+      }
     </Table.Row>
   );
 };

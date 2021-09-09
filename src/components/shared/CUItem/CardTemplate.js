@@ -8,12 +8,12 @@ import { toHumanReadableTime } from '../../../helpers/time';
 import { formatDuration } from '../../../helpers/utils';
 import { isLanguageRtl } from '../../../helpers/i18n-utils';
 import UnitLogo from '../Logo/UnitLogo';
+import Link from '../../Language/MultiLanguageLink';
 
 const CardTemplate = ({ unit, language, withCCUInfo, link, ccu, description, children, playTime }) => {
   const dir = isLanguageRtl(language) ? 'rtl' : 'ltr';
 
   let percent = null;
-  link        = `/${language}${link}`;
   if (playTime) {
     const sep = link.indexOf('?') > 0 ? `&` : '?';
     link      = `${link}${sep}sstart=${toHumanReadableTime(playTime)}`;
@@ -41,7 +41,7 @@ const CardTemplate = ({ unit, language, withCCUInfo, link, ccu, description, chi
   ) : null;
 
   return (
-    <Card raised className="cu_item" link href={link}>
+    <Card raised className="cu_item" as={Link} to={link}>
       <div className="cu_item_img">
         <UnitLogo unitId={unit.id} width={520} />
         <Container className="cu_item_img_info" textAlign="right">

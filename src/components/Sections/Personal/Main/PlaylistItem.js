@@ -2,26 +2,29 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { Card, Header, Icon, Label, Table } from 'semantic-ui-react';
 
-import { MY_NAMESPACE_PLAYLISTS } from '../../../../helpers/consts';
 import { selectors as mdb } from '../../../../redux/modules/mdb';
+import { MY_NAMESPACE_PLAYLISTS } from '../../../../helpers/consts';
+import { isLanguageRtl } from '../../../../helpers/i18n-utils';
 import { canonicalLink } from '../../../../helpers/links';
 import { imageByUnit } from '../../../../helpers/utils';
+import PlaylistPlayIcon from '../../../../images/icons/PlaylistPlay';
 import UnitLogo from '../../../shared/Logo/UnitLogo';
 import Link from '../../../Language/MultiLanguageLink';
 
 export const PlaylistItem = ({ item, t, language, asList = false }) => {
   const unit = useSelector(state => mdb.getDenormContentUnit(state.mdb, item.playlist_items?.[0]?.content_unit_uid)) || {};
 
+  const isRtl            = isLanguageRtl(language);
   const link             = canonicalLink(unit);
   const canonicalSection = imageByUnit(unit, link);
-  const href             = `/${language}/personal/${MY_NAMESPACE_PLAYLISTS}/${item.id}`;
+  const href             = `/personal/${MY_NAMESPACE_PLAYLISTS}/${item.id}`;
   const renderAsCard     = () => {
     return (
-      <Card raised link href={href}>
+      <Card as={Link} to={href} raised>
         <div className="my_playlist_item">
-          <div className="over_layer">
+          <div className={`over_layer ${isRtl ? 'rtl' : 'ltr'}`}>
             <Header as={'h2'}>{item.count || 0}</Header>
-            <Icon name="list" size="big" />
+            <PlaylistPlayIcon className="playlist_icon" fill="#FFFFFF" />
           </div>
           <UnitLogo unitId={unit.id} width={520} fallbackImg={canonicalSection} />
         </div>

@@ -146,8 +146,4 @@ PlaylistMyPage.propTypes = {
   collection: shapes.GenericCollection,
 };
 
-const areEqual = (prevProps, nextProps) => {
-  return prevProps.collection && (prevProps.collection.id === nextProps.collection.id);
-};
-
-export default React.memo(PlaylistMyPage, areEqual);
+export default PlaylistMyPage;

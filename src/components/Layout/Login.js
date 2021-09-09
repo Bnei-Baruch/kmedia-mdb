@@ -20,7 +20,7 @@ const Login = ({ t }) => {
   const user                    = useSelector(state => selectors.getUser(state.auth));
 
   useEffect(() => {
-    initKC(dispatch, language);
+    !user && initKC(dispatch, language);
   }, []);
 
   const login  = () => {

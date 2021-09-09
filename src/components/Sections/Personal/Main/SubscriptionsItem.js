@@ -32,8 +32,8 @@ export const SubscriptionsItem = ({ item, t, language }) => {
       start_date: moment(item.updated_at).format('YYYY-MM-DD'),
       end_date: moment(Date.now()).add(1, 'd').format('YYYY-MM-DD')
     };
-    if (item.collection_uid) params.collections = [item.collection_uid];
-    if (item.content_type) params.content_types = [item.content_type];
+    if (item.collection_uid) params.collection = [item.collection_uid];
+    if (item.content_type) params.content_type = [item.content_type];
 
     dispatch(mdbActions.countCU(namespace, params));
   }, [item.id]);
@@ -58,7 +58,6 @@ export const SubscriptionsItem = ({ item, t, language }) => {
             {title}
           </Link>
         </Header>
-        <Card.Description content={`${t('personal.viewedAt')} - ${t('values.date', { date: item.updated_at })}`} />
         <Card.Meta content={`${t('personal.subsNewUnits')} - ${unitCount}`} />
       </Card.Content>
       <Card.Content extra textAlign="center">

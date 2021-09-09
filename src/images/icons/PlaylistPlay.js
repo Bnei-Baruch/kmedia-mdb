@@ -1,11 +1,13 @@
 import * as React from "react";
 
-function SvgPlaylistPlayBlack24Dp(props) {
+function SvgPlaylistPlay(props) {
     return (
         <svg
             xmlns="http://www.w3.org/2000/svg"
-            height={24}
-            width={24}
+            height="100%"
+            viewBox="0 0 23 24"
+            width="100%"
+            fill="#000"
             {...props}
         >
             <path fill="none" d="M0 0h24v24H0z" />
@@ -14,4 +16,4 @@ function SvgPlaylistPlayBlack24Dp(props) {
     );
 }
 
-export default SvgPlaylistPlayBlack24Dp;
+export default SvgPlaylistPlay;

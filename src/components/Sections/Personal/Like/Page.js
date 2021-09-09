@@ -11,9 +11,11 @@ import WipErr from '../../../shared/WipErr/WipErr';
 import CUItemContainer from '../../../shared/CUItem/CUItemContainer';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import { selectors as settings } from '../../../../redux/modules/settings';
+import { selectors as auth } from '../../../../redux/modules/auth';
 import { getPageFromLocation } from '../../../Pagination/withPagination';
 import Pagination from '../../../Pagination/Pagination';
 import LikeActions from './Actions';
+import Link from '../../../Language/MultiLanguageLink';
 
 const PAGE_SIZE = 20;
 const Page      = ({ location, t }) => {
@@ -25,6 +27,7 @@ const Page      = ({ location, t }) => {
   const items    = useSelector(state => selectors.getItems(state.my, MY_NAMESPACE_LIKES)) || [];
   const wip      = useSelector(state => selectors.getWIP(state.my, MY_NAMESPACE_LIKES));
   const err      = useSelector(state => selectors.getErr(state.my, MY_NAMESPACE_LIKES));
+  const user     = useSelector(state => auth.getUser(state.auth));
 
   const dispatch = useDispatch();
   const setPage  = (pageNo) => dispatch(actions.setPage(MY_NAMESPACE_LIKES, pageNo));
@@ -35,7 +38,7 @@ const Page      = ({ location, t }) => {
 
   useEffect(() => {
     dispatch(actions.fetch(MY_NAMESPACE_LIKES, { page_no: pageNo, page_size: PAGE_SIZE }));
-  }, [pageNo, language]);
+  }, [pageNo, language, user]);
 
   const wipErr = WipErr({ wip, err, t });
   if (wipErr) return wipErr;
@@ -54,14 +57,12 @@ const Page      = ({ location, t }) => {
                 {`${t('personal.videosOnList')} ${total}`}
               </Header.Subheader>
             </Header>
-            <Button
-              basic
-              className="clear_button"
-              href={`/${language}/${MY_NAMESPACE_PLAYLISTS}/${MY_NAMESPACE_LIKES}`}
-            >
-              <Icon name={'play circle outline'} className="margin-left-8 margin-right-8" size="big" />
-              {t('personal.playAll')}
-            </Button>
+            <Link to={`/${MY_NAMESPACE_PLAYLISTS}/${MY_NAMESPACE_LIKES}`}>
+              <Button basic className="clear_button">
+                <Icon name={'play circle outline'} className="margin-left-8 margin-right-8" size="big" />
+                {t('personal.playAll')}
+              </Button>
+            </Link>
           </div>
         </Container>
         {

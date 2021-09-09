@@ -48,7 +48,9 @@ export const initKC = (dispatch, language) => {
       }
     };
 
-    login = () => keycloak.login({ redirectUri: window.location.href, locale: language });
+    login = () => {
+      keycloak.login({ redirectUri: window.location.href, locale: language });
+    };
 
     logout = () => {
       keycloak.logout();
@@ -60,23 +62,17 @@ export const initKC = (dispatch, language) => {
       flow: 'standard',
       pkceMethod: 'S256',
       enableLogging: true,
+      onLoad: 'check-sso'
     };
 
-    //if initial on return from KC server
-    const isBack = (window.location.hash.includes('state') && window.location.hash.includes('session_state'));
-    if (!isBack) options.onLoad = 'check-sso';
-
     return keycloak.init(options).then((ok) => {
-      if (!ok && !isBack) return;
-
-      if (!ok && isBack) {
+      if (!ok) {
         login().then(v => {
           const { sub, name } = keycloak.tokenParsed;
           dispatch(actions.loginSuccess({ user: { id: sub, name }, token: keycloak.token }));
         });
         return;
       }
-
       const { sub, name } = keycloak.tokenParsed;
       dispatch(actions.loginSuccess({ user: { id: sub, name }, token: keycloak.token }));
     }).catch(error => {

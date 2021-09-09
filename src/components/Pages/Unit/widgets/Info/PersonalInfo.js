@@ -17,9 +17,9 @@ import AlertModal from '../../../../shared/AlertModal';
 import NeedToLogin from '../../../../Sections/Personal/NeedToLogin';
 
 const PersonalInfo = ({ unit = {}, t, collection }) => {
-  const [alertMsg, setAlertMsg] = useState();
-  const [confirm, setConfirm]   = useState();
-  const [isNeedLogin, setIsNeedLogin]   = useState();
+  const [alertMsg, setAlertMsg]       = useState();
+  const [confirm, setConfirm]         = useState();
+  const [isNeedLogin, setIsNeedLogin] = useState();
 
   const dispatch = useDispatch();
   const user     = useSelector(state => selectors.getUser(state.auth));
@@ -32,19 +32,25 @@ const PersonalInfo = ({ unit = {}, t, collection }) => {
   const subsByType = CT_SUBSCRIBE_BY_TYPE.includes(type) ? type : null;
   const cId        = collection?.id || collections && Object.values(collections)[0]?.id;
   const subsByCO   = CT_SUBSCRIBE_BY_COLLECTION.includes(type) ? cId : null;
-  const sub        = useSelector(state => myselector.getItemByCU(state.my, MY_NAMESPACE_SUBSCRIPTIONS, id));
+
+  const subs = useSelector(state => myselector.getItems(state.my, MY_NAMESPACE_SUBSCRIPTIONS));
+  let sub;
+  if (subsByCO)
+    sub = subs.find(s => subsByCO === s.collection_uid);
+  if (subsByType)
+    sub = subs.find(s => subsByType === s.content_type);
 
   useEffect(() => {
     if (id) {
       dispatch(actions.fetchByCU(MY_NAMESPACE_LIKES, { 'uids': [id] }));
-      dispatch(actions.fetchByCU(MY_NAMESPACE_SUBSCRIPTIONS, { 'uids': [id] }));
       dispatch(actions.likeCount({ 'uids': [id] }));
+    }
+    if (subsByType || subsByCO) {
+      dispatch(actions.fetch(MY_NAMESPACE_SUBSCRIPTIONS, { 'collections': [subsByCO], 'types': [subsByType] }));
     }
   }, [dispatch, id, user]);
 
   if (!unit) return null;
-
-  const needToLogin = () => setAlertMsg(t('personal.youNeedLogin'));
 
   const likeDislike = (l) => {
     if (!user)
@@ -106,8 +112,8 @@ const PersonalInfo = ({ unit = {}, t, collection }) => {
       <Modal
         closeIcon
         open={isNeedLogin}
-        onClose={()=>setIsNeedLogin(false)}
-        onOpen={()=>setIsNeedLogin(true)}
+        onClose={() => setIsNeedLogin(false)}
+        onOpen={() => setIsNeedLogin(true)}
       >
         <Modal.Content>
           <NeedToLogin>

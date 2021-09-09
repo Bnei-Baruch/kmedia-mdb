@@ -7,15 +7,16 @@ import { Button, Confirm, Container, Grid, Table } from 'semantic-ui-react';
 import clsx from 'clsx';
 
 import { actions, selectors } from '../../../../redux/modules/my';
+import { DeviceInfoContext } from '../../../../helpers/app-contexts';
+import { selectors as settings } from '../../../../redux/modules/settings';
+import { selectors as auth } from '../../../../redux/modules/auth';
 import {
   MY_NAMESPACE_PLAYLIST_BY_ID,
   MY_NAMESPACE_PLAYLIST_ITEMS,
   MY_NAMESPACE_PLAYLISTS
 } from '../../../../helpers/consts';
 import WipErr from '../../../shared/WipErr/WipErr';
-import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import CUItemContainer from '../../../shared/CUItem/CUItemContainer';
-import { selectors as settings } from '../../../../redux/modules/settings';
 import PlaylistHeaderContainer from './HeaderContainer';
 
 const Page = ({ t }) => {
@@ -27,25 +28,25 @@ const Page = ({ t }) => {
   const language = useSelector(state => settings.getLanguage(state.settings));
   const playlist = useSelector(state => selectors.getPlaylistById(state.my, id));
   const wip      = useSelector(state => selectors.getWIP(state.my, MY_NAMESPACE_PLAYLIST_BY_ID));
-
   const err      = useSelector(state => selectors.getErr(state.my, MY_NAMESPACE_PLAYLIST_BY_ID));
+  const user     = useSelector(state => auth.getUser(state.auth));
   const dispatch = useDispatch();
 
   useEffect(() => {
     id && dispatch(actions.fetchById(MY_NAMESPACE_PLAYLIST_BY_ID, { id }));
-  }, [id, language]);
-
-  if (!playlist) return null;
+  }, [id, language, user]);
 
   const wipErr = WipErr({ wip, err, t });
   if (wipErr) return wipErr;
+
+  if (!playlist) return null;
 
   const link          = `/${language}/${MY_NAMESPACE_PLAYLISTS}/${playlist.id}`;
   const computerWidth = isMobileDevice ? 16 : 10;
   const items         = [...playlist.playlist_items || []];
   items.sort((a, b) => b.position - a.position);
 
-  const removeItem = (id) => setConfirm(true);
+  const removeItem = () => setConfirm(true);
 
   const changeItemPosition = (i, up) => {
     let { id: cid, position: cp } = items[i];
@@ -59,10 +60,49 @@ const Page = ({ t }) => {
 
   const handleConfirmCancel = () => setConfirm(false);
 
-  const handleConfirmSuccess = () => dispatch(actions.remove(MY_NAMESPACE_PLAYLIST_ITEMS, { ids: [id] }));
+  const handleConfirmSuccess = (iID) => {
+    dispatch(actions.remove(MY_NAMESPACE_PLAYLIST_ITEMS, { ids: [iID] }));
+    setConfirm(false);
+  };
+
+  const renderItem = (x, i) => (
+    <CUItemContainer id={x.content_unit_uid} link={`${link}?ap=${i}`} asList>
+      <div className="my_playlist_actions">
+        <Confirm
+          size="tiny"
+          open={confirm}
+          onCancel={handleConfirmCancel}
+          onConfirm={() => handleConfirmSuccess(x.id)}
+          content={t('personal.confirmRemovePlaylistItem', { cu: x.name, playlist: playlist.name })}
+        />
+        <div>
+          <Button
+            basic
+            icon="long arrow alternate up"
+            className="no-shadow"
+            disabled={i === 0}
+            onClick={() => changeItemPosition(i, true)}
+          />
+          <Button
+            basic
+            icon="remove circle"
+            className="no-shadow"
+            onClick={removeItem}
+          />
+          <Button
+            basic
+            icon="long arrow alternate down"
+            className="no-shadow"
+            disabled={i === items.length - 1}
+            onClick={() => changeItemPosition(i, false)}
+          />
+        </div>
+      </div>
+    </CUItemContainer>
+  );
 
   return (
-    <Grid padded={!isMobileDevice} className="avbox no-background">
+    <Grid className="avbox no-background">
       <Grid.Column mobile={16} tablet={computerWidth} computer={computerWidth} className={clsx({ 'is-fitted': isMobileDevice })}>
         <PlaylistHeaderContainer playlist={playlist} />
         {
@@ -70,45 +110,11 @@ const Page = ({ t }) => {
             <Container className="padded">
               <Table unstackable basic="very" sortable>
                 <Table.Body>
-                  {items.map((x, i) => (
-                      <CUItemContainer id={x.content_unit_uid} link={`${link}?ap=${i}`} asList>
-                        <div className="my_playlist_actions">
-                          <Confirm
-                            size="tiny"
-                            open={confirm}
-                            onCancel={handleConfirmCancel}
-                            onConfirm={handleConfirmSuccess}
-                            content={t('personal.confirmRemovePlaylistItem', { cu: x.name, playlist: playlist.name })}
-                          />
-                          <div>
-                            <Button
-                              basic
-                              icon="long arrow alternate up"
-                              className="no-shadow"
-                              disabled={i === 0}
-                              onClick={() => changeItemPosition(i, true)}
-                            />
-                            <Button
-                              basic
-                              icon="remove circle"
-                              className="no-shadow"
-                              onClick={() => removeItem(x.id)}
-                            />
-                            <Button
-                              basic
-                              icon="long arrow alternate down"
-                              className="no-shadow"
-                              disabled={i === items.length - 1}
-                              onClick={() => changeItemPosition(i, false)}
-                            />
-                          </div>
-                        </div>
-                      </CUItemContainer>
-                    )
-                  )}
+                  {items.map(renderItem)}
                 </Table.Body>
               </Table>
-            </Container>) : null
+            </Container>
+          ) : null
         }
       </Grid.Column>
       {
