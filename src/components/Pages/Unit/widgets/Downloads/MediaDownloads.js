@@ -1,4 +1,4 @@
-import React, { Component, useContext } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import { connect } from 'react-redux';
@@ -27,8 +27,8 @@ import { selectors as settings } from '../../../../../redux/modules/settings';
 import { selectors } from '../../../../../redux/modules/publications';
 import * as shapes from '../../../../shapes';
 import DropdownLanguageSelector from '../../../../Language/Selector/DropdownLanguageSelector';
-import { DeviceInfoContext } from "../../../../../helpers/app-contexts";
-import classNames from "classnames";
+import { DeviceInfoContext } from '../../../../../helpers/app-contexts';
+import classNames from 'classnames';
 
 const MEDIA_ORDER = [
   MT_VIDEO,
@@ -260,11 +260,11 @@ class MediaDownloads extends Component {
     return (
       <div className="media-downloads content__aside-unit">
         { languages.length > 1 ?
-          <Grid container padded={false} columns={isMobileDevice ? 1 : 2} className={classNames({ "padding_r_l_0": !isMobileDevice })}>
+          <Grid container padded={false} columns={isMobileDevice ? 1 : 2} className={classNames({ 'padding_r_l_0': !isMobileDevice })}>
             {!isMobileDevice &&
             <Grid.Column width={12}>
             </Grid.Column>}
-            <Grid.Column width={isMobileDevice ? 16 : 4} textAlign={"right"} className={classNames({ "padding_r_l_0": !isMobileDevice })}>
+            <Grid.Column width={isMobileDevice ? 16 : 4} textAlign={'right'} className={classNames({ 'padding_r_l_0': !isMobileDevice })}>
               <DropdownLanguageSelector
                 languages={languages}
                 defaultValue={language}

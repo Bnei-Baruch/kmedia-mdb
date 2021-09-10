@@ -106,6 +106,7 @@
     ],
     "prefer-object-spread": "warn",
     "prefer-template": "warn",
+    "quotes": ["warn", "single", { "allowTemplateLiterals": true }],
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
     "rest-spread-spacing": "warn",

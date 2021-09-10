@@ -5,13 +5,14 @@ const ASSETS_BACKEND          = process.env.REACT_APP_ASSETS_BACKEND;
 const CMS_BACKEND             = process.env.REACT_APP_CMS_BACKEND || `${API_BACKEND}cms/`;
 const IMAGINARY_URL           = process.env.REACT_APP_IMAGINARY_URL;
 const IMAGINARY_INTERNAL_HOST = process.env.REACT_APP_IMAGINARY_INTERNAL_HOST || 'localhost';
-const API_RECOMMENDED         = process.env.REACT_APP_RECOMMENDED;
+const API_FEED                = process.env.REACT_APP_FEED;
 const CHRONICLES_BACKEND      = process.env.REACT_APP_CHRONICLES_BACKEND;
 
 export const backendUrl               = path => `${API_BACKEND}${path}`;
 export const assetUrl                 = path => `${ASSETS_BACKEND}${path}`;
 export const cmsUrl                   = path => `${CMS_BACKEND}${path}`;
 export const imaginaryUrl             = path => `${IMAGINARY_URL}${path}`;
+export const feedUrl                  = path => `${API_FEED}${path}`;
 export const chroniclesUrl            = path => `${CHRONICLES_BACKEND}${path}`;
 export const chroniclesBackendEnabled = CHRONICLES_BACKEND !== undefined;
 
@@ -137,7 +138,7 @@ class Api {
     Requests.get(`simple?${Requests.makeParams({ language, start_date, end_date })}`)
   );
 
-  static recommendedRequestData = ({ uid, languages, skipUids: skip_uids, size: more_items }) => ({
+  static recommendedRequestData = ({ uid, languages, skipUids: skip_uids, size: more_items, spec, specs, watchingNowMin: watching_now_min }) => ({
     more_items,
     'current_feed': [],
     'options': {
@@ -146,15 +147,40 @@ class Api {
       },
       languages,
       skip_uids,
+      spec,
+      specs,
+      watching_now_min,
     }
   });
 
   static recommended = requestData => {
     const config = {
       method: 'post',
-      url: `${API_RECOMMENDED}`,
+      url: feedUrl('recommend'),
       headers: { 'Content-Type': 'application/json' },
       data: JSON.stringify(requestData),
+    };
+
+    return axios(config);
+  };
+
+  static views = uids => {
+    const config = {
+      method: 'post',
+      url: feedUrl('views'),
+      headers: { 'Content-Type': 'application/json' },
+      data: JSON.stringify({ uids }),
+    };
+
+    return axios(config);
+  };
+
+  static watchingNow = uids => {
+    const config = {
+      method: 'post',
+      url: feedUrl('watchingnow'),
+      headers: { 'Content-Type': 'application/json' },
+      data: JSON.stringify({ uids }),
     };
 
     return axios(config);

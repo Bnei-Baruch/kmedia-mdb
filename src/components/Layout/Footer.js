@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { Container, Grid, Header, Button } from 'semantic-ui-react';
 import { getRSSLinkByLang } from '../../helpers/utils';
 import { selectors as settings } from '../../redux/modules/settings';
-import { DeviceInfoContext } from "../../helpers/app-contexts";
+import { DeviceInfoContext } from '../../helpers/app-contexts';
 
 const Footer = ({ t }) => {
   const language = useSelector(state => settings.getLanguage(state.settings));

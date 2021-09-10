@@ -3,6 +3,7 @@ import { ES_RESULT_TYPE_TAGS, SEARCH_GRAMMAR_HIT_TYPE_LANDING_PAGE, ES_RESULT_TY
 export class SuggestionsHelper {
   constructor(results) {
     this.suggestions = [];
+    this.autocompleteId = (results && results.autocompleteId) || '';
 
     if (results?.suggest && results.suggest['title_suggest']) {
       const query      = results.suggest.title_suggest[0].text.toLowerCase();

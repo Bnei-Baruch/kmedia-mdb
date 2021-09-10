@@ -19,9 +19,9 @@ import {
 } from '../../../../../../helpers/scrollToSearch/helper';
 import { getQuery } from '../../../../../../helpers/url';
 import ShareBar from '../../../../../shared/ShareSelected';
-import DropdownLanguageSelector from "../../../../../Language/Selector/DropdownLanguageSelector";
-import { DeviceInfoContext } from "../../../../../../helpers/app-contexts";
-import classNames from "classnames";
+import DropdownLanguageSelector from '../../../../../Language/Selector/DropdownLanguageSelector';
+import { DeviceInfoContext } from '../../../../../../helpers/app-contexts';
+import classNames from 'classnames';
 
 const scrollToSearch = () => {
   const element = document.getElementById(SCROLL_SEARCH_ID);
@@ -295,11 +295,11 @@ class Transcription extends Component {
 
       return (
         <div>
-          <Grid container padded={false} columns={isMobileDevice ? 1 : 2} className={classNames({ "no-margin-top" :true, "padding_r_l_0": !isMobileDevice })}>
+          <Grid container padded={false} columns={isMobileDevice ? 1 : 2} className={classNames({ 'no-margin-top' :true, 'padding_r_l_0': !isMobileDevice })}>
             {!isMobileDevice &&
             <Grid.Column width={12}>
             </Grid.Column>}
-            <Grid.Column width={isMobileDevice ? 16 : 4} textAlign={"right"} className={classNames({ "padding_r_l_0": !isMobileDevice })}>
+            <Grid.Column width={isMobileDevice ? 16 : 4} textAlign={'right'} className={classNames({ 'padding_r_l_0': !isMobileDevice })}>
               <DropdownLanguageSelector
                 languages={languages}
                 defaultValue={language}

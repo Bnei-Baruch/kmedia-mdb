@@ -432,7 +432,16 @@
       "header": "קטעים נבחרים"
     },
     "recommended": {
-      "header": "מומלצים"
+      "same-topic": "אותו נושא",
+      "any-topic": "כל נושא",
+      "default": "מומלצים",
+      "popular": "פופולרי",
+      "watching-now": "צופים עכשיו",
+      "views": "צפיות",
+      "last": "אחרונים",
+      "next": "פרק הבא",
+      "prev": "פרק קודם",
+      "rand": "תוכן אקראי"
     },
     "playlist":{
       "header": "הבא בתור"

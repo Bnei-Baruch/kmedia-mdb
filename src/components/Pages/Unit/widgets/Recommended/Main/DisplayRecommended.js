@@ -1,6 +1,7 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
+import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Header, List, Table } from 'semantic-ui-react';
+import { Header, List, Popup, Table } from 'semantic-ui-react';
 
 import * as shapes from '../../../../../shapes';
 import { NO_NAME } from '../../../../../../helpers/consts';
@@ -8,14 +9,27 @@ import { canonicalLink } from '../../../../../../helpers/links';
 import { formatDuration, canonicalCollection } from '../../../../../../helpers/utils';
 import Link from '../../../../../Language/MultiLanguageLink';
 import UnitLogo from '../../../../../shared/Logo/UnitLogo';
-import { ClientChroniclesContext } from "../../../../../../helpers/app-contexts";
+import { ClientChroniclesContext } from '../../../../../../helpers/app-contexts';
+import { selectors } from '../../../../../../redux/modules/recommended';
 
 const getCollectionId = unit => {
   const unitCollection = canonicalCollection(unit);
   return unitCollection ? unitCollection.id : null;
 }
 
-export const renderPlaylistUnit = (unit, t) =>
+const viewsToString = views => {
+  if (views >= 1000) {
+    if (views % 1000 > 50) {
+      return `${Number.parseFloat(views/1000).toFixed(1)}K`;
+    }
+
+    return `${Math.round(views/1000)}K`;
+  }
+
+  return `${views}`;
+}
+
+export const renderPlaylistUnit = (unit, t, views = -1, watchingNow = -1, suggesterLabel = '') =>
   <Table selectable compact unstackable>
     <Table.Body>
       <Table.Row verticalAlign="middle">
@@ -33,6 +47,26 @@ export const renderPlaylistUnit = (unit, t) =>
             </small>
             <br />
             <span>{unit.name || NO_NAME}</span>
+            {(views !== -1 || watchingNow !== -1 || suggesterLabel) && <br />}
+            {watchingNow !== -1 &&
+              <small className="text">
+                <Popup content={`${t('materials.recommended.watching-now')} ${watchingNow}`}
+                  trigger={<span>{`${t('materials.recommended.watching-now')} ${viewsToString(watchingNow)}`}</span>}
+                />
+              </small>
+            }
+            {watchingNow === -1 && views !== -1 &&
+              <small className="text">
+                <Popup content={`${t('materials.recommended.popular')} ${views} ${t('materials.recommended.views')}`}
+                  trigger={<span>{`${t('materials.recommended.popular')} ${viewsToString(views)} ${t('materials.recommended.views')}`}</span>}
+                />
+              </small>
+            }
+            {watchingNow === -1 && views === -1 && suggesterLabel &&
+              <small className="text">
+                <span>{suggesterLabel}</span>
+              </small>
+            }
           </Header>
         </Table.Cell>
         {unit.duration &&
@@ -44,36 +78,65 @@ export const renderPlaylistUnit = (unit, t) =>
   </Table>;
 
 
-const renderPlaylist = (unitsToDisplay, selected, t, chronicles) =>
-  <div className="avbox__playlist-view">
-    <List selection size="tiny">
-      {
-        unitsToDisplay.map((unit, index) => (
-          <List.Item
-            key={unit.id}
-            name={`${index}`}
-            active={index === selected}
-            as={Link}
-            to={canonicalLink(unit)}
-            onClick={() => chronicles.recommendSelected(unit.id)}
-          >
-            {renderPlaylistUnit(unit, t)}
-          </List.Item>
-        ))
-      }
-    </List>
-  </div>;
+const RecommendedPlaylist = (units, selected, t, chronicles, viewLimit, feedName) => {
+  const [expanded, setExpanded] = useState(false);
+  const unitsToDisplay = !expanded && viewLimit && viewLimit < units.length ? units.slice(0, viewLimit) : units;
+  const recommendedItems = useSelector(state => selectors.getRecommendedItems(feedName, state.recommended)) || [];
+  const suggesters = new Map(recommendedItems.map(item => [item.uid, item.suggester]));
+  const suggesterIncludes = (uid, str) => (suggesters.get(uid) || '').includes(str);
+  const unitsViews = useSelector(state => selectors.getManyViews(unitsToDisplay.map(unit => unit.id), state.recommended))
+  const unitsWatchingNow = useSelector(state => selectors.getManyWatchingNow(unitsToDisplay.map(unit => unit.id), state.recommended))
+  const views = (uid, index) => (suggesterIncludes(uid, 'Popular') && unitsViews[index]) || -1;
+  const watchingNow = (uid, index) => (suggesterIncludes(uid, 'WatchingNow') && unitsWatchingNow[index]) || -1;
+  const suggesterLabel = uid => {
+    if (suggesterIncludes(uid, 'Last')) {
+      return t('materials.recommended.last');
+    } else if (suggesterIncludes(uid, 'Next')) {
+      return t('materials.recommended.next');
+    } else if (suggesterIncludes(uid, 'Prev')) {
+      return t('materials.recommended.prev');
+    } else if (suggesterIncludes(uid, 'Rand')) {
+      return t('materials.recommended.rand');
+    }
+
+    return '';
+  };
+
+  return (
+    <div className="avbox__playlist-view">
+      <List selection size="tiny">
+        {
+          unitsToDisplay.map((unit, index) => (
+            <List.Item
+              key={unit.id}
+              name={`${index}`}
+              active={index === selected}
+              as={Link}
+              to={canonicalLink(unit)}
+              onClick={() => chronicles.recommendSelected(unit.id)}
+            >
+              {renderPlaylistUnit(unit, t, views(unit.id, index), watchingNow(unit.id, index), suggesterLabel(unit.id))}
+            </List.Item>
+          ))
+        }
+        { viewLimit && viewLimit < units.length ?
+          <Link onClick={() => setExpanded(!expanded)}>{expanded ? 'Less' : 'More'}</Link>
+          : null }
+      </List>
+    </div>
+  );
+};
 
 
-const DisplayRecommended = ({ unit, t, recommendedUnits, displayTitle = true }) => {
+const DisplayRecommended = ({ unit, t, recommendedUnits, displayTitle = true, title = 'header', viewLimit = 0, feedName = 'default' }) => {
   const chronicles = useContext(ClientChroniclesContext);
   const unitCollection = canonicalCollection(unit);
   const unitCollectionId = unitCollection ? unitCollection.id : null;
 
   return (
     <div className="avbox__playlist-wrapper">
-      { displayTitle && <Header as="h3" content={t('materials.recommended.header')} /> }
-      {renderPlaylist(recommendedUnits, unitCollectionId, t, chronicles)}
+      {displayTitle && <Header as="h3" content={t(`materials.recommended.${title}`)} />}
+      {RecommendedPlaylist(recommendedUnits, unitCollectionId, t, chronicles, viewLimit, feedName)}
     </div>
   );
 }

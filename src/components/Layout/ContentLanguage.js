@@ -10,7 +10,7 @@ import { ALL_LANGUAGES, COOKIE_CONTENT_LANG, LANGUAGES } from '../../helpers/con
 import { setCookie } from '../../helpers/date';
 import { getToWithLanguage } from '../../helpers/url';
 import Link from '../Language/MultiLanguageLink';
-import { DeviceInfoContext } from "../../helpers/app-contexts";
+import { DeviceInfoContext } from '../../helpers/app-contexts';
 
 const storeContentLanguage = (language, setContentLanguage) => {
   if (!language) {
