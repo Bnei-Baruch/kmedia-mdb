@@ -381,7 +381,8 @@
       "info": {
         "sources": "Quellen",
         "topics": "Themen",
-        "collections": "Bezieht sich auf"
+        "collections": "Bezieht sich auf",
+        "episode": "Episode {{name}}"
       },
       "recommended": {
         "same-collection": {

@@ -383,7 +383,8 @@
       "info": {
         "sources": "Fuentes",
         "topics": "Temas",
-        "collections": "Relacionado a"
+        "collections": "Relacionado a",
+        "episode": "Capitulo {{name}}"
       },
       "recommended": {
         "same-collection": {

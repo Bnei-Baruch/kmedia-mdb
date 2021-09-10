@@ -408,7 +408,8 @@
       "info": {
         "sources": "Источники",
         "topics": "Темы",
-        "collections": "Относится к"
+        "collections": "Относится к",
+        "episode": "Эпизод {{name}}"
       },
       "recommended": {
         "same-collection": {

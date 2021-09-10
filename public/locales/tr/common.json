@@ -393,7 +393,8 @@
       "info": {
         "sources": "Kabala Kaynakları",
         "topics": "Konular",
-        "collections": "İlişkili olan"
+        "collections": "İlişkili olan",
+        "episode": "{{name}} Bölümü"
       },
       "recommended": {
         "same-collection": {
