@@ -5,21 +5,23 @@ import { useSelector } from 'react-redux';
 import {Button, Header, List} from 'semantic-ui-react';
 
 import {
-  CT_DAILY_LESSON,
+  CT_CLIP, CT_CONGRESS,
+  CT_DAILY_LESSON, CT_KTAIM_NIVCHARIM,
   CT_LECTURE,
-  CT_LESSON_PART,
-  CT_SPECIAL_LESSON,
+  CT_LESSON_PART, CT_LESSONS_SERIES,
+  CT_SPECIAL_LESSON, CT_VIDEO_PROGRAM_CHAPTER,
   CT_VIRTUAL_LESSON,
   CT_WOMEN_LESSON
 } from '../../../../../helpers/consts';
 import { canonicalLink } from '../../../../../helpers/links';
 import { intersperse, tracePath } from '../../../../../helpers/utils';
-import { stringify as urlSearchStringify } from '../../../../../helpers/url';
+import {getQuery, stringify as urlSearchStringify} from '../../../../../helpers/url';
 import { selectors as sourcesSelectors } from '../../../../../redux/modules/sources';
 import { selectors as tagsSelectors } from '../../../../../redux/modules/tags';
 import { filtersTransformer } from '../../../../../filters/index';
 import Link from '../../../../Language/MultiLanguageLink';
 import * as shapes from '../../../../shapes';
+import {useLocation} from "react-router-dom";
 
 const filterLessons = (ct, filmDate) => {
   switch (ct) {
@@ -92,9 +94,10 @@ const makeSourcesLinks = (sources = [], getSourceById, filteredListPath) => Arra
 
 const makeCollectionsLinks = (collections = {}, t, currentCollection) => {
   // filter out the current collection
+  const colValues = Object.values(collections);
   const collectionsForLinks = currentCollection
-    ? Object.values(collections).filter(col => col.id !== currentCollection.id)
-    : Object.values(collections);
+    ? colValues.filter(col => col.id !== currentCollection.id)
+    : colValues;
 
   return Array.from(intersperse(
     collectionsForLinks.map(x => {
@@ -117,14 +120,29 @@ const makeCollectionsLinks = (collections = {}, t, currentCollection) => {
     }), ', '));
 };
 
-const getEpisodeInfo = (cIDs, filmDate, t) => {
-  const cId = Object.keys(cIDs)[0];
-  const episode = cId && cId.split('_').slice(-1).pop();
+const getEpisodeName = (ct, episode, t) => {
+  const tName = [CT_VIDEO_PROGRAM_CHAPTER,CT_CLIP].find(x => x===ct) ? 'pages.unit.info.episode' : 'pages.unit.recommended.same-collection.item-title';
+  return t(tName, {name: episode});
+}
+
+const getEpisodeInfo = (ct, cIDs, currentCollection, filmDate, t) => {
+  const cIds = cIDs && Object.keys(cIDs);
+  const cId = cIds && (currentCollection ? cIds.find(c => c.split('_')[0] === currentCollection.id) : cIds[0]);
+  const showEpisode = cId && cId.indexOf(CT_KTAIM_NIVCHARIM) === -1;
+  const episode = showEpisode && cId.split('_').slice(-1).pop();
   let episodeInfo = [];
-  if (episode !== '0')
-    episodeInfo.push(t('pages.unit.info.episode', {name: episode}));
+  if (episode && episode !== '0')
+    episodeInfo.push(getEpisodeName(ct, episode, t));
   episodeInfo.push(t('values.date', {date: filmDate}));
-  return episodeInfo.join(' | ');
+  const len = episodeInfo.length-1;
+  return episodeInfo.map((x,i) => {
+    return (
+      <span>
+        {x}
+        {i < len && (<span className="seperator">|</span>)}
+      </span>
+    );
+  });
 }
 
 const Info = ({ unit = {}, section = '', t, currentCollection = null }) => {
@@ -142,19 +160,20 @@ const Info = ({ unit = {}, section = '', t, currentCollection = null }) => {
   const tagLinks = makeTagLinks(tags, getTagById);
   const sourcesLinks = makeSourcesLinks(sources, getSourceById, filteredListPath);
   const collectionsLinks = makeCollectionsLinks(collections, t, currentCollection);
+  const isMultiLessons = Object.values(collections).some(col => col.content_type === CT_LESSONS_SERIES || col.content_type === CT_CONGRESS);
+  const episodeInfo = getEpisodeInfo(ct, cIDs, currentCollection, filmDate, t);
 
-  const episodeInfo = getEpisodeInfo(cIDs, filmDate, t);
 
   return (
     <div className="unit-info">
       {
-        collectionsLinks.length > 0 && (
+        !isMultiLessons && collectionsLinks.length > 0 && (
           <List.Item className="unit-info__collections">
             {collectionsLinks}
           </List.Item>
         )
       }
-      <Header as="h2">
+      <Header as="h2" className="unit-info__header">
         <span className="unit-info__name">{name}</span>
       </Header>
 
@@ -179,6 +198,18 @@ const Info = ({ unit = {}, section = '', t, currentCollection = null }) => {
               </strong>
               &nbsp;
               {sourcesLinks}
+            </List.Item>
+          )
+        }
+        {
+          isMultiLessons && collectionsLinks.length > 0 && (
+            <List.Item>
+              <strong>
+                {t('pages.unit.info.collections')}
+                :
+              </strong>
+              &nbsp;
+              {collectionsLinks}
             </List.Item>
           )
         }
