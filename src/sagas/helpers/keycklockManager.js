@@ -67,10 +67,7 @@ export const initKC = (dispatch, language) => {
 
     return keycloak.init(options).then((ok) => {
       if (!ok) {
-        login().then(v => {
-          const { sub, name } = keycloak.tokenParsed;
-          dispatch(actions.loginSuccess({ user: { id: sub, name }, token: keycloak.token }));
-        });
+        dispatch(actions.loginFailure(null));
         return;
       }
       const { sub, name } = keycloak.tokenParsed;
