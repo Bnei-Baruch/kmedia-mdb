@@ -32,13 +32,15 @@ const Page      = ({ location, t }) => {
   const dispatch = useDispatch();
   const setPage  = (pageNo) => dispatch(actions.setPage(MY_NAMESPACE_LIKES, pageNo));
   useEffect(() => {
-    const pageNoLocation = getPageFromLocation(location);
-    if (pageNoLocation !== pageNo) setPage(pageNoLocation);
-  }, [dispatch, location, pageNo, language]);
+    if (user) {
+      const pageNoLocation = getPageFromLocation(location);
+      if (pageNoLocation !== pageNo) setPage(pageNoLocation);
+    }
+  }, [user, location, pageNo, language]);
 
   useEffect(() => {
     dispatch(actions.fetch(MY_NAMESPACE_LIKES, { page_no: pageNo, page_size: PAGE_SIZE }));
-  }, [pageNo, language, user]);
+  }, [pageNo, language]);
 
   const wipErr = WipErr({ wip, err, t });
   if (wipErr) return wipErr;

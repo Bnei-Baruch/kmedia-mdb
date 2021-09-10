@@ -103,4 +103,4 @@ Login.propTypes = {
   t: PropTypes.func.isRequired,
 };
 
-export default React.memo(withNamespaces()(Login));
+export default withNamespaces()(Login);

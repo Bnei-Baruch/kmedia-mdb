@@ -129,7 +129,7 @@ const PlaylistInfo = ({ cuID, t, handleClose = null }) => {
       >
         <Modal.Header>{t('personal.addToPlaylist')}</Modal.Header>
         <Modal.Content>
-          <List fluid secondary>
+          <List>
             {playlists.map(renderPlaylist)}
             <Divider hidden />
             {

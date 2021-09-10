@@ -12,6 +12,7 @@ import WipErr from '../../../shared/WipErr/WipErr';
 import CUItemContainer from '../../../shared/CUItem/CUItemContainer';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import { selectors as settings } from '../../../../redux/modules/settings';
+import { selectors as auth } from '../../../../redux/modules/auth';
 import { getPageFromLocation } from '../../../Pagination/withPagination';
 import Pagination from '../../../Pagination/Pagination';
 import Actions from './Actions';
@@ -26,13 +27,16 @@ const Page      = ({ location, t }) => {
   const items    = useSelector(state => selectors.getItems(state.my, MY_NAMESPACE_HISTORY)) || [];
   const wip      = useSelector(state => selectors.getWIP(state.my, MY_NAMESPACE_HISTORY));
   const err      = useSelector(state => selectors.getErr(state.my, MY_NAMESPACE_HISTORY));
+  const user     = useSelector(state => auth.getUser(state.auth));
 
   const dispatch = useDispatch();
   const setPage  = (pageNo) => dispatch(actions.setPage(MY_NAMESPACE_HISTORY, pageNo));
   useEffect(() => {
-    const pageNoLocation = getPageFromLocation(location);
-    if (pageNoLocation !== pageNo) setPage(pageNoLocation);
-  }, [dispatch, location, pageNo, language]);
+    if (user) {
+      const pageNoLocation = getPageFromLocation(location);
+      if (pageNoLocation !== pageNo) setPage(pageNoLocation);
+    }
+  }, [user, location, pageNo, language]);
 
   useEffect(() => {
     dispatch(actions.fetch(MY_NAMESPACE_HISTORY, { page_no: pageNo, page_size: PAGE_SIZE }));
@@ -49,18 +53,24 @@ const Page      = ({ location, t }) => {
     const mx   = moment(x.created_at);
     const diff = i !== 0 ? mp.diff(mx, 'days') : 1;
     if (diff > 0) {
-      newDay = <Header as="h3" content={t('values.date', { date: x.created_at })} />;
+      newDay = (
+        <Table.Row>
+          <Table.Cell collapsing>
+            <Header as="h3" content={t('values.date', { date: x.created_at })} />
+          </Table.Cell>
+        </Table.Row>
+      );
     }
     const item = (
-      <CUItemContainer id={x.content_unit_uid} asList={true} key={i} playTime={x.data.current_time}>
+      <CUItemContainer id={x.content_unit_uid} asList={true} playTime={x.data.current_time}>
         <Actions cuId={x.content_unit_uid} id={x.id} />
       </CUItemContainer>
     );
     return (
-      <>
+      <React.Fragment key={i}>
         {newDay}
         {item}
-      </>
+      </React.Fragment>
     );
   };
 
