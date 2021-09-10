@@ -7,6 +7,7 @@ import { actions, types, selectors as recommended } from '../redux/modules/recom
 import { actions as mdbActions, selectors as mdbSelectors } from '../redux/modules/mdb';
 import { selectors as settings } from '../redux/modules/settings';
 
+const WATCHING_NOW_MIN = 50;
 
 export function* fetchRecommended(action) {
   const { id, size, skip, variant } = action.payload;
@@ -38,7 +39,7 @@ export function* fetchRecommended(action) {
 
     specs.push({ name: 'Default' });
 
-    const requestData = Api.recommendedRequestData({ uid: id, languages: [language], skipUids, size, specs });
+    const requestData = Api.recommendedRequestData({ uid: id, languages: [language], skipUids, size, specs, watchingNowMin: WATCHING_NOW_MIN });
     const { data } = yield call(Api.recommended, requestData);
 
     if (Array.isArray(data.feeds) && data.feeds.length > 0) {
