@@ -174,7 +174,7 @@ const Likut = ({ t }) => {
                   relatedLessons
                     .sort((u1, u2) => u1.film_date <= u2.film_date ? 1 : -1)
                     .map(u =>
-                      <Grid.Column>
+                      <Grid.Column key={u.id}>
                         <Link to={canonicalLink(u)}>{t('values.date', { date: u.film_date })}</Link>
                       </Grid.Column>)
                 }
