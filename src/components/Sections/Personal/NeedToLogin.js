@@ -5,9 +5,11 @@ import { withNamespaces } from 'react-i18next';
 import { actions, selectors } from '../../../redux/modules/auth';
 import { Container, Divider, Button } from 'semantic-ui-react';
 
-const ShowNeedToLogin = withNamespaces()(({ t, language, children }) => {
+const ShowNeedToLogin = withNamespaces()(
+  ({ t, language, children }) => {
     const dispatch = useDispatch();
     const login    = () => dispatch(actions.login(language));
+
     return (
       <Container className="padded" textAlign="center" fluid>
         <Divider hidden />

@@ -9,7 +9,7 @@ const LOGOUT         = 'Auth/LOGOUT';
 const LOGOUT_SUCCESS = 'Auth/LOGOUT_SUCCESS';
 const UPDATE_TOKEN   = 'Auth/UPDATE_TOKEN';
 
-export const types = { LOGIN, LOGOUT };
+export const types = { LOGIN, LOGIN_SUCCESS, LOGOUT_SUCCESS, LOGOUT };
 
 /* Reducer */
 const initialState = { user: null, token: null, error: null, isKcReady: false };
@@ -30,7 +30,7 @@ const onLoginFailure = (draft, action) => {
   return draft;
 };
 
-const onLogoutSuccess = (draft) => {
+const onLogoutSuccess = draft => {
   draft.user  = null;
   draft.token = null;
   draft.error = null;

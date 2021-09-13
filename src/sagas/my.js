@@ -27,7 +27,6 @@ function* fetch(action) {
   if (!token) return;
   let { namespace, with_files = false, ...params } = action.payload;
 
-
   const language = yield select(state => settings.getLanguage(state.settings));
   try {
     const { data } = yield call(Api.my, namespace, params, token);
@@ -36,22 +35,21 @@ function* fetch(action) {
     let co_uids = [];
 
     switch (namespace) {
-    case MY_NAMESPACE_HISTORY:
-    case MY_NAMESPACE_LIKES:
-      cu_uids = data.items?.map(x => x.content_unit_uid) || [];
-      break;
-    case MY_NAMESPACE_PLAYLIST_ITEMS:
-      cu_uids    = data.items?.map(x => x.content_unit_uid) || [];
-      with_files = true;
-      break;
-    case MY_NAMESPACE_PLAYLISTS:
-      cu_uids = data.items?.filter(p => p.playlist_items).reduce((acc, p) => {
-        return acc.concat(p.playlist_items.flatMap(x => x.content_unit_uid));
-      }, []);
-      break;
-    case MY_NAMESPACE_SUBSCRIPTIONS:
-      co_uids = data.items?.filter(s => s.collection_uid).map(s => s.collection_uid) || [];
-      break;
+      case MY_NAMESPACE_HISTORY:
+      case MY_NAMESPACE_LIKES:
+        cu_uids = data.items?.map(x => x.content_unit_uid) || [];
+        break;
+      case MY_NAMESPACE_PLAYLIST_ITEMS:
+        cu_uids    = data.items?.map(x => x.content_unit_uid) || [];
+        with_files = true;
+        break;
+      case MY_NAMESPACE_PLAYLISTS:
+        cu_uids = data.items?.filter(p => p.playlist_items).reduce((acc, p) => acc.concat(p.playlist_items.flatMap(x => x.content_unit_uid)), []);
+        break;
+      case MY_NAMESPACE_SUBSCRIPTIONS:
+        co_uids = data.items?.filter(s => s.collection_uid).map(s => s.collection_uid) || [];
+        break;
+      default:
     }
 
     if (cu_uids.length > 0) {
@@ -63,6 +61,7 @@ function* fetch(action) {
       });
       yield put(mdbActions.receiveContentUnits(content_units));
     }
+
     if (co_uids.length > 0) {
       const { data: { collections } } = yield call(Api.collections, {
         id: co_uids,
@@ -71,11 +70,13 @@ function* fetch(action) {
       });
       yield put(mdbActions.receiveCollections(collections));
     }
+
     if (action.type === types.FETCH_BY_CU) {
       yield put(actions.fetchByCUSuccess({ namespace, ...data, uids: params.uids }));
     } else {
       yield put(actions.fetchSuccess({ namespace, ...data }));
     }
+
     try {
       const { data: viewData } = yield call(Api.views, cu_uids);
       const views              = cu_uids.reduce((acc, uid, i) => {
@@ -92,7 +93,7 @@ function* fetch(action) {
 }
 
 function* fetchById(action) {
-  const token    = yield select(state => authSelectors.getToken(state.auth));
+  const token = yield select(state => authSelectors.getToken(state.auth));
   if (!token) return;
   const { namespace, ...params } = action.payload;
   if (!params?.id) return;
@@ -102,9 +103,10 @@ function* fetchById(action) {
 
     let cu_uids = [];
     switch (namespace) {
-    case MY_NAMESPACE_PLAYLIST_BY_ID:
-      cu_uids = data.playlist_items?.map(x => x.content_unit_uid) || [];
-      break;
+      case MY_NAMESPACE_PLAYLIST_BY_ID:
+        cu_uids = data.playlist_items?.map(x => x.content_unit_uid) || [];
+        break;
+      default:
     }
 
     if (cu_uids.length > 0) {
@@ -116,6 +118,7 @@ function* fetchById(action) {
       });
       yield put(mdbActions.receiveContentUnits(content_units));
     }
+
     yield put(actions.fetchSuccess({ namespace, items: [data] }));
   } catch (err) {
     yield put(actions.fetchFailure({ namespace, ...err }));
@@ -123,36 +126,38 @@ function* fetchById(action) {
 }
 
 function* add(action) {
-  const token                    = yield select(state => authSelectors.getToken(state.auth));
+  const token = yield select(state => authSelectors.getToken(state.auth));
   if (!token) return;
   const { namespace, ...params } = action.payload;
   try {
     const { data } = yield call(Api.my, namespace, params, token, 'POST');
     yield put(actions.addSuccess({ namespace, items: data }));
   } catch (err) {
+    console.log(err);
   }
 }
 
 function* edit(action) {
-  const token                    = yield select(state => authSelectors.getToken(state.auth));
+  const token = yield select(state => authSelectors.getToken(state.auth));
   if (!token) return;
   const { namespace, ...params } = action.payload;
   try {
     const { data } = yield call(Api.my, namespace, params, token, 'PATCH');
     yield put(actions.editSuccess({ namespace, item: data }));
   } catch (err) {
+    console.log(err);
   }
 }
 
 function* remove(action) {
-  const token                    = yield select(state => authSelectors.getToken(state.auth));
+  const token = yield select(state => authSelectors.getToken(state.auth));
   if (!token) return;
   const { namespace, ...params } = action.payload;
   try {
     yield call(Api.my, namespace, params, token, 'DELETE');
     yield put(actions.removeSuccess({ namespace, ...params }));
   } catch (err) {
-
+    console.log(err);
   }
 }
 
@@ -161,7 +166,7 @@ function* likeCount(action) {
     const { data } = yield call(Api.likeCount, action.payload);
     yield put(actions.likeCountSuccess(data));
   } catch (err) {
-
+    console.log(err);
   }
 }
 

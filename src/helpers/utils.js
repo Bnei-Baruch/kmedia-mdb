@@ -249,14 +249,14 @@ export const getEscapedRegExp = term => {
 
 export const getRSSFeedByLang = language => {
   switch (language) {
-  case consts.LANG_HEBREW:
-    return 'KabbalahVideoHeb';
-  case consts.LANG_RUSSIAN:
-    return 'KabbalahVideoRus';
-  case consts.LANG_SPANISH:
-    return 'kabbalah-archive/spa';
-  default:
-    return 'KabbalahVideoEng';
+    case consts.LANG_HEBREW:
+      return 'KabbalahVideoHeb';
+    case consts.LANG_RUSSIAN:
+      return 'KabbalahVideoRus';
+    case consts.LANG_SPANISH:
+      return 'kabbalah-archive/spa';
+    default:
+      return 'KabbalahVideoEng';
   }
 };
 
@@ -338,7 +338,8 @@ export const getSectionForTranslation = content_type => {
   }
 };
 
-export const noop = () => {};
+export const noop = () => {
+};
 
 // Used in React hooks to remember previous props.
 export const usePrevious = value => {
@@ -375,7 +376,7 @@ export const partialAssign = (target, source, what = true) => {
         if (Array.isArray(source[property])) {
           target[property] = source[property].map(sourceArrValue => partialAssign({}, sourceArrValue, what[property]));
         } else {
-          target[property] = partialAssign({}, source[property], what[property])
+          target[property] = partialAssign({}, source[property], what[property]);
         }
       }
       // Ignore unexisting field
@@ -386,32 +387,32 @@ export const partialAssign = (target, source, what = true) => {
 
   console.error('Unexpected what for partialAssign:', what);
   return {};
-}
+};
 
 export const imageByUnit = (unit, link) => {
   // collections -- prepare random image
   switch (unit.content_type) {
-  case CT_CONGRESS:
-  case CT_MEALS:
-  case CT_DAILY_LESSON:
-  case CT_SPECIAL_LESSON:
-  case CT_VIRTUAL_LESSONS:
-  case CT_WOMEN_LESSONS:
-  case CT_VIDEO_PROGRAM:
-  case CT_FRIENDS_GATHERINGS:
-  case CT_HOLIDAY:
-  case CT_PICNIC:
-  case CT_UNITY_DAY:
-  case CT_LESSONS_SERIES:
-    return Requests.imaginaryRandom('resize', {
-      width: 512,
-      height: 288,
-      nocrop: false,
-      stripmeta: true,
-    }, `lessons/latest_lesson_%s.jpg`);
-    break;
-  default:
-    return canonicalSectionByLink(link);
+    case CT_CONGRESS:
+    case CT_MEALS:
+    case CT_DAILY_LESSON:
+    case CT_SPECIAL_LESSON:
+    case CT_VIRTUAL_LESSONS:
+    case CT_WOMEN_LESSONS:
+    case CT_VIDEO_PROGRAM:
+    case CT_FRIENDS_GATHERINGS:
+    case CT_HOLIDAY:
+    case CT_PICNIC:
+    case CT_UNITY_DAY:
+    case CT_LESSONS_SERIES:
+      return Requests.imaginaryRandom('resize', {
+        width: 512,
+        height: 288,
+        nocrop: false,
+        stripmeta: true,
+      }, `lessons/latest_lesson_%s.jpg`);
+      break;
+    default:
+      return canonicalSectionByLink(link);
 
   }
 };

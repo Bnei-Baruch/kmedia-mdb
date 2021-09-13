@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { actions, selectors } from '../../../../redux/modules/my';
-import { selectors as mdb } from '../../../../redux/modules/mdb';
 import { selectors as settings } from '../../../../redux/modules/settings';
 import {
   MY_NAMESPACE_HISTORY,
@@ -38,28 +37,29 @@ const ItemsContainer = ({ pageSize = 8, pageNo = 1, t, namespace, withSeeAll }) 
   let children = null;
 
   switch (namespace) {
-  case MY_NAMESPACE_LIKES:
-    children = items.map(x => <CUItem id={x.content_unit_uid} key={`${namespace}_${x.id}`} asList={isMobileDevice} />);
-    break;
-  case MY_NAMESPACE_HISTORY:
-    children = (
-      items.map(x => <CUItem
-        id={x.content_unit_uid}
-        key={`${namespace}_${x.id}`}
-        playTime={x.data.current_time}
-        asList={isMobileDevice}
-      />)
-    );
-    break;
-  case MY_NAMESPACE_PLAYLISTS:
-    children = items.map(x =>
-      <PlaylistItem item={x} key={`${namespace}_${x.id}`} language={language} t={t} asList={isMobileDevice} />);
-    break;
-  case MY_NAMESPACE_SUBSCRIPTIONS:
-    children = items.map(x => <SubscriptionsItem item={x} key={`${namespace}_${x.id}`} t={t} language={language} />);
-    break;
-  default:
-    break;
+    case MY_NAMESPACE_LIKES:
+      children = items.map(x =>
+        <CUItem id={x.content_unit_uid} key={`${namespace}_${x.id}`} asList={isMobileDevice} />);
+      break;
+    case MY_NAMESPACE_HISTORY:
+      children = (
+        items.map(x => <CUItem
+          id={x.content_unit_uid}
+          key={`${namespace}_${x.id}`}
+          playTime={x.data.current_time}
+          asList={isMobileDevice}
+        />)
+      );
+      break;
+    case MY_NAMESPACE_PLAYLISTS:
+      children = items.map(x =>
+        <PlaylistItem item={x} key={`${namespace}_${x.id}`} language={language} t={t} asList={isMobileDevice} />);
+      break;
+    case MY_NAMESPACE_SUBSCRIPTIONS:
+      children = items.map(x => <SubscriptionsItem item={x} key={`${namespace}_${x.id}`} t={t} language={language} />);
+      break;
+    default:
+      break;
   }
 
   if (isMobileDevice && [MY_NAMESPACE_PLAYLISTS, MY_NAMESPACE_LIKES, MY_NAMESPACE_HISTORY].includes(namespace)) {

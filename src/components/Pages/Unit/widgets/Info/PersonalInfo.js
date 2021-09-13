@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { withNamespaces } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Confirm, Icon, Menu, Modal } from 'semantic-ui-react';
@@ -30,7 +30,7 @@ const PersonalInfo = ({ unit = {}, t, collection }) => {
   const like      = useSelector(state => myselector.getItemByCU(state.my, MY_NAMESPACE_LIKES, id));
 
   const subsByType = CT_SUBSCRIBE_BY_TYPE.includes(type) ? type : null;
-  const cId        = collection?.id || collections && Object.values(collections)[0]?.id;
+  const cId        = collection?.id || (collections && Object.values(collections)[0]?.id);
   const subsByCO   = CT_SUBSCRIBE_BY_COLLECTION.includes(type) ? cId : null;
 
   const subs = useSelector(state => myselector.getItems(state.my, MY_NAMESPACE_SUBSCRIPTIONS));
@@ -90,22 +90,26 @@ const PersonalInfo = ({ unit = {}, t, collection }) => {
     setConfirm(false);
   };
 
-  const subBtn = subsByType || subsByCO ? (
-    <Menu.Item>
-      <Confirm
-        size="tiny"
-        open={confirm}
-        onCancel={handleConfirmCancel}
-        onConfirm={handleConfirmSuccess}
-        content={t('personal.confirmUnsubscribe')}
-      />
-      <Button
-        primary={!sub}
-        size={'tiny'}
-        onClick={() => subsUnsubs(sub)}
-        content={t(`personal.${!sub ? 'subscribe' : 'unsubscribe'}`)}
-      />
-    </Menu.Item>) : null;
+  const renderSubBtn = () => {
+    if (!subsByType && !subsByCO) return null;
+    return (
+      <Menu.Item>
+        <Confirm
+          size="tiny"
+          open={confirm}
+          onCancel={handleConfirmCancel}
+          onConfirm={handleConfirmSuccess}
+          content={t('personal.confirmUnsubscribe')}
+        />
+        <Button
+          primary={!sub}
+          size={'tiny'}
+          onClick={() => subsUnsubs(sub)}
+          content={t(`personal.${!sub ? 'subscribe' : 'unsubscribe'}`)}
+        />
+      </Menu.Item>
+    );
+  };
 
   return (
     <>
@@ -121,7 +125,7 @@ const PersonalInfo = ({ unit = {}, t, collection }) => {
           </NeedToLogin>
         </Modal.Content>
       </Modal>
-      <Menu secondary floated="right">
+      <Menu secondary className="personal_info">
         <AlertModal message={alertMsg} open={!!alertMsg} onClose={onAlertCloseHandler} />
         <Menu.Item fitted="horizontally">
           <PlaylistInfo cuID={unit.id} t={t} />
@@ -136,7 +140,7 @@ const PersonalInfo = ({ unit = {}, t, collection }) => {
           </Button>
           <span>{likeCount}</span>
         </Menu.Item>
-        {subBtn}
+        {renderSubBtn()}
       </Menu>
     </>
   );

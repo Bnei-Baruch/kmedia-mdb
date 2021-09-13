@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { withNamespaces } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import { Button, Confirm, Dropdown, List, Menu, Modal, Popup, Segment, Sidebar } from 'semantic-ui-react';
+import { Confirm, Dropdown } from 'semantic-ui-react';
 
 import { actions } from '../../../../redux/modules/my';
-import { MY_NAMESPACE_HISTORY, MY_NAMESPACE_LIKES } from '../../../../helpers/consts';
+import { MY_NAMESPACE_HISTORY } from '../../../../helpers/consts';
 import PlaylistInfo from '../../../Pages/Unit/widgets/Info/PlaylistInfo';
 
 const Actions = ({ cuId, id, t }) => {

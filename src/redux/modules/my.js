@@ -181,11 +181,12 @@ const onEditSuccess = (draft, { namespace, item }) => {
     };
 
   if (namespace === MY_NAMESPACE_PLAYLIST_ITEMS) {
-    const playlist = draft[MY_NAMESPACE_PLAYLIST_BY_ID].byID[item.playlist_id];
-    let itemIndex  = playlist.playlist_items.findIndex(x => x.id === item.id);
+    const playlist  = draft[MY_NAMESPACE_PLAYLIST_BY_ID].byID[item.playlist_id];
+    const itemIndex = playlist.playlist_items.findIndex(x => x.id === item.id);
     if (itemIndex < 0) index = playlist.playlist_items.length;
     playlist.playlist_items[itemIndex] = item;
   }
+
   draft[namespace].byCU[item.content_unit_uid] = item;
   draft[namespace].items[index]                = item;
   draft[namespace].wip                         = false;
@@ -207,6 +208,7 @@ const onRemoveSuccess = (draft, { namespace, ids, playlist_id, uids }) => {
         delete draft[MY_NAMESPACE_PLAYLIST_BY_ID][id];
     }
   }
+
   if (namespace === MY_NAMESPACE_PLAYLIST_ITEMS && playlist_id) {
     draft[namespace].items = draft[namespace].items.filter(a => !(uids.includes(a.content_unit_uid) && a.playlist_id === playlist_id));
   } else {

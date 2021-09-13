@@ -26,15 +26,15 @@ export const initKC = (dispatch, language) => {
     keycloak                = new Keycloak(userManagerConfig);
     keycloak.onTokenExpired = () => renewToken(0);
 
-    const renewToken = (retry) => {
+    const renewToken = retry => {
       retry++;
-      keycloak.updateToken(70).then((refreshed) => {
+      keycloak.updateToken(70).then(refreshed => {
         if (refreshed) {
           dispatch(actions.updateToken(keycloak.token));
         } else {
           renewRetry(retry, refreshed);
         }
-      }).catch((err) => {
+      }).catch(err => {
         renewRetry(retry, err);
       });
     };
@@ -65,11 +65,12 @@ export const initKC = (dispatch, language) => {
       onLoad: 'check-sso'
     };
 
-    return keycloak.init(options).then((ok) => {
+    return keycloak.init(options).then(ok => {
       if (!ok) {
         dispatch(actions.loginFailure(null));
         return;
       }
+
       const { sub, name } = keycloak.tokenParsed;
       dispatch(actions.loginSuccess({ user: { id: sub, name }, token: keycloak.token }));
     }).catch(error => {

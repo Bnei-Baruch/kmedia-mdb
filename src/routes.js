@@ -6,8 +6,7 @@ import {
   DEFAULT_LANGUAGE,
   MY_NAMESPACE_HISTORY,
   MY_NAMESPACE_LIKES,
-  MY_NAMESPACE_PLAYLISTS,
-  MY_NAMESPACE_SUBSCRIPTIONS
+  MY_NAMESPACE_PLAYLISTS
 } from './helpers/consts';
 import LanguageSetter from './components/Language/LanguageSetter';
 import Layout from './components/Layout/Layout';

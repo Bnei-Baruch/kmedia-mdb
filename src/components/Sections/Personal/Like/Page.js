@@ -72,7 +72,8 @@ const Page      = ({ location, t }) => {
             <Container className="padded">
               <Table unstackable basic="very">
                 <Table.Body>
-                  {items.map((x, i) => (
+                  {items.map((x, i) =>
+                    (
                       <CUItemContainer id={x.content_unit_uid} asList={true} key={i}>
                         <LikeActions cuId={x.content_unit_uid} id={x.id} />
                       </CUItemContainer>
