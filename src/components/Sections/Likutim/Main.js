@@ -68,7 +68,7 @@ const Main = ({ t }) => {
   }, [dispatch, err, wip, dataLoaded])
 
   const sortedLikutim = likutim
-    .filter(lk => lk.name.toLowerCase().includes(match))
+    .filter(lk => lk.name.toLowerCase().includes(match.toLowerCase()))
     .sort((l1, l2) => l1.name < l2.name ? -1 : 1);
 
   const firstLetters = sortedLikutim
