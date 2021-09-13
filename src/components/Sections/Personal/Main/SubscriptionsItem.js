@@ -66,7 +66,7 @@ export const SubscriptionsItem = ({ item, t, language }) => {
           open={confirm}
           onCancel={handleConfirmCancel}
           onConfirm={handleConfirmSuccess}
-          content={t('personal.confirmUnsubscribe')}
+          content={t('personal.confirmUnsubscribe', { name: title })}
         />
         <Button
           basic

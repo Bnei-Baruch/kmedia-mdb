@@ -3,7 +3,7 @@ import { withRouter } from 'react-router';
 import { withNamespaces } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Confirm, Container, Grid, Table } from 'semantic-ui-react';
+import { Button, Container, Grid, Table } from 'semantic-ui-react';
 import clsx from 'clsx';
 
 import { actions, selectors } from '../../../../redux/modules/my';
@@ -20,8 +20,7 @@ import CUItemContainer from '../../../shared/CUItem/CUItemContainer';
 import PlaylistHeaderContainer from './HeaderContainer';
 
 const Page = ({ t }) => {
-  const [confirm, setConfirm] = useState();
-  const { id }                = useParams();
+  const { id } = useParams();
 
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
@@ -46,7 +45,7 @@ const Page = ({ t }) => {
   const items         = [...playlist.playlist_items || []];
   items.sort((a, b) => b.position - a.position);
 
-  const removeItem = () => setConfirm(true);
+  const removeItem = (iID) => dispatch(actions.remove(MY_NAMESPACE_PLAYLIST_ITEMS, { ids: [iID] }));
 
   const changeItemPosition = (i, up) => {
     let { id: cid, position: cp } = items[i];
@@ -58,23 +57,9 @@ const Page = ({ t }) => {
     dispatch(actions.edit(MY_NAMESPACE_PLAYLIST_ITEMS, { id: nid, position: cp }));
   };
 
-  const handleConfirmCancel = () => setConfirm(false);
-
-  const handleConfirmSuccess = (iID) => {
-    dispatch(actions.remove(MY_NAMESPACE_PLAYLIST_ITEMS, { ids: [iID] }));
-    setConfirm(false);
-  };
-
   const renderItem = (x, i) => (
     <CUItemContainer id={x.content_unit_uid} link={`${link}?ap=${i}`} asList>
       <div className="my_playlist_actions">
-        <Confirm
-          size="tiny"
-          open={confirm}
-          onCancel={handleConfirmCancel}
-          onConfirm={() => handleConfirmSuccess(x.id)}
-          content={t('personal.confirmRemovePlaylistItem', { cu: x.name, playlist: playlist.name })}
-        />
         <div>
           <Button
             basic
@@ -87,7 +72,7 @@ const Page = ({ t }) => {
             basic
             icon="remove circle"
             className="no-shadow"
-            onClick={removeItem}
+            onClick={() => removeItem(x.id)}
           />
           <Button
             basic

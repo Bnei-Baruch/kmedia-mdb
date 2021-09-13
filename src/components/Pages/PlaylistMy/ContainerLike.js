@@ -36,7 +36,7 @@ const PlaylistLikeContainer = ({ t }) => {
   const wipErr = WipErr({ wip, err, t });
   if (wipErr) return wipErr;
   if (content_units.length === 0)
-    return (<Header size="large" content={t('personal.playlistNoResult', { name: t('personal.likes') })} />);
+    return (<Header size="large" content={t('personal.playlistNoResult')} />);
 
   return (
     <Page collection={fictiveCollection} />

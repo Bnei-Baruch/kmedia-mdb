@@ -39,7 +39,7 @@ const PlaylistMyContainer = ({ t, history, location, id }) => {
   const wipErr = WipErr({ wip, err, t });
   if (wipErr) return wipErr;
   if (content_units.length === 0)
-    return (<Header size="large" content={t('personal.playlistNoResult', { name: playlist.name })} />);
+    return (<Header size="large" content={t('personal.playlistNoResult')} />);
 
   return (
     <Page collection={fictiveCollection} />

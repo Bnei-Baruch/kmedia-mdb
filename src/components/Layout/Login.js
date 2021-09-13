@@ -47,7 +47,15 @@ const Login = ({ t }) => {
         key="handleLogin"
         flowing
         position="bottom right"
-        trigger={<Trigger />}
+        trigger={
+          <Button
+            circular
+            compact
+            size="tiny"
+            content={user.name[0].toUpperCase()}
+            onClick={handlePopupClose}
+          />
+        }
         open={isActive}
         onOpen={handlePopupOpen}
         onClose={handlePopupClose}
@@ -86,7 +94,7 @@ const Login = ({ t }) => {
       compact
       basic
       size="small"
-      icon={'user circle'}
+      icon={'user circle outline'}
       content={t('personal.login')}
       className={'donate-button'}
       color={'blue'}

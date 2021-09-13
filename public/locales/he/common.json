@@ -4,7 +4,7 @@
       "header": "קבלה מדיה"
     },
     "sidebar": {
-      "personal": "התכנים שלי",
+      "personal": "איזור אישי",
       "lessons": "שיעורים והרצאות",
       "programs": "תוכניות וקליפים",
       "sources": "ספרייה",
@@ -113,7 +113,9 @@
     "previous": "הקודם",
     "next": "הבא",
     "copy": "העתק",
-    "view-all": "הצג הכל"
+    "view-all": "הצג הכל",
+    "save": "שמור",
+    "remove": "הסר"
   },
   "player": {
     "messages": {
@@ -394,7 +396,8 @@
         "topics": "נושאים",
         "collections": "קשור ל",
         "episode": "פרק {{name}}",
-        "views": " {{views}} צפיות"
+        "lesson-episode": "Part {{name}}",
+        "views": "צפיות {{views}}"
       },
       "recommended": {
         "same-collection": {
@@ -704,40 +707,34 @@
     "disable-share": "לבטל"
   },
   "personal": {
-    "viewedAt": "Last time viewed at",
-    "subsNewUnits": "From last view was added",
-    "unsubscribe": "Unsubscribe",
-    "subscribe": "Subscribe",
-    "unsubscribeSuccessful": "You was unsubscribe successful",
-    "subscribeSuccessful": "You was subscribe successful",
-    "newPlaylistSuccessful": "New play list {{name}} was successfully created",
-    "addToPlaylistSuccessful": "Unit was added to play list {{name}} successfully",
-    "history": "You History",
-    "likes": "You Likes",
-    "playlists": "You Playlists",
-    "playlistNoResult": "Playlist {{name}} have not any video",
-    "subscriptions": "You Subscriptions",
-    "playlistPlay": "Play playlist",
-    "savePlaylist": "Save playlist",
-    "addToPlaylist": "Add to playlist",
-    "newPlaylistName": "New playlist name",
-    "newPlaylist": "Create new playlist",
-    "editPlaylist": "Edit playlist",
-    "removedHistory": "History {{name}} was remove successfully",
-    "removedLike": "Like {{name}} was remove successfully",
-    "removedPlaylist": "Playlist {{name}} was remove successfully",
-    "removedSubscribe": "Subscribe {{name}} was remove successfully",
-    "removeHistory": "Remove from history",
-    "removeLike": "Remove from likes",
+    "subsNewUnits": "פרקים חדשים",
+    "unsubscribe": "נרשמת כמנוי",
+    "subscribe": "הרשמה למינוי",
+    "unsubscribeSuccessful": "המינוי הוסר",
+    "subscribeSuccessful": "נוסף מינוי",
+    "newPlaylistSuccessful": "פלייליסט {{name}} נוצר",
+    "addToPlaylistSuccessful": "נוסף לפלייליסט {{name}}",
+    "history": "היסטוריית צפייה",
+    "likes": "תוכן שאהבתי",
+    "playlists": "פלייליסטים",
+    "playlistNoResult": "בפלייליסט זה אין וידאו",
+    "subscriptions": "מינויים",
     "playAll": "נגן הכל",
-    "confirmRemovePlaylist": "Are you sure on remove playlist {{name}}",
-    "confirmRemovePlaylistItem": "Are you sure on remove playlist item {{cu}} from {{playlist}}",
-    "confirmRemoveHistory": "Are you sure on remove History",
-    "confirmRemoveLike": "Are you sure on remove Like",
-    "confirmUnsubscribe": "Are you sure on unsubscribe",
-    "videosOnList": "videos",
-    "login": "login",
-    "logout": "logout",
-    "needToLogin": "For view this content you need login"
+    "savePlaylist": "שמור פלייליסט",
+    "addToPlaylist": "הוסף לפלייליסט",
+    "newPlaylistName": "שם הפלייליסט החדש",
+    "newPlaylist": "צור פלייליסט חדש",
+    "editPlaylist": "ערוך פלייליסט",
+    "removedHistory": "הוסר בהצלחה",
+    "removedPlaylist": "הפלייליסט {{name}} הוסר בהצלחה",
+    "removedSubscribe": "המינוי הוסר",
+    "removeHistory": "הסרה מהיסטוריית צפיה",
+    "removeLike": "הסרה מהיסטוריית צפיה",
+    "confirmRemovePlaylist": "בחרת למחוק את הפלייליסט {{name}}. להמשיך?\nהערה: מחיקת פלייליסטים היא פעולה בלתי הפיכה ולא ניתן לבטל אותה.",
+    "confirmUnsubscribe": "לבטל את הרישום כמנוי ל{{name}}?",
+    "videosOnList": "וידאו",
+    "login": "כניסה",
+    "logout": "יציאה",
+    "needToLogin": "כדאי להיכנס כדי להוסיף לייק לסרטונים, לשמור תכנים ולהירשם למינויים."
   }
 }

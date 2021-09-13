@@ -18,10 +18,9 @@ const ShowNeedToLogin = withNamespaces()(
         <Button
           compact
           basic
-          size="small"
-          icon={'user circle'}
+          size="big"
+          icon={'user circle outline'}
           content={t('personal.login')}
-          className={'donate-button'}
           color={'blue'}
           as="a"
           target="_blank"

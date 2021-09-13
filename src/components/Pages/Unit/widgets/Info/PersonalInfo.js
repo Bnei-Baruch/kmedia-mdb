@@ -7,7 +7,7 @@ import {
   CT_SUBSCRIBE_BY_COLLECTION,
   CT_SUBSCRIBE_BY_TYPE,
   MY_NAMESPACE_LIKES,
-  MY_NAMESPACE_SUBSCRIPTIONS
+  MY_NAMESPACE_SUBSCRIPTIONS, SECTIONS_LINK_BY_CU_CONTENT_TYPE
 } from '../../../../../helpers/consts';
 import * as shapes from '../../../../shapes';
 import { selectors } from '../../../../../redux/modules/auth';
@@ -15,6 +15,8 @@ import { actions, selectors as myselector } from '../../../../../redux/modules/m
 import PlaylistInfo from './PlaylistInfo';
 import AlertModal from '../../../../shared/AlertModal';
 import NeedToLogin from '../../../../Sections/Personal/NeedToLogin';
+import UnitLogo from '../../../../shared/Logo/UnitLogo';
+import { canonicalLink } from '../../../../../helpers/links';
 
 const PersonalInfo = ({ unit = {}, t, collection }) => {
   const [alertMsg, setAlertMsg]       = useState();
@@ -34,12 +36,15 @@ const PersonalInfo = ({ unit = {}, t, collection }) => {
   const subsByCO   = CT_SUBSCRIBE_BY_COLLECTION.includes(type) ? cId : null;
 
   const subs = useSelector(state => myselector.getItems(state.my, MY_NAMESPACE_SUBSCRIPTIONS));
-  let sub;
-  if (subsByCO)
-    sub = subs.find(s => subsByCO === s.collection_uid);
-  if (subsByType)
-    sub = subs.find(s => subsByType === s.content_type);
 
+  let sub, title;
+  if (subsByCO) {
+    sub   = subs.find(s => subsByCO === s.collection_uid);
+    title = collection?.name;
+  } else if (subsByType) {
+    sub   = subs.find(s => subsByType === s.content_type);
+    title = t(`constants.content-types.${subsByType}`);
+  }
   useEffect(() => {
     if (id) {
       dispatch(actions.fetchByCU(MY_NAMESPACE_LIKES, { 'uids': [id] }));
@@ -99,7 +104,7 @@ const PersonalInfo = ({ unit = {}, t, collection }) => {
           open={confirm}
           onCancel={handleConfirmCancel}
           onConfirm={handleConfirmSuccess}
-          content={t('personal.confirmUnsubscribe')}
+          content={t('personal.confirmUnsubscribe', { name: title })}
         />
         <Button
           primary={!sub}
