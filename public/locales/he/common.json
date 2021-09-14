@@ -397,7 +397,7 @@
         "collections": "קשור ל",
         "episode": "פרק {{name}}",
         "lesson-episode": "Part {{name}}",
-        "views": "צפיות {{views}}"
+        "views": "{{views}} צפיות"
       },
       "recommended": {
         "same-collection": {

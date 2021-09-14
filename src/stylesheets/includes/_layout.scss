@@ -7,6 +7,7 @@ body {
 
   &.noscroll {
     overflow: hidden;
+
     &--smallmobile {
       @include small-mobile {
         overflow: hidden;
@@ -221,7 +222,7 @@ body {
 }
 
 .ui.menu {
-  .donate-button {
+  .donate-button, .auth-button {
     &.ui.button,
     &.ui.button:hover,
     &.ui.button:focus {
@@ -230,15 +231,24 @@ body {
     }
   }
 
+  .auth-button {
+    width: 2.3rem;
+    text-align: center;
+    padding-right: 0;
+    padding-left: 0;
+  }
+
   .vh-button {
     font-size: .92857143rem !important;
     margin: 0 0.5em !important;
+
     &.ui.button {
-      background:#f2711c !important;
+      background: #f2711c !important;
       color: white !important;
     }
-    &.ui.button:hover{
-      background:#f26202 !important;
+
+    &.ui.button:hover {
+      background: #f26202 !important;
       color: white !important;
     }
   }

@@ -3,16 +3,19 @@ import { useDispatch, useSelector } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
 
 import { actions, selectors } from '../../../redux/modules/auth';
-import { Container, Divider, Button, Header, Menu } from 'semantic-ui-react';
+import { Container, Divider, Button, Header, Menu, Modal } from 'semantic-ui-react';
+import { getLanguageDirection } from '../../../helpers/i18n-utils';
 
 const ShowNeedToLogin = withNamespaces()(
   ({ t, language, children }) => {
     const dispatch = useDispatch();
-    const login    = () => dispatch(actions.login(language));
+
+    const dir   = getLanguageDirection(language);
+    const login = () => dispatch(actions.login(language));
 
     return (
       <div className="need_to_login">
-        <div>
+        <div dir={dir}>
           <Header as="h1" content={t('nav.sidebar.personal')} className="weight-normal" />
           <Header as="h2" content={t('personal.needToLogin')} className="weight-normal" />
           <Divider hidden />

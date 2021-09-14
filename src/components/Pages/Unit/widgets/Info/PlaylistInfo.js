@@ -9,8 +9,9 @@ import { MY_NAMESPACE_PLAYLIST_ITEMS, MY_NAMESPACE_PLAYLISTS } from '../../../..
 import AlertModal from '../../../../shared/AlertModal';
 import PlaylistAddIcon from '../../../../../images/icons/PlaylistAdd';
 import NeedToLogin from '../../../../Sections/Personal/NeedToLogin';
+import { getLanguageDirection } from '../../../../../helpers/i18n-utils';
 
-const PlaylistInfo = ({ cuID, t, handleClose = null }) => {
+const PlaylistInfo = ({ cuID, t, handleClose = null, language }) => {
   const [isOpen, setIsOpen]               = useState(false);
   const [selected, setSelected]           = useState([]);
   const [saved, setSaved]                 = useState([]);
@@ -19,6 +20,7 @@ const PlaylistInfo = ({ cuID, t, handleClose = null }) => {
   const [alertMsg, setAlertMsg]           = useState();
   const [isNeedLogin, setIsNeedLogin]     = useState();
 
+  const dir      = getLanguageDirection(language);
   const dispatch = useDispatch();
 
   const playlists     = useSelector(state => selectors.getItems(state.my, MY_NAMESPACE_PLAYLISTS));
@@ -107,6 +109,7 @@ const PlaylistInfo = ({ cuID, t, handleClose = null }) => {
         open={isNeedLogin}
         onClose={() => setIsNeedLogin(false)}
         onOpen={() => setIsNeedLogin(true)}
+        direction={dir}
       >
         <Modal.Content>
           <NeedToLogin />
@@ -189,9 +192,8 @@ const PlaylistInfo = ({ cuID, t, handleClose = null }) => {
   );
 };
 
-PlaylistInfo.propTypes =
-  {
-    cuID: PropTypes.string.isRequired,
-  };
+PlaylistInfo.propTypes = {
+  cuID: PropTypes.string.isRequired,
+};
 
 export default PlaylistInfo;

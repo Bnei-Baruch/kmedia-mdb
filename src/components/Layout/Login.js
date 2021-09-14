@@ -44,7 +44,7 @@ const Login = ({ t, language }) => {
           <Button
             circular
             compact
-            size="tiny"
+            className={'auth-button'}
             content={user.name[0].toUpperCase()}
             onClick={handlePopupClose}
           />
@@ -88,7 +88,7 @@ const Login = ({ t, language }) => {
       basic
       icon={'user circle outline'}
       content={isMobileDevice ? null : t('personal.login')}
-      className={'donate-button'}
+      className={isMobileDevice ? 'auth-button' : 'donate-button'}
       circular={isMobileDevice}
       color={'blue'}
       as="a"
@@ -101,8 +101,8 @@ const Login = ({ t, language }) => {
 };
 
 Login.propTypes =
-{
-  t: PropTypes.func.isRequired,
-};
+  {
+    t: PropTypes.func.isRequired,
+  };
 
 export default withNamespaces()(Login);

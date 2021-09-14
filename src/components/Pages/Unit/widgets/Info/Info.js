@@ -185,7 +185,7 @@ const Info = ({ unit = {}, section = '', t, currentCollection = null }) => {
         <div className="text grey unit-info__film-date">
           {episodeInfo}
           {
-            views && (
+            (views > 0) && (
               <span key="views">
                 <span className="seperator">|</span>
                 {t('pages.unit.info.views', { views })}

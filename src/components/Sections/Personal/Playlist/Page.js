@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { withRouter } from 'react-router';
 import { withNamespaces } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -45,7 +45,7 @@ const Page = ({ t }) => {
   const items         = [...playlist.playlist_items || []];
   items.sort((a, b) => b.position - a.position);
 
-  const removeItem = (iID) => dispatch(actions.remove(MY_NAMESPACE_PLAYLIST_ITEMS, { ids: [iID] }));
+  const removeItem = iID => dispatch(actions.remove(MY_NAMESPACE_PLAYLIST_ITEMS, { ids: [iID] }));
 
   const changeItemPosition = (i, up) => {
     let { id: cid, position: cp } = items[i];
