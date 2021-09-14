@@ -123,10 +123,10 @@ const Likut = ({ t }) => {
       <Grid padded>
         <Grid.Column mobile={16} tablet={16-relatedLessonsSize} computer={16-relatedLessonsSize}>
           <div className="section-header likut">
-            <Header as='h2' >
+            <Header as='h2' className="topics__title-font">
               <Header.Content>
                 {`${t('likutim.item-header')} ${name}`}
-                <Header.Subheader><b>{t('values.date', { date: film_date })}</b></Header.Subheader>
+                <Header.Subheader>{t('values.date', { date: film_date })}</Header.Subheader>
               </Header.Content>
             </Header>
             <div className="likut__toolbar">
