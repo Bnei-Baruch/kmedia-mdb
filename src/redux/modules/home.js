@@ -23,20 +23,20 @@ export const types = {
 
 /* Actions */
 
-const fetchData          = createAction(FETCH_DATA);
-const fetchDataSuccess   = createAction(FETCH_DATA_SUCCESS);
-const fetchDataFailure   = createAction(FETCH_DATA_FAILURE);
-const fetchBanner        = createAction(FETCH_BANNER);
-const fetchBannerSuccess = createAction(FETCH_BANNER_SUCCESS);
-const fetchBannerFailure = createAction(FETCH_BANNER_FAILURE);
+const fetchData           = createAction(FETCH_DATA);
+const fetchDataSuccess    = createAction(FETCH_DATA_SUCCESS);
+const fetchDataFailure    = createAction(FETCH_DATA_FAILURE);
+const fetchBanners        = createAction(FETCH_BANNER);
+const fetchBannersSuccess = createAction(FETCH_BANNER_SUCCESS);
+const fetchBannersFailure = createAction(FETCH_BANNER_FAILURE);
 
 export const actions = {
   fetchData,
   fetchDataSuccess,
   fetchDataFailure,
-  fetchBanner,
-  fetchBannerSuccess,
-  fetchBannerFailure,
+  fetchBanners,
+  fetchBannersSuccess,
+  fetchBannersFailure,
 };
 
 /* Reducer */
@@ -44,7 +44,7 @@ export const actions = {
 const initialState = {
   latestLesson: null,
   latestUnits: null,
-  banner: {
+  banners: {
     data: {},
     wip: false,
     err: null,
@@ -56,7 +56,7 @@ const initialState = {
 const onSetLanguage = draft => {
   draft.latestLesson = null;
   draft.latestUnits  = null;
-  draft.banner       = {
+  draft.banners      = {
     data: {},
     wip: false,
     err: null,
@@ -72,7 +72,7 @@ const onData = (draft, payload) => {
 };
 
 const onDataSuccess = (draft, payload) => {
-  const { id } = payload.latest_daily_lesson;
+  const { id }      = payload.latest_daily_lesson;
   const latestUnits = payload.latest_units.map(x => x.id);
 
   if (draft.latestLesson !== id || !isEqual(draft.latestLesson, latestUnits)) {
@@ -89,31 +89,31 @@ const onDataFailure = (draft, payload) => {
   draft.err  = payload;
 };
 
-const onFetchBanner = draft => {
-  draft.banner.wip  = true;
-  draft.banner.data = {
+const onFetchBanners = draft => {
+  draft.banners.wip  = true;
+  draft.banners.data = {
     data: {},
     wip: false,
     err: null,
   };
 };
 
-const onFetchBannerSuccess = (draft, payload) => {
+const onFetchBannersSuccess = (draft, payload) => {
   if (payload.length === 0) {
     // empty result
-    onFetchBannerFailure(draft, payload);
+    onFetchBannersFailure(draft, payload);
     return;
   }
 
-  draft.banner.wip  = false;
-  draft.banner.err  = null;
-  draft.banner.data = payload;
+  draft.banners.wip  = false;
+  draft.banners.err  = null;
+  draft.banners.data = payload;
 };
 
-const onFetchBannerFailure = (draft, payload) => {
-  draft.banner.wip  = false;
-  draft.banner.data = {};
-  draft.banner.err  = payload;
+const onFetchBannersFailure = (draft, payload) => {
+  draft.banners.wip  = false;
+  draft.banners.data = {};
+  draft.banners.err  = payload;
 };
 
 const onSSRPrepare = draft => {
@@ -131,16 +131,16 @@ export const reducer = handleActions({
   [FETCH_DATA_SUCCESS]: onDataSuccess,
   [FETCH_DATA_FAILURE]: onDataFailure,
 
-  [FETCH_BANNER]: onFetchBanner,
-  [FETCH_BANNER_SUCCESS]: onFetchBannerSuccess,
-  [FETCH_BANNER_FAILURE]: onFetchBannerFailure,
+  [FETCH_BANNER]: onFetchBanners,
+  [FETCH_BANNER_SUCCESS]: onFetchBannersSuccess,
+  [FETCH_BANNER_FAILURE]: onFetchBannersFailure,
 }, initialState);
 
 /* Selectors */
 
 const getLatestLesson = state => state.latestLesson;
 const getLatestUnits  = state => state.latestUnits;
-const getBanner       = state => state.banner;
+const getBanner       = state => state.banners;
 const getWip          = state => state.wip;
 const getError        = state => state.err;
 

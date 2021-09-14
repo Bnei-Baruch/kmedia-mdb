@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Container, Feed, Grid } from 'semantic-ui-react';
 import * as shapes from '../../shapes';
@@ -13,6 +13,9 @@ import BlogFeed from '../Publications/tabs/Blog/Feed';
 import TwitterFeed from '../Publications/tabs/Twitter/Feed';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { isEqual } from 'lodash';
+import { useInterval } from '../../../helpers/timer';
+
+const SWITCH_BANNERS_TIMEOUT = 5 * 1000; // every 5 sec
 
 const renderBlogPosts = (latestBlogPosts, language, t) =>
   latestBlogPosts.length
@@ -110,7 +113,7 @@ const renderLatestLessonAndBanner = (latestLesson, banner) =>
             </Grid.Column>
           }
           <Grid.Column computer={6} tablet={7} mobile={16}>
-            <Promoted banner={banner} />
+            {banner && <Promoted banner={banner} />}
           </Grid.Column>
         </Grid.Row>
       </Grid>
@@ -118,17 +121,28 @@ const renderLatestLessonAndBanner = (latestLesson, banner) =>
   </div>;
 
 const HomePage = ({
-  banner,
-  language,
-  location,
-  latestUnits = [],
-  latestLesson = null,
-  latestBlogPosts = [],
-  latestTweets = [],
-  t,
-}) => {
+                    banners,
+                    language,
+                    location,
+                    latestUnits = [],
+                    latestLesson = null,
+                    latestBlogPosts = [],
+                    latestTweets = [],
+                    t,
+                  }) => {
 
   const { isMobileDevice } = useContext(DeviceInfoContext);
+
+  const [bannerIdx, setBannerIdx] = useState(-1);
+  useInterval(() => {
+    const allBanners = banners.data.length;
+    if (allBanners > 0) {
+      setBannerIdx(() => (bannerIdx + 1) % allBanners);
+    } else {
+      setBannerIdx(-1);
+    }
+  }, SWITCH_BANNERS_TIMEOUT);
+  const banner = bannerIdx === -1 ? null : banners.data[bannerIdx];
 
   return (
     <div className="homepage">

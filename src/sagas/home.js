@@ -22,9 +22,9 @@ export function* fetchBanner(action) {
     const { data } = yield call(Api.getCMS, 'banner', {
       language: action.payload,
     });
-    yield put(actions.fetchBannerSuccess(data));
+    yield put(actions.fetchBannersSuccess(data));
   } catch (err) {
-    yield put(actions.fetchBannerFailure(err));
+    yield put(actions.fetchBannersFailure(err));
   }
 }
 
