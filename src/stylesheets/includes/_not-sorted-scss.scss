@@ -1350,10 +1350,6 @@
   border-radius: 0;
 }
 
-.no-padding {
-  padding: 0 !important;
-}
-
 .search-result-note {
   padding: 10px 16px 10px 16px !important;
   border-width: 1px 4px 1px 1px;
@@ -1371,6 +1367,10 @@
 
 .no-margin-top {
   margin-top: 0 !important;
+}
+
+.no-margin-bottom {
+  margin-bottom: 0 !important;
 }
 
 .no-border {
@@ -1403,6 +1403,14 @@
 
 .margin-bottom-4 {
   margin-bottom: 4px !important;
+}
+
+.padding-top_1em {
+  padding-top: 1em;
+}
+
+.uppercase {
+  text-transform: uppercase;
 }
 
 @media screen and (-webkit-min-device-pixel-ratio: 0) {
@@ -2176,8 +2184,24 @@ tr:hover .my_playlist_actions {
   }
 }
 
-.ui.menu.personal_info{
+.ui.menu.personal_info {
   display: flex;
   justify-content: flex-end;
   margin-top: 1em;
+  @include mobile {
+    margin-top: 0;
+  }
+  margin-bottom: 0;
+
+  .icon.heart {
+    font-size: 1.3em
+  }
+}
+
+.need_to_login {
+  height: 80VH;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }

@@ -109,9 +109,7 @@ const PlaylistInfo = ({ cuID, t, handleClose = null }) => {
         onOpen={() => setIsNeedLogin(true)}
       >
         <Modal.Content>
-          <NeedToLogin>
-            <div>For use this action</div>
-          </NeedToLogin>
+          <NeedToLogin />
         </Modal.Content>
       </Modal>
       <Modal
@@ -121,9 +119,9 @@ const PlaylistInfo = ({ cuID, t, handleClose = null }) => {
         onClose={toggle}
         size={'tiny'}
         trigger={
-          <Button basic className="my_playlist_add clear_button" onClick={toggle}>
+          <Button basic className="my_playlist_add clear_button uppercase no-padding" onClick={toggle}>
             <PlaylistAddIcon className="playlist_add" fill="#767676" />
-            <span>{t('personal.savePlaylist')}</span>
+            <span>{t('buttons.save')}</span>
           </Button>
         }
       >
@@ -178,6 +176,7 @@ const PlaylistInfo = ({ cuID, t, handleClose = null }) => {
             primary
             content={t('buttons.save')}
             onClick={save}
+            className="uppercase"
           />
           <Button
             primary

@@ -98,7 +98,7 @@ const PersonalInfo = ({ unit = {}, t, collection }) => {
   const renderSubBtn = () => {
     if (!subsByType && !subsByCO) return null;
     return (
-      <Menu.Item>
+      <Menu.Item fitted="horizontally">
         <Confirm
           size="tiny"
           open={confirm}
@@ -107,10 +107,13 @@ const PersonalInfo = ({ unit = {}, t, collection }) => {
           content={t('personal.confirmUnsubscribe', { name: title })}
         />
         <Button
-          primary={!sub}
-          size={'tiny'}
+          basic
+          color={!sub ? 'blue' : 'grey'}
           onClick={() => subsUnsubs(sub)}
           content={t(`personal.${!sub ? 'subscribe' : 'unsubscribe'}`)}
+          className="uppercase  margin-right-4 margin-left-4"
+          compact
+          style={{ fontSize: '0.9em' }}
         />
       </Menu.Item>
     );
@@ -125,25 +128,23 @@ const PersonalInfo = ({ unit = {}, t, collection }) => {
         onOpen={() => setIsNeedLogin(true)}
       >
         <Modal.Content>
-          <NeedToLogin>
-            <div>For use this action</div>
-          </NeedToLogin>
+          <NeedToLogin />
         </Modal.Content>
       </Modal>
       <Menu secondary className="personal_info">
         <AlertModal message={alertMsg} open={!!alertMsg} onClose={onAlertCloseHandler} />
-        <Menu.Item fitted="horizontally">
-          <PlaylistInfo cuID={unit.id} t={t} />
-        </Menu.Item>
-        <Menu.Item fitted="horizontally">
+        <Menu.Item>
           <Button
             basic
             className="clear_button"
             onClick={() => likeDislike(like)}
           >
             <Icon name={`heart${!like ? ' outline' : ''}`} className="margin-right-4 margin-left-4" />
+            <span>{likeCount}</span>
           </Button>
-          <span>{likeCount}</span>
+        </Menu.Item>
+        <Menu.Item className="no-margin-bottom">
+          <PlaylistInfo cuID={unit.id} t={t} />
         </Menu.Item>
         {renderSubBtn()}
       </Menu>

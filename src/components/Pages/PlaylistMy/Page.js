@@ -115,7 +115,7 @@ const PlaylistMyPage = ({ collection }) => {
                 <PlaylistHeader collection={collection} />
               </div>
               }
-              <Container id="unit_container">
+              <Container className="unit_container">
                 <Helmets.AVUnit unit={unit} language={uiLanguage} />
                 <Info unit={unit} currentCollection={collection} />
                 <Materials unit={unit} playlistComponent={PlaylistData} />

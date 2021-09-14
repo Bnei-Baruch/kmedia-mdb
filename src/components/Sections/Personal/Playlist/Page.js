@@ -3,7 +3,7 @@ import { withRouter } from 'react-router';
 import { withNamespaces } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Container, Grid, Table } from 'semantic-ui-react';
+import { Button, Container, Grid, Popup, Table } from 'semantic-ui-react';
 import clsx from 'clsx';
 
 import { actions, selectors } from '../../../../redux/modules/my';
@@ -68,12 +68,18 @@ const Page = ({ t }) => {
             disabled={i === 0}
             onClick={() => changeItemPosition(i, true)}
           />
-          <Button
+          <Popup
             basic
-            icon="remove circle"
-            className="no-shadow"
-            onClick={() => removeItem(x.id)}
-          />
+            content={t('personal.removeFromPlaylist')}
+            trigger={
+              <Button
+                basic
+                icon="remove circle"
+                className="no-shadow"
+                onClick={() => removeItem(x.id)}
+              />
+            }>
+          </Popup>
           <Button
             basic
             icon="long arrow alternate down"

@@ -1,9 +1,9 @@
 .unit-info {
   @include mobile {
-    margin: 1em 1em 1em 1em;
+    margin: 0 1em 1em 1em;
   }
   clear: both;
-  margin: 1em 1em 2em 0;
+  margin: 0 1em 2em 0;
 
   &__name {
     font-weight: normal;
@@ -22,7 +22,7 @@
   }
 
   &__header {
-    margin-top: 1rem !important;
+    margin-top: 0.5rem !important;
   }
 
   .link_to_cu {

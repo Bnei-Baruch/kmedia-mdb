@@ -74,6 +74,7 @@ export const SubscriptionsItem = ({ item, t, language }) => {
           content={t('personal.unsubscribe')}
           onClick={remove}
           color="grey"
+          className="uppercase"
         />
       </Card.Content>
     </Card>

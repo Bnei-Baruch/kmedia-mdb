@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
 
 import { actions, selectors } from '../../../redux/modules/auth';
-import { Container, Divider, Button } from 'semantic-ui-react';
+import { Container, Divider, Button, Header, Menu } from 'semantic-ui-react';
 
 const ShowNeedToLogin = withNamespaces()(
   ({ t, language, children }) => {
@@ -11,23 +11,24 @@ const ShowNeedToLogin = withNamespaces()(
     const login    = () => dispatch(actions.login(language));
 
     return (
-      <Container className="padded" textAlign="center" fluid>
-        <Divider hidden />
-        {children}
-        <h1>{t('personal.needToLogin')}</h1>
-        <Button
-          compact
-          basic
-          size="big"
-          icon={'user circle outline'}
-          content={t('personal.login')}
-          color={'blue'}
-          as="a"
-          target="_blank"
-          onClick={login}
-        />
-        <Divider hidden />
-      </Container>
+      <div className="need_to_login">
+        <div>
+          <Header as="h1" content={t('nav.sidebar.personal')} className="weight-normal" />
+          <Header as="h2" content={t('personal.needToLogin')} className="weight-normal" />
+          <Divider hidden />
+          <Button
+            compact
+            basic
+            size="big"
+            icon={'user circle outline'}
+            content={t('personal.login')}
+            color={'blue'}
+            as="a"
+            target="_blank"
+            onClick={login}
+          />
+        </div>
+      </div>
     );
   }
 );

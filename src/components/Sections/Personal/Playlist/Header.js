@@ -35,7 +35,7 @@ const PlaylistHeader = ({ confirmSuccess, save, playlist, t }) => {
   const nameTag   = isEditName ? (
     <>
       <Input type="text" value={name} onChange={handleChangeName} maxLength={30} />
-      <Button content={t('buttons.save')} onClick={handleSave} className="margin-right-8 margin-left-8" />
+      <Button content={t('buttons.save')} onClick={handleSave} className="margin-right-8 margin-left-8 uppercase" />
       <Button content={t('buttons.cancel')} onClick={toggleEditName} />
     </>
   ) : playlist.name;

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import identity from 'lodash/identity';
-import { Button, Container, Menu, MenuItem, Sidebar } from 'semantic-ui-react';
+import { Button, Menu, Header, Sidebar } from 'semantic-ui-react';
 
 import { getPodcastLinkByLang, getRSSLinkByLang } from '../../helpers/utils';
 import NavLink from '../Language/MultiLanguageNavLink';
@@ -46,12 +46,11 @@ const MenuItems = ({ simple = false, visible = false, t, onItemClick = identity,
   ));
 
   const personal = !user ? (
-    <Menu.Item
-      key={'personal'}
-      className="sidebar-item"
-    >
-      <h3 className="weight-normal margin-bottom-4">{t('nav.sidebar.personal')}</h3>
-      <Container content={t('personal.needToLogin')} />
+    <Menu.Item key={'personal'}>
+      <Header as="h3" className="margin-bottom-4">
+        <Header.Content content={t('nav.sidebar.personal')} className="weight-normal" />
+        <Header.Subheader content={t('personal.needToLogin')} className="margin-left-4 margin-right-4" />
+      </Header>
       <Button
         compact
         basic

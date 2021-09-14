@@ -172,7 +172,7 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
                 <PlaylistHeader collection={collection} prevLink={prevLink} nextLink={nextLink} />
               </div>
               }
-              <Container id="unit_container">
+              <Container className="unit_container">
                 <Helmets.AVUnit unit={unit} language={uiLanguage} />
                 <Info unit={unit} currentCollection={collection} />
                 <Materials unit={unit} playlistComponent={PlaylistData} />

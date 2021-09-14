@@ -22,6 +22,7 @@ import { filtersTransformer } from '../../../../../filters/index';
 import Link from '../../../../Language/MultiLanguageLink';
 import * as shapes from '../../../../shapes';
 import PersonalInfo from './PersonalInfo';
+import { selectors as recommended } from '../../../../../redux/modules/recommended';
 
 const filterLessons = (ct, filmDate) => {
   switch (ct) {
@@ -63,7 +64,7 @@ const makeTagLinks = (tags = [], getTagById) =>
     }), ''));
 
 const makeSourcesLinks = (sources = [], getSourceById, filteredListPath) => Array.from(intersperse(
-  sources.map(x => {
+  sources.map((x, i) => {
     const source = getSourceById(x);
     if (!source) {
       return '';
@@ -138,7 +139,7 @@ const getEpisodeInfo = (ct, cIDs, currentCollection, filmDate, t) => {
   const len = episodeInfo.length - 1;
   return episodeInfo.map((x, i) => {
     return (
-      <span>
+      <span key={i}>
         {x}
         {i < len && (<span className="seperator">|</span>)}
       </span>
@@ -150,7 +151,9 @@ const Info = ({ unit = {}, section = '', t, currentCollection = null }) => {
   const getSourceById = useSelector(state => sourcesSelectors.getSourceById(state.sources));
   const getTagById    = useSelector(state => tagsSelectors.getTagById(state.tags));
 
-  const { name, film_date: filmDate, sources, tags, collections, content_type: ct, cIDs } = unit;
+  const { id, name, film_date: filmDate, sources, tags, collections, content_type: ct, cIDs } = unit;
+
+  const views = useSelector(state => recommended.getViews(id, state.recommended));
 
   // take lessons section tabs into consideration
   let filteredListPath = section;
@@ -170,30 +173,38 @@ const Info = ({ unit = {}, section = '', t, currentCollection = null }) => {
       <div className="unit-info">
         {
           !isMultiLessons && collectionsLinks.length > 0 && (
-            <List.Item className="unit-info__collections">
+            <List.Item className="unit-info__collections" key="collections">
               {collectionsLinks}
             </List.Item>
           )
         }
         <Header as="h2" className="unit-info__header">
-          <span className="unit-info__name">{name}</span>
+          <div className="unit-info__name">{name}</div>
         </Header>
 
         <div className="text grey unit-info__film-date">
           {episodeInfo}
+          {
+            views && (
+              <span key="views">
+                <span className="seperator">|</span>
+                {t('pages.unit.info.views', { views })}
+            </span>
+            )
+          }
         </div>
 
         <List>
           {
             tagLinks.length > 0 && (
-              <List.Item className="unit-info__topics">
+              <List.Item className="unit-info__topics" key="topics">
                 {tagLinks}
               </List.Item>
             )
           }
           {
             sourcesLinks.length > 0 && (
-              <List.Item className="unit-info__sources">
+              <List.Item className="unit-info__sources" key="sources">
                 <strong>
                   {t('pages.unit.info.sources')}
                   :
@@ -205,7 +216,7 @@ const Info = ({ unit = {}, section = '', t, currentCollection = null }) => {
           }
           {
             isMultiLessons && collectionsLinks.length > 0 && (
-              <List.Item>
+              <List.Item key="co-links">
                 <strong>
                   {t('pages.unit.info.collections')}
                   :

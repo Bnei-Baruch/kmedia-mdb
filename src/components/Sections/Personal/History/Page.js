@@ -48,11 +48,11 @@ const Page      = ({ location, t }) => {
   const computerWidth = isMobileDevice ? 16 : 10;
 
   const renderItem = (x, i) => {
-    let newDay = null;
-    const mp   = i !== 0 && moment(items[i - 1].created_at);
-    const mx   = moment(x.created_at);
-    const diff = i !== 0 ? mp.diff(mx, 'days') : 1;
-    if (diff > 0) {
+    let newDay   = null;
+    const mp     = i !== 0 && moment(items[i - 1].created_at);
+    const mx     = moment(x.created_at);
+    const isDiff = i !== 0 ? mp.date() !== mx.date() : true;
+    if (isDiff) {
       newDay = (
         <Table.Row>
           <Table.Cell collapsing>
