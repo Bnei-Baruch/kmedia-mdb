@@ -10,10 +10,9 @@ import { initKC } from '../../sagas/helpers/keycklockManager';
 import { DeviceInfoContext } from '../../helpers/app-contexts';
 import { getLanguageDirection } from '../../helpers/i18n-utils';
 
-const Login = ({ t }) => {
+const Login = ({ t, language }) => {
   const [isActive, setIsActive] = useState(false);
   const { isMobileDevice }      = useContext(DeviceInfoContext);
-  const language                = useSelector(state => settings.getLanguage(state.settings));
   const direction               = getLanguageDirection(language);
   const popupStyle              = { direction };
   const dispatch                = useDispatch();
@@ -33,12 +32,6 @@ const Login = ({ t }) => {
 
   const handlePopupOpen  = () => setIsActive(true);
   const handlePopupClose = () => setIsActive(false);
-
-  const Trigger = React.forwardRef((props, ref) => (
-    <div onClick={handlePopupOpen} ref={ref}>
-      {<Icon size="big" name="user circle" className={isMobileDevice ? 'no-margin' : ''} />}
-    </div>
-  ));
 
   const renderAccount = () => {
     return (
@@ -93,10 +86,10 @@ const Login = ({ t }) => {
     <Button
       compact
       basic
-      size="small"
       icon={'user circle outline'}
-      content={t('personal.login')}
+      content={isMobileDevice ? null : t('personal.login')}
       className={'donate-button'}
+      circular={isMobileDevice}
       color={'blue'}
       as="a"
       target="_blank"
@@ -107,7 +100,8 @@ const Login = ({ t }) => {
   return user ? renderAccount() : renderLogin();
 };
 
-Login.propTypes = {
+Login.propTypes =
+{
   t: PropTypes.func.isRequired,
 };
 

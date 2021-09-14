@@ -116,11 +116,10 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
     setUnit(newUnit);
   }, [playlist, selected]);
 
-  if (!collection || !Array.isArray(collection.content_units)) {
-    return null;
-  }
-
-  if (!playlist || !unit) {
+  if (!collection ||
+    !Array.isArray(collection.content_units) ||
+    !playlist ||
+    !unit) {
     return null;
   }
 

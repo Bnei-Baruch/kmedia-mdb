@@ -27,7 +27,7 @@ const WrappedOmniBoxWithChronicles = ({ location }) => {
   const chronicles = useContext(ClientChroniclesContext);
   return <WrappedOmniBox location={location} chronicles={chronicles} />;
 };
-const RenderHeaderSearch = React.forwardRef(({ t, location }, headerSearchElement) => (
+const RenderHeaderSearch           = React.forwardRef(({ t, location }, headerSearchElement) => (
   <div ref={headerSearchElement}>
     <Segment color="blue" inverted className="header_search">
       <WrappedOmniBoxWithChronicles location={location} />
@@ -49,10 +49,10 @@ const shouldShowSearch = location => {
   return true;
 };
 
-const menuButtonElement1 = createRef();
-const menuButtonElement2 = createRef();
+const menuButtonElement1      = createRef();
+const menuButtonElement2      = createRef();
 const showSearchButtonElement = createRef();
-const headerSearchElement = createRef();
+const headerSearchElement     = createRef();
 
 class Layout extends Component {
   static contextType = DeviceInfoContext;
@@ -91,8 +91,8 @@ class Layout extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    const { location, language } = this.props;
-    const { sidebarActive, isShowHeaderSearch }   = this.state;
+    const { location, language }                = this.props;
+    const { sidebarActive, isShowHeaderSearch } = this.state;
 
     return (language !== nextProps.language
       || location.pathname !== nextProps.location.pathname
@@ -159,9 +159,9 @@ class Layout extends Component {
   };
 
   render() {
-    const { t, location, route, language }              = this.props;
-    const { sidebarActive, embed, isShowHeaderSearch }  = this.state;
-    const { isMobileDevice }                            = this.context;
+    const { t, location, route, language }             = this.props;
+    const { sidebarActive, embed, isShowHeaderSearch } = this.state;
+    const { isMobileDevice }                           = this.context;
 
     const showSearch = shouldShowSearch(location);
 
@@ -216,16 +216,18 @@ class Layout extends Component {
                   </Menu.Item>
                   {
                     showSearch && isMobileDevice &&
-                      <Ref innerRef={showSearchButtonElement}>
-                        <Menu.Item as="a" position="right">
-                          <Icon name="search" className="no-margin" onClick={this.showHeaderSearch} />
-                        </Menu.Item>
-                      </Ref>
+                    <Ref innerRef={showSearchButtonElement}>
+                      <Menu.Item as="a" position="right">
+                        <Icon name="search" className="no-margin" onClick={this.showHeaderSearch} />
+                      </Menu.Item>
+                    </Ref>
                   }
                   <Menu.Item position="right" className="mobile-hidden">
                     <DonateNow language={language} />
                     <VirtualHomeButton />
-                    <Login />
+                  </Menu.Item>
+                  <Menu.Item position="right">
+                    <Login language={language} />
                   </Menu.Item>
                   <TopMost />
                 </Menu.Menu>
