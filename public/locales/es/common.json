@@ -626,6 +626,8 @@
     "videosOnList": "vídeos",
     "login": "Iniciar sesión",
     "logout": "Cerrar sesión",
-    "needToLogin": "Iniciar sesión para me gusta, guardar y suscribirse a videos"
+    "needToLogin": "Iniciar sesión para me gusta, guardar y suscribirse a videos",
+    "account": "Mi cuenta"
+
   }
 }

@@ -3,11 +3,12 @@ import { useSelector, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 
-import { Button, Header, Popup } from 'semantic-ui-react';
+import { Button, Divider, List, Popup } from 'semantic-ui-react';
 import { selectors, actions } from '../../redux/modules/auth';
 import { initKC } from '../../sagas/helpers/keycklockManager';
 import { DeviceInfoContext } from '../../helpers/app-contexts';
 import { getLanguageDirection } from '../../helpers/i18n-utils';
+import Link from '../Language/MultiLanguageLink';
 
 const Login = ({ t, language }) => {
   const [isActive, setIsActive] = useState(false);
@@ -35,6 +36,8 @@ const Login = ({ t, language }) => {
       key="handleLogin"
       flowing
       position="bottom right"
+      size="large"
+      className="auth-popup"
       trigger={
         <Button
           circular
@@ -50,28 +53,29 @@ const Login = ({ t, language }) => {
       on="click"
       style={popupStyle}
     >
-      <Popup.Header>
-        <div className="handle-language-header title">
-          <Header size="small" textAlign="center" content={user.name} />
-          <Button
-            basic
-            compact
-            size="tiny"
-            content={t('buttons.close')}
-            onClick={handlePopupClose}
-          />
-        </div>
-      </Popup.Header>
+      <Popup.Header content={user.name} />
+      <Divider />
       <Popup.Content>
-        <Button
-          fluid
-          basic
-          size="small"
-          content={t('personal.logout')}
-          className={'donate-button'}
-          color={'blue'}
-          onClick={logout}
-        />
+        <List>
+          <List.Item
+            key="personal"
+            as={Link}
+            to={'/personal'}
+            content={t('nav.sidebar.personal')}
+          />
+          <List.Item
+            key="account"
+            as="a"
+            href={`https://accounts.kab.info/auth/realms/main/account/?kc_locale=${language}`}
+            content={t('personal.account')}
+          />
+          <List.Item
+            key="logout"
+            as="a"
+            onClick={logout}
+            content={t('personal.logout')}
+          />
+        </List>
       </Popup.Content>
     </Popup>
   );

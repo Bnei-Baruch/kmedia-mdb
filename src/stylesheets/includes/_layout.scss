@@ -222,7 +222,7 @@ body {
 }
 
 .ui.menu {
-  .donate-button, .auth-button {
+  .donate-button {
     &.ui.button,
     &.ui.button:hover,
     &.ui.button:focus {
@@ -232,10 +232,23 @@ body {
   }
 
   .auth-button {
-    width: 2.3rem;
-    text-align: center;
-    padding-right: 0;
-    padding-left: 0;
+    &.ui.button,
+    &.ui.button:hover,
+    &.ui.button:focus {
+
+      background: $white !important;
+      font-size: 1.8em !important;
+      width: 2.9rem;
+      text-align: center;
+      padding: 0;
+      line-height: 1.3em;
+
+      @include mobile {
+        font-size: 1rem !important;
+        width: 2.3rem;
+        line-height: 2.3rem;
+      }
+    }
   }
 
   .vh-button {
@@ -250,6 +263,18 @@ body {
     &.ui.button:hover {
       background: #f26202 !important;
       color: white !important;
+    }
+  }
+}
+
+.auth-popup {
+  text-align: center;
+  padding: 0 2em;
+
+  .ui.list > a {
+    &.item, &.item:hover, &.item:focus {
+      color: $black;
+      padding: 0.5em 0;
     }
   }
 }

@@ -646,6 +646,7 @@
     "videosOnList": "videos",
     "login": "Login",
     "logout": "Logout",
-    "needToLogin": "Sign in to like, save and subscribe to videos"
+    "needToLogin": "Sign in to like, save and subscribe to videos",
+    "account": "My Account"
   }
 }
