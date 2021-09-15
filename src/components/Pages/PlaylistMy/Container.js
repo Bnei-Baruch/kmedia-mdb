@@ -27,14 +27,14 @@ const PlaylistMyContainer = ({ t, history, location, id }) => {
   const dispatch = useDispatch();
   useEffect(() => {
     user && dispatch(actions.fetchById(MY_NAMESPACE_PLAYLIST_BY_ID, { id }));
-  }, [id, uiLanguage, user]);
+  }, [id, uiLanguage, user, dispatch]);
 
   useEffect(() => {
     if (user && cuUID && !playerHelper.getActivePartFromQuery(location)) {
       const selected = content_units.findIndex(u => u.id === cuUID);
       playerHelper.setActivePartInQuery(history, selected);
     }
-  }, [cuUID]);
+  }, [cuUID, content_units, history, location, user]);
 
   const wipErr = WipErr({ wip, err, t });
   if (wipErr) return wipErr;

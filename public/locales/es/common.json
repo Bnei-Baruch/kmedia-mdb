@@ -617,7 +617,7 @@
     "newPlaylistName": "Nuevo nombre de lista de reproducción",
     "newPlaylist": "Crear lista de reproducción",
     "editPlaylist": "Editar lista de reproducción",
-    "successfullyRemoved": "Eliminado exitosamente",
+    "removedSuccessfully": "Eliminado exitosamente",
     "removeHistory": "Eliminar de la historia",
     "removeLike": "Eliminar de los videos que me gustan",
     "removeFromPlaylist": "Eliminar de lista de reproducción",

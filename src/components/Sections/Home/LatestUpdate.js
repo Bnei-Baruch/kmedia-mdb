@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Card, Header } from 'semantic-ui-react';
 
-import { canonicalLink, canonicalSectionByLink } from '../../../helpers/links';
+import { canonicalLink } from '../../../helpers/links';
 import * as shapes from '../../shapes';
 import Link from '../../Language/MultiLanguageLink';
 import UnitLogo from '../../shared/Logo/UnitLogo';

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { withNamespaces } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Confirm, Icon, Menu, Modal } from 'semantic-ui-react';
@@ -7,7 +7,7 @@ import {
   CT_SUBSCRIBE_BY_COLLECTION,
   CT_SUBSCRIBE_BY_TYPE,
   MY_NAMESPACE_LIKES,
-  MY_NAMESPACE_SUBSCRIPTIONS, SECTIONS_LINK_BY_CU_CONTENT_TYPE
+  MY_NAMESPACE_SUBSCRIPTIONS
 } from '../../../../../helpers/consts';
 import * as shapes from '../../../../shapes';
 import { selectors } from '../../../../../redux/modules/auth';
@@ -15,8 +15,6 @@ import { actions, selectors as myselector } from '../../../../../redux/modules/m
 import PlaylistInfo from './PlaylistInfo';
 import AlertModal from '../../../../shared/AlertModal';
 import NeedToLogin from '../../../../Sections/Personal/NeedToLogin';
-import UnitLogo from '../../../../shared/Logo/UnitLogo';
-import { canonicalLink } from '../../../../../helpers/links';
 
 const PersonalInfo = ({ unit = {}, t, collection }) => {
   const [alertMsg, setAlertMsg]       = useState();
@@ -45,19 +43,21 @@ const PersonalInfo = ({ unit = {}, t, collection }) => {
     sub   = subs.find(s => subsByType === s.content_type);
     title = t(`constants.content-types.${subsByType}`);
   }
+
   useEffect(() => {
     if (id) {
       dispatch(actions.fetchByCU(MY_NAMESPACE_LIKES, { 'uids': [id] }));
       dispatch(actions.likeCount({ 'uids': [id] }));
     }
+
     if (subsByType || subsByCO) {
       dispatch(actions.fetch(MY_NAMESPACE_SUBSCRIPTIONS, { 'collections': [subsByCO], 'types': [subsByType] }));
     }
-  }, [dispatch, id, user]);
+  }, [dispatch, id, user, subsByCO, subsByType]);
 
   if (!unit) return null;
 
-  const likeDislike = (l) => {
+  const likeDislike = l => {
     if (!user)
       return setIsNeedLogin(true);
 
@@ -68,7 +68,7 @@ const PersonalInfo = ({ unit = {}, t, collection }) => {
     return null;
   };
 
-  const subsUnsubs = (s) => {
+  const subsUnsubs = s => {
     if (!user)
       return setIsNeedLogin(true);
     let msg;
@@ -82,6 +82,7 @@ const PersonalInfo = ({ unit = {}, t, collection }) => {
       }));
       msg = t('personal.subscribeSuccessful');
     }
+
     setAlertMsg(msg);
     return null;
   };

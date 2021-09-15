@@ -36,7 +36,7 @@ export const SubscriptionsItem = ({ item, t, language }) => {
     if (item.content_type) params.content_type = [item.content_type];
 
     dispatch(mdbActions.countCU(namespace, params));
-  }, [item.id]);
+  }, [item, dispatch, namespace]);
 
   let logo, title, link;
   if (item.collection_uid) {
@@ -46,7 +46,7 @@ export const SubscriptionsItem = ({ item, t, language }) => {
   } else {
     logo  = <UnitLogo unitId={item.content_unit_uid} width={isMobileDevice ? 300 : 520} />;
     title = t(`constants.content-types.${item.content_type}`);
-    link  = '/' + SECTIONS_LINK_BY_CU_CONTENT_TYPE[item.content_type];
+    link  = `/${SECTIONS_LINK_BY_CU_CONTENT_TYPE[item.content_type]}`;
   }
 
   return (

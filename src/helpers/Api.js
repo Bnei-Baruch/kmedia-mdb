@@ -46,6 +46,7 @@ export class Requests {
     } else {
       config.data = JSON.stringify(params);
     }
+
     return axios(config);
   };
 
@@ -111,7 +112,7 @@ class Api {
     Requests.get(`stats/cu_class?${Requests.makeParams({ content_type, ...rest })}`)
   );
 
-  static countCU = (params) => Requests.get(`count_cu?${Requests.makeParams(params)}`);
+  static countCU = params => Requests.get(`count_cu?${Requests.makeParams(params)}`);
 
   static tweets = ({ pageNo: page_no, pageSize: page_size, ...rest }) => (
     Requests.get(`tweets?${Requests.makeParams({ page_no, page_size, ...rest })}`)
@@ -208,11 +209,12 @@ class Api {
       urlParam = `${urlParam}/${params.id}`;
       delete params.id;
     }
+
     const url = `${MY_BACKEND}rest/${urlParam}`;
     return Requests.auth(params, url, token, method);
   };
 
-  static likeCount = (params) => {
+  static likeCount = params => {
     const url    = `${MY_BACKEND}like_count?${Requests.makeParams(params)}`;
     const config = { url, method: 'GET' };
     return axios(config);

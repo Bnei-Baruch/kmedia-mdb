@@ -410,7 +410,6 @@ export const imageByUnit = (unit, link) => {
         nocrop: false,
         stripmeta: true,
       }, `lessons/latest_lesson_%s.jpg`);
-      break;
     default:
       return canonicalSectionByLink(link);
 

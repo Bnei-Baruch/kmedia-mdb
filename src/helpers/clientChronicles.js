@@ -141,6 +141,7 @@ export default class ClientChronicles {
     if (!chroniclesBackendEnabled) {
       return;
     }
+
     for (const key in abTesting) {
       if (typeof abTesting[key] === 'string') {
         this.abTesting[key] = abTesting[key];
@@ -223,6 +224,7 @@ export default class ClientChronicles {
     if (action.type === authTypes.LOGIN_SUCCESS) {
       this.keycloakId = action.payload.user?.id;
     }
+
     if (action.type === authTypes.LOGOUT_SUCCESS) {
       this.keycloakId = null;
     }

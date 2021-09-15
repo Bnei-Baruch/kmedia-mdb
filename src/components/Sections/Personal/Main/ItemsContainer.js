@@ -26,7 +26,7 @@ const ItemsContainer = ({ pageSize = 8, pageNo = 1, t, namespace, withSeeAll }) 
 
   useEffect(() => {
     dispatch(actions.fetch(namespace, { page_no: pageNo, page_size: pageSize }));
-  }, [dispatch, pageNo, pageSize, language]);
+  }, [dispatch, pageNo, pageSize, language, namespace]);
 
   const items = useSelector(state => selectors.getItems(state.my, namespace));
   const err   = useSelector(state => selectors.getErr(state.my, namespace));

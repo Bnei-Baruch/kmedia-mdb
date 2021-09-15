@@ -16,13 +16,14 @@ const PlaylistHeaderContainer = ({ playlist }) => {
   const dispatch           = useDispatch();
   const language           = useSelector(state => settings.getLanguage(state.settings));
 
-  const save = (name) => dispatch(actions.edit(MY_NAMESPACE_PLAYLISTS, { id: playlist.id, name }));
+  const save = name => dispatch(actions.edit(MY_NAMESPACE_PLAYLISTS, { id: playlist.id, name }));
 
   const confirmSuccess = () => {
     dispatch(actions.remove(MY_NAMESPACE_PLAYLISTS, { ids: [playlist.id] }));
     //wait for remove from server
     setTimeout(() => history.push(`/${language}/personal`), 100);
   };
+
   if (!playlist) return null;
 
   const props = {

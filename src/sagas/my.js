@@ -25,6 +25,7 @@ function* updatePageInQuery(action) {
 function* fetch(action) {
   const token = yield select(state => authSelectors.getToken(state.auth));
   if (!token) return;
+  // eslint-disable-next-line prefer-const
   let { namespace, with_files = false, ...params } = action.payload;
 
   const language = yield select(state => settings.getLanguage(state.settings));

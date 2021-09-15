@@ -11,7 +11,6 @@ import playerHelper from '../../../helpers/player';
 import { selectors as settings } from '../../../redux/modules/settings';
 import AVPlaylistPlayer from '../../AVPlayer/AVPlaylistPlayer';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
-import * as PropTypes from 'prop-types';
 
 import Info from '../Unit/widgets/Info/Info';
 import PlaylistHeader from '../PlaylistCollection/widgets/Playlist/PlaylistHeader';
@@ -54,6 +53,7 @@ const PlaylistMyPage = ({ collection }) => {
     const mediaType   = playerHelper.getMediaTypeFromQuery(location, preferredMT);
     const nPlaylist   = playerHelper.playlistFromUnits(collection, mediaType, contentLanguage, uiLanguage);
     setPlaylist(nPlaylist);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -63,20 +63,21 @@ const PlaylistMyPage = ({ collection }) => {
       const nPlaylist = playerHelper.playlistFromUnits(collection, mediaType, contentLanguage, uiLanguage);
       setPlaylist(nPlaylist);
     }
-  }, [location]);
+  }, [location, collection, contentLanguage, playlist?.mediaType, uiLanguage]);
 
   useEffect(() => {
     let nSelected = playerHelper.getActivePartFromQuery(location);
     if (nSelected >= playlist?.items.length || nSelected < 0) {
       nSelected = 0;
     }
+
     setSelected(nSelected);
   }, [location, playlist]);
 
   useEffect(() => {
     const newUnit = playlist?.items[selected]?.unit;
     setUnit(newUnit);
-  }, [selected]);
+  }, [selected, playlist?.items]);
 
   if (!collection ||
     !Array.isArray(collection.content_units) ||

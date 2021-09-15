@@ -31,7 +31,7 @@ const PlaylistLikeContainer = ({ t }) => {
   const dispatch = useDispatch();
   useEffect(() => {
     user && dispatch(actions.fetch(MY_NAMESPACE_LIKES, { page_no: 1, page_size: 100, with_files: true }));
-  }, [uiLanguage, user]);
+  }, [uiLanguage, user, dispatch]);
 
   const wipErr = WipErr({ wip, err, t });
   if (wipErr) return wipErr;

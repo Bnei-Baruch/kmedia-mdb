@@ -28,6 +28,8 @@ const EDIT_SUCCESS = 'My/EDIT_SUCCESS';
 const REMOVE         = 'My/REMOVE';
 const REMOVE_SUCCESS = 'My/REMOVE_SUCCESS';
 
+const SET_DELETED = 'My/SET_DELETED';
+
 const LIKE_COUNT         = 'My/LIKE_COUNT';
 const LIKE_COUNT_SUCCESS = 'My/LIKE_COUNT_SUCCESS';
 
@@ -50,6 +52,8 @@ export const types = {
 
   REMOVE,
   REMOVE_SUCCESS,
+
+  SET_DELETED,
 
   LIKE_COUNT,
   LIKE_COUNT_SUCCESS,
@@ -76,6 +80,8 @@ const editSuccess = createAction(EDIT_SUCCESS);
 const remove        = createAction(REMOVE, (namespace, params) => ({ namespace, ...params }));
 const removeSuccess = createAction(REMOVE_SUCCESS);
 
+const setDeleted = createAction(SET_DELETED, (namespace, deleted) => ({ namespace, deleted }));
+
 const likeCount        = createAction(LIKE_COUNT);
 const likeCountSuccess = createAction(LIKE_COUNT_SUCCESS);
 
@@ -99,6 +105,8 @@ export const actions = {
   remove,
   removeSuccess,
 
+  setDeleted,
+
   likeCount,
   likeCountSuccess,
 
@@ -111,7 +119,8 @@ const initialState = MY_NAMESPACES.reduce((acc, n) => {
     wip: false,
     total: 0,
     errors: null,
-    byCU: {}
+    byCU: {},
+    deleted: false
   };
   return acc;
 }, { likeCount: 0, [MY_NAMESPACE_PLAYLIST_BY_ID]: { byID: {} } });
@@ -222,10 +231,16 @@ const onRemoveSuccess = (draft, { namespace, ids, playlist_id, uids }) => {
     }
   }
 
-  draft[namespace].total  = draft[namespace].total - ids?.length;
-  draft[namespace].wip    = false;
-  draft[namespace].errors = false;
+  draft[namespace].deleted = true;
+  draft[namespace].total   = draft[namespace].total - ids?.length;
+  draft[namespace].wip     = false;
+  draft[namespace].errors  = false;
   if (namespace === MY_NAMESPACE_LIKES) --draft.likeCount;
+  return draft;
+};
+
+const onSetDeleted = (draft, { namespace, deleted }) => {
+  draft[namespace].deleted = deleted;
   return draft;
 };
 
@@ -248,6 +263,8 @@ export const reducer = handleActions({
   [EDIT_SUCCESS]: onEditSuccess,
   [REMOVE_SUCCESS]: onRemoveSuccess,
 
+  [SET_DELETED]: onSetDeleted,
+
   [LIKE_COUNT_SUCCESS]: onLikeCountSuccess,
 }, initialState);
 
@@ -257,6 +274,7 @@ const getItemByCU     = (state, namespace, uid) => state[namespace].byCU[uid];
 const getPlaylistById = (state, id) => state[MY_NAMESPACE_PLAYLIST_BY_ID].byID[id];
 const getWIP          = (state, namespace) => state[namespace].wip;
 const getErr          = (state, namespace) => state[namespace].errors;
+const getDeleted      = (state, namespace) => state[namespace].deleted;
 const getPageNo       = (state, namespace) => state[namespace].pageNo;
 const getTotal        = (state, namespace) => state[namespace].total;
 const getLikeCount    = state => state.likeCount;
@@ -267,6 +285,7 @@ export const selectors = {
   getPlaylistById,
   getWIP,
   getErr,
+  getDeleted,
   getPageNo,
   setPage,
   getTotal,

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useCallback, useContext, useEffect } from 'react';
 import { withRouter } from 'react-router';
 import { withNamespaces } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -7,15 +7,16 @@ import clsx from 'clsx';
 import moment from 'moment';
 
 import { actions, selectors } from '../../../../redux/modules/my';
-import { MY_NAMESPACE_HISTORY, MY_NAMESPACE_PLAYLISTS } from '../../../../helpers/consts';
-import WipErr from '../../../shared/WipErr/WipErr';
-import CUItemContainer from '../../../shared/CUItem/CUItemContainer';
-import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import { selectors as settings } from '../../../../redux/modules/settings';
 import { selectors as auth } from '../../../../redux/modules/auth';
+import { DeviceInfoContext } from '../../../../helpers/app-contexts';
+import { MY_NAMESPACE_HISTORY } from '../../../../helpers/consts';
+import WipErr from '../../../shared/WipErr/WipErr';
+import CUItemContainer from '../../../shared/CUItem/CUItemContainer';
 import { getPageFromLocation } from '../../../Pagination/withPagination';
 import Pagination from '../../../Pagination/Pagination';
 import Actions from './Actions';
+import AlertModal from '../../../shared/AlertModal';
 
 const PAGE_SIZE = 20;
 const Page      = ({ location, t }) => {
@@ -27,20 +28,24 @@ const Page      = ({ location, t }) => {
   const items    = useSelector(state => selectors.getItems(state.my, MY_NAMESPACE_HISTORY)) || [];
   const wip      = useSelector(state => selectors.getWIP(state.my, MY_NAMESPACE_HISTORY));
   const err      = useSelector(state => selectors.getErr(state.my, MY_NAMESPACE_HISTORY));
+  const deleted  = useSelector(state => selectors.getDeleted(state.my, MY_NAMESPACE_HISTORY));
   const user     = useSelector(state => auth.getUser(state.auth));
 
   const dispatch = useDispatch();
-  const setPage  = (pageNo) => dispatch(actions.setPage(MY_NAMESPACE_HISTORY, pageNo));
+  const setPage  = useCallback(pageNo => dispatch(actions.setPage(MY_NAMESPACE_HISTORY, pageNo)), [dispatch]);
+
+  const onAlertCloseHandler = () => dispatch(actions.setDeleted(MY_NAMESPACE_HISTORY, false));
+
   useEffect(() => {
     if (user) {
       const pageNoLocation = getPageFromLocation(location);
       if (pageNoLocation !== pageNo) setPage(pageNoLocation);
     }
-  }, [user, location, pageNo, language]);
+  }, [user, location, pageNo, language, setPage]);
 
   useEffect(() => {
     dispatch(actions.fetch(MY_NAMESPACE_HISTORY, { page_no: pageNo, page_size: PAGE_SIZE }));
-  }, [pageNo, language]);
+  }, [pageNo, language, dispatch]);
 
   const wipErr = WipErr({ wip, err, t });
   if (wipErr) return wipErr;
@@ -61,6 +66,7 @@ const Page      = ({ location, t }) => {
         </Table.Row>
       );
     }
+
     const item = (
       <CUItemContainer id={x.content_unit_uid} asList={true} playTime={x.data.current_time}>
         <Actions cuId={x.content_unit_uid} id={x.id} />
@@ -85,6 +91,7 @@ const Page      = ({ location, t }) => {
             </Header>
           </div>
         </Container>
+        <AlertModal message={t('personal.removedSuccessfully')} open={deleted} onClose={onAlertCloseHandler} />
         {
           items?.length > 0 ? (
             <Container className="padded">

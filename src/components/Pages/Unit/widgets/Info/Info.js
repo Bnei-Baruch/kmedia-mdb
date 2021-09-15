@@ -137,14 +137,12 @@ const getEpisodeInfo = (ct, cIDs, currentCollection, filmDate, t) => {
     episodeInfo.push(getEpisodeName(ct, episode, t));
   episodeInfo.push(t('values.date', { date: filmDate }));
   const len = episodeInfo.length - 1;
-  return episodeInfo.map((x, i) => {
-    return (
-      <span key={i}>
-        {x}
-        {i < len && (<span className="seperator">|</span>)}
-      </span>
-    );
-  });
+  return episodeInfo.map((x, i) => (
+    <span key={i}>
+      {x}
+      {i < len && (<span className="seperator">|</span>)}
+    </span>
+  ));
 };
 
 const Info = ({ unit = {}, section = '', t, currentCollection = null }) => {
@@ -189,7 +187,7 @@ const Info = ({ unit = {}, section = '', t, currentCollection = null }) => {
               <span key="views">
                 <span className="seperator">|</span>
                 {t('pages.unit.info.views', { views })}
-            </span>
+              </span>
             )
           }
         </div>

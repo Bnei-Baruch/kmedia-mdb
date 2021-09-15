@@ -11,6 +11,7 @@ import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import { selectors as settings } from '../../../../redux/modules/settings';
 import { selectors as auth } from '../../../../redux/modules/auth';
 import {
+  MY_NAMESPACE_LIKES,
   MY_NAMESPACE_PLAYLIST_BY_ID,
   MY_NAMESPACE_PLAYLIST_ITEMS,
   MY_NAMESPACE_PLAYLISTS
@@ -18,6 +19,7 @@ import {
 import WipErr from '../../../shared/WipErr/WipErr';
 import CUItemContainer from '../../../shared/CUItem/CUItemContainer';
 import PlaylistHeaderContainer from './HeaderContainer';
+import AlertModal from '../../../shared/AlertModal';
 
 const Page = ({ t }) => {
   const { id } = useParams();
@@ -28,12 +30,13 @@ const Page = ({ t }) => {
   const playlist = useSelector(state => selectors.getPlaylistById(state.my, id));
   const wip      = useSelector(state => selectors.getWIP(state.my, MY_NAMESPACE_PLAYLIST_BY_ID));
   const err      = useSelector(state => selectors.getErr(state.my, MY_NAMESPACE_PLAYLIST_BY_ID));
+  const deleted  = useSelector(state => selectors.getDeleted(state.my, MY_NAMESPACE_PLAYLIST_ITEMS));
   const user     = useSelector(state => auth.getUser(state.auth));
   const dispatch = useDispatch();
 
   useEffect(() => {
     id && dispatch(actions.fetchById(MY_NAMESPACE_PLAYLIST_BY_ID, { id }));
-  }, [id, language, user]);
+  }, [id, language, user, dispatch]);
 
   const wipErr = WipErr({ wip, err, t });
   if (wipErr) return wipErr;
@@ -47,12 +50,17 @@ const Page = ({ t }) => {
 
   const removeItem = iID => dispatch(actions.remove(MY_NAMESPACE_PLAYLIST_ITEMS, { ids: [iID] }));
 
+  const onAlertCloseHandler = () => dispatch(actions.setDeleted(MY_NAMESPACE_PLAYLIST_ITEMS, false));
+
   const changeItemPosition = (i, up) => {
+    // eslint-disable-next-line prefer-const
     let { id: cid, position: cp } = items[i];
+    // eslint-disable-next-line prefer-const
     let { id: nid, position: np } = up ? items[i - 1] : items[i + 1];
     if (cp === np) {
       np = up ? np + 1 : np - 1;
     }
+
     dispatch(actions.edit(MY_NAMESPACE_PLAYLIST_ITEMS, { id: cid, position: np }));
     dispatch(actions.edit(MY_NAMESPACE_PLAYLIST_ITEMS, { id: nid, position: cp }));
   };
@@ -96,6 +104,7 @@ const Page = ({ t }) => {
     <Grid className="avbox no-background">
       <Grid.Column mobile={16} tablet={computerWidth} computer={computerWidth} className={clsx({ 'is-fitted': isMobileDevice })}>
         <PlaylistHeaderContainer playlist={playlist} />
+        <AlertModal message={t('personal.removedSuccessfully')} open={deleted} onClose={onAlertCloseHandler} />
         {
           items?.length > 0 ? (
             <Container className="padded">

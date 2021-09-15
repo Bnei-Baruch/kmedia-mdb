@@ -2123,6 +2123,10 @@
 .cu_item_dropdown {
   margin-bottom: 30px;
 
+  &.ui.dropdown .menu > .item {
+    color: rgba(0, 0, 0, .6);
+  }
+
   & > .icon {
     color: $midGrey;
   }

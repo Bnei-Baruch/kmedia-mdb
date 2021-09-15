@@ -637,7 +637,7 @@
     "newPlaylistName": "New playlist name",
     "newPlaylist": "Create new playlist",
     "editPlaylist": "Edit playlist",
-    "removedHistory": "Successfully removed",
+    "removedSuccessfully": "Successfully removed",
     "removeHistory": "Remove from history",
     "removeLike": "Remove from Liked videos",
     "removeFromPlaylist": "Remove from playlist",

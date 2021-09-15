@@ -49,7 +49,7 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
         setSelected(nSelected);
       }
     }
-  }, [history, selected, collection]);
+  }, [history, selected, isLesson, playlist?.items]);
 
   useEffect(() => {
     if (prev?.unit?.id !== unit?.id) {
@@ -97,7 +97,7 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
         setSelected(nIndex);
       }
     }
-  }, [collection, contentLanguage, location, playlist?.language, uiLanguage, cuId]);
+  }, [collection, contentLanguage, location, playlist?.language, uiLanguage, cuId, isLesson]);
 
   useEffect(() => {
     if (!isLesson) {
@@ -109,7 +109,7 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
 
       handleSelectedChange(nSelected);
     }
-  }, [handleSelectedChange, location, playlist]);
+  }, [handleSelectedChange, location, playlist, isLesson]);
 
   useEffect(() => {
     const newUnit = playlist?.items[selected]?.unit;

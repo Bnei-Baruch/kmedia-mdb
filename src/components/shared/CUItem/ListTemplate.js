@@ -19,11 +19,12 @@ const ListTemplate = ({ unit, language, withCCUInfo, link, ccu, description, chi
   if (!isMobileDevice) {
     ccu_info = ccu && withCCUInfo ? (
       <div className="cu_item_info_co">
-      <span style={{ display: 'inline-block' }}>
-        <UnitLogo collectionId={ccu.id} />
-      </span>
+        <span style={{ display: 'inline-block' }}>
+          <UnitLogo collectionId={ccu.id} />
+        </span>
         <Header size="small" content={ccu.name || NO_NAME} textAlign="left" />
-      </div>) : null;
+      </div>
+    ) : null;
   } else {
     ccu_info = ccu && withCCUInfo ? (
       <div className="cu_item_info_co ">

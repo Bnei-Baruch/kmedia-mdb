@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
 
 import { actions, selectors } from '../../../redux/modules/auth';
-import { Container, Divider, Button, Header, Menu, Modal } from 'semantic-ui-react';
+import { Divider, Button, Header } from 'semantic-ui-react';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
 
 const ShowNeedToLogin = withNamespaces()(

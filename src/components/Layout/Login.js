@@ -3,9 +3,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 
-import { Button, Header, Icon, Popup } from 'semantic-ui-react';
+import { Button, Header, Popup } from 'semantic-ui-react';
 import { selectors, actions } from '../../redux/modules/auth';
-import { selectors as settings } from '../../redux/modules/settings';
 import { initKC } from '../../sagas/helpers/keycklockManager';
 import { DeviceInfoContext } from '../../helpers/app-contexts';
 import { getLanguageDirection } from '../../helpers/i18n-utils';
@@ -20,67 +19,62 @@ const Login = ({ t, language }) => {
 
   useEffect(() => {
     !user && initKC(dispatch, language);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const login  = () => {
-    dispatch(actions.login(language));
+  const login = () => dispatch(actions.login(language));
 
-  };
-  const logout = () => {
-    dispatch(actions.logout());
-  };
+  const logout = () => dispatch(actions.logout());
 
   const handlePopupOpen  = () => setIsActive(true);
   const handlePopupClose = () => setIsActive(false);
 
-  const renderAccount = () => {
-    return (
-      <Popup
-        id="handleLoginPopup"
-        key="handleLogin"
-        flowing
-        position="bottom right"
-        trigger={
+  const renderAccount = () => (
+    <Popup
+      id="handleLoginPopup"
+      key="handleLogin"
+      flowing
+      position="bottom right"
+      trigger={
+        <Button
+          circular
+          compact
+          className={'auth-button'}
+          content={user.name[0].toUpperCase()}
+          onClick={handlePopupClose}
+        />
+      }
+      open={isActive}
+      onOpen={handlePopupOpen}
+      onClose={handlePopupClose}
+      on="click"
+      style={popupStyle}
+    >
+      <Popup.Header>
+        <div className="handle-language-header title">
+          <Header size="small" textAlign="center" content={user.name} />
           <Button
-            circular
+            basic
             compact
-            className={'auth-button'}
-            content={user.name[0].toUpperCase()}
+            size="tiny"
+            content={t('buttons.close')}
             onClick={handlePopupClose}
           />
-        }
-        open={isActive}
-        onOpen={handlePopupOpen}
-        onClose={handlePopupClose}
-        on="click"
-        style={popupStyle}
-      >
-        <Popup.Header>
-          <div className="handle-language-header title">
-            <Header size="small" textAlign="center" content={user.name} />
-            <Button
-              basic
-              compact
-              size="tiny"
-              content={t('buttons.close')}
-              onClick={handlePopupClose}
-            />
-          </div>
-        </Popup.Header>
-        <Popup.Content>
-          <Button
-            fluid
-            basic
-            size="small"
-            content={t('personal.logout')}
-            className={'donate-button'}
-            color={'blue'}
-            onClick={logout}
-          />
-        </Popup.Content>
-      </Popup>
-    );
-  };
+        </div>
+      </Popup.Header>
+      <Popup.Content>
+        <Button
+          fluid
+          basic
+          size="small"
+          content={t('personal.logout')}
+          className={'donate-button'}
+          color={'blue'}
+          onClick={logout}
+        />
+      </Popup.Content>
+    </Popup>
+  );
 
   const renderLogin = () => (
     <Button

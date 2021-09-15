@@ -3,7 +3,7 @@ import { withNamespaces } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { CT_CLIPS, CT_LESSON_PART, CT_VIDEO_PROGRAM, CT_VIRTUAL_LESSONS, NO_NAME } from '../../../helpers/consts';
+import { CT_CLIPS, CT_LESSON_PART, CT_VIDEO_PROGRAM, CT_VIRTUAL_LESSONS } from '../../../helpers/consts';
 import { canonicalCollection } from '../../../helpers/utils';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { canonicalLink } from '../../../helpers/links';
@@ -26,7 +26,7 @@ const CUItemContainer = ({ id, children, t, asList = false, link, playTime }) =>
     if (!unit) {
       dispatch(actions.fetchUnit(id));
     }
-  }, [id]);
+  }, [id, unit, dispatch]);
 
   if (!unit) return null;
   const ccu       = canonicalCollection(unit);

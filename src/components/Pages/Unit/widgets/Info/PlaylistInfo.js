@@ -89,7 +89,7 @@ const PlaylistInfo = ({ cuID, t, handleClose = null }) => {
     handleClose && setTimeout(handleClose, 0);
   };
 
-  const renderPlaylist = (p) => (
+  const renderPlaylist = p => (
     <List.Item key={p.id}>
       <List.Content floated='left'>
         <Checkbox
