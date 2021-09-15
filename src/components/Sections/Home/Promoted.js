@@ -22,25 +22,21 @@ const renderHeader = (header, subHeader) => {
   );
 };
 
-const ExtLink = ({ to, children }) => (
-  <a href={to} target="_blank" rel="noopener noreferrer">{children}</a>
-);
+const extLink = ({ to, children }) => <a href={to} target="_blank" rel="noopener noreferrer">{children}</a>;
 
-const Promoted = props => {
-  const { banner: { wip, err, data } } = props;
-
-  if (err || wip) {
+const Promoted = ({ banner }) => {
+  if (banner === null) {
     return <div className="thumbnail" />;
   }
 
-  const { meta } = data;
+  const { meta } = banner;
   if (!meta) {
     return <div className="thumbnail">&nbsp;</div>;
   }
 
-  const { header, 'sub-header': subHeader, link, image } = data.meta;
+  const { header, 'sub-header': subHeader, link, image } = banner.meta;
 
-  const Lnk     = link.match(/:\/\//) === null ? Link : ExtLink;
+  const Lnk     = link.match(/:\/\//) === null ? Link : extLink;
   let imageFile = cmsUrl(image);
   if (!/^http/.exec(imageFile)) {
     imageFile = publicFile(imageFile);
