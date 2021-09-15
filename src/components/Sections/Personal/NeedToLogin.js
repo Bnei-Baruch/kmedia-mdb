@@ -5,12 +5,15 @@ import { withNamespaces } from 'react-i18next';
 import { actions, selectors } from '../../../redux/modules/auth';
 import { Divider, Button, Header } from 'semantic-ui-react';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
+import { selectors as settings } from '../../../redux/modules/settings';
 
 const ShowNeedToLogin = withNamespaces()(
-  ({ t, language, children }) => {
+  ({ t, children }) => {
     const dispatch = useDispatch();
+    const language = useSelector(state => settings.getLanguage(state.settings));
 
-    const dir   = getLanguageDirection(language);
+    const dir = getLanguageDirection(language);
+
     const login = () => dispatch(actions.login(language));
 
     return (

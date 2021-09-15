@@ -17,6 +17,7 @@ import Pagination from '../../../Pagination/Pagination';
 import Link from '../../../Language/MultiLanguageLink';
 import LikeActions from './Actions';
 import AlertModal from '../../../shared/AlertModal';
+import NeedToLogin from '../NeedToLogin';
 
 const PAGE_SIZE = 20;
 const Page      = ({ location, t }) => {
@@ -46,6 +47,9 @@ const Page      = ({ location, t }) => {
   useEffect(() => {
     dispatch(actions.fetch(MY_NAMESPACE_LIKES, { page_no: pageNo, page_size: PAGE_SIZE }));
   }, [pageNo, language, dispatch]);
+
+  const needToLogin = NeedToLogin({ t });
+  if (needToLogin) return needToLogin;
 
   const wipErr = WipErr({ wip, err, t });
   if (wipErr) return wipErr;

@@ -11,7 +11,6 @@ import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import { selectors as settings } from '../../../../redux/modules/settings';
 import { selectors as auth } from '../../../../redux/modules/auth';
 import {
-  MY_NAMESPACE_LIKES,
   MY_NAMESPACE_PLAYLIST_BY_ID,
   MY_NAMESPACE_PLAYLIST_ITEMS,
   MY_NAMESPACE_PLAYLISTS
@@ -20,6 +19,7 @@ import WipErr from '../../../shared/WipErr/WipErr';
 import CUItemContainer from '../../../shared/CUItem/CUItemContainer';
 import PlaylistHeaderContainer from './HeaderContainer';
 import AlertModal from '../../../shared/AlertModal';
+import NeedToLogin from '../NeedToLogin';
 
 const Page = ({ t }) => {
   const { id } = useParams();
@@ -37,6 +37,9 @@ const Page = ({ t }) => {
   useEffect(() => {
     id && dispatch(actions.fetchById(MY_NAMESPACE_PLAYLIST_BY_ID, { id }));
   }, [id, language, user, dispatch]);
+
+  const needToLogin = NeedToLogin({ t });
+  if (needToLogin) return needToLogin;
 
   const wipErr = WipErr({ wip, err, t });
   if (wipErr) return wipErr;
