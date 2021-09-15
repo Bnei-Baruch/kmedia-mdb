@@ -27,7 +27,7 @@ export class Requests {
     let url;
     switch (item) {
       case 'banner':
-        url = `${cmsUrl('banners')}/${options.language}`;
+        url = `${cmsUrl('banners-list')}/${options.language}`;
         break;
       case 'person':
         url = `${cmsUrl('persons')}/${options.id}?language=${options.language}`;
