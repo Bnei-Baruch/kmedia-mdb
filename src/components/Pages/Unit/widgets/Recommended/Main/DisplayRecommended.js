@@ -34,11 +34,36 @@ export const renderPlaylistUnit = (unit, t, views = -1, watchingNow = -1, sugges
     <Table.Body>
       <Table.Row verticalAlign="middle">
         <Table.Cell textAlign="left" width={4}>
-          <UnitLogo
-            unitId={unit.id}
-            collectionId={getCollectionId(unit)}
-            fallbackImg='programs'
-          />
+          <div className="recommend-cell">
+            <UnitLogo
+              unitId={unit.id}
+              collectionId={getCollectionId(unit)}
+              fallbackImg='programs'
+            />
+            {(views !== -1 || watchingNow !== -1 || suggesterLabel) &&
+              <div className="recommend-label">
+                {watchingNow !== -1 &&
+                  <small className="text">
+                    <Popup content={`${t('materials.recommended.watching-now')} ${watchingNow}`}
+                      trigger={<span>{`${t('materials.recommended.watching-now')} ${viewsToString(watchingNow)}`}</span>}
+                    />
+                  </small>
+                }
+                {watchingNow === -1 && views !== -1 &&
+                  <small className="text">
+                    <Popup content={`${t('materials.recommended.popular')} ${views} ${t('materials.recommended.views')}`}
+                      trigger={<span>{`${t('materials.recommended.popular')} ${viewsToString(views)} ${t('materials.recommended.views')}`}</span>}
+                    />
+                  </small>
+                }
+                {watchingNow === -1 && views === -1 && suggesterLabel &&
+                  <small className="text">
+                    <span>{suggesterLabel}</span>
+                  </small>
+                }
+              </div>
+            }
+          </div>
         </Table.Cell>
         <Table.Cell textAlign="left" width={10}>
           <Header as="h5">
@@ -47,26 +72,6 @@ export const renderPlaylistUnit = (unit, t, views = -1, watchingNow = -1, sugges
             </small>
             <br />
             <span>{unit.name || NO_NAME}</span>
-            {(views !== -1 || watchingNow !== -1 || suggesterLabel) && <br />}
-            {watchingNow !== -1 &&
-              <small className="text">
-                <Popup content={`${t('materials.recommended.watching-now')} ${watchingNow}`}
-                  trigger={<span>{`${t('materials.recommended.watching-now')} ${viewsToString(watchingNow)}`}</span>}
-                />
-              </small>
-            }
-            {watchingNow === -1 && views !== -1 &&
-              <small className="text">
-                <Popup content={`${t('materials.recommended.popular')} ${views} ${t('materials.recommended.views')}`}
-                  trigger={<span>{`${t('materials.recommended.popular')} ${viewsToString(views)} ${t('materials.recommended.views')}`}</span>}
-                />
-              </small>
-            }
-            {watchingNow === -1 && views === -1 && suggesterLabel &&
-              <small className="text">
-                <span>{suggesterLabel}</span>
-              </small>
-            }
           </Header>
         </Table.Cell>
         {unit.duration &&
@@ -128,14 +133,14 @@ const RecommendedPlaylist = (units, selected, t, chronicles, viewLimit, feedName
 };
 
 
-const DisplayRecommended = ({ unit, t, recommendedUnits, displayTitle = true, title = 'header', viewLimit = 0, feedName = 'default' }) => {
+const DisplayRecommended = ({ unit, t, recommendedUnits, displayTitle = true, title = '', viewLimit = 0, feedName = 'default' }) => {
   const chronicles = useContext(ClientChroniclesContext);
   const unitCollection = canonicalCollection(unit);
   const unitCollectionId = unitCollection ? unitCollection.id : null;
 
   return (
     <div className="avbox__playlist-wrapper">
-      {displayTitle && <Header as="h3" content={t(`materials.recommended.${title}`)} />}
+      {displayTitle && <Header as="h3" content={title} />}
       {RecommendedPlaylist(recommendedUnits, unitCollectionId, t, chronicles, viewLimit, feedName)}
     </div>
   );

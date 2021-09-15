@@ -432,7 +432,8 @@
       "header": "Selected Highlights"
     },
     "recommended": {
-      "same-topic": "Same Topic",
+      "same-topic": "Recommanded for topic",
+      "same-collection": "Recommended chapters from",
       "any-topic": "Any Topic",
       "default": "Recommended for you",
       "popular": "Popular",

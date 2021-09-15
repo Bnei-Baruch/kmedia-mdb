@@ -1712,3 +1712,28 @@
 .rtl .library-language-container {
   text-align:left;
 }
+
+.recommend-cell {
+  position: relative;
+}
+
+.recommend-label {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  color: white;
+  background-color: #2e8fd5;
+  max-width: 120px;
+
+  .text {
+    padding-left: 0.4em;
+    padding-right: 0.4em;
+    padding-bottom: 0.1em;
+    white-space: nowrap;
+  }
+}
+
+.rtl .recommend-label {
+  left: 0;
+  right: unset;
+}

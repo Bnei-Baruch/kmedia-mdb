@@ -431,7 +431,8 @@
       "header": "קטעים נבחרים"
     },
     "recommended": {
-      "same-topic": "אותו נושא",
+      "same-topic": "מומלצים בנושא",
+      "same-collection": "פרקים מומלצים של",
       "any-topic": "כל נושא",
       "default": "מומלצים",
       "popular": "פופולרי",

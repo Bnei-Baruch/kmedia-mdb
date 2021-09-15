@@ -10,7 +10,7 @@ import { selectors as settings } from '../redux/modules/settings';
 const WATCHING_NOW_MIN = 50;
 
 export function* fetchRecommended(action) {
-  const { id, size, skip, variant } = action.payload;
+  const { id, tags, collections, size, skip, variant } = action.payload;
   try {
     const language = yield select(state => settings.getContentLanguage(state.settings));
     const skipUids = yield select(state => recommended.getSkipUids(state.recommended));
@@ -24,17 +24,21 @@ export function* fetchRecommended(action) {
     const specs = [];  // Order important due to skip uids.
     if (variant === AB_RECOMMEND_NEW) {
       // Same Topic - WatchingNow, Popular, Latest.
-      specs.push({ 'name': 'RoundRobinSuggester', 'specs': [
-        { 'name': 'DataContentUnitsSuggester', 'filters': [{ 'filter_selector': 5 }, { 'filter_selector': 8 }], 'order_selector': 5 },
-        { 'name': 'DataContentUnitsSuggester', 'filters': [{ 'filter_selector': 5 }], 'order_selector': 4 },
-        { 'name': 'DataContentUnitsSuggester', 'filters': [{ 'filter_selector': 5 }], 'order_selector': 0 },
-      ] });
-      // Any Topic - WatchingNow, Popular, Latest.
-      specs.push({ 'name': 'RoundRobinSuggester', 'specs': [
-        { 'name': 'DataContentUnitsSuggester', 'filters': [{ 'filter_selector': 8 }], 'order_selector': 5 },
-        { 'name': 'DataContentUnitsSuggester', 'order_selector': 4 },
-        { 'name': 'DataContentUnitsSuggester', 'order_selector': 0 },
-      ] });
+      tags.forEach(tag => {
+        specs.push({ 'name': 'RoundRobinSuggester', 'specs': [
+          { 'name': 'DataContentUnitsSuggester', 'filters': [{ 'filter_selector': 2, 'args': [tag] }, { 'filter_selector': 8 }], 'order_selector': 5 },
+          { 'name': 'DataContentUnitsSuggester', 'filters': [{ 'filter_selector': 2, 'args': [tag] }], 'order_selector': 4 },
+          { 'name': 'DataContentUnitsSuggester', 'filters': [{ 'filter_selector': 2, 'args': [tag] }], 'order_selector': 0 },
+        ] });
+      });
+      collections.forEach(collection => {
+        // Same collection - WatchingNow, Popular, Latest.
+        specs.push({ 'name': 'RoundRobinSuggester', 'specs': [
+          { 'name': 'DataContentUnitsSuggester', 'filters': [{ 'filter_selector': 4, 'args': [collection.id] }, { 'filter_selector': 8 }], 'order_selector': 5 },
+          { 'name': 'DataContentUnitsSuggester', 'filters': [{ 'filter_selector': 4, 'args': [collection.id] }], 'order_selector': 4 },
+          { 'name': 'DataContentUnitsSuggester', 'filters': [{ 'filter_selector': 4, 'args': [collection.id] }], 'order_selector': 0 },
+        ] });
+      });
     }
 
     specs.push({ name: 'Default' });
@@ -66,8 +70,15 @@ export function* fetchRecommended(action) {
 
     const feeds = { 'default': data.feeds[data.feeds.length-1] };
     if (variant === AB_RECOMMEND_NEW) {
-      feeds['same-topic'] = data.feeds[0];
-      feeds['any-topic'] = data.feeds[1];
+      let index = 0;
+      tags.forEach(tag => {
+        feeds[`same-topic-${tag}`] = data.feeds[index];
+        index++;
+      });
+      collections.forEach(collection => {
+        feeds[`same-collection-${collection.id}`] = data.feeds[index];
+        index++;
+      });
     }
 
     yield put(actions.fetchRecommendedSuccess({ feeds, requestData }));
