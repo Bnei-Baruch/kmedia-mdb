@@ -38,20 +38,22 @@ const Likut = ({ t }) => {
   const [file, setFile]                           = useState(null);
   const [language, setLanguage]                   = useState(contentLanguage);
   const [scrollTopPosition, setScrollTopPosition] = useState(0);
-
+  const [scrollingElement, setScrollingElement] = useState(null);
   const articleRef = useRef();
-  const scrollingElement = isReadable ? articleRef.current : document?.scrollingElement;
+
+  useEffect(() => {
+    const scrollingElement = isReadable ? articleRef.current : document.scrollingElement;
+    setScrollingElement(scrollingElement);
+
+    if (articleRef) {
+      scrollingElement.scrollTop = scrollTopPosition;
+    }
+  }, [isReadable, scrollTopPosition]);
 
   const handleIsReadable = () => {
     setScrollTopPosition(scrollingElement?.scrollTop || 0);
     setIsReadable(!isReadable);
   }
-
-  useEffect(() => {
-    if (articleRef) {
-      scrollingElement.scrollTop = scrollTopPosition;
-    }
-  }, [scrollTopPosition, scrollingElement]);
 
   const handleLanguageChanged = (e, lang) => setLanguage(lang);
 
@@ -97,8 +99,8 @@ const Likut = ({ t }) => {
     tagNames.length > 0 &&
       <div>
         {
-          tagNames.map(tag =>
-            <Button key={tag.id} basic compact size='small'>
+          tagNames.map((tag, index) =>
+            <Button key={`${tag.id}${index}`} basic compact size='small'>
               <Link to={`/topics/${tag.id}`}>{tag.label}</Link>
             </Button>
           )
