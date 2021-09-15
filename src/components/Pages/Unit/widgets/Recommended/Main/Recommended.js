@@ -65,8 +65,6 @@ const Recommended = ({ unit, t, filterOutUnits = [], displayTitle = true }) => {
   const err = useSelector(state => selectors.getError(state.recommended));
   const getTagById = useSelector(state => tagsSelectors.getTagById(state.tags));
 
-  console.log(unit);
-
   useEffect(() => {
     if (unit?.id && unit.id !== unitId) {
       setUnitId(unit.id);
@@ -108,7 +106,7 @@ const Recommended = ({ unit, t, filterOutUnits = [], displayTitle = true }) => {
             unit={unit}
             t={t}
             recommendedUnits={recommendedUnits[sameTopic(tag)]}
-            title={<span>{t('materials.recommended.same-topic')} {makeTagLink(tag, getTagById)}</span>}
+            title={<span>{t('materials.recommended.same-topic')}: {makeTagLink(tag, getTagById)}</span>}
             displayTitle={displayTitle}
             viewLimit={3}
             feedName={sameTopic(tag)} />);

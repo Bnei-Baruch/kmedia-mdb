@@ -8,6 +8,7 @@ import { actions as mdbActions, selectors as mdbSelectors } from '../redux/modul
 import { selectors as settings } from '../redux/modules/settings';
 
 const WATCHING_NOW_MIN = 50;
+const POPULAR_MIN = 100;
 
 export function* fetchRecommended(action) {
   const { id, tags, collections, size, skip, variant } = action.payload;
@@ -27,7 +28,7 @@ export function* fetchRecommended(action) {
       tags.forEach(tag => {
         specs.push({ 'name': 'RoundRobinSuggester', 'specs': [
           { 'name': 'DataContentUnitsSuggester', 'filters': [{ 'filter_selector': 2, 'args': [tag] }, { 'filter_selector': 8 }], 'order_selector': 5 },
-          { 'name': 'DataContentUnitsSuggester', 'filters': [{ 'filter_selector': 2, 'args': [tag] }], 'order_selector': 4 },
+          { 'name': 'DataContentUnitsSuggester', 'filters': [{ 'filter_selector': 2, 'args': [tag] }, { 'filter_selector': 9 }], 'order_selector': 4 },
           { 'name': 'DataContentUnitsSuggester', 'filters': [{ 'filter_selector': 2, 'args': [tag] }], 'order_selector': 0 },
         ] });
       });
@@ -35,7 +36,7 @@ export function* fetchRecommended(action) {
         // Same collection - WatchingNow, Popular, Latest.
         specs.push({ 'name': 'RoundRobinSuggester', 'specs': [
           { 'name': 'DataContentUnitsSuggester', 'filters': [{ 'filter_selector': 4, 'args': [collection.id] }, { 'filter_selector': 8 }], 'order_selector': 5 },
-          { 'name': 'DataContentUnitsSuggester', 'filters': [{ 'filter_selector': 4, 'args': [collection.id] }], 'order_selector': 4 },
+          { 'name': 'DataContentUnitsSuggester', 'filters': [{ 'filter_selector': 4, 'args': [collection.id] }, { 'filter_selector': 9 }], 'order_selector': 4 },
           { 'name': 'DataContentUnitsSuggester', 'filters': [{ 'filter_selector': 4, 'args': [collection.id] }], 'order_selector': 0 },
         ] });
       });
@@ -43,7 +44,7 @@ export function* fetchRecommended(action) {
 
     specs.push({ name: 'Default' });
 
-    const requestData = Api.recommendedRequestData({ uid: id, languages: [language], skipUids, size, specs, watchingNowMin: WATCHING_NOW_MIN });
+    const requestData = Api.recommendedRequestData({ uid: id, languages: [language], skipUids, size, specs, watchingNowMin: WATCHING_NOW_MIN, popularMin: POPULAR_MIN });
     const { data } = yield call(Api.recommended, requestData);
 
     if (Array.isArray(data.feeds) && data.feeds.length > 0) {
