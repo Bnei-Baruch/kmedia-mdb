@@ -143,7 +143,7 @@ const PersonalInfo = ({ unit = {}, t, collection }) => {
             <span>{likeCount}</span>
           </Button>
         </Menu.Item>
-        <Menu.Item className="no-margin-bottom">
+        <Menu.Item>
           <PlaylistInfo cuID={unit.id} t={t} />
         </Menu.Item>
         {renderSubBtn()}

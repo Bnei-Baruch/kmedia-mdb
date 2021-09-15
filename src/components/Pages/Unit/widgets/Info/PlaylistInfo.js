@@ -10,8 +10,9 @@ import AlertModal from '../../../../shared/AlertModal';
 import PlaylistAddIcon from '../../../../../images/icons/PlaylistAdd';
 import NeedToLogin from '../../../../Sections/Personal/NeedToLogin';
 import { getLanguageDirection } from '../../../../../helpers/i18n-utils';
+import { selectors as settings } from '../../../../../redux/modules/settings';
 
-const PlaylistInfo = ({ cuID, t, handleClose = null, language }) => {
+const PlaylistInfo = ({ cuID, t, handleClose = null }) => {
   const [isOpen, setIsOpen]               = useState(false);
   const [selected, setSelected]           = useState([]);
   const [saved, setSaved]                 = useState([]);
@@ -20,12 +21,14 @@ const PlaylistInfo = ({ cuID, t, handleClose = null, language }) => {
   const [alertMsg, setAlertMsg]           = useState();
   const [isNeedLogin, setIsNeedLogin]     = useState();
 
-  const dir      = getLanguageDirection(language);
   const dispatch = useDispatch();
 
   const playlists     = useSelector(state => selectors.getItems(state.my, MY_NAMESPACE_PLAYLISTS));
   const playlistItems = useSelector(state => selectors.getItems(state.my, MY_NAMESPACE_PLAYLIST_ITEMS));
+  const language      = useSelector(state => settings.getLanguage(state.settings));
   const user          = useSelector(state => auth.getUser(state.auth));
+
+  const dir = getLanguageDirection(language);
 
   useEffect(() => {
     const _saved = playlistItems.filter(pi => pi.content_unit_uid === cuID).map(p => p.playlist_id);
@@ -109,7 +112,7 @@ const PlaylistInfo = ({ cuID, t, handleClose = null, language }) => {
         open={isNeedLogin}
         onClose={() => setIsNeedLogin(false)}
         onOpen={() => setIsNeedLogin(true)}
-        direction={dir}
+        dir={dir}
       >
         <Modal.Content>
           <NeedToLogin />
@@ -127,6 +130,7 @@ const PlaylistInfo = ({ cuID, t, handleClose = null, language }) => {
             <span>{t('buttons.save')}</span>
           </Button>
         }
+        dir={dir}
       >
         <Modal.Header>{t('personal.addToPlaylist')}</Modal.Header>
         <Modal.Content>
