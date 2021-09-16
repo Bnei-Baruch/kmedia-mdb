@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
-import { List, Card, Grid, Divider, Container, Input } from 'semantic-ui-react';
+import { List, Card, Grid, Divider, Container } from 'semantic-ui-react';
 import debounce from 'lodash/debounce';
 
 import { actions, selectors } from '../../../redux/modules/likutim';
@@ -39,11 +39,11 @@ const Main = ({ t }) => {
   const [dataLoaded, setDataLoaded] = useState(false);
   const [match, setMatch] = useState('');
 
-  const handleFilterChange = debounce((e, data) => {
+  const handleSearch = debounce((e, data) => {
     setMatch(data.value);
   }, 100);
 
-  const handleFilterKeyDown = e => {
+  const handleSearchKeyDown = e => {
     if (e.keyCode === 27) { // Esc
       setMatch('');
     }
@@ -76,37 +76,19 @@ const Main = ({ t }) => {
     .filter((l, i, arr) => arr.indexOf(l) === i)
     .sort();
 
-  // console.log('likutim:', likutim, ' sorted:', sortedLikutim)
-  // console.log('firstLetters:', firstLetters)
-
   return (
     <div>
       <SectionHeader section="likutim" />
       <Divider fitted />
+      <Filters
+        namespace="likutim"
+        filters={filters}
+        onChange={handleFiltersChanged}
+        onKeyDown={handleSearchKeyDown}
+        onSearch={handleSearch}
+        onHydrated={noop}
+      />
       <Container className="padded">
-        <Grid stackable columns={2} verticalAlign='middle'>
-          <Grid.Row>
-            <Grid.Column stretched>
-              <Filters
-                namespace="likutim"
-                filters={filters}
-                onChange={handleFiltersChanged}
-                onHydrated={noop}
-              />
-            </Grid.Column>
-            <Grid.Column stretched>
-              <Input
-                fluid
-                size="large"
-                icon="search"
-                className="search-omnibox"
-                placeholder={t('sources-library.filter')}
-                onChange={handleFilterChange}
-                onKeyDown={handleFilterKeyDown}
-              />
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
         <Grid>
           <Grid.Column>
             <Card.Group stackable itemsPerRow={4}>
