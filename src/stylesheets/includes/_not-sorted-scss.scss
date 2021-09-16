@@ -24,7 +24,16 @@
 .search-omnibox {
   max-width: 600px;
   width: 100%;
+  margin: 0 auto;
 
+  input {
+    border: 1px solid #7dcff5 !important;
+    border-radius: 20px !important;
+    box-shadow: 0 0 6px 0 #7dcff5 !important;
+    width: 100%;
+  }
+
+  // main omnibox size
   .input {
     width: 100%;
   }
