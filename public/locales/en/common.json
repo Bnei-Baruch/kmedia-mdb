@@ -440,13 +440,14 @@
       "header": "Selected Highlights"
     },
     "recommended": {
-      "same-topic": "Same Topic",
+      "same-topic": "Recommended for topic",
+      "same-collection": "Recommended chapters from",
       "any-topic": "Any Topic",
       "default": "Recommended for you",
-      "popular": "Popular",
-      "watching-now": "Watching now",
+      "popular": "Most viewed",
+      "watching-now": "watching now",
       "views": "views",
-      "last": "Latest",
+      "last": "Last chapters",
       "next": "Next chapters",
       "prev": "Prev chapters",
       "rand": "Random content"
