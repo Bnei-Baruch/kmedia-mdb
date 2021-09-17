@@ -447,10 +447,12 @@
       "popular": "Most viewed",
       "watching-now": "watching now",
       "views": "views",
-      "last": "Last chapters",
-      "next": "Next chapters",
-      "prev": "Prev chapters",
-      "rand": "Random content"
+      "last": "Last chapter",
+      "next": "Next chapter",
+      "prev": "Prev chapter",
+      "rand": "Random content",
+      "more": "More",
+      "less": "Less"
     },
     "playlist": {
       "header": "Up Next"
