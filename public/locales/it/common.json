@@ -7,6 +7,7 @@
       "lessons": "Lezioni e Conferenze",
       "programs": "Programmi e Clip",
       "sources": "Biblioteca",
+      "likutim": "Likutim",
       "events": "Convegni e Eventi",
       "books": "Libri",
       "topics": "Argomenti",
@@ -292,6 +293,13 @@
       "title": "Daily Kabbalah Lesson - updated",
       "description": "An up to date shortcut to the latest Daily Lesson"
     }
+  },
+  "likutim":{
+    "header": {
+      "text": "Excerpts from Kabbalistic Sources",
+      "subtext": "Excerpts from the Sources on various subjects"
+    },
+    "item-header": "Excerpts from the Sources:"
   },
   "programs": {
     "header": {

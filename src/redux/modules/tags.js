@@ -144,7 +144,7 @@ const onDashboardSuccess = (draft, { data }) => {
 
   const getCounts = section => {
     const contentTypes = canonicalContentType(section);
-    return contentTypes.map(c => counts[c] || 0).reduce((acc, c) => acc + c) || 0;
+    return contentTypes.map(c => counts[c] || 0).reduce((acc, c) => acc + c, 0);
   };
 
   draft.wip             = false;

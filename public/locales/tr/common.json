@@ -7,6 +7,7 @@
       "lessons": "Dersler ve Konuşmalar",
       "programs": "Programlar ve Klipler",
       "sources": "Kütüphane",
+      "likutim": "Likutim",
       "events": "Kongreler ve Etkinlikler",
       "books": "Kitaplar",
       "topics": "Konular",
@@ -292,6 +293,13 @@
       "title": "Günlük Kabala Dersi - güncel",
       "description": "En son Günlük dersin güncel kısa yolu"
     }
+  },
+  "likutim":{
+    "header": {
+      "text": "Excerpts from Kabbalistic Sources",
+      "subtext": "Excerpts from the Sources on various subjects"
+    },
+    "item-header": "Excerpts from the Sources:"
   },
   "programs": {
     "header": {

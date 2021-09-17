@@ -9,22 +9,22 @@ import { withNamespaces } from 'react-i18next';
 import { Button, Container, Grid, Header, Input, Ref, Segment } from 'semantic-ui-react';
 import Headroom from 'react-headroom';
 
-import { formatError, isEmpty } from '../../../helpers/utils';
+import { isEmpty } from '../../../helpers/utils';
 import { actions as assetsActions, selectors as assets } from '../../../redux/modules/assets';
 import { actions as sourceActions, selectors as sources } from '../../../redux/modules/sources';
 import { selectors as settings } from '../../../redux/modules/settings';
 import * as shapes from '../../shapes';
-import { ErrorSplash, FrownSplash } from '../../shared/Splash/Splash';
+import { getSourceErrorSplash } from '../../shared/WipErr/WipErr';
 import Helmets from '../../shared/Helmets';
+import { isTaas } from '../../shared/PDF/PDF';
 import LibraryContentContainer from './LibraryContentContainer';
 import TOC, { getIndex } from './TOC';
-import LibrarySettings from './LibrarySettings';
-import Share from './Share';
-import { getLanguageDirection, isLanguageRtl } from '../../../helpers/i18n-utils';
+import LibraryBar from './LibraryBar';
+import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { getQuery } from '../../../helpers/url';
 import { SCROLL_SEARCH_ID } from '../../../helpers/consts';
-import { isTaas } from '../../shared/PDF/PDF';
+
 
 const waitForRenderElement = async (attempts = 0) => {
   if (attempts > 10) return Promise.reject();
@@ -322,9 +322,6 @@ class LibraryContainer extends Component {
     }
   };
 
-  print = () => {
-    window.print();
-  };
 
   matchString = (parentId, t) => {
     const { NotToFilter } = this.props;
@@ -361,10 +358,6 @@ class LibraryContainer extends Component {
     return path;
   };
 
-  static getErrContent = (err, t) => (err.response && err.response.status === 404)
-    ? <FrownSplash text={t('messages.source-content-not-found')} />
-    : <ErrorSplash text={t('messages.server-error')} subtext={formatError(err)} />;
-
   getContent = () => {
     const { sourceId, indexMap, language, contentLanguage, t, history } = this.props;
     const index                                                         = isEmpty(sourceId) ? {} : indexMap[sourceId];
@@ -373,7 +366,7 @@ class LibraryContainer extends Component {
     let content;
 
     if (err) {
-      content = LibraryContainer.getErrContent(err, t);
+      content = getSourceErrorSplash(err, t);
     } else {
       const downloadAllowed = this.context.deviceInfo.os.name !== 'iOS';
       content               = (
@@ -464,9 +457,6 @@ class LibraryContainer extends Component {
     const fullPath    = LibraryContainer.getFullPath(sourceId, getPathByID);
     const parentId    = this.properParentId(fullPath);
     const matchString = this.matchString(parentId, t);
-
-    const isRtl    = isLanguageRtl(language);
-    const position = isRtl ? 'left' : 'right';
     const active   = !this.context.isMobileDevice || tocIsActive;
 
     return (
@@ -504,14 +494,13 @@ class LibraryContainer extends Component {
                   </Grid.Column>
                   <Grid.Column mobile={16} tablet={16} computer={12} className="source__content-header">
                     <div className="source__header-title">{this.header(sourceId, parentId)}</div>
-                    <div className="source__header-toolbar">
-                      <Button compact size="small" className="mobile-hidden" icon="print" onClick={this.print} />
-                      <div id="download-button" />
-                      <LibrarySettings fontSize={fontSize} handleSettings={this.handleSettings} />
-                      <Button compact size="small" icon={isReadable ? 'compress' : 'expand'} onClick={this.handleIsReadable} />
-                      <Button compact size="small" className="computer-hidden large-screen-hidden widescreen-hidden" icon="list layout" onClick={this.handleTocIsActive} />
-                      <Share position={position} />
-                    </div>
+                    <LibraryBar
+                      handleSettings={this.handleSettings}
+                      handleIsReadable={this.handleIsReadable}
+                      handleTocIsActive={this.handleTocIsActive}
+                      isReadable={isReadable}
+                      fontSize={fontSize}>
+                    </LibraryBar>
                   </Grid.Column>
                 </Grid.Row>
               </Grid>

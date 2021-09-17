@@ -7,6 +7,7 @@
       "lessons": "Lekce a Přednášky",
       "programs": "Programy",
       "sources": "Knihovna",
+      "likutim": "Likutim",
       "events": "Setkání a Události",
       "books": "Knihy",
       "topics": "Témata",
@@ -269,6 +270,13 @@
       "title": "Denní Kabalistické lekce - aktualizované",
       "description": "Aktuální zkratky k poslední Denní lekci"
     }
+  },
+  "likutim":{
+    "header": {
+      "text": "Excerpts from Kabbalistic Sources",
+      "subtext": "Excerpts from the Sources on various subjects"
+    },
+    "item-header": "Excerpts from the Sources:"
   },
   "programs": {
     "header": {

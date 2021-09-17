@@ -7,6 +7,7 @@
       "lessons": "Lecciones y Charlas",
       "programs": "Programas y Clips",
       "sources": "Biblioteca",
+      "likutim": "Likutim",
       "events": "Congresos y Eventos",
       "books": "Libros",
       "topics": "Temas",
@@ -288,6 +289,13 @@
       "title": "Lección Diaria de Cabalá - Actualizado",
       "description": "Un acceso directo actualizado a la última lección diaria"
     }
+  },
+  "likutim":{
+    "header": {
+      "text": "Excerpts from Kabbalistic Sources",
+      "subtext": "Excerpts from the Sources on various subjects"
+    },
+    "item-header": "Excerpts from the Sources:"
   },
   "programs": {
     "header": {

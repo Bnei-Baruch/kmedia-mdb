@@ -7,6 +7,7 @@
       "lessons": "Lektionen und Vorlesungen",
       "programs": "Programme und Clips",
       "sources": "Bibliothek",
+      "likutim": "Likutim",
       "events": "Kongresse, Veranstaltungen",
       "books": "Bücher",
       "topics": "Themen",
@@ -287,6 +288,13 @@
       "title": "Die tägliche Kabbala Lektion - aktualisiert",
       "description": "Aktualisierte Verknüpfung zur letzten täglichen Lektion"
     }
+  },
+  "likutim":{
+    "header": {
+      "text": "Excerpts from Kabbalistic Sources",
+      "subtext": "Excerpts from the Sources on various subjects"
+    },
+    "item-header": "Excerpts from the Sources:"
   },
   "programs": {
     "header": {

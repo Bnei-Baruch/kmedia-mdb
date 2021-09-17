@@ -7,6 +7,7 @@
       "lessons": "Уроки та Лекції",
       "programs": "Програми та Кліпи",
       "sources": "Бібліотека",
+      "likutim": "Likutim",
       "events": "Конгреси, події",
       "books": "Книжки",
       "topics": "Теми",
@@ -289,6 +290,13 @@
       "title": "Щоденний урок Кабали - Оновлено",
       "description": "Оновлений ярлик до останнього денного уроку"
     }
+  },
+  "likutim":{
+    "header": {
+      "text": "Excerpts from Kabbalistic Sources",
+      "subtext": "Excerpts from the Sources on various subjects"
+    },
+    "item-header": "Excerpts from the Sources:"
   },
   "programs": {
     "header": {
