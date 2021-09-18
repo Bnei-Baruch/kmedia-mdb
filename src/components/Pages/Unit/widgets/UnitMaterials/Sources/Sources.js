@@ -42,11 +42,6 @@ const getLikutimLanguages = unit => {
 
 const getSourceLanguages = idx => idx?.data ? [...Object.keys(idx.data)] : [];
 
-const checkIsLikutim = (options, selected) => {
-  const val = options.find(o => o.value === selected);
-  return val && val.type === CT_LIKUTIM;
-};
-
 
 const Sources = ({ unit, indexMap, t, options }) => {
   const uiLanguage      = useSelector(state => settings.getLanguage(state.settings));
@@ -60,6 +55,8 @@ const Sources = ({ unit, indexMap, t, options }) => {
   const [languages, setLanguages] = useState([]);
   const [language, setLanguage]   = useState(contentLanguage);
   const [selectedUnitId, setSelectedUnitId]   = useState(null);
+  const [pdf, setPdf] = useState(null);
+  const [file, setFile] = useState(null);
 
   // when options are changed, must change selected
   useEffect(() => {
@@ -69,8 +66,9 @@ const Sources = ({ unit, indexMap, t, options }) => {
   }, [options]);
 
   useEffect(() => {
-    const isLikutim = checkIsLikutim(options, selectedUnitId);
-    setIsLikutim(isLikutim);
+    const isLikutimVal = options.find(o => o.value === selectedUnitId && o.type === CT_LIKUTIM);
+    // const isLikutim = val && val.type === CT_LIKUTIM;
+    setIsLikutim(!!isLikutimVal);
   }, [options, selectedUnitId]);
 
   useEffect(() => {
@@ -91,25 +89,9 @@ const Sources = ({ unit, indexMap, t, options }) => {
   }, [contentLanguage, languages, uiLanguage]);
 
   useEffect(() => {
-    if (!selectedUnitId || !language) {
-      return;
-    }
-
-    const newFetch = `${selectedUnitId}#${language}`;
-    if (newFetch === fetched) {
-      // console.log('fetched already', newFetch);
-      return;
-    }
-
-    const doc2html = fileId => dispatch(assetsActions.doc2html(fileId));
-
+    let file;
     if (isLikutim) {
-      const file = getLikutimFiles(unit, selectedUnitId).find(x => x.language === language);
-      if (file?.id) {
-        // console.log('file:', file);
-        doc2html(file.id);
-        setFetched(newFetch);
-      }
+      file = getLikutimFiles(unit, selectedUnitId).find(x => x.language === language);
     } else {
       const langFiles = indexMap[selectedUnitId]?.data?.[language];
 
@@ -117,41 +99,50 @@ const Sources = ({ unit, indexMap, t, options }) => {
         const { pdf, docx, doc } = langFiles;
         if (pdf && isTaas(selectedUnitId)) {
           // pdf.js fetch it on his own (smarter than us), we fetch it for nothing.
+          setPdf(pdf);
+          setFile(null);
           return;
         }
 
-        const { id } = docx || doc || {};
-        doc2html(id);
-        setFetched(newFetch);
+        file = docx || doc || {};
       }
     }
-  }, [dispatch, fetched, indexMap, isLikutim, language, selectedUnitId, unit]);
 
-  const handleLanguageChanged = (e, lang) => setLanguage(lang);
-  const handleSourceChanged   = (e, data) => setSelectedUnitId(data.value);
+    console.log('file:', file)
+
+    setFile(file);
+    setPdf(null);
+  }, [indexMap, isLikutim, language, selectedUnitId, unit])
+
+  useEffect(() => {
+    if (!selectedUnitId || !language || !file || !file.id) {
+      return;
+    }
+
+    const newFetch = `${selectedUnitId}#${language}#${file.id}`;
+    console.log('fetch:', newFetch);
+    if (newFetch === fetched) {
+      console.log('fetched already', newFetch);
+      return;
+    }
+
+    dispatch(assetsActions.doc2html(file.id))
+    setFetched(newFetch);
+  }, [dispatch, fetched, file, language, selectedUnitId]);
 
   const getContents = () => {
-    let file;
-    if (isLikutim) {
-      file = getLikutimFiles(unit, selectedUnitId).find(x => x.language === language);
-    } else {
-      const langFiles = indexMap[selectedUnitId]?.data?.[language];
-      if (!langFiles)
-        return null;
-
-      const { pdf, doc, docx } = langFiles;
-      if (isTaas(selectedUnitId) && pdf) {
-        return <PDF pdfFile={physicalFile(pdf)} pageNumber={1} startsFrom={startsFrom(selectedUnitId)} />;
-      }
-
-      file = docx || doc || {};
+    if (pdf) {
+      return <PDF pdfFile={physicalFile(pdf)} pageNumber={1} startsFrom={startsFrom(selectedUnitId)} />;
+    } else if (file?.id && doc2htmlById[file.id]) {
+      return getFileContents();
     }
 
-    return getContentsDiv(file);
+    return noSourcesMsg;
   };
 
-  const getContentsDiv = file => {
-    const { wip, err, data } = doc2htmlById[file?.id] || {};
+  const getFileContents = () => {
+    console.log('doc2htmlById[file.id]:', doc2htmlById[file.id])
+    const { wip, err, data } = doc2htmlById[file.id];
 
     if (err) {
       return getSourceErrorSplash(err, t);
@@ -163,10 +154,17 @@ const Sources = ({ unit, indexMap, t, options }) => {
     return <div className="doc2html" style={{ direction }} dangerouslySetInnerHTML={{ __html: data }} />;
   }
 
+  const noSourcesMsg = <Segment basic>{t('materials.sources.no-source-available')}</Segment>;
+
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
-  if (!selectedUnitId) {
-    return <Segment basic>{t('materials.sources.no-source-available')}</Segment>;
+  const handleLanguageChanged = (e, lang) => setLanguage(lang);
+  const handleSourceChanged   = (e, data) => setSelectedUnitId(data.value);
+
+  console.log('selectedUnitId:', selectedUnitId)
+
+  if (!selectedUnitId || (!pdf && !file)) {
+    return noSourcesMsg;
   }
 
   return (
