@@ -62,8 +62,8 @@ const Sources = ({ unit, indexMap, t, options }) => {
   useEffect(() => {
     const available = options.filter(x => !x.disabled);
     const newSelectedUnitId = available.length > 0 ? available[0].value : null;
-    setSelectedUnitId(newSelectedUnitId);
-  }, [options]);
+    setSelectedUnitId(unitId => unitId && (unit.sources || []).includes(unitId) ? unitId : newSelectedUnitId);
+  }, [options, unit.sources]);
 
   useEffect(() => {
     const isLikutimVal = options.find(o => o.value === selectedUnitId && o.type === CT_LIKUTIM);
