@@ -34,6 +34,22 @@
     background-color: #fff;
   }
 
+  @mixin item-font {
+    line-height: 24px !important;
+    font-size: 16px !important;
+    padding: 0 !important;
+    margin-bottom: 4px !important;
+  }
+
+  &__item-font {
+    @include item-font;
+  }
+
+  &__item-smaller-font {
+    font-size: 14px !important;
+    color: rgb(160, 155, 155);
+  }
+
   &__list {
     .topics__card {
       display: block;
@@ -63,10 +79,7 @@
       }
 
       .item {
-        line-height: 24px !important;
-        font-size: 16px !important;
-        padding: 0 !important;
-        margin-bottom: 4px !important;
+        @include item-font;
 
         &.hide-topic {
           display: none !important;

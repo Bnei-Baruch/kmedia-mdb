@@ -131,21 +131,26 @@ const Likut = ({ t }) => {
                 <Header.Subheader>{t('values.date', { date: film_date })}</Header.Subheader>
               </Header.Content>
             </Header>
-            <div className="likut__toolbar">
-              {renderTags()}
-              <div className="source__header-toolbar">
-                { file && <Download path={url} mimeType={file.mimetype} downloadAllowed={true} filename={file.name} /> }
-                <LibraryBar fontSize={fontSize} isReadable={isReadable} handleIsReadable={handleIsReadable} handleSettings={setSettings} />
-                <div className="library-language-container">
-                  <MenuLanguageSelector
-                    languages={languages}
-                    defaultValue={language}
-                    onSelect={handleLanguageChanged}
-                    fluid={false}
-                  />
+            {/* toolbar */}
+            <Grid className="likut__toolbar" columns={2}>
+              <Grid.Column>
+                {renderTags()}
+              </Grid.Column>
+              <Grid.Column>
+                <div className="source__header-toolbar">
+                  { file && <Download path={url} mimeType={file.mimetype} downloadAllowed={true} filename={file.name} /> }
+                  <LibraryBar fontSize={fontSize} isReadable={isReadable} handleIsReadable={handleIsReadable} handleSettings={setSettings} />
+                  <div className="library-language-container">
+                    <MenuLanguageSelector
+                      languages={languages}
+                      defaultValue={language}
+                      onSelect={handleLanguageChanged}
+                      fluid={false}
+                    />
+                  </div>
                 </div>
-              </div>
-            </div>
+              </Grid.Column>
+            </Grid>
           </div>
           {/* content */}
           <div
