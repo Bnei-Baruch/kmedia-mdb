@@ -14,7 +14,7 @@ import {
 import * as shapes from '../../../../shapes';
 import TabsMenu from '../../../../shared/TabsMenu';
 import Summary from './Summary/Summary';
-import SourcesContainer from './Sources/SourcesContainer';
+import Sources from './Sources/Sources';
 import Sketches from './Sketches';
 import MediaDownloads from '../Downloads/MediaDownloads';
 import TranscriptionContainer from './Transcription/TranscriptionContainer';
@@ -57,7 +57,7 @@ const Materials = ({ unit = undefined, t, playlistComponent = null }) => {
     {
       name: 'sources',
       label: t('materials.sources.header'),
-      component: <SourcesContainer unit={unit} />
+      component: <Sources unit={unit} />
     },
     {
       name: 'sketches',
