@@ -1747,3 +1747,11 @@
   left: 0;
   right: unset;
 }
+
+.recommend-more {
+  float: right;
+}
+
+.rtl .recommend-more {
+  float: left;
+}

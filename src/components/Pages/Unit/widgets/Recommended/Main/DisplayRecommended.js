@@ -131,7 +131,7 @@ const RecommendedPlaylist = (units, selected, t, chronicles, viewLimit, feedName
           ))
         }
         { viewLimit && viewLimit < units.length ?
-          <Link onClick={() => setExpanded(!expanded)}>{expanded ? 'Less' : 'More'}</Link>
+          <Link className="recommend-more" onClick={() => setExpanded(!expanded)}>{expanded ? t('materials.recommended.less') : t('materials.recommended.more')}</Link>
           : null }
       </List>
     </div>
