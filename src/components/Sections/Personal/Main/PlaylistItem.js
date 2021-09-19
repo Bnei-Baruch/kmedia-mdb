@@ -7,9 +7,9 @@ import { MY_NAMESPACE_PLAYLISTS } from '../../../../helpers/consts';
 import { isLanguageRtl } from '../../../../helpers/i18n-utils';
 import { canonicalLink } from '../../../../helpers/links';
 import { imageByUnit } from '../../../../helpers/utils';
-import PlaylistPlayIcon from '../../../../images/icons/PlaylistPlay';
 import UnitLogo from '../../../shared/Logo/UnitLogo';
 import Link from '../../../Language/MultiLanguageLink';
+import PlaylistPlayIcon from '../../../../images/icons/PlaylistPlay';
 
 export const PlaylistItem = ({ item, t, language, asList = false }) => {
   const unit = useSelector(state => mdb.getDenormContentUnit(state.mdb, item.playlist_items?.[0]?.content_unit_uid)) || {};

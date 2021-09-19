@@ -15,6 +15,7 @@ const ITEMS = [
   'lessons',
   'programs',
   'sources',
+  'likutim',
   'events',
   // 'books',
   'topics',

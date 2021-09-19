@@ -8,6 +8,7 @@
       "lessons": "Lezioni e Conferenze",
       "programs": "Programmi e Clip",
       "sources": "Biblioteca",
+      "likutim": "Likutim",
       "events": "Convegni e Eventi",
       "books": "Libri",
       "topics": "Argomenti",
@@ -294,6 +295,13 @@
       "description": "An up to date shortcut to the latest Daily Lesson"
     }
   },
+  "likutim":{
+    "header": {
+      "text": "Excerpts from Kabbalistic Sources",
+      "subtext": "Excerpts from the Sources on various subjects"
+    },
+    "item-header": "Excerpts from the Sources:"
+  },
   "programs": {
     "header": {
       "text": "Programs",
@@ -433,7 +441,19 @@
       "header": "Selected Highlights"
     },
     "recommended": {
-      "header": "Recommended"
+      "same-topic": "Recommended for topic",
+      "same-collection": "Recommended chapters from",
+      "any-topic": "Any Topic",
+      "default": "Recommended for you",
+      "popular": "Most viewed",
+      "watching-now": "watching now",
+      "views": "views",
+      "last": "Last chapter",
+      "next": "Next chapter",
+      "prev": "Prev chapter",
+      "rand": "Random content",
+      "more": "More",
+      "less": "Less"
     },
     "playlist":{
       "header": "Up Next"

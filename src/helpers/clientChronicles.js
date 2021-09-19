@@ -91,7 +91,7 @@ export default class ClientChronicles {
       if (this.timestampedAppends.length) {
         this.flushAppends(/* sync */ false);
       }
-    }, 5000);
+    }, 60000);
 
     window.addEventListener('beforeunload', event => {
       this.sessionActivities.add('beforeunload');

@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import { bindActionCreators } from 'redux';
 import { connect, ReactReduxContext } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
-import { Container, Icon, Label, Menu, Popup } from 'semantic-ui-react';
+import { Container, Icon, Label, Menu, Popup, Input } from 'semantic-ui-react';
 import isEqual from 'react-fast-compare';
 
 import { getLanguageDirection } from '../../helpers/i18n-utils';
@@ -25,6 +25,7 @@ class Filters extends Component {
     rightItems: PropTypes.arrayOf(PropTypes.node),
     onChange: PropTypes.func.isRequired,
     onHydrated: PropTypes.func.isRequired,
+    onSearch: PropTypes.func,
     setFilterValue: PropTypes.func.isRequired,
     resetFilter: PropTypes.func.isRequired,
     filtersData: PropTypes.objectOf(PropTypes.object).isRequired,
@@ -169,7 +170,7 @@ class Filters extends Component {
   };
 
   render() {
-    const { namespace, onHydrated, t, rightItems, language } = this.props;
+    const { namespace, onHydrated, t, rightItems, language, onSearch, onKeyDown } = this.props;
 
     const langDir    = getLanguageDirection(language);
     const popupStyle = {
@@ -189,6 +190,19 @@ class Filters extends Component {
             <ReactReduxContext.Consumer>
               {({ store }) => (this.renderFilters(store, langDir, popupStyle))}
             </ReactReduxContext.Consumer>
+            {
+              onSearch &&
+               <Menu.Item>
+                 <Input
+                   size="small"
+                   icon="search"
+                   className="search-omnibox"
+                   placeholder={t('sources-library.filter')}
+                   onChange={onSearch}
+                   onKeyDown={onKeyDown}
+                 />
+               </Menu.Item>
+            }
             {
               rightItems && <Menu.Menu position="right">{rightItems}</Menu.Menu>
             }

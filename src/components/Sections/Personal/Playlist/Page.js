@@ -17,8 +17,8 @@ import {
 } from '../../../../helpers/consts';
 import WipErr from '../../../shared/WipErr/WipErr';
 import CUItemContainer from '../../../shared/CUItem/CUItemContainer';
-import PlaylistHeaderContainer from './HeaderContainer';
 import AlertModal from '../../../shared/AlertModal';
+import PlaylistHeaderContainer from './HeaderContainer';
 import NeedToLogin from '../NeedToLogin';
 
 const Page = ({ t }) => {

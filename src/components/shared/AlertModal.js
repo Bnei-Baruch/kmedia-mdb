@@ -5,14 +5,11 @@ import { Modal } from 'semantic-ui-react';
 const AlertModal = ({ message, open, onClose }) => (
   <Modal
     closeIcon
+    size={'mini'}
     open={open}
     onClose={onClose}
-    size={'mini'}
-  >
-    <Modal.Content>
-      {message}
-    </Modal.Content>
-  </Modal>
+    content={message}
+  />
 );
 
 AlertModal.propTypes = {

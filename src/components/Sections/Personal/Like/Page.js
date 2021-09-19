@@ -9,14 +9,14 @@ import { actions, selectors } from '../../../../redux/modules/my';
 import { MY_NAMESPACE_LIKES, MY_NAMESPACE_PLAYLISTS } from '../../../../helpers/consts';
 import { selectors as settings } from '../../../../redux/modules/settings';
 import { selectors as auth } from '../../../../redux/modules/auth';
-import CUItemContainer from '../../../shared/CUItem/CUItemContainer';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import { getPageFromLocation } from '../../../Pagination/withPagination';
+import CUItemContainer from '../../../shared/CUItem/CUItemContainer';
 import WipErr from '../../../shared/WipErr/WipErr';
+import AlertModal from '../../../shared/AlertModal';
 import Pagination from '../../../Pagination/Pagination';
 import Link from '../../../Language/MultiLanguageLink';
 import LikeActions from './Actions';
-import AlertModal from '../../../shared/AlertModal';
 import NeedToLogin from '../NeedToLogin';
 
 const PAGE_SIZE = 20;

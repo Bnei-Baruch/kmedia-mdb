@@ -4,11 +4,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import { actions } from '../../../../redux/modules/my';
+import { selectors as settings } from '../../../../redux/modules/settings';
 import { MY_NAMESPACE_PLAYLISTS } from '../../../../helpers/consts';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import PlaylistHeaderMobile from './HeaderMobile';
 import PlaylistHeader from './Header';
-import { selectors as settings } from '../../../../redux/modules/settings';
 
 const PlaylistHeaderContainer = ({ playlist }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);

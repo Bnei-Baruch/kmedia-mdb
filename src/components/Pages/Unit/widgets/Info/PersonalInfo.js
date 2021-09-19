@@ -12,9 +12,9 @@ import {
 import * as shapes from '../../../../shapes';
 import { selectors } from '../../../../../redux/modules/auth';
 import { actions, selectors as myselector } from '../../../../../redux/modules/my';
-import PlaylistInfo from './PlaylistInfo';
 import AlertModal from '../../../../shared/AlertModal';
 import NeedToLogin from '../../../../Sections/Personal/NeedToLogin';
+import PlaylistInfo from './PlaylistInfo';
 
 const PersonalInfo = ({ unit = {}, t, collection }) => {
   const [alertMsg, setAlertMsg]       = useState();

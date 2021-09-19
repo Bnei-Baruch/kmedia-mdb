@@ -235,8 +235,8 @@ export const strCmp = (a, b) =>
   a < b
     ? -1
     : a > b
-    ? 1
-    : 0;
+      ? 1
+      : 0;
 
 export const getEscapedRegExp = term => {
   const escaped = term.replace(/[/)(.+\\]/g, '\\$&');
@@ -338,8 +338,7 @@ export const getSectionForTranslation = content_type => {
   }
 };
 
-export const noop = () => {
-};
+export const noop = () => {};
 
 // Used in React hooks to remember previous props.
 export const usePrevious = value => {

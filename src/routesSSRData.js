@@ -272,6 +272,7 @@ export const libraryPage = async (store, match) => {
   let timeout = 5000;
   while (timeout && !sourcesSelectors.areSourcesLoaded(store.getState().sources)) {
     timeout -= 10;
+    // eslint-disable-next-line no-await-in-loop
     await sleep(10);
   }
 
