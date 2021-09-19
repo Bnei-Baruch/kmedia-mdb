@@ -42,6 +42,8 @@ const reducers = history => combineReducers({
   recommended,
   chronicles,
   music,
+  auth,
+  my,
   likutim
 });
 
