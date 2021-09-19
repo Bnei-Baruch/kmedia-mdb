@@ -3,13 +3,13 @@ import { withNamespaces } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 
+import { selectors, actions } from '../../../redux/modules/mdb';
+import { selectors as settings } from '../../../redux/modules/settings';
+import { selectors as recommended } from '../../../redux/modules/recommended';
 import { CT_CLIPS, CT_LESSON_PART, CT_VIDEO_PROGRAM, CT_VIRTUAL_LESSONS } from '../../../helpers/consts';
 import { canonicalCollection } from '../../../helpers/utils';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { canonicalLink } from '../../../helpers/links';
-import { selectors, actions } from '../../../redux/modules/mdb';
-import { selectors as settings } from '../../../redux/modules/settings';
-import { selectors as recommended } from '../../../redux/modules/recommended';
 import ListTemplate from './ListTemplate';
 import CardTemplate from './CardTemplate';
 

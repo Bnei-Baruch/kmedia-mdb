@@ -5,12 +5,12 @@ import { Button, Checkbox, Icon, Input, List, Modal, Divider } from 'semantic-ui
 
 import { actions, selectors } from '../../../../../redux/modules/my';
 import { selectors as auth } from '../../../../../redux/modules/auth';
+import { selectors as settings } from '../../../../../redux/modules/settings';
 import { MY_NAMESPACE_PLAYLIST_ITEMS, MY_NAMESPACE_PLAYLISTS } from '../../../../../helpers/consts';
+import { getLanguageDirection } from '../../../../../helpers/i18n-utils';
 import AlertModal from '../../../../shared/AlertModal';
 import PlaylistAddIcon from '../../../../../images/icons/PlaylistAdd';
 import NeedToLogin from '../../../../Sections/Personal/NeedToLogin';
-import { getLanguageDirection } from '../../../../../helpers/i18n-utils';
-import { selectors as settings } from '../../../../../redux/modules/settings';
 
 const PlaylistInfo = ({ cuID, t, handleClose = null }) => {
   const [isOpen, setIsOpen]               = useState(false);

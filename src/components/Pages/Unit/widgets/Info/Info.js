@@ -5,11 +5,15 @@ import { useSelector } from 'react-redux';
 import { Button, Header, List } from 'semantic-ui-react';
 
 import {
-  CT_CLIP, CT_CONGRESS,
-  CT_DAILY_LESSON, CT_KTAIM_NIVCHARIM,
+  CT_CLIP,
+  CT_CONGRESS,
+  CT_DAILY_LESSON,
+  CT_KTAIM_NIVCHARIM,
   CT_LECTURE,
-  CT_LESSON_PART, CT_LESSONS_SERIES,
-  CT_SPECIAL_LESSON, CT_VIDEO_PROGRAM_CHAPTER,
+  CT_LESSON_PART,
+  CT_LESSONS_SERIES,
+  CT_SPECIAL_LESSON,
+  CT_VIDEO_PROGRAM_CHAPTER,
   CT_VIRTUAL_LESSON,
   CT_WOMEN_LESSON
 } from '../../../../../helpers/consts';

@@ -1,7 +1,8 @@
 import React, { useContext, useEffect } from 'react';
 import { withNamespaces } from 'react-i18next';
-import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
+import PropTypes from 'prop-types';
+import { Card, Table } from 'semantic-ui-react';
 
 import { actions, selectors } from '../../../../redux/modules/my';
 import { selectors as settings } from '../../../../redux/modules/settings';
@@ -11,13 +12,12 @@ import {
   MY_NAMESPACE_PLAYLISTS,
   MY_NAMESPACE_SUBSCRIPTIONS
 } from '../../../../helpers/consts';
+import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import WipErr from '../../../shared/WipErr/WipErr';
+import CUItem from '../../../shared/CUItem/CUItemContainer';
 import { PlaylistItem } from './PlaylistItem';
 import { SubscriptionsItem } from './SubscriptionsItem';
-import CUItem from '../../../shared/CUItem/CUItemContainer';
 import ItemTemplate from './ItemTemplate';
-import { DeviceInfoContext } from '../../../../helpers/app-contexts';
-import { Card, Table } from 'semantic-ui-react';
 
 const ItemsContainer = ({ pageSize = 8, pageNo = 1, t, namespace, withSeeAll }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);

@@ -49,7 +49,7 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
         setSelected(nSelected);
       }
     }
-  }, [history, selected, isLesson, playlist?.items]);
+  }, [history, selected, collection]);
 
   useEffect(() => {
     if (prev?.unit?.id !== unit?.id) {
@@ -97,7 +97,7 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
         setSelected(nIndex);
       }
     }
-  }, [collection, contentLanguage, location, playlist?.language, uiLanguage, cuId, isLesson]);
+  }, [collection, contentLanguage, location, playlist?.language, uiLanguage, cuId]);
 
   useEffect(() => {
     if (!isLesson) {
@@ -109,17 +109,18 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
 
       handleSelectedChange(nSelected);
     }
-  }, [handleSelectedChange, location, playlist, isLesson]);
+  }, [handleSelectedChange, location, playlist]);
 
   useEffect(() => {
     const newUnit = playlist?.items[selected]?.unit;
     setUnit(newUnit);
   }, [playlist, selected]);
 
-  if (!collection ||
-    !Array.isArray(collection.content_units) ||
-    !playlist ||
-    !unit) {
+  if (!collection || !Array.isArray(collection.content_units)) {
+    return null;
+  }
+
+  if (!playlist || !unit) {
     return null;
   }
 
@@ -171,7 +172,7 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
                 <PlaylistHeader collection={collection} prevLink={prevLink} nextLink={nextLink} />
               </div>
               }
-              <Container className="unit_container">
+              <Container id="unit_container">
                 <Helmets.AVUnit unit={unit} language={uiLanguage} />
                 <Info unit={unit} currentCollection={collection} />
                 <Materials unit={unit} playlistComponent={PlaylistData} />
