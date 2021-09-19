@@ -23,6 +23,9 @@ const FETCH_SQDATA_FAILURE        = 'MDB/FETCH_SQDATA_FAILURE';
 const FETCH_WINDOW                = 'MDB/FETCH_WINDOW';
 const FETCH_WINDOW_SUCCESS        = 'MDB/FETCH_WINDOW_SUCCESS';
 const FETCH_WINDOW_FAILURE        = 'MDB/FETCH_WINDOW_FAILURE';
+const FETCH_DATEPICKER_CO         = 'MDB/FETCH_DATEPICKER_CO';
+const FETCH_DATEPICKER_CO_SUCCESS = 'MDB/FETCH_DATEPICKER_CO_SUCCESS';
+const FETCH_DATEPICKER_CO_FAILURE = 'MDB/FETCH_DATEPICKER_CO_FAILURE';
 const COUNT_CU                    = 'MDB/COUNT_CU';
 const COUNT_CU_SUCCESS            = 'MDB/COUNT_CU_SUCCESS';
 const COUNT_CU_FAILURE            = 'MDB/COUNT_CU_FAILURE';
@@ -46,6 +49,9 @@ export const types = {
   FETCH_WINDOW,
   FETCH_WINDOW_SUCCESS,
   FETCH_WINDOW_FAILURE,
+  FETCH_DATEPICKER_CO,
+  FETCH_DATEPICKER_CO_SUCCESS,
+  FETCH_DATEPICKER_CO_FAILURE,
   COUNT_CU,
   COUNT_CU_SUCCESS,
   COUNT_CU_FAILURE,
@@ -71,6 +77,9 @@ const fetchSQDataFailure       = createAction(FETCH_SQDATA_FAILURE);
 const fetchWindow              = createAction(FETCH_WINDOW);
 const fetchWindowSuccess       = createAction(FETCH_WINDOW_SUCCESS, (id, data) => ({ id, data }));
 const fetchWindowFailure       = createAction(FETCH_WINDOW_FAILURE, (id, err) => ({ id, err }));
+const fetchDatepickerCO        = createAction(FETCH_DATEPICKER_CO);
+const fetchDatepickerCOSuccess = createAction(FETCH_DATEPICKER_CO_SUCCESS);
+const fetchDatepickerCOFailure = createAction(FETCH_DATEPICKER_CO_FAILURE, (err) => ({ err }));
 const countCU                  = createAction(COUNT_CU, (namespace, params) => ({ namespace, params }));
 const countCUSuccess           = createAction(COUNT_CU_SUCCESS, (namespace, total) => ({ namespace, total }));
 const countCUFailure           = createAction(COUNT_CU_FAILURE, (namespace, err) => ({ namespace, err }));
@@ -94,6 +103,9 @@ export const actions = {
   fetchWindow,
   fetchWindowSuccess,
   fetchWindowFailure,
+  fetchDatepickerCO,
+  fetchDatepickerCOSuccess,
+  fetchDatepickerCOFailure,
   countCU,
   countCUSuccess,
   countCUFailure,
@@ -109,10 +121,12 @@ const freshStore = () => ({
   cuById: {},
   cWindow: {},
   countCU: {},
+  datepickerCO: null,
   wip: {
     units: {},
     collections: {},
     cWindow: {},
+    datepickerCO: false,
     lastLesson: false,
     sqData: false,
     countCU: false,
@@ -121,6 +135,7 @@ const freshStore = () => ({
     units: {},
     collections: {},
     cWindow: {},
+    datepickerCO: null,
     lastLesson: null,
     sqData: null,
     countCU: null,
@@ -174,6 +189,10 @@ const setStatus = (state, action) => {
       wip.cWindow    = { ...wip.cWindow, [action.payload.id]: false };
       errors.cWindow = { ...errors.cWindow, [action.payload.id]: null };
       break;
+    case FETCH_DATEPICKER_CO_SUCCESS:
+      wip.datepickerCO    = false;
+      errors.datepickerCO = null;
+      break;
     case FETCH_SQDATA_SUCCESS:
       wip.sqData    = false;
       errors.sqData = null;
@@ -194,6 +213,10 @@ const setStatus = (state, action) => {
     case FETCH_WINDOW_FAILURE:
       wip.cWindow    = { ...wip.cWindow, [action.payload.id]: false };
       errors.cWindow = { ...errors.cWindow, [action.payload.id]: action.payload.err };
+      break;
+    case FETCH_DATEPICKER_CO_FAILURE:
+      wip.datepickerCO    = false;
+      errors.datepickerCO = action.payload.err;
       break;
     case FETCH_SQDATA_FAILURE:
       wip.sqData    = false;
@@ -404,6 +427,11 @@ const onFetchWindow = (state, action) => {
   };
 };
 
+const onFetchDatepickerCO = (state, action) => {
+  const { collections } = action.payload;
+  return { ...state, datepickerCO: collections[0]?.id };
+};
+
 const onSSRPrepare = state => ({
   ...state,
   wip: freshStore().wip,
@@ -461,6 +489,11 @@ export const reducer = handleActions({
     setStatus(onFetchWindow(onReceiveCollections(state, { payload: action.payload.data?.collections }), action), action)
   ),
   [FETCH_WINDOW_FAILURE]: setStatus,
+  [FETCH_DATEPICKER_CO]: setStatus,
+  [FETCH_DATEPICKER_CO_SUCCESS]: (state, action) => (
+    setStatus(onFetchDatepickerCO(onReceiveCollections(state, { payload: action.payload.collections }), action), action)
+  ),
+  [FETCH_DATEPICKER_CO_FAILURE]: setStatus,
   [FETCH_SQDATA]: setStatus,
   [FETCH_SQDATA_SUCCESS]: setStatus,
   [FETCH_SQDATA_FAILURE]: setStatus,
@@ -481,6 +514,7 @@ const getWip            = state => state.wip;
 const getErrors         = state => state.errors;
 const getCollections    = state => state.items;
 const getWindow         = state => state.cWindow;
+const getDatepickerCO   = state => state.datepickerCO/* && getCollectionById(state, state.datepickerCO);*/
 const getSQDataWipErr   = state => !(getWip(state).sqData || getErrors(state).sqData);
 
 const getDenormCollection = (state, id) => {
@@ -552,6 +586,7 @@ export const selectors = {
   getLastLessonId,
   getCollections,
   getWindow,
+  getDatepickerCO,
   getSQDataWipErr,
   getCountCu
 };
