@@ -45,6 +45,8 @@ import PlaylistDecorator from './components/Pages/PlaylistMy/Decorator';
 import PlaylistPage from './components/Sections/Personal/Playlist/Page';
 import LikePage from './components/Sections/Personal/Like/Page';
 import HistoryPage from './components/Sections/Personal/History/Page';
+import Likut from './components/Sections/Likutim/Likut';
+import LikutimMain from './components/Sections/Likutim/Main';
 
 const routes = [
   { path: '', component: HomePage, options: { ssrData: ssrDataLoaders.home } },
@@ -107,6 +109,8 @@ const routes = [
   { path: 'help', component: Help },
   { path: 'simple-mode', component: SimpleModeContainer, options: { ssrData: ssrDataLoaders.simpleMode } },
   { path: 'excerpt', component: ExcerptContainer },
+  { path: 'likutim', component: LikutimMain },
+  { path: 'likutim/:id', component: Likut, },
   // { path: 'design', component: Design },
   // { path: 'design2', component: Design2 },
 ];

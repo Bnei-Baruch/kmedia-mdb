@@ -390,3 +390,51 @@
     }
   }
 }
+
+.likut {
+  @include mobile {
+    margin: 0 !important;
+
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    .button { padding: 0.5em !important }
+  }
+
+  .ui.header {
+    @include mobile {
+      padding: inherit 0 !important;
+      font-size: 1.3em !important;
+    }
+
+    padding: 0.5em 1em 0 !important;
+  }
+
+  .sub.header {
+    padding: 0.5em 0 0 !important;
+  }
+
+   a {
+    color: gray !important;
+  }
+
+  &__toolbar {
+    display: flex;
+    flex: 1;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    padding: 0 1em 0.5em !important;
+  }
+
+  &__grid {
+    .row {
+      padding-top: 0 !important;
+    }
+    .column {
+      padding-top: 0.5em !important;
+      padding-bottom: 0.5em !important;
+    }
+  }
+}

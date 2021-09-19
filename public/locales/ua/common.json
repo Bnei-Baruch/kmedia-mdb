@@ -8,6 +8,7 @@
       "lessons": "Уроки та Лекції",
       "programs": "Програми та Кліпи",
       "sources": "Бібліотека",
+      "likutim": "Likutim",
       "events": "Конгреси, події",
       "books": "Книжки",
       "topics": "Теми",
@@ -291,6 +292,13 @@
       "description": "Оновлений ярлик до останнього денного уроку"
     }
   },
+  "likutim":{
+    "header": {
+      "text": "Excerpts from Kabbalistic Sources",
+      "subtext": "Excerpts from the Sources on various subjects"
+    },
+    "item-header": "Excerpts from the Sources:"
+  },
   "programs": {
     "header": {
       "text": "Програми",
@@ -424,7 +432,19 @@
       "header": "Selected Highlights"
     },
     "recommended": {
-      "header": "Recommended"
+      "same-topic": "Recommended for topic",
+      "same-collection": "Recommended chapters from",
+      "any-topic": "Any Topic",
+      "default": "Recommended for you",
+      "popular": "Most viewed",
+      "watching-now": "watching now",
+      "views": "views",
+      "last": "Last chapter",
+      "next": "Next chapter",
+      "prev": "Prev chapter",
+      "rand": "Random content",
+      "more": "More",
+      "less": "Less"
     },
     "playlist":{
       "header": "Up Next"
