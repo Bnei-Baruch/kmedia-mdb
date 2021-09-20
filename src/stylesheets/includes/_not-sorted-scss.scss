@@ -1442,6 +1442,8 @@
 
 .ui.flowing.popup {
   z-index: 10000;
+  margin: 0 !important;
+  width: 100%;
 }
 
 .ui.accordion.menu .item .title > .dropdown.icon {

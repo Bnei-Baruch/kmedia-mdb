@@ -158,17 +158,19 @@ class Filters extends Component {
           onOpen={() => this.handlePopupOpen(name)}
           style={popupStyle}
           closeOnDocumentClick={false}
+          content={
+            <div className={`filter-popup__content ${langDir}`}>
+              <FilterComponent
+                namespace={namespace}
+                value={value}
+                onCancel={this.handlePopupClose}
+                onApply={x => this.handleApply(name, x)}
+                language={language}
+                contentLanguage={contentLanguage}
+              />
+            </div>
+          }
         >
-          <Popup.Content className={`filter-popup__content ${langDir}`}>
-            <FilterComponent
-              namespace={namespace}
-              value={value}
-              onCancel={this.handlePopupClose}
-              onApply={x => this.handleApply(name, x)}
-              language={language}
-              contentLanguage={contentLanguage}
-            />
-          </Popup.Content>
         </Popup>
       );
     });
