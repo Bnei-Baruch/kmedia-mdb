@@ -15,7 +15,7 @@ import CardTemplate from './CardTemplate';
 
 const NOT_LESSONS_COLLECTIONS = [CT_VIDEO_PROGRAM, CT_VIRTUAL_LESSONS, CT_CLIPS];
 
-const CUItemContainer = ({ id, children, t, asList = false, link, playTime }) => {
+const CUItemContainer = ({ id, children, t, asList = false, link, playTime, size, selected }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const unit               = useSelector(state => selectors.getDenormContentUnit(state.mdb, id));
   const language           = useSelector(state => settings.getLanguage(state.settings));
@@ -46,11 +46,13 @@ const CUItemContainer = ({ id, children, t, asList = false, link, playTime }) =>
     unit,
     language,
     link: link || canonicalLink(unit),
-    withCCUInfo,
+    withCCUInfo: withCCUInfo,
     ccu,
     description,
     children,
-    playTime
+    playTime,
+    size: !isMobileDevice ? size : '',
+    selected
   };
   return (asList ? <ListTemplate {...props} /> : <CardTemplate {...props} />);
 };

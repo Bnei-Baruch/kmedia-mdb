@@ -147,18 +147,19 @@ const renderUnits = (units, language, t, helpChooseLang) => (
 );
 
 export const renderCollection = (collection, language, t, helpChooseLang) => {
-  if (!collection.content_units) {
+  const { number, id, content_units } = collection;
+  if (!content_units) {
     return null;
-  }
 
+  }
   const units = renderUnits(collection.content_units, language, t, helpChooseLang);
 
   return (
-    <Card fluid key={collection.id}>
-      <Card.Content className={collection.number ? 'gray-header' : ''}>
+    <Card fluid key={id}>
+      <Card.Content className={number ? 'gray-header' : ''}>
         <Card.Header className="unit-header">
           <Link to={canonicalLink(collection)}>
-            {`${t(CT_DAILY_LESSON_I18N_KEY)}${collection.number ? ` ${t('lessons.list.number')}${collection.number}` : ''}`}
+            {`${t(CT_DAILY_LESSON_I18N_KEY)}${number ? ` (${t('lessons.list.nameByNum_' + number)})` : ''}`}
           </Link>
         </Card.Header>
       </Card.Content>

@@ -69,7 +69,7 @@ const UnitPage = ({ section = '', t }) => {
                 </Grid.Column>
               </Grid.Row>
               <Grid.Row>
-                <Grid.Column className="padding-top_1em">
+                <Grid.Column>
                   <Container className="unit_container">
                     <Info unit={unit} section={section} />
                     <Materials unit={unit} />

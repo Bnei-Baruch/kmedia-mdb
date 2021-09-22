@@ -61,12 +61,16 @@ const PlaylistInfo = ({ cuID, t, handleClose = null }) => {
     setNewPlaylist('');
   };
 
-  const handleSaveNewPlaylist = () => {
+  const handleSaveNewPlaylist = e => {
+    e.preventDefault();
+    e.stopPropagation();
     !!newPlaylist && dispatch(actions.add(MY_NAMESPACE_PLAYLISTS, { name: newPlaylist }));
     setAlertMsg(t('personal.newPlaylistSuccessful', { name: newPlaylist }));
   };
 
-  const toggle = () => {
+  const toggle = e => {
+    e.preventDefault();
+    e.stopPropagation();
     if (!user)
       return setIsNeedLogin(true);
     setSelected([]);

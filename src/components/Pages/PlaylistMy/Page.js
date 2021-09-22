@@ -15,13 +15,14 @@ import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import Info from '../Unit/widgets/Info/Info';
 import PlaylistHeader from '../PlaylistCollection/widgets/Playlist/PlaylistHeader';
 import * as shapes from '../../shapes';
+import { MY_NAMESPACE_PLAYLISTS } from '../../../helpers/consts';
 
 const PlaylistMyPage = ({ collection }) => {
   const location           = useLocation();
   const history            = useHistory();
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
-  const uiLanguage      = useSelector(state => settings.getLanguage(state.settings));
+  const language        = useSelector(state => settings.getLanguage(state.settings));
   const contentLanguage = useSelector(state => settings.getContentLanguage(state.settings));
 
   const embed                   = playerHelper.getEmbedFromQuery(location);
@@ -51,7 +52,7 @@ const PlaylistMyPage = ({ collection }) => {
   useEffect(() => {
     const preferredMT = playerHelper.restorePreferredMediaType();
     const mediaType   = playerHelper.getMediaTypeFromQuery(location, preferredMT);
-    const nPlaylist   = playerHelper.playlistFromUnits(collection, mediaType, contentLanguage, uiLanguage);
+    const nPlaylist   = playerHelper.playlistFromUnits(collection, mediaType, contentLanguage, language);
     setPlaylist(nPlaylist);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -60,10 +61,10 @@ const PlaylistMyPage = ({ collection }) => {
     const preferredMT = playerHelper.restorePreferredMediaType();
     const mediaType   = playerHelper.getMediaTypeFromQuery(location, preferredMT);
     if (mediaType !== playlist?.mediaType) {
-      const nPlaylist = playerHelper.playlistFromUnits(collection, mediaType, contentLanguage, uiLanguage);
+      const nPlaylist = playerHelper.playlistFromUnits(collection, mediaType, contentLanguage, language);
       setPlaylist(nPlaylist);
     }
-  }, [location, collection, contentLanguage, playlist?.mediaType, uiLanguage]);
+  }, [location, collection, contentLanguage, playlist?.mediaType, language]);
 
   useEffect(() => {
     let nSelected = playerHelper.getActivePartFromQuery(location);
@@ -86,13 +87,13 @@ const PlaylistMyPage = ({ collection }) => {
     return null;
   }
 
-  const { items } = playlist;
-
+  const { items }    = playlist;
   const PlaylistData = () =>
     <Playlist
       playlist={playlist}
       selected={selected}
       onSelectedChange={handleSelectedChange}
+      link={`/${language}/${MY_NAMESPACE_PLAYLISTS}/${collection.id}`}
     />;
 
   const computerWidth = isMobileDevice ? 16 : 10;
@@ -117,7 +118,7 @@ const PlaylistMyPage = ({ collection }) => {
               </div>
               }
               <Container className="unit_container">
-                <Helmets.AVUnit unit={unit} language={uiLanguage} />
+                <Helmets.AVUnit unit={unit} language={language} />
                 <Info unit={unit} currentCollection={collection} />
                 <Materials unit={unit} playlistComponent={PlaylistData} />
               </Container>
