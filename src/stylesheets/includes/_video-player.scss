@@ -1,200 +1,203 @@
 .avbox {
+  @include mobile {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  background-color: $darkWhite;
+  width: 100% !important;
+
+  .unit_container {
     @include mobile {
-      margin: 0 !important;
-      padding: 0 !important;
+      padding-bottom: 0;
+      padding-left: 0;
+      padding-right: 0;
     }
 
     background-color: $darkWhite;
-    width: 100% !important;
+    padding: 1em;
+    width: 100%
+  }
 
-    .unit_container {
-      @include mobile {
-        padding-bottom: 0;
-        padding-left: 0;
-        padding-right: 0;
-      }
+  /* player on mobile devices */
+  &__player.mobile-device {
+    height: auto;
+    padding: 0;
 
-      background-color: $darkWhite;
-      padding: 1em;
-      width: 100%
-    }
-
-    /* player on mobile devices */
-    &__player.mobile-device {
-      height: auto;
-      padding: 0;
-
-      .avbox__media-wrapper {
-        overflow: visible;
-        padding-top: 0;
-        position: relative;
-      }
-
-      .mediaplayer__wrapper {
-        position: relative;
-      }
-
-      audio {
-        margin: 0;
-      }
-
-      select {
-        background: transparent;
-        border-width: 0;
-        padding: 0.8em 0;
-        max-width: 8rem;
-
-        &:focus {
-          outline: none;
-        }
-      }
-    }
-
-    &__player {
-      background: $black;
-      height: 0;
-      margin-bottom: -1rem;
-      padding-top: percentage(9 / 16);
+    .avbox__media-wrapper {
+      overflow: visible;
+      padding-top: 0;
       position: relative;
+    }
 
-      &--is-4x3 {
-        padding-top: percentage(3 / 4);
+    .mediaplayer__wrapper {
+      position: relative;
+    }
+
+    audio {
+      margin: 0;
+    }
+
+    select {
+      background: transparent;
+      border-width: 0;
+      padding: 0.8em 0;
+      max-width: 8rem;
+
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+
+  &__player {
+    background: $black;
+    height: 0;
+    padding-top: percentage(9 / 16);
+    position: relative;
+
+    &--is-4x3 {
+      padding-top: percentage(3 / 4);
+    }
+
+    &--is-audio {
+      padding-top: 100px;
+
+      &--edit-mode {
+        height: 400px;
+        -webkit-transition: height 1s;
+        transition: height 1s;
       }
 
-      &--is-audio {
-        padding-top: 100px;
-
+      @media screen and (min-width: $tabletBreakpoint) {
         &--edit-mode {
-          height:400px;
-          -webkit-transition: height 1s;
-          transition: height 1s;
-        }
-
-        @media screen and (min-width: $tabletBreakpoint) {
-          &--edit-mode {
-            height:310px;
-          }
-        }
-
-        &--normal-mode {
-          height:0;
-          -webkit-transition: height 1s;
-          transition: height 1s;
-        }
-
-        &--dropdown-opened {
-          height:280px;
-          -webkit-transition: height 0.5s;
-          transition: height 0.5s;
-        }
-
-        &--dropdown-closed {
-          height:0;
-          -webkit-transition: height 0.5s;
-          transition: height 0.5s;
+          height: 310px;
         }
       }
+
+      &--normal-mode {
+        height: 0;
+        -webkit-transition: height 1s;
+        transition: height 1s;
+      }
+
+      &--dropdown-opened {
+        height: 280px;
+        -webkit-transition: height 0.5s;
+        transition: height 0.5s;
+      }
+
+      &--dropdown-closed {
+        height: 0;
+        -webkit-transition: height 0.5s;
+        transition: height 0.5s;
+      }
+    }
+  }
+
+  &__media-wrapper {
+    height: 100%;
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    width: 100%;
+  }
+
+  #avbox_playlist {
+    max-height: 40rem;
+
+    > .header, .sub {
+      background-color: $black;
+      color: $darkWhite;
     }
 
-    &__media-wrapper {
-      height: 100%;
-      overflow: hidden;
-      position: absolute;
-      top: 0;
-      width: 100%;
+    > .header {
+      @include mobile {
+        padding: 1em 1em 0.5em;
+      }
+
+      padding: 0.5em 0.5em 1em;
+      margin-top: 0;
+      margin-bottom: 0;
     }
+  }
 
-    #avbox_playlist {
-      max-height: 40rem;
+  &__playlist-wrapper {
+    @include mobile {
+      display: block;
+      padding-bottom: 1em;
+      padding-top: -1em;
+      left: 0;
+      right: 0;
+      position: relative;
+      overflow-y: auto;
 
-      > .header, .sub {
-        background-color: $black;
-        color: $darkWhite;
+      &::before {
+        content: none;
       }
 
       > .header {
-        @include mobile {
-          padding: 1em 1em 0.5em;
-        }
-
-        padding: 0.5em 0.5em 1em;
-        margin-top: 0;
-        margin-bottom: 0;
-      }
-    }
-
-    &__playlist-wrapper {
-      @include mobile {
-        display: block;
-        padding-bottom: 1em;
-        padding-top: -1em;
-        left: 0;
-        right : 0;
-        position: relative;
-        overflow-y: auto;
-
         &::before {
           content: none;
         }
-
-        > .header {
-          &::before {
-            content: none;
-          }
-        }
-      }
-
-      background: $darkWhite;
-      display: flex;
-      flex-direction: column;
-
-      > .header {
-        flex: 0 0 auto;
-        position: relative;
-        padding: 0 0.5em;
       }
     }
 
-    &__playlist-view {
-      @include mobile {
-        padding-bottom: 0;
-        padding-top: 0;
-      }
+    background: $darkWhite;
+    display: flex;
+    flex-direction: column;
 
-      clear: both;
-      overflow-y: auto;
-      padding-bottom: 1rem;
+    > .header {
+      flex: 0 0 auto;
       position: relative;
-      margin: 0;
+      padding: 0 0.5em;
+    }
+  }
 
-      .header {
-        color: $blue;
-      }
+  &__playlist-view {
+    @include mobile {
+      padding-bottom: 0;
+      padding-top: 0;
+    }
 
-      .list {
-        width: 100%;
+    padding-top: 1em;
+    clear: both;
+    overflow-y: auto;
+    padding-bottom: 1rem;
+    position: relative;
+    margin: 0;
 
-        .item {
-          padding: 0 !important;
+    &.container {
+      border: 1px solid $midWhite;
+    }
 
-          .active {
-            background-color: rgba($blue, .2) !important;
-          }
+    .header {
+      color: $blue;
+    }
 
-          table {
-            width: 100%;
-            background-color: inherit;
-            color: inherit;
-          }
-        }
-      }
+    .list {
+      width: 100%;
 
+      .item {
+        padding: 0 !important;
 
-
-      .menu > .item {
-        &.active {
+        .active {
           background-color: rgba($blue, .2) !important;
         }
+
+        table {
+          width: 100%;
+          background-color: inherit;
+          color: inherit;
+        }
       }
     }
+
+
+    .menu > .item {
+      &.active {
+        background-color: rgba($blue, .2) !important;
+      }
+    }
+  }
 }

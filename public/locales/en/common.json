@@ -275,6 +275,10 @@
     "list": {
       "related": "Related to:",
       "number": "#",
+      "nameByNum_1": "Morning",
+      "nameByNum_2": "Afternoon",
+      "nameByNum_3": "Evening",
+      "nameByNum_4": "Evening 2",
       "item_from": "Item of:"
     },
     "unit": {

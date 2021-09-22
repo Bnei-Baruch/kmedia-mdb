@@ -25,8 +25,9 @@ const CollectionDatePicker = ({ collection, t }) => {
     if (co && co.id !== id) {
       const link = canonicalLink(co.content_units[0]);
       history.push(`/${language}${link}`);
+      dispatch(actions.nullDatepickerCO())
     }
-  }, [coID, id, language]);
+  }, [coID]);
 
   const fetchNextCO = date => {
     const filmDate = moment.utc(date);
@@ -41,7 +42,7 @@ const CollectionDatePicker = ({ collection, t }) => {
       label={film_date}
       language={language}
       onDayChange={fetchNextCO}
-      value={Date(film_date)}
+      value={Date.parse(film_date)}
     />
   );
 };

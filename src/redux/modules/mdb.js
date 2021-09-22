@@ -26,6 +26,7 @@ const FETCH_WINDOW_FAILURE        = 'MDB/FETCH_WINDOW_FAILURE';
 const FETCH_DATEPICKER_CO         = 'MDB/FETCH_DATEPICKER_CO';
 const FETCH_DATEPICKER_CO_SUCCESS = 'MDB/FETCH_DATEPICKER_CO_SUCCESS';
 const FETCH_DATEPICKER_CO_FAILURE = 'MDB/FETCH_DATEPICKER_CO_FAILURE';
+const NULL_DATEPICKER_CO  = 'MDB/NULL_DATEPICKER_CO';
 const COUNT_CU                    = 'MDB/COUNT_CU';
 const COUNT_CU_SUCCESS            = 'MDB/COUNT_CU_SUCCESS';
 const COUNT_CU_FAILURE            = 'MDB/COUNT_CU_FAILURE';
@@ -52,6 +53,7 @@ export const types = {
   FETCH_DATEPICKER_CO,
   FETCH_DATEPICKER_CO_SUCCESS,
   FETCH_DATEPICKER_CO_FAILURE,
+  NULL_DATEPICKER_CO,
   COUNT_CU,
   COUNT_CU_SUCCESS,
   COUNT_CU_FAILURE,
@@ -80,6 +82,7 @@ const fetchWindowFailure       = createAction(FETCH_WINDOW_FAILURE, (id, err) =>
 const fetchDatepickerCO        = createAction(FETCH_DATEPICKER_CO);
 const fetchDatepickerCOSuccess = createAction(FETCH_DATEPICKER_CO_SUCCESS);
 const fetchDatepickerCOFailure = createAction(FETCH_DATEPICKER_CO_FAILURE, (err) => ({ err }));
+const nullDatepickerCO         = createAction(NULL_DATEPICKER_CO);
 const countCU                  = createAction(COUNT_CU, (namespace, params) => ({ namespace, params }));
 const countCUSuccess           = createAction(COUNT_CU_SUCCESS, (namespace, total) => ({ namespace, total }));
 const countCUFailure           = createAction(COUNT_CU_FAILURE, (namespace, err) => ({ namespace, err }));
@@ -106,6 +109,7 @@ export const actions = {
   fetchDatepickerCO,
   fetchDatepickerCOSuccess,
   fetchDatepickerCOFailure,
+  nullDatepickerCO,
   countCU,
   countCUSuccess,
   countCUFailure,
@@ -429,8 +433,11 @@ const onFetchWindow = (state, action) => {
 
 const onFetchDatepickerCO = (state, action) => {
   const { collections } = action.payload;
-  return { ...state, datepickerCO: collections[0]?.id };
+  const sorted          = collections.sort((a, b) => a.number - b.number);
+  return { ...state, datepickerCO: sorted[0]?.id };
 };
+
+const onNullDatepickerCO = (state) => ({ ...state, datepickerCO: null });
 
 const onSSRPrepare = state => ({
   ...state,
@@ -493,6 +500,9 @@ export const reducer = handleActions({
   [FETCH_DATEPICKER_CO_SUCCESS]: (state, action) => (
     setStatus(onFetchDatepickerCO(onReceiveCollections(state, { payload: action.payload.collections }), action), action)
   ),
+  [NULL_DATEPICKER_CO]: (state) => (
+    onNullDatepickerCO(state)
+  ),
   [FETCH_DATEPICKER_CO_FAILURE]: setStatus,
   [FETCH_SQDATA]: setStatus,
   [FETCH_SQDATA_SUCCESS]: setStatus,
@@ -514,7 +524,7 @@ const getWip            = state => state.wip;
 const getErrors         = state => state.errors;
 const getCollections    = state => state.items;
 const getWindow         = state => state.cWindow;
-const getDatepickerCO   = state => state.datepickerCO/* && getCollectionById(state, state.datepickerCO);*/
+const getDatepickerCO   = state => state.datepickerCO;
 const getSQDataWipErr   = state => !(getWip(state).sqData || getErrors(state).sqData);
 
 const getDenormCollection = (state, id) => {
