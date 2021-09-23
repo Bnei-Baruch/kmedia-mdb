@@ -11,7 +11,7 @@ import { actions, selectors } from '../../../../../redux/modules/mdb';
 import ButtonDayPicker from '../../../../Filters/components/Date/ButtonDayPicker';
 import { canonicalLink } from '../../../../../helpers/links';
 
-const CollectionDatePicker = ({ collection, t }) => {
+const CollectionDatePicker = ({ collection }) => {
 
   const { film_date, id } = collection;
   const history           = useHistory();
@@ -25,7 +25,7 @@ const CollectionDatePicker = ({ collection, t }) => {
     if (co && co.id !== id) {
       const link = canonicalLink(co.content_units[0]);
       history.push(`/${language}${link}`);
-      dispatch(actions.nullDatepickerCO())
+      dispatch(actions.nullDatepickerCO());
     }
   }, [coID]);
 
@@ -43,6 +43,7 @@ const CollectionDatePicker = ({ collection, t }) => {
       language={language}
       onDayChange={fetchNextCO}
       value={Date.parse(film_date)}
+      withLabel={true}
     />
   );
 };
@@ -51,4 +52,4 @@ CollectionDatePicker.propTypes = {
   collection: shapes.GenericCollection.isRequired
 };
 
-export default withNamespaces()(CollectionDatePicker);
+export default CollectionDatePicker;

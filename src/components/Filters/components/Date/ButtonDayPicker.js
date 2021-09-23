@@ -24,6 +24,7 @@ class ButtonDayPicker extends Component {
     label: PropTypes.string,
     onDayChange: PropTypes.func,
     language: PropTypes.string.isRequired,
+    withLabel: PropTypes.bool
   };
 
   static defaultProps = {
@@ -171,7 +172,7 @@ class ButtonDayPicker extends Component {
   };
 
   render() {
-    const { language, t, value, label }                                            = this.props;
+    const { language, t, value, label, withLabel }                                 = this.props;
     const { month, isPopupOpen, isNativePopupOpen, selectedDate, langDir, locale } = this.state;
     const { deviceInfo, isMobileDevice }                                           = this.context;
 
@@ -180,8 +181,9 @@ class ButtonDayPicker extends Component {
       const selectedToString = selected ? moment(selected).format('YYYY-MM-DD') : '';
 
       const dateButton = (
-        <button className="ui button dateButton" onClick={this.openNativeDatePicker}>
+        <button className={`ui button dateButton${withLabel ? ' dateButton_with_label' : ''}`} onClick={this.openNativeDatePicker}>
           <i aria-hidden="true" className={isMobileDevice ? 'calendar alternate outline large icon' : 'calendar alternate outline icon'} />
+          {withLabel && label}
           <input
             className="hide-native-date-input"
             type="date"

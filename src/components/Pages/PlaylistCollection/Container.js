@@ -7,6 +7,7 @@ import { withNamespaces } from 'react-i18next';
 import { CT_DAILY_LESSON, CT_SPECIAL_LESSON, DATE_FORMAT } from '../../../helpers/consts';
 import { canonicalLink } from '../../../helpers/links';
 import { actions, selectors } from '../../../redux/modules/mdb';
+import { actions as recommended } from '../../../redux/modules/recommended';
 import WipErr from '../../shared/WipErr/WipErr';
 import Page from './Page';
 
@@ -90,7 +91,11 @@ const PlaylistCollectionContainer = ({ cId, t, cuId }) => {
         }
       }
     }
-  }, [cId, cWindow, collection, dispatch, errorMap.units, wipMap]);
+  }, [cId, cWindow, collection, errorMap.units, wipMap]);
+
+  useEffect(() => {
+    if (collection) dispatch(recommended.fetchViews(collection.cuIDs));
+  }, [collection?.cuIDs]);
 
   if (!cId || !collection || !Array.isArray(collection.content_units)) {
     return null;

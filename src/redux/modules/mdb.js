@@ -26,7 +26,7 @@ const FETCH_WINDOW_FAILURE        = 'MDB/FETCH_WINDOW_FAILURE';
 const FETCH_DATEPICKER_CO         = 'MDB/FETCH_DATEPICKER_CO';
 const FETCH_DATEPICKER_CO_SUCCESS = 'MDB/FETCH_DATEPICKER_CO_SUCCESS';
 const FETCH_DATEPICKER_CO_FAILURE = 'MDB/FETCH_DATEPICKER_CO_FAILURE';
-const NULL_DATEPICKER_CO  = 'MDB/NULL_DATEPICKER_CO';
+const NULL_DATEPICKER_CO          = 'MDB/NULL_DATEPICKER_CO';
 const COUNT_CU                    = 'MDB/COUNT_CU';
 const COUNT_CU_SUCCESS            = 'MDB/COUNT_CU_SUCCESS';
 const COUNT_CU_FAILURE            = 'MDB/COUNT_CU_FAILURE';
@@ -313,6 +313,7 @@ const onReceiveCollections = (state, action) => {
 
     // normalize content units
     if (y.content_units) {
+
       y.ccuNames = y.ccuNames || {};
       y.cuIDs    = y.content_units.filter(cu => !!cu).map(cu => {
         const ccuName     = cu.name_in_collection;
