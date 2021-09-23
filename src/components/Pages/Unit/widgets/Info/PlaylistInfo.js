@@ -68,9 +68,14 @@ const PlaylistInfo = ({ cuID, t, handleClose = null }) => {
     setAlertMsg(t('personal.newPlaylistSuccessful', { name: newPlaylist }));
   };
 
-  const toggle = e => {
+  const handleOpenModal = e => {
     e.preventDefault();
     e.stopPropagation();
+    toggle();
+    return;
+  };
+
+  const toggle = () => {
     if (!user)
       return setIsNeedLogin(true);
     setSelected([]);
@@ -129,7 +134,7 @@ const PlaylistInfo = ({ cuID, t, handleClose = null }) => {
         onClose={toggle}
         size={'tiny'}
         trigger={
-          <Button basic className="my_playlist_add clear_button uppercase no-padding" onClick={toggle}>
+          <Button basic className="my_playlist_add clear_button uppercase no-padding" onClick={handleOpenModal}>
             <PlaylistAddIcon className="playlist_add" fill="#767676" />
             <span>{t('buttons.save')}</span>
           </Button>
