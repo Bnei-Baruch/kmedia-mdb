@@ -15,7 +15,7 @@ const Actions = ({ cuId, id, t }) => {
     e.preventDefault();
     e.stopPropagation();
     dispatch(actions.remove(MY_NAMESPACE_HISTORY, { ids: [id] }));
-  }
+  };
 
   const handleOpen = e => {
     e.preventDefault();
@@ -23,7 +23,13 @@ const Actions = ({ cuId, id, t }) => {
     setOpen(true);
   };
 
-  const handleClose = () => setOpen(false);
+  const handleClose = e => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    setOpen(false);
+  };
 
   return (
     <Dropdown className="cu_item_dropdown" icon={'ellipsis vertical'} onClose={handleClose} onOpen={handleOpen} open={open}>
@@ -32,7 +38,6 @@ const Actions = ({ cuId, id, t }) => {
           <PlaylistInfo cuID={cuId} t={t} handleClose={handleClose} />
         </Dropdown.Item>
         <Dropdown.Item
-          as={'a'}
           fitted="vertically"
           icon="remove circle"
           onClick={removeItem}

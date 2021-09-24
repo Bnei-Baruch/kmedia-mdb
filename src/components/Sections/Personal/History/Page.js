@@ -2,7 +2,7 @@ import React, { useCallback, useContext, useEffect } from 'react';
 import { withRouter } from 'react-router';
 import { withNamespaces } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { Container, Grid, Header, Icon, Table } from 'semantic-ui-react';
+import { Container, Grid, Header, Icon } from 'semantic-ui-react';
 import clsx from 'clsx';
 import moment from 'moment';
 
@@ -62,13 +62,7 @@ const Page      = ({ location, t }) => {
     const mx     = moment(x.created_at);
     const isDiff = i !== 0 ? mp.date() !== mx.date() : true;
     if (isDiff) {
-      newDay = (
-        <Table.Row>
-          <Table.Cell collapsing>
-            <Header as="h3" content={t('values.date', { date: x.created_at })} />
-          </Table.Cell>
-        </Table.Row>
-      );
+      newDay = (<Header as="h3" content={t('values.date', { date: x.created_at })} />);
     }
 
     const item = (
@@ -86,36 +80,37 @@ const Page      = ({ location, t }) => {
 
   return (
     <Grid padded={!isMobileDevice} className="avbox no-background">
-      <Grid.Column mobile={16} tablet={computerWidth} computer={computerWidth} className={clsx({ 'is-fitted': isMobileDevice })}>
-        <Container className="padded">
-          <div className="summary-container align_items_center">
-            <Header as={'h2'} className="my_header">
-              <Icon name="history" className="display-iblock" />
-              {t('personal.history')}
-            </Header>
-          </div>
-        </Container>
-        <AlertModal message={t('personal.removedSuccessfully')} open={deleted} onClose={onAlertCloseHandler} />
+      <Grid.Row>
+        <Grid.Column mobile={16} tablet={computerWidth} computer={computerWidth} className={clsx({ 'is-fitted': isMobileDevice })}>
+          <Container className="padded">
+            <div className="summary-container align_items_center">
+              <Header as={'h2'} className="my_header">
+                <Icon name="history" className="display-iblock" />
+                {t('personal.history')}
+              </Header>
+            </div>
+          </Container>
+          <AlertModal message={t('personal.removedSuccessfully')} open={deleted} onClose={onAlertCloseHandler} />
+          {
+            items?.length > 0 ? (
+              <Container className="padded">
+                {items.map(renderItem)}
+              </Container>
+            ) : null
+          }
+          <Container className="padded pagination-wrapper" textAlign="center">
+            <Pagination
+              pageNo={pageNo}
+              pageSize={PAGE_SIZE}
+              total={total}
+              onChange={setPage}
+            />
+          </Container>
+        </Grid.Column>
         {
-          items?.length > 0 ? (
-            <Container className="padded">
-              <Table unstackable basic="very" sortable>
-                <Table.Body>
-                  {items.map(renderItem)}
-                </Table.Body>
-              </Table>
-            </Container>
-          ) : null
+          !isMobileDevice && <Grid.Column mobile={16} tablet={6} computer={6} />
         }
-        <Container className="padded pagination-wrapper" textAlign="center">
-          <Pagination
-            pageNo={pageNo}
-            pageSize={PAGE_SIZE}
-            total={total}
-            onChange={setPage}
-          />
-        </Container>
-      </Grid.Column>
+      </Grid.Row>
     </Grid>
   );
 };

@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
-import { Header, Progress, Table } from 'semantic-ui-react';
+import { Container, Header, Progress } from 'semantic-ui-react';
 
 import * as shapes from '../../shapes';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
@@ -62,39 +62,36 @@ const ListTemplate = ({
   }
 
   return (
-    <Table.Row
+    <Container
       as={Link}
       to={link}
       key={unit.id}
       className={`cu_item cu_item_list no-thumbnail${size ? ' ' + size : ''}${selected ? ' selected' : ''}`}
-      verticalAlign="top"
     >
-      <Table.Cell width={2} className={'padding_r_l_0 no-padding-top'} verticalAlign={'top'}>
-        <div style={{ position: 'relative' }}>
-          <div className="cu_item_duration">{formatDuration(unit.duration)}</div>
-          {percent}
-          <span className="cu_item_img">
-            <UnitLogo unitId={unit.id} width={isMobileDevice ? 165 : imageWidthBySize[size]} />
-          </span>
+      <div>
+        <div className="cu_item_duration">{formatDuration(unit.duration)}</div>
+        {percent}
+        <div className="cu_item_img">
+          <UnitLogo unitId={unit.id} width={isMobileDevice ? 165 : imageWidthBySize[size]} />
         </div>
-      </Table.Cell>
-      <Table.Cell verticalAlign={'top'} className={`cu_item_info ${dir}`}>
+      </div>
+      <div className={`cu_item_info ${dir}`}>
         {ccu_info}
-        <span className={`cu_item_name ${!ccu_info ? ' font_black' : ''}`}>
+        <div className={`cu_item_name ${!ccu_info ? ' font_black' : ''}`}>
           {unit.name}
-        </span>
-        <div className={`cu_info_description ${dir}`}>
+        </div>
+        <div className={`cu_info_description ${dir} text_ellipsis`}>
           {description.map((d, i) => (<span key={i}>{d}</span>))}
         </div>
-      </Table.Cell>
+      </div>
       {
         children ? (
-          <Table.Cell width="1" verticalAlign="middle" textAlign="center" className="padding_r_l_0">
+          <div className="cu_item_actions">
             {children}
-          </Table.Cell>
+          </div>
         ) : null
       }
-    </Table.Row>
+    </Container>
   );
 };
 
