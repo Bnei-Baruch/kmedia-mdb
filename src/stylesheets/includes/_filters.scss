@@ -194,4 +194,13 @@
   }
 }
 
+.alphabetFilter {
+  a.item {
+    display: inline-flex !important;
+    padding: 0 0.5em !important;
+  }
 
+  a.active {
+    font-weight: bold !important;
+  }
+}
