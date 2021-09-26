@@ -440,16 +440,19 @@
       "header": "Selected Highlights"
     },
     "recommended": {
-      "same-topic": "Same Topic",
+      "same-topic": "Recommended for topic",
+      "same-collection": "Recommended chapters from",
       "any-topic": "Any Topic",
       "default": "Recommended for you",
-      "popular": "Popular",
-      "watching-now": "Watching now",
+      "popular": "Most viewed",
+      "watching-now": "watching now",
       "views": "views",
-      "last": "Latest",
-      "next": "Next chapters",
-      "prev": "Prev chapters",
-      "rand": "Random content"
+      "last": "Last chapter",
+      "next": "Next chapter",
+      "prev": "Prev chapter",
+      "rand": "Random content",
+      "more": "More",
+      "less": "Less"
     },
     "playlist": {
       "header": "Up Next"

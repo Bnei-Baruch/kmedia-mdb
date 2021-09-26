@@ -30,7 +30,6 @@
     border: 1px solid #7dcff5 !important;
     border-radius: 20px !important;
     box-shadow: 0 0 6px 0 #7dcff5 !important;
-    width: 100%;
   }
 
   // main omnibox size
@@ -1720,4 +1719,38 @@
 
 .rtl .library-language-container {
   text-align:left;
+}
+
+.recommend-cell {
+  position: relative;
+}
+
+.recommend-label {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  color: white;
+  background-color: #2e8fd5;
+  max-width: 120px;
+  overflow: hidden;
+
+  .text {
+    padding-left: 0.4em;
+    padding-right: 0.4em;
+    padding-bottom: 0.1em;
+    white-space: nowrap;
+  }
+}
+
+.rtl .recommend-label {
+  left: 0;
+  right: unset;
+}
+
+.recommend-more {
+  float: right;
+}
+
+.rtl .recommend-more {
+  float: left;
 }

@@ -428,7 +428,19 @@
       "header": "Selected Highlights"
     },
     "recommended": {
-      "header": "Recommended"
+      "same-topic": "Recommended for topic",
+      "same-collection": "Recommended chapters from",
+      "any-topic": "Any Topic",
+      "default": "Recommended for you",
+      "popular": "Most viewed",
+      "watching-now": "watching now",
+      "views": "views",
+      "last": "Last chapter",
+      "next": "Next chapter",
+      "prev": "Prev chapter",
+      "rand": "Random content",
+      "more": "More",
+      "less": "Less"
     },
     "playlist": {
       "header": "Up Next"

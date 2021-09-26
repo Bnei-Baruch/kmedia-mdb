@@ -439,16 +439,19 @@
       "header": "קטעים נבחרים"
     },
     "recommended": {
-      "same-topic": "אותו נושא",
+      "same-topic": "מומלצים בנושא",
+      "same-collection": "פרקים מומלצים של",
       "any-topic": "כל נושא",
       "default": "מומלצים",
-      "popular": "פופולרי",
+      "popular": "הכי נצפה",
       "watching-now": "צופים עכשיו",
       "views": "צפיות",
-      "last": "אחרונים",
+      "last": "פרק אחרון",
       "next": "פרק הבא",
       "prev": "פרק קודם",
-      "rand": "תוכן אקראי"
+      "rand": "תוכן אקראי",
+      "more": "עוד",
+      "less": "פחות"
     },
     "playlist":{
       "header": "הבא בתור"
