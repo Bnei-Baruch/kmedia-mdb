@@ -4,6 +4,7 @@ export function logErrors(err, req, res, next) {
   } else {
     console.log(err);
   }
+
   console.info(`error handling ${req.originalUrl}`);
   next(err);
 }
