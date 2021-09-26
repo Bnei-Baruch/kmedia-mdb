@@ -38,6 +38,7 @@ const Main = ({ t }) => {
 
   const [dataLoaded, setDataLoaded] = useState(false);
   const [match, setMatch] = useState('');
+  const [clickedLetter, setClickedLetter] = useState(null);
 
   const handleSearch = debounce((e, data) => {
     setMatch(data.value);
@@ -73,8 +74,22 @@ const Main = ({ t }) => {
 
   const firstLetters = sortedLikutim
     .map(lk => getFirstLetter(lk.name))
-    .filter((l, i, arr) => arr.indexOf(l) === i)
-    .sort();
+    .filter((l, i, arr) => arr.indexOf(l) === i);
+
+  // clicked letter filtering
+  let selectedFirstLetters;
+  let displayedLikutim;
+  if (clickedLetter) {
+    selectedFirstLetters = firstLetters.filter(lt => lt === clickedLetter);
+    displayedLikutim = sortedLikutim.filter(lk => getFirstLetter(lk.name) === clickedLetter)
+  } else {
+    selectedFirstLetters = firstLetters.sort();
+    displayedLikutim = sortedLikutim;
+  }
+
+  const onLetterClick = letter => {
+    setClickedLetter(letter);
+  }
 
   return (
     <div>
@@ -87,13 +102,15 @@ const Main = ({ t }) => {
         onKeyDown={handleSearchKeyDown}
         onSearch={handleSearch}
         onHydrated={noop}
+        onLetterClick={onLetterClick}
+        letters={firstLetters}
       />
       <Container className="padded">
         <Grid>
           <Grid.Column>
             <Card.Group stackable itemsPerRow={4}>
               {
-                firstLetters.map(fl =>
+                selectedFirstLetters.map(fl =>
                   <Card key={fl}>
                     <Card.Content>
                       <Card.Header as='h2' textAlign='center'>
@@ -101,12 +118,12 @@ const Main = ({ t }) => {
                       </Card.Header>
                       <List relaxed>
                         {
-                          sortedLikutim
+                          displayedLikutim
                             .filter(sl => sl.name[0] === fl)
                             .map(lu =>
-                              <List.Item key={lu.id} class="topics__item-font">
+                              <List.Item key={lu.id} className="topics__item-font">
                                 <Link to={canonicalLink(lu)} >{lu.name} </Link>
-                                <span class="topics__item-smaller-font">
+                                <span className="topics__item-smaller-font">
                                     | {t('values.date', { date: lu.film_date })}
                                 </span>
                               </List.Item>
