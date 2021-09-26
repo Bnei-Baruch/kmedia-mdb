@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
 import { List, Card, Grid, Divider, Container } from 'semantic-ui-react';
@@ -72,8 +72,19 @@ const Main = ({ t }) => {
     .filter(lk => lk.name.toLowerCase().includes(match.toLowerCase()))
     .sort((l1, l2) => l1.name < l2.name ? -1 : 1);
 
+  // creates a Map - key value structure of (likut, first letter of likut name)
+  const firstLettersMap = useMemo(() => {
+    const flMap = new Map();
+
+    sortedLikutim.forEach(lk => {
+      flMap.set(lk.id, getFirstLetter(lk.name));
+    });
+
+    return flMap;
+  }, [sortedLikutim]);
+
   const firstLetters = sortedLikutim
-    .map(lk => getFirstLetter(lk.name))
+    .map(lk => firstLettersMap.get(lk.id))
     .filter((l, i, arr) => arr.indexOf(l) === i);
 
   // clicked letter filtering
@@ -81,7 +92,7 @@ const Main = ({ t }) => {
   let displayedLikutim;
   if (clickedLetter) {
     selectedFirstLetters = firstLetters.filter(lt => lt === clickedLetter);
-    displayedLikutim = sortedLikutim.filter(lk => getFirstLetter(lk.name) === clickedLetter)
+    displayedLikutim = sortedLikutim.filter(lk => firstLettersMap.get(lk.id) === clickedLetter)
   } else {
     selectedFirstLetters = firstLetters.sort();
     displayedLikutim = sortedLikutim;
@@ -119,12 +130,12 @@ const Main = ({ t }) => {
                       <List relaxed>
                         {
                           displayedLikutim
-                            .filter(sl => sl.name[0] === fl)
-                            .map(lu =>
-                              <List.Item key={lu.id} className="topics__item-font">
-                                <Link to={canonicalLink(lu)} >{lu.name} </Link>
+                            .filter(dlk => firstLettersMap.get(dlk.id) === fl)
+                            .map(lk =>
+                              <List.Item key={lk.id} className="topics__item-font">
+                                <Link to={canonicalLink(lk)} >{lk.name} </Link>
                                 <span className="topics__item-smaller-font">
-                                    | {t('values.date', { date: lu.film_date })}
+                                    | {t('values.date', { date: lk.film_date })}
                                 </span>
                               </List.Item>
                             )

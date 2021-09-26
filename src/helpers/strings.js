@@ -39,8 +39,10 @@ export const getFirstLetter = str => {
     return ''
   }
 
+  const specialChars = new RegExp('"/[ `!@#$%^&*()_+-=[]{};\':\\|,.<>/?~]/');
+
   for (const l of str) {
-    if (isCharALetter(l)) {
+    if (!specialChars.test(l) && isCharALetter(l)) {
       return l;
     }
   }
