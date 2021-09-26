@@ -81,10 +81,15 @@ class Filters extends Component {
     onChange();
   };
 
-  renderFilters = (store, langDir, popupStyle) => {
+  renderFilters = store => {
     const { filters, namespace, t, filtersData, language, contentLanguage } = this.props;
     const { activeFilter }                                                  = this.state;
     const { isMobileDevice }                                                = this.context;
+
+    const langDir    = getLanguageDirection(language);
+    const popupStyle = {
+      direction: langDir,
+    };
 
     return filters.map(item => {
       const { component: FilterComponent, name } = item;
@@ -153,29 +158,26 @@ class Filters extends Component {
           onOpen={() => this.handlePopupOpen(name)}
           style={popupStyle}
           closeOnDocumentClick={false}
+          content={
+            <div className={`filter-popup__content ${langDir}`}>
+              <FilterComponent
+                namespace={namespace}
+                value={value}
+                onCancel={this.handlePopupClose}
+                onApply={x => this.handleApply(name, x)}
+                language={language}
+                contentLanguage={contentLanguage}
+              />
+            </div>
+          }
         >
-          <Popup.Content className={`filter-popup__content ${langDir}`}>
-            <FilterComponent
-              namespace={namespace}
-              value={value}
-              onCancel={this.handlePopupClose}
-              onApply={x => this.handleApply(name, x)}
-              language={language}
-              contentLanguage={contentLanguage}
-            />
-          </Popup.Content>
         </Popup>
       );
     });
   };
 
   render() {
-    const { namespace, onHydrated, t, rightItems, language, onSearch, onKeyDown } = this.props;
-
-    const langDir    = getLanguageDirection(language);
-    const popupStyle = {
-      direction: langDir,
-    };
+    const { namespace, onHydrated, t, rightItems, onSearch, onKeyDown } = this.props;
 
     return (
       <div className="filters">
@@ -188,7 +190,7 @@ class Filters extends Component {
               content={t('filters.by')}
             />
             <ReactReduxContext.Consumer>
-              {({ store }) => (this.renderFilters(store, langDir, popupStyle))}
+              {({ store }) => (this.renderFilters(store))}
             </ReactReduxContext.Consumer>
             {
               onSearch &&
