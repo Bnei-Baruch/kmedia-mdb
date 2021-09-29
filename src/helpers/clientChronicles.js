@@ -14,9 +14,9 @@ import { ClientChroniclesContext } from './app-contexts';
 const ACTIVITY_EVENTS = ['mousedown', 'mousemove', 'keydown', 'scroll', 'touchstart'];
 
 const FLOWS = [
-  { start: 'page-enter',               end: 'page-leave',                 subFlows: ['recommend', 'search', 'autocomplete', 'user-inactive'] },
-  { start: 'unit-page-enter',          end: 'unit-page-leave',            subFlows: ['player-play', 'recommend', 'search', 'autocomplete', 'user-inactive'] },
-  { start: 'collection-page-enter',    end: 'collection-page-leave',      subFlows: ['collection-unit-selected', 'recommend', 'search', 'autocomplete', 'user-inactive'] },
+  { start: 'page-enter',               end: 'page-leave',                 subFlows: ['recommend', 'search', 'autocomplete', 'user-inactive', 'download'] },
+  { start: 'unit-page-enter',          end: 'unit-page-leave',            subFlows: ['player-play', 'recommend', 'search', 'autocomplete', 'user-inactive', 'download'] },
+  { start: 'collection-page-enter',    end: 'collection-page-leave',      subFlows: ['collection-unit-selected', 'recommend', 'search', 'autocomplete', 'user-inactive', 'download'] },
   { start: 'collection-unit-selected', end: 'collection-unit-unselected', subFlows: ['player-play', 'user-inactive'] },
   { start: 'player-play',              end: 'player-stop',                subFlows: ['mute-unmute', 'user-inactive'] },
   { start: 'recommend',                end: '',                           subFlows: ['recommend-selected'] },

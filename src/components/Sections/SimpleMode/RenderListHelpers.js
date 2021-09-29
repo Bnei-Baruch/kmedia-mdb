@@ -64,14 +64,18 @@ const labelTextByFile = (file, contentType, t) => {
   return label;
 };
 
-const renderHorizontalFilesList = (files, contentType, t) => (
+const renderHorizontalFilesList = (files, contentType, t, chronicles) => (
   sortMediaFiles(files).map(file => {
     const url   = physicalFile(file);
     const label = labelTextByFile(file, contentType, t);
+    const onClick = url => {
+      chronicles.append('download', { url, uid: file.id });
+    };
+
     return (
       <List.Item key={file.id} className="media-file-button">
         <List.Content>
-          <a href={url}>
+          <a href={url} onClick={() => onClick(url)}>
             {label}
             <Image className="file-list-icon">
               <SectionLogo name='downloads' />
@@ -102,11 +106,11 @@ const unitDerivedFiles = (unit, type, keyFilter, mimeFilter) => {
     : [];
 };
 
-const renderUnits = (units, language, t, helpChooseLang) => (
+const renderUnits = (units, language, t, helpChooseLang, chronicles) => (
   units.filter(unit => unit).map((unit, index, unitsArray) => {
     const lastUnit  = unitsArray.length - 1;
     const filesList = filesForRenderByUnit(unit).filter(file => file.language === language);
-    const files     = filesList && renderHorizontalFilesList(filesList, unit.content_type, t);
+    const files     = filesList && renderHorizontalFilesList(filesList, unit.content_type, t, chronicles);
     const duration  = formatTime(unit.duration);
 
     if (!files) {
@@ -146,12 +150,12 @@ const renderUnits = (units, language, t, helpChooseLang) => (
   })
 );
 
-export const renderCollection = (collection, language, t, helpChooseLang) => {
+export const renderCollection = (collection, language, t, helpChooseLang, chronicles) => {
   if (!collection.content_units) {
     return null;
   }
 
-  const units = renderUnits(collection.content_units, language, t, helpChooseLang);
+  const units = renderUnits(collection.content_units, language, t, helpChooseLang, chronicles);
 
   return (
     <Card fluid key={collection.id}>
@@ -182,8 +186,8 @@ export const matchIconToType = type => {
   }
 };
 
-export const renderOtherCollection = (title, collectionArray, language, t, helpChooseLang) => {
-  const items = Object.values(collectionArray).map(u => renderUnits(u, language, t, helpChooseLang));
+const renderOtherCollection = (title, collectionArray, language, t, helpChooseLang, chronicles) => {
+  const items = Object.values(collectionArray).map(u => renderUnits(u, language, t, helpChooseLang, chronicles));
   const icon  = matchIconToType(title.toLowerCase());
 
   return (
@@ -236,8 +240,8 @@ export const mergeTypesToCollections = byType => {
   return collections;
 };
 
-export const groupOtherMediaByType = (collection, language, t, helpChooseLang) => {
+export const groupOtherMediaByType = (collection, language, t, helpChooseLang, chronicles) => {
   const byType            = groupBy(collection, 'content_type');
   const mergedCollections = mergeTypesToCollections(byType);
-  return Object.entries(mergedCollections).map(([title, coll]) => renderOtherCollection(title, coll, language, t, helpChooseLang));
+  return Object.entries(mergedCollections).map(([title, coll]) => renderOtherCollection(title, coll, language, t, helpChooseLang, chronicles));
 };
