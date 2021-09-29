@@ -137,8 +137,6 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
       <Playlist
         playlist={playlist}
         selected={selected}
-        nextLink={nextLink}
-        prevLink={prevLink}
         link={link}
       />
       <br />
@@ -152,7 +150,7 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
       <Grid padded={!isMobileDevice} className="avbox">
         <Grid.Column mobile={16} tablet={computerWidth} computer={computerWidth} className={clsx({ 'is-fitted': isMobileDevice })}>
           {
-            (unit && isMobileDevice) &&
+            unit &&
             <div id="avbox_playlist">
               <PlaylistHeader collection={collection} prevLink={prevLink} nextLink={nextLink} />
             </div>
