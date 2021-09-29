@@ -7,7 +7,7 @@ import { renderRoutes } from 'react-router-config';
 import { Header, Icon, Menu, Ref, Segment } from 'semantic-ui-react';
 import Headroom from 'react-headroom';
 
-import { ALL_LANGUAGES } from '../../helpers/consts';
+import { ALL_LANGUAGES, VERSION_WITH_PERSONALIZATION } from '../../helpers/consts';
 import playerHelper from '../../helpers/player';
 import { selectors as settings } from '../../redux/modules/settings';
 import * as shapes from '../shapes';
@@ -28,7 +28,7 @@ const WrappedOmniBoxWithChronicles = ({ location }) => {
   return <WrappedOmniBox location={location} chronicles={chronicles} />;
 };
 
-const RenderHeaderSearch           = React.forwardRef(({ t, location }, headerSearchElement) => (
+const RenderHeaderSearch = React.forwardRef(({ t, location }, headerSearchElement) => (
   <div ref={headerSearchElement}>
     <Segment color="blue" inverted className="header_search">
       <WrappedOmniBoxWithChronicles location={location} />
@@ -228,7 +228,7 @@ class Layout extends Component {
                     <VirtualHomeButton />
                   </Menu.Item>
                   <Menu.Item position="right">
-                    <Login language={language} />
+                    {VERSION_WITH_PERSONALIZATION && <Login language={language} />}
                   </Menu.Item>
                   <TopMost />
                 </Menu.Menu>
