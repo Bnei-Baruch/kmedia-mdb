@@ -12,21 +12,6 @@ import Link from '../../../../Language/MultiLanguageLink';
 import { selectors as settings } from '../../../../../redux/modules/settings';
 import CollectionDatePicker from './CollectionDatePicker';
 
-const getContentByType = (collection, t) => {
-  const { content_type, number } = collection;
-  const ct                       = content_type === CT_SPECIAL_LESSON ? CT_DAILY_LESSON : content_type;
-  let byNum                      = null;
-  if (number) {
-    byNum = <small> ({t('lessons.list.nameByNum_' + number)})</small>;
-  }
-  return (
-    <>
-      {t(`constants.content-types.${ct}`)}
-      {byNum}
-    </>
-  );
-};
-
 const getNextLink = (langDir, t, link) =>
   link &&
   <Link
@@ -51,30 +36,48 @@ const PlaylistHeader = ({ collection, t, prevLink = null, nextLink = null }) => 
   const uiLanguage = useSelector(state => settings.getLanguage(state.settings));
   const langDir    = getLanguageDirection(uiLanguage);
 
-  const { content_type, film_date, start_date, end_date } = collection;
+  const { content_type, number, name, film_date, start_date, end_date } = collection;
 
   const isLesson = content_type === CT_DAILY_LESSON || content_type === CT_SPECIAL_LESSON;
 
   const getSubHeader = () => {
+    if (!isLesson) return null;
+
+    return (
+      <Header.Subheader>
+        {getPrevLink(langDir, t, prevLink)}
+        <CollectionDatePicker collection={collection} />
+        {getNextLink(langDir, t, nextLink)}
+      </Header.Subheader>
+    );
+  };
+
+  const getTitleByCO = () => {
+    const ct      = content_type === CT_SPECIAL_LESSON ? CT_DAILY_LESSON : content_type;
     let subheader = '';
+
     if (isLesson) {
-      subheader = <CollectionDatePicker collection={collection} />;
+      subheader = `${film_date}${number && ` (${t('lessons.list.nameByNum_' + number)})`}`;
     } else if (film_date) {
       subheader = t('values.date', { date: film_date });
     } else if (start_date && end_date) {
       subheader = fromToLocalized(start_date, end_date);
     }
-    return subheader;
+
+    return (
+      <>
+        {name || t(`constants.content-types.${ct}`)}
+        <small className="display-block">
+          {subheader}
+        </small>
+      </>
+    );
   };
 
   return (
     <Header as="h2" className={`avbox__playlist-header ${isLesson ? '' : ' flex_column'}`}>
-      <Header.Content content={collection.name || getContentByType(collection, t)} />
-      <Header.Subheader>
-        {getPrevLink(langDir, t, prevLink)}
-        {getSubHeader()}
-        {getNextLink(langDir, t, nextLink)}
-      </Header.Subheader>
+      <Header.Content content={getTitleByCO(collection, t)} />
+      {getSubHeader()}
     </Header>
   );
 };
