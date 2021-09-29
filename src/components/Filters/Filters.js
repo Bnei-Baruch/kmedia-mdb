@@ -8,6 +8,7 @@ import { Container, Icon, Label, Menu, Popup, Input } from 'semantic-ui-react';
 import isEqual from 'react-fast-compare';
 
 import { getLanguageDirection } from '../../helpers/i18n-utils';
+import { isEmpty } from '../../helpers/utils';
 import { filtersTransformer } from '../../filters/index';
 import { actions, selectors } from '../../redux/modules/filters';
 import { selectors as mdb } from '../../redux/modules/mdb';
@@ -15,6 +16,7 @@ import { selectors as settings } from '../../redux/modules/settings';
 import * as shapes from '../shapes';
 import FiltersHydrator from './FiltersHydrator';
 import { DeviceInfoContext } from '../../helpers/app-contexts';
+import AlphabetFilter from './components/AlphabetFilter';
 
 class Filters extends Component {
   static contextType = DeviceInfoContext;
@@ -32,7 +34,9 @@ class Filters extends Component {
     language: PropTypes.string.isRequired,
     contentLanguage: PropTypes.string.isRequired,
     t: PropTypes.func.isRequired,
-    sqDataWipErr: PropTypes.bool
+    sqDataWipErr: PropTypes.bool,
+    letters: PropTypes.arrayOf(PropTypes.string),
+    onLetterClick: PropTypes.func
   };
 
   static defaultProps = {
@@ -44,8 +48,8 @@ class Filters extends Component {
   };
 
   shouldComponentUpdate(nextProps, nextState) {
-    const { namespace, language, contentLanguage, filters, rightItems, filtersData, sqDataWipErr } = this.props;
-    const { activeFilter }                                                                         = this.state;
+    const { namespace, language, contentLanguage, filters, rightItems, filtersData, sqDataWipErr, letters } = this.props;
+    const { activeFilter } = this.state;
 
     return (activeFilter !== nextState.activeFilter
       || namespace !== nextProps.namespace
@@ -54,7 +58,8 @@ class Filters extends Component {
       || sqDataWipErr !== nextProps.sqDataWipErr
       || !isEqual(filters, nextProps.filters)
       || !isEqual(rightItems, nextProps.rightItems)
-      || !isEqual(filtersData, nextProps.filtersData));
+      || !isEqual(filtersData, nextProps.filtersData)
+      || !isEqual(letters, nextProps.letters));
   }
 
   handlePopupClose = () => {
@@ -177,13 +182,13 @@ class Filters extends Component {
   };
 
   render() {
-    const { namespace, onHydrated, t, rightItems, onSearch, onKeyDown } = this.props;
+    const { namespace, onHydrated, t, rightItems, onSearch, onKeyDown, letters, onLetterClick } = this.props;
 
     return (
       <div className="filters">
         <FiltersHydrator namespace={namespace} onHydrated={onHydrated} />
         <Container className="padded">
-          <Menu className="filters__menu" stackable compact>
+          <Menu className="filters__menu" stackable>
             <Menu.Item
               header
               className="filters__header"
@@ -203,6 +208,12 @@ class Filters extends Component {
                    onChange={onSearch}
                    onKeyDown={onKeyDown}
                  />
+               </Menu.Item>
+            }
+            {
+              !isEmpty(letters) &&
+               <Menu.Item>
+                 <AlphabetFilter letters={letters} onLetterClick={onLetterClick}></AlphabetFilter>
                </Menu.Item>
             }
             {
