@@ -164,20 +164,9 @@
 
   .dateButton, .dateButton:hover, .dateButton:active, .dateButton:focus {
     color: white;
-    background-color: transparent;
+    background-color: #333333;
     margin: 0;
     font-size: 1.1rem;
-    font-weight: normal;
-    padding-right: 0.5em;
-    padding-left: 0.5em;
-    &:hover {
-      background-color: rgba(255, 255, 255, 0.2);
-    }
-
-    .icon {
-      opacity: 1 !important;
-    }
-
     @include mobile {
       & .icon {
         font-size: 1rem;
@@ -193,19 +182,10 @@
 }
 
 .avbox__playlist-prev-button, .avbox__playlist-next-button {
-  @include mobile {
-    padding: 0 4px;
-  }
-
   i.icon {
     margin: 0 .25rem !important;
     color: white;
     width: 15px;
-    display: inline-block;
-
-    &:hover {
-      opacity: 0.8;
-    }
   }
 }
 
@@ -1549,12 +1529,12 @@
     .searchButton {
       margin-right: 5px !important;
       padding-left: 15px !important;
-      padding-right: 0 !important;
+      padding-right: 0px !important;
     }
   }
   .dateButton {
     padding-left: 8px !important;
-    padding-right: 0 !important;
+    padding-right: 0px !important;
 
     &.dateButton_with_label {
       padding-right: 4px !important;
@@ -1983,26 +1963,19 @@
 
 .ui.container.cu_item_list {
   border-bottom: 1px solid $midWhite;
-  display: flex;
-  justify-content: start;
-  margin: 0 0 1px;
-  position: relative;
+  margin: 0;
 
   &:last-child {
     border: 0;
   }
 
-  & > div {
-    position: relative;
+  &.selected {
+    background-color: $midWhite;
   }
 
   @include mobile {
     padding-top: 17px;
     padding-bottom: 17px;
-  }
-
-  &.selected {
-    background-color: $midWhite;
   }
 
   .column {
@@ -2012,30 +1985,9 @@
     cursor: pointer;
   }
 
-  &.big {
-    .cu_info_description {
-      left: 2em;
-      right: 2em;
-    }
-  }
 
   &.small {
     padding: 0.7em;
-
-    .cu_item_name {
-      margin-top: 0;
-      margin-bottom: 8px;
-      font-size: 1.1em;
-      color: $grey;
-    }
-
-    .cu_info_description {
-      top: 60px;
-    }
-
-    .cu_item_duration {
-      margin: 4px;
-    }
 
     .cu_item_info {
       padding: 0 1em 1em;
@@ -2048,10 +2000,22 @@
         overflow: hidden;
       }
     }
+  }
 
-    .cu_item_img {
-      width: 144px;
-    }
+  .cu_item_info {
+    height: 100%;
+  }
+
+}
+
+.ui.container.cu_item_list {
+  display: flex;
+  justify-content: start;
+  margin-bottom: 1px;
+  position: relative;
+
+  & > div {
+    position: relative;
   }
 
   .cu_item_info_co {
@@ -2101,18 +2065,20 @@
     }
   }
 
+  &.small .cu_item_img {
+    width: 144px;
+  }
+
+
   .cu_item_info {
     padding: 1em 2em 0;
     position: relative;
-    width: 100%;
-
     @include mobile {
       position: absolute;
       padding: 0;
       top: 1em;
       left: 173px;
       right: 0;
-      width: auto;
     }
 
     &.rtl {
@@ -2133,13 +2099,8 @@
     right: 1em;
     left: 1em;
     width: auto;
-
     @include mobile {
-      top: 78px;
-      bottom: auto;
-      left: 0;
-      right: 0;
-      width: 100%;
+      top: 75px;
     }
   }
 
@@ -2159,7 +2120,25 @@
       color: $grey;
     }
   }
+
+  &.small {
+    .cu_item_name {
+      margin-top: 0;
+      margin-bottom: 8px;
+      font-size: 1.1em;
+      color: $grey;
+    }
+
+    .cu_info_description {
+      top: 60px;
+    }
+
+    .cu_item_duration {
+      margin: 4px;
+    }
+  }
 }
+
 
 .cu_item_actions {
   position: absolute !important;
@@ -2183,6 +2162,7 @@
     }
   }
 }
+
 
 .rtl .cu_item_actions {
   right: auto;
@@ -2262,6 +2242,7 @@
   height: 30px;
   width: 28px;
 }
+
 
 .my_playlist_add {
   display: flex;

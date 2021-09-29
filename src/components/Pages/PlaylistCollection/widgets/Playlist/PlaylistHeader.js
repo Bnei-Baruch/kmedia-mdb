@@ -12,30 +12,25 @@ import Link from '../../../../Language/MultiLanguageLink';
 import { selectors as settings } from '../../../../../redux/modules/settings';
 import CollectionDatePicker from './CollectionDatePicker';
 
-const getNextLink = (langDir, t, link) => (
-  link ?
-    <Link
-      to={link}
-      className="avbox__playlist-next-button"
-      title={t('buttons.next')}
-    >
-      <Icon size="large" name={`triangle ${langDir === 'ltr' ? 'right' : 'left'}`} />
-    </Link> :
-    <span className="avbox__playlist-next-button">
-      <Icon disabled size="large" name={`triangle ${langDir === 'ltr' ? 'right' : 'left'}`} />
-    </span>
-);
+const getNextLink = (langDir, t, link) =>
+  link &&
+  <Link
+    to={link}
+    className="avbox__playlist-next-button"
+    title={t('buttons.next')}
+  >
+    <Icon size="big" name={`triangle ${langDir === 'ltr' ? 'right' : 'left'}`} />
+  </Link>;
 
-const getPrevLink = (langDir, t, link) => (
+const getPrevLink = (langDir, t, link) =>
   link &&
   <Link
     to={link}
     className="avbox__playlist-prev-button"
     title={t('buttons.previous')}
   >
-    <Icon size="large" name={`triangle ${langDir === 'ltr' ? 'left' : 'right'}`} />
-  </Link>
-);
+    <Icon size="big" name={`triangle ${langDir === 'ltr' ? 'left' : 'right'}`} />
+  </Link>;
 
 const PlaylistHeader = ({ collection, t, prevLink = null, nextLink = null }) => {
   const uiLanguage = useSelector(state => settings.getLanguage(state.settings));
@@ -62,7 +57,7 @@ const PlaylistHeader = ({ collection, t, prevLink = null, nextLink = null }) => 
     let subheader = '';
 
     if (isLesson) {
-      subheader = `${t('values.date', { date: film_date })}${number && ` (${t('lessons.list.nameByNum_' + number)})`}`;
+      subheader = `${film_date}${number && ` (${t('lessons.list.nameByNum_' + number)})`}`;
     } else if (film_date) {
       subheader = t('values.date', { date: film_date });
     } else if (start_date && end_date) {
