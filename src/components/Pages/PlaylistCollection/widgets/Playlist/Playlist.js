@@ -10,7 +10,7 @@ import { withNamespaces } from 'react-i18next';
 const PlaylistWidget = ({ playlist, selected = 0, link, t }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
-  const { collection, items } = playlist;
+  const { collection, items, name } = playlist;
   const unitsToDisplay        = items.filter(item => !!item.unit).map(item => item.unit);
 
   return (
@@ -18,9 +18,9 @@ const PlaylistWidget = ({ playlist, selected = 0, link, t }) => {
       {
         !isMobileDevice &&
         <Header
-          as="h2"
-          className={'avbox__playlist-header'}
-          content={t(`playlist.title-by-type.${collection.content_type}`)}
+          as="h3"
+          className={'avbox__playlist-header h3'}
+          content={name || t(`playlist.title-by-type.${collection.content_type}`)}
         />
       }
       {/* cannot use semantic Item because it doesn't recongnize the onClick event */}

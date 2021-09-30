@@ -164,9 +164,20 @@
 
   .dateButton, .dateButton:hover, .dateButton:active, .dateButton:focus {
     color: white;
-    background-color: #333333;
+    background-color: transparent;
     margin: 0;
     font-size: 1.1rem;
+    font-weight: normal;
+    padding-right: 0.5em;
+    padding-left: 0.5em;
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .icon {
+      opacity: 1 !important;
+    }
+
     @include mobile {
       & .icon {
         font-size: 1rem;
@@ -182,10 +193,19 @@
 }
 
 .avbox__playlist-prev-button, .avbox__playlist-next-button {
+  @include mobile {
+    padding: 0 4px;
+  }
+
   i.icon {
     margin: 0 .25rem !important;
     color: white;
     width: 15px;
+    display: inline-block;
+
+    &:hover {
+      opacity: 0.8;
+    }
   }
 }
 
