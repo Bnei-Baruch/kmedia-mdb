@@ -194,7 +194,7 @@ const playlistFromUnits = (collection, mediaType, contentLanguage, uiLanguage) =
       return x;
     });
 
-  return { items, collection, mediaType, contentLanguage, uiLanguage };
+  return { items, collection, mediaType, contentLanguage, uiLanguage, name: collection.name };
 };
 
 const getMediaTypeFromQuery = (location, defaultMediaType) => {
