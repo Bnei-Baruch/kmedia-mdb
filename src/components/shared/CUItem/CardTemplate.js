@@ -56,7 +56,7 @@ const CardTemplate = ({ unit, language, withCCUInfo, link, ccu, description, chi
       <Card.Meta className={`cu_info_description ${dir}`}>
         {description.map((d, i) => (<span key={i}>{d}</span>))}
       </Card.Meta>
-      {children ? <Card.Content extra>{children}</Card.Content> : null}
+      {children ? <Card.Content extra textAlign="right">{children}</Card.Content> : null}
     </Card>
   );
 };

@@ -4,42 +4,30 @@ import { Table } from 'semantic-ui-react';
 import { CT_VIDEO_PROGRAM_CHAPTER } from '../../../../../helpers/consts';
 import * as renderUnitHelper from '../../../../../helpers/renderUnitHelper';
 import UnitList from '../../../../Pages/UnitList/Container';
-import { frownSplashContentNotFound } from '../../../../shared/WipErr/WipErr';
+import Link from '../../../../Language/MultiLanguageLink';
+import { canonicalLink } from '../../../../../helpers/links';
+import { withNamespaces } from 'react-i18next';
 
-const renderUnit = (unit, t) => {
-  if (!unit) {
-    return frownSplashContentNotFound(t);
-  }
+const ProgramsList = ({ t }) => {
 
-  const breakdown = renderUnitHelper.getUnitCollectionsBreakdown(unit);
-  const programs  = breakdown.getPrograms();
+  const renderActions = unit => {
+    if (!unit) return null;
 
-  const relatedItems = programs
-    .map(x => renderUnitHelper.renderUnitNameAsListItem(x))
-    .concat(breakdown.getAllButPrograms()
-      .map(x => renderUnitHelper.renderUnitNameAsListItem(x)));
+    const breakdown = renderUnitHelper.getUnitCollectionsBreakdown(unit);
+    const program   = breakdown.getPrograms()[0];
+    if (!program) return null;
+    return (
+      <Link to={canonicalLink(program)}>{t('programs.list.show_all')}</Link>
+    );
+  };
 
   return (
-    <Table.Row key={unit.id} verticalAlign="top">
-      <Table.Cell collapsing singleLine>
-        {renderUnitHelper.renderUnitCollectionLogo(unit, 'programs', programs.length > 0 ? programs[0].id : null)}
-      </Table.Cell>
-      <Table.Cell>
-        {renderUnitHelper.renderUnitFilmDate(unit, t)}
-        {renderUnitHelper.renderUnitNameLink(unit)}
-        {renderUnitHelper.renderUnitDescription(unit)}
-        {renderUnitHelper.renderRelatedItems(relatedItems, t('programs.list.episode_from'))}
-      </Table.Cell>
-    </Table.Row>
+    <UnitList
+      key="programs-main"
+      namespace="programs-main"
+      renderActions={renderActions}
+      extraFetchParams={{ content_type: CT_VIDEO_PROGRAM_CHAPTER }}
+    />
   );
 };
-
-const ProgramsList = () =>
-  <UnitList
-    key="programs-main"
-    namespace="programs-main"
-    renderUnit={renderUnit}
-    extraFetchParams={{ content_type: CT_VIDEO_PROGRAM_CHAPTER }}
-  />;
-
-export default ProgramsList;
+export default withNamespaces()(ProgramsList);

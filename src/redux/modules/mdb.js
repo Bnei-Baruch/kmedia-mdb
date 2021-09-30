@@ -380,7 +380,7 @@ const onReceiveContentUnits = (state, action) => {
         const [cID, ccuName] = k.split('____');
 
         // make a copy of collection and set this unit ccuName
-        const updatedC = { ...v, ...state.cById[v.id] };
+        const updatedC = { ...v, ...cById[v.id] };
         if (updatedC.cuIDs) {
           if (updatedC.cuIDs.findIndex(z => z === y.id) === -1) {
             updatedC.cuIDs = [...updatedC.cuIDs, y.id];

@@ -6,7 +6,7 @@ import { canonicalLink } from '../../../../../helpers/links';
 import * as renderUnitHelper from '../../../../../helpers/renderUnitHelper';
 import { selectors as mdb } from '../../../../../redux/modules/mdb';
 import { selectors as lists } from '../../../../../redux/modules/lists';
-import { mapState as baseMapState, UnitListContainer, wrap } from '../../../../Pages/UnitList/Container';
+import { mapState as baseMapState, UnitListContainer, wrap } from '../../../../Pages/UnitListAsTable/Container';
 import Link from '../../../../Language/MultiLanguageLink';
 
 const CT_DAILY_LESSON_I18N_KEY = `constants.content-types.${CT_DAILY_LESSON}`;
