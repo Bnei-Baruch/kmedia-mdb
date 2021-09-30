@@ -17,7 +17,7 @@ const ProgramsList = ({ t }) => {
     const program   = breakdown.getPrograms()[0];
     if (!program) return null;
     return (
-      <Link to={canonicalLink(program)}>{t('programs.list.show_all')}</Link>
+      <Link to={canonicalLink(program)} className="ui">{t('programs.list.show_all')}</Link>
     );
   };
 

@@ -16,7 +16,7 @@ const ClipsList = ({ t }) => {
     const co        = breakdown.getClips()[0];
     if (!co) return null;
     return (
-      <Link to={canonicalLink(co)}>{t('programs.list.show_all')}</Link>
+      <Link to={canonicalLink(co)} className="ui">{t('programs.list.show_all')}</Link>
     );
   };
 
