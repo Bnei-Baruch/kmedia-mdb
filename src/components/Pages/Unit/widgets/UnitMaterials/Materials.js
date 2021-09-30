@@ -18,7 +18,7 @@ import Sources from './Sources/Sources';
 import Sketches from './Sketches';
 import MediaDownloads from '../Downloads/MediaDownloads';
 import TranscriptionContainer from './Transcription/TranscriptionContainer';
-import { isEmpty } from '../../../../../helpers/utils';
+import { isEmpty, noop } from '../../../../../helpers/utils';
 import { ClientChroniclesContext, DeviceInfoContext } from '../../../../../helpers/app-contexts';
 import DerivedUnits from './DerivedUnits';
 import Recommended from '../Recommended/Main/Recommended';
@@ -44,11 +44,12 @@ const Materials = ({ unit = undefined, t, playlistComponent = null }) => {
   }
 
   const derivedTexts = derivedTextUnits(unit);
+  const chroniclesAppend = chronicles ? chronicles.append.bind(chronicles) : noop;
   const items        = [
     {
       name: 'downloads',
       label: t('media-downloads.title'),
-      component: <MediaDownloads unit={unit} chroniclesAppend={chronicles.append.bind(chronicles)} />
+      component: <MediaDownloads unit={unit} chroniclesAppend={chroniclesAppend} />
     },
     {
       name: 'transcription',

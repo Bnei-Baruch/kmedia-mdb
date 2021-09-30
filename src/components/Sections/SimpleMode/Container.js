@@ -5,7 +5,7 @@ import { useHistory, useLocation } from 'react-router-dom';
 import { withNamespaces } from 'react-i18next';
 
 import { getQuery, updateQuery } from '../../../helpers/url';
-import { isEmpty } from '../../../helpers/utils';
+import { isEmpty, noop } from '../../../helpers/utils';
 import { selectors as settings } from '../../../redux/modules/settings';
 import { actions } from '../../../redux/modules/simpleMode';
 import Page from './Page';
@@ -77,7 +77,7 @@ const SimpleModeContainer = () => {
       : window.scrollTo(0, 0);
   };
 
-  const chroniclesAppend = chronicles.append.bind(chronicles);
+  const chroniclesAppend = chronicles ? chronicles.append.bind(chronicles) : noop;
   const renderUnitOrCollection = (item, language, t) => (
     isEmpty(item.content_units)
       ? groupOtherMediaByType(item, language, t, helpChooseLang, chroniclesAppend)

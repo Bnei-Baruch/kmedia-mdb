@@ -203,10 +203,6 @@ class MediaDownloads extends Component {
     const ext                 = file.name.substring(file.name.lastIndexOf('.') + 1);
     const url                 = physicalFile(file);
 
-    const onClick = url => {
-      chronicles.append('download', { url, uid: file.id });
-    };
-
     return (
       <Table.Row key={file.id} className="media-downloads__file" verticalAlign="top">
         <Table.Cell>

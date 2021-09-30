@@ -124,11 +124,7 @@ const ArticlePage = ({ t }) => {
                 </Grid.Row>
                 <Grid.Row>
                   <Grid.Column>
-<<<<<<< HEAD
                     {renderArticle(unit, chronicles.append.bind(chronicles))}
-=======
-                    {renderArticle(unit, chronicles)}
->>>>>>> Log downloads in chronicles.
                   </Grid.Column>
                 </Grid.Row>
               </Grid.Column>

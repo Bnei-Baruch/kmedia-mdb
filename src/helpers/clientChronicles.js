@@ -353,10 +353,15 @@ export const ChroniclesActions = () => {
   const clientChronicles = useContext(ClientChroniclesContext);
   const action = useSelector(state => state.chronicles.lastAction);
   const actionsCount = useSelector(state => state.chronicles.actionsCount);
-  clientChronicles.uiLanguage = useSelector(state => settings.getLanguage(state.settings));
-  clientChronicles.contentLanguage = useSelector(state => settings.getContentLanguage(state.settings));
+  const uiLanguage = useSelector(state => settings.getLanguage(state.settings));
+  const contentLanguage = useSelector(state => settings.getContentLanguage(state.settings));
+  if (clientChronicles) {
+    clientChronicles.uiLanguage = uiLanguage;
+    clientChronicles.contentLanguage = contentLanguage;
+  }
+
   useEffect(() => {
-    if (action) {
+    if (action && clientChronicles) {
       clientChronicles.onAction(action);
     }
   }, [action, actionsCount, clientChronicles]);
