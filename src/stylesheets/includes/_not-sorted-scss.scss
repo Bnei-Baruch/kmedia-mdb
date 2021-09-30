@@ -1549,12 +1549,12 @@
     .searchButton {
       margin-right: 5px !important;
       padding-left: 15px !important;
-      padding-right: 0px !important;
+      padding-right: 0 !important;
     }
   }
   .dateButton {
     padding-left: 8px !important;
-    padding-right: 0px !important;
+    padding-right: 0 !important;
 
     &.dateButton_with_label {
       padding-right: 4px !important;
@@ -1989,8 +1989,8 @@
     border: 0;
   }
 
-  &.selected {
-    background-color: $midWhite;
+  & > div {
+    position: relative;
   }
 
   @include mobile {
