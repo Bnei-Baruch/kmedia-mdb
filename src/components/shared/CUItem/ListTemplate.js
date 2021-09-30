@@ -13,7 +13,7 @@ import Link from '../../Language/MultiLanguageLink';
 
 const imageWidthBySize = {
   'small': 144,
-  '': 287
+  'big': 287
 };
 
 const ListTemplate = ({
@@ -25,7 +25,7 @@ const ListTemplate = ({
                         description,
                         children,
                         playTime,
-                        size = '',
+                        size = 'big',
                         selected
                       }) => {
   const dir                = isLanguageRtl(language) ? 'rtl' : 'ltr';
@@ -60,19 +60,19 @@ const ListTemplate = ({
       />
     );
   }
-
+  const width = isMobileDevice ? 165 : imageWidthBySize[size];
   return (
     <Container
       as={Link}
       to={link}
       key={unit.id}
-      className={`cu_item cu_item_list no-thumbnail${size ? ' ' + size : ''}${selected ? ' selected' : ''}`}
+      className={`cu_item cu_item_list no-thumbnail ${isMobileDevice ? ' ' + size : ''}${selected ? ' selected' : ''}`}
     >
       <div>
         <div className="cu_item_duration">{formatDuration(unit.duration)}</div>
         {percent}
-        <div className="cu_item_img">
-          <UnitLogo unitId={unit.id} width={isMobileDevice ? 165 : imageWidthBySize[size]} />
+        <div className="cu_item_img" style={{ width }}>
+          <UnitLogo unitId={unit.id} width={width} />
         </div>
       </div>
       <div className={`cu_item_info ${dir}`}>
