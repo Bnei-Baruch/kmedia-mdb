@@ -49,7 +49,7 @@ class MediaDownloads extends Component {
     contentLanguage: PropTypes.string.isRequired,
     t: PropTypes.func.isRequired,
     displayDivider: PropTypes.bool,
-    chronicles: PropTypes.shape(),
+    chroniclesAppend: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -198,14 +198,10 @@ class MediaDownloads extends Component {
   };
 
   renderRow = (file, label, t) => {
-    const { chronicles }     = this.props;
+    const { chroniclesAppend }     = this.props;
     const { isCopyPopupOpen } = this.state;
     const ext                 = file.name.substring(file.name.lastIndexOf('.') + 1);
     const url                 = physicalFile(file);
-
-    const onClick = url => {
-      chronicles.append('download', { url, uid: file.id });
-    };
 
     return (
       <Table.Row key={file.id} className="media-downloads__file" verticalAlign="top">
@@ -223,7 +219,7 @@ class MediaDownloads extends Component {
             size="mini"
             color="orange"
             content={ext.toUpperCase()}
-            onClick={() => onClick(url)}
+            onClick={() => chroniclesAppend('download', { url, uid: file.id })}
           />
         </Table.Cell>
         <Table.Cell collapsing>

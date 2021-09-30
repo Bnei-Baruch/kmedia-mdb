@@ -48,7 +48,7 @@ const Materials = ({ unit = undefined, t, playlistComponent = null }) => {
     {
       name: 'downloads',
       label: t('media-downloads.title'),
-      component: <MediaDownloads unit={unit} chronicles={chronicles} />
+      component: <MediaDownloads unit={unit} chroniclesAppend={chronicles.append.bind(chronicles)} />
     },
     {
       name: 'transcription',

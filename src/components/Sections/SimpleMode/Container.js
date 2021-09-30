@@ -77,10 +77,11 @@ const SimpleModeContainer = () => {
       : window.scrollTo(0, 0);
   };
 
+  const chroniclesAppend = chronicles.append.bind(chronicles);
   const renderUnitOrCollection = (item, language, t) => (
     isEmpty(item.content_units)
-      ? groupOtherMediaByType(item, language, t, helpChooseLang, chronicles)
-      : renderCollection(item, language, t, helpChooseLang, chronicles)
+      ? groupOtherMediaByType(item, language, t, helpChooseLang, chroniclesAppend)
+      : renderCollection(item, language, t, helpChooseLang, chroniclesAppend)
   );
 
 

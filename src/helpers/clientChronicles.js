@@ -6,6 +6,7 @@ import { chroniclesUrl, chroniclesBackendEnabled } from './Api';
 import { noop, partialAssign } from './utils';
 
 import { actions } from '../redux/modules/chronicles';
+import { selectors as settings } from '../redux/modules/settings';
 import { types as recommendedTypes } from '../redux/modules/recommended';
 import { types as searchTypes } from '../redux/modules/search';
 import { ClientChroniclesContext } from './app-contexts';
@@ -124,6 +125,9 @@ export default class ClientChronicles {
         this.prevHref = window.location.href;
       }
     });
+
+    this.uiLanguage = '';
+    this.contentLanguage = '';
   }
 
   setAbTesting(abTesting) {
@@ -299,6 +303,8 @@ export default class ClientChronicles {
 
   append(eventType, data, sync = false) {
     data.ab = this.abTesting;
+    data.ui_language = this.uiLanguage;
+    data.content_language = this.contentLanguage;
     data.location = eventType.endsWith('page-leave') ? this.prevHref : window.location.href;
     const eventId = ulid();
     const nowTimestampMs = Date.now();
@@ -347,6 +353,8 @@ export const ChroniclesActions = () => {
   const clientChronicles = useContext(ClientChroniclesContext);
   const action = useSelector(state => state.chronicles.lastAction);
   const actionsCount = useSelector(state => state.chronicles.actionsCount);
+  clientChronicles.uiLanguage = useSelector(state => settings.getLanguage(state.settings));
+  clientChronicles.contentLanguage = useSelector(state => settings.getContentLanguage(state.settings));
   useEffect(() => {
     if (action) {
       clientChronicles.onAction(action);

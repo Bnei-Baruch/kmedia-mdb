@@ -65,7 +65,7 @@ const renderHelmet = unit => (
   </Fragment>
 );
 
-const renderArticle = (unit, chronicles) => (
+const renderArticle = (unit, chroniclesAppend) => (
   <Grid padded>
     <Grid.Row>
       <Grid.Column>
@@ -74,7 +74,7 @@ const renderArticle = (unit, chronicles) => (
     </Grid.Row>
     <Grid.Row>
       <Grid.Column>
-        <MediaDownloads unit={unit} displayDivider={true} chronicles={chronicles} />
+        <MediaDownloads unit={unit} displayDivider={true} chroniclesAppend={chroniclesAppend} />
       </Grid.Column>
     </Grid.Row>
   </Grid>
@@ -124,7 +124,7 @@ const ArticlePage = ({ t }) => {
                 </Grid.Row>
                 <Grid.Row>
                   <Grid.Column>
-                    {renderArticle(unit, chronicles)}
+                    {renderArticle(unit, chronicles.append.bind(chronicles))}
                   </Grid.Column>
                 </Grid.Row>
               </Grid.Column>
