@@ -212,7 +212,7 @@ class Filters extends Component {
             }
             {
               !isEmpty(letters) &&
-               <Menu.Item>
+               <Menu.Item className="alphabetFilter">
                  <AlphabetFilter letters={letters} onLetterClick={onLetterClick}></AlphabetFilter>
                </Menu.Item>
             }
