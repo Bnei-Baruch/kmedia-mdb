@@ -91,7 +91,7 @@ const MenuItems = ({ simple = false, visible = false, t, onItemClick = identity,
         />
         <Menu.Item className="mobile-only">
           <DonateNow language={language} />
-          <VirtualHomeButton />
+          <VirtualHomeButton language={language} />
         </Menu.Item>
         <Menu.Item
           key="rss"

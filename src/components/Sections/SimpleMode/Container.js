@@ -10,13 +10,14 @@ import { selectors as settings } from '../../../redux/modules/settings';
 import { actions } from '../../../redux/modules/simpleMode';
 import Page from './Page';
 import { groupOtherMediaByType, renderCollection } from './RenderListHelpers';
-import { DeviceInfoContext } from '../../../helpers/app-contexts';
+import { ClientChroniclesContext, DeviceInfoContext } from '../../../helpers/app-contexts';
 
 const SimpleModeContainer = () => {
   const uiLanguage = useSelector(state => settings.getLanguage(state.settings));
   const contentLanguage = useSelector(state => settings.getContentLanguage(state.settings));
 
   const { deviceInfo: { browser: { name: browserName } } } = useContext(DeviceInfoContext);
+  const chronicles = useContext(ClientChroniclesContext);
 
   const history = useHistory();
   const location = useLocation();
@@ -76,10 +77,11 @@ const SimpleModeContainer = () => {
       : window.scrollTo(0, 0);
   };
 
+  const chroniclesAppend = chronicles.append.bind(chronicles);
   const renderUnitOrCollection = (item, language, t) => (
     isEmpty(item.content_units)
-      ? groupOtherMediaByType(item, language, t, helpChooseLang)
-      : renderCollection(item, language, t, helpChooseLang)
+      ? groupOtherMediaByType(item, language, t, helpChooseLang, chroniclesAppend)
+      : renderCollection(item, language, t, helpChooseLang, chroniclesAppend)
   );
 
 
