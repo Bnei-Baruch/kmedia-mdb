@@ -22,7 +22,7 @@ const AlphabetFilter = ({ letters, onLetterClick }) => {
   }
 
   return (
-    <List horizontal relaxed divided className="alphabetFilter">
+    <List horizontal relaxed divided>
       {
         letters.sort().map(lt =>
           <List.Item
