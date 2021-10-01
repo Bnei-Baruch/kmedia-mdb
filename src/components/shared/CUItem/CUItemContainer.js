@@ -40,7 +40,7 @@ const CUItemContainer = ({ id, children, t, asList = false, link, playTime, size
   const description = [];
   if (part && !isNaN(part)) description.push(t(`pages.unit.info.${unit.content_type === CT_LESSON_PART ? 'lesson-episode' : 'episode'}`, { name: part }));
   if (unit.film_date) description.push(t('values.date', { date: unit.film_date }));
-  if (!isMobileDevice && views > 0) description.push(t('pages.unit.info.views', { views }));
+  if (!(isMobileDevice && asList) && views > 0) description.push(t('pages.unit.info.views', { views }));
 
   const props = {
     unit,
