@@ -1,7 +1,17 @@
 @import 'rtl/filters';
 
 .filters {
-  // &__menu {  }
+  &__menu {
+    .item.alphabetFilter {
+      flex: 1 1 auto !important;
+
+      @include mobile {
+        .item {
+          width: inherit !important;
+        }
+      }
+    }
+   }
 
   &__header {
     align-self: stretch;
