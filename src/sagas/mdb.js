@@ -67,6 +67,16 @@ export function* fetchSQData() {
   }
 }
 
+export function* countCU(action) {
+  const { params, namespace } = action.payload;
+  try {
+    const { data: { total } } = yield call(Api.countCU, params);
+    yield put(actions.countCUSuccess(namespace, total));
+  } catch (err) {
+    yield put(actions.countCUFailure(err));
+  }
+}
+
 function* watchFetchUnit() {
   yield takeEvery(types.FETCH_UNIT, fetchUnit);
 }
@@ -87,10 +97,15 @@ function* watchFetchWindow() {
   yield takeEvery(types.FETCH_WINDOW, fetchWindow);
 }
 
+function* watchCountCU() {
+  yield takeEvery(types.COUNT_CU, countCU);
+}
+
 export const sagas = [
   watchFetchUnit,
   watchFetchCollection,
   watchFetchLatestLesson,
   watchFetchSQData,
   watchFetchWindow,
+  watchCountCU
 ];

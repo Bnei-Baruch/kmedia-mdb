@@ -23,6 +23,9 @@ const FETCH_SQDATA_FAILURE        = 'MDB/FETCH_SQDATA_FAILURE';
 const FETCH_WINDOW                = 'MDB/FETCH_WINDOW';
 const FETCH_WINDOW_SUCCESS        = 'MDB/FETCH_WINDOW_SUCCESS';
 const FETCH_WINDOW_FAILURE        = 'MDB/FETCH_WINDOW_FAILURE';
+const COUNT_CU                    = 'MDB/COUNT_CU';
+const COUNT_CU_SUCCESS            = 'MDB/COUNT_CU_SUCCESS';
+const COUNT_CU_FAILURE            = 'MDB/COUNT_CU_FAILURE';
 
 const RECEIVE_COLLECTIONS   = 'MDB/RECEIVE_COLLECTIONS';
 const RECEIVE_CONTENT_UNITS = 'MDB/RECEIVE_CONTENT_UNITS';
@@ -43,6 +46,9 @@ export const types = {
   FETCH_WINDOW,
   FETCH_WINDOW_SUCCESS,
   FETCH_WINDOW_FAILURE,
+  COUNT_CU,
+  COUNT_CU_SUCCESS,
+  COUNT_CU_FAILURE,
 
   RECEIVE_COLLECTIONS,
   RECEIVE_CONTENT_UNITS,
@@ -65,6 +71,9 @@ const fetchSQDataFailure       = createAction(FETCH_SQDATA_FAILURE);
 const fetchWindow              = createAction(FETCH_WINDOW);
 const fetchWindowSuccess       = createAction(FETCH_WINDOW_SUCCESS, (id, data) => ({ id, data }));
 const fetchWindowFailure       = createAction(FETCH_WINDOW_FAILURE, (id, err) => ({ id, err }));
+const countCU                  = createAction(COUNT_CU, (namespace, params) => ({ namespace, params }));
+const countCUSuccess           = createAction(COUNT_CU_SUCCESS, (namespace, total) => ({ namespace, total }));
+const countCUFailure           = createAction(COUNT_CU_FAILURE, (namespace, err) => ({ namespace, err }));
 
 const receiveCollections  = createAction(RECEIVE_COLLECTIONS);
 const receiveContentUnits = createAction(RECEIVE_CONTENT_UNITS);
@@ -85,6 +94,9 @@ export const actions = {
   fetchWindow,
   fetchWindowSuccess,
   fetchWindowFailure,
+  countCU,
+  countCUSuccess,
+  countCUFailure,
 
   receiveCollections,
   receiveContentUnits,
@@ -96,12 +108,14 @@ const freshStore = () => ({
   cById: {},
   cuById: {},
   cWindow: {},
+  countCU: {},
   wip: {
     units: {},
     collections: {},
     cWindow: {},
     lastLesson: false,
     sqData: false,
+    countCU: false,
   },
   errors: {
     units: {},
@@ -109,6 +123,7 @@ const freshStore = () => ({
     cWindow: {},
     lastLesson: null,
     sqData: null,
+    countCU: null,
   },
 });
 
@@ -183,6 +198,10 @@ const setStatus = (state, action) => {
     case FETCH_SQDATA_FAILURE:
       wip.sqData    = false;
       errors.sqData = action.payload.err;
+      break;
+    case COUNT_CU_FAILURE:
+      wip.countCU    = false;
+      errors.countCU = action.payload.err;
       break;
 
     default:
@@ -395,6 +414,28 @@ const onSSRPrepare = state => ({
   }
 });
 
+const onCountCU = (state, action) => ({
+  ...state,
+  countCU: {
+    ...state.countCU,
+    [action.payload.namespace]: {
+      ...(state.countCU[action.payload.namespace] || {}),
+      wip: true,
+    }
+  }
+});
+
+const onCountCUSuccess = (state, action) => {
+  state.wip.countCU    = false;
+  state.errors.countCU = null;
+
+  state.countCU = {
+    ...state.countCU,
+    [action.payload.namespace]: action.payload.total
+  };
+  return state;
+};
+
 export const reducer = handleActions({
   [ssr.PREPARE]: onSSRPrepare,
   [settings.SET_LANGUAGE]: () => freshStore(),
@@ -423,6 +464,9 @@ export const reducer = handleActions({
   [FETCH_SQDATA]: setStatus,
   [FETCH_SQDATA_SUCCESS]: setStatus,
   [FETCH_SQDATA_FAILURE]: setStatus,
+  [COUNT_CU]: onCountCU,
+  [COUNT_CU_SUCCESS]: onCountCUSuccess,
+  [COUNT_CU_FAILURE]: setStatus,
 
   [RECEIVE_COLLECTIONS]: (state, action) => onReceiveCollections(state, action),
   [RECEIVE_CONTENT_UNITS]: (state, action) => onReceiveContentUnits(state, action),
@@ -495,6 +539,8 @@ const getDenormCollectionWUnits = (state, id) => {
   return c;
 };
 
+const getCountCu = (state, namespace) => state.countCU[namespace];
+
 export const selectors = {
   getCollectionById,
   getUnitById,
@@ -506,5 +552,6 @@ export const selectors = {
   getLastLessonId,
   getCollections,
   getWindow,
-  getSQDataWipErr
+  getSQDataWipErr,
+  getCountCu
 };

@@ -1,7 +1,7 @@
 import { useContext, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
-import { ulid } from 'ulid'
+import { ulid } from 'ulid';
 import { chroniclesUrl, chroniclesBackendEnabled } from './Api';
 import { noop, partialAssign } from './utils';
 
@@ -9,6 +9,7 @@ import { actions } from '../redux/modules/chronicles';
 import { selectors as settings } from '../redux/modules/settings';
 import { types as recommendedTypes } from '../redux/modules/recommended';
 import { types as searchTypes } from '../redux/modules/search';
+import { types as authTypes } from '../redux/modules/auth';
 import { ClientChroniclesContext } from './app-contexts';
 
 //An array of DOM events that should be interpreted as user activity.
@@ -19,14 +20,14 @@ const FLOWS = [
   { start: 'unit-page-enter',          end: 'unit-page-leave',            subFlows: ['player-play', 'recommend', 'search', 'autocomplete', 'user-inactive', 'download'] },
   { start: 'collection-page-enter',    end: 'collection-page-leave',      subFlows: ['collection-unit-selected', 'recommend', 'search', 'autocomplete', 'user-inactive', 'download'] },
   { start: 'collection-unit-selected', end: 'collection-unit-unselected', subFlows: ['player-play', 'user-inactive'] },
-  { start: 'player-play',              end: 'player-stop',                subFlows: ['mute-unmute', 'user-inactive'] },
-  { start: 'recommend',                end: '',                           subFlows: ['recommend-selected'] },
-  { start: 'search',                   end: '',                           subFlows: ['search-selected'] },
-  { start: 'autocomplete',             end: '',                           subFlows: ['autocomplete-selected'] },
+  { start: 'player-play', end: 'player-stop', subFlows: ['mute-unmute', 'user-inactive'] },
+  { start: 'recommend', end: '', subFlows: ['recommend-selected'] },
+  { start: 'search', end: '', subFlows: ['search-selected'] },
+  { start: 'autocomplete', end: '', subFlows: ['autocomplete-selected'] },
 ];
 
 const FLOWS_BY_END = new Map(FLOWS.map(flow => [flow.end, flow]));
-const SUBFLOWS = new Map(Object.entries(FLOWS.reduce((acc, flow) => {
+const SUBFLOWS     = new Map(Object.entries(FLOWS.reduce((acc, flow) => {
   flow.subFlows.forEach(subflow => {
     if (!(subflow in acc)) {
       acc[subflow] = [];
@@ -59,6 +60,8 @@ export default class ClientChronicles {
     this.namespace = 'archive';
 
     this.abTesting = {};
+
+    this.keycloakId = null;
 
     this.initSession(/* reinit= */ false);
 
@@ -108,7 +111,7 @@ export default class ClientChronicles {
       }, true);
     });
 
-    this.prevHref = window.location.href;
+    this.prevHref        = window.location.href;
     this.currentPathname = window.location.pathname;
     this.appendPage('enter');
     history.listen(historyEvent => {
@@ -156,7 +159,7 @@ export default class ClientChronicles {
 
     if (action.type === searchTypes.SEARCH_SUCCESS) {
       const { searchResults, searchRequest } = action.payload;
-      const reducedResults = partialAssign({}, searchResults, {
+      const reducedResults                   = partialAssign({}, searchResults, {
         language: true,
         search_result: {
           hits: {
@@ -180,13 +183,13 @@ export default class ClientChronicles {
         },
         typo_suggest: true,
       });
-      const appendData = { search_results: reducedResults, search_request: searchRequest };
+      const appendData                       = { search_results: reducedResults, search_request: searchRequest };
       this.append('search', appendData);
     }
 
     if (action.type === searchTypes.AUTOCOMPLETE_SUCCESS) {
       const { suggestions, request } = action.payload;
-      const reducedSuggestions = partialAssign({}, suggestions, {
+      const reducedSuggestions       = partialAssign({}, suggestions, {
         suggest: {
           title_suggest: { // This is an array.
             options: {  // This is an array.
@@ -210,8 +213,16 @@ export default class ClientChronicles {
         timed_out: true,
         took: true,
       });
-      const appendData = { suggestions: reducedSuggestions, request };
+      const appendData               = { suggestions: reducedSuggestions, request };
       this.append('autocomplete', appendData);
+    }
+
+    if (action.type === authTypes.LOGIN_SUCCESS) {
+      this.keycloakId = action.payload.user?.id;
+    }
+
+    if (action.type === authTypes.LOGOUT_SUCCESS) {
+      this.keycloakId = null;
     }
   }
 
@@ -233,11 +244,11 @@ export default class ClientChronicles {
     };
 
     let prefix = 'collection-';
-    let match = this.currentPathname.match(/\/(latest)$|\/c\/([a-zA-Z0-9]{8})$/);
+    let match  = this.currentPathname.match(/\/(latest)$|\/c\/([a-zA-Z0-9]{8})$/);
     if (match) {
       data.collection_uid = match[1];
     } else {
-      match = this.currentPathname.match(/\/cu\/([a-zA-Z0-9]{8})$/);
+      match  = this.currentPathname.match(/\/cu\/([a-zA-Z0-9]{8})$/);
       prefix = 'unit-';
       if (match) {
         data.unit_uid = match[1];
@@ -262,8 +273,8 @@ export default class ClientChronicles {
     this.LastEntriesByType = new Map();
 
     this.firstActivityTimestampMs = Date.now();
-    this.lastActivityTimestampMs = this.firstActivityTimestampMs;
-    this.sessionActivities = new Set();
+    this.lastActivityTimestampMs  = this.firstActivityTimestampMs;
+    this.sessionActivities        = new Set();
   }
 
   lastEventType() {
@@ -287,8 +298,13 @@ export default class ClientChronicles {
   }
 
   flushAppends(sync = false) {
-    const nowTimestampMs = Date.now();
-    const appends = { append_requests: this.timestampedAppends.map(timestampAppend => ({ append: timestampAppend.append, offset: timestampAppend.timestamp - nowTimestampMs })) };
+    const nowTimestampMs           = Date.now();
+    const appends                  = {
+      append_requests: this.timestampedAppends.map(timestampAppend => ({
+        append: timestampAppend.append,
+        offset: timestampAppend.timestamp - nowTimestampMs
+      }))
+    };
     // Clear bulk without checking if post worked or not.
     this.timestampedAppends.length = 0;
     if (sync) {
@@ -308,8 +324,8 @@ export default class ClientChronicles {
     data.location = eventType.endsWith('page-leave') ? this.prevHref : window.location.href;
     const eventId = ulid();
     const nowTimestampMs = Date.now();
-    let flowId = '';
-    let flowType = '';
+    let flowId           = '';
+    let flowType         = '';
     if (FLOWS_BY_END.has(eventType)) {
       // Ending event of a flow.
       // 1. We don't set flowType for end, just for subflow (see else).
@@ -321,15 +337,14 @@ export default class ClientChronicles {
       (SUBFLOWS.get(eventType) || []).forEach(flowStart => {
         const { timestamp = 0, eventId = null } = this.LastEntriesByType.get(flowStart) || {};
         if (timestamp > latest) {
-          latest = timestamp;
-          flowId = eventId;
+          latest   = timestamp;
+          flowId   = eventId;
           flowType = flowStart;
         }
       });
     }
 
     const append = {
-      client_id: this.userId,
       client_session_id: this.sessionId,
       namespace: this.namespace,
       client_event_id: eventId,
@@ -338,6 +353,12 @@ export default class ClientChronicles {
       client_flow_type: flowType,
       data,
     };
+
+    if (this.keycloakId) {
+      append.keycloak_id = this.keycloakId;
+    } else {
+      append.client_id = this.userId;
+    }
 
     this.LastEntriesByType.set(eventType, { timestamp: nowTimestampMs, eventId });
 
@@ -366,4 +387,4 @@ export const ChroniclesActions = () => {
     }
   }, [action, actionsCount, clientChronicles]);
   return null;
-}
+};

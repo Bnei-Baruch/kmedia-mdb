@@ -1,3 +1,5 @@
+export const VERSION_WITH_PERSONALIZATION = false;
+
 // Collection Types
 export const CT_DAILY_LESSON       = 'DAILY_LESSON';
 export const CT_SPECIAL_LESSON     = 'SPECIAL_LESSON';
@@ -114,7 +116,7 @@ export const LANG_UNKNOWN    = 'xx';
 
 export const LANGUAGES = {
   [LANG_HEBREW]: { value: LANG_HEBREW, locale: 'he_IL', lang3: 'HEB', name: 'עברית' },
-  [LANG_ENGLISH]: { value: LANG_ENGLISH,  locale: 'en_US', lang3: 'ENG', name: 'English' },
+  [LANG_ENGLISH]: { value: LANG_ENGLISH, locale: 'en_US', lang3: 'ENG', name: 'English' },
   [LANG_RUSSIAN]: { value: LANG_RUSSIAN, locale: 'ru_RU', lang3: 'RUS', name: 'Русский' },
   [LANG_SPANISH]: { value: LANG_SPANISH, locale: 'es_ES', lang3: 'SPA', name: 'Español' },
   [LANG_ITALIAN]: { value: LANG_ITALIAN, locale: 'it_IT', lang3: 'ITA', name: 'Italiano' },
@@ -442,3 +444,51 @@ export const SEARCH_INTENT_SECTIONS = {
 };
 
 export const SCROLL_SEARCH_ID = '__scrollSearchToHere__';
+
+export const MY_NAMESPACE_HISTORY        = 'history';
+export const MY_NAMESPACE_LIKES          = 'likes';
+export const MY_NAMESPACE_PLAYLISTS      = 'playlists';
+export const MY_NAMESPACE_PLAYLIST_BY_ID = 'playlists_by_id';
+export const MY_NAMESPACE_PLAYLIST_ITEMS = 'playlist_items';
+export const MY_NAMESPACE_SUBSCRIPTIONS  = 'subscriptions';
+
+export const MY_NAMESPACES = [MY_NAMESPACE_HISTORY, MY_NAMESPACE_LIKES, MY_NAMESPACE_PLAYLISTS, MY_NAMESPACE_PLAYLIST_ITEMS, MY_NAMESPACE_SUBSCRIPTIONS];
+
+export const CT_SUBSCRIBE_BY_TYPE = [
+  CT_FRIENDS_GATHERINGS,
+  CT_WOMEN_LESSONS,
+  CT_MEALS,
+  CT_LECTURE,
+  CT_MEAL,
+  CT_LESSON_PART,
+];
+
+export const CT_SUBSCRIBE_BY_COLLECTION = [
+  CT_LECTURE,
+  CT_VIDEO_PROGRAM_CHAPTER,
+  CT_ARTICLE,
+  CT_EVENT_PART,
+  CT_CLIP,
+  CT_TRAINING,
+  CT_KITEI_MAKOR,
+  CT_PUBLICATION, //check language
+  CT_LELO_MIKUD,
+  CT_BLOG_POST,
+  CT_RESEARCH_MATERIAL,
+  CT_KTAIM_NIVCHARIM,
+  CT_LIKUTIM,
+];
+
+export const SECTIONS_LINK_BY_CU_CONTENT_TYPE = {
+  [CT_LESSON_PART]: 'lessons/daily',
+  [CT_VIRTUAL_LESSON]: 'lessons/virtual',
+  [CT_LECTURE]: 'lessons/lectures',
+  [CT_WOMEN_LESSON]: 'lessons/women',
+  [CT_VIDEO_PROGRAM_CHAPTER]: 'programs/main',
+  [CT_CLIP]: 'programs/clips',
+  [CT_FRIENDS_GATHERING]: 'events/friends-gatherings',
+  [CT_MEAL]: 'events/meals',
+  [CT_BLOG_POST]: 'publications/blog',
+  [SCT_TWEET]: 'publications/twitter',
+  [CT_ARTICLE]: 'publications/articles',
+};

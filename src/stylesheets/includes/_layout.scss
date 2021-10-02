@@ -7,6 +7,7 @@ body {
 
   &.noscroll {
     overflow: hidden;
+
     &--smallmobile {
       @include small-mobile {
         overflow: hidden;
@@ -230,16 +231,50 @@ body {
     }
   }
 
+  .auth-button {
+    &.ui.button,
+    &.ui.button:hover,
+    &.ui.button:focus {
+
+      background: $white !important;
+      font-size: 1.8em !important;
+      width: 2.9rem;
+      text-align: center;
+      padding: 0;
+      line-height: 1.3em;
+
+      @include mobile {
+        font-size: 1rem !important;
+        width: 2.3rem;
+        line-height: 2.3rem;
+      }
+    }
+  }
+
   .vh-button {
     font-size: .92857143rem !important;
     margin: 0 0.5em !important;
+
     &.ui.button {
-      background:#f2711c !important;
+      background: #f2711c !important;
       color: white !important;
     }
-    &.ui.button:hover{
-      background:#f26202 !important;
+
+    &.ui.button:hover {
+      background: #f26202 !important;
       color: white !important;
+    }
+  }
+}
+
+.auth-popup {
+  text-align: center;
+  padding: 0 2em;
+
+  .ui.list > a {
+    &.item, &.item:hover, &.item:focus {
+      color: $black;
+      padding: 0.5em 0;
     }
   }
 }

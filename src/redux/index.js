@@ -19,6 +19,8 @@ import { reducer as recommended } from './modules/recommended';
 import { reducer as chronicles } from './modules/chronicles';
 import { reducer as music } from './modules/music';
 import { reducer as likutim } from './modules/likutim';
+import { reducer as auth } from './modules/auth';
+import { reducer as my } from './modules/my';
 
 const reducers = history => combineReducers({
   router: connectRouter(history),
@@ -40,6 +42,8 @@ const reducers = history => combineReducers({
   recommended,
   chronicles,
   music,
+  auth,
+  my,
   likutim
 });
 

@@ -154,7 +154,8 @@
     "ua-parser-js": "^0.7.17",
     "ulid": "^2.3.0",
     "warning": "^4.0.2",
-    "worker-loader": "^3.0.4"
+    "worker-loader": "^3.0.4",
+    "keycloak-js": "^14.0.0"
   },
   "moduleRoots": [
     "src",

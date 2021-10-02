@@ -7,7 +7,7 @@ import { renderRoutes } from 'react-router-config';
 import { Header, Icon, Menu, Ref, Segment } from 'semantic-ui-react';
 import Headroom from 'react-headroom';
 
-import { ALL_LANGUAGES } from '../../helpers/consts';
+import { ALL_LANGUAGES, VERSION_WITH_PERSONALIZATION } from '../../helpers/consts';
 import playerHelper from '../../helpers/player';
 import { selectors as settings } from '../../redux/modules/settings';
 import * as shapes from '../shapes';
@@ -21,6 +21,7 @@ import TopMost from './TopMost';
 import DonateNow, { VirtualHomeButton } from './DonateNow';
 import Logo from '../../images/icons/Logo';
 import { ClientChroniclesContext, DeviceInfoContext } from '../../helpers/app-contexts';
+import Login from './Login';
 
 const WrappedOmniBoxWithChronicles = ({ location }) => {
   const chronicles = useContext(ClientChroniclesContext);
@@ -49,10 +50,10 @@ const shouldShowSearch = location => {
   return true;
 };
 
-const menuButtonElement1 = createRef();
-const menuButtonElement2 = createRef();
+const menuButtonElement1      = createRef();
+const menuButtonElement2      = createRef();
 const showSearchButtonElement = createRef();
-const headerSearchElement = createRef();
+const headerSearchElement     = createRef();
 
 class Layout extends Component {
   static contextType = DeviceInfoContext;
@@ -91,8 +92,8 @@ class Layout extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    const { location, language } = this.props;
-    const { sidebarActive, isShowHeaderSearch }   = this.state;
+    const { location, language }                = this.props;
+    const { sidebarActive, isShowHeaderSearch } = this.state;
 
     return (language !== nextProps.language
       || location.pathname !== nextProps.location.pathname
@@ -159,9 +160,9 @@ class Layout extends Component {
   };
 
   render() {
-    const { t, location, route, language }              = this.props;
-    const { sidebarActive, embed, isShowHeaderSearch }  = this.state;
-    const { isMobileDevice }                            = this.context;
+    const { t, location, route, language }             = this.props;
+    const { sidebarActive, embed, isShowHeaderSearch } = this.state;
+    const { isMobileDevice }                           = this.context;
 
     const showSearch = shouldShowSearch(location);
 
@@ -216,15 +217,18 @@ class Layout extends Component {
                   </Menu.Item>
                   {
                     showSearch && isMobileDevice &&
-                      <Ref innerRef={showSearchButtonElement}>
-                        <Menu.Item as="a" position="right">
-                          <Icon name="search" className="no-margin" onClick={this.showHeaderSearch} />
-                        </Menu.Item>
-                      </Ref>
+                    <Ref innerRef={showSearchButtonElement}>
+                      <Menu.Item as="a" position="right">
+                        <Icon name="search" className="no-margin" onClick={this.showHeaderSearch} />
+                      </Menu.Item>
+                    </Ref>
                   }
                   <Menu.Item position="right" className="mobile-hidden">
                     <DonateNow language={language} />
                     <VirtualHomeButton language={language} />
+                  </Menu.Item>
+                  <Menu.Item position="right">
+                    {VERSION_WITH_PERSONALIZATION && <Login language={language} />}
                   </Menu.Item>
                   <TopMost />
                 </Menu.Menu>

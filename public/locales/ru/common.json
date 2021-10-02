@@ -4,6 +4,7 @@
       "header": "Каббала Медиа"
     },
     "sidebar": {
+      "personal": "Личная зона",
       "lessons": "Уроки и лекции",
       "programs": "Программы и Клипы",
       "sources": "Библиотека",
@@ -114,7 +115,9 @@
     "previous": "Предыдущий",
     "next": "Следующий",
     "copy": "Копировать",
-    "view-all": "Посмотреть все"
+    "view-all": "Посмотреть все",
+    "save": "Сохранить",
+    "remove": "Удалить"
   },
   "player": {
     "messages": {
@@ -415,7 +418,10 @@
       "info": {
         "sources": "Источники",
         "topics": "Темы",
-        "collections": "Относится к"
+        "collections": "Относится к",
+        "episode": "Эпизод {{name}}",
+        "lesson-episode": "Part {{name}}",
+        "views": "{{views}} просмотров"
       },
       "recommended": {
         "same-collection": {
@@ -469,7 +475,7 @@
       "more": "Ещё",
       "less": "Меньше"
     },
-    "playlist":{
+    "playlist": {
       "header": "Следующий"
     }
   },
@@ -726,5 +732,35 @@
     "copy-link": "Копировать ссылку",
     "copy-text": "Копировать текст",
     "disable-share": "Отменить"
+  },
+  "personal": {
+    "subsNewUnits": "новых эпизодов",
+    "unsubscribe": "Вы подписаны",
+    "subscribe": "Подписаться",
+    "unsubscribeSuccessful": "Подписка отменена",
+    "subscribeSuccessful": "Подписка оформлена",
+    "newPlaylistSuccessful": "Новый плейлист {{name}} создан",
+    "addToPlaylistSuccessful": "Добавлен в плейлист {{name}}",
+    "history": "История",
+    "likes": "Понравившиеся",
+    "playlists": "Плейлисты",
+    "playlistNoResult": "В плейлисте пока нет видео",
+    "subscriptions": "Подписки",
+    "playAll": "Воспроизвести все",
+    "addToPlaylist": "Сохранить в...",
+    "newPlaylistName": "Название нового плейлиста",
+    "newPlaylist": "Создать новый плейлист",
+    "editPlaylist": "Редактировать плейлист",
+    "removedSuccessfully": "Успешно удалено",
+    "removeHistory": "Удалить из истории просмотра",
+    "removeLike": "Удалить из понравившихся",
+    "removeFromPlaylist": "Удалить из плейлиста",
+    "confirmRemovePlaylist": "Вы действительно хотите удалить плейлист {{name}}?\nПримечание. Плейлисты удаляются безвозвратно.",
+    "confirmUnsubscribe": "Отказаться от подписки на {{name}}?",
+    "videosOnList": "видео",
+    "login": "ВОЙТИ",
+    "logout": "ВЫЙТИ",
+    "needToLogin": "Войдите, чтобы ставить лайки, сохранять и подписываться на видео",
+    "account": "Мой аккаунт"
   }
 }

@@ -1,10 +1,47 @@
 .unit-info {
   @include mobile {
-    margin: 1em;
+    margin: 0 1em 1em 1em;
+  }
+  clear: both;
+  margin: 0 1em 2em 0;
+
+  &__name {
+    font-weight: normal;
   }
 
-  margin-top: 2em;
-  margin-bottom: 2em;
+  &__film-date {
+    font-size: 1rem;
+
+    .separator {
+      margin: 0 0.5em;
+    }
+  }
+
+  &__collections a {
+    font-size: 1.46rem;
+  }
+
+  &__header {
+    margin-top: 0.5rem !important;
+  }
+
+  .link_to_cu {
+    padding: 4px 8px;
+    margin-top: 8px !important;
+    margin-right: 4px !important;
+    margin-left: 0 !important;
+  }
+
+
+}
+
+.rtl {
+  .unit-info {
+    .link_to_cu {
+      margin-right: 0 !important;
+      margin-left: 4px !important;
+    }
+  }
 }
 
 .unit-materials {

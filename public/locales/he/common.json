@@ -4,6 +4,7 @@
       "header": "קבלה מדיה"
     },
     "sidebar": {
+      "personal": "איזור אישי",
       "lessons": "שיעורים והרצאות",
       "programs": "תוכניות וקליפים",
       "sources": "ספרייה",
@@ -113,7 +114,9 @@
     "previous": "הקודם",
     "next": "הבא",
     "copy": "העתק",
-    "view-all": "הצג הכל"
+    "view-all": "הצג הכל",
+    "save": "שמור",
+    "remove": "הסר"
   },
   "player": {
     "messages": {
@@ -399,7 +402,10 @@
       "info": {
         "sources": "מקורות",
         "topics": "נושאים",
-        "collections": "קשור ל"
+        "collections": "קשור ל",
+        "episode": "פרק {{name}}",
+        "lesson-episode": "Part {{name}}",
+        "views": "{{views}} צפיות"
       },
       "recommended": {
         "same-collection": {
@@ -453,7 +459,7 @@
       "more": "עוד",
       "less": "פחות"
     },
-    "playlist":{
+    "playlist": {
       "header": "הבא בתור"
     }
   },
@@ -710,5 +716,35 @@
     "copy-link": "העתק קישור",
     "copy-text": "העתק טקסט",
     "disable-share": "לבטל"
+  },
+  "personal": {
+    "subsNewUnits": "פרקים חדשים",
+    "unsubscribe": "נרשמת כמנוי",
+    "subscribe": "הרשמה למינוי",
+    "unsubscribeSuccessful": "המינוי הוסר",
+    "subscribeSuccessful": "נוסף מינוי",
+    "newPlaylistSuccessful": "פלייליסט {{name}} נוצר",
+    "addToPlaylistSuccessful": "נוסף לפלייליסט {{name}}",
+    "history": "היסטוריית צפייה",
+    "likes": "תוכן שאהבתי",
+    "playlists": "פלייליסטים",
+    "playlistNoResult": "בפלייליסט זה אין וידאו",
+    "subscriptions": "מינויים",
+    "playAll": "נגן הכל",
+    "addToPlaylist": "שמירה ב...",
+    "newPlaylistName": "שם הפלייליסט החדש",
+    "newPlaylist": "צור פלייליסט חדש",
+    "editPlaylist": "ערוך פלייליסט",
+    "removedSuccessfully": "הוסר בהצלחה",
+    "removeHistory": "הסרה מהיסטוריית צפיה",
+    "removeLike": "הסרה מתוכן שאהבתי",
+    "removeFromPlaylist": "הסרה מהפלייליסט",
+    "confirmRemovePlaylist": "בחרת למחוק את הפלייליסט {{name}}. להמשיך?\nהערה: מחיקת פלייליסטים היא פעולה בלתי הפיכה ולא ניתן לבטל אותה.",
+    "confirmUnsubscribe": "לבטל את הרישום כמנוי ל{{name}}?",
+    "videosOnList": "וידאו",
+    "login": "כניסה",
+    "logout": "יציאה",
+    "needToLogin": "כדאי להיכנס כדי להוסיף לייק לסרטונים, לשמור תכנים ולהירשם למינויים.",
+    "account": "החשבון שלי"
   }
 }

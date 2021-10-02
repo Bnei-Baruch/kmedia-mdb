@@ -4,6 +4,7 @@
       "header": "Cabalá Media"
     },
     "sidebar": {
+      "personal": "Área personal",
       "lessons": "Lecciones y Charlas",
       "programs": "Programas y Clips",
       "sources": "Biblioteca",
@@ -113,7 +114,9 @@
     "previous": "Anterior",
     "next": "Siguiente",
     "copy": "Copiar",
-    "view-all": "Ver todo"
+    "view-all": "Ver todo",
+    "save": "Guardar",
+    "remove": "Eliminar"
   },
   "player": {
     "messages": {
@@ -390,7 +393,10 @@
       "info": {
         "sources": "Fuentes",
         "topics": "Temas",
-        "collections": "Relacionado a"
+        "collections": "Relacionado a",
+        "episode": "Capitulo {{name}}",
+        "lesson-episode": "Part {{name}}",
+        "views": "{{views}} visualizaciones"
       },
       "recommended": {
         "same-collection": {
@@ -612,5 +618,36 @@
     "copy-link": "Copiar link",
     "copy-text": "Copiar texto",
     "disable-share": "Cancelar"
+  },
+  "personal": {
+    "subsNewUnits": "nuevos episodios",
+    "unsubscribe": "Suscrito",
+    "subscribe": "Suscribirme",
+    "unsubscribeSuccessful": "Suscripción eliminada",
+    "subscribeSuccessful": "Suscripción agregada",
+    "newPlaylistSuccessful": "Nueva lista de reproducción {{name}} creado",
+    "addToPlaylistSuccessful": "Añadido a la lista de reproducción {{name}}",
+    "history": "Historial",
+    "likes": "Vídeos que me gustan",
+    "playlists": "Playlists",
+    "playlistNoResult": "No hay videos en esta lista de reproducción",
+    "subscriptions": "Suscripciones",
+    "playAll": "Jugar todo",
+    "addToPlaylist": "Guardar en...",
+    "newPlaylistName": "Nuevo nombre de lista de reproducción",
+    "newPlaylist": "Crear lista de reproducción",
+    "editPlaylist": "Editar lista de reproducción",
+    "removedSuccessfully": "Eliminado exitosamente",
+    "removeHistory": "Eliminar de la historia",
+    "removeLike": "Eliminar de los videos que me gustan",
+    "removeFromPlaylist": "Eliminar de lista de reproducción",
+    "confirmRemovePlaylist": "¿Seguro que quieres eliminar {{name}}?\nNota: Eliminar listas de reproducción es una acción permanente y no se puede deshacer.",
+    "confirmUnsubscribe": "¿Anular la suscripción a {{name}}?",
+    "videosOnList": "vídeos",
+    "login": "Iniciar sesión",
+    "logout": "Cerrar sesión",
+    "needToLogin": "Iniciar sesión para me gusta, guardar y suscribirse a videos",
+    "account": "Mi cuenta"
+
   }
 }

@@ -4,6 +4,7 @@
       "header": "Kabbalah Media"
     },
     "sidebar": {
+      "personal": "My Library",
       "lessons": "Lezioni e Conferenze",
       "programs": "Programmi e Clip",
       "sources": "Biblioteca",
@@ -113,7 +114,9 @@
     "previous": "Precedente",
     "next": "Successivo",
     "copy": "Copia",
-    "view-all": "View All"
+    "view-all": "View All",
+    "save": "Save",
+    "remove": "Remove"
   },
   "player": {
     "messages": {
@@ -399,7 +402,10 @@
       "info": {
         "sources": "Kabbalah Sources",
         "topics": "Topics",
-        "collections": "Related to"
+        "collections": "Related to",
+        "episode": "Episode {{name}}",
+        "lesson-episode": "Part {{name}}",
+        "views": "{{views}} Views"
       },
       "recommended": {
         "same-collection": {
@@ -709,5 +715,35 @@
     "copy-link": "Copia link",
     "copy-text": "Copia testo",
     "disable-share": "Annulla"
+  },
+  "personal": {
+    "subsNewUnits": "new episodes",
+    "unsubscribe": "Unsubscribe",
+    "subscribe": "Subscribe",
+    "unsubscribeSuccessful": "Subscription removed",
+    "subscribeSuccessful": "Subscription added",
+    "newPlaylistSuccessful": "New playlist {{name}} created",
+    "addToPlaylistSuccessful": "Added to playlist {{name}}",
+    "history": "History",
+    "likes": "Liked videos",
+    "playlists": "Playlists",
+    "playlistNoResult": "No videos in this playlist",
+    "subscriptions": "Subscriptions",
+    "playAll": "Play all",
+    "addToPlaylist": "Save to...",
+    "newPlaylistName": "New playlist name",
+    "newPlaylist": "Create new playlist",
+    "editPlaylist": "Edit playlist",
+    "removedSuccessfully": "Successfully removed",
+    "removeHistory": "Remove from history",
+    "removeLike": "Remove from Liked videos",
+    "removeFromPlaylist": "Remove from playlist",
+    "confirmRemovePlaylist": "Are you sure you want to delete playlist {{name}}?\nNote: Deleting playlists is a permanent action and cannot be undone.",
+    "confirmUnsubscribe": "Unsubscribe from {{name}}?",
+    "videosOnList": "videos",
+    "login": "Login",
+    "logout": "Logout",
+    "needToLogin": "Sign in to like, save and subscribe to videos",
+    "account": "My Account"
   }
 }

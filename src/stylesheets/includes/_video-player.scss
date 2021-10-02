@@ -7,9 +7,11 @@
     background-color: $darkWhite;
     width: 100% !important;
 
-    #unit_container {
+    .unit_container {
       @include mobile {
-        padding: 0;
+        padding-bottom: 0;
+        padding-left: 0;
+        padding-right: 0;
       }
 
       background-color: $darkWhite;

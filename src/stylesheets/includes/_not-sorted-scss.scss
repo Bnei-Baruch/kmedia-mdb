@@ -2,23 +2,23 @@
 // See TimedPopup.js, solves existing bug:
 // https://github.com/Semantic-Org/Semantic-UI-React/issues/1065
 // .popup {
-  // background: #fff;
-  // border: 1px solid #d4d4d5;
-  // border-radius: .28571429rem;
-  // box-shadow: 1px 1px 0 0 #bababc;
-  // color: rgba(0, 0, 0, .87);
-  // font-style: normal;
-  // font-weight: 400;
-  // line-height: 1.4285em;
-  // margin: 0 0 .71428571em;
-  // max-width: 250px;
-  // padding: .833em 1em;
-  // z-index: 1900;
+// background: #fff;
+// border: 1px solid #d4d4d5;
+// border-radius: .28571429rem;
+// box-shadow: 1px 1px 0 0 #bababc;
+// color: rgba(0, 0, 0, .87);
+// font-style: normal;
+// font-weight: 400;
+// line-height: 1.4285em;
+// margin: 0 0 .71428571em;
+// max-width: 250px;
+// padding: .833em 1em;
+// z-index: 1900;
 
-  // .content {
-    // text-align: center;
-    // width: 200px;
-  // }
+// .content {
+// text-align: center;
+// width: 200px;
+// }
 // }
 
 .search-omnibox {
@@ -374,8 +374,10 @@
       margin: 0 .25rem;
     }
   }
+
   .message-mobile {
     max-width: 200px;
+
     .content {
       overflow: hidden;
     }
@@ -1163,6 +1165,7 @@
 .dropdown-language-selector * {
   line-height: 1;
 }
+
 .dropdown-language-selector.blink, .blink {
   box-shadow: 0 0 0 6px #7dcff5 inset;
   animation: dropdown-blink .8s ease-in-out;
@@ -1355,10 +1358,6 @@
   border-radius: 0;
 }
 
-.no-padding {
-  padding: 0 !important;
-}
-
 .search-result-note {
   padding: 10px 16px 10px 16px !important;
   border-width: 1px 4px 1px 1px;
@@ -1378,6 +1377,10 @@
   margin-top: 0 !important;
 }
 
+.no-margin-bottom {
+  margin-bottom: 0 !important;
+}
+
 .no-border {
   border: 0 none !important;
 }
@@ -1394,12 +1397,28 @@
   margin-right: 4px !important;
 }
 
+.margin-left-4 {
+  margin-left: 4px !important;
+}
+
 .margin-right-8 {
   margin-right: 8px !important;
 }
 
 .margin-left-8 {
   margin-left: 8px !important;
+}
+
+.margin-bottom-4 {
+  margin-bottom: 4px !important;
+}
+
+.padding-top_1em {
+  padding-top: 1em;
+}
+
+.uppercase {
+  text-transform: uppercase;
 }
 
 @media screen and (-webkit-min-device-pixel-ratio: 0) {
@@ -1584,6 +1603,14 @@
   display: inline;
 }
 
+.display-block {
+  display: block !important;
+}
+
+.display-iblock {
+  display: inline-block !important;
+}
+
 .library__nextPrevButtons {
   height: 20px;
 }
@@ -1593,11 +1620,11 @@
 }
 
 .library__languagesContainer {
-  height:50px;
+  height: 50px;
 
   .languages {
-    display:block;
-    float:left;
+    display: block;
+    float: left;
   }
 
 }
@@ -1605,7 +1632,7 @@
 .ltr {
   .library__languagesContainer {
     .languages {
-      float:right;
+      float: right;
     }
   }
 }
@@ -1700,8 +1727,16 @@
   white-space: nowrap;
 }
 
+.text_ellipsis {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  width: 100%;
+  white-space: nowrap;
+  display: inline-block;
+}
+
 .languagesGrid {
-  margin-top:0 !important;
+  margin-top: 0 !important;
 }
 
 .media-downloads {
@@ -1712,15 +1747,483 @@
   padding-bottom: 0 !important;
 }
 
+.no-padding-top {
+  padding-top: 0 !important;
+}
+
 .library-language-container {
   padding-right: 0;
   padding-left: 0;
   margin-bottom: 1em;
-  text-align:right;
+  text-align: right;
 }
 
 .rtl .library-language-container {
-  text-align:left;
+  text-align: left;
+}
+
+.my_playlist_item {
+  position: relative;
+
+  .over_layer {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 30%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 1;
+    color: white;
+    display: flex;
+    vertical-align: middle;
+    align-items: center;
+    justify-content: center;
+    flex-flow: column;
+
+    .header {
+      margin: 0;
+      color: white;
+    }
+
+    &.rtl {
+      left: 0;
+      right: auto;
+    }
+  }
+
+  .unit-logo {
+    width: 100%
+  }
+}
+
+
+.cu_items.ui.four.cards > .card {
+  width: calc(25% - 74px);
+  margin: 37px;
+  @include tablet {
+    width: calc(50% - 40px);
+    margin: 20px;
+  }
+  @include mobile {
+    width: calc(100% - 5em) !important;
+    margin: 2.5em;
+    &:first-child {
+      margin-top: 2.5em !important;
+    }
+  }
+}
+
+.cu_item {
+  .cu_item_img {
+    position: relative;
+    width: 100%;
+    height: auto;
+
+    .ui.image {
+      display: block;
+    }
+
+
+    .cu_item_img_info {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 100%;
+
+      .cu_item_info_co {
+        position: absolute;
+        bottom: 0.5em;
+        width: 100%;
+        display: flex;
+        flex: 3 30px;
+        flex-flow: nowrap;
+
+        .ui.image, svg {
+          height: 3.5em !important;
+          margin: 0;
+        }
+
+        .header {
+          width: 100%;
+          color: white;
+          line-height: 3em;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          background-color: rgba(0, 0, 0, 0.63);
+          padding: 0 1.7em;
+          margin: 0;
+        }
+      }
+
+    }
+
+    .ui.card > .content, .ui.cards > .card > .content {
+      border-top: 0;
+    }
+  }
+}
+
+.cu_item_duration {
+  border-radius: 0;
+  background-color: $black;
+  color: white;
+  margin: 1em;
+  padding: 3px 7px;
+  display: inline-block;
+
+  @include mobile {
+    margin: 4px;
+  }
+}
+
+.cu_info_description {
+  margin: 1.5em 1em;
+
+  & > span {
+    display: inline-block;
+    padding: 0 0.5em;
+    font-size: .9em;
+    line-height: 1em;
+  }
+
+  &.ltr > span {
+    border-left: 1px rgb(170, 170, 170) solid;
+
+    &:first-child {
+      border-left: 0;
+      padding-left: 0;
+    }
+
+    &:last-child {
+      padding-right: 0;
+    }
+  }
+
+  &.rtl > span {
+    border-right: 1px $midGrey solid;
+
+    &:first-child {
+      padding-right: 0;
+      border-right: 0;
+    }
+
+    &:last-child {
+      padding-left: 0;
+    }
+  }
+}
+
+.cu_item_info_co {
+  .ui.image, svg {
+    height: 2.5em !important;
+    margin: 0;
+  }
+}
+
+.cu_item_progress.ui.progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 0;
+  background: $grey;
+  margin: 0;
+  border-radius: 0;
+  z-index: 2;
+
+  .bar {
+    background: #04eaf6;
+    border-radius: 0;
+    @include mobile {
+      height: 3px;
+    }
+  }
+}
+
+.ui.table .cu_item_list {
+
+  td {
+    position: relative;
+    margin: 0;
+    padding-bottom: 0;
+
+    @include mobile {
+      padding-bottom: 35px;
+      border-top: 0 none;
+    }
+  }
+
+  td.cu_item_info {
+    height: 100%;
+  }
+}
+
+.cu_item_list {
+  .cu_item_info_co {
+    white-space: nowrap;
+
+    @include mobile {
+      line-height: 0.7em;
+    }
+
+    .ui.image, svg {
+      height: 2.5em !important;
+      margin: 0;
+    }
+
+    .header {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: inline-block;
+      vertical-align: top;
+      color: white;
+      line-height: 2.35em;
+      background-color: rgba(0, 0, 0, 0.63);
+      padding: 0 2em;
+      margin: 0 -1.5em;
+    }
+
+  }
+
+  .cu_item_duration {
+    position: absolute;
+    right: 0;
+    z-index: 2;
+    top: 0;
+  }
+
+  .cu_item_duration.rtl {
+    left: 0;
+    right: auto;
+  }
+
+  .cu_item_img {
+    position: relative;
+    width: 100%;
+    height: auto;
+
+  }
+
+
+  .cu_item_info {
+    padding-right: 2em !important;
+    padding-left: 2em !important;
+    @include mobile {
+      padding-top: 0 !important;
+      padding-right: 0 !important;
+      padding-left: 8px !important;
+      max-width: 0;
+    }
+
+    &.rtl {
+      @include mobile {
+        padding-right: 8px !important;
+        padding-left: 0 !important;
+      }
+    }
+  }
+
+  .cu_info_description {
+    margin: 0;
+    position: absolute;
+    bottom: 1em;
+    opacity: 0.43;
+    @include mobile {
+      top: 75px;
+    }
+  }
+
+  .cu_item_name {
+    margin: 1em 0 2.5em;
+    color: $fullBlack;
+    display: inline-block;
+    @include mobile {
+      margin-top: 0;
+      margin-bottom: 8px;
+      -webkit-line-clamp: 3;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      height: 60px;
+    }
+  }
+
+}
+
+
+.weight-normal {
+  font-weight: normal !important;
+}
+
+.vertical_bottom {
+  vertical-align: bottom;
+}
+
+.no-background {
+  background-color: transparent !important;
+}
+
+.homepage__thumbnails .my_header.ui.header {
+  margin-right: 1.5em;
+  margin-left: 1.5em;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+
+  @include mobile {
+    margin-right: 0;
+    margin-left: 0;
+  }
+}
+
+.my_header.ui.header {
+  margin: 0 0 4px;
+  font-weight: normal;
+  vertical-align: bottom;
+
+  &.my_playlist_header {
+    margin-bottom: 14px;
+  }
+
+  svg {
+    height: 1.5em;
+    width: 1.5em;
+    margin: 0 0 -.3em;
+
+  }
+
+  .icon {
+    font-size: 1em;
+    vertical-align: top;
+  }
+}
+
+.my_playlist_actions {
+  position: absolute;
+  top: .5em;
+  left: 0;
+  right: 0;
+  display: none;
+
+  @include mobile {
+    display: block;
+    margin-top: -15px;
+  }
+
+  & > div {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+}
+
+.playlist_icon {
+  height: 40px;
+  width: 38px;
+}
+
+.playlist_add {
+  height: 30px;
+  width: 28px;
+}
+
+.cu_item_dropdown {
+  margin-bottom: 30px;
+
+  &.ui.dropdown .menu > .item {
+    color: rgba(0, 0, 0, .6);
+  }
+
+  & > .icon {
+    color: $midGrey;
+  }
+}
+
+.my_playlist_add {
+  display: flex;
+  flex-flow: nowrap;
+  align-items: center;
+
+  span {
+    margin: 0 8px;
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  svg {
+    vertical-align: middle;
+  }
+}
+
+tr:hover .my_playlist_actions {
+  display: block;
+}
+
+.align_items_center {
+  align-items: center
+}
+
+.background_grey {
+  background-color: $darkWhite;
+}
+
+.clear_button.ui.basic.button {
+  padding: 0;
+  box-shadow: none;
+
+  &:hover, &:active, &:focus {
+    background: none !important;
+    box-shadow: none;
+  }
+}
+
+.my_playlist_header.ui.header {
+  @include mobile {
+    display: block;
+    svg {
+      vertical-align: bottom;
+    }
+    .content {
+      vertical-align: bottom;
+      margin: 0 8px;
+    }
+    .sub.header {
+      display: inline-block;
+      vertical-align: baseline;
+      font-size: 13px;
+    }
+  }
+}
+
+.ui.menu.personal_info {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1em;
+  margin-bottom: 0;
+  @include mobile {
+    margin-top: 0;
+  }
+
+  & > .item {
+    margin: 0;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+  }
+
+  .icon.heart {
+    font-size: 1.3em
+  }
+}
+
+.need_to_login {
+  height: 80VH;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 
 .recommend-cell {

@@ -2,7 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { renderRoutes } from 'react-router-config';
 
-import { DEFAULT_LANGUAGE } from './helpers/consts';
+import {
+  DEFAULT_LANGUAGE,
+  MY_NAMESPACE_HISTORY,
+  MY_NAMESPACE_LIKES,
+  MY_NAMESPACE_PLAYLISTS
+} from './helpers/consts';
 import LanguageSetter from './components/Language/LanguageSetter';
 import Layout from './components/Layout/Layout';
 import Lessons from './components/Sections/Lessons/MainPage';
@@ -35,11 +40,23 @@ import NotImplemented from './components/NotImplemented';
 // import Design from './components/Design/Design';
 import * as ssrDataLoaders from './routesSSRData';
 import * as shapes from './components/shapes';
+import Main from './components/Sections/Personal/Main/Page';
+import PlaylistDecorator from './components/Pages/PlaylistMy/Decorator';
+import PlaylistPage from './components/Sections/Personal/Playlist/Page';
+import LikePage from './components/Sections/Personal/Like/Page';
+import HistoryPage from './components/Sections/Personal/History/Page';
 import Likut from './components/Sections/Likutim/Likut';
 import LikutimMain from './components/Sections/Likutim/Main';
 
 const routes = [
   { path: '', component: HomePage, options: { ssrData: ssrDataLoaders.home } },
+
+  { path: 'personal', component: Main },
+  { path: `personal/${MY_NAMESPACE_HISTORY}`, component: HistoryPage },
+  { path: `personal/${MY_NAMESPACE_LIKES}`, component: LikePage },
+  { path: `personal/${MY_NAMESPACE_PLAYLISTS}/:id`, component: PlaylistPage },
+  { path: `${MY_NAMESPACE_PLAYLISTS}/:id`, component: PlaylistDecorator },
+
   { path: 'lessons', component: Lessons, options: { ssrData: ssrDataLoaders.lessonsPage } },
   { path: 'lessons/:tab', component: Lessons, options: { ssrData: ssrDataLoaders.lessonsPage } },
   {
@@ -60,7 +77,11 @@ const routes = [
   { path: 'events', component: Events, options: { ssrData: ssrDataLoaders.eventsPage } },
   { path: 'events/:tab', component: Events, options: { ssrData: ssrDataLoaders.eventsPage } },
   { path: 'events/cu/:id', component: UnitPage, options: { ssrData: ssrDataLoaders.cuPage } },
-  { path: 'events/c/:id', component: PlaylistCollectionIdCheck, options: { ssrData: ssrDataLoaders.playlistCollectionPage } },
+  {
+    path: 'events/c/:id',
+    component: PlaylistCollectionIdCheck,
+    options: { ssrData: ssrDataLoaders.playlistCollectionPage }
+  },
   { path: 'publications', component: Publications, options: { ssrData: ssrDataLoaders.publicationsPage } },
   { path: 'publications/:tab', component: Publications, options: { ssrData: ssrDataLoaders.publicationsPage } },
   { path: 'publications/articles/cu/:id', component: ArticlePage, options: { ssrData: ssrDataLoaders.articleCUPage } },
@@ -71,7 +92,11 @@ const routes = [
   },
   { path: 'publications/blog/:blog/:id', component: BlogPost, options: { ssrData: ssrDataLoaders.blogPostPage } },
   { path: 'music', component: Music, options: { ssrData: ssrDataLoaders.musicPage } },
-  { path: 'music/c/:id', component: PlaylistCollectionIdCheck, options: { ssrData: ssrDataLoaders.playlistCollectionPage } },
+  {
+    path: 'music/c/:id',
+    component: PlaylistCollectionIdCheck,
+    options: { ssrData: ssrDataLoaders.playlistCollectionPage }
+  },
   { path: 'sources', component: LibraryHomepage },
   { path: 'sources/:id', component: LibraryContainer, options: { ssrData: ssrDataLoaders.libraryPage } },
   { path: 'topics', component: Topics },
