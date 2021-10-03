@@ -58,50 +58,51 @@ const Page      = ({ location, t }) => {
 
   return (
     <Grid padded={!isMobileDevice} className="avbox no-background">
-      <Grid.Column mobile={16} tablet={computerWidth} computer={computerWidth} className={clsx({ 'is-fitted': isMobileDevice })}>
-        <Container className="padded">
-          <div className="summary-container align_items_center">
-            <Header as={'h2'} className="my_header">
-              <Icon name="heart outline" className="display-iblock" />
-              {t('personal.likes')}
-              <Header.Subheader className="display-iblock margin-right-8 margin-left-8">
-                {`${t('personal.videosOnList')} ${total}`}
-              </Header.Subheader>
-            </Header>
-            <Link to={`/${MY_NAMESPACE_PLAYLISTS}/${MY_NAMESPACE_LIKES}`}>
-              <Button basic className="clear_button">
-                <Icon name={'play circle outline'} className="margin-left-8 margin-right-8" size="big" />
-                {t('personal.playAll')}
-              </Button>
-            </Link>
-          </div>
-        </Container>
-        <AlertModal message={t('personal.removedSuccessfully')} open={deleted} onClose={onAlertCloseHandler} />
+      <Grid.Row>
+        <Grid.Column mobile={16} tablet={computerWidth} computer={computerWidth} className={clsx({ 'is-fitted': isMobileDevice })}>
+          <Container className="padded">
+            <div className="summary-container align_items_center">
+              <Header as={'h2'} className="my_header">
+                <Icon name="heart outline" className="display-iblock" />
+                {t('personal.likes')}
+                <Header.Subheader className="display-iblock margin-right-8 margin-left-8">
+                  {`${total} ${t('personal.videosOnList')}`}
+                </Header.Subheader>
+              </Header>
+              <Link to={`/${MY_NAMESPACE_PLAYLISTS}/${MY_NAMESPACE_LIKES}`}>
+                <Button basic className="clear_button">
+                  <Icon name={'play circle outline'} className="margin-left-8 margin-right-8" size="big" />
+                  {t('personal.playAll')}
+                </Button>
+              </Link>
+            </div>
+          </Container>
+          <AlertModal message={t('personal.removedSuccessfully')} open={deleted} onClose={onAlertCloseHandler} />
+          {
+            items?.length > 0 ? (
+              <Container className="padded">
+                {items.map((x, i) =>
+                  (
+                    <CUItemContainer id={x.content_unit_uid} asList={true} key={i}>
+                      <LikeActions cuId={x.content_unit_uid} id={x.id} />
+                    </CUItemContainer>
+                  )
+                )}
+              </Container>) : null
+          }
+          <Container className="padded pagination-wrapper" textAlign="center">
+            <Pagination
+              pageNo={pageNo}
+              pageSize={PAGE_SIZE}
+              total={total}
+              onChange={setPage}
+            />
+          </Container>
+        </Grid.Column>
         {
-          items?.length > 0 ? (
-            <Container className="padded">
-              <Table unstackable basic="very">
-                <Table.Body>
-                  {items.map((x, i) =>
-                    (
-                      <CUItemContainer id={x.content_unit_uid} asList={true} key={i}>
-                        <LikeActions cuId={x.content_unit_uid} id={x.id} />
-                      </CUItemContainer>
-                    )
-                  )}
-                </Table.Body>
-              </Table>
-            </Container>) : null
+          !isMobileDevice && <Grid.Column mobile={16} tablet={6} computer={6} />
         }
-        <Container className="padded pagination-wrapper" textAlign="center">
-          <Pagination
-            pageNo={pageNo}
-            pageSize={PAGE_SIZE}
-            total={total}
-            onChange={setPage}
-          />
-        </Container>
-      </Grid.Column>
+      </Grid.Row>
     </Grid>
   );
 };

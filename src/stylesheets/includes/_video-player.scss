@@ -155,15 +155,9 @@
   }
 
   &__playlist-view {
-    @include mobile {
-      padding-bottom: 0;
-      padding-top: 0;
-    }
-
-    padding-top: 1em;
+    border: 1px solid $midWhite;
     clear: both;
     overflow-y: auto;
-    padding-bottom: 1rem;
     position: relative;
     margin: 0;
 

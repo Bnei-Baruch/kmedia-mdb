@@ -134,7 +134,11 @@ const PlaylistInfo = ({ cuID, t, handleClose = null }) => {
         onClose={toggle}
         size={'tiny'}
         trigger={
-          <Button basic className="my_playlist_add clear_button uppercase no-padding" onClick={handleOpenModal}>
+          <Button
+            basic
+            className="my_playlist_add clear_button uppercase no-padding"
+            onClick={handleOpenModal}
+          >
             <PlaylistAddIcon className="playlist_add" fill="#767676" />
             <span>{t('buttons.save')}</span>
           </Button>
@@ -187,19 +191,23 @@ const PlaylistInfo = ({ cuID, t, handleClose = null }) => {
 
           </List>
         </Modal.Content>
-        <Modal.Actions>
-          <Button
-            primary
-            content={t('buttons.save')}
-            onClick={save}
-            className="uppercase"
-          />
-          <Button
-            primary
-            content={t('buttons.cancel')}
-            onClick={toggle}
-          />
-        </Modal.Actions>
+        {
+          !isNewPlaylist && (
+            <Modal.Actions>
+              <Button
+                primary
+                content={t('buttons.save')}
+                onClick={save}
+                className="uppercase"
+              />
+              <Button
+                primary
+                content={t('buttons.cancel')}
+                onClick={toggle}
+              />
+            </Modal.Actions>
+          )
+        }
       </Modal>
     </>
   );

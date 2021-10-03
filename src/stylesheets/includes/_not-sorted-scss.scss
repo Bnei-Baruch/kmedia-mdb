@@ -30,7 +30,6 @@
     border: 1px solid #7dcff5 !important;
     border-radius: 20px !important;
     box-shadow: 0 0 6px 0 #7dcff5 !important;
-    width: 100%;
   }
 
   // main omnibox size
@@ -1983,12 +1982,15 @@
   }
 }
 
-.ui.table .cu_item_list {
-  display: block;
-  padding-bottom: 1px;
+.ui.container.cu_item_list {
+  border-bottom: 1px solid $midWhite;
+  display: flex;
+  justify-content: start;
+  margin: 0 0 1px;
+  position: relative;
 
-  &.selected {
-    background-color: $midWhite;
+  & > div {
+    position: relative;
   }
 
   @include mobile {
@@ -1996,21 +1998,45 @@
     padding-bottom: 17px;
   }
 
-  td {
+  &.selected {
+    background-color: $midWhite;
+  }
+
+  .column {
     position: relative;
     margin: 0;
     padding-bottom: 0;
     cursor: pointer;
   }
 
+  &.big {
+    .cu_info_description {
+      left: 2em;
+      right: 2em;
+    }
+  }
 
   &.small {
     padding: 0.7em;
 
-    td.cu_item_info {
-      padding-bottom: 1em;
+    .cu_item_name {
+      margin-top: 0;
+      margin-bottom: 8px;
+      font-size: 1.1em;
+      color: $grey;
+    }
+
+    .cu_info_description {
+      top: 60px;
+    }
+
+    .cu_item_duration {
+      margin: 4px;
+    }
+
+    .cu_item_info {
+      padding: 0 1em 1em;
       height: 80px;
-      padding-top: 0;
 
       .cu_item_name {
         -webkit-line-clamp: 2;
@@ -2019,15 +2045,12 @@
         overflow: hidden;
       }
     }
+
+    .cu_item_img {
+      width: 144px;
+    }
   }
 
-  td.cu_item_info {
-    height: 100%;
-  }
-
-}
-
-.cu_item_list {
   .cu_item_info_co {
     color: $black;
 
@@ -2070,36 +2093,50 @@
     position: relative;
     width: 100%;
     height: auto;
-
+    @include mobile {
+      width: 165px;
+    }
   }
 
-
   .cu_item_info {
-    padding-right: 2em !important;
-    padding-left: 2em !important;
+    padding: 1em 2em 0;
+    position: relative;
+    width: 100%;
+
     @include mobile {
-      padding-top: 0 !important;
-      padding-right: 0 !important;
-      padding-left: 8px !important;
-      max-width: 0;
+      position: absolute;
+      padding: 0;
+      top: 1em;
+      left: 173px;
+      right: 0;
+      width: auto;
     }
 
     &.rtl {
       @include mobile {
-        padding-right: 8px !important;
-        padding-left: 0 !important;
+        right: 173px;
+        left: 0;
       }
     }
   }
 
   .cu_info_description {
     margin: 0;
+    height: 1.1em;
     position: absolute;
     bottom: 1em;
     opacity: 0.43;
     color: $black;
+    right: 1em;
+    left: 1em;
+    width: auto;
+
     @include mobile {
-      top: 75px;
+      top: 78px;
+      bottom: auto;
+      left: 0;
+      right: 0;
+      width: 100%;
     }
   }
 
@@ -2107,6 +2144,7 @@
     margin: 1em 0 2.5em;
     color: $fullBlack;
     display: inline-block;
+
     @include mobile {
       margin-top: 0;
       margin-bottom: 8px;
@@ -2115,28 +2153,27 @@
       -webkit-box-orient: vertical;
       overflow: hidden;
       height: 60px;
-      color: $grey;
-    }
-  }
-
-  &.small {
-    .cu_item_name {
-      margin-top: 0;
-      margin-bottom: 8px;
-      font-size: 1.1em;
-      color: $grey;
     }
 
-    .cu_info_description {
-      top: 60px;
+    &.ui.dropdown .menu > .item {
+      color: rgba(0, 0, 0, .6);
     }
 
-    .cu_item_duration {
-      margin: 4px;
+    & > .icon {
+      color: $midGrey;
     }
   }
 }
 
+.rtl .cu_item_actions {
+  right: auto;
+  left: -0.5em;
+
+  .cu_item_dropdown {
+    padding-right: 1em;
+    padding-left: 0;
+  }
+}
 
 .weight-normal {
   font-weight: normal !important;
@@ -2186,22 +2223,14 @@
 }
 
 .my_playlist_actions {
-  position: absolute;
-  top: .5em;
-  left: 0;
-  right: 0;
   display: none;
+  height: 100%;
+  flex-direction: column;
+  justify-content: space-between;
 
   @include mobile {
     display: block;
     margin-top: -15px;
-  }
-
-  & > div {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
   }
 }
 
@@ -2213,18 +2242,6 @@
 .playlist_add {
   height: 30px;
   width: 28px;
-}
-
-.cu_item_dropdown {
-  margin-bottom: 30px;
-
-  &.ui.dropdown .menu > .item {
-    color: rgba(0, 0, 0, .6);
-  }
-
-  & > .icon {
-    color: $midGrey;
-  }
 }
 
 .my_playlist_add {
@@ -2244,7 +2261,7 @@
 }
 
 .cu_item:hover .my_playlist_actions {
-  display: block;
+  display: flex;
 }
 
 .align_items_center {

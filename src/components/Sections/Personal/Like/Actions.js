@@ -23,7 +23,14 @@ const Actions = ({ cuId, id, t }) => {
     setOpen(true);
   }
 
-  const handleClose = () => setOpen(false);
+  const handleClose = e => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+
+    setOpen(false);
+  }
 
   return (
     <Dropdown
@@ -40,7 +47,6 @@ const Actions = ({ cuId, id, t }) => {
           <PlaylistInfo cuID={cuId} t={t} handleClose={handleClose} />
         </Dropdown.Item>
         <Dropdown.Item
-          as={'a'}
           fitted="vertically"
           icon="remove circle"
           onClick={removeItem}

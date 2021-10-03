@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
-import { Header, Progress, Table } from 'semantic-ui-react';
+import { Container, Header, Progress } from 'semantic-ui-react';
+import clsx from 'clsx';
 
 import * as shapes from '../../shapes';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
@@ -10,25 +11,24 @@ import { formatDuration } from '../../../helpers/utils';
 import { isLanguageRtl } from '../../../helpers/i18n-utils';
 import UnitLogo from '../Logo/UnitLogo';
 import Link from '../../Language/MultiLanguageLink';
-import clsx from 'clsx';
 
 const imageWidthBySize = {
   'small': 144,
-  '': 287
+  'big': 287
 };
 
 const ListTemplate = ({
-                        unit,
-                        language,
-                        withCCUInfo,
-                        link,
-                        ccu,
-                        description,
-                        children,
-                        playTime,
-                        size = '',
-                        selected
-                      }) => {
+  unit,
+  language,
+  withCCUInfo,
+  link,
+  ccu,
+  description,
+  children,
+  playTime,
+  size = 'big',
+  selected
+}) => {
   const dir                = isLanguageRtl(language) ? 'rtl' : 'ltr';
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
@@ -62,40 +62,38 @@ const ListTemplate = ({
     );
   }
 
+  const width = isMobileDevice ? 165 : imageWidthBySize[size];
   return (
-    <Table.Row
+    <Container
       as={Link}
       to={link}
       key={unit.id}
-      className={clsx('cu_item cu_item_list no-thumbnail', { size, 'selected': selected })}
-      verticalAlign="top"
+      className={clsx('cu_item cu_item_list no-thumbnail', { size, selected })}
     >
-      <Table.Cell width={2} className={'padding_r_l_0 no-padding-top'} verticalAlign={'top'}>
-        <div style={{ position: 'relative' }}>
-          <div className="cu_item_duration">{formatDuration(unit.duration)}</div>
-          {percent}
-          <span className="cu_item_img">
-            <UnitLogo unitId={unit.id} width={isMobileDevice ? 165 : imageWidthBySize[size]} />
-          </span>
+      <div>
+        <div className="cu_item_duration">{formatDuration(unit.duration)}</div>
+        {percent}
+        <div className="cu_item_img" style={{ width }}>
+          <UnitLogo unitId={unit.id} width={width} />
         </div>
-      </Table.Cell>
-      <Table.Cell verticalAlign={'top'} className={`cu_item_info ${dir}`}>
+      </div>
+      <div className={`cu_item_info ${dir}`}>
         {ccu_info}
-        <span className={clsx('cu_item_name', { 'font_black': !ccu_info })}>
+        <div className={clsx('cu_item_name', { 'font_black': !ccu_info })}>
           {unit.name}
-        </span>
-        <div className={`cu_info_description ${dir}`}>
+        </div>
+        <div className={`cu_info_description ${dir} text_ellipsis`}>
           {description.map((d, i) => (<span key={i}>{d}</span>))}
         </div>
-      </Table.Cell>
+      </div>
       {
         children ? (
-          <Table.Cell width="1" verticalAlign="middle" textAlign="center" className="padding_r_l_0">
+          <div className="cu_item_actions">
             {children}
-          </Table.Cell>
+          </div>
         ) : null
       }
-    </Table.Row>
+    </Container>
   );
 };
 
