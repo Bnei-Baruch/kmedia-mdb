@@ -62,7 +62,7 @@ const PlaylistHeader = ({ collection, t, prevLink = null, nextLink = null }) => 
     let subheader = '';
 
     if (isLesson) {
-      subheader = `${t('values.date', { date: film_date })}${number && ` (${t('lessons.list.nameByNum_' + number)})`}`;
+      subheader = `${t('values.date', { date: film_date })}${number && ` (${t(`lessons.list.nameByNum_${  number}`)})`}`;
     } else if (film_date) {
       subheader = t('values.date', { date: film_date });
     } else if (start_date && end_date) {

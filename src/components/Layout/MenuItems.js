@@ -10,6 +10,7 @@ import DonateNow, { VirtualHomeButton } from './DonateNow';
 import FeedBurner from './FeedBurner';
 import { useDispatch, useSelector } from 'react-redux';
 import { actions, selectors } from '../../redux/modules/auth';
+import { VERSION_WITH_PERSONALIZATION } from '../../helpers/consts';
 
 const ITEMS = [
   'lessons',
@@ -80,7 +81,7 @@ const MenuItems = ({ simple = false, visible = false, t, onItemClick = identity,
   if (simple) {
     return (
       <Menu vertical borderless fluid color="blue" size="huge">
-        {personal}
+        {VERSION_WITH_PERSONALIZATION && personal}
         {items}
         <Menu.Item
           as="a"
@@ -90,7 +91,7 @@ const MenuItems = ({ simple = false, visible = false, t, onItemClick = identity,
         />
         <Menu.Item className="mobile-only">
           <DonateNow language={language} />
-          <VirtualHomeButton />
+          <VirtualHomeButton language={language} />
         </Menu.Item>
         <Menu.Item
           key="rss"

@@ -21,8 +21,7 @@ const storeContentLanguage = (language, setContentLanguage) => {
   setContentLanguage(language);
 };
 
-
-const DesktopLanguage = ({ language, contentLanguage, setContentLanguage, t }) => (
+const DesktopLanguage = ({ language, contentLanguage, setContentLanguage }) => (
   <Dropdown item scrolling text={LANGUAGES[contentLanguage].name}>
     <Dropdown.Menu>
       {
@@ -43,7 +42,7 @@ const DesktopLanguage = ({ language, contentLanguage, setContentLanguage, t }) =
   </Dropdown>
 );
 
-const MobileLanguage = ({ language, contentLanguage, t, setContentLanguage }) => {
+const MobileLanguage = ({ language, contentLanguage, setContentLanguage }) => {
 // We need dependency on location in order to change Link every time url changes
   const history = useHistory();
   const location = useLocation();
@@ -94,12 +93,11 @@ const ContentLanguage = ({ t }) => {
               language={language}
               contentLanguage={contentLanguage}
               setContentLanguage={setContentLanguage}
-              t={t} />
+            />
             :
             <DesktopLanguage
               language={language}
               contentLanguage={contentLanguage}
-              t={t}
               setContentLanguage={setContentLanguage}
               storeContentLanguage={storeContentLanguage}
             />

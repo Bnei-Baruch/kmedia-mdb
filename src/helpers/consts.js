@@ -1,3 +1,5 @@
+export const VERSION_WITH_PERSONALIZATION = false;
+
 // Collection Types
 export const CT_DAILY_LESSON       = 'DAILY_LESSON';
 export const CT_SPECIAL_LESSON     = 'SPECIAL_LESSON';
