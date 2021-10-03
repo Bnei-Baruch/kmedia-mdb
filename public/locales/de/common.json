@@ -114,7 +114,9 @@
     "previous": "Zurück",
     "next": "Nächstes",
     "copy": "Kopieren",
-    "view-all": "Alle ansehen"
+    "view-all": "Alle ansehen",
+    "save": "Save",
+    "remove": "Remove"
   },
   "player": {
     "messages": {
@@ -390,7 +392,9 @@
         "sources": "Quellen",
         "topics": "Themen",
         "collections": "Bezieht sich auf",
-        "episode": "Episode {{name}}"
+        "episode": "Episode {{name}}",
+        "lesson-episode": "Part {{name}}",
+        "views": "{{views}} Views"
       },
       "recommended": {
         "same-collection": {
@@ -604,5 +608,35 @@
     "copy-link": "Link kopieren",
     "copy-text": "Text kopieren",
     "disable-share": "Stornieren"
+  },
+  "personal": {
+    "subsNewUnits": "new episodes",
+    "unsubscribe": "Unsubscribe",
+    "subscribe": "Subscribe",
+    "unsubscribeSuccessful": "Subscription removed",
+    "subscribeSuccessful": "Subscription added",
+    "newPlaylistSuccessful": "New playlist {{name}} created",
+    "addToPlaylistSuccessful": "Added to playlist {{name}}",
+    "history": "History",
+    "likes": "Liked videos",
+    "playlists": "Playlists",
+    "playlistNoResult": "No videos in this playlist",
+    "subscriptions": "Subscriptions",
+    "playAll": "Play all",
+    "addToPlaylist": "Save to...",
+    "newPlaylistName": "New playlist name",
+    "newPlaylist": "Create new playlist",
+    "editPlaylist": "Edit playlist",
+    "removedSuccessfully": "Successfully removed",
+    "removeHistory": "Remove from history",
+    "removeLike": "Remove from Liked videos",
+    "removeFromPlaylist": "Remove from playlist",
+    "confirmRemovePlaylist": "Are you sure you want to delete playlist {{name}}?\nNote: Deleting playlists is a permanent action and cannot be undone.",
+    "confirmUnsubscribe": "Unsubscribe from {{name}}?",
+    "videosOnList": "videos",
+    "login": "Login",
+    "logout": "Logout",
+    "needToLogin": "Sign in to like, save and subscribe to videos",
+    "account": "My Account"
   }
 }

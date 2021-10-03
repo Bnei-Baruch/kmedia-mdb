@@ -8,7 +8,7 @@ const IMAGINARY_URL           = process.env.REACT_APP_IMAGINARY_URL;
 const IMAGINARY_INTERNAL_HOST = process.env.REACT_APP_IMAGINARY_INTERNAL_HOST || 'localhost';
 const API_FEED                = process.env.REACT_APP_FEED;
 const CHRONICLES_BACKEND      = process.env.REACT_APP_CHRONICLES_BACKEND;
-const MY_BACKEND              = process.env.REACT_APP_MY_BACKEND;
+const PERSONAL_API_BACKEND    = process.env.REACT_APP_MY_BACKEND;
 
 export const backendUrl               = path => `${API_BACKEND}${path}`;
 export const assetUrl                 = path => `${ASSETS_BACKEND}${path}`;
@@ -153,7 +153,16 @@ class Api {
     Requests.get(`simple?${Requests.makeParams({ language, start_date, end_date })}`)
   );
 
-  static recommendedRequestData = ({ uid, languages, skipUids: skip_uids, size: more_items, spec, specs, watchingNowMin: watching_now_min, popularMin: popular_min }) => ({
+  static recommendedRequestData = ({
+    uid,
+    languages,
+    skipUids: skip_uids,
+    size: more_items,
+    spec,
+    specs,
+    watchingNowMin: watching_now_min,
+    popularMin: popular_min
+  }) => ({
     more_items,
     'current_feed': [],
     'options': {
@@ -211,12 +220,12 @@ class Api {
       delete params.id;
     }
 
-    const url = `${MY_BACKEND}rest/${urlParam}`;
+    const url = `${PERSONAL_API_BACKEND}rest/${urlParam}`;
     return Requests.auth(params, url, token, method);
   };
 
   static likeCount = params => {
-    const url    = `${MY_BACKEND}like_count?${Requests.makeParams(params)}`;
+    const url    = `${PERSONAL_API_BACKEND}like_count?${Requests.makeParams(params)}`;
     const config = { url, method: 'GET' };
     return axios(config);
   };

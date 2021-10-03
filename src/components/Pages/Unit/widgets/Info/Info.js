@@ -15,7 +15,8 @@ import {
   CT_SPECIAL_LESSON,
   CT_VIDEO_PROGRAM_CHAPTER,
   CT_VIRTUAL_LESSON,
-  CT_WOMEN_LESSON
+  CT_WOMEN_LESSON,
+  VERSION_WITH_PERSONALIZATION
 } from '../../../../../helpers/consts';
 import { canonicalLink } from '../../../../../helpers/links';
 import { intersperse, tracePath } from '../../../../../helpers/utils';
@@ -144,7 +145,7 @@ const getEpisodeInfo = (ct, cIDs, currentCollection, filmDate, t) => {
   return episodeInfo.map((x, i) => (
     <span key={i}>
       {x}
-      {i < len && (<span className="seperator">|</span>)}
+      {i < len && (<span className="separator">|</span>)}
     </span>
   ));
 };
@@ -171,7 +172,13 @@ const Info = ({ unit = {}, section = '', t, currentCollection = null }) => {
 
   return (
     <>
-      <PersonalInfo collection={currentCollection} unit={unit} />
+      {
+        VERSION_WITH_PERSONALIZATION ?
+          <PersonalInfo collection={currentCollection} unit={unit} /> :
+          <div className="padding-top_1em">
+            <div className="padding-top_1em" />
+          </div>
+      }
       <div className="unit-info">
         {
           !isMultiLessons && collectionsLinks.length > 0 && (
@@ -189,7 +196,7 @@ const Info = ({ unit = {}, section = '', t, currentCollection = null }) => {
           {
             (views > 0) && (
               <span key="views">
-                <span className="seperator">|</span>
+                <span className="separator">|</span>
                 {t('pages.unit.info.views', { views })}
               </span>
             )

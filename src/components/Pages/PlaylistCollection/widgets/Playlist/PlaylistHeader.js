@@ -17,8 +17,9 @@ const getContentByType = (collection, t) => {
   const ct                       = content_type === CT_SPECIAL_LESSON ? CT_DAILY_LESSON : content_type;
   let byNum                      = null;
   if (number) {
-    byNum = <small> ({t('lessons.list.nameByNum_' + number)})</small>;
+    byNum = <small> ({t(`lessons.list.nameByNum_${  number}`)})</small>;
   }
+
   return (
     <>
       {t(`constants.content-types.${ct}`)}
@@ -64,6 +65,7 @@ const PlaylistHeader = ({ collection, t, prevLink = null, nextLink = null }) => 
     } else if (start_date && end_date) {
       subheader = fromToLocalized(start_date, end_date);
     }
+
     return subheader;
   };
 

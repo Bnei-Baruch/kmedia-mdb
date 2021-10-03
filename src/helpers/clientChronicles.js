@@ -6,6 +6,7 @@ import { chroniclesUrl, chroniclesBackendEnabled } from './Api';
 import { noop, partialAssign } from './utils';
 
 import { actions } from '../redux/modules/chronicles';
+import { selectors as settings } from '../redux/modules/settings';
 import { types as recommendedTypes } from '../redux/modules/recommended';
 import { types as searchTypes } from '../redux/modules/search';
 import { types as authTypes } from '../redux/modules/auth';
@@ -15,17 +16,9 @@ import { ClientChroniclesContext } from './app-contexts';
 const ACTIVITY_EVENTS = ['mousedown', 'mousemove', 'keydown', 'scroll', 'touchstart'];
 
 const FLOWS = [
-  { start: 'page-enter', end: 'page-leave', subFlows: ['recommend', 'search', 'autocomplete', 'user-inactive'] },
-  {
-    start: 'unit-page-enter',
-    end: 'unit-page-leave',
-    subFlows: ['player-play', 'recommend', 'search', 'autocomplete', 'user-inactive']
-  },
-  {
-    start: 'collection-page-enter',
-    end: 'collection-page-leave',
-    subFlows: ['collection-unit-selected', 'recommend', 'search', 'autocomplete', 'user-inactive']
-  },
+  { start: 'page-enter',               end: 'page-leave',                 subFlows: ['recommend', 'search', 'autocomplete', 'user-inactive', 'download'] },
+  { start: 'unit-page-enter',          end: 'unit-page-leave',            subFlows: ['player-play', 'recommend', 'search', 'autocomplete', 'user-inactive', 'download'] },
+  { start: 'collection-page-enter',    end: 'collection-page-leave',      subFlows: ['collection-unit-selected', 'recommend', 'search', 'autocomplete', 'user-inactive', 'download'] },
   { start: 'collection-unit-selected', end: 'collection-unit-unselected', subFlows: ['player-play', 'user-inactive'] },
   { start: 'player-play', end: 'player-stop', subFlows: ['mute-unmute', 'user-inactive'] },
   { start: 'recommend', end: '', subFlows: ['recommend-selected'] },
@@ -135,6 +128,9 @@ export default class ClientChronicles {
         this.prevHref = window.location.href;
       }
     });
+
+    this.uiLanguage = '';
+    this.contentLanguage = '';
   }
 
   setAbTesting(abTesting) {
@@ -322,9 +318,11 @@ export default class ClientChronicles {
   }
 
   append(eventType, data, sync = false) {
-    data.ab              = this.abTesting;
-    data.location        = eventType.endsWith('page-leave') ? this.prevHref : window.location.href;
-    const eventId        = ulid();
+    data.ab = this.abTesting;
+    data.ui_language = this.uiLanguage;
+    data.content_language = this.contentLanguage;
+    data.location = eventType.endsWith('page-leave') ? this.prevHref : window.location.href;
+    const eventId = ulid();
     const nowTimestampMs = Date.now();
     let flowId           = '';
     let flowType         = '';
@@ -374,10 +372,17 @@ export default class ClientChronicles {
 // Have to add the relevant actions to redux/modules/chronicles.js for this to work.
 export const ChroniclesActions = () => {
   const clientChronicles = useContext(ClientChroniclesContext);
-  const action           = useSelector(state => state.chronicles.lastAction);
-  const actionsCount     = useSelector(state => state.chronicles.actionsCount);
+  const action = useSelector(state => state.chronicles.lastAction);
+  const actionsCount = useSelector(state => state.chronicles.actionsCount);
+  const uiLanguage = useSelector(state => settings.getLanguage(state.settings));
+  const contentLanguage = useSelector(state => settings.getContentLanguage(state.settings));
+  if (clientChronicles) {
+    clientChronicles.uiLanguage = uiLanguage;
+    clientChronicles.contentLanguage = contentLanguage;
+  }
+
   useEffect(() => {
-    if (action) {
+    if (action && clientChronicles) {
       clientChronicles.onAction(action);
     }
   }, [action, actionsCount, clientChronicles]);
