@@ -129,15 +129,15 @@ const setBanners = (allBanners, bannerIdx, setBannerIdx) => {
 };
 
 const HomePage = ({
-                    banners,
-                    language,
-                    location,
-                    latestUnits = [],
-                    latestLesson = null,
-                    latestBlogPosts = [],
-                    latestTweets = [],
-                    t,
-                  }) => {
+  banners,
+  language,
+  location,
+  latestUnits = [],
+  latestLesson = null,
+  latestBlogPosts = [],
+  latestTweets = [],
+  t,
+}) => {
 
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
