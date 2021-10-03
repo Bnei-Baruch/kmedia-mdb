@@ -68,7 +68,7 @@ const ListTemplate = ({
       as={Link}
       to={link}
       key={unit.id}
-      className={clsx('cu_item cu_item_list no-thumbnail', { size, 'selected': selected })}
+      className={clsx('cu_item cu_item_list no-thumbnail', { size, selected })}
     >
       <div>
         <div className="cu_item_duration">{formatDuration(unit.duration)}</div>
