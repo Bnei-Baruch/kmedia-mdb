@@ -30,7 +30,6 @@
     border: 1px solid #7dcff5 !important;
     border-radius: 20px !important;
     box-shadow: 0 0 6px 0 #7dcff5 !important;
-    width: 100%;
   }
 
   // main omnibox size
@@ -2154,22 +2153,6 @@
       -webkit-box-orient: vertical;
       overflow: hidden;
       height: 60px;
-      color: $grey;
-    }
-  }
-}
-
-.cu_item_actions {
-  position: absolute !important;
-  right: -0.5em;
-  top: 20%;
-
-  .cu_item_dropdown {
-    padding: 1em 0 1em 1em;
-
-    .my_playlist_add {
-      width: 100%;
-      text-align: start;
     }
 
     &.ui.dropdown .menu > .item {
