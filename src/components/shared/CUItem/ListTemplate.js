@@ -17,17 +17,17 @@ const imageWidthBySize = {
 };
 
 const ListTemplate = ({
-                        unit,
-                        language,
-                        withCCUInfo,
-                        link,
-                        ccu,
-                        description,
-                        children,
-                        playTime,
-                        size = '',
-                        selected
-                      }) => {
+  unit,
+  language,
+  withCCUInfo,
+  link,
+  ccu,
+  description,
+  children,
+  playTime,
+  size = '',
+  selected
+}) => {
   const dir                = isLanguageRtl(language) ? 'rtl' : 'ltr';
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
@@ -66,7 +66,7 @@ const ListTemplate = ({
       as={Link}
       to={link}
       key={unit.id}
-      className={`cu_item cu_item_list no-thumbnail${size ? ' ' + size : ''}${selected ? ' selected' : ''}`}
+      className={`cu_item cu_item_list no-thumbnail${size ? ` ${  size}` : ''}${selected ? ' selected' : ''}`}
       verticalAlign="top"
     >
       <Table.Cell width={2} className={'padding_r_l_0 no-padding-top'} verticalAlign={'top'}>

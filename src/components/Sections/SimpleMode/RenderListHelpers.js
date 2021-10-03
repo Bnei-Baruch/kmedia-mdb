@@ -153,6 +153,7 @@ export const renderCollection = (collection, language, t, helpChooseLang) => {
     return null;
 
   }
+
   const units = renderUnits(collection.content_units, language, t, helpChooseLang);
 
   return (
@@ -160,7 +161,7 @@ export const renderCollection = (collection, language, t, helpChooseLang) => {
       <Card.Content className={number ? 'gray-header' : ''}>
         <Card.Header className="unit-header">
           <Link to={canonicalLink(collection)}>
-            {`${t(CT_DAILY_LESSON_I18N_KEY)}${number ? ` (${t('lessons.list.nameByNum_' + number)})` : ''}`}
+            {`${t(CT_DAILY_LESSON_I18N_KEY)}${number ? ` (${t(`lessons.list.nameByNum_${  number}`)})` : ''}`}
           </Link>
         </Card.Header>
       </Card.Content>

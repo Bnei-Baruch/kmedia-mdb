@@ -76,7 +76,7 @@ export const renderCollection = (collection, t) => {
       </Table.Cell>
       <Table.Cell>
         <Link className="index__title" to={canonicalLink(collection)}>
-          {`${t(CT_DAILY_LESSON_I18N_KEY)}${number ? ` (${t('lessons.list.nameByNum_' + number)})` : ''}`}
+          {`${t(CT_DAILY_LESSON_I18N_KEY)}${number ? ` (${t(`lessons.list.nameByNum_${  number}`)})` : ''}`}
         </Link>
       </Table.Cell>
     </Table.Row>
