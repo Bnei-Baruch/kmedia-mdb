@@ -30,7 +30,7 @@ const CardTemplate = ({ unit, language, withCCUInfo, link, ccu, description, chi
     <div className="cu_item_info_co">
       <Divider style={{ width: '4em' }} />
       <div style={{ margin: '0 -1.5em' }}>
-        <UnitLogo collectionId={ccu.id} fallbackImg={'https://kabbalahmedia.info/assets/logos/collections/zf4lLwyI.jpg'} />
+        <UnitLogo collectionId={ccu.id} circular />
       </div>
       <Popup
         basic
