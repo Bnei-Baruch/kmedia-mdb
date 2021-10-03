@@ -107,18 +107,36 @@
     max-height: 40rem;
 
     > .header, .sub {
-      background-color: $black;
       color: $darkWhite;
+      align-items: flex-start;
     }
 
     > .header {
+      background-image: linear-gradient(0deg, #1b1c1d, rgba(27, 28, 29, .85));
       @include mobile {
-        padding: 1em 0.5em 0.5em;
-      }
+        padding: 1em 0.5em;
+        font-size: 18px;
 
-      padding: 0.5em 0.5em 1em;
+        & small {
+          font-size: 14px !important;
+        }
+      }
+      font-size: 2.0rem;
+      padding: 0.5em;
       margin-top: 0;
       margin-bottom: 0;
+
+      .content {
+        padding: 0 1em;
+      }
+
+      & small {
+        font-size: 70%;
+      }
+
+      &.h3 {
+        font-size: 1.5rem;
+      }
     }
   }
 

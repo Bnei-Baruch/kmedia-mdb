@@ -19,7 +19,7 @@ import { DeviceInfoContext } from '../../../helpers/app-contexts';
 
 const renderPlayer = unit => <AVBox unit={unit} />;
 
-const UnitPage = ({ section = '', t }) => {
+const UnitPage = ({ t }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const location           = useLocation();
   const { id }             = useParams();
@@ -71,7 +71,7 @@ const UnitPage = ({ section = '', t }) => {
               <Grid.Row>
                 <Grid.Column>
                   <Container className="unit_container">
-                    <Info unit={unit} section={section} />
+                    <Info unit={unit} />
                     <Materials unit={unit} />
                   </Container>
                 </Grid.Column>

@@ -112,7 +112,7 @@
     "more": "More",
     "copy-link": "Copy Link",
     "search": "Search",
-    "previous": "Previous",
+    "previous": "To the previous lesson",
     "next": "Next",
     "copy": "Copy",
     "view-all": "View All",
@@ -135,6 +135,17 @@
     },
     "error": {
       "loading": "Error loading file."
+    }
+  },
+  "playlist": {
+    "title-by-type": {
+      "DAILY_LESSON": "Parts of the lesson",
+      "SPECIAL_LESSON": "Parts of the lesson",
+      "CONGRESS": "Parts of the event",
+      "HOLIDAY": "Parts of the holiday",
+      "PICNIC": "Parts of the event",
+      "UNITY_DAY": "Parts of the event",
+      "LESSONS_SERIES": "Parts of the collection"
     }
   },
   "messages": {
@@ -301,7 +312,7 @@
       "description": "An up to date shortcut to the latest Daily Lesson"
     }
   },
-  "likutim":{
+  "likutim": {
     "header": {
       "text": "Excerpts from Kabbalistic Sources",
       "subtext": "Excerpts from the Sources on various subjects"

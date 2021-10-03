@@ -111,7 +111,7 @@
     "more": "עוד",
     "copy-link": "העתק קישור",
     "search": "חפש",
-    "previous": "הקודם",
+    "previous": "לשיעור הקודם",
     "next": "הבא",
     "copy": "העתק",
     "view-all": "הצג הכל",
@@ -300,7 +300,7 @@
       "description": "קיצור דרך מתעדכן לשיעור הקבלה היומי האחרון"
     }
   },
-  "likutim":{
+  "likutim": {
     "header": {
       "text": "ליקוטי מקובלים",
       "subtext": "ליקוטי מקובלים בנושאים שונים"
@@ -570,7 +570,7 @@
       "am": "אמהרית"
     },
     "content-types": {
-      "DAILY_LESSON": "שיעור",
+      "DAILY_LESSON": "שיעור הקבלה היומי",
       "SPECIAL_LESSON": "שיעור מיוחד",
       "FRIENDS_GATHERINGS": "ישיבות חברים",
       "CONGRESS": "כנס",

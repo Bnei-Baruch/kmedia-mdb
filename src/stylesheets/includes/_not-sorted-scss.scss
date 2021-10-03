@@ -163,16 +163,24 @@
 
   .dateButton, .dateButton:hover, .dateButton:active, .dateButton:focus {
     color: white;
-    background-color: #333333;
-  }
+    background-color: transparent;
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: normal;
+    padding-right: 0.5em;
+    padding-left: 0.5em;
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
 
-  @include mobile {
-    .avbox__playlist-prev-button, .avbox__playlist-next-button {
-      display: inline-block;
+    .icon {
+      opacity: 1 !important;
+    }
 
-      .icon {
-        width: 20px;
-        text-align: center;
+    @include mobile {
+      & .icon {
+        font-size: 1rem;
+        line-height: 0.8rem
       }
     }
   }
@@ -183,30 +191,19 @@
   align-items: start;
 }
 
-.avbox__playlist-prev-button {
+.avbox__playlist-prev-button, .avbox__playlist-next-button {
+  @include mobile {
+    padding: 0 4px;
+  }
+
   i.icon {
-    margin: 0 !important;
+    margin: 0 .25rem !important;
     color: white;
-  }
-}
+    width: 15px;
+    display: inline-block;
 
-.avbox__playlist-next-button {
-  i.icon {
-    margin: 0 !important;
-    color: white;
-  }
-}
-
-.rtl {
-  .avbox__playlist-prev-button {
-    i.icon {
-      margin: 0 0 0 .25rem !important;
-    }
-  }
-
-  .avbox__playlist-next-button {
-    i.icon {
-      margin: 0 .25rem 0 0 !important;
+    &:hover {
+      opacity: 0.8;
     }
   }
 }
@@ -1551,15 +1548,16 @@
     .searchButton {
       margin-right: 5px !important;
       padding-left: 15px !important;
-      padding-right: 0px !important;
+      padding-right: 0 !important;
     }
   }
   .dateButton {
-    padding-left: 15px !important;
-    padding-right: 0px !important;
+    padding-left: 8px !important;
+    padding-right: 0 !important;
 
     &.dateButton_with_label {
       padding-right: 4px !important;
+      margin: 0;
     }
   }
 
@@ -1584,7 +1582,7 @@
     }
     .dateButton {
       padding-left: 5px !important;
-      padding-right: 15px !important;
+      padding-right: 8px !important;
 
       &.dateButton_with_label {
         left: 4px !important;
@@ -1989,6 +1987,10 @@
   margin: 0 0 1px;
   position: relative;
 
+  &:last-child {
+    border: 0;
+  }
+
   & > div {
     position: relative;
   }
@@ -2153,6 +2155,22 @@
       -webkit-box-orient: vertical;
       overflow: hidden;
       height: 60px;
+      color: $grey;
+    }
+  }
+}
+
+.cu_item_actions {
+  position: absolute !important;
+  right: -0.5em;
+  top: 20%;
+
+  .cu_item_dropdown {
+    padding: 1em 0 1em 1em;
+
+    .my_playlist_add {
+      width: 100%;
+      text-align: start;
     }
 
     &.ui.dropdown .menu > .item {

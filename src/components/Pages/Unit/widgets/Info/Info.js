@@ -68,37 +68,6 @@ const makeTagLinks = (tags = [], getTagById) =>
       </Link>;
     }), ''));
 
-const makeSourcesLinks = (sources = [], getSourceById, filteredListPath) => Array.from(intersperse(
-  sources.map((x, i) => {
-    const source = getSourceById(x);
-    if (!source) {
-      return '';
-    }
-
-    const path    = tracePath(source, getSourceById);
-    const display = path.map(y => y.name).join(' > ');
-
-    if (filteredListPath) {
-      const query = filtersTransformer.toQueryParams([
-        { name: 'sources-filter', values: [path.map(y => y.id)] }
-      ]);
-
-      return (
-        <Link
-          key={x}
-          to={{
-            pathname: `/${filteredListPath}`,
-            search: urlSearchStringify(query)
-          }}
-        >
-          {display}
-        </Link>
-      );
-    }
-
-    return <span key={x}>{display}</span>;
-  }), ', '));
-
 const makeCollectionsLinks = (collections = {}, t, currentCollection) => {
   // filter out the current collection
   const colValues           = Object.values(collections);
@@ -150,22 +119,14 @@ const getEpisodeInfo = (ct, cIDs, currentCollection, filmDate, t) => {
   ));
 };
 
-const Info = ({ unit = {}, section = '', t, currentCollection = null }) => {
-  const getSourceById = useSelector(state => sourcesSelectors.getSourceById(state.sources));
-  const getTagById    = useSelector(state => tagsSelectors.getTagById(state.tags));
+const Info = ({ unit = {}, t, currentCollection = null }) => {
+  const getTagById = useSelector(state => tagsSelectors.getTagById(state.tags));
 
   const { id, name, film_date: filmDate, sources, tags, collections, content_type: ct, cIDs } = unit;
 
   const views = useSelector(state => recommended.getViews(id, state.recommended));
 
-  // take lessons section tabs into consideration
-  let filteredListPath = section;
-  if (filteredListPath === 'lessons') {
-    filteredListPath += filterLessons(ct, filmDate);
-  }
-
   const tagLinks         = makeTagLinks(tags, getTagById);
-  const sourcesLinks     = makeSourcesLinks(sources, getSourceById, filteredListPath);
   const collectionsLinks = makeCollectionsLinks(collections, t, currentCollection);
   const isMultiLessons   = Object.values(collections).some(col => col.content_type === CT_LESSONS_SERIES || col.content_type === CT_CONGRESS);
   const episodeInfo      = getEpisodeInfo(ct, cIDs, currentCollection, filmDate, t);

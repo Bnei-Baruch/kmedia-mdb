@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useHistory } from 'react-router';
 import { withNamespaces } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -10,16 +10,18 @@ import { selectors as settings } from '../../../../../redux/modules/settings';
 import { actions, selectors } from '../../../../../redux/modules/mdb';
 import ButtonDayPicker from '../../../../Filters/components/Date/ButtonDayPicker';
 import { canonicalLink } from '../../../../../helpers/links';
+import { DeviceInfoContext } from '../../../../../helpers/app-contexts';
 
-const CollectionDatePicker = ({ collection }) => {
+const CollectionDatePicker = ({ collection, t }) => {
+  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const { film_date, id }  = collection;
+  const history            = useHistory();
 
-  const { film_date, id } = collection;
-  const history           = useHistory();
-  const dispatch          = useDispatch();
-
+  const dispatch = useDispatch();
   const language = useSelector(state => settings.getLanguage(state.settings));
   const coID     = useSelector(state => selectors.getDatepickerCO(state.mdb));
-  const co       = useSelector(state => selectors.getDenormCollectionWUnits(state.mdb, coID));
+
+  const co = useSelector(state => selectors.getDenormCollectionWUnits(state.mdb, coID));
 
   useEffect(() => {
     if (co && co.id !== id) {
@@ -39,7 +41,7 @@ const CollectionDatePicker = ({ collection }) => {
 
   return (
     <ButtonDayPicker
-      label={film_date}
+      label={isMobileDevice ? film_date : t('values.date', { date: film_date })}
       language={language}
       onDayChange={fetchNextCO}
       value={Date.parse(film_date)}
@@ -52,4 +54,4 @@ CollectionDatePicker.propTypes = {
   collection: shapes.GenericCollection.isRequired
 };
 
-export default CollectionDatePicker;
+export default withNamespaces()(CollectionDatePicker);
