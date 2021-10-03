@@ -17,17 +17,17 @@ const imageWidthBySize = {
 };
 
 const ListTemplate = ({
-                        unit,
-                        language,
-                        withCCUInfo,
-                        link,
-                        ccu,
-                        description,
-                        children,
-                        playTime,
-                        size = 'big',
-                        selected
-                      }) => {
+  unit,
+  language,
+  withCCUInfo,
+  link,
+  ccu,
+  description,
+  children,
+  playTime,
+  size = 'big',
+  selected
+}) => {
   const dir                = isLanguageRtl(language) ? 'rtl' : 'ltr';
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
@@ -60,13 +60,14 @@ const ListTemplate = ({
       />
     );
   }
+
   const width = isMobileDevice ? 165 : imageWidthBySize[size];
   return (
     <Container
       as={Link}
       to={link}
       key={unit.id}
-      className={`cu_item cu_item_list no-thumbnail ${isMobileDevice ? ' ' + size : ''}${selected ? ' selected' : ''}`}
+      className={`cu_item cu_item_list no-thumbnail ${isMobileDevice ? ` ${  size}` : ''}${selected ? ' selected' : ''}`}
     >
       <div>
         <div className="cu_item_duration">{formatDuration(unit.duration)}</div>

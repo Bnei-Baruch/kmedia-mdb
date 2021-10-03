@@ -24,10 +24,11 @@ const Actions = ({ cuId, id, t }) => {
   }
 
   const handleClose = e => {
-    if(e){
+    if (e) {
       e.preventDefault();
       e.stopPropagation();
     }
+
     setOpen(false);
   }
 

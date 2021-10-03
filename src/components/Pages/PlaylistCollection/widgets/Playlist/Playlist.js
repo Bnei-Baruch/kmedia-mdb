@@ -16,19 +16,19 @@ const PlaylistWidget = ({ playlist, selected = 0, link, prevLink = null, nextLin
     <div id="avbox_playlist" className="avbox__playlist-view">
       {!isMobileDevice && <PlaylistHeader collection={collection} prevLink={prevLink} nextLink={nextLink} />}
 
-        {/* cannot use semantic Item because it doesn't recongnize the onClick event */}
-            {
-              unitsToDisplay.map((unit, i) => (
-                <CUItemContainer
-                  key={unit.id}
-                  id={unit.id}
-                  size="small"
-                  asList={true}
-                  selected={i === selected}
-                  link={link ? `${link}?ap=${i}` : null}
-                />
-              ))
-            }
+      {/* cannot use semantic Item because it doesn't recongnize the onClick event */}
+      {
+        unitsToDisplay.map((unit, i) => (
+          <CUItemContainer
+            key={unit.id}
+            id={unit.id}
+            size="small"
+            asList={true}
+            selected={i === selected}
+            link={link ? `${link}?ap=${i}` : null}
+          />
+        ))
+      }
     </div>
   );
 };
