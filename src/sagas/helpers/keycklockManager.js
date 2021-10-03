@@ -7,13 +7,6 @@ let logout = () => console.error('Must be override on browser, keycloak');
 //because of keycloak-js module use windows on init we import it dynamic
 let keycloak;
 
-//demi authentication
-/*
-export const initKC_ = (dispatch) => {
-  dispatch(actions.loginSuccess({ user: { id: 'token.Subject', name: 'test_name' }, token: 'token.Subject' }));
-};
-*/
-
 export const initKC = (dispatch, language) => {
   import('keycloak-js').then(({ default: Keycloak }) => {
     const userManagerConfig = {

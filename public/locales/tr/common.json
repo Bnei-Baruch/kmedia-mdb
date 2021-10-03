@@ -115,7 +115,9 @@
     "previous": "Önceki",
     "next": "Sonraki",
     "copy": "Kopyala",
-    "view-all":  "Hepsini Görüntüle"
+    "view-all":  "Hepsini Görüntüle",
+    "save": "Save",
+    "remove": "Remove"
   },
   "player": {
     "messages": {
@@ -402,7 +404,9 @@
         "sources": "Kabala Kaynakları",
         "topics": "Konular",
         "collections": "İlişkili olan",
-        "episode": "{{name}} Bölümü"
+        "episode": "{{name}} Bölümü",
+        "lesson-episode": "Part {{name}}",
+        "views": "{{views}} Views"
       },
       "recommended": {
         "same-collection": {
@@ -624,5 +628,35 @@
     "copy-link": "Bağlantıyı kopyala",
     "copy-text": "Metni kopyala",
     "disable-share": "İptal etmek"
+  },
+  "personal": {
+    "subsNewUnits": "new episodes",
+    "unsubscribe": "Unsubscribe",
+    "subscribe": "Subscribe",
+    "unsubscribeSuccessful": "Subscription removed",
+    "subscribeSuccessful": "Subscription added",
+    "newPlaylistSuccessful": "New playlist {{name}} created",
+    "addToPlaylistSuccessful": "Added to playlist {{name}}",
+    "history": "History",
+    "likes": "Liked videos",
+    "playlists": "Playlists",
+    "playlistNoResult": "No videos in this playlist",
+    "subscriptions": "Subscriptions",
+    "playAll": "Play all",
+    "addToPlaylist": "Save to...",
+    "newPlaylistName": "New playlist name",
+    "newPlaylist": "Create new playlist",
+    "editPlaylist": "Edit playlist",
+    "removedSuccessfully": "Successfully removed",
+    "removeHistory": "Remove from history",
+    "removeLike": "Remove from Liked videos",
+    "removeFromPlaylist": "Remove from playlist",
+    "confirmRemovePlaylist": "Are you sure you want to delete playlist {{name}}?\nNote: Deleting playlists is a permanent action and cannot be undone.",
+    "confirmUnsubscribe": "Unsubscribe from {{name}}?",
+    "videosOnList": "videos",
+    "login": "Login",
+    "logout": "Logout",
+    "needToLogin": "Sign in to like, save and subscribe to videos",
+    "account": "My Account"
   }
 }

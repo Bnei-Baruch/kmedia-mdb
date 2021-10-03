@@ -28,6 +28,7 @@ const Actions = ({ cuId, id, t }) => {
       e.preventDefault();
       e.stopPropagation();
     }
+
     setOpen(false);
   };
 

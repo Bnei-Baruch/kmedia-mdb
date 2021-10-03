@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
 import { List, Card, Grid, Divider, Container } from 'semantic-ui-react';
@@ -38,6 +38,7 @@ const Main = ({ t }) => {
 
   const [dataLoaded, setDataLoaded] = useState(false);
   const [match, setMatch] = useState('');
+  const [clickedLetter, setClickedLetter] = useState(null);
 
   const handleSearch = debounce((e, data) => {
     setMatch(data.value);
@@ -71,10 +72,35 @@ const Main = ({ t }) => {
     .filter(lk => lk.name.toLowerCase().includes(match.toLowerCase()))
     .sort((l1, l2) => l1.name < l2.name ? -1 : 1);
 
+  // creates a Map - key value structure of (likut, first letter of likut name)
+  const firstLettersMap = useMemo(() => {
+    const flMap = new Map();
+
+    sortedLikutim.forEach(lk => {
+      flMap.set(lk.id, getFirstLetter(lk.name));
+    });
+
+    return flMap;
+  }, [sortedLikutim]);
+
   const firstLetters = sortedLikutim
-    .map(lk => getFirstLetter(lk.name))
-    .filter((l, i, arr) => arr.indexOf(l) === i)
-    .sort();
+    .map(lk => firstLettersMap.get(lk.id))
+    .filter((l, i, arr) => arr.indexOf(l) === i);
+
+  // clicked letter filtering
+  let selectedFirstLetters;
+  let displayedLikutim;
+  if (clickedLetter) {
+    selectedFirstLetters = firstLetters.filter(lt => lt === clickedLetter);
+    displayedLikutim = sortedLikutim.filter(lk => firstLettersMap.get(lk.id) === clickedLetter)
+  } else {
+    selectedFirstLetters = firstLetters.sort();
+    displayedLikutim = sortedLikutim;
+  }
+
+  const onLetterClick = letter => {
+    setClickedLetter(letter);
+  }
 
   return (
     <div>
@@ -87,13 +113,15 @@ const Main = ({ t }) => {
         onKeyDown={handleSearchKeyDown}
         onSearch={handleSearch}
         onHydrated={noop}
+        onLetterClick={onLetterClick}
+        letters={firstLetters}
       />
       <Container className="padded">
         <Grid>
           <Grid.Column>
             <Card.Group stackable itemsPerRow={4}>
               {
-                firstLetters.map(fl =>
+                selectedFirstLetters.map(fl =>
                   <Card key={fl}>
                     <Card.Content>
                       <Card.Header as='h2' textAlign='center'>
@@ -101,13 +129,13 @@ const Main = ({ t }) => {
                       </Card.Header>
                       <List relaxed>
                         {
-                          sortedLikutim
-                            .filter(sl => sl.name[0] === fl)
-                            .map(lu =>
-                              <List.Item key={lu.id} class="topics__item-font">
-                                <Link to={canonicalLink(lu)} >{lu.name} </Link>
-                                <span class="topics__item-smaller-font">
-                                    | {t('values.date', { date: lu.film_date })}
+                          displayedLikutim
+                            .filter(dlk => firstLettersMap.get(dlk.id) === fl)
+                            .map(lk =>
+                              <List.Item key={lk.id} className="topics__item-font">
+                                <Link to={canonicalLink(lk)} >{lk.name} </Link>
+                                <span className="topics__item-smaller-font">
+                                    | {t('values.date', { date: lk.film_date })}
                                 </span>
                               </List.Item>
                             )

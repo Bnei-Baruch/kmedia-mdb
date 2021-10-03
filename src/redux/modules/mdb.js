@@ -81,7 +81,7 @@ const fetchWindowSuccess       = createAction(FETCH_WINDOW_SUCCESS, (id, data) =
 const fetchWindowFailure       = createAction(FETCH_WINDOW_FAILURE, (id, err) => ({ id, err }));
 const fetchDatepickerCO        = createAction(FETCH_DATEPICKER_CO);
 const fetchDatepickerCOSuccess = createAction(FETCH_DATEPICKER_CO_SUCCESS);
-const fetchDatepickerCOFailure = createAction(FETCH_DATEPICKER_CO_FAILURE, (err) => ({ err }));
+const fetchDatepickerCOFailure = createAction(FETCH_DATEPICKER_CO_FAILURE, err => ({ err }));
 const nullDatepickerCO         = createAction(NULL_DATEPICKER_CO);
 const countCU                  = createAction(COUNT_CU, (namespace, params) => ({ namespace, params }));
 const countCUSuccess           = createAction(COUNT_CU_SUCCESS, (namespace, total) => ({ namespace, total }));
@@ -438,7 +438,7 @@ const onFetchDatepickerCO = (state, action) => {
   return { ...state, datepickerCO: sorted[0]?.id };
 };
 
-const onNullDatepickerCO = (state) => ({ ...state, datepickerCO: null });
+const onNullDatepickerCO = state => ({ ...state, datepickerCO: null });
 
 const onSSRPrepare = state => ({
   ...state,
@@ -501,7 +501,7 @@ export const reducer = handleActions({
   [FETCH_DATEPICKER_CO_SUCCESS]: (state, action) => (
     setStatus(onFetchDatepickerCO(onReceiveCollections(state, { payload: action.payload.collections }), action), action)
   ),
-  [NULL_DATEPICKER_CO]: (state) => (
+  [NULL_DATEPICKER_CO]: state => (
     onNullDatepickerCO(state)
   ),
   [FETCH_DATEPICKER_CO_FAILURE]: setStatus,

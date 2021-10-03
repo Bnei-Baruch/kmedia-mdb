@@ -46,7 +46,7 @@ const CUItemContainer = ({ id, children, t, asList = false, link, playTime, size
     unit,
     language,
     link: link || canonicalLink(unit),
-    withCCUInfo: withCCUInfo,
+    withCCUInfo,
     ccu,
     description,
     children,
