@@ -11,6 +11,7 @@ import { fromToLocalized } from '../../../../../helpers/date';
 import Link from '../../../../Language/MultiLanguageLink';
 import { selectors as settings } from '../../../../../redux/modules/settings';
 import CollectionDatePicker from './CollectionDatePicker';
+import clsx from 'clsx';
 
 const getContentByType = (collection, t) => {
   const { content_type, number } = collection;
@@ -70,7 +71,10 @@ const PlaylistHeader = ({ collection, t, prevLink = null, nextLink = null }) => 
   };
 
   return (
-    <Header as="h2" className={`avbox__playlist-header ${isLesson ? '' : ' flex_column'}`}>
+    <Header
+      as="h2"
+      className={clsx('avbox__playlist-header', { 'flex_column': isLesson })}
+    >
       <Header.Content content={collection.name || getContentByType(collection, t)} />
       <Header.Subheader>
         {getPrevLink(langDir, t, prevLink)}

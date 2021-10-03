@@ -10,6 +10,7 @@ import { formatDuration } from '../../../helpers/utils';
 import { isLanguageRtl } from '../../../helpers/i18n-utils';
 import UnitLogo from '../Logo/UnitLogo';
 import Link from '../../Language/MultiLanguageLink';
+import clsx from 'clsx';
 
 const imageWidthBySize = {
   'small': 144,
@@ -17,17 +18,17 @@ const imageWidthBySize = {
 };
 
 const ListTemplate = ({
-  unit,
-  language,
-  withCCUInfo,
-  link,
-  ccu,
-  description,
-  children,
-  playTime,
-  size = '',
-  selected
-}) => {
+                        unit,
+                        language,
+                        withCCUInfo,
+                        link,
+                        ccu,
+                        description,
+                        children,
+                        playTime,
+                        size = '',
+                        selected
+                      }) => {
   const dir                = isLanguageRtl(language) ? 'rtl' : 'ltr';
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
@@ -66,7 +67,7 @@ const ListTemplate = ({
       as={Link}
       to={link}
       key={unit.id}
-      className={`cu_item cu_item_list no-thumbnail${size ? ` ${  size}` : ''}${selected ? ' selected' : ''}`}
+      className={clsx('cu_item cu_item_list no-thumbnail', { size, 'selected': selected })}
       verticalAlign="top"
     >
       <Table.Cell width={2} className={'padding_r_l_0 no-padding-top'} verticalAlign={'top'}>
@@ -80,7 +81,7 @@ const ListTemplate = ({
       </Table.Cell>
       <Table.Cell verticalAlign={'top'} className={`cu_item_info ${dir}`}>
         {ccu_info}
-        <span className={`cu_item_name ${!ccu_info ? ' font_black' : ''}`}>
+        <span className={clsx('cu_item_name', { 'font_black': !ccu_info })}>
           {unit.name}
         </span>
         <div className={`cu_info_description ${dir}`}>
