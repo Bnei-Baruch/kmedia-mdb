@@ -169,6 +169,9 @@
       "second": "You can choose other content languages"
     },
     "didYouMean": "Ти мав на увазі: ",
+    "showAll": "Show All",
+    "lessons": "Lessons",
+    "programs": "Programs",
     "sortby": "Сортувати за",
     "sorts": {
       "relevance": "актуальністю",
@@ -272,6 +275,10 @@
     "list": {
       "related": "Відносяться до:",
       "number": "№ ",
+      "nameByNum_1": "Morning",
+      "nameByNum_2": "Afternoon",
+      "nameByNum_3": "Evening",
+      "nameByNum_4": "Evening 2",
       "item_from": "Частина з:"
     },
     "unit": {
@@ -336,7 +343,8 @@
   "publications": {
     "header": {
       "text": "Публікації",
-      "subtext": "Статті про поточні події, культуру, народні науки, взаємини один з одним, представлені з унікальної точки зору мудрості Кабали"
+      "subtext": "Статті про поточні події, культуру, народні науки, взаємини один з одним, представлені з унікальної точки зору мудрості Кабали",
+      "subtext2": ""
     },
     "tabs": {
       "articles": "Статті",
@@ -345,6 +353,7 @@
       "audio-blog": "Аудіо Блог"
     },
     "list": {
+      "item_from": "Item of:",
       "episode_from": "Частина з:"
     },
     "unit": {
@@ -379,6 +388,12 @@
     "next": "далі",
     "choose-date": "Виберіть дату",
     "today-lessons": "Щоденні уроки Каббали"
+  },
+  "help": {
+    "header": {
+      "text": "Help",
+      "subtext": "In this section you will find video tutorials and best practices on how to use the site"
+    }
   },
   "pages": {
     "collection": {

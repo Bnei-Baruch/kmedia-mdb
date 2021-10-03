@@ -230,9 +230,6 @@ class Layout extends Component {
                   <Menu.Item position="right">
                     {VERSION_WITH_PERSONALIZATION && <Login language={language} />}
                   </Menu.Item>
-                  <Menu.Item position="right">
-                    <Login language={language} />
-                  </Menu.Item>
                   <TopMost />
                 </Menu.Menu>
               </Menu>
