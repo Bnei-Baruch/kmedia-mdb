@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
 import { Header, Icon } from 'semantic-ui-react';
+import clsx from 'clsx';
 
 import * as shapes from '../../../../shapes';
 import { getLanguageDirection } from '../../../../../helpers/i18n-utils';
@@ -80,7 +81,7 @@ const PlaylistHeader = ({ collection, t, prevLink = null, nextLink = null }) => 
   };
 
   return (
-    <Header as="h2" className={`avbox__playlist-header ${isLesson ? '' : ' flex_column'}`}>
+    <Header as="h2" className={clsx('avbox__playlist-header', { 'flex_column': isLesson })}>
       <Header.Content content={getTitleByCO(collection, t)} />
       {getSubHeader()}
     </Header>

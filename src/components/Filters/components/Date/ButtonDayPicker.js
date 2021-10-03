@@ -15,6 +15,7 @@ import YearMonthForm from './YearMonthForm';
 import DayPicker from 'react-day-picker';
 import { withNamespaces } from 'react-i18next';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
+import clsx from 'clsx';
 
 class ButtonDayPicker extends Component {
   static contextType = DeviceInfoContext;
@@ -181,7 +182,10 @@ class ButtonDayPicker extends Component {
       const selectedToString = selected ? moment(selected).format('YYYY-MM-DD') : '';
 
       const dateButton = (
-        <button className={`ui button dateButton${withLabel ? ' dateButton_with_label' : ''}`} onClick={this.openNativeDatePicker}>
+        <button
+          className={clsx('ui button dateButton', { 'dateButton_with_label': withLabel })}
+          onClick={this.openNativeDatePicker}
+        >
           <i aria-hidden="true" className={isMobileDevice ? 'calendar alternate outline large icon' : 'calendar alternate outline icon'} />
           {withLabel && label}
           <input

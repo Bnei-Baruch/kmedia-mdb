@@ -275,6 +275,10 @@
     "list": {
       "related": "İlgili:",
       "number": "#",
+      "nameByNum_1": "Morning",
+      "nameByNum_2": "Afternoon",
+      "nameByNum_3": "Evening",
+      "nameByNum_4": "Evening 2",
       "item_from": "Konusu:"
     },
     "unit": {
@@ -474,7 +478,8 @@
     "az": "AZ",
     "default": "Varsayılan",
     "filter": "Filtre...",
-    "share-title": "Bu makaleyi okuyun"
+    "share-title": "Bu makaleyi okuyun",
+    "group-articles": "Group Articles"
   },
   "topics": {
     "header": {

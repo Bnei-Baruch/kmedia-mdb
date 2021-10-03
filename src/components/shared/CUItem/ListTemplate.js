@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Container, Header, Progress } from 'semantic-ui-react';
+import clsx from 'clsx';
 
 import * as shapes from '../../shapes';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
@@ -67,7 +68,7 @@ const ListTemplate = ({
       as={Link}
       to={link}
       key={unit.id}
-      className={`cu_item cu_item_list no-thumbnail ${isMobileDevice ? ` ${  size}` : ''}${selected ? ' selected' : ''}`}
+      className={clsx('cu_item cu_item_list no-thumbnail', { size, selected })}
     >
       <div>
         <div className="cu_item_duration">{formatDuration(unit.duration)}</div>
@@ -78,7 +79,7 @@ const ListTemplate = ({
       </div>
       <div className={`cu_item_info ${dir}`}>
         {ccu_info}
-        <div className={`cu_item_name ${!ccu_info ? ' font_black' : ''}`}>
+        <div className={clsx('cu_item_name', { 'font_black': !ccu_info })}>
           {unit.name}
         </div>
         <div className={`cu_info_description ${dir} text_ellipsis`}>
