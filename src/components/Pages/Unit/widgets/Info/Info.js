@@ -212,18 +212,6 @@ const Info = ({ unit = {}, section = '', t, currentCollection = null }) => {
             )
           }
           {
-            sourcesLinks.length > 0 && (
-              <List.Item className="unit-info__sources" key="sources">
-                <strong>
-                  {t('pages.unit.info.sources')}
-                  :
-                </strong>
-                &nbsp;
-                {sourcesLinks}
-              </List.Item>
-            )
-          }
-          {
             isMultiLessons && collectionsLinks.length > 0 && (
               <List.Item key="co-links">
                 <strong>

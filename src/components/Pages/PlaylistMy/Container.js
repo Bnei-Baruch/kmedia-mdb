@@ -22,7 +22,7 @@ const PlaylistMyContainer = ({ t, history, location, id }) => {
 
   const cuUIDs            = content_units.map(c => c.id);
   const cuUID             = playlist.last_played || cuUIDs[0];
-  const fictiveCollection = { content_units, id: 'f', cuIDs: cuUIDs, name: playlist.name };
+  const fictiveCollection = { content_units, id, cuIDs: cuUIDs, name: playlist.name };
 
   const dispatch = useDispatch();
   useEffect(() => {

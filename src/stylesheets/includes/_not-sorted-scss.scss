@@ -30,6 +30,7 @@
     border: 1px solid #7dcff5 !important;
     border-radius: 20px !important;
     box-shadow: 0 0 6px 0 #7dcff5 !important;
+    width: 100%;
   }
 
   // main omnibox size
@@ -151,15 +152,49 @@
   max-height: 220px;
 }
 
+.avbox__playlist-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: nowrap;
+
+  .sub {
+    white-space: nowrap;
+  }
+
+  .dateButton, .dateButton:hover, .dateButton:active, .dateButton:focus {
+    color: white;
+    background-color: #333333;
+  }
+
+  @include mobile {
+    .avbox__playlist-prev-button, .avbox__playlist-next-button {
+      display: inline-block;
+
+      .icon {
+        width: 20px;
+        text-align: center;
+      }
+    }
+  }
+}
+
+.flex_column {
+  flex-direction: column;
+  align-items: start;
+}
+
 .avbox__playlist-prev-button {
   i.icon {
-    margin: 0 .25rem 0 0 !important;
+    margin: 0 !important;
+    color: white;
   }
 }
 
 .avbox__playlist-next-button {
   i.icon {
-    margin: 0 0 0 .25rem !important;
+    margin: 0 !important;
+    color: white;
   }
 }
 
@@ -1460,8 +1495,6 @@
 
 .ui.flowing.popup {
   z-index: 10000;
-  margin: 0 !important;
-  width: 100%;
 }
 
 .ui.accordion.menu .item .title > .dropdown.icon {
@@ -1525,7 +1558,12 @@
   .dateButton {
     padding-left: 15px !important;
     padding-right: 0px !important;
+
+    &.dateButton_with_label {
+      padding-right: 4px !important;
+    }
   }
+
 }
 
 .rtl {
@@ -1548,6 +1586,10 @@
     .dateButton {
       padding-left: 5px !important;
       padding-right: 15px !important;
+
+      &.dateButton_with_label {
+        left: 4px !important;
+      }
     }
   }
 }
@@ -1942,26 +1984,52 @@
 }
 
 .ui.table .cu_item_list {
+  display: block;
+  padding-bottom: 1px;
+
+  &.selected {
+    background-color: $midWhite;
+  }
+
+  @include mobile {
+    padding-top: 17px;
+    padding-bottom: 17px;
+  }
 
   td {
     position: relative;
     margin: 0;
     padding-bottom: 0;
+    cursor: pointer;
+  }
 
-    @include mobile {
-      padding-bottom: 35px;
-      border-top: 0 none;
+
+  &.small {
+    padding: 0.7em;
+
+    td.cu_item_info {
+      padding-bottom: 1em;
+      height: 80px;
+      padding-top: 0;
+
+      .cu_item_name {
+        -webkit-line-clamp: 2;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
     }
   }
 
   td.cu_item_info {
     height: 100%;
   }
+
 }
 
 .cu_item_list {
   .cu_item_info_co {
-    white-space: nowrap;
+    color: $black;
 
     @include mobile {
       line-height: 0.7em;
@@ -1984,19 +2052,18 @@
       padding: 0 2em;
       margin: 0 -1.5em;
     }
-
   }
 
   .cu_item_duration {
     position: absolute;
-    right: 0;
+    left: 0;
     z-index: 2;
-    top: 0;
+    bottom: 0;
   }
 
   .cu_item_duration.rtl {
-    left: 0;
-    right: auto;
+    right: 0;
+    left: auto;
   }
 
   .cu_item_img {
@@ -2030,6 +2097,7 @@
     position: absolute;
     bottom: 1em;
     opacity: 0.43;
+    color: $black;
     @include mobile {
       top: 75px;
     }
@@ -2047,9 +2115,26 @@
       -webkit-box-orient: vertical;
       overflow: hidden;
       height: 60px;
+      color: $grey;
     }
   }
 
+  &.small {
+    .cu_item_name {
+      margin-top: 0;
+      margin-bottom: 8px;
+      font-size: 1.1em;
+      color: $grey;
+    }
+
+    .cu_info_description {
+      top: 60px;
+    }
+
+    .cu_item_duration {
+      margin: 4px;
+    }
+  }
 }
 
 
@@ -2158,7 +2243,7 @@
   }
 }
 
-tr:hover .my_playlist_actions {
+.cu_item:hover .my_playlist_actions {
   display: block;
 }
 
@@ -2201,7 +2286,6 @@ tr:hover .my_playlist_actions {
 .ui.menu.personal_info {
   display: flex;
   justify-content: flex-end;
-  margin-top: 1em;
   margin-bottom: 0;
   @include mobile {
     margin-top: 0;
@@ -2231,20 +2315,9 @@ tr:hover .my_playlist_actions {
 }
 
 .recommend-label {
-  width: 120px;
-  left: 0;
-  right: unset;
-  position: absolute;
-}
-
-.rtl .recommend-label {
-  right: 0;
-  left: unset;
-}
-
-.recommend-label div {
   position: absolute;
   bottom: 0;
+  right: 0;
   color: white;
   background-color: #2e8fd5;
   max-width: 120px;
@@ -2258,10 +2331,19 @@ tr:hover .my_playlist_actions {
   }
 }
 
+.rtl .recommend-label {
+  left: 0;
+  right: unset;
+}
+
 .recommend-more {
   float: right;
 }
 
 .rtl .recommend-more {
   float: left;
+}
+
+.font_black {
+  color: $black !important;
 }

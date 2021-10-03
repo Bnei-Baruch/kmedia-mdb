@@ -51,11 +51,17 @@ const Page = ({ t }) => {
   const items         = [...playlist.playlist_items || []];
   items.sort((a, b) => b.position - a.position);
 
-  const removeItem = iID => dispatch(actions.remove(MY_NAMESPACE_PLAYLIST_ITEMS, { ids: [iID] }));
+  const removeItem = (e, iID) => {
+    e.preventDefault();
+    e.stopPropagation();
+    dispatch(actions.remove(MY_NAMESPACE_PLAYLIST_ITEMS, { ids: [iID] }));
+  };
 
   const onAlertCloseHandler = () => dispatch(actions.setDeleted(MY_NAMESPACE_PLAYLIST_ITEMS, false));
 
-  const changeItemPosition = (i, up) => {
+  const changeItemPosition = (e, i, up) => {
+    e.preventDefault();
+    e.stopPropagation();
     // eslint-disable-next-line prefer-const
     let { id: cid, position: cp } = items[i];
     // eslint-disable-next-line prefer-const
@@ -77,7 +83,7 @@ const Page = ({ t }) => {
             icon="long arrow alternate up"
             className="no-shadow"
             disabled={i === 0}
-            onClick={() => changeItemPosition(i, true)}
+            onClick={e => changeItemPosition(e, i, true)}
           />
           <Popup
             basic
@@ -87,7 +93,7 @@ const Page = ({ t }) => {
                 basic
                 icon="remove circle"
                 className="no-shadow"
-                onClick={() => removeItem(x.id)}
+                onClick={e => removeItem(e, x.id)}
               />
             }>
           </Popup>
@@ -96,7 +102,7 @@ const Page = ({ t }) => {
             icon="long arrow alternate down"
             className="no-shadow"
             disabled={i === items.length - 1}
-            onClick={() => changeItemPosition(i, false)}
+            onClick={e => changeItemPosition(e, i, false)}
           />
         </div>
       </div>

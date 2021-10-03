@@ -284,6 +284,10 @@
     "list": {
       "related": "Относятся к:",
       "number": "№ ",
+      "nameByNum_1": "Утро",
+      "nameByNum_2": "Полдень",
+      "nameByNum_3": "Вечер",
+      "nameByNum_4": "Вечер 2",
       "item_from": "Часть из:"
     },
     "unit": {

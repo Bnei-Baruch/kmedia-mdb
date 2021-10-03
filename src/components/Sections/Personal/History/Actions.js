@@ -11,9 +11,17 @@ const Actions = ({ cuId, id, t }) => {
   const [open, setOpen] = useState();
   const dispatch        = useDispatch();
 
-  const removeItem = () => dispatch(actions.remove(MY_NAMESPACE_HISTORY, { ids: [id] }));
+  const removeItem = e => {
+    e.preventDefault();
+    e.stopPropagation();
+    dispatch(actions.remove(MY_NAMESPACE_HISTORY, { ids: [id] }));
+  }
 
-  const handleOpen = () => setOpen(true);
+  const handleOpen = e => {
+    e.preventDefault();
+    e.stopPropagation();
+    setOpen(true);
+  };
 
   const handleClose = () => setOpen(false);
 

@@ -274,6 +274,10 @@
     "list": {
       "related": "קשור ל:",
       "number": "מס' ",
+      "nameByNum_1": "בוקר",
+      "nameByNum_2": "צהריים",
+      "nameByNum_3": "ערב",
+      "nameByNum_4": "ערב 2",
       "item_from": "חלק מתוך:"
     },
     "unit": {

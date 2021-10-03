@@ -13,7 +13,7 @@ import {
   MT_VIDEO,
   VS_DEFAULT,
 } from './consts';
-import { getQuery, updateQuery } from './url';
+import { getQuery, stringify, updateQuery } from './url';
 import { canonicalLink } from './links';
 import MediaHelper from './media';
 import { isEmpty, physicalFile } from './utils';
@@ -234,6 +234,11 @@ const setActivePartInQuery = (history, ap) =>
     ap
   }));
 
+const linkWithoutActivePart = location => {
+  const { search, ap } = getQuery(location);
+  return `${location.pathname || '/'}${stringify(search)}`;
+};
+
 const getEmbedFromQuery = location => {
   const query = getQuery(location);
   return query.embed === '1';
@@ -259,6 +264,7 @@ const exportMethods = {
   setLanguageInQuery,
   getActivePartFromQuery,
   setActivePartInQuery,
+  linkWithoutActivePart,
   restorePreferredMediaType,
   persistPreferredMediaType,
   restorePreferredVideoSize,

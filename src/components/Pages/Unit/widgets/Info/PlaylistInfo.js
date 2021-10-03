@@ -61,9 +61,18 @@ const PlaylistInfo = ({ cuID, t, handleClose = null }) => {
     setNewPlaylist('');
   };
 
-  const handleSaveNewPlaylist = () => {
+  const handleSaveNewPlaylist = e => {
+    e.preventDefault();
+    e.stopPropagation();
     !!newPlaylist && dispatch(actions.add(MY_NAMESPACE_PLAYLISTS, { name: newPlaylist }));
     setAlertMsg(t('personal.newPlaylistSuccessful', { name: newPlaylist }));
+  };
+
+  const handleOpenModal = e => {
+    e.preventDefault();
+    e.stopPropagation();
+    toggle();
+    return;
   };
 
   const toggle = () => {
@@ -125,7 +134,7 @@ const PlaylistInfo = ({ cuID, t, handleClose = null }) => {
         onClose={toggle}
         size={'tiny'}
         trigger={
-          <Button basic className="my_playlist_add clear_button uppercase no-padding" onClick={toggle}>
+          <Button basic className="my_playlist_add clear_button uppercase no-padding" onClick={handleOpenModal}>
             <PlaylistAddIcon className="playlist_add" fill="#767676" />
             <span>{t('buttons.save')}</span>
           </Button>

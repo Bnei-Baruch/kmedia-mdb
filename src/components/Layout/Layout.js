@@ -28,7 +28,7 @@ const WrappedOmniBoxWithChronicles = ({ location }) => {
   return <WrappedOmniBox location={location} chronicles={chronicles} />;
 };
 
-const RenderHeaderSearch = React.forwardRef(({ t, location }, headerSearchElement) => (
+const RenderHeaderSearch           = React.forwardRef(({ t, location }, headerSearchElement) => (
   <div ref={headerSearchElement}>
     <Segment color="blue" inverted className="header_search">
       <WrappedOmniBoxWithChronicles location={location} />

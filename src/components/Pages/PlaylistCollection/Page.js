@@ -39,17 +39,11 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
   //check if come from lesson CU rotate
   const { path } = useRouteMatch();
   const isLesson = NO_COLLECTION_VIEW_TYPE.includes(collection.content_type) && (path.indexOf('lessons/cu/:id') !== -1);
+  const link     = isLesson ? null : playerHelper.linkWithoutActivePart(location);
 
   const handleSelectedChange = useCallback(nSelected => {
-    if (nSelected !== selected) {
-      if (isLesson) {
-        playlist.items[nSelected] && history.push(playlist.items[nSelected].shareUrl);
-      } else {
-        playerHelper.setActivePartInQuery(history, nSelected);
-        setSelected(nSelected);
-      }
-    }
-  }, [history, selected, collection]);
+    if (nSelected !== selected && !isLesson) setSelected(nSelected);
+  }, [history, selected]);
 
   useEffect(() => {
     if (prev?.unit?.id !== unit?.id) {
@@ -143,9 +137,9 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
       <Playlist
         playlist={playlist}
         selected={selected}
-        onSelectedChange={handleSelectedChange}
         nextLink={nextLink}
         prevLink={prevLink}
+        link={link}
       />
       <br />
       <Recommended unit={recommendUnit} filterOutUnits={filterOutUnits} />
@@ -157,6 +151,12 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
     (
       <Grid padded={!isMobileDevice} className="avbox">
         <Grid.Column mobile={16} tablet={computerWidth} computer={computerWidth} className={clsx({ 'is-fitted': isMobileDevice })}>
+          {
+            (unit && isMobileDevice) &&
+            <div id="avbox_playlist">
+              <PlaylistHeader collection={collection} prevLink={prevLink} nextLink={nextLink} />
+            </div>
+          }
           <AVPlaylistPlayer
             items={items}
             selected={selected}
@@ -166,18 +166,11 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
           />
           {
             unit &&
-            <>
-              {isMobileDevice &&
-              <div id="avbox_playlist">
-                <PlaylistHeader collection={collection} prevLink={prevLink} nextLink={nextLink} />
-              </div>
-              }
-              <Container id="unit_container">
-                <Helmets.AVUnit unit={unit} language={uiLanguage} />
-                <Info unit={unit} currentCollection={collection} />
-                <Materials unit={unit} playlistComponent={PlaylistData} />
-              </Container>
-            </>
+            <Container id="unit_container">
+              <Helmets.AVUnit unit={unit} language={uiLanguage} />
+              <Info unit={unit} currentCollection={collection} />
+              <Materials unit={unit} playlistComponent={PlaylistData} />
+            </Container>
           }
         </Grid.Column>
         {

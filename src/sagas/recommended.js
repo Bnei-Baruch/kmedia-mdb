@@ -8,14 +8,14 @@ import { actions as mdbActions, selectors as mdbSelectors } from '../redux/modul
 import { selectors as settings } from '../redux/modules/settings';
 
 const WATCHING_NOW_MIN = 50;
-const POPULAR_MIN = 100;
+const POPULAR_MIN      = 100;
 
 export function* fetchRecommended(action) {
   const { id, tags, collections, size, skip, variant } = action.payload;
   try {
     const language = yield select(state => settings.getContentLanguage(state.settings));
     const skipUids = yield select(state => recommended.getSkipUids(state.recommended));
-    const skipSet = new Set(skipUids);
+    const skipSet  = new Set(skipUids);
     skip.forEach(uid => {
       if (!skipSet.has(uid)) {
         skipUids.push(uid);
@@ -26,26 +26,62 @@ export function* fetchRecommended(action) {
     if (variant === AB_RECOMMEND_NEW) {
       // Same Topic - WatchingNow, Popular, Latest.
       tags.forEach(tag => {
-        specs.push({ 'name': 'RoundRobinSuggester', 'specs': [
-          { 'name': 'DataContentUnitsSuggester', 'filters': [{ 'filter_selector': 2, 'args': [tag] }, { 'filter_selector': 8 }], 'order_selector': 5 },
-          { 'name': 'DataContentUnitsSuggester', 'filters': [{ 'filter_selector': 2, 'args': [tag] }, { 'filter_selector': 9 }], 'order_selector': 4 },
-          { 'name': 'DataContentUnitsSuggester', 'filters': [{ 'filter_selector': 2, 'args': [tag] }], 'order_selector': 0 },
-        ] });
+        specs.push({
+          'name': 'RoundRobinSuggester', 'specs': [
+            {
+              'name': 'DataContentUnitsSuggester',
+              'filters': [{ 'filter_selector': 2, 'args': [tag] }, { 'filter_selector': 8 }],
+              'order_selector': 5
+            },
+            {
+              'name': 'DataContentUnitsSuggester',
+              'filters': [{ 'filter_selector': 2, 'args': [tag] }, { 'filter_selector': 9 }],
+              'order_selector': 4
+            },
+            {
+              'name': 'DataContentUnitsSuggester',
+              'filters': [{ 'filter_selector': 2, 'args': [tag] }],
+              'order_selector': 0
+            },
+          ]
+        });
       });
       collections.forEach(collection => {
         // Same collection - WatchingNow, Popular, Latest.
-        specs.push({ 'name': 'RoundRobinSuggester', 'specs': [
-          { 'name': 'DataContentUnitsSuggester', 'filters': [{ 'filter_selector': 4, 'args': [collection.id] }, { 'filter_selector': 8 }], 'order_selector': 5 },
-          { 'name': 'DataContentUnitsSuggester', 'filters': [{ 'filter_selector': 4, 'args': [collection.id] }, { 'filter_selector': 9 }], 'order_selector': 4 },
-          { 'name': 'DataContentUnitsSuggester', 'filters': [{ 'filter_selector': 4, 'args': [collection.id] }], 'order_selector': 0 },
-        ] });
+        specs.push({
+          'name': 'RoundRobinSuggester', 'specs': [
+            {
+              'name': 'DataContentUnitsSuggester',
+              'filters': [{ 'filter_selector': 4, 'args': [collection.id] }, { 'filter_selector': 8 }],
+              'order_selector': 5
+            },
+            {
+              'name': 'DataContentUnitsSuggester',
+              'filters': [{ 'filter_selector': 4, 'args': [collection.id] }, { 'filter_selector': 9 }],
+              'order_selector': 4
+            },
+            {
+              'name': 'DataContentUnitsSuggester',
+              'filters': [{ 'filter_selector': 4, 'args': [collection.id] }],
+              'order_selector': 0
+            },
+          ]
+        });
       });
     }
 
     specs.push({ name: 'Default' });
 
-    const requestData = Api.recommendedRequestData({ uid: id, languages: [language], skipUids, size, specs, watchingNowMin: WATCHING_NOW_MIN, popularMin: POPULAR_MIN });
-    const { data } = yield call(Api.recommended, requestData);
+    const requestData = Api.recommendedRequestData({
+      uid: id,
+      languages: [language],
+      skipUids,
+      size,
+      specs,
+      watchingNowMin: WATCHING_NOW_MIN,
+      popularMin: POPULAR_MIN
+    });
+    const { data }    = yield call(Api.recommended, requestData);
 
     if (Array.isArray(data.feeds) && data.feeds.length > 0) {
       const fetchList = [
@@ -55,7 +91,7 @@ export function* fetchRecommended(action) {
       if (variant === AB_RECOMMEND_NEW) {
         for (let i = 0; i < data.feeds.length; ++i) {
           if (Array.isArray(data.feeds[i]) && data.feeds[i].length > 0) {
-            fetchList.push(fetchViews(data.feeds[i]));
+            fetchList.push(fetchViewsByUIDs(data.feeds[i].map(f => f.uid)));
             fetchList.push(fetchWatchingNow(data.feeds[i]));
           }
         }
@@ -69,7 +105,7 @@ export function* fetchRecommended(action) {
       throw new Error(`Expected recommended feeds size to be ${specs.length}`);
     }
 
-    const feeds = { 'default': data.feeds[data.feeds.length-1] };
+    const feeds = { 'default': data.feeds[data.feeds.length - 1] };
     if (variant === AB_RECOMMEND_NEW) {
       let index = 0;
       tags.forEach(tag => {
@@ -88,11 +124,15 @@ export function* fetchRecommended(action) {
   }
 }
 
-function* fetchViews(recommendedItems) {
-  const uids = yield select(state => recommendedItems.map(item => item.uid).filter(uid => recommended.getViews(uid, state.recommended) === -1));
+function* fetchViews(action) {
+  yield fetchViewsByUIDs(action.payload);
+}
+
+function* fetchViewsByUIDs(uids) {
+  uids = yield select(state => uids.filter(uid => recommended.getViews(uid, state.recommended) === -1));
   if (uids.length > 0) {
     const { data } = yield call(Api.views, uids);
-    const views = uids.reduce((acc, uid, i) => {
+    const views    = uids.reduce((acc, uid, i) => {
       acc[uid] = data.views[i];
       return acc;
     }, {});
@@ -104,14 +144,13 @@ function* fetchWatchingNow(recommendedItems) {
   const uids = yield select(state => recommendedItems.map(item => item.uid).filter(uid => recommended.getWatchingNow(uid, state.recommended) === -1));
   if (uids.length > 0) {
     const { data } = yield call(Api.watchingNow, uids);
-    const views = uids.reduce((acc, uid, i) => {
+    const views    = uids.reduce((acc, uid, i) => {
       acc[uid] = data.watching_now[i];
       return acc;
     }, {});
     yield put(actions.receiveWatchingNow(views));
   }
 }
-
 
 function* fetchMissingUnits(recommendedItems) {
   const missingUnitIds = yield select(state => recommendedItems
@@ -141,6 +180,11 @@ function* watchFetchRecommended() {
   yield takeLatest(types.FETCH_RECOMMENDED, fetchRecommended);
 }
 
+function* watchFetchViews() {
+  yield takeLatest(types.FETCH_VIEWS, fetchViews);
+}
+
 export const sagas = [
   watchFetchRecommended,
-]
+  watchFetchViews,
+];

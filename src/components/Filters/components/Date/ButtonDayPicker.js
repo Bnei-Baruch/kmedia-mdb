@@ -15,6 +15,7 @@ import YearMonthForm from './YearMonthForm';
 import DayPicker from 'react-day-picker';
 import { withNamespaces } from 'react-i18next';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
+import clsx from 'clsx';
 
 class ButtonDayPicker extends Component {
   static contextType = DeviceInfoContext;
@@ -24,6 +25,7 @@ class ButtonDayPicker extends Component {
     label: PropTypes.string,
     onDayChange: PropTypes.func,
     language: PropTypes.string.isRequired,
+    withLabel: PropTypes.bool
   };
 
   static defaultProps = {
@@ -171,7 +173,7 @@ class ButtonDayPicker extends Component {
   };
 
   render() {
-    const { language, t, value, label }                                            = this.props;
+    const { language, t, value, label, withLabel }                                 = this.props;
     const { month, isPopupOpen, isNativePopupOpen, selectedDate, langDir, locale } = this.state;
     const { deviceInfo, isMobileDevice }                                           = this.context;
 
@@ -180,8 +182,12 @@ class ButtonDayPicker extends Component {
       const selectedToString = selected ? moment(selected).format('YYYY-MM-DD') : '';
 
       const dateButton = (
-        <button className="ui button dateButton" onClick={this.openNativeDatePicker}>
+        <button
+          className={clsx('ui button dateButton', { 'dateButton_with_label': withLabel })}
+          onClick={this.openNativeDatePicker}
+        >
           <i aria-hidden="true" className={isMobileDevice ? 'calendar alternate outline large icon' : 'calendar alternate outline icon'} />
+          {withLabel && label}
           <input
             className="hide-native-date-input"
             type="date"

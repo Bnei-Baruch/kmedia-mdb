@@ -168,6 +168,9 @@
       "second": "You can choose other content languages"
     },
     "didYouMean": "Querías decir: ",
+    "showAll": "Show All",
+    "lessons": "Lessons",
+    "programs": "Programs",
     "sortby": "ordenar por",
     "sorts": {
       "relevance": "Relevante",
@@ -271,6 +274,10 @@
     "list": {
       "related": "Relacionado con:",
       "number": "#",
+      "nameByNum_1": "Mañana",
+      "nameByNum_2": "Mediodía",
+      "nameByNum_3": "Noche",
+      "nameByNum_4": "Noche 2",
       "item_from": "Parte de:"
     },
     "unit": {
@@ -379,6 +386,12 @@
     "next": "Siguiente",
     "choose-date": "Elegir fecha",
     "today-lessons": "Lecciones diarias de Cabalá"
+  },
+  "help": {
+    "header": {
+      "text": "Help",
+      "subtext": "In this section you will find video tutorials and best practices on how to use the site"
+    }
   },
   "pages": {
     "collection": {

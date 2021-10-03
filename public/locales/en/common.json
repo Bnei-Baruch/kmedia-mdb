@@ -22,8 +22,8 @@
       "design2": "Layout",
       "project-status": "Project Status",
       "help": "Help",
-      "podcast": "Podcast",
       "old-site": "Old Site",
+      "podcast": "Podcast",
       "subscribe": "Subscribe For Updates"
     },
     "footer": {
@@ -275,6 +275,10 @@
     "list": {
       "related": "Related to:",
       "number": "#",
+      "nameByNum_1": "Morning",
+      "nameByNum_2": "Afternoon",
+      "nameByNum_3": "Evening",
+      "nameByNum_4": "Evening 2",
       "item_from": "Item of:"
     },
     "unit": {

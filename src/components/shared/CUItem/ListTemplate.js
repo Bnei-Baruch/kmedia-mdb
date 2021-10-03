@@ -10,13 +10,30 @@ import { formatDuration } from '../../../helpers/utils';
 import { isLanguageRtl } from '../../../helpers/i18n-utils';
 import UnitLogo from '../Logo/UnitLogo';
 import Link from '../../Language/MultiLanguageLink';
+import clsx from 'clsx';
 
-const ListTemplate = ({ unit, language, withCCUInfo, link, ccu, description, children, playTime }) => {
+const imageWidthBySize = {
+  'small': 144,
+  '': 287
+};
+
+const ListTemplate = ({
+                        unit,
+                        language,
+                        withCCUInfo,
+                        link,
+                        ccu,
+                        description,
+                        children,
+                        playTime,
+                        size = '',
+                        selected
+                      }) => {
   const dir                = isLanguageRtl(language) ? 'rtl' : 'ltr';
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
   let ccu_info;
-  if (!isMobileDevice) {
+  if (!isMobileDevice && size !== 'small') {
     ccu_info = ccu && withCCUInfo ? (
       <div className="cu_item_info_co">
         <span style={{ display: 'inline-block' }}>
@@ -28,7 +45,7 @@ const ListTemplate = ({ unit, language, withCCUInfo, link, ccu, description, chi
   } else {
     ccu_info = ccu && withCCUInfo ? (
       <div className="cu_item_info_co ">
-        <h5 className="weight-normal no-padding no-margin text_ellipsis">{ccu.name || NO_NAME}</h5>
+        <h5 className="no-padding no-margin text_ellipsis">{ccu.name || NO_NAME}</h5>
       </div>) : null;
   }
 
@@ -46,22 +63,27 @@ const ListTemplate = ({ unit, language, withCCUInfo, link, ccu, description, chi
   }
 
   return (
-    <Table.Row className="cu_item cu_item_list no-thumbnail" verticalAlign="top" key={unit.id}>
+    <Table.Row
+      as={Link}
+      to={link}
+      key={unit.id}
+      className={clsx('cu_item cu_item_list no-thumbnail', { size, 'selected': selected })}
+      verticalAlign="top"
+    >
       <Table.Cell width={2} className={'padding_r_l_0 no-padding-top'} verticalAlign={'top'}>
         <div style={{ position: 'relative' }}>
           <div className="cu_item_duration">{formatDuration(unit.duration)}</div>
           {percent}
-          <Link to={link} className="cu_item_img">
-            <UnitLogo unitId={unit.id} width={isMobileDevice ? 165 : 287} />
-          </Link>
-
+          <span className="cu_item_img">
+            <UnitLogo unitId={unit.id} width={isMobileDevice ? 165 : imageWidthBySize[size]} />
+          </span>
         </div>
       </Table.Cell>
       <Table.Cell verticalAlign={'top'} className={`cu_item_info ${dir}`}>
         {ccu_info}
-        <Link to={link} className="cu_item_name">
+        <span className={clsx('cu_item_name', { 'font_black': !ccu_info })}>
           {unit.name}
-        </Link>
+        </span>
         <div className={`cu_info_description ${dir}`}>
           {description.map((d, i) => (<span key={i}>{d}</span>))}
         </div>
