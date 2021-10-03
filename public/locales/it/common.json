@@ -24,6 +24,7 @@
       "help": "Aiuto",
       "old-site": "Vecchio sito",
       "podcast": "Podcast",
+      "old-site": "Old Site",
       "subscribe": "Iscriviti per gli aggiornamenti"
     },
     "footer": {
@@ -49,7 +50,8 @@
         "LAST_30_DAYS": "Ultimi 30 Giorni",
         "LAST_MONTH": "Scorso mese",
         "THIS_MONTH": "Questo mese",
-        "CUSTOM_RANGE": "Gamma Personalizzata"
+        "CUSTOM_RANGE": "Gamma Personalizzata",
+        "CUSTOM_DAY": "Pick a Date"
       },
       "start": "Inizio",
       "end": "Fine"
@@ -275,6 +277,10 @@
     "list": {
       "related": "Related to:",
       "number": "#",
+      "nameByNum_1": "Morning",
+      "nameByNum_2": "Afternoon",
+      "nameByNum_3": "Evening",
+      "nameByNum_4": "Evening 2",
       "item_from": "Item of:"
     },
     "unit": {
@@ -339,7 +345,8 @@
   "publications": {
     "header": {
       "text": "Publicazioni",
-      "subtext": "Articles on current events, culture, popular science, relationships and more, presented from the unique perspective of the wisdom of Kabbalah"
+      "subtext": "Articles on current events, culture, popular science, relationships and more, presented from the unique perspective of the wisdom of Kabbalah",
+      "subtext2": ""
     },
     "tabs": {
       "articles": "Articles",
@@ -473,7 +480,8 @@
     "az": "AZ",
     "default": "Default",
     "filter": "Filter...",
-    "share-title": "Read this article"
+    "share-title": "Read this article",
+    "group-articles": "Group Articles"
   },
   "topics": {
     "header": {
