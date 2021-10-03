@@ -115,10 +115,10 @@ const UnitListPage = props => {
           <Card.Group doubling itemsPerRow={4} stackable className="cu_items">
             {
               items.filter(x => !!x).map((unit, i) => (
-                  <CUItem id={unit.id} key={i}>
-                    {renderActions && renderActions(unit)}
-                  </CUItem>
-                )
+                <CUItem id={unit.id} key={i}>
+                  {renderActions && renderActions(unit)}
+                </CUItem>
+              )
               )
             }
           </Card.Group>

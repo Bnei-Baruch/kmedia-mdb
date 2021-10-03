@@ -29,4 +29,5 @@ const ClipsList = ({ t }) => {
     />
   );
 };
+
 export default withNamespaces()(ClipsList);

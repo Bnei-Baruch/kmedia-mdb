@@ -30,4 +30,5 @@ const ProgramsList = ({ t }) => {
     />
   );
 };
+
 export default withNamespaces()(ProgramsList);
