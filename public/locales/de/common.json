@@ -94,6 +94,7 @@
     },
     "sections-filter": {
       "label": "Abschnitt",
+      "all": "All",
       "lessons": "Lektionen und Vorlesungen",
       "programs": "Programme und Clips",
       "events": "Kongresse, Veranstaltungen",
@@ -260,6 +261,7 @@
       "virtual": "Virtuelle Lektionen",
       "lectures": "Vorträge",
       "women": "Lektionen für Frauen",
+      "rabash": "Rabash Lessons",
       "children": "Unterricht für Kinder",
       "series": "Ausgewählte Trainingsserien",
       "seriesTree": {
@@ -270,6 +272,10 @@
     "list": {
       "related": "Bezogen auf",
       "number": "Nr.",
+      "nameByNum_1": "Morning",
+      "nameByNum_2": "Afternoon",
+      "nameByNum_3": "Evening",
+      "nameByNum_4": "Evening 2",
       "item_from": "Teil von:"
     },
     "unit": {
@@ -378,6 +384,12 @@
     "choose-date": "Datum wählen",
     "today-lessons": "Tägliche Kabbalah-Stunden"
   },
+  "help": {
+    "header": {
+      "text": "Help",
+      "subtext": "In this section you will find video tutorials and best practices on how to use the site"
+    }
+  },
   "pages": {
     "collection": {
       "items": {
@@ -463,6 +475,14 @@
     "default": "Standard",
     "filter": "Filter...",
     "share-title": "Lesen Sie diesen Artikel"
+  },
+  "topics": {
+    "header": {
+      "text": "Topics",
+      "subtext": "A collection of all items for a selected topic."
+    },
+    "show-more": "Show more",
+    "show-less": "Show less"
   },
   "media-downloads": {
     "title": "Herunterladen",
