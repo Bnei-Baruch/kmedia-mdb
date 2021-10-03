@@ -132,6 +132,17 @@
       "loading": "Chyba nahrávání souboru"
     }
   },
+  "playlist": {
+    "title-by-type": {
+      "DAILY_LESSON": "Parts of the lesson",
+      "SPECIAL_LESSON": "Parts of the lesson",
+      "CONGRESS": "Parts of the event",
+      "HOLIDAY": "Parts of the holiday",
+      "PICNIC": "Parts of the event",
+      "UNITY_DAY": "Parts of the event",
+      "LESSONS_SERIES": "Parts of the collection"
+    }
+  },
   "messages": {
     "loading": "Nahrávání",
     "loading-subtext": "Přidržet pevně",
@@ -332,7 +343,8 @@
     },
     "list": {
       "episode_from": "Epizody od:",
-      "item_of": "Item of:"
+      "item_of": "Item of:",
+      "show_all": "To all episodes"
     },
     "unit": {
       "recommended": {

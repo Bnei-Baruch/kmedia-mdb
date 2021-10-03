@@ -137,6 +137,17 @@
       "loading": "Dosya yükleme hatası."
     }
   },
+  "playlist": {
+    "title-by-type": {
+      "DAILY_LESSON": "Parts of the lesson",
+      "SPECIAL_LESSON": "Parts of the lesson",
+      "CONGRESS": "Parts of the event",
+      "HOLIDAY": "Parts of the holiday",
+      "PICNIC": "Parts of the event",
+      "UNITY_DAY": "Parts of the event",
+      "LESSONS_SERIES": "Parts of the collection"
+    }
+  },
   "messages": {
     "loading": "Yükleme",
     "loading-subtext": "Sıkı durun",
@@ -329,7 +340,8 @@
     },
     "list": {
       "episode_from": "Bölümünden",
-      "item_of": "Maddesi:"
+      "item_of": "Maddesi:",
+      "show_all": "To all episodes"
     },
     "unit": {
       "recommended": {

@@ -340,7 +340,8 @@
     },
     "list": {
       "episode_from": "Episode from:",
-      "item_of": "Item of:"
+      "item_of": "Item of:",
+      "show_all": "To all episodes"
     },
     "unit": {
       "recommended": {

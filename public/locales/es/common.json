@@ -136,6 +136,17 @@
       "loading": "Error al cargar el video"
     }
   },
+  "playlist": {
+    "title-by-type": {
+      "DAILY_LESSON": "Partes de la lección",
+      "SPECIAL_LESSON": "Partes de la lección",
+      "CONGRESS": "Partes del evento",
+      "HOLIDAY": "Partes del evento",
+      "PICNIC": "Partes del evento",
+      "UNITY_DAY": "Partes del evento",
+      "LESSONS_SERIES": "Partes de la colección"
+    }
+  },
   "messages": {
     "loading": "Cargando",
     "loading-subtext": "Enseguida llega",
@@ -328,7 +339,8 @@
     },
     "list": {
       "episode_from": "Capítulo del programa:",
-      "item_of": "Parte de:"
+      "item_of": "Parte de:",
+      "show_all": "A todos los episodios"
     },
     "unit": {
       "recommended": {
@@ -408,7 +420,7 @@
         "topics": "Temas",
         "collections": "Relacionado a",
         "episode": "Capitulo {{name}}",
-        "lesson-episode": "Part {{name}}",
+        "lesson-episode": "Parte {{name}}",
         "views": "{{views}} visualizaciones"
       },
       "recommended": {
