@@ -81,7 +81,7 @@ const PlaylistHeader = ({ collection, t, prevLink = null, nextLink = null }) => 
   };
 
   return (
-    <Header as="h2" className={clsx('avbox__playlist-header', { 'flex_column': isLesson })}>
+    <Header as="h2" className={clsx('avbox__playlist-header', { 'flex_column': !isLesson })}>
       <Header.Content content={getTitleByCO(collection, t)} />
       {getSubHeader()}
     </Header>

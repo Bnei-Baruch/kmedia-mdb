@@ -30,7 +30,6 @@
     border: 1px solid #7dcff5 !important;
     border-radius: 20px !important;
     box-shadow: 0 0 6px 0 #7dcff5 !important;
-    width: 100%;
   }
 
   // main omnibox size
@@ -170,7 +169,6 @@
     font-weight: normal;
     padding-right: 0.5em;
     padding-left: 0.5em;
-
     &:hover {
       background-color: rgba(255, 255, 255, 0.2);
     }
@@ -1896,11 +1894,7 @@
         flex-flow: nowrap;
 
         .ui.image, svg {
-          margin: 0;
-          padding: 0;
           height: 3.5em !important;
-          display: inline-block;
-          overflow: hidden;
         }
 
         svg {
@@ -1914,7 +1908,6 @@
           overflow: hidden;
           white-space: nowrap;
           text-overflow: ellipsis;
-          background-image: linear-gradient(0deg, #1b1c1d, rgba(27, 28, 29, .85));
           padding: 0 2em;
           margin: 0;
         }

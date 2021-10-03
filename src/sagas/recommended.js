@@ -128,8 +128,8 @@ function* fetchViews(action) {
   yield fetchViewsByUIDs(action.payload);
 }
 
-function* fetchViewsByUIDs(allUIDs) {
-  const uids = yield select(state => allUIDs.filter(uid => recommended.getViews(uid, state.recommended) === -1));
+function* fetchViewsByUIDs(uids) {
+  uids = yield select(state => uids.filter(uid => recommended.getViews(uid, state.recommended) === -1));
   if (uids.length > 0) {
     const { data } = yield call(Api.views, uids);
     const views    = uids.reduce((acc, uid, i) => {
