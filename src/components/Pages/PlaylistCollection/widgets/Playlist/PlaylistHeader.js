@@ -5,12 +5,14 @@ import { withNamespaces } from 'react-i18next';
 import { Header, Icon } from 'semantic-ui-react';
 import clsx from 'clsx';
 
+import { selectors as settings } from '../../../../../redux/modules/settings';
+import { selectors as sources } from '../../../../../redux/modules/sources';
+import { selectors as tags } from '../../../../../redux/modules/tags';
 import * as shapes from '../../../../shapes';
 import { getLanguageDirection } from '../../../../../helpers/i18n-utils';
-import { CT_DAILY_LESSON, CT_SPECIAL_LESSON } from '../../../../../helpers/consts';
+import { CT_DAILY_LESSON, CT_LESSONS_SERIES, CT_SPECIAL_LESSON } from '../../../../../helpers/consts';
 import { fromToLocalized } from '../../../../../helpers/date';
 import Link from '../../../../Language/MultiLanguageLink';
-import { selectors as settings } from '../../../../../redux/modules/settings';
 import CollectionDatePicker from './CollectionDatePicker';
 
 const getNextLink = (langDir, t, link) => (
@@ -42,7 +44,10 @@ const PlaylistHeader = ({ collection, t, prevLink = null, nextLink = null }) => 
   const uiLanguage = useSelector(state => settings.getLanguage(state.settings));
   const langDir    = getLanguageDirection(uiLanguage);
 
-  const { content_type, number, name, film_date, start_date, end_date } = collection;
+  const getPath    = useSelector(state => sources.getPathByID(state.sources));
+  const getTagById = useSelector(state => tags.getTagById(state.tags));
+
+  const { content_type, number, name, film_date, start_date, end_date, tag_id, source_id } = collection;
 
   const isLesson = content_type === CT_DAILY_LESSON || content_type === CT_SPECIAL_LESSON;
 
@@ -56,6 +61,22 @@ const PlaylistHeader = ({ collection, t, prevLink = null, nextLink = null }) => 
         {getNextLink(langDir, t, nextLink)}
       </Header.Subheader>
     );
+  };
+
+  const getTitle = () => {
+    if (content_type !== CT_LESSONS_SERIES) return name;
+
+    if (tag_id && tag_id.length > 0 && getTagById) {
+      const tag = getTagById(tag_id[0]);
+      return `${t('player.header.series-by-topic')} ${tag.label}`;
+    }
+
+    if (source_id && getPath) {
+      const path = getPath(source_id);
+      return `${t('player.header.series-by-source')} ${path[0].name} - "${name}"`;
+    }
+
+    return name;
   };
 
   const getTitleByCO = () => {
@@ -72,7 +93,7 @@ const PlaylistHeader = ({ collection, t, prevLink = null, nextLink = null }) => 
 
     return (
       <>
-        {name || t(`constants.content-types.${ct}`)}
+        {getTitle() || t(`constants.content-types.${ct}`)}
         <small className="display-block">
           {subheader}
         </small>
