@@ -8,7 +8,7 @@
       "lessons": "Lessons & Lectures",
       "programs": "Programs & Clips",
       "sources": "Library",
-      "likutim": "Assorted Excerpts",
+      "likutim": "Likutim",
       "events": "Conventions & Events",
       "books": "Books",
       "topics": "Topics",
@@ -137,7 +137,8 @@
       "loading": "Error loading file."
     },
     "header": {
-      "series-by-topic": "Lessons collection on the topic of:"
+      "series-by-topic": "Lessons collection on the topic of:",
+      "series-by-source": "Lessons collection on the source of:"
     }
   },
   "playlist": {
@@ -317,8 +318,8 @@
   },
   "likutim": {
     "header": {
-      "text": "Assorted Excerpts",
-      "subtext": "In this section, you will find excerpts from the writings of the greatest kabbalists that we learn during the daily Kabbalah lessons with Dr. Michael Laitman. The excerpts concern the spiritual work and the structure of the upper worlds. For your convenience, they are arranged in alphabetical order."
+      "text": "Excerpts from Kabbalistic Sources",
+      "subtext": "Excerpts from the Sources on various subjects"
     },
     "item-header": "Excerpts from the Sources:"
   },
@@ -477,8 +478,7 @@
       "prev": "Prev chapter",
       "rand": "Random content",
       "more": "More",
-      "less": "Less",
-      "new": "New"
+      "less": "Less"
     },
     "playlist": {
       "header": "Up Next"

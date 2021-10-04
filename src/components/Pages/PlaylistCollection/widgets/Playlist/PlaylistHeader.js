@@ -7,6 +7,7 @@ import clsx from 'clsx';
 
 import { selectors as settings } from '../../../../../redux/modules/settings';
 import { selectors as sources } from '../../../../../redux/modules/sources';
+import { selectors as tags } from '../../../../../redux/modules/tags';
 import * as shapes from '../../../../shapes';
 import { getLanguageDirection } from '../../../../../helpers/i18n-utils';
 import { CT_DAILY_LESSON, CT_LESSONS_SERIES, CT_SPECIAL_LESSON } from '../../../../../helpers/consts';
@@ -44,6 +45,7 @@ const PlaylistHeader = ({ collection, t, prevLink = null, nextLink = null }) => 
   const langDir    = getLanguageDirection(uiLanguage);
 
   const getPath    = useSelector(state => sources.getPathByID(state.sources));
+  const getTagById = useSelector(state => tags.getTagById(state.tags));
 
   const { content_type, number, name, film_date, start_date, end_date, tag_id, source_id } = collection;
 
@@ -64,13 +66,14 @@ const PlaylistHeader = ({ collection, t, prevLink = null, nextLink = null }) => 
   const getTitle = () => {
     if (content_type !== CT_LESSONS_SERIES) return name;
 
-    if (tag_id && tag_id.length > 0) {
-      return `${t('player.header.series-by-topic')} ${name}`;
+    if (tag_id && tag_id.length > 0 && getTagById) {
+      const tag = getTagById(tag_id[0]);
+      return `${t('player.header.series-by-topic')} ${tag.label}`;
     }
 
     if (source_id && getPath) {
       const path = getPath(source_id);
-      return `${t('player.header.series-by-topic')} ${path[0].name} - ${name}`;
+      return `${t('player.header.series-by-source')} ${path[0].name} - "${name}"`;
     }
 
     return name;
@@ -81,7 +84,7 @@ const PlaylistHeader = ({ collection, t, prevLink = null, nextLink = null }) => 
     let subheader = '';
 
     if (isLesson) {
-      subheader = `${t('values.date', { date: film_date })}${(number && number < 5) ? ` (${t(`lessons.list.nameByNum_${number}`)})` : ''}`;
+      subheader = `${t('values.date', { date: film_date })}${number && ` (${t(`lessons.list.nameByNum_${number}`)})`}`;
     } else if (film_date) {
       subheader = t('values.date', { date: film_date });
     } else if (start_date && end_date) {

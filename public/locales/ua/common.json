@@ -137,7 +137,8 @@
       "loading": "Помилка при завантаженні файлу."
     },
     "header": {
-      "series-by-topic": "Lessons collection on the topic of:"
+      "series-by-topic": "Lessons collection on the topic of:",
+      "series-by-source": "Lessons collection on the source of:"
     }
   },
   "playlist": {
@@ -478,8 +479,7 @@
       "prev": "Prev chapter",
       "rand": "Random content",
       "more": "More",
-      "less": "Less",
-      "new": "New"
+      "less": "Less"
     },
     "playlist":{
       "header": "Up Next"

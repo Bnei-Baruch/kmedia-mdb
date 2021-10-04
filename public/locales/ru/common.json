@@ -137,7 +137,8 @@
       "loading": "Ошибка при загрузке файла."
     },
     "header": {
-      "series-by-topic": "Серия уроков по теме:"
+      "series-by-topic": "Lessons collection on the topic of:",
+      "series-by-source": "Lessons collection on the source of:"
     }
   },
   "playlist": {
@@ -492,8 +493,7 @@
       "prev": "Предыдущая передача",
       "rand": "Произвольный контент",
       "more": "Ещё",
-      "less": "Меньше",
-      "new": "Новое"
+      "less": "Меньше"
     },
     "playlist": {
       "header": "Следующий"
