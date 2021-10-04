@@ -135,6 +135,10 @@
     },
     "error": {
       "loading": "Dosya yükleme hatası."
+    },
+    "header": {
+      "series-by-topic": "Lessons collection on the topic of:",
+      "series-by-source": "Lessons collection on the source of:"
     }
   },
   "playlist": {
