@@ -169,6 +169,7 @@
     font-weight: normal;
     padding-right: 0.5em;
     padding-left: 0.5em;
+
     &:hover {
       background-color: rgba(255, 255, 255, 0.2);
     }
@@ -1869,6 +1870,7 @@
 }
 
 .cu_item {
+  overflow: hidden;
   .cu_item_img {
     position: relative;
     width: 100%;
@@ -1947,32 +1949,35 @@
     padding: 0 0.5em;
     font-size: .9em;
     line-height: 1em;
-  }
-
-  &.ltr > span {
-    border-left: 1px rgb(170, 170, 170) solid;
-
-    &:first-child {
-      border-left: 0;
-      padding-left: 0;
-    }
-
-    &:last-child {
-      padding-right: 0;
-    }
-  }
-
-  &.rtl > span {
+    border-left: 1px $midGrey solid;
     border-right: 1px $midGrey solid;
+  }
+}
 
-    &:first-child {
-      padding-right: 0;
-      border-right: 0;
-    }
 
-    &:last-child {
-      padding-left: 0;
-    }
+.ltr .cu_info_description > span {
+  border-right-width: 0;
+
+  &:first-child {
+    border-left: 0;
+    padding-left: 0;
+  }
+
+  &:last-child {
+    padding-right: 0;
+  }
+}
+
+.rtl .cu_info_description > span {
+  border-left-width: 0;
+
+  &:first-child {
+    padding-right: 0;
+    border-right: 0;
+  }
+
+  &:last-child {
+    padding-left: 0;
   }
 }
 
