@@ -1,36 +1,33 @@
 import React from 'react';
-import { Table } from 'semantic-ui-react';
 
 import { CT_CLIP } from '../../../../../helpers/consts';
 import * as renderUnitHelper from '../../../../../helpers/renderUnitHelper';
 import UnitList from '../../../../Pages/UnitList/Container';
+import Link from '../../../../Language/MultiLanguageLink';
+import { canonicalLink } from '../../../../../helpers/links';
+import { withNamespaces } from 'react-i18next';
 
-const renderUnit = (unit, t) => {
-  if (!unit) {
-    return null;
-  }
+const ClipsList = ({ t }) => {
 
-  const { clips, relatedItems }
-          = renderUnitHelper.commonRenderUnitForClips(unit, t);
-  return <Table.Row key={unit.id} verticalAlign="top">
-    <Table.Cell collapsing singleLine>
-      {renderUnitHelper.renderUnitCollectionLogo(unit, 'clips', clips.length > 0 ? clips[0].id : null)}
-    </Table.Cell>
-    <Table.Cell>
-      {renderUnitHelper.renderUnitFilmDate(unit, t)}
-      {renderUnitHelper.renderUnitNameLink(unit)}
-      {renderUnitHelper.renderUnitDescription(unit)}
-      {renderUnitHelper.renderRelatedItems(relatedItems, t('programs.list.item_of'))}
-    </Table.Cell>
-  </Table.Row>;
+  const renderActions = unit => {
+    if (!unit) return null;
+
+    const breakdown = renderUnitHelper.getUnitCollectionsBreakdown(unit);
+    const co        = breakdown.getClips()[0];
+    if (!co) return null;
+    return (
+      <Link to={canonicalLink(co)} className="ui">{t('programs.list.show_all')}</Link>
+    );
+  };
+
+  return (
+    <UnitList
+      key="programs-clips"
+      namespace="programs-clips"
+      renderActions={renderActions}
+      extraFetchParams={{ content_type: CT_CLIP }}
+    />
+  );
 };
 
-const ClipsList = () =>
-  <UnitList
-    key="programs-clips"
-    namespace="programs-clips"
-    renderUnit={renderUnit}
-    extraFetchParams={{ content_type: CT_CLIP }}
-  />;
-
-export default ClipsList;
+export default withNamespaces()(ClipsList);

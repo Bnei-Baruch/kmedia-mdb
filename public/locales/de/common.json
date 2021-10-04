@@ -137,6 +137,17 @@
       "loading": "Beim Laden der Datei ist ein Fehler aufgetreten."
     }
   },
+  "playlist": {
+    "title-by-type": {
+      "DAILY_LESSON": "Parts of the lesson",
+      "SPECIAL_LESSON": "Parts of the lesson",
+      "CONGRESS": "Parts of the event",
+      "HOLIDAY": "Parts of the holiday",
+      "PICNIC": "Parts of the event",
+      "UNITY_DAY": "Parts of the event",
+      "LESSONS_SERIES": "Parts of the collection"
+    }
+  },
   "messages": {
     "loading": "Laden...",
     "loading-subtext": "Warte...",
@@ -326,7 +337,8 @@
     },
     "list": {
       "episode_from": "Folge von:",
-      "item_of": "Teil von:"
+      "item_of": "Teil von:",
+      "show_all": "To all episodes"
     },
     "unit": {
       "recommended": {

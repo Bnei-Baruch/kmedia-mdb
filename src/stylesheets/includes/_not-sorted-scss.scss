@@ -424,6 +424,21 @@
 }
 
 .collection-header {
+  .ui.column.grid > [class*="four wide"].column, .ui.grid > .column.row > [class*="four wide"].column, .ui.grid > .row > [class*="four wide"].column, .ui.grid > [class*="four wide"].column {
+    width: 20% !important;
+    @include mobile {
+      width: 30% !important;
+    }
+  }
+
+  .ui.column.grid > [class*="eight wide"].column, .ui.grid > .column.row > [class*="eight wide"].column, .ui.grid > .row > [class*="eight wide"].column, .ui.grid > [class*="eight wide"].column {
+    @include mobile {
+      width: 70% !important;
+    }
+  }
+}
+
+.collection-header {
   .social-buttons {
     position: relative;
     background: rgba(27, 28, 29, 0.8);
@@ -1839,6 +1854,7 @@
 .cu_items.ui.four.cards > .card {
   width: calc(25% - 74px);
   margin: 37px;
+  overflow: hidden;
   @include tablet {
     width: calc(50% - 40px);
     margin: 20px;
@@ -1879,7 +1895,10 @@
 
         .ui.image, svg {
           height: 3.5em !important;
-          margin: 0;
+        }
+
+        svg {
+          width: 70px;
         }
 
         .header {
@@ -1889,16 +1908,20 @@
           overflow: hidden;
           white-space: nowrap;
           text-overflow: ellipsis;
-          background-color: rgba(0, 0, 0, 0.63);
-          padding: 0 1.7em;
+          padding: 0 2em;
           margin: 0;
         }
       }
-
     }
 
     .ui.card > .content, .ui.cards > .card > .content {
       border-top: 0;
+    }
+  }
+
+  .cu_item_info_co {
+    .header {
+      background-image: linear-gradient(0deg, #1b1c1d, rgba(27, 28, 29, .85));
     }
   }
 }
@@ -2073,7 +2096,6 @@
       vertical-align: top;
       color: white;
       line-height: 2.35em;
-      background-color: rgba(0, 0, 0, 0.63);
       padding: 0 2em;
       margin: 0 -1.5em;
     }

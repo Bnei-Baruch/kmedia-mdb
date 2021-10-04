@@ -11,6 +11,8 @@ import { getRSSLinkByTopic } from '../../../helpers/utils';
 import { useSelector } from 'react-redux';
 import { selectors as settings } from '../../../redux/modules/settings';
 import ShareForm from './ShareForm';
+import SubscribeBtn from '../../shared/SubscribeBtn';
+import { VERSION_WITH_PERSONALIZATION } from '../../../helpers/consts';
 
 const CollectionPageHeader = ({ collection = null, namespace, t }) => {
   const contentLanguage = useSelector(state => settings.getContentLanguage(state.settings));
@@ -49,6 +51,15 @@ const CollectionPageHeader = ({ collection = null, namespace, t }) => {
                       compact={true}
                       href={getRSSLinkByTopic(collection.id, contentLanguage)} />
                     <ShareForm collection={collection} />
+                    {
+                      VERSION_WITH_PERSONALIZATION &&
+                      (
+                        <div className="margin-top-8 display-iblock">
+                          <SubscribeBtn collection={collection} />
+                        </div>
+                      )
+                    }
+
                   </Header.Subheader>
                 </Header.Content>
               </Header>

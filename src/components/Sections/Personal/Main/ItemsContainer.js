@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from 'react';
 import { withNamespaces } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Card, Table } from 'semantic-ui-react';
+import { Card, Container } from 'semantic-ui-react';
 
 import { actions, selectors } from '../../../../redux/modules/my';
 import { selectors as settings } from '../../../../redux/modules/settings';
@@ -63,11 +63,7 @@ const ItemsContainer = ({ pageSize = 8, pageNo = 1, t, namespace, withSeeAll }) 
   }
 
   if (isMobileDevice && [MY_NAMESPACE_PLAYLISTS, MY_NAMESPACE_LIKES, MY_NAMESPACE_HISTORY].includes(namespace)) {
-    children = items?.length > 0 ? (
-      <Table unstackable basic="very" sortable>
-        <Table.Body children={children} />
-      </Table>
-    ) : null;
+    children = items?.length > 0 ? <Container className="padded" children={children} /> : null;
   } else {
     children = <Card.Group doubling itemsPerRow={4} stackable className="cu_items">{children}</Card.Group>;
   }

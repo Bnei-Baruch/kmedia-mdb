@@ -4,7 +4,7 @@ import { Table } from 'semantic-ui-react';
 
 import { CT_LECTURE, CT_LESSON_PART, CT_VIRTUAL_LESSON, CT_WOMEN_LESSON, RABASH_PERSON_UID } from '../../../../../helpers/consts';
 import * as renderUnitHelper from '../../../../../helpers/renderUnitHelper';
-import UnitList from '../../../../Pages/UnitList/Container';
+import UnitList from '../../../../Pages/UnitListAsTable/Container';
 
 const renderUnit = (unit, t, namespace) => {
   if (!unit) {

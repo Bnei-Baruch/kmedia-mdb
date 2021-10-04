@@ -137,6 +137,17 @@
       "loading": "Помилка при завантаженні файлу."
     }
   },
+  "playlist": {
+    "title-by-type": {
+      "DAILY_LESSON": "Parts of the lesson",
+      "SPECIAL_LESSON": "Parts of the lesson",
+      "CONGRESS": "Parts of the event",
+      "HOLIDAY": "Parts of the holiday",
+      "PICNIC": "Parts of the event",
+      "UNITY_DAY": "Parts of the event",
+      "LESSONS_SERIES": "Parts of the collection"
+    }
+  },
   "messages": {
     "loading": "Завантаження...",
     "loading-subtext": "Чекайте...",
@@ -329,7 +340,8 @@
     },
     "list": {
       "episode_from": "Епізод із:",
-      "item_of": "Частина з:"
+      "item_of": "Частина з:",
+      "show_all": "To all episodes"
     },
     "unit": {
       "recommended": {

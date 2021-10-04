@@ -113,7 +113,7 @@
     "copy-link": "Копировать линк",
     "search": "Поиск",
     "previous": "К предыдущему уроку",
-    "next": "Следующий",
+    "next": "К следующему уроку",
     "copy": "Копировать",
     "view-all": "Посмотреть все",
     "save": "Сохранить",
@@ -135,6 +135,17 @@
     },
     "error": {
       "loading": "Ошибка при загрузке файла."
+    }
+  },
+  "playlist": {
+    "title-by-type": {
+      "DAILY_LESSON": "Части урока",
+      "SPECIAL_LESSON": "Части урока",
+      "CONGRESS": "Части события",
+      "HOLIDAY": "Части события",
+      "PICNIC": "Части события",
+      "UNITY_DAY": "Части события",
+      "LESSONS_SERIES": "Части серии"
     }
   },
   "messages": {
@@ -338,7 +349,8 @@
     },
     "list": {
       "episode_from": "Эпизод из:",
-      "item_of": "Часть из:"
+      "item_of": "Часть из:",
+      "show_all": "Ко всем эпизодам"
     },
     "unit": {
       "recommended": {
@@ -424,7 +436,7 @@
         "topics": "Темы",
         "collections": "Относится к",
         "episode": "Эпизод {{name}}",
-        "lesson-episode": "Part {{name}}",
+        "lesson-episode": "Часть {{name}}",
         "views": "{{views}} просмотров"
       },
       "recommended": {

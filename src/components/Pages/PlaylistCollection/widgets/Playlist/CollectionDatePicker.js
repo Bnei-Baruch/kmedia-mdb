@@ -44,7 +44,7 @@ const CollectionDatePicker = ({ collection, t }) => {
       label={isMobileDevice ? film_date : t('values.date', { date: film_date })}
       language={language}
       onDayChange={fetchNextCO}
-      value={Date.parse(film_date)}
+      value={new Date(film_date)}
       withLabel={true}
     />
   );

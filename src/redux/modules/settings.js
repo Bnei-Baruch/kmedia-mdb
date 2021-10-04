@@ -46,7 +46,7 @@ export const actions = {
 export const initialState = {
   language: DEFAULT_LANGUAGE,
   contentLanguage: DEFAULT_LANGUAGE,
-  pageSize: 10,
+  pageSize: 20,
 };
 
 const onSetLanguage = (draft, payload) => {

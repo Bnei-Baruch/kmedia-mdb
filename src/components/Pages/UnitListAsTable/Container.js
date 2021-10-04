@@ -8,7 +8,6 @@ import { selectors as settings } from '../../../redux/modules/settings';
 import { actions as filtersActions, selectors as filters } from '../../../redux/modules/filters';
 import { actions as listsActions, selectors as lists } from '../../../redux/modules/lists';
 import { selectors as mdb } from '../../../redux/modules/mdb';
-import { actions as recommendedActions } from '../../../redux/modules/recommended';
 import withPagination, { getPageFromLocation } from '../../Pagination/withPagination';
 import * as shapes from '../../shapes';
 import Page from './Page';
@@ -28,7 +27,7 @@ export class UnitListContainer extends withPagination {
     fetchList: PropTypes.func.isRequired,
     setPage: PropTypes.func.isRequired,
     extraFetchParams: PropTypes.object,
-    renderActions: PropTypes.func,
+    renderUnit: PropTypes.func.isRequired,
     resetNamespace: PropTypes.func.isRequired
   };
 
@@ -80,12 +79,6 @@ export class UnitListContainer extends withPagination {
     super.UNSAFE_componentWillReceiveProps(nextProps);
   }
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.wip && !this.props.wip) {
-      prevProps.fetchViews(this.props.items.map(x => x.id));
-    }
-  }
-
   extraFetchParams() {
     return this.props.extraFetchParams;
   }
@@ -109,7 +102,7 @@ export class UnitListContainer extends withPagination {
   }
 
   render() {
-    const { namespace, items, wip, err, pageNo, total, pageSize, language, renderActions, location } = this.props;
+    const { namespace, items, wip, err, pageNo, total, pageSize, language, renderUnit, location } = this.props;
 
     return (
       <Page
@@ -121,7 +114,7 @@ export class UnitListContainer extends withPagination {
         total={total}
         pageSize={pageSize}
         language={language}
-        renderActions={renderActions}
+        renderUnit={renderUnit}
         onPageChange={this.handlePageChanged}
         onFiltersChanged={this.handleFiltersChanged}
         onFiltersHydrated={() => this.handleFiltersHydrated(location)}
@@ -153,7 +146,6 @@ export const mapDispatch = dispatch => (
     setPage: listsActions.setPage,
     resetNamespace: filtersActions.resetNamespace,
     hydrateFilters: filtersActions.hydrateFilters,
-    fetchViews: recommendedActions.fetchViews,
   }, dispatch)
 );
 

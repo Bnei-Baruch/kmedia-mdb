@@ -4,7 +4,7 @@ import { Table } from 'semantic-ui-react';
 
 import { CT_FRIENDS_GATHERING, CT_MEAL } from '../../../../../helpers/consts';
 import * as renderUnitHelper from '../../../../../helpers/renderUnitHelper';
-import UnitList from '../../../../Pages/UnitList/Container';
+import UnitList from '../../../../Pages/UnitListAsTable/Container';
 
 const renderUnit = (unit, t) => {
   const breakdown = renderUnitHelper.getUnitCollectionsBreakdown(unit);

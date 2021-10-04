@@ -112,7 +112,7 @@
     "copy-link": "העתק קישור",
     "search": "חפש",
     "previous": "לשיעור הקודם",
-    "next": "הבא",
+    "next": "לשיעור הבא",
     "copy": "העתק",
     "view-all": "הצג הכל",
     "save": "שמור",
@@ -134,6 +134,17 @@
     },
     "error": {
       "loading": "שגיאה בטעינת קובץ"
+    }
+  },
+  "playlist": {
+    "title-by-type": {
+      "DAILY_LESSON": "חלקי השיעור",
+      "SPECIAL_LESSON": "חלקי השיעור",
+      "CONGRESS": "חלקי האירוע",
+      "HOLIDAY": "חלקי האירוע",
+      "PICNIC": "חלקי האירוע",
+      "UNITY_DAY": "חלקי האירוע",
+      "LESSONS_SERIES": "שיעורי הסדרה"
     }
   },
   "messages": {
@@ -328,7 +339,8 @@
     },
     "list": {
       "episode_from": "פרק מתוך התוכנית:",
-      "item_of": "חלק מתוך:"
+      "item_of": "חלק מתוך:",
+      "show_all": "לכל הפרקים"
     },
     "unit": {
       "recommended": {
@@ -408,7 +420,7 @@
         "topics": "נושאים",
         "collections": "קשור ל",
         "episode": "פרק {{name}}",
-        "lesson-episode": "Part {{name}}",
+        "lesson-episode": "חלק {{name}}",
         "views": "{{views}} צפיות"
       },
       "recommended": {
