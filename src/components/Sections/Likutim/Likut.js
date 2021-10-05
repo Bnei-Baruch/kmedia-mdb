@@ -170,7 +170,7 @@ const Likut = ({ t }) => {
               [`size${fontSize}`]: true,
             })}>
             <div className="source__content"
-                 dangerouslySetInnerHTML={{ __html: data }}
+              dangerouslySetInnerHTML={{ __html: data }}
             />
           </div>
         </Grid.Column>
