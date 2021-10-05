@@ -147,14 +147,14 @@ const renderUnits = (units, language, t, helpChooseLang, chroniclesAppend) => (
   })
 );
 
-export const renderCollection = (collection, language, t, helpChooseLang) => {
+export const renderCollection = (collection, language, t, helpChooseLang, chroniclesAppend) => {
   const { number, id, content_units } = collection;
   if (!content_units) {
     return null;
 
   }
 
-  const units = renderUnits(collection.content_units, language, t, helpChooseLang);
+  const units = renderUnits(collection.content_units, language, t, helpChooseLang, chroniclesAppend);
 
   return (
     <Card fluid key={id}>
