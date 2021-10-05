@@ -476,7 +476,8 @@
       "prev": "Prev chapter",
       "rand": "Random content",
       "more": "More",
-      "less": "Less"
+      "less": "Less",
+      "new": "New"
     },
     "playlist":{
       "header": "Up Next"
