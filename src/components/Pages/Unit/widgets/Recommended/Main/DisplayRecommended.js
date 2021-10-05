@@ -60,6 +60,8 @@ export const renderPlaylistUnit = (unit, t, label = null) =>
     </Table.Body>
   </Table>
 
+const padOneZero = str => str.length === 1 ? `0${str}` : str;
+
 const RecommendedPlaylist = (recommendForUnit, units, selected, t, chronicles, viewLimit, feedName) => {
   const [expanded, setExpanded] = useState(false);
   const unitsToDisplay = !expanded && viewLimit && viewLimit < units.length ? units.slice(0, viewLimit) : units;
@@ -70,19 +72,12 @@ const RecommendedPlaylist = (recommendForUnit, units, selected, t, chronicles, v
   const unitsWatchingNow = useSelector(state => selectors.getManyWatchingNow(unitsToDisplay.map(unit => unit.id), state.recommended))
   const views = (uid, index) => (suggesterIncludes(uid, 'Popular') && unitsViews[index]) || -1;
   const watchingNow = (uid, index) => (suggesterIncludes(uid, 'WatchingNow') && unitsWatchingNow[index]) || -1;
+  const twoDaysAgo = new Date();
+  twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
+  const filmDateNow = `${twoDaysAgo.getFullYear()}-${padOneZero(twoDaysAgo.getMonth())}-${padOneZero(twoDaysAgo.getDate())}`;
   const suggesterLabel = (recommendForUnit, unit) => {
-    if (suggesterIncludes(unit.id, 'Last')) {
-      if (recommendForUnit.film_date && unit.film_date && recommendForUnit.film_date.localeCompare(unit.film_date) === -1) {
-        return t('materials.recommended.last');
-      }
-
-      return t('materials.recommended.prev');
-    } else if (suggesterIncludes(unit.id, 'Next')) {
-      return t('materials.recommended.next');
-    } else if (suggesterIncludes(unit.id, 'Prev')) {
-      return t('materials.recommended.prev');
-    } else if (suggesterIncludes(unit.id, 'Rand')) {
-      return t('materials.recommended.rand');
+    if (unit.film_date && unit.film_date.localeCompare(filmDateNow) === -1) {
+      return t('materials.recommended.new');
     }
 
     return '';
