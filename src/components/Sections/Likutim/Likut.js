@@ -59,9 +59,11 @@ const Likut = ({ t }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!wip && !err && !(unit?.files && unit.tags)) {
-      dispatch(actions.fetchUnit(id));
-    } else if (unit) {
+    dispatch(actions.fetchUnit(id));
+  }, [dispatch, id]);
+
+  useEffect(() => {
+    if (unit) {
       let file = unit.files?.find(x => x.language === language);
 
       if (!file) {
@@ -76,7 +78,7 @@ const Likut = ({ t }) => {
         setFile(file);
       }
     }
-  }, [dispatch, err, id, language, unit, wip]);
+  }, [dispatch, language, unit]);
 
   useEffect(() => {
     if (file) {
@@ -168,7 +170,7 @@ const Likut = ({ t }) => {
               [`size${fontSize}`]: true,
             })}>
             <div className="source__content"
-              dangerouslySetInnerHTML={{ __html: data }}
+                 dangerouslySetInnerHTML={{ __html: data }}
             />
           </div>
         </Grid.Column>
