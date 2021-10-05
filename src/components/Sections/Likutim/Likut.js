@@ -14,7 +14,7 @@ import { getLanguageDirection, getLangPropertyDirection } from '../../../helpers
 import { physicalFile } from '../../../helpers/utils';
 import { SectionLogo } from '../../../helpers/images';
 import { canonicalLink } from '../../../helpers/links';
-import { CT_LESSON_PART } from '../../../helpers/consts';
+import { CT_LESSON_PART, LANG_ENGLISH, LANG_HEBREW } from '../../../helpers/consts';
 import LibraryBar from '../Library/LibraryBar';
 import MenuLanguageSelector from '../../../components/Language/Selector/MenuLanguageSelector';
 import Link from '../../../components/Language/MultiLanguageLink';
