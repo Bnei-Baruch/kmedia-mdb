@@ -74,9 +74,9 @@ const RecommendedPlaylist = (recommendForUnit, units, selected, t, chronicles, v
   const watchingNow = (uid, index) => (suggesterIncludes(uid, 'WatchingNow') && unitsWatchingNow[index]) || -1;
   const twoDaysAgo = new Date();
   twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
-  const filmDateNow = `${twoDaysAgo.getFullYear()}-${padOneZero(String(twoDaysAgo.getMonth()+1))}-${padOneZero(String(twoDaysAgo.getDate()))}`;
+  const filmDateNow = `${twoDaysAgo.getFullYear()}-${padOneZero(twoDaysAgo.getMonth())}-${padOneZero(twoDaysAgo.getDate())}`;
   const suggesterLabel = (recommendForUnit, unit) => {
-    if (unit.film_date && unit.film_date.localeCompare(filmDateNow) >= 0) {
+    if (unit.film_date && unit.film_date.localeCompare(filmDateNow) === -1) {
       return t('materials.recommended.new');
     }
 
@@ -122,15 +122,18 @@ const RecommendedPlaylist = (recommendForUnit, units, selected, t, chronicles, v
     const suggesterLabelStr = suggesterLabel(recommendForUnit, unit);
 
     if (suggesterLabelStr) {
-      return (
-        <div className="recommend-label">
-          <div>
-            <small className="text">
-              <span>{suggesterLabelStr}</span>
-            </small>
+      if (!labelsUsed.has(suggesterLabelStr)) {
+        labelsUsed.set(suggesterLabelStr, unit);
+        return (
+          <div className="recommend-label">
+            <div>
+              <small className="text">
+                <span>{suggesterLabelStr}</span>
+              </small>
+            </div>
           </div>
-        </div>
-      );
+        );
+      }
     }
 
     return null;
