@@ -14,7 +14,7 @@ import { getLanguageDirection, getLangPropertyDirection } from '../../../helpers
 import { physicalFile } from '../../../helpers/utils';
 import { SectionLogo } from '../../../helpers/images';
 import { canonicalLink } from '../../../helpers/links';
-import { CT_LESSON_PART, LANG_ENGLISH, LANG_HEBREW } from '../../../helpers/consts';
+import { LANG_ENGLISH, LANG_HEBREW, UNIT_LESSONS_TYPE } from '../../../helpers/consts';
 import LibraryBar from '../Library/LibraryBar';
 import MenuLanguageSelector from '../../../components/Language/Selector/MenuLanguageSelector';
 import Link from '../../../components/Language/MultiLanguageLink';
@@ -119,7 +119,7 @@ const Likut = ({ t }) => {
   );
 
   const url                = file && physicalFile(file, true);
-  const relatedLessons     = Object.values(source_units).filter(u => u.content_type === CT_LESSON_PART);
+  const relatedLessons     = Object.values(source_units).filter(u => UNIT_LESSONS_TYPE.includes(u.content_type));
   const relatedLessonsSize = relatedLessons.length > 0 ? 6 : 0;
 
   return (
@@ -170,7 +170,7 @@ const Likut = ({ t }) => {
               [`size${fontSize}`]: true,
             })}>
             <div className="source__content"
-              dangerouslySetInnerHTML={{ __html: data }}
+                 dangerouslySetInnerHTML={{ __html: data }}
             />
           </div>
         </Grid.Column>
