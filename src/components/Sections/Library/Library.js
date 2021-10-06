@@ -1,29 +1,22 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import React, { useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { withNamespaces } from 'react-i18next';
 import { Segment } from 'semantic-ui-react';
+import PropTypes from 'prop-types';
 
-import { selectors, actions } from '../../../redux/modules/assets';
 import { selectors as settings } from '../../../redux/modules/settings';
-import { DeviceInfoContext, SessionInfoContext } from '../../../helpers/app-contexts';
-import { physicalFile, isEmpty } from '../../../helpers/utils';
+import { selectors, actions } from '../../../redux/modules/assets';
 import { selectSuitableLanguage } from '../../../helpers/language';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
-import { getQuery, updateQuery } from '../../../helpers/url';
-import {
-  buildSearchLinkFromSelection,
-  DOM_ROOT_ID,
-  prepareScrollToSearch
-} from '../../../helpers/scrollToSearch/helper';
-import { getPageFromLocation } from '../../Pagination/withPagination';
+import { physicalFile, isEmpty } from '../../../helpers/utils';
+import { updateQuery } from '../../../helpers/url';
+import PDF, { isTaas, startsFrom } from '../../shared/PDF/PDF';
+import ScrollToSearch from '../../shared/ScrollToSearch';
 import Download from '../../shared/Download/Download';
 import WipErr from '../../shared/WipErr/WipErr';
-import ShareBar from '../../shared/ShareSelected';
-import PDF, { isTaas, startsFrom } from '../../shared/PDF/PDF';
 import MenuLanguageSelector from '../../Language/Selector/MenuLanguageSelector';
-import ScrollToSearch from '../../shared/ScrollToSearch';
+import { getPageFromLocation } from '../../Pagination/withPagination';
 
 export const checkRabashGroupArticles = source => {
   if (/^gr-/.test(source)) { // Rabash Group Articles
