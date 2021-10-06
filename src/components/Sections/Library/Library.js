@@ -23,6 +23,7 @@ import WipErr from '../../shared/WipErr/WipErr';
 import ShareBar from '../../shared/ShareSelected';
 import PDF, { isTaas, startsFrom } from '../../shared/PDF/PDF';
 import MenuLanguageSelector from '../../Language/Selector/MenuLanguageSelector';
+import ScrollToSearch from '../../shared/ScrollToSearch';
 
 export const checkRabashGroupArticles = source => {
   if (/^gr-/.test(source)) { // Rabash Group Articles
@@ -35,17 +36,11 @@ export const checkRabashGroupArticles = source => {
 };
 
 const Library = ({ data, source, downloadAllowed, t }) => {
-  const location                             = useLocation();
-  const history                              = useHistory();
-  const [pageNumber, setPageNumber]          = useState(getPageFromLocation(location));
-  const [searchUrl, setSearchUrl]            = useState();
-  const [searchText, setSearchText]          = useState();
-  const [language, setLanguage]              = useState(null);
-  const [languages, setLanguages]            = useState([]);
-  const { srchstart, srchend, highlightAll } = getQuery(location);
-  const search                               = { srchstart, srchend };
-  const { isMobileDevice }                                              = useContext(DeviceInfoContext);
-  const { enableShareText: { isShareTextEnabled, setEnableShareText } } = useContext(SessionInfoContext);
+  const location                    = useLocation();
+  const history                     = useHistory();
+  const [pageNumber, setPageNumber] = useState(getPageFromLocation(location));
+  const [language, setLanguage]     = useState(null);
+  const [languages, setLanguages]   = useState([]);
 
   const doc2htmlById    = useSelector(state => selectors.getDoc2htmlById(state.assets));
   const uiLanguage      = useSelector(state => settings.getLanguage(state.settings));
@@ -80,35 +75,6 @@ const Library = ({ data, source, downloadAllowed, t }) => {
     }
   }, [data, language, source, dispatch]);
 
-  useEffect(() => {
-    const handleOnMouseUp = e => {
-      if (isMobileDevice || !isShareTextEnabled) {
-        return false;
-      }
-
-      const { url, text } = buildSearchLinkFromSelection(language);
-      if (url)       {
-        setSearchText(text);
-        setSearchUrl(url);
-      }
-
-      return false;
-    };
-
-    document.addEventListener('mouseup', handleOnMouseUp);
-    return () => document.removeEventListener('mouseup', handleOnMouseUp);
-  }, [isMobileDevice, isShareTextEnabled, language]);
-
-
-  const handleOnMouseDown = e => {
-    if (isMobileDevice || !isShareTextEnabled) {
-      return false;
-    }
-
-    setSearchUrl(null);
-    return false;
-  };
-
   if (!data) {
     return <Segment basic>&nbsp;</Segment>;
   }
@@ -121,30 +87,20 @@ const Library = ({ data, source, downloadAllowed, t }) => {
     }));
   };
 
-  const disableShareBar = () => setEnableShareText(false);
-
-  const renderShareBar = () => isMobileDevice || !searchUrl
-    ? null
-    : <ShareBar url={searchUrl} text={searchText} disable={disableShareBar} />;
-
   const handleLanguageChanged = (e, language) => {
-    updateQuery(history, query => ({
-      ...query,
-      language,
-    }));
-
+    updateQuery(history, query => ({ ...query, language }));
     setLanguage(language);
   };
 
   const languageBar = languages.length > 0 &&
-      <div className="library-language-container">
-        <MenuLanguageSelector
-          languages={languages}
-          defaultValue={language}
-          onSelect={handleLanguageChanged}
-          fluid={false}
-        />
-      </div>
+    <div className="library-language-container">
+      <MenuLanguageSelector
+        languages={languages}
+        defaultValue={language}
+        onSelect={handleLanguageChanged}
+        fluid={false}
+      />
+    </div>;
 
   const getContent = () => {
     if (!data?.[language])
@@ -185,14 +141,9 @@ const Library = ({ data, source, downloadAllowed, t }) => {
     } else if (contentData) {
       const direction = getLanguageDirection(language);
       return (
-        <div className="search-on-page--container">
-          {isShareTextEnabled && renderShareBar()}
-          <div
-            id={DOM_ROOT_ID}
-            onMouseDown={handleOnMouseDown}
-            style={{ direction, textAlign: (direction === 'ltr' ? 'left' : 'right') }}
-            dangerouslySetInnerHTML={{ __html: prepareScrollToSearch(contentData, search, highlightAll === 'true') }}
-          />
+        <div
+          style={{ direction, textAlign: (direction === 'ltr' ? 'left' : 'right') }}>
+          <ScrollToSearch data={contentData} language={language} />
         </div>
       );
     }
