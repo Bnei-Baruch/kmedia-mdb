@@ -26,12 +26,12 @@ import CUItemContainer from '../../shared/CUItem/CUItemContainer';
 import { fromToLocalized } from '../../../helpers/date';
 
 const LatestUpdate = ({ unit, t }) => {
-  const link = canonicalLink(unit);
+  const { content_type, name, film_date, name_in_collection, id, collections } = unit;
 
-  const { content_type, name, film_date, name_in_collection, id } = unit;
-  let title                                                       = name || `${t(`constants.content-types.${content_type}`)} ${t('lessons.list.number')} ${name_in_collection}`;
-  let subheader                                                   = [t('values.date', { date: film_date })];
-  let canonicalSection                                            = Requests.imaginaryRandom('resize', {
+  const link           = canonicalLink(unit);
+  let title            = name || `${t(`constants.content-types.${content_type}`)} ${t('lessons.list.number')} ${name_in_collection}`;
+  let subheader        = [t('values.date', { date: film_date })];
+  let canonicalSection = Requests.imaginaryRandom('resize', {
     width: 512,
     height: 288,
     nocrop: false,
@@ -44,24 +44,21 @@ const LatestUpdate = ({ unit, t }) => {
     case CT_CLIP:
     case CT_VIRTUAL_LESSONS:
       return <CUItemContainer id={id} noViews />;
-    case CT_SPECIAL_LESSON:
     case CT_DAILY_LESSON:
       title     = t(`constants.content-types.${content_type}`);
-      subheader = [];
-      //subheader.push(t('pages.unit.info.lesson-episode', { name: name_in_collection }));
-      subheader.push(t('values.date', { date: film_date }));
+      subheader = [`${t('values.date', { date: film_date })}${name_in_collection && ` (${t(`lessons.list.nameByNum_${name_in_collection}`)})`}`];
       break;
     case CT_WOMEN_LESSONS:
       title     = name;
       subheader = [t('values.date', { date: film_date })];
       break;
     case CT_LESSONS_SERIES:
+      const { start_date, end_date, film_date: defDate } = Object.values(collections)[0] || {};
+
       title     = name || t(`constants.content-types.${content_type}`);
-      subheader = [];
-      name_in_collection && subheader.push(t('pages.unit.info.lesson-episode', { name: name_in_collection }));
-      //subheader.push(fromToLocalized(start_date, end_date));
-      subheader.push(fromToLocalized('2020-10-01', film_date));
+      subheader = [fromToLocalized(start_date || defDate, end_date)];
       break;
+    case CT_SPECIAL_LESSON:
     case CT_CONGRESS:
     case CT_MEALS:
     case CT_FRIENDS_GATHERINGS:
@@ -90,7 +87,7 @@ const LatestUpdate = ({ unit, t }) => {
 
 LatestUpdate.propTypes = {
   unit: shapes.ContentUnit.isRequired,
-  label: PropTypes.string.isRequired,
+  label: PropTypes.string,
   t: PropTypes.func.isRequired,
 };
 
