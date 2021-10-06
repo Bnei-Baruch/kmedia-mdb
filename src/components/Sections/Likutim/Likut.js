@@ -20,6 +20,7 @@ import MenuLanguageSelector from '../../../components/Language/Selector/MenuLang
 import Link from '../../../components/Language/MultiLanguageLink';
 import WipErr from '../../shared/WipErr/WipErr';
 import Download from '../../shared/Download/Download';
+import ScrollToSearch from '../../shared/ScrollToSearch';
 
 // expected unit of type Likutim
 const Likut = ({ t }) => {
@@ -169,9 +170,7 @@ const Likut = ({ t }) => {
               'source__content-wrapper': true,
               [`size${fontSize}`]: true,
             })}>
-            <div className="source__content"
-              dangerouslySetInnerHTML={{ __html: data }}
-            />
+            <ScrollToSearch language={language} data={data} />
           </div>
         </Grid.Column>
         {relatedLessonsSize > 0 &&
