@@ -44,13 +44,13 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
   const handleSelectedChange = useCallback(nSelected => {
     if (nSelected !== selected) {
       if (isLesson) {
-        playlist.items[nSelected] && history.push(playlist.items[nSelected].shareUrl);
+        playlist.items[nSelected] && history.push(`/${uiLanguage}${playlist.items[nSelected].shareUrl}`);
       } else {
         playerHelper.setActivePartInQuery(history, nSelected);
         setSelected(nSelected);
       }
     }
-  }, [history, selected, collection]);
+  }, [history, selected, uiLanguage]);
 
   useEffect(() => {
     if (prev?.unit?.id !== unit?.id) {
