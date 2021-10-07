@@ -227,13 +227,6 @@ const Sources = ({ unit, t }) => {
       >
         <Grid.Column
           className={clsx({ 'is-fitted': isMobileDevice })}
-          width={isMobileDevice ? 16 : 2}
-        >
-          {<Download path={url} mimeType={file.mimetype} downloadAllowed={true} filename={file.name} />}
-          <UnitBar handleSettings={setSettings} fontSize={setting.fontSize} />
-        </Grid.Column>
-        <Grid.Column
-          className={clsx({ 'is-fitted': isMobileDevice })}
           width={isMobileDevice ? 16 : 10}
         >
           <Dropdown
@@ -261,6 +254,13 @@ const Sources = ({ unit, t }) => {
             />
           </Grid.Column>
         }
+        <Grid.Column
+          className={clsx({ 'is-fitted': isMobileDevice })}
+          width={isMobileDevice ? 16 : 2}
+        >
+          {<Download path={url} mimeType={file.mimetype} downloadAllowed={true} filename={file.name} />}
+          <UnitBar handleSettings={setSettings} fontSize={setting.fontSize} />
+        </Grid.Column>
       </Grid>
       <Divider hidden fitted />
       {getContents()}
