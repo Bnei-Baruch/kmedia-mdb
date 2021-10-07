@@ -729,9 +729,15 @@
   .layout__footer,
   .layout__secondary-header,
   .anchors-language-selector,
+  .avbox__playlist-view,
+  .avbox__playlist-wrapper,
+  .avbox__playlist-wrapper,
+  .no_print,
+  .unit-info,
+  #avbox_playlist,
   #us_report_button,
   div:empty {
-    display: none;
+    display: none !important;
   }
 
   .layout {

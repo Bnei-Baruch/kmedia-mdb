@@ -77,7 +77,6 @@ const ScrollToSearch = ({ data, language, urlParams='' }) => {
         <div
           id={DOM_ROOT_ID}
           onMouseDown={handleOnMouseDown}
-          className="source__content"
           dangerouslySetInnerHTML={{ __html: prepareScrollToSearch(data, search, highlightAll === 'true') }}
         />
       }
