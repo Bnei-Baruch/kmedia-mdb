@@ -207,6 +207,7 @@ class Transcription extends Component {
       const text = type || 'transcription';
       return <Segment basic>{t(`materials.${text}.no-content`)}</Segment>;
     }
+
     const { id, name, mimetype } = selectedFile;
     const { data, wip, err }     = doc2htmlById[id] || {};
 
