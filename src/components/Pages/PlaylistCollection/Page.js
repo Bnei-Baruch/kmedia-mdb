@@ -42,8 +42,15 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
   const link     = isLesson ? null : playerHelper.linkWithoutActivePart(location);
 
   const handleSelectedChange = useCallback(nSelected => {
-    if (nSelected !== selected && !isLesson) setSelected(nSelected);
-  }, [history, selected]);
+    if (nSelected !== selected) {
+      if (isLesson) {
+        playlist.items[nSelected] && history.push(`/${uiLanguage}${playlist.items[nSelected].shareUrl}`);
+      } else {
+        playerHelper.setActivePartInQuery(history, nSelected);
+        setSelected(nSelected);
+      }
+    }
+  }, [history, selected, uiLanguage]);
 
   useEffect(() => {
     if (prev?.unit?.id !== unit?.id) {
