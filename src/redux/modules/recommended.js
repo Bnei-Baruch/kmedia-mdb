@@ -66,6 +66,7 @@ const onSSRPrepare = state => {
   if (state.err) {
     state.err = state.err.toString();
   }
+  return state
 };
 
 const onPlayerPlay = (state, action) => {
@@ -73,10 +74,12 @@ const onPlayerPlay = (state, action) => {
   if (unitUid && !state.skipUids.includes(unitUid)) {
     state.skipUids.push(unitUid);
   }
+  return state;
 };
 
 const onUserInactive = state => {
   state.skipUids.length = 0;
+  return state;
 };
 
 const onReceiveViews = (state, action) => {
@@ -94,9 +97,7 @@ export const reducer = handleActions({
   [player.PLAYER_PLAY]: onPlayerPlay,
   [chronicles.USER_INACTIVE]: onUserInactive,
 
-  [FETCH_RECOMMENDED]: state => {
-    state.wip = true;
-  },
+  [FETCH_RECOMMENDED]: state => ({ wip: true, ...state }),
   [FETCH_RECOMMENDED_SUCCESS]: onSuccess,
   [FETCH_RECOMMENDED_FAILURE]: onFailure,
   [RECEIVE_VIEWS]: onReceiveViews,

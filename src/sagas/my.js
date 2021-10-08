@@ -87,6 +87,7 @@ function* fetch(action) {
       yield put(recommendedActions.receiveViews(views));
     } catch (err) {
       console.error('error on recommendation service', err);
+      yield put(recommendedActions.receiveViews({}));
     }
   } catch (err) {
     yield put(actions.fetchFailure({ namespace, ...err }));

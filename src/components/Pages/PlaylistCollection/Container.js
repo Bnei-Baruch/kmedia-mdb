@@ -94,8 +94,9 @@ const PlaylistCollectionContainer = ({ cId, t, cuId }) => {
   }, [cId, cWindow, collection, errorMap.units, wipMap]);
 
   useEffect(() => {
-    if (collection?.cuIDs) dispatch(recommended.fetchViews(collection.cuIDs));
-  }, [collection?.cuIDs]);
+    if (collection?.cuIDs)
+      dispatch(recommended.fetchViews(collection.cuIDs));
+  }, [collection?.cuIDs?.length]);
 
   if (!cId || !collection || !Array.isArray(collection.content_units)) {
     return null;
