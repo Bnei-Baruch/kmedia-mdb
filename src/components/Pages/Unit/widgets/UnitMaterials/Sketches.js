@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import isEqual from 'react-fast-compare';
 import ImageGallery from 'react-image-gallery';
-import { Button, Container, Segment } from 'semantic-ui-react';
+import { Button, Container, MenuItem, Segment } from 'semantic-ui-react';
 
 import { assetUrl, Requests } from '../../../../../helpers/Api';
 import { selectSuitableLanguage } from '../../../../../helpers/language';
@@ -16,6 +16,7 @@ import { selectors as settings } from '../../../../../redux/modules/settings';
 import * as shapes from '../../../../shapes';
 import WipErr from '../../../../shared/WipErr/WipErr';
 import DropdownLanguageSelector from '../../../../Language/Selector/DropdownLanguageSelector';
+import MenuLanguageSelector from '../../../../Language/Selector/MenuLanguageSelector';
 
 class Sketches extends React.Component {
   static propTypes = {
@@ -283,12 +284,12 @@ class Sketches extends React.Component {
             {
               languages && languages.length > 1
                 ? (
-                  <Container fluid textAlign="center">
-                    <DropdownLanguageSelector
+                  <Container fluid textAlign="right" className="padded">
+                    <MenuLanguageSelector
                       languages={languages}
                       defaultValue={language}
                       onSelect={this.handleLanguageChanged}
-                      fluid={true}
+                      fluid={false}
                     />
                   </Container>
                 )

@@ -51,7 +51,7 @@
 
   background: $darkWhite;
 
-  .menu {
+  & > .menu {
     @include mobile {
       overflow-x: auto;
       overflow-y: hidden;

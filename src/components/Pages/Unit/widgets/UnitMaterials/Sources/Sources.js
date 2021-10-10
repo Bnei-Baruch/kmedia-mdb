@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
-import { Divider, Dropdown, Grid, Segment } from 'semantic-ui-react';
+import { Container, Divider, Dropdown, Grid, Menu, MenuItem, Segment } from 'semantic-ui-react';
 import clsx from 'clsx';
 
 import { selectors } from '../../../../../../redux/modules/sources';
@@ -19,6 +19,7 @@ import { DeviceInfoContext } from '../../../../../../helpers/app-contexts';
 import DropdownLanguageSelector from '../../../../../Language/Selector/DropdownLanguageSelector';
 import Download from '../../../../../shared/Download/Download';
 import UnitBar from '../UnitBar';
+import MenuLanguageSelector from '../../../../../Language/Selector/MenuLanguageSelector';
 
 const isValidLikut = unit =>
   unit.content_type === CT_LIKUTIM
@@ -214,23 +215,22 @@ const Sources = ({ unit, t }) => {
         [`size${setting.fontSize}`]: true,
       })}
     >
-      <Grid
-        container
-        padded={isMobileDevice}
-        columns={3}
+      <Menu
+        stackable
+        secondary
+        compact
+        fluid
         className={
           clsx({
             'no-margin-top': !isMobileDevice,
-            'no_print': true
+            'no_print': true,
+            'justify_content_end': true
           })
         }
       >
-        <Grid.Column
-          className={clsx({ 'is-fitted': isMobileDevice })}
-          width={isMobileDevice ? 16 : 10}
-        >
+        <Menu.Item>
           <Dropdown
-            fluid
+            fluid={isMobileDevice}
             selection
             value={selectedUnitId}
             options={sourcesDropDownOptions}
@@ -238,31 +238,25 @@ const Sources = ({ unit, t }) => {
             selectOnNavigation={false}
             onChange={handleSourceChanged}
           />
-        </Grid.Column>
-        {
-          languages.length > 0 &&
-          <Grid.Column
-            textAlign="center"
-            className={clsx({ 'padding_r_l_0': isMobileDevice, 'no-padding-bottom': isMobileDevice })}
-            width={isMobileDevice ? 16 : 4}
-          >
-            <DropdownLanguageSelector
-              languages={languages}
-              defaultValue={language}
-              onSelect={handleLanguageChanged}
-              fluid={isMobileDevice}
-            />
-          </Grid.Column>
-        }
-        <Grid.Column
-          className={clsx({ 'is-fitted': isMobileDevice })}
-          width={isMobileDevice ? 16 : 2}
-        >
+        </Menu.Item>
+        <Menu.Item className="justify_content_end">
+          {
+            languages.length > 0 && (
+              <div className="display-iblock margin-right-8 margin-left-8">
+                <MenuLanguageSelector
+                  languages={languages}
+                  defaultValue={language}
+                  onSelect={handleLanguageChanged}
+                  fluid={false}
+                />
+              </div>
+            )
+          }
           {<Download path={url} mimeType={file.mimetype} downloadAllowed={true} filename={file.name} />}
           <UnitBar handleSettings={setSettings} fontSize={setting.fontSize} />
-        </Grid.Column>
-      </Grid>
-      <Divider hidden fitted />
+        </Menu.Item>
+      </Menu>
+      <Divider hidden fitted className="clear" />
       {getContents()}
     </div>
   );

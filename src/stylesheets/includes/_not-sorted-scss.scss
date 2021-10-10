@@ -169,6 +169,7 @@
     font-weight: normal;
     padding-right: 0.5em;
     padding-left: 0.5em;
+
     &:hover {
       background-color: rgba(255, 255, 255, 0.2);
     }
@@ -729,15 +730,9 @@
   .layout__footer,
   .layout__secondary-header,
   .anchors-language-selector,
-  .avbox__playlist-view,
-  .avbox__playlist-wrapper,
-  .avbox__playlist-wrapper,
-  .no_print,
-  .unit-info,
-  #avbox_playlist,
   #us_report_button,
   div:empty {
-    display: none !important;
+    display: none;
   }
 
   .layout {
@@ -825,7 +820,8 @@
     }
 
     .dropdown-container {
-      width: 170px;
+      width: auto;
+      line-height: 1;
     }
   }
 
@@ -2310,8 +2306,8 @@
   display: flex;
 }
 
-.align_items_center {
-  align-items: center
+.justify_content_end {
+  justify-content: flex-end
 }
 
 .background_grey {

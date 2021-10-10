@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import uniq from 'lodash/uniq';
-import { Grid, Segment } from 'semantic-ui-react';
+import { Divider, Grid, Menu, Segment } from 'semantic-ui-react';
 import isEqual from 'react-fast-compare';
 
 import { CT_ARTICLE, CT_RESEARCH_MATERIAL, MT_TEXT, SCROLL_SEARCH_ID } from '../../../../../../helpers/consts';
@@ -21,6 +21,7 @@ import UnitBar from '../UnitBar';
 import clsx from 'clsx';
 import Download from '../../../../../shared/Download/Download';
 import { physicalFile } from '../../../../../../helpers/utils';
+import MenuLanguageSelector from '../../../../../Language/Selector/MenuLanguageSelector';
 
 class Transcription extends Component {
   static contextType = DeviceInfoContext;
@@ -234,25 +235,34 @@ class Transcription extends Component {
             [`size${fontSize}`]: true,
           })}
         >
-          <Grid container padded={false} columns={isMobileDevice ? 1 : 2} className={classNames({
-            'no_print': true,
-            'no-margin-top': true,
-            'padding_r_l_0': !isMobileDevice
-          })}>
-            {!isMobileDevice &&
-            <Grid.Column width={12}>
+          <Menu
+            secondary
+            compact
+            fluid
+            className={
+              clsx({
+                'no-margin-top': !isMobileDevice,
+                'no_print': true,
+                'justify_content_end': true
+              })
+            }
+          >
+            {
+              languages.length > 0 &&
+              <Menu.Item>
+                <MenuLanguageSelector
+                  languages={languages}
+                  defaultValue={language}
+                  onSelect={this.handleLanguageChanged}
+                  fluid={false}
+                />
+              </Menu.Item>
+            }
+            <Menu.Item>
               {<Download path={url} mimeType={mimetype} downloadAllowed={true} filename={name} />}
               <UnitBar handleSettings={this.handleSettings} fontSize={fontSize} />
-            </Grid.Column>}
-            <Grid.Column width={isMobileDevice ? 16 : 4} textAlign={'right'} className={classNames({ 'padding_r_l_0': !isMobileDevice })}>
-              <DropdownLanguageSelector
-                languages={languages}
-                defaultValue={language}
-                onSelect={this.handleLanguageChanged}
-                fluid={isMobileDevice}
-              />
-            </Grid.Column>
-          </Grid>
+            </Menu.Item>
+          </Menu>
           {content}
         </div>
       );
