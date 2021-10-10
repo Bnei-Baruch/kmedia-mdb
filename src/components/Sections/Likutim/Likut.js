@@ -67,12 +67,14 @@ const Likut = ({ t }) => {
     if (unit) {
       let file = unit.files?.find(x => x.language === language);
 
-      if (!file) {
+      if (!file && language !== LANG_ENGLISH) {
         file = unit.files?.find(x => x.language === LANG_ENGLISH);
+        setLanguage(LANG_HEBREW);
       }
 
-      if (!file) {
+      if (!file && language !== LANG_HEBREW) {
         file = unit.files?.find(x => x.language === LANG_HEBREW);
+        setLanguage(LANG_HEBREW);
       }
 
       if (file) {
@@ -149,8 +151,18 @@ const Likut = ({ t }) => {
               </Grid.Column>
               <Grid.Column>
                 <div className="source__header-toolbar">
-                  {file && <Download path={url} mimeType={file.mimetype} downloadAllowed={true} filename={file.name} />}
-                  <LibraryBar fontSize={fontSize} isReadable={isReadable} handleIsReadable={handleIsReadable} handleSettings={setSettings} />
+                  <div className="display-iblock margin-right-8 margin-left-8">
+                    {
+                      file &&
+                      <Download path={url} mimeType={file.mimetype} downloadAllowed={true} filename={file.name} />
+                    }
+                    <LibraryBar
+                      fontSize={fontSize}
+                      isReadable={isReadable}
+                      handleIsReadable={handleIsReadable}
+                      handleSettings={setSettings}
+                    />
+                  </div>
                   <div className="library-language-container">
                     <MenuLanguageSelector
                       languages={languages}
