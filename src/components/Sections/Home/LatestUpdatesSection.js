@@ -74,7 +74,7 @@ const LatestUpdatesSection = ({ latestUnits = [], t }) => {
   }
 
   const getLatestUpdate = unit =>
-    <LatestUpdate key={unit.id} unit={unit} t={t} />;
+    <LatestUpdate key={unit.id} unit={unit} label={t(getSectionForTranslation(unit.content_type))} t={t} />;
 
   const getCardArray = (content_type, itemsCount) => unitsByCT[content_type]?.slice(0, itemsCount).map(unit => getLatestUpdate(unit));
 

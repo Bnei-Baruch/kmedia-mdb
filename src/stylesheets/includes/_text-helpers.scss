@@ -1,8 +1,12 @@
-$serif-family: 'Georgia, 'Times New Roman', Times, serif';
+$serif-family: 'Georgia, ' Times New Roman ', Times, serif';
 $max-readble-width: 700px;
 @import 'rtl/text-helpers';
 .uppercase {
   text-transform: uppercase !important;
+}
+
+.bold-font {
+  font-weight: bold;
 }
 
 .is-serif {
@@ -30,7 +34,9 @@ blockquote {
     line-height: 1.5;
   }
 
-  > em {color: $grey;}
+  > em {
+    color: $grey;
+  }
 
   &.following-text {
     margin-top: -.5em !important;

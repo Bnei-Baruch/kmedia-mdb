@@ -11,26 +11,26 @@ import {
   CT_CLIP,
   CT_CONGRESS,
   CT_DAILY_LESSON,
-  CT_FRIENDS_GATHERINGS,
+  CT_FRIENDS_GATHERING,
   CT_HOLIDAY,
   CT_LESSONS_SERIES,
-  CT_MEALS,
+  CT_MEAL,
   CT_PICNIC,
   CT_SPECIAL_LESSON,
   CT_UNITY_DAY,
   CT_VIDEO_PROGRAM_CHAPTER,
-  CT_VIRTUAL_LESSONS,
+  CT_VIRTUAL_LESSON,
   CT_WOMEN_LESSONS
 } from '../../../helpers/consts';
 import CUItemContainer from '../../shared/CUItem/CUItemContainer';
 import { fromToLocalized } from '../../../helpers/date';
 
-const LatestUpdate = ({ unit, t }) => {
+const LatestUpdate = ({ unit, t, label }) => {
   const { content_type, name, film_date, name_in_collection, id, collections } = unit;
 
   const link           = canonicalLink(unit);
   let title            = name || `${t(`constants.content-types.${content_type}`)} ${t('lessons.list.number')} ${name_in_collection}`;
-  let subheader        = [t('values.date', { date: film_date })];
+  let subheader        = [`${t('values.date', { date: unit.film_date })} - ${label}`];
   let canonicalSection = Requests.imaginaryRandom('resize', {
     width: 512,
     height: 288,
@@ -42,7 +42,7 @@ const LatestUpdate = ({ unit, t }) => {
   switch (content_type) {
     case CT_VIDEO_PROGRAM_CHAPTER:
     case CT_CLIP:
-    case CT_VIRTUAL_LESSONS:
+    case CT_VIRTUAL_LESSON:
       return <CUItemContainer id={id} noViews />;
     case CT_DAILY_LESSON:
       title     = t(`constants.content-types.${content_type}`);
@@ -60,8 +60,8 @@ const LatestUpdate = ({ unit, t }) => {
       break;
     case CT_SPECIAL_LESSON:
     case CT_CONGRESS:
-    case CT_MEALS:
-    case CT_FRIENDS_GATHERINGS:
+    case CT_MEAL:
+    case CT_FRIENDS_GATHERING:
     case CT_HOLIDAY:
     case CT_PICNIC:
     case CT_UNITY_DAY:
@@ -76,7 +76,7 @@ const LatestUpdate = ({ unit, t }) => {
         <UnitLogo unitId={id} width={520} fallbackImg={canonicalSection} />
       </div>
       <Card.Content>
-        <Card.Description content={title} />
+        <Card.Description content={title} className="bold-font" />
       </Card.Content>
       <Card.Meta className={'cu_info_description'}>
         {subheader.map((d, i) => (<span key={i}>{d}</span>))}
