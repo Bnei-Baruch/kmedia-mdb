@@ -137,8 +137,7 @@
       "loading": "Ошибка при загрузке файла."
     },
     "header": {
-      "series-by-topic": "Lessons collection on the topic of:",
-      "series-by-source": "Lessons collection on the source of:"
+      "series-by-topic": "Серия уроков по теме:"
     }
   },
   "playlist": {
