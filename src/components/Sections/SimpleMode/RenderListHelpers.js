@@ -108,7 +108,7 @@ const renderUnits = (units, language, t, helpChooseLang, chroniclesAppend) => (
     const lastUnit  = unitsArray.length - 1;
     const filesList = filesForRenderByUnit(unit).filter(file => file.language === language);
     const files     = filesList && renderHorizontalFilesList(filesList, unit.content_type, t, chroniclesAppend);
-    const duration  = formatTime(unit.duration);
+    const duration  = !!unit.duration ? formatTime(unit.duration) : null;
 
     if (!files) {
       return null;
@@ -137,7 +137,9 @@ const renderUnits = (units, language, t, helpChooseLang, chroniclesAppend) => (
       title = (
         <List.Header className="unit-header">
           <Link className="unit-link" to={link}>{unit.name || NO_NAME}</Link>
-          <span className="duration">{duration}</span>
+          {
+            duration && <span className="duration">{duration}</span>
+          }
         </List.Header>
       );
     }
