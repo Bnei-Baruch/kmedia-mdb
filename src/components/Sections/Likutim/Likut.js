@@ -65,18 +65,20 @@ const Likut = ({ t }) => {
 
   useEffect(() => {
     if (unit) {
-      let file = unit.files?.find(x => x.language === language);
+      let f = unit.files?.find(x => x.language === language);
 
-      if (!file) {
-        file = unit.files?.find(x => x.language === LANG_ENGLISH);
+      if (!f && language !== LANG_ENGLISH && !file) {
+        f = unit.files?.find(x => x.language === LANG_ENGLISH);
+        setLanguage(LANG_ENGLISH);
       }
 
-      if (!file) {
-        file = unit.files?.find(x => x.language === LANG_HEBREW);
+      if (!f && language !== LANG_HEBREW) {
+        f = unit.files?.find(x => x.language === LANG_HEBREW);
+        setLanguage(LANG_HEBREW);
       }
 
-      if (file) {
-        setFile(file);
+      if (f) {
+        setFile(f);
       }
     }
   }, [dispatch, language, unit]);
@@ -149,8 +151,18 @@ const Likut = ({ t }) => {
               </Grid.Column>
               <Grid.Column>
                 <div className="source__header-toolbar">
-                  {file && <Download path={url} mimeType={file.mimetype} downloadAllowed={true} filename={file.name} />}
-                  <LibraryBar fontSize={fontSize} isReadable={isReadable} handleIsReadable={handleIsReadable} handleSettings={setSettings} />
+                  <div className="display-iblock margin-right-8 margin-left-8">
+                    {
+                      file &&
+                      <Download path={url} mimeType={file.mimetype} downloadAllowed={true} filename={file.name} />
+                    }
+                    <LibraryBar
+                      fontSize={fontSize}
+                      isReadable={isReadable}
+                      handleIsReadable={handleIsReadable}
+                      handleSettings={setSettings}
+                    />
+                  </div>
                   <div className="library-language-container">
                     <MenuLanguageSelector
                       languages={languages}
@@ -168,12 +180,9 @@ const Likut = ({ t }) => {
             style={{ direction }}
             className={clsx({
               'source__content-wrapper': true,
-              'font_settings-wrapper': true,
               [`size${fontSize}`]: true,
             })}>
-            <div className="font_settings source__content">
-              <ScrollToSearch language={language} data={data} />
-            </div>
+            <ScrollToSearch language={language} data={data} />
           </div>
         </Grid.Column>
         {relatedLessonsSize > 0 &&

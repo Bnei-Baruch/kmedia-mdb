@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import uniq from 'lodash/uniq';
-import { Divider, Grid, Menu, Segment } from 'semantic-ui-react';
+import { Grid, Segment } from 'semantic-ui-react';
 import isEqual from 'react-fast-compare';
 
 import { CT_ARTICLE, CT_RESEARCH_MATERIAL, MT_TEXT, SCROLL_SEARCH_ID } from '../../../../../../helpers/consts';
@@ -17,11 +17,6 @@ import DropdownLanguageSelector from '../../../../../Language/Selector/DropdownL
 import { DeviceInfoContext } from '../../../../../../helpers/app-contexts';
 import classNames from 'classnames';
 import ScrollToSearch from '../../../../../shared/ScrollToSearch';
-import UnitBar from '../UnitBar';
-import clsx from 'clsx';
-import Download from '../../../../../shared/Download/Download';
-import { physicalFile } from '../../../../../../helpers/utils';
-import MenuLanguageSelector from '../../../../../Language/Selector/MenuLanguageSelector';
 
 class Transcription extends Component {
   static contextType = DeviceInfoContext;
@@ -107,8 +102,7 @@ class Transcription extends Component {
         || !isEqual(nextProps.doc2htmlById, props.doc2htmlById)
         || (state.selectedFile && props.doc2htmlById && (props.doc2htmlById[state.selectedFile.id]?.wip !== nextProps.doc2htmlById[state.selectedFile.id]?.wip))
         || nextState.language !== state.language
-        || nextState.selectedFile !== state.selectedFile
-        || nextState.settings !== state.settings);
+        || nextState.selectedFile !== state.selectedFile);
   }
 
   componentDidMount() {
@@ -185,10 +179,10 @@ class Transcription extends Component {
     const direction         = getLanguageDirection(language);
 
     return (
-      <div className="font_settings-wrapper">
+      <div>
         {this.getSelectFiles(selectedFile, textFiles)}
         <div
-          className="font_settings doc2html"
+          className="doc2html"
           style={{ direction, textAlign: (direction === 'ltr' ? 'left' : 'right') }}
         >
           <ScrollToSearch data={data} language={language} urlParams={urlParams} />
@@ -197,20 +191,17 @@ class Transcription extends Component {
     );
   };
 
-  handleSettings = settings => this.setState({ settings });
-
   render() {
-    const { doc2htmlById, t, type }                       = this.props;
-    const { selectedFile, languages, language, settings } = this.state;
-    const { isMobileDevice }                              = this.context;
+    const { doc2htmlById, t, type }             = this.props;
+    const { selectedFile, languages, language } = this.state;
+    const { isMobileDevice }                    = this.context;
 
     if (!selectedFile) {
       const text = type || 'transcription';
       return <Segment basic>{t(`materials.${text}.no-content`)}</Segment>;
     }
 
-    const { id, name, mimetype } = selectedFile;
-    const { data, wip, err }     = doc2htmlById[id] || {};
+    const { data, wip, err } = doc2htmlById[selectedFile.id] || {};
 
     const wipErr = WipErr({ wip, err, t });
     if (wipErr) {
@@ -224,45 +215,24 @@ class Transcription extends Component {
         return content;
       }
 
-      const url                                         = physicalFile(selectedFile, true);
-      const { theme = 'light', fontType, fontSize = 0 } = settings || {};
       return (
-        <div
-          className={clsx({
-            source: true,
-            [`is-${theme}`]: true,
-            [`is-${fontType}`]: true,
-            [`size${fontSize}`]: true,
-          })}
-        >
-          <Menu
-            secondary
-            compact
-            fluid
-            className={
-              clsx({
-                'no-margin-top': !isMobileDevice,
-                'no_print': true,
-                'justify_content_end': true
-              })
-            }
-          >
-            {
-              languages.length > 0 &&
-              <Menu.Item>
-                <MenuLanguageSelector
-                  languages={languages}
-                  defaultValue={language}
-                  onSelect={this.handleLanguageChanged}
-                  fluid={false}
-                />
-              </Menu.Item>
-            }
-            <Menu.Item>
-              {<Download path={url} mimeType={mimetype} downloadAllowed={true} filename={name} />}
-              <UnitBar handleSettings={this.handleSettings} fontSize={fontSize} />
-            </Menu.Item>
-          </Menu>
+        <div>
+          <Grid container padded={false} columns={isMobileDevice ? 1 : 2} className={classNames({
+            'no-margin-top': true,
+            'padding_r_l_0': !isMobileDevice
+          })}>
+            {!isMobileDevice &&
+            <Grid.Column width={12}>
+            </Grid.Column>}
+            <Grid.Column width={isMobileDevice ? 16 : 4} textAlign={'right'} className={classNames({ 'padding_r_l_0': !isMobileDevice })}>
+              <DropdownLanguageSelector
+                languages={languages}
+                defaultValue={language}
+                onSelect={this.handleLanguageChanged}
+                fluid={isMobileDevice}
+              />
+            </Grid.Column>
+          </Grid>
           {content}
         </div>
       );
