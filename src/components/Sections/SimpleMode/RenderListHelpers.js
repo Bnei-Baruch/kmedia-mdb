@@ -113,6 +113,7 @@ const renderUnits = (units, language, t, helpChooseLang, chroniclesAppend) => (
     if (!files) {
       return null;
     }
+
     const link = canonicalLink(unit);
     let title;
     if (unit.content_type === CT_VIDEO_PROGRAM_CHAPTER) {
