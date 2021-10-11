@@ -896,7 +896,7 @@
   .no-files {
     display: inline-flex !important;
     align-items: center;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     font-size: 14px;
     font-weight: normal;
     color: #333333;
@@ -975,6 +975,7 @@
   color: $midGrey;
   font-size: 14px;
   margin: 0 1em;
+  display: inline-block;
 }
 
 .under-line {

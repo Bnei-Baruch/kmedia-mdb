@@ -120,7 +120,7 @@ const renderUnits = (units, language, t, helpChooseLang, chroniclesAppend) => (
       const description = [];
       const ccu         = canonicalCollection(unit);
       const part        = Number(ccu?.ccuNames[unit.id]);
-      description.push(t('pages.unit.info.episode', { name: part }));
+      part && description.push(t('pages.unit.info.episode', { name: part }));
       if (!!duration)
         description.push(duration);
 
