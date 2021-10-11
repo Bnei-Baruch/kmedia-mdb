@@ -3,13 +3,13 @@ import groupBy from 'lodash/groupBy';
 import { Button, Card, Image, List } from 'semantic-ui-react';
 
 import {
-  CT_ARTICLE,
+  CT_ARTICLE, CT_CLIP,
   CT_DAILY_LESSON,
   CT_FULL_LESSON,
   CT_KITEI_MAKOR,
   CT_LELO_MIKUD,
   CT_LESSON_PART,
-  CT_VIDEO_PROGRAM_CHAPTER,
+  CT_VIDEO_PROGRAM_CHAPTER, CT_VIRTUAL_LESSON,
   MT_AUDIO,
   NO_NAME,
   UNIT_EVENTS_TYPE,
@@ -116,7 +116,7 @@ const renderUnits = (units, language, t, helpChooseLang, chroniclesAppend) => (
 
     const link = canonicalLink(unit);
     let title;
-    if (unit.content_type === CT_VIDEO_PROGRAM_CHAPTER) {
+    if (unit.content_type === CT_VIDEO_PROGRAM_CHAPTER || unit.content_type === CT_CLIP || unit.content_type === CT_VIRTUAL_LESSON) {
       const description = [];
       const ccu         = canonicalCollection(unit);
       const part        = Number(ccu?.ccuNames[unit.id]);
@@ -126,7 +126,7 @@ const renderUnits = (units, language, t, helpChooseLang, chroniclesAppend) => (
 
       title = (
         <List.Header className="unit-header">
-          <div>
+          <div className="margin-bottom-4">
             <Link className="unit-link" to={link}>{ccu.name || NO_NAME}</Link>
             <span className="duration">{description.join('  |  ')}</span>
           </div>
@@ -154,10 +154,8 @@ const renderUnits = (units, language, t, helpChooseLang, chroniclesAppend) => (
                 ? files
                 : (
                   <List.Item key={unit.id} className="no-files">
-                    <Image>
-                      <SectionLogo name='info' />
-                    </Image>
-                    <List.Content>
+                    <SectionLogo name='info'  />
+                    <List.Content className="margin-right-8 margin-left-8">
                       <span className="bold-font">{t('simple-mode.no-files-found-for-lang')}</span>
                       <br />
                       {t('simple-mode.try-different-language')}
