@@ -18,7 +18,7 @@ import {
   VS_NAMES
 } from '../../../helpers/consts';
 import { canonicalLink } from '../../../helpers/links';
-import { isEmpty, physicalFile } from '../../../helpers/utils';
+import { canonicalCollection, isEmpty, physicalFile } from '../../../helpers/utils';
 import { formatTime } from '../../../helpers/time';
 import Link from '../../Language/MultiLanguageLink';
 import { SectionLogo } from '../../../helpers/images';
@@ -113,15 +113,38 @@ const renderUnits = (units, language, t, helpChooseLang, chroniclesAppend) => (
     if (!files) {
       return null;
     }
+    const link = canonicalLink(unit);
+    let title;
+    if (unit.content_type === CT_VIDEO_PROGRAM_CHAPTER) {
+      const description = [];
+      const ccu         = canonicalCollection(unit);
+      const part        = Number(ccu?.ccuNames[unit.id]);
+      description.push(t('pages.unit.info.episode', { name: part }));
+      if (!!duration)
+        description.push(duration);
+
+      title = (
+        <List.Header className="unit-header">
+          <div>
+            <Link className="unit-link" to={link}>{ccu.name || NO_NAME}</Link>
+            <span className="duration">{description.join('  |  ')}</span>
+          </div>
+          <Link className="unit-link" to={link}>{unit.name || NO_NAME}</Link>
+        </List.Header>
+      );
+    } else {
+      title = (
+        <List.Header className="unit-header">
+          <Link className="unit-link" to={link}>{unit.name || NO_NAME}</Link>
+          <span className="duration">{duration}</span>
+        </List.Header>
+      );
+    }
 
     return (
       <List.Item key={unit.id} className="unit-header">
         <List.Content>
-          <List.Header className="unit-header">
-            <Link className="unit-link" to={canonicalLink(unit)}>{unit.name || NO_NAME}</Link>
-            &nbsp;&nbsp;
-            <span className="duration">{duration}</span>
-          </List.Header>
+          {title}
           <List.List className={`horizontal-list ${index === lastUnit ? 'remove-bottom-border' : ''}`}>
             {
               files.length
@@ -161,7 +184,7 @@ export const renderCollection = (collection, language, t, helpChooseLang, chroni
       <Card.Content className={number ? 'gray-header' : ''}>
         <Card.Header className="unit-header">
           <Link to={canonicalLink(collection)}>
-            {`${t(CT_DAILY_LESSON_I18N_KEY)}${number ? ` (${t(`lessons.list.nameByNum_${  number}`)})` : ''}`}
+            {`${t(CT_DAILY_LESSON_I18N_KEY)}${number ? ` (${t(`lessons.list.nameByNum_${number}`)})` : ''}`}
           </Link>
         </Card.Header>
       </Card.Content>
