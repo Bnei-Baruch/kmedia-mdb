@@ -12,16 +12,31 @@ import MediaHelper from '../../../../../../helpers/media';
 import playerHelper from '../../../../../../helpers/player';
 import * as shapes from '../../../../../shapes';
 import WipErr from '../../../../../shared/WipErr/WipErr';
+import {
+  prepareScrollToSearch,
+  buildSearchLinkFromSelection,
+  DOM_ROOT_ID
+} from '../../../../../../helpers/scrollToSearch/helper';
 import { getQuery } from '../../../../../../helpers/url';
+import ShareBar from '../../../../../shared/ShareSelected';
 import DropdownLanguageSelector from '../../../../../Language/Selector/DropdownLanguageSelector';
 import { DeviceInfoContext } from '../../../../../../helpers/app-contexts';
 import classNames from 'classnames';
-import ScrollToSearch from '../../../../../shared/ScrollToSearch';
+
+const scrollToSearch = () => {
+  const element = document.getElementById(SCROLL_SEARCH_ID);
+  if (element === null) {
+    return;
+  }
+
+  setTimeout(() => element.scrollIntoView(), 0);
+};
 
 class Transcription extends Component {
   static contextType = DeviceInfoContext;
 
-  state = {};
+  state              = {};
+
 
   static selectFile = (textFiles, language) => {
     const selectedFiles = textFiles.filter(x => x.language === language);
@@ -98,18 +113,29 @@ class Transcription extends Component {
       || (nextProps.contentLanguage !== props.contentLanguage)
       || (nextProps.unit && !props.unit)
       || (nextProps.unit.id !== props.unit.id)
+      || (nextProps.enableShareText.isShareTextEnabled !== props.enableShareText.isShareTextEnabled)
       || (nextProps.unit.files !== props.unit.files
         || !isEqual(nextProps.doc2htmlById, props.doc2htmlById)
         || (state.selectedFile && props.doc2htmlById && (props.doc2htmlById[state.selectedFile.id]?.wip !== nextProps.doc2htmlById[state.selectedFile.id]?.wip))
         || nextState.language !== state.language
+        || nextState.searchUrl !== state.searchUrl
         || nextState.selectedFile !== state.selectedFile);
   }
 
   componentDidMount() {
-    const { selectedFile } = this.state;
+    const { selectedFile }       = this.state;
+    const { srchstart, srchend } = getQuery(this.props.location);
 
     this.loadFile(selectedFile);
     document.addEventListener('mouseup', this.handleOnMouseUp);
+
+    if (srchstart
+      && srchend
+      && selectedFile
+      && this.props.doc2htmlById[selectedFile.id]
+      && this.props.doc2htmlById[selectedFile.id].wip === false) {
+      scrollToSearch();
+    }
   }
 
   componentWillUnmount() {
@@ -118,9 +144,18 @@ class Transcription extends Component {
 
   componentDidUpdate(prevProp, prevState) {
     const { selectedFile, language } = this.state;
+    const { srchstart }              = getQuery(this.props.location);
 
     if (selectedFile !== prevState.selectedFile || language !== prevState.language) {
       this.loadFile(selectedFile);
+    }
+
+    if (srchstart
+      && selectedFile
+      && prevProp.doc2htmlById[selectedFile.id]
+      && prevProp.doc2htmlById[selectedFile.id].wip === true
+      && this.props.doc2htmlById[selectedFile.id].wip === false) {
+      scrollToSearch();
     }
   }
 
@@ -169,24 +204,67 @@ class Transcription extends Component {
     </select>;
   }
 
-  prepareContent = data => {
-    const { textFiles, selectedFile, language } = this.state;
-    const { location, activeTab }               = this.props;
+  handleOnMouseUp = e => {
+    if (this.context.isMobileDevice || !this.props.enableShareText.isShareTextEnabled) {
+      return false;
+    }
 
-    const ap                = playerHelper.getActivePartFromQuery(location);
-    const selectedFileProps = selectedFile ? `&selectedFileId=${selectedFile.id}` : '';
-    const urlParams         = `activeTab=${activeTab}${selectedFileProps}${!ap ? '' : `&ap=${ap}`}`;
-    const direction         = getLanguageDirection(language);
+    this.updateSelection();
+    return false;
+  };
+
+  handleOnMouseDown = e => {
+    if (this.context.isMobileDevice || !this.props.enableShareText.isShareTextEnabled) {
+      return false;
+    }
+
+    this.setState({ searchUrl: null });
+    return false;
+  };
+
+  disableShareBar = () => this.props.enableShareText.setEnableShareText(false);
+
+  renderShareBar = () => {
+    const { searchUrl, searchText } = this.state;
+    if (this.context.isMobileDevice || !searchUrl)
+      return null;
 
     return (
-      <div>
+      <ShareBar url={searchUrl} text={searchText} disable={this.disableShareBar} />
+    );
+  };
+
+  updateSelection = () => {
+    const { language, selectedFile } = this.state;
+    const { location, activeTab }    = this.props;
+
+    const ap                        = playerHelper.getActivePartFromQuery(location);
+    const { url, text: searchText } = buildSearchLinkFromSelection(language);
+    if (!url)
+      return;
+    const selectedFileProps = selectedFile ? `&selectedFileId=${selectedFile.id}` : '';
+    const searchUrl         = `${url}&activeTab=${activeTab}${selectedFileProps}${!ap ? '' : `&ap=${  ap}`}`;
+    this.setState({ searchUrl, searchText });
+  };
+
+  prepareContent = data => {
+    const { textFiles, selectedFile, language } = this.state;
+    const direction                             = getLanguageDirection(language);
+    const { srchstart, srchend, highlightAll }  = getQuery(this.props.location);
+
+    return (
+      <div className="search-on-page--container">
+        {this.props.enableShareText.isShareTextEnabled && this.renderShareBar()}
         {this.getSelectFiles(selectedFile, textFiles)}
         <div
+          id={DOM_ROOT_ID}
           className="doc2html"
+          onMouseDown={this.handleOnMouseDown.bind(this)}
           style={{ direction, textAlign: (direction === 'ltr' ? 'left' : 'right') }}
-        >
-          <ScrollToSearch data={data} language={language} urlParams={urlParams} />
-        </div>
+          dangerouslySetInnerHTML={{
+            __html: prepareScrollToSearch(data, { srchstart, srchend }, highlightAll === 'true')
+          }}
+        />
       </div>
     );
   };
@@ -217,10 +295,7 @@ class Transcription extends Component {
 
       return (
         <div>
-          <Grid container padded={false} columns={isMobileDevice ? 1 : 2} className={classNames({
-            'no-margin-top': true,
-            'padding_r_l_0': !isMobileDevice
-          })}>
+          <Grid container padded={false} columns={isMobileDevice ? 1 : 2} className={classNames({ 'no-margin-top' :true, 'padding_r_l_0': !isMobileDevice })}>
             {!isMobileDevice &&
             <Grid.Column width={12}>
             </Grid.Column>}
