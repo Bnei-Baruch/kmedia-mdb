@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
-import { Container, Divider, Dropdown, Grid, Menu, MenuItem, Segment } from 'semantic-ui-react';
+import { Divider, Dropdown, Menu, Segment } from 'semantic-ui-react';
 import clsx from 'clsx';
 
 import { selectors } from '../../../../../../redux/modules/sources';
@@ -16,7 +16,6 @@ import * as shapes from '../../../../../shapes';
 import { getSourceErrorSplash, wipLoadingSplash } from '../../../../../shared/WipErr/WipErr';
 import PDF, { isTaas, startsFrom } from '../../../../../shared/PDF/PDF';
 import { DeviceInfoContext } from '../../../../../../helpers/app-contexts';
-import DropdownLanguageSelector from '../../../../../Language/Selector/DropdownLanguageSelector';
 import Download from '../../../../../shared/Download/Download';
 import UnitBar from '../UnitBar';
 import MenuLanguageSelector from '../../../../../Language/Selector/MenuLanguageSelector';
