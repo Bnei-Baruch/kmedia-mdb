@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
-import { Divider, Dropdown, Grid, Segment } from 'semantic-ui-react';
+import { Divider, Dropdown, Menu, Segment } from 'semantic-ui-react';
 import clsx from 'clsx';
 
 import { selectors } from '../../../../../../redux/modules/sources';
@@ -11,17 +11,18 @@ import { selectors as settings } from '../../../../../../redux/modules/settings'
 import { MT_TEXT, CT_LIKUTIM } from '../../../../../../helpers/consts';
 import { selectSuitableLanguage } from '../../../../../../helpers/language';
 import { getLanguageDirection } from '../../../../../../helpers/i18n-utils';
-import { physicalFile, tracePath, isEmpty  } from '../../../../../../helpers/utils';
+import { physicalFile, tracePath, isEmpty } from '../../../../../../helpers/utils';
 import * as shapes from '../../../../../shapes';
 import { getSourceErrorSplash, wipLoadingSplash } from '../../../../../shared/WipErr/WipErr';
 import PDF, { isTaas, startsFrom } from '../../../../../shared/PDF/PDF';
 import { DeviceInfoContext } from '../../../../../../helpers/app-contexts';
-import DropdownLanguageSelector from '../../../../../Language/Selector/DropdownLanguageSelector';
-
+import Download from '../../../../../shared/Download/Download';
+import UnitBar from '../UnitBar';
+import MenuLanguageSelector from '../../../../../Language/Selector/MenuLanguageSelector';
 
 const isValidLikut = unit =>
   unit.content_type === CT_LIKUTIM
-&& (unit.files || []).some(f => f.type === MT_TEXT)
+  && (unit.files || []).some(f => f.type === MT_TEXT);
 
 const getLikutimUnits = unit =>
   Object.values(unit.derived_units || {}).filter(x => isValidLikut(x));
@@ -43,31 +44,30 @@ const getLikutimLanguages = unit => {
 
 const getSourceLanguages = idx => idx?.data ? [...Object.keys(idx.data)] : [];
 
-
 const Sources = ({ unit, t }) => {
-  const getSourceById  = useSelector(state => selectors.getSourceById(state.sources), shallowEqual);
-  const indexById      = useSelector(state => assetsSelectors.getSourceIndexById(state.assets), shallowEqual);
+  const getSourceById   = useSelector(state => selectors.getSourceById(state.sources), shallowEqual);
+  const indexById       = useSelector(state => assetsSelectors.getSourceIndexById(state.assets), shallowEqual);
   const uiLanguage      = useSelector(state => settings.getLanguage(state.settings));
   const contentLanguage = useSelector(state => settings.getContentLanguage(state.settings));
   const doc2htmlById    = useSelector(state => assetsSelectors.getDoc2htmlById(state.assets));
 
   const dispatch = useDispatch();
 
-  const [fetched, setFetched]     = useState(null);
-  const [isLikutim, setIsLikutim] = useState(false);
-  const [languages, setLanguages] = useState([]);
-  const [language, setLanguage]   = useState(contentLanguage);
-  const [selectedUnitId, setSelectedUnitId]   = useState(null);
-  const [pdf, setPdf] = useState(null);
-  const [file, setFile] = useState(null);
+  const [fetched, setFetched]               = useState(null);
+  const [isLikutim, setIsLikutim]           = useState(false);
+  const [languages, setLanguages]           = useState([]);
+  const [language, setLanguage]             = useState(contentLanguage);
+  const [selectedUnitId, setSelectedUnitId] = useState(null);
+  const [pdf, setPdf]                       = useState(null);
+  const [file, setFile]                     = useState(null);
+  const [setting, setSettings]              = useState({});
 
   // get files data for all sources
   useEffect(() => {
     (unit.sources || [])
       .filter(s => isEmpty(indexById[s]))
-      .forEach(s => dispatch(assetsActions.sourceIndex(s)))
-  }, [dispatch, indexById, unit.sources])
-
+      .forEach(s => dispatch(assetsActions.sourceIndex(s)));
+  }, [dispatch, indexById, unit.sources]);
 
   const sourcesDropDownOptions = useMemo(() => {
     const sourceOptions = (unit.sources || [])
@@ -87,7 +87,7 @@ const Sources = ({ unit, t }) => {
         disabled: false,
       })) || [];
 
-    return [...sourceOptions, ...likutimOptions]
+    return [...sourceOptions, ...likutimOptions];
   }, [getSourceById, indexById, t, unit]);
 
   // when options are changed, change selected unit if was not selected explicitly
@@ -140,7 +140,7 @@ const Sources = ({ unit, t }) => {
 
     setFile(file);
     setPdf(null);
-  }, [indexById, isLikutim, language, selectedUnitId, unit])
+  }, [indexById, isLikutim, language, selectedUnitId, unit]);
 
   useEffect(() => {
     if (!selectedUnitId || !language || !file || !file.id) {
@@ -153,11 +153,11 @@ const Sources = ({ unit, t }) => {
       return;
     }
 
-    dispatch(assetsActions.doc2html(file.id))
+    dispatch(assetsActions.doc2html(file.id));
     setFetched(newFetch);
   }, [dispatch, fetched, file, language, selectedUnitId]);
 
-  const noSourcesMsg = <Segment basic>{t('materials.sources.no-sources')}</Segment>;
+  const noSourcesMsg          = <Segment basic>{t('materials.sources.no-sources')}</Segment>;
   const noSourcesAvailableMsg = <Segment basic>{t('materials.sources.no-source-available')}</Segment>;
 
   const getContents = () => {
@@ -180,8 +180,16 @@ const Sources = ({ unit, t }) => {
     }
 
     const direction = getLanguageDirection(language);
-    return <div className="doc2html" style={{ direction }} dangerouslySetInnerHTML={{ __html: data }} />;
-  }
+    return (
+      <div className="font_settings-wrapper">
+        <div
+          className="font_settings doc2html"
+          style={{ direction }}
+          dangerouslySetInnerHTML={{ __html: data }}
+        />
+      </div>
+    );
+  };
 
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
@@ -196,15 +204,32 @@ const Sources = ({ unit, t }) => {
     return noSourcesAvailableMsg;
   }
 
+  const url = file && physicalFile(file, true);
   return (
-    <>
-      <Grid container padded={isMobileDevice} columns={2} className={clsx({ 'no-margin-top': !isMobileDevice })}>
-        <Grid.Column
-          className={clsx({ 'is-fitted': isMobileDevice })}
-          width={isMobileDevice ? 16 : 12}
-        >
+    <div
+      className={clsx({
+        source: true,
+        [`is-${setting.theme}`]: true,
+        [`is-${setting.fontType}`]: true,
+        [`size${setting.fontSize}`]: true,
+      })}
+    >
+      <Menu
+        stackable
+        secondary
+        compact
+        fluid
+        className={
+          clsx({
+            'no-margin-top': !isMobileDevice,
+            'no_print': true,
+            'justify_content_end': true
+          })
+        }
+      >
+        <Menu.Item>
           <Dropdown
-            fluid
+            fluid={isMobileDevice}
             selection
             value={selectedUnitId}
             options={sourcesDropDownOptions}
@@ -212,26 +237,27 @@ const Sources = ({ unit, t }) => {
             selectOnNavigation={false}
             onChange={handleSourceChanged}
           />
-        </Grid.Column>
-        {
-          languages.length > 0 &&
-            <Grid.Column
-              textAlign="center"
-              className={clsx({ 'padding_r_l_0': isMobileDevice, 'no-padding-bottom': isMobileDevice })}
-              width={isMobileDevice ? 16 : 4}
-            >
-              <DropdownLanguageSelector
-                languages={languages}
-                defaultValue={language}
-                onSelect={handleLanguageChanged}
-                fluid={isMobileDevice}
-              />
-            </Grid.Column>
-        }
-      </Grid>
-      <Divider hidden fitted />
+        </Menu.Item>
+        <Menu.Item className="justify_content_end">
+          {
+            languages.length > 0 && (
+              <div className="display-iblock margin-right-8 margin-left-8">
+                <MenuLanguageSelector
+                  languages={languages}
+                  defaultValue={language}
+                  onSelect={handleLanguageChanged}
+                  fluid={false}
+                />
+              </div>
+            )
+          }
+          {<Download path={url} mimeType={file.mimetype} downloadAllowed={true} filename={file.name} />}
+          <UnitBar handleSettings={setSettings} fontSize={setting.fontSize} />
+        </Menu.Item>
+      </Menu>
+      <Divider hidden fitted className="clear" />
       {getContents()}
-    </>
+    </div>
   );
 };
 

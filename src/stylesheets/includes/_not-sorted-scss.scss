@@ -820,7 +820,8 @@
     }
 
     .dropdown-container {
-      width: 170px;
+      width: auto;
+      line-height: 1;
     }
   }
 
@@ -2309,8 +2310,8 @@
   display: flex;
 }
 
-.align_items_center {
-  align-items: center
+.justify_content_end {
+  justify-content: flex-end
 }
 
 .background_grey {

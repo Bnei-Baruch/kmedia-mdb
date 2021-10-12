@@ -528,14 +528,14 @@ class LibraryContainer extends Component {
                 tablet={16}
                 computer={12}
                 className={clsx({
-                  'source__content-wrapper': true,
+                  'source__content-wrapper font_settings-wrapper': true,
                   [`size${fontSize}`]: true,
                 })}
               >
                 {/*<div ref={this.handleLangContainerRef}></div>*/}
                 <Ref innerRef={this.handleContextRef}>
                   <div
-                    className="source__content"
+                    className="source__content font_settings"
                     style={{ minHeight: `calc(100vh - 14px)` }}
                   >
                     {content}

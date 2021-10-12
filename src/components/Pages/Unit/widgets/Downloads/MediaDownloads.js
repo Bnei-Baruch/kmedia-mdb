@@ -29,6 +29,7 @@ import * as shapes from '../../../../shapes';
 import DropdownLanguageSelector from '../../../../Language/Selector/DropdownLanguageSelector';
 import { DeviceInfoContext } from '../../../../../helpers/app-contexts';
 import classNames from 'classnames';
+import MenuLanguageSelector from '../../../../Language/Selector/MenuLanguageSelector';
 
 const MEDIA_ORDER = [
   MT_VIDEO,
@@ -198,10 +199,10 @@ class MediaDownloads extends Component {
   };
 
   renderRow = (file, label, t) => {
-    const { chroniclesAppend }     = this.props;
-    const { isCopyPopupOpen } = this.state;
-    const ext                 = file.name.substring(file.name.lastIndexOf('.') + 1);
-    const url                 = physicalFile(file);
+    const { chroniclesAppend } = this.props;
+    const { isCopyPopupOpen }  = this.state;
+    const ext                  = file.name.substring(file.name.lastIndexOf('.') + 1);
+    const url                  = physicalFile(file);
 
     return (
       <Table.Row key={file.id} className="media-downloads__file" verticalAlign="top">
@@ -262,17 +263,17 @@ class MediaDownloads extends Component {
 
     return (
       <div className="media-downloads content__aside-unit">
-        { languages.length > 1 ?
+        {languages.length > 1 ?
           <Grid container padded={false} columns={isMobileDevice ? 1 : 2} className={classNames({ 'padding_r_l_0': !isMobileDevice })}>
             {!isMobileDevice &&
             <Grid.Column width={12}>
             </Grid.Column>}
             <Grid.Column width={isMobileDevice ? 16 : 4} textAlign={'right'} className={classNames({ 'padding_r_l_0': !isMobileDevice })}>
-              <DropdownLanguageSelector
+              <MenuLanguageSelector
                 languages={languages}
                 defaultValue={language}
                 onSelect={this.handleChangeLanguage}
-                fluid={isMobileDevice}
+                fluid={false}
               />
             </Grid.Column>
           </Grid>

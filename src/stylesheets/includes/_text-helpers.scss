@@ -54,3 +54,118 @@ blockquote {
     display: block;
   }
 }
+
+.font_settings-wrapper {
+  font-size: 1.1428571429rem;
+
+  .is-dark & {
+    background: $black !important;
+    color: $white !important;
+  }
+
+  .is-sepia & {
+    background: $sepia-bg !important;
+    color: $sepia-text !important;
+  }
+}
+.font_settings {
+  .is-serif & {
+    font-family: Georgia, “Times New Roman”, Times, serif;
+  }
+
+  .size8 & {
+    font-size: (24 / 16) + em;
+  }
+
+  .size7 & {
+    font-size: (23 / 16) + em;
+  }
+
+  .size6 & {
+    font-size: (22 / 16) + em;
+  }
+
+  .size5 & {
+    font-size: (21 / 16) + em;
+  }
+
+  .size4 & {
+    font-size: (20 / 16) + em;
+  }
+
+  .size3 & {
+    font-size: (19 / 16) + em;
+  }
+
+  .size2 & {
+    font-size: (18 / 16) + em;
+  }
+
+  .size1 & {
+    font-size: (17 / 16) + em;
+  }
+
+  .size0 & {
+    font-size: (16 / 16) + em;
+  }
+
+  .size-1 & {
+    font-size: (15 / 16) + em;
+  }
+
+  .size-2 & {
+    font-size: (14 / 16) + em;
+  }
+
+  .size-3 & {
+    font-size: (13 / 16) + em;
+  }
+
+  * {
+    line-height: 1.65;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
+    line-height: 1.28571429em;
+
+    .is-serif & {
+      font-family: $serif-family;
+    }
+
+  }
+
+  p {
+    margin-bottom: 2em;
+  }
+
+  ul,
+  ol {
+    p {
+      text-indent: 0;
+    }
+  }
+
+  h1 {
+    font-size: 2em;
+  }
+
+  h2 {
+    font-size: 1.71428571em;
+  }
+
+  h3 {
+    font-size: 1.28571429em;
+  }
+
+  h4 {
+    font-size: 1.07142857em;
+  }
+
+  h5 {
+    font-size: 1em;
+  }
+}

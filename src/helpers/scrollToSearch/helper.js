@@ -221,7 +221,7 @@ const findOffsetOfDOMNode = (node, offset) => {
 
 const countOffsetFromParent = node => {
   let offset = 0;
-  for (; node.previousSibling !== null;) {
+  for (; !!node.previousSibling?.textContent;) {
     offset += node.previousSibling.textContent.length;
     node = node.previousSibling;
   }
