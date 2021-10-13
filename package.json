@@ -9,7 +9,7 @@
   },
   "scripts": {
     "critical-css": "node-sass src/stylesheets/critical.scss | yarn run postcss --use autoprefixer --use cssnano -o build/critical.css --no-map",
-    "apply-critical-css": "sed \"s*</head>*<style type='text/css'>`cat build/critical.css`</style></head>*\" build/index.html > build/critical.html",
+    "apply-critical-css": "sed -e 's/<\\\/head>/\\\nHERE\\\n/' build/index.html | awk '!/HERE/ { print } /HERE/ { print \"<style type=\\\"text/css\\\">\"; while ((getline a < \"build/critical.css\") > 0) print a; print \"</style></head>\" }' > build/critical.html",
     "build:css": "echo '>>> Building CSS'; yarn critical-css && yarn apply-critical-css",
     "build:svgs": "echo '>>> Building Icons...'; npx @svgr/cli@5.4.0 -d src/images/ --ignore-existing src/images/",
     "build:scripts": "echo '>>> Building Scripts...'; react-scripts build",
