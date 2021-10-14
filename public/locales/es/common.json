@@ -8,7 +8,7 @@
       "lessons": "Lecciones y Charlas",
       "programs": "Programas y Clips",
       "sources": "Biblioteca",
-      "likutim": "Likutim",
+      "likutim": "Compilaciones",
       "events": "Congresos y Eventos",
       "books": "Libros",
       "topics": "Temas",
@@ -313,8 +313,8 @@
   },
   "likutim":{
     "header": {
-      "text": "Excerpts from Kabbalistic Sources",
-      "subtext": "Excerpts from the Sources on various subjects"
+      "text": "Compilaciones",
+      "subtext": "En esta sección encontrarán compilaciones de los escritos de los mas grandes cabalistas, que se estudian en las clases diarias de Cabalá con el Rav Dr. Michael Laitman. Las compilaciones tratan del trabajo espiritual y de la estructura de los mundos Superiores. Con el fin de facilitar su uso están en orden alfabético."
     },
     "item-header": "Excerpts from the Sources:"
   },
