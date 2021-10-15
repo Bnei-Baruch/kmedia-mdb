@@ -128,7 +128,7 @@ const $$sortTree = node => {
 
   // leaf nodes has array of children
   // we sort them by start_date
-  if (Array.isArray(node.children) && node.children.length > 0) {
+  if (isNotEmptyArray(node.children)) {
     node.children.sort((a, b) => strCmp(a.start_date, b.start_date));
     return node;
   }
@@ -137,9 +137,8 @@ const $$sortTree = node => {
   // instead of {name, item, item, item...}
   const children = Object.keys(node)
     .filter(x => x !== 'name' && x !== 'id' && x !== 'parent_id' && x !== 'type')
-    .map(x => node[x]);
-
-  children.sort(x => x.name);
+    .map(x => node[x])
+    .sort(x => x.name);
 
   const { id, parent_id, name, type } = node;
 
