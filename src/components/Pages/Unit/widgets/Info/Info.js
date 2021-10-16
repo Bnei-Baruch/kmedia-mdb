@@ -9,49 +9,18 @@ import {
   CT_CONGRESS,
   CT_DAILY_LESSON,
   CT_KTAIM_NIVCHARIM,
-  CT_LECTURE,
-  CT_LESSON_PART,
   CT_LESSONS_SERIES,
   CT_SPECIAL_LESSON,
   CT_VIDEO_PROGRAM_CHAPTER,
-  CT_VIRTUAL_LESSON,
-  CT_WOMEN_LESSON,
   VERSION_WITH_PERSONALIZATION
 } from '../../../../../helpers/consts';
 import { canonicalLink } from '../../../../../helpers/links';
-import { intersperse, tracePath } from '../../../../../helpers/utils';
-import { stringify as urlSearchStringify } from '../../../../../helpers/url';
-import { selectors as sourcesSelectors } from '../../../../../redux/modules/sources';
+import { intersperse } from '../../../../../helpers/utils';
 import { selectors as tagsSelectors } from '../../../../../redux/modules/tags';
-import { filtersTransformer } from '../../../../../filters/index';
 import Link from '../../../../Language/MultiLanguageLink';
 import * as shapes from '../../../../shapes';
 import PersonalInfo from './PersonalInfo';
 import { selectors as recommended } from '../../../../../redux/modules/recommended';
-
-const filterLessons = (ct, filmDate) => {
-  switch (ct) {
-    case CT_LESSON_PART:
-      if (filmDate && filmDate > '1980-01-01') {
-        return '/daily';
-      }
-
-      // dirty hack to determine if rabash lesson
-      // a better way would use MDB data (require backend api support)
-      return '/rabash';
-
-    case CT_VIRTUAL_LESSON:
-      return '/virtual';
-    case CT_LECTURE:
-      return '/lectures';
-    case CT_WOMEN_LESSON:
-      return '/women';
-    // case CT_CHILDREN_LESSON:
-    //   return '/children';
-    default:
-      return '';
-  }
-};
 
 const makeTagLinks = (tags = [], getTagById) =>
   Array.from(intersperse(
@@ -122,7 +91,7 @@ const getEpisodeInfo = (ct, cIDs, currentCollection, filmDate, t) => {
 const Info = ({ unit = {}, t, currentCollection = null }) => {
   const getTagById = useSelector(state => tagsSelectors.getTagById(state.tags));
 
-  const { id, name, film_date: filmDate, sources, tags, collections, content_type: ct, cIDs } = unit;
+  const { id, name, film_date: filmDate, tags, collections, content_type: ct, cIDs } = unit;
 
   const views = useSelector(state => recommended.getViews(id, state.recommended));
 
