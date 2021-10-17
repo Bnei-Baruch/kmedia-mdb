@@ -66,6 +66,7 @@ const onSSRPrepare = state => {
   if (state.err) {
     state.err = state.err.toString();
   }
+
   return state
 };
 
@@ -74,6 +75,7 @@ const onPlayerPlay = (state, action) => {
   if (unitUid && !state.skipUids.includes(unitUid)) {
     state.skipUids.push(unitUid);
   }
+
   return state;
 };
 
