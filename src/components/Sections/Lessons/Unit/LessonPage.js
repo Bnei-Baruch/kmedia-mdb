@@ -15,11 +15,18 @@ const LessonPage = ({ t }) => {
   const wip    = useSelector(state => selectors.getWip(state.mdb).units[id]);
   const err    = useSelector(state => selectors.getErrors(state.mdb).units[id]);
 
+  //fix bug with unit without collection
+  let needToFetch;
+
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!wip && !err && !(unit?.id === id && Object.keys(unit.collections).length > 0)) {
+    if (!(unit?.id === id)) {
+      needToFetch = true;
+    }
+    if (!wip && !err && !(unit?.id === id && Object.keys(unit.collections).length > 0) && needToFetch) {
       dispatch(actions.fetchUnit(id));
+      needToFetch = false;
     }
   }, [dispatch, err, id, unit, wip]);
 
