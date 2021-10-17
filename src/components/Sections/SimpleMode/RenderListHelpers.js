@@ -3,13 +3,13 @@ import groupBy from 'lodash/groupBy';
 import { Button, Card, Image, List } from 'semantic-ui-react';
 
 import {
-  CT_ARTICLE,
+  CT_ARTICLE, CT_CLIP,
   CT_DAILY_LESSON,
   CT_FULL_LESSON,
   CT_KITEI_MAKOR,
   CT_LELO_MIKUD,
   CT_LESSON_PART,
-  CT_VIDEO_PROGRAM_CHAPTER,
+  CT_VIDEO_PROGRAM_CHAPTER, CT_VIRTUAL_LESSON,
   MT_AUDIO,
   NO_NAME,
   UNIT_EVENTS_TYPE,
@@ -18,7 +18,7 @@ import {
   VS_NAMES
 } from '../../../helpers/consts';
 import { canonicalLink } from '../../../helpers/links';
-import { isEmpty, physicalFile } from '../../../helpers/utils';
+import { canonicalCollection, isEmpty, physicalFile } from '../../../helpers/utils';
 import { formatTime } from '../../../helpers/time';
 import Link from '../../Language/MultiLanguageLink';
 import { SectionLogo } from '../../../helpers/images';
@@ -108,30 +108,54 @@ const renderUnits = (units, language, t, helpChooseLang, chroniclesAppend) => (
     const lastUnit  = unitsArray.length - 1;
     const filesList = filesForRenderByUnit(unit).filter(file => file.language === language);
     const files     = filesList && renderHorizontalFilesList(filesList, unit.content_type, t, chroniclesAppend);
-    const duration  = formatTime(unit.duration);
+    const duration  = !!unit.duration ? formatTime(unit.duration) : null;
 
     if (!files) {
       return null;
     }
 
+    const link = canonicalLink(unit);
+    let title;
+    if (unit.content_type === CT_VIDEO_PROGRAM_CHAPTER || unit.content_type === CT_CLIP || unit.content_type === CT_VIRTUAL_LESSON) {
+      const description = [];
+      const ccu         = canonicalCollection(unit);
+      const part        = Number(ccu?.ccuNames[unit.id]);
+      part && description.push(t('pages.unit.info.episode', { name: part }));
+      if (!!duration)
+        description.push(duration);
+
+      title = (
+        <List.Header className="unit-header">
+          <div className="margin-bottom-4">
+            <Link className="unit-link" to={link}>{ccu.name || NO_NAME}</Link>
+            <span className="duration">{description.join('  |  ')}</span>
+          </div>
+          <Link className="unit-link" to={link}>{unit.name || NO_NAME}</Link>
+        </List.Header>
+      );
+    } else {
+      title = (
+        <List.Header className="unit-header">
+          <Link className="unit-link" to={link}>{unit.name || NO_NAME}</Link>
+          {
+            duration && <span className="duration">{duration}</span>
+          }
+        </List.Header>
+      );
+    }
+
     return (
       <List.Item key={unit.id} className="unit-header">
         <List.Content>
-          <List.Header className="unit-header">
-            <Link className="unit-link" to={canonicalLink(unit)}>{unit.name || NO_NAME}</Link>
-            &nbsp;&nbsp;
-            <span className="duration">{duration}</span>
-          </List.Header>
+          {title}
           <List.List className={`horizontal-list ${index === lastUnit ? 'remove-bottom-border' : ''}`}>
             {
               files.length
                 ? files
                 : (
                   <List.Item key={unit.id} className="no-files">
-                    <Image>
-                      <SectionLogo name='info' />
-                    </Image>
-                    <List.Content>
+                    <SectionLogo name='info'  />
+                    <List.Content className="margin-right-8 margin-left-8">
                       <span className="bold-font">{t('simple-mode.no-files-found-for-lang')}</span>
                       <br />
                       {t('simple-mode.try-different-language')}
@@ -161,7 +185,7 @@ export const renderCollection = (collection, language, t, helpChooseLang, chroni
       <Card.Content className={number ? 'gray-header' : ''}>
         <Card.Header className="unit-header">
           <Link to={canonicalLink(collection)}>
-            {`${t(CT_DAILY_LESSON_I18N_KEY)}${number ? ` (${t(`lessons.list.nameByNum_${  number}`)})` : ''}`}
+            {`${t(CT_DAILY_LESSON_I18N_KEY)}${number ? ` (${t(`lessons.list.nameByNum_${number}`)})` : ''}`}
           </Link>
         </Card.Header>
       </Card.Content>
