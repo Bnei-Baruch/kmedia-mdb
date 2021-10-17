@@ -43,7 +43,7 @@ const PlaylistHeader = ({ collection, t, prevLink = null, nextLink = null }) => 
   const uiLanguage = useSelector(state => settings.getLanguage(state.settings));
   const langDir    = getLanguageDirection(uiLanguage);
 
-  const getPath    = useSelector(state => sources.getPathByID(state.sources));
+  const getPath = useSelector(state => sources.getPathByID(state.sources));
 
   const { content_type, number, name, film_date, start_date, end_date, tag_id, source_id } = collection;
 
@@ -62,7 +62,10 @@ const PlaylistHeader = ({ collection, t, prevLink = null, nextLink = null }) => 
   };
 
   const getTitle = () => {
-    if (content_type !== CT_LESSONS_SERIES) return name;
+    if (content_type !== CT_LESSONS_SERIES) {
+      const ct = content_type === CT_SPECIAL_LESSON ? CT_DAILY_LESSON : content_type;
+      return name || t(`constants.content-types.${ct}`);
+    }
 
     if (tag_id && tag_id.length > 0) {
       return `${t('player.header.series-by-topic')} ${name}`;
@@ -77,9 +80,7 @@ const PlaylistHeader = ({ collection, t, prevLink = null, nextLink = null }) => 
   };
 
   const getTitleByCO = () => {
-    const ct      = content_type === CT_SPECIAL_LESSON ? CT_DAILY_LESSON : content_type;
     let subheader = '';
-
     if (isLesson) {
       subheader = `${t('values.date', { date: film_date })}${(number && number < 5) ? ` (${t(`lessons.list.nameByNum_${number}`)})` : ''}`;
     } else if (film_date) {
@@ -90,7 +91,7 @@ const PlaylistHeader = ({ collection, t, prevLink = null, nextLink = null }) => 
 
     return (
       <>
-        {getTitle() || t(`constants.content-types.${ct}`)}
+        {getTitle()}
         <small className="display-block">
           {subheader}
         </small>
