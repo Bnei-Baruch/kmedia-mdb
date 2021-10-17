@@ -8,7 +8,7 @@ import { buildSearchLinkFromSelection, DOM_ROOT_ID, prepareScrollToSearch } from
 import ShareBar from './ShareSelected';
 import { SCROLL_SEARCH_ID } from '../../helpers/consts';
 
-const ScrollToSearch = ({ data, language, urlParams='' }) => {
+const ScrollToSearch = ({ data, language, urlParams = '', pathname }) => {
 
   const { enableShareText: { isShareTextEnabled, setEnableShareText } } = useContext(SessionInfoContext);
   const { isMobileDevice }                                              = useContext(DeviceInfoContext);
@@ -35,7 +35,7 @@ const ScrollToSearch = ({ data, language, urlParams='' }) => {
         return false;
       }
 
-      const { url, text } = buildSearchLinkFromSelection(language);
+      const { url, text } = buildSearchLinkFromSelection(language, pathname);
       if (url) {
         setSearchText(text);
         setSearchUrl(`${url}&${urlParams}`);
@@ -46,7 +46,7 @@ const ScrollToSearch = ({ data, language, urlParams='' }) => {
 
     document.addEventListener('mouseup', handleOnMouseUp);
     return () => document.removeEventListener('mouseup', handleOnMouseUp);
-  }, [isMobileDevice, isShareTextEnabled, language]);
+  }, [isMobileDevice, isShareTextEnabled, language, pathname]);
 
   if (!data) {
     return null;
