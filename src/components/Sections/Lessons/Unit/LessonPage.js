@@ -14,7 +14,7 @@ const LessonPage = ({ t }) => {
   const unit                          = useSelector(state => selectors.getDenormContentUnit(state.mdb, id));
   const wip                           = useSelector(state => selectors.getWip(state.mdb).units[id]);
   const err                           = useSelector(state => selectors.getErrors(state.mdb).units[id]);
-//fix bug with unit without collection
+  //fix bug with unit without collection
   const [needToFetch, setNeedToFetch] = useState();
 
   const dispatch = useDispatch();
