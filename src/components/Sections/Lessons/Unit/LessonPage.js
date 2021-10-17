@@ -24,6 +24,7 @@ const LessonPage = ({ t }) => {
     if (!(unit?.id === id)) {
       needToFetch = true;
     }
+
     if (!wip && !err && !(unit?.id === id && Object.keys(unit.collections).length > 0) && needToFetch) {
       dispatch(actions.fetchUnit(id));
       needToFetch = false;
