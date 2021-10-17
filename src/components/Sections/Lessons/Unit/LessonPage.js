@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import { withNamespaces } from 'react-i18next';
 import WipErr from '../../../shared/WipErr/WipErr';
@@ -10,26 +10,25 @@ import { actions, selectors } from '../../../../redux/modules/mdb';
 import PlaylistCollectionContainer from '../../../Pages/PlaylistCollection/Container';
 
 const LessonPage = ({ t }) => {
-  const { id } = useParams();
-  const unit   = useSelector(state => selectors.getDenormContentUnit(state.mdb, id));
-  const wip    = useSelector(state => selectors.getWip(state.mdb).units[id]);
-  const err    = useSelector(state => selectors.getErrors(state.mdb).units[id]);
-
-  //fix bug with unit without collection
-  let needToFetch;
+  const { id }                        = useParams();
+  const unit                          = useSelector(state => selectors.getDenormContentUnit(state.mdb, id));
+  const wip                           = useSelector(state => selectors.getWip(state.mdb).units[id]);
+  const err                           = useSelector(state => selectors.getErrors(state.mdb).units[id]);
+//fix bug with unit without collection
+  const [needToFetch, setNeedToFetch] = useState();
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!(unit?.id === id)) {
-      needToFetch = true;
-    }
+    setNeedToFetch(!unit || Object.keys(unit.collections).length === 0);
+  }, [id]);
 
-    if (!wip && !err && !(unit?.id === id && Object.keys(unit.collections).length > 0) && needToFetch) {
+  useEffect(() => {
+    if (!wip && !err && needToFetch) {
       dispatch(actions.fetchUnit(id));
-      needToFetch = false;
+      setNeedToFetch(false);
     }
-  }, [dispatch, err, id, unit, wip]);
+  }, [dispatch, err, id, wip, needToFetch]);
 
   const wipErr = WipErr({ wip, err, t });
   if (wipErr) {
