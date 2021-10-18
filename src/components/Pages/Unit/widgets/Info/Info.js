@@ -48,14 +48,10 @@ const makeCollectionsLinks = (collections = {}, t, currentCollection) => {
     : colValues;
 
   const noSSeries = Array.from(intersperse(
-    collectionsForLinks.filter(c => c.content_type !== CT_LESSONS_SERIES).map(x => {
-      return <Link key={x.id} to={canonicalLink(x)}>{x.name}</Link>;
-    }), ', '));
+    collectionsForLinks.filter(c => c.content_type !== CT_LESSONS_SERIES).map(x => <Link key={x.id} to={canonicalLink(x)}>{x.name}</Link>), ', '));
 
   const sSeries = Array.from(intersperse(
-    collectionsForLinks.filter(c => c.content_type === CT_LESSONS_SERIES).map(x => {
-      return <Link key={x.id} to={canonicalLink(x)}>{x.name}</Link>;
-    }), ', '));
+    collectionsForLinks.filter(c => c.content_type === CT_LESSONS_SERIES).map(x => <Link key={x.id} to={canonicalLink(x)}>{x.name}</Link>), ', '));
   return { noSSeries, sSeries };
 };
 
