@@ -69,7 +69,7 @@ const PlaylistHeader = ({ collection, unit, t, prevLink = null, nextLink = null 
           {t('constants.content-types.DAILY_LESSON')}
           <small>
             <span className="display-iblock margin-left-8 margin-right-8">{t('values.date', { date: film_date })}</span>
-            {(number && number < 5) ? `(${t('lessons.list.nameByNum_' + number)})` : ''}
+            {(number && number < 5) ? `(${t(`lessons.list.nameByNum_${  number}`)})` : ''}
           </small>
         </>
       );
