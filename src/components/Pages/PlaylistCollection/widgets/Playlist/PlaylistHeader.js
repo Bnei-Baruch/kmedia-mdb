@@ -9,7 +9,7 @@ import { selectors as settings } from '../../../../../redux/modules/settings';
 import { selectors as sources } from '../../../../../redux/modules/sources';
 import * as shapes from '../../../../shapes';
 import { getLanguageDirection } from '../../../../../helpers/i18n-utils';
-import { CT_DAILY_LESSON, CT_LESSONS_SERIES, CT_SPECIAL_LESSON } from '../../../../../helpers/consts';
+import { CT_DAILY_LESSON, CT_SPECIAL_LESSON } from '../../../../../helpers/consts';
 import { fromToLocalized } from '../../../../../helpers/date';
 import Link from '../../../../Language/MultiLanguageLink';
 import CollectionDatePicker from './CollectionDatePicker';
@@ -124,6 +124,7 @@ const PlaylistHeader = ({ collection, unit, t, prevLink = null, nextLink = null 
 
 PlaylistHeader.propTypes = {
   collection: shapes.GenericCollection.isRequired,
+  unit: shapes.ContentUnit,
   t: PropTypes.func.isRequired,
   nextLink: PropTypes.string,
   prevLink: PropTypes.string,
