@@ -420,6 +420,7 @@
         "sources": "Kabala Kaynakları",
         "topics": "Konular",
         "collections": "İlişkili olan",
+        "study-series": "To all the lessons of the collection",
         "episode": "{{name}} Bölümü",
         "lesson-episode": "Part {{name}}",
         "views": "{{views}} Views"

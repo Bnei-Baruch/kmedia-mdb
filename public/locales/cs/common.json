@@ -422,6 +422,7 @@
         "sources": "Zdroje",
         "topics": "Témata",
         "collections": "Související s",
+        "study-series": "To all the lessons of the collection",
         "episode": "Epizoda {{name}}",
         "lesson-episode": "Part {{name}}",
         "views": "{{views}} Views"

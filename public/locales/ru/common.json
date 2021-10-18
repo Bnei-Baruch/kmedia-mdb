@@ -435,6 +435,7 @@
         "sources": "Источники",
         "topics": "Темы",
         "collections": "Относится к",
+        "study-series": "Ко всем урокам серии",
         "episode": "Эпизод {{name}}",
         "lesson-episode": "Часть {{name}}",
         "views": "{{views}} просмотров"

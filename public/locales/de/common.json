@@ -416,6 +416,7 @@
         "sources": "Quellen",
         "topics": "Themen",
         "collections": "Bezieht sich auf",
+        "study-series": "To all the lessons of the collection",
         "episode": "Episode {{name}}",
         "lesson-episode": "Part {{name}}",
         "views": "{{views}} Views"

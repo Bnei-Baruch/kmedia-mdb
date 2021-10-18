@@ -9,7 +9,7 @@ import {
   CT_CONGRESS,
   CT_DAILY_LESSON,
   CT_KTAIM_NIVCHARIM,
-  CT_LECTURE,
+  CT_LECTURE, CT_LECTURE_SERIES,
   CT_LESSON_PART,
   CT_LESSONS_SERIES,
   CT_SPECIAL_LESSON,
@@ -70,30 +70,21 @@ const makeTagLinks = (tags = [], getTagById) =>
 
 const makeCollectionsLinks = (collections = {}, t, currentCollection) => {
   // filter out the current collection
-  const colValues           = Object.values(collections).filter(c => c.content_type !== CT_DAILY_LESSON);
+  const colValues           = Object.values(collections).filter(c => ![CT_DAILY_LESSON, CT_SPECIAL_LESSON].includes(c.content_type));
   const collectionsForLinks = currentCollection
     ? colValues.filter(col => col.id !== currentCollection.id)
     : colValues;
 
-  return Array.from(intersperse(
-    collectionsForLinks.map(x => {
-      let display;
-      switch (x.content_type) {
-        case CT_DAILY_LESSON:
-        case CT_SPECIAL_LESSON: {
-          const ctLabel = t(`constants.content-types.${CT_DAILY_LESSON}`);
-          const fd      = t('values.date', { date: x.film_date });
-          display       = `${ctLabel} ${fd}`;
-          break;
-        }
-
-        default:
-          display = x.name;
-          break;
-      }
-
-      return <Link key={x.id} to={canonicalLink(x)}>{display}</Link>;
+  const noSSeries = Array.from(intersperse(
+    collectionsForLinks.filter(c => c.content_type !== CT_LESSONS_SERIES).map(x => {
+      return <Link key={x.id} to={canonicalLink(x)}>{x.name}</Link>;
     }), ', '));
+
+  const sSeries = Array.from(intersperse(
+    collectionsForLinks.filter(c => c.content_type === CT_LESSONS_SERIES).map(x => {
+      return <Link key={x.id} to={canonicalLink(x)}>{x.name}</Link>;
+    }), ', '));
+  return { noSSeries, sSeries };
 };
 
 const getEpisodeName = (ct, episode, t) => {
@@ -126,10 +117,9 @@ const Info = ({ unit = {}, t, currentCollection = null }) => {
 
   const views = useSelector(state => recommended.getViews(id, state.recommended));
 
-  const tagLinks         = makeTagLinks(tags, getTagById);
-  const collectionsLinks = makeCollectionsLinks(collections, t, currentCollection);
-  const isMultiLessons   = Object.values(collections).some(col => col.content_type === CT_LESSONS_SERIES || col.content_type === CT_CONGRESS);
-  const episodeInfo      = getEpisodeInfo(ct, cIDs, currentCollection, filmDate, t);
+  const tagLinks               = makeTagLinks(tags, getTagById);
+  const { noSSeries, sSeries } = makeCollectionsLinks(collections, t, currentCollection);
+  const episodeInfo            = getEpisodeInfo(ct, cIDs, currentCollection, filmDate, t);
 
   return (
     <>
@@ -141,13 +131,6 @@ const Info = ({ unit = {}, t, currentCollection = null }) => {
           </div>
       }
       <div className="unit-info">
-        {
-          !isMultiLessons && collectionsLinks.length > 0 && (
-            <List.Item className="unit-info__collections" key="collections">
-              {collectionsLinks}
-            </List.Item>
-          )
-        }
         <Header as="h2" className="unit-info__header">
           <div className="unit-info__name">{name}</div>
         </Header>
@@ -173,14 +156,22 @@ const Info = ({ unit = {}, t, currentCollection = null }) => {
             )
           }
           {
-            isMultiLessons && collectionsLinks.length > 0 && (
-              <List.Item key="co-links">
+            sSeries.length > 0 && (
+              <List.Item key="co-links-series" className="margin-top-8">
                 <strong>
-                  {t('pages.unit.info.collections')}
-                  :
+                  {`${t('pages.unit.info.study-series')}: `}
                 </strong>
-                &nbsp;
-                {collectionsLinks}
+                {sSeries}
+              </List.Item>
+            )
+          }
+          {
+            noSSeries.length > 0 && (
+              <List.Item key="co-links" className="margin-top-8">
+                <strong>
+                  {`${t('pages.unit.info.collections')}: `}
+                </strong>
+                {noSSeries}
               </List.Item>
             )
           }

@@ -419,6 +419,7 @@
         "sources": "Fuentes",
         "topics": "Temas",
         "collections": "Relacionado a",
+        "study-series": "A todas las lecciones de la colección",
         "episode": "Capitulo {{name}}",
         "lesson-episode": "Parte {{name}}",
         "views": "{{views}} visualizaciones"
