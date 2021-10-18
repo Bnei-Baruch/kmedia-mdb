@@ -26,7 +26,6 @@ import { physicalFile } from '../../../../../helpers/utils';
 import { selectors as settings } from '../../../../../redux/modules/settings';
 import { selectors } from '../../../../../redux/modules/publications';
 import * as shapes from '../../../../shapes';
-import DropdownLanguageSelector from '../../../../Language/Selector/DropdownLanguageSelector';
 import { DeviceInfoContext } from '../../../../../helpers/app-contexts';
 import classNames from 'classnames';
 import MenuLanguageSelector from '../../../../Language/Selector/MenuLanguageSelector';

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
-import { Card, Container, Divider, Table } from 'semantic-ui-react';
+import { Card, Container, Divider } from 'semantic-ui-react';
 
 import * as shapes from '../../shapes';
 import Pagination from '../../Pagination/Pagination';

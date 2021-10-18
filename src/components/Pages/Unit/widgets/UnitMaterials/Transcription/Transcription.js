@@ -5,7 +5,7 @@ import uniq from 'lodash/uniq';
 import { Grid, Segment } from 'semantic-ui-react';
 import isEqual from 'react-fast-compare';
 
-import { CT_ARTICLE, CT_RESEARCH_MATERIAL, MT_TEXT, SCROLL_SEARCH_ID } from '../../../../../../helpers/consts';
+import { CT_ARTICLE, CT_RESEARCH_MATERIAL, MT_TEXT } from '../../../../../../helpers/consts';
 import { getLanguageDirection } from '../../../../../../helpers/i18n-utils';
 import { selectSuitableLanguage } from '../../../../../../helpers/language';
 import MediaHelper from '../../../../../../helpers/media';
