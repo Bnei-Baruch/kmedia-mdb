@@ -126,29 +126,34 @@ const $$sortTree = node => {
     return [];
   }
 
-  // leaf nodes has array of children
-  // we sort them by start_date
-  if (Array.isArray(node.children) && node.children.length > 0) {
-    node.children.sort((a, b) => strCmp(a.start_date, b.start_date));
-    return node;
-  }
-
   // non-leaf nodes are reshaped to {name, children}
   // instead of {name, item, item, item...}
-  const children = Object.keys(node)
+  const nonLeafChildren = Object.keys(node)
     .filter(x => x !== 'name' && x !== 'id' && x !== 'parent_id' && x !== 'type')
-    .map(x => node[x]);
+    .map(x => node[x])
+    .sort(x => x.name);
 
-  children.sort(x => x.name);
+  const { id, parent_id, name, type, children = [] } = node;
 
-  const { id, parent_id, name, type } = node;
+  // leaf nodes has array of children
+  // we sort them by start_date
+  if (isNotEmptyArray(children)) {
+    children.sort((a, b) => strCmp(a.start_date, b.start_date));
+  }
+
+  const { id: nId, start_date } = nonLeafChildren[0]
+
+  // sort the non leaf nodes (with an id but don't have a start_date ) and add them to children
+  if (nId && !start_date) {
+    children.push(...nonLeafChildren.map($$sortTree))
+  }
 
   return {
     id,
     name,
     parent_id,
     type,
-    children: children.map($$sortTree),
+    children,
   };
 };
 
