@@ -235,7 +235,7 @@ const setActivePartInQuery = (history, ap) =>
   }));
 
 const linkWithoutActivePart = location => {
-  const { search, ap } = getQuery(location);
+  const { search } = getQuery(location);
   return `${location.pathname || '/'}${stringify(search)}`;
 };
 
