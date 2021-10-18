@@ -187,7 +187,6 @@ const Sources = ({ unit, t, activeTab = 'sources' }) => {
           className="font_settings doc2html"
           style={{ direction }}
         >
-
           <ScrollToSearch
             data={data}
             language={language}

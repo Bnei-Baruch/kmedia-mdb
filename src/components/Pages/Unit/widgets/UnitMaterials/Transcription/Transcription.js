@@ -220,10 +220,6 @@ class Transcription extends Component {
     if (data) {
       const content = this.prepareContent(data);
 
-      if (languages.length === 1) {
-        return content;
-      }
-
       const url                                         = physicalFile(selectedFile, true);
       const { theme = 'light', fontType, fontSize = 0 } = settings || {};
       return (
@@ -248,7 +244,7 @@ class Transcription extends Component {
             }
           >
             {
-              languages.length > 0 &&
+              languages.length > 1 &&
               <Menu.Item>
                 <MenuLanguageSelector
                   languages={languages}
