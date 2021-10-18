@@ -428,6 +428,7 @@
         "study-series": "To all the lessons of the collection",
         "episode": "Epizoda {{name}}",
         "lesson-episode": "Part {{name}}",
+        "series-episode": "Lesson {{name}}",
         "views": "{{views}} Views"
       },
       "recommended": {

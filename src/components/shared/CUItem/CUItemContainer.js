@@ -13,7 +13,7 @@ import {
   CT_VIDEO_PROGRAM,
   CT_VIRTUAL_LESSONS
 } from '../../../helpers/consts';
-import { canonicalCollection } from '../../../helpers/utils';
+import { canonicalCollection, cuPartNameByCCUType } from '../../../helpers/utils';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { canonicalLink } from '../../../helpers/links';
 import ListTemplate from './ListTemplate';
@@ -43,10 +43,8 @@ const CUItemContainer = ({ id, children, t, asList = false, link, playTime, size
       withCCUInfo = true;
   }
 
-  const isLesson = [CT_DAILY_LESSON, CT_SPECIAL_LESSON].includes(ccu.content_type);
-
   const description = [];
-  if (part && !isNaN(part)) description.push(t(`pages.unit.info.${isLesson ? 'lesson-episode' : 'episode'}`, { name: part }));
+  if (part && !isNaN(part)) description.push(t(cuPartNameByCCUType(ccu.content_type), { name: part }));
   if (unit.film_date) description.push(t('values.date', { date: unit.film_date }));
   if (!(isMobileDevice && asList) && views > 0) description.push(t('pages.unit.info.views', { views }));
 

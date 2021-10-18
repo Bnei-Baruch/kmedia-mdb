@@ -14,6 +14,7 @@ import { fromToLocalized } from '../../../../../helpers/date';
 import Link from '../../../../Language/MultiLanguageLink';
 import CollectionDatePicker from './CollectionDatePicker';
 import { DeviceInfoContext } from '../../../../../helpers/app-contexts';
+import { cuPartNameByCCUType } from '../../../../../helpers/utils';
 
 const getNextLink = (langDir, t, link) => (
   link ?
@@ -94,7 +95,7 @@ const PlaylistHeader = ({ collection, unit, t, prevLink = null, nextLink = null 
     if (isLesson) {
       if (!isMobileDevice) {
         const part = Number(collection?.ccuNames[unit.id]);
-        subheader  = (!isNaN(part) && part > 0) ? `${t('pages.unit.info.lesson-episode', { name: part })}: ${unit.name}` : unit.name;
+        subheader  = (!isNaN(part) && part > 0) ? `${t(cuPartNameByCCUType(content_type), { name: part })}: ${unit.name}` : unit.name;
       } else {
         subheader = `${t('values.date', { date: film_date })}${(number && number < 5) ? ` (${t(`lessons.list.nameByNum_${number}`)})` : ''}`;
       }

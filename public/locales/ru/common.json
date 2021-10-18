@@ -441,6 +441,7 @@
         "study-series": "Ко всем урокам серии",
         "episode": "Эпизод {{name}}",
         "lesson-episode": "Часть {{name}}",
+        "series-episode": "Урок {{name}}",
         "views": "{{views}} просмотров"
       },
       "recommended": {
