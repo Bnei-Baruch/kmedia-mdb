@@ -190,7 +190,7 @@ const Sources = ({ unit, t, activeTab = 'sources' }) => {
           <ScrollToSearch
             data={data}
             language={language}
-            pathname={`/${isLikutim ? 'likutim' : 'sources'}/${selectedUnitId}`}
+            pathname={`/${language}/${isLikutim ? 'likutim' : 'sources'}/${selectedUnitId}`}
           />
         </div>
       </div>
