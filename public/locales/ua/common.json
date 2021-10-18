@@ -135,6 +135,9 @@
     },
     "error": {
       "loading": "Помилка при завантаженні файлу."
+    },
+    "header": {
+      "series-by-topic": "Lessons collection on the topic of:"
     }
   },
   "playlist": {

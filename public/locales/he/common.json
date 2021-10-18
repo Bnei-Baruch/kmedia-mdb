@@ -134,6 +134,9 @@
     },
     "error": {
       "loading": "שגיאה בטעינת קובץ"
+    },
+    "header": {
+      "series-by-topic": "סדרת לימוד בנושא:"
     }
   },
   "playlist": {

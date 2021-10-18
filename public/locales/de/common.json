@@ -135,6 +135,9 @@
     },
     "error": {
       "loading": "Beim Laden der Datei ist ein Fehler aufgetreten."
+    },
+    "header": {
+      "series-by-topic": "Lessons collection on the topic of:"
     }
   },
   "playlist": {

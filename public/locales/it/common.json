@@ -136,6 +136,9 @@
     },
     "error": {
       "loading": "Error loading file."
+    },
+    "header": {
+      "series-by-topic": "Lessons collection on the topic of:"
     }
   },
   "playlist": {

@@ -130,6 +130,9 @@
     },
     "error": {
       "loading": "Chyba nahrávání souboru"
+    },
+    "header": {
+      "series-by-topic": "Lessons collection on the topic of:"
     }
   },
   "playlist": {

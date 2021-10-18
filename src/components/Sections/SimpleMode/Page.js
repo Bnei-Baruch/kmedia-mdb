@@ -12,7 +12,6 @@ import { selectors as settings } from '../../../redux/modules/settings';
 import { ALL_LANGUAGES } from '../../../helpers/consts';
 import { today } from '../../../helpers/date';
 import SectionHeader from '../../shared/SectionHeader';
-import DropdownLanguageSelector from '../../Language/Selector/DropdownLanguageSelector';
 import YearMonthForm from '../../Filters/components/Date/YearMonthForm';
 import SimpleModeList from './list';
 import { getOptions } from '../../../helpers/language';

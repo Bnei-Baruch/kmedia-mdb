@@ -134,6 +134,9 @@
     },
     "error": {
       "loading": "Error al cargar el video"
+    },
+    "header": {
+      "series-by-topic": "Lessons collection on the topic of:"
     }
   },
   "playlist": {
