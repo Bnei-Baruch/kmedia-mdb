@@ -178,12 +178,14 @@ const Likut = ({ t }) => {
           </div>
           {/* content */}
           <div
-            style={{ direction }}
-            className={clsx({
-              'source__content-wrapper': true,
-              [`size${fontSize}`]: true,
-            })}>
-            <ScrollToSearch language={language} data={data} />
+            className={`source__content-wrapper font_settings-wrapper size${fontSize}`}
+          >
+            <div
+              className="font_settings doc2html"
+              style={{ direction }}
+            >
+              <ScrollToSearch language={language} data={data} />
+            </div>
           </div>
         </Grid.Column>
         {relatedLessonsSize > 0 &&
