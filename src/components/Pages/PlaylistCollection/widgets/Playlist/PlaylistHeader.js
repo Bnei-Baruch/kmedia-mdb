@@ -38,7 +38,7 @@ const getPrevLink = (langDir, t, link) => (
   </Link>
 );
 
-const PlaylistHeader = ({ collection, t, prevLink = null, nextLink = null }) => {
+const PlaylistHeader = ({ collection, unit, t, prevLink = null, nextLink = null }) => {
   const uiLanguage = useSelector(state => settings.getLanguage(state.settings));
   const langDir    = getLanguageDirection(uiLanguage);
 
@@ -59,11 +59,21 @@ const PlaylistHeader = ({ collection, t, prevLink = null, nextLink = null }) => 
   };
 
   const getTitleByCO = () => {
-    const ct      = content_type === CT_SPECIAL_LESSON ? CT_DAILY_LESSON : content_type;
     let subheader = '';
+    let header    = name || t(`constants.content-types.${content_type}`);
 
     if (isLesson) {
-      subheader = `${t('values.date', { date: film_date })}${(number && number < 5) ? ` (${t(`lessons.list.nameByNum_${number}`)})` : ''}`;
+      const part = Number(collection?.ccuNames[unit.id]);
+      header     = (
+        <>
+          {t('constants.content-types.DAILY_LESSON')}
+          <small>
+            <span className="display-iblock margin-left-8 margin-right-8">{t('values.date', { date: film_date })}</span>
+            {(number && number < 5) ? `(${t('lessons.list.nameByNum_' + number)})` : ''}
+          </small>
+        </>
+      );
+      subheader  = (!isNaN(part) && part > 0) ? `${t('pages.unit.info.lesson-episode', { name: part })}: ${unit.name}` : unit.name;
     } else if (film_date) {
       subheader = t('values.date', { date: film_date });
     } else if (start_date && end_date) {
@@ -72,7 +82,7 @@ const PlaylistHeader = ({ collection, t, prevLink = null, nextLink = null }) => 
 
     return (
       <>
-        {name || t(`constants.content-types.${ct}`)}
+        {header}
         <small className="display-block">
           {subheader}
         </small>

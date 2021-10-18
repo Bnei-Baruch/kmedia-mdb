@@ -70,7 +70,7 @@ const makeTagLinks = (tags = [], getTagById) =>
 
 const makeCollectionsLinks = (collections = {}, t, currentCollection) => {
   // filter out the current collection
-  const colValues           = Object.values(collections);
+  const colValues           = Object.values(collections).filter(c => c.content_type !== CT_DAILY_LESSON);
   const collectionsForLinks = currentCollection
     ? colValues.filter(col => col.id !== currentCollection.id)
     : colValues;
