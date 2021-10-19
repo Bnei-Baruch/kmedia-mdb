@@ -127,7 +127,7 @@ const renderUnits = (units, language, t, helpChooseLang, chroniclesAppend) => (
       title = (
         <List.Header className="unit-header">
           <div className="margin-bottom-4">
-            <Link className="unit-link" to={link}>{ccu.name || NO_NAME}</Link>
+            <Link className="unit-link" to={link}>{ccu?.name || NO_NAME}</Link>
             <span className="duration">{description.join('  |  ')}</span>
           </div>
           <Link className="unit-link" to={link}>{unit.name || NO_NAME}</Link>
