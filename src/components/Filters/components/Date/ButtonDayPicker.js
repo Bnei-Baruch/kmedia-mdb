@@ -57,6 +57,7 @@ class ButtonDayPicker extends Component {
       props.language !== language) {
       return {
         value: props.value,
+        month: props.value,
         stringValue: ButtonDayPicker.formatDateValue(props.value, props.language),
         language: props.language,
         langDir: getLanguageDirection(props.language),
@@ -264,6 +265,7 @@ class ButtonDayPicker extends Component {
             ref={this.handleDayPickerRef}
             onDayChange={this.onPopupDayChange}
             onDayClick={this.onPopupDayChange}
+            selectedDays={value}
           />
         </Popup.Content>
       </Popup>
