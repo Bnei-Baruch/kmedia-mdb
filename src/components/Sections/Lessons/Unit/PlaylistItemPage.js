@@ -7,11 +7,11 @@ import { actions, selectors } from '../../../../redux/modules/mdb';
 import WipErr from '../../../shared/WipErr/WipErr';
 import PlaylistCollectionContainer from '../../../Pages/PlaylistCollection/Container';
 import UnitPage from '../../../Pages/Unit/Page';
-import { COLLECTION_DAILY_LESSONS, CT_CONGRESS, CT_HOLIDAY } from '../../../../helpers/consts';
+import { COLLECTION_DAILY_LESSONS, EVENT_TYPES } from '../../../../helpers/consts';
 
 const COLLECTION_TYPES_BY_ROUTING = {
   'lessons': COLLECTION_DAILY_LESSONS,
-  'events': [CT_CONGRESS, CT_HOLIDAY],
+  'events': EVENT_TYPES,
 };
 
 const PlaylistItemPage = ({ t }) => {
