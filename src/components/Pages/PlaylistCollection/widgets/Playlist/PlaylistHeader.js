@@ -47,7 +47,7 @@ const PlaylistHeader = ({ collection, t, prevLink = null, nextLink = null }) => 
 
   const { content_type, number, name, film_date, start_date, end_date, tag_id, source_id } = collection;
 
-  const isLesson = content_type === CT_DAILY_LESSON || content_type === CT_SPECIAL_LESSON;
+  const isLesson = COLLECTION_DAILY_LESSONS.includes(content_type);
 
   const getSubHeader = () => {
     if (!isLesson) return null;
