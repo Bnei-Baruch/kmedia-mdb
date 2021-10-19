@@ -83,6 +83,7 @@ const onDataSuccess = (draft, payload) => {
     draft.latestUnits  = latestUnits;
     draft.latestCos    = latestCos;
   }
+
   return draft;
 };
 
