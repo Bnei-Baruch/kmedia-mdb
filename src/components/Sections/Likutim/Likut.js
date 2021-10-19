@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { Button, Grid, Header, Image } from 'semantic-ui-react';
 import clsx from 'clsx';
 
@@ -26,11 +26,12 @@ import ScrollToSearch from '../../shared/ScrollToSearch';
 const Likut = ({ t }) => {
   const { id } = useParams();
 
+  const location        = useLocation();
   const unit            = useSelector(state => selectors.getDenormContentUnit(state.mdb, id));
   const wip             = useSelector(state => selectors.getWip(state.mdb).units[id]);
   const err             = useSelector(state => selectors.getErrors(state.mdb).units[id]);
   const getTagById      = useSelector(state => tagSelectors.getTagById(state.tags));
-  const contentLanguage = useSelector(state => siteSettings.getContentLanguage(state.settings));
+  const contentLanguage = useSelector(state => siteSettings.getContentLanguage(state.settings, location));
   const doc2htmlById    = useSelector(state => assetsSelectors.getDoc2htmlById(state.assets));
 
   const [isReadable, setIsReadable]               = useState(false);
@@ -177,12 +178,14 @@ const Likut = ({ t }) => {
           </div>
           {/* content */}
           <div
-            style={{ direction }}
-            className={clsx({
-              'source__content-wrapper': true,
-              [`size${fontSize}`]: true,
-            })}>
-            <ScrollToSearch language={language} data={data} />
+            className={`source__content-wrapper font_settings-wrapper size${fontSize}`}
+          >
+            <div
+              className="font_settings doc2html"
+              style={{ direction }}
+            >
+              <ScrollToSearch language={language} data={data} />
+            </div>
           </div>
         </Grid.Column>
         {relatedLessonsSize > 0 &&
