@@ -65,24 +65,22 @@ const Likut = ({ t }) => {
   }, [dispatch, id]);
 
   useEffect(() => {
-    if (unit) {
-      let f = unit.files?.find(x => x.language === language);
+    if (unit?.files) {
+      const f = unit.files.find(x => x.language === language);
 
-      if (!f && language !== LANG_ENGLISH && !file) {
-        f = unit.files?.find(x => x.language === LANG_ENGLISH);
-        setLanguage(LANG_ENGLISH);
-      }
-
-      if (!f && language !== LANG_HEBREW) {
-        f = unit.files?.find(x => x.language === LANG_HEBREW);
-        setLanguage(LANG_HEBREW);
+      if (!f) {
+        if (language === LANG_ENGLISH) {
+          setLanguage(LANG_HEBREW)
+        } else {
+          setLanguage(LANG_ENGLISH);
+        }
       }
 
       if (f) {
         setFile(f);
       }
     }
-  }, [dispatch, language, unit]);
+  }, [language, unit]);
 
   useEffect(() => {
     if (file) {
