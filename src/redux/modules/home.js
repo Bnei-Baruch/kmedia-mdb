@@ -74,13 +74,16 @@ const onData = (draft, payload) => {
 const onDataSuccess = (draft, payload) => {
   const { id }      = payload.latest_daily_lesson;
   const latestUnits = payload.latest_units.map(x => x.id);
+  const latestCos   = payload.latest_cos.map(x => x.id);
 
-  if (draft.latestLesson !== id || !isEqual(draft.latestLesson, latestUnits)) {
+  if (draft.latestLesson !== id || !isEqual(draft.latestLesson, latestUnits) || !isEqual(draft.latestCos, latestCos)) {
     draft.wip          = false;
     draft.err          = null;
     draft.latestLesson = id;
     draft.latestUnits  = latestUnits;
+    draft.latestCos    = latestCos;
   }
+  return draft;
 };
 
 const onDataFailure = (draft, payload) => {
@@ -140,6 +143,7 @@ export const reducer = handleActions({
 
 const getLatestLesson = state => state.latestLesson;
 const getLatestUnits  = state => state.latestUnits;
+const getLatestCos    = state => state.latestCos;
 const getBanner       = state => state.banners;
 const getWip          = state => state.wip;
 const getError        = state => state.err;
@@ -147,6 +151,7 @@ const getError        = state => state.err;
 export const selectors = {
   getLatestLesson,
   getLatestUnits,
+  getLatestCos,
   getBanner,
   getWip,
   getError,

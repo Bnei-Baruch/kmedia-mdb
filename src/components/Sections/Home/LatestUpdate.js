@@ -25,12 +25,12 @@ import {
 import CUItemContainer from '../../shared/CUItem/CUItemContainer';
 import { fromToLocalized } from '../../../helpers/date';
 
-const LatestUpdate = ({ unit, t, label }) => {
-  const { content_type, name, film_date, name_in_collection, id, collections } = unit;
+const LatestUpdate = ({ item, t, label }) => {
+  const { content_type, name, film_date, name_in_collection, id, start_date, end_date, number } = item;
 
-  const link           = canonicalLink(unit);
+  const link           = canonicalLink(item);
   let title            = name || `${t(`constants.content-types.${content_type}`)} ${t('lessons.list.number')} ${name_in_collection}`;
-  let subheader        = [`${t('values.date', { date: unit.film_date })} - ${label}`];
+  let subheader        = [`${t('values.date', { date: item.film_date })} - ${label}`];
   let canonicalSection = Requests.imaginaryRandom('resize', {
     width: 512,
     height: 288,
@@ -46,17 +46,15 @@ const LatestUpdate = ({ unit, t, label }) => {
       return <CUItemContainer id={id} noViews />;
     case CT_DAILY_LESSON:
       title     = t(`constants.content-types.${content_type}`);
-      subheader = [`${t('values.date', { date: film_date })}${name_in_collection && ` (${t(`lessons.list.nameByNum_${name_in_collection}`)})`}`];
+      subheader = [`${t('values.date', { date: film_date })}${number && ` (${t(`lessons.list.nameByNum_${number}`)})`}`];
       break;
     case CT_WOMEN_LESSONS:
       title     = name;
       subheader = [t('values.date', { date: film_date })];
       break;
     case CT_LESSONS_SERIES:
-      const { start_date, end_date, film_date: defDate } = Object.values(collections)[0] || {};
-
       title     = name || t(`constants.content-types.${content_type}`);
-      subheader = [fromToLocalized(start_date || defDate, end_date)];
+      subheader = [fromToLocalized(start_date || film_date, end_date)];
       break;
     case CT_SPECIAL_LESSON:
     case CT_CONGRESS:
@@ -86,7 +84,7 @@ const LatestUpdate = ({ unit, t, label }) => {
 };
 
 LatestUpdate.propTypes = {
-  unit: shapes.ContentUnit.isRequired,
+  item: PropTypes.oneOfType([shapes.ContentUnit, shapes.Collection]).isRequired,
   label: PropTypes.string,
   t: PropTypes.func.isRequired,
 };
