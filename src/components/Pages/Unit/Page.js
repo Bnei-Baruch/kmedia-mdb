@@ -91,7 +91,6 @@ const UnitPage = ({ t, currentCollection }) => {
 };
 
 UnitPage.propTypes = {
-  section: PropTypes.string,
   t: PropTypes.func.isRequired
 };
 

@@ -11,18 +11,16 @@ import {
 import LanguageSetter from './components/Language/LanguageSetter';
 import Layout from './components/Layout/Layout';
 import Lessons from './components/Sections/Lessons/MainPage';
-import LessonPage from './components/Sections/Lessons/Unit/LessonPage';
+import PlaylistItemPage from './components/Sections/Lessons/Unit/PlaylistItemPage';
 import LessonCollection from './components/Sections/Lessons/Collection/MainPage';
 import LastLessonCollection from './components/Sections/Lessons/Collection/LastDaily';
 import Programs from './components/Sections/Programs/MainPage';
-import ProgramPage from './components/Sections/Programs/ProgramPage';
 import ProgramCollection from './components/Sections/Programs/Collection';
 import Publications from './components/Sections/Publications/MainPage';
 import ArticlePage from './components/Sections/Publications/tabs/Articles/Unit';
 import ArticleCollection from './components/Sections/Publications/tabs/Articles/Collection';
 import BlogPost from './components/Sections/Publications/tabs/Blog/Post/Container';
 import Events from './components/Sections/Events/MainPage';
-import UnitPage from './components/Pages/Unit/Page';
 import PlaylistCollectionIdCheck from './components/Pages/PlaylistCollection/IdCheck';
 import LibraryHomepage from './components/Sections/Library/Homepage';
 import LibraryContainer from './components/Sections/Library/LibraryContainer';
@@ -57,6 +55,7 @@ const routes = [
   { path: `personal/${MY_NAMESPACE_PLAYLISTS}/:id`, component: PlaylistPage },
   { path: `${MY_NAMESPACE_PLAYLISTS}/:id`, component: PlaylistDecorator },
 
+  { path: ':routeType/cu/:id', component: PlaylistItemPage, options: { ssrData: ssrDataLoaders.cuPage } },
   { path: 'lessons', component: Lessons, options: { ssrData: ssrDataLoaders.lessonsPage } },
   { path: 'lessons/:tab', component: Lessons, options: { ssrData: ssrDataLoaders.lessonsPage } },
   {
@@ -64,11 +63,9 @@ const routes = [
     component: LessonCollection,
     options: { ssrData: ssrDataLoaders.lessonsCollectionPage }
   },
-  { path: 'lessons/cu/:id', component: LessonPage, options: { ssrData: ssrDataLoaders.cuPage } },
   { path: 'lessons/daily/latest', component: LastLessonCollection, options: { ssrData: ssrDataLoaders.latestLesson } },
   { path: 'programs', component: Programs, options: { ssrData: ssrDataLoaders.programsPage } },
   { path: 'programs/:tab', component: Programs, options: { ssrData: ssrDataLoaders.programsPage } },
-  { path: 'programs/cu/:id', component: ProgramPage, options: { ssrData: ssrDataLoaders.cuPage } },
   {
     path: 'programs/c/:id',
     component: ProgramCollection,
@@ -76,7 +73,6 @@ const routes = [
   },
   { path: 'events', component: Events, options: { ssrData: ssrDataLoaders.eventsPage } },
   { path: 'events/:tab', component: Events, options: { ssrData: ssrDataLoaders.eventsPage } },
-  { path: 'events/cu/:id', component: UnitPage, options: { ssrData: ssrDataLoaders.cuPage } },
   {
     path: 'events/c/:id',
     component: PlaylistCollectionIdCheck,

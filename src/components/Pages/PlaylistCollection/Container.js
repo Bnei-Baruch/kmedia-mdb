@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
+import PropTypes from 'prop-types';
+import moment from 'moment';
 
-import { CT_DAILY_LESSON, CT_SPECIAL_LESSON, DATE_FORMAT } from '../../../helpers/consts';
-import { canonicalLink } from '../../../helpers/links';
 import { actions, selectors } from '../../../redux/modules/mdb';
 import { actions as recommended } from '../../../redux/modules/recommended';
+import { COLLECTION_DAILY_LESSONS, DATE_FORMAT } from '../../../helpers/consts';
+import { canonicalLink } from '../../../helpers/links';
 import WipErr from '../../shared/WipErr/WipErr';
 import Page from './Page';
 
@@ -54,9 +54,7 @@ const PlaylistCollectionContainer = ({ cId, t, cuId }) => {
       }
 
       // next prev links only for lessons
-      if (content_type === CT_DAILY_LESSON
-        || content_type === CT_SPECIAL_LESSON) {
-
+      if (COLLECTION_DAILY_LESSONS.includes(content_type)) {
         const fetchWindow = () => {
           const filmDate = moment.utc(film_date);
           dispatch(actions.fetchWindow({
