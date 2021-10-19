@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
@@ -9,10 +9,12 @@ import { selectors as settings } from '../../../../../redux/modules/settings';
 import { selectors as sources } from '../../../../../redux/modules/sources';
 import * as shapes from '../../../../shapes';
 import { getLanguageDirection } from '../../../../../helpers/i18n-utils';
-import { CT_DAILY_LESSON, CT_LESSONS_SERIES, CT_SPECIAL_LESSON } from '../../../../../helpers/consts';
+import { CT_DAILY_LESSON, CT_SPECIAL_LESSON } from '../../../../../helpers/consts';
 import { fromToLocalized } from '../../../../../helpers/date';
 import Link from '../../../../Language/MultiLanguageLink';
 import CollectionDatePicker from './CollectionDatePicker';
+import { DeviceInfoContext } from '../../../../../helpers/app-contexts';
+import { cuPartNameByCCUType } from '../../../../../helpers/utils';
 
 const getNextLink = (langDir, t, link) => (
   link ?
@@ -39,9 +41,10 @@ const getPrevLink = (langDir, t, link) => (
   </Link>
 );
 
-const PlaylistHeader = ({ collection, t, prevLink = null, nextLink = null }) => {
-  const uiLanguage = useSelector(state => settings.getLanguage(state.settings));
-  const langDir    = getLanguageDirection(uiLanguage);
+const PlaylistHeader = ({ collection, unit, t, prevLink = null, nextLink = null }) => {
+  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const uiLanguage         = useSelector(state => settings.getLanguage(state.settings));
+  const langDir            = getLanguageDirection(uiLanguage);
 
   const getPath = useSelector(state => sources.getPathByID(state.sources));
 
@@ -62,9 +65,16 @@ const PlaylistHeader = ({ collection, t, prevLink = null, nextLink = null }) => 
   };
 
   const getTitle = () => {
-    if (content_type !== CT_LESSONS_SERIES) {
-      const ct = content_type === CT_SPECIAL_LESSON ? CT_DAILY_LESSON : content_type;
-      return name || t(`constants.content-types.${ct}`);
+    if (isLesson) {
+      return !isMobileDevice ? (
+        <>
+          {t('constants.content-types.DAILY_LESSON')}
+          <small>
+            <span className="display-iblock margin-left-8 margin-right-8">{t('values.date', { date: film_date })}</span>
+            {(number && number < 5) ? `(${t(`lessons.list.nameByNum_${number}`)})` : ''}
+          </small>
+        </>
+      ) : t('constants.content-types.DAILY_LESSON');
     }
 
     if (tag_id && tag_id.length > 0) {
@@ -81,8 +91,14 @@ const PlaylistHeader = ({ collection, t, prevLink = null, nextLink = null }) => 
 
   const getTitleByCO = () => {
     let subheader = '';
+
     if (isLesson) {
-      subheader = `${t('values.date', { date: film_date })}${(number && number < 5) ? ` (${t(`lessons.list.nameByNum_${number}`)})` : ''}`;
+      if (!isMobileDevice) {
+        const part = Number(collection?.ccuNames[unit.id]);
+        subheader  = (!isNaN(part) && part > 0) ? `${t(cuPartNameByCCUType(content_type), { name: part })}: ${unit.name}` : unit.name;
+      } else {
+        subheader = `${t('values.date', { date: film_date })}${(number && number < 5) ? ` (${t(`lessons.list.nameByNum_${number}`)})` : ''}`;
+      }
     } else if (film_date) {
       subheader = t('values.date', { date: film_date });
     } else if (start_date && end_date) {
@@ -92,7 +108,7 @@ const PlaylistHeader = ({ collection, t, prevLink = null, nextLink = null }) => 
     return (
       <>
         {getTitle()}
-        <small className="display-block">
+        <small className="display-block font-normal">
           {subheader}
         </small>
       </>
@@ -109,6 +125,7 @@ const PlaylistHeader = ({ collection, t, prevLink = null, nextLink = null }) => 
 
 PlaylistHeader.propTypes = {
   collection: shapes.GenericCollection.isRequired,
+  unit: shapes.ContentUnit,
   t: PropTypes.func.isRequired,
   nextLink: PropTypes.string,
   prevLink: PropTypes.string,

@@ -422,8 +422,10 @@
         "sources": "מקורות",
         "topics": "נושאים",
         "collections": "קשור ל",
+        "study-series": "לכל השיעורים בסדרה",
         "episode": "פרק {{name}}",
         "lesson-episode": "חלק {{name}}",
+        "series-episode": "שיעור {{name}}",
         "views": "{{views}} צפיות"
       },
       "recommended": {

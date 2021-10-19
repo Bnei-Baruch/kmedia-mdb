@@ -5,6 +5,10 @@ $max-readble-width: 700px;
   text-transform: uppercase !important;
 }
 
+.font-normal {
+  font-weight: normal !important;
+}
+
 .is-serif {
   font-family: $serif-family !important;
 }
@@ -64,6 +68,7 @@ blockquote {
     color: $sepia-text !important;
   }
 }
+
 .font_settings {
   .is-serif & {
     font-family: Georgia, “Times New Roman”, Times, serif;

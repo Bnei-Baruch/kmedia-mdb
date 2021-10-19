@@ -314,7 +314,7 @@
       "description": "Un acceso directo actualizado a la última lección diaria"
     }
   },
-  "likutim":{
+  "likutim": {
     "header": {
       "text": "Compilaciones",
       "subtext": "En esta sección encontrarán compilaciones de los escritos de los mas grandes cabalistas, que se estudian en las clases diarias de Cabalá con el Rav Dr. Michael Laitman. Las compilaciones tratan del trabajo espiritual y de la estructura de los mundos Superiores. Con el fin de facilitar su uso están en orden alfabético."
@@ -422,8 +422,10 @@
         "sources": "Fuentes",
         "topics": "Temas",
         "collections": "Relacionado a",
+        "study-series": "A todas las lecciones de la colección",
         "episode": "Capitulo {{name}}",
         "lesson-episode": "Parte {{name}}",
+        "series-episode": "Lección {{name}}",
         "views": "{{views}} visualizaciones"
       },
       "recommended": {
@@ -677,6 +679,5 @@
     "logout": "Cerrar sesión",
     "needToLogin": "Iniciar sesión para me gusta, guardar y suscribirse a videos",
     "account": "Mi cuenta"
-
   }
 }

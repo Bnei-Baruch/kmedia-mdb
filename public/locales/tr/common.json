@@ -423,8 +423,10 @@
         "sources": "Kabala Kaynakları",
         "topics": "Konular",
         "collections": "İlişkili olan",
+        "study-series": "To all the lessons of the collection",
         "episode": "{{name}} Bölümü",
         "lesson-episode": "Part {{name}}",
+        "series-episode": "Lesson {{name}}",
         "views": "{{views}} Views"
       },
       "recommended": {

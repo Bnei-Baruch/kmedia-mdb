@@ -29,6 +29,7 @@ const PlaylistWidget = ({ playlist, selected = 0, link, t }) => {
           <CUItemContainer
             key={unit.id}
             id={unit.id}
+            ccuId={collection.id}
             size="small"
             asList={true}
             selected={i === selected}

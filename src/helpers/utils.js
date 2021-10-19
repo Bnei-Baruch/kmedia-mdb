@@ -414,3 +414,17 @@ export const imageByUnit = (unit, link) => {
 
   }
 };
+
+export const cuPartNameByCCUType = (ct) => {
+  const prefix = 'pages.unit.info.';
+  switch (ct) {
+    case CT_DAILY_LESSON:
+    case CT_SPECIAL_LESSON:
+    case CT_CONGRESS:
+      return `${prefix}lesson-episode`;
+    case CT_LESSONS_SERIES:
+      return `${prefix}series-episode`;
+    default:
+      return `${prefix}episode`;
+  }
+};

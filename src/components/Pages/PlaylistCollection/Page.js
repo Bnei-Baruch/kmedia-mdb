@@ -159,7 +159,7 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
           {
             unit &&
             <div id="avbox_playlist">
-              <PlaylistHeader collection={collection} prevLink={prevLink} nextLink={nextLink} />
+              <PlaylistHeader collection={collection} prevLink={prevLink} nextLink={nextLink} unit={unit} />
             </div>
           }
           <AVPlaylistPlayer

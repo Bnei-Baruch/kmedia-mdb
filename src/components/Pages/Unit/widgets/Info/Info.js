@@ -5,17 +5,15 @@ import { useSelector } from 'react-redux';
 import { Button, Header, List } from 'semantic-ui-react';
 
 import {
-  CT_CLIP,
   CT_CONGRESS,
   CT_DAILY_LESSON,
   CT_KTAIM_NIVCHARIM,
   CT_LESSONS_SERIES,
   CT_SPECIAL_LESSON,
-  CT_VIDEO_PROGRAM_CHAPTER,
   VERSION_WITH_PERSONALIZATION
 } from '../../../../../helpers/consts';
 import { canonicalLink } from '../../../../../helpers/links';
-import { intersperse } from '../../../../../helpers/utils';
+import { cuPartNameByCCUType, intersperse } from '../../../../../helpers/utils';
 import { selectors as tagsSelectors } from '../../../../../redux/modules/tags';
 import Link from '../../../../Language/MultiLanguageLink';
 import * as shapes from '../../../../shapes';
@@ -39,35 +37,19 @@ const makeTagLinks = (tags = [], getTagById) =>
 
 const makeCollectionsLinks = (collections = {}, t, currentCollection) => {
   // filter out the current collection
-  const colValues           = Object.values(collections);
+  const colValues           = Object.values(collections).filter(c => ![CT_DAILY_LESSON, CT_SPECIAL_LESSON].includes(c.content_type));
   const collectionsForLinks = currentCollection
     ? colValues.filter(col => col.id !== currentCollection.id)
     : colValues;
 
-  return Array.from(intersperse(
-    collectionsForLinks.map(x => {
-      let display;
-      switch (x.content_type) {
-        case CT_DAILY_LESSON:
-        case CT_SPECIAL_LESSON: {
-          const ctLabel = t(`constants.content-types.${CT_DAILY_LESSON}`);
-          const fd      = t('values.date', { date: x.film_date });
-          display       = `${ctLabel} ${fd}`;
-          break;
-        }
+  const noSSeries = Array.from(intersperse(
+    collectionsForLinks.filter(c => c.content_type !== CT_LESSONS_SERIES).map(x =>
+      <Link key={x.id} to={canonicalLink(x)}>{x.name}</Link>), ', '));
 
-        default:
-          display = x.name;
-          break;
-      }
-
-      return <Link key={x.id} to={canonicalLink(x)}>{display}</Link>;
-    }), ', '));
-};
-
-const getEpisodeName = (ct, episode, t) => {
-  const tName = [CT_VIDEO_PROGRAM_CHAPTER, CT_CLIP].find(x => x === ct) ? 'pages.unit.info.episode' : 'pages.unit.recommended.same-collection.item-title';
-  return t(tName, { name: episode });
+  const sSeries = Array.from(intersperse(
+    collectionsForLinks.filter(c => c.content_type === CT_LESSONS_SERIES).map(x =>
+      <Link key={x.id} to={canonicalLink(x)}>{x.name}</Link>), ', '));
+  return { noSSeries, sSeries };
 };
 
 const getEpisodeInfo = (ct, cIDs, currentCollection, filmDate, t) => {
@@ -76,8 +58,8 @@ const getEpisodeInfo = (ct, cIDs, currentCollection, filmDate, t) => {
   const showEpisode = cId && cId.indexOf(CT_KTAIM_NIVCHARIM) === -1;
   const episode     = showEpisode && cId.split('_').slice(-1).pop();
   const episodeInfo = [];
-  if (episode && episode !== '0')
-    episodeInfo.push(getEpisodeName(ct, episode, t));
+  if (episode && episode !== '0' && (currentCollection && ![CT_DAILY_LESSON, CT_SPECIAL_LESSON].includes(currentCollection.content_type)))
+    episodeInfo.push(t(cuPartNameByCCUType(currentCollection.content_type), { name: episode }));
   episodeInfo.push(t('values.date', { date: filmDate }));
   const len = episodeInfo.length - 1;
   return episodeInfo.map((x, i) => (
@@ -95,10 +77,10 @@ const Info = ({ unit = {}, t, currentCollection = null }) => {
 
   const views = useSelector(state => recommended.getViews(id, state.recommended));
 
-  const tagLinks         = makeTagLinks(tags, getTagById);
-  const collectionsLinks = makeCollectionsLinks(collections, t, currentCollection);
-  const isMultiLessons   = Object.values(collections).some(col => col.content_type === CT_LESSONS_SERIES || col.content_type === CT_CONGRESS);
-  const episodeInfo      = getEpisodeInfo(ct, cIDs, currentCollection, filmDate, t);
+  const tagLinks               = makeTagLinks(tags, getTagById);
+  const { noSSeries, sSeries } = makeCollectionsLinks(collections, t, currentCollection);
+  const isMultiLessons         = Object.values(collections).some(col => col.content_type === CT_LESSONS_SERIES || col.content_type === CT_CONGRESS);
+  const episodeInfo            = getEpisodeInfo(ct, cIDs, currentCollection || Object.values(collections)[0], filmDate, t);
 
   return (
     <>
@@ -111,9 +93,9 @@ const Info = ({ unit = {}, t, currentCollection = null }) => {
       }
       <div className="unit-info">
         {
-          !isMultiLessons && collectionsLinks.length > 0 && (
+          !isMultiLessons && noSSeries.length > 0 && (
             <List.Item className="unit-info__collections" key="collections">
-              {collectionsLinks}
+              {noSSeries}
             </List.Item>
           )
         }
@@ -142,14 +124,22 @@ const Info = ({ unit = {}, t, currentCollection = null }) => {
             )
           }
           {
-            isMultiLessons && collectionsLinks.length > 0 && (
-              <List.Item key="co-links">
+            sSeries.length > 0 && (
+              <List.Item key="co-links-series" className="margin-top-8">
                 <strong>
-                  {t('pages.unit.info.collections')}
-                  :
+                  {`${t('pages.unit.info.study-series')}: `}
                 </strong>
-                &nbsp;
-                {collectionsLinks}
+                {sSeries}
+              </List.Item>
+            )
+          }
+          {
+            isMultiLessons && noSSeries.length > 0 && (
+              <List.Item key="co-links" className="margin-top-8">
+                <strong>
+                  {`${t('pages.unit.info.collections')}: `}
+                </strong>
+                {noSSeries}
               </List.Item>
             )
           }
@@ -162,6 +152,7 @@ const Info = ({ unit = {}, t, currentCollection = null }) => {
 Info.propTypes = {
   unit: shapes.ContentUnit,
   section: PropTypes.string,
+  currentCollection: shapes.Collection
 };
 
 export default withNamespaces()(Info);
