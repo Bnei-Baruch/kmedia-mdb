@@ -8,7 +8,6 @@ import isEqual from 'react-fast-compare';
 
 import { selectors as settings } from '../../../redux/modules/settings';
 import { ClientChroniclesContext, DeviceInfoContext } from '../../../helpers/app-contexts';
-import { COLLECTION_DAILY_LESSONS } from '../../../helpers/consts';
 import { usePrevious } from '../../../helpers/utils';
 import playerHelper from '../../../helpers/player';
 import Helmets from '../../shared/Helmets';
@@ -31,21 +30,14 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
 
   const embed                   = playerHelper.getEmbedFromQuery(location);
   const [unit, setUnit]         = useState(null);
-  const [selected, setSelected] = useState();
+  const [selected, setSelected] = useState(0);
   const [playlist, setPlaylist] = useState(null);
 
   const prev     = usePrevious({ unit, collection });
-  const isLesson = COLLECTION_DAILY_LESSONS.includes(collection.content_type);
-  const link     = isLesson ? null : playerHelper.linkWithoutActivePart(location);
 
   const handleSelectedChange = useCallback(nSelected => {
     if (nSelected !== selected) {
-      if (isLesson) {
-        playlist.items[nSelected] && history.push(`/${uiLanguage}${playlist.items[nSelected].shareUrl}`);
-      } else {
-        playerHelper.setActivePartInQuery(history, nSelected);
-        setSelected(nSelected);
-      }
+      playlist.items[nSelected] && history.push(`/${uiLanguage}${playlist.items[nSelected].shareUrl}`);
     }
   }, [history, selected, uiLanguage]);
 
@@ -89,25 +81,13 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
     const nPlaylist = playerHelper.playlist(collection, mediaType, contentLang, uiLang);
     setPlaylist(nPlaylist);
 
-    if (nPlaylist && isLesson) {
+    if (nPlaylist) {
       const nIndex = nPlaylist.items.findIndex(i => i.unit.id === cuId);
       if (nIndex !== -1) {
         setSelected(nIndex);
       }
     }
   }, [collection, contentLanguage, location, playlist?.language, uiLanguage, cuId]);
-
-  useEffect(() => {
-    if (!isLesson) {
-      let nSelected = playerHelper.getActivePartFromQuery(location);
-
-      if (nSelected >= playlist?.items.length) {
-        nSelected = 0;
-      }
-
-      handleSelectedChange(nSelected);
-    }
-  }, [handleSelectedChange, location, playlist]);
 
   useEffect(() => {
     const newUnit = playlist?.items[selected]?.unit;
@@ -122,8 +102,7 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
     return null;
   }
 
-  const { items } = playlist;
-
+  const { items }      = playlist;
   const filterOutUnits = items.map(item => item.unit).filter(u => !!u) || [];
 
   // Don't recommend lesson preparation, skip to next unit.
@@ -141,7 +120,6 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
       <Playlist
         playlist={playlist}
         selected={selected}
-        link={link}
       />
       <br />
       <Recommended unit={recommendUnit} filterOutUnits={filterOutUnits} />
