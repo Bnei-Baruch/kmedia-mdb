@@ -7,7 +7,7 @@
       "personal": "Personal Area",
       "lessons": "Lessons & Lectures",
       "programs": "Programs & Clips",
-      "sources": "Library",
+      "sources": "Kabbalah Library",
       "likutim": "Assorted Excerpts",
       "events": "Conventions & Events",
       "books": "Books",
@@ -488,7 +488,7 @@
   },
   "sources-library": {
     "header": {
-      "text": "Library",
+      "text": "Kabbalah Library",
       "subtext": "A collection of all the most important original texts for the study of Kabbalah, written by the greatest Kabbalists."
     },
     "no-source": "Please select source",
