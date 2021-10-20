@@ -113,6 +113,8 @@
     "search": "Buscar",
     "previous": "Anterior",
     "next": "Siguiente",
+    "previous-article": "Artículo anterior",
+    "next-article": "Artículo siguiente",
     "copy": "Copiar",
     "view-all": "Ver todo",
     "save": "Guardar",
