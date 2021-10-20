@@ -1826,6 +1826,17 @@
   text-align: left;
 }
 
+.library-audio-player {
+  margin-left: 0;
+  margin-right: 10px;
+}
+
+.rtl .library-audio-player {
+  margin-left: 10px;
+  margin-right: 0;
+
+}
+
 .my_playlist_item {
   position: relative;
 

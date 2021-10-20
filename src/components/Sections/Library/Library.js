@@ -85,15 +85,37 @@ const Library = ({ data, source, downloadAllowed, t }) => {
     setLanguage(language);
   };
 
-  const languageBar = languages.length > 0 &&
-    <div className="library-language-container">
-      <MenuLanguageSelector
-        languages={languages}
-        defaultValue={language}
-        onSelect={handleLanguageChanged}
-        fluid={false}
-      />
-    </div>;
+  const getMp3 = () => {
+    if (!data?.[language])
+      return null;
+    const { mp3 } = data[language];
+    if (!mp3)
+      return null;
+    return { url: physicalFile(mp3, true), name: mp3.name };
+  };
+
+  function getAudioPlayer() {
+    const mp3 = getMp3();
+    return mp3 && <span className="library-audio-player">
+      <a href={mp3?.url}>mp3</a>
+    </span>;
+  }
+
+  const getLanguageBar = () => {
+    const languageBar = languages.length > 0 &&
+      <div className="library-language-container">
+        {getAudioPlayer()}
+        <MenuLanguageSelector
+          languages={languages}
+          defaultValue={language}
+          onSelect={handleLanguageChanged}
+          fluid={false}
+        />
+      </div>;
+    return languageBar;
+  }
+
+  const languageBar = getLanguageBar();
 
   const getContent = () => {
     if (!data?.[language])
