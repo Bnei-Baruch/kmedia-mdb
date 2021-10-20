@@ -8,18 +8,13 @@ import clsx from 'clsx';
 import { selectors as settings } from '../../../../../redux/modules/settings';
 import { selectors as sources } from '../../../../../redux/modules/sources';
 import * as shapes from '../../../../shapes';
+import { COLLECTION_DAILY_LESSONS } from '../../../../../helpers/consts';
 import { getLanguageDirection } from '../../../../../helpers/i18n-utils';
-import {
-  COLLECTION_DAILY_LESSONS,
-  CT_DAILY_LESSON,
-  CT_LESSONS_SERIES,
-  CT_SPECIAL_LESSON
-} from '../../../../../helpers/consts';
+import { DeviceInfoContext } from '../../../../../helpers/app-contexts';
+import { cuPartNameByCCUType } from '../../../../../helpers/utils';
 import { fromToLocalized } from '../../../../../helpers/date';
 import Link from '../../../../Language/MultiLanguageLink';
 import CollectionDatePicker from './CollectionDatePicker';
-import { DeviceInfoContext } from '../../../../../helpers/app-contexts';
-import { cuPartNameByCCUType } from '../../../../../helpers/utils';
 
 const getNextLink = (langDir, t, link) => (
   link ?
