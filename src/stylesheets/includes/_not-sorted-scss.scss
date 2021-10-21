@@ -2031,6 +2031,7 @@
   @include mobile {
     padding-top: 17px;
     padding-bottom: 17px;
+    min-height: 120px;
   }
 
   &.selected {
@@ -2053,6 +2054,7 @@
 
   &.small {
     padding: 0.7em;
+    min-height: 100px;
 
     .cu_item_name {
       margin-top: 0;
