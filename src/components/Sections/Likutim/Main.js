@@ -7,7 +7,6 @@ import debounce from 'lodash/debounce';
 import { actions, selectors } from '../../../redux/modules/likutim';
 import { selectors as settings } from '../../../redux/modules/settings';
 import { canonicalLink } from '../../../helpers/links';
-import { noop } from '../../../helpers/utils';
 import { getFirstLetter } from '../../../helpers/strings';
 
 import Link from '../../Language/MultiLanguageLink';
@@ -108,7 +107,6 @@ const Main = ({ t }) => {
         onChange={handleFiltersChanged}
         onSearch={handleSearch}
         onClear={handleClear}
-        onHydrated={noop}
         onLetterClick={onLetterClick}
         letters={firstLetters}
       />

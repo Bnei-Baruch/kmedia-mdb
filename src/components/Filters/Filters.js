@@ -27,7 +27,7 @@ class Filters extends Component {
     filters: PropTypes.arrayOf(shapes.filterPropShape).isRequired,
     rightItems: PropTypes.arrayOf(PropTypes.node),
     onChange: PropTypes.func.isRequired,
-    onHydrated: PropTypes.func.isRequired,
+    onHydrated: PropTypes.func,
     onSearch: PropTypes.func,
     onClear: PropTypes.func,
     setFilterValue: PropTypes.func.isRequired,
@@ -76,14 +76,14 @@ class Filters extends Component {
   };
 
   handleApply = (name, value) => {
-    const { props: { setFilterValue, namespace, onChange } } = this;
+    const { setFilterValue, namespace, onChange } = this.props;
     this.handlePopupClose();
     setFilterValue(namespace, name, value);
     onChange();
   };
 
   handleResetFilter = (e, name) => {
-    const { props: { resetFilter, namespace, onChange } } = this;
+    const { resetFilter, namespace, onChange } = this.props;
     e.stopPropagation();
     resetFilter(namespace, name);
     onChange();
