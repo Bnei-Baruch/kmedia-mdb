@@ -1,64 +1,26 @@
 import React, { useContext, useState } from 'react';
 import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Header, List, Popup, Table } from 'semantic-ui-react';
+import { Header, List, Popup } from 'semantic-ui-react';
 
 import * as shapes from '../../../../../shapes';
-import { NO_NAME } from '../../../../../../helpers/consts';
-import { canonicalLink } from '../../../../../../helpers/links';
-import { formatDuration, canonicalCollection } from '../../../../../../helpers/utils';
+import { canonicalCollection } from '../../../../../../helpers/utils';
 import Link from '../../../../../Language/MultiLanguageLink';
-import UnitLogo from '../../../../../shared/Logo/UnitLogo';
+import CUItemContainer from '../../../../../shared/CUItem/CUItemContainer';
 import { ClientChroniclesContext } from '../../../../../../helpers/app-contexts';
 import { selectors } from '../../../../../../redux/modules/recommended';
 
-const getCollectionId = unit => {
-  const unitCollection = canonicalCollection(unit);
-  return unitCollection ? unitCollection.id : null;
-}
-
-const viewsToString = views => {
-  if (views >= 1000) {
-    if (views % 1000 > 50) {
-      return `${Number.parseFloat(views/1000).toFixed(1)}K`;
+const watchingNowToString = watchingNow => {
+  if (watchingNow >= 1000) {
+    if (watchingNow % 1000 > 50) {
+      return `${Number.parseFloat(watchingNow/1000).toFixed(1)}K`;
     }
 
-    return `${Math.round(views/1000)}K`;
+    return `${Math.round(watchingNow/1000)}K`;
   }
 
-  return `${views}`;
+  return `${watchingNow}`;
 }
-
-export const renderPlaylistUnit = (unit, t, label = null) =>
-  <Table selectable compact unstackable>
-    <Table.Body>
-      <Table.Row verticalAlign="middle">
-        <Table.Cell textAlign="left" width={4}>
-          <div className="recommend-cell">
-            <UnitLogo
-              unitId={unit.id}
-              collectionId={getCollectionId(unit)}
-              fallbackImg='programs'
-            />
-            {label}
-          </div>
-        </Table.Cell>
-        <Table.Cell textAlign="left" width={10}>
-          <Header as="h5">
-            <small className="text grey uppercase">
-              {t('values.date', { date: unit.film_date })}
-            </small>
-            <br />
-            <span>{unit.name || NO_NAME}</span>
-          </Header>
-        </Table.Cell>
-        {unit.duration &&
-        <Table.Cell textAlign="right" width={2}>
-          <span>{formatDuration(unit.duration)}</span>
-        </Table.Cell>}
-      </Table.Row>
-    </Table.Body>
-  </Table>
 
 const padOneZero = str => str.length === 1 ? `0${str}` : str;
 
@@ -70,12 +32,11 @@ const RecommendedPlaylist = (recommendForUnit, units, selected, t, chronicles, v
   const suggesterIncludes = (uid, str) => (suggesters.get(uid) || '').includes(str);
   const unitsViews = useSelector(state => selectors.getManyViews(unitsToDisplay.map(unit => unit.id), state.recommended))
   const unitsWatchingNow = useSelector(state => selectors.getManyWatchingNow(unitsToDisplay.map(unit => unit.id), state.recommended))
-  const views = (uid, index) => (suggesterIncludes(uid, 'Popular') && unitsViews[index]) || -1;
   const watchingNow = (uid, index) => (suggesterIncludes(uid, 'WatchingNow') && unitsWatchingNow[index]) || -1;
   const twoDaysAgo = new Date();
   twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
   const filmDateNow = `${twoDaysAgo.getFullYear()}-${padOneZero(String(twoDaysAgo.getMonth()+1))}-${padOneZero(String(twoDaysAgo.getDate()))}`;
-  const suggesterLabel = (recommendForUnit, unit) => {
+  const suggesterLabel = (recommendForUnit, unit, index) => {
     if (unit.film_date && unit.film_date.localeCompare(filmDateNow) >= 0) {
       return t('materials.recommended.new');
     }
@@ -93,7 +54,7 @@ const RecommendedPlaylist = (recommendForUnit, units, selected, t, chronicles, v
             <div>
               <small className="text">
                 <Popup content={`${watchingNow(unit.id, index)} ${t('materials.recommended.watching-now')}`}
-                  trigger={<span>{`${viewsToString(watchingNow(unit.id, index))} ${t('materials.recommended.watching-now')}`}</span>}
+                  trigger={<span>{`${watchingNowToString(watchingNow(unit.id, index))} ${t('materials.recommended.watching-now')}`}</span>}
                 />
               </small>
             </div>
@@ -102,24 +63,21 @@ const RecommendedPlaylist = (recommendForUnit, units, selected, t, chronicles, v
       }
     }
 
-    if (views(unit.id, index) !== -1) {
-      if (!labelsUsed.has('views')) {
-        labelsUsed.set('views', unit);
-        return (
-          <div className="recommend-label">
-            <div>
-              <small className="text">
-                <Popup content={`${t('materials.recommended.popular')} ${views(unit.id, index)} ${t('materials.recommended.views')}`}
-                  trigger={<span>{`${t('materials.recommended.popular')} ${viewsToString(views(unit.id, index))} ${t('materials.recommended.views')}`}</span>}
-                />
-              </small>
-            </div>
+    if (!labelsUsed.has('Popular') && suggesterIncludes(unit.id, 'Popular') && unitsViews[index]) {
+      labelsUsed.set('Popular', unit);
+      return (
+        <div className="recommend-label">
+          <div>
+            <small className="text">
+              <span>{t('materials.recommended.popular')}</span>
+            </small>
           </div>
-        );
-      }
+        </div>
+      );
     }
 
-    const suggesterLabelStr = suggesterLabel(recommendForUnit, unit);
+
+    const suggesterLabelStr = suggesterLabel(recommendForUnit, unit, index);
 
     if (suggesterLabelStr) {
       return (
@@ -137,26 +95,32 @@ const RecommendedPlaylist = (recommendForUnit, units, selected, t, chronicles, v
   });
 
   return (
-    <div className="avbox__playlist-view">
-      <List selection size="tiny">
-        {
-          unitsToDisplay.map((unit, index) => (
-            <List.Item
-              key={unit.id}
-              name={`${index}`}
-              active={index === selected}
-              as={Link}
-              to={canonicalLink(unit)}
-              onClick={() => chronicles.recommendSelected(unit.id)}
-            >
-              {renderPlaylistUnit(unit, t, unitLabels[index])}
-            </List.Item>
-          ))
-        }
-        { viewLimit && viewLimit < units.length ?
-          <Link className="recommend-more" onClick={() => setExpanded(!expanded)}>{expanded ? t('materials.recommended.less') : t('materials.recommended.more')}</Link>
-          : null }
-      </List>
+    <div>
+      <div className="avbox__playlist-view">
+        <List selection>
+          {
+            unitsToDisplay.map((unit, index) => (
+              <List.Item
+                key={unit.id}
+                name={`${index}`}
+                active={index === selected}
+                onClick={() => chronicles.recommendSelected(unit.id)}
+              >
+                {<CUItemContainer
+                  id={unit.id}
+                  key={unit.id}
+                  asList
+                  label={unitLabels[index]}
+                  size={'small'} />
+                }
+              </List.Item>
+            ))
+          }
+        </List>
+      </div>
+      { viewLimit && viewLimit < units.length ?
+        <Link className="recommend-more" onClick={() => setExpanded(!expanded)}>{expanded ? t('materials.recommended.less') : t('materials.recommended.more')}</Link>
+        : <div className="recommend-more-placeholder"></div> }
     </div>
   );
 };

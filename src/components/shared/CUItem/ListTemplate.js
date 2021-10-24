@@ -27,7 +27,8 @@ const ListTemplate = ({
   children,
   playTime,
   size = 'big',
-  selected
+  selected,
+  label,
 }) => {
   const dir                = isLanguageRtl(language) ? 'rtl' : 'ltr';
   const { isMobileDevice } = useContext(DeviceInfoContext);
@@ -72,6 +73,7 @@ const ListTemplate = ({
     >
       <div>
         <div className="cu_item_duration">{formatDuration(unit.duration)}</div>
+        {label ? <div className="cu_item_label">{label}</div> : null}
         {percent}
         <div className="cu_item_img" style={{ width }}>
           <UnitLogo unitId={unit.id} width={width} />
