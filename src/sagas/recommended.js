@@ -1,13 +1,14 @@
 import { all, call, put, takeLatest, select } from 'redux-saga/effects';
 
 import Api from '../helpers/Api';
-import { IsCollectionContentType } from '../helpers/consts';
+import { IsCollectionContentType, IsUnitContentType } from '../helpers/consts';
 import { AB_RECOMMEND_NEW } from '../helpers/ab-testing';
 import { actions, types, selectors as recommended } from '../redux/modules/recommended';
 import { actions as mdbActions, selectors as mdbSelectors } from '../redux/modules/mdb';
 import { selectors as settings } from '../redux/modules/settings';
 import {
   CT_LESSONS_SERIES,
+  CT_SOURCE,
 } from '../helpers/consts';
 
 const WATCHING_NOW_MIN = 50;
@@ -90,12 +91,13 @@ export function* fetchRecommended(action) {
     if (variant === AB_RECOMMEND_NEW) {
       data.feeds.splice(data.feeds.length - 1, 0, [
         { content_type: CT_LESSONS_SERIES, uid: 'ReQUUOtN' },
+        { content_type: CT_SOURCE, uid: 'grRABASH' },
       ]);
     }
 
     if (Array.isArray(data.feeds) && data.feeds.length > 0) {
       const fetchList = [
-        fetchMissingUnits(data.feeds.flat().filter(item => item && !IsCollectionContentType(item.content_type))),
+        fetchMissingUnits(data.feeds.flat().filter(item => item && IsUnitContentType(item.content_type))),
         fetchMissingCollections(data.feeds.flat().filter(item => item && IsCollectionContentType(item.content_type))),
       ];
       const viewUids = new Set();

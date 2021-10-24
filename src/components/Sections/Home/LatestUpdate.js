@@ -71,7 +71,7 @@ const LatestUpdate = ({ item, t, label }) => {
   return (
     <Card raised className="cu_item" as={Link} to={link}>
       <div className="cu_item_img">
-        <UnitLogo unitId={id} width={520} fallbackImg={canonicalSection} />
+        <UnitLogo unitId={id} width={700} fallbackImg={canonicalSection} />
       </div>
       <Card.Content>
         <Card.Description content={title} className="bold-font" />

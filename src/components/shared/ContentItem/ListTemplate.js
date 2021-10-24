@@ -14,11 +14,12 @@ import Link from '../../Language/MultiLanguageLink';
 
 const imageWidthBySize = {
   'small': 144,
-  'big': 287
+  'big': 287,
 };
 
 const ListTemplate = ({
   unit,
+  source,
   language,
   withCUInfo,
   withCCUInfo,
@@ -52,7 +53,7 @@ const ListTemplate = ({
   }
 
   let percent = null;
-  if (playTime) {
+  if (unit && playTime) {
     const sep = link.indexOf('?') > 0 ? `&` : '?';
     link      = `${link}${sep}sstart=${toHumanReadableTime(playTime)}`;
     percent   = (
@@ -69,21 +70,21 @@ const ListTemplate = ({
     <Container
       as={Link}
       to={link}
-      key={unit.id}
+      key={(unit && unit.id) || (source && source.id)}
       className={clsx('cu_item cu_item_list no-thumbnail', { [size]: !!size, selected })}
     >
       <div>
-        {withCUInfo && <div className="cu_item_duration">{formatDuration(unit.duration)}</div>}
+        {withCUInfo && unit && <div className="cu_item_duration">{formatDuration(unit.duration)}</div>}
         {label ? <div className="cu_item_label">{label}</div> : null}
         {percent}
         <div className="cu_item_img" style={{ width }}>
-          <UnitLogo unitId={unit.id} width={width} />
+          <UnitLogo unitId={unit && unit.id} sourceId={source && source.id} width={width} />
         </div>
       </div>
       <div className={`cu_item_info ${dir}`}>
         {ccu_info}
         {withCUInfo && <div className={clsx('cu_item_name', { 'font_black': !ccu_info })}>
-          {unit.name}
+          {(unit && unit.name) || (source && source.name)}
         </div>}
         <div className={`cu_info_description ${dir} text_ellipsis`}>
           {description.map((d, i) => (<span key={i}>{d}</span>))}
@@ -101,7 +102,8 @@ const ListTemplate = ({
 };
 
 ListTemplate.propTypes = {
-  unit: shapes.ContentUnit.isRequired,
+  unit: shapes.ContentUnit,
+  source: shapes.Source,
   language: PropTypes.string.isRequired,
   link: PropTypes.string.isRequired,
   withCCUInfo: PropTypes.bool,

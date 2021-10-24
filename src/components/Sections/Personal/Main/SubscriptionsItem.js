@@ -40,11 +40,11 @@ export const SubscriptionsItem = ({ item, t, language }) => {
 
   let logo, title, link;
   if (item.collection_uid) {
-    logo  = <UnitLogo collectionId={collection?.id} width={isMobileDevice ? 300 : 520} />;
+    logo  = <UnitLogo collectionId={collection?.id} width={isMobileDevice ? 300 : 700} />;
     title = collection?.name;
     link  = canonicalLink(collection);
   } else {
-    logo  = <UnitLogo unitId={item.content_unit_uid} width={isMobileDevice ? 300 : 520} />;
+    logo  = <UnitLogo unitId={item.content_unit_uid} width={isMobileDevice ? 300 : 700} />;
     title = t(`constants.content-types.${item.content_type}`);
     link  = `/${SECTIONS_LINK_BY_CU_CONTENT_TYPE[item.content_type]}`;
   }
