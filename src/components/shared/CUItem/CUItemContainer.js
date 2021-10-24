@@ -6,8 +6,14 @@ import PropTypes from 'prop-types';
 import { selectors, actions } from '../../../redux/modules/mdb';
 import { selectors as settings } from '../../../redux/modules/settings';
 import { selectors as recommended } from '../../../redux/modules/recommended';
-import { CT_CLIPS, CT_LESSON_PART, CT_VIDEO_PROGRAM, CT_VIRTUAL_LESSONS } from '../../../helpers/consts';
-import { canonicalCollection } from '../../../helpers/utils';
+import {
+  CT_CLIPS,
+  CT_DAILY_LESSON,
+  CT_LESSON_PART, CT_SPECIAL_LESSON,
+  CT_VIDEO_PROGRAM,
+  CT_VIRTUAL_LESSONS
+} from '../../../helpers/consts';
+import { canonicalCollection, cuPartNameByCCUType } from '../../../helpers/utils';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { canonicalLink } from '../../../helpers/links';
 import ListTemplate from './ListTemplate';
@@ -15,11 +21,12 @@ import CardTemplate from './CardTemplate';
 
 const NOT_LESSONS_COLLECTIONS = [CT_VIDEO_PROGRAM, CT_VIRTUAL_LESSONS, CT_CLIPS];
 
-const CUItemContainer = ({ id, children, t, asList = false, link, playTime, size, selected, noViews }) => {
+const CUItemContainer = ({ id, children, t, asList = false, link, playTime, size, selected, ccuId, noViews }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const unit               = useSelector(state => selectors.getDenormContentUnit(state.mdb, id));
   const language           = useSelector(state => settings.getLanguage(state.settings));
   const views              = useSelector(state => recommended.getViews(id, state.recommended));
+  const ccu                = useSelector(state => selectors.getDenormCollection(state.mdb, ccuId)) || canonicalCollection(unit);
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -29,7 +36,6 @@ const CUItemContainer = ({ id, children, t, asList = false, link, playTime, size
   }, [id, unit, dispatch]);
 
   if (!unit) return null;
-  const ccu       = canonicalCollection(unit);
   const part      = Number(ccu?.ccuNames[unit.id]);
   let withCCUInfo = false;
   for (const i in unit.collections) {
@@ -38,7 +44,7 @@ const CUItemContainer = ({ id, children, t, asList = false, link, playTime, size
   }
 
   const description = [];
-  if (part && !isNaN(part)) description.push(t(`pages.unit.info.${unit.content_type === CT_LESSON_PART ? 'lesson-episode' : 'episode'}`, { name: part }));
+  if (part && !isNaN(part)) description.push(t(cuPartNameByCCUType(ccu.content_type), { name: part }));
   if (unit.film_date) description.push(t('values.date', { date: unit.film_date }));
   if (!noViews && !(isMobileDevice && asList) && views > 0) description.push(t('pages.unit.info.views', { views }));
 

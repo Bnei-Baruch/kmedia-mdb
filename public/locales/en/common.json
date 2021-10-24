@@ -423,8 +423,10 @@
         "sources": "Kabbalah Sources",
         "topics": "Topics",
         "collections": "Related to",
+        "study-series": "To all the lessons of the collection",
         "episode": "Episode {{name}}",
         "lesson-episode": "Part {{name}}",
+        "series-episode": "Lesson {{name}}",
         "views": "{{views}} Views"
       },
       "recommended": {

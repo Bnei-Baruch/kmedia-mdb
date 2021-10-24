@@ -424,8 +424,10 @@
         "sources": "Джерела",
         "topics": "Теми",
         "collections": "Відноситься до",
+        "study-series": "To all the lessons of the collection",
         "episode": "Епізод {{name}}",
         "lesson-episode": "Part {{name}}",
+        "series-episode": "Lesson {{name}}",
         "views": "{{views}} Views"
       },
       "recommended": {

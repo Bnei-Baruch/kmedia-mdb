@@ -130,7 +130,7 @@ export const wrapSeekingPlace = (data, tags, fromNohtml, toNoHtml) => {
   before += data.slice(openTagP.pos, from).replace(/<p|<h/, x => `<div class="scroll-to-search" id="${SCROLL_SEARCH_ID}">${x}`);
 
   let after = data.slice(to, closeTagP.pos);
-  after += data.slice(closeTagP.pos).replace(/<\/p>|<\/h\d>/, x => `${x  }</div>`);
+  after += data.slice(closeTagP.pos).replace(/<\/p>|<\/h\d>/, x => `${x}</div>`);
 
   return { before, after };
 };
@@ -139,7 +139,7 @@ export const wrapSeekingPlace = (data, tags, fromNohtml, toNoHtml) => {
  * help functions for build link
  */
 export const DOM_ROOT_ID                  = 'roodNodeOfShareText';
-export const buildSearchLinkFromSelection = language => {
+export const buildSearchLinkFromSelection = (language, pathname) => {
   if (!window?.getSelection) {
     return { url: null };
   }
@@ -155,9 +155,11 @@ export const buildSearchLinkFromSelection = language => {
   if (words.length < MIN_NUMBER_WORDS_IN_LINK * 2)
     return buildLinkForShortSelect(words, sel, isForward, language);
 
-  const { protocol, hostname, port, pathname } = window.location;
-  const sStart                                   = words.slice(0, MIN_NUMBER_WORDS_IN_LINK).join(' ');
-  const sEnd                                     = words.slice(-1 * MIN_NUMBER_WORDS_IN_LINK).join(' ');
+  pathname = pathname || window.location.pathname;
+
+  const { protocol, hostname, port } = window.location;
+  const sStart                       = words.slice(0, MIN_NUMBER_WORDS_IN_LINK).join(' ');
+  const sEnd                         = words.slice(-1 * MIN_NUMBER_WORDS_IN_LINK).join(' ');
 
   const start = isForward ? { node: sel.anchorNode, offset: sel.anchorOffset }
     : { node: sel.focusNode, offset: sel.focusOffset };

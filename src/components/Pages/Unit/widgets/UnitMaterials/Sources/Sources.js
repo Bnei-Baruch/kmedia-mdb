@@ -1,22 +1,24 @@
 import React, { useState, useEffect, useContext, useMemo } from 'react';
-import PropTypes from 'prop-types';
-import { useSelector, useDispatch, shallowEqual } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 import { withNamespaces } from 'react-i18next';
+import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import { Divider, Dropdown, Menu, Segment } from 'semantic-ui-react';
+import PropTypes from 'prop-types';
 import clsx from 'clsx';
 
 import { selectors } from '../../../../../../redux/modules/sources';
 import { selectors as assetsSelectors, actions as assetsActions } from '../../../../../../redux/modules/assets';
+import { physicalFile, tracePath, isEmpty } from '../../../../../../helpers/utils';
 import { selectors as settings } from '../../../../../../redux/modules/settings';
-import { MT_TEXT, CT_LIKUTIM } from '../../../../../../helpers/consts';
 import { selectSuitableLanguage } from '../../../../../../helpers/language';
 import { getLanguageDirection } from '../../../../../../helpers/i18n-utils';
-import { physicalFile, tracePath, isEmpty } from '../../../../../../helpers/utils';
-import * as shapes from '../../../../../shapes';
+import { DeviceInfoContext } from '../../../../../../helpers/app-contexts';
+import { MT_TEXT, CT_LIKUTIM } from '../../../../../../helpers/consts';
 import { getSourceErrorSplash, wipLoadingSplash } from '../../../../../shared/WipErr/WipErr';
 import PDF, { isTaas, startsFrom } from '../../../../../shared/PDF/PDF';
-import { DeviceInfoContext } from '../../../../../../helpers/app-contexts';
+import ScrollToSearch from '../../../../../shared/ScrollToSearch';
 import Download from '../../../../../shared/Download/Download';
+import * as shapes from '../../../../../shapes';
 import UnitBar from '../UnitBar';
 import MenuLanguageSelector from '../../../../../Language/Selector/MenuLanguageSelector';
 
@@ -44,14 +46,13 @@ const getLikutimLanguages = unit => {
 
 const getSourceLanguages = idx => idx?.data ? [...Object.keys(idx.data)] : [];
 
-const Sources = ({ unit, t }) => {
+const Sources = ({ unit, t, activeTab = 'sources' }) => {
   const getSourceById   = useSelector(state => selectors.getSourceById(state.sources), shallowEqual);
   const indexById       = useSelector(state => assetsSelectors.getSourceIndexById(state.assets), shallowEqual);
   const uiLanguage      = useSelector(state => settings.getLanguage(state.settings));
   const contentLanguage = useSelector(state => settings.getContentLanguage(state.settings));
   const doc2htmlById    = useSelector(state => assetsSelectors.getDoc2htmlById(state.assets));
-
-  const dispatch = useDispatch();
+  const dispatch        = useDispatch();
 
   const [fetched, setFetched]               = useState(null);
   const [isLikutim, setIsLikutim]           = useState(false);
@@ -185,8 +186,13 @@ const Sources = ({ unit, t }) => {
         <div
           className="font_settings doc2html"
           style={{ direction }}
-          dangerouslySetInnerHTML={{ __html: data }}
-        />
+        >
+          <ScrollToSearch
+            data={data}
+            language={language}
+            pathname={`/${language}/${isLikutim ? 'likutim' : 'sources'}/${selectedUnitId}`}
+          />
+        </div>
       </div>
     );
   };
