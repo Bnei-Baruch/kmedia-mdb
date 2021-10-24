@@ -442,8 +442,11 @@
         "collections": "Относится к",
         "study-series": "Ко всем урокам серии",
         "episode": "Эпизод {{name}}",
+        "episodes": "{{name}} эпизодов",
         "lesson-episode": "Часть {{name}}",
+        "lesson-episodes": "{{name}} частей",
         "series-episode": "Урок {{name}}",
+        "series-episodes": "{{name}} уроков",
         "views": "{{views}} просмотров"
       },
       "recommended": {

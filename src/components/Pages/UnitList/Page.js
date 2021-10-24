@@ -8,7 +8,7 @@ import Pagination from '../../Pagination/Pagination';
 import Filters from '../../Filters/Filters';
 import filterComponents from '../../Filters/components';
 import WipErr from '../../shared/WipErr/WipErr';
-import CUItem from '../../shared/CUItem/CUItemContainer';
+import ContentItem from '../../shared/ContentItem/ContentItemContainer';
 
 const filters = {
   'lessons-daily': [
@@ -115,9 +115,9 @@ const UnitListPage = props => {
           <Card.Group doubling itemsPerRow={4} stackable className="cu_items">
             {
               items.filter(x => !!x).map((unit, i) => (
-                <CUItem id={unit.id} key={i}>
+                <ContentItem id={unit.id} key={i}>
                   {renderActions && renderActions(unit)}
-                </CUItem>
+                </ContentItem>
               )
               )
             }

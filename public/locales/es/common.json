@@ -426,8 +426,11 @@
         "collections": "Relacionado a",
         "study-series": "A todas las lecciones de la colección",
         "episode": "Capitulo {{name}}",
+        "episodes": "{{name}} episodes",
         "lesson-episode": "Parte {{name}}",
+        "lesson-episodes": "{{name}} parts",
         "series-episode": "Lección {{name}}",
+        "series-episodes": "{{name}} lessons",
         "views": "{{views}} visualizaciones"
       },
       "recommended": {
