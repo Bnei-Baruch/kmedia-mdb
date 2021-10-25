@@ -30,7 +30,7 @@ const buildNode = (id, getSourceById, cuStats) => {
 
 const SourcesFilter = props => {
   const { namespace, t } = props;
-  let cuStats = useSelector(state => stats.getCUStats(state.stats, namespace) || { data: { sources: {} } });
+  let cuStats = useSelector(state => stats.getCUStats(state.stats, namespace));
   cuStats     = isEmpty(cuStats) || isEmpty(cuStats.data) ? null : cuStats.data.sources;
 
   const roots = useSelector(state => selectors.getRoots(state.sources));

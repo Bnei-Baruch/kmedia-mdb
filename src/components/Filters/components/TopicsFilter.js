@@ -35,7 +35,7 @@ const TagsFilter = props => {
   const roots      = useSelector(state => selectors.getRoots(state.tags));
   const getTagById = useSelector(state => selectors.getTagById(state.tags));
 
-  let cuStats = useSelector(state => stats.getCUStats(state.stats, props.namespace)) || { data: { tags: {} } };
+  let cuStats = useSelector(state => stats.getCUStats(state.stats, props.namespace));
   cuStats     = isEmpty(cuStats) || isEmpty(cuStats.data) ? null : cuStats.data.tags;
 
   const { t } = props;
