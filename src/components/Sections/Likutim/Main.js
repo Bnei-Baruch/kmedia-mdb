@@ -29,6 +29,8 @@ const filters = [
   },
 ];
 
+const namespace = 'likutim'
+
 const Main = ({ t }) => {
   const wip = useSelector(state => selectors.getWip(state.likutim));
   const err = useSelector(state => selectors.getError(state.likutim));
@@ -58,7 +60,7 @@ const Main = ({ t }) => {
 
   useEffect(() => {
     if (!wip && !err && !dataLoaded) {
-      dispatch(actions.fetchLikutim());
+      dispatch(actions.fetchLikutim(namespace));
       setDataLoaded(true);
     }
   }, [dispatch, err, wip, dataLoaded])
@@ -99,10 +101,10 @@ const Main = ({ t }) => {
 
   return (
     <div>
-      <SectionHeader section="likutim" />
+      <SectionHeader section={namespace} />
       <Divider fitted />
       <Filters
-        namespace="likutim"
+        namespace={namespace}
         filters={filters}
         onChange={handleFiltersChanged}
         onSearch={handleSearch}

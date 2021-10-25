@@ -12,7 +12,7 @@ export const types = {
 }
 
 // Actions
-const fetchLikutim         = createAction(FETCH_LIKUTIM);
+const fetchLikutim         = createAction(FETCH_LIKUTIM, namespace => ({ namespace }));
 const fetchLikutimSuccess  = createAction(FETCH_LIKUTIM_SUCCESS);
 const fetchLikutimFailure  = createAction(FETCH_LIKUTIM_FAILURE);
 

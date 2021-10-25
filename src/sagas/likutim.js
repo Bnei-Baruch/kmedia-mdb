@@ -6,12 +6,11 @@ import { actions, types } from '../redux/modules/likutim';
 import { actions as mdbActions } from '../redux/modules/mdb';
 import { selectors as settings } from '../redux/modules/settings';
 import { selectors as filterSelectors } from '../redux/modules/filters';
-import { callUnitsStats } from './stats';
 import { filtersTransformer } from '../filters';
 
-function* fetchLikutim() {
+function* fetchLikutim(action) {
   try {
-    const namespace    = 'likutim';
+    const { namespace }    = action.payload;
     const filters      = yield select(state => filterSelectors.getFilters(state.filters, namespace));
     const filterParams = filtersTransformer.toApiParams(filters) || {};
 
@@ -20,9 +19,6 @@ function* fetchLikutim() {
     const { data } = yield call(Api.units, { content_type: CT_LIKUTIM, language, pageSize, ...filterParams });
 
     if (Array.isArray(data.content_units)) {
-      // get counts of filter data (Topics etc)
-      yield* callUnitsStats({ content_type: CT_LIKUTIM, language, pageSize }, namespace);
-
       yield put(mdbActions.receiveContentUnits(data.content_units));
       yield put(actions.fetchLikutimSuccess(data))
     }
