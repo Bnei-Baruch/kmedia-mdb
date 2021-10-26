@@ -1829,6 +1829,20 @@
 .library-audio-player {
   margin-left: 0;
   margin-right: 10px;
+  cursor: pointer;
+  a {
+    svg {
+      position: relative;
+      top: 5px;
+      margin-right: 5px;
+      margin-left: 5px;
+    }
+  }
+  audio {
+    height: 25px;
+    position: relative;
+    top: 7px;
+  }
 }
 
 .rtl .library-audio-player {
