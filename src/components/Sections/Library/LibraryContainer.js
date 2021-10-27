@@ -412,7 +412,7 @@ class LibraryContainer extends Component {
   static getNextPrevDetails(isNext, language, t) {
     const langDir = getLanguageDirection(language);
 
-    const title         = isNext ? t('buttons.next') : t('buttons.previous');
+    const title         = isNext ? t('buttons.next-article') : t('buttons.previous-article');
     const labelPosition = isNext ? 'right' : 'left';
     const icon          = isNext ? (langDir === 'ltr' ? 'forward' : 'backward') : (langDir === 'ltr' ? 'backward' : 'forward');
     const buttonAlign   = isNext ? (langDir === 'ltr' ? 'right' : 'left') : (langDir === 'ltr' ? 'left' : 'right');
