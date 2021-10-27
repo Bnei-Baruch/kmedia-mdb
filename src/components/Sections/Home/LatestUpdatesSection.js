@@ -9,7 +9,7 @@ import * as shapes from '../../shapes';
 import Section from './Section';
 import LatestUpdate from './LatestUpdate';
 
-const itemsByContentType = list => list.reduce((acc, val) => {
+const itemsByContentType = list => list.filter(x=>!!x).reduce((acc, val) => {
   if (!acc[val.content_type]) {
     acc[val.content_type] = [val];
   } else {
