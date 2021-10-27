@@ -492,7 +492,8 @@
     "az": "А-Z",
     "default": "Standard",
     "filter": "Filter...",
-    "share-title": "Lesen Sie diesen Artikel"
+    "share-title": "Lesen Sie diesen Artikel",
+    "play-audio-file": "Spielen Sie die Audiodatei ab"
   },
   "topics": {
     "header": {

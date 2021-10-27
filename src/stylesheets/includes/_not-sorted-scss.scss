@@ -1828,7 +1828,7 @@
 
 .library-audio-player {
   margin-left: 0;
-  margin-right: 15px;
+  margin-right: 20px;
   cursor: pointer;
   a {
     svg {
@@ -1848,15 +1848,18 @@
       width: 100%;
     }
   }
-  &.mobile {
-
+  .playAudioIcon {
+    margin-left: 10px;
   }
 }
 
 .rtl .library-audio-player {
-  margin-left: 15px;
+  margin-left: 20px;
   margin-right: 0;
-
+  .playAudioIcon {
+    margin-right: 10px;
+    margin-left: 0;
+  }
 }
 
 .my_playlist_item {

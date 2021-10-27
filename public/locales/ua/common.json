@@ -497,7 +497,8 @@
     "az": "А-Я",
     "default": "За замовчуванням",
     "filter": "Фiльтр...",
-    "share-title": "Читайте статтю"
+    "share-title": "Читайте статтю",
+    "play-audio-file": "Відтворіть аудіофайл"
   },
   "topics": {
     "header": {

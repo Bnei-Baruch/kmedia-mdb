@@ -496,7 +496,8 @@
     "default": "ברירת מחדל",
     "filter": "סנן...",
     "share-title": "קרא את המאמר",
-    "group-articles": "מאמרי החברה"
+    "group-articles": "מאמרי החברה",
+    "play-audio-file": "להפעלת קובץ אודיו"
   },
   "topics": {
     "header": {

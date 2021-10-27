@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
@@ -18,7 +18,7 @@ import WipErr from '../../shared/WipErr/WipErr';
 import MenuLanguageSelector from '../../Language/Selector/MenuLanguageSelector';
 import { getPageFromLocation } from '../../Pagination/withPagination';
 import PlayAudioIcon from '../../../images/icons/PlayAudio';
-import {DeviceInfoContext} from "../../../helpers/app-contexts";
+import { DeviceInfoContext } from '../../../helpers/app-contexts';
 
 export const checkRabashGroupArticles = source => {
   if (/^gr-/.test(source)) { // Rabash Group Articles
@@ -103,11 +103,13 @@ const Library = ({ data, source, downloadAllowed, t }) => {
       clearAudioInfo();
       return;
     }
+
     const { mp3 } = data[language];
     if (!mp3) {
       clearAudioInfo();
       return;
     }
+
     const newAudioInfo = { url: physicalFile(mp3, true), name: mp3.name };
     if (audioInfo?.url !== newAudioInfo.url) {
       setAudioInfo(newAudioInfo);
@@ -121,7 +123,7 @@ const Library = ({ data, source, downloadAllowed, t }) => {
     return audioInfo && <span className="library-audio-player">
       { playing ?
         <audio controls src={audioInfo?.url} autoPlay={true} preload="metadata" /> :
-        <a onClick={() => setPlaying(true)}>להפעלת קובץ אודיו <PlayAudioIcon /></a>
+        <a onClick={() => setPlaying(true)}>{t('sources-library.play-audio-file')}<PlayAudioIcon className="playAudioIcon" /></a>
       }
     </span>;
   }
