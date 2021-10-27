@@ -147,6 +147,7 @@ const onFetchSuccess = (draft, { namespace, items = [], total, uids }) => {
     keys.push(key);
     draft[namespace].byKey[key] = x;
   }
+
   draft[namespace].keys = keys;
   return draft;
 };

@@ -23,5 +23,6 @@ export const getMyItemKey = (namespace, item) => {
     default:
       key = item.id;
   }
+
   return { key, item };
 };

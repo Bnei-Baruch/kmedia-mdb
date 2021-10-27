@@ -113,6 +113,7 @@ function* fetchOne(action) {
       });
       yield put(mdbActions.receiveContentUnits(content_units));
     }
+
     yield put(actions.fetchOneSuccess({ namespace, item: data }));
   } catch (err) {
     yield put(actions.fetchFailure({ namespace, ...err }));
