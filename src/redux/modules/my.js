@@ -142,7 +142,7 @@ const onFetchSuccess = (draft, { namespace, items = [], total, uids }) => {
   draft[namespace].errors = false;
 
   const keys = [];
-  Object.values(items).forEach((x) => {
+  Object.values(items).forEach(x => {
     const { key } = getMyItemKey(namespace, x);
     keys.push(key);
     draft[namespace].byKey[key] = x;
