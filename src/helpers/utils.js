@@ -235,8 +235,8 @@ export const strCmp = (a, b) =>
   a < b
     ? -1
     : a > b
-    ? 1
-    : 0;
+      ? 1
+      : 0;
 
 export const getEscapedRegExp = term => {
   const escaped = term.replace(/[/)(.+\\]/g, '\\$&');
