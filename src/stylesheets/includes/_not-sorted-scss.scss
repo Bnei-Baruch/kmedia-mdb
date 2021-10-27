@@ -1828,7 +1828,7 @@
 
 .library-audio-player {
   margin-left: 0;
-  margin-right: 10px;
+  margin-right: 15px;
   cursor: pointer;
   a {
     svg {
@@ -1842,11 +1842,19 @@
     height: 25px;
     position: relative;
     top: 7px;
+    @include mobile {
+      margin-top: 15px;
+      height: 54px;
+      width: 100%;
+    }
+  }
+  &.mobile {
+
   }
 }
 
 .rtl .library-audio-player {
-  margin-left: 10px;
+  margin-left: 15px;
   margin-right: 0;
 
 }

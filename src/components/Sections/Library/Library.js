@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
@@ -18,6 +18,7 @@ import WipErr from '../../shared/WipErr/WipErr';
 import MenuLanguageSelector from '../../Language/Selector/MenuLanguageSelector';
 import { getPageFromLocation } from '../../Pagination/withPagination';
 import PlayAudioIcon from '../../../images/icons/PlayAudio';
+import {DeviceInfoContext} from "../../../helpers/app-contexts";
 
 export const checkRabashGroupArticles = source => {
   if (/^gr-/.test(source)) { // Rabash Group Articles
@@ -36,6 +37,9 @@ const Library = ({ data, source, downloadAllowed, t }) => {
   const [language, setLanguage]     = useState(null);
   const [languages, setLanguages]   = useState([]);
   const [playing, setPlaying]       = useState(false);
+  const [audioInfo, setAudioInfo]       = useState(null);
+
+  const { isMobileDevice } = useContext(DeviceInfoContext);
 
   const doc2htmlById    = useSelector(state => selectors.getDoc2htmlById(state.assets));
   const uiLanguage      = useSelector(state => settings.getLanguage(state.settings));
@@ -87,20 +91,36 @@ const Library = ({ data, source, downloadAllowed, t }) => {
     setLanguage(language);
   };
 
-  const getMp3 = () => {
-    if (!data?.[language])
-      return null;
+  const clearAudioInfo = () => {
+    if (audioInfo !== null) {
+      setAudioInfo(null);
+      setPlaying(false);
+    }
+  }
+
+  const calcAudioInfo = () => {
+    if (!data?.[language]) {
+      clearAudioInfo();
+      return;
+    }
     const { mp3 } = data[language];
-    if (!mp3)
-      return null;
-    return { url: physicalFile(mp3, true), name: mp3.name };
+    if (!mp3) {
+      clearAudioInfo();
+      return;
+    }
+    const newAudioInfo = { url: physicalFile(mp3, true), name: mp3.name };
+    if (audioInfo?.url !== newAudioInfo.url) {
+      setAudioInfo(newAudioInfo);
+      setPlaying(false);
+    }
   };
 
+  calcAudioInfo();
+
   function getAudioPlayer() {
-    const mp3 = getMp3();
-    return mp3 && <span className="library-audio-player">
+    return audioInfo && <span className="library-audio-player">
       { playing ?
-        <audio controls src={mp3?.url} autoPlay={true} preload="metadata" /> :
+        <audio controls src={audioInfo?.url} autoPlay={true} preload="metadata" /> :
         <a onClick={() => setPlaying(true)}>להפעלת קובץ אודיו <PlayAudioIcon /></a>
       }
     </span>;
@@ -109,13 +129,14 @@ const Library = ({ data, source, downloadAllowed, t }) => {
   const getLanguageBar = () => {
     const languageBar = languages.length > 0 &&
       <div className="library-language-container">
-        {getAudioPlayer()}
+        {(!isMobileDevice || !playing) && getAudioPlayer()}
         <MenuLanguageSelector
           languages={languages}
           defaultValue={language}
           onSelect={handleLanguageChanged}
           fluid={false}
         />
+        {isMobileDevice && playing && getAudioPlayer()}
       </div>;
     return languageBar;
   }
