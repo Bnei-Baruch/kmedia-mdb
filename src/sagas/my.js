@@ -7,9 +7,6 @@ import { actions as mdbActions } from '../redux/modules/mdb';
 import { actions as recommendedActions } from '../redux/modules/recommended';
 import {
   MY_NAMESPACE_HISTORY,
-  MY_NAMESPACE_REACTIONS,
-  MY_NAMESPACE_PLAYLIST_BY_ID,
-  MY_NAMESPACE_PLAYLIST_ITEMS,
   MY_NAMESPACE_PLAYLISTS,
   MY_NAMESPACE_SUBSCRIPTIONS
 } from '../helpers/consts';
@@ -173,8 +170,8 @@ function* watchFetch() {
   yield takeEvery(types.FETCH, fetch);
 }
 
-function* watchFetchById() {
-  yield takeEvery(types.FETCH_BY_ID, fetchOne);
+function* watchFetchOne() {
+  yield takeEvery(types.FETCH_ONE, fetchOne);
 }
 
 function* watchAdd() {
@@ -196,7 +193,7 @@ function* watchReactionsCount() {
 export const sagas = [
   watchSetPage,
   watchFetch,
-  watchFetchById,
+  watchFetchOne,
   watchAdd,
   watchEdit,
   watchRemove,

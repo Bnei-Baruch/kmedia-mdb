@@ -10,7 +10,6 @@ import Section from './Section';
 import LatestUpdate from './LatestUpdate';
 
 const itemsByContentType = list => list.reduce((acc, val) => {
-  if (!val) debugger
   if (!acc[val.content_type]) {
     acc[val.content_type] = [val];
   } else {

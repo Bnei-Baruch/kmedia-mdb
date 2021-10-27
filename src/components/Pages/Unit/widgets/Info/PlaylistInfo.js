@@ -23,21 +23,20 @@ const PlaylistInfo = ({ cuID, t, handleClose = null }) => {
 
   const dispatch = useDispatch();
 
-  const playlists     = useSelector(state => selectors.getItems(state.my, MY_NAMESPACE_PLAYLISTS));
-  const playlistItems = useSelector(state => selectors.getItems(state.my, MY_NAMESPACE_PLAYLIST_ITEMS));
+  const playlists     = useSelector(state => selectors.getList(state.my, MY_NAMESPACE_PLAYLISTS));
   const language      = useSelector(state => settings.getLanguage(state.settings));
   const user          = useSelector(state => auth.getUser(state.auth));
 
   const dir = getLanguageDirection(language);
 
   useEffect(() => {
-    const _saved = playlistItems.filter(pi => pi.content_unit_uid === cuID).map(p => p.playlist_id);
+    const _saved = playlists.playlist_items.filter(pi => pi.content_unit_uid === cuID).map(p => p.playlist_id);
     setSaved(_saved);
     const ids = isNewPlaylist ? playlists.filter(p => p.name === newPlaylist).map(p => p.id) : [];
     setSelected(selected.concat(ids, _saved));
     setNewPlaylist('');
     setIsNewPlaylist(false);
-  }, [playlists, playlistItems]);
+  }, [playlists]);
 
   const onOpen = () => {
     dispatch(actions.fetch(MY_NAMESPACE_PLAYLISTS, { page_no: 1, page_size: 100 }));

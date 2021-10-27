@@ -5,7 +5,7 @@ import { Button, Icon, Menu, Modal } from 'semantic-ui-react';
 
 import { selectors } from '../../../../../redux/modules/auth';
 import { actions, selectors as my } from '../../../../../redux/modules/my';
-import { MY_NAMESPACE_REACTIONS, MY_REACTION_KINDS } from '../../../../../helpers/consts';
+import { MY_NAMESPACE_REACTIONS, MY_NAMESPACE_SUBSCRIPTIONS, MY_REACTION_KINDS } from '../../../../../helpers/consts';
 import { getMyItemKey } from '../../../../../helpers/my';
 import SubscribeBtn from '../../../../shared/SubscribeBtn';
 import * as shapes from '../../../../shapes';
@@ -27,11 +27,13 @@ const PersonalInfo = ({ unit = {}, t, collection }) => {
   };
 
   const reactionsCount = useSelector(state => my.getReactionsCount(state.my, MY_REACTION_KINDS.LIKE));
-  const reaction       = useSelector(state => my.getItemByKey(state.my, MY_NAMESPACE_REACTIONS, getMyItemKey(MY_NAMESPACE_REACTIONS, likeParams)));
+
+  const { key }  = getMyItemKey(MY_NAMESPACE_REACTIONS, likeParams);
+  const reaction = useSelector(state => my.getItemByKey(state.my, MY_NAMESPACE_REACTIONS, key));
 
   useEffect(() => {
     if (id) {
-      dispatch(actions.fetchOne(MY_NAMESPACE_REACTIONS, { likeParams }));
+      dispatch(actions.fetch(MY_NAMESPACE_REACTIONS, likeParams));
       dispatch(actions.reactionsCount({ 'uids': [id] }));
     }
   }, [dispatch, id, user]);

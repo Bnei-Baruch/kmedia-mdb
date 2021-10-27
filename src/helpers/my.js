@@ -18,7 +18,7 @@ export const getMyItemKey = (namespace, item) => {
       key = item.id;
       break;
     case MY_NAMESPACE_SUBSCRIPTIONS:
-      key = `${item.collection_uid}_${item.content_type}_${item.content_unit_uid}`;
+      key = `${item.collection_uid}_${item.content_type}`;
       break;
     default:
       key = item.id;

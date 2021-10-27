@@ -142,11 +142,11 @@ const onFetchSuccess = (draft, { namespace, items = [], total, uids }) => {
   draft[namespace].errors = false;
 
   const keys = [];
-  for (const x in items) {
+  Object.values(items).forEach((x) => {
     const { key } = getMyItemKey(namespace, x);
     keys.push(key);
     draft[namespace].byKey[key] = x;
-  }
+  });
 
   draft[namespace].keys = keys;
   return draft;
@@ -243,7 +243,7 @@ const getErr            = (state, namespace) => state[namespace].errors;
 const getDeleted        = (state, namespace) => state[namespace].deleted;
 const getPageNo         = (state, namespace) => state[namespace].pageNo;
 const getTotal          = (state, namespace) => state[namespace].total;
-const getReactionsCount = (state, kind) => state.reactionsCount[kind];
+const getReactionsCount = (state, kind) => state.reactionsCount?.[kind];
 
 export const selectors = {
   getList,

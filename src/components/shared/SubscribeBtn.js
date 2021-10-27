@@ -13,6 +13,7 @@ import { selectors } from '../../redux/modules/auth';
 import { actions, selectors as myselector } from '../../redux/modules/my';
 import AlertModal from './AlertModal';
 import NeedToLogin from '../Sections/Personal/NeedToLogin';
+import { getMyItemKey } from '../../helpers/my';
 
 const SubscribeBtn = ({ unit = {}, t, collection }) => {
   const [alertMsg, setAlertMsg]       = useState();
@@ -28,20 +29,20 @@ const SubscribeBtn = ({ unit = {}, t, collection }) => {
   const cId        = collection?.id || (collections && Object.values(collections)[0]?.id);
   const subsByCO   = !type || CT_SUBSCRIBE_BY_COLLECTION.includes(type) ? cId : null;
 
-  const subs = useSelector(state => myselector.getItems(state.my, MY_NAMESPACE_SUBSCRIPTIONS));
+  const subParams = { 'collection_uid': subsByCO, 'content_type': subsByType, 'content_unit_uid': id };
+  const { key }   = getMyItemKey(MY_NAMESPACE_SUBSCRIPTIONS, subParams);
+  const sub       = useSelector(state => myselector.getItemByKey(state.my, MY_NAMESPACE_SUBSCRIPTIONS, key));
 
-  let sub, title;
+  let title;
   if (subsByCO) {
-    sub   = subs.find(s => subsByCO === s.collection_uid);
     title = collection?.name;
   } else if (subsByType) {
-    sub   = subs.find(s => subsByType === s.content_type);
     title = t(`constants.content-types.${subsByType}`);
   }
 
   useEffect(() => {
     if (subsByType || subsByCO) {
-      dispatch(actions.fetch(MY_NAMESPACE_SUBSCRIPTIONS, { 'collections': [subsByCO], 'types': [subsByType] }));
+      dispatch(actions.fetch(MY_NAMESPACE_SUBSCRIPTIONS, subParams));
     }
   }, [dispatch, id, user, subsByCO, subsByType]);
 
@@ -52,11 +53,7 @@ const SubscribeBtn = ({ unit = {}, t, collection }) => {
     if (s) {
       setConfirm(true);
     } else {
-      dispatch(actions.add(MY_NAMESPACE_SUBSCRIPTIONS, {
-        collections: [subsByCO],
-        types: [subsByType],
-        content_unit_uid: id
-      }));
+      dispatch(actions.add(MY_NAMESPACE_SUBSCRIPTIONS, subParams));
       msg = t('personal.subscribeSuccessful');
     }
 
@@ -69,7 +66,7 @@ const SubscribeBtn = ({ unit = {}, t, collection }) => {
   const handleConfirmCancel = () => setConfirm(false);
 
   const handleConfirmSuccess = () => {
-    dispatch(actions.remove(MY_NAMESPACE_SUBSCRIPTIONS, { ids: [sub.id] }));
+    dispatch(actions.remove(MY_NAMESPACE_SUBSCRIPTIONS, { id: sub.id }));
     setConfirm(false);
   };
 
