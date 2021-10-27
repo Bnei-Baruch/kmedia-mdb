@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 
 import {
   MY_NAMESPACE_HISTORY,
-  MY_NAMESPACE_LIKES,
+  MY_NAMESPACE_REACTIONS,
   MY_NAMESPACE_PLAYLISTS,
   MY_NAMESPACE_SUBSCRIPTIONS,
 } from '../../../../helpers/consts';
@@ -17,7 +17,7 @@ const Page = ({ t }) => {
   return (
     <>
       <ItemsContainer namespace={MY_NAMESPACE_HISTORY} withSeeAll={true} />
-      <ItemsContainer namespace={MY_NAMESPACE_LIKES} withSeeAll={true} />
+      <ItemsContainer namespace={MY_NAMESPACE_REACTIONS} withSeeAll={true} />
       <ItemsContainer namespace={MY_NAMESPACE_PLAYLISTS} withSeeAll={false} />
       <ItemsContainer namespace={MY_NAMESPACE_SUBSCRIPTIONS} withSeeAll={false} />
 

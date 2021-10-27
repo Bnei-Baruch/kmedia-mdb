@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { Dropdown } from 'semantic-ui-react';
 
 import { actions } from '../../../../redux/modules/my';
-import { MY_NAMESPACE_LIKES } from '../../../../helpers/consts';
+import { MY_NAMESPACE_REACTIONS } from '../../../../helpers/consts';
 import PlaylistInfo from '../../../Pages/Unit/widgets/Info/PlaylistInfo';
 
 const Actions = ({ cuId, id, t }) => {
@@ -14,7 +14,7 @@ const Actions = ({ cuId, id, t }) => {
   const removeItem = e => {
     e.preventDefault();
     e.stopPropagation();
-    dispatch(actions.remove(MY_NAMESPACE_LIKES, { ids: [id] }));
+    dispatch(actions.remove(MY_NAMESPACE_REACTIONS, { ids: [id] }));
   }
 
   const handleOpen = e => {

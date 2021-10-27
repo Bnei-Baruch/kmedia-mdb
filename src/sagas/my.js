@@ -7,7 +7,7 @@ import { actions as mdbActions } from '../redux/modules/mdb';
 import { actions as recommendedActions } from '../redux/modules/recommended';
 import {
   MY_NAMESPACE_HISTORY,
-  MY_NAMESPACE_LIKES,
+  MY_NAMESPACE_REACTIONS,
   MY_NAMESPACE_PLAYLIST_BY_ID,
   MY_NAMESPACE_PLAYLIST_ITEMS,
   MY_NAMESPACE_PLAYLISTS,
@@ -37,17 +37,14 @@ function* fetch(action) {
 
     switch (namespace) {
       case MY_NAMESPACE_HISTORY:
-      case MY_NAMESPACE_LIKES:
         cu_uids = data.items?.map(x => x.content_unit_uid) || [];
         break;
-      case MY_NAMESPACE_PLAYLIST_ITEMS:
-        cu_uids    = data.items?.map(x => x.content_unit_uid) || [];
-        with_files = true;
-        break;
       case MY_NAMESPACE_PLAYLISTS:
-        cu_uids = data.items?.filter(p => p.playlist_items).reduce((acc, p) => acc.concat(p.playlist_items.flatMap(x => x.content_unit_uid)), []);
+        cu_uids = data.items?.filter(p => p.playlist_items)
+          .reduce((acc, p) => acc.concat(p.playlist_items.flatMap(x => x.content_unit_uid)), []);
         break;
       case MY_NAMESPACE_SUBSCRIPTIONS:
+        cu_uids = data.items?.map(x => x.content_unit_uid) || [];
         co_uids = data.items?.filter(s => s.collection_uid).map(s => s.collection_uid) || [];
         break;
       default:
@@ -72,11 +69,7 @@ function* fetch(action) {
       yield put(mdbActions.receiveCollections(collections));
     }
 
-    if (action.type === types.FETCH_BY_CU) {
-      yield put(actions.fetchByCUSuccess({ namespace, ...data, uids: params.uids }));
-    } else {
-      yield put(actions.fetchSuccess({ namespace, ...data }));
-    }
+    yield put(actions.fetchSuccess({ namespace, ...data }));
 
     try {
       const { data: viewData } = yield call(Api.views, cu_uids);
@@ -94,7 +87,7 @@ function* fetch(action) {
   }
 }
 
-function* fetchById(action) {
+function* fetchOne(action) {
   const token = yield select(state => authSelectors.getToken(state.auth));
   if (!token) return;
   const { namespace, ...params } = action.payload;
@@ -105,7 +98,7 @@ function* fetchById(action) {
 
     let cu_uids = [];
     switch (namespace) {
-      case MY_NAMESPACE_PLAYLIST_BY_ID:
+      case MY_NAMESPACE_PLAYLISTS:
         cu_uids = data.playlist_items?.map(x => x.content_unit_uid) || [];
         break;
       default:
@@ -120,8 +113,7 @@ function* fetchById(action) {
       });
       yield put(mdbActions.receiveContentUnits(content_units));
     }
-
-    yield put(actions.fetchSuccess({ namespace, items: [data] }));
+    yield put(actions.fetchOneSuccess({ namespace, item: data }));
   } catch (err) {
     yield put(actions.fetchFailure({ namespace, ...err }));
   }
@@ -144,7 +136,7 @@ function* edit(action) {
   if (!token) return;
   const { namespace, ...params } = action.payload;
   try {
-    const { data } = yield call(Api.my, namespace, params, token, 'PATCH');
+    const { data } = yield call(Api.my, namespace, params, token, 'PUT');
     yield put(actions.editSuccess({ namespace, item: data }));
   } catch (err) {
     console.log(err);
@@ -163,10 +155,10 @@ function* remove(action) {
   }
 }
 
-function* likeCount(action) {
+function* reactionsCount(action) {
   try {
-    const { data } = yield call(Api.likeCount, action.payload);
-    yield put(actions.likeCountSuccess(data));
+    const { data } = yield call(Api.reactionsCount, action.payload);
+    yield put(actions.reactionsCountSuccess(data));
   } catch (err) {
     console.log(err);
   }
@@ -178,11 +170,10 @@ function* watchSetPage() {
 
 function* watchFetch() {
   yield takeEvery(types.FETCH, fetch);
-  yield takeEvery(types.FETCH_BY_CU, fetch);
 }
 
 function* watchFetchById() {
-  yield takeEvery(types.FETCH_BY_ID, fetchById);
+  yield takeEvery(types.FETCH_BY_ID, fetchOne);
 }
 
 function* watchAdd() {
@@ -197,8 +188,8 @@ function* watchRemove() {
   yield takeEvery(types.REMOVE, remove);
 }
 
-function* watchLikeCount() {
-  yield takeEvery(types.LIKE_COUNT, likeCount);
+function* watchReactionsCount() {
+  yield takeEvery(types.REACTION_COUNT, reactionsCount);
 }
 
 export const sagas = [
@@ -208,5 +199,5 @@ export const sagas = [
   watchAdd,
   watchEdit,
   watchRemove,
-  watchLikeCount,
+  watchReactionsCount,
 ];

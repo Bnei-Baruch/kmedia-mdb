@@ -6,7 +6,7 @@ import { Button, Container, Grid, Header, Icon } from 'semantic-ui-react';
 import clsx from 'clsx';
 
 import { actions, selectors } from '../../../../redux/modules/my';
-import { MY_NAMESPACE_LIKES, MY_NAMESPACE_PLAYLISTS } from '../../../../helpers/consts';
+import { MY_NAMESPACE_REACTIONS, MY_NAMESPACE_PLAYLISTS } from '../../../../helpers/consts';
 import { selectors as settings } from '../../../../redux/modules/settings';
 import { selectors as auth } from '../../../../redux/modules/auth';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
@@ -16,26 +16,26 @@ import WipErr from '../../../shared/WipErr/WipErr';
 import AlertModal from '../../../shared/AlertModal';
 import Pagination from '../../../Pagination/Pagination';
 import Link from '../../../Language/MultiLanguageLink';
-import LikeActions from './Actions';
+import ReactionActions from './Actions';
 import NeedToLogin from '../NeedToLogin';
 
 const PAGE_SIZE = 20;
 const Page      = ({ location, t }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
-  const pageNo   = useSelector(state => selectors.getPageNo(state.my, MY_NAMESPACE_LIKES));
-  const total    = useSelector(state => selectors.getTotal(state.my, MY_NAMESPACE_LIKES));
+  const pageNo   = useSelector(state => selectors.getPageNo(state.my, MY_NAMESPACE_REACTIONS));
+  const total    = useSelector(state => selectors.getTotal(state.my, MY_NAMESPACE_REACTIONS));
   const language = useSelector(state => settings.getLanguage(state.settings));
-  const items    = useSelector(state => selectors.getItems(state.my, MY_NAMESPACE_LIKES)) || [];
-  const wip      = useSelector(state => selectors.getWIP(state.my, MY_NAMESPACE_LIKES));
-  const err      = useSelector(state => selectors.getErr(state.my, MY_NAMESPACE_LIKES));
-  const deleted  = useSelector(state => selectors.getDeleted(state.my, MY_NAMESPACE_LIKES));
+  const items    = useSelector(state => selectors.getItems(state.my, MY_NAMESPACE_REACTIONS)) || [];
+  const wip      = useSelector(state => selectors.getWIP(state.my, MY_NAMESPACE_REACTIONS));
+  const err      = useSelector(state => selectors.getErr(state.my, MY_NAMESPACE_REACTIONS));
+  const deleted  = useSelector(state => selectors.getDeleted(state.my, MY_NAMESPACE_REACTIONS));
   const user     = useSelector(state => auth.getUser(state.auth));
 
   const dispatch = useDispatch();
-  const setPage  = useCallback(pageNo => dispatch(actions.setPage(MY_NAMESPACE_LIKES, pageNo)), [dispatch]);
+  const setPage  = useCallback(pageNo => dispatch(actions.setPage(MY_NAMESPACE_REACTIONS, pageNo)), [dispatch]);
 
-  const onAlertCloseHandler = () => dispatch(actions.setDeleted(MY_NAMESPACE_LIKES, false));
+  const onAlertCloseHandler = () => dispatch(actions.setDeleted(MY_NAMESPACE_REACTIONS, false));
 
   useEffect(() => {
     if (user) {
@@ -45,7 +45,7 @@ const Page      = ({ location, t }) => {
   }, [user, location, pageNo, language, setPage]);
 
   useEffect(() => {
-    dispatch(actions.fetch(MY_NAMESPACE_LIKES, { page_no: pageNo, page_size: PAGE_SIZE }));
+    dispatch(actions.fetch(MY_NAMESPACE_REACTIONS, { page_no: pageNo, page_size: PAGE_SIZE }));
   }, [pageNo, language, dispatch]);
 
   const needToLogin = NeedToLogin({ t });
@@ -69,7 +69,7 @@ const Page      = ({ location, t }) => {
                   {`${total} ${t('personal.videosOnList')}`}
                 </Header.Subheader>
               </Header>
-              <Link to={`/${MY_NAMESPACE_PLAYLISTS}/${MY_NAMESPACE_LIKES}`}>
+              <Link to={`/${MY_NAMESPACE_PLAYLISTS}/${MY_NAMESPACE_REACTIONS}`}>
                 <Button basic className="clear_button">
                   <Icon name={'play circle outline'} className="margin-left-8 margin-right-8" size="big" />
                   {t('personal.playAll')}
@@ -84,7 +84,7 @@ const Page      = ({ location, t }) => {
                 {items.map((x, i) =>
                   (
                     <CUItemContainer id={x.content_unit_uid} asList={true} key={i}>
-                      <LikeActions cuId={x.content_unit_uid} id={x.id} />
+                      <ReactionActions cuId={x.content_unit_uid} id={x.id} />
                     </CUItemContainer>
                   )
                 )}

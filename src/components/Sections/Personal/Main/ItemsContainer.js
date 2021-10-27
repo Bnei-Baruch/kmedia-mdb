@@ -8,7 +8,7 @@ import { actions, selectors } from '../../../../redux/modules/my';
 import { selectors as settings } from '../../../../redux/modules/settings';
 import {
   MY_NAMESPACE_HISTORY,
-  MY_NAMESPACE_LIKES,
+  MY_NAMESPACE_REACTIONS,
   MY_NAMESPACE_PLAYLISTS,
   MY_NAMESPACE_SUBSCRIPTIONS
 } from '../../../../helpers/consts';
@@ -37,7 +37,7 @@ const ItemsContainer = ({ pageSize = 8, pageNo = 1, t, namespace, withSeeAll }) 
   let children = null;
 
   switch (namespace) {
-    case MY_NAMESPACE_LIKES:
+    case MY_NAMESPACE_REACTIONS:
       children = items.map(x =>
         <CUItem id={x.content_unit_uid} key={`${namespace}_${x.id}`} asList={isMobileDevice} />);
       break;
@@ -62,7 +62,7 @@ const ItemsContainer = ({ pageSize = 8, pageNo = 1, t, namespace, withSeeAll }) 
       break;
   }
 
-  if (isMobileDevice && [MY_NAMESPACE_PLAYLISTS, MY_NAMESPACE_LIKES, MY_NAMESPACE_HISTORY].includes(namespace)) {
+  if (isMobileDevice && [MY_NAMESPACE_PLAYLISTS, MY_NAMESPACE_REACTIONS, MY_NAMESPACE_HISTORY].includes(namespace)) {
     children = items?.length > 0 ? <Container className="padded" children={children} /> : null;
   } else {
     children = <Card.Group doubling itemsPerRow={4} stackable className="cu_items">{children}</Card.Group>;

@@ -1,4 +1,4 @@
-export const VERSION_WITH_PERSONALIZATION = false;
+export const VERSION_WITH_PERSONALIZATION = true;
 
 // Collection Types
 export const CT_DAILY_LESSON       = 'DAILY_LESSON';
@@ -446,13 +446,19 @@ export const SEARCH_INTENT_SECTIONS = {
 export const SCROLL_SEARCH_ID = '__scrollSearchToHere__';
 
 export const MY_NAMESPACE_HISTORY        = 'history';
-export const MY_NAMESPACE_LIKES          = 'likes';
+export const MY_NAMESPACE_REACTIONS      = 'reactions';
 export const MY_NAMESPACE_PLAYLISTS      = 'playlists';
 export const MY_NAMESPACE_PLAYLIST_BY_ID = 'playlists_by_id';
 export const MY_NAMESPACE_PLAYLIST_ITEMS = 'playlist_items';
 export const MY_NAMESPACE_SUBSCRIPTIONS  = 'subscriptions';
 
-export const MY_NAMESPACES = [MY_NAMESPACE_HISTORY, MY_NAMESPACE_LIKES, MY_NAMESPACE_PLAYLISTS, MY_NAMESPACE_PLAYLIST_ITEMS, MY_NAMESPACE_SUBSCRIPTIONS];
+export const MY_NAMESPACES       = [MY_NAMESPACE_HISTORY, MY_NAMESPACE_REACTIONS, MY_NAMESPACE_PLAYLISTS, MY_NAMESPACE_SUBSCRIPTIONS];
+
+
+export const MY_REACTION_KINDS = {
+  LIKE: 'like',
+  SUPER: 'super',
+};
 
 export const CT_SUBSCRIBE_BY_TYPE = [
   CT_FRIENDS_GATHERINGS,
