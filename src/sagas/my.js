@@ -37,8 +37,8 @@ function* fetch(action) {
         cu_uids = data.items?.map(x => x.content_unit_uid) || [];
         break;
       case MY_NAMESPACE_PLAYLISTS:
-        cu_uids = data.items?.filter(p => p.playlist_items)
-          .reduce((acc, p) => acc.concat(p.playlist_items.flatMap(x => x.content_unit_uid)), []);
+        cu_uids = data.items?.filter(p => p.items)
+          .reduce((acc, p) => acc.concat(p.items.flatMap(x => x.content_unit_uid)), []);
         break;
       case MY_NAMESPACE_SUBSCRIPTIONS:
         cu_uids = data.items?.map(x => x.content_unit_uid) || [];
@@ -96,7 +96,7 @@ function* fetchOne(action) {
     let cu_uids = [];
     switch (namespace) {
       case MY_NAMESPACE_PLAYLISTS:
-        cu_uids = data.playlist_items?.map(x => x.content_unit_uid) || [];
+        cu_uids = data.items?.map(x => x.content_unit_uid) || [];
         break;
       default:
     }

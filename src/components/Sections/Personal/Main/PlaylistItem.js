@@ -12,7 +12,7 @@ import Link from '../../../Language/MultiLanguageLink';
 import PlaylistPlayIcon from '../../../../images/icons/PlaylistPlay';
 
 export const PlaylistItem = ({ item, t, language, asList = false }) => {
-  const unit = useSelector(state => mdb.getDenormContentUnit(state.mdb, item.playlist_items?.[0]?.content_unit_uid)) || {};
+  const unit = useSelector(state => mdb.getDenormContentUnit(state.mdb, item.items?.[0]?.content_unit_uid)) || {};
 
   const isRtl            = isLanguageRtl(language);
   const link             = canonicalLink(unit);

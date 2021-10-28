@@ -14,33 +14,31 @@ import NeedToLogin from '../../../../Sections/Personal/NeedToLogin';
 
 const PlaylistInfo = ({ cuID, t, handleClose = null }) => {
   const [isOpen, setIsOpen]               = useState(false);
-  const [selected, setSelected]           = useState([]);
-  const [saved, setSaved]                 = useState([]);
-  const [newPlaylist, setNewPlaylist]     = useState('');
-  const [isNewPlaylist, setIsNewPlaylist] = useState(false);
   const [alertMsg, setAlertMsg]           = useState();
   const [isNeedLogin, setIsNeedLogin]     = useState();
+  const [selected, setSelected]           = useState([]);
+  const [newPlaylist, setNewPlaylist]     = useState('');
+  const [isNewPlaylist, setIsNewPlaylist] = useState(false);
+  const [countNew, setCountNew]           = useState(0);
 
   const dispatch = useDispatch();
 
-  const playlists     = useSelector(state => selectors.getList(state.my, MY_NAMESPACE_PLAYLISTS));
-  const language      = useSelector(state => settings.getLanguage(state.settings));
-  const user          = useSelector(state => auth.getUser(state.auth));
+  const playlists = useSelector(state => selectors.getList(state.my, MY_NAMESPACE_PLAYLISTS));
+  const total     = useSelector(state => selectors.getTotal(state.my, MY_NAMESPACE_PLAYLISTS));
+  const language  = useSelector(state => settings.getLanguage(state.settings));
+  const user      = useSelector(state => auth.getUser(state.auth));
+  const saved     = playlists.filter(p => !!p.items);
+
+  useEffect(() => {
+    playlists.sort((a, b) => b.id - a.id);
+    const s = playlists.slice(-1 * countNew);
+    setSelected([...s, ...saved.map(x => x.id)]);
+  }, [playlists.length, cuID]);
 
   const dir = getLanguageDirection(language);
 
-  useEffect(() => {
-    const _saved = playlists.playlist_items.filter(pi => pi.content_unit_uid === cuID).map(p => p.playlist_id);
-    setSaved(_saved);
-    const ids = isNewPlaylist ? playlists.filter(p => p.name === newPlaylist).map(p => p.id) : [];
-    setSelected(selected.concat(ids, _saved));
-    setNewPlaylist('');
-    setIsNewPlaylist(false);
-  }, [playlists]);
-
   const onOpen = () => {
-    dispatch(actions.fetch(MY_NAMESPACE_PLAYLISTS, { page_no: 1, page_size: 100 }));
-    dispatch(actions.fetch(MY_NAMESPACE_PLAYLIST_ITEMS, { uids: [cuID] }));
+    dispatch(actions.fetch(MY_NAMESPACE_PLAYLISTS, { 'exist_cu': cuID, order_by: 'id' }));
   };
 
   const handleChange = (e, d) => {
@@ -65,28 +63,37 @@ const PlaylistInfo = ({ cuID, t, handleClose = null }) => {
     e.stopPropagation();
     !!newPlaylist && dispatch(actions.add(MY_NAMESPACE_PLAYLISTS, { name: newPlaylist }));
     setAlertMsg(t('personal.newPlaylistSuccessful', { name: newPlaylist }));
+    setCountNew(countNew + 1);
   };
 
   const handleOpenModal = e => {
     e.preventDefault();
     e.stopPropagation();
     toggle();
-    return;
   };
 
   const toggle = () => {
     if (!user)
       return setIsNeedLogin(true);
-    setSelected([]);
     setIsOpen(!isOpen);
+    setNewPlaylist('');
+    setIsNewPlaylist(false);
     return null;
   };
 
   const save = () => {
-    const aIds = selected.filter(id => !saved.includes(id));
-    aIds.forEach(id => dispatch(actions.add(MY_NAMESPACE_PLAYLISTS, { id, uids: [cuID] })));
-    const dIds = saved.filter(id => !selected.includes(id));
-    dIds.forEach(id => dispatch(actions.remove(MY_NAMESPACE_PLAYLIST_ITEMS, { playlist_id: id, uids: [cuID] })));
+    const adds = selected.filter(id => !saved.find(p => p.id));
+    adds.forEach(id => dispatch(actions.add(MY_NAMESPACE_PLAYLISTS, {
+      id,
+      items: [{ position: -1, content_unit_uid: cuID }],
+      changeItems: true
+    })));
+    const deletes = saved.filter(p => !selected.includes(p.id));
+    deletes.forEach(p => dispatch(actions.remove(MY_NAMESPACE_PLAYLISTS, {
+      id: p.id,
+      ids: p.items?.map(pi => pi.id),
+      changeItems: true
+    })));
     toggle();
 
     setAlertMsg(t('personal.addToPlaylistSuccessful'));

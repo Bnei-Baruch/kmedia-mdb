@@ -31,7 +31,6 @@ const PlaylistHeader = ({ confirmSuccess, save, playlist, t }) => {
 
   const handleConfirmCancel = () => setConfirm(false);
 
-  const itemCount = playlist.playlist_items?.length || 0;
   const nameTag   = isEditName ? (
     <>
       <Input type="text" value={name} onChange={handleChangeName} maxLength={30} />
@@ -47,7 +46,7 @@ const PlaylistHeader = ({ confirmSuccess, save, playlist, t }) => {
           <PlaylistPlayIcon className="playlist_icon" />
           {nameTag}
           <Header.Subheader className="display-iblock margin-right-8 margin-left-8">
-            {`${itemCount} ${t('pages.collection.items.programs-collection')}`}
+            {`${playlist.total} ${t('pages.collection.items.programs-collection')}`}
           </Header.Subheader>
         </Header>
         <div>

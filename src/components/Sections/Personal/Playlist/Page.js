@@ -48,7 +48,7 @@ const Page = ({ t }) => {
 
   const link          = `/${language}/${MY_NAMESPACE_PLAYLISTS}/${playlist.id}`;
   const computerWidth = isMobileDevice ? 16 : 10;
-  const items         = [...playlist.playlist_items || []];
+  const items         = [...playlist.items || []];
   items.sort((a, b) => b.position - a.position);
 
   const removeItem = (e, iID) => {
