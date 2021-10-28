@@ -22,7 +22,7 @@ export const PlaylistItem = ({ item, t, language, asList = false }) => {
     <Card as={Link} to={href} raised>
       <div className="my_playlist_item">
         <div className={`over_layer ${isRtl ? 'rtl' : 'ltr'}`}>
-          <Header as={'h2'}>{item.count || 0}</Header>
+          <Header as={'h2'}>{item.total_items}</Header>
           <PlaylistPlayIcon className="playlist_icon" fill="#FFFFFF" />
         </div>
         <UnitLogo unitId={unit.id} width={520} fallbackImg={canonicalSection} />

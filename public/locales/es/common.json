@@ -661,7 +661,7 @@
     "newPlaylistSuccessful": "Nueva lista de reproducción {{name}} creado",
     "addToPlaylistSuccessful": "Añadido a la lista de reproducción {{name}}",
     "history": "Historial",
-    "likes": "Vídeos que me gustan",
+    "reactions": "Vídeos que me gustan",
     "playlists": "Playlists",
     "playlistNoResult": "No hay videos en esta lista de reproducción",
     "subscriptions": "Suscripciones",

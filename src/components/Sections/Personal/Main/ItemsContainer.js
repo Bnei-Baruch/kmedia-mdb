@@ -28,7 +28,7 @@ const ItemsContainer = ({ pageSize = 8, pageNo = 1, t, namespace, withSeeAll }) 
     dispatch(actions.fetch(namespace, { page_no: pageNo, page_size: pageSize }));
   }, [dispatch, pageNo, pageSize, language, namespace]);
 
-  const items = useSelector(state => selectors.getItems(state.my, namespace));
+  const items = useSelector(state => selectors.getList(state.my, namespace));
   const err   = useSelector(state => selectors.getErr(state.my, namespace));
   const wip   = useSelector(state => selectors.getWIP(state.my, namespace));
 
@@ -39,7 +39,7 @@ const ItemsContainer = ({ pageSize = 8, pageNo = 1, t, namespace, withSeeAll }) 
   switch (namespace) {
     case MY_NAMESPACE_REACTIONS:
       children = items.map(x =>
-        <CUItem id={x.content_unit_uid} key={`${namespace}_${x.id}`} asList={isMobileDevice} />);
+        <CUItem id={x.subject_uid} key={`${namespace}_${x.id}`} asList={isMobileDevice} />);
       break;
     case MY_NAMESPACE_HISTORY:
       children = (

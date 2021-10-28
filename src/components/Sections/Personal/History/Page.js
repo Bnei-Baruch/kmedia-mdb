@@ -26,7 +26,7 @@ const Page      = ({ location, t }) => {
   const pageNo   = useSelector(state => selectors.getPageNo(state.my, MY_NAMESPACE_HISTORY));
   const total    = useSelector(state => selectors.getTotal(state.my, MY_NAMESPACE_HISTORY));
   const language = useSelector(state => settings.getLanguage(state.settings));
-  const items    = useSelector(state => selectors.getItems(state.my, MY_NAMESPACE_HISTORY)) || [];
+  const items    = useSelector(state => selectors.getList(state.my, MY_NAMESPACE_HISTORY));
   const wip      = useSelector(state => selectors.getWIP(state.my, MY_NAMESPACE_HISTORY));
   const err      = useSelector(state => selectors.getErr(state.my, MY_NAMESPACE_HISTORY));
   const deleted  = useSelector(state => selectors.getDeleted(state.my, MY_NAMESPACE_HISTORY));

@@ -766,7 +766,7 @@
     "newPlaylistSuccessful": "Новый плейлист {{name}} создан",
     "addToPlaylistSuccessful": "Добавлен в плейлист {{name}}",
     "history": "История",
-    "likes": "Понравившиеся",
+    "reactions": "Понравившиеся",
     "playlists": "Плейлисты",
     "playlistNoResult": "В плейлисте пока нет видео",
     "subscriptions": "Подписки",

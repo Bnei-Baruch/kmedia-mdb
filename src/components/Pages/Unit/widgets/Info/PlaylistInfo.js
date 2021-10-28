@@ -24,7 +24,6 @@ const PlaylistInfo = ({ cuID, t, handleClose = null }) => {
   const dispatch = useDispatch();
 
   const playlists = useSelector(state => selectors.getList(state.my, MY_NAMESPACE_PLAYLISTS));
-  const total     = useSelector(state => selectors.getTotal(state.my, MY_NAMESPACE_PLAYLISTS));
   const language  = useSelector(state => settings.getLanguage(state.settings));
   const user      = useSelector(state => auth.getUser(state.auth));
   const saved     = playlists.filter(p => !!p.items);
@@ -83,9 +82,9 @@ const PlaylistInfo = ({ cuID, t, handleClose = null }) => {
 
   const save = () => {
     const adds = selected.filter(id => !saved.find(p => p.id));
-    adds.forEach(id => dispatch(actions.add(MY_NAMESPACE_PLAYLISTS, {
+    adds.forEach((id, i) => dispatch(actions.add(MY_NAMESPACE_PLAYLISTS, {
       id,
-      items: [{ position: -1, content_unit_uid: cuID }],
+      items: [{ position: saved.length + i + 1, content_unit_uid: cuID }],
       changeItems: true
     })));
     const deletes = saved.filter(p => !selected.includes(p.id));

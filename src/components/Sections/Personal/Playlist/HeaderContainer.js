@@ -19,7 +19,7 @@ const PlaylistHeaderContainer = ({ playlist }) => {
   const save = name => dispatch(actions.edit(MY_NAMESPACE_PLAYLISTS, { id: playlist.id, name }));
 
   const confirmSuccess = () => {
-    dispatch(actions.remove(MY_NAMESPACE_PLAYLISTS, { ids: [playlist.id] }));
+    dispatch(actions.remove(MY_NAMESPACE_PLAYLISTS, { id: playlist.id }));
     //wait for remove from server
     setTimeout(() => history.push(`/${language}/personal`), 100);
   };

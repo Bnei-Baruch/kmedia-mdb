@@ -66,7 +66,7 @@ const fetchSuccess = createAction(FETCH_SUCCESS);
 const fetchFailure = createAction(FETCH_FAILURE);
 
 const fetchOne        = createAction(FETCH_ONE, (namespace, params) => ({ namespace, ...params }));
-const fetchOneSuccess = createAction(FETCH_ONE_SUCCESS, (namespace, params) => ({ namespace, ...params }));
+const fetchOneSuccess = createAction(FETCH_ONE_SUCCESS);
 
 const add        = createAction(ADD, (namespace, params) => ({ namespace, ...params }));
 const addSuccess = createAction(ADD_SUCCESS);
@@ -113,7 +113,7 @@ const initialNamespaces = MY_NAMESPACES.reduce((acc, n) => {
   acc[n] = {
     keys: [],
     byKey: {},
-    total: null,
+    total: 0,
     wip: false,
     errors: null,
     pageNo: 0,
@@ -122,27 +122,22 @@ const initialNamespaces = MY_NAMESPACES.reduce((acc, n) => {
   return acc;
 }, {});
 
-const initialCount = MY_REACTIONS_TYPES.reduce((acc, t) => {
-  acc[t] = 0;
-  return acc;
-}, {});
-
 const onSetPage = (draft, { namespace, pageNo }) => draft[namespace].pageNo = pageNo;
 
 const onFetch = (draft, { namespace }) => {
-  draft[namespace].total  = null;
+  draft[namespace].total  = 0;
   draft[namespace].wip    = true;
   draft[namespace].errors = false;
   return draft;
 };
 
-const onFetchSuccess = (draft, { namespace, items = [], total, uids }) => {
+const onFetchSuccess = (draft, { namespace, items, total, uids }) => {
   draft[namespace].total  = total;
   draft[namespace].wip    = false;
   draft[namespace].errors = false;
 
   const keys = [];
-  Object.values(items).forEach(x => {
+  Object.values(items || []).forEach(x => {
     const { key } = getMyItemKey(namespace, x);
     keys.push(key);
     draft[namespace].byKey[key] = x;
@@ -177,7 +172,8 @@ const onAddSuccess = (draft, { namespace, item }) => {
   const { key }               = getMyItemKey(namespace, item);
   draft[namespace].byKey[key] = item;
   draft[namespace].total      = draft[namespace].total + 1;
-  if (namespace === MY_NAMESPACE_REACTIONS) ++draft.reactionsCount[item.kind];
+  if (namespace === MY_NAMESPACE_REACTIONS)
+    draft.reactionsCount[key] = draft.reactionsCount[key] ? draft.reactionsCount[key] + 1 : 1;
 
   draft[namespace].wip    = false;
   draft[namespace].errors = false;
@@ -194,11 +190,13 @@ const onEditSuccess = (draft, { namespace, item }) => {
   return draft;
 };
 
-const onRemoveSuccess = (draft, { namespace, key }) => {
+const onRemoveSuccess = (draft, { namespace, item }) => {
+  const { key }            = getMyItemKey(namespace, item);
   draft[namespace].keys    = draft[namespace].keys.filter(k => k === key);
   draft[namespace].deleted = true;
-  --draft[namespace].total;
-  if (namespace === MY_NAMESPACE_REACTIONS) --draft.reactionsCount[key];
+  draft[namespace].total   = draft[namespace].total - 1;
+  if (namespace === MY_NAMESPACE_REACTIONS)
+    draft.reactionsCount[key] = draft.reactionsCount[key] ? draft.reactionsCount[key] - 1 : 0;
 
   draft[namespace].wip    = false;
   draft[namespace].errors = false;
@@ -232,7 +230,7 @@ export const reducer = handleActions({
   [SET_DELETED]: onSetDeleted,
 
   [REACTION_COUNT_SUCCESS]: onReactionsCountSuccess,
-}, { ...initialNamespaces, reactionsCount: initialCount });
+}, { reactionsCount: {}, ...initialNamespaces });
 
 /* Selectors */
 const getList      = (state, namespace) => state[namespace].keys.map(key => getItemByKey(state, namespace, key));

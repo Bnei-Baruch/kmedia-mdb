@@ -663,7 +663,7 @@
     "newPlaylistSuccessful": "New playlist {{name}} created",
     "addToPlaylistSuccessful": "Added to playlist {{name}}",
     "history": "History",
-    "likes": "Liked videos",
+    "reactions": "Liked videos",
     "playlists": "Playlists",
     "playlistNoResult": "No videos in this playlist",
     "subscriptions": "Subscriptions",

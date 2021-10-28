@@ -46,7 +46,7 @@ const PlaylistHeader = ({ confirmSuccess, save, playlist, t }) => {
           <PlaylistPlayIcon className="playlist_icon" />
           {nameTag}
           <Header.Subheader className="display-iblock margin-right-8 margin-left-8">
-            {`${playlist.total} ${t('pages.collection.items.programs-collection')}`}
+            {`${playlist.total_items} ${t('pages.collection.items.programs-collection')}`}
           </Header.Subheader>
         </Header>
         <div>

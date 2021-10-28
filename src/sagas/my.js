@@ -146,8 +146,12 @@ function* remove(action) {
   if (!token) return;
   const { namespace, ...params } = action.payload;
   try {
-    yield call(Api.my, namespace, params, token, 'DELETE');
-    yield put(actions.removeSuccess({ namespace, ...params }));
+    const { data } = yield call(Api.my, namespace, { ...params }, token, 'DELETE');
+    if (namespace === MY_NAMESPACE_PLAYLISTS && params.changeItems) {
+      yield put(actions.fetchOneSuccess({ namespace, item: data }));
+    } else {
+      yield put(actions.removeSuccess({ namespace, item: params }));
+    }
   } catch (err) {
     console.log(err);
   }

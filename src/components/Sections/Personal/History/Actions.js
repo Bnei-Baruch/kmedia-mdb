@@ -14,7 +14,7 @@ const Actions = ({ cuId, id, t }) => {
   const removeItem = e => {
     e.preventDefault();
     e.stopPropagation();
-    dispatch(actions.remove(MY_NAMESPACE_HISTORY, { ids: [id] }));
+    dispatch(actions.remove(MY_NAMESPACE_HISTORY, { id }));
   };
 
   const handleOpen = e => {

@@ -7,14 +7,14 @@ import { actions } from '../../../../redux/modules/my';
 import { MY_NAMESPACE_REACTIONS } from '../../../../helpers/consts';
 import PlaylistInfo from '../../../Pages/Unit/widgets/Info/PlaylistInfo';
 
-const Actions = ({ cuId, id, t }) => {
+const Actions = ({ cuId, params, t }) => {
   const [open, setOpen] = useState();
   const dispatch        = useDispatch();
 
   const removeItem = e => {
     e.preventDefault();
     e.stopPropagation();
-    dispatch(actions.remove(MY_NAMESPACE_REACTIONS, { ids: [id] }));
+    dispatch(actions.remove(MY_NAMESPACE_REACTIONS, params));
   }
 
   const handleOpen = e => {

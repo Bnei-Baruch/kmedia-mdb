@@ -28,7 +28,7 @@ const PlaylistHeaderMobile = ({ confirmSuccess, save, playlist, t }) => {
 
   const handleConfirmCancel = () => setConfirm(false);
 
-  const nameTag   = isEditName ? (
+  const nameTag = isEditName ? (
     <Header.Subheader>
       <Input type="text" value={name} onChange={handleChangeName} maxLength={30} />
       <Button
@@ -50,7 +50,7 @@ const PlaylistHeaderMobile = ({ confirmSuccess, save, playlist, t }) => {
         <PlaylistPlayIcon className="playlist_icon" />
         {nameTag}
         <Header.Subheader>
-          {`${playlist.total} ${t('pages.collection.items.programs-collection')}`}
+          {`${playlist.total_items} ${t('pages.collection.items.programs-collection')}`}
         </Header.Subheader>
       </Header>
       <div className="summary-container">

@@ -26,7 +26,7 @@ const Page      = ({ location, t }) => {
   const pageNo   = useSelector(state => selectors.getPageNo(state.my, MY_NAMESPACE_REACTIONS));
   const total    = useSelector(state => selectors.getTotal(state.my, MY_NAMESPACE_REACTIONS));
   const language = useSelector(state => settings.getLanguage(state.settings));
-  const items    = useSelector(state => selectors.getItems(state.my, MY_NAMESPACE_REACTIONS)) || [];
+  const items    = useSelector(state => selectors.getList(state.my, MY_NAMESPACE_REACTIONS));
   const wip      = useSelector(state => selectors.getWIP(state.my, MY_NAMESPACE_REACTIONS));
   const err      = useSelector(state => selectors.getErr(state.my, MY_NAMESPACE_REACTIONS));
   const deleted  = useSelector(state => selectors.getDeleted(state.my, MY_NAMESPACE_REACTIONS));
@@ -64,7 +64,7 @@ const Page      = ({ location, t }) => {
             <div className="summary-container align_items_center">
               <Header as={'h2'} className="my_header">
                 <Icon name="heart outline" className="display-iblock" />
-                {t('personal.likes')}
+                {t('personal.reactions')}
                 <Header.Subheader className="display-iblock margin-right-8 margin-left-8">
                   {`${total} ${t('personal.videosOnList')}`}
                 </Header.Subheader>
@@ -83,8 +83,8 @@ const Page      = ({ location, t }) => {
               <Container className="padded">
                 {items.map((x, i) =>
                   (
-                    <CUItemContainer id={x.content_unit_uid} asList={true} key={i}>
-                      <ReactionActions cuId={x.content_unit_uid} id={x.id} />
+                    <CUItemContainer id={x.subject_uid} asList={true} key={i}>
+                      <ReactionActions cuId={x.content_unit_uid} params={x} />
                     </CUItemContainer>
                   )
                 )}
