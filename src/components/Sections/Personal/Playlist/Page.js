@@ -75,6 +75,7 @@ const Page = ({ t }) => {
       np = currentItem.position;
       cp = nextItem.position;
     }
+
     const _items = [{ ...currentItem, position: cp || 1 }, { ...nextItem, position: np || 1 }];
     dispatch(actions.edit(MY_NAMESPACE_PLAYLISTS, { id, items: _items, changeItems: true }));
   };
