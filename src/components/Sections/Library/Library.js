@@ -77,19 +77,17 @@ const Library = ({ data, source, downloadAllowed, t }) => {
   useEffect(() => {
     if (!data?.[language]) {
       clearAudioInfo();
-      return;
-    }
-
-    const { mp3 } = data[language];
-    if (!mp3) {
-      clearAudioInfo();
-      return;
-    }
-
-    const newAudioInfo = { url: physicalFile(mp3, true), name: mp3.name };
-    if (audioInfo?.url !== newAudioInfo.url) {
-      setAudioInfo(newAudioInfo);
-      setPlaying(false);
+    } else {
+      const {mp3} = data[language];
+      if (!mp3) {
+        clearAudioInfo();
+      } else {
+        const newAudioInfo = {url: physicalFile(mp3, true), name: mp3.name};
+        if (audioInfo?.url !== newAudioInfo.url) {
+          setAudioInfo(newAudioInfo);
+          setPlaying(false);
+        }
+      }
     }
   }, [data, language]);
 
