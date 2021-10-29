@@ -119,7 +119,7 @@ const Library = ({ data, source, downloadAllowed, t }) => {
 
   calcAudioInfo();
 
-  function getAudioPlayer() {
+  const getAudioPlayer = () => {
     return audioInfo && <span className="library-audio-player">
       { playing ?
         <audio controls src={audioInfo?.url} autoPlay={true} preload="metadata" /> :
