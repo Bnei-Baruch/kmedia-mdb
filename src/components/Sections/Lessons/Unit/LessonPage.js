@@ -8,12 +8,15 @@ import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { actions, selectors } from '../../../../redux/modules/mdb';
 import PlaylistCollectionContainer from '../../../Pages/PlaylistCollection/Container';
+import { selectors as settings } from '../../../../redux/modules/settings';
 
 const LessonPage = ({ t }) => {
   const { id }                        = useParams();
   const unit                          = useSelector(state => selectors.getDenormContentUnit(state.mdb, id));
   const wip                           = useSelector(state => selectors.getWip(state.mdb).units[id]);
   const err                           = useSelector(state => selectors.getErrors(state.mdb).units[id]);
+  const language = useSelector(state => settings.getLanguage(state.settings));
+
   //fix bug with unit without collection
   const [needToFetch, setNeedToFetch] = useState();
 
@@ -21,7 +24,7 @@ const LessonPage = ({ t }) => {
 
   useEffect(() => {
     setNeedToFetch(!unit || Object.keys(unit.collections).length === 0);
-  }, [id]);
+  }, [id, language]);
 
   useEffect(() => {
     if (!wip && !err && needToFetch) {

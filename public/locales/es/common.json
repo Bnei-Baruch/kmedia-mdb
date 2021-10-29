@@ -111,8 +111,10 @@
     "more": "Mas",
     "copy-link": "Copiar enlace",
     "search": "Buscar",
-    "previous": "Anterior",
-    "next": "Siguiente",
+    "previous-lesson": "Anterior",
+    "next-lesson": "Siguiente",
+    "previous-article": "Artículo anterior",
+    "next-article": "Artículo siguiente",
     "copy": "Copiar",
     "view-all": "Ver todo",
     "save": "Guardar",
@@ -136,7 +138,7 @@
       "loading": "Error al cargar el video"
     },
     "header": {
-      "series-by-topic": "Lessons collection on the topic of:"
+      "series-by-topic": "Serie de lecciones sobre el tema:"
     }
   },
   "playlist": {

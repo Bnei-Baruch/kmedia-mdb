@@ -21,7 +21,7 @@ const getNextLink = (langDir, t, link) => (
     <Link
       to={link}
       className="avbox__playlist-next-button"
-      title={t('buttons.next')}
+      title={t('buttons.next-lesson')}
     >
       <Icon size="large" name={`triangle ${langDir === 'ltr' ? 'right' : 'left'}`} />
     </Link> :
@@ -35,7 +35,7 @@ const getPrevLink = (langDir, t, link) => (
   <Link
     to={link}
     className="avbox__playlist-prev-button"
-    title={t('buttons.previous')}
+    title={t('buttons.previous-lesson')}
   >
     <Icon size="large" name={`triangle ${langDir === 'ltr' ? 'left' : 'right'}`} />
   </Link>

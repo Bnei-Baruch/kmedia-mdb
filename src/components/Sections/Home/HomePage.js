@@ -132,7 +132,7 @@ const HomePage = ({
   banners,
   language,
   location,
-  latestUnits = [],
+  latestItems = [],
   latestLesson = null,
   latestBlogPosts = [],
   latestTweets = [],
@@ -158,7 +158,7 @@ const HomePage = ({
       {renderLatestLessonAndBanner(latestLesson, banner)}
       {renderActiveSectionsGrid(t, isMobileDevice)}
 
-      <LatestUpdatesSection latestUnits={latestUnits} t={t} />
+      <LatestUpdatesSection latestItems={latestItems} t={t} />
 
       {renderBlogPostsAndTweets(latestBlogPosts, latestTweets, language, t)}
     </div>
@@ -168,7 +168,7 @@ const HomePage = ({
 HomePage.propTypes = {
   location: shapes.HistoryLocation.isRequired,
   latestLesson: shapes.LessonCollection,
-  latestUnits: PropTypes.arrayOf(shapes.ContentUnit),
+  latestItems: PropTypes.arrayOf(PropTypes.oneOfType([shapes.ContentUnit, shapes.Collection])),
   latestBlogPosts: PropTypes.arrayOf(shapes.BlogPost),
   latestTweets: PropTypes.arrayOf(shapes.Tweet),
   banner: shapes.Banner,
