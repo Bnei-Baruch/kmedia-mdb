@@ -338,7 +338,8 @@ export const getSectionForTranslation = content_type => {
   }
 };
 
-export const noop = () => {};
+export const noop = () => {
+};
 
 // Used in React hooks to remember previous props.
 export const usePrevious = value => {
@@ -415,7 +416,7 @@ export const imageByUnit = (unit, link) => {
   }
 };
 
-export const cuPartNameByCCUType = (ct) => {
+export const cuPartNameByCCUType = ct => {
   const prefix = 'pages.unit.info.';
   switch (ct) {
     case CT_DAILY_LESSON:

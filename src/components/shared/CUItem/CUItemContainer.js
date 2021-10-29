@@ -8,8 +8,6 @@ import { selectors as settings } from '../../../redux/modules/settings';
 import { selectors as recommended } from '../../../redux/modules/recommended';
 import {
   CT_CLIPS,
-  CT_DAILY_LESSON,
-  CT_LESSON_PART, CT_SPECIAL_LESSON,
   CT_VIDEO_PROGRAM,
   CT_VIRTUAL_LESSONS
 } from '../../../helpers/consts';
