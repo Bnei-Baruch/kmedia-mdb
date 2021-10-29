@@ -74,31 +74,7 @@ const Library = ({ data, source, downloadAllowed, t }) => {
     }
   }, [data, language, source, dispatch]);
 
-  if (!data) {
-    return <Segment basic>&nbsp;</Segment>;
-  }
-
-  const pageNumberHandler = pageNumber => {
-    setPageNumber(pageNumber);
-    updateQuery(history, query => ({
-      ...query,
-      page: pageNumber,
-    }));
-  };
-
-  const handleLanguageChanged = (e, language) => {
-    updateQuery(history, query => ({ ...query, language }));
-    setLanguage(language);
-  };
-
-  const clearAudioInfo = () => {
-    if (audioInfo !== null) {
-      setAudioInfo(null);
-      setPlaying(false);
-    }
-  }
-
-  const calcAudioInfo = () => {
+  useEffect(() => {
     if (!data?.[language]) {
       clearAudioInfo();
       return;
@@ -115,9 +91,31 @@ const Library = ({ data, source, downloadAllowed, t }) => {
       setAudioInfo(newAudioInfo);
       setPlaying(false);
     }
+  }, [data, language]);
+
+  const clearAudioInfo = () => {
+    if (audioInfo !== null) {
+      setAudioInfo(null);
+      setPlaying(false);
+    }
+  }
+
+  if (!data) {
+    return <Segment basic>&nbsp;</Segment>;
+  }
+
+  const pageNumberHandler = pageNumber => {
+    setPageNumber(pageNumber);
+    updateQuery(history, query => ({
+      ...query,
+      page: pageNumber,
+    }));
   };
 
-  calcAudioInfo();
+  const handleLanguageChanged = (e, language) => {
+    updateQuery(history, query => ({ ...query, language }));
+    setLanguage(language);
+  };
 
   const getAudioPlayer = () => {
     return audioInfo && <span className="library-audio-player">
