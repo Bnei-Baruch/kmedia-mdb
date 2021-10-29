@@ -37,7 +37,7 @@ const Library = ({ data, source, downloadAllowed, t }) => {
   const [language, setLanguage]     = useState(null);
   const [languages, setLanguages]   = useState([]);
   const [playing, setPlaying]       = useState(false);
-  const [audioInfo, setAudioInfo]       = useState(null);
+  const [audioInfo, setAudioInfo]   = useState(null);
 
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
