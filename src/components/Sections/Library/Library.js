@@ -74,6 +74,30 @@ const Library = ({ data, source, downloadAllowed, t }) => {
     }
   }, [data, language, source, dispatch]);
 
+  useEffect(() => {
+    if (!data?.[language]) {
+      clearAudioInfo();
+    } else {
+      const { mp3 } = data[language];
+      if (!mp3) {
+        clearAudioInfo();
+      } else {
+        const newAudioInfo = { url: physicalFile(mp3, true), name: mp3.name };
+        if (audioInfo?.url !== newAudioInfo.url) {
+          setAudioInfo(newAudioInfo);
+          setPlaying(false);
+        }
+      }
+    }
+  }, [data, language]);
+
+  const clearAudioInfo = () => {
+    if (audioInfo !== null) {
+      setAudioInfo(null);
+      setPlaying(false);
+    }
+  }
+
   if (!data) {
     return <Segment basic>&nbsp;</Segment>;
   }
@@ -91,42 +115,12 @@ const Library = ({ data, source, downloadAllowed, t }) => {
     setLanguage(language);
   };
 
-  const clearAudioInfo = () => {
-    if (audioInfo !== null) {
-      setAudioInfo(null);
-      setPlaying(false);
+  const getAudioPlayer = () => audioInfo && <span className="library-audio-player">
+    { playing ?
+      <audio controls src={audioInfo?.url} autoPlay={true} preload="metadata" /> :
+      <a onClick={() => setPlaying(true)}>{t('sources-library.play-audio-file')}<PlayAudioIcon className="playAudioIcon" /></a>
     }
-  }
-
-  const calcAudioInfo = () => {
-    if (!data?.[language]) {
-      clearAudioInfo();
-      return;
-    }
-
-    const { mp3 } = data[language];
-    if (!mp3) {
-      clearAudioInfo();
-      return;
-    }
-
-    const newAudioInfo = { url: physicalFile(mp3, true), name: mp3.name };
-    if (audioInfo?.url !== newAudioInfo.url) {
-      setAudioInfo(newAudioInfo);
-      setPlaying(false);
-    }
-  };
-
-  calcAudioInfo();
-
-  const getAudioPlayer = () => {
-    return audioInfo && <span className="library-audio-player">
-      { playing ?
-        <audio controls src={audioInfo?.url} autoPlay={true} preload="metadata" /> :
-        <a onClick={() => setPlaying(true)}>{t('sources-library.play-audio-file')}<PlayAudioIcon className="playAudioIcon" /></a>
-      }
-    </span>;
-  }
+  </span>
 
   const getLanguageBar = () => {
     const languageBar = languages.length > 0 &&
