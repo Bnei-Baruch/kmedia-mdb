@@ -501,7 +501,8 @@
     "default": "Default",
     "filter": "Filter...",
     "share-title": "Read this article",
-    "group-articles": "Group Articles"
+    "group-articles": "Group Articles",
+    "play-audio-file": "Riproduci il file audio"
   },
   "topics": {
     "header": {

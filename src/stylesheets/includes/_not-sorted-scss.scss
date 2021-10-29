@@ -1826,6 +1826,42 @@
   text-align: left;
 }
 
+.library-audio-player {
+  margin-left: 0;
+  margin-right: 20px;
+  cursor: pointer;
+  a {
+    svg {
+      position: relative;
+      top: 5px;
+      margin-right: 5px;
+      margin-left: 5px;
+    }
+  }
+  audio {
+    height: 25px;
+    position: relative;
+    top: 7px;
+    @include mobile {
+      margin-top: 15px;
+      height: 54px;
+      width: 100%;
+    }
+  }
+  .playAudioIcon {
+    margin-left: 10px;
+  }
+}
+
+.rtl .library-audio-player {
+  margin-left: 20px;
+  margin-right: 0;
+  .playAudioIcon {
+    margin-right: 10px;
+    margin-left: 0;
+  }
+}
+
 .my_playlist_item {
   position: relative;
 

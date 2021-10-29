@@ -497,7 +497,8 @@
     "az": "AZ",
     "default": "Por Omisión",
     "filter": "Filtro...",
-    "share-title": "Lee este artículo"
+    "share-title": "Lee este artículo",
+    "play-audio-file": "Reproducir el archivo de audio"
   },
   "topics": {
     "header": {
