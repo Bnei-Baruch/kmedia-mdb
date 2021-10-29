@@ -30,6 +30,7 @@ import {
   CT_MEAL,
   CT_MEALS,
   CT_PICNIC,
+  CT_SOURCE,
   CT_SONGS,
   CT_SPECIAL_LESSON,
   CT_UNITY_DAY,
@@ -112,7 +113,7 @@ export const canonicalLink = (entity, mediaLang) => {
   }
 
   // source
-  if (entity.content_type === 'SOURCE') {
+  if (entity.content_type === CT_SOURCE) {
     return `/sources/${entity.id}`;
   }
 
