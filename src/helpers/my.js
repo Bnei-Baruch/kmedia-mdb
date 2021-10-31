@@ -6,19 +6,25 @@ import {
 } from './consts';
 
 export const getMyItemKey = (namespace, item) => {
-  let key;
+  let key = null;
+  if (!item) return { key, item };
+
   switch (namespace) {
     case MY_NAMESPACE_HISTORY:
-      key = item.content_unit_uid;
+      key = item.id;
       break;
     case MY_NAMESPACE_REACTIONS:
-      key = `${item.kind}_${item.subject_type}_${item.subject_uid}`;
+      const { kind, subject_type, subject_uid } = item;
+
+      key = !!(kind && subject_type && subject_uid) ? `${kind}_${subject_type}_${subject_uid}` : null;
       break;
     case MY_NAMESPACE_PLAYLISTS:
       key = item.id;
       break;
     case MY_NAMESPACE_SUBSCRIPTIONS:
-      key = `${item.collection_uid}_${item.content_type}`;
+      const { collection_uid, content_type } = item;
+
+      key = !!(collection_uid && content_type) ? `${collection_uid}_${content_type}` : null;
       break;
     default:
       key = item.id;

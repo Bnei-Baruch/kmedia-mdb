@@ -69,12 +69,18 @@ const PlaylistHeaderMobile = ({ confirmSuccess, save, playlist, t }) => {
             <Icon name={'trash alternate outline'} size="large" />
           </Button>
         </div>
-        <Link to={`/${MY_NAMESPACE_PLAYLISTS}/${playlist.id}`}>
-          <Button basic className="clear_button">
-            <Icon name={'play circle outline'} className="margin-left-8 margin-right-8" size="big" />
-            {t('personal.playAll')}
-          </Button>
-        </Link>
+        {
+          (playlist.total_items > 0) && <Link to={`/${MY_NAMESPACE_PLAYLISTS}/${playlist.id}`}>
+            <Button basic className="clear_button">
+              <Icon
+                name={'play circle outline'}
+                className="margin-left-8 margin-right-8"
+                size="big"
+              />
+              {t('personal.playAll')}
+            </Button>
+          </Link>
+        }
       </div>
     </Container>
   );

@@ -131,13 +131,13 @@ const onFetch = (draft, { namespace }) => {
   return draft;
 };
 
-const onFetchSuccess = (draft, { namespace, items, total, uids }) => {
+const onFetchSuccess = (draft, { namespace, items, total }) => {
   draft[namespace].total  = total;
   draft[namespace].wip    = false;
   draft[namespace].errors = false;
 
   const keys = [];
-  Object.values(items || []).forEach(x => {
+  Object.values(items).forEach(x => {
     const { key } = getMyItemKey(namespace, x);
     keys.push(key);
     draft[namespace].byKey[key] = x;
@@ -171,7 +171,8 @@ const onFetchOneSuccess = (draft, { namespace, item }) => {
 const onAddSuccess = (draft, { namespace, item }) => {
   const { key }               = getMyItemKey(namespace, item);
   draft[namespace].byKey[key] = item;
-  draft[namespace].total      = draft[namespace].total + 1;
+  draft[namespace].keys.push(key);
+  draft[namespace].total = draft[namespace].total + 1;
   if (namespace === MY_NAMESPACE_REACTIONS)
     draft.reactionsCount[key] = draft.reactionsCount[key] ? draft.reactionsCount[key] + 1 : 1;
 
@@ -192,7 +193,8 @@ const onEditSuccess = (draft, { namespace, item }) => {
 
 const onRemoveSuccess = (draft, { namespace, item }) => {
   const { key }            = getMyItemKey(namespace, item);
-  draft[namespace].keys    = draft[namespace].keys.filter(k => k === key);
+  draft[namespace].keys    = draft[namespace].keys.filter(k => k !== key);
+  draft[namespace].byKey[key] = null;
   draft[namespace].deleted = true;
   draft[namespace].total   = draft[namespace].total - 1;
   if (namespace === MY_NAMESPACE_REACTIONS)

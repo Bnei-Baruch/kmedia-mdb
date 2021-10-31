@@ -5,7 +5,12 @@ import { Button, Icon, Menu, Modal } from 'semantic-ui-react';
 
 import { selectors } from '../../../../../redux/modules/auth';
 import { actions, selectors as my } from '../../../../../redux/modules/my';
-import { MY_NAMESPACE_REACTIONS, MY_NAMESPACE_SUBSCRIPTIONS, MY_REACTION_KINDS } from '../../../../../helpers/consts';
+import {
+  MY_NAMESPACE_HISTORY,
+  MY_NAMESPACE_REACTIONS,
+  MY_NAMESPACE_SUBSCRIPTIONS,
+  MY_REACTION_KINDS
+} from '../../../../../helpers/consts';
 import { getMyItemKey } from '../../../../../helpers/my';
 import SubscribeBtn from '../../../../shared/SubscribeBtn';
 import * as shapes from '../../../../shapes';
@@ -15,28 +20,31 @@ import PlaylistInfo from './PlaylistInfo';
 const PersonalInfo = ({ unit = {}, t, collection }) => {
   const [isNeedLogin, setIsNeedLogin] = useState();
 
-  const dispatch = useDispatch();
-  const user     = useSelector(state => selectors.getUser(state.auth));
-
   const { id, content_type } = unit;
-
-  const likeParams = {
+  const likeParams           = {
     kind: MY_REACTION_KINDS.LIKE,
     subject_type: content_type,
     subject_uid: id
   };
 
+  const user           = useSelector(state => selectors.getUser(state.auth));
   const reactionsCount = useSelector(state => my.getReactionsCount(state.my, MY_REACTION_KINDS.LIKE));
 
   const { key }  = getMyItemKey(MY_NAMESPACE_REACTIONS, likeParams);
   const reaction = useSelector(state => my.getItemByKey(state.my, MY_NAMESPACE_REACTIONS, key));
+  const deleted  = useSelector(state => my.getDeleted(state.my, MY_NAMESPACE_REACTIONS));
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (key && !reaction) {
+      dispatch(actions.fetch(MY_NAMESPACE_REACTIONS, likeParams));
+    }
+    dispatch(actions.reactionsCount({ 'uids': [id] }));
+  }, [dispatch, user, key]);
 
   useEffect(() => {
-    if (id) {
-      dispatch(actions.fetch(MY_NAMESPACE_REACTIONS, likeParams));
-      dispatch(actions.reactionsCount({ 'uids': [id] }));
-    }
-  }, [dispatch, id, user]);
+    deleted && dispatch(actions.setDeleted(MY_NAMESPACE_REACTIONS, false));
+  }, [deleted]);
 
   if (!unit) return null;
 
@@ -90,4 +98,8 @@ PersonalInfo.propTypes = {
 
 };
 
-export default withNamespaces()(PersonalInfo);
+const areEqual = (prevProps, nextProps) => {
+  return nextProps.unit && prevProps.unit?.id === nextProps.unit.id;
+};
+
+export default React.memo(withNamespaces()(PersonalInfo), areEqual);

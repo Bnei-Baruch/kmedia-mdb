@@ -44,7 +44,7 @@ const SubscribeBtn = ({ unit = {}, t, collection }) => {
     if (subsByType || subsByCO) {
       dispatch(actions.fetch(MY_NAMESPACE_SUBSCRIPTIONS, subParams));
     }
-  }, [dispatch, id, user, subsByCO, subsByType]);
+  }, [dispatch, key]);
 
   const subsUnsubs = s => {
     if (!user)

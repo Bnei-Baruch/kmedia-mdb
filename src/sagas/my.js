@@ -3,11 +3,12 @@ import { call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
 import { actions, types } from '../redux/modules/my';
 import Api from '../helpers/Api';
 import { selectors as authSelectors } from '../redux/modules/auth';
-import { actions as mdbActions } from '../redux/modules/mdb';
+import { actions as mdbActions, selectors as mdbSelectors } from '../redux/modules/mdb';
 import { actions as recommendedActions } from '../redux/modules/recommended';
 import {
+  IsCollectionContentType,
   MY_NAMESPACE_HISTORY,
-  MY_NAMESPACE_PLAYLISTS,
+  MY_NAMESPACE_PLAYLISTS, MY_NAMESPACE_REACTIONS,
   MY_NAMESPACE_SUBSCRIPTIONS
 } from '../helpers/consts';
 import { updateQuery } from './helpers/url';
@@ -28,13 +29,19 @@ function* fetch(action) {
   const language = yield select(state => settings.getLanguage(state.settings));
   try {
     const { data } = yield call(Api.my, namespace, params, token);
-
+    if (!data?.items) {
+      yield put(actions.fetchSuccess({ namespace, items: [] }));
+      return;
+    }
     let cu_uids = [];
     let co_uids = [];
 
     switch (namespace) {
       case MY_NAMESPACE_HISTORY:
         cu_uids = data.items?.map(x => x.content_unit_uid) || [];
+        break;
+      case MY_NAMESPACE_REACTIONS:
+        cu_uids = data.items?.filter(x => !IsCollectionContentType(x.subject_type)).map(x => x.subject_uid) || [];
         break;
       case MY_NAMESPACE_PLAYLISTS:
         cu_uids = data.items?.filter(p => p.items)
@@ -46,7 +53,8 @@ function* fetch(action) {
         break;
       default:
     }
-
+    cu_uids = yield select(state => mdbSelectors.skipFetchedCU(state.mdb, cu_uids));
+    co_uids = yield select(state => mdbSelectors.skipFetchedCO(state.mdb, co_uids));
     if (cu_uids.length > 0) {
       const { data: { content_units } } = yield call(Api.units, {
         id: cu_uids,
@@ -123,7 +131,7 @@ function* add(action) {
   const { namespace, ...params } = action.payload;
   try {
     const { data } = yield call(Api.my, namespace, params, token, 'POST');
-    yield put(actions.addSuccess({ namespace, items: data }));
+    yield put(actions.addSuccess({ namespace, item: data }));
   } catch (err) {
     console.log(err);
   }

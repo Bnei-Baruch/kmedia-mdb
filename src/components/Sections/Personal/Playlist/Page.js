@@ -10,11 +10,7 @@ import { actions, selectors } from '../../../../redux/modules/my';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import { selectors as settings } from '../../../../redux/modules/settings';
 import { selectors as auth } from '../../../../redux/modules/auth';
-import {
-  MY_NAMESPACE_PLAYLIST_BY_ID,
-  MY_NAMESPACE_PLAYLIST_ITEMS,
-  MY_NAMESPACE_PLAYLISTS, MY_NAMESPACE_REACTIONS
-} from '../../../../helpers/consts';
+import { MY_NAMESPACE_PLAYLISTS } from '../../../../helpers/consts';
 import WipErr from '../../../shared/WipErr/WipErr';
 import CUItemContainer from '../../../shared/CUItem/CUItemContainer';
 import AlertModal from '../../../shared/AlertModal';
@@ -40,6 +36,7 @@ const Page = ({ t }) => {
     id && dispatch(actions.fetchOne(MY_NAMESPACE_PLAYLISTS, { id }));
   }, [id, language, user, dispatch]);
 
+
   const needToLogin = NeedToLogin({ t });
   if (needToLogin) return needToLogin;
 
@@ -47,7 +44,6 @@ const Page = ({ t }) => {
   if (wipErr) return wipErr;
 
   if (!playlist) return null;
-  if (playlist.total_items === 0) return <FrownSplash text={t('messages.not-found')} />;
 
   const link          = `/${language}/${MY_NAMESPACE_PLAYLISTS}/${id}`;
   const computerWidth = isMobileDevice ? 16 : 10;
@@ -80,9 +76,8 @@ const Page = ({ t }) => {
     dispatch(actions.edit(MY_NAMESPACE_PLAYLISTS, { id, items: _items, changeItems: true }));
   };
 
-  const renderItem = (x, i) => (
-    <>
-      {`position: ${x.position}`}
+  const renderItem = (x, i) => {
+    return (
       <CUItemContainer
         id={x.content_unit_uid}
         key={i}
@@ -118,8 +113,8 @@ const Page = ({ t }) => {
           />
         </div>
       </CUItemContainer>
-    </>
-  );
+    );
+  };
 
   return (
     <Grid className="avbox no-background">
@@ -132,7 +127,7 @@ const Page = ({ t }) => {
               <Container className="padded">
                 {items.map(renderItem)}
               </Container>
-            ) : null
+            ) : <FrownSplash text={t('messages.not-found')} />
           }
         </Grid.Column>
         {

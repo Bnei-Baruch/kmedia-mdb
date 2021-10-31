@@ -31,7 +31,7 @@ const PlaylistHeader = ({ confirmSuccess, save, playlist, t }) => {
 
   const handleConfirmCancel = () => setConfirm(false);
 
-  const nameTag   = isEditName ? (
+  const nameTag = isEditName ? (
     <>
       <Input type="text" value={name} onChange={handleChangeName} maxLength={30} />
       <Button content={t('buttons.save')} onClick={handleSave} className="margin-right-8 margin-left-8 uppercase" />
@@ -65,12 +65,14 @@ const PlaylistHeader = ({ confirmSuccess, save, playlist, t }) => {
           </Button>
         </div>
       </div>
-      <Link to={`/${MY_NAMESPACE_PLAYLISTS}/${playlist.id}`}>
-        <Button basic className="clear_button">
-          <Icon name={'play circle outline'} className="margin-left-8 margin-right-8" size="big" />
-          {t('personal.playAll')}
-        </Button>
-      </Link>
+      {
+        (playlist.total_items > 0) && (<Link to={`/${MY_NAMESPACE_PLAYLISTS}/${playlist.id}`}>
+          <Button basic className="clear_button">
+            <Icon name={'play circle outline'} className="margin-left-8 margin-right-8" size="big" />
+            {t('personal.playAll')}
+          </Button>
+        </Link>)
+      }
     </Container>
   );
 };

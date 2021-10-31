@@ -80,12 +80,7 @@ const PlaylistMyPage = ({ collection }) => {
     setUnit(newUnit);
   }, [selected, playlist?.items]);
 
-  if (!collection ||
-    !Array.isArray(collection.content_units) ||
-    !playlist ||
-    !unit) {
-    return null;
-  }
+  if (!playlist || !unit) return null;
 
   const { items }    = playlist;
   const PlaylistData = () =>
@@ -119,7 +114,7 @@ const PlaylistMyPage = ({ collection }) => {
               }
               <Container className="unit_container">
                 <Helmets.AVUnit unit={unit} language={language} />
-                <Info unit={unit} currentCollection={collection} />
+                <Info unit={unit} />
                 <Materials unit={unit} playlistComponent={PlaylistData} />
               </Container>
             </>

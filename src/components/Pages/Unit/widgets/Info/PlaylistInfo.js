@@ -30,8 +30,8 @@ const PlaylistInfo = ({ cuID, t, handleClose = null }) => {
 
   useEffect(() => {
     playlists.sort((a, b) => b.id - a.id);
-    const s = playlists.slice(-1 * countNew);
-    setSelected([...s, ...saved.map(x => x.id)]);
+    const s = playlists.slice(0, countNew);
+    setSelected([...s, ...saved]);
   }, [playlists.length, cuID]);
 
   const dir = getLanguageDirection(language);
@@ -40,11 +40,11 @@ const PlaylistInfo = ({ cuID, t, handleClose = null }) => {
     dispatch(actions.fetch(MY_NAMESPACE_PLAYLISTS, { 'exist_cu': cuID, order_by: 'id' }));
   };
 
-  const handleChange = (e, d) => {
-    if (d.checked) {
-      setSelected([d.value, ...selected]);
+  const handleChange = (checked, p) => {
+    if (checked) {
+      setSelected([p, ...selected]);
     } else {
-      setSelected(selected.filter(x => x !== d.value));
+      setSelected(selected.filter(x => x.id !== p.id));
     }
   };
 
@@ -63,6 +63,8 @@ const PlaylistInfo = ({ cuID, t, handleClose = null }) => {
     !!newPlaylist && dispatch(actions.add(MY_NAMESPACE_PLAYLISTS, { name: newPlaylist }));
     setAlertMsg(t('personal.newPlaylistSuccessful', { name: newPlaylist }));
     setCountNew(countNew + 1);
+    setIsNewPlaylist(false);
+    setNewPlaylist('');
   };
 
   const handleOpenModal = e => {
@@ -81,13 +83,13 @@ const PlaylistInfo = ({ cuID, t, handleClose = null }) => {
   };
 
   const save = () => {
-    const adds = selected.filter(id => !saved.find(p => p.id));
-    adds.forEach((id, i) => dispatch(actions.add(MY_NAMESPACE_PLAYLISTS, {
-      id,
-      items: [{ position: saved.length + i + 1, content_unit_uid: cuID }],
+    const adds = selected.filter(p => !saved.some(x => p.id === x.id));
+    adds.forEach((p, i) => dispatch(actions.add(MY_NAMESPACE_PLAYLISTS, {
+      id: p.id,
+      items: [{ position: p.max_position + 1, content_unit_uid: cuID }],
       changeItems: true
     })));
-    const deletes = saved.filter(p => !selected.includes(p.id));
+    const deletes = saved.filter(p => !selected.some(x => p.id === x.id));
     deletes.forEach(p => dispatch(actions.remove(MY_NAMESPACE_PLAYLISTS, {
       id: p.id,
       ids: p.items?.map(pi => pi.id),
@@ -107,9 +109,8 @@ const PlaylistInfo = ({ cuID, t, handleClose = null }) => {
     <List.Item key={p.id}>
       <List.Content floated='left'>
         <Checkbox
-          value={p.id}
-          checked={selected.includes(p.id)}
-          onChange={handleChange}
+          checked={selected.some(x => x.id === p.id)}
+          onChange={(e, { checked }) => handleChange(checked, p)}
         />
       </List.Content>
       <List.Content>
