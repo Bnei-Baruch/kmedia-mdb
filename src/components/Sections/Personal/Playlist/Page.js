@@ -76,45 +76,43 @@ const Page = ({ t }) => {
     dispatch(actions.edit(MY_NAMESPACE_PLAYLISTS, { id, items: _items, changeItems: true }));
   };
 
-  const renderItem = (x, i) => {
-    return (
-      <CUItemContainer
-        id={x.content_unit_uid}
-        key={i}
-        link={`${link}?ap=${i}`}
-        asList
-      >
-        <div className="my_playlist_actions">
-          <Button
-            basic
-            icon="long arrow alternate up"
-            className="no-shadow"
-            disabled={i === 0}
-            onClick={e => changeItemPosition(e, i, true)}
-          />
-          <Popup
-            basic
-            content={t('personal.removeFromPlaylist')}
-            trigger={
-              <Button
-                basic
-                icon="remove circle"
-                className="no-shadow"
-                onClick={e => removeItem(e, x.id)}
-              />
-            }>
-          </Popup>
-          <Button
-            basic
-            icon="long arrow alternate down"
-            className="no-shadow"
-            disabled={i === items.length - 1}
-            onClick={e => changeItemPosition(e, i, false)}
-          />
-        </div>
-      </CUItemContainer>
-    );
-  };
+  const renderItem = (x, i) => (
+    <CUItemContainer
+      id={x.content_unit_uid}
+      key={i}
+      link={`${link}?ap=${i}`}
+      asList
+    >
+      <div className="my_playlist_actions">
+        <Button
+          basic
+          icon="long arrow alternate up"
+          className="no-shadow"
+          disabled={i === 0}
+          onClick={e => changeItemPosition(e, i, true)}
+        />
+        <Popup
+          basic
+          content={t('personal.removeFromPlaylist')}
+          trigger={
+            <Button
+              basic
+              icon="remove circle"
+              className="no-shadow"
+              onClick={e => removeItem(e, x.id)}
+            />
+          }>
+        </Popup>
+        <Button
+          basic
+          icon="long arrow alternate down"
+          className="no-shadow"
+          disabled={i === items.length - 1}
+          onClick={e => changeItemPosition(e, i, false)}
+        />
+      </div>
+    </CUItemContainer>
+  );
 
   return (
     <Grid className="avbox no-background">

@@ -39,6 +39,7 @@ const PersonalInfo = ({ unit = {}, t, collection }) => {
     if (key && !reaction) {
       dispatch(actions.fetch(MY_NAMESPACE_REACTIONS, likeParams));
     }
+
     dispatch(actions.reactionsCount({ 'uids': [id] }));
   }, [dispatch, user, key]);
 
@@ -98,8 +99,6 @@ PersonalInfo.propTypes = {
 
 };
 
-const areEqual = (prevProps, nextProps) => {
-  return nextProps.unit && prevProps.unit?.id === nextProps.unit.id;
-};
+const areEqual = (prevProps, nextProps) => nextProps.unit && prevProps.unit?.id === nextProps.unit.id;
 
 export default React.memo(withNamespaces()(PersonalInfo), areEqual);

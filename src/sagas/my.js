@@ -33,6 +33,7 @@ function* fetch(action) {
       yield put(actions.fetchSuccess({ namespace, items: [] }));
       return;
     }
+
     let cu_uids = [];
     let co_uids = [];
 
@@ -53,6 +54,7 @@ function* fetch(action) {
         break;
       default:
     }
+
     cu_uids = yield select(state => mdbSelectors.skipFetchedCU(state.mdb, cu_uids));
     co_uids = yield select(state => mdbSelectors.skipFetchedCO(state.mdb, co_uids));
     if (cu_uids.length > 0) {
