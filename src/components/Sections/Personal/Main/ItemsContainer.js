@@ -47,14 +47,14 @@ const ItemsContainer = ({ pageSize = 8, pageNo = 1, t, namespace, withSeeAll }) 
     case MY_NAMESPACE_HISTORY:
       children = (
         items.map(x => {
-            const { key } = getMyItemKey(namespace, x);
-            return <CUItem
-              id={x.content_unit_uid}
-              key={key}
-              playTime={x.data.current_time}
-              asList={isMobileDevice}
-            />;
-          }
+          const { key } = getMyItemKey(namespace, x);
+          return <CUItem
+            id={x.content_unit_uid}
+            key={key}
+            playTime={x.data.current_time}
+            asList={isMobileDevice}
+          />;
+        }
         )
       );
       break;
@@ -66,9 +66,9 @@ const ItemsContainer = ({ pageSize = 8, pageNo = 1, t, namespace, withSeeAll }) 
       break;
     case MY_NAMESPACE_SUBSCRIPTIONS:
       children = items.map(x => {
-          const { key } = getMyItemKey(namespace, x);
-          return <SubscriptionsItem item={x} key={key} t={t} language={language} />;
-        }
+        const { key } = getMyItemKey(namespace, x);
+        return <SubscriptionsItem item={x} key={key} t={t} language={language} />;
+      }
       );
       break;
     default:
