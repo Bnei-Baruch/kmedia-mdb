@@ -16,7 +16,7 @@ export const getMyItemKey = (namespace, item) => {
     case MY_NAMESPACE_REACTIONS:
       const { kind, subject_type, subject_uid } = item;
 
-      key = !!(kind && subject_type && subject_uid) ? `${kind}_${subject_type}_${subject_uid}` : null;
+      key = !!(kind || subject_type || subject_uid) ? `${kind}_${subject_type}_${subject_uid}` : null;
       break;
     case MY_NAMESPACE_PLAYLISTS:
       key = item.id;
@@ -24,7 +24,7 @@ export const getMyItemKey = (namespace, item) => {
     case MY_NAMESPACE_SUBSCRIPTIONS:
       const { collection_uid, content_type } = item;
 
-      key = !!(collection_uid && content_type) ? `${collection_uid}_${content_type}` : null;
+      key = !!(collection_uid || content_type) ? `${collection_uid}_${content_type}` : null;
       break;
     default:
       key = item.id;

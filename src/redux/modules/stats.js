@@ -40,8 +40,8 @@ const onCURequest = (state, action) => ({
   ...state,
   cuStats: {
     ...state.cuStats,
-    [action.payload.namespace]: {
-      ...(state.cuStats[action.payload.namespace] || {}),
+    [action.namespace]: {
+      ...(state.cuStats[action.namespace] || {}),
       wip: true,
     }
   }

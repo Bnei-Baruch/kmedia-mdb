@@ -18,6 +18,7 @@ import CUItem from '../../../shared/CUItem/CUItemContainer';
 import { PlaylistItem } from './PlaylistItem';
 import { SubscriptionsItem } from './SubscriptionsItem';
 import ItemTemplate from './ItemTemplate';
+import { getMyItemKey } from '../../../../helpers/my';
 
 const ItemsContainer = ({ pageSize = 8, pageNo = 1, t, namespace, withSeeAll }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
@@ -38,25 +39,37 @@ const ItemsContainer = ({ pageSize = 8, pageNo = 1, t, namespace, withSeeAll }) 
 
   switch (namespace) {
     case MY_NAMESPACE_REACTIONS:
-      children = items.map(x =>
-        <CUItem id={x.subject_uid} key={`${namespace}_${x.id}`} asList={isMobileDevice} />);
+      children = items.map(x => {
+        const { key } = getMyItemKey(namespace, x);
+        return <CUItem id={x.subject_uid} key={key} asList={isMobileDevice} />;
+      });
       break;
     case MY_NAMESPACE_HISTORY:
       children = (
-        items.map(x => <CUItem
-          id={x.content_unit_uid}
-          key={`${namespace}_${x.id}`}
-          playTime={x.data.current_time}
-          asList={isMobileDevice}
-        />)
+        items.map(x => {
+            const { key } = getMyItemKey(namespace, x);
+            return <CUItem
+              id={x.content_unit_uid}
+              key={key}
+              playTime={x.data.current_time}
+              asList={isMobileDevice}
+            />;
+          }
+        )
       );
       break;
     case MY_NAMESPACE_PLAYLISTS:
-      children = items.map(x =>
-        <PlaylistItem item={x} key={`${namespace}_${x.id}`} language={language} t={t} asList={isMobileDevice} />);
+      children = items.map(x => {
+        const { key } = getMyItemKey(namespace, x);
+        return <PlaylistItem item={x} key={key} language={language} t={t} asList={isMobileDevice} />;
+      });
       break;
     case MY_NAMESPACE_SUBSCRIPTIONS:
-      children = items.map(x => <SubscriptionsItem item={x} key={`${namespace}_${x.id}`} t={t} language={language} />);
+      children = items.map(x => {
+          const { key } = getMyItemKey(namespace, x);
+          return <SubscriptionsItem item={x} key={key} t={t} language={language} />;
+        }
+      );
       break;
     default:
       break;

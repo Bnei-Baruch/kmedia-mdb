@@ -4,21 +4,24 @@ import moment from 'moment';
 import { Button, Card, Confirm, Header } from 'semantic-ui-react';
 
 import { actions } from '../../../../redux/modules/my';
+import { selectors as mdb } from '../../../../redux/modules/mdb';
+import { actions as statsActions, selectors as stats } from '../../../../redux/modules/stats';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
-import { actions as mdbActions, selectors as mdb, selectors as mdbSelectors } from '../../../../redux/modules/mdb';
 import { MY_NAMESPACE_SUBSCRIPTIONS, SECTIONS_LINK_BY_CU_CONTENT_TYPE } from '../../../../helpers/consts';
 import { canonicalLink } from '../../../../helpers/links';
 import Link from '../../../Language/MultiLanguageLink';
 import UnitLogo from '../../../shared/Logo/UnitLogo';
+import { getMyItemKey } from '../../../../helpers/my';
 
-export const SubscriptionsItem = ({ item, t, language }) => {
+export const SubscriptionsItem = ({ item, t }) => {
   const [confirm, setConfirm] = useState();
 
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
-  const namespace  = `${MY_NAMESPACE_SUBSCRIPTIONS}_${item.id}`;
+  const { key } = getMyItemKey(MY_NAMESPACE_SUBSCRIPTIONS, item);
+
   const collection = useSelector(state => mdb.getDenormCollection(state.mdb, item.collection_uid));
-  const unitCount  = useSelector(state => mdbSelectors.getCountCu(state.mdb, namespace));
+  const cuStats    = useSelector(state => stats.getCUStats(state.stats, key));
 
   const dispatch = useDispatch();
   const remove   = () => setConfirm(true);
@@ -28,15 +31,18 @@ export const SubscriptionsItem = ({ item, t, language }) => {
   const handleConfirmSuccess = () => dispatch(actions.remove(MY_NAMESPACE_SUBSCRIPTIONS, { id: item.id }));
 
   useEffect(() => {
-    const params = {
-      start_date: moment(item.updated_at).format('YYYY-MM-DD'),
-      end_date: moment(Date.now()).add(1, 'd').format('YYYY-MM-DD')
-    };
-    if (item.collection_uid) params.collection = [item.collection_uid];
-    if (item.content_type) params.content_type = [item.content_type];
+    if (item) {
+      const params = {
+        start_date: moment(item.updated_at || item.created_at).format('YYYY-MM-DD'),
+        end_date: moment(Date.now()).add(1, 'd').format('YYYY-MM-DD'),
+        count_only: true
+      };
+      if (item.collection_uid) params.collection = [item.collection_uid];
+      if (item.content_type) params.content_type = [item.content_type];
 
-    dispatch(mdbActions.countCU(namespace, params));
-  }, [item, dispatch, namespace]);
+      dispatch(statsActions.fetchCUStats(key, params));
+    }
+  }, [item, dispatch]);
 
   let logo, title, link;
   if (item.collection_uid) {
@@ -50,7 +56,7 @@ export const SubscriptionsItem = ({ item, t, language }) => {
   }
 
   return (
-    <Card raised color={unitCount ? 'red' : 'green'}>
+    <Card raised color={cuStats?.data?.total ? 'red' : 'green'}>
       {logo}
       <Card.Content>
         <Header size="medium" className="no-margin-top">
@@ -58,7 +64,7 @@ export const SubscriptionsItem = ({ item, t, language }) => {
             {title}
           </Link>
         </Header>
-        <Card.Meta content={`${t('personal.subsNewUnits')} - ${unitCount}`} />
+        <Card.Meta content={`${t('personal.subsNewUnits')} - ${cuStats?.data?.total || 0}`} />
       </Card.Content>
       <Card.Content extra textAlign="center">
         <Confirm
