@@ -16,11 +16,11 @@ const COLLECTION_TYPES_BY_ROUTING = {
 };
 
 const PlaylistItemPage = ({ t }) => {
-  const { id, routeType }             = useParams();
-  const unit                          = useSelector(state => selectors.getDenormContentUnit(state.mdb, id));
-  const wip                           = useSelector(state => selectors.getWip(state.mdb).units[id]);
-  const err                           = useSelector(state => selectors.getErrors(state.mdb).units[id]);
-  const language = useSelector(state => settings.getLanguage(state.settings));
+  const { id, routeType } = useParams();
+  const unit              = useSelector(state => selectors.getDenormContentUnit(state.mdb, id));
+  const wip               = useSelector(state => selectors.getWip(state.mdb).units[id]);
+  const err               = useSelector(state => selectors.getErrors(state.mdb).units[id]);
+  const language          = useSelector(state => settings.getLanguage(state.settings));
 
   //fix bug with unit without collection
   const [needToFetch, setNeedToFetch] = useState();
