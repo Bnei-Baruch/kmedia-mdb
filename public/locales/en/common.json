@@ -7,7 +7,7 @@
       "personal": "Personal Area",
       "lessons": "Lessons & Lectures",
       "programs": "Programs & Clips",
-      "sources": "Library",
+      "sources": "Kabbalah Library",
       "likutim": "Assorted Excerpts",
       "events": "Conventions & Events",
       "books": "Books",
@@ -112,8 +112,10 @@
     "more": "More",
     "copy-link": "Copy Link",
     "search": "Search",
-    "previous": "To the previous lesson",
-    "next": "To the next lesson",
+    "previous-lesson": "To the previous lesson",
+    "next-lesson": "To the next lesson",
+    "previous-article": "Previous article",
+    "next-article": "Next article",
     "copy": "Copy",
     "view-all": "View All",
     "save": "Save",
@@ -137,7 +139,7 @@
       "loading": "Error loading file."
     },
     "header": {
-      "series-by-topic": "Lessons collection on the topic of:"
+      "series-by-topic": "Series of lessons on the topic:"
     }
   },
   "playlist": {
@@ -488,7 +490,7 @@
   },
   "sources-library": {
     "header": {
-      "text": "Library",
+      "text": "Kabbalah Library",
       "subtext": "A collection of all the most important original texts for the study of Kabbalah, written by the greatest Kabbalists."
     },
     "no-source": "Please select source",
@@ -497,7 +499,8 @@
     "default": "Default",
     "filter": "Filter...",
     "share-title": "Read this article",
-    "group-articles": "Group Articles"
+    "group-articles": "Group Articles",
+    "play-audio-file": "Play the audio file"
   },
   "topics": {
     "header": {

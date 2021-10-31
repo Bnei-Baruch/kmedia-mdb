@@ -9,7 +9,7 @@ import * as shapes from '../../shapes';
 import Section from './Section';
 import LatestUpdate from './LatestUpdate';
 
-const unitsByContentType = list => list.reduce((acc, val) => {
+const itemsByContentType = list => list.filter(x => !!x).reduce((acc, val) => {
   if (!acc[val.content_type]) {
     acc[val.content_type] = [val];
   } else {
@@ -35,15 +35,15 @@ const getComplexCards = getCard => {
   //    virtual lesson unit CT_VIRTUAL_LESSON,
   //    lessons_series collection CT_LECTURE_SERIES, if one of them is older than 2 weeks use another lesson collection
 
-  const wl  = getCard(consts.CT_WOMEN_LESSON);
-  const vl  = getCard(consts.CT_VIRTUAL_LESSON);
+  const wl    = getCard(consts.CT_WOMEN_LESSON);
+  const vl    = getCard(consts.CT_VIRTUAL_LESSON);
   const cards = [];
 
-  if (wl && moment().diff(moment(wl.props.unit.film_date), 'days') < 14) {
+  if (wl && moment().diff(moment(wl.props.item.film_date), 'days') < 14) {
     cards.push(wl);
   }
 
-  if (vl && moment().diff(moment(vl.props.unit.film_date), 'days') < 14) {
+  if (vl && moment().diff(moment(vl.props.item.film_date), 'days') < 14) {
     cards.push(vl);
   }
 
@@ -58,27 +58,27 @@ const getComplexCards = getCard => {
   return cards;
 };
 
-const LatestUpdatesSection = ({ latestUnits = [], t }) => {
-  const unitsByCT = unitsByContentType(latestUnits);
+const LatestUpdatesSection = ({ latestItems = [], t }) => {
+  const itemsByCT = itemsByContentType(latestItems);
 
-  if (unitsByCT[consts.CT_DAILY_LESSON]) {
-    unitsByCT[consts.CT_DAILY_LESSON] = unitsByCT[consts.CT_DAILY_LESSON].sort(
+  if (itemsByCT[consts.CT_DAILY_LESSON]) {
+    itemsByCT[consts.CT_DAILY_LESSON] = itemsByCT[consts.CT_DAILY_LESSON].sort(
       (a, b) => {
         if (a.film_date !== b.film_date) {
           return moment(a).diff(moment(b), 'days');
         }
 
-        return a.name_in_collection - b.name_in_collection;
+        return a.number - b.number;
       },
     );
   }
 
-  const getLatestUpdate = unit =>
-    <LatestUpdate key={unit.id} unit={unit} label={t(getSectionForTranslation(unit.content_type))} t={t} />;
+  const getLatestUpdate = item =>
+    <LatestUpdate key={item.id} item={item} label={t(getSectionForTranslation(item.content_type))} t={t} />;
 
-  const getCardArray = (content_type, itemsCount) => unitsByCT[content_type]?.slice(0, itemsCount).map(unit => getLatestUpdate(unit));
+  const getCardArray = (content_type, itemsCount) => itemsByCT[content_type]?.slice(0, itemsCount).map(item => getLatestUpdate(item));
 
-  const getCard = (content_type, index = 0) => unitsByCT[content_type]?.length > index && getLatestUpdate(unitsByCT[content_type][index]);
+  const getCard = (content_type, index = 0) => itemsByCT[content_type]?.length > index && getLatestUpdate(itemsByCT[content_type][index]);
 
   const eventTypes = [consts.CT_CONGRESS, consts.CT_FRIENDS_GATHERING, consts.CT_MEAL, consts.CT_HOLIDAY];
 

@@ -113,8 +113,10 @@
     "more": "Altro",
     "copy-link": "Copia Link",
     "search": "Cerca",
-    "previous": "Precedente",
-    "next": "Successivo",
+    "previous-lesson": "Precedente",
+    "next-lesson": "Successivo",
+    "previous-article": "Previous article",
+    "next-article": "Next article",
     "copy": "Copia",
     "view-all": "View All",
     "save": "Save",
@@ -138,7 +140,7 @@
       "loading": "Error loading file."
     },
     "header": {
-      "series-by-topic": "Lessons collection on the topic of:"
+      "series-by-topic": "Series of lessons on the topic:"
     }
   },
   "playlist": {
@@ -499,7 +501,8 @@
     "default": "Default",
     "filter": "Filter...",
     "share-title": "Read this article",
-    "group-articles": "Group Articles"
+    "group-articles": "Group Articles",
+    "play-audio-file": "Riproduci il file audio"
   },
   "topics": {
     "header": {

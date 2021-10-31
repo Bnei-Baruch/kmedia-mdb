@@ -112,8 +112,10 @@
     "more": "Mehr",
     "copy-link": "Link kopieren",
     "search": "Suche",
-    "previous": "Zurück",
-    "next": "Nächstes",
+    "previous-lesson": "Zurück",
+    "next-lesson": "Nächstes",
+    "previous-article": "Previous article",
+    "next-article": "Next article",
     "copy": "Kopieren",
     "view-all": "Alle ansehen",
     "save": "Save",
@@ -137,7 +139,7 @@
       "loading": "Beim Laden der Datei ist ein Fehler aufgetreten."
     },
     "header": {
-      "series-by-topic": "Lessons collection on the topic of:"
+      "series-by-topic": "Series of lessons on the topic:"
     }
   },
   "playlist": {
@@ -492,7 +494,8 @@
     "az": "А-Z",
     "default": "Standard",
     "filter": "Filter...",
-    "share-title": "Lesen Sie diesen Artikel"
+    "share-title": "Lesen Sie diesen Artikel",
+    "play-audio-file": "Spielen Sie die Audiodatei ab"
   },
   "topics": {
     "header": {

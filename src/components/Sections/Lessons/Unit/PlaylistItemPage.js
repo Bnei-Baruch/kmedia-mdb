@@ -4,6 +4,7 @@ import { withNamespaces } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { actions, selectors } from '../../../../redux/modules/mdb';
+import { selectors as settings } from '../../../../redux/modules/settings';
 import WipErr from '../../../shared/WipErr/WipErr';
 import PlaylistCollectionContainer from '../../../Pages/PlaylistCollection/Container';
 import UnitPage from '../../../Pages/Unit/Page';
@@ -19,6 +20,8 @@ const PlaylistItemPage = ({ t }) => {
   const unit                          = useSelector(state => selectors.getDenormContentUnit(state.mdb, id));
   const wip                           = useSelector(state => selectors.getWip(state.mdb).units[id]);
   const err                           = useSelector(state => selectors.getErrors(state.mdb).units[id]);
+  const language = useSelector(state => settings.getLanguage(state.settings));
+
   //fix bug with unit without collection
   const [needToFetch, setNeedToFetch] = useState();
 
@@ -26,7 +29,7 @@ const PlaylistItemPage = ({ t }) => {
 
   useEffect(() => {
     setNeedToFetch(!unit || Object.keys(unit.collections).length === 0);
-  }, [id]);
+  }, [id, language]);
 
   useEffect(() => {
     if (!wip && !err && needToFetch) {

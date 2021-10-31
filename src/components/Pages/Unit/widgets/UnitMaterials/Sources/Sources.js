@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext, useMemo } from 'react';
-import { useLocation } from 'react-router-dom';
 import { withNamespaces } from 'react-i18next';
 import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import { Divider, Dropdown, Menu, Segment } from 'semantic-ui-react';

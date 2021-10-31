@@ -9,7 +9,7 @@ export function* fetchData() {
   try {
     const language = yield select(state => settings.getLanguage(state.settings));
     const { data } = yield call(Api.home, { language });
-    yield put(mdb.receiveCollections([data.latest_daily_lesson]));
+    yield put(mdb.receiveCollections([data.latest_daily_lesson, ...data.latest_cos]));
     yield put(mdb.receiveContentUnits(data.latest_units));
     yield put(actions.fetchDataSuccess(data));
   } catch (err) {

@@ -10,7 +10,7 @@ import {
   CT_KTAIM_NIVCHARIM,
   CT_LESSONS_SERIES,
   CT_SPECIAL_LESSON,
-  VERSION_WITH_PERSONALIZATION
+  VERSION_WITH_PERSONALIZATION,
 } from '../../../../../helpers/consts';
 import { canonicalLink } from '../../../../../helpers/links';
 import { cuPartNameByCCUType, intersperse } from '../../../../../helpers/utils';

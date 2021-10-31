@@ -7,7 +7,7 @@
       "personal": "איזור אישי",
       "lessons": "שיעורים והרצאות",
       "programs": "תוכניות וקליפים",
-      "sources": "ספרייה",
+      "sources": "ספריית כתבי מקובלים",
       "likutim": "ליקוטי מקובלים",
       "events": "כנסים ואירועים",
       "books": "ספרים",
@@ -111,8 +111,10 @@
     "more": "עוד",
     "copy-link": "העתק קישור",
     "search": "חפש",
-    "previous": "לשיעור הקודם",
-    "next": "לשיעור הבא",
+    "previous-lesson": "לשיעור הקודם",
+    "next-lesson": "לשיעור הבא",
+    "previous-article": "המאמר הקודם",
+    "next-article": "המאמר הבא",
     "copy": "העתק",
     "view-all": "הצג הכל",
     "save": "שמור",
@@ -136,7 +138,7 @@
       "loading": "שגיאה בטעינת קובץ"
     },
     "header": {
-      "series-by-topic": "סדרת לימוד בנושא:"
+      "series-by-topic": "סדרת שיעורים בנושא:"
     }
   },
   "playlist": {
@@ -487,7 +489,7 @@
   },
   "sources-library": {
     "header": {
-      "text": "ספרייה",
+      "text": "ספריית כתבי מקובלים",
       "subtext": "אוסף של כל הכתבים המקוריים החשובים ביותר ללימוד הקבלה, שנכתבו על ידי גדולי המקובלים."
     },
     "no-source": "בחר מקור",
@@ -496,7 +498,8 @@
     "default": "ברירת מחדל",
     "filter": "סנן...",
     "share-title": "קרא את המאמר",
-    "group-articles": "מאמרי החברה"
+    "group-articles": "מאמרי החברה",
+    "play-audio-file": "להפעלת קובץ אודיו"
   },
   "topics": {
     "header": {

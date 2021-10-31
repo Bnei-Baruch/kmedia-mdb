@@ -1,27 +1,25 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
-import uniq from 'lodash/uniq';
-import { Divider, Grid, Menu, Segment } from 'semantic-ui-react';
+import { Menu, Segment } from 'semantic-ui-react';
 import isEqual from 'react-fast-compare';
+import PropTypes from 'prop-types';
+import uniq from 'lodash/uniq';
+import clsx from 'clsx';
 
 import { CT_ARTICLE, CT_RESEARCH_MATERIAL, MT_TEXT } from '../../../../../../helpers/consts';
-import { getLanguageDirection } from '../../../../../../helpers/i18n-utils';
 import { selectSuitableLanguage } from '../../../../../../helpers/language';
-import MediaHelper from '../../../../../../helpers/media';
-import playerHelper from '../../../../../../helpers/player';
-import * as shapes from '../../../../../shapes';
-import WipErr from '../../../../../shared/WipErr/WipErr';
-import { getQuery } from '../../../../../../helpers/url';
-import DropdownLanguageSelector from '../../../../../Language/Selector/DropdownLanguageSelector';
+import { getLanguageDirection } from '../../../../../../helpers/i18n-utils';
 import { DeviceInfoContext } from '../../../../../../helpers/app-contexts';
-import classNames from 'classnames';
-import ScrollToSearch from '../../../../../shared/ScrollToSearch';
-import UnitBar from '../UnitBar';
-import clsx from 'clsx';
-import Download from '../../../../../shared/Download/Download';
 import { physicalFile } from '../../../../../../helpers/utils';
+import playerHelper from '../../../../../../helpers/player';
+import MediaHelper from '../../../../../../helpers/media';
+import { getQuery } from '../../../../../../helpers/url';
+import ScrollToSearch from '../../../../../shared/ScrollToSearch';
+import Download from '../../../../../shared/Download/Download';
+import WipErr from '../../../../../shared/WipErr/WipErr';
+import * as shapes from '../../../../../shapes';
 import MenuLanguageSelector from '../../../../../Language/Selector/MenuLanguageSelector';
+import UnitBar from '../UnitBar';
 
 class Transcription extends Component {
   static contextType = DeviceInfoContext;

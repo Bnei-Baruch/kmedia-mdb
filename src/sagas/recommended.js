@@ -79,7 +79,7 @@ export function* fetchRecommended(action) {
       size,
       specs,
       watchingNowMin: WATCHING_NOW_MIN,
-      popularMin: POPULAR_MIN
+      popularMin: POPULAR_MIN,
     });
     const { data }    = yield call(Api.recommended, requestData);
 
@@ -88,10 +88,15 @@ export function* fetchRecommended(action) {
         fetchMissingUnits(data.feeds.flat().filter(item => item && !IsCollectionContentType(item.content_type))),
         fetchMissingCollections(data.feeds.flat().filter(item => item && IsCollectionContentType(item.content_type))),
       ];
+      for (let i = 0; i < data.feeds.length; ++i) {
+        if (Array.isArray(data.feeds[i]) && data.feeds[i].length > 0) {
+          fetchList.push(fetchViewsByUIDs(data.feeds[i].map(f => f.uid)));
+        }
+      }
+
       if (variant === AB_RECOMMEND_NEW) {
         for (let i = 0; i < data.feeds.length; ++i) {
           if (Array.isArray(data.feeds[i]) && data.feeds[i].length > 0) {
-            fetchList.push(fetchViewsByUIDs(data.feeds[i].map(f => f.uid)));
             fetchList.push(fetchWatchingNow(data.feeds[i]));
           }
         }

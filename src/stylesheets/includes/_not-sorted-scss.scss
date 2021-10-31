@@ -1826,6 +1826,42 @@
   text-align: left;
 }
 
+.library-audio-player {
+  margin-left: 0;
+  margin-right: 20px;
+  cursor: pointer;
+  a {
+    svg {
+      position: relative;
+      top: 5px;
+      margin-right: 5px;
+      margin-left: 5px;
+    }
+  }
+  audio {
+    height: 25px;
+    position: relative;
+    top: 7px;
+    @include mobile {
+      margin-top: 15px;
+      height: 54px;
+      width: 100%;
+    }
+  }
+  .playAudioIcon {
+    margin-left: 10px;
+  }
+}
+
+.rtl .library-audio-player {
+  margin-left: 20px;
+  margin-right: 0;
+  .playAudioIcon {
+    margin-right: 10px;
+    margin-left: 0;
+  }
+}
+
 .my_playlist_item {
   position: relative;
 
@@ -1879,6 +1915,7 @@
 }
 
 .cu_item {
+  overflow: hidden;
   .cu_item_img {
     position: relative;
     width: 100%;
@@ -1937,11 +1974,12 @@
 }
 
 .cu_item_duration {
+  font-size: 0.8em;
   border-radius: 0;
   background-color: $black;
   color: white;
   margin: 1em;
-  padding: 3px 7px;
+  padding: 3px 4px;
   display: inline-block;
 
   @include mobile {
@@ -1957,32 +1995,35 @@
     padding: 0 0.5em;
     font-size: .9em;
     line-height: 1em;
-  }
-
-  &.ltr > span {
-    border-left: 1px rgb(170, 170, 170) solid;
-
-    &:first-child {
-      border-left: 0;
-      padding-left: 0;
-    }
-
-    &:last-child {
-      padding-right: 0;
-    }
-  }
-
-  &.rtl > span {
+    border-left: 1px $midGrey solid;
     border-right: 1px $midGrey solid;
+  }
+}
 
-    &:first-child {
-      padding-right: 0;
-      border-right: 0;
-    }
 
-    &:last-child {
-      padding-left: 0;
-    }
+.ltr .cu_info_description > span {
+  border-right-width: 0;
+
+  &:first-child {
+    border-left: 0;
+    padding-left: 0;
+  }
+
+  &:last-child {
+    padding-right: 0;
+  }
+}
+
+.rtl .cu_info_description > span {
+  border-left-width: 0;
+
+  &:first-child {
+    padding-right: 0;
+    border-right: 0;
+  }
+
+  &:last-child {
+    padding-left: 0;
   }
 }
 
@@ -2031,6 +2072,7 @@
   @include mobile {
     padding-top: 17px;
     padding-bottom: 17px;
+    min-height: 120px;
   }
 
   &.selected {
@@ -2053,6 +2095,7 @@
 
   &.small {
     padding: 0.7em;
+    min-height: 100px;
 
     .cu_item_name {
       margin-top: 0;
@@ -2066,7 +2109,7 @@
     }
 
     .cu_item_duration {
-      margin: 4px;
+      margin: 0;
     }
 
     .cu_item_info {
@@ -2115,10 +2158,22 @@
     position: absolute;
     left: 0;
     z-index: 2;
-    bottom: 0;
+    top: 0;
   }
 
   .cu_item_duration.rtl {
+    right: 0;
+    left: auto;
+  }
+
+  .cu_item_label {
+    position: absolute;
+    left: 0;
+    z-index: 2;
+    bottom: 0;
+  }
+
+  .cu_item_label.rtl {
     right: 0;
     left: auto;
   }
@@ -2377,27 +2432,9 @@
   text-align: center;
 }
 
-.recommend-cell {
-  position: relative;
-}
-
-.recommend-label {
-  width: 120px;
-  left: 0;
-  right: unset;
-  position: absolute;
-}
-
-.rtl .recommend-label {
-  right: 0;
-  left: unset;
-}
-
 .recommend-label div {
-  position: absolute;
-  bottom: 0;
   color: white;
-  background-color: #2e8fd5;
+  background-color: #005697;
   max-width: 120px;
   overflow: hidden;
 
@@ -2415,6 +2452,10 @@
 
 .rtl .recommend-more {
   float: left;
+}
+
+.recommend-more-placeholder {
+  height: 1.4em;
 }
 
 .font_black {

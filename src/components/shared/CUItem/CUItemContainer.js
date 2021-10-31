@@ -8,8 +8,6 @@ import { selectors as settings } from '../../../redux/modules/settings';
 import { selectors as recommended } from '../../../redux/modules/recommended';
 import {
   CT_CLIPS,
-  CT_DAILY_LESSON,
-  CT_LESSON_PART, CT_SPECIAL_LESSON,
   CT_VIDEO_PROGRAM,
   CT_VIRTUAL_LESSONS
 } from '../../../helpers/consts';
@@ -21,7 +19,7 @@ import CardTemplate from './CardTemplate';
 
 const NOT_LESSONS_COLLECTIONS = [CT_VIDEO_PROGRAM, CT_VIRTUAL_LESSONS, CT_CLIPS];
 
-const CUItemContainer = ({ id, children, t, asList = false, link, playTime, size, selected, ccuId }) => {
+const CUItemContainer = ({ id, children, t, asList = false, link, playTime, size, selected, ccuId, noViews, label = '' }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const unit               = useSelector(state => selectors.getDenormContentUnit(state.mdb, id));
   const language           = useSelector(state => settings.getLanguage(state.settings));
@@ -46,7 +44,7 @@ const CUItemContainer = ({ id, children, t, asList = false, link, playTime, size
   const description = [];
   if (part && !isNaN(part)) description.push(t(cuPartNameByCCUType(ccu.content_type), { name: part }));
   if (unit.film_date) description.push(t('values.date', { date: unit.film_date }));
-  if (!(isMobileDevice && asList) && views > 0) description.push(t('pages.unit.info.views', { views }));
+  if (!noViews && !(isMobileDevice && asList) && views > 0) description.push(t('pages.unit.info.views', { views }));
 
   const props = {
     unit,
@@ -58,7 +56,8 @@ const CUItemContainer = ({ id, children, t, asList = false, link, playTime, size
     children,
     playTime,
     size: !isMobileDevice ? size : '',
-    selected
+    selected,
+    label,
   };
   return (asList ? <ListTemplate {...props} /> : <CardTemplate {...props} />);
 };

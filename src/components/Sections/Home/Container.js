@@ -77,6 +77,8 @@ const HomePageContainer = ({ location, t }) => {
 
   const latestUnitIDs = useSelector(latestUnitIDsFn);
   const latestUnits   = useSelector(latestUnitsFn(latestUnitIDs));
+  const latestCoIDs   = useSelector(state => selectors.getLatestCos(state.home)) || [];
+  const latestCos     = useSelector(state => latestCoIDs.map(x => mdb.getDenormCollection(state.mdb, x)));
 
   const fetchBlogList   = useCallback((type, id, options) => dispatch(publicationsActions.fetchBlogList(type, id, options)), [dispatch]);
   const latestBlogPosts = useSelector(latestBlogPostsFn);
@@ -108,7 +110,7 @@ const HomePageContainer = ({ location, t }) => {
     <HomePage
       location={location}
       latestLesson={latestLesson}
-      latestUnits={latestUnits}
+      latestItems={[...latestUnits, ...latestCos]}
       latestBlogPosts={latestBlogPosts}
       latestTweets={latestTweets}
       banners={banners}

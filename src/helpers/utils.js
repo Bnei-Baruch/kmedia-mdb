@@ -338,7 +338,8 @@ export const getSectionForTranslation = content_type => {
   }
 };
 
-export const noop = () => {};
+export const noop = () => {
+};
 
 // Used in React hooks to remember previous props.
 export const usePrevious = value => {
