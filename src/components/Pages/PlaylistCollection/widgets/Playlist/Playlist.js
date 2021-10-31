@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import isEqual from 'react-fast-compare';
 
 import { DeviceInfoContext } from '../../../../../helpers/app-contexts';
-import CUItemContainer from '../../../../shared/CUItem/CUItemContainer';
+import ContentItemContainer from '../../../../shared/ContentItem/ContentItemContainer';
 import { Header } from 'semantic-ui-react';
 import { withNamespaces } from 'react-i18next';
 
@@ -26,7 +26,7 @@ const PlaylistWidget = ({ playlist, selected = 0, link, t }) => {
       {/* cannot use semantic Item because it doesn't recongnize the onClick event */}
       {
         unitsToDisplay.map((unit, i) => (
-          <CUItemContainer
+          <ContentItemContainer
             key={unit.id}
             id={unit.id}
             ccuId={collection.id}

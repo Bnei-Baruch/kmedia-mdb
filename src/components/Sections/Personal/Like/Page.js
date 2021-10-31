@@ -11,7 +11,7 @@ import { selectors as settings } from '../../../../redux/modules/settings';
 import { selectors as auth } from '../../../../redux/modules/auth';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import { getPageFromLocation } from '../../../Pagination/withPagination';
-import CUItemContainer from '../../../shared/CUItem/CUItemContainer';
+import ContentItemContainer from '../../../shared/ContentItem/ContentItemContainer';
 import WipErr from '../../../shared/WipErr/WipErr';
 import AlertModal from '../../../shared/AlertModal';
 import Pagination from '../../../Pagination/Pagination';
@@ -83,9 +83,9 @@ const Page      = ({ location, t }) => {
               <Container className="padded">
                 {items.map((x, i) =>
                   (
-                    <CUItemContainer id={x.content_unit_uid} asList={true} key={i}>
+                    <ContentItemContainer id={x.content_unit_uid} asList={true} key={i}>
                       <LikeActions cuId={x.content_unit_uid} id={x.id} />
-                    </CUItemContainer>
+                    </ContentItemContainer>
                   )
                 )}
               </Container>) : null

@@ -427,8 +427,11 @@
         "collections": "İlişkili olan",
         "study-series": "To all the lessons of the collection",
         "episode": "{{name}} Bölümü",
+        "episodes": "{{name}} episodes",
         "lesson-episode": "Part {{name}}",
+        "lesson-episodes": "{{name}} parts",
         "series-episode": "Lesson {{name}}",
+        "series-episodes": "{{name}} lessons",
         "views": "{{views}} Views"
       },
       "recommended": {

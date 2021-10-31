@@ -14,8 +14,13 @@ import { usePrevious } from '../../../../../../helpers/utils';
 import { AB_RECOMMEND_EXPERIMENT, AB_RECOMMEND_NEW } from '../../../../../../helpers/ab-testing';
 import { AbTestingContext } from '../../../../../../helpers/app-contexts';
 import Link from '../../../../../Language/MultiLanguageLink';
-import { canonicalLink } from '../../../../../../helpers/links';
-import { CT_DAILY_LESSON, CT_SPECIAL_LESSON } from '../../../../../../helpers/consts';
+import { canonicalLink, landingPageSectionLink } from '../../../../../../helpers/links';
+import {
+  CT_DAILY_LESSON,
+  CT_SPECIAL_LESSON,
+  SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_TEXT,
+  SGLP_LESSON_SERIES,
+} from '../../../../../../helpers/consts';
 
 // Number of items to try to recommend.
 const N = 12;
@@ -23,6 +28,13 @@ const N = 12;
 const sameTopic = tag => `same-topic-${tag}`;
 const sameCollection = collection => `same-collection-${collection}`;
 const DEFAULT = 'default';
+const SERIES = 'series';
+
+const makeLandingPageLink = (t, landingPage) => (
+  <Link key={landingPage} to={landingPageSectionLink(landingPage, [])}>
+    {t(SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_TEXT[SGLP_LESSON_SERIES])}
+  </Link>
+);
 
 const makeTagLink = (tag, getTagById) => {
   const { id, label } = getTagById(tag);
@@ -90,14 +102,26 @@ const Recommended = ({ unit, t, filterOutUnits = [], displayTitle = true }) => {
   if (activeVariant === AB_RECOMMEND_NEW) {
     unitTags.forEach(tag => recommendedUnitsTypes.push(sameTopic(tag)));
     unitCollections.forEach(collection => recommendedUnitsTypes.push(sameCollection(collection.id)));
+    recommendedUnitsTypes.push(SERIES);
   }
 
-  recommendedUnitsTypes.push(DEFAULT)
+  recommendedUnitsTypes.push(DEFAULT);
 
   const recommendedUnits = useRecommendedUnits(recommendedUnitsTypes);
 
   const renderRecommended = [];
   if (activeVariant === AB_RECOMMEND_NEW) {
+    renderRecommended.push(
+      <DisplayRecommended
+        key={SERIES}
+        unit={unit}
+        t={t}
+        recommendedUnits={recommendedUnits[SERIES]}
+        title={<span>{makeLandingPageLink(t, SGLP_LESSON_SERIES)}</span>}
+        displayTitle={displayTitle}
+        viewLimit={3}
+        feedName={SERIES} />
+    );
     unitTags.forEach(tag => {
       if (recommendedUnits[sameTopic(tag)].length !== 0) {
         renderRecommended.push(

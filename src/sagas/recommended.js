@@ -6,6 +6,9 @@ import { AB_RECOMMEND_NEW } from '../helpers/ab-testing';
 import { actions, types, selectors as recommended } from '../redux/modules/recommended';
 import { actions as mdbActions, selectors as mdbSelectors } from '../redux/modules/mdb';
 import { selectors as settings } from '../redux/modules/settings';
+import {
+  CT_LESSONS_SERIES,
+} from '../helpers/consts';
 
 const WATCHING_NOW_MIN = 50;
 const POPULAR_MIN      = 100;
@@ -83,31 +86,45 @@ export function* fetchRecommended(action) {
     });
     const { data }    = yield call(Api.recommended, requestData);
 
+    // Append predefined, constant recommentations.
+    if (variant === AB_RECOMMEND_NEW) {
+      data.feeds.splice(data.feeds.length - 1, 0, [
+        { content_type: CT_LESSONS_SERIES, uid: 'ReQUUOtN' },
+      ]);
+    }
+
     if (Array.isArray(data.feeds) && data.feeds.length > 0) {
       const fetchList = [
         fetchMissingUnits(data.feeds.flat().filter(item => item && !IsCollectionContentType(item.content_type))),
         fetchMissingCollections(data.feeds.flat().filter(item => item && IsCollectionContentType(item.content_type))),
       ];
+      const viewUids = new Set();
       for (let i = 0; i < data.feeds.length; ++i) {
         if (Array.isArray(data.feeds[i]) && data.feeds[i].length > 0) {
-          fetchList.push(fetchViewsByUIDs(data.feeds[i].map(f => f.uid)));
+          data.feeds[i].forEach(f => viewUids.add(f.uid));
         }
       }
 
+      fetchList.push(fetchViewsByUIDs(Array.from(viewUids)));
+
       if (variant === AB_RECOMMEND_NEW) {
+        const watchingUids = new Set();
         for (let i = 0; i < data.feeds.length; ++i) {
           if (Array.isArray(data.feeds[i]) && data.feeds[i].length > 0) {
-            fetchList.push(fetchWatchingNow(data.feeds[i]));
+            data.feeds[i].forEach(f => watchingUids.add(f.uid));
           }
         }
+
+        fetchList.push(fetchWatchingNow(Array.from(watchingUids)));
       }
 
       yield all(fetchList);
     }
 
     const keysLength = Object.keys(data.feeds).length;
-    if (keysLength !== specs.length) {
-      throw new Error(`Expected recommended feeds size to be ${specs.length}`);
+    const expectedLength = variant === AB_RECOMMEND_NEW ? specs.length + 1 : specs.length;
+    if (keysLength !== expectedLength) {
+      throw new Error(`Expected recommended feeds size to be ${expectedLength}`);
     }
 
     const feeds = { 'default': data.feeds[data.feeds.length - 1] };
@@ -121,6 +138,8 @@ export function* fetchRecommended(action) {
         feeds[`same-collection-${collection.id}`] = data.feeds[index];
         index++;
       });
+      // One before last.
+      feeds['series'] = data.feeds[index];
     }
 
     yield put(actions.fetchRecommendedSuccess({ feeds, requestData }));
@@ -145,8 +164,8 @@ function* fetchViewsByUIDs(uids) {
   }
 }
 
-function* fetchWatchingNow(recommendedItems) {
-  const uids = yield select(state => recommendedItems.map(item => item.uid).filter(uid => recommended.getWatchingNow(uid, state.recommended) === -1));
+function* fetchWatchingNow(uids) {
+  uids = yield select(state => uids.filter(uid => recommended.getWatchingNow(uid, state.recommended) === -1));
   if (uids.length > 0) {
     const { data } = yield call(Api.watchingNow, uids);
     const views    = uids.reduce((acc, uid, i) => {

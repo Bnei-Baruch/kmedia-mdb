@@ -22,7 +22,7 @@ import {
   CT_VIRTUAL_LESSON,
   CT_WOMEN_LESSONS
 } from '../../../helpers/consts';
-import CUItemContainer from '../../shared/CUItem/CUItemContainer';
+import ContentItemContainer from '../../shared/ContentItem/ContentItemContainer';
 import { fromToLocalized } from '../../../helpers/date';
 
 const LatestUpdate = ({ item, t, label }) => {
@@ -43,7 +43,7 @@ const LatestUpdate = ({ item, t, label }) => {
     case CT_VIDEO_PROGRAM_CHAPTER:
     case CT_CLIP:
     case CT_VIRTUAL_LESSON:
-      return <CUItemContainer id={id} noViews />;
+      return <ContentItemContainer id={id} noViews />;
     case CT_DAILY_LESSON:
       title     = t(`constants.content-types.${content_type}`);
       subheader = [`${t('values.date', { date: film_date })}${number && ` (${t(`lessons.list.nameByNum_${number}`)})`}`];

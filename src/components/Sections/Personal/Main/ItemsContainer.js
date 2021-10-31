@@ -14,7 +14,7 @@ import {
 } from '../../../../helpers/consts';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import WipErr from '../../../shared/WipErr/WipErr';
-import CUItem from '../../../shared/CUItem/CUItemContainer';
+import ContentItem from '../../../shared/ContentItem/ContentItemContainer';
 import { PlaylistItem } from './PlaylistItem';
 import { SubscriptionsItem } from './SubscriptionsItem';
 import ItemTemplate from './ItemTemplate';
@@ -39,11 +39,11 @@ const ItemsContainer = ({ pageSize = 8, pageNo = 1, t, namespace, withSeeAll }) 
   switch (namespace) {
     case MY_NAMESPACE_LIKES:
       children = items.map(x =>
-        <CUItem id={x.content_unit_uid} key={`${namespace}_${x.id}`} asList={isMobileDevice} />);
+        <ContentItem id={x.content_unit_uid} key={`${namespace}_${x.id}`} asList={isMobileDevice} />);
       break;
     case MY_NAMESPACE_HISTORY:
       children = (
-        items.map(x => <CUItem
+        items.map(x => <ContentItem
           id={x.content_unit_uid}
           key={`${namespace}_${x.id}`}
           playTime={x.data.current_time}
