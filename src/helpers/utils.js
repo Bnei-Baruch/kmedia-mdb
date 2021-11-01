@@ -82,8 +82,7 @@ export const formatError = error => {
  * @param duration {numeric} number of seconds in this duration
  * @param fmt {String} default is 'hh:mm:ss'
  */
-export const formatDuration = (duration, fmt = 'hh:mm:ss') => moment.duration(duration, 'seconds').format(fmt);
-
+export const formatDuration = (duration, fmt = duration < 60 ?'[0:]ss':'hh:mm:ss') => moment.duration(duration, 'seconds').format(fmt);
 /**
  * A generator for interspersing a delimiter between items of an iterable.
  * @param iterable
