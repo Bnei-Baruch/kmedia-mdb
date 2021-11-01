@@ -7,7 +7,7 @@ import ContentItemContainer from '../../../../shared/ContentItem/ContentItemCont
 import { Header } from 'semantic-ui-react';
 import { withNamespaces } from 'react-i18next';
 
-const PlaylistWidget = ({ playlist, selected = 0, link, t }) => {
+const PlaylistWidget = ({ playlist, selected = 0, t }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
   const { collection, items, name } = playlist;
@@ -23,7 +23,6 @@ const PlaylistWidget = ({ playlist, selected = 0, link, t }) => {
           content={name || t(`playlist.title-by-type.${collection.content_type}`)}
         />
       }
-      {/* cannot use semantic Item because it doesn't recongnize the onClick event */}
       {
         unitsToDisplay.map((unit, i) => (
           <ContentItemContainer
@@ -33,7 +32,6 @@ const PlaylistWidget = ({ playlist, selected = 0, link, t }) => {
             size="small"
             asList={true}
             selected={i === selected}
-            link={link ? `${link}?ap=${i}` : null}
           />
         ))
       }

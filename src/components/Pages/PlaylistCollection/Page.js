@@ -1,25 +1,23 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { useHistory, useLocation, useRouteMatch } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
-import { useSelector } from 'react-redux';
 import { Container, Grid } from 'semantic-ui-react';
 import isEqual from 'react-fast-compare';
 
-import * as shapes from '../../shapes';
+import { selectors as settings } from '../../../redux/modules/settings';
+import { ClientChroniclesContext, DeviceInfoContext } from '../../../helpers/app-contexts';
+import { usePrevious } from '../../../helpers/utils';
+import playerHelper from '../../../helpers/player';
 import Helmets from '../../shared/Helmets';
-import Materials from '../Unit/widgets/UnitMaterials/Materials';
+import * as shapes from '../../shapes';
 import Info from '../Unit/widgets/Info/Info';
+import Materials from '../Unit/widgets/UnitMaterials/Materials';
 import Recommended from '../Unit/widgets/Recommended/Main/Recommended';
 import Playlist from './widgets/Playlist/Playlist';
 import PlaylistHeader from './widgets/Playlist/PlaylistHeader';
-import playerHelper from '../../../helpers/player';
-import { ClientChroniclesContext, DeviceInfoContext } from '../../../helpers/app-contexts';
-import { selectors as settings } from '../../../redux/modules/settings';
 import AVPlaylistPlayer from '../../AVPlayer/AVPlaylistPlayer';
-
-import { usePrevious } from '../../../helpers/utils';
-import { NO_COLLECTION_VIEW_TYPE } from '../../../helpers/consts';
 
 const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, cuId }) => {
   const location           = useLocation();
@@ -32,23 +30,14 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
 
   const embed                   = playerHelper.getEmbedFromQuery(location);
   const [unit, setUnit]         = useState(null);
-  const [selected, setSelected] = useState();
+  const [selected, setSelected] = useState(0);
   const [playlist, setPlaylist] = useState(null);
 
   const prev     = usePrevious({ unit, collection });
-  //check if come from lesson CU rotate
-  const { path } = useRouteMatch();
-  const isLesson = NO_COLLECTION_VIEW_TYPE.includes(collection.content_type) && (path.indexOf('lessons/cu/:id') !== -1);
-  const link     = isLesson ? null : playerHelper.linkWithoutActivePart(location);
 
   const handleSelectedChange = useCallback(nSelected => {
     if (nSelected !== selected) {
-      if (isLesson) {
-        playlist.items[nSelected] && history.push(`/${uiLanguage}${playlist.items[nSelected].shareUrl}`);
-      } else {
-        playerHelper.setActivePartInQuery(history, nSelected);
-        setSelected(nSelected);
-      }
+      playlist.items[nSelected] && history.push(`/${uiLanguage}${playlist.items[nSelected].shareUrl}`);
     }
   }, [history, selected, uiLanguage]);
 
@@ -92,25 +81,13 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
     const nPlaylist = playerHelper.playlist(collection, mediaType, contentLang, uiLang);
     setPlaylist(nPlaylist);
 
-    if (nPlaylist && isLesson) {
+    if (nPlaylist) {
       const nIndex = nPlaylist.items.findIndex(i => i.unit.id === cuId);
       if (nIndex !== -1) {
         setSelected(nIndex);
       }
     }
   }, [collection, contentLanguage, location, playlist?.language, uiLanguage, cuId]);
-
-  useEffect(() => {
-    if (!isLesson) {
-      let nSelected = playerHelper.getActivePartFromQuery(location);
-
-      if (nSelected >= playlist?.items.length) {
-        nSelected = 0;
-      }
-
-      handleSelectedChange(nSelected);
-    }
-  }, [handleSelectedChange, location, playlist]);
 
   useEffect(() => {
     const newUnit = playlist?.items[selected]?.unit;
@@ -125,8 +102,7 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
     return null;
   }
 
-  const { items } = playlist;
-
+  const { items }      = playlist;
   const filterOutUnits = items.map(item => item.unit).filter(u => !!u) || [];
 
   // Don't recommend lesson preparation, skip to next unit.
@@ -144,7 +120,6 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
       <Playlist
         playlist={playlist}
         selected={selected}
-        link={link}
       />
       <br />
       <Recommended unit={recommendUnit} filterOutUnits={filterOutUnits} />
