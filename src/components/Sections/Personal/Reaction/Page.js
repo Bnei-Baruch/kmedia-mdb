@@ -83,9 +83,9 @@ const Page      = ({ location, t }) => {
               <Container className="padded">
                 {items.map((x, i) =>
                   (
-                      <CUItemContainer id={x.subject_uid} asList={true} key={i}>
-                        <ReactionActions cuId={x.subject_uid} params={x} />
-                      </CUItemContainer>
+                    <CUItemContainer id={x.subject_uid} asList={true} key={i}>
+                      <ReactionActions cuId={x.subject_uid} params={x} />
+                    </CUItemContainer>
                   )
                 )}
               </Container>

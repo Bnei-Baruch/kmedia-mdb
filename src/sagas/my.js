@@ -49,6 +49,7 @@ function* fetch(action) {
           cu_uids = data.items.filter(p => p.items)
             .reduce((acc, p) => acc.concat(p.items.flatMap(x => x.content_unit_uid)), []);
         }
+
         cu_uids.concat(data.items.map(x => x.content_unit_uid).filter(x => !!x));
         break;
       case MY_NAMESPACE_SUBSCRIPTIONS:

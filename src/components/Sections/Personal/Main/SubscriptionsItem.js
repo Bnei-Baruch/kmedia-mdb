@@ -38,6 +38,7 @@ export const SubscriptionsItem = ({ item, t }) => {
       if (start.isSame(now, 'day')) {
         start = end;
       }
+
       const params = {
         start_date: start.format('YYYY-MM-DD'),
         end_date: end.format('YYYY-MM-DD'),
