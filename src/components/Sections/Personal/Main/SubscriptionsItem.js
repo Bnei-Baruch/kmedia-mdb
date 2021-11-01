@@ -32,9 +32,15 @@ export const SubscriptionsItem = ({ item, t }) => {
 
   useEffect(() => {
     if (item) {
+      let start = moment(item.updated_at || item.created_at);
+      const now = moment(Date.now());
+      const end = moment(Date.now()).add(1, 'd');
+      if (start.isSame(now, 'day')) {
+        start = end;
+      }
       const params = {
-        start_date: moment(item.updated_at || item.created_at).format('YYYY-MM-DD'),
-        end_date: moment(Date.now()).add(1, 'd').format('YYYY-MM-DD'),
+        start_date: start.format('YYYY-MM-DD'),
+        end_date: end.format('YYYY-MM-DD'),
         count_only: true
       };
       if (item.collection_uid) params.collection = [item.collection_uid];

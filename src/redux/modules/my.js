@@ -124,22 +124,22 @@ const initialNamespaces = MY_NAMESPACES.reduce((acc, n) => {
 
 const onSetPage = (draft, { namespace, pageNo }) => draft[namespace].pageNo = pageNo;
 
-const onFetch = (draft, { namespace }) => {
-  draft[namespace].total  = 0;
+const onFetch = (draft, { namespace, addToList = true }) => {
+  addToList && (draft[namespace].total = 0);
   draft[namespace].wip    = true;
   draft[namespace].errors = false;
   return draft;
 };
 
-const onFetchSuccess = (draft, { namespace, items, total }) => {
+const onFetchSuccess = (draft, { namespace, addToList = true, items, total }) => {
   draft[namespace].total  = total;
   draft[namespace].wip    = false;
   draft[namespace].errors = false;
 
-  const keys = [];
+  const keys = addToList ? [] : draft[namespace].keys;
   Object.values(items).forEach(x => {
     const { key } = getMyItemKey(namespace, x);
-    keys.push(key);
+    addToList && keys.push(key);
     draft[namespace].byKey[key] = x;
   });
 
@@ -192,11 +192,11 @@ const onEditSuccess = (draft, { namespace, item }) => {
 };
 
 const onRemoveSuccess = (draft, { namespace, item }) => {
-  const { key }            = getMyItemKey(namespace, item);
-  draft[namespace].keys    = draft[namespace].keys.filter(k => k !== key);
+  const { key }               = getMyItemKey(namespace, item);
+  draft[namespace].keys       = draft[namespace].keys.filter(k => k !== key);
   draft[namespace].byKey[key] = null;
-  draft[namespace].deleted = true;
-  draft[namespace].total   = draft[namespace].total - 1;
+  draft[namespace].deleted    = true;
+  draft[namespace].total      = draft[namespace].total - 1;
   if (namespace === MY_NAMESPACE_REACTIONS)
     draft.reactionsCount[key] = draft.reactionsCount[key] ? draft.reactionsCount[key] - 1 : 0;
 

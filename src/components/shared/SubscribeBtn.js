@@ -41,10 +41,10 @@ const SubscribeBtn = ({ unit = {}, t, collection }) => {
   }
 
   useEffect(() => {
-    if (subsByType || subsByCO) {
-      dispatch(actions.fetch(MY_NAMESPACE_SUBSCRIPTIONS, subParams));
+    if (!sub && (subsByType || subsByCO)) {
+      dispatch(actions.fetch(MY_NAMESPACE_SUBSCRIPTIONS, { addToList: false, ...subParams }));
     }
-  }, [dispatch, key]);
+  }, [dispatch, key, sub]);
 
   const subsUnsubs = s => {
     if (!user)

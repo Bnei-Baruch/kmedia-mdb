@@ -24,7 +24,7 @@ function* fetch(action) {
   const token = yield select(state => authSelectors.getToken(state.auth));
   if (!token) return;
   // eslint-disable-next-line prefer-const
-  let { namespace, with_files = false, ...params } = action.payload;
+  let { namespace, with_files = false, addToList = true, ...params } = action.payload;
 
   const language = yield select(state => settings.getLanguage(state.settings));
   try {
@@ -45,8 +45,11 @@ function* fetch(action) {
         cu_uids = data.items?.filter(x => !IsCollectionContentType(x.subject_type)).map(x => x.subject_uid) || [];
         break;
       case MY_NAMESPACE_PLAYLISTS:
-        cu_uids = data.items?.filter(p => p.items)
-          .reduce((acc, p) => acc.concat(p.items.flatMap(x => x.content_unit_uid)), []);
+        if (data.items) {
+          cu_uids = data.items.filter(p => p.items)
+            .reduce((acc, p) => acc.concat(p.items.flatMap(x => x.content_unit_uid)), []);
+        }
+        cu_uids.concat(data.items.map(x => x.content_unit_uid).filter(x => !!x));
         break;
       case MY_NAMESPACE_SUBSCRIPTIONS:
         cu_uids = data.items?.map(x => x.content_unit_uid) || [];
@@ -55,7 +58,7 @@ function* fetch(action) {
       default:
     }
 
-    cu_uids = yield select(state => mdbSelectors.skipFetchedCU(state.mdb, cu_uids));
+    cu_uids = yield select(state => mdbSelectors.skipFetchedCU(state.mdb, cu_uids, with_files));
     co_uids = yield select(state => mdbSelectors.skipFetchedCO(state.mdb, co_uids));
     if (cu_uids.length > 0) {
       const { data: { content_units } } = yield call(Api.units, {
@@ -76,7 +79,7 @@ function* fetch(action) {
       yield put(mdbActions.receiveCollections(collections));
     }
 
-    yield put(actions.fetchSuccess({ namespace, ...data }));
+    yield put(actions.fetchSuccess({ namespace, addToList, ...data }));
 
     try {
       const { data: viewData } = yield call(Api.views, cu_uids);

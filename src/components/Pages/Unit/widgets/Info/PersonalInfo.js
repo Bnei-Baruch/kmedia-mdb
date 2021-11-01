@@ -37,7 +37,7 @@ const PersonalInfo = ({ unit = {}, t, collection }) => {
   const dispatch = useDispatch();
   useEffect(() => {
     if (key && !reaction) {
-      dispatch(actions.fetch(MY_NAMESPACE_REACTIONS, likeParams));
+      dispatch(actions.fetch(MY_NAMESPACE_REACTIONS, { addToList: false, ...likeParams }));
     }
 
     dispatch(actions.reactionsCount({ 'uids': [id] }));

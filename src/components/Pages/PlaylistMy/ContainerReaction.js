@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
 import { Header } from 'semantic-ui-react';
 
-import { MY_NAMESPACE_REACTIONS } from '../../../helpers/consts';
+import { IsCollectionContentType, MY_NAMESPACE_REACTIONS } from '../../../helpers/consts';
 import { actions, selectors } from '../../../redux/modules/my';
 import { selectors as mdbSelectors } from '../../../redux/modules/mdb';
 import { selectors as settings } from '../../../redux/modules/settings';
@@ -19,8 +19,9 @@ const PlaylistReactionContainer = ({ t }) => {
   const uiLanguage = useSelector(state => settings.getLanguage(state.settings));
   const user       = useSelector(state => auth.getUser(state.auth));
 
-  const content_units     = useSelector(state => items.map(x => mdbSelectors.getDenormContentUnit(state.mdb, x.subject_uid))) || [];
-  const cuUIDs            = items.map(x => x.subject_uid);
+  const content_units = useSelector(state => items.filter(x => !IsCollectionContentType(x.subject_type)).map(x => mdbSelectors.getDenormContentUnit(state.mdb, x.subject_uid))) || [];
+  const cuUIDs        = content_units.filter(x => !!x).map(x => x.id);
+
   const fictiveCollection = {
     content_units,
     id: MY_NAMESPACE_REACTIONS,
