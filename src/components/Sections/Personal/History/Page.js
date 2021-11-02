@@ -58,11 +58,11 @@ const Page      = ({ location, t }) => {
 
   const renderItem = (x, i) => {
     let newDay   = null;
-    const mp     = i !== 0 && moment(items[i - 1].created_at);
-    const mx     = moment(x.created_at);
+    const mp     = i !== 0 && moment(items[i - 1].timestamp);
+    const mx     = moment(x.timestamp);
     const isDiff = i !== 0 ? mp.date() !== mx.date() : true;
     if (isDiff) {
-      newDay = (<Header as="h3" content={t('values.date', { date: x.created_at })} />);
+      newDay = (<Header as="h3" content={t('values.date', { date: x.timestamp })} />);
     }
 
     const item = (
