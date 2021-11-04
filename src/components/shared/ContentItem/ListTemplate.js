@@ -20,6 +20,7 @@ const imageWidthBySize = {
 const ListTemplate = ({
   unit,
   language,
+  withCUInfo,
   withCCUInfo,
   link,
   ccu,
@@ -72,7 +73,7 @@ const ListTemplate = ({
       className={clsx('cu_item cu_item_list no-thumbnail', { [size]: !!size, selected })}
     >
       <div>
-        <div className="cu_item_duration">{formatDuration(unit.duration)}</div>
+        {withCUInfo && <div className="cu_item_duration">{formatDuration(unit.duration)}</div>}
         {label ? <div className="cu_item_label">{label}</div> : null}
         {percent}
         <div className="cu_item_img" style={{ width }}>
@@ -81,9 +82,9 @@ const ListTemplate = ({
       </div>
       <div className={`cu_item_info ${dir}`}>
         {ccu_info}
-        <div className={clsx('cu_item_name', { 'font_black': !ccu_info })}>
+        {withCUInfo && <div className={clsx('cu_item_name', { 'font_black': !ccu_info })}>
           {unit.name}
-        </div>
+        </div>}
         <div className={`cu_info_description ${dir} text_ellipsis`}>
           {description.map((d, i) => (<span key={i}>{d}</span>))}
         </div>

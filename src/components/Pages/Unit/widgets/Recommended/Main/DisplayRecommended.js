@@ -6,9 +6,11 @@ import { Header, List, Popup } from 'semantic-ui-react';
 import * as shapes from '../../../../../shapes';
 import { canonicalCollection } from '../../../../../../helpers/utils';
 import Link from '../../../../../Language/MultiLanguageLink';
-import CUItemContainer from '../../../../../shared/CUItem/CUItemContainer';
+import { canonicalLink } from '../../../../../../helpers/links';
+import ContentItemContainer from '../../../../../shared/ContentItem/ContentItemContainer';
 import { ClientChroniclesContext } from '../../../../../../helpers/app-contexts';
 import { selectors } from '../../../../../../redux/modules/recommended';
+import { IsCollectionContentType } from '../../../../../../helpers/consts';
 
 const watchingNowToString = watchingNow => {
   if (watchingNow >= 1000) {
@@ -106,12 +108,24 @@ const RecommendedPlaylist = (recommendForUnit, units, selected, t, chronicles, v
                 active={index === selected}
                 onClick={() => chronicles.recommendSelected(unit.id)}
               >
-                {<CUItemContainer
-                  id={unit.id}
-                  key={unit.id}
-                  asList
-                  label={unitLabels[index]}
-                  size={'small'} />
+                {IsCollectionContentType(unit.content_type) ?
+                  <ContentItemContainer
+                    id={unit.cuIDs[0]}
+                    ccuId={unit.id}
+                    key={unit.id}
+                    link={canonicalLink(unit)}
+                    withCUInfo={false}
+                    withCCUInfo={true}
+                    asList
+                    label={unitLabels[index]}
+                    size={'small'} />
+                  :
+                  <ContentItemContainer
+                    id={unit.id}
+                    key={unit.id}
+                    asList
+                    label={unitLabels[index]}
+                    size={'small'} />
                 }
               </List.Item>
             ))
@@ -147,6 +161,8 @@ DisplayRecommended.propTypes = {
 }
 
 const areEqual = (prevProps, nextProps) =>
-  prevProps.unit.id === nextProps.unit.id;
+  prevProps.unit.id === nextProps.unit.id &&
+  prevProps.recommendedUnits.length === nextProps.recommendedUnits.length &&
+  prevProps.recommendedUnits.every((unit, index) => nextProps.recommendedUnits[index].id === unit.id);
 
 export default React.memo(DisplayRecommended, areEqual);

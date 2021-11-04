@@ -426,8 +426,11 @@
         "collections": "קשור ל",
         "study-series": "לכל השיעורים בסדרה",
         "episode": "פרק {{name}}",
+        "episodes": "{{name}} פרקים",
         "lesson-episode": "חלק {{name}}",
+        "lesson-episodes": "{{name}} חלקים",
         "series-episode": "שיעור {{name}}",
+        "series-episodes": "{{name}} שיעורים",
         "views": "{{views}} צפיות"
       },
       "recommended": {
