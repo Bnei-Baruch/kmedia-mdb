@@ -682,6 +682,10 @@
     "login": "Login",
     "logout": "Logout",
     "needToLogin": "Sign in to like, save and subscribe to videos",
-    "account": "My Account"
+    "account": "My Account",
+    "no_playlists": "You have no playlists, please create one",
+    "no_reactions": "You have no videos you liked",
+    "no_history": "Start watching videos to be shown here",
+    "no_subscriptions": "You have no subscriptions yet, subscribe to see them here"
   }
 }

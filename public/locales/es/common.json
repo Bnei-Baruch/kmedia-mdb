@@ -680,6 +680,10 @@
     "login": "Iniciar sesión",
     "logout": "Cerrar sesión",
     "needToLogin": "Iniciar sesión para me gusta, guardar y suscribirse a videos",
-    "account": "Mi cuenta"
+    "account": "Mi cuenta",
+    "no_playlists": "Aún no tienes listas de reproducción, crea una.",
+    "no_reactions": "No tienes vídeos que te gustaron",
+    "no_history": "Empiece a ver los videos que se mostrarán aquí",
+    "no_subscriptions": "Aún no tienes suscripciones, suscríbete para verlas aquí"
   }
 }
