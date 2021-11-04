@@ -65,6 +65,7 @@ const PlaylistInfo = ({ cuID, t, handleClose = null }) => {
         status = updateStatus.delete;
       }
     }
+
     const count = (!!forUpdate[p.id] && status === null) ? -1 : 1;
     setForUpdate({ ...forUpdate, [p.id]: status, count: forUpdate.count + count });
   };
