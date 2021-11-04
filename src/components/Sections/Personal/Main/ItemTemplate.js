@@ -47,7 +47,17 @@ const ItemTemplate    = ({ children, namespace, t, withSeeAll = false, language 
           </Header.Content>
           <Header.Subheader className="display-iblock">{seeAll}</Header.Subheader>
         </Header>
-        {children}
+        {
+          children.length === 0 ?
+            (
+              <Header
+                textAlign="center"
+                size="large"
+                content={t(`personal.no_${namespace}`)}
+              />
+            )
+            : children
+        }
       </Container>
     </div>
   );

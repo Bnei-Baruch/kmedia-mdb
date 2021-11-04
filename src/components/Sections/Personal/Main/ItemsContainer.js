@@ -34,7 +34,8 @@ const ItemsContainer = ({ pageSize = 8, pageNo = 1, t, namespace, withSeeAll }) 
   const wip   = useSelector(state => selectors.getWIP(state.my, namespace));
 
   if (wip || err) return WipErr({ wip, err, t });
-  if (items.length === 0) return null;
+  if (items.length === 0)
+    return <ItemTemplate namespace={namespace} children={[]} t={t} language={language} />;;
   let children = null;
 
   switch (namespace) {

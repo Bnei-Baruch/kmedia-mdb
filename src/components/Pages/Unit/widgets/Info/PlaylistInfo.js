@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as PropTypes from 'prop-types';
-import { Button, Checkbox, Icon, Input, List, Modal, Divider } from 'semantic-ui-react';
+import { Button, Checkbox, Icon, Input, List, Modal, Divider, Segment, Container } from 'semantic-ui-react';
 
 import { actions, selectors } from '../../../../../redux/modules/my';
 import { selectors as auth } from '../../../../../redux/modules/auth';
@@ -12,11 +12,14 @@ import AlertModal from '../../../../shared/AlertModal';
 import PlaylistAddIcon from '../../../../../images/icons/PlaylistAdd';
 import NeedToLogin from '../../../../Sections/Personal/NeedToLogin';
 
+const updateStatus = { save: 1, delete: 2 };
+
 const PlaylistInfo = ({ cuID, t, handleClose = null }) => {
   const [isOpen, setIsOpen]               = useState(false);
   const [alertMsg, setAlertMsg]           = useState();
   const [isNeedLogin, setIsNeedLogin]     = useState();
   const [selected, setSelected]           = useState([]);
+  const [forUpdate, setForUpdate]         = useState({ count: 0 });
   const [newPlaylist, setNewPlaylist]     = useState('');
   const [isNewPlaylist, setIsNewPlaylist] = useState(false);
   const [countNew, setCountNew]           = useState(0);
@@ -30,22 +33,40 @@ const PlaylistInfo = ({ cuID, t, handleClose = null }) => {
 
   useEffect(() => {
     playlists.sort((a, b) => b.id - a.id);
-    const s = playlists.slice(0, countNew);
+    const s      = playlists.slice(0, countNew).filter(x => !forUpdate[x.id]);
+    const update = s.reduce((acc, x) => {
+      acc[x.id] = updateStatus.save;
+      return acc;
+    }, {});
+    setForUpdate({ ...forUpdate, ...update, count: forUpdate.count + s.length });
     setSelected([...s, ...saved]);
-  }, [playlists.length, cuID]);
+  }, [playlists.length]);
 
   const dir = getLanguageDirection(language);
 
   const onOpen = () => {
+    setSelected([]);
+    setCountNew(0);
+    setForUpdate({ count: 0 });
     dispatch(actions.fetch(MY_NAMESPACE_PLAYLISTS, { 'exist_cu': cuID, order_by: 'id' }));
   };
 
   const handleChange = (checked, p) => {
+    let status = null;
     if (checked) {
       setSelected([p, ...selected]);
+
+      if (forUpdate[p.id] !== updateStatus.delete) {
+        status = updateStatus.save;
+      }
     } else {
       setSelected(selected.filter(x => x.id !== p.id));
+      if (forUpdate[p.id] !== updateStatus.save) {
+        status = updateStatus.delete;
+      }
     }
+    const count = (!!forUpdate[p.id] && status === null) ? -1 : 1;
+    setForUpdate({ ...forUpdate, [p.id]: status, count: forUpdate.count + count });
   };
 
   const handleAddPlaylist = () => setIsNewPlaylist(true);
@@ -155,9 +176,10 @@ const PlaylistInfo = ({ cuID, t, handleClose = null }) => {
         <Modal.Content>
           <List>
             {playlists.map(renderPlaylist)}
+            {(playlists.length === 0) && t(`personal.no_${MY_NAMESPACE_PLAYLISTS}`)}
             <Divider hidden />
             {
-              isNewPlaylist
+              isNewPlaylist || playlists.length === 0
                 ? (
                   <List.Item key="playlist_form">
                     <List.Content floated='right'>
@@ -205,6 +227,7 @@ const PlaylistInfo = ({ cuID, t, handleClose = null }) => {
                 content={t('buttons.save')}
                 onClick={save}
                 className="uppercase"
+                disabled={!forUpdate.count}
               />
               <Button
                 primary
