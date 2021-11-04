@@ -1,18 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { assetUrl } from '../../../helpers/Api';
+import { cmsImagesUrl, Requests } from '../../../helpers/Api';
 import FallbackImage from '../FallbackImage';
 
 const CollectionLogo = props => {
   const { collectionId = null, ...rest } = props;
+
+  const src = Requests.imaginary('thumbnail', {
+    url: cmsImagesUrl(`logos/${collectionId}.jpg`),
+    width: 250,
+    stripmeta: true
+  });
 
   return (
     <FallbackImage
       fluid
       shape="rounded"
       className="collection-logo ui fluid image"
-      src={assetUrl(`logos/collections/${collectionId}.jpg`)}
+      src={src}
       {...rest}
     />
   );

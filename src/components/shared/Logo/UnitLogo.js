@@ -1,17 +1,34 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { assetUrl, Requests } from '../../../helpers/Api';
+import { assetUrl, cmsImagesUrl, Requests } from '../../../helpers/Api';
 import FallbackImage from '../FallbackImage';
 
 const UnitLogo = props => {
-  const { unitId = null, collectionId = null, width = 120, className = '', fallbackImg = 'default', ...rest } = props;
+  const { unitId       = null,
+          collectionId = null,
+          width        = 120,
+          height,
+          className    = '',
+          fallbackImg  = 'default',
+          ...rest
+        } = props;
 
-  const src = Requests.imaginary('thumbnail', {
-    url: assetUrl(`api/thumbnail/${unitId}`),
-    width,
-    stripmeta: true,
-  });
+  let src;
+  if (unitId) {
+    src = Requests.imaginary('thumbnail', {
+      url: assetUrl(`api/thumbnail/${unitId}`),
+      width,
+      stripmeta: true,
+    });
+  } else if (collectionId) {
+    src = Requests.imaginary('thumbnail', {
+      url: cmsImagesUrl(`logos/${collectionId}.jpg`),
+      width,
+      height,
+      stripmeta: true
+    });
+  }
 
   const fallback = fallbackImg || 'default';
 
@@ -20,11 +37,9 @@ const UnitLogo = props => {
       {...rest}
       src={src}
       width={width}
+      height={height}
       className={`unit-logo ${className} ui image`}
-      fallbackImage={[
-        collectionId ? assetUrl(`logos/collections/${collectionId}.jpg`) : null,
-        fallback
-      ]}
+      fallbackImage={[fallback]}
     />
   );
 };

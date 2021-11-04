@@ -1830,6 +1830,7 @@
   margin-left: 0;
   margin-right: 20px;
   cursor: pointer;
+
   a {
     svg {
       position: relative;
@@ -1838,6 +1839,7 @@
       margin-left: 5px;
     }
   }
+
   audio {
     height: 25px;
     position: relative;
@@ -1848,6 +1850,7 @@
       width: 100%;
     }
   }
+
   .playAudioIcon {
     margin-left: 10px;
   }
@@ -1856,6 +1859,7 @@
 .rtl .library-audio-player {
   margin-left: 20px;
   margin-right: 0;
+
   .playAudioIcon {
     margin-right: 10px;
     margin-left: 0;
@@ -1916,6 +1920,7 @@
 
 .cu_item {
   overflow: hidden;
+
   .cu_item_img {
     position: relative;
     width: 100%;
@@ -1937,11 +1942,13 @@
         bottom: 0.5em;
         width: 100%;
         display: flex;
-        flex: 3 30px;
+        flex: 0 0 50px;
         flex-flow: nowrap;
 
         .ui.image, svg {
           height: 3.5em !important;
+          flex: 0 0 auto;
+          width: 50px;
         }
 
         svg {
@@ -1951,11 +1958,8 @@
         .header {
           width: 100%;
           color: white;
-          line-height: 3em;
-          overflow: hidden;
-          white-space: nowrap;
-          text-overflow: ellipsis;
-          padding: 0 2em;
+          padding: 4px 8px;
+          align-self: center;
           margin: 0;
         }
       }
@@ -1966,12 +1970,14 @@
     }
   }
 
+}
+
+.card.cu_item {
   .cu_item_info_co {
-    .header {
-      background-image: linear-gradient(0deg, #1b1c1d, rgba(27, 28, 29, .85));
-    }
+    background-image: linear-gradient(0deg, #1b1c1d, rgba(27, 28, 29, .85));
   }
 }
+
 
 .cu_item_duration {
   font-size: 0.8em;
@@ -2131,6 +2137,7 @@
 
   .cu_item_info_co {
     color: $black;
+
 
     @include mobile {
       line-height: 0.7em;

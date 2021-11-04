@@ -25,17 +25,14 @@ const CardTemplate = ({ unit, language, withCCUInfo, link, ccu, description, chi
       />
     );
   }
-
   const coInfo = ccu && withCCUInfo ? (
     <div className="cu_item_info_co">
-      <Divider style={{ width: '4em' }} />
-      <div style={{ margin: '0 -1.5em' }}>
-        <UnitLogo collectionId={ccu.id} circular />
-      </div>
+      <Divider style={{ width: '1em' }} />
+      <UnitLogo collectionId={ccu.id} circular height={80} width={120} />
       <Popup
         basic
         content={ccu.name}
-        trigger={<Header size="small" content={ccu.name || NO_NAME} textAlign="left" />}
+        trigger={<Header size="medium" content={ccu.name || NO_NAME} textAlign="left" />}
       />
     </div>
   ) : null;
