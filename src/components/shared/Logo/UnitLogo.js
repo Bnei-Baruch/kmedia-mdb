@@ -6,13 +6,13 @@ import FallbackImage from '../FallbackImage';
 
 const UnitLogo = props => {
   const { unitId       = null,
-          collectionId = null,
-          width        = 120,
-          height,
-          className    = '',
-          fallbackImg  = 'default',
-          ...rest
-        } = props;
+    collectionId = null,
+    width        = 120,
+    height,
+    className    = '',
+    fallbackImg  = 'default',
+    ...rest
+  } = props;
 
   let src;
   if (unitId) {
