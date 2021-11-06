@@ -68,7 +68,7 @@ const renderBlogPostsAndTweets = (latestBlogPosts, latestTweets, language, t) =>
 const renderActiveSections = (t, isMobileDevice) => {
   const map = isMobileDevice ?
     x => (
-      <Grid.Column width={5} key={x} textAlign="center">
+      <Grid.Column width={4} key={x} textAlign="center">
         <Topic title={t(`nav.sidebar.${x}`)} src={x} href={`/${x}`} />
       </Grid.Column>
     ) :
@@ -78,7 +78,7 @@ const renderActiveSections = (t, isMobileDevice) => {
       </Grid.Column>
     );
 
-  return ['lessons', 'programs', 'sources', 'events', 'publications', 'simple-mode'].map(map);
+  return ['lessons', 'programs', 'sources', 'events', 'publications', 'simple-mode','topics','likutim'].map(map);
 };
 
 const renderActiveSectionsGrid = (t, isMobileDevice) =>
