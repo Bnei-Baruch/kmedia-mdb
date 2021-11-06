@@ -78,7 +78,7 @@ const renderActiveSections = (t, isMobileDevice) => {
       </Grid.Column>
     );
 
-  return ['lessons', 'programs', 'sources', 'events', 'publications', 'simple-mode','topics','likutim'].map(map);
+  return ['lessons', 'programs', 'sources', 'events', 'publications', 'simple-mode', 'topics', 'likutim'].map(map);
 };
 
 const renderActiveSectionsGrid = (t, isMobileDevice) =>
