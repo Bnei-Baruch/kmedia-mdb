@@ -37,26 +37,21 @@ const derivedTextUnits = unit => {
 
 const Materials = ({ unit = undefined, t, playlistComponent = null }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
-  const chronicles = useContext(ClientChroniclesContext);
+  const chronicles         = useContext(ClientChroniclesContext);
 
   if (!unit) {
     return null;
   }
 
-  const derivedTexts = derivedTextUnits(unit);
+  const derivedTexts     = derivedTextUnits(unit);
   const chroniclesAppend = chronicles ? chronicles.append.bind(chronicles) : noop;
-  const items        = [
-    {
-      name: 'downloads',
-      label: t('media-downloads.title'),
-      component: <MediaDownloads unit={unit} chroniclesAppend={chroniclesAppend} />
-    },
+  const items            = [
     {
       name: 'transcription',
       label: t('materials.transcription.header'),
       component: <TranscriptionContainer unit={unit} key="transcription" />
     },
-    {
+    (![CT_CLIP, CT_VIDEO_PROGRAM_CHAPTER].includes(unit.content_type)) && {
       name: 'sources',
       label: t('materials.sources.header'),
       component: <Sources unit={unit} />
@@ -66,6 +61,11 @@ const Materials = ({ unit = undefined, t, playlistComponent = null }) => {
       label: t('materials.sketches.header'),
       component: <Sketches unit={unit} />,
     },
+    {
+      name: 'downloads',
+      label: t('media-downloads.title'),
+      component: <MediaDownloads unit={unit} chroniclesAppend={chroniclesAppend} />
+    }
   ];
 
   if ([CT_VIDEO_PROGRAM_CHAPTER, CT_VIRTUAL_LESSON, CT_CLIP].includes(unit.content_type)) {
@@ -87,7 +87,7 @@ const Materials = ({ unit = undefined, t, playlistComponent = null }) => {
         name: 'playlist',
         label: t('materials.playlist.header'),
         component: playlistComponent()
-      }
+      };
 
     items.unshift(item);
   }
@@ -119,7 +119,7 @@ const Materials = ({ unit = undefined, t, playlistComponent = null }) => {
     }
   }
 
-  return <TabsMenu items={items} />
+  return <TabsMenu items={items} />;
 };
 
 Materials.propTypes = {
