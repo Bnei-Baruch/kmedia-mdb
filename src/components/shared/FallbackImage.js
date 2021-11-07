@@ -70,6 +70,19 @@ const FallbackImage = props => {
       </div>);
   }
 
+  if (width && rest.force16x9) {
+    return (
+      <div style={{ width, height: width * 9 / 16, overflow: 'hidden' }} >
+        <Image
+          className={className}
+          style={{ top: 'calc(-50%)', width: '100%' }}
+          {...rest}
+          src={imageSource}
+        />
+      </div>
+    );
+  }
+
   return (
     <Image
       className={className}

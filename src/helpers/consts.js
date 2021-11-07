@@ -64,6 +64,33 @@ export const CT_RESEARCH_MATERIAL     = 'RESEARCH_MATERIAL';
 export const CT_KTAIM_NIVCHARIM       = 'KTAIM_NIVCHARIM';
 export const CT_LIKUTIM               = 'LIKUTIM';
 
+
+export const CT_UNITS = [
+  CT_LESSON_PART,
+  CT_LECTURE,
+  CT_CHILDREN_LESSON,
+  CT_WOMEN_LESSON,
+  CT_VIRTUAL_LESSON,
+  CT_FRIENDS_GATHERING,
+  CT_MEAL,
+  CT_VIDEO_PROGRAM_CHAPTER,
+  CT_FULL_LESSON,
+  CT_ARTICLE,
+  CT_UNKNOWN,
+  CT_EVENT_PART,
+  CT_CLIP,
+  CT_TRAINING,
+  CT_KITEI_MAKOR,
+  CT_PUBLICATION,
+  CT_LELO_MIKUD,
+  CT_BLOG_POST,
+  CT_RESEARCH_MATERIAL,
+  CT_KTAIM_NIVCHARIM,
+  CT_LIKUTIM,
+];
+
+export const IsUnitContentType = contentType => CT_UNITS.includes(contentType);
+
 // Content types for additional Elastic results
 export const SCT_BLOG_POST = 'R_BLOG_POST';
 export const SCT_TWEET     = 'R_TWEET';

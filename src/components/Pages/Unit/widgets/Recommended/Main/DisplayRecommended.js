@@ -7,10 +7,10 @@ import * as shapes from '../../../../../shapes';
 import { canonicalCollection } from '../../../../../../helpers/utils';
 import Link from '../../../../../Language/MultiLanguageLink';
 import { canonicalLink } from '../../../../../../helpers/links';
-import ContentItemContainer from '../../../../../shared/ContentItem/ContentItemContainer';
+import ContentItemContainer, { SourceItemContainer } from '../../../../../shared/ContentItem/ContentItemContainer';
 import { ClientChroniclesContext } from '../../../../../../helpers/app-contexts';
 import { selectors } from '../../../../../../redux/modules/recommended';
-import { IsCollectionContentType } from '../../../../../../helpers/consts';
+import { IsCollectionContentType, IsUnitContentType } from '../../../../../../helpers/consts';
 
 const watchingNowToString = watchingNow => {
   if (watchingNow >= 1000) {
@@ -110,7 +110,7 @@ const RecommendedPlaylist = (recommendForUnit, units, selected, t, chronicles, v
               >
                 {IsCollectionContentType(unit.content_type) ?
                   <ContentItemContainer
-                    id={unit.cuIDs[0]}
+                    id={(unit.cuIDs && unit.cuIDs.length && unit.cuIDs[0]) || ''}
                     ccuId={unit.id}
                     key={unit.id}
                     link={canonicalLink(unit)}
@@ -119,13 +119,20 @@ const RecommendedPlaylist = (recommendForUnit, units, selected, t, chronicles, v
                     asList
                     label={unitLabels[index]}
                     size={'small'} />
-                  :
-                  <ContentItemContainer
-                    id={unit.id}
-                    key={unit.id}
-                    asList
-                    label={unitLabels[index]}
-                    size={'small'} />
+                  : (IsUnitContentType(unit.content_type) ?
+                    <ContentItemContainer
+                      id={unit.id}
+                      key={unit.id}
+                      asList
+                      label={unitLabels[index]}
+                      size={'small'} /> :
+                    <SourceItemContainer
+                      id={unit.id}
+                      key={unit.id}
+                      asList
+                      label={unitLabels[index]}
+                      size={'small'} />
+                  )
                 }
               </List.Item>
             ))
