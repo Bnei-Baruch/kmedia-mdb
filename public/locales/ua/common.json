@@ -4,9 +4,11 @@
       "header": "Кабала Медіа"
     },
     "sidebar": {
+      "personal": "My Library",
       "lessons": "Уроки та Лекції",
       "programs": "Програми та Кліпи",
       "sources": "Бібліотека",
+      "likutim": "Likutim",
       "events": "Конгреси, події",
       "books": "Книжки",
       "topics": "Теми",
@@ -110,10 +112,14 @@
     "more": "Ще",
     "copy-link": "Копіювати лінк",
     "search": "Пошук",
-    "previous": "Попередній",
-    "next": "Наступний",
+    "previous-lesson": "Попередній",
+    "next-lesson": "Наступний",
+    "previous-article": "Previous article",
+    "next-article": "Next article",
     "copy": "Копіювати",
-    "view-all": "Подивитись все"
+    "view-all": "Подивитись все",
+    "save": "Save",
+    "remove": "Remove"
   },
   "player": {
     "messages": {
@@ -131,6 +137,20 @@
     },
     "error": {
       "loading": "Помилка при завантаженні файлу."
+    },
+    "header": {
+      "series-by-topic": "Series of lessons on the topic:"
+    }
+  },
+  "playlist": {
+    "title-by-type": {
+      "DAILY_LESSON": "Parts of the lesson",
+      "SPECIAL_LESSON": "Parts of the lesson",
+      "CONGRESS": "Parts of the event",
+      "HOLIDAY": "Parts of the holiday",
+      "PICNIC": "Parts of the event",
+      "UNITY_DAY": "Parts of the event",
+      "LESSONS_SERIES": "Parts of the collection"
     }
   },
   "messages": {
@@ -165,6 +185,9 @@
       "second": "You can choose other content languages"
     },
     "didYouMean": "Ти мав на увазі: ",
+    "showAll": "Show All",
+    "lessons": "Lessons",
+    "programs": "Programs",
     "sortby": "Сортувати за",
     "sorts": {
       "relevance": "актуальністю",
@@ -268,6 +291,10 @@
     "list": {
       "related": "Відносяться до:",
       "number": "№ ",
+      "nameByNum_1": "Morning",
+      "nameByNum_2": "Afternoon",
+      "nameByNum_3": "Evening",
+      "nameByNum_4": "Evening 2",
       "item_from": "Частина з:"
     },
     "unit": {
@@ -290,6 +317,13 @@
       "description": "Оновлений ярлик до останнього денного уроку"
     }
   },
+  "likutim":{
+    "header": {
+      "text": "Excerpts from Kabbalistic Sources",
+      "subtext": "Excerpts from the Sources on various subjects"
+    },
+    "item-header": "Excerpts from the Sources:"
+  },
   "programs": {
     "header": {
       "text": "Програми",
@@ -311,7 +345,8 @@
     },
     "list": {
       "episode_from": "Епізод із:",
-      "item_of": "Частина з:"
+      "item_of": "Частина з:",
+      "show_all": "To all episodes"
     },
     "unit": {
       "recommended": {
@@ -325,7 +360,8 @@
   "publications": {
     "header": {
       "text": "Публікації",
-      "subtext": "Статті про поточні події, культуру, народні науки, взаємини один з одним, представлені з унікальної точки зору мудрості Кабали"
+      "subtext": "Статті про поточні події, культуру, народні науки, взаємини один з одним, представлені з унікальної точки зору мудрості Кабали",
+      "subtext2": ""
     },
     "tabs": {
       "articles": "Статті",
@@ -334,6 +370,7 @@
       "audio-blog": "Аудіо Блог"
     },
     "list": {
+      "item_from": "Item of:",
       "episode_from": "Частина з:"
     },
     "unit": {
@@ -369,6 +406,12 @@
     "choose-date": "Виберіть дату",
     "today-lessons": "Щоденні уроки Каббали"
   },
+  "help": {
+    "header": {
+      "text": "Help",
+      "subtext": "In this section you will find video tutorials and best practices on how to use the site"
+    }
+  },
   "pages": {
     "collection": {
       "items": {
@@ -382,7 +425,15 @@
       "info": {
         "sources": "Джерела",
         "topics": "Теми",
-        "collections": "Відноситься до"
+        "collections": "Відноситься до",
+        "study-series": "To all the lessons of the collection",
+        "episode": "Епізод {{name}}",
+        "episodes": "{{name}} episodes",
+        "lesson-episode": "Part {{name}}",
+        "lesson-episodes": "{{name}} parts",
+        "series-episode": "Lesson {{name}}",
+        "series-episodes": "{{name}} lessons",
+        "views": "{{views}} Views"
       },
       "recommended": {
         "same-collection": {
@@ -422,7 +473,20 @@
       "header": "Selected Highlights"
     },
     "recommended": {
-      "header": "Recommended"
+      "same-topic": "Recommended for topic",
+      "same-collection": "Recommended chapters from",
+      "any-topic": "Any Topic",
+      "default": "Recommended for you",
+      "popular": "Most viewed",
+      "watching-now": "watching now",
+      "views": "views",
+      "last": "Last chapter",
+      "next": "Next chapter",
+      "prev": "Prev chapter",
+      "rand": "Random content",
+      "more": "More",
+      "less": "Less",
+      "new": "New"
     },
     "playlist":{
       "header": "Up Next"
@@ -438,7 +502,8 @@
     "az": "А-Я",
     "default": "За замовчуванням",
     "filter": "Фiльтр...",
-    "share-title": "Читайте статтю"
+    "share-title": "Читайте статтю",
+    "play-audio-file": "Відтворіть аудіофайл"
   },
   "topics": {
     "header": {
@@ -680,5 +745,35 @@
     "copy-link": "Копіювати посилання",
     "copy-text": "Скопіювати текст",
     "disable-share": "Скасувати"
+  },
+  "personal": {
+    "subsNewUnits": "new episodes",
+    "unsubscribe": "Unsubscribe",
+    "subscribe": "Subscribe",
+    "unsubscribeSuccessful": "Subscription removed",
+    "subscribeSuccessful": "Subscription added",
+    "newPlaylistSuccessful": "New playlist {{name}} created",
+    "addToPlaylistSuccessful": "Added to playlist {{name}}",
+    "history": "History",
+    "likes": "Liked videos",
+    "playlists": "Playlists",
+    "playlistNoResult": "No videos in this playlist",
+    "subscriptions": "Subscriptions",
+    "playAll": "Play all",
+    "addToPlaylist": "Save to...",
+    "newPlaylistName": "New playlist name",
+    "newPlaylist": "Create new playlist",
+    "editPlaylist": "Edit playlist",
+    "removedSuccessfully": "Successfully removed",
+    "removeHistory": "Remove from history",
+    "removeLike": "Remove from Liked videos",
+    "removeFromPlaylist": "Remove from playlist",
+    "confirmRemovePlaylist": "Are you sure you want to delete playlist {{name}}?\nNote: Deleting playlists is a permanent action and cannot be undone.",
+    "confirmUnsubscribe": "Unsubscribe from {{name}}?",
+    "videosOnList": "videos",
+    "login": "Login",
+    "logout": "Logout",
+    "needToLogin": "Sign in to like, save and subscribe to videos",
+    "account": "My Account"
   }
 }

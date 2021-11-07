@@ -13,7 +13,7 @@ import {
   MT_VIDEO,
   VS_DEFAULT,
 } from './consts';
-import { getQuery, updateQuery } from './url';
+import { getQuery, stringify, updateQuery } from './url';
 import { canonicalLink } from './links';
 import MediaHelper from './media';
 import { isEmpty, physicalFile } from './utils';
@@ -185,6 +185,18 @@ const playlist = (collection, mediaType, contentLanguage, uiLanguage) => {
   };
 };
 
+const playlistFromUnits = (collection, mediaType, contentLanguage, uiLanguage) => {
+  const items = collection.content_units
+    .map(x => playableItem(x, mediaType, uiLanguage, contentLanguage))
+    .filter(item => !!item.unit)
+    .map(x => {
+      x.shareUrl = canonicalLink(x.unit);
+      return x;
+    });
+
+  return { items, collection, mediaType, contentLanguage, uiLanguage, name: collection.name };
+};
+
 const getMediaTypeFromQuery = (location, defaultMediaType) => {
   const query = getQuery(location);
   const mt    = (query.mediaType || '').toLowerCase();
@@ -222,6 +234,11 @@ const setActivePartInQuery = (history, ap) =>
     ap
   }));
 
+const linkWithoutActivePart = location => {
+  const { search } = getQuery(location);
+  return `${location.pathname || '/'}${stringify(search)}`;
+};
+
 const getEmbedFromQuery = location => {
   const query = getQuery(location);
   return query.embed === '1';
@@ -240,12 +257,14 @@ const switchAV = (selectedItem, history) => {
 const exportMethods = {
   playableItem,
   playlist,
+  playlistFromUnits,
   getMediaTypeFromQuery,
   setMediaTypeInQuery,
   getLanguageFromQuery,
   setLanguageInQuery,
   getActivePartFromQuery,
   setActivePartInQuery,
+  linkWithoutActivePart,
   restorePreferredMediaType,
   persistPreferredMediaType,
   restorePreferredVideoSize,

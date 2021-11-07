@@ -9,6 +9,8 @@ import PublicationsIcon from '../images/icons/Publications';
 import DownloadIcon from '../images/icons/Download';
 import InfoIcon from '../images/icons/Info';
 import SimpleModeIcon from '../images/icons/SimpleMode';
+import LikutimIcon from '../images/icons/Likutim';
+import TopicsIcon from '../images/icons/Topics';
 
 import DailyLessonsFallbackIcon from '../images/fallbacks/DailylessonsFallback';
 import ProgramsFallbackIcon from '../images/fallbacks/ProgramsFallback';
@@ -29,6 +31,8 @@ const sectionLogo = {
   downloads: DownloadIcon,
   info: InfoIcon,
   'simple-mode': SimpleModeIcon,
+  likutim: LikutimIcon,
+  topics: TopicsIcon
 };
 
 export const SectionLogo = ({ name, ...props }) => {

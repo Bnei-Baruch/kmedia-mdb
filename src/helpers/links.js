@@ -30,6 +30,7 @@ import {
   CT_MEAL,
   CT_MEALS,
   CT_PICNIC,
+  CT_SOURCE,
   CT_SONGS,
   CT_SPECIAL_LESSON,
   CT_UNITY_DAY,
@@ -46,6 +47,7 @@ import {
   UNIT_LESSONS_TYPE,
   UNIT_PROGRAMS_TYPE,
   UNIT_PUBLICATIONS_TYPE,
+  CT_LIKUTIM,
 } from './consts';
 
 export const landingPageSectionLink = (landingPage, filterValues) => {
@@ -111,7 +113,7 @@ export const canonicalLink = (entity, mediaLang) => {
   }
 
   // source
-  if (entity.content_type === 'SOURCE') {
+  if (entity.content_type === CT_SOURCE) {
     return `/sources/${entity.id}`;
   }
 
@@ -154,6 +156,8 @@ export const canonicalLink = (entity, mediaLang) => {
       return `/events/c/${entity.id}`;
     case CT_SONGS:
       return `/music/c/${entity.id}`;
+    case CT_LIKUTIM:
+      return `/likutim/${entity.id}`;
     default:
       break;
   }

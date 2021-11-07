@@ -6,9 +6,23 @@ import isEqual from 'react-fast-compare';
 import { useEffect, useRef } from 'react';
 
 import { CollectionsBreakdown } from './mdb';
-import { canonicalSectionByUnit } from './links';
+import { canonicalSectionByLink, canonicalSectionByUnit } from './links';
 import * as consts from './consts';
-import { LANGUAGES } from './consts';
+import {
+  CT_CONGRESS,
+  CT_DAILY_LESSON,
+  CT_FRIENDS_GATHERINGS,
+  CT_HOLIDAY,
+  CT_LESSONS_SERIES,
+  CT_MEALS, CT_PICNIC,
+  CT_SPECIAL_LESSON,
+  CT_UNITY_DAY,
+  CT_VIDEO_PROGRAM,
+  CT_VIRTUAL_LESSONS,
+  CT_WOMEN_LESSONS,
+  LANGUAGES
+} from './consts';
+import { Requests } from './Api';
 
 const CDN_URL     = process.env.REACT_APP_CDN_URL;
 const PUBLIC_BASE = process.env.REACT_APP_PUBLIC_BASE;
@@ -245,7 +259,7 @@ export const getRSSFeedByLang = language => {
   }
 };
 
-export const getRSSLinkByLang = language => `https://feeds.feedburner.com/${  getRSSFeedByLang(language)}`;
+export const getRSSLinkByLang = language => `https://feeds.feedburner.com/${getRSSFeedByLang(language)}`;
 
 export const getRSSLinkByTopic = (topicId, language) => `https://kabbalahmedia.info/feeds/collections/${LANGUAGES[language].lang3}/${topicId}`;
 
@@ -260,7 +274,7 @@ const podcastLinks = new Map([
 
 export const getPodcastLinkByLang = language => {
   const hash = podcastLinks.get(language) || 'kabbalah-media-mp3-kab-eng/id1109845884?l=iw';
-  return `https://podcasts.apple.com/il/podcast/${  hash}`;
+  return `https://podcasts.apple.com/il/podcast/${hash}`;
 };
 
 // Compare properties without functions
@@ -323,7 +337,8 @@ export const getSectionForTranslation = content_type => {
   }
 };
 
-export const noop = () => {};
+export const noop = () => {
+};
 
 // Used in React hooks to remember previous props.
 export const usePrevious = value => {
@@ -360,7 +375,7 @@ export const partialAssign = (target, source, what = true) => {
         if (Array.isArray(source[property])) {
           target[property] = source[property].map(sourceArrValue => partialAssign({}, sourceArrValue, what[property]));
         } else {
-          target[property] = partialAssign({}, source[property], what[property])
+          target[property] = partialAssign({}, source[property], what[property]);
         }
       }
       // Ignore unexisting field
@@ -371,4 +386,45 @@ export const partialAssign = (target, source, what = true) => {
 
   console.error('Unexpected what for partialAssign:', what);
   return {};
-}
+};
+
+export const imageByUnit = (unit, link) => {
+  // collections -- prepare random image
+  switch (unit.content_type) {
+    case CT_CONGRESS:
+    case CT_MEALS:
+    case CT_DAILY_LESSON:
+    case CT_SPECIAL_LESSON:
+    case CT_VIRTUAL_LESSONS:
+    case CT_WOMEN_LESSONS:
+    case CT_VIDEO_PROGRAM:
+    case CT_FRIENDS_GATHERINGS:
+    case CT_HOLIDAY:
+    case CT_PICNIC:
+    case CT_UNITY_DAY:
+    case CT_LESSONS_SERIES:
+      return Requests.imaginaryRandom('resize', {
+        width: 512,
+        height: 288,
+        nocrop: false,
+        stripmeta: true,
+      }, `lessons/latest_lesson_%s.jpg`);
+    default:
+      return canonicalSectionByLink(link);
+
+  }
+};
+
+export const cuPartNameByCCUType = ct => {
+  const prefix = 'pages.unit.info.';
+  switch (ct) {
+    case CT_DAILY_LESSON:
+    case CT_SPECIAL_LESSON:
+    case CT_CONGRESS:
+      return `${prefix}lesson-episode`;
+    case CT_LESSONS_SERIES:
+      return `${prefix}series-episode`;
+    default:
+      return `${prefix}episode`;
+  }
+};

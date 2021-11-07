@@ -5,11 +5,12 @@ import { Button } from 'semantic-ui-react';
 
 import { LANG_ENGLISH, LANG_RUSSIAN, LANG_UKRAINIAN } from '../../helpers/consts';
 
-const Vh_Button = ({ t }) => (
-  DButton({ content: t('home.virtual-home'), href: `https://virtualhome.kli.one/?bbref_internal=kmedia&bbref_lang=he`, icon: 'globe', className: 'vh-button' })
+const Vh_Button = ({ t, language }) => (
+  DButton({ content: t('home.virtual-home'), href: `https://kli.one/?bbref_internal=kmedia&bbref_lang=${language}&lang=${language}`, icon: 'globe', className: 'vh-button' })
 );
 
 Vh_Button.propTypes = {
+  language: PropTypes.string.isRequired,
   t: PropTypes.func.isRequired,
 };
 

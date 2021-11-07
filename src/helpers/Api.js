@@ -1,17 +1,20 @@
 import axios from 'axios';
+import { MY_NAMESPACE_PLAYLIST_BY_ID, MY_NAMESPACE_PLAYLISTS } from './consts';
 
 const API_BACKEND             = process.env.REACT_APP_API_BACKEND;
 const ASSETS_BACKEND          = process.env.REACT_APP_ASSETS_BACKEND;
 const CMS_BACKEND             = process.env.REACT_APP_CMS_BACKEND || `${API_BACKEND}cms/`;
 const IMAGINARY_URL           = process.env.REACT_APP_IMAGINARY_URL;
 const IMAGINARY_INTERNAL_HOST = process.env.REACT_APP_IMAGINARY_INTERNAL_HOST || 'localhost';
-const API_RECOMMENDED         = process.env.REACT_APP_RECOMMENDED;
+const API_FEED                = process.env.REACT_APP_FEED;
 const CHRONICLES_BACKEND      = process.env.REACT_APP_CHRONICLES_BACKEND;
+const PERSONAL_API_BACKEND    = process.env.REACT_APP_MY_BACKEND;
 
 export const backendUrl               = path => `${API_BACKEND}${path}`;
 export const assetUrl                 = path => `${ASSETS_BACKEND}${path}`;
 export const cmsUrl                   = path => `${CMS_BACKEND}${path}`;
 export const imaginaryUrl             = path => `${IMAGINARY_URL}${path}`;
+export const feedUrl                  = path => `${API_FEED}${path}`;
 export const chroniclesUrl            = path => `${CHRONICLES_BACKEND}${path}`;
 export const chroniclesBackendEnabled = CHRONICLES_BACKEND !== undefined;
 
@@ -24,7 +27,7 @@ export class Requests {
     let url;
     switch (item) {
       case 'banner':
-        url = `${cmsUrl('banners')}/${options.language}`;
+        url = `${cmsUrl('banners-list')}/${options.language}`;
         break;
       case 'person':
         url = `${cmsUrl('persons')}/${options.id}?language=${options.language}`;
@@ -34,6 +37,17 @@ export class Requests {
     }
 
     return axios(url);
+  };
+
+  static auth = (params, url, token, method = 'GET') => {
+    const config = { url, method, headers: { 'Content-Type': 'application/json', 'Authorization': `bearer ${token}` } };
+    if (method === 'GET') {
+      config.url = `${url}?${Requests.makeParams(params)}`;
+    } else {
+      config.data = JSON.stringify(params);
+    }
+
+    return axios(config);
   };
 
   static makeParams = params => (
@@ -98,6 +112,8 @@ class Api {
     Requests.get(`stats/cu_class?${Requests.makeParams({ content_type, ...rest })}`)
   );
 
+  static countCU = params => Requests.get(`count_cu?${Requests.makeParams(params)}`);
+
   static tweets = ({ pageNo: page_no, pageSize: page_size, ...rest }) => (
     Requests.get(`tweets?${Requests.makeParams({ page_no, page_size, ...rest })}`)
   );
@@ -137,7 +153,16 @@ class Api {
     Requests.get(`simple?${Requests.makeParams({ language, start_date, end_date })}`)
   );
 
-  static recommendedRequestData = ({ uid, languages, skipUids: skip_uids, size: more_items }) => ({
+  static recommendedRequestData = ({
+    uid,
+    languages,
+    skipUids: skip_uids,
+    size: more_items,
+    spec,
+    specs,
+    watchingNowMin: watching_now_min,
+    popularMin: popular_min
+  }) => ({
     more_items,
     'current_feed': [],
     'options': {
@@ -146,17 +171,62 @@ class Api {
       },
       languages,
       skip_uids,
+      spec,
+      specs,
+      watching_now_min,
+      popular_min,
     }
   });
 
   static recommended = requestData => {
     const config = {
       method: 'post',
-      url: `${API_RECOMMENDED}`,
+      url: feedUrl('recommend'),
       headers: { 'Content-Type': 'application/json' },
       data: JSON.stringify(requestData),
     };
 
+    return axios(config);
+  };
+
+  static views = uids => {
+    const config = {
+      method: 'post',
+      url: feedUrl('views'),
+      headers: { 'Content-Type': 'application/json' },
+      data: JSON.stringify({ uids }),
+    };
+
+    return axios(config);
+  };
+
+  static watchingNow = uids => {
+    const config = {
+      method: 'post',
+      url: feedUrl('watchingnow'),
+      headers: { 'Content-Type': 'application/json' },
+      data: JSON.stringify({ uids }),
+    };
+
+    return axios(config);
+  };
+
+  static my = (namespace, params, token, method) => {
+    let urlParam = namespace;
+    if (namespace === MY_NAMESPACE_PLAYLIST_BY_ID) urlParam = MY_NAMESPACE_PLAYLISTS;
+
+    if (params.id) {
+      urlParam = `${urlParam}/${params.id}`;
+      delete params.id;
+    }
+
+    const url = `${PERSONAL_API_BACKEND}rest/${urlParam}`;
+    return Requests.auth(params, url, token, method);
+  };
+
+  static likeCount = params => {
+    const url    = `${PERSONAL_API_BACKEND}like_count?${Requests.makeParams(params)}`;
+    const config = { url, method: 'GET' };
     return axios(config);
   };
 }

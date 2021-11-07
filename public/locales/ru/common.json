@@ -4,9 +4,11 @@
       "header": "Каббала Медиа"
     },
     "sidebar": {
+      "personal": "Личная зона",
       "lessons": "Уроки и лекции",
       "programs": "Программы и Клипы",
       "sources": "Библиотека",
+      "likutim": "Сборники",
       "events": "Конгрессы, события",
       "books": "Книги",
       "topics": "Темы",
@@ -110,10 +112,14 @@
     "more": "Ещё",
     "copy-link": "Копировать линк",
     "search": "Поиск",
-    "previous": "Предыдущий",
-    "next": "Следующий",
+    "previous-lesson": "К предыдущему уроку",
+    "next-lesson": "К следующему уроку",
+    "previous-article": "Предыдущая статья",
+    "next-article": "Следующая статья",
     "copy": "Копировать",
-    "view-all": "Посмотреть все"
+    "view-all": "Посмотреть все",
+    "save": "Сохранить",
+    "remove": "Удалить"
   },
   "player": {
     "messages": {
@@ -131,6 +137,20 @@
     },
     "error": {
       "loading": "Ошибка при загрузке файла."
+    },
+    "header": {
+      "series-by-topic": "Серия уроков по теме:"
+    }
+  },
+  "playlist": {
+    "title-by-type": {
+      "DAILY_LESSON": "Части урока",
+      "SPECIAL_LESSON": "Части урока",
+      "CONGRESS": "Части события",
+      "HOLIDAY": "Части события",
+      "PICNIC": "Части события",
+      "UNITY_DAY": "Части события",
+      "LESSONS_SERIES": "Части серии"
     }
   },
   "messages": {
@@ -280,6 +300,10 @@
     "list": {
       "related": "Относятся к:",
       "number": "№ ",
+      "nameByNum_1": "Утро",
+      "nameByNum_2": "Полдень",
+      "nameByNum_3": "Вечер",
+      "nameByNum_4": "Вечер 2",
       "item_from": "Часть из:"
     },
     "unit": {
@@ -302,6 +326,13 @@
       "description": "Обновленный ярлык к последнему ежедневному уроку"
     }
   },
+  "likutim":{
+    "header": {
+      "text": "Избранные отрывки из первоисточников",
+      "subtext": "Избранные отрывки из первоисточников на разные темы"
+    },
+    "item-header": "Избранные отрывки из первоисточников:"
+  },
   "programs": {
     "header": {
       "text": "Программы",
@@ -323,7 +354,8 @@
     },
     "list": {
       "episode_from": "Эпизод из:",
-      "item_of": "Часть из:"
+      "item_of": "Часть из:",
+      "show_all": "Ко всем эпизодам"
     },
     "unit": {
       "recommended": {
@@ -407,7 +439,15 @@
       "info": {
         "sources": "Источники",
         "topics": "Темы",
-        "collections": "Относится к"
+        "collections": "Относится к",
+        "study-series": "Ко всем урокам серии",
+        "episode": "Эпизод {{name}}",
+        "episodes": "{{name}} эпизодов",
+        "lesson-episode": "Часть {{name}}",
+        "lesson-episodes": "{{name}} частей",
+        "series-episode": "Урок {{name}}",
+        "series-episodes": "{{name}} уроков",
+        "views": "{{views}} просмотров"
       },
       "recommended": {
         "same-collection": {
@@ -447,9 +487,22 @@
       "header": "Избранные отрывки"
     },
     "recommended": {
-      "header": "Рекомендуемые"
+      "same-topic": "Рекомендуемые по теме",
+      "same-collection": "Рекомендуемые передачи из",
+      "any-topic": "Любая тема",
+      "default": "Рекомендуемые",
+      "popular": "Топ просмотров",
+      "watching-now": "смотрят сейчас",
+      "views": "просмотров",
+      "last": "Последняя передача",
+      "next": "Следующая передача",
+      "prev": "Предыдущая передача",
+      "rand": "Произвольный контент",
+      "more": "Ещё",
+      "less": "Меньше",
+      "new": "Новое"
     },
-    "playlist":{
+    "playlist": {
       "header": "Следующий"
     }
   },
@@ -464,7 +517,8 @@
     "default": "По умолчанию",
     "filter": "Фильтр...",
     "share-title": "Читайте статью",
-    "group-articles": "Статьи о группе"
+    "group-articles": "Статьи о группе",
+    "play-audio-file": "Воспроизвести аудиофайл"
   },
   "topics": {
     "header": {
@@ -706,5 +760,35 @@
     "copy-link": "Копировать ссылку",
     "copy-text": "Копировать текст",
     "disable-share": "Отменить"
+  },
+  "personal": {
+    "subsNewUnits": "новых эпизодов",
+    "unsubscribe": "Вы подписаны",
+    "subscribe": "Подписаться",
+    "unsubscribeSuccessful": "Подписка отменена",
+    "subscribeSuccessful": "Подписка оформлена",
+    "newPlaylistSuccessful": "Новый плейлист {{name}} создан",
+    "addToPlaylistSuccessful": "Добавлен в плейлист {{name}}",
+    "history": "История",
+    "likes": "Понравившиеся",
+    "playlists": "Плейлисты",
+    "playlistNoResult": "В плейлисте пока нет видео",
+    "subscriptions": "Подписки",
+    "playAll": "Воспроизвести все",
+    "addToPlaylist": "Сохранить в...",
+    "newPlaylistName": "Название нового плейлиста",
+    "newPlaylist": "Создать новый плейлист",
+    "editPlaylist": "Редактировать плейлист",
+    "removedSuccessfully": "Успешно удалено",
+    "removeHistory": "Удалить из истории просмотра",
+    "removeLike": "Удалить из понравившихся",
+    "removeFromPlaylist": "Удалить из плейлиста",
+    "confirmRemovePlaylist": "Вы действительно хотите удалить плейлист {{name}}?\nПримечание. Плейлисты удаляются безвозвратно.",
+    "confirmUnsubscribe": "Отказаться от подписки на {{name}}?",
+    "videosOnList": "видео",
+    "login": "ВОЙТИ",
+    "logout": "ВЫЙТИ",
+    "needToLogin": "Войдите, чтобы ставить лайки, сохранять и подписываться на видео",
+    "account": "Мой аккаунт"
   }
 }

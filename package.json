@@ -9,7 +9,7 @@
   },
   "scripts": {
     "critical-css": "node-sass src/stylesheets/critical.scss | yarn run postcss --use autoprefixer --use cssnano -o build/critical.css --no-map",
-    "apply-critical-css": "sed \"s*</head>*<style type='text/css'>`cat build/critical.css`</style></head>*\" build/index.html > build/critical.html",
+    "apply-critical-css": "sed -e 's/<\\\/head>/\\\nHERE\\\n/' build/index.html | awk '!/HERE/ { print } /HERE/ { print \"<style type=\\\"text/css\\\">\"; while ((getline a < \"build/critical.css\") > 0) print a; print \"</style></head>\" }' > build/critical.html",
     "build:css": "echo '>>> Building CSS'; yarn critical-css && yarn apply-critical-css",
     "build:svgs": "echo '>>> Building Icons...'; npx @svgr/cli@5.4.0 -d src/images/ --ignore-existing src/images/",
     "build:scripts": "echo '>>> Building Scripts...'; react-scripts build",
@@ -35,7 +35,7 @@
   "husky": {
     "hooks": {
       "pre-commit": "",
-      "pre-push": "yarn run lint"
+      "pre-push": "yarn run lint-fix"
     }
   },
   "devDependencies": {
@@ -84,6 +84,7 @@
     "@babel/preset-react": "^7.0.0",
     "@babel/register": "^7.11.5",
     "@babel/types": "^7.11.5",
+    "@marvelapp/react-ab-test": "^2.3.0",
     "@testing-library/jest-dom": "^5.11.4",
     "axios": "^0.21.1",
     "babel-eslint": "^10.1.0",
@@ -153,7 +154,8 @@
     "ua-parser-js": "^0.7.17",
     "ulid": "^2.3.0",
     "warning": "^4.0.2",
-    "worker-loader": "^3.0.4"
+    "worker-loader": "^3.0.4",
+    "keycloak-js": "^14.0.0"
   },
   "moduleRoots": [
     "src",

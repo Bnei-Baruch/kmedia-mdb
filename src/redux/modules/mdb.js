@@ -23,6 +23,13 @@ const FETCH_SQDATA_FAILURE        = 'MDB/FETCH_SQDATA_FAILURE';
 const FETCH_WINDOW                = 'MDB/FETCH_WINDOW';
 const FETCH_WINDOW_SUCCESS        = 'MDB/FETCH_WINDOW_SUCCESS';
 const FETCH_WINDOW_FAILURE        = 'MDB/FETCH_WINDOW_FAILURE';
+const FETCH_DATEPICKER_CO         = 'MDB/FETCH_DATEPICKER_CO';
+const FETCH_DATEPICKER_CO_SUCCESS = 'MDB/FETCH_DATEPICKER_CO_SUCCESS';
+const FETCH_DATEPICKER_CO_FAILURE = 'MDB/FETCH_DATEPICKER_CO_FAILURE';
+const NULL_DATEPICKER_CO          = 'MDB/NULL_DATEPICKER_CO';
+const COUNT_CU                    = 'MDB/COUNT_CU';
+const COUNT_CU_SUCCESS            = 'MDB/COUNT_CU_SUCCESS';
+const COUNT_CU_FAILURE            = 'MDB/COUNT_CU_FAILURE';
 
 const RECEIVE_COLLECTIONS   = 'MDB/RECEIVE_COLLECTIONS';
 const RECEIVE_CONTENT_UNITS = 'MDB/RECEIVE_CONTENT_UNITS';
@@ -43,6 +50,13 @@ export const types = {
   FETCH_WINDOW,
   FETCH_WINDOW_SUCCESS,
   FETCH_WINDOW_FAILURE,
+  FETCH_DATEPICKER_CO,
+  FETCH_DATEPICKER_CO_SUCCESS,
+  FETCH_DATEPICKER_CO_FAILURE,
+  NULL_DATEPICKER_CO,
+  COUNT_CU,
+  COUNT_CU_SUCCESS,
+  COUNT_CU_FAILURE,
 
   RECEIVE_COLLECTIONS,
   RECEIVE_CONTENT_UNITS,
@@ -65,6 +79,13 @@ const fetchSQDataFailure       = createAction(FETCH_SQDATA_FAILURE);
 const fetchWindow              = createAction(FETCH_WINDOW);
 const fetchWindowSuccess       = createAction(FETCH_WINDOW_SUCCESS, (id, data) => ({ id, data }));
 const fetchWindowFailure       = createAction(FETCH_WINDOW_FAILURE, (id, err) => ({ id, err }));
+const fetchDatepickerCO        = createAction(FETCH_DATEPICKER_CO);
+const fetchDatepickerCOSuccess = createAction(FETCH_DATEPICKER_CO_SUCCESS);
+const fetchDatepickerCOFailure = createAction(FETCH_DATEPICKER_CO_FAILURE, err => ({ err }));
+const nullDatepickerCO         = createAction(NULL_DATEPICKER_CO);
+const countCU                  = createAction(COUNT_CU, (namespace, params) => ({ namespace, params }));
+const countCUSuccess           = createAction(COUNT_CU_SUCCESS, (namespace, total) => ({ namespace, total }));
+const countCUFailure           = createAction(COUNT_CU_FAILURE, (namespace, err) => ({ namespace, err }));
 
 const receiveCollections  = createAction(RECEIVE_COLLECTIONS);
 const receiveContentUnits = createAction(RECEIVE_CONTENT_UNITS);
@@ -85,6 +106,13 @@ export const actions = {
   fetchWindow,
   fetchWindowSuccess,
   fetchWindowFailure,
+  fetchDatepickerCO,
+  fetchDatepickerCOSuccess,
+  fetchDatepickerCOFailure,
+  nullDatepickerCO,
+  countCU,
+  countCUSuccess,
+  countCUFailure,
 
   receiveCollections,
   receiveContentUnits,
@@ -96,19 +124,25 @@ const freshStore = () => ({
   cById: {},
   cuById: {},
   cWindow: {},
+  countCU: {},
+  datepickerCO: null,
   wip: {
     units: {},
     collections: {},
     cWindow: {},
+    datepickerCO: false,
     lastLesson: false,
     sqData: false,
+    countCU: false,
   },
   errors: {
     units: {},
     collections: {},
     cWindow: {},
+    datepickerCO: null,
     lastLesson: null,
     sqData: null,
+    countCU: null,
   },
 });
 
@@ -159,6 +193,10 @@ const setStatus = (state, action) => {
       wip.cWindow    = { ...wip.cWindow, [action.payload.id]: false };
       errors.cWindow = { ...errors.cWindow, [action.payload.id]: null };
       break;
+    case FETCH_DATEPICKER_CO_SUCCESS:
+      wip.datepickerCO    = false;
+      errors.datepickerCO = null;
+      break;
     case FETCH_SQDATA_SUCCESS:
       wip.sqData    = false;
       errors.sqData = null;
@@ -180,9 +218,17 @@ const setStatus = (state, action) => {
       wip.cWindow    = { ...wip.cWindow, [action.payload.id]: false };
       errors.cWindow = { ...errors.cWindow, [action.payload.id]: action.payload.err };
       break;
+    case FETCH_DATEPICKER_CO_FAILURE:
+      wip.datepickerCO    = false;
+      errors.datepickerCO = action.payload.err;
+      break;
     case FETCH_SQDATA_FAILURE:
       wip.sqData    = false;
       errors.sqData = action.payload.err;
+      break;
+    case COUNT_CU_FAILURE:
+      wip.countCU    = false;
+      errors.countCU = action.payload.err;
       break;
 
     default:
@@ -267,6 +313,7 @@ const onReceiveCollections = (state, action) => {
 
     // normalize content units
     if (y.content_units) {
+
       y.ccuNames = y.ccuNames || {};
       y.cuIDs    = y.content_units.filter(cu => !!cu).map(cu => {
         const ccuName     = cu.name_in_collection;
@@ -333,7 +380,7 @@ const onReceiveContentUnits = (state, action) => {
         const [cID, ccuName] = k.split('____');
 
         // make a copy of collection and set this unit ccuName
-        const updatedC = { ...v, ...state.cById[v.id] };
+        const updatedC = { ...v, ...cById[v.id] };
         if (updatedC.cuIDs) {
           if (updatedC.cuIDs.findIndex(z => z === y.id) === -1) {
             updatedC.cuIDs = [...updatedC.cuIDs, y.id];
@@ -385,6 +432,14 @@ const onFetchWindow = (state, action) => {
   };
 };
 
+const onFetchDatepickerCO = (state, action) => {
+  const { collections } = action.payload;
+  const sorted          = collections.sort((a, b) => a.number - b.number);
+  return { ...state, datepickerCO: sorted[0]?.id };
+};
+
+const onNullDatepickerCO = state => ({ ...state, datepickerCO: null });
+
 const onSSRPrepare = state => ({
   ...state,
   wip: freshStore().wip,
@@ -394,6 +449,28 @@ const onSSRPrepare = state => ({
     lastLesson: state.errors.lastLesson ? state.errors.lastLesson.toString() : state.errors.lastLesson,
   }
 });
+
+const onCountCU = (state, action) => ({
+  ...state,
+  countCU: {
+    ...state.countCU,
+    [action.payload.namespace]: {
+      ...(state.countCU[action.payload.namespace] || {}),
+      wip: true,
+    }
+  }
+});
+
+const onCountCUSuccess = (state, action) => {
+  state.wip.countCU    = false;
+  state.errors.countCU = null;
+
+  state.countCU = {
+    ...state.countCU,
+    [action.payload.namespace]: action.payload.total
+  };
+  return state;
+};
 
 export const reducer = handleActions({
   [ssr.PREPARE]: onSSRPrepare,
@@ -420,9 +497,20 @@ export const reducer = handleActions({
     setStatus(onFetchWindow(onReceiveCollections(state, { payload: action.payload.data?.collections }), action), action)
   ),
   [FETCH_WINDOW_FAILURE]: setStatus,
+  [FETCH_DATEPICKER_CO]: setStatus,
+  [FETCH_DATEPICKER_CO_SUCCESS]: (state, action) => (
+    setStatus(onFetchDatepickerCO(onReceiveCollections(state, { payload: action.payload.collections }), action), action)
+  ),
+  [NULL_DATEPICKER_CO]: state => (
+    onNullDatepickerCO(state)
+  ),
+  [FETCH_DATEPICKER_CO_FAILURE]: setStatus,
   [FETCH_SQDATA]: setStatus,
   [FETCH_SQDATA_SUCCESS]: setStatus,
   [FETCH_SQDATA_FAILURE]: setStatus,
+  [COUNT_CU]: onCountCU,
+  [COUNT_CU_SUCCESS]: onCountCUSuccess,
+  [COUNT_CU_FAILURE]: setStatus,
 
   [RECEIVE_COLLECTIONS]: (state, action) => onReceiveCollections(state, action),
   [RECEIVE_CONTENT_UNITS]: (state, action) => onReceiveContentUnits(state, action),
@@ -437,6 +525,7 @@ const getWip            = state => state.wip;
 const getErrors         = state => state.errors;
 const getCollections    = state => state.items;
 const getWindow         = state => state.cWindow;
+const getDatepickerCO   = state => state.datepickerCO;
 const getSQDataWipErr   = state => !(getWip(state).sqData || getErrors(state).sqData);
 
 const getDenormCollection = (state, id) => {
@@ -495,6 +584,8 @@ const getDenormCollectionWUnits = (state, id) => {
   return c;
 };
 
+const getCountCu = (state, namespace) => state.countCU[namespace];
+
 export const selectors = {
   getCollectionById,
   getUnitById,
@@ -506,5 +597,7 @@ export const selectors = {
   getLastLessonId,
   getCollections,
   getWindow,
-  getSQDataWipErr
+  getDatepickerCO,
+  getSQDataWipErr,
+  getCountCu
 };

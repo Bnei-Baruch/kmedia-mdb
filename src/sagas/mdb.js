@@ -44,6 +44,17 @@ export function* fetchWindow(action) {
   }
 }
 
+export function* fetchDatepickerCO(action) {
+  try {
+    const language = yield select(state => settings.getLanguage(state.settings));
+    const args     = { ...action.payload, language };
+    const { data } = yield call(Api.lessons, args);
+    yield put(actions.fetchDatepickerCOSuccess(data));
+  } catch (err) {
+    yield put(actions.fetchDatepickerCOFailure(err));
+  }
+}
+
 export function* fetchLatestLesson() {
   try {
     const language = yield select(state => settings.getLanguage(state.settings));
@@ -67,6 +78,16 @@ export function* fetchSQData() {
   }
 }
 
+export function* countCU(action) {
+  const { params, namespace } = action.payload;
+  try {
+    const { data: { total } } = yield call(Api.countCU, params);
+    yield put(actions.countCUSuccess(namespace, total));
+  } catch (err) {
+    yield put(actions.countCUFailure(err));
+  }
+}
+
 function* watchFetchUnit() {
   yield takeEvery(types.FETCH_UNIT, fetchUnit);
 }
@@ -87,10 +108,20 @@ function* watchFetchWindow() {
   yield takeEvery(types.FETCH_WINDOW, fetchWindow);
 }
 
+function* watchFetchDatepickerCO() {
+  yield takeEvery(types.FETCH_DATEPICKER_CO, fetchDatepickerCO);
+}
+
+function* watchCountCU() {
+  yield takeEvery(types.COUNT_CU, countCU);
+}
+
 export const sagas = [
   watchFetchUnit,
   watchFetchCollection,
   watchFetchLatestLesson,
   watchFetchSQData,
   watchFetchWindow,
+  watchFetchDatepickerCO,
+  watchCountCU
 ];

@@ -13,24 +13,29 @@ function* fetchCUStats(action) {
     return;
   }
 
+  // fetch once
+  const nsState = yield select(state => selectors.getCUStats(state.stats, namespace));
+  if (!isEmpty(nsState) && !isEmpty(nsState.data)) {
+    // console.log('Allready in cache');
+    return;
+  }
+
+  // console.log('not in cache');
+
+  const args = { ...action.payload };
+  if (namespace === 'lessons-daily') {
+    args.content_type = [CT_LESSON_PART];
+  }
+
+  delete args.namespace;
+
+  yield* callUnitsStats(args, namespace);
+}
+
+export function* callUnitsStats(args, namespace) {
   try {
-    // fetch once
-    const nsState = yield select(state => selectors.getCUStats(state.stats, namespace));
-    if (!isEmpty(nsState) && !isEmpty(nsState.data)) {
-      // console.log('Allready in cache');
-      return;
-    }
-
-    // console.log('not in cache');
-
-    const args = { ...action.payload };
-    if (namespace === 'lessons-daily') {
-      args.content_type = [CT_LESSON_PART];
-    }
-
-    delete args.namespace;
-
     const { data } = yield call(Api.unitsStats, args);
+
     yield put(actions.fetchCUStatsSuccess(namespace, data));
   } catch (err) {
     yield put(actions.fetchCUStatsFailure(namespace, err));

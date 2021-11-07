@@ -1,42 +1,30 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
-import uniq from 'lodash/uniq';
-import { Grid, Segment } from 'semantic-ui-react';
+import { Menu, Segment } from 'semantic-ui-react';
 import isEqual from 'react-fast-compare';
+import PropTypes from 'prop-types';
+import uniq from 'lodash/uniq';
+import clsx from 'clsx';
 
-import { CT_ARTICLE, CT_RESEARCH_MATERIAL, MT_TEXT, SCROLL_SEARCH_ID } from '../../../../../../helpers/consts';
-import { getLanguageDirection } from '../../../../../../helpers/i18n-utils';
+import { CT_ARTICLE, CT_RESEARCH_MATERIAL, MT_TEXT } from '../../../../../../helpers/consts';
 import { selectSuitableLanguage } from '../../../../../../helpers/language';
-import MediaHelper from '../../../../../../helpers/media';
-import playerHelper from '../../../../../../helpers/player';
-import * as shapes from '../../../../../shapes';
-import WipErr from '../../../../../shared/WipErr/WipErr';
-import {
-  prepareScrollToSearch,
-  buildSearchLinkFromSelection,
-  DOM_ROOT_ID
-} from '../../../../../../helpers/scrollToSearch/helper';
-import { getQuery } from '../../../../../../helpers/url';
-import ShareBar from '../../../../../shared/ShareSelected';
-import DropdownLanguageSelector from '../../../../../Language/Selector/DropdownLanguageSelector';
+import { getLanguageDirection } from '../../../../../../helpers/i18n-utils';
 import { DeviceInfoContext } from '../../../../../../helpers/app-contexts';
-import classNames from 'classnames';
-
-const scrollToSearch = () => {
-  const element = document.getElementById(SCROLL_SEARCH_ID);
-  if (element === null) {
-    return;
-  }
-
-  setTimeout(() => element.scrollIntoView(), 0);
-};
+import { physicalFile } from '../../../../../../helpers/utils';
+import playerHelper from '../../../../../../helpers/player';
+import MediaHelper from '../../../../../../helpers/media';
+import { getQuery } from '../../../../../../helpers/url';
+import ScrollToSearch from '../../../../../shared/ScrollToSearch';
+import Download from '../../../../../shared/Download/Download';
+import WipErr from '../../../../../shared/WipErr/WipErr';
+import * as shapes from '../../../../../shapes';
+import MenuLanguageSelector from '../../../../../Language/Selector/MenuLanguageSelector';
+import UnitBar from '../UnitBar';
 
 class Transcription extends Component {
   static contextType = DeviceInfoContext;
 
-  state              = {};
-
+  state = {};
 
   static selectFile = (textFiles, language) => {
     const selectedFiles = textFiles.filter(x => x.language === language);
@@ -113,29 +101,19 @@ class Transcription extends Component {
       || (nextProps.contentLanguage !== props.contentLanguage)
       || (nextProps.unit && !props.unit)
       || (nextProps.unit.id !== props.unit.id)
-      || (nextProps.enableShareText.isShareTextEnabled !== props.enableShareText.isShareTextEnabled)
       || (nextProps.unit.files !== props.unit.files
         || !isEqual(nextProps.doc2htmlById, props.doc2htmlById)
         || (state.selectedFile && props.doc2htmlById && (props.doc2htmlById[state.selectedFile.id]?.wip !== nextProps.doc2htmlById[state.selectedFile.id]?.wip))
         || nextState.language !== state.language
-        || nextState.searchUrl !== state.searchUrl
-        || nextState.selectedFile !== state.selectedFile);
+        || nextState.selectedFile !== state.selectedFile
+        || nextState.settings !== state.settings);
   }
 
   componentDidMount() {
-    const { selectedFile }       = this.state;
-    const { srchstart, srchend } = getQuery(this.props.location);
+    const { selectedFile } = this.state;
 
     this.loadFile(selectedFile);
     document.addEventListener('mouseup', this.handleOnMouseUp);
-
-    if (srchstart
-      && srchend
-      && selectedFile
-      && this.props.doc2htmlById[selectedFile.id]
-      && this.props.doc2htmlById[selectedFile.id].wip === false) {
-      scrollToSearch();
-    }
   }
 
   componentWillUnmount() {
@@ -144,18 +122,9 @@ class Transcription extends Component {
 
   componentDidUpdate(prevProp, prevState) {
     const { selectedFile, language } = this.state;
-    const { srchstart }              = getQuery(this.props.location);
 
     if (selectedFile !== prevState.selectedFile || language !== prevState.language) {
       this.loadFile(selectedFile);
-    }
-
-    if (srchstart
-      && selectedFile
-      && prevProp.doc2htmlById[selectedFile.id]
-      && prevProp.doc2htmlById[selectedFile.id].wip === true
-      && this.props.doc2htmlById[selectedFile.id].wip === false) {
-      scrollToSearch();
     }
   }
 
@@ -204,82 +173,42 @@ class Transcription extends Component {
     </select>;
   }
 
-  handleOnMouseUp = e => {
-    if (this.context.isMobileDevice || !this.props.enableShareText.isShareTextEnabled) {
-      return false;
-    }
-
-    this.updateSelection();
-    return false;
-  };
-
-  handleOnMouseDown = e => {
-    if (this.context.isMobileDevice || !this.props.enableShareText.isShareTextEnabled) {
-      return false;
-    }
-
-    this.setState({ searchUrl: null });
-    return false;
-  };
-
-  disableShareBar = () => this.props.enableShareText.setEnableShareText(false);
-
-  renderShareBar = () => {
-    const { searchUrl, searchText } = this.state;
-    if (this.context.isMobileDevice || !searchUrl)
-      return null;
-
-    return (
-      <ShareBar url={searchUrl} text={searchText} disable={this.disableShareBar} />
-    );
-  };
-
-  updateSelection = () => {
-    const { language, selectedFile } = this.state;
-    const { location, activeTab }    = this.props;
-
-    const ap                        = playerHelper.getActivePartFromQuery(location);
-    const { url, text: searchText } = buildSearchLinkFromSelection(language);
-    if (!url)
-      return;
-    const selectedFileProps = selectedFile ? `&selectedFileId=${selectedFile.id}` : '';
-    const searchUrl         = `${url}&activeTab=${activeTab}${selectedFileProps}${!ap ? '' : `&ap=${  ap}`}`;
-    this.setState({ searchUrl, searchText });
-  };
-
   prepareContent = data => {
     const { textFiles, selectedFile, language } = this.state;
-    const direction                             = getLanguageDirection(language);
-    const { srchstart, srchend, highlightAll }  = getQuery(this.props.location);
+    const { location, activeTab }               = this.props;
+
+    const ap                = playerHelper.getActivePartFromQuery(location);
+    const selectedFileProps = selectedFile ? `&selectedFileId=${selectedFile.id}` : '';
+    const urlParams         = `activeTab=${activeTab}${selectedFileProps}${!ap ? '' : `&ap=${ap}`}`;
+    const direction         = getLanguageDirection(language);
 
     return (
-      <div className="search-on-page--container">
-        {this.props.enableShareText.isShareTextEnabled && this.renderShareBar()}
+      <div className="font_settings-wrapper">
         {this.getSelectFiles(selectedFile, textFiles)}
         <div
-          id={DOM_ROOT_ID}
-          className="doc2html"
-          onMouseDown={this.handleOnMouseDown.bind(this)}
+          className="font_settings doc2html"
           style={{ direction, textAlign: (direction === 'ltr' ? 'left' : 'right') }}
-          dangerouslySetInnerHTML={{
-            __html: prepareScrollToSearch(data, { srchstart, srchend }, highlightAll === 'true')
-          }}
-        />
+        >
+          <ScrollToSearch data={data} language={language} urlParams={urlParams} />
+        </div>
       </div>
     );
   };
 
+  handleSettings = settings => this.setState({ settings });
+
   render() {
-    const { doc2htmlById, t, type }             = this.props;
-    const { selectedFile, languages, language } = this.state;
-    const { isMobileDevice }                    = this.context;
+    const { doc2htmlById, t, type }                       = this.props;
+    const { selectedFile, languages, language, settings } = this.state;
+    const { isMobileDevice }                              = this.context;
 
     if (!selectedFile) {
       const text = type || 'transcription';
       return <Segment basic>{t(`materials.${text}.no-content`)}</Segment>;
     }
 
-    const { data, wip, err } = doc2htmlById[selectedFile.id] || {};
+    const { id, name, mimetype } = selectedFile;
+    const { data, wip, err }     = doc2htmlById[id] || {};
 
     const wipErr = WipErr({ wip, err, t });
     if (wipErr) {
@@ -289,25 +218,45 @@ class Transcription extends Component {
     if (data) {
       const content = this.prepareContent(data);
 
-      if (languages.length === 1) {
-        return content;
-      }
-
+      const url                                         = physicalFile(selectedFile, true);
+      const { theme = 'light', fontType, fontSize = 0 } = settings || {};
       return (
-        <div>
-          <Grid container padded={false} columns={isMobileDevice ? 1 : 2} className={classNames({ 'no-margin-top' :true, 'padding_r_l_0': !isMobileDevice })}>
-            {!isMobileDevice &&
-            <Grid.Column width={12}>
-            </Grid.Column>}
-            <Grid.Column width={isMobileDevice ? 16 : 4} textAlign={'right'} className={classNames({ 'padding_r_l_0': !isMobileDevice })}>
-              <DropdownLanguageSelector
-                languages={languages}
-                defaultValue={language}
-                onSelect={this.handleLanguageChanged}
-                fluid={isMobileDevice}
-              />
-            </Grid.Column>
-          </Grid>
+        <div
+          className={clsx({
+            source: true,
+            [`is-${theme}`]: true,
+            [`is-${fontType}`]: true,
+            [`size${fontSize}`]: true,
+          })}
+        >
+          <Menu
+            secondary
+            compact
+            fluid
+            className={
+              clsx({
+                'no-margin-top': !isMobileDevice,
+                'no_print': true,
+                'justify_content_end': true
+              })
+            }
+          >
+            {
+              languages.length > 1 &&
+              <Menu.Item>
+                <MenuLanguageSelector
+                  languages={languages}
+                  defaultValue={language}
+                  onSelect={this.handleLanguageChanged}
+                  fluid={false}
+                />
+              </Menu.Item>
+            }
+            <Menu.Item>
+              {<Download path={url} mimeType={mimetype} downloadAllowed={true} filename={name} />}
+              <UnitBar handleSettings={this.handleSettings} fontSize={fontSize} />
+            </Menu.Item>
+          </Menu>
           {content}
         </div>
       );

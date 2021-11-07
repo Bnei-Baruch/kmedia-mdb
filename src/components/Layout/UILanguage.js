@@ -12,7 +12,6 @@ import { getToWithLanguage } from '../../helpers/url';
 import Link from '../Language/MultiLanguageLink';
 import { DeviceInfoContext } from '../../helpers/app-contexts';
 
-
 const storeUILanguage = language => {
   if (!language) {
     return;
@@ -21,8 +20,7 @@ const storeUILanguage = language => {
   setCookie(COOKIE_UI_LANG, language);
 };
 
-
-const DesktopLanguage = ({ language, contentLanguage, t }) => (
+const DesktopLanguage = ({ language, contentLanguage }) => (
   <Dropdown item text={LANGUAGES[language].name}>
     <Dropdown.Menu>
       {
@@ -43,7 +41,7 @@ const DesktopLanguage = ({ language, contentLanguage, t }) => (
   </Dropdown>
 );
 
-const MobileLanguage = ({ language, contentLanguage, t }) => {
+const MobileLanguage = ({ language, contentLanguage }) => {
   // We need dependency on location in order to change Link every time url changes
   const history = useHistory();
   const location = useLocation();
@@ -86,8 +84,8 @@ const UILanguage = ({ t }) => {
       <Menu.Menu position="right">
         {
           isMobileDevice
-            ? <MobileLanguage language={language} contentLanguage={contentLanguage} t={t} />
-            : <DesktopLanguage language={language} contentLanguage={contentLanguage} t={t} />
+            ? <MobileLanguage language={language} contentLanguage={contentLanguage} />
+            : <DesktopLanguage language={language} contentLanguage={contentLanguage} />
         }
       </Menu.Menu>
     </Menu>

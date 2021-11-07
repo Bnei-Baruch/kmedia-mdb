@@ -1,27 +1,24 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
 import { useHistory, useLocation } from 'react-router-dom';
-import { Portal, Segment } from 'semantic-ui-react';
+import { useSelector, useDispatch } from 'react-redux';
+import { withNamespaces } from 'react-i18next';
+import { Segment } from 'semantic-ui-react';
+import PropTypes from 'prop-types';
 
-import { selectors } from '../../../redux/modules/assets';
-import { physicalFile } from '../../../helpers/utils';
-
-import PDF, { isTaas, startsFrom } from '../../shared/PDF/PDF';
+import { selectors as settings } from '../../../redux/modules/settings';
+import { selectors, actions } from '../../../redux/modules/assets';
+import { selectSuitableLanguage } from '../../../helpers/language';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
-import { getQuery, updateQuery } from '../../../helpers/url';
-import {
-  buildSearchLinkFromSelection,
-  DOM_ROOT_ID,
-  prepareScrollToSearch
-} from '../../../helpers/scrollToSearch/helper';
-import { getPageFromLocation } from '../../Pagination/withPagination';
+import { physicalFile, isEmpty } from '../../../helpers/utils';
+import { updateQuery } from '../../../helpers/url';
+import PDF, { isTaas, startsFrom } from '../../shared/PDF/PDF';
+import ScrollToSearch from '../../shared/ScrollToSearch';
 import Download from '../../shared/Download/Download';
 import WipErr from '../../shared/WipErr/WipErr';
-import ShareBar from '../../shared/ShareSelected';
-import { DeviceInfoContext, SessionInfoContext } from '../../../helpers/app-contexts';
 import MenuLanguageSelector from '../../Language/Selector/MenuLanguageSelector';
+import { getPageFromLocation } from '../../Pagination/withPagination';
+import PlayAudioIcon from '../../../images/icons/PlayAudio';
+import { DeviceInfoContext } from '../../../helpers/app-contexts';
 
 export const checkRabashGroupArticles = source => {
   if (/^gr-/.test(source)) { // Rabash Group Articles
@@ -33,75 +30,73 @@ export const checkRabashGroupArticles = source => {
 
 };
 
-const Library = ({
-  data,
-  source,
-  language = null,
-  languages = [],
-  langSelectorMount = null,
-  downloadAllowed,
-  handleLanguageChanged,
-  t,
-}) => {
-  const location                             = useLocation();
-  const history                              = useHistory();
-  const [pageNumber, setPageNumber]          = useState(getPageFromLocation(location));
-  const [searchUrl, setSearchUrl]            = useState();
-  const [searchText, setSearchText]          = useState();
-  const { srchstart, srchend, highlightAll } = getQuery(location);
+const Library = ({ data, source, downloadAllowed, t }) => {
+  const location                    = useLocation();
+  const history                     = useHistory();
+  const [pageNumber, setPageNumber] = useState(getPageFromLocation(location));
+  const [language, setLanguage]     = useState(null);
+  const [languages, setLanguages]   = useState([]);
+  const [playing, setPlaying]       = useState(false);
+  const [audioInfo, setAudioInfo]   = useState(null);
 
-  const search                                                          = { srchstart, srchend };
-  const { isMobileDevice }                                              = useContext(DeviceInfoContext);
-  const { enableShareText: { isShareTextEnabled, setEnableShareText } } = useContext(SessionInfoContext);
+  const { isMobileDevice } = useContext(DeviceInfoContext);
 
-  const doc2htmlById = useSelector(state => selectors.getDoc2htmlById(state.assets));
-
-  const getContent = () => {
-    if (!data?.[language])
-      return null;
-    const { pdf, docx, doc } = data[language];
-    if (pdf && isTaas(source))
-      return { url: physicalFile(pdf), isPDF: true, name: pdf.name };
-
-    const file = docx || doc;
-    if (!file) return null;
-
-    return { url: physicalFile(file, true), name: file.name, ...doc2htmlById[file.id] };
-  };
-
-  const content = getContent() || {};
-
-  //use  early definition for use in useEffect
-  const updateSelection = () => {
-    const { url, text } = buildSearchLinkFromSelection(language);
-    if (!url)
-      return;
-    setSearchText(text);
-    setSearchUrl(url);
-  };
-
-  const handleOnMouseUp = e => {
-    if (isMobileDevice || !isShareTextEnabled) {
-      return false;
-    }
-
-    updateSelection();
-    return false;
-  };
-
-  const handleOnMouseDown = e => {
-    if (isMobileDevice || !isShareTextEnabled) {
-      return false;
-    }
-
-    setSearchUrl(null);
-    return false;
-  };
+  const doc2htmlById    = useSelector(state => selectors.getDoc2htmlById(state.assets));
+  const uiLanguage      = useSelector(state => settings.getLanguage(state.settings));
+  const contentLanguage = useSelector(state => settings.getContentLanguage(state.settings, location));
 
   useEffect(() => {
-    document.addEventListener('mouseup', handleOnMouseUp);
-    return () => document.removeEventListener('mouseup', handleOnMouseUp);
-  });
+    if (data) {
+      const languages = Object.keys(data);
+      setLanguages(languages);
+    }
+  }, [data]);
+
+  useEffect(() => {
+    const newLanguage = selectSuitableLanguage(contentLanguage, uiLanguage, languages);
+    if (newLanguage) {
+      setLanguage(newLanguage);
+    }
+  }, [contentLanguage, uiLanguage, languages]);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (data && language && !isEmpty(source)) {
+      const lData = data[language];
+
+      // In case of TAS we prefer PDF, otherwise HTML
+      // pdf.js fetch it on his own (smarter than us), we fetch it for nothing.
+      if (lData && (!lData.pdf || !isTaas(source))) {
+        const { id } = lData.docx || lData.doc || {};
+        id && dispatch(actions.doc2html(id));
+      }
+    }
+  }, [data, language, source, dispatch]);
+
+  useEffect(() => {
+    if (!data?.[language]) {
+      clearAudioInfo();
+    } else {
+      const { mp3 } = data[language];
+      if (!mp3) {
+        clearAudioInfo();
+      } else {
+        const newAudioInfo = { url: physicalFile(mp3, true), name: mp3.name };
+        if (audioInfo?.url !== newAudioInfo.url) {
+          setAudioInfo(newAudioInfo);
+          setPlaying(false);
+        }
+      }
+    }
+  }, [data, language]);
+
+  const clearAudioInfo = () => {
+    if (audioInfo !== null) {
+      setAudioInfo(null);
+      setPlaying(false);
+    }
+  }
 
   if (!data) {
     return <Segment basic>&nbsp;</Segment>;
@@ -115,20 +110,54 @@ const Library = ({
     }));
   };
 
-  const disableShareBar = () => setEnableShareText(false);
+  const handleLanguageChanged = (e, language) => {
+    updateQuery(history, query => ({ ...query, language }));
+    setLanguage(language);
+  };
 
-  const renderShareBar = () => {
-    if (isMobileDevice || !searchUrl)
+  const getAudioPlayer = () => audioInfo && <span className="library-audio-player">
+    { playing ?
+      <audio controls src={audioInfo?.url} autoPlay={true} preload="metadata" /> :
+      <a onClick={() => setPlaying(true)}>{t('sources-library.play-audio-file')}<PlayAudioIcon className="playAudioIcon" /></a>
+    }
+  </span>
+
+  const getLanguageBar = () => {
+    const languageBar = languages.length > 0 &&
+      <div className="library-language-container">
+        {(!isMobileDevice || !playing) && getAudioPlayer()}
+        <MenuLanguageSelector
+          languages={languages}
+          defaultValue={language}
+          onSelect={handleLanguageChanged}
+          fluid={false}
+        />
+        {isMobileDevice && playing && getAudioPlayer()}
+      </div>;
+    return languageBar;
+  }
+
+  const languageBar = getLanguageBar();
+
+  const getContent = () => {
+    if (!data?.[language])
       return null;
 
-    return (
-      <ShareBar url={searchUrl} text={searchText} disable={disableShareBar} />
-    );
+    const { pdf, docx, doc } = data[language];
+    if (pdf && isTaas(source))
+      return { url: physicalFile(pdf), isPDF: true, name: pdf.name };
+
+    const file = docx || doc;
+    if (!file)
+      return null;
+
+    return { url: physicalFile(file, true), name: file.name, ...doc2htmlById[file.id] };
   };
+
+  const content = getContent() || {};
 
   const getContentToDisplay = () => {
     const { wip, err, data: contentData, isPDF, url } = content;
-    const starts                                      = startsFrom(source) || 1;
 
     const wipErr = WipErr({ wip, err, t });
     if (wipErr) {
@@ -136,6 +165,8 @@ const Library = ({
     }
 
     if (isPDF) {
+      const starts = startsFrom(source) || 1;
+
       return (
         <PDF
           pdfFile={url}
@@ -147,14 +178,9 @@ const Library = ({
     } else if (contentData) {
       const direction = getLanguageDirection(language);
       return (
-        <div className="search-on-page--container">
-          {isShareTextEnabled && renderShareBar()}
-          <div
-            id={DOM_ROOT_ID}
-            onMouseDown={handleOnMouseDown}
-            style={{ direction, textAlign: (direction === 'ltr' ? 'left' : 'right') }}
-            dangerouslySetInnerHTML={{ __html: prepareScrollToSearch(contentData, search, highlightAll === 'true') }}
-          />
+        <div
+          style={{ direction, textAlign: (direction === 'ltr' ? 'left' : 'right') }}>
+          <ScrollToSearch data={contentData} language={language} />
         </div>
       );
     }
@@ -168,21 +194,6 @@ const Library = ({
     return <Segment basic>{t('sources-library.no-source')}</Segment>;
   }
 
-  let languageBar = null;
-
-  if (languages.length > 0) {
-    languageBar = (
-      <div className="library-language-container">
-        <MenuLanguageSelector
-          languages={languages}
-          defaultValue={language}
-          onSelect={handleLanguageChanged}
-          fluid={false}
-        />
-      </div>
-    );
-  }
-
   // PDF.js will fetch file by itself
   const mimeType = content.isPDF
     ? 'application/pdf'
@@ -190,11 +201,7 @@ const Library = ({
 
   return (
     <div>
-      {
-        langSelectorMount && languageBar
-          ? <Portal open preprend mountNode={langSelectorMount}>{languageBar}</Portal>
-          : languageBar
-      }
+      {languageBar}
       <Download path={content.url} mimeType={mimeType} downloadAllowed={downloadAllowed} filename={content.name} />
       {contentsToDisplay}
     </div>
@@ -204,10 +211,6 @@ const Library = ({
 Library.propTypes = {
   source: PropTypes.string,
   data: PropTypes.any,
-  language: PropTypes.string,
-  languages: PropTypes.arrayOf(PropTypes.string),
-  langSelectorMount: PropTypes.instanceOf(PropTypes.element),
-  handleLanguageChanged: PropTypes.func.isRequired,
   downloadAllowed: PropTypes.bool.isRequired,
   t: PropTypes.func.isRequired,
 };

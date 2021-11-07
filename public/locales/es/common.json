@@ -4,9 +4,11 @@
       "header": "Cabalá Media"
     },
     "sidebar": {
+      "personal": "Área personal",
       "lessons": "Lecciones y Charlas",
       "programs": "Programas y Clips",
       "sources": "Biblioteca",
+      "likutim": "Compilaciones",
       "events": "Congresos y Eventos",
       "books": "Libros",
       "topics": "Temas",
@@ -109,10 +111,14 @@
     "more": "Mas",
     "copy-link": "Copiar enlace",
     "search": "Buscar",
-    "previous": "Anterior",
-    "next": "Siguiente",
+    "previous-lesson": "Anterior",
+    "next-lesson": "Siguiente",
+    "previous-article": "Artículo anterior",
+    "next-article": "Artículo siguiente",
     "copy": "Copiar",
-    "view-all": "Ver todo"
+    "view-all": "Ver todo",
+    "save": "Guardar",
+    "remove": "Eliminar"
   },
   "player": {
     "messages": {
@@ -130,6 +136,20 @@
     },
     "error": {
       "loading": "Error al cargar el video"
+    },
+    "header": {
+      "series-by-topic": "Serie de lecciones sobre el tema:"
+    }
+  },
+  "playlist": {
+    "title-by-type": {
+      "DAILY_LESSON": "Partes de la lección",
+      "SPECIAL_LESSON": "Partes de la lección",
+      "CONGRESS": "Partes del evento",
+      "HOLIDAY": "Partes del evento",
+      "PICNIC": "Partes del evento",
+      "UNITY_DAY": "Partes del evento",
+      "LESSONS_SERIES": "Partes de la colección"
     }
   },
   "messages": {
@@ -164,6 +184,9 @@
       "second": "You can choose other content languages"
     },
     "didYouMean": "Querías decir: ",
+    "showAll": "Show All",
+    "lessons": "Lessons",
+    "programs": "Programs",
     "sortby": "ordenar por",
     "sorts": {
       "relevance": "Relevante",
@@ -267,6 +290,10 @@
     "list": {
       "related": "Relacionado con:",
       "number": "#",
+      "nameByNum_1": "Mañana",
+      "nameByNum_2": "Mediodía",
+      "nameByNum_3": "Noche",
+      "nameByNum_4": "Noche 2",
       "item_from": "Parte de:"
     },
     "unit": {
@@ -289,6 +316,13 @@
       "description": "Un acceso directo actualizado a la última lección diaria"
     }
   },
+  "likutim": {
+    "header": {
+      "text": "Compilaciones",
+      "subtext": "En esta sección encontrarán compilaciones de los escritos de los mas grandes cabalistas, que se estudian en las clases diarias de Cabalá con el Rav Dr. Michael Laitman. Las compilaciones tratan del trabajo espiritual y de la estructura de los mundos Superiores. Con el fin de facilitar su uso están en orden alfabético."
+    },
+    "item-header": "Excerpts from the Sources:"
+  },
   "programs": {
     "header": {
       "text": "Programas",
@@ -310,7 +344,8 @@
     },
     "list": {
       "episode_from": "Capítulo del programa:",
-      "item_of": "Parte de:"
+      "item_of": "Parte de:",
+      "show_all": "A todos los episodios"
     },
     "unit": {
       "recommended": {
@@ -369,6 +404,12 @@
     "choose-date": "Elegir fecha",
     "today-lessons": "Lecciones diarias de Cabalá"
   },
+  "help": {
+    "header": {
+      "text": "Help",
+      "subtext": "In this section you will find video tutorials and best practices on how to use the site"
+    }
+  },
   "pages": {
     "collection": {
       "items": {
@@ -382,7 +423,15 @@
       "info": {
         "sources": "Fuentes",
         "topics": "Temas",
-        "collections": "Relacionado a"
+        "collections": "Relacionado a",
+        "study-series": "A todas las lecciones de la colección",
+        "episode": "Capitulo {{name}}",
+        "episodes": "{{name}} episodes",
+        "lesson-episode": "Parte {{name}}",
+        "lesson-episodes": "{{name}} parts",
+        "series-episode": "Lección {{name}}",
+        "series-episodes": "{{name}} lessons",
+        "views": "{{views}} visualizaciones"
       },
       "recommended": {
         "same-collection": {
@@ -422,7 +471,20 @@
       "header": "Selected Highlights"
     },
     "recommended": {
-      "header": "Recomendado"
+      "same-topic": "Recommended for topic",
+      "same-collection": "Recommended chapters from",
+      "any-topic": "Any Topic",
+      "default": "Recommended for you",
+      "popular": "Most viewed",
+      "watching-now": "watching now",
+      "views": "views",
+      "last": "Last chapter",
+      "next": "Next chapter",
+      "prev": "Prev chapter",
+      "rand": "Random content",
+      "more": "More",
+      "less": "Less",
+      "new": "New"
     },
     "playlist": {
       "header": "Up Next"
@@ -438,7 +500,8 @@
     "az": "AZ",
     "default": "Por Omisión",
     "filter": "Filtro...",
-    "share-title": "Lee este artículo"
+    "share-title": "Lee este artículo",
+    "play-audio-file": "Reproducir el archivo de audio"
   },
   "topics": {
     "header": {
@@ -592,5 +655,35 @@
     "copy-link": "Copiar link",
     "copy-text": "Copiar texto",
     "disable-share": "Cancelar"
+  },
+  "personal": {
+    "subsNewUnits": "nuevos episodios",
+    "unsubscribe": "Suscrito",
+    "subscribe": "Suscribirme",
+    "unsubscribeSuccessful": "Suscripción eliminada",
+    "subscribeSuccessful": "Suscripción agregada",
+    "newPlaylistSuccessful": "Nueva lista de reproducción {{name}} creado",
+    "addToPlaylistSuccessful": "Añadido a la lista de reproducción {{name}}",
+    "history": "Historial",
+    "likes": "Vídeos que me gustan",
+    "playlists": "Playlists",
+    "playlistNoResult": "No hay videos en esta lista de reproducción",
+    "subscriptions": "Suscripciones",
+    "playAll": "Jugar todo",
+    "addToPlaylist": "Guardar en...",
+    "newPlaylistName": "Nuevo nombre de lista de reproducción",
+    "newPlaylist": "Crear lista de reproducción",
+    "editPlaylist": "Editar lista de reproducción",
+    "removedSuccessfully": "Eliminado exitosamente",
+    "removeHistory": "Eliminar de la historia",
+    "removeLike": "Eliminar de los videos que me gustan",
+    "removeFromPlaylist": "Eliminar de lista de reproducción",
+    "confirmRemovePlaylist": "¿Seguro que quieres eliminar {{name}}?\nNota: Eliminar listas de reproducción es una acción permanente y no se puede deshacer.",
+    "confirmUnsubscribe": "¿Anular la suscripción a {{name}}?",
+    "videosOnList": "vídeos",
+    "login": "Iniciar sesión",
+    "logout": "Cerrar sesión",
+    "needToLogin": "Iniciar sesión para me gusta, guardar y suscribirse a videos",
+    "account": "Mi cuenta"
   }
 }

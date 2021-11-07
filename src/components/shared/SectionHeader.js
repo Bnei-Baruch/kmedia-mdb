@@ -17,7 +17,7 @@ const SectionHeader = ({ section, t, submenuItems }) => {
       <Container className="padded">
         <Grid>
           <Grid.Row>
-            <Grid.Column>
+            <Grid.Column mobile={16} tablet={12} computer={10}>
               <Header as="h1" color="blue">
                 <Header.Content>
                   <span className="section-header__title">

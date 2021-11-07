@@ -11,10 +11,10 @@ import serverRender from './renderer';
 const CRA_CLIENT_PORT = process.env.CRA_CLIENT_PORT || 3000;
 
 function handler(req, res, next) {
-  http.get(`http://localhost:${CRA_CLIENT_PORT}/index.html`, (result) => {
+  http.get(`http://localhost:${CRA_CLIENT_PORT}/index.html`, result => {
     result.setEncoding('utf8');
     let htmlData = '';
-    result.on('data', (chunk) => {
+    result.on('data', chunk => {
       htmlData += chunk;
     });
     result.on('end', () => {

@@ -2,22 +2,25 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { renderRoutes } from 'react-router-config';
 
-import { DEFAULT_LANGUAGE } from './helpers/consts';
+import {
+  DEFAULT_LANGUAGE,
+  MY_NAMESPACE_HISTORY,
+  MY_NAMESPACE_LIKES,
+  MY_NAMESPACE_PLAYLISTS
+} from './helpers/consts';
 import LanguageSetter from './components/Language/LanguageSetter';
 import Layout from './components/Layout/Layout';
 import Lessons from './components/Sections/Lessons/MainPage';
-import LessonPage from './components/Sections/Lessons/Unit/LessonPage';
+import PlaylistItemPage from './components/Sections/Lessons/Unit/PlaylistItemPage';
 import LessonCollection from './components/Sections/Lessons/Collection/MainPage';
 import LastLessonCollection from './components/Sections/Lessons/Collection/LastDaily';
 import Programs from './components/Sections/Programs/MainPage';
-import ProgramPage from './components/Sections/Programs/ProgramPage';
 import ProgramCollection from './components/Sections/Programs/Collection';
 import Publications from './components/Sections/Publications/MainPage';
 import ArticlePage from './components/Sections/Publications/tabs/Articles/Unit';
 import ArticleCollection from './components/Sections/Publications/tabs/Articles/Collection';
 import BlogPost from './components/Sections/Publications/tabs/Blog/Post/Container';
 import Events from './components/Sections/Events/MainPage';
-import UnitPage from './components/Pages/Unit/Page';
 import PlaylistCollectionIdCheck from './components/Pages/PlaylistCollection/IdCheck';
 import LibraryHomepage from './components/Sections/Library/Homepage';
 import LibraryContainer from './components/Sections/Library/LibraryContainer';
@@ -35,9 +38,24 @@ import NotImplemented from './components/NotImplemented';
 // import Design from './components/Design/Design';
 import * as ssrDataLoaders from './routesSSRData';
 import * as shapes from './components/shapes';
+import Main from './components/Sections/Personal/Main/Page';
+import PlaylistDecorator from './components/Pages/PlaylistMy/Decorator';
+import PlaylistPage from './components/Sections/Personal/Playlist/Page';
+import LikePage from './components/Sections/Personal/Like/Page';
+import HistoryPage from './components/Sections/Personal/History/Page';
+import Likut from './components/Sections/Likutim/Likut';
+import LikutimMain from './components/Sections/Likutim/Main';
 
 const routes = [
   { path: '', component: HomePage, options: { ssrData: ssrDataLoaders.home } },
+
+  { path: 'personal', component: Main },
+  { path: `personal/${MY_NAMESPACE_HISTORY}`, component: HistoryPage },
+  { path: `personal/${MY_NAMESPACE_LIKES}`, component: LikePage },
+  { path: `personal/${MY_NAMESPACE_PLAYLISTS}/:id`, component: PlaylistPage },
+  { path: `${MY_NAMESPACE_PLAYLISTS}/:id`, component: PlaylistDecorator },
+
+  { path: ':routeType/cu/:id', component: PlaylistItemPage, options: { ssrData: ssrDataLoaders.cuPage } },
   { path: 'lessons', component: Lessons, options: { ssrData: ssrDataLoaders.lessonsPage } },
   { path: 'lessons/:tab', component: Lessons, options: { ssrData: ssrDataLoaders.lessonsPage } },
   {
@@ -45,11 +63,9 @@ const routes = [
     component: LessonCollection,
     options: { ssrData: ssrDataLoaders.lessonsCollectionPage }
   },
-  { path: 'lessons/cu/:id', component: LessonPage, options: { ssrData: ssrDataLoaders.cuPage } },
   { path: 'lessons/daily/latest', component: LastLessonCollection, options: { ssrData: ssrDataLoaders.latestLesson } },
   { path: 'programs', component: Programs, options: { ssrData: ssrDataLoaders.programsPage } },
   { path: 'programs/:tab', component: Programs, options: { ssrData: ssrDataLoaders.programsPage } },
-  { path: 'programs/cu/:id', component: ProgramPage, options: { ssrData: ssrDataLoaders.cuPage } },
   {
     path: 'programs/c/:id',
     component: ProgramCollection,
@@ -57,8 +73,11 @@ const routes = [
   },
   { path: 'events', component: Events, options: { ssrData: ssrDataLoaders.eventsPage } },
   { path: 'events/:tab', component: Events, options: { ssrData: ssrDataLoaders.eventsPage } },
-  { path: 'events/cu/:id', component: UnitPage, options: { ssrData: ssrDataLoaders.cuPage } },
-  { path: 'events/c/:id', component: PlaylistCollectionIdCheck, options: { ssrData: ssrDataLoaders.playlistCollectionPage } },
+  {
+    path: 'events/c/:id',
+    component: PlaylistCollectionIdCheck,
+    options: { ssrData: ssrDataLoaders.playlistCollectionPage }
+  },
   { path: 'publications', component: Publications, options: { ssrData: ssrDataLoaders.publicationsPage } },
   { path: 'publications/:tab', component: Publications, options: { ssrData: ssrDataLoaders.publicationsPage } },
   { path: 'publications/articles/cu/:id', component: ArticlePage, options: { ssrData: ssrDataLoaders.articleCUPage } },
@@ -69,7 +88,11 @@ const routes = [
   },
   { path: 'publications/blog/:blog/:id', component: BlogPost, options: { ssrData: ssrDataLoaders.blogPostPage } },
   { path: 'music', component: Music, options: { ssrData: ssrDataLoaders.musicPage } },
-  { path: 'music/c/:id', component: PlaylistCollectionIdCheck, options: { ssrData: ssrDataLoaders.playlistCollectionPage } },
+  {
+    path: 'music/c/:id',
+    component: PlaylistCollectionIdCheck,
+    options: { ssrData: ssrDataLoaders.playlistCollectionPage }
+  },
   { path: 'sources', component: LibraryHomepage },
   { path: 'sources/:id', component: LibraryContainer, options: { ssrData: ssrDataLoaders.libraryPage } },
   { path: 'topics', component: Topics },
@@ -82,6 +105,8 @@ const routes = [
   { path: 'help', component: Help },
   { path: 'simple-mode', component: SimpleModeContainer, options: { ssrData: ssrDataLoaders.simpleMode } },
   { path: 'excerpt', component: ExcerptContainer },
+  { path: 'likutim', component: LikutimMain },
+  { path: 'likutim/:id', component: Likut, },
   // { path: 'design', component: Design },
   // { path: 'design2', component: Design2 },
 ];

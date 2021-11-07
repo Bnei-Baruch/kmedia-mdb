@@ -9,7 +9,7 @@ export function* fetchData() {
   try {
     const language = yield select(state => settings.getLanguage(state.settings));
     const { data } = yield call(Api.home, { language });
-    yield put(mdb.receiveCollections([data.latest_daily_lesson]));
+    yield put(mdb.receiveCollections([data.latest_daily_lesson, ...data.latest_cos]));
     yield put(mdb.receiveContentUnits(data.latest_units));
     yield put(actions.fetchDataSuccess(data));
   } catch (err) {
@@ -22,9 +22,9 @@ export function* fetchBanner(action) {
     const { data } = yield call(Api.getCMS, 'banner', {
       language: action.payload,
     });
-    yield put(actions.fetchBannerSuccess(data));
+    yield put(actions.fetchBannersSuccess(data));
   } catch (err) {
-    yield put(actions.fetchBannerFailure(err));
+    yield put(actions.fetchBannersFailure(err));
   }
 }
 

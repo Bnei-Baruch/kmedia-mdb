@@ -5,18 +5,18 @@ import DayPicker from 'react-day-picker';
 import Navbar from 'react-day-picker/build/Navbar';
 import MomentLocaleUtils from 'react-day-picker/moment';
 import { withNamespaces } from 'react-i18next';
-import { Button, Card, Divider, Grid, Input } from 'semantic-ui-react';
+import { Button, Card, Divider, Grid, Input, MenuItem } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
 
 import { selectors as settings } from '../../../redux/modules/settings';
 import { ALL_LANGUAGES } from '../../../helpers/consts';
 import { today } from '../../../helpers/date';
 import SectionHeader from '../../shared/SectionHeader';
-import DropdownLanguageSelector from '../../Language/Selector/DropdownLanguageSelector';
 import YearMonthForm from '../../Filters/components/Date/YearMonthForm';
 import SimpleModeList from './list';
 import { getOptions } from '../../../helpers/language';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
+import MenuLanguageSelector from '../../Language/Selector/MenuLanguageSelector';
 
 const changeDay = (amount, selectedDate, onDayClick) => {
   const newDate = moment(selectedDate).add(amount, 'd').toDate();
@@ -84,7 +84,7 @@ const languagesDropDownContainer = (filesLanguage, blinkLangSelect, onLanguageCh
   }
 
   return (
-    <DropdownLanguageSelector
+    <MenuLanguageSelector
       languages={ALL_LANGUAGES}
       defaultValue={filesLanguage}
       onSelect={onLanguageChange}
@@ -200,9 +200,9 @@ const SimpleModePage = ({
                   {t('simple-mode.media-language')}
                   {' '}
                 </h4>
-                <div className="dropdown-container">
+                <MenuItem className="dropdown-container">
                   {languagesDropDownContainer(filesLanguage, blinkLangSelect, onLanguageChange, t, isMobileDevice)}
-                </div>
+                </MenuItem>
               </div>
             </div>
             <SimpleModeList language={filesLanguage} renderUnit={renderUnit} />

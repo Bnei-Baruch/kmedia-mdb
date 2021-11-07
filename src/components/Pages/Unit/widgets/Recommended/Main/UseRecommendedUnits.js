@@ -1,17 +1,19 @@
 import { useSelector } from 'react-redux';
 import { selectors } from '../../../../../../redux/modules/recommended';
 import { selectors as mdbSelectors } from '../../../../../../redux/modules/mdb';
+import { selectors as sourcesSelectors } from '../../../../../../redux/modules/sources';
 
 // A custom hook to get loaded recommended
-const useRecommendedUnits = () => {
-  const recommendedItems = useSelector(state => selectors.getRecommendedItems(state.recommended)) || [];
+const useRecommendedUnits = feedNames => {
+  const recommendedItems = useSelector(state => selectors.getManyRecommendedItems(feedNames, state.recommended)) || [];
 
-  const recommendedUnits = useSelector(state => recommendedItems
-    .map(item => mdbSelectors.getDenormContentUnit(state.mdb, item.uid) || mdbSelectors.getDenormCollection(state.mdb, item.uid))
-    .filter(item => !!item)) || [];
-
-  return recommendedUnits;
+  return useSelector(state => Object.entries(recommendedItems).reduce((acc, [feedName, items]) => {
+    acc[feedName] = items.map(item =>
+      mdbSelectors.getDenormContentUnit(state.mdb, item.uid) ||
+      mdbSelectors.getDenormCollection(state.mdb, item.uid) ||
+      sourcesSelectors.getSourceById(state.sources)(item.uid)).filter(item => !!item) || [];
+    return acc;
+  }, {}));
 };
-
 
 export default useRecommendedUnits;

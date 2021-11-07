@@ -36,7 +36,7 @@ const app = process.env.NODE_ENV === 'development'
 
 const PORT = process.env.SERVER_PORT || 3001;
 
-app.listen(PORT, (error) => {
+app.listen(PORT, error => {
   if (error) {
     return console.log(`something bad happened: ${error} :(`);
   }
@@ -44,7 +44,7 @@ app.listen(PORT, (error) => {
   return console.log(`App listening on port ${PORT}!`);
 });
 
-app.on('error', (error) => {
+app.on('error', error => {
   if (error.syscall !== 'listen') {
     throw error;
   }
@@ -55,15 +55,15 @@ app.on('error', (error) => {
 
   // handle specific listen errors with friendly messages
   switch (error.code) {
-  case 'EACCES':
-    console.error(`${bind} requires elevated privileges`);
-    process.exit(1);
-    break;
-  case 'EADDRINUSE':
-    console.error(`${bind} is already in use`);
-    process.exit(1);
-    break;
-  default:
-    throw error;
+    case 'EACCES':
+      console.error(`${bind} requires elevated privileges`);
+      process.exit(1);
+      break;
+    case 'EADDRINUSE':
+      console.error(`${bind} is already in use`);
+      process.exit(1);
+      break;
+    default:
+      throw error;
   }
 });

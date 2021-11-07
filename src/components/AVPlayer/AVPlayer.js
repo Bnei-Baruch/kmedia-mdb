@@ -31,6 +31,7 @@ import AVEditSlice from './AVEditSlice';
 import AVJumpBack from './AVJumpBack';
 import AVSpinner from './AVSpinner';
 import ShareFormDesktop from './Share/ShareFormDesktop';
+import { buildAppendData } from './utils';
 import { isLanguageRtl } from '../../helpers/i18n-utils';
 import { PlayerStartEnum } from './playerStartEnum';
 import { DeviceInfoContext } from '../../helpers/app-contexts';
@@ -395,21 +396,10 @@ class AVPlayer extends Component {
     }
   };
 
-  buildAppendData = () => {
+  buildAppendData() {
     const { autoPlay, item, media } = this.props;
-    const { src } = this.state;
-
-    return {
-      unit_uid: item?.unit?.id,
-      file_src: src,
-      current_time: media.currentTime,
-      duration: media.duration,
-      auto_play: autoPlay,
-      // media.isMuted is actually the state before the action, so we call it was_muted.
-      // This is specifically relevant for the mute-unmute action.
-      was_muted: media.isMuted,
-    };
-  };
+    return buildAppendData(autoPlay, item, media.currentTime, media.duration, media.isMuted);
+  }
 
   onPlay = () => {
     const { chronicles, onPlay, item, actionPlayerPlay } = this.props;
