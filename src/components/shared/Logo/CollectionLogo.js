@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { cmsImagesUrl, Requests } from '../../../helpers/Api';
+import { cmsImgUrl, Requests } from '../../../helpers/Api';
 import FallbackImage from '../FallbackImage';
 
 const CollectionLogo = props => {
   const { collectionId = null, ...rest } = props;
 
   const src = Requests.imaginary('thumbnail', {
-    url: cmsImagesUrl(`logos/${collectionId}.jpg`),
+    url: cmsImgUrl(`logos/${collectionId}.jpg`),
     width: 250,
     stripmeta: true
   });
