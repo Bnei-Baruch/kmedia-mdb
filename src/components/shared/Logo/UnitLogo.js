@@ -15,15 +15,15 @@ const portraits = { bs: portraitBS, rb: portraitRB, ml: portraitML };
 
 const UnitLogo = props => {
   const {
-          unitId       = null,
-          collectionId = null,
-          sourceId     = null,
-          width        = 120,
-          height,
-          className    = '',
-          fallbackImg  = 'default',
-          ...rest
-        }          = props;
+    unitId       = null,
+    collectionId = null,
+    sourceId     = null,
+    width        = 120,
+    height,
+    className    = '',
+    fallbackImg  = 'default',
+    ...rest
+  }          = props;
   const sourcePath = useSelector(state => sources.getPathByID(state.sources)(sourceId));
 
   let src;
