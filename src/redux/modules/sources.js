@@ -32,10 +32,14 @@ const initialState = {
   byId: {},
   roots: [],
   sortedByAZ: {
-    getByID: identity
+    getByID: identity,
+    getPath: identity,
+    getPathByID: identity,
   },
   sortedByBook: {
-    getByID: identity
+    getByID: identity,
+    getPath: identity,
+    getPathByID: identity,
   },
   loaded: false,
   sortBy: 'Book',

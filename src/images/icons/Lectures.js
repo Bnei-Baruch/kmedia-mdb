@@ -11,10 +11,10 @@ function SvgLectures(props) {
             {...props}
         >
             <g stroke="#2185d0" strokeLinecap="square" strokeWidth={2}>
-                <path d="M6 7h38M5 7h40M5 33h40M25 33.5v3" />
+                <path d="M5 10h40M5 33h40M25 33v3" />
                 <circle cx={25} cy={38} fill="#fff" r={2} />
-                <path d="M11 44l14-28 14 28" />
-                <path d="M7 7h36v26H7z" fill="#fff" />
+                <path d="M11 44.5L25 18l14 26.5" />
+                <path d="M7 10h36v23H7z" fill="#fff" />
             </g>
         </svg>
     );
