@@ -66,6 +66,9 @@
       align-items: stretch;
       display: flex !important;
       justify-content: center;
+      &.topIcon {
+        padding-bottom: 5em;
+      }
     }
 
     a {
@@ -79,6 +82,7 @@
         }
       }
     }
+
   }
 
   &__search {

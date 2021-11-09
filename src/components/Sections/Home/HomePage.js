@@ -66,19 +66,23 @@ const renderBlogPostsAndTweets = (latestBlogPosts, latestTweets, language, t) =>
   </div>;
 
 const renderActiveSections = (t, isMobileDevice) => {
-  const map = isMobileDevice ?
-    x => (
-      <Grid.Column width={4} key={x} textAlign="center">
-        <Topic title={t(`nav.sidebar.${x}`)} src={x} href={`/${x}`} />
-      </Grid.Column>
-    ) :
-    x => (
-      <Grid.Column key={x} textAlign="center">
-        <Topic title={t(`nav.sidebar.${x}`)} src={x} href={`/${x}`} />
-      </Grid.Column>
-    );
+  const map = x =>
+      <Grid.Column width={4} key={x.name} textAlign="center" className={!isMobileDevice && x.className}>
+        <Topic title={t(`nav.sidebar.${x.name}`)} src={x.name} href={`/${x.name}`} />
+      </Grid.Column>;
 
-  return ['lessons', 'programs', 'sources', 'events', 'publications', 'simple-mode', 'topics', 'likutim'].map(map);
+  const sections = [
+    {name:'lessons', className: 'topIcon' },
+    {name:'programs', className: 'topIcon' },
+    {name:'topics', className: 'topIcon' },
+    {name:'sources', className: 'topIcon' },
+    {name:'events', className: '' },
+    {name:'likutim', className: '' },
+    {name:'publications', className: '' },
+    {name:'simple-mode', className: '' }
+  ];
+
+  return sections.map(map);
 };
 
 const renderActiveSectionsGrid = (t, isMobileDevice) =>
