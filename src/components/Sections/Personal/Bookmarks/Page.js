@@ -12,7 +12,7 @@ import WipErr from '../../../shared/WipErr/WipErr';
 import { withNamespaces } from 'react-i18next';
 //import FoldersContainer from './Folders/Container';
 
-const Page = ({t}) => {
+const Page = ({ t }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
   const needToLogin = NeedToLogin({ t });

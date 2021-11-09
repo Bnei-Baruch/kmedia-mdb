@@ -70,21 +70,20 @@ const BookmarkForm = ({ t, onClose, source }) => {
     if (value.length > 0) {
       params.query = value;
     }
+
     dispatch(actions.fetch(MY_NAMESPACE_FOLDERS, params));
   };
 
-  const renderFolder = f => {
-    return (
-      <List.Item key={f.id} className="margin-top-8 margin-bottom-4">
-        <Checkbox
-          checked={selected?.includes(f.id)}
-          onChange={(e, { checked }) => handleChange(checked, f.id)}
-          label={f.name}
-          className="margin-right-4 margin-left-4"
-        />
-      </List.Item>
-    );
-  };
+  const renderFolder = f => (
+    <List.Item key={f.id} className="margin-top-8 margin-bottom-4">
+      <Checkbox
+        checked={selected?.includes(f.id)}
+        onChange={(e, { checked }) => handleChange(checked, f.id)}
+        label={f.name}
+        className="margin-right-4 margin-left-4"
+      />
+    </List.Item>
+  );
 
   return (
     <>
