@@ -427,8 +427,11 @@
         "collections": "Related to",
         "study-series": "To all the lessons of the collection",
         "episode": "Episode {{name}}",
+        "episodes": "{{name}} episodes",
         "lesson-episode": "Part {{name}}",
+        "lesson-episodes": "{{name}} parts",
         "series-episode": "Lesson {{name}}",
+        "series-episodes": "{{name}} lessons",
         "views": "{{views}} Views"
       },
       "recommended": {
@@ -499,7 +502,8 @@
     "default": "Default",
     "filter": "Filter...",
     "share-title": "Read this article",
-    "group-articles": "Group Articles"
+    "group-articles": "Group Articles",
+    "play-audio-file": "Play the audio file"
   },
   "topics": {
     "header": {

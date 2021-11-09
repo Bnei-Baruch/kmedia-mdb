@@ -12,7 +12,7 @@ import { selectors as settings } from '../../../../redux/modules/settings';
 import { selectors as auth } from '../../../../redux/modules/auth';
 import { MY_NAMESPACE_PLAYLISTS } from '../../../../helpers/consts';
 import WipErr from '../../../shared/WipErr/WipErr';
-import CUItemContainer from '../../../shared/CUItem/CUItemContainer';
+import ContentItemContainer from '../../../shared/ContentItem/ContentItemContainer';
 import AlertModal from '../../../shared/AlertModal';
 import PlaylistHeaderContainer from './HeaderContainer';
 import NeedToLogin from '../NeedToLogin';
@@ -77,7 +77,7 @@ const Page = ({ t }) => {
   };
 
   const renderItem = (x, i) => (
-    <CUItemContainer
+    <ContentItemContainer
       id={x.content_unit_uid}
       key={i}
       link={`${link}?ap=${i}`}
@@ -111,7 +111,7 @@ const Page = ({ t }) => {
           onClick={e => changeItemPosition(e, i, false)}
         />
       </div>
-    </CUItemContainer>
+    </ContentItemContainer>
   );
 
   return (

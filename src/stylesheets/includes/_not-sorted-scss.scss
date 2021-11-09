@@ -1826,6 +1826,42 @@
   text-align: left;
 }
 
+.library-audio-player {
+  margin-left: 0;
+  margin-right: 20px;
+  cursor: pointer;
+  a {
+    svg {
+      position: relative;
+      top: 5px;
+      margin-right: 5px;
+      margin-left: 5px;
+    }
+  }
+  audio {
+    height: 25px;
+    position: relative;
+    top: 7px;
+    @include mobile {
+      margin-top: 15px;
+      height: 54px;
+      width: 100%;
+    }
+  }
+  .playAudioIcon {
+    margin-left: 10px;
+  }
+}
+
+.rtl .library-audio-player {
+  margin-left: 20px;
+  margin-right: 0;
+  .playAudioIcon {
+    margin-right: 10px;
+    margin-left: 0;
+  }
+}
+
 .my_playlist_item {
   position: relative;
 
@@ -1938,11 +1974,12 @@
 }
 
 .cu_item_duration {
+  font-size: 0.8em;
   border-radius: 0;
   background-color: $black;
   color: white;
   margin: 1em;
-  padding: 3px 7px;
+  padding: 3px 4px;
   display: inline-block;
 
   @include mobile {
@@ -2072,7 +2109,7 @@
     }
 
     .cu_item_duration {
-      margin: 4px;
+      margin: 0;
     }
 
     .cu_item_info {
@@ -2121,10 +2158,22 @@
     position: absolute;
     left: 0;
     z-index: 2;
-    bottom: 0;
+    top: 0;
   }
 
   .cu_item_duration.rtl {
+    right: 0;
+    left: auto;
+  }
+
+  .cu_item_label {
+    position: absolute;
+    left: 0;
+    z-index: 2;
+    bottom: 0;
+  }
+
+  .cu_item_label.rtl {
     right: 0;
     left: auto;
   }
@@ -2383,27 +2432,9 @@
   text-align: center;
 }
 
-.recommend-cell {
-  position: relative;
-}
-
-.recommend-label {
-  width: 120px;
-  left: 0;
-  right: unset;
-  position: absolute;
-}
-
-.rtl .recommend-label {
-  right: 0;
-  left: unset;
-}
-
 .recommend-label div {
-  position: absolute;
-  bottom: 0;
   color: white;
-  background-color: #2e8fd5;
+  background-color: #005697;
   max-width: 120px;
   overflow: hidden;
 
@@ -2421,6 +2452,10 @@
 
 .rtl .recommend-more {
   float: left;
+}
+
+.recommend-more-placeholder {
+  height: 1.4em;
 }
 
 .font_black {

@@ -28,7 +28,7 @@ export const PlaylistItem = ({ item, t, language, asList = false }) => {
           <Header as={'h2'}>{item.total_items}</Header>
           <PlaylistPlayIcon className="playlist_icon" fill="#FFFFFF" />
         </div>
-        <UnitLogo unitId={item.poster_unit_uid} width={520} fallbackImg={canonicalSection} />
+        <UnitLogo unitId={item.poster_unit_uid} width={700} fallbackImg={canonicalSection} />
       </div>
       <Card.Content>
         <Header size="medium" className="no-margin-top" content={item.name} />

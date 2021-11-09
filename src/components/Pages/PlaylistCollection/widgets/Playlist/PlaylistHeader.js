@@ -8,13 +8,13 @@ import clsx from 'clsx';
 import { selectors as settings } from '../../../../../redux/modules/settings';
 import { selectors as sources } from '../../../../../redux/modules/sources';
 import * as shapes from '../../../../shapes';
+import { COLLECTION_DAILY_LESSONS } from '../../../../../helpers/consts';
 import { getLanguageDirection } from '../../../../../helpers/i18n-utils';
-import { CT_DAILY_LESSON, CT_SPECIAL_LESSON } from '../../../../../helpers/consts';
+import { DeviceInfoContext } from '../../../../../helpers/app-contexts';
+import { cuPartNameByCCUType } from '../../../../../helpers/utils';
 import { fromToLocalized } from '../../../../../helpers/date';
 import Link from '../../../../Language/MultiLanguageLink';
 import CollectionDatePicker from './CollectionDatePicker';
-import { DeviceInfoContext } from '../../../../../helpers/app-contexts';
-import { cuPartNameByCCUType } from '../../../../../helpers/utils';
 
 const getNextLink = (langDir, t, link) => (
   link ?
@@ -50,7 +50,7 @@ const PlaylistHeader = ({ collection, unit, t, prevLink = null, nextLink = null 
 
   const { content_type, number, name, film_date, start_date, end_date, tag_id, source_id } = collection;
 
-  const isLesson = content_type === CT_DAILY_LESSON || content_type === CT_SPECIAL_LESSON;
+  const isLesson = COLLECTION_DAILY_LESSONS.includes(content_type);
 
   const getSubHeader = () => {
     if (!isLesson) return null;

@@ -423,8 +423,11 @@
         "collections": "Bezieht sich auf",
         "study-series": "To all the lessons of the collection",
         "episode": "Episode {{name}}",
+        "episodes": "{{name}} episodes",
         "lesson-episode": "Part {{name}}",
+        "lesson-episodes": "{{name}} parts",
         "series-episode": "Lesson {{name}}",
+        "series-episodes": "{{name}} lessons",
         "views": "{{views}} Views"
       },
       "recommended": {
@@ -494,7 +497,8 @@
     "az": "А-Z",
     "default": "Standard",
     "filter": "Filter...",
-    "share-title": "Lesen Sie diesen Artikel"
+    "share-title": "Lesen Sie diesen Artikel",
+    "play-audio-file": "Spielen Sie die Audiodatei ab"
   },
   "topics": {
     "header": {

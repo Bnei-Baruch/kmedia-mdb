@@ -1,5 +1,6 @@
 import * as React from "react";
 
+// viewBox sets ratio 16x9
 function SvgImage(props) {
     return (
         <svg
@@ -7,7 +8,7 @@ function SvgImage(props) {
             xmlnsXlink="http://www.w3.org/1999/xlink"
             width="1em"
             height="1em"
-            viewBox="0 0 960 796"
+            viewBox="0 122 960 552"
             {...props}
         >
             <image

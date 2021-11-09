@@ -18,6 +18,7 @@ export const CT_CLIPS              = 'CLIPS';
 export const CT_ARTICLES           = 'ARTICLES';
 export const CT_LESSONS_SERIES     = 'LESSONS_SERIES';
 export const CT_SONGS              = 'SONGS';
+export const CT_SOURCE             = 'SOURCE';
 
 export const CT_COLLECTIONS = [
   CT_DAILY_LESSON,
@@ -62,6 +63,33 @@ export const CT_BLOG_POST             = 'BLOG_POST';
 export const CT_RESEARCH_MATERIAL     = 'RESEARCH_MATERIAL';
 export const CT_KTAIM_NIVCHARIM       = 'KTAIM_NIVCHARIM';
 export const CT_LIKUTIM               = 'LIKUTIM';
+
+
+export const CT_UNITS = [
+  CT_LESSON_PART,
+  CT_LECTURE,
+  CT_CHILDREN_LESSON,
+  CT_WOMEN_LESSON,
+  CT_VIRTUAL_LESSON,
+  CT_FRIENDS_GATHERING,
+  CT_MEAL,
+  CT_VIDEO_PROGRAM_CHAPTER,
+  CT_FULL_LESSON,
+  CT_ARTICLE,
+  CT_UNKNOWN,
+  CT_EVENT_PART,
+  CT_CLIP,
+  CT_TRAINING,
+  CT_KITEI_MAKOR,
+  CT_PUBLICATION,
+  CT_LELO_MIKUD,
+  CT_BLOG_POST,
+  CT_RESEARCH_MATERIAL,
+  CT_KTAIM_NIVCHARIM,
+  CT_LIKUTIM,
+];
+
+export const IsUnitContentType = contentType => CT_UNITS.includes(contentType);
 
 // Content types for additional Elastic results
 export const SCT_BLOG_POST = 'R_BLOG_POST';
@@ -250,7 +278,6 @@ export const EVENT_TYPES = [
 
 // Required for Sections filter.
 export const COLLECTION_LESSONS_TYPE      = [CT_DAILY_LESSON, CT_SPECIAL_LESSON, /* CT_CHILDREN_LESSONS, */ CT_WOMEN_LESSONS, CT_VIRTUAL_LESSONS, CT_LECTURE_SERIES];
-export const NO_COLLECTION_VIEW_TYPE      = [CT_DAILY_LESSON, CT_SPECIAL_LESSON];
 export const COLLECTION_PROGRAMS_TYPE     = [CT_VIDEO_PROGRAM, CT_CLIPS];
 export const COLLECTION_EVENTS_TYPE       = [CT_FRIENDS_GATHERINGS, CT_MEALS, ...EVENT_TYPES];
 export const COLLECTION_PUBLICATIONS_TYPE = [CT_ARTICLES];
@@ -259,6 +286,8 @@ export const UNIT_PROGRAMS_TYPE           = [CT_VIDEO_PROGRAM_CHAPTER, CT_CLIP];
 export const UNIT_EVENTS_TYPE             = [CT_EVENT_PART, CT_MEAL, CT_FRIENDS_GATHERING];
 export const UNIT_PUBLICATIONS_TYPE       = [CT_ARTICLE, CT_PUBLICATION, CT_BLOG_POST, SCT_BLOG_POST, SCT_TWEET];
 export const DERIVED_UNITS_CONTENT_TYPE   = [CT_VIDEO_PROGRAM_CHAPTER, CT_CLIP];
+
+export const COLLECTION_DAILY_LESSONS = [CT_DAILY_LESSON, CT_SPECIAL_LESSON];
 
 export const NO_NAME = '☠ no name';
 
@@ -305,27 +334,27 @@ export const LANG_UI_LANGUAGES   = [LANG_HEBREW, LANG_ENGLISH, LANG_RUSSIAN, LAN
 export const SEARCH_GRAMMAR_HIT_TYPE_LANDING_PAGE = 'landing-page';
 
 // Search Grammar Landing Pages (SGL) constants.
-const SGLP_LESSONS            = 'lessons';
-const SGLP_VIRTUAL_LESSONS    = 'virtual_lessons';
-const SGLP_LECTURES           = 'lectures';
-const SGLP_WOMEN_LESSONS      = 'women_lessons';
-const SGLP_RABASH_LESSONS     = 'rabash_lessons';
-const SGLP_LESSON_SERIES      = 'lesson_series';
-const SGLP_PRORGRAMS          = 'programs';
-const SGLP_CLIPS              = 'clips';
-const SGLP_LIBRARY            = 'library';
-const SGLP_GROUP_ARTICLES     = 'group_articles';
-const SGLP_CONVENTIONS        = 'conventions';
-const SGLP_HOLIDAYS           = 'holidays';
-const SGLP_UNITY_DAYS         = 'unity_days';
-const SGLP_FRIENDS_GATHERINGS = 'friends_gatherings';
-const SGLP_MEALS              = 'meals';
-const SGLP_TOPICS             = 'topics';
-const SGLP_BLOG               = 'blog';
-const SGLP_TWITTER            = 'twitter';
-const SGLP_ARTICLES           = 'articles';
-const SGLP_DOWNLOADS          = 'downloads';
-const SGLP_HELP               = 'help';
+const SGLP_LESSONS              = 'lessons';
+const SGLP_VIRTUAL_LESSONS      = 'virtual_lessons';
+const SGLP_LECTURES             = 'lectures';
+const SGLP_WOMEN_LESSONS        = 'women_lessons';
+const SGLP_RABASH_LESSONS       = 'rabash_lessons';
+export const SGLP_LESSON_SERIES = 'lesson_series';
+const SGLP_PRORGRAMS            = 'programs';
+const SGLP_CLIPS                = 'clips';
+const SGLP_LIBRARY              = 'library';
+const SGLP_GROUP_ARTICLES       = 'group_articles';
+const SGLP_CONVENTIONS          = 'conventions';
+const SGLP_HOLIDAYS             = 'holidays';
+const SGLP_UNITY_DAYS           = 'unity_days';
+const SGLP_FRIENDS_GATHERINGS   = 'friends_gatherings';
+const SGLP_MEALS                = 'meals';
+const SGLP_TOPICS               = 'topics';
+const SGLP_BLOG                 = 'blog';
+const SGLP_TWITTER              = 'twitter';
+const SGLP_ARTICLES             = 'articles';
+const SGLP_DOWNLOADS            = 'downloads';
+const SGLP_HELP                 = 'help';
 
 export const SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_LINK = {
   [SGLP_LESSONS]: 'lessons/daily',
