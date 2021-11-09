@@ -426,8 +426,11 @@
         "collections": "Relacionado a",
         "study-series": "A todas las lecciones de la colección",
         "episode": "Capitulo {{name}}",
+        "episodes": "{{name}} episodes",
         "lesson-episode": "Parte {{name}}",
+        "lesson-episodes": "{{name}} parts",
         "series-episode": "Lección {{name}}",
+        "series-episodes": "{{name}} lessons",
         "views": "{{views}} visualizaciones"
       },
       "recommended": {
@@ -497,7 +500,8 @@
     "az": "AZ",
     "default": "Por Omisión",
     "filter": "Filtro...",
-    "share-title": "Lee este artículo"
+    "share-title": "Lee este artículo",
+    "play-audio-file": "Reproducir el archivo de audio"
   },
   "topics": {
     "header": {

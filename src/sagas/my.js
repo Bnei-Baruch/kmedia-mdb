@@ -51,7 +51,7 @@ function* fetch(action) {
       case MY_NAMESPACE_PLAYLISTS:
         if (data.items) {
           cu_uids = data.items.filter(p => p.items)
-            .reduce((acc, p) => acc.concat(p.items.flatMap(x => x.content_unit_uid)), []);
+            .reduce((acc, p) => acc.concat(p.items.flatMap(x => x.poster_unit_uid)), []);
         }
 
         cu_uids.concat(data.items.map(x => x.content_unit_uid).filter(x => !!x));

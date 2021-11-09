@@ -14,7 +14,7 @@ import {
 } from '../../../../helpers/consts';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import WipErr from '../../../shared/WipErr/WipErr';
-import CUItem from '../../../shared/CUItem/CUItemContainer';
+import ContentItem from '../../../shared/ContentItem/ContentItemContainer';
 import { PlaylistItem } from './PlaylistItem';
 import { SubscriptionsItem } from './SubscriptionsItem';
 import ItemTemplate from './ItemTemplate';
@@ -42,14 +42,14 @@ const ItemsContainer = ({ pageSize = 8, pageNo = 1, t, namespace, withSeeAll }) 
     case MY_NAMESPACE_REACTIONS:
       children = items.map(x => {
         const { key } = getMyItemKey(namespace, x);
-        return <CUItem id={x.subject_uid} key={key} asList={isMobileDevice} />;
+        return <ContentItem id={x.subject_uid} key={key} asList={isMobileDevice} />;
       });
       break;
     case MY_NAMESPACE_HISTORY:
       children = (
         items.map(x => {
           const { key } = getMyItemKey(namespace, x);
-          return <CUItem
+          return <ContentItem
             id={x.content_unit_uid}
             key={key}
             playTime={x.data.current_time}

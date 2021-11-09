@@ -426,8 +426,11 @@
         "collections": "קשור ל",
         "study-series": "לכל השיעורים בסדרה",
         "episode": "פרק {{name}}",
+        "episodes": "{{name}} פרקים",
         "lesson-episode": "חלק {{name}}",
+        "lesson-episodes": "{{name}} חלקים",
         "series-episode": "שיעור {{name}}",
+        "series-episodes": "{{name}} שיעורים",
         "views": "{{views}} צפיות"
       },
       "recommended": {
@@ -448,7 +451,7 @@
       "no-content": "חסר תמליל"
     },
     "sources": {
-      "header": "מקורות",
+      "header": "מקורות לשיעור",
       "no-sources": "אין מקורות",
       "no-source": "בחר מקור",
       "no-source-available": "אף מקור לא מוכן לתצוגה"
@@ -498,7 +501,8 @@
     "default": "ברירת מחדל",
     "filter": "סנן...",
     "share-title": "קרא את המאמר",
-    "group-articles": "מאמרי החברה"
+    "group-articles": "מאמרי החברה",
+    "play-audio-file": "להפעלת קובץ אודיו"
   },
   "topics": {
     "header": {

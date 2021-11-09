@@ -13,7 +13,7 @@ import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import { MY_NAMESPACE_HISTORY } from '../../../../helpers/consts';
 import WipErr from '../../../shared/WipErr/WipErr';
 import AlertModal from '../../../shared/AlertModal';
-import CUItemContainer from '../../../shared/CUItem/CUItemContainer';
+import ContentItemContainer from '../../../shared/ContentItem/ContentItemContainer';
 import { getPageFromLocation } from '../../../Pagination/withPagination';
 import Pagination from '../../../Pagination/Pagination';
 import Actions from './Actions';
@@ -66,9 +66,9 @@ const Page      = ({ location, t }) => {
     }
 
     const item = (
-      <CUItemContainer id={x.content_unit_uid} asList={true} playTime={x.data.current_time}>
+      <ContentItemContainer id={x.content_unit_uid} asList={true} playTime={x.data.current_time}>
         <Actions cuId={x.content_unit_uid} id={x.id} />
-      </CUItemContainer>
+      </ContentItemContainer>
     );
     return (
       <React.Fragment key={i}>
