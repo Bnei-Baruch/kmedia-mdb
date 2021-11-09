@@ -6,7 +6,8 @@ import {
   DEFAULT_LANGUAGE,
   MY_NAMESPACE_HISTORY,
   MY_NAMESPACE_REACTIONS,
-  MY_NAMESPACE_PLAYLISTS
+  MY_NAMESPACE_PLAYLISTS,
+  MY_NAMESPACE_BOOKMARKS
 } from './helpers/consts';
 import LanguageSetter from './components/Language/LanguageSetter';
 import Layout from './components/Layout/Layout';
@@ -44,6 +45,7 @@ import Main from './components/Sections/Personal/Main/Page';
 import PlaylistDecorator from './components/Pages/PlaylistMy/Decorator';
 import PlaylistPage from './components/Sections/Personal/Playlist/Page';
 import ReactionPage from './components/Sections/Personal/Reaction/Page';
+import BookmarksPage from './components/Sections/Personal/Bookmarks/Page';
 import HistoryPage from './components/Sections/Personal/History/Page';
 import Likut from './components/Sections/Likutim/Likut';
 import LikutimMain from './components/Sections/Likutim/Main';
@@ -54,6 +56,7 @@ const routes = [
   { path: 'personal', component: Main },
   { path: `personal/${MY_NAMESPACE_HISTORY}`, component: HistoryPage },
   { path: `personal/${MY_NAMESPACE_REACTIONS}`, component: ReactionPage },
+  { path: `personal/${MY_NAMESPACE_BOOKMARKS}`, component: BookmarksPage },
   { path: `personal/${MY_NAMESPACE_PLAYLISTS}/:id`, component: PlaylistPage },
   { path: `${MY_NAMESPACE_PLAYLISTS}/:id`, component: PlaylistDecorator },
 

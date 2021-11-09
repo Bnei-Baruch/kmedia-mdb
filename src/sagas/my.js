@@ -6,9 +6,12 @@ import { selectors as authSelectors } from '../redux/modules/auth';
 import { actions as mdbActions, selectors as mdbSelectors } from '../redux/modules/mdb';
 import { actions as recommendedActions } from '../redux/modules/recommended';
 import {
+  CT_LIKUTIM,
   IsCollectionContentType,
+  MY_NAMESPACE_BOOKMARKS,
   MY_NAMESPACE_HISTORY,
-  MY_NAMESPACE_PLAYLISTS, MY_NAMESPACE_REACTIONS,
+  MY_NAMESPACE_PLAYLISTS,
+  MY_NAMESPACE_REACTIONS,
   MY_NAMESPACE_SUBSCRIPTIONS
 } from '../helpers/consts';
 import { updateQuery } from './helpers/url';
@@ -24,7 +27,8 @@ function* fetch(action) {
   const token = yield select(state => authSelectors.getToken(state.auth));
   if (!token) return;
   // eslint-disable-next-line prefer-const
-  let { namespace, with_files = false, addToList = true, ...params } = action.payload;
+  const { namespace, with_files = false, addToList = true, ...params } = action.payload;
+  let with_derivations                                                 = false;
 
   const language = yield select(state => settings.getLanguage(state.settings));
   try {
@@ -56,6 +60,10 @@ function* fetch(action) {
         cu_uids = data.items?.map(x => x.content_unit_uid) || [];
         co_uids = data.items?.filter(s => s.collection_uid).map(s => s.collection_uid) || [];
         break;
+      case MY_NAMESPACE_BOOKMARKS:
+        cu_uids          = data.items?.filter(x => x.source_type === CT_LIKUTIM).map(x => x.source_uid) || [];
+        with_derivations = true;
+        break;
       default:
     }
 
@@ -66,6 +74,7 @@ function* fetch(action) {
         id: cu_uids,
         pageSize: cu_uids.length,
         with_files,
+        with_derivations,
         language
       });
       yield put(mdbActions.receiveContentUnits(content_units));
