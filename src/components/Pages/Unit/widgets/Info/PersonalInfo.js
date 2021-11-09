@@ -5,12 +5,7 @@ import { Button, Icon, Menu, Modal } from 'semantic-ui-react';
 
 import { selectors } from '../../../../../redux/modules/auth';
 import { actions, selectors as my } from '../../../../../redux/modules/my';
-import {
-  MY_NAMESPACE_HISTORY,
-  MY_NAMESPACE_REACTIONS,
-  MY_NAMESPACE_SUBSCRIPTIONS,
-  MY_REACTION_KINDS
-} from '../../../../../helpers/consts';
+import { MY_NAMESPACE_REACTIONS, MY_REACTION_KINDS } from '../../../../../helpers/consts';
 import { getMyItemKey } from '../../../../../helpers/my';
 import SubscribeBtn from '../../../../shared/SubscribeBtn';
 import * as shapes from '../../../../shapes';
