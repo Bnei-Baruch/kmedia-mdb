@@ -22,6 +22,7 @@ const Actions = ({ id, t }) => {
       e.preventDefault();
       e.stopPropagation();
     }
+
     setOpen(true);
   };
 

@@ -16,4 +16,5 @@ const BookmarksList = ({ items }) => {
     </Container>
   );
 };
+
 export default withNamespaces()(BookmarksList);

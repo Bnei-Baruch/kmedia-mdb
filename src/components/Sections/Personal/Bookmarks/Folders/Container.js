@@ -29,7 +29,7 @@ const Container = ({ t }) => {
     dispatch(filtersActions.deleteFilter(MY_BOOKMARK_FILTER_FOLDER_QUERY));
   };
 
-  const handleSaveFolder = (e) => {
+  const handleSaveFolder = e => {
     dispatch(actions.add(MY_NAMESPACE_FOLDERS, { name: e.target.value || t('personal.newFolderName') }));
     setEditFolder(false);
   };
@@ -92,7 +92,7 @@ const Container = ({ t }) => {
 
         <Grid.Row color={!id ? 'blue' : ''} key="all" className="margin-top-4 margin-bottom-4">
           <Grid.Column width="16" onClick={() => handleSelectFolder(null)}>
-            {t("personal.allFolders")}
+            {t('personal.allFolders')}
           </Grid.Column>
         </Grid.Row>
         {

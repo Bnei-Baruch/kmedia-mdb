@@ -77,7 +77,7 @@ const BookmarkForm = ({ t, onClose, source, bookmarkId }) => {
     handleSearchChange(null, { value: '' });
   };
 
-  const handleSaveFolder = (e) => {
+  const handleSaveFolder = e => {
     dispatch(actions.add(MY_NAMESPACE_FOLDERS, { name: e.target.value }));
     setEditFolder(false);
   };

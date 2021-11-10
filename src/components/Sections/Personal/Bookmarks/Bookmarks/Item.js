@@ -27,15 +27,13 @@ const BookmarksItem = ({ bookmark, getSourceById }) => {
     dispatch(actions.edit(MY_NAMESPACE_BOOKMARKS, { id, folder_ids: folder_ids.filter(x => x !== fID) }));
   };
 
-  const renderFolder = f => {
-    return (
-      <Label as="a">
-        <Icon name="folder outline" />
-        {f.name}
-        <Icon name="delete" onClick={() => handleRemoveFolder(f.id)} />
-      </Label>
-    );
-  };
+  const renderFolder = f => (
+    <Label as="a">
+      <Icon name="folder outline" />
+      {f.name}
+      <Icon name="delete" onClick={() => handleRemoveFolder(f.id)} />
+    </Label>
+  );
 
   return (
     <List.Item className="padded" key={id}>

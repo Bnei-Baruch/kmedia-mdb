@@ -39,9 +39,7 @@ export const reducer = handleActions({
 
 /* Selectors */
 const getAll   = state => state;
-const getByKey = (state, key) => {
-  return state[key];
-};
+const getByKey = (state, key) => state[key];
 
 export const selectors = {
   getAll,
