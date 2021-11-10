@@ -10,7 +10,7 @@ import { selectors as auth } from '../../../../redux/modules/auth';
 import NeedToLogin from '../NeedToLogin';
 import WipErr from '../../../shared/WipErr/WipErr';
 import { withNamespaces } from 'react-i18next';
-//import FoldersContainer from './Folders/Container';
+import FoldersContainer from './Folders/Container';
 
 const Page = ({ t }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
@@ -18,17 +18,16 @@ const Page = ({ t }) => {
   const needToLogin = NeedToLogin({ t });
   if (needToLogin) return needToLogin;
 
-
   return (
     <Grid padded={!isMobileDevice}>
       <Grid.Row>
-        <Grid.Column mobile={16} tablet={10} computer={10} className={clsx({ 'is-fitted': isMobileDevice })}>
+        <Grid.Column mobile={16} tablet={11} computer={11} className={clsx({ 'is-fitted': isMobileDevice })}>
           <Container className="padded">
             <BookmarksContainer />
           </Container>
         </Grid.Column>
-        <Grid.Column mobile={16} tablet={6} computer={6}>
-          {/*<FoldersContainer />*/}
+        <Grid.Column mobile={16} tablet={5} computer={5}>
+          <FoldersContainer />
         </Grid.Column>
       </Grid.Row>
     </Grid>

@@ -6,12 +6,15 @@ import { Button, Modal, } from 'semantic-ui-react';
 import NeedToLogin from '../../Sections/Personal/NeedToLogin';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import BookmarkForm from './BookmarkForm';
+import { useSelector } from 'react-redux';
+import { selectors as settings } from '../../../redux/modules/settings';
 
-const BookmarkButton = ({ t, language, source }) => {
+const BookmarkButton = ({ t, source, bookmarkId }) => {
   const [open, setOpen] = useState();
   const needToLogin     = NeedToLogin({ t });
 
-  const dir = getLanguageDirection(language);
+  const language = useSelector(state => settings.getLanguage(state.settings));
+  const dir      = getLanguageDirection(language);
 
   const handleOpen  = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -31,7 +34,7 @@ const BookmarkButton = ({ t, language, source }) => {
     >
       <Modal.Header content={t('personal.saveBookmark')} />
       {
-        !needToLogin ? <BookmarkForm onClose={handleClose} source={source} /> : <Modal.Content content={needToLogin} />
+        !needToLogin ? <BookmarkForm onClose={handleClose} source={source} bookmarkId={bookmarkId} /> : <Modal.Content content={needToLogin} />
       }
     </Modal>
   );

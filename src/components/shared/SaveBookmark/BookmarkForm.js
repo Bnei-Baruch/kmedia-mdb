@@ -18,21 +18,23 @@ import { useDispatch, useSelector } from 'react-redux';
 import { actions, selectors } from '../../../redux/modules/my';
 import { MY_NAMESPACE_BOOKMARKS, MY_NAMESPACE_FOLDERS } from '../../../helpers/consts';
 import { frownSplashNotFound } from '../WipErr/WipErr';
+import { getMyItemKey } from '../../../helpers/my';
 
-const BookmarkForm = ({ t, onClose, source }) => {
+const BookmarkForm = ({ t, onClose, source, bookmarkId }) => {
   const [name, setName]             = useState();
   const [selected, setSelected]     = useState(null);
   const [editFolder, setEditFolder] = useState(false);
-  const [folderName, setFolderName] = useState('');
 
+  const { key }  = getMyItemKey(MY_NAMESPACE_BOOKMARKS, { id: bookmarkId });
+  const bookmark = useSelector(state => selectors.getItemByKey(state.my, MY_NAMESPACE_BOOKMARKS, key));
   const items    = useSelector(state => selectors.getList(state.my, MY_NAMESPACE_FOLDERS)).sort((a, b) => b.id - a.id);
-  const saved    = items.filter(f => f.bookmark_ids?.length > 0);
+  const saved    = items.filter(f => bookmark?.folder_ids?.includes(f.id)).map(f => f.id);
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (items.length === 0)
       dispatch(actions.fetch(MY_NAMESPACE_FOLDERS, { 'order_by': 'id DESC' }));
-    setName('');
+    setName(bookmark?.name || '');
   }, []);
 
   useEffect(() => {
@@ -40,13 +42,25 @@ const BookmarkForm = ({ t, onClose, source }) => {
       setSelected([...saved]);
   }, [items?.length]);
 
-  if (!source)
+  if (!source && !bookmark)
     return null;
 
   const changeName = (e, { value }) => setName(value);
 
-  const handleSave = () => {
-    dispatch(actions.add(MY_NAMESPACE_BOOKMARKS, { name, ...source }));
+  const handleSave = () => !bookmark ? create() : update();
+
+  const create = () => {
+    const params = { name, ...source };
+
+    if (selected.length > 0)
+      params.folder_ids = selected;
+
+    dispatch(actions.add(MY_NAMESPACE_BOOKMARKS, params));
+    onClose();
+  };
+
+  const update = () => {
+    dispatch(actions.edit(MY_NAMESPACE_BOOKMARKS, { id: bookmarkId, name, folder_ids: selected }));
     onClose();
   };
 
@@ -58,17 +72,20 @@ const BookmarkForm = ({ t, onClose, source }) => {
     }
   };
 
-  const handleNewFolder = () => setEditFolder(true);
+  const handleNewFolder = () => {
+    setEditFolder(true);
+    handleSearchChange(null, { value: '' });
+  };
 
-  const handleSaveFolder = () => {
-    dispatch(actions.add(MY_NAMESPACE_FOLDERS, { name: folderName }));
+  const handleSaveFolder = (e) => {
+    dispatch(actions.add(MY_NAMESPACE_FOLDERS, { name: e.target.value }));
     setEditFolder(false);
   };
 
   const handleSearchChange = (e, { value }) => {
     const params = { 'order_by': 'id DESC' };
     if (value.length > 0) {
-      params.query = value;
+      params.query = value.toLowerCase();
     }
 
     dispatch(actions.fetch(MY_NAMESPACE_FOLDERS, params));
@@ -119,9 +136,12 @@ const BookmarkForm = ({ t, onClose, source }) => {
             editFolder && (
               <Input
                 focus
-                onChange={(e, { value }) => setFolderName(value)}
-                onBlur={() => handleSaveFolder()}
+                onBlur={handleSaveFolder}
                 autoFocus
+                onFocus={e => {
+                  e.target.value = t('personal.newFolderName');
+                  e.target.select();
+                }}
               />
             )
           }

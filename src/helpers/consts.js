@@ -64,7 +64,6 @@ export const CT_RESEARCH_MATERIAL     = 'RESEARCH_MATERIAL';
 export const CT_KTAIM_NIVCHARIM       = 'KTAIM_NIVCHARIM';
 export const CT_LIKUTIM               = 'LIKUTIM';
 
-
 export const CT_UNITS = [
   CT_LESSON_PART,
   CT_LECTURE,
@@ -496,6 +495,9 @@ export const MY_REACTION_KINDS = {
   LIKE: 'like',
   SUPER: 'super',
 };
+
+export const MY_BOOKMARK_FILTER_FOLDER_QUERY = 'folder_query';
+export const MY_BOOKMARK_FILTER_FOLDER_ID    = 'folder_id';
 
 export const CT_SUBSCRIBE_BY_TYPE = [
   CT_FRIENDS_GATHERINGS,

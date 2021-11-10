@@ -10,7 +10,7 @@ import DonateNow, { VirtualHomeButton } from './DonateNow';
 import FeedBurner from './FeedBurner';
 import { useDispatch, useSelector } from 'react-redux';
 import { actions, selectors } from '../../redux/modules/auth';
-import { VERSION_WITH_PERSONALIZATION } from '../../helpers/consts';
+import { MY_NAMESPACE_BOOKMARKS, VERSION_WITH_PERSONALIZATION } from '../../helpers/consts';
 
 const ITEMS = [
   'lessons',
@@ -67,15 +67,26 @@ const MenuItems = ({ simple = false, visible = false, t, onItemClick = identity,
       />
     </Menu.Item>
   ) : (
-    <Menu.Item
-      key={'personal'}
-      as={NavLink}
-      to={'/personal'}
-      className="sidebar-item"
-      activeClassName="active"
-      content={t('nav.sidebar.personal')}
-      onClick={onItemClick}
-    />
+    <>
+      <Menu.Item
+        key={'personal'}
+        as={NavLink}
+        to={'/personal'}
+        className="sidebar-item"
+        activeClassName="active"
+        content={t('nav.sidebar.personal')}
+        onClick={onItemClick}
+      />
+      <Menu.Item
+        key={MY_NAMESPACE_BOOKMARKS}
+        as={NavLink}
+        to={`personal/${MY_NAMESPACE_BOOKMARKS}`}
+        className="sidebar-item"
+        activeClassName="active"
+        content={t(`nav.sidebar.${MY_NAMESPACE_BOOKMARKS}`)}
+        onClick={onItemClick}
+      />
+    </>
   );
 
   if (simple) {
