@@ -64,7 +64,6 @@ export const CT_RESEARCH_MATERIAL     = 'RESEARCH_MATERIAL';
 export const CT_KTAIM_NIVCHARIM       = 'KTAIM_NIVCHARIM';
 export const CT_LIKUTIM               = 'LIKUTIM';
 
-
 export const CT_UNITS = [
   CT_LESSON_PART,
   CT_LECTURE,
@@ -474,14 +473,13 @@ export const SEARCH_INTENT_SECTIONS = {
 
 export const SCROLL_SEARCH_ID = '__scrollSearchToHere__';
 
-export const MY_NAMESPACE_HISTORY        = 'history';
-export const MY_NAMESPACE_REACTIONS      = 'reactions';
-export const MY_NAMESPACE_PLAYLISTS      = 'playlists';
-export const MY_NAMESPACE_PLAYLIST_BY_ID = 'playlists_by_id';
-export const MY_NAMESPACE_PLAYLIST_ITEMS = 'playlist_items';
-export const MY_NAMESPACE_SUBSCRIPTIONS  = 'subscriptions';
+export const MY_NAMESPACE_HISTORY       = 'history';
+export const MY_NAMESPACE_REACTIONS     = 'reactions';
+export const MY_NAMESPACE_PLAYLISTS     = 'playlists';
+export const MY_NAMESPACE_PLAYLIST_EDIT = 'playlists_edit';
+export const MY_NAMESPACE_SUBSCRIPTIONS = 'subscriptions';
 
-export const MY_NAMESPACES = [MY_NAMESPACE_HISTORY, MY_NAMESPACE_REACTIONS, MY_NAMESPACE_PLAYLISTS, MY_NAMESPACE_SUBSCRIPTIONS];
+export const MY_NAMESPACES = [MY_NAMESPACE_HISTORY, MY_NAMESPACE_REACTIONS, MY_NAMESPACE_PLAYLISTS, MY_NAMESPACE_PLAYLIST_EDIT, MY_NAMESPACE_SUBSCRIPTIONS];
 
 export const MY_REACTION_KINDS = {
   LIKE: 'like',

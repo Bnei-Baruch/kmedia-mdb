@@ -6,7 +6,7 @@ import { Button, Checkbox, Icon, Input, List, Modal, Divider, Segment, Container
 import { actions, selectors } from '../../../../../redux/modules/my';
 import { selectors as auth } from '../../../../../redux/modules/auth';
 import { selectors as settings } from '../../../../../redux/modules/settings';
-import { MY_NAMESPACE_PLAYLIST_ITEMS, MY_NAMESPACE_PLAYLISTS } from '../../../../../helpers/consts';
+import { MY_NAMESPACE_PLAYLIST_EDIT, MY_NAMESPACE_PLAYLISTS } from '../../../../../helpers/consts';
 import { getLanguageDirection } from '../../../../../helpers/i18n-utils';
 import AlertModal from '../../../../shared/AlertModal';
 import PlaylistAddIcon from '../../../../../images/icons/PlaylistAdd';
@@ -26,21 +26,23 @@ const PlaylistInfo = ({ cuID, t, handleClose = null }) => {
 
   const dispatch = useDispatch();
 
-  const playlists = useSelector(state => selectors.getList(state.my, MY_NAMESPACE_PLAYLISTS));
+  const playlists = useSelector(state => selectors.getList(state.my, MY_NAMESPACE_PLAYLIST_EDIT));
+  const total     = useSelector(state => selectors.getTotal(state.my, MY_NAMESPACE_PLAYLIST_EDIT));
   const language  = useSelector(state => settings.getLanguage(state.settings));
   const user      = useSelector(state => auth.getUser(state.auth));
   const saved     = playlists.filter(p => !!p.items);
 
   useEffect(() => {
-    playlists.sort((a, b) => b.id - a.id);
-    const s      = playlists.slice(0, countNew).filter(x => !forUpdate[x.id]);
-    const update = s.reduce((acc, x) => {
-      acc[x.id] = updateStatus.save;
-      return acc;
-    }, {});
-    setForUpdate({ ...forUpdate, ...update, count: forUpdate.count + s.length });
-    setSelected([...s, ...saved]);
-  }, [playlists.length]);
+    if (total !== 0) {
+      const s      = playlists.slice(0, countNew).filter(x => !forUpdate[x.id]);
+      const update = s.reduce((acc, x) => {
+        acc[x.id] = updateStatus.save;
+        return acc;
+      }, {});
+      setForUpdate({ ...forUpdate, ...update, count: forUpdate.count + s.length });
+      setSelected([...s, ...saved]);
+    }
+  }, [total]);
 
   const dir = getLanguageDirection(language);
 
@@ -48,7 +50,7 @@ const PlaylistInfo = ({ cuID, t, handleClose = null }) => {
     setSelected([]);
     setCountNew(0);
     setForUpdate({ count: 0 });
-    dispatch(actions.fetch(MY_NAMESPACE_PLAYLISTS, { 'exist_cu': cuID, order_by: 'id' }));
+    dispatch(actions.fetch(MY_NAMESPACE_PLAYLIST_EDIT, { 'exist_cu': cuID, order_by: 'id' }));
   };
 
   const handleChange = (checked, p) => {

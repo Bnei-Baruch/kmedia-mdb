@@ -7,11 +7,11 @@ import ContentItemContainer from '../../../../shared/ContentItem/ContentItemCont
 import { Header } from 'semantic-ui-react';
 import { withNamespaces } from 'react-i18next';
 
-const PlaylistWidget = ({ playlist, selected = 0, t }) => {
+const PlaylistWidget = ({ playlist, selected = 0, link, t }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
   const { collection, items, name } = playlist;
-  const unitsToDisplay        = items.filter(item => !!item.unit).map(item => item.unit);
+  const unitsToDisplay              = items.filter(item => !!item.unit).map(item => item.unit);
 
   return (
     <div id="avbox_playlist" className="avbox__playlist-view">
@@ -32,6 +32,7 @@ const PlaylistWidget = ({ playlist, selected = 0, t }) => {
             size="small"
             asList={true}
             selected={i === selected}
+            link={link ? `${link}?ap=${i}` : null}
           />
         ))
       }

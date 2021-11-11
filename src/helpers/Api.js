@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { MY_NAMESPACE_PLAYLISTS } from './consts';
+import { MY_NAMESPACE_PLAYLIST_EDIT, MY_NAMESPACE_PLAYLISTS } from './consts';
 
 const API_BACKEND             = process.env.REACT_APP_API_BACKEND;
 const ASSETS_BACKEND          = process.env.REACT_APP_ASSETS_BACKEND;
@@ -129,15 +129,15 @@ class Api {
   static autocomplete = ({ q, language }) => Requests.get(`autocomplete?${Requests.makeParams({ q, language })}`);
 
   static search = ({
-    q,
-    language,
-    pageNo: page_no,
-    pageSize: page_size,
-    sortBy: sort_by,
-    deb,
-    suggest,
-    searchId: search_id
-  }) => (
+                     q,
+                     language,
+                     pageNo: page_no,
+                     pageSize: page_size,
+                     sortBy: sort_by,
+                     deb,
+                     suggest,
+                     searchId: search_id
+                   }) => (
     Requests.get(`search?${Requests.makeParams({ q, language, page_no, page_size, sort_by, deb, suggest, search_id })}`)
   );
 
@@ -154,15 +154,15 @@ class Api {
   );
 
   static recommendedRequestData = ({
-    uid,
-    languages,
-    skipUids: skip_uids,
-    size: more_items,
-    spec,
-    specs,
-    watchingNowMin: watching_now_min,
-    popularMin: popular_min
-  }) => ({
+                                     uid,
+                                     languages,
+                                     skipUids: skip_uids,
+                                     size: more_items,
+                                     spec,
+                                     specs,
+                                     watchingNowMin: watching_now_min,
+                                     popularMin: popular_min
+                                   }) => ({
     more_items,
     'current_feed': [],
     'options': {
@@ -213,6 +213,8 @@ class Api {
 
   static my = (namespace, params, token, method) => {
     let urlParam = namespace;
+    if (namespace === MY_NAMESPACE_PLAYLIST_EDIT)
+      urlParam = MY_NAMESPACE_PLAYLISTS;
 
     if (params.id) {
       urlParam = `${urlParam}/${params.id}`;
