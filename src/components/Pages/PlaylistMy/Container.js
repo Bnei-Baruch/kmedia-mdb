@@ -7,7 +7,7 @@ import { actions, selectors } from '../../../redux/modules/my';
 import { selectors as mdbSelectors } from '../../../redux/modules/mdb';
 import { selectors as settings } from '../../../redux/modules/settings';
 import { selectors as auth } from '../../../redux/modules/auth';
- import { MY_NAMESPACE_PLAYLISTS } from '../../../helpers/consts';
+import { MY_NAMESPACE_PLAYLISTS } from '../../../helpers/consts';
 import playerHelper from '../../../helpers/player';
 import WipErr from '../../shared/WipErr/WipErr';
 import Page from './Page';
