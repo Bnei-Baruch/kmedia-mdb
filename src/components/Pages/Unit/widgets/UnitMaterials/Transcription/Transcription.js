@@ -198,7 +198,7 @@ class Transcription extends Component {
   handleSettings = settings => this.setState({ settings });
 
   render() {
-    const { doc2htmlById, t, type }                       = this.props;
+    const { doc2htmlById, t, type, unit }                 = this.props;
     const { selectedFile, languages, language, settings } = this.state;
     const { isMobileDevice }                              = this.context;
 
@@ -254,7 +254,11 @@ class Transcription extends Component {
             }
             <Menu.Item>
               {<Download path={url} mimeType={mimetype} downloadAllowed={true} filename={name} />}
-              <UnitBar handleSettings={this.handleSettings} fontSize={fontSize} />
+              <UnitBar
+                handleSettings={this.handleSettings}
+                fontSize={fontSize}
+                source={unit}
+              />
             </Menu.Item>
           </Menu>
           {content}

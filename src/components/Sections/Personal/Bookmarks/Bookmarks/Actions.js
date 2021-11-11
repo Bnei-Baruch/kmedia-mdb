@@ -1,15 +1,21 @@
 import React, { useState } from 'react';
 import { withNamespaces } from 'react-i18next';
-import { useDispatch } from 'react-redux';
-import { Dropdown } from 'semantic-ui-react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Dropdown, Modal } from 'semantic-ui-react';
 
 import { actions } from '../../../../../redux/modules/my';
 import { MY_NAMESPACE_BOOKMARKS } from '../../../../../helpers/consts';
-import BookmarkButton from '../../../../shared/SaveBookmark/BookmarkButton';
+import BookmarkForm from '../../../../shared/SaveBookmark/BookmarkForm';
+import { selectors as settings } from '../../../../../redux/modules/settings';
+import { getLanguageDirection } from '../../../../../helpers/i18n-utils';
 
 const Actions = ({ id, t }) => {
-  const [open, setOpen] = useState();
-  const dispatch        = useDispatch();
+  const [open, setOpen]         = useState();
+  const [openEdit, setOpenEdit] = useState();
+  const dispatch                = useDispatch();
+
+  const language = useSelector(state => settings.getLanguage(state.settings));
+  const dir      = getLanguageDirection(language);
 
   const removeItem = e => {
     e.preventDefault();
@@ -17,22 +23,27 @@ const Actions = ({ id, t }) => {
     dispatch(actions.remove(MY_NAMESPACE_BOOKMARKS, { id }));
   };
 
-  const handleOpen = e => {
+  const handleOpen = () => setOpen(true);
+
+  const handleClose = () => setOpen(false);
+
+  const handleOpenEdit = e => {
     if (e) {
       e.preventDefault();
       e.stopPropagation();
     }
 
-    setOpen(true);
+    setOpenEdit(true);
   };
 
-  const handleClose = e => {
+  const handleCloseEdit = e => {
     if (e) {
       e.preventDefault();
       e.stopPropagation();
     }
 
-    setOpen(false);
+    setOpenEdit(false);
+    handleClose();
   };
 
   return (
@@ -43,10 +54,24 @@ const Actions = ({ id, t }) => {
       onOpen={handleOpen}
       open={open}
     >
-      <Dropdown.Menu direction="left">
-        <Dropdown.Item fitted="horizontally">
-          <BookmarkButton bookmarkId={id} />
-        </Dropdown.Item>
+      <Dropdown.Menu
+        direction="left">
+        <Modal
+          trigger={
+            <Dropdown.Item
+              content={t('personal.editBookmark')}
+              onClick={handleOpenEdit}
+              icon="pencil"
+            />
+          }
+          open={openEdit}
+          onClose={handleCloseEdit}
+          size="tiny"
+          dir={dir}
+        >
+          <Modal.Header content={t('personal.saveBookmark')} />
+          <BookmarkForm onClose={handleCloseEdit} bookmarkId={id} />
+        </Modal>
         <Dropdown.Item
           fitted="vertically"
           icon="remove circle"

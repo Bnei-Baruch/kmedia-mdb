@@ -67,32 +67,34 @@ const MenuItems = ({ simple = false, visible = false, t, onItemClick = identity,
       />
     </Menu.Item>
   ) : (
-    <>
-      <Menu.Item
-        key={'personal'}
-        as={NavLink}
-        to={'/personal'}
-        className="sidebar-item"
-        activeClassName="active"
-        content={t('nav.sidebar.personal')}
-        onClick={onItemClick}
-      />
-      <Menu.Item
-        key={MY_NAMESPACE_BOOKMARKS}
-        as={NavLink}
-        to={`personal/${MY_NAMESPACE_BOOKMARKS}`}
-        className="sidebar-item"
-        activeClassName="active"
-        content={t(`nav.sidebar.${MY_NAMESPACE_BOOKMARKS}`)}
-        onClick={onItemClick}
-      />
-    </>
+    <Menu.Item
+      key={'personal'}
+      as={NavLink}
+      to={'/personal'}
+      className="sidebar-item"
+      activeClassName="active"
+      content={t('nav.sidebar.personal')}
+      onClick={onItemClick}
+    />
   );
+
+  const bookmark = !!user ? (
+    <Menu.Item
+      key={MY_NAMESPACE_BOOKMARKS}
+      as={NavLink}
+      to={`personal/${MY_NAMESPACE_BOOKMARKS}`}
+      className="sidebar-item"
+      activeClassName="active"
+      content={t(`nav.sidebar.${MY_NAMESPACE_BOOKMARKS}`)}
+      onClick={onItemClick}
+    />
+  ) : null;
 
   if (simple) {
     return (
       <Menu vertical borderless fluid color="blue" size="huge">
         {VERSION_WITH_PERSONALIZATION && personal}
+        {VERSION_WITH_PERSONALIZATION && bookmark}
         {items}
         <Menu.Item
           as="a"
@@ -135,6 +137,7 @@ const MenuItems = ({ simple = false, visible = false, t, onItemClick = identity,
   return (
     <Sidebar pointing vertical as={Menu} animation="push" visible={visible}>
       {personal}
+      {bookmark}
       {items}
     </Sidebar>
   );

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import {
@@ -29,12 +29,13 @@ const BookmarkForm = ({ t, onClose, source, bookmarkId }) => {
   const bookmark = useSelector(state => selectors.getItemByKey(state.my, MY_NAMESPACE_BOOKMARKS, key));
   const items    = useSelector(state => selectors.getList(state.my, MY_NAMESPACE_FOLDERS)).sort((a, b) => b.id - a.id);
   const saved    = items.filter(f => bookmark?.folder_ids?.includes(f.id)).map(f => f.id);
+
   const dispatch = useDispatch();
+  const formsRef = useRef();
 
   useEffect(() => {
     if (items.length === 0)
       dispatch(actions.fetch(MY_NAMESPACE_FOLDERS, { 'order_by': 'id DESC' }));
-    setName(bookmark?.name || '');
   }, []);
 
   useEffect(() => {
@@ -114,42 +115,45 @@ const BookmarkForm = ({ t, onClose, source, bookmarkId }) => {
               fluid
               focus={true}
               onChange={changeName}
+              defaultValue={bookmark?.name}
               autoFocus
             />
           </Grid.Column>
         </Grid>
         <Header as="h4" content={t('personal.folders')} />
-        <Input
-          icon
-          iconPosition="left"
-          placeholder='Search...'
-          onChange={handleSearchChange}
-          className="no-border"
-        >
-          <input />
-          <Icon name="search" />
-        </Input>
       </ModalContent>
-      <ModalContent className="padded" scrolling>
-        <Segment padded>
-          {
-            editFolder && (
-              <Input
-                focus
-                onBlur={handleSaveFolder}
-                autoFocus
-                onFocus={e => {
-                  e.target.value = t('personal.newFolderName');
-                  e.target.select();
-                }}
-              />
-            )
-          }
-          {
-            !(items.length === 0 && editFolder) ?
-              items.map(renderFolder)
-              : frownSplashNotFound(t)
-          }
+      <ModalContent padded>
+        <Segment>
+          <Input
+            icon
+            iconPosition="left"
+            placeholder='Search...'
+            onChange={handleSearchChange}
+            className="no-border"
+          >
+            <input />
+            <Icon name="search" />
+          </Input>
+          <ModalContent scrolling>
+            {
+              editFolder && (
+                <Input
+                  focus
+                  onBlur={handleSaveFolder}
+                  autoFocus
+                  onFocus={e => {
+                    e.target.value = t('personal.newFolderName');
+                    e.target.select();
+                  }}
+                />
+              )
+            }
+            {
+              !(items.length === 0 && editFolder) ?
+                items.map(renderFolder)
+                : frownSplashNotFound(t)
+            }
+          </ModalContent>
         </Segment>
       </ModalContent>
       <ModalActions>
@@ -178,7 +182,8 @@ const BookmarkForm = ({ t, onClose, source, bookmarkId }) => {
 
 BookmarkForm.propTypes = {
   t: PropTypes.func.isRequired,
-  source: PropTypes.object.isRequired,
+  source: PropTypes.object,
+  bookmarkId: PropTypes.number
 };
 
 export default withNamespaces()(BookmarkForm);

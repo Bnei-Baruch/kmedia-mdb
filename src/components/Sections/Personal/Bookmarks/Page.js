@@ -21,13 +21,13 @@ const Page = ({ t }) => {
   return (
     <Grid padded={!isMobileDevice}>
       <Grid.Row>
+        <Grid.Column mobile={16} tablet={5} computer={5}>
+          <FoldersContainer />
+        </Grid.Column>
         <Grid.Column mobile={16} tablet={11} computer={11} className={clsx({ 'is-fitted': isMobileDevice })}>
           <Container className="padded">
             <BookmarksContainer />
           </Container>
-        </Grid.Column>
-        <Grid.Column mobile={16} tablet={5} computer={5}>
-          <FoldersContainer />
         </Grid.Column>
       </Grid.Row>
     </Grid>

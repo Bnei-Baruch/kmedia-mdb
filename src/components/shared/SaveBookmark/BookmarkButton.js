@@ -9,7 +9,7 @@ import BookmarkForm from './BookmarkForm';
 import { useSelector } from 'react-redux';
 import { selectors as settings } from '../../../redux/modules/settings';
 
-const BookmarkButton = ({ t, source, bookmarkId }) => {
+const BookmarkButton = ({ t, source }) => {
   const [open, setOpen] = useState();
   const needToLogin     = NeedToLogin({ t });
 
@@ -34,7 +34,7 @@ const BookmarkButton = ({ t, source, bookmarkId }) => {
     >
       <Modal.Header content={t('personal.saveBookmark')} />
       {
-        !needToLogin ? <BookmarkForm onClose={handleClose} source={source} bookmarkId={bookmarkId} /> : <Modal.Content content={needToLogin} />
+        !needToLogin ? <BookmarkForm onClose={handleClose} source={source} /> : <Modal.Content content={needToLogin} />
       }
     </Modal>
   );

@@ -1,7 +1,7 @@
-import React, { useCallback, useEffect } from 'react';
+import React from 'react';
 import { withNamespaces } from 'react-i18next';
-import { Dropdown, Icon, Image, Label, List } from 'semantic-ui-react';
-import { shallowEqual, useDispatch, useSelector } from 'react-redux';
+import { Image, Label, List } from 'semantic-ui-react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { selectors as mdb } from '../../../../../redux/modules/mdb';
 import { actions, selectors } from '../../../../../redux/modules/my';
@@ -22,31 +22,34 @@ const BookmarksItem = ({ bookmark, getSourceById }) => {
 
   const isSource  = cu?.content_type === CT_SOURCE;
   const mdbSource = isSource ? getSourceById(cu.id) : null;
-
-  const handleRemoveFolder = fID => {
-    dispatch(actions.edit(MY_NAMESPACE_BOOKMARKS, { id, folder_ids: folder_ids.filter(x => x !== fID) }));
-  };
+  const link      = canonicalLink(cu);
 
   const renderFolder = f => (
-    <Label as="a">
-      <Icon name="folder outline" />
-      {f.name}
-      <Icon name="delete" onClick={() => handleRemoveFolder(f.id)} />
-    </Label>
+    <Label
+      key={f.id}
+      basic
+      className="no-border"
+      icon="folder outline"
+      content={f.name}
+    />
   );
 
   return (
-    <List.Item className="padded" key={id}>
+    <List.Item className="padded">
       <List.Icon>
-        <Link to={{ pathname: canonicalLink(cu) }}>
+        <Link to={link}>
           <Image size="mini" verticalAlign="middle">
             <SectionLogo name='sources' width='25' height='25' />
           </Image>
         </Link>
       </List.Icon>
       <List.Content>
-        <List.Header>
-          {`${bookmark.name} | ${isSource ? mdbSource.name : cu?.name}`}
+        <List.Header as="h3">
+          {bookmark.name}
+          <span className="margin-right-8 margin-left-8">|</span>
+          <Link to={link} className="font-normal">
+            {isSource ? mdbSource.name : cu?.name}
+          </Link>
         </List.Header>
         <List.Description>
           {folders.map(renderFolder)}

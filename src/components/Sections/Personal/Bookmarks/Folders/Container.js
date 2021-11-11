@@ -6,17 +6,13 @@ import { Segment, Divider, Button, Input, Grid, Icon, Header } from 'semantic-ui
 
 import { actions, selectors } from '../../../../../redux/modules/my';
 import { actions as filtersActions, selectors as filtersSelectors } from '../../../../../redux/modules/bookmarkFilter';
-import {
-  MY_BOOKMARK_FILTER_FOLDER_ID,
-  MY_BOOKMARK_FILTER_FOLDER_QUERY,
-  MY_NAMESPACE_FOLDERS
-} from '../../../../../helpers/consts';
+import { MY_BOOKMARK_FILTER_FOLDER_QUERY, MY_NAMESPACE_FOLDERS } from '../../../../../helpers/consts';
+import FolderItem from './Item';
 
 const Container = ({ t }) => {
   const [editFolder, setEditFolder] = useState(false);
 
   const query = useSelector(state => filtersSelectors.getByKey(state.bookmarkFilter, MY_BOOKMARK_FILTER_FOLDER_QUERY));
-  const id    = useSelector(state => filtersSelectors.getByKey(state.bookmarkFilter, MY_BOOKMARK_FILTER_FOLDER_ID));
   const items = useSelector(state => selectors.getList(state.my, MY_NAMESPACE_FOLDERS));
 
   const dispatch = useDispatch();
@@ -35,25 +31,6 @@ const Container = ({ t }) => {
   };
 
   const handleSearchChange = (e, { value }) => dispatch(filtersActions.addFilter(MY_BOOKMARK_FILTER_FOLDER_QUERY, value));
-
-  const handleSelectFolder = id => dispatch(filtersActions.addFilter(MY_BOOKMARK_FILTER_FOLDER_ID, id));
-
-  const renderFolder = f => (
-    <Grid.Row
-      color={(id === f.id) ? 'blue' : ''}
-      key={f.id}
-      className="margin-top-4 margin-bottom-4"
-    >
-      <Grid.Column width="12" onClick={() => handleSelectFolder(f.id)}>
-        <Icon name="bookmark outline" />
-        {f.name}
-      </Grid.Column>
-      <Grid.Column width="4">
-        <Button icon='edit' />
-        <Button icon='delete' />
-      </Grid.Column>
-    </Grid.Row>
-  );
 
   return (
     <Segment padded>
@@ -74,39 +51,36 @@ const Container = ({ t }) => {
           </Input>
         </Grid.Column>
       </Grid>
-      {
-        editFolder && (
-          <Input
-            focus
-            //onChange={(e, { value }) => setFolderName(value)}
-            onBlur={handleSaveFolder}
-            autoFocus
-            onFocus={e => {
-              e.target.value = t('personal.newFolderName');
-              e.target.select();
-            }}
-          />
-        )
-      }
       <Grid>
-
-        <Grid.Row color={!id ? 'blue' : ''} key="all" className="margin-top-4 margin-bottom-4">
-          <Grid.Column width="16" onClick={() => handleSelectFolder(null)}>
-            {t('personal.allFolders')}
-          </Grid.Column>
-        </Grid.Row>
+        <FolderItem folder={{ id: 'all', name: t('personal.allFolders') }} />
         {
-          items.map(renderFolder)
+          editFolder && (
+            <Grid.Row>
+              <Grid.Column>
+                <Input
+                  focus
+                  fluid
+                  onBlur={handleSaveFolder}
+                  autoFocus
+                  onFocus={e => {
+                    e.target.value = t('personal.newFolderName');
+                    e.target.select();
+                  }}
+                />
+              </Grid.Column>
+            </Grid.Row>
+          )
+        }
+        {
+          items.map((f) => <FolderItem folder={f} />)
         }
       </Grid>
       <Divider horizontal />
-
       <Button
         primary
         basic
         content={t('personal.newFolder')}
         onClick={handleNewFolder}
-        floated="left"
       />
     </Segment>
   );
