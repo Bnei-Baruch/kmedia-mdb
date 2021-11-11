@@ -257,7 +257,7 @@ class Transcription extends Component {
               <UnitBar
                 handleSettings={this.handleSettings}
                 fontSize={fontSize}
-                source={unit}
+                unit={unit}
               />
             </Menu.Item>
           </Menu>

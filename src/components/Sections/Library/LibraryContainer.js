@@ -23,7 +23,7 @@ import LibraryBar from './LibraryBar';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { getQuery } from '../../../helpers/url';
-import { SCROLL_SEARCH_ID } from '../../../helpers/consts';
+import { CT_SOURCE, SCROLL_SEARCH_ID } from '../../../helpers/consts';
 
 const waitForRenderElement = async (attempts = 0) => {
   if (attempts > 10) return Promise.reject();
@@ -494,7 +494,7 @@ class LibraryContainer extends Component {
                       handleTocIsActive={this.handleTocIsActive}
                       isReadable={isReadable}
                       fontSize={fontSize}
-                      source={{ source_uid: sourceId, source_type: 'SOURCE' }}
+                      source={{ source_uid: sourceId, source_type: CT_SOURCE }}
                     />
                   </Grid.Column>
                 </Grid.Row>

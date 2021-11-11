@@ -498,6 +498,7 @@ export const MY_REACTION_KINDS = {
 
 export const MY_BOOKMARK_FILTER_FOLDER_QUERY = 'folder_query';
 export const MY_BOOKMARK_FILTER_FOLDER_ID    = 'folder_id';
+export const MY_BOOKMARK_FILTER_QUERY        = 'bookmark_query';
 
 export const CT_SUBSCRIBE_BY_TYPE = [
   CT_FRIENDS_GATHERINGS,

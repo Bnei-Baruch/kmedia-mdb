@@ -162,7 +162,7 @@ const Likut = ({ t }) => {
                       isReadable={isReadable}
                       handleIsReadable={handleIsReadable}
                       handleSettings={setSettings}
-                      source={unit}
+                      source={{ source_uid: unit.id, source_type: unit.content_type }}
                     />
                   </div>
                   <div className="library-language-container">

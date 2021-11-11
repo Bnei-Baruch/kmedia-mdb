@@ -31,7 +31,6 @@ const BookmarkForm = ({ t, onClose, source, bookmarkId }) => {
   const saved    = items.filter(f => bookmark?.folder_ids?.includes(f.id)).map(f => f.id);
 
   const dispatch = useDispatch();
-  const formsRef = useRef();
 
   useEffect(() => {
     if (items.length === 0)
