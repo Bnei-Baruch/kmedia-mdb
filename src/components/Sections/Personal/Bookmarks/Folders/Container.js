@@ -72,7 +72,7 @@ const Container = ({ t }) => {
           )
         }
         {
-          items.map((f) => <FolderItem folder={f} />)
+          items.map(f => <FolderItem folder={f} />)
         }
       </Grid>
       <Divider horizontal />

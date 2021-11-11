@@ -13,12 +13,12 @@ const BookmarksList = ({ items }) => {
     <Container>
       <List divided relaxed celled>
         {items.map(x => (
-            <BookmarksItem
-              bookmark={x}
-              getSourceById={getSourceById}
-              key={`${MY_NAMESPACE_BOOKMARKS}_${x.id}`}
-            />
-          )
+          <BookmarksItem
+            bookmark={x}
+            getSourceById={getSourceById}
+            key={`${MY_NAMESPACE_BOOKMARKS}_${x.id}`}
+          />
+        )
         )}
       </List>
     </Container>
