@@ -98,7 +98,7 @@ export const formatError = error => {
  */
 export const formatDuration = (duration, fmt) => {
   fmt = duration < 60 ? '[0:]ss' : fmt || 'hh:mm:ss';
-  moment.duration(duration, 'seconds').format(fmt);
+  return moment.duration(duration, 'seconds').format(fmt);
 };
 
 /**
