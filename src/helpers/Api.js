@@ -13,7 +13,6 @@ const PERSONAL_API_BACKEND    = process.env.REACT_APP_MY_BACKEND;
 export const backendUrl               = path => `${API_BACKEND}${path}`;
 export const assetUrl                 = path => `${ASSETS_BACKEND}${path}`;
 export const cmsUrl                   = path => `${CMS_BACKEND}${path}`;
-export const cmsImgUrl                = path => cmsUrl(`images/${path}`);
 export const imaginaryUrl             = path => `${IMAGINARY_URL}${path}`;
 export const feedUrl                  = path => `${API_FEED}${path}`;
 export const chroniclesUrl            = path => `${CHRONICLES_BACKEND}${path}`;
