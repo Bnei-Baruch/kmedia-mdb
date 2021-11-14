@@ -35,22 +35,13 @@ const ListTemplate = ({
   const dir                = isLanguageRtl(language) ? 'rtl' : 'ltr';
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
-  let ccu_info;
-  if (!isMobileDevice && size !== 'small') {
-    ccu_info = ccu && withCCUInfo ? (
-      <div className="cu_item_info_co">
-        <span style={{ display: 'inline-block' }}>
-          <UnitLogo collectionId={ccu.id} />
-        </span>
-        <Header size="small" content={ccu.name || NO_NAME} textAlign="left" />
-      </div>
-    ) : null;
-  } else {
-    ccu_info = ccu && withCCUInfo ? (
-      <div className="cu_item_info_co ">
-        <h5 className="no-padding no-margin text_ellipsis">{ccu.name || NO_NAME}</h5>
-      </div>) : null;
-  }
+  const ccu_info = ccu && withCCUInfo ? (
+    <div className="cu_item_info_co ">
+      {
+        size === 'big' ? <h3 className="no-padding no-margin text_ellipsis">{ccu.name || NO_NAME}</h3>
+          : <h5 className="no-padding no-margin text_ellipsis">{ccu.name || NO_NAME}</h5>
+      }
+    </div>) : null;
 
   let percent = null;
   if (unit && playTime) {

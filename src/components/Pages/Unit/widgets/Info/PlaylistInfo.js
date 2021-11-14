@@ -50,7 +50,7 @@ const PlaylistInfo = ({ cuID, t, handleClose = null }) => {
     setSelected([]);
     setCountNew(0);
     setForUpdate({ count: 0 });
-    dispatch(actions.fetch(MY_NAMESPACE_PLAYLIST_EDIT, { 'exist_cu': cuID, order_by: 'id' }));
+    dispatch(actions.fetch(MY_NAMESPACE_PLAYLIST_EDIT, { 'exist_cu': cuID, order_by: 'id DESC' }));
   };
 
   const handleChange = (checked, p) => {
@@ -84,7 +84,7 @@ const PlaylistInfo = ({ cuID, t, handleClose = null }) => {
   const handleSaveNewPlaylist = e => {
     e.preventDefault();
     e.stopPropagation();
-    !!newPlaylist && dispatch(actions.add(MY_NAMESPACE_PLAYLISTS, { name: newPlaylist }));
+    !!newPlaylist && dispatch(actions.add(MY_NAMESPACE_PLAYLIST_EDIT, { name: newPlaylist }));
     setAlertMsg(t('personal.newPlaylistSuccessful', { name: newPlaylist }));
     setCountNew(countNew + 1);
     setIsNewPlaylist(false);

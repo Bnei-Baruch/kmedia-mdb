@@ -14,6 +14,8 @@ import { actions, selectors as myselector } from '../../redux/modules/my';
 import AlertModal from './AlertModal';
 import NeedToLogin from '../Sections/Personal/NeedToLogin';
 import { getMyItemKey } from '../../helpers/my';
+import { selectors as settings } from '../../redux/modules/settings';
+import { getLanguageDirection } from '../../helpers/i18n-utils';
 
 const SubscribeBtn = ({ unit = {}, t, collection }) => {
   const [alertMsg, setAlertMsg]       = useState();
@@ -32,6 +34,9 @@ const SubscribeBtn = ({ unit = {}, t, collection }) => {
   const subParams = { 'collection_uid': subsByCO, 'content_type': subsByType, 'content_unit_uid': id };
   const { key }   = getMyItemKey(MY_NAMESPACE_SUBSCRIPTIONS, subParams);
   const sub       = useSelector(state => myselector.getItemByKey(state.my, MY_NAMESPACE_SUBSCRIPTIONS, key));
+
+  const language         = useSelector(state => settings.getLanguage(state.settings));
+  const dir = getLanguageDirection(language);
 
   let title;
   if (subsByCO) {
@@ -90,7 +95,10 @@ const SubscribeBtn = ({ unit = {}, t, collection }) => {
         open={confirm}
         onCancel={handleConfirmCancel}
         onConfirm={handleConfirmSuccess}
+        cancelButton={t('buttons.apply')}
+        confirmButton={t('buttons.cancel')}
         content={t('personal.confirmUnsubscribe', { name: title })}
+        dir={dir}
       />
       <Button
         basic
