@@ -18,6 +18,7 @@ import PlaylistHeaderContainer from './HeaderContainer';
 import NeedToLogin from '../NeedToLogin';
 import { getMyItemKey } from '../../../../helpers/my';
 import { FrownSplash } from '../../../shared/Splash/Splash';
+import { stopBubbling } from '../../../../helpers/utils';
 
 const Page = ({ t }) => {
   const { id } = useParams();
@@ -67,11 +68,6 @@ const Page = ({ t }) => {
 
     const _items = [{ ...currentItem, position: cp || 1 }, { ...nextItem, position: np || 1 }];
     dispatch(actions.edit(MY_NAMESPACE_PLAYLISTS, { id, items: _items, changeItems: true }));
-  };
-
-  const stopBubbling = e => {
-    e.preventDefault();
-    e.stopPropagation();
   };
 
   const renderItem = (x, i) => (

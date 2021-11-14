@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
-import { Container, Header, Progress } from 'semantic-ui-react';
+import { Container, Progress } from 'semantic-ui-react';
 import clsx from 'clsx';
 
 import * as shapes from '../../shapes';
@@ -18,20 +18,20 @@ const imageWidthBySize = {
 };
 
 const ListTemplate = ({
-  unit,
-  source,
-  language,
-  withCUInfo,
-  withCCUInfo,
-  link,
-  ccu,
-  description,
-  children,
-  playTime,
-  size = 'big',
-  selected,
-  label,
-}) => {
+                        unit,
+                        source,
+                        language,
+                        withCUInfo,
+                        withCCUInfo,
+                        link,
+                        ccu,
+                        description,
+                        children,
+                        playTime,
+                        size = 'big',
+                        selected,
+                        label,
+                      }) => {
   const dir                = isLanguageRtl(language) ? 'rtl' : 'ltr';
   const { isMobileDevice } = useContext(DeviceInfoContext);
 

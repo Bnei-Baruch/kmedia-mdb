@@ -33,7 +33,7 @@ export const SubscriptionsItem = ({ item, t }) => {
 
   const handleConfirmCancel = () => setConfirm(false);
 
-  const handleConfirmSuccess = () => dispatch(actions.remove(MY_NAMESPACE_SUBSCRIPTIONS, { id: item.id }));
+  const handleConfirmSuccess = () => dispatch(actions.remove(MY_NAMESPACE_SUBSCRIPTIONS, { id: item.id, key }));
 
   useEffect(() => {
     if (item) {

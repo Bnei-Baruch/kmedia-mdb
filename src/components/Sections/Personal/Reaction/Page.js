@@ -84,7 +84,7 @@ const Page      = ({ location, t }) => {
                 {items.map((x, i) =>
                   (
                     <ContentItemContainer id={x.subject_uid} asList={true} key={i}>
-                      <ReactionActions cuId={x.subject_uid} params={x} />
+                      <ReactionActions cuId={x.subject_uid} reaction={x} />
                     </ContentItemContainer>
                   )
                 )}

@@ -11,6 +11,7 @@ import { getLanguageDirection } from '../../../../../helpers/i18n-utils';
 import AlertModal from '../../../../shared/AlertModal';
 import PlaylistAddIcon from '../../../../../images/icons/PlaylistAdd';
 import NeedToLogin from '../../../../Sections/Personal/NeedToLogin';
+import { stopBubbling } from '../../../../../helpers/utils';
 
 const updateStatus = { save: 1, delete: 2 };
 
@@ -82,8 +83,7 @@ const PlaylistInfo = ({ cuID, t, handleClose = null }) => {
   };
 
   const handleSaveNewPlaylist = e => {
-    e.preventDefault();
-    e.stopPropagation();
+    stopBubbling(e)
     !!newPlaylist && dispatch(actions.add(MY_NAMESPACE_PLAYLIST_EDIT, { name: newPlaylist }));
     setAlertMsg(t('personal.newPlaylistSuccessful', { name: newPlaylist }));
     setCountNew(countNew + 1);
@@ -92,8 +92,7 @@ const PlaylistInfo = ({ cuID, t, handleClose = null }) => {
   };
 
   const handleOpenModal = e => {
-    e.preventDefault();
-    e.stopPropagation();
+    stopBubbling(e)
     toggle();
   };
 

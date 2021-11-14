@@ -48,7 +48,7 @@ const PersonalInfo = ({ unit = {}, t, collection }) => {
     if (!user)
       return setIsNeedLogin(true);
     if (l)
-      dispatch(actions.remove(MY_NAMESPACE_REACTIONS, likeParams));
+      dispatch(actions.remove(MY_NAMESPACE_REACTIONS, { ...likeParams, key }));
     else
       dispatch(actions.add(MY_NAMESPACE_REACTIONS, likeParams));
     return null;

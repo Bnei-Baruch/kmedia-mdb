@@ -67,7 +67,7 @@ const Page      = ({ location, t }) => {
 
     const item = (
       <ContentItemContainer id={x.content_unit_uid} asList={true} playTime={x.data.current_time}>
-        <Actions cuId={x.content_unit_uid} id={x.id} />
+        <Actions history={x} />
       </ContentItemContainer>
     );
     return (
