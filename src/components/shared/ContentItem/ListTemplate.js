@@ -18,20 +18,20 @@ const imageWidthBySize = {
 };
 
 const ListTemplate = ({
-                        unit,
-                        source,
-                        language,
-                        withCUInfo,
-                        withCCUInfo,
-                        link,
-                        ccu,
-                        description,
-                        children,
-                        playTime,
-                        size = 'big',
-                        selected,
-                        label,
-                      }) => {
+  unit,
+  source,
+  language,
+  withCUInfo,
+  withCCUInfo,
+  link,
+  ccu,
+  description,
+  children,
+  playTime,
+  size = 'big',
+  selected,
+  label,
+}) => {
   const dir                = isLanguageRtl(language) ? 'rtl' : 'ltr';
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
