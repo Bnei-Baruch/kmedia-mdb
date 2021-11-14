@@ -18,20 +18,20 @@ const imageWidthBySize = {
 };
 
 const ListTemplate = ({
-  unit,
-  source,
-  language,
-  withCUInfo,
-  withCCUInfo,
-  link,
-  ccu,
-  description,
-  children,
-  playTime,
-  size = 'big',
-  selected,
-  label,
-}) => {
+                        unit,
+                        source,
+                        language,
+                        withCUInfo,
+                        withCCUInfo,
+                        link,
+                        ccu,
+                        description,
+                        children,
+                        playTime,
+                        size = 'big',
+                        selected,
+                        label,
+                      }) => {
   const dir                = isLanguageRtl(language) ? 'rtl' : 'ltr';
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
@@ -72,7 +72,7 @@ const ListTemplate = ({
           <UnitLogo unitId={unit && unit.id} sourceId={source && source.id} width={width} />
         </div>
       </div>
-      <div className={`cu_item_info ${dir}`} style={{ left: !children ? 0 : '1em' }}>
+      <div className={clsx('cu_item_info', { [dir]: true, 'with_actions': !!children })}>
         {ccu_info}
         {withCUInfo && <div className={clsx('cu_item_name', { 'font_black': !ccu_info })}>
           {(unit && unit.name) || (source && source.name)}

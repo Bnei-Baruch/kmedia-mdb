@@ -1830,6 +1830,7 @@
   margin-left: 0;
   margin-right: 20px;
   cursor: pointer;
+
   a {
     svg {
       position: relative;
@@ -1838,6 +1839,7 @@
       margin-left: 5px;
     }
   }
+
   audio {
     height: 25px;
     position: relative;
@@ -1848,6 +1850,7 @@
       width: 100%;
     }
   }
+
   .playAudioIcon {
     margin-left: 10px;
   }
@@ -1856,6 +1859,7 @@
 .rtl .library-audio-player {
   margin-left: 20px;
   margin-right: 0;
+
   .playAudioIcon {
     margin-right: 10px;
     margin-left: 0;
@@ -1915,6 +1919,8 @@
 }
 
 .cu_item {
+  -webkit-tap-highlight-color: transparent;
+
   .cu_item_img {
     position: relative;
     width: 100%;
@@ -2198,12 +2204,21 @@
       left: 173px;
       right: 0;
       width: auto;
+
+      &.with_actions {
+        right: 20px
+      }
     }
+
 
     &.rtl {
       @include mobile {
         right: 173px;
         left: 0;
+
+        &.with_actions {
+          left: 20px
+        }
       }
     }
   }
