@@ -189,6 +189,7 @@ const onEditSuccess = (draft, { namespace, item, changeItems }) => {
   if (namespace === MY_NAMESPACE_PLAYLISTS && !changeItems) {
     byKey.items = draft[namespace].byKey[key].items;
   }
+
   draft[namespace].byKey[key] = byKey;
 
   draft[namespace].wip    = false;
