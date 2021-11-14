@@ -2218,6 +2218,7 @@
     right: 1em;
     left: 1em;
     width: auto;
+    min-height: 1.5em;
 
     @include mobile {
       top: 78px;
