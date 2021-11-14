@@ -11,6 +11,7 @@ import { canonicalLink } from '../../../../../helpers/links';
 import { CT_SOURCE, MY_NAMESPACE_BOOKMARKS, MY_NAMESPACE_FOLDERS } from '../../../../../helpers/consts';
 import { getMyItemKey } from '../../../../../helpers/my';
 import Actions from './Actions';
+import Header from '../../../../Pages/Collection/Header';
 
 const BookmarksItem = ({ bookmark, getSourceById }) => {
   const { id, folder_ids = [] } = bookmark;
@@ -44,14 +45,13 @@ const BookmarksItem = ({ bookmark, getSourceById }) => {
         </Link>
       </List.Icon>
       <List.Content>
-        <List.Header as="h3">
+        <Header as="h3" className="display-iblock">
           {bookmark.name}
-          <span className="margin-right-8 margin-left-8">|</span>
-          <Link to={link} className="font-normal">
-            {isSource ? mdbSource.name : cu?.name}
-          </Link>
-        </List.Header>
-        <List.Description>
+        </Header>
+        <Link to={link} className="font-normal">
+          {isSource ? mdbSource.name : cu?.name}
+        </Link>
+        <List.Description className="padding-top_1em">
           {folders.map(renderFolder)}
         </List.Description>
       </List.Content>

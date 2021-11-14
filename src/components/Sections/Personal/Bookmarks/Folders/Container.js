@@ -45,6 +45,7 @@ const Container = ({ t }) => {
             placeholder='Search...'
             onChange={handleSearchChange}
             className="no-border"
+            defaultValue={query}
           >
             <input />
             <Icon name="search" />
@@ -86,4 +87,4 @@ const Container = ({ t }) => {
   );
 };
 
-export default withNamespaces()(withRouter(Container));
+export default withNamespaces()(Container);

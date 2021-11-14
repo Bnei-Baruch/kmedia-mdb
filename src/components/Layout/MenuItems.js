@@ -82,7 +82,7 @@ const MenuItems = ({ simple = false, visible = false, t, onItemClick = identity,
     <Menu.Item
       key={MY_NAMESPACE_BOOKMARKS}
       as={NavLink}
-      to={`personal/${MY_NAMESPACE_BOOKMARKS}`}
+      to={`/${MY_NAMESPACE_BOOKMARKS}`}
       className="sidebar-item"
       activeClassName="active"
       content={t(`nav.sidebar.${MY_NAMESPACE_BOOKMARKS}`)}

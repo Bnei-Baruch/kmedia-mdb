@@ -1,79 +1,58 @@
-import React from 'react';
-import { withNamespaces } from 'react-i18next';
-import { Container, Icon, Input, Label, List, Segment } from 'semantic-ui-react';
-import BookmarksItem from './Item';
+import React, { useEffect } from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
-import { selectors } from '../../../../../redux/modules/sources';
-import {
-  MY_BOOKMARK_FILTER_FOLDER_ID, MY_BOOKMARK_FILTER_FOLDER_QUERY, MY_BOOKMARK_FILTER_QUERY,
-  MY_NAMESPACE_BOOKMARKS,
-  MY_NAMESPACE_FOLDERS
-} from '../../../../../helpers/consts';
-import { actions as filtersActions, selectors as filters } from '../../../../../redux/modules/bookmarkFilter';
-import { selectors as my } from '../../../../../redux/modules/my';
-import { getMyItemKey } from '../../../../../helpers/my';
+import { withNamespaces } from 'react-i18next';
 
-const BookmarksList = ({ items, t }) => {
-  const getSourceById = useSelector(state => selectors.getSourceById(state.sources), shallowEqual);
-  const query         = useSelector(state => filters.getByKey(state.bookmarkFilter, MY_BOOKMARK_FILTER_QUERY));
+import { actions, selectors } from '../../../../../redux/modules/my';
+import { selectors as sources } from '../../../../../redux/modules/sources';
+import { selectors as filters } from '../../../../../redux/modules/bookmarkFilter';
+import {
+  MY_BOOKMARK_FILTER_FOLDER_ID,
+  MY_BOOKMARK_FILTER_QUERY,
+  MY_NAMESPACE_BOOKMARKS
+} from '../../../../../helpers/consts';
+import WipErr from '../../../../shared/WipErr/WipErr';
+import NeedToLogin from '../../NeedToLogin';
+import { List } from 'semantic-ui-react';
+import BookmarksItem from './Item';
+
+const BookmarkList = ({ t }) => {
+  const items         = useSelector(state => selectors.getList(state.my, MY_NAMESPACE_BOOKMARKS));
+  const wip           = useSelector(state => selectors.getWIP(state.my, MY_NAMESPACE_BOOKMARKS));
+  const err           = useSelector(state => selectors.getErr(state.my, MY_NAMESPACE_BOOKMARKS));
   const folder_id     = useSelector(state => filters.getByKey(state.bookmarkFilter, MY_BOOKMARK_FILTER_FOLDER_ID));
-  const { key: fKey } = getMyItemKey(MY_NAMESPACE_FOLDERS, { id: folder_id });
-  const folder        = useSelector(state => my.getItemByKey(state.my, MY_NAMESPACE_FOLDERS, fKey));
+  const query         = useSelector(state => filters.getByKey(state.bookmarkFilter, MY_BOOKMARK_FILTER_QUERY));
+  const getSourceById = useSelector(state => sources.getSourceById(state.sources), shallowEqual);
 
   const dispatch = useDispatch();
 
-  const filterList = [];
+  const params = { folder_id, query };
 
-  if (folder) {
-    const name = `${t('personal.filterByFolder')}: ${folder.name}`;
-    const key  = MY_BOOKMARK_FILTER_FOLDER_ID;
-    filterList.push({ key, name });
-  }
+  useEffect(() => {
+    dispatch(actions.fetch(MY_NAMESPACE_BOOKMARKS, params));
+  }, [folder_id]);
 
-  if (query) {
-    const name = `${t('personal.filterByQuery')}: ${query}`;
-    const key  = MY_BOOKMARK_FILTER_QUERY;
-    filterList.push({ key, name });
-  }
+  useEffect(() => {
+    dispatch(actions.fetch(MY_NAMESPACE_BOOKMARKS, params));
+  }, [query]);
 
-  const handleRemoveFilter = key => dispatch(filtersActions.deleteFilter(key));
+  const needToLogin = NeedToLogin({ t });
+  if (needToLogin) return needToLogin;
 
-  const handleSearch = query => dispatch(filtersActions.addFilter(MY_BOOKMARK_FILTER_QUERY, query.toLowerCase()));
-
-  const renderLabel = ({ name, key }) => {
-    return (
-      <Label basic icon className="no-shadow">
-        {name}
-        <Icon
-          name='delete'
-          onClick={() => handleRemoveFilter(key)}
-        />
-      </Label>
-    );
-  };
+  const wipErr = WipErr({ wip, err, t });
+  if (wipErr) return wipErr;
 
   return (
-    <Container>
-      <Input
-        icon="search"
-        placeholder='Search...'
-        defaultValue={query}
-        autoFocus
-        onChange={(e, { value }) => handleSearch(value)}
-      />
-      {filterList.map(renderLabel)}
-      <List divided relaxed celled>
-        {items.map(x => (
-            <BookmarksItem
-              bookmark={x}
-              getSourceById={getSourceById}
-              key={`${MY_NAMESPACE_BOOKMARKS}_${x.id}`}
-            />
-          )
-        )}
-      </List>
-    </Container>
+    <List divided relaxed celled>
+      {
+        items.map(x => <BookmarksItem
+            bookmark={x}
+            getSourceById={getSourceById}
+            key={`${MY_NAMESPACE_BOOKMARKS}_${x.id}`}
+          />
+        )
+      }
+    </List>
   );
 };
 
-export default withNamespaces()(BookmarksList);
+export default withNamespaces()(BookmarkList);

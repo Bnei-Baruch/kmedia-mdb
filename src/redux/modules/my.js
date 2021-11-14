@@ -171,8 +171,8 @@ const onFetchOneSuccess = (draft, { namespace, item }) => {
 const onAddSuccess = (draft, { namespace, item }) => {
   const { key }               = getMyItemKey(namespace, item);
   draft[namespace].byKey[key] = item;
-  draft[namespace].keys.push(key);
-  draft[namespace].total = draft[namespace].total + 1;
+  draft[namespace].keys       = [key, ...draft[namespace].keys];
+  draft[namespace].total      = draft[namespace].total + 1;
   if (namespace === MY_NAMESPACE_REACTIONS)
     draft.reactionsCount[key] = draft.reactionsCount[key] ? draft.reactionsCount[key] + 1 : 1;
 

@@ -54,9 +54,9 @@ const routes = [
   { path: 'personal', component: Main },
   { path: `personal/${MY_NAMESPACE_HISTORY}`, component: HistoryPage },
   { path: `personal/${MY_NAMESPACE_REACTIONS}`, component: ReactionPage },
-  { path: `personal/${MY_NAMESPACE_BOOKMARKS}`, component: BookmarksPage },
   { path: `personal/${MY_NAMESPACE_PLAYLISTS}/:id`, component: PlaylistPage },
   { path: `${MY_NAMESPACE_PLAYLISTS}/:id`, component: PlaylistDecorator },
+  { path: `${MY_NAMESPACE_BOOKMARKS}`, component: BookmarksPage },
 
   { path: ':routeType/cu/:id', component: PlaylistItemPage, options: { ssrData: ssrDataLoaders.cuPage } },
   { path: 'lessons', component: Lessons, options: { ssrData: ssrDataLoaders.lessonsPage } },

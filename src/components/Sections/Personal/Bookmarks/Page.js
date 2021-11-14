@@ -1,16 +1,13 @@
 import React, { useContext } from 'react';
-import { withRouter } from 'react-router';
-import { Button, Container, Grid, Header, Icon } from 'semantic-ui-react';
+import { Grid, Segment } from 'semantic-ui-react';
 import clsx from 'clsx';
 
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
-import BookmarksContainer from './Bookmarks/Container';
-import { useSelector } from 'react-redux';
-import { selectors as auth } from '../../../../redux/modules/auth';
+import BookmarkList from './Bookmarks/List';
 import NeedToLogin from '../NeedToLogin';
-import WipErr from '../../../shared/WipErr/WipErr';
 import { withNamespaces } from 'react-i18next';
 import FoldersContainer from './Folders/Container';
+import BookmarkHeader from './Bookmarks/Header';
 
 const Page = ({ t }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
@@ -19,15 +16,21 @@ const Page = ({ t }) => {
   if (needToLogin) return needToLogin;
 
   return (
-    <Grid padded={!isMobileDevice}>
+    <Grid padded={!isMobileDevice} >
+      <Grid.Row>
+        <Grid.Column mobile={16} tablet={5} computer={5} />
+        <Grid.Column mobile={16} tablet={11} computer={11} className={clsx({ 'is-fitted': isMobileDevice })}>
+          <BookmarkHeader />
+        </Grid.Column>
+      </Grid.Row>
       <Grid.Row>
         <Grid.Column mobile={16} tablet={5} computer={5}>
           <FoldersContainer />
         </Grid.Column>
         <Grid.Column mobile={16} tablet={11} computer={11} className={clsx({ 'is-fitted': isMobileDevice })}>
-          <Container className="padded">
-            <BookmarksContainer />
-          </Container>
+          <Segment className="padded">
+            <BookmarkList />
+          </Segment>
         </Grid.Column>
       </Grid.Row>
     </Grid>
