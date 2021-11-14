@@ -63,8 +63,8 @@ const PlaylistHeader = ({ confirmSuccess, save, playlist, t }) => {
             open={confirm}
             onCancel={handleConfirmCancel}
             onConfirm={confirmSuccess}
-            cancelButton={t('buttons.apply')}
-            confirmButton={t('buttons.cancel')}
+            cancelButton={t('buttons.cancel')}
+            confirmButton={t('buttons.apply')}
             content={t('personal.confirmRemovePlaylist', { name: playlist.name })}
             dir={dir}
           />

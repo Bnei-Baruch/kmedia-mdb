@@ -95,8 +95,8 @@ const SubscribeBtn = ({ unit = {}, t, collection }) => {
         open={confirm}
         onCancel={handleConfirmCancel}
         onConfirm={handleConfirmSuccess}
-        cancelButton={t('buttons.apply')}
-        confirmButton={t('buttons.cancel')}
+        cancelButton={t('buttons.cancel')}
+        confirmButton={t('buttons.apply')}
         content={t('personal.confirmUnsubscribe', { name: title })}
         dir={dir}
       />
