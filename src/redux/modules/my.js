@@ -2,6 +2,7 @@ import { createAction } from 'redux-actions';
 
 import { handleActions } from './settings';
 import {
+  MY_NAMESPACE_PLAYLISTS,
   MY_NAMESPACE_REACTIONS,
   MY_NAMESPACES
 } from '../../helpers/consts';
@@ -183,8 +184,9 @@ const onAddSuccess = (draft, { namespace, item }) => {
 };
 
 const onEditSuccess = (draft, { namespace, item }) => {
-  const { key }               = getMyItemKey(namespace, item);
-  draft[namespace].byKey[key] = item;
+  const { key } = getMyItemKey(namespace, item);
+
+  draft[namespace].byKey[key] = { ...item, ...draft[namespace].byKey[key] };
 
   draft[namespace].wip    = false;
   draft[namespace].errors = false;
