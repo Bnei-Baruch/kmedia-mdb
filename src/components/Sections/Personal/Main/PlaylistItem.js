@@ -1,16 +1,17 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Card, Header, Icon, Table } from 'semantic-ui-react';
+import { Card, Container, Header, Icon, Table } from 'semantic-ui-react';
 
 import { selectors as mdb } from '../../../../redux/modules/mdb';
 import { MY_NAMESPACE_PLAYLISTS } from '../../../../helpers/consts';
 import { isLanguageRtl } from '../../../../helpers/i18n-utils';
 import { canonicalLink } from '../../../../helpers/links';
-import { imageByUnit } from '../../../../helpers/utils';
+import { formatDuration, imageByUnit } from '../../../../helpers/utils';
 import UnitLogo from '../../../shared/Logo/UnitLogo';
 import Link from '../../../Language/MultiLanguageLink';
 import PlaylistPlayIcon from '../../../../images/icons/PlaylistPlay';
 import { getMyItemKey } from '../../../../helpers/my';
+import clsx from 'clsx';
 
 export const PlaylistItem = ({ item, t, language, asList = false }) => {
   const unit = useSelector(state => mdb.getDenormContentUnit(state.mdb, item.content_unit_uid)) || {};
@@ -37,6 +38,31 @@ export const PlaylistItem = ({ item, t, language, asList = false }) => {
   );
 
   const renderAsList = () => (
+    <Container
+      as={Link}
+      to={href}
+      key={key}
+      className={clsx('cu_item cu_item_list no-thumbnail')}
+    >
+      <div className="my_playlist_item">
+        <div className="over_layer">
+          <Header as={'h3'}>{item.total_items || 0}</Header>
+          <Icon name="list" size="large" />
+        </div>
+        <UnitLogo unitId={item.poster_unit_uid} width={165} fallbackImg={canonicalSection} />
+      </div>
+      <div className={`cu_item_info ${isRtl ? 'rtl' : 'ltr'}`}>
+
+        <Header as="h4" className="weight-normal no-margin-top">
+          {item.name}
+          <Header.Subheader>{`${item.total_items || 0} ${t('personal.videosOnList')}`}</Header.Subheader>
+        </Header>
+      </div>
+    </Container>
+
+  );
+
+  const renderAsList_ = () => (
     <Table.Row className="cu_item cu_item_list no-thumbnail" verticalAlign="top" key={key}>
       <Table.Cell width={7} className={'no-padding-top'}>
         <Link to={href}>
@@ -45,7 +71,7 @@ export const PlaylistItem = ({ item, t, language, asList = false }) => {
               <Header as={'h3'}>{item.count || 0}</Header>
               <Icon name="list" size="large" />
             </div>
-            <UnitLogo unitId={item.content_unit_uid} width={150} fallbackImg={canonicalSection} />
+            <UnitLogo unitId={item.poster_unit_uid} width={150} fallbackImg={canonicalSection} />
           </div>
         </Link>
       </Table.Cell>

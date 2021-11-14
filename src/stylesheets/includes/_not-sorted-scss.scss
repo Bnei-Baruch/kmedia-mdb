@@ -2248,7 +2248,7 @@
 
 .cu_item_actions {
   position: absolute !important;
-  right: -0.5em;
+  right: -1em;
   top: 20%;
 
   .cu_item_dropdown {
@@ -2271,7 +2271,7 @@
 
 .rtl .cu_item_actions {
   right: auto;
-  left: -0.5em;
+  left: -1em;
 
   .cu_item_dropdown {
     padding-right: 1em;
@@ -2333,7 +2333,7 @@
   justify-content: space-between;
 
   @include mobile {
-    display: block;
+    display: flex;
     margin-top: -15px;
   }
 }
