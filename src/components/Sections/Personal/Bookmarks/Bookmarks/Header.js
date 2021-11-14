@@ -37,17 +37,15 @@ const BookmarkHeader = ({ t }) => {
 
   const handleSearch = query => dispatch(filtersActions.addFilter(MY_BOOKMARK_FILTER_QUERY, query.toLowerCase()));
 
-  const renderLabel = ({ name, key }) => {
-    return (
-      <Label basic icon className="no-shadow">
-        {name}
-        <Icon
-          name='delete'
-          onClick={() => handleRemoveFilter(key)}
-        />
-      </Label>
-    );
-  };
+  const renderLabel = ({ name, key }) => (
+    <Label basic icon className="no-shadow">
+      {name}
+      <Icon
+        name='delete'
+        onClick={() => handleRemoveFilter(key)}
+      />
+    </Label>
+  );
 
   return (
     <Header as={'h2'} className="my_header">

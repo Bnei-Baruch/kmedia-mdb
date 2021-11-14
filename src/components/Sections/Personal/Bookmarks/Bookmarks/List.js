@@ -45,10 +45,10 @@ const BookmarkList = ({ t }) => {
     <List divided relaxed celled>
       {
         items.map(x => <BookmarksItem
-            bookmark={x}
-            getSourceById={getSourceById}
-            key={`${MY_NAMESPACE_BOOKMARKS}_${x.id}`}
-          />
+          bookmark={x}
+          getSourceById={getSourceById}
+          key={`${MY_NAMESPACE_BOOKMARKS}_${x.id}`}
+        />
         )
       }
     </List>
