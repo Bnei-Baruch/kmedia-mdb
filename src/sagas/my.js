@@ -149,7 +149,7 @@ function* edit(action) {
   const { namespace, ...params } = action.payload;
   try {
     const { data } = yield call(Api.my, namespace, params, token, 'PUT');
-    yield put(actions.editSuccess({ namespace, item: data }));
+    yield put(actions.editSuccess({ namespace, item: data, changeItems: action.payload.changeItems }));
   } catch (err) {
     console.log(err);
   }
@@ -161,7 +161,7 @@ function* remove(action) {
   const { namespace, ...params } = action.payload;
   try {
     const { data } = yield call(Api.my, namespace, { ...params }, token, 'DELETE');
-    if (namespace === MY_NAMESPACE_PLAYLISTS && params.changeItems) {
+    if (namespace === MY_NAMESPACE_PLAYLISTS && action.payload.changeItems) {
       yield put(actions.fetchOneSuccess({ namespace, item: data }));
     } else {
       yield put(actions.removeSuccess({ namespace, item: params }));

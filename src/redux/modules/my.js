@@ -183,10 +183,13 @@ const onAddSuccess = (draft, { namespace, item }) => {
   return draft;
 };
 
-const onEditSuccess = (draft, { namespace, item }) => {
+const onEditSuccess = (draft, { namespace, item, changeItems }) => {
   const { key } = getMyItemKey(namespace, item);
-
-  draft[namespace].byKey[key] = { ...item, ...draft[namespace].byKey[key] };
+  const byKey   = { ...draft[namespace].byKey[key], ...item };
+  if (namespace === MY_NAMESPACE_PLAYLISTS && !changeItems) {
+    byKey.items = draft[namespace].byKey[key].items;
+  }
+  draft[namespace].byKey[key] = byKey;
 
   draft[namespace].wip    = false;
   draft[namespace].errors = false;
@@ -213,7 +216,11 @@ const onSetDeleted = (draft, { namespace, deleted }) => {
 };
 
 const onReactionsCountSuccess = (draft, data) => {
-  Object.assign(draft.reactionsCount, data);
+  const byKey = data.reduce((acc, x) => {
+    const { key } = getMyItemKey(MY_NAMESPACE_REACTIONS, x);
+    acc[key]      = x.total;
+    return acc;
+  }, draft.reactionsCount);
   return draft;
 };
 
@@ -245,7 +252,7 @@ const getErr            = (state, namespace) => state[namespace].errors;
 const getDeleted        = (state, namespace) => state[namespace].deleted;
 const getPageNo         = (state, namespace) => state[namespace].pageNo;
 const getTotal          = (state, namespace) => state[namespace].total;
-const getReactionsCount = (state, kind) => state.reactionsCount?.[kind];
+const getReactionsCount = (state, key) => state.reactionsCount[key];
 
 export const selectors = {
   getList,
