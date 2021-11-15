@@ -57,7 +57,7 @@ const BookmarksItem = ({ bookmark, getSourceById }) => {
           <span className="separator">|</span>
           <span className="source_name">
 
-          {isSource ? mdbSource.name : cu?.name}
+            {isSource ? mdbSource.name : cu?.name}
           </span>
         </List.Header>
         <List.Description>
