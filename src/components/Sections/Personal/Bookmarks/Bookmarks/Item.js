@@ -36,7 +36,6 @@ const BookmarksItem = ({ bookmark, getSourceById }) => {
     <Label
       key={f.id}
       basic
-      className="no-border"
       icon="folder outline"
       content={f.name}
     />
@@ -56,7 +55,6 @@ const BookmarksItem = ({ bookmark, getSourceById }) => {
           {bookmark.name}
           <span className="separator">|</span>
           <span className="source_name">
-
             {isSource ? mdbSource.name : cu?.name}
           </span>
         </List.Header>

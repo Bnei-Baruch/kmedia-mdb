@@ -24,7 +24,8 @@
       "help": "Help",
       "old-site": "Old Site",
       "podcast": "Podcast",
-      "subscribe": "Subscribe For Updates"
+      "subscribe": "Subscribe For Updates",
+      "bookmarks": "Bookmarks"
     },
     "footer": {
       "copyright": "Copyright © 2003-{{year}}",
@@ -690,6 +691,21 @@
     "no_playlists": "You have no playlists, please create one",
     "no_reactions": "You have no videos you liked",
     "no_history": "Start watching videos to be shown here",
-    "no_subscriptions": "You have no subscriptions yet, subscribe to see them here"
+    "no_subscriptions": "You have no subscriptions yet, subscribe to see them here",
+    "bookmark": {
+      "title": "Bookmarks",
+      "name": "name",
+      "saveBookmark": "Save Bookmark",
+      "editBookmark": "Edit Bookmark",
+      "removeBookmark": "Remove Bookmark",
+      "searchBookmarks": "Search bookmarks",
+      "searchFolders": "Search Folders",
+      "folders": "Folders",
+      "newFolder": "New Folder",
+      "newFolderName": "New folder name",
+      "allFolders": "Show all",
+      "filterByFolder": "Bookmarks of folder",
+      "filterByQuery": "Bookmarks with name"
+    }
   }
 }

@@ -64,7 +64,7 @@ const FolderList = ({ t }) => {
                     onBlur={handleSaveFolder}
                     autoFocus
                     onFocus={e => {
-                      e.target.value = t('personal.bookmarks.newFolderName');
+                      e.target.value = t('personal.bookmark.newFolderName');
                       e.target.select();
                     }}
                   />

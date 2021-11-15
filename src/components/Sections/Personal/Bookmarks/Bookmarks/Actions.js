@@ -58,7 +58,7 @@ const Actions = ({ id, t }) => {
         <Modal
           trigger={
             <Dropdown.Item
-              content={t('personal.editBookmark')}
+              content={t('personal.bookmark.editBookmark')}
               onClick={handleOpenEdit}
               icon="pencil"
             />
@@ -68,14 +68,14 @@ const Actions = ({ id, t }) => {
           size="tiny"
           dir={dir}
         >
-          <Modal.Header content={t('personal.bookmark.saveBookmark')} />
+          <Modal.Header content={t('personal.bookmark.editBookmark')} />
           <BookmarkForm onClose={handleCloseEdit} bookmarkId={id} />
         </Modal>
         <Dropdown.Item
           fitted="vertically"
           icon="remove circle"
           onClick={removeItem}
-          content={t('personal.removeBookmark')}
+          content={t('personal.bookmark.removeBookmark')}
         />
       </Dropdown.Menu>
     </Dropdown>

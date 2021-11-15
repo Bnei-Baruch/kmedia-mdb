@@ -12,10 +12,17 @@
 .bookmark_search {
   &.ui.input > input {
     border-width: 0 0 1px 0;
+    border-radius: 0;
   }
 }
 
-.bookmark_item {
+.ui.list > .bookmark_item.item {
+  padding: 1em 0 !important;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
   .separator {
     margin: 0 1em;
     color: $grey;
@@ -24,6 +31,14 @@
   .source_name {
     font-weight: normal;
     color: $grey;
+  }
+
+  .description {
+    margin-top: 8px;
+    .label{
+      border: 0;
+      color: $grey;
+    }
   }
 }
 
