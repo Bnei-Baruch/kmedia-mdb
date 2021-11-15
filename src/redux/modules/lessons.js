@@ -141,7 +141,7 @@ const $$sortTree = node => {
     children.sort((a, b) => strCmp(a.start_date, b.start_date));
   }
 
-  const { id: nId, start_date } = nonLeafChildren[0]
+  const { id: nId, start_date } = isNotEmptyArray(nonLeafChildren) ? nonLeafChildren[0] : false;
 
   // sort the non leaf nodes (with an id but don't have a start_date ) and add them to children
   if (nId && !start_date) {
