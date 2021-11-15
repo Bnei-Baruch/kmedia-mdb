@@ -136,7 +136,11 @@ export const getToWithLanguage = (navigateTo, location, language, contentLanguag
   }
 
   if (new_version) {
-    navigateTo.search = !navigateTo.search ? '?new_version=true' : `${navigateTo.search}&new_version=true`;
+    if (!navigateTo.search) {
+      navigateTo.search = '?new_version=true';
+    } else if (!navigateTo.search.includes('new_version')) {
+      navigateTo.search = `${navigateTo.search}&new_version=true`;
+    }
   }
 
   // we're changing 'search' in case contentLanguage was supplied
