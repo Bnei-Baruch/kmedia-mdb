@@ -19,6 +19,7 @@ import * as shapes from '../../../../shapes';
 import PersonalInfo from './PersonalInfo';
 import { selectors as recommended } from '../../../../../redux/modules/recommended';
 import { isNewVersion } from '../../../../../helpers/url';
+import { useLocation } from 'react-router-dom';
 
 const makeTagLinks = (tags = [], getTagById) =>
   Array.from(intersperse(
@@ -70,7 +71,7 @@ const getEpisodeInfo = (ct, cIDs, currentCollection, filmDate, t) => {
   ));
 };
 
-const Info = ({ unit = {}, t, currentCollection = null, location }) => {
+const Info = ({ unit = {}, t, currentCollection = null }) => {
   const getTagById = useSelector(state => tagsSelectors.getTagById(state.tags));
 
   const { id, name, film_date: filmDate, tags, collections, content_type: ct, cIDs } = unit;
@@ -81,6 +82,7 @@ const Info = ({ unit = {}, t, currentCollection = null, location }) => {
   const { noSSeries, sSeries } = makeCollectionsLinks(collections, t, currentCollection);
   const isMultiLessons         = Object.values(collections).some(col => col.content_type === CT_LESSONS_SERIES || col.content_type === CT_CONGRESS);
   const episodeInfo            = getEpisodeInfo(ct, cIDs, currentCollection || Object.values(collections)[0], filmDate, t);
+  const location               = useLocation();
 
   return (
     <>

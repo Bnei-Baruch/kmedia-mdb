@@ -13,14 +13,15 @@ import { selectors as settings } from '../../../redux/modules/settings';
 import ShareForm from './ShareForm';
 import SubscribeBtn from '../../shared/SubscribeBtn';
 import { isNewVersion } from '../../../helpers/url';
+import { useLocation } from 'react-router-dom';
 
-const CollectionPageHeader = ({ collection = null, namespace, t, location }) => {
+const CollectionPageHeader = ({ collection = null, namespace, t }) => {
   const contentLanguage = useSelector(state => settings.getContentLanguage(state.settings));
 
+  const location  = useLocation();
   if (collection === null) {
     return <div className="collection-header" />;
   }
-
   const itemCount = Array.isArray(collection.cuIDs) ? collection.cuIDs.length : 0;
 
   return (

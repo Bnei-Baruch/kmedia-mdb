@@ -135,6 +135,9 @@ export const getToWithLanguage = (navigateTo, location, language, contentLanguag
     navigateTo = { ...location };
   }
 
+  if (new_version) {
+    navigateTo.search = !navigateTo.search ? '?new_version=true' : `${navigateTo.search}&new_version=true`;
+  }
   // we're changing 'search' in case contentLanguage was supplied
   if (contentLanguage) {
     const q           = getQuery(navigateTo);

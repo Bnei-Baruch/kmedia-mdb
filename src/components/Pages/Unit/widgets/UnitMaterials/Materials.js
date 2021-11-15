@@ -119,7 +119,7 @@ const Materials = ({ unit = undefined, t, playlistComponent = null }) => {
     }
   }
 
-  return <TabsMenu items={items} />;
+  return <TabsMenu items={items.filter(x => !!x)} />;
 };
 
 Materials.propTypes = {
