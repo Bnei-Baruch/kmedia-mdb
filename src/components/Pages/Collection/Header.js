@@ -22,6 +22,7 @@ const CollectionPageHeader = ({ collection = null, namespace, t }) => {
   if (collection === null) {
     return <div className="collection-header" />;
   }
+
   const itemCount = Array.isArray(collection.cuIDs) ? collection.cuIDs.length : 0;
 
   return (
