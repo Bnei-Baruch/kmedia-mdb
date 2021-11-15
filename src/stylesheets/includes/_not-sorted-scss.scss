@@ -1830,6 +1830,7 @@
   margin-left: 0;
   margin-right: 20px;
   cursor: pointer;
+
   a {
     svg {
       position: relative;
@@ -1838,6 +1839,7 @@
       margin-left: 5px;
     }
   }
+
   audio {
     height: 25px;
     position: relative;
@@ -1848,6 +1850,7 @@
       width: 100%;
     }
   }
+
   .playAudioIcon {
     margin-left: 10px;
   }
@@ -1856,6 +1859,7 @@
 .rtl .library-audio-player {
   margin-left: 20px;
   margin-right: 0;
+
   .playAudioIcon {
     margin-right: 10px;
     margin-left: 0;
@@ -1916,6 +1920,7 @@
 
 .cu_item {
   overflow: hidden;
+
   .cu_item_img {
     position: relative;
     width: 100%;
@@ -2285,7 +2290,7 @@
 }
 
 .vertical_bottom {
-  vertical-align: bottom;
+  vertical-align: bottom !important;
 }
 
 .no-background {

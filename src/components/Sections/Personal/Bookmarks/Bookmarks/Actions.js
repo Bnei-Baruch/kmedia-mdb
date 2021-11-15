@@ -48,7 +48,6 @@ const Actions = ({ id, t }) => {
 
   return (
     <Dropdown
-      className="cu_item_dropdown"
       icon={'ellipsis vertical'}
       onClose={handleClose}
       onOpen={handleOpen}
@@ -69,7 +68,7 @@ const Actions = ({ id, t }) => {
           size="tiny"
           dir={dir}
         >
-          <Modal.Header content={t('personal.saveBookmark')} />
+          <Modal.Header content={t('personal.bookmark.saveBookmark')} />
           <BookmarkForm onClose={handleCloseEdit} bookmarkId={id} />
         </Modal>
         <Dropdown.Item

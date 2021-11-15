@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import {
   Button,
-  Checkbox,
+  Checkbox, Container,
   Grid,
   Header,
   Icon,
@@ -92,12 +92,11 @@ const BookmarkForm = ({ t, onClose, source, bookmarkId }) => {
   };
 
   const renderFolder = f => (
-    <List.Item key={f.id} className="margin-top-8 margin-bottom-4">
+    <List.Item key={f.id}>
       <Checkbox
         checked={selected?.includes(f.id)}
         onChange={(e, { checked }) => handleChange(checked, f.id)}
         label={f.name}
-        className="margin-right-4 margin-left-4"
       />
     </List.Item>
   );
@@ -105,9 +104,9 @@ const BookmarkForm = ({ t, onClose, source, bookmarkId }) => {
   return (
     <>
       <ModalContent className="padded">
-        <Grid>
+        <Grid verticalAlign="middle">
           <Grid.Column key={1} width="2">
-            {t('personal.name')}
+            {t('personal.bookmark.name')}
           </Grid.Column>
           <Grid.Column key={2} width="14">
             <Input
@@ -119,21 +118,19 @@ const BookmarkForm = ({ t, onClose, source, bookmarkId }) => {
             />
           </Grid.Column>
         </Grid>
-        <Header as="h4" content={t('personal.folders')} />
-      </ModalContent>
-      <ModalContent padded>
+        <Header as="h4" content={t('personal.bookmark.folders')} />
         <Segment>
           <Input
             icon
             iconPosition="left"
-            placeholder='Search...'
+            placeholder={t('personal.bookmark.searchFolders')}
             onChange={handleSearchChange}
-            className="no-border"
+            className="bookmark_search"
           >
             <input />
             <Icon name="search" />
           </Input>
-          <ModalContent scrolling>
+          <Container className="folders_list">
             {
               editFolder && (
                 <Input
@@ -141,7 +138,7 @@ const BookmarkForm = ({ t, onClose, source, bookmarkId }) => {
                   onBlur={handleSaveFolder}
                   autoFocus
                   onFocus={e => {
-                    e.target.value = t('personal.newFolderName');
+                    e.target.value = t('personal.bookmark.newFolderName');
                     e.target.select();
                   }}
                 />
@@ -152,14 +149,14 @@ const BookmarkForm = ({ t, onClose, source, bookmarkId }) => {
                 items.map(renderFolder)
                 : frownSplashNotFound(t)
             }
-          </ModalContent>
+          </Container>
         </Segment>
       </ModalContent>
       <ModalActions>
         <Button
           primary
           basic
-          content={t('personal.newFolder')}
+          content={t('personal.bookmark.newFolder')}
           onClick={handleNewFolder}
           floated="left"
         />

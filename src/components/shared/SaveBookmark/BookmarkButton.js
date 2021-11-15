@@ -23,6 +23,9 @@ const BookmarkButton = ({ t, source }) => {
     <Modal
       trigger={
         <Button
+          compact
+          size="small"
+          className="mobile-hidden"
           icon="bookmark outline"
           onClick={handleOpen}
         />
@@ -32,7 +35,7 @@ const BookmarkButton = ({ t, source }) => {
       size="tiny"
       dir={dir}
     >
-      <Modal.Header content={t('personal.saveBookmark')} />
+      <Modal.Header content={t('personal.bookmark.saveBookmark')} />
       {
         !needToLogin ? <BookmarkForm onClose={handleClose} source={source} /> : <Modal.Content content={needToLogin} />
       }

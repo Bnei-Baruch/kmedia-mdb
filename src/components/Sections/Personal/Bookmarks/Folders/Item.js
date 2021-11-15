@@ -35,7 +35,7 @@ const FolderItem = ({ folder }) => {
 
   const handleRemoveFolder = () => dispatch(actions.remove(MY_NAMESPACE_FOLDERS, { id }));
 
-  const rowProps = { key: id, className: 'margin-top-4 margin-bottom-4' };
+  const rowProps = { key: id };
   if (isSelect)
     rowProps.color = 'blue';
 

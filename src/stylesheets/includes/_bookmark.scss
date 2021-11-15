@@ -1,0 +1,33 @@
+.folders_list {
+  height: 50VH;
+  overflow: auto;
+  overflow-x: hidden;
+  margin-top: 1em;
+
+  & > .item {
+    margin: 8px 0;
+  }
+}
+
+.bookmark_search {
+  &.ui.input > input {
+    border-width: 0 0 1px 0;
+  }
+}
+
+.bookmark_item {
+  .separator {
+    margin: 0 1em;
+    color: $grey;
+  }
+
+  .source_name {
+    font-weight: normal;
+    color: $grey;
+  }
+}
+
+.bookmark_filters.ui.label {
+  margin: 0 8px;
+  vertical-align: bottom;
+}

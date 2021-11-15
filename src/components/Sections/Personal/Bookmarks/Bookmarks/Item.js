@@ -8,7 +8,12 @@ import { actions, selectors } from '../../../../../redux/modules/my';
 import { SectionLogo } from '../../../../../helpers/images';
 import Link from '../../../../Language/MultiLanguageLink';
 import { canonicalLink } from '../../../../../helpers/links';
-import { CT_SOURCE, MY_NAMESPACE_BOOKMARKS, MY_NAMESPACE_FOLDERS } from '../../../../../helpers/consts';
+import {
+  CT_SOURCE,
+  CT_VIDEO_PROGRAM_CHAPTER,
+  MY_NAMESPACE_BOOKMARKS,
+  MY_NAMESPACE_FOLDERS
+} from '../../../../../helpers/consts';
 import { getMyItemKey } from '../../../../../helpers/my';
 import Actions from './Actions';
 import Header from '../../../../Pages/Collection/Header';
@@ -19,11 +24,13 @@ const BookmarksItem = ({ bookmark, getSourceById }) => {
   const cu         = useSelector(state => mdb.getDenormContentUnit(state.mdb, bookmark.source_uid));
   const folderKeys = folder_ids.map(id => getMyItemKey(MY_NAMESPACE_FOLDERS, { id }).key);
   const folders    = useSelector(state => folderKeys.map(k => selectors.getItemByKey(state.my, MY_NAMESPACE_FOLDERS, k)).filter(x => !!x));
-  const dispatch   = useDispatch();
 
   const isSource  = cu?.content_type === CT_SOURCE;
   const mdbSource = isSource ? getSourceById(cu.id) : null;
-  const link      = canonicalLink(cu);
+  let link        = canonicalLink(cu);
+  if (cu?.content_type === CT_VIDEO_PROGRAM_CHAPTER) {
+    link = `${link}?activeTab=transcription`;
+  }
 
   const renderFolder = f => (
     <Label
@@ -36,7 +43,7 @@ const BookmarksItem = ({ bookmark, getSourceById }) => {
   );
 
   return (
-    <List.Item className="padded">
+    <List.Item className="bookmark_item">
       <List.Icon>
         <Link to={link}>
           <Image size="mini" verticalAlign="middle">
@@ -44,18 +51,20 @@ const BookmarksItem = ({ bookmark, getSourceById }) => {
           </Image>
         </Link>
       </List.Icon>
-      <List.Content>
-        <Header as="h3" className="display-iblock">
+      <List.Content as={Link} to={link}>
+        <List.Header as="h3" className="display-iblock">
           {bookmark.name}
-        </Header>
-        <Link to={link} className="font-normal">
+          <span className="separator">|</span>
+          <span className="source_name">
+
           {isSource ? mdbSource.name : cu?.name}
-        </Link>
-        <List.Description className="padding-top_1em">
+          </span>
+        </List.Header>
+        <List.Description>
           {folders.map(renderFolder)}
         </List.Description>
       </List.Content>
-      <List.Icon>
+      <List.Icon verticalAlign="middle">
         <Actions id={id} />
       </List.Icon>
     </List.Item>
