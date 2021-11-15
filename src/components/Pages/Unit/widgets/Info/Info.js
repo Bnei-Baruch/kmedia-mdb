@@ -10,7 +10,6 @@ import {
   CT_KTAIM_NIVCHARIM,
   CT_LESSONS_SERIES,
   CT_SPECIAL_LESSON,
-  VERSION_WITH_PERSONALIZATION,
 } from '../../../../../helpers/consts';
 import { canonicalLink } from '../../../../../helpers/links';
 import { cuPartNameByCCUType, intersperse } from '../../../../../helpers/utils';
@@ -19,6 +18,7 @@ import Link from '../../../../Language/MultiLanguageLink';
 import * as shapes from '../../../../shapes';
 import PersonalInfo from './PersonalInfo';
 import { selectors as recommended } from '../../../../../redux/modules/recommended';
+import { isNewVersion } from '../../../../../helpers/url';
 
 const makeTagLinks = (tags = [], getTagById) =>
   Array.from(intersperse(
@@ -70,7 +70,7 @@ const getEpisodeInfo = (ct, cIDs, currentCollection, filmDate, t) => {
   ));
 };
 
-const Info = ({ unit = {}, t, currentCollection = null }) => {
+const Info = ({ unit = {}, t, currentCollection = null, location }) => {
   const getTagById = useSelector(state => tagsSelectors.getTagById(state.tags));
 
   const { id, name, film_date: filmDate, tags, collections, content_type: ct, cIDs } = unit;
@@ -85,7 +85,7 @@ const Info = ({ unit = {}, t, currentCollection = null }) => {
   return (
     <>
       {
-        VERSION_WITH_PERSONALIZATION ?
+        isNewVersion(location) ?
           <PersonalInfo collection={currentCollection} unit={unit} /> :
           <div className="padding-top_1em">
             <div className="padding-top_1em" />

@@ -12,9 +12,9 @@ import { useSelector } from 'react-redux';
 import { selectors as settings } from '../../../redux/modules/settings';
 import ShareForm from './ShareForm';
 import SubscribeBtn from '../../shared/SubscribeBtn';
-import { VERSION_WITH_PERSONALIZATION } from '../../../helpers/consts';
+import { isNewVersion } from '../../../helpers/url';
 
-const CollectionPageHeader = ({ collection = null, namespace, t }) => {
+const CollectionPageHeader = ({ collection = null, namespace, t, location }) => {
   const contentLanguage = useSelector(state => settings.getContentLanguage(state.settings));
 
   if (collection === null) {
@@ -52,7 +52,7 @@ const CollectionPageHeader = ({ collection = null, namespace, t }) => {
                       href={getRSSLinkByTopic(collection.id, contentLanguage)} />
                     <ShareForm collection={collection} />
                     {
-                      VERSION_WITH_PERSONALIZATION &&
+                      isNewVersion(location) &&
                       (
                         <div className="margin-top-8 display-iblock">
                           <SubscribeBtn collection={collection} />

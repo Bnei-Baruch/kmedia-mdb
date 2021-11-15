@@ -118,8 +118,15 @@ export const updateQuery = (history, updater) => {
 
 export const isDebMode = location => getQuery(location).deb || false;
 
+export const isNewVersion = location => getQuery(location).new_version || false;
+
 export const getToWithLanguage = (navigateTo, location, language, contentLanguage) => {
+  const new_version = isNewVersion(location);
+
   if (typeof navigateTo === 'string') {
+    if (new_version) {
+      navigateTo = `${navigateTo}${navigateTo.includes('?') ? '&' : '?'}new_version=true`;
+    }
     return prefixWithLanguage(navigateTo, location, language);
   }
 

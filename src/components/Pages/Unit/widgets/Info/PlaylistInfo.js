@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as PropTypes from 'prop-types';
-import { Button, Checkbox, Icon, Input, List, Modal, Divider, Segment, Container } from 'semantic-ui-react';
+import { Button, Checkbox, Icon, Input, List, Modal, Divider } from 'semantic-ui-react';
 
 import { actions, selectors } from '../../../../../redux/modules/my';
 import { selectors as auth } from '../../../../../redux/modules/auth';

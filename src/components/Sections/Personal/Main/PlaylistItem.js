@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Container, Header, Icon, Table } from 'semantic-ui-react';
+import { Card, Container, Header, Icon } from 'semantic-ui-react';
 
 import { MY_NAMESPACE_PLAYLISTS } from '../../../../helpers/consts';
 import { isLanguageRtl } from '../../../../helpers/i18n-utils';

@@ -9,7 +9,6 @@ import { selectors as settings } from '../../../redux/modules/settings';
 import { selectors as auth } from '../../../redux/modules/auth';
 import { MY_NAMESPACE_PLAYLISTS } from '../../../helpers/consts';
 import playerHelper from '../../../helpers/player';
-import WipErr from '../../shared/WipErr/WipErr';
 import Page from './Page';
 import { actions as recommended } from '../../../redux/modules/recommended';
 import { getMyItemKey } from '../../../helpers/my';

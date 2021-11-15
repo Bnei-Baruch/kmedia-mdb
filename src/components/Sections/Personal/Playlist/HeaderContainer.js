@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 
 import { actions } from '../../../../redux/modules/my';
 import { selectors as settings } from '../../../../redux/modules/settings';
-import { MY_NAMESPACE_PLAYLISTS, MY_NAMESPACE_SUBSCRIPTIONS } from '../../../../helpers/consts';
+import { MY_NAMESPACE_PLAYLISTS } from '../../../../helpers/consts';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import PlaylistHeaderMobile from './HeaderMobile';
 import PlaylistHeader from './Header';
