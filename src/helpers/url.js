@@ -127,6 +127,7 @@ export const getToWithLanguage = (navigateTo, location, language, contentLanguag
     if (new_version) {
       navigateTo = `${navigateTo}${navigateTo.includes('?') ? '&' : '?'}new_version=true`;
     }
+
     return prefixWithLanguage(navigateTo, location, language);
   }
 
