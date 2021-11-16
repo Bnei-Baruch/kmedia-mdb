@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { MY_NAMESPACE_PLAYLIST_BY_ID, MY_NAMESPACE_PLAYLISTS } from './consts';
+import { MY_NAMESPACE_PLAYLIST_EDIT, MY_NAMESPACE_PLAYLISTS } from './consts';
 
 const API_BACKEND             = process.env.REACT_APP_API_BACKEND;
 const ASSETS_BACKEND          = process.env.REACT_APP_ASSETS_BACKEND;
@@ -8,7 +8,7 @@ const IMAGINARY_URL           = process.env.REACT_APP_IMAGINARY_URL;
 const IMAGINARY_INTERNAL_HOST = process.env.REACT_APP_IMAGINARY_INTERNAL_HOST || 'localhost';
 const API_FEED                = process.env.REACT_APP_FEED;
 const CHRONICLES_BACKEND      = process.env.REACT_APP_CHRONICLES_BACKEND;
-const PERSONAL_API_BACKEND    = process.env.REACT_APP_MY_BACKEND;
+const PERSONAL_API_BACKEND    = process.env.REACT_APP_PERSONAL_API_BACKEND;
 
 export const backendUrl               = path => `${API_BACKEND}${path}`;
 export const assetUrl                 = path => `${ASSETS_BACKEND}${path}`;
@@ -213,19 +213,40 @@ class Api {
 
   static my = (namespace, params, token, method) => {
     let urlParam = namespace;
-    if (namespace === MY_NAMESPACE_PLAYLIST_BY_ID) urlParam = MY_NAMESPACE_PLAYLISTS;
+    if (namespace === MY_NAMESPACE_PLAYLIST_EDIT)
+      urlParam = MY_NAMESPACE_PLAYLISTS;
 
     if (params.id) {
       urlParam = `${urlParam}/${params.id}`;
       delete params.id;
     }
 
+    if (namespace === MY_NAMESPACE_PLAYLISTS && params.changeItems) {
+      let p;
+      switch (method) {
+        case 'POST':
+          p = 'add_items';
+          break;
+        case 'PUT':
+          p = 'update_items';
+          break;
+        case 'DELETE':
+          p = 'remove_items';
+          break;
+        default:
+          p = '';
+      }
+
+      urlParam = `${urlParam}/${p}`;
+      delete params.changeItems;
+    }
+
     const url = `${PERSONAL_API_BACKEND}rest/${urlParam}`;
     return Requests.auth(params, url, token, method);
   };
 
-  static likeCount = params => {
-    const url    = `${PERSONAL_API_BACKEND}like_count?${Requests.makeParams(params)}`;
+  static reactionsCount = params => {
+    const url    = `${PERSONAL_API_BACKEND}reaction_count?${Requests.makeParams(params)}`;
     const config = { url, method: 'GET' };
     return axios(config);
   };

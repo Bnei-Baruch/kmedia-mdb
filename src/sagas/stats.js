@@ -6,6 +6,7 @@ import { isEmpty } from '../helpers/utils';
 import { actions, selectors } from '../redux/modules/stats';
 import { types as lists } from '../redux/modules/lists';
 import { types as tags } from '../redux/modules/tags';
+import { types as stats } from '../redux/modules/stats';
 
 function* fetchCUStats(action) {
   const { namespace } = action.payload;
@@ -43,7 +44,7 @@ export function* callUnitsStats(args, namespace) {
 }
 
 function* watchFetchList() {
-  yield takeLatest([lists.FETCH_LIST, tags.FETCH_STATS], fetchCUStats);
+  yield takeLatest([lists.FETCH_LIST, tags.FETCH_STATS, stats.FETCH_CU_STATS], fetchCUStats);
 }
 
 export const sagas = [

@@ -754,7 +754,7 @@
     "newPlaylistSuccessful": "פלייליסט {{name}} נוצר",
     "addToPlaylistSuccessful": "נוסף לפלייליסט {{name}}",
     "history": "היסטוריית צפייה",
-    "likes": "תוכן שאהבתי",
+    "reactions": "תוכן שאהבתי",
     "playlists": "פלייליסטים",
     "playlistNoResult": "בפלייליסט זה אין וידאו",
     "subscriptions": "מינויים",
@@ -773,6 +773,10 @@
     "login": "כניסה",
     "logout": "יציאה",
     "needToLogin": "כדאי להיכנס כדי להוסיף לייק לסרטונים, לשמור תכנים ולהירשם למינויים.",
-    "account": "החשבון שלי"
+    "account": "החשבון שלי",
+    "no_playlists": "אין לך עדיין פלייליסטים, אנא צור אחד",
+    "no_reactions": "אין לך סרטונים שאהבת",
+    "no_history": "התחל לצפות בסרטונים שיוצגו כאן",
+    "no_subscriptions": "אין לך עדיין מנויים, הירשם כדי לראות אותם כאן"
   }
 }

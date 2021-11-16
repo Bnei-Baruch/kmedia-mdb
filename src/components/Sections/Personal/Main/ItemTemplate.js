@@ -5,7 +5,7 @@ import { Container, Grid, Header, Icon } from 'semantic-ui-react';
 import * as shapes from '../../../shapes';
 import {
   MY_NAMESPACE_HISTORY,
-  MY_NAMESPACE_LIKES,
+  MY_NAMESPACE_REACTIONS,
   MY_NAMESPACE_PLAYLISTS,
   MY_NAMESPACE_SUBSCRIPTIONS
 } from '../../../../helpers/consts';
@@ -15,7 +15,7 @@ import PlaylistPlayIcon from '../../../../images/icons/PlaylistPlay';
 import SubscriptionsIcon from '../../../../images/icons/Subscriptions';
 
 const iconByNamespace = {
-  [MY_NAMESPACE_LIKES]: 'heart outline',
+  [MY_NAMESPACE_REACTIONS]: 'heart outline',
   [MY_NAMESPACE_HISTORY]: 'history',
   [MY_NAMESPACE_SUBSCRIPTIONS]: <SubscriptionsIcon className="playlist_icon" />,
   [MY_NAMESPACE_PLAYLISTS]: <PlaylistPlayIcon className="playlist_icon" />,
@@ -47,7 +47,17 @@ const ItemTemplate    = ({ children, namespace, t, withSeeAll = false, language 
           </Header.Content>
           <Header.Subheader className="display-iblock">{seeAll}</Header.Subheader>
         </Header>
-        {children}
+        {
+          children.length === 0 ?
+            (
+              <Header
+                textAlign="center"
+                size="large"
+                content={t(`personal.no_${namespace}`)}
+              />
+            )
+            : children
+        }
       </Container>
     </div>
   );

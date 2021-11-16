@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
-import { Container, Header, Progress } from 'semantic-ui-react';
+import { Container, Progress } from 'semantic-ui-react';
 import clsx from 'clsx';
 
 import * as shapes from '../../shapes';
@@ -35,22 +35,13 @@ const ListTemplate = ({
   const dir                = isLanguageRtl(language) ? 'rtl' : 'ltr';
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
-  let ccu_info;
-  if (!isMobileDevice && size !== 'small') {
-    ccu_info = ccu && withCCUInfo ? (
-      <div className="cu_item_info_co">
-        <span style={{ display: 'inline-block' }}>
-          <UnitLogo collectionId={ccu.id} />
-        </span>
-        <Header size="small" content={ccu.name || NO_NAME} textAlign="left" />
-      </div>
-    ) : null;
-  } else {
-    ccu_info = ccu && withCCUInfo ? (
-      <div className="cu_item_info_co ">
-        <h5 className="no-padding no-margin text_ellipsis">{ccu.name || NO_NAME}</h5>
-      </div>) : null;
-  }
+  const ccu_info = ccu && withCCUInfo ? (
+    <div className="cu_item_info_co ">
+      {
+        size === 'big' ? <h3 className="no-padding no-margin text_ellipsis">{ccu.name || NO_NAME}</h3>
+          : <h5 className="no-padding no-margin text_ellipsis">{ccu.name || NO_NAME}</h5>
+      }
+    </div>) : null;
 
   let percent = null;
   if (unit && playTime) {
@@ -81,7 +72,7 @@ const ListTemplate = ({
           <UnitLogo unitId={unit && unit.id} sourceId={source && source.id} width={width} />
         </div>
       </div>
-      <div className={`cu_item_info ${dir}`}>
+      <div className={clsx('cu_item_info', { [dir]: true, 'with_actions': !!children })}>
         {ccu_info}
         {withCUInfo && <div className={clsx('cu_item_name', { 'font_black': !ccu_info })}>
           {(unit && unit.name) || (source && source.name)}

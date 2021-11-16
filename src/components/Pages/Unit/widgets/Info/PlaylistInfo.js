@@ -6,50 +6,71 @@ import { Button, Checkbox, Icon, Input, List, Modal, Divider } from 'semantic-ui
 import { actions, selectors } from '../../../../../redux/modules/my';
 import { selectors as auth } from '../../../../../redux/modules/auth';
 import { selectors as settings } from '../../../../../redux/modules/settings';
-import { MY_NAMESPACE_PLAYLIST_ITEMS, MY_NAMESPACE_PLAYLISTS } from '../../../../../helpers/consts';
+import { MY_NAMESPACE_PLAYLIST_EDIT, MY_NAMESPACE_PLAYLISTS } from '../../../../../helpers/consts';
 import { getLanguageDirection } from '../../../../../helpers/i18n-utils';
 import AlertModal from '../../../../shared/AlertModal';
 import PlaylistAddIcon from '../../../../../images/icons/PlaylistAdd';
 import NeedToLogin from '../../../../Sections/Personal/NeedToLogin';
+import { stopBubbling } from '../../../../../helpers/utils';
+
+const updateStatus = { save: 1, delete: 2 };
 
 const PlaylistInfo = ({ cuID, t, handleClose = null }) => {
   const [isOpen, setIsOpen]               = useState(false);
-  const [selected, setSelected]           = useState([]);
-  const [saved, setSaved]                 = useState([]);
-  const [newPlaylist, setNewPlaylist]     = useState('');
-  const [isNewPlaylist, setIsNewPlaylist] = useState(false);
   const [alertMsg, setAlertMsg]           = useState();
   const [isNeedLogin, setIsNeedLogin]     = useState();
+  const [selected, setSelected]           = useState([]);
+  const [forUpdate, setForUpdate]         = useState({ count: 0 });
+  const [newPlaylist, setNewPlaylist]     = useState('');
+  const [isNewPlaylist, setIsNewPlaylist] = useState(false);
+  const [countNew, setCountNew]           = useState(0);
 
   const dispatch = useDispatch();
 
-  const playlists     = useSelector(state => selectors.getItems(state.my, MY_NAMESPACE_PLAYLISTS));
-  const playlistItems = useSelector(state => selectors.getItems(state.my, MY_NAMESPACE_PLAYLIST_ITEMS));
-  const language      = useSelector(state => settings.getLanguage(state.settings));
-  const user          = useSelector(state => auth.getUser(state.auth));
+  const playlists = useSelector(state => selectors.getList(state.my, MY_NAMESPACE_PLAYLIST_EDIT));
+  const total     = useSelector(state => selectors.getTotal(state.my, MY_NAMESPACE_PLAYLIST_EDIT));
+  const language  = useSelector(state => settings.getLanguage(state.settings));
+  const user      = useSelector(state => auth.getUser(state.auth));
+  const saved     = playlists.filter(p => !!p.items);
+
+  useEffect(() => {
+    if (total !== 0) {
+      const s      = playlists.slice(0, countNew).filter(x => !forUpdate[x.id]);
+      const update = s.reduce((acc, x) => {
+        acc[x.id] = updateStatus.save;
+        return acc;
+      }, {});
+      setForUpdate({ ...forUpdate, ...update, count: forUpdate.count + s.length });
+      setSelected([...s, ...saved]);
+    }
+  }, [total]);
 
   const dir = getLanguageDirection(language);
 
-  useEffect(() => {
-    const _saved = playlistItems.filter(pi => pi.content_unit_uid === cuID).map(p => p.playlist_id);
-    setSaved(_saved);
-    const ids = isNewPlaylist ? playlists.filter(p => p.name === newPlaylist).map(p => p.id) : [];
-    setSelected(selected.concat(ids, _saved));
-    setNewPlaylist('');
-    setIsNewPlaylist(false);
-  }, [playlists, playlistItems]);
-
   const onOpen = () => {
-    dispatch(actions.fetch(MY_NAMESPACE_PLAYLISTS, { page_no: 1, page_size: 100 }));
-    dispatch(actions.fetch(MY_NAMESPACE_PLAYLIST_ITEMS, { uids: [cuID] }));
+    setSelected([]);
+    setCountNew(0);
+    setForUpdate({ count: 0 });
+    dispatch(actions.fetch(MY_NAMESPACE_PLAYLIST_EDIT, { 'exist_cu': cuID, order_by: 'id DESC' }));
   };
 
-  const handleChange = (e, d) => {
-    if (d.checked) {
-      setSelected([d.value, ...selected]);
+  const handleChange = (checked, p) => {
+    let status = null;
+    if (checked) {
+      setSelected([p, ...selected]);
+
+      if (forUpdate[p.id] !== updateStatus.delete) {
+        status = updateStatus.save;
+      }
     } else {
-      setSelected(selected.filter(x => x !== d.value));
+      setSelected(selected.filter(x => x.id !== p.id));
+      if (forUpdate[p.id] !== updateStatus.save) {
+        status = updateStatus.delete;
+      }
     }
+
+    const count = (!!forUpdate[p.id] && status === null) ? -1 : 1;
+    setForUpdate({ ...forUpdate, [p.id]: status, count: forUpdate.count + count });
   };
 
   const handleAddPlaylist = () => setIsNewPlaylist(true);
@@ -62,32 +83,41 @@ const PlaylistInfo = ({ cuID, t, handleClose = null }) => {
   };
 
   const handleSaveNewPlaylist = e => {
-    e.preventDefault();
-    e.stopPropagation();
-    !!newPlaylist && dispatch(actions.add(MY_NAMESPACE_PLAYLISTS, { name: newPlaylist }));
+    stopBubbling(e)
+    !!newPlaylist && dispatch(actions.add(MY_NAMESPACE_PLAYLIST_EDIT, { name: newPlaylist }));
     setAlertMsg(t('personal.newPlaylistSuccessful', { name: newPlaylist }));
+    setCountNew(countNew + 1);
+    setIsNewPlaylist(false);
+    setNewPlaylist('');
   };
 
   const handleOpenModal = e => {
-    e.preventDefault();
-    e.stopPropagation();
+    stopBubbling(e)
     toggle();
-    return;
   };
 
   const toggle = () => {
     if (!user)
       return setIsNeedLogin(true);
-    setSelected([]);
     setIsOpen(!isOpen);
+    setNewPlaylist('');
+    setIsNewPlaylist(false);
     return null;
   };
 
   const save = () => {
-    const aIds = selected.filter(id => !saved.includes(id));
-    aIds.forEach(id => dispatch(actions.add(MY_NAMESPACE_PLAYLISTS, { id, uids: [cuID] })));
-    const dIds = saved.filter(id => !selected.includes(id));
-    dIds.forEach(id => dispatch(actions.remove(MY_NAMESPACE_PLAYLIST_ITEMS, { playlist_id: id, uids: [cuID] })));
+    const adds = selected.filter(p => !saved.some(x => p.id === x.id));
+    adds.forEach((p, i) => dispatch(actions.add(MY_NAMESPACE_PLAYLISTS, {
+      id: p.id,
+      items: [{ position: p.max_position + 1, content_unit_uid: cuID }],
+      changeItems: true
+    })));
+    const deletes = saved.filter(p => !selected.some(x => p.id === x.id));
+    deletes.forEach(p => dispatch(actions.remove(MY_NAMESPACE_PLAYLISTS, {
+      id: p.id,
+      ids: p.items?.map(pi => pi.id),
+      changeItems: true
+    })));
     toggle();
 
     setAlertMsg(t('personal.addToPlaylistSuccessful'));
@@ -102,9 +132,8 @@ const PlaylistInfo = ({ cuID, t, handleClose = null }) => {
     <List.Item key={p.id}>
       <List.Content floated='left'>
         <Checkbox
-          value={p.id}
-          checked={selected.includes(p.id)}
-          onChange={handleChange}
+          checked={selected.some(x => x.id === p.id)}
+          onChange={(e, { checked }) => handleChange(checked, p)}
         />
       </List.Content>
       <List.Content>
@@ -149,9 +178,10 @@ const PlaylistInfo = ({ cuID, t, handleClose = null }) => {
         <Modal.Content>
           <List>
             {playlists.map(renderPlaylist)}
+            {(playlists.length === 0) && t(`personal.no_${MY_NAMESPACE_PLAYLISTS}`)}
             <Divider hidden />
             {
-              isNewPlaylist
+              isNewPlaylist || playlists.length === 0
                 ? (
                   <List.Item key="playlist_form">
                     <List.Content floated='right'>
@@ -199,6 +229,7 @@ const PlaylistInfo = ({ cuID, t, handleClose = null }) => {
                 content={t('buttons.save')}
                 onClick={save}
                 className="uppercase"
+                disabled={!forUpdate.count}
               />
               <Button
                 primary
