@@ -90,6 +90,7 @@ export function* fetchRecommended(action) {
     // Append predefined, constant recommentations.
     if (variant === AB_RECOMMEND_NEW) {
       data.feeds.splice(data.feeds.length - 1, 0, [
+        { content_type: CT_SOURCE, uid: 'qMUUn22b' },
         { content_type: CT_LESSONS_SERIES, uid: 'ReQUUOtN' },
         { content_type: CT_SOURCE, uid: 'grRABASH' },
       ]);
