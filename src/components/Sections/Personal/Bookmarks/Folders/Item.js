@@ -6,6 +6,7 @@ import { actions } from '../../../../../redux/modules/my';
 import { MY_BOOKMARK_FILTER_FOLDER_ID, MY_NAMESPACE_FOLDERS } from '../../../../../helpers/consts';
 import { actions as filtersActions, selectors as filtersSelectors } from '../../../../../redux/modules/bookmarkFilter';
 import { useDispatch, useSelector } from 'react-redux';
+import clsx from 'clsx';
 
 const FolderItem = ({ folder }) => {
   const [edit, setEdit] = useState();
@@ -37,11 +38,18 @@ const FolderItem = ({ folder }) => {
 
   const rowProps = { key: id };
   if (isSelect)
-    rowProps.color = 'blue';
+    rowProps.className = 'active';
 
   return (
     <Grid.Row {...rowProps}>
-      <Grid.Column width={isAll ? 16 : 12} onClick={handleSelectFolder}>
+      <Grid.Column
+        width={isAll ? 16 : 11}
+        tablet={isAll ? 16 : 9}
+        computer={isAll ? 16 : 10}
+        onClick={handleSelectFolder}
+        className={clsx({ 'nowrap': edit })}
+        verticalAlign={'middle'}
+      >
         <Icon name="folder outline" />
         {
           !edit ? folder.name : (
@@ -56,7 +64,7 @@ const FolderItem = ({ folder }) => {
       </Grid.Column>
       {
         isAll ? null : (
-          <Grid.Column width="4">
+          <Grid.Column width="5" computer="6" tablet="7" textAlign={'right'}>
             {
               edit ?
                 (

@@ -103,7 +103,7 @@ const BookmarkForm = ({ t, onClose, source, bookmarkId }) => {
 
   return (
     <>
-      <ModalContent className="padded">
+      <ModalContent className="padded bookmark_modal">
         <Grid verticalAlign="middle">
           <Grid.Column key={1} width="2">
             {t('personal.bookmark.name')}

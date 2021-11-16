@@ -32,12 +32,12 @@ const FolderList = ({ t }) => {
   const handleSearchChange = (e, { value }) => dispatch(filtersActions.addFilter(MY_BOOKMARK_FILTER_FOLDER_QUERY, value));
 
   return (
-    <Segment padded>
-      <Grid verticalAlign="middle">
-        <Grid.Column width="6">
+    <Segment className="bookmark_page">
+      <Grid verticalAlign="middle" className="folders padded">
+        <Grid.Column width="7">
           <Header as="h3" content={t('personal.bookmark.folders')} />
         </Grid.Column>
-        <Grid.Column>
+        <Grid.Column width="9">
           <Input
             icon
             iconPosition="left"

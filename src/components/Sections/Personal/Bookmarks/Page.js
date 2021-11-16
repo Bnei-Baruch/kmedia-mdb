@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Grid, Segment } from 'semantic-ui-react';
+import { Grid, Header, Icon, Input, Segment } from 'semantic-ui-react';
 import clsx from 'clsx';
 
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
@@ -17,12 +17,20 @@ const Page = ({ t }) => {
 
   return (
     <Grid padded={!isMobileDevice}>
-      <BookmarkHeader />
+
+      <Grid.Row verticalAlign="bottom">
+        <Grid.Column mobile={16} tablet={4} computer={4}>
+        </Grid.Column>
+        <Grid.Column mobile={16} tablet={12} computer={12} className={clsx({ 'is-fitted': isMobileDevice })}
+        >
+          <BookmarkHeader />
+        </Grid.Column>
+      </Grid.Row>
       <Grid.Row>
-        <Grid.Column mobile={16} tablet={5} computer={5}>
+        <Grid.Column mobile={16} tablet={4} computer={4}>
           <FolderList />
         </Grid.Column>
-        <Grid.Column mobile={16} tablet={11} computer={11} className={clsx({ 'is-fitted': isMobileDevice })}>
+        <Grid.Column mobile={16} tablet={12} computer={12} className={clsx({ 'is-fitted': isMobileDevice })}>
           <Segment className="padded">
             <BookmarkList />
           </Segment>

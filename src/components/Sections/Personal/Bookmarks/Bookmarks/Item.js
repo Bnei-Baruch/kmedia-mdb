@@ -50,7 +50,7 @@ const BookmarksItem = ({ bookmark, getSourceById }) => {
           </Image>
         </Link>
       </List.Icon>
-      <List.Content as={Link} to={link}>
+      <List.Content as={Link} to={link} verticalAlign="bottom">
         <List.Header as="h3" className="display-iblock">
           {bookmark.name}
           <span className="separator">|</span>
