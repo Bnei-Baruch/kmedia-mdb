@@ -29,7 +29,7 @@ const CardTemplate = ({ unit, language, withCCUInfo, link, ccu, description, chi
   const coInfo = ccu && withCCUInfo ? (
     <div className="cu_item_info_co">
       <Divider style={{ width: '1em' }} />
-      <UnitLogo collectionId={ccu.id} circular height={80} width={120} />
+      <UnitLogo collectionId={ccu.id} circular height={80} width={80} />
       <Popup
         basic
         content={ccu.name}
