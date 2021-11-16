@@ -26,7 +26,7 @@ const Page      = ({ location, t }) => {
   const pageNo   = useSelector(state => selectors.getPageNo(state.my, MY_NAMESPACE_HISTORY));
   const total    = useSelector(state => selectors.getTotal(state.my, MY_NAMESPACE_HISTORY));
   const language = useSelector(state => settings.getLanguage(state.settings));
-  const items    = useSelector(state => selectors.getItems(state.my, MY_NAMESPACE_HISTORY)) || [];
+  const items    = useSelector(state => selectors.getList(state.my, MY_NAMESPACE_HISTORY));
   const wip      = useSelector(state => selectors.getWIP(state.my, MY_NAMESPACE_HISTORY));
   const err      = useSelector(state => selectors.getErr(state.my, MY_NAMESPACE_HISTORY));
   const deleted  = useSelector(state => selectors.getDeleted(state.my, MY_NAMESPACE_HISTORY));
@@ -58,16 +58,16 @@ const Page      = ({ location, t }) => {
 
   const renderItem = (x, i) => {
     let newDay   = null;
-    const mp     = i !== 0 && moment(items[i - 1].created_at);
-    const mx     = moment(x.created_at);
+    const mp     = i !== 0 && moment(items[i - 1].timestamp);
+    const mx     = moment(x.timestamp);
     const isDiff = i !== 0 ? mp.date() !== mx.date() : true;
     if (isDiff) {
-      newDay = (<Header as="h3" content={t('values.date', { date: x.created_at })} />);
+      newDay = (<Header as="h3" content={t('values.date', { date: x.timestamp })} />);
     }
 
     const item = (
       <ContentItemContainer id={x.content_unit_uid} asList={true} playTime={x.data.current_time}>
-        <Actions cuId={x.content_unit_uid} id={x.id} />
+        <Actions history={x} />
       </ContentItemContainer>
     );
     return (

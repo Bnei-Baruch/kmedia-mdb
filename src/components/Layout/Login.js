@@ -52,6 +52,7 @@ const Login = ({ t, language }) => {
       onClose={handlePopupClose}
       on="click"
       style={popupStyle}
+      hideOnScroll
     >
       <Popup.Header content={user.name} />
       <Divider />

@@ -7,6 +7,9 @@ import { MY_NAMESPACE_PLAYLISTS } from '../../../../helpers/consts';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import Link from '../../../Language/MultiLanguageLink';
 import PlaylistPlayIcon from '../../../../images/icons/PlaylistPlay';
+import { getLanguageDirection } from '../../../../helpers/i18n-utils';
+import { useSelector } from 'react-redux';
+import { selectors as settings } from '../../../../redux/modules/settings';
 
 const PlaylistHeader = ({ confirmSuccess, save, playlist, t }) => {
   const [isEditName, setIsEditName] = useState();
@@ -14,6 +17,8 @@ const PlaylistHeader = ({ confirmSuccess, save, playlist, t }) => {
   const [confirm, setConfirm]       = useState();
 
   const { isMobileDevice } = useContext(DeviceInfoContext);
+  const language         = useSelector(state => settings.getLanguage(state.settings));
+  const dir = getLanguageDirection(language);
 
   const handleChangeName = (e, { value }) => setName(value);
 
@@ -31,8 +36,7 @@ const PlaylistHeader = ({ confirmSuccess, save, playlist, t }) => {
 
   const handleConfirmCancel = () => setConfirm(false);
 
-  const itemCount = playlist.playlist_items?.length || 0;
-  const nameTag   = isEditName ? (
+  const nameTag = isEditName ? (
     <>
       <Input type="text" value={name} onChange={handleChangeName} maxLength={30} />
       <Button content={t('buttons.save')} onClick={handleSave} className="margin-right-8 margin-left-8 uppercase" />
@@ -47,7 +51,7 @@ const PlaylistHeader = ({ confirmSuccess, save, playlist, t }) => {
           <PlaylistPlayIcon className="playlist_icon" />
           {nameTag}
           <Header.Subheader className="display-iblock margin-right-8 margin-left-8">
-            {`${itemCount} ${t('pages.collection.items.programs-collection')}`}
+            {`${playlist.total_items} ${t('pages.collection.items.programs-collection')}`}
           </Header.Subheader>
         </Header>
         <div>
@@ -59,19 +63,24 @@ const PlaylistHeader = ({ confirmSuccess, save, playlist, t }) => {
             open={confirm}
             onCancel={handleConfirmCancel}
             onConfirm={confirmSuccess}
+            cancelButton={t('buttons.cancel')}
+            confirmButton={t('buttons.apply')}
             content={t('personal.confirmRemovePlaylist', { name: playlist.name })}
+            dir={dir}
           />
           <Button basic onClick={remove} className="clear_button">
             <Icon name={'trash alternate outline'} size="large" />
           </Button>
         </div>
       </div>
-      <Link to={`/${MY_NAMESPACE_PLAYLISTS}/${playlist.id}`}>
-        <Button basic className="clear_button">
-          <Icon name={'play circle outline'} className="margin-left-8 margin-right-8" size="big" />
-          {t('personal.playAll')}
-        </Button>
-      </Link>
+      {
+        (playlist.total_items > 0) && (<Link to={`/${MY_NAMESPACE_PLAYLISTS}/${playlist.id}`}>
+          <Button basic className="clear_button">
+            <Icon name={'play circle outline'} className="margin-left-8 margin-right-8" size="big" />
+            {t('personal.playAll')}
+          </Button>
+        </Link>)
+      }
     </Container>
   );
 };

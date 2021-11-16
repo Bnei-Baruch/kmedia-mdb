@@ -586,6 +586,13 @@ const getDenormCollectionWUnits = (state, id) => {
 
 const getCountCu = (state, namespace) => state.countCU[namespace];
 
+const skipFetchedCU = (state, ids, with_files) => ids.filter(id => {
+  const cu = getDenormContentUnit(state, id);
+  if (!with_files) return !cu;
+  return !cu?.files?.length;
+});
+const skipFetchedCO = (state, ids) => ids.filter(id => !getDenormCollection(state, id));
+
 export const selectors = {
   getCollectionById,
   getUnitById,
@@ -599,5 +606,7 @@ export const selectors = {
   getWindow,
   getDatepickerCO,
   getSQDataWipErr,
-  getCountCu
+  getCountCu,
+  skipFetchedCU,
+  skipFetchedCO,
 };

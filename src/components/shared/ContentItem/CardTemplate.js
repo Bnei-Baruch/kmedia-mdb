@@ -66,7 +66,7 @@ CardTemplate.propTypes = {
   withCCUInfo: PropTypes.bool,
   ccu: shapes.Collection,
   description: PropTypes.array,
-  children: PropTypes.array
+  children: PropTypes.any
 };
 
 export default CardTemplate;

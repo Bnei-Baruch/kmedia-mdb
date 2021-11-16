@@ -3,42 +3,54 @@ import { withNamespaces } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Icon, Menu, Modal } from 'semantic-ui-react';
 
-import { MY_NAMESPACE_LIKES } from '../../../../../helpers/consts';
-import * as shapes from '../../../../shapes';
 import { selectors } from '../../../../../redux/modules/auth';
-import { actions, selectors as myselector } from '../../../../../redux/modules/my';
+import { actions, selectors as my } from '../../../../../redux/modules/my';
+import { MY_NAMESPACE_REACTIONS, MY_REACTION_KINDS } from '../../../../../helpers/consts';
+import { getMyItemKey } from '../../../../../helpers/my';
+import SubscribeBtn from '../../../../shared/SubscribeBtn';
+import * as shapes from '../../../../shapes';
 import NeedToLogin from '../../../../Sections/Personal/NeedToLogin';
 import PlaylistInfo from './PlaylistInfo';
-import SubscribeBtn from '../../../../shared/SubscribeBtn';
 
 const PersonalInfo = ({ unit = {}, t, collection }) => {
   const [isNeedLogin, setIsNeedLogin] = useState();
 
+  const { id, content_type } = unit;
+  const likeParams           = {
+    kind: MY_REACTION_KINDS.LIKE,
+    subject_type: content_type,
+    subject_uid: id
+  };
+
+  const { key } = getMyItemKey(MY_NAMESPACE_REACTIONS, likeParams);
+
+  const user           = useSelector(state => selectors.getUser(state.auth));
+  const reactionsCount = useSelector(state => my.getReactionsCount(state.my, key));
+  const reaction       = useSelector(state => my.getItemByKey(state.my, MY_NAMESPACE_REACTIONS, key));
+  const deleted        = useSelector(state => my.getDeleted(state.my, MY_NAMESPACE_REACTIONS));
+
   const dispatch = useDispatch();
-  const user     = useSelector(state => selectors.getUser(state.auth));
+  useEffect(() => {
+    if (key && !reaction) {
+      dispatch(actions.fetch(MY_NAMESPACE_REACTIONS, { addToList: false, ...likeParams }));
+    }
 
-  const { id } = unit;
-
-  const likeCount = useSelector(state => myselector.getLikeCount(state.my));
-  const like      = useSelector(state => myselector.getItemByCU(state.my, MY_NAMESPACE_LIKES, id));
+    dispatch(actions.reactionsCount({ 'uids': [id], type: content_type }));
+  }, [dispatch, user, key]);
 
   useEffect(() => {
-    if (id) {
-      dispatch(actions.fetchByCU(MY_NAMESPACE_LIKES, { 'uids': [id] }));
-      dispatch(actions.likeCount({ 'uids': [id] }));
-    }
-  }, [dispatch, id, user]);
+    deleted && dispatch(actions.setDeleted(MY_NAMESPACE_REACTIONS, false));
+  }, [deleted]);
 
   if (!unit) return null;
 
-  const likeDislike = l => {
+  const toggleReaction = l => {
     if (!user)
       return setIsNeedLogin(true);
-
     if (l)
-      dispatch(actions.remove(MY_NAMESPACE_LIKES, { ids: [l.id] }));
+      dispatch(actions.remove(MY_NAMESPACE_REACTIONS, { ...likeParams, key }));
     else
-      dispatch(actions.add(MY_NAMESPACE_LIKES, { uids: [id] }));
+      dispatch(actions.add(MY_NAMESPACE_REACTIONS, likeParams));
     return null;
   };
 
@@ -59,10 +71,10 @@ const PersonalInfo = ({ unit = {}, t, collection }) => {
           <Button
             basic
             className="clear_button"
-            onClick={() => likeDislike(like)}
+            onClick={() => toggleReaction(reaction)}
           >
-            <Icon name={`heart${!like ? ' outline' : ''}`} className="margin-right-4 margin-left-4" />
-            <span>{likeCount}</span>
+            <Icon name={`heart${!reaction ? ' outline' : ''}`} className="margin-right-4 margin-left-4" />
+            <span>{reactionsCount}</span>
           </Button>
         </Menu.Item>
         <Menu.Item>
@@ -82,4 +94,6 @@ PersonalInfo.propTypes = {
 
 };
 
-export default withNamespaces()(PersonalInfo);
+const areEqual = (prevProps, nextProps) => nextProps.unit && prevProps.unit?.id === nextProps.unit.id;
+
+export default React.memo(withNamespaces()(PersonalInfo), areEqual);

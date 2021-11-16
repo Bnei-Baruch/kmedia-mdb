@@ -432,3 +432,9 @@ export const cuPartNameByCCUType = ct => {
       return `${prefix}episode`;
   }
 };
+
+export const stopBubbling = e => {
+  if (!e) return;
+  e.preventDefault();
+  e.stopPropagation();
+};
