@@ -62,7 +62,7 @@ const BookmarksItem = ({ bookmark, getSourceById }) => {
           {folders.map(renderFolder)}
         </List.Description>
       </List.Content>
-      <List.Icon verticalAlign="middle">
+      <List.Icon verticalAlign="top">
         <Actions id={id} />
       </List.Icon>
     </List.Item>

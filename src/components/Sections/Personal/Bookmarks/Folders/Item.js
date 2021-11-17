@@ -36,21 +36,21 @@ const FolderItem = ({ folder }) => {
 
   const handleRemoveFolder = () => dispatch(actions.remove(MY_NAMESPACE_FOLDERS, { id }));
 
-  const rowProps = { key: id };
+  const rowProps = { key: id, className: 'flex_nowrap' };
   if (isSelect)
-    rowProps.className = 'active';
+    rowProps.className += ' active';
 
   return (
     <Grid.Row {...rowProps}>
       <Grid.Column
-        width={isAll ? 16 : 11}
+        mobile={isAll ? 16 : 11}
         tablet={isAll ? 16 : 9}
         computer={isAll ? 16 : 10}
         onClick={handleSelectFolder}
         className={clsx({ 'nowrap': edit })}
         verticalAlign={'middle'}
       >
-        <Icon name="folder outline" />
+        {!edit && <Icon name="folder outline" />}
         {
           !edit ? folder.name : (
             <Input
@@ -58,13 +58,14 @@ const FolderItem = ({ folder }) => {
               onChange={handleChangeName}
               onFocus={e => e.target.select()}
               defaultValue={folder.name}
+              fluid
             />
           )
         }
       </Grid.Column>
       {
         isAll ? null : (
-          <Grid.Column width="5" computer="6" tablet="7" textAlign={'right'}>
+          <Grid.Column mobile={5} tablet={7} computer={6} textAlign={'right'}>
             {
               edit ?
                 (

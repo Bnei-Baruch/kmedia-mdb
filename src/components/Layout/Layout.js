@@ -28,7 +28,7 @@ const WrappedOmniBoxWithChronicles = ({ location }) => {
   return <WrappedOmniBox location={location} chronicles={chronicles} />;
 };
 
-const RenderHeaderSearch           = React.forwardRef(({ t, location }, headerSearchElement) => (
+const RenderHeaderSearch = React.forwardRef(({ t, location }, headerSearchElement) => (
   <div ref={headerSearchElement}>
     <Segment color="blue" inverted className="header_search">
       <WrappedOmniBoxWithChronicles location={location} />
@@ -211,7 +211,7 @@ class Layout extends Component {
                     showSearch && <WrappedOmniBoxWithChronicles location={location} />
                   }
                 </Menu.Item>
-                <Menu.Menu position="right" className="no-padding no-margin">
+                <Menu.Menu position="right" className="layout__header-buttons">
                   <Menu.Item className="no-margin">
                     <HandleLanguages language={language} />
                   </Menu.Item>

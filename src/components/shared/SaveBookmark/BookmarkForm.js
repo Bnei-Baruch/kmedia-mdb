@@ -42,6 +42,10 @@ const BookmarkForm = ({ t, onClose, source, bookmarkId }) => {
       setSelected([...saved]);
   }, [items?.length]);
 
+  useEffect(() => {
+    setName(bookmark?.name);
+  }, [bookmark?.name]);
+
   if (!source && !bookmark)
     return null;
 
@@ -105,20 +109,20 @@ const BookmarkForm = ({ t, onClose, source, bookmarkId }) => {
     <>
       <ModalContent className="padded bookmark_modal">
         <Grid verticalAlign="middle">
-          <Grid.Column key={1} width="2">
-            {t('personal.bookmark.name')}
+          <Grid.Column key={1} width={3}>
+            <Header as="h4" content={t('personal.bookmark.name')} />
           </Grid.Column>
-          <Grid.Column key={2} width="14">
+          <Grid.Column key={2} width={13}>
             <Input
               fluid
               focus={true}
               onChange={changeName}
-              defaultValue={bookmark?.name}
+              defaultValue={name}
               autoFocus
             />
           </Grid.Column>
         </Grid>
-        <Header as="h4" content={t('personal.bookmark.folders')} />
+        <Header as="h3" content={t('personal.bookmark.folders')} />
         <Segment>
           <Input
             icon
@@ -170,6 +174,7 @@ const BookmarkForm = ({ t, onClose, source, bookmarkId }) => {
           content={t('buttons.save')}
           onClick={handleSave}
           floated="right"
+          disabled={!name}
         />
       </ModalActions>
     </>

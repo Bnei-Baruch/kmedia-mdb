@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import { Button, Modal, } from 'semantic-ui-react';
@@ -8,13 +8,15 @@ import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import BookmarkForm from './BookmarkForm';
 import { useSelector } from 'react-redux';
 import { selectors as settings } from '../../../redux/modules/settings';
+import { DeviceInfoContext } from '../../../helpers/app-contexts';
 
 const BookmarkButton = ({ t, source }) => {
   const [open, setOpen] = useState();
   const needToLogin     = NeedToLogin({ t });
 
-  const language = useSelector(state => settings.getLanguage(state.settings));
-  const dir      = getLanguageDirection(language);
+  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const language           = useSelector(state => settings.getLanguage(state.settings));
+  const dir                = getLanguageDirection(language);
 
   const handleOpen  = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -25,14 +27,13 @@ const BookmarkButton = ({ t, source }) => {
         <Button
           compact
           size="small"
-          className="mobile-hidden"
           icon="bookmark outline"
           onClick={handleOpen}
         />
       }
       open={open}
       onClose={handleClose}
-      size="tiny"
+      size={!isMobileDevice ? 'tiny': 'fullscreen'}
       dir={dir}
     >
       <Modal.Header content={t('personal.bookmark.saveBookmark')} />
