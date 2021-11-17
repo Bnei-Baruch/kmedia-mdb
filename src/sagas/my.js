@@ -6,7 +6,6 @@ import { selectors as authSelectors } from '../redux/modules/auth';
 import { actions as mdbActions, selectors as mdbSelectors } from '../redux/modules/mdb';
 import { actions as recommendedActions } from '../redux/modules/recommended';
 import {
-  CT_LIKUTIM,
   IsCollectionContentType,
   MY_NAMESPACE_BOOKMARKS,
   MY_NAMESPACE_HISTORY,

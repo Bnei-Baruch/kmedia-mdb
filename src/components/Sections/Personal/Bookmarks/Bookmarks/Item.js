@@ -1,22 +1,20 @@
 import React from 'react';
 import { withNamespaces } from 'react-i18next';
 import { Image, Label, List } from 'semantic-ui-react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import { selectors as mdb } from '../../../../../redux/modules/mdb';
-import { actions, selectors } from '../../../../../redux/modules/my';
+import { selectors } from '../../../../../redux/modules/my';
 import { SectionLogo } from '../../../../../helpers/images';
 import Link from '../../../../Language/MultiLanguageLink';
 import { canonicalLink } from '../../../../../helpers/links';
 import {
   CT_SOURCE,
   CT_VIDEO_PROGRAM_CHAPTER,
-  MY_NAMESPACE_BOOKMARKS,
   MY_NAMESPACE_FOLDERS
 } from '../../../../../helpers/consts';
 import { getMyItemKey } from '../../../../../helpers/my';
 import Actions from './Actions';
-import Header from '../../../../Pages/Collection/Header';
 
 const BookmarksItem = ({ bookmark, getSourceById }) => {
   const { id, folder_ids = [] } = bookmark;

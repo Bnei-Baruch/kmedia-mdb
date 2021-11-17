@@ -1,14 +1,15 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { withNamespaces } from 'react-i18next';
-import { Grid, Header, Icon, Input, Label } from 'semantic-ui-react';
+import { Grid, Header, Icon, Input } from 'semantic-ui-react';
 import { useDispatch, useSelector } from 'react-redux';
+
+import { actions as filtersActions, selectors as filters } from '../../../../redux/modules/bookmarkFilter';
+import { selectors as my } from '../../../../redux/modules/my';
 import {
   MY_BOOKMARK_FILTER_FOLDER_ID,
   MY_BOOKMARK_FILTER_QUERY,
   MY_NAMESPACE_FOLDERS
 } from '../../../../helpers/consts';
-import { actions as filtersActions, selectors as filters } from '../../../../redux/modules/bookmarkFilter';
-import { selectors as my } from '../../../../redux/modules/my';
 import { getMyItemKey } from '../../../../helpers/my';
 
 const BookmarkHeader = ({ t }) => {

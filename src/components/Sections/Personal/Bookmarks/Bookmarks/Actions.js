@@ -9,6 +9,7 @@ import BookmarkForm from '../../../../shared/SaveBookmark/BookmarkForm';
 import { selectors as settings } from '../../../../../redux/modules/settings';
 import { getLanguageDirection } from '../../../../../helpers/i18n-utils';
 import { getMyItemKey } from '../../../../../helpers/my';
+import { stopBubbling } from '../../../../../helpers/utils';
 
 const Actions = ({ bookmark, t }) => {
   const [open, setOpen]         = useState();
@@ -21,8 +22,7 @@ const Actions = ({ bookmark, t }) => {
   const { key } = getMyItemKey(MY_NAMESPACE_BOOKMARKS, bookmark);
 
   const removeItem = e => {
-    e.preventDefault();
-    e.stopPropagation();
+    stopBubbling(e);
     dispatch(actions.remove(MY_NAMESPACE_BOOKMARKS, { id: bookmark.id, key }));
   };
 
@@ -40,11 +40,7 @@ const Actions = ({ bookmark, t }) => {
   };
 
   const handleCloseEdit = e => {
-    if (e) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
-
+    stopBubbling(e);
     setOpenEdit(false);
     handleClose();
   };

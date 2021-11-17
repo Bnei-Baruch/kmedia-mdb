@@ -1,7 +1,8 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { withNamespaces } from 'react-i18next';
 import { Button, Container, Divider, Grid, Header, Icon, Input, Label, Modal } from 'semantic-ui-react';
 import { useDispatch, useSelector } from 'react-redux';
+
 import {
   MY_BOOKMARK_FILTER_FOLDER_ID,
   MY_BOOKMARK_FILTER_QUERY,

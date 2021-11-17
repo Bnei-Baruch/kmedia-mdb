@@ -1,16 +1,12 @@
 import React, { useState } from 'react';
 import { withNamespaces } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
 import { Button, Grid, Icon, Input } from 'semantic-ui-react';
+import clsx from 'clsx';
 
 import { actions } from '../../../../../redux/modules/my';
-import {
-  MY_BOOKMARK_FILTER_FOLDER_ID,
-  MY_NAMESPACE_BOOKMARKS,
-  MY_NAMESPACE_FOLDERS
-} from '../../../../../helpers/consts';
 import { actions as filtersActions, selectors as filtersSelectors } from '../../../../../redux/modules/bookmarkFilter';
-import { useDispatch, useSelector } from 'react-redux';
-import clsx from 'clsx';
+import { MY_BOOKMARK_FILTER_FOLDER_ID, MY_NAMESPACE_FOLDERS } from '../../../../../helpers/consts';
 import { getMyItemKey } from '../../../../../helpers/my';
 
 const FolderItem = ({ folder }) => {

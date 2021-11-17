@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Container, Grid, Header, Icon, Input, Segment } from 'semantic-ui-react';
+import { Container, Grid, Segment } from 'semantic-ui-react';
 import clsx from 'clsx';
 
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';

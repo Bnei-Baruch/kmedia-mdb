@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 
 import LibrarySettings from '../../../../Sections/Library/LibrarySettings';
 import BookmarkButton from '../../../../shared/SaveBookmark/BookmarkButton';
-import LibraryBar from '../../../../Sections/Library/LibraryBar';
 
 const UnitBar = ({ fontSize = 0, handleSettings, unit }) => {
 

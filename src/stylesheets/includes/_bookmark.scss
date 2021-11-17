@@ -2,10 +2,12 @@
   .folders_list {
     height: 20VH;
   }
-  .header{
+
+  .header {
     margin: 0.5em 0 0;
   }
-  .segment{
+
+  .segment {
     margin-top: 0;
   }
 }
@@ -39,6 +41,7 @@
   & > .ui.grid > .row {
     padding: 0.5em;
     vertical-align: middle;
+    cursor: pointer;
 
     &.active {
       background: rgba(66, 131, 202, 0.16);
@@ -87,7 +90,7 @@
   }
 }
 
-.bookmark_search_mobile.ui.icon.input>input {
+.bookmark_search_mobile.ui.icon.input > input {
   padding-top: 0.5em;
   padding-bottom: 0.5em;
   border: none;
