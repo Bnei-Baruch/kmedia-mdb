@@ -48,7 +48,7 @@ const Actions = ({ id, t }) => {
 
   return (
     <Dropdown
-      icon={{ name: 'ellipsis vertical', size: 'large', color: 'grey', className: "margin-top-8" }}
+      icon={{ name: 'ellipsis vertical', size: 'large', color: 'grey', className: 'margin-top-8' }}
       onClose={handleClose}
       onOpen={handleOpen}
       open={open}

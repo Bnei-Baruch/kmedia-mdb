@@ -28,7 +28,7 @@ const BookmarkHeaderMobile = ({ t }) => {
   const handleToggle = () => setOpen(!open);
 
 
-  const removeFolderFilter = (e) => {
+  const removeFolderFilter = e => {
     dispatch(filtersActions.deleteFilter(MY_BOOKMARK_FILTER_FOLDER_ID));
     e.stopPropagation();
   };
