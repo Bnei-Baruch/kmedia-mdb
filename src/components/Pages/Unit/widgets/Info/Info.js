@@ -10,7 +10,6 @@ import {
   CT_KTAIM_NIVCHARIM,
   CT_LESSONS_SERIES,
   CT_SPECIAL_LESSON,
-  VERSION_WITH_PERSONALIZATION,
 } from '../../../../../helpers/consts';
 import { canonicalLink } from '../../../../../helpers/links';
 import { cuPartNameByCCUType, intersperse } from '../../../../../helpers/utils';
@@ -19,6 +18,8 @@ import Link from '../../../../Language/MultiLanguageLink';
 import * as shapes from '../../../../shapes';
 import PersonalInfo from './PersonalInfo';
 import { selectors as recommended } from '../../../../../redux/modules/recommended';
+import { isNewVersion } from '../../../../../helpers/url';
+import { useLocation } from 'react-router-dom';
 
 const makeTagLinks = (tags = [], getTagById) =>
   Array.from(intersperse(
@@ -81,11 +82,12 @@ const Info = ({ unit = {}, t, currentCollection = null }) => {
   const { noSSeries, sSeries } = makeCollectionsLinks(collections, t, currentCollection);
   const isMultiLessons         = Object.values(collections).some(col => col.content_type === CT_LESSONS_SERIES || col.content_type === CT_CONGRESS);
   const episodeInfo            = getEpisodeInfo(ct, cIDs, currentCollection || Object.values(collections)[0], filmDate, t);
+  const location               = useLocation();
 
   return (
     <>
       {
-        VERSION_WITH_PERSONALIZATION ?
+        isNewVersion(location) ?
           <PersonalInfo collection={currentCollection} unit={unit} /> :
           <div className="padding-top_1em">
             <div className="padding-top_1em" />

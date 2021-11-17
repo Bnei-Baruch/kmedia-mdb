@@ -97,6 +97,12 @@ const PlaylistMyPage = ({ collection }) => {
     (
       <Grid padded={!isMobileDevice} className="avbox">
         <Grid.Column mobile={16} tablet={computerWidth} computer={computerWidth} className={clsx({ 'is-fitted': isMobileDevice })}>
+          {
+            unit &&
+            <div id="avbox_playlist">
+              <PlaylistHeader collection={collection} />
+            </div>
+          }
           <AVPlaylistPlayer
             items={items}
             selected={selected}
@@ -106,18 +112,11 @@ const PlaylistMyPage = ({ collection }) => {
           />
           {
             unit &&
-            <>
-              {isMobileDevice &&
-              <div id="avbox_playlist">
-                <PlaylistHeader collection={collection} />
-              </div>
-              }
-              <Container className="unit_container">
-                <Helmets.AVUnit unit={unit} language={language} />
-                <Info unit={unit} />
-                <Materials unit={unit} playlistComponent={PlaylistData} />
-              </Container>
-            </>
+            <Container className="unit_container">
+              <Helmets.AVUnit unit={unit} language={language} />
+              <Info unit={unit} />
+              <Materials unit={unit} playlistComponent={PlaylistData} />
+            </Container>
           }
         </Grid.Column>
         {

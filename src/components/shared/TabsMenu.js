@@ -31,7 +31,7 @@ const TabsMenu = ({ items = [], active = '' }) => {
     <div className="unit-materials">
       <Menu tabular secondary pointing color="blue" className="no_print">
         {
-          items.filter(x => !!x).map(item => {
+          items.map(item => {
             const { name, label } = item;
             return (
               <Menu.Item

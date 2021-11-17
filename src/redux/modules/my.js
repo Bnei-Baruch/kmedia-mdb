@@ -2,11 +2,11 @@ import { createAction } from 'redux-actions';
 
 import { handleActions } from './settings';
 import {
+  MY_NAMESPACE_PLAYLISTS,
   MY_NAMESPACE_REACTIONS,
   MY_NAMESPACES
 } from '../../helpers/consts';
 import { getMyItemKey } from '../../helpers/my';
-import MY_REACTIONS_TYPES from 'lodash';
 
 /* Types */
 const SET_PAGE = 'My/SET_PAGE';
@@ -182,17 +182,22 @@ const onAddSuccess = (draft, { namespace, item }) => {
   return draft;
 };
 
-const onEditSuccess = (draft, { namespace, item }) => {
-  const { key }               = getMyItemKey(namespace, item);
-  draft[namespace].byKey[key] = item;
+const onEditSuccess = (draft, { namespace, item, changeItems }) => {
+  const { key } = getMyItemKey(namespace, item);
+  const byKey   = { ...draft[namespace].byKey[key], ...item };
+  if (namespace === MY_NAMESPACE_PLAYLISTS && !changeItems) {
+    byKey.total_items = draft[namespace].byKey[key].total_items;
+    byKey.items = draft[namespace].byKey[key].items;
+  }
+
+  draft[namespace].byKey[key] = byKey;
 
   draft[namespace].wip    = false;
   draft[namespace].errors = false;
   return draft;
 };
 
-const onRemoveSuccess = (draft, { namespace, item }) => {
-  const { key }               = getMyItemKey(namespace, item);
+const onRemoveSuccess = (draft, { namespace, key }) => {
   draft[namespace].keys       = draft[namespace].keys.filter(k => k !== key);
   draft[namespace].byKey[key] = null;
   draft[namespace].deleted    = true;
@@ -211,7 +216,11 @@ const onSetDeleted = (draft, { namespace, deleted }) => {
 };
 
 const onReactionsCountSuccess = (draft, data) => {
-  Object.assign(draft.reactionsCount, data);
+  data.reduce((acc, x) => {
+    const { key } = getMyItemKey(MY_NAMESPACE_REACTIONS, x);
+    acc[key]      = x.total;
+    return acc;
+  }, draft.reactionsCount);
   return draft;
 };
 
@@ -243,7 +252,7 @@ const getErr            = (state, namespace) => state[namespace].errors;
 const getDeleted        = (state, namespace) => state[namespace].deleted;
 const getPageNo         = (state, namespace) => state[namespace].pageNo;
 const getTotal          = (state, namespace) => state[namespace].total;
-const getReactionsCount = (state, kind) => state.reactionsCount?.[kind];
+const getReactionsCount = (state, key) => state.reactionsCount[key];
 
 export const selectors = {
   getList,

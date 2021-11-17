@@ -9,17 +9,19 @@ import { MY_NAMESPACE_PLAYLISTS } from '../../../../helpers/consts';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import PlaylistHeaderMobile from './HeaderMobile';
 import PlaylistHeader from './Header';
+import { getMyItemKey } from '../../../../helpers/my';
 
 const PlaylistHeaderContainer = ({ playlist }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const history            = useHistory();
   const dispatch           = useDispatch();
   const language           = useSelector(state => settings.getLanguage(state.settings));
+  const { key }            = getMyItemKey(MY_NAMESPACE_PLAYLISTS, playlist);
 
   const save = name => dispatch(actions.edit(MY_NAMESPACE_PLAYLISTS, { id: playlist.id, name }));
 
   const confirmSuccess = () => {
-    dispatch(actions.remove(MY_NAMESPACE_PLAYLISTS, { id: playlist.id }));
+    dispatch(actions.remove(MY_NAMESPACE_PLAYLISTS, { id: playlist.id, key }));
     history.push(`/${language}/personal`);
   };
 

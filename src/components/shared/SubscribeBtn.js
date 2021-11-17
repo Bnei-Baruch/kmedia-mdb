@@ -14,6 +14,8 @@ import { actions, selectors as myselector } from '../../redux/modules/my';
 import AlertModal from './AlertModal';
 import NeedToLogin from '../Sections/Personal/NeedToLogin';
 import { getMyItemKey } from '../../helpers/my';
+import { selectors as settings } from '../../redux/modules/settings';
+import { getLanguageDirection } from '../../helpers/i18n-utils';
 
 const SubscribeBtn = ({ unit = {}, t, collection }) => {
   const [alertMsg, setAlertMsg]       = useState();
@@ -33,6 +35,9 @@ const SubscribeBtn = ({ unit = {}, t, collection }) => {
   const { key }   = getMyItemKey(MY_NAMESPACE_SUBSCRIPTIONS, subParams);
   const sub       = useSelector(state => myselector.getItemByKey(state.my, MY_NAMESPACE_SUBSCRIPTIONS, key));
 
+  const language = useSelector(state => settings.getLanguage(state.settings));
+  const dir      = getLanguageDirection(language);
+
   let title;
   if (subsByCO) {
     title = collection?.name;
@@ -44,7 +49,7 @@ const SubscribeBtn = ({ unit = {}, t, collection }) => {
     if (!sub && (subsByType || subsByCO)) {
       dispatch(actions.fetch(MY_NAMESPACE_SUBSCRIPTIONS, { addToList: false, ...subParams }));
     }
-  }, [dispatch, key, sub]);
+  }, [dispatch, key, sub, user]);
 
   const subsUnsubs = s => {
     if (!user)
@@ -66,7 +71,7 @@ const SubscribeBtn = ({ unit = {}, t, collection }) => {
   const handleConfirmCancel = () => setConfirm(false);
 
   const handleConfirmSuccess = () => {
-    dispatch(actions.remove(MY_NAMESPACE_SUBSCRIPTIONS, { id: sub.id }));
+    dispatch(actions.remove(MY_NAMESPACE_SUBSCRIPTIONS, { id: sub.id, key }));
     setConfirm(false);
   };
 
@@ -90,7 +95,10 @@ const SubscribeBtn = ({ unit = {}, t, collection }) => {
         open={confirm}
         onCancel={handleConfirmCancel}
         onConfirm={handleConfirmSuccess}
+        cancelButton={t('buttons.cancel')}
+        confirmButton={t('buttons.apply')}
         content={t('personal.confirmUnsubscribe', { name: title })}
+        dir={dir}
       />
       <Button
         basic

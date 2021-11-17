@@ -22,12 +22,12 @@ const PersonalInfo = ({ unit = {}, t, collection }) => {
     subject_uid: id
   };
 
-  const user           = useSelector(state => selectors.getUser(state.auth));
-  const reactionsCount = useSelector(state => my.getReactionsCount(state.my, MY_REACTION_KINDS.LIKE));
+  const { key } = getMyItemKey(MY_NAMESPACE_REACTIONS, likeParams);
 
-  const { key }  = getMyItemKey(MY_NAMESPACE_REACTIONS, likeParams);
-  const reaction = useSelector(state => my.getItemByKey(state.my, MY_NAMESPACE_REACTIONS, key));
-  const deleted  = useSelector(state => my.getDeleted(state.my, MY_NAMESPACE_REACTIONS));
+  const user           = useSelector(state => selectors.getUser(state.auth));
+  const reactionsCount = useSelector(state => my.getReactionsCount(state.my, key));
+  const reaction       = useSelector(state => my.getItemByKey(state.my, MY_NAMESPACE_REACTIONS, key));
+  const deleted        = useSelector(state => my.getDeleted(state.my, MY_NAMESPACE_REACTIONS));
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -35,7 +35,7 @@ const PersonalInfo = ({ unit = {}, t, collection }) => {
       dispatch(actions.fetch(MY_NAMESPACE_REACTIONS, { addToList: false, ...likeParams }));
     }
 
-    dispatch(actions.reactionsCount({ 'uids': [id] }));
+    dispatch(actions.reactionsCount({ 'uids': [id], type: content_type }));
   }, [dispatch, user, key]);
 
   useEffect(() => {
@@ -48,7 +48,7 @@ const PersonalInfo = ({ unit = {}, t, collection }) => {
     if (!user)
       return setIsNeedLogin(true);
     if (l)
-      dispatch(actions.remove(MY_NAMESPACE_REACTIONS, likeParams));
+      dispatch(actions.remove(MY_NAMESPACE_REACTIONS, { ...likeParams, key }));
     else
       dispatch(actions.add(MY_NAMESPACE_REACTIONS, likeParams));
     return null;

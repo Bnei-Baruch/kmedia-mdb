@@ -7,7 +7,7 @@ import { renderRoutes } from 'react-router-config';
 import { Header, Icon, Menu, Ref, Segment } from 'semantic-ui-react';
 import Headroom from 'react-headroom';
 
-import { ALL_LANGUAGES, VERSION_WITH_PERSONALIZATION } from '../../helpers/consts';
+import { ALL_LANGUAGES } from '../../helpers/consts';
 import playerHelper from '../../helpers/player';
 import { selectors as settings } from '../../redux/modules/settings';
 import * as shapes from '../shapes';
@@ -22,6 +22,7 @@ import DonateNow, { VirtualHomeButton } from './DonateNow';
 import Logo from '../../images/icons/Logo';
 import { ClientChroniclesContext, DeviceInfoContext } from '../../helpers/app-contexts';
 import Login from './Login';
+import { isNewVersion } from '../../helpers/url';
 
 const WrappedOmniBoxWithChronicles = ({ location }) => {
   const chronicles = useContext(ClientChroniclesContext);
@@ -228,7 +229,7 @@ class Layout extends Component {
                     <VirtualHomeButton language={language} />
                   </Menu.Item>
                   <Menu.Item position="right">
-                    {VERSION_WITH_PERSONALIZATION && <Login language={language} />}
+                    {isNewVersion(location) && <Login language={language} />}
                   </Menu.Item>
                   <TopMost />
                 </Menu.Menu>

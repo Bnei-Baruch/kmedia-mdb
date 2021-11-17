@@ -4,31 +4,29 @@ import { useDispatch } from 'react-redux';
 import { Dropdown } from 'semantic-ui-react';
 
 import { actions } from '../../../../redux/modules/my';
-import { MY_NAMESPACE_HISTORY } from '../../../../helpers/consts';
+import { MY_NAMESPACE_HISTORY, MY_NAMESPACE_SUBSCRIPTIONS } from '../../../../helpers/consts';
 import PlaylistInfo from '../../../Pages/Unit/widgets/Info/PlaylistInfo';
+import { getMyItemKey } from '../../../../helpers/my';
+import { stopBubbling } from '../../../../helpers/utils';
 
-const Actions = ({ cuId, id, t }) => {
-  const [open, setOpen] = useState();
-  const dispatch        = useDispatch();
+const Actions = ({ history, t }) => {
+  const [open, setOpen]          = useState();
+  const dispatch                 = useDispatch();
+  const { id, content_unit_uid } = history;
+  const { key }                  = getMyItemKey(MY_NAMESPACE_HISTORY, history);
 
   const removeItem = e => {
-    e.preventDefault();
-    e.stopPropagation();
-    dispatch(actions.remove(MY_NAMESPACE_HISTORY, { id }));
+    stopBubbling(e);
+    dispatch(actions.remove(MY_NAMESPACE_HISTORY, { id, key }));
   };
 
   const handleOpen = e => {
-    e.preventDefault();
-    e.stopPropagation();
+    stopBubbling(e);
     setOpen(true);
   };
 
   const handleClose = e => {
-    if (e) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
-
+    stopBubbling(e);
     setOpen(false);
   };
 
@@ -36,7 +34,7 @@ const Actions = ({ cuId, id, t }) => {
     <Dropdown className="cu_item_dropdown" icon={'ellipsis vertical'} onClose={handleClose} onOpen={handleOpen} open={open}>
       <Dropdown.Menu direction="left">
         <Dropdown.Item fitted="horizontally">
-          <PlaylistInfo cuID={cuId} t={t} handleClose={handleClose} />
+          <PlaylistInfo cuID={content_unit_uid} t={t} handleClose={handleClose} />
         </Dropdown.Item>
         <Dropdown.Item
           fitted="vertically"
