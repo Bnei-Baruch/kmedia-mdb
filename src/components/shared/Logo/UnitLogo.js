@@ -27,7 +27,7 @@ const makeImaginary = (cuId, cId, width, height) => {
       url: assetUrl(`logos/collections/${cId}.jpg`),
       width,
       height,
-      stripmeta: true
+      stripmeta: true,
     });
   }
 
