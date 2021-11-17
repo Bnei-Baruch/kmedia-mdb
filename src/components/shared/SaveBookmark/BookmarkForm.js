@@ -24,10 +24,11 @@ const BookmarkForm = ({ t, onClose, source, bookmarkId }) => {
   const [name, setName]             = useState();
   const [selected, setSelected]     = useState(null);
   const [editFolder, setEditFolder] = useState(false);
+  const [query, setQuery]           = useState();
 
   const { key }  = getMyItemKey(MY_NAMESPACE_BOOKMARKS, { id: bookmarkId });
   const bookmark = useSelector(state => selectors.getItemByKey(state.my, MY_NAMESPACE_BOOKMARKS, key));
-  const items    = useSelector(state => selectors.getList(state.my, MY_NAMESPACE_FOLDERS)).sort((a, b) => b.id - a.id);
+  const items    = useSelector(state => selectors.getList(state.my, MY_NAMESPACE_FOLDERS)).filter(x => !query || x.name.toLowerCase().includes(query));
   const saved    = items.filter(f => bookmark?.folder_ids?.includes(f.id)).map(f => f.id);
 
   const dispatch = useDispatch();
@@ -86,14 +87,7 @@ const BookmarkForm = ({ t, onClose, source, bookmarkId }) => {
     setEditFolder(false);
   };
 
-  const handleSearchChange = (e, { value }) => {
-    const params = { 'order_by': 'id DESC' };
-    if (value.length > 0) {
-      params.query = value;
-    }
-
-    dispatch(actions.fetch(MY_NAMESPACE_FOLDERS, params));
-  };
+  const handleSearchChange = (e, { value }) => setQuery(value.toLowerCase());
 
   const renderFolder = f => (
     <List.Item key={f.id}>

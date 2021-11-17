@@ -11,20 +11,21 @@ import { DeviceInfoContext } from '../../../../../helpers/app-contexts';
 
 const FolderList = ({ t, close }) => {
   const [editFolder, setEditFolder] = useState(false);
+  const [query, setQuery]           = useState();
 
-  const query = useSelector(state => filtersSelectors.getByKey(state.bookmarkFilter, MY_BOOKMARK_FILTER_FOLDER_QUERY));
-  const items = useSelector(state => selectors.getList(state.my, MY_NAMESPACE_FOLDERS));
+  const items = useSelector(state => selectors.getList(state.my, MY_NAMESPACE_FOLDERS)).filter(x => !query || x.name.toLowerCase().includes(query));
 
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(actions.fetch(MY_NAMESPACE_FOLDERS, { 'order_by': 'id DESC', query }));
-  }, [query]);
+    if (items.length === 0)
+      dispatch(actions.fetch(MY_NAMESPACE_FOLDERS, { 'order_by': 'id DESC' }));
+  }, []);
 
   const handleNewFolder = () => {
     setEditFolder(true);
-    dispatch(filtersActions.deleteFilter(MY_BOOKMARK_FILTER_FOLDER_QUERY));
+    setQuery('');
   };
 
   const handleSaveFolder = e => {
@@ -32,7 +33,7 @@ const FolderList = ({ t, close }) => {
     setEditFolder(false);
   };
 
-  const handleSearchChange = (e, { value }) => dispatch(filtersActions.addFilter(MY_BOOKMARK_FILTER_FOLDER_QUERY, value));
+  const handleSearchChange = (e, { value }) => setQuery(value.toLowerCase());
 
   return (
     <Grid.Column mobile={16} tablet={4} computer={4}>
