@@ -8,8 +8,9 @@ import { MY_NAMESPACE_BOOKMARKS } from '../../../../../helpers/consts';
 import BookmarkForm from '../../../../shared/SaveBookmark/BookmarkForm';
 import { selectors as settings } from '../../../../../redux/modules/settings';
 import { getLanguageDirection } from '../../../../../helpers/i18n-utils';
+import { getMyItemKey } from '../../../../../helpers/my';
 
-const Actions = ({ id, t }) => {
+const Actions = ({ bookmark, t }) => {
   const [open, setOpen]         = useState();
   const [openEdit, setOpenEdit] = useState();
   const dispatch                = useDispatch();
@@ -17,10 +18,12 @@ const Actions = ({ id, t }) => {
   const language = useSelector(state => settings.getLanguage(state.settings));
   const dir      = getLanguageDirection(language);
 
+  const { key } = getMyItemKey(MY_NAMESPACE_BOOKMARKS, bookmark);
+
   const removeItem = e => {
     e.preventDefault();
     e.stopPropagation();
-    dispatch(actions.remove(MY_NAMESPACE_BOOKMARKS, { id }));
+    dispatch(actions.remove(MY_NAMESPACE_BOOKMARKS, { id: bookmark.id, key }));
   };
 
   const handleOpen = () => setOpen(true);
@@ -69,7 +72,7 @@ const Actions = ({ id, t }) => {
           dir={dir}
         >
           <Modal.Header content={t('personal.bookmark.editBookmark')} />
-          <BookmarkForm onClose={handleCloseEdit} bookmarkId={id} />
+          <BookmarkForm onClose={handleCloseEdit} bookmarkId={bookmark.id} />
         </Modal>
         <Dropdown.Item
           fitted="vertically"

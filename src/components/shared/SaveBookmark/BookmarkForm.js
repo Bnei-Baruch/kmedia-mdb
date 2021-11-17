@@ -89,7 +89,7 @@ const BookmarkForm = ({ t, onClose, source, bookmarkId }) => {
   const handleSearchChange = (e, { value }) => {
     const params = { 'order_by': 'id DESC' };
     if (value.length > 0) {
-      params.query = value.toLowerCase();
+      params.query = value;
     }
 
     dispatch(actions.fetch(MY_NAMESPACE_FOLDERS, params));

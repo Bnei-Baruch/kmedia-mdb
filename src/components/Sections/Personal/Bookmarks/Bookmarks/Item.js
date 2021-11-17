@@ -63,7 +63,7 @@ const BookmarksItem = ({ bookmark, getSourceById }) => {
         </List.Description>
       </List.Content>
       <List.Icon verticalAlign="top">
-        <Actions id={id} />
+        <Actions bookmark={bookmark} />
       </List.Icon>
     </List.Item>
   );

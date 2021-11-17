@@ -23,7 +23,7 @@ const BookmarkHeaderMobile = ({ t }) => {
 
   const dispatch = useDispatch();
 
-  const handleSearch = query => dispatch(filtersActions.addFilter(MY_BOOKMARK_FILTER_QUERY, query.toLowerCase()));
+  const handleSearch = query => dispatch(filtersActions.addFilter(MY_BOOKMARK_FILTER_QUERY, query));
 
   const handleToggle = () => setOpen(!open);
 

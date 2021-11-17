@@ -3,16 +3,22 @@ import { withNamespaces } from 'react-i18next';
 import { Button, Grid, Icon, Input } from 'semantic-ui-react';
 
 import { actions } from '../../../../../redux/modules/my';
-import { MY_BOOKMARK_FILTER_FOLDER_ID, MY_NAMESPACE_FOLDERS } from '../../../../../helpers/consts';
+import {
+  MY_BOOKMARK_FILTER_FOLDER_ID,
+  MY_NAMESPACE_BOOKMARKS,
+  MY_NAMESPACE_FOLDERS
+} from '../../../../../helpers/consts';
 import { actions as filtersActions, selectors as filtersSelectors } from '../../../../../redux/modules/bookmarkFilter';
 import { useDispatch, useSelector } from 'react-redux';
 import clsx from 'clsx';
+import { getMyItemKey } from '../../../../../helpers/my';
 
 const FolderItem = ({ folder }) => {
   const [edit, setEdit] = useState();
   const [name, setName] = useState();
 
-  const { id } = folder;
+  const { id }  = folder;
+  const { key } = getMyItemKey(MY_NAMESPACE_FOLDERS, folder);
 
   const selectedId = useSelector(state => filtersSelectors.getByKey(state.bookmarkFilter, MY_BOOKMARK_FILTER_FOLDER_ID));
   const isAll      = id === 'all';
@@ -34,7 +40,7 @@ const FolderItem = ({ folder }) => {
     setEdit(false);
   };
 
-  const handleRemoveFolder = () => dispatch(actions.remove(MY_NAMESPACE_FOLDERS, { id }));
+  const handleRemoveFolder = () => dispatch(actions.remove(MY_NAMESPACE_FOLDERS, { id, key }));
 
   const rowProps = { key: id, className: 'flex_nowrap' };
   if (isSelect)
