@@ -10,6 +10,9 @@ export const getMyItemKey = (namespace, item) => {
   if (!item) return { key, item };
 
   switch (namespace) {
+    case MY_NAMESPACE_HISTORY:
+      key = item.id;
+      break;
     case MY_NAMESPACE_REACTIONS:
       const { kind, subject_type, subject_uid } = item;
 
