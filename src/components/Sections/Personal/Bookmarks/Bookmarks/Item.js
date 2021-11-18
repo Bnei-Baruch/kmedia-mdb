@@ -62,7 +62,7 @@ const BookmarksItem = ({ bookmark, getPathByID, t }) => {
   };
 
   const title = buildTitle();
-  const icon  = iconByContentTypeMap.get(cu.content_type);
+  const icon  = iconByContentTypeMap.get(cu?.content_type);
   return (
     <List.Item className="bookmark_item">
       <List.Icon>

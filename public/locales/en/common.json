@@ -707,7 +707,8 @@
       "filterByFolder": "Search in",
       "filterByQuery": "Bookmarks with name",
       "bookmarkUpdated": "Bookmarks was updated",
-      "bookmarkCreated": "Bookmarks was created"
+      "bookmarkCreated": "Bookmarks was created",
+      "confirmRemoveBookmark": "Are you sure you want to delete bookmark {{name}}?"
     }
   }
 }

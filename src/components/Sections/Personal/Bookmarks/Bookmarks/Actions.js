@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { withNamespaces } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { Dropdown, Modal } from 'semantic-ui-react';
+import { Card, Confirm, Dropdown, Modal } from 'semantic-ui-react';
 
 import { actions } from '../../../../../redux/modules/my';
-import { MY_NAMESPACE_BOOKMARKS } from '../../../../../helpers/consts';
+import { MY_NAMESPACE_BOOKMARKS, MY_NAMESPACE_SUBSCRIPTIONS } from '../../../../../helpers/consts';
 import BookmarkForm from '../../../../shared/SaveBookmark/BookmarkForm';
 import { selectors as settings } from '../../../../../redux/modules/settings';
 import { getLanguageDirection } from '../../../../../helpers/i18n-utils';
@@ -16,6 +16,7 @@ const Actions = ({ bookmark, t }) => {
   const [open, setOpen]         = useState();
   const [openEdit, setOpenEdit] = useState();
   const [alertMsg, setAlertMsg] = useState();
+  const [confirm, setConfirm]   = useState();
 
   const dispatch = useDispatch();
 
@@ -26,7 +27,7 @@ const Actions = ({ bookmark, t }) => {
 
   const removeItem = e => {
     stopBubbling(e);
-    dispatch(actions.remove(MY_NAMESPACE_BOOKMARKS, { id: bookmark.id, key }));
+    setConfirm(true);
   };
 
   const handleOpen = () => setOpen(true);
@@ -34,11 +35,7 @@ const Actions = ({ bookmark, t }) => {
   const handleClose = () => setOpen(false);
 
   const handleOpenEdit = e => {
-    if (e) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
-
+    stopBubbling(e);
     setOpenEdit(true);
   };
 
@@ -51,9 +48,26 @@ const Actions = ({ bookmark, t }) => {
 
   const handleAlertClose = () => setAlertMsg(null);
 
+  const handleConfirmCancel = () => setConfirm(false);
+
+  const handleConfirmSuccess = () => {
+    dispatch(actions.remove(MY_NAMESPACE_BOOKMARKS, { id: bookmark.id, key }));
+    setConfirm(false);
+  };
+
   return (
     <>
       <AlertModal message={alertMsg} open={!!alertMsg} onClose={handleAlertClose} />
+      <Confirm
+        size="tiny"
+        open={confirm}
+        onCancel={handleConfirmCancel}
+        onConfirm={handleConfirmSuccess}
+        cancelButton={t('buttons.cancel')}
+        confirmButton={t('buttons.apply')}
+        content={t('personal.bookmark.confirmRemoveBookmark', { name: bookmark.name })}
+        dir={dir}
+      />
       <Dropdown
         icon={{ name: 'ellipsis vertical', size: 'large', color: 'grey', className: 'margin-top-8' }}
         onClose={handleClose}
