@@ -27,6 +27,12 @@ const FolderList = ({ t, close }) => {
     setQuery('');
   };
 
+  const handleKeyDown = e => {
+    if (e.key === 'Enter') {
+      handleSaveFolder(e);
+    }
+  };
+
   const handleSaveFolder = e => {
     dispatch(actions.add(MY_NAMESPACE_FOLDERS, { name: e.target.value || t('personal.bookmark.newFolderName') }));
     setEditFolder(false);
@@ -36,7 +42,7 @@ const FolderList = ({ t, close }) => {
 
   return (
     <Grid.Column mobile={16} tablet={4} computer={4}>
-      <Segment className="bookmark_page">
+      <Segment>
         <Grid verticalAlign="middle" className="folders padded">
           <Grid.Column width="7">
             <Header as="h3" content={t('personal.bookmark.folders')} />
@@ -57,15 +63,16 @@ const FolderList = ({ t, close }) => {
         </Grid>
         <Container className="folders_list padded">
           <Grid className="no-padding">
-            <FolderItem folder={{ id: 'all', name: t('personal.bookmark.allFolders') }} />
+            <FolderItem folder={{ id: 'all', name: t('personal.bookmark.allFolders') }} key={'all'} />
             {
               editFolder && (
-                <Grid.Row>
+                <Grid.Row key={'newFolderName'}>
                   <Grid.Column>
                     <Input
                       focus
                       fluid
                       onBlur={handleSaveFolder}
+                      onKeyDown={handleKeyDown}
                       autoFocus
                       onFocus={e => {
                         e.target.value = t('personal.bookmark.newFolderName');
@@ -77,7 +84,7 @@ const FolderList = ({ t, close }) => {
               )
             }
             {
-              items.map(f => <FolderItem folder={f} />)
+              items.map(f => <FolderItem folder={f} key={f.id} />)
             }
           </Grid>
         </Container>

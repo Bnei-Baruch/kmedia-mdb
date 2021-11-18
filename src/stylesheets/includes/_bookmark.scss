@@ -18,6 +18,8 @@
 }
 
 .bookmark_page {
+  min-height: 60VH;
+
   .folders {
     border-bottom: 1px solid $midWhite;
 
@@ -29,7 +31,6 @@
       width: 100%;
     }
   }
-
 }
 
 .bookmark_header {
@@ -48,13 +49,34 @@
     margin: 8px 0;
   }
 
+  .ui.grid > .row > .column.folder_actions {
+    display: none;
+
+    &:hover, .active > & {
+
+    }
+  }
+
   & > .ui.grid > .row {
     padding: 0.5em;
     vertical-align: middle;
     cursor: pointer;
+    min-height: 45px;
+
+    .column.folder_actions {
+      display: none;
+    }
+
+    &:hover > .column.folder_actions {
+      display: inline-block;
+    }
 
     &.active {
       background: rgba(66, 131, 202, 0.16);
+
+      .column.folder_actions {
+        display: inline-block;
+      }
     }
 
     .column {

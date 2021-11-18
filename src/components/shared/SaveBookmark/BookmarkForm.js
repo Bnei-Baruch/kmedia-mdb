@@ -84,6 +84,12 @@ const BookmarkForm = ({ t, onClose, source, bookmarkId, data }) => {
     handleSearchChange(null, { value: '' });
   };
 
+  const handleKeyDown = e => {
+    if (e.key === 'Enter') {
+      handleSaveFolder(e);
+    }
+  };
+
   const handleSaveFolder = e => {
     dispatch(actions.add(MY_NAMESPACE_FOLDERS, { name: e.target.value }));
     setEditFolder(false);
@@ -133,6 +139,7 @@ const BookmarkForm = ({ t, onClose, source, bookmarkId, data }) => {
                 <Input
                   focus
                   onBlur={handleSaveFolder}
+                  onKeyDown={handleKeyDown}
                   autoFocus
                   onFocus={e => {
                     e.target.value = t('personal.bookmark.newFolderName');

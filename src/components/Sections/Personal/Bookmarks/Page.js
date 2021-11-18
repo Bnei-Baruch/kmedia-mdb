@@ -17,7 +17,7 @@ const Page = ({ t }) => {
   if (needToLogin) return needToLogin;
 
   return (
-    <Container fluid className="padded">
+    <Container fluid className="padded bookmark_page">
       {isMobileDevice && <BookmarkHeaderMobile />}
       <Grid className="no-padding">
         {!isMobileDevice && <BookmarkHeader />}

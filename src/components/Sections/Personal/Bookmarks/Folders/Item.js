@@ -8,6 +8,7 @@ import { actions } from '../../../../../redux/modules/my';
 import { actions as filtersActions, selectors as filtersSelectors } from '../../../../../redux/modules/bookmarkFilter';
 import { MY_BOOKMARK_FILTER_FOLDER_ID, MY_NAMESPACE_FOLDERS } from '../../../../../helpers/consts';
 import { getMyItemKey } from '../../../../../helpers/my';
+import { stopBubbling } from '../../../../../helpers/utils';
 
 const FolderItem = ({ folder }) => {
   const [edit, setEdit] = useState();
@@ -29,9 +30,19 @@ const FolderItem = ({ folder }) => {
     setName(folder.name);
   };
 
-  const handleChangeName = (e, { value }) => setName(value);
+  const handleChangeName = (e, { value }) => {
+    stopBubbling(e);
+    setName(value);
+  };
 
-  const handleUpdateFolder = () => {
+  const handleKeyDown = e => {
+    if (e.key === 'Enter') {
+      handleUpdateFolder();
+    }
+  };
+
+  const handleUpdateFolder = e => {
+    stopBubbling(e);
     dispatch(actions.edit(MY_NAMESPACE_FOLDERS, { id, name }));
     setEdit(false);
   };
@@ -58,6 +69,8 @@ const FolderItem = ({ folder }) => {
             <Input
               autoSelect
               onChange={handleChangeName}
+              onClick={stopBubbling}
+              onKeyDown={handleKeyDown}
               onFocus={e => e.target.select()}
               defaultValue={folder.name}
               fluid
@@ -67,7 +80,13 @@ const FolderItem = ({ folder }) => {
       </Grid.Column>
       {
         isAll ? null : (
-          <Grid.Column mobile={5} tablet={7} computer={6} textAlign={'right'}>
+          <Grid.Column
+            mobile={5}
+            tablet={7}
+            computer={6}
+            textAlign={'right'}
+            className={clsx({ 'folder_actions': !edit })}
+          >
             {
               edit ?
                 (
