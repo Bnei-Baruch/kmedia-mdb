@@ -12,7 +12,7 @@ import {
 } from '../../../../../helpers/consts';
 import WipErr from '../../../../shared/WipErr/WipErr';
 import NeedToLogin from '../../NeedToLogin';
-import { List } from 'semantic-ui-react';
+import { Header, List } from 'semantic-ui-react';
 import BookmarksItem from './Item';
 
 const BookmarkList = ({ t }) => {
@@ -41,14 +41,23 @@ const BookmarkList = ({ t }) => {
   const wipErr = WipErr({ wip, err, t });
   if (wipErr) return wipErr;
 
+  if (items.length === 0) {
+    let msg = t('personal.bookmark.haveNo');
+    if (query)
+      msg = t('personal.bookmark.notFoundAny');
+    else if (folder_id)
+      msg = t('personal.bookmark.haveNoInFolder');
+    return <Header as="h2" content={msg} textAlign="center" />;
+  }
+
   return (
     <List divided relaxed celled>
       {
         items.map(x => <BookmarksItem
-          bookmark={x}
-          getPathByID={getPathByID}
-          key={`${MY_NAMESPACE_BOOKMARKS}_${x.id}`}
-        />
+            bookmark={x}
+            getPathByID={getPathByID}
+            key={`${MY_NAMESPACE_BOOKMARKS}_${x.id}`}
+          />
         )
       }
     </List>
