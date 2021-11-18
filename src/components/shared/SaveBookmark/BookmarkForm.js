@@ -20,7 +20,7 @@ import { MY_NAMESPACE_BOOKMARKS, MY_NAMESPACE_FOLDERS } from '../../../helpers/c
 import { frownSplashNotFound } from '../WipErr/WipErr';
 import { getMyItemKey } from '../../../helpers/my';
 
-const BookmarkForm = ({ t, onClose, source, bookmarkId }) => {
+const BookmarkForm = ({ t, onClose, source, bookmarkId, data }) => {
   const [name, setName]             = useState();
   const [selected, setSelected]     = useState(null);
   const [editFolder, setEditFolder] = useState(false);
@@ -59,6 +59,8 @@ const BookmarkForm = ({ t, onClose, source, bookmarkId }) => {
 
     if (selected.length > 0)
       params.folder_ids = selected;
+    if (data)
+      params.data = data;
 
     dispatch(actions.add(MY_NAMESPACE_BOOKMARKS, params));
     onClose();
@@ -101,21 +103,18 @@ const BookmarkForm = ({ t, onClose, source, bookmarkId }) => {
 
   return (
     <>
-      <ModalContent className="padded bookmark_modal">
-        <Grid verticalAlign="middle">
-          <Grid.Column key={1} width={3}>
-            <Header as="h4" content={t('personal.bookmark.name')} />
-          </Grid.Column>
-          <Grid.Column key={2} width={13}>
-            <Input
-              fluid
-              focus={true}
-              onChange={changeName}
-              defaultValue={name}
-              autoFocus
-            />
-          </Grid.Column>
-        </Grid>
+      <ModalContent className="padded">
+        <div>
+          <Header as="h4" content={t('personal.bookmark.name')} className="display-iblock" />
+          <Input
+            focus={true}
+            onChange={changeName}
+            defaultValue={name}
+            autoFocus
+            className="margin-left-8 margin-right-8"
+            style={{ width: '70%' }}
+          />
+        </div>
         <Header as="h3" content={t('personal.bookmark.folders')} />
         <Segment>
           <Input

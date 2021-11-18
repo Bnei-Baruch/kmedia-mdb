@@ -10,7 +10,7 @@ import { useSelector } from 'react-redux';
 import { selectors as settings } from '../../../redux/modules/settings';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 
-const BookmarkButton = ({ t, source }) => {
+const BookmarkButton = ({ t, source, data }) => {
   const [open, setOpen] = useState();
   const needToLogin     = NeedToLogin({ t });
 
@@ -33,12 +33,13 @@ const BookmarkButton = ({ t, source }) => {
       }
       open={open}
       onClose={handleClose}
-      size={!isMobileDevice ? 'tiny': 'fullscreen'}
+      size={!isMobileDevice ? 'tiny' : 'fullscreen'}
       dir={dir}
+      className="bookmark_modal"
     >
       <Modal.Header content={t('personal.bookmark.saveBookmark')} />
       {
-        !needToLogin ? <BookmarkForm onClose={handleClose} source={source} /> : <Modal.Content content={needToLogin} />
+        !needToLogin ? <BookmarkForm onClose={handleClose} source={source} data={data} /> : <Modal.Content content={needToLogin} />
       }
     </Modal>
   );

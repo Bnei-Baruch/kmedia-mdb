@@ -66,6 +66,7 @@ const Actions = ({ bookmark, t }) => {
           onClose={handleCloseEdit}
           size="tiny"
           dir={dir}
+          className="bookmark_modal"
         >
           <Modal.Header content={t('personal.bookmark.editBookmark')} />
           <BookmarkForm onClose={handleCloseEdit} bookmarkId={bookmark.id} />

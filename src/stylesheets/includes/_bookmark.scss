@@ -1,4 +1,9 @@
-.bookmark_modal {
+.bookmark_modal.ui.modal {
+  & > .header, & > .actions {
+    border: none !important;
+    background: none;
+  }
+
   .folders_list {
     height: 20VH;
   }
@@ -19,7 +24,12 @@
     &.ui.grid > .column {
       padding: 0;
     }
+
+    .bookmark_search {
+      width: 100%;
+    }
   }
+
 }
 
 .bookmark_header {
@@ -54,7 +64,7 @@
 }
 
 .bookmark_search {
-  width: 100%;
+  //width: 100%;
 
   &.ui.input > input {
     border-width: 0 0 1px 0;

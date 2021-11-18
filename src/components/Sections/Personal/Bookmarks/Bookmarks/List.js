@@ -16,12 +16,12 @@ import { List } from 'semantic-ui-react';
 import BookmarksItem from './Item';
 
 const BookmarkList = ({ t }) => {
-  const items         = useSelector(state => selectors.getList(state.my, MY_NAMESPACE_BOOKMARKS));
-  const wip           = useSelector(state => selectors.getWIP(state.my, MY_NAMESPACE_BOOKMARKS));
-  const err           = useSelector(state => selectors.getErr(state.my, MY_NAMESPACE_BOOKMARKS));
-  const folder_id     = useSelector(state => filters.getByKey(state.bookmarkFilter, MY_BOOKMARK_FILTER_FOLDER_ID));
-  const query         = useSelector(state => filters.getByKey(state.bookmarkFilter, MY_BOOKMARK_FILTER_QUERY));
-  const getSourceById = useSelector(state => sources.getSourceById(state.sources), shallowEqual);
+  const items       = useSelector(state => selectors.getList(state.my, MY_NAMESPACE_BOOKMARKS));
+  const wip         = useSelector(state => selectors.getWIP(state.my, MY_NAMESPACE_BOOKMARKS));
+  const err         = useSelector(state => selectors.getErr(state.my, MY_NAMESPACE_BOOKMARKS));
+  const folder_id   = useSelector(state => filters.getByKey(state.bookmarkFilter, MY_BOOKMARK_FILTER_FOLDER_ID));
+  const query       = useSelector(state => filters.getByKey(state.bookmarkFilter, MY_BOOKMARK_FILTER_QUERY));
+  const getPathByID = useSelector(state => sources.getPathByID(state.sources));
 
   const dispatch = useDispatch();
 
@@ -45,10 +45,10 @@ const BookmarkList = ({ t }) => {
     <List divided relaxed celled>
       {
         items.map(x => <BookmarksItem
-          bookmark={x}
-          getSourceById={getSourceById}
-          key={`${MY_NAMESPACE_BOOKMARKS}_${x.id}`}
-        />
+            bookmark={x}
+            getPathByID={getPathByID}
+            key={`${MY_NAMESPACE_BOOKMARKS}_${x.id}`}
+          />
         )
       }
     </List>

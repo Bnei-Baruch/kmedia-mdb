@@ -198,7 +198,7 @@ class Transcription extends Component {
   handleSettings = settings => this.setState({ settings });
 
   render() {
-    const { doc2htmlById, t, type, unit }                 = this.props;
+    const { doc2htmlById, t, type, unit, activeTab }      = this.props;
     const { selectedFile, languages, language, settings } = this.state;
     const { isMobileDevice }                              = this.context;
 
@@ -258,6 +258,7 @@ class Transcription extends Component {
                 handleSettings={this.handleSettings}
                 fontSize={fontSize}
                 unit={unit}
+                bookmarkData={{ activeTab }}
               />
             </Menu.Item>
           </Menu>

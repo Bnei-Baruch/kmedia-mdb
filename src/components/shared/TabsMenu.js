@@ -1,7 +1,7 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useLocation } from 'react-router-dom';
-import { Menu } from 'semantic-ui-react';
+import { Menu, Ref } from 'semantic-ui-react';
 
 import { getQuery } from '../../helpers/url';
 
@@ -16,37 +16,50 @@ const activeFromLocation = location => {
 const activeFromDefault = items => (items.length > 0 ? items[0].name : null);
 
 const TabsMenu = ({ items = [], active = '' }) => {
-  const location = useLocation();
+  const location       = useLocation();
+  const activeLocation = activeFromLocation(location);
 
   const computedActive = active
-    || activeFromLocation(location)
+    || activeLocation
     || activeFromDefault(items);
 
   const [internalActive, setInternalActive] = useState(computedActive);
   const handleActiveChange                  = useCallback((e, { name }) => setInternalActive(name), []);
 
+  const scrollRef = useRef();
+
   const activeItem = items.find(x => x.name === internalActive);
+
+  useEffect(() => {
+    if (activeLocation && scrollRef.current?.scrollIntoView) {
+      setTimeout(() => {
+        scrollRef.current && scrollRef.current.scrollIntoView();
+      }, 150);
+    }
+  }, [scrollRef?.current]);
 
   return (
     <div className="unit-materials">
-      <Menu tabular secondary pointing color="blue" className="no_print">
-        {
-          items.map(item => {
-            const { name, label } = item;
-            return (
-              <Menu.Item
-                key={name}
-                name={name}
-                className={`tab-${name}`}
-                active={internalActive === name}
-                onClick={handleActiveChange}
-              >
-                {label}
-              </Menu.Item>
-            );
-          })
-        }
-      </Menu>
+      <Ref innerRef={scrollRef}>
+        <Menu tabular secondary pointing color="blue" className="no_print">
+          {
+            items.map(item => {
+              const { name, label } = item;
+              return (
+                <Menu.Item
+                  key={name}
+                  name={name}
+                  className={`tab-${name}`}
+                  active={internalActive === name}
+                  onClick={handleActiveChange}
+                >
+                  {label}
+                </Menu.Item>
+              );
+            })
+          }
+        </Menu>
+      </Ref>
       {activeItem ? activeItem.component : null}
     </div>
   );
