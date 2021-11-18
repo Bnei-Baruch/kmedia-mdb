@@ -50,6 +50,7 @@ const BookmarksItem = ({ bookmark, getPathByID, t }) => {
       const articleName = path.splice(-1);
       return `${articleName} ${path.join('. ')}`;
     }
+
     if (content_type === CT_LIKUTIM) {
       return name;
     }
