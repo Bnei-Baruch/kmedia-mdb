@@ -20,6 +20,10 @@
 .bookmark_page {
   min-height: 60VH;
 
+  & > .ui.grid > .row > .column > .segment {
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
+  }
+
   .folders {
     border-bottom: 1px solid $midWhite;
 
