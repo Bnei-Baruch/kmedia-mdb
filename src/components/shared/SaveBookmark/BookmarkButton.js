@@ -9,39 +9,50 @@ import BookmarkForm from './BookmarkForm';
 import { useSelector } from 'react-redux';
 import { selectors as settings } from '../../../redux/modules/settings';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
+import AlertModal from '../AlertModal';
 
 const BookmarkButton = ({ t, source, data }) => {
-  const [open, setOpen] = useState();
-  const needToLogin     = NeedToLogin({ t });
+  const [open, setOpen]         = useState();
+  const [alertMsg, setAlertMsg] = useState();
+  const needToLogin             = NeedToLogin({ t });
 
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const language           = useSelector(state => settings.getLanguage(state.settings));
   const dir                = getLanguageDirection(language);
 
   const handleOpen  = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleClose = (e, el, isCreated) => {
+    isCreated && setAlertMsg(t('personal.bookmark.bookmarkCreated'));
+    setOpen(false);
+  };
+
+  const handleAlertClose = () => setAlertMsg(null);
 
   return (
-    <Modal
-      trigger={
-        <Button
-          compact
-          size="small"
-          icon="bookmark outline"
-          onClick={handleOpen}
-        />
-      }
-      open={open}
-      onClose={handleClose}
-      size={!isMobileDevice ? 'tiny' : 'fullscreen'}
-      dir={dir}
-      className="bookmark_modal"
-    >
-      <Modal.Header content={t('personal.bookmark.saveBookmark')} />
-      {
-        !needToLogin ? <BookmarkForm onClose={handleClose} source={source} data={data} /> : <Modal.Content content={needToLogin} />
-      }
-    </Modal>
+    <>
+      <AlertModal message={alertMsg} open={!!alertMsg} onClose={handleAlertClose} />
+      <Modal
+        trigger={
+          <Button
+            compact
+            size="small"
+            icon="bookmark outline"
+            onClick={handleOpen}
+          />
+        }
+        open={open}
+        onClose={handleClose}
+        size={!isMobileDevice ? 'tiny' : 'fullscreen'}
+        dir={dir}
+        className="bookmark_modal"
+      >
+        <Modal.Header content={t('personal.bookmark.saveBookmark')} />
+        {
+          !needToLogin ? <BookmarkForm onClose={handleClose} source={source} data={data} /> :
+            <Modal.Content content={needToLogin} />
+        }
+      </Modal>
+    </>
   );
 };
 

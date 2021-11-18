@@ -63,12 +63,12 @@ const BookmarkForm = ({ t, onClose, source, bookmarkId, data }) => {
       params.data = data;
 
     dispatch(actions.add(MY_NAMESPACE_BOOKMARKS, params));
-    onClose();
+    onClose(null, null, true);
   };
 
   const update = () => {
     dispatch(actions.edit(MY_NAMESPACE_BOOKMARKS, { id: bookmarkId, name, folder_ids: selected }));
-    onClose();
+    onClose(null, null, true);
   };
 
   const handleChange = (checked, id) => {

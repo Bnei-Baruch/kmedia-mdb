@@ -10,11 +10,14 @@ import { selectors as settings } from '../../../../../redux/modules/settings';
 import { getLanguageDirection } from '../../../../../helpers/i18n-utils';
 import { getMyItemKey } from '../../../../../helpers/my';
 import { stopBubbling } from '../../../../../helpers/utils';
+import AlertModal from '../../../../shared/AlertModal';
 
 const Actions = ({ bookmark, t }) => {
   const [open, setOpen]         = useState();
   const [openEdit, setOpenEdit] = useState();
-  const dispatch                = useDispatch();
+  const [alertMsg, setAlertMsg] = useState();
+
+  const dispatch = useDispatch();
 
   const language = useSelector(state => settings.getLanguage(state.settings));
   const dir      = getLanguageDirection(language);
@@ -39,46 +42,52 @@ const Actions = ({ bookmark, t }) => {
     setOpenEdit(true);
   };
 
-  const handleCloseEdit = e => {
+  const handleCloseEdit = (e, el, isUpdated) => {
     stopBubbling(e);
     setOpenEdit(false);
     handleClose();
+    isUpdated && setAlertMsg(t('personal.bookmark.bookmarkUpdated'));
   };
 
+  const handleAlertClose = () => setAlertMsg(null);
+
   return (
-    <Dropdown
-      icon={{ name: 'ellipsis vertical', size: 'large', color: 'grey', className: 'margin-top-8' }}
-      onClose={handleClose}
-      onOpen={handleOpen}
-      open={open}
-    >
-      <Dropdown.Menu
-        direction="left">
-        <Modal
-          trigger={
-            <Dropdown.Item
-              content={t('personal.bookmark.editBookmark')}
-              onClick={handleOpenEdit}
-              icon="pencil"
-            />
-          }
-          open={openEdit}
-          onClose={handleCloseEdit}
-          size="tiny"
-          dir={dir}
-          className="bookmark_modal"
-        >
-          <Modal.Header content={t('personal.bookmark.editBookmark')} />
-          <BookmarkForm onClose={handleCloseEdit} bookmarkId={bookmark.id} />
-        </Modal>
-        <Dropdown.Item
-          fitted="vertically"
-          icon="remove circle"
-          onClick={removeItem}
-          content={t('personal.bookmark.removeBookmark')}
-        />
-      </Dropdown.Menu>
-    </Dropdown>
+    <>
+      <AlertModal message={alertMsg} open={!!alertMsg} onClose={handleAlertClose} />
+      <Dropdown
+        icon={{ name: 'ellipsis vertical', size: 'large', color: 'grey', className: 'margin-top-8' }}
+        onClose={handleClose}
+        onOpen={handleOpen}
+        open={open}
+      >
+        <Dropdown.Menu
+          direction="left">
+          <Modal
+            trigger={
+              <Dropdown.Item
+                content={t('personal.bookmark.editBookmark')}
+                onClick={handleOpenEdit}
+                icon="pencil"
+              />
+            }
+            open={openEdit}
+            onClose={handleCloseEdit}
+            size="tiny"
+            dir={dir}
+            className="bookmark_modal"
+          >
+            <Modal.Header content={t('personal.bookmark.editBookmark')} />
+            <BookmarkForm onClose={handleCloseEdit} bookmarkId={bookmark.id} />
+          </Modal>
+          <Dropdown.Item
+            fitted="vertically"
+            icon="remove circle"
+            onClick={removeItem}
+            content={t('personal.bookmark.removeBookmark')}
+          />
+        </Dropdown.Menu>
+      </Dropdown>
+    </>
   );
 };
 
