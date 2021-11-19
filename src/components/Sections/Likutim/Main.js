@@ -41,14 +41,10 @@ const Main = ({ t }) => {
   const [clickedLetter, setClickedLetter] = useState(null);
 
   const handleSearch = debounce((e, data) => {
-    setMatch(data.value);
+    setMatch(data?.value);
   }, 100);
 
-  const handleSearchKeyDown = e => {
-    if (e.keyCode === 27) { // Esc
-      setMatch('');
-    }
-  };
+  const handleClear = () => setMatch('');
 
   // reload data on filter change
   const handleFiltersChanged = () => {
@@ -110,8 +106,8 @@ const Main = ({ t }) => {
         namespace="likutim"
         filters={filters}
         onChange={handleFiltersChanged}
-        onKeyDown={handleSearchKeyDown}
         onSearch={handleSearch}
+        onClear={handleClear}
         onHydrated={noop}
         onLetterClick={onLetterClick}
         letters={firstLetters}
