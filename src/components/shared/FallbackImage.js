@@ -30,7 +30,7 @@ const buildImage = (src, fallbacks, onError, onLoad) => {
     handleLoaded(displayImage.src);
   };
 
-  const handleLoaded = (image) => {
+  const handleLoaded = image => {
     if (image.includes(IMAGINARY_URL))
       imaginaryCalls--;
 
@@ -85,15 +85,15 @@ const buildImage = (src, fallbacks, onError, onLoad) => {
 
 const FallbackImage = props => {
   const {
-          src,
-          fallbackImage = ['default'],
-          className,
-          onLoad,
-          onError,
-          width         = 'auto',
-          height        = 'auto',
-          ...rest
-        }                             = props;
+    src,
+    fallbackImage = ['default'],
+    className,
+    onLoad,
+    onError,
+    width         = 'auto',
+    height        = 'auto',
+    ...rest
+  }                             = props;
   const [imageSource, setImageSource] = useState();
 
   useEffect(() => {
@@ -105,7 +105,7 @@ const FallbackImage = props => {
     };
   }, [fallbackImage, src]);
 
-  const handleLoaded = (image) => {
+  const handleLoaded = image => {
     setImageSource(image);
 
     if (onLoad) {
