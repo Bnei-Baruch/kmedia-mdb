@@ -22,7 +22,6 @@ import DonateNow, { VirtualHomeButton } from './DonateNow';
 import Logo from '../../images/icons/Logo';
 import { ClientChroniclesContext, DeviceInfoContext } from '../../helpers/app-contexts';
 import Login from './Login';
-import { isNewVersion } from '../../helpers/url';
 
 const WrappedOmniBoxWithChronicles = ({ location }) => {
   const chronicles = useContext(ClientChroniclesContext);
@@ -229,7 +228,7 @@ class Layout extends Component {
                     <VirtualHomeButton language={language} />
                   </Menu.Item>
                   <Menu.Item position="right">
-                    {isNewVersion(location) && <Login language={language} />}
+                    <Login language={language} />
                   </Menu.Item>
                   <TopMost />
                 </Menu.Menu>

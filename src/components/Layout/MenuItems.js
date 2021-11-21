@@ -10,8 +10,6 @@ import DonateNow, { VirtualHomeButton } from './DonateNow';
 import FeedBurner from './FeedBurner';
 import { useDispatch, useSelector } from 'react-redux';
 import { actions, selectors } from '../../redux/modules/auth';
-import { isNewVersion } from '../../helpers/url';
-import { useLocation } from 'react-router-dom';
 
 const ITEMS = [
   'lessons',
@@ -35,7 +33,6 @@ const MenuItems = ({ simple = false, visible = false, t, onItemClick = identity,
   const user     = useSelector(state => selectors.getUser(state.auth));
   const dispatch = useDispatch();
   const login    = () => dispatch(actions.login(language));
-  const location = useLocation();
 
   const items = ITEMS.map(x => (
     <Menu.Item
@@ -83,7 +80,7 @@ const MenuItems = ({ simple = false, visible = false, t, onItemClick = identity,
   if (simple) {
     return (
       <Menu vertical borderless fluid color="blue" size="huge">
-        {isNewVersion(location) && personal}
+        {personal}
         {items}
         <Menu.Item
           as="a"
