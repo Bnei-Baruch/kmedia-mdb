@@ -118,29 +118,14 @@ export const updateQuery = (history, updater) => {
 
 export const isDebMode = location => getQuery(location).deb || false;
 
-export const isNewVersion = location => true//getQuery(location).new_version || false;
-
 export const getToWithLanguage = (navigateTo, location, language, contentLanguage) => {
-  const new_version = isNewVersion(location);
 
   if (typeof navigateTo === 'string') {
-    if (new_version) {
-      navigateTo = `${navigateTo}${navigateTo.includes('?') ? '&' : '?'}new_version=true`;
-    }
-
     return prefixWithLanguage(navigateTo, location, language);
   }
 
   if (!navigateTo) {
     navigateTo = { ...location };
-  }
-
-  if (new_version) {
-    if (!navigateTo.search) {
-      navigateTo.search = '?new_version=true';
-    } else if (!navigateTo.search.includes('new_version')) {
-      navigateTo.search = `${navigateTo.search}&new_version=true`;
-    }
   }
 
   // we're changing 'search' in case contentLanguage was supplied
