@@ -12,7 +12,6 @@ const InitKC = ({ children }) => {
   const language = useSelector(state => settings.getLanguage(state.settings));
   const user     = useSelector(state => selectors.getUser(state.auth));
   useEffect(() => {
-    console.log('InitKC duble bug useEffect', user);
     !user && initKC(dispatch, language);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
