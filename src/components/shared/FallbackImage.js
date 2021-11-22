@@ -90,8 +90,8 @@ const FallbackImage = props => {
     className,
     onLoad,
     onError,
-    width         = 'auto',
-    height        = 'auto',
+    width = 'auto',
+    height = 'auto',
     ...rest
   }                             = props;
   const [imageSource, setImageSource] = useState();
