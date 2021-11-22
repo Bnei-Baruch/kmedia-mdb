@@ -1,20 +1,17 @@
 import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
-import { Button, Modal, } from 'semantic-ui-react';
-
-import NeedToLogin from '../../Sections/Personal/NeedToLogin';
-import { getLanguageDirection } from '../../../helpers/i18n-utils';
-import BookmarkForm from './BookmarkForm';
-import { useSelector } from 'react-redux';
-import { selectors as settings } from '../../../redux/modules/settings';
-import { DeviceInfoContext } from '../../../helpers/app-contexts';
+import { Button, Icon, MenuItem, Modal } from 'semantic-ui-react';
 import AlertModal from '../AlertModal';
+import BookmarkForm from '../SaveBookmark/BookmarkForm';
+import { useSelector } from 'react-redux';
+import { getLanguageDirection } from '../../../helpers/i18n-utils';
+import { DeviceInfoContext } from '../../../helpers/app-contexts';
+import { selectors as settings } from '../../../redux/modules/settings';
 
-const BookmarkButton = ({ t, source }) => {
+const BookmarkBtn = ({ t, source }) => {
   const [open, setOpen]         = useState();
   const [alertMsg, setAlertMsg] = useState();
-  const needToLogin             = NeedToLogin({ t });
 
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const language           = useSelector(state => settings.getLanguage(state.settings));
@@ -33,12 +30,10 @@ const BookmarkButton = ({ t, source }) => {
       <AlertModal message={alertMsg} open={!!alertMsg} onClose={handleAlertClose} />
       <Modal
         trigger={
-          <Button
-            compact
-            size="small"
-            icon="bookmark outline"
-            onClick={handleOpen}
-          />
+          <MenuItem onClick={handleOpen}>
+            <Button circular icon="bookmark" />
+            bookmark
+          </MenuItem>
         }
         open={open}
         onClose={handleClose}
@@ -47,18 +42,17 @@ const BookmarkButton = ({ t, source }) => {
         className="bookmark_modal"
       >
         <Modal.Header content={t('personal.bookmark.saveBookmark')} />
-        {
-          !needToLogin ? <BookmarkForm onClose={handleClose} source={source} /> :
-            <Modal.Content content={needToLogin} />
-        }
+        {<BookmarkForm onClose={handleClose} source={source} />}
       </Modal>
     </>
+
   );
 };
 
-BookmarkButton.propTypes = {
+BookmarkBtn.propTypes = {
   t: PropTypes.func.isRequired,
-  source: PropTypes.object.isRequired,
+  query: PropTypes.object,
+  source: PropTypes.object,
 };
 
-export default withNamespaces()(BookmarkButton);
+export default withNamespaces()(BookmarkBtn);

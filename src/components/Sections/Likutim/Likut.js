@@ -20,7 +20,7 @@ import MenuLanguageSelector from '../../../components/Language/Selector/MenuLang
 import Link from '../../../components/Language/MultiLanguageLink';
 import WipErr from '../../shared/WipErr/WipErr';
 import Download from '../../shared/Download/Download';
-import ScrollToSearch from '../../shared/ScrollToSearch';
+import ScrollToSearch from '../../shared/DocToolbar/ScrollToSearch';
 
 // expected unit of type Likutim
 const Likut = ({ t }) => {

@@ -59,8 +59,6 @@ const BookmarkForm = ({ t, onClose, source, bookmarkId, data }) => {
 
     if (selected.length > 0)
       params.folder_ids = selected;
-    if (data)
-      params.data = data;
 
     dispatch(actions.add(MY_NAMESPACE_BOOKMARKS, params));
     onClose(null, null, true);

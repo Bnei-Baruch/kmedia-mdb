@@ -3,6 +3,7 @@ import { stringify } from '../url';
 import { RenderHighlightAll } from './RenderHighlightAll';
 import { RenderHighlightBorder } from './RenderHighlightBorder';
 import { RenderHighlightSingleString } from './RenderHighlightSingleString';
+import { element } from 'prop-types';
 
 /* eslint-disable  no-useless-escape */
 export const KEEP_LETTERS_RE            = /[".,\/#!$%\^&\*;:{}=\-_`~()\[\]‘’”“]/g;
@@ -183,7 +184,9 @@ export const buildSearchLinkFromSelection = (language, pathname) => {
   }
 
   const url = `${protocol}//${hostname}${port ? `:${port}` : ''}${pathname}?${stringify(query)}`;
-  return { url, text: sel.toString() };
+
+  const element = sel.focusNode.nodeName.includes('text') ? sel.focusNode.parentElement : sel.focusNode;
+  return { url, text: sel.toString(), query, element };
 };
 
 const buildLinkForShortSelect = (words, sel, isForward, language) => {
@@ -207,7 +210,7 @@ const buildLinkForShortSelect = (words, sel, isForward, language) => {
   }
 
   const url = `${protocol}//${hostname}${port ? `:${port}` : ''}${pathname}?${stringify(query)}`;
-  return { url, text: sel.toString() };
+  return { url, text: sel.toString(), query };
 };
 
 const findOffsetOfDOMNode = (node, offset) => {

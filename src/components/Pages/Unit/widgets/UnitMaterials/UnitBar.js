@@ -13,7 +13,7 @@ const UnitBar = ({ fontSize = 0, handleSettings, unit, bookmarkData }) => {
   return (
     <div className="source__header-toolbar">
       {
-        unit && <BookmarkButton source={{ source_uid, source_type }} data={bookmarkData} />
+        unit && <BookmarkButton source={{ source_uid, source_type, data: bookmarkData }} />
       }
       <Button compact size="small" className="mobile-hidden" icon="print" onClick={print} />
       {/* a portal is used to put the download button here in this div */}

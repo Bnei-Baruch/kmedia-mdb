@@ -18,6 +18,7 @@ import {
 import { getMyItemKey } from '../../../../../helpers/my';
 import Actions from './Actions';
 import { cuPartNameByCCUType } from '../../../../../helpers/utils';
+import { stringify } from '../../../../../helpers/url';
 
 const BookmarksItem = ({ bookmark, getPathByID, t }) => {
   const { data, folder_ids = [] } = bookmark;
@@ -27,8 +28,10 @@ const BookmarksItem = ({ bookmark, getPathByID, t }) => {
   const folders    = useSelector(state => folderKeys.map(k => selectors.getItemByKey(state.my, MY_NAMESPACE_FOLDERS, k)).filter(x => !!x));
 
   let link = canonicalLink(cu);
-  if (data?.activeTab) {
-    link = `${link}?activeTab=${data.activeTab}&autoPlay=0`;
+  if (data) {
+    link = `${link}?${stringify(data)}`;
+    if (data.activeTab)
+      link = `${link}&autoPlay=0`;
   }
 
   const renderFolder = f => (
@@ -80,6 +83,9 @@ const BookmarksItem = ({ bookmark, getPathByID, t }) => {
             {title}
           </span>
         </List.Header>
+        <div>
+          {`${bookmark.data.srchstart} ... ${bookmark.data.srchend}`}
+        </div>
         <List.Description>
           {folders.map(renderFolder)}
         </List.Description>

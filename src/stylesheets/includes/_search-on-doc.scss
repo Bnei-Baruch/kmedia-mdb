@@ -1,0 +1,50 @@
+.search-on-doc- {
+  &-container {
+    position: relative;
+
+    .social-buttons {
+      align-items: center;
+      background: rgba($black, .8);
+      border-radius: calc(36px / 2 + .5rem);
+      display: flex;
+      margin: auto 0 1rem;
+      padding: .5rem .25rem;
+
+      .embed-share-button {
+        vertical-align: text-bottom;
+      }
+    }
+  }
+
+  &-share {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+
+  &-bar-position {
+    position: absolute;
+  }
+
+  &-toolbar {
+    position: absolute;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    transform: none!important;
+    top: 0;
+    right: 0;
+
+    .ui.menu .item {
+      flex-direction: column;
+      color: $white;
+
+      & > .button {
+        margin-bottom: 4px;
+        background-color: $white;
+      }
+    }
+
+  }
+}

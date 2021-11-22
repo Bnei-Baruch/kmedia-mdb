@@ -15,7 +15,7 @@ import { DeviceInfoContext } from '../../../../../../helpers/app-contexts';
 import { MT_TEXT, CT_LIKUTIM } from '../../../../../../helpers/consts';
 import { getSourceErrorSplash, wipLoadingSplash } from '../../../../../shared/WipErr/WipErr';
 import PDF, { isTaas, startsFrom } from '../../../../../shared/PDF/PDF';
-import ScrollToSearch from '../../../../../shared/ScrollToSearch';
+import ScrollToSearch from '../../../../../shared/DocToolbar/ScrollToSearch';
 import Download from '../../../../../shared/Download/Download';
 import * as shapes from '../../../../../shapes';
 import UnitBar from '../UnitBar';

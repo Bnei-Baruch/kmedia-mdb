@@ -1735,58 +1735,6 @@
     box-shadow: none;
   }
 }
-
-.search-on-page- {
-  &-container {
-    position: relative;
-
-    .social-buttons {
-      align-items: center;
-      background: rgba($black, .8);
-      border-radius: calc(36px / 2 + .5rem);
-      display: flex;
-      margin: auto 0 1rem;
-      padding: .5rem .25rem;
-
-      .embed-share-button {
-        vertical-align: text-bottom;
-      }
-    }
-  }
-
-  &-share {
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-  }
-
-  &-bar-position {
-    position: fixed;
-    top: 200px;
-  }
-
-  &-share-bar {
-    background: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-
-    .social-buttons {
-      border-radius: 0.5rem;
-    }
-
-    .message {
-      max-width: 500px;
-      word-wrap: break-word;
-    }
-
-    .cancel-button {
-      font-size: 0.6em !important;
-      margin: -2.3em 0.3em 0 1em;
-    }
-  }
-}
-
 .nowrap {
   white-space: nowrap;
 }

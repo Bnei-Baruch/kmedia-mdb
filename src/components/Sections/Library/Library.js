@@ -12,13 +12,14 @@ import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import { physicalFile, isEmpty } from '../../../helpers/utils';
 import { updateQuery } from '../../../helpers/url';
 import PDF, { isTaas, startsFrom } from '../../shared/PDF/PDF';
-import ScrollToSearch from '../../shared/ScrollToSearch';
+import ScrollToSearch from '../../shared/DocToolbar/ScrollToSearch';
 import Download from '../../shared/Download/Download';
 import WipErr from '../../shared/WipErr/WipErr';
 import MenuLanguageSelector from '../../Language/Selector/MenuLanguageSelector';
 import { getPageFromLocation } from '../../Pagination/withPagination';
 import PlayAudioIcon from '../../../images/icons/PlayAudio';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
+import { CT_SOURCE } from '../../../helpers/consts';
 
 export const checkRabashGroupArticles = source => {
   if (/^gr-/.test(source)) { // Rabash Group Articles
@@ -96,7 +97,7 @@ const Library = ({ data, source, downloadAllowed, t }) => {
       setAudioInfo(null);
       setPlaying(false);
     }
-  }
+  };
 
   if (!data) {
     return <Segment basic>&nbsp;</Segment>;
@@ -116,11 +117,11 @@ const Library = ({ data, source, downloadAllowed, t }) => {
   };
 
   const getAudioPlayer = () => audioInfo && <span className="library-audio-player">
-    { playing ?
+    {playing ?
       <audio controls src={audioInfo?.url} autoPlay={true} preload="metadata" /> :
       <a onClick={() => setPlaying(true)}>{t('sources-library.play-audio-file')}<PlayAudioIcon className="playAudioIcon" /></a>
     }
-  </span>
+  </span>;
 
   const getLanguageBar = () => {
     const languageBar = languages.length > 0 &&
@@ -135,7 +136,7 @@ const Library = ({ data, source, downloadAllowed, t }) => {
         {isMobileDevice && playing && getAudioPlayer()}
       </div>;
     return languageBar;
-  }
+  };
 
   const languageBar = getLanguageBar();
 
@@ -180,7 +181,13 @@ const Library = ({ data, source, downloadAllowed, t }) => {
       return (
         <div
           style={{ direction, textAlign: (direction === 'ltr' ? 'left' : 'right') }}>
-          <ScrollToSearch data={contentData} language={language} />
+          <ScrollToSearch
+            data={contentData}
+            language={language}
+            source={{
+              source_uid: source,
+              source_type: CT_SOURCE
+            }} />
         </div>
       );
     }

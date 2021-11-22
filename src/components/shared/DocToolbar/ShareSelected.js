@@ -4,7 +4,7 @@ import { withNamespaces } from 'react-i18next';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { Button, Icon, Popup, } from 'semantic-ui-react';
 
-import useStateWithCallback from '../../helpers/use-state-with-callback';
+import useStateWithCallback from '../../../helpers/use-state-with-callback';
 import {
   EmailIcon,
   EmailShareButton,
@@ -59,10 +59,10 @@ const ShareSelected = ({ t, url, text, disable }) => {
 
     return (
       <>
-        <div className="search-on-page--bar-position" ref={contextRef}></div>
+        <div className="search-on-doc--bar-position" ref={contextRef}></div>
 
         <Popup // share bar popup
-          className="share-bar search-on-page--share-bar"
+          className="share-bar search-on-doc--toolbar"
           context={contextRef}
           basic
           position={`bottom left`}
@@ -71,7 +71,7 @@ const ShareSelected = ({ t, url, text, disable }) => {
           hideOnScroll
         >
           <Popup.Content>
-            {/*<ShareBar url={url} buttonSize={buttonSize} messageTitle={} className="search-on-page--share-bar" />*/}
+            {/*<ShareBar url={url} buttonSize={buttonSize} messageTitle={} className="search-on-doc--toolbar" />*/}
 
 
             <div className="social-buttons">

@@ -14,7 +14,7 @@ import { physicalFile } from '../../../../../../helpers/utils';
 import playerHelper from '../../../../../../helpers/player';
 import MediaHelper from '../../../../../../helpers/media';
 import { getQuery } from '../../../../../../helpers/url';
-import ScrollToSearch from '../../../../../shared/ScrollToSearch';
+import ScrollToSearch from '../../../../../shared/DocToolbar/ScrollToSearch';
 import Download from '../../../../../shared/Download/Download';
 import WipErr from '../../../../../shared/WipErr/WipErr';
 import * as shapes from '../../../../../shapes';
