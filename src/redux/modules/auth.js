@@ -38,8 +38,7 @@ const onLogoutSuccess = draft => {
 };
 
 const onUpdateToken = (draft, action) => {
-  const { token } = action.payload;
-  draft.token     = token;
+  draft.token     = action.payload;
   return draft;
 };
 
