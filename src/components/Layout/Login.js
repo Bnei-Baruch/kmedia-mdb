@@ -5,7 +5,6 @@ import { withNamespaces } from 'react-i18next';
 
 import { Button, Divider, List, Popup } from 'semantic-ui-react';
 import { selectors, actions } from '../../redux/modules/auth';
-import { initKC } from '../../sagas/helpers/keycklockManager';
 import { DeviceInfoContext } from '../../helpers/app-contexts';
 import { getLanguageDirection } from '../../helpers/i18n-utils';
 import Link from '../Language/MultiLanguageLink';
@@ -18,10 +17,6 @@ const Login = ({ t, language }) => {
   const dispatch                = useDispatch();
   const user                    = useSelector(state => selectors.getUser(state.auth));
 
-  useEffect(() => {
-    !user && initKC(dispatch, language);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const login = () => dispatch(actions.login(language));
 

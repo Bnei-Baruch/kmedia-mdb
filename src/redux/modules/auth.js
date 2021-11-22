@@ -12,7 +12,7 @@ const UPDATE_TOKEN   = 'Auth/UPDATE_TOKEN';
 export const types = { LOGIN, LOGIN_SUCCESS, LOGOUT_SUCCESS, LOGOUT };
 
 /* Reducer */
-const initialState = { user: null, token: null, error: null, isKcReady: false };
+const initialState = { token: null, error: null, isKcReady: false };
 
 const onLoginSuccess = (draft, action) => {
   const { user, token } = action.payload;
