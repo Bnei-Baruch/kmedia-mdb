@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import { Container, Menu, Popup, } from 'semantic-ui-react';
@@ -11,8 +11,13 @@ import { useSelector } from 'react-redux';
 import { selectors } from '../../../redux/modules/auth';
 
 const DocToolbar = ({ t, url, text, source, position }) => {
-  const user       = useSelector(state => selectors.getUser(state.auth));
-  const contextRef = useRef();
+  const [open, setOpen] = useState(!!url);
+  const user            = useSelector(state => selectors.getUser(state.auth));
+  const contextRef      = useRef();
+
+  const handleToggle = () => {
+    setOpen(!open);
+  };
 
   return (
     <>
@@ -20,16 +25,27 @@ const DocToolbar = ({ t, url, text, source, position }) => {
         className="search-on-doc--bar-position"
         ref={contextRef}
         style={{ top: `${position.y}px`, left: `${position.x}px` }}
-      />
+      >
+        <div className="search-on-doc--toolbar">
 
+          <Menu inverted compact>
+            <ShareBtn url={'url'} />
+            <CopyBtn icon="copy" name={t('share-text.copy-text')} text={text} popup={t('messages.text-copied-to-clipboard')} />
+            <CopyBtn icon="linkify" name={t('share-text.copy-link')} text={url} popup={t('messages.link-copied-to-clipboard')} />
+            {source && user && <BookmarkBtn source={source} close={handleToggle} />}
+            {/*<NoteBtn />*/}
+          </Menu>
+        </div>
+      </div>
+      {/*
 
       <Popup
         className="search-on-doc--toolbar"
-        context={contextRef}
         basic
         position={`bottom left`}
         trigger={<div />}
-        open
+        open={open}
+        onOpen={handleToggle}
         hideOnScroll
         flowing
       >
@@ -38,11 +54,11 @@ const DocToolbar = ({ t, url, text, source, position }) => {
             <ShareBtn url={'url'} />
             <CopyBtn icon="copy" name={t('share-text.copy-text')} text={text} popup={t('messages.text-copied-to-clipboard')} />
             <CopyBtn icon="linkify" name={t('share-text.copy-link')} text={url} popup={t('messages.link-copied-to-clipboard')} />
-            {source && user && <BookmarkBtn source={source} />}
+            {source && user && <BookmarkBtn source={source} close={handleToggle} />}
             <NoteBtn />
           </Menu>
         </Popup.Content>
-      </Popup>
+      </Popup>*/}
     </>
   );
 };

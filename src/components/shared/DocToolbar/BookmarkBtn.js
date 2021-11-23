@@ -9,7 +9,7 @@ import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { selectors as settings } from '../../../redux/modules/settings';
 
-const BookmarkBtn = ({ t, source }) => {
+const BookmarkBtn = ({ t, source, close }) => {
   const [open, setOpen]         = useState();
   const [alertMsg, setAlertMsg] = useState();
 
@@ -17,10 +17,14 @@ const BookmarkBtn = ({ t, source }) => {
   const language           = useSelector(state => settings.getLanguage(state.settings));
   const dir                = getLanguageDirection(language);
 
-  const handleOpen  = () => setOpen(true);
+  const handleOpen = () => {
+    setOpen(true);
+  }
+
   const handleClose = (e, el, isCreated) => {
     isCreated && setAlertMsg(t('personal.bookmark.bookmarkCreated'));
     setOpen(false);
+    close();
   };
 
   const handleAlertClose = () => setAlertMsg(null);

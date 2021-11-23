@@ -5,15 +5,14 @@ import PropTypes from 'prop-types';
 import LibrarySettings from '../../../../Sections/Library/LibrarySettings';
 import BookmarkButton from '../../../../shared/SaveBookmark/BookmarkButton';
 
-const UnitBar = ({ fontSize = 0, handleSettings, unit, bookmarkData }) => {
+const UnitBar = ({ fontSize = 0, handleSettings, source }) => {
 
-  const print                                         = () => window.print();
-  const { id: source_uid, content_type: source_type } = unit;
+  const print = () => window.print();
 
   return (
     <div className="source__header-toolbar">
       {
-        unit && <BookmarkButton source={{ source_uid, source_type, data: bookmarkData }} />
+        source && <BookmarkButton source={source} />
       }
       <Button compact size="small" className="mobile-hidden" icon="print" onClick={print} />
       {/* a portal is used to put the download button here in this div */}

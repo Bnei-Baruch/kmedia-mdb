@@ -175,7 +175,7 @@ class Transcription extends Component {
 
   prepareContent = data => {
     const { textFiles, selectedFile, language } = this.state;
-    const { location, activeTab }               = this.props;
+    const { location, activeTab, unit }         = this.props;
 
     const ap                = playerHelper.getActivePartFromQuery(location);
     const selectedFileProps = selectedFile ? `&selectedFileId=${selectedFile.id}` : '';
@@ -189,7 +189,15 @@ class Transcription extends Component {
           className="font_settings doc2html"
           style={{ direction, textAlign: (direction === 'ltr' ? 'left' : 'right') }}
         >
-          <ScrollToSearch data={data} language={language} urlParams={urlParams} />
+          <ScrollToSearch
+            data={data}
+            language={language}
+            urlParams={urlParams}
+            source={{
+              source_uid: unit.id,
+              source_type: unit.content_type,
+              data: { activeTab }
+            }} />
         </div>
       </div>
     );
@@ -217,8 +225,8 @@ class Transcription extends Component {
 
     if (data) {
       const content = this.prepareContent(data);
+      const url     = physicalFile(selectedFile, true);
 
-      const url                                         = physicalFile(selectedFile, true);
       const { theme = 'light', fontType, fontSize = 0 } = settings || {};
       return (
         <div
@@ -257,8 +265,7 @@ class Transcription extends Component {
               <UnitBar
                 handleSettings={this.handleSettings}
                 fontSize={fontSize}
-                unit={unit}
-                bookmarkData={{ activeTab }}
+                source={{ source_uid: unit.id, source_type: unit.content_type, data: { activeTab } }}
               />
             </Menu.Item>
           </Menu>

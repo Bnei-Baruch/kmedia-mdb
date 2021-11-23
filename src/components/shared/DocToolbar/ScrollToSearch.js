@@ -43,15 +43,15 @@ const ScrollToSearch = ({ source, data, language, urlParams = '', pathname }) =>
         return false;
       }
 
-      if (e.path.some(x => x.className?.includes('search-on-doc--toolbar')))
+      if (e.path.some(x => (typeof x.className === 'string') && x.className.includes('search-on-doc--toolbar')))
         return false;
 
       const { url, text, query, element } = buildSearchLinkFromSelection(language, pathname);
       if (url) {
-        const { pageX, pageY } = e;
         setSearchText(text);
-        const rect = element.getBoundingClientRect();
-        setBarPosition({ x: pageX - rect.left, y: pageY - rect.top });
+        const rect         = element.getBoundingClientRect();
+        const recContainer = containerRef.current?.getBoundingClientRect();
+        setBarPosition({ x: e.pageX - recContainer.left, y: rect.top - recContainer.top });
         setSearchUrl(`${url}&${urlParams}`);
         setSearchQuery(query);
       }
@@ -72,7 +72,7 @@ const ScrollToSearch = ({ source, data, language, urlParams = '', pathname }) =>
   const renderShareBar = () => {
     if (isMobileDevice || !searchUrl)
       return null;
-    source.data = { ...source.data || {}, ...searchQuery };
+    source.data = { ...source?.data || {}, ...searchQuery };
     return <Toolbar
       source={source}
       url={searchUrl}

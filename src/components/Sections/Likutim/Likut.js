@@ -125,6 +125,7 @@ const Likut = ({ t }) => {
   const url                = file && physicalFile(file, true);
   const relatedLessons     = Object.values(source_units).filter(u => UNIT_LESSONS_TYPE.includes(u.content_type));
   const relatedLessonsSize = relatedLessons.length > 0 ? 6 : 0;
+  const bookmarkSource     = { source_uid: unit.id, source_type: unit.content_type };
 
   return (
     <div
@@ -162,7 +163,7 @@ const Likut = ({ t }) => {
                       isReadable={isReadable}
                       handleIsReadable={handleIsReadable}
                       handleSettings={setSettings}
-                      source={{ source_uid: unit.id, source_type: unit.content_type }}
+                      source={bookmarkSource}
                     />
                   </div>
                   <div className="library-language-container">
@@ -185,7 +186,7 @@ const Likut = ({ t }) => {
               className="font_settings doc2html"
               style={{ direction }}
             >
-              <ScrollToSearch language={language} data={data} />
+              <ScrollToSearch language={language} data={data} source={bookmarkSource} />
             </div>
           </div>
         </Grid.Column>

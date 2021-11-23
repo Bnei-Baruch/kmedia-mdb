@@ -39,9 +39,10 @@ const BookmarkForm = ({ t, onClose, source, bookmarkId, data }) => {
   }, []);
 
   useEffect(() => {
-    if (selected === null)
+    if (selected === null) {
       setSelected([...saved]);
-  }, [items?.length]);
+    }
+  }, [saved?.length]);
 
   useEffect(() => {
     setName(bookmark?.name);
