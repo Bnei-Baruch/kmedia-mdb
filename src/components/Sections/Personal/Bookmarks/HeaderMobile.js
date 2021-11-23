@@ -42,7 +42,6 @@ const BookmarkHeaderMobile = ({ t }) => {
         as="a"
         size="big"
         basic
-        icon
         className="no-border padding_r_l_0"
         color="blue"
         onClick={handleToggle}

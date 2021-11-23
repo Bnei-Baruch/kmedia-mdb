@@ -12,18 +12,18 @@ import {
   iconByContentTypeMap,
   CT_LIKUTIM,
   CT_SOURCE,
-  CT_VIDEO_PROGRAM_CHAPTER,
   MY_NAMESPACE_FOLDERS
 } from '../../../../../helpers/consts';
+import { OFFSET_TEXT_SEPARATOR } from '../../../../../helpers/scrollToSearch/helper';
 import { getMyItemKey } from '../../../../../helpers/my';
 import Actions from './Actions';
 import { cuPartNameByCCUType } from '../../../../../helpers/utils';
 import { stringify } from '../../../../../helpers/url';
 
 const BookmarksItem = ({ bookmark, getPathByID, t }) => {
-  const { data, folder_ids = [] } = bookmark;
+  const { data, folder_ids = [], name, source_uid } = bookmark;
 
-  const cu         = useSelector(state => mdb.getDenormContentUnit(state.mdb, bookmark.source_uid));
+  const cu         = useSelector(state => mdb.getDenormContentUnit(state.mdb, source_uid));
   const folderKeys = folder_ids.map(id => getMyItemKey(MY_NAMESPACE_FOLDERS, { id }).key);
   const folders    = useSelector(state => folderKeys.map(k => selectors.getItemByKey(state.my, MY_NAMESPACE_FOLDERS, k)).filter(x => !!x));
 
@@ -66,6 +66,13 @@ const BookmarksItem = ({ bookmark, getPathByID, t }) => {
 
   const title = buildTitle();
   const icon  = iconByContentTypeMap.get(cu?.content_type);
+
+  const citates = [];
+  if (!!data?.srchstart)
+    citates.push(data.srchstart.split(OFFSET_TEXT_SEPARATOR)[0]);
+  if (!!data?.srchend)
+    citates.push(data.srchend.split(OFFSET_TEXT_SEPARATOR)[0]);
+
   return (
     <List.Item className="bookmark_item">
       <List.Icon>
@@ -77,15 +84,15 @@ const BookmarksItem = ({ bookmark, getPathByID, t }) => {
       </List.Icon>
       <List.Content as={Link} to={link} verticalAlign="bottom">
         <List.Header as="h3" className="display-iblock">
-          {bookmark.name}
+          {name}
           <span className="separator">|</span>
           <span className="source_name">
             {title}
           </span>
         </List.Header>
-        <div>
-          {`${bookmark.data.srchstart} ... ${bookmark.data.srchend}`}
-        </div>
+        <List.Description as={'em'}>
+          {citates.join(' ... ')}
+        </List.Description>
         <List.Description>
           {folders.map(renderFolder)}
         </List.Description>

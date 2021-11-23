@@ -23,17 +23,18 @@
   & > .ui.grid > .row > .column > .segment {
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
   }
+}
 
-  .folders {
-    border-bottom: 1px solid $midWhite;
+.folders {
+  border-bottom: 1px solid $midWhite;
 
-    &.ui.grid > .column {
-      padding: 0;
-    }
+  &.ui.grid > .column {
+    padding: 0;
+  }
 
-    .bookmark_search {
-      width: 100%;
-    }
+  .bookmark_search {
+    width: 100%;
+    border: red !important;
   }
 }
 
