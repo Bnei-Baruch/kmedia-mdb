@@ -16,7 +16,6 @@ const InitKC = ({ children }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  console.log('InitKC duble bug render', user, user !== undefined);
   return user !== undefined ? children : <Splash isLoading icon="circle notch" color="blue" text={''} />;
 };
 

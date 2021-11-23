@@ -14,7 +14,7 @@ import {
   AbTestingContext,
   ClientChroniclesContext,
   DeviceInfoContext,
-  SessionInfoContext
+  SessionInfoContext,
 } from '../../helpers/app-contexts';
 import InitKC from '../shared/InitKC';
 

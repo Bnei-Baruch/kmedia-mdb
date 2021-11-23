@@ -12,7 +12,7 @@ const UPDATE_TOKEN   = 'Auth/UPDATE_TOKEN';
 export const types = { LOGIN, LOGIN_SUCCESS, LOGOUT_SUCCESS, LOGOUT };
 
 /* Reducer */
-const initialState = { token: null, error: null, isKcReady: false };
+const initialState = { user: undefined, token: null, error: null, isKcReady: false };
 
 const onLoginSuccess = (draft, action) => {
   const { user, token } = action.payload;
@@ -38,7 +38,7 @@ const onLogoutSuccess = draft => {
 };
 
 const onUpdateToken = (draft, action) => {
-  draft.token     = action.payload;
+  draft.token = action.payload;
   return draft;
 };
 
