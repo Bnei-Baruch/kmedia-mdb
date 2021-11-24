@@ -1896,7 +1896,10 @@
   }
 
   .unit-logo {
-    width: 100%
+    width: 100%;
+    @include mobile {
+      max-width: 160px;
+    }
   }
 }
 
