@@ -42,7 +42,7 @@ const CardTemplate = ({ unit, language, withCCUInfo, link, ccu, description, chi
       <div className="cu_item_img">
         <UnitLogo unitId={unit.id} width={700} />
         <Container className="cu_item_img_info" textAlign="right">
-          <div className="cu_item_duration">{formatDuration(unit.duration)}</div>
+          {unit.duration && <div className="cu_item_duration">{formatDuration(unit.duration)}</div>}
           {coInfo}
           {percent}
         </Container>
