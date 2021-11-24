@@ -107,7 +107,7 @@ const mediaPrefix = new Map([
 /* WARNING!!!
    This function MUST be synchronized with the next one: canonicalContentType
  */
-export const canonicalLink = (entity, mediaLang) => {
+export const canonicalLink = (entity, mediaLang, ccu) => {
   if (!entity) {
     return '/';
   }
@@ -163,9 +163,13 @@ export const canonicalLink = (entity, mediaLang) => {
   }
 
   // units whose canonical collection is an event goes as an event item
-  const collection = canonicalCollection(entity);
+  const collection = !ccu ? canonicalCollection(entity) : ccu;
   if (collection && EVENT_TYPES.indexOf(collection.content_type) !== -1) {
     return `/events/cu/${entity.id}`;
+  }
+
+  if (collection?.content_type === CT_LESSONS_SERIES) {
+    return `/lessons/series/cu/${entity.id}`;
   }
 
   const mediaLangSuffix = mediaLang ? `?language=${mediaLang}` : '';
