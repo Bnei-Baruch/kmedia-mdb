@@ -18,20 +18,20 @@ const imageWidthBySize = {
 };
 
 const ListTemplate = ({
-  unit,
-  source,
-  language,
-  withCUInfo,
-  withCCUInfo,
-  link,
-  ccu,
-  description,
-  children,
-  playTime,
-  size = 'big',
-  selected,
-  label,
-}) => {
+                        unit,
+                        source,
+                        language,
+                        withCUInfo,
+                        withCCUInfo,
+                        link,
+                        ccu,
+                        description,
+                        children,
+                        playTime,
+                        size = 'big',
+                        selected,
+                        label,
+                      }) => {
   const dir                = isLanguageRtl(language) ? 'rtl' : 'ltr';
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
@@ -46,7 +46,7 @@ const ListTemplate = ({
   let percent = null;
   if (unit && playTime) {
     localStorage.setItem(`${PLAYER_POSITION_STORAGE_KEY}_${unit.id}`, playTime);
-    percent   = (
+    percent = (
       <Progress
         size="tiny"
         className="cu_item_progress"
@@ -64,7 +64,7 @@ const ListTemplate = ({
       className={clsx('cu_item cu_item_list no-thumbnail', { [size]: !!size, selected })}
     >
       <div>
-        {withCUInfo && unit && <div className="cu_item_duration">{formatDuration(unit.duration)}</div>}
+        {withCUInfo && unit?.duration && <div className="cu_item_duration">{formatDuration(unit.duration)}</div>}
         {label ? <div className="cu_item_label">{label}</div> : null}
         {percent}
         <div className="cu_item_img" style={{ width }}>
