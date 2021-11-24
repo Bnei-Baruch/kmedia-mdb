@@ -16,7 +16,7 @@ import { fromHumanReadableTime } from '../../helpers/time';
 import { getQuery } from '../../helpers/url';
 import { isEmpty } from '../../helpers/utils';
 import * as shapes from '../shapes';
-import { PLAYER_MODE } from './constants';
+import { PLAYER_MODE, PLAYER_POSITION_STORAGE_KEY } from './constants';
 import AVPlayPause from './AVPlayPause';
 import AVPlaybackRate from './AVPlaybackRate';
 import AVVideoSize from './AVVideoSize';
@@ -41,7 +41,6 @@ import { actions } from '../../redux/modules/player';
 
 const DEFAULT_PLAYER_VOLUME       = 0.8;
 const PLAYER_VOLUME_STORAGE_KEY   = '@@kmedia_player_volume';
-const PLAYER_POSITION_STORAGE_KEY = '@@kmedia_player_position';
 
 // Converts playback rate string to float: 1.0x => 1.0
 const playbackToValue = playback => parseFloat(playback.slice(0, -1));

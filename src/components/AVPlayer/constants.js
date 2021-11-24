@@ -3,3 +3,5 @@ export const PLAYER_MODE = {
   SLICE_VIEW: 1,
   SLICE_EDIT: 2
 };
+
+export const PLAYER_POSITION_STORAGE_KEY = '@@kmedia_player_position';
