@@ -128,8 +128,8 @@ const FallbackImage = props => {
 
   if (knownFallbackImages.includes(imageSource)) {
     return (
-      <div className={className}>
-        <SectionThumbnailFallback name={imageSource} width={width} height={height} />
+      <div className={className} style={{ maxWidth: width}}>
+        <SectionThumbnailFallback name={imageSource} width={width} height={height} {...rest} />
       </div>);
   }
 
