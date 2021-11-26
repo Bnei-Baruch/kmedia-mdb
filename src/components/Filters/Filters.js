@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import { bindActionCreators } from 'redux';
 import { connect, ReactReduxContext } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
-import { Container, Icon, Label, Menu, Popup, Input } from 'semantic-ui-react';
+import { Container, Icon, Label, Menu, Popup } from 'semantic-ui-react';
 import isEqual from 'react-fast-compare';
 
 import { getLanguageDirection } from '../../helpers/i18n-utils';
@@ -17,6 +17,7 @@ import * as shapes from '../shapes';
 import FiltersHydrator from './FiltersHydrator';
 import { DeviceInfoContext } from '../../helpers/app-contexts';
 import AlphabetFilter from './components/AlphabetFilter';
+import SearchInput from './SearchInput';
 
 class Filters extends Component {
   static contextType = DeviceInfoContext;
@@ -28,6 +29,7 @@ class Filters extends Component {
     onChange: PropTypes.func.isRequired,
     onHydrated: PropTypes.func.isRequired,
     onSearch: PropTypes.func,
+    onClear: PropTypes.func,
     setFilterValue: PropTypes.func.isRequired,
     resetFilter: PropTypes.func.isRequired,
     filtersData: PropTypes.objectOf(PropTypes.object).isRequired,
@@ -45,6 +47,7 @@ class Filters extends Component {
 
   state = {
     activeFilter: null,
+    searchClicked: false
   };
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -182,7 +185,7 @@ class Filters extends Component {
   };
 
   render() {
-    const { namespace, onHydrated, t, rightItems, onSearch, onKeyDown, letters, onLetterClick } = this.props;
+    const { namespace, onHydrated, t, rightItems, onSearch, onClear, letters, onLetterClick } = this.props;
 
     return (
       <div className="filters">
@@ -199,22 +202,15 @@ class Filters extends Component {
             </ReactReduxContext.Consumer>
             {
               onSearch &&
-               <Menu.Item>
-                 <Input
-                   size="small"
-                   icon="search"
-                   className="search-omnibox"
-                   placeholder={t('sources-library.filter')}
-                   onChange={onSearch}
-                   onKeyDown={onKeyDown}
-                 />
-               </Menu.Item>
+                 <Menu.Item>
+                   <SearchInput onSearch={onSearch} onClear={onClear} />
+                 </Menu.Item>
             }
             {
               !isEmpty(letters) &&
-               <Menu.Item className="alphabetFilter">
-                 <AlphabetFilter letters={letters} onLetterClick={onLetterClick}></AlphabetFilter>
-               </Menu.Item>
+                 <Menu.Item className="alphabetFilter">
+                   <AlphabetFilter letters={letters} onLetterClick={onLetterClick}></AlphabetFilter>
+                 </Menu.Item>
             }
             {
               rightItems && <Menu.Menu position="right">{rightItems}</Menu.Menu>
