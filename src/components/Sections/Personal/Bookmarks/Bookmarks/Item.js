@@ -6,26 +6,23 @@ import { useSelector } from 'react-redux';
 import { selectors as mdb } from '../../../../../redux/modules/mdb';
 import { selectors } from '../../../../../redux/modules/my';
 import { SectionLogo } from '../../../../../helpers/images';
-import Link from '../../../../Language/MultiLanguageLink';
 import { canonicalLink } from '../../../../../helpers/links';
-import {
-  iconByContentTypeMap,
-  CT_LIKUTIM,
-  CT_SOURCE,
-  MY_NAMESPACE_FOLDERS
-} from '../../../../../helpers/consts';
+import { iconByContentTypeMap, MY_NAMESPACE_FOLDERS } from '../../../../../helpers/consts';
 import { OFFSET_TEXT_SEPARATOR } from '../../../../../helpers/scrollToSearch/helper';
 import { getMyItemKey } from '../../../../../helpers/my';
-import Actions from './Actions';
-import { cuPartNameByCCUType } from '../../../../../helpers/utils';
 import { stringify } from '../../../../../helpers/url';
+import Link from '../../../../Language/MultiLanguageLink';
+import Actions from './Actions';
+import { buildTitleByUnit } from './helper';
+import { selectors as sources } from '../../../../../redux/modules/sources';
 
-const BookmarksItem = ({ bookmark, getPathByID, t }) => {
+const BookmarksItem = ({ bookmark, t }) => {
   const { data, folder_ids = [], name, source_uid } = bookmark;
 
-  const cu         = useSelector(state => mdb.getDenormContentUnit(state.mdb, source_uid));
-  const folderKeys = folder_ids.map(id => getMyItemKey(MY_NAMESPACE_FOLDERS, { id }).key);
-  const folders    = useSelector(state => folderKeys.map(k => selectors.getItemByKey(state.my, MY_NAMESPACE_FOLDERS, k)).filter(x => !!x));
+  const cu          = useSelector(state => mdb.getDenormContentUnit(state.mdb, source_uid));
+  const folderKeys  = folder_ids.map(id => getMyItemKey(MY_NAMESPACE_FOLDERS, { id }).key);
+  const folders     = useSelector(state => folderKeys.map(k => selectors.getItemByKey(state.my, MY_NAMESPACE_FOLDERS, k)).filter(x => !!x));
+  const getPathByID = useSelector(state => sources.getPathByID(state.sources));
 
   let link = canonicalLink(cu);
   if (data) {
@@ -43,28 +40,7 @@ const BookmarksItem = ({ bookmark, getPathByID, t }) => {
     />
   );
 
-  const buildTitle = () => {
-    if (!cu) return '';
-
-    const { content_type, film_date, collections, name } = cu;
-
-    if (content_type === CT_SOURCE) {
-      const path        = getPathByID(cu.id)?.map(x => x.name);
-      const articleName = path.splice(-1);
-      return `${articleName} ${path.join('. ')}`;
-    }
-
-    if (content_type === CT_LIKUTIM) {
-      return name;
-    }
-
-    const collection = Object.values(collections)[0];
-    const part       = Number(collection?.ccuNames[cu.id]);
-    const partName   = t(cuPartNameByCCUType(content_type), { name: part });
-    return `${collection.name} ${partName} ${t('values.date', { date: film_date })}`;
-  };
-
-  const title = buildTitle();
+  const title = buildTitleByUnit(cu, t, getPathByID);
   const icon  = iconByContentTypeMap.get(cu?.content_type);
 
   const citates = [];
