@@ -63,6 +63,7 @@ const routes = [
     component: LessonCollection,
     options: { ssrData: ssrDataLoaders.lessonsCollectionPage }
   },
+  { path: ':routeType/:tab/cu/:id', component: PlaylistItemPage, options: { ssrData: ssrDataLoaders.cuPage } },
   { path: 'lessons/daily/latest', component: LastLessonCollection, options: { ssrData: ssrDataLoaders.latestLesson } },
   { path: 'programs', component: Programs, options: { ssrData: ssrDataLoaders.programsPage } },
   { path: 'programs/:tab', component: Programs, options: { ssrData: ssrDataLoaders.programsPage } },

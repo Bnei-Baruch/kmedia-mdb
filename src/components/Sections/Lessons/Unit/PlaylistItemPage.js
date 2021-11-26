@@ -8,19 +8,21 @@ import { selectors as settings } from '../../../../redux/modules/settings';
 import WipErr from '../../../shared/WipErr/WipErr';
 import PlaylistCollectionContainer from '../../../Pages/PlaylistCollection/Container';
 import UnitPage from '../../../Pages/Unit/Page';
-import { COLLECTION_DAILY_LESSONS, EVENT_TYPES } from '../../../../helpers/consts';
+import { COLLECTION_DAILY_LESSONS, CT_LESSONS_SERIES, EVENT_TYPES } from '../../../../helpers/consts';
 
 const COLLECTION_TYPES_BY_ROUTING = {
   'lessons': COLLECTION_DAILY_LESSONS,
+  'lessons_series': CT_LESSONS_SERIES,
   'events': EVENT_TYPES,
 };
 
 const PlaylistItemPage = ({ t }) => {
-  const { id, routeType } = useParams();
-  const unit              = useSelector(state => selectors.getDenormContentUnit(state.mdb, id));
-  const wip               = useSelector(state => selectors.getWip(state.mdb).units[id]);
-  const err               = useSelector(state => selectors.getErrors(state.mdb).units[id]);
-  const language          = useSelector(state => settings.getLanguage(state.settings));
+  const { id, routeType, tab } = useParams();
+
+  const unit     = useSelector(state => selectors.getDenormContentUnit(state.mdb, id));
+  const wip      = useSelector(state => selectors.getWip(state.mdb).units[id]);
+  const err      = useSelector(state => selectors.getErrors(state.mdb).units[id]);
+  const language = useSelector(state => settings.getLanguage(state.settings));
 
   //fix bug with unit without collection
   const [needToFetch, setNeedToFetch] = useState();
@@ -45,7 +47,7 @@ const PlaylistItemPage = ({ t }) => {
 
   if (routeType === 'program' || !unit.collections) return <UnitPage />;
 
-  const cTypes = COLLECTION_TYPES_BY_ROUTING[routeType];
+  const cTypes = COLLECTION_TYPES_BY_ROUTING[!tab ? routeType : `${routeType}_${tab}`];
   if (!cTypes) return <UnitPage />;
 
   const collection = Object.values(unit.collections).find(c => cTypes.includes(c.content_type));

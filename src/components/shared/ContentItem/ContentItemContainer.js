@@ -48,7 +48,7 @@ const SourceItemContainerHook = ({ id, t, asList = false, link, size, selected, 
     label,
   };
   return (asList ? <ListTemplate {...props} /> : <CardTemplate {...props} />);
-}
+};
 
 const ContentItemContainer = ({ id, children, t, asList = false, link, playTime, size, selected, ccuId, noViews, label = '', withCCUInfo = undefined, withCUInfo = undefined, withPart = true }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
@@ -87,7 +87,7 @@ const ContentItemContainer = ({ id, children, t, asList = false, link, playTime,
   const props = {
     unit,
     language,
-    link: link || canonicalLink(unit),
+    link: link || canonicalLink(unit, null, ccu),
     withCUInfo,
     withCCUInfo,
     ccu,
