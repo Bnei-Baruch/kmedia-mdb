@@ -8,6 +8,8 @@ import { actions as mdbActions } from '../redux/modules/mdb';
 import { selectors as settings } from '../redux/modules/settings';
 import { isEmpty } from '../helpers/utils';
 import { setTab } from './helpers/url';
+import { getFilterApiParams } from './filters';
+
 
 function* fetchLecturesList(action) {
   if (action.payload.namespace !== 'lessons-virtual'
@@ -42,14 +44,16 @@ function* fetchLecturesList(action) {
 
 export function* fetchAllSeries(action) {
   try {
+    const filterParams = yield* getFilterApiParams(action);
+
     const language = yield select(state => settings.getLanguage(state.settings));
     const { data } = yield call(Api.collections, {
-      ...action.payload,
       contentTypes: [CT_LESSONS_SERIES],
       language,
       pageNo: 1,
       pageSize: 1000, // NOTE: we need to get all, and the endpoint lets us fetch only with pagination,
       with_units: false,
+      ...filterParams
     });
     yield put(mdbActions.receiveCollections(data.collections));
     yield put(actions.fetchAllSeriesSuccess(data));

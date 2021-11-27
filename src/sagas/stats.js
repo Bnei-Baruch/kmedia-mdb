@@ -6,7 +6,6 @@ import { isEmpty } from '../helpers/utils';
 import { actions, selectors } from '../redux/modules/stats';
 import { types as lists } from '../redux/modules/lists';
 import { types as tags } from '../redux/modules/tags';
-import { types as stats } from '../redux/modules/stats';
 import { types as lessons } from '../redux/modules/lessons';
 import { types as likutim } from '../redux/modules/likutim';
 
@@ -32,9 +31,9 @@ function* fetchCUStats(action) {
       args.content_type = CT_LESSON_PART;
       break;
 
-      // case 'lessons-series':
-      //   args.content_type = CT_LESSONS_SERIES;
-      //   break;
+    case 'lessons-series':
+      args.content_type = CT_LESSONS_SERIES;
+      break;
 
     case 'likutim':
       args.content_type = CT_LIKUTIM;
@@ -51,9 +50,7 @@ function* fetchCUStats(action) {
 
 export function* callUnitsStats(args, namespace) {
   try {
-    // console.log('callUnitsStats:', args, namespace)
     const { data } = yield call(Api.unitsStats, args);
-    // console.log('stats data:', data)
 
     yield put(actions.fetchCUStatsSuccess(namespace, data));
   } catch (err) {
@@ -61,14 +58,10 @@ export function* callUnitsStats(args, namespace) {
   }
 }
 
-function* watchFetchList() {
-  yield takeLatest([lists.FETCH_LIST, tags.FETCH_STATS, stats.FETCH_CU_STATS], fetchCUStats);
-
 function* watchFetchCUStats() {
   yield takeLatest([lists.FETCH_LIST, lessons.FETCH_ALL_SERIES, likutim.FETCH_LIKUTIM, tags.FETCH_STATS], fetchCUStats);
 }
 
 export const sagas = [
-  watchFetchList,
   watchFetchCUStats
 ];

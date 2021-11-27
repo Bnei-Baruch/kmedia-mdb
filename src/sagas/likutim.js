@@ -5,14 +5,11 @@ import { CT_LIKUTIM } from '../helpers/consts';
 import { actions, types } from '../redux/modules/likutim';
 import { actions as mdbActions } from '../redux/modules/mdb';
 import { selectors as settings } from '../redux/modules/settings';
-import { selectors as filterSelectors } from '../redux/modules/filters';
-import { filtersTransformer } from '../filters';
+import { getFilterApiParams } from './filters';
 
 function* fetchLikutim(action) {
   try {
-    const { namespace }    = action.payload;
-    const filters      = yield select(state => filterSelectors.getFilters(state.filters, namespace));
-    const filterParams = filtersTransformer.toApiParams(filters) || {};
+    const filterParams = yield* getFilterApiParams(action);
 
     const pageSize = 10000;
     const language = yield select(state => settings.getContentLanguage(state.settings));

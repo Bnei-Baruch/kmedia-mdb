@@ -31,7 +31,7 @@ export const types = {
 const setTab = createAction(SET_TAB);
 
 const receiveLectures       = createAction(RECEIVE_LECTURES);
-const fetchAllSeries        = createAction(FETCH_ALL_SERIES);
+const fetchAllSeries        = createAction(FETCH_ALL_SERIES, namespace => ({ namespace }));
 const fetchAllSeriesSuccess = createAction(FETCH_ALL_SERIES_SUCCESS);
 const fetchAllSeriesFailure = createAction(FETCH_ALL_SERIES_FAILURE);
 

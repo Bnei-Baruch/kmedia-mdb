@@ -48,7 +48,7 @@ const Main = ({ t }) => {
   const handleClear = () => setMatch('');
 
   // reload data on filter change
-  const handleFiltersChanged = () => {
+  const handleFiltersChange = () => {
     setDataLoaded(false);
   };
 
@@ -106,7 +106,7 @@ const Main = ({ t }) => {
       <Filters
         namespace={namespace}
         filters={filters}
-        onChange={handleFiltersChanged}
+        onChange={handleFiltersChange}
         onSearch={handleSearch}
         onClear={handleClear}
         onLetterClick={onLetterClick}

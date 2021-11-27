@@ -3,38 +3,46 @@ import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
 import debounce from 'lodash/debounce';
-import { Container, Header, List, Grid, Input, Button } from 'semantic-ui-react';
+import { Container, Header, List, Grid, Button } from 'semantic-ui-react';
 
 import { canonicalLink } from '../../../../../helpers/links';
 import { isEmpty } from '../../../../../helpers/utils';
 import { selectors as settings } from '../../../../../redux/modules/settings';
 import { actions, selectors } from '../../../../../redux/modules/lessons';
+import filterComponents from '../../../../Filters/components';
+import Filters from '../../../../Filters/Filters';
 import Link from '../../../../Language/MultiLanguageLink';
 import WipErr from '../../../../shared/WipErr/WipErr';
 import isEqual from 'react-fast-compare';
 
+const filters = [
+  { name: 'topics-filter', component: filterComponents.TopicsFilter },
+  { name: 'sources-filter', component: filterComponents.SourcesFilter }
+];
 
 const SeriesContainer = ({ t }) => {
   const [match, setMatch] = useState('');
   const [expandedNodes, setExpandedNodes] = useState(new Set());
+  const [dataLoaded, setDataLoaded] = useState(false);
 
   const dataTree = useSelector(state => selectors.getSeriesTree(state, match), isEqual);
-  const seriesIDs = useSelector(state => selectors.getSeriesIDs(state.lessons), isEqual);
+  // const seriesIDs = useSelector(state => selectors.getSeriesIDs(state.lessons), isEqual);
   const language = useSelector(state => settings.getLanguage(state.settings));
   const wip      = useSelector(state => selectors.getWip(state.lessons).series);
   const err      = useSelector(state => selectors.getErrors(state.lessons).series);
 
   const visibleItemsCount = 3;
 
-  const handleFilterChange = debounce((e, data) => {
-    setMatch(data.value);
+  // reload data on filter change
+  const handleFilterChange = () => {
+    setDataLoaded(false);
+  };
+
+  const handleSearch = debounce((e, data) => {
+    setMatch(data?.value);
   }, 100);
 
-  const handleFilterKeyDown = e => {
-    if (e.keyCode === 27) { // Esc
-      setMatch('');
-    }
-  };
+  const handleClear = () => setMatch('');
 
   const handleShowMoreClick = nodeId => {
     setExpandedNodes(expNodes => {
@@ -68,7 +76,7 @@ const SeriesContainer = ({ t }) => {
           isEmpty(children)
             ?
             <List.Item key={id} className="topics__item-font">
-              <Link to={canonicalLink(node)}>{name}  </Link>
+              <Link to={canonicalLink(node)}>{name}</Link>
               {
                 start_date &&
                   <span className="topics__item-smaller-font">
@@ -165,13 +173,19 @@ const SeriesContainer = ({ t }) => {
     </Grid>
   )
 
+  const namespace = 'lessons-series';
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!wip && !err && isEmpty(dataTree) && isEmpty(seriesIDs)) {
-      dispatch(actions.fetchAllSeries());
+    setDataLoaded(false);
+  }, [language])
+
+  useEffect(() => {
+    if (!wip && !err && !dataLoaded) {
+      dispatch(actions.fetchAllSeries(namespace));
+      setDataLoaded(true)
     }
-  }, [dataTree, wip, err, language, dispatch, seriesIDs]);
+  }, [wip, err, dispatch, dataLoaded]);
 
   const wipErr = WipErr({ wip, err, t });
 
@@ -182,14 +196,12 @@ const SeriesContainer = ({ t }) => {
   return (
     <>
       <Container className="padded">
-        <Input
-          fluid
-          size="large"
-          icon="search"
-          className="search-omnibox"
-          placeholder={t('sources-library.filter')}
+        <Filters
+          namespace={namespace}
+          filters={filters}
           onChange={handleFilterChange}
-          onKeyDown={handleFilterKeyDown}
+          onSearch={handleSearch}
+          onClear={handleClear}
         />
       </Container>
       {

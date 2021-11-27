@@ -19,16 +19,23 @@ import { filtersTransformer } from '../filters';
  * NOTE: if you add new actions you'll need to watch for those too.
  */
 
-function* pushFilterValuesInQuery(action) {
+export function* getFilterApiParams(action) {
   const filters = yield select(state => filterSelectors.getFilters(state.filters, action.payload.namespace));
+  const filterParams = filtersTransformer.toApiParams(filters) || {};
 
-  yield* pushQuery(query => Object.assign(query, filtersTransformer.toQueryParams(filters)));
+  return filterParams;
 }
 
 export function* hydrateFilters(action) {
   const query   = yield* getQuery();
   const filters = filtersTransformer.fromQueryParams(query);
   yield put(filterActions.setHydratedFilterValues(action.payload.namespace, filters));
+}
+
+function* pushFilterValuesInQuery(action) {
+  const filters = yield select(state => filterSelectors.getFilters(state.filters, action.payload.namespace));
+
+  yield* pushQuery(query => Object.assign(query, filtersTransformer.toQueryParams(filters)));
 }
 
 const valueChangingActions = [
