@@ -26,10 +26,20 @@
   }
 
   .link_to_cu {
-    padding: 4px 8px;
+    padding: 4px 8zpx;
     margin-top: 8px !important;
     margin-right: 4px !important;
     margin-left: 0 !important;
+  }
+  .unit-info__title {
+    line-height: 2.5em;
+    color: red !important;
+    img {
+      height: 2.5em;
+      width: 2.5em;
+      float: left;
+      margin-right: .5em;
+    }
   }
 
 
@@ -40,6 +50,12 @@
     .link_to_cu {
       margin-right: 0 !important;
       margin-left: 4px !important;
+    }
+    .unit-info__title {
+      img {
+        float: right;
+        margin-left: .5em;
+      }
     }
   }
 }

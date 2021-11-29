@@ -19,6 +19,7 @@ import Link from '../../../../Language/MultiLanguageLink';
 import * as shapes from '../../../../shapes';
 import PersonalInfo from './PersonalInfo';
 import { selectors as recommended } from '../../../../../redux/modules/recommended';
+import UnitLogo from '../../../../shared/Logo/UnitLogo';
 
 const makeTagLinks = (tags = [], getTagById) =>
   Array.from(intersperse(
@@ -81,7 +82,7 @@ const Info = ({ unit = {}, t, currentCollection = null }) => {
   const { noSSeries, sSeries } = makeCollectionsLinks(collections, t, currentCollection);
   const isMultiLessons         = Object.values(collections).some(col => col.content_type === CT_LESSONS_SERIES || col.content_type === CT_CONGRESS);
   const episodeInfo            = getEpisodeInfo(ct, cIDs, currentCollection || Object.values(collections)[0], filmDate, t);
-
+  const ccu =  Object.values(collections)[0];
   return (
     <>
       {
@@ -94,9 +95,14 @@ const Info = ({ unit = {}, t, currentCollection = null }) => {
       <div className="unit-info">
         {
           !isMultiLessons && noSSeries.length > 0 && (
-            <List.Item className="unit-info__collections" key="collections">
-              {noSSeries}
-            </List.Item>
+            <>
+            <div className="unit-info__title">
+              <UnitLogo collectionId={ccu.id} circular />
+              <List.Item className="unit-info__collections" key="collections">
+                {noSSeries}
+              </List.Item>
+            </div>           
+            </>
           )
         }
         <Header as="h2" className="unit-info__header">
