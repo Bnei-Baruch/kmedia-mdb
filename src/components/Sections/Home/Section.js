@@ -6,7 +6,7 @@ import * as shapes from '../../shapes';
 const Section = ({ title, children, computer= 12, tablet= 14, mobile= 16 }) =>
   <Grid centered padded="vertically" className="homepage__section__iconsrow">
     <Grid.Row className="iconsTitleRow">
-        <div className="iconsTitle">{title}</div>
+      <div className="iconsTitle">{title}</div>
     </Grid.Row>
     <Grid.Row>
       <Grid.Column computer={computer} tablet={tablet} mobile={mobile}>

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Card, Container, Feed, Grid} from 'semantic-ui-react';
+import { Card, Container, Feed, Grid } from 'semantic-ui-react';
 import { isEqual } from 'lodash';
 import moment from 'moment';
 import { getSectionForTranslation } from '../../../helpers/utils';
@@ -8,7 +8,7 @@ import * as consts from '../../../helpers/consts';
 import * as shapes from '../../shapes';
 import Section from './Section';
 import LatestUpdate from './LatestUpdate';
-import TwitterFeed from "../Publications/tabs/Twitter/Feed";
+import TwitterFeed from '../Publications/tabs/Twitter/Feed';
 
 const itemsByContentType = list => list.filter(x => !!x).reduce((acc, val) => {
   if (!acc[val.content_type]) {
