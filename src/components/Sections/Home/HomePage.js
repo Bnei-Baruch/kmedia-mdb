@@ -55,7 +55,7 @@ const renderBlogPostsAndTweets = (latestBlogPosts, latestTweets, language, t) =>
   <div className="homepage__section home-social-section">
     <Container className="padded horizontally ">
       <Section title={t('home.social')}>
-        <Grid width={15} centered className="homepage__iconsrow">
+        <Grid width={15} centered className="homepage__iconsrow socialBackground">
           <Grid.Row>
             {renderBlogPosts(latestBlogPosts, language, t)}
             {renderTweets(latestTweets, language, t)}
@@ -90,7 +90,7 @@ const renderActiveSectionsGrid = (t, isMobileDevice) =>
     <Container className="padded horizontally">
       <Section title={t('home.sections')}>
         <Grid columns="equal" centered className="homepage__iconsrow">
-          <Grid.Row>
+          <Grid.Row className="activeSectionsIcons">
             {renderActiveSections(t, isMobileDevice)}
           </Grid.Row>
         </Grid>

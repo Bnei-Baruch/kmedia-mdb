@@ -18,6 +18,33 @@
         background-size: 100% 1px;
       }
     }
+
+    &__iconsrow {
+
+      .iconsTitleRow {
+
+        .iconsTitle {
+          position: relative;
+          top: 33px;
+          background: #FFF;
+          font-size: 1.5em;
+          font-weight: bold;
+          padding: 5px 20px 10px 20px;
+          border: 2px solid #DBECF9;
+          border-radius: 9px;
+          z-index: 1;
+        }
+      }
+    }
+
+
+    &__cardGroup {
+      background: rgba(44, 144, 220, 0.05);
+      padding-top: 4em;
+      border-top: 2px solid #DBECF9;
+    }
+
+
   }
 
   &__header {
@@ -56,6 +83,30 @@
   }
 
   &__iconsrow {
+    background: #F3F4F5;
+    border-top:  2px solid #DBECF9;
+    padding-top: 1.5em !important;
+
+    .iconsTitleRow {
+      background: #FFF;
+
+      .iconsTitle {
+        position: relative;
+        top: 33px;
+        background: #FFF;
+        font-size: 1.5em;
+        font-weight: bold;
+        padding: 5px 20px 10px 20px;
+        border: 2px solid #DBECF9;
+        border-radius: 9px;
+        z-index: 1;
+      }
+    }
+
+    .activeSectionsIcons {
+      padding-top: 1.5em !important;
+    }
+
     img {
       margin-bottom: .2em;
       transition: transform .2s ease-out;
@@ -67,7 +118,8 @@
       display: flex !important;
       justify-content: center;
       &.topIcon {
-        padding-bottom: 5em;
+
+        padding-bottom: 3em;
       }
     }
 
@@ -83,6 +135,10 @@
       }
     }
 
+  }
+
+  &__iconsrow.socialBackground {
+    background: #F4F9FB;
   }
 
   &__search {
@@ -201,3 +257,4 @@
     }
   }
 }
+
