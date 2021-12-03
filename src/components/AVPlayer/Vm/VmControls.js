@@ -128,8 +128,8 @@ const buildDesktopVideoControls = ({ activeDuration, waitForPlaybackStart, hideO
       <ControlGroup space="top">
         {showNextPrev && (
           <VmPrevNext isPrev
-                      isDisabled={!hasPrev}
-                      onClick={onPrev}
+            isDisabled={!hasPrev}
+            onClick={onPrev}
           />
         )}
         <PlaybackControl
@@ -137,8 +137,8 @@ const buildDesktopVideoControls = ({ activeDuration, waitForPlaybackStart, hideO
           style={{ '--vm-control-scale': 0.7, margin: '0 -1rem', }} />
         {showNextPrev && (
           <VmPrevNext isPrev={false}
-                      isDisabled={!hasNext}
-                      onClick={onNext}
+            isDisabled={!hasNext}
+            onClick={onNext}
           />
         )}
         <TimeProgress hideTooltip />
@@ -156,17 +156,17 @@ const buildDesktopVideoControls = ({ activeDuration, waitForPlaybackStart, hideO
 );
 
 export const VmControls = ({
-                             isMobile, isVideo,
-                             onSwitchAV,
-                             onActivateSlice,
-                             activeDuration, waitForPlaybackStart, hideWhenPaused, hideOnMouseLeave,
-                             showNextPrev, hasPrev, onPrev, hasNext, onNext,
-                           }) => {
+  isMobile, isVideo,
+  onSwitchAV,
+  onActivateSlice,
+  activeDuration, waitForPlaybackStart, hideWhenPaused, hideOnMouseLeave,
+  showNextPrev, hasPrev, onPrev, hasNext, onNext,
+}) => {
   let controls;
 
   if (!isVideo) {
     controls = buildAudioControls();
-  } else if (isVideo && isMobile) {
+  } else if (isMobile) {
     controls = buildMobileVideoControls({ activeDuration, waitForPlaybackStart, hideWhenPaused });
   } else {
     controls = buildDesktopVideoControls({
