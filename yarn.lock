@@ -1727,10 +1727,10 @@
   dependencies:
     "@sinonjs/commons" "^1.7.0"
 
-"@stencil/core@^2.5.2":
-  version "2.6.0"
-  resolved "https://registry.yarnpkg.com/@stencil/core/-/core-2.6.0.tgz#29da96d8b6fc83e689b9f297ef3e8b59b90a676a"
-  integrity sha512-QsxWayZyusnqSZrlCl81R71rA3KqFjVVQSH4E0rGN15F1GdQaFonKlHLyCOLKLig1zzC+DQkLLiUuocexuvdeQ==
+"@stencil/core@2.5.2":
+  version "2.5.2"
+  resolved "https://registry.yarnpkg.com/@stencil/core/-/core-2.5.2.tgz#ad00d495ee37bbed4044524d59c7f22de15ab4a7"
+  integrity sha512-bgjPXkSzzg1WnTgVUm6m5ZzpKt602WmA/QljODAW1xVN40OHJdbGblzF/F6MFzqv2c5Cy30CB41arc8qADIdcQ==
 
 "@surma/rollup-plugin-off-main-thread@^1.1.1":
   version "1.4.2"
@@ -2315,24 +2315,23 @@
     "@typescript-eslint/types" "4.27.0"
     eslint-visitor-keys "^2.0.0"
 
-"@vime/core@^5.0.33":
-  version "5.0.33"
-  resolved "https://registry.yarnpkg.com/@vime/core/-/core-5.0.33.tgz#186afe600270371fa6abbf33289c5617d825481e"
-  integrity sha512-mpWT/wDALAdzhowskJ1YgQl8ThSQuhgHQVAhLn2Bd3yg2Vgw9rkuLC00c98dHXNTEE/sn2tdyiu9YnJ8EwknQQ==
+"@vime/core@^5.3.0":
+  version "5.3.0"
+  resolved "https://registry.yarnpkg.com/@vime/core/-/core-5.3.0.tgz#df62cfa1637db1d438a1e87e8631a569c53e0622"
+  integrity sha512-iSajxd2oktyo5EiBA+MsdAuaHYuBqn9gT3VdZhqByQYMlbhFVgZasUK71/Cyl/WB70uZInE4Cb6HFYtrsT34wQ==
   dependencies:
-    "@stencil/core" "^2.5.2"
+    "@stencil/core" "2.5.2"
     "@types/fscreen" "^1.0.1"
     fscreen "^1.2.0"
-    mitt "^2.1.0"
-    stencil-wormhole "^3.2.2"
+    mitt "^3.0.0"
+    stencil-wormhole "^3.4.1"
 
-"@vime/react@^5.0.31":
-  version "5.0.33"
-  resolved "https://registry.yarnpkg.com/@vime/react/-/react-5.0.33.tgz#cfe1ff0a03b12f8e9941862455ba3f3c944a64b1"
-  integrity sha512-Z4g7OACudwaJM4bX+esdPkZ5qHaGcivetGaShqyLSfJtrU4hMp+gv0+7h7sGdHFbbmrCP8UxEUlJwuF/HqDm8A==
+"@vime/react@^5.3.0":
+  version "5.3.0"
+  resolved "https://registry.yarnpkg.com/@vime/react/-/react-5.3.0.tgz#35ddbd5fa7357736fb4dd8f3e052d40e93e6b5c5"
+  integrity sha512-zQuUsyvOSMjc+igemjdVFqzlZfvBVHPR3v3lwufPw7Z/o2ncmb90AotkcD06nMSxJzl3OznDA6vhz/DHxKNuUQ==
   dependencies:
     "@seznam/compose-react-refs" "^1.0.4"
-    "@vime/core" "^5.0.33"
 
 "@webassemblyjs/ast@1.9.0":
   version "1.9.0"
@@ -9998,10 +9997,10 @@ mississippi@^3.0.0:
     stream-each "^1.1.0"
     through2 "^2.0.0"
 
-mitt@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/mitt/-/mitt-2.1.0.tgz#f740577c23176c6205b121b2973514eade1b2230"
-  integrity sha512-ILj2TpLiysu2wkBbWjAmww7TkZb65aiQO+DkVdUTBpBXq+MHYiETENkKFMtsJZX1Lf4pe4QOrTSjIfUwN5lRdg==
+mitt@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/mitt/-/mitt-3.0.0.tgz#69ef9bd5c80ff6f57473e8d89326d01c414be0bd"
+  integrity sha512-7dX2/10ITVyqh4aOSVI9gdape+t9l2/8QxHrFmUXu4EEUpdlxl6RudZUPZoc+zuY2hk1j7XxVroIVIan/pD/SQ==
 
 mixin-deep@^1.2.0:
   version "1.3.2"
@@ -13877,7 +13876,7 @@ stealthy-require@^1.1.1:
   resolved "https://registry.yarnpkg.com/stealthy-require/-/stealthy-require-1.1.1.tgz#35b09875b4ff49f26a777e509b3090a3226bf24b"
   integrity sha1-NbCYdbT/SfJqd35QmzCQoyJr8ks=
 
-stencil-wormhole@^3.2.2:
+stencil-wormhole@^3.4.1:
   version "3.4.1"
   resolved "https://registry.yarnpkg.com/stencil-wormhole/-/stencil-wormhole-3.4.1.tgz#f6c74d38cca38470884fca7353486620072d3734"
   integrity sha512-ppYTcWTJnIl4ZAKwF39LTA9f/ypHfbVefsHdN2hpMQGrR57wt1TieZo9tlCM/r1Y4SFiZ5yz/cjho564C921Xw==
