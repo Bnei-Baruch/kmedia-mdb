@@ -7,9 +7,9 @@ const video = (source, poster) => (
   </Video>
 );
 
-const audio = (source) => (
+const audio = source => (
   <Audio>
-    <source data-src={source} type="audio/mp4" />
+    <source data-src={source} type="audio/mp3" />
   </Audio>
 );
 
