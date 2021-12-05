@@ -120,7 +120,8 @@ const Recommended = ({ unit, t, filterOutUnits = [], displayTitle = true }) => {
         title={<span>{makeLandingPageLink(t, SGLP_LESSON_SERIES)}</span>}
         displayTitle={displayTitle}
         viewLimit={3}
-        feedName={SERIES} />
+        feedName={SERIES}
+        showLabels={false} />
     );
     unitCollections.forEach(collection => {
       if (recommendedUnits[sameCollection(collection.id)].length !== 0) {
@@ -133,7 +134,8 @@ const Recommended = ({ unit, t, filterOutUnits = [], displayTitle = true }) => {
             title={<span>{t(`materials.recommended.same-collection`)} {makeCollectionLink(collection, t)}</span>}
             displayTitle={displayTitle}
             viewLimit={3}
-            feedName={sameCollection(collection.id)} />);
+            feedName={sameCollection(collection.id)} 
+            showLabels={true} />);
       }
     });
     unitTags.forEach(tag => {
@@ -147,7 +149,9 @@ const Recommended = ({ unit, t, filterOutUnits = [], displayTitle = true }) => {
             title={<span>{t('materials.recommended.same-topic')}: {makeTagLink(tag, getTagById)}</span>}
             displayTitle={displayTitle}
             viewLimit={3}
-            feedName={sameTopic(tag)} />);
+            feedName={sameTopic(tag)}
+            showLabels={false} />);
+
       }
     });
   }
@@ -162,7 +166,8 @@ const Recommended = ({ unit, t, filterOutUnits = [], displayTitle = true }) => {
         title={t(`materials.recommended.${DEFAULT}`)}
         displayTitle={displayTitle}
         viewLimit={activeVariant === AB_RECOMMEND_NEW ? 4 : 0}
-        feedName={DEFAULT} />);
+        feedName={DEFAULT}
+        showLabels={false} />);
   }
 
   const wipErr = WipErr({ wip, err, t });
