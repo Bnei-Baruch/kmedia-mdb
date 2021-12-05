@@ -122,21 +122,6 @@ const Recommended = ({ unit, t, filterOutUnits = [], displayTitle = true }) => {
         viewLimit={3}
         feedName={SERIES} />
     );
-    unitTags.forEach(tag => {
-      if (recommendedUnits[sameTopic(tag)].length !== 0) {
-        renderRecommended.push(
-          <DisplayRecommended
-            key={sameTopic(tag)}
-            unit={unit}
-            t={t}
-            recommendedUnits={recommendedUnits[sameTopic(tag)]}
-            title={<span>{t('materials.recommended.same-topic')}: {makeTagLink(tag, getTagById)}</span>}
-            displayTitle={displayTitle}
-            viewLimit={3}
-            feedName={sameTopic(tag)} />);
-      }
-    });
-
     unitCollections.forEach(collection => {
       if (recommendedUnits[sameCollection(collection.id)].length !== 0) {
         renderRecommended.push(
@@ -149,6 +134,20 @@ const Recommended = ({ unit, t, filterOutUnits = [], displayTitle = true }) => {
             displayTitle={displayTitle}
             viewLimit={3}
             feedName={sameCollection(collection.id)} />);
+      }
+    });
+    unitTags.forEach(tag => {
+      if (recommendedUnits[sameTopic(tag)].length !== 0) {
+        renderRecommended.push(
+          <DisplayRecommended
+            key={sameTopic(tag)}
+            unit={unit}
+            t={t}
+            recommendedUnits={recommendedUnits[sameTopic(tag)]}
+            title={<span>{t('materials.recommended.same-topic')}: {makeTagLink(tag, getTagById)}</span>}
+            displayTitle={displayTitle}
+            viewLimit={3}
+            feedName={sameTopic(tag)} />);
       }
     });
   }
