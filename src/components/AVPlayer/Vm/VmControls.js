@@ -81,7 +81,7 @@ const buildMobileVideoControls = ({ activeDuration, waitForPlaybackStart, hideWh
   </>
 );
 
-const buildDesktopVideoControls = ({ activeDuration, waitForPlaybackStart, hideOnMouseLeave, showNextPrev, hasPrev, onPrev, hasNext, onNext, isVideo, onSwitchAV, onActivateSlice }) => (
+const buildDesktopVideoControls = ({ activeDuration, waitForPlaybackStart, hideOnMouseLeave, showNextPrev, hasPrev, onPrev, hasNext, onNext, onActivateSlice }) => (
   <>
     <Scrim gradient="up" />
     <ClickToPlay />
@@ -164,14 +164,14 @@ export const VmControls = ({
 }) => {
   let controls;
 
-  if (!isVideo) {
-    controls = buildAudioControls();
-  } else if (isMobile) {
+  if (isMobile) {
     controls = buildMobileVideoControls({ activeDuration, waitForPlaybackStart, hideWhenPaused });
-  } else {
+  } else if (isVideo) {
     controls = buildDesktopVideoControls({
-      activeDuration, waitForPlaybackStart, hideOnMouseLeave, showNextPrev, hasPrev, onPrev, hasNext, onNext, isVideo, onSwitchAV, onActivateSlice,
+      activeDuration, waitForPlaybackStart, hideOnMouseLeave, showNextPrev, hasPrev, onPrev, hasNext, onNext, onActivateSlice,
     });
+  } else {
+    controls = buildAudioControls();
   }
 
   return <DefaultUi noControls noSettings noCaptions noClickToPlay noDblClickFullScreen noPoster noSpinner>
