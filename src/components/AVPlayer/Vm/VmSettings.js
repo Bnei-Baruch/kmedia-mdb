@@ -4,7 +4,7 @@ import { LANGUAGE_OPTIONS, VS_FHD, VS_HD, VS_NAMES, VS_NHD } from '../../../help
 
 const sortedVS = [VS_FHD, VS_HD, VS_NHD];
 
-const formatRate = (rate) => rate.toString() === '1' ? 'normal' : `${rate}x`;
+const formatRate = rate => rate.toString() === '1' ? 'normal' : `${rate}x`;
 
 const buildPlaybackRateSubmenu = (playbackRates, currentRate, playback) => (
   <Submenu label="Playback Rate" hint={formatRate(currentRate)}>
@@ -28,13 +28,14 @@ const buildPlaybackQualitySubmenu = (isVideo, videoQuality, setPlaybackQuality, 
   if (!isVideo) {
     return null;
   }
+
   if (videoQualities.length <= 1) {
     return <MenuItem label="Playback" hint={VS_NAMES[videoQuality] ?? 'auto'} />;
   }
 
   return (
     <Submenu label="Quality" hint={VS_NAMES[videoQuality]}>
-      <MenuRadioGroup value={videoQuality} onVmCheck={(e) => onPlaybackQualitySelect(e, onQualityChange, setPlaybackQuality)}>
+      <MenuRadioGroup value={videoQuality} onVmCheck={e => onPlaybackQualitySelect(e, onQualityChange, setPlaybackQuality)}>
         {
           videoQualities.map(quality => (
             <MenuRadio key={`quality-${quality}`} label={VS_NAMES[quality]} value={quality} />
@@ -64,9 +65,11 @@ const buildLanguageMenu = (selectedLanguage, languages, onLanguageChange) => {
       if (a.value < b.value) {
         return -1;
       }
+
       if (a.value > b.value) {
         return 1;
       }
+
       return 0;
     })
     .map(x => ({ value: x.value, text: x.value }));
@@ -91,7 +94,7 @@ export const VmSettings = ({ isVideo, videoQuality, videoQualities, onQualityCha
   const [playbackRate, setPlaybackRate] = usePlayerContext(ref, 'playbackRate', 1);
   const [_, setPlaybackQuality]         = usePlayerContext(ref, 'playbackQuality', 'HD');
 
-  const onPlaybackRateSelect = (event) => {
+  const onPlaybackRateSelect = event => {
     const rate = parseFloat(event.target.value);
     setPlaybackRate(rate);
   };

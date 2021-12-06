@@ -19,6 +19,6 @@ const AVMobileCheck = props => {
         {/*<AVPlayerMobile {...props} chronicles={chronicles} />*/}
       </>
     );
-};
+}
 
 export default AVMobileCheck;

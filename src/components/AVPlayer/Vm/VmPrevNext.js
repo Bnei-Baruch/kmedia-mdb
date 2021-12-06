@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import { Control } from '@vime/react';
-import { Icon as Icon } from 'semantic-ui-react';
+import { Icon } from 'semantic-ui-react';
 
 export const VmPrevNext = ({ isPrev, isDisabled, onClick }) => {
   const ref  = useRef(null);
