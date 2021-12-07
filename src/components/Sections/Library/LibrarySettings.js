@@ -10,12 +10,15 @@ const LibrarySettings = ({ handleSettings, fontSize }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
+    const savedState = getItem();
+    handleSettings(savedState);
+
     window.addEventListener('resize', () => setIsOpen(false));
 
     return () => {
       window.removeEventListener('resize', () => setIsOpen(false));
     }
-  }, []);
+  }, [handleSettings]);
 
   const handleNewSettings = newSettings => {
     const savedState         = getItem();
@@ -31,9 +34,6 @@ const LibrarySettings = ({ handleSettings, fontSize }) => {
 
     handleNewSettings({ fontSize: fontSize + amount });
   };
-
-  const savedState = getItem();
-  handleSettings(savedState);
 
   return (
     <Popup
