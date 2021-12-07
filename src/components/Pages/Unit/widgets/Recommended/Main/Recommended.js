@@ -134,7 +134,7 @@ const Recommended = ({ unit, t, filterOutUnits = [], displayTitle = true }) => {
             title={<span>{t(`materials.recommended.same-collection`)} {makeCollectionLink(collection, t)}</span>}
             displayTitle={displayTitle}
             viewLimit={3}
-            feedName={sameCollection(collection.id)} 
+            feedName={sameCollection(collection.id)}
             showLabels={true} />);
       }
     });

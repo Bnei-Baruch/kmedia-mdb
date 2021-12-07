@@ -51,6 +51,7 @@ const RecommendedPlaylist = (recommendForUnit, units, selected, t, chronicles, v
     if (!showLabels) {
       return null;
     }
+
     if (watchingNow(unit.id, index) !== -1) {
       if (!labelsUsed.has('watchingNow')) {
         labelsUsed.set('watchingNow', unit);
@@ -119,7 +120,6 @@ const RecommendedPlaylist = (recommendForUnit, units, selected, t, chronicles, v
                     link={canonicalLink(unit)}
                     withCUInfo={false}
                     withCCUInfo={true}
-                    withPart={false}
                     asList
                     label={unitLabels[index]}
                     size={'small'} />
@@ -127,14 +127,12 @@ const RecommendedPlaylist = (recommendForUnit, units, selected, t, chronicles, v
                     <ContentItemContainer
                       id={unit.id}
                       key={unit.id}
-                      withPart={false}
                       asList
                       label={unitLabels[index]}
                       size={'small'} /> :
                     <SourceItemContainer
                       id={unit.id}
                       key={unit.id}
-                      withPart={false}
                       asList
                       label={unitLabels[index]}
                       size={'small'} />
