@@ -1848,7 +1848,10 @@
   }
 
   .unit-logo {
-    width: 100%
+    width: 100%;
+    @include mobile {
+      max-width: 160px;
+    }
   }
 }
 
@@ -2073,6 +2076,8 @@
     .cu_item_info {
       padding: 0 1em 1em;
       height: 80px;
+      width: 100%;
+      overflow: hidden;
 
       .cu_item_name {
         -webkit-line-clamp: 2;
@@ -2186,7 +2191,7 @@
     color: $black;
     right: 1em;
     left: 1em;
-    width: auto;
+    width: max-content;
     min-height: 1.5em;
 
     @include mobile {

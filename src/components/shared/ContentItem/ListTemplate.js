@@ -6,11 +6,11 @@ import clsx from 'clsx';
 import * as shapes from '../../shapes';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { NO_NAME } from '../../../helpers/consts';
-import { toHumanReadableTime } from '../../../helpers/time';
 import { formatDuration } from '../../../helpers/utils';
 import { isLanguageRtl } from '../../../helpers/i18n-utils';
 import UnitLogo from '../Logo/UnitLogo';
 import Link from '../../Language/MultiLanguageLink';
+import { PLAYER_POSITION_STORAGE_KEY } from '../../AVPlayer/constants';
 
 const imageWidthBySize = {
   'small': 144,
@@ -45,9 +45,8 @@ const ListTemplate = ({
 
   let percent = null;
   if (unit && playTime) {
-    const sep = link.indexOf('?') > 0 ? `&` : '?';
-    link      = `${link}${sep}sstart=${toHumanReadableTime(playTime)}`;
-    percent   = (
+    localStorage.setItem(`${PLAYER_POSITION_STORAGE_KEY}_${unit.id}`, playTime);
+    percent = (
       <Progress
         size="tiny"
         className="cu_item_progress"
@@ -65,7 +64,7 @@ const ListTemplate = ({
       className={clsx('cu_item cu_item_list no-thumbnail', { [size]: !!size, selected })}
     >
       <div>
-        {withCUInfo && unit && <div className="cu_item_duration">{formatDuration(unit.duration)}</div>}
+        {withCUInfo && unit?.duration && <div className="cu_item_duration">{formatDuration(unit.duration)}</div>}
         {label ? <div className="cu_item_label">{label}</div> : null}
         {percent}
         <div className="cu_item_img" style={{ width }}>

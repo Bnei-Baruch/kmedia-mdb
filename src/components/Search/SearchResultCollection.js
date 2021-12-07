@@ -3,20 +3,17 @@ import { Button, Container, Icon, Segment } from 'semantic-ui-react';
 
 import { canonicalLink } from '../../helpers/links';
 import { isDebMode } from '../../helpers/url';
-import { assetUrl } from '../../helpers/Api';
 import * as shapes from '../shapes';
 import Link from '../Language/MultiLanguageLink';
 import ScoreDebug from './ScoreDebug';
-import FallbackImage from '../shared/FallbackImage';
 import SearchResultBase from './SearchResultBase';
+import UnitLogo from '../shared/Logo/UnitLogo';
 
 class SearchResultCollection extends SearchResultBase {
   static propTypes = {
     ...SearchResultBase.props,
     c: shapes.Collection,
   };
-
-  state = { isImgLoaded: false };
 
   renderCU = cu => {
     const { queryResult, hit, rank }                                   = this.props;
@@ -35,16 +32,6 @@ class SearchResultCollection extends SearchResultBase {
     );
   };
 
-  handleImageContextRef = ref => {
-    if (ref) {
-      this.imgRef = ref.children[0];
-    }
-  };
-
-  imgLoadHandler = () => {
-    this.setState({ isImgLoaded: true });
-  };
-
   buildLinkParams = () => {
     const { queryResult: { search_result: { searchId } }, hit, rank, filters, c }   = this.props;
     const { _index: index, _source: { mdb_uid: mdbUid, result_type: resultType }, } = hit;
@@ -59,24 +46,18 @@ class SearchResultCollection extends SearchResultBase {
   render() {
     const { t, location, c, hit }                = this.props;
     const { highlight, _score: score }           = hit;
-    const { isImgLoaded }                        = this.state;
     const { canonicalLinkParams, logLinkParams } = this.buildLinkParams();
 
     return (
       <Segment className="bg_hover_grey search__block">
         <Container>
-          <span ref={this.handleImageContextRef}>
-            <FallbackImage
-              circular
-              width={isImgLoaded ? this.imgRef.offsetWidth.toString() : null}
-              height={isImgLoaded ? this.imgRef.offsetWidth.toString() : null}
-              onLoad={this.imgLoadHandler}
-              floated="left"
-              fallbackImage={null}
-              size="tiny"
-              src={assetUrl(`logos/collections/${this.props.c.id}.jpg`)}
-            />
-          </span>
+          <UnitLogo
+            width={80}
+            circular
+            collectionId={this.props.c.id}
+            floated="left"
+            size="tiny"
+          />
           <Container>
             <Container as="h3">
               <Link

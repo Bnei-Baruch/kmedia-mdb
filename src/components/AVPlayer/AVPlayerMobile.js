@@ -11,7 +11,7 @@ import { fromHumanReadableTime } from '../../helpers/time';
 import { isLanguageRtl } from '../../helpers/i18n-utils';
 import { getQuery } from '../../helpers/url';
 import * as shapes from '../shapes';
-import { PLAYER_MODE } from './constants';
+import { PLAYER_MODE, PLAYER_POSITION_STORAGE_KEY } from './constants';
 import AVPlayPause from './AVPlayPause';
 import AVLanguageMobile from './AVLanguageMobile';
 import AVAudioVideo from './AVAudioVideo';
@@ -28,7 +28,6 @@ import { buildAppendData } from './utils';
 
 const DEFAULT_PLAYER_VOLUME       = 0.8;
 const PLAYER_VOLUME_STORAGE_KEY   = '@@kmedia_player_volume';
-const PLAYER_POSITION_STORAGE_KEY = '@@kmedia_player_position';
 
 // Converts playback rate string to float: 1.0x => 1.0
 const playbackToValue = playback => parseFloat(playback.slice(0, -1));
