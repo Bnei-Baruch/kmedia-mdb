@@ -28,6 +28,12 @@ export function* fetchRecommended(action) {
 
     const specs = [];  // Order important due to skip uids.
     if (variant === AB_RECOMMEND_NEW) {
+      // Random Programs
+      specs.push({
+        'name': 'DataContentUnitsSuggester',
+        'filters': [{ 'filter_selector': 1, 'args': ['VIDEO_PROGRAM'] }],
+        'order_selector': 3,
+      });
       // Same Topic - WatchingNow, Popular, Latest.
       tags.forEach(tag => {
         specs.push({
@@ -133,6 +139,8 @@ export function* fetchRecommended(action) {
     const feeds = { 'default': data.feeds[data.feeds.length - 1] };
     if (variant === AB_RECOMMEND_NEW) {
       let index = 0;
+      feeds['random-programs'] = data.feeds[index];
+      index++;
       tags.forEach(tag => {
         feeds[`same-topic-${tag}`] = data.feeds[index];
         index++;
