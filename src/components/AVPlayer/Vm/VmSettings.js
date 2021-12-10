@@ -100,13 +100,11 @@ export const VmSettings = ({ isVideo, videoQuality, videoQualities, onQualityCha
   };
 
   return (
-    <>
-      <Settings hideTooltip id="1" ref={ref}>
-        {buildPlaybackRateSubmenu(playbackRates, playbackRate, onPlaybackRateSelect)}
-        {buildPlaybackQualitySubmenu(isVideo, videoQuality, setPlaybackQuality, videoQualities, onQualityChange)}
-        {buildAVSubmenu(isVideo, onSwitchAV)}
-        {buildLanguageMenu(selectedLanguage, languages, onLanguageChange)}
-      </Settings>
-    </>
+    <Settings hideTooltip id="1" ref={ref}>
+      {buildPlaybackRateSubmenu(playbackRates, playbackRate, onPlaybackRateSelect)}
+      {buildPlaybackQualitySubmenu(isVideo, videoQuality, setPlaybackQuality, videoQualities, onQualityChange)}
+      {buildAVSubmenu(isVideo, onSwitchAV)}
+      {buildLanguageMenu(selectedLanguage, languages, onLanguageChange)}
+    </Settings>
   );
 };

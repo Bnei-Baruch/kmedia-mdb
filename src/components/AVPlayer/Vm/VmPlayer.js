@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Player, usePlayerContext, } from '@vime/react';
+import { Player, usePlayerContext, Ui } from '@vime/react';
 
 import { VmControls } from './VmControls';
 import { VmProvider } from './VmProvider';
@@ -88,14 +88,14 @@ const VmPlayer = ({
     setVideoQuality(videoQuality);
     setSource(src);
     setIsVideo(item.mediaType === MT_VIDEO);
-  }, [item]);
+  }, [item, t]);
 
   useEffect(() => {
     if (playbackReady && wasCurrentTime > 0) {
       setCurrentTime(wasCurrentTime);
       setWasCurrentTime(0);
     }
-  }, [playbackReady]);
+  }, [playbackReady, setCurrentTime, wasCurrentTime]);
 
   const setEditMode = (properties = {}) => {
     console.log('----------->', editMode);
@@ -129,9 +129,9 @@ const VmPlayer = ({
     onLanguageChange(e, e.target?.value);
   };
 
-  if (isEditMode) {
+  // if (isEditMode) {
 
-  }
+  // }
 
   return (
     <Player ref={player} theme="dark" playsInline
@@ -143,47 +143,49 @@ const VmPlayer = ({
         poster={isVideo ? item.preImageUrl : null}
         source={source}
       />
-      <VmControls player={player.current}
-        isVideo={isVideo}
-        // TODO isMobile={isMobile}
+      <Ui>
+        <VmControls player={player.current}
+          isVideo={isVideo}
+          // TODO isMobile={isMobile}
 
-        activeDuration={1500}
-        hideWhenPaused={false}
+          activeDuration={1500}
+          hideWhenPaused={false}
 
-        onSwitchAV={switchAV}
-        onActivateSlice={() => {
-          setEditMode();
-        }}
-
-        showNextPrev={showNextPrev}
-        hasPrev={hasPrev}
-        onPrev={onPrev}
-        hasNext={hasNext}
-        onNext={onNext}
-      />
-      {isEditMode && (
-        <ShareFormDesktop
-          // media={media}
-          item={item}
-          uiLanguage={uiLanguage}
-          onSliceChange={this.handleSliceChange}
-          onExit={() => {
-            setMode(PLAYER_MODE.NORMAL);
-            setSliceStart(undefined);
-            setSliceEnd(undefined);
+          onSwitchAV={switchAV}
+          onActivateSlice={() => {
+            setEditMode();
           }}
+
+          showNextPrev={showNextPrev}
+          hasPrev={hasPrev}
+          onPrev={onPrev}
+          hasNext={hasNext}
+          onNext={onNext}
         />
-      )}
-      <VmSettings
-        isVideo={isVideo}
-        videoQuality={videoQuality}
-        videoQualities={Object.keys(item.byQuality)}
-        onQualityChange={onQualityChange}
-        onSwitchAV={switchAV}
-        selectedLanguage={selectedLanguage}
-        languages={languages}
-        onLanguageChange={languageChange}
-      />
+        {isEditMode && (
+          <ShareFormDesktop
+          // media={media}
+            item={item}
+            uiLanguage={uiLanguage}
+            onSliceChange={this.handleSliceChange}
+            onExit={() => {
+              setMode(PLAYER_MODE.NORMAL);
+              setSliceStart(undefined);
+              setSliceEnd(undefined);
+            }}
+          />
+        )}
+        <VmSettings
+          isVideo={isVideo}
+          videoQuality={videoQuality}
+          videoQualities={Object.keys(item.byQuality)}
+          onQualityChange={onQualityChange}
+          onSwitchAV={switchAV}
+          selectedLanguage={selectedLanguage}
+          languages={languages}
+          onLanguageChange={languageChange}
+        />
+      </Ui>
     </Player>
   );
 };
@@ -205,7 +207,7 @@ VmPlayer.propTypes = {
   onSwitchAV: PropTypes.func.isRequired,
 
   // Slice props
-  history: shapes.History.isRequired,
+  // history: shapes.History.isRequired,
 
   // Playlist props
   autoPlay: PropTypes.bool,
@@ -222,7 +224,7 @@ VmPlayer.propTypes = {
   onDropdownOpenedChange: PropTypes.func.isRequired,
 
   // Player actions.
-  actionPlayerPlay: PropTypes.func.isRequired,
+  // actionPlayerPlay: PropTypes.func.isRequired,
 };
 
 export default withNamespaces()(VmPlayer);
