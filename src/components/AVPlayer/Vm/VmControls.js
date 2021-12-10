@@ -5,15 +5,14 @@ import {
   Controls,
   ControlSpacer,
   CurrentTime,
-  DefaultUi,
   EndTime,
-  FullscreenControl, MuteControl,
+  FullscreenControl,
   PipControl,
   PlaybackControl,
   Poster,
   Scrim,
   ScrubberControl,
-  SettingsControl, Slider,
+  SettingsControl,
   Spinner,
   TimeProgress,
   VolumeControl,
@@ -174,7 +173,5 @@ export const VmControls = ({
     controls = buildAudioControls();
   }
 
-  return <DefaultUi noControls noSettings noCaptions noClickToPlay noDblClickFullScreen noPoster noSpinner>
-    {controls}
-  </DefaultUi>;
+  return controls;
 };
