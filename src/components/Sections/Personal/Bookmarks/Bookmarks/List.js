@@ -39,7 +39,7 @@ const BookmarkList = ({ t }) => {
 
   if (wipErr) return wipErr;
 
-  const filterBookmarkByQuery = (bookmark) => {
+  const filterBookmarkByQuery = bookmark => {
     if (!bookmark)
       return false;
     const { name, source_uid } = bookmark;
@@ -54,6 +54,7 @@ const BookmarkList = ({ t }) => {
   if (query) {
     items = items.filter(filterBookmarkByQuery);
   }
+
   if (items.length === 0) {
     let msg = t('personal.bookmark.haveNo');
     if (folder_id)

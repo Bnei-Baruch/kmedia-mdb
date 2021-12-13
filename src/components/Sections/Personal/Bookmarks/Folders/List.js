@@ -34,7 +34,7 @@ const FolderList = ({ t, close }) => {
   };
 
   const handleSaveFolder = e => {
-    dispatch(actions.add(MY_NAMESPACE_FOLDERS, { name: e.target.value || t('personal.bookmark.newFolderName') }));
+    dispatch(actions.add(MY_NAMESPACE_FOLDERS, { name: e.target.value || t('personal.bookmark.newFolder') }));
     setEditFolder(false);
   };
 
@@ -66,7 +66,7 @@ const FolderList = ({ t, close }) => {
             <FolderItem folder={{ id: 'all', name: t('personal.bookmark.allFolders') }} key={'all'} />
             {
               editFolder && (
-                <Grid.Row key={'newFolderName'}>
+                <Grid.Row key={'newFolder'}>
                   <Grid.Column>
                     <Input
                       focus
@@ -75,7 +75,7 @@ const FolderList = ({ t, close }) => {
                       onKeyDown={handleKeyDown}
                       autoFocus
                       onFocus={e => {
-                        e.target.value = t('personal.bookmark.newFolderName');
+                        e.target.value = t('personal.bookmark.newFolder');
                         e.target.select();
                       }}
                     />
