@@ -20,6 +20,7 @@ import {
   CT_SPECIAL_LESSON,
   SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_TEXT,
   SGLP_LESSON_SERIES,
+  SGLP_PRORGRAMS,
 } from '../../../../../../helpers/consts';
 
 // Number of items to try to recommend.
@@ -29,10 +30,11 @@ const sameTopic = tag => `same-topic-${tag}`;
 const sameCollection = collection => `same-collection-${collection}`;
 const DEFAULT = 'default';
 const SERIES = 'series';
+const RANDOM_PROGRAMS = 'random-programs';
 
 const makeLandingPageLink = (t, landingPage) => (
   <Link key={landingPage} to={landingPageSectionLink(landingPage, [])}>
-    {t(SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_TEXT[SGLP_LESSON_SERIES])}
+    {t(SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_TEXT[landingPage])}
   </Link>
 );
 
@@ -100,6 +102,7 @@ const Recommended = ({ unit, t, filterOutUnits = [], displayTitle = true }) => {
 
   const recommendedUnitsTypes = [];
   if (activeVariant === AB_RECOMMEND_NEW) {
+    recommendedUnitsTypes.push(RANDOM_PROGRAMS);
     unitTags.forEach(tag => recommendedUnitsTypes.push(sameTopic(tag)));
     unitCollections.forEach(collection => recommendedUnitsTypes.push(sameCollection(collection.id)));
     recommendedUnitsTypes.push(SERIES);
@@ -134,7 +137,7 @@ const Recommended = ({ unit, t, filterOutUnits = [], displayTitle = true }) => {
             title={<span>{t(`materials.recommended.same-collection`)} {makeCollectionLink(collection, t)}</span>}
             displayTitle={displayTitle}
             viewLimit={3}
-            feedName={sameCollection(collection.id)} 
+            feedName={sameCollection(collection.id)}
             showLabels={true} />);
       }
     });
@@ -154,6 +157,20 @@ const Recommended = ({ unit, t, filterOutUnits = [], displayTitle = true }) => {
 
       }
     });
+    if (recommendedUnits[RANDOM_PROGRAMS].length !== 0) {
+      renderRecommended.push(
+        <DisplayRecommended
+          key={RANDOM_PROGRAMS}
+          unit={unit}
+          t={t}
+          recommendedUnits={recommendedUnits[RANDOM_PROGRAMS]}
+          title={<span>{makeLandingPageLink(t, SGLP_PRORGRAMS)}</span>}
+          displayTitle={displayTitle}
+          viewLimit={3}
+          feedName={RANDOM_PROGRAMS}
+          showLabels={false} />
+      );
+    }
   }
 
   if (recommendedUnits[DEFAULT].length !== 0) {
