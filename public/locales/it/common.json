@@ -24,8 +24,8 @@
       "help": "Aiuto",
       "old-site": "Vecchio sito",
       "podcast": "Podcast",
-      "old-site": "Old Site",
-      "subscribe": "Iscriviti per gli aggiornamenti"
+      "subscribe": "Iscriviti per gli aggiornamenti",
+      "bookmarks": "Bookmarks"
     },
     "footer": {
       "copyright": "Copyright © 2003-{{year}}",
@@ -776,6 +776,26 @@
     "login": "Login",
     "logout": "Logout",
     "needToLogin": "Sign in to like, save and subscribe to videos",
-    "account": "My Account"
+    "account": "My Account",
+    "no_playlists": "You have no playlists, please create one",
+    "no_reactions": "You have no videos you liked",
+    "no_history": "Start watching videos to be shown here",
+    "no_subscriptions": "You have no subscriptions yet, subscribe to see them here",
+    "bookmark": {
+      "title": "Bookmarks",
+      "name": "Name",
+      "saveBookmark": "Save Bookmark",
+      "editBookmark": "Edit Bookmark",
+      "removeBookmark": "Remove Bookmark",
+      "searchBookmarks": "Search Bookmarks",
+      "searchFolders": "Search Folders",
+      "folders": "Folders",
+      "newFolder": "New Folder",
+      "allFolders": "All",
+      "filterByFolder": "Search in",
+      "bookmarkUpdated": "Bookmark updated successfully!",
+      "bookmarkCreated": "Bookmark successfully created!",
+      "confirmRemoveBookmark": "Are you sure you want to delete {{name}}?"
+    }
   }
 }

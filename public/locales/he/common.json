@@ -23,7 +23,8 @@
       "help": "עזרה",
       "old-site": "לאתר הישן",
       "podcast": "פודקאסט",
-      "subscribe": "הרשם לעדכונים"
+      "subscribe": "הרשם לעדכונים",
+      "bookmarks": "סימניות"
     },
     "footer": {
       "copyright": "© כל הזכויות שמורות 2003-{{year}}",
@@ -750,7 +751,7 @@
     "unsubscribe": "נרשמת כמנוי",
     "subscribe": "הרשמה למינוי",
     "unsubscribeSuccessful": "המינוי הוסר",
-    "subscribeSuccessful": "נוסף מינוי",
+    "subscribeSuccessful": "נוסף מנוי",
     "newPlaylistSuccessful": "פלייליסט {{name}} נוצר",
     "addToPlaylistSuccessful": "נוסף לפלייליסט {{name}}",
     "history": "היסטוריית צפייה",
@@ -777,6 +778,22 @@
     "no_playlists": "אין לך עדיין פלייליסטים, אנא צור אחד",
     "no_reactions": "אין לך סרטונים שאהבת",
     "no_history": "התחל לצפות בסרטונים שיוצגו כאן",
-    "no_subscriptions": "אין לך עדיין מנויים, הירשם כדי לראות אותם כאן"
+    "no_subscriptions": "אין לך עדיין מנויים, הירשם כדי לראות אותם כאן",
+    "bookmark": {
+      "title": "סימניות",
+      "name": "שם",
+      "saveBookmark": "שמירת סימניה",
+      "editBookmark": "עריכת סימניה",
+      "removeBookmark": "להסיר סימניה",
+      "searchBookmarks": "לחפש בסימניות",
+      "searchFolders": "חפש תיקיות",
+      "folders": "תיקיות",
+      "newFolder": "תיקיה חדשה",
+      "allFolders": "הכל",
+      "filterByFolder": "חפש ב",
+      "bookmarkUpdated": "הסימניה עודכנה בהצלחה!",
+      "bookmarkCreated": "הסימניה נוצרה בהצלחה!",
+      "confirmRemoveBookmark": "האם ברצונך למחוק את {{name}}?"
+    }
   }
 }

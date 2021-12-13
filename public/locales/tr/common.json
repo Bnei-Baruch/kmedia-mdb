@@ -24,7 +24,8 @@
       "help": "Yardım",
       "old-site": "Eski Site",
       "podcast": "Dijital ses dosyası",
-      "subscribe": "Güncellemeler İçin Abone Ol"
+      "subscribe": "Güncellemeler İçin Abone Ol",
+      "bookmarks": "Bookmarks"
     },
     "footer": {
       "copyright": "Telif Hakkı © 2003-{{year}}",
@@ -690,6 +691,22 @@
     "no_playlists": "You have no playlists, please create one",
     "no_reactions": "You have no videos you liked",
     "no_history": "Start watching videos to be shown here",
-    "no_subscriptions": "You have no subscriptions yet, subscribe to see them here"
+    "no_subscriptions": "You have no subscriptions yet, subscribe to see them here",
+    "bookmark": {
+      "title": "Bookmarks",
+      "name": "Name",
+      "saveBookmark": "Save Bookmark",
+      "editBookmark": "Edit Bookmark",
+      "removeBookmark": "Remove Bookmark",
+      "searchBookmarks": "Search Bookmarks",
+      "searchFolders": "Search Folders",
+      "folders": "Folders",
+      "newFolder": "New Folder",
+      "allFolders": "All",
+      "filterByFolder": "Search in",
+      "bookmarkUpdated": "Bookmark updated successfully!",
+      "bookmarkCreated": "Bookmark successfully created!",
+      "confirmRemoveBookmark": "Are you sure you want to delete {{name}}?"
+    }
   }
 }

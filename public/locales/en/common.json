@@ -694,21 +694,19 @@
     "no_subscriptions": "You have no subscriptions yet, subscribe to see them here",
     "bookmark": {
       "title": "Bookmarks",
-      "name": "name",
+      "name": "Name",
       "saveBookmark": "Save Bookmark",
       "editBookmark": "Edit Bookmark",
       "removeBookmark": "Remove Bookmark",
-      "searchBookmarks": "Search bookmarks",
+      "searchBookmarks": "Search Bookmarks",
       "searchFolders": "Search Folders",
       "folders": "Folders",
       "newFolder": "New Folder",
-      "newFolderName": "New folder name",
-      "allFolders": "Show all",
+      "allFolders": "All",
       "filterByFolder": "Search in",
-      "filterByQuery": "Bookmarks with name",
-      "bookmarkUpdated": "Bookmarks was updated",
-      "bookmarkCreated": "Bookmarks was created",
-      "confirmRemoveBookmark": "Are you sure you want to delete bookmark {{name}}?"
+      "bookmarkUpdated": "Bookmark updated successfully!",
+      "bookmarkCreated": "Bookmark successfully created!",
+      "confirmRemoveBookmark": "Are you sure you want to delete {{name}}?"
     }
   }
 }
