@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Container, Feed, Grid } from 'semantic-ui-react';
 import * as shapes from '../../shapes';
@@ -13,6 +13,9 @@ import BlogFeed from '../Publications/tabs/Blog/Feed';
 import TwitterFeed from '../Publications/tabs/Twitter/Feed';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { isEqual } from 'lodash';
+import { useInterval } from '../../../helpers/timer';
+
+const SWITCH_BANNERS_TIMEOUT = 5 * 1000; // every 5 sec
 
 const renderBlogPosts = (latestBlogPosts, language, t) =>
   latestBlogPosts.length
@@ -65,7 +68,7 @@ const renderBlogPostsAndTweets = (latestBlogPosts, latestTweets, language, t) =>
 const renderActiveSections = (t, isMobileDevice) => {
   const map = isMobileDevice ?
     x => (
-      <Grid.Column width={5} key={x} textAlign="center">
+      <Grid.Column width={4} key={x} textAlign="center">
         <Topic title={t(`nav.sidebar.${x}`)} src={x} href={`/${x}`} />
       </Grid.Column>
     ) :
@@ -75,7 +78,7 @@ const renderActiveSections = (t, isMobileDevice) => {
       </Grid.Column>
     );
 
-  return ['lessons', 'programs', 'sources', 'events', 'publications', 'simple-mode'].map(map);
+  return ['lessons', 'programs', 'sources', 'events', 'publications', 'simple-mode', 'topics', 'likutim'].map(map);
 };
 
 const renderActiveSectionsGrid = (t, isMobileDevice) =>
@@ -110,25 +113,45 @@ const renderLatestLessonAndBanner = (latestLesson, banner) =>
             </Grid.Column>
           }
           <Grid.Column computer={6} tablet={7} mobile={16}>
-            <Promoted banner={banner} />
+            {banner && <Promoted banner={banner} />}
           </Grid.Column>
         </Grid.Row>
       </Grid>
     </Container>
   </div>;
 
+
 const HomePage = ({
-  banner,
+  banners,
   language,
   location,
-  latestUnits = [],
+  latestItems = [],
   latestLesson = null,
   latestBlogPosts = [],
   latestTweets = [],
   t,
 }) => {
-
   const { isMobileDevice } = useContext(DeviceInfoContext);
+
+  const [bannerIdx, setBannerIdx] = useState(-1);
+
+  const setBanners = useCallback(allBanners => {
+    if (allBanners > 0) {
+      setBannerIdx(() => (bannerIdx + 1) % allBanners);
+    } else {
+      setBannerIdx(-1);
+    }
+  }, [bannerIdx]);
+
+  useEffect(() => {
+    setBanners(banners.data.length);
+  }, [banners, setBanners]);
+
+  useInterval(() => {
+    setBanners(banners.data.length);
+  }, SWITCH_BANNERS_TIMEOUT);
+
+  const banner = bannerIdx === -1 ? null : banners.data[bannerIdx];
 
   return (
     <div className="homepage">
@@ -138,7 +161,7 @@ const HomePage = ({
       {renderLatestLessonAndBanner(latestLesson, banner)}
       {renderActiveSectionsGrid(t, isMobileDevice)}
 
-      <LatestUpdatesSection latestUnits={latestUnits} t={t} />
+      <LatestUpdatesSection latestItems={latestItems} t={t} />
 
       {renderBlogPostsAndTweets(latestBlogPosts, latestTweets, language, t)}
     </div>
@@ -148,7 +171,7 @@ const HomePage = ({
 HomePage.propTypes = {
   location: shapes.HistoryLocation.isRequired,
   latestLesson: shapes.LessonCollection,
-  latestUnits: PropTypes.arrayOf(shapes.ContentUnit),
+  latestItems: PropTypes.arrayOf(PropTypes.oneOfType([shapes.ContentUnit, shapes.Collection])),
   latestBlogPosts: PropTypes.arrayOf(shapes.BlogPost),
   latestTweets: PropTypes.arrayOf(shapes.Tweet),
   banner: shapes.Banner,

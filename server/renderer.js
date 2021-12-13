@@ -25,6 +25,7 @@ import i18nnext from './i18nnext';
 
 const helmetContext = {};
 
+// eslint-disable-next-line no-unused-vars
 const DoNotRemove = localStorage; // DO NOT REMOVE - the import above does all the work
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
@@ -94,7 +95,7 @@ function alternateLinks(req, lang) {
   }
 
   return LANG_UI_LANGUAGES
-    .map((x) => {
+    .map(x => {
       const l = getLanguageLocaleWORegion(x);
       return `<link rel="alternate" href="${BASE_URL}${x}/${aPath}" hreflang="${l}" />`;
     })
@@ -130,7 +131,7 @@ export default function serverRender(req, res, next, htmlData) {
   moment.locale(language === LANG_UKRAINIAN ? 'uk' : language);
 
   const i18nServer = i18nnext.cloneInstance();
-  i18nServer.changeLanguage(language, (err) => {
+  i18nServer.changeLanguage(language, err => {
     if (err) {
       next(err);
       return;
@@ -145,10 +146,7 @@ export default function serverRender(req, res, next, htmlData) {
     const deviceInfo = new UAParser(req.get('user-agent')).getResult();
 
     const initialState = {
-      settings: Object.assign({}, settingsInitialState, {
-        language,
-        contentLanguage: cookies[COOKIE_CONTENT_LANG],
-      }),
+      settings: { ...settingsInitialState, language, contentLanguage: cookies[COOKIE_CONTENT_LANG], },
     };
 
     const store = createStore(initialState, history);

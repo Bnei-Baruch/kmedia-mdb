@@ -4,9 +4,11 @@
       "header": "Kabbalah Media"
     },
     "sidebar": {
+      "personal": "My Library",
       "lessons": "Lektionen und Vorlesungen",
       "programs": "Programme und Clips",
       "sources": "Bibliothek",
+      "likutim": "Likutim",
       "events": "Kongresse, Veranstaltungen",
       "books": "Bücher",
       "topics": "Themen",
@@ -92,6 +94,7 @@
     },
     "sections-filter": {
       "label": "Abschnitt",
+      "all": "All",
       "lessons": "Lektionen und Vorlesungen",
       "programs": "Programme und Clips",
       "events": "Kongresse, Veranstaltungen",
@@ -109,10 +112,14 @@
     "more": "Mehr",
     "copy-link": "Link kopieren",
     "search": "Suche",
-    "previous": "Zurück",
-    "next": "Nächstes",
+    "previous-lesson": "Zurück",
+    "next-lesson": "Nächstes",
+    "previous-article": "Previous article",
+    "next-article": "Next article",
     "copy": "Kopieren",
-    "view-all": "Alle ansehen"
+    "view-all": "Alle ansehen",
+    "save": "Save",
+    "remove": "Remove"
   },
   "player": {
     "messages": {
@@ -130,6 +137,20 @@
     },
     "error": {
       "loading": "Beim Laden der Datei ist ein Fehler aufgetreten."
+    },
+    "header": {
+      "series-by-topic": "Series of lessons on the topic:"
+    }
+  },
+  "playlist": {
+    "title-by-type": {
+      "DAILY_LESSON": "Parts of the lesson",
+      "SPECIAL_LESSON": "Parts of the lesson",
+      "CONGRESS": "Parts of the event",
+      "HOLIDAY": "Parts of the holiday",
+      "PICNIC": "Parts of the event",
+      "UNITY_DAY": "Parts of the event",
+      "LESSONS_SERIES": "Parts of the collection"
     }
   },
   "messages": {
@@ -256,6 +277,7 @@
       "virtual": "Virtuelle Lektionen",
       "lectures": "Vorträge",
       "women": "Lektionen für Frauen",
+      "rabash": "Rabash Lessons",
       "children": "Unterricht für Kinder",
       "series": "Ausgewählte Trainingsserien",
       "seriesTree": {
@@ -266,6 +288,10 @@
     "list": {
       "related": "Bezogen auf",
       "number": "Nr.",
+      "nameByNum_1": "Morning",
+      "nameByNum_2": "Afternoon",
+      "nameByNum_3": "Evening",
+      "nameByNum_4": "Evening 2",
       "item_from": "Teil von:"
     },
     "unit": {
@@ -288,6 +314,13 @@
       "description": "Aktualisierte Verknüpfung zur letzten täglichen Lektion"
     }
   },
+  "likutim":{
+    "header": {
+      "text": "Excerpts from Kabbalistic Sources",
+      "subtext": "Excerpts from the Sources on various subjects"
+    },
+    "item-header": "Excerpts from the Sources:"
+  },
   "programs": {
     "header": {
       "text": "Programme",
@@ -309,7 +342,8 @@
     },
     "list": {
       "episode_from": "Folge von:",
-      "item_of": "Teil von:"
+      "item_of": "Teil von:",
+      "show_all": "To all episodes"
     },
     "unit": {
       "recommended": {
@@ -367,6 +401,12 @@
     "choose-date": "Datum wählen",
     "today-lessons": "Tägliche Kabbalah-Stunden"
   },
+  "help": {
+    "header": {
+      "text": "Help",
+      "subtext": "In this section you will find video tutorials and best practices on how to use the site"
+    }
+  },
   "pages": {
     "collection": {
       "items": {
@@ -380,7 +420,15 @@
       "info": {
         "sources": "Quellen",
         "topics": "Themen",
-        "collections": "Bezieht sich auf"
+        "collections": "Bezieht sich auf",
+        "study-series": "To all the lessons of the collection",
+        "episode": "Episode {{name}}",
+        "episodes": "{{name}} episodes",
+        "lesson-episode": "Part {{name}}",
+        "lesson-episodes": "{{name}} parts",
+        "series-episode": "Lesson {{name}}",
+        "series-episodes": "{{name}} lessons",
+        "views": "{{views}} Views"
       },
       "recommended": {
         "same-collection": {
@@ -420,7 +468,20 @@
       "header": "Selected Highlights"
     },
     "recommended": {
-      "header": "Recommended"
+      "same-topic": "Recommended for topic",
+      "same-collection": "Recommended chapters from",
+      "any-topic": "Any Topic",
+      "default": "Recommended for you",
+      "popular": "Most viewed",
+      "watching-now": "watching now",
+      "views": "views",
+      "last": "Last chapter",
+      "next": "Next chapter",
+      "prev": "Prev chapter",
+      "rand": "Random content",
+      "more": "More",
+      "less": "Less",
+      "new": "New"
     },
     "playlist": {
       "header": "Up Next"
@@ -436,7 +497,16 @@
     "az": "А-Z",
     "default": "Standard",
     "filter": "Filter...",
-    "share-title": "Lesen Sie diesen Artikel"
+    "share-title": "Lesen Sie diesen Artikel",
+    "play-audio-file": "Spielen Sie die Audiodatei ab"
+  },
+  "topics": {
+    "header": {
+      "text": "Topics",
+      "subtext": "A collection of all items for a selected topic."
+    },
+    "show-more": "Show more",
+    "show-less": "Show less"
   },
   "media-downloads": {
     "title": "Herunterladen",
@@ -582,5 +652,39 @@
     "copy-link": "Link kopieren",
     "copy-text": "Text kopieren",
     "disable-share": "Stornieren"
+  },
+  "personal": {
+    "subsNewUnits": "new episodes",
+    "unsubscribe": "Unsubscribe",
+    "subscribe": "Subscribe",
+    "unsubscribeSuccessful": "Subscription removed",
+    "subscribeSuccessful": "Subscription added",
+    "newPlaylistSuccessful": "New playlist {{name}} created",
+    "addToPlaylistSuccessful": "Added to playlist {{name}}",
+    "history": "History",
+    "reactions": "Liked videos",
+    "playlists": "Playlists",
+    "playlistNoResult": "No videos in this playlist",
+    "subscriptions": "Subscriptions",
+    "playAll": "Play all",
+    "addToPlaylist": "Save to...",
+    "newPlaylistName": "New playlist name",
+    "newPlaylist": "Create new playlist",
+    "editPlaylist": "Edit playlist",
+    "removedSuccessfully": "Successfully removed",
+    "removeHistory": "Remove from history",
+    "removeLike": "Remove from Liked videos",
+    "removeFromPlaylist": "Remove from playlist",
+    "confirmRemovePlaylist": "Are you sure you want to delete playlist {{name}}?\nNote: Deleting playlists is a permanent action and cannot be undone.",
+    "confirmUnsubscribe": "Unsubscribe from {{name}}?",
+    "videosOnList": "videos",
+    "login": "Login",
+    "logout": "Logout",
+    "needToLogin": "Sign in to like, save and subscribe to videos",
+    "account": "My Account",
+    "no_playlists": "You have no playlists, please create one",
+    "no_reactions": "You have no videos you liked",
+    "no_history": "Start watching videos to be shown here",
+    "no_subscriptions": "You have no subscriptions yet, subscribe to see them here"
   }
 }

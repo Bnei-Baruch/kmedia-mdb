@@ -6,7 +6,7 @@ import { Form } from 'semantic-ui-react';
 
 const FeedBurner = ({ language, t }) => {
   const [email, setEmail] = useState('');
-  const handleChange      = (e, { name, value }) => setEmail({ [name]: value });
+  const handleChange      = (e, { value }) => setEmail(value);
 
   const subscribe = () => {
     const uri = getRSSFeedByLang(language);
@@ -14,7 +14,7 @@ const FeedBurner = ({ language, t }) => {
       `https://feedburner.google.com/fb/a/mailverify?uri=${uri}&email=${email}`,
       'popupwindow',
       'scrollbars=yes,width=550,height=520');
-    this.setState({ email: '' });
+    setEmail('');
   };
 
   return (

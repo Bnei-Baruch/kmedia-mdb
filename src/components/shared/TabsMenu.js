@@ -11,7 +11,7 @@ const activeFromLocation = location => {
 
   const { activeTab = '' } = getQuery(location);
   return activeTab;
-}
+};
 
 const activeFromDefault = items => (items.length > 0 ? items[0].name : null);
 
@@ -23,13 +23,13 @@ const TabsMenu = ({ items = [], active = '' }) => {
     || activeFromDefault(items);
 
   const [internalActive, setInternalActive] = useState(computedActive);
-  const handleActiveChange = useCallback((e, { name }) => setInternalActive(name), []);
+  const handleActiveChange                  = useCallback((e, { name }) => setInternalActive(name), []);
 
   const activeItem = items.find(x => x.name === internalActive);
 
   return (
     <div className="unit-materials">
-      <Menu tabular secondary pointing color="blue" >
+      <Menu tabular secondary pointing color="blue" className="no_print">
         {
           items.map(item => {
             const { name, label } = item;
@@ -50,7 +50,7 @@ const TabsMenu = ({ items = [], active = '' }) => {
       {activeItem ? activeItem.component : null}
     </div>
   );
-}
+};
 
 TabsMenu.propTypes = {
   items: PropTypes.arrayOf(PropTypes.shape({

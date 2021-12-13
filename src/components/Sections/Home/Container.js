@@ -13,7 +13,7 @@ import * as shapes from '../../shapes';
 import WipErr from '../../shared/WipErr/WipErr';
 import HomePage from './HomePage';
 
-const FETCH_TIMEOUT = 10 * 60 * 1000;// every 10 min
+const FETCH_TIMEOUT = 10 * 60 * 1000; // every 10 min
 
 const chooseTwitterByLanguage = language => {
   switch (language) {
@@ -77,6 +77,8 @@ const HomePageContainer = ({ location, t }) => {
 
   const latestUnitIDs = useSelector(latestUnitIDsFn);
   const latestUnits   = useSelector(latestUnitsFn(latestUnitIDs));
+  const latestCoIDs   = useSelector(state => selectors.getLatestCos(state.home)) || [];
+  const latestCos     = useSelector(state => latestCoIDs.map(x => mdb.getDenormCollection(state.mdb, x)));
 
   const fetchBlogList   = useCallback((type, id, options) => dispatch(publicationsActions.fetchBlogList(type, id, options)), [dispatch]);
   const latestBlogPosts = useSelector(latestBlogPostsFn);
@@ -84,33 +86,34 @@ const HomePageContainer = ({ location, t }) => {
   const fetchTweetsList = useCallback((type, id, options) => dispatch(publicationsActions.fetchTweets(type, id, options)), [dispatch]);
   const latestTweets    = useSelector(latestTweetsFn);
 
-  const banner      = useSelector(bannerFn);
-  const fetchBanner = useCallback(language => dispatch(actions.fetchBanner(language)), [dispatch]);
-
-  const language = useSelector(languageFn);
-  const wip      = useSelector(wipFn);
-  const err      = useSelector(errFn);
+  const banners      = useSelector(bannerFn);
+  const fetchBanners = useCallback(language => dispatch(actions.fetchBanners(language)), [dispatch]);
+  const language     = useSelector(languageFn);
+  const wip          = useSelector(wipFn);
+  const err          = useSelector(errFn);
 
   useEffect(() => {
     fetchData(true);
     fetchSocialMedia('blog', fetchBlogList, language);
     fetchSocialMedia('tweet', fetchTweetsList, language);
-    fetchBanner(language);
-  }, [language, fetchBanner, fetchBlogList, fetchData, fetchTweetsList]);
+    fetchBanners(language);
+  }, [language, fetchBanners, fetchBlogList, fetchData, fetchTweetsList]);
 
   useInterval(() => fetchData(false), FETCH_TIMEOUT);
 
   const wipErr = WipErr({ wip, err, t });
+  if (wipErr) {
+    return null;
+  }
 
   return (
-    wipErr ??
     <HomePage
       location={location}
       latestLesson={latestLesson}
-      latestUnits={latestUnits}
+      latestItems={[...latestUnits, ...latestCos]}
       latestBlogPosts={latestBlogPosts}
       latestTweets={latestTweets}
-      banner={banner}
+      banners={banners}
       language={language}
       t={t}
     />

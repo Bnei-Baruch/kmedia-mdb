@@ -14,12 +14,12 @@ import {
 import * as shapes from '../../../../shapes';
 import TabsMenu from '../../../../shared/TabsMenu';
 import Summary from './Summary/Summary';
-import SourcesContainer from './Sources/SourcesContainer';
+import Sources from './Sources/Sources';
 import Sketches from './Sketches';
 import MediaDownloads from '../Downloads/MediaDownloads';
 import TranscriptionContainer from './Transcription/TranscriptionContainer';
-import { isEmpty } from '../../../../../helpers/utils';
-import { DeviceInfoContext } from '../../../../../helpers/app-contexts';
+import { isEmpty, noop } from '../../../../../helpers/utils';
+import { ClientChroniclesContext, DeviceInfoContext } from '../../../../../helpers/app-contexts';
 import DerivedUnits from './DerivedUnits';
 import Recommended from '../Recommended/Main/Recommended';
 
@@ -37,33 +37,35 @@ const derivedTextUnits = unit => {
 
 const Materials = ({ unit = undefined, t, playlistComponent = null }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
+  const chronicles         = useContext(ClientChroniclesContext);
 
   if (!unit) {
     return null;
   }
 
-  const derivedTexts = derivedTextUnits(unit);
-  const items        = [
-    {
-      name: 'downloads',
-      label: t('media-downloads.title'),
-      component: <MediaDownloads unit={unit} />
-    },
+  const derivedTexts     = derivedTextUnits(unit);
+  const chroniclesAppend = chronicles ? chronicles.append.bind(chronicles) : noop;
+  const items            = [
     {
       name: 'transcription',
       label: t('materials.transcription.header'),
       component: <TranscriptionContainer unit={unit} key="transcription" />
     },
-    {
+    (![CT_CLIP, CT_VIDEO_PROGRAM_CHAPTER].includes(unit.content_type)) && {
       name: 'sources',
       label: t('materials.sources.header'),
-      component: <SourcesContainer unit={unit} />
+      component: <Sources unit={unit} />
     },
     {
       name: 'sketches',
       label: t('materials.sketches.header'),
       component: <Sketches unit={unit} />,
     },
+    {
+      name: 'downloads',
+      label: t('media-downloads.title'),
+      component: <MediaDownloads unit={unit} chroniclesAppend={chroniclesAppend} />
+    }
   ];
 
   if ([CT_VIDEO_PROGRAM_CHAPTER, CT_VIRTUAL_LESSON, CT_CLIP].includes(unit.content_type)) {
@@ -78,14 +80,14 @@ const Materials = ({ unit = undefined, t, playlistComponent = null }) => {
     const item = playlistComponent === null
       ? {
         name: 'recommended',
-        label: t('materials.recommended.header'),
+        label: t('materials.recommended.default'),
         component: <Recommended unit={unit} displayTitle={false} />
       }
       : {
         name: 'playlist',
         label: t('materials.playlist.header'),
         component: playlistComponent()
-      }
+      };
 
     items.unshift(item);
   }
@@ -117,7 +119,7 @@ const Materials = ({ unit = undefined, t, playlistComponent = null }) => {
     }
   }
 
-  return <TabsMenu items={items} />
+  return <TabsMenu items={items.filter(x => !!x)} />;
 };
 
 Materials.propTypes = {

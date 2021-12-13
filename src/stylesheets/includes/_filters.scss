@@ -1,7 +1,17 @@
 @import 'rtl/filters';
 
 .filters {
-  // &__menu {  }
+  &__menu {
+    .item.alphabetFilter {
+      flex: 1 1 auto !important;
+
+      @include mobile {
+        .item {
+          width: inherit !important;
+        }
+      }
+    }
+   }
 
   &__header {
     align-self: stretch;
@@ -194,4 +204,13 @@
   }
 }
 
+.alphabetFilter {
+  a.item {
+    display: inline-flex !important;
+    padding: 0 0.5em !important;
+  }
 
+  a.active {
+    font-weight: bold !important;
+  }
+}

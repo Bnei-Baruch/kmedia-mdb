@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
-import { Container, Divider, Table } from 'semantic-ui-react';
+import { Card, Container, Divider } from 'semantic-ui-react';
 
 import * as shapes from '../../shapes';
 import Pagination from '../../Pagination/Pagination';
-import ResultsPageHeader from '../../Pagination/ResultsPageHeader';
 import Filters from '../../Filters/Filters';
 import filterComponents from '../../Filters/components';
 import WipErr from '../../shared/WipErr/WipErr';
+import ContentItem from '../../shared/ContentItem/ContentItemContainer';
 
 const filters = {
   'lessons-daily': [
@@ -104,20 +104,24 @@ const UnitListPage = props => {
       onPageChange,
       onFiltersChanged,
       onFiltersHydrated,
-      renderUnit
+      renderActions
     } = props;
 
   const content = WipErr({ wip, err, t }) || (
     <div>
       <Container className="padded">
-        <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} />
         {
           items.length > 0 &&
-            <Table unstackable basic="very" className="index" sortable>
-              <Table.Body>
-                {items.map(x => renderUnit(x, t, namespace))}
-              </Table.Body>
-            </Table>
+          <Card.Group doubling itemsPerRow={4} stackable className="cu_items">
+            {
+              items.filter(x => !!x).map((unit, i) => (
+                <ContentItem id={unit.id} key={i}>
+                  {renderActions && renderActions(unit)}
+                </ContentItem>
+              )
+              )
+            }
+          </Card.Group>
         }
       </Container>
       <Divider fitted />
@@ -140,12 +144,12 @@ const UnitListPage = props => {
       <Divider fitted />
       {
         nsFilters.length > 0 &&
-          <Filters
-            namespace={namespace}
-            filters={nsFilters}
-            onChange={onFiltersChanged}
-            onHydrated={onFiltersHydrated}
-          />
+        <Filters
+          namespace={namespace}
+          filters={nsFilters}
+          onChange={onFiltersChanged}
+          onHydrated={onFiltersHydrated}
+        />
       }
       {content}
     </div>
@@ -165,7 +169,7 @@ UnitListPage.propTypes = {
   onPageChange: PropTypes.func.isRequired,
   onFiltersChanged: PropTypes.func.isRequired,
   onFiltersHydrated: PropTypes.func.isRequired,
-  renderUnit: PropTypes.func.isRequired,
+  renderActions: PropTypes.func,
 };
 
 export default withNamespaces()(UnitListPage);

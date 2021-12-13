@@ -6,7 +6,7 @@ import { canonicalLink } from '../../../../../helpers/links';
 import * as renderUnitHelper from '../../../../../helpers/renderUnitHelper';
 import { selectors as mdb } from '../../../../../redux/modules/mdb';
 import { selectors as lists } from '../../../../../redux/modules/lists';
-import { mapState as baseMapState, UnitListContainer, wrap } from '../../../../Pages/UnitList/Container';
+import { mapState as baseMapState, UnitListContainer, wrap } from '../../../../Pages/UnitListAsTable/Container';
 import Link from '../../../../Language/MultiLanguageLink';
 
 const CT_DAILY_LESSON_I18N_KEY = `constants.content-types.${CT_DAILY_LESSON}`;
@@ -22,20 +22,20 @@ const map1Func = t => x => (
 const renderUnit = (unit, t) => {
   const breakdown = renderUnitHelper.getUnitCollectionsBreakdown(unit);
 
-  const map1 = map1Func(t);
-
+  const map1         = map1Func(t);
+  const ccu          = breakdown.getDailyLessons();
   const relatedItems = breakdown.getDailyLessons()
     .map(map1)
-    .concat(breakdown.getAllButDailyLessons().map(renderUnitHelper.renderUnitNameAsListItem));
+    .concat(breakdown.getAllButDailyLessons().map(cu => renderUnitHelper.renderUnitNameAsListItem(cu, ccu)));
 
   return (
     <Table.Row verticalAlign="top" key={unit.id} className="no-thumbnail">
       <Table.Cell collapsing singleLine>
-        { renderUnitHelper.renderUnitFilmDate(unit, t) }
+        {renderUnitHelper.renderUnitFilmDate(unit, t)}
       </Table.Cell>
       <Table.Cell>
-        { renderUnitHelper.renderUnitNameLink(unit) }
-        { renderUnitHelper.renderRelatedItems(relatedItems, t('lessons.list.related'))}
+        {renderUnitHelper.renderUnitNameLink(unit, 'index__title', ccu)}
+        {renderUnitHelper.renderRelatedItems(relatedItems, t('lessons.list.related'))}
       </Table.Cell>
     </Table.Row>
   );
@@ -43,21 +43,24 @@ const renderUnit = (unit, t) => {
 
 export const renderCollection = (collection, t) => {
   let units = [];
-  if (collection.content_units) {
-    units = collection.content_units.map(unit => {
-      const breakdown = renderUnitHelper.getUnitCollectionsBreakdown(unit);
-      const map1 = map1Func(t);
 
+  const { number, id, content_units, film_date } = collection;
+  if (content_units) {
+    units = content_units.map(unit => {
+      const breakdown = renderUnitHelper.getUnitCollectionsBreakdown(unit);
+      const map1      = map1Func(t);
+
+      const ccu          = breakdown.getDailyLessons();
       const relatedItems = breakdown.getDailyLessons()
-        .filter(x => x.id !== collection.id)
+        .filter(x => x.id !== id)
         .map(map1)
         .concat(breakdown.getAllButDailyLessons().map(renderUnitHelper.renderUnitNameAsListItem));
 
       return (
         <Table.Row key={`u-${unit.id}`} verticalAlign="top" className="no-thumbnail">
           <Table.Cell>
-            { renderUnitHelper.renderUnitNameLink(unit, 'index__item') }
-            { renderUnitHelper.renderRelatedItems(relatedItems, t('lessons.list.related'))}
+            {renderUnitHelper.renderUnitNameLink(unit, 'index__item', ccu)}
+            {renderUnitHelper.renderRelatedItems(relatedItems, t('lessons.list.related'))}
           </Table.Cell>
         </Table.Row>
       );
@@ -65,16 +68,16 @@ export const renderCollection = (collection, t) => {
   }
 
   const rows   = [];
-  const cuSpan = collection.content_units ? collection.content_units.length + 1 : 1;
+  const cuSpan = content_units ? content_units.length + 1 : 1;
 
   rows.push((
-    <Table.Row key={`l-${collection.id}`} verticalAlign="top" className="no-thumbnail">
+    <Table.Row key={`l-${id}`} verticalAlign="top" className="no-thumbnail">
       <Table.Cell collapsing singleLine rowSpan={cuSpan}>
-        <span className="index__date">{t('values.date', { date: collection.film_date })}</span>
+        <span className="index__date">{t('values.date', { date: film_date })}</span>
       </Table.Cell>
       <Table.Cell>
         <Link className="index__title" to={canonicalLink(collection)}>
-          {`${t(CT_DAILY_LESSON_I18N_KEY)}${collection.number ? ` ${t('lessons.list.number')}${collection.number}` : ''}`}
+          {`${t(CT_DAILY_LESSON_I18N_KEY)}${number ? ` (${t(`lessons.list.nameByNum_${number}`)})` : ''}`}
         </Link>
       </Table.Cell>
     </Table.Row>

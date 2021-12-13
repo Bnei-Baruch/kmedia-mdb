@@ -18,6 +18,10 @@
 .section-header {
   background: $darkWhite;
 
+  .ui.icon.header {
+    margin: 0 !important;
+  }
+
   h1.header {
     @include mobile {
       font-size: 2em;

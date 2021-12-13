@@ -16,6 +16,7 @@ export const CT_CLIPS              = 'CLIPS';
 export const CT_ARTICLES           = 'ARTICLES';
 export const CT_LESSONS_SERIES     = 'LESSONS_SERIES';
 export const CT_SONGS              = 'SONGS';
+export const CT_SOURCE             = 'SOURCE';
 
 export const CT_COLLECTIONS = [
   CT_DAILY_LESSON,
@@ -60,6 +61,32 @@ export const CT_BLOG_POST             = 'BLOG_POST';
 export const CT_RESEARCH_MATERIAL     = 'RESEARCH_MATERIAL';
 export const CT_KTAIM_NIVCHARIM       = 'KTAIM_NIVCHARIM';
 export const CT_LIKUTIM               = 'LIKUTIM';
+
+export const CT_UNITS = [
+  CT_LESSON_PART,
+  CT_LECTURE,
+  CT_CHILDREN_LESSON,
+  CT_WOMEN_LESSON,
+  CT_VIRTUAL_LESSON,
+  CT_FRIENDS_GATHERING,
+  CT_MEAL,
+  CT_VIDEO_PROGRAM_CHAPTER,
+  CT_FULL_LESSON,
+  CT_ARTICLE,
+  CT_UNKNOWN,
+  CT_EVENT_PART,
+  CT_CLIP,
+  CT_TRAINING,
+  CT_KITEI_MAKOR,
+  CT_PUBLICATION,
+  CT_LELO_MIKUD,
+  CT_BLOG_POST,
+  CT_RESEARCH_MATERIAL,
+  CT_KTAIM_NIVCHARIM,
+  CT_LIKUTIM,
+];
+
+export const IsUnitContentType = contentType => CT_UNITS.includes(contentType);
 
 // Content types for additional Elastic results
 export const SCT_BLOG_POST = 'R_BLOG_POST';
@@ -114,7 +141,7 @@ export const LANG_UNKNOWN    = 'xx';
 
 export const LANGUAGES = {
   [LANG_HEBREW]: { value: LANG_HEBREW, locale: 'he_IL', lang3: 'HEB', name: 'עברית' },
-  [LANG_ENGLISH]: { value: LANG_ENGLISH,  locale: 'en_US', lang3: 'ENG', name: 'English' },
+  [LANG_ENGLISH]: { value: LANG_ENGLISH, locale: 'en_US', lang3: 'ENG', name: 'English' },
   [LANG_RUSSIAN]: { value: LANG_RUSSIAN, locale: 'ru_RU', lang3: 'RUS', name: 'Русский' },
   [LANG_SPANISH]: { value: LANG_SPANISH, locale: 'es_ES', lang3: 'SPA', name: 'Español' },
   [LANG_ITALIAN]: { value: LANG_ITALIAN, locale: 'it_IT', lang3: 'ITA', name: 'Italiano' },
@@ -248,7 +275,6 @@ export const EVENT_TYPES = [
 
 // Required for Sections filter.
 export const COLLECTION_LESSONS_TYPE      = [CT_DAILY_LESSON, CT_SPECIAL_LESSON, /* CT_CHILDREN_LESSONS, */ CT_WOMEN_LESSONS, CT_VIRTUAL_LESSONS, CT_LECTURE_SERIES];
-export const NO_COLLECTION_VIEW_TYPE      = [CT_DAILY_LESSON, CT_SPECIAL_LESSON];
 export const COLLECTION_PROGRAMS_TYPE     = [CT_VIDEO_PROGRAM, CT_CLIPS];
 export const COLLECTION_EVENTS_TYPE       = [CT_FRIENDS_GATHERINGS, CT_MEALS, ...EVENT_TYPES];
 export const COLLECTION_PUBLICATIONS_TYPE = [CT_ARTICLES];
@@ -257,6 +283,8 @@ export const UNIT_PROGRAMS_TYPE           = [CT_VIDEO_PROGRAM_CHAPTER, CT_CLIP];
 export const UNIT_EVENTS_TYPE             = [CT_EVENT_PART, CT_MEAL, CT_FRIENDS_GATHERING];
 export const UNIT_PUBLICATIONS_TYPE       = [CT_ARTICLE, CT_PUBLICATION, CT_BLOG_POST, SCT_BLOG_POST, SCT_TWEET];
 export const DERIVED_UNITS_CONTENT_TYPE   = [CT_VIDEO_PROGRAM_CHAPTER, CT_CLIP];
+
+export const COLLECTION_DAILY_LESSONS = [CT_DAILY_LESSON, CT_SPECIAL_LESSON];
 
 export const NO_NAME = '☠ no name';
 
@@ -303,27 +331,27 @@ export const LANG_UI_LANGUAGES   = [LANG_HEBREW, LANG_ENGLISH, LANG_RUSSIAN, LAN
 export const SEARCH_GRAMMAR_HIT_TYPE_LANDING_PAGE = 'landing-page';
 
 // Search Grammar Landing Pages (SGL) constants.
-const SGLP_LESSONS            = 'lessons';
-const SGLP_VIRTUAL_LESSONS    = 'virtual_lessons';
-const SGLP_LECTURES           = 'lectures';
-const SGLP_WOMEN_LESSONS      = 'women_lessons';
-const SGLP_RABASH_LESSONS     = 'rabash_lessons';
-const SGLP_LESSON_SERIES      = 'lesson_series';
-const SGLP_PRORGRAMS          = 'programs';
-const SGLP_CLIPS              = 'clips';
-const SGLP_LIBRARY            = 'library';
-const SGLP_GROUP_ARTICLES     = 'group_articles';
-const SGLP_CONVENTIONS        = 'conventions';
-const SGLP_HOLIDAYS           = 'holidays';
-const SGLP_UNITY_DAYS         = 'unity_days';
-const SGLP_FRIENDS_GATHERINGS = 'friends_gatherings';
-const SGLP_MEALS              = 'meals';
-const SGLP_TOPICS             = 'topics';
-const SGLP_BLOG               = 'blog';
-const SGLP_TWITTER            = 'twitter';
-const SGLP_ARTICLES           = 'articles';
-const SGLP_DOWNLOADS          = 'downloads';
-const SGLP_HELP               = 'help';
+const SGLP_LESSONS              = 'lessons';
+const SGLP_VIRTUAL_LESSONS      = 'virtual_lessons';
+const SGLP_LECTURES             = 'lectures';
+const SGLP_WOMEN_LESSONS        = 'women_lessons';
+const SGLP_RABASH_LESSONS       = 'rabash_lessons';
+export const SGLP_LESSON_SERIES = 'lesson_series';
+export const SGLP_PRORGRAMS     = 'programs';
+const SGLP_CLIPS                = 'clips';
+const SGLP_LIBRARY              = 'library';
+const SGLP_GROUP_ARTICLES       = 'group_articles';
+const SGLP_CONVENTIONS          = 'conventions';
+const SGLP_HOLIDAYS             = 'holidays';
+const SGLP_UNITY_DAYS           = 'unity_days';
+const SGLP_FRIENDS_GATHERINGS   = 'friends_gatherings';
+const SGLP_MEALS                = 'meals';
+const SGLP_TOPICS               = 'topics';
+const SGLP_BLOG                 = 'blog';
+const SGLP_TWITTER              = 'twitter';
+const SGLP_ARTICLES             = 'articles';
+const SGLP_DOWNLOADS            = 'downloads';
+const SGLP_HELP                 = 'help';
 
 export const SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_LINK = {
   [SGLP_LESSONS]: 'lessons/daily',
@@ -442,3 +470,55 @@ export const SEARCH_INTENT_SECTIONS = {
 };
 
 export const SCROLL_SEARCH_ID = '__scrollSearchToHere__';
+
+export const MY_NAMESPACE_HISTORY       = 'history';
+export const MY_NAMESPACE_REACTIONS     = 'reactions';
+export const MY_NAMESPACE_PLAYLISTS     = 'playlists';
+export const MY_NAMESPACE_PLAYLIST_EDIT = 'playlists_edit';
+export const MY_NAMESPACE_SUBSCRIPTIONS = 'subscriptions';
+
+export const MY_NAMESPACES = [MY_NAMESPACE_HISTORY, MY_NAMESPACE_REACTIONS, MY_NAMESPACE_PLAYLISTS, MY_NAMESPACE_PLAYLIST_EDIT, MY_NAMESPACE_SUBSCRIPTIONS];
+
+export const MY_REACTION_KINDS = {
+  LIKE: 'like',
+  SUPER: 'super',
+};
+
+export const CT_SUBSCRIBE_BY_TYPE = [
+  CT_FRIENDS_GATHERINGS,
+  CT_WOMEN_LESSONS,
+  CT_MEALS,
+  CT_LECTURE,
+  CT_MEAL,
+  CT_LESSON_PART,
+];
+
+export const CT_SUBSCRIBE_BY_COLLECTION = [
+  CT_LECTURE,
+  CT_VIDEO_PROGRAM_CHAPTER,
+  CT_ARTICLE,
+  CT_EVENT_PART,
+  CT_CLIP,
+  CT_TRAINING,
+  CT_KITEI_MAKOR,
+  CT_PUBLICATION, //check language
+  CT_LELO_MIKUD,
+  CT_BLOG_POST,
+  CT_RESEARCH_MATERIAL,
+  CT_KTAIM_NIVCHARIM,
+  CT_LIKUTIM,
+];
+
+export const SECTIONS_LINK_BY_CU_CONTENT_TYPE = {
+  [CT_LESSON_PART]: 'lessons/daily',
+  [CT_VIRTUAL_LESSON]: 'lessons/virtual',
+  [CT_LECTURE]: 'lessons/lectures',
+  [CT_WOMEN_LESSON]: 'lessons/women',
+  [CT_VIDEO_PROGRAM_CHAPTER]: 'programs/main',
+  [CT_CLIP]: 'programs/clips',
+  [CT_FRIENDS_GATHERING]: 'events/friends-gatherings',
+  [CT_MEAL]: 'events/meals',
+  [CT_BLOG_POST]: 'publications/blog',
+  [SCT_TWEET]: 'publications/twitter',
+  [CT_ARTICLE]: 'publications/articles',
+};

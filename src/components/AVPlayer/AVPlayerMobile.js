@@ -11,7 +11,7 @@ import { fromHumanReadableTime } from '../../helpers/time';
 import { isLanguageRtl } from '../../helpers/i18n-utils';
 import { getQuery } from '../../helpers/url';
 import * as shapes from '../shapes';
-import { PLAYER_MODE } from './constants';
+import { PLAYER_MODE, PLAYER_POSITION_STORAGE_KEY } from './constants';
 import AVPlayPause from './AVPlayPause';
 import AVLanguageMobile from './AVLanguageMobile';
 import AVAudioVideo from './AVAudioVideo';
@@ -24,10 +24,10 @@ import { PlayerStartEnum } from './playerStartEnum';
 import clsx from 'clsx';
 import { DeviceInfoContext } from '../../helpers/app-contexts';
 import { areEqual } from '../../helpers/utils';
+import { buildAppendData } from './utils';
 
 const DEFAULT_PLAYER_VOLUME       = 0.8;
 const PLAYER_VOLUME_STORAGE_KEY   = '@@kmedia_player_volume';
-const PLAYER_POSITION_STORAGE_KEY = '@@kmedia_player_position';
 
 // Converts playback rate string to float: 1.0x => 1.0
 const playbackToValue = playback => parseFloat(playback.slice(0, -1));
@@ -139,10 +139,15 @@ class AVPlayerMobile extends Component {
       || mode !== nextState.mode);
   };
 
+  buildAppendData(props) {
+    const { autoPlay, item } = props;
+    return buildAppendData(autoPlay, item, this.media.currentTime, this.media.duration, this.media.muted);
+  }
+
   componentDidUpdate(prevProps) {
     if (prevProps.item !== this.props.item) {
       if (this.isUnitExistAndPlaying()) {
-        this.props.chronicles.append('player-stop', this.buildAppendData(prevProps.item, this.media));
+        this.props.chronicles.append('player-stop', this.buildAppendData(prevProps));
       }
 
       this.setState({ error: false, errorReason: '', firstSeek: true });
@@ -155,20 +160,13 @@ class AVPlayerMobile extends Component {
     }
 
     if (this.isUnitExistAndPlaying()) {
-      this.props.chronicles.append('player-stop', this.buildAppendData(this.props.item, this.media));
+      this.props.chronicles.append('player-stop', this.buildAppendData(this.props));
     }
   }
 
   isUnitExistAndPlaying() {
     return this.props.media?.isPlaying && this.state.item?.unit?.id;
   }
-
-  buildAppendData = (item, media) => ({
-    unit_uid: item.unit.id,
-    file_src: item.src,
-    current_time: media.currentTime,
-    duration: media.duration,
-  })
 
   onSwitchAV = (...params) => {
     // We only keep the current time.
@@ -229,7 +227,7 @@ class AVPlayerMobile extends Component {
     this.media.autoplay = true;
 
     if (this.props?.item?.unit?.id) {
-      this.props.chronicles.append('player-play', this.buildAppendData(this.props.item, this.media));
+      this.props.chronicles.append('player-play', this.buildAppendData(this.props));
     }
   };
 
@@ -287,7 +285,7 @@ class AVPlayerMobile extends Component {
     }
 
     if (this?.props?.item?.unit?.id) {
-      this.props.chronicles.append('player-stop', this.buildAppendData(this.props.item, this.media));
+      this.props.chronicles.append('player-stop', this.buildAppendData(this.props));
     }
   };
 

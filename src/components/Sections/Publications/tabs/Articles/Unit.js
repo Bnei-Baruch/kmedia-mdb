@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { Fragment, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import { useLocation, useParams } from 'react-router-dom';
@@ -15,6 +15,7 @@ import MediaDownloads from '../../../../Pages/Unit/widgets/Downloads/MediaDownlo
 import WipErr from '../../../../shared/WipErr/WipErr';
 import Recommended from '../../../../Pages/Unit/widgets/Recommended/Main/Recommended';
 import playerHelper from '../../../../../helpers/player';
+import { ClientChroniclesContext } from '../../../../../helpers/app-contexts';
 
 
 const renderHeader = (unit, t, language) => {
@@ -64,7 +65,7 @@ const renderHelmet = unit => (
   </Fragment>
 );
 
-const renderArticle = unit => (
+const renderArticle = (unit, chroniclesAppend) => (
   <Grid padded>
     <Grid.Row>
       <Grid.Column>
@@ -73,7 +74,7 @@ const renderArticle = unit => (
     </Grid.Row>
     <Grid.Row>
       <Grid.Column>
-        <MediaDownloads unit={unit} displayDivider={true} />
+        <MediaDownloads unit={unit} displayDivider={true} chroniclesAppend={chroniclesAppend} />
       </Grid.Column>
     </Grid.Row>
   </Grid>
@@ -82,6 +83,7 @@ const renderArticle = unit => (
 const ArticlePage = ({ t }) => {
   const location = useLocation();
   const { id } = useParams();
+  const chronicles = useContext(ClientChroniclesContext);
 
   const language = useSelector(state => settings.getLanguage(state.settings));
   const unit = useSelector(state => selectors.getDenormContentUnit(state.mdb, id));
@@ -122,7 +124,7 @@ const ArticlePage = ({ t }) => {
                 </Grid.Row>
                 <Grid.Row>
                   <Grid.Column>
-                    {renderArticle(unit)}
+                    {renderArticle(unit, chronicles.append.bind(chronicles))}
                   </Grid.Column>
                 </Grid.Row>
               </Grid.Column>

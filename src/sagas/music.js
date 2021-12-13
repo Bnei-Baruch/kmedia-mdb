@@ -10,7 +10,7 @@ export function* fetchMusic(action) {
   try {
     const language = yield select(state => settings.getLanguage(state.settings));
     const { data } = yield call(Api.collections, {
-      contentTypes: CT_SONGS,
+      content_type: CT_SONGS,
       language,
       pageNo: 1,
       pageSize: 1000, // NOTE: we need to get all data, and the endpoint lets us fetch only with pagination,

@@ -7,7 +7,7 @@ import WipErr from '../../shared/WipErr/WipErr';
 import UnitList from '../UnitList/Container';
 import PageHeader from './Header';
 
-const CollectionPage = ({ collection= null, wip = false, err = null, namespace, t, renderUnit }) => {
+const CollectionPage = ({ collection = null, wip = false, err = null, namespace, t }) => {
 
   // Most chances we already have the collection either SSR or some nav link.
   // Only in case we don't, we'll show wipErr.
@@ -22,7 +22,6 @@ const CollectionPage = ({ collection= null, wip = false, err = null, namespace, 
         key={namespace}
         namespace={namespace}
         extraFetchParams={{ collection: collection.id }}
-        renderUnit={renderUnit}
       />
     </div>
   );
@@ -33,8 +32,7 @@ CollectionPage.propTypes = {
   collection: shapes.GenericCollection,
   wip: shapes.WIP,
   err: shapes.Error,
-  t: PropTypes.func.isRequired,
-  renderUnit: PropTypes.func.isRequired,
+  t: PropTypes.func.isRequired
 };
 
 export default withNamespaces()(CollectionPage);

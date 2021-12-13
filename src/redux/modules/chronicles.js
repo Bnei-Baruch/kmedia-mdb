@@ -1,10 +1,11 @@
 import { createAction, handleActions } from 'redux-actions';
+import { types as authTypes } from './auth';
 
 const USER_INACTIVE = 'USER_INACTIVE';
 
 export const types = {
   USER_INACTIVE,
-}
+};
 
 // Actions
 const userInactive = createAction(USER_INACTIVE);
@@ -21,7 +22,7 @@ const initialState = {
 
 const onAction = (draft, payload) => {
   draft.actionsCount = draft.actionsCount + 1;
-  draft.lastAction = payload;
+  draft.lastAction   = payload;
   return draft;
 };
 
@@ -29,10 +30,12 @@ export const reducer = handleActions({
   'FETCH_RECOMMENDED_SUCCESS': onAction,
   'Search/AUTOCOMPLETE_SUCCESS': onAction,
   'Search/SEARCH_SUCCESS': onAction,
+  [authTypes.LOGIN_SUCCESS]: onAction,
+  [authTypes.LOGOUT_SUCCESS]: onAction
 }, initialState);
 
 const getLastAction = state => state.lastAction;
 
 export const selectors = {
   getLastAction,
-}
+};

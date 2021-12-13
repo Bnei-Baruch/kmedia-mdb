@@ -10,11 +10,17 @@ import ScrollToTop from '../shared/ScrollToTop/ScrollToTop';
 import '../../stylesheets/Kmedia.scss';
 import * as shapes from '../shapes';
 import { ChroniclesActions } from '../../helpers/clientChronicles';
-import { ClientChroniclesContext, DeviceInfoContext, SessionInfoContext } from '../../helpers/app-contexts';
+import {
+  AbTestingContext,
+  ClientChroniclesContext,
+  DeviceInfoContext,
+  SessionInfoContext,
+} from '../../helpers/app-contexts';
+import InitKC from '../shared/InitKC';
 
 const App = props => {
-  const [isShareTextEnabled, setEnableShareText]                                                  = useState(true);
-  const { i18n, store, history, initialI18nStore, initialLanguage, deviceInfo, clientChronicles } = props;
+  const [isShareTextEnabled, setEnableShareText]                                                             = useState(true);
+  const { i18n, store, history, initialI18nStore, initialLanguage, deviceInfo, clientChronicles, abTesting } = props;
 
   const sessionInfo       = {
     enableShareText: { isShareTextEnabled, setEnableShareText }
@@ -24,21 +30,26 @@ const App = props => {
     isMobileDevice: deviceInfo.device?.type === 'mobile',
     undefinedDevice: deviceInfo.device?.type === undefined
   };
+
   return (
     <I18nextProvider i18n={i18n} initialI18nStore={initialI18nStore} initialLanguage={initialLanguage}>
       <Provider store={store}>
-        <ClientChroniclesContext.Provider value={clientChronicles}>
-          <DeviceInfoContext.Provider value={deviceInfoContext}>
-            <SessionInfoContext.Provider value={sessionInfo}>
-              <ChroniclesActions />
-              <ConnectedRouter history={history}>
-                <ScrollToTop>
-                  {renderRoutes(routes)}
-                </ScrollToTop>
-              </ConnectedRouter>
-            </SessionInfoContext.Provider>
-          </DeviceInfoContext.Provider>
-        </ClientChroniclesContext.Provider>
+        <InitKC>
+          <ClientChroniclesContext.Provider value={clientChronicles}>
+            <AbTestingContext.Provider value={abTesting}>
+              <DeviceInfoContext.Provider value={deviceInfoContext}>
+                <SessionInfoContext.Provider value={sessionInfo}>
+                  <ChroniclesActions />
+                  <ConnectedRouter history={history}>
+                    <ScrollToTop>
+                      {renderRoutes(routes)}
+                    </ScrollToTop>
+                  </ConnectedRouter>
+                </SessionInfoContext.Provider>
+              </DeviceInfoContext.Provider>
+            </AbTestingContext.Provider>
+          </ClientChroniclesContext.Provider>
+        </InitKC>
       </Provider>
     </I18nextProvider>
   );

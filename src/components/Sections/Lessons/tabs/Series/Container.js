@@ -9,7 +9,7 @@ import { canonicalLink } from '../../../../../helpers/links';
 import { isEmpty } from '../../../../../helpers/utils';
 import { selectors as settings } from '../../../../../redux/modules/settings';
 import { actions, selectors } from '../../../../../redux/modules/lessons';
-import NavLink from '../../../../Language/MultiLanguageNavLink';
+import Link from '../../../../Language/MultiLanguageLink';
 import WipErr from '../../../../shared/WipErr/WipErr';
 import isEqual from 'react-fast-compare';
 
@@ -54,7 +54,7 @@ const SeriesContainer = ({ t }) => {
       return null;
     }
 
-    const { id, children, name } = node;
+    const { id, children, name, start_date } = node;
 
     // expand all levels excluding the leafs
     const expandedLevel = !isEmpty(children) && children.some(ch => !isEmpty(ch.children));
@@ -66,7 +66,16 @@ const SeriesContainer = ({ t }) => {
       <Fragment key={`f-${key}`}>
         {
           isEmpty(children)
-            ? <List.Item key={id} as={NavLink} to={canonicalLink(node)} content={name} />
+            ?
+            <List.Item key={id} className="topics__item-font">
+              <Link to={canonicalLink(node)}>{name}  </Link>
+              {
+                start_date &&
+                  <span className="topics__item-smaller-font">
+                  | {t('values.date', { date: start_date })}
+                  </span>
+              }
+            </List.Item>
             : (
               <div key={key} className={`topics__card no_height ${grandchildrenClass}`}>
                 <Header as={`h${level > 6 ? 6 : level}`} className="topics__subtitle" content={name} />

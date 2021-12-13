@@ -3,13 +3,14 @@ import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import { Button } from 'semantic-ui-react';
 
-import { LANG_ENGLISH, LANG_RUSSIAN, LANG_UKRAINIAN } from '../../helpers/consts';
+import { LANG_ENGLISH, LANG_HEBREW, LANG_RUSSIAN, LANG_SPANISH, LANG_UKRAINIAN } from '../../helpers/consts';
 
-const Vh_Button = ({ t }) => (
-  DButton({ content: t('home.virtual-home'), href: `https://virtualhome.kli.one/?bbref_internal=kmedia&bbref_lang=he`, icon: 'globe', className: 'vh-button' })
+const Vh_Button = ({ t, language }) => (
+  DButton({ content: t('home.virtual-home'), href: `https://kli.one/?bbref_internal=kmedia&bbref_lang=${language}&lang=${language}`, icon: 'globe', className: 'vh-button' })
 );
 
 Vh_Button.propTypes = {
+  language: PropTypes.string.isRequired,
   t: PropTypes.func.isRequired,
 };
 
@@ -30,20 +31,22 @@ const DButton = ({ content, href, icon, className, color = 'blue' }) => (
   />
 );
 
-const DonateNow = ({ t, language }) => {
-
-  let lang = language;
-  switch (lang) {
+const getDonateLang = language => {
+  switch (language) {
+    case LANG_HEBREW:
+      return LANG_HEBREW;
+    case LANG_RUSSIAN:
     case LANG_UKRAINIAN:
-      lang = LANG_RUSSIAN;
-      break;
-    case LANG_ENGLISH:
-      lang = '';
-      break;
+      return LANG_RUSSIAN;
+    case LANG_SPANISH:
+      return LANG_SPANISH;
     default:
-      break;
+      return LANG_ENGLISH;
   }
+}
 
+const DonateNow = ({ t, language }) => {
+  const lang = getDonateLang(language);
   return DButton({ content: t('home.donate'), href: `https://kab1.com/${lang}`, icon: 'heart', className: 'donate-button' });
 };
 

@@ -18,7 +18,7 @@ const ensureStartsWithSlash = str => str && (str[0] === '/' ? str : `/${str}`);
 
 export const splitPathByLanguage = path => {
   const pathWithSlash = ensureStartsWithSlash(path);
-  const parts = pathWithSlash.split('/');
+  const parts         = pathWithSlash.split('/');
 
   if (LANGUAGES[parts[1]]) {
     return {
@@ -47,7 +47,7 @@ export const getLanguageFromPath = (path, headers, userAgent) => {
 
   // UI lang is set in cookie - redirect 302 to /:lang/...
   const cookies = cookieParse(headers.cookie || '');
-  language = cookies[COOKIE_UI_LANG];
+  language      = cookies[COOKIE_UI_LANG];
   // Only existing languages...
   if (language !== undefined && LANG_UI_LANGUAGES.includes(language)) {
     console.log(`language: ${language}, redirect: ${language !== DEFAULT_LANGUAGE}`);
@@ -79,7 +79,7 @@ export const prefixWithLanguage = (path, location, toLanguage) => {
   }
 
   const { language: languagePrefix, path: pathSuffix } = splitPathByLanguage(path);
-  const { language: currentPathLangPrefix } = splitPathByLanguage(location.pathname);
+  const { language: currentPathLangPrefix }            = splitPathByLanguage(location.pathname);
 
   // priority: language from args > language from link path > language from current path
   const language = toLanguage || languagePrefix || currentPathLangPrefix || '';
@@ -109,12 +109,17 @@ export const updateQuery = (history, updater) => {
     delete query.deb;
   }
 
-  history.replace({ search: stringify(updater(query)), state: history.location?.state ?? '' });
+  history.replace({
+    search: stringify(updater(query)),
+    state: history.location?.state ?? '',
+    hash: history.location.hash
+  });
 };
 
 export const isDebMode = location => getQuery(location).deb || false;
 
 export const getToWithLanguage = (navigateTo, location, language, contentLanguage) => {
+
   if (typeof navigateTo === 'string') {
     return prefixWithLanguage(navigateTo, location, language);
   }
@@ -125,8 +130,8 @@ export const getToWithLanguage = (navigateTo, location, language, contentLanguag
 
   // we're changing 'search' in case contentLanguage was supplied
   if (contentLanguage) {
-    const q = getQuery(navigateTo);
-    q.language = contentLanguage;
+    const q           = getQuery(navigateTo);
+    q.language        = contentLanguage;
     navigateTo.search = `?${stringify(q)}`;
   }
 

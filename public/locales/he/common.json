@@ -4,9 +4,11 @@
       "header": "קבלה מדיה"
     },
     "sidebar": {
+      "personal": "איזור אישי",
       "lessons": "שיעורים והרצאות",
       "programs": "תוכניות וקליפים",
-      "sources": "ספרייה",
+      "sources": "ספריית כתבי מקובלים",
+      "likutim": "ליקוטי מקובלים",
       "events": "כנסים ואירועים",
       "books": "ספרים",
       "topics": "נושאים",
@@ -109,10 +111,14 @@
     "more": "עוד",
     "copy-link": "העתק קישור",
     "search": "חפש",
-    "previous": "הקודם",
-    "next": "הבא",
+    "previous-lesson": "לשיעור הקודם",
+    "next-lesson": "לשיעור הבא",
+    "previous-article": "המאמר הקודם",
+    "next-article": "המאמר הבא",
     "copy": "העתק",
-    "view-all": "הצג הכל"
+    "view-all": "הצג הכל",
+    "save": "שמור",
+    "remove": "הסר"
   },
   "player": {
     "messages": {
@@ -130,6 +136,20 @@
     },
     "error": {
       "loading": "שגיאה בטעינת קובץ"
+    },
+    "header": {
+      "series-by-topic": "סדרת שיעורים בנושא:"
+    }
+  },
+  "playlist": {
+    "title-by-type": {
+      "DAILY_LESSON": "חלקי השיעור",
+      "SPECIAL_LESSON": "חלקי השיעור",
+      "CONGRESS": "חלקי האירוע",
+      "HOLIDAY": "חלקי האירוע",
+      "PICNIC": "חלקי האירוע",
+      "UNITY_DAY": "חלקי האירוע",
+      "LESSONS_SERIES": "שיעורי הסדרה"
     }
   },
   "messages": {
@@ -270,6 +290,10 @@
     "list": {
       "related": "קשור ל:",
       "number": "מס' ",
+      "nameByNum_1": "בוקר",
+      "nameByNum_2": "צהריים",
+      "nameByNum_3": "ערב",
+      "nameByNum_4": "ערב 2",
       "item_from": "חלק מתוך:"
     },
     "unit": {
@@ -292,6 +316,13 @@
       "description": "קיצור דרך מתעדכן לשיעור הקבלה היומי האחרון"
     }
   },
+  "likutim": {
+    "header": {
+      "text": "ליקוטי מקובלים",
+      "subtext": "במדור זה תמצאו ליקוטים מתוך כתבי גדולי המקובלים הנלמדים בשיעורי הקבלה היומיים עם הרב ד\"ר מיכאל לייטמן. הליקוטים עוסקים בעבודה הרוחנית ובמבנה העולמות העליונים; לנוחיותכם הם מסודרים לפי סדר הא\"ב."
+    },
+    "item-header": "ליקוטי מקובלים בנושא:"
+  },
   "programs": {
     "header": {
       "text": "תוכניות",
@@ -313,7 +344,8 @@
     },
     "list": {
       "episode_from": "פרק מתוך התוכנית:",
-      "item_of": "חלק מתוך:"
+      "item_of": "חלק מתוך:",
+      "show_all": "לכל הפרקים"
     },
     "unit": {
       "recommended": {
@@ -391,7 +423,15 @@
       "info": {
         "sources": "מקורות",
         "topics": "נושאים",
-        "collections": "קשור ל"
+        "collections": "קשור ל",
+        "study-series": "לכל השיעורים בסדרה",
+        "episode": "פרק {{name}}",
+        "episodes": "{{name}} פרקים",
+        "lesson-episode": "חלק {{name}}",
+        "lesson-episodes": "{{name}} חלקים",
+        "series-episode": "שיעור {{name}}",
+        "series-episodes": "{{name}} שיעורים",
+        "views": "{{views}} צפיות"
       },
       "recommended": {
         "same-collection": {
@@ -411,7 +451,7 @@
       "no-content": "חסר תמליל"
     },
     "sources": {
-      "header": "מקורות",
+      "header": "מקורות לשיעור",
       "no-sources": "אין מקורות",
       "no-source": "בחר מקור",
       "no-source-available": "אף מקור לא מוכן לתצוגה"
@@ -431,15 +471,28 @@
       "header": "קטעים נבחרים"
     },
     "recommended": {
-      "header": "מומלצים"
+      "same-topic": "מומלצים בנושא",
+      "same-collection": "פרקים מומלצים מתוך",
+      "any-topic": "כל נושא",
+      "default": "מומלצים",
+      "popular": "הנצפה ביותר",
+      "watching-now": "צופים עכשיו",
+      "views": "צפיות",
+      "last": "פרק אחרון",
+      "next": "פרק הבא",
+      "prev": "פרק קודם",
+      "rand": "תוכן אקראי",
+      "more": "עוד",
+      "less": "פחות",
+      "new": "פרק חדש"
     },
-    "playlist":{
+    "playlist": {
       "header": "הבא בתור"
     }
   },
   "sources-library": {
     "header": {
-      "text": "ספרייה",
+      "text": "ספריית כתבי מקובלים",
       "subtext": "אוסף של כל הכתבים המקוריים החשובים ביותר ללימוד הקבלה, שנכתבו על ידי גדולי המקובלים."
     },
     "no-source": "בחר מקור",
@@ -448,7 +501,8 @@
     "default": "ברירת מחדל",
     "filter": "סנן...",
     "share-title": "קרא את המאמר",
-    "group-articles": "מאמרי החברה"
+    "group-articles": "מאמרי החברה",
+    "play-audio-file": "להפעלת קובץ אודיו"
   },
   "topics": {
     "header": {
@@ -540,7 +594,7 @@
       "am": "אמהרית"
     },
     "content-types": {
-      "DAILY_LESSON": "שיעור",
+      "DAILY_LESSON": "שיעור הקבלה היומי",
       "SPECIAL_LESSON": "שיעור מיוחד",
       "FRIENDS_GATHERINGS": "ישיבות חברים",
       "CONGRESS": "כנס",
@@ -690,5 +744,39 @@
     "copy-link": "העתק קישור",
     "copy-text": "העתק טקסט",
     "disable-share": "לבטל"
+  },
+  "personal": {
+    "subsNewUnits": "פרקים חדשים",
+    "unsubscribe": "נרשמת כמנוי",
+    "subscribe": "הרשמה למינוי",
+    "unsubscribeSuccessful": "המינוי הוסר",
+    "subscribeSuccessful": "נוסף מינוי",
+    "newPlaylistSuccessful": "פלייליסט {{name}} נוצר",
+    "addToPlaylistSuccessful": "נוסף לפלייליסט {{name}}",
+    "history": "היסטוריית צפייה",
+    "reactions": "תוכן שאהבתי",
+    "playlists": "פלייליסטים",
+    "playlistNoResult": "בפלייליסט זה אין וידאו",
+    "subscriptions": "מינויים",
+    "playAll": "נגן הכל",
+    "addToPlaylist": "שמירה ב...",
+    "newPlaylistName": "שם הפלייליסט החדש",
+    "newPlaylist": "צור פלייליסט חדש",
+    "editPlaylist": "ערוך פלייליסט",
+    "removedSuccessfully": "הוסר בהצלחה",
+    "removeHistory": "הסרה מהיסטוריית צפיה",
+    "removeLike": "הסרה מתוכן שאהבתי",
+    "removeFromPlaylist": "הסרה מהפלייליסט",
+    "confirmRemovePlaylist": "בחרת למחוק את הפלייליסט {{name}}. להמשיך?\nהערה: מחיקת פלייליסטים היא פעולה בלתי הפיכה ולא ניתן לבטל אותה.",
+    "confirmUnsubscribe": "לבטל את הרישום כמנוי ל{{name}}?",
+    "videosOnList": "וידאו",
+    "login": "כניסה",
+    "logout": "יציאה",
+    "needToLogin": "כדאי להיכנס כדי להוסיף לייק לסרטונים, לשמור תכנים ולהירשם למינויים.",
+    "account": "החשבון שלי",
+    "no_playlists": "אין לך עדיין פלייליסטים, אנא צור אחד",
+    "no_reactions": "אין לך סרטונים שאהבת",
+    "no_history": "התחל לצפות בסרטונים שיוצגו כאן",
+    "no_subscriptions": "אין לך עדיין מנויים, הירשם כדי לראות אותם כאן"
   }
 }
