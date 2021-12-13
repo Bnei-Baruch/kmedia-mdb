@@ -7,7 +7,7 @@ import {
   Grid,
   Header,
   Icon,
-  Input,
+  Input, Label,
   List,
   ModalActions,
   ModalContent,
@@ -19,6 +19,7 @@ import { actions, selectors } from '../../../redux/modules/my';
 import { MY_NAMESPACE_BOOKMARKS, MY_NAMESPACE_FOLDERS } from '../../../helpers/consts';
 import { frownSplashNotFound } from '../WipErr/WipErr';
 import { getMyItemKey } from '../../../helpers/my';
+import BookmarkActions from './BookmarkActions';
 
 const BookmarkForm = ({ t, onClose, source, bookmarkId, data }) => {
   const [name, setName]             = useState();
@@ -53,10 +54,10 @@ const BookmarkForm = ({ t, onClose, source, bookmarkId, data }) => {
 
   const changeName = (e, { value }) => setName(value);
 
-  const handleSave = () => !bookmark ? create() : update();
+  const handleSave = params => !bookmark ? create(params) : update(params);
 
-  const create = () => {
-    const params = { name, ...source };
+  const create = params => {
+    params = { name, ...params, ...source };
 
     if (selected.length > 0)
       params.folder_ids = selected;
@@ -65,8 +66,8 @@ const BookmarkForm = ({ t, onClose, source, bookmarkId, data }) => {
     onClose(null, null, true);
   };
 
-  const update = () => {
-    dispatch(actions.edit(MY_NAMESPACE_BOOKMARKS, { id: bookmarkId, name, folder_ids: selected }));
+  const update = params => {
+    dispatch(actions.edit(MY_NAMESPACE_BOOKMARKS, { id: bookmarkId, name, folder_ids: selected, ...params }));
     onClose(null, null, true);
   };
 
@@ -141,7 +142,7 @@ const BookmarkForm = ({ t, onClose, source, bookmarkId, data }) => {
                   onKeyDown={handleKeyDown}
                   autoFocus
                   onFocus={e => {
-                    e.target.value = t('personal.bookmark.newFolderName');
+                    e.target.value = t('personal.bookmark.newFolder');
                     e.target.select();
                   }}
                 />
@@ -156,24 +157,11 @@ const BookmarkForm = ({ t, onClose, source, bookmarkId, data }) => {
         </Segment>
       </ModalContent>
       <ModalActions>
-        <Button
-          primary
-          basic
-          content={t('personal.bookmark.newFolder')}
-          onClick={handleNewFolder}
-          floated="left"
-        />
-        <Button
-          content={t('buttons.cancel')}
-          onClick={onClose}
-          color="grey"
-        />
-        <Button
-          primary
-          content={t('buttons.save')}
-          onClick={handleSave}
-          floated="right"
-          disabled={!name}
+        <BookmarkActions
+          newFolder={handleNewFolder}
+          onCancel={onClose}
+          onSave={handleSave}
+          name={name}
         />
       </ModalActions>
     </>
