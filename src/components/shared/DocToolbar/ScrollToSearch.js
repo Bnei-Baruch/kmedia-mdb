@@ -73,13 +73,15 @@ const ScrollToSearch = ({ source, data, language, urlParams = '', pathname }) =>
     if (isMobileDevice || !searchUrl)
       return null;
     source.data = { ...source?.data || {}, ...searchQuery };
-    return <Toolbar
-      source={source}
-      url={searchUrl}
-      text={searchText}
-      disable={disableShareBar}
-      position={barPosition}
-    />;
+    return (
+      <Toolbar
+        source={source}
+        url={searchUrl}
+        text={searchText}
+        disable={disableShareBar}
+        position={barPosition}
+      />
+    );
   };
 
   const handleOnMouseDown = e => {

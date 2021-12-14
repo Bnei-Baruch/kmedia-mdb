@@ -4,7 +4,6 @@ import { withNamespaces } from 'react-i18next';
 import {
   Button,
   Checkbox, Container,
-  Grid,
   Header,
   Icon,
   Input,

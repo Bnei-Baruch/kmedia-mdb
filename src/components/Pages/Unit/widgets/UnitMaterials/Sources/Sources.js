@@ -12,7 +12,7 @@ import { selectors as settings } from '../../../../../../redux/modules/settings'
 import { selectSuitableLanguage } from '../../../../../../helpers/language';
 import { getLanguageDirection } from '../../../../../../helpers/i18n-utils';
 import { DeviceInfoContext } from '../../../../../../helpers/app-contexts';
-import { MT_TEXT, CT_LIKUTIM } from '../../../../../../helpers/consts';
+import { MT_TEXT, CT_LIKUTIM, CT_SOURCE } from '../../../../../../helpers/consts';
 import { getSourceErrorSplash, wipLoadingSplash } from '../../../../../shared/WipErr/WipErr';
 import PDF, { isTaas, startsFrom } from '../../../../../shared/PDF/PDF';
 import ScrollToSearch from '../../../../../shared/DocToolbar/ScrollToSearch';
@@ -190,6 +190,10 @@ const Sources = ({ unit, t, activeTab = 'sources' }) => {
             data={data}
             language={language}
             pathname={`/${language}/${isLikutim ? 'likutim' : 'sources'}/${selectedUnitId}`}
+            source={{
+              source_uid: selectedUnitId,
+              source_type: isLikutim ? CT_LIKUTIM : CT_SOURCE
+            }}
           />
         </div>
       </div>
@@ -257,7 +261,11 @@ const Sources = ({ unit, t, activeTab = 'sources' }) => {
             )
           }
           {<Download path={url} mimeType={file.mimetype} downloadAllowed={true} filename={file.name} />}
-          <UnitBar handleSettings={setSettings} fontSize={setting.fontSize} />
+          <UnitBar
+            handleSettings={setSettings}
+            fontSize={setting.fontSize}
+            source={{ source_uid: selectedUnitId, source_type: isLikutim ? CT_LIKUTIM : CT_SOURCE }}
+          />
         </Menu.Item>
       </Menu>
       <Divider hidden fitted className="clear" />

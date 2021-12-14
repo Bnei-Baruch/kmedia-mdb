@@ -12,6 +12,8 @@ import { actions as filtersActions, selectors as filters } from '../../../../red
 import { selectors as my } from '../../../../redux/modules/my';
 import { getMyItemKey } from '../../../../helpers/my';
 import FolderList from './Folders/List';
+import { getLanguageDirection } from '../../../../helpers/i18n-utils';
+import { selectors as settings } from '../../../../redux/modules/settings';
 
 const BookmarkHeaderMobile = ({ t }) => {
   const [open, setOpen] = useState();
@@ -28,7 +30,6 @@ const BookmarkHeaderMobile = ({ t }) => {
 
   const handleToggle = () => setOpen(!open);
 
-
   const removeFolderFilter = e => {
     dispatch(filtersActions.deleteFilter(MY_BOOKMARK_FILTER_FOLDER_ID));
     e.stopPropagation();
@@ -36,7 +37,10 @@ const BookmarkHeaderMobile = ({ t }) => {
 
   const placeholder = !folder ? t('personal.bookmark.searchBookmarks') : `${t('personal.bookmark.filterByFolder')}: ${folder.name}`;
 
-  const trigger = (
+  const language = useSelector(state => settings.getLanguage(state.settings));
+  const dir      = getLanguageDirection(language);
+
+  const trigger  = (
     <Container>
       <Label
         as="a"
@@ -49,7 +53,7 @@ const BookmarkHeaderMobile = ({ t }) => {
         <Icon name="folder outline" color="grey" />
         {t('personal.bookmark.folders')}
         <Icon
-          name="caret right"
+          name={`caret ${dir === 'ltr' ? 'right' : 'left'}`}
           className="margin-left-8 margin-right-8"
         />
       </Label>
@@ -93,6 +97,7 @@ const BookmarkHeaderMobile = ({ t }) => {
         onOpen={handleToggle}
         onClose={handleToggle}
         open={open}
+        dir={dir}
       >
         <Modal.Content>
           <Grid className="no-padding">

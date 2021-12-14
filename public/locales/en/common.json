@@ -655,6 +655,8 @@
   "share-text": {
     "message-title": "Read this fragment",
     "share-button": "Share fragment",
+    "note-button": "Share fragment",
+    "bookmark-button": "Share fragment",
     "copy-link": "Copy link",
     "copy-text": "Copy text",
     "disable-share": "Cancel"

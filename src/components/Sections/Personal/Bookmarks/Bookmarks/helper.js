@@ -1,4 +1,4 @@
-import { CT_LIKUTIM, CT_SOURCE } from '../../../../../helpers/consts';
+import { CT_DAILY_LESSON, CT_LESSON_PART, CT_LIKUTIM, CT_SOURCE } from '../../../../../helpers/consts';
 import { cuPartNameByCCUType } from '../../../../../helpers/utils';
 
 export const buildTitleByUnit = (cu, t, getPathByID) => {
@@ -6,6 +6,12 @@ export const buildTitleByUnit = (cu, t, getPathByID) => {
   if (!cu) return '';
 
   const { content_type, film_date, collections, name } = cu;
+
+  if (content_type === CT_LESSON_PART) {
+    const ctLabel = t(`constants.content-types.${CT_DAILY_LESSON}`);
+    const fd      = t('values.date', { date: film_date });
+    return `${ctLabel} ${fd}`;
+  }
 
   if (content_type === CT_SOURCE) {
     const path        = getPathByID(cu.id)?.map(x => x.name);

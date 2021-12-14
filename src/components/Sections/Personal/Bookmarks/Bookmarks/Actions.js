@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { withNamespaces } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { Card, Confirm, Dropdown, Modal } from 'semantic-ui-react';
+import { Confirm, Dropdown, Modal } from 'semantic-ui-react';
 
 import { actions } from '../../../../../redux/modules/my';
-import { MY_NAMESPACE_BOOKMARKS, MY_NAMESPACE_SUBSCRIPTIONS } from '../../../../../helpers/consts';
+import { MY_NAMESPACE_BOOKMARKS } from '../../../../../helpers/consts';
 import BookmarkForm from '../../../../shared/SaveBookmark/BookmarkForm';
 import { selectors as settings } from '../../../../../redux/modules/settings';
 import { getLanguageDirection } from '../../../../../helpers/i18n-utils';

@@ -5,19 +5,19 @@ import { Menu, Ref } from 'semantic-ui-react';
 
 import { getQuery } from '../../helpers/url';
 
-const activeFromLocation = location => {
+const paramsFromLocation = location => {
   if (location.state && location.state.active)
     return location.state.active;
 
-  const { activeTab = '' } = getQuery(location);
-  return activeTab;
+  const { activeTab: activeLocation = '', srchstart } = getQuery(location);
+  return { activeLocation, isHighLighted: !!srchstart };
 };
 
 const activeFromDefault = items => (items.length > 0 ? items[0].name : null);
 
 const TabsMenu = ({ items = [], active = '' }) => {
-  const location       = useLocation();
-  const activeLocation = activeFromLocation(location);
+  const location                          = useLocation();
+  const { activeLocation, isHighLighted } = paramsFromLocation(location);
 
   const computedActive = active
     || activeLocation
@@ -31,7 +31,7 @@ const TabsMenu = ({ items = [], active = '' }) => {
   const activeItem = items.find(x => x.name === internalActive);
 
   useEffect(() => {
-    if (activeLocation && scrollRef.current?.scrollIntoView) {
+    if (!isHighLighted && activeLocation && scrollRef.current?.scrollIntoView) {
       setTimeout(() => {
         scrollRef.current && scrollRef.current.scrollIntoView();
       }, 150);

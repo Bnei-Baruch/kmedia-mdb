@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
-import { Button, Icon, MenuItem, Modal } from 'semantic-ui-react';
+import { Button, MenuItem, Modal } from 'semantic-ui-react';
 import AlertModal from '../AlertModal';
 import BookmarkForm from '../SaveBookmark/BookmarkForm';
 import { useSelector } from 'react-redux';
@@ -19,7 +19,7 @@ const BookmarkBtn = ({ t, source, close }) => {
 
   const handleOpen = () => {
     setOpen(true);
-  }
+  };
 
   const handleClose = (e, el, isCreated) => {
     isCreated && setAlertMsg(t('personal.bookmark.bookmarkCreated'));
@@ -36,7 +36,7 @@ const BookmarkBtn = ({ t, source, close }) => {
         trigger={
           <MenuItem onClick={handleOpen}>
             <Button circular icon="bookmark" />
-            bookmark
+            {t('share-text.bookmark-button')}
           </MenuItem>
         }
         open={open}

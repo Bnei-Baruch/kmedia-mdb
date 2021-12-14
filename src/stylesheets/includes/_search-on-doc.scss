@@ -25,6 +25,7 @@
 
   &-bar-position {
     position: absolute;
+    z-index: 999;
   }
 
   &-toolbar {
@@ -32,7 +33,7 @@
     background: transparent !important;
     border: none !important;
     box-shadow: none !important;
-    transform: none!important;
+    transform: none !important;
     top: 0;
     right: 0;
     width: max-content;
@@ -44,6 +45,8 @@
       & > .button {
         margin-bottom: 4px;
         background-color: $white;
+        height: 40px;
+        width: 40px;
       }
     }
 

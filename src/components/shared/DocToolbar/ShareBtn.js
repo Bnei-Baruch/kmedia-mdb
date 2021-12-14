@@ -1,10 +1,8 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
-import CopyToClipboard from 'react-copy-to-clipboard';
-import { Button, Dropdown, Icon, MenuItem, Popup, } from 'semantic-ui-react';
+import { Button, Dropdown, MenuItem } from 'semantic-ui-react';
 
-import useStateWithCallback from '../../../helpers/use-state-with-callback';
 import {
   EmailIcon,
   EmailShareButton,
@@ -75,7 +73,7 @@ const ShareBtn = ({ t, url }) => {
         (
           <MenuItem>
             <Button circular icon="share alternate" />
-            share
+            {t('share-text.share-button')}
           </MenuItem>
         )
       }

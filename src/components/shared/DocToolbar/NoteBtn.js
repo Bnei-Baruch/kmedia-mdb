@@ -6,7 +6,7 @@ import { Button, MenuItem } from 'semantic-ui-react';
 const NoteBtn = ({ t, url }) => (
   <MenuItem>
     <Button circular icon="sticky note" />
-      note
+    {t('share-text.note-button')}
   </MenuItem>
 );
 
