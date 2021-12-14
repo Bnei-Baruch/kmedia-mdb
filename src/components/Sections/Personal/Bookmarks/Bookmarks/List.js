@@ -51,15 +51,12 @@ const BookmarkList = ({ t }) => {
     return title.includes(query);
   };
 
-  if (query) {
-    items = items.filter(filterBookmarkByQuery);
+  if (items.length === 0) {
+    return <Header as="h2" content={t('personal.bookmark.haveNo')} textAlign="center" />;
   }
 
-  if (items.length === 0) {
-    let msg = t('personal.bookmark.haveNo');
-    if (folder_id)
-      msg = t('personal.bookmark.haveNoInFolder');
-    return <Header as="h2" content={msg} textAlign="center" />;
+  if (query) {
+    items = items.filter(filterBookmarkByQuery);
   }
 
   return (
