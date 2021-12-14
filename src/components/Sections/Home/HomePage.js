@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Container, Feed, Grid } from 'semantic-ui-react';
 import * as shapes from '../../shapes';
@@ -120,6 +120,13 @@ const renderLatestLessonAndBanner = (latestLesson, banner) =>
     </Container>
   </div>;
 
+const setBanners = (allBanners, bannerIdx, setBannerIdx) => {
+  if (allBanners > 0) {
+    setBannerIdx(() => (bannerIdx + 1) % allBanners);
+  } else {
+    setBannerIdx(-1);
+  }
+};
 
 const HomePage = ({
   banners,
@@ -131,26 +138,16 @@ const HomePage = ({
   latestTweets = [],
   t,
 }) => {
+
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
   const [bannerIdx, setBannerIdx] = useState(-1);
-
-  const setBanners = useCallback(allBanners => {
-    if (allBanners > 0) {
-      setBannerIdx(() => (bannerIdx + 1) % allBanners);
-    } else {
-      setBannerIdx(-1);
-    }
-  }, [bannerIdx]);
-
   useEffect(() => {
-    setBanners(banners.data.length);
-  }, [banners, setBanners]);
-
+    setBanners(banners.data.length, bannerIdx, setBannerIdx);
+  }, [banners?.data?.length]);
   useInterval(() => {
-    setBanners(banners.data.length);
+    setBanners(banners.data.length, bannerIdx, setBannerIdx);
   }, SWITCH_BANNERS_TIMEOUT);
-
   const banner = bannerIdx === -1 ? null : banners.data[bannerIdx];
 
   return (
