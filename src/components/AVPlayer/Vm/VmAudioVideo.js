@@ -1,33 +1,36 @@
 import { useRef } from 'react';
+import { withNamespaces } from 'react-i18next';
 import { Control } from '@vime/react';
-import classNames from 'classnames';
 
-const onJump = (amount, currentTime, duration, setCurrentTime) => {
-  let jumpTo = currentTime + amount;
-  // Make sure we don't exceed the duration boundaries
-  jumpTo     = Math.max(0, Math.min(jumpTo, duration));
 
-  setCurrentTime(jumpTo);
-};
-
-export const VmAudioVideo = ({ isVideo, onSwitchAV }) => {
+const VmAudioVideo = ({ isVideo, onSwitchAV, t }) => {
   const ref = useRef(null);
 
   return (
     <Control
       ref={ref}
       style={{ '--vm-control-scale': 0.5, margin: '0 -2.5rem' }}
-      class={'mediaplayer__audiovideo'}
+      // class={'mediaplayer__audiovideo'}
     >
-      <span
+      <button type="button" onClick={onSwitchAV}>
+        <span className={!isVideo ? 'is-active' : ''}>{t('buttons.audio')}</span>
+        &nbsp;/&nbsp;
+        <span className={isVideo ? 'is-active' : ''}>{t('buttons.video')}</span>
+      </button>
+
+      {/* <span
         className={classNames({ 'is-active': !isVideo })}
         onClick={() => onSwitchAV('audio')}
-      >audio</span>
+      >audio
+      </span>
       &nbsp;/&nbsp;
       <span
         className={classNames({ 'is-active': isVideo })}
         onClick={() => onSwitchAV('video')}
-      >video</span>
+      >video
+      </span> */}
     </Control>
   );
 };
+
+export default withNamespaces()(VmAudioVideo);

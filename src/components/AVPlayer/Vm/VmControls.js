@@ -19,21 +19,45 @@ import {
 } from '@vime/react';
 import { VmPrevNext } from './VmPrevNext';
 import { VmJump } from './VmJump';
-import { VmAudioVideo } from './VmAudioVideo';
+import VmAudioVideo from './VmAudioVideo';
 import { VmShare } from './VmShare';
 
-const buildAudioControls = () => (
-  <Controls fullWidth>
-    <PlaybackControl keys={undefined} tooltipDirection="right" />
-    <VolumeControl />
-    <CurrentTime />
-    <ScrubberControl alwaysShowHours />
-    <EndTime />
-    <SettingsControl tooltipDirection="left" />
-  </Controls>
-);
+const getVideoControls = () => (
+  <>
+    <PipControl />
+    <FullscreenControl hideTooltip />
+  </>
+)
 
-const buildMobileVideoControls = ({ activeDuration, waitForPlaybackStart, hideWhenPaused }) => (
+const getControls = (showNextPrev, hasPrev, onPrev, hasNext, onNext, onActivateSlice, isVideo, onSwitchAV) =>
+  <ControlGroup space="top">
+    {
+      showNextPrev && (
+        <VmPrevNext isPrev
+          isDisabled={!hasPrev}
+          onClick={onPrev} />
+      )
+    }
+    <PlaybackControl />
+    <VolumeControl className="volumeControl" />
+    {
+      showNextPrev && (
+        <VmPrevNext isPrev={false}
+          isDisabled={!hasNext}
+          onClick={onNext} />
+      )
+    }
+    <TimeProgress hideTooltip />
+    <VmJump />
+    <ControlSpacer hideTooltip />
+    <VmAudioVideo isVideo={isVideo} onSwitchAV={onSwitchAV} />
+    <SettingsControl />
+    { isVideo && getVideoControls()}
+    <VmShare onActivateSlice={onActivateSlice} />
+  </ControlGroup>;
+
+
+const buildMobileVideoControls = (activeDuration, waitForPlaybackStart, hideWhenPaused) => (
   <>
     <Scrim gradient="up" />
     <Controls
@@ -80,7 +104,8 @@ const buildMobileVideoControls = ({ activeDuration, waitForPlaybackStart, hideWh
   </>
 );
 
-const buildDesktopVideoControls = ({ activeDuration, waitForPlaybackStart, hideOnMouseLeave, showNextPrev, hasPrev, onPrev, hasNext, onNext, onActivateSlice }) => (
+const buildDesktopVideoControls = (activeDuration, waitForPlaybackStart, hideOnMouseLeave,
+  showNextPrev, hasPrev, onPrev, hasNext, onNext, onActivateSlice, onSwitchAV) => (
   <>
     <Scrim gradient="up" />
     <ClickToPlay />
@@ -120,58 +145,52 @@ const buildDesktopVideoControls = ({ activeDuration, waitForPlaybackStart, hideO
       hideWhenPaused={false}
       hideOnMouseLeave={hideOnMouseLeave}
     >
-      <ControlGroup>
+      <ControlGroup space="bottom">
         <ScrubberControl alwaysShowHours />
       </ControlGroup>
 
-      <ControlGroup space="top">
-        {showNextPrev && (
-          <VmPrevNext isPrev
-            isDisabled={!hasPrev}
-            onClick={onPrev}
-          />
-        )}
-        <PlaybackControl
-          hideTooltip
-          style={{ '--vm-control-scale': 0.7, margin: '0 -1rem', }} />
-        {showNextPrev && (
-          <VmPrevNext isPrev={false}
-            isDisabled={!hasNext}
-            onClick={onNext}
-          />
-        )}
-        <TimeProgress hideTooltip />
-        <VmJump />
-        <VolumeControl hideTooltip className="volumeControl" />
-        <ControlSpacer hideTooltip />
-        {/*<VmAudioVideo isVideo={isVideo} onSwitchAV={onSwitchAV} />*/}
-        <PipControl hideTooltip />
-        <SettingsControl hideTooltip />
-        <VmShare onActivateSlice={onActivateSlice} />
-        <FullscreenControl hideTooltip />
-      </ControlGroup>
+      {getControls(showNextPrev, hasPrev, onPrev, hasNext, onNext, onActivateSlice, true, onSwitchAV)}
     </Controls>
   </>
 );
 
-export const VmControls = ({
-  isMobile, isVideo,
-  onSwitchAV,
-  onActivateSlice,
-  activeDuration, waitForPlaybackStart, hideWhenPaused, hideOnMouseLeave,
-  showNextPrev, hasPrev, onPrev, hasNext, onNext,
-}) => {
+const buildAudioControls = (onActivateSlice, showNextPrev, hasPrev, onPrev, hasNext, onNext, onSwitchAV) => (
+  <Controls fullWidth>
+    {/* <Scrim gradient="up" /> */}
+    <ClickToPlay />
+
+    <ControlGroup space="bottom">
+      <ScrubberControl alwaysShowHours />
+    </ControlGroup>
+
+    {getControls(showNextPrev, hasPrev, onPrev, hasNext, onNext, onActivateSlice, false, onSwitchAV)}
+
+  </Controls>
+);
+
+
+export const VmControls = (
+  {
+    isMobile, isVideo,
+    onSwitchAV,
+    onActivateSlice,
+    activeDuration, waitForPlaybackStart, hideWhenPaused, hideOnMouseLeave,
+    showNextPrev, hasPrev, onPrev, hasNext, onNext,
+  }
+) =>  {
   let controls;
 
   if (isMobile) {
     controls = buildMobileVideoControls({ activeDuration, waitForPlaybackStart, hideWhenPaused });
   } else if (isVideo) {
-    controls = buildDesktopVideoControls({
-      activeDuration, waitForPlaybackStart, hideOnMouseLeave, showNextPrev, hasPrev, onPrev, hasNext, onNext, onActivateSlice,
-    });
+    controls = buildDesktopVideoControls(
+      activeDuration, waitForPlaybackStart, hideOnMouseLeave,
+      showNextPrev, hasPrev, onPrev, hasNext, onNext, onActivateSlice, onSwitchAV
+    );
   } else {
-    controls = buildAudioControls();
+    controls = buildAudioControls(onActivateSlice, showNextPrev, hasPrev, onPrev, hasNext, onNext, onSwitchAV);
   }
 
   return controls;
 };
+
