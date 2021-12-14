@@ -16,6 +16,7 @@ import BookmarksItem from './Item';
 import { buildTitleByUnit } from './helper';
 import { selectors as mdb } from '../../../../../redux/modules/mdb';
 import { selectors as sources } from '../../../../../redux/modules/sources';
+import { selectors as settings } from '../../../../../redux/modules/settings';
 
 const BookmarkList = ({ t }) => {
   let items         = useSelector(state => selectors.getList(state.my, MY_NAMESPACE_BOOKMARKS));
@@ -25,12 +26,13 @@ const BookmarkList = ({ t }) => {
   const getPathByID = useSelector(state => sources.getPathByID(state.sources));
   const query       = useSelector(state => filters.getByKey(state.bookmarkFilter, MY_BOOKMARK_FILTER_QUERY));
   const denormCU    = useSelector(state => mdb.nestedGetDenormContentUnit(state.mdb));
+  const language    = useSelector(state => settings.getLanguage(state.settings));
 
-  const dispatch = useDispatch();
+  const dispatch    = useDispatch();
 
   useEffect(() => {
     dispatch(actions.fetch(MY_NAMESPACE_BOOKMARKS, { folder_id }));
-  }, [folder_id]);
+  }, [folder_id, language]);
 
   const needToLogin = NeedToLogin({ t });
 

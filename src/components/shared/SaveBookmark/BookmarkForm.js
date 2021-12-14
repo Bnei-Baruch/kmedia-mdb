@@ -141,7 +141,7 @@ const BookmarkForm = ({ t, onClose, source, bookmarkId, data }) => {
                   onKeyDown={handleKeyDown}
                   autoFocus
                   onFocus={e => {
-                    e.target.value = t('personal.bookmark.newFolderName');
+                    e.target.value = t('personal.bookmark.newFolder');
                     e.target.select();
                   }}
                 />
