@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Card } from 'semantic-ui-react';
-
+import { useSelector } from 'react-redux';
+import { selectors as sources } from '../../../redux/modules/sources';
 import { canonicalLink, canonicalSectionByLink } from '../../../helpers/links';
 import * as shapes from '../../shapes';
 import Link from '../../Language/MultiLanguageLink';
@@ -26,11 +27,21 @@ import ContentItemContainer from '../../shared/ContentItem/ContentItemContainer'
 import { fromToLocalized } from '../../../helpers/date';
 
 const LatestUpdate = ({ item, t, label }) => {
-  const { content_type, name, film_date, name_in_collection, id, start_date, end_date, number } = item;
-
+  const { content_type, name, film_date, name_in_collection, id, source_id, start_date, end_date, number } = item;
   const link           = canonicalLink(item);
   let title            = name || `${t(`constants.content-types.${content_type}`)} ${t('lessons.list.number')} ${name_in_collection}`;
   let subheader        = [`${t('values.date', { date: item.film_date })} - ${label}`];
+  let authorName       = '';
+  let roots  = useSelector(state => sources.getRoots(state.sources));
+  let source = useSelector(state => sources.getSourceById(state.sources));
+  if(content_type === CT_LESSONS_SERIES){
+      roots.map(r => {
+        let author = source(r);
+        if(author.children && author.children.includes(source_id)){
+          authorName = ' '+ author.name + ' -';
+        }      
+      })
+  }
   let canonicalSection = Requests.imaginaryRandom('resize', {
     width: 512,
     height: 288,
@@ -53,7 +64,8 @@ const LatestUpdate = ({ item, t, label }) => {
       subheader = [t('values.date', { date: film_date })];
       break;
     case CT_LESSONS_SERIES:
-      title     = name || t(`constants.content-types.${content_type}`);
+      //title     = name || t(`constants.content-types.${content_type}`);
+      title     = [t(`player.header.series-by-topic`),`${authorName}`,` ${name}`] || t(`constants.content-types.${content_type}`);
       subheader = [fromToLocalized(start_date || film_date, end_date)];
       break;
     case CT_SPECIAL_LESSON:
