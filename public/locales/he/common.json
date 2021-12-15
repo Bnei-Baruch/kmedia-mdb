@@ -793,7 +793,7 @@
       "filterByFolder": "חפש ב",
       "bookmarkUpdated": "הסימניה עודכנה בהצלחה!",
       "bookmarkCreated": "הסימניה נוצרה בהצלחה!",
-      "confirmRemoveBookmark": "האם ברצונך למחוק את {{name}}?",
+      "confirmRemove": "האם ברצונך למחוק את {{name}}?",
       "haveNo": "אין לך סימניות עדיין"
     }
   }

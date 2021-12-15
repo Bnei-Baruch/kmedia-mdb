@@ -1,6 +1,6 @@
 import React from 'react';
 import { withNamespaces } from 'react-i18next';
-import { Image, Label, List } from 'semantic-ui-react';
+import { Icon, Image, Label, List } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
 
 import { selectors as mdb } from '../../../../../redux/modules/mdb';
@@ -36,12 +36,10 @@ const BookmarksItem = ({ bookmark, t }) => {
   }
 
   const renderFolder = f => (
-    <Label
-      key={f.id}
-      basic
-      icon="folder outline"
-      content={f.name}
-    />
+    <Label key={f.id} basic>
+      <Icon name="folder outline" className="margin-left-4 margin-right-4" />
+      {f.name}
+    </Label>
   );
 
   const title = buildTitleByUnit(cu, t, getPathByID);

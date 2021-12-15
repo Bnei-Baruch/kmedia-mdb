@@ -39,7 +39,6 @@ const BookmarkHeader = ({ t }) => {
           icon="search"
           placeholder={placeholder}
           defaultValue={query}
-          autoFocus
           onChange={(e, { value }) => handleSearch(value)}
           className="bookmark_search"
           iconPosition="left"

@@ -114,7 +114,7 @@ const BookmarkForm = ({ t, onClose, source, bookmarkId, data }) => {
             focus={true}
             onChange={changeName}
             defaultValue={name}
-            autoFocus
+            error={!name}
             className="margin-left-8 margin-right-8"
             style={{ width: '70%' }}
           />

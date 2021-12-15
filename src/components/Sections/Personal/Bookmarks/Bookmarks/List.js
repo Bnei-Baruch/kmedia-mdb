@@ -53,7 +53,7 @@ const BookmarkList = ({ t }) => {
     return title.includes(query);
   };
 
-  if (items.length === 0) {
+  if (items.length === 0 && !folder_id) {
     return <Header as="h2" content={t('personal.bookmark.haveNo')} textAlign="center" />;
   }
 

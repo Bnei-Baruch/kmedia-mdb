@@ -1,29 +1,33 @@
 import React, { useState } from 'react';
 import { withNamespaces } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Grid, Icon, Input } from 'semantic-ui-react';
+import { Button, Confirm, Grid, Icon, Input } from 'semantic-ui-react';
 import clsx from 'clsx';
 
 import { actions } from '../../../../../redux/modules/my';
-import { actions as filtersActions, selectors as filtersSelectors } from '../../../../../redux/modules/bookmarkFilter';
-import { MY_BOOKMARK_FILTER_FOLDER_ID, MY_NAMESPACE_FOLDERS } from '../../../../../helpers/consts';
+import { MY_NAMESPACE_FOLDERS } from '../../../../../helpers/consts';
 import { getMyItemKey } from '../../../../../helpers/my';
 import { stopBubbling } from '../../../../../helpers/utils';
+import { selectors as settings } from '../../../../../redux/modules/settings';
+import { getLanguageDirection } from '../../../../../helpers/i18n-utils';
 
-const FolderItem = ({ folder }) => {
-  const [edit, setEdit] = useState();
-  const [name, setName] = useState();
+const FolderItem = ({ folder, selectedId, selectFolder, t }) => {
+  const [edit, setEdit]       = useState();
+  const [name, setName]       = useState();
+  const [confirm, setConfirm] = useState();
+
+  const language = useSelector(state => settings.getLanguage(state.settings));
+  const dir      = getLanguageDirection(language);
 
   const { id }  = folder;
   const { key } = getMyItemKey(MY_NAMESPACE_FOLDERS, folder);
 
-  const selectedId = useSelector(state => filtersSelectors.getByKey(state.bookmarkFilter, MY_BOOKMARK_FILTER_FOLDER_ID));
-  const isAll      = id === 'all';
-  const isSelect   = isAll ? !selectedId : id === selectedId;
+  const isAll    = id === 'all';
+  const isSelect = isAll ? !selectedId : id === selectedId;
 
   const dispatch = useDispatch();
 
-  const handleSelectFolder = () => dispatch(filtersActions.addFilter(MY_BOOKMARK_FILTER_FOLDER_ID, isAll ? null : id));
+  const handleSelectFolder = () => selectFolder(isAll ? null : id);
 
   const handleEditFolder = () => {
     setEdit(true);
@@ -47,7 +51,9 @@ const FolderItem = ({ folder }) => {
     setEdit(false);
   };
 
-  const handleRemoveFolder = () => dispatch(actions.remove(MY_NAMESPACE_FOLDERS, { id, key }));
+  const toggleConfirm = () => setConfirm(!confirm);
+
+  const handleConfirmSuccess = () => dispatch(actions.remove(MY_NAMESPACE_FOLDERS, { id, key }));
 
   const rowProps = { key: id, className: 'flex_nowrap' };
   if (isSelect)
@@ -113,7 +119,18 @@ const FolderItem = ({ folder }) => {
               compact
               className="no-shadow"
               icon='trash alternate outline'
-              onClick={handleRemoveFolder}
+              onClick={toggleConfirm}
+            />
+
+            <Confirm
+              size="tiny"
+              open={confirm}
+              onCancel={toggleConfirm}
+              onConfirm={handleConfirmSuccess}
+              cancelButton={t('buttons.cancel')}
+              confirmButton={t('buttons.apply')}
+              content={t('personal.bookmark.confirmRemove', { name: folder.name })}
+              dir={dir}
             />
           </Grid.Column>
         )

@@ -86,7 +86,7 @@ const BookmarkHeaderMobile = ({ t }) => {
   );
 
   return (
-    <>
+    <Container className="padded">
       <Header as={'h2'} className="my_header padding-top_1em">
         <Icon name="bookmark outline" className="display-iblock" />
         {t('personal.bookmark.title')}
@@ -111,14 +111,12 @@ const BookmarkHeaderMobile = ({ t }) => {
         icon="search"
         placeholder={placeholder}
         defaultValue={query}
-        autoFocus
         onChange={(e, { value }) => handleSearch(value)}
         className="bookmark_search_mobile"
         iconPosition="left"
         fluid
       />
-      <Divider hidden />
-    </>
+    </Container>
   );
 };
 

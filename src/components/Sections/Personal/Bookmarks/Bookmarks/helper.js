@@ -10,7 +10,7 @@ export const buildTitleByUnit = (cu, t, getPathByID) => {
   if (content_type === CT_LESSON_PART) {
     const ctLabel = t(`constants.content-types.${CT_DAILY_LESSON}`);
     const fd      = t('values.date', { date: film_date });
-    return `${ctLabel} ${fd}`;
+    return `${ctLabel} (${fd})`;
   }
 
   if (content_type === CT_SOURCE) {
@@ -26,6 +26,6 @@ export const buildTitleByUnit = (cu, t, getPathByID) => {
   const collection = Object.values(collections)[0];
   const part       = Number(collection?.ccuNames[cu.id]);
   const partName   = t(cuPartNameByCCUType(content_type), { name: part });
-  return `${collection.name} ${partName} ${t('values.date', { date: film_date })}`;
+  return `${collection.name} ${partName} (${t('values.date', { date: film_date })})`;
 };
 

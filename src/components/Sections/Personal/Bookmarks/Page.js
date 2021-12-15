@@ -17,20 +17,23 @@ const Page = ({ t }) => {
   if (needToLogin) return needToLogin;
 
   return (
-    <Container fluid className="padded bookmark_page">
+    <Container fluid className={clsx('padded bookmark_page', {
+      'padded': !isMobileDevice,
+      'no-padding': isMobileDevice
+    })}
+    >
       {isMobileDevice && <BookmarkHeaderMobile />}
-      <Grid className="no-padding">
+      <Grid className={clsx({ 'no-margin': isMobileDevice })}>
         {!isMobileDevice && <BookmarkHeader />}
         <Grid.Row>
           {!isMobileDevice && <FolderList />}
-          <Grid.Column mobile={16} tablet={12} computer={12}>
-            <Segment
-              className={clsx({
-                'padded': !isMobileDevice,
-                'no-padding': isMobileDevice
-              })}
-              basic={isMobileDevice}
-            >
+          <Grid.Column
+            mobile={16}
+            tablet={12}
+            computer={12}
+            className={clsx({ 'no-margin, no-padding': isMobileDevice })}
+          >
+            <Segment basic={isMobileDevice}>
               <BookmarkList />
             </Segment>
           </Grid.Column>
