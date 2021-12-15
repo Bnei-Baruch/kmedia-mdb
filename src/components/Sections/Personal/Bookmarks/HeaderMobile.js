@@ -1,27 +1,27 @@
-import React, {useState} from 'react';
-import {withNamespaces} from 'react-i18next';
-import {Button, Container, Divider, Grid, Header, Icon, Input, Label, Modal} from 'semantic-ui-react';
-import {useDispatch, useSelector} from 'react-redux';
+import React, { useState } from 'react';
+import { withNamespaces } from 'react-i18next';
+import { Button, Container, Divider, Grid, Header, Icon, Input, Label, Modal } from 'semantic-ui-react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import {
   MY_BOOKMARK_FILTER_FOLDER_ID,
   MY_BOOKMARK_FILTER_QUERY,
   MY_NAMESPACE_FOLDERS
 } from '../../../../helpers/consts';
-import {actions as filtersActions, selectors as filters} from '../../../../redux/modules/bookmarkFilter';
-import {selectors as my} from '../../../../redux/modules/my';
-import {getMyItemKey} from '../../../../helpers/my';
+import { actions as filtersActions, selectors as filters } from '../../../../redux/modules/bookmarkFilter';
+import { selectors as my } from '../../../../redux/modules/my';
+import { getMyItemKey } from '../../../../helpers/my';
 import FolderList from './Folders/List';
-import {getLanguageDirection} from '../../../../helpers/i18n-utils';
-import {selectors as settings} from '../../../../redux/modules/settings';
+import { getLanguageDirection } from '../../../../helpers/i18n-utils';
+import { selectors as settings } from '../../../../redux/modules/settings';
 
-const BookmarkHeaderMobile = ({t}) => {
+const BookmarkHeaderMobile = ({ t }) => {
   const [open, setOpen] = useState();
 
   const folder_id = useSelector(state => filters.getByKey(state.bookmarkFilter, MY_BOOKMARK_FILTER_FOLDER_ID));
   const query = useSelector(state => filters.getByKey(state.bookmarkFilter, MY_BOOKMARK_FILTER_QUERY));
 
-  const {key: fKey} = getMyItemKey(MY_NAMESPACE_FOLDERS, {id: folder_id});
+  const { key: fKey } = getMyItemKey(MY_NAMESPACE_FOLDERS, { id: folder_id });
   const folder = useSelector(state => my.getItemByKey(state.my, MY_NAMESPACE_FOLDERS, fKey));
 
   const dispatch = useDispatch();
@@ -112,7 +112,7 @@ const BookmarkHeaderMobile = ({t}) => {
         icon="search"
         placeholder={placeholder}
         defaultValue={query}
-        onChange={(e, {value}) => handleSearch(value)}
+        onChange={(e, { value }) => handleSearch(value)}
         className="bookmark_search_mobile"
         iconPosition="left"
         fluid
