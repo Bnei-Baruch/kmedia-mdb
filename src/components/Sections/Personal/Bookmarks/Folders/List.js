@@ -58,28 +58,26 @@ const FolderList = ({ t, close }) => {
     }
   };
 
-  const renderHeader = () => {
-    return (
-      <Grid verticalAlign="middle" className="folders padded">
-        <Grid.Column width="7">
-          <Header as="h3" content={t('personal.bookmark.folders')} />
-        </Grid.Column>
-        <Grid.Column width="9">
-          <Input
-            icon
-            iconPosition="left"
-            placeholder={t('personal.bookmark.searchFolders')}
-            onChange={searchChange}
-            className="bookmark_search"
-            defaultValue={query}
-          >
-            <input />
-            <Icon name="search" />
-          </Input>
-        </Grid.Column>
-      </Grid>
-    );
-  };
+  const renderHeader = () => (
+    <Grid verticalAlign="middle" className="folders padded">
+      <Grid.Column width="7">
+        <Header as="h3" content={t('personal.bookmark.folders')} />
+      </Grid.Column>
+      <Grid.Column width="9">
+        <Input
+          icon
+          iconPosition="left"
+          placeholder={t('personal.bookmark.searchFolders')}
+          onChange={searchChange}
+          className="bookmark_search"
+          defaultValue={query}
+        >
+          <input />
+          <Icon name="search" />
+        </Input>
+      </Grid.Column>
+    </Grid>
+  );
 
   const renderEdit = () => {
     if (!editFolder) return null;
@@ -103,28 +101,26 @@ const FolderList = ({ t, close }) => {
     );
   };
 
-  const renderActions = () => {
-    return (
-      <>
-        <Button
-          primary
-          basic
-          content={t('personal.bookmark.newFolder')}
-          onClick={newFolder}
-        />
-        {
-          isMobileDevice && (
-            <Button
-              primary
-              floated={'right'}
-              content={t('buttons.apply')}
-              onClick={handleClose}
-            />
-          )
-        }
-      </>
-    );
-  };
+  const renderActions = () => (
+    <>
+      <Button
+        primary
+        basic
+        content={t('personal.bookmark.newFolder')}
+        onClick={newFolder}
+      />
+      {
+        isMobileDevice && (
+          <Button
+            primary
+            floated={'right'}
+            content={t('buttons.apply')}
+            onClick={handleClose}
+          />
+        )
+      }
+    </>
+  );
 
   return (
     <Grid.Column mobile={16} tablet={4} computer={4}>
@@ -141,13 +137,13 @@ const FolderList = ({ t, close }) => {
             {renderEdit()}
             {
               items.map(f => (
-                  <FolderItem
-                    folder={f}
-                    key={f.id}
-                    selectedId={selectedId}
-                    selectFolder={selectFolder}
-                  />
-                )
+                <FolderItem
+                  folder={f}
+                  key={f.id}
+                  selectedId={selectedId}
+                  selectFolder={selectFolder}
+                />
+              )
               )
             }
           </Grid>
