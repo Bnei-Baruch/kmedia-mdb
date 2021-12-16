@@ -652,10 +652,18 @@
   },
   "share-text": {
     "message-title": "Read this fragment",
-    "share-button": "Share fragment",
-    "copy-link": "Copiar link",
+    "copy-link": "Copiar enlace",
     "copy-text": "Copiar texto",
-    "disable-share": "Cancelar"
+    "disable-share": "Cancelar",
+    "share-button": "Compartir enlace",
+    "bookmark-button": "Guardar marcador",
+    "tag-button": "Etiquetar el texto",
+    "share-button-alt": "Compartir enlace",
+    "link-button-alt": "Copiar enlace al texto seleccionado",
+    "copy-button-alt": "Copiar texto",
+    "bookmark-button-alt": "Crea un marcador y guárdalo en la zona personal",
+    "tag-button-alt": "Etiquete el texto seleccionado en la sección Temas",
+    "docbar-title": "Ha seleccionado un extracto del texto, ¿qué le gustaría hacer?"
   },
   "personal": {
     "subsNewUnits": "nuevos episodios",

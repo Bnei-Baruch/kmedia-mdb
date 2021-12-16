@@ -654,10 +654,18 @@
   },
   "share-text": {
     "message-title": "Přečtěte si tento fragment",
-    "share-button": "Sdílet fragment",
     "copy-link": "Kopírovat odkaz",
     "copy-text": "Zkopírujte text",
-    "disable-share": "Zrušení"
+    "disable-share": "Zrušení",
+    "share-button": "Sdílet fragment",
+    "bookmark-button": "Save Bookmark",
+    "tag-button": "Tag Text",
+    "share-button-alt": "Share Link",
+    "link-button-alt": "Copy link to selected text",
+    "copy-button-alt": "Copy text",
+    "bookmark-button-alt": "Create a bookmark and save it in the personal area",
+    "tag-button-alt": "Tag the selected text in the Topics section",
+    "docbar-title": "You have selected an excerpt from the text, what would you like to do?"
   },
   "personal": {
     "subsNewUnits": "new episodes",
@@ -707,18 +715,7 @@
       "bookmarkUpdated": "Bookmark updated successfully!",
       "bookmarkCreated": "Bookmark successfully created!",
       "confirmRemove": "Are you sure you want to delete {{name}}?",
-      "haveNo": "You have no bookmarks yet",
-      "share-button": "Share Link",
-      "link-button": "Copy Link",
-      "copy-button": "Copy Text",
-      "bookmark-button": "Save Bookmark",
-      "tag-button": "Tag Text",
-      "share-button-alt": "Share Link",
-      "link-button-alt": "Copy link to selected text",
-      "copy-button-alt": "Copy text",
-      "bookmark-button-alt": "Create a bookmark and save it in the personal area",
-      "tag-button-alt": "Tag the selected text in the Topics section",
-      "docbar-title": "You have selected an excerpt from the text, what would you like to do?"
+      "haveNo": "You have no bookmarks yet"
     }
   }
 }

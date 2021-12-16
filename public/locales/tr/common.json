@@ -654,10 +654,18 @@
   },
   "share-text": {
     "message-title": "Read this fragment",
-    "share-button": "Share fragment",
     "copy-link": "Bağlantıyı kopyala",
     "copy-text": "Metni kopyala",
-    "disable-share": "İptal etmek"
+    "disable-share": "İptal etmek",
+    "share-button": "Share fragment",
+    "bookmark-button": "Save Bookmark",
+    "tag-button": "Tag Text",
+    "share-button-alt": "Share Link",
+    "link-button-alt": "Copy link to selected text",
+    "copy-button-alt": "Copy text",
+    "bookmark-button-alt": "Create a bookmark and save it in the personal area",
+    "tag-button-alt": "Tag the selected text in the Topics section",
+    "docbar-title": "You have selected an excerpt from the text, what would you like to do?"
   },
   "personal": {
     "subsNewUnits": "new episodes",
