@@ -30,23 +30,32 @@
 
   &-toolbar {
     position: absolute;
-    background: transparent !important;
     border: none !important;
     box-shadow: none !important;
     transform: none !important;
     top: 0;
     right: 0;
     width: max-content;
+    background: $black;
 
-    .ui.menu .item {
-      flex-direction: column;
+    & > .header {
       color: $white;
+      margin-top: 4px;
+    }
 
-      & > .button {
-        margin-bottom: 4px;
-        background-color: $white;
-        height: 40px;
-        width: 40px;
+    .ui.menu {
+      background: transparent !important;
+
+      .item {
+        flex-direction: column;
+        color: $white;
+
+        & > .button {
+          margin-bottom: 4px;
+          background-color: $white;
+          height: 40px;
+          width: 40px;
+        }
       }
     }
 
