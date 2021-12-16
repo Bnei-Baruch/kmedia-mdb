@@ -9,7 +9,7 @@
   },
   "scripts": {
     "critical-css": "node-sass src/stylesheets/critical.scss | yarn run postcss --use autoprefixer --use cssnano -o build/critical.css --no-map",
-    "apply-critical-css": "sed -e 's/<\\\/head>/\\\nHERE\\\n/' build/index.html | awk '!/HERE/ { print } /HERE/ { print \"<style type=\\\"text/css\\\">\"; while ((getline a < \"build/critical.css\") > 0) print a; print \"</style></head>\" }' > build/critical.html",
+    "apply-critical-css": "sed -e 's/<\\/head>/\\\nHERE\\\n/' build/index.html | awk '!/HERE/ { print } /HERE/ { print \"<style type=\\\"text/css\\\">\"; while ((getline a < \"build/critical.css\") > 0) print a; print \"</style></head>\" }' > build/critical.html",
     "build:css": "echo '>>> Building CSS'; yarn critical-css && yarn apply-critical-css",
     "build:svgs": "echo '>>> Building Icons...'; npx @svgr/cli@5.4.0 -d src/images/ --ignore-existing src/images/",
     "build:scripts": "echo '>>> Building Scripts...'; react-scripts build",
@@ -58,7 +58,7 @@
     "jest-environment-enzyme": "^7.0.2",
     "jest-enzyme": "^7.0.2",
     "ndb": "^1.0.44",
-    "node-sass": "^4.14.1",
+    "node-sass": "^6.0.0",
     "nodemon": "^2.0.1",
     "npm-run-all": "^4.0.2",
     "postcss": "^8.0.9",
@@ -116,6 +116,7 @@
     "invariant": "^2.2.4",
     "iphone-inline-video": "^2.2.2",
     "jaybe-react-loadable": "^5.6.0",
+    "keycloak-js": "^14.0.0",
     "levenary": "^1.1.1",
     "lodash": "^4.17.20",
     "mock-local-storage": "^1.1.15",
@@ -154,8 +155,7 @@
     "ua-parser-js": "^0.7.17",
     "ulid": "^2.3.0",
     "warning": "^4.0.2",
-    "worker-loader": "^3.0.4",
-    "keycloak-js": "^14.0.0"
+    "worker-loader": "^3.0.4"
   },
   "moduleRoots": [
     "src",
