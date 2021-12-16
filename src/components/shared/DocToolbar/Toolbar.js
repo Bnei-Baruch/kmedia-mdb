@@ -1,13 +1,13 @@
 import React, {useRef, useState} from 'react';
 import PropTypes from 'prop-types';
 import {withNamespaces} from 'react-i18next';
-import {Header, Icon, Label, Menu} from 'semantic-ui-react';
+import {Button, Header, Icon, Label, Menu, MenuItem, Popup} from 'semantic-ui-react';
+import {useSelector} from 'react-redux';
 
+import {selectors} from '../../../redux/modules/auth';
 import ShareBtn from './ShareBtn';
 import CopyBtn from './CopyBtn';
 import BookmarkBtn from './BookmarkBtn';
-import {useSelector} from 'react-redux';
-import {selectors} from '../../../redux/modules/auth';
 
 const DocToolbar = ({t, url, text, source, position, disable}) => {
   const [open, setOpen] = useState(!!url);
@@ -31,7 +31,12 @@ const DocToolbar = ({t, url, text, source, position, disable}) => {
           circular
           onClick={disable}
         >
-          <Icon name="close" circular bordered={false} className="no-margin no-shadow"/>
+          <Popup
+            content={t('share-text.disable-share')}
+            trigger={
+              <Icon name="close" circular bordered={false} className="no-margin no-shadow"/>
+            }
+          />
         </Label>
         <Header
           as="h3"
@@ -46,6 +51,7 @@ const DocToolbar = ({t, url, text, source, position, disable}) => {
                    popup={t('messages.link-copied-to-clipboard')}/>
           {source && user && <BookmarkBtn source={source} close={handleToggle}/>}
           {/*<NoteBtn />*/}
+          {/*user&&<TagBtn />*/}
         </Menu>
       </div>
     </div>

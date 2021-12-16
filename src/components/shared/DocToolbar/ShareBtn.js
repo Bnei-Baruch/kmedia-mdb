@@ -1,7 +1,7 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import {withNamespaces} from 'react-i18next';
-import {Button, Dropdown, MenuItem, Popup} from 'semantic-ui-react';
+import { withNamespaces } from 'react-i18next';
+import { Button, Dropdown, MenuItem, Popup } from 'semantic-ui-react';
 
 import {
   EmailIcon,
@@ -14,7 +14,7 @@ import {
   WhatsappShareButton
 } from 'react-share';
 
-const ShareBtn = ({t, url}) => {
+const ShareBtn = ({ t, url }) => {
   const [open, setOpen] = useState(false);
 
   const handleOnOpen = () => setOpen(true);

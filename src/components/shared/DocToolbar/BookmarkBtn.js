@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
-import {Button, MenuItem, Modal, Popup} from 'semantic-ui-react';
+import { Button, MenuItem, Modal, Popup } from 'semantic-ui-react';
 import AlertModal from '../AlertModal';
 import BookmarkForm from '../SaveBookmark/BookmarkForm';
 import { useSelector } from 'react-redux';
