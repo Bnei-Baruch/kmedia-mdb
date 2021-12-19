@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import CopyToClipboard from 'react-copy-to-clipboard';
-import { Button, MenuItem, Popup, } from 'semantic-ui-react';
+import {Button, MenuItem, Popup,} from 'semantic-ui-react';
 
 import useStateWithCallback from '../../../helpers/use-state-with-callback';
-import { withNamespaces } from 'react-i18next';
+import {withNamespaces} from 'react-i18next';
 
 const POPOVER_CONFIRMATION_TIMEOUT = 2500;
 
-const CopyBtn = ({ t, name, text, popup, icon }) => {
+const CopyBtn = ({t, name, text, popup, icon}) => {
   const [open, setOpen] = useStateWithCallback(false, open => {
     if (open) {
       timeout = setTimeout(() => setOpen(false), POPOVER_CONFIRMATION_TIMEOUT);
@@ -36,20 +36,20 @@ const CopyBtn = ({ t, name, text, popup, icon }) => {
       position={`bottom left`}
       trigger={
         (
-          <CopyToClipboard
-            text={text}
-            onCopy={handleCopied}
-          >
-            <Popup
-              content={t('share-text.copy-button-alt')}
-              trigger={
+          <Popup
+            content={t('share-text.copy-button-alt')}
+            trigger={
+              <CopyToClipboard
+                text={text}
+                onCopy={handleCopied}
+              >
                 <MenuItem>
                   <Button circular icon={icon}/>
                   {name}
                 </MenuItem>
-              }
-            />
-          </CopyToClipboard>
+              </CopyToClipboard>
+            }
+          />
         )
       }
     />
