@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import {
@@ -35,12 +35,15 @@ const BookmarkForm = ({ t, onClose, source, bookmarkId, data }) => {
   useEffect(() => {
     if (items.length === 0)
       dispatch(actions.fetch(MY_NAMESPACE_FOLDERS, { 'order_by': 'id DESC' }));
-  }, []);
+    // eslint-disable-next-line  react-hooks/exhaustive-deps
+  }, [dispatch]);
 
   useEffect(() => {
     if (selected === null) {
       setSelected([...saved]);
     }
+    // eslint-disable-next-line  react-hooks/exhaustive-deps
+
   }, [saved?.length]);
 
   useEffect(() => {

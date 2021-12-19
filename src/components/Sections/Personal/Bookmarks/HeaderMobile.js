@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { withNamespaces } from 'react-i18next';
-import { Button, Container, Divider, Grid, Header, Icon, Input, Label, Modal } from 'semantic-ui-react';
+import { Button, Container, Grid, Header, Icon, Input, Label, Modal } from 'semantic-ui-react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import {

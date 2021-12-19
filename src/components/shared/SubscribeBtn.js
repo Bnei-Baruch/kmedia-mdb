@@ -49,6 +49,7 @@ const SubscribeBtn = ({ unit = {}, t, collection }) => {
     if (!sub && (subsByType || subsByCO)) {
       dispatch(actions.fetch(MY_NAMESPACE_SUBSCRIPTIONS, { addToList: false, ...subParams }));
     }
+    // eslint-disable-next-line  react-hooks/exhaustive-deps
   }, [dispatch, key, sub, user]);
 
   const subsUnsubs = s => {

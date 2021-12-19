@@ -32,7 +32,7 @@ const BookmarkList = ({ t }) => {
 
   useEffect(() => {
     dispatch(actions.fetch(MY_NAMESPACE_BOOKMARKS, { folder_id }));
-  }, [folder_id, language]);
+  }, [folder_id, language, dispatch]);
 
   const needToLogin = NeedToLogin({ t });
 

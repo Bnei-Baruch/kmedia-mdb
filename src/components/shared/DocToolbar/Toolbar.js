@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
-import { Button, Header, Icon, Label, Menu, MenuItem, Popup } from 'semantic-ui-react';
+import { Header, Icon, Label, Menu, Popup } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
 
 import { selectors } from '../../../redux/modules/auth';

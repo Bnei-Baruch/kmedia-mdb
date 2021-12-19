@@ -23,7 +23,8 @@ const FolderList = ({ t, close }) => {
   useEffect(() => {
     if (items.length === 0)
       dispatch(actions.fetch(MY_NAMESPACE_FOLDERS, { 'order_by': 'id DESC' }));
-  }, []);
+    // eslint-disable-next-line  react-hooks/exhaustive-deps
+  }, [dispatch]);
 
   let selectedId = useSelector(state => filtersSelectors.getByKey(state.bookmarkFilter, MY_BOOKMARK_FILTER_FOLDER_ID));
   if (isMobileDevice) selectedId = selectedMobile;
