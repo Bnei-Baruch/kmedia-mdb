@@ -34,7 +34,7 @@
     border: none !important;
     box-shadow: none !important;
     transform: none !important;
-    width: max-content;
+    width: min-content;
     background: $black;
     margin: 0 auto;
 
@@ -45,6 +45,7 @@
 
     .ui.menu {
       background: transparent !important;
+      width: max-content;
 
       .item {
         flex-direction: column;
