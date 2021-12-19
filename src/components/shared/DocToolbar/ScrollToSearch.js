@@ -1,32 +1,32 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import React, {useContext, useEffect, useRef, useState} from 'react';
+import {useLocation} from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-import { DeviceInfoContext, SessionInfoContext } from '../../../helpers/app-contexts';
-import { getQuery } from '../../../helpers/url';
+import {DeviceInfoContext, SessionInfoContext} from '../../../helpers/app-contexts';
+import {getQuery} from '../../../helpers/url';
 import {
   buildSearchLinkFromSelection,
   DOM_ROOT_ID,
   prepareScrollToSearch
 } from '../../../helpers/scrollToSearch/helper';
 import Toolbar from './Toolbar';
-import { SCROLL_SEARCH_ID } from '../../../helpers/consts';
+import {SCROLL_SEARCH_ID} from '../../../helpers/consts';
 
-const ScrollToSearch = ({ source, data, language, urlParams = '', pathname }) => {
+const ScrollToSearch = ({source, data, language, urlParams = '', pathname}) => {
 
-  const { enableShareText: { isShareTextEnabled, setEnableShareText } } = useContext(SessionInfoContext);
-  const { isMobileDevice }                                              = useContext(DeviceInfoContext);
+  const {enableShareText: {isShareTextEnabled, setEnableShareText}} = useContext(SessionInfoContext);
+  const {isMobileDevice} = useContext(DeviceInfoContext);
 
-  const [searchUrl, setSearchUrl]     = useState();
+  const [searchUrl, setSearchUrl] = useState('test');
   const [barPosition, setBarPosition] = useState({});
-  const [searchText, setSearchText]   = useState();
+  const [searchText, setSearchText] = useState();
   const [searchQuery, setSearchQuery] = useState();
 
   const containerRef = useRef();
 
-  const location                             = useLocation();
-  const { srchstart, srchend, highlightAll } = getQuery(location);
-  const search                               = { srchstart, srchend };
+  const location = useLocation();
+  const {srchstart, srchend, highlightAll} = getQuery(location);
+  const search = {srchstart, srchend};
 
   useEffect(() => {
     const element = document.getElementById(SCROLL_SEARCH_ID);
@@ -39,19 +39,19 @@ const ScrollToSearch = ({ source, data, language, urlParams = '', pathname }) =>
 
   useEffect(() => {
     const handleOnMouseUp = e => {
-      if (isMobileDevice || !isShareTextEnabled) {
+      if (isMobileDevice) {
         return false;
       }
 
       if (e.path?.some(x => (typeof x.className === 'string') && x.className.includes('search-on-doc--toolbar')))
         return false;
 
-      const { url, text, query, element } = buildSearchLinkFromSelection(language, pathname);
+      const {url, text, query, element} = buildSearchLinkFromSelection(language, pathname);
       if (url) {
         setSearchText(text);
-        const rect         = element.getBoundingClientRect();
+        const rect = element.getBoundingClientRect();
         const recContainer = containerRef.current?.getBoundingClientRect();
-        setBarPosition({ y: rect.top - recContainer.top });
+        setBarPosition({y: rect.top - recContainer.top});
         setSearchUrl(`${url}&${urlParams}`);
         setSearchQuery(query);
       }
@@ -67,25 +67,29 @@ const ScrollToSearch = ({ source, data, language, urlParams = '', pathname }) =>
     return null;
   }
 
-  const disableShareBar = () => setEnableShareText(false);
+
+  const handlePinned = () => {
+    setEnableShareText(!isShareTextEnabled);
+  }
 
   const renderShareBar = () => {
     if (isMobileDevice || !searchUrl)
       return null;
-    source.data = { ...source?.data || {}, ...searchQuery };
+    source.data = {...source?.data || {}, ...searchQuery};
     return (
       <Toolbar
         source={source}
         url={searchUrl}
         text={searchText}
-        disable={disableShareBar}
+        setPinned={handlePinned}
+        isPinned={!isShareTextEnabled}
         position={barPosition}
       />
     );
   };
 
   const handleOnMouseDown = e => {
-    if (isMobileDevice || !isShareTextEnabled) {
+    if (isMobileDevice) {
       return false;
     }
 
@@ -98,13 +102,13 @@ const ScrollToSearch = ({ source, data, language, urlParams = '', pathname }) =>
       className="search-on-doc--container"
       ref={containerRef}
     >
-      {isShareTextEnabled && renderShareBar()}
+      {renderShareBar()}
       {
         <div
           id={DOM_ROOT_ID}
           onMouseDown={handleOnMouseDown}
           className="source__content"
-          dangerouslySetInnerHTML={{ __html: prepareScrollToSearch(data, search, highlightAll === 'true') }}
+          dangerouslySetInnerHTML={{__html: prepareScrollToSearch(data, search, highlightAll === 'true')}}
         />
       }
     </div>

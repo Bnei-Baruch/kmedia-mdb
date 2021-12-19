@@ -1,3 +1,11 @@
+.ltr .search-on-doc- {
+
+  &-bar-position.pinned {
+    left: auto;
+    right: -2em;
+  }
+}
+
 .search-on-doc- {
   &-container {
     position: relative;
@@ -27,6 +35,15 @@
     position: absolute;
     z-index: 999;
     width: 100%;
+
+    &.pinned {
+      width: max-content;
+      left: -2em;
+      padding: 4px;
+      border-radius: 8px;
+      background: $black;
+
+    }
   }
 
   &-toolbar {
@@ -38,11 +55,36 @@
     background: $black;
     margin: 0 auto;
     border-radius: 8px;
+    text-align: center;
 
     & > .header {
       color: $white;
       margin-top: 4px;
       padding: 1rem 1em 0;
+    }
+
+    & > .button {
+      margin: 4px !important;
+
+      &.pin {
+        box-shadow: none !important;
+        font-size: 1em;
+        line-height: 26px;
+        height: 30px;
+        width: 30px;
+        padding: 0;
+      }
+
+      &.circular {
+        width: 26px;
+        height: 26px;
+        line-height: 26px;
+        padding: 0 !important;
+
+        .icon {
+          font-size: 1em;
+        }
+      }
     }
 
     .ui.menu {
@@ -52,6 +94,8 @@
       .item {
         flex-direction: column;
         color: $white;
+        width: min-content;
+        text-align: center;
 
         & > .button {
           margin-bottom: 4px;

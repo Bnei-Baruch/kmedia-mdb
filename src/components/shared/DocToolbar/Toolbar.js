@@ -1,14 +1,15 @@
-import React, { useRef, useState } from 'react';
+import React, {useRef, useState} from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
-import { Header, Icon, Label, Menu, Popup } from 'semantic-ui-react';
+import {withNamespaces} from 'react-i18next';
+import {Button, Header, Icon, Label, Menu, Popup} from 'semantic-ui-react';
 
 import ShareBtn from './ShareBtn';
 import BookmarkBtn from './BookmarkBtn';
 import CopyTextBtn from './CopyTextBtn';
 import CopyLinkBtn from './CopyLinkBtn';
+import clsx from "clsx";
 
-const DocToolbar = ({ t, url, text, source, position, disable }) => {
+const DocToolbar = ({t, url, text, source, position, setPinned, isPinned}) => {
   const [open, setOpen] = useState(!!url);
   const contextRef = useRef();
 
@@ -16,39 +17,55 @@ const DocToolbar = ({ t, url, text, source, position, disable }) => {
     setOpen(!open);
   };
 
-  return (
-    <div
-      className="search-on-doc--bar-position"
+  return open && (<div
+      className={clsx("search-on-doc--bar-position", {'pinned': isPinned})}
       ref={contextRef}
-      style={{ top: `${position.y}px` }}
+      style={{top: `${position.y}px`}}
     >
       <div className="search-on-doc--toolbar">
-        <Label
-          color='grey'
-          floating
-          circular
-          onClick={disable}
-        >
-          <Popup
-            content={t('share-text.disable-share')}
-            trigger={
-              <Icon name="close" circular bordered={false} className="no-margin no-shadow"/>
-            }
-          />
-        </Label>
-        <Header
-          as="h3"
-          content={t('share-text.docbar-title')}
-          textAlign="center"
+        <Popup
+          content={t('share-text.disable-share')}
+          trigger={<Button
+            inverted
+            floated={isPinned ? "none" : 'right'}
+            icon="close"
+            circular
+            onClick={handleToggle}
+          />}
         />
-        <Menu compact inverted>
-          <ShareBtn url={url}/>
-          <CopyLinkBtn text={url}/>
-          <CopyTextBtn text={text}/>
-          {source && <BookmarkBtn source={source} close={handleToggle}/>}
-          {/*<TagBtn />*/}
-          {/*<NoteBtn />*/}
-        </Menu>
+        <Popup
+          content={isPinned ? t('share-text.unpin') : t('share-text.pin')}
+          trigger={<Button
+            inverted
+            className="pin"
+            icon="thumbtack"
+            floated="right"
+            onClick={setPinned}
+          />}
+        />
+        {
+          !isPinned &&
+          (
+            <>
+              <Header
+                as="h3"
+                textAlign="center"
+              >
+                <Header.Content>
+                  {t('share-text.docbar-title')}
+                </Header.Content>
+              </Header>
+              <Menu compact inverted>
+                <ShareBtn url={url}/>
+                <CopyLinkBtn text={url}/>
+                <CopyTextBtn text={text}/>
+                {source && <BookmarkBtn source={source} close={handleToggle}/>}
+                {/*<TagBtn />*/}
+                {/*<NoteBtn />*/}
+              </Menu>
+            </>
+          )
+        }
       </div>
     </div>
   );
@@ -57,7 +74,8 @@ const DocToolbar = ({ t, url, text, source, position, disable }) => {
 DocToolbar.propTypes = {
   t: PropTypes.func.isRequired,
   url: PropTypes.string.isRequired,
-  disable: PropTypes.func,
+  setPinned: PropTypes.func,
+  isPinned: PropTypes.bool,
   query: PropTypes.object,
 };
 
