@@ -1,14 +1,14 @@
-import React, {useRef, useState} from 'react';
+import React, { useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import {withNamespaces} from 'react-i18next';
-import {Header, Icon, Label, Menu, Popup} from 'semantic-ui-react';
+import { withNamespaces } from 'react-i18next';
+import { Header, Icon, Label, Menu, Popup } from 'semantic-ui-react';
 
 import ShareBtn from './ShareBtn';
 import BookmarkBtn from './BookmarkBtn';
-import CopyTextBtn from "./CopyTextBtn";
-import CopyLinkBtn from "./CopyLinkBtn";
+import CopyTextBtn from './CopyTextBtn';
+import CopyLinkBtn from './CopyLinkBtn';
 
-const DocToolbar = ({t, url, text, source, position, disable}) => {
+const DocToolbar = ({ t, url, text, source, position, disable }) => {
   const [open, setOpen] = useState(!!url);
   const contextRef = useRef();
 
@@ -20,7 +20,7 @@ const DocToolbar = ({t, url, text, source, position, disable}) => {
     <div
       className="search-on-doc--bar-position"
       ref={contextRef}
-      style={{top: `${position.y}px`}}
+      style={{ top: `${position.y}px` }}
     >
       <div className="search-on-doc--toolbar">
         <Label
