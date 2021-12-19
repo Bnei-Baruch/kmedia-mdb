@@ -1,17 +1,15 @@
-import React, { useRef, useState } from 'react';
+import React, {useRef, useState} from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
-import { Header, Icon, Label, Menu, Popup } from 'semantic-ui-react';
-import { useSelector } from 'react-redux';
+import {withNamespaces} from 'react-i18next';
+import {Header, Icon, Label, Menu, Popup} from 'semantic-ui-react';
 
-import { selectors } from '../../../redux/modules/auth';
 import ShareBtn from './ShareBtn';
-import CopyBtn from './CopyBtn';
 import BookmarkBtn from './BookmarkBtn';
+import CopyTextBtn from "./CopyTextBtn";
+import CopyLinkBtn from "./CopyLinkBtn";
 
-const DocToolbar = ({ t, url, text, source, position, disable }) => {
+const DocToolbar = ({t, url, text, source, position, disable}) => {
   const [open, setOpen] = useState(!!url);
-  const user = useSelector(state => selectors.getUser(state.auth));
   const contextRef = useRef();
 
   const handleToggle = () => {
@@ -22,7 +20,7 @@ const DocToolbar = ({ t, url, text, source, position, disable }) => {
     <div
       className="search-on-doc--bar-position"
       ref={contextRef}
-      style={{ top: `${position.y}px` }}
+      style={{top: `${position.y}px`}}
     >
       <div className="search-on-doc--toolbar">
         <Label
@@ -44,14 +42,12 @@ const DocToolbar = ({ t, url, text, source, position, disable }) => {
           textAlign="center"
         />
         <Menu compact inverted>
-          <ShareBtn url={'url'}/>
-          <CopyBtn icon="copy" name={t('share-text.copy-text')} text={text}
-            popup={t('messages.text-copied-to-clipboard')}/>
-          <CopyBtn icon="linkify" name={t('share-text.copy-link')} text={url}
-            popup={t('messages.link-copied-to-clipboard')}/>
-          {source && user && <BookmarkBtn source={source} close={handleToggle}/>}
+          <ShareBtn url={url}/>
+          <CopyLinkBtn text={url}/>
+          <CopyTextBtn text={text}/>
+          {source && <BookmarkBtn source={source} close={handleToggle}/>}
+          {/*<TagBtn />*/}
           {/*<NoteBtn />*/}
-          {/*user&&<TagBtn />*/}
         </Menu>
       </div>
     </div>

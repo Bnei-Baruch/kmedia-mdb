@@ -43,7 +43,7 @@ const ScrollToSearch = ({ source, data, language, urlParams = '', pathname }) =>
         return false;
       }
 
-      if (e.path.some(x => (typeof x.className === 'string') && x.className.includes('search-on-doc--toolbar')))
+      if (e.path?.some(x => (typeof x.className === 'string') && x.className.includes('search-on-doc--toolbar')))
         return false;
 
       const { url, text, query, element } = buildSearchLinkFromSelection(language, pathname);

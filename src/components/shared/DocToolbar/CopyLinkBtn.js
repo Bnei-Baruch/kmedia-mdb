@@ -8,7 +8,7 @@ import { withNamespaces } from 'react-i18next';
 
 const POPOVER_CONFIRMATION_TIMEOUT = 2500;
 
-const CopyBtn = ({ t, name, text, popup, icon }) => {
+const CopyBtn = ({ t, text }) => {
   const [open, setOpen] = useStateWithCallback(false, open => {
     if (open) {
       timeout = setTimeout(() => setOpen(false), POPOVER_CONFIRMATION_TIMEOUT);
@@ -32,20 +32,20 @@ const CopyBtn = ({ t, name, text, popup, icon }) => {
   return (
     <Popup // link was copied message popup
       open={open}
-      content={popup}
+      content={t('messages.link-copied-to-clipboard')}
       position={`bottom left`}
       trigger={
         (
           <Popup
-            content={t('share-text.copy-button-alt')}
+            content={t('share-text.link-button-alt')}
             trigger={
               <CopyToClipboard
                 text={text}
                 onCopy={handleCopied}
               >
                 <MenuItem>
-                  <Button circular icon={icon}/>
-                  {name}
+                  <Button circular icon="linkify"/>
+                  {t('share-text.copy-link')}
                 </MenuItem>
               </CopyToClipboard>
             }

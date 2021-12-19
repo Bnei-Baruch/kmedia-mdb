@@ -7,7 +7,7 @@ import {
   Header,
   Icon,
   Input,
-  List,
+  List, Modal,
   ModalActions,
   ModalContent,
   Segment
@@ -18,6 +18,7 @@ import { actions, selectors } from '../../../redux/modules/my';
 import { MY_NAMESPACE_BOOKMARKS, MY_NAMESPACE_FOLDERS } from '../../../helpers/consts';
 import { frownSplashNotFound } from '../WipErr/WipErr';
 import { getMyItemKey } from '../../../helpers/my';
+import NeedToLogin from '../../Sections/Personal/NeedToLogin';
 
 const BookmarkForm = ({ t, onClose, source, bookmarkId, data }) => {
   const [name, setName] = useState();
@@ -52,6 +53,11 @@ const BookmarkForm = ({ t, onClose, source, bookmarkId, data }) => {
 
   if (!source && !bookmark)
     return null;
+
+  const needToLogin = NeedToLogin({ t });
+  if (needToLogin) {
+    return (<Modal.Content>{needToLogin}</Modal.Content>)
+  }
 
   const changeName = (e, { value }) => setName(value);
 

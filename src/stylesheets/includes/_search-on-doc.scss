@@ -37,10 +37,12 @@
     width: min-content;
     background: $black;
     margin: 0 auto;
+    border-radius: 8px;
 
     & > .header {
       color: $white;
       margin-top: 4px;
+      padding: 1rem 1em 0;
     }
 
     .ui.menu {
@@ -56,6 +58,11 @@
           background-color: $white;
           height: 40px;
           width: 40px;
+
+          .icon {
+            font-size: 1.2em;
+            line-height: 1em;
+          }
         }
       }
     }
