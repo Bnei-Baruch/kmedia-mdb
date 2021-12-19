@@ -51,7 +51,7 @@ const ScrollToSearch = ({ source, data, language, urlParams = '', pathname }) =>
         setSearchText(text);
         const rect         = element.getBoundingClientRect();
         const recContainer = containerRef.current?.getBoundingClientRect();
-        setBarPosition({ x: e.pageX - recContainer.left, y: rect.top - recContainer.top });
+        setBarPosition({ y: rect.top - recContainer.top });
         setSearchUrl(`${url}&${urlParams}`);
         setSearchQuery(query);
       }

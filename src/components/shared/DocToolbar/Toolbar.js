@@ -22,7 +22,7 @@ const DocToolbar = ({ t, url, text, source, position, disable }) => {
     <div
       className="search-on-doc--bar-position"
       ref={contextRef}
-      style={{ top: `${position.y}px`, left: `${position.x}px` }}
+      style={{ top: `${position.y}px` }}
     >
       <div className="search-on-doc--toolbar">
         <Label

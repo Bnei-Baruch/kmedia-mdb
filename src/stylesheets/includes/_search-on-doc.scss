@@ -26,17 +26,17 @@
   &-bar-position {
     position: absolute;
     z-index: 999;
+    width: 100%;
   }
 
   &-toolbar {
-    position: absolute;
+    position: relative;
     border: none !important;
     box-shadow: none !important;
     transform: none !important;
-    top: 0;
-    right: 0;
     width: max-content;
     background: $black;
+    margin: 0 auto;
 
     & > .header {
       color: $white;
