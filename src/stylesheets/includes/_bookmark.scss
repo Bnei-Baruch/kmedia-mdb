@@ -9,7 +9,7 @@
   }
 
   .header {
-    margin: 0.5em 0 0;
+    margin: 0.5em 0;
   }
 
   .segment {
@@ -19,6 +19,16 @@
   .actions > .button {
     margin-right: 0;
     margin-left: 0;
+    padding: .7em 1em;
+  }
+
+  .bookmark_name {
+    width: 70%;
+    margin: 0 8px;
+
+    input {
+      padding: 4px 1em;
+    }
   }
 }
 
@@ -60,6 +70,11 @@
     margin: 8px 0;
   }
 
+  & > .button > .icon.check {
+    color: green;
+    font-size: 1.5em;
+  }
+
   .ui.grid > .row > .column.folder_actions {
     display: none;
 
@@ -97,12 +112,17 @@
 }
 
 .bookmark_search {
-  //width: 100%;
+  width: 30%;
+
+  @include mobile {
+    width: 50%;
+  }
 
   &.ui.input > input {
     border-width: 0 0 1px 0;
     border-radius: 0;
     border-color: $grey;
+    padding: 4px .5em;
   }
 }
 

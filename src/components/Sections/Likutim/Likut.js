@@ -147,7 +147,7 @@ const Likut = ({ t }) => {
               </Header.Content>
             </Header>
             {/* toolbar */}
-            <Grid className="likut__toolbar" columns={2}>
+            <Grid className="likut__toolbar" columns={2} stackable>
               <Grid.Column>
                 {renderTags()}
               </Grid.Column>

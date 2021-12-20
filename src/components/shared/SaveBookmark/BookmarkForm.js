@@ -25,6 +25,7 @@ const BookmarkForm = ({ t, onClose, source, bookmarkId, data }) => {
   const [selected, setSelected] = useState(null);
   const [editFolder, setEditFolder] = useState(false);
   const [query, setQuery] = useState();
+  const [isEdit, setIsEdit] = useState();
 
   const { key } = getMyItemKey(MY_NAMESPACE_BOOKMARKS, { id: bookmarkId });
   const bookmark = useSelector(state => selectors.getItemByKey(state.my, MY_NAMESPACE_BOOKMARKS, key));
@@ -116,19 +117,20 @@ const BookmarkForm = ({ t, onClose, source, bookmarkId, data }) => {
 
   return (
     <>
-      <ModalContent className="padded">
+      <ModalContent className="padded no-padding-top">
         <div>
-          <Header as="h4" content={t('personal.bookmark.name')} className="display-iblock"/>
+          <Header as="h4" content={t('personal.bookmark.name')} className="display-iblock font-normal"/>
           <Input
-            focus={true}
             onChange={changeName}
             defaultValue={name}
-            error={!name}
-            className="margin-left-8 margin-right-8"
-            style={{ width: '70%' }}
+            error={!name && !isEdit}
+            onFocus={e => setIsEdit(true)}
+            onBlur={e => setIsEdit(false)}
+            className="bookmark_name"
+            autoFocus
           />
         </div>
-        <Header as="h3" content={t('personal.bookmark.folders')}/>
+        <Header as="h4" content={t('personal.bookmark.folders')}  className="font-normal"/>
         <Segment>
           <Input
             icon
@@ -141,6 +143,9 @@ const BookmarkForm = ({ t, onClose, source, bookmarkId, data }) => {
             <Icon name="search"/>
           </Input>
           <Container className="folders_list">
+            {
+              items.map(renderFolder)
+            }
             {
               editFolder && (
                 <>
@@ -158,17 +163,11 @@ const BookmarkForm = ({ t, onClose, source, bookmarkId, data }) => {
                     icon='check'
                     basic
                     compact
-                    className="no-shadow"
+                    className="no-shadow no-border"
                     onClick={handleSaveFolder}
-                    floated="right"
                   />
                 </>
               )
-            }
-            {
-              !(items.length === 0 && editFolder) ?
-                items.map(renderFolder)
-                : frownSplashNotFound(t)
             }
           </Container>
         </Segment>
