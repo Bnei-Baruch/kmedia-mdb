@@ -649,10 +649,11 @@
   },
   "share-text": {
     "message-title": "Lesen Sie dieses Fragment",
-    "share-button": "Fragment teilen",
     "copy-link": "Link kopieren",
     "copy-text": "Text kopieren",
     "disable-share": "Stornieren",
+    "pin": "Collapse",
+    "unpin": "Expand",
     "share-button": "Fragment teilen",
     "bookmark-button": "Save Bookmark",
     "tag-button": "Tag Text",

@@ -657,6 +657,8 @@
     "copy-link": "Copy Link",
     "copy-text": "Copy Text",
     "disable-share": "Cancel",
+    "pin": "Collapse",
+    "unpin": "Expand",
     "share-button": "Share Link",
     "bookmark-button": "Save Bookmark",
     "tag-button": "Tag Text",

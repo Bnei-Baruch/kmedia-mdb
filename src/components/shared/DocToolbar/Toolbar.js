@@ -36,7 +36,7 @@ const DocToolbar = ({ t, url, text, source, position, setPinned, isPinned }) => 
       <Popup
         content={isPinned ? t('share-text.unpin') : t('share-text.pin')}
         trigger={<Button
-          inverted
+          inverted={!isPinned}
           className="pin"
           icon="thumbtack"
           floated="right"
@@ -55,7 +55,7 @@ const DocToolbar = ({ t, url, text, source, position, setPinned, isPinned }) => 
                   {t('share-text.docbar-title')}
                 </Header.Content>
               </Header>
-              <Menu compact inverted>
+              <Menu inverted borderless>
                 <ShareBtn url={url}/>
                 <CopyLinkBtn text={url}/>
                 <CopyTextBtn text={text}/>

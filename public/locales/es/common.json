@@ -655,6 +655,8 @@
     "copy-link": "Copiar enlace",
     "copy-text": "Copiar texto",
     "disable-share": "Cancelar",
+    "pin": "Colapso",
+    "unpin": "Expandir",
     "share-button": "Compartir enlace",
     "bookmark-button": "Guardar marcador",
     "tag-button": "Etiquetar el texto",

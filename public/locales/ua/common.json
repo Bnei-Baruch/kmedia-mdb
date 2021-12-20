@@ -745,6 +745,8 @@
     "copy-link": "Копіювати посилання",
     "copy-text": "Скопіювати текст",
     "disable-share": "Скасувати",
+    "pin": "Collapse",
+    "unpin": "Expand",
     "share-button": "Share fragment",
     "bookmark-button": "Save Bookmark",
     "tag-button": "Tag Text",

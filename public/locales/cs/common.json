@@ -657,6 +657,8 @@
     "copy-link": "Kopírovat odkaz",
     "copy-text": "Zkopírujte text",
     "disable-share": "Zrušení",
+    "pin": "Collapse",
+    "unpin": "Expand",
     "share-button": "Sdílet fragment",
     "bookmark-button": "Save Bookmark",
     "tag-button": "Tag Text",

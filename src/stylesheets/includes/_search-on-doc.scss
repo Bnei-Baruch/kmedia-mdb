@@ -1,9 +1,17 @@
 .ltr .search-on-doc- {
 
   &-bar-position.pinned {
-    left: auto;
-    right: -2em;
+    right: auto;
+    left: -50px;
   }
+}
+
+.ltr .unit-materials .search-on-doc--bar-position.pinned {
+  left: 10px;
+}
+
+.unit-materials .search-on-doc--bar-position.pinned {
+  right: 10px;
 }
 
 .search-on-doc- {
@@ -38,7 +46,8 @@
 
     &.pinned {
       width: max-content;
-      left: -2em;
+      right: -50px;
+      left: auto;
       padding: 4px;
       border-radius: 8px;
       background: $black;
@@ -56,6 +65,7 @@
     margin: 0 auto;
     border-radius: 8px;
     text-align: center;
+    opacity: 0.95;
 
     & > .header {
       color: $white;
@@ -70,16 +80,17 @@
         box-shadow: none !important;
         font-size: 1em;
         line-height: 26px;
-        height: 30px;
-        width: 30px;
+        height: 26px;
+        width: 26px;
         padding: 0;
       }
 
       &.circular {
-        width: 26px;
-        height: 26px;
-        line-height: 26px;
+        width: 20px;
+        height: 20px;
+        line-height: 20px;
         padding: 0 !important;
+        font-size: 10px;
 
         .icon {
           font-size: 1em;
@@ -90,21 +101,23 @@
     .ui.menu {
       background: transparent !important;
       width: max-content;
+      padding: 1em;
 
       .item {
         flex-direction: column;
         color: $white;
-        width: min-content;
         text-align: center;
+        font-size: 0.8em;
+        padding: 1.4em 2em;
 
         & > .button {
-          margin-bottom: 4px;
+          margin-bottom: 8px;
           background-color: $white;
           height: 40px;
           width: 40px;
 
           .icon {
-            font-size: 1.2em;
+            font-size: 1.7em;
             line-height: 1em;
           }
         }

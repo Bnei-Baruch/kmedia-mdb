@@ -657,6 +657,8 @@
     "copy-link": "Bağlantıyı kopyala",
     "copy-text": "Metni kopyala",
     "disable-share": "İptal etmek",
+    "pin": "Collapse",
+    "unpin": "Expand",
     "share-button": "Share fragment",
     "bookmark-button": "Save Bookmark",
     "tag-button": "Tag Text",

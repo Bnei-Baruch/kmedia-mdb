@@ -746,6 +746,8 @@
     "copy-link": "Copia link",
     "copy-text": "Copia testo",
     "disable-share": "Annulla",
+    "pin": "Collapse",
+    "unpin": "Expand",
     "share-button": "Share fragment",
     "bookmark-button": "Save Bookmark",
     "tag-button": "Tag Text",

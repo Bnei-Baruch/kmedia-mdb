@@ -17,7 +17,7 @@ const ScrollToSearch = ({ source, data, language, urlParams = '', pathname }) =>
   const { enableShareText: { isShareTextEnabled, setEnableShareText } } = useContext(SessionInfoContext);
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
-  const [searchUrl, setSearchUrl] = useState('test');
+  const [searchUrl, setSearchUrl] = useState();
   const [barPosition, setBarPosition] = useState({});
   const [searchText, setSearchText] = useState();
   const [searchQuery, setSearchQuery] = useState();
