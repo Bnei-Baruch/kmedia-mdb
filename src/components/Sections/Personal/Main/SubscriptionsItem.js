@@ -1,26 +1,26 @@
-import React, {useContext, useEffect, useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import React, { useContext, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
-import {Button, Card, Confirm, Header} from 'semantic-ui-react';
+import { Button, Card, Confirm, Header } from 'semantic-ui-react';
 
-import {actions} from '../../../../redux/modules/my';
-import {selectors as mdb} from '../../../../redux/modules/mdb';
-import {actions as statsActions, selectors as stats} from '../../../../redux/modules/stats';
-import {DeviceInfoContext} from '../../../../helpers/app-contexts';
-import {MY_NAMESPACE_SUBSCRIPTIONS, SECTIONS_LINK_BY_CU_CONTENT_TYPE} from '../../../../helpers/consts';
-import {canonicalLink} from '../../../../helpers/links';
+import { actions } from '../../../../redux/modules/my';
+import { selectors as mdb } from '../../../../redux/modules/mdb';
+import { actions as statsActions, selectors as stats } from '../../../../redux/modules/stats';
+import { DeviceInfoContext } from '../../../../helpers/app-contexts';
+import { MY_NAMESPACE_SUBSCRIPTIONS, SECTIONS_LINK_BY_CU_CONTENT_TYPE } from '../../../../helpers/consts';
+import { canonicalLink } from '../../../../helpers/links';
 import Link from '../../../Language/MultiLanguageLink';
 import UnitLogo from '../../../shared/Logo/UnitLogo';
-import {getMyItemKey} from '../../../../helpers/my';
-import {selectors as settings} from '../../../../redux/modules/settings';
-import {getLanguageDirection} from '../../../../helpers/i18n-utils';
+import { getMyItemKey } from '../../../../helpers/my';
+import { selectors as settings } from '../../../../redux/modules/settings';
+import { getLanguageDirection } from '../../../../helpers/i18n-utils';
 
-export const SubscriptionsItem = ({item, t}) => {
+export const SubscriptionsItem = ({ item, t }) => {
   const [confirm, setConfirm] = useState();
 
-  const {isMobileDevice} = useContext(DeviceInfoContext);
+  const { isMobileDevice } = useContext(DeviceInfoContext);
 
-  const {key} = getMyItemKey(MY_NAMESPACE_SUBSCRIPTIONS, item);
+  const { key } = getMyItemKey(MY_NAMESPACE_SUBSCRIPTIONS, item);
 
   const collection = useSelector(state => mdb.getDenormCollection(state.mdb, item.collection_uid));
   const cuStats = useSelector(state => stats.getCUStats(state.stats, key));
@@ -33,7 +33,7 @@ export const SubscriptionsItem = ({item, t}) => {
 
   const handleConfirmCancel = () => setConfirm(false);
 
-  const handleConfirmSuccess = () => dispatch(actions.remove(MY_NAMESPACE_SUBSCRIPTIONS, {id: item.id, key}));
+  const handleConfirmSuccess = () => dispatch(actions.remove(MY_NAMESPACE_SUBSCRIPTIONS, { id: item.id, key }));
 
   useEffect(() => {
     if (item) {
@@ -86,7 +86,7 @@ export const SubscriptionsItem = ({item, t}) => {
           onConfirm={handleConfirmSuccess}
           cancelButton={t('buttons.cancel')}
           confirmButton={t('buttons.apply')}
-          content={t('personal.confirmUnsubscribe', {name: title})}
+          content={t('personal.confirmUnsubscribe', { name: title })}
           dir={dir}
         />
         <Button
