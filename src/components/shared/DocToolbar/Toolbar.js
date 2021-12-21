@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
-import { Button, Header, Icon, Label, Menu, Popup } from 'semantic-ui-react';
+import { Button, Header, Menu, Popup } from 'semantic-ui-react';
 
 import ShareBtn from './ShareBtn';
 import BookmarkBtn from './BookmarkBtn';
