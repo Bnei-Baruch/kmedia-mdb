@@ -6,6 +6,7 @@ import isEqual from 'react-fast-compare';
 
 import { actions, selectors } from '../../../../../../redux/modules/recommended';
 import { selectors as tagsSelectors } from '../../../../../../redux/modules/tags';
+import { selectors as sourcesSelectors } from '../../../../../../redux/modules/sources';
 import * as shapes from '../../../../../shapes';
 import WipErr from '../../../../../shared/WipErr/WipErr';
 import DisplayRecommended from './DisplayRecommended';
@@ -27,6 +28,8 @@ import {
 const N = 12;
 
 const sameTopic = tag => `same-topic-${tag}`;
+const sameSource = source => `same-source-${source}`;
+const sameSourceCollection = source => `same-source-collection-${source}`;
 const sameCollection = collection => `same-collection-${collection}`;
 const DEFAULT = 'default';
 const SERIES = 'series';
@@ -37,6 +40,16 @@ const makeLandingPageLink = (t, landingPage) => (
     {t(SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_TEXT[landingPage])}
   </Link>
 );
+
+const makeSourceLink = (source, getSourceById) => {
+  console.log('make link', getSourceById(source));
+  const { id, name } = getSourceById(source);
+  if (!name) {
+    return '';
+  }
+
+  return <Link key={id} to={`/sources/${id}`}>{name}</Link>;
+}
 
 const makeTagLink = (tag, getTagById) => {
   const { id, label } = getTagById(tag);
@@ -69,7 +82,10 @@ const makeCollectionLink = (collection, t) => {
 const Recommended = ({ unit, t, filterOutUnits = [], displayTitle = true }) => {
   const abTesting = useContext(AbTestingContext);
   const [unitId, setUnitId] = useState(null);
+  const [unitContentType, setUnitContentType] = useState(null);
   const [unitTags, setUnitTags] = useState([]);
+  const [unitSources, setUnitSources] = useState([]);
+  const [unitSourceCollections, setUnitSourceCollections] = useState([]);
   const [unitCollections, setUnitCollections] = useState([]);
   const prevUnitId = usePrevious(unitId);
 
@@ -78,12 +94,24 @@ const Recommended = ({ unit, t, filterOutUnits = [], displayTitle = true }) => {
   const wip = useSelector(state => selectors.getWip(state.recommended));
   const err = useSelector(state => selectors.getError(state.recommended));
   const getTagById = useSelector(state => tagsSelectors.getTagById(state.tags));
+  const getSourceById = useSelector(state => sourcesSelectors.getSourceById(state.sources));
+  const getPathById = useSelector(state => sourcesSelectors.getPathByID(state.sources));
 
   useEffect(() => {
     if (unit?.id && unit.id !== unitId) {
       setUnitId(unit.id);
+      setUnitContentType(unit.content_type);
       setUnitTags(unit.tags || []);
+      setUnitSources(unit.sources || []);
       setUnitCollections(Object.values(unit.collections) || []);
+      setUnitSourceCollections(Object.values((unit.sources || []).map(source => getPathById(source)).
+        filter(path => path.length >= 2).map(path => path[path.length - 2].id).
+        reduce((acc, source) => {
+          if (!(source.id in acc)) {
+            acc[source.id] = source;
+          }
+          return acc;
+        }, {})));
     }
   }, [unit, unitId])
   const dispatch = useDispatch();
@@ -91,7 +119,9 @@ const Recommended = ({ unit, t, filterOutUnits = [], displayTitle = true }) => {
     if (unitId && !err && prevUnitId !== unitId) {
       dispatch(actions.fetchRecommended({
         id: unitId,
+        content_type: unitContentType,
         tags: unitTags,
+        sources: unitSources,
         collections: unitCollections,
         size: N,
         skip: filterOutUnits.map(unit => unit.id),
@@ -104,6 +134,8 @@ const Recommended = ({ unit, t, filterOutUnits = [], displayTitle = true }) => {
   if (activeVariant === AB_RECOMMEND_NEW) {
     recommendedUnitsTypes.push(RANDOM_PROGRAMS);
     unitTags.forEach(tag => recommendedUnitsTypes.push(sameTopic(tag)));
+    unitSources.forEach(source => recommendedUnitsTypes.push(sameSource(source)));
+    unitSourceCollections.forEach(source => recommendedUnitsTypes.push(sameSourceCollection(source)));
     unitCollections.forEach(collection => recommendedUnitsTypes.push(sameCollection(collection.id)));
     recommendedUnitsTypes.push(SERIES);
   }
@@ -111,6 +143,7 @@ const Recommended = ({ unit, t, filterOutUnits = [], displayTitle = true }) => {
   recommendedUnitsTypes.push(DEFAULT);
 
   const recommendedUnits = useRecommendedUnits(recommendedUnitsTypes);
+  console.log('!!', recommendedUnits);
 
   const renderRecommended = [];
   if (activeVariant === AB_RECOMMEND_NEW) {
@@ -154,7 +187,36 @@ const Recommended = ({ unit, t, filterOutUnits = [], displayTitle = true }) => {
             viewLimit={3}
             feedName={sameTopic(tag)}
             showLabels={false} />);
-
+      }
+    });
+    unitSources.forEach(source => {
+      if (recommendedUnits[sameSource(source)].length !== 0) {
+        renderRecommended.push(
+          <DisplayRecommended
+            key={sameSource(source)}
+            unit={unit}
+            t={t}
+            recommendedUnits={recommendedUnits[sameSource(source)]}
+            title={<span>{makeSourceLink(source, getSourceById)}</span>}
+            displayTitle={displayTitle}
+            viewLimit={3}
+            feedName={sameSource(source)}
+            showLabels={false} />);
+      }
+    });
+    unitSourceCollections.forEach(source => {
+      if (recommendedUnits[sameSourceCollection(source)].length !== 0) {
+        renderRecommended.push(
+          <DisplayRecommended
+            key={sameSourceCollection(source)}
+            unit={unit}
+            t={t}
+            recommendedUnits={recommendedUnits[sameSourceCollection(source)]}
+            title={<span>{makeSourceLink(source, getSourceById)}</span>}
+            displayTitle={displayTitle}
+            viewLimit={3}
+            feedName={sameSourceCollection(source)}
+            showLabels={false} />);
       }
     });
     if (recommendedUnits[RANDOM_PROGRAMS].length !== 0) {

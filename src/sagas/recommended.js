@@ -6,6 +6,7 @@ import { AB_RECOMMEND_NEW } from '../helpers/ab-testing';
 import { actions, types, selectors as recommended } from '../redux/modules/recommended';
 import { actions as mdbActions, selectors as mdbSelectors } from '../redux/modules/mdb';
 import { selectors as settings } from '../redux/modules/settings';
+import { selectors as sourcesSelectors } from '../redux/modules/sources';
 import {
   CT_LESSONS_SERIES,
   CT_SOURCE,
@@ -15,7 +16,7 @@ const WATCHING_NOW_MIN = 50;
 const POPULAR_MIN      = 100;
 
 export function* fetchRecommended(action) {
-  const { id, tags, collections, size, skip, variant } = action.payload;
+  const { id, content_type, tags, sources, collections, size, skip, variant } = action.payload;
   try {
     const language = yield select(state => settings.getContentLanguage(state.settings));
     const skipUids = yield select(state => recommended.getSkipUids(state.recommended));
@@ -25,6 +26,15 @@ export function* fetchRecommended(action) {
         skipUids.push(uid);
       }
     });
+    const sourcesCollections = yield select(state => Object.values(sources.map(source => sourcesSelectors.getPathByID(state.sources)(source)).
+      map(path => (path && path.length >= 2 && path[path.length - 2]) || null).
+      filter(collectionSource => !!collectionSource).
+      reduce((acc, source) => {
+        if (!(source.id in acc)) {
+          acc[source.id] = source;
+        }
+        return acc;
+      }, {})).filter(source => source && source.children && source.children.length));
 
     const specs = [];  // Order important due to skip uids.
     if (variant === AB_RECOMMEND_NEW) {
@@ -40,18 +50,18 @@ export function* fetchRecommended(action) {
           'name': 'RoundRobinSuggester', 'specs': [
             {
               'name': 'DataContentUnitsSuggester',
-              'filters': [{ 'filter_selector': 2, 'args': [tag] }, { 'filter_selector': 8 }],
-              'order_selector': 5
+              'filters': [{ 'filter_selector': 2 /* Tags */, 'args': [tag] }, { 'filter_selector': 8 /* WatchingNowFilter */ }],
+              'order_selector': 5  // WatchingNow
             },
             {
               'name': 'DataContentUnitsSuggester',
-              'filters': [{ 'filter_selector': 2, 'args': [tag] }, { 'filter_selector': 9 }],
-              'order_selector': 4
+              'filters': [{ 'filter_selector': 2 /* Tags */, 'args': [tag] }, { 'filter_selector': 9 /* PopularFilter */ }],
+              'order_selector': 4  // Popular
             },
             {
               'name': 'DataContentUnitsSuggester',
-              'filters': [{ 'filter_selector': 2, 'args': [tag] }],
-              'order_selector': 0
+              'filters': [{ 'filter_selector': 2 /* Tags */, 'args': [tag] }],
+              'order_selector': 0  // Last
             },
           ]
         });
@@ -62,18 +72,65 @@ export function* fetchRecommended(action) {
           'name': 'RoundRobinSuggester', 'specs': [
             {
               'name': 'DataContentUnitsSuggester',
-              'filters': [{ 'filter_selector': 4, 'args': [collection.id] }, { 'filter_selector': 8 }],
-              'order_selector': 5
+              'filters': [{ 'filter_selector': 4 /* Collections */, 'args': [collection.id] }, { 'filter_selector': 8 /* WatchingNowFilter */ }],
+              'order_selector': 5  // WatchingNow
             },
             {
               'name': 'DataContentUnitsSuggester',
-              'filters': [{ 'filter_selector': 4, 'args': [collection.id] }, { 'filter_selector': 9 }],
-              'order_selector': 4
+              'filters': [{ 'filter_selector': 4 /* Collections */, 'args': [collection.id] }, { 'filter_selector': 9 /* PopularFilter */ }],
+              'order_selector': 4  // Popular
             },
             {
               'name': 'DataContentUnitsSuggester',
-              'filters': [{ 'filter_selector': 4, 'args': [collection.id] }],
-              'order_selector': 0
+              'filters': [{ 'filter_selector': 4 /* Collections */, 'args': [collection.id] }],
+              'order_selector': 0  // Last
+            },
+          ]
+        });
+      });
+      sources.forEach(source => {
+        // Same source.
+        specs.push({
+          'name': 'RoundRobinSuggester', 'specs': [
+            {
+              'name': 'DataContentUnitsSuggester',
+              'filters': [{ 'filter_selector': 3 /* Sources */, 'args': [source] }, { 'filter_selector': 8 /* WatchingNowFilter */ }],
+              'order_selector': 5  // WatchingNow
+            },
+            {
+              'name': 'DataContentUnitsSuggester',
+              'filters': [{ 'filter_selector': 3 /* Sources */, 'args': [source] }, { 'filter_selector': 9 /* PopularFilter */ }],
+              'order_selector': 4  // Popular
+            },
+            {
+              'name': 'DataContentUnitsSuggester',
+              'filters': [{ 'filter_selector': 3 /* Sources */, 'args': [source] }],
+              'order_selector': 0  // Last
+            },
+          ]
+        });
+      });
+      sourcesCollections.forEach(sourcesCollection => {
+        // Same source collection.
+        // NOTE: Currently it will take one-level-up as "Source Collection" which might not be what we want.
+        // Sometimes we want to take several levels up such as with Zohar and more nested sources.
+        // We have to try out and decide later on proper "Source Collection" definition.
+        specs.push({
+          'name': 'RoundRobinSuggester', 'specs': [
+            {
+              'name': 'DataContentUnitsSuggester',
+              'filters': [{ 'filter_selector': 3 /* Sources */, 'args': sourcesCollection.children }, { 'filter_selector': 8 /* WatchingNowFilter */ }],
+              'order_selector': 5  // WatchingNow
+            },
+            {
+              'name': 'DataContentUnitsSuggester',
+              'filters': [{ 'filter_selector': 3 /* Sources */, 'args': sourcesCollection.children }, { 'filter_selector': 9 /* PopularFilter */ }],
+              'order_selector': 4  // Popular
+            },
+            {
+              'name': 'DataContentUnitsSuggester',
+              'filters': [{ 'filter_selector': 3 /* Sources */, 'args': sourcesCollection.children }],
+              'order_selector': 0  // Last
             },
           ]
         });
@@ -147,6 +204,14 @@ export function* fetchRecommended(action) {
       });
       collections.forEach(collection => {
         feeds[`same-collection-${collection.id}`] = data.feeds[index];
+        index++;
+      });
+      sources.forEach(source => {
+        feeds[`same-source-${source}`] = data.feeds[index];
+        index++;
+      });
+      sourcesCollections.forEach(sourceCollection => {
+        feeds[`same-source-collection-${sourceCollection.id}`] = data.feeds[index];
         index++;
       });
       // One before last.
