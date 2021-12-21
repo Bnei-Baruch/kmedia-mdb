@@ -65,7 +65,7 @@ const Actions = ({ bookmark, t }) => {
         onConfirm={handleConfirmSuccess}
         cancelButton={t('buttons.cancel')}
         confirmButton={t('buttons.apply')}
-        content={t('personal.bookmark.confirmRemove', { name: bookmark.name })}
+        content={t('personal.bookmark.confirmRemoveBookmark', { name: bookmark.name })}
         dir={dir}
       />
       <Dropdown

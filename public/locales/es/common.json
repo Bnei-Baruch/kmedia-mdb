@@ -714,7 +714,8 @@
       "filterByFolder": "Busca en",
       "bookmarkUpdated": "¡Marcador actualizado con éxito!",
       "bookmarkCreated": "¡Marcador creado con éxito!",
-      "confirmRemove": "¿Estás seguro de que quieres eliminar {{name}}?",
+      "confirmRemoveBookmark": "¿Estás seguro de que quieres eliminar marcador {{name}}?",
+      "confirmRemoveFolder": "¿Estás seguro de que quieres eliminar carpeta {{name}}?",
       "haveNo": "Aún no tienes marcadores"
     }
   }

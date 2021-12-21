@@ -819,7 +819,8 @@
       "filterByFolder": "Искать в",
       "bookmarkUpdated": "Закладка успешно обновлена!",
       "bookmarkCreated": "Закладка успешно создана!",
-      "confirmRemove": "Вы действительно хотите удалить {{name}}?",
+      "confirmRemoveBookmark": "Вы действительно хотите удалить закладку {{name}}?",
+      "confirmRemoveFolder": "Вы действительно хотите удалить папку {{name}}?",
       "haveNo": "У вас еще нет закладок"
     }
   }

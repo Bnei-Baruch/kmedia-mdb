@@ -803,7 +803,8 @@
       "filterByFolder": "חפש ב",
       "bookmarkUpdated": "הסימניה עודכנה בהצלחה!",
       "bookmarkCreated": "הסימניה נוצרה בהצלחה!",
-      "confirmRemove": "האם ברצונך למחוק את {{name}}?",
+      "confirmRemoveBookmark": "האם ברצונך למחוק את סימניה {{name}}?",
+      "confirmRemoveFolder": "האם ברצונך למחוק את תיקיה {{name}}?",
       "haveNo": "אין לך סימניות עדיין"
     }
   }

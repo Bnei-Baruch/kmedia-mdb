@@ -129,7 +129,7 @@ const FolderItem = ({ folder, selectedId, selectFolder, t }) => {
               onConfirm={handleConfirmSuccess}
               cancelButton={t('buttons.cancel')}
               confirmButton={t('buttons.apply')}
-              content={t('personal.bookmark.confirmRemove', { name: folder.name })}
+              content={t('personal.bookmark.confirmRemoveFolder', { name: folder.name })}
               dir={dir}
             />
           </Grid.Column>

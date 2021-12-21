@@ -130,8 +130,7 @@ const Likut = ({ t }) => {
   return (
     <div
       ref={articleRef}
-      className={clsx({
-        source: true,
+      className={clsx('source likutim', {
         'is-readable': isReadable,
         [`is-${theme}`]: true,
         [`is-${fontType}`]: true,

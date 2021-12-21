@@ -14,6 +14,16 @@
   right: 10px;
 }
 
+.ltr .likutim .search-on-doc--bar-position.pinned {
+  right: -50px;
+  left: auto;
+}
+
+.likutim .search-on-doc--bar-position.pinned {
+  right: auto;
+  left: -50px;
+}
+
 .search-on-doc- {
   &-container {
     position: relative;

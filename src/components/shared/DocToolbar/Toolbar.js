@@ -60,8 +60,6 @@ const DocToolbar = ({ t, url, text, source, position, setPinned, isPinned }) => 
                 <CopyLinkBtn text={url}/>
                 <CopyTextBtn text={text}/>
                 {source && <BookmarkBtn source={source} close={handleToggle}/>}
-                {/*<TagBtn />*/}
-                {/*<NoteBtn />*/}
               </Menu>
             </>
           )

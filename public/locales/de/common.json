@@ -711,7 +711,8 @@
       "filterByFolder": "Search in",
       "bookmarkUpdated": "Bookmark updated successfully!",
       "bookmarkCreated": "Bookmark successfully created!",
-      "confirmRemove": "Are you sure you want to delete {{name}}?",
+      "confirmRemoveBookmark": "Are you sure you want to delete bookmark {{name}}?",
+      "confirmRemoveFolder": "Are you sure you want to delete folder {{name}}?",
       "haveNo": "You have no bookmarks yet"
     }
   }
