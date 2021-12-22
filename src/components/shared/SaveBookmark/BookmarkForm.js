@@ -19,7 +19,7 @@ import { MY_NAMESPACE_BOOKMARKS, MY_NAMESPACE_FOLDERS } from '../../../helpers/c
 import { getMyItemKey } from '../../../helpers/my';
 import NeedToLogin from '../../Sections/Personal/NeedToLogin';
 
-const BookmarkForm = ({ t, onClose, source, bookmarkId, data }) => {
+const BookmarkForm = ({ t, onClose, source, bookmarkId }) => {
   const [name, setName] = useState();
   const [selected, setSelected] = useState(null);
   const [editFolder, setEditFolder] = useState(false);

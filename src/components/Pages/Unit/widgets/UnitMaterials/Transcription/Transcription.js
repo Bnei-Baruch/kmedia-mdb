@@ -196,7 +196,7 @@ class Transcription extends Component {
             source={{
               source_uid: unit.id,
               source_type: unit.content_type,
-              data: { activeTab }
+              properties: { activeTab }
             }} />
         </div>
       </div>
@@ -265,7 +265,7 @@ class Transcription extends Component {
               <UnitBar
                 handleSettings={this.handleSettings}
                 fontSize={fontSize}
-                source={{ source_uid: unit.id, source_type: unit.content_type, data: { activeTab } }}
+                source={{ source_uid: unit.id, source_type: unit.content_type, properties: { activeTab } }}
               />
             </Menu.Item>
           </Menu>

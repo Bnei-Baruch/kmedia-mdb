@@ -17,7 +17,7 @@ import { buildTitleByUnit } from './helper';
 import { selectors as sourcesSelectors, selectors as sources } from '../../../../../redux/modules/sources';
 
 const BookmarksItem = ({ bookmark, t }) => {
-  const { data, folder_ids = [], name, source_uid } = bookmark;
+  const { properties, folder_ids = [], name, source_uid } = bookmark;
 
   const cu               = useSelector(state => mdb.getDenormContentUnit(state.mdb, source_uid));
   const folderKeys       = folder_ids.map(id => getMyItemKey(MY_NAMESPACE_FOLDERS, { id }).key);
@@ -29,9 +29,9 @@ const BookmarksItem = ({ bookmark, t }) => {
     return null;
 
   let link = canonicalLink(cu);
-  if (data) {
-    link = `${link}?${stringify(data)}`;
-    if (data.activeTab)
+  if (properties) {
+    link = `${link}?${stringify(properties)}`;
+    if (properties.activeTab)
       link = `${link}&autoPlay=0`;
   }
 
@@ -46,10 +46,10 @@ const BookmarksItem = ({ bookmark, t }) => {
   const icon  = iconByContentTypeMap.get(cu?.content_type);
 
   const citates = [];
-  if (!!data?.srchstart)
-    citates.push(data.srchstart.split(OFFSET_TEXT_SEPARATOR)[0]);
-  if (!!data?.srchend)
-    citates.push(data.srchend.split(OFFSET_TEXT_SEPARATOR)[0]);
+  if (!!properties?.srchstart)
+    citates.push(properties.srchstart.split(OFFSET_TEXT_SEPARATOR)[0]);
+  if (!!properties?.srchend)
+    citates.push(properties.srchend.split(OFFSET_TEXT_SEPARATOR)[0]);
 
   return (
     <List.Item className="bookmark_item">

@@ -75,7 +75,7 @@ const ScrollToSearch = ({ source, data, language, urlParams = '', pathname }) =>
   const renderShareBar = () => {
     if (isMobileDevice || !searchUrl)
       return null;
-    source.data = { ...source?.data || {}, ...searchQuery };
+    source.properties = { ...source?.properties || {}, ...searchQuery };
     return (
       <Toolbar
         source={source}
