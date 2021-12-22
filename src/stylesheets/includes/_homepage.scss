@@ -40,8 +40,15 @@
 
     &__cardGroup {
       background: rgba(44, 144, 220, 0.05);
-      padding-top: 4em;
       border-top: 2px solid #DBECF9;
+
+      .cardsTitle {
+        width:100%;
+        padding: 2em 1em 0 1em;
+        font-size: 1em;
+        font-weight: 700;
+        color: #134D78;
+      }
     }
 
 

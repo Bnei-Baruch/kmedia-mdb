@@ -102,13 +102,28 @@ const LatestUpdatesSection = ({ latestItems = [], t }) => {
       <Container className="padded horizontally">
         <Section title={t('materials.recommended.new')} computer={13}>
           <Card.Group itemsPerRow={4} doubling className="homepage__section__cardGroup">
+            <div className="cardsTitle">
+              {t(`events.collection.playlist.lessons`)}
+            </div>
             {getCard(consts.CT_DAILY_LESSON, 0)}
             {getCard(consts.CT_DAILY_LESSON, 1)}
             {cards[0]}
             {cards[1]}
+            <div className="cardsTitle">
+              {t(`lessons.tabs.lectures`)}
+            </div>
             {getCardArray(consts.CT_VIDEO_PROGRAM_CHAPTER, 4)}
+            <div className="cardsTitle">
+              {t(`programs.tabs.clips`)}
+            </div>
             {getCardArray(consts.CT_CLIP, 4)}
+            <div className="cardsTitle">
+              {t(`publications.header.text`)}
+            </div>
             {getCardArray(consts.CT_ARTICLE, 4)}
+            <div className="cardsTitle">
+              {t(`nav.sidebar.events`)}
+            </div>
             {eventTypes.map(type => getCard(type))}
           </Card.Group>
         </Section>
