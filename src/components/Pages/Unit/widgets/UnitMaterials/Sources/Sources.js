@@ -191,8 +191,8 @@ const Sources = ({ unit, t, activeTab = 'sources' }) => {
             language={language}
             pathname={`/${language}/${isLikutim ? 'likutim' : 'sources'}/${selectedUnitId}`}
             source={{
-              source_uid: selectedUnitId,
-              source_type: isLikutim ? CT_LIKUTIM : CT_SOURCE
+              subject_uid: selectedUnitId,
+              subject_type: isLikutim ? CT_LIKUTIM : CT_SOURCE
             }}
           />
         </div>
@@ -264,7 +264,7 @@ const Sources = ({ unit, t, activeTab = 'sources' }) => {
           <UnitBar
             handleSettings={setSettings}
             fontSize={setting.fontSize}
-            source={{ source_uid: selectedUnitId, source_type: isLikutim ? CT_LIKUTIM : CT_SOURCE }}
+            source={{ subject_uid: selectedUnitId, subject_type: isLikutim ? CT_LIKUTIM : CT_SOURCE }}
           />
         </Menu.Item>
       </Menu>

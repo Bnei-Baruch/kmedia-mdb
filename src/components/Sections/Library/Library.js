@@ -185,8 +185,8 @@ const Library = ({ data, source, downloadAllowed, t }) => {
             data={contentData}
             language={language}
             source={{
-              source_uid: source,
-              source_type: CT_SOURCE
+              subject_uid: source,
+              subject_type: CT_SOURCE
             }} />
         </div>
       );

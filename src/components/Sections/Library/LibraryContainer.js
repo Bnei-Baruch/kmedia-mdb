@@ -494,7 +494,7 @@ class LibraryContainer extends Component {
                       handleTocIsActive={this.handleTocIsActive}
                       isReadable={isReadable}
                       fontSize={fontSize}
-                      source={{ source_uid: sourceId, source_type: CT_SOURCE }}
+                      source={{ subject_uid: sourceId, subject_type: CT_SOURCE }}
                     />
                   </Grid.Column>
                 </Grid.Row>
