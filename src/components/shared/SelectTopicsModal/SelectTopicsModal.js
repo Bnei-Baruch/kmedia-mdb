@@ -39,7 +39,7 @@ const SelectTopicsModal = ({t, open, onClose}) => {
   const flatten = rootIds
     .map(byId)
     .map(
-      ({...r, children}) => ({...r, children: children.map(id => flatRecursive(id, byId))}))
+      ({children, ...r}) => ({...r, children: children.map(id => flatRecursive(id, byId))}))
   // const flatten = flatRecursive({children: rootIds}, byId, []);
 
   const [match, setMatch] = useState('');
