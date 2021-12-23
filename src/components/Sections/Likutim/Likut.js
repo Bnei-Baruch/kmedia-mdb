@@ -125,7 +125,7 @@ const Likut = ({ t }) => {
   const url                = file && physicalFile(file, true);
   const relatedLessons     = Object.values(source_units).filter(u => UNIT_LESSONS_TYPE.includes(u.content_type));
   const relatedLessonsSize = relatedLessons.length > 0 ? 6 : 0;
-  const bookmarkSource     = { source_uid: unit.id, source_type: unit.content_type };
+  const bookmarkSource     = { subject_uid: unit.id, subject_type: unit.content_type };
 
   return (
     <div
