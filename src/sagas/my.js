@@ -9,6 +9,7 @@ import {
   IsCollectionContentType,
   MY_NAMESPACE_BOOKMARKS,
   MY_NAMESPACE_HISTORY,
+  MY_NAMESPACE_LABELS,
   MY_NAMESPACE_PLAYLISTS,
   MY_NAMESPACE_REACTIONS,
   MY_NAMESPACE_SUBSCRIPTIONS
@@ -60,6 +61,7 @@ function* fetch(action) {
         co_uids = data.items?.filter(s => s.collection_uid).map(s => s.collection_uid) || [];
         break;
       case MY_NAMESPACE_BOOKMARKS:
+      case MY_NAMESPACE_LABELS:
         cu_uids          = data.items?.map(x => x.source_uid) || [];
         with_derivations = true;
         break;

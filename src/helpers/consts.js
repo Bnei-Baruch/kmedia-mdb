@@ -515,6 +515,7 @@ export const MY_NAMESPACE_PLAYLIST_EDIT = 'playlists_edit';
 export const MY_NAMESPACE_SUBSCRIPTIONS = 'subscriptions';
 export const MY_NAMESPACE_BOOKMARKS     = 'bookmarks';
 export const MY_NAMESPACE_FOLDERS       = 'folders';
+export const MY_NAMESPACE_LABELS       = 'labels';
 
 export const MY_NAMESPACES = [
   MY_NAMESPACE_HISTORY,
@@ -524,6 +525,7 @@ export const MY_NAMESPACES = [
   MY_NAMESPACE_PLAYLIST_EDIT,
   MY_NAMESPACE_BOOKMARKS,
   MY_NAMESPACE_FOLDERS,
+  MY_NAMESPACE_LABELS,
 ];
 
 export const MY_REACTION_KINDS = {
