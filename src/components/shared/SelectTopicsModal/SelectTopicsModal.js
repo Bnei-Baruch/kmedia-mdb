@@ -1,16 +1,16 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import {withNamespaces} from 'react-i18next';
-import {useSelector} from 'react-redux';
-import {Button, Grid, Input, Modal} from 'semantic-ui-react';
+import { withNamespaces } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { Button, Grid, Input, Modal } from 'semantic-ui-react';
 
-import {selectors as topicsSelectors} from '../../../redux/modules/tags';
+import { selectors as topicsSelectors } from '../../../redux/modules/tags';
 import isEqual from 'react-fast-compare';
 import TopicBranch from './TopicBranch';
 
 const flatRecursive = (rootId, byId) => {
   const root = byId[rootId] || {};
-  const {children, ...current} = root
+  const { children, ...current } = root
   if (!(children?.length > 0))
     return null;
 
@@ -31,7 +31,7 @@ const flatRecursive = (rootId, byId) => {
   return result;
 };
 
-const SelectTopicsModal = ({t, open, onClose}) => {
+const SelectTopicsModal = ({ t, open, onClose }) => {
   const [selected, setSelected] = useState([])
 
   const rootIds = useSelector(state => topicsSelectors.getDisplayRoots(state.tags), isEqual) || [];
@@ -39,7 +39,7 @@ const SelectTopicsModal = ({t, open, onClose}) => {
   const flatten = rootIds
     .map(byId)
     .map(
-      ({children, ...r}) => ({...r, children: children.map(id => flatRecursive(id, byId))}))
+      ({ children, ...r }) => ({ ...r, children: children.map(id => flatRecursive(id, byId)) }))
   // const flatten = flatRecursive({children: rootIds}, byId, []);
 
   const [match, setMatch] = useState('');
