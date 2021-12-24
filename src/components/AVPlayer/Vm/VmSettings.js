@@ -1,10 +1,20 @@
 import React, { useRef } from 'react';
 import { MenuItem, MenuRadio, MenuRadioGroup, Settings, Submenu, usePlayerContext } from '@vime/react';
-import { LANGUAGE_OPTIONS, VS_FHD, VS_HD, VS_NAMES, VS_NHD } from '../../../helpers/consts';
-
-const sortedVS = [VS_FHD, VS_HD, VS_NHD];
+import { LANGUAGE_OPTIONS, VS_NAMES } from '../../../helpers/consts';
 
 const formatRate = rate => rate.toString() === '1' ? 'normal' : `${rate}x`;
+
+const sortByValue = (a, b) => {
+  if (a.value < b.value) {
+    return -1;
+  }
+
+  if (a.value > b.value) {
+    return 1;
+  }
+
+  return 0;
+};
 
 const buildPlaybackRateSubmenu = (playbackRates, currentRate, playback) => (
   <Submenu label="Playback Rate" hint={formatRate(currentRate)}>
@@ -58,34 +68,19 @@ const buildAVSubmenu = (isVideo, onSwitchAV) => {
   );
 };
 
-const buildLanguageMenu = (selectedLanguage, languages, onLanguageChange) => {
-  const options = LANGUAGE_OPTIONS
-    .filter(x => languages.includes(x.value))
-    .sort((a, b) => {
-      if (a.value < b.value) {
-        return -1;
+const buildLanguageMenu = (selectedLanguage, languages, onLanguageChange) => (
+  <Submenu label="Language" hint={selectedLanguage}>
+    <MenuRadioGroup value={selectedLanguage} onVmCheck={onLanguageChange}>
+      {
+        LANGUAGE_OPTIONS
+          .filter(lang => languages.includes(lang.value))
+          .sort(sortByValue)
+          .map(lang => <MenuRadio key={`lang-${lang.value}`} label={lang.name} value={lang.value} />)
+
       }
-
-      if (a.value > b.value) {
-        return 1;
-      }
-
-      return 0;
-    })
-    .map(x => ({ value: x.value, text: x.value }));
-
-  return (
-    <Submenu label="Language" hint={selectedLanguage}>
-      <MenuRadioGroup value={selectedLanguage} onVmCheck={onLanguageChange}>
-        {
-          options.map(language => (
-            <MenuRadio key={`lang-${language.value}`} label={language.text} value={language.value} />
-          ))
-        }
-      </MenuRadioGroup>
-    </Submenu>
-  );
-};
+    </MenuRadioGroup>
+  </Submenu>
+);
 
 export const VmSettings = ({ isVideo, videoQuality, videoQualities, onQualityChange, onSwitchAV, selectedLanguage, languages, onLanguageChange }) => {
   const ref = useRef(null);
