@@ -60,7 +60,7 @@ function* fetch(action) {
         co_uids = data.items?.filter(s => s.collection_uid).map(s => s.collection_uid) || [];
         break;
       case MY_NAMESPACE_BOOKMARKS:
-        cu_uids          = data.items?.map(x => x.source_uid) || [];
+        cu_uids          = data.items?.map(x => x.subject_uid) || [];
         with_derivations = true;
         break;
       default:
