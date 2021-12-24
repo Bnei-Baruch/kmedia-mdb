@@ -17,7 +17,7 @@ import { buildTitleByUnit } from './helper';
 import { selectors as sourcesSelectors, selectors as sources } from '../../../../../redux/modules/sources';
 
 const BookmarksItem = ({ bookmark, t }) => {
-  const { properties, folder_ids = [], name, source_uid } = bookmark;
+  const { properties, folder_ids = [], name, subject_uid } = bookmark;
 
   const cu               = useSelector(state => mdb.getDenormContentUnit(state.mdb, source_uid));
   const folderKeys       = folder_ids.map(id => getMyItemKey(MY_NAMESPACE_FOLDERS, { id }).key);
