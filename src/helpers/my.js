@@ -27,7 +27,7 @@ export const getMyItemKey = (namespace, item) => {
       key = !!(collection_uid || content_type) ? `${collection_uid}_${content_type}` : null;
       break;
     default:
-      key = item.id;
+      key = `${namespace}_${item.id}`;
   }
 
   return { key, item };

@@ -10,6 +10,7 @@ import DonateNow, { VirtualHomeButton } from './DonateNow';
 import FeedBurner from './FeedBurner';
 import { useDispatch, useSelector } from 'react-redux';
 import { actions, selectors } from '../../redux/modules/auth';
+import { MY_NAMESPACE_BOOKMARKS } from '../../helpers/consts';
 
 const ITEMS = [
   'lessons',
@@ -77,10 +78,23 @@ const MenuItems = ({ simple = false, visible = false, t, onItemClick = identity,
     />
   );
 
+  const bookmark = !!user ? (
+    <Menu.Item
+      key={MY_NAMESPACE_BOOKMARKS}
+      as={NavLink}
+      to={`/${MY_NAMESPACE_BOOKMARKS}`}
+      className="sidebar-item"
+      activeClassName="active"
+      content={t(`nav.sidebar.${MY_NAMESPACE_BOOKMARKS}`)}
+      onClick={onItemClick}
+    />
+  ) : null;
+
   if (simple) {
     return (
       <Menu vertical borderless fluid color="blue" size="huge">
         {personal}
+        {bookmark}
         {items}
         <Menu.Item
           as="a"
@@ -123,6 +137,7 @@ const MenuItems = ({ simple = false, visible = false, t, onItemClick = identity,
   return (
     <Sidebar pointing vertical as={Menu} animation="push" visible={visible}>
       {personal}
+      {bookmark}
       {items}
     </Sidebar>
   );

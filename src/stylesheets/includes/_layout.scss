@@ -284,3 +284,8 @@ body {
   flex-direction: column;
   justify-content: center;
 }
+
+.layout__header-buttons > .item {
+  padding-right: 0.7em !important;
+  padding-left: 0.7em !important;
+}

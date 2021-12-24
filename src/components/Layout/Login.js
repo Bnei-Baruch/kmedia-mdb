@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
@@ -16,7 +16,6 @@ const Login = ({ t, language }) => {
   const popupStyle              = { direction };
   const dispatch                = useDispatch();
   const user                    = useSelector(state => selectors.getUser(state.auth));
-
 
   const login = () => dispatch(actions.login(language));
 

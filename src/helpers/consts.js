@@ -86,6 +86,43 @@ export const CT_UNITS = [
   CT_LIKUTIM,
 ];
 
+export const iconByContentTypeMap = new Map([
+  [CT_LESSON_PART, 'lessons'],
+  [CT_FULL_LESSON, 'lessons'],
+  [CT_VIRTUAL_LESSON, 'lessons'],
+  [CT_WOMEN_LESSON, 'lessons'],
+  [CT_CHILDREN_LESSON, 'lessons'],
+  [CT_LELO_MIKUD, 'lessons'],
+  [CT_DAILY_LESSON, 'lessons'],
+  [CT_SPECIAL_LESSON, 'lessons'],
+  [CT_LECTURE_SERIES, 'lessons'],
+  [CT_CHILDREN_LESSONS, 'lessons'],
+  [CT_WOMEN_LESSONS, 'lessons'],
+  [CT_VIRTUAL_LESSONS, 'lessons'],
+  [CT_LESSONS_SERIES, 'lessons'],
+  [CT_LECTURE, 'lessons'],
+  [CT_LIKUTIM, 'lessons'],
+  [CT_FRIENDS_GATHERING, 'events'],
+  [CT_MEAL, 'events'],
+  [CT_EVENT_PART, 'events'],
+  [CT_TRAINING, 'events'],
+  [CT_UNITY_DAY, 'events'],
+  [CT_FRIENDS_GATHERINGS, 'events'],
+  [CT_CONGRESS, 'events'],
+  [CT_MEALS, 'events'],
+  [CT_HOLIDAY, 'events'],
+  [CT_PICNIC, 'events'],
+  [CT_ARTICLE, 'publications'],
+  [CT_ARTICLES, 'publications'],
+  [CT_BLOG_POST, 'publications'],
+  [CT_VIDEO_PROGRAM_CHAPTER, 'programs'],
+  [CT_CLIP, 'programs'],
+  [CT_VIDEO_PROGRAM, 'programs'],
+  [CT_CLIPS, 'programs'],
+  [CT_SOURCE, 'sources'],
+  ['sources', 'sources'],
+]);
+
 export const IsUnitContentType = contentType => CT_UNITS.includes(contentType);
 
 // Content types for additional Elastic results
@@ -476,13 +513,26 @@ export const MY_NAMESPACE_REACTIONS     = 'reactions';
 export const MY_NAMESPACE_PLAYLISTS     = 'playlists';
 export const MY_NAMESPACE_PLAYLIST_EDIT = 'playlists_edit';
 export const MY_NAMESPACE_SUBSCRIPTIONS = 'subscriptions';
+export const MY_NAMESPACE_BOOKMARKS     = 'bookmarks';
+export const MY_NAMESPACE_FOLDERS       = 'folders';
 
-export const MY_NAMESPACES = [MY_NAMESPACE_HISTORY, MY_NAMESPACE_REACTIONS, MY_NAMESPACE_PLAYLISTS, MY_NAMESPACE_PLAYLIST_EDIT, MY_NAMESPACE_SUBSCRIPTIONS];
+export const MY_NAMESPACES = [
+  MY_NAMESPACE_HISTORY,
+  MY_NAMESPACE_REACTIONS,
+  MY_NAMESPACE_PLAYLISTS,
+  MY_NAMESPACE_SUBSCRIPTIONS,
+  MY_NAMESPACE_PLAYLIST_EDIT,
+  MY_NAMESPACE_BOOKMARKS,
+  MY_NAMESPACE_FOLDERS,
+];
 
 export const MY_REACTION_KINDS = {
   LIKE: 'like',
   SUPER: 'super',
 };
+
+export const MY_BOOKMARK_FILTER_FOLDER_ID = 'folder_id';
+export const MY_BOOKMARK_FILTER_QUERY     = 'bookmark_query';
 
 export const CT_SUBSCRIBE_BY_TYPE = [
   CT_FRIENDS_GATHERINGS,
@@ -522,3 +572,4 @@ export const SECTIONS_LINK_BY_CU_CONTENT_TYPE = {
   [SCT_TWEET]: 'publications/twitter',
   [CT_ARTICLE]: 'publications/articles',
 };
+
