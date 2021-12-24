@@ -7,9 +7,11 @@ import { actions, types, selectors as recommended } from '../redux/modules/recom
 import { actions as mdbActions, selectors as mdbSelectors } from '../redux/modules/mdb';
 import { selectors as settings } from '../redux/modules/settings';
 import { selectors as sourcesSelectors } from '../redux/modules/sources';
+import { getSourcesCollections } from '../helpers/utils';
 import {
   CT_LESSONS_SERIES,
   CT_SOURCE,
+  UNIT_LESSONS_TYPE,
 } from '../helpers/consts';
 
 const WATCHING_NOW_MIN = 50;
@@ -18,6 +20,7 @@ const POPULAR_MIN      = 100;
 export function* fetchRecommended(action) {
   const { id, content_type, tags, sources, collections, size, skip, variant } = action.payload;
   try {
+    const isLesson = UNIT_LESSONS_TYPE.includes(content_type);
     const language = yield select(state => settings.getContentLanguage(state.settings));
     const skipUids = yield select(state => recommended.getSkipUids(state.recommended));
     const skipSet  = new Set(skipUids);
@@ -26,15 +29,8 @@ export function* fetchRecommended(action) {
         skipUids.push(uid);
       }
     });
-    const sourcesCollections = yield select(state => Object.values(sources.map(source => sourcesSelectors.getPathByID(state.sources)(source)).
-      map(path => (path && path.length >= 2 && path[path.length - 2]) || null).
-      filter(collectionSource => !!collectionSource).
-      reduce((acc, source) => {
-        if (!(source.id in acc)) {
-          acc[source.id] = source;
-        }
-        return acc;
-      }, {})).filter(source => source && source.children && source.children.length));
+    const getPathById = yield select(state => sourcesSelectors.getPathByID(state.sources));
+    const sourcesCollections = yield select(state => getSourcesCollections(sources, getPathById));
 
     const specs = [];  // Order important due to skip uids.
     if (variant === AB_RECOMMEND_NEW) {
@@ -44,97 +40,100 @@ export function* fetchRecommended(action) {
         'filters': [{ 'filter_selector': 1, 'args': ['VIDEO_PROGRAM'] }],
         'order_selector': 3,
       });
-      // Same Topic - WatchingNow, Popular, Latest.
-      tags.forEach(tag => {
-        specs.push({
-          'name': 'RoundRobinSuggester', 'specs': [
-            {
-              'name': 'DataContentUnitsSuggester',
-              'filters': [{ 'filter_selector': 2 /* Tags */, 'args': [tag] }, { 'filter_selector': 8 /* WatchingNowFilter */ }],
-              'order_selector': 5  // WatchingNow
-            },
-            {
-              'name': 'DataContentUnitsSuggester',
-              'filters': [{ 'filter_selector': 2 /* Tags */, 'args': [tag] }, { 'filter_selector': 9 /* PopularFilter */ }],
-              'order_selector': 4  // Popular
-            },
-            {
-              'name': 'DataContentUnitsSuggester',
-              'filters': [{ 'filter_selector': 2 /* Tags */, 'args': [tag] }],
-              'order_selector': 0  // Last
-            },
-          ]
+      if (isLesson) {
+        sources.forEach(source => {
+          // Same source.
+          specs.push({
+            'name': 'RoundRobinSuggester', 'specs': [
+              {
+                'name': 'DataContentUnitsSuggester',
+                'filters': [{ 'filter_selector': 3 /* Sources */, 'args': [source] }, { 'filter_selector': 8 /* WatchingNowFilter */ }],
+                'order_selector': 5  // WatchingNow
+              },
+              {
+                'name': 'DataContentUnitsSuggester',
+                'filters': [{ 'filter_selector': 3 /* Sources */, 'args': [source] }, { 'filter_selector': 9 /* PopularFilter */ }],
+                'order_selector': 4  // Popular
+              },
+              {
+                'name': 'DataContentUnitsSuggester',
+                'filters': [{ 'filter_selector': 3 /* Sources */, 'args': [source] }],
+                'order_selector': 0  // Last
+              },
+            ]
+          });
         });
-      });
-      collections.forEach(collection => {
-        // Same collection - WatchingNow, Popular, Latest.
-        specs.push({
-          'name': 'RoundRobinSuggester', 'specs': [
-            {
-              'name': 'DataContentUnitsSuggester',
-              'filters': [{ 'filter_selector': 4 /* Collections */, 'args': [collection.id] }, { 'filter_selector': 8 /* WatchingNowFilter */ }],
-              'order_selector': 5  // WatchingNow
-            },
-            {
-              'name': 'DataContentUnitsSuggester',
-              'filters': [{ 'filter_selector': 4 /* Collections */, 'args': [collection.id] }, { 'filter_selector': 9 /* PopularFilter */ }],
-              'order_selector': 4  // Popular
-            },
-            {
-              'name': 'DataContentUnitsSuggester',
-              'filters': [{ 'filter_selector': 4 /* Collections */, 'args': [collection.id] }],
-              'order_selector': 0  // Last
-            },
-          ]
+        sourcesCollections.forEach(sourcesCollection => {
+          // Same source collection.
+          // NOTE: Currently it will take one-level-up as "Source Collection" which might not be what we want.
+          // Sometimes we want to take several levels up such as with Zohar and more nested sources.
+          // We have to try out and decide later on proper "Source Collection" definition.
+          specs.push({
+            'name': 'RoundRobinSuggester', 'specs': [
+              {
+                'name': 'DataContentUnitsSuggester',
+                'filters': [{ 'filter_selector': 3 /* Sources */, 'args': sourcesCollection.children }, { 'filter_selector': 8 /* WatchingNowFilter */ }],
+                'order_selector': 5  // WatchingNow
+              },
+              {
+                'name': 'DataContentUnitsSuggester',
+                'filters': [{ 'filter_selector': 3 /* Sources */, 'args': sourcesCollection.children }, { 'filter_selector': 9 /* PopularFilter */ }],
+                'order_selector': 4  // Popular
+              },
+              {
+                'name': 'DataContentUnitsSuggester',
+                'filters': [{ 'filter_selector': 3 /* Sources */, 'args': sourcesCollection.children }],
+                'order_selector': 0  // Last
+              },
+            ]
+          });
         });
-      });
-      sources.forEach(source => {
-        // Same source.
-        specs.push({
-          'name': 'RoundRobinSuggester', 'specs': [
-            {
-              'name': 'DataContentUnitsSuggester',
-              'filters': [{ 'filter_selector': 3 /* Sources */, 'args': [source] }, { 'filter_selector': 8 /* WatchingNowFilter */ }],
-              'order_selector': 5  // WatchingNow
-            },
-            {
-              'name': 'DataContentUnitsSuggester',
-              'filters': [{ 'filter_selector': 3 /* Sources */, 'args': [source] }, { 'filter_selector': 9 /* PopularFilter */ }],
-              'order_selector': 4  // Popular
-            },
-            {
-              'name': 'DataContentUnitsSuggester',
-              'filters': [{ 'filter_selector': 3 /* Sources */, 'args': [source] }],
-              'order_selector': 0  // Last
-            },
-          ]
+      } else {
+        // Same Topic - WatchingNow, Popular, Latest.
+        tags.forEach(tag => {
+          specs.push({
+            'name': 'RoundRobinSuggester', 'specs': [
+              {
+                'name': 'DataContentUnitsSuggester',
+                'filters': [{ 'filter_selector': 2 /* Tags */, 'args': [tag] }, { 'filter_selector': 8 /* WatchingNowFilter */ }],
+                'order_selector': 5  // WatchingNow
+              },
+              {
+                'name': 'DataContentUnitsSuggester',
+                'filters': [{ 'filter_selector': 2 /* Tags */, 'args': [tag] }, { 'filter_selector': 9 /* PopularFilter */ }],
+                'order_selector': 4  // Popular
+              },
+              {
+                'name': 'DataContentUnitsSuggester',
+                'filters': [{ 'filter_selector': 2 /* Tags */, 'args': [tag] }],
+                'order_selector': 0  // Last
+              },
+            ]
+          });
         });
-      });
-      sourcesCollections.forEach(sourcesCollection => {
-        // Same source collection.
-        // NOTE: Currently it will take one-level-up as "Source Collection" which might not be what we want.
-        // Sometimes we want to take several levels up such as with Zohar and more nested sources.
-        // We have to try out and decide later on proper "Source Collection" definition.
-        specs.push({
-          'name': 'RoundRobinSuggester', 'specs': [
-            {
-              'name': 'DataContentUnitsSuggester',
-              'filters': [{ 'filter_selector': 3 /* Sources */, 'args': sourcesCollection.children }, { 'filter_selector': 8 /* WatchingNowFilter */ }],
-              'order_selector': 5  // WatchingNow
-            },
-            {
-              'name': 'DataContentUnitsSuggester',
-              'filters': [{ 'filter_selector': 3 /* Sources */, 'args': sourcesCollection.children }, { 'filter_selector': 9 /* PopularFilter */ }],
-              'order_selector': 4  // Popular
-            },
-            {
-              'name': 'DataContentUnitsSuggester',
-              'filters': [{ 'filter_selector': 3 /* Sources */, 'args': sourcesCollection.children }],
-              'order_selector': 0  // Last
-            },
-          ]
+        collections.forEach(collection => {
+          // Same collection - WatchingNow, Popular, Latest.
+          specs.push({
+            'name': 'RoundRobinSuggester', 'specs': [
+              {
+                'name': 'DataContentUnitsSuggester',
+                'filters': [{ 'filter_selector': 4 /* Collections */, 'args': [collection.id] }, { 'filter_selector': 8 /* WatchingNowFilter */ }],
+                'order_selector': 5  // WatchingNow
+              },
+              {
+                'name': 'DataContentUnitsSuggester',
+                'filters': [{ 'filter_selector': 4 /* Collections */, 'args': [collection.id] }, { 'filter_selector': 9 /* PopularFilter */ }],
+                'order_selector': 4  // Popular
+              },
+              {
+                'name': 'DataContentUnitsSuggester',
+                'filters': [{ 'filter_selector': 4 /* Collections */, 'args': [collection.id] }],
+                'order_selector': 0  // Last
+              },
+            ]
+          });
         });
-      });
+      }
     }
 
     specs.push({ name: 'Default' });
@@ -198,22 +197,26 @@ export function* fetchRecommended(action) {
       let index = 0;
       feeds['random-programs'] = data.feeds[index];
       index++;
-      tags.forEach(tag => {
-        feeds[`same-topic-${tag}`] = data.feeds[index];
-        index++;
-      });
-      collections.forEach(collection => {
-        feeds[`same-collection-${collection.id}`] = data.feeds[index];
-        index++;
-      });
-      sources.forEach(source => {
-        feeds[`same-source-${source}`] = data.feeds[index];
-        index++;
-      });
-      sourcesCollections.forEach(sourceCollection => {
-        feeds[`same-source-collection-${sourceCollection.id}`] = data.feeds[index];
-        index++;
-      });
+      if (isLesson) {
+        sources.forEach(source => {
+          feeds[`same-source-${source}`] = data.feeds[index];
+          index++;
+        });
+        sourcesCollections.forEach(sourceCollection => {
+          feeds[`same-source-collection-${sourceCollection.id}`] = data.feeds[index];
+          index++;
+        });
+      } else {
+        tags.forEach(tag => {
+          feeds[`same-topic-${tag}`] = data.feeds[index];
+          index++;
+        });
+        collections.forEach(collection => {
+          feeds[`same-collection-${collection.id}`] = data.feeds[index];
+          index++;
+        });
+      }
+
       // One before last.
       feeds['series'] = data.feeds[index];
     }
