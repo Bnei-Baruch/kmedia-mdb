@@ -20,7 +20,7 @@ import {
 import { VmPrevNext } from './VmPrevNext';
 import { VmJump } from './VmJump';
 import VmAudioVideo from './VmAudioVideo';
-import { VmShare } from './VmShare';
+import { VmShareButton } from './VmShareButton';
 
 const getVideoControls = () => (
   <>
@@ -53,7 +53,7 @@ const getControls = (showNextPrev, hasPrev, onPrev, hasNext, onNext, onActivateS
     <VmAudioVideo isVideo={isVideo} onSwitchAV={onSwitchAV} />
     <SettingsControl />
     { isVideo && getVideoControls()}
-    <VmShare onActivateSlice={onActivateSlice} />
+    <VmShareButton onActivateSlice={onActivateSlice} />
   </ControlGroup>;
 
 

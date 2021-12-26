@@ -2,7 +2,7 @@ import { useRef } from 'react';
 import { Control, usePlayerContext } from '@vime/react';
 import { Icon } from 'semantic-ui-react';
 
-export const VmShare = ({ onActivateSlice }) => {
+export const VmShareButton = ({ onActivateSlice }) => {
   const ref               = useRef(null);
   const [isPlaybackReady] = usePlayerContext(ref, 'playbackReady', false);
 
