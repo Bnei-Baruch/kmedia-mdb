@@ -103,7 +103,7 @@ const Recommended = ({ unit, t, filterOutUnits = [], displayTitle = true }) => {
       setUnitTags(unit.tags || []);
       setUnitSources(unit.sources || []);
       setUnitCollections(Object.values(unit.collections) || []);
-      setUnitSourceCollections(getSourcesCollections(unit.sources, getPathById));
+      setUnitSourceCollections(getSourcesCollections(unit.sources || [], getPathById));
     }
   }, [unit, unitId, getPathById]);
   const dispatch = useDispatch();
