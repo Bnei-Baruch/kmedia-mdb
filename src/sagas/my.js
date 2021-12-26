@@ -62,7 +62,7 @@ function* fetch(action) {
         break;
       case MY_NAMESPACE_BOOKMARKS:
       case MY_NAMESPACE_LABELS:
-        cu_uids          = data.items?.map(x => x.source_uid) || [];
+        cu_uids          = data.items?.map(x => x.subject_uid) || [];
         with_derivations = true;
         break;
       default:
