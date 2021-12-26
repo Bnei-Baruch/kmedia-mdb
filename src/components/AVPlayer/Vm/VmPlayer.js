@@ -1,21 +1,26 @@
 import React, { useEffect, useRef, useState } from 'react';
+import PropTypes from 'prop-types';
+import { withNamespaces } from 'react-i18next';
+import { useSelector } from 'react-redux';
 import { Player, usePlayerContext, Ui } from '@vime/react';
+
+import * as shapes from '../../shapes';
+import ClientChronicles from '../../../helpers/clientChronicles';
+import playerHelper from '../../../helpers/player';
+import { isEmpty } from '../../../helpers/utils';
+import { MT_VIDEO, VS_DEFAULT, VS_FHD, VS_HD, VS_NHD } from '../../../helpers/consts';
+import { selectors as settings } from '../../../redux/modules/settings';
+import { PLAYER_MODE } from '../constants';
+import ShareForm from '../Share/ShareForm';
 
 import { VmControls } from './VmControls';
 import { VmProvider } from './VmProvider';
 import { VmSettings } from './VmSettings';
-import { isEmpty } from '../../../helpers/utils';
 
 // Default theme. ~960B
 import '@vime/core/themes/default.css';
-import PropTypes from 'prop-types';
-import * as shapes from '../../shapes';
-import ClientChronicles from '../../../helpers/clientChronicles';
-import { withNamespaces } from 'react-i18next';
-import playerHelper from '../../../helpers/player';
-import { MT_VIDEO, VS_DEFAULT, VS_FHD, VS_HD, VS_NHD } from '../../../helpers/consts';
-import { PLAYER_MODE } from '../constants';
-import ShareFormDesktop from '../Share/ShareFormDesktop';
+
+// import { setMode } from '@vime/core/dist/types/stencil-public-runtime';
 // Optional light theme (extends default). ~400B
 // import '@vime/core/themes/light.css';
 
@@ -45,6 +50,7 @@ const VmPlayer = ({
   item,
 
   onSwitchAV,
+  onMediaEditModeChange,
 
   selectedLanguage,
   languages,
@@ -55,13 +61,12 @@ const VmPlayer = ({
   onPrev = null,
   hasNext = false,
   onNext = null,
-
-  mode,
-  uiLanguage,
-
+  // mode,
   t,
 }) => {
   const player = useRef(null);
+  const uiLanguage          = useSelector(state => settings.getLanguage(state.settings));
+  // const contentLanguage     = useSelector(state => settings.getContentLanguage(state.settings));
 
   const [duration]                    = usePlayerContext(player, 'duration', 0);
   const [currentTime, setCurrentTime] = usePlayerContext(player, 'currentTime', 0);
@@ -74,14 +79,12 @@ const VmPlayer = ({
 
   const [wasCurrentTime, setWasCurrentTime] = useState(0);
 
-  const [editMode, setMode]         = useState(mode);
-  const [isEditMode, setIsEditMode] = useState(mode === PLAYER_MODE.SLICE_EDIT);
+  // const [mode, setMode]         = useState(PLAYER_MODE.NORMAL);
+  const [editMode, setEditMode] = useState(false);
+
+  // const [isEditMode, setIsEditMode] = useState(mode === PLAYER_MODE.SLICE_EDIT);
   const [sliceStart, setSliceStart] = useState(0);
   const [sliceEnd, setSliceEnd]     = useState(duration);
-
-  useEffect(() => {
-
-  }, [isEditMode]);
 
   useEffect(() => {
     const { src, videoQuality } = chooseSource(item, t);
@@ -97,13 +100,21 @@ const VmPlayer = ({
     }
   }, [playbackReady, setCurrentTime, wasCurrentTime]);
 
-  const setEditMode = (properties = {}) => {
-    console.log('----------->', editMode);
-    const { sliceStart: sstart, sliceEnd: send } = properties;
-    setSliceStart(sstart || sliceStart || 0);
-    setSliceEnd(send || sliceEnd || Infinity);
-    setMode(isEditMode ? PLAYER_MODE.NORMAL : PLAYER_MODE.SLICE_EDIT);
-  };
+  useEffect(() => {
+    if (!editMode) {
+      setSliceStart(undefined);
+      setSliceEnd(undefined);
+    }
+
+    onMediaEditModeChange(editMode ? PLAYER_MODE.SLICE_EDIT : PLAYER_MODE.NORMAL)
+  }, [editMode, onMediaEditModeChange]);
+
+
+  const handleSliceChange = (sliceStart, sliceEnd) => {
+    console.log('handleSliceChange:', sliceStart, sliceEnd);
+    setSliceStart(sliceStart);
+    setSliceEnd(sliceEnd);
+  }
 
   const onQualityChange = quality => {
     if (quality === videoQuality) {
@@ -129,10 +140,6 @@ const VmPlayer = ({
     onLanguageChange(e, e.target?.value);
   };
 
-  // if (isEditMode) {
-
-  // }
-
   return (
     <Player ref={player} theme="dark" playsInline
       style={{ '--vm-control-spacing': 0, }}
@@ -144,7 +151,8 @@ const VmPlayer = ({
         source={source}
       />
       <Ui>
-        <VmControls player={player.current}
+        <VmControls
+          // player={player.current}
           isVideo={isVideo}
           // TODO isMobile={isMobile}
 
@@ -152,9 +160,7 @@ const VmPlayer = ({
           hideWhenPaused={false}
 
           onSwitchAV={switchAV}
-          onActivateSlice={() => {
-            setEditMode();
-          }}
+          onActivateSlice={() => setEditMode(!editMode)}
 
           showNextPrev={showNextPrev}
           hasPrev={hasPrev}
@@ -162,17 +168,14 @@ const VmPlayer = ({
           hasNext={hasNext}
           onNext={onNext}
         />
-        {isEditMode && (
-          <ShareFormDesktop
+        {editMode && (
+          <ShareForm
           // media={media}
+            player={player.current}
             item={item}
-            uiLanguage={uiLanguage}
-            onSliceChange={this.handleSliceChange}
-            onExit={() => {
-              setMode(PLAYER_MODE.NORMAL);
-              setSliceStart(undefined);
-              setSliceEnd(undefined);
-            }}
+            // uiLanguage={uiLanguage}
+            onSliceChange={handleSliceChange}
+            onExit={() => setEditMode(false)}
           />
         )}
         <VmSettings
