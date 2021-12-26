@@ -109,7 +109,7 @@ const PlaylistInfo = ({ cuID, t, handleClose = null }) => {
     const adds = selected.filter(p => !saved.some(x => p.id === x.id));
     adds.forEach((p, i) => dispatch(actions.add(MY_NAMESPACE_PLAYLISTS, {
       id: p.id,
-      items: [{ position: p.max_position + 1, content_unit_uid: cuID }],
+      items: [{ position: -1, content_unit_uid: cuID }],
       changeItems: true
     })));
     const deletes = saved.filter(p => !selected.some(x => p.id === x.id));
