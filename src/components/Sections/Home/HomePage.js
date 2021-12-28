@@ -23,7 +23,6 @@ const renderBlogPosts = (latestBlogPosts, language, t) =>
     <Grid.Column mobile={16} tablet={11} computer={11} className="home-blog-posts">
       <div className="titles">
         <h4>{t('home.blog-title')}</h4>
-        <a href={`/${language}/publications/blog`}>{t('home.all-posts')}</a>
       </div>
       <BlogFeed snippetVersion items={latestBlogPosts} language={language} limitLength={4} />
       <div className="read-more-bottom">
@@ -38,7 +37,6 @@ const renderTweets = (latestTweets, language, t) =>
     <Grid.Column mobile={16} tablet={5} computer={5} className="home-twitter">
       <div className="titles">
         <h4>{t('home.twitter-title')}</h4>
-        <a href={`/${language}/publications/twitter`}>{t('home.all-tweets')}</a>
       </div>
       <Feed>
         {

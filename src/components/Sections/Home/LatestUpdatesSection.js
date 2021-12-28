@@ -110,7 +110,7 @@ const LatestUpdatesSection = ({ latestItems = [], t }) => {
             {cards[0]}
             {cards[1]}
             <div className="cardsTitle">
-              {t(`lessons.tabs.lectures`)}
+              {t(`programs.header.text`)}
             </div>
             {getCardArray(consts.CT_VIDEO_PROGRAM_CHAPTER, 4)}
             <div className="cardsTitle">

@@ -470,10 +470,16 @@
 
 .blog-posts {
   max-width: 550px;
+
+  .read-more-link {
+    padding-bottom: 0 !important;
+  }
 }
 
 .post {
   margin-bottom: 1.5rem !important;
+  background: #FFF;
+  padding: 1em;
 
   /* ********** wordpress style ********** */
 
@@ -1102,6 +1108,9 @@
 
     h4 {
       margin-bottom: 0;
+      color: #134D78;
+      font-size:1.4em;
+      margin-right: 0.2em;
     }
 
     a {
