@@ -83,7 +83,7 @@ const SearchResults = props => {
       return <SearchResultTwitters  {...newProps} />;
     }
 
-    if (type === 'lessons_series') {
+    if (type === 'lessons_series_by_tag' || type === 'lessons_series_by_source' ) {
       return <SearchResultSeries {...newProps} />;
     }
 

@@ -574,6 +574,8 @@ const getDenormContentUnit = (state, id) => {
 
 const nestedGetDenormContentUnit = state => id => getDenormContentUnit(state, id);
 
+const nestedDenormCollectionWUnits = state => id => getDenormCollectionWUnits(state, id)
+
 const getDenormCollectionWUnits = (state, id) => {
   let c = state.cById[id];
   if (c && Array.isArray(c.cuIDs)) {
@@ -602,6 +604,7 @@ export const selectors = {
   getErrors,
   getDenormCollection,
   getDenormCollectionWUnits,
+  nestedDenormCollectionWUnits,
   getDenormContentUnit,
   nestedGetDenormContentUnit,
   getLastLessonId,

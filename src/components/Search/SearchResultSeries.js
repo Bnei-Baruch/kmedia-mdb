@@ -1,13 +1,15 @@
 import React from 'react';
-import { Button, Container, Icon, Segment } from 'semantic-ui-react';
+import {connect} from 'react-redux';
+import {Button, Container, Icon, Segment} from 'semantic-ui-react';
 
-import { selectors as lessonsSelectors } from '../../redux/modules/lessons';
-import { isDebMode } from '../../helpers/url';
+import {selectors as lessonsSelectors} from '../../redux/modules/lessons';
+import {selectors as mdbSelectors} from "../../redux/modules/mdb";
+import {isDebMode} from '../../helpers/url';
 import Link from '../Language/MultiLanguageLink';
 import ScoreDebug from './ScoreDebug';
 import SearchResultBase from './SearchResultBase';
-import { connect } from 'react-redux';
-import { CT_LESSONS_SERIES } from '../../helpers/consts';
+import {CT_LESSONS_SERIES} from '../../helpers/consts';
+import SearchResultCollection from "./SearchResultCollection";
 
 class SearchResultSeries extends SearchResultBase {
   renderSerie = s => {
@@ -53,21 +55,36 @@ class SearchResultSeries extends SearchResultBase {
   };
 
   render() {
-    const { t, location, hit, getSerieBySource, wip: { lectures: wipL, series: wipS } } = this.props;
+    const {
+      t,
+      location,
+      hit,
+      getSerieBySource,
+      getSerieByTag,
+      nestedDenormCollectionWUnits,
+      wip: {lectures: wipL, series: wipS}
+    } = this.props;
 
     if (wipL || wipS) {
       return null;
     }
 
-    const { _score: score, _uid } = hit;
+    const getSerie = hit._type === "lessons_series_by_tag" ? getSerieByTag : getSerieBySource
+
+    const {_score: score, _uid} = hit;
     if (!_uid) {
       return null;
     }
 
-    const series = _uid.split('_').map(getSerieBySource);
-    const s      = this.getLowestLevelSeries(series);
-
-    const { logLinkParams } = this.buildLinkParams();
+    const series = _uid.split('_').map(getSerie);
+    const s = this.getLowestLevelSeries(series);
+    if (s?.collections.length === 1) {
+      const c = nestedDenormCollectionWUnits(s.collections[0].id)
+      return (
+        <SearchResultCollection c={c} {...this.props} />
+      )
+    }
+    const {logLinkParams} = this.buildLinkParams();
 
     return (
       <Segment className="bg_hover_grey search__block">
@@ -118,5 +135,7 @@ class SearchResultSeries extends SearchResultBase {
 
 export default connect(state => ({
   getSerieBySource: lessonsSelectors.getSerieBySourceId(state.lessons, state.mdb, state.sources),
+  getSerieByTag: lessonsSelectors.getSerieByTagId(state.lessons, state.mdb, state.tags),
+  nestedDenormCollectionWUnits: mdbSelectors.nestedDenormCollectionWUnits(state.mdb),
   wip: lessonsSelectors.getWip(state.lessons)
 }))(SearchResultSeries);
