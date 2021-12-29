@@ -315,7 +315,7 @@ const getSeriesTree = (state, match) => {
   return sortedTree.children;
 };
 
-const getSerieBySourceId = (state, mdbState, sourcesState) => (sId) => {
+const getSerieBySourceId = (state, mdbState, sourcesState) => sId => {
   const source      = sources.getSourceById(sourcesState)(sId);
   const collections = state.seriesIDs.map(id => mdb.getCollectionById(mdbState, id)).filter(({ source_id }) => source_id === sId);
   return { ...source, collections };

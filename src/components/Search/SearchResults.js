@@ -82,6 +82,7 @@ const SearchResults = props => {
     if (type === 'tweets_many') {
       return <SearchResultTwitters  {...newProps} />;
     }
+
     if (type === 'lessons_series') {
       return <SearchResultSeries {...newProps} />;
     }

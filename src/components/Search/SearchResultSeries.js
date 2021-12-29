@@ -31,7 +31,7 @@ class SearchResultSeries extends SearchResultBase {
     );
   };
 
-  buildCollectionLinkParams = (c) => {
+  buildCollectionLinkParams = c => {
     const { queryResult: { search_result: { searchId } }, hit, rank, filters }      = this.props;
     const { _index: index, _source: { mdb_uid: mdbUid, result_type: resultType }, } = hit;
 
@@ -48,6 +48,7 @@ class SearchResultSeries extends SearchResultBase {
     if (!(root?.children?.length !== 0)) {
       return root;
     }
+
     return this.getLowestLevelSeries(series, root.id);
   };
 
