@@ -20,7 +20,7 @@ import MenuLanguageSelector from '../../../components/Language/Selector/MenuLang
 import Link from '../../../components/Language/MultiLanguageLink';
 import WipErr from '../../shared/WipErr/WipErr';
 import Download from '../../shared/Download/Download';
-import ScrollToSearch from '../../shared/ScrollToSearch';
+import ScrollToSearch from '../../shared/DocToolbar/ScrollToSearch';
 
 // expected unit of type Likutim
 const Likut = ({ t }) => {
@@ -125,12 +125,12 @@ const Likut = ({ t }) => {
   const url                = file && physicalFile(file, true);
   const relatedLessons     = Object.values(source_units).filter(u => UNIT_LESSONS_TYPE.includes(u.content_type));
   const relatedLessonsSize = relatedLessons.length > 0 ? 6 : 0;
+  const bookmarkSource     = { subject_uid: unit.id, subject_type: unit.content_type };
 
   return (
     <div
       ref={articleRef}
-      className={clsx({
-        source: true,
+      className={clsx('source likutim', {
         'is-readable': isReadable,
         [`is-${theme}`]: true,
         [`is-${fontType}`]: true,
@@ -146,7 +146,7 @@ const Likut = ({ t }) => {
               </Header.Content>
             </Header>
             {/* toolbar */}
-            <Grid className="likut__toolbar" columns={2}>
+            <Grid className="likut__toolbar" columns={2} stackable>
               <Grid.Column>
                 {renderTags()}
               </Grid.Column>
@@ -162,6 +162,7 @@ const Likut = ({ t }) => {
                       isReadable={isReadable}
                       handleIsReadable={handleIsReadable}
                       handleSettings={setSettings}
+                      source={bookmarkSource}
                     />
                   </div>
                   <div className="library-language-container">
@@ -184,7 +185,7 @@ const Likut = ({ t }) => {
               className="font_settings doc2html"
               style={{ direction }}
             >
-              <ScrollToSearch language={language} data={data} />
+              <ScrollToSearch language={language} data={data} source={bookmarkSource} />
             </div>
           </div>
         </Grid.Column>

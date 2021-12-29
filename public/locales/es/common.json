@@ -23,7 +23,8 @@
       "help": "Ayuda",
       "podcast": "Podcast",
       "old-site": "Viejo Sitio",
-      "subscribe": "Suscríbase para actualizaciones"
+      "subscribe": "Suscríbase para actualizaciones",
+      "bookmarks": "Marcadores"
     },
     "footer": {
       "copyright": "Derecho de autor 2003-{{year}}",
@@ -484,7 +485,8 @@
       "rand": "Random content",
       "more": "More",
       "less": "Less",
-      "new": "New"
+      "new": "New",
+      "same-source": "Same source"
     },
     "playlist": {
       "header": "Up Next"
@@ -651,10 +653,20 @@
   },
   "share-text": {
     "message-title": "Read this fragment",
-    "share-button": "Share fragment",
-    "copy-link": "Copiar link",
+    "copy-link": "Copiar enlace",
     "copy-text": "Copiar texto",
-    "disable-share": "Cancelar"
+    "disable-share": "Cancelar",
+    "pin": "Colapso",
+    "unpin": "Expandir",
+    "share-button": "Compartir enlace",
+    "bookmark-button": "Guardar marcador",
+    "tag-button": "Etiquetar el texto",
+    "share-button-alt": "Compartir enlace",
+    "link-button-alt": "Copiar enlace al texto seleccionado",
+    "copy-button-alt": "Copiar texto",
+    "bookmark-button-alt": "Crea un marcador y guárdalo en la zona personal",
+    "tag-button-alt": "Etiquete el texto seleccionado en la sección Temas",
+    "docbar-title": "Ha seleccionado un extracto del texto, ¿qué le gustaría hacer?"
   },
   "personal": {
     "subsNewUnits": "nuevos episodios",
@@ -688,6 +700,24 @@
     "no_playlists": "Aún no tienes listas de reproducción, crea una.",
     "no_reactions": "No tienes vídeos que te gustaron",
     "no_history": "Empiece a ver los videos que se mostrarán aquí",
-    "no_subscriptions": "Aún no tienes suscripciones, suscríbete para verlas aquí"
+    "no_subscriptions": "Aún no tienes suscripciones, suscríbete para verlas aquí",
+    "bookmark": {
+      "title": "Marcadores",
+      "name": "Nombre",
+      "saveBookmark": "Guardar marcador",
+      "editBookmark": "Editar marcador",
+      "removeBookmark": "Quitar marcador",
+      "searchBookmarks": "Buscar marcadores",
+      "searchFolders": "Buscar en carpetas",
+      "folders": "Carpetas",
+      "newFolder": "Nueva carpeta",
+      "allFolders": "Todo",
+      "filterByFolder": "Busca en",
+      "bookmarkUpdated": "¡Marcador actualizado con éxito!",
+      "bookmarkCreated": "¡Marcador creado con éxito!",
+      "confirmRemoveBookmark": "¿Estás seguro de que quieres eliminar marcador {{name}}?",
+      "confirmRemoveFolder": "¿Estás seguro de que quieres eliminar carpeta {{name}}?",
+      "haveNo": "Aún no tienes marcadores"
+    }
   }
 }

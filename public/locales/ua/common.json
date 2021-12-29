@@ -24,7 +24,8 @@
       "help": "Допомогти",
       "podcast": "Подкаст",
       "old-site": "Старий сайт",
-      "subscribe": "Підписатися на оновлення"
+      "subscribe": "Підписатися на оновлення",
+      "bookmarks": "Bookmarks"
     },
     "footer": {
       "copyright": "Copyright © 2003-{{year}}",
@@ -486,7 +487,8 @@
       "rand": "Random content",
       "more": "More",
       "less": "Less",
-      "new": "New"
+      "new": "New",
+      "same-source": "Same source"
     },
     "playlist":{
       "header": "Up Next"
@@ -741,10 +743,20 @@
   },
   "share-text": {
     "message-title": "Read this fragment",
-    "share-button": "Share fragment",
     "copy-link": "Копіювати посилання",
     "copy-text": "Скопіювати текст",
-    "disable-share": "Скасувати"
+    "disable-share": "Скасувати",
+    "pin": "Collapse",
+    "unpin": "Expand",
+    "share-button": "Share fragment",
+    "bookmark-button": "Save Bookmark",
+    "tag-button": "Tag Text",
+    "share-button-alt": "Share Link",
+    "link-button-alt": "Copy link to selected text",
+    "copy-button-alt": "Copy text",
+    "bookmark-button-alt": "Create a bookmark and save it in the personal area",
+    "tag-button-alt": "Tag the selected text in the Topics section",
+    "docbar-title": "You have selected an excerpt from the text, what would you like to do?"
   },
   "personal": {
     "subsNewUnits": "new episodes",
@@ -778,6 +790,24 @@
     "no_playlists": "You have no playlists, please create one",
     "no_reactions": "You have no videos you liked",
     "no_history": "Start watching videos to be shown here",
-    "no_subscriptions": "You have no subscriptions yet, subscribe to see them here"
+    "no_subscriptions": "You have no subscriptions yet, subscribe to see them here",
+    "bookmark": {
+      "title": "Bookmarks",
+      "name": "Name",
+      "saveBookmark": "Save Bookmark",
+      "editBookmark": "Edit Bookmark",
+      "removeBookmark": "Remove Bookmark",
+      "searchBookmarks": "Search Bookmarks",
+      "searchFolders": "Search Folders",
+      "folders": "Folders",
+      "newFolder": "New Folder",
+      "allFolders": "All",
+      "filterByFolder": "Search in",
+      "bookmarkUpdated": "Bookmark updated successfully!",
+      "bookmarkCreated": "Bookmark successfully created!",
+      "confirmRemoveBookmark": "Are you sure you want to delete bookmark {{name}}?",
+      "confirmRemoveFolder": "Are you sure you want to delete folder {{name}}?",
+      "haveNo": "You have no bookmarks yet"
+    }
   }
 }

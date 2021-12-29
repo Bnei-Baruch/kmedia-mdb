@@ -23,8 +23,7 @@ import LibraryBar from './LibraryBar';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { getQuery } from '../../../helpers/url';
-import { SCROLL_SEARCH_ID } from '../../../helpers/consts';
-
+import { CT_SOURCE, SCROLL_SEARCH_ID } from '../../../helpers/consts';
 
 const waitForRenderElement = async (attempts = 0) => {
   if (attempts > 10) return Promise.reject();
@@ -322,7 +321,6 @@ class LibraryContainer extends Component {
     }
   };
 
-
   matchString = (parentId, t) => {
     const { NotToFilter } = this.props;
     const { match }       = this.state;
@@ -369,12 +367,12 @@ class LibraryContainer extends Component {
       content = getSourceErrorSplash(err, t);
     } else {
       const downloadAllowed = this.context.deviceInfo.os.name !== 'iOS';
-      content =
+      content               =
         <Library
           source={sourceId}
           data={data}
           downloadAllowed={downloadAllowed}
-        />
+        />;
     }
 
     return content;
@@ -453,7 +451,7 @@ class LibraryContainer extends Component {
     const fullPath    = LibraryContainer.getFullPath(sourceId, getPathByID);
     const parentId    = this.properParentId(fullPath);
     const matchString = this.matchString(parentId, t);
-    const active   = !this.context.isMobileDevice || tocIsActive;
+    const active      = !this.context.isMobileDevice || tocIsActive;
 
     return (
       <div
@@ -495,8 +493,9 @@ class LibraryContainer extends Component {
                       handleIsReadable={this.handleIsReadable}
                       handleTocIsActive={this.handleTocIsActive}
                       isReadable={isReadable}
-                      fontSize={fontSize}>
-                    </LibraryBar>
+                      fontSize={fontSize}
+                      source={{ subject_uid: sourceId, subject_type: CT_SOURCE }}
+                    />
                   </Grid.Column>
                 </Grid.Row>
               </Grid>

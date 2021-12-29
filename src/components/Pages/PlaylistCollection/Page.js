@@ -107,7 +107,8 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
 
   // Don't recommend lesson preparation, skip to next unit.
   let recommendUnit = unit;
-  const isUnitPrep  = collection?.ccuNames?.[unit?.id] === '0';
+  const ccuNames = collection?.ccuNames || {};
+  const isUnitPrep  = ccuNames?.[unit?.id] === '0' && Object.values(ccuNames).filter(value => value === '0').length === 1;
   if (isUnitPrep && Array.isArray(playlist?.items)) {
     const indexOfUnit = playlist.items.findIndex(item => item?.unit?.id === unit.id);
     if (indexOfUnit !== -1 && indexOfUnit + 1 < playlist.items.length) {

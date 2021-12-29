@@ -23,13 +23,13 @@ export const SubscriptionsItem = ({ item, t }) => {
   const { key } = getMyItemKey(MY_NAMESPACE_SUBSCRIPTIONS, item);
 
   const collection = useSelector(state => mdb.getDenormCollection(state.mdb, item.collection_uid));
-  const cuStats    = useSelector(state => stats.getCUStats(state.stats, key));
+  const cuStats = useSelector(state => stats.getCUStats(state.stats, key));
 
-  const language         = useSelector(state => settings.getLanguage(state.settings));
+  const language = useSelector(state => settings.getLanguage(state.settings));
   const dir = getLanguageDirection(language);
 
   const dispatch = useDispatch();
-  const remove   = () => setConfirm(true);
+  const remove = () => setConfirm(true);
 
   const handleConfirmCancel = () => setConfirm(false);
 
@@ -54,17 +54,17 @@ export const SubscriptionsItem = ({ item, t }) => {
 
       dispatch(statsActions.fetchCUStats(key, params));
     }
-  }, [item, dispatch]);
+  }, [item, dispatch, key]);
 
   let logo, title, link;
   if (item.collection_uid) {
-    logo  = <UnitLogo collectionId={collection?.id} width={isMobileDevice ? 300 : 700} />;
+    logo = <UnitLogo collectionId={collection?.id} width={isMobileDevice ? 300 : 700}/>;
     title = collection?.name;
-    link  = canonicalLink(collection);
+    link = canonicalLink(collection);
   } else {
-    logo  = <UnitLogo unitId={item.content_unit_uid} width={isMobileDevice ? 300 : 700} />;
+    logo = <UnitLogo unitId={item.content_unit_uid} width={isMobileDevice ? 300 : 700}/>;
     title = t(`constants.content-types.${item.content_type}`);
-    link  = `/${SECTIONS_LINK_BY_CU_CONTENT_TYPE[item.content_type]}`;
+    link = `/${SECTIONS_LINK_BY_CU_CONTENT_TYPE[item.content_type]}`;
   }
 
   return (
@@ -76,7 +76,7 @@ export const SubscriptionsItem = ({ item, t }) => {
             {title}
           </Link>
         </Header>
-        <Card.Meta content={`${t('personal.subsNewUnits')} - ${cuStats?.data?.total || 0}`} />
+        <Card.Meta content={`${t('personal.subsNewUnits')} - ${cuStats?.data?.total || 0}`}/>
       </Card.Content>
       <Card.Content extra textAlign="center">
         <Confirm
