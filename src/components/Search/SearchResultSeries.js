@@ -1,19 +1,19 @@
 import React from 'react';
-import {connect} from 'react-redux';
-import {Button, Container, Icon, Segment} from 'semantic-ui-react';
+import { connect } from 'react-redux';
+import { Button, Container, Icon, Segment } from 'semantic-ui-react';
 
-import {selectors as lessonsSelectors} from '../../redux/modules/lessons';
-import {selectors as mdbSelectors} from "../../redux/modules/mdb";
-import {isDebMode} from '../../helpers/url';
+import { selectors as lessonsSelectors } from '../../redux/modules/lessons';
+import { selectors as mdbSelectors } from '../../redux/modules/mdb';
+import { isDebMode } from '../../helpers/url';
 import Link from '../Language/MultiLanguageLink';
 import ScoreDebug from './ScoreDebug';
 import SearchResultBase from './SearchResultBase';
-import {CT_LESSONS_SERIES} from '../../helpers/consts';
-import SearchResultCollection from "./SearchResultCollection";
+import { CT_LESSONS_SERIES } from '../../helpers/consts';
+import SearchResultCollection from './SearchResultCollection';
 
 class SearchResultSeries extends SearchResultBase {
   renderSerie = s => {
-    const { t }             = this.props;
+    const { t } = this.props;
     const { logLinkParams } = this.buildCollectionLinkParams(s);
 
     return (
@@ -25,7 +25,7 @@ class SearchResultSeries extends SearchResultBase {
           to={`/lessons/series/c/${s.id}`}
         >
           <span className="margin-right-8 margin-left-8">
-            <Icon name="tasks" size="small" />
+            <Icon name="tasks" size="small"/>
             {`${t('search.showAll')} ${s.cuIDs.length} ${t('pages.collection.items.lessons-collection')}`}
           </span>
         </Link>
@@ -34,7 +34,7 @@ class SearchResultSeries extends SearchResultBase {
   };
 
   buildCollectionLinkParams = c => {
-    const { queryResult: { search_result: { searchId } }, hit, rank, filters }      = this.props;
+    const { queryResult: { search_result: { searchId } }, hit, rank, filters } = this.props;
     const { _index: index, _source: { mdb_uid: mdbUid, result_type: resultType }, } = hit;
 
     return {
@@ -62,16 +62,16 @@ class SearchResultSeries extends SearchResultBase {
       getSerieBySource,
       getSerieByTag,
       nestedDenormCollectionWUnits,
-      wip: {lectures: wipL, series: wipS}
+      wip: { lectures: wipL, series: wipS }
     } = this.props;
 
     if (wipL || wipS) {
       return null;
     }
 
-    const getSerie = hit._type === "lessons_series_by_tag" ? getSerieByTag : getSerieBySource
+    const getSerie = hit._type === 'lessons_series_by_tag' ? getSerieByTag : getSerieBySource
 
-    const {_score: score, _uid} = hit;
+    const { _score: score, _uid } = hit;
     if (!_uid) {
       return null;
     }
@@ -84,7 +84,8 @@ class SearchResultSeries extends SearchResultBase {
         <SearchResultCollection c={c} {...this.props} />
       )
     }
-    const {logLinkParams} = this.buildLinkParams();
+
+    const { logLinkParams } = this.buildLinkParams();
 
     return (
       <Segment className="bg_hover_grey search__block">
@@ -103,7 +104,7 @@ class SearchResultSeries extends SearchResultBase {
             <Container className="content">
               {this.iconByContentType(CT_LESSONS_SERIES, t, true)}
             </Container>
-            <div className="clear" />
+            <div className="clear"/>
           </Container>
 
           <Container className="content clear margin-top-8">
@@ -114,7 +115,7 @@ class SearchResultSeries extends SearchResultBase {
               to={`/lessons/series`}
               className="margin-right-8"
             >
-              <Icon name="tasks" size="small" />
+              <Icon name="tasks" size="small"/>
               {`${t('search.showAll')} ${s.collections.length} ${t('pages.collection.items.lessons-collection')}`}
             </Link>
           </Container>
@@ -124,7 +125,7 @@ class SearchResultSeries extends SearchResultBase {
             ? null
             : (
               <Container collapsing>
-                <ScoreDebug name={s.name} score={score} explanation={hit._explanation} />
+                <ScoreDebug name={s.name} score={score} explanation={hit._explanation}/>
               </Container>
             )
         }

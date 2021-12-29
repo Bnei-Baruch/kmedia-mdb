@@ -317,14 +317,14 @@ const getSeriesTree = (state, match) => {
 
 const getSerieBySourceId = (state, mdbState, sourcesState) => sId => {
   const source = sources.getSourceById(sourcesState)(sId);
-  const collections = state.seriesIDs.map(id => mdb.getCollectionById(mdbState, id)).filter(({source_id}) => source_id === sId);
-  return {...source, collections};
+  const collections = state.seriesIDs.map(id => mdb.getCollectionById(mdbState, id)).filter(({ source_id }) => source_id === sId);
+  return { ...source, collections };
 };
 
 const getSerieByTagId = (state, mdbState, tagsState) => tId => {
   const tag = tags.getTagById(tagsState)(tId);
-  const collections = state.seriesIDs.map(id => mdb.getCollectionById(mdbState, id)).filter(({tag_id}) => tag_id?.includes(tId));
-  return {...tag, collections};
+  const collections = state.seriesIDs.map(id => mdb.getCollectionById(mdbState, id)).filter(({ tag_id }) => tag_id?.includes(tId));
+  return { ...tag, collections };
 };
 
 export const selectors = {
