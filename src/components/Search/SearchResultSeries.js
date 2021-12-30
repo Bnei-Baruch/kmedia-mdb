@@ -1,21 +1,21 @@
 import React from 'react';
-import {connect} from 'react-redux';
-import {Button, Container, Icon, Segment} from 'semantic-ui-react';
+import { connect } from 'react-redux';
+import { Button, Container, Icon, Segment } from 'semantic-ui-react';
 
-import {selectors as lessonsSelectors} from '../../redux/modules/lessons';
-import {selectors as mdbSelectors} from '../../redux/modules/mdb';
-import {selectors as tagSelectors} from '../../redux/modules/tags';
-import {isDebMode} from '../../helpers/url';
+import { selectors as lessonsSelectors } from '../../redux/modules/lessons';
+import { selectors as mdbSelectors } from '../../redux/modules/mdb';
+import { selectors as tagSelectors } from '../../redux/modules/tags';
+import { isDebMode } from '../../helpers/url';
 import Link from '../Language/MultiLanguageLink';
 import ScoreDebug from './ScoreDebug';
 import SearchResultBase from './SearchResultBase';
-import {CT_LESSONS_SERIES} from '../../helpers/consts';
+import { CT_LESSONS_SERIES } from '../../helpers/consts';
 import SearchResultCollection from './SearchResultCollection';
 
 class SearchResultSeries extends SearchResultBase {
   renderSerie = s => {
-    const {t} = this.props;
-    const {logLinkParams} = this.buildCollectionLinkParams(s);
+    const { t } = this.props;
+    const { logLinkParams } = this.buildCollectionLinkParams(s);
 
     return (
       <Button basic size="tiny" className="link_to_cu">
@@ -35,11 +35,11 @@ class SearchResultSeries extends SearchResultBase {
   };
 
   buildCollectionLinkParams = c => {
-    const {queryResult: {search_result: {searchId}}, hit, rank, filters} = this.props;
-    const {_index: index, _source: {mdb_uid: mdbUid, result_type: resultType},} = hit;
+    const { queryResult: { search_result: { searchId } }, hit, rank, filters } = this.props;
+    const { _index: index, _source: { mdb_uid: mdbUid, result_type: resultType }, } = hit;
 
     return {
-      canonicalLinkParams: [{id: c.id, content_type: 'CT_LECTURE_SERIES'}, this.getMediaLanguage(filters)],
+      canonicalLinkParams: [{ id: c.id, content_type: 'CT_LECTURE_SERIES' }, this.getMediaLanguage(filters)],
       logLinkParams: [mdbUid, index, resultType, rank, searchId]
     };
   };
@@ -64,16 +64,17 @@ class SearchResultSeries extends SearchResultBase {
       getSerieByTag,
       nestedDenormCollectionWUnits,
       getTagById,
-      wip: {lectures: wipL, series: wipS}
+      wip: { lectures: wipL, series: wipS }
     } = this.props;
 
     if (wipL || wipS) {
       return null;
     }
+
     const isByTag = hit._type === 'lessons_series_by_tag'
     const getSerie = isByTag ? getSerieByTag : getSerieBySource
 
-    const {_score: score, _uid} = hit;
+    const { _score: score, _uid } = hit;
     if (!_uid) {
       return null;
     }
@@ -87,7 +88,7 @@ class SearchResultSeries extends SearchResultBase {
       )
     }
 
-    const {logLinkParams} = this.buildLinkParams();
+    const { logLinkParams } = this.buildLinkParams();
     const title = isByTag ? getTagById(_uid)?.label : s.name;
 
     return (
