@@ -1,29 +1,29 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
-import {withRouter} from 'react-router-dom';
-import {push as routerPush, replace as routerReplace} from 'connected-react-router';
-import {withNamespaces} from 'react-i18next';
-import {Button, Container, Grid, Header, Input, Ref, Segment} from 'semantic-ui-react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+import { push as routerPush, replace as routerReplace } from 'connected-react-router';
+import { withNamespaces } from 'react-i18next';
+import { Button, Container, Grid, Header, Input, Ref, Segment } from 'semantic-ui-react';
 import Headroom from 'react-headroom';
 
-import {isEmpty} from '../../../helpers/utils';
-import {actions as assetsActions, selectors as assets} from '../../../redux/modules/assets';
-import {actions as sourceActions, selectors as sources} from '../../../redux/modules/sources';
-import {selectors as settings} from '../../../redux/modules/settings';
+import { isEmpty } from '../../../helpers/utils';
+import { actions as assetsActions, selectors as assets } from '../../../redux/modules/assets';
+import { actions as sourceActions, selectors as sources } from '../../../redux/modules/sources';
+import { selectors as settings } from '../../../redux/modules/settings';
 import * as shapes from '../../shapes';
-import {getSourceErrorSplash} from '../../shared/WipErr/WipErr';
+import { getSourceErrorSplash } from '../../shared/WipErr/WipErr';
 import Helmets from '../../shared/Helmets';
-import {isTaas} from '../../shared/PDF/PDF';
-import Library, {buildBookmarkSource} from './Library';
-import TOC, {getIndex} from './TOC';
+import { isTaas } from '../../shared/PDF/PDF';
+import Library, { buildBookmarkSource } from './Library';
+import TOC, { getIndex } from './TOC';
 import LibraryBar from './LibraryBar';
-import {getLanguageDirection} from '../../../helpers/i18n-utils';
-import {DeviceInfoContext} from '../../../helpers/app-contexts';
-import {getQuery} from '../../../helpers/url';
-import {CT_SOURCE, SCROLL_SEARCH_ID} from '../../../helpers/consts';
+import { getLanguageDirection } from '../../../helpers/i18n-utils';
+import { DeviceInfoContext } from '../../../helpers/app-contexts';
+import { getQuery } from '../../../helpers/url';
+import { CT_SOURCE, SCROLL_SEARCH_ID } from '../../../helpers/consts';
 
 const waitForRenderElement = async (attempts = 0) => {
   if (attempts > 10) return Promise.reject();
@@ -79,8 +79,8 @@ class LibraryContainer extends Component {
   };
 
   shouldComponentUpdate(nextProps, nextState) {
-    const {sourceId, indexMap, language, contentLanguage, sortBy, areSourcesLoaded} = this.props;
-    const {lastLoadedId, isReadable, fontSize, fontType, theme, tocIsActive, match, scrollTopPosition} = this.state;
+    const { sourceId, indexMap, language, contentLanguage, sortBy, areSourcesLoaded } = this.props;
+    const { lastLoadedId, isReadable, fontSize, fontType, theme, tocIsActive, match, scrollTopPosition } = this.state;
 
     const equalProps = sourceId === nextProps.sourceId
       && language === nextProps.language
@@ -107,11 +107,11 @@ class LibraryContainer extends Component {
     window.addEventListener('resize', this.updateSticky);
     window.addEventListener('load', this.updateSticky);
 
-    const {sourceId, areSourcesLoaded, history} = this.props;
-    const {location: {state: {tocIsActive} = {state: {tocIsActive: false}}}} = history;
+    const { sourceId, areSourcesLoaded, history } = this.props;
+    const { location: { state: { tocIsActive } = { state: { tocIsActive: false } } } } = history;
 
     if (tocIsActive || sourceId === 'grRABASH') {
-      this.setState({tocIsActive: true});
+      this.setState({ tocIsActive: true });
     }
 
     if (!areSourcesLoaded) {
@@ -122,7 +122,7 @@ class LibraryContainer extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const {sourceId, areSourcesLoaded, getPathByID, location} = this.props;
+    const { sourceId, areSourcesLoaded, getPathByID, location } = this.props;
     if (!areSourcesLoaded) {
       return;
     }
@@ -130,14 +130,14 @@ class LibraryContainer extends Component {
     this.replaceOrFetch(sourceId);
     this.updateSticky();
 
-    const {isReadable, scrollTopPosition, tocIsActive, doScroll = true} = this.state;
+    const { isReadable, scrollTopPosition, tocIsActive, doScroll = true } = this.state;
 
-    const {srchstart} = getQuery(location);
+    const { srchstart } = getQuery(location);
     const scrollingElement = isReadable ? this.articleRef : document.scrollingElement;
 
     if (srchstart && doScroll) {
       waitForRenderElement(0).then(el => el && (scrollingElement.scrollTop = el.offsetTop));
-      this.setState({doScroll: false});
+      this.setState({ doScroll: false });
     }
 
     //on change full screen and normal view scroll to position
@@ -151,7 +151,7 @@ class LibraryContainer extends Component {
       const activeIndex = getIndex(fullPath[1], fullPath[2]);
 
       if (activeIndex === -1) {
-        this.setState({tocIsActive: false});
+        this.setState({ tocIsActive: false });
       }
     }
   }
@@ -162,7 +162,7 @@ class LibraryContainer extends Component {
   }
 
   replaceOrFetch(nextSourceId) {
-    const {sourceId, replace, language} = this.props;
+    const { sourceId, replace, language } = this.props;
 
     const firstLeafId = this.firstLeafId(nextSourceId);
     if (firstLeafId !== nextSourceId) {
@@ -170,13 +170,13 @@ class LibraryContainer extends Component {
     } else if (sourceId !== nextSourceId
       || this.state.lastLoadedId !== nextSourceId
       || this.state.language !== language) {
-      this.setState({lastLoadedId: nextSourceId, language});
+      this.setState({ lastLoadedId: nextSourceId, language });
       this.fetchIndices(nextSourceId);
     }
   }
 
   fetchIndices = sourceId => {
-    const {indexMap, fetchIndex} = this.props;
+    const { indexMap, fetchIndex } = this.props;
     if (isEmpty(sourceId) || !isEmpty(indexMap[sourceId])) {
       return;
     }
@@ -185,9 +185,9 @@ class LibraryContainer extends Component {
   };
 
   firstLeafId = sourceId => {
-    const {getSourceById} = this.props;
+    const { getSourceById } = this.props;
 
-    const {children} = getSourceById(sourceId) || {children: []};
+    const { children } = getSourceById(sourceId) || { children: [] };
     if (isEmpty(children)) {
       return sourceId;
     }
@@ -198,9 +198,9 @@ class LibraryContainer extends Component {
   updateSticky = () => {
     // check fixed header width in pixels for text-overflow:ellipsis
     if (this.contentHeaderRef) {
-      const {width} = this.contentHeaderRef.getBoundingClientRect();
+      const { width } = this.contentHeaderRef.getBoundingClientRect();
       if (this.state.contentHeaderWidth !== width) {
-        this.setState({contentHeaderWidth: width});
+        this.setState({ contentHeaderWidth: width });
       }
     }
   };
@@ -214,14 +214,14 @@ class LibraryContainer extends Component {
   // handleLangContainerRef = (ref) => this.langContainerRef = ref;
 
   handleTocIsActive = () => {
-    const {tocIsActive} = this.state;
-    this.setState({tocIsActive: !tocIsActive});
+    const { tocIsActive } = this.state;
+    this.setState({ tocIsActive: !tocIsActive });
   };
 
   handleIsReadable = () => {
-    const {isReadable} = this.state;
+    const { isReadable } = this.state;
     const scrollTopPosition = this.getScrollTop();
-    this.setState({isReadable: !isReadable, scrollTopPosition});
+    this.setState({ isReadable: !isReadable, scrollTopPosition });
   };
 
   /**
@@ -235,7 +235,7 @@ class LibraryContainer extends Component {
   handleSettings = setting => this.setState(setting);
 
   header = (sourceId, properParentId) => {
-    const {getSourceById} = this.props;
+    const { getSourceById } = this.props;
 
     const source = getSourceById(sourceId);
     const properParentSource = getSourceById(properParentId);
@@ -244,22 +244,22 @@ class LibraryContainer extends Component {
       return <div/>;
     }
 
-    const {name: parentName, description, parent_id: parentId} = properParentSource;
+    const { name: parentName, description, parent_id: parentId } = properParentSource;
     const parentSource = getSourceById(parentId);
 
     if (!parentSource) {
       return <Segment basic>&nbsp;</Segment>;
     }
 
-    const {name: sourceName} = source;
-    const {name: kabName, full_name: kabFullName} = parentSource;
+    const { name: sourceName } = source;
+    const { name: kabName, full_name: kabFullName } = parentSource;
 
     let displayName = kabFullName || kabName;
     if (kabFullName && kabName) {
       displayName += ` (${kabName})`;
     }
 
-    const {contentHeaderWidth} = this.state;
+    const { contentHeaderWidth } = this.state;
 
     return (
       <Header size="small">
@@ -268,13 +268,13 @@ class LibraryContainer extends Component {
           <div/>
         </Ref>
         <Header.Subheader>
-          <small style={{width: `${contentHeaderWidth}px`}}>
+          <small style={{ width: `${contentHeaderWidth}px` }}>
             {displayName}
             /
             {`${parentName} ${description || ''} `}
           </small>
         </Header.Subheader>
-        <span style={{width: `${contentHeaderWidth}px`}}>{sourceName}</span>
+        <span style={{ width: `${contentHeaderWidth}px` }}>{sourceName}</span>
       </Header>
 
     );
@@ -283,7 +283,7 @@ class LibraryContainer extends Component {
   properParentId = path => (path[1].id);
 
   sortButton = () => {
-    const {sortBy, sourcesSortBy} = this.props;
+    const { sortBy, sourcesSortBy } = this.props;
     const sortOrder = sortBy === 'AZ'
       ? 'Book'
       : 'AZ';
@@ -292,7 +292,7 @@ class LibraryContainer extends Component {
   };
 
   switchSortingOrder = parentId => {
-    const {sortBy, NotToSort} = this.props;
+    const { sortBy, NotToSort } = this.props;
 
     if (NotToSort.findIndex(a => a === parentId) !== -1) {
       return null;
@@ -313,17 +313,17 @@ class LibraryContainer extends Component {
     );
   };
 
-  handleFilterChange = (e, data) => this.setState({match: data.value});
+  handleFilterChange = (e, data) => this.setState({ match: data.value });
 
   handleFilterKeyDown = e => {
     if (e.keyCode === 27) { // Esc
-      this.setState({match: ''});
+      this.setState({ match: '' });
     }
   };
 
   matchString = (parentId, t) => {
-    const {NotToFilter} = this.props;
-    const {match} = this.state;
+    const { NotToFilter } = this.props;
+    const { match } = this.state;
     if (NotToFilter.findIndex(a => a === parentId) !== -1) {
       return null;
     }
@@ -344,22 +344,22 @@ class LibraryContainer extends Component {
   static getFullPath = (sourceId, getPathByID) => {
     // Go to the root of this sourceId
     if (!getPathByID) {
-      return [{id: '0'}, {id: sourceId}];
+      return [{ id: '0' }, { id: sourceId }];
     }
 
     const path = getPathByID(sourceId);
 
     if (!path || path.length < 2 || !path[1]) {
-      return [{id: '0'}, {id: sourceId}];
+      return [{ id: '0' }, { id: sourceId }];
     }
 
     return path;
   };
 
   getContent = () => {
-    const {sourceId, indexMap, t} = this.props;
+    const { sourceId, indexMap, t } = this.props;
     const index = isEmpty(sourceId) ? {} : indexMap[sourceId];
-    const {err, data} = index || {};
+    const { err, data } = index || {};
 
     let content;
 
@@ -379,7 +379,7 @@ class LibraryContainer extends Component {
   };
 
   static nextPrevButtons = props => {
-    const {sourceId, getPathByID} = props;
+    const { sourceId, getPathByID } = props;
 
     if (isTaas(sourceId)) {
       return null;
@@ -398,7 +398,7 @@ class LibraryContainer extends Component {
       return null;
     }
 
-    const {children} = fullPath[len - 2];
+    const { children } = fullPath[len - 2];
     return (
       <div className="library__nextPrevButtons">
         {LibraryContainer.nextPrevLink(children, activeIndex - 1, false, props)}
@@ -415,15 +415,15 @@ class LibraryContainer extends Component {
     const icon = isNext ? (langDir === 'ltr' ? 'forward' : 'backward') : (langDir === 'ltr' ? 'backward' : 'forward');
     const buttonAlign = isNext ? (langDir === 'ltr' ? 'right' : 'left') : (langDir === 'ltr' ? 'left' : 'right');
 
-    return {title, labelPosition, buttonAlign, icon};
+    return { title, labelPosition, buttonAlign, icon };
   }
 
-  static nextPrevLink(children, index, isNext, {push, t, language, getSourceById}) {
+  static nextPrevLink(children, index, isNext, { push, t, language, getSourceById }) {
     if (index < 0 || index > children.length - 1) {
       return null;
     }
 
-    const {title, labelPosition, buttonAlign, icon} = LibraryContainer.getNextPrevDetails(isNext, language, t);
+    const { title, labelPosition, buttonAlign, icon } = LibraryContainer.getNextPrevDetails(isNext, language, t);
     const sourceId = children[index];
     const source = getSourceById(sourceId);
     return (
@@ -442,11 +442,11 @@ class LibraryContainer extends Component {
   }
 
   render() {
-    const {sourceId, getSourceById, getPathByID, language, t, push} = this.props;
+    const { sourceId, getSourceById, getPathByID, language, t, push } = this.props;
 
     const content = this.getContent();
 
-    const {isReadable, fontSize, theme, fontType, tocIsActive, match} = this.state;
+    const { isReadable, fontSize, theme, fontType, tocIsActive, match } = this.state;
 
     const fullPath = LibraryContainer.getFullPath(sourceId, getPathByID);
     const parentId = this.properParentId(fullPath);
@@ -535,7 +535,7 @@ class LibraryContainer extends Component {
                 <Ref innerRef={this.handleContextRef}>
                   <div
                     className="source__content font_settings"
-                    style={{minHeight: `calc(100vh - 14px)`}}
+                    style={{ minHeight: `calc(100vh - 14px)` }}
                   >
                     {content}
                     {LibraryContainer.nextPrevButtons(this.props)}

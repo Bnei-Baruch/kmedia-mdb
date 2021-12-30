@@ -1,26 +1,26 @@
 import React from 'react';
-import {withNamespaces} from 'react-i18next';
-import {Icon, Image, Label, List} from 'semantic-ui-react';
-import {useSelector} from 'react-redux';
+import { withNamespaces } from 'react-i18next';
+import { Icon, Image, Label, List } from 'semantic-ui-react';
+import { useSelector } from 'react-redux';
 
-import {selectors as mdb} from '../../../../../redux/modules/mdb';
-import {selectors} from '../../../../../redux/modules/my';
-import {SectionLogo} from '../../../../../helpers/images';
-import {canonicalLink} from '../../../../../helpers/links';
-import {iconByContentTypeMap, MY_NAMESPACE_FOLDERS} from '../../../../../helpers/consts';
-import {OFFSET_TEXT_SEPARATOR} from '../../../../../helpers/scrollToSearch/helper';
-import {getMyItemKey} from '../../../../../helpers/my';
-import {stringify} from '../../../../../helpers/url';
+import { selectors as mdb } from '../../../../../redux/modules/mdb';
+import { selectors } from '../../../../../redux/modules/my';
+import { SectionLogo } from '../../../../../helpers/images';
+import { canonicalLink } from '../../../../../helpers/links';
+import { iconByContentTypeMap, MY_NAMESPACE_FOLDERS } from '../../../../../helpers/consts';
+import { OFFSET_TEXT_SEPARATOR } from '../../../../../helpers/scrollToSearch/helper';
+import { getMyItemKey } from '../../../../../helpers/my';
+import { stringify } from '../../../../../helpers/url';
 import Link from '../../../../Language/MultiLanguageLink';
 import Actions from './Actions';
-import {buildTitleByUnit} from './helper';
-import {selectors as sourcesSelectors, selectors as sources} from '../../../../../redux/modules/sources';
+import { buildTitleByUnit } from './helper';
+import { selectors as sourcesSelectors, selectors as sources } from '../../../../../redux/modules/sources';
 
-const BookmarksItem = ({bookmark, t}) => {
-  const {properties: {uid_prefix, ...urlParams} = false, folder_ids = [], name, subject_uid} = bookmark;
+const BookmarksItem = ({ bookmark, t }) => {
+  const { properties: { uid_prefix, ...urlParams } = false, folder_ids = [], name, subject_uid } = bookmark;
 
   const cu = useSelector(state => mdb.getDenormContentUnit(state.mdb, subject_uid));
-  const folderKeys = folder_ids.map(id => getMyItemKey(MY_NAMESPACE_FOLDERS, {id}).key);
+  const folderKeys = folder_ids.map(id => getMyItemKey(MY_NAMESPACE_FOLDERS, { id }).key);
   const folders = useSelector(state => folderKeys.map(k => selectors.getItemByKey(state.my, MY_NAMESPACE_FOLDERS, k)).filter(x => !!x));
   const getPathByID = useSelector(state => sources.getPathByID(state.sources));
   const areSourcesLoaded = useSelector(state => sourcesSelectors.areSourcesLoaded(state.sources));
@@ -28,7 +28,7 @@ const BookmarksItem = ({bookmark, t}) => {
   if (!areSourcesLoaded)
     return null;
 
-  let link = canonicalLink({...cu, id: `${uid_prefix || ''}${subject_uid}`});
+  let link = canonicalLink({ ...cu, id: `${uid_prefix || ''}${subject_uid}` });
   if (urlParams) {
     link = `${link}?${stringify(urlParams)}`;
     if (urlParams.activeTab)
