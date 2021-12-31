@@ -1,15 +1,15 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
 import { Segment } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 
 import { selectors as settings } from '../../../redux/modules/settings';
-import { selectors, actions } from '../../../redux/modules/assets';
+import { actions, selectors } from '../../../redux/modules/assets';
 import { selectSuitableLanguage } from '../../../helpers/language';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
-import { physicalFile, isEmpty } from '../../../helpers/utils';
+import { isEmpty, physicalFile } from '../../../helpers/utils';
 import { updateQuery } from '../../../helpers/url';
 import PDF, { isTaas, startsFrom } from '../../shared/PDF/PDF';
 import ScrollToSearch from '../../shared/DocToolbar/ScrollToSearch';

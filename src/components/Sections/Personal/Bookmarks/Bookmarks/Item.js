@@ -56,7 +56,7 @@ const BookmarksItem = ({ bookmark, t }) => {
       <List.Icon>
         <Link to={link}>
           <Image size="mini" verticalAlign="middle">
-            <SectionLogo name={icon} width='25' height='25' />
+            <SectionLogo name={icon} width="25" height="25" />
           </Image>
         </Link>
       </List.Icon>
