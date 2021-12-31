@@ -1,20 +1,20 @@
-import React, {Fragment, useState} from 'react';
+import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
-import {withNamespaces} from 'react-i18next';
-import {Button, Checkbox, Container, Grid, Header, List} from 'semantic-ui-react';
+import { withNamespaces } from 'react-i18next';
+import { Button, Checkbox, Container, Grid, Header, List } from 'semantic-ui-react';
 
-import {getEscapedRegExp} from '../../../helpers/utils';
+import { getEscapedRegExp } from '../../../helpers/utils';
 import clsx from 'clsx';
 
 const ITEMS_NUMBER = 5;
 
-const TopicBranch = ({root, match, selected, setSelected, t}) => {
+const TopicBranch = ({ root, match, selected, setSelected, t }) => {
   const [showAll, setShowAll] = useState();
   const regExp = getEscapedRegExp(match);
-  const {text, value} = root;
+  const { text, value } = root;
 
   const children = (text && regExp.test(text)) ? root.children
-    : root.children.filter(({text}) => text && regExp.test(text));
+    : root.children.filter(({ text }) => text && regExp.test(text));
 
   if (!children?.length > 0) return null;
 
@@ -33,13 +33,13 @@ const TopicBranch = ({root, match, selected, setSelected, t}) => {
       return null;
     }
 
-    const {text, value} = node;
+    const { text, value } = node;
 
     return (
       <List.Item key={value}>
         <Checkbox
           checked={selected?.includes(value)}
-          onChange={(e, {checked}) => handleChange(checked, value)}
+          onChange={(e, { checked }) => handleChange(checked, value)}
           label={text}
         />
       </List.Item>
@@ -61,7 +61,7 @@ const TopicBranch = ({root, match, selected, setSelected, t}) => {
           children.length >= ITEMS_NUMBER && (
             <Button
               basic
-              icon={{name: showAll ? 'minus' : 'plus', color: "blue"}}
+              icon={{ name: showAll ? 'minus' : 'plus', color: 'blue' }}
               className="topics_button clear_button"
               content={t(`topics.show-${showAll ? 'less' : 'more'}`)}
               onClick={handleShowAll}

@@ -1,20 +1,20 @@
-import React, {useMemo, useState} from 'react';
+import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import {withNamespaces} from 'react-i18next';
-import {useDispatch, useSelector} from 'react-redux';
-import {Button, Grid, Input, Modal, Header, Label, Icon, Container} from 'semantic-ui-react';
+import { withNamespaces } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
+import { Button, Grid, Input, Modal, Header, Label, Icon, Container } from 'semantic-ui-react';
 
-import {selectors} from '../../../redux/modules/tags';
+import { selectors } from '../../../redux/modules/tags';
 import isEqual from 'react-fast-compare';
 import TopicBranch from './TopicBranch';
-import {getTree} from "../../../helpers/topricTree";
-import {actions} from "../../../redux/modules/my";
-import {MY_NAMESPACE_LABELS} from "../../../helpers/consts";
-import AlertModal from "../AlertModal";
-import {selectors as settings} from "../../../redux/modules/settings";
-import {getLanguageDirection} from "../../../helpers/i18n-utils";
+import { getTree } from '../../../helpers/topricTree';
+import { actions } from '../../../redux/modules/my';
+import { MY_NAMESPACE_LABELS } from '../../../helpers/consts';
+import AlertModal from '../AlertModal';
+import { selectors as settings } from '../../../redux/modules/settings';
+import { getLanguageDirection } from '../../../helpers/i18n-utils';
 
-const SelectTopicsModal = ({t, open, onClose, source, trigger}) => {
+const SelectTopicsModal = ({ t, open, onClose, source, trigger }) => {
   const [selected, setSelected] = useState([])
   const [match, setMatch] = useState('');
   const [name, setName] = useState('');
@@ -25,41 +25,38 @@ const SelectTopicsModal = ({t, open, onClose, source, trigger}) => {
   const tree = useMemo(() => getTree(roots, getTagById, null, t)[0], [roots, getTagById, t]);
 
   const uiLanguage = useSelector(state => settings.getLanguage(state.settings));
-  const {language = uiLanguage} = source.properties;
+  const { language = uiLanguage } = source.properties;
   const dir = getLanguageDirection(language);
 
   const dispatch = useDispatch();
 
   const create = () => {
 
-    const params = {name, tag_uids: selected, language, ...source};
+    const params = { name, tag_uids: selected, language, ...source };
 
     dispatch(actions.add(MY_NAMESPACE_LABELS, params));
   };
 
-  const renderColumn = col => {
-    return (
-      <Grid.Column key={col.value}>
-        <Header
-          as="h2"
-          content={col.text}
-          className="topic_row_title"
-        />
-        {
-          col.children.map(r => (
-            <TopicBranch
-              key={r.value}
-              match={match}
-              root={r}
-              selected={selected}
-              setSelected={setSelected}
-            />
-          ))
-        }
-      </Grid.Column>
-    )
-
-  }
+  const renderColumn = col => (
+    <Grid.Column key={col.value}>
+      <Header
+        as="h2"
+        content={col.text}
+        className="topic_row_title"
+      />
+      {
+        col.children.map(r => (
+          <TopicBranch
+            key={r.value}
+            match={match}
+            root={r}
+            selected={selected}
+            setSelected={setSelected}
+          />
+        ))
+      }
+    </Grid.Column>
+  )
 
 
   const handleFilterChange = (e, data) => setMatch(data.value);

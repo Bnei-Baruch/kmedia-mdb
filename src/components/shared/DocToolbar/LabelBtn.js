@@ -1,11 +1,11 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import {withNamespaces} from 'react-i18next';
-import {Button, MenuItem, Popup} from 'semantic-ui-react';
+import { withNamespaces } from 'react-i18next';
+import { Button, MenuItem, Popup } from 'semantic-ui-react';
 import AlertModal from '../AlertModal';
 import SelectTopicsModal from '../SelectTopicsModal/SelectTopicsModal';
 
-const LabelBtn = ({t, source}) => {
+const LabelBtn = ({ t, source }) => {
   const [open, setOpen] = useState(false);
 
 

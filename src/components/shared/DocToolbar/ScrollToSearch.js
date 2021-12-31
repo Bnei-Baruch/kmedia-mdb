@@ -1,50 +1,48 @@
-import React, {useContext, useEffect, useMemo, useRef, useState} from 'react';
-import {useLocation} from 'react-router-dom';
+import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-import {DeviceInfoContext, SessionInfoContext} from '../../../helpers/app-contexts';
-import {getQuery} from '../../../helpers/url';
+import { DeviceInfoContext, SessionInfoContext } from '../../../helpers/app-contexts';
+import { getQuery } from '../../../helpers/url';
 import {
   buildSearchLinkFromSelection,
   DOM_ROOT_ID, OFFSET_TEXT_SEPARATOR,
   prepareScrollToSearch
 } from '../../../helpers/scrollToSearch/helper';
 import Toolbar from './Toolbar';
-import {MY_NAMESPACE_LABELS, MY_NAMESPACE_REACTIONS, SCROLL_SEARCH_ID} from '../../../helpers/consts';
-import {useDispatch, useSelector} from "react-redux";
-import {actions, selectors as my} from "../../../redux/modules/my";
-import LabelMark from "./LabelMark";
+import { MY_NAMESPACE_LABELS, MY_NAMESPACE_REACTIONS, SCROLL_SEARCH_ID } from '../../../helpers/consts';
+import { useDispatch, useSelector } from 'react-redux';
+import { actions, selectors as my } from '../../../redux/modules/my';
+import LabelMark from './LabelMark';
 
 //its not mus be accurate number (average number letters per line)
 const LETTERS_ON_LINE = 20
 
-const buildOffsets = (labels) => {
-  return labels.map(({data: {srchstart, srchend}, uid}) => {
-    let start = Math.round(Number(srchstart?.split(OFFSET_TEXT_SEPARATOR)[1]) / LETTERS_ON_LINE);
-    start = Math.round(start / LETTERS_ON_LINE);
+const buildOffsets = labels => labels.map(({ data: { srchstart, srchend }, uid }) => {
+  let start = Math.round(Number(srchstart?.split(OFFSET_TEXT_SEPARATOR)[1]) / LETTERS_ON_LINE);
+  start = Math.round(start / LETTERS_ON_LINE);
 
-    let end = Math.round(Number(srchend?.split(OFFSET_TEXT_SEPARATOR)[1]) / LETTERS_ON_LINE);
-    end = Math.round(end / LETTERS_ON_LINE);
+  let end = Math.round(Number(srchend?.split(OFFSET_TEXT_SEPARATOR)[1]) / LETTERS_ON_LINE);
+  end = Math.round(end / LETTERS_ON_LINE);
 
-    return {
-      start: Math.min(start, end) || Math.max(start, end),
-      end: Math.max(start, end),
-      uid
-    }
-  }).reduce((acc, l, i, arr) => {
-    const cross = arr.filter(x => !(x.start > l.end + 2 || x.end < l.start - 2))
-    cross.sort((a, b) => (b.end - b.start) - (a.end - a.start))
-    const x = cross.findIndex(x => x.uid === l.uid)
-    const y = cross.filter(x => x.start - l.start === 0).findIndex(x => x.uid === l.uid)
-    acc[l.uid] = {x, y}
-    return acc
-  }, {})
-}
+  return {
+    start: Math.min(start, end) || Math.max(start, end),
+    end: Math.max(start, end),
+    uid
+  }
+}).reduce((acc, l, i, arr) => {
+  const cross = arr.filter(x => !(x.start > l.end + 2 || x.end < l.start - 2))
+  cross.sort((a, b) => (b.end - b.start) - (a.end - a.start))
+  const x = cross.findIndex(x => x.uid === l.uid)
+  const y = cross.filter(x => x.start - l.start === 0).findIndex(x => x.uid === l.uid)
+  acc[l.uid] = { x, y }
+  return acc
+}, {})
 
-const ScrollToSearch = ({source, data, language, urlParams = '', pathname}) => {
+const ScrollToSearch = ({ source, data, language, urlParams = '', pathname }) => {
 
-  const {enableShareText: {isShareTextEnabled, setEnableShareText}} = useContext(SessionInfoContext);
-  const {isMobileDevice} = useContext(DeviceInfoContext);
+  const { enableShareText: { isShareTextEnabled, setEnableShareText } } = useContext(SessionInfoContext);
+  const { isMobileDevice } = useContext(DeviceInfoContext);
 
   const [searchUrl, setSearchUrl] = useState();
   const [barPosition, setBarPosition] = useState({});
@@ -54,8 +52,8 @@ const ScrollToSearch = ({source, data, language, urlParams = '', pathname}) => {
   const containerRef = useRef();
 
   const location = useLocation();
-  const {srchstart, srchend, highlightAll} = getQuery(location);
-  const search = {srchstart, srchend};
+  const { srchstart, srchend, highlightAll } = getQuery(location);
+  const search = { srchstart, srchend };
   const labels = useSelector(state => my.getList(state.my, MY_NAMESPACE_LABELS));
   const offsets = useMemo(() => buildOffsets(labels), [labels])
 
@@ -66,10 +64,10 @@ const ScrollToSearch = ({source, data, language, urlParams = '', pathname}) => {
 
   const dispatch = useDispatch();
 
-  const {subject_type, subject_uid} = source || {}
+  const { subject_type, subject_uid } = source || {}
   useEffect(() => {
     if (subject_type && subject_uid) {
-      dispatch(actions.fetch(MY_NAMESPACE_LABELS, {subject_type, subject_uid}));
+      dispatch(actions.fetch(MY_NAMESPACE_LABELS, { subject_type, subject_uid }));
     }
   }, [dispatch, subject_type, subject_uid]);
 
@@ -91,12 +89,12 @@ const ScrollToSearch = ({source, data, language, urlParams = '', pathname}) => {
       if (e.path?.some(x => (typeof x.className === 'string') && x.className.includes('search-on-doc--toolbar')))
         return false;
 
-      const {url, text, query, element} = buildSearchLinkFromSelection(language, pathname);
+      const { url, text, query, element } = buildSearchLinkFromSelection(language, pathname);
       if (url) {
         setSearchText(text);
         const rect = element.getBoundingClientRect();
         const recContainer = containerRef.current?.getBoundingClientRect();
-        setBarPosition({y: rect.top - recContainer.top});
+        setBarPosition({ y: rect.top - recContainer.top });
         setSearchUrl(`${url}&${urlParams}`);
         setSearchQuery(query);
       }
@@ -120,7 +118,7 @@ const ScrollToSearch = ({source, data, language, urlParams = '', pathname}) => {
   const renderShareBar = () => {
     if (isMobileDevice || !searchUrl)
       return null;
-    source.properties = {...source?.properties || {}, ...searchQuery};
+    source.properties = { ...source?.properties || {}, ...searchQuery };
     return (
       <Toolbar
         source={source}
@@ -157,7 +155,7 @@ const ScrollToSearch = ({source, data, language, urlParams = '', pathname}) => {
         <div
           id={DOM_ROOT_ID}
           onMouseDown={handleOnMouseDown}
-          dangerouslySetInnerHTML={{__html}}
+          dangerouslySetInnerHTML={{ __html }}
         />
       </div>
     </div>

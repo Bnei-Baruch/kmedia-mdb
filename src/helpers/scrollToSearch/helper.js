@@ -1,10 +1,10 @@
-import {SCROLL_SEARCH_ID} from '../consts';
-import {stringify} from '../url';
-import {RenderHighlightAll} from './RenderHighlightAll';
-import {RenderHighlightBorder} from './RenderHighlightBorder';
-import {RenderHighlightSingleString} from './RenderHighlightSingleString';
-import {RenderBase} from "./RenderBase";
-import {RenderNoSearch} from "./RenderNoSearch";
+import { SCROLL_SEARCH_ID } from '../consts';
+import { stringify } from '../url';
+import { RenderHighlightAll } from './RenderHighlightAll';
+import { RenderHighlightBorder } from './RenderHighlightBorder';
+import { RenderHighlightSingleString } from './RenderHighlightSingleString';
+import { RenderBase } from './RenderBase';
+import { RenderNoSearch } from './RenderNoSearch';
 
 /* eslint-disable  no-useless-escape */
 export const KEEP_LETTERS_RE = /[".,\/#!$%\^&\*;:{}=\-_`~()\[\]‘’”“]/g;
@@ -16,7 +16,7 @@ const MIN_NUMBER_WORDS_IN_LINK = 5;
 /***
  * help functions for render html
  */
-export const prepareScrollToSearch = (data, {srchstart: start, srchend: end}, highlightAll = false, labels) => {
+export const prepareScrollToSearch = (data, { srchstart: start, srchend: end }, highlightAll = false, labels) => {
   if (!start?.length && !labels?.length) {
     return data;
   }
@@ -62,7 +62,7 @@ export const filterTagsByBorder = (from, to, tags) => {
     result.push(p);
   }
 
-  return {tagsPositionInner: result, from, to};
+  return { tagsPositionInner: result, from, to };
 };
 
 export const textToHtml = (source, from, to, allTags, isBold = true) => {
@@ -85,7 +85,7 @@ export const textToHtml = (source, from, to, allTags, isBold = true) => {
       const r = tags.reduce((acc, t, i) => {
         const p = t.noHtmlPos - from;
         // eslint-disable-next-line prefer-const
-        let {prevPosition, result} = acc;
+        let { prevPosition, result } = acc;
         if (p !== 0) {
           const s = word.slice(prevPosition, p);
           prevPosition += s.length;
@@ -97,8 +97,8 @@ export const textToHtml = (source, from, to, allTags, isBold = true) => {
           result.push(`<em class="${cssClass}">${word.slice(p)}</em>`);
         }
 
-        return {prevPosition, result};
-      }, {prevPosition: 0, result: []});
+        return { prevPosition, result };
+      }, { prevPosition: 0, result: [] });
       return r.result.join('');
     }).join(' ');
 };
@@ -137,7 +137,7 @@ export const wrapSeekingPlace = (data, tags, fromNohtml, toNoHtml) => {
   let after = insertAdded(data, tags, to, closeTagP.pos)
   after += insertAdded(data, tags, closeTagP.pos, -1).replace(/<\/p>|<\/h\d>/, x => `${x}</div>`);
 
-  return {before, after};
+  return { before, after };
 };
 
 export const insertAdded = (html, allTags, from, to) => {
@@ -157,12 +157,12 @@ export const insertAdded = (html, allTags, from, to) => {
 export const DOM_ROOT_ID = 'roodNodeOfShareText';
 export const buildSearchLinkFromSelection = (language, pathname) => {
   if (!window?.getSelection) {
-    return {url: null};
+    return { url: null };
   }
 
   const sel = window.getSelection();
   if (sel.isCollapsed || !sel.anchorNode || !sel.focusNode) {
-    return {url: null};
+    return { url: null };
   }
 
   const isForward = isSelectionForward(sel);
@@ -173,21 +173,21 @@ export const buildSearchLinkFromSelection = (language, pathname) => {
 
   pathname = pathname || window.location.pathname;
 
-  const {protocol, hostname, port} = window.location;
+  const { protocol, hostname, port } = window.location;
   const sStart = words.slice(0, MIN_NUMBER_WORDS_IN_LINK).join(' ');
   const sEnd = words.slice(-1 * MIN_NUMBER_WORDS_IN_LINK).join(' ');
 
-  const start = isForward ? {node: sel.anchorNode, offset: sel.anchorOffset}
-    : {node: sel.focusNode, offset: sel.focusOffset};
+  const start = isForward ? { node: sel.anchorNode, offset: sel.anchorOffset }
+    : { node: sel.focusNode, offset: sel.focusOffset };
 
-  const end = isForward ? {node: sel.focusNode, offset: sel.focusOffset}
-    : {node: sel.anchorNode, offset: sel.anchorOffset};
+  const end = isForward ? { node: sel.focusNode, offset: sel.focusOffset }
+    : { node: sel.anchorNode, offset: sel.anchorOffset };
 
   const sOffset = findOffsetOfDOMNode(start.node, start.offset);
   const eOffset = findOffsetOfDOMNode(end.node, end.offset);
 
   if (sOffset === null || eOffset === null)
-    return {url: null, text: null};
+    return { url: null, text: null };
 
   const query = {
     srchstart: wholeStartWord(start.node.textContent, start.offset) + sStart + OFFSET_TEXT_SEPARATOR + sOffset,
@@ -201,20 +201,20 @@ export const buildSearchLinkFromSelection = (language, pathname) => {
   const url = `${protocol}//${hostname}${port ? `:${port}` : ''}${pathname}?${stringify(query)}`;
 
   const element = sel.focusNode.nodeName.includes('text') ? sel.focusNode.parentElement : sel.focusNode;
-  return {url, text: sel.toString(), query, element};
+  return { url, text: sel.toString(), query, element };
 };
 
 const buildLinkForShortSelect = (words, sel, isForward, language) => {
 
-  const {protocol, hostname, port, pathname} = window.location;
+  const { protocol, hostname, port, pathname } = window.location;
 
-  const {node, offset} = isForward ? {node: sel.anchorNode, offset: sel.anchorOffset}
-    : {node: sel.focusNode, offset: sel.focusOffset};
+  const { node, offset } = isForward ? { node: sel.anchorNode, offset: sel.anchorOffset }
+    : { node: sel.focusNode, offset: sel.focusOffset };
 
   const fullOffset = findOffsetOfDOMNode(node, offset);
 
   if (fullOffset === null)
-    return {url: null, text: null};
+    return { url: null, text: null };
 
   const query = {
     srchstart: wholeStartWord(node.textContent, offset) + words.join(' ') + OFFSET_TEXT_SEPARATOR + fullOffset,
@@ -226,7 +226,7 @@ const buildLinkForShortSelect = (words, sel, isForward, language) => {
 
   const url = `${protocol}//${hostname}${port ? `:${port}` : ''}${pathname}?${stringify(query)}`;
   const element = sel.focusNode.nodeName.includes('text') ? sel.focusNode.parentElement : sel.focusNode;
-  return {url, text: sel.toString(), query, element};
+  return { url, text: sel.toString(), query, element };
 };
 
 const findOffsetOfDOMNode = (node, offset) => {

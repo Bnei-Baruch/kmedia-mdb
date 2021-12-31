@@ -1,21 +1,21 @@
-import React, {useContext, useState} from 'react';
+import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
-import {withNamespaces} from 'react-i18next';
-import {Button, Confirm, MenuItem, Modal, Popup} from 'semantic-ui-react';
+import { withNamespaces } from 'react-i18next';
+import { Button, Confirm, MenuItem, Modal, Popup } from 'semantic-ui-react';
 import AlertModal from '../AlertModal';
 import BookmarkForm from '../SaveBookmark/BookmarkForm';
-import {useSelector} from 'react-redux';
-import {getLanguageDirection} from '../../../helpers/i18n-utils';
-import {DeviceInfoContext} from '../../../helpers/app-contexts';
-import {selectors as settings} from '../../../redux/modules/settings';
-import SelectTopicsModal from "../SelectTopicsModal/SelectTopicsModal";
+import { useSelector } from 'react-redux';
+import { getLanguageDirection } from '../../../helpers/i18n-utils';
+import { DeviceInfoContext } from '../../../helpers/app-contexts';
+import { selectors as settings } from '../../../redux/modules/settings';
+import SelectTopicsModal from '../SelectTopicsModal/SelectTopicsModal';
 
-const BookmarkBtn = ({t, source, close}) => {
+const BookmarkBtn = ({ t, source, close }) => {
   const [open, setOpen] = useState();
   const [confirm, setConfirm] = useState();
   const [openTag, setOpenTag] = useState();
 
-  const {isMobileDevice} = useContext(DeviceInfoContext);
+  const { isMobileDevice } = useContext(DeviceInfoContext);
   const language = useSelector(state => settings.getLanguage(state.settings));
   const dir = getLanguageDirection(language);
 
@@ -29,6 +29,7 @@ const BookmarkBtn = ({t, source, close}) => {
       close();
       return
     }
+
     setConfirm(true);
     setOpen(false);
   };

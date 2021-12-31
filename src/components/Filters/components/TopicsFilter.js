@@ -6,7 +6,7 @@ import { isEmpty } from '../../../helpers/utils';
 import { selectors } from '../../../redux/modules/tags';
 import { selectors as stats } from '../../../redux/modules/stats';
 import HierarchicalFilter from './HierarchicalFilter';
-import {getTree} from "../../../helpers/topricTree";
+import { getTree } from '../../../helpers/topricTree';
 
 const TagsFilter = props => {
   const roots      = useSelector(state => selectors.getRoots(state.tags));

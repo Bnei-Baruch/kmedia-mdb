@@ -1,10 +1,10 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import {withNamespaces} from 'react-i18next';
-import {Button, Popup} from 'semantic-ui-react';
-import {SectionLogo} from "../../../helpers/images";
+import { withNamespaces } from 'react-i18next';
+import { Button, Popup } from 'semantic-ui-react';
+import { SectionLogo } from '../../../helpers/images';
 
-const LabelMark = ({label, offset, t}) => {
+const LabelMark = ({ label, offset, t }) => {
   const [top, setTop] = useState(0);
   const [bottom, setBottom] = useState(0);
 
@@ -24,10 +24,10 @@ const LabelMark = ({label, offset, t}) => {
     return null
 
   return (
-    <div className="label_mark" style={{top, height: bottom - top + 20, left: offset.x * 5 + 'px'}}>
+    <div className="label_mark" style={{ top, height: bottom - top + 20, left: `${offset.x * 5  }px` }}>
       <Popup
         trigger={
-          <Button basic className="clear_button" style={{marginTop: offset.y * 20 + 'px'}}>
+          <Button basic className="clear_button" style={{ marginTop: `${offset.y * 20  }px` }}>
             <SectionLogo name="topics" width='25' height='25'/>
           </Button>
         }

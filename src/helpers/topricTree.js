@@ -1,4 +1,4 @@
-import {TOPICS_FOR_DISPLAY} from "./consts";
+import { TOPICS_FOR_DISPLAY } from './consts';
 
 export const getTree = (roots, getTagById, cuStats, t) => (
   [

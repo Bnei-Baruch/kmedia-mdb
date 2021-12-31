@@ -1,4 +1,4 @@
-import {KEEP_LETTERS_RE, OFFSET_TEXT_SEPARATOR} from './helper';
+import { KEEP_LETTERS_RE, OFFSET_TEXT_SEPARATOR } from './helper';
 
 export class RenderBase {
   tagPositions = [];
@@ -20,14 +20,14 @@ export class RenderBase {
     let diff = 0;
     this.dataCleanHtml = this.source
       .replace(/<.+?>/g, (str, pos) => {
-        this.tagPositions.push({str, pos, noHtmlPos: pos - diff});
+        this.tagPositions.push({ str, pos, noHtmlPos: pos - diff });
         diff += str.length;
         return '';
       });
   }
 
   defineMatch() {
-    const {start, end} = this.getMatches();
+    const { start, end } = this.getMatches();
     if (!start || !end)
       return;
 
@@ -46,19 +46,21 @@ export class RenderBase {
   insertLabels(labels) {
     if (!labels?.length)
       return
-    const lPositions = labels.reduce((acc, {data: {srchstart, srchend}, uid}) => {
+    const lPositions = labels.reduce((acc, { data: { srchstart, srchend }, uid }) => {
       const start = srchstart?.split(OFFSET_TEXT_SEPARATOR);
       if (start) {
         const match = this.findClose(this.buildMatch(start[0], this.dataCleanHtml), start[1])
         const noHtmlPos = match?.index - 1
-        acc.push({str: `<span class="label_pos" id="start_${uid}"></span>`, noHtmlPos, isAdded: true});
+        acc.push({ str: `<span class="label_pos" id="start_${uid}"></span>`, noHtmlPos, isAdded: true });
       }
+
       const end = srchend?.split(OFFSET_TEXT_SEPARATOR);
       if (end) {
         const match = this.findClose(this.buildMatch(end[0], this.dataCleanHtml), end[1])
         const noHtmlPos = match?.index + end[0].length + 1
-        acc.push({str: `<span class="label_pos" id="end_${uid}"></span>`, noHtmlPos, isAdded: true});
+        acc.push({ str: `<span class="label_pos" id="end_${uid}"></span>`, noHtmlPos, isAdded: true });
       }
+
       return acc
     }, [])
     lPositions.sort((a, b) => a.noHtmlPos - b.noHtmlPos)
@@ -89,6 +91,7 @@ export class RenderBase {
       j++
       diffl = diffl + lj.str.length
     }
+
     tagPositions.sort((a, b) => a.pos - b.pos);
     this.tagPositions = tagPositions;
   }
