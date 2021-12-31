@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
-import { useSelector } from 'react-redux';
+// import { useSelector } from 'react-redux';
 import { Player, usePlayerContext, Ui } from '@vime/react';
 
 import * as shapes from '../../shapes';
@@ -9,7 +9,7 @@ import ClientChronicles from '../../../helpers/clientChronicles';
 import playerHelper from '../../../helpers/player';
 import { isEmpty } from '../../../helpers/utils';
 import { MT_VIDEO, VS_DEFAULT, VS_FHD, VS_HD, VS_NHD } from '../../../helpers/consts';
-import { selectors as settings } from '../../../redux/modules/settings';
+// import { selectors as settings } from '../../../redux/modules/settings';
 import { PLAYER_MODE } from '../constants';
 import ShareForm from '../Share/ShareForm';
 
@@ -65,13 +65,13 @@ const VmPlayer = ({
   t,
 }) => {
   const player = useRef(null);
-  const uiLanguage          = useSelector(state => settings.getLanguage(state.settings));
+  // const uiLanguage          = useSelector(state => settings.getLanguage(state.settings));
   // const contentLanguage     = useSelector(state => settings.getContentLanguage(state.settings));
 
   const [duration]                    = usePlayerContext(player, 'duration', 0);
   const [currentTime, setCurrentTime] = usePlayerContext(player, 'currentTime', 0);
   const [playbackReady]               = usePlayerContext(player, 'playbackReady', false);
-  const [mediaType]                   = usePlayerContext(player, 'mediaType', undefined);
+  // const [mediaType]                   = usePlayerContext(player, 'mediaType', undefined);
 
   const [source, setSource]             = useState({});
   const [isVideo, setIsVideo]           = useState(item.mediaType === MT_VIDEO);
@@ -144,6 +144,7 @@ const VmPlayer = ({
     <Player ref={player} theme="dark" playsInline
       style={{ '--vm-control-spacing': 0, }}
       debug={true}
+      currentTime={currentTime}
     >
       <VmProvider
         isVideo={isVideo}
