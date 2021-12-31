@@ -28,13 +28,7 @@ const buildPlaybackRateSubmenu = (playbackRates, currentRate, playback) => (
   </Submenu>
 );
 
-const onPlaybackQualitySelect = (event, callback, setPlaybackQuality) => {
-  const radio = event.target.value;
-  setPlaybackQuality(radio);
-  callback(radio);
-};
-
-const buildPlaybackQualitySubmenu = (isVideo, videoQuality, setPlaybackQuality, videoQualities, onQualityChange) => {
+const buildPlaybackQualitySubmenu = (isVideo, videoQuality, videoQualities, onQualityChange) => {
   if (!isVideo) {
     return null;
   }
@@ -45,7 +39,7 @@ const buildPlaybackQualitySubmenu = (isVideo, videoQuality, setPlaybackQuality, 
 
   return (
     <Submenu label="Quality" hint={VS_NAMES[videoQuality]}>
-      <MenuRadioGroup value={videoQuality} onVmCheck={e => onPlaybackQualitySelect(e, onQualityChange, setPlaybackQuality)}>
+      <MenuRadioGroup value={videoQuality} onVmCheck={e => onQualityChange(e.target.value)}>
         {
           videoQualities.map(quality => (
             <MenuRadio key={`quality-${quality}`} label={VS_NAMES[quality]} value={quality} />
@@ -87,7 +81,6 @@ export const VmSettings = ({ isVideo, videoQuality, videoQualities, onQualityCha
 
   const [playbackRates]                 = usePlayerContext(ref, 'playbackRates', []);
   const [playbackRate, setPlaybackRate] = usePlayerContext(ref, 'playbackRate', 1);
-  const [_, setPlaybackQuality]         = usePlayerContext(ref, 'playbackQuality', 'HD');
 
   const onPlaybackRateSelect = event => {
     const rate = parseFloat(event.target.value);
@@ -97,7 +90,7 @@ export const VmSettings = ({ isVideo, videoQuality, videoQualities, onQualityCha
   return (
     <Settings hideTooltip id="1" ref={ref}>
       {buildPlaybackRateSubmenu(playbackRates, playbackRate, onPlaybackRateSelect)}
-      {buildPlaybackQualitySubmenu(isVideo, videoQuality, setPlaybackQuality, videoQualities, onQualityChange)}
+      {buildPlaybackQualitySubmenu(isVideo, videoQuality, videoQualities, onQualityChange)}
       {buildAVSubmenu(isVideo, onSwitchAV)}
       {buildLanguageMenu(selectedLanguage, languages, onLanguageChange)}
     </Settings>
