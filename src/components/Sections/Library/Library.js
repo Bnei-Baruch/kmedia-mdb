@@ -1,15 +1,15 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
 import { Segment } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 
 import { selectors as settings } from '../../../redux/modules/settings';
-import { selectors, actions } from '../../../redux/modules/assets';
+import { actions, selectors } from '../../../redux/modules/assets';
 import { selectSuitableLanguage } from '../../../helpers/language';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
-import { physicalFile, isEmpty } from '../../../helpers/utils';
+import { isEmpty, physicalFile } from '../../../helpers/utils';
 import { updateQuery } from '../../../helpers/url';
 import PDF, { isTaas, startsFrom } from '../../shared/PDF/PDF';
 import ScrollToSearch from '../../shared/DocToolbar/ScrollToSearch';
@@ -31,31 +31,31 @@ export const checkRabashGroupArticles = source => {
 };
 
 export const buildBookmarkSource = source => {
-  const { uid, isGr } = checkRabashGroupArticles(source)
-  const s = {
+  const { uid, isGr } = checkRabashGroupArticles(source);
+  const s             = {
     subject_uid: uid,
     subject_type: CT_SOURCE
   };
   if (isGr) {
-    s.properties = { uid_prefix: 'gr-' }
+    s.properties = { uid_prefix: 'gr-' };
   }
 
-  return s
-}
+  return s;
+};
 
 const Library = ({ data, source, downloadAllowed, t }) => {
-  const location = useLocation();
-  const history = useHistory();
+  const location                    = useLocation();
+  const history                     = useHistory();
   const [pageNumber, setPageNumber] = useState(getPageFromLocation(location));
-  const [language, setLanguage] = useState(null);
-  const [languages, setLanguages] = useState([]);
-  const [playing, setPlaying] = useState(false);
-  const [audioInfo, setAudioInfo] = useState(null);
+  const [language, setLanguage]     = useState(null);
+  const [languages, setLanguages]   = useState([]);
+  const [playing, setPlaying]       = useState(false);
+  const [audioInfo, setAudioInfo]   = useState(null);
 
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
-  const doc2htmlById = useSelector(state => selectors.getDoc2htmlById(state.assets));
-  const uiLanguage = useSelector(state => settings.getLanguage(state.settings));
+  const doc2htmlById    = useSelector(state => selectors.getDoc2htmlById(state.assets));
+  const uiLanguage      = useSelector(state => settings.getLanguage(state.settings));
   const contentLanguage = useSelector(state => settings.getContentLanguage(state.settings, location));
 
   useEffect(() => {
@@ -130,9 +130,9 @@ const Library = ({ data, source, downloadAllowed, t }) => {
 
   const getAudioPlayer = () => audioInfo && <span className="library-audio-player">
     {playing ?
-      <audio controls src={audioInfo?.url} autoPlay={true} preload="metadata"/> :
+      <audio controls src={audioInfo?.url} autoPlay={true} preload="metadata" /> :
       <a onClick={() => setPlaying(true)}>{t('sources-library.play-audio-file')}<PlayAudioIcon
-        className="playAudioIcon"/></a>
+        className="playAudioIcon" /></a>
     }
   </span>;
 
@@ -221,7 +221,7 @@ const Library = ({ data, source, downloadAllowed, t }) => {
   return (
     <div>
       {languageBar}
-      <Download path={content.url} mimeType={mimeType} downloadAllowed={downloadAllowed} filename={content.name}/>
+      <Download path={content.url} mimeType={mimeType} downloadAllowed={downloadAllowed} filename={content.name} />
       {contentsToDisplay}
     </div>
   );

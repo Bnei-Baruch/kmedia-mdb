@@ -23,7 +23,7 @@ import LibraryBar from './LibraryBar';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { getQuery } from '../../../helpers/url';
-import { CT_SOURCE, SCROLL_SEARCH_ID } from '../../../helpers/consts';
+import { SCROLL_SEARCH_ID } from '../../../helpers/consts';
 
 const waitForRenderElement = async (attempts = 0) => {
   if (attempts > 10) return Promise.reject();
@@ -79,7 +79,7 @@ class LibraryContainer extends Component {
   };
 
   shouldComponentUpdate(nextProps, nextState) {
-    const { sourceId, indexMap, language, contentLanguage, sortBy, areSourcesLoaded } = this.props;
+    const { sourceId, indexMap, language, contentLanguage, sortBy, areSourcesLoaded }                    = this.props;
     const { lastLoadedId, isReadable, fontSize, fontType, theme, tocIsActive, match, scrollTopPosition } = this.state;
 
     const equalProps = sourceId === nextProps.sourceId
@@ -107,7 +107,7 @@ class LibraryContainer extends Component {
     window.addEventListener('resize', this.updateSticky);
     window.addEventListener('load', this.updateSticky);
 
-    const { sourceId, areSourcesLoaded, history } = this.props;
+    const { sourceId, areSourcesLoaded, history }                                      = this.props;
     const { location: { state: { tocIsActive } = { state: { tocIsActive: false } } } } = history;
 
     if (tocIsActive || sourceId === 'grRABASH') {
@@ -132,7 +132,7 @@ class LibraryContainer extends Component {
 
     const { isReadable, scrollTopPosition, tocIsActive, doScroll = true } = this.state;
 
-    const { srchstart } = getQuery(location);
+    const { srchstart }    = getQuery(location);
     const scrollingElement = isReadable ? this.articleRef : document.scrollingElement;
 
     if (srchstart && doScroll) {
@@ -147,7 +147,7 @@ class LibraryContainer extends Component {
 
     // hide toc if only one item
     if (tocIsActive) {
-      const fullPath = LibraryContainer.getFullPath(sourceId, getPathByID);
+      const fullPath    = LibraryContainer.getFullPath(sourceId, getPathByID);
       const activeIndex = getIndex(fullPath[1], fullPath[2]);
 
       if (activeIndex === -1) {
@@ -219,7 +219,7 @@ class LibraryContainer extends Component {
   };
 
   handleIsReadable = () => {
-    const { isReadable } = this.state;
+    const { isReadable }    = this.state;
     const scrollTopPosition = this.getScrollTop();
     this.setState({ isReadable: !isReadable, scrollTopPosition });
   };
@@ -237,21 +237,21 @@ class LibraryContainer extends Component {
   header = (sourceId, properParentId) => {
     const { getSourceById } = this.props;
 
-    const source = getSourceById(sourceId);
+    const source             = getSourceById(sourceId);
     const properParentSource = getSourceById(properParentId);
 
     if (!source || !properParentSource) {
-      return <div/>;
+      return <div />;
     }
 
     const { name: parentName, description, parent_id: parentId } = properParentSource;
-    const parentSource = getSourceById(parentId);
+    const parentSource                                           = getSourceById(parentId);
 
     if (!parentSource) {
       return <Segment basic>&nbsp;</Segment>;
     }
 
-    const { name: sourceName } = source;
+    const { name: sourceName }                      = source;
     const { name: kabName, full_name: kabFullName } = parentSource;
 
     let displayName = kabFullName || kabName;
@@ -263,9 +263,9 @@ class LibraryContainer extends Component {
 
     return (
       <Header size="small">
-        <Helmets.Basic title={`${sourceName} - ${parentName} - ${kabName}`} description={description}/>
+        <Helmets.Basic title={`${sourceName} - ${parentName} - ${kabName}`} description={description} />
         <Ref innerRef={this.handleContentHeaderRef}>
-          <div/>
+          <div />
         </Ref>
         <Header.Subheader>
           <small style={{ width: `${contentHeaderWidth}px` }}>
@@ -284,7 +284,7 @@ class LibraryContainer extends Component {
 
   sortButton = () => {
     const { sortBy, sourcesSortBy } = this.props;
-    const sortOrder = sortBy === 'AZ'
+    const sortOrder                 = sortBy === 'AZ'
       ? 'Book'
       : 'AZ';
 
@@ -323,7 +323,7 @@ class LibraryContainer extends Component {
 
   matchString = (parentId, t) => {
     const { NotToFilter } = this.props;
-    const { match } = this.state;
+    const { match }       = this.state;
     if (NotToFilter.findIndex(a => a === parentId) !== -1) {
       return null;
     }
@@ -358,8 +358,8 @@ class LibraryContainer extends Component {
 
   getContent = () => {
     const { sourceId, indexMap, t } = this.props;
-    const index = isEmpty(sourceId) ? {} : indexMap[sourceId];
-    const { err, data } = index || {};
+    const index                     = isEmpty(sourceId) ? {} : indexMap[sourceId];
+    const { err, data }             = index || {};
 
     let content;
 
@@ -367,7 +367,7 @@ class LibraryContainer extends Component {
       content = getSourceErrorSplash(err, t);
     } else {
       const downloadAllowed = this.context.deviceInfo.os.name !== 'iOS';
-      content =
+      content               =
         <Library
           source={sourceId}
           data={data}
@@ -410,10 +410,10 @@ class LibraryContainer extends Component {
   static getNextPrevDetails(isNext, language, t) {
     const langDir = getLanguageDirection(language);
 
-    const title = isNext ? t('buttons.next-article') : t('buttons.previous-article');
+    const title         = isNext ? t('buttons.next-article') : t('buttons.previous-article');
     const labelPosition = isNext ? 'right' : 'left';
-    const icon = isNext ? (langDir === 'ltr' ? 'forward' : 'backward') : (langDir === 'ltr' ? 'backward' : 'forward');
-    const buttonAlign = isNext ? (langDir === 'ltr' ? 'right' : 'left') : (langDir === 'ltr' ? 'left' : 'right');
+    const icon          = isNext ? (langDir === 'ltr' ? 'forward' : 'backward') : (langDir === 'ltr' ? 'backward' : 'forward');
+    const buttonAlign   = isNext ? (langDir === 'ltr' ? 'right' : 'left') : (langDir === 'ltr' ? 'left' : 'right');
 
     return { title, labelPosition, buttonAlign, icon };
   }
@@ -424,8 +424,8 @@ class LibraryContainer extends Component {
     }
 
     const { title, labelPosition, buttonAlign, icon } = LibraryContainer.getNextPrevDetails(isNext, language, t);
-    const sourceId = children[index];
-    const source = getSourceById(sourceId);
+    const sourceId                                    = children[index];
+    const source                                      = getSourceById(sourceId);
     return (
       <Button
         onClick={e => {
@@ -437,7 +437,7 @@ class LibraryContainer extends Component {
         icon={icon}
         labelPosition={labelPosition}
         content={title}
-        title={source.name}/>
+        title={source.name} />
     );
   }
 
@@ -448,10 +448,10 @@ class LibraryContainer extends Component {
 
     const { isReadable, fontSize, theme, fontType, tocIsActive, match } = this.state;
 
-    const fullPath = LibraryContainer.getFullPath(sourceId, getPathByID);
-    const parentId = this.properParentId(fullPath);
+    const fullPath    = LibraryContainer.getFullPath(sourceId, getPathByID);
+    const parentId    = this.properParentId(fullPath);
     const matchString = this.matchString(parentId, t);
-    const active = !this.context.isMobileDevice || tocIsActive;
+    const active      = !this.context.isMobileDevice || tocIsActive;
 
     return (
       <div

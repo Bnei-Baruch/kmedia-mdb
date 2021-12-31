@@ -19,10 +19,10 @@ import { selectors as sourcesSelectors, selectors as sources } from '../../../..
 const BookmarksItem = ({ bookmark, t }) => {
   const { properties: { uid_prefix, ...urlParams } = false, folder_ids = [], name, subject_uid } = bookmark;
 
-  const cu = useSelector(state => mdb.getDenormContentUnit(state.mdb, subject_uid));
-  const folderKeys = folder_ids.map(id => getMyItemKey(MY_NAMESPACE_FOLDERS, { id }).key);
-  const folders = useSelector(state => folderKeys.map(k => selectors.getItemByKey(state.my, MY_NAMESPACE_FOLDERS, k)).filter(x => !!x));
-  const getPathByID = useSelector(state => sources.getPathByID(state.sources));
+  const cu               = useSelector(state => mdb.getDenormContentUnit(state.mdb, subject_uid));
+  const folderKeys       = folder_ids.map(id => getMyItemKey(MY_NAMESPACE_FOLDERS, { id }).key);
+  const folders          = useSelector(state => folderKeys.map(k => selectors.getItemByKey(state.my, MY_NAMESPACE_FOLDERS, k)).filter(x => !!x));
+  const getPathByID      = useSelector(state => sources.getPathByID(state.sources));
   const areSourcesLoaded = useSelector(state => sourcesSelectors.areSourcesLoaded(state.sources));
 
   if (!areSourcesLoaded)
@@ -37,13 +37,13 @@ const BookmarksItem = ({ bookmark, t }) => {
 
   const renderFolder = f => (
     <Label key={f.id} basic>
-      <Icon name="folder outline" className="margin-left-4 margin-right-4"/>
+      <Icon name="folder outline" className="margin-left-4 margin-right-4" />
       {f.name}
     </Label>
   );
 
   const title = buildTitleByUnit(cu, t, getPathByID);
-  const icon = iconByContentTypeMap.get(cu?.content_type);
+  const icon  = iconByContentTypeMap.get(cu?.content_type);
 
   const citates = [];
   if (!!urlParams?.srchstart)
@@ -56,7 +56,7 @@ const BookmarksItem = ({ bookmark, t }) => {
       <List.Icon>
         <Link to={link}>
           <Image size="mini" verticalAlign="middle">
-            <SectionLogo name={icon} width='25' height='25'/>
+            <SectionLogo name={icon} width="25" height="25" />
           </Image>
         </Link>
       </List.Icon>
@@ -76,7 +76,7 @@ const BookmarksItem = ({ bookmark, t }) => {
         </List.Description>
       </List.Content>
       <List.Icon verticalAlign="top">
-        <Actions bookmark={bookmark}/>
+        <Actions bookmark={bookmark} />
       </List.Icon>
     </List.Item>
   );
