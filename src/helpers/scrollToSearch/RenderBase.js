@@ -1,3 +1,4 @@
+
 import { KEEP_LETTERS_RE, OFFSET_TEXT_SEPARATOR } from './helper';
 
 export class RenderBase {
@@ -72,7 +73,6 @@ export class RenderBase {
       const ti = this.tagPositions[i]
       const lj = lPositions[j]
       if (!lj || ti && ti.noHtmlPos <= lj.noHtmlPos) {
-        //ti.pos = ti.noHtmlPos + diffp
         tagPositions.push(ti)
         i++
         diffp = diffp + ti.str.length
@@ -81,7 +81,7 @@ export class RenderBase {
 
       //if prev tag was close </p>|</h*> we replace them
       const prevT = tagPositions[i + j - 1]
-      if (prevT.str.search(/<\/p>|<\/h\d>/) !== -1 && prevT.noHtmlPos > lj.noHtmlPos - 1) {
+      if (prevT?.str.search(/<\/p>|<\/h\d>/) !== -1 && prevT.noHtmlPos > lj.noHtmlPos - 1) {
         lj.pos = prevT.pos - 1
       } else {
         lj.pos = lj.noHtmlPos + diffp

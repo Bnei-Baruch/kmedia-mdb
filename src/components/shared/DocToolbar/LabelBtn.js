@@ -2,12 +2,11 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import { Button, MenuItem, Popup } from 'semantic-ui-react';
-import AlertModal from '../AlertModal';
 import SelectTopicsModal from '../SelectTopicsModal/SelectTopicsModal';
+import { SectionLogo } from '../../../helpers/images';
 
 const LabelBtn = ({ t, source }) => {
   const [open, setOpen] = useState(false);
-
 
   const handleOpen = () => {
     setOpen(true);
@@ -28,8 +27,10 @@ const LabelBtn = ({ t, source }) => {
             content={t('share-text.label-button-alt')}
             trigger={
               <MenuItem onClick={handleOpen}>
-                <Button circular icon="sticky note"/>
-                {t('share-text.note-button')}
+                <Button circular icon className="no-padding">
+                  <SectionLogo name="topics" color="grey" />
+                </Button>
+                {t('share-text.label-button')}
               </MenuItem>
             }
           />

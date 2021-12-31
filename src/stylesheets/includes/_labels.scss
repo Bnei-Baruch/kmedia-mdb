@@ -1,6 +1,13 @@
 .select_topic_modal {
+  & > .header {
+    text-align: center
+  }
 
-  .input .label {
+  .scrolling.content {
+    height: 50VH;
+  }
+
+  .input {
     font-size: 1.3rem;
     font-weight: normal;
 
@@ -37,7 +44,36 @@
     margin: 0 0 8px;
     color: $blue;
   }
-  .topics_button{
 
+  .topics_button {
+
+  }
+}
+
+.label_bar {
+  height: 100%;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+
+  .label_mark {
+    position: absolute;
+    width: 0px;
+    border-left: 1px solid $blue;
+    left: 0;
+    vertical-align: middle;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+
+    .button {
+      z-index: 1;
+    }
+
+    svg {
+      width: 20px;
+      height: 20px;
+    }
   }
 }

@@ -120,6 +120,8 @@ const SelectTopicsModal = ({ t, open, onClose, source, trigger }) => {
           <Button
             onClick={handleSave}
             content={t('topic.select')}
+            color="green"
+            disabled={!selected.length || !name}
           />
         </Modal.Actions>
       </Modal>
