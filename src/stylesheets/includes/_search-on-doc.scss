@@ -40,6 +40,36 @@
         vertical-align: text-bottom;
       }
     }
+
+    .label_pos {
+      //visibility: hidden;
+    }
+
+    .label_bar {
+      height: 100%;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 0;
+
+      .label_mark {
+        position: absolute;
+        width: 0px;
+        border-left: 1px solid $blue;
+        left: 0;
+        vertical-align: middle;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        .button{
+          z-index: 1;
+        }
+        svg{
+          width: 20px;
+          height: 20px;
+        }
+      }
+    }
   }
 
   &-share {
@@ -133,6 +163,5 @@
         }
       }
     }
-
   }
 }

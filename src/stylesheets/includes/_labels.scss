@@ -1,0 +1,43 @@
+.select_topic_modal {
+
+  .input .label {
+    font-size: 1.3rem;
+    font-weight: normal;
+
+    input {
+      padding-top: 4px;
+      padding-bottom: 4px;
+    }
+  }
+
+  .search-omnibox {
+    width: auto;
+
+    input {
+      padding-top: 4px;
+      padding-bottom: 4px;
+    }
+  }
+
+  .topic_row_title {
+    padding: 0;
+    border-bottom: 1px solid $grey;
+    font-weight: normal;
+  }
+
+  .topics_card {
+    margin-bottom: 2em;
+    background: #F3F4F5;
+    color: $grey;
+  }
+
+  .topics_title {
+    box-shadow: 0px 3px 6px $grey;
+    padding: 4px 1em;
+    margin: 0 0 8px;
+    color: $blue;
+  }
+  .topics_button{
+
+  }
+}

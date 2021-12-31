@@ -719,6 +719,9 @@
       "confirmRemoveBookmark": "Are you sure you want to delete bookmark {{name}}?",
       "confirmRemoveFolder": "Are you sure you want to delete folder {{name}}?",
       "haveNo": "You have no bookmarks yet"
+    },
+    "label": {
+      "tagging": "tagging"
     }
   }
 }
