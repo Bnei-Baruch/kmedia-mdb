@@ -24,11 +24,23 @@ import { CT_SOURCE } from '../../../helpers/consts';
 export const checkRabashGroupArticles = source => {
   if (/^gr-/.test(source)) { // Rabash Group Articles
     const result = /^gr-(.+)/.exec(source);
-    return result[1];
+    return { uid: result[1], isGr: true };
   }
 
-  return source;
+  return { uid: source, isGr: false };
+};
 
+export const buildBookmarkSource = source => {
+  const { uid, isGr } = checkRabashGroupArticles(source);
+  const s             = {
+    subject_uid: uid,
+    subject_type: CT_SOURCE
+  };
+  if (isGr) {
+    s.properties = { uid_prefix: 'gr-' };
+  }
+
+  return s;
 };
 
 const Library = ({ data, source, downloadAllowed, t }) => {
@@ -119,7 +131,8 @@ const Library = ({ data, source, downloadAllowed, t }) => {
   const getAudioPlayer = () => audioInfo && <span className="library-audio-player">
     {playing ?
       <audio controls src={audioInfo?.url} autoPlay={true} preload="metadata" /> :
-      <a onClick={() => setPlaying(true)}>{t('sources-library.play-audio-file')}<PlayAudioIcon className="playAudioIcon" /></a>
+      <a onClick={() => setPlaying(true)}>{t('sources-library.play-audio-file')}<PlayAudioIcon
+        className="playAudioIcon" /></a>
     }
   </span>;
 
@@ -178,16 +191,15 @@ const Library = ({ data, source, downloadAllowed, t }) => {
       );
     } else if (contentData) {
       const direction = getLanguageDirection(language);
+
       return (
         <div
           style={{ direction, textAlign: (direction === 'ltr' ? 'left' : 'right') }}>
           <ScrollToSearch
             data={contentData}
             language={language}
-            source={{
-              subject_uid: source,
-              subject_type: CT_SOURCE
-            }} />
+            source={buildBookmarkSource(source)}
+          />
         </div>
       );
     }

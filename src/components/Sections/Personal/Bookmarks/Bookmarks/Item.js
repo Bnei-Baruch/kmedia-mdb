@@ -17,7 +17,7 @@ import { buildTitleByUnit } from './helper';
 import { selectors as sourcesSelectors, selectors as sources } from '../../../../../redux/modules/sources';
 
 const BookmarksItem = ({ bookmark, t }) => {
-  const { properties, folder_ids = [], name, subject_uid } = bookmark;
+  const { properties: { uid_prefix, ...urlParams } = false, folder_ids = [], name, subject_uid } = bookmark;
 
   const cu               = useSelector(state => mdb.getDenormContentUnit(state.mdb, subject_uid));
   const folderKeys       = folder_ids.map(id => getMyItemKey(MY_NAMESPACE_FOLDERS, { id }).key);
@@ -28,10 +28,10 @@ const BookmarksItem = ({ bookmark, t }) => {
   if (!areSourcesLoaded)
     return null;
 
-  let link = canonicalLink(cu);
-  if (properties) {
-    link = `${link}?${stringify(properties)}`;
-    if (properties.activeTab)
+  let link = canonicalLink({ ...cu, id: `${uid_prefix || ''}${subject_uid}` });
+  if (urlParams) {
+    link = `${link}?${stringify(urlParams)}`;
+    if (urlParams.activeTab)
       link = `${link}&autoPlay=0`;
   }
 
@@ -46,10 +46,10 @@ const BookmarksItem = ({ bookmark, t }) => {
   const icon  = iconByContentTypeMap.get(cu?.content_type);
 
   const citates = [];
-  if (!!properties?.srchstart)
-    citates.push(properties.srchstart.split(OFFSET_TEXT_SEPARATOR)[0]);
-  if (!!properties?.srchend)
-    citates.push(properties.srchend.split(OFFSET_TEXT_SEPARATOR)[0]);
+  if (!!urlParams?.srchstart)
+    citates.push(urlParams.srchstart.split(OFFSET_TEXT_SEPARATOR)[0]);
+  if (!!urlParams?.srchend)
+    citates.push(urlParams.srchend.split(OFFSET_TEXT_SEPARATOR)[0]);
 
   return (
     <List.Item className="bookmark_item">
