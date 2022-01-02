@@ -1,15 +1,15 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
 import { Segment } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 
 import { selectors as settings } from '../../../redux/modules/settings';
-import { selectors, actions } from '../../../redux/modules/assets';
+import { actions, selectors } from '../../../redux/modules/assets';
 import { selectSuitableLanguage } from '../../../helpers/language';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
-import { physicalFile, isEmpty } from '../../../helpers/utils';
+import { isEmpty, physicalFile } from '../../../helpers/utils';
 import { updateQuery } from '../../../helpers/url';
 import PDF, { isTaas, startsFrom } from '../../shared/PDF/PDF';
 import ScrollToSearch from '../../shared/DocToolbar/ScrollToSearch';
@@ -24,11 +24,23 @@ import { CT_SOURCE } from '../../../helpers/consts';
 export const checkRabashGroupArticles = source => {
   if (/^gr-/.test(source)) { // Rabash Group Articles
     const result = /^gr-(.+)/.exec(source);
-    return result[1];
+    return { uid: result[1], isGr: true };
   }
 
-  return source;
+  return { uid: source, isGr: false };
+};
 
+export const buildBookmarkSource = source => {
+  const { uid, isGr } = checkRabashGroupArticles(source);
+  const s             = {
+    subject_uid: uid,
+    subject_type: CT_SOURCE
+  };
+  if (isGr) {
+    s.properties = { uid_prefix: 'gr-' };
+  }
+
+  return s;
 };
 
 const Library = ({ data, source, downloadAllowed, t }) => {
@@ -119,7 +131,8 @@ const Library = ({ data, source, downloadAllowed, t }) => {
   const getAudioPlayer = () => audioInfo && <span className="library-audio-player">
     {playing ?
       <audio controls src={audioInfo?.url} autoPlay={true} preload="metadata" /> :
-      <a onClick={() => setPlaying(true)}>{t('sources-library.play-audio-file')}<PlayAudioIcon className="playAudioIcon" /></a>
+      <a onClick={() => setPlaying(true)}>{t('sources-library.play-audio-file')}<PlayAudioIcon
+        className="playAudioIcon" /></a>
     }
   </span>;
 
@@ -178,16 +191,15 @@ const Library = ({ data, source, downloadAllowed, t }) => {
       );
     } else if (contentData) {
       const direction = getLanguageDirection(language);
+
       return (
         <div
           style={{ direction, textAlign: (direction === 'ltr' ? 'left' : 'right') }}>
           <ScrollToSearch
             data={contentData}
-            source={{
-              language,
-              subject_uid: source,
-              subject_type: CT_SOURCE
-            }} />
+            language={language}
+            source={{ language, ...buildBookmarkSource(source) }}
+          />
         </div>
       );
     }

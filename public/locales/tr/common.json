@@ -486,7 +486,8 @@
       "rand": "Random content",
       "more": "More",
       "less": "Less",
-      "new": "New"
+      "new": "New",
+      "same-source": "Same source"
     },
     "playlist":{
       "header": "Up Next"
