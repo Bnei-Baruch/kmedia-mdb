@@ -183,8 +183,8 @@ const Library = ({ data, source, downloadAllowed, t }) => {
           style={{ direction, textAlign: (direction === 'ltr' ? 'left' : 'right') }}>
           <ScrollToSearch
             data={contentData}
-            language={language}
             source={{
+              language,
               subject_uid: source,
               subject_type: CT_SOURCE
             }} />
