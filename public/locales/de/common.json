@@ -715,6 +715,16 @@
       "confirmRemoveBookmark": "Are you sure you want to delete bookmark {{name}}?",
       "confirmRemoveFolder": "Are you sure you want to delete folder {{name}}?",
       "haveNo": "You have no bookmarks yet"
+    },
+    "label": {
+      "tagging": "Tag",
+      "createdBy": "Tagged by {{author}}",
+      "name": "Title of the excerpt",
+      "infoAddTag": "Assign topics to the excerpt you selected and click the \"Tag\" button at the bottom of the page:",
+      "header": "Tagging excerpts in the topics section",
+      "search": "Insert topic",
+      "ending": "Finish",
+      "contentCreate": "Want everyone to see the excerpt you marked?\nTag it in the site's topics section"
     }
   }
 }

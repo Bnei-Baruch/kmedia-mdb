@@ -722,15 +722,14 @@
       "haveNo": "You have no bookmarks yet"
     },
     "label": {
-      "tagging": "tagging",
-      "createdBy": "created by {{author}}",
-      "name": "label name",
-      "infoAddTag": "infoAddTag",
-      "header": "header",
-      "search": "search",
-      "save": "save",
-      "ending": "ending",
-      "contentCreate": "contentCreate"
+      "tagging": "Tag",
+      "createdBy": "Tagged by {{author}}",
+      "name": "Title of the excerpt",
+      "infoAddTag": "Assign topics to the excerpt you selected and click the \"Tag\" button at the bottom of the page:",
+      "header": "Tagging excerpts in the topics section",
+      "search": "Insert topic",
+      "ending": "Finish",
+      "contentCreate": "Want everyone to see the excerpt you marked?\nTag it in the site's topics section"
     }
   }
 }

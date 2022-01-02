@@ -162,6 +162,8 @@
 
 .bookmark_confirm.ui.modal{
   text-align: center;
+
+
   & > .header{
     font-weight: normal;
     color: $midGrey;
@@ -170,6 +172,7 @@
   & > .content{
     border: none;
     font-weight: bold;
+    white-space: pre-line;
   }
 
   & > .actions{

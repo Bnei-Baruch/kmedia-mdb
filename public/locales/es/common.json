@@ -718,6 +718,16 @@
       "confirmRemoveBookmark": "¿Estás seguro de que quieres eliminar marcador {{name}}?",
       "confirmRemoveFolder": "¿Estás seguro de que quieres eliminar carpeta {{name}}?",
       "haveNo": "Aún no tienes marcadores"
+    },
+    "label": {
+      "tagging": "Etiquetar",
+      "createdBy": "Etiquetado por {{author}}",
+      "name": "Título del extracto",
+      "infoAddTag": "Asigne temas al extracto que seleccionó y haga clic en el botón \"Etiqueta\" en la parte inferior de la página:",
+      "header": "Etiquetado de extractos en la sección de temas",
+      "search": "Insertar tema",
+      "ending": "Acabado",
+      "contentCreate": "¿Quieres que todos vean el extracto que marcaste?\nEtiquételo en la sección de temas del sitio"
     }
   }
 }

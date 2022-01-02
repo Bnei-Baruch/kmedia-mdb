@@ -117,8 +117,12 @@ const SelectTopicsModal = ({ t, open, onClose, source, trigger }) => {
         </Modal.Content>
         <Modal.Actions>
           <Button
+            onClick={handleAlertClose}
+            content={t('buttons.cancel')}
+          />
+          <Button
             onClick={handleSave}
-            content={t('personal.label.save')}
+            content={t('personal.label.tagging')}
             color="green"
             disabled={!selected.length || !name}
           />
