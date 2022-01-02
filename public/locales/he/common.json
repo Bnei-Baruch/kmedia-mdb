@@ -807,6 +807,10 @@
       "confirmRemoveBookmark": "האם ברצונך למחוק את סימניה {{name}}?",
       "confirmRemoveFolder": "האם ברצונך למחוק את תיקיה {{name}}?",
       "haveNo": "אין לך סימניות עדיין"
+    },
+    "label": {
+      "tagging": "tagging",
+      "infoAddTag": "שייכו נושאים לקטע שבחרתם ולחצו על כפתור ״תייג״ בתחתית הדף:"
     }
   }
 }

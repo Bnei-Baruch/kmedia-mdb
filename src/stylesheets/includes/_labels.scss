@@ -11,9 +11,13 @@
     font-size: 1.3rem;
     font-weight: normal;
 
+    .label {
+      font-size: 1.2rem;
+      font-weight: normal;
+    }
+
     input {
-      padding-top: 4px;
-      padding-bottom: 4px;
+      padding: 4px 8px;
     }
   }
 
@@ -27,13 +31,14 @@
   }
 
   .topic_row_title {
-    padding: 0;
+    margin: 0 !important;
+    padding: 1rem !important;
     border-bottom: 1px solid $grey;
     font-weight: normal;
   }
 
   .topics_card {
-    margin-bottom: 2em;
+    margin: 1em 1em 2em;
     background: #F3F4F5;
     color: $grey;
   }
@@ -45,8 +50,16 @@
     color: $blue;
   }
 
-  .topics_button {
+  .label_topic_grid {
+    padding-top: 0 !important;
 
+    .ui.grid {
+      & > .row {
+        & > .column {
+          padding: 0
+        }
+      }
+    }
   }
 }
 
@@ -55,7 +68,7 @@
   position: absolute;
   top: 0;
   bottom: 0;
-  right: 0;
+  right: -10px;
 
   .label_mark {
     position: absolute;
@@ -76,9 +89,13 @@
       height: 20px;
     }
   }
+
 }
 
+.ui.popup.label_mark_popup {
+  opacity: 0.95;
+}
 .ltr.label_bar {
   right: auto;
-  left: 0;
+  left: -10PX;
 }

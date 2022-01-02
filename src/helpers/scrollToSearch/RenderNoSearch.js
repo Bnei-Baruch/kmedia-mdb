@@ -1,4 +1,4 @@
-import { insertAdded, textToHtml, wrapSeekingPlace } from './helper';
+import { insertAdded } from './helper';
 import { RenderBase } from './RenderBase';
 
 export class RenderNoSearch extends RenderBase {

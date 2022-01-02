@@ -3,7 +3,6 @@ import { stringify } from '../url';
 import { RenderHighlightAll } from './RenderHighlightAll';
 import { RenderHighlightBorder } from './RenderHighlightBorder';
 import { RenderHighlightSingleString } from './RenderHighlightSingleString';
-import { RenderBase } from './RenderBase';
 import { RenderNoSearch } from './RenderNoSearch';
 
 /* eslint-disable  no-useless-escape */

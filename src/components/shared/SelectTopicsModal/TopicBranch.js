@@ -1,17 +1,16 @@
-import React, { Fragment, useState } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import { Button, Checkbox, Container, Grid, Header, List } from 'semantic-ui-react';
 
 import { getEscapedRegExp } from '../../../helpers/utils';
-import clsx from 'clsx';
 
 const ITEMS_NUMBER = 5;
 
 const TopicBranch = ({ root, match, selected, setSelected, t }) => {
   const [showAll, setShowAll] = useState();
-  const regExp = getEscapedRegExp(match);
-  const { text, value } = root;
+  const regExp                = getEscapedRegExp(match);
+  const { text, value }       = root;
 
   const children = (text && regExp.test(text)) ? root.children
     : root.children.filter(({ text }) => text && regExp.test(text));

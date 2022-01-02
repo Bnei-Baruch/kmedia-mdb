@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Grid, Input, Modal, Header, Label, Icon, Container } from 'semantic-ui-react';
+import { Button, Container, Grid, Header, Input, Label, Modal } from 'semantic-ui-react';
 
 import { selectors } from '../../../redux/modules/tags';
 import isEqual from 'react-fast-compare';
@@ -15,18 +15,18 @@ import { selectors as settings } from '../../../redux/modules/settings';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
 
 const SelectTopicsModal = ({ t, open, onClose, source, trigger }) => {
-  const [selected, setSelected] = useState([])
-  const [match, setMatch] = useState('');
-  const [name, setName] = useState('');
+  const [selected, setSelected] = useState([]);
+  const [match, setMatch]       = useState('');
+  const [name, setName]         = useState('');
   const [alertMsg, setAlertMsg] = useState();
 
-  const roots = useSelector(state => selectors.getDisplayRoots(state.tags), isEqual) || [];
+  const roots      = useSelector(state => selectors.getDisplayRoots(state.tags), isEqual) || [];
   const getTagById = useSelector(state => selectors.getTagById(state.tags));
-  const tree = useMemo(() => getTree(roots, getTagById, null, t)[0], [roots, getTagById, t]);
+  const tree       = useMemo(() => getTree(roots, getTagById, null, t)[0], [roots.length, getTagById, t]);
 
-  const uiLanguage = useSelector(state => settings.getLanguage(state.settings));
+  const uiLanguage                = useSelector(state => settings.getLanguage(state.settings));
   const { language = uiLanguage } = source.properties;
-  const dir = getLanguageDirection(language);
+  const dir                       = getLanguageDirection(language);
 
   const dispatch = useDispatch();
 
@@ -42,7 +42,7 @@ const SelectTopicsModal = ({ t, open, onClose, source, trigger }) => {
       <Header
         as="h2"
         content={col.text}
-        className="topic_row_title"
+        className="topic_row_title topics__title"
       />
       {
         col.children.map(r => (
@@ -56,26 +56,25 @@ const SelectTopicsModal = ({ t, open, onClose, source, trigger }) => {
         ))
       }
     </Grid.Column>
-  )
-
+  );
 
   const handleFilterChange = (e, data) => setMatch(data.value);
 
   const handleSetName = (e, data) => setName(data.value);
 
   const handleSave = () => {
-    create()
+    create();
     setAlertMsg(t('personal.label.labelCreated'));
   };
 
   const handleAlertClose = () => {
     setAlertMsg(null);
     onClose();
-  }
+  };
 
   return (
     <>
-      <AlertModal message={alertMsg} open={!!alertMsg} onClose={handleAlertClose}/>
+      <AlertModal message={alertMsg} open={!!alertMsg} onClose={handleAlertClose} />
       <Modal
         open={open}
         onClose={onClose}
@@ -84,32 +83,32 @@ const SelectTopicsModal = ({ t, open, onClose, source, trigger }) => {
         dir={dir}
         className="select_topic_modal"
       >
-        <Modal.Header content={t('personal.label.header')}/>
-        <Modal.Content className="padded">
+        <Modal.Header content={t('personal.label.header')} className="no-border" />
+        <Modal.Content style={{ paddingTop: 0 }}>
           <Input
             defaultValue={name}
             onChange={handleSetName}
-            size="mini"
             fluid
+            className="label_name"
+            error={selected.length > 0 && !name}
           >
             <Label
               content={t('personal.label.name')}
               basic
               className="no-border"
             />
-            <input className="no-padding"/>
+            <input autoFocus />
           </Input>
         </Modal.Content>
-        <Modal.Content className="padded">
-          <Container as="h3" className="font-normal" content={t('personal.label.infoAddTag')}/>
+        <Modal.Content style={{ paddingTop: 0, paddingBottom: 0 }}>
+          <Container as="h4" className="font-normal" content={t('personal.label.infoAddTag')} />
           <Input
-            icon="search"
             className="search-omnibox"
             placeholder={t('personal.label.search')}
             onChange={handleFilterChange}
           />
         </Modal.Content>
-        <Modal.Content scrolling>
+        <Modal.Content scrolling className="label_topic_grid">
           <Grid columns={tree?.children.length}>
             <Grid.Row>
               {tree?.children.map(renderColumn)}
@@ -119,7 +118,7 @@ const SelectTopicsModal = ({ t, open, onClose, source, trigger }) => {
         <Modal.Actions>
           <Button
             onClick={handleSave}
-            content={t('topic.select')}
+            content={t('personal.label.save')}
             color="green"
             disabled={!selected.length || !name}
           />

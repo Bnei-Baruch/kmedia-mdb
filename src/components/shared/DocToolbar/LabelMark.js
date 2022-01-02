@@ -31,11 +31,13 @@ const LabelMark = ({ label, offset, t }) => {
             <SectionLogo name="topics" width='25' height='25'/>
           </Button>
         }
+        inverted
         on='click'
         position='left center'
+        className="label_mark_popup"
       >
         <Popup.Header>{label.name}</Popup.Header>
-        <Popup.Content>{t('personal.label.createdBy', label.author)}</Popup.Content>
+        <Popup.Content>{t('personal.label.createdBy', { author: label.author })}</Popup.Content>
       </Popup>
     </div>
 

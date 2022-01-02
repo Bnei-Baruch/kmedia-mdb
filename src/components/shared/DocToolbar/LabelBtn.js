@@ -24,13 +24,13 @@ const LabelBtn = ({ t, source }) => {
         onClose={handleClose}
         trigger={
           <Popup
-            content={t('share-text.label-button-alt')}
+            content={t('share-text.tag-button-alt')}
             trigger={
               <MenuItem onClick={handleOpen}>
                 <Button circular icon className="no-padding">
                   <SectionLogo name="topics" color="grey" />
                 </Button>
-                {t('share-text.label-button')}
+                {t('share-text.tag-button')}
               </MenuItem>
             }
           />

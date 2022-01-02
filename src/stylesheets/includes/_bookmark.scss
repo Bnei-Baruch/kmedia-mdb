@@ -159,3 +159,25 @@
   border: none;
   background-color: $midWhite;
 }
+
+.bookmark_confirm.ui.modal{
+  text-align: center;
+  & > .header{
+    font-weight: normal;
+    color: $midGrey;
+    border: none;
+  }
+  & > .content{
+    border: none;
+    font-weight: bold;
+  }
+
+  & > .actions{
+    text-align: center;
+    border: none;
+    background: none;
+    .button{
+      font-weight: normal;
+    }
+  }
+}

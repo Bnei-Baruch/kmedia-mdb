@@ -71,7 +71,7 @@ export class RenderBase {
     for (let i = 0, j = 0; i + j < len;) {
       const ti = this.tagPositions[i];
       const lj = lPositions[j];
-      if (!lj || ti && ti.noHtmlPos <= lj.noHtmlPos) {
+      if (!lj || (ti && ti.noHtmlPos <= lj.noHtmlPos)) {
         tagPositions.push(ti);
         i++;
         diffp = diffp + ti.str.length;
