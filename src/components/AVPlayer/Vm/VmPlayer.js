@@ -144,7 +144,6 @@ const VmPlayer = ({
     <Player ref={player} theme="dark" playsInline
       style={{ '--vm-control-spacing': 0, }}
       debug={true}
-      currentTime={currentTime}
     >
       <VmProvider
         isVideo={isVideo}
@@ -169,16 +168,13 @@ const VmPlayer = ({
           hasNext={hasNext}
           onNext={onNext}
         />
-        {editMode && (
-          <ShareForm
-          // media={media}
-            player={player.current}
-            item={item}
-            // uiLanguage={uiLanguage}
-            onSliceChange={handleSliceChange}
-            onExit={() => setEditMode(false)}
-          />
-        )}
+        { editMode &&
+            <ShareForm
+              item={item}
+              onSliceChange={handleSliceChange}
+              onExit={() => setEditMode(false)}
+            />
+        }
         <VmSettings
           isVideo={isVideo}
           videoQuality={videoQuality}
