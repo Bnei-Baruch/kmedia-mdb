@@ -146,7 +146,6 @@ const Recommended = ({ unit, t, filterOutUnits = [], displayTitle = true }) => {
         recommendedUnits={recommendedUnits[SERIES]}
         title={<span>{makeLandingPageLink(t, SGLP_LESSON_SERIES)}</span>}
         displayTitle={displayTitle}
-        viewLimit={3}
         feedName={SERIES}
         showLabels={false} />
     );
