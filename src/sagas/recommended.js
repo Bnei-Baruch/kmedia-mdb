@@ -152,9 +152,11 @@ export function* fetchRecommended(action) {
     // Append predefined, constant recommentations.
     if (variant === AB_RECOMMEND_NEW) {
       data.feeds.splice(data.feeds.length - 1, 0, [
-        { content_type: CT_SOURCE, uid: 'qMUUn22b' },
-        { content_type: CT_LESSONS_SERIES, uid: 'ReQUUOtN' },
-        { content_type: CT_SOURCE, uid: 'grRABASH' },
+        { content_type: CT_SOURCE, uid: 'itcVAcFn' },         // Maamar Ha-Arvut
+        /*{ content_type: CT_SOURCE, uid: 'qMUUn22b' },*/     // Shamati
+        { content_type: CT_LESSONS_SERIES, uid: 'dbPOMK0R' }, // Amuna lemala mahadaat 2021
+        { content_type: CT_LESSONS_SERIES, uid: 'ReQUUOtN' }, // Ptiha - 2019
+        { content_type: CT_SOURCE, uid: 'grRABASH' },         // Group articles.
       ]);
     }
 
