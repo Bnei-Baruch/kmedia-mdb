@@ -46,7 +46,7 @@ export class RenderBase {
   insertLabels(labels) {
     if (!labels?.length)
       return;
-    const lPositions = labels.reduce((acc, { data: { srchstart, srchend }, uid }) => {
+    const lPositions = labels.reduce((acc, { properties: { srchstart, srchend } = {}, uid }) => {
       const start = srchstart?.split(OFFSET_TEXT_SEPARATOR);
       if (start) {
         const match     = this.findClose(this.buildMatch(start[0], this.dataCleanHtml), start[1]);

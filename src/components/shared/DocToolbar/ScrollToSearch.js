@@ -20,7 +20,7 @@ import { getLanguageDirection } from '../../../helpers/i18n-utils';
 //its not mus be accurate number (average number letters per line)
 const LETTERS_ON_LINE = 20;
 
-const buildOffsets = labels => labels.map(({ data: { srchstart, srchend }, uid }) => {
+const buildOffsets = labels => labels.map(({ properties: { srchstart, srchend } = {}, uid }) => {
   let start = Math.round(Number(srchstart?.split(OFFSET_TEXT_SEPARATOR)[1]) / LETTERS_ON_LINE);
   start     = Math.round(start / LETTERS_ON_LINE);
 

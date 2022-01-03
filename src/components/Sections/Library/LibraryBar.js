@@ -8,6 +8,7 @@ import { isLanguageRtl } from '../../../helpers/i18n-utils';
 import LibrarySettings from './LibrarySettings';
 import Share from './Share';
 import BookmarkButton from '../../shared/SaveBookmark/BookmarkButton';
+import LabelButton from '../../shared/SelectTopicsModal/LabelButton';
 
 const LibraryBar = (
   {
@@ -28,6 +29,7 @@ const LibraryBar = (
   return (
     <div className="source__header-toolbar">
       <BookmarkButton source={source} />
+      <LabelButton source={source} />
       <Button compact size="small" className="mobile-hidden" icon="print" onClick={print} />
       {/* a portal is used to put the download button here in this div */}
       <div id="download-button" />

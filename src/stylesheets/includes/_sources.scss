@@ -207,6 +207,15 @@
     .input {
       flex: 1 1 auto;
     }
+
+    .label_icon.icon {
+      padding: 4px!important;
+
+      svg {
+        height: 19px;
+        width: 19px;
+      }
+    }
   }
 
   &__toc-header {
@@ -304,7 +313,9 @@
       flex-wrap: wrap;
     }
 
-    .button { padding: 0.5em !important }
+    .button {
+      padding: 0.5em !important
+    }
   }
 
   .ui.header {
@@ -320,7 +331,7 @@
     padding: 0.5em 0 0 !important;
   }
 
-   a {
+  a {
     color: gray !important;
   }
 
@@ -336,6 +347,7 @@
     .row {
       padding-top: 0 !important;
     }
+
     .column {
       padding-top: 0.5em !important;
       padding-bottom: 0.5em !important;

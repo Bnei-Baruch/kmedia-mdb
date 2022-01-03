@@ -3,16 +3,17 @@ import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Container, Grid, Header, Input, Label, Modal } from 'semantic-ui-react';
-
-import { selectors } from '../../../redux/modules/tags';
 import isEqual from 'react-fast-compare';
-import TopicBranch from './TopicBranch';
-import { getTree } from '../../../helpers/topricTree';
+
+import { selectors as sourcesSelectors } from '../../../redux/modules/sources';
+import { selectors } from '../../../redux/modules/tags';
 import { actions } from '../../../redux/modules/my';
-import { MY_NAMESPACE_LABELS } from '../../../helpers/consts';
-import AlertModal from '../AlertModal';
-import { selectors as settings } from '../../../redux/modules/settings';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
+import { MY_NAMESPACE_LABELS } from '../../../helpers/consts';
+import { getTree } from '../../../helpers/topricTree';
+import NeedToLogin from '../../Sections/Personal/NeedToLogin';
+import AlertModal from '../AlertModal';
+import TopicBranch from './TopicBranch';
 
 const SelectTopicsModal = ({ t, open, onClose, source, trigger }) => {
   const [selected, setSelected] = useState([]);
@@ -20,18 +21,17 @@ const SelectTopicsModal = ({ t, open, onClose, source, trigger }) => {
   const [name, setName]         = useState('');
   const [alertMsg, setAlertMsg] = useState();
 
-  const roots      = useSelector(state => selectors.getDisplayRoots(state.tags), isEqual) || [];
-  const getTagById = useSelector(state => selectors.getTagById(state.tags));
-  const tree       = useMemo(() => getTree(roots, getTagById, null, t)[0], [roots.length, getTagById, t]);
+  const areSourcesLoaded = useSelector(state => sourcesSelectors.areSourcesLoaded(state.sources));
+  const roots            = useSelector(state => selectors.getDisplayRoots(state.tags), isEqual) || [];
+  const getTagById       = useSelector(state => selectors.getTagById(state.tags));
+  const tree             = useMemo(() => getTree(roots, getTagById, null, t)[0], [roots.length, getTagById, t]);
 
-  const uiLanguage                = useSelector(state => settings.getLanguage(state.settings));
-  const { language = uiLanguage } = source.properties;
-  const dir                       = getLanguageDirection(language);
+  const { language } = source;
+  const dir          = getLanguageDirection(language);
 
   const dispatch = useDispatch();
 
   const create = () => {
-
     const params = { name, tag_uids: selected, language, ...source };
 
     dispatch(actions.add(MY_NAMESPACE_LABELS, params));
@@ -45,7 +45,7 @@ const SelectTopicsModal = ({ t, open, onClose, source, trigger }) => {
         className="topic_row_title topics__title"
       />
       {
-        col.children.map(r => (
+        col.children?.map(r => (
           <TopicBranch
             key={r.value}
             match={match}
@@ -64,57 +64,72 @@ const SelectTopicsModal = ({ t, open, onClose, source, trigger }) => {
 
   const handleSave = () => {
     create();
+    onClose();
     setAlertMsg(t('personal.label.labelCreated'));
   };
 
-  const handleAlertClose = () => {
-    setAlertMsg(null);
-    onClose();
-  };
+  const handleAlertClose = () => setAlertMsg(null);
+
+  const needToLogin = NeedToLogin({ t });
 
   return (
     <>
-      <AlertModal message={alertMsg} open={!!alertMsg} onClose={handleAlertClose} />
+      <AlertModal message={alertMsg} open={!!alertMsg} onClose={handleAlertClose} dir={dir} />
       <Modal
         open={open}
         onClose={onClose}
+        className="select_topic_modal"
         size="large"
         trigger={trigger}
         dir={dir}
-        className="select_topic_modal"
       >
         <Modal.Header content={t('personal.label.header')} className="no-border" />
-        <Modal.Content style={{ paddingTop: 0 }}>
-          <Input
-            defaultValue={name}
-            onChange={handleSetName}
-            fluid
-            className="label_name"
-            error={selected.length > 0 && !name}
-          >
-            <Label
-              content={t('personal.label.name')}
-              basic
-              className="no-border"
-            />
-            <input autoFocus />
-          </Input>
-        </Modal.Content>
-        <Modal.Content style={{ paddingTop: 0, paddingBottom: 0 }}>
-          <Container as="h4" className="font-normal" content={t('personal.label.infoAddTag')} />
-          <Input
-            className="search-omnibox"
-            placeholder={t('personal.label.search')}
-            onChange={handleFilterChange}
-          />
-        </Modal.Content>
-        <Modal.Content scrolling className="label_topic_grid">
-          <Grid columns={tree?.children.length}>
-            <Grid.Row>
-              {tree?.children.map(renderColumn)}
-            </Grid.Row>
-          </Grid>
-        </Modal.Content>
+        {
+          !!needToLogin ?
+            (
+              <Modal.Content>{needToLogin}</Modal.Content>
+            ) : (
+              <>
+                <Modal.Content style={{ paddingTop: 0 }}>
+                  <Input
+                    defaultValue={name}
+                    onChange={handleSetName}
+                    fluid
+                    className="label_name"
+                    error={selected.length > 0 && !name}
+                  >
+                    <Label
+                      content={t('personal.label.name')}
+                      basic
+                      className="no-border"
+                    />
+                    <input autoFocus />
+                  </Input>
+                </Modal.Content>
+                <Modal.Content style={{ paddingTop: 0, paddingBottom: 0 }}>
+                  <Container as="h4" className="font-normal" content={t('personal.label.infoAddTag')} />
+                  <Input
+                    className="search-omnibox"
+                    placeholder={t('personal.label.search')}
+                    onChange={handleFilterChange}
+                  />
+                </Modal.Content>
+                <Modal.Content scrolling className="label_topic_grid">
+                  {
+                    tree?.children && (
+                      <Grid columns={tree.children.length}>
+                        <Grid.Row>
+                          {
+                            areSourcesLoaded && tree.children.map(renderColumn)
+                          }
+                        </Grid.Row>
+                      </Grid>
+                    )
+                  }
+                </Modal.Content>
+              </>
+            )
+        }
         <Modal.Actions>
           <Button
             onClick={handleAlertClose}

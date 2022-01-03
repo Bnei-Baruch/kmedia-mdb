@@ -817,7 +817,8 @@
       "header": "Tagging excerpts in the topics section",
       "search": "Insert topic",
       "ending": "Finish",
-      "contentCreate": "Want everyone to see the excerpt you marked?\nTag it in the site's topics section"
+      "contentCreate": "Want everyone to see the excerpt you marked?\nTag it in the site's topics section",
+      "labelCreated": "The excerpt has been successfully tagged. You can find it in the topics section under the topics you tagged"
     }
   }
 }

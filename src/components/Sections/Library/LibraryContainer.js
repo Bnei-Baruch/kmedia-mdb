@@ -442,7 +442,7 @@ class LibraryContainer extends Component {
   }
 
   render() {
-    const { sourceId, getSourceById, getPathByID, language, t, push, areSourcesLoaded } = this.props;
+    const { sourceId, getSourceById, getPathByID, language, contentLanguage, t, push, areSourcesLoaded } = this.props;
 
     if (!areSourcesLoaded)
       return null;
@@ -497,7 +497,7 @@ class LibraryContainer extends Component {
                       handleTocIsActive={this.handleTocIsActive}
                       isReadable={isReadable}
                       fontSize={fontSize}
-                      source={buildBookmarkSource(sourceId)}
+                      source={{ language: contentLanguage, ...buildBookmarkSource(sourceId) }}
                     />
                   </Grid.Column>
                 </Grid.Row>

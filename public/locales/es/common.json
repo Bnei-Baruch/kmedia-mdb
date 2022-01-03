@@ -727,7 +727,8 @@
       "header": "Etiquetado de extractos en la sección de temas",
       "search": "Insertar tema",
       "ending": "Acabado",
-      "contentCreate": "¿Quieres que todos vean el extracto que marcaste?\nEtiquételo en la sección de temas del sitio"
+      "contentCreate": "¿Quieres que todos vean el extracto que marcaste?\nEtiquételo en la sección de temas del sitio",
+      "labelCreated": "El extracto se ha etiquetado correctamente. Puede encontrarlo en la sección de temas debajo de los temas que etiquetó."
     }
   }
 }
