@@ -11,6 +11,7 @@ export const getTree = (roots, getTagById, cuStats, t) => {
       }
     ]);
 };
+
 const buildNode      = (id, getTagById, cuStats) => {
   const { label, children } = getTagById(id);
   return {
