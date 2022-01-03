@@ -6,6 +6,7 @@ import { Button, Container, Grid, Header, Input, Label, Modal } from 'semantic-u
 import isEqual from 'react-fast-compare';
 
 import { selectors as sourcesSelectors } from '../../../redux/modules/sources';
+import { selectors as settings } from '../../../redux/modules/settings';
 import { selectors } from '../../../redux/modules/tags';
 import { actions } from '../../../redux/modules/my';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
@@ -26,7 +27,7 @@ const SelectTopicsModal = ({ t, open, onClose, source, trigger }) => {
   const getTagById       = useSelector(state => selectors.getTagById(state.tags));
   const tree             = useMemo(() => getTree(roots, getTagById, null, t)[0], [roots.length, getTagById, t]);
 
-  const { language } = source;
+  const language  = useSelector(state => settings.getLanguage(state.settings));
   const dir          = getLanguageDirection(language);
 
   const dispatch = useDispatch();
