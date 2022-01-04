@@ -26,14 +26,14 @@ export class Requests {
   static getCMS = (item, options) => {
     let url;
     switch (item) {
-    case 'banner':
-      url = `${cmsUrl('banners-list')}/${options.language}`;
-      break;
-    case 'person':
-      url = `${cmsUrl('persons')}/${options.id}?language=${options.language}`;
-      break;
-    default:
-      return null;
+      case 'banner':
+        url = `${cmsUrl('banners-list')}/${options.language}`;
+        break;
+      case 'person':
+        url = `${cmsUrl('persons')}/${options.id}?language=${options.language}`;
+        break;
+      default:
+        return null;
     }
 
     return axios(url);
@@ -45,6 +45,7 @@ export class Requests {
       delete headers.Authorization;
       delete params.isPublic;
     }
+
     const config = { url, method, headers };
     if (method === 'GET') {
       config.url = `${url}?${Requests.makeParams(params)}`;
@@ -229,17 +230,17 @@ class Api {
     if (namespace === MY_NAMESPACE_PLAYLISTS && params.changeItems) {
       let p;
       switch (method) {
-      case 'POST':
-        p = 'add_items';
-        break;
-      case 'PUT':
-        p = 'update_items';
-        break;
-      case 'DELETE':
-        p = 'remove_items';
-        break;
-      default:
-        p = '';
+        case 'POST':
+          p = 'add_items';
+          break;
+        case 'PUT':
+          p = 'update_items';
+          break;
+        case 'DELETE':
+          p = 'remove_items';
+          break;
+        default:
+          p = '';
       }
 
       urlParam = `${urlParam}/${p}`;
