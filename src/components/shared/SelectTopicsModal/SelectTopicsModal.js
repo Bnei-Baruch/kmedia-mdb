@@ -73,11 +73,6 @@ const SelectTopicsModal = ({ t, open, onClose, source, trigger }) => {
     setAlertMsg(t('personal.label.labelCreated'));
   };
 
-  const handleCancel = () => {
-    onClose();
-    setAlertMsg(t('personal.label.labelCreated'));
-  };
-
   const handleAlertClose = () => setAlertMsg(null);
 
   const needToLogin = NeedToLogin({ t });
@@ -142,7 +137,7 @@ const SelectTopicsModal = ({ t, open, onClose, source, trigger }) => {
         }
         <Modal.Actions>
           <Button
-            onClick={handleCancel}
+            onClick={onClose}
             content={t('buttons.cancel')}
           />
           <Button
