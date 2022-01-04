@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -30,16 +30,18 @@ const SelectTopicsModal = ({ t, open, onClose, source, trigger }) => {
   const language = useSelector(state => settings.getLanguage(state.settings));
   const dir      = getLanguageDirection(language);
 
-  useEffect(() => {
-    setSelected([]);
-    setName('');
-  }, []);
   const dispatch = useDispatch();
 
   const create = () => {
     const params = { name, tag_uids: selected, language, ...source };
 
     dispatch(actions.add(MY_NAMESPACE_LABELS, params));
+  };
+
+  const clear = () => {
+    setSelected([]);
+    setName('');
+    setAlertMsg(null);
   };
 
   const renderColumn = col => (
@@ -73,13 +75,16 @@ const SelectTopicsModal = ({ t, open, onClose, source, trigger }) => {
     setAlertMsg(t('personal.label.labelCreated'));
   };
 
-  const handleAlertClose = () => setAlertMsg(null);
+  const handleCancel = () => {
+    onClose();
+    clear();
+  };
 
   const needToLogin = NeedToLogin({ t });
 
   return (
     <>
-      <AlertModal message={alertMsg} open={!!alertMsg} onClose={handleAlertClose} dir={dir} />
+      <AlertModal message={alertMsg} open={!!alertMsg} onClose={clear} dir={dir} />
       <Modal
         open={open}
         onClose={onClose}
@@ -137,7 +142,7 @@ const SelectTopicsModal = ({ t, open, onClose, source, trigger }) => {
         }
         <Modal.Actions>
           <Button
-            onClick={onClose}
+            onClick={handleCancel}
             content={t('buttons.cancel')}
           />
           <Button
