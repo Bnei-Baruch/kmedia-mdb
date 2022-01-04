@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -27,9 +27,13 @@ const SelectTopicsModal = ({ t, open, onClose, source, trigger }) => {
   const getTagById       = useSelector(state => selectors.getTagById(state.tags));
   const tree             = useMemo(() => getTree(roots, getTagById, null, t)[0], [roots.length, getTagById, t]);
 
-  const language  = useSelector(state => settings.getLanguage(state.settings));
-  const dir          = getLanguageDirection(language);
+  const language = useSelector(state => settings.getLanguage(state.settings));
+  const dir      = getLanguageDirection(language);
 
+  useEffect(() => {
+    setSelected([]);
+    setName('');
+  }, []);
   const dispatch = useDispatch();
 
   const create = () => {
@@ -65,6 +69,11 @@ const SelectTopicsModal = ({ t, open, onClose, source, trigger }) => {
 
   const handleSave = () => {
     create();
+    onClose();
+    setAlertMsg(t('personal.label.labelCreated'));
+  };
+
+  const handleCancel = () => {
     onClose();
     setAlertMsg(t('personal.label.labelCreated'));
   };
@@ -133,7 +142,7 @@ const SelectTopicsModal = ({ t, open, onClose, source, trigger }) => {
         }
         <Modal.Actions>
           <Button
-            onClick={handleAlertClose}
+            onClick={handleCancel}
             content={t('buttons.cancel')}
           />
           <Button
