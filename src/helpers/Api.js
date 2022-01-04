@@ -1,21 +1,21 @@
 import axios from 'axios';
 import { MY_NAMESPACE_LABELS, MY_NAMESPACE_PLAYLIST_EDIT, MY_NAMESPACE_PLAYLISTS } from './consts';
 
-const API_BACKEND = process.env.REACT_APP_API_BACKEND;
-const ASSETS_BACKEND = process.env.REACT_APP_ASSETS_BACKEND;
-const CMS_BACKEND = process.env.REACT_APP_CMS_BACKEND || `${API_BACKEND}cms/`;
-export const IMAGINARY_URL = process.env.REACT_APP_IMAGINARY_URL;
+const API_BACKEND             = process.env.REACT_APP_API_BACKEND;
+const ASSETS_BACKEND          = process.env.REACT_APP_ASSETS_BACKEND;
+const CMS_BACKEND             = process.env.REACT_APP_CMS_BACKEND || `${API_BACKEND}cms/`;
+export const IMAGINARY_URL    = process.env.REACT_APP_IMAGINARY_URL;
 const IMAGINARY_INTERNAL_HOST = process.env.REACT_APP_IMAGINARY_INTERNAL_HOST || 'localhost';
-const API_FEED = process.env.REACT_APP_FEED;
-const CHRONICLES_BACKEND = process.env.REACT_APP_CHRONICLES_BACKEND;
-const PERSONAL_API_BACKEND = process.env.REACT_APP_PERSONAL_API_BACKEND || `${API_BACKEND}my/`;
+const API_FEED                = process.env.REACT_APP_FEED;
+const CHRONICLES_BACKEND      = process.env.REACT_APP_CHRONICLES_BACKEND;
+const PERSONAL_API_BACKEND    = process.env.REACT_APP_PERSONAL_API_BACKEND || `${API_BACKEND}my/`;
 
-export const backendUrl = path => `${API_BACKEND}${path}`;
-export const assetUrl = path => `${ASSETS_BACKEND}${path}`;
-export const cmsUrl = path => `${CMS_BACKEND}${path}`;
-export const imaginaryUrl = path => `${IMAGINARY_URL}${path}`;
-export const feedUrl = path => `${API_FEED}${path}`;
-export const chroniclesUrl = path => `${CHRONICLES_BACKEND}${path}`;
+export const backendUrl               = path => `${API_BACKEND}${path}`;
+export const assetUrl                 = path => `${ASSETS_BACKEND}${path}`;
+export const cmsUrl                   = path => `${CMS_BACKEND}${path}`;
+export const imaginaryUrl             = path => `${IMAGINARY_URL}${path}`;
+export const feedUrl                  = path => `${API_FEED}${path}`;
+export const chroniclesUrl            = path => `${CHRONICLES_BACKEND}${path}`;
 export const chroniclesBackendEnabled = CHRONICLES_BACKEND !== undefined;
 
 export class Requests {
@@ -26,21 +26,26 @@ export class Requests {
   static getCMS = (item, options) => {
     let url;
     switch (item) {
-      case 'banner':
-        url = `${cmsUrl('banners-list')}/${options.language}`;
-        break;
-      case 'person':
-        url = `${cmsUrl('persons')}/${options.id}?language=${options.language}`;
-        break;
-      default:
-        return null;
+    case 'banner':
+      url = `${cmsUrl('banners-list')}/${options.language}`;
+      break;
+    case 'person':
+      url = `${cmsUrl('persons')}/${options.id}?language=${options.language}`;
+      break;
+    default:
+      return null;
     }
 
     return axios(url);
   };
 
   static auth = (params, url, token, method) => {
-    const config = { url, method, headers: { 'Content-Type': 'application/json', 'Authorization': `bearer ${token}` } };
+    const headers = { 'Content-Type': 'application/json', 'Authorization': `bearer ${token}` };
+    if (params.isPublic) {
+      delete headers.Authorization;
+      delete params.isPublic;
+    }
+    const config = { url, method, headers };
     if (method === 'GET') {
       config.url = `${url}?${Requests.makeParams(params)}`;
     } else {
@@ -54,7 +59,7 @@ export class Requests {
     `${Object.entries(params)
       .filter(([_, v]) => v !== undefined && v !== null)
       .map(pair => {
-        const key = pair[0];
+        const key   = pair[0];
         const value = pair[1];
 
         if (Array.isArray(value)) {
@@ -224,26 +229,26 @@ class Api {
     if (namespace === MY_NAMESPACE_PLAYLISTS && params.changeItems) {
       let p;
       switch (method) {
-        case 'POST':
-          p = 'add_items';
-          break;
-        case 'PUT':
-          p = 'update_items';
-          break;
-        case 'DELETE':
-          p = 'remove_items';
-          break;
-        default:
-          p = '';
+      case 'POST':
+        p = 'add_items';
+        break;
+      case 'PUT':
+        p = 'update_items';
+        break;
+      case 'DELETE':
+        p = 'remove_items';
+        break;
+      default:
+        p = '';
       }
 
       urlParam = `${urlParam}/${p}`;
       delete params.changeItems;
     }
 
-    let isNotREST = false
+    let isNotREST = false;
     if (namespace === MY_NAMESPACE_LABELS && method === 'GET') {
-      isNotREST = true
+      isNotREST = true;
     }
 
     const url = `${PERSONAL_API_BACKEND}${isNotREST ? '' : 'rest/'}${urlParam}`;
@@ -251,7 +256,7 @@ class Api {
   };
 
   static reactionsCount = params => {
-    const url = `${PERSONAL_API_BACKEND}reaction_count?${Requests.makeParams(params)}`;
+    const url    = `${PERSONAL_API_BACKEND}reaction_count?${Requests.makeParams(params)}`;
     const config = { url, method: 'GET' };
     return axios(config);
   };

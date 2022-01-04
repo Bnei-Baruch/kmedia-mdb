@@ -70,7 +70,7 @@ const ScrollToSearch = ({ source, data, language, urlParams = '', pathname }) =>
   const { subject_type, subject_uid } = source || {};
   useEffect(() => {
     if (subject_type && subject_uid) {
-      dispatch(actions.fetch(MY_NAMESPACE_LABELS, { subject_type, subject_uid, language }));
+      dispatch(actions.fetch(MY_NAMESPACE_LABELS, { subject_type, subject_uid, language, isPublic: true }));
     }
   }, [dispatch, subject_type, subject_uid, language]);
 

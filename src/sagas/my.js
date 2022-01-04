@@ -25,7 +25,10 @@ function* updatePageInQuery(action) {
 
 function* fetch(action) {
   const token = yield select(state => authSelectors.getToken(state.auth));
-  if (!token) return;
+  if (!token && !action.payload?.isPublic) {
+    console.error('need token for this request');
+    return;
+  }
   // eslint-disable-next-line prefer-const
   const { namespace, with_files = false, addToList = true, ...params } = action.payload;
   let with_derivations                                                 = false;
@@ -42,30 +45,30 @@ function* fetch(action) {
     let co_uids = [];
 
     switch (namespace) {
-      case MY_NAMESPACE_HISTORY:
-        cu_uids = data.items?.map(x => x.content_unit_uid) || [];
-        break;
-      case MY_NAMESPACE_REACTIONS:
-        cu_uids = data.items?.filter(x => !IsCollectionContentType(x.subject_type)).map(x => x.subject_uid) || [];
-        break;
-      case MY_NAMESPACE_PLAYLISTS:
-        if (data.items) {
-          cu_uids = data.items.filter(p => p.items)
-            .reduce((acc, p) => acc.concat(p.items.flatMap(x => x.poster_unit_uid)), []);
-        }
+    case MY_NAMESPACE_HISTORY:
+      cu_uids = data.items?.map(x => x.content_unit_uid) || [];
+      break;
+    case MY_NAMESPACE_REACTIONS:
+      cu_uids = data.items?.filter(x => !IsCollectionContentType(x.subject_type)).map(x => x.subject_uid) || [];
+      break;
+    case MY_NAMESPACE_PLAYLISTS:
+      if (data.items) {
+        cu_uids = data.items.filter(p => p.items)
+          .reduce((acc, p) => acc.concat(p.items.flatMap(x => x.poster_unit_uid)), []);
+      }
 
-        cu_uids.concat(data.items.map(x => x.content_unit_uid).filter(x => !!x));
-        break;
-      case MY_NAMESPACE_SUBSCRIPTIONS:
-        cu_uids = data.items?.map(x => x.content_unit_uid) || [];
-        co_uids = data.items?.filter(s => s.collection_uid).map(s => s.collection_uid) || [];
-        break;
-      case MY_NAMESPACE_BOOKMARKS:
-      case MY_NAMESPACE_LABELS:
-        cu_uids          = data.items?.map(x => x.subject_uid) || [];
-        with_derivations = true;
-        break;
-      default:
+      cu_uids.concat(data.items.map(x => x.content_unit_uid).filter(x => !!x));
+      break;
+    case MY_NAMESPACE_SUBSCRIPTIONS:
+      cu_uids = data.items?.map(x => x.content_unit_uid) || [];
+      co_uids = data.items?.filter(s => s.collection_uid).map(s => s.collection_uid) || [];
+      break;
+    case MY_NAMESPACE_BOOKMARKS:
+    case MY_NAMESPACE_LABELS:
+      cu_uids          = data.items?.map(x => x.subject_uid) || [];
+      with_derivations = true;
+      break;
+    default:
     }
 
     cu_uids = yield select(state => mdbSelectors.skipFetchedCU(state.mdb, cu_uids, with_files));
@@ -119,10 +122,10 @@ function* fetchOne(action) {
 
     let cu_uids = [];
     switch (namespace) {
-      case MY_NAMESPACE_PLAYLISTS:
-        cu_uids = data.items?.map(x => x.content_unit_uid) || [];
-        break;
-      default:
+    case MY_NAMESPACE_PLAYLISTS:
+      cu_uids = data.items?.map(x => x.content_unit_uid) || [];
+      break;
+    default:
     }
 
     if (cu_uids.length > 0) {
