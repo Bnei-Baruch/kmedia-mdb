@@ -13,8 +13,12 @@ import { CT_LESSONS_SERIES } from '../../helpers/consts';
 import SearchResultCollection from './SearchResultCollection';
 
 class SearchResultSeries extends SearchResultBase {
+  state = {
+    showAll: false,
+  };
+
   renderSerie = s => {
-    const { t } = this.props;
+    const { t }             = this.props;
     const { logLinkParams } = this.buildCollectionLinkParams(s);
 
     return (
@@ -26,7 +30,7 @@ class SearchResultSeries extends SearchResultBase {
           to={`/lessons/series/c/${s.id}`}
         >
           <span className="margin-right-8 margin-left-8">
-            <Icon name="tasks" size="small"/>
+            <Icon name="tasks" size="small" />
             {`${t('search.showAll')} ${s.cuIDs.length} ${t('pages.collection.items.lessons-collection')}`}
           </span>
         </Link>
@@ -35,7 +39,7 @@ class SearchResultSeries extends SearchResultBase {
   };
 
   buildCollectionLinkParams = c => {
-    const { queryResult: { search_result: { searchId } }, hit, rank, filters } = this.props;
+    const { queryResult: { search_result: { searchId } }, hit, rank, filters }      = this.props;
     const { _index: index, _source: { mdb_uid: mdbUid, result_type: resultType }, } = hit;
 
     return {
@@ -55,73 +59,80 @@ class SearchResultSeries extends SearchResultBase {
     return this.getLowestLevelSeries(series, root.id);
   };
 
+  handleToggle = () => this.setState({ showAll: !this.state.showAll });
+
   render() {
     const {
-      t,
-      location,
-      hit,
-      getSerieBySource,
-      getSerieByTag,
-      nestedDenormCollectionWUnits,
-      getTagById,
-      wip: { lectures: wipL, series: wipS }
-    } = this.props;
+            t,
+            location,
+            hit,
+            getSerieBySource,
+            getSerieByTag,
+            nestedDenormCollectionWUnits,
+            getTagById,
+            wip: { lectures: wipL, series: wipS }
+          } = this.props;
+
+    const { showAll } = this.state;
 
     if (wipL || wipS) {
       return null;
     }
 
-    const isByTag = hit._type === 'lessons_series_by_tag'
-    const getSerie = isByTag ? getSerieByTag : getSerieBySource
+    const isByTag  = hit._type === 'lessons_series_by_tag';
+    const getSerie = isByTag ? getSerieByTag : getSerieBySource;
 
-    const { _score: score, _uid } = hit;
+    const { _score: score, _uid, _source: { mdb_uid } } = hit;
     if (!_uid) {
       return null;
     }
 
     const series = _uid.split('_').map(getSerie);
-    const s = this.getLowestLevelSeries(series);
-    if (s?.collections.length === 1) {
-      const c = nestedDenormCollectionWUnits(s.collections[0].id)
+    const s      = this.getLowestLevelSeries(series);
+    if (!s) return null;
+    if (s.collections.length === 1) {
+      const c = nestedDenormCollectionWUnits(s.collections[0].id);
       return (
         <SearchResultCollection c={c} {...this.props} />
-      )
+      );
     }
 
     const { logLinkParams } = this.buildLinkParams();
-    const title = isByTag ? getTagById(_uid)?.label : s.name;
-
+    const title             = isByTag ? getTagById(_uid)?.label : s.name;
+    const collecitons       = s.collections.filter(c => c.id !== mdb_uid);
+    collecitons.unshift(s.collections.find(c => c.id === mdb_uid));
     return (
       <Segment className="bg_hover_grey search__block">
         <Container>
           <Container>
-            <Container as="h3">
-              {<Link
-                className="search__link"
-                onClick={() => this.logClick(...logLinkParams)}
-                to={'/lessons/series'}
-              >
-                {title}
-              </Link>}
-            </Container>
-
+            <Container as="h3" content={title} />
             <Container className="content">
               {this.iconByContentType(CT_LESSONS_SERIES, t, true)}
             </Container>
-            <div className="clear"/>
+            <div className="clear" />
           </Container>
 
           <Container className="content clear margin-top-8">
-            {s.collections.slice(0, 5).map(this.renderSerie)}
+            {(showAll || collecitons.length < 5 ? collecitons : collecitons.slice(0, 5)).filter(c => !!c).map(this.renderSerie)}
 
-            <Link
-              onClick={() => this.logClick(...logLinkParams)}
-              to={`/lessons/series`}
-              className="margin-right-8"
-            >
-              <Icon name="tasks" size="small"/>
-              {`${t('search.showAll')} ${s.collections.length} ${t('pages.collection.items.lessons-collection')}`}
-            </Link>
+            {
+              (collecitons.length > 4) && (
+                <Button
+                  basic
+                  icon={showAll ? 'minus' : 'plus'}
+                  className="link_to_cu"
+                  size="tini"
+                  onClick={this.handleToggle}
+                >
+                  <Icon name={showAll ? 'minus' : 'plus'} size="small" />
+                  {
+                    showAll ?
+                      t('topics.show-less')
+                      : `${t('search.showAll')} ${s.collections.length} ${t('pages.collection.items.lessons-collection')}`
+                  }
+                </Button>
+              )
+            }
           </Container>
         </Container>
         {
@@ -129,7 +140,7 @@ class SearchResultSeries extends SearchResultBase {
             ? null
             : (
               <Container collapsing>
-                <ScoreDebug name={s.name} score={score} explanation={hit._explanation}/>
+                <ScoreDebug name={s.name} score={score} explanation={hit._explanation} />
               </Container>
             )
         }
