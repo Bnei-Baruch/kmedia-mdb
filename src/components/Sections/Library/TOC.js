@@ -314,7 +314,6 @@ class TOC extends Component {
     const toc  = this.toc(rootId, path, true);
 
     return (
-      <><div>ssss</div>
       <Sticky
         context={contextRef}
         className={clsx({
@@ -327,7 +326,7 @@ class TOC extends Component {
         <Ref innerRef={this.handleAccordionContext}>
           <Accordion fluid panels={toc} defaultActiveIndex={activeIndex} onTitleClick={handleTitleClick} />
         </Ref>
-      </Sticky></>
+      </Sticky>
     );
   }
 }
