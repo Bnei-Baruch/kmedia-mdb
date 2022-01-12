@@ -23,16 +23,18 @@ import {
   CT_FRIENDS_GATHERINGS,
   CT_FULL_LESSON,
   CT_HOLIDAY,
+  CT_KTAIM_NIVCHARIM,
   CT_LECTURE,
   CT_LECTURE_SERIES,
-  CT_LESSON_PART,
   CT_LESSONS_SERIES,
+  CT_LESSON_PART,
   CT_MEAL,
   CT_MEALS,
   CT_PICNIC,
-  CT_SOURCE,
   CT_SONGS,
+  CT_SOURCE,
   CT_SPECIAL_LESSON,
+  CT_TAG,
   CT_UNITY_DAY,
   CT_VIDEO_PROGRAM,
   CT_VIDEO_PROGRAM_CHAPTER,
@@ -40,7 +42,6 @@ import {
   CT_VIRTUAL_LESSONS,
   CT_WOMEN_LESSON,
   CT_WOMEN_LESSONS,
-  CT_KTAIM_NIVCHARIM,
   EVENT_TYPES,
   SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_LINK,
   UNIT_EVENTS_TYPE,
@@ -115,6 +116,11 @@ export const canonicalLink = (entity, mediaLang, ccu) => {
   // source
   if (entity.content_type === CT_SOURCE) {
     return `/sources/${entity.id}`;
+  }
+
+  // tag
+  if (entity.content_type === CT_TAG) {
+    return `/topics/${entity.id}`;
   }
 
   if (entity.content_type === 'POST') {
