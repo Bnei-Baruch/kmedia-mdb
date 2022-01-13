@@ -17,6 +17,7 @@ export const CT_ARTICLES           = 'ARTICLES';
 export const CT_LESSONS_SERIES     = 'LESSONS_SERIES';
 export const CT_SONGS              = 'SONGS';
 export const CT_SOURCE             = 'SOURCE';
+export const CT_TAG                = 'TAG';
 
 export const CT_COLLECTIONS = [
   CT_DAILY_LESSON,

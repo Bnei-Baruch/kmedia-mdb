@@ -20,6 +20,7 @@ const imageWidthBySize = {
 const ListTemplate = ({
   unit,
   source,
+  tag,
   language,
   withCUInfo,
   withCCUInfo,
@@ -35,11 +36,11 @@ const ListTemplate = ({
   const dir                = isLanguageRtl(language) ? 'rtl' : 'ltr';
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
-  const ccu_info = ccu && withCCUInfo ? (
+  const info = ((ccu || source || tag) && withCCUInfo) ? (
     <div className="cu_item_info_co ">
       {
         size === 'big' ? <h3 className="no-padding no-margin text_ellipsis">{ccu.name || NO_NAME}</h3>
-          : <h5 className="no-padding no-margin text_ellipsis">{ccu.name || NO_NAME}</h5>
+          : <h5 className="no-padding no-margin text_ellipsis">{(ccu && ccu.name) || (source && source.name) || (tag && tag.label) || NO_NAME}</h5>
       }
     </div>) : null;
 
@@ -60,7 +61,7 @@ const ListTemplate = ({
     <Container
       as={Link}
       to={link}
-      key={(unit && unit.id) || (source && source.id)}
+      key={(unit && unit.id) || (source && source.id) || (tag && tag.id)}
       className={clsx('cu_item cu_item_list no-thumbnail', { [size]: !!size, selected })}
     >
       <div>
@@ -72,9 +73,9 @@ const ListTemplate = ({
         </div>
       </div>
       <div className={clsx('cu_item_info', { [dir]: true, 'with_actions': !!children })}>
-        {ccu_info}
-        {withCUInfo && <div className={clsx('cu_item_name', { 'font_black': !ccu_info })}>
-          {(unit && unit.name) || (source && source.name)}
+        {info}
+        {withCUInfo && <div className={clsx('cu_item_name', { 'font_black': !info })}>
+          {(unit && unit.name) || (source && source.name) || (tag && tag.label)}
         </div>}
         <div className={`cu_info_description ${dir} text_ellipsis`}>
           {description.map((d, i) => (<span key={i}>{d}</span>))}
@@ -94,6 +95,7 @@ const ListTemplate = ({
 ListTemplate.propTypes = {
   unit: shapes.ContentUnit,
   source: shapes.Source,
+  tag: shapes.Topic,
   language: PropTypes.string.isRequired,
   link: PropTypes.string.isRequired,
   withCCUInfo: PropTypes.bool,
