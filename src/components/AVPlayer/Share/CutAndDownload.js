@@ -41,43 +41,40 @@ const CutAndDownload = ({ file, start, end, width, size, t }) => {
     setIsCopyPopupOpen(true);
   };
 
-  const renderLink = () => {
-    return (
-      <>
-        <Header as="h2" content={t('player.download.modalTitle')} />
-        <Download
-          path={download}
-          mimeType={file.mimetype}
-          downloadAllowed={true}
-          filename={download?.split('/').slice(-1)}
-          elId="cut-and-download-button"
-          color="orange"
-        />
-        {/* a portal is used to put the download button here in this div */}
-        <span id="cut-and-download-button" />
-        <Popup
-          open={isCopyPopupOpen}
-          content={t('messages.link-copied-to-clipboard')}
-          position="bottom right"
-          trigger={(
-            <CopyToClipboard text={download} onCopy={handleCopied}>
-              <Button color="orange" size="mini" content={t('buttons.copy')} />
-            </CopyToClipboard>
-          )}
-        />
-        <Container content={t('player.download.modalContent')} />
-      </>
-    );
-  };
-  const renderWIP  = () => {
-    return (
-      <>
-        <Header as="h2" content={t('player.download.wipTitle')} />
-        <Splash isLoading icon="circle notch" color="blue" text={''} />
-        <Container content={t('player.download.wipContent')} />
-      </>
-    );
-  };
+  const renderLink = () => (
+    <>
+      <Header as="h2" content={t('player.download.modalTitle')} />
+      <Download
+        path={download}
+        mimeType={file.mimetype}
+        downloadAllowed={true}
+        filename={download?.split('/').slice(-1)}
+        elId="cut-and-download-button"
+        color="orange"
+      />
+      {/* a portal is used to put the download button here in this div */}
+      <span id="cut-and-download-button" />
+      <Popup
+        open={isCopyPopupOpen}
+        content={t('messages.link-copied-to-clipboard')}
+        position="bottom right"
+        trigger={(
+          <CopyToClipboard text={download} onCopy={handleCopied}>
+            <Button color="orange" size="mini" content={t('buttons.copy')} />
+          </CopyToClipboard>
+        )}
+      />
+      <Container content={t('player.download.modalContent')} />
+    </>
+  );
+
+  const renderWIP  = () => (
+    <>
+      <Header as="h2" content={t('player.download.wipTitle')} />
+      <Splash isLoading icon="circle notch" color="blue" text={''} />
+      <Container content={t('player.download.wipContent')} />
+    </>
+  );
 
   return (
     <Modal
