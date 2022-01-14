@@ -52,18 +52,35 @@ const downloadAsset = (path, mimeType, downloadAllowed, name) => {
 };
 
 const Download = props => {
-  const { children = null, path = null, mimeType, downloadAllowed, filename = path?.split('/').slice(-1)[0] } = props;
+  const {
+          children = null,
+          path     = null,
+          mimeType,
+          downloadAllowed,
+          filename = path?.split('/').slice(-1)[0],
+          elId     = 'download-button',
+          ...params
+        } = props;
+
   if (path === null || typeof filename === 'undefined') {
     return null;
   }
 
-  const mountPoint = document.getElementById('download-button');
+  const mountPoint = document.getElementById(elId);
   if (mountPoint === null) {
     return null;
   }
 
   return ReactDOM.createPortal(
-    <Button compact size="small" icon="download" onClick={() => downloadAsset(path, mimeType, downloadAllowed, filename)}>{children}</Button>,
+    <Button
+      compact
+      size="small"
+      icon="download"
+      onClick={() => downloadAsset(path, mimeType, downloadAllowed, filename)}
+      {...params}
+    >
+      {children}
+    </Button>,
     mountPoint,
   );
 };
@@ -76,6 +93,7 @@ Download.propTypes = {
     PropTypes.node
   ]),
   downloadAllowed: PropTypes.bool.isRequired,
+  elId: PropTypes.string,
 };
 
 export default Download;

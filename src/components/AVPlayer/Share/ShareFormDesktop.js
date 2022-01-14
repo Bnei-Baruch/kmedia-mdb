@@ -6,6 +6,7 @@ import { withNamespaces } from 'react-i18next';
 
 import BaseShareForm from './BaseShareForm';
 import ShareBar from './ShareBar';
+import { toHumanReadableTime } from '../../../helpers/time';
 
 const POPOVER_CONFIRMATION_TIMEOUT = 2500;
 
@@ -47,7 +48,7 @@ class ShareFormDesktop extends BaseShareForm {
   };
 
   render() {
-    const { t, onExit }                                   = this.props;
+    const { t, onExit, file }                             = this.props;
     const { start, end, url, uiLangUrl, isCopyPopupOpen } = this.state;
 
     return (
@@ -59,7 +60,14 @@ class ShareFormDesktop extends BaseShareForm {
           icon="chevron left"
           onClick={onExit}
         />
-        <ShareBar url={url} embedContent={ShareFormDesktop.getEmbed(uiLangUrl)} t={t} buttonSize="medium" />
+        <ShareBar
+          url={url}
+          embedContent={ShareFormDesktop.getEmbed(uiLangUrl)}
+          buttonSize="medium"
+          start={toHumanReadableTime(start)}
+          end={toHumanReadableTime(end)}
+          file={file}
+        />
         <div className="mediaplayer__onscreen-share-form">
           <div className="mediaplayer__onscreen-share-bar">
             <Message content={url} size="mini" />

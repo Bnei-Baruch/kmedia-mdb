@@ -18,21 +18,33 @@ import {
   WhatsappIcon,
   WhatsappShareButton,
 } from 'react-share';
+import CutAndDownload from './CutAndDownload';
 
 const POPOVER_CONFIRMATION_TIMEOUT = 2500;
 
 const getBsPixels = buttonSize => {
   switch (buttonSize) {
-    default:
-      return 46;
-    case 'small':
-      return 36;
-    case 'tiny':
-      return 26;
+  default:
+    return 46;
+  case 'small':
+    return 36;
+  case 'tiny':
+    return 26;
   }
 };
 
-const ShareBar = ({ t,  url = '', buttonSize = 'big', messageTitle = '', embedContent = null }) => {
+const ShareBar = (props) => {
+  const {
+          t,
+          url          = '',
+          buttonSize   = 'big',
+          messageTitle = '',
+          embedContent = null,
+          start,
+          end,
+          file
+        } = props;
+
   const [isEmbedPopupOpen, setIsEmbedPopupOpen] = useState(false);
   let embedTimeout;
 
@@ -59,6 +71,13 @@ const ShareBar = ({ t,  url = '', buttonSize = 'big', messageTitle = '', embedCo
 
   return (
     <div className="social-buttons">
+      <CutAndDownload
+        start={start}
+        end={end}
+        file={file}
+        width={bsPixels}
+        size={buttonSize}
+      />
       <FacebookShareButton url={url} quote={title}>
         <FacebookIcon size={bsPixels} round />
       </FacebookShareButton>
@@ -80,20 +99,20 @@ const ShareBar = ({ t,  url = '', buttonSize = 'big', messageTitle = '', embedCo
 
       {
         embedContent &&
-          <Popup
-            open={isEmbedPopupOpen}
-            content={t('messages.link-copied-to-clipboard')}
-            position="bottom right"
-            trigger={(
-              <CopyToClipboard text={embedContent} onCopy={handleEmbedCopied}>
-                <Button icon="code" size="big" circular className="embed-share-button" />
-              </CopyToClipboard>
-            )}
-          />
+        <Popup
+          open={isEmbedPopupOpen}
+          content={t('messages.link-copied-to-clipboard')}
+          position="bottom right"
+          trigger={(
+            <CopyToClipboard text={embedContent} onCopy={handleEmbedCopied}>
+              <Button icon="code" size="big" circular className="embed-share-button" />
+            </CopyToClipboard>
+          )}
+        />
       }
     </div>
   );
-}
+};
 
 ShareBar.propTypes = {
   t: PropTypes.func.isRequired,

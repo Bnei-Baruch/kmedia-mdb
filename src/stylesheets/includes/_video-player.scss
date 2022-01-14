@@ -213,3 +213,11 @@
     }
   }
 }
+
+.cut_and_download_modal {
+  text-align: center;
+
+  & > .container {
+    padding-top: 1em;
+  }
+}
