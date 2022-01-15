@@ -27,7 +27,7 @@ ENV REACT_APP_ENV=production \
     REACT_APP_PUBLIC_BASE=${public_base} \
     REACT_APP_FEED=${feed_api_url} \
     REACT_APP_PERSONAL_API_BACKEND=${personal_api_url} \
-    REACT_APP_CHRONICLES_BACKEND=${chronicles_url}
+    REACT_APP_CHRONICLES_BACKEND=${chronicles_url} \
     REACT_APP_FILE_TRIMMER_API=${file_trimmer_api_url}
 
 COPY . .
@@ -61,7 +61,7 @@ ENV NODE_ENV=production \
     REACT_APP_PUBLIC_BASE=${public_base} \
     REACT_APP_FEED=${feed_api_url} \
     REACT_APP_PERSONAL_API_BACKEND=${personal_api_url} \
-    REACT_APP_CHRONICLES_BACKEND=${chronicles_url}
+    REACT_APP_CHRONICLES_BACKEND=${chronicles_url} \
     REACT_APP_FILE_TRIMMER_API=${file_trimmer_api_url}
 
 EXPOSE 3001
