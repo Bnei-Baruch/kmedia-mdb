@@ -214,10 +214,19 @@
   }
 }
 
-.cut_and_download_modal {
+.ui.modal > .content.cut_and_download_modal {
   text-align: center;
+  padding: 3em 1em !important;
+
+  & > .header {
+    padding-bottom: 1em;
+  }
 
   & > .container {
-    padding-top: 1em;
+    padding-top: 2em;
+  }
+
+  .button {
+    margin: 0 1em;
   }
 }

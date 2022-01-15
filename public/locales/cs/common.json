@@ -136,6 +136,15 @@
     },
     "header": {
       "series-by-topic": "Series of lessons on the topic:"
+    },
+    "download": {
+      "iconHoverText": "Download the excerpt you marked",
+      "modalTitle": "Your file is ready!",
+      "modalContent": "* The link will be available for download for 7 days only",
+      "wipTitle": "We prepare the file for you!",
+      "wipContent": "* The process can take several minutes, please do not close the window until the process is complete",
+      "downloadButton": "Download",
+      "copyButton": "Copy link"
     }
   },
   "playlist": {
@@ -168,7 +177,8 @@
     "fallback-to-audio": "Video nebylo nalezeno, pouze audio",
     "fallback-to-video": "Audio nebylo nalezeno, pouze video",
     "source-content-not-found": "Obsah zdroje nebyl nalezen",
-    "no-images": "Nebyly nalezeny žádné náčrtky"
+    "no-images": "Nebyly nalezeny žádné náčrtky",
+    "new": "new"
   },
   "search": {
     "header": {

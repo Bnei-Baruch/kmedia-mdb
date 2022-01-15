@@ -141,6 +141,15 @@
     },
     "header": {
       "series-by-topic": "Series of lessons on the topic:"
+    },
+    "download": {
+      "iconHoverText": "Download the excerpt you marked",
+      "modalTitle": "Your file is ready!",
+      "modalContent": "* The link will be available for download for 7 days only",
+      "wipTitle": "We prepare the file for you!",
+      "wipContent": "* The process can take several minutes, please do not close the window until the process is complete",
+      "downloadButton": "Download",
+      "copyButton": "Copy link"
     }
   },
   "playlist": {
@@ -173,7 +182,8 @@
     "fallback-to-audio": "Video was not found, using audio.",
     "fallback-to-video": "Audio was not found, using video.",
     "source-content-not-found": "Source contents wasn't found",
-    "no-images": "No sketches found"
+    "no-images": "No sketches found",
+    "new": "new"
   },
   "search": {
     "header": {

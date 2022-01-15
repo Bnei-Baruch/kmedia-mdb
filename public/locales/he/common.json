@@ -140,6 +140,15 @@
     },
     "header": {
       "series-by-topic": "סדרת שיעורים בנושא:"
+    },
+    "download": {
+      "iconHoverText": "להוריד את הקטע שסימנת",
+      "modalTitle": "הקובץ שלך מוכן!",
+      "modalContent": "* הקישור יהיה זמין להורדה ל-7 ימים בלבד",
+      "wipTitle": "אנחנו מכינים את הקובץ בשבילך!",
+      "wipContent": "* התהליך יכול לקחת כמה דקות, נא לא לסגור את החלון עד סיום התהליך",
+      "downloadButton": "הורד",
+      "copyButton": "העתק קישור"
     }
   },
   "playlist": {
@@ -172,7 +181,8 @@
     "fallback-to-audio": "וידיאו לא נמצא, משתמש באודיו.",
     "fallback-to-video": "אודיו לא נמצא, משתמש בוידיאו.",
     "source-content-not-found": "לא נמצא תוכן המקור",
-    "no-images": "לא נמצאו שרטוטים"
+    "no-images": "לא נמצאו שרטוטים",
+    "new": "חדש"
   },
   "search": {
     "header": {

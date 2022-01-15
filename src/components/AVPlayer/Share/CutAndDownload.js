@@ -14,25 +14,20 @@ const CutAndDownload = ({ file, start, end, width, size, t }) => {
   const [isCopyPopupOpen, setIsCopyPopupOpen] = useState();
 
   const handleCut = () => {
+    if (start === end) return;
     setWip(true);
-    console.log(`handleCut 1`);
     fetch(`https://trim.kab.sh/rest/trim?uid=${file.id}&sstart=${start}&send=${end}`)
       .then(r => {
-        console.log(`handleCut 2`);
         if (r.ok) return r.json();
         throw Error(r.statusText);
       })
       .then(d => {
-
-        console.log(`handleCut 3`);
         setDownload(d.link);
       })
       .catch(err => {
-        console.log(`handleCut err`);
         console.error(err);
       })
       .finally(() => {
-        console.log(`handleCut end`);
         setWip(false);
       });
   };
@@ -43,7 +38,7 @@ const CutAndDownload = ({ file, start, end, width, size, t }) => {
 
   const renderLink = () => (
     <>
-      <Header as="h2" content={t('player.download.modalTitle')} />
+      <Header as="h2" color="grey" content={t('player.download.modalTitle')} />
       <Download
         path={download}
         mimeType={file.mimetype}
@@ -51,7 +46,9 @@ const CutAndDownload = ({ file, start, end, width, size, t }) => {
         filename={download?.split('/').slice(-1)}
         elId="cut-and-download-button"
         color="orange"
-      />
+      >
+        {t("player.download.downloadButton")}
+      </Download>
       {/* a portal is used to put the download button here in this div */}
       <span id="cut-and-download-button" />
       <Popup
@@ -68,9 +65,9 @@ const CutAndDownload = ({ file, start, end, width, size, t }) => {
     </>
   );
 
-  const renderWIP  = () => (
+  const renderWIP = () => (
     <>
-      <Header as="h2" content={t('player.download.wipTitle')} />
+      <Header as="h2" color="grey" content={t('player.download.wipTitle')} />
       <Splash isLoading icon="circle notch" color="blue" text={''} />
       <Container content={t('player.download.wipContent')} />
     </>
@@ -80,20 +77,26 @@ const CutAndDownload = ({ file, start, end, width, size, t }) => {
     <Modal
       open={!!download || wip}
       onClose={() => setDownload(null)}
+      size="tiny"
       trigger={
-        <Button
-          circular
-          onClick={handleCut}
-          disabled={start === end}
-          compact
-          style={{ width: `${width}px`, height: `${width}px`, position: 'relative' }}
-          size="big"
-        >
-          <Label color="red" floating content={t('new')} />
-          <Icon name="cloud download" />
-        </Button>
+        <Popup
+          hoverable
+          content={t('player.download.iconHoverText')}
+          position="top center"
+          trigger={
+            <Button
+              circular
+              onClick={handleCut}
+              compact
+              style={{ width: `${width}px`, height: `${width}px`, position: 'relative' }}
+              size="big"
+            >
+              <Label color="red" floating content={t('messages.new')} />
+              <Icon name="cloud download" />
+            </Button>
+          }
+        />
       }
-      size="small"
     >
       <Modal.Content className="cut_and_download_modal">
         {
