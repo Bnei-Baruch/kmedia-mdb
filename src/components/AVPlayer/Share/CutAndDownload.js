@@ -47,7 +47,7 @@ const CutAndDownload = ({ file, start, end, width, size, t }) => {
         elId="cut-and-download-button"
         color="orange"
       >
-        {t("player.download.downloadButton")}
+        {t('player.download.downloadButton')}
       </Download>
       {/* a portal is used to put the download button here in this div */}
       <span id="cut-and-download-button" />
