@@ -3,6 +3,7 @@ ARG public_base="https://kabbalahmedia.info/"
 ARG feed_api_url="https://kabbalahmedia.info/feed_api/"
 ARG personal_api_url="https://kabbalahmedia.info/backend/my/"
 ARG chronicles_url="https://chronicles.kli.one/"
+ARG file_trimmer_api_url="https://trim.kab.sh/rest/trim"
 
 FROM bneibaruch/kmedia_base:latest as build
 
@@ -27,6 +28,7 @@ ENV REACT_APP_ENV=production \
     REACT_APP_FEED=${feed_api_url} \
     REACT_APP_PERSONAL_API_BACKEND=${personal_api_url} \
     REACT_APP_CHRONICLES_BACKEND=${chronicles_url}
+    REACT_APP_FILE_TRIMMER_API=${file_trimmer_api_url}
 
 COPY . .
 
@@ -60,6 +62,7 @@ ENV NODE_ENV=production \
     REACT_APP_FEED=${feed_api_url} \
     REACT_APP_PERSONAL_API_BACKEND=${personal_api_url} \
     REACT_APP_CHRONICLES_BACKEND=${chronicles_url}
+    REACT_APP_FILE_TRIMMER_API=${file_trimmer_api_url}
 
 EXPOSE 3001
 ENTRYPOINT ["/app/misc/docker-entrypoint.sh"]

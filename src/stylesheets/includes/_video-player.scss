@@ -214,6 +214,17 @@
   }
 }
 
+.cut_and_download_btn {
+  padding: 0 !important;
+  position: relative;
+  font-size: 1.7em !important;
+
+  & > .icon {
+    margin: 0 !important;
+    width: auto !important;
+  }
+}
+
 .ui.modal > .content.cut_and_download_modal {
   text-align: center;
   padding: 3em 1em !important;

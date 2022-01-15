@@ -3,12 +3,15 @@ import PropTypes from 'prop-types';
 import { Button, Container, Header, Icon, Label, Modal, Popup } from 'semantic-ui-react';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { withNamespaces } from 'react-i18next';
+
 import Download from '../../shared/Download/Download';
 import { MDBFile } from '../../shapes';
 import { Splash } from '../../shared/Splash/Splash';
 import { relative } from 'patch-package/dist/path';
 
-const CutAndDownload = ({ file, start, end, width, size, t }) => {
+const FILE_TRIMMER_API = process.env.REACT_APP_FILE_TRIMMER_API;
+
+const CutAndDownload = ({ file, start, end, width, t }) => {
   const [download, setDownload]               = useState();
   const [wip, setWip]                         = useState(false);
   const [isCopyPopupOpen, setIsCopyPopupOpen] = useState();
@@ -16,7 +19,7 @@ const CutAndDownload = ({ file, start, end, width, size, t }) => {
   const handleCut = () => {
     if (start === end) return;
     setWip(true);
-    fetch(`https://trim.kab.sh/rest/trim?uid=${file.id}&sstart=${start}&send=${end}`)
+    fetch(`${FILE_TRIMMER_API}?uid=${file.id}&sstart=${start}&send=${end}`)
       .then(r => {
         if (r.ok) return r.json();
         throw Error(r.statusText);
@@ -88,8 +91,9 @@ const CutAndDownload = ({ file, start, end, width, size, t }) => {
               circular
               onClick={handleCut}
               compact
-              style={{ width: `${width}px`, height: `${width}px`, position: 'relative' }}
+              style={{ width: `${width}px`, height: `${width}px` }}
               size="big"
+              className="cut_and_download_btn"
             >
               <Label color="red" floating content={t('messages.new')} />
               <Icon name="cloud download" />
