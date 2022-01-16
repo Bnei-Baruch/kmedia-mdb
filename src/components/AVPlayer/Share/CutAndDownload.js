@@ -7,7 +7,7 @@ import { withNamespaces } from 'react-i18next';
 import Download from '../../shared/Download/Download';
 import { MDBFile } from '../../shapes';
 import Api from '../../../helpers/Api';
-import WipErr from '../../shared/WipErr/WipErr';
+import WipErr, { wipLoadingSplash } from '../../shared/WipErr/WipErr';
 import { useSelector } from 'react-redux';
 import { selectors as settings } from '../../../redux/modules/settings';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
@@ -22,8 +22,8 @@ const CutAndDownload    = ({ file, sstart, send, width, t }) => {
   const language = useSelector(state => settings.getLanguage(state.settings));
   const dir      = getLanguageDirection(language);
 
-  const wipErr           = WipErr({ wip, err, t });
   const isPortalRendered = !!document.getElementById(PORTAL_ELEMENT_ID);
+  const wipErr           = WipErr({ wip, err, t });
 
   const handleCut = () => {
     if (sstart === send) return;
@@ -40,9 +40,8 @@ const CutAndDownload    = ({ file, sstart, send, width, t }) => {
       });
   };
 
-  const renderLink = () => (
+  const renderDownloadBnt = () => (
     <>
-      <Header as="h2" color="grey" content={t('player.download.modalTitle')} />
       <Download
         path={download}
         mimeType={file.mimetype}
@@ -57,32 +56,27 @@ const CutAndDownload    = ({ file, sstart, send, width, t }) => {
       </Download>
       {/* a portal is used to put the download button here in this div */}
       <span id={PORTAL_ELEMENT_ID} />
-      {
-        isPortalRendered && (
-          <Popup
-            open={isCopyPopupOpen}
-            onClose={() => setIsCopyPopupOpen(false)}
-            content={t('messages.link-copied-to-clipboard')}
-            position="bottom right"
-            trigger={(
-              <CopyToClipboard text={download} onCopy={() => setIsCopyPopupOpen(true)}>
-                <Button color="orange" size="mini" content={t('buttons.copy')} />
-              </CopyToClipboard>
-            )}
-          />
-        )
-      }
-      <Container content={t('player.download.modalContent')} />
     </>
   );
 
-  const renderWIP = () => (
-    <>
-      <Header as="h2" color="grey" content={t('player.download.wipTitle')} />
-      {wipErr}
-      <Container content={t('player.download.wipContent')} />
-    </>
-  );
+  const renderCopyBtn = () => {
+    return (
+      <Popup
+        open={isCopyPopupOpen}
+        onClose={() => setIsCopyPopupOpen(false)}
+        content={t('messages.link-copied-to-clipboard')}
+        position="bottom right"
+        trigger={(
+          <CopyToClipboard text={download} onCopy={() => setIsCopyPopupOpen(true)}>
+            <Button color="orange" size="mini" content={t('buttons.copy')} />
+          </CopyToClipboard>
+        )}
+      />
+    );
+  };
+
+  const title   = wip ? t('player.download.wipTitle') : t('player.download.modalTitle');
+  const content = wip ? t('player.download.wipContent') : t('player.download.modalContent');
 
   return (
     <Modal
@@ -115,9 +109,18 @@ const CutAndDownload    = ({ file, sstart, send, width, t }) => {
       }
     >
       <Modal.Content className="cut_and_download_modal">
+        <Header as="h2" color="grey" content={title} />
         {
-          wipErr ? renderWIP() : renderLink()
+          (wip || !isPortalRendered) && wipLoadingSplash(t)
         }
+        {
+          download && renderDownloadBnt()
+        }
+        {
+          isPortalRendered && renderCopyBtn()
+        }
+
+        <Container content={content} />
       </Modal.Content>
     </Modal>
   );
