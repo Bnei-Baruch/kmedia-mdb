@@ -59,21 +59,19 @@ const CutAndDownload    = ({ file, sstart, send, width, t }) => {
     </>
   );
 
-  const renderCopyBtn = () => {
-    return (
-      <Popup
-        open={isCopyPopupOpen}
-        onClose={() => setIsCopyPopupOpen(false)}
-        content={t('messages.link-copied-to-clipboard')}
-        position="bottom right"
-        trigger={(
-          <CopyToClipboard text={download} onCopy={() => setIsCopyPopupOpen(true)}>
-            <Button color="orange" size="mini" content={t('buttons.copy')} />
-          </CopyToClipboard>
-        )}
-      />
-    );
-  };
+  const renderCopyBtn = () => (
+    <Popup
+      open={isCopyPopupOpen}
+      onClose={() => setIsCopyPopupOpen(false)}
+      content={t('messages.link-copied-to-clipboard')}
+      position="bottom right"
+      trigger={(
+        <CopyToClipboard text={download} onCopy={() => setIsCopyPopupOpen(true)}>
+          <Button color="orange" size="mini" content={t('buttons.copy')} />
+        </CopyToClipboard>
+      )}
+    />
+  );
 
   const title   = wip ? t('player.download.wipTitle') : t('player.download.modalTitle');
   const content = wip ? t('player.download.wipContent') : t('player.download.modalContent');
