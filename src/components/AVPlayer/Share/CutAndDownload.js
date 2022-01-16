@@ -6,29 +6,28 @@ import { withNamespaces } from 'react-i18next';
 
 import Download from '../../shared/Download/Download';
 import { MDBFile } from '../../shapes';
-import { Splash } from '../../shared/Splash/Splash';
-import { relative } from 'patch-package/dist/path';
+import Api from '../../../helpers/Api';
+import WipErr from '../../shared/WipErr/WipErr';
 
-const FILE_TRIMMER_API = process.env.REACT_APP_FILE_TRIMMER_API;
-
-const CutAndDownload = ({ file, start, end, width, t }) => {
+const CutAndDownload = ({ file, sstart, send, width, t }) => {
   const [download, setDownload]               = useState();
   const [wip, setWip]                         = useState(false);
+  const [err, setErr]                         = useState(null);
   const [isCopyPopupOpen, setIsCopyPopupOpen] = useState();
 
+  const wipErr = WipErr({ wip, err, t });
+
   const handleCut = () => {
-    if (start === end) return;
+    if (sstart === send) return;
     setWip(true);
-    fetch(`${FILE_TRIMMER_API}?uid=${file.id}&sstart=${start}&send=${end}`)
-      .then(r => {
-        if (r.ok) return r.json();
-        throw Error(r.statusText);
-      })
+    setErr(null);
+    Api.trimFile({ sstart, send, uid: file.id })
       .then(d => {
         setDownload(d.link);
       })
       .catch(err => {
         console.error(err);
+        setErr(err);
       })
       .finally(() => {
         setWip(false);
@@ -71,7 +70,7 @@ const CutAndDownload = ({ file, start, end, width, t }) => {
   const renderWIP = () => (
     <>
       <Header as="h2" color="grey" content={t('player.download.wipTitle')} />
-      <Splash isLoading icon="circle notch" color="blue" text={''} />
+      {wipErr}
       <Container content={t('player.download.wipContent')} />
     </>
   );
@@ -104,7 +103,7 @@ const CutAndDownload = ({ file, start, end, width, t }) => {
     >
       <Modal.Content className="cut_and_download_modal">
         {
-          wip ? renderWIP() : renderLink()
+          wipErr ? renderWIP() : renderLink()
         }
       </Modal.Content>
     </Modal>
@@ -113,10 +112,9 @@ const CutAndDownload = ({ file, start, end, width, t }) => {
 
 CutAndDownload.propTypes = {
   file: MDBFile,
-  start: PropTypes.string,
-  end: PropTypes.string,
-  width: PropTypes.number,
-  size: PropTypes.string,
+  sstart: PropTypes.string,
+  send: PropTypes.string,
+  width: PropTypes.number
 };
 
 export default withNamespaces()(CutAndDownload);

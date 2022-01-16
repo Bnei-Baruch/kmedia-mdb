@@ -72,8 +72,8 @@ const ShareBar = props => {
   return (
     <div className="social-buttons">
       <CutAndDownload
-        start={start}
-        end={end}
+        sstart={start}
+        send={end}
         file={file}
         width={bsPixels}
         size={buttonSize}
