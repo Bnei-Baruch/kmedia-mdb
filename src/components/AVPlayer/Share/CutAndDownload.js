@@ -8,14 +8,22 @@ import Download from '../../shared/Download/Download';
 import { MDBFile } from '../../shapes';
 import Api from '../../../helpers/Api';
 import WipErr from '../../shared/WipErr/WipErr';
+import { useSelector } from 'react-redux';
+import { selectors as settings } from '../../../redux/modules/settings';
+import { getLanguageDirection } from '../../../helpers/i18n-utils';
 
-const CutAndDownload = ({ file, sstart, send, width, t }) => {
+const PORTAL_ELEMENT_ID = 'cut-and-download-button';
+const CutAndDownload    = ({ file, sstart, send, width, t }) => {
   const [download, setDownload]               = useState();
   const [wip, setWip]                         = useState(false);
   const [err, setErr]                         = useState(null);
-  const [isCopyPopupOpen, setIsCopyPopupOpen] = useState();
+  const [isCopyPopupOpen, setIsCopyPopupOpen] = useState(false);
 
-  const wipErr = WipErr({ wip, err, t });
+  const language = useSelector(state => settings.getLanguage(state.settings));
+  const dir      = getLanguageDirection(language);
+
+  const wipErr           = WipErr({ wip, err, t });
+  const isPortalRendered = !!document.getElementById(PORTAL_ELEMENT_ID);
 
   const handleCut = () => {
     if (sstart === send) return;
@@ -32,10 +40,6 @@ const CutAndDownload = ({ file, sstart, send, width, t }) => {
       });
   };
 
-  const handleCopied = () => {
-    setIsCopyPopupOpen(true);
-  };
-
   const renderLink = () => (
     <>
       <Header as="h2" color="grey" content={t('player.download.modalTitle')} />
@@ -44,23 +48,30 @@ const CutAndDownload = ({ file, sstart, send, width, t }) => {
         mimeType={file.mimetype}
         downloadAllowed={true}
         filename={download?.split('/').slice(-1)}
-        elId="cut-and-download-button"
+        elId={PORTAL_ELEMENT_ID}
         color="orange"
+        beforeClick={() => setWip(true)}
+        afterLoaded={() => setWip(false)}
       >
         {t('player.download.downloadButton')}
       </Download>
       {/* a portal is used to put the download button here in this div */}
-      <span id="cut-and-download-button" />
-      <Popup
-        open={isCopyPopupOpen}
-        content={t('messages.link-copied-to-clipboard')}
-        position="bottom right"
-        trigger={(
-          <CopyToClipboard text={download} onCopy={handleCopied}>
-            <Button color="orange" size="mini" content={t('buttons.copy')} />
-          </CopyToClipboard>
-        )}
-      />
+      <span id={PORTAL_ELEMENT_ID} />
+      {
+        isPortalRendered && (
+          <Popup
+            open={isCopyPopupOpen}
+            onClose={() => setIsCopyPopupOpen(false)}
+            content={t('messages.link-copied-to-clipboard')}
+            position="bottom right"
+            trigger={(
+              <CopyToClipboard text={download} onCopy={() => setIsCopyPopupOpen(true)}>
+                <Button color="orange" size="mini" content={t('buttons.copy')} />
+              </CopyToClipboard>
+            )}
+          />
+        )
+      }
       <Container content={t('player.download.modalContent')} />
     </>
   );
@@ -78,9 +89,9 @@ const CutAndDownload = ({ file, sstart, send, width, t }) => {
       open={!!download || wip}
       onClose={() => setDownload(null)}
       size="tiny"
+      dir={dir}
       trigger={
         <Popup
-          hoverable
           content={t('player.download.iconHoverText')}
           position="top center"
           trigger={
@@ -92,7 +103,11 @@ const CutAndDownload = ({ file, sstart, send, width, t }) => {
               size="big"
               className="cut_and_download_btn"
             >
-              <Label color="red" floating content={t('messages.new')} />
+              <Label
+                color="red"
+                floating="right"
+                content={t('messages.new')}
+              />
               <Icon name="cloud download" />
             </Button>
           }

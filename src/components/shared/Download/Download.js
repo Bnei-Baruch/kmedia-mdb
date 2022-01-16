@@ -37,7 +37,7 @@ const fileDownload = (data, path, mimeType, filename = path.split('/').slice(-1)
 
 const downloadAsset = (path, mimeType, downloadAllowed, name) => {
   if (downloadAllowed) {
-    axios({
+    return axios({
       url: path,
       headers: {
         Accept: mimeType
@@ -48,19 +48,22 @@ const downloadAsset = (path, mimeType, downloadAllowed, name) => {
     });
   } else {
     window.open(path, '_blank');
+    return Promise.resolve();
   }
 };
 
 const Download = props => {
   const {
-    children = null,
-    path     = null,
-    mimeType,
-    downloadAllowed,
-    filename = path?.split('/').slice(-1)[0],
-    elId     = 'download-button',
-    ...params
-  } = props;
+          children = null,
+          path     = null,
+          mimeType,
+          downloadAllowed,
+          filename = path?.split('/').slice(-1)[0],
+          elId     = 'download-button',
+          beforeClick,
+          afterLoaded,
+          ...params
+        } = props;
 
   if (path === null || typeof filename === 'undefined') {
     return null;
@@ -71,12 +74,18 @@ const Download = props => {
     return null;
   }
 
+  const handleOnClick = () => {
+    beforeClick && beforeClick();
+    downloadAsset(path, mimeType, downloadAllowed, filename)
+      .then(d => afterLoaded && afterLoaded(d));
+
+  };
   return ReactDOM.createPortal(
     <Button
       compact
       size="small"
       icon="download"
-      onClick={() => downloadAsset(path, mimeType, downloadAllowed, filename)}
+      onClick={handleOnClick}
       {...params}
     >
       {children}
@@ -94,6 +103,8 @@ Download.propTypes = {
   ]),
   downloadAllowed: PropTypes.bool.isRequired,
   elId: PropTypes.string,
+  beforeClick: PropTypes.func,
+  afterLoaded: PropTypes.func,
 };
 
 export default Download;
