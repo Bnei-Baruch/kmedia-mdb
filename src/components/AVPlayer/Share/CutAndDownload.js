@@ -24,13 +24,11 @@ const CutAndDownload = ({ file, sstart, send, width, t }) => {
     Api.trimFile({ sstart, send, uid: file.id })
       .then(d => {
         setDownload(d.link);
+        setWip(false);
       })
       .catch(err => {
         console.error(err);
         setErr(err);
-      })
-      .finally(() => {
-        setWip(false);
       });
   };
 
