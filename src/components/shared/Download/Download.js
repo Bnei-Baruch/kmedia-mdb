@@ -46,24 +46,25 @@ const downloadAsset = (path, mimeType, downloadAllowed, name) => {
     }).then(response => {
       fileDownload(response.data, path, mimeType, name);
     });
-  } else {
-    window.open(path, '_blank');
-    return Promise.resolve();
   }
+
+  window.open(path, '_blank');
+  return Promise.resolve();
+
 };
 
 const Download = props => {
   const {
-          children = null,
-          path     = null,
-          mimeType,
-          downloadAllowed,
-          filename = path?.split('/').slice(-1)[0],
-          elId     = 'download-button',
-          beforeClick,
-          afterLoaded,
-          ...params
-        } = props;
+    children = null,
+    path     = null,
+    mimeType,
+    downloadAllowed,
+    filename = path?.split('/').slice(-1)[0],
+    elId     = 'download-button',
+    beforeClick,
+    afterLoaded,
+    ...params
+  } = props;
 
   if (path === null || typeof filename === 'undefined') {
     return null;
@@ -80,6 +81,7 @@ const Download = props => {
       .then(d => afterLoaded && afterLoaded(d));
 
   };
+
   return ReactDOM.createPortal(
     <Button
       compact
