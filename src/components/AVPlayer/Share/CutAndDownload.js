@@ -15,26 +15,32 @@ import Download from '../../shared/Download/Download';
 const PORTAL_ELEMENT_ID = 'cut-and-download-button';
 
 const CutAndDownload = ({ file, sstart, send, width, t }) => {
-  const [wipFetch, setWipFetch]               = useState(false);
-  const [isCopyPopupOpen, setIsCopyPopupOpen] = useState(false);
+  const [wipFetch, setWipFetch]                 = useState(false);
+  const [openIconHover, setOpenIconHover]       = useState(false);
+  const [isCopyPopupOpen, setIsCopyPopupOpen]   = useState(false);
+  const [isPortalRendered, setIsPortalRendered] = useState(false);
 
   const { wip, err, url } = useSelector(state => selectors.getTrimFile(state.assets)) || {};
 
   const language = useSelector(state => settings.getLanguage(state.settings));
   const dir      = getLanguageDirection(language);
 
-  const isPortalRendered = !!document.getElementById(PORTAL_ELEMENT_ID);
-
   const dispatch  = useDispatch();
   const handleCut = () => {
-    if (sstart === send) return;
-
+    if (sstart === send) {
+      return;
+    }
     dispatch(actions.trimFile({ sstart, send, uid: file.id }));
   };
 
   const clear = () => {
     dispatch(actions.clearTrimFile());
     setWipFetch(false);
+    setIsPortalRendered(false);
+  };
+
+  const handleDidMount = () => {
+    setIsPortalRendered(true);
   };
 
   const renderDownloadBnt = () => (
@@ -48,6 +54,7 @@ const CutAndDownload = ({ file, sstart, send, width, t }) => {
         color="orange"
         beforeClick={() => setWipFetch(true)}
         afterLoaded={() => setWipFetch(false)}
+        handleDidMount={handleDidMount}
       >
         {t('player.download.downloadButton')}
       </Download>
@@ -90,15 +97,18 @@ const CutAndDownload = ({ file, sstart, send, width, t }) => {
       </Modal.Content>
     );
   };
-
+  const mOpen         = !!url || wip || wipFetch;
   return (
     <Modal
-      open={!!url || wip || wipFetch}
+      open={mOpen}
       onClose={clear}
       size="tiny"
       dir={dir}
       trigger={
         <Popup
+          open={openIconHover && !(mOpen)}
+          onOpen={() => setOpenIconHover(true)}
+          onClose={() => setOpenIconHover(false)}
           content={t('player.download.iconHoverText')}
           position={'top right'}
           trigger={
