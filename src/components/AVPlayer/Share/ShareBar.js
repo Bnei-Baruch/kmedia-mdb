@@ -40,8 +40,8 @@ const ShareBar = props => {
     buttonSize   = 'big',
     messageTitle = '',
     embedContent = null,
-    start,
-    end,
+    sstart,
+    send,
     file
   } = props;
 
@@ -72,8 +72,8 @@ const ShareBar = props => {
   return (
     <div className="social-buttons">
       <CutAndDownload
-        sstart={start}
-        send={end}
+        sstart={sstart}
+        send={send}
         file={file}
         width={bsPixels - 1}
         size={buttonSize}

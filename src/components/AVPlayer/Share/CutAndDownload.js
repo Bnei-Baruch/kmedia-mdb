@@ -7,7 +7,7 @@ import { withNamespaces } from 'react-i18next';
 import Download from '../../shared/Download/Download';
 import { MDBFile } from '../../shapes';
 import Api from '../../../helpers/Api';
-import WipErr, { wipLoadingSplash } from '../../shared/WipErr/WipErr';
+import { getSourceErrorSplash, wipLoadingSplash } from '../../shared/WipErr/WipErr';
 import { useSelector } from 'react-redux';
 import { selectors as settings } from '../../../redux/modules/settings';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
@@ -23,7 +23,6 @@ const CutAndDownload    = ({ file, sstart, send, width, t }) => {
   const dir      = getLanguageDirection(language);
 
   const isPortalRendered = !!document.getElementById(PORTAL_ELEMENT_ID);
-  const wipErr           = WipErr({ wip, err, t });
 
   const handleCut = () => {
     if (sstart === send) return;
@@ -73,8 +72,26 @@ const CutAndDownload    = ({ file, sstart, send, width, t }) => {
     />
   );
 
-  const title   = wip ? t('player.download.wipTitle') : t('player.download.modalTitle');
-  const content = wip ? t('player.download.wipContent') : t('player.download.modalContent');
+  const renderContent = () => {
+    const title   = wip ? t('player.download.wipTitle') : t('player.download.modalTitle');
+    const content = wip ? t('player.download.wipContent') : t('player.download.modalContent');
+    return (
+      <Modal.Content className="cut_and_download_modal">
+        <Header as="h2" color="grey" content={title} />
+        {
+          !!err ? getSourceErrorSplash(err, t) : (wip || !isPortalRendered) && wipLoadingSplash(t)
+        }
+        {
+          download && renderDownloadBnt()
+        }
+        {
+          isPortalRendered && renderCopyBtn()
+        }
+
+        <Container content={content} />
+      </Modal.Content>
+    );
+  };
 
   return (
     <Modal
@@ -97,7 +114,7 @@ const CutAndDownload    = ({ file, sstart, send, width, t }) => {
             >
               <Label
                 color="red"
-                floating="right"
+                floating
                 content={t('messages.new')}
               />
               <Icon name="cloud download" />
@@ -106,20 +123,7 @@ const CutAndDownload    = ({ file, sstart, send, width, t }) => {
         />
       }
     >
-      <Modal.Content className="cut_and_download_modal">
-        <Header as="h2" color="grey" content={title} />
-        {
-          (wip || !isPortalRendered) && wipLoadingSplash(t)
-        }
-        {
-          download && renderDownloadBnt()
-        }
-        {
-          isPortalRendered && renderCopyBtn()
-        }
-
-        <Container content={content} />
-      </Modal.Content>
+      {renderContent()}
     </Modal>
   );
 };

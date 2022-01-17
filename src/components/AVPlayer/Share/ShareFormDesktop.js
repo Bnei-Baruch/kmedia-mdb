@@ -50,6 +50,8 @@ class ShareFormDesktop extends BaseShareForm {
   render() {
     const { t, onExit, file }                             = this.props;
     const { start, end, url, uiLangUrl, isCopyPopupOpen } = this.state;
+    const sstart                                          = toHumanReadableTime(start);
+    const send                                            = toHumanReadableTime(end);
 
     return (
       <div className="mediaplayer__onscreen-share">
@@ -64,8 +66,8 @@ class ShareFormDesktop extends BaseShareForm {
           url={url}
           embedContent={ShareFormDesktop.getEmbed(uiLangUrl)}
           buttonSize="medium"
-          start={toHumanReadableTime(start)}
-          end={toHumanReadableTime(end)}
+          sstart={sstart}
+          send={send}
           file={file}
         />
         <div className="mediaplayer__onscreen-share-form">
