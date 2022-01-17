@@ -14,6 +14,7 @@ ARG public_base
 ARG feed_api_url
 ARG personal_api_url
 ARG chronicles_url
+ARG file_trimmer_api_url
 
 WORKDIR /app
 
@@ -46,6 +47,7 @@ ARG public_base
 ARG feed_api_url
 ARG personal_api_url
 ARG chronicles_url
+ARG file_trimmer_api_url
 
 WORKDIR /app
 COPY --from=build /app .

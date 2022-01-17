@@ -20,6 +20,11 @@ const FETCH_PERSON         = 'Assets/FETCH_PERSON';
 const FETCH_PERSON_SUCCESS = 'Assets/FETCH_PERSON_SUCCESS';
 const FETCH_PERSON_FAILURE = 'Assets/FETCH_PERSON_FAILURE';
 
+const TRIM_FILE         = 'Assets/TRIM_FILE';
+const TRIM_FILE_SUCCESS = 'Assets/TRIM_FILE_SUCCESS';
+const TRIM_FILE_FAILURE = 'Assets/TRIM_FILE_FAILURE';
+const CLEAR_TRIM_FILE   = 'Assets/CLEAR_TRIM_FILE';
+
 export const types = {
   UNZIP,
   UNZIP_SUCCESS,
@@ -34,6 +39,9 @@ export const types = {
   FETCH_ASSET_SUCCESS,
   FETCH_ASSET_FAILURE,
   FETCH_PERSON,
+  TRIM_FILE,
+  TRIM_FILE_SUCCESS,
+  TRIM_FILE_FAILURE,
 };
 
 /* Actions */
@@ -53,6 +61,10 @@ const fetchAssetFailure  = createAction(FETCH_ASSET_FAILURE);
 const fetchPerson        = createAction(FETCH_PERSON);
 const fetchPersonSuccess = createAction(FETCH_PERSON_SUCCESS);
 const fetchPersonFailure = createAction(FETCH_PERSON_FAILURE);
+const trimFile           = createAction(TRIM_FILE);
+const trimFileSuccess    = createAction(TRIM_FILE_SUCCESS);
+const trimFileFailure    = createAction(TRIM_FILE_FAILURE);
+const clearTrimFile      = createAction(CLEAR_TRIM_FILE);
 
 export const actions = {
   unzip,
@@ -70,6 +82,10 @@ export const actions = {
   fetchPerson,
   fetchPersonSuccess,
   fetchPersonFailure,
+  trimFile,
+  trimFileSuccess,
+  trimFileFailure,
+  clearTrimFile,
 };
 
 /* Reducer */
@@ -88,6 +104,11 @@ const initialState = {
     wip: false,
     err: null,
   },
+  trimFile: {
+    url: null,
+    wip: false,
+    err: null
+  }
 };
 
 const onSSRPrepare = draft => {
@@ -100,20 +121,20 @@ const onSSRPrepare = draft => {
 
 const getActionKey = type => {
   switch (type) {
-    case UNZIP:
-    case UNZIP_SUCCESS:
-    case UNZIP_FAILURE:
-      return 'zipIndexById';
-    case DOC2HTML:
-    case DOC2HTML_SUCCESS:
-    case DOC2HTML_FAILURE:
-      return 'doc2htmlById';
-    case SOURCE_INDEX:
-    case SOURCE_INDEX_SUCCESS:
-    case SOURCE_INDEX_FAILURE:
-      return 'sourceIndexById';
-    default:
-      throw new Error(`Unknown action key: ${type}`);
+  case UNZIP:
+  case UNZIP_SUCCESS:
+  case UNZIP_FAILURE:
+    return 'zipIndexById';
+  case DOC2HTML:
+  case DOC2HTML_SUCCESS:
+  case DOC2HTML_FAILURE:
+    return 'doc2htmlById';
+  case SOURCE_INDEX:
+  case SOURCE_INDEX_SUCCESS:
+  case SOURCE_INDEX_FAILURE:
+    return 'sourceIndexById';
+  default:
+    throw new Error(`Unknown action key: ${type}`);
   }
 };
 
@@ -169,6 +190,22 @@ const onFetchPersonFailure = (draft, payload) => {
   draft.person.err = payload;
 };
 
+const onTrimFile = draft => {
+  draft.trimFile = { wip: true, err: null, url: null };
+};
+
+const onTrimFileSuccess = (draft, payload) => {
+  draft.trimFile = { wip: false, err: null, url: payload.link };
+};
+
+const onTrimFileFailure = (draft, payload) => {
+  draft.trimFile = { wip: false, err: payload, url: null };
+};
+
+const onClearTrimFile = (draft) => {
+  draft.trimFile = { wip: false, err: null, url: null };
+};
+
 export const reducer = handleActions({
   [ssr.PREPARE]: onSSRPrepare,
 
@@ -191,6 +228,11 @@ export const reducer = handleActions({
   [FETCH_PERSON]: onFetchPerson,
   [FETCH_PERSON_SUCCESS]: onFetchPersonSuccess,
   [FETCH_PERSON_FAILURE]: onFetchPersonFailure,
+
+  [TRIM_FILE]: onTrimFile,
+  [TRIM_FILE_SUCCESS]: onTrimFileSuccess,
+  [TRIM_FILE_FAILURE]: onTrimFileFailure,
+  [CLEAR_TRIM_FILE]: onClearTrimFile,
 }, initialState);
 
 /* Selectors */
@@ -200,6 +242,7 @@ const getDoc2htmlById    = state => state.doc2htmlById;
 const getSourceIndexById = state => state.sourceIndexById;
 const getAsset           = state => state.asset;
 const getPerson          = state => state.person;
+const getTrimFile        = state => state.trimFile;
 
 export const selectors = {
   getZipIndexById,
@@ -207,4 +250,5 @@ export const selectors = {
   getSourceIndexById,
   getAsset,
   getPerson,
+  getTrimFile,
 };

@@ -27,14 +27,14 @@ export class Requests {
   static getCMS = (item, options) => {
     let url;
     switch (item) {
-      case 'banner':
-        url = `${cmsUrl('banners-list')}/${options.language}`;
-        break;
-      case 'person':
-        url = `${cmsUrl('persons')}/${options.id}?language=${options.language}`;
-        break;
-      default:
-        return null;
+    case 'banner':
+      url = `${cmsUrl('banners-list')}/${options.language}`;
+      break;
+    case 'person':
+      url = `${cmsUrl('persons')}/${options.id}?language=${options.language}`;
+      break;
+    default:
+      return null;
     }
 
     return axios(url);
@@ -130,15 +130,15 @@ class Api {
   static autocomplete = ({ q, language }) => Requests.get(`autocomplete?${Requests.makeParams({ q, language })}`);
 
   static search = ({
-    q,
-    language,
-    pageNo: page_no,
-    pageSize: page_size,
-    sortBy: sort_by,
-    deb,
-    suggest,
-    searchId: search_id
-  }) => (
+                     q,
+                     language,
+                     pageNo: page_no,
+                     pageSize: page_size,
+                     sortBy: sort_by,
+                     deb,
+                     suggest,
+                     searchId: search_id
+                   }) => (
     Requests.get(`search?${Requests.makeParams({ q, language, page_no, page_size, sort_by, deb, suggest, search_id })}`)
   );
 
@@ -155,15 +155,15 @@ class Api {
   );
 
   static recommendedRequestData = ({
-    uid,
-    languages,
-    skipUids: skip_uids,
-    size: more_items,
-    spec,
-    specs,
-    watchingNowMin: watching_now_min,
-    popularMin: popular_min
-  }) => ({
+                                     uid,
+                                     languages,
+                                     skipUids: skip_uids,
+                                     size: more_items,
+                                     spec,
+                                     specs,
+                                     watchingNowMin: watching_now_min,
+                                     popularMin: popular_min
+                                   }) => ({
     more_items,
     'current_feed': [],
     'options': {
@@ -225,17 +225,17 @@ class Api {
     if (namespace === MY_NAMESPACE_PLAYLISTS && params.changeItems) {
       let p;
       switch (method) {
-        case 'POST':
-          p = 'add_items';
-          break;
-        case 'PUT':
-          p = 'update_items';
-          break;
-        case 'DELETE':
-          p = 'remove_items';
-          break;
-        default:
-          p = '';
+      case 'POST':
+        p = 'add_items';
+        break;
+      case 'PUT':
+        p = 'update_items';
+        break;
+      case 'DELETE':
+        p = 'remove_items';
+        break;
+      default:
+        p = '';
       }
 
       urlParam = `${urlParam}/${p}`;
@@ -253,12 +253,9 @@ class Api {
   };
 
   static trimFile = params => {
-    console.log('trimFile FILE_TRIMMER_API', FILE_TRIMMER_API);
-    return fetch(`${FILE_TRIMMER_API || 'https://trim.kab.sh/rest/trim'}?${Requests.makeParams(params)}`)
-      .then(r => {
-        if (r.ok) return r.json();
-        throw Error(r.statusText);
-      });
+    const url    = `${FILE_TRIMMER_API}?${Requests.makeParams(params)}`;
+    const config = { url, method: 'GET' };
+    return axios(config);
   };
 }
 

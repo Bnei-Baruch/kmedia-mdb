@@ -2,54 +2,52 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Container, Header, Icon, Label, Modal, Popup } from 'semantic-ui-react';
 import CopyToClipboard from 'react-copy-to-clipboard';
+import { useDispatch, useSelector } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
 
-import Download from '../../shared/Download/Download';
-import { MDBFile } from '../../shapes';
-import Api from '../../../helpers/Api';
-import { getSourceErrorSplash, wipLoadingSplash } from '../../shared/WipErr/WipErr';
-import { useSelector } from 'react-redux';
 import { selectors as settings } from '../../../redux/modules/settings';
+import { actions, selectors } from '../../../redux/modules/assets';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
+import { getSourceErrorSplash, wipLoadingSplash } from '../../shared/WipErr/WipErr';
+import { MDBFile } from '../../shapes';
+import Download from '../../shared/Download/Download';
 
 const PORTAL_ELEMENT_ID = 'cut-and-download-button';
-const CutAndDownload    = ({ file, sstart, send, width, t }) => {
-  const [download, setDownload]               = useState();
-  const [wip, setWip]                         = useState(false);
-  const [err, setErr]                         = useState(null);
+
+const CutAndDownload = ({ file, sstart, send, width, t }) => {
+  const [wipFetch, setWipFetch]               = useState(false);
   const [isCopyPopupOpen, setIsCopyPopupOpen] = useState(false);
+
+  const { wip, err, url } = useSelector(state => selectors.getTrimFile(state.assets)) || {};
 
   const language = useSelector(state => settings.getLanguage(state.settings));
   const dir      = getLanguageDirection(language);
 
   const isPortalRendered = !!document.getElementById(PORTAL_ELEMENT_ID);
 
+  const dispatch  = useDispatch();
   const handleCut = () => {
     if (sstart === send) return;
-    setWip(true);
-    setErr(null);
-    Api.trimFile({ sstart, send, uid: file.id })
-      .then(d => {
-        setDownload(d.link);
-        setWip(false);
-      })
-      .catch(err => {
-        console.error(err);
-        setErr(err);
-      });
+
+    dispatch(actions.trimFile({ sstart, send, uid: file.id }));
+  };
+
+  const clear = () => {
+    dispatch(actions.clearTrimFile());
+    setWipFetch(false);
   };
 
   const renderDownloadBnt = () => (
     <>
       <Download
-        path={download}
+        path={url}
         mimeType={file.mimetype}
         downloadAllowed={true}
-        filename={download?.split('/').slice(-1)}
+        filename={url?.split('/').slice(-1)}
         elId={PORTAL_ELEMENT_ID}
         color="orange"
-        beforeClick={() => setWip(true)}
-        afterLoaded={() => setWip(false)}
+        beforeClick={() => setWipFetch(true)}
+        afterLoaded={() => setWipFetch(false)}
       >
         {t('player.download.downloadButton')}
       </Download>
@@ -65,7 +63,7 @@ const CutAndDownload    = ({ file, sstart, send, width, t }) => {
       content={t('messages.link-copied-to-clipboard')}
       position="bottom right"
       trigger={(
-        <CopyToClipboard text={download} onCopy={() => setIsCopyPopupOpen(true)}>
+        <CopyToClipboard text={url} onCopy={() => setIsCopyPopupOpen(true)}>
           <Button color="orange" size="mini" content={t('buttons.copy')} />
         </CopyToClipboard>
       )}
@@ -73,16 +71,16 @@ const CutAndDownload    = ({ file, sstart, send, width, t }) => {
   );
 
   const renderContent = () => {
-    const title   = wip ? t('player.download.wipTitle') : t('player.download.modalTitle');
-    const content = wip ? t('player.download.wipContent') : t('player.download.modalContent');
+    const title   = (wip || wipFetch) ? t('player.download.wipTitle') : t('player.download.modalTitle');
+    const content = (wip || wipFetch) ? t('player.download.wipContent') : t('player.download.modalContent');
     return (
       <Modal.Content className="cut_and_download_modal">
         <Header as="h2" color="grey" content={title} />
         {
-          !!err ? getSourceErrorSplash(err, t) : (wip || !isPortalRendered) && wipLoadingSplash(t)
+          !!err ? getSourceErrorSplash(err, t) : (wip || wipFetch || !isPortalRendered) && wipLoadingSplash(t)
         }
         {
-          download && renderDownloadBnt()
+          url && renderDownloadBnt()
         }
         {
           isPortalRendered && renderCopyBtn()
@@ -95,8 +93,8 @@ const CutAndDownload    = ({ file, sstart, send, width, t }) => {
 
   return (
     <Modal
-      open={!!download || wip}
-      onClose={() => setDownload(null)}
+      open={!!url || wip || wipFetch}
+      onClose={clear}
       size="tiny"
       dir={dir}
       trigger={

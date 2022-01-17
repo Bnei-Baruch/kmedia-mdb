@@ -61,6 +61,15 @@ export function* fetchPerson(action) {
   }
 }
 
+export function* trimFile(action) {
+  try {
+    const { data } = yield call(Api.trimFile, action.payload);
+    yield put(actions.trimFileSuccess(data));
+  } catch (err) {
+    yield put(actions.trimFileFailure(err));
+  }
+}
+
 function* watchUnzip() {
   yield takeLatest(types.UNZIP, unzip);
 }
@@ -93,10 +102,15 @@ function cuFilesToData(cu) {
   }, {});
 }
 
+function* watchTrimFile() {
+  yield takeLatest([types.TRIM_FILE], trimFile);
+}
+
 export const sagas = [
   watchUnzip,
   watchDoc2Html,
   watchSourceIndex,
   watchFetchAsset,
   watchFetchPerson,
+  watchTrimFile,
 ];
