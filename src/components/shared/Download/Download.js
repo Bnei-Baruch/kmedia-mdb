@@ -55,17 +55,17 @@ const downloadAsset = (path, mimeType, downloadAllowed, name) => {
 
 const Download = props => {
   const {
-          children = null,
-          path     = null,
-          mimeType,
-          downloadAllowed,
-          filename = path?.split('/').slice(-1)[0],
-          elId     = 'download-button',
-          beforeClick,
-          afterLoaded,
-          handleDidMount,
-          ...params
-        } = props;
+    children = null,
+    path     = null,
+    mimeType,
+    downloadAllowed,
+    filename = path?.split('/').slice(-1)[0],
+    elId     = 'download-button',
+    beforeClick,
+    afterLoaded,
+    handleDidMount,
+    ...params
+  } = props;
 
   useEffect(() => {
     handleDidMount && handleDidMount();

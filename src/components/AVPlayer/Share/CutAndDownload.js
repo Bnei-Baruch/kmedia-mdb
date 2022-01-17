@@ -30,6 +30,7 @@ const CutAndDownload = ({ file, sstart, send, width, t }) => {
     if (sstart === send) {
       return;
     }
+
     dispatch(actions.trimFile({ sstart, send, uid: file.id }));
   };
 
@@ -97,6 +98,7 @@ const CutAndDownload = ({ file, sstart, send, width, t }) => {
       </Modal.Content>
     );
   };
+
   const mOpen         = !!url || wip || wipFetch;
   return (
     <Modal
