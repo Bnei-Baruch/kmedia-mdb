@@ -100,7 +100,7 @@ const CutAndDownload = ({ file, sstart, send, width, t }) => {
       trigger={
         <Popup
           content={t('player.download.iconHoverText')}
-          position="top center"
+          position={'top right'}
           trigger={
             <Button
               circular
