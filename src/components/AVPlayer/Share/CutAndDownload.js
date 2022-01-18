@@ -42,21 +42,19 @@ const CutAndDownload = ({ file, sstart, send, width, t }) => {
   };
 
   const renderDownloadBnt = () => (
-          <>
-            <DownloadNoPortal
-              path={url}
-              mimeType={file.mimetype}
-              onLoadStart={clear}
-              color="orange"
-              downloadAllowed={downloadAllowed}
-            >
-              {t('player.download.downloadButton')}
-            </DownloadNoPortal>
+    <>
+      <DownloadNoPortal
+        path={url}
+        mimeType={file.mimetype}
+        onLoadStart={clear}
+        color="orange"
+        downloadAllowed={downloadAllowed}
+      >
+        {t('player.download.downloadButton')}
+      </DownloadNoPortal>
 
-          </>
-        )
-  ;
-
+    </>
+  );
   const renderCopyBtn = () => (
     <Popup
       open={isCopyPopupOpen}
