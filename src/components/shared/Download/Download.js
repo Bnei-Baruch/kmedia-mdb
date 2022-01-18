@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
 import PropTypes from 'prop-types';
@@ -37,7 +37,7 @@ const fileDownload = (data, path, mimeType, filename = path.split('/').slice(-1)
 
 const downloadAsset = (path, mimeType, downloadAllowed, name) => {
   if (downloadAllowed) {
-    return axios({
+    axios({
       url: path,
       headers: {
         Accept: mimeType
@@ -46,50 +46,24 @@ const downloadAsset = (path, mimeType, downloadAllowed, name) => {
     }).then(response => {
       fileDownload(response.data, path, mimeType, name);
     });
+  } else {
+    window.open(path, '_blank');
   }
-
-  window.open(path, '_blank');
-  return Promise.resolve();
-
 };
 
 const Download = props => {
-  const {
-    children = null,
-    path     = null,
-    mimeType,
-    downloadAllowed,
-    filename = path?.split('/').slice(-1)[0],
-    elId     = 'download-button',
-    handleDidMount,
-    ...params
-  } = props;
-
-  useEffect(() => {
-    handleDidMount && handleDidMount();
-  }, [path]);
-
+  const { children = null, path = null, mimeType, downloadAllowed, filename = path?.split('/').slice(-1)[0] } = props;
   if (path === null || typeof filename === 'undefined') {
     return null;
   }
 
-  const mountPoint = document.getElementById(elId);
+  const mountPoint = document.getElementById('download-button');
   if (mountPoint === null) {
     return null;
   }
 
-  const handleOnClick = () => downloadAsset(path, mimeType, downloadAllowed, filename);
-
   return ReactDOM.createPortal(
-    <Button
-      compact
-      size="small"
-      icon="download"
-      onClick={handleOnClick}
-      {...params}
-    >
-      {children}
-    </Button>,
+    <Button compact size="small" icon="download" onClick={() => downloadAsset(path, mimeType, downloadAllowed, filename)}>{children}</Button>,
     mountPoint,
   );
 };
@@ -102,7 +76,6 @@ Download.propTypes = {
     PropTypes.node
   ]),
   downloadAllowed: PropTypes.bool.isRequired,
-  elId: PropTypes.string,
 };
 
 export default Download;

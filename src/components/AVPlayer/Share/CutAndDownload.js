@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Container, Header, Icon, Label, Modal, Popup } from 'semantic-ui-react';
 import CopyToClipboard from 'react-copy-to-clipboard';
@@ -11,6 +11,7 @@ import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import { getSourceErrorSplash, wipLoadingSplash } from '../../shared/WipErr/WipErr';
 import { MDBFile } from '../../shapes';
 import { DownloadNoPortal } from '../../shared/Download/Download';
+import { DeviceInfoContext } from '../../../helpers/app-contexts';
 
 const CutAndDownload = ({ file, sstart, send, width, t }) => {
   const [open, setOpen]                       = useState(false);
@@ -21,6 +22,9 @@ const CutAndDownload = ({ file, sstart, send, width, t }) => {
 
   const language = useSelector(state => settings.getLanguage(state.settings));
   const dir      = getLanguageDirection(language);
+
+  const deviceInfoContext = useContext(DeviceInfoContext);
+  const downloadAllowed   = deviceInfoContext.deviceInfo?.os.name !== 'iOS';
 
   const dispatch  = useDispatch();
   const handleCut = () => {
@@ -38,18 +42,20 @@ const CutAndDownload = ({ file, sstart, send, width, t }) => {
   };
 
   const renderDownloadBnt = () => (
-    <>
-      <DownloadNoPortal
-        path={url}
-        mimeType={file.mimetype}
-        onLoadStart={clear}
-        color="orange"
-      >
-        {t('player.download.downloadButton')}
-      </DownloadNoPortal>
+          <>
+            <DownloadNoPortal
+              path={url}
+              mimeType={file.mimetype}
+              onLoadStart={clear}
+              color="orange"
+              downloadAllowed={downloadAllowed}
+            >
+              {t('player.download.downloadButton')}
+            </DownloadNoPortal>
 
-    </>
-  );
+          </>
+        )
+  ;
 
   const renderCopyBtn = () => (
     <Popup
