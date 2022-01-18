@@ -55,22 +55,19 @@ const downloadAsset = (path, mimeType, downloadAllowed, name) => {
 
 const Download = props => {
   const {
-    children = null,
-    path     = null,
-    mimeType,
-    downloadAllowed,
-    filename = path?.split('/').slice(-1)[0],
-    elId     = 'download-button',
-    beforeClick,
-    afterLoaded,
-    handleDidMount,
-    ...params
-  } = props;
+          children = null,
+          path     = null,
+          mimeType,
+          downloadAllowed,
+          filename = path?.split('/').slice(-1)[0],
+          elId     = 'download-button',
+          handleDidMount,
+          ...params
+        } = props;
 
   useEffect(() => {
     handleDidMount && handleDidMount();
   }, [path]);
-
 
   if (path === null || typeof filename === 'undefined') {
     return null;
@@ -81,12 +78,7 @@ const Download = props => {
     return null;
   }
 
-  const handleOnClick = () => {
-    beforeClick && beforeClick();
-    downloadAsset(path, mimeType, downloadAllowed, filename)
-      .then(d => afterLoaded && afterLoaded(d));
-
-  };
+  const handleOnClick = () => downloadAsset(path, mimeType, downloadAllowed, filename);
 
   return ReactDOM.createPortal(
     <Button
@@ -111,8 +103,45 @@ Download.propTypes = {
   ]),
   downloadAllowed: PropTypes.bool.isRequired,
   elId: PropTypes.string,
-  beforeClick: PropTypes.func,
-  afterLoaded: PropTypes.func,
 };
 
 export default Download;
+
+export const DownloadNoPortal = props => {
+  const {
+          children        = null,
+          path            = null,
+          mimeType,
+          filename        = path?.split('/').slice(-1)[0],
+          downloadAllowed = true,
+          onLoadStart,
+          ...params
+        } = props;
+
+  const handleOnClick = () => {
+    onLoadStart && onLoadStart();
+    return downloadAsset(path, mimeType, downloadAllowed, filename);
+  };
+  return (
+    <Button
+      compact
+      size="small"
+      icon="download"
+      onClick={handleOnClick}
+      {...params}
+    >
+      {children}
+    </Button>
+  );
+};
+
+DownloadNoPortal.propTypes = {
+  path: PropTypes.string,
+  mimeType: PropTypes.string.isRequired,
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node
+  ]),
+  downloadAllowed: PropTypes.bool.isRequired,
+  onLoadStart: PropTypes.func,
+};

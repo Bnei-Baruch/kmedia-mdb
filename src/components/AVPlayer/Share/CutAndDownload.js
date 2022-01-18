@@ -10,15 +10,12 @@ import { actions, selectors } from '../../../redux/modules/assets';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import { getSourceErrorSplash, wipLoadingSplash } from '../../shared/WipErr/WipErr';
 import { MDBFile } from '../../shapes';
-import Download from '../../shared/Download/Download';
-
-const PORTAL_ELEMENT_ID = 'cut-and-download-button';
+import { DownloadNoPortal } from '../../shared/Download/Download';
 
 const CutAndDownload = ({ file, sstart, send, width, t }) => {
-  const [wipFetch, setWipFetch]                 = useState(false);
-  const [openIconHover, setOpenIconHover]       = useState(false);
-  const [isCopyPopupOpen, setIsCopyPopupOpen]   = useState(false);
-  const [isPortalRendered, setIsPortalRendered] = useState(false);
+  const [open, setOpen]                       = useState(false);
+  const [openIconHover, setOpenIconHover]     = useState(false);
+  const [isCopyPopupOpen, setIsCopyPopupOpen] = useState(false);
 
   const { wip, err, url } = useSelector(state => selectors.getTrimFile(state.assets)) || {};
 
@@ -30,37 +27,26 @@ const CutAndDownload = ({ file, sstart, send, width, t }) => {
     if (sstart === send) {
       return;
     }
-
+    setOpen(true);
     dispatch(actions.trimFile({ sstart, send, uid: file.id }));
   };
 
   const clear = () => {
     dispatch(actions.clearTrimFile());
-    setWipFetch(false);
-    setIsPortalRendered(false);
-  };
-
-  const handleDidMount = () => {
-    setIsPortalRendered(true);
+    setOpen(false);
   };
 
   const renderDownloadBnt = () => (
     <>
-      <Download
+      <DownloadNoPortal
         path={url}
         mimeType={file.mimetype}
-        downloadAllowed={true}
-        filename={url?.split('/').slice(-1)}
-        elId={PORTAL_ELEMENT_ID}
+        onLoadStart={clear}
         color="orange"
-        beforeClick={() => setWipFetch(true)}
-        afterLoaded={() => setWipFetch(false)}
-        handleDidMount={handleDidMount}
       >
         {t('player.download.downloadButton')}
-      </Download>
-      {/* a portal is used to put the download button here in this div */}
-      <span id={PORTAL_ELEMENT_ID} />
+      </DownloadNoPortal>
+
     </>
   );
 
@@ -79,19 +65,19 @@ const CutAndDownload = ({ file, sstart, send, width, t }) => {
   );
 
   const renderContent = () => {
-    const title   = (wip || wipFetch) ? t('player.download.wipTitle') : t('player.download.modalTitle');
-    const content = (wip || wipFetch) ? t('player.download.wipContent') : t('player.download.modalContent');
+    const title   = wip ? t('player.download.wipTitle') : t('player.download.modalTitle');
+    const content = wip ? t('player.download.wipContent') : t('player.download.modalContent');
     return (
       <Modal.Content className="cut_and_download_modal">
         <Header as="h2" color="grey" content={title} />
         {
-          !!err ? getSourceErrorSplash(err, t) : (wip || wipFetch || !isPortalRendered) && wipLoadingSplash(t)
+          !!err ? getSourceErrorSplash(err, t) : wip && wipLoadingSplash(t)
         }
         {
           url && renderDownloadBnt()
         }
         {
-          isPortalRendered && renderCopyBtn()
+          url && renderCopyBtn()
         }
 
         <Container content={content} />
@@ -99,16 +85,15 @@ const CutAndDownload = ({ file, sstart, send, width, t }) => {
     );
   };
 
-  const mOpen         = !!url || wip || wipFetch;
   return (
     <Modal
-      open={mOpen}
+      open={open}
       onClose={clear}
       size="tiny"
       dir={dir}
       trigger={
         <Popup
-          open={openIconHover && !(mOpen)}
+          open={openIconHover && !open}
           onOpen={() => setOpenIconHover(true)}
           onClose={() => setOpenIconHover(false)}
           content={t('player.download.iconHoverText')}
