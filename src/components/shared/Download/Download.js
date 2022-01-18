@@ -55,15 +55,15 @@ const downloadAsset = (path, mimeType, downloadAllowed, name) => {
 
 const Download = props => {
   const {
-          children = null,
-          path     = null,
-          mimeType,
-          downloadAllowed,
-          filename = path?.split('/').slice(-1)[0],
-          elId     = 'download-button',
-          handleDidMount,
-          ...params
-        } = props;
+    children = null,
+    path     = null,
+    mimeType,
+    downloadAllowed,
+    filename = path?.split('/').slice(-1)[0],
+    elId     = 'download-button',
+    handleDidMount,
+    ...params
+  } = props;
 
   useEffect(() => {
     handleDidMount && handleDidMount();
@@ -109,19 +109,20 @@ export default Download;
 
 export const DownloadNoPortal = props => {
   const {
-          children        = null,
-          path            = null,
-          mimeType,
-          filename        = path?.split('/').slice(-1)[0],
-          downloadAllowed = true,
-          onLoadStart,
-          ...params
-        } = props;
+    children        = null,
+    path            = null,
+    mimeType,
+    filename        = path?.split('/').slice(-1)[0],
+    downloadAllowed = true,
+    onLoadStart,
+    ...params
+  } = props;
 
   const handleOnClick = () => {
     onLoadStart && onLoadStart();
     return downloadAsset(path, mimeType, downloadAllowed, filename);
   };
+
   return (
     <Button
       compact

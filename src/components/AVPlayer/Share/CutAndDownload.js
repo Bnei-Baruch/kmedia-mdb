@@ -27,6 +27,7 @@ const CutAndDownload = ({ file, sstart, send, width, t }) => {
     if (sstart === send) {
       return;
     }
+
     setOpen(true);
     dispatch(actions.trimFile({ sstart, send, uid: file.id }));
   };
