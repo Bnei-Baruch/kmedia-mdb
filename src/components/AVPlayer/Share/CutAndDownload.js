@@ -10,7 +10,6 @@ import { actions, selectors } from '../../../redux/modules/assets';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import { getSourceErrorSplash, wipLoadingSplash } from '../../shared/WipErr/WipErr';
 import { MDBFile } from '../../shapes';
-import { DownloadNoPortal } from '../../shared/Download/Download';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 
 const CutAndDownload = ({ file, sstart, send, width, t }) => {
@@ -18,7 +17,7 @@ const CutAndDownload = ({ file, sstart, send, width, t }) => {
   const [openIconHover, setOpenIconHover]     = useState(false);
   const [isCopyPopupOpen, setIsCopyPopupOpen] = useState(false);
 
-  const { wip, err, url } = useSelector(state => selectors.getTrimFile(state.assets)) || {};
+  const { wip, err, download, link } = useSelector(state => selectors.getTrimFile(state.assets)) || {};
 
   const language = useSelector(state => settings.getLanguage(state.settings));
   const dir      = getLanguageDirection(language);
@@ -41,32 +40,28 @@ const CutAndDownload = ({ file, sstart, send, width, t }) => {
     setOpen(false);
   };
 
-  const renderDownloadBnt = () => (
+  const renderBtns = () => (
     <>
-      <DownloadNoPortal
-        path={url}
-        mimeType={file.mimetype}
-        onLoadStart={clear}
+      <Button
+        as="a"
+        href={download}
+        target="_blank"
+        size="mini"
         color="orange"
-        downloadAllowed={downloadAllowed}
-      >
-        {t('player.download.downloadButton')}
-      </DownloadNoPortal>
-
+        content={t('player.download.downloadButton')}
+      />
+      <Popup
+        open={isCopyPopupOpen}
+        onClose={() => setIsCopyPopupOpen(false)}
+        content={t('messages.link-copied-to-clipboard')}
+        position="bottom right"
+        trigger={(
+          <CopyToClipboard text={link} onCopy={() => setIsCopyPopupOpen(true)}>
+            <Button color="orange" size="mini" content={t('buttons.copy')} />
+          </CopyToClipboard>
+        )}
+      />
     </>
-  );
-  const renderCopyBtn = () => (
-    <Popup
-      open={isCopyPopupOpen}
-      onClose={() => setIsCopyPopupOpen(false)}
-      content={t('messages.link-copied-to-clipboard')}
-      position="bottom right"
-      trigger={(
-        <CopyToClipboard text={url} onCopy={() => setIsCopyPopupOpen(true)}>
-          <Button color="orange" size="mini" content={t('buttons.copy')} />
-        </CopyToClipboard>
-      )}
-    />
   );
 
   const renderContent = () => {
@@ -79,12 +74,8 @@ const CutAndDownload = ({ file, sstart, send, width, t }) => {
           !!err ? getSourceErrorSplash(err, t) : wip && wipLoadingSplash(t)
         }
         {
-          url && renderDownloadBnt()
+          download && renderBtns()
         }
-        {
-          url && renderCopyBtn()
-        }
-
         <Container content={content} />
       </Modal.Content>
     );

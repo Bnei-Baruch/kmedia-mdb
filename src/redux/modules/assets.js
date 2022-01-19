@@ -121,20 +121,20 @@ const onSSRPrepare = draft => {
 
 const getActionKey = type => {
   switch (type) {
-    case UNZIP:
-    case UNZIP_SUCCESS:
-    case UNZIP_FAILURE:
-      return 'zipIndexById';
-    case DOC2HTML:
-    case DOC2HTML_SUCCESS:
-    case DOC2HTML_FAILURE:
-      return 'doc2htmlById';
-    case SOURCE_INDEX:
-    case SOURCE_INDEX_SUCCESS:
-    case SOURCE_INDEX_FAILURE:
-      return 'sourceIndexById';
-    default:
-      throw new Error(`Unknown action key: ${type}`);
+  case UNZIP:
+  case UNZIP_SUCCESS:
+  case UNZIP_FAILURE:
+    return 'zipIndexById';
+  case DOC2HTML:
+  case DOC2HTML_SUCCESS:
+  case DOC2HTML_FAILURE:
+    return 'doc2htmlById';
+  case SOURCE_INDEX:
+  case SOURCE_INDEX_SUCCESS:
+  case SOURCE_INDEX_FAILURE:
+    return 'sourceIndexById';
+  default:
+    throw new Error(`Unknown action key: ${type}`);
   }
 };
 
@@ -191,19 +191,19 @@ const onFetchPersonFailure = (draft, payload) => {
 };
 
 const onTrimFile = draft => {
-  draft.trimFile = { wip: true, err: null, url: null };
+  draft.trimFile = { wip: true, err: null, download: null, link: null };
 };
 
-const onTrimFileSuccess = (draft, payload) => {
-  draft.trimFile = { wip: false, err: null, url: payload.link };
+const onTrimFileSuccess = (draft, { download, link }) => {
+  draft.trimFile = { wip: false, err: null, download, link };
 };
 
 const onTrimFileFailure = (draft, payload) => {
-  draft.trimFile = { wip: false, err: payload, url: null };
+  draft.trimFile = { wip: false, err: payload, download: null, link: null };
 };
 
 const onClearTrimFile = draft => {
-  draft.trimFile = { wip: false, err: null, url: null };
+  draft.trimFile = { wip: false, err: null, download: null, link: null };
 };
 
 export const reducer = handleActions({
