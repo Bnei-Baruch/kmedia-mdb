@@ -111,6 +111,7 @@ const PlaylistHeader = ({ collection, unit, t, prevLink = null, nextLink = null 
         playNow = unit?.name;
       }
     }
+
     return (
       <>
         {getTitle()}
