@@ -8,7 +8,7 @@ import clsx from 'clsx';
 import { selectors as settings } from '../../../../../redux/modules/settings';
 import { selectors as sources } from '../../../../../redux/modules/sources';
 import * as shapes from '../../../../shapes';
-import { COLLECTION_DAILY_LESSONS } from '../../../../../helpers/consts';
+import { COLLECTION_DAILY_LESSONS, CT_LESSONS_SERIES } from '../../../../../helpers/consts';
 import { getLanguageDirection } from '../../../../../helpers/i18n-utils';
 import { DeviceInfoContext } from '../../../../../helpers/app-contexts';
 import { cuPartNameByCCUType } from '../../../../../helpers/utils';
@@ -65,6 +65,9 @@ const PlaylistHeader = ({ collection, unit, t, prevLink = null, nextLink = null 
   };
 
   const getTitle = () => {
+    if (!content_type)
+      return null;
+
     if (isLesson) {
       return !isMobileDevice ? (
         <>
@@ -90,27 +93,41 @@ const PlaylistHeader = ({ collection, unit, t, prevLink = null, nextLink = null 
   };
 
   const getTitleByCO = () => {
-    let subheader = '';
-
+    let subheader;
     if (isLesson) {
-      if (!isMobileDevice) {
-        const part = Number(collection?.ccuNames[unit.id]);
-        subheader  = (!isNaN(part) && part > 0) ? `${t(cuPartNameByCCUType(content_type), { name: part })}: ${unit.name}` : unit.name;
-      } else {
-        subheader = `${t('values.date', { date: film_date })}${(number && number < 5) ? ` (${t(`lessons.list.nameByNum_${number}`)})` : ''}`;
-      }
+      subheader = isMobileDevice && `${t('values.date', { date: film_date })}${(number && number < 5) ? ` (${t(`lessons.list.nameByNum_${number}`)})` : ''}`;
     } else if (film_date) {
       subheader = t('values.date', { date: film_date });
     } else if (start_date && end_date) {
       subheader = fromToLocalized(start_date, end_date);
     }
 
+    let playNow;
+    if (!isMobileDevice) {
+      const part = collection?.ccuNames?.[unit.id] ? Number(collection.ccuNames[unit.id]) : null;
+      if (isLesson || content_type === CT_LESSONS_SERIES) {
+        playNow = (!isNaN(part) && part > 0) ? `${t(cuPartNameByCCUType(content_type), { name: part })}: ${unit.name}` : unit.name;
+      } else {
+        playNow = unit?.name;
+      }
+    }
     return (
       <>
         {getTitle()}
-        <small className="display-block font-normal">
-          {subheader}
-        </small>
+        {
+          subheader && (
+            <small className="display-block font-normal">
+              {subheader}
+            </small>
+          )
+        }
+        {
+          playNow && (
+            <small className="display-block font-normal">
+              {playNow}
+            </small>
+          )
+        }
       </>
     );
   };
