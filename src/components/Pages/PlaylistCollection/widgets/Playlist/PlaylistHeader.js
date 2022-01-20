@@ -105,8 +105,11 @@ const PlaylistHeader = ({ collection, unit, t, prevLink = null, nextLink = null 
     let playNow;
     if (!isMobileDevice) {
       const part = collection?.ccuNames?.[unit.id] ? Number(collection.ccuNames[unit.id]) : null;
-      if (isLesson || content_type === CT_LESSONS_SERIES) {
+      if (isLesson) {
         playNow = (!isNaN(part) && part > 0) ? `${t(cuPartNameByCCUType(content_type), { name: part })}: ${unit.name}` : unit.name;
+      } else if (content_type === CT_LESSONS_SERIES) {
+       // playNow = `${t(cuPartNameByCCUType(content_type), { name: part })}: ${t('values.date', { date: unit.film_date })}`;
+        playNow = `${t('values.date', { date: unit.film_date })}`;
       } else {
         playNow = unit?.name;
       }
