@@ -10,7 +10,6 @@ import { actions, selectors } from '../../../redux/modules/assets';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import { getSourceErrorSplash, wipLoadingSplash } from '../../shared/WipErr/WipErr';
 import { MDBFile } from '../../shapes';
-import { DeviceInfoContext } from '../../../helpers/app-contexts';
 
 const CutAndDownload = ({ file, sstart, send, width, t }) => {
   const [open, setOpen]                       = useState(false);
@@ -21,9 +20,6 @@ const CutAndDownload = ({ file, sstart, send, width, t }) => {
 
   const language = useSelector(state => settings.getLanguage(state.settings));
   const dir      = getLanguageDirection(language);
-
-  const deviceInfoContext = useContext(DeviceInfoContext);
-  const downloadAllowed   = deviceInfoContext.deviceInfo?.os.name !== 'iOS';
 
   const dispatch  = useDispatch();
   const handleCut = () => {
