@@ -2471,3 +2471,13 @@
   color: $black !important;
 }
 
+.latestUpdatesCardGroup {
+  position: relative;
+
+  .scroll_intents {
+    position: absolute;
+    top: 140px;
+    background-color: white !important;
+    z-index: 10;
+  }
+}

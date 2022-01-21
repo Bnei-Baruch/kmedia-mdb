@@ -1,6 +1,6 @@
-import React from 'react';
+import React, {useState} from 'react';
 import PropTypes from 'prop-types';
-import { Card, Container, Feed, Grid } from 'semantic-ui-react';
+import {Button, Card, Container, Feed, Grid, Segment} from 'semantic-ui-react';
 import { isEqual } from 'lodash';
 import moment from 'moment';
 import { getSectionForTranslation } from '../../../helpers/utils';
@@ -8,7 +8,10 @@ import * as consts from '../../../helpers/consts';
 import * as shapes from '../../shapes';
 import Section from './Section';
 import LatestUpdate from './LatestUpdate';
+import LatestUpdatesCardList from './LatestUpdatesCardList'
 import TwitterFeed from '../Publications/tabs/Twitter/Feed';
+import {isLanguageRtl} from "../../../helpers/i18n-utils";
+import {Swipeable} from "react-swipeable";
 
 const itemsByContentType = list => list.filter(x => !!x).reduce((acc, val) => {
   if (!acc[val.content_type]) {
@@ -59,6 +62,7 @@ const getComplexCards = getCard => {
   return cards;
 };
 
+
 const LatestUpdatesSection = ({ latestItems = [], t }) => {
   const itemsByCT = itemsByContentType(latestItems);
 
@@ -77,11 +81,7 @@ const LatestUpdatesSection = ({ latestItems = [], t }) => {
   const getLatestUpdate = item =>
     <LatestUpdate key={item.id} item={item} label={t(getSectionForTranslation(item.content_type))} t={t} />;
 
-  const getCardArray = (content_type, itemsCount) => itemsByCT[content_type]?.slice(0, itemsCount).map(item => getLatestUpdate(item));
-
   const getCard = (content_type, index = 0) => itemsByCT[content_type]?.length > index && getLatestUpdate(itemsByCT[content_type][index]);
-
-  const eventTypes = [consts.CT_CONGRESS, consts.CT_FRIENDS_GATHERING, consts.CT_MEAL, consts.CT_HOLIDAY];
 
   const cards = getComplexCards(getCard);
 
@@ -101,6 +101,7 @@ const LatestUpdatesSection = ({ latestItems = [], t }) => {
     <div className="homepage__thumbnails homepage__section">
       <Container className="padded horizontally">
         <Section title={t('materials.recommended.new')} computer={13}>
+
           <Card.Group itemsPerRow={4} doubling className="homepage__section__cardGroup">
             <div className="cardsTitle">
               {t(`events.collection.playlist.lessons`)}
@@ -109,22 +110,17 @@ const LatestUpdatesSection = ({ latestItems = [], t }) => {
             {getCard(consts.CT_DAILY_LESSON, 1)}
             {cards[0]}
             {cards[1]}
-            <div className="cardsTitle">
-              {t(`programs.header.text`)}
-            </div>
-            {getCardArray(consts.CT_VIDEO_PROGRAM_CHAPTER, 4)}
-            <div className="cardsTitle">
-              {t(`programs.tabs.clips`)}
-            </div>
-            {getCardArray(consts.CT_CLIP, 4)}
-            <div className="cardsTitle">
-              {t(`publications.header.text`)}
-            </div>
-            {getCardArray(consts.CT_ARTICLE, 4)}
-            <div className="cardsTitle">
-              {t(`nav.sidebar.events`)}
-            </div>
-            {eventTypes.map(type => getCard(type))}
+
+            {/*<LatestUpdatesCardList  t={t} title={t(`events.collection.playlist.lessons`)} cts={[consts.CT_DAILY_LESSON]} itemsByCT={itemsByCT} />*/}
+
+            <LatestUpdatesCardList  t={t} title={t(`programs.header.text`)} cts={[consts.CT_VIDEO_PROGRAM_CHAPTER]} itemsByCT={itemsByCT} />
+
+            <LatestUpdatesCardList  t={t} title={t(`programs.tabs.clips`)} cts={[consts.CT_CLIP]} itemsByCT={itemsByCT} />
+
+            <LatestUpdatesCardList  t={t} title={t(`publications.header.text`)} cts={[consts.CT_ARTICLE]} itemsByCT={itemsByCT} />
+
+            <LatestUpdatesCardList  t={t} title={t(`nav.sidebar.events`)} cts={[consts.CT_CONGRESS, consts.CT_FRIENDS_GATHERING, consts.CT_MEAL, consts.CT_HOLIDAY]} itemsByCT={itemsByCT} />
+
           </Card.Group>
         </Section>
       </Container>
