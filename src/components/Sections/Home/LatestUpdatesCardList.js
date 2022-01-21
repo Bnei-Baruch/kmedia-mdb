@@ -1,14 +1,14 @@
-import React, {useState} from "react";
-import {Swipeable} from "react-swipeable";
-import {Button, Card} from "semantic-ui-react";
-import PropTypes from "prop-types";
+import React, { useState } from 'react';
+import { Swipeable } from 'react-swipeable';
+import { Button, Card } from 'semantic-ui-react';
+import PropTypes from 'prop-types';
 import * as consts from '../../../helpers/consts';
-import {withNamespaces} from "react-i18next";
-import LatestUpdate from "./LatestUpdate";
-import {getSectionForTranslation} from "../../../helpers/utils";
-import Section from "./Section";
+import { withNamespaces } from 'react-i18next';
+import LatestUpdate from './LatestUpdate';
+import { getSectionForTranslation } from '../../../helpers/utils';
+import Section from './Section';
 
-const LatestUpdatesCardList = ({t, title, cts, itemsByCT, itemsCount=4}) => {
+const LatestUpdatesCardList = ({ t, title, cts, itemsByCT, itemsCount=4 }) => {
 
   const [pageNo, setPageNo] = useState(0);
 
@@ -32,6 +32,7 @@ const LatestUpdatesCardList = ({t, title, cts, itemsByCT, itemsCount=4}) => {
     if (newPageNo < 0 || newPageStart >= getCardArray()?.length) {
       return;
     }
+
     setPageNo(newPageNo);
     setPageStart(newPageStart);
   };

@@ -1,6 +1,6 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import {Button, Card, Container, Feed, Grid, Segment} from 'semantic-ui-react';
+import { Button, Card, Container, Feed, Grid, Segment } from 'semantic-ui-react';
 import { isEqual } from 'lodash';
 import moment from 'moment';
 import { getSectionForTranslation } from '../../../helpers/utils';
@@ -10,8 +10,8 @@ import Section from './Section';
 import LatestUpdate from './LatestUpdate';
 import LatestUpdatesCardList from './LatestUpdatesCardList'
 import TwitterFeed from '../Publications/tabs/Twitter/Feed';
-import {isLanguageRtl} from "../../../helpers/i18n-utils";
-import {Swipeable} from "react-swipeable";
+import { isLanguageRtl } from '../../../helpers/i18n-utils';
+import { Swipeable } from 'react-swipeable';
 
 const itemsByContentType = list => list.filter(x => !!x).reduce((acc, val) => {
   if (!acc[val.content_type]) {
