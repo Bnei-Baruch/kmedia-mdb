@@ -68,7 +68,7 @@ const VmPlayer = ({
   // const uiLanguage          = useSelector(state => settings.getLanguage(state.settings));
   // const contentLanguage     = useSelector(state => settings.getContentLanguage(state.settings));
 
-  // const [duration]                    = usePlayerContext(player, 'duration', 0);
+  const [duration]                    = usePlayerContext(player, 'duration', 0);
   const [currentTime, setCurrentTime] = usePlayerContext(player, 'currentTime', 0);
   const [playbackReady]               = usePlayerContext(player, 'playbackReady', false);
   // const [mediaType]                   = usePlayerContext(player, 'mediaType', undefined);
@@ -190,9 +190,11 @@ const VmPlayer = ({
           onNext={onNext}
         />
         { editMode &&
-          <Controls>
+          <Controls pin="topLeft">
             <ShareForm
               item={item}
+              currentTime={currentTime}
+              duration={duration}
               onSliceChange={handleSliceChange}
               onExit={() => setEditMode(false)}
             />
