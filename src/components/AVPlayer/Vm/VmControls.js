@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   ClickToPlay,
+  DblClickFullscreen,
   ControlGroup,
   Controls,
   ControlSpacer,
@@ -31,27 +32,32 @@ const getVideoControls = () => (
   </>
 )
 
+const seekBarFocus = () => {
+  console.log('seekBarFocus')
+}
+
 const getSeekBar = (sliceStart, sliceEnd) =>
   // <VmSeekBar sliceStart={sliceStart} sliceEnd={sliceEnd} />;
-  <ControlGroup space="both">
+  <ControlGroup>
     <ScrubberControl
       alwaysShowHours
       min={sliceStart}
       max={sliceEnd}
-      style={{
-        '--vm-slider-track-height': 7,
-        // '--vm-slider-track-focused-height':10,
-        // '--vm-scrubber-buffered-bg': 'red',
-        // '--vm-scrubber-loading-stripe-color': 'gray'
-        // '--vm-slider-thumb-height': 15,
-        // '--vm-slider-thumb-bg': 'orange'
-        // '--vm-slider-track-color': 'yellow'
-      }}
+      vmFocus={seekBarFocus}
+      // style={{
+      //   '--vm-slider-track-height': 7,
+      //   '--vm-slider-track-focused-height':7,
+      //   // '--vm-scrubber-buffered-bg': 'red',
+      //   // '--vm-scrubber-loading-stripe-color': 'gray'
+      //   '--vm-slider-thumb-height': 7,
+      //   // '--vm-slider-thumb-bg': 'orange'
+      //   // '--vm-slider-track-color': 'yellow'
+      // }}
     />;
   </ControlGroup>
 
 const getControls = (showNextPrev, onPrev, onNext, onActivateSlice, isVideo, onSwitchAV) =>
-  <ControlGroup space="top">
+  <ControlGroup space="both">
     { showNextPrev && <VmPrevNext isPrev onClick={onPrev} /> }
     <PlaybackControl />
     <VolumeControl className="volumeControl" />
@@ -115,13 +121,14 @@ const buildDesktopVideoControls = (showNextPrev, onPrev, onNext, onActivateSlice
   <>
     <Scrim gradient="up" />
     <ClickToPlay />
+    <DblClickFullscreen />
     <Poster />
     <Spinner />
     <Skeleton />
 
-    <Controls fullWidth pin="topLeft">
+    {/* <Controls fullWidth pin="topLeft">
       <ControlSpacer />
-    </Controls>
+    </Controls> */}
 
     <Controls
       pin="center"
@@ -175,7 +182,6 @@ export const VmControls = (
   }
 ) =>  {
   let controls;
-  console.log('prev, next:', showNextPrev, !!onPrev, !!onNext);
 
   if (isMobile) {
     controls = buildMobileVideoControls();
