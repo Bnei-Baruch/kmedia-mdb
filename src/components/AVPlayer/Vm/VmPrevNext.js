@@ -2,7 +2,7 @@ import { useRef } from 'react';
 import { Control } from '@vime/react';
 import { Icon } from 'semantic-ui-react';
 
-export const VmPrevNext = ({ isPrev, isDisabled, onClick }) => {
+export const VmPrevNext = ({ isPrev, onClick }) => {
   const ref  = useRef(null);
   const icon = isPrev ? 'step backward' : 'step forward';
 
@@ -10,10 +10,10 @@ export const VmPrevNext = ({ isPrev, isDisabled, onClick }) => {
     <Control
       ref={ref}
       onClick={onClick}
-      disabled={isDisabled}
+      disabled={!onClick}
       style={{ '--vm-control-scale': 0.5 }}
     >
-      <Icon name={icon} disabled={isDisabled} />
+      <Icon name={icon} disabled={!onClick} />
     </Control>
   );
 };

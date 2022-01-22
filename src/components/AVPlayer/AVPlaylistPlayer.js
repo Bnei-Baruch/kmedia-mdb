@@ -80,10 +80,8 @@ const AVPlaylistPlayer = ({ items, selected, onSelectedChange, onLanguageChange,
           // Playlist props
           showNextPrev
           onFinish={onFinish}
-          hasNext={hasNext}
-          hasPrev={hasPrev}
-          onPrev={onPrev}
-          onNext={onNext}
+          onPrev={hasPrev && onPrev}
+          onNext={hasNext && onNext}
           onPause={onPause}
           onPlay={onPlay}
           onMediaEditModeChange={handleMediaEditModeChange}
