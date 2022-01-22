@@ -112,7 +112,7 @@ export const updateQuery = (history, updater) => {
   history.replace({
     search: stringify(updater(query)),
     state: history.location?.state ?? '',
-    hash: history.location.hash
+    hash: history.location?.hash
   });
 };
 

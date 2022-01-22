@@ -235,14 +235,21 @@ function* fetchViews(action) {
 }
 
 function* fetchViewsByUIDs(uids) {
-  uids = yield select(state => uids.filter(uid => recommended.getViews(uid, state.recommended) === -1));
-  if (uids.length > 0) {
-    const { data } = yield call(Api.views, uids);
-    const views    = uids.reduce((acc, uid, i) => {
-      acc[uid] = data.views[i];
-      return acc;
-    }, {});
-    yield put(actions.receiveViews(views));
+  if (Array.isArray(uids)) {
+    uids = yield select(state => uids.filter(uid => recommended.getViews(uid, state.recommended) === -1));
+    if (uids.length > 0) {
+      const { data } = yield call(Api.views, uids);
+      let views = [];
+
+      if (Array.isArray(data.views)) {
+        views    = uids.reduce((acc, uid, i) => {
+          acc[uid] = i < data.views.length ? data.views[i] : undefined;
+          return acc;
+        }, {});
+      }
+
+      yield put(actions.receiveViews(views));
+    }
   }
 }
 
