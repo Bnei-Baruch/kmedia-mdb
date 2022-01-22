@@ -1,14 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
+import { useLocation } from 'react-router-dom';
 // import { useSelector } from 'react-redux';
-import { Player, usePlayerContext, Ui } from '@vime/react';
+import { Player, usePlayerContext, Ui, Controls } from '@vime/react';
 
 import * as shapes from '../../shapes';
 import ClientChronicles from '../../../helpers/clientChronicles';
 import playerHelper from '../../../helpers/player';
 import { isEmpty } from '../../../helpers/utils';
 import { MT_VIDEO, VS_DEFAULT, VS_FHD, VS_HD, VS_NHD } from '../../../helpers/consts';
+import { getQuery } from '../../../helpers/url';
+import { fromHumanReadableTime } from '../../../helpers/time';
 // import { selectors as settings } from '../../../redux/modules/settings';
 import { PLAYER_MODE } from '../constants';
 import ShareForm from '../Share/ShareForm';
@@ -57,18 +60,15 @@ const VmPlayer = ({
   onLanguageChange,
 
   showNextPrev = false,
-  hasPrev = false,
   onPrev = null,
-  hasNext = false,
   onNext = null,
-  // mode,
   t,
 }) => {
   const player = useRef(null);
   // const uiLanguage          = useSelector(state => settings.getLanguage(state.settings));
   // const contentLanguage     = useSelector(state => settings.getContentLanguage(state.settings));
 
-  const [duration]                    = usePlayerContext(player, 'duration', 0);
+  // const [duration]                    = usePlayerContext(player, 'duration', 0);
   const [currentTime, setCurrentTime] = usePlayerContext(player, 'currentTime', 0);
   const [playbackReady]               = usePlayerContext(player, 'playbackReady', false);
   // const [mediaType]                   = usePlayerContext(player, 'mediaType', undefined);
@@ -76,15 +76,26 @@ const VmPlayer = ({
   const [source, setSource]             = useState({});
   const [isVideo, setIsVideo]           = useState(item.mediaType === MT_VIDEO);
   const [videoQuality, setVideoQuality] = useState(VS_DEFAULT);
-
-  const [wasCurrentTime, setWasCurrentTime] = useState(0);
-
-  // const [mode, setMode]         = useState(PLAYER_MODE.NORMAL);
+  const [switchCurrentTime, setSwitchCurrentTime] = useState(0);
   const [editMode, setEditMode] = useState(false);
 
-  // const [isEditMode, setIsEditMode] = useState(mode === PLAYER_MODE.SLICE_EDIT);
   const [sliceStart, setSliceStart] = useState(0);
-  const [sliceEnd, setSliceEnd]     = useState(duration);
+  const [sliceEnd, setSliceEnd]     = useState(player.duration);
+
+  const location = useLocation();
+
+  useEffect(() => {
+    const query = getQuery(location);
+    const { sstart, send } = query
+    console.log('sstart, send:', sstart, send)
+
+    if (sstart)
+      setSliceStart(fromHumanReadableTime(sstart).asSeconds());
+
+    if (send)
+      setSliceEnd(fromHumanReadableTime(send).asSeconds())
+
+  }, [location]);
 
   useEffect(() => {
     const { src, videoQuality } = chooseSource(item, t);
@@ -94,20 +105,36 @@ const VmPlayer = ({
   }, [item, t]);
 
   useEffect(() => {
-    if (playbackReady && wasCurrentTime > 0) {
-      setCurrentTime(wasCurrentTime);
-      setWasCurrentTime(0);
+    if (playbackReady && switchCurrentTime > 0) {
+      console.log('setCurrentTime by switch time:', switchCurrentTime)
+      setCurrentTime(switchCurrentTime);
+      setSwitchCurrentTime(0);
     }
-  }, [playbackReady, setCurrentTime, wasCurrentTime]);
+  }, [playbackReady, setCurrentTime, switchCurrentTime]);
 
   useEffect(() => {
-    if (!editMode) {
-      setSliceStart(undefined);
-      setSliceEnd(undefined);
-    }
+    // if (!editMode && (sliceStart || sliceEnd)) {
+    //   setSliceStart(undefined);
+    //   setSliceEnd(undefined);
+    // }
 
     onMediaEditModeChange(editMode ? PLAYER_MODE.SLICE_EDIT : PLAYER_MODE.NORMAL)
   }, [editMode, onMediaEditModeChange]);
+
+  useEffect(() => {
+    if (sliceStart) {
+      console.log('setCurrentTime:', sliceStart)
+      setCurrentTime(sliceStart);
+    }
+  }, [setCurrentTime, sliceStart])
+
+  useEffect(() => {
+    // console.log('currentTime, sliceEnd:', currentTime, sliceEnd)
+    if (player.current.playing && currentTime >= sliceEnd) {
+      console.log('pause')
+      player.current.pause();
+    }
+  }, [currentTime, sliceEnd]);
 
 
   const handleSliceChange = (sliceStart, sliceEnd) => {
@@ -121,7 +148,7 @@ const VmPlayer = ({
       return;
     }
 
-    setWasCurrentTime(currentTime);
+    setSwitchCurrentTime(currentTime);
     playerHelper.persistPreferredVideoSize(quality);
     const { byQuality } = item;
     setVideoQuality(quality);
@@ -130,18 +157,18 @@ const VmPlayer = ({
 
   // Remember the current time while switching.
   const switchAV = () => {
-    setWasCurrentTime(currentTime);
+    setSwitchCurrentTime(currentTime);
     onSwitchAV();
   };
 
   // Remember the current time while switching.
   const languageChange = e => {
-    setWasCurrentTime(currentTime);
+    setSwitchCurrentTime(currentTime);
     onLanguageChange(e, e.target?.value);
   };
 
   return (
-    <Player ref={player} theme="dark" playsInline
+    <Player ref={player} theme="dark" playsInline autoPlay
       style={{ '--vm-control-spacing': 0, }}
       debug={true}
     >
@@ -152,28 +179,24 @@ const VmPlayer = ({
       />
       <Ui>
         <VmControls
-          // player={player.current}
           isVideo={isVideo}
-          // TODO isMobile={isMobile}
-
-          activeDuration={1500}
-          hideWhenPaused={false}
-
           onSwitchAV={switchAV}
           onActivateSlice={() => setEditMode(!editMode)}
+          sliceStart={sliceStart}
+          sliceEnd={sliceEnd}
 
           showNextPrev={showNextPrev}
-          hasPrev={hasPrev}
           onPrev={onPrev}
-          hasNext={hasNext}
           onNext={onNext}
         />
         { editMode &&
+          <Controls>
             <ShareForm
               item={item}
               onSliceChange={handleSliceChange}
               onExit={() => setEditMode(false)}
             />
+          </Controls>
         }
         <VmSettings
           isVideo={isVideo}
