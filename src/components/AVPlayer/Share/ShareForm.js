@@ -4,7 +4,6 @@ import { Button, Form, Message, Popup } from 'semantic-ui-react';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { withNamespaces } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { usePlayerContext } from '@vime/react';
 
 import { selectors as settings } from '../../../redux/modules/settings';
 import { toHumanReadableTime } from '../../../helpers/time';
@@ -44,37 +43,39 @@ const getUrl = (item, uiLanguage, start, end, addUiLang) => {
   return `${shareUrl}?${stringify(q)}`;
 }
 
-const colonStrToSecond = str => {
-  const s = str.replace(/[^\d:]+/g, '');
+// const colonStrToSecond = str => {
+//   const s = str.replace(/[^\d:]+/g, '');
 
-  return s.split(':')
-    .map(t => (t ? parseInt(t, 10) : 0))
-    .reverse()
-    .reduce((result, t, i) => (result + (t * Math.pow(60, i))), 0);
-}
+//   return s.split(':')
+//     .map(t => (t ? parseInt(t, 10) : 0))
+//     .reverse()
+//     .reduce((result, t, i) => (result + (t * Math.pow(60, i))), 0);
+// }
 
-const mlsToStrColon = seconds => {
-  const duration = new Date(seconds * 1000); // ms
-  const h        = duration.getUTCHours();
-  const m        = duration.getUTCMinutes();
-  const s        = duration.getUTCSeconds();
-  return h ? `${h}:${m}:${s}` : `${m}:${s}`;
-}
+// const mlsToStrColon = seconds => {
+//   const duration = new Date(seconds * 1000); // ms
+//   const h        = duration.getUTCHours();
+//   const m        = duration.getUTCMinutes();
+//   const s        = duration.getUTCSeconds();
+//   return h ? `${h}:${m}:${s}` : `${m}:${s}`;
+// }
 
 const getEmbed = url => {
-  const appendChar = url.indexOf('?') !== -1 ? '&' : '?';
-  return `<iframe width="680" height="420" src="${url}${appendChar}embed=1&autoPlay=1" frameBorder="0" scrolling="no" allowfullscreen />`;
+  if (url) {
+    const appendChar = url.indexOf('?') !== -1 ? '&' : '?';
+    return `<iframe width="680" height="420" src="${url}${appendChar}embed=1&autoPlay=1" frameBorder="0" scrolling="no" allowfullscreen />`;
+  }
+
+  return null;
+
 };
 
-const ShareForm = ({ player, item, onSliceChange, onExit, t }) => {
+const ShareForm = ({ item, currentTime, duration, onSliceChange, onExit, t }) => {
   const uiLanguage  = useSelector(state => settings.getLanguage(state.settings));
 
-  const [duration]    = usePlayerContext(player, 'duration', 0);
-  const [currentTime] = usePlayerContext(player, 'currentTime', 0);
-
   const [isCopyPopupOpen, setIsCopyPopupOpen] = useState(false);
-  const [start, setStart] = useState(Math.round(currentTime));
-  const [end, setEnd] = useState(Math.round(currentTime));
+  const [start, setStart] = useState(currentTime);
+  const [end, setEnd] = useState(duration);
 
   const [url, setUrl] = useState();
   const [uiLangUrl, setUiLangUrl] = useState();
@@ -82,74 +83,25 @@ const ShareForm = ({ player, item, onSliceChange, onExit, t }) => {
   useEffect(() => {
     setUrl(getUrl(item, uiLanguage, start, end));
     setUiLangUrl(getUrl(item, uiLanguage, start, end, true));
-    onSliceChange(start, end);
-  }, [end, item, onSliceChange, start, uiLanguage]);
+  }, [end, item, start, uiLanguage]);
 
   const handleCopied = () => {
-    // clearTimeout();
     setIsCopyPopupOpen(true);
     setTimeout(() => setIsCopyPopupOpen(false), POPOVER_CONFIRMATION_TIMEOUT);
-
-    // setState({ isCopyPopupOpen: true }, () => {
-    //   timeout = setTimeout(() => setState({ isCopyPopupOpen: false }), POPOVER_CONFIRMATION_TIMEOUT);
-    // });
   };
 
-  const setStartValue = (e, data) => {
-    // const { media, onSliceChange } = props;
-    // const duration = Math.max(duration, 0);
+  const setCutFrom = (e, data) => {
+    console.log('setStartValue:', currentTime, e, data);
+    setStart(currentTime);
 
-    let newStart = data?.value
-      ? colonStrToSecond(data.value)
-      : Math.round(currentTime);
-    newStart     = Math.min(newStart, duration);
-
-    if (end < newStart) {
-      setEnd(duration);
-    }
-
-    setStart(newStart);
-
-    // let newEnd = end < newStart ? duration : end;
-    // newEnd     = newEnd > newStart ? newEnd : duration;
-
-    // setEnd(newEnd);
-
-    // const state = { start: newStart, end: newEnd };
-    // if (!newEnd) {
-    //   delete state.end;
-    //   newEnd = null;
-    // }
-
-    // setState({
-    //   ...state,
-    //   url: getUrl(props, newStart, newEnd),
-    //   uiLangUrl: getUrl(props, newStart, newEnd, true),
-    // });
-    // onSliceChange(newStart, newEnd);
+    onSliceChange(start, end)
   };
 
-  const setEndValue = (e, data) => {
-    // const { media, onSliceChange } = props;
-    // const duration                 = Math.max(media.duration, 0);
+  const setCutTo = () => {
+    console.log('setEndValue:', currentTime);
+    setEnd(currentTime);
 
-    let newEnd = data?.value
-      ? colonStrToSecond(data.value)
-      : Math.round(currentTime);
-    newEnd = Math.min(newEnd, duration);
-
-    if (start > newEnd) {
-      setStart(0);
-    }
-
-    setEnd(newEnd);
-
-    // setState({
-    //   end, start,
-    //   url: getUrl(props, start, end),
-    //   uiLangUrl: getUrl(props, start, end, true),
-    // });
-    // onSliceChange(newStart, newEnd);
+    onSliceChange(start, end)
   };
 
   return (
@@ -171,7 +123,8 @@ const ShareForm = ({ player, item, onSliceChange, onExit, t }) => {
             position="bottom right"
             trigger={(
               <CopyToClipboard text={url} onCopy={handleCopied}>
-                <Button className="shareCopyLinkButton" size="mini" content={t('buttons.copy')} />
+                <Button //className="shareCopyLinkButton"
+                  size="mini" content={t('buttons.copy')} />
               </CopyToClipboard>
             )}
           />
@@ -179,32 +132,32 @@ const ShareForm = ({ player, item, onSliceChange, onExit, t }) => {
         <Form>
           <Form.Group widths="equal">
             <Form.Input
-              value={start ? mlsToStrColon(start) : ''}
-              onClick={setStartValue}
               action={{
                 content: t('player.buttons.start-position'),
-                onClick: setStartValue,
+                onClick: setCutFrom,
                 icon: 'hourglass start',
                 color: 'blue',
                 size: 'mini',
                 compact: true,
               }}
-              input={{ readOnly: true }}
+              onClick={setCutFrom}
+              value={toHumanReadableTime(start)}
+              // onChange={() => setStart(currentTime)}
               actionPosition="left"
               placeholder={t('player.buttons.click-to-set')}
             />
             <Form.Input
-              value={end ? mlsToStrColon(end) : ''}
-              onClick={setEndValue}
               action={{
                 content: t('player.buttons.end-position'),
-                onClick: setEndValue,
+                onClick: setCutTo,
                 icon: 'hourglass end',
                 color: 'blue',
                 size: 'mini',
                 compact: true,
               }}
-              input={{ readOnly: true }}
+              value={toHumanReadableTime(end)}
+              onClick={setCutTo}
+              // input={{ readOnly: true }}
               actionPosition="left"
               placeholder={t('player.buttons.click-to-set')}
             />
@@ -216,8 +169,7 @@ const ShareForm = ({ player, item, onSliceChange, onExit, t }) => {
 }
 
 ShareForm.propTypes = {
-  player: PropTypes.object,
-  item: PropTypes.arrayOf(shapes.VideoItem).isRequired,
+  item: shapes.VideoItem.isRequired,
   onSliceChange: PropTypes.func.isRequired,
   onExit: PropTypes.func.isRequired,
   t: PropTypes.func.isRequired,
