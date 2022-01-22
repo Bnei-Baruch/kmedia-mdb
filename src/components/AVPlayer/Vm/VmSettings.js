@@ -4,17 +4,12 @@ import { LANGUAGE_OPTIONS, VS_NAMES } from '../../../helpers/consts';
 
 const formatRate = rate => rate.toString() === '1' ? 'normal' : `${rate}x`;
 
-const sortByValue = (a, b) => {
-  if (a.value < b.value) {
-    return -1;
-  }
-
-  if (a.value > b.value) {
-    return 1;
-  }
-
-  return 0;
-};
+const sortByValue = (a, b) =>
+  a.value < b.value
+    ? -1
+    : a.value > b.value
+      ? 1
+      : 0;
 
 const buildPlaybackRateSubmenu = (playbackRates, currentRate, playback) => (
   <Submenu label="Playback Rate" hint={formatRate(currentRate)}>
