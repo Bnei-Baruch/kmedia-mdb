@@ -46,7 +46,7 @@ const PlaylistCollectionContainer = ({ cId, t, cuId }) => {
         cuIDs.forEach(cuID => {
           if (!wipMap.units[cuID] && !errorMap.units[cuID]) {
             const cu = content_units.find(x => x.id === cuID);
-            if (!cu || !cu.files) {
+            if (!cu || !cu.files || !cu.tags || !cu.sources) {
               dispatch(actions.fetchUnit(cuID));
             }
           }
