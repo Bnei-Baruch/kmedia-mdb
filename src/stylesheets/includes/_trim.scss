@@ -1,0 +1,54 @@
+.trimmed_files {
+  position: fixed;
+  bottom: 0;
+  left: 2em;
+  right: auto;
+  width: 600px;
+  background: $white;
+  z-index: 1900;
+  border: 1px solid $midGrey;
+
+  & > .segment {
+    background: $blue;
+    color: white;
+    padding: 1em 0.5em;
+    border-radius: 0;
+  }
+
+  & > .content {
+    max-height: 70VH;
+    overflow: auto;
+    padding-bottom: 2em;
+  }
+
+  .button {
+    padding: 0 !important;
+  }
+
+  .ui.basic.icon.button {
+    box-shadow: none !important;
+
+    &:hover, &:active, &:focus {
+      box-shadow: none !important;
+    }
+
+    &:hover {
+      opacity: 0.8;
+    }
+
+    & > .icon {
+      font-size: 1.4em;
+      line-height: 1.2em;
+      align-self: center;
+    }
+  }
+
+  .splash {
+    display: inline-block;
+    margin: 0 8px;
+
+    & .icon {
+      font-size: 1.2em !important;
+    }
+  }
+}

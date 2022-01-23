@@ -18,7 +18,7 @@ import {
   WhatsappIcon,
   WhatsappShareButton,
 } from 'react-share';
-import CutAndDownload from './CutAndDownload';
+import CutAndDownload from './TrimBtn';
 
 const POPOVER_CONFIRMATION_TIMEOUT = 2500;
 

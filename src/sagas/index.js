@@ -19,6 +19,7 @@ import { sagas as music } from './music';
 import { sagas as auth } from './auth';
 import { sagas as my } from './my';
 import { sagas as likutim } from './likutim';
+import { sagas as trim } from './trim';
 
 const allSagas = [
   ...mdb,
@@ -40,7 +41,8 @@ const allSagas = [
   ...auth,
   ...my,
   ...music,
-  ...likutim
+  ...likutim,
+  ...trim
 ];
 
 export function* rootSaga() {
