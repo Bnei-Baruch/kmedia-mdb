@@ -168,6 +168,12 @@ export const Source = PropTypes.shape({
   description: PropTypes.string,
 });
 
+export const Topic = PropTypes.shape({
+  id: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+  // Some fields might be missing.
+});
+
 export const Topics = PropTypes.arrayOf(PropTypes.shape({
   id: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
