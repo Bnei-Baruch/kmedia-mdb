@@ -21,62 +21,59 @@ const DownloadTrim = ({ t }) => {
   if ((list.length === 0 && wips.length === 0) || !open)
     return null;
 
-  const renderItem = ({ link, download, name }, i) => {
-    return (
-      <GridRow>
-        <GridColumn width="12">
-          {`${wips.length + i + 1}. ${name}`}
-        </GridColumn>
-        <GridColumn width="4" textAlign="right">
-          <Popup
-            content={t('player.download.downloadButton')}
-            trigger={
+  const renderItem = ({ link, download, name }, i) => (
+    <GridRow>
+      <GridColumn width="12">
+        {`${wips.length + i + 1}. ${name}`}
+      </GridColumn>
+      <GridColumn width="4" textAlign="right">
+        <Popup
+          content={t('player.download.downloadButton')}
+          trigger={
+            <Button
+              as="a"
+              basic
+              compact
+              size="medium"
+              color="blue"
+              href={download}
+              target="_blank"
+              icon="download"
+            />
+          }
+        />
+        <Popup
+          open={isCopyPopupOpen}
+          onClose={() => setIsCopyPopupOpen(false)}
+          content={t('messages.link-copied-to-clipboard')}
+          position="bottom right"
+          trigger={(
+            <CopyToClipboard text={link} onCopy={() => setIsCopyPopupOpen(true)}>
               <Button
-                as="a"
                 basic
+                icon="copy outline"
                 compact
                 size="medium"
                 color="blue"
-                href={download}
-                target="_blank"
-                icon="download"
               />
-            }
-          />
-          <Popup
-            open={isCopyPopupOpen}
-            onClose={() => setIsCopyPopupOpen(false)}
-            content={t('messages.link-copied-to-clipboard')}
-            position="bottom right"
-            trigger={(
-              <CopyToClipboard text={link} onCopy={() => setIsCopyPopupOpen(true)}>
-                <Button
-                  basic
-                  icon="copy outline"
-                  compact
-                  size="medium"
-                  color="blue"
-                />
-              </CopyToClipboard>
-            )}
-          />
-        </GridColumn>
-      </GridRow>
-    );
-  };
+            </CopyToClipboard>
+          )}
+        />
+      </GridColumn>
+    </GridRow>
+  );
 
-  const renderWip = (x, i) => {
-    return (
-      <GridRow>
-        <GridColumn width={9} verticalAlign={'middle'}>
-          {`${wips.length + i + 1}. ${t('messages.trimmed-wip')} `}
-          <Splash isLoading icon="circle notch" color="blue" width="20" />
-        </GridColumn>
-        <GridColumn>
-        </GridColumn>
-      </GridRow>
-    );
-  };
+  const renderWip = (x, i) => (
+    <GridRow>
+      <GridColumn width={9} verticalAlign={'middle'}>
+        {`${wips.length + i + 1}. ${t('messages.trimmed-wip')} `}
+        <Splash isLoading icon="circle notch" color="blue" width="20" />
+      </GridColumn>
+      <GridColumn>
+      </GridColumn>
+    </GridRow>
+  );
+
   return (
     <div className="trimmed_files">
       <Segment clearing className="top">
