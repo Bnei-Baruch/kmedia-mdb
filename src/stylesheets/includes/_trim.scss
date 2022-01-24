@@ -1,12 +1,19 @@
+.rtl .trimmed_files {
+  left: 2em;
+  right: auto;
+
+}
+
 .trimmed_files {
   position: fixed;
   bottom: 0;
-  left: 2em;
-  right: auto;
+  right: 2em;
+  left: auto;
   width: 600px;
   background: $white;
   z-index: 1900;
   border: 1px solid $midGrey;
+  padding-bottom: 1.5em;
 
   & > .segment {
     background: $blue;
@@ -18,7 +25,6 @@
   & > .content {
     max-height: 70VH;
     overflow: auto;
-    padding-bottom: 2em;
   }
 
   .button {
@@ -27,6 +33,9 @@
 
   .ui.basic.icon.button {
     box-shadow: none !important;
+    &:first-child{
+      margin:0 8px;
+    }
 
     &:hover, &:active, &:focus {
       box-shadow: none !important;

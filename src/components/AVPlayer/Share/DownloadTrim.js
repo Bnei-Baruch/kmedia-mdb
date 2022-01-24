@@ -101,7 +101,7 @@ const DownloadTrim = ({ t }) => {
           as="h3"
           floated="left"
           inverted
-          content={t('messages.trimmed-title')}
+          content={wips.length > 0 ? t('messages.trimmed-title-wip') : t('messages.trimmed-title')}
         />
       </Segment>
       {
@@ -109,7 +109,7 @@ const DownloadTrim = ({ t }) => {
           <Container className="padded content">
             <Grid>
               {
-                [1, 2, ...wips].map(renderWip)
+                wips.map(renderWip)
               }
               {
                 list.map(renderItem)
