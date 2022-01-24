@@ -23,10 +23,10 @@ const DownloadTrim = ({ t }) => {
 
   const renderItem = ({ link, download, name }, i) => (
     <GridRow>
-      <GridColumn width="12">
+      <GridColumn width="13">
         {`${wips.length + i + 1}. ${name}`}
       </GridColumn>
-      <GridColumn width="4" textAlign="right">
+      <GridColumn width="3" textAlign="right">
         <Popup
           content={t('player.download.downloadButton')}
           trigger={
