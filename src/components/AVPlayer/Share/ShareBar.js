@@ -25,26 +25,26 @@ const POPOVER_CONFIRMATION_TIMEOUT = 2500;
 
 const getBsPixels = buttonSize => {
   switch (buttonSize) {
-  default:
-    return 46;
-  case 'small':
-    return 36;
-  case 'tiny':
-    return 26;
+    default:
+      return 46;
+    case 'small':
+      return 36;
+    case 'tiny':
+      return 26;
   }
 };
 
 const ShareBar = props => {
   const {
-          t,
-          url          = '',
-          buttonSize   = 'big',
-          messageTitle = '',
-          embedContent = null,
-          sstart,
-          send,
-          file
-        } = props;
+    t,
+    url          = '',
+    buttonSize   = 'big',
+    messageTitle = '',
+    embedContent = null,
+    sstart,
+    send,
+    file
+  } = props;
 
   const [isEmbedPopupOpen, setIsEmbedPopupOpen] = useState(false);
   const { isMobileDevice }                      = useContext(DeviceInfoContext);

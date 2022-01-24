@@ -22,7 +22,7 @@ const DownloadTrim = ({ t }) => {
     return null;
 
   const renderItem = ({ link, download, name }, i) => (
-    <GridRow>
+    <GridRow  key={`file_${i}`}>
       <GridColumn width="13">
         {`${wips.length + i + 1}. ${name}`}
       </GridColumn>
@@ -64,7 +64,7 @@ const DownloadTrim = ({ t }) => {
   );
 
   const renderWip = (x, i) => (
-    <GridRow>
+    <GridRow key={`wip_${i}`}>
       <GridColumn width={9} verticalAlign={'middle'}>
         {`${i + 1}. ${t('messages.trimmed-content-wip')} `}
         <Splash isLoading icon="circle notch" color="blue" width="20" />
