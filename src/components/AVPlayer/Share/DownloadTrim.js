@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Container, Grid, GridColumn, GridRow, Header, Popup, Segment } from 'semantic-ui-react';
+import { Button, Container, Divider, Grid, GridColumn, GridRow, Header, Popup, Segment } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
 import { selectors } from '../../../redux/modules/trim';
@@ -66,7 +66,7 @@ const DownloadTrim = ({ t }) => {
   const renderWip = (x, i) => (
     <GridRow>
       <GridColumn width={9} verticalAlign={'middle'}>
-        {`${wips.length + i + 1}. ${t('messages.trimmed-wip')} `}
+        {`${i + 1}. ${t('messages.trimmed-content-wip')} `}
         <Splash isLoading icon="circle notch" color="blue" width="20" />
       </GridColumn>
       <GridColumn>
@@ -106,16 +106,20 @@ const DownloadTrim = ({ t }) => {
       </Segment>
       {
         !isMin && (
-          <Container className="padded content">
-            <Grid>
-              {
-                wips.map(renderWip)
-              }
-              {
-                list.map(renderItem)
-              }
-            </Grid>
-          </Container>
+          <>
+            <Container className="padded content">
+              <Grid>
+                {
+                  wips.map(renderWip)
+                }
+                {
+                  list.map(renderItem)
+                }
+              </Grid>
+            </Container>
+            <Container className="padded" content={t('messages.trim-expiration')} />
+            <Divider hidden />
+          </>
         )
       }
     </div>

@@ -144,11 +144,7 @@
     },
     "download": {
       "iconHoverText": "Download the excerpt you marked",
-      "modalTitle": "Your file is ready!",
-      "modalContent": "* The link will be available for download for 7 days only",
-      "wipTitle": "We prepare the file for you!",
-      "wipContent": "* The process can take several minutes, please do not close the window until the process is complete",
-      "downloadButton": "Download",
+     "downloadButton": "Download",
       "copyButton": "Copy link"
     }
   },
@@ -183,7 +179,11 @@
     "fallback-to-video": "Audio nicht gefunden, Video wird verwendet.",
     "source-content-not-found": "Ursprüngliche Quelle nicht gefunden",
     "no-images": "Zeichnungen nicht gefunden",
-    "new": "new"
+    "new": "new",
+    "trim-expiration": "* The link will be available for download for 7 days only",
+    "trimmed-title": "Your files are ready",
+    "trimmed-title-wip": "We prepare the file for you",
+    "trimmed-content-wip": "A few minutes..."
   },
   "search": {
     "header": {

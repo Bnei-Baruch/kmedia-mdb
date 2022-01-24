@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import { Button, Popup } from 'semantic-ui-react';
@@ -19,33 +19,36 @@ import {
   WhatsappShareButton,
 } from 'react-share';
 import CutAndDownload from './TrimBtn';
+import { DeviceInfoContext } from '../../../helpers/app-contexts';
 
 const POPOVER_CONFIRMATION_TIMEOUT = 2500;
 
 const getBsPixels = buttonSize => {
   switch (buttonSize) {
-    default:
-      return 46;
-    case 'small':
-      return 36;
-    case 'tiny':
-      return 26;
+  default:
+    return 46;
+  case 'small':
+    return 36;
+  case 'tiny':
+    return 26;
   }
 };
 
 const ShareBar = props => {
   const {
-    t,
-    url          = '',
-    buttonSize   = 'big',
-    messageTitle = '',
-    embedContent = null,
-    sstart,
-    send,
-    file
-  } = props;
+          t,
+          url          = '',
+          buttonSize   = 'big',
+          messageTitle = '',
+          embedContent = null,
+          sstart,
+          send,
+          file
+        } = props;
 
   const [isEmbedPopupOpen, setIsEmbedPopupOpen] = useState(false);
+  const { isMobileDevice }                      = useContext(DeviceInfoContext);
+
   let embedTimeout;
 
   const clearEmbedTimeout = () => {
@@ -71,13 +74,17 @@ const ShareBar = props => {
 
   return (
     <div className="social-buttons">
-      <CutAndDownload
-        sstart={sstart}
-        send={send}
-        file={file}
-        width={bsPixels - 1}
-        size={buttonSize}
-      />
+      {
+        !isMobileDevice && (
+          <CutAndDownload
+            sstart={sstart}
+            send={send}
+            file={file}
+            width={bsPixels - 1}
+            size={buttonSize}
+          />
+        )
+      }
       <FacebookShareButton url={url} quote={title}>
         <FacebookIcon size={bsPixels} round />
       </FacebookShareButton>

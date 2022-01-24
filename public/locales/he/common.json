@@ -143,10 +143,6 @@
     },
     "download": {
       "iconHoverText": "להוריד את הקטע שסימנת",
-      "modalTitle": "הקובץ שלך מוכן!",
-      "modalContent": "* הקישור יהיה זמין להורדה ל-7 ימים בלבד",
-      "wipTitle": "אנחנו מכינים את הקובץ בשבילך!",
-      "wipContent": "* התהליך יכול לקחת כמה דקות, נא לא לסגור את החלון עד סיום התהליך",
       "downloadButton": "הורד",
       "copyButton": "העתק קישור"
     }
@@ -182,7 +178,11 @@
     "fallback-to-video": "אודיו לא נמצא, משתמש בוידיאו.",
     "source-content-not-found": "לא נמצא תוכן המקור",
     "no-images": "לא נמצאו שרטוטים",
-    "new": "חדש"
+    "new": "חדש",
+    "trim-expiration": "* הקישור יהיה זמין להורדה ל-7 ימים בלבד",
+    "trimmed-title": "הקבצים שלך מוכנים",
+    "trimmed-title-wip": "אנחנו מכינים את הקובץ בשבילך",
+    "trimmed-content-wip": "כמה דקות..."
   },
   "search": {
     "header": {

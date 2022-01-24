@@ -143,10 +143,6 @@
     },
     "download": {
       "iconHoverText": "Descarga el extracto que marcaste",
-      "modalTitle": "¡Tu archivo está listo!",
-      "modalContent": "* El enlace estará disponible para descargar solo durante 7 días",
-      "wipTitle": "¡Preparamos para usted el archivo!",
-      "wipContent": "* El proceso puede demorar varios minutos, no cierre la ventana hasta que se complete el proceso",
       "downloadButton": "Descargar",
       "copyButton": "Copiar link"
     }
@@ -182,7 +178,11 @@
     "fallback-to-video": "Audio no encontrado, usa video.",
     "source-content-not-found": " Contenido de fuente no fue encontrado ",
     "no-images": "No se encontraron dibujos",
-    "new": "nuevo"
+    "new": "nuevo",
+    "trim-expiration": "* El enlace estará disponible para descargar solo durante 7 días",
+    "trimmed-title": "Tus archivos están listos",
+    "trimmed-title-wip": "Preparamos para usted el archivo",
+    "trimmed-content-wip": "Un par de minutos..."
   },
   "search": {
     "header": {
