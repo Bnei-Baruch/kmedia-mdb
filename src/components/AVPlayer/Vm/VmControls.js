@@ -1,4 +1,5 @@
 import React from 'react';
+import isNumber from 'lodash/isNumber';
 import {
   ClickToPlay,
   DblClickFullscreen,
@@ -22,7 +23,6 @@ import {
 import { VmPrevNext } from './VmPrevNext';
 import { VmJump } from './VmJump';
 import VmAudioVideo from './VmAudioVideo';
-// import VmSeekBar from './VmSeekBar';
 import { VmShareButton } from './VmShareButton';
 
 const getVideoControls = () => (
@@ -32,32 +32,61 @@ const getVideoControls = () => (
   </>
 )
 
-const seekBarFocus = () => {
-  console.log('seekBarFocus')
+const toPercentage = l => {
+  const ret = 100 * l;
+  if (ret > 100) {
+    return '100%';
+  }
+
+  return (ret < 1) ? 0 : `${ret}%`;
+};
+
+const getSeekBar = (sliceStart, sliceEnd, duration) => {
+  console.log('scrubber:', sliceStart, sliceEnd, duration)
+  const isSlice = isNumber(sliceStart) && isNumber(sliceEnd);
+
+  if (isSlice) {
+    if (sliceStart > sliceEnd) {
+      sliceStart = sliceEnd;
+    }
+
+    if (duration < sliceStart) {
+      sliceStart = duration;
+    }
+
+    if (sliceStart < 0) {
+      sliceStart = 0;
+    }
+
+    if (sliceEnd > duration) {
+      sliceEnd = duration;
+    }
+
+    if (sliceEnd < 0) {
+      sliceEnd = 0;
+    }
+  }
+
+  return (
+    <ControlGroup>
+      { // slice marker
+        (isSlice && duration > 0) &&
+          <div className="seekbar__bar is-slice" style= {{
+            left: toPercentage(sliceStart / duration),
+            width: toPercentage((sliceEnd - sliceStart) / duration)
+          }}>
+          </div>
+      }
+      <ScrubberControl
+        alwaysShowHours
+        style={{ '--vm-slider-track-height': '4px' }}
+      />;
+    </ControlGroup>
+  );
 }
 
-const getSeekBar = (sliceStart, sliceEnd) =>
-  // <VmSeekBar sliceStart={sliceStart} sliceEnd={sliceEnd} />;
-  <ControlGroup>
-    <ScrubberControl
-      alwaysShowHours
-      min={sliceStart}
-      max={sliceEnd}
-      vmFocus={seekBarFocus}
-      // style={{
-      //   '--vm-slider-track-height': 7,
-      //   '--vm-slider-track-focused-height':7,
-      //   // '--vm-scrubber-buffered-bg': 'red',
-      //   // '--vm-scrubber-loading-stripe-color': 'gray'
-      //   '--vm-slider-thumb-height': 7,
-      //   // '--vm-slider-thumb-bg': 'orange'
-      //   // '--vm-slider-track-color': 'yellow'
-      // }}
-    />;
-  </ControlGroup>
-
 const getControls = (showNextPrev, onPrev, onNext, onActivateSlice, isVideo, onSwitchAV) =>
-  <ControlGroup space="both">
+  <ControlGroup>
     { showNextPrev && <VmPrevNext isPrev onClick={onPrev} /> }
     <PlaybackControl />
     <VolumeControl className="volumeControl" />
@@ -72,15 +101,12 @@ const getControls = (showNextPrev, onPrev, onNext, onActivateSlice, isVideo, onS
   </ControlGroup>;
 
 
-const buildMobileVideoControls = () => (
+const buildMobileVideoControls = (sliceStart, sliceEnd, duration) => (
   <>
     <Scrim gradient="up" />
     <Controls
       pin="topLeft"
       fullWidth
-      // activeDuration={activeDuration}
-      // waitForPlaybackStart={waitForPlaybackStart}
-      // hideWhenPaused={hideWhenPaused}
     >
       <ControlSpacer />
       <VolumeControl />
@@ -91,9 +117,6 @@ const buildMobileVideoControls = () => (
     <Controls
       pin="center"
       justify="center"
-      // activeDuration={activeDuration}
-      // waitForPlaybackStart={waitForPlaybackStart}
-      // hideWhenPaused={hideWhenPaused}
     >
       <PlaybackControl hideTooltip style={{ '--vm-control-scale': 1.3 }} />
     </Controls>
@@ -101,9 +124,6 @@ const buildMobileVideoControls = () => (
     <Controls
       pin="bottomLeft"
       fullWidth
-      // activeDuration={activeDuration}
-      // waitForPlaybackStart={waitForPlaybackStart}
-      // hideWhenPaused={hideWhenPaused}
     >
       <ControlGroup>
         <CurrentTime />
@@ -112,12 +132,12 @@ const buildMobileVideoControls = () => (
         <FullscreenControl />
       </ControlGroup>
 
-      {getSeekBar()}
+      {getSeekBar(sliceStart, sliceEnd, duration)}
     </Controls>
   </>
 );
 
-const buildDesktopVideoControls = (showNextPrev, onPrev, onNext, onActivateSlice, onSwitchAV, sliceStart, sliceEnd) => (
+const buildDesktopVideoControls = (showNextPrev, onPrev, onNext, onSwitchAV, onActivateSlice, sliceStart, sliceEnd, duration) => (
   <>
     <Scrim gradient="up" />
     <ClickToPlay />
@@ -125,10 +145,6 @@ const buildDesktopVideoControls = (showNextPrev, onPrev, onNext, onActivateSlice
     <Poster />
     <Spinner />
     <Skeleton />
-
-    {/* <Controls fullWidth pin="topLeft">
-      <ControlSpacer />
-    </Controls> */}
 
     <Controls
       pin="center"
@@ -154,20 +170,17 @@ const buildDesktopVideoControls = (showNextPrev, onPrev, onNext, onActivateSlice
       fullWidth
       hideOnMouseLeave={true}
     >
-      {getSeekBar(sliceStart, sliceEnd)}
-      {/* <VmSeekBar sliceStart={sliceStart} sliceEnd={sliceEnd} />; */}
+      {getSeekBar(sliceStart, sliceEnd, duration)}
       {getControls(showNextPrev, onPrev, onNext, onActivateSlice, true, onSwitchAV)}
     </Controls>
   </>
 );
 
-const buildAudioControls = (onActivateSlice, showNextPrev, onPrev, onNext, onSwitchAV, sliceStart, sliceEnd) => (
+const buildAudioControls = (showNextPrev, onPrev, onNext, onSwitchAV, onActivateSlice, sliceStart, sliceEnd, duration) => (
   <Controls fullWidth>
-    {/* <Scrim gradient="up" /> */}
     <ClickToPlay />
-    <Poster />
-    {getSeekBar(sliceStart, sliceEnd)}
-    {/* <VmSeekBar sliceStart={sliceStart} sliceEnd={sliceEnd} />; */}
+    {/* <Poster /> */}
+    {getSeekBar(sliceStart, sliceEnd, duration)}
     {getControls(showNextPrev, onPrev, onNext, onActivateSlice, false, onSwitchAV)}
   </Controls>
 );
@@ -176,8 +189,8 @@ const buildAudioControls = (onActivateSlice, showNextPrev, onPrev, onNext, onSwi
 export const VmControls = (
   {
     isMobile, isVideo,
-    onSwitchAV,
-    onActivateSlice, sliceStart, sliceEnd,
+    onSwitchAV, onActivateSlice,
+    sliceStart, sliceEnd, duration,
     showNextPrev, onPrev, onNext,
   }
 ) =>  {
@@ -186,9 +199,9 @@ export const VmControls = (
   if (isMobile) {
     controls = buildMobileVideoControls();
   } else if (isVideo) {
-    controls = buildDesktopVideoControls(showNextPrev, onPrev, onNext, onActivateSlice, onSwitchAV, sliceStart, sliceEnd);
+    controls = buildDesktopVideoControls(showNextPrev, onPrev, onNext, onSwitchAV, onActivateSlice, sliceStart, sliceEnd, duration);
   } else {
-    controls = buildAudioControls(onActivateSlice, showNextPrev, onPrev, onNext, onSwitchAV, sliceStart, sliceEnd);
+    controls = buildAudioControls(showNextPrev, onPrev, onNext, onSwitchAV, onActivateSlice, sliceStart, sliceEnd, duration);
   }
 
   return controls;

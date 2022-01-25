@@ -184,7 +184,7 @@ const VmPlayer = ({
           onActivateSlice={() => setEditMode(!editMode)}
           sliceStart={sliceStart}
           sliceEnd={sliceEnd}
-
+          duration={duration}
           showNextPrev={showNextPrev}
           onPrev={onPrev}
           onNext={onNext}
