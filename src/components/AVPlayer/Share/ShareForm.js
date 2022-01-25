@@ -74,8 +74,8 @@ const ShareForm = ({ item, currentTime, duration, onSliceChange, onExit, t }) =>
   const uiLanguage  = useSelector(state => settings.getLanguage(state.settings));
 
   const [isCopyPopupOpen, setIsCopyPopupOpen] = useState(false);
-  const [start, setStart] = useState(currentTime);
-  const [end, setEnd] = useState(duration);
+  const [start, setStart] = useState();
+  const [end, setEnd] = useState();
 
   const [url, setUrl] = useState();
   const [uiLangUrl, setUiLangUrl] = useState();
@@ -94,14 +94,14 @@ const ShareForm = ({ item, currentTime, duration, onSliceChange, onExit, t }) =>
     console.log('setStartValue:', currentTime, e, data);
     setStart(currentTime);
 
-    onSliceChange(start, end)
+    onSliceChange(start, end || duration)
   };
 
   const setCutTo = () => {
     console.log('setEndValue:', currentTime);
     setEnd(currentTime);
 
-    onSliceChange(start, end)
+    onSliceChange(start || currentTime, end)
   };
 
   return (
@@ -123,8 +123,7 @@ const ShareForm = ({ item, currentTime, duration, onSliceChange, onExit, t }) =>
             position="bottom right"
             trigger={(
               <CopyToClipboard text={url} onCopy={handleCopied}>
-                <Button //className="shareCopyLinkButton"
-                  size="mini" content={t('buttons.copy')} />
+                <Button className="shareCopyLinkButton" size="tiny" content={t('buttons.copy')} />
               </CopyToClipboard>
             )}
           />
