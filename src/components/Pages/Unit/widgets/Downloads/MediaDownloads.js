@@ -211,12 +211,15 @@ class MediaDownloads extends Component {
         <Table.Cell collapsing>
           <Button
             compact
+            fluid
             as="a"
             href={url}
             target="_blank"
+            className="media-downloads__file-download-btn"
             size="mini"
             color="orange"
             content={ext.toUpperCase()}
+            onClick={() => chroniclesAppend('download', { url, uid: file.id })}
           />
         </Table.Cell>
         <Table.Cell collapsing>
