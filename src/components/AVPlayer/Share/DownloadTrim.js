@@ -20,16 +20,19 @@ const DownloadTrim = ({ t }) => {
   if ((list.length === 0 && wips.length === 0) || !open)
     return null;
 
-  const renderWip = (x, i) => (
-    <GridRow key={`wip_${i}`}>
-      <GridColumn width={9} verticalAlign={'middle'}>
-        {`${i + 1}. ${t('messages.trimmed-content-wip')} `}
-        <Splash isLoading icon="circle notch" color="blue" width="20" />
-      </GridColumn>
-      <GridColumn>
-      </GridColumn>
-    </GridRow>
-  );
+  const renderWip = (x, i) => {
+    i = list.length + i + 1;
+    return (
+      <GridRow key={`wip_${i}`}>
+        <GridColumn width={9} verticalAlign={'middle'}>
+          {`${i}. ${t('messages.trimmed-content-wip')} `}
+          <Splash isLoading icon="circle notch" color="blue" width="20" />
+        </GridColumn>
+        <GridColumn>
+        </GridColumn>
+      </GridRow>
+    );
+  };
 
   return (
     <div className="trimmed_files">
@@ -67,10 +70,10 @@ const DownloadTrim = ({ t }) => {
             <Container className="padded content">
               <Grid>
                 {
-                  wips.map(renderWip)
+                  list.map((item, i) => <DownloadTrimItem pos={i + 1} item={item} />)
                 }
                 {
-                  list.map((item, i) => <DownloadTrimItem pos={wips.length + i + 1} item={item} />)
+                  wips.map(renderWip)
                 }
               </Grid>
             </Container>
