@@ -77,7 +77,7 @@ const Info = ({ unit = {}, t, currentCollection = null }) => {
 
   const views = useSelector(state => recommended.getViews(id, state.recommended));
 
-  const tagLinks               = makeTagLinks(tags, getTagById);
+  const tagLinks               = makeTagLinks(tags || [], getTagById);
   const { noSSeries, sSeries } = makeCollectionsLinks(collections, t, currentCollection);
   const isMultiLessons         = Object.values(collections).some(col => col.content_type === CT_LESSONS_SERIES || col.content_type === CT_CONGRESS);
   const episodeInfo            = getEpisodeInfo(ct, cIDs, currentCollection || Object.values(collections)[0], filmDate, t);
