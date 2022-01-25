@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Container, Divider, Grid, GridColumn, GridRow, Header, Popup, Segment } from 'semantic-ui-react';
+import { Button, Container, Divider, Grid, GridColumn, GridRow, Header, Segment } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
 import { selectors } from '../../../redux/modules/trim';
 import { Splash } from '../../shared/Splash/Splash';
-import CopyToClipboard from 'react-copy-to-clipboard';
+import DownloadTrimItem from './DownloadTrimItem';
 
 const DownloadTrim = ({ t }) => {
-  const [open, setOpen]                       = useState(true);
-  const [isMin, setIsMin]                     = useState(false);
-  const [isCopyPopupOpen, setIsCopyPopupOpen] = useState(false);
+  const [open, setOpen]   = useState(true);
+  const [isMin, setIsMin] = useState(false);
 
   const list = useSelector(state => selectors.getList(state.trim));
   const wips = useSelector(state => selectors.getWIPs(state.trim));
@@ -20,48 +19,6 @@ const DownloadTrim = ({ t }) => {
   }, [list.length]);
   if ((list.length === 0 && wips.length === 0) || !open)
     return null;
-
-  const renderItem = ({ link, download, name }, i) => (
-    <GridRow  key={`file_${i}`}>
-      <GridColumn width="13">
-        {`${wips.length + i + 1}. ${name}`}
-      </GridColumn>
-      <GridColumn width="3" textAlign="right">
-        <Popup
-          content={t('player.download.downloadButton')}
-          trigger={
-            <Button
-              as="a"
-              basic
-              compact
-              size="medium"
-              color="blue"
-              href={download}
-              target="_blank"
-              icon="download"
-            />
-          }
-        />
-        <Popup
-          open={isCopyPopupOpen}
-          onClose={() => setIsCopyPopupOpen(false)}
-          content={t('messages.link-copied-to-clipboard')}
-          position="bottom right"
-          trigger={(
-            <CopyToClipboard text={link} onCopy={() => setIsCopyPopupOpen(true)}>
-              <Button
-                basic
-                icon="copy outline"
-                compact
-                size="medium"
-                color="blue"
-              />
-            </CopyToClipboard>
-          )}
-        />
-      </GridColumn>
-    </GridRow>
-  );
 
   const renderWip = (x, i) => (
     <GridRow key={`wip_${i}`}>
@@ -113,7 +70,7 @@ const DownloadTrim = ({ t }) => {
                   wips.map(renderWip)
                 }
                 {
-                  list.map(renderItem)
+                  list.map((item, i) => <DownloadTrimItem pos={wips.length + i + 1} item={item} />)
                 }
               </Grid>
             </Container>
