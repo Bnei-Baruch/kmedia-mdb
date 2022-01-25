@@ -76,7 +76,7 @@ export const getIndex = (node1, node2) => {
 };
 
 const scrollToActive = activeId => {
-  if (activeId !== undefined) {
+  if (activeId === undefined) {
     return;
   }
 
