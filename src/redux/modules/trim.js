@@ -37,13 +37,13 @@ const onTrim = draft => {
 };
 
 const onTrimSuccess = (draft, { download, link }) => {
-  draft.list.unshift({ download, link, name: link.split('/').slice(-1)[0] });
+  draft.list.push({ download, link, name: link.split('/').slice(-1)[0] });
   draft.wips.pop();
   return draft;
 };
 
 const onTrimFailure = (draft, payload) => {
-  draft.errors.unshift(payload);
+  draft.errors.push(payload);
   draft.wips.pop();
   return draft;
 };
