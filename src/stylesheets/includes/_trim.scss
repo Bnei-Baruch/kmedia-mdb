@@ -1,14 +1,14 @@
-.rtl .trimmed_files {
-  left: 2em;
-  right: auto;
+.ltr .trimmed_files {
+  right: 2em;
+  left: auto;
 
 }
 
 .trimmed_files {
   position: fixed;
   bottom: 0;
-  right: 2em;
-  left: auto;
+  left: 2em;
+  right: auto;
   width: 600px;
   background: $white;
   z-index: 1900;
@@ -20,6 +20,10 @@
     color: white;
     padding: 1em 0.5em;
     border-radius: 0;
+    &.minimized{
+      padding: 0.3em 0.5em;
+
+    }
   }
 
   & > .content {
