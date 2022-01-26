@@ -2,6 +2,14 @@
   right: 2em;
   left: auto;
 
+  &.minimized {
+    width: calc(600px - 200px);
+    right: 200px;
+
+    & > .segment {
+      padding: 0.3em 0.5em;
+    }
+  }
 }
 
 .trimmed_files {
@@ -20,10 +28,6 @@
     color: white;
     padding: 1em 0.5em;
     border-radius: 0;
-    &.minimized{
-      padding: 0.3em 0.5em;
-
-    }
   }
 
   & > .content {
@@ -37,8 +41,9 @@
 
   .ui.basic.icon.button {
     box-shadow: none !important;
-    &:first-child{
-      margin:0 8px;
+
+    &:first-child {
+      margin: 0 8px;
     }
 
     &:hover, &:active, &:focus {

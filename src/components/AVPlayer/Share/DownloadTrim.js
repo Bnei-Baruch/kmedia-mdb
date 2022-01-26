@@ -5,6 +5,7 @@ import { withNamespaces } from 'react-i18next';
 import { selectors } from '../../../redux/modules/trim';
 import { Splash } from '../../shared/Splash/Splash';
 import DownloadTrimItem from './DownloadTrimItem';
+import clsx from 'clsx';
 
 const DownloadTrim = ({ t }) => {
   const [open, setOpen]   = useState(true);
@@ -35,7 +36,7 @@ const DownloadTrim = ({ t }) => {
   };
 
   return (
-    <div className="trimmed_files">
+    <div className={clsx('trimmed_files', { 'minimized': isMin })}>
       <Segment clearing className="top">
         <Button
           basic
