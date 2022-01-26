@@ -12,11 +12,12 @@ import WipErr from '../../shared/WipErr/WipErr';
 import Page from './Page';
 
 const PlaylistCollectionContainer = ({ cId, t, cuId }) => {
-  const collection  = useSelector(state => selectors.getDenormCollectionWUnits(state.mdb, cId));
-  const wipMap      = useSelector(state => selectors.getWip(state.mdb));
-  const errorMap    = useSelector(state => selectors.getErrors(state.mdb));
-  const cWindow     = useSelector(state => selectors.getWindow(state.mdb));
-  const collections = useSelector(state => cWindow?.data?.map(id => selectors.getDenormCollection(state.mdb, id)).filter(c => !!c));
+  const collection         = useSelector(state => selectors.getDenormCollectionWUnits(state.mdb, cId));
+  const wipMap             = useSelector(state => selectors.getWip(state.mdb));
+  const fullUnitFetchedMap = useSelector(state => selectors.getFullUnitFetched(state.mdb));
+  const errorMap           = useSelector(state => selectors.getErrors(state.mdb));
+  const cWindow            = useSelector(state => selectors.getWindow(state.mdb));
+  const collections        = useSelector(state => cWindow?.data?.map(id => selectors.getDenormCollection(state.mdb, id)).filter(c => !!c));
 
   const [nextLink, setNextLink] = useState(null);
   const [prevLink, setPrevLink] = useState(null);
@@ -42,9 +43,10 @@ const PlaylistCollectionContainer = ({ cId, t, cuId }) => {
     if (collection) {
       const { id, cuIDs, content_units, content_type, film_date } = collection;
 
+      // Fetch full units data if needed.
       if (Array.isArray(cuIDs) && cuIDs.length > 0) {
         cuIDs.forEach(cuID => {
-          if (!wipMap.units[cuID] && !errorMap.units[cuID]) {
+          if (!fullUnitFetchedMap[cuID] && !wipMap.units[cuID] && !errorMap.units[cuID]) {
             const cu = content_units.find(x => x.id === cuID);
             if (!cu || !cu.files || !cu.tags || !cu.sources) {
               dispatch(actions.fetchUnit(cuID));
