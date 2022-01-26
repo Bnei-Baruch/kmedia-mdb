@@ -9,7 +9,7 @@ import { isDebMode } from '../../helpers/url';
 import Link from '../Language/MultiLanguageLink';
 import ScoreDebug from './ScoreDebug';
 import SearchResultBase from './SearchResultBase';
-import { CT_LESSONS_SERIES } from '../../helpers/consts';
+import { CT_LESSONS_SERIES, SEARCH_INTENT_HIT_TYPE_SERIES_BY_TAG } from '../../helpers/consts';
 import SearchResultCollection from './SearchResultCollection';
 
 class SearchResultSeries extends SearchResultBase {
@@ -63,15 +63,15 @@ class SearchResultSeries extends SearchResultBase {
 
   render() {
     const {
-      t,
-      location,
-      hit,
-      getSerieBySource,
-      getSerieByTag,
-      nestedDenormCollectionWUnits,
-      getTagById,
-      wip: { lectures: wipL, series: wipS }
-    } = this.props;
+            t,
+            location,
+            hit,
+            getSerieBySource,
+            getSerieByTag,
+            nestedDenormCollectionWUnits,
+            getTagById,
+            wip: { lectures: wipL, series: wipS }
+          } = this.props;
 
     const { showAll } = this.state;
 
@@ -79,7 +79,7 @@ class SearchResultSeries extends SearchResultBase {
       return null;
     }
 
-    const isByTag  = hit._type === 'lessons_series_by_tag';
+    const isByTag  = hit._type === SEARCH_INTENT_HIT_TYPE_SERIES_BY_TAG;
     const getSerie = isByTag ? getSerieByTag : getSerieBySource;
 
     const { _score: score, _uid, _source: { mdb_uid } } = hit;
@@ -87,6 +87,8 @@ class SearchResultSeries extends SearchResultBase {
       return null;
     }
 
+    //_uid is tags/sources uids separated by '_' (because tags/sources have tree build)
+    //and we need series that connected to the lowest level of tags/sources
     const series = _uid.split('_').map(getSerie);
     const s      = this.getLowestLevelSeries(series);
     if (!s) return null;
@@ -97,9 +99,8 @@ class SearchResultSeries extends SearchResultBase {
       );
     }
 
-    const { logLinkParams } = this.buildLinkParams();
-    const title             = isByTag ? getTagById(_uid)?.label : s.name;
-    const collecitons       = s.collections.filter(c => c.id !== mdb_uid);
+    const title       = isByTag ? getTagById(_uid)?.label : s.name;
+    const collecitons = s.collections.filter(c => c.id !== mdb_uid);
     collecitons.unshift(s.collections.find(c => c.id === mdb_uid));
     return (
       <Segment className="bg_hover_grey search__block">
