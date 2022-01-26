@@ -67,17 +67,17 @@ const SearchResults = props => {
 
   const renderHit = (hit, rank, searchLanguage) => {
     const {
-            _source: {
-              mdb_uid: mdbUid,
-              result_type: resultType,
-              landing_page: landingPage,
-              filter_values: filterValues
-            }, _type: type, _index
-          }   = hit;
+      _source: {
+        mdb_uid: mdbUid,
+        result_type: resultType,
+        landing_page: landingPage,
+        filter_values: filterValues
+      }, _type: type, _index
+    }   = hit;
     const key = mdbUid ? `${mdbUid}_${type}` : `${landingPage}_${type}_${(filterValues || []).map(({
-                                                                                                     name,
-                                                                                                     value
-                                                                                                   }) => `${name}_${value}`).join('_')}`;
+      name,
+      value
+    }) => `${name}_${value}`).join('_')}`;
 
     searchLanguage = searchLanguageByIndex(_index, searchLanguage);
     const newProps = {
