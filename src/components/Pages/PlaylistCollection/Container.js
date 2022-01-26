@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
 import PropTypes from 'prop-types';
@@ -45,14 +45,16 @@ const PlaylistCollectionContainer = ({ cId, t, cuId }) => {
 
       // Fetch full units data if needed.
       if (Array.isArray(cuIDs) && cuIDs.length > 0) {
-        cuIDs.forEach(cuID => {
-          if (!fullUnitFetchedMap[cuID] && !wipMap.units[cuID] && !errorMap.units[cuID]) {
-            const cu = content_units.find(x => x.id === cuID);
-            if (!cu || !cu.files || !cu.tags || !cu.sources) {
-              dispatch(actions.fetchUnit(cuID));
-            }
-          }
+        const cusForFetch = cuIDs.filter(cuID => {
+          if (fullUnitFetchedMap[cuID] || wipMap.units[cuID] || errorMap.units[cuID])
+            return false;
+          const cu = content_units.find(x => x.id === cuID);
+          return !cu?.files;
         });
+
+        if (cusForFetch?.length > 0) {
+          dispatch(actions.fetchUnitsByIDs({ id: cusForFetch, with_tags: true, with_files: true }));
+        }
       }
 
       // next prev links only for lessons
