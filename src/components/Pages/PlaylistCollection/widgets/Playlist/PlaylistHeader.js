@@ -15,6 +15,7 @@ import { cuPartNameByCCUType } from '../../../../../helpers/utils';
 import { fromToLocalized } from '../../../../../helpers/date';
 import Link from '../../../../Language/MultiLanguageLink';
 import CollectionDatePicker from './CollectionDatePicker';
+import PlaylistPlayIcon from '../../../../../images/icons/PlaylistPlay';
 
 const getNextLink = (langDir, t, link) => (
   link ?
@@ -66,7 +67,12 @@ const PlaylistHeader = ({ collection, unit, t, prevLink = null, nextLink = null 
 
   const getTitle = () => {
     if (!content_type)
-      return null;
+      return (
+        <>
+          <PlaylistPlayIcon className="playlist_icon" fill="#FFFFFF" />
+          {name}
+        </>
+      );
 
     if (isLesson) {
       return !isMobileDevice ? (
@@ -119,16 +125,22 @@ const PlaylistHeader = ({ collection, unit, t, prevLink = null, nextLink = null 
         {getTitle()}
         {
           subheader && (
-            <small className="display-block font-normal">
-              {subheader}
-            </small>
+            <Header
+              as="h4"
+              inverted
+              className="font-normal"
+              content={subheader}
+            />
           )
         }
         {
           playNow && (
-            <small className="display-block font-normal">
-              {playNow}
-            </small>
+            <Header
+              as="h3"
+              inverted
+              className="font-normal"
+              content={playNow}
+            />
           )
         }
       </>
