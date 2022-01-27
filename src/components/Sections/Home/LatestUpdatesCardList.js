@@ -8,7 +8,7 @@ import { withNamespaces } from 'react-i18next';
 import LatestUpdate from './LatestUpdate';
 import { getSectionForTranslation } from '../../../helpers/utils';
 import Section from './Section';
-import {isLanguageRtl} from "../../../helpers/i18n-utils";
+import { isLanguageRtl } from '../../../helpers/i18n-utils';
 
 const LatestUpdatesCardList = ({ t, language, title, cts, itemsByCT, itemsCount=4 }) => {
 
@@ -51,7 +51,9 @@ const LatestUpdatesCardList = ({ t, language, title, cts, itemsByCT, itemsCount=
           hasItems = true;
         }
       });
-    };
+    }
+
+    ;
     setCardsArray(cards);
   };
 
