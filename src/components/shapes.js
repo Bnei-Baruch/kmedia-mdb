@@ -280,8 +280,8 @@ export const VideoItem = PropTypes.shape({
   availableLanguages: PropTypes.array,
   availableMediaTypes: PropTypes.array,
   byQuality: PropTypes.shape({
-    HD: PropTypes.string,
-    nHD: PropTypes.string,
+    HD: MDBFile,
+    nHD: MDBFile,
   }),
   language: PropTypes.string,
   mediaType: PropTypes.string,

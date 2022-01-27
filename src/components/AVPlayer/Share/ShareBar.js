@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import { Button, Popup } from 'semantic-ui-react';
@@ -18,6 +18,8 @@ import {
   WhatsappIcon,
   WhatsappShareButton,
 } from 'react-share';
+import CutAndDownload from './TrimBtn';
+import { DeviceInfoContext } from '../../../helpers/app-contexts';
 
 const POPOVER_CONFIRMATION_TIMEOUT = 2500;
 
@@ -32,8 +34,21 @@ const getBsPixels = buttonSize => {
   }
 };
 
-const ShareBar = ({ t,  url = '', buttonSize = 'big', messageTitle = '', embedContent = null }) => {
+const ShareBar = props => {
+  const {
+    t,
+    url          = '',
+    buttonSize   = 'big',
+    messageTitle = '',
+    embedContent = null,
+    sstart,
+    send,
+    file
+  } = props;
+
   const [isEmbedPopupOpen, setIsEmbedPopupOpen] = useState(false);
+  const { isMobileDevice }                      = useContext(DeviceInfoContext);
+
   let embedTimeout;
 
   const clearEmbedTimeout = () => {
@@ -59,6 +74,17 @@ const ShareBar = ({ t,  url = '', buttonSize = 'big', messageTitle = '', embedCo
 
   return (
     <div className="social-buttons">
+      {
+        !isMobileDevice && (
+          <CutAndDownload
+            sstart={sstart}
+            send={send}
+            file={file}
+            width={bsPixels - 1}
+            size={buttonSize}
+          />
+        )
+      }
       <FacebookShareButton url={url} quote={title}>
         <FacebookIcon size={bsPixels} round />
       </FacebookShareButton>
@@ -80,20 +106,26 @@ const ShareBar = ({ t,  url = '', buttonSize = 'big', messageTitle = '', embedCo
 
       {
         embedContent &&
-          <Popup
-            open={isEmbedPopupOpen}
-            content={t('messages.link-copied-to-clipboard')}
-            position="bottom right"
-            trigger={(
-              <CopyToClipboard text={embedContent} onCopy={handleEmbedCopied}>
-                <Button icon="code" size="big" circular className="embed-share-button" />
-              </CopyToClipboard>
-            )}
-          />
+        <Popup
+          open={isEmbedPopupOpen}
+          content={t('messages.link-copied-to-clipboard')}
+          position="bottom right"
+          trigger={(
+            <CopyToClipboard text={embedContent} onCopy={handleEmbedCopied}>
+              <Button
+                icon="code"
+                style={{ width: `${bsPixels - 1}px`, height: `${bsPixels - 1}px` }}
+                size="big"
+                circular
+                className="embed-share-button"
+              />
+            </CopyToClipboard>
+          )}
+        />
       }
     </div>
   );
-}
+};
 
 ShareBar.propTypes = {
   t: PropTypes.func.isRequired,

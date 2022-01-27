@@ -4,6 +4,7 @@ import { noop } from '../../../helpers/utils';
 
 import { toHumanReadableTime } from '../../../helpers/time';
 import { getQuery, splitPathByLanguage, stringify } from '../../../helpers/url';
+import moment from 'moment/moment';
 
 class BaseShareForm extends React.Component {
   static propTypes = {
@@ -49,19 +50,12 @@ class BaseShareForm extends React.Component {
   }
 
   static colonStrToSecond(str) {
-    const s = str.replace(/[^\d:]+/g, '');
-    return s.split(':')
-      .map(t => (t ? parseInt(t, 10) : 0))
-      .reverse()
-      .reduce((result, t, i) => (result + (t * Math.pow(60, i))), 0);
+    return moment.duration(str).asSeconds();
   }
 
   static mlsToStrColon(seconds) {
-    const duration = new Date(seconds * 1000); // ms
-    const h        = duration.getUTCHours();
-    const m        = duration.getUTCMinutes();
-    const s        = duration.getUTCSeconds();
-    return h ? `${h}:${m}:${s}` : `${m}:${s}`;
+    const fmt = seconds >= 60 * 60 ? 'HH:mm:ss' : 'mm:ss';
+    return moment.utc(seconds * 1000).format(fmt);
   }
 
   constructor(props) {
