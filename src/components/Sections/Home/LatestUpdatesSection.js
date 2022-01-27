@@ -1,17 +1,12 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Card, Container, Feed, Grid, Segment } from 'semantic-ui-react';
+import { Card, Container, Feed, Grid, Segment } from 'semantic-ui-react';
 import { isEqual } from 'lodash';
 import moment from 'moment';
-import { getSectionForTranslation } from '../../../helpers/utils';
 import * as consts from '../../../helpers/consts';
 import * as shapes from '../../shapes';
 import Section from './Section';
-import LatestUpdate from './LatestUpdate';
 import LatestUpdatesCardList from './LatestUpdatesCardList'
-import TwitterFeed from '../Publications/tabs/Twitter/Feed';
-import { isLanguageRtl } from '../../../helpers/i18n-utils';
-import { Swipeable } from 'react-swipeable';
 
 const itemsByContentType = list => list.filter(x => !!x).reduce((acc, val) => {
   if (!acc[val.content_type]) {
@@ -33,37 +28,7 @@ const itemsByContentType = list => list.filter(x => !!x).reduce((acc, val) => {
   return acc;
 }, {});
 
-const getComplexCards = getCard => {
-  //  Switch by created at between:
-  //    women lesson unit CT_WOMEN_LESSON,
-  //    virtual lesson unit CT_VIRTUAL_LESSON,
-  //    lessons_series collection CT_LECTURE_SERIES, if one of them is older than 2 weeks use another lesson collection
-
-  const wl    = getCard(consts.CT_WOMEN_LESSON);
-  const vl    = getCard(consts.CT_VIRTUAL_LESSON);
-  const cards = [];
-
-  if (wl && moment().diff(moment(wl.props.item.film_date), 'days') < 14) {
-    cards.push(wl);
-  }
-
-  if (vl && moment().diff(moment(vl.props.item.film_date), 'days') < 14) {
-    cards.push(vl);
-  }
-
-  if (cards.length < 2) {
-    cards.push(getCard(consts.CT_LESSONS_SERIES));
-  }
-
-  if (cards.length < 2) {
-    cards.push(getCard(consts.CT_LESSONS_SERIES, 1));
-  }
-
-  return cards;
-};
-
-
-const LatestUpdatesSection = ({ latestItems = [], t }) => {
+const LatestUpdatesSection = ({ latestItems = [], t, language }) => {
   const itemsByCT = itemsByContentType(latestItems);
 
   if (itemsByCT[consts.CT_DAILY_LESSON]) {
@@ -78,12 +43,12 @@ const LatestUpdatesSection = ({ latestItems = [], t }) => {
     );
   }
 
-  const getLatestUpdate = item =>
-    <LatestUpdate key={item.id} item={item} label={t(getSectionForTranslation(item.content_type))} t={t} />;
+  // const getLatestUpdate = item =>
+  //   <LatestUpdate key={item.id} item={item} label={t(getSectionForTranslation(item.content_type))} t={t} />;
 
-  const getCard = (content_type, index = 0) => itemsByCT[content_type]?.length > index && getLatestUpdate(itemsByCT[content_type][index]);
+  //const getCard = (content_type, index = 0) => itemsByCT[content_type]?.length > index && getLatestUpdate(itemsByCT[content_type][index]);
 
-  const cards = getComplexCards(getCard);
+  //const cards = getComplexCards(getCard);
 
   // row #1:
   //    a. lesson collection before the last lesson CT_DAILY_LESSON - 1
@@ -97,30 +62,34 @@ const LatestUpdatesSection = ({ latestItems = [], t }) => {
   // row #4: CT_ARTICLE x 4
   // row #5: CT_CONGRESS, CT_FRIENDS_GATHERING, CT_FRIENDS_GATHERING, CT_MEAL
 
+  console.log(language);
+
   return (
     <div className="homepage__thumbnails homepage__section">
       <Container className="padded horizontally">
         <Section title={t('materials.recommended.new')} computer={13}>
 
           <Card.Group itemsPerRow={4} doubling className="homepage__section__cardGroup">
-            <div className="cardsTitle">
-              {t(`events.collection.playlist.lessons`)}
-            </div>
-            {getCard(consts.CT_DAILY_LESSON, 0)}
-            {getCard(consts.CT_DAILY_LESSON, 1)}
-            {cards[0]}
-            {cards[1]}
+            <LatestUpdatesCardList t={t} language={language} title={t(`events.collection.playlist.lessons`)} itemsByCT={itemsByCT} cts={[
+              {ct:consts.CT_DAILY_LESSON, itemsPerPage:2},
+              {ct:consts.CT_WOMEN_LESSON, daysBack: 14},
+              {ct:consts.CT_VIRTUAL_LESSON, daysBack: 14},
+              {ct:consts.CT_LESSONS_SERIES}]} />
 
-            {/*<LatestUpdatesCardList  t={t} title={t(`events.collection.playlist.lessons`)} cts={[consts.CT_DAILY_LESSON]} itemsByCT={itemsByCT} />*/}
+            <LatestUpdatesCardList  t={t} title={t(`programs.header.text`)} itemsByCT={itemsByCT} cts={[
+              {ct:consts.CT_VIDEO_PROGRAM_CHAPTER}]}  />
 
-            <LatestUpdatesCardList  t={t} title={t(`programs.header.text`)} cts={[consts.CT_VIDEO_PROGRAM_CHAPTER]} itemsByCT={itemsByCT} />
+            <LatestUpdatesCardList  t={t} title={t(`programs.tabs.clips`)} itemsByCT={itemsByCT} cts={[
+              {ct:consts.CT_CLIP}]} />
 
-            <LatestUpdatesCardList  t={t} title={t(`programs.tabs.clips`)} cts={[consts.CT_CLIP]} itemsByCT={itemsByCT} />
+            <LatestUpdatesCardList  t={t} title={t(`publications.header.text`)} itemsByCT={itemsByCT} cts={[
+              {ct:consts.CT_ARTICLE}]} />
 
-            <LatestUpdatesCardList  t={t} title={t(`publications.header.text`)} cts={[consts.CT_ARTICLE]} itemsByCT={itemsByCT} />
-
-            <LatestUpdatesCardList  t={t} title={t(`nav.sidebar.events`)} cts={[consts.CT_CONGRESS, consts.CT_FRIENDS_GATHERING, consts.CT_MEAL, consts.CT_HOLIDAY]} itemsByCT={itemsByCT} />
-
+            <LatestUpdatesCardList  t={t} title={t(`nav.sidebar.events`)} itemsByCT={itemsByCT} cts={[
+              {ct:consts.CT_CONGRESS},
+              {ct:consts.CT_FRIENDS_GATHERING},
+              {ct:consts.CT_MEAL},
+              {ct:consts.CT_HOLIDAY}]} />
           </Card.Group>
         </Section>
       </Container>
@@ -131,6 +100,7 @@ const LatestUpdatesSection = ({ latestItems = [], t }) => {
 LatestUpdatesSection.propTypes = {
   latestUnits: PropTypes.arrayOf(shapes.ContentUnit),
   t: PropTypes.func.isRequired,
+  language: PropTypes.string
 };
 
 const arePropsEqual = (prevProps, nextProps) => {

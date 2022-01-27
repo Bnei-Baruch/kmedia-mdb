@@ -160,7 +160,7 @@ const HomePage = ({
       {renderLatestLessonAndBanner(latestLesson, banner)}
       {renderActiveSectionsGrid(t, isMobileDevice)}
 
-      <LatestUpdatesSection latestItems={latestItems} t={t} />
+      <LatestUpdatesSection latestItems={latestItems} t={t} language={language} />
 
       {renderBlogPostsAndTweets(latestBlogPosts, latestTweets, language, t)}
     </div>
