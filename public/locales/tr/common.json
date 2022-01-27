@@ -141,6 +141,11 @@
     },
     "header": {
       "series-by-topic": "Series of lessons on the topic:"
+    },
+    "download": {
+      "iconHoverText": "Download the excerpt you marked",
+   "downloadButton": "Download",
+      "copyButton": "Copy link"
     }
   },
   "playlist": {
@@ -173,7 +178,12 @@
     "fallback-to-audio": "Görüntü kayıt bulunamadı, sesli kayıt kullanılıyor.",
     "fallback-to-video": "Sesli kayıt bulunamadı, görüntülü  kayıt kullanılıyor. ",
     "source-content-not-found": "Kaynak içerik bulunamadı",
-    "no-images": "Skeç bulunmuyor"
+    "no-images": "Skeç bulunmuyor",
+    "new": "new",
+    "trim-expiration": "* The link will be available for download for 7 days only",
+    "trimmed-title": "Your files are ready",
+    "trimmed-title-wip": "We prepare the file for you",
+    "trimmed-content-wip": "A few minutes..."
   },
   "search": {
     "header": {

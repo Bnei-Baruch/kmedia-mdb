@@ -141,6 +141,11 @@
     },
     "header": {
       "series-by-topic": "Series of lessons on the topic:"
+    },
+    "download": {
+      "iconHoverText": "Download the excerpt you marked",
+      "downloadButton": "Download",
+      "copyButton": "Copy link"
     }
   },
   "playlist": {
@@ -173,7 +178,12 @@
     "fallback-to-audio": "Відео не знайдено, використовується аудіо.",
     "fallback-to-video": "Аудіо не знайдено, використовується відео.",
     "source-content-not-found": "Першоджерело не знайдене",
-    "no-images": "Креслення не знайдені"
+    "no-images": "Креслення не знайдені",
+    "new": "new",
+    "trim-expiration": "* The link will be available for download for 7 days only",
+    "trimmed-title": "Your files are ready",
+    "trimmed-title-wip": "We prepare the file for you",
+    "trimmed-content-wip": "A few minutes..."
   },
   "search": {
     "header": {

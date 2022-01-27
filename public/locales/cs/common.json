@@ -136,6 +136,11 @@
     },
     "header": {
       "series-by-topic": "Series of lessons on the topic:"
+    },
+    "download": {
+      "iconHoverText": "Download the excerpt you marked",
+      "downloadButton": "Download",
+      "copyButton": "Copy link"
     }
   },
   "playlist": {
@@ -168,7 +173,12 @@
     "fallback-to-audio": "Video nebylo nalezeno, pouze audio",
     "fallback-to-video": "Audio nebylo nalezeno, pouze video",
     "source-content-not-found": "Obsah zdroje nebyl nalezen",
-    "no-images": "Nebyly nalezeny žádné náčrtky"
+    "no-images": "Nebyly nalezeny žádné náčrtky",
+    "new": "new",
+    "trim-expiration": "* The link will be available for download for 7 days only",
+    "trimmed-title": "Your files are ready",
+    "trimmed-title-wip": "We prepare the file for you",
+    "trimmed-content-wip": "A few minutes..."
   },
   "search": {
     "header": {
@@ -321,7 +331,7 @@
       "description": "Aktuální zkratky k poslední Denní lekci"
     }
   },
-  "likutim":{
+  "likutim": {
     "header": {
       "text": "Excerpts from Kabbalistic Sources",
       "subtext": "Excerpts from the Sources on various subjects"
@@ -491,7 +501,7 @@
       "new": "New",
       "same-source": "Same source"
     },
-    "playlist":{
+    "playlist": {
       "header": "Up Next"
     }
   },
