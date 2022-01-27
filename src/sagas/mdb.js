@@ -1,7 +1,7 @@
 import { call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
 
 import Api from '../helpers/Api';
-import { actions, types } from '../redux/modules/mdb';
+import { actions as mdbActions, actions, types } from '../redux/modules/mdb';
 import { selectors as settings } from '../redux/modules/settings';
 import { actions as sources } from '../redux/modules/sources';
 import { actions as tags } from '../redux/modules/tags';
@@ -15,6 +15,17 @@ export function* fetchUnit(action) {
     yield put(actions.fetchUnitSuccess(id, data));
   } catch (err) {
     yield put(actions.fetchUnitFailure(id, err));
+  }
+}
+
+export function* fetchUnitsByIDs(action) {
+  const { id } = action.payload;
+  try {
+    const language = yield select(state => settings.getLanguage(state.settings));
+    const { data } = yield call(Api.units, { ...action.payload, language, page_size: id.length });
+    yield put(mdbActions.fetchUnitsByIDsSuccess(data.content_units));
+  } catch (err) {
+    yield put(mdbActions.fetchUnitsByIDsSuccess({ id, err }));
   }
 }
 
@@ -92,6 +103,10 @@ function* watchFetchUnit() {
   yield takeEvery(types.FETCH_UNIT, fetchUnit);
 }
 
+function* watchFetchUnitsByIDs() {
+  yield takeEvery(types.FETCH_UNITS_BY_IDS, fetchUnitsByIDs);
+}
+
 function* watchFetchCollection() {
   yield takeEvery(types.FETCH_COLLECTION, fetchCollection);
 }
@@ -118,6 +133,7 @@ function* watchCountCU() {
 
 export const sagas = [
   watchFetchUnit,
+  watchFetchUnitsByIDs,
   watchFetchCollection,
   watchFetchLatestLesson,
   watchFetchSQData,
