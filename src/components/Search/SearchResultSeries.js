@@ -64,15 +64,15 @@ class SearchResultSeries extends SearchResultBase {
 
   render() {
     const {
-            t,
-            location,
-            hit,
-            getSerieBySource,
-            getSerieByTag,
-            nestedDenormCollectionWUnits,
-            getTagById,
-            wip: { lectures: wipL, series: wipS }
-          } = this.props;
+      t,
+      location,
+      hit,
+      getSerieBySource,
+      getSerieByTag,
+      nestedDenormCollectionWUnits,
+      getTagById,
+      wip: { lectures: wipL, series: wipS }
+    } = this.props;
 
     const { showAll } = this.state;
 
