@@ -28,20 +28,18 @@ import { fromToLocalized } from '../../../helpers/date';
 
 const LatestUpdate = ({ item, t, label }) => {
   const { content_type, name, film_date, name_in_collection, id, source_id, start_date, end_date, number } = item;
-  const link           = canonicalLink(item);
-  let title            = name || `${t(`constants.content-types.${content_type}`)} ${t('lessons.list.number')} ${name_in_collection}`;
-  let subheader        = [`${t('values.date', { date: item.film_date })} - ${label}`];
-  let authorName       = '';
-  let roots  = useSelector(state => sources.getRoots(state.sources));
-  let source = useSelector(state => sources.getSourceById(state.sources));
-  if(content_type === CT_LESSONS_SERIES){
-      roots.map(r => {
-        let author = source(r);
-        if(author.children && author.children.includes(source_id)){
-          authorName = ' '+ author.name + ' -';
-        }
-      })
+
+  const link     = canonicalLink(item);
+  let title      = name || `${t(`constants.content-types.${content_type}`)} ${t('lessons.list.number')} ${name_in_collection}`;
+  let subheader  = [`${t('values.date', { date: item.film_date })} - ${label}`];
+  let authorName = '';
+
+  const getPathByID = useSelector(state => sources.getPathByID(state.sources));
+
+  if (content_type === CT_LESSONS_SERIES && source_id) {
+    authorName = getPathByID(source_id)?.[0]?.name;
   }
+
   let canonicalSection = Requests.imaginaryRandom('resize', {
     width: 512,
     height: 288,
@@ -51,32 +49,32 @@ const LatestUpdate = ({ item, t, label }) => {
 
   // collections -- prepare random image
   switch (content_type) {
-    case CT_VIDEO_PROGRAM_CHAPTER:
-    case CT_CLIP:
-    case CT_VIRTUAL_LESSON:
-      return <ContentItemContainer id={id} noViews />;
-    case CT_DAILY_LESSON:
-      title     = t(`constants.content-types.${content_type}`);
-      subheader = [`${t('values.date', { date: film_date })}${number && ` (${t(`lessons.list.nameByNum_${number}`)})`}`];
-      break;
-    case CT_WOMEN_LESSONS:
-      title     = name;
-      subheader = [t('values.date', { date: film_date })];
-      break;
-    case CT_LESSONS_SERIES:
-      title     = [t(`player.header.series-by-topic`),`${authorName}`,` ${name}`] || t(`constants.content-types.${content_type}`);
-      subheader = [fromToLocalized(start_date || film_date, end_date)];
-      break;
-    case CT_SPECIAL_LESSON:
-    case CT_CONGRESS:
-    case CT_MEAL:
-    case CT_FRIENDS_GATHERING:
-    case CT_HOLIDAY:
-    case CT_PICNIC:
-    case CT_UNITY_DAY:
-      break;
-    default:
-      canonicalSection = canonicalSectionByLink(link);
+  case CT_VIDEO_PROGRAM_CHAPTER:
+  case CT_CLIP:
+  case CT_VIRTUAL_LESSON:
+    return <ContentItemContainer id={id} noViews />;
+  case CT_DAILY_LESSON:
+    title     = t(`constants.content-types.${content_type}`);
+    subheader = [`${t('values.date', { date: film_date })}${number && ` (${t(`lessons.list.nameByNum_${number}`)})`}`];
+    break;
+  case CT_WOMEN_LESSONS:
+    title     = name;
+    subheader = [t('values.date', { date: film_date })];
+    break;
+  case CT_LESSONS_SERIES:
+    title     = [t(`player.header.series-by-topic`), `${authorName}`, ` ${name}`] || t(`constants.content-types.${content_type}`);
+    subheader = [fromToLocalized(start_date || film_date, end_date)];
+    break;
+  case CT_SPECIAL_LESSON:
+  case CT_CONGRESS:
+  case CT_MEAL:
+  case CT_FRIENDS_GATHERING:
+  case CT_HOLIDAY:
+  case CT_PICNIC:
+  case CT_UNITY_DAY:
+    break;
+  default:
+    canonicalSection = canonicalSectionByLink(link);
   }
 
   return (
