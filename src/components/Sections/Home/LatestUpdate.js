@@ -39,7 +39,7 @@ const LatestUpdate = ({ item, t, label }) => {
         let author = source(r);
         if(author.children && author.children.includes(source_id)){
           authorName = ' '+ author.name + ' -';
-        }      
+        }
       })
   }
   let canonicalSection = Requests.imaginaryRandom('resize', {
@@ -64,7 +64,6 @@ const LatestUpdate = ({ item, t, label }) => {
       subheader = [t('values.date', { date: film_date })];
       break;
     case CT_LESSONS_SERIES:
-      //title     = name || t(`constants.content-types.${content_type}`);
       title     = [t(`player.header.series-by-topic`),`${authorName}`,` ${name}`] || t(`constants.content-types.${content_type}`);
       subheader = [fromToLocalized(start_date || film_date, end_date)];
       break;
