@@ -56,6 +56,10 @@ const PlaylistCollectionContainer = ({ cId, t, cuId }) => {
           dispatch(actions.fetchUnitsByIDs({ id: cusForFetch, with_tags: true, with_files: true }));
         }
       }
+      //full fetch currently played unit
+      if (cuId && !fullUnitFetchedMap[cuId] && !wipMap.units[cuId] && !errorMap.units[cuId]) {
+        dispatch(actions.fetchUnit(cuId));
+      }
 
       // next prev links only for lessons
       if (COLLECTION_DAILY_LESSONS.includes(content_type)) {
