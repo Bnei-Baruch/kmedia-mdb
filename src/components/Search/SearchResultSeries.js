@@ -11,6 +11,7 @@ import ScoreDebug from './ScoreDebug';
 import SearchResultBase from './SearchResultBase';
 import { CT_LESSONS_SERIES, SEARCH_INTENT_HIT_TYPE_SERIES_BY_TAG } from '../../helpers/consts';
 import SearchResultCollection from './SearchResultCollection';
+import { canonicalLink } from '../../helpers/links';
 
 class SearchResultSeries extends SearchResultBase {
   state = {
@@ -18,8 +19,8 @@ class SearchResultSeries extends SearchResultBase {
   };
 
   renderSerie = s => {
-    const { t }             = this.props;
-    const { logLinkParams } = this.buildCollectionLinkParams(s);
+    const { t }                                  = this.props;
+    const { logLinkParams, canonicalLinkParams } = this.buildCollectionLinkParams(s);
 
     return (
       <Button basic size="tiny" className="link_to_cu">
@@ -27,7 +28,7 @@ class SearchResultSeries extends SearchResultBase {
         <Link
           key={s.id}
           onClick={() => this.logClick(...logLinkParams)}
-          to={`/lessons/series/c/${s.id}`}
+          to={canonicalLink(...canonicalLinkParams)}
         >
           <span className="margin-right-8 margin-left-8">
             <Icon name="tasks" size="small" />
@@ -63,15 +64,15 @@ class SearchResultSeries extends SearchResultBase {
 
   render() {
     const {
-      t,
-      location,
-      hit,
-      getSerieBySource,
-      getSerieByTag,
-      nestedDenormCollectionWUnits,
-      getTagById,
-      wip: { lectures: wipL, series: wipS }
-    } = this.props;
+            t,
+            location,
+            hit,
+            getSerieBySource,
+            getSerieByTag,
+            nestedDenormCollectionWUnits,
+            getTagById,
+            wip: { lectures: wipL, series: wipS }
+          } = this.props;
 
     const { showAll } = this.state;
 
