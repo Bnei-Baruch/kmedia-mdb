@@ -49,32 +49,32 @@ const LatestUpdate = ({ item, t, label }) => {
 
   // collections -- prepare random image
   switch (content_type) {
-  case CT_VIDEO_PROGRAM_CHAPTER:
-  case CT_CLIP:
-  case CT_VIRTUAL_LESSON:
-    return <ContentItemContainer id={id} noViews />;
-  case CT_DAILY_LESSON:
-    title     = t(`constants.content-types.${content_type}`);
-    subheader = [`${t('values.date', { date: film_date })}${number && ` (${t(`lessons.list.nameByNum_${number}`)})`}`];
-    break;
-  case CT_WOMEN_LESSONS:
-    title     = name;
-    subheader = [t('values.date', { date: film_date })];
-    break;
-  case CT_LESSONS_SERIES:
-    title     = [t(`player.header.series-by-topic`), `${authorName}`, ` ${name}`] || t(`constants.content-types.${content_type}`);
-    subheader = [fromToLocalized(start_date || film_date, end_date)];
-    break;
-  case CT_SPECIAL_LESSON:
-  case CT_CONGRESS:
-  case CT_MEAL:
-  case CT_FRIENDS_GATHERING:
-  case CT_HOLIDAY:
-  case CT_PICNIC:
-  case CT_UNITY_DAY:
-    break;
-  default:
-    canonicalSection = canonicalSectionByLink(link);
+    case CT_VIDEO_PROGRAM_CHAPTER:
+    case CT_CLIP:
+    case CT_VIRTUAL_LESSON:
+      return <ContentItemContainer id={id} noViews />;
+    case CT_DAILY_LESSON:
+      title     = t(`constants.content-types.${content_type}`);
+      subheader = [`${t('values.date', { date: film_date })}${number && ` (${t(`lessons.list.nameByNum_${number}`)})`}`];
+      break;
+    case CT_WOMEN_LESSONS:
+      title     = name;
+      subheader = [t('values.date', { date: film_date })];
+      break;
+    case CT_LESSONS_SERIES:
+      title     = [t(`player.header.series-by-topic`), `${authorName}`, ` ${name}`] || t(`constants.content-types.${content_type}`);
+      subheader = [fromToLocalized(start_date || film_date, end_date)];
+      break;
+    case CT_SPECIAL_LESSON:
+    case CT_CONGRESS:
+    case CT_MEAL:
+    case CT_FRIENDS_GATHERING:
+    case CT_HOLIDAY:
+    case CT_PICNIC:
+    case CT_UNITY_DAY:
+      break;
+    default:
+      canonicalSection = canonicalSectionByLink(link);
   }
 
   return (
