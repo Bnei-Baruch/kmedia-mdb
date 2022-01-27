@@ -779,6 +779,7 @@
     "history": "History",
     "reactions": "Liked videos",
     "playlists": "Playlists",
+    "playlist": "Playlist \"{{name}}\"",
     "playlistNoResult": "No videos in this playlist",
     "subscriptions": "Subscriptions",
     "playAll": "Play all",

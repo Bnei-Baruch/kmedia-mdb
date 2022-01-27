@@ -794,6 +794,7 @@
     "history": "История",
     "reactions": "Понравившиеся",
     "playlists": "Плейлисты",
+    "playlist": "Плейлист \"{{name}}\"",
     "playlistNoResult": "В плейлисте пока нет видео",
     "subscriptions": "Подписки",
     "playAll": "Воспроизвести все",

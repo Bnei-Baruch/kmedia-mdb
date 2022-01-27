@@ -689,6 +689,7 @@
     "history": "Historial",
     "reactions": "Vídeos que me gustan",
     "playlists": "Playlists",
+    "playlist": "Playlist \"{{name}}\"",
     "playlistNoResult": "No hay videos en esta lista de reproducción",
     "subscriptions": "Suscripciones",
     "playAll": "Jugar todo",

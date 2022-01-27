@@ -8,13 +8,14 @@ import clsx from 'clsx';
 import { selectors as settings } from '../../../../../redux/modules/settings';
 import { selectors as sources } from '../../../../../redux/modules/sources';
 import * as shapes from '../../../../shapes';
-import { COLLECTION_DAILY_LESSONS } from '../../../../../helpers/consts';
+import { COLLECTION_DAILY_LESSONS, CT_LESSONS_SERIES } from '../../../../../helpers/consts';
 import { getLanguageDirection } from '../../../../../helpers/i18n-utils';
 import { DeviceInfoContext } from '../../../../../helpers/app-contexts';
 import { cuPartNameByCCUType } from '../../../../../helpers/utils';
 import { fromToLocalized } from '../../../../../helpers/date';
 import Link from '../../../../Language/MultiLanguageLink';
 import CollectionDatePicker from './CollectionDatePicker';
+import PlaylistPlayIcon from '../../../../../images/icons/PlaylistPlay';
 
 const getNextLink = (langDir, t, link) => (
   link ?
@@ -65,6 +66,14 @@ const PlaylistHeader = ({ collection, unit, t, prevLink = null, nextLink = null 
   };
 
   const getTitle = () => {
+    if (!content_type)
+      return (
+        <>
+          <PlaylistPlayIcon className="playlist_icon" fill="#FFFFFF" />
+          {t('personal.playlist', { name })}
+        </>
+      );
+
     if (isLesson) {
       return !isMobileDevice ? (
         <>
@@ -90,27 +99,54 @@ const PlaylistHeader = ({ collection, unit, t, prevLink = null, nextLink = null 
   };
 
   const getTitleByCO = () => {
-    let subheader = '';
-
+    let subheader;
     if (isLesson) {
-      if (!isMobileDevice) {
-        const part = Number(collection?.ccuNames[unit.id]);
-        subheader  = (!isNaN(part) && part > 0) ? `${t(cuPartNameByCCUType(content_type), { name: part })}: ${unit.name}` : unit.name;
-      } else {
-        subheader = `${t('values.date', { date: film_date })}${(number && number < 5) ? ` (${t(`lessons.list.nameByNum_${number}`)})` : ''}`;
-      }
+      subheader = isMobileDevice && `${t('values.date', { date: film_date })}${(number && number < 5) ? ` (${t(`lessons.list.nameByNum_${number}`)})` : ''}`;
     } else if (film_date) {
       subheader = t('values.date', { date: film_date });
     } else if (start_date && end_date) {
       subheader = fromToLocalized(start_date, end_date);
     }
 
+    let playNow;
+    if (!isMobileDevice) {
+      const part = collection?.ccuNames?.[unit.id] ? Number(collection.ccuNames[unit.id]) : null;
+      if (isLesson) {
+        playNow = (!isNaN(part) && part > 0) ? `${t(cuPartNameByCCUType(content_type), { name: part })} ${unit.name}` : unit.name;
+      } else if (content_type === CT_LESSONS_SERIES) {
+        playNow = <>
+          {t(cuPartNameByCCUType(content_type), { name: part })}
+          <small className="display-iblock margin-left-8 margin-right-8 font-normal">
+            {t('values.date', { date: unit.film_date })}
+          </small>
+        </>;
+      } else {
+        playNow = unit?.name;
+      }
+    }
+
     return (
       <>
         {getTitle()}
-        <small className="display-block font-normal">
-          {subheader}
-        </small>
+        {
+          subheader && (
+            <Header
+              as="h4"
+              inverted
+              className="font-normal"
+              content={subheader}
+            />
+          )
+        }
+        {
+          playNow && (
+            <Header
+              as="h2"
+              inverted
+              content={playNow}
+            />
+          )
+        }
       </>
     );
   };

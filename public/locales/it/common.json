@@ -780,6 +780,7 @@
     "history": "History",
     "reactions": "Liked videos",
     "playlists": "Playlists",
+    "playlist": "Playlist",
     "playlistNoResult": "No videos in this playlist",
     "subscriptions": "Subscriptions",
     "playAll": "Play all",
