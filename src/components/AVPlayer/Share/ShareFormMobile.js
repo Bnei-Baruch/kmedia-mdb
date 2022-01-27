@@ -5,6 +5,7 @@ import { withNamespaces } from 'react-i18next';
 
 import BaseShareForm from './BaseShareForm';
 import ShareBar from './ShareBar';
+import { toHumanReadableTime } from '../../../helpers/time';
 
 const POPOVER_CONFIRMATION_TIMEOUT = 2500;
 
@@ -37,12 +38,20 @@ class ShareFormMobile extends BaseShareForm {
   }
 
   render() {
-    const { t }                                = this.props;
+    const { t, item }                          = this.props;
     const { start, end, url, isCopyPopupOpen } = this.state;
+    const sstart                               = toHumanReadableTime(start);
+    const send                                 = toHumanReadableTime(end);
 
     return (
       <div className="mediaplayer__onscreen-share">
-        <ShareBar url={url} buttonSize="medium" />
+        <ShareBar
+          url={url}
+          buttonSize="medium"
+          sstart={sstart}
+          send={send}
+          file={item.file}
+        />
         <div className="mediaplayer__onscreen-share-form">
           <div className="mediaplayer__onscreen-share-bar-mobile">
             <Input

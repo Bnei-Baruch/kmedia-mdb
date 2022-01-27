@@ -22,6 +22,7 @@ import DonateNow, { VirtualHomeButton } from './DonateNow';
 import Logo from '../../images/icons/Logo';
 import { ClientChroniclesContext, DeviceInfoContext } from '../../helpers/app-contexts';
 import Login from './Login';
+import DownloadTrim from '../AVPlayer/Share/DownloadTrim';
 
 const WrappedOmniBoxWithChronicles = ({ location }) => {
   const chronicles = useContext(ClientChroniclesContext);
@@ -265,6 +266,7 @@ class Layout extends Component {
         </div>
         <div className="layout__main">
           <div className="layout__content">
+            <DownloadTrim />
             {renderRoutes(route.routes)}
           </div>
           <Footer />

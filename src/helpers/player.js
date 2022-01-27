@@ -76,14 +76,19 @@ const playableItem = (unit, mediaType, uiLanguage, contentLanguage) => {
   const files     = (unit.files || []).filter(f => (
     f.language === language
     && (targetMediaType === MT_VIDEO ? MediaHelper.IsMp4(f) : MediaHelper.IsMp3(f))));
-  const byQuality = mapValues(groupBy(files, x => x.video_size || VS_DEFAULT),
-    val => physicalFile(val[0], true));
+  const byQuality = mapValues(
+    groupBy(files, x => x.video_size || VS_DEFAULT),
+    val => ({
+      src: physicalFile(val[0], true),
+      ...val[0],
+    })
+  );
 
   return {
     unit,
     language,
     mediaType: targetMediaType,
-    src: byQuality[VS_DEFAULT] || '',
+    file: byQuality[VS_DEFAULT] || '',
     preImageUrl: assetUrl(`api/thumbnail/${unit.id}`),
     requestedLanguage: language,
     requestedMediaType,

@@ -9,6 +9,7 @@ const IMAGINARY_INTERNAL_HOST = process.env.REACT_APP_IMAGINARY_INTERNAL_HOST ||
 const API_FEED                = process.env.REACT_APP_FEED;
 const CHRONICLES_BACKEND      = process.env.REACT_APP_CHRONICLES_BACKEND;
 const PERSONAL_API_BACKEND    = process.env.REACT_APP_PERSONAL_API_BACKEND;
+const FILE_TRIMMER_API        = process.env.REACT_APP_FILE_TRIMMER_API;
 
 export const backendUrl               = path => `${API_BACKEND}${path}`;
 export const assetUrl                 = path => `${ASSETS_BACKEND}${path}`;
@@ -247,6 +248,12 @@ class Api {
 
   static reactionsCount = params => {
     const url    = `${PERSONAL_API_BACKEND}reaction_count?${Requests.makeParams(params)}`;
+    const config = { url, method: 'GET' };
+    return axios(config);
+  };
+
+  static trimFile = params => {
+    const url    = `${FILE_TRIMMER_API}?${Requests.makeParams(params)}`;
     const config = { url, method: 'GET' };
     return axios(config);
   };

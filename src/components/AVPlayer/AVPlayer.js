@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { noop } from '../../helpers/utils';
+import { isEmpty, noop } from '../../helpers/utils';
 import debounce from 'lodash/debounce';
 import { withRouter } from 'react-router-dom';
 import { Player, utils, withMediaProps } from 'react-media-player';
@@ -14,7 +14,6 @@ import { MT_AUDIO, MT_VIDEO, VS_DEFAULT, VS_FHD, VS_HD, VS_NHD } from '../../hel
 import playerHelper from '../../helpers/player';
 import { fromHumanReadableTime } from '../../helpers/time';
 import { getQuery } from '../../helpers/url';
-import { isEmpty } from '../../helpers/utils';
 import * as shapes from '../shapes';
 import { PLAYER_MODE, PLAYER_POSITION_STORAGE_KEY } from './constants';
 import AVPlayPause from './AVPlayPause';
@@ -104,21 +103,21 @@ class AVPlayer extends Component {
       return { error: true, errorReason: t('messages.no-playable-files') };
     }
 
-    let videoSize = playerHelper.restorePreferredVideoSize();
-    let src       = item.byQuality[videoSize];
+    let videoSize     = playerHelper.restorePreferredVideoSize();
+    let file  = item.byQuality[videoSize];
 
     // if we can't find the user preferred video size we fallback.
     // first we try to go down from where he was.
     // if we can't find anything on our way down we start go up.
-    if (!src) {
+    if (!file) {
       const vss = [VS_NHD, VS_HD, VS_FHD];
       const idx = vss.indexOf(videoSize);
       const o   = vss.slice(0, idx).reverse().concat(vss.slice(idx + 1));
       videoSize = o.find(x => !!item.byQuality[x]);
-      src       = item.byQuality[videoSize];
+      file      = item.byQuality[videoSize];
     }
 
-    return { src, videoSize };
+    return { file, videoSize };
   };
 
   static persistVolume = debounce(volume => localStorage.setItem(PLAYER_VOLUME_STORAGE_KEY, volume), 200);
@@ -195,6 +194,7 @@ class AVPlayer extends Component {
 
   componentDidMount() {
     const { history: { location }, media, item, autoPlay } = this.props;
+
     const query = getQuery(location);
     const start = PlayerStartEnum.GetFromQuery(query);
     // By default hide controls after a while if player playing.
@@ -463,8 +463,8 @@ class AVPlayer extends Component {
       const { media: { currentTime }, item: { byQuality } } = this.props;
       this.setState({
         videoSize: vs,
-        src: byQuality[vs],
-        wasCurrentTime: currentTime
+        file: byQuality[vs],
+        wasCurrentTime: currentTime,
       });
     }
   };
@@ -743,11 +743,11 @@ class AVPlayer extends Component {
         mode,
         playbackRate,
         videoSize,
-        src,
         error,
         errorReason,
         isClient,
         unMuteButton,
+        file,
       } = this.state;
 
     const [isVideo, isAudio] = [item.mediaType === MT_VIDEO, item.mediaType === MT_AUDIO];
@@ -771,6 +771,7 @@ class AVPlayer extends Component {
         <ShareFormDesktop
           media={media}
           item={item}
+          file={file}
           uiLanguage={uiLanguage}
           onSliceChange={this.handleSliceChange}
           onExit={this.handleEditBack}
@@ -808,7 +809,7 @@ class AVPlayer extends Component {
               enableInlineVideo(c.instance);
             }
           }}
-          src={src}
+          src={file?.src}
           poster={isVideo ? item.preImageUrl : null}
           vendor={isVideo ? 'video' : 'audio'}
           onReady={this.onPlayerReady}
