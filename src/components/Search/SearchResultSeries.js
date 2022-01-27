@@ -44,7 +44,7 @@ class SearchResultSeries extends SearchResultBase {
     const { _index: index, _source: { mdb_uid: mdbUid, result_type: resultType }, } = hit;
 
     return {
-      canonicalLinkParams: [{ id: c.id, content_type: 'CT_LECTURE_SERIES' }, this.getMediaLanguage(filters)],
+      canonicalLinkParams: [{ id: c.id, content_type: CT_LESSONS_SERIES }, this.getMediaLanguage(filters)],
       logLinkParams: [mdbUid, index, resultType, rank, searchId]
     };
   };
