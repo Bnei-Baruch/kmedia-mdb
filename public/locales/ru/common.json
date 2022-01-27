@@ -4,7 +4,7 @@
       "header": "Каббала Медиа"
     },
     "sidebar": {
-      "personal": "Личная зона",
+      "personal": "Мой архив",
       "lessons": "Уроки и лекции",
       "programs": "Программы и Клипы",
       "sources": "Библиотека",
@@ -24,7 +24,8 @@
       "help": "Поддержка",
       "podcast": "Подкаст",
       "old-site": "Старый сайт",
-      "subscribe": "Подписаться на обновления"
+      "subscribe": "Подписаться на обновления",
+      "bookmarks": "Закладки"
     },
     "footer": {
       "copyright": "Copyright © 2003-{{year}}",
@@ -140,6 +141,11 @@
     },
     "header": {
       "series-by-topic": "Серия уроков по теме:"
+    },
+    "download": {
+      "iconHoverText": "Загрузите отрывок, который вы отметили",
+      "downloadButton": "Скачать",
+      "copyButton": "Копировать линк"
     }
   },
   "playlist": {
@@ -172,7 +178,12 @@
     "fallback-to-audio": "Видео не найдено, используется аудио.",
     "fallback-to-video": "Аудио не найдено, используется видео.",
     "source-content-not-found": "Первоисточник не найден",
-    "no-images": "Чертежи не найдены"
+    "no-images": "Чертежи не найдены",
+    "new": "новое",
+    "trim-expiration": "* Ссылка будет доступна для скачивания только 7 дней",
+    "trimmed-title": "Ваши файлы готовы",
+    "trimmed-title-wip": "Мы готовим для вас файл",
+    "trimmed-content-wip": "Несколько минут..."
   },
   "search": {
     "header": {
@@ -326,7 +337,7 @@
       "description": "Обновленный ярлык к последнему ежедневному уроку"
     }
   },
-  "likutim":{
+  "likutim": {
     "header": {
       "text": "Избранные отрывки из первоисточников",
       "subtext": "Избранные отрывки из первоисточников на разные темы"
@@ -500,7 +511,8 @@
       "rand": "Произвольный контент",
       "more": "Ещё",
       "less": "Меньше",
-      "new": "Новое"
+      "new": "Новая передача",
+      "same-source": "По тому же источнику"
     },
     "playlist": {
       "header": "Следующий"
@@ -756,10 +768,20 @@
   },
   "share-text": {
     "message-title": "Read this fragment",
-    "share-button": "Share fragment",
     "copy-link": "Копировать ссылку",
     "copy-text": "Копировать текст",
-    "disable-share": "Отменить"
+    "disable-share": "Отменить",
+    "pin": "Свернуть",
+    "unpin": "Развернуть",
+    "share-button": "Поделиться ссылкой",
+    "bookmark-button": "Сохранить закладку",
+    "tag-button": "Пометьте текст",
+    "share-button-alt": "Поделиться ссылкой",
+    "link-button-alt": "Скопировать ссылку на выделенный текст",
+    "copy-button-alt": "Копировать текст",
+    "bookmark-button-alt": "Создайте закладку и сохраните ее в личной зоне",
+    "tag-button-alt": "Пометьте выделенный текст в разделе \"Темы\"",
+    "docbar-title": "Вы выбрали отрывок из текста, что бы вы хотели сделать?"
   },
   "personal": {
     "subsNewUnits": "новых эпизодов",
@@ -770,8 +792,9 @@
     "newPlaylistSuccessful": "Новый плейлист {{name}} создан",
     "addToPlaylistSuccessful": "Добавлен в плейлист {{name}}",
     "history": "История",
-    "likes": "Понравившиеся",
+    "reactions": "Понравившиеся",
     "playlists": "Плейлисты",
+    "playlist": "Плейлист \"{{name}}\"",
     "playlistNoResult": "В плейлисте пока нет видео",
     "subscriptions": "Подписки",
     "playAll": "Воспроизвести все",
@@ -789,6 +812,28 @@
     "login": "ВОЙТИ",
     "logout": "ВЫЙТИ",
     "needToLogin": "Войдите, чтобы ставить лайки, сохранять и подписываться на видео",
-    "account": "Мой аккаунт"
+    "account": "Мой аккаунт",
+    "no_playlists": "У вас еще нет плейлистов, создайте их",
+    "no_reactions": "У вас нет видео, которые вам понравились",
+    "no_history": "Начните смотреть видео, которое будет показано здесь",
+    "no_subscriptions": "У вас еще нет подписок, подпишитесь, чтобы увидеть их здесь",
+    "bookmark": {
+      "title": "Закладки",
+      "name": "Название",
+      "saveBookmark": "Сохранить закладку",
+      "editBookmark": "Редактировать закладку",
+      "removeBookmark": "Удалить закладку",
+      "searchBookmarks": "Искать в закладках",
+      "searchFolders": "Искать в папках",
+      "folders": "Папки",
+      "newFolder": "Новая папка",
+      "allFolders": "Все",
+      "filterByFolder": "Искать в",
+      "bookmarkUpdated": "Закладка успешно обновлена!",
+      "bookmarkCreated": "Закладка успешно создана!",
+      "confirmRemoveBookmark": "Вы действительно хотите удалить закладку {{name}}?",
+      "confirmRemoveFolder": "Вы действительно хотите удалить папку {{name}}?",
+      "haveNo": "У вас еще нет закладок"
+    }
   }
 }

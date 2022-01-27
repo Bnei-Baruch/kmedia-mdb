@@ -14,7 +14,7 @@ import { physicalFile } from '../../../../../../helpers/utils';
 import playerHelper from '../../../../../../helpers/player';
 import MediaHelper from '../../../../../../helpers/media';
 import { getQuery } from '../../../../../../helpers/url';
-import ScrollToSearch from '../../../../../shared/ScrollToSearch';
+import ScrollToSearch from '../../../../../shared/DocToolbar/ScrollToSearch';
 import Download from '../../../../../shared/Download/Download';
 import WipErr from '../../../../../shared/WipErr/WipErr';
 import * as shapes from '../../../../../shapes';
@@ -175,7 +175,7 @@ class Transcription extends Component {
 
   prepareContent = data => {
     const { textFiles, selectedFile, language } = this.state;
-    const { location, activeTab }               = this.props;
+    const { location, activeTab, unit }         = this.props;
 
     const ap                = playerHelper.getActivePartFromQuery(location);
     const selectedFileProps = selectedFile ? `&selectedFileId=${selectedFile.id}` : '';
@@ -189,7 +189,15 @@ class Transcription extends Component {
           className="font_settings doc2html"
           style={{ direction, textAlign: (direction === 'ltr' ? 'left' : 'right') }}
         >
-          <ScrollToSearch data={data} language={language} urlParams={urlParams} />
+          <ScrollToSearch
+            data={data}
+            language={language}
+            urlParams={urlParams}
+            source={{
+              subject_uid: unit.id,
+              subject_type: unit.content_type,
+              properties: { activeTab }
+            }} />
         </div>
       </div>
     );
@@ -198,7 +206,7 @@ class Transcription extends Component {
   handleSettings = settings => this.setState({ settings });
 
   render() {
-    const { doc2htmlById, t, type }                       = this.props;
+    const { doc2htmlById, t, type, unit, activeTab }      = this.props;
     const { selectedFile, languages, language, settings } = this.state;
     const { isMobileDevice }                              = this.context;
 
@@ -217,8 +225,8 @@ class Transcription extends Component {
 
     if (data) {
       const content = this.prepareContent(data);
+      const url     = physicalFile(selectedFile, true);
 
-      const url                                         = physicalFile(selectedFile, true);
       const { theme = 'light', fontType, fontSize = 0 } = settings || {};
       return (
         <div
@@ -254,7 +262,11 @@ class Transcription extends Component {
             }
             <Menu.Item>
               {<Download path={url} mimeType={mimetype} downloadAllowed={true} filename={name} />}
-              <UnitBar handleSettings={this.handleSettings} fontSize={fontSize} />
+              <UnitBar
+                handleSettings={this.handleSettings}
+                fontSize={fontSize}
+                source={{ subject_uid: unit.id, subject_type: unit.content_type, properties: { activeTab } }}
+              />
             </Menu.Item>
           </Menu>
           {content}

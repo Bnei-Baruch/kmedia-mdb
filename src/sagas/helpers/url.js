@@ -13,7 +13,9 @@ export function* getQuery() {
 
 export function* updateQuery(updater) {
   const query = yield* getQuery();
-  yield put(replace({ search: stringify(updater(query)) }));
+
+  const { state, hash } = (typeof window !== 'undefined') && window.location;
+  yield put(replace({ search: stringify(updater(query)), state, hash }));
 }
 
 export function* pushQuery(updater) {

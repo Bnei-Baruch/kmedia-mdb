@@ -11,6 +11,9 @@ import { types as ssr } from './ssr';
 const FETCH_UNIT                  = 'MDB/FETCH_UNIT';
 const FETCH_UNIT_SUCCESS          = 'MDB/FETCH_UNIT_SUCCESS';
 const FETCH_UNIT_FAILURE          = 'MDB/FETCH_UNIT_FAILURE';
+const FETCH_UNITS_BY_IDS          = 'MDB/FETCH_UNITS_BY_IDS';
+const FETCH_UNITS_BY_IDS_SUCCESS  = 'MDB/FETCH_UNITS_BY_IDS_SUCCESS';
+const FETCH_UNITS_BY_IDS_FAILURE  = 'MDB/FETCH_UNITS_BY_IDS_FAILURE';
 const FETCH_COLLECTION            = 'MDB/FETCH_COLLECTION';
 const FETCH_COLLECTION_SUCCESS    = 'MDB/FETCH_COLLECTION_SUCCESS';
 const FETCH_COLLECTION_FAILURE    = 'MDB/FETCH_COLLECTION_FAILURE';
@@ -38,6 +41,9 @@ export const types = {
   FETCH_UNIT,
   FETCH_UNIT_SUCCESS,
   FETCH_UNIT_FAILURE,
+  FETCH_UNITS_BY_IDS,
+  FETCH_UNITS_BY_IDS_SUCCESS,
+  FETCH_UNITS_BY_IDS_FAILURE,
   FETCH_COLLECTION,
   FETCH_COLLECTION_SUCCESS,
   FETCH_COLLECTION_FAILURE,
@@ -67,6 +73,9 @@ export const types = {
 const fetchUnit                = createAction(FETCH_UNIT);
 const fetchUnitSuccess         = createAction(FETCH_UNIT_SUCCESS, (id, data) => ({ id, data }));
 const fetchUnitFailure         = createAction(FETCH_UNIT_FAILURE, (id, err) => ({ id, err }));
+const fetchUnitsByIDs          = createAction(FETCH_UNITS_BY_IDS);
+const fetchUnitsByIDsSuccess   = createAction(FETCH_UNITS_BY_IDS_SUCCESS);
+const fetchUnitsByIDsFailure   = createAction(FETCH_UNITS_BY_IDS_FAILURE);
 const fetchCollection          = createAction(FETCH_COLLECTION);
 const fetchCollectionSuccess   = createAction(FETCH_COLLECTION_SUCCESS, (id, data) => ({ id, data }));
 const fetchCollectionFailure   = createAction(FETCH_COLLECTION_FAILURE, (id, err) => ({ id, err }));
@@ -94,6 +103,9 @@ export const actions = {
   fetchUnit,
   fetchUnitSuccess,
   fetchUnitFailure,
+  fetchUnitsByIDs,
+  fetchUnitsByIDsSuccess,
+  fetchUnitsByIDsFailure,
   fetchCollection,
   fetchCollectionSuccess,
   fetchCollectionFailure,
@@ -144,6 +156,9 @@ const freshStore = () => ({
     sqData: null,
     countCU: null,
   },
+  fetched: {
+    units: {},
+  },
 });
 
 /**
@@ -153,12 +168,19 @@ const freshStore = () => ({
  * @returns {{wip: {}, errors: {}}}
  */
 const setStatus = (state, action) => {
-  const wip    = { ...state.wip };
-  const errors = { ...state.errors };
+  const wip     = { ...state.wip };
+  const errors  = { ...state.errors };
+  const fetched = { ...state.fetched };
+  let units     = { errors: {}, wip: {} };
 
   switch (action.type) {
     case FETCH_UNIT:
-      wip.units = { ...wip.units, [action.payload]: true };
+      wip.units     = { ...wip.units, [action.payload]: true };
+      fetched.units = { ...fetched.units, [action.payload]: true };
+      break;
+    case FETCH_UNITS_BY_IDS:
+      units.wip = action.payload.id?.reduce((acc, id) => ({ ...acc, [id]: true }), {});
+      wip.units = { ...wip.units, ...units.wip };
       break;
     case FETCH_COLLECTION:
       wip.collections = { ...wip.collections, [action.payload]: true };
@@ -176,6 +198,14 @@ const setStatus = (state, action) => {
     case FETCH_UNIT_SUCCESS:
       wip.units    = { ...wip.units, [action.payload.id]: false };
       errors.units = { ...errors.units, [action.payload.id]: null };
+      break;
+    case FETCH_UNITS_BY_IDS_SUCCESS:
+      units        = action.payload?.reduce((acc, { id }) => ({
+        wip: { ...acc.wip, [id]: false },
+        errors: { ...acc.errors, [id]: null }
+      }), { wip: {}, errors: {} });
+      wip.units    = { ...wip.units, ...units.wip };
+      errors.units = { ...errors.units, ...units.errors };
       break;
     case FETCH_COLLECTION_SUCCESS:
       wip.collections    = { ...wip.collections, [action.payload.id]: false };
@@ -205,6 +235,14 @@ const setStatus = (state, action) => {
     case FETCH_UNIT_FAILURE:
       wip.units    = { ...wip.units, [action.payload.id]: false };
       errors.units = { ...errors.units, [action.payload.id]: action.payload.err };
+      break;
+    case FETCH_UNITS_BY_IDS_FAILURE:
+      units        = action.payload.id?.reduce((acc, id) => ({
+        wip: { ...acc.wip, [id]: false },
+        errors: { ...acc.errors, [id]: action.payload.err }
+      }), { wip: {}, errors: {} });
+      wip.units    = { ...wip.units, ...units.wip };
+      errors.units = { ...errors.units, ...units.errors };
       break;
     case FETCH_COLLECTION_FAILURE:
       wip.collections    = { ...wip.collections, [action.payload.id]: false };
@@ -239,6 +277,7 @@ const setStatus = (state, action) => {
     ...state,
     wip,
     errors,
+    fetched,
   };
 };
 
@@ -426,6 +465,7 @@ const onReceiveContentUnits = (state, action) => {
 
 const onFetchWindow = (state, action) => {
   const { id, data } = action.payload;
+
   return {
     ...state,
     cWindow: { id, data: (data.collections || []).map(x => x.id) },
@@ -435,6 +475,7 @@ const onFetchWindow = (state, action) => {
 const onFetchDatepickerCO = (state, action) => {
   const { collections } = action.payload;
   const sorted          = collections.sort((a, b) => a.number - b.number);
+
   return { ...state, datepickerCO: sorted[0]?.id };
 };
 
@@ -481,6 +522,11 @@ export const reducer = handleActions({
     setStatus(onReceiveContentUnits(state, { payload: [action.payload.data] }), action)
   ),
   [FETCH_UNIT_FAILURE]: setStatus,
+  [FETCH_UNITS_BY_IDS]: setStatus,
+  [FETCH_UNITS_BY_IDS_SUCCESS]: (state, action) => (
+    setStatus(onReceiveContentUnits(state, { payload: action.payload }), action)
+  ),
+  [FETCH_UNITS_BY_IDS_FAILURE]: setStatus,
   [FETCH_COLLECTION]: setStatus,
   [FETCH_COLLECTION_SUCCESS]: (state, action) => (
     setStatus(onReceiveCollections(state, { payload: [action.payload.data] }), action)
@@ -518,15 +564,16 @@ export const reducer = handleActions({
 
 /* Selectors */
 
-const getCollectionById = (state, id) => state.cById[id];
-const getUnitById       = (state, id) => state.cuById[id];
-const getLastLessonId   = state => state.lastLessonId;
-const getWip            = state => state.wip;
-const getErrors         = state => state.errors;
-const getCollections    = state => state.items;
-const getWindow         = state => state.cWindow;
-const getDatepickerCO   = state => state.datepickerCO;
-const getSQDataWipErr   = state => !(getWip(state).sqData || getErrors(state).sqData);
+const getCollectionById  = (state, id) => state.cById[id];
+const getUnitById        = (state, id) => state.cuById[id];
+const getLastLessonId    = state => state.lastLessonId;
+const getWip             = state => state.wip;
+const getFullUnitFetched = state => state.fetched.units;
+const getErrors          = state => state.errors;
+const getCollections     = state => state.items;
+const getWindow          = state => state.cWindow;
+const getDatepickerCO    = state => state.datepickerCO;
+const getSQDataWipErr    = state => !(getWip(state).sqData || getErrors(state).sqData);
 
 const getDenormCollection = (state, id) => {
   let c = state.cById[id];
@@ -572,6 +619,8 @@ const getDenormContentUnit = (state, id) => {
   return cu;
 };
 
+const nestedGetDenormContentUnit = state => id => getDenormContentUnit(state, id);
+
 const getDenormCollectionWUnits = (state, id) => {
   let c = state.cById[id];
   if (c && Array.isArray(c.cuIDs)) {
@@ -586,18 +635,29 @@ const getDenormCollectionWUnits = (state, id) => {
 
 const getCountCu = (state, namespace) => state.countCU[namespace];
 
+const skipFetchedCU = (state, ids, with_files) => ids.filter(id => {
+  const cu = getDenormContentUnit(state, id);
+  if (!with_files) return !cu;
+  return !cu?.files?.length;
+});
+const skipFetchedCO = (state, ids) => ids.filter(id => !getDenormCollection(state, id));
+
 export const selectors = {
   getCollectionById,
   getUnitById,
   getWip,
+  getFullUnitFetched,
   getErrors,
   getDenormCollection,
   getDenormCollectionWUnits,
   getDenormContentUnit,
+  nestedGetDenormContentUnit,
   getLastLessonId,
   getCollections,
   getWindow,
   getDatepickerCO,
   getSQDataWipErr,
-  getCountCu
+  getCountCu,
+  skipFetchedCU,
+  skipFetchedCO,
 };

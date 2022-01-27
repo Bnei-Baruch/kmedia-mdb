@@ -22,11 +22,11 @@ const map1Func = t => x => (
 const renderUnit = (unit, t) => {
   const breakdown = renderUnitHelper.getUnitCollectionsBreakdown(unit);
 
-  const map1 = map1Func(t);
-
+  const map1         = map1Func(t);
+  const ccu          = breakdown.getDailyLessons();
   const relatedItems = breakdown.getDailyLessons()
     .map(map1)
-    .concat(breakdown.getAllButDailyLessons().map(renderUnitHelper.renderUnitNameAsListItem));
+    .concat(breakdown.getAllButDailyLessons().map(cu => renderUnitHelper.renderUnitNameAsListItem(cu, ccu)));
 
   return (
     <Table.Row verticalAlign="top" key={unit.id} className="no-thumbnail">
@@ -34,7 +34,7 @@ const renderUnit = (unit, t) => {
         {renderUnitHelper.renderUnitFilmDate(unit, t)}
       </Table.Cell>
       <Table.Cell>
-        {renderUnitHelper.renderUnitNameLink(unit)}
+        {renderUnitHelper.renderUnitNameLink(unit, 'index__title', ccu)}
         {renderUnitHelper.renderRelatedItems(relatedItems, t('lessons.list.related'))}
       </Table.Cell>
     </Table.Row>
@@ -50,6 +50,7 @@ export const renderCollection = (collection, t) => {
       const breakdown = renderUnitHelper.getUnitCollectionsBreakdown(unit);
       const map1      = map1Func(t);
 
+      const ccu          = breakdown.getDailyLessons();
       const relatedItems = breakdown.getDailyLessons()
         .filter(x => x.id !== id)
         .map(map1)
@@ -58,7 +59,7 @@ export const renderCollection = (collection, t) => {
       return (
         <Table.Row key={`u-${unit.id}`} verticalAlign="top" className="no-thumbnail">
           <Table.Cell>
-            {renderUnitHelper.renderUnitNameLink(unit, 'index__item')}
+            {renderUnitHelper.renderUnitNameLink(unit, 'index__item', ccu)}
             {renderUnitHelper.renderRelatedItems(relatedItems, t('lessons.list.related'))}
           </Table.Cell>
         </Table.Row>
@@ -76,7 +77,7 @@ export const renderCollection = (collection, t) => {
       </Table.Cell>
       <Table.Cell>
         <Link className="index__title" to={canonicalLink(collection)}>
-          {`${t(CT_DAILY_LESSON_I18N_KEY)}${number ? ` (${t(`lessons.list.nameByNum_${  number}`)})` : ''}`}
+          {`${t(CT_DAILY_LESSON_I18N_KEY)}${number ? ` (${t(`lessons.list.nameByNum_${number}`)})` : ''}`}
         </Link>
       </Table.Cell>
     </Table.Row>

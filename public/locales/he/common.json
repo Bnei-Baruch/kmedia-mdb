@@ -23,7 +23,8 @@
       "help": "עזרה",
       "old-site": "לאתר הישן",
       "podcast": "פודקאסט",
-      "subscribe": "הרשם לעדכונים"
+      "subscribe": "הרשם לעדכונים",
+      "bookmarks": "סימניות"
     },
     "footer": {
       "copyright": "© כל הזכויות שמורות 2003-{{year}}",
@@ -139,6 +140,11 @@
     },
     "header": {
       "series-by-topic": "סדרת שיעורים בנושא:"
+    },
+    "download": {
+      "iconHoverText": "להוריד את הקטע שסימנת",
+      "downloadButton": "הורד",
+      "copyButton": "העתק קישור"
     }
   },
   "playlist": {
@@ -171,7 +177,12 @@
     "fallback-to-audio": "וידיאו לא נמצא, משתמש באודיו.",
     "fallback-to-video": "אודיו לא נמצא, משתמש בוידיאו.",
     "source-content-not-found": "לא נמצא תוכן המקור",
-    "no-images": "לא נמצאו שרטוטים"
+    "no-images": "לא נמצאו שרטוטים",
+    "new": "חדש",
+    "trim-expiration": "* הקישור יהיה זמין להורדה ל-7 ימים בלבד",
+    "trimmed-title": "הקבצים שלך מוכנים",
+    "trimmed-title-wip": "אנחנו מכינים את הקובץ בשבילך",
+    "trimmed-content-wip": "כמה דקות..."
   },
   "search": {
     "header": {
@@ -475,7 +486,7 @@
       "same-collection": "פרקים מומלצים מתוך",
       "any-topic": "כל נושא",
       "default": "מומלצים",
-      "popular": "הכי נצפה",
+      "popular": "הנצפה ביותר",
       "watching-now": "צופים עכשיו",
       "views": "צפיות",
       "last": "פרק אחרון",
@@ -484,7 +495,8 @@
       "rand": "תוכן אקראי",
       "more": "עוד",
       "less": "פחות",
-      "new": "חדש באתר"
+      "new": "פרק חדש",
+      "same-source": "באותו מקור"
     },
     "playlist": {
       "header": "הבא בתור"
@@ -740,22 +752,33 @@
   },
   "share-text": {
     "message-title": "Read this fragment",
-    "share-button": "Share fragment",
     "copy-link": "העתק קישור",
     "copy-text": "העתק טקסט",
-    "disable-share": "לבטל"
+    "disable-share": "לבטל",
+    "pin": "מזער",
+    "unpin": "הגדל",
+    "share-button": "שתף קישור",
+    "bookmark-button": "שמור סימניה",
+    "tag-button": "תייג טקסט",
+    "share-button-alt": "שתף קישור",
+    "link-button-alt": "העתק קישור לטקסט נבחר",
+    "copy-button-alt": "העתק טקסט",
+    "bookmark-button-alt": "צור סימניה ושמור אותה באיזור האישי",
+    "tag-button-alt": "תייג את הקטע במדור הנושאים",
+    "docbar-title": "בחרת קטע, מה תרצה לעשות?"
   },
   "personal": {
     "subsNewUnits": "פרקים חדשים",
     "unsubscribe": "נרשמת כמנוי",
     "subscribe": "הרשמה למינוי",
     "unsubscribeSuccessful": "המינוי הוסר",
-    "subscribeSuccessful": "נוסף מינוי",
+    "subscribeSuccessful": "נוסף מנוי",
     "newPlaylistSuccessful": "פלייליסט {{name}} נוצר",
     "addToPlaylistSuccessful": "נוסף לפלייליסט {{name}}",
     "history": "היסטוריית צפייה",
-    "likes": "תוכן שאהבתי",
-    "playlists": "פלייליסטים",
+    "reactions": "תוכן שאהבתי",
+    "playlists": "רשימות צפייה",
+    "playlist": "רשימת צפייה \"{{name}}\"",
     "playlistNoResult": "בפלייליסט זה אין וידאו",
     "subscriptions": "מינויים",
     "playAll": "נגן הכל",
@@ -773,6 +796,28 @@
     "login": "כניסה",
     "logout": "יציאה",
     "needToLogin": "כדאי להיכנס כדי להוסיף לייק לסרטונים, לשמור תכנים ולהירשם למינויים.",
-    "account": "החשבון שלי"
+    "account": "החשבון שלי",
+    "no_playlists": "אין לך עדיין פלייליסטים, אנא צור אחד",
+    "no_reactions": "אין לך סרטונים שאהבת",
+    "no_history": "התחל לצפות בסרטונים שיוצגו כאן",
+    "no_subscriptions": "אין לך עדיין מנויים, הירשם כדי לראות אותם כאן",
+    "bookmark": {
+      "title": "סימניות",
+      "name": "שם",
+      "saveBookmark": "שמירת סימניה",
+      "editBookmark": "עריכת סימניה",
+      "removeBookmark": "להסיר סימניה",
+      "searchBookmarks": "לחפש בסימניות",
+      "searchFolders": "חפש תיקיות",
+      "folders": "תיקיות",
+      "newFolder": "תיקיה חדשה",
+      "allFolders": "הכל",
+      "filterByFolder": "חפש ב",
+      "bookmarkUpdated": "הסימניה עודכנה בהצלחה!",
+      "bookmarkCreated": "הסימניה נוצרה בהצלחה!",
+      "confirmRemoveBookmark": "האם ברצונך למחוק את סימניה {{name}}?",
+      "confirmRemoveFolder": "האם ברצונך למחוק את תיקיה {{name}}?",
+      "haveNo": "אין לך סימניות עדיין"
+    }
   }
 }

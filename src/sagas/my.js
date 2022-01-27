@@ -3,14 +3,14 @@ import { call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
 import { actions, types } from '../redux/modules/my';
 import Api from '../helpers/Api';
 import { selectors as authSelectors } from '../redux/modules/auth';
-import { actions as mdbActions } from '../redux/modules/mdb';
+import { actions as mdbActions, selectors as mdbSelectors } from '../redux/modules/mdb';
 import { actions as recommendedActions } from '../redux/modules/recommended';
 import {
+  IsCollectionContentType,
+  MY_NAMESPACE_BOOKMARKS,
   MY_NAMESPACE_HISTORY,
-  MY_NAMESPACE_LIKES,
-  MY_NAMESPACE_PLAYLIST_BY_ID,
-  MY_NAMESPACE_PLAYLIST_ITEMS,
   MY_NAMESPACE_PLAYLISTS,
+  MY_NAMESPACE_REACTIONS,
   MY_NAMESPACE_SUBSCRIPTIONS
 } from '../helpers/consts';
 import { updateQuery } from './helpers/url';
@@ -26,38 +26,54 @@ function* fetch(action) {
   const token = yield select(state => authSelectors.getToken(state.auth));
   if (!token) return;
   // eslint-disable-next-line prefer-const
-  let { namespace, with_files = false, ...params } = action.payload;
+  const { namespace, with_files = false, addToList = true, ...params } = action.payload;
+  let with_derivations                                                 = false;
 
   const language = yield select(state => settings.getLanguage(state.settings));
   try {
     const { data } = yield call(Api.my, namespace, params, token);
+    if (!data?.items) {
+      yield put(actions.fetchSuccess({ namespace, items: [] }));
+      return;
+    }
 
     let cu_uids = [];
     let co_uids = [];
 
     switch (namespace) {
       case MY_NAMESPACE_HISTORY:
-      case MY_NAMESPACE_LIKES:
         cu_uids = data.items?.map(x => x.content_unit_uid) || [];
         break;
-      case MY_NAMESPACE_PLAYLIST_ITEMS:
-        cu_uids    = data.items?.map(x => x.content_unit_uid) || [];
-        with_files = true;
+      case MY_NAMESPACE_REACTIONS:
+        cu_uids = data.items?.filter(x => !IsCollectionContentType(x.subject_type)).map(x => x.subject_uid) || [];
         break;
       case MY_NAMESPACE_PLAYLISTS:
-        cu_uids = data.items?.filter(p => p.playlist_items).reduce((acc, p) => acc.concat(p.playlist_items.flatMap(x => x.content_unit_uid)), []);
+        if (data.items) {
+          cu_uids = data.items.filter(p => p.items)
+            .reduce((acc, p) => acc.concat(p.items.flatMap(x => x.poster_unit_uid)), []);
+        }
+
+        cu_uids.concat(data.items.map(x => x.content_unit_uid).filter(x => !!x));
         break;
       case MY_NAMESPACE_SUBSCRIPTIONS:
+        cu_uids = data.items?.map(x => x.content_unit_uid) || [];
         co_uids = data.items?.filter(s => s.collection_uid).map(s => s.collection_uid) || [];
+        break;
+      case MY_NAMESPACE_BOOKMARKS:
+        cu_uids          = data.items?.map(x => x.subject_uid) || [];
+        with_derivations = true;
         break;
       default:
     }
 
+    cu_uids = yield select(state => mdbSelectors.skipFetchedCU(state.mdb, cu_uids, with_files));
+    co_uids = yield select(state => mdbSelectors.skipFetchedCO(state.mdb, co_uids));
     if (cu_uids.length > 0) {
       const { data: { content_units } } = yield call(Api.units, {
         id: cu_uids,
         pageSize: cu_uids.length,
         with_files,
+        with_derivations,
         language
       });
       yield put(mdbActions.receiveContentUnits(content_units));
@@ -72,11 +88,7 @@ function* fetch(action) {
       yield put(mdbActions.receiveCollections(collections));
     }
 
-    if (action.type === types.FETCH_BY_CU) {
-      yield put(actions.fetchByCUSuccess({ namespace, ...data, uids: params.uids }));
-    } else {
-      yield put(actions.fetchSuccess({ namespace, ...data }));
-    }
+    yield put(actions.fetchSuccess({ namespace, addToList, ...data }));
 
     try {
       const { data: viewData } = yield call(Api.views, cu_uids);
@@ -94,7 +106,7 @@ function* fetch(action) {
   }
 }
 
-function* fetchById(action) {
+function* fetchOne(action) {
   const token = yield select(state => authSelectors.getToken(state.auth));
   if (!token) return;
   const { namespace, ...params } = action.payload;
@@ -105,8 +117,8 @@ function* fetchById(action) {
 
     let cu_uids = [];
     switch (namespace) {
-      case MY_NAMESPACE_PLAYLIST_BY_ID:
-        cu_uids = data.playlist_items?.map(x => x.content_unit_uid) || [];
+      case MY_NAMESPACE_PLAYLISTS:
+        cu_uids = data.items?.map(x => x.content_unit_uid) || [];
         break;
       default:
     }
@@ -121,7 +133,7 @@ function* fetchById(action) {
       yield put(mdbActions.receiveContentUnits(content_units));
     }
 
-    yield put(actions.fetchSuccess({ namespace, items: [data] }));
+    yield put(actions.fetchOneSuccess({ namespace, item: data }));
   } catch (err) {
     yield put(actions.fetchFailure({ namespace, ...err }));
   }
@@ -133,7 +145,7 @@ function* add(action) {
   const { namespace, ...params } = action.payload;
   try {
     const { data } = yield call(Api.my, namespace, params, token, 'POST');
-    yield put(actions.addSuccess({ namespace, items: data }));
+    yield put(actions.addSuccess({ namespace, item: data }));
   } catch (err) {
     console.log(err);
   }
@@ -144,8 +156,8 @@ function* edit(action) {
   if (!token) return;
   const { namespace, ...params } = action.payload;
   try {
-    const { data } = yield call(Api.my, namespace, params, token, 'PATCH');
-    yield put(actions.editSuccess({ namespace, item: data }));
+    const { data } = yield call(Api.my, namespace, params, token, 'PUT');
+    yield put(actions.editSuccess({ namespace, item: data, changeItems: action.payload.changeItems }));
   } catch (err) {
     console.log(err);
   }
@@ -154,19 +166,23 @@ function* edit(action) {
 function* remove(action) {
   const token = yield select(state => authSelectors.getToken(state.auth));
   if (!token) return;
-  const { namespace, ...params } = action.payload;
+  const { namespace, key, ...params } = action.payload;
   try {
-    yield call(Api.my, namespace, params, token, 'DELETE');
-    yield put(actions.removeSuccess({ namespace, ...params }));
+    const { data } = yield call(Api.my, namespace, params, token, 'DELETE');
+    if (namespace === MY_NAMESPACE_PLAYLISTS && action.payload.changeItems) {
+      yield put(actions.fetchOneSuccess({ namespace, item: data }));
+    } else {
+      yield put(actions.removeSuccess({ namespace, key }));
+    }
   } catch (err) {
     console.log(err);
   }
 }
 
-function* likeCount(action) {
+function* reactionsCount(action) {
   try {
-    const { data } = yield call(Api.likeCount, action.payload);
-    yield put(actions.likeCountSuccess(data));
+    const { data } = yield call(Api.reactionsCount, action.payload);
+    yield put(actions.reactionsCountSuccess(data));
   } catch (err) {
     console.log(err);
   }
@@ -178,11 +194,10 @@ function* watchSetPage() {
 
 function* watchFetch() {
   yield takeEvery(types.FETCH, fetch);
-  yield takeEvery(types.FETCH_BY_CU, fetch);
 }
 
-function* watchFetchById() {
-  yield takeEvery(types.FETCH_BY_ID, fetchById);
+function* watchFetchOne() {
+  yield takeEvery(types.FETCH_ONE, fetchOne);
 }
 
 function* watchAdd() {
@@ -197,16 +212,16 @@ function* watchRemove() {
   yield takeEvery(types.REMOVE, remove);
 }
 
-function* watchLikeCount() {
-  yield takeEvery(types.LIKE_COUNT, likeCount);
+function* watchReactionsCount() {
+  yield takeEvery(types.REACTION_COUNT, reactionsCount);
 }
 
 export const sagas = [
   watchSetPage,
   watchFetch,
-  watchFetchById,
+  watchFetchOne,
   watchAdd,
   watchEdit,
   watchRemove,
-  watchLikeCount,
+  watchReactionsCount,
 ];

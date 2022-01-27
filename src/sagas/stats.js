@@ -1,9 +1,9 @@
-import { call, put, select, takeLatest } from 'redux-saga/effects';
+import { call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
 
 import Api from '../helpers/Api';
 import { CT_LESSON_PART } from '../helpers/consts';
 import { isEmpty } from '../helpers/utils';
-import { actions, selectors } from '../redux/modules/stats';
+import { actions, selectors, types as stats } from '../redux/modules/stats';
 import { types as lists } from '../redux/modules/lists';
 import { types as tags } from '../redux/modules/tags';
 
@@ -44,6 +44,7 @@ export function* callUnitsStats(args, namespace) {
 
 function* watchFetchList() {
   yield takeLatest([lists.FETCH_LIST, tags.FETCH_STATS], fetchCUStats);
+  yield takeEvery([stats.FETCH_CU_STATS], fetchCUStats);
 }
 
 export const sagas = [

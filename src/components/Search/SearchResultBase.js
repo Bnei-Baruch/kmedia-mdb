@@ -4,45 +4,15 @@ import { Button, Container, Icon, Image, Label } from 'semantic-ui-react';
 import { formatDuration, physicalFile } from '../../helpers/utils';
 
 import {
-  CT_ARTICLE,
-  CT_ARTICLES,
-  CT_BLOG_POST,
-  CT_CHILDREN_LESSON,
-  CT_CHILDREN_LESSONS,
-  CT_CLIP,
-  CT_CLIPS,
-  CT_CONGRESS,
-  CT_DAILY_LESSON,
-  CT_EVENT_PART,
-  CT_FRIENDS_GATHERING,
-  CT_FRIENDS_GATHERINGS,
-  CT_FULL_LESSON,
-  CT_HOLIDAY,
   CT_KITEI_MAKOR,
-  CT_LECTURE_SERIES,
-  CT_LELO_MIKUD,
-  CT_LESSON_PART,
-  CT_LESSONS_SERIES,
-  CT_LECTURE,
-  CT_MEAL,
-  CT_MEALS,
-  CT_PICNIC,
-  CT_SPECIAL_LESSON,
-  CT_TRAINING,
-  CT_UNITY_DAY,
-  CT_VIDEO_PROGRAM,
-  CT_VIDEO_PROGRAM_CHAPTER,
-  CT_VIRTUAL_LESSON,
-  CT_VIRTUAL_LESSONS,
-  CT_WOMEN_LESSON,
-  CT_WOMEN_LESSONS,
   MT_AUDIO,
   MT_IMAGE,
   MT_TEXT,
   MT_VIDEO,
   SEARCH_INTENT_INDEX_SOURCE,
   SEARCH_INTENT_INDEX_TOPIC,
-  CT_LIKUTIM
+  CT_LIKUTIM,
+  iconByContentTypeMap,
 } from '../../helpers/consts';
 import { SectionLogo } from '../../helpers/images';
 import { canonicalLink } from '../../helpers/links';
@@ -54,41 +24,6 @@ import ScoreDebug from './ScoreDebug';
 const PATH_SEPARATOR = ' > ';
 
 const MIN_NECESSARY_WORDS_FOR_SEARCH = 4;
-
-const iconByContentTypeMap = new Map([
-  [CT_LESSON_PART, 'lessons'],
-  [CT_FULL_LESSON, 'lessons'],
-  [CT_VIRTUAL_LESSON, 'lessons'],
-  [CT_WOMEN_LESSON, 'lessons'],
-  [CT_CHILDREN_LESSON, 'lessons'],
-  [CT_LELO_MIKUD, 'lessons'],
-  [CT_DAILY_LESSON, 'lessons'],
-  [CT_SPECIAL_LESSON, 'lessons'],
-  [CT_LECTURE_SERIES, 'lessons'],
-  [CT_CHILDREN_LESSONS, 'lessons'],
-  [CT_WOMEN_LESSONS, 'lessons'],
-  [CT_VIRTUAL_LESSONS, 'lessons'],
-  [CT_LESSONS_SERIES, 'lessons'],
-  [CT_LECTURE, 'lessons'],
-  [CT_FRIENDS_GATHERING, 'events'],
-  [CT_MEAL, 'events'],
-  [CT_EVENT_PART, 'events'],
-  [CT_TRAINING, 'events'],
-  [CT_UNITY_DAY, 'events'],
-  [CT_FRIENDS_GATHERINGS, 'events'],
-  [CT_CONGRESS, 'events'],
-  [CT_MEALS, 'events'],
-  [CT_HOLIDAY, 'events'],
-  [CT_PICNIC, 'events'],
-  [CT_ARTICLE, 'publications'],
-  [CT_ARTICLES, 'publications'],
-  [CT_BLOG_POST, 'publications'],
-  [CT_VIDEO_PROGRAM_CHAPTER, 'programs'],
-  [CT_CLIP, 'programs'],
-  [CT_VIDEO_PROGRAM, 'programs'],
-  [CT_CLIPS, 'programs'],
-  ['sources', 'sources'],
-]);
 
 class SearchResultBase extends Component {
   static propTypes = {

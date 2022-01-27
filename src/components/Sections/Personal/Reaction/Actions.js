@@ -4,33 +4,30 @@ import { useDispatch } from 'react-redux';
 import { Dropdown } from 'semantic-ui-react';
 
 import { actions } from '../../../../redux/modules/my';
-import { MY_NAMESPACE_LIKES } from '../../../../helpers/consts';
+import { MY_NAMESPACE_REACTIONS } from '../../../../helpers/consts';
 import PlaylistInfo from '../../../Pages/Unit/widgets/Info/PlaylistInfo';
+import { getMyItemKey } from '../../../../helpers/my';
+import { stopBubbling } from '../../../../helpers/utils';
 
-const Actions = ({ cuId, id, t }) => {
+const Actions = ({ cuId, reaction, t }) => {
   const [open, setOpen] = useState();
   const dispatch        = useDispatch();
+  const { key }         = getMyItemKey(MY_NAMESPACE_REACTIONS, reaction);
 
   const removeItem = e => {
-    e.preventDefault();
-    e.stopPropagation();
-    dispatch(actions.remove(MY_NAMESPACE_LIKES, { ids: [id] }));
-  }
+    stopBubbling(e);
+    dispatch(actions.remove(MY_NAMESPACE_REACTIONS, { ...reaction, key }));
+  };
 
   const handleOpen = e => {
-    e.preventDefault();
-    e.stopPropagation();
+    stopBubbling(e);
     setOpen(true);
-  }
+  };
 
   const handleClose = e => {
-    if (e) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
-
+    stopBubbling(e);
     setOpen(false);
-  }
+  };
 
   return (
     <Dropdown

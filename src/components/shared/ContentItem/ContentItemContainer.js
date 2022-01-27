@@ -7,11 +7,16 @@ import { selectors, actions } from '../../../redux/modules/mdb';
 import { selectors as settings } from '../../../redux/modules/settings';
 import { selectors as recommended } from '../../../redux/modules/recommended';
 import { selectors as sources } from '../../../redux/modules/sources';
+import { selectors as tags } from '../../../redux/modules/tags';
 import {
   CT_CLIPS,
+  CT_CONGRESS,
+  CT_DAILY_LESSON,
+  CT_SOURCE,
+  CT_SPECIAL_LESSON,
+  CT_TAG,
   CT_VIDEO_PROGRAM,
   CT_VIRTUAL_LESSONS,
-  CT_SOURCE,
 } from '../../../helpers/consts';
 import { canonicalCollection, cuPartNameByCCUType } from '../../../helpers/utils';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
@@ -20,6 +25,35 @@ import ListTemplate from './ListTemplate';
 import CardTemplate from './CardTemplate';
 
 const NOT_LESSONS_COLLECTIONS = [CT_VIDEO_PROGRAM, CT_VIRTUAL_LESSONS, CT_CLIPS];
+
+const TagItemContainerHook = ({ id, t, asList = false, link, size, selected, noViews, label = '', withInfo = undefined }) => {
+  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const tag                = useSelector(state => tags.getTagById(state.tags)(id));
+  const language           = useSelector(state => settings.getLanguage(state.settings));
+  const views              = useSelector(state => recommended.getViews(id, state.recommended));
+
+  if (!tag) return null;
+  if (withInfo === undefined) {
+    withInfo = true;
+  }
+
+  const description = [];
+  if (!noViews && !(isMobileDevice && asList) && views > 0) description.push(t('pages.unit.info.views', { views }));
+
+  const props = {
+    tag,
+    language,
+    link: link || canonicalLink({ id: tag.id, content_type: CT_TAG }),
+    withCUInfo: false,
+    withCCUInfo: withInfo,
+    description,
+    size: !isMobileDevice ? size : '',
+    selected,
+    label,
+  };
+
+  return (asList ? <ListTemplate {...props} /> : <CardTemplate {...props} />);
+};
 
 const SourceItemContainerHook = ({ id, t, asList = false, link, size, selected, noViews, label = '', withInfo = undefined }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
@@ -41,16 +75,16 @@ const SourceItemContainerHook = ({ id, t, asList = false, link, size, selected, 
     link: link || canonicalLink({ id: source.id, content_type: CT_SOURCE }),
     withCUInfo: false,
     withCCUInfo: withInfo,
-    ccu: source,
     description,
     size: !isMobileDevice ? size : '',
     selected,
     label,
   };
-  return (asList ? <ListTemplate {...props} /> : <CardTemplate {...props} />);
-}
 
-const ContentItemContainer = ({ id, children, t, asList = false, link, playTime, size, selected, ccuId, noViews, label = '', withCCUInfo = undefined, withCUInfo = undefined, withPart = true }) => {
+  return (asList ? <ListTemplate {...props} /> : <CardTemplate {...props} />);
+};
+
+const ContentItemContainer = ({ id, children, t, asList = false, link, playTime, size, selected, ccuId, noViews, label = '', withCCUInfo = undefined, withCUInfo = undefined }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const unit               = useSelector(state => selectors.getDenormContentUnit(state.mdb, id));
   const language           = useSelector(state => settings.getLanguage(state.settings));
@@ -80,6 +114,7 @@ const ContentItemContainer = ({ id, children, t, asList = false, link, playTime,
   const description = [];
   if (withCCUInfo && ccu?.content_units?.length) description.push(t(`${cuPartNameByCCUType(ccu?.content_type)}s`, { name: ccu?.content_units.length }));
   const part = Number(ccu?.ccuNames[unit.id]);
+  const withPart = ccu && ![CT_DAILY_LESSON, CT_SPECIAL_LESSON, CT_CONGRESS].includes(ccu.content_type);
   if (withPart && part && !isNaN(part)) description.push(t(cuPartNameByCCUType(ccu.content_type), { name: part }));
   if (unit.film_date) description.push(t('values.date', { date: unit.film_date }));
   if (!noViews && !(isMobileDevice && asList) && views > 0) description.push(t('pages.unit.info.views', { views }));
@@ -87,7 +122,7 @@ const ContentItemContainer = ({ id, children, t, asList = false, link, playTime,
   const props = {
     unit,
     language,
-    link: link || canonicalLink(unit),
+    link: link || canonicalLink(unit, null, ccu),
     withCUInfo,
     withCCUInfo,
     ccu,
@@ -116,3 +151,4 @@ SourceItemContainerHook.propTypes = {
 
 export default withNamespaces()(ContentItemContainer);
 export const SourceItemContainer = withNamespaces()(SourceItemContainerHook);
+export const TagItemContainer = withNamespaces()(TagItemContainerHook);

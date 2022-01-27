@@ -1,0 +1,138 @@
+.ltr .search-on-doc- {
+
+  &-bar-position.pinned {
+    right: auto;
+    left: -50px;
+  }
+}
+
+.ltr .unit-materials .search-on-doc--bar-position.pinned {
+  left: 10px;
+}
+
+.unit-materials .search-on-doc--bar-position.pinned {
+  right: 10px;
+}
+
+.ltr .likutim .search-on-doc--bar-position.pinned {
+  right: -50px;
+  left: auto;
+}
+
+.likutim .search-on-doc--bar-position.pinned {
+  right: auto;
+  left: -50px;
+}
+
+.search-on-doc- {
+  &-container {
+    position: relative;
+
+    .social-buttons {
+      align-items: center;
+      background: rgba($black, .8);
+      border-radius: calc(36px / 2 + .5rem);
+      display: flex;
+      margin: auto 0 1rem;
+      padding: .5rem .25rem;
+
+      .embed-share-button {
+        vertical-align: text-bottom;
+      }
+    }
+  }
+
+  &-share {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+
+  &-bar-position {
+    position: absolute;
+    z-index: 999;
+    width: 100%;
+
+    &.pinned {
+      width: max-content;
+      right: -50px;
+      left: auto;
+      padding: 4px;
+      border-radius: 8px;
+      background: $black;
+
+    }
+  }
+
+  &-toolbar {
+    position: relative;
+    border: none !important;
+    box-shadow: none !important;
+    transform: none !important;
+    width: min-content;
+    background: $black;
+    margin: 0 auto;
+    border-radius: 8px;
+    text-align: center;
+    opacity: 0.95;
+
+    & > .header {
+      color: $white;
+      margin-top: 4px;
+      padding: 1rem 1em 0;
+    }
+
+    & > .button {
+      margin: 4px !important;
+
+      &.pin {
+        box-shadow: none !important;
+        font-size: 1em;
+        line-height: 26px;
+        height: 26px;
+        width: 26px;
+        padding: 0;
+      }
+
+      &.circular {
+        width: 20px;
+        height: 20px;
+        line-height: 20px;
+        padding: 0 !important;
+        font-size: 10px;
+
+        .icon {
+          font-size: 1em;
+        }
+      }
+    }
+
+    .ui.menu {
+      background: transparent !important;
+      width: max-content;
+      padding: 1em;
+
+      .item {
+        flex-direction: column;
+        color: $white;
+        text-align: center;
+        font-size: 0.8em;
+        padding: 1.4em 2em;
+
+        & > .button {
+          margin-bottom: 8px;
+          background-color: $white;
+          height: 40px;
+          width: 40px;
+
+          .icon {
+            font-size: 1.7em;
+            line-height: 1em;
+          }
+        }
+      }
+    }
+
+  }
+}

@@ -1,16 +1,16 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
-import { Container, Header, Progress } from 'semantic-ui-react';
+import { Container, Progress } from 'semantic-ui-react';
 import clsx from 'clsx';
 
 import * as shapes from '../../shapes';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { NO_NAME } from '../../../helpers/consts';
-import { toHumanReadableTime } from '../../../helpers/time';
 import { formatDuration } from '../../../helpers/utils';
 import { isLanguageRtl } from '../../../helpers/i18n-utils';
 import UnitLogo from '../Logo/UnitLogo';
 import Link from '../../Language/MultiLanguageLink';
+import { PLAYER_POSITION_STORAGE_KEY } from '../../AVPlayer/constants';
 
 const imageWidthBySize = {
   'small': 144,
@@ -20,6 +20,7 @@ const imageWidthBySize = {
 const ListTemplate = ({
   unit,
   source,
+  tag,
   language,
   withCUInfo,
   withCCUInfo,
@@ -35,28 +36,18 @@ const ListTemplate = ({
   const dir                = isLanguageRtl(language) ? 'rtl' : 'ltr';
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
-  let ccu_info;
-  if (!isMobileDevice && size !== 'small') {
-    ccu_info = ccu && withCCUInfo ? (
-      <div className="cu_item_info_co">
-        <span style={{ display: 'inline-block' }}>
-          <UnitLogo collectionId={ccu.id} />
-        </span>
-        <Header size="small" content={ccu.name || NO_NAME} textAlign="left" />
-      </div>
-    ) : null;
-  } else {
-    ccu_info = ccu && withCCUInfo ? (
-      <div className="cu_item_info_co ">
-        <h5 className="no-padding no-margin text_ellipsis">{ccu.name || NO_NAME}</h5>
-      </div>) : null;
-  }
+  const info = ((ccu || source || tag) && withCCUInfo) ? (
+    <div className="cu_item_info_co ">
+      {
+        size === 'big' ? <h3 className="no-padding no-margin text_ellipsis">{ccu.name || NO_NAME}</h3>
+          : <h5 className="no-padding no-margin text_ellipsis">{(ccu && ccu.name) || (source && source.name) || (tag && tag.label) || NO_NAME}</h5>
+      }
+    </div>) : null;
 
   let percent = null;
   if (unit && playTime) {
-    const sep = link.indexOf('?') > 0 ? `&` : '?';
-    link      = `${link}${sep}sstart=${toHumanReadableTime(playTime)}`;
-    percent   = (
+    localStorage.setItem(`${PLAYER_POSITION_STORAGE_KEY}_${unit.id}`, playTime);
+    percent = (
       <Progress
         size="tiny"
         className="cu_item_progress"
@@ -70,21 +61,21 @@ const ListTemplate = ({
     <Container
       as={Link}
       to={link}
-      key={(unit && unit.id) || (source && source.id)}
+      key={(unit && unit.id) || (source && source.id) || (tag && tag.id)}
       className={clsx('cu_item cu_item_list no-thumbnail', { [size]: !!size, selected })}
     >
       <div>
-        {withCUInfo && unit && <div className="cu_item_duration">{formatDuration(unit.duration)}</div>}
+        {withCUInfo && unit?.duration && <div className="cu_item_duration">{formatDuration(unit.duration)}</div>}
         {label ? <div className="cu_item_label">{label}</div> : null}
         {percent}
         <div className="cu_item_img" style={{ width }}>
           <UnitLogo unitId={unit && unit.id} sourceId={source && source.id} width={width} />
         </div>
       </div>
-      <div className={`cu_item_info ${dir}`}>
-        {ccu_info}
-        {withCUInfo && <div className={clsx('cu_item_name', { 'font_black': !ccu_info })}>
-          {(unit && unit.name) || (source && source.name)}
+      <div className={clsx('cu_item_info', { [dir]: true, 'with_actions': !!children })}>
+        {info}
+        {withCUInfo && <div className={clsx('cu_item_name', { 'font_black': !info })}>
+          {(unit && unit.name) || (source && source.name) || (tag && tag.label)}
         </div>}
         <div className={`cu_info_description ${dir} text_ellipsis`}>
           {description.map((d, i) => (<span key={i}>{d}</span>))}
@@ -104,6 +95,7 @@ const ListTemplate = ({
 ListTemplate.propTypes = {
   unit: shapes.ContentUnit,
   source: shapes.Source,
+  tag: shapes.Topic,
   language: PropTypes.string.isRequired,
   link: PropTypes.string.isRequired,
   withCCUInfo: PropTypes.bool,

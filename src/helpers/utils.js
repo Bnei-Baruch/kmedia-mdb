@@ -432,3 +432,21 @@ export const cuPartNameByCCUType = ct => {
       return `${prefix}episode`;
   }
 };
+
+export const stopBubbling = e => {
+  if (!e) return;
+  e.preventDefault();
+  e.stopPropagation();
+};
+
+export const getSourcesCollections = (sources, getPathById) =>
+  Object.values(sources.map(source => getPathById(source))
+    .map(path => (path && path.length >= 2 && path[path.length - 2]) || null).filter(collectionSource => !!collectionSource)
+    .reduce((acc, source) => {
+      if (!(source.id in acc)) {
+        acc[source.id] = source;
+      }
+
+      return acc;
+    }, {})).filter(source => source && source.children && source.children.length);
+
