@@ -4,7 +4,12 @@ import { Trans, withNamespaces } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Container, Divider, Grid } from 'semantic-ui-react';
 
-import { SEARCH_GRAMMAR_HIT_TYPES, SEARCH_INTENT_HIT_TYPES } from '../../helpers/consts';
+import {
+  SEARCH_GRAMMAR_HIT_TYPES,
+  SEARCH_INTENT_HIT_TYPE_SERIES_BY_SOURCE,
+  SEARCH_INTENT_HIT_TYPE_SERIES_BY_TAG,
+  SEARCH_INTENT_HIT_TYPES
+} from '../../helpers/consts';
 import { isEmpty } from '../../helpers/utils';
 import { getQuery } from '../../helpers/url';
 import { ClientChroniclesContext } from '../../helpers/app-contexts';
@@ -25,6 +30,7 @@ import SearchResultTwitters from './SearchResultTwitters';
 import SearchResultSource from './SearchResultSource';
 import SearchResultPost from './SearchResultPost';
 import DidYouMean from './DidYouMean';
+import SearchResultSeries from './SearchResultSeries';
 
 const SearchResults = props => {
   /* Requested by Mizrahi
@@ -52,7 +58,7 @@ const SearchResults = props => {
       language,
       t,
       handlePageChange,
-      location,
+      location
     } = props;
 
   const filterByHitType = hit => hitType ? hit.type === hitType : true;
@@ -60,8 +66,18 @@ const SearchResults = props => {
   const searchLanguageByIndex = (index, def) => index.split('_')[2] ?? def;
 
   const renderHit = (hit, rank, searchLanguage) => {
-    const { _source: { mdb_uid: mdbUid, result_type: resultType, landing_page: landingPage, filter_values: filterValues }, _type: type, _index } = hit;
-    const key = mdbUid ? `${mdbUid}_${type}`: `${landingPage}_${type}_${(filterValues || []).map(({ name, value }) => `${name}_${value}`).join('_')}`;
+    const {
+      _source: {
+        mdb_uid: mdbUid,
+        result_type: resultType,
+        landing_page: landingPage,
+        filter_values: filterValues
+      }, _type: type, _index
+    }   = hit;
+    const key = mdbUid ? `${mdbUid}_${type}` : `${landingPage}_${type}_${(filterValues || []).map(({
+      name,
+      value
+    }) => `${name}_${value}`).join('_')}`;
 
     searchLanguage = searchLanguageByIndex(_index, searchLanguage);
     const newProps = {
@@ -80,6 +96,10 @@ const SearchResults = props => {
 
     if (type === 'tweets_many') {
       return <SearchResultTwitters  {...newProps} />;
+    }
+
+    if (type === SEARCH_INTENT_HIT_TYPE_SERIES_BY_TAG || type === SEARCH_INTENT_HIT_TYPE_SERIES_BY_SOURCE) {
+      return <SearchResultSeries {...newProps} />;
     }
 
     let result = null;
@@ -233,7 +253,7 @@ SearchResults.defaultProps = {
   twitterMap: {},
   wip: false,
   err: null,
-  getSourcePath: undefined,
+  getSourcePath: undefined
 };
 
 export default withNamespaces()(SearchResults);
