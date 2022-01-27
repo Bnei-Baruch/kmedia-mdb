@@ -70,7 +70,7 @@ const PlaylistHeader = ({ collection, unit, t, prevLink = null, nextLink = null 
       return (
         <>
           <PlaylistPlayIcon className="playlist_icon" fill="#FFFFFF" />
-          {name}
+          {t('personal.playlist', { name })}
         </>
       );
 
@@ -114,7 +114,12 @@ const PlaylistHeader = ({ collection, unit, t, prevLink = null, nextLink = null 
       if (isLesson) {
         playNow = (!isNaN(part) && part > 0) ? `${t(cuPartNameByCCUType(content_type), { name: part })} ${unit.name}` : unit.name;
       } else if (content_type === CT_LESSONS_SERIES) {
-        playNow = `${t(cuPartNameByCCUType(content_type), { name: part })} ${t('values.date', { date: unit.film_date })}`;
+        playNow = <>
+          {t(cuPartNameByCCUType(content_type), { name: part })}
+          <small className="display-iblock margin-left-8 margin-right-8 font-normal">
+            {t('values.date', { date: unit.film_date })}
+          </small>
+        </>;
       } else {
         playNow = unit?.name;
       }
