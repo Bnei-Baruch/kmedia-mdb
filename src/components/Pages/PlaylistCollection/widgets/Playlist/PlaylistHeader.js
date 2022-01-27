@@ -112,9 +112,9 @@ const PlaylistHeader = ({ collection, unit, t, prevLink = null, nextLink = null 
     if (!isMobileDevice) {
       const part = collection?.ccuNames?.[unit.id] ? Number(collection.ccuNames[unit.id]) : null;
       if (isLesson) {
-        playNow = (!isNaN(part) && part > 0) ? `${t(cuPartNameByCCUType(content_type), { name: part })}: ${unit.name}` : unit.name;
+        playNow = (!isNaN(part) && part > 0) ? `${t(cuPartNameByCCUType(content_type), { name: part })} ${unit.name}` : unit.name;
       } else if (content_type === CT_LESSONS_SERIES) {
-        playNow = `${t(cuPartNameByCCUType(content_type), { name: part })}: ${t('values.date', { date: unit.film_date })}`;
+        playNow = `${t(cuPartNameByCCUType(content_type), { name: part })} ${t('values.date', { date: unit.film_date })}`;
       } else {
         playNow = unit?.name;
       }
@@ -136,9 +136,8 @@ const PlaylistHeader = ({ collection, unit, t, prevLink = null, nextLink = null 
         {
           playNow && (
             <Header
-              as="h3"
+              as="h2"
               inverted
-              className="font-normal"
               content={playNow}
             />
           )
