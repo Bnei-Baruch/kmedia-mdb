@@ -79,11 +79,11 @@ const AVPlaylistPlayer = ({ items, selected, onSelectedChange, onLanguageChange,
           onLanguageChange={onLanguageChange}
           // Playlist props
           showNextPrev
-          onFinish={onFinish}
-          onPrev={hasPrev && onPrev}
-          onNext={hasNext && onNext}
-          onPause={onPause}
+          onPrev={hasPrev ? onPrev : null}
+          onNext={hasNext ? onNext : null}
           onPlay={onPlay}
+          onPause={onPause}
+          onFinish={onFinish}
           onMediaEditModeChange={handleMediaEditModeChange}
           onDropdownOpenedChange={handleDropdownOpenedChange}
         />
