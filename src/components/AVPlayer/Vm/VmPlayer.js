@@ -32,26 +32,26 @@ const chooseSource = (item, t) => {
     return { error: true, errorReason: t('messages.no-playable-files') };
   }
 
-  let videoQuality = playerHelper.restorePreferredVideoSize();
-  let src          = item.byQuality[videoQuality];
+  let videoSize = playerHelper.restorePreferredVideoSize();
+  let file      = item.byQuality[videoSize];
 
   // if we can't find the user preferred video size we fallback.
   // first we try to go down from where he was.
   // if we can't find anything on our way down we start go up.
-  if (!src) {
-    const vss    = [VS_NHD, VS_HD, VS_FHD];
-    const idx    = vss.indexOf(videoQuality);
-    const o      = vss.slice(0, idx).reverse().concat(vss.slice(idx + 1));
-    videoQuality = o.find(x => !!item.byQuality[x]);
-    src          = item.byQuality[videoQuality];
+  if (!file) {
+    const vss = [VS_NHD, VS_HD, VS_FHD];
+    const idx = vss.indexOf(videoSize);
+    const o   = vss.slice(0, idx).reverse().concat(vss.slice(idx + 1));
+    videoSize = o.find(x => !!item.byQuality[x]);
+    file      = item.byQuality[videoSize];
   }
 
-  return { src, videoQuality };
+  return { file, videoSize };
 };
 
 const VmPlayer = ({
   item,
-
+  autoPlay,
   onSwitchAV,
   onMediaEditModeChange,
 
@@ -98,9 +98,10 @@ const VmPlayer = ({
   }, [location]);
 
   useEffect(() => {
-    const { src, videoQuality } = chooseSource(item, t);
+    const { file, videoQuality } = chooseSource(item, t);
+
     setVideoQuality(videoQuality);
-    setSource(src);
+    setSource(file?.src);
     setIsVideo(item.mediaType === MT_VIDEO);
   }, [item, t]);
 
@@ -168,7 +169,8 @@ const VmPlayer = ({
   };
 
   return (
-    <Player ref={player} theme="dark" playsInline autoPlay
+    <Player ref={player} theme="dark" playsInline
+      autoPlay={autoPlay}
       style={{ '--vm-control-spacing': 0, }}
       debug={true}
     >
@@ -231,25 +233,17 @@ VmPlayer.propTypes = {
   item: shapes.VideoItem.isRequired,
   onSwitchAV: PropTypes.func.isRequired,
 
-  // Slice props
-  // history: shapes.History.isRequired,
-
   // Playlist props
   autoPlay: PropTypes.bool,
   showNextPrev: PropTypes.bool,
-  hasNext: PropTypes.bool,
-  hasPrev: PropTypes.bool,
-  onFinish: PropTypes.func,
   onPrev: PropTypes.func,
   onNext: PropTypes.func,
   onPlay: PropTypes.func,
   onPause: PropTypes.func,
+  onFinish: PropTypes.func,
 
   onMediaEditModeChange: PropTypes.func.isRequired,
   onDropdownOpenedChange: PropTypes.func.isRequired,
-
-  // Player actions.
-  // actionPlayerPlay: PropTypes.func.isRequired,
 };
 
 export default withNamespaces()(VmPlayer);
