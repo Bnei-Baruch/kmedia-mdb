@@ -1,5 +1,3 @@
-export const VERSION_WITH_PERSONALIZATION = false;
-
 // Collection Types
 export const CT_DAILY_LESSON       = 'DAILY_LESSON';
 export const CT_SPECIAL_LESSON     = 'SPECIAL_LESSON';
@@ -19,6 +17,7 @@ export const CT_ARTICLES           = 'ARTICLES';
 export const CT_LESSONS_SERIES     = 'LESSONS_SERIES';
 export const CT_SONGS              = 'SONGS';
 export const CT_SOURCE             = 'SOURCE';
+export const CT_TAG                = 'TAG';
 
 export const CT_COLLECTIONS = [
   CT_DAILY_LESSON,
@@ -64,7 +63,6 @@ export const CT_RESEARCH_MATERIAL     = 'RESEARCH_MATERIAL';
 export const CT_KTAIM_NIVCHARIM       = 'KTAIM_NIVCHARIM';
 export const CT_LIKUTIM               = 'LIKUTIM';
 
-
 export const CT_UNITS = [
   CT_LESSON_PART,
   CT_LECTURE,
@@ -88,6 +86,43 @@ export const CT_UNITS = [
   CT_KTAIM_NIVCHARIM,
   CT_LIKUTIM,
 ];
+
+export const iconByContentTypeMap = new Map([
+  [CT_LESSON_PART, 'lessons'],
+  [CT_FULL_LESSON, 'lessons'],
+  [CT_VIRTUAL_LESSON, 'lessons'],
+  [CT_WOMEN_LESSON, 'lessons'],
+  [CT_CHILDREN_LESSON, 'lessons'],
+  [CT_LELO_MIKUD, 'lessons'],
+  [CT_DAILY_LESSON, 'lessons'],
+  [CT_SPECIAL_LESSON, 'lessons'],
+  [CT_LECTURE_SERIES, 'lessons'],
+  [CT_CHILDREN_LESSONS, 'lessons'],
+  [CT_WOMEN_LESSONS, 'lessons'],
+  [CT_VIRTUAL_LESSONS, 'lessons'],
+  [CT_LESSONS_SERIES, 'lessons'],
+  [CT_LECTURE, 'lessons'],
+  [CT_LIKUTIM, 'lessons'],
+  [CT_FRIENDS_GATHERING, 'events'],
+  [CT_MEAL, 'events'],
+  [CT_EVENT_PART, 'events'],
+  [CT_TRAINING, 'events'],
+  [CT_UNITY_DAY, 'events'],
+  [CT_FRIENDS_GATHERINGS, 'events'],
+  [CT_CONGRESS, 'events'],
+  [CT_MEALS, 'events'],
+  [CT_HOLIDAY, 'events'],
+  [CT_PICNIC, 'events'],
+  [CT_ARTICLE, 'publications'],
+  [CT_ARTICLES, 'publications'],
+  [CT_BLOG_POST, 'publications'],
+  [CT_VIDEO_PROGRAM_CHAPTER, 'programs'],
+  [CT_CLIP, 'programs'],
+  [CT_VIDEO_PROGRAM, 'programs'],
+  [CT_CLIPS, 'programs'],
+  [CT_SOURCE, 'sources'],
+  ['sources', 'sources'],
+]);
 
 export const IsUnitContentType = contentType => CT_UNITS.includes(contentType);
 
@@ -340,7 +375,7 @@ const SGLP_LECTURES             = 'lectures';
 const SGLP_WOMEN_LESSONS        = 'women_lessons';
 const SGLP_RABASH_LESSONS       = 'rabash_lessons';
 export const SGLP_LESSON_SERIES = 'lesson_series';
-const SGLP_PRORGRAMS            = 'programs';
+export const SGLP_PRORGRAMS     = 'programs';
 const SGLP_CLIPS                = 'clips';
 const SGLP_LIBRARY              = 'library';
 const SGLP_GROUP_ARTICLES       = 'group_articles';
@@ -454,6 +489,8 @@ export const SEARCH_INTENT_INDEX_TOPIC       = 'intent-tag';
 export const SEARCH_INTENT_INDEX_SOURCE      = 'intent-source';
 export const SEARCH_INTENT_HIT_TYPE_PROGRAMS = 'programs';
 export const SEARCH_INTENT_HIT_TYPE_LESSONS  = 'lessons';
+export const SEARCH_INTENT_HIT_TYPE_SERIES_BY_TAG  = 'lessons_series_by_tag';
+export const SEARCH_INTENT_HIT_TYPE_SERIES_BY_SOURCE  = 'lessons_series_by_source';
 
 export const SEARCH_INTENT_HIT_TYPES = [SEARCH_INTENT_HIT_TYPE_PROGRAMS, SEARCH_INTENT_HIT_TYPE_LESSONS];
 
@@ -474,14 +511,31 @@ export const SEARCH_INTENT_SECTIONS = {
 
 export const SCROLL_SEARCH_ID = '__scrollSearchToHere__';
 
-export const MY_NAMESPACE_HISTORY        = 'history';
-export const MY_NAMESPACE_LIKES          = 'likes';
-export const MY_NAMESPACE_PLAYLISTS      = 'playlists';
-export const MY_NAMESPACE_PLAYLIST_BY_ID = 'playlists_by_id';
-export const MY_NAMESPACE_PLAYLIST_ITEMS = 'playlist_items';
-export const MY_NAMESPACE_SUBSCRIPTIONS  = 'subscriptions';
+export const MY_NAMESPACE_HISTORY       = 'history';
+export const MY_NAMESPACE_REACTIONS     = 'reactions';
+export const MY_NAMESPACE_PLAYLISTS     = 'playlists';
+export const MY_NAMESPACE_PLAYLIST_EDIT = 'playlists_edit';
+export const MY_NAMESPACE_SUBSCRIPTIONS = 'subscriptions';
+export const MY_NAMESPACE_BOOKMARKS     = 'bookmarks';
+export const MY_NAMESPACE_FOLDERS       = 'folders';
 
-export const MY_NAMESPACES = [MY_NAMESPACE_HISTORY, MY_NAMESPACE_LIKES, MY_NAMESPACE_PLAYLISTS, MY_NAMESPACE_PLAYLIST_ITEMS, MY_NAMESPACE_SUBSCRIPTIONS];
+export const MY_NAMESPACES = [
+  MY_NAMESPACE_HISTORY,
+  MY_NAMESPACE_REACTIONS,
+  MY_NAMESPACE_PLAYLISTS,
+  MY_NAMESPACE_SUBSCRIPTIONS,
+  MY_NAMESPACE_PLAYLIST_EDIT,
+  MY_NAMESPACE_BOOKMARKS,
+  MY_NAMESPACE_FOLDERS,
+];
+
+export const MY_REACTION_KINDS = {
+  LIKE: 'like',
+  SUPER: 'super',
+};
+
+export const MY_BOOKMARK_FILTER_FOLDER_ID = 'folder_id';
+export const MY_BOOKMARK_FILTER_QUERY     = 'bookmark_query';
 
 export const CT_SUBSCRIBE_BY_TYPE = [
   CT_FRIENDS_GATHERINGS,
@@ -521,3 +575,4 @@ export const SECTIONS_LINK_BY_CU_CONTENT_TYPE = {
   [SCT_TWEET]: 'publications/twitter',
   [CT_ARTICLE]: 'publications/articles',
 };
+

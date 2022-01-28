@@ -168,6 +168,12 @@ export const Source = PropTypes.shape({
   description: PropTypes.string,
 });
 
+export const Topic = PropTypes.shape({
+  id: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+  // Some fields might be missing.
+});
+
 export const Topics = PropTypes.arrayOf(PropTypes.shape({
   id: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
@@ -274,8 +280,8 @@ export const VideoItem = PropTypes.shape({
   availableLanguages: PropTypes.array,
   availableMediaTypes: PropTypes.array,
   byQuality: PropTypes.shape({
-    HD: PropTypes.string,
-    nHD: PropTypes.string,
+    HD: MDBFile,
+    nHD: MDBFile,
   }),
   language: PropTypes.string,
   mediaType: PropTypes.string,

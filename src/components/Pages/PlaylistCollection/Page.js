@@ -33,13 +33,7 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
   const [selected, setSelected] = useState(0);
   const [playlist, setPlaylist] = useState(null);
 
-  const prev     = usePrevious({ unit, collection });
-
-  const handleSelectedChange = useCallback(nSelected => {
-    if (nSelected !== selected) {
-      playlist.items[nSelected] && history.push(`/${uiLanguage}${playlist.items[nSelected].shareUrl}`);
-    }
-  }, [history, selected, uiLanguage]);
+  const prev = usePrevious({ unit, collection });
 
   useEffect(() => {
     if (prev?.unit?.id !== unit?.id) {
@@ -68,6 +62,12 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
       playerHelper.switchAV(selectedItem, history);
     }
   }, [history, playlist, selected]);
+
+  const handleSelectedChange = useCallback(nSelected => {
+    if (nSelected !== selected && playlist?.items && playlist?.items[nSelected]) {
+      history.push(`/${uiLanguage}${playlist.items[nSelected].shareUrl}`);
+    }
+  }, [history, playlist, selected, uiLanguage]);
 
   // we need to calculate the playlist here, so we can filter items out of recommended
   // playlist { collection, language, mediaType, items, groups };
@@ -107,7 +107,8 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
 
   // Don't recommend lesson preparation, skip to next unit.
   let recommendUnit = unit;
-  const isUnitPrep  = collection?.ccuNames?.[unit?.id] === '0';
+  const ccuNames = collection?.ccuNames || {};
+  const isUnitPrep  = ccuNames?.[unit?.id] === '0' && Object.values(ccuNames).filter(value => value === '0').length === 1;
   if (isUnitPrep && Array.isArray(playlist?.items)) {
     const indexOfUnit = playlist.items.findIndex(item => item?.unit?.id === unit.id);
     if (indexOfUnit !== -1 && indexOfUnit + 1 < playlist.items.length) {

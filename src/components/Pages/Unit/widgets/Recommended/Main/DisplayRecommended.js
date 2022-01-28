@@ -7,7 +7,7 @@ import * as shapes from '../../../../../shapes';
 import { canonicalCollection } from '../../../../../../helpers/utils';
 import Link from '../../../../../Language/MultiLanguageLink';
 import { canonicalLink } from '../../../../../../helpers/links';
-import ContentItemContainer, { SourceItemContainer } from '../../../../../shared/ContentItem/ContentItemContainer';
+import ContentItemContainer, { SourceItemContainer, TagItemContainer } from '../../../../../shared/ContentItem/ContentItemContainer';
 import { ClientChroniclesContext } from '../../../../../../helpers/app-contexts';
 import { selectors } from '../../../../../../redux/modules/recommended';
 import { IsCollectionContentType, IsUnitContentType } from '../../../../../../helpers/consts';
@@ -26,7 +26,7 @@ const watchingNowToString = watchingNow => {
 
 const padOneZero = str => str.length === 1 ? `0${str}` : str;
 
-const RecommendedPlaylist = (recommendForUnit, units, selected, t, chronicles, viewLimit, feedName) => {
+const RecommendedPlaylist = (recommendForUnit, units, selected, t, chronicles, viewLimit, feedName, showLabels) => {
   const [expanded, setExpanded] = useState(false);
   const unitsToDisplay = !expanded && viewLimit && viewLimit < units.length ? units.slice(0, viewLimit) : units;
   const recommendedItems = useSelector(state => selectors.getRecommendedItems(feedName, state.recommended)) || [];
@@ -48,6 +48,10 @@ const RecommendedPlaylist = (recommendForUnit, units, selected, t, chronicles, v
 
   const labelsUsed = new Map();
   const unitLabels = unitsToDisplay.map((unit, index) => {
+    if (!showLabels) {
+      return null;
+    }
+
     if (watchingNow(unit.id, index) !== -1) {
       if (!labelsUsed.has('watchingNow')) {
         labelsUsed.set('watchingNow', unit);
@@ -108,7 +112,7 @@ const RecommendedPlaylist = (recommendForUnit, units, selected, t, chronicles, v
                 active={index === selected}
                 onClick={() => chronicles.recommendSelected(unit.id)}
               >
-                {IsCollectionContentType(unit.content_type) ?
+                {unit.content_type && IsCollectionContentType(unit.content_type) ?
                   <ContentItemContainer
                     id={(unit.cuIDs && unit.cuIDs.length && unit.cuIDs[0]) || ''}
                     ccuId={unit.id}
@@ -119,19 +123,27 @@ const RecommendedPlaylist = (recommendForUnit, units, selected, t, chronicles, v
                     asList
                     label={unitLabels[index]}
                     size={'small'} />
-                  : (IsUnitContentType(unit.content_type) ?
+                  : (unit.content_type && IsUnitContentType(unit.content_type) ?
                     <ContentItemContainer
                       id={unit.id}
                       key={unit.id}
                       asList
                       label={unitLabels[index]}
                       size={'small'} /> :
-                    <SourceItemContainer
-                      id={unit.id}
-                      key={unit.id}
-                      asList
-                      label={unitLabels[index]}
-                      size={'small'} />
+                    (unit.type ?  /* TODO: Improve the distinction between source and topic. */
+                      <SourceItemContainer
+                        id={unit.id}
+                        key={unit.id}
+                        asList
+                        label={unitLabels[index]}
+                        size={'small'} /> :
+                      <TagItemContainer
+                        id={unit.id}
+                        key={unit.id}
+                        asList
+                        label={unitLabels[index]}
+                        size={'small'} />
+                    )
                   )
                 }
               </List.Item>
@@ -147,7 +159,7 @@ const RecommendedPlaylist = (recommendForUnit, units, selected, t, chronicles, v
 };
 
 
-const DisplayRecommended = ({ unit, t, recommendedUnits, displayTitle = true, title = '', viewLimit = 0, feedName = 'default' }) => {
+const DisplayRecommended = ({ unit, t, recommendedUnits, displayTitle = true, title = '', viewLimit = 0, feedName = 'default', showLabels = true }) => {
   const chronicles = useContext(ClientChroniclesContext);
   const unitCollection = canonicalCollection(unit);
   const unitCollectionId = unitCollection ? unitCollection.id : null;
@@ -155,7 +167,7 @@ const DisplayRecommended = ({ unit, t, recommendedUnits, displayTitle = true, ti
   return (
     <div className="avbox__playlist-wrapper">
       {displayTitle && <Header as="h3" content={title} />}
-      {RecommendedPlaylist(unit, recommendedUnits, unitCollectionId, t, chronicles, viewLimit, feedName)}
+      {RecommendedPlaylist(unit, recommendedUnits, unitCollectionId, t, chronicles, viewLimit, feedName, showLabels)}
     </div>
   );
 }

@@ -183,7 +183,9 @@ export const buildSearchLinkFromSelection = (language, pathname) => {
   }
 
   const url = `${protocol}//${hostname}${port ? `:${port}` : ''}${pathname}?${stringify(query)}`;
-  return { url, text: sel.toString() };
+
+  const element = sel.focusNode.nodeName.includes('text') ? sel.focusNode.parentElement : sel.focusNode;
+  return { url, text: sel.toString(), query, element };
 };
 
 const buildLinkForShortSelect = (words, sel, isForward, language) => {
@@ -206,8 +208,9 @@ const buildLinkForShortSelect = (words, sel, isForward, language) => {
     query.language = language;
   }
 
-  const url = `${protocol}//${hostname}${port ? `:${port}` : ''}${pathname}?${stringify(query)}`;
-  return { url, text: sel.toString() };
+  const url     = `${protocol}//${hostname}${port ? `:${port}` : ''}${pathname}?${stringify(query)}`;
+  const element = sel.focusNode.nodeName.includes('text') ? sel.focusNode.parentElement : sel.focusNode;
+  return { url, text: sel.toString(), query, element };
 };
 
 const findOffsetOfDOMNode = (node, offset) => {

@@ -24,7 +24,8 @@
       "help": "Hilfe",
       "podcast": "Podcast",
       "old-site": "Alte Seite",
-      "subscribe": "Für Updates abonnieren"
+      "subscribe": "Für Updates abonnieren",
+      "bookmarks": "Bookmarks"
     },
     "footer": {
       "copyright": "Copyright © 2003-{{year}}",
@@ -140,6 +141,11 @@
     },
     "header": {
       "series-by-topic": "Series of lessons on the topic:"
+    },
+    "download": {
+      "iconHoverText": "Download the excerpt you marked",
+     "downloadButton": "Download",
+      "copyButton": "Copy link"
     }
   },
   "playlist": {
@@ -172,7 +178,12 @@
     "fallback-to-audio": "Video nicht gefunden, Audio wird verwendet.",
     "fallback-to-video": "Audio nicht gefunden, Video wird verwendet.",
     "source-content-not-found": "Ursprüngliche Quelle nicht gefunden",
-    "no-images": "Zeichnungen nicht gefunden"
+    "no-images": "Zeichnungen nicht gefunden",
+    "new": "new",
+    "trim-expiration": "* The link will be available for download for 7 days only",
+    "trimmed-title": "Your files are ready",
+    "trimmed-title-wip": "We prepare the file for you",
+    "trimmed-content-wip": "A few minutes..."
   },
   "search": {
     "header": {
@@ -481,7 +492,8 @@
       "rand": "Random content",
       "more": "More",
       "less": "Less",
-      "new": "New"
+      "new": "New",
+      "same-source": "Same source"
     },
     "playlist": {
       "header": "Up Next"
@@ -648,10 +660,20 @@
   },
   "share-text": {
     "message-title": "Lesen Sie dieses Fragment",
-    "share-button": "Fragment teilen",
     "copy-link": "Link kopieren",
     "copy-text": "Text kopieren",
-    "disable-share": "Stornieren"
+    "disable-share": "Stornieren",
+    "pin": "Collapse",
+    "unpin": "Expand",
+    "share-button": "Fragment teilen",
+    "bookmark-button": "Save Bookmark",
+    "tag-button": "Tag Text",
+    "share-button-alt": "Share Link",
+    "link-button-alt": "Copy link to selected text",
+    "copy-button-alt": "Copy text",
+    "bookmark-button-alt": "Create a bookmark and save it in the personal area",
+    "tag-button-alt": "Tag the selected text in the Topics section",
+    "docbar-title": "You have selected an excerpt from the text, what would you like to do?"
   },
   "personal": {
     "subsNewUnits": "new episodes",
@@ -662,8 +684,9 @@
     "newPlaylistSuccessful": "New playlist {{name}} created",
     "addToPlaylistSuccessful": "Added to playlist {{name}}",
     "history": "History",
-    "likes": "Liked videos",
+    "reactions": "Liked videos",
     "playlists": "Playlists",
+    "playlist": "Playlist \"{{name}}\"",
     "playlistNoResult": "No videos in this playlist",
     "subscriptions": "Subscriptions",
     "playAll": "Play all",
@@ -681,6 +704,28 @@
     "login": "Login",
     "logout": "Logout",
     "needToLogin": "Sign in to like, save and subscribe to videos",
-    "account": "My Account"
+    "account": "My Account",
+    "no_playlists": "You have no playlists, please create one",
+    "no_reactions": "You have no videos you liked",
+    "no_history": "Start watching videos to be shown here",
+    "no_subscriptions": "You have no subscriptions yet, subscribe to see them here",
+    "bookmark": {
+      "title": "Bookmarks",
+      "name": "Name",
+      "saveBookmark": "Save Bookmark",
+      "editBookmark": "Edit Bookmark",
+      "removeBookmark": "Remove Bookmark",
+      "searchBookmarks": "Search Bookmarks",
+      "searchFolders": "Search Folders",
+      "folders": "Folders",
+      "newFolder": "New Folder",
+      "allFolders": "All",
+      "filterByFolder": "Search in",
+      "bookmarkUpdated": "Bookmark updated successfully!",
+      "bookmarkCreated": "Bookmark successfully created!",
+      "confirmRemoveBookmark": "Are you sure you want to delete bookmark {{name}}?",
+      "confirmRemoveFolder": "Are you sure you want to delete folder {{name}}?",
+      "haveNo": "You have no bookmarks yet"
+    }
   }
 }

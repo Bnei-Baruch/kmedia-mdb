@@ -4,19 +4,18 @@ import { Container, Card, Header, Popup, Divider, Progress } from 'semantic-ui-r
 
 import * as shapes from '../../shapes';
 import { NO_NAME } from '../../../helpers/consts';
-import { toHumanReadableTime } from '../../../helpers/time';
 import { formatDuration } from '../../../helpers/utils';
 import { isLanguageRtl } from '../../../helpers/i18n-utils';
 import UnitLogo from '../Logo/UnitLogo';
 import Link from '../../Language/MultiLanguageLink';
+import { PLAYER_POSITION_STORAGE_KEY } from '../../AVPlayer/constants';
 
 const CardTemplate = ({ unit, language, withCCUInfo, link, ccu, description, children, playTime }) => {
   const dir = isLanguageRtl(language) ? 'rtl' : 'ltr';
 
   let percent = null;
   if (playTime) {
-    const sep = link.indexOf('?') > 0 ? `&` : '?';
-    link      = `${link}${sep}sstart=${toHumanReadableTime(playTime)}`;
+    localStorage.setItem(`${PLAYER_POSITION_STORAGE_KEY}_${unit.id}`, playTime);
     percent   = (
       <Progress
         size="tiny"
@@ -28,14 +27,12 @@ const CardTemplate = ({ unit, language, withCCUInfo, link, ccu, description, chi
 
   const coInfo = ccu && withCCUInfo ? (
     <div className="cu_item_info_co">
-      <Divider style={{ width: '4em' }} />
-      <div style={{ margin: '0 -1.5em' }}>
-        <UnitLogo collectionId={ccu.id} circular />
-      </div>
+      <Divider style={{ width: '1em' }} />
+      <UnitLogo collectionId={ccu.id} circular height={80} width={80} />
       <Popup
         basic
         content={ccu.name}
-        trigger={<Header size="small" content={ccu.name || NO_NAME} textAlign="left" />}
+        trigger={<Header size="medium" content={ccu.name || NO_NAME} textAlign="left" />}
       />
     </div>
   ) : null;
@@ -45,7 +42,7 @@ const CardTemplate = ({ unit, language, withCCUInfo, link, ccu, description, chi
       <div className="cu_item_img">
         <UnitLogo unitId={unit.id} width={700} />
         <Container className="cu_item_img_info" textAlign="right">
-          <div className="cu_item_duration">{formatDuration(unit.duration)}</div>
+          {unit.duration && <div className="cu_item_duration">{formatDuration(unit.duration)}</div>}
           {coInfo}
           {percent}
         </Container>
@@ -68,7 +65,7 @@ CardTemplate.propTypes = {
   withCCUInfo: PropTypes.bool,
   ccu: shapes.Collection,
   description: PropTypes.array,
-  children: PropTypes.array
+  children: PropTypes.any
 };
 
 export default CardTemplate;

@@ -10,32 +10,31 @@ import { actions, selectors } from '../../../../redux/modules/my';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import { selectors as settings } from '../../../../redux/modules/settings';
 import { selectors as auth } from '../../../../redux/modules/auth';
-import {
-  MY_NAMESPACE_PLAYLIST_BY_ID,
-  MY_NAMESPACE_PLAYLIST_ITEMS,
-  MY_NAMESPACE_PLAYLISTS
-} from '../../../../helpers/consts';
+import { MY_NAMESPACE_PLAYLISTS } from '../../../../helpers/consts';
 import WipErr from '../../../shared/WipErr/WipErr';
 import ContentItemContainer from '../../../shared/ContentItem/ContentItemContainer';
 import AlertModal from '../../../shared/AlertModal';
 import PlaylistHeaderContainer from './HeaderContainer';
 import NeedToLogin from '../NeedToLogin';
+import { getMyItemKey } from '../../../../helpers/my';
+import { FrownSplash } from '../../../shared/Splash/Splash';
+import { stopBubbling } from '../../../../helpers/utils';
 
 const Page = ({ t }) => {
   const { id } = useParams();
 
   const { isMobileDevice } = useContext(DeviceInfoContext);
-
-  const language = useSelector(state => settings.getLanguage(state.settings));
-  const playlist = useSelector(state => selectors.getPlaylistById(state.my, id));
-  const wip      = useSelector(state => selectors.getWIP(state.my, MY_NAMESPACE_PLAYLIST_BY_ID));
-  const err      = useSelector(state => selectors.getErr(state.my, MY_NAMESPACE_PLAYLIST_BY_ID));
-  const deleted  = useSelector(state => selectors.getDeleted(state.my, MY_NAMESPACE_PLAYLIST_ITEMS));
-  const user     = useSelector(state => auth.getUser(state.auth));
-  const dispatch = useDispatch();
+  const { key }            = getMyItemKey(MY_NAMESPACE_PLAYLISTS, { id });
+  const language           = useSelector(state => settings.getLanguage(state.settings));
+  const playlist           = useSelector(state => selectors.getItemByKey(state.my, MY_NAMESPACE_PLAYLISTS, key));
+  const wip                = useSelector(state => selectors.getWIP(state.my, MY_NAMESPACE_PLAYLISTS));
+  const err                = useSelector(state => selectors.getErr(state.my, MY_NAMESPACE_PLAYLISTS));
+  const deleted            = useSelector(state => selectors.getDeleted(state.my, MY_NAMESPACE_PLAYLISTS));
+  const user               = useSelector(state => auth.getUser(state.auth));
+  const dispatch           = useDispatch();
 
   useEffect(() => {
-    id && dispatch(actions.fetchById(MY_NAMESPACE_PLAYLIST_BY_ID, { id }));
+    id && dispatch(actions.fetchOne(MY_NAMESPACE_PLAYLISTS, { id }));
   }, [id, language, user, dispatch]);
 
   const needToLogin = NeedToLogin({ t });
@@ -46,32 +45,29 @@ const Page = ({ t }) => {
 
   if (!playlist) return null;
 
-  const link          = `/${language}/${MY_NAMESPACE_PLAYLISTS}/${playlist.id}`;
+  const link          = `/${language}/${MY_NAMESPACE_PLAYLISTS}/${id}`;
   const computerWidth = isMobileDevice ? 16 : 10;
-  const items         = [...playlist.playlist_items || []];
+  const items         = [...playlist.items || []];
   items.sort((a, b) => b.position - a.position);
 
-  const removeItem = (e, iID) => {
-    e.preventDefault();
-    e.stopPropagation();
-    dispatch(actions.remove(MY_NAMESPACE_PLAYLIST_ITEMS, { ids: [iID] }));
-  };
+  const removeItem = piID => dispatch(actions.remove(MY_NAMESPACE_PLAYLISTS, { id, ids: [piID], changeItems: true }));
 
-  const onAlertCloseHandler = () => dispatch(actions.setDeleted(MY_NAMESPACE_PLAYLIST_ITEMS, false));
+  const onAlertCloseHandler = () => dispatch(actions.setDeleted(MY_NAMESPACE_PLAYLISTS, false));
 
-  const changeItemPosition = (e, i, up) => {
-    e.preventDefault();
-    e.stopPropagation();
-    // eslint-disable-next-line prefer-const
-    let { id: cid, position: cp } = items[i];
-    // eslint-disable-next-line prefer-const
-    let { id: nid, position: np } = up ? items[i - 1] : items[i + 1];
-    if (cp === np) {
-      np = up ? np + 1 : np - 1;
+  const changeItemPosition = (i, up) => {
+    const currentItem = items[i];
+    const nextItem    = up ? items[i - 1] : items[i + 1];
+    let cp, np;
+    if (currentItem.position === nextItem.position) {
+      cp = up ? currentItem.position + 1 : currentItem.position - 1;
+      np = nextItem.position;
+    } else {
+      np = currentItem.position;
+      cp = nextItem.position;
     }
 
-    dispatch(actions.edit(MY_NAMESPACE_PLAYLIST_ITEMS, { id: cid, position: np }));
-    dispatch(actions.edit(MY_NAMESPACE_PLAYLIST_ITEMS, { id: nid, position: cp }));
+    const _items = [{ ...currentItem, position: cp || 1 }, { ...nextItem, position: np || 1 }];
+    dispatch(actions.edit(MY_NAMESPACE_PLAYLISTS, { id, items: _items, changeItems: true }));
   };
 
   const renderItem = (x, i) => (
@@ -81,13 +77,13 @@ const Page = ({ t }) => {
       link={`${link}?ap=${i}`}
       asList
     >
-      <div className="my_playlist_actions">
+      <div className="my_playlist_actions" onClick={stopBubbling}>
         <Button
           basic
           icon="long arrow alternate up"
           className="no-shadow"
           disabled={i === 0}
-          onClick={e => changeItemPosition(e, i, true)}
+          onClick={() => changeItemPosition(i, true)}
         />
         <Popup
           basic
@@ -97,7 +93,7 @@ const Page = ({ t }) => {
               basic
               icon="remove circle"
               className="no-shadow"
-              onClick={e => removeItem(e, x.id)}
+              onClick={() => removeItem(x.id)}
             />
           }>
         </Popup>
@@ -106,7 +102,7 @@ const Page = ({ t }) => {
           icon="long arrow alternate down"
           className="no-shadow"
           disabled={i === items.length - 1}
-          onClick={e => changeItemPosition(e, i, false)}
+          onClick={() => changeItemPosition(i, false)}
         />
       </div>
     </ContentItemContainer>
@@ -123,7 +119,7 @@ const Page = ({ t }) => {
               <Container className="padded">
                 {items.map(renderItem)}
               </Container>
-            ) : null
+            ) : <FrownSplash text={t('messages.not-found')} />
           }
         </Grid.Column>
         {

@@ -1446,6 +1446,10 @@
   margin-bottom: 0 !important;
 }
 
+.no-margin {
+  margin: 0 !important;
+}
+
 .no-border {
   border: 0 none !important;
 }
@@ -1744,60 +1748,12 @@
     box-shadow: none;
   }
 }
-
-.search-on-page- {
-  &-container {
-    position: relative;
-
-    .social-buttons {
-      align-items: center;
-      background: rgba($black, .8);
-      border-radius: calc(36px / 2 + .5rem);
-      display: flex;
-      margin: auto 0 1rem;
-      padding: .5rem .25rem;
-
-      .embed-share-button {
-        vertical-align: text-bottom;
-      }
-    }
-  }
-
-  &-share {
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-  }
-
-  &-bar-position {
-    position: fixed;
-    top: 200px;
-  }
-
-  &-share-bar {
-    background: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-
-    .social-buttons {
-      border-radius: 0.5rem;
-    }
-
-    .message {
-      max-width: 500px;
-      word-wrap: break-word;
-    }
-
-    .cancel-button {
-      font-size: 0.6em !important;
-      margin: -2.3em 0.3em 0 1em;
-    }
-  }
-}
-
 .nowrap {
   white-space: nowrap;
+}
+
+.flex_nowrap {
+  flex-wrap: nowrap !important;
 }
 
 .text_ellipsis {
@@ -1839,6 +1795,7 @@
   margin-left: 0;
   margin-right: 20px;
   cursor: pointer;
+
   a {
     svg {
       position: relative;
@@ -1847,6 +1804,7 @@
       margin-left: 5px;
     }
   }
+
   audio {
     height: 25px;
     position: relative;
@@ -1857,6 +1815,7 @@
       width: 100%;
     }
   }
+
   .playAudioIcon {
     margin-left: 10px;
   }
@@ -1865,6 +1824,7 @@
 .rtl .library-audio-player {
   margin-left: 20px;
   margin-right: 0;
+
   .playAudioIcon {
     margin-right: 10px;
     margin-left: 0;
@@ -1901,7 +1861,10 @@
   }
 
   .unit-logo {
-    width: 100%
+    width: 100%;
+    @include mobile {
+      max-width: 160px;
+    }
   }
 }
 
@@ -1924,7 +1887,8 @@
 }
 
 .cu_item {
-  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+
   .cu_item_img {
     position: relative;
     width: 100%;
@@ -1946,11 +1910,13 @@
         bottom: 0.5em;
         width: 100%;
         display: flex;
-        flex: 3 30px;
+        flex: 0 0 50px;
         flex-flow: nowrap;
 
         .ui.image, svg {
           height: 3.5em !important;
+          flex: 0 0 auto;
+          width: 50px;
         }
 
         svg {
@@ -1960,11 +1926,8 @@
         .header {
           width: 100%;
           color: white;
-          line-height: 3em;
-          overflow: hidden;
-          white-space: nowrap;
-          text-overflow: ellipsis;
-          padding: 0 2em;
+          padding: 4px 8px;
+          align-self: center;
           margin: 0;
         }
       }
@@ -1975,12 +1938,14 @@
     }
   }
 
+}
+
+.card.cu_item {
   .cu_item_info_co {
-    .header {
-      background-image: linear-gradient(0deg, #1b1c1d, rgba(27, 28, 29, .85));
-    }
+    background-image: linear-gradient(0deg, #1b1c1d, rgba(27, 28, 29, .85));
   }
 }
+
 
 .cu_item_duration {
   font-size: 0.8em;
@@ -2124,6 +2089,8 @@
     .cu_item_info {
       padding: 0 1em 1em;
       height: 80px;
+      width: 100%;
+      overflow: hidden;
 
       .cu_item_name {
         -webkit-line-clamp: 2;
@@ -2140,6 +2107,7 @@
 
   .cu_item_info_co {
     color: $black;
+
 
     @include mobile {
       line-height: 0.7em;
@@ -2208,12 +2176,21 @@
       left: 173px;
       right: 0;
       width: auto;
+
+      &.with_actions {
+        right: 20px
+      }
     }
+
 
     &.rtl {
       @include mobile {
         right: 173px;
         left: 0;
+
+        &.with_actions {
+          left: 20px
+        }
       }
     }
   }
@@ -2227,7 +2204,8 @@
     color: $black;
     right: 1em;
     left: 1em;
-    width: auto;
+    width: max-content;
+    min-height: 1.5em;
 
     @include mobile {
       top: 78px;
@@ -2240,7 +2218,7 @@
 
   .cu_item_name {
     margin: 1em 0 2.5em;
-    color: $fullBlack;
+    color: $grey;
     display: inline-block;
 
     @include mobile {
@@ -2258,7 +2236,7 @@
 
 .cu_item_actions {
   position: absolute !important;
-  right: -0.5em;
+  right: -1em;
   top: 20%;
 
   .cu_item_dropdown {
@@ -2281,7 +2259,7 @@
 
 .rtl .cu_item_actions {
   right: auto;
-  left: -0.5em;
+  left: -1em;
 
   .cu_item_dropdown {
     padding-right: 1em;
@@ -2294,7 +2272,7 @@
 }
 
 .vertical_bottom {
-  vertical-align: bottom;
+  vertical-align: bottom !important;
 }
 
 .no-background {
@@ -2333,6 +2311,7 @@
   .icon {
     font-size: 1em;
     vertical-align: top;
+    text-align: start;
   }
 }
 
@@ -2343,7 +2322,7 @@
   justify-content: space-between;
 
   @include mobile {
-    display: block;
+    display: flex;
     margin-top: -15px;
   }
 }

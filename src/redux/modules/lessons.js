@@ -141,7 +141,7 @@ const $$sortTree = node => {
     children.sort((a, b) => strCmp(a.start_date, b.start_date));
   }
 
-  const { id: nId, start_date } = nonLeafChildren[0]
+  const { id: nId, start_date } = isNotEmptyArray(nonLeafChildren) ? nonLeafChildren[0] : false;
 
   // sort the non leaf nodes (with an id but don't have a start_date ) and add them to children
   if (nId && !start_date) {
@@ -315,10 +315,24 @@ const getSeriesTree = (state, match) => {
   return sortedTree.children;
 };
 
+const getSerieBySourceId = (state, mdbState, sourcesState) => sId => {
+  const source = sources.getSourceById(sourcesState)(sId);
+  const collections = state.seriesIDs.map(id => mdb.getCollectionById(mdbState, id)).filter(({ source_id }) => source_id === sId);
+  return { ...source, collections };
+};
+
+const getSerieByTagId = (state, mdbState, tagsState) => tId => {
+  const tag = tags.getTagById(tagsState)(tId);
+  const collections = state.seriesIDs.map(id => mdb.getCollectionById(mdbState, id)).filter(({ tag_id }) => tag_id?.includes(tId));
+  return { ...tag, collections };
+};
+
 export const selectors = {
   getWip,
   getErrors,
   getLecturesByType,
   getSeriesIDs,
   getSeriesTree,
+  getSerieBySourceId,
+  getSerieByTagId,
 };

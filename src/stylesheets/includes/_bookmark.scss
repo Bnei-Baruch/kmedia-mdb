@@ -1,0 +1,161 @@
+.bookmark_modal.ui.modal {
+  & > .header, & > .actions {
+    border: none !important;
+    background: none;
+  }
+
+  .folders_list {
+    height: 20VH;
+  }
+
+  .header {
+    margin: 0.5em 0;
+  }
+
+  .segment {
+    margin-top: 0;
+  }
+
+  .actions > .button {
+    margin-right: 0;
+    margin-left: 0;
+    padding: .7em 1em;
+  }
+
+  .bookmark_name {
+    width: 70%;
+    margin: 0 8px;
+
+    input {
+      padding: 4px 1em;
+    }
+  }
+}
+
+.bookmark_page {
+  min-height: 60VH;
+
+  & > .ui.grid > .row > .column > .segment {
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
+  }
+}
+
+.folders {
+  border-bottom: 1px solid $midWhite;
+
+  &.ui.grid > .column {
+    padding: 0;
+  }
+
+  .bookmark_search {
+    width: 100%;
+    border: red !important;
+  }
+}
+
+.bookmark_header {
+  .bookmark_search {
+    width: auto;
+    display: inline;
+  }
+}
+
+.folders_list {
+  overflow: auto;
+  overflow-x: hidden;
+  margin-top: 1em;
+  height: 50VH;
+
+  & > .item {
+    margin: 8px 0;
+  }
+
+  & > .button > .icon.check {
+    color: green;
+    font-size: 1.5em;
+  }
+
+  .ui.grid > .row > .column.folder_actions {
+    display: none;
+
+    &:hover, .active > & {
+
+    }
+  }
+
+  & > .ui.grid > .row {
+    padding: 0.5em;
+    vertical-align: middle;
+    cursor: pointer;
+    min-height: 45px;
+
+    .column.folder_actions {
+      display: none;
+    }
+
+    &:hover > .column.folder_actions {
+      display: inline-block;
+    }
+
+    &.active {
+      background: rgba(66, 131, 202, 0.16);
+
+      .column.folder_actions {
+        display: inline-block;
+      }
+    }
+
+    .column {
+      padding: 0
+    }
+  }
+}
+
+.bookmark_search {
+  width: 30%;
+
+  @include mobile {
+    width: 50%;
+  }
+
+  &.ui.input > input {
+    border-width: 0 0 1px 0;
+    border-radius: 0;
+    border-color: $grey;
+    padding: 4px .5em;
+  }
+}
+
+.ui.list > .bookmark_item.item {
+  padding: 1em 0 !important;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  .separator {
+    margin: 0 1em;
+    color: $grey;
+  }
+
+  .source_name {
+    font-weight: normal;
+    color: $grey;
+  }
+
+  .description {
+    margin-top: 8px;
+
+    .label {
+      border: 0;
+      color: $grey;
+    }
+  }
+}
+
+.bookmark_search_mobile.ui.icon.input > input {
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  border: none;
+  background-color: $midWhite;
+}

@@ -21,6 +21,8 @@ import { reducer as music } from './modules/music';
 import { reducer as likutim } from './modules/likutim';
 import { reducer as auth } from './modules/auth';
 import { reducer as my } from './modules/my';
+import { reducer as bookmarkFilter } from './modules/bookmarkFilter';
+import { reducer as trim } from './modules/trim';
 
 const reducers = history => combineReducers({
   router: connectRouter(history),
@@ -44,7 +46,9 @@ const reducers = history => combineReducers({
   music,
   auth,
   my,
-  likutim
+  likutim,
+  bookmarkFilter,
+  trim
 });
 
 export default reducers;

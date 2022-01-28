@@ -6,11 +6,17 @@ import { Button, Confirm, Container, Header, Icon, Input } from 'semantic-ui-rea
 import { MY_NAMESPACE_PLAYLISTS } from '../../../../helpers/consts';
 import PlaylistPlayIcon from '../../../../images/icons/PlaylistPlay';
 import Link from '../../../Language/MultiLanguageLink';
+import { useSelector } from 'react-redux';
+import { selectors as settings } from '../../../../redux/modules/settings';
+import { getLanguageDirection } from '../../../../helpers/i18n-utils';
 
 const PlaylistHeaderMobile = ({ confirmSuccess, save, playlist, t }) => {
   const [isEditName, setIsEditName] = useState();
   const [name, setName]             = useState();
   const [confirm, setConfirm]       = useState();
+
+  const language         = useSelector(state => settings.getLanguage(state.settings));
+  const dir = getLanguageDirection(language);
 
   const handleChangeName = (e, { value }) => setName(value);
 
@@ -28,8 +34,7 @@ const PlaylistHeaderMobile = ({ confirmSuccess, save, playlist, t }) => {
 
   const handleConfirmCancel = () => setConfirm(false);
 
-  const itemCount = playlist.playlist_items?.length || 0;
-  const nameTag   = isEditName ? (
+  const nameTag = isEditName ? (
     <Header.Subheader>
       <Input type="text" value={name} onChange={handleChangeName} maxLength={30} />
       <Button
@@ -51,7 +56,7 @@ const PlaylistHeaderMobile = ({ confirmSuccess, save, playlist, t }) => {
         <PlaylistPlayIcon className="playlist_icon" />
         {nameTag}
         <Header.Subheader>
-          {`${itemCount} ${t('pages.collection.items.programs-collection')}`}
+          {`${playlist.total_items} ${t('pages.collection.items.programs-collection')}`}
         </Header.Subheader>
       </Header>
       <div className="summary-container">
@@ -64,18 +69,27 @@ const PlaylistHeaderMobile = ({ confirmSuccess, save, playlist, t }) => {
             open={confirm}
             onCancel={handleConfirmCancel}
             onConfirm={confirmSuccess}
+            cancelButton={t('buttons.cancel')}
+            confirmButton={t('buttons.apply')}
             content={t('personal.confirmRemovePlaylist', { name: playlist.name })}
+            dir={dir}
           />
           <Button basic onClick={remove} className="clear_button">
             <Icon name={'trash alternate outline'} size="large" />
           </Button>
         </div>
-        <Link to={`/${MY_NAMESPACE_PLAYLISTS}/${playlist.id}`}>
-          <Button basic className="clear_button">
-            <Icon name={'play circle outline'} className="margin-left-8 margin-right-8" size="big" />
-            {t('personal.playAll')}
-          </Button>
-        </Link>
+        {
+          (playlist.total_items > 0) && <Link to={`/${MY_NAMESPACE_PLAYLISTS}/${playlist.id}`}>
+            <Button basic className="clear_button">
+              <Icon
+                name={'play circle outline'}
+                className="margin-left-8 margin-right-8"
+                size="big"
+              />
+              {t('personal.playAll')}
+            </Button>
+          </Link>
+        }
       </div>
     </Container>
   );

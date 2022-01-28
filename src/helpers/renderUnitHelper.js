@@ -39,13 +39,13 @@ export const renderUnitFilmDate = (unit, t) => {
   return filmDate && renderFilmDate(filmDate);
 };
 
-export const renderUnitNameAsListItem = unit =>
-  unit && <List.Item key={unit.id} as={Link} to={canonicalLink(unit)}>
+export const renderUnitNameAsListItem = (unit, ccu) =>
+  unit && <List.Item key={unit.id} as={Link} to={canonicalLink(unit, null, ccu)}>
     {unit.name || NO_NAME}
   </List.Item>
 
-export const renderUnitNameLink = (unit, className='index__title') =>
-  unit && <Link className={className} to={canonicalLink(unit)}>
+export const renderUnitNameLink = (unit, className='index__title', ccu) =>
+  unit && <Link className={className} to={canonicalLink(unit, null, ccu)}>
     {unit.name || NO_NAME}
   </Link>
 

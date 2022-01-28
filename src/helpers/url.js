@@ -119,6 +119,7 @@ export const updateQuery = (history, updater) => {
 export const isDebMode = location => getQuery(location).deb || false;
 
 export const getToWithLanguage = (navigateTo, location, language, contentLanguage) => {
+
   if (typeof navigateTo === 'string') {
     return prefixWithLanguage(navigateTo, location, language);
   }
