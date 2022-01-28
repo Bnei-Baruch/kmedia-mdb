@@ -2455,8 +2455,16 @@
 
   .scroll_intents {
     position: absolute;
-    top: 140px;
+    top: 0;
+    width: 40px;
+    height: calc(100% - 22px);
+    margin-top: 12px;
     background-color: white !important;
     z-index: 10;
+
+    .icon {
+      transform: scale(2, 3.5);
+      color: #0000008A;
+    }
   }
 }

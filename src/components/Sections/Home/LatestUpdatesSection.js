@@ -70,22 +70,22 @@ const LatestUpdatesSection = ({ latestItems = [], t, language }) => {
         <Section title={t('materials.recommended.new')} computer={13}>
 
           <Card.Group itemsPerRow={4} doubling className="homepage__section__cardGroup">
-            <LatestUpdatesCardList t={t} language={language} title={t(`events.collection.playlist.lessons`)} itemsByCT={itemsByCT} cts={[
+            <LatestUpdatesCardList t={t} language={language} title={t(`events.collection.playlist.lessons`)} itemsByCT={itemsByCT} maxItems={20} cts={[
               { ct:consts.CT_DAILY_LESSON, itemsPerPage:2 },
-              { ct:consts.CT_WOMEN_LESSON, daysBack: 14 },
-              { ct:consts.CT_VIRTUAL_LESSON, daysBack: 14 },
+              { ct:consts.CT_WOMEN_LESSON, daysBack: 30 },
+              { ct:consts.CT_VIRTUAL_LESSON, daysBack: 30 },
               { ct:consts.CT_LESSONS_SERIES }]} />
 
-            <LatestUpdatesCardList  t={t} title={t(`programs.header.text`)} itemsByCT={itemsByCT} cts={[
+            <LatestUpdatesCardList  t={t} language={language} title={t(`programs.header.text`)} itemsByCT={itemsByCT} maxItems={20}  cts={[
               { ct:consts.CT_VIDEO_PROGRAM_CHAPTER }]}  />
 
-            <LatestUpdatesCardList  t={t} title={t(`programs.tabs.clips`)} itemsByCT={itemsByCT} cts={[
+            <LatestUpdatesCardList  t={t} language={language} title={t(`programs.tabs.clips`)} itemsByCT={itemsByCT} maxItems={20} cts={[
               { ct:consts.CT_CLIP }]} />
 
-            <LatestUpdatesCardList  t={t} title={t(`publications.header.text`)} itemsByCT={itemsByCT} cts={[
+            <LatestUpdatesCardList  t={t} language={language} title={t(`publications.header.text`)} itemsByCT={itemsByCT} maxItems={20} cts={[
               { ct:consts.CT_ARTICLE }]} />
 
-            <LatestUpdatesCardList  t={t} title={t(`nav.sidebar.events`)} itemsByCT={itemsByCT} cts={[
+            <LatestUpdatesCardList  t={t} language={language} title={t(`nav.sidebar.events`)} itemsByCT={itemsByCT} maxItems={20} cts={[
               { ct:consts.CT_CONGRESS },
               { ct:consts.CT_FRIENDS_GATHERING },
               { ct:consts.CT_MEAL },

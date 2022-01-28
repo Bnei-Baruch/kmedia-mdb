@@ -10,7 +10,7 @@ import { getSectionForTranslation } from '../../../helpers/utils';
 import Section from './Section';
 import { isLanguageRtl } from '../../../helpers/i18n-utils';
 
-const LatestUpdatesCardList = ({ t, language, title, cts, itemsByCT, itemsCount=4 }) => {
+const LatestUpdatesCardList = ({ t, language, title, maxItems, cts, itemsByCT, itemsCount=4 }) => {
 
   const [pageNo, setPageNo] = useState(0);
 
@@ -34,13 +34,13 @@ const LatestUpdatesCardList = ({ t, language, title, cts, itemsByCT, itemsCount=
       if (!itemsByCT[entry.ct])
         return [];
       const entryItems = [...itemsByCT[entry.ct]];
-      return entryItems;
-      //return entry.daysBack ? entryItems.filter(item => moment().diff(moment(item.film_date), 'days') < entry.daysBack) : entryItems;
+      //return entryItems;
+      return entry.daysBack ? entryItems.filter(item => moment().diff(moment(item.film_date), 'days') < entry.daysBack) : entryItems;
     }
 
     cts.forEach(entry => items[entry.ct] = getEntryItems(entry));
     let hasItems = true;
-    while (hasItems) {
+    while (hasItems && cards.length < maxItems) {
       hasItems = false;
       cts.forEach(ct => {
         const curItems = items[ct.ct];
@@ -84,12 +84,11 @@ const LatestUpdatesCardList = ({ t, language, title, cts, itemsByCT, itemsCount=
     return pageNo === 0 ? null : (
       <Button
         icon={`chevron ${dir}`}
-        circular
         basic
         size="large"
         onClick={onScrollLeft}
         className="scroll_intents"
-        style={{ [dir]: '-15px' }}
+        style={{ [dir]: '-40px' }}
       />
     );
   };
@@ -99,12 +98,11 @@ const LatestUpdatesCardList = ({ t, language, title, cts, itemsByCT, itemsCount=
     return (pageNo+1) * itemsCount >= cardsArray.length ? null : (
       <Button
         icon={`chevron ${dir}`}
-        circular
         basic
         size="large"
         onClick={onScrollRight}
         className="scroll_intents left"
-        style={{ [dir]: '-15px' }}
+        style={{ [dir]: '-45px' }}
       />
     );
   };
