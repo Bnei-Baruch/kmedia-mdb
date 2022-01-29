@@ -67,7 +67,7 @@ const LatestUpdatesSection = ({ latestItems = [], t, language }) => {
   return (
     <div className="homepage__thumbnails homepage__section">
       <Container className="padded horizontally">
-        <Section title={t('materials.recommended.new')} computer={13}>
+        <Section title={t('home.latest-updates.new-on-the-site')} computer={13}>
 
           <Card.Group itemsPerRow={4} doubling className="homepage__section__cardGroup">
             <LatestUpdatesCardList t={t} language={language} title={t(`events.collection.playlist.lessons`)} itemsByCT={itemsByCT} maxItems={20} cts={[
