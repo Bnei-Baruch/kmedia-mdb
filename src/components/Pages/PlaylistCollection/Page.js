@@ -1,6 +1,6 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { Container, Grid } from 'semantic-ui-react';
@@ -18,15 +18,19 @@ import Recommended from '../Unit/widgets/Recommended/Main/Recommended';
 import Playlist from './widgets/Playlist/Playlist';
 import PlaylistHeader from './widgets/Playlist/PlaylistHeader';
 import AVPlaylistPlayer from '../../AVPlayer/AVPlaylistPlayer';
+import { actions, selectors } from '../../../redux/modules/mdb';
 
 const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, cuId }) => {
-  const location           = useLocation();
-  const history            = useHistory();
+  const location = useLocation();
+  const history  = useHistory();
+  const dispatch = useDispatch();
+
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const chronicles         = useContext(ClientChroniclesContext);
 
   const uiLanguage      = useSelector(state => settings.getLanguage(state.settings));
   const contentLanguage = useSelector(state => settings.getContentLanguage(state.settings));
+  const wipMap          = useSelector(state => selectors.getWip(state.mdb));
 
   const embed                   = playerHelper.getEmbedFromQuery(location);
   const [unit, setUnit]         = useState(null);
@@ -92,7 +96,12 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
   useEffect(() => {
     const newUnit = playlist?.items[selected]?.unit;
     setUnit(newUnit);
-  }, [playlist, selected]);
+
+    if (newUnit && !Object.prototype.hasOwnProperty.call(wipMap.units, newUnit.id)) {
+      // never fetched as full so fetch now
+      dispatch(actions.fetchUnit(newUnit.id));
+    }
+  }, [playlist, selected, wipMap, dispatch]);
 
   if (!collection || !Array.isArray(collection.content_units)) {
     return null;
@@ -107,7 +116,7 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
 
   // Don't recommend lesson preparation, skip to next unit.
   let recommendUnit = unit;
-  const ccuNames = collection?.ccuNames || {};
+  const ccuNames    = collection?.ccuNames || {};
   const isUnitPrep  = ccuNames?.[unit?.id] === '0' && Object.values(ccuNames).filter(value => value === '0').length === 1;
   if (isUnitPrep && Array.isArray(playlist?.items)) {
     const indexOfUnit = playlist.items.findIndex(item => item?.unit?.id === unit.id);
