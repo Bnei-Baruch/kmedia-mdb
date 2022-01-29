@@ -68,8 +68,7 @@ const LatestUpdatesSection = ({ latestItems = [], t, language }) => {
     <div className="homepage__thumbnails homepage__section">
       <Container className="padded horizontally">
         <Section title={t('home.latest-updates.new-on-the-site')} computer={13}>
-
-          <Card.Group itemsPerRow={4} doubling className="homepage__section__cardGroup">
+          <div className="homepage__section__latestUpdates">
             <LatestUpdatesCardList t={t} language={language} title={t(`events.collection.playlist.lessons`)} itemsByCT={itemsByCT} maxItems={20} cts={[
               { ct:consts.CT_DAILY_LESSON, itemsPerPage:2 },
               { ct:consts.CT_WOMEN_LESSON, daysBack: 30 },
@@ -90,7 +89,7 @@ const LatestUpdatesSection = ({ latestItems = [], t, language }) => {
               { ct:consts.CT_FRIENDS_GATHERING },
               { ct:consts.CT_MEAL },
               { ct:consts.CT_HOLIDAY }]} />
-          </Card.Group>
+          </div>
         </Section>
       </Container>
     </div>
