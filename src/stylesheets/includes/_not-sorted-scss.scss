@@ -2452,6 +2452,15 @@
 
 .latestUpdatesCardGroup {
   position: relative;
+  min-height: 300px;
+
+  .card.cu_item {
+    min-height: 275px;
+
+    .cu_item_img {
+      min-height: 124px;
+    }
+  }
 
   .scroll_intents {
     position: absolute;

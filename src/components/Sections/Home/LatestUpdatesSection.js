@@ -62,12 +62,10 @@ const LatestUpdatesSection = ({ latestItems = [], t, language }) => {
   // row #4: CT_ARTICLE x 4
   // row #5: CT_CONGRESS, CT_FRIENDS_GATHERING, CT_FRIENDS_GATHERING, CT_MEAL
 
-  console.log(language);
-
   return (
     <div className="homepage__thumbnails homepage__section">
       <Container className="padded horizontally">
-        <Section title={t('home.latest-updates.new-on-the-site')} computer={13}>
+        <Section title={t('home.latest-updates.new-on-the-site')} className={'latestUpdateSection'} computer={13}>
           <div className="homepage__section__latestUpdates">
             <LatestUpdatesCardList t={t} language={language} title={t(`events.collection.playlist.lessons`)} itemsByCT={itemsByCT} maxItems={20} cts={[
               { ct:consts.CT_DAILY_LESSON, itemsPerPage:2 },
