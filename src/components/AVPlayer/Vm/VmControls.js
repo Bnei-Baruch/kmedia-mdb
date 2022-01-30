@@ -92,7 +92,7 @@ const getControls = (showNextPrev, onPrev, onNext, onActivateSlice, isVideo, onS
     <VolumeControl className="volumeControl" />
     { showNextPrev && <VmPrevNext isPrev={false} onClick={onNext} /> }
     <TimeProgress hideTooltip />
-    <VmJump />
+    {/* <VmJump /> */}
     <ControlSpacer hideTooltip />
     <VmAudioVideo isVideo={isVideo} onSwitchAV={onSwitchAV} />
     <SettingsControl />
@@ -146,12 +146,19 @@ const buildDesktopVideoControls = (showNextPrev, onPrev, onNext, onSwitchAV, onA
     <Spinner />
     <Skeleton />
 
-    <Controls
-      pin="center"
-      justify="center"
-    >
+    {/* <Controls pin="topLeft" style={{ '--vm-controls-padding': '1.5rem' }}>
+      <Radio toggle onChange={onSwitchAV} checked={false} label="Audio Only OFF"></Radio>
+    </Controls> */}
+
+    <Controls pin="center" justify='start' hideOnMouseLeave={true}>
+      { showNextPrev && <VmPrevNext isPrev onClick={onPrev} /> }
+      <VmJump isBack={true} />
+    </Controls>
+
+    <Controls pin="center" justify='center' hideOnMouseLeave={true}>
       {/*<VmBigPlay />*/}
       {/* TODO icon: padding-left: 2px; */}
+
       <PlaybackControl
         hideTooltip
         style={{
@@ -163,6 +170,11 @@ const buildDesktopVideoControls = (showNextPrev, onPrev, onNext, onSwitchAV, onA
           padding: '4px',
         }}
       />
+    </Controls>
+
+    <Controls pin="center" justify='end' hideOnMouseLeave={true}>
+      <VmJump isBack={false} />
+      { showNextPrev && <VmPrevNext isPrev={false} onClick={onNext} /> }
     </Controls>
 
     <Controls
