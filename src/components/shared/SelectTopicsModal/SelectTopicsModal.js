@@ -10,7 +10,6 @@ import { selectors as settings } from '../../../redux/modules/settings';
 import { selectors } from '../../../redux/modules/tags';
 import { actions } from '../../../redux/modules/my';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
-import { MY_NAMESPACE_LABELS } from '../../../helpers/consts';
 import { getTree } from '../../../helpers/topricTree';
 import NeedToLogin from '../../Sections/Personal/NeedToLogin';
 import AlertModal from '../AlertModal';
@@ -33,9 +32,20 @@ const SelectTopicsModal = ({ t, open, onClose, source, trigger }) => {
   const dispatch = useDispatch();
 
   const create = () => {
-    const params = { name, tag_uids: selected, language, ...source };
+    const { subject_type: content_type, subject_uid, properties, language: l = language } = source;
 
-    dispatch(actions.add(MY_NAMESPACE_LABELS, params));
+    const params = {
+      i18n: {
+        [l]: { name, language: l }
+      },
+      tag_uids: selected,
+      subject_uid,
+      content_type,
+      properties,
+      media_type: 'text'
+    };
+
+    dispatch(actions.mdbCreateLabel(params));
   };
 
   const clear = () => {

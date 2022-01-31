@@ -4,7 +4,7 @@ export class RenderBase {
   tagPositions = [];
 
   constructor(data, start, end) {
-    this.source = data.replace(/\r?\n|\r{1,}|\s{2,}/g, ' ');
+    this.source = data.replace(/\r?\n|\r{1,}|\s{2,}|\&nbsp;{1,}/g, ' ');
     this.start  = start;
     this.end    = end;
   }
@@ -46,19 +46,19 @@ export class RenderBase {
   insertLabels(labels) {
     if (!labels?.length)
       return;
-    const lPositions = labels.reduce((acc, { properties: { srchstart, srchend } = {}, uid }) => {
+    const lPositions = labels.reduce((acc, { properties: { srchstart, srchend } = {}, id }) => {
       const start = srchstart?.split(OFFSET_TEXT_SEPARATOR);
       if (start) {
         const match     = this.findClose(this.buildMatch(start[0], this.dataCleanHtml), start[1]);
         const noHtmlPos = match?.index - 1;
-        acc.push({ str: `<span class="label_pos" id="start_${uid}"></span>`, noHtmlPos, isAdded: true });
+        acc.push({ str: `<span class="label_pos" id="start_${id}"></span>`, noHtmlPos, isAdded: true });
       }
 
       const end = srchend?.split(OFFSET_TEXT_SEPARATOR);
       if (end) {
         const match     = this.findClose(this.buildMatch(end[0], this.dataCleanHtml), end[1]);
         const noHtmlPos = match?.index + end[0].length + 1;
-        acc.push({ str: `<span class="label_pos" id="end_${uid}"></span>`, noHtmlPos, isAdded: true });
+        acc.push({ str: `<span class="label_pos" id="end_${id}"></span>`, noHtmlPos, isAdded: true });
       }
 
       return acc;

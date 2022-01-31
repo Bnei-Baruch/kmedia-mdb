@@ -9,6 +9,7 @@ const IMAGINARY_INTERNAL_HOST = process.env.REACT_APP_IMAGINARY_INTERNAL_HOST ||
 const API_FEED                = process.env.REACT_APP_FEED;
 const CHRONICLES_BACKEND      = process.env.REACT_APP_CHRONICLES_BACKEND;
 const PERSONAL_API_BACKEND    = process.env.REACT_APP_PERSONAL_API_BACKEND || `${API_BACKEND}my/`;
+const MDB_REST_BACKEND        = process.env.REACT_APP_MDB_REST_BACKEND || `${API_BACKEND}mdb-api/`;
 
 export const backendUrl               = path => `${API_BACKEND}${path}`;
 export const assetUrl                 = path => `${ASSETS_BACKEND}${path}`;
@@ -129,6 +130,8 @@ class Api {
   );
 
   static post = (blog, id) => Requests.get(`posts/${blog}/${id}`);
+
+  static labels = params => Requests.get(`labels?${Requests.makeParams(params)}`);
 
   static tagDashboard = ({ id, language }) => Requests.get(`tags/${id}/dashboard?${Requests.makeParams({ language })}`);
 
@@ -259,6 +262,13 @@ class Api {
   static reactionsCount = params => {
     const url    = `${PERSONAL_API_BACKEND}reaction_count?${Requests.makeParams(params)}`;
     const config = { url, method: 'GET' };
+    return axios(config);
+  };
+
+  static mdbCreateLabel = (params, token) => {
+    const url     = `${MDB_REST_BACKEND}labels`;
+    const headers = { 'Content-Type': 'application/json', 'Authorization': `bearer ${token}` };
+    const config  = { url, headers, method: 'POST', data: JSON.stringify(params) };
     return axios(config);
   };
 }

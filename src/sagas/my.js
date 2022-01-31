@@ -194,6 +194,21 @@ function* reactionsCount(action) {
   }
 }
 
+//Watches
+function* createLabel(action) {
+  try {
+    const token = yield select(state => authSelectors.getToken(state.auth));
+    if (!token)
+      new Error('no token');
+
+    const { data } = yield call(Api.mdbCreateLabel, action.payload, token);
+    console.log(data);
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+//watchers
 function* watchSetPage() {
   yield takeLatest(types.SET_PAGE, updatePageInQuery);
 }
@@ -208,6 +223,10 @@ function* watchFetchOne() {
 
 function* watchAdd() {
   yield takeEvery(types.ADD, add);
+}
+
+function* watchCreateLabel() {
+  yield takeEvery(types.MDB_CREATE_LABEL, createLabel);
 }
 
 function* watchEdit() {
@@ -230,4 +249,5 @@ export const sagas = [
   watchEdit,
   watchRemove,
   watchReactionsCount,
+  watchCreateLabel,
 ];

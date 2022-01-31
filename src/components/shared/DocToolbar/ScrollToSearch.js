@@ -11,16 +11,16 @@ import {
   prepareScrollToSearch
 } from '../../../helpers/scrollToSearch/helper';
 import Toolbar from './Toolbar';
-import { MY_NAMESPACE_LABELS, SCROLL_SEARCH_ID } from '../../../helpers/consts';
+import { SCROLL_SEARCH_ID } from '../../../helpers/consts';
 import { useDispatch, useSelector } from 'react-redux';
-import { actions, selectors as my } from '../../../redux/modules/my';
+import { actions, buildSubjectKey, selectors as mdb } from '../../../redux/modules/mdb';
 import LabelMark from './LabelMark';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
 
 //its not mus be accurate number (average number letters per line)
 const LETTERS_ON_LINE = 20;
 
-const buildOffsets = labels => labels.map(({ properties: { srchstart, srchend } = {}, uid }) => {
+const buildOffsets = labels => labels.map(({ properties: { srchstart, srchend } = {}, id }) => {
   let start = Math.round(Number(srchstart?.split(OFFSET_TEXT_SEPARATOR)[1]) / LETTERS_ON_LINE);
   start     = Math.round(start / LETTERS_ON_LINE);
 
@@ -30,19 +30,18 @@ const buildOffsets = labels => labels.map(({ properties: { srchstart, srchend } 
   return {
     start: Math.min(start, end) || Math.max(start, end),
     end: Math.max(start, end),
-    uid
+    id
   };
 }).reduce((acc, l, i, arr) => {
   const cross = arr.filter(x => !(x.start > l.end + 2 || x.end < l.start - 2));
   cross.sort((a, b) => (b.end - b.start) - (a.end - a.start));
-  const x    = cross.findIndex(x => x.uid === l.uid);
-  const y    = cross.filter(x => x.start - l.start === 0).findIndex(x => x.uid === l.uid);
-  acc[l.uid] = { x, y };
+  const x    = cross.findIndex(x => x.id === l.id);
+  const y    = cross.filter(x => x.start - l.start === 0).findIndex(x => x.id === l.id);
+  acc[l.id] = { x, y };
   return acc;
 }, {});
 
 const ScrollToSearch = ({ source, data, language, urlParams = '', pathname }) => {
-
   const { enableShareText: { isShareTextEnabled, setEnableShareText } } = useContext(SessionInfoContext);
   const { isMobileDevice }                                              = useContext(DeviceInfoContext);
 
@@ -53,12 +52,16 @@ const ScrollToSearch = ({ source, data, language, urlParams = '', pathname }) =>
 
   const containerRef = useRef();
 
+  const { subject_type, subject_uid } = source || {};
+  const key                           = buildSubjectKey(subject_uid, subject_type);
+  const labels                        = useSelector(state => mdb.getLabelsBySubject(state.mdb, key)) || [];
+
   const location                             = useLocation();
   const { srchstart, srchend, highlightAll } = getQuery(location);
   const search                               = { srchstart, srchend };
-  const labels                               = useSelector(state => my.getList(state.my, MY_NAMESPACE_LABELS));
-  const offsets                              = useMemo(() => buildOffsets(labels), [labels]);
-  const dir                                  = getLanguageDirection(language);
+
+  const offsets = useMemo(() => buildOffsets(labels), [labels]);
+  const dir     = getLanguageDirection(language);
 
   const __html = useMemo(
     () => prepareScrollToSearch(data, search, highlightAll === 'true', labels),
@@ -67,10 +70,9 @@ const ScrollToSearch = ({ source, data, language, urlParams = '', pathname }) =>
 
   const dispatch = useDispatch();
 
-  const { subject_type, subject_uid } = source || {};
   useEffect(() => {
     if (subject_type && subject_uid) {
-      dispatch(actions.fetch(MY_NAMESPACE_LABELS, { subject_type, subject_uid, language, isPublic: true }));
+      dispatch(actions.fetchLabels({ content_type: subject_type, subject_uid, language }));
     }
   }, [dispatch, subject_type, subject_uid, language]);
 
@@ -151,7 +153,7 @@ const ScrollToSearch = ({ source, data, language, urlParams = '', pathname }) =>
         {renderShareBar()}
         <div className={`label_bar ${dir}`}>
           {
-            labels.map((l, i) => <LabelMark label={l} offset={offsets[l.uid]} key={l.uid} />)
+            labels.map((l, i) => <LabelMark label={l} offset={offsets[l.id]} key={l.id} />)
           }
         </div>
         <div

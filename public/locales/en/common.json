@@ -513,7 +513,12 @@
       "subtext": "A collection of all items for a selected topic."
     },
     "show-more": "Show more",
-    "show-less": "Show less"
+    "show-less": "Show less",
+    "part-of": "Part of {{name}}",
+    "articles-based-on": "Article based on \"{{name}}\"",
+    "research-based-on": "Research materials based on \"{{name}}\"",
+    "transcription-based-on": "Transcription based on \"{{name}}\"",
+    "likut-title": "\"{{name}}\" (Assorted Excerpts)"
   },
   "media-downloads": {
     "title": "Downloads",

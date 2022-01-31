@@ -13,7 +13,7 @@ export class RenderNoSearch extends RenderBase {
 
   findClose(list, pos) {
     if (list.length === 0)
-      return null;
+      return pos;
     let result = list[0];
     let diff = Math.abs(result.index - pos);
 

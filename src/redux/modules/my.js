@@ -32,6 +32,8 @@ const SET_DELETED = 'My/SET_DELETED';
 const REACTION_COUNT         = 'My/REACTION_COUNT';
 const REACTION_COUNT_SUCCESS = 'My/REACTION_COUNT_SUCCESS';
 
+const MDB_CREATE_LABEL = 'My/MDB_CREATE_LABEL';
+
 export const types = {
   SET_PAGE,
 
@@ -55,6 +57,8 @@ export const types = {
 
   REACTION_COUNT,
   REACTION_COUNT_SUCCESS,
+
+  MDB_CREATE_LABEL,
 };
 
 /* Actions */
@@ -82,6 +86,8 @@ const setDeleted = createAction(SET_DELETED, (namespace, deleted) => ({ namespac
 const reactionsCount        = createAction(REACTION_COUNT);
 const reactionsCountSuccess = createAction(REACTION_COUNT_SUCCESS);
 
+const mdbCreateLabel = createAction(MDB_CREATE_LABEL);
+
 export const actions = {
   setPage,
 
@@ -106,6 +112,7 @@ export const actions = {
   reactionsCount,
   reactionsCountSuccess,
 
+  mdbCreateLabel,
 };
 
 /* Reducer */
@@ -187,7 +194,7 @@ const onEditSuccess = (draft, { namespace, item, changeItems }) => {
   const byKey   = { ...draft[namespace].byKey[key], ...item };
   if (namespace === MY_NAMESPACE_PLAYLISTS && !changeItems) {
     byKey.total_items = draft[namespace].byKey[key].total_items;
-    byKey.items = draft[namespace].byKey[key].items;
+    byKey.items       = draft[namespace].byKey[key].items;
   }
 
   draft[namespace].byKey[key] = byKey;

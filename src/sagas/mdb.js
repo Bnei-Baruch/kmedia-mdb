@@ -88,6 +88,17 @@ export function* countCU(action) {
   }
 }
 
+export function* fetchLabels(action) {
+  try {
+    const language            = yield select(state => settings.getLanguage(state.settings));
+    const params                = { ...action.payload, language };
+    const { data }            = yield call(Api.labels, params);
+    yield put(actions.fetchLabelsSuccess(data));
+  } catch (err) {
+    console.error('fetchLabels errors', err)
+  }
+}
+
 function* watchFetchUnit() {
   yield takeEvery(types.FETCH_UNIT, fetchUnit);
 }
@@ -116,6 +127,10 @@ function* watchCountCU() {
   yield takeEvery(types.COUNT_CU, countCU);
 }
 
+function* watchFetchLabels() {
+  yield takeEvery(types.FETCH_LABELS, fetchLabels);
+}
+
 export const sagas = [
   watchFetchUnit,
   watchFetchCollection,
@@ -123,5 +138,6 @@ export const sagas = [
   watchFetchSQData,
   watchFetchWindow,
   watchFetchDatepickerCO,
-  watchCountCU
+  watchCountCU,
+  watchFetchLabels,
 ];

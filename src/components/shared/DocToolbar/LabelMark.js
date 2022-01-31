@@ -11,8 +11,8 @@ const LabelMark = ({ label, offset, t }) => {
   const [bottom, setBottom] = useState(0);
 
   useEffect(() => {
-    let start = document.getElementById(`start_${label.uid}`);
-    let end   = document.getElementById(`end_${label.uid}`);
+    let start = document.getElementById(`start_${label.id}`);
+    let end   = document.getElementById(`end_${label.id}`);
     start     = start || end || null;
     end       = end || start || null;
     if (start) {
