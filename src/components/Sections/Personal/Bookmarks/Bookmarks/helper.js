@@ -1,5 +1,7 @@
 import { CT_DAILY_LESSON, CT_LESSON_PART, CT_LIKUTIM, CT_SOURCE } from '../../../../../helpers/consts';
 import { cuPartNameByCCUType } from '../../../../../helpers/utils';
+import { canonicalLink } from '../../../../../helpers/links';
+import { stringify } from '../../../../../helpers/url';
 
 export const buildTitleByUnit = (cu, t, getPathByID) => {
 
@@ -29,3 +31,18 @@ export const buildTitleByUnit = (cu, t, getPathByID) => {
   return `${collection.name} ${partName} (${t('values.date', { date: film_date })})`;
 };
 
+export const buildBookmarkLink = (bookmark, cu) => {
+  if (!bookmark)
+    return canonicalLink(cu);
+
+  const { properties: { uid_prefix, ...urlParams } = false, subject_uid } = bookmark;
+
+  let link = canonicalLink({ ...cu, id: `${uid_prefix || ''}${subject_uid}` });
+
+  if (urlParams) {
+    link = `${link}?${stringify(urlParams)}`;
+    if (urlParams.activeTab)
+      link = `${link}&autoPlay=0`;
+  }
+  return link;
+};

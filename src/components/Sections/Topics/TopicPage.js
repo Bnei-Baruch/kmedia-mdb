@@ -6,29 +6,15 @@ import { withNamespaces } from 'react-i18next';
 import { Breadcrumb, Container, Divider, Grid, Header } from 'semantic-ui-react';
 import { isLanguageRtl } from '../../../helpers/i18n-utils';
 import { isEmpty } from '../../../helpers/utils';
-import { stringify as urlSearchStringify } from '../../../helpers/url';
-import { filtersTransformer } from '../../../filters/index';
-import { actions, selectors } from '../../../redux/modules/tags';
+
+import { actions, selectors } from '../../../redux/modules/mdb';
+import { selectors as tagSelectors } from '../../../redux/modules/tags';
 import { selectors as settings } from '../../../redux/modules/settings';
 import WipErr from '../../shared/WipErr/WipErr';
 import Link from '../../Language/MultiLanguageLink';
-import TopN from './TopN';
 import HelmetsBasic from '../../shared/Helmets/Basic';
-
-const TOP_N_ITEMS = 5;
-
-const getTopicUrl = (section, tagPath, language) => {
-  const query = tagPath
-    ? filtersTransformer
-      .toQueryParams([{ name: 'topics-filter', values: [tagPath.map(y => y.id)] }])
-    : '';
-
-  const realSection = section === 'publications'
-    ? 'publications/articles'
-    : section;
-
-  return `/${language}/${realSection}?${urlSearchStringify(query)}`;
-};
+import TextList from './TextsList';
+import VideoList from './VideoList';
 
 const getBreadCrumbSection = (p, index, arr) => {
   const section = {
@@ -47,29 +33,26 @@ const getBreadCrumbSection = (p, index, arr) => {
 };
 
 const TopicPage = ({ t }) => {
-  const wip             = useSelector(state => selectors.getWip(state.tags));
-  const error           = useSelector(state => selectors.getError(state.tags));
-  const sections        = useSelector(state => selectors.getSections(state.tags));
-  const getSectionUnits = useSelector(state => selectors.getSectionUnits(state.tags));
-  const getCounts       = useSelector(state => selectors.getCounts(state.tags));
-  const getPathByID     = useSelector(state => selectors.getPathByID(state.tags));
-  const getTags         = useSelector(state => selectors.getTags(state.tags));
+  const getPathByID     = useSelector(state => tagSelectors.getPathByID(state.tags));
+  const getTags         = useSelector(state => tagSelectors.getTags(state.tags));
   const language        = useSelector(state => settings.getLanguage(state.settings));
+  const cusByTag        = useSelector(state => selectors.skipFetchedCO(state.my));
+  const { wip, errors } = cusByTag;
 
   const dispatch = useDispatch();
 
   const { id } = useParams();
 
   useEffect(() => {
-    dispatch(actions.fetchDashboard(id));
+    dispatch(actions.cusByTag({ tag: id }));
   }, [id, language, dispatch]);
 
-  const wipErr = WipErr({ wip, error, t });
+  const wipErr = WipErr({ wip, errors, t });
   if (wipErr) {
     return wipErr;
   }
 
-  if (getPathByID && !isEmpty(sections)) {
+  if (getPathByID && !isEmpty(cusByTag.byType)) {
     const tagPath = getPathByID(id);
 
     // create breadCrumb sections from tagPath
@@ -83,31 +66,16 @@ const TopicPage = ({ t }) => {
     return (
       <>
         <HelmetsBasic title={breadCrumbSections[breadCrumbSections.length - 1]?.content} />
-        <Container className="padded">
+        <Container className="padded topics">
           <Breadcrumb icon={breadCrumbIcon} sections={breadCrumbSections} size="large" />
           <Divider hidden />
-          <Grid doubling columns={sections.length}>
-            {
-              sections.map(s => {
-                const sectionUnits = getSectionUnits(s);
-                const topicUrl     = getTopicUrl(s, tagPath, language);
-                const sectionCount = getCounts(s);
-
-                return isEmpty(sectionUnits)
-                  ? null
-                  : (
-                    <Grid.Column key={s}>
-                      <TopN
-                        section={s}
-                        units={sectionUnits}
-                        N={TOP_N_ITEMS}
-                        topicUrl={topicUrl}
-                        sectionCount={sectionCount}
-                      />
-                    </Grid.Column>
-                  );
-              })
-            }
+          <Grid>
+            <Grid.Column width="7">
+              <TextList cusByType={cusByTag.byType} />
+            </Grid.Column>
+            <Grid.Column width="9">
+              <VideoList cusByType={cusByTag.byType} />
+            </Grid.Column>
           </Grid>
         </Container>
       </>
