@@ -35,10 +35,12 @@ export const extractByMediaType = (cusByType, isText = false) => {
       res            = [...res, ...fromTabs];
       continue;
     }
+
     if (UNIT_VIDEOS_TYPE.includes(k) !== isText) {
       res = [...res, ...cusByType[k]];
     }
   }
+
   return res;
 };
 
@@ -51,24 +53,25 @@ export const buildTextUnitInfo = (cu, t, getPathByID, { label, date }) => {
 
   description.push(t('values.date', { date }));
   switch (true) {
-  case content_type === CT_SOURCE:
-    subject = buildSourceTitle(getPathByID, id);
-    break;
-  case content_type === CT_LIKUTIM:
-    subject = t('topics.likut-title', { name });
-    break;
-  case !!label?.properties?.activeTab:
-    subject = t(`topics.${label.properties.activeTab}-based-on`, { name });
-    break;
-  default:
-    subject = name;
+    case content_type === CT_SOURCE:
+      subject = buildSourceTitle(getPathByID, id);
+      break;
+    case content_type === CT_LIKUTIM:
+      subject = t('topics.likut-title', { name });
+      break;
+    case !!label?.properties?.activeTab:
+      subject = t(`topics.${label.properties.activeTab}-based-on`, { name });
+      break;
+    default:
+      subject = name;
   }
+
   return insertInfoFromLabel(subject, description, label, t);
 };
 
 export const buildVideoUnitInfo = (cu, t, { label, date }) => {
 
-  let subject = '', subTitle = '', title = '', description = [];
+  const subject = '', subTitle = '', title = '', description = [];
   if (!cu) return { subTitle, title, description };
 
   const { id, content_type, name } = cu;
@@ -89,6 +92,7 @@ export const insertInfoFromLabel = (subject, description, label, t) => {
   if (srchstart || srchend) {
     subject = t(`topics.part-of`, { name: subject });
   }
+
   subTitle = subject;
   title    = name;
   description.push(author);

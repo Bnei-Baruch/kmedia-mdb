@@ -44,5 +44,6 @@ export const buildBookmarkLink = (bookmark, cu) => {
     if (urlParams.activeTab)
       link = `${link}&autoPlay=0`;
   }
+
   return link;
 };

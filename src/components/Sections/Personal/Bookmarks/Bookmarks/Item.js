@@ -26,7 +26,7 @@ const BookmarksItem = ({ bookmark, t }) => {
   if (!areSourcesLoaded)
     return null;
 
-  let link = buildBookmarkLink(bookmark, cu);
+  const link = buildBookmarkLink(bookmark, cu);
 
   const renderFolder = f => (
     <Label key={f.id} basic>
