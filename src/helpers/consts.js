@@ -17,6 +17,7 @@ export const CT_ARTICLES           = 'ARTICLES';
 export const CT_LESSONS_SERIES     = 'LESSONS_SERIES';
 export const CT_SONGS              = 'SONGS';
 export const CT_SOURCE             = 'SOURCE';
+export const CT_TAG                = 'TAG';
 
 export const CT_COLLECTIONS = [
   CT_DAILY_LESSON,
@@ -488,6 +489,8 @@ export const SEARCH_INTENT_INDEX_TOPIC       = 'intent-tag';
 export const SEARCH_INTENT_INDEX_SOURCE      = 'intent-source';
 export const SEARCH_INTENT_HIT_TYPE_PROGRAMS = 'programs';
 export const SEARCH_INTENT_HIT_TYPE_LESSONS  = 'lessons';
+export const SEARCH_INTENT_HIT_TYPE_SERIES_BY_TAG  = 'lessons_series_by_tag';
+export const SEARCH_INTENT_HIT_TYPE_SERIES_BY_SOURCE  = 'lessons_series_by_source';
 
 export const SEARCH_INTENT_HIT_TYPES = [SEARCH_INTENT_HIT_TYPE_PROGRAMS, SEARCH_INTENT_HIT_TYPE_LESSONS];
 

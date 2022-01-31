@@ -10,7 +10,7 @@ import { selectors as sourcesSelectors } from '../redux/modules/sources';
 import { getSourcesCollections } from '../helpers/utils';
 import {
   CT_LESSONS_SERIES,
-  CT_SOURCE,
+  CT_TAG,
   UNIT_LESSONS_TYPE,
 } from '../helpers/consts';
 
@@ -52,8 +52,8 @@ export function* fetchRecommended(action) {
               },
               {
                 'name': 'DataContentUnitsSuggester',
-                'filters': [{ 'filter_selector': 3 /* Sources */, 'args': [source] }, { 'filter_selector': 9 /* PopularFilter */ }],
-                'order_selector': 4  // Popular
+                'filters': [{ 'filter_selector': 3 /* Sources */, 'args': [source] }],
+                'order_selector': 3  // Random
               },
               {
                 'name': 'DataContentUnitsSuggester',
@@ -77,8 +77,8 @@ export function* fetchRecommended(action) {
               },
               {
                 'name': 'DataContentUnitsSuggester',
-                'filters': [{ 'filter_selector': 3 /* Sources */, 'args': sourcesCollection.children }, { 'filter_selector': 9 /* PopularFilter */ }],
-                'order_selector': 4  // Popular
+                'filters': [{ 'filter_selector': 3 /* Sources */, 'args': sourcesCollection.children }],
+                'order_selector': 3  // Random
               },
               {
                 'name': 'DataContentUnitsSuggester',
@@ -89,7 +89,7 @@ export function* fetchRecommended(action) {
           });
         });
       } else {
-        // Same Topic - WatchingNow, Popular, Latest.
+        // Same Topic - WatchingNow, Random, Latest.
         tags.forEach(tag => {
           specs.push({
             'name': 'RoundRobinSuggester', 'specs': [
@@ -100,8 +100,8 @@ export function* fetchRecommended(action) {
               },
               {
                 'name': 'DataContentUnitsSuggester',
-                'filters': [{ 'filter_selector': 2 /* Tags */, 'args': [tag] }, { 'filter_selector': 9 /* PopularFilter */ }],
-                'order_selector': 4  // Popular
+                'filters': [{ 'filter_selector': 2 /* Tags */, 'args': [tag] }],
+                'order_selector': 0  // Random
               },
               {
                 'name': 'DataContentUnitsSuggester',
@@ -112,7 +112,7 @@ export function* fetchRecommended(action) {
           });
         });
         collections.forEach(collection => {
-          // Same collection - WatchingNow, Popular, Latest.
+          // Same collection - WatchingNow, Random, Latest.
           specs.push({
             'name': 'RoundRobinSuggester', 'specs': [
               {
@@ -122,8 +122,8 @@ export function* fetchRecommended(action) {
               },
               {
                 'name': 'DataContentUnitsSuggester',
-                'filters': [{ 'filter_selector': 4 /* Collections */, 'args': [collection.id] }, { 'filter_selector': 9 /* PopularFilter */ }],
-                'order_selector': 4  // Popular
+                'filters': [{ 'filter_selector': 4 /* Collections */, 'args': [collection.id] }],
+                'order_selector': 3  // Random
               },
               {
                 'name': 'DataContentUnitsSuggester',
@@ -152,11 +152,12 @@ export function* fetchRecommended(action) {
     // Append predefined, constant recommentations.
     if (variant === AB_RECOMMEND_NEW) {
       data.feeds.splice(data.feeds.length - 1, 0, [
-        { content_type: CT_SOURCE, uid: 'itcVAcFn' },         // Maamar Ha-Arvut
+        /*{ content_type: CT_SOURCE, uid: 'itcVAcFn' },*/     // Maamar Ha-Arvut
         /*{ content_type: CT_SOURCE, uid: 'qMUUn22b' },*/     // Shamati
+        { content_type: CT_TAG, uid: 'sxxboapw' },            // Faith Above Reason
         { content_type: CT_LESSONS_SERIES, uid: 'dbPOMK0R' }, // Amuna lemala mahadaat 2021
         { content_type: CT_LESSONS_SERIES, uid: 'ReQUUOtN' }, // Ptiha - 2019
-        { content_type: CT_SOURCE, uid: 'grRABASH' },         // Group articles.
+        /*{ content_type: CT_SOURCE, uid: 'grRABASH' },*/     // Group articles.
       ]);
     }
 

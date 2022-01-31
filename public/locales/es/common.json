@@ -140,6 +140,11 @@
     },
     "header": {
       "series-by-topic": "Serie de lecciones sobre el tema:"
+    },
+    "download": {
+      "iconHoverText": "Descarga el extracto que marcaste",
+      "downloadButton": "Descargar",
+      "copyButton": "Copiar link"
     }
   },
   "playlist": {
@@ -172,7 +177,12 @@
     "fallback-to-audio": "Video no encontrado, usa audio.",
     "fallback-to-video": "Audio no encontrado, usa video.",
     "source-content-not-found": " Contenido de fuente no fue encontrado ",
-    "no-images": "No se encontraron dibujos"
+    "no-images": "No se encontraron dibujos",
+    "new": "nuevo",
+    "trim-expiration": "* El enlace estará disponible para descargar solo durante 7 días",
+    "trimmed-title": "Tus archivos están listos",
+    "trimmed-title-wip": "Preparamos para usted el archivo",
+    "trimmed-content-wip": "Un par de minutos..."
   },
   "search": {
     "header": {
@@ -679,6 +689,7 @@
     "history": "Historial",
     "reactions": "Vídeos que me gustan",
     "playlists": "Playlists",
+    "playlist": "Playlist \"{{name}}\"",
     "playlistNoResult": "No hay videos en esta lista de reproducción",
     "subscriptions": "Suscripciones",
     "playAll": "Jugar todo",

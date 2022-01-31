@@ -140,6 +140,11 @@
     },
     "header": {
       "series-by-topic": "סדרת שיעורים בנושא:"
+    },
+    "download": {
+      "iconHoverText": "להוריד את הקטע שסימנת",
+      "downloadButton": "הורד",
+      "copyButton": "העתק קישור"
     }
   },
   "playlist": {
@@ -172,7 +177,12 @@
     "fallback-to-audio": "וידיאו לא נמצא, משתמש באודיו.",
     "fallback-to-video": "אודיו לא נמצא, משתמש בוידיאו.",
     "source-content-not-found": "לא נמצא תוכן המקור",
-    "no-images": "לא נמצאו שרטוטים"
+    "no-images": "לא נמצאו שרטוטים",
+    "new": "חדש",
+    "trim-expiration": "* הקישור יהיה זמין להורדה ל-7 ימים בלבד",
+    "trimmed-title": "הקבצים שלך מוכנים",
+    "trimmed-title-wip": "אנחנו מכינים את הקובץ בשבילך",
+    "trimmed-content-wip": "כמה דקות..."
   },
   "search": {
     "header": {
@@ -767,7 +777,8 @@
     "addToPlaylistSuccessful": "נוסף לפלייליסט {{name}}",
     "history": "היסטוריית צפייה",
     "reactions": "תוכן שאהבתי",
-    "playlists": "פלייליסטים",
+    "playlists": "רשימות צפייה",
+    "playlist": "רשימת צפייה \"{{name}}\"",
     "playlistNoResult": "בפלייליסט זה אין וידאו",
     "subscriptions": "מינויים",
     "playAll": "נגן הכל",

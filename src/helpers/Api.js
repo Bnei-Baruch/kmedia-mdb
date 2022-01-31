@@ -8,7 +8,8 @@ export const IMAGINARY_URL    = process.env.REACT_APP_IMAGINARY_URL;
 const IMAGINARY_INTERNAL_HOST = process.env.REACT_APP_IMAGINARY_INTERNAL_HOST || 'localhost';
 const API_FEED                = process.env.REACT_APP_FEED;
 const CHRONICLES_BACKEND      = process.env.REACT_APP_CHRONICLES_BACKEND;
-const PERSONAL_API_BACKEND    = process.env.REACT_APP_PERSONAL_API_BACKEND || `${API_BACKEND}my/`;
+const PERSONAL_API_BACKEND    = process.env.REACT_APP_PERSONAL_API_BACKEND;
+const FILE_TRIMMER_API        = process.env.REACT_APP_FILE_TRIMMER_API;
 const MDB_REST_BACKEND        = process.env.REACT_APP_MDB_REST_BACKEND || `${API_BACKEND}mdb-api/`;
 
 export const backendUrl               = path => `${API_BACKEND}${path}`;
@@ -40,14 +41,8 @@ export class Requests {
     return axios(url);
   };
 
-  static auth = (params, url, token, method) => {
-    const headers = { 'Content-Type': 'application/json', 'Authorization': `bearer ${token}` };
-    if (params.isPublic) {
-      delete headers.Authorization;
-      delete params.isPublic;
-    }
-
-    const config = { url, method, headers };
+  static auth = (params, url, token, method = 'GET') => {
+    const config = { url, method, headers: { 'Content-Type': 'application/json', 'Authorization': `bearer ${token}` } };
     if (method === 'GET') {
       config.url = `${url}?${Requests.makeParams(params)}`;
     } else {
@@ -261,6 +256,12 @@ class Api {
 
   static reactionsCount = params => {
     const url    = `${PERSONAL_API_BACKEND}reaction_count?${Requests.makeParams(params)}`;
+    const config = { url, method: 'GET' };
+    return axios(config);
+  };
+
+  static trimFile = params => {
+    const url    = `${FILE_TRIMMER_API}?${Requests.makeParams(params)}`;
     const config = { url, method: 'GET' };
     return axios(config);
   };

@@ -44,6 +44,7 @@ app.use(helmet({
         '*.google-analytics.com',
         'stats.g.doubleclick.net',
         'accounts.kab.info',
+        'trim.kab.sh',
       ],
       'script-src': [
         '\'self\'',

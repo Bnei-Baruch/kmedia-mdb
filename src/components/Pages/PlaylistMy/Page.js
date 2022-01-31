@@ -100,7 +100,7 @@ const PlaylistMyPage = ({ collection }) => {
           {
             unit &&
             <div id="avbox_playlist">
-              <PlaylistHeader collection={collection} />
+              <PlaylistHeader collection={collection} unit={unit} />
             </div>
           }
           <AVPlaylistPlayer

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { noop } from '../../helpers/utils';
+import { areEqual, noop } from '../../helpers/utils';
 import debounce from 'lodash/debounce';
 import { withRouter } from 'react-router-dom';
 import { withNamespaces } from 'react-i18next';
@@ -23,11 +23,10 @@ import playerHelper from '../../helpers/player';
 import { PlayerStartEnum } from './playerStartEnum';
 import clsx from 'clsx';
 import { DeviceInfoContext } from '../../helpers/app-contexts';
-import { areEqual } from '../../helpers/utils';
 import { buildAppendData } from './utils';
 
-const DEFAULT_PLAYER_VOLUME       = 0.8;
-const PLAYER_VOLUME_STORAGE_KEY   = '@@kmedia_player_volume';
+const DEFAULT_PLAYER_VOLUME     = 0.8;
+const PLAYER_VOLUME_STORAGE_KEY = '@@kmedia_player_volume';
 
 // Converts playback rate string to float: 1.0x => 1.0
 const playbackToValue = playback => parseFloat(playback.slice(0, -1));
@@ -337,9 +336,10 @@ class AVPlayerMobile extends Component {
     const { t } = this.props;
     // Show error only on loading of video.
     if (!e.currentTarget.currentTime && this.media.paused) {
-      const { item }  = this.props;
+      const { item: { file: { src } } } = this.props;
+
       let errorReason = '';
-      if (item.src.endsWith('wmv') || item.src.endsWith('flv')) {
+      if (src.endsWith('wmv') || src.endsWith('flv')) {
         errorReason = t('messages.unsupported-media-format');
       } else {
         errorReason = t('messages.unknown');
@@ -493,7 +493,7 @@ class AVPlayerMobile extends Component {
     const fallbackMedia = item.mediaType !== item.requestedMediaType;
     const isRtl         = isLanguageRtl(uiLanguage);
 
-    if (!item.src) {
+    if (!item.file?.src) {
       return <Message warning>{t('messages.no-playable-files')}</Message>;
     }
 
@@ -505,12 +505,12 @@ class AVPlayerMobile extends Component {
           autoPlay={autoPlay}
           playsInline
           ref={this.handleMediaRef}
-          src={item.src}
+          src={item.file.src}
           preload="metadata"
           poster={item.preImageUrl}
         />;
     } else {
-      mediaEl = <audio controls autoPlay={autoPlay} ref={this.handleMediaRef} src={item.src} preload="metadata" />;
+      mediaEl = <audio controls autoPlay={autoPlay} ref={this.handleMediaRef} src={item.file.src} preload="metadata" />;
     }
 
     return (
@@ -539,7 +539,7 @@ class AVPlayerMobile extends Component {
               onPrev={onPrev}
               onNext={onNext}
             />
-            {!embed && <AVEditSlice onActivateSlice={this.toggleSliceMode} /> }
+            {!embed && <AVEditSlice onActivateSlice={this.toggleSliceMode} />}
             <button type="button" tabIndex="-1" onClick={this.handleJumpBack}>
               -5s
               <Icon name="backward" />
@@ -573,12 +573,12 @@ class AVPlayerMobile extends Component {
           </div>
         </div>
         {isSliceMode && <ShareFormMobile media={this.media} item={item} uiLanguage={uiLanguage} />}
-        { isVideo && unMuteButton && this.renderUnmuteButton(isRtl, embed, t) }
+        {isVideo && unMuteButton && this.renderUnmuteButton(isRtl, embed, t)}
         {
           !showControls &&
-           <div className="mediaplayer__mobileLoader">
-             <AVSpinner isLoading={this.media ? this.media.isLoading : false} />
-           </div>
+          <div className="mediaplayer__mobileLoader">
+            <AVSpinner isLoading={this.media ? this.media.isLoading : false} />
+          </div>
         }
       </div>
     );

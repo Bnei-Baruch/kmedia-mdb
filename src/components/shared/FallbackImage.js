@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Image } from 'semantic-ui-react';
 
-import { knownFallbackImages, SectionThumbnailFallback } from '../../helpers/images';
+import { knownFallbackImages, NoneFallbackImage, SectionThumbnailFallback } from '../../helpers/images';
 import { IMAGINARY_URL } from '../../helpers/Api';
 
 // An adaptation of https://github.com/socialtables/react-image-fallback
@@ -92,8 +92,9 @@ const FallbackImage = props => {
     onError,
     width = 'auto',
     height = 'auto',
+    floated,
     ...rest
-  }                             = props;
+  } = props;
   const [imageSource, setImageSource] = useState();
 
   useEffect(() => {
@@ -121,14 +122,14 @@ const FallbackImage = props => {
     }
   };
 
-  if (!imageSource) {
+  if (!imageSource || imageSource === NoneFallbackImage) {
     /* There is no fallbacks and src was not found */
     return null;
   }
 
   if (knownFallbackImages.includes(imageSource)) {
     return (
-      <div className={className} style={{ maxWidth: width }}>
+      <div className={`${className} ${floated && 'floated'} ${floated}`} style={{ maxWidth: width }}>
         <SectionThumbnailFallback name={imageSource} width={width} height={height} {...rest} />
       </div>);
   }
@@ -139,6 +140,7 @@ const FallbackImage = props => {
         <Image
           className={className}
           style={{ top: 'calc(-50%)', width: '100%' }}
+          floated={floated}
           {...rest}
           src={imageSource}
         />
@@ -149,6 +151,7 @@ const FallbackImage = props => {
   return (
     <Image
       className={className}
+      floated={floated}
       {...rest}
       src={imageSource}
     />);
