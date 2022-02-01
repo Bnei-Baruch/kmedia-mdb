@@ -52,8 +52,8 @@ const renderTweets = (latestTweets, language, t) =>
 const renderBlogPostsAndTweets = (latestBlogPosts, latestTweets, language, t) =>
   <div className="homepage__section home-social-section">
     <Container className="padded horizontally ">
-      <Section title={t('home.social')}>
-        <Grid width={15} centered className="homepage__iconsrow socialBackground">
+      <Section title={t('home.social')} computer={13}>
+        <Grid centered className="homepage__iconsrow socialBackground">
           <Grid.Row>
             {renderBlogPosts(latestBlogPosts, language, t)}
             {renderTweets(latestTweets, language, t)}

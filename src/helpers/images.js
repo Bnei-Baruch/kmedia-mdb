@@ -41,7 +41,7 @@ export const SectionLogo = ({ name, ...props }) => {
     return null;
   }
 
-  return <Logo {...props} width="50" height="50" />;
+  return <Logo {...props} width="100" height="100" />;
 };
 
 const sectionThumbnailFallback = {

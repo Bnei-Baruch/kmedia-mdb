@@ -5,7 +5,7 @@ import Link from '../../Language/MultiLanguageLink';
 import { SectionLogo } from '../../../helpers/images';
 
 const Topic = ({ title, src, href }) => (
-  <Header size="tiny" as={Link} to={href}>
+  <Header size="large" as={Link} to={href}>
     <SectionLogo name={src} />
     <br />
     {title}
