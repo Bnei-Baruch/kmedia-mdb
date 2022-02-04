@@ -344,7 +344,7 @@ export default class ClientChronicles {
       // Ending event of a flow.
       // 1. We don't set flowType for end, just for subflow (see else).
       // 2. We delete the start event so that other events won't use it as flow-event.
-      const start = FLOWS_BY_END.get(eventType).start;
+      const { start } = FLOWS_BY_END.get(eventType);
       const startEvent = this.lastEntriesByType.has(start);
       if (startEvent) {
         flowId = startEvent.eventId;
