@@ -9,6 +9,7 @@ import {
   CurrentTime,
   EndTime,
   FullscreenControl,
+  LoadingScreen,
   PipControl,
   PlaybackControl,
   Poster,
@@ -25,13 +26,6 @@ import { VmJump } from './VmJump';
 import VmAudioVideo from './VmAudioVideo';
 import { VmShareButton } from './VmShareButton';
 
-const getVideoControls = () => (
-  <>
-    <PipControl />
-    <FullscreenControl hideTooltip />
-  </>
-)
-
 const toPercentage = l => {
   const ret = 100 * l;
   if (ret > 100) {
@@ -42,7 +36,7 @@ const toPercentage = l => {
 };
 
 const getSeekBar = (sliceStart, sliceEnd, duration) => {
-  console.log('scrubber:', sliceStart, sliceEnd, duration)
+  // console.log('scrubber:', sliceStart, sliceEnd, duration)
   const isSlice = isNumber(sliceStart) && isNumber(sliceEnd);
 
   if (isSlice) {
@@ -85,14 +79,11 @@ const getSeekBar = (sliceStart, sliceEnd, duration) => {
   );
 }
 
-const getControls = (showNextPrev, onPrev, onNext, onActivateSlice, isVideo, onSwitchAV) =>
+const getControls = (onActivateSlice, isVideo, onSwitchAV) =>
   <ControlGroup>
-    { showNextPrev && <VmPrevNext isPrev onClick={onPrev} /> }
     <PlaybackControl />
     <VolumeControl className="volumeControl" />
-    { showNextPrev && <VmPrevNext isPrev={false} onClick={onNext} /> }
     <TimeProgress hideTooltip />
-    {/* <VmJump /> */}
     <ControlSpacer hideTooltip />
     <VmAudioVideo isVideo={isVideo} onSwitchAV={onSwitchAV} />
     <SettingsControl />
@@ -100,6 +91,13 @@ const getControls = (showNextPrev, onPrev, onNext, onActivateSlice, isVideo, onS
     <VmShareButton onActivateSlice={onActivateSlice} />
   </ControlGroup>;
 
+
+const getVideoControls = () => (
+  <>
+    <PipControl />
+    <FullscreenControl hideTooltip />
+  </>
+)
 
 const buildMobileVideoControls = (sliceStart, sliceEnd, duration) => (
   <>
@@ -137,28 +135,27 @@ const buildMobileVideoControls = (sliceStart, sliceEnd, duration) => (
   </>
 );
 
-const buildDesktopVideoControls = (showNextPrev, onPrev, onNext, onSwitchAV, onActivateSlice, sliceStart, sliceEnd, duration) => (
+const buildDesktopVideoUi = (isVideo, showNextPrev, onPrev, onNext, onSwitchAV, onActivateSlice, sliceStart, sliceEnd, duration) => (
   <>
-    <Scrim gradient="up" />
+    {/* video ui */}
+    { isVideo &&
+      <>
+        <Scrim gradient="up" />
+        <Poster />
+        <Skeleton />
+        <DblClickFullscreen />
+      </>
+    }
+
+    {/* generic  */}
     <ClickToPlay />
-    <DblClickFullscreen />
-    <Poster />
     <Spinner />
-    <Skeleton />
+    <LoadingScreen />
 
-    {/* <Controls pin="topLeft" style={{ '--vm-controls-padding': '1.5rem' }}>
-      <Radio toggle onChange={onSwitchAV} checked={false} label="Audio Only OFF"></Radio>
-    </Controls> */}
-
-    <Controls pin="center" justify='start' hideOnMouseLeave={true}>
+    <Controls pin="center" justify='space-around' hideOnMouseLeave={true}>
       { showNextPrev && <VmPrevNext isPrev onClick={onPrev} /> }
       <VmJump isBack={true} />
-    </Controls>
-
-    <Controls pin="center" justify='center' hideOnMouseLeave={true}>
-      {/*<VmBigPlay />*/}
-      {/* TODO icon: padding-left: 2px; */}
-
+      <ControlSpacer />
       <PlaybackControl
         hideTooltip
         style={{
@@ -170,30 +167,24 @@ const buildDesktopVideoControls = (showNextPrev, onPrev, onNext, onSwitchAV, onA
           padding: '4px',
         }}
       />
-    </Controls>
-
-    <Controls pin="center" justify='end' hideOnMouseLeave={true}>
+      <ControlSpacer />
       <VmJump isBack={false} />
       { showNextPrev && <VmPrevNext isPrev={false} onClick={onNext} /> }
     </Controls>
 
-    <Controls
-      pin="bottomLeft"
-      fullWidth
-      hideOnMouseLeave={true}
-    >
+    <Controls pin="bottomLeft" fullWidth hideOnMouseLeave={true} style={{ '--vm-control-spacing': 0, }}>
       {getSeekBar(sliceStart, sliceEnd, duration)}
-      {getControls(showNextPrev, onPrev, onNext, onActivateSlice, true, onSwitchAV)}
+      {getControls(onActivateSlice, isVideo, onSwitchAV)}
     </Controls>
   </>
 );
 
-const buildAudioControls = (showNextPrev, onPrev, onNext, onSwitchAV, onActivateSlice, sliceStart, sliceEnd, duration) => (
+const buildAudioControls = (onSwitchAV, onActivateSlice, sliceStart, sliceEnd, duration) => (
   <Controls fullWidth>
     <ClickToPlay />
     {/* <Poster /> */}
     {getSeekBar(sliceStart, sliceEnd, duration)}
-    {getControls(showNextPrev, onPrev, onNext, onActivateSlice, false, onSwitchAV)}
+    {getControls(onActivateSlice, false, onSwitchAV)}
   </Controls>
 );
 
@@ -208,13 +199,13 @@ export const VmControls = (
 ) =>  {
   let controls;
 
-  if (isMobile) {
-    controls = buildMobileVideoControls();
-  } else if (isVideo) {
-    controls = buildDesktopVideoControls(showNextPrev, onPrev, onNext, onSwitchAV, onActivateSlice, sliceStart, sliceEnd, duration);
-  } else {
-    controls = buildAudioControls(showNextPrev, onPrev, onNext, onSwitchAV, onActivateSlice, sliceStart, sliceEnd, duration);
-  }
+  // if (isMobile) {
+  //   controls = buildMobileVideoControls();
+  // } else if (isVideo) {
+  controls = buildDesktopVideoUi(isVideo, showNextPrev, onPrev, onNext, onSwitchAV, onActivateSlice, sliceStart, sliceEnd, duration);
+  // } else {
+  //   controls = buildAudioControls(showNextPrev, onPrev, onNext, onSwitchAV, onActivateSlice, sliceStart, sliceEnd, duration);
+  // }
 
   return controls;
 };
