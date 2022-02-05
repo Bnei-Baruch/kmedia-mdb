@@ -169,9 +169,9 @@ const VmPlayer = ({
   };
 
   return (
-    <Player ref={player} theme="dark" playsInline
+    <Player ref={player} playsInline autoPiP
+      theme="dark"
       autoPlay={autoPlay}
-      style={{ '--vm-control-spacing': 0, }}
       debug={true}
     >
       <VmProvider
