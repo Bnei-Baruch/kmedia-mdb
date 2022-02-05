@@ -2,7 +2,7 @@ import React from 'react';
 import { Audio, Video } from '@vime/react';
 
 const video = (source, poster) => (
-  <Video crossOrigin poster={poster}>
+  <Video crossOrigin autoPiP poster={poster}>
     <source data-src={source} type="video/mp4" />
   </Video>
 );
