@@ -176,7 +176,7 @@ const VmPlayer = ({
     >
       <VmProvider
         isVideo={isVideo}
-        poster={isVideo ? item.preImageUrl : null}
+        poster={item.preImageUrl}
         source={source}
       />
       <Ui>
