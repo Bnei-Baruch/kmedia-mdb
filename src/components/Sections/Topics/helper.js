@@ -17,8 +17,8 @@ export const buildDailyLessonTitle = (cu, t) => {
   return `${ctLabel} (${fd})`;
 };
 
-export const buildSourceTitle = (getPathByID, cu) => {
-  const path        = getPathByID(cu.id)?.map(x => x.name);
+export const buildSourceTitle = (getPathByID, id) => {
+  const path        = getPathByID(id)?.map(x => x.name);
   const articleName = path.splice(-1);
   return `${articleName} ${path.join('. ')}`;
 };
@@ -55,17 +55,17 @@ export const buildTextUnitInfo = ({ cu, label }, t, getPathByID) => {
 
   description.push(t('values.date', { date }));
   switch (true) {
-    case content_type === CT_SOURCE:
-      subject = buildSourceTitle(getPathByID, id);
-      break;
-    case content_type === CT_LIKUTIM:
-      subject = t('topics.likut-title', { name });
-      break;
-    case !!label?.properties?.activeTab:
-      subject = t(`topics.${label.properties.activeTab}-based-on`, { name });
-      break;
-    default:
-      subject = name;
+  case content_type === CT_SOURCE:
+    subject = buildSourceTitle(getPathByID, id);
+    break;
+  case content_type === CT_LIKUTIM:
+    subject = t('topics.likut-title', { name });
+    break;
+  case !!label?.properties?.activeTab:
+    subject = t(`topics.${label.properties.activeTab}-based-on`, { name });
+    break;
+  default:
+    subject = name;
   }
 
   return insertInfoFromLabel(subject, description, label, t);

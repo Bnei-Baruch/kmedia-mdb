@@ -53,8 +53,9 @@ const ScrollToSearch = ({ source, data, language, urlParams = '', pathname }) =>
   const containerRef = useRef();
 
   const { subject_uid } = source || {};
-  let labels            = useSelector(state => mdb.getLabelsByCU(state.mdb, subject_uid));
-  labels                = labels?.filter(l => (l.properties?.srchstart || l.properties?.srchend)) || [];
+  const ids             = useSelector(state => mdb.getLabelsByCU(state.mdb, subject_uid));
+  const denorm          = useSelector(state => mdb.getDenormLabel(state.mdb));
+  const labels          = ids?.map(denorm).filter(l => (l.properties?.srchstart || l.properties?.srchend)) || [];
 
   const location                             = useLocation();
   const { srchstart, srchend, highlightAll } = getQuery(location);

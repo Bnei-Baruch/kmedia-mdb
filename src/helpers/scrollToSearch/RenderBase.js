@@ -4,7 +4,7 @@ export class RenderBase {
   tagPositions = [];
 
   constructor(data, start, end) {
-    this.source = data.replace(/\r?\n|\r{1,}|\s{2,}|\&nbsp;{1,}/g, ' ');
+    this.source = data.replace(/\r?\n|\r{1,}|\s{2,}|&nbsp;{1,}/g, ' ');
     this.start  = start;
     this.end    = end;
   }

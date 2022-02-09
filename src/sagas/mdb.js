@@ -106,8 +106,11 @@ function* createLabel(action) {
     if (!token)
       new Error('token is required');
 
-    const { data } = yield call(Api.mdbCreateLabel, action.payload, token);
-    yield put(mdbActions.receiveLabels(data.labels));
+    const { data: { uid } } = yield call(Api.mdbCreateLabel, action.payload, token);
+
+    const language             = yield select(state => settings.getLanguage(state.settings));
+    const { data: { labels } } = yield call(Api.labels, { id: uid, language });
+    yield put(mdbActions.receiveLabels(labels));
   } catch (err) {
     console.log(err);
   }
