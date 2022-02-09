@@ -10,7 +10,7 @@ const API_FEED                = process.env.REACT_APP_FEED;
 const CHRONICLES_BACKEND      = process.env.REACT_APP_CHRONICLES_BACKEND;
 const PERSONAL_API_BACKEND    = process.env.REACT_APP_PERSONAL_API_BACKEND;
 const FILE_TRIMMER_API        = process.env.REACT_APP_FILE_TRIMMER_API;
-const MDB_REST_BACKEND        = process.env.REACT_APP_MDB_REST_BACKEND || `${API_BACKEND}mdb-api/`;
+const MDB_REST_API            = process.env.REACT_APP_MDB_REST_API || `${API_BACKEND}mdb-api/`;
 
 export const backendUrl               = path => `${API_BACKEND}${path}`;
 export const assetUrl                 = path => `${ASSETS_BACKEND}${path}`;
@@ -28,14 +28,14 @@ export class Requests {
   static getCMS = (item, options) => {
     let url;
     switch (item) {
-      case 'banner':
-        url = `${cmsUrl('banners-list')}/${options.language}`;
-        break;
-      case 'person':
-        url = `${cmsUrl('persons')}/${options.id}?language=${options.language}`;
-        break;
-      default:
-        return null;
+    case 'banner':
+      url = `${cmsUrl('banners-list')}/${options.language}`;
+      break;
+    case 'person':
+      url = `${cmsUrl('persons')}/${options.id}?language=${options.language}`;
+      break;
+    default:
+      return null;
     }
 
     return axios(url);
@@ -133,15 +133,15 @@ class Api {
   static autocomplete = ({ q, language }) => Requests.get(`autocomplete?${Requests.makeParams({ q, language })}`);
 
   static search = ({
-    q,
-    language,
-    pageNo: page_no,
-    pageSize: page_size,
-    sortBy: sort_by,
-    deb,
-    suggest,
-    searchId: search_id
-  }) => (
+                     q,
+                     language,
+                     pageNo: page_no,
+                     pageSize: page_size,
+                     sortBy: sort_by,
+                     deb,
+                     suggest,
+                     searchId: search_id
+                   }) => (
     Requests.get(`search?${Requests.makeParams({ q, language, page_no, page_size, sort_by, deb, suggest, search_id })}`)
   );
 
@@ -158,15 +158,15 @@ class Api {
   );
 
   static recommendedRequestData = ({
-    uid,
-    languages,
-    skipUids: skip_uids,
-    size: more_items,
-    spec,
-    specs,
-    watchingNowMin: watching_now_min,
-    popularMin: popular_min
-  }) => ({
+                                     uid,
+                                     languages,
+                                     skipUids: skip_uids,
+                                     size: more_items,
+                                     spec,
+                                     specs,
+                                     watchingNowMin: watching_now_min,
+                                     popularMin: popular_min
+                                   }) => ({
     more_items,
     'current_feed': [],
     'options': {
@@ -228,17 +228,17 @@ class Api {
     if (namespace === MY_NAMESPACE_PLAYLISTS && params.changeItems) {
       let p;
       switch (method) {
-        case 'POST':
-          p = 'add_items';
-          break;
-        case 'PUT':
-          p = 'update_items';
-          break;
-        case 'DELETE':
-          p = 'remove_items';
-          break;
-        default:
-          p = '';
+      case 'POST':
+        p = 'add_items';
+        break;
+      case 'PUT':
+        p = 'update_items';
+        break;
+      case 'DELETE':
+        p = 'remove_items';
+        break;
+      default:
+        p = '';
       }
 
       urlParam = `${urlParam}/${p}`;
@@ -267,7 +267,7 @@ class Api {
   };
 
   static mdbCreateLabel = (params, token) => {
-    const url     = `${MDB_REST_BACKEND}labels`;
+    const url     = `${MDB_REST_API}labels`;
     const headers = { 'Content-Type': 'application/json', 'Authorization': `bearer ${token}` };
     const config  = { url, headers, method: 'POST', data: JSON.stringify(params) };
     return axios(config);
