@@ -4,7 +4,7 @@ ARG feed_api_url="https://kabbalahmedia.info/feed_api/"
 ARG personal_api_url="https://kabbalahmedia.info/backend/my/"
 ARG chronicles_url="https://chronicles.kli.one/"
 ARG file_trimmer_api_url="https://trim.kab.sh/rest/trim"
-ARG mdb_rest_api_url="https://staging-archive.kabbalahmedia.info/mdb-api"
+ARG mdb_rest_api_url="https://staging-archive.kabbalahmedia.info/mdb-api/"
 
 FROM bneibaruch/kmedia_base:latest as build
 
