@@ -71,7 +71,7 @@ const TopicPage = ({ t }) => {
 
     const breadCrumbIcon = `${isLanguageRtl(language) ? 'left' : 'right'} angle`;
 
-    const onPageChange = (n) => {
+    const onPageChange = n => {
       setPageNo(n);
     };
 

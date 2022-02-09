@@ -42,6 +42,7 @@ export const extractByMediaType = items => items.reduce((acc, { cu, label }) => 
   if (UNIT_TEXT_TYPE.includes(cu.content_type)) {
     acc.texts.push({ cu, label });
   }
+
   return acc;
 }, { texts: [], medias: [] });
 
@@ -54,17 +55,17 @@ export const buildTextUnitInfo = ({ cu, label }, t, getPathByID) => {
 
   description.push(t('values.date', { date }));
   switch (true) {
-  case content_type === CT_SOURCE:
-    subject = buildSourceTitle(getPathByID, id);
-    break;
-  case content_type === CT_LIKUTIM:
-    subject = t('topics.likut-title', { name });
-    break;
-  case !!label?.properties?.activeTab:
-    subject = t(`topics.${label.properties.activeTab}-based-on`, { name });
-    break;
-  default:
-    subject = name;
+    case content_type === CT_SOURCE:
+      subject = buildSourceTitle(getPathByID, id);
+      break;
+    case content_type === CT_LIKUTIM:
+      subject = t('topics.likut-title', { name });
+      break;
+    case !!label?.properties?.activeTab:
+      subject = t(`topics.${label.properties.activeTab}-based-on`, { name });
+      break;
+    default:
+      subject = name;
   }
 
   return insertInfoFromLabel(subject, description, label, t);
