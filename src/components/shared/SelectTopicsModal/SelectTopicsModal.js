@@ -38,13 +38,12 @@ const SelectTopicsModal = ({ t, open, onClose, source, trigger }) => {
 
     const params = {
       i18n: {
-        [l]: { name, language: l }
+        [l]: { name, language: l, author: user.name }
       },
       tags: selected,
       content_unit: subject_uid,
       properties,
-      media_type: 'text',
-      author: user.name
+      media_type: 'text'
     };
 
     dispatch(actions.createLabel(params));
