@@ -528,7 +528,7 @@
     "articles-based-on": "Article based on \"{{name}}\"",
     "research-based-on": "Research materials based on \"{{name}}\"",
     "transcription-based-on": "Transcription based on \"{{name}}\"",
-    "likut-title": "\"{{name}}\" (Assorted Excerpts)"
+    "likut-title": "\"{{name}}\" (Assorted Excerpts)",
   },
   "media-downloads": {
     "title": "Downloads",

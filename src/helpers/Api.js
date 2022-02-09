@@ -128,7 +128,7 @@ class Api {
 
   static labels = params => Requests.get(`labels?${Requests.makeParams(params)}`);
 
-  static tagDashboard = ({ id, language }) => Requests.get(`tags/${id}/dashboard?${Requests.makeParams({ language })}`);
+  static tagDashboard = ({ id, ...params }) => Requests.get(`tags/${id}/dashboard?${Requests.makeParams(params)}`);
 
   static autocomplete = ({ q, language }) => Requests.get(`autocomplete?${Requests.makeParams({ q, language })}`);
 

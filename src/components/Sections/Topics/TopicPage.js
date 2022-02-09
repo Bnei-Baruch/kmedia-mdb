@@ -1,20 +1,22 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { withNamespaces } from 'react-i18next';
 import { Breadcrumb, Container, Divider, Grid, Header } from 'semantic-ui-react';
 import { isLanguageRtl } from '../../../helpers/i18n-utils';
-import { isEmpty } from '../../../helpers/utils';
 
-import { actions, selectors } from '../../../redux/modules/mdb';
-import { selectors as tagSelectors } from '../../../redux/modules/tags';
+import { actions, selectors } from '../../../redux/modules/tags';
 import { selectors as settings } from '../../../redux/modules/settings';
-import WipErr from '../../shared/WipErr/WipErr';
+import { selectors as mdb } from '../../../redux/modules/mdb';
 import Link from '../../Language/MultiLanguageLink';
 import HelmetsBasic from '../../shared/Helmets/Basic';
-import TextList from './TextsList';
-import VideoList from './VideoList';
+import { extractByMediaType } from './helper';
+import TextItem from './TextItem';
+import ContentItemContainer from '../../shared/ContentItem/ContentItemContainer';
+import Pagination from '../../Pagination/Pagination';
+
+const TOPIC_PAGE_SIZE = 10;
 
 const getBreadCrumbSection = (p, index, arr) => {
   const section = {
@@ -33,26 +35,32 @@ const getBreadCrumbSection = (p, index, arr) => {
 };
 
 const TopicPage = ({ t }) => {
-  const getPathByID     = useSelector(state => tagSelectors.getPathByID(state.tags));
-  const getTags         = useSelector(state => tagSelectors.getTags(state.tags));
-  const language        = useSelector(state => settings.getLanguage(state.settings));
-  const cusByTag        = useSelector(state => selectors.skipFetchedCO(state.my));
-  const { wip, errors } = cusByTag;
+  const [pageNo, setPageNo] = useState(0);
+
+  const getPathByID = useSelector(state => selectors.getPathByID(state.tags));
+  const getTags     = useSelector(state => selectors.getTags(state.tags));
+  const language    = useSelector(state => settings.getLanguage(state.settings));
+  const denormCU    = useSelector(state => mdb.nestedGetDenormContentUnit(state.mdb));
+  const denormLabel = useSelector(state => mdb.getDenormLabel(state.mdb));
+
+  const { items: ids, mediaTotal, textTotal } = useSelector(state => selectors.getItems(state.tags));
+  const total                                 = Math.max(mediaTotal, textTotal);
+  const items                                 = ids?.map(({ cuID, lID }) => ({
+    cu: denormCU(cuID),
+    label: denormLabel(lID)
+  })) || [];
+
+  const { texts, medias } = useMemo(() => extractByMediaType(items), [items]);
 
   const dispatch = useDispatch();
 
   const { id } = useParams();
 
   useEffect(() => {
-    dispatch(actions.cusByTag({ tag: id }));
-  }, [id, language, dispatch]);
+    dispatch(actions.fetchDashboard({ id, page_size: TOPIC_PAGE_SIZE, page_no: pageNo === 0 ? 0 : pageNo - 1 }));
+  }, [id, language, dispatch, pageNo]);
 
-  const wipErr = WipErr({ wip, errors, t });
-  if (wipErr) {
-    return wipErr;
-  }
-
-  if (getPathByID && !isEmpty(cusByTag.byType)) {
+  if (getPathByID) {
     const tagPath = getPathByID(id);
 
     // create breadCrumb sections from tagPath
@@ -63,6 +71,13 @@ const TopicPage = ({ t }) => {
 
     const breadCrumbIcon = `${isLanguageRtl(language) ? 'left' : 'right'} angle`;
 
+    const onPageChange = (n) => {
+      setPageNo(n);
+    };
+
+    const mediaTile = `${t('nav.sidebar.lessons')}, ${t('nav.sidebar.events')}, ${t('nav.sidebar.programs')} (${mediaTotal})`;
+    const textTile  = `${t('nav.sidebar.publications')}, ${t('nav.sidebar.books')}, ${t('nav.sidebar.likutim')} (${textTotal})`;
+
     return (
       <>
         <HelmetsBasic title={breadCrumbSections[breadCrumbSections.length - 1]?.content} />
@@ -71,12 +86,37 @@ const TopicPage = ({ t }) => {
           <Divider hidden />
           <Grid>
             <Grid.Column width="7">
-              <TextList cusByType={cusByTag.byType} />
+              <Container className="padded topics_texts">
+                <Header as="h3" content={textTile} />
+                {
+                  texts.map((x, i) => (<TextItem item={x} key={i} />))
+                }
+              </Container>
             </Grid.Column>
             <Grid.Column width="9">
-              <VideoList cusByType={cusByTag.byType} />
+              <Container className="padded topics_media">
+                <Header content={mediaTile} />
+                {
+                  medias.map((x, i) =>
+                    <ContentItemContainer id={x.cu.id} size="small" asList={true} key={i} />
+                  )
+                }
+              </Container>
             </Grid.Column>
           </Grid>
+        </Container>
+        <Divider fitted />
+        <Container className="padded pagination-wrapper" textAlign="center">
+          {
+            total > 0 &&
+            <Pagination
+              pageNo={pageNo}
+              pageSize={TOPIC_PAGE_SIZE}
+              total={total}
+              language={language}
+              onChange={onPageChange}
+            />
+          }
         </Container>
       </>
     );

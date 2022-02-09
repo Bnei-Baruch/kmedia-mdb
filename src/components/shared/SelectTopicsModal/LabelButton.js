@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import { Button, Popup, } from 'semantic-ui-react';
-import SelectTopicsModal from './SelectTopicsModal';
+
 import { SectionLogo } from '../../../helpers/images';
+import SelectTopicsModal from './SelectTopicsModal';
 
 const LabelButton = ({ t, source }) => {
   const [open, setOpen] = useState();
@@ -20,7 +21,6 @@ const LabelButton = ({ t, source }) => {
         <Popup
           content={t('share-text.tag-button-alt')}
           trigger={
-
             <Button
               compact
               size="small"

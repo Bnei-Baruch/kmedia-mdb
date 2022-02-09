@@ -1,11 +1,7 @@
 import { createAction } from 'redux-actions';
 
 import { handleActions } from './settings';
-import {
-  MY_NAMESPACE_PLAYLISTS,
-  MY_NAMESPACE_REACTIONS,
-  MY_NAMESPACES
-} from '../../helpers/consts';
+import { MY_NAMESPACE_PLAYLISTS, MY_NAMESPACE_REACTIONS, MY_NAMESPACES } from '../../helpers/consts';
 import { getMyItemKey } from '../../helpers/my';
 
 /* Types */
@@ -32,8 +28,6 @@ const SET_DELETED = 'My/SET_DELETED';
 const REACTION_COUNT         = 'My/REACTION_COUNT';
 const REACTION_COUNT_SUCCESS = 'My/REACTION_COUNT_SUCCESS';
 
-const MDB_CREATE_LABEL = 'My/MDB_CREATE_LABEL';
-
 export const types = {
   SET_PAGE,
 
@@ -57,8 +51,6 @@ export const types = {
 
   REACTION_COUNT,
   REACTION_COUNT_SUCCESS,
-
-  MDB_CREATE_LABEL,
 };
 
 /* Actions */
@@ -86,8 +78,6 @@ const setDeleted = createAction(SET_DELETED, (namespace, deleted) => ({ namespac
 const reactionsCount        = createAction(REACTION_COUNT);
 const reactionsCountSuccess = createAction(REACTION_COUNT_SUCCESS);
 
-const mdbCreateLabel = createAction(MDB_CREATE_LABEL);
-
 export const actions = {
   setPage,
 
@@ -111,8 +101,6 @@ export const actions = {
 
   reactionsCount,
   reactionsCountSuccess,
-
-  mdbCreateLabel,
 };
 
 /* Reducer */

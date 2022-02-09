@@ -37,8 +37,12 @@ const COUNT_CU_FAILURE            = 'MDB/COUNT_CU_FAILURE';
 const RECEIVE_COLLECTIONS   = 'MDB/RECEIVE_COLLECTIONS';
 const RECEIVE_CONTENT_UNITS = 'MDB/RECEIVE_CONTENT_UNITS';
 
+const CREATE_LABEL         = 'MDB/CREATE_LABEL';
+const CREATE_LABEL_SUCCESS = 'MDB/CREATE_LABEL_SUCCESS';
+const CREATE_LABEL_FAILURE = 'MDB/CREATE_LABEL_FAILURE';
 const FETCH_LABELS         = 'MDB/FETCH_LABELS';
 const FETCH_LABELS_SUCCESS = 'MDB/FETCH_LABELS_SUCCESS';
+const RECEIVE_LABELS       = 'MDB/RECEIVE_LABELS';
 
 export const types = {
   FETCH_UNIT,
@@ -69,7 +73,9 @@ export const types = {
 
   RECEIVE_COLLECTIONS,
   RECEIVE_CONTENT_UNITS,
+  RECEIVE_LABELS,
 
+  CREATE_LABEL,
   FETCH_LABELS,
   FETCH_LABELS_SUCCESS,
 };
@@ -105,8 +111,12 @@ const countCUFailure           = createAction(COUNT_CU_FAILURE, (namespace, err)
 const receiveCollections  = createAction(RECEIVE_COLLECTIONS);
 const receiveContentUnits = createAction(RECEIVE_CONTENT_UNITS);
 
+const createLabel        = createAction(CREATE_LABEL);
+const createLabelSuccess = createAction(CREATE_LABEL_SUCCESS);
+const createLabelFailure = createAction(CREATE_LABEL_FAILURE);
 const fetchLabels        = createAction(FETCH_LABELS);
 const fetchLabelsSuccess = createAction(FETCH_LABELS_SUCCESS);
+const receiveLabels      = createAction(RECEIVE_LABELS);
 
 export const actions = {
   fetchUnit,
@@ -137,7 +147,11 @@ export const actions = {
 
   receiveCollections,
   receiveContentUnits,
+  receiveLabels,
 
+  createLabel,
+  createLabelSuccess,
+  createLabelFailure,
   fetchLabels,
   fetchLabelsSuccess,
 };
@@ -147,9 +161,10 @@ export const actions = {
 const freshStore = () => ({
   cById: {},
   cuById: {},
+  labelById: {},
   cWindow: {},
   countCU: {},
-  labelsBySubject: {},
+  labelsByCU: {},
   datepickerCO: null,
   wip: {
     units: {},
@@ -187,103 +202,103 @@ const setStatus = (state, action) => {
   let units     = { errors: {}, wip: {} };
 
   switch (action.type) {
-    case FETCH_UNIT:
-      wip.units     = { ...wip.units, [action.payload]: true };
-      fetched.units = { ...fetched.units, [action.payload]: true };
-      break;
-    case FETCH_UNITS_BY_IDS:
-      units.wip = action.payload.id?.reduce((acc, id) => ({ ...acc, [id]: true }), {});
-      wip.units = { ...wip.units, ...units.wip };
-      break;
-    case FETCH_COLLECTION:
-      wip.collections = { ...wip.collections, [action.payload]: true };
-      break;
-    case FETCH_LATEST_LESSON:
-      wip.lastLesson = true;
-      break;
-    case FETCH_WINDOW:
-      wip.cWindow = { ...wip.cWindow, [action.payload.id]: true };
-      break;
-    case FETCH_SQDATA:
-      wip.sqData = true;
-      break;
+  case FETCH_UNIT:
+    wip.units     = { ...wip.units, [action.payload]: true };
+    fetched.units = { ...fetched.units, [action.payload]: true };
+    break;
+  case FETCH_UNITS_BY_IDS:
+    units.wip = action.payload.id?.reduce((acc, id) => ({ ...acc, [id]: true }), {});
+    wip.units = { ...wip.units, ...units.wip };
+    break;
+  case FETCH_COLLECTION:
+    wip.collections = { ...wip.collections, [action.payload]: true };
+    break;
+  case FETCH_LATEST_LESSON:
+    wip.lastLesson = true;
+    break;
+  case FETCH_WINDOW:
+    wip.cWindow = { ...wip.cWindow, [action.payload.id]: true };
+    break;
+  case FETCH_SQDATA:
+    wip.sqData = true;
+    break;
 
-    case FETCH_UNIT_SUCCESS:
-      wip.units    = { ...wip.units, [action.payload.id]: false };
-      errors.units = { ...errors.units, [action.payload.id]: null };
-      break;
-    case FETCH_UNITS_BY_IDS_SUCCESS:
-      units        = action.payload?.reduce((acc, { id }) => ({
-        wip: { ...acc.wip, [id]: false },
-        errors: { ...acc.errors, [id]: null }
-      }), { wip: {}, errors: {} });
-      wip.units    = { ...wip.units, ...units.wip };
-      errors.units = { ...errors.units, ...units.errors };
-      break;
-    case FETCH_COLLECTION_SUCCESS:
-      wip.collections    = { ...wip.collections, [action.payload.id]: false };
-      errors.collections = { ...errors.collections, [action.payload.id]: null };
-      break;
-    case FETCH_LATEST_LESSON_SUCCESS:
-      wip.lastLesson    = false;
-      errors.lastLesson = null;
+  case FETCH_UNIT_SUCCESS:
+    wip.units    = { ...wip.units, [action.payload.id]: false };
+    errors.units = { ...errors.units, [action.payload.id]: null };
+    break;
+  case FETCH_UNITS_BY_IDS_SUCCESS:
+    units        = action.payload?.reduce((acc, { id }) => ({
+      wip: { ...acc.wip, [id]: false },
+      errors: { ...acc.errors, [id]: null }
+    }), { wip: {}, errors: {} });
+    wip.units    = { ...wip.units, ...units.wip };
+    errors.units = { ...errors.units, ...units.errors };
+    break;
+  case FETCH_COLLECTION_SUCCESS:
+    wip.collections    = { ...wip.collections, [action.payload.id]: false };
+    errors.collections = { ...errors.collections, [action.payload.id]: null };
+    break;
+  case FETCH_LATEST_LESSON_SUCCESS:
+    wip.lastLesson    = false;
+    errors.lastLesson = null;
 
-      // update wip & errors map to mark this collection was requested fully (single)
-      wip.collections    = { ...wip.collections, [action.payload.id]: false };
-      errors.collections = { ...errors.collections, [action.payload.id]: null };
-      break;
-    case FETCH_WINDOW_SUCCESS:
-      wip.cWindow    = { ...wip.cWindow, [action.payload.id]: false };
-      errors.cWindow = { ...errors.cWindow, [action.payload.id]: null };
-      break;
-    case FETCH_DATEPICKER_CO_SUCCESS:
-      wip.datepickerCO    = false;
-      errors.datepickerCO = null;
-      break;
-    case FETCH_SQDATA_SUCCESS:
-      wip.sqData    = false;
-      errors.sqData = null;
-      break;
+    // update wip & errors map to mark this collection was requested fully (single)
+    wip.collections    = { ...wip.collections, [action.payload.id]: false };
+    errors.collections = { ...errors.collections, [action.payload.id]: null };
+    break;
+  case FETCH_WINDOW_SUCCESS:
+    wip.cWindow    = { ...wip.cWindow, [action.payload.id]: false };
+    errors.cWindow = { ...errors.cWindow, [action.payload.id]: null };
+    break;
+  case FETCH_DATEPICKER_CO_SUCCESS:
+    wip.datepickerCO    = false;
+    errors.datepickerCO = null;
+    break;
+  case FETCH_SQDATA_SUCCESS:
+    wip.sqData    = false;
+    errors.sqData = null;
+    break;
 
-    case FETCH_UNIT_FAILURE:
-      wip.units    = { ...wip.units, [action.payload.id]: false };
-      errors.units = { ...errors.units, [action.payload.id]: action.payload.err };
-      break;
-    case FETCH_UNITS_BY_IDS_FAILURE:
-      units        = action.payload.id?.reduce((acc, id) => ({
-        wip: { ...acc.wip, [id]: false },
-        errors: { ...acc.errors, [id]: action.payload.err }
-      }), { wip: {}, errors: {} });
-      wip.units    = { ...wip.units, ...units.wip };
-      errors.units = { ...errors.units, ...units.errors };
-      break;
-    case FETCH_COLLECTION_FAILURE:
-      wip.collections    = { ...wip.collections, [action.payload.id]: false };
-      errors.collections = { ...errors.collections, [action.payload.id]: action.payload.err };
-      break;
-    case FETCH_LATEST_LESSON_FAILURE:
-      wip.lastLesson    = false;
-      errors.lastLesson = action.payload.err;
-      break;
-    case FETCH_WINDOW_FAILURE:
-      wip.cWindow    = { ...wip.cWindow, [action.payload.id]: false };
-      errors.cWindow = { ...errors.cWindow, [action.payload.id]: action.payload.err };
-      break;
-    case FETCH_DATEPICKER_CO_FAILURE:
-      wip.datepickerCO    = false;
-      errors.datepickerCO = action.payload.err;
-      break;
-    case FETCH_SQDATA_FAILURE:
-      wip.sqData    = false;
-      errors.sqData = action.payload.err;
-      break;
-    case COUNT_CU_FAILURE:
-      wip.countCU    = false;
-      errors.countCU = action.payload.err;
-      break;
+  case FETCH_UNIT_FAILURE:
+    wip.units    = { ...wip.units, [action.payload.id]: false };
+    errors.units = { ...errors.units, [action.payload.id]: action.payload.err };
+    break;
+  case FETCH_UNITS_BY_IDS_FAILURE:
+    units        = action.payload.id?.reduce((acc, id) => ({
+      wip: { ...acc.wip, [id]: false },
+      errors: { ...acc.errors, [id]: action.payload.err }
+    }), { wip: {}, errors: {} });
+    wip.units    = { ...wip.units, ...units.wip };
+    errors.units = { ...errors.units, ...units.errors };
+    break;
+  case FETCH_COLLECTION_FAILURE:
+    wip.collections    = { ...wip.collections, [action.payload.id]: false };
+    errors.collections = { ...errors.collections, [action.payload.id]: action.payload.err };
+    break;
+  case FETCH_LATEST_LESSON_FAILURE:
+    wip.lastLesson    = false;
+    errors.lastLesson = action.payload.err;
+    break;
+  case FETCH_WINDOW_FAILURE:
+    wip.cWindow    = { ...wip.cWindow, [action.payload.id]: false };
+    errors.cWindow = { ...errors.cWindow, [action.payload.id]: action.payload.err };
+    break;
+  case FETCH_DATEPICKER_CO_FAILURE:
+    wip.datepickerCO    = false;
+    errors.datepickerCO = action.payload.err;
+    break;
+  case FETCH_SQDATA_FAILURE:
+    wip.sqData    = false;
+    errors.sqData = action.payload.err;
+    break;
+  case COUNT_CU_FAILURE:
+    wip.countCU    = false;
+    errors.countCU = action.payload.err;
+    break;
 
-    default:
-      break;
+  default:
+    break;
   }
 
   return {
@@ -477,23 +492,26 @@ const onReceiveContentUnits = (state, action) => {
 };
 
 const onReceiveLabels = (state, action) => {
-  const { total, labels } = action.payload;
-
+  const labels = action.payload;
   if (labels.length === 0) {
     return state;
   }
 
-  const labelsBySubject = { ...state.labelsBySubject };
+  const labelsByCU = { ...state.labelsByCU };
+  const labelById  = { ...state.labelById };
   for (const i in labels) {
-    const { subject_uid, content_type } = labels[i];
+    const { content_unit, id } = labels[i];
 
-    const key            = buildSubjectKey(subject_uid, content_type);
-    labelsBySubject[key] = [...(labelsBySubject[key] || []).filter(l => l.id !== labels[i].id), labels[i]];
+    labelById[id] = labels[i];
+    if (!labelsByCU[content_unit]?.includes(id)) {
+      labelsByCU[content_unit] = [...(labelsByCU[content_unit] || []), id];
+    }
   }
 
   return {
     ...state,
-    labelsBySubject
+    labelsByCU,
+    labelById,
   };
 };
 
@@ -595,7 +613,7 @@ export const reducer = handleActions({
   [RECEIVE_COLLECTIONS]: (state, action) => onReceiveCollections(state, action),
   [RECEIVE_CONTENT_UNITS]: (state, action) => onReceiveContentUnits(state, action),
 
-  [FETCH_LABELS_SUCCESS]: onReceiveLabels,
+  [RECEIVE_LABELS]: onReceiveLabels,
 }, freshStore());
 
 /* Selectors */
@@ -657,7 +675,7 @@ const getDenormContentUnit = (state, id) => {
 
 const nestedGetDenormContentUnit = state => id => getDenormContentUnit(state, id);
 
-const nestedDenormCollectionWUnits = state => id => getDenormCollectionWUnits(state, id)
+const nestedDenormCollectionWUnits = state => id => getDenormCollectionWUnits(state, id);
 
 const getDenormCollectionWUnits = (state, id) => {
   let c = state.cById[id];
@@ -671,6 +689,8 @@ const getDenormCollectionWUnits = (state, id) => {
   return c;
 };
 
+const getDenormLabel = state => id => state.labelById[id];
+
 const getCountCu = (state, namespace) => state.countCU[namespace];
 
 const skipFetchedCU = (state, ids, with_files) => ids.filter(id => {
@@ -680,8 +700,9 @@ const skipFetchedCU = (state, ids, with_files) => ids.filter(id => {
 });
 const skipFetchedCO = (state, ids) => ids.filter(id => !getDenormCollection(state, id));
 
-const getLabelsBySubject = (state, key) => state.labelsBySubject[key];
-export const selectors   = {
+const getLabelsByCU = (state, id) => state.labelsByCU[id];
+
+export const selectors = {
   getCollectionById,
   getUnitById,
   getWip,
@@ -700,7 +721,6 @@ export const selectors   = {
   getCountCu,
   skipFetchedCU,
   skipFetchedCO,
-  getLabelsBySubject,
+  getLabelsByCU,
+  getDenormLabel,
 };
-
-export const buildSubjectKey = (uid, ct) => `${ct}_${uid}`;

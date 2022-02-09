@@ -32,12 +32,12 @@ export const buildTitleByUnit = (cu, t, getPathByID) => {
 };
 
 export const buildBookmarkLink = (bookmark, cu) => {
-  if (!bookmark)
+  if (!bookmark?.properties)
     return canonicalLink(cu);
 
-  const { properties: { uid_prefix, ...urlParams } = false, subject_uid } = bookmark;
+  const { properties: { uid_prefix, ...urlParams } } = bookmark;
 
-  let link = canonicalLink({ ...cu, id: `${uid_prefix || ''}${subject_uid}` });
+  let link = canonicalLink({ ...cu, id: `${uid_prefix || ''}${cu.id}` });
 
   if (urlParams) {
     link = `${link}?${stringify(urlParams)}`;

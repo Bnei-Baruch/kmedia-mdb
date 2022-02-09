@@ -8,12 +8,13 @@ import isEqual from 'react-fast-compare';
 import { selectors as sourcesSelectors } from '../../../redux/modules/sources';
 import { selectors as settings } from '../../../redux/modules/settings';
 import { selectors } from '../../../redux/modules/tags';
-import { actions } from '../../../redux/modules/my';
+import { actions } from '../../../redux/modules/mdb';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import { getTree } from '../../../helpers/topricTree';
 import NeedToLogin from '../../Sections/Personal/NeedToLogin';
 import AlertModal from '../AlertModal';
 import TopicBranch from './TopicBranch';
+import { selectors as auth } from '../../../redux/modules/auth';
 
 const SelectTopicsModal = ({ t, open, onClose, source, trigger }) => {
   const [selected, setSelected] = useState([]);
@@ -25,6 +26,7 @@ const SelectTopicsModal = ({ t, open, onClose, source, trigger }) => {
   const roots            = useSelector(state => selectors.getDisplayRoots(state.tags), isEqual) || [];
   const getTagById       = useSelector(state => selectors.getTagById(state.tags));
   const tree             = useMemo(() => getTree(roots, getTagById, null, t)[0], [roots.length, getTagById, t]);
+  const user             = useSelector(state => auth.getUser(state.auth));
 
   const language = useSelector(state => settings.getLanguage(state.settings));
   const dir      = getLanguageDirection(language);
@@ -32,20 +34,20 @@ const SelectTopicsModal = ({ t, open, onClose, source, trigger }) => {
   const dispatch = useDispatch();
 
   const create = () => {
-    const { subject_type: content_type, subject_uid, properties, language: l = language } = source;
+    const { subject_uid, properties, language: l = language } = source;
 
     const params = {
       i18n: {
         [l]: { name, language: l }
       },
-      tag_uids: selected,
-      subject_uid,
-      content_type,
+      tags: selected,
+      content_unit: subject_uid,
       properties,
-      media_type: 'text'
+      media_type: 'text',
+      author: user.name
     };
 
-    dispatch(actions.mdbCreateLabel(params));
+    dispatch(actions.createLabel(params));
   };
 
   const clear = () => {

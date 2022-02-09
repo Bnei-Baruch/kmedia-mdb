@@ -1,11 +1,12 @@
 import { call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
 
 import Api from '../helpers/Api';
-import { actions as mdbActions, actions, types } from '../redux/modules/mdb';
+import { actions as mdb, actions as mdbActions, actions, types } from '../redux/modules/mdb';
 import { selectors as settings } from '../redux/modules/settings';
 import { actions as sources } from '../redux/modules/sources';
 import { actions as tags } from '../redux/modules/tags';
 import { actions as publications } from '../redux/modules/publications';
+import { selectors as authSelectors } from '../redux/modules/auth';
 
 export function* fetchUnit(action) {
   const id = action.payload;
@@ -99,14 +100,28 @@ export function* countCU(action) {
   }
 }
 
+function* createLabel(action) {
+  try {
+    const token = yield select(state => authSelectors.getToken(state.auth));
+    if (!token)
+      new Error('token is required');
+
+    const { data } = yield call(Api.mdbCreateLabel, action.payload, token);
+    yield put(mdbActions.receiveLabels(data.labels));
+  } catch (err) {
+    console.log(err);
+  }
+}
+
 export function* fetchLabels(action) {
   try {
-    const language            = yield select(state => settings.getLanguage(state.settings));
-    const params                = { ...action.payload, language };
-    const { data }            = yield call(Api.labels, params);
+    const language = yield select(state => settings.getLanguage(state.settings));
+    const params   = { ...action.payload, language };
+    const { data } = yield call(Api.labels, params);
+    yield put(mdb.receiveLabels(data.labels));
     yield put(actions.fetchLabelsSuccess(data));
   } catch (err) {
-    console.error('fetchLabels errors', err)
+    console.error('fetchLabels errors', err);
   }
 }
 
@@ -142,6 +157,10 @@ function* watchCountCU() {
   yield takeEvery(types.COUNT_CU, countCU);
 }
 
+function* watchCreateLabel() {
+  yield takeEvery(types.CREATE_LABEL, createLabel);
+}
+
 function* watchFetchLabels() {
   yield takeEvery(types.FETCH_LABELS, fetchLabels);
 }
@@ -155,5 +174,6 @@ export const sagas = [
   watchFetchWindow,
   watchFetchDatepickerCO,
   watchCountCU,
+  watchCreateLabel,
   watchFetchLabels,
 ];

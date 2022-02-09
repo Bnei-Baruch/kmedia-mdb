@@ -13,7 +13,7 @@ import {
 import Toolbar from './Toolbar';
 import { SCROLL_SEARCH_ID } from '../../../helpers/consts';
 import { useDispatch, useSelector } from 'react-redux';
-import { actions, buildSubjectKey, selectors as mdb } from '../../../redux/modules/mdb';
+import { actions, selectors as mdb } from '../../../redux/modules/mdb';
 import LabelMark from './LabelMark';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
 
@@ -35,8 +35,8 @@ const buildOffsets = labels => labels.map(({ properties: { srchstart, srchend } 
 }).reduce((acc, l, i, arr) => {
   const cross = arr.filter(x => !(x.start > l.end + 2 || x.end < l.start - 2));
   cross.sort((a, b) => (b.end - b.start) - (a.end - a.start));
-  const x    = cross.findIndex(x => x.id === l.id);
-  const y    = cross.filter(x => x.start - l.start === 0).findIndex(x => x.id === l.id);
+  const x   = cross.findIndex(x => x.id === l.id);
+  const y   = cross.filter(x => x.start - l.start === 0).findIndex(x => x.id === l.id);
   acc[l.id] = { x, y };
   return acc;
 }, {});
@@ -52,9 +52,9 @@ const ScrollToSearch = ({ source, data, language, urlParams = '', pathname }) =>
 
   const containerRef = useRef();
 
-  const { subject_type, subject_uid } = source || {};
-  const key                           = buildSubjectKey(subject_uid, subject_type);
-  const labels                        = useSelector(state => mdb.getLabelsBySubject(state.mdb, key)) || [];
+  const { subject_uid } = source || {};
+  let labels            = useSelector(state => mdb.getLabelsByCU(state.mdb, subject_uid));
+  labels                = labels?.filter(l => (l.properties?.srchstart || l.properties?.srchend)) || [];
 
   const location                             = useLocation();
   const { srchstart, srchend, highlightAll } = getQuery(location);
@@ -71,10 +71,10 @@ const ScrollToSearch = ({ source, data, language, urlParams = '', pathname }) =>
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (subject_type && subject_uid) {
-      dispatch(actions.fetchLabels({ content_type: subject_type, subject_uid, language }));
+    if (subject_uid) {
+      dispatch(actions.fetchLabels({ content_unit: subject_uid, language }));
     }
-  }, [dispatch, subject_type, subject_uid, language]);
+  }, [dispatch, subject_uid, language]);
 
   useEffect(() => {
     const element = document.getElementById(SCROLL_SEARCH_ID);

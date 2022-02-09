@@ -12,17 +12,16 @@ import Link from '../../Language/MultiLanguageLink';
 import { buildTextUnitInfo } from './helper';
 
 const TextItem = ({ item, t }) => {
-  const { content_unit_uid, label, content_type } = item;
+  const { cu: { id, content_type }, label } = item;
 
-  const unit        = useSelector(state => mdb.getDenormContentUnit(state.mdb, content_unit_uid));
   const getPathByID = useSelector(state => sources.getPathByID(state.sources));
   const icon        = iconByContentTypeMap.get(content_type) || null;
 
-  const link                             = buildBookmarkLink(label, unit);
-  const { subTitle, title, description } = buildTextUnitInfo(unit, t, getPathByID, item);
+  const link                             = buildBookmarkLink(label, item.cu);
+  const { subTitle, title, description } = buildTextUnitInfo(item, t, getPathByID);
   return (
     <Container
-      key={content_unit_uid}
+      key={id}
       className="cu_item cu_item_list"
     >
       <Image size="tiny" verticalAlign="middle">
