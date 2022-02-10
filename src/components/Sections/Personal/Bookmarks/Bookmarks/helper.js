@@ -47,6 +47,7 @@ export const buildBookmarkLink = (bookmark, cu) => {
   if (!urlParams?.activeTab && UNIT_VIDEOS_TYPE.includes(cu.content_type)) {
     urlParams.activeTab = 'transcription';
   }
+
   if (urlParams) {
     link = `${link}?${stringify(urlParams)}`;
     if (urlParams.activeTab)
