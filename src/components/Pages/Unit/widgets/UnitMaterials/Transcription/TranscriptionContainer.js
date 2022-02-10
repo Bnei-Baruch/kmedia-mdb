@@ -11,11 +11,11 @@ import Transcription from './Transcription';
 import { SessionInfoContext } from '../../../../../../helpers/app-contexts';
 
 const TranscriptionContainer = ({ unit, type = null, activeTab = 'transcription' }) => {
-  const location          = useLocation();
-  const doc2htmlById      = useSelector(state => selectors.getDoc2htmlById(state.assets));
-  const language          = useSelector(state => settings.getLanguage(state.settings));
-  const contentLanguage   = useSelector(state => settings.getContentLanguage(state.settings, location));
-  const dispatch          = useDispatch();
+  const location        = useLocation();
+  const doc2htmlById    = useSelector(state => selectors.getDoc2htmlById(state.assets));
+  const language        = useSelector(state => settings.getLanguage(state.settings));
+  const contentLanguage = useSelector(state => settings.getContentLanguage(state.settings, location));
+  const dispatch        = useDispatch();
 
   const handleContentChange = id => dispatch(actions.doc2html(id));
 

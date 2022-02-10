@@ -4,7 +4,6 @@ import { Container, Header, Image } from 'semantic-ui-react';
 import { iconByContentTypeMap } from '../../../helpers/consts';
 import { SectionLogo } from '../../../helpers/images';
 import { useSelector } from 'react-redux';
-import { selectors as mdb } from '../../../redux/modules/mdb';
 import { selectors as sources } from '../../../redux/modules/sources';
 import { buildBookmarkLink } from '../Personal/Bookmarks/Bookmarks/helper';
 import { withNamespaces } from 'react-i18next';

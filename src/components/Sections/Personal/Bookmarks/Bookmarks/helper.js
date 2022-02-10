@@ -1,4 +1,10 @@
-import { CT_DAILY_LESSON, CT_LESSON_PART, CT_LIKUTIM, CT_SOURCE } from '../../../../../helpers/consts';
+import {
+  CT_DAILY_LESSON,
+  CT_LESSON_PART,
+  CT_LIKUTIM,
+  CT_SOURCE,
+  UNIT_VIDEOS_TYPE
+} from '../../../../../helpers/consts';
 import { cuPartNameByCCUType } from '../../../../../helpers/utils';
 import { canonicalLink } from '../../../../../helpers/links';
 import { stringify } from '../../../../../helpers/url';
@@ -38,7 +44,9 @@ export const buildBookmarkLink = (bookmark, cu) => {
   const { properties: { uid_prefix, ...urlParams } } = bookmark;
 
   let link = canonicalLink({ ...cu, id: `${uid_prefix || ''}${cu.id}` });
-
+  if (!urlParams?.activeTab && UNIT_VIDEOS_TYPE.includes(cu.content_type)) {
+    urlParams.activeTab = 'transcription';
+  }
   if (urlParams) {
     link = `${link}?${stringify(urlParams)}`;
     if (urlParams.activeTab)

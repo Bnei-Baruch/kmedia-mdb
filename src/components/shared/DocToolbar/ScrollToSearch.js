@@ -41,7 +41,7 @@ const buildOffsets = labels => labels.map(({ properties: { srchstart, srchend } 
   return acc;
 }, {});
 
-const ScrollToSearch = ({ source, data, language, urlParams = '', pathname }) => {
+const ScrollToSearch = ({ source, label, data, language, urlParams = '', pathname }) => {
   const { enableShareText: { isShareTextEnabled, setEnableShareText } } = useContext(SessionInfoContext);
   const { isMobileDevice }                                              = useContext(DeviceInfoContext);
 
@@ -52,16 +52,16 @@ const ScrollToSearch = ({ source, data, language, urlParams = '', pathname }) =>
 
   const containerRef = useRef();
 
-  const { subject_uid } = source || {};
-  const ids             = useSelector(state => mdb.getLabelsByCU(state.mdb, subject_uid));
-  const denorm          = useSelector(state => mdb.getDenormLabel(state.mdb));
-  const labels          = ids?.map(denorm).filter(l => (l.properties?.srchstart || l.properties?.srchend)) || [];
+  const { content_unit } = label || {};
+  const ids              = useSelector(state => mdb.getLabelsByCU(state.mdb, content_unit));
+  const denorm           = useSelector(state => mdb.getDenormLabel(state.mdb));
+  const labels           = ids?.map(denorm).filter(l => (l.properties?.srchstart || l.properties?.srchend)) || [];
 
   const location                             = useLocation();
   const { srchstart, srchend, highlightAll } = getQuery(location);
   const search                               = { srchstart, srchend };
 
-  const offsets = useMemo(() => buildOffsets(labels), [labels]);
+  const offsets = useMemo(() => buildOffsets(labels), [labels.length]);
   const dir     = getLanguageDirection(language);
 
   const __html = useMemo(
@@ -72,10 +72,10 @@ const ScrollToSearch = ({ source, data, language, urlParams = '', pathname }) =>
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (subject_uid) {
-      dispatch(actions.fetchLabels({ content_unit: subject_uid, language }));
+    if (content_unit) {
+      dispatch(actions.fetchLabels({ content_unit, language }));
     }
-  }, [dispatch, subject_uid, language]);
+  }, [dispatch, content_unit, language]);
 
   useEffect(() => {
     const element = document.getElementById(SCROLL_SEARCH_ID);
@@ -127,6 +127,7 @@ const ScrollToSearch = ({ source, data, language, urlParams = '', pathname }) =>
     return (
       <Toolbar
         source={source}
+        label={content_unit ? { content_unit, properties: searchQuery } : null}
         url={searchUrl}
         text={searchText}
         setPinned={handlePinned}

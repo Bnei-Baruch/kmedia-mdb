@@ -126,6 +126,7 @@ const Likut = ({ t }) => {
   const relatedLessons     = Object.values(source_units).filter(u => UNIT_LESSONS_TYPE.includes(u.content_type));
   const relatedLessonsSize = relatedLessons.length > 0 ? 6 : 0;
   const bookmarkSource     = { subject_uid: unit.id, subject_type: unit.content_type, language };
+  const labelSource        = { content_unit: unit.id, language };
 
   return (
     <div
@@ -163,6 +164,7 @@ const Likut = ({ t }) => {
                       handleIsReadable={handleIsReadable}
                       handleSettings={setSettings}
                       source={bookmarkSource}
+                      label={labelSource}
                     />
                   </div>
                   <div className="library-language-container">
@@ -191,6 +193,7 @@ const Likut = ({ t }) => {
                     language={language}
                     data={data}
                     source={bookmarkSource}
+                    label={labelSource}
                   />
                 )
               }

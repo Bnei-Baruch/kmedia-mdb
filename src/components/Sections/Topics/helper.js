@@ -1,15 +1,13 @@
 import {
-  CT_ARTICLE,
-  CT_BLOG_POST,
+  CT_CONGRESS,
   CT_DAILY_LESSON,
   CT_LIKUTIM,
-  CT_PUBLICATION,
-  CT_RESEARCH_MATERIAL,
   CT_SOURCE,
-  UNIT_EVENTS_TYPE,
-  UNIT_LESSONS_TYPE,
-  UNIT_PROGRAMS_TYPE
+  CT_SPECIAL_LESSON,
+  UNIT_TEXT_TYPE,
+  UNIT_VIDEOS_TYPE
 } from '../../../helpers/consts';
+import { canonicalCollection, cuPartNameByCCUType } from '../../../helpers/utils';
 
 export const buildDailyLessonTitle = (cu, t) => {
   const ctLabel = t(`constants.content-types.${CT_DAILY_LESSON}`);
@@ -22,9 +20,6 @@ export const buildSourceTitle = (getPathByID, id) => {
   const articleName = path.splice(-1);
   return `${articleName} ${path.join('. ')}`;
 };
-
-const UNIT_TEXT_TYPE   = [CT_ARTICLE, CT_BLOG_POST, CT_PUBLICATION, CT_RESEARCH_MATERIAL, CT_SOURCE, CT_LIKUTIM,];
-const UNIT_VIDEOS_TYPE = [...UNIT_LESSONS_TYPE, ...UNIT_PROGRAMS_TYPE, ...UNIT_EVENTS_TYPE];
 
 export const extractByMediaType = items => items.reduce((acc, { cu, label }) => {
   if (!cu)
@@ -52,6 +47,7 @@ export const buildTextUnitInfo = ({ cu, label }, t, getPathByID) => {
   if (!cu) return { subTitle, title, description };
 
   const { id, content_type, name } = cu;
+  insertCCUPart(cu, description, t);
 
   description.push(t('values.date', { date }));
   switch (true) {
@@ -69,6 +65,20 @@ export const buildTextUnitInfo = ({ cu, label }, t, getPathByID) => {
   }
 
   return insertInfoFromLabel(subject, description, label, t);
+};
+
+const insertCCUPart = (cu, description, t) => {
+  if (!cu) return;
+
+  const { content_type, ccuNames } = canonicalCollection(cu) || false;
+  if (![CT_DAILY_LESSON, CT_SPECIAL_LESSON, CT_CONGRESS].includes(content_type))
+    return;
+
+  const part = Number(ccuNames[cu.id]);
+  if (!part || isNaN(part))
+    return;
+
+  description.push(t(cuPartNameByCCUType(content_type), { name: part }));
 };
 
 export const buildVideoUnitInfo = (cu, t, { label, date }) => {

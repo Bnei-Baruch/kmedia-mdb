@@ -43,6 +43,16 @@ export const buildBookmarkSource = source => {
   return s;
 };
 
+export const buildLabelData = source => {
+  const { uid, isGr } = checkRabashGroupArticles(source);
+  const s             = { content_unit: uid };
+  if (isGr) {
+    s.properties = { uid_prefix: 'gr-' };
+  }
+
+  return s;
+};
+
 const Library = ({ data, source, downloadAllowed, t }) => {
   const location                    = useLocation();
   const history                     = useHistory();
@@ -199,6 +209,7 @@ const Library = ({ data, source, downloadAllowed, t }) => {
             data={contentData}
             language={language}
             source={{ language, ...buildBookmarkSource(source) }}
+            label={{ language, ...buildLabelData(source) }}
           />
         </div>
       );

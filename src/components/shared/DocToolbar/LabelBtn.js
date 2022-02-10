@@ -5,7 +5,7 @@ import { Button, MenuItem, Popup } from 'semantic-ui-react';
 import SelectTopicsModal from '../SelectTopicsModal/SelectTopicsModal';
 import { SectionLogo } from '../../../helpers/images';
 
-const LabelBtn = ({ t, source }) => {
+const LabelBtn = ({ t, label }) => {
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => {
@@ -18,7 +18,7 @@ const LabelBtn = ({ t, source }) => {
 
   return (
     <SelectTopicsModal
-      source={source}
+      label={label}
       open={open}
       onClose={handleClose}
       trigger={
@@ -41,7 +41,7 @@ const LabelBtn = ({ t, source }) => {
 LabelBtn.propTypes = {
   t: PropTypes.func.isRequired,
   query: PropTypes.object,
-  source: PropTypes.object,
+  label: PropTypes.object,
 };
 
 export default withNamespaces()(LabelBtn);

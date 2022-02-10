@@ -9,10 +9,10 @@ import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { selectors as settings } from '../../../redux/modules/settings';
 import SelectTopicsModal from '../SelectTopicsModal/SelectTopicsModal';
 
-const BookmarkBtn = ({ t, source, close }) => {
-  const [open, setOpen]       = useState();
-  const [confirm, setConfirm] = useState();
-  const [openTag, setOpenTag] = useState();
+const BookmarkBtn = ({ t, source, label, close }) => {
+  const [open, setOpen]       = useState(false);
+  const [confirm, setConfirm] = useState(false);
+  const [openTag, setOpenTag] = useState(false);
 
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const language           = useSelector(state => settings.getLanguage(state.settings));
@@ -23,7 +23,7 @@ const BookmarkBtn = ({ t, source, close }) => {
   };
 
   const handleClose = (e, el, isCreated) => {
-    if (!isCreated) {
+    if (!isCreated || !label) {
       setOpen(false);
       close();
       return;
@@ -55,7 +55,7 @@ const BookmarkBtn = ({ t, source, close }) => {
         className="bookmark_confirm"
         cancelButton={
           <SelectTopicsModal
-            source={source}
+            label={label}
             open={openTag}
             onClose={handleCloseTag}
             trigger={
@@ -99,6 +99,7 @@ BookmarkBtn.propTypes = {
   t: PropTypes.func.isRequired,
   query: PropTypes.object,
   source: PropTypes.object,
+  label: PropTypes.object,
 };
 
 export default withNamespaces()(BookmarkBtn);

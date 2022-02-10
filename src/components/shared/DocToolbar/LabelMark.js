@@ -4,7 +4,6 @@ import { withNamespaces } from 'react-i18next';
 import { Button, Popup } from 'semantic-ui-react';
 import { SectionLogo } from '../../../helpers/images';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
-import { left } from 'core-js/internals/array-reduce';
 
 const LabelMark = ({ label, offset, t }) => {
   const [top, setTop]       = useState(0);
@@ -20,7 +19,7 @@ const LabelMark = ({ label, offset, t }) => {
       setTop(Math.min(start.offsetTop, b));
       setBottom(Math.max(start.offsetTop, b));
     }
-  }, []);
+  }, [label.id]);
 
   if (!top || !bottom)
     return null;

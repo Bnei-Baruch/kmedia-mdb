@@ -485,12 +485,12 @@ export const SUGGEST_LIMIT = 10;
 export const ES_RESULT_TYPE_SOURCES = 'sources';
 export const ES_RESULT_TYPE_TAGS    = 'tags';
 
-export const SEARCH_INTENT_INDEX_TOPIC       = 'intent-tag';
-export const SEARCH_INTENT_INDEX_SOURCE      = 'intent-source';
-export const SEARCH_INTENT_HIT_TYPE_PROGRAMS = 'programs';
-export const SEARCH_INTENT_HIT_TYPE_LESSONS  = 'lessons';
-export const SEARCH_INTENT_HIT_TYPE_SERIES_BY_TAG  = 'lessons_series_by_tag';
-export const SEARCH_INTENT_HIT_TYPE_SERIES_BY_SOURCE  = 'lessons_series_by_source';
+export const SEARCH_INTENT_INDEX_TOPIC               = 'intent-tag';
+export const SEARCH_INTENT_INDEX_SOURCE              = 'intent-source';
+export const SEARCH_INTENT_HIT_TYPE_PROGRAMS         = 'programs';
+export const SEARCH_INTENT_HIT_TYPE_LESSONS          = 'lessons';
+export const SEARCH_INTENT_HIT_TYPE_SERIES_BY_TAG    = 'lessons_series_by_tag';
+export const SEARCH_INTENT_HIT_TYPE_SERIES_BY_SOURCE = 'lessons_series_by_source';
 
 export const SEARCH_INTENT_HIT_TYPES = [SEARCH_INTENT_HIT_TYPE_PROGRAMS, SEARCH_INTENT_HIT_TYPE_LESSONS];
 
@@ -518,7 +518,7 @@ export const MY_NAMESPACE_PLAYLIST_EDIT = 'playlists_edit';
 export const MY_NAMESPACE_SUBSCRIPTIONS = 'subscriptions';
 export const MY_NAMESPACE_BOOKMARKS     = 'bookmarks';
 export const MY_NAMESPACE_FOLDERS       = 'folders';
-export const MY_NAMESPACE_LABELS       = 'labels';
+export const MY_NAMESPACE_LABELS        = 'labels';
 
 export const MY_NAMESPACES = [
   MY_NAMESPACE_HISTORY,
@@ -578,3 +578,5 @@ export const SECTIONS_LINK_BY_CU_CONTENT_TYPE = {
   [CT_ARTICLE]: 'publications/articles',
 };
 
+export const UNIT_TEXT_TYPE   = [CT_ARTICLE, CT_BLOG_POST, CT_PUBLICATION, CT_RESEARCH_MATERIAL, CT_SOURCE, CT_LIKUTIM];
+export const UNIT_VIDEOS_TYPE = [...UNIT_LESSONS_TYPE, ...UNIT_PROGRAMS_TYPE, ...UNIT_EVENTS_TYPE];

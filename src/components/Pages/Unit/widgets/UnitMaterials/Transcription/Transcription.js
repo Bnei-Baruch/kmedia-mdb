@@ -129,15 +129,35 @@ class Transcription extends Component {
   }
 
   loadFile = selectedFile => {
-    if (selectedFile && selectedFile.id) {
-      const { doc2htmlById, onContentChange } = this.props;
-      const { data }                          = doc2htmlById[selectedFile.id] || {};
+    if (!selectedFile?.id)
+      return;
 
-      if (!data) {
-        // load from redux
-        onContentChange(selectedFile.id);
-      }
+    this.loadFileCU(selectedFile.id);
+    const { doc2htmlById, onContentChange } = this.props;
+    const { data }                          = doc2htmlById[selectedFile.id] || {};
+
+    if (!data) {
+      // load from redux
+      onContentChange(selectedFile.id);
     }
+  };
+
+  loadFileCU = fid => {
+    const cu = this.findCUByFile(fid);
+    if (!cu) return;
+
+    this.setState({ fileCU: cu.id });
+
+  };
+
+  findCUByFile = fid => {
+    const { type, unit } = this.props;
+    if (!type)
+      return unit;
+
+    return Object.values(unit.derived_units || {})
+      .find(x => x.files?.some(f => f.id === fid));
+
   };
 
   handleLanguageChanged = (e, newLanguage) => {
@@ -174,8 +194,8 @@ class Transcription extends Component {
   }
 
   prepareContent = data => {
-    const { textFiles, selectedFile, language } = this.state;
-    const { location, activeTab, unit }         = this.props;
+    const { textFiles, selectedFile, language, fileCU } = this.state;
+    const { location, activeTab, unit }                 = this.props;
 
     const ap                = playerHelper.getActivePartFromQuery(location);
     const selectedFileProps = selectedFile ? `&selectedFileId=${selectedFile.id}` : '';
@@ -197,7 +217,9 @@ class Transcription extends Component {
               subject_uid: unit.id,
               subject_type: unit.content_type,
               properties: { activeTab }
-            }} />
+            }}
+            label={activeTab !== 'research' ? { content_unit: fileCU } : null}
+          />
         </div>
       </div>
     );
@@ -206,9 +228,9 @@ class Transcription extends Component {
   handleSettings = settings => this.setState({ settings });
 
   render() {
-    const { doc2htmlById, t, type, unit, activeTab }      = this.props;
-    const { selectedFile, languages, language, settings } = this.state;
-    const { isMobileDevice }                              = this.context;
+    const { doc2htmlById, t, type, unit, activeTab }              = this.props;
+    const { selectedFile, languages, language, settings, fileCU } = this.state;
+    const { isMobileDevice }                                      = this.context;
 
     if (!selectedFile) {
       const text = type || 'transcription';
@@ -266,6 +288,7 @@ class Transcription extends Component {
                 handleSettings={this.handleSettings}
                 fontSize={fontSize}
                 source={{ subject_uid: unit.id, subject_type: unit.content_type, properties: { activeTab } }}
+                label={activeTab !== 'research' ? { content_unit: fileCU } : null}
               />
             </Menu.Item>
           </Menu>

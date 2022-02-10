@@ -1,18 +1,18 @@
-import React, { useState, useEffect, useContext, useMemo } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { withNamespaces } from 'react-i18next';
-import { useSelector, useDispatch, shallowEqual } from 'react-redux';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { Divider, Dropdown, Menu, Segment } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 
 import { selectors } from '../../../../../../redux/modules/sources';
-import { selectors as assetsSelectors, actions as assetsActions } from '../../../../../../redux/modules/assets';
-import { physicalFile, tracePath, isEmpty } from '../../../../../../helpers/utils';
+import { actions as assetsActions, selectors as assetsSelectors } from '../../../../../../redux/modules/assets';
+import { isEmpty, physicalFile, tracePath } from '../../../../../../helpers/utils';
 import { selectors as settings } from '../../../../../../redux/modules/settings';
 import { selectSuitableLanguage } from '../../../../../../helpers/language';
 import { getLanguageDirection } from '../../../../../../helpers/i18n-utils';
 import { DeviceInfoContext } from '../../../../../../helpers/app-contexts';
-import { MT_TEXT, CT_LIKUTIM, CT_SOURCE } from '../../../../../../helpers/consts';
+import { CT_LIKUTIM, CT_SOURCE, MT_TEXT } from '../../../../../../helpers/consts';
 import { getSourceErrorSplash, wipLoadingSplash } from '../../../../../shared/WipErr/WipErr';
 import PDF, { isTaas, startsFrom } from '../../../../../shared/PDF/PDF';
 import ScrollToSearch from '../../../../../shared/DocToolbar/ScrollToSearch';
@@ -194,6 +194,7 @@ const Sources = ({ unit, t, activeTab = 'sources' }) => {
               subject_uid: selectedUnitId,
               subject_type: isLikutim ? CT_LIKUTIM : CT_SOURCE
             }}
+            label={{ content_unit: selectedUnitId }}
           />
         </div>
       </div>
@@ -265,6 +266,7 @@ const Sources = ({ unit, t, activeTab = 'sources' }) => {
             handleSettings={setSettings}
             fontSize={setting.fontSize}
             source={{ subject_uid: selectedUnitId, subject_type: isLikutim ? CT_LIKUTIM : CT_SOURCE }}
+            label={{ content_unit: selectedUnitId }}
           />
         </Menu.Item>
       </Menu>

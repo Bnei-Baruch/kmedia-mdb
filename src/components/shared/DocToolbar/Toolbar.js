@@ -9,7 +9,7 @@ import CopyLinkBtn from './CopyLinkBtn';
 import ShareBtn from './ShareBtn';
 import LabelBtn from './LabelBtn';
 
-const DocToolbar = ({ t, url, text, source, position, setPinned, isPinned }) => {
+const DocToolbar = ({ t, url, text, source, label, position, setPinned, isPinned }) => {
   const [open, setOpen] = useState(!!url);
 
   const contextRef = useRef();
@@ -61,8 +61,8 @@ const DocToolbar = ({ t, url, text, source, position, setPinned, isPinned }) => 
                 <ShareBtn url={url} />
                 <CopyLinkBtn text={url} />
                 <CopyTextBtn text={text} />
-                {source && <BookmarkBtn source={source} close={handleToggle} />}
-                {source && <LabelBtn source={source} close={handleToggle} />}
+                {source && <BookmarkBtn source={source} label={label} close={handleToggle} />}
+                {label && <LabelBtn label={label} close={handleToggle} />}
               </Menu>
             </>
           )

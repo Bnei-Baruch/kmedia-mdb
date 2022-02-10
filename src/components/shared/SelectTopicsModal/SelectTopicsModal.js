@@ -16,7 +16,7 @@ import AlertModal from '../AlertModal';
 import TopicBranch from './TopicBranch';
 import { selectors as auth } from '../../../redux/modules/auth';
 
-const SelectTopicsModal = ({ t, open, onClose, source, trigger }) => {
+const SelectTopicsModal = ({ t, open, onClose, label, trigger }) => {
   const [selected, setSelected] = useState([]);
   const [match, setMatch]       = useState('');
   const [name, setName]         = useState('');
@@ -34,14 +34,14 @@ const SelectTopicsModal = ({ t, open, onClose, source, trigger }) => {
   const dispatch = useDispatch();
 
   const create = () => {
-    const { subject_uid, properties, language: l = language } = source;
+    const { content_unit, properties, language: l = language } = label;
 
     const params = {
       i18n: {
         [l]: { name, language: l, author: user.name }
       },
       tags: selected,
-      content_unit: subject_uid,
+      content_unit,
       properties,
       media_type: 'text'
     };
