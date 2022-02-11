@@ -156,7 +156,7 @@ const buildDesktopVideoUi = (isVideo, showNextPrev, onPrev, onNext, onSwitchAV, 
       { showNextPrev && <VmPrevNext isPrev onClick={onPrev} /> }
       <VmJump isBack={true} />
       <ControlSpacer />
-      <PlaybackControl
+      {/* <PlaybackControl
         hideTooltip
         style={{
           '--vm-control-scale': 1.3,
@@ -167,7 +167,7 @@ const buildDesktopVideoUi = (isVideo, showNextPrev, onPrev, onNext, onSwitchAV, 
           padding: '4px',
         }}
       />
-      <ControlSpacer />
+      <ControlSpacer /> */}
       <VmJump isBack={false} />
       { showNextPrev && <VmPrevNext isPrev={false} onClick={onNext} /> }
     </Controls>
