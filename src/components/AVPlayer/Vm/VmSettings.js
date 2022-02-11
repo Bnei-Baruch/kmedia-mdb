@@ -46,14 +46,16 @@ const buildPlaybackQualitySubmenu = (isVideo, videoQuality, videoQualities, onQu
 };
 
 const buildAVSubmenu = (isVideo, onSwitchAV) => {
-  const state = isVideo ? 'video' : 'audio';
+  const state = isVideo ? 'VIDEO' : 'AUDIO';
   return (
-    <Submenu label="Audio/Video" hint={state}>
-      <MenuRadioGroup value={state} onVmCheck={onSwitchAV}>
-        <MenuRadio key={'audio'} label={'audio'} value={'audio'} />
-        <MenuRadio key={'video'} label={'video'} value={'video'} />
-      </MenuRadioGroup>
-    </Submenu>
+    <MenuItem badge={state} label="Audio/Video" onClick={onSwitchAV} />
+  // <Submenu label="Audio/Video" hint={state}>
+  //   <MenuRadioGroup value={state} onVmCheck={onSwitchAV}>
+  //     <MenuRadio key={'audio'} label={'audio'} value={'audio'} />
+  //     <MenuRadio key={'video'} label={'video'} value={'video'} />
+  //   </MenuRadioGroup>
+  // </Submenu>
+
   );
 };
 
@@ -83,11 +85,11 @@ export const VmSettings = ({ isVideo, videoQuality, videoQualities, onQualityCha
   };
 
   return (
-    <Settings hideTooltip id="1" ref={ref}>
+    <Settings ref={ref}>
       {buildPlaybackRateSubmenu(playbackRates, playbackRate, onPlaybackRateSelect)}
       {buildPlaybackQualitySubmenu(isVideo, videoQuality, videoQualities, onQualityChange)}
-      {buildAVSubmenu(isVideo, onSwitchAV)}
       {buildLanguageMenu(selectedLanguage, languages, onLanguageChange)}
+      {buildAVSubmenu(isVideo, onSwitchAV)}
     </Settings>
   );
 };
