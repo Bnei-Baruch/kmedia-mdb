@@ -170,7 +170,8 @@ const VmPlayer = ({
 
   return (
     <Player ref={player} playsInline autoPiP
-      theme="dark"
+      // theme="dark"
+      icons="material"
       autoPlay={autoPlay}
       debug={true}
     >
