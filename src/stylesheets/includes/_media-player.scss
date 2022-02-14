@@ -162,7 +162,7 @@ $player-color: $black;
       display: flex;
       flex: 1 1 auto;
       flex-direction: column;
-      padding: 1rem;
+      padding: 0.5rem;
       user-select: text;
 
       input {
@@ -171,6 +171,7 @@ $player-color: $black;
 
       &-back {
         align-self: flex-start;
+        height: 20px;
       }
 
       .social-buttons {
@@ -189,6 +190,12 @@ $player-color: $black;
     }
   }
 }
+
+.shareCopyLinkButton {
+  height: 20px;
+  margin: 0 10px 5px 10px !important;
+}
+
 
 .volume-popover {
   background: rgba(lighten($player-color, 0), .9);
