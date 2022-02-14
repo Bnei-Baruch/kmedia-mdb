@@ -10,7 +10,7 @@ const API_FEED                = process.env.REACT_APP_FEED;
 const CHRONICLES_BACKEND      = process.env.REACT_APP_CHRONICLES_BACKEND;
 const PERSONAL_API_BACKEND    = process.env.REACT_APP_PERSONAL_API_BACKEND;
 const FILE_TRIMMER_API        = process.env.REACT_APP_FILE_TRIMMER_API;
-const MDB_REST_API_URL            = process.env.REACT_APP_MDB_REST_API_URL || `${API_BACKEND}mdb-api/`;
+const MDB_REST_API_URL        = process.env.REACT_APP_MDB_REST_API_URL || `${API_BACKEND}mdb-api/`;
 
 export const backendUrl               = path => `${API_BACKEND}${path}`;
 export const assetUrl                 = path => `${ASSETS_BACKEND}${path}`;
@@ -267,7 +267,7 @@ class Api {
   };
 
   static mdbCreateLabel = (params, token) => {
-    const url     = `${MDB_REST_API_URL}labels`;
+    const url     = `${MDB_REST_API_URL}labels/`;
     const headers = { 'Content-Type': 'application/json', 'Authorization': `bearer ${token}` };
     const config  = { url, headers, method: 'POST', data: JSON.stringify(params) };
     return axios(config);
