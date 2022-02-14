@@ -43,23 +43,6 @@ const getUrl = (item, uiLanguage, start, end, addUiLang) => {
   return `${shareUrl}?${stringify(q)}`;
 }
 
-// const colonStrToSecond = str => {
-//   const s = str.replace(/[^\d:]+/g, '');
-
-//   return s.split(':')
-//     .map(t => (t ? parseInt(t, 10) : 0))
-//     .reverse()
-//     .reduce((result, t, i) => (result + (t * Math.pow(60, i))), 0);
-// }
-
-// const mlsToStrColon = seconds => {
-//   const duration = new Date(seconds * 1000); // ms
-//   const h        = duration.getUTCHours();
-//   const m        = duration.getUTCMinutes();
-//   const s        = duration.getUTCSeconds();
-//   return h ? `${h}:${m}:${s}` : `${m}:${s}`;
-// }
-
 const getEmbed = url => {
   if (url) {
     const appendChar = url.indexOf('?') !== -1 ? '&' : '?';
@@ -106,16 +89,48 @@ const ShareForm = ({ item, currentTime, duration, onSliceChange, onExit, t }) =>
 
   return (
     <div className="mediaplayer__onscreen-share">
-      <Button
-        className="mediaplayer__onscreen-share-back"
-        content={t('player.buttons.edit-back')}
-        primary
-        icon="chevron left"
-        onClick={onExit}
-      />
-      <ShareBar url={url} embedContent={getEmbed(uiLangUrl)} t={t} buttonSize="medium" />
-      <div className="mediaplayer__onscreen-share-form">
-        <div className="mediaplayer__onscreen-share-bar">
+      <Form size='tiny'>
+        {/* widths="equal" */}
+        <Form.Group>
+          <Form.Input
+            action={{
+              content: t('player.buttons.start-position'),
+              onClick: setCutFrom,
+              icon: 'hourglass start',
+              color: 'blue',
+              size: 'mini',
+              compact: true,
+            }}
+            onClick={setCutFrom}
+            value={toHumanReadableTime(start)}
+            actionPosition="left"
+            placeholder={t('player.buttons.click-to-set')}
+          />
+          <Form.Input
+            action={{
+              content: t('player.buttons.end-position'),
+              onClick: setCutTo,
+              icon: 'hourglass end',
+              color: 'blue',
+              size: 'mini',
+              compact: true,
+            }}
+            value={toHumanReadableTime(end)}
+            onClick={setCutTo}
+            actionPosition="left"
+            placeholder={t('player.buttons.click-to-set')}
+          />
+          <Button
+            className="mediaplayer__onscreen-share-back"
+            content={t('player.buttons.edit-back')}
+            primary
+            compact
+            size='mini'
+            icon="chevron left"
+            onClick={onExit}
+          />
+        </Form.Group>
+        <Form.Group>
           <Message content={url} size="mini" />
           <Popup
             open={isCopyPopupOpen}
@@ -123,46 +138,15 @@ const ShareForm = ({ item, currentTime, duration, onSliceChange, onExit, t }) =>
             position="bottom right"
             trigger={(
               <CopyToClipboard text={url} onCopy={handleCopied}>
-                <Button className="shareCopyLinkButton" size="tiny" content={t('buttons.copy')} />
+                <Button className="shareCopyLinkButton" size="mini" content={t('buttons.copy')} />
               </CopyToClipboard>
             )}
           />
-        </div>
-        <Form>
-          <Form.Group widths="equal">
-            <Form.Input
-              action={{
-                content: t('player.buttons.start-position'),
-                onClick: setCutFrom,
-                icon: 'hourglass start',
-                color: 'blue',
-                size: 'mini',
-                compact: true,
-              }}
-              onClick={setCutFrom}
-              value={toHumanReadableTime(start)}
-              // onChange={() => setStart(currentTime)}
-              actionPosition="left"
-              placeholder={t('player.buttons.click-to-set')}
-            />
-            <Form.Input
-              action={{
-                content: t('player.buttons.end-position'),
-                onClick: setCutTo,
-                icon: 'hourglass end',
-                color: 'blue',
-                size: 'mini',
-                compact: true,
-              }}
-              value={toHumanReadableTime(end)}
-              onClick={setCutTo}
-              // input={{ readOnly: true }}
-              actionPosition="left"
-              placeholder={t('player.buttons.click-to-set')}
-            />
-          </Form.Group>
-        </Form>
-      </div>
+          <div className="mediaplayer__onscreen-share-bar">
+            <ShareBar url={url} embedContent={getEmbed(uiLangUrl)} t={t} buttonSize="small" />
+          </div>
+        </Form.Group>
+      </Form>
     </div>
   );
 }
