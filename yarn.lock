@@ -4390,6 +4390,11 @@ cosmiconfig@^7.0.0:
     path-type "^4.0.0"
     yaml "^1.10.0"
 
+crawler-user-agents@^1.0.88:
+  version "1.0.88"
+  resolved "https://registry.yarnpkg.com/crawler-user-agents/-/crawler-user-agents-1.0.88.tgz#721848ff06758e1166d49c30222f3d208ed4c2ea"
+  integrity sha512-mmTPYnNHRqD0yE8f6e3PrrqODi0k0hUZ0jDedrpQmAN6Dl8mbtP/xUEXrIeyMBFReB9RejRIaZitQjJhEfo+fQ==
+
 create-ecdh@^4.0.0:
   version "4.0.4"
   resolved "https://registry.yarnpkg.com/create-ecdh/-/create-ecdh-4.0.4.tgz#d6e7f4bffa66736085a0762fd3a632684dabcc4e"
