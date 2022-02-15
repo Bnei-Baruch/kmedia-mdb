@@ -15,7 +15,6 @@ const POPOVER_CONFIRMATION_TIMEOUT = 2500;
 
 const getUrl = (item, uiLanguage, start, end, addUiLang) => {
   const { protocol, hostname, port, pathname } = window.location;
-  // const { item, uiLanguage }                   = props;
   const path                 = item.shareUrl || pathname;
   const { path: pathSuffix } = splitPathByLanguage(path);
   const uiLang               = addUiLang ? `/${uiLanguage}` : '';
@@ -90,7 +89,6 @@ const ShareForm = ({ item, currentTime, duration, onSliceChange, onExit, t }) =>
   return (
     <div className="mediaplayer__onscreen-share">
       <Form size='tiny'>
-        {/* widths="equal" */}
         <Form.Group>
           <Form.Input
             action={{
