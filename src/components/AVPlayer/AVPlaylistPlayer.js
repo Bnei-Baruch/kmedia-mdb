@@ -51,8 +51,8 @@ const AVPlaylistPlayer = ({ items, selected, onSelectedChange, onLanguageChange,
 
   // hasNext, hasPrev are not trivial as checking the indexes due to fact
   // that in some languages there might be missing audio or video file.
-  const hasNext = selected < items.length - 1 && items.slice(selected).some(f => !!f.src);
-  const hasPrev = selected > 0 && items.slice(0, selected).some(f => !!f.src);
+  const hasNext = selected < items.length - 1 && items.slice(selected).some(f => !!f.file?.src);
+  const hasPrev = selected > 0 && items.slice(0, selected).some(f => !!f.file?.src);
 
   const isAudio = currentItem.mediaType === MT_AUDIO;
 
