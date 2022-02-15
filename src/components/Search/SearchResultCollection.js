@@ -57,6 +57,7 @@ class SearchResultCollection extends SearchResultBase {
             collectionId={this.props.c.id}
             floated="left"
             size="tiny"
+            fallbackImg="none"
           />
           <Container>
             <Container as="h3">

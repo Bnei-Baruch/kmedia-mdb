@@ -44,6 +44,8 @@ export const SectionLogo = ({ name, ...props }) => {
   return <Logo {...props} />;
 };
 
+export const NoneFallbackImage = 'none';
+
 const sectionThumbnailFallback = {
   lessons: DailyLessonsFallbackIcon,
   programs: ProgramsFallbackIcon,
@@ -52,9 +54,10 @@ const sectionThumbnailFallback = {
   events: EventsFallbackIcon,
   publications: PublicationsFallbackIcon,
   default: ImagePlaceholder,
+  [NoneFallbackImage]: null,
 };
 
-export const knownFallbackImages = ['lessons', 'programs', 'lectures', 'sources', 'events', 'publications', 'default'];
+export const knownFallbackImages = ['lessons', 'programs', 'lectures', 'sources', 'events', 'publications', 'default', NoneFallbackImage];
 
 export const SectionThumbnailFallback = ({ name, ...props }) => {
   const Fallback = sectionThumbnailFallback[name];

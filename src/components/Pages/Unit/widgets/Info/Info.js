@@ -90,7 +90,7 @@ const Info = ({ unit = {}, t, currentCollection = null }) => {
           !isMultiLessons && noSSeries.length > 0 && (
             <>
               <div className="unit-info__title">
-                <UnitLogo collectionId={ccu.id} circular />
+                <UnitLogo collectionId={ccu.id} circular fallbackImg="none" />
                 <List.Item className="unit-info__collections" key="collections">
                   {noSSeries}
                 </List.Item>

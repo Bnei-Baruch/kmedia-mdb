@@ -12,7 +12,7 @@ import { types as searchTypes } from '../redux/modules/search';
 import { types as authTypes } from '../redux/modules/auth';
 import { ClientChroniclesContext } from './app-contexts';
 
-//An array of DOM events that should be interpreted as user activity.
+// An array of DOM events that should be interpreted as user activity.
 const ACTIVITY_EVENTS = ['mousedown', 'mousemove', 'keydown', 'scroll', 'touchstart'];
 
 const FLOWS = [
@@ -20,13 +20,15 @@ const FLOWS = [
   { start: 'unit-page-enter',          end: 'unit-page-leave',            subFlows: ['player-play', 'recommend', 'search', 'autocomplete', 'user-inactive', 'download'] },
   { start: 'collection-page-enter',    end: 'collection-page-leave',      subFlows: ['collection-unit-selected', 'recommend', 'search', 'autocomplete', 'user-inactive', 'download'] },
   { start: 'collection-unit-selected', end: 'collection-unit-unselected', subFlows: ['player-play', 'user-inactive'] },
-  { start: 'player-play', end: 'player-stop', subFlows: ['mute-unmute', 'user-inactive'] },
-  { start: 'recommend', end: '', subFlows: ['recommend-selected'] },
-  { start: 'search', end: '', subFlows: ['search-selected'] },
-  { start: 'autocomplete', end: '', subFlows: ['autocomplete-selected'] },
+  { start: 'player-play',              end: 'player-stop',                subFlows: ['mute-unmute', 'user-inactive'] },
+  { start: 'recommend',                end: '',                           subFlows: ['recommend-selected'] },
+  { start: 'search',                   end: '',                           subFlows: ['search-selected'] },
+  { start: 'autocomplete',             end: '',                           subFlows: ['autocomplete-selected'] },
 ];
 
-const FLOWS_BY_END = new Map(FLOWS.map(flow => [flow.end, flow]));
+const PREV_HREF_EVENTS = ['page-leave', 'unit-page-leave', 'collection-page-leave', 'recommend-selected', 'search-selected'];
+
+const FLOWS_BY_END = new Map(FLOWS.filter(flow => flow.end).map(flow => [flow.end, flow]));
 const SUBFLOWS     = new Map(Object.entries(FLOWS.reduce((acc, flow) => {
   flow.subFlows.forEach(subflow => {
     if (!(subflow in acc)) {
@@ -41,6 +43,7 @@ const SUBFLOWS     = new Map(Object.entries(FLOWS.reduce((acc, flow) => {
 }, {})));
 
 const MAX_INACTIVITY_MS = 60 * 1000; // Minute in milliseconds.
+const APPENDS_FLUSH_MS  = 60 * 1000; // Minute in milliseconds.
 
 export default class ClientChronicles {
   constructor(history, store) {
@@ -84,7 +87,7 @@ export default class ClientChronicles {
       if (this.timestampedAppends.length) {
         this.flushAppends(/* sync */ false);
       }
-    }, 60000);
+    }, APPENDS_FLUSH_MS);
 
     window.addEventListener('beforeunload', event => {
       this.sessionActivities.add('beforeunload');
@@ -112,6 +115,8 @@ export default class ClientChronicles {
     });
 
     this.prevHref        = window.location.href;
+    this.currentHref     = window.location.href;
+    this.prevPathname    = window.location.pathname;
     this.currentPathname = window.location.pathname;
     this.appendPage('enter');
     history.listen(historyEvent => {
@@ -120,12 +125,16 @@ export default class ClientChronicles {
           this.appendPage('leave');
         }
 
+        this.prevPathname = this.currentPathname;
         this.currentPathname = historyEvent.pathname;
         this.appendPage('enter');
       }
 
-      if (window.location.href !== this.prevHref) {
-        this.prevHref = window.location.href;
+      const currentUrl = new URL(this.currentHref);
+      // Ignore params in comparison of prev page.
+      if (`${window.location.origin}${window.location.pathname}` !== `${currentUrl.origin}${currentUrl.pathname}`) {
+        this.prevHref = this.currentHref;
+        this.currentHref = window.location.href;
       }
     });
 
@@ -268,9 +277,14 @@ export default class ClientChronicles {
 
     this.sessionId = sessionStorage.getItem('session_id');
 
-    // Maps entry types to the last timestamp they happened. This is required to properly
-    // assign flows to entries.
-    this.LastEntriesByType = new Map();
+    if (!reinit) {
+      // Maps entry types to the last timestamp they happened. This is required to properly
+      // assign flows to entries.
+      // We don't empty this for user getting back from inactive state so that events will
+      // have proper flows and start events. This may cause two events to have different
+      // session id.
+      this.lastEntriesByType = new Map();
+    }
 
     this.firstActivityTimestampMs = Date.now();
     this.lastActivityTimestampMs  = this.firstActivityTimestampMs;
@@ -278,7 +292,7 @@ export default class ClientChronicles {
   }
 
   lastEventType() {
-    return Array.from(this.LastEntriesByType.entries()).reduce((max, [eventType, { timestamp }]) => {
+    return Array.from(this.lastEntriesByType.entries()).reduce((max, [eventType, { timestamp }]) => {
       if (timestamp > max.timestamp) {
         return { eventType, timestamp };
       }
@@ -288,8 +302,8 @@ export default class ClientChronicles {
   }
 
   isPlayerPlaying() {
-    const play = this.LastEntriesByType.get('player-play');
-    const stop = this.LastEntriesByType.get('player-stop');
+    const play = this.lastEntriesByType.get('player-play');
+    const stop = this.lastEntriesByType.get('player-stop');
     return play && (!stop || play.timestamp > stop.timestamp);
   }
 
@@ -318,24 +332,29 @@ export default class ClientChronicles {
   }
 
   append(eventType, data, sync = false) {
-    data.ab = this.abTesting;
-    data.ui_language = this.uiLanguage;
+    data.ab               = this.abTesting;
+    data.ui_language      = this.uiLanguage;
     data.content_language = this.contentLanguage;
-    data.location = eventType.endsWith('page-leave') ? this.prevHref : window.location.href;
-    const eventId = ulid();
-    const nowTimestampMs = Date.now();
-    let flowId           = '';
-    let flowType         = '';
+    data.location         = PREV_HREF_EVENTS.includes(eventType) ? this.prevHref : window.location.href;
+    const eventId         = ulid();
+    const nowTimestampMs  = Date.now();
+    let flowId            = '';
+    let flowType          = '';
     if (FLOWS_BY_END.has(eventType)) {
       // Ending event of a flow.
       // 1. We don't set flowType for end, just for subflow (see else).
-      // 2. After use inactive, there might not be start event at all, so defaulting to empty string.
-      flowId = this.LastEntriesByType.get(FLOWS_BY_END.get(eventType).start)?.eventId ?? '';
+      // 2. We delete the start event so that other events won't use it as flow-event.
+      const { start } = FLOWS_BY_END.get(eventType);
+      const startEvent = this.lastEntriesByType.has(start);
+      if (startEvent) {
+        flowId = startEvent.eventId;
+        this.lastEntriesByType.delete(start);
+      }
     } else {
-      // Subflow.
+      // Subflow. Get the latest flow (matching current eventType) that has not ended.
       let latest = 0;
       (SUBFLOWS.get(eventType) || []).forEach(flowStart => {
-        const { timestamp = 0, eventId = null } = this.LastEntriesByType.get(flowStart) || {};
+        const { timestamp = 0, eventId = null } = this.lastEntriesByType.get(flowStart) || {};
         if (timestamp > latest) {
           latest   = timestamp;
           flowId   = eventId;
@@ -360,7 +379,7 @@ export default class ClientChronicles {
       append.client_id = this.userId;
     }
 
-    this.LastEntriesByType.set(eventType, { timestamp: nowTimestampMs, eventId });
+    this.lastEntriesByType.set(eventType, { timestamp: nowTimestampMs, eventId });
 
     this.timestampedAppends.push({ timestamp: nowTimestampMs, append });
     if (sync) {

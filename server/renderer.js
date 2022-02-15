@@ -11,6 +11,7 @@ import UAParser from 'ua-parser-js';
 import localStorage from 'mock-local-storage';
 import { HelmetProvider } from 'react-helmet-async';
 import { parse as cookieParse } from 'cookie';
+import crawlers from 'crawler-user-agents';
 
 import routes from '../src/routes';
 import { COOKIE_CONTENT_LANG, LANG_UI_LANGUAGES, LANG_UKRAINIAN } from '../src/helpers/consts';
@@ -148,6 +149,9 @@ export default function serverRender(req, res, next, htmlData) {
     const initialState = {
       settings: { ...settingsInitialState, language, contentLanguage: cookies[COOKIE_CONTENT_LANG], },
     };
+    if (isBot(req)) {
+      initialState.auth = { user: { name: 'bot' } };
+    }
 
     const store = createStore(initialState, history);
     store.dispatch(settings.setLanguage(language));
@@ -187,7 +191,8 @@ export default function serverRender(req, res, next, htmlData) {
             hrstart = process.hrtime();
 
             // actual render
-            const markup = ReactDOMServer.renderToString(<HelmetProvider context={helmetContext}><App i18n={context.i18n} store={store} history={history} deviceInfo={deviceInfo} /></HelmetProvider>);
+            const markup = ReactDOMServer.renderToString(
+              <HelmetProvider context={helmetContext}><App i18n={context.i18n} store={store} history={history} deviceInfo={deviceInfo} /></HelmetProvider>);
             hrend        = process.hrtime(hrstart);
             console.log('serverRender: renderToString %ds %dms', hrend[0], hrend[1] / 1000000);
             hrstart = process.hrtime();
@@ -243,4 +248,8 @@ export default function serverRender(req, res, next, htmlData) {
       })
       .catch(next);
   });
+}
+
+function isBot(req) {
+  return crawlers.some(entry => RegExp(entry.pattern).test(req.headers['user-agent']));
 }
