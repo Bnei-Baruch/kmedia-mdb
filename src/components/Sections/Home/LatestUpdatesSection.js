@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Card, Container, Feed, Grid, Segment } from 'semantic-ui-react';
 import { isEqual } from 'lodash';
@@ -7,7 +7,7 @@ import * as consts from '../../../helpers/consts';
 import * as shapes from '../../shapes';
 import Section from './Section';
 import LatestUpdatesCardList from './LatestUpdatesCardList'
-import {DeviceInfoContext} from "../../../helpers/app-contexts";
+import { DeviceInfoContext } from '../../../helpers/app-contexts';
 
 const itemsByContentType = list => list.filter(x => !!x).reduce((acc, val) => {
   if (!acc[val.content_type]) {
