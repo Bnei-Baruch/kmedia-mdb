@@ -4,9 +4,9 @@ import { Header } from 'semantic-ui-react';
 import Link from '../../Language/MultiLanguageLink';
 import { SectionLogo } from '../../../helpers/images';
 
-const Topic = ({ title, src, href }) => (
-  <Header size="large" as={Link} to={href}>
-    <SectionLogo name={src} />
+const Topic = ({ title, src, href, width, height, fontSize }) => (
+  <Header size={fontSize} as={Link} to={href}>
+    <SectionLogo name={src} width={width} height={height} />
     <br />
     {title}
   </Header>

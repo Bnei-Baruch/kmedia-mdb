@@ -64,9 +64,11 @@ const renderBlogPostsAndTweets = (latestBlogPosts, latestTweets, language, t) =>
   </div>;
 
 const renderActiveSections = (t, isMobileDevice) => {
+  const iconSize = isMobileDevice ? 50 : 100;
+  const fontSize = isMobileDevice ? "medium" : "large";
   const map = x =>
     <Grid.Column width={4} key={x.name} textAlign="center" className={!isMobileDevice && x.className}>
-      <Topic title={t(`nav.sidebar.${x.name}`)} src={x.name} href={`/${x.name}`} />
+      <Topic title={t(`nav.sidebar.${x.name}`)} src={x.name} href={`/${x.name}`} width={iconSize} height={iconSize} fontSize={fontSize} />
     </Grid.Column>;
 
   const sections = [

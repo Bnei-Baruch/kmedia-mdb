@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useContext, useState} from 'react';
 import { Swipeable } from 'react-swipeable';
 import { Button, Card } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
@@ -9,8 +9,13 @@ import LatestUpdate from './LatestUpdate';
 import { getSectionForTranslation } from '../../../helpers/utils';
 import Section from './Section';
 import { isLanguageRtl } from '../../../helpers/i18n-utils';
+import clsx from "clsx";
+import {DeviceInfoContext} from "../../../helpers/app-contexts";
 
-const LatestUpdatesCardList = ({ t, language, title, maxItems, cts, itemsByCT, itemsCount=4 }) => {
+const LatestUpdatesCardList = ({ t, language, title, maxItems, cts, itemsByCT, itemsCount=4, stackable = true }) => {
+
+  const { isMobileDevice }      = useContext(DeviceInfoContext);
+
 
   const [pageNo, setPageNo] = useState(0);
 
@@ -110,17 +115,28 @@ const LatestUpdatesCardList = ({ t, language, title, maxItems, cts, itemsByCT, i
   if (cardsArray.length == 0)
     initCardsArray();
 
+  const cardsRow = (
+    <Card.Group className={clsx({ 'latestUpdatesCardGroup' : !isMobileDevice })} itemsPerRow={itemsCount} stackable={stackable}>
+      {getPageCardArray()}
+      { !isMobileDevice && renderScrollLeft() }
+      { !isMobileDevice && renderScrollRight() }
+    </Card.Group>
+  );
+
+  const swipCards = !isMobileDevice ?
+    (
+      <Swipeable swipeProps={getSwipeProps()} >
+        { cardsRow }
+      </Swipeable>
+    )
+    : cardsRow;
+
+
   return <>
     <div className="cardsTitle">
       {title}
     </div>
-    <Swipeable swipeProps={getSwipeProps()} >
-      <Card.Group className="latestUpdatesCardGroup" itemsPerRow={itemsCount} stackable>
-        {getPageCardArray()}
-        {renderScrollLeft()}
-        {renderScrollRight()}
-      </Card.Group>
-    </Swipeable>
+    { swipCards }
   </>;
 }
 

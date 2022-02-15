@@ -36,6 +36,9 @@
           border: 2px solid #DBECF9;
           border-radius: 9px;
           z-index: 1;
+          @include mobile {
+            font-size: 1.5em;
+          }
         }
       }
     }
@@ -47,12 +50,21 @@
       border-top: 2px solid #DBECF9;
       padding: 0 55px;
 
+      @include mobile {
+        padding: 1em;
+      }
+
       .cardsTitle {
         width:100%;
-        padding: 2em 0 0.5em 1em;
+        padding: 2em 0 0 1em;
         font-size: 1.5em;
         font-weight: 700;
         color: #134D78;
+        @include mobile {
+          &:first-child {
+            padding: 2em 0 1em 1em;
+          }
+        }
       }
     }
   }
@@ -124,6 +136,9 @@
         border: 2px solid #DBECF9;
         border-radius: 9px;
         z-index: 1;
+        @include mobile {
+          font-size: 1.5em;
+        }
       }
     }
 
