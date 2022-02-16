@@ -71,6 +71,7 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
     if (nSelected !== selected && playlist?.items && playlist?.items[nSelected]) {
       history.push(`/${uiLanguage}${playlist.items[nSelected].shareUrl}`);
     }
+
     fetchFullPrevNext(nSelected);
   }, [history, playlist, selected, uiLanguage]);
 
@@ -80,11 +81,13 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
     if (nextCU && !fullUnitFetchedMap[nextCU.id]) {
       dispatch(actions.fetchUnit(nextCU.id));
     }
+
     const prevCU = playlist?.items[sel - 1]?.unit;
     if (prevCU && !fullUnitFetchedMap[prevCU.id]) {
       dispatch(actions.fetchUnit(prevCU.id));
     }
   };
+
   // we need to calculate the playlist here, so we can filter items out of recommended
   // playlist { collection, language, mediaType, items, groups };
   useEffect(() => {
