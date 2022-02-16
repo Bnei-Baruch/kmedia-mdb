@@ -214,4 +214,5 @@ const areEqual = (prevProps, nextProps) => {
   );
   return eq;
 };
+
 export default React.memo(PlaylistCollectionPage, areEqual);
