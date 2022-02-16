@@ -22,6 +22,8 @@ const PlaylistCollectionContainer = ({ cId, t, cuId }) => {
   const [nextLink, setNextLink] = useState(null);
   const [prevLink, setPrevLink] = useState(null);
 
+  const { id, cuIDs, content_units, content_type, film_date } = collection || false;
+
   const dispatch = useDispatch();
 
   const createPrevNextLinks = curIndex => {
@@ -35,70 +37,72 @@ const PlaylistCollectionContainer = ({ cId, t, cuId }) => {
   };
 
   useEffect(() => {
+    // Fetch full units data if needed.
+    if (cuIDs?.length > 0) {
+      const cusForFetch = cuIDs.filter(cuID => {
+        if (fullUnitFetchedMap[cuID] || wipMap.units[cuID] || errorMap.units[cuID])
+          return false;
+        const cu = content_units.find(x => x.id === cuID);
+        return !cu?.files;
+      });
+
+      if (cusForFetch?.length > 0) {
+        dispatch(actions.fetchUnitsByIDs({ id: cusForFetch, with_tags: true, with_files: true }));
+      }
+    }
+
+    //full fetch currently played unit
+    if (cuId && !fullUnitFetchedMap[cuId] && !wipMap.units[cuId] && !errorMap.units[cuId]) {
+      dispatch(actions.fetchUnit(cuId));
+    }
+
+  }, [dispatch, cuIDs, errorMap.units, wipMap.units]);
+
+  useEffect(() => {
     if (!Object.prototype.hasOwnProperty.call(wipMap.collections, cId)) {
       // never fetched as full so fetch now
       dispatch(actions.fetchCollection(cId));
     }
+  }, [cId, dispatch, collection, wipMap.collections]);
 
-    if (collection) {
-      const { id, cuIDs, content_units, content_type, film_date } = collection;
+  useEffect(() => {
 
-      // Fetch full units data if needed.
-      if (Array.isArray(cuIDs) && cuIDs.length > 0) {
-        const cusForFetch = cuIDs.filter(cuID => {
-          if (fullUnitFetchedMap[cuID] || wipMap.units[cuID] || errorMap.units[cuID])
-            return false;
-          const cu = content_units.find(x => x.id === cuID);
-          return !cu?.files;
-        });
+    // next prev links only for lessons
+    if (COLLECTION_DAILY_LESSONS.includes(content_type)) {
 
-        if (cusForFetch?.length > 0) {
-          dispatch(actions.fetchUnitsByIDs({ id: cusForFetch, with_tags: true, with_files: true }));
+      // empty or no window
+      if (!cWindow.data || cWindow.data.length === 0) {
+        if (!wipMap.cWindow[cId]) {
+          // no wip, go fetch
+          fetchWindow(id, film_date);
         }
-      }
-
-      //full fetch currently played unit
-      if (cuId && !fullUnitFetchedMap[cuId] && !wipMap.units[cuId] && !errorMap.units[cuId]) {
-        dispatch(actions.fetchUnit(cuId));
-      }
-
-      // next prev links only for lessons
-      if (COLLECTION_DAILY_LESSONS.includes(content_type)) {
-        const fetchWindow = () => {
-          const filmDate = moment.utc(film_date);
-          dispatch(actions.fetchWindow({
-            id,
-            start_date: filmDate.subtract(5, 'days').format(DATE_FORMAT),
-            end_date: filmDate.add(10, 'days').format(DATE_FORMAT)
-          }));
-        };
-
-        // empty or no window
-        if (!cWindow.data || cWindow.data.length === 0) {
-          if (!wipMap.cWindow[cId]) {
-            // no wip, go fetch
-            fetchWindow(id, film_date);
-          }
+      } else {
+        const { id: cWindowId, data } = cWindow;
+        const curIndex                = data.indexOf(cId);
+        if (cId !== cWindowId
+          && (curIndex <= 0 || curIndex === collections.length - 1)
+          && !wipMap.cWindow[cId]) {
+          // it's not our window,
+          // we're not in it (at least not in the middle, we could reuse it otherwise)
+          // and our window is not wip
+          fetchWindow(id, film_date);
         } else {
-          const { id: cWindowId, data } = cWindow;
-          const curIndex                = data.indexOf(cId);
-          // console.log('cWindow:', cWindowId, curIndex, collections);
-
-          if (cId !== cWindowId
-            && (curIndex <= 0 || curIndex === collections.length - 1)
-            && !wipMap.cWindow[cId]) {
-            // it's not our window,
-            // we're not in it (at least not in the middle, we could reuse it otherwise)
-            // and our window is not wip
-            fetchWindow(id, film_date);
-          } else {
-            // it's a good window, extract the previous and next links
-            createPrevNextLinks(curIndex);
-          }
+          // it's a good window, extract the previous and next links
+          createPrevNextLinks(curIndex);
         }
       }
+
     }
-  }, [cId, cWindow, collection, errorMap.units, wipMap]);
+  }, [cId, cWindow, content_type, wipMap.cWindow]);
+
+  const fetchWindow = () => {
+    const filmDate = moment.utc(film_date);
+    dispatch(actions.fetchWindow({
+      id,
+      start_date: filmDate.subtract(5, 'days').format(DATE_FORMAT),
+      end_date: filmDate.add(10, 'days').format(DATE_FORMAT)
+    }));
+  };
 
   useEffect(() => {
     if (collection?.cuIDs)
