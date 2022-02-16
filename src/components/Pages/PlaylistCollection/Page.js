@@ -18,7 +18,7 @@ import Recommended from '../Unit/widgets/Recommended/Main/Recommended';
 import Playlist from './widgets/Playlist/Playlist';
 import PlaylistHeader from './widgets/Playlist/PlaylistHeader';
 import AVPlaylistPlayer from '../../AVPlayer/AVPlaylistPlayer';
-import { actions, selectors } from '../../../redux/modules/mdb';
+import { selectors } from '../../../redux/modules/mdb';
 
 const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, cuId }) => {
   const location           = useLocation();
@@ -71,22 +71,7 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
     if (nSelected !== selected && playlist?.items && playlist?.items[nSelected]) {
       history.push(`/${uiLanguage}${playlist.items[nSelected].shareUrl}`);
     }
-
-    // fetchFullPrevNext(nSelected);
   }, [history, playlist, selected, uiLanguage]);
-
-  //for autoplay, we need full fetch next and prev CU
-  const fetchFullPrevNext = sel => {
-    const nextCU = playlist?.items[sel + 1]?.unit;
-    if (nextCU && !fullUnitFetchedMap[nextCU.id]) {
-      dispatch(actions.fetchUnit(nextCU.id));
-    }
-
-    const prevCU = playlist?.items[sel - 1]?.unit;
-    if (prevCU && !fullUnitFetchedMap[prevCU.id]) {
-      dispatch(actions.fetchUnit(prevCU.id));
-    }
-  };
 
   // we need to calculate the playlist here, so we can filter items out of recommended
   // playlist { collection, language, mediaType, items, groups };
@@ -113,7 +98,6 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
       setSelected(newSel);
       const newUnit = playlist?.items[newSel]?.unit;
       setUnit(newUnit);
-      //fetchFullPrevNext(newSel);
     }
   }, [playlist, cuId]);
 
