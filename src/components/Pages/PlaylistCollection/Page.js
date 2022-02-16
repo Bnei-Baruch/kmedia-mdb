@@ -1,6 +1,6 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { Container, Grid } from 'semantic-ui-react';
@@ -18,6 +18,7 @@ import Recommended from '../Unit/widgets/Recommended/Main/Recommended';
 import Playlist from './widgets/Playlist/Playlist';
 import PlaylistHeader from './widgets/Playlist/PlaylistHeader';
 import AVPlaylistPlayer from '../../AVPlayer/AVPlaylistPlayer';
+import { actions, selectors } from '../../../redux/modules/mdb';
 
 const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, cuId }) => {
   const location           = useLocation();
@@ -25,8 +26,9 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const chronicles         = useContext(ClientChroniclesContext);
 
-  const uiLanguage      = useSelector(state => settings.getLanguage(state.settings));
-  const contentLanguage = useSelector(state => settings.getContentLanguage(state.settings));
+  const uiLanguage         = useSelector(state => settings.getLanguage(state.settings));
+  const contentLanguage    = useSelector(state => settings.getContentLanguage(state.settings));
+  const fullUnitFetchedMap = useSelector(state => selectors.getFullUnitFetched(state.mdb));
 
   const embed                   = playerHelper.getEmbedFromQuery(location);
   const [unit, setUnit]         = useState(null);
@@ -34,6 +36,8 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
   const [playlist, setPlaylist] = useState(null);
 
   const prev = usePrevious({ unit, collection });
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (prev?.unit?.id !== unit?.id) {
@@ -67,8 +71,20 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
     if (nSelected !== selected && playlist?.items && playlist?.items[nSelected]) {
       history.push(`/${uiLanguage}${playlist.items[nSelected].shareUrl}`);
     }
+    fetchFullPrevNext(nSelected);
   }, [history, playlist, selected, uiLanguage]);
 
+  //for autoplay, we need full fetch next and prev CU
+  const fetchFullPrevNext = sel => {
+    const nextCU = playlist?.items[sel + 1]?.unit;
+    if (nextCU && !fullUnitFetchedMap[nextCU.id]) {
+      dispatch(actions.fetchUnit(nextCU.id));
+    }
+    const prevCU = playlist?.items[sel - 1]?.unit;
+    if (prevCU && !fullUnitFetchedMap[prevCU.id]) {
+      dispatch(actions.fetchUnit(prevCU.id));
+    }
+  };
   // we need to calculate the playlist here, so we can filter items out of recommended
   // playlist { collection, language, mediaType, items, groups };
   useEffect(() => {
@@ -79,20 +95,24 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
     const contentLang    = playerHelper.getLanguageFromQuery(location, playerLanguage);
 
     const nPlaylist = playerHelper.playlist(collection, mediaType, contentLang, uiLang);
-    setPlaylist(nPlaylist);
-
-    if (nPlaylist) {
-      const nIndex = nPlaylist.items.findIndex(i => i.unit.id === cuId);
-      if (nIndex !== -1) {
-        setSelected(nIndex);
-      }
+    if (
+      nPlaylist?.collection.id !== playlist?.collection.id ||
+      nPlaylist?.mediaType !== playlist?.mediaType ||
+      nPlaylist?.language !== playlist?.language
+    ) {
+      setPlaylist(nPlaylist);
     }
-  }, [collection, contentLanguage, location, playlist?.language, uiLanguage, cuId]);
+  }, [collection, contentLanguage, location, playlist, uiLanguage]);
 
   useEffect(() => {
-    const newUnit = playlist?.items[selected]?.unit;
-    setUnit(newUnit);
-  }, [playlist, selected]);
+    const newSel = playlist?.items.findIndex(i => i.unit.id === cuId);
+    if (!isNaN(newSel) && newSel !== -1) {
+      setSelected(newSel);
+      const newUnit = playlist?.items[newSel]?.unit;
+      setUnit(newUnit);
+      fetchFullPrevNext(newSel);
+    }
+  }, [playlist, cuId]);
 
   if (!collection || !Array.isArray(collection.content_units)) {
     return null;
@@ -107,7 +127,7 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
 
   // Don't recommend lesson preparation, skip to next unit.
   let recommendUnit = unit;
-  const ccuNames = collection?.ccuNames || {};
+  const ccuNames    = collection?.ccuNames || {};
   const isUnitPrep  = ccuNames?.[unit?.id] === '0' && Object.values(ccuNames).filter(value => value === '0').length === 1;
   if (isUnitPrep && Array.isArray(playlist?.items)) {
     const indexOfUnit = playlist.items.findIndex(item => item?.unit?.id === unit.id);
