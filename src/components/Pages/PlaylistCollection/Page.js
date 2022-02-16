@@ -72,7 +72,7 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
       history.push(`/${uiLanguage}${playlist.items[nSelected].shareUrl}`);
     }
 
-    fetchFullPrevNext(nSelected);
+    // fetchFullPrevNext(nSelected);
   }, [history, playlist, selected, uiLanguage]);
 
   //for autoplay, we need full fetch next and prev CU
@@ -113,7 +113,7 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
       setSelected(newSel);
       const newUnit = playlist?.items[newSel]?.unit;
       setUnit(newUnit);
-      fetchFullPrevNext(newSel);
+      //fetchFullPrevNext(newSel);
     }
   }, [playlist, cuId]);
 
@@ -205,10 +205,13 @@ PlaylistCollectionPage.propTypes = {
 const isEqualLink = (link1, link2) =>
   (!link1 && !link2) || link1 === link2;
 
-const areEqual = (prevProps, nextProps) =>
-  isEqual(prevProps.collection, nextProps.collection)
-  && (prevProps.cuId === nextProps.cuId)
-  && isEqualLink(prevProps.prevLink, nextProps.prevLink)
-  && isEqualLink(prevProps.nextLink, nextProps.nextLink);
-
+const areEqual = (prevProps, nextProps) => {
+  const eq = (
+    isEqual(prevProps.collection, nextProps.collection)
+    && (prevProps.cuId === nextProps.cuId)
+    && isEqualLink(prevProps.prevLink, nextProps.prevLink)
+    && isEqualLink(prevProps.nextLink, nextProps.nextLink)
+  );
+  return eq;
+};
 export default React.memo(PlaylistCollectionPage, areEqual);
