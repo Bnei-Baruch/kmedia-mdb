@@ -110,8 +110,8 @@ const PlaylistCollectionContainer = ({ cId, t, cuId }) => {
   }
 
   // We're wip / err if some request is wip / err
-  //don't wip for full fetch now played CU (cuID !== cuID) cause its rerender Page component
-  const wip = wipMap.collections[cId] || (Array.isArray(collection.cuIDs) && collection.cuIDs.some(cuID => cuID !== cuID && wipMap.units[cuID]));
+  //don't wip for full fetch now played CU (cuID !== cuId) cause its rerender Page component
+  const wip = wipMap.collections[cId] || (Array.isArray(collection.cuIDs) && collection.cuIDs.some(cuID => (cuID !== cuId) && wipMap.units[cuID]));
   let err   = errorMap.collections[cId];
   if (!err) {
     const cuIDwithError = Array.isArray(collection.cuIDs) && collection.cuIDs.find(cuID => errorMap.units[cuID]);

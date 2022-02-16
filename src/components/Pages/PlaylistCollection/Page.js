@@ -108,7 +108,7 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
   }, [collection, contentLanguage, location, playlist, uiLanguage]);
 
   useEffect(() => {
-    const newSel = playlist?.items.findIndex(i => i.unit.id === cuId);
+    const newSel = cuId ? playlist?.items.findIndex(i => i.unit.id === cuId) : playerHelper.getActivePartFromQuery(location);
     if (!isNaN(newSel) && newSel !== -1) {
       setSelected(newSel);
       const newUnit = playlist?.items[newSel]?.unit;

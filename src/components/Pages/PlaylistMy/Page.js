@@ -54,7 +54,6 @@ const PlaylistMyPage = ({ collection }) => {
     const mediaType   = playerHelper.getMediaTypeFromQuery(location, preferredMT);
     const nPlaylist   = playerHelper.playlistFromUnits(collection, mediaType, contentLanguage, language);
     setPlaylist(nPlaylist);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
