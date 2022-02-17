@@ -1,6 +1,6 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { Container, Grid } from 'semantic-ui-react';
@@ -18,7 +18,6 @@ import Recommended from '../Unit/widgets/Recommended/Main/Recommended';
 import Playlist from './widgets/Playlist/Playlist';
 import PlaylistHeader from './widgets/Playlist/PlaylistHeader';
 import AVPlaylistPlayer from '../../AVPlayer/AVPlaylistPlayer';
-import { selectors } from '../../../redux/modules/mdb';
 
 const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, cuId }) => {
   const location           = useLocation();
@@ -26,9 +25,8 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const chronicles         = useContext(ClientChroniclesContext);
 
-  const uiLanguage         = useSelector(state => settings.getLanguage(state.settings));
-  const contentLanguage    = useSelector(state => settings.getContentLanguage(state.settings));
-  const fullUnitFetchedMap = useSelector(state => selectors.getFullUnitFetched(state.mdb));
+  const uiLanguage      = useSelector(state => settings.getLanguage(state.settings));
+  const contentLanguage = useSelector(state => settings.getContentLanguage(state.settings));
 
   const embed                   = playerHelper.getEmbedFromQuery(location);
   const [unit, setUnit]         = useState(null);
@@ -36,8 +34,6 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
   const [playlist, setPlaylist] = useState(null);
 
   const prev = usePrevious({ unit, collection });
-
-  const dispatch = useDispatch();
 
   useEffect(() => {
     if (prev?.unit?.id !== unit?.id) {
@@ -189,14 +185,11 @@ PlaylistCollectionPage.propTypes = {
 const isEqualLink = (link1, link2) =>
   (!link1 && !link2) || link1 === link2;
 
-const areEqual = (prevProps, nextProps) => {
-  const eq = (
-    isEqual(prevProps.collection, nextProps.collection)
-    && (prevProps.cuId === nextProps.cuId)
-    && isEqualLink(prevProps.prevLink, nextProps.prevLink)
-    && isEqualLink(prevProps.nextLink, nextProps.nextLink)
-  );
-  return eq;
-};
+const areEqual = (prevProps, nextProps) => (
+  isEqual(prevProps.collection, nextProps.collection)
+  && (prevProps.cuId === nextProps.cuId)
+  && isEqualLink(prevProps.prevLink, nextProps.prevLink)
+  && isEqualLink(prevProps.nextLink, nextProps.nextLink)
+);
 
 export default React.memo(PlaylistCollectionPage, areEqual);
