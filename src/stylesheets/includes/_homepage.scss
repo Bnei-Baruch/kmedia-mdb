@@ -60,10 +60,11 @@
         font-size: 1.5em;
         font-weight: 700;
         color: #134D78;
+        margin-bottom:0.5em;
         @include mobile {
-          &:first-child {
-            padding: 2em 0 1em 1em;
-          }
+          font-size: 1em;
+          padding: 2em 0 0 0em;
+          margin-bottom:0;
         }
       }
     }

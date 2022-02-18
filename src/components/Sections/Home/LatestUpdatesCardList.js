@@ -116,7 +116,7 @@ const LatestUpdatesCardList = ({ t, language, title, maxItems, cts, itemsByCT, i
     initCardsArray();
 
   const cardsRow = (
-    <Card.Group className={clsx({ 'latestUpdatesCardGroup' : !isMobileDevice })} itemsPerRow={itemsCount} stackable={stackable}>
+    <Card.Group className={clsx({ 'latestUpdatesCardGroup' : !isMobileDevice, 'latestUpdatesCardGroupMobile': isMobileDevice })} itemsPerRow={itemsCount} stackable={stackable}>
       {getPageCardArray()}
       { !isMobileDevice && renderScrollLeft() }
       { !isMobileDevice && renderScrollRight() }
@@ -125,7 +125,7 @@ const LatestUpdatesCardList = ({ t, language, title, maxItems, cts, itemsByCT, i
 
   const swipCards = !isMobileDevice ?
     (
-      <Swipeable swipeProps={getSwipeProps()} >
+      <Swipeable swipeProps={getSwipeProps()}>
         { cardsRow }
       </Swipeable>
     )
