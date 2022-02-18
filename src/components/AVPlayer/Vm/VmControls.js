@@ -24,7 +24,7 @@ import {
 import { VmPrevNext } from './VmPrevNext';
 import { VmJump } from './VmJump';
 import VmAudioVideo from './VmAudioVideo';
-import { VmShareButton } from './VmShareButton';
+import { VmShareButton, VmSettingsButton } from './VmControlButton';
 
 const toPercentage = l => {
   const ret = 100 * l;
@@ -79,15 +79,16 @@ const getSeekBar = (sliceStart, sliceEnd, duration) => {
   );
 }
 
-const getControls = (onActivateSlice, isVideo, onSwitchAV) =>
+const getControls = (onActivateSlice, onActivateSettings, isVideo, onSwitchAV) =>
   <ControlGroup>
     <PlaybackControl />
     <VolumeControl className="volumeControl" />
     <TimeProgress hideTooltip />
     <ControlSpacer hideTooltip />
     <VmAudioVideo isVideo={isVideo} onSwitchAV={onSwitchAV} />
-    <SettingsControl />
+    {/* <SettingsControl /> */}
     { isVideo && getVideoControls()}
+    <VmSettingsButton onActivateSettings={onActivateSettings} />
     <VmShareButton onActivateSlice={onActivateSlice} />
   </ControlGroup>;
 
@@ -135,7 +136,7 @@ const buildMobileVideoControls = (sliceStart, sliceEnd, duration) => (
   </>
 );
 
-const buildDesktopVideoUi = (isVideo, showNextPrev, onPrev, onNext, onSwitchAV, onActivateSlice, sliceStart, sliceEnd, duration) => (
+const buildDesktopVideoUi = (isVideo, showNextPrev, onPrev, onNext, onSwitchAV, onActivateSlice, onActivateSettings, sliceStart, sliceEnd, duration) => (
   <>
     {/* video ui */}
     { isVideo &&
@@ -174,7 +175,7 @@ const buildDesktopVideoUi = (isVideo, showNextPrev, onPrev, onNext, onSwitchAV, 
 
     <Controls pin="bottomLeft" fullWidth hideOnMouseLeave={true} style={{ '--vm-control-spacing': 0, }}>
       {getSeekBar(sliceStart, sliceEnd, duration)}
-      {getControls(onActivateSlice, isVideo, onSwitchAV)}
+      {getControls(onActivateSlice, onActivateSettings, isVideo, onSwitchAV)}
     </Controls>
   </>
 );
@@ -192,7 +193,7 @@ const buildAudioControls = (onSwitchAV, onActivateSlice, sliceStart, sliceEnd, d
 export const VmControls = (
   {
     isMobile, isVideo,
-    onSwitchAV, onActivateSlice,
+    onSwitchAV, onActivateSlice, onActivateSettings,
     sliceStart, sliceEnd, duration,
     showNextPrev, onPrev, onNext,
   }
@@ -202,7 +203,7 @@ export const VmControls = (
   // if (isMobile) {
   //   controls = buildMobileVideoControls();
   // } else if (isVideo) {
-  controls = buildDesktopVideoUi(isVideo, showNextPrev, onPrev, onNext, onSwitchAV, onActivateSlice, sliceStart, sliceEnd, duration);
+  controls = buildDesktopVideoUi(isVideo, showNextPrev, onPrev, onNext, onSwitchAV, onActivateSlice, onActivateSettings, sliceStart, sliceEnd, duration);
   // } else {
   //   controls = buildAudioControls(showNextPrev, onPrev, onNext, onSwitchAV, onActivateSlice, sliceStart, sliceEnd, duration);
   // }
