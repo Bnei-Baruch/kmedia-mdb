@@ -190,14 +190,48 @@ $player-color: $black;
     }
 
     &-settings {
-      align-items: center;
-      align-self: stretch;
-      background: $darkWhite; // rgba($darkWhite, .3); //rgba($black, .3);
-      display: flex;
-      flex: 1 1 auto;
-      flex-direction: column;
-      padding: 0.5rem;
-      user-select: text;
+      background: $black;
+      padding: 0.5rem 1rem;
+      width: fit-content;
+
+      form {
+        width: 100%;
+        height: 100%;
+      }
+
+      .ui.form .inline.fields {
+        margin: 0 0 0.5em;
+
+        >label {
+          width: 10em !important;
+        }
+
+        .field,
+        .menu {
+          margin: 0.5em 0;
+        }
+      }
+
+      .ui.inverted.menu .active.item{
+        background-color: white;
+        color: $black !important;
+      }
+
+      .ui.radio.checkbox {
+        label {
+          width: 5em;
+        }
+      }
+
+      .ui.selection.dropdown {
+        min-width: 7em;
+        min-height: 1em;
+
+        input {
+          min-width: inherit;
+          min-height: inherit;
+        }
+      }
     }
   }
 }

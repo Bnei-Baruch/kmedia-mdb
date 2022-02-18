@@ -8,8 +8,7 @@ export const VmSettingsButton = ({ onActivateSettings }) => getControlButton('se
 const getControlButton = (iconName, onClick) =>
   (
     <Control
-      // disabled={!isPlaybackReady}
-      style={{ '--vm-control-scale': 0.5, margin: '0 -0.8rem', }}
+      style={{ '--vm-control-scale': 0.6, margin: '0' }}
       onClick={onClick}
     >
       <Icon name={iconName} />

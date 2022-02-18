@@ -1,20 +1,17 @@
 import React, { useState, useRef } from 'react'
-import { Form, Radio, Dropdown } from 'semantic-ui-react'
-import { usePlayerContext } from '@vime/react';
+import { Form, Dropdown, Menu } from 'semantic-ui-react'
+import { usePlayerContext, usePlayer } from '@vime/react';
 import { LANGUAGE_OPTIONS } from '../../../helpers/consts';
 
 const formatRate = rate => rate.toString() === '1' ? 'normal' : `${rate}x`;
 
-const VmBBSettings = ({ item, isVideo, onSwitchAV, videoQuality, onQualityChange, onLanguageChange, onExit }) => {
+const VmBBSettings = ({ item, isVideo, onSwitchAV, videoQuality, playbackRates, onQualityChange, onLanguageChange, onExit }) => {
   const ref = useRef(null);
+  const player = usePlayer(ref);
 
-  const [playbackRates]                 = usePlayerContext(ref, 'playbackRates', []);
   const [playbackRate, setPlaybackRate] = usePlayerContext(ref, 'playbackRate', 1);
 
   const videoQualities = Object.keys(item.byQuality);
-
-  // const [playbackQualities]             = usePlayerContext(ref, 'playbackQualities');
-  // const [playbackQuality, setPlaybackQuality] = usePlayerContext(ref, 'playbackQuality');
 
   const [av, setAV] = useState(isVideo ? 'video' : 'audio');
 
@@ -22,13 +19,14 @@ const VmBBSettings = ({ item, isVideo, onSwitchAV, videoQuality, onQualityChange
     .filter(x => item.availableLanguages.includes(x.value))
     .map(x => ({ value: x.value, text: x.name }));
 
-  const handlePlaybackRateSwitch = (e, { value }) => {
-    const rate = parseFloat(value);
+  const handlePlaybackRateSwitch = (e, data) => {
+    console.log('data:', data, playbackRates, player.canSetPlaybackRate())
+    const rate = parseFloat(data.name);
     setPlaybackRate(rate);
+    console.log('p', playbackRate, rate)
   };
 
   const handleVideoQuality = (e, { value }) => {
-    // setPlaybackQuality(value);
     onQualityChange(value);
   }
 
@@ -42,12 +40,56 @@ const VmBBSettings = ({ item, isVideo, onSwitchAV, videoQuality, onQualityChange
     onLanguageChange(value);
   }
 
-  console.log('videoQualities:', videoQualities, 'current video quality:', videoQuality)
+  console.log('playbackRates:', playbackRates, playbackRate)
 
   return (
     <div ref={ref} className="mediaplayer__onscreen-settings">
-      <Form>
-        <Form.Button icon="close" onClick={onExit} className="mediaplayer__onscreen-settings-back"></Form.Button>
+      <Form inverted>
+        <Form.Button icon="close" onClick={onExit}></Form.Button>
+        <Form.Group inline>
+          <label>Language</label>
+          <Dropdown
+            placeholder='Language'
+            floating
+            upward
+            search
+            selection
+            options={options}
+            onChange={handleLanguageChange}
+            value={item.language}
+          />
+        </Form.Group>
+        <Form.Group inline>
+          <label>Playback Rate</label>
+          <Menu color='black' inverted>
+            {
+              playbackRates.map(rate =>
+                <Menu.Item
+                  key={`rate ${  rate}`}
+                  name={rate.toString()}
+                  active={rate.toString() === playbackRate.toString()}
+                  onClick={handlePlaybackRateSwitch}
+                >
+                  {formatRate(rate)}
+                </Menu.Item>
+              )
+            }
+          </Menu>
+        </Form.Group>
+        <Form.Group inline>
+          <label>Quality</label>
+          {
+            videoQualities.map(quality =>
+              <Form.Radio
+                key={`quality-${quality}`}
+                label={quality}
+                value={quality}
+                checked={quality === videoQuality}
+                onChange={handleVideoQuality}
+              />
+            )
+          }
+        </Form.Group>
         <Form.Group inline>
           <label>Audio/Video</label>
           <Form.Radio
@@ -63,43 +105,6 @@ const VmBBSettings = ({ item, isVideo, onSwitchAV, videoQuality, onQualityChange
             onChange={handleAVSwitch}
           />
         </Form.Group>
-        <Form.Group inline>
-          <label>Playback Rate</label>
-          {
-            playbackRates.map(rate =>
-              <Form.Radio
-                key={`rate-${rate}`}
-                label={formatRate(rate)}
-                value={rate}
-                checked={rate === playbackRate}
-                onChange={handlePlaybackRateSwitch}
-              />
-            )
-          }
-        </Form.Group>
-        <Form.Group inline>
-          <label>Quality</label>
-          {
-            videoQualities.map(quality =>
-              <Radio
-                key={`quality-${quality}`}
-                label={quality}
-                value={quality}
-                checked={quality === videoQuality}
-                onChange={handleVideoQuality}
-              />
-            )
-          }
-        </Form.Group>
-        <Dropdown
-          placeholder='Language'
-          // fluid
-          search
-          selection
-          options={options}
-          onChange={handleLanguageChange}
-          value={item.language}
-        />
       </Form>
     </div>
   )

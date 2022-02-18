@@ -56,23 +56,23 @@ const VmPlayer = ({
   item,
   autoPlay,
   onMediaEditModeChange,
-
-
   showNextPrev = false,
   onPrev = null,
   onNext = null,
   t,
 }) => {
-  const player = useRef(null);
+  const ref = useRef(null);
   // const uiLanguage          = useSelector(state => settings.getLanguage(state.settings));
   // const contentLanguage               = useSelector(state => settings.getContentLanguage(state.settings));
 
-  const [duration]                    = usePlayerContext(player, 'duration', 0);
-  const [currentTime, setCurrentTime] = usePlayerContext(player, 'currentTime', 0);
-  const [playbackReady]               = usePlayerContext(player, 'playbackReady', false);
+  const [duration]                    = usePlayerContext(ref, 'duration', 0);
+  const [currentTime, setCurrentTime] = usePlayerContext(ref, 'currentTime', 0);
+  const [playbackReady]               = usePlayerContext(ref, 'playbackReady', false);
   // const [mediaType]                   = usePlayerContext(player, 'mediaType', undefined);
 
   // const [playbackQualities]             = usePlayerContext(player, 'playbackQualities');
+  const [playbackRates]                 = usePlayerContext(ref, 'playbackRates', [1]);
+  // const [playbackRate, setPlaybackRate] = usePlayerContext(ref, 'playbackRate', 1);
 
   const [source, setSource]             = useState({});
   const [isVideo, setIsVideo]           = useState(item.mediaType === MT_VIDEO);
@@ -82,12 +82,12 @@ const VmPlayer = ({
   const [settingsMode, setSettingsMode] = useState(false);
 
   const [sliceStart, setSliceStart] = useState(0);
-  const [sliceEnd, setSliceEnd]     = useState(player.duration);
+  const [sliceEnd, setSliceEnd]     = useState(ref.duration);
 
   const history = useHistory();
   const location = useLocation();
 
-  console.log(' videoQuality:', videoQuality);
+  console.log(' playbackRate:', playbackRates);
 
   useEffect(() => {
     const query = getQuery(location);
@@ -104,7 +104,7 @@ const VmPlayer = ({
 
   useEffect(() => {
     const { file, restoredVideoQuality } = chooseSource(item, t);
-    console.log('set video quality:', restoredVideoQuality, file)
+    // console.log('set video quality:', restoredVideoQuality, file)
 
     setVideoQuality(restoredVideoQuality);
     setSource(file?.src);
@@ -131,10 +131,8 @@ const VmPlayer = ({
   }, [setCurrentTime, sliceStart])
 
   useEffect(() => {
-    // console.log('currentTime, sliceEnd:', currentTime, sliceEnd)
-    if (player.current.playing && currentTime >= sliceEnd) {
-      console.log('pause')
-      player.current.pause();
+    if (ref.current.playing && currentTime >= sliceEnd) {
+      ref.current.pause();
     }
   }, [currentTime, sliceEnd]);
 
@@ -169,7 +167,7 @@ const VmPlayer = ({
   };
 
   return (
-    <Player ref={player} playsInline autoPiP
+    <Player ref={ref} playsInline autoPiP
       // theme="dark"
       icons="material"
       autoPlay={autoPlay}
@@ -205,11 +203,12 @@ const VmPlayer = ({
           </Controls>
         }
         { settingsMode &&
-          <Controls pin='center'>
+          <Controls pin='bottomRight'>
             <VmBBSettings
               item={item}
               isVideo={isVideo}
               videoQuality={videoQuality}
+              playbackRates={playbackRates}
               onQualityChange={onQualityChange}
               onSwitchAV={switchAV}
               onLanguageChange={handleLanguageChange}
