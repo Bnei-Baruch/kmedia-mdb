@@ -1,5 +1,4 @@
-import { useRef } from 'react';
-import { Control, usePlayerContext } from '@vime/react';
+import { Control } from '@vime/react';
 import { Icon } from 'semantic-ui-react';
 
 export const VmShareButton = ({ onActivateSlice }) => getControlButton('share alternate', onActivateSlice);

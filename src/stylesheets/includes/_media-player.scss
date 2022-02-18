@@ -188,6 +188,17 @@ $player-color: $black;
         }
       }
     }
+
+    &-settings {
+      align-items: center;
+      align-self: stretch;
+      background: $darkWhite; // rgba($darkWhite, .3); //rgba($black, .3);
+      display: flex;
+      flex: 1 1 auto;
+      flex-direction: column;
+      padding: 0.5rem;
+      user-select: text;
+    }
   }
 }
 

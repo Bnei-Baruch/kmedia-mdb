@@ -28,7 +28,6 @@ const AVBox = ({ unit, t }) => {
   const [mediaEditMode, setMediaEditMode]       = useState(0);
   const [isDropdownOpened, setIsDropdownOpened] = useState(false);
 
-  const handleChangeLanguage       = useCallback((e, language) => playerHelper.setLanguageInQuery(history, language), [history]);
   const handleMediaEditModeChange  = useCallback(newMediaEditMode => setMediaEditMode(newMediaEditMode), []);
   const handleDropdownOpenedChange = useCallback(dropdownOpened => setIsDropdownOpened(dropdownOpened), []);
 
@@ -41,11 +40,6 @@ const AVBox = ({ unit, t }) => {
     setPlayableItem(playItem => isEqual(playItem, newPlayableItem) ? playItem : newPlayableItem);
   }, [unit, location, uiLanguage, contentLanguage]);
 
-  const handleSwitchAV = useCallback(() => {
-    if (playableItem) {
-      playerHelper.switchAV(playableItem, history);
-    }
-  }, [history, playableItem]);
 
   const recommendedUnits = useRecommendedUnits(['default']);
 
@@ -79,13 +73,6 @@ const AVBox = ({ unit, t }) => {
         <AVMobileCheck
           autoPlay={true}
           item={playableItem}
-          preImageUrl={playableItem.preImageUrl}
-          onSwitchAV={handleSwitchAV}
-          languages={playableItem.availableLanguages}
-          uiLanguage={uiLanguage}
-          selectedLanguage={playableItem.language}
-          requestedLanguage={contentLanguage}
-          onLanguageChange={handleChangeLanguage}
           onMediaEditModeChange={handleMediaEditModeChange}
           onDropdownOpenedChange={handleDropdownOpenedChange}
           onFinish={onFinish}

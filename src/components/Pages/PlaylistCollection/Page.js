@@ -51,18 +51,6 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
     }
   }, [unit, prev?.unit, chronicles]);
 
-  const handleLanguageChange = useCallback((e, language) => {
-    playerHelper.setLanguageInQuery(history, language);
-  }, [history]);
-
-  const handleSwitchAV = useCallback(() => {
-    const selectedItem = playlist?.items[selected];
-
-    if (selectedItem) {
-      playerHelper.switchAV(selectedItem, history);
-    }
-  }, [history, playlist, selected]);
-
   const handleSelectedChange = useCallback(nSelected => {
     if (nSelected !== selected && playlist?.items && playlist?.items[nSelected]) {
       history.push(`/${uiLanguage}${playlist.items[nSelected].shareUrl}`);
@@ -95,7 +83,7 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
       const newUnit = playlist?.items[newSel]?.unit;
       setUnit(newUnit);
     }
-  }, [playlist, cuId]);
+  }, [playlist, cuId, location]);
 
   if (!collection || !Array.isArray(collection.content_units)) {
     return null;
@@ -145,8 +133,6 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
             items={items}
             selected={selected}
             onSelectedChange={handleSelectedChange}
-            onLanguageChange={handleLanguageChange}
-            onSwitchAV={handleSwitchAV}
           />
           {
             unit &&
@@ -170,8 +156,6 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
         items={items}
         selected={selected}
         onSelectedChange={handleSelectedChange}
-        onLanguageChange={handleLanguageChange}
-        onSwitchAV={handleSwitchAV}
       />
     </Container>;
 };
