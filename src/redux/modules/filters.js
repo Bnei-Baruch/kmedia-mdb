@@ -7,6 +7,7 @@ import { isEmpty } from '../../helpers/utils';
 /* Types */
 
 const SET_FILTER_VALUE           = 'Filters/SET_FILTER_VALUE';
+const SET_FILTER_VALUE_MULTI     = 'Filters/SET_FILTER_VALUE_MULTI';
 const RESET_FILTER               = 'Filters/RESET_FILTER';
 const RESET_NAMESPACE            = 'Filters/RESET_NAMESPACE';
 const SET_HYDRATED_FILTER_VALUES = 'Filters/SET_HYDRATED_FILTER_VALUES';
@@ -15,6 +16,7 @@ const FILTERS_HYDRATED           = 'Filters/FILTERS_HYDRATED';
 
 export const types = {
   SET_FILTER_VALUE,
+  SET_FILTER_VALUE_MULTI,
   RESET_FILTER,
   RESET_NAMESPACE,
   SET_HYDRATED_FILTER_VALUES,
@@ -26,6 +28,8 @@ export const types = {
 
 const setFilterValue          = createAction(SET_FILTER_VALUE,
   (namespace, name, value, index) => ({ namespace, name, value, index }));
+const setFilterValueMulti     = createAction(SET_FILTER_VALUE_MULTI,
+  (namespace, name, value, index) => ({ namespace, name, value, index }));
 const resetFilter             = createAction(RESET_FILTER,
   (namespace, name) => ({ namespace, name }));
 const resetNamespace          = createAction(RESET_NAMESPACE, namespace => ({ namespace }));
@@ -36,6 +40,7 @@ const filtersHydrated         = createAction(FILTERS_HYDRATED, namespace => ({ n
 
 export const actions = {
   setFilterValue,
+  setFilterValueMulti,
   resetFilter,
   resetNamespace,
   setHydratedFilterValues,
@@ -75,6 +80,15 @@ const $$setFilterValue = (draft, { namespace, name, value }) => {
       values: arrayObjectOrString && isEmpty(value) ? [] : [value],
     };
   });
+};
+
+const $$setFilterValueMulti = (draft, args) => {
+  const { namespace, name, value } = args;
+  if (!Array.isArray(value)) {
+    $$setFilterValue(draft, args);
+    return;
+  }
+  setFilterState(draft, namespace, name, () => ({ values: value }));
 };
 
 const $$resetFilter = (draft, { namespace, name }) => {
@@ -126,6 +140,7 @@ const $$filtersHydrated = (draft, { namespace }) => {
 
 export const reducer = handleActions({
   [SET_FILTER_VALUE]: $$setFilterValue,
+  [SET_FILTER_VALUE_MULTI]: $$setFilterValueMulti,
   [RESET_FILTER]: $$resetFilter,
   [RESET_NAMESPACE]: $$resetNamespace,
 
@@ -137,6 +152,8 @@ export const reducer = handleActions({
 /* Selectors */
 
 const getNSFilters = (state, namespace) => state[namespace] || {};
+
+const getFilterByName = (state, namespace, name) => state[namespace]?.[name];
 
 const getFilters = (state, namespace) => {
   const filters = state[namespace] ? state[namespace] : null;
@@ -157,4 +174,5 @@ export const selectors = {
   getNSFilters,
   getFilters,
   getIsHydrated,
+  getFilterByName,
 };

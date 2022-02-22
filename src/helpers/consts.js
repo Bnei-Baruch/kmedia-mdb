@@ -485,12 +485,12 @@ export const SUGGEST_LIMIT = 10;
 export const ES_RESULT_TYPE_SOURCES = 'sources';
 export const ES_RESULT_TYPE_TAGS    = 'tags';
 
-export const SEARCH_INTENT_INDEX_TOPIC       = 'intent-tag';
-export const SEARCH_INTENT_INDEX_SOURCE      = 'intent-source';
-export const SEARCH_INTENT_HIT_TYPE_PROGRAMS = 'programs';
-export const SEARCH_INTENT_HIT_TYPE_LESSONS  = 'lessons';
-export const SEARCH_INTENT_HIT_TYPE_SERIES_BY_TAG  = 'lessons_series_by_tag';
-export const SEARCH_INTENT_HIT_TYPE_SERIES_BY_SOURCE  = 'lessons_series_by_source';
+export const SEARCH_INTENT_INDEX_TOPIC               = 'intent-tag';
+export const SEARCH_INTENT_INDEX_SOURCE              = 'intent-source';
+export const SEARCH_INTENT_HIT_TYPE_PROGRAMS         = 'programs';
+export const SEARCH_INTENT_HIT_TYPE_LESSONS          = 'lessons';
+export const SEARCH_INTENT_HIT_TYPE_SERIES_BY_TAG    = 'lessons_series_by_tag';
+export const SEARCH_INTENT_HIT_TYPE_SERIES_BY_SOURCE = 'lessons_series_by_source';
 
 export const SEARCH_INTENT_HIT_TYPES = [SEARCH_INTENT_HIT_TYPE_PROGRAMS, SEARCH_INTENT_HIT_TYPE_LESSONS];
 
@@ -576,3 +576,5 @@ export const SECTIONS_LINK_BY_CU_CONTENT_TYPE = {
   [CT_ARTICLE]: 'publications/articles',
 };
 
+export const FN_SOURCES_MULTI = 'sources-filter-multi';
+export const FN_TOPICS_MULTI        = 'topics-filter';

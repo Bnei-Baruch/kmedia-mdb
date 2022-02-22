@@ -14,6 +14,7 @@ import WipErr from '../../shared/WipErr/WipErr';
 import Link from '../../Language/MultiLanguageLink';
 import TopN from './TopN';
 import HelmetsBasic from '../../shared/Helmets/Basic';
+import SourcesFilterContainer from '../../FiltersAside/SourcesFilter/SourcesFilterContainer';
 
 const TOP_N_ITEMS = 5;
 
@@ -86,7 +87,10 @@ const TopicPage = ({ t }) => {
         <Container className="padded">
           <Breadcrumb icon={breadCrumbIcon} sections={breadCrumbSections} size="large" />
           <Divider hidden />
-          <Grid doubling columns={sections.length}>
+          <Grid doubling columns={sections.length + 1}>
+            <Grid.Column key={'filter'}>
+              <SourcesFilterContainer namespace={`tag_${id}`} baseParams={{ tag: id }} />
+            </Grid.Column>
             {
               sections.map(s => {
                 const sectionUnits = getSectionUnits(s);
