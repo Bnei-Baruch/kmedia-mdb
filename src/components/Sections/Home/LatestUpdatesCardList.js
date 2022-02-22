@@ -12,10 +12,9 @@ import { isLanguageRtl } from '../../../helpers/i18n-utils';
 import clsx from 'clsx';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 
-const LatestUpdatesCardList = ({ t, language, title, maxItems, cts, itemsByCT, itemsCount=4, stackable = true }) => {
+const LatestUpdatesCardList = ({ t, language, title, maxItems, cts, itemsByCT, itemsPerRow = 4, itemsCount= 4, stackable = true }) => {
 
   const { isMobileDevice }      = useContext(DeviceInfoContext);
-
 
   const [pageNo, setPageNo] = useState(0);
 
@@ -116,7 +115,7 @@ const LatestUpdatesCardList = ({ t, language, title, maxItems, cts, itemsByCT, i
     initCardsArray();
 
   const cardsRow = (
-    <Card.Group className={clsx({ 'latestUpdatesCardGroup' : !isMobileDevice, 'latestUpdatesCardGroupMobile': isMobileDevice })} itemsPerRow={itemsCount} stackable={stackable}>
+    <Card.Group className={clsx({ 'latestUpdatesCardGroup' : !isMobileDevice, 'latestUpdatesCardGroupMobile': isMobileDevice })} itemsPerRow={itemsPerRow} stackable={stackable}>
       {getPageCardArray()}
       { !isMobileDevice && renderScrollLeft() }
       { !isMobileDevice && renderScrollRight() }

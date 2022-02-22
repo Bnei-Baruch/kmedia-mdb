@@ -57,29 +57,29 @@ const LatestUpdatesSection = ({ latestItems = [], t, language }) => {
   // row #4: CT_ARTICLE x 4
   // row #5: CT_CONGRESS, CT_FRIENDS_GATHERING, CT_FRIENDS_GATHERING, CT_MEAL
 
-  const itemsCount = isMobileDevice ? 2 : 4;
+  const itemsPerRow = isMobileDevice ? 2 : 4;
 
   return (
     <div className="homepage__thumbnails homepage__section">
       <Container className="padded horizontally">
         <Section title={t('home.latest-updates.new-on-the-site')} className={'latestUpdateSection'} computer={13}>
           <div className="homepage__section__latestUpdates">
-            <LatestUpdatesCardList t={t} language={language} title={t(`events.collection.playlist.lessons`)} itemsByCT={itemsByCT} maxItems={20} itemsCount={itemsCount} stackable={!isMobileDevice} cts={[
+            <LatestUpdatesCardList t={t} language={language} title={t(`events.collection.playlist.lessons`)} itemsByCT={itemsByCT} maxItems={20} itemsPerRow={itemsPerRow} stackable={!isMobileDevice} cts={[
               { ct:consts.CT_DAILY_LESSON, itemsPerPage:2 },
               { ct:consts.CT_WOMEN_LESSON, daysBack: 30 },
               { ct:consts.CT_VIRTUAL_LESSON, daysBack: 30 },
               { ct:consts.CT_LESSONS_SERIES }]} />
 
-            <LatestUpdatesCardList  t={t} language={language} title={t(`programs.header.text`)} itemsByCT={itemsByCT} maxItems={20} itemsCount={itemsCount} stackable={!isMobileDevice} cts={[
+            <LatestUpdatesCardList  t={t} language={language} title={t(`programs.header.text`)} itemsByCT={itemsByCT} maxItems={20} itemsPerRow={itemsPerRow} stackable={!isMobileDevice} cts={[
               { ct:consts.CT_VIDEO_PROGRAM_CHAPTER }]}  />
 
-            <LatestUpdatesCardList  t={t} language={language} title={t(`programs.tabs.clips`)} itemsByCT={itemsByCT} maxItems={20} itemsCount={itemsCount} stackable={!isMobileDevice} cts={[
+            <LatestUpdatesCardList  t={t} language={language} title={t(`programs.tabs.clips`)} itemsByCT={itemsByCT} maxItems={20} itemsPerRow={itemsPerRow} stackable={!isMobileDevice} cts={[
               { ct:consts.CT_CLIP }]} />
 
-            <LatestUpdatesCardList  t={t} language={language} title={t(`publications.header.text`)} itemsByCT={itemsByCT} maxItems={20} itemsCount={itemsCount} stackable={!isMobileDevice} cts={[
+            <LatestUpdatesCardList  t={t} language={language} title={t(`publications.header.text`)} itemsByCT={itemsByCT} maxItems={20} itemsPerRow={itemsPerRow} stackable={!isMobileDevice} cts={[
               { ct:consts.CT_ARTICLE }]} />
 
-            <LatestUpdatesCardList  t={t} language={language} title={t(`nav.sidebar.events`)} itemsByCT={itemsByCT} maxItems={20} itemsCount={itemsCount} stackable={!isMobileDevice} cts={[
+            <LatestUpdatesCardList  t={t} language={language} title={t(`nav.sidebar.events`)} itemsByCT={itemsByCT} maxItems={20} itemsPerRow={itemsPerRow} stackable={!isMobileDevice} cts={[
               { ct:consts.CT_CONGRESS },
               { ct:consts.CT_FRIENDS_GATHERING },
               { ct:consts.CT_MEAL },
