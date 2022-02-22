@@ -45,7 +45,7 @@ const onFetchStats = (draft, { namespace }) => {
 };
 
 const onFetchStatsSuccess = (draft, { data: { sources }, namespace, isPrepare }) => {
-  let acc = draft.sources[namespace];
+  const acc = draft.sources[namespace];
 
   if (isPrepare) {
     acc.tree = [];
@@ -59,6 +59,7 @@ const onFetchStatsSuccess = (draft, { data: { sources }, namespace, isPrepare })
       acc.byId[id] = sources[id] || 0;
     });
   }
+
   draft.sources[namespace] = { ...acc, wip: false, err: null };
   return draft;
 };

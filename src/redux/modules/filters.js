@@ -88,6 +88,7 @@ const $$setFilterValueMulti = (draft, args) => {
     $$setFilterValue(draft, args);
     return;
   }
+
   setFilterState(draft, namespace, name, () => ({ values: value }));
 };
 

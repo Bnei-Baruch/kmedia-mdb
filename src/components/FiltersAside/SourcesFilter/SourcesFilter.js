@@ -6,18 +6,17 @@ import { useMemo } from 'react';
 import SourcesItem from './SourcesItem';
 import { List } from 'semantic-ui-react';
 
-const treeItems = (items, getPath) => {
-  return items.map(getPath)
-    .flat()
-    .filter(x => !!x)
-    .reduce((acc, x) => {
-      if (!acc.byId[x.id]) {
-        acc.byId[x.id] = x.id;
-        acc.uniq.push(x.id);
-      }
-      return acc;
-    }, { byId: {}, uniq: [] }).uniq;
-};
+const treeItems = (items, getPath) => items.map(getPath)
+  .flat()
+  .filter(x => !!x)
+  .reduce((acc, x) => {
+    if (!acc.byId[x.id]) {
+      acc.byId[x.id] = x.id;
+      acc.uniq.push(x.id);
+    }
+
+    return acc;
+  }, { byId: {}, uniq: [] }).uniq;
 
 const SourcesFilter = ({ namespace }) => {
   const baseItems = useSelector(state => selectors.getTree(state.filtersAside, namespace, FN_SOURCES_MULTI));

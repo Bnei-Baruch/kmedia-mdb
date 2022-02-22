@@ -15,7 +15,7 @@ const SourcesItem = ({ namespace, id, baseItems }) => {
   const dispatch = useDispatch();
 
   const handleSelect = (e, { checked }) => {
-    let sel = [id, ...selected].filter(x => checked || id !== x);
+    const sel = [id, ...selected].filter(x => checked || id !== x);
     dispatch(actions.setFilterValueMulti(namespace, FN_SOURCES_MULTI, sel));
   };
 
