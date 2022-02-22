@@ -21,10 +21,8 @@ import {
   TimeProgress,
   VolumeControl,
 } from '@vime/react';
-import { VmPrevNext } from './VmPrevNext';
 import { VmJump } from './VmJump';
-import VmAudioVideo from './VmAudioVideo';
-import { VmShareButton, VmSettingsButton } from './VmControlButton';
+import {VmAudioVideo, VmPrevNext, VmSettingsButton, VmShareButton } from './VmControlButton';
 
 const toPercentage = l => {
   const ret = 100 * l;
@@ -36,7 +34,6 @@ const toPercentage = l => {
 };
 
 const getSeekBar = (sliceStart, sliceEnd, duration) => {
-  // console.log('scrubber:', sliceStart, sliceEnd, duration)
   const isSlice = isNumber(sliceStart) && isNumber(sliceEnd);
 
   if (isSlice) {
@@ -88,8 +85,8 @@ const getControls = (onActivateSlice, onActivateSettings, isVideo, onSwitchAV) =
     <VmAudioVideo isVideo={isVideo} onSwitchAV={onSwitchAV} />
     {/* <SettingsControl /> */}
     { isVideo && getVideoControls()}
-    <VmSettingsButton onActivateSettings={onActivateSettings} />
-    <VmShareButton onActivateSlice={onActivateSlice} />
+    <VmSettingsButton onClick={onActivateSettings} />
+    <VmShareButton onClick={onActivateSlice} />
   </ControlGroup>;
 
 
@@ -157,23 +154,11 @@ const buildDesktopVideoUi = (isVideo, showNextPrev, onPrev, onNext, onSwitchAV, 
       { showNextPrev && <VmPrevNext isPrev onClick={onPrev} /> }
       <VmJump isBack={true} />
       <ControlSpacer />
-      {/* <PlaybackControl
-        hideTooltip
-        style={{
-          '--vm-control-scale': 1.3,
-          backgroundColor: 'rgba(24, 26, 27, 0.9)',
-          color: 'rgb(214, 211, 205)',
-          border: '3px solid rgb(214, 211, 205)',
-          borderRadius: '50%',
-          padding: '4px',
-        }}
-      />
-      <ControlSpacer /> */}
       <VmJump isBack={false} />
       { showNextPrev && <VmPrevNext isPrev={false} onClick={onNext} /> }
     </Controls>
 
-    <Controls pin="bottomLeft" fullWidth hideOnMouseLeave={true} style={{ '--vm-control-spacing': 0, }}>
+    <Controls pin="bottomLeft" fullWidth hideOnMouseLeave={true}>
       {getSeekBar(sliceStart, sliceEnd, duration)}
       {getControls(onActivateSlice, onActivateSettings, isVideo, onSwitchAV)}
     </Controls>

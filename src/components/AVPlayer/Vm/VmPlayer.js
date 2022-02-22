@@ -87,8 +87,6 @@ const VmPlayer = ({
   const history = useHistory();
   const location = useLocation();
 
-  console.log(' playbackRate:', playbackRates);
-
   useEffect(() => {
     const query = getQuery(location);
     const { sstart, send } = query
