@@ -338,16 +338,9 @@ $player-color: $black;
 
 }
 
-// vm-player {
-//   // --vm-control-scale: 0.7;
-//   // --vm-controls-spacing: 0;
-//   // --vm-controls-padding: 0.5;
-//   // margin: 0.5em;
-// }
-
 vm-player[mobile] {
   /* Add styles here for when the player is loaded on a mobile device. */
-  --vm-control-scale: 0.7;
+  --vm-control-scale: 0.9;
   --vm-controls-spacing: 0;
-  --vm-controls-padding: 0.5;
+  --vm-controls-padding: 5px;
 }

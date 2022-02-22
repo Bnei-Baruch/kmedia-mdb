@@ -22,7 +22,7 @@ import {
   VolumeControl,
 } from '@vime/react';
 import { VmJump } from './VmJump';
-import {VmAudioVideo, VmPrevNext, VmSettingsButton, VmShareButton } from './VmControlButton';
+import { VmAudioVideo, VmPrevNext, VmSettingsButton, VmShareButton } from './VmControlButton';
 
 const toPercentage = l => {
   const ret = 100 * l;
