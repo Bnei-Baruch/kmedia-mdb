@@ -1892,6 +1892,12 @@
 .cu_item {
   -webkit-tap-highlight-color: transparent;
 
+  @include mobile {
+    .content {
+      font-size: 1.3em !important;
+    }
+  }
+
   .cu_item_img {
     position: relative;
     width: 100%;
@@ -1965,7 +1971,7 @@
 }
 
 .cu_info_description {
-  margin: 1.5em 1em;
+  margin: 0 1em 1em 0.5em;
 
   & > span {
     display: inline-block;
@@ -2456,10 +2462,9 @@
 .latestUpdatesCardGroup {
   padding-top:0 !important;
   position: relative;
-  min-height: 300px;
 
   .card.cu_item {
-    min-height: 275px;
+
 
     .cu_item_img {
       min-height: 124px;

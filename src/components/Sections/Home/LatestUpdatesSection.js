@@ -57,7 +57,7 @@ const LatestUpdatesSection = ({ latestItems = [], t, language }) => {
   // row #4: CT_ARTICLE x 4
   // row #5: CT_CONGRESS, CT_FRIENDS_GATHERING, CT_FRIENDS_GATHERING, CT_MEAL
 
-  const itemsPerRow = isMobileDevice ? 2 : 4;
+  const itemsPerRow = isMobileDevice ? 1 : 4;
 
   return (
     <div className="homepage__thumbnails homepage__section">

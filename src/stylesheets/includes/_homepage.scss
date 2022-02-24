@@ -56,13 +56,13 @@
 
       .cardsTitle {
         width:100%;
-        padding: 2em 0 0 1em;
+        padding: 2em 0 0 0;
         font-size: 1.5em;
         font-weight: 700;
         color: #134D78;
         margin-bottom:0.5em;
         @include mobile {
-          font-size: 1em;
+          font-size: 1.5em;
           padding: 2em 0 0 0em;
           margin-bottom:0;
         }

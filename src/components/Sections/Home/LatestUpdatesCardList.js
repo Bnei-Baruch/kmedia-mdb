@@ -56,8 +56,6 @@ const LatestUpdatesCardList = ({ t, language, title, maxItems, cts, itemsByCT, i
         }
       });
     }
-
-    ;
     setCardsArray(cards);
   };
 

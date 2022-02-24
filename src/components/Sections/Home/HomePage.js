@@ -161,9 +161,7 @@ const HomePage = ({
       {renderSearchBar(location)}
       {renderLatestLessonAndBanner(latestLesson, banner)}
       {renderActiveSectionsGrid(t, isMobileDevice)}
-
       <LatestUpdatesSection latestItems={latestItems} t={t} language={language} />
-
       {renderBlogPostsAndTweets(latestBlogPosts, latestTweets, language, t)}
     </div>
   );

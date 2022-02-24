@@ -37,6 +37,8 @@ const CardTemplate = ({ unit, language, withCCUInfo, link, ccu, description, chi
     </div>
   ) : null;
 
+  const trimText = (title, len = 150) => title.length < len ? title : title.substr(0, title.lastIndexOf(' ', len)) + '...';
+
   return (
     <Card raised className="cu_item" as={Link} to={link}>
       <div className="cu_item_img">
@@ -48,7 +50,7 @@ const CardTemplate = ({ unit, language, withCCUInfo, link, ccu, description, chi
         </Container>
       </div>
       <Card.Content>
-        <Card.Description content={unit.name} />
+        <Card.Description content={trimText(unit.name)} />
       </Card.Content>
       <Card.Meta className={`cu_info_description ${dir}`}>
         {description.map((d, i) => (<span key={i}>{d}</span>))}
