@@ -190,6 +190,43 @@ $player-color: $black;
     }
 
     &-settings {
+      @include mobile {
+        padding: 0.5em 0 0;
+        margin: 0;
+
+        .ui.form {
+          display: flex;
+          flex: 1 1 auto;
+          flex-direction: row;
+          flex-wrap: wrap;
+        }
+
+        .ui.button {
+          padding: 0.2em;
+          margin: 0;
+        }
+
+        .ui.inverted.menu .item {
+          padding: 0.5em;
+          min-width: 3em;
+        }
+
+        .ui.selection.dropdown {
+          min-width: 6em !important;
+          min-height: 0.5em !important;
+          padding: 0.5em 0.7em;
+        }
+
+        .ui.form .inline.fields {
+          margin: 0.5em 0 !important;
+
+          >label {
+            margin: 0 0.2em;
+            // width: max-content !important;
+          }
+        }
+      }
+
       background: $black;
       padding: 0.5rem 1rem;
       width: fit-content;
@@ -203,7 +240,7 @@ $player-color: $black;
         margin: 0 0 0.5em;
 
         >label {
-          width: 10em !important;
+          width: 10em;
         }
 
         .field,

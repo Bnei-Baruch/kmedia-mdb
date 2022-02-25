@@ -1,11 +1,14 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useContext } from 'react'
+
 import { Form, Dropdown, Menu } from 'semantic-ui-react'
 import { usePlayerContext, usePlayer } from '@vime/react';
 import { LANGUAGE_OPTIONS } from '../../../helpers/consts';
+import { DeviceInfoContext } from '../../../helpers/app-contexts';
 
 const formatRate = rate => rate.toString() === '1' ? 'normal' : `${rate}x`;
 
 const VmBBSettings = ({ item, isVideo, onSwitchAV, videoQuality, playbackRates, onQualityChange, onLanguageChange, onExit }) => {
+  const { isMobileDevice } = useContext(DeviceInfoContext);
   const ref = useRef(null);
   const player = usePlayer(ref);
 
@@ -40,7 +43,7 @@ const VmBBSettings = ({ item, isVideo, onSwitchAV, videoQuality, playbackRates, 
     onLanguageChange(value);
   }
 
-  console.log('playbackRates:', playbackRates, playbackRate)
+  // console.log('playbackRates:', playbackRates, playbackRate)
 
   return (
     <div ref={ref} className="mediaplayer__onscreen-settings">
@@ -51,7 +54,7 @@ const VmBBSettings = ({ item, isVideo, onSwitchAV, videoQuality, playbackRates, 
           <Dropdown
             placeholder='Language'
             floating
-            upward
+            upward={!isMobileDevice}
             search
             selection
             options={options}

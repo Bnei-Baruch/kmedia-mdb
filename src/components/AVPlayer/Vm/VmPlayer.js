@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import { useLocation, useHistory } from 'react-router-dom';
@@ -6,6 +6,7 @@ import { useLocation, useHistory } from 'react-router-dom';
 import { Player, usePlayerContext, Ui, Controls } from '@vime/react';
 
 import * as shapes from '../../shapes';
+import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import ClientChronicles from '../../../helpers/clientChronicles';
 import playerHelper from '../../../helpers/player';
 import { isEmpty } from '../../../helpers/utils';
@@ -61,6 +62,7 @@ const VmPlayer = ({
   onNext = null,
   t,
 }) => {
+  const { isMobileDevice } = useContext(DeviceInfoContext);
   const ref = useRef(null);
   // const uiLanguage          = useSelector(state => settings.getLanguage(state.settings));
   // const contentLanguage               = useSelector(state => settings.getContentLanguage(state.settings));
@@ -146,6 +148,8 @@ const VmPlayer = ({
       return;
     }
 
+    console.log('onQualityChange to', quality, item)
+
     setSwitchCurrentTime(currentTime);
     playerHelper.persistPreferredVideoSize(quality);
     setVideoQuality(quality);
@@ -164,12 +168,27 @@ const VmPlayer = ({
     playerHelper.setLanguageInQuery(history, lang);
   };
 
+  const onVmReady = (e, data) => {
+    console.log('onVmReady:', e, data)
+  }
+
+  const onVmPlaybackQualityChange = (e, data) => {
+    console.log('onVmPlaybackQualityChange', e, data);
+  }
+
+  const onVmCurrentSrcChange = (e, data) => {
+    console.log('onVmCurrentSrcChange:', e, data)
+  }
+
   return (
     <Player ref={ref} playsInline autoPiP
       // theme="dark"
       icons="material"
       autoPlay={autoPlay}
       debug={true}
+      vmReady={onVmReady}
+      vmPlaybackQualityChange={onVmPlaybackQualityChange}
+      vmCurrentSrcChange={onVmCurrentSrcChange}
     >
       <VmProvider
         isVideo={isVideo}
@@ -201,7 +220,7 @@ const VmPlayer = ({
           </Controls>
         }
         { settingsMode &&
-          <Controls pin='bottomRight'>
+          <Controls pin='bottomRight' fullWidth fullHeight={isMobileDevice} justify='space-evenly'>
             <VmBBSettings
               item={item}
               isVideo={isVideo}
