@@ -166,27 +166,13 @@ const VmPlayer = ({
     playerHelper.setLanguageInQuery(history, lang);
   };
 
-  const onVmReady = (e, data) => {
-    console.log('onVmReady:', e, data)
-  }
-
-  const onVmPlaybackQualityChange = (e, data) => {
-    console.log('onVmPlaybackQualityChange', e, data);
-  }
-
-  const onVmCurrentSrcChange = (e, data) => {
-    console.log('onVmCurrentSrcChange:', e, data)
-  }
-
   return (
-    <Player ref={ref} playsInline autoPiP
+    <Player ref={ref}
+      playsInline={true}
       // theme="dark"
       icons="material"
       autoPlay={autoPlay}
       debug={true}
-      vmReady={onVmReady}
-      vmPlaybackQualityChange={onVmPlaybackQualityChange}
-      vmCurrentSrcChange={onVmCurrentSrcChange}
     >
       <VmProvider
         isVideo={isVideo}
