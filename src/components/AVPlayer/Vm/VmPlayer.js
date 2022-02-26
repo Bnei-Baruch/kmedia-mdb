@@ -35,7 +35,7 @@ const chooseSource = (item, t) => {
   let restoredVideoQuality = playerHelper.restorePreferredVideoSize();
   let file      = item.byQuality[restoredVideoQuality];
 
-  console.log('chooseSource:', item, ' file:', file, ' restore videoSize:', restoredVideoQuality)
+  // console.log('chooseSource:', item, ' file:', file, ' restore videoSize:', restoredVideoQuality)
 
   // if we can't find the user preferred video size we fallback.
   // first we try to go down from where he was.
@@ -56,6 +56,7 @@ const VmPlayer = ({
   item,
   autoPlay,
   onMediaEditModeChange,
+  onFinish,
   showNextPrev = false,
   onPrev = null,
   onNext = null,
@@ -166,6 +167,10 @@ const VmPlayer = ({
     playerHelper.setLanguageInQuery(history, lang);
   };
 
+  const handlePlaybackEnded = e => {
+    onFinish()
+  }
+
   return (
     <Player ref={ref}
       playsInline={true}
@@ -173,6 +178,7 @@ const VmPlayer = ({
       icons="material"
       autoPlay={autoPlay}
       debug={true}
+      onVmPlaybackEnded={handlePlaybackEnded}
     >
       <VmProvider
         isVideo={isVideo}
@@ -231,8 +237,8 @@ VmPlayer.propTypes = {
   showNextPrev: PropTypes.bool,
   onPrev: PropTypes.func,
   onNext: PropTypes.func,
-  onPlay: PropTypes.func,
-  onPause: PropTypes.func,
+  // onPlay: PropTypes.func,
+  // onPause: PropTypes.func,
   onFinish: PropTypes.func,
 
   onMediaEditModeChange: PropTypes.func.isRequired,
