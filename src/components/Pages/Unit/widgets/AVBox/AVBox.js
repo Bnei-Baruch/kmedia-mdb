@@ -13,7 +13,7 @@ import { isEmpty } from '../../../../../helpers/utils';
 import { DeviceInfoContext } from '../../../../../helpers/app-contexts';
 import { canonicalLink } from '../../../../../helpers/links';
 import * as shapes from '../../../../shapes';
-import AVMobileCheck from '../../../../AVPlayer/AVMobileCheck';
+import VmPlayer from '../../../../AVPlayer/Vm/VmPlayer';
 import useRecommendedUnits from '../Recommended/Main/UseRecommendedUnits';
 
 const AVBox = ({ unit, t }) => {
@@ -70,7 +70,7 @@ const AVBox = ({ unit, t }) => {
     })}
     >
       <div className="avbox__media-wrapper">
-        <AVMobileCheck
+        <VmPlayer
           autoPlay={true}
           item={playableItem}
           onMediaEditModeChange={handleMediaEditModeChange}

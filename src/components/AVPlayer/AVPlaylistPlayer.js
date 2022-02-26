@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import { useLocation } from 'react-router-dom';
 import { MT_AUDIO } from '../../helpers/consts';
 import * as shapes from '../shapes';
-import AVMobileCheck from './AVMobileCheck';
+import VmPlayer from './Vm/VmPlayer';
 import { getQuery } from '../../helpers/url';
 import { DeviceInfoContext } from '../../helpers/app-contexts';
 
@@ -63,7 +63,7 @@ const AVPlaylistPlayer = ({ items, selected, onSelectedChange }) => {
       })}
     >
       <div className="avbox__media-wrapper">
-        <AVMobileCheck
+        <VmPlayer
           autoPlay={autoPlay}
           item={currentItem}
           // Playlist props
