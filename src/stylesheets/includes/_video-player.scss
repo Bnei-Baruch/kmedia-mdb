@@ -81,17 +81,17 @@
         transition: height 1s;
       }
 
-      &--dropdown-opened {
-        height: 280px;
-        -webkit-transition: height 0.5s;
-        transition: height 0.5s;
-      }
+      // &--dropdown-opened {
+      //   height: 280px;
+      //   -webkit-transition: height 0.5s;
+      //   transition: height 0.5s;
+      // }
 
-      &--dropdown-closed {
-        height: 0;
-        -webkit-transition: height 0.5s;
-        transition: height 0.5s;
-      }
+      // &--dropdown-closed {
+      //   height: 0;
+      //   -webkit-transition: height 0.5s;
+      //   transition: height 0.5s;
+      // }
     }
   }
 

@@ -16,10 +16,10 @@ const AVPlaylistPlayer = ({ items, selected, onSelectedChange }) => {
 
   const [autoPlay, setAutoPlay]                 = useState(!!query.sstart);
   const [mediaEditMode, setMediaEditMode]       = useState(null);
-  const [isDropdownOpened, setIsDropdownOpened] = useState(false);
+  // const [isDropdownOpened, setIsDropdownOpened] = useState(false);
 
   const handleMediaEditModeChange  = mediaEditMode => setMediaEditMode(mediaEditMode);
-  const handleDropdownOpenedChange = isDropdownOpened => setIsDropdownOpened(isDropdownOpened);
+  // const handleDropdownOpenedChange = isDropdownOpened => setIsDropdownOpened(isDropdownOpened);
 
   const onPlay  = () => setAutoPlay(true);
   const onPause = () => setAutoPlay(false);
@@ -56,8 +56,8 @@ const AVPlaylistPlayer = ({ items, selected, onSelectedChange }) => {
         'avbox__player--is-audio': isAudio,
         'avbox__player--is-audio--edit-mode': isAudio && mediaEditMode === 2,
         'avbox__player--is-audio--normal-mode': isAudio && mediaEditMode === 0,
-        'avbox__player--is-audio--dropdown-opened': isAudio && isDropdownOpened && !mediaEditMode,
-        'avbox__player--is-audio--dropdown-closed': isAudio && !isDropdownOpened && !mediaEditMode,
+        // 'avbox__player--is-audio--dropdown-opened': isAudio && isDropdownOpened && !mediaEditMode,
+        // 'avbox__player--is-audio--dropdown-closed': isAudio && !isDropdownOpened && !mediaEditMode,
         'avbox__player--is-4x3': currentItem.unit.film_date < '2014',
         'mobile-device': !undefinedDevice,
       })}
@@ -74,7 +74,7 @@ const AVPlaylistPlayer = ({ items, selected, onSelectedChange }) => {
           onPause={onPause}
           onFinish={onFinish}
           onMediaEditModeChange={handleMediaEditModeChange}
-          onDropdownOpenedChange={handleDropdownOpenedChange}
+          // onDropdownOpenedChange={handleDropdownOpenedChange}
         />
       </div>
     </div>

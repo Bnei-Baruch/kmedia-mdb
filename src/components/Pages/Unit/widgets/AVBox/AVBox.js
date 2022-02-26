@@ -26,10 +26,10 @@ const AVBox = ({ unit, t }) => {
 
   const [playableItem, setPlayableItem]         = useState(null);
   const [mediaEditMode, setMediaEditMode]       = useState(0);
-  const [isDropdownOpened, setIsDropdownOpened] = useState(false);
+  // const [isDropdownOpened, setIsDropdownOpened] = useState(false);
 
   const handleMediaEditModeChange  = useCallback(newMediaEditMode => setMediaEditMode(newMediaEditMode), []);
-  const handleDropdownOpenedChange = useCallback(dropdownOpened => setIsDropdownOpened(dropdownOpened), []);
+  // const handleDropdownOpenedChange = useCallback(dropdownOpened => setIsDropdownOpened(dropdownOpened), []);
 
   useEffect(() => {
     const preferredMT       = playerHelper.restorePreferredMediaType();
@@ -62,9 +62,9 @@ const AVBox = ({ unit, t }) => {
     <div className={clsx('avbox__player', {
       'avbox__player--is-audio': isAudio,
       'avbox__player--is-audio--edit-mode': isAudio && mediaEditMode === 2,
-      'avbox__player--is-audio--normal-mode': isAudio && mediaEditMode === 0,
-      'avbox__player--is-audio--dropdown-opened': isAudio && isDropdownOpened && !mediaEditMode,
-      'avbox__player--is-audio--dropdown-closed': isAudio && !isDropdownOpened && !mediaEditMode,
+      'avbox__player--is-audio--normal-mode': isAudio && !mediaEditMode,
+      // 'avbox__player--is-audio--dropdown-opened': isAudio && isDropdownOpened && !mediaEditMode,
+      // 'avbox__player--is-audio--dropdown-closed': isAudio && !mediaEditMode && !isDropdownOpened,
       'avbox__player--is-4x3': playableItem.unit.film_date < '2014',
       'mobile-device': isMobileDevice,
     })}
@@ -74,7 +74,7 @@ const AVBox = ({ unit, t }) => {
           autoPlay={true}
           item={playableItem}
           onMediaEditModeChange={handleMediaEditModeChange}
-          onDropdownOpenedChange={handleDropdownOpenedChange}
+          // onDropdownOpenedChange={handleDropdownOpenedChange}
           onFinish={onFinish}
         />
       </div>
