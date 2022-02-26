@@ -6,8 +6,7 @@ import { useLocation, useHistory } from 'react-router-dom';
 import { Player, usePlayerContext, Ui, Controls } from '@vime/react';
 
 import * as shapes from '../../shapes';
-import { DeviceInfoContext } from '../../../helpers/app-contexts';
-import ClientChronicles from '../../../helpers/clientChronicles';
+import { DeviceInfoContext, ClientChroniclesContext } from '../../../helpers/app-contexts';
 import playerHelper from '../../../helpers/player';
 import { isEmpty } from '../../../helpers/utils';
 import { MT_VIDEO, VS_DEFAULT, VS_FHD, VS_HD, VS_NHD } from '../../../helpers/consts';
@@ -62,10 +61,9 @@ const VmPlayer = ({
   onNext = null,
   t,
 }) => {
+  // const chronicles         = useContext(ClientChroniclesContext);
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const ref = useRef(null);
-  // const uiLanguage          = useSelector(state => settings.getLanguage(state.settings));
-  // const contentLanguage               = useSelector(state => settings.getContentLanguage(state.settings));
 
   const [duration]                    = usePlayerContext(ref, 'duration', 0);
   const [currentTime, setCurrentTime] = usePlayerContext(ref, 'currentTime', 0);
@@ -104,7 +102,6 @@ const VmPlayer = ({
 
   useEffect(() => {
     const { file, restoredVideoQuality } = chooseSource(item, t);
-    // console.log('set video quality:', restoredVideoQuality, file)
 
     setVideoQuality(restoredVideoQuality);
     setSource(file?.src);
@@ -149,11 +146,12 @@ const VmPlayer = ({
     }
 
     console.log('onQualityChange to', quality, item)
+    playerHelper.persistPreferredVideoSize(quality);
+    const file = item.byQuality[quality];
 
     setSwitchCurrentTime(currentTime);
-    playerHelper.persistPreferredVideoSize(quality);
     setVideoQuality(quality);
-    setSource(item.byQuality[quality]);
+    setSource(file.src);
   };
 
   // Remember the current time while switching.
@@ -240,7 +238,6 @@ const VmPlayer = ({
 
 VmPlayer.propTypes = {
   t: PropTypes.func.isRequired,
-  chronicles: PropTypes.instanceOf(ClientChronicles),
   item: shapes.VideoItem.isRequired,
 
   // Playlist props
