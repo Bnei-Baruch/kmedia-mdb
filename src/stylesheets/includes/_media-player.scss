@@ -163,14 +163,13 @@ $player-color: $black;
       flex: 1 1 auto;
       flex-direction: column;
       padding: 0.5rem;
-      user-select: text;
 
       input {
         cursor: pointer;
       }
 
       &-back {
-        align-self: flex-start;
+        align-self: flex-end;
         height: 20px;
       }
 
@@ -274,8 +273,8 @@ $player-color: $black;
 }
 
 .shareCopyLinkButton {
-  height: 20px;
-  margin: 0 10px 5px 10px !important;
+  // height: 20px;
+  margin: 0 10px 5px !important;
 }
 
 

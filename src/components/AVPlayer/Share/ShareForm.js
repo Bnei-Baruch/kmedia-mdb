@@ -88,7 +88,7 @@ const ShareForm = ({ item, currentTime, duration, onSliceChange, onExit, t }) =>
 
   return (
     <div className="mediaplayer__onscreen-share">
-      <Form size='tiny'>
+      <Form size='mini'>
         <Form.Group>
           <Form.Input
             action={{
@@ -136,14 +136,14 @@ const ShareForm = ({ item, currentTime, duration, onSliceChange, onExit, t }) =>
             position="bottom right"
             trigger={(
               <CopyToClipboard text={url} onCopy={handleCopied}>
-                <Button className="shareCopyLinkButton" size="mini" content={t('buttons.copy')} />
+                <Button className="shareCopyLinkButton" size="mini" compact content={t('buttons.copy')} />
               </CopyToClipboard>
             )}
           />
-          <div className="mediaplayer__onscreen-share-bar">
-            <ShareBar url={url} embedContent={getEmbed(uiLangUrl)} t={t} buttonSize="small" />
-          </div>
         </Form.Group>
+        <div className="mediaplayer__onscreen-share-bar">
+          <ShareBar url={url} embedContent={getEmbed(uiLangUrl)} t={t} buttonSize="small" />
+        </div>
       </Form>
     </div>
   );
