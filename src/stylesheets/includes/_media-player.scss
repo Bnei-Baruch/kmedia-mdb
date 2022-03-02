@@ -156,6 +156,27 @@ $player-color: $black;
     }
 
     &-share {
+      @include mobile {
+        background-color: aliceblue;
+        z-index: 10;
+        position: fixed;
+        align-items: flex-start;
+
+        &-bar {
+          margin: 0.5em;
+        }
+
+        .ui.message {
+          margin: 0.5em;
+        }
+
+        .close-button {
+          .ui.icon.button {
+            padding: 0.5em !important;
+          }
+        }
+      }
+
       align-items: center;
       align-self: stretch;
       background: rgba($black, .3);
@@ -168,12 +189,11 @@ $player-color: $black;
         cursor: pointer;
       }
 
-      &-back {
-        align-self: flex-end;
-        height: 20px;
-      }
-
       .social-buttons {
+        @include mobile {
+          margin: 0;
+        }
+
         align-items: center;
         background: rgba($black, .8);
         border-radius: calc(36px / 2 + .5rem);
@@ -221,7 +241,6 @@ $player-color: $black;
 
           >label {
             margin: 0 0.2em;
-            // width: max-content !important;
           }
         }
       }
@@ -273,7 +292,10 @@ $player-color: $black;
 }
 
 .shareCopyLinkButton {
-  // height: 20px;
+  @include mobile {
+    margin: 0 !important;
+  }
+
   margin: 0 10px 5px !important;
 }
 

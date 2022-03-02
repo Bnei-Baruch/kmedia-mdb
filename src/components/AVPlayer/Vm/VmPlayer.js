@@ -199,7 +199,7 @@ const VmPlayer = ({
           onNext={onNext}
         />
         { editMode &&
-          <Controls pin="topLeft">
+          <Controls pin={isMobileDevice ? 'bottomLeft' : 'topLeft'}>
             <ShareForm
               item={item}
               currentTime={currentTime}
