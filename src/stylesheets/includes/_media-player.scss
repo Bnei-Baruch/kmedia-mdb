@@ -169,12 +169,6 @@ $player-color: $black;
         .ui.message {
           margin: 0.5em;
         }
-
-        .close-button {
-          .ui.icon.button {
-            padding: 0.5em !important;
-          }
-        }
       }
 
       align-items: center;
@@ -204,6 +198,12 @@ $player-color: $black;
         .SocialMediaShareButton {
           cursor: pointer;
           margin: 0 .25rem;
+        }
+      }
+
+      .close-button {
+        button.ui.icon {
+          padding: 0.5em;
         }
       }
     }
@@ -248,6 +248,12 @@ $player-color: $black;
       background: $black;
       padding: 0.5rem 1rem;
       width: fit-content;
+
+      .close-button {
+        button.ui.icon {
+          padding: 0.5em;
+        }
+      }
 
       form {
         width: 100%;

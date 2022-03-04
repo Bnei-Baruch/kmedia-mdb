@@ -43,12 +43,10 @@ const VmBBSettings = ({ item, isVideo, onSwitchAV, videoQuality, playbackRates, 
     onLanguageChange(value);
   }
 
-  // console.log('playbackRates:', playbackRates, playbackRate)
-
   return (
     <div ref={ref} className="mediaplayer__onscreen-settings">
       <Form inverted>
-        <Form.Button icon="close" onClick={onExit}></Form.Button>
+        <Form.Button icon="close" onClick={onExit} floated='right' className="close-button"></Form.Button>
         <Form.Group inline>
           <label>Language</label>
           <Dropdown

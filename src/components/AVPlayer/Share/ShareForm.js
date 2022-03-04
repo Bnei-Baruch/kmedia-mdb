@@ -90,7 +90,7 @@ const ShareForm = ({ item, currentTime, duration, onSliceChange, onExit, t }) =>
     <div className="mediaplayer__onscreen-share">
       <div className="mediaplayer__onscreen-share-bar">
         <ShareBar url={url} embedContent={getEmbed(uiLangUrl)} t={t} buttonSize="small" />
-        <Form.Button icon="close" onClick={onExit} className="close-button"></Form.Button>
+        <Form.Button icon="close" onClick={onExit} floated='right' className="close-button"></Form.Button>
       </div>
       <Form size='mini'>
         <Form.Group widths="equal">
