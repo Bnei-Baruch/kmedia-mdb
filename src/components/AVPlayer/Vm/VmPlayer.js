@@ -146,7 +146,7 @@ const VmPlayer = ({
       return;
     }
 
-    console.log('onQualityChange to', quality, item)
+    // console.log('onQualityChange to', quality, item)
     playerHelper.persistPreferredVideoSize(quality);
     const file = item.byQuality[quality];
 
@@ -237,12 +237,9 @@ VmPlayer.propTypes = {
   showNextPrev: PropTypes.bool,
   onPrev: PropTypes.func,
   onNext: PropTypes.func,
-  // onPlay: PropTypes.func,
-  // onPause: PropTypes.func,
   onFinish: PropTypes.func,
 
   onMediaEditModeChange: PropTypes.func.isRequired,
-  onDropdownOpenedChange: PropTypes.func.isRequired,
 };
 
 export default withNamespaces()(VmPlayer);

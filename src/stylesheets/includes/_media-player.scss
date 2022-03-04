@@ -156,17 +156,14 @@ $player-color: $black;
     }
 
     &-share {
-      @include mobile {
+      @include small-mobile {
         background-color: aliceblue;
         z-index: 10;
         position: fixed;
         align-items: flex-start;
+        padding: 0 0.5rem;
 
         &-bar {
-          margin: 0.5em;
-        }
-
-        .ui.message {
           margin: 0.5em;
         }
       }
@@ -209,15 +206,19 @@ $player-color: $black;
     }
 
     &-settings {
-      @include mobile {
-        padding: 0.5em 0 0;
+      @include small-mobile {
+        padding: 0.5em !important;
         margin: 0;
+        position: fixed;
+        z-index: 15;
+        width: -webkit-fill-available;
 
         .ui.form {
           display: flex;
-          flex: 1 1 auto;
-          flex-direction: row;
-          flex-wrap: wrap;
+          flex-direction: column;
+          flex-wrap: wrap-reverse;
+          justify-content: flex-start;
+          font-size: small;
         }
 
         .ui.button {
@@ -226,8 +227,8 @@ $player-color: $black;
         }
 
         .ui.inverted.menu .item {
-          padding: 0.5em;
-          min-width: 3em;
+          padding: 0.25em;
+          font-size: smaller;
         }
 
         .ui.selection.dropdown {
@@ -237,13 +238,13 @@ $player-color: $black;
         }
 
         .ui.form .inline.fields {
-          margin: 0.5em 0 !important;
-
           >label {
             margin: 0 0.2em;
           }
         }
       }
+
+      // desktop
 
       background: $black;
       padding: 0.5rem 1rem;
@@ -273,9 +274,15 @@ $player-color: $black;
         }
       }
 
-      .ui.inverted.menu .active.item{
-        background-color: white;
-        color: $black !important;
+      .ui.inverted.menu {
+        .item {
+          text-align: center;
+        }
+
+        .active.item{
+          background-color: white;
+          color: $black !important;
+        }
       }
 
       .ui.radio.checkbox {

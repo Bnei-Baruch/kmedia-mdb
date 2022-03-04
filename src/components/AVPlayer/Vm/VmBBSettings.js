@@ -1,7 +1,7 @@
 import React, { useState, useRef, useContext } from 'react'
 
 import { Form, Dropdown, Menu } from 'semantic-ui-react'
-import { usePlayerContext, usePlayer } from '@vime/react';
+import { usePlayerContext } from '@vime/react';
 import { LANGUAGE_OPTIONS } from '../../../helpers/consts';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 
@@ -10,7 +10,6 @@ const formatRate = rate => rate.toString() === '1' ? 'normal' : `${rate}x`;
 const VmBBSettings = ({ item, isVideo, onSwitchAV, videoQuality, playbackRates, onQualityChange, onLanguageChange, onExit }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const ref = useRef(null);
-  const player = usePlayer(ref);
 
   const [playbackRate, setPlaybackRate] = usePlayerContext(ref, 'playbackRate', 1);
 
@@ -23,10 +22,8 @@ const VmBBSettings = ({ item, isVideo, onSwitchAV, videoQuality, playbackRates, 
     .map(x => ({ value: x.value, text: x.name }));
 
   const handlePlaybackRateSwitch = (e, data) => {
-    console.log('data:', data, playbackRates, player.canSetPlaybackRate())
     const rate = parseFloat(data.name);
     setPlaybackRate(rate);
-    console.log('p', playbackRate, rate)
   };
 
   const handleVideoQuality = (e, { value }) => {
@@ -39,7 +36,6 @@ const VmBBSettings = ({ item, isVideo, onSwitchAV, videoQuality, playbackRates, 
   }
 
   const handleLanguageChange = (e, { value }) => {
-    console.log('handleLanguageChange:', value)
     onLanguageChange(value);
   }
 
@@ -62,16 +58,16 @@ const VmBBSettings = ({ item, isVideo, onSwitchAV, videoQuality, playbackRates, 
         </Form.Group>
         <Form.Group inline>
           <label>Playback Rate</label>
-          <Menu color='black' inverted>
+          <Menu color='black' inverted compact>
             {
               playbackRates.map(rate =>
                 <Menu.Item
                   key={`rate ${  rate}`}
                   name={rate.toString()}
+                  content={formatRate(rate)}
                   active={rate.toString() === playbackRate.toString()}
                   onClick={handlePlaybackRateSwitch}
                 >
-                  {formatRate(rate)}
                 </Menu.Item>
               )
             }
