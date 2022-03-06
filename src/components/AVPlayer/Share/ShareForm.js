@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Form, Message, Popup } from 'semantic-ui-react';
+import { Form, Message, Popup } from 'semantic-ui-react';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { withNamespaces } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -73,14 +73,14 @@ const ShareForm = ({ item, currentTime, duration, onSliceChange, onExit, t }) =>
   };
 
   const setCutFrom = (e, data) => {
-    console.log('setStartValue:', currentTime, e, data);
+    // console.log('setStartValue:', currentTime, e, data);
     setStart(currentTime);
 
     onSliceChange(start, end || duration)
   };
 
   const setCutTo = () => {
-    console.log('setEndValue:', currentTime);
+    // console.log('setEndValue:', currentTime);
     setEnd(currentTime);
 
     onSliceChange(start || currentTime, end)
@@ -88,8 +88,12 @@ const ShareForm = ({ item, currentTime, duration, onSliceChange, onExit, t }) =>
 
   return (
     <div className="mediaplayer__onscreen-share">
-      <Form size='tiny'>
-        <Form.Group>
+      <div className="mediaplayer__onscreen-share-bar">
+        <ShareBar url={url} embedContent={getEmbed(uiLangUrl)} t={t} buttonSize="small" />
+        <Form.Button icon="close" onClick={onExit} floated='right' className="close-button"></Form.Button>
+      </div>
+      <Form size='mini'>
+        <Form.Group widths="equal">
           <Form.Input
             action={{
               content: t('player.buttons.start-position'),
@@ -118,17 +122,8 @@ const ShareForm = ({ item, currentTime, duration, onSliceChange, onExit, t }) =>
             actionPosition="left"
             placeholder={t('player.buttons.click-to-set')}
           />
-          <Button
-            className="mediaplayer__onscreen-share-back"
-            content={t('player.buttons.edit-back')}
-            primary
-            compact
-            size='mini'
-            icon="chevron left"
-            onClick={onExit}
-          />
         </Form.Group>
-        <Form.Group>
+        <Form.Group inline>
           <Message content={url} size="mini" />
           <Popup
             open={isCopyPopupOpen}
@@ -136,13 +131,10 @@ const ShareForm = ({ item, currentTime, duration, onSliceChange, onExit, t }) =>
             position="bottom right"
             trigger={(
               <CopyToClipboard text={url} onCopy={handleCopied}>
-                <Button className="shareCopyLinkButton" size="mini" content={t('buttons.copy')} />
+                <Form.Button className="shareCopyLinkButton" size="mini" compact content={t('buttons.copy')} />
               </CopyToClipboard>
             )}
           />
-          <div className="mediaplayer__onscreen-share-bar">
-            <ShareBar url={url} embedContent={getEmbed(uiLangUrl)} t={t} buttonSize="small" />
-          </div>
         </Form.Group>
       </Form>
     </div>

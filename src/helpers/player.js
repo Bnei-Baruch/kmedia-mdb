@@ -176,7 +176,7 @@ const playlist = (collection, mediaType, contentLanguage, uiLanguage) => {
   items = items.filter(item => !!item.unit);
 
   items.forEach(x => {
-    x.shareUrl = canonicalLink(x.unit);
+    x.shareUrl = canonicalLink(x.unit, null, collection);
   });
 
   const language = contentLanguage;
@@ -195,7 +195,7 @@ const playlistFromUnits = (collection, mediaType, contentLanguage, uiLanguage) =
     .map(x => playableItem(x, mediaType, uiLanguage, contentLanguage))
     .filter(item => !!item.unit)
     .map(x => {
-      x.shareUrl = canonicalLink(x.unit);
+      x.shareUrl = canonicalLink(x.unit, null, collection);
       return x;
     });
 

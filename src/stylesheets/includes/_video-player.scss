@@ -61,7 +61,7 @@
     }
 
     &--is-audio {
-      padding-top: percentage(3 / 16);
+      padding-top: percentage(5 / 32);
 
       &--edit-mode {
         height: 400px;
@@ -81,17 +81,17 @@
         transition: height 1s;
       }
 
-      &--dropdown-opened {
-        height: 280px;
-        -webkit-transition: height 0.5s;
-        transition: height 0.5s;
-      }
+      // &--dropdown-opened {
+      //   height: 280px;
+      //   -webkit-transition: height 0.5s;
+      //   transition: height 0.5s;
+      // }
 
-      &--dropdown-closed {
-        height: 0;
-        -webkit-transition: height 0.5s;
-        transition: height 0.5s;
-      }
+      // &--dropdown-closed {
+      //   height: 0;
+      //   -webkit-transition: height 0.5s;
+      //   transition: height 0.5s;
+      // }
     }
   }
 

@@ -156,6 +156,18 @@ $player-color: $black;
     }
 
     &-share {
+      @include small-mobile {
+        background-color: aliceblue;
+        z-index: 10;
+        position: fixed;
+        align-items: flex-start;
+        padding: 0 0.5rem;
+
+        &-bar {
+          margin: 0.5em;
+        }
+      }
+
       align-items: center;
       align-self: stretch;
       background: rgba($black, .3);
@@ -163,18 +175,16 @@ $player-color: $black;
       flex: 1 1 auto;
       flex-direction: column;
       padding: 0.5rem;
-      user-select: text;
 
       input {
         cursor: pointer;
       }
 
-      &-back {
-        align-self: flex-start;
-        height: 20px;
-      }
-
       .social-buttons {
+        @include mobile {
+          margin: 0;
+        }
+
         align-items: center;
         background: rgba($black, .8);
         border-radius: calc(36px / 2 + .5rem);
@@ -187,13 +197,119 @@ $player-color: $black;
           margin: 0 .25rem;
         }
       }
+
+      .close-button {
+        button.ui.icon {
+          padding: 0.5em;
+        }
+      }
+    }
+
+    &-settings {
+      @include small-mobile {
+        padding: 0.5em !important;
+        margin: 0;
+        position: fixed;
+        z-index: 15;
+        width: -webkit-fill-available;
+
+        .ui.form {
+          display: flex;
+          flex-direction: column;
+          flex-wrap: wrap-reverse;
+          justify-content: flex-start;
+          font-size: small;
+        }
+
+        .ui.button {
+          padding: 0.2em;
+          margin: 0;
+        }
+
+        .ui.inverted.menu .item {
+          padding: 0.25em;
+          font-size: smaller;
+        }
+
+        .ui.selection.dropdown {
+          min-width: 6em !important;
+          min-height: 0.5em !important;
+          padding: 0.5em 0.7em;
+        }
+
+        .ui.form .inline.fields {
+          >label {
+            margin: 0 0.2em;
+          }
+        }
+      }
+
+      // desktop
+
+      background: $black;
+      padding: 0.5rem 1rem;
+      width: fit-content;
+
+      .close-button {
+        button.ui.icon {
+          padding: 0.5em;
+        }
+      }
+
+      form {
+        width: 100%;
+        height: 100%;
+      }
+
+      .ui.form .inline.fields {
+        margin: 0 0 0.5em;
+
+        >label {
+          width: 10em;
+        }
+
+        .field,
+        .menu {
+          margin: 0.5em 0;
+        }
+      }
+
+      .ui.inverted.menu {
+        .item {
+          text-align: center;
+        }
+
+        .active.item{
+          background-color: white;
+          color: $black !important;
+        }
+      }
+
+      .ui.radio.checkbox {
+        label {
+          width: 5em;
+        }
+      }
+
+      .ui.selection.dropdown {
+        min-width: 7em;
+        min-height: 1em;
+
+        input {
+          min-width: inherit;
+          min-height: inherit;
+        }
+      }
     }
   }
 }
 
 .shareCopyLinkButton {
-  height: 20px;
-  margin: 0 10px 5px 10px !important;
+  @include mobile {
+    margin: 0 !important;
+  }
+
+  margin: 0 10px 5px !important;
 }
 
 
@@ -291,4 +407,11 @@ $player-color: $black;
     }
   }
 
+}
+
+vm-player[mobile] {
+  /* Add styles here for when the player is loaded on a mobile device. */
+  --vm-control-scale: 0.9;
+  --vm-controls-spacing: 0;
+  --vm-controls-padding: 5px;
 }

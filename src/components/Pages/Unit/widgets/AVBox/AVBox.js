@@ -13,7 +13,7 @@ import { isEmpty } from '../../../../../helpers/utils';
 import { DeviceInfoContext } from '../../../../../helpers/app-contexts';
 import { canonicalLink } from '../../../../../helpers/links';
 import * as shapes from '../../../../shapes';
-import AVMobileCheck from '../../../../AVPlayer/AVMobileCheck';
+import VmPlayer from '../../../../AVPlayer/Vm/VmPlayer';
 import useRecommendedUnits from '../Recommended/Main/UseRecommendedUnits';
 
 const AVBox = ({ unit, t }) => {
@@ -26,11 +26,10 @@ const AVBox = ({ unit, t }) => {
 
   const [playableItem, setPlayableItem]         = useState(null);
   const [mediaEditMode, setMediaEditMode]       = useState(0);
-  const [isDropdownOpened, setIsDropdownOpened] = useState(false);
+  // const [isDropdownOpened, setIsDropdownOpened] = useState(false);
 
-  const handleChangeLanguage       = useCallback((e, language) => playerHelper.setLanguageInQuery(history, language), [history]);
   const handleMediaEditModeChange  = useCallback(newMediaEditMode => setMediaEditMode(newMediaEditMode), []);
-  const handleDropdownOpenedChange = useCallback(dropdownOpened => setIsDropdownOpened(dropdownOpened), []);
+  // const handleDropdownOpenedChange = useCallback(dropdownOpened => setIsDropdownOpened(dropdownOpened), []);
 
   useEffect(() => {
     const preferredMT       = playerHelper.restorePreferredMediaType();
@@ -41,11 +40,6 @@ const AVBox = ({ unit, t }) => {
     setPlayableItem(playItem => isEqual(playItem, newPlayableItem) ? playItem : newPlayableItem);
   }, [unit, location, uiLanguage, contentLanguage]);
 
-  const handleSwitchAV = useCallback(() => {
-    if (playableItem) {
-      playerHelper.switchAV(playableItem, history);
-    }
-  }, [history, playableItem]);
 
   const recommendedUnits = useRecommendedUnits(['default']);
 
@@ -68,26 +62,19 @@ const AVBox = ({ unit, t }) => {
     <div className={clsx('avbox__player', {
       'avbox__player--is-audio': isAudio,
       'avbox__player--is-audio--edit-mode': isAudio && mediaEditMode === 2,
-      'avbox__player--is-audio--normal-mode': isAudio && mediaEditMode === 0,
-      'avbox__player--is-audio--dropdown-opened': isAudio && isDropdownOpened && !mediaEditMode,
-      'avbox__player--is-audio--dropdown-closed': isAudio && !isDropdownOpened && !mediaEditMode,
+      'avbox__player--is-audio--normal-mode': isAudio && !mediaEditMode,
+      // 'avbox__player--is-audio--dropdown-opened': isAudio && isDropdownOpened && !mediaEditMode,
+      // 'avbox__player--is-audio--dropdown-closed': isAudio && !mediaEditMode && !isDropdownOpened,
       'avbox__player--is-4x3': playableItem.unit.film_date < '2014',
       'mobile-device': isMobileDevice,
     })}
     >
       <div className="avbox__media-wrapper">
-        <AVMobileCheck
+        <VmPlayer
           autoPlay={true}
           item={playableItem}
-          preImageUrl={playableItem.preImageUrl}
-          onSwitchAV={handleSwitchAV}
-          languages={playableItem.availableLanguages}
-          uiLanguage={uiLanguage}
-          selectedLanguage={playableItem.language}
-          requestedLanguage={contentLanguage}
-          onLanguageChange={handleChangeLanguage}
           onMediaEditModeChange={handleMediaEditModeChange}
-          onDropdownOpenedChange={handleDropdownOpenedChange}
+          // onDropdownOpenedChange={handleDropdownOpenedChange}
           onFinish={onFinish}
         />
       </div>

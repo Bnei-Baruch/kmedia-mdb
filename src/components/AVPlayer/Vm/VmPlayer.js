@@ -1,12 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useHistory } from 'react-router-dom';
 // import { useSelector } from 'react-redux';
 import { Player, usePlayerContext, Ui, Controls } from '@vime/react';
 
 import * as shapes from '../../shapes';
-import ClientChronicles from '../../../helpers/clientChronicles';
+import { DeviceInfoContext, ClientChroniclesContext } from '../../../helpers/app-contexts';
 import playerHelper from '../../../helpers/player';
 import { isEmpty } from '../../../helpers/utils';
 import { MT_VIDEO, VS_DEFAULT, VS_FHD, VS_HD, VS_NHD } from '../../../helpers/consts';
@@ -18,7 +18,7 @@ import ShareForm from '../Share/ShareForm';
 
 import { VmControls } from './VmControls';
 import { VmProvider } from './VmProvider';
-import { VmSettings } from './VmSettings';
+import VmBBSettings from './VmBBSettings';
 
 // Default theme. ~960B
 import '@vime/core/themes/default.css';
@@ -32,56 +32,60 @@ const chooseSource = (item, t) => {
     return { error: true, errorReason: t('messages.no-playable-files') };
   }
 
-  let videoSize = playerHelper.restorePreferredVideoSize();
-  let file      = item.byQuality[videoSize];
+  let restoredVideoQuality = playerHelper.restorePreferredVideoSize();
+  let file      = item.byQuality[restoredVideoQuality];
+
+  // console.log('chooseSource:', item, ' file:', file, ' restore videoSize:', restoredVideoQuality)
 
   // if we can't find the user preferred video size we fallback.
   // first we try to go down from where he was.
   // if we can't find anything on our way down we start go up.
   if (!file) {
     const vss = [VS_NHD, VS_HD, VS_FHD];
-    const idx = vss.indexOf(videoSize);
+    const idx = vss.indexOf(restoredVideoQuality);
     const o   = vss.slice(0, idx).reverse().concat(vss.slice(idx + 1));
-    videoSize = o.find(x => !!item.byQuality[x]);
-    file      = item.byQuality[videoSize];
+    restoredVideoQuality = o.find(x => !!item.byQuality[x]);
+    file      = item.byQuality[restoredVideoQuality];
   }
 
-  return { file, videoSize };
+  return { file, restoredVideoQuality };
 };
+
 
 const VmPlayer = ({
   item,
   autoPlay,
-  onSwitchAV,
   onMediaEditModeChange,
-
-  selectedLanguage,
-  languages,
-  onLanguageChange,
-
+  onFinish,
   showNextPrev = false,
   onPrev = null,
   onNext = null,
   t,
 }) => {
-  const player = useRef(null);
-  // const uiLanguage          = useSelector(state => settings.getLanguage(state.settings));
-  // const contentLanguage     = useSelector(state => settings.getContentLanguage(state.settings));
+  // const chronicles         = useContext(ClientChroniclesContext);
+  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const ref = useRef(null);
 
-  const [duration]                    = usePlayerContext(player, 'duration', 0);
-  const [currentTime, setCurrentTime] = usePlayerContext(player, 'currentTime', 0);
-  const [playbackReady]               = usePlayerContext(player, 'playbackReady', false);
+  const [duration]                    = usePlayerContext(ref, 'duration', 0);
+  const [currentTime, setCurrentTime] = usePlayerContext(ref, 'currentTime', 0);
+  const [playbackReady]               = usePlayerContext(ref, 'playbackReady', false);
   // const [mediaType]                   = usePlayerContext(player, 'mediaType', undefined);
+
+  // const [playbackQualities]             = usePlayerContext(player, 'playbackQualities');
+  const [playbackRates]                 = usePlayerContext(ref, 'playbackRates', [1]);
+  // const [playbackRate, setPlaybackRate] = usePlayerContext(ref, 'playbackRate', 1);
 
   const [source, setSource]             = useState({});
   const [isVideo, setIsVideo]           = useState(item.mediaType === MT_VIDEO);
   const [videoQuality, setVideoQuality] = useState(VS_DEFAULT);
   const [switchCurrentTime, setSwitchCurrentTime] = useState(0);
   const [editMode, setEditMode] = useState(false);
+  const [settingsMode, setSettingsMode] = useState(false);
 
   const [sliceStart, setSliceStart] = useState(0);
-  const [sliceEnd, setSliceEnd]     = useState(player.duration);
+  const [sliceEnd, setSliceEnd]     = useState(ref.duration);
 
+  const history = useHistory();
   const location = useLocation();
 
   useEffect(() => {
@@ -98,9 +102,9 @@ const VmPlayer = ({
   }, [location]);
 
   useEffect(() => {
-    const { file, videoQuality } = chooseSource(item, t);
+    const { file, restoredVideoQuality } = chooseSource(item, t);
 
-    setVideoQuality(videoQuality);
+    setVideoQuality(restoredVideoQuality);
     setSource(file?.src);
     setIsVideo(item.mediaType === MT_VIDEO);
   }, [item, t]);
@@ -114,11 +118,6 @@ const VmPlayer = ({
   }, [playbackReady, setCurrentTime, switchCurrentTime]);
 
   useEffect(() => {
-    // if (!editMode && (sliceStart || sliceEnd)) {
-    //   setSliceStart(undefined);
-    //   setSliceEnd(undefined);
-    // }
-
     onMediaEditModeChange(editMode ? PLAYER_MODE.SLICE_EDIT : PLAYER_MODE.NORMAL)
   }, [editMode, onMediaEditModeChange]);
 
@@ -130,10 +129,8 @@ const VmPlayer = ({
   }, [setCurrentTime, sliceStart])
 
   useEffect(() => {
-    // console.log('currentTime, sliceEnd:', currentTime, sliceEnd)
-    if (player.current.playing && currentTime >= sliceEnd) {
-      console.log('pause')
-      player.current.pause();
+    if (ref.current.playing && currentTime >= sliceEnd) {
+      ref.current.pause();
     }
   }, [currentTime, sliceEnd]);
 
@@ -149,31 +146,39 @@ const VmPlayer = ({
       return;
     }
 
-    setSwitchCurrentTime(currentTime);
+    // console.log('onQualityChange to', quality, item)
     playerHelper.persistPreferredVideoSize(quality);
-    const { byQuality } = item;
+    const file = item.byQuality[quality];
+
+    setSwitchCurrentTime(currentTime);
     setVideoQuality(quality);
-    setSource(byQuality[quality]);
+    setSource(file.src);
   };
 
   // Remember the current time while switching.
   const switchAV = () => {
     setSwitchCurrentTime(currentTime);
-    onSwitchAV();
+    playerHelper.switchAV(item, history);
   };
 
   // Remember the current time while switching.
-  const languageChange = e => {
+  const handleLanguageChange = lang => {
     setSwitchCurrentTime(currentTime);
-    onLanguageChange(e, e.target?.value);
+    playerHelper.setLanguageInQuery(history, lang);
   };
 
+  const handlePlaybackEnded = e => {
+    onFinish()
+  }
+
   return (
-    <Player ref={player} playsInline autoPiP
+    <Player ref={ref}
+      playsInline={true}
       // theme="dark"
       icons="material"
       autoPlay={autoPlay}
       debug={true}
+      onVmPlaybackEnded={handlePlaybackEnded}
     >
       <VmProvider
         isVideo={isVideo}
@@ -185,6 +190,7 @@ const VmPlayer = ({
           isVideo={isVideo}
           onSwitchAV={switchAV}
           onActivateSlice={() => setEditMode(!editMode)}
+          onActivateSettings={() => setSettingsMode(!settingsMode)}
           sliceStart={sliceStart}
           sliceEnd={sliceEnd}
           duration={duration}
@@ -193,7 +199,7 @@ const VmPlayer = ({
           onNext={onNext}
         />
         { editMode &&
-          <Controls pin="topLeft">
+          <Controls pin={isMobileDevice ? 'bottomLeft' : 'topLeft'}>
             <ShareForm
               item={item}
               currentTime={currentTime}
@@ -203,16 +209,20 @@ const VmPlayer = ({
             />
           </Controls>
         }
-        <VmSettings
-          isVideo={isVideo}
-          videoQuality={videoQuality}
-          videoQualities={Object.keys(item.byQuality)}
-          onQualityChange={onQualityChange}
-          onSwitchAV={switchAV}
-          selectedLanguage={selectedLanguage}
-          languages={languages}
-          onLanguageChange={languageChange}
-        />
+        { settingsMode &&
+          <Controls pin='bottomRight' fullWidth fullHeight={isMobileDevice} justify='space-evenly'>
+            <VmBBSettings
+              item={item}
+              isVideo={isVideo}
+              videoQuality={videoQuality}
+              playbackRates={playbackRates}
+              onQualityChange={onQualityChange}
+              onSwitchAV={switchAV}
+              onLanguageChange={handleLanguageChange}
+              onExit={() => setSettingsMode(false)}
+            />
+          </Controls>
+        }
       </Ui>
     </Player>
   );
@@ -220,31 +230,16 @@ const VmPlayer = ({
 
 VmPlayer.propTypes = {
   t: PropTypes.func.isRequired,
-
-  uiLanguage: PropTypes.string.isRequired,
-  chronicles: PropTypes.instanceOf(ClientChronicles),
-
-  // Language dropdown props.
-  languages: PropTypes.arrayOf(PropTypes.string).isRequired,
-  selectedLanguage: PropTypes.string.isRequired,
-  onLanguageChange: PropTypes.func.isRequired,
-  requestedLanguage: PropTypes.string,
-
-  // Audio/Video switch props.
   item: shapes.VideoItem.isRequired,
-  onSwitchAV: PropTypes.func.isRequired,
 
   // Playlist props
   autoPlay: PropTypes.bool,
   showNextPrev: PropTypes.bool,
   onPrev: PropTypes.func,
   onNext: PropTypes.func,
-  onPlay: PropTypes.func,
-  onPause: PropTypes.func,
   onFinish: PropTypes.func,
 
   onMediaEditModeChange: PropTypes.func.isRequired,
-  onDropdownOpenedChange: PropTypes.func.isRequired,
 };
 
 export default withNamespaces()(VmPlayer);
