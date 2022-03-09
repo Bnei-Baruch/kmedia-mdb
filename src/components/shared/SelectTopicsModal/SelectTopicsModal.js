@@ -38,7 +38,7 @@ const SelectTopicsModal = ({ t, open, onClose, label, trigger }) => {
 
     const params = {
       i18n: {
-        [l]: { name, language: l, author: user.name }
+        [l]: { name, language: l }
       },
       tags: selected,
       content_unit,
