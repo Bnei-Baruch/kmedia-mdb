@@ -518,6 +518,7 @@ export const MY_NAMESPACE_PLAYLIST_EDIT = 'playlists_edit';
 export const MY_NAMESPACE_SUBSCRIPTIONS = 'subscriptions';
 export const MY_NAMESPACE_BOOKMARKS     = 'bookmarks';
 export const MY_NAMESPACE_FOLDERS       = 'folders';
+export const MY_NAMESPACE_LABELS        = 'labels';
 
 export const MY_NAMESPACES = [
   MY_NAMESPACE_HISTORY,
@@ -527,6 +528,7 @@ export const MY_NAMESPACES = [
   MY_NAMESPACE_PLAYLIST_EDIT,
   MY_NAMESPACE_BOOKMARKS,
   MY_NAMESPACE_FOLDERS,
+  MY_NAMESPACE_LABELS,
 ];
 
 export const MY_REACTION_KINDS = {
@@ -575,6 +577,9 @@ export const SECTIONS_LINK_BY_CU_CONTENT_TYPE = {
   [SCT_TWEET]: 'publications/twitter',
   [CT_ARTICLE]: 'publications/articles',
 };
+
+export const UNIT_TEXT_TYPE   = [CT_ARTICLE, CT_BLOG_POST, CT_PUBLICATION, CT_RESEARCH_MATERIAL, CT_SOURCE, CT_LIKUTIM];
+export const UNIT_VIDEOS_TYPE = [...UNIT_LESSONS_TYPE, ...UNIT_PROGRAMS_TYPE, ...UNIT_EVENTS_TYPE];
 
 export const FN_SOURCES_MULTI = 'sources-filter-multi';
 export const FN_TOPICS_MULTI        = 'topics-filter';

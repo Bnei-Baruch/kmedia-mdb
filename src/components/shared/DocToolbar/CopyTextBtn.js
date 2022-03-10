@@ -57,10 +57,7 @@ const CopyTextBtn = ({ t, text }) => {
 };
 
 CopyTextBtn.propTypes = {
-  name: PropTypes.string.isRequired,
-  popup: PropTypes.string.isRequired,
   text: PropTypes.string.isRequired,
-  icon: PropTypes.string.isRequired,
 };
 
 export default withNamespaces()(CopyTextBtn);

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { MY_NAMESPACE_PLAYLIST_EDIT, MY_NAMESPACE_PLAYLISTS } from './consts';
+import { MY_NAMESPACE_LABELS, MY_NAMESPACE_PLAYLIST_EDIT, MY_NAMESPACE_PLAYLISTS } from './consts';
 
 const API_BACKEND             = process.env.REACT_APP_API_BACKEND;
 const ASSETS_BACKEND          = process.env.REACT_APP_ASSETS_BACKEND;
@@ -10,6 +10,7 @@ const API_FEED                = process.env.REACT_APP_FEED;
 const CHRONICLES_BACKEND      = process.env.REACT_APP_CHRONICLES_BACKEND;
 const PERSONAL_API_BACKEND    = process.env.REACT_APP_PERSONAL_API_BACKEND;
 const FILE_TRIMMER_API        = process.env.REACT_APP_FILE_TRIMMER_API;
+const MDB_REST_API_URL        = process.env.REACT_APP_MDB_REST_API_URL || `${API_BACKEND}mdb-api/`;
 
 export const backendUrl               = path => `${API_BACKEND}${path}`;
 export const assetUrl                 = path => `${ASSETS_BACKEND}${path}`;
@@ -125,7 +126,9 @@ class Api {
 
   static post = (blog, id) => Requests.get(`posts/${blog}/${id}`);
 
-  static tagDashboard = ({ id, language }) => Requests.get(`tags/${id}/dashboard?${Requests.makeParams({ language })}`);
+  static labels = params => Requests.get(`labels?${Requests.makeParams(params)}`);
+
+  static tagDashboard = ({ id, ...params }) => Requests.get(`tags/${id}/dashboard?${Requests.makeParams(params)}`);
 
   static autocomplete = ({ q, language }) => Requests.get(`autocomplete?${Requests.makeParams({ q, language })}`);
 
@@ -212,7 +215,7 @@ class Api {
     return axios(config);
   };
 
-  static my = (namespace, params, token, method) => {
+  static my = (namespace, params, token, method = 'GET') => {
     let urlParam = namespace;
     if (namespace === MY_NAMESPACE_PLAYLIST_EDIT)
       urlParam = MY_NAMESPACE_PLAYLISTS;
@@ -242,7 +245,12 @@ class Api {
       delete params.changeItems;
     }
 
-    const url = `${PERSONAL_API_BACKEND}rest/${urlParam}`;
+    let isNotREST = false;
+    if (namespace === MY_NAMESPACE_LABELS && method === 'GET') {
+      isNotREST = true;
+    }
+
+    const url = `${PERSONAL_API_BACKEND}${isNotREST ? '' : 'rest/'}${urlParam}`;
     return Requests.auth(params, url, token, method);
   };
 
@@ -255,6 +263,13 @@ class Api {
   static trimFile = params => {
     const url    = `${FILE_TRIMMER_API}?${Requests.makeParams(params)}`;
     const config = { url, method: 'GET' };
+    return axios(config);
+  };
+
+  static mdbCreateLabel = (params, token) => {
+    const url     = `${MDB_REST_API_URL}labels/`;
+    const headers = { 'Content-Type': 'application/json', 'Authorization': `bearer ${token}` };
+    const config  = { url, headers, method: 'POST', data: JSON.stringify(params) };
     return axios(config);
   };
 }

@@ -4,6 +4,7 @@ ARG feed_api_url="https://kabbalahmedia.info/feed_api/"
 ARG personal_api_url="https://kabbalahmedia.info/backend/my/"
 ARG chronicles_url="https://chronicles.kli.one/"
 ARG file_trimmer_api_url="https://trim.kab.sh/rest/trim"
+ARG mdb_rest_api_url="https://staging-archive.kabbalahmedia.info/mdb-api/"
 
 FROM bneibaruch/kmedia_base:latest as build
 
@@ -15,6 +16,7 @@ ARG feed_api_url
 ARG personal_api_url
 ARG chronicles_url
 ARG file_trimmer_api_url
+ARG mdb_rest_api_url
 
 WORKDIR /app
 
@@ -29,7 +31,8 @@ ENV REACT_APP_ENV=production \
     REACT_APP_FEED=${feed_api_url} \
     REACT_APP_PERSONAL_API_BACKEND=${personal_api_url} \
     REACT_APP_CHRONICLES_BACKEND=${chronicles_url} \
-    REACT_APP_FILE_TRIMMER_API=${file_trimmer_api_url}
+    REACT_APP_FILE_TRIMMER_API=${file_trimmer_api_url} \
+    REACT_APP_MDB_REST_API_URL=${mdb_rest_api_url}
 
 COPY . .
 
@@ -48,6 +51,7 @@ ARG feed_api_url
 ARG personal_api_url
 ARG chronicles_url
 ARG file_trimmer_api_url
+ARG mdb_rest_api_url
 
 WORKDIR /app
 COPY --from=build /app .
@@ -64,7 +68,8 @@ ENV NODE_ENV=production \
     REACT_APP_FEED=${feed_api_url} \
     REACT_APP_PERSONAL_API_BACKEND=${personal_api_url} \
     REACT_APP_CHRONICLES_BACKEND=${chronicles_url} \
-    REACT_APP_FILE_TRIMMER_API=${file_trimmer_api_url}
+    REACT_APP_FILE_TRIMMER_API=${file_trimmer_api_url} \
+    REACT_APP_MDB_REST_API_URL=${mdb_rest_api_url}
 
 EXPOSE 3001
 ENTRYPOINT ["/app/misc/docker-entrypoint.sh"]

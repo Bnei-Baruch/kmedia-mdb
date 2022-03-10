@@ -9,6 +9,7 @@ import {
   IsCollectionContentType,
   MY_NAMESPACE_BOOKMARKS,
   MY_NAMESPACE_HISTORY,
+  MY_NAMESPACE_LABELS,
   MY_NAMESPACE_PLAYLISTS,
   MY_NAMESPACE_REACTIONS,
   MY_NAMESPACE_SUBSCRIPTIONS
@@ -24,7 +25,11 @@ function* updatePageInQuery(action) {
 
 function* fetch(action) {
   const token = yield select(state => authSelectors.getToken(state.auth));
-  if (!token) return;
+  if (!token && !action.payload?.isPublic) {
+    console.error('need token for this request');
+    return;
+  }
+
   // eslint-disable-next-line prefer-const
   const { namespace, with_files = false, addToList = true, ...params } = action.payload;
   let with_derivations                                                 = false;
@@ -60,6 +65,7 @@ function* fetch(action) {
         co_uids = data.items?.filter(s => s.collection_uid).map(s => s.collection_uid) || [];
         break;
       case MY_NAMESPACE_BOOKMARKS:
+      case MY_NAMESPACE_LABELS:
         cu_uids          = data.items?.map(x => x.subject_uid) || [];
         with_derivations = true;
         break;
@@ -188,6 +194,7 @@ function* reactionsCount(action) {
   }
 }
 
+//Watches
 function* watchSetPage() {
   yield takeLatest(types.SET_PAGE, updatePageInQuery);
 }

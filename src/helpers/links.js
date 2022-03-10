@@ -162,6 +162,14 @@ export const canonicalLink = (entity, mediaLang, ccu) => {
       return `/events/c/${entity.id}`;
     case CT_SONGS:
       return `/music/c/${entity.id}`;
+    default:
+      break;
+  }
+
+  // content units
+  switch (entity.content_type) {
+    case CT_ARTICLE:
+      return `/publications/articles/cu/${entity.id}`;
     case CT_LIKUTIM:
       return `/likutim/${entity.id}`;
     default:

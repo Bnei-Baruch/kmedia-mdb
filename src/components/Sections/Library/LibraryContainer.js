@@ -17,7 +17,7 @@ import * as shapes from '../../shapes';
 import { getSourceErrorSplash } from '../../shared/WipErr/WipErr';
 import Helmets from '../../shared/Helmets';
 import { isTaas } from '../../shared/PDF/PDF';
-import Library, { buildBookmarkSource } from './Library';
+import Library, { buildBookmarkSource, buildLabelData } from './Library';
 import TOC, { getIndex } from './TOC';
 import LibraryBar from './LibraryBar';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
@@ -442,7 +442,10 @@ class LibraryContainer extends Component {
   }
 
   render() {
-    const { sourceId, getSourceById, getPathByID, language, t, push } = this.props;
+    const { sourceId, getSourceById, getPathByID, language, contentLanguage, t, push, areSourcesLoaded } = this.props;
+
+    if (!areSourcesLoaded)
+      return null;
 
     const content = this.getContent();
 
@@ -494,7 +497,8 @@ class LibraryContainer extends Component {
                       handleTocIsActive={this.handleTocIsActive}
                       isReadable={isReadable}
                       fontSize={fontSize}
-                      source={buildBookmarkSource(sourceId)}
+                      source={{ language: contentLanguage, ...buildBookmarkSource(sourceId) }}
+                      label={{ language: contentLanguage, ...buildLabelData(sourceId) }}
                     />
                   </Grid.Column>
                 </Grid.Row>

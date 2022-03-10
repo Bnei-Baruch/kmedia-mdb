@@ -1,16 +1,16 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useParams } from 'react-router-dom';
 import { Button, Grid, Header, Image } from 'semantic-ui-react';
 import clsx from 'clsx';
 
-import { selectors as assetsSelectors, actions as assetsActions } from '../../../redux/modules/assets';
+import { actions as assetsActions, selectors as assetsSelectors } from '../../../redux/modules/assets';
 import { selectors as siteSettings } from '../../../redux/modules/settings';
 import { selectors as tagSelectors } from '../../../redux/modules/tags';
 import { actions, selectors } from '../../../redux/modules/mdb';
-import { getLanguageDirection, getLangPropertyDirection } from '../../../helpers/i18n-utils';
+import { getLangPropertyDirection, getLanguageDirection } from '../../../helpers/i18n-utils';
 import { physicalFile } from '../../../helpers/utils';
 import { SectionLogo } from '../../../helpers/images';
 import { canonicalLink } from '../../../helpers/links';
@@ -114,7 +114,7 @@ const Likut = ({ t }) => {
     <div>
       {
         tagNames.map((tag, index) =>
-          <Button key={`${tag.id}${index}`} basic compact size='small'>
+          <Button key={`${tag.id}${index}`} basic compact size="small">
             <Link to={`/topics/${tag.id}`}>{tag.label}</Link>
           </Button>
         )
@@ -125,7 +125,8 @@ const Likut = ({ t }) => {
   const url                = file && physicalFile(file, true);
   const relatedLessons     = Object.values(source_units).filter(u => UNIT_LESSONS_TYPE.includes(u.content_type));
   const relatedLessonsSize = relatedLessons.length > 0 ? 6 : 0;
-  const bookmarkSource     = { subject_uid: unit.id, subject_type: unit.content_type };
+  const bookmarkSource     = { subject_uid: unit.id, subject_type: unit.content_type, language };
+  const labelSource        = { content_unit: unit.id, language };
 
   return (
     <div
@@ -139,7 +140,7 @@ const Likut = ({ t }) => {
       <Grid padded>
         <Grid.Column mobile={16} tablet={16 - relatedLessonsSize} computer={16 - relatedLessonsSize}>
           <div className="section-header likut">
-            <Header as='h2' className="topics__title-font">
+            <Header as="h2" className="topics__title-font">
               <Header.Content>
                 {`${t('likutim.item-header')} ${name}`}
                 <Header.Subheader>{t('values.date', { date: film_date })}</Header.Subheader>
@@ -163,6 +164,7 @@ const Likut = ({ t }) => {
                       handleIsReadable={handleIsReadable}
                       handleSettings={setSettings}
                       source={bookmarkSource}
+                      label={labelSource}
                     />
                   </div>
                   <div className="library-language-container">
@@ -185,34 +187,43 @@ const Likut = ({ t }) => {
               className="font_settings doc2html"
               style={{ direction }}
             >
-              <ScrollToSearch language={language} data={data} source={bookmarkSource} />
+              {
+                data && (
+                  <ScrollToSearch
+                    language={language}
+                    data={data}
+                    source={bookmarkSource}
+                    label={labelSource}
+                  />
+                )
+              }
             </div>
           </div>
         </Grid.Column>
         {relatedLessonsSize > 0 &&
-        <Grid.Column mobile={16} tablet={relatedLessonsSize} computer={relatedLessonsSize}>
-          {/* links to other pages */}
-          <Grid padded relaxed='very' className="section-header likut__grid" stackable>
-            <Grid.Row>
-              <Header icon textAlign={gridDirection} as='h3'>
-                <Image size="big" verticalAlign="middle">
-                  <SectionLogo name='lessons' />
-                </Image>
-                {`${t(`search.intent-prefix.lessons-topic`)}  ${name}`}
-              </Header>
-            </Grid.Row>
-            <Grid.Row columns={3}>
-              {
-                relatedLessons
-                  .sort((u1, u2) => u1.film_date <= u2.film_date ? 1 : -1)
-                  .map(u =>
-                    <Grid.Column key={u.id}>
-                      <Link to={canonicalLink(u)}>{t('values.date', { date: u.film_date })}</Link>
-                    </Grid.Column>)
-              }
-            </Grid.Row>
-          </Grid>
-        </Grid.Column>
+          <Grid.Column mobile={16} tablet={relatedLessonsSize} computer={relatedLessonsSize}>
+            {/* links to other pages */}
+            <Grid padded relaxed="very" className="section-header likut__grid" stackable>
+              <Grid.Row>
+                <Header icon textAlign={gridDirection} as="h3">
+                  <Image size="big" verticalAlign="middle">
+                    <SectionLogo name="lessons" />
+                  </Image>
+                  {`${t(`search.intent-prefix.lessons-topic`)}  ${name}`}
+                </Header>
+              </Grid.Row>
+              <Grid.Row columns={3}>
+                {
+                  relatedLessons
+                    .sort((u1, u2) => u1.film_date <= u2.film_date ? 1 : -1)
+                    .map(u =>
+                      <Grid.Column key={u.id}>
+                        <Link to={canonicalLink(u)}>{t('values.date', { date: u.film_date })}</Link>
+                      </Grid.Column>)
+                }
+              </Grid.Row>
+            </Grid>
+          </Grid.Column>
         }
       </Grid>
     </div>
