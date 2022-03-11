@@ -87,7 +87,7 @@ const getControls = (isMobileDevice, onActivateSlice, onActivateSettings, isVide
     <VolumeControl className="volumeControl" />
     <TimeProgress hideTooltip />
     { !isMobileDevice && <ControlSpacer hideTooltip /> }
-    <VmAudioVideo isVideo={isVideo} onSwitchAV={onSwitchAV} />
+    { isMobileDevice && <VmAudioVideo isVideo={isVideo} onSwitchAV={onSwitchAV} /> }
     { isVideo && getVideoControls()}
     <VmSettingsButton onClick={onActivateSettings} />
     <VmShareButton onClick={onActivateSlice} />
