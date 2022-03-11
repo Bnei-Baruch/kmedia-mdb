@@ -99,6 +99,7 @@
     "connected-react-router": "^6.6.0",
     "cookie": "^0.4.0",
     "core-js": "^3.1.4",
+    "crawler-user-agents": "^1.0.88",
     "cross-env": "^7.0.0",
     "dotenv": "^8.0.0",
     "eslint-config-react-app": "^6.0.0",
@@ -140,7 +141,7 @@
     "react-i18next": "^8.3.8",
     "react-image-gallery": "^1.0.8",
     "react-pdf": "^5.0.0",
-    "react-redux": "7.2.3",
+    "react-redux": "^7.2.3",
     "react-router": "^5.2.0",
     "react-router-config": "^5.1.1",
     "react-router-dom": "^5.2.0",
@@ -156,8 +157,7 @@
     "ua-parser-js": "^0.7.17",
     "ulid": "^2.3.0",
     "warning": "^4.0.2",
-    "worker-loader": "^3.0.4",
-    "crawler-user-agents": "^1.0.88"
+    "worker-loader": "^3.0.4"
   },
   "moduleRoots": [
     "src",
