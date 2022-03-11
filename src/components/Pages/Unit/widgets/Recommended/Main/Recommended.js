@@ -12,7 +12,7 @@ import WipErr from '../../../../../shared/WipErr/WipErr';
 import DisplayRecommended from './DisplayRecommended';
 import useRecommendedUnits from './UseRecommendedUnits';
 import { usePrevious, getSourcesCollections } from '../../../../../../helpers/utils';
-import { AB_RECOMMEND_EXPERIMENT, AB_RECOMMEND_NEW } from '../../../../../../helpers/ab-testing';
+import { AB_RECOMMEND_EXPERIMENT, AB_RECOMMEND_NEW, AB_RECOMMEND_RANDOM } from '../../../../../../helpers/ab-testing';
 import { AbTestingContext } from '../../../../../../helpers/app-contexts';
 import Link from '../../../../../Language/MultiLanguageLink';
 import { canonicalLink, landingPageSectionLink } from '../../../../../../helpers/links';
@@ -34,6 +34,7 @@ const sameCollection = collection => `same-collection-${collection}`;
 const DEFAULT = 'default';
 const SERIES = 'series';
 const RANDOM_PROGRAMS = 'random-programs';
+const RANDOM_UNITS = 'random-units';
 
 const makeLandingPageLink = (t, landingPage) => (
   <Link key={landingPage} to={landingPageSectionLink(landingPage, [])}>
@@ -130,9 +131,13 @@ const Recommended = ({ unit, t, filterOutUnits = [], displayTitle = true }) => {
     unitSourceCollections.forEach(source => recommendedUnitsTypes.push(sameSourceCollection(source.id)));
     unitCollections.forEach(collection => recommendedUnitsTypes.push(sameCollection(collection.id)));
     recommendedUnitsTypes.push(SERIES);
+  } else if (activeVariant === AB_RECOMMEND_RANDOM) {
+    recommendedUnitsTypes.push(RANDOM_UNITS);
   }
 
-  recommendedUnitsTypes.push(DEFAULT);
+  if (activeVariant !== AB_RECOMMEND_RANDOM) {
+    recommendedUnitsTypes.push(DEFAULT);
+  }
 
   const recommendedUnits = useRecommendedUnits(recommendedUnitsTypes);
 
@@ -223,9 +228,24 @@ const Recommended = ({ unit, t, filterOutUnits = [], displayTitle = true }) => {
           showLabels={false} />
       );
     }
+  } else if (activeVariant === AB_RECOMMEND_RANDOM) {
+    if (recommendedUnits[RANDOM_UNITS].length !== 0) {
+      renderRecommended.push(
+        <DisplayRecommended
+          key={RANDOM_UNITS}
+          unit={unit}
+          t={t}
+          recommendedUnits={recommendedUnits[RANDOM_UNITS]}
+          title={t(`materials.recommended.${DEFAULT}`)}
+          displayTitle={displayTitle}
+          viewLimit={3}
+          feedName={RANDOM_UNITS}
+          showLabels={false} />
+      );
+    }
   }
 
-  if (recommendedUnits[DEFAULT].length !== 0) {
+  if (activeVariant !== AB_RECOMMEND_RANDOM && recommendedUnits[DEFAULT].length !== 0) {
     renderRecommended.push(
       <DisplayRecommended
         key={DEFAULT}
