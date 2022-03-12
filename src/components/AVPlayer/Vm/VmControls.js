@@ -60,15 +60,21 @@ const getSeekBar = (sliceStart, sliceEnd, duration) => {
     <ControlGroup>
       { // slice marker
         (isSlice && duration > 0) &&
-          <div className="seekbar__bar is-slice" style= {{
-            left: toPercentage(sliceStart / duration),
-            width: toPercentage((sliceEnd - sliceStart) / duration)
-          }}>
+          <div
+            className="seekbar__bar is-slice"
+            style= {{
+              left: toPercentage(sliceStart / duration),
+              width: toPercentage((sliceEnd - sliceStart) / duration)
+            }}>
           </div>
       }
       <ScrubberControl
         alwaysShowHours
-        style={{ '--vm-slider-track-height': '4px' }}
+        style={{ '--vm-slider-track-height': '3px',
+          '--vm-slider-track-focused-height': '5px',
+          '--vm-slider-thumb-height': '10px',
+          '--vm-slider-thumb-width': '10px'
+        }}
       />;
     </ControlGroup>
   );
@@ -81,7 +87,7 @@ const getVideoControls = () => (
   </>
 )
 
-const getControls = (isMobileDevice, onActivateSlice, onActivateSettings, isVideo, onSwitchAV) =>
+const getControls = (isMobileDevice, onActivateSlice, onActivateSettings, isVideo, onSwitchAV,  sliceStart, sliceEnd, duration) =>
   <ControlGroup>
     <PlaybackControl />
     <VolumeControl className="volumeControl" />
@@ -112,26 +118,29 @@ export const VmControls = (
           <Scrim gradient="up" />
           <Poster />
           <Skeleton />
+          <ClickToPlay />
           <DblClickFullscreen />
         </>
       }
 
       {/* generic  */}
-      <ClickToPlay />
       <Spinner />
       <LoadingScreen />
 
-      <Controls pin="center" justify='space-around' hideOnMouseLeave={true}>
+      {/* Jump & Next */}
+      <Controls pin="center" justify='space-around' hideOnMouseLeave>
         { showNextPrev && <VmPrevNext isPrev onClick={onPrev} /> }
         <VmJump isBack={true} />
+        <ControlSpacer />
+        { isVideo && <PlaybackControl hideTooltip style={{ '--vm-control-scale': 3 }} /> }
         <ControlSpacer />
         <VmJump isBack={false} />
         { showNextPrev && <VmPrevNext isPrev={false} onClick={onNext} /> }
       </Controls>
 
-      <Controls pin="bottomLeft" fullWidth hideOnMouseLeave={true}>
+      <Controls pin="bottomLeft" fullWidth hideOnMouseLeave justify="space-evenly">
         {getSeekBar(sliceStart, sliceEnd, duration)}
-        {getControls(isMobileDevice, onActivateSlice, onActivateSettings, isVideo, onSwitchAV)}
+        {getControls(isMobileDevice, onActivateSlice, onActivateSettings, isVideo, onSwitchAV,  sliceStart, sliceEnd, duration)}
       </Controls>
     </>
   )
