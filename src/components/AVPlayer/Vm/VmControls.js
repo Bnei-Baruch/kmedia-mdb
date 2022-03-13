@@ -57,7 +57,7 @@ const getSeekBar = (sliceStart, sliceEnd, duration) => {
   }
 
   return (
-    <ControlGroup>
+    <>
       { // slice marker
         (isSlice && duration > 0) &&
           <div
@@ -70,13 +70,14 @@ const getSeekBar = (sliceStart, sliceEnd, duration) => {
       }
       <ScrubberControl
         alwaysShowHours
-        style={{ '--vm-slider-track-height': '3px',
+        style={{ 'top': '15px',
+          '--vm-slider-track-height': '5px',
           '--vm-slider-track-focused-height': '5px',
           '--vm-slider-thumb-height': '10px',
           '--vm-slider-thumb-width': '10px'
         }}
       />;
-    </ControlGroup>
+    </>
   );
 }
 
@@ -87,12 +88,12 @@ const getVideoControls = () => (
   </>
 )
 
-const getControls = (isMobileDevice, onActivateSlice, onActivateSettings, isVideo, onSwitchAV,  sliceStart, sliceEnd, duration) =>
+const getControls = (isMobileDevice, onActivateSlice, onActivateSettings, isVideo, onSwitchAV, sliceStart, sliceEnd, duration) =>
   <ControlGroup>
     <PlaybackControl />
     <VolumeControl className="volumeControl" />
     <TimeProgress hideTooltip />
-    { !isMobileDevice && <ControlSpacer hideTooltip /> }
+    {getSeekBar(sliceStart, sliceEnd, duration)}
     { isMobileDevice && <VmAudioVideo isVideo={isVideo} onSwitchAV={onSwitchAV} /> }
     { isVideo && getVideoControls()}
     <VmSettingsButton onClick={onActivateSettings} />
@@ -138,9 +139,8 @@ export const VmControls = (
         { showNextPrev && <VmPrevNext isPrev={false} onClick={onNext} /> }
       </Controls>
 
-      <Controls pin="bottomLeft" fullWidth hideOnMouseLeave justify="space-evenly">
-        {getSeekBar(sliceStart, sliceEnd, duration)}
-        {getControls(isMobileDevice, onActivateSlice, onActivateSettings, isVideo, onSwitchAV,  sliceStart, sliceEnd, duration)}
+      <Controls pin="bottomLeft" fullWidth hideOnMouseLeave justify="space-around">
+        {getControls(isMobileDevice, onActivateSlice, onActivateSettings, isVideo, onSwitchAV, sliceStart, sliceEnd, duration)}
       </Controls>
     </>
   )
