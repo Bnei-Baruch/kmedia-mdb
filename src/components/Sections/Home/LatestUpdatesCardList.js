@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import { Swipeable } from 'react-swipeable';
 import { Button, Card } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
@@ -110,8 +110,9 @@ const LatestUpdatesCardList = ({ t, language, title, maxItems, cts, itemsByCT, i
     );
   };
 
-  if (cardsArray.length == 0)
-    initCardsArray();
+  useEffect(() => {
+      initCardsArray();
+  }, [cts]);
 
   const cardsRow = (
     <Card.Group className={clsx({ 'latestUpdatesCardGroup' : !isMobileDevice, 'latestUpdatesCardGroupMobile': isMobileDevice })} itemsPerRow={itemsPerRow} stackable={stackable}>
