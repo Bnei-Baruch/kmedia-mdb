@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Swipeable } from 'react-swipeable';
 import { Button, Card } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
@@ -111,7 +111,7 @@ const LatestUpdatesCardList = ({ t, language, title, maxItems, cts, itemsByCT, i
   };
 
   useEffect(() => {
-      initCardsArray();
+    initCardsArray();
   }, [cts]);
 
   const cardsRow = (
