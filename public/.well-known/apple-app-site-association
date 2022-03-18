@@ -1,0 +1,12 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "com.bb.kmedia",
+        "paths": ["*"]
+      }
+    ]
+  }
+
+}
