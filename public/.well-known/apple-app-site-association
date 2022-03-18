@@ -1,12 +1,12 @@
 {
-  "applinks": {
-    "apps": [],
-    "details": [
-      {
-        "appID": "com.bb.kmedia",
-        "paths": ["*"]
-      }
-    ]
-  }
+    "applinks": {
+      "apps": [],
+      "details": [
+        {
+          "appID": "3ZYLPBKYWW.com.bb.kmedia",
+          "paths": ["*"]
+        }
+      ]
+    }
 
-}
+  }
