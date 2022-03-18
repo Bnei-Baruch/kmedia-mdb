@@ -1,12 +1,11 @@
 {
     "applinks": {
-      "apps": [],
-      "details": [
+    "apps": [],
+        "details": [
         {
-          "appID": "3ZYLPBKYWW.com.bb.kmedia",
-          "paths": ["*"]
+            "appID": "3ZYLPBKYWW.com.bb.kmedia",
+            "paths": ["*"]
         }
-      ]
+    ]
     }
-
-  }
+}
