@@ -1,4 +1,8 @@
-version: 2
+version: 2.1
+
+orbs:
+  node: circleci/node@5.0.1
+
 jobs:
   build:
     environment:
@@ -7,24 +11,16 @@ jobs:
       - image: cimg/node:15.14
     steps:
       - checkout
-      - restore_cache: # special step to restore the dependency cache
-          key: dependency-cache-{{ checksum "package.json" }}
-      - run:
-          name: Setup Dependencies
-          command: |
-            yarn --ignore-engines
+      - node/install-packages:
+          pkg-manager: yarn
       - run:
           name: Setup Code Climate test-reporter
           command: |
             curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
             chmod +x ./cc-test-reporter
-      - save_cache: # special step to save the dependency cache
-          key: dependency-cache-{{ checksum "package.json" }}
-          paths:
-            - ./node_modules
       - run: # run tests
-          name: Run Test and Coverage
+          name: Run Tests and Coverage
           command: |
             ./cc-test-reporter before-build
-            yarn test --coverage
+            node ./node_modules/react-scripts/scripts/test.js --coverage --watchAll=false --maxWorkers=2
             ./cc-test-reporter after-build --exit-code $?
