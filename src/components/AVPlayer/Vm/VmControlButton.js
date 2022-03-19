@@ -31,7 +31,7 @@ const getControlButton = (iconName, onClick) =>
 const getSemControlButton = (iconName, onClick) =>
   (
     <Control
-      style={{ '--vm-control-scale': 0.6 }}
+      style={{ '--vm-control-scale': 0.6, 'margin': 0 }}
       onClick={onClick}
       disabled={!onClick}
     >
