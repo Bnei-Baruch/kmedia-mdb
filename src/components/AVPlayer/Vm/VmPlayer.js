@@ -10,7 +10,8 @@ import { DeviceInfoContext, ClientChroniclesContext } from '../../../helpers/app
 import playerHelper from '../../../helpers/player';
 import { isEmpty } from '../../../helpers/utils';
 import { MT_VIDEO, VS_DEFAULT, VS_FHD, VS_HD, VS_NHD } from '../../../helpers/consts';
-import { getQuery } from '../../../helpers/url';
+import { getQuery, getToWithLanguage } from '../../../helpers/url';
+
 import { fromHumanReadableTime } from '../../../helpers/time';
 // import { selectors as settings } from '../../../redux/modules/settings';
 import { PLAYER_MODE } from '../constants';
@@ -34,8 +35,6 @@ const chooseSource = (item, t) => {
 
   let restoredVideoQuality = playerHelper.restorePreferredVideoSize();
   let file      = item.byQuality[restoredVideoQuality];
-
-  // console.log('chooseSource:', item, ' file:', file, ' restore videoSize:', restoredVideoQuality)
 
   // if we can't find the user preferred video size we fallback.
   // first we try to go down from where he was.
@@ -69,11 +68,7 @@ const VmPlayer = ({
   const [duration]                    = usePlayerContext(ref, 'duration', 0);
   const [currentTime, setCurrentTime] = usePlayerContext(ref, 'currentTime', 0);
   const [playbackReady]               = usePlayerContext(ref, 'playbackReady', false);
-  // const [mediaType]                   = usePlayerContext(player, 'mediaType', undefined);
-
-  // const [playbackQualities]             = usePlayerContext(player, 'playbackQualities');
   const [playbackRates]                 = usePlayerContext(ref, 'playbackRates', [1]);
-  // const [playbackRate, setPlaybackRate] = usePlayerContext(ref, 'playbackRate', 1);
 
   const [source, setSource]             = useState({});
   const [isVideo, setIsVideo]           = useState(item.mediaType === MT_VIDEO);
@@ -84,9 +79,26 @@ const VmPlayer = ({
 
   const [sliceStart, setSliceStart] = useState(0);
   const [sliceEnd, setSliceEnd]     = useState(ref.duration);
+  const [currentUrl, setCurrentUrl] = useState(null);
 
   const history = useHistory();
   const location = useLocation();
+
+  // const [mediaType]  = usePlayerContext(ref, 'mediaType', undefined);
+  // const [currentSrc] = usePlayerContext(ref, 'currentSrc', undefined);
+  // const [isPiPActive] = usePlayerContext(ref, 'isPiPActive', undefined);
+
+  // console.log('data:', mediaType, currentSrc, isPiPActive, playbackReady)
+
+  // if (!currentSrc) {
+  //   if (ref?.current) {
+  //     ref.current.pause();
+  //     isPiPActive && ref.current.exitPiP();
+  //     console.log('pause and exit pip')
+  //   } else {
+  //     console.log('ref is null')
+  //   }
+  // }
 
   useEffect(() => {
     const query = getQuery(location);
@@ -102,11 +114,13 @@ const VmPlayer = ({
   }, [location]);
 
   useEffect(() => {
-    const { file, restoredVideoQuality } = chooseSource(item, t);
+    if (item) {
+      const { file, restoredVideoQuality } = chooseSource(item, t);
 
-    setVideoQuality(restoredVideoQuality);
-    setSource(file?.src);
-    setIsVideo(item.mediaType === MT_VIDEO);
+      setVideoQuality(restoredVideoQuality);
+      setSource(file?.src);
+      setIsVideo(item.mediaType === MT_VIDEO);
+    }
   }, [item, t]);
 
   useEffect(() => {
@@ -129,7 +143,7 @@ const VmPlayer = ({
   }, [setCurrentTime, sliceStart])
 
   useEffect(() => {
-    if (ref.current.playing && currentTime >= sliceEnd) {
+    if (ref.current?.playing && currentTime >= sliceEnd) {
       ref.current.pause();
     }
   }, [currentTime, sliceEnd]);
@@ -146,13 +160,15 @@ const VmPlayer = ({
       return;
     }
 
+    if (ref.current) {
     // console.log('onQualityChange to', quality, item)
-    playerHelper.persistPreferredVideoSize(quality);
-    const file = item.byQuality[quality];
+      playerHelper.persistPreferredVideoSize(quality);
+      const file = item.byQuality[quality];
 
-    setSwitchCurrentTime(currentTime);
-    setVideoQuality(quality);
-    setSource(file.src);
+      setSwitchCurrentTime(currentTime);
+      setVideoQuality(quality);
+      setSource(file.src);
+    }
   };
 
   // Remember the current time while switching.
@@ -171,14 +187,48 @@ const VmPlayer = ({
     onFinish()
   }
 
+  const handleError = e => {
+    console.log('player error:', e);
+  }
+
+  const handlePipChange = e => {
+    console.log('handlePipChange:', ref.isPiPActive, e);
+    console.log('location:', location)
+
+    const { pathName } = location;
+    console.log('pathName, currentUrl:', pathName, currentUrl)
+
+    if (ref.isPiPActive) {
+      // save current url when entering pip mode to find it if user moves
+      setCurrentUrl(pathName);
+    } else if (pathName !== currentUrl) {
+      // go to the minimized video url if different
+      const link = getToWithLanguage(currentUrl, location);
+      console.log('link:', link)
+      history.push(link);
+    }
+  }
+
+  const handleCurrentProviderChange = e => {
+    console.log('handleCurrentProviderChange:', e)
+  }
+
+  const handleVmReady = e => {
+    console.log('handleVmReady:', e)
+  }
+
   return (
     <Player ref={ref}
-      playsInline={true}
+      // playsInline={true}
       // theme="dark"
-      icons="material"
+      icons='material'
       autoPlay={autoPlay}
       debug={true}
+      onVmError={handleError}
       onVmPlaybackEnded={handlePlaybackEnded}
+      onVmPiPChange={handlePipChange}
+      onVmCurrentProviderChange={handleCurrentProviderChange}
+      onVmReady={handleVmReady}
     >
       <VmProvider
         isVideo={isVideo}
@@ -186,6 +236,7 @@ const VmPlayer = ({
         source={source}
       />
       <Ui>
+        {/* <IconLibrary name="material" resolver={iconName => `playerIcons/md-${iconName}.svg`}  /> */}
         <VmControls
           isVideo={isVideo}
           onSwitchAV={switchAV}
