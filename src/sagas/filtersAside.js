@@ -9,22 +9,23 @@ import { filtersTransformer } from '../filters';
 export function* fetchStat(action) {
   const { namespace, params, isPrepare } = action.payload;
 
-  const language = yield select(state => settings.getContentLanguage(state.settings));
-  const filters  = yield select(state => filterSelectors.getFilters(state.filters, namespace));
-
-  let rest = { ...params, language };
-
+  params.language  = yield select(state => settings.getContentLanguage(state.settings));
+  let filterParams = {};
   if (!isPrepare) {
-    const filterParams = filtersTransformer.toApiParams(filters) || {};
-    rest               = { ...filterParams, ...rest };
+    const filters = yield select(state => filterSelectors.getFilters(state.filters, namespace));
+    filterParams  = filtersTransformer.toApiParams(filters) || {};
   }
+  Object.keys(params).forEach(p => {
+    filterParams[p] = [...(filterParams[p] || []), params[p]];
+  });
 
   try {
-    const { data } = yield call(Api.unitsStats, rest);
+    const { data: dataCU } = yield call(Api.unitsStats, filterParams);
+    const { data: dataL }  = yield call(Api.labelsStats, filterParams);
 
-    yield put(actions.fetchStatsSuccess({ data, namespace, isPrepare }));
+    yield put(actions.fetchStatsSuccess({ dataCU, dataL, namespace, isPrepare }));
   } catch (err) {
-    yield put(actions.fetchStatsFailure(err));
+    yield put(actions.fetchStatsFailure(namespace, err));
   }
 }
 

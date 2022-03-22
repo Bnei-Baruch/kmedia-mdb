@@ -11,16 +11,19 @@ import { selectors as settings } from '../../../redux/modules/settings';
 import { selectors as mdb } from '../../../redux/modules/mdb';
 import Link from '../../Language/MultiLanguageLink';
 import HelmetsBasic from '../../shared/Helmets/Basic';
-import SourcesFilterContainer from '../../FiltersAside/SourcesFilter/SourcesFilterContainer';
 
 import { extractByMediaType } from './helper';
 import TextItem from './TextItem';
 import ContentItemContainer from '../../shared/ContentItem/ContentItemContainer';
 import Pagination from '../../Pagination/Pagination';
+import Filters from './Filters';
+import { selectors as filters } from '../../../redux/modules/filters';
+import { FN_CONTENT_TYPE, FN_LANGUAGES, FN_SOURCES_MULTI } from '../../../helpers/consts';
 
 const TOPIC_PAGE_SIZE = 10;
 
 const getBreadCrumbSection = (p, index, arr) => {
+  if (!p) return arr;
   const section = {
     key: p.id,
     content: p.label,
@@ -37,6 +40,8 @@ const getBreadCrumbSection = (p, index, arr) => {
 };
 
 const TopicPage = ({ t }) => {
+  const { id } = useParams();
+
   const [pageNo, setPageNo] = useState(0);
 
   const getPathByID = useSelector(state => selectors.getPathByID(state.tags));
@@ -44,6 +49,8 @@ const TopicPage = ({ t }) => {
   const language    = useSelector(state => settings.getLanguage(state.settings));
   const denormCU    = useSelector(state => mdb.nestedGetDenormContentUnit(state.mdb));
   const denormLabel = useSelector(state => mdb.getDenormLabel(state.mdb));
+  const filterNames = [FN_SOURCES_MULTI, FN_CONTENT_TYPE, FN_LANGUAGES];
+  const selected    = useSelector(state => filterNames.map(fn => filters.getFilterByName(state.filters, `topics_${id}`, fn)?.values || [])).flat();
 
   const { items: ids, mediaTotal, textTotal } = useSelector(state => selectors.getItems(state.tags));
   const total                                 = Math.max(mediaTotal, textTotal);
@@ -56,11 +63,17 @@ const TopicPage = ({ t }) => {
 
   const dispatch = useDispatch();
 
-  const { id } = useParams();
-
   useEffect(() => {
-    dispatch(actions.fetchDashboard({ id, page_size: TOPIC_PAGE_SIZE, page_no: pageNo === 0 ? 0 : pageNo - 1 }));
-  }, [id, language, dispatch, pageNo]);
+    const page_no = pageNo > 1 ? pageNo : 1;
+    dispatch(actions.fetchDashboard({ tag: id, page_size: TOPIC_PAGE_SIZE, page_no }));
+  }, [id, language, dispatch, pageNo, selected?.length]);
+
+  /*
+    const wipErr = WipErr({ wip, error, t });
+    if (wipErr) {
+      return wipErr;
+    }
+  */
 
   if (getPathByID) {
     const tagPath = getPathByID(id);
@@ -87,10 +100,13 @@ const TopicPage = ({ t }) => {
           <Breadcrumb icon={breadCrumbIcon} sections={breadCrumbSections} size="large" />
           <Divider hidden />
           <Grid>
-            <Grid.Column key={'filter'}>
-            <SourcesFilterContainer namespace={`tag_${id}`} baseParams={{ tag: id }} />
-          </Grid.Column>
-            <Grid.Column width="7">
+            <Grid.Column width="4">
+              <Filters
+                namespace={`topics_${id}`}
+                baseParams={{ tag: id }}
+              />
+            </Grid.Column>
+            <Grid.Column width="5">
               <Container className="padded topics_texts">
                 <Header as="h3" content={textTile} />
                 {
@@ -98,7 +114,7 @@ const TopicPage = ({ t }) => {
                 }
               </Container>
             </Grid.Column>
-            <Grid.Column width="9">
+            <Grid.Column width="7">
               <Container className="padded topics_media">
                 <Header content={mediaTile} />
                 {

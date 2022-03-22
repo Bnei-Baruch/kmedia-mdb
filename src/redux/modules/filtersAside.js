@@ -1,7 +1,16 @@
 import { createAction } from 'redux-actions';
 
 import { handleActions } from './settings';
+import { FN_CONTENT_TYPE, FN_LANGUAGES, FN_SOURCES_MULTI, FN_TOPICS_MULTI } from '../../helpers/consts';
 
+const fieldNameByFilter = {
+  [FN_SOURCES_MULTI]: 'sources',
+  [FN_TOPICS_MULTI]: 'tags',
+  [FN_CONTENT_TYPE]: 'content_types',
+  [FN_LANGUAGES]: 'languages',
+};
+
+const FILTER_NAMES = [FN_TOPICS_MULTI, FN_SOURCES_MULTI, FN_CONTENT_TYPE, FN_LANGUAGES];
 /* Types */
 
 const FETCH_STATS         = 'Filters_aside/FETCH_STATS';
@@ -32,41 +41,47 @@ export const actions = {
 
 /* Reducer */
 
-const initialState = {
-  sources: { tree: [], byId: {} },
-};
+const initialState = {};
 
 const onFetchStats = (draft, { namespace }) => {
-  const sourcesNS          = draft.sources[namespace] || {};
-  sourcesNS.wip            = true;
-  sourcesNS.err            = null;
-  draft.sources[namespace] = sourcesNS;
+  const ns         = draft[namespace] || {};
+  ns.wip           = true;
+  ns.err           = null;
+  draft[namespace] = ns;
   return draft;
 };
 
-const onFetchStatsSuccess = (draft, { data: { sources }, namespace, isPrepare }) => {
-  const acc = draft.sources[namespace];
+const onFetchStatsSuccess = (draft, { dataCU, dataL, namespace, isPrepare }) => {
+  const ns = draft[namespace] || FILTER_NAMES.reduce((acc, fn) => {
+    acc[fn] = {};
+    return acc;
+  }, {});
 
-  if (isPrepare) {
-    acc.tree = [];
-    acc.byId = {};
-    Object.keys(sources).filter(id => !!id).forEach(id => {
-      acc.byId[id] = sources[id];
-      acc.tree.push(id);
-    });
-  } else {
-    draft.sources[namespace].tree.forEach(id => {
-      acc.byId[id] = sources[id] || 0;
-    });
-  }
+  FILTER_NAMES.forEach(fn => {
+    const acc = ns[fn] || { tree: [], byId: {} };
+    const dcu = dataCU[fieldNameByFilter[fn]] || {};
+    const dl  = dataL[fieldNameByFilter[fn]] || {};
+    if (isPrepare) {
+      [...Object.keys(dcu), ...Object.keys(dl)].filter(id => !!id).forEach(id => {
+        acc.byId[id] = dcu[id] || 0 + dl[id] || 0;
+        acc.tree.push(id);
+      });
+    } else {
+      acc.tree.forEach(id => {
+        acc.byId[id] = dcu[id] || 0 + dl[id] || 0;
+      });
+    }
 
-  draft.sources[namespace] = { ...acc, wip: false, err: null };
+    ns[fn] = acc;
+  });
+
+  draft[namespace] = { ...ns, wip: false, err: null, isReady: true };
   return draft;
 };
 
 const onFetchStatsFailure = (draft, ns, err) => {
-  draft.tree[ns].wip = false;
-  draft.tree[ns].err = err;
+  draft[ns].wip = false;
+  draft[ns].err = err;
   return draft;
 };
 
@@ -78,10 +93,10 @@ export const reducer = handleActions({
 }, initialState);
 
 /* Selectors */
-const getStats  = (state, ns, id) => state.sources[ns]?.byId[id] || '0';
-const getTree   = (state, ns) => state.sources[ns]?.tree || [];
-const isReady   = (state, ns) => !!state.sources[ns]?.tree;
-const getWipErr = (state, ns) => ({ wip: state.sources[ns]?.wip || false, err: state.sources[ns]?.err || null });
+const getStats  = (state, ns, fn, id) => state[ns]?.[fn]?.byId[id] || 0;
+const getTree   = (state, ns, fn) => state[ns]?.[fn]?.tree || [];
+const isReady   = (state, ns) => !!state[ns]?.isReady;
+const getWipErr = (state, ns) => ({ wip: state[ns]?.wip || false, err: state[ns]?.err || null });
 
 export const selectors = {
   getStats,
