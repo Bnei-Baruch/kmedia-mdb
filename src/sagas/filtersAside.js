@@ -15,6 +15,7 @@ export function* fetchStat(action) {
     const filters = yield select(state => filterSelectors.getFilters(state.filters, namespace));
     filterParams  = filtersTransformer.toApiParams(filters) || {};
   }
+
   Object.keys(params).forEach(p => {
     filterParams[p] = [...(filterParams[p] || []), params[p]];
   });
