@@ -17,12 +17,12 @@ export function* fetchDashboard(action) {
     const filterParams = filtersTransformer.toApiParams(filters) || {};
 
     const {
-            data: {
-              items,
-              media_total,
-              text_total
-            }
-          } = yield call(Api.tagDashboard, { ...action.payload, ...filterParams, language });
+      data: {
+        items,
+        media_total,
+        text_total
+      }
+    } = yield call(Api.tagDashboard, { ...action.payload, ...filterParams, language });
 
     const cuIDs    = items.map(x => x.content_unit_id);
     const labelIDs = items.map(x => x.label_id).filter(x => !!x);
