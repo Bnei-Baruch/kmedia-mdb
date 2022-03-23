@@ -87,7 +87,7 @@ const TopicPage = ({ t }) => {
           <Breadcrumb icon={breadCrumbIcon} sections={breadCrumbSections} size="large" />
           <Divider hidden />
           <Grid doubling columns={sections.length}>
-                {
+            {
               sections.map(s => {
                 const sectionUnits = getSectionUnits(s);
                 const topicUrl     = getTopicUrl(s, tagPath, language);
@@ -104,10 +104,10 @@ const TopicPage = ({ t }) => {
                         topicUrl={topicUrl}
                         sectionCount={sectionCount}
                       />
-            </Grid.Column>
+                    </Grid.Column>
                   );
               })
-                }
+            }
           </Grid>
         </Container>
       </>
