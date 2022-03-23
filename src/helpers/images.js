@@ -41,7 +41,7 @@ export const SectionLogo = ({ name, ...props }) => {
     return null;
   }
 
-  return <Logo {...props} width="50" height="50" />;
+  return <Logo {...props} />;
 };
 
 export const NoneFallbackImage = 'none';

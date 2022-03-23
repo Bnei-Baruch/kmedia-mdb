@@ -20,7 +20,6 @@ export const renderBlogItemForHomepage = (item, language, t) => {
         <div className="entry" dangerouslySetInnerHTML={{ __html: pHtml }} />
         <Link className="read-more-link remove-indent" to={internalUrl}>{t('publications.read-more')}</Link>
       </div>
-      <Divider />
     </div>
   );
 };
