@@ -19,6 +19,8 @@ import Pagination from '../../Pagination/Pagination';
 import Filters from './Filters';
 import { selectors as filters } from '../../../redux/modules/filters';
 import { FN_CONTENT_TYPE, FN_LANGUAGES, FN_SOURCES_MULTI } from '../../../helpers/consts';
+import VideoList from './VideoList';
+import TextList from './TextList';
 
 const TOPIC_PAGE_SIZE = 10;
 
@@ -47,19 +49,12 @@ const TopicPage = ({ t }) => {
   const getPathByID = useSelector(state => selectors.getPathByID(state.tags));
   const getTags     = useSelector(state => selectors.getTags(state.tags));
   const language    = useSelector(state => settings.getLanguage(state.settings));
-  const denormCU    = useSelector(state => mdb.nestedGetDenormContentUnit(state.mdb));
-  const denormLabel = useSelector(state => mdb.getDenormLabel(state.mdb));
   const filterNames = [FN_SOURCES_MULTI, FN_CONTENT_TYPE, FN_LANGUAGES];
   const selected    = useSelector(state => filterNames.map(fn => filters.getFilterByName(state.filters, `topics_${id}`, fn)?.values || [])).flat();
 
-  const { items: ids, mediaTotal, textTotal } = useSelector(state => selectors.getItems(state.tags));
+  const { mediaTotal, textTotal } = useSelector(state => selectors.getItems(state.tags));
   const total                                 = Math.max(mediaTotal, textTotal);
-  const items                                 = ids?.map(({ cuID, lID }) => ({
-    cu: denormCU(cuID),
-    label: denormLabel(lID)
-  })) || [];
 
-  const { texts, medias } = useMemo(() => extractByMediaType(items), [items]);
 
   const dispatch = useDispatch();
 
@@ -90,9 +85,6 @@ const TopicPage = ({ t }) => {
       setPageNo(n);
     };
 
-    const mediaTile = `${t('nav.sidebar.lessons')}, ${t('nav.sidebar.events')}, ${t('nav.sidebar.programs')} (${mediaTotal})`;
-    const textTile  = `${t('nav.sidebar.publications')}, ${t('nav.sidebar.books')}, ${t('nav.sidebar.likutim')} (${textTotal})`;
-
     return (
       <>
         <HelmetsBasic title={breadCrumbSections[breadCrumbSections.length - 1]?.content} />
@@ -107,22 +99,10 @@ const TopicPage = ({ t }) => {
               />
             </Grid.Column>
             <Grid.Column width="5">
-              <Container className="padded topics_texts">
-                <Header as="h3" content={textTile} />
-                {
-                  texts.map((x, i) => (<TextItem item={x} key={i} />))
-                }
-              </Container>
+              <TextList />
             </Grid.Column>
             <Grid.Column width="7">
-              <Container className="padded topics_media">
-                <Header content={mediaTile} />
-                {
-                  medias.map((x, i) =>
-                    <ContentItemContainer id={x.cu.id} size="small" asList={true} key={i} />
-                  )
-                }
-              </Container>
+              <VideoList />
             </Grid.Column>
           </Grid>
         </Container>

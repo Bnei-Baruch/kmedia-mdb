@@ -17,16 +17,20 @@ export function* fetchDashboard(action) {
     const filterParams = filtersTransformer.toApiParams(filters) || {};
 
     const {
-      data: {
-        items,
-        media_total,
-        text_total
-      }
-    } = yield call(Api.tagDashboard, { ...action.payload, ...filterParams, language });
+            data: {
+              items,
+              media_total,
+              text_total
+            }
+          } = yield call(Api.tagDashboard, { ...action.payload, ...filterParams, language });
 
     const cuIDs    = items.map(x => x.content_unit_id);
     const labelIDs = items.map(x => x.label_id).filter(x => !!x);
-    const list     = items.map(({ content_unit_id, label_id }) => ({ cuID: content_unit_id, lID: label_id }));
+    const list     = items.map(({ content_unit_id, label_id, is_text }) => ({
+      cuID: content_unit_id,
+      lID: label_id,
+      isText: is_text
+    }));
 
     yield put(mdb.fetchUnitsByIDs({ id: cuIDs }));
     yield put(mdb.fetchLabels({ id: labelIDs }));

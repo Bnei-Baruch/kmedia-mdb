@@ -21,20 +21,20 @@ export const buildSourceTitle = (getPathByID, id) => {
   return `${articleName} ${path.join('. ')}`;
 };
 
-export const extractByMediaType = items => items.reduce((acc, { cu, label }) => {
+export const extractByMediaType = items => items.reduce((acc, { cu, label, isText }) => {
   if (!cu)
     return acc;
 
-  if (label?.media_type === 'text') {
+  if (isText) {
     acc.texts.push({ cu, label });
     return acc;
   }
 
-  if (UNIT_VIDEOS_TYPE.includes(cu.content_type)) {
+  if (isText) {
     acc.medias.push({ cu, label });
   }
 
-  if (UNIT_TEXT_TYPE.includes(cu.content_type)) {
+  if (isText) {
     acc.texts.push({ cu, label });
   }
 
