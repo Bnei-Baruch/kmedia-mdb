@@ -6,20 +6,21 @@ import { selectors as settings } from '../redux/modules/settings';
 import { actions as mdb } from '../redux/modules/mdb';
 
 export function* fetchDashboard(action) {
-  const { id } = action.payload;
+  const id = action.payload;
 
   try {
     const language = yield select(state => settings.getLanguage(state.settings));
+    const { data } = yield call(Api.tagDashboard, { id, language });
 
-    const { data: { items, media_total, text_total } } = yield call(Api.tagDashboard, { ...action.payload, language });
+    if (data && Array.isArray(data.latest_units)) {
+      yield put(mdb.receiveContentUnits(data.latest_units));
+      //  yield put(mdb.receiveContentUnits(data.promoted_units));
 
-    const cuIDs    = items.map(x => x.content_unit_id);
-    const labelIDs = items.map(x => x.label_id).filter(x => !!x);
-    const list     = items.map(({ content_unit_id, label_id }) => ({ cuID: content_unit_id, lID: label_id }));
-
-    yield put(mdb.fetchUnitsByIDs({ id: cuIDs }));
-    yield put(mdb.fetchLabels({ id: labelIDs }));
-    yield put(actions.fetchDashboardSuccess({ items: list, mediaTotal: media_total, textTotal: text_total }));
+      yield put(actions.fetchDashboardSuccess(id, data));
+    } else {
+      const err = 'No latest units were found';
+      yield put(actions.fetchDashboardFailure(id, err));
+    }
   } catch (err) {
     yield put(actions.fetchDashboardFailure(id, err));
   }

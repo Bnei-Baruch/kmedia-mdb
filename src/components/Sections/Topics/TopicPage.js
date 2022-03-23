@@ -1,22 +1,34 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { withNamespaces } from 'react-i18next';
 import { Breadcrumb, Container, Divider, Grid, Header } from 'semantic-ui-react';
 import { isLanguageRtl } from '../../../helpers/i18n-utils';
-
+import { isEmpty } from '../../../helpers/utils';
+import { stringify as urlSearchStringify } from '../../../helpers/url';
+import { filtersTransformer } from '../../../filters/index';
 import { actions, selectors } from '../../../redux/modules/tags';
 import { selectors as settings } from '../../../redux/modules/settings';
-import { selectors as mdb } from '../../../redux/modules/mdb';
+import WipErr from '../../shared/WipErr/WipErr';
 import Link from '../../Language/MultiLanguageLink';
+import TopN from './TopN';
 import HelmetsBasic from '../../shared/Helmets/Basic';
-import { extractByMediaType } from './helper';
-import TextItem from './TextItem';
-import ContentItemContainer from '../../shared/ContentItem/ContentItemContainer';
-import Pagination from '../../Pagination/Pagination';
 
-const TOPIC_PAGE_SIZE = 10;
+const TOP_N_ITEMS = 5;
+
+const getTopicUrl = (section, tagPath, language) => {
+  const query = tagPath
+    ? filtersTransformer
+      .toQueryParams([{ name: 'topics-filter', values: [tagPath.map(y => y.id)] }])
+    : '';
+
+  const realSection = section === 'publications'
+    ? 'publications/articles'
+    : section;
+
+  return `/${language}/${realSection}?${urlSearchStringify(query)}`;
+};
 
 const getBreadCrumbSection = (p, index, arr) => {
   const section = {
@@ -35,32 +47,29 @@ const getBreadCrumbSection = (p, index, arr) => {
 };
 
 const TopicPage = ({ t }) => {
-  const [pageNo, setPageNo] = useState(0);
-
+  const wip             = useSelector(state => selectors.getWip(state.tags));
+  const error           = useSelector(state => selectors.getError(state.tags));
+  const sections        = useSelector(state => selectors.getSections(state.tags));
+  const getSectionUnits = useSelector(state => selectors.getSectionUnits(state.tags));
+  const getCounts       = useSelector(state => selectors.getCounts(state.tags));
   const getPathByID = useSelector(state => selectors.getPathByID(state.tags));
   const getTags     = useSelector(state => selectors.getTags(state.tags));
   const language    = useSelector(state => settings.getLanguage(state.settings));
-  const denormCU    = useSelector(state => mdb.nestedGetDenormContentUnit(state.mdb));
-  const denormLabel = useSelector(state => mdb.getDenormLabel(state.mdb));
-
-  const { items: ids, mediaTotal, textTotal } = useSelector(state => selectors.getItems(state.tags));
-  const total                                 = Math.max(mediaTotal, textTotal);
-  const items                                 = ids?.map(({ cuID, lID }) => ({
-    cu: denormCU(cuID),
-    label: denormLabel(lID)
-  })) || [];
-
-  const { texts, medias } = useMemo(() => extractByMediaType(items), [items]);
 
   const dispatch = useDispatch();
 
   const { id } = useParams();
 
   useEffect(() => {
-    dispatch(actions.fetchDashboard({ id, page_size: TOPIC_PAGE_SIZE, page_no: pageNo === 0 ? 0 : pageNo - 1 }));
-  }, [id, language, dispatch, pageNo]);
+    dispatch(actions.fetchDashboard(id));
+  }, [id, language, dispatch]);
 
-  if (getPathByID) {
+  const wipErr = WipErr({ wip, error, t });
+  if (wipErr) {
+    return wipErr;
+  }
+
+  if (getPathByID && !isEmpty(sections)) {
     const tagPath = getPathByID(id);
 
     // create breadCrumb sections from tagPath
@@ -71,52 +80,35 @@ const TopicPage = ({ t }) => {
 
     const breadCrumbIcon = `${isLanguageRtl(language) ? 'left' : 'right'} angle`;
 
-    const onPageChange = n => {
-      setPageNo(n);
-    };
-
-    const mediaTile = `${t('nav.sidebar.lessons')}, ${t('nav.sidebar.events')}, ${t('nav.sidebar.programs')} (${mediaTotal})`;
-    const textTile  = `${t('nav.sidebar.publications')}, ${t('nav.sidebar.books')}, ${t('nav.sidebar.likutim')} (${textTotal})`;
-
     return (
       <>
         <HelmetsBasic title={breadCrumbSections[breadCrumbSections.length - 1]?.content} />
-        <Container className="padded topics">
+        <Container className="padded">
           <Breadcrumb icon={breadCrumbIcon} sections={breadCrumbSections} size="large" />
           <Divider hidden />
-          <Grid>
-            <Grid.Column width="7">
-              <Container className="padded topics_texts">
-                <Header as="h3" content={textTile} />
+          <Grid doubling columns={sections.length}>
                 {
-                  texts.map((x, i) => (<TextItem item={x} key={i} />))
-                }
-              </Container>
+              sections.map(s => {
+                const sectionUnits = getSectionUnits(s);
+                const topicUrl     = getTopicUrl(s, tagPath, language);
+                const sectionCount = getCounts(s);
+
+                return isEmpty(sectionUnits)
+                  ? null
+                  : (
+                    <Grid.Column key={s}>
+                      <TopN
+                        section={s}
+                        units={sectionUnits}
+                        N={TOP_N_ITEMS}
+                        topicUrl={topicUrl}
+                        sectionCount={sectionCount}
+                      />
             </Grid.Column>
-            <Grid.Column width="9">
-              <Container className="padded topics_media">
-                <Header content={mediaTile} />
-                {
-                  medias.map((x, i) =>
-                    <ContentItemContainer id={x.cu.id} size="small" asList={true} key={i} />
-                  )
+                  );
+              })
                 }
-              </Container>
-            </Grid.Column>
           </Grid>
-        </Container>
-        <Divider fitted />
-        <Container className="padded pagination-wrapper" textAlign="center">
-          {
-            total > 0 &&
-            <Pagination
-              pageNo={pageNo}
-              pageSize={TOPIC_PAGE_SIZE}
-              total={total}
-              language={language}
-              onChange={onPageChange}
-            />
-          }
         </Container>
       </>
     );
