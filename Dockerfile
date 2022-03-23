@@ -6,7 +6,7 @@ ARG chronicles_url="https://chronicles.kli.one/"
 ARG file_trimmer_api_url="https://trim.kab.sh/rest/trim"
 ARG mdb_rest_api_url="https://staging-archive.kabbalahmedia.info/mdb-api/"
 
-FROM bneibaruch/kmedia_base:latest as build
+FROM bneibaruch/kmedia_base:1 as build
 
 LABEL maintainer="edoshor@gmail.com"
 

@@ -4,11 +4,12 @@ import { emitter } from '@marvelapp/react-ab-test';
 
 // Recommendations.
 export const AB_RECOMMEND_EXPERIMENT = 'recommend';
-export const AB_RECOMMEND_NEW = 'new';
 export const AB_RECOMMEND_CURRENT = 'current';
+export const AB_RECOMMEND_NEW = 'new';
+export const AB_RECOMMEND_RANDOM = 'random';
 
 // Define A/B testing for Recommendations.
-emitter.defineVariants(AB_RECOMMEND_EXPERIMENT, [AB_RECOMMEND_CURRENT, AB_RECOMMEND_NEW]);
+emitter.defineVariants(AB_RECOMMEND_EXPERIMENT, [AB_RECOMMEND_CURRENT, AB_RECOMMEND_NEW, AB_RECOMMEND_RANDOM]);
 
 // Selects ab testing variabnt by experiment and userId.
 // Can be overriden by URL paramter ?ab=<experiment1>:<variant1>,<experiment2>:<variant2>,...

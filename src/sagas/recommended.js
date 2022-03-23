@@ -2,7 +2,7 @@ import { all, call, put, takeLatest, select } from 'redux-saga/effects';
 
 import Api from '../helpers/Api';
 import { IsCollectionContentType, IsUnitContentType } from '../helpers/consts';
-import { AB_RECOMMEND_NEW } from '../helpers/ab-testing';
+import { AB_RECOMMEND_NEW, AB_RECOMMEND_RANDOM } from '../helpers/ab-testing';
 import { actions, types, selectors as recommended } from '../redux/modules/recommended';
 import { actions as mdbActions, selectors as mdbSelectors } from '../redux/modules/mdb';
 import { selectors as settings } from '../redux/modules/settings';
@@ -134,9 +134,17 @@ export function* fetchRecommended(action) {
           });
         });
       }
+    } else if (variant === AB_RECOMMEND_RANDOM) {
+      // Random Units
+      specs.push({
+        'name': 'DataContentUnitsSuggester',
+        'order_selector': 3,
+      });
     }
 
-    specs.push({ name: 'Default' });
+    if (variant !== AB_RECOMMEND_RANDOM) {
+      specs.push({ name: 'Default' });
+    }
 
     const requestData = Api.recommendedRequestData({
       uid: id,
@@ -175,7 +183,7 @@ export function* fetchRecommended(action) {
 
       fetchList.push(fetchViewsByUIDs(Array.from(viewUids)));
 
-      if (variant === AB_RECOMMEND_NEW) {
+      if (variant === AB_RECOMMEND_NEW || variant === AB_RECOMMEND_RANDOM) {
         const watchingUids = new Set();
         for (let i = 0; i < data.feeds.length; ++i) {
           if (Array.isArray(data.feeds[i]) && data.feeds[i].length > 0) {
@@ -195,7 +203,7 @@ export function* fetchRecommended(action) {
       throw new Error(`Expected recommended feeds size to be ${expectedLength}`);
     }
 
-    const feeds = { 'default': data.feeds[data.feeds.length - 1] };
+    const feeds = variant === AB_RECOMMEND_RANDOM ? { 'random-units': data.feeds[0] } : { 'default': data.feeds[data.feeds.length - 1] };
     if (variant === AB_RECOMMEND_NEW) {
       let index = 0;
       feeds['random-programs'] = data.feeds[index];

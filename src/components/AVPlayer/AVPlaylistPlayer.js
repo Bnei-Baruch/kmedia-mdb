@@ -14,20 +14,20 @@ import { DeviceInfoContext } from '../../helpers/app-contexts';
 
 const AVPlaylistPlayer = ({ items, selected, onSelectedChange, onLanguageChange, onSwitchAV }) => {
   const { undefinedDevice } = useContext(DeviceInfoContext);
-  const uiLanguage = useSelector(state => settings.getLanguage(state.settings));
-  const contentLanguage = useSelector(state => settings.getContentLanguage(state.settings));
+  const uiLanguage          = useSelector(state => settings.getLanguage(state.settings));
+  const contentLanguage     = useSelector(state => settings.getContentLanguage(state.settings));
 
   const location = useLocation();
-  const query = getQuery(location);
+  const query    = getQuery(location);
 
   const [autoPlay, setAutoPlay]                 = useState(!!query.sstart);
   const [mediaEditMode, setMediaEditMode]       = useState(null);
   const [isDropdownOpened, setIsDropdownOpened] = useState(false);
 
-  const handleMediaEditModeChange = mediaEditMode => setMediaEditMode(mediaEditMode);
+  const handleMediaEditModeChange  = mediaEditMode => setMediaEditMode(mediaEditMode);
   const handleDropdownOpenedChange = isDropdownOpened => setIsDropdownOpened(isDropdownOpened);
 
-  const onPlay = () => setAutoPlay(true);
+  const onPlay  = () => setAutoPlay(true);
   const onPause = () => setAutoPlay(false);
 
   const onPrev = () => {
@@ -51,8 +51,8 @@ const AVPlaylistPlayer = ({ items, selected, onSelectedChange, onLanguageChange,
 
   // hasNext, hasPrev are not trivial as checking the indexes due to fact
   // that in some languages there might be missing audio or video file.
-  const hasNext = selected < items.length - 1 && items.slice(selected).some(f => !!f.src);
-  const hasPrev = selected > 0 && items.slice(0, selected).some(f => !!f.src);
+  const hasNext = selected < items.length - 1 && items.slice(selected).some(f => !!f.file?.src);
+  const hasPrev = selected > 0 && items.slice(0, selected).some(f => !!f.file?.src);
 
   const isAudio = currentItem.mediaType === MT_AUDIO;
 
@@ -95,9 +95,9 @@ const AVPlaylistPlayer = ({ items, selected, onSelectedChange, onLanguageChange,
       </div>
     </div>
   );
-}
+};
 
-AVPlaylistPlayer.propTypes   = {
+AVPlaylistPlayer.propTypes = {
   items: PropTypes.arrayOf(shapes.VideoItem).isRequired,
   selected: PropTypes.number.isRequired,
   onSelectedChange: PropTypes.func.isRequired,

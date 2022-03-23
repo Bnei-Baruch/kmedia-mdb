@@ -79,20 +79,23 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
     const contentLang    = playerHelper.getLanguageFromQuery(location, playerLanguage);
 
     const nPlaylist = playerHelper.playlist(collection, mediaType, contentLang, uiLang);
-    setPlaylist(nPlaylist);
-
-    if (nPlaylist) {
-      const nIndex = nPlaylist.items.findIndex(i => i.unit.id === cuId);
-      if (nIndex !== -1) {
-        setSelected(nIndex);
-      }
+    if (
+      nPlaylist?.collection.id !== playlist?.collection.id ||
+      nPlaylist?.mediaType !== playlist?.mediaType ||
+      nPlaylist?.language !== playlist?.language
+    ) {
+      setPlaylist(nPlaylist);
     }
-  }, [collection, contentLanguage, location, playlist?.language, uiLanguage, cuId]);
+  }, [collection, contentLanguage, location, playlist, uiLanguage]);
 
   useEffect(() => {
-    const newUnit = playlist?.items[selected]?.unit;
-    setUnit(newUnit);
-  }, [playlist, selected]);
+    const newSel = cuId ? playlist?.items.findIndex(i => i.unit.id === cuId) : playerHelper.getActivePartFromQuery(location);
+    if (!isNaN(newSel) && newSel !== -1) {
+      setSelected(newSel);
+      const newUnit = playlist?.items[newSel]?.unit;
+      setUnit(newUnit);
+    }
+  }, [playlist, cuId]);
 
   if (!collection || !Array.isArray(collection.content_units)) {
     return null;
@@ -107,7 +110,7 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
 
   // Don't recommend lesson preparation, skip to next unit.
   let recommendUnit = unit;
-  const ccuNames = collection?.ccuNames || {};
+  const ccuNames    = collection?.ccuNames || {};
   const isUnitPrep  = ccuNames?.[unit?.id] === '0' && Object.values(ccuNames).filter(value => value === '0').length === 1;
   if (isUnitPrep && Array.isArray(playlist?.items)) {
     const indexOfUnit = playlist.items.findIndex(item => item?.unit?.id === unit.id);
@@ -182,10 +185,11 @@ PlaylistCollectionPage.propTypes = {
 const isEqualLink = (link1, link2) =>
   (!link1 && !link2) || link1 === link2;
 
-const areEqual = (prevProps, nextProps) =>
+const areEqual = (prevProps, nextProps) => (
   isEqual(prevProps.collection, nextProps.collection)
   && (prevProps.cuId === nextProps.cuId)
   && isEqualLink(prevProps.prevLink, nextProps.prevLink)
-  && isEqualLink(prevProps.nextLink, nextProps.nextLink);
+  && isEqualLink(prevProps.nextLink, nextProps.nextLink)
+);
 
 export default React.memo(PlaylistCollectionPage, areEqual);
