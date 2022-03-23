@@ -1,8 +1,7 @@
 import { createAction } from 'redux-actions';
 import identity from 'lodash/identity';
 
-import { tracePath, unitsBySection } from '../../helpers/utils';
-import { canonicalContentType, canonicalSectionByUnit } from '../../helpers/links';
+import { tracePath } from '../../helpers/utils';
 import { TOPICS_FOR_DISPLAY } from '../../helpers/consts';
 import { handleActions, types as settings } from './settings';
 import { types as ssr } from './ssr';
@@ -33,7 +32,7 @@ export const types = {
 const receiveTags = createAction(RECEIVE_TAGS);
 
 const fetchDashboard        = createAction(FETCH_DASHBOARD);
-const fetchDashboardSuccess = createAction(FETCH_DASHBOARD_SUCCESS, (id, data) => ({ id, data }));
+const fetchDashboardSuccess = createAction(FETCH_DASHBOARD_SUCCESS);
 const fetchDashboardFailure = createAction(FETCH_DASHBOARD_FAILURE, (id, err) => ({ id, err }));
 const fetchStats            = createAction(FETCH_STATS, (namespace, contentTypes) => ({ namespace, contentTypes }));
 const fetchStatsSuccess     = createAction(FETCH_STATS_SUCCESS);
@@ -55,11 +54,7 @@ const initialState = {
   wip: false,
   error: null,
   getByID: identity,
-  counts: [],
-  sections: [],
-  units: [],
-  cuBySection: {},
-  getSectionUnits: identity
+  dashboard: { items: [], mediaTotal: 0, textTotal: 0 },
 };
 
 const buildById = items => {
@@ -87,11 +82,7 @@ const onSSRPrepare = draft => {
   draft.wip         = false;
   draft.getByID     = identity;
   draft.getPathByID = () => [];
-  draft.counts          = [];
-  draft.sections        = [];
-  draft.units           = [];
-  draft.cuBySection     = {};
-  draft.getSectionUnits = identity;
+  draft.dashboard      = { items: [], mediaTotal: 0, textTotal: 0 };
 
   if (draft.error) {
     draft.error = draft.error.toString();
@@ -129,43 +120,16 @@ const onDashboard = draft => {
   draft.wip    = true;
 };
 
-const onDashboardSuccess = (draft, { data }) => {
-  const { latest_units: latestUnits, counts /* promoted_units */ } = data;
-
-  if (!Array.isArray(latestUnits)) {
-    return;
-  }
-
-  // map units to sections
-  const cuBySection = unitsBySection(latestUnits);
-
-  const getSectionUnits   = section => cuBySection[section];
-  const uniqueSectionsArr = [...new Set(latestUnits.map(u => canonicalSectionByUnit(u)).filter(x => !!x))].sort();
-
-  const getCounts = section => {
-    const contentTypes = canonicalContentType(section);
-    return contentTypes.map(c => counts[c] || 0).reduce((acc, c) => acc + c, 0);
-  };
-
+const onDashboardSuccess = (draft, { items = [], mediaTotal, textTotal }) => {
   draft.wip    = false;
   draft.error  = null;
-  draft.counts          = counts;
-  draft.getCounts       = getCounts;
-  draft.sections        = uniqueSectionsArr;
-  draft.units           = latestUnits;
-  draft.cuBySection     = cuBySection;
-  draft.getSectionUnits = getSectionUnits;
+  draft.dashboard = { items, mediaTotal, textTotal };
 };
 
 const onSetLanguage = draft => {
   draft.wip     = false;
-  draft.getByID         = identity;
-  draft.counts          = [];
-  draft.sections        = [];
-  draft.units           = [];
-  draft.cuBySection     = {};
-  draft.getSectionUnits = identity;
   draft.err     = null;
+  draft.getByID         = identity;
 };
 
 const onFetchDashboardFailure = (draft, payload) => {
@@ -189,28 +153,23 @@ export const reducer = handleActions({
 
 const getTags         = state => state.byId;
 const getRoots        = state => state.roots;
-const getCounts       = state => state.getCounts;
 const getDisplayRoots = state => state.displayRoots;
 const getTagById      = state => state.getByID;
 const getPath         = state => state.getPath;
 const getPathByID     = state => state.getPathByID;
-const getSections     = state => state.sections;
-const getUnits        = state => state.units;
-const getSectionUnits = state => state.getSectionUnits;
 const getWip          = state => state.wip;
 const getError        = state => state.error;
+
+const getItems = state => state.dashboard || {};
 
 export const selectors = {
   getWip,
   getError,
   getTags,
   getRoots,
-  getCounts,
   getDisplayRoots,
   getTagById,
   getPath,
   getPathByID,
-  getSections,
-  getUnits,
-  getSectionUnits
+  getItems
 };
