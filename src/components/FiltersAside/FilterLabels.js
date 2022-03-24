@@ -9,7 +9,7 @@ const FilterLabels = ({ namespace, t }) => {
 
   const dispatch = useDispatch();
 
-  const onRemove = (fn) => {
+  const onRemove = fn => {
     dispatch(actions.setFilterValue(namespace, fn, null));
   };
 
