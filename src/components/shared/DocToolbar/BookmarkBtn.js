@@ -62,7 +62,7 @@ const BookmarkBtn = ({ t, source, label, close }) => {
               <Button
                 color="green"
                 content={t('personal.label.tagging')}
-                onClick={()=>setOpenTag(true)}
+                onClick={() => setOpenTag(true)}
               />
             }
           />
