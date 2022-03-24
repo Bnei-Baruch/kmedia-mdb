@@ -7,6 +7,7 @@ import TagSourceFilter from '../../FiltersAside/TopicsFilter/TagSourceFilter';
 import ContentType from '../../FiltersAside/ContentTypeFilter/ContentType';
 import Language from '../../FiltersAside/LanguageFilter/Language';
 import { selectors as filters } from '../../../redux/modules/filters';
+import FilterLabels from '../../FiltersAside/FilterLabels';
 
 const Filters = ({ namespace, baseParams }) => {
   const [isHydrated, setIsHydrated] = useState(false);
@@ -40,7 +41,7 @@ const Filters = ({ namespace, baseParams }) => {
   return (
     <>
       <FiltersHydrator namespace={namespace} onHydrated={handleOnHydrated} />
-
+      <FilterLabels namespace={namespace} />
       <TagSourceFilter
         namespace={namespace}
         filterName={FN_SOURCES_MULTI}
@@ -55,9 +56,4 @@ const Filters = ({ namespace, baseParams }) => {
   );
 };
 
-const areEqual = (prevProps, nextProps) => (
-  prevProps.namespace === nextProps.namespace &&
-  prevProps.baseParams === nextProps.baseParams
-);
-
-export default React.memo(Filters, areEqual);
+export default Filters;
