@@ -65,9 +65,11 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
 
   const handleSelectedChange = useCallback(nSelected => {
     if (nSelected !== selected && playlist?.items && playlist?.items[nSelected]) {
-      history.push(`/${uiLanguage}${playlist.items[nSelected].shareUrl}`);
+      // console.log('share url:', playlist.items[nSelected].shareUrl)
+      // history.push(`/${uiLanguage}${playlist.items[nSelected].shareUrl}`);
+      setSelected(nSelected);
     }
-  }, [history, playlist, selected, uiLanguage]);
+  }, [playlist, selected]);
 
   // we need to calculate the playlist here, so we can filter items out of recommended
   // playlist { collection, language, mediaType, items, groups };
@@ -95,7 +97,7 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
       const newUnit = playlist?.items[newSel]?.unit;
       setUnit(newUnit);
     }
-  }, [playlist, cuId]);
+  }, [playlist, cuId, location]);
 
   if (!collection || !Array.isArray(collection.content_units)) {
     return null;
