@@ -1,11 +1,7 @@
 import { createAction } from 'redux-actions';
 
 import { handleActions } from './settings';
-import {
-  MY_NAMESPACE_PLAYLISTS,
-  MY_NAMESPACE_REACTIONS,
-  MY_NAMESPACES
-} from '../../helpers/consts';
+import { MY_NAMESPACE_PLAYLISTS, MY_NAMESPACE_REACTIONS, MY_NAMESPACES } from '../../helpers/consts';
 import { getMyItemKey } from '../../helpers/my';
 
 /* Types */
@@ -105,7 +101,6 @@ export const actions = {
 
   reactionsCount,
   reactionsCountSuccess,
-
 };
 
 /* Reducer */
@@ -187,7 +182,7 @@ const onEditSuccess = (draft, { namespace, item, changeItems }) => {
   const byKey   = { ...draft[namespace].byKey[key], ...item };
   if (namespace === MY_NAMESPACE_PLAYLISTS && !changeItems) {
     byKey.total_items = draft[namespace].byKey[key].total_items;
-    byKey.items = draft[namespace].byKey[key].items;
+    byKey.items       = draft[namespace].byKey[key].items;
   }
 
   draft[namespace].byKey[key] = byKey;

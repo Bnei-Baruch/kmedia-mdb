@@ -84,9 +84,9 @@ const buildById = items => {
 };
 
 const onSSRPrepare = draft => {
-  draft.wip             = false;
-  draft.getByID         = identity;
-  draft.getPathByID     = () => [];
+  draft.wip         = false;
+  draft.getByID     = identity;
+  draft.getPathByID = () => [];
   draft.counts          = [];
   draft.sections        = [];
   draft.units           = [];
@@ -126,7 +126,7 @@ const onReceiveTags = (draft, payload) => {
 };
 
 const onDashboard = draft => {
-  draft.wip = true;
+  draft.wip    = true;
 };
 
 const onDashboardSuccess = (draft, { data }) => {
@@ -147,8 +147,8 @@ const onDashboardSuccess = (draft, { data }) => {
     return contentTypes.map(c => counts[c] || 0).reduce((acc, c) => acc + c, 0);
   };
 
-  draft.wip             = false;
-  draft.error           = null;
+  draft.wip    = false;
+  draft.error  = null;
   draft.counts          = counts;
   draft.getCounts       = getCounts;
   draft.sections        = uniqueSectionsArr;
@@ -158,14 +158,14 @@ const onDashboardSuccess = (draft, { data }) => {
 };
 
 const onSetLanguage = draft => {
-  draft.wip             = false;
+  draft.wip     = false;
   draft.getByID         = identity;
   draft.counts          = [];
   draft.sections        = [];
   draft.units           = [];
   draft.cuBySection     = {};
   draft.getSectionUnits = identity;
-  draft.err             = null;
+  draft.err     = null;
 };
 
 const onFetchDashboardFailure = (draft, payload) => {

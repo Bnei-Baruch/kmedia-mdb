@@ -188,6 +188,7 @@ function* reactionsCount(action) {
   }
 }
 
+//Watches
 function* watchSetPage() {
   yield takeLatest(types.SET_PAGE, updatePageInQuery);
 }

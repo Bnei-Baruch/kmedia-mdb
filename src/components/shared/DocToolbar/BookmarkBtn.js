@@ -1,17 +1,18 @@
 import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
-import { Button, MenuItem, Modal, Popup } from 'semantic-ui-react';
-import AlertModal from '../AlertModal';
+import { Button, Confirm, MenuItem, Modal, Popup } from 'semantic-ui-react';
 import BookmarkForm from '../SaveBookmark/BookmarkForm';
 import { useSelector } from 'react-redux';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { selectors as settings } from '../../../redux/modules/settings';
+import SelectTopicsModal from '../SelectTopicsModal/SelectTopicsModal';
 
-const BookmarkBtn = ({ t, source, close }) => {
-  const [open, setOpen]         = useState();
-  const [alertMsg, setAlertMsg] = useState();
+const BookmarkBtn = ({ t, source, label, close }) => {
+  const [open, setOpen]       = useState(false);
+  const [confirm, setConfirm] = useState(false);
+  const [openTag, setOpenTag] = useState(false);
 
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const language           = useSelector(state => settings.getLanguage(state.settings));
@@ -22,16 +23,53 @@ const BookmarkBtn = ({ t, source, close }) => {
   };
 
   const handleClose = (e, el, isCreated) => {
-    isCreated && setAlertMsg(t('personal.bookmark.bookmarkCreated'));
+    if (!isCreated || !label) {
+      setOpen(false);
+      close();
+      return;
+    }
+
+    setConfirm(true);
     setOpen(false);
+  };
+
+  const handleConfirmCancel = () => {
+    setConfirm(false);
     close();
   };
 
-  const handleAlertClose = () => setAlertMsg(null);
+  const handleCloseTag = () => {
+    setOpenTag(false);
+    close();
+  };
 
   return (
     <>
-      <AlertModal message={alertMsg} open={!!alertMsg} onClose={handleAlertClose} />
+      <Confirm
+        size="tiny"
+        open={confirm}
+        header={t('personal.bookmark.bookmarkCreated')}
+        onCancel={handleConfirmCancel}
+        onConfirm={() => setConfirm(false)}
+        confirmButton={{ content: t('personal.label.ending') }}
+        className="bookmark_confirm"
+        cancelButton={
+          <SelectTopicsModal
+            label={label}
+            open={openTag}
+            onClose={handleCloseTag}
+            trigger={
+              <Button
+                color="green"
+                content={t('personal.label.tagging')}
+                onClick={() => setOpenTag(true)}
+              />
+            }
+          />
+        }
+        content={t('personal.label.contentCreate')}
+        dir={dir}
+      />
       <Modal
         trigger={
           <Popup
@@ -62,6 +100,7 @@ BookmarkBtn.propTypes = {
   t: PropTypes.func.isRequired,
   query: PropTypes.object,
   source: PropTypes.object,
+  label: PropTypes.object,
 };
 
 export default withNamespaces()(BookmarkBtn);

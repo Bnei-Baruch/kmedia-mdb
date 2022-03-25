@@ -132,4 +132,22 @@
       }
     }
   }
+
+  .topics_texts .cu_item_info {
+    padding-left: 0!important;
+    padding-right: 0!important;
+  }
+
+  .cu_item {
+    vertical-align: top;
+
+    & > .image {
+      padding-top: 1em;
+    }
+  }
+
+  .description {
+    opacity: 0.43;
+    color: #1b1c1d;
+  }
 }

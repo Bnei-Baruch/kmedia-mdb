@@ -8,7 +8,7 @@ import { withNamespaces } from 'react-i18next';
 
 const POPOVER_CONFIRMATION_TIMEOUT = 2500;
 
-const CopyBtn = ({ t, text }) => {
+const CopyLinkBtn = ({ t, text }) => {
   const [open, setOpen] = useStateWithCallback(false, open => {
     if (open) {
       timeout = setTimeout(() => setOpen(false), POPOVER_CONFIRMATION_TIMEOUT);
@@ -56,11 +56,8 @@ const CopyBtn = ({ t, text }) => {
   );
 };
 
-CopyBtn.propTypes = {
-  name: PropTypes.string.isRequired,
-  popup: PropTypes.string.isRequired,
+CopyLinkBtn.propTypes = {
   text: PropTypes.string.isRequired,
-  icon: PropTypes.string.isRequired,
 };
 
-export default withNamespaces()(CopyBtn);
+export default withNamespaces()(CopyLinkBtn);

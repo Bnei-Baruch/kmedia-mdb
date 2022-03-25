@@ -6,18 +6,16 @@ import { useSelector } from 'react-redux';
 import { selectors as mdb } from '../../../../../redux/modules/mdb';
 import { selectors } from '../../../../../redux/modules/my';
 import { SectionLogo } from '../../../../../helpers/images';
-import { canonicalLink } from '../../../../../helpers/links';
 import { iconByContentTypeMap, MY_NAMESPACE_FOLDERS } from '../../../../../helpers/consts';
 import { OFFSET_TEXT_SEPARATOR } from '../../../../../helpers/scrollToSearch/helper';
 import { getMyItemKey } from '../../../../../helpers/my';
-import { stringify } from '../../../../../helpers/url';
 import Link from '../../../../Language/MultiLanguageLink';
 import Actions from './Actions';
-import { buildTitleByUnit } from './helper';
+import { buildBookmarkLink, buildTitleByUnit } from './helper';
 import { selectors as sourcesSelectors, selectors as sources } from '../../../../../redux/modules/sources';
 
 const BookmarksItem = ({ bookmark, t }) => {
-  const { properties: { uid_prefix, ...urlParams } = false, folder_ids = [], name, subject_uid } = bookmark;
+  const { properties, folder_ids = [], name, subject_uid } = bookmark;
 
   const cu               = useSelector(state => mdb.getDenormContentUnit(state.mdb, subject_uid));
   const folderKeys       = folder_ids.map(id => getMyItemKey(MY_NAMESPACE_FOLDERS, { id }).key);
@@ -28,12 +26,7 @@ const BookmarksItem = ({ bookmark, t }) => {
   if (!areSourcesLoaded)
     return null;
 
-  let link = canonicalLink({ ...cu, id: `${uid_prefix || ''}${subject_uid}` });
-  if (urlParams) {
-    link = `${link}?${stringify(urlParams)}`;
-    if (urlParams.activeTab)
-      link = `${link}&autoPlay=0`;
-  }
+  const link = buildBookmarkLink(bookmark, cu);
 
   const renderFolder = f => (
     <Label key={f.id} basic>
@@ -46,10 +39,10 @@ const BookmarksItem = ({ bookmark, t }) => {
   const icon  = iconByContentTypeMap.get(cu?.content_type);
 
   const citates = [];
-  if (!!urlParams?.srchstart)
-    citates.push(urlParams.srchstart.split(OFFSET_TEXT_SEPARATOR)[0]);
-  if (!!urlParams?.srchend)
-    citates.push(urlParams.srchend.split(OFFSET_TEXT_SEPARATOR)[0]);
+  if (!!properties?.srchstart)
+    citates.push(properties.srchstart.split(OFFSET_TEXT_SEPARATOR)[0]);
+  if (!!properties?.srchend)
+    citates.push(properties.srchend.split(OFFSET_TEXT_SEPARATOR)[0]);
 
   return (
     <List.Item className="bookmark_item">

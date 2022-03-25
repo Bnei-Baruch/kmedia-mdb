@@ -37,6 +37,13 @@ const COUNT_CU_FAILURE            = 'MDB/COUNT_CU_FAILURE';
 const RECEIVE_COLLECTIONS   = 'MDB/RECEIVE_COLLECTIONS';
 const RECEIVE_CONTENT_UNITS = 'MDB/RECEIVE_CONTENT_UNITS';
 
+const CREATE_LABEL         = 'MDB/CREATE_LABEL';
+const CREATE_LABEL_SUCCESS = 'MDB/CREATE_LABEL_SUCCESS';
+const CREATE_LABEL_FAILURE = 'MDB/CREATE_LABEL_FAILURE';
+const FETCH_LABELS         = 'MDB/FETCH_LABELS';
+const FETCH_LABELS_SUCCESS = 'MDB/FETCH_LABELS_SUCCESS';
+const RECEIVE_LABELS       = 'MDB/RECEIVE_LABELS';
+
 export const types = {
   FETCH_UNIT,
   FETCH_UNIT_SUCCESS,
@@ -66,6 +73,11 @@ export const types = {
 
   RECEIVE_COLLECTIONS,
   RECEIVE_CONTENT_UNITS,
+  RECEIVE_LABELS,
+
+  CREATE_LABEL,
+  FETCH_LABELS,
+  FETCH_LABELS_SUCCESS,
 };
 
 /* Actions */
@@ -99,6 +111,13 @@ const countCUFailure           = createAction(COUNT_CU_FAILURE, (namespace, err)
 const receiveCollections  = createAction(RECEIVE_COLLECTIONS);
 const receiveContentUnits = createAction(RECEIVE_CONTENT_UNITS);
 
+const createLabel        = createAction(CREATE_LABEL);
+const createLabelSuccess = createAction(CREATE_LABEL_SUCCESS);
+const createLabelFailure = createAction(CREATE_LABEL_FAILURE);
+const fetchLabels        = createAction(FETCH_LABELS);
+const fetchLabelsSuccess = createAction(FETCH_LABELS_SUCCESS);
+const receiveLabels      = createAction(RECEIVE_LABELS);
+
 export const actions = {
   fetchUnit,
   fetchUnitSuccess,
@@ -128,6 +147,13 @@ export const actions = {
 
   receiveCollections,
   receiveContentUnits,
+  receiveLabels,
+
+  createLabel,
+  createLabelSuccess,
+  createLabelFailure,
+  fetchLabels,
+  fetchLabelsSuccess,
 };
 
 /* Reducer */
@@ -135,8 +161,10 @@ export const actions = {
 const freshStore = () => ({
   cById: {},
   cuById: {},
+  labelById: {},
   cWindow: {},
   countCU: {},
+  labelsByCU: {},
   datepickerCO: null,
   wip: {
     units: {},
@@ -463,6 +491,30 @@ const onReceiveContentUnits = (state, action) => {
   };
 };
 
+const onReceiveLabels = (state, action) => {
+  const labels = action.payload;
+  if (labels.length === 0) {
+    return state;
+  }
+
+  const labelsByCU = { ...state.labelsByCU };
+  const labelById  = { ...state.labelById };
+  for (const i in labels) {
+    const { content_unit, id } = labels[i];
+
+    labelById[id] = labels[i];
+    if (!labelsByCU[content_unit]?.includes(id)) {
+      labelsByCU[content_unit] = [...(labelsByCU[content_unit] || []), id];
+    }
+  }
+
+  return {
+    ...state,
+    labelsByCU,
+    labelById,
+  };
+};
+
 const onFetchWindow = (state, action) => {
   const { id, data } = action.payload;
 
@@ -560,6 +612,8 @@ export const reducer = handleActions({
 
   [RECEIVE_COLLECTIONS]: (state, action) => onReceiveCollections(state, action),
   [RECEIVE_CONTENT_UNITS]: (state, action) => onReceiveContentUnits(state, action),
+
+  [RECEIVE_LABELS]: onReceiveLabels,
 }, freshStore());
 
 /* Selectors */
@@ -621,7 +675,7 @@ const getDenormContentUnit = (state, id) => {
 
 const nestedGetDenormContentUnit = state => id => getDenormContentUnit(state, id);
 
-const nestedDenormCollectionWUnits = state => id => getDenormCollectionWUnits(state, id)
+const nestedDenormCollectionWUnits = state => id => getDenormCollectionWUnits(state, id);
 
 const getDenormCollectionWUnits = (state, id) => {
   let c = state.cById[id];
@@ -635,6 +689,8 @@ const getDenormCollectionWUnits = (state, id) => {
   return c;
 };
 
+const getDenormLabel = state => id => state.labelById[id];
+
 const getCountCu = (state, namespace) => state.countCU[namespace];
 
 const skipFetchedCU = (state, ids, with_files) => ids.filter(id => {
@@ -643,6 +699,8 @@ const skipFetchedCU = (state, ids, with_files) => ids.filter(id => {
   return !cu?.files?.length;
 });
 const skipFetchedCO = (state, ids) => ids.filter(id => !getDenormCollection(state, id));
+
+const getLabelsByCU = (state, id) => state.labelsByCU[id];
 
 export const selectors = {
   getCollectionById,
@@ -663,4 +721,6 @@ export const selectors = {
   getCountCu,
   skipFetchedCU,
   skipFetchedCO,
+  getLabelsByCU,
+  getDenormLabel,
 };

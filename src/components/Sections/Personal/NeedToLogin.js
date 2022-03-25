@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
-import { Divider, Button, Header } from 'semantic-ui-react';
+import { Button, Divider, Header } from 'semantic-ui-react';
 
 import { actions, selectors } from '../../../redux/modules/auth';
 import { selectors as settings } from '../../../redux/modules/settings';
@@ -41,7 +41,7 @@ const ShowNeedToLogin = withNamespaces()(
 
 const NeedToLogin = () => {
   const user = useSelector(state => selectors.getUser(state.auth));
-  return !user ? <ShowNeedToLogin /> : null;
+  return useMemo(() => !user ? <ShowNeedToLogin /> : null, [user]);
 };
 
 export default NeedToLogin;

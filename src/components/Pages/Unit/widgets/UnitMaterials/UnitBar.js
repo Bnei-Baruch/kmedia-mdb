@@ -4,8 +4,9 @@ import PropTypes from 'prop-types';
 
 import LibrarySettings from '../../../../Sections/Library/LibrarySettings';
 import BookmarkButton from '../../../../shared/SaveBookmark/BookmarkButton';
+import LabelButton from '../../../../shared/SelectTopicsModal/LabelButton';
 
-const UnitBar = ({ fontSize = 0, handleSettings, source }) => {
+const UnitBar = ({ fontSize = 0, handleSettings, source, label }) => {
 
   const print = () => window.print();
 
@@ -13,6 +14,9 @@ const UnitBar = ({ fontSize = 0, handleSettings, source }) => {
     <div className="source__header-toolbar">
       {
         source && <BookmarkButton source={source} />
+      }
+      {
+        label && <LabelButton label={label} />
       }
       <Button compact size="small" className="mobile-hidden" icon="print" onClick={print} />
       {/* a portal is used to put the download button here in this div */}

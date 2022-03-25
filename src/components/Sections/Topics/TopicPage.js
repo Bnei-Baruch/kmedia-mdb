@@ -52,9 +52,9 @@ const TopicPage = ({ t }) => {
   const sections        = useSelector(state => selectors.getSections(state.tags));
   const getSectionUnits = useSelector(state => selectors.getSectionUnits(state.tags));
   const getCounts       = useSelector(state => selectors.getCounts(state.tags));
-  const getPathByID     = useSelector(state => selectors.getPathByID(state.tags));
-  const getTags         = useSelector(state => selectors.getTags(state.tags));
-  const language        = useSelector(state => settings.getLanguage(state.settings));
+  const getPathByID = useSelector(state => selectors.getPathByID(state.tags));
+  const getTags     = useSelector(state => selectors.getTags(state.tags));
+  const language    = useSelector(state => settings.getLanguage(state.settings));
 
   const dispatch = useDispatch();
 

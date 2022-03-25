@@ -126,13 +126,18 @@
           height: 40px;
           width: 40px;
 
+          svg {
+            height: 2.2em;
+            width: 2.2em;
+            color: $grey;
+          }
           .icon {
             font-size: 1.7em;
             line-height: 1em;
+
           }
         }
       }
     }
-
   }
 }

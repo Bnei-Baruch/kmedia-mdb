@@ -29,7 +29,6 @@
   input {
     border: 1px solid #7dcff5 !important;
     border-radius: 20px !important;
-    box-shadow: 0 0 6px 0 #7dcff5 !important;
   }
 
   // main omnibox size
@@ -2422,7 +2421,7 @@
 }
 
 .need_to_login {
-  height: 80VH;
+  height: 60VH;
   display: flex;
   justify-content: center;
   align-items: center;

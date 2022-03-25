@@ -8,6 +8,7 @@ import { isLanguageRtl } from '../../../helpers/i18n-utils';
 import LibrarySettings from './LibrarySettings';
 import Share from './Share';
 import BookmarkButton from '../../shared/SaveBookmark/BookmarkButton';
+import LabelButton from '../../shared/SelectTopicsModal/LabelButton';
 
 const LibraryBar = (
   {
@@ -16,7 +17,8 @@ const LibraryBar = (
     handleIsReadable,
     handleSettings,
     handleTocIsActive = null,
-    source
+    source,
+    label
   }
 ) => {
   const language = useSelector(state => settings.getLanguage(state.settings));
@@ -28,14 +30,15 @@ const LibraryBar = (
   return (
     <div className="source__header-toolbar">
       <BookmarkButton source={source} />
+      <LabelButton label={label} />
       <Button compact size="small" className="mobile-hidden" icon="print" onClick={print} />
       {/* a portal is used to put the download button here in this div */}
       <div id="download-button" />
       <LibrarySettings fontSize={fontSize} handleSettings={handleSettings} />
       <Button compact size="small" icon={isReadable ? 'compress' : 'expand'} onClick={handleIsReadable} />
       {handleTocIsActive &&
-      <Button compact size="small" icon="list layout" onClick={handleTocIsActive}
-        className="computer-hidden large-screen-hidden widescreen-hidden" />
+        <Button compact size="small" icon="list layout" onClick={handleTocIsActive}
+          className="computer-hidden large-screen-hidden widescreen-hidden" />
       }
       <Share position={position} />
     </div>
@@ -48,7 +51,8 @@ LibraryBar.propTypes = {
   handleTocIsActive: PropTypes.func,
   isReadable: PropTypes.bool,
   fontSize: PropTypes.number,
-  source: PropTypes.object
+  source: PropTypes.object,
+  label: PropTypes.object
 };
 
 export default LibraryBar;
