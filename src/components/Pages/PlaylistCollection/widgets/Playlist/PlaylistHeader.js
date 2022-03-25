@@ -57,7 +57,7 @@ const PlaylistHeader = ({ collection, unit, t, prevLink = null, nextLink = null 
     if (!isLesson) return null;
 
     return (
-      <Header.Subheader className={isMobileDevice ? "" : langDir==="rtl" ? "float-left" : "float-right"}>
+      <Header.Subheader className={isMobileDevice ? '' : langDir==='rtl' ? 'float-left' : 'float-right'}>
         {getPrevLink(langDir, t, prevLink)}
         <CollectionDatePicker collection={collection} />
         {getNextLink(langDir, t, nextLink)}
