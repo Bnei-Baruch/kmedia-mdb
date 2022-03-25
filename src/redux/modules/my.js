@@ -216,11 +216,14 @@ const onSetDeleted = (draft, { namespace, deleted }) => {
 };
 
 const onReactionsCountSuccess = (draft, data) => {
-  data.reduce((acc, x) => {
-    const { key } = getMyItemKey(MY_NAMESPACE_REACTIONS, x);
-    acc[key]      = x.total;
-    return acc;
-  }, draft.reactionsCount);
+  if (Array.isArray(data)) {
+    data.reduce((acc, x) => {
+      const { key } = getMyItemKey(MY_NAMESPACE_REACTIONS, x);
+      acc[key]      = x.total;
+      return acc;
+    }, draft.reactionsCount)
+  }
+
   return draft;
 };
 
