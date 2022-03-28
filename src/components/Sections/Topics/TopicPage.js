@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
@@ -8,19 +8,14 @@ import { isLanguageRtl } from '../../../helpers/i18n-utils';
 
 import { actions, selectors } from '../../../redux/modules/tags';
 import { selectors as settings } from '../../../redux/modules/settings';
-import { selectors as mdb } from '../../../redux/modules/mdb';
 import Link from '../../Language/MultiLanguageLink';
 import HelmetsBasic from '../../shared/Helmets/Basic';
-
-import { extractByMediaType } from './helper';
-import TextItem from './TextItem';
-import ContentItemContainer from '../../shared/ContentItem/ContentItemContainer';
 import Pagination from '../../Pagination/Pagination';
 import Filters from './Filters';
 import { selectors as filters } from '../../../redux/modules/filters';
-import { FN_CONTENT_TYPE, FN_LANGUAGES, FN_SOURCES_MULTI } from '../../../helpers/consts';
 import VideoList from './VideoList';
 import TextList from './TextList';
+import { isEqual } from 'lodash';
 
 const TOPIC_PAGE_SIZE = 10;
 
@@ -49,26 +44,18 @@ const TopicPage = ({ t }) => {
   const getPathByID = useSelector(state => selectors.getPathByID(state.tags));
   const getTags     = useSelector(state => selectors.getTags(state.tags));
   const language    = useSelector(state => settings.getLanguage(state.settings));
-  const filterNames = [FN_SOURCES_MULTI, FN_CONTENT_TYPE, FN_LANGUAGES];
-  const selected    = useSelector(state => filterNames.map(fn => filters.getFilterByName(state.filters, `topics_${id}`, fn)?.values || [])).flat();
+  const selected    = useSelector(state => filters.getFilters(state.filters, `topics_${id}`), isEqual);
 
   const { mediaTotal, textTotal } = useSelector(state => selectors.getItems(state.tags));
-  const total                                 = Math.max(mediaTotal, textTotal);
-
+  const total                     = Math.max(mediaTotal, textTotal);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     const page_no = pageNo > 1 ? pageNo : 1;
+    const s       = selected;
     dispatch(actions.fetchDashboard({ tag: id, page_size: TOPIC_PAGE_SIZE, page_no }));
-  }, [id, language, dispatch, pageNo, selected?.length]);
-
-  /*
-    const wipErr = WipErr({ wip, error, t });
-    if (wipErr) {
-      return wipErr;
-    }
-  */
+  }, [id, language, dispatch, pageNo, selected]);
 
   if (getPathByID) {
     const tagPath = getPathByID(id);

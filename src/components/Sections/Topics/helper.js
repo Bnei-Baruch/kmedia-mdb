@@ -4,11 +4,14 @@ import {
   CT_LIKUTIM,
   CT_SOURCE,
   CT_SPECIAL_LESSON,
-  UNIT_TEXT_TYPE,
-  UNIT_VIDEOS_TYPE
+  FN_CONTENT_TYPE,
+  FN_DATE_FILTER,
+  FN_LANGUAGES,
+  FN_SOURCES_MULTI
 } from '../../../helpers/consts';
 import { canonicalCollection, cuPartNameByCCUType } from '../../../helpers/utils';
 
+export const TAG_DASHBOARD_FILTERS = [FN_SOURCES_MULTI, FN_CONTENT_TYPE, FN_LANGUAGES, FN_DATE_FILTER];
 export const buildDailyLessonTitle = (cu, t) => {
   const ctLabel = t(`constants.content-types.${CT_DAILY_LESSON}`);
   const fd      = t('values.date', { date: cu.film_date });
@@ -51,17 +54,17 @@ export const buildTextUnitInfo = ({ cu, label }, t, getPathByID) => {
 
   description.push(t('values.date', { date }));
   switch (true) {
-    case content_type === CT_SOURCE:
-      subject = buildSourceTitle(getPathByID, id);
-      break;
-    case content_type === CT_LIKUTIM:
-      subject = t('topics.likut-title', { name });
-      break;
-    case !!label?.properties?.activeTab:
-      subject = t(`topics.${label.properties.activeTab}-based-on`, { name });
-      break;
-    default:
-      subject = name;
+  case content_type === CT_SOURCE:
+    subject = buildSourceTitle(getPathByID, id);
+    break;
+  case content_type === CT_LIKUTIM:
+    subject = t('topics.likut-title', { name });
+    break;
+  case !!label?.properties?.activeTab:
+    subject = t(`topics.${label.properties.activeTab}-based-on`, { name });
+    break;
+  default:
+    subject = name;
   }
 
   return insertInfoFromLabel(subject, description, label, t);

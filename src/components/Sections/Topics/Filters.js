@@ -2,20 +2,23 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { actions, selectors } from '../../../redux/modules/filtersAside';
 import FiltersHydrator from '../../Filters/FiltersHydrator';
-import { FN_CONTENT_TYPE, FN_LANGUAGES, FN_SOURCES_MULTI } from '../../../helpers/consts';
-import TagSourceFilter from '../../FiltersAside/TopicsFilter/TagSourceFilter';
-import ContentType from '../../FiltersAside/ContentTypeFilter/ContentType';
-import Language from '../../FiltersAside/LanguageFilter/Language';
+import { FN_DATE_FILTER, FN_SOURCES_MULTI } from '../../../helpers/consts';
 import { selectors as filters } from '../../../redux/modules/filters';
+import { List } from 'semantic-ui-react';
+import DateFilter from '../../FiltersAside/DateFilter';
+import { withNamespaces } from 'react-i18next';
+import Language from '../../FiltersAside/LanguageFilter/Language';
+import ContentType from '../../FiltersAside/ContentTypeFilter/ContentType';
+import TagSourceFilter from '../../FiltersAside/TopicsFilter/TagSourceFilter';
 import FilterLabels from '../../FiltersAside/FilterLabels';
+import { isEqual } from 'lodash';
 
-const Filters = ({ namespace, baseParams }) => {
+const Filters = ({ namespace, baseParams, t }) => {
   const [isHydrated, setIsHydrated] = useState(false);
 
   const isReady      = useSelector(state => selectors.isReady(state.filtersAside, namespace));
   const { wip, err } = useSelector(state => selectors.getWipErr(state.filtersAside, namespace));
-  const filterNames  = [FN_SOURCES_MULTI, FN_CONTENT_TYPE, FN_LANGUAGES];
-  const selected     = useSelector(state => filterNames.map(fn => filters.getFilterByName(state.filters, namespace, fn)?.values || [])).flat();
+  const selected     = useSelector(state => filters.getFilters(state.filters, namespace), isEqual);
 
   const dispatch = useDispatch();
 
@@ -26,34 +29,30 @@ const Filters = ({ namespace, baseParams }) => {
   }, [dispatch, isReady]);
 
   useEffect(() => {
-    if (isHydrated && isReady && !wip && !err) {
+    if (selected, isHydrated && isReady && !wip && !err) {
       dispatch(actions.fetchStats(namespace, baseParams, false));
     }
-  }, [dispatch, isHydrated, isReady, selected?.length]);
+  }, [dispatch, isHydrated, isReady, selected]);
 
   const handleOnHydrated = () => setIsHydrated(true);
-
-  /* const wipErr = WipErr({ wip, err, t });
-   if (wipErr) {
-     return wipErr;
-   }*/
 
   return (
     <>
       <FiltersHydrator namespace={namespace} onHydrated={handleOnHydrated} />
       <FilterLabels namespace={namespace} />
-      <TagSourceFilter
-        namespace={namespace}
-        filterName={FN_SOURCES_MULTI}
-      />
-      <ContentType
-        namespace={namespace}
-      />
-      <Language
-        namespace={namespace}
-      />
+      <TagSourceFilter namespace={namespace} filterName={FN_SOURCES_MULTI} />
+      <ContentType namespace={namespace} />
+      <Language namespace={namespace} />
+
+      <List>
+        <List.Header content={t(`topic.title.${FN_DATE_FILTER}`)} />
+        <DateFilter namespace={namespace} />
+      </List>
     </>
   );
 };
 
-export default Filters;
+const areEqual = (prevProps, nextProps) => prevProps.namespace === nextProps.namespace
+  && prevProps.baseParams === nextProps.baseParams;
+
+export default React.memo(withNamespaces()(Filters), areEqual);
