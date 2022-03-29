@@ -58,6 +58,16 @@ const routes = [
   { path: `${MY_NAMESPACE_PLAYLISTS}/:id`, component: PlaylistDecorator },
   { path: `${MY_NAMESPACE_BOOKMARKS}`, component: BookmarksPage },
 
+  { path: 'publications', component: Publications, options: { ssrData: ssrDataLoaders.publicationsPage } },
+  { path: 'publications/:tab', component: Publications, options: { ssrData: ssrDataLoaders.publicationsPage } },
+  { path: 'publications/articles/cu/:id', component: ArticlePage, options: { ssrData: ssrDataLoaders.articleCUPage } },
+  {
+    path: 'publications/articles/c/:id',
+    component: ArticleCollection,
+    options: { ssrData: ssrDataLoaders.collectionPage('publications-collection') }
+  },
+  { path: 'publications/blog/:blog/:id', component: BlogPost, options: { ssrData: ssrDataLoaders.blogPostPage } },
+
   { path: ':routeType/cu/:id', component: PlaylistItemPage, options: { ssrData: ssrDataLoaders.cuPage } },
   { path: 'lessons', component: Lessons, options: { ssrData: ssrDataLoaders.lessonsPage } },
   { path: 'lessons/:tab', component: Lessons, options: { ssrData: ssrDataLoaders.lessonsPage } },
@@ -66,7 +76,7 @@ const routes = [
     component: LessonCollection,
     options: { ssrData: ssrDataLoaders.lessonsCollectionPage }
   },
-  // { path: ':routeType/:tab/cu/:id', component: PlaylistItemPage, options: { ssrData: ssrDataLoaders.cuPage } },
+  { path: ':routeType/:tab/cu/:id', component: PlaylistItemPage, options: { ssrData: ssrDataLoaders.cuPage } },
   { path: 'lessons/daily/latest', component: LastLessonCollection, options: { ssrData: ssrDataLoaders.latestLesson } },
   { path: 'programs', component: Programs, options: { ssrData: ssrDataLoaders.programsPage } },
   { path: 'programs/:tab', component: Programs, options: { ssrData: ssrDataLoaders.programsPage } },
@@ -82,15 +92,6 @@ const routes = [
     component: PlaylistCollectionIdCheck,
     options: { ssrData: ssrDataLoaders.playlistCollectionPage }
   },
-  { path: 'publications', component: Publications, options: { ssrData: ssrDataLoaders.publicationsPage } },
-  { path: 'publications/:tab', component: Publications, options: { ssrData: ssrDataLoaders.publicationsPage } },
-  { path: 'publications/articles/cu/:id', component: ArticlePage, options: { ssrData: ssrDataLoaders.articleCUPage } },
-  {
-    path: 'publications/articles/c/:id',
-    component: ArticleCollection,
-    options: { ssrData: ssrDataLoaders.collectionPage('publications-collection') }
-  },
-  { path: 'publications/blog/:blog/:id', component: BlogPost, options: { ssrData: ssrDataLoaders.blogPostPage } },
   { path: 'music', component: Music, options: { ssrData: ssrDataLoaders.musicPage } },
   {
     path: 'music/c/:id',
