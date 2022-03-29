@@ -156,6 +156,10 @@
   align-items: center;
   flex-wrap: nowrap;
 
+  .content {
+    width: 100%;
+  }
+
   .sub {
     white-space: nowrap;
   }
@@ -1523,6 +1527,10 @@
 
 .float-left {
   float: left
+}
+
+.float-right {
+  float: right;
 }
 
 .clear {

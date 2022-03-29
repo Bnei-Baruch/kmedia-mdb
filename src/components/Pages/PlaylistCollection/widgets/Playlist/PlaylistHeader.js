@@ -57,7 +57,7 @@ const PlaylistHeader = ({ collection, unit, t, prevLink = null, nextLink = null 
     if (!isLesson) return null;
 
     return (
-      <Header.Subheader>
+      <Header.Subheader className={isMobileDevice ? '' : langDir==='rtl' ? 'float-left' : 'float-right'}>
         {getPrevLink(langDir, t, prevLink)}
         <CollectionDatePicker collection={collection} />
         {getNextLink(langDir, t, nextLink)}
@@ -127,6 +127,7 @@ const PlaylistHeader = ({ collection, unit, t, prevLink = null, nextLink = null 
 
     return (
       <>
+        {!isMobileDevice && getSubHeader()}
         {getTitle()}
         {
           subheader && (
@@ -153,8 +154,8 @@ const PlaylistHeader = ({ collection, unit, t, prevLink = null, nextLink = null 
 
   return (
     <Header as="h2" className={clsx('avbox__playlist-header', { 'flex_column': !isLesson })}>
-      <Header.Content content={getTitleByCO(collection, t)} />
-      {getSubHeader()}
+      <Header.Content content={getTitleByCO()} />
+      {isMobileDevice && getSubHeader()}
     </Header>
   );
 };
