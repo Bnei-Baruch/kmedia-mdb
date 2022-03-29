@@ -66,7 +66,6 @@ const routes = [
     component: LessonCollection,
     options: { ssrData: ssrDataLoaders.lessonsCollectionPage }
   },
-  // { path: ':routeType/:tab/cu/:id', component: PlaylistItemPage, options: { ssrData: ssrDataLoaders.cuPage } },
   { path: 'lessons/daily/latest', component: LastLessonCollection, options: { ssrData: ssrDataLoaders.latestLesson } },
   { path: 'programs', component: Programs, options: { ssrData: ssrDataLoaders.programsPage } },
   { path: 'programs/:tab', component: Programs, options: { ssrData: ssrDataLoaders.programsPage } },
@@ -91,6 +90,7 @@ const routes = [
     options: { ssrData: ssrDataLoaders.collectionPage('publications-collection') }
   },
   { path: 'publications/blog/:blog/:id', component: BlogPost, options: { ssrData: ssrDataLoaders.blogPostPage } },
+  { path: ':routeType/:tab/cu/:id', component: PlaylistItemPage, options: { ssrData: ssrDataLoaders.cuPage } },
   { path: 'music', component: Music, options: { ssrData: ssrDataLoaders.musicPage } },
   {
     path: 'music/c/:id',
