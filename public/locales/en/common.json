@@ -102,6 +102,9 @@
       "publications": "Publications",
       "sources": "Kabbalah Sources",
       "posts": "Blog"
+    },
+    "aside-titles": {
+
     }
   },
   "buttons": {
@@ -649,7 +652,8 @@
       "BLOG_POST": "Blog Post",
       "LESSONS_SERIES": "Selected Study Series",
       "KTAIM_NIVCHARIM": "Selected Highlights",
-      "sources": "Kabbalah Sources"
+      "sources": "Kabbalah Sources",
+      "SOURCE": "Kabbalah Sources"
     },
     "media-types": {
       "video": "Video",

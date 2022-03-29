@@ -144,7 +144,7 @@
     },
     "download": {
       "iconHoverText": "Download the excerpt you marked",
-     "downloadButton": "Download",
+      "downloadButton": "Download",
       "copyButton": "Copy link"
     }
   },
@@ -328,7 +328,7 @@
       "description": "Aktualisierte Verknüpfung zur letzten täglichen Lektion"
     }
   },
-  "likutim":{
+  "likutim": {
     "header": {
       "text": "Excerpts from Kabbalistic Sources",
       "subtext": "Excerpts from the Sources on various subjects"
@@ -641,7 +641,8 @@
       "BLOG_POST": "Blog",
       "LESSONS_SERIES": "Ausgewählte Trainingsserien",
       "KTAIM_NIVCHARIM": "Ausgewählte Highlights",
-      "sources": "Primäre Quellen"
+      "sources": "Primäre Quellen",
+      "SOURCE": "Primäre Quellen"
     },
     "media-types": {
       "video": "Video",

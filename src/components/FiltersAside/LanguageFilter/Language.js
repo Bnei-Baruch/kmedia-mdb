@@ -1,20 +1,32 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectors } from '../../../redux/modules/filtersAside';
 import { withNamespaces } from 'react-i18next';
-import { FN_LANGUAGES } from '../../../helpers/consts';
-import { List } from 'semantic-ui-react';
+import { FN_LANGUAGES, POPULAR_LANGUAGES } from '../../../helpers/consts';
+import { Button, List } from 'semantic-ui-react';
 import LanguageItem from './LanguageItem';
+import { selectors as filters } from '../../../redux/modules/filters';
+import { Link } from 'react-router-dom';
 
 const Language = ({ namespace, t }) => {
-  const items = useSelector(state => selectors.getTree(state.filtersAside, namespace, FN_LANGUAGES));
+  const items    = useSelector(state => selectors.getTree(state.filtersAside, namespace, FN_LANGUAGES));
+  const selected = useSelector(state => filters.getFilterByName(state.filters, namespace, FN_LANGUAGES))?.values || [];
+
+  const [showAll, setShowAll] = useState(selected.filter(x => POPULAR_LANGUAGES.includes(x)).length > 0);
+
+  const toggleShowAll = () => setShowAll(!showAll);
 
   return (
     <List>
-      <List.Header content={t(`topic.title.${FN_LANGUAGES}`)} />
+      <List.Header content={t(`filters.aside-titles.${FN_LANGUAGES}`)} />
       {
-        items.map(id => <LanguageItem namespace={namespace} id={id} />)
+        items.filter(id => POPULAR_LANGUAGES.includes(id)).map(id => <LanguageItem namespace={namespace} id={id} />)
       }
+      {
+        showAll && items.filter(id => !POPULAR_LANGUAGES.includes(id)).map(id =>
+          <LanguageItem namespace={namespace} id={id} />)
+      }
+      <Link onClick={toggleShowAll}>{t(`topics.show-${showAll ? 'less' : 'more'}`)}</Link>
     </List>
   );
 };

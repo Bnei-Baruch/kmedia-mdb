@@ -2,9 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { actions, selectors } from '../../../redux/modules/filtersAside';
 import FiltersHydrator from '../../Filters/FiltersHydrator';
-import { FN_DATE_FILTER, FN_SOURCES_MULTI } from '../../../helpers/consts';
+import { FN_SOURCES_MULTI } from '../../../helpers/consts';
 import { selectors as filters } from '../../../redux/modules/filters';
-import { List } from 'semantic-ui-react';
 import DateFilter from '../../FiltersAside/DateFilter';
 import { withNamespaces } from 'react-i18next';
 import Language from '../../FiltersAside/LanguageFilter/Language';
@@ -43,11 +42,7 @@ const Filters = ({ namespace, baseParams, t }) => {
       <TagSourceFilter namespace={namespace} filterName={FN_SOURCES_MULTI} />
       <ContentType namespace={namespace} />
       <Language namespace={namespace} />
-
-      <List>
-        <List.Header content={t(`topic.title.${FN_DATE_FILTER}`)} />
-        <DateFilter namespace={namespace} />
-      </List>
+      <DateFilter namespace={namespace} />
     </>
   );
 };

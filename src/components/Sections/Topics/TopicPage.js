@@ -85,11 +85,11 @@ const TopicPage = ({ t }) => {
                 baseParams={{ tag: id }}
               />
             </Grid.Column>
-            <Grid.Column width="5">
-              <TextList />
-            </Grid.Column>
             <Grid.Column width="7">
               <VideoList />
+            </Grid.Column>
+            <Grid.Column width="5">
+              <TextList />
             </Grid.Column>
           </Grid>
         </Container>

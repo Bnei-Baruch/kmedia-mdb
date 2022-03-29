@@ -4,8 +4,9 @@ import { Checkbox, List } from 'semantic-ui-react';
 import { actions, selectors as filters } from '../../../redux/modules/filters';
 import { selectors as filtersAside } from '../../../redux/modules/filtersAside';
 import { FN_CONTENT_TYPE } from '../../../helpers/consts';
+import { withNamespaces } from 'react-i18next';
 
-const ContentTypeItem = ({ namespace, id }) => {
+const ContentTypeItem = ({ namespace, id, t }) => {
 
   const selected = useSelector(state => filters.getFilterByName(state.filters, namespace, FN_CONTENT_TYPE))?.values || [];
   const stat     = useSelector(state => filtersAside.getStats(state.filtersAside, namespace, FN_CONTENT_TYPE, id));
@@ -25,7 +26,7 @@ const ContentTypeItem = ({ namespace, id }) => {
         {`(${stat})`}
       </List.Content>
       <Checkbox
-        label={id}
+        label={t(`constants.content-types.${id}`)}
         checked={selected.includes(id)}
         disabled={disabled}
         onChange={handleSelect}
@@ -34,4 +35,4 @@ const ContentTypeItem = ({ namespace, id }) => {
   );
 };
 
-export default ContentTypeItem;
+export default withNamespaces()(ContentTypeItem);

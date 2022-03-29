@@ -62,10 +62,12 @@ const onFetchStatsSuccess = (draft, { dataCU, dataL, namespace, isPrepare }) => 
     const dcu = dataCU[fieldNameByFilter[fn]] || {};
     const dl  = dataL[fieldNameByFilter[fn]] || {};
     if (isPrepare) {
-      [...Object.keys(dcu), ...Object.keys(dl)].filter(id => !!id).forEach(id => {
-        acc.byId[id] = dcu[id] || 0 + dl[id] || 0;
-        acc.tree.push(id);
-      });
+      [...Object.keys({ ...dcu, ...dl })]
+        .filter(id => !!id)
+        .forEach(id => {
+          acc.byId[id] = dcu[id] || 0 + dl[id] || 0;
+          acc.tree.push(id);
+        });
     } else {
       acc.tree.forEach(id => {
         acc.byId[id] = dcu[id] || 0 + dl[id] || 0;

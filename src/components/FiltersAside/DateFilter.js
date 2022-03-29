@@ -54,9 +54,10 @@ const DateFilter = ({ t, namespace }) => {
     // calculate range with regard to the date preset
     if (_preset === CUSTOM_RANGE || _preset === CUSTOM_DAY) {
       return { from: _from, to: _to };
-    } else {
-      return (presetToRange[_preset] || presetToRange[TODAY])();
     }
+
+    return (presetToRange[_preset] || presetToRange[TODAY])();
+
   };
 
   const handleDatePresetsChange = (event, { value, checked }) => {
@@ -110,20 +111,20 @@ const DateFilter = ({ t, namespace }) => {
 
   return (
     <Segment.Group className="filter-popup__wrapper">
-      <List.Header content={t(`topic.title.${FN_DATE_FILTER}`)} />
+      <List.Header content={t(`filters.aside-titles.${FN_DATE_FILTER}`)} />
       {
         datePresets.map((x, i) => (
-            <List.Item key={`${FN_DATE_FILTER}_${i}`}>
-              <List.Content>
-                <Checkbox
-                  label={t(`filters.date-filter.presets.${x}`)}
-                  checked={preset === x}
-                  value={x}
-                  onChange={handleDatePresetsChange}
-                />
-              </List.Content>
-            </List.Item>
-          )
+          <List.Item key={`${FN_DATE_FILTER}_${i}`}>
+            <List.Content>
+              <Checkbox
+                label={t(`filters.date-filter.presets.${x}`)}
+                checked={preset === x}
+                value={x}
+                onChange={handleDatePresetsChange}
+              />
+            </List.Content>
+          </List.Item>
+        )
         )
       }
       <Segment basic className="filter-popup__body date-filter">

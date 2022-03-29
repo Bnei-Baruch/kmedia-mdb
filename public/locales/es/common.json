@@ -644,7 +644,8 @@
       "BLOG_POST": "Blog",
       "LESSONS_SERIES": "Serie de Estudios",
       "KTAIM_NIVCHARIM": "Destacados Seleccionados",
-      "sources": "Fuentes"
+      "sources": "Fuentes",
+      "SOURCE": "Fuentes"
     },
     "media-types": {
       "video": "Video",

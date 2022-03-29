@@ -645,7 +645,8 @@
       "BLOG_POST": "בלוג פוסט",
       "LESSONS_SERIES": "סדרות לימוד נבחרות",
       "KTAIM_NIVCHARIM": "קטעים נבחרים",
-      "sources": "מקורות"
+      "sources": "מקורות",
+      "SOURCE": "מקורות"
     },
     "media-types": {
       "video": "וידאו",

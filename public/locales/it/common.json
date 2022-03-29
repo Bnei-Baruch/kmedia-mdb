@@ -647,7 +647,8 @@
       "BLOG_POST": "Post dal Blog",
       "LESSONS_SERIES": "Selected Study Series",
       "KTAIM_NIVCHARIM": "Punti Salienti Selezionati",
-      "sources": "Kabbalah Sources"
+      "sources": "Kabbalah Sources",
+      "SOURCE": "Kabbalah Sources"
     },
     "media-types": {
       "video": "Video",

@@ -646,7 +646,8 @@
       "BLOG_POST": "Пост у блозі",
       "LESSONS_SERIES": "Вибрані серії навчання",
       "KTAIM_NIVCHARIM": "Вибрані моменти",
-      "sources": "Першоджерела"
+      "sources": "Першоджерела",
+      "SOURCE": "Першоджерела"
     },
     "media-types": {
       "video": "Відео",
