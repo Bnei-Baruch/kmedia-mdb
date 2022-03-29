@@ -26,6 +26,16 @@ const PlaylistCollectionContainer = ({ cId, t, cuId }) => {
 
   const dispatch = useDispatch();
 
+  const createPrevNextLinks = curIndex => {
+    const prevCollection = curIndex < collections.length - 1 ? collections[curIndex + 1] : null;
+    const prevLnk        = prevCollection ? canonicalLink(prevCollection) : null;
+    setPrevLink(prevLnk);
+
+    const nextCollection = curIndex > 0 ? collections[curIndex - 1] : null;
+    const nextLnk        = nextCollection ? canonicalLink(nextCollection) : null;
+    setNextLink(nextLnk);
+  };
+
   useEffect(() => {
     // Fetch full units data if needed.
     if (cuIDs?.length > 0) {
@@ -46,7 +56,7 @@ const PlaylistCollectionContainer = ({ cId, t, cuId }) => {
       dispatch(actions.fetchUnit(cuId));
     }
 
-  }, [dispatch, cuIDs, errorMap.units, wipMap.units, cuId, fullUnitFetchedMap, content_units]);
+  }, [dispatch, cuIDs, errorMap.units, wipMap.units]);
 
   useEffect(() => {
     if (!Object.prototype.hasOwnProperty.call(wipMap.collections, cId)) {
@@ -56,24 +66,6 @@ const PlaylistCollectionContainer = ({ cId, t, cuId }) => {
   }, [cId, dispatch, collection, wipMap.collections]);
 
   useEffect(() => {
-    const fetchWindow = () => {
-      const filmDate = moment.utc(film_date);
-      dispatch(actions.fetchWindow({
-        id,
-        start_date: filmDate.subtract(5, 'days').format(DATE_FORMAT),
-        end_date: filmDate.add(10, 'days').format(DATE_FORMAT)
-      }));
-    };
-
-    const createPrevNextLinks = curIndex => {
-      const prevCollection = curIndex < collections.length - 1 ? collections[curIndex + 1] : null;
-      const prevLnk        = prevCollection ? canonicalLink(prevCollection) : null;
-      setPrevLink(prevLnk);
-
-      const nextCollection = curIndex > 0 ? collections[curIndex - 1] : null;
-      const nextLnk        = nextCollection ? canonicalLink(nextCollection) : null;
-      setNextLink(nextLnk);
-    };
 
     // next prev links only for lessons
     if (COLLECTION_DAILY_LESSONS.includes(content_type)) {
@@ -101,12 +93,21 @@ const PlaylistCollectionContainer = ({ cId, t, cuId }) => {
       }
 
     }
-  }, [cId, cWindow, collections, content_type, dispatch, film_date, id, wipMap.cWindow]);
+  }, [cId, cWindow, content_type, wipMap.cWindow]);
+
+  const fetchWindow = () => {
+    const filmDate = moment.utc(film_date);
+    dispatch(actions.fetchWindow({
+      id,
+      start_date: filmDate.subtract(5, 'days').format(DATE_FORMAT),
+      end_date: filmDate.add(10, 'days').format(DATE_FORMAT)
+    }));
+  };
 
   useEffect(() => {
     if (collection?.cuIDs)
       dispatch(recommended.fetchViews(collection.cuIDs));
-  }, [collection.cuIDs, dispatch]);
+  }, [collection?.cuIDs?.length]);
 
   if (!cId || !collection || !Array.isArray(collection.content_units)) {
     return null;

@@ -48,7 +48,8 @@ PlaylistWidget.propTypes = {
 
 const areEqual = (prevProps, nextProps) => (
   nextProps.selected === prevProps.selected
-  && nextProps.link === prevProps.link
+  && nextProps.nextLink === prevProps.nextLink
+  && nextProps.prevLink === prevProps.prevLink
   && isEqual(nextProps.playlist, prevProps.playlist)
 );
 
