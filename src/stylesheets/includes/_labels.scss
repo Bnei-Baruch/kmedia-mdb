@@ -94,7 +94,19 @@
 
 .ui.popup.label_mark_popup {
   opacity: 0.95;
+
+  .link_to_cu {
+    padding: 2px 3px !important;
+    font-size: smaller;
+    background: $midGrey !important;
+    color: white !important;
+
+    &:hover {
+      background-color: $sepia-bg;
+    }
+  }
 }
+
 .ltr.label_bar {
   right: auto;
   left: -10PX;

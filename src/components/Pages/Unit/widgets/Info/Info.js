@@ -19,8 +19,9 @@ import * as shapes from '../../../../shapes';
 import PersonalInfo from './PersonalInfo';
 import { selectors as recommended } from '../../../../../redux/modules/recommended';
 import UnitLogo from '../../../../shared/Logo/UnitLogo';
+import { selectors as mdb } from '../../../../../redux/modules/mdb';
 
-const makeTagLinks = (tags = [], getTagById) =>
+export const makeTagLinks = (tags = [], getTagById) =>
   Array.from(intersperse(
     tags.map(x => {
       const { id, label } = getTagById(x);
@@ -71,17 +72,32 @@ const getEpisodeInfo = (ct, cIDs, currentCollection, filmDate, t) => {
 };
 
 const Info = ({ unit = {}, t, currentCollection = null }) => {
+
   const getTagById = useSelector(state => tagsSelectors.getTagById(state.tags));
 
-  const { id, name, film_date: filmDate, tags, collections, content_type: ct, cIDs } = unit;
+  const { id, name, film_date: filmDate, collections, content_type: ct, cIDs, tags = [] } = unit;
 
   const views = useSelector(state => recommended.getViews(id, state.recommended));
 
-  const tagLinks               = makeTagLinks(tags || [], getTagById);
+  const lids   = useSelector(state => mdb.getLabelsByCU(state.mdb, id));
+  const denorm = useSelector(state => mdb.getDenormLabel(state.mdb));
+
+  const mergeTags = () => {
+    let ids = [];
+    if (tags?.length > 0) ids = tags;
+
+    if (lids?.length > 0) {
+      const lTags = lids?.map(denorm).flatMap(l => (l.tags || [])) || [];
+      ids         = [...ids, ...lTags.filter(x => !ids.includes(x))];
+    }
+    return ids;
+  };
+
+  const tagLinks               = makeTagLinks(mergeTags(), getTagById);
   const { noSSeries, sSeries } = makeCollectionsLinks(collections, t, currentCollection);
   const isMultiLessons         = Object.values(collections).some(col => col.content_type === CT_LESSONS_SERIES || col.content_type === CT_CONGRESS);
   const episodeInfo            = getEpisodeInfo(ct, cIDs, currentCollection || Object.values(collections)[0], filmDate, t);
-  const ccu =  Object.values(collections)[0];
+  const ccu                    = Object.values(collections)[0];
   return (
     <>
       <PersonalInfo collection={currentCollection} unit={unit} />

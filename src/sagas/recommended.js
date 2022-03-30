@@ -246,10 +246,12 @@ function* fetchViewsByUIDs(uids) {
   uids = yield select(state => uids.filter(uid => recommended.getViews(uid, state.recommended) === -1));
   if (uids.length > 0) {
     const { data } = yield call(Api.views, uids);
-    const views    = uids.reduce((acc, uid, i) => {
-      acc[uid] = data.views[i];
-      return acc;
-    }, {});
+    const views    = Array.isArray(data.views) && data.views.length > 0
+      ? uids.reduce((acc, uid, i) => {
+        acc[uid] = data.views[i];
+        return acc;
+      }, {})
+      : [];
     yield put(actions.receiveViews(views));
   }
 }
