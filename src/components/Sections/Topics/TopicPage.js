@@ -53,7 +53,6 @@ const TopicPage = ({ t }) => {
 
   useEffect(() => {
     const page_no = pageNo > 1 ? pageNo : 1;
-    const s       = selected;
     dispatch(actions.fetchDashboard({ tag: id, page_size: TOPIC_PAGE_SIZE, page_no }));
   }, [id, language, dispatch, pageNo, selected]);
 
@@ -68,9 +67,7 @@ const TopicPage = ({ t }) => {
 
     const breadCrumbIcon = `${isLanguageRtl(language) ? 'left' : 'right'} angle`;
 
-    const onPageChange = n => {
-      setPageNo(n);
-    };
+    const onPageChange = n => setPageNo(n);
 
     return (
       <>

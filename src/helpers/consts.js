@@ -102,7 +102,7 @@ export const iconByContentTypeMap = new Map([
   [CT_VIRTUAL_LESSONS, 'lessons'],
   [CT_LESSONS_SERIES, 'lessons'],
   [CT_LECTURE, 'lessons'],
-  [CT_LIKUTIM, 'lessons'],
+  [CT_LIKUTIM, 'likutim'],
   [CT_FRIENDS_GATHERING, 'events'],
   [CT_MEAL, 'events'],
   [CT_EVENT_PART, 'events'],
@@ -121,6 +121,7 @@ export const iconByContentTypeMap = new Map([
   [CT_VIDEO_PROGRAM, 'programs'],
   [CT_CLIPS, 'programs'],
   [CT_SOURCE, 'sources'],
+  [CT_PUBLICATION, 'publications'],
   ['sources', 'sources'],
 ]);
 

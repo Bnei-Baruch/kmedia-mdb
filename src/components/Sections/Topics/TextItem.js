@@ -24,7 +24,8 @@ const TextItem = ({ item, t }) => {
       className="cu_item cu_item_list"
     >
       <Image size="tiny" verticalAlign="middle">
-        <SectionLogo name={icon} width="25" height="25" />
+        <SectionLogo name={icon} height="50" width="45" />
+        {icon}
       </Image>
       <Container className="cu_item_info">
         <div>
@@ -33,7 +34,7 @@ const TextItem = ({ item, t }) => {
         <Header as={Link} to={link} size="small">
           {title}
         </Header>
-        <div className="text_ellipsis description">
+        <div className="description ">
           {description.map((d, i) => (<span key={i}>{d}</span>))}
         </div>
       </Container>
