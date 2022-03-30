@@ -26,8 +26,9 @@ import {
   CT_KTAIM_NIVCHARIM,
   CT_LECTURE,
   CT_LECTURE_SERIES,
-  CT_LESSONS_SERIES,
   CT_LESSON_PART,
+  CT_LESSONS_SERIES,
+  CT_LIKUTIM,
   CT_MEAL,
   CT_MEALS,
   CT_PICNIC,
@@ -48,7 +49,6 @@ import {
   UNIT_LESSONS_TYPE,
   UNIT_PROGRAMS_TYPE,
   UNIT_PUBLICATIONS_TYPE,
-  CT_LIKUTIM,
 } from './consts';
 
 export const landingPageSectionLink = (landingPage, filterValues) => {
@@ -184,6 +184,10 @@ export const canonicalLink = (entity, mediaLang, ccu) => {
 
   if (collection?.content_type === CT_LESSONS_SERIES) {
     return `/lessons/series/cu/${entity.id}`;
+  }
+
+  if (collection?.content_type === CT_SONGS) {
+    return `/music/cu/${entity.id}`;
   }
 
   const mediaLangSuffix = mediaLang ? `?language=${mediaLang}` : '';
