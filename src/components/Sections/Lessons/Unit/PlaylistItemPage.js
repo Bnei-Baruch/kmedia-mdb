@@ -8,12 +8,13 @@ import { selectors as settings } from '../../../../redux/modules/settings';
 import WipErr from '../../../shared/WipErr/WipErr';
 import PlaylistCollectionContainer from '../../../Pages/PlaylistCollection/Container';
 import UnitPage from '../../../Pages/Unit/Page';
-import { COLLECTION_DAILY_LESSONS, CT_LESSONS_SERIES, EVENT_TYPES } from '../../../../helpers/consts';
+import { COLLECTION_DAILY_LESSONS, CT_LESSONS_SERIES, CT_SONGS, EVENT_TYPES } from '../../../../helpers/consts';
 
 const COLLECTION_TYPES_BY_ROUTING = {
   'lessons': COLLECTION_DAILY_LESSONS,
   'lessons_series': CT_LESSONS_SERIES,
   'events': EVENT_TYPES,
+  'music': CT_SONGS,
 };
 
 const PlaylistItemPage = ({ t }) => {
