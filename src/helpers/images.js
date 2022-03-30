@@ -11,14 +11,15 @@ import InfoIcon from '../images/icons/Info';
 import SimpleModeIcon from '../images/icons/SimpleMode';
 import LikutimIcon from '../images/icons/Likutim';
 import TopicsIcon from '../images/icons/Topics';
+import LabelIcon from '../images/icons/LabelIcon';
 
 import DailyLessonsFallbackIcon from '../images/fallbacks/DailylessonsFallback';
 import ProgramsFallbackIcon from '../images/fallbacks/ProgramsFallback';
 import LecturesFallbackIcon from '../images/fallbacks/LecturesFallback';
 import SourcesFallbackIcon from '../images/fallbacks/SourcesFallback';
 import EventsFallbackIcon from '../images/fallbacks/EventsFallback';
-import PublicationsFallbackIcon from '../images/fallbacks/PublicationsFallback';
 
+import PublicationsFallbackIcon from '../images/fallbacks/PublicationsFallback';
 import ImagePlaceholder from '../images/Image';
 
 const sectionLogo = {
@@ -32,7 +33,8 @@ const sectionLogo = {
   info: InfoIcon,
   'simple-mode': SimpleModeIcon,
   likutim: LikutimIcon,
-  topics: TopicsIcon
+  topics: TopicsIcon,
+  label: LabelIcon
 };
 
 export const SectionLogo = ({ name, ...props }) => {

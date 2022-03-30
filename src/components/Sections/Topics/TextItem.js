@@ -14,7 +14,7 @@ const TextItem = ({ item, t }) => {
   const { cu: { id, content_type }, label } = item;
 
   const getPathByID = useSelector(state => sources.getPathByID(state.sources));
-  const icon        = iconByContentTypeMap.get(content_type) || null;
+  const icon        = label ? 'label' : iconByContentTypeMap.get(content_type) || null;
 
   const link                             = buildBookmarkLink(label, item.cu);
   const { subTitle, title, description } = buildTextUnitInfo(item, t, getPathByID);
@@ -25,7 +25,6 @@ const TextItem = ({ item, t }) => {
     >
       <Image size="tiny" verticalAlign="middle">
         <SectionLogo name={icon} height="50" width="45" />
-        {icon}
       </Image>
       <Container className="cu_item_info">
         <div>

@@ -134,8 +134,8 @@
   }
 
   .topics_texts .cu_item_info {
-    padding-left: 0!important;
-    padding-right: 0!important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
   }
 
   .cu_item {
@@ -148,6 +148,39 @@
 
   .description {
     opacity: 0.43;
-    color: #1b1c1d;
+    color: $midGrey;
+    line-height: 12px;
+    font-size: 12px;
+    padding: 0.5em 0;
+
+    span {
+      padding: 0 4px;
+      border-right: 1px solid $midGrey;
+      display: inline-block;
+
+      &:first-child {
+        padding-left: 0;
+      }
+
+
+      &:last-child {
+        border-right: none;
+      }
+    }
+  }
+}
+
+.rtl {
+  .description span {
+    &:first-child {
+      border-right: none;
+      padding-right: 0;
+      padding-left: 4px;
+    }
+
+    &:last-child {
+      border-right: 1px solid $midGrey;
+
+    }
   }
 }
