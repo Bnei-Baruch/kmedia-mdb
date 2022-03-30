@@ -51,7 +51,7 @@ const LabelMark = ({ label, offset, t }) => {
         <Popup.Header>{name}</Popup.Header>
         <Popup.Content>
           {
-            t('personal.label.createdBy', { author: author })
+            t('personal.label.createdBy', { author })
           }
           <Container content={tagLinks} />
         </Popup.Content>

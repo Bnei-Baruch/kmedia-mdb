@@ -90,6 +90,7 @@ const Info = ({ unit = {}, t, currentCollection = null }) => {
       const lTags = lids?.map(denorm).flatMap(l => (l.tags || [])) || [];
       ids         = [...ids, ...lTags.filter(x => !ids.includes(x))];
     }
+
     return ids;
   };
 
