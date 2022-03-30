@@ -183,6 +183,7 @@ const playlist = (collection, mediaType, contentLanguage, uiLanguage) => {
   if (collection.content_type === CT_SONGS) {
     name = collection.name;
   }
+
   const language = contentLanguage;
 
   return {
