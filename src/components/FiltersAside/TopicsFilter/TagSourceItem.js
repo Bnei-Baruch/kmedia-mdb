@@ -41,26 +41,27 @@ const TagSourceItem = ({ namespace, id, baseItems, filterName }) => {
 
   return (
     <List.Item key={`${filterName}_${id}`} disabled={disabled}>
-      <List.Content className="stat" floated="right">
-        {`(${stat})`}
+      <List.Content className="tree_item_content">
+        <Checkbox
+          label={item[isTag ? 'label' : 'name']}
+          checked={selected.includes(id)}
+          disabled={disabled}
+          onChange={handleSelect}
+        />
+        {
+          (item.children?.length > 0) && (
+            <Button
+              basic
+              color="blue"
+              className="clear_button no-shadow"
+              icon={`caret ${!open ? 'left' : 'down'}`}
+              onClick={() => setOpen(!open)}
+              size="medium"
+            />
+          )
+        }
+        <span className="stat">{`(${stat})`}</span>
       </List.Content>
-      <Checkbox
-        label={item[isTag ? 'label' : 'name']}
-        checked={selected.includes(id)}
-        disabled={disabled}
-        onChange={handleSelect}
-      />
-      {
-        (item.children?.length > 0) && (
-          <Button
-            basic
-            color="blue"
-            className="clear_button no-shadow"
-            icon={`caret ${!open ? 'left' : 'down'}`}
-            onClick={() => setOpen(!open)}
-          />
-        )
-      }
       {
         open && (
           <List>

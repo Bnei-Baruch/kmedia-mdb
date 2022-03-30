@@ -231,7 +231,38 @@
     padding: 0.5em 0 1em;
   }
 
+  .caret {
+    font-size: 1.2em;
+    line-height: 1em;
+  }
+
+  .tree_item_content {
+    display: flex;
+  }
+
+  .item .list {
+    margin-left: 1em;
+  }
+
   .stat {
     opacity: .7;
+    padding-left: 1em;
+    margin-left: auto;
+  }
+}
+
+.rtl {
+  .filter_aside {
+    .item .list {
+      margin-right: 1em;
+      margin-left: 0;
+    }
+
+    .stat {
+      padding-left: 0;
+      padding-right: 1em;
+      margin-left: 0;
+      margin-right: auto;
+    }
   }
 }
