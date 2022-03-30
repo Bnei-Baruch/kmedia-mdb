@@ -11,7 +11,7 @@
         }
       }
     }
-   }
+  }
 
   &__header {
     align-self: stretch;
@@ -143,8 +143,10 @@
 
   &__header {
     border-radius: 0 !important;
+
     .title {
       display: flex;
+
       .header {
         margin: 0 1rem;
         flex-grow: 2;
@@ -189,9 +191,11 @@
 
     .item {
       color: $blue;
+
       .filter__count {
         color: $grey;
       }
+
       &.active {
         background: $blue !important;
         color: $white !important;
@@ -212,5 +216,22 @@
 
   a.active {
     font-weight: bold !important;
+  }
+}
+
+.filter_aside {
+  border-bottom: 1px solid $midWhite;
+  padding: 1em 1em !important;
+  margin: 0 !important;
+
+  & > .title {
+    color: $blue;
+    font-size: 1.3em;
+    font-weight: bold;
+    padding: 0.5em 0 1em;
+  }
+
+  .stat {
+    opacity: .7;
   }
 }

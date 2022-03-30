@@ -35,8 +35,8 @@ const TagSourceFilter = ({ namespace, filterName, t }) => {
 
 
   return (
-    <List>
-      <List.Header content={t(`filters.aside-titles.${filterName}`)} />
+    <List className="filter_aside">
+      <List.Header className="title" content={t(`filters.aside-titles.${filterName}`)} />
       {
         roots
           .filter(r => items.includes(r))

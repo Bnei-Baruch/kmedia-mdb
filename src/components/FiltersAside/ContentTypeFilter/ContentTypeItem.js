@@ -22,7 +22,7 @@ const ContentTypeItem = ({ namespace, id, t }) => {
 
   return (
     <List.Item key={`${FN_CONTENT_TYPE}_${id}`} disabled={disabled}>
-      <List.Content floated="right">
+      <List.Content className="stat" floated="right">
         {`(${stat})`}
       </List.Content>
       <Checkbox

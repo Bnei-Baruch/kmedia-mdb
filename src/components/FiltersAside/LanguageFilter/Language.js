@@ -17,8 +17,8 @@ const Language = ({ namespace, t }) => {
   const toggleShowAll = () => setShowAll(!showAll);
 
   return (
-    <List>
-      <List.Header content={t(`filters.aside-titles.${FN_LANGUAGES}`)} />
+    <List className="filter_aside">
+      <List.Header className="title" content={t(`filters.aside-titles.${FN_LANGUAGES}`)} />
       {
         items.filter(id => POPULAR_LANGUAGES.includes(id)).map(id => <LanguageItem namespace={namespace} id={id} />)
       }

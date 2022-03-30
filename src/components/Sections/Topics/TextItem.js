@@ -9,13 +9,13 @@ import { buildBookmarkLink } from '../Personal/Bookmarks/Bookmarks/helper';
 import { withNamespaces } from 'react-i18next';
 import Link from '../../Language/MultiLanguageLink';
 import { buildTextUnitInfo } from './helper';
+import clsx from 'clsx';
 
 const TextItem = ({ item, t }) => {
   const { cu: { id, content_type }, label } = item;
 
   const getPathByID = useSelector(state => sources.getPathByID(state.sources));
   const icon        = label ? 'label' : iconByContentTypeMap.get(content_type) || null;
-
   const link                             = buildBookmarkLink(label, item.cu);
   const { subTitle, title, description } = buildTextUnitInfo(item, t, getPathByID);
   return (
@@ -33,9 +33,9 @@ const TextItem = ({ item, t }) => {
         <Header as={Link} to={link} size="small">
           {title}
         </Header>
-        <div className="description ">
+        <Container className={clsx('description', { 'is_single': !(description?.length > 1) })}>
           {description.map((d, i) => (<span key={i}>{d}</span>))}
-        </div>
+        </Container>
       </Container>
     </Container>
   );

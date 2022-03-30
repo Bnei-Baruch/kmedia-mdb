@@ -29,7 +29,7 @@ const FilterLabels = ({ namespace, t }) => {
   };
 
   return (
-    <Container>
+    <Container className="filter__aside__labels">
       {
         list.filter(f => f.values?.length > 0).map(renderItem)
       }

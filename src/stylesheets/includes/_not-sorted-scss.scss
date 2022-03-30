@@ -1112,10 +1112,10 @@
     h4 {
       margin-bottom: 0;
       color: #134D78;
-      font-size:1.6em;
+      font-size: 1.6em;
       margin-right: 0.2em;
       @include mobile {
-        font-size:1.5em;
+        font-size: 1.5em;
       }
     }
 
@@ -1758,6 +1758,7 @@
     box-shadow: none;
   }
 }
+
 .nowrap {
   white-space: nowrap;
 }
@@ -2383,11 +2384,11 @@
 
 .clear_button.ui.basic.button {
   padding: 0;
-  box-shadow: none;
+  box-shadow: none !important;
 
   &:hover, &:active, &:focus {
     background: none !important;
-    box-shadow: none;
+    box-shadow: none !important;
   }
 }
 
@@ -2467,7 +2468,7 @@
 }
 
 .latestUpdatesCardGroup {
-  padding-top:0 !important;
+  padding-top: 0 !important;
   position: relative;
 
   .card.cu_item {

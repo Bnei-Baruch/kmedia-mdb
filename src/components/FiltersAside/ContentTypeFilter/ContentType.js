@@ -10,8 +10,8 @@ const ContentType = ({ namespace, t }) => {
   const items = useSelector(state => selectors.getTree(state.filtersAside, namespace, FN_CONTENT_TYPE));
 
   return (
-    <List>
-      <List.Header content={t(`filters.aside-titles.${FN_CONTENT_TYPE}`)} />
+    <List className="filter_aside">
+      <List.Header className="title" content={t(`filters.aside-titles.${FN_CONTENT_TYPE}`)} />
       {
         items.map(id => <ContentTypeItem namespace={namespace} id={id} />)
       }
