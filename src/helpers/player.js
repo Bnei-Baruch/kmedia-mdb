@@ -6,6 +6,7 @@ import { assetUrl } from './Api';
 import {
   CT_FULL_LESSON,
   CT_LESSON_PART,
+  CT_SONGS,
   EVENT_PREPARATION_TAG,
   EVENT_TYPES,
   LANG_ENGLISH,
@@ -178,7 +179,10 @@ const playlist = (collection, mediaType, contentLanguage, uiLanguage) => {
   items.forEach(x => {
     x.shareUrl = canonicalLink(x.unit, null, collection);
   });
-
+  let name = null;
+  if (collection.content_type === CT_SONGS) {
+    name = collection.name;
+  }
   const language = contentLanguage;
 
   return {
@@ -187,6 +191,7 @@ const playlist = (collection, mediaType, contentLanguage, uiLanguage) => {
     mediaType,
     items,
     groups,
+    name
   };
 };
 

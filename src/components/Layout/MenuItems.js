@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import identity from 'lodash/identity';
-import { Button, Menu, Header, Sidebar } from 'semantic-ui-react';
+import { Button, Header, Menu, Sidebar } from 'semantic-ui-react';
 
 import { getPodcastLinkByLang, getRSSLinkByLang } from '../../helpers/utils';
 import NavLink from '../Language/MultiLanguageNavLink';
@@ -21,7 +21,7 @@ const ITEMS = [
   // 'books',
   'topics',
   'publications',
-  // 'music',
+  'music',
   'simple-mode',
   // 'project-status',
   'help',
