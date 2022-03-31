@@ -1,46 +1,37 @@
 import { useSelector } from 'react-redux';
 import { selectors } from '../../../redux/modules/filtersAside';
-import { selectors as tags } from '../../../redux/modules/tags';
-import { selectors as sources } from '../../../redux/modules/sources';
-import { useMemo } from 'react';
-import TagSourceItem from './TagSourceItem';
+import React, { useState } from 'react';
 import { List } from 'semantic-ui-react';
 import { withNamespaces } from 'react-i18next';
-import { FN_TOPICS_MULTI } from '../../../helpers/consts';
-
-const treeItems = (items, getPath) => items.map(getPath)
-  .flat()
-  .filter(x => !!x)
-  .reduce((acc, x) => {
-    if (!acc.byId[x.id]) {
-      acc.byId[x.id] = x.id;
-      acc.uniq.push(x.id);
-    }
-
-    return acc;
-  }, { byId: {}, uniq: [] }).uniq;
+import RenderAsList from './RenderAsList';
+import RenderAsTree from './RenderAsTree';
+import SearchInput from '../../Filters/SearchInput';
 
 const TagSourceFilter = ({ namespace, filterName, t }) => {
-  const baseItems      = useSelector(state => selectors.getTree(state.filtersAside, namespace, filterName));
-  const getPathTags    = useSelector(state => tags.getPathByID(state.tags));
-  const rootsTags      = useSelector(state => tags.getRoots(state.tags));
-  const getPathSources = useSelector(state => sources.getPathByID(state.sources));
-  const rootsSources   = useSelector(state => sources.getRoots(state.sources));
+  const [query, setQuery] = useState();
+  const baseItems         = useSelector(state => selectors.getTree(state.filtersAside, namespace, filterName));
 
-  const isTag   = filterName === FN_TOPICS_MULTI;
-  const getPath = isTag ? getPathTags : getPathSources;
-  const roots   = isTag ? rootsTags : rootsSources;
-
-  const items = useMemo(() => treeItems(baseItems, getPath), [baseItems]);
-
+  const handleSetQuery = (e, data) => {
+    const q = data.value.trim();
+    q && setQuery(q);
+  };
 
   return (
     <List className="filter_aside">
+
+      <SearchInput onSearch={handleSetQuery} onClear={() => setQuery(null)} />
       <List.Header className="title" content={t(`filters.aside-titles.${filterName}`)} />
       {
-        roots
-          .filter(r => items.includes(r))
-          .map(r => <TagSourceItem namespace={namespace} id={r} baseItems={items} filterName={filterName} />)
+        query ? <RenderAsList
+          query={query}
+          namespace={namespace}
+          baseItems={baseItems}
+          filterName={filterName}
+        /> : <RenderAsTree
+          namespace={namespace}
+          baseItems={baseItems}
+          filterName={filterName}
+        />
       }
     </List>
   );
