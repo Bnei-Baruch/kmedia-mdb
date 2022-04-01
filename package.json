@@ -97,6 +97,7 @@
     "connected-react-router": "^6.6.0",
     "cookie": "^0.4.0",
     "core-js": "^3.1.4",
+    "crawler-user-agents": "^1.0.88",
     "cross-env": "^7.0.0",
     "dotenv": "^8.0.0",
     "eslint-config-react-app": "^6.0.0",
@@ -155,8 +156,7 @@
     "ua-parser-js": "^0.7.17",
     "ulid": "^2.3.0",
     "warning": "^4.0.2",
-    "worker-loader": "^3.0.4",
-    "crawler-user-agents": "^1.0.88"
+    "worker-loader": "^3.0.4"
   },
   "moduleRoots": [
     "src",
