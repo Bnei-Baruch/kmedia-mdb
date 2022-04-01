@@ -95,13 +95,9 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
       const newUnit = playlist?.items[newSel]?.unit;
       setUnit(newUnit);
     }
-  }, [playlist, cuId]);
+  }, [playlist, cuId, location]);
 
-  if (!collection || !Array.isArray(collection.content_units)) {
-    return null;
-  }
-
-  if (!playlist || !unit) {
+  if (!collection || !Array.isArray(collection.content_units) || !playlist || !unit) {
     return null;
   }
 
