@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Divider, Grid } from 'semantic-ui-react';
+import { Grid } from 'semantic-ui-react';
 import * as shapes from '../../shapes';
 
 const Section = ({ title, children, className, computer= 12, tablet= 14, mobile= 16 }) =>
