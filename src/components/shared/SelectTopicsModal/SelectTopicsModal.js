@@ -14,7 +14,6 @@ import { getTree } from '../../../helpers/topricTree';
 import NeedToLogin from '../../Sections/Personal/NeedToLogin';
 import AlertModal from '../AlertModal';
 import TopicBranch from './TopicBranch';
-import { selectors as auth } from '../../../redux/modules/auth';
 
 const SelectTopicsModal = ({ t, open, onClose, label, trigger }) => {
   const [selected, setSelected] = useState([]);
@@ -25,8 +24,7 @@ const SelectTopicsModal = ({ t, open, onClose, label, trigger }) => {
   const areSourcesLoaded = useSelector(state => sourcesSelectors.areSourcesLoaded(state.sources));
   const roots            = useSelector(state => selectors.getDisplayRoots(state.tags), isEqual) || [];
   const getTagById       = useSelector(state => selectors.getTagById(state.tags));
-  const tree             = useMemo(() => getTree(roots, getTagById, null, t)[0], [roots.length, getTagById, t]);
-  const user             = useSelector(state => auth.getUser(state.auth));
+  const tree             = useMemo(() => getTree(roots, getTagById, null, t)[0], [roots, getTagById, t]);
 
   const language = useSelector(state => settings.getLanguage(state.settings));
   const dir      = getLanguageDirection(language);

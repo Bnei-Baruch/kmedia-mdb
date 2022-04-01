@@ -3,11 +3,9 @@ import { Swipeable } from 'react-swipeable';
 import { Button, Card } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import * as consts from '../../../helpers/consts';
 import { withNamespaces } from 'react-i18next';
 import LatestUpdate from './LatestUpdate';
 import { getSectionForTranslation } from '../../../helpers/utils';
-import Section from './Section';
 import { isLanguageRtl } from '../../../helpers/i18n-utils';
 import clsx from 'clsx';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
@@ -28,37 +26,6 @@ const LatestUpdatesCardList = ({ t, language, title, maxItems, cts, itemsByCT, i
 
   const getLatestUpdate = item =>
     <LatestUpdate key={item.id} item={item} label={t(getSectionForTranslation(item.content_type))} t={t} />;
-
-  const initCardsArray = () => {
-    // arrange cards by type in criss cross order
-    const cards = [];
-    const items = {};
-
-    const getEntryItems = entry => {
-      if (!itemsByCT[entry.ct])
-        return [];
-      const entryItems = [...itemsByCT[entry.ct]];
-      //return entryItems;
-      return entry.daysBack ? entryItems.filter(item => moment().diff(moment(item.film_date), 'days') < entry.daysBack) : entryItems;
-    }
-
-    cts.forEach(entry => items[entry.ct] = getEntryItems(entry));
-    let hasItems = true;
-    while (hasItems && cards.length < maxItems) {
-      hasItems = false;
-      cts.forEach(ct => {
-        const curItems = items[ct.ct];
-        let count = ct.itemsPerPage ? ct.itemsPerPage : 1;
-        while (curItems.length > 0 && count > 0) {
-          cards.push((curItems.shift()));
-          count--;
-          hasItems = true;
-        }
-      });
-    }
-
-    setCardsArray(cards);
-  };
 
   const getPageCardArray = () =>
     cardsArray.slice(pageStart, pageStart + itemsCount).map(item => getLatestUpdate(item));
@@ -111,8 +78,39 @@ const LatestUpdatesCardList = ({ t, language, title, maxItems, cts, itemsByCT, i
   };
 
   useEffect(() => {
+    const initCardsArray = () => {
+      // arrange cards by type in criss cross order
+      const cards = [];
+      const items = {};
+
+      const getEntryItems = entry => {
+        if (!itemsByCT[entry.ct])
+          return [];
+        const entryItems = [...itemsByCT[entry.ct]];
+        //return entryItems;
+        return entry.daysBack ? entryItems.filter(item => moment().diff(moment(item.film_date), 'days') < entry.daysBack) : entryItems;
+      }
+
+      cts.forEach(entry => items[entry.ct] = getEntryItems(entry));
+      let hasItems = true;
+      while (hasItems && cards.length < maxItems) {
+        hasItems = false;
+        cts.forEach(ct => {
+          const curItems = items[ct.ct];
+          let count = ct.itemsPerPage ? ct.itemsPerPage : 1;
+          while (curItems.length > 0 && count > 0) {
+            cards.push((curItems.shift()));
+            count--;
+            hasItems = true;
+          }
+        });
+      }
+
+      setCardsArray(cards);
+    };
+
     initCardsArray();
-  }, [cts]);
+  }, [cts, itemsByCT, maxItems]);
 
   const cardsRow = (
     <Card.Group className={clsx({ 'latestUpdatesCardGroup' : !isMobileDevice, 'latestUpdatesCardGroupMobile': isMobileDevice })} itemsPerRow={itemsPerRow} stackable={stackable}>

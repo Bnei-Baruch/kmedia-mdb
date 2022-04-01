@@ -179,11 +179,8 @@ const playlist = (collection, mediaType, contentLanguage, uiLanguage) => {
   items.forEach(x => {
     x.shareUrl = canonicalLink(x.unit, null, collection);
   });
-  let name = null;
-  if (collection.content_type === CT_SONGS) {
-    name = collection.name;
-  }
 
+  const name = collection.content_type === CT_SONGS ? collection.name : null;
   const language = contentLanguage;
 
   return {

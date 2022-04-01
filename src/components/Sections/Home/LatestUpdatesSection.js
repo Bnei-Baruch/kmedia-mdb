@@ -1,6 +1,6 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
-import { Card, Container, Feed, Grid, Segment } from 'semantic-ui-react';
+import { Container } from 'semantic-ui-react';
 import { isEqual } from 'lodash';
 import moment from 'moment';
 import * as consts from '../../../helpers/consts';
