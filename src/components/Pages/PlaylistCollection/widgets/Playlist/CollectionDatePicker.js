@@ -29,7 +29,7 @@ const CollectionDatePicker = ({ collection, t }) => {
       history.push(`/${language}${link}`);
       dispatch(actions.nullDatepickerCO());
     }
-  }, [coID]);
+  }, [co, coID, dispatch, history, id, language]);
 
   const fetchNextCO = date => {
     const filmDate = moment.utc(date);

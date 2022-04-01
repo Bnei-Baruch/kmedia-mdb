@@ -98,29 +98,30 @@ const FallbackImage = props => {
   const [imageSource, setImageSource] = useState();
 
   useEffect(() => {
+    const handleLoaded = image => {
+      setImageSource(image);
+
+      if (onLoad) {
+        onLoad(image);
+      }
+    };
+
+    const handleError = () => {
+      setImageSource(null);
+
+      if (onError) {
+        onError(src);
+      }
+    };
+
     const displayImage = buildImage(src, fallbackImage, handleError, handleLoaded);
 
     return () => {
       displayImage && (displayImage.onerror = null);
       displayImage && (displayImage.onload = null);
     };
-  }, [fallbackImage, src]);
+  }, [fallbackImage, onError, onLoad, src]);
 
-  const handleLoaded = image => {
-    setImageSource(image);
-
-    if (onLoad) {
-      onLoad(image);
-    }
-  };
-
-  const handleError = () => {
-    setImageSource(null);
-
-    if (onError) {
-      onError(src);
-    }
-  };
 
   if (!imageSource || imageSource === NoneFallbackImage) {
     /* There is no fallbacks and src was not found */
