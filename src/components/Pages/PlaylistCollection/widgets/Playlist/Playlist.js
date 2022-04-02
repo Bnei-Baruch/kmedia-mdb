@@ -33,7 +33,7 @@ const PlaylistWidget = ({ playlist, selected = 0, link, t }) => {
         !isMobileDevice &&
         <Header as="h3" className={'avbox__playlist-header h3'}>
           {name || t(`playlist.title-by-type.${collection.content_type}`)}
-          <Button style={{ padding: 'inherit', fontSize: '1em' }} icon='random' circular positive onClick={() => randomize()}></Button>
+          <Button title={t('playlist.shuffle')} style={{ padding: 'inherit', fontSize: '1em' }} icon='random' circular positive onClick={() => randomize()}></Button>
         </Header>
       }
       {
