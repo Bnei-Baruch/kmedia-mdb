@@ -11,24 +11,25 @@ const LanguageItem = ({ namespace, id, t }) => {
   const selected = useSelector(state => filters.getFilterByName(state.filters, namespace, FN_LANGUAGES))?.values || [];
   const stat     = useSelector(state => filtersAside.getStats(state.filtersAside, namespace, FN_LANGUAGES, id));
 
-  const disabled = !stat || (selected.length > 0 && !selected.includes(id));
-
   const dispatch = useDispatch();
 
   const handleSelect = (e, { checked }) => {
-    const val = checked ? id : null;
-    dispatch(actions.setFilterValue(namespace, FN_LANGUAGES, val));
+    let val = [...selected].filter(x => x !== id);
+    if (checked) {
+      val.push(id);
+    }
+
+    dispatch(actions.setFilterValueMulti(namespace, FN_LANGUAGES, val));
   };
 
   return (
-    <List.Item key={`${FN_LANGUAGES}_${id}`} disabled={disabled}>
+    <List.Item key={`${FN_LANGUAGES}_${id}`}>
       <List.Content className="stat" floated="right">
         {`(${stat})`}
       </List.Content>
       <Checkbox
         label={t(`constants.languages.${id}`)}
         checked={selected.includes(id)}
-        disabled={disabled}
         onChange={handleSelect}
       />
     </List.Item>

@@ -5,14 +5,13 @@ import FiltersHydrator from '../../Filters/FiltersHydrator';
 import { FN_SOURCES_MULTI } from '../../../helpers/consts';
 import { selectors as filters } from '../../../redux/modules/filters';
 import DateFilter from '../../FiltersAside/DateFilter';
-import { withNamespaces } from 'react-i18next';
 import Language from '../../FiltersAside/LanguageFilter/Language';
 import ContentType from '../../FiltersAside/ContentTypeFilter/ContentType';
 import TagSourceFilter from '../../FiltersAside/TopicsFilter/TagSourceFilter';
 import FilterLabels from '../../FiltersAside/FilterLabels';
 import { isEqual } from 'lodash';
 
-const Filters = ({ namespace, baseParams, t }) => {
+const Filters = ({ namespace, baseParams }) => {
   const [isHydrated, setIsHydrated] = useState(false);
 
   const isReady      = useSelector(state => selectors.isReady(state.filtersAside, namespace));
@@ -50,4 +49,4 @@ const Filters = ({ namespace, baseParams, t }) => {
 const areEqual = (prevProps, nextProps) => prevProps.namespace === nextProps.namespace
   && prevProps.baseParams === nextProps.baseParams;
 
-export default React.memo(withNamespaces()(Filters), areEqual);
+export default React.memo(Filters, areEqual);

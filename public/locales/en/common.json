@@ -104,7 +104,7 @@
       "posts": "Blog"
     },
     "aside-titles": {
-
+      "modal": "Filter on: {{name}}"
     }
   },
   "buttons": {

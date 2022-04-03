@@ -249,6 +249,15 @@
     padding-left: 1em;
     margin-left: auto;
   }
+
+}
+
+.tree_item_modal_content {
+  @extend .no-shadow;
+
+  .item .list {
+    margin-left: 1em;
+  }
 }
 
 .rtl {
@@ -263,6 +272,13 @@
       padding-right: 1em;
       margin-left: 0;
       margin-right: auto;
+    }
+  }
+
+  .tree_item_modal_content {
+    .item .list {
+      margin-right: 1em;
+      margin-left: 0;
     }
   }
 }

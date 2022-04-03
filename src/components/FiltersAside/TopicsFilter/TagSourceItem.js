@@ -6,9 +6,13 @@ import { selectors as sources } from '../../../redux/modules/sources';
 import { selectors as tags } from '../../../redux/modules/tags';
 import { selectors as filtersAside } from '../../../redux/modules/filtersAside';
 import { FN_TOPICS_MULTI } from '../../../helpers/consts';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import TagSourceItemModal from './TagSourceItemModal';
+import { selectors as settings } from '../../../redux/modules/settings';
+import { isLanguageRtl } from '../../../helpers/i18n-utils';
+import clsx from 'clsx';
 
-const TagSourceItem = ({ namespace, id, baseItems, filterName }) => {
+const TagSourceItem = ({ namespace, id, baseItems, filterName, deep }) => {
   const [open, setOpen] = useState(false);
 
   const selected       = useSelector(state => filters.getFilterByName(state.filters, namespace, filterName))?.values || [];
@@ -17,6 +21,7 @@ const TagSourceItem = ({ namespace, id, baseItems, filterName }) => {
   const getPathSources = useSelector(state => sources.getPathByID(state.sources));
   const getTagById     = useSelector(state => tags.getTagById(state.tags));
   const getPathTags    = useSelector(state => tags.getPathByID(state.tags));
+  const language       = useSelector(state => settings.getLanguage(state.settings));
 
   const isTag   = filterName === FN_TOPICS_MULTI;
   const getPath = isTag ? getPathTags : getPathSources;
@@ -25,7 +30,6 @@ const TagSourceItem = ({ namespace, id, baseItems, filterName }) => {
 
   const pathIDs     = selected.length > 0 ? getPath(selected?.[0]).map(x => x.id) : [];
   const isOnSelPath = pathIDs.includes(id);
-  const disabled    = !stat || selected.length > 0 && !isOnSelPath;
 
   const dispatch = useDispatch();
 
@@ -35,27 +39,54 @@ const TagSourceItem = ({ namespace, id, baseItems, filterName }) => {
   }, [isOnSelPath]);
 
   const handleSelect = (e, { checked }) => {
-    const val = checked ? id : null;
-    dispatch(actions.setFilterValue(namespace, filterName, val));
+    let val = [...selected].filter(x => x !== id);
+    if (checked) {
+      val.push(id);
+    }
+
+    dispatch(actions.setFilterValueMulti(namespace, filterName, val));
   };
 
+  const toggleOpen = () => setOpen(!open);
+
+  const renderSubList = () => (
+    <List>
+      {
+        item.children?.filter(r => baseItems.includes(r))
+          .map(x => (
+              <TagSourceItem
+                namespace={namespace}
+                id={x}
+                baseItems={baseItems}
+                filterName={filterName}
+                deep={deep - 1}
+              />
+            )
+          )
+      }
+
+    </List>
+  );
+
   return (
-    <List.Item key={`${filterName}_${id}`} disabled={disabled}>
+    <List.Item key={`${filterName}_${id}`}>
       <List.Content className="tree_item_content">
         <Checkbox
-          label={item[isTag ? 'label' : 'name']}
           checked={selected.includes(id)}
-          disabled={disabled}
           onChange={handleSelect}
         />
+        <span
+          className={clsx('margin-right-8', 'margin-left-8', { 'bold-font': item.children?.length > 0 })}>
+          {item[isTag ? 'label' : 'name']}
+        </span>
         {
-          (item.children?.length > 0) && (
+          (deep === 0) && (item.children?.length > 0) && (
             <Button
               basic
               color="blue"
               className="clear_button no-shadow"
-              icon={`caret ${!open ? 'left' : 'down'}`}
-              onClick={() => setOpen(!open)}
+              icon={`caret ${open ? 'down' : isLanguageRtl(language) ? 'left' : 'right'}`}
+              onClick={toggleOpen}
               size="medium"
             />
           )
@@ -63,15 +94,17 @@ const TagSourceItem = ({ namespace, id, baseItems, filterName }) => {
         <span className="stat">{`(${stat})`}</span>
       </List.Content>
       {
-        open && (
-          <List>
-            {
-              item.children?.filter(r => baseItems.includes(r))
-                .map(x => <TagSourceItem namespace={namespace} id={x} baseItems={baseItems} filterName={filterName} />)
-            }
-
-          </List>
-        )
+        (deep !== 0) && (item.children.length > 0) ? renderSubList() :
+          <TagSourceItemModal
+            filterName={filterName}
+            baseItems={baseItems}
+            namespace={namespace}
+            parent={item}
+            open={open}
+            getById={getById}
+            getPath={getPath}
+            onClose={() => setOpen(false)}
+          />
       }
     </List.Item>
   );

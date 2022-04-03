@@ -65,12 +65,12 @@ const onFetchStatsSuccess = (draft, { dataCU, dataL, namespace, isPrepare }) => 
       [...Object.keys({ ...dcu, ...dl })]
         .filter(id => !!id)
         .forEach(id => {
-          acc.byId[id] = dcu[id] || 0 + dl[id] || 0;
+          acc.byId[id] = (dcu[id] || 0) + (dl[id] || 0);
           acc.tree.push(id);
         });
     } else {
       acc.tree.forEach(id => {
-        acc.byId[id] = dcu[id] || 0 + dl[id] || 0;
+        acc.byId[id] = (dcu[id] || 0) + (dl[id] || 0);
       });
     }
 

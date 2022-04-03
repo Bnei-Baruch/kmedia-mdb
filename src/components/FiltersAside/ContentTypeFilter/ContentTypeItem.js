@@ -11,24 +11,25 @@ const ContentTypeItem = ({ namespace, id, t }) => {
   const selected = useSelector(state => filters.getFilterByName(state.filters, namespace, FN_CONTENT_TYPE))?.values || [];
   const stat     = useSelector(state => filtersAside.getStats(state.filtersAside, namespace, FN_CONTENT_TYPE, id));
 
-  const disabled = !stat || (selected.length > 0 && !selected.includes(id));
-
   const dispatch = useDispatch();
 
   const handleSelect = (e, { checked }) => {
-    const val = checked ? id : null;
-    dispatch(actions.setFilterValue(namespace, FN_CONTENT_TYPE, val));
+    let val = [...selected].filter(x => x !== id);
+    if (checked) {
+      val.push(id);
+    }
+
+    dispatch(actions.setFilterValueMulti(namespace, FN_CONTENT_TYPE, val));
   };
 
   return (
-    <List.Item key={`${FN_CONTENT_TYPE}_${id}`} disabled={disabled}>
+    <List.Item key={`${FN_CONTENT_TYPE}_${id}`}>
       <List.Content className="stat" floated="right">
         {`(${stat})`}
       </List.Content>
       <Checkbox
         label={t(`constants.content-types.${id}`)}
         checked={selected.includes(id)}
-        disabled={disabled}
         onChange={handleSelect}
       />
     </List.Item>

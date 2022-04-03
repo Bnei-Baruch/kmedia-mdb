@@ -5,7 +5,7 @@ import React, { useMemo } from 'react';
 import { FN_TOPICS_MULTI } from '../../../helpers/consts';
 import TagSourceItem from './TagSourceItem';
 
-const RenderAsList = ({ namespace, filterName, t, baseItems, query }) => {
+const RenderAsList = ({ namespace, filterName, baseItems, query }) => {
   const getTagById    = useSelector(state => tags.getTagById(state.tags));
   const getSourceById = useSelector(state => sources.getSourceById(state.sources));
 
