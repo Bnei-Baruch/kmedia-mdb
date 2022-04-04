@@ -12,8 +12,10 @@ import { selectors as settings } from '../../../redux/modules/settings';
 import { isLanguageRtl } from '../../../helpers/i18n-utils';
 import clsx from 'clsx';
 
-const TagSourceItem = ({ namespace, id, baseItems, filterName, deep }) => {
-  const [open, setOpen] = useState(false);
+const TagSourceItem = ({ namespace, id, baseItems, filterName, deep, defaultSel = false }) => {
+  const [open, setOpen]               = useState(false);
+  const [isOnSelPath, setIsOnSelPath] = useState(false);
+  const [isSelected, setIsSelected]   = useState(defaultSel);
 
   const selected       = useSelector(state => filters.getFilterByName(state.filters, namespace, filterName))?.values || [];
   const stat           = useSelector(state => filtersAside.getStats(state.filtersAside, namespace, filterName, id));
@@ -25,23 +27,34 @@ const TagSourceItem = ({ namespace, id, baseItems, filterName, deep }) => {
 
   const isTag   = filterName === FN_TOPICS_MULTI;
   const getPath = isTag ? getPathTags : getPathSources;
+  const pathIds = getPath(id)?.map(x => x.id);
   const getById = isTag ? getTagById : getSourceById;
   const item    = getById(id);
 
-  const pathIDs     = selected.length > 0 ? getPath(selected?.[0]).map(x => x.id) : [];
-  const isOnSelPath = pathIDs.includes(id);
-
-  const dispatch = useDispatch();
+  useEffect(() => {
+    const sel = selected.includes(id) || defaultSel;
+    setIsSelected(sel);
+  }, [selected, id, defaultSel]);
 
   useEffect(() => {
-    if (isOnSelPath && !selected.includes(id))
-      setOpen(true);
-  }, [isOnSelPath]);
+    const pathIDs = selected.length > 0 ? selected.map(id => getPath(id)).flat().map(x => x.id) : [];
+    setIsOnSelPath(!selected.includes(id) && pathIDs.includes(id));
+  }, [selected, id, getPath]);
+
+  const dispatch = useDispatch();
 
   const handleSelect = (e, { checked }) => {
     let val = [...selected].filter(x => x !== id);
     if (checked) {
+      val = val.filter(x => !item.children.includes(x));
       val.push(id);
+    } else {
+      //find more top selected parent item
+      const pId = pathIds.find(x => val.includes(x));
+      if (!!pId) {
+        val = val.filter(x => !pathIds.includes(x));
+        val = [...val, ...getById(pId).children.filter(x => !pathIds.includes(x))];
+      }
     }
 
     dispatch(actions.setFilterValueMulti(namespace, filterName, val));
@@ -60,6 +73,7 @@ const TagSourceItem = ({ namespace, id, baseItems, filterName, deep }) => {
                 baseItems={baseItems}
                 filterName={filterName}
                 deep={deep - 1}
+                defaultSel={isSelected}
               />
             )
           )
@@ -72,8 +86,9 @@ const TagSourceItem = ({ namespace, id, baseItems, filterName, deep }) => {
     <List.Item key={`${filterName}_${id}`}>
       <List.Content className="tree_item_content">
         <Checkbox
-          checked={selected.includes(id)}
+          checked={isSelected}
           onChange={handleSelect}
+          indeterminate={isOnSelPath}
         />
         <span
           className={clsx('margin-right-8', 'margin-left-8', { 'bold-font': item.children?.length > 0 })}>
@@ -103,6 +118,7 @@ const TagSourceItem = ({ namespace, id, baseItems, filterName, deep }) => {
             open={open}
             getById={getById}
             getPath={getPath}
+            defaultSel={isSelected}
             onClose={() => setOpen(false)}
           />
       }

@@ -14,7 +14,7 @@ const LanguageItem = ({ namespace, id, t }) => {
   const dispatch = useDispatch();
 
   const handleSelect = (e, { checked }) => {
-    let val = [...selected].filter(x => x !== id);
+    const val = [...selected].filter(x => x !== id);
     if (checked) {
       val.push(id);
     }

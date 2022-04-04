@@ -9,7 +9,18 @@ import TagSourceItem from './TagSourceItem';
 import SearchInput from '../../Filters/SearchInput';
 import clsx from 'clsx';
 
-const TagSourceItemModal = ({ namespace, baseItems, filterName, parent, open, onClose, getById, getPath, t }) => {
+const TagSourceItemModal = ({
+                              namespace,
+                              baseItems,
+                              filterName,
+                              parent,
+                              open,
+                              onClose,
+                              getById,
+                              getPath,
+                              defaultSel,
+                              t
+                            }) => {
 
   const [query, setQuery] = useState('');
 
@@ -19,34 +30,30 @@ const TagSourceItemModal = ({ namespace, baseItems, filterName, parent, open, on
 
   const handleSetQuery = (e, data) => setQuery(data.value);
 
-  const dir   = getLanguageDirection(language);
+  const dir = getLanguageDirection(language);
   const isTag = filterName === FN_TOPICS_MULTI;
   const field = isTag ? 'label' : 'name';
 
   let children = parent.children?./*.filter(r => baseItems.includes(r)).*/map(getById);
   if (query) {
     const reg = new RegExp(query, 'i');
-    children  = baseItems.filter(id => {
-      return getPath(id).some(x => {
-        return x.id === parent.id;
-      });
-    })
+    children  = baseItems.filter(id => getPath(id).some(x => x.id === parent.id))
       .map(id => getById(id))
       .filter(x => x?.[field] && reg.test(x[field]));
   }
-  const renderAsCard = item => {
-    return (
-      <Card className="tree_item_modal_content">
-        <TagSourceItem
-          namespace={namespace}
-          id={item.id}
-          baseItems={baseItems}
-          filterName={filterName}
-          deep={-1}
-        />
-      </Card>
-    );
-  };
+
+  const renderAsCard = item => (
+    <Card className="tree_item_modal_content">
+      <TagSourceItem
+        namespace={namespace}
+        id={item.id}
+        baseItems={baseItems}
+        filterName={filterName}
+        deep={-1}
+        defaultSel={defaultSel}
+      />
+    </Card>
+  );
 
   const chAsCard = children.filter(x => x?.children.length > 0);
   const chAsLeaf = children.filter(x => !(x?.children.length > 0));
@@ -69,7 +76,7 @@ const TagSourceItemModal = ({ namespace, baseItems, filterName, parent, open, on
         <Card.Group>
           {
             chAsLeaf.length > 0 && (
-              <Card className="tree_item_modal_content item">
+              <Card className="tree_item_modal_content item single_item" fluid>
                 {
                   chAsLeaf.map(x => (
                     <TagSourceItem
@@ -78,6 +85,7 @@ const TagSourceItemModal = ({ namespace, baseItems, filterName, parent, open, on
                       baseItems={baseItems}
                       filterName={filterName}
                       deep={-1}
+                      defaultSel={defaultSel}
                     />
                   ))
                 }

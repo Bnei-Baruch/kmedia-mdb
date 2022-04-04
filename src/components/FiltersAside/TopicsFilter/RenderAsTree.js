@@ -35,12 +35,12 @@ const RenderAsTree = ({ namespace, filterName, baseItems }) => {
         roots
           .filter(r => items.includes(r))
           .map(r => <TagSourceItem
-              id={r}
-              namespace={namespace}
-              baseItems={items}
-              filterName={filterName}
-              deep={1}
-            />
+            id={r}
+            namespace={namespace}
+            baseItems={items}
+            filterName={filterName}
+            deep={1}
+          />
           )
       }
     </>
