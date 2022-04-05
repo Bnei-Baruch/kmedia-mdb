@@ -111,7 +111,7 @@ const DateFilter = ({ t, namespace }) => {
 
   return (
     <Segment.Group className="filter-popup__wrapper filter_aside">
-      <List.Header className="title" content={t(`filters.aside-titles.${FN_DATE_FILTER}`)} />
+      <List.Header className="title" content={t(`filters.aside-filter.${FN_DATE_FILTER}`)} />
       {
         datePresets.map((x, i) => (
           <List.Item key={`${FN_DATE_FILTER}_${i}`}>

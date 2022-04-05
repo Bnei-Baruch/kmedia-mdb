@@ -11,7 +11,7 @@ const ContentType = ({ namespace, t }) => {
 
   return (
     <List className="filter_aside">
-      <List.Header className="title" content={t(`filters.aside-titles.${FN_CONTENT_TYPE}`)} />
+      <List.Header className="title" content={t(`filters.aside-filter.${FN_CONTENT_TYPE}`)} />
       {
         items.map(id => <ContentTypeItem namespace={namespace} id={id} />)
       }

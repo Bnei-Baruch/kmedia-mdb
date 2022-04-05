@@ -20,7 +20,7 @@ const TagSourceFilter = ({ namespace, filterName, t }) => {
     <List className="filter_aside">
 
       <SearchInput onSearch={handleSetQuery} onClear={() => setQuery(null)} />
-      <List.Header className="title" content={t(`filters.aside-titles.${filterName}`)} />
+      <List.Header className="title" content={t(`filters.aside-filter.${filterName}`)} />
       {
         query ? <RenderAsList
           query={query}

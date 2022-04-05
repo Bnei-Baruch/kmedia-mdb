@@ -252,12 +252,39 @@
 
 }
 
+.filters_aside_tree_modal, .filter_aside {
+
+  .search-omnibox.ui.input {
+    width: auto;
+    margin: 0 1em;
+
+    & > input {
+      padding: 4px 8px;
+    }
+  }
+}
+
+.filters_aside_tree_modal {
+  & > .header {
+    text-align: start;
+    margin: 0;
+  }
+}
+
 .tree_item_modal_content {
   @extend .no-shadow;
 
   .item .list {
     margin-left: 1em;
+
+    .item {
+      padding-bottom: 0;
+    }
   }
+}
+
+.ui.cards > .card.single_item {
+  margin: 0 .5em;
 }
 
 .rtl {

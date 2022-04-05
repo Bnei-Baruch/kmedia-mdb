@@ -18,7 +18,7 @@ const Language = ({ namespace, t }) => {
 
   return (
     <List className="filter_aside">
-      <List.Header className="title" content={t(`filters.aside-titles.${FN_LANGUAGES}`)} />
+      <List.Header className="title" content={t(`filters.aside-filter.${FN_LANGUAGES}`)} />
       {
         items.filter(id => POPULAR_LANGUAGES.includes(id)).map(id => <LanguageItem namespace={namespace} id={id} />)
       }

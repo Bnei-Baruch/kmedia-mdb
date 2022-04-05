@@ -9,18 +9,17 @@ import TagSourceItem from './TagSourceItem';
 import SearchInput from '../../Filters/SearchInput';
 import clsx from 'clsx';
 
-const TagSourceItemModal = ({
-                              namespace,
-                              baseItems,
-                              filterName,
-                              parent,
-                              open,
-                              onClose,
-                              getById,
-                              getPath,
-                              defaultSel,
-                              t
-                            }) => {
+const TagSourceItemModal = props => {
+  const {
+          baseItems,
+          filterName,
+          parent,
+          open,
+          onClose,
+          getById,
+          getPath,
+          t
+        } = props;
 
   const [query, setQuery] = useState('');
 
@@ -30,11 +29,11 @@ const TagSourceItemModal = ({
 
   const handleSetQuery = (e, data) => setQuery(data.value);
 
-  const dir = getLanguageDirection(language);
+  const dir   = getLanguageDirection(language);
   const isTag = filterName === FN_TOPICS_MULTI;
   const field = isTag ? 'label' : 'name';
 
-  let children = parent.children?./*.filter(r => baseItems.includes(r)).*/map(getById);
+  let children = parent.children?.filter(r => baseItems.includes(r)).map(getById);
   if (query) {
     const reg = new RegExp(query, 'i');
     children  = baseItems.filter(id => getPath(id).some(x => x.id === parent.id))
@@ -44,14 +43,7 @@ const TagSourceItemModal = ({
 
   const renderAsCard = item => (
     <Card className="tree_item_modal_content">
-      <TagSourceItem
-        namespace={namespace}
-        id={item.id}
-        baseItems={baseItems}
-        filterName={filterName}
-        deep={-1}
-        defaultSel={defaultSel}
-      />
+      <TagSourceItem {...props} id={item.id} deep={-1} />
     </Card>
   );
 
@@ -61,35 +53,25 @@ const TagSourceItemModal = ({
   return (
     <Modal
       open={open}
-      className={clsx('select_topic_modal', { [dir]: true })}
+      className={clsx('filters_aside_tree_modal', { [dir]: true })}
       size="large"
       dir={dir}
       onClose={onClose}
     >
       <Modal.Header className="no-border">
         {
-          t('filters.aside-titles.modal', { name: parent[field] })
+          t('filters.aside-filter.modal-title', { name: parent[field] })
         }
         <SearchInput onSearch={handleSetQuery} onClear={() => setQuery(null)} defVal={query} />
       </Modal.Header>
-      <Modal.Content>
-        <Card.Group>
+      <Modal.Content scrolling>
+        <Card.Group itemsPerRow={3}>
           {
-            chAsLeaf.length > 0 && (
-              <Card className="tree_item_modal_content item single_item" fluid>
-                {
-                  chAsLeaf.map(x => (
-                    <TagSourceItem
-                      namespace={namespace}
-                      id={x.id}
-                      baseItems={baseItems}
-                      filterName={filterName}
-                      deep={-1}
-                      defaultSel={defaultSel}
-                    />
-                  ))
-                }
-              </Card>
+            chAsLeaf.length > 0 && (chAsLeaf.map(x => (
+                <Card className="tree_item_modal_content item single_item">
+                  <TagSourceItem {...props} id={x.id} deep={-1} />
+                </Card>
+              ))
             )
           }
           {
