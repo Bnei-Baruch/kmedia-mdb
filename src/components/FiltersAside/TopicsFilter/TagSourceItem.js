@@ -92,7 +92,7 @@ const TagSourceItem = props => {
           indeterminate={isOnSelPath}
         />
         <span
-          className={clsx('margin-right-8', 'margin-left-8', { 'bold-font': childrenIDs?.length > 0 })}>
+          className={clsx('tree_item_title', { 'bold-font': childrenIDs?.length > 0 })}>
           {item[isTag ? 'label' : 'name']}
         </span>
         {

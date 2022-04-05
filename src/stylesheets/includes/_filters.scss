@@ -219,6 +219,7 @@
   }
 }
 
+//aside filters styles
 .filter_aside {
   border-bottom: 1px solid $midWhite;
   padding: 1em 1em !important;
@@ -230,44 +231,30 @@
     font-weight: bold;
     padding: 0.5em 0 1em;
   }
-
-  .caret {
-    font-size: 1.2em;
-    line-height: 1em;
-  }
-
-  .tree_item_content {
-    display: flex;
-  }
-
-  .item .list {
-    margin-left: 1em;
-  }
-
-  .stat {
-    opacity: .7;
-    padding-left: 1em;
-    margin-left: auto;
-  }
-
 }
 
-.filters_aside_tree_modal, .filter_aside {
+.ui.modal.filters_aside_tree_modal {
+  text-align: end;
 
-  .search-omnibox.ui.input {
-    width: auto;
-    margin: 0 1em;
-
-    & > input {
-      padding: 4px 8px;
-    }
-  }
-}
-
-.filters_aside_tree_modal {
   & > .header {
     text-align: start;
     margin: 0;
+    padding-top: 0;
+
+    .search-omnibox.ui.input {
+      width: auto;
+      margin: 0 1em;
+    }
+  }
+
+  & > .content {
+    text-align: start;
+    padding-bottom: 2.5em;
+  }
+
+  & > .icon {
+    margin: 0.5em 0.5em 0;
+    cursor: pointer;
   }
 }
 
@@ -275,7 +262,11 @@
   @extend .no-shadow;
 
   .item .list {
-    margin-left: 1em;
+    margin: 0 0 0 .5em;
+
+    .rtl & {
+      margin: 0 .5em 0;
+    }
 
     .item {
       padding-bottom: 0;
@@ -287,25 +278,47 @@
   margin: 0 .5em;
 }
 
-.rtl {
-  .filter_aside {
-    .item .list {
-      margin-right: 1em;
-      margin-left: 0;
+.filters_aside_tree_modal, .filter_aside {
+  .search-omnibox.ui.input {
+    & > input {
+      padding: 4px 8px;
     }
+  }
 
-    .stat {
+  .stat {
+    opacity: .4;
+    padding-left: 1em;
+    margin-left: auto;
+
+    .rtl & {
       padding-left: 0;
       padding-right: 1em;
       margin-left: 0;
       margin-right: auto;
     }
   }
+}
 
-  .tree_item_modal_content {
-    .item .list {
-      margin-right: 1em;
+
+.tree_item_content {
+  display: flex;
+
+  .tree_item_title {
+    margin-left: 8px;
+
+    .rtl & {
       margin-left: 0;
+      margin-right: 8px;
+    }
+  }
+
+  & > .icon {
+    margin: 0 auto 0 0;
+    font-size: 1.2em;
+    line-height: 1em;
+
+    .rtl & {
+      margin: 0 0 0 auto;
     }
   }
 }

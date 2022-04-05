@@ -14,8 +14,8 @@ const FilterLabels = ({ namespace, t }) => {
   };
 
   const renderItem = ({ name, values }) => {
-    const val = t(values[0]);
-    const n   = t(name);
+    const val = values.join(', ');
+    const n   = t(`filters.aside-filter.${name}`);
     return (
       <Label
         basic
