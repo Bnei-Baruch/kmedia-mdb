@@ -11,9 +11,11 @@ const PlaylistWidget = ({ playlist, selected = 0, link, t }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const { collection, items, name } = playlist;
 
-  const [unitsToDisplay, setUnitsToDisplay] = useState(items.filter(item => !!item.unit).map(item => item.unit))
+  const [unitsToDisplay, setUnitsToDisplay] = useState(items.map(item => item.unit))
+  const [selectedIndex, setSelectedIndex]   = useState(selected);
 
   const randomize = () => {
+    const currentSelectedUnit = unitsToDisplay[selected];
     const newUnitsToDisplay = [...unitsToDisplay];
     // create an array of randoms and sort units by it
     const randomArr = newUnitsToDisplay.map(() => Math.random() * newUnitsToDisplay.length);
@@ -24,7 +26,10 @@ const PlaylistWidget = ({ playlist, selected = 0, link, t }) => {
       return randomArr[ai] - randomArr[bi];
     })
 
+    const newSelectedIndex = newUnitsToDisplay.indexOf(currentSelectedUnit);
+
     setUnitsToDisplay(newUnitsToDisplay);
+    setSelectedIndex(newSelectedIndex);
   }
 
   return (
@@ -33,7 +38,15 @@ const PlaylistWidget = ({ playlist, selected = 0, link, t }) => {
         !isMobileDevice &&
         <Header as="h3" className={'avbox__playlist-header h3'}>
           {name || t(`playlist.title-by-type.${collection.content_type}`)}
-          <Button title={t('playlist.shuffle')} style={{ padding: 'inherit', fontSize: '1em' }} icon='random' circular positive onClick={() => randomize()}></Button>
+          <Button
+            title={t('playlist.shuffle')}
+            style={{ padding: 'inherit', fontSize: '1em' }}
+            icon='random'
+            circular
+            positive
+            onClick={() => randomize()}
+          >
+          </Button>
         </Header>
       }
       {
@@ -44,7 +57,7 @@ const PlaylistWidget = ({ playlist, selected = 0, link, t }) => {
             ccuId={collection.id}
             size="small"
             asList={true}
-            selected={i === selected}
+            selected={i === selectedIndex}
             link={link ? `${link}?ap=${i}` : null}
           />
         ))

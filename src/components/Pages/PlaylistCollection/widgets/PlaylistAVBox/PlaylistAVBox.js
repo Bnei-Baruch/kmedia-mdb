@@ -35,11 +35,8 @@ class PlaylistAVBox extends Component {
     super(props);
     const { collection, uiLanguage, contentLanguage, history, location, onSelectedChange } = props;
 
-    const preferredMT    = playerHelper.restorePreferredMediaType();
-    const mediaType      = playerHelper.getMediaTypeFromQuery(history.location, preferredMT);
-    const playerLanguage = playerHelper.getLanguageFromQuery(location, contentLanguage);
-    const playlist       = playerHelper.playlist(collection, mediaType, playerLanguage, uiLanguage);
-    let selected         = playerHelper.getActivePartFromQuery(location);
+    const playlist = playerHelper.playlist(collection, location, contentLanguage, uiLanguage);
+    let selected   = playerHelper.getActivePartFromQuery(location);
 
     if (Array.isArray(playlist.items) && playlist.items.length > 0) {
       if (selected >= playlist.items.length) {
@@ -65,12 +62,8 @@ class PlaylistAVBox extends Component {
     const { selected, playlist }       = state;
     const { language: playerLanguage } = playlist;
 
-    const preferredMT     = playerHelper.restorePreferredMediaType();
-    const newMediaType    = playerHelper.getMediaTypeFromQuery(location, preferredMT);
-    const newItemLanguage = playerHelper.getLanguageFromQuery(location, playerLanguage);
-
     // Recalculate playlist
-    const nPlaylist = playerHelper.playlist(collection, newMediaType, newItemLanguage, playerLanguage);
+    const nPlaylist = playerHelper.playlist(collection, location, playerLanguage, playerLanguage);
 
     // When moving from playlist to another playlist
     // we're already mounted. We have to make sure to change selected as well.

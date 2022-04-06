@@ -19,14 +19,29 @@ import PlaylistHeader from './widgets/Playlist/PlaylistHeader';
 import AVPlaylistPlayer from '../../AVPlayer/AVPlaylistPlayer';
 import Materials from '../Unit/widgets/UnitMaterials/Materials';
 
+// Don't recommend lesson preparation, skip to next unit.
+const getRecommendUnit = (unit, collection, items) => {
+  let recommendUnit = unit;
+  const ccuNames = collection?.ccuNames || {};
+  const isUnitPrep = ccuNames?.[unit?.id] === '0' && Object.values(ccuNames).filter(value => value === '0').length === 1;
+  if (isUnitPrep && Array.isArray(items)) {
+    const indexOfUnit = items.findIndex(item => item?.unit?.id === unit.id);
+    if (indexOfUnit !== -1 && indexOfUnit + 1 < items.length) {
+      recommendUnit = items[indexOfUnit + 1].unit;
+    }
+  }
+
+  return recommendUnit;
+};
+
 const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, cuId }) => {
   const location           = useLocation();
   const history            = useHistory();
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const chronicles         = useContext(ClientChroniclesContext);
 
-  const uiLanguage      = useSelector(state => settings.getLanguage(state.settings));
-  const contentLanguage = useSelector(state => settings.getContentLanguage(state.settings));
+  const uiLanguage         = useSelector(state => settings.getLanguage(state.settings));
+  const contentLanguage    = useSelector(state => settings.getContentLanguage(state.settings));
 
   const embed                   = playerHelper.getEmbedFromQuery(location);
   const [unit, setUnit]         = useState(null);
@@ -70,20 +85,21 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
   }, [history, playlist, selected, uiLanguage]);
 
   // we need to calculate the playlist here, so we can filter items out of recommended
-  // playlist { collection, language, mediaType, items, groups };
+  // playlist = { collection, language, mediaType, items, groups, name };
   useEffect(() => {
-    const preferredMT    = playerHelper.restorePreferredMediaType();
-    const mediaType      = playerHelper.getMediaTypeFromQuery(location, preferredMT);
-    const playerLanguage = playlist?.language || contentLanguage;
-    const uiLang         = playlist?.language || uiLanguage;
-    const contentLang    = playerHelper.getLanguageFromQuery(location, playerLanguage);
+    if (playlist) {
+      const { collection, mediaType, language } = playlist
+      const nPlaylist = playerHelper.playlist(collection, location, language, language, true);
 
-    const nPlaylist = playerHelper.playlist(collection, mediaType, contentLang, uiLang);
-    if (
-      nPlaylist?.collection.id !== playlist?.collection.id ||
-      nPlaylist?.mediaType !== playlist?.mediaType ||
-      nPlaylist?.language !== playlist?.language
-    ) {
+      if (
+        nPlaylist?.collection.id !== collection.id ||
+        nPlaylist?.mediaType !== mediaType ||
+       nPlaylist?.language !== language
+      ) {
+        setPlaylist(nPlaylist);
+      }
+    } else {
+      const nPlaylist  = playerHelper.playlist(collection, location, contentLanguage, uiLanguage, true);
       setPlaylist(nPlaylist);
     }
   }, [collection, contentLanguage, location, playlist, uiLanguage]);
@@ -102,18 +118,8 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
   }
 
   const { items }      = playlist;
-  const filterOutUnits = items.map(item => item.unit).filter(u => !!u) || [];
-
-  // Don't recommend lesson preparation, skip to next unit.
-  let recommendUnit = unit;
-  const ccuNames    = collection?.ccuNames || {};
-  const isUnitPrep  = ccuNames?.[unit?.id] === '0' && Object.values(ccuNames).filter(value => value === '0').length === 1;
-  if (isUnitPrep && Array.isArray(playlist?.items)) {
-    const indexOfUnit = playlist.items.findIndex(item => item?.unit?.id === unit.id);
-    if (indexOfUnit !== -1 && indexOfUnit + 1 < playlist.items.length) {
-      recommendUnit = playlist.items[indexOfUnit + 1].unit;
-    }
-  }
+  const filterOutUnits = items.map(item => item.unit) || [];
+  const recommendUnit = getRecommendUnit(unit, collection, items);
 
   const playlistData = (
     <>

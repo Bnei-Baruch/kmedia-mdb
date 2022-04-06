@@ -50,8 +50,9 @@ const calcAvailableLanguages = unit => {
   }
 
   return Array.from(
-    unit.files.filter(f => f.type === MT_VIDEO || f.type === MT_AUDIO).reduce((acc, val) => acc.add(val.language),
-      new Set()));
+    unit.files
+      .filter(f => f.type === MT_VIDEO || f.type === MT_AUDIO)
+      .reduce((acc, val) => acc.add(val.language), new Set()));
 };
 
 const playableItem = (unit, mediaType, uiLanguage, contentLanguage) => {
@@ -74,7 +75,7 @@ const playableItem = (unit, mediaType, uiLanguage, contentLanguage) => {
     targetMediaType = mediaType === MT_AUDIO ? MT_VIDEO : MT_AUDIO;
   }
 
-  const files     = (unit.files || []).filter(f => (
+  const files = (unit.files || []).filter(f => (
     f.language === language
     && (targetMediaType === MT_VIDEO ? MediaHelper.IsMp4(f) : MediaHelper.IsMp3(f))));
   const byQuality = mapValues(
@@ -99,10 +100,14 @@ const playableItem = (unit, mediaType, uiLanguage, contentLanguage) => {
   };
 };
 
-const playlist = (collection, mediaType, contentLanguage, uiLanguage) => {
+const playlist = (collection, location, playerLanguage, uiLanguage, randomize = undefined) => {
   if (!collection) {
     return {};
   }
+
+  const preferredMT     = restorePreferredMediaType();
+  const mediaType       = getMediaTypeFromQuery(location, preferredMT);
+  const contentLanguage = getLanguageFromQuery(location, playerLanguage);
 
   const units = collection.content_units || [];
 
@@ -179,6 +184,17 @@ const playlist = (collection, mediaType, contentLanguage, uiLanguage) => {
   items.forEach(x => {
     x.shareUrl = canonicalLink(x.unit, null, collection);
   });
+
+  // randomize items order - create an array of randoms and sort items by it
+  if (randomize) {
+    const randomArr = items.map(() => Math.random() * items.length);
+    items.sort((a, b) => {
+      const ai = items.indexOf(a);
+      const bi = items.indexOf(b);
+
+      return randomArr[ai] - randomArr[bi];
+    })
+  }
 
   const name = collection.content_type === CT_SONGS ? collection.name : null;
   const language = contentLanguage;
