@@ -19,6 +19,7 @@ import FastDayPicker from '../Filters/components/Date/FastDayPicker';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectors as settings } from '../../redux/modules/settings';
 import { actions, selectors as filters } from '../../redux/modules/filters';
+import FilterHeader from './FilterHeader';
 
 const DateFilter = ({ t, namespace }) => {
   const [to, setTo]               = useState();
@@ -109,22 +110,21 @@ const DateFilter = ({ t, namespace }) => {
     setShowDay(!showDay);
   };
 
-  return (
-    <Segment.Group className="filter-popup__wrapper filter_aside">
-      <List.Header className="title" content={t(`filters.aside-filter.${FN_DATE_FILTER}`)} />
+  const renderContent = () => (
+    <Segment.Group className="filter-popup__wrapper">
       {
         datePresets.map((x, i) => (
-          <List.Item key={`${FN_DATE_FILTER}_${i}`}>
-            <List.Content>
-              <Checkbox
-                label={t(`filters.date-filter.presets.${x}`)}
-                checked={preset === x}
-                value={x}
-                onChange={handleDatePresetsChange}
-              />
-            </List.Content>
-          </List.Item>
-        )
+            <List.Item key={`${FN_DATE_FILTER}_${i}`}>
+              <List.Content>
+                <Checkbox
+                  label={t(`filters.date-filter.presets.${x}`)}
+                  checked={preset === x}
+                  value={x}
+                  onChange={handleDatePresetsChange}
+                />
+              </List.Content>
+            </List.Item>
+          )
         )
       }
       <Segment basic className="filter-popup__body date-filter">
@@ -170,6 +170,13 @@ const DateFilter = ({ t, namespace }) => {
         </Accordion>
       </Segment>
     </Segment.Group>
+  );
+  return (
+    <FilterHeader
+      filterName={FN_DATE_FILTER}
+      children={renderContent()}
+    />
+
   );
 };
 

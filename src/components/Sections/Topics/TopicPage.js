@@ -16,6 +16,7 @@ import { selectors as filters } from '../../../redux/modules/filters';
 import VideoList from './VideoList';
 import TextList from './TextList';
 import { isEqual } from 'lodash';
+import FilterLabels from '../../FiltersAside/FilterLabels';
 
 const TOPIC_PAGE_SIZE = 10;
 
@@ -75,22 +76,27 @@ const TopicPage = ({ t }) => {
         <Container className="padded topics">
           <Breadcrumb icon={breadCrumbIcon} sections={breadCrumbSections} size="large" />
           <Divider hidden />
-          <Grid>
+          <Grid divided>
             <Grid.Column width="4">
               <Filters
                 namespace={`topics_${id}`}
                 baseParams={{ tag: id }}
               />
             </Grid.Column>
-            <Grid.Column width="7">
-              <VideoList />
-            </Grid.Column>
-            <Grid.Column width="5">
-              <TextList />
+            <Grid.Column width="12">
+              <FilterLabels namespace={`topics_${id}`} />
+              <Grid>
+                <Grid.Column width="10">
+                  <VideoList />
+                </Grid.Column>
+                <Grid.Column width="6">
+                  <TextList />
+                </Grid.Column>
+              </Grid>
             </Grid.Column>
           </Grid>
         </Container>
-        <Divider fitted />
+        <Divider fitted />;
         <Container className="padded pagination-wrapper" textAlign="center">
           {
             total > 0 &&
@@ -102,9 +108,10 @@ const TopicPage = ({ t }) => {
               onChange={onPageChange}
             />
           }
-        </Container>
+        </Container>;
       </>
-    );
+    )
+      ;
   }
 
   const tag = getTags ? getTags[id] : null;

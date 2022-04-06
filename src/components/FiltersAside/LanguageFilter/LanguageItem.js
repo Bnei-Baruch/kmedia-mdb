@@ -3,10 +3,9 @@ import { Checkbox, List } from 'semantic-ui-react';
 
 import { actions, selectors as filters } from '../../../redux/modules/filters';
 import { selectors as filtersAside } from '../../../redux/modules/filtersAside';
-import { FN_LANGUAGES } from '../../../helpers/consts';
-import { withNamespaces } from 'react-i18next';
+import { FN_LANGUAGES, LANGUAGES } from '../../../helpers/consts';
 
-const LanguageItem = ({ namespace, id, t }) => {
+const LanguageItem = ({ namespace, id }) => {
 
   const selected = useSelector(state => filters.getFilterByName(state.filters, namespace, FN_LANGUAGES))?.values || [];
   const stat     = useSelector(state => filtersAside.getStats(state.filtersAside, namespace, FN_LANGUAGES, id));
@@ -28,7 +27,7 @@ const LanguageItem = ({ namespace, id, t }) => {
         {`(${stat})`}
       </List.Content>
       <Checkbox
-        label={t(`constants.languages.${id}`)}
+        label={LANGUAGES[id]?.name}
         checked={selected.includes(id)}
         onChange={handleSelect}
       />
@@ -36,4 +35,4 @@ const LanguageItem = ({ namespace, id, t }) => {
   );
 };
 
-export default withNamespaces()(LanguageItem);
+export default LanguageItem;

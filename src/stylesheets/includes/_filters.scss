@@ -222,14 +222,27 @@
 //aside filters styles
 .filter_aside {
   border-bottom: 1px solid $midWhite;
-  padding: 1em 1em !important;
+  padding: 0 0 1em !important;
   margin: 0 !important;
 
   & > .title {
     color: $blue;
     font-size: 1.3em;
     font-weight: bold;
-    padding: 0.5em 0 1em;
+    padding: 0.5em 0;
+
+  }
+
+  &:first-child > .title {
+    padding-top: 0;
+  }
+
+  .filter-popup__body {
+    min-width: auto;
+  }
+
+  .date-filter .item {
+    padding: 1em 0;
   }
 }
 
@@ -280,6 +293,8 @@
 
 .filters_aside_tree_modal, .filter_aside {
   .search-omnibox.ui.input {
+    margin: 0 0 1em;
+
     & > input {
       padding: 4px 8px;
     }
@@ -319,6 +334,17 @@
 
     .rtl & {
       margin: 0 0 0 auto;
+    }
+  }
+}
+
+.filter_aside_labels {
+  .ui.circular.label {
+    margin: .5em .5em;
+
+    .button {
+      padding: 0;
+      margin: 0 .5em;
     }
   }
 }

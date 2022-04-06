@@ -3,19 +3,19 @@ import { useSelector } from 'react-redux';
 import { selectors } from '../../../redux/modules/filtersAside';
 import { withNamespaces } from 'react-i18next';
 import { FN_CONTENT_TYPE } from '../../../helpers/consts';
-import { List } from 'semantic-ui-react';
 import ContentTypeItem from './ContentTypeItem';
+import FilterHeader from '../FilterHeader';
 
 const ContentType = ({ namespace, t }) => {
   const items = useSelector(state => selectors.getTree(state.filtersAside, namespace, FN_CONTENT_TYPE));
 
   return (
-    <List className="filter_aside">
-      <List.Header className="title" content={t(`filters.aside-filter.${FN_CONTENT_TYPE}`)} />
-      {
+    <FilterHeader
+      filterName={FN_CONTENT_TYPE}
+      children={
         items.map(id => <ContentTypeItem namespace={namespace} id={id} />)
       }
-    </List>
+    />
   );
 };
 

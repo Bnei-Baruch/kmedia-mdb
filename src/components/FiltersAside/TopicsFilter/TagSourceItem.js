@@ -70,13 +70,13 @@ const TagSourceItem = props => {
       {
         childrenIDs.filter(r => baseItems.includes(r))
           .map(x => (
-            <TagSourceItem
-              {...props}
-              id={x}
-              deep={deep - 1}
-              defaultSel={isSelected}
-            />
-          )
+              <TagSourceItem
+                {...props}
+                id={x}
+                deep={deep - 1}
+                defaultSel={isSelected}
+              />
+            )
           )
       }
 
@@ -92,7 +92,7 @@ const TagSourceItem = props => {
           indeterminate={isOnSelPath}
         />
         <span
-          className={clsx('tree_item_title', { 'bold-font': childrenIDs?.length > 0 })}>
+          className={clsx('tree_item_title', { 'bold-font': deep === 1 })}>
           {item[isTag ? 'label' : 'name']}
         </span>
         {
@@ -101,7 +101,7 @@ const TagSourceItem = props => {
               basic
               color="blue"
               className="clear_button no-shadow"
-              icon={`caret ${open ? 'down' : isLanguageRtl(language) ? 'left' : 'right'}`}
+              icon={`caret ${isLanguageRtl(language) ? 'left' : 'right'}`}
               onClick={toggleOpen}
               size="medium"
             />
