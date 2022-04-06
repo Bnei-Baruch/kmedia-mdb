@@ -25,18 +25,18 @@ const FilterLabels = ({ namespace, t }) => {
 
   const titleByFilterType = (fn, val) => {
     switch (fn) {
-    case FN_SOURCES_MULTI:
-      return getSourceById(val)?.name;
-    case FN_TOPICS:
-      return getTagById(val)?.label;
-    case FN_CONTENT_TYPE:
-      return t(`constants.content-types.${val}`);
-    case FN_DATE_FILTER:
-      return dateFilter.valueToTagLabel(val);
-    case FN_LANGUAGES:
-      return LANGUAGES[val]?.name;
-    default:
-      return null;
+      case FN_SOURCES_MULTI:
+        return getSourceById(val)?.name;
+      case FN_TOPICS:
+        return getTagById(val)?.label;
+      case FN_CONTENT_TYPE:
+        return t(`constants.content-types.${val}`);
+      case FN_DATE_FILTER:
+        return dateFilter.valueToTagLabel(val);
+      case FN_LANGUAGES:
+        return LANGUAGES[val]?.name;
+      default:
+        return null;
     }
 
   };
@@ -48,20 +48,18 @@ const FilterLabels = ({ namespace, t }) => {
     dispatch(actions.setFilterValueMulti(namespace, fn, val));
   };
 
-  const renderItem = (name, val) => {
-    return (
-      <Label
-        basic
-        circular
-        size="tiny"
-      >
-        {
-          titleByFilterType(name, val)
-        }
-        <Button icon="times circle outline" circular basic onClick={() => onRemove(name, val)} />
-      </Label>
-    );
-  };
+  const renderItem = (name, val) => (
+    <Label
+      basic
+      circular
+      size="tiny"
+    >
+      {
+        titleByFilterType(name, val)
+      }
+      <Button icon="times circle outline" circular basic onClick={() => onRemove(name, val)} />
+    </Label>
+  );
 
   return (
     <Container className="filter_aside_labels">
