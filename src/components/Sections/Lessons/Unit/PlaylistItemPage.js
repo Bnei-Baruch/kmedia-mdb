@@ -32,7 +32,7 @@ const PlaylistItemPage = ({ t }) => {
 
   useEffect(() => {
     setNeedToFetch(!unit || Object.keys(unit.collections).length === 0);
-  }, [id, language]);
+  }, [id, language, unit]);
 
   useEffect(() => {
     if (!wip && !err && needToFetch) {

@@ -22,6 +22,7 @@ const SelectTopicsModal = ({ t, open, onClose, label, trigger }) => {
   const [alertMsg, setAlertMsg] = useState();
 
   const areSourcesLoaded = useSelector(state => sourcesSelectors.areSourcesLoaded(state.sources));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const roots            = useSelector(state => selectors.getDisplayRoots(state.tags), isEqual) || [];
   const getTagById       = useSelector(state => selectors.getTagById(state.tags));
   const tree             = useMemo(() => getTree(roots, getTagById, null, t)[0], [roots, getTagById, t]);
