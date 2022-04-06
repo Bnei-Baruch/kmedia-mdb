@@ -110,8 +110,7 @@ const TopicPage = ({ t }) => {
           }
         </Container>;
       </>
-    )
-      ;
+    );
   }
 
   const tag = getTags ? getTags[id] : null;

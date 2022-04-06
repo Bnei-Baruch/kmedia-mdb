@@ -114,17 +114,17 @@ const DateFilter = ({ t, namespace }) => {
     <Segment.Group className="filter-popup__wrapper">
       {
         datePresets.map((x, i) => (
-            <List.Item key={`${FN_DATE_FILTER}_${i}`}>
-              <List.Content>
-                <Checkbox
-                  label={t(`filters.date-filter.presets.${x}`)}
-                  checked={preset === x}
-                  value={x}
-                  onChange={handleDatePresetsChange}
-                />
-              </List.Content>
-            </List.Item>
-          )
+          <List.Item key={`${FN_DATE_FILTER}_${i}`}>
+            <List.Content>
+              <Checkbox
+                label={t(`filters.date-filter.presets.${x}`)}
+                checked={preset === x}
+                value={x}
+                onChange={handleDatePresetsChange}
+              />
+            </List.Content>
+          </List.Item>
+        )
         )
       }
       <Segment basic className="filter-popup__body date-filter">
