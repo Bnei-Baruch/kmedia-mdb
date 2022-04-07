@@ -17,6 +17,7 @@ const ContentType = ({ namespace, t }) => {
     } else {
       acc.other.push(x);
     }
+
     return acc;
   }, { lessons: [], events: [], other: [] });
 

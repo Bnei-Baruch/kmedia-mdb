@@ -46,4 +46,5 @@ const Filters = ({ namespace, baseParams, t }) => {
     </Container>
   );
 };
+
 export default withNamespaces()(Filters);
