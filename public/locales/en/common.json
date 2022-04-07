@@ -108,7 +108,9 @@
       "sources-filter-multi": "Filter by source",
       "content-type-filter": "Filter by content type",
       "language-filter": "Filter by language",
-      "date-filter": "Filter by date"
+      "date-filter": "Filter by date",
+      "show-languages-more": "Show more languages",
+      "show-languages-less": "Show less languages"
     }
   },
   "buttons": {

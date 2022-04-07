@@ -9,8 +9,10 @@ import Language from '../../FiltersAside/LanguageFilter/Language';
 import ContentType from '../../FiltersAside/ContentTypeFilter/ContentType';
 import TagSourceFilter from '../../FiltersAside/TopicsFilter/TagSourceFilter';
 import { isEqual } from 'lodash';
+import { Container, Header } from 'semantic-ui-react';
+import { withNamespaces } from 'react-i18next';
 
-const Filters = ({ namespace, baseParams }) => {
+const Filters = ({ namespace, baseParams, t }) => {
   const [isHydrated, setIsHydrated] = useState(false);
 
   const isReady      = useSelector(state => selectors.isReady(state.filtersAside, namespace));
@@ -34,17 +36,14 @@ const Filters = ({ namespace, baseParams }) => {
   const handleOnHydrated = () => setIsHydrated(true);
 
   return (
-    <>
+    <Container className="padded">
+      <Header as="h3" content={t('topics.filters-title')} />
       <FiltersHydrator namespace={namespace} onHydrated={handleOnHydrated} />
       <TagSourceFilter namespace={namespace} filterName={FN_SOURCES_MULTI} />
       <ContentType namespace={namespace} />
       <Language namespace={namespace} />
       <DateFilter namespace={namespace} />
-    </>
+    </Container>
   );
 };
-
-const areEqual = (prevProps, nextProps) => prevProps.namespace === nextProps.namespace
-  && prevProps.baseParams === nextProps.baseParams;
-
-export default React.memo(Filters, areEqual);
+export default withNamespaces()(Filters);

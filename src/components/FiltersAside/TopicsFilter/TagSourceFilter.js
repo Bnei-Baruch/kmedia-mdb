@@ -4,25 +4,26 @@ import React, { useState } from 'react';
 import { withNamespaces } from 'react-i18next';
 import RenderAsList from './RenderAsList';
 import RenderAsTree from './RenderAsTree';
-import SearchInput from '../../Filters/SearchInput';
-import { FN_LANGUAGES } from '../../../helpers/consts';
 import FilterHeader from '../FilterHeader';
+import { Input } from 'semantic-ui-react';
 
 const TagSourceFilter = ({ namespace, filterName, t }) => {
   const [query, setQuery] = useState();
   const baseItems         = useSelector(state => selectors.getTree(state.filtersAside, namespace, filterName));
 
-  const handleSetQuery = (e, data) => {
-    const q = data.value.trim();
-    q && setQuery(q);
-  };
+  const handleSetQuery = (e, data) => setQuery(data.value);
 
   return (
     <FilterHeader
       filterName={filterName}
       children={
         <>
-          <SearchInput onSearch={handleSetQuery} onClear={() => setQuery(null)} />
+          <Input
+            className="search-input"
+            placeholder={t('topics.search-input')}
+            onChange={handleSetQuery}
+            value={query}
+          />
           {
             query ? <RenderAsList
               query={query}

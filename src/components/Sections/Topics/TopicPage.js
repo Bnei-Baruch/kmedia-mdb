@@ -74,10 +74,10 @@ const TopicPage = ({ t }) => {
       <>
         <HelmetsBasic title={breadCrumbSections[breadCrumbSections.length - 1]?.content} />
         <Container className="padded topics">
-          <Breadcrumb icon={breadCrumbIcon} sections={breadCrumbSections} size="large" />
-          <Divider hidden />
+          <Breadcrumb icon={breadCrumbIcon} sections={breadCrumbSections} size="huge" />
+          <Divider  />
           <Grid divided>
-            <Grid.Column width="4">
+            <Grid.Column width="4" className="filters-aside-wrapper">
               <Filters
                 namespace={`topics_${id}`}
                 baseParams={{ tag: id }}
@@ -96,7 +96,7 @@ const TopicPage = ({ t }) => {
             </Grid.Column>
           </Grid>
         </Container>
-        <Divider fitted />;
+        <Divider fitted />
         <Container className="padded pagination-wrapper" textAlign="center">
           {
             total > 0 &&
@@ -108,7 +108,7 @@ const TopicPage = ({ t }) => {
               onChange={onPageChange}
             />
           }
-        </Container>;
+        </Container>
       </>
     );
   }

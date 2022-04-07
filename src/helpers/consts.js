@@ -586,7 +586,7 @@ export const FN_SOURCES      = 'sources-filter';
 export const FN_TOPICS       = 'topics-filter';
 export const FN_LANGUAGES    = 'language-filter';
 export const FN_CONTENT_TYPE = 'content-type-filter';
-export const FN_DATE_FILTER = 'date-filter';
+export const FN_DATE_FILTER  = 'date-filter';
 
 export const FN_LANGUAGES_MULI = 'language-filter-multi';
 export const FN_SOURCES_MULTI  = 'sources-filter-multi';

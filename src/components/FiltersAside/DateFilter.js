@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import { noop } from '../../helpers/utils';
-import { Accordion, Checkbox, List, Menu, Segment } from 'semantic-ui-react';
+import { Accordion, Checkbox, Icon, List, Segment } from 'semantic-ui-react';
 
 import 'react-day-picker/lib/style.css';
 import {
@@ -20,6 +20,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectors as settings } from '../../redux/modules/settings';
 import { actions, selectors as filters } from '../../redux/modules/filters';
 import FilterHeader from './FilterHeader';
+import { isLanguageRtl } from '../../helpers/i18n-utils';
 
 const DateFilter = ({ t, namespace }) => {
   const [to, setTo]               = useState();
@@ -110,65 +111,67 @@ const DateFilter = ({ t, namespace }) => {
     setShowDay(!showDay);
   };
 
+  const iconName      = `caret ${isLanguageRtl(language) ? 'left' : 'right'}`;
   const renderContent = () => (
     <Segment.Group className="filter-popup__wrapper">
       {
         datePresets.map((x, i) => (
-          <List.Item key={`${FN_DATE_FILTER}_${i}`}>
-            <List.Content>
-              <Checkbox
-                label={t(`filters.date-filter.presets.${x}`)}
-                checked={preset === x}
-                value={x}
-                onChange={handleDatePresetsChange}
-              />
-            </List.Content>
-          </List.Item>
-        )
+            <List.Item key={`${FN_DATE_FILTER}_${i}`}>
+              <List.Content>
+                <Checkbox
+                  label={t(`filters.date-filter.presets.${x}`)}
+                  checked={preset === x}
+                  value={x}
+                  onChange={handleDatePresetsChange}
+                />
+              </List.Content>
+            </List.Item>
+          )
         )
       }
-      <Segment basic className="filter-popup__body date-filter">
-        <Accordion as={Menu} vertical fluid size="small">
-          <Menu.Item>
-            <Accordion.Title
-              active={showDay}
-              content={t('filters.date-filter.presets.CUSTOM_DAY')}
-              onClick={toggleDay}
+      <Accordion as={List} vertical size="small" className="date-filter">
+        <List.Item>
+          <Accordion.Title
+            active={showDay}
+            onClick={toggleDay}
+          >
+            {t('filters.date-filter.presets.CUSTOM_DAY')}
+            <Icon color="blue" name={iconName} />
+          </Accordion.Title>
+          <Accordion.Content active={showDay}>
+            <FastDayPicker
+              label={null}
+              value={from}
+              language={language}
+              onDayChange={handleDayInputChange}
             />
-            <Accordion.Content active={showDay}>
-              <FastDayPicker
-                label={null}
-                value={from}
-                language={language}
-                onDayChange={handleDayInputChange}
-              />
-            </Accordion.Content>
-
-          </Menu.Item>
-          <Menu.Item>
-            <Accordion.Title
-              active={showRange}
-              content={t('filters.date-filter.presets.CUSTOM_RANGE')}
-              onClick={toggleRange}
+          </Accordion.Content>
+        </List.Item>
+        <List.Item>
+          <Accordion.Title
+            active={showRange}
+            onClick={toggleRange}
+          >
+            {t('filters.date-filter.presets.CUSTOM_RANGE')}
+            <Icon color="blue" name={iconName} />
+          </Accordion.Title>
+          <Accordion.Content active={showRange}>
+            <FastDayPicker
+              label={t('filters.date-filter.start')}
+              value={from}
+              language={language}
+              onDayChange={handleFromInputChange}
             />
-            <Accordion.Content active={showRange}>
-              <FastDayPicker
-                label={t('filters.date-filter.start')}
-                value={from}
-                language={language}
-                onDayChange={handleFromInputChange}
-              />
-              <br />
-              <FastDayPicker
-                label={t('filters.date-filter.end')}
-                value={to}
-                language={language}
-                onDayChange={handleToInputChange}
-              />
-            </Accordion.Content>
-          </Menu.Item>
-        </Accordion>
-      </Segment>
+            <br />
+            <FastDayPicker
+              label={t('filters.date-filter.end')}
+              value={to}
+              language={language}
+              onDayChange={handleToInputChange}
+            />
+          </Accordion.Content>
+        </List.Item>
+      </Accordion>
     </Segment.Group>
   );
   return (

@@ -220,6 +220,15 @@
 }
 
 //aside filters styles
+.filters-aside-wrapper {
+  padding: 0 1em 0 0 !important;
+
+  & > .container {
+    background-color: $offWhite;
+
+  }
+}
+
 .filter_aside {
   border-bottom: 1px solid $midWhite;
   padding: 0 0 1em !important;
@@ -237,13 +246,37 @@
     padding-top: 0;
   }
 
-  .filter-popup__body {
+  .date-filter {
     min-width: auto;
+    margin: .5em 0;
+    padding: 0;
+
+    .item {
+      padding: 1em 0;
+
+      .title {
+        padding: 0;
+
+        .icon {
+          line-height: 1em;
+        }
+      }
+
+      .content {
+        width: fit-content;
+
+        input {
+          min-width: 200px;
+        }
+
+        .input .label {
+          vertical-align: middle;
+          line-height: 2em;
+        }
+      }
+    }
   }
 
-  .date-filter .item {
-    padding: 1em 0;
-  }
 }
 
 .ui.modal.filters_aside_tree_modal {
@@ -254,8 +287,7 @@
     margin: 0;
     padding-top: 0;
 
-    .search-omnibox.ui.input {
-      width: auto;
+    .search-input.ui.input {
       margin: 0 1em;
     }
   }
@@ -292,11 +324,16 @@
 }
 
 .filters_aside_tree_modal, .filter_aside {
-  .search-omnibox.ui.input {
-    margin: 0 0 1em;
+  .search-input.ui.input {
+    max-width: 180px;
+    width: 100%;
+    margin-bottom: 1em;
 
     & > input {
-      padding: 4px 8px;
+      padding: 2px 8px;
+      border: 1px solid $blue !important;
+      border-radius: 8px !important;
+      font-size: 14px;
     }
   }
 
@@ -341,10 +378,25 @@
 .filter_aside_labels {
   .ui.circular.label {
     margin: .5em .5em;
+    padding: 2px 2px 0 .5em !important;
+    cursor: pointer;
 
-    .button {
-      padding: 0;
-      margin: 0 .5em;
+    .rtl & {
+      padding-right: .5em !important;
+      padding-left: 2px !important;
+    }
+
+    .icon {
+      padding: 0 !important;
+      opacity: .4;
+      margin-left: .5em;
+      height: auto !important;
+      width: auto !important;
+
+      .rtl & {
+        margin-left: 0;
+        margin-right: .5em;
+      }
     }
   }
 }

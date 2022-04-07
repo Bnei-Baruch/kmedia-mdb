@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Container, Label } from 'semantic-ui-react';
+import { Button, Container, Icon, Label } from 'semantic-ui-react';
 import { actions, selectors as filters } from '../../redux/modules/filters';
 import { selectors as sources } from '../../redux/modules/sources';
 import { selectors as tags } from '../../redux/modules/tags';
@@ -57,7 +57,7 @@ const FilterLabels = ({ namespace, t }) => {
       {
         titleByFilterType(name, val)
       }
-      <Button icon="times circle outline" circular basic onClick={() => onRemove(name, val)} />
+      <Icon name="times circle outline" size="large" inverted circular  onClick={() => onRemove(name, val)} />
     </Label>
   );
 

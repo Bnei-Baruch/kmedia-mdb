@@ -28,7 +28,7 @@ const Language = ({ namespace, t }) => {
             showAll && items.filter(id => !POPULAR_LANGUAGES.includes(id)).map(id =>
               <LanguageItem namespace={namespace} id={id} />)
           }
-          <Link onClick={toggleShowAll}>{t(`topics.show-${showAll ? 'less' : 'more'}`)}</Link>
+          <Link onClick={toggleShowAll}>{t(`filters.aside-filter.show-languages-${showAll ? 'less' : 'more'}`)}</Link>
         </>
       }
     />
