@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import isEqual from 'react-fast-compare';
 
@@ -6,31 +6,39 @@ import { DeviceInfoContext } from '../../../../../helpers/app-contexts';
 import ContentItemContainer from '../../../../shared/ContentItem/ContentItemContainer';
 import { Button, Header } from 'semantic-ui-react';
 import { withNamespaces } from 'react-i18next';
+import { useLocation } from 'react-router';
 
 const PlaylistWidget = ({ playlist, selected = 0, link, t }) => {
+  const location = useLocation();
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const { collection, items, name } = playlist;
 
-  const [unitsToDisplay, setUnitsToDisplay] = useState(items.map(item => item.unit))
-  const [selectedIndex, setSelectedIndex]   = useState(selected);
+  const [selectedIndex, setSelectedIndex] = useState(selected);
+  const [playlistItems, setPlaylistItems] = useState(items);
 
   const randomize = () => {
-    const currentSelectedUnit = unitsToDisplay[selected];
-    const newUnitsToDisplay = [...unitsToDisplay];
-    // create an array of randoms and sort units by it
-    const randomArr = newUnitsToDisplay.map(() => Math.random() * newUnitsToDisplay.length);
-    newUnitsToDisplay.sort((a, b) => {
-      const ai = newUnitsToDisplay.indexOf(a);
-      const bi = newUnitsToDisplay.indexOf(b);
+    const selectedItem = playlistItems[selectedIndex];
+    const newPlaylistItems = [...playlistItems];
+
+    // create an array of randoms and sort items by it
+    const randomArr = newPlaylistItems.map(() => Math.random() * newPlaylistItems.length);
+    newPlaylistItems.sort((a, b) => {
+      const ai = newPlaylistItems.indexOf(a);
+      const bi = newPlaylistItems.indexOf(b);
 
       return randomArr[ai] - randomArr[bi];
     })
 
-    const newSelectedIndex = newUnitsToDisplay.indexOf(currentSelectedUnit);
-
-    setUnitsToDisplay(newUnitsToDisplay);
+    const newSelectedIndex = newPlaylistItems.indexOf(selectedItem);
+    setPlaylistItems(newPlaylistItems);
     setSelectedIndex(newSelectedIndex);
   }
+
+  useEffect(() => {
+    // select the item which url we are currently on
+    const currentIndex = playlistItems.findIndex(item => location.pathname.includes(item.shareUrl));
+    setSelectedIndex(currentIndex);
+  }, [location, playlistItems])
 
   return (
     <div id="avbox_playlist" className="avbox__playlist-view">
@@ -50,10 +58,10 @@ const PlaylistWidget = ({ playlist, selected = 0, link, t }) => {
         </Header>
       }
       {
-        unitsToDisplay.map((unit, i) => (
+        playlistItems.map((item, i) => (
           <ContentItemContainer
-            key={unit.id}
-            id={unit.id}
+            key={item.unit.id}
+            id={item.unit.id}
             ccuId={collection.id}
             size="small"
             asList={true}

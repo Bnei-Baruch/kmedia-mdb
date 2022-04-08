@@ -79,7 +79,7 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
   }, [history, playlist, selected]);
 
   const handleSelectedChange = useCallback(nSelected => {
-    if (nSelected !== selected && playlist?.items && playlist?.items[nSelected]) {
+    if (nSelected !== selected && playlist?.items && playlist.items[nSelected]) {
       history.push(`/${uiLanguage}${playlist.items[nSelected].shareUrl}`);
     }
   }, [history, playlist, selected, uiLanguage]);
