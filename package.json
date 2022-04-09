@@ -120,7 +120,7 @@
     "levenary": "^1.1.1",
     "lodash": "^4.17.20",
     "mock-local-storage": "^1.1.15",
-    "moment": "^2.29.1",
+    "moment": "^2.29.2",
     "moment-duration-format": "^2.2.2",
     "patch-package": "^6.2.2",
     "postinstall-postinstall": "^2.1.0",
