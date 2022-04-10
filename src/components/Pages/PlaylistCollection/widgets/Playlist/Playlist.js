@@ -7,6 +7,7 @@ import ContentItemContainer from '../../../../shared/ContentItem/ContentItemCont
 import { Button, Header } from 'semantic-ui-react';
 import { withNamespaces } from 'react-i18next';
 import { useLocation } from 'react-router';
+import { CT_SONGS } from '../../../../../helpers/consts';
 
 const PlaylistWidget = ({ playlist, selected = 0, link, t }) => {
   const location = useLocation();
@@ -40,21 +41,25 @@ const PlaylistWidget = ({ playlist, selected = 0, link, t }) => {
     setSelectedIndex(currentIndex);
   }, [location, playlistItems])
 
+  const { content_type } = collection;
+
   return (
     <div id="avbox_playlist" className="avbox__playlist-view">
       {
         !isMobileDevice &&
         <Header as="h3" className={'avbox__playlist-header h3'}>
-          {name || t(`playlist.title-by-type.${collection.content_type}`)}
-          <Button
-            title={t('playlist.shuffle')}
-            style={{ padding: 'inherit', fontSize: '1em' }}
-            icon='random'
-            circular
-            positive
-            onClick={() => randomize()}
-          >
-          </Button>
+          {name || t(`playlist.title-by-type.${content_type}`)}
+          {content_type === CT_SONGS &&
+            <Button
+              title={t('playlist.shuffle')}
+              style={{ padding: 'inherit', fontSize: '1em' }}
+              icon='random'
+              circular
+              positive
+              onClick={() => randomize()}
+            >
+            </Button>
+          }
         </Header>
       }
       {
