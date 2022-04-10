@@ -18,7 +18,7 @@ import TextList from './TextList';
 import { isEqual } from 'lodash';
 import FilterLabels from '../../FiltersAside/FilterLabels';
 
-const TOPIC_PAGE_SIZE = 10;
+const TOPIC_PAGE_SIZE = 50;
 
 const getBreadCrumbSection = (p, index, arr) => {
   if (!p) return arr;

@@ -20,6 +20,8 @@ export function* fetchStat(action) {
     filterParams[p] = [...(filterParams[p] || []), params[p]];
   });
 
+  filterParams.for_filter = true;
+
   try {
     const { data: dataCU } = yield call(Api.unitsStats, filterParams);
     const { data: dataL }  = yield call(Api.labelsStats, filterParams);

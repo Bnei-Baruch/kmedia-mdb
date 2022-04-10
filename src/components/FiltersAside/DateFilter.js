@@ -129,7 +129,7 @@ const DateFilter = ({ t, namespace }) => {
         )
         )
       }
-      <Accordion as={List} vertical size="small" className="date-filter">
+      <Accordion as={List} vertical className="date-filter">
         <List.Item>
           <Accordion.Title
             active={showDay}
