@@ -22,7 +22,7 @@ const LanguageItem = ({ namespace, id }) => {
   };
 
   return (
-    <List.Item key={`${FN_LANGUAGES}_${id}`}>
+    <List.Item key={`${FN_LANGUAGES}_${id}`} disabled={stat === 0}>
       <List.Content className="stat" floated="right">
         {`(${stat})`}
       </List.Content>
@@ -30,6 +30,7 @@ const LanguageItem = ({ namespace, id }) => {
         label={LANGUAGES[id]?.name}
         checked={selected.includes(id)}
         onChange={handleSelect}
+        disabled={stat === 0}
       />
     </List.Item>
   );

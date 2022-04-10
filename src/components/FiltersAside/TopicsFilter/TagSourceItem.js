@@ -70,13 +70,13 @@ const TagSourceItem = props => {
       {
         childrenIDs.filter(r => baseItems.includes(r))
           .map(x => (
-            <TagSourceItem
-              {...props}
-              id={x}
-              deep={deep - 1}
-              defaultSel={isSelected}
-            />
-          )
+              <TagSourceItem
+                {...props}
+                id={x}
+                deep={deep - 1}
+                defaultSel={isSelected}
+              />
+            )
           )
       }
 
@@ -84,12 +84,13 @@ const TagSourceItem = props => {
   );
 
   return (
-    <List.Item key={`${filterName}_${id}`}>
+    <List.Item key={`${filterName}_${id}`} disabled={stat === 0}>
       <List.Content className="tree_item_content">
         <Checkbox
           checked={isSelected}
           onChange={handleSelect}
           indeterminate={isOnSelPath}
+          disabled={stat === 0}
         />
         <span
           className={clsx('tree_item_title', { 'bold-font': deep === 1 })}>
@@ -104,6 +105,7 @@ const TagSourceItem = props => {
               icon={`caret ${isLanguageRtl(language) ? 'left' : 'right'}`}
               onClick={toggleOpen}
               size="medium"
+              disabled={stat === 0}
             />
           )
         }

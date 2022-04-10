@@ -23,7 +23,7 @@ const ContentTypeItem = ({ namespace, id, t }) => {
   };
 
   return (
-    <List.Item key={`${FN_CONTENT_TYPE}_${id}`}>
+    <List.Item key={`${FN_CONTENT_TYPE}_${id}`} disabled={stat === 0}>
       <List.Content className="stat" floated="right">
         {`(${stat})`}
       </List.Content>
@@ -31,6 +31,7 @@ const ContentTypeItem = ({ namespace, id, t }) => {
         label={t(`constants.content-types.${id}`)}
         checked={selected.includes(id)}
         onChange={handleSelect}
+        disabled={stat === 0}
       />
     </List.Item>
   );
