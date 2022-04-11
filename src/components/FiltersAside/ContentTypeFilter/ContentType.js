@@ -24,21 +24,17 @@ const ContentType = ({ namespace, t }) => {
 
   const selected = useSelector(state => filters.getFilterByName(state.filters, namespace, FN_CONTENT_TYPE))?.values || [];
   const lStats   = useSelector(state => UNIT_LESSONS_TYPE.reduce(
-    (acc, x) => {
-      return acc + filtersAside.getStats(state.filtersAside, namespace, FN_CONTENT_TYPE, x);
-    }, 0)
+    (acc, x) => acc + filtersAside.getStats(state.filtersAside, namespace, FN_CONTENT_TYPE, x), 0)
   );
   const eStats   = useSelector(state => UNIT_EVENTS_TYPE.reduce(
-    (acc, x) => {
-      return acc + filtersAside.getStats(state.filtersAside, namespace, FN_CONTENT_TYPE, x);
-    }, 0)
+    (acc, x) => acc + filtersAside.getStats(state.filtersAside, namespace, FN_CONTENT_TYPE, x), 0)
   );
 
   const dispatch = useDispatch();
 
   const handleSelect = (e, { checked, value }) => {
     const types = value === 'lessons' ? UNIT_LESSONS_TYPE : UNIT_EVENTS_TYPE;
-    let val     = [...selected].filter(x => !types.includes(x));
+    const val     = [...selected].filter(x => !types.includes(x));
     if (checked) {
       val.push(...types);
     }
