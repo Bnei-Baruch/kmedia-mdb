@@ -23,7 +23,7 @@ const ContentTypeItem = ({ namespace, id, t }) => {
   };
 
   return (
-    <List.Item key={`${FN_CONTENT_TYPE}_${id}`} disabled={stat === 0}>
+    <List.Item key={`${FN_CONTENT_TYPE}_${id}`} disabled={stat === 0} className="filters-aside-ct">
       <List.Content className="stat" floated="right">
         {`(${stat})`}
       </List.Content>
