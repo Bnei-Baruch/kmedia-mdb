@@ -31,23 +31,25 @@ const DButton = ({ content, href, icon, className, color = 'blue' }) => (
   />
 );
 
-const getDonateLang = language => {
+const getDonateLinkDetails = language => {
   switch (language) {
     case LANG_HEBREW:
-      return LANG_HEBREW;
+      return { linkLang: '', utmTerm: 'heb' };
+    case LANG_ENGLISH:
+      return { linkLang: 'en', utmTerm: 'eng' };
     case LANG_RUSSIAN:
-    case LANG_UKRAINIAN:
-      return LANG_RUSSIAN;
+      return { linkLang: 'ru', utmTerm: 'rus' };
     case LANG_SPANISH:
-      return LANG_SPANISH;
+      return { linkLang: 'es', utmTerm: 'spa' };
     default:
-      return LANG_ENGLISH;
+      return { linkLang: 'en', utmTerm: 'other_lang' };
   }
 }
 
 const DonateNow = ({ t, language }) => {
-  const lang = getDonateLang(language);
-  return DButton({ content: t('home.donate'), href: `https://kab1.com/${lang}`, icon: 'heart', className: 'donate-button' });
+  const { linkLang, utmTerm} = getDonateLinkDetails(language);
+  const link = `https://www.kab1.com/${linkLang}?utm_source=kabbalah_media&utm_medium=button&utm_campaign=donations&utm_id=donations&utm_term=${utmTerm}&utm_content=header_button_donate`;
+  return DButton({ content: t('home.donate'), href: link, icon: 'heart', className: 'donate-button' });
 };
 
 DonateNow.propTypes = {
