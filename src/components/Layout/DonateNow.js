@@ -47,7 +47,7 @@ const getDonateLinkDetails = language => {
 }
 
 const DonateNow = ({ t, language }) => {
-  const { linkLang, utmTerm} = getDonateLinkDetails(language);
+  const { linkLang, utmTerm } = getDonateLinkDetails(language);
   const link = `https://www.kab1.com/${linkLang}?utm_source=kabbalah_media&utm_medium=button&utm_campaign=donations&utm_id=donations&utm_term=${utmTerm}&utm_content=header_button_donate`;
   return DButton({ content: t('home.donate'), href: link, icon: 'heart', className: 'donate-button' });
 };
