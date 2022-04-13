@@ -11,6 +11,7 @@ const getItemsRecursive = (rootID, getById, base) => {
   if (!root.children || root.children.length === 0) {
     return [rootID];
   }
+
   const ch = root
     .children
     .filter(x => base.includes(x))
