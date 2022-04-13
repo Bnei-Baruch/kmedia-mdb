@@ -104,13 +104,17 @@
       "posts": "Blog"
     },
     "aside-filter": {
-      "modal-title": "Filter on: {{name}}",
-      "sources-filter-multi": "Filter by source",
-      "content-type-filter": "Filter by content type",
-      "language-filter": "Filter by language",
-      "date-filter": "Filter by date",
-      "show-languages-more": "Show more languages",
-      "show-languages-less": "Show less languages"
+      "filters-title": "Filter by interests:",
+      "sources-filter-multi": "Kabbalists",
+      "content-type-filter": "Section",
+      "language-filter": "Language",
+      "date-filter": "Date",
+      "show-languages-more": "Show all languages",
+      "show-languages-less": "Show less languages",
+      "lessons": "Lessons & Lectures",
+      "events": "Conventions & Events",
+      "search-input-topic": "search topic",
+      "search-input-source": "search source"
     }
   },
   "buttons": {
@@ -539,7 +543,8 @@
     "show-less": "Show less",
     "part-of": "Part of {{name}}",
     "likut-title": "\"{{name}}\" (Assorted Excerpts)",
-    "tagged-author": "Tagged with {{author}}"
+    "tagged-author": "Tagged with {{author}}",
+    "texts-title": "Kabbalah Sources, Transcriptions, Publications"
   },
   "media-downloads": {
     "title": "Downloads",

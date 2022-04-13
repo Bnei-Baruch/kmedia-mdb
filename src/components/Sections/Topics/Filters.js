@@ -11,6 +11,7 @@ import TagSourceFilter from '../../FiltersAside/TopicsFilter/TagSourceFilter';
 import { isEqual } from 'lodash';
 import { Container, Header } from 'semantic-ui-react';
 import { withNamespaces } from 'react-i18next';
+import SubTopics from './SubTopics';
 
 const Filters = ({ namespace, baseParams, t }) => {
   const [isHydrated, setIsHydrated] = useState(false);
@@ -37,7 +38,8 @@ const Filters = ({ namespace, baseParams, t }) => {
 
   return (
     <Container className="padded">
-      <Header as="h3" content={t('topics.filters-title')} />
+      <Header as="h3" content={t('filters.aside-filter.filters-title')} />
+      <SubTopics namespace={namespace} root={baseParams.tag} />
       <FiltersHydrator namespace={namespace} onHydrated={handleOnHydrated} />
       <TagSourceFilter namespace={namespace} filterName={FN_SOURCES_MULTI} />
       <ContentType namespace={namespace} />

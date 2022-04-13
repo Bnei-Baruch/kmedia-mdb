@@ -221,7 +221,11 @@
 
 //aside filters styles
 .filters-aside-wrapper {
-  padding: 0 1em 0 0 !important;
+  padding: 0 0 0 1em !important;
+
+  .rtl {
+    padding: 0 1em 0 0 !important;
+  }
 
   & > .container {
     background-color: $offWhite;

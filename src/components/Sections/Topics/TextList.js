@@ -18,11 +18,9 @@ const TextList = ({ t }) => {
     label: denormLabel(lID)
   })).filter(x => !!x.cu) || [];
 
-  const title = `${t('nav.sidebar.publications')}, ${t('nav.sidebar.books')}, ${t('nav.sidebar.likutim')} (${textTotal})`;
-
   return (
     <Container className="padded topics_texts">
-      <Header as="h3" content={title} />
+      <Header as="h3" content={t('topics.texts-title')} />
       {
         items?.map((x, i) => (<TextItem item={x} key={i} />))
       }

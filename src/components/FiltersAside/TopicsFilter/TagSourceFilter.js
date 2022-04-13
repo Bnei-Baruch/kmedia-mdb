@@ -6,6 +6,7 @@ import RenderAsList from './RenderAsList';
 import RenderAsTree from './RenderAsTree';
 import FilterHeader from '../FilterHeader';
 import { Input } from 'semantic-ui-react';
+import { FN_TOPICS_MULTI } from '../../../helpers/consts';
 
 const TagSourceFilter = ({ namespace, filterName, t }) => {
   const [query, setQuery] = useState();
@@ -13,6 +14,7 @@ const TagSourceFilter = ({ namespace, filterName, t }) => {
 
   const handleSetQuery = (e, data) => setQuery(data.value);
 
+  const isTag = filterName === FN_TOPICS_MULTI;
   return (
     <FilterHeader
       filterName={filterName}
@@ -20,7 +22,7 @@ const TagSourceFilter = ({ namespace, filterName, t }) => {
         <>
           <Input
             className="search-input"
-            placeholder={t('topics.search-input')}
+            placeholder={t(`filters.aside-filter.search-input-${isTag ? 'topic' : 'source'}`)}
             onChange={handleSetQuery}
             value={query}
           />

@@ -10,15 +10,15 @@ import clsx from 'clsx';
 
 const TagSourceItemModal = props => {
   const {
-    baseItems,
-    filterName,
-    parent,
-    open,
-    onClose,
-    getById,
-    getPath,
-    t
-  } = props;
+          baseItems,
+          filterName,
+          parent,
+          open,
+          onClose,
+          getById,
+          getPath,
+          t
+        } = props;
 
   const [query, setQuery] = useState('');
 
@@ -59,12 +59,10 @@ const TagSourceItemModal = props => {
       closeIcon={<Icon name="times circle outline" />}
     >
       <Modal.Header className="no-border">
-        {
-          t('filters.aside-filter.modal-title', { name: parent[field] })
-        }
+        {parent[field]}
         <Input
           className="search-input"
-          placeholder={t('topics.search-input')}
+          placeholder={t('filters.aside-filter.search-input')}
           onChange={handleSetQuery}
           value={query}
         />
@@ -73,10 +71,10 @@ const TagSourceItemModal = props => {
         <Card.Group itemsPerRow={3}>
           {
             chAsLeaf.length > 0 && (chAsLeaf.map(x => (
-              <Card className="tree_item_modal_content item single_item">
-                <TagSourceItem {...props} id={x.id} deep={-1} />
-              </Card>
-            ))
+                <Card className="tree_item_modal_content item single_item">
+                  <TagSourceItem {...props} id={x.id} deep={-1} />
+                </Card>
+              ))
             )
           }
           {
