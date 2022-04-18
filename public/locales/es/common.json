@@ -105,6 +105,7 @@
     "aside-filter": {
       "filters-title": "Filtrar por intereses:",
       "sources-filter-multi": "Cabalistas",
+      "topics-filter-multi": "Temas",
       "content-type-filter": "Sección",
       "language-filter": "Idioma",
       "date-filter": "Fecha",

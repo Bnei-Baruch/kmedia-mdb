@@ -106,6 +106,7 @@
     "aside-filter": {
       "filters-title": "Filter by interests:",
       "sources-filter-multi": "Kabbalists",
+      "topics-filter-multi": "Теми",
       "content-type-filter": "Section",
       "language-filter": "Language",
       "date-filter": "Date",

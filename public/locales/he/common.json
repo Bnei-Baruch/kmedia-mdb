@@ -105,6 +105,7 @@
     "aside-filter": {
       "filters-title": "סנן את מה שמעניין אותך:",
       "sources-filter-multi": "מקובלים",
+      "topics-filter-multi": "נושאים",
       "content-type-filter": "מדור",
       "language-filter": "שפה",
       "date-filter": "תאריך",

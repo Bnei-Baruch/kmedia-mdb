@@ -95,7 +95,6 @@
     },
     "sections-filter": {
       "label": "Abschnitt",
-      "all": "All",
       "lessons": "Lektionen und Vorlesungen",
       "programs": "Programme und Clips",
       "events": "Kongresse, Veranstaltungen",
@@ -106,6 +105,7 @@
     "aside-filter": {
       "filters-title": "Filter by interests:",
       "sources-filter-multi": "Kabbalists",
+      "topics-filter-multi": "Topics",
       "content-type-filter": "Section",
       "language-filter": "Language",
       "date-filter": "Date",

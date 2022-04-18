@@ -106,6 +106,7 @@
     "aside-filter": {
       "filters-title": "Фильтровать по интересам:",
       "sources-filter-multi": "Каббалисты",
+      "topics-filter-multi": "Темы",
       "content-type-filter": "Раздел",
       "language-filter": "Язык",
       "date-filter": "Дата",
