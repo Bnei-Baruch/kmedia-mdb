@@ -109,8 +109,6 @@
       "content-type-filter": "Section",
       "language-filter": "Language",
       "date-filter": "Date",
-      "show-languages-more": "Show all languages",
-      "show-languages-less": "Show less languages",
       "lessons": "Lessons & Lectures",
       "events": "Conventions & Events",
       "search-input-topic": "search topic",
