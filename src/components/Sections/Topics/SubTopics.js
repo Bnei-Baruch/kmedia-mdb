@@ -9,6 +9,8 @@ import TagSourceItemModal from '../../FiltersAside/TopicsFilter/TagSourceItemMod
 import { withNamespaces } from 'react-i18next';
 import { selectors as filters } from '../../../redux/modules/filters';
 import FilterHeader from '../../FiltersAside/FilterHeader';
+import { Input } from 'semantic-ui-react';
+import RenderAsList from '../../FiltersAside/TopicsFilter/RenderAsList';
 
 const MAX_SHOWED_ITEMS  = 10;
 const getItemsRecursive = (rootID, getById, base) => {
@@ -31,6 +33,7 @@ const getItemsRecursive = (rootID, getById, base) => {
 const SubTopics = ({ namespace, rootID, t }) => {
   const [open, setOpen]             = useState(false);
   const [isSelected, setIsSelected] = useState();
+  const [query, setQuery]           = useState();
 
   const getTagById  = useSelector(state => tags.getTagById(state.tags));
   const getPathTags = useSelector(state => tags.getPathByID(state.tags));
@@ -47,22 +50,24 @@ const SubTopics = ({ namespace, rootID, t }) => {
 
   const toggleOpen = () => setOpen(!open);
 
+  const handleSetQuery = (e, data) => setQuery(data.value);
+
   const children = root.children?.filter(r => items.includes(r));
 
   if (!(children?.length > 0))
     return null;
 
-  return (
-    <FilterHeader filterName={FN_TOPICS_MULTI}>
+  const renderAsTree = () => (
+    <>
       {
         children.slice(0, MAX_SHOWED_ITEMS)
           .map(r => <TagSourceItem
-            id={r}
-            namespace={namespace}
-            baseItems={items}
-            filterName={FN_TOPICS_MULTI}
-            deep={0}
-          />
+              id={r}
+              namespace={namespace}
+              baseItems={items}
+              filterName={FN_TOPICS_MULTI}
+              deep={0}
+            />
           )
       }
       {
@@ -81,6 +86,27 @@ const SubTopics = ({ namespace, rootID, t }) => {
               namespace={namespace}
             />
           </>
+        )
+      }
+    </>
+  );
+
+  return (
+    <FilterHeader filterName={FN_TOPICS_MULTI}>
+      <Input
+        className="search-input"
+        placeholder={t('filters.aside-filter.search-input-topic')}
+        onChange={handleSetQuery}
+        value={query}
+      />
+      {
+        !query ? renderAsTree() : (
+          <RenderAsList
+            query={query}
+            namespace={namespace}
+            baseItems={items}
+            filterName={FN_TOPICS_MULTI}
+          />
         )
       }
     </FilterHeader>
