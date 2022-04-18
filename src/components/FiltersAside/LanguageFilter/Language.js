@@ -6,7 +6,7 @@ import { FN_LANGUAGES, POPULAR_LANGUAGES } from '../../../helpers/consts';
 import { selectors as filters } from '../../../redux/modules/filters';
 import FilterHeader from '../FilterHeader';
 import LanguageItem from './LanguageItem';
-import { Link } from 'react-router-dom';
+import { Button } from 'semantic-ui-react';
 
 const Language = ({ namespace, t }) => {
   const items    = useSelector(state => selectors.getTree(state.filtersAside, namespace, FN_LANGUAGES));
@@ -30,7 +30,14 @@ const Language = ({ namespace, t }) => {
             showAll && items.filter(id => !POPULAR_LANGUAGES.includes(id)).map(id =>
               <LanguageItem namespace={namespace} id={id} />)
           }
-          <Link onClick={toggleShowAll}>{t(`filters.aside-filter.show-languages-${showAll ? 'less' : 'more'}`)}</Link>
+          <Button
+            basic
+            icon={showAll ? 'minus' : 'plus'}
+            color="blue"
+            className="clear_button"
+            content={t(`topics.show-${showAll ? 'less' : 'more'}`)}
+            onClick={toggleShowAll}
+          />
         </>
       }
     />

@@ -309,6 +309,15 @@
     margin: 0.5em 0.5em 0;
     cursor: pointer;
   }
+
+  .stat {
+    margin-right: .5em;
+
+    .rtl & {
+      margin-left: .5em;
+      margin-right: 0;
+    }
+  }
 }
 
 .tree_item_modal_content {

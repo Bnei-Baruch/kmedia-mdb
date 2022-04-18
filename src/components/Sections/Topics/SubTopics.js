@@ -4,12 +4,11 @@ import { selectors } from '../../../redux/modules/filtersAside';
 import { FN_TOPICS_MULTI } from '../../../helpers/consts';
 import { selectors as tags } from '../../../redux/modules/tags';
 import TagSourceItem from '../../FiltersAside/TopicsFilter/TagSourceItem';
-import { Link } from 'react-router-dom';
 import TagSourceItemModal from '../../FiltersAside/TopicsFilter/TagSourceItemModal';
 import { withNamespaces } from 'react-i18next';
 import { selectors as filters } from '../../../redux/modules/filters';
 import FilterHeader from '../../FiltersAside/FilterHeader';
-import { Input } from 'semantic-ui-react';
+import { Button, Input } from 'semantic-ui-react';
 import RenderAsList from '../../FiltersAside/TopicsFilter/RenderAsList';
 
 const MAX_SHOWED_ITEMS  = 10;
@@ -62,18 +61,26 @@ const SubTopics = ({ namespace, rootID, t }) => {
       {
         children.slice(0, MAX_SHOWED_ITEMS)
           .map(r => <TagSourceItem
-            id={r}
-            namespace={namespace}
-            baseItems={items}
-            filterName={FN_TOPICS_MULTI}
-            deep={0}
-          />
+              id={r}
+              namespace={namespace}
+              baseItems={items}
+              filterName={FN_TOPICS_MULTI}
+              deep={0}
+            />
           )
       }
       {
         children.length > MAX_SHOWED_ITEMS && (
           <>
-            <Link onClick={toggleOpen}>{t('filters.aside-filter.show-languages-more')}</Link>
+
+            <Button
+              basic
+              icon="plus"
+              color="blue"
+              className="clear_button"
+              content={t('topics.show-more')}
+              onClick={toggleOpen}
+            />
             <TagSourceItemModal
               parent={root}
               open={open}

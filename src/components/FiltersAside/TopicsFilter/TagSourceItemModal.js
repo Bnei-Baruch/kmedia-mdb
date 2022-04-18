@@ -68,10 +68,10 @@ const TagSourceItemModal = props => {
         />
       </Modal.Header>
       <Modal.Content scrolling>
-        <Card.Group itemsPerRow={3}>
+        <Card.Group itemsPerRow={3} >
           {
             chAsLeaf.length > 0 && (chAsLeaf.map(x => (
-              <Card className="tree_item_modal_content item single_item">
+              <Card fluid={false} className="tree_item_modal_content item single_item">
                 <TagSourceItem {...props} id={x.id} deep={-1} />
               </Card>
             ))
