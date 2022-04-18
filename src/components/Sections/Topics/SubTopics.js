@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectors } from '../../../redux/modules/filtersAside';
 import { FN_TOPICS_MULTI } from '../../../helpers/consts';
@@ -12,18 +12,20 @@ import FilterHeader from '../../FiltersAside/FilterHeader';
 
 const MAX_SHOWED_ITEMS  = 10;
 const getItemsRecursive = (rootID, getById, base) => {
+  if (base?.length === 0) return [];
+
   const root = getById(rootID);
   if (!root.children || root.children.length === 0) {
-    return [rootID];
+    return base.includes(rootID) ? [rootID] : null;
   }
 
-  const ch = root
+  const resp = root
     .children
-    .filter(x => base.includes(x))
     .map(x => getItemsRecursive(x, getById, base))
+    .filter(x => !!x)
     .flat();
-
-  return ch;
+  if (resp.length > 0) resp.push(rootID);
+  return resp;
 };
 
 const SubTopics = ({ namespace, rootID, t }) => {
@@ -36,7 +38,7 @@ const SubTopics = ({ namespace, rootID, t }) => {
   const selected    = useSelector(state => filters.getFilterByName(state.filters, namespace, FN_TOPICS_MULTI))?.values || [];
 
   const root  = getTagById(rootID);
-  const items = getItemsRecursive(rootID, getTagById, baseItems) || [];
+  const items = useMemo(() => getItemsRecursive(rootID, getTagById, baseItems) || [], [rootID, getTagById, baseItems]);
 
   useEffect(() => {
     const sel = selected.includes(rootID);
@@ -45,22 +47,22 @@ const SubTopics = ({ namespace, rootID, t }) => {
 
   const toggleOpen = () => setOpen(!open);
 
-  if (!root?.children) return null;
+  const children = root.children?.filter(r => items.includes(r));
 
-  const children = root.children.filter(r => items.includes(r));
+  if (!(children?.length > 0))
+    return null;
+
   return (
-
     <FilterHeader filterName={FN_TOPICS_MULTI}>
       {
         children.slice(0, MAX_SHOWED_ITEMS)
-          .filter(r => items.includes(r))
           .map(r => <TagSourceItem
-            id={r}
-            namespace={namespace}
-            baseItems={items}
-            filterName={FN_TOPICS_MULTI}
-            deep={0}
-          />
+              id={r}
+              namespace={namespace}
+              baseItems={items}
+              filterName={FN_TOPICS_MULTI}
+              deep={0}
+            />
           )
       }
       {

@@ -14,6 +14,8 @@ const Language = ({ namespace, t }) => {
 
   const [showAll, setShowAll] = useState(selected.filter(x => POPULAR_LANGUAGES.includes(x)).length > 0);
 
+  if (!(items?.length > 0)) return null;
+
   const toggleShowAll = () => setShowAll(!showAll);
 
   return (

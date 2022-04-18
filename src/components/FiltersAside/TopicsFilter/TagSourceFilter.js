@@ -12,6 +12,8 @@ const TagSourceFilter = ({ namespace, filterName, t }) => {
   const [query, setQuery] = useState();
   const baseItems         = useSelector(state => selectors.getTree(state.filtersAside, namespace, filterName));
 
+  if (!(baseItems?.length > 0)) return null;
+
   const handleSetQuery = (e, data) => setQuery(data.value);
 
   const isTag = filterName === FN_TOPICS_MULTI;

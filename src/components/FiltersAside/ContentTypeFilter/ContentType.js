@@ -9,7 +9,8 @@ import { Checkbox, List } from 'semantic-ui-react';
 import { actions, selectors as filters } from '../../../redux/modules/filters';
 
 const ContentType = ({ namespace, t }) => {
-  const items                      = useSelector(state => selectors.getTree(state.filtersAside, namespace, FN_CONTENT_TYPE));
+  const items = useSelector(state => selectors.getTree(state.filtersAside, namespace, FN_CONTENT_TYPE));
+
   const { lessons, events, other } = items.reduce((acc, x) => {
     if (UNIT_LESSONS_TYPE.includes(x)) {
       acc.lessons.push(x);
@@ -32,9 +33,11 @@ const ContentType = ({ namespace, t }) => {
 
   const dispatch = useDispatch();
 
+  if (!(items?.length > 0)) return null;
+
   const handleSelect = (e, { checked, value }) => {
     const types = value === 'lessons' ? UNIT_LESSONS_TYPE : UNIT_EVENTS_TYPE;
-    const val     = [...selected].filter(x => !types.includes(x));
+    const val   = [...selected].filter(x => !types.includes(x));
     if (checked) {
       val.push(...types);
     }
