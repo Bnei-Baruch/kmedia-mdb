@@ -101,6 +101,19 @@
       "publications": "פרסומים",
       "sources": "מקורות",
       "posts": "בלוג"
+    },
+    "aside-filter": {
+      "filters-title": "סנן את מה שמעניין אותך:",
+      "sources-filter-multi": "מקובלים",
+      "content-type-filter": "מדור",
+      "language-filter": "שפה",
+      "date-filter": "תאריך",
+      "show-languages-more": "הראה את כל השפות",
+      "show-languages-less": "הראה פחות שפות",
+      "lessons": "שיעורים והרצאות",
+      "events": "כנסים ואירועים",
+      "search-input-topic": "search topic",
+      "search-input-source": "search source"
     }
   },
   "buttons": {
@@ -526,7 +539,8 @@
       "subtext": "אוסף תכנים בנושא נבחר"
     },
     "show-more": "הצג עוד",
-    "show-less": "הצג פחות"
+    "show-less": "הצג פחות",
+    "texts-title": "כתבי מקובלים, תמלילים, פרסומי הרב לייטמן ברשת"
   },
   "media-downloads": {
     "title": "קבצים להורדה",

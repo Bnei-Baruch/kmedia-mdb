@@ -101,6 +101,19 @@
       "publications": "Publicaciones",
       "sources": "Fuentes",
       "posts": "Blog"
+    },
+    "aside-filter": {
+      "filters-title": "Filtrar por intereses:",
+      "sources-filter-multi": "Cabalistas",
+      "content-type-filter": "Sección",
+      "language-filter": "Idioma",
+      "date-filter": "Fecha",
+      "show-languages-more": "Mostrar todos los idiomas",
+      "show-languages-less": "Mostrar menos idiomas",
+      "lessons": "Lecciones y Charlas",
+      "events": "Congresos y Eventos",
+      "search-input-topic": "search topic",
+      "search-input-source": "search source"
     }
   },
   "buttons": {
@@ -525,7 +538,8 @@
       "subtext": "A collection of all items for a selected topic."
     },
     "show-more": "Mostrar más",
-    "show-less": "Muestra menos"
+    "show-less": "Muestra menos",
+    "texts-title": "Kabbalah Sources, Transcriptions, Publications"
   },
   "media-downloads": {
     "title": "Descargar archivos",

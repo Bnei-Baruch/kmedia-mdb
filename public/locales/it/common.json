@@ -102,6 +102,19 @@
       "publications": "Publicazioni",
       "sources": "Kabbalah Sources",
       "posts": "Blog"
+    },
+    "aside-filter": {
+      "filters-title": "Filter by interests:",
+      "sources-filter-multi": "Kabbalists",
+      "content-type-filter": "Section",
+      "language-filter": "Language",
+      "date-filter": "Date",
+      "show-languages-more": "Show all languages",
+      "show-languages-less": "Show less languages",
+      "lessons": "Lessons & Lectures",
+      "events": "Conventions & Events",
+      "search-input-topic": "search topic",
+      "search-input-source": "search source"
     }
   },
   "buttons": {
@@ -528,7 +541,8 @@
       "subtext": "A collection of all items for a selected topic."
     },
     "show-more": "Show more",
-    "show-less": "Show less"
+    "show-less": "Show less",
+    "texts-title": "Kabbalah Sources, Transcriptions, Publications"
   },
   "media-downloads": {
     "title": "Downloads",

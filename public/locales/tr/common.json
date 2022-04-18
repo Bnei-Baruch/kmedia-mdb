@@ -102,6 +102,19 @@
       "publications": "Yayınlar",
       "sources": "Kabala Kaynakları",
       "posts": "Blok"
+    },
+    "aside-filter": {
+      "filters-title": "Filter by interests:",
+      "sources-filter-multi": "Kabbalists",
+      "content-type-filter": "Section",
+      "language-filter": "Language",
+      "date-filter": "Date",
+      "show-languages-more": "Show all languages",
+      "show-languages-less": "Show less languages",
+      "lessons": "Lessons & Lectures",
+      "events": "Conventions & Events",
+      "search-input-topic": "search topic",
+      "search-input-source": "search source"
     }
   },
   "buttons": {
@@ -527,7 +540,8 @@
       "subtext": "Seçilmiş bir konunun tüm parçalarının derlemesi "
     },
     "show-more": "Daha fazlasını göster",
-    "show-less": "Daha azını göster"
+    "show-less": "Daha azını göster",
+    "texts-title": "Kabbalah Sources, Transcriptions, Publications"
   },
   "media-downloads": {
     "title": "Medya yüklemeleri",

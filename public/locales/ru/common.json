@@ -102,6 +102,19 @@
       "publications": "Публикации",
       "sources": "Первоисточники",
       "posts": "Блог"
+    },
+    "aside-filter": {
+      "filters-title": "Фильтровать по интересам:",
+      "sources-filter-multi": "Каббалисты",
+      "content-type-filter": "Раздел",
+      "language-filter": "Язык",
+      "date-filter": "Дата",
+      "show-languages-more": "Показать все языки",
+      "show-languages-less": "Показать меньше языков",
+      "lessons": "Уроки и лекции",
+      "events": "Конгрессы, события",
+      "search-input-topic": "search topic",
+      "search-input-source": "search source"
     }
   },
   "buttons": {
@@ -542,7 +555,8 @@
       "subtext": "Сборник материалов по выбранной теме"
     },
     "show-more": "Показать больше",
-    "show-less": "Показывай меньше"
+    "show-less": "Показывай меньше",
+    "texts-title": "Kabbalah Sources, Transcriptions, Publications"
   },
   "media-downloads": {
     "title": "Скачать",
