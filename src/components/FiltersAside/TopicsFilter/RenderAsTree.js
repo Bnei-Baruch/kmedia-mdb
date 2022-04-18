@@ -17,7 +17,7 @@ const treeItems = (items, getPath) => items.map(getPath)
     return acc;
   }, { byId: {}, uniq: [] }).uniq;
 
-const RenderAsTree = ({ namespace, filterName, baseItems, rootIDs }) => {
+const RenderAsTree = ({ namespace, filterName, baseItems, root }) => {
   const getPathTags    = useSelector(state => tags.getPathByID(state.tags));
   const rootsTags      = useSelector(state => tags.getRoots(state.tags));
   const getPathSources = useSelector(state => sources.getPathByID(state.sources));
@@ -25,7 +25,7 @@ const RenderAsTree = ({ namespace, filterName, baseItems, rootIDs }) => {
 
   const isTag   = filterName === FN_TOPICS_MULTI;
   const getPath = isTag ? getPathTags : getPathSources;
-  const roots   = !(rootIDs?.length === 0)  ? isTag ? rootsTags : rootsSources : rootIDs;
+  const roots   = !root  ? isTag ? rootsTags : rootsSources : root.children;
 
   const items = useMemo(() => treeItems(baseItems, getPath), [baseItems]);
 

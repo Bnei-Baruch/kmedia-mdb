@@ -29,7 +29,9 @@ const TagSourceItem = props => {
 
   const isTag       = filterName === FN_TOPICS_MULTI;
   const getPath     = isTag ? getPathTags : getPathSources;
-  const pathIds     = getPath(id)?.map(x => x.id);
+  const pathIds     = getPath(id)?.map(x => {
+    return x.id;
+  });
   const getById     = isTag ? getTagById : getSourceById;
   const item        = getById(id);
   const childrenIDs = useMemo(() => item.children?.filter(x => baseItems.includes(x)) || [], [baseItems, item]);
@@ -70,13 +72,13 @@ const TagSourceItem = props => {
       {
         childrenIDs.filter(r => baseItems.includes(r))
           .map(x => (
-            <TagSourceItem
-              {...props}
-              id={x}
-              deep={deep - 1}
-              defaultSel={isSelected}
-            />
-          )
+              <TagSourceItem
+                {...props}
+                id={x}
+                deep={deep - 1}
+                defaultSel={isSelected}
+              />
+            )
           )
       }
 

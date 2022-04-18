@@ -38,9 +38,9 @@ const Filters = ({ namespace, baseParams, t }) => {
 
   return (
     <Container className="padded">
-      <Header as="h3" content={t('filters.aside-filter.filters-title')} />
-      <SubTopics namespace={namespace} root={baseParams.tag} />
       <FiltersHydrator namespace={namespace} onHydrated={handleOnHydrated} />
+      <Header as="h3" content={t('filters.aside-filter.filters-title')} />
+      <SubTopics namespace={namespace} rootID={baseParams.tag} />
       <TagSourceFilter namespace={namespace} filterName={FN_SOURCES_MULTI} />
       <ContentType namespace={namespace} />
       <Language namespace={namespace} />

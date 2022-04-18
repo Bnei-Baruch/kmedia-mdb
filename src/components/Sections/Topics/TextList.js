@@ -20,7 +20,7 @@ const TextList = ({ t }) => {
 
   return (
     <Container className="padded topics_texts">
-      <Header as="h3" content={t('topics.texts-title')} />
+      <Header as="h3" content={`${t('topics.texts-title')} (${textTotal})`} />
       {
         items?.map((x, i) => (<TextItem item={x} key={i} />))
       }
