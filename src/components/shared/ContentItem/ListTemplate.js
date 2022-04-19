@@ -19,22 +19,22 @@ const imageWidthBySize = {
 };
 
 const ListTemplate = ({
-                        unit,
-                        source,
-                        tag,
-                        language,
-                        withCUInfo,
-                        withCCUInfo,
-                        link,
-                        ccu,
-                        description,
-                        children,
-                        playTime,
-                        size = 'big',
-                        selected,
-                        label,
-                        t
-                      }) => {
+  unit,
+  source,
+  tag,
+  language,
+  withCUInfo,
+  withCCUInfo,
+  link,
+  ccu,
+  description,
+  children,
+  playTime,
+  size = 'big',
+  selected,
+  label,
+  t
+}) => {
   const dir                = isLanguageRtl(language) ? 'rtl' : 'ltr';
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
@@ -47,7 +47,7 @@ const ListTemplate = ({
     }
   }, [cuInfoRef.current]);
 
-  const toggleShowCUInfo = (e) => {
+  const toggleShowCUInfo = e => {
     setCuInfoShowAll(!cuInfoShowAll);
     stopBubbling(e);
   };
