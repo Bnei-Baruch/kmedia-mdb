@@ -95,14 +95,14 @@ const ListTemplate = ({
             <>
               <Ref innerRef={cuInfoRef}>
                 <Header
-                  as={size === 'big' ? 'h5' : 'h3'}
+                  as={size === 'big' || isMobileDevice ? 'h5' : 'h3'}
                   className={clsx('cu_item_name', { 'show_part': !cuInfoShowAll })}
                 >
                   {(unit && unit.name) || (source && source.name) || (tag && tag.label)}
                 </Header>
               </Ref>
               {
-                (cuInfoShowAll !== null) && (
+                (cuInfoShowAll !== null) && !isMobileDevice && (
                   <Button
                     floated="right"
                     basic

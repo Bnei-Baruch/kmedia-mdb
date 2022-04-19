@@ -2239,12 +2239,12 @@
 
     @include mobile {
       margin-top: 0;
-      margin-bottom: 8px;
+      margin-bottom: 4px;
       -webkit-line-clamp: 3;
       display: -webkit-box;
       -webkit-box-orient: vertical;
       overflow: hidden;
-      height: 60px;
+      height: 56px;
       color: $grey;
     }
   }
