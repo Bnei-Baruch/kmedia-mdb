@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { withNamespaces } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Icon, Menu, Modal } from 'semantic-ui-react';
@@ -16,11 +16,11 @@ const PersonalInfo = ({ unit = {}, t, collection }) => {
   const [isNeedLogin, setIsNeedLogin] = useState();
 
   const { id, content_type } = unit;
-  const likeParams           = {
+  const likeParams           = useMemo(() => ({
     kind: MY_REACTION_KINDS.LIKE,
     subject_type: content_type,
     subject_uid: id
-  };
+  }), [content_type, id]);
 
   const { key } = getMyItemKey(MY_NAMESPACE_REACTIONS, likeParams);
 
@@ -36,11 +36,11 @@ const PersonalInfo = ({ unit = {}, t, collection }) => {
     }
 
     dispatch(actions.reactionsCount({ 'uids': [id], type: content_type }));
-  }, [dispatch, key]);
+  }, [dispatch, user, key, reaction, id, content_type, likeParams]);
 
   useEffect(() => {
     deleted && dispatch(actions.setDeleted(MY_NAMESPACE_REACTIONS, false));
-  }, [deleted]);
+  }, [deleted, dispatch]);
 
   const toggleReaction = l => {
     if (!user)

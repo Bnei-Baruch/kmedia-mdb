@@ -19,7 +19,7 @@ const TabsMenu = ({ items = [], active = '' }) => {
   const location                          = useLocation();
   const { activeLocation, isHighLighted } = paramsFromLocation(location);
 
-  const computedActive = active
+  const computedActive = !!active
     || activeLocation
     || activeFromDefault(items);
 
@@ -43,11 +43,11 @@ const TabsMenu = ({ items = [], active = '' }) => {
       <Ref innerRef={scrollRef}>
         <Menu tabular secondary pointing color="blue" className="no_print">
           {
-            items.map(item => {
+            items.map((item, index) => {
               const { name, label } = item;
               return (
                 <Menu.Item
-                  key={name}
+                  key={name + index}
                   name={name}
                   className={`tab-${name}`}
                   active={internalActive === name}

@@ -36,7 +36,7 @@ export const makeTagLinks = (tags = [], getTagById) =>
       </Link>;
     }), ''));
 
-const makeCollectionsLinks = (collections = {}, t, currentCollection) => {
+const makeCollectionsLinks = (collections = {}, currentCollection) => {
   // filter out the current collection
   const colValues           = Object.values(collections).filter(c => ![CT_DAILY_LESSON, CT_SPECIAL_LESSON].includes(c.content_type));
   const collectionsForLinks = currentCollection
@@ -53,7 +53,7 @@ const makeCollectionsLinks = (collections = {}, t, currentCollection) => {
   return { noSSeries, sSeries };
 };
 
-const getEpisodeInfo = (ct, cIDs, currentCollection, filmDate, t) => {
+const getEpisodeInfo = (cIDs, currentCollection, filmDate, t) => {
   const cIds        = cIDs && Object.keys(cIDs);
   const cId         = cIds && (currentCollection ? cIds.find(c => c.split('_')[0] === currentCollection.id) : cIds[0]);
   const showEpisode = cId && cId.indexOf(CT_KTAIM_NIVCHARIM) === -1;
@@ -75,30 +75,15 @@ const Info = ({ unit = {}, t, currentCollection = null }) => {
 
   const getTagById = useSelector(state => tagsSelectors.getTagById(state.tags));
 
-  const { id, name, film_date: filmDate, collections, content_type: ct, cIDs, tags = [] } = unit;
+  const { id, name, film_date: filmDate, tags, collections, cIDs } = unit;
 
   const views = useSelector(state => recommended.getViews(id, state.recommended));
 
-  const lids   = useSelector(state => mdb.getLabelsByCU(state.mdb, id));
-  const denorm = useSelector(state => mdb.getDenormLabel(state.mdb));
-
-  const mergeTags = () => {
-    let ids = [];
-    if (tags?.length > 0) ids = tags;
-
-    if (lids?.length > 0) {
-      const lTags = lids?.map(denorm).flatMap(l => (l.tags || [])) || [];
-      ids         = [...ids, ...lTags.filter(x => !ids.includes(x))];
-    }
-
-    return ids;
-  };
-
-  const tagLinks               = makeTagLinks(mergeTags(), getTagById);
-  const { noSSeries, sSeries } = makeCollectionsLinks(collections, t, currentCollection);
+  const tagLinks               = makeTagLinks(tags || [], getTagById);
+  const { noSSeries, sSeries } = makeCollectionsLinks(collections, currentCollection);
   const isMultiLessons         = Object.values(collections).some(col => col.content_type === CT_LESSONS_SERIES || col.content_type === CT_CONGRESS);
-  const episodeInfo            = getEpisodeInfo(ct, cIDs, currentCollection || Object.values(collections)[0], filmDate, t);
-  const ccu                    = Object.values(collections)[0];
+  const episodeInfo            = getEpisodeInfo(cIDs, currentCollection || Object.values(collections)[0], filmDate, t);
+  const ccu =  Object.values(collections)[0];
   return (
     <>
       <PersonalInfo collection={currentCollection} unit={unit} />
