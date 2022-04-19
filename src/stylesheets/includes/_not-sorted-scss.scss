@@ -2090,13 +2090,13 @@
 
     .cu_item_name {
       margin-top: 0;
-      margin-bottom: 8px;
+      margin-bottom: 4px;
       font-size: 1.1em;
-      color: $grey;
+      color: $black;
     }
 
     .cu_info_description {
-      top: 60px;
+      bottom: -5px;
     }
 
     .cu_item_duration {
@@ -2105,11 +2105,10 @@
 
     .cu_item_info {
       padding: 0 1em 1em;
-      height: 80px;
       width: 100%;
       overflow: hidden;
 
-      .cu_item_name {
+      .cu_item_name.show_part {
         -webkit-line-clamp: 2;
         display: -webkit-box;
         -webkit-box-orient: vertical;
@@ -2235,7 +2234,7 @@
 
   .cu_item_name {
     margin: 1em 0 2.5em;
-    color: $grey;
+    color: $black;
     display: inline-block;
 
     @include mobile {
