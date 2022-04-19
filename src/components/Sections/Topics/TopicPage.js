@@ -1,46 +1,27 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { withNamespaces } from 'react-i18next';
-import { Breadcrumb, Container, Divider, Grid, Header } from 'semantic-ui-react';
-import { isLanguageRtl } from '../../../helpers/i18n-utils';
+import { Container, Divider, Header } from 'semantic-ui-react';
 
 import { actions, selectors } from '../../../redux/modules/tags';
 import { selectors as settings } from '../../../redux/modules/settings';
-import Link from '../../Language/MultiLanguageLink';
-import HelmetsBasic from '../../shared/Helmets/Basic';
 import Pagination from '../../Pagination/Pagination';
-import Filters from './Filters';
 import { selectors as filters } from '../../../redux/modules/filters';
-import VideoList from './VideoList';
-import TextList from './TextList';
 import { isEqual } from 'lodash';
-import FilterLabels from '../../FiltersAside/FilterLabels';
-
-const TOPIC_PAGE_SIZE = 50;
-
-const getBreadCrumbSection = (p, index, arr) => {
-  if (!p) return arr;
-  const section = {
-    key: p.id,
-    content: p.label,
-  };
-
-  if (index === arr.length - 1) {
-    section.active = true;
-  } else {
-    section.as = Link;
-    section.to = `/topics/${p.id}`;
-  }
-
-  return section;
-};
+import { DeviceInfoContext } from '../../../helpers/app-contexts';
+import RenderPage from './RenderPage';
+import RenderPageMobile from './RenderPageMobile';
 
 const TopicPage = ({ t }) => {
   const { id } = useParams();
 
   const [pageNo, setPageNo] = useState(0);
+
+  const { isMobileDevice } = useContext(DeviceInfoContext);
+
+  const pageSize = isMobileDevice ? 10 : 50;
 
   const getPathByID = useSelector(state => selectors.getPathByID(state.tags));
   const getTags     = useSelector(state => selectors.getTags(state.tags));
@@ -54,77 +35,43 @@ const TopicPage = ({ t }) => {
 
   useEffect(() => {
     const page_no = pageNo > 1 ? pageNo : 1;
-    dispatch(actions.fetchDashboard({ tag: id, page_size: TOPIC_PAGE_SIZE, page_no }));
+    dispatch(actions.fetchDashboard({ tag: id, page_size: pageSize, page_no }));
   }, [id, language, dispatch, pageNo, selected]);
 
-  if (getPathByID) {
-    const tagPath = getPathByID(id);
-
-    // create breadCrumb sections from tagPath
-    const breadCrumbSections = [
-      { id: '', label: t('nav.sidebar.topics') },
-      ...tagPath,
-    ].map(getBreadCrumbSection);
-
-    const breadCrumbIcon = `${isLanguageRtl(language) ? 'left' : 'right'} angle`;
-
-    const onPageChange = n => setPageNo(n);
-
+  if (!getPathByID) {
+    const tag = getTags ? getTags[id] : null;
     return (
-      <>
-        <HelmetsBasic title={breadCrumbSections[breadCrumbSections.length - 1]?.content} />
-        <Container className="padded topics">
-          <Breadcrumb icon={breadCrumbIcon} sections={breadCrumbSections} size="huge" />
-          <Divider  />
-          <Grid divided>
-            <Grid.Column width="4" className="filters-aside-wrapper">
-              <Filters
-                namespace={`topics_${id}`}
-                baseParams={{ tag: id }}
-              />
-            </Grid.Column>
-            <Grid.Column width="12">
-              <FilterLabels namespace={`topics_${id}`} />
-              <Grid>
-                <Grid.Column width="10">
-                  <VideoList />
-                </Grid.Column>
-                <Grid.Column width="6">
-                  <TextList />
-                </Grid.Column>
-              </Grid>
-            </Grid.Column>
-          </Grid>
-        </Container>
-        <Divider fitted />
-        <Container className="padded pagination-wrapper" textAlign="center">
-          {
-            total > 0 &&
-            <Pagination
-              pageNo={pageNo}
-              pageSize={TOPIC_PAGE_SIZE}
-              total={total}
-              language={language}
-              onChange={onPageChange}
-            />
-          }
-        </Container>
-      </>
+      <Container className="padded">
+        <Header as="h3">
+          {t(`nav.sidebar.topic`)}
+          {' "'}
+          {tag ? tag.label : id}
+          {'" '}
+          {t(`nav.sidebar.not-found`)}
+        </Header>
+      </Container>
     );
   }
 
-  const tag = getTags ? getTags[id] : null;
+  const onPageChange = n => setPageNo(n);
 
   return (
-    <Container className="padded">
-      <Header as="h3">
-        {t(`nav.sidebar.topic`)}
-        {' "'}
-        {tag ? tag.label : id}
-        {'" '}
-        {t(`nav.sidebar.not-found`)}
-      </Header>
-    </Container>
+    <>
+      {isMobileDevice ? <RenderPageMobile /> : <RenderPage />}
+      <Divider fitted />
+      <Container className="padded pagination-wrapper" textAlign="center">
+        {
+          total > 0 &&
+          <Pagination
+            pageNo={pageNo}
+            pageSize={pageSize}
+            total={total}
+            language={language}
+            onChange={onPageChange}
+          />
+        }
+      </Container>
+    </>
   );
 };
 

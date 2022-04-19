@@ -26,7 +26,7 @@ const TextItem = ({ item, t }) => {
       <Image size="tiny" verticalAlign="middle">
         <SectionLogo name={icon} height="50" width="45" />
       </Image>
-      <Container className="cu_item_info">
+      <Container>
         <div>
           {subTitle}
         </div>
