@@ -1,13 +1,27 @@
 import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import isEqual from 'react-fast-compare';
-
-import { DeviceInfoContext } from '../../../../../helpers/app-contexts';
-import ContentItemContainer from '../../../../shared/ContentItem/ContentItemContainer';
 import { Button, Header } from 'semantic-ui-react';
 import { withNamespaces } from 'react-i18next';
 import { useLocation } from 'react-router';
+
+import { DeviceInfoContext } from '../../../../../helpers/app-contexts';
+import ContentItemContainer from '../../../../shared/ContentItem/ContentItemContainer';
 import { CT_SONGS } from '../../../../../helpers/consts';
+import {  randomizeArray } from '../../../../../helpers/utils';
+
+
+const randomizePlaylist = (playlistItems, selectedIndex) => {
+  const selectedItem = playlistItems[selectedIndex];
+  const newPlaylistItems = [...playlistItems];
+
+  // random sorting of the playlist
+  randomizeArray(newPlaylistItems)
+  const newSelectedIndex = newPlaylistItems.indexOf(selectedItem);
+
+  return { newPlaylistItems, newSelectedIndex }
+}
+
 
 const PlaylistWidget = ({ playlist, selected = 0, link, t }) => {
   const location = useLocation();
@@ -18,19 +32,7 @@ const PlaylistWidget = ({ playlist, selected = 0, link, t }) => {
   const [playlistItems, setPlaylistItems] = useState(items);
 
   const randomize = () => {
-    const selectedItem = playlistItems[selectedIndex];
-    const newPlaylistItems = [...playlistItems];
-
-    // create an array of randoms and sort items by it
-    const randomArr = newPlaylistItems.map(() => Math.random() * newPlaylistItems.length);
-    newPlaylistItems.sort((a, b) => {
-      const ai = newPlaylistItems.indexOf(a);
-      const bi = newPlaylistItems.indexOf(b);
-
-      return randomArr[ai] - randomArr[bi];
-    })
-
-    const newSelectedIndex = newPlaylistItems.indexOf(selectedItem);
+    const { newPlaylistItems, newSelectedIndex } = randomizePlaylist(playlistItems, selectedIndex);
     setPlaylistItems(newPlaylistItems);
     setSelectedIndex(newSelectedIndex);
   }

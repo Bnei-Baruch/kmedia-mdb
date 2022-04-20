@@ -17,7 +17,7 @@ import {
 import { getQuery, stringify, updateQuery } from './url';
 import { canonicalLink } from './links';
 import MediaHelper from './media';
-import { isEmpty, physicalFile } from './utils';
+import { isEmpty, physicalFile, randomizeArray } from './utils';
 import { selectSuitableLanguage } from './language';
 
 const restorePreferredMediaType = () => localStorage.getItem('@@kmedia_player_media_type') || MT_VIDEO;
@@ -187,13 +187,7 @@ const playlist = (collection, location, playerLanguage, uiLanguage, randomize = 
 
   // randomize items order - create an array of randoms and sort items by it
   if (randomize) {
-    const randomArr = items.map(() => Math.random() * items.length);
-    items.sort((a, b) => {
-      const ai = items.indexOf(a);
-      const bi = items.indexOf(b);
-
-      return randomArr[ai] - randomArr[bi];
-    })
+    randomizeArray(items);
   }
 
   const name = collection.content_type === CT_SONGS ? collection.name : null;
@@ -209,7 +203,10 @@ const playlist = (collection, location, playerLanguage, uiLanguage, randomize = 
   };
 };
 
-const playlistFromUnits = (collection, mediaType, contentLanguage, uiLanguage) => {
+const playlistFromUnits = (collection, location, contentLanguage, uiLanguage) => {
+  const preferredMT = restorePreferredMediaType();
+  const mediaType   = getMediaTypeFromQuery(location, preferredMT);
+
   const items = collection.content_units
     .map(x => playableItem(x, mediaType, uiLanguage, contentLanguage))
     .filter(item => !!item.unit)

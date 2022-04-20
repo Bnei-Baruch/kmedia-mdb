@@ -50,20 +50,9 @@ const PlaylistMyPage = ({ collection }) => {
   }, [history, playlist, selected]);
 
   useEffect(() => {
-    const preferredMT = playerHelper.restorePreferredMediaType();
-    const mediaType   = playerHelper.getMediaTypeFromQuery(location, preferredMT);
-    const nPlaylist   = playerHelper.playlistFromUnits(collection, mediaType, contentLanguage, language);
+    const nPlaylist   = playerHelper.playlistFromUnits(collection, location, contentLanguage, language);
     setPlaylist(nPlaylist);
-  }, []);
-
-  useEffect(() => {
-    const preferredMT = playerHelper.restorePreferredMediaType();
-    const mediaType   = playerHelper.getMediaTypeFromQuery(location, preferredMT);
-    if (mediaType !== playlist?.mediaType) {
-      const nPlaylist = playerHelper.playlistFromUnits(collection, mediaType, contentLanguage, language);
-      setPlaylist(nPlaylist);
-    }
-  }, [location, collection, contentLanguage, playlist?.mediaType, language]);
+  }, [collection, contentLanguage, language, location]);
 
   useEffect(() => {
     let nSelected = playerHelper.getActivePartFromQuery(location);
