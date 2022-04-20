@@ -28,26 +28,6 @@ export const buildSourceTitle = (getPathByID, id) => {
   return `${articleName} ${path.join('. ')}`;
 };
 
-export const extractByMediaType = items => items.reduce((acc, { cu, label, isText }) => {
-  if (!cu)
-    return acc;
-
-  if (isText) {
-    acc.texts.push({ cu, label });
-    return acc;
-  }
-
-  if (isText) {
-    acc.medias.push({ cu, label });
-  }
-
-  if (isText) {
-    acc.texts.push({ cu, label });
-  }
-
-  return acc;
-}, { texts: [], medias: [] });
-
 export const buildTextUnitInfo = ({ cu, label }, t, getPathByID) => {
   const date  = label?.date || cu.film_date;
   let subject = '', subTitle = '', title = '', description = [];
