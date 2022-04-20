@@ -229,7 +229,15 @@
 
   & > .container {
     background-color: $offWhite;
+  }
 
+  @include mobile {
+    padding: 0 !important;
+
+    & > .container {
+      background: none;
+      padding: 0 !important;
+    }
   }
 }
 

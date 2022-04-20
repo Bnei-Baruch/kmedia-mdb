@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { withNamespaces } from 'react-i18next';
 import { Breadcrumb, Button, Container, Divider, Modal } from 'semantic-ui-react';
-import { isLanguageRtl } from '../../../helpers/i18n-utils';
+import { getLanguageDirection, isLanguageRtl } from '../../../helpers/i18n-utils';
 
 import { selectors } from '../../../redux/modules/tags';
 import { selectors as settings } from '../../../redux/modules/settings';
@@ -22,6 +22,7 @@ const RenderPageMobile = ({ t }) => {
 
   const getPathByID = useSelector(state => selectors.getPathByID(state.tags));
   const language    = useSelector(state => settings.getLanguage(state.settings));
+  const dir   = getLanguageDirection(language);
 
   const tagPath = getPathByID(id);
 
@@ -36,6 +37,8 @@ const RenderPageMobile = ({ t }) => {
         closeIcon
         open={openFilters}
         onClose={() => setOpenFilters(false)}
+        dir={dir}
+        className={dir}
       >
         <Modal.Content className="filters-aside-wrapper">
           <Filters
