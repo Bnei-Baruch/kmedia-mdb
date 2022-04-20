@@ -10,7 +10,7 @@ import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import TagSourceItem from './TagSourceItem';
 
 const ITEMS_PER_ROW = 3;
-const buildRowArr   = (n) => {
+const buildRowArr   = n => {
   const abs = n % ITEMS_PER_ROW;
   const len = (n - abs) / ITEMS_PER_ROW + ((abs === 0) ? 0 : 1);
   return Array(len).fill(0);
@@ -18,15 +18,15 @@ const buildRowArr   = (n) => {
 
 const TagSourceItemModal = props => {
   const {
-          baseItems,
-          filterName,
-          parent,
-          open,
-          onClose,
-          getById,
-          getPath,
-          t
-        } = props;
+    baseItems,
+    filterName,
+    parent,
+    open,
+    onClose,
+    getById,
+    getPath,
+    t
+  } = props;
 
   const [query, setQuery] = useState('');
 
