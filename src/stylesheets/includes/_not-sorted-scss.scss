@@ -2121,9 +2121,19 @@
     }
   }
 
+
+  &.big {
+    .cu_item_info_co {
+      padding-bottom: 2em;
+    }
+
+    .cu_item_name {
+      margin-bottom: .5em;
+    }
+  }
+
   .cu_item_info_co {
     color: $black;
-
 
     @include mobile {
       line-height: 0.8em;
