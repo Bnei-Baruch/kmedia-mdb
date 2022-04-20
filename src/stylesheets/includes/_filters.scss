@@ -223,7 +223,7 @@
 .filters-aside-wrapper {
   padding: 0 0 0 1em !important;
 
-  .rtl &{
+  .rtl & {
     padding: 0 1em 0 0 !important;
   }
 
@@ -289,6 +289,7 @@
 
 .ui.modal.filters_aside_tree_modal {
   text-align: end;
+  width: auto;
 
   & > .header {
     text-align: start;
@@ -318,10 +319,18 @@
       margin-right: 0;
     }
   }
+
+  .ui.basic.table {
+    border: none;
+  }
 }
 
 .tree_item_modal_content {
   @extend .no-shadow;
+
+  .ui.table tr & {
+    border-top: none;
+  }
 
   .item .list {
     margin: 0 0 0 .5em;
@@ -406,7 +415,7 @@
     .icon {
       padding: 0 !important;
       opacity: .4;
-      margin-left: .5em;
+      margin: 0 0 0 .5em;
       height: auto !important;
       width: auto !important;
 
