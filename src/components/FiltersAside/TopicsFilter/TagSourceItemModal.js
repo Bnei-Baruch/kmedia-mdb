@@ -43,7 +43,7 @@ const TagSourceItemModal = props => {
   let children = parent.children?.filter(r => baseItems.includes(r)).map(getById);
   if (query) {
     const reg = new RegExp(query, 'i');
-    children  = baseItems.filter(id => id !== parent.id && getPath(id).some(x => x.id === parent.id))
+    children  = baseItems.filter(id => id !== parent.id && getPath(id).some(x => !!x && x.id === parent.id))
       .map(id => getById(id))
       .filter(x => x?.[field] && reg.test(x[field]));
   }
