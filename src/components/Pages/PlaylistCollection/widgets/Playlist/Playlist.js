@@ -51,7 +51,7 @@ const PlaylistWidget = ({ playlist, selected = 0, link, t }) => {
       style={{ padding: 'inherit', fontSize: '1em' }}
       icon='random'
       circular
-      positive
+      primary
       onClick={() => randomize()}
     >
     </Button>
