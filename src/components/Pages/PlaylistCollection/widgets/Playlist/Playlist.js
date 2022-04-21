@@ -45,24 +45,27 @@ const PlaylistWidget = ({ playlist, selected = 0, link, t }) => {
 
   const { content_type } = collection;
 
+  const randomButton = content_type === CT_SONGS &&
+    <Button
+      title={t('playlist.shuffle')}
+      style={{ padding: 'inherit', fontSize: '1em' }}
+      icon='random'
+      circular
+      positive
+      onClick={() => randomize()}
+    >
+    </Button>
+
+
   return (
     <div id="avbox_playlist" className="avbox__playlist-view">
       {
-        !isMobileDevice &&
-        <Header as="h3" className={'avbox__playlist-header h3'}>
-          {name || t(`playlist.title-by-type.${content_type}`)}
-          {content_type === CT_SONGS &&
-            <Button
-              title={t('playlist.shuffle')}
-              style={{ padding: 'inherit', fontSize: '1em' }}
-              icon='random'
-              circular
-              positive
-              onClick={() => randomize()}
-            >
-            </Button>
-          }
-        </Header>
+        isMobileDevice
+          ? <div style={{ float: 'right', padding: '0.3em' }}>{ randomButton }</div>
+          : <Header as="h3" className={'avbox__playlist-header h3'}>
+            {name || t(`playlist.title-by-type.${content_type}`)}
+            {randomButton}
+          </Header>
       }
       {
         playlistItems.map((item, i) => (
