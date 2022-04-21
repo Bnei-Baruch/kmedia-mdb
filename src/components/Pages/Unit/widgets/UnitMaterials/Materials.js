@@ -51,11 +51,6 @@ const Materials = ({ unit = undefined, t, playlistComponent = null }) => {
       label: t('materials.transcription.header'),
       component: <TranscriptionContainer unit={unit} key="transcription" />
     },
-    (![CT_CLIP, CT_VIDEO_PROGRAM_CHAPTER].includes(unit.content_type)) && {
-      name: 'sources',
-      label: t('materials.sources.header'),
-      component: <Sources unit={unit} />
-    },
     {
       name: 'sketches',
       label: t('materials.sketches.header'),
@@ -67,6 +62,14 @@ const Materials = ({ unit = undefined, t, playlistComponent = null }) => {
       component: <MediaDownloads unit={unit} chroniclesAppend={chroniclesAppend} />
     }
   ];
+
+  if (![CT_CLIP, CT_VIDEO_PROGRAM_CHAPTER].includes(unit.content_type)) {
+    items.splice(1, 0, {
+      name: 'sources',
+      label: t('materials.sources.header'),
+      component: <Sources unit={unit} />
+    });
+  }
 
   if ([CT_VIDEO_PROGRAM_CHAPTER, CT_VIRTUAL_LESSON, CT_CLIP].includes(unit.content_type)) {
     items.unshift({

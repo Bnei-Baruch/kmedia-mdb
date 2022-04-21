@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useLocation } from 'react-router-dom';
 import { Menu, Ref } from 'semantic-ui-react';
@@ -24,7 +24,7 @@ const TabsMenu = ({ items = [], active = '' }) => {
     || activeFromDefault(items);
 
   const [internalActive, setInternalActive] = useState(computedActive);
-  const handleActiveChange                  = useCallback((e, { name }) => setInternalActive(name), []);
+  const handleActiveChange                  = (e, { name }) => setInternalActive(name);
 
   const scrollRef = useRef();
 
