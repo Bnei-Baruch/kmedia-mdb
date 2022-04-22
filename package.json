@@ -58,7 +58,7 @@
     "jest-environment-enzyme": "^7.0.2",
     "jest-enzyme": "^7.0.2",
     "ndb": "^1.0.44",
-    "node-sass": "^6.0.0",
+    "node-sass": "^7.0.0",
     "nodemon": "^2.0.1",
     "npm-run-all": "^4.0.2",
     "postcss": "^8.0.9",
