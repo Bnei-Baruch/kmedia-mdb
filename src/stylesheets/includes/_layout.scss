@@ -226,7 +226,8 @@ body {
     &.ui.button,
     &.ui.button:hover,
     &.ui.button:focus {
-      background: $white !important;
+      background: #fc6719 !important;
+      color: white !important;
       font-size: .92857143rem !important;
     }
   }
@@ -255,15 +256,12 @@ body {
     font-size: .92857143rem !important;
     margin: 0 0.5em !important;
 
-    &.ui.button {
-      background: #f2711c !important;
-      color: white !important;
+    &.ui.button,
+    &.ui.button:hover,
+    &.ui.button:focus {
+      background: $white !important;
     }
 
-    &.ui.button:hover {
-      background: #f26202 !important;
-      color: white !important;
-    }
   }
 }
 
