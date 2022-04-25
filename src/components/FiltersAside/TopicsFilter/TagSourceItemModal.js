@@ -84,7 +84,7 @@ const TagSourceItemModal = props => {
           className="search-input"
           placeholder={t('sources-library.filter')}
           onChange={handleSetQuery}
-          value={query}
+          defaultValue={query}
         />
       </Modal.Header>
       <Modal.Content scrolling>

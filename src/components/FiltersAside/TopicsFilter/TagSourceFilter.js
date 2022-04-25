@@ -24,7 +24,7 @@ const TagSourceFilter = ({ namespace, filterName, t }) => {
             className="search-input"
             placeholder={t('sources-library.filter')}
             onChange={handleSetQuery}
-            value={query}
+            defaultValue={query}
           />
           {
             query ? <RenderAsList

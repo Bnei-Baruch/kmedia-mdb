@@ -50,19 +50,21 @@ export function* fetchStat(action) {
 
     const responses = yield all(requests);
 
-    const { data: dataCU }          = responses.shift();
-    const { data: dataC }           = responses.shift();
-    const { data: dataL }           = responses.shift();
-    const { data: dataCUPart = {} } = responses.shift() || {};
-    const { data: dataCPart = {} }  = responses.shift() || {};
-    const { data: dataLPart = {} }  = responses.shift() || {};
+    const { data: dataCU } = responses.shift();
+    const { data: dataC }  = responses.shift();
+    const { data: dataL }  = responses.shift();
 
-    uniq(Object.keys(params).map(x => RESULT_NAME_BY_PARAM[x])).forEach(n => {
-      dataCU[n] = dataCUPart[n];
-      dataC[n]  = dataCPart[n];
-      dataL[n]  = dataLPart[n];
-    });
+    if (isFilteredByBase) {
+      const { data: dataCUPart = {} } = responses.shift() || {};
+      const { data: dataCPart = {} }  = responses.shift() || {};
+      const { data: dataLPart = {} }  = responses.shift() || {};
 
+      uniq(Object.keys(params).map(x => RESULT_NAME_BY_PARAM[x])).forEach(n => {
+        dataCU[n] = dataCUPart[n];
+        dataC[n]  = dataCPart[n];
+        dataL[n]  = dataLPart[n];
+      });
+    }
     yield put(actions.fetchStatsSuccess({ dataCU, dataC, dataL, namespace, isPrepare }));
   } catch (err) {
     yield put(actions.fetchStatsFailure(namespace, err));

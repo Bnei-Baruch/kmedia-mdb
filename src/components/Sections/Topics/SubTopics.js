@@ -31,7 +31,7 @@ const getItemsRecursive = (rootID, getById, base) => {
 
 const SubTopics = ({ namespace, rootID, t }) => {
   const [open, setOpen]             = useState(false);
-  const [isSelected, setIsSelected] = useState();
+  const [isSelected, setIsSelected] = useState(false);
   const [query, setQuery]           = useState();
 
   const getTagById  = useSelector(state => tags.getTagById(state.tags));
@@ -104,7 +104,7 @@ const SubTopics = ({ namespace, rootID, t }) => {
         className="search-input"
         placeholder={t('sources-library.filter')}
         onChange={handleSetQuery}
-        value={query}
+        defaultValue={query}
       />
       {
         !query ? renderAsTree() : (
