@@ -30,6 +30,17 @@ export function* fetchUnitsByIDs(action) {
   }
 }
 
+export function* fetchCollectionsByIDs(action) {
+  const { id } = action.payload;
+  try {
+    const language = yield select(state => settings.getLanguage(state.settings));
+    const { data } = yield call(Api.collections, { ...action.payload, language, page_size: id.length });
+    yield put(mdbActions.receiveCollections(data.collections));
+  } catch (err) {
+    yield put(mdbActions.fetchCollectionsByIDsFailure({ id, err }));
+  }
+}
+
 export function* fetchCollection(action) {
   const id = action.payload;
   try {
