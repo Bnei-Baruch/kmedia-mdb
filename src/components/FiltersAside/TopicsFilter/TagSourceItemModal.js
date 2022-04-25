@@ -82,7 +82,7 @@ const TagSourceItemModal = props => {
         {parent[field]}
         <Input
           className="search-input"
-          placeholder={t(`filters.aside-filter.search-input-${isTag ? 'topic' : 'source'}`)}
+          placeholder={t('sources-library.filter')}
           onChange={handleSetQuery}
           value={query}
         />

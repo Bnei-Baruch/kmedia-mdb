@@ -111,9 +111,7 @@
       "language-filter": "Language",
       "date-filter": "Date",
       "lessons": "Lessons & Lectures",
-      "events": "Conventions & Events",
-      "search-input-topic": "search topic",
-      "search-input-source": "search source"
+      "events": "Conventions & Events"
     }
   },
   "buttons": {

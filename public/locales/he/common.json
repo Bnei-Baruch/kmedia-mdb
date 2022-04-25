@@ -110,9 +110,7 @@
       "language-filter": "שפה",
       "date-filter": "תאריך",
       "lessons": "שיעורים והרצאות",
-      "events": "כנסים ואירועים",
-      "search-input-topic": "search topic",
-      "search-input-source": "search source"
+      "events": "כנסים ואירועים"
     }
   },
   "buttons": {

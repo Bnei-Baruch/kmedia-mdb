@@ -111,9 +111,7 @@
       "language-filter": "Язык",
       "date-filter": "Дата",
       "lessons": "Уроки и лекции",
-      "events": "Конгрессы, события",
-      "search-input-topic": "search topic",
-      "search-input-source": "search source"
+      "events": "Конгрессы, события"
     }
   },
   "buttons": {

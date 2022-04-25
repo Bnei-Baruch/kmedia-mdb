@@ -102,7 +102,7 @@ const SubTopics = ({ namespace, rootID, t }) => {
     <FilterHeader filterName={FN_TOPICS_MULTI}>
       <Input
         className="search-input"
-        placeholder={t('filters.aside-filter.search-input-topic')}
+        placeholder={t('sources-library.filter')}
         onChange={handleSetQuery}
         value={query}
       />
