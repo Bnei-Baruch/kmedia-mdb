@@ -47,9 +47,9 @@ const CollectionListTemplate = ({ language, cID, size = 'big', t }) => {
       </div>
       <div className="cu_item_info">
         <div className="cu_item_info_co ">
-      <span className="no-padding no-margin text_ellipsis">
-        {c.name}
-      </span>
+          <span className="no-padding no-margin text_ellipsis">
+            {c.name}
+          </span>
         </div>
         <div className={`cu_info_description text_ellipsis`}>
           {description.map((d, i) => (<span key={i}>{d}</span>))}
