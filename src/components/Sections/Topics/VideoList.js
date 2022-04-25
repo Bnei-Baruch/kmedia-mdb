@@ -20,7 +20,7 @@ const VideoList = ({ t }) => {
       {
         items?.map((x, i) => {
           if (x.cID)
-            return <CollectionListTemplate cID={x.cID} size="small" />;
+            return <CollectionListTemplate cID={x.cID} size="small" key={i} />;
           return <ContentItemContainer id={x.cuID} size="small" asList={true} key={i} />;
         })
       }

@@ -24,11 +24,14 @@ const Language = ({ namespace, t }) => {
       children={
         <>
           {
-            items.filter(id => POPULAR_LANGUAGES.includes(id)).map(id => <LanguageItem namespace={namespace} id={id} />)
+            items.filter(id => POPULAR_LANGUAGES.includes(id)).map(id =>
+              <LanguageItem namespace={namespace} id={id} key={id} />
+            )
           }
           {
             showAll && items.filter(id => !POPULAR_LANGUAGES.includes(id)).map(id =>
-              <LanguageItem namespace={namespace} id={id} />)
+              <LanguageItem namespace={namespace} id={id} key={id} />
+            )
           }
           <Button
             basic

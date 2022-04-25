@@ -70,13 +70,14 @@ const TagSourceItem = props => {
       {
         childrenIDs.filter(r => baseItems.includes(r))
           .map(x => (
-            <TagSourceItem
-              {...props}
-              id={x}
-              deep={deep - 1}
-              defaultSel={isSelected}
-            />
-          )
+              <TagSourceItem
+                {...props}
+                id={x}
+                deep={deep - 1}
+                defaultSel={isSelected}
+                key={x}
+              />
+            )
           )
       }
 

@@ -51,7 +51,7 @@ const onFetchStats = (draft, { namespace }) => {
   return draft;
 };
 
-const onFetchStatsSuccess = (draft, { dataCU, dataL, namespace, isPrepare }) => {
+const onFetchStatsSuccess = (draft, { dataCU, dataC, dataL, namespace, isPrepare }) => {
   const ns = draft[namespace] || FILTER_NAMES.reduce((acc, fn) => {
     acc[fn] = {};
     return acc;
@@ -60,17 +60,18 @@ const onFetchStatsSuccess = (draft, { dataCU, dataL, namespace, isPrepare }) => 
   FILTER_NAMES.forEach(fn => {
     const acc = ns[fn] || { tree: [], byId: {} };
     const dcu = dataCU[fieldNameByFilter[fn]] || {};
+    const dc  = dataC[fieldNameByFilter[fn]] || {};
     const dl  = dataL[fieldNameByFilter[fn]] || {};
     if (isPrepare) {
-      [...Object.keys({ ...dcu, ...dl })]
+      [...Object.keys({ ...dcu, ...dc, ...dl })]
         .filter(id => !!id)
         .forEach(id => {
-          acc.byId[id] = (dcu[id] || 0) + (dl[id] || 0);
+          acc.byId[id] = (dcu[id] || 0) + (dc[id] || 0) + (dl[id] || 0);
           acc.tree.push(id);
         });
     } else {
       acc.tree.forEach(id => {
-        acc.byId[id] = (dcu[id] || 0) + (dl[id] || 0);
+        acc.byId[id] = (dcu[id] || 0) + (dc[id] || 0) + (dl[id] || 0);
       });
     }
 

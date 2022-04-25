@@ -114,6 +114,10 @@ class Api {
     Requests.get(`stats/cu_class?${Requests.makeParams({ content_type, ...rest })}`)
   );
 
+  static collectionsStats = ({ contentTypes: content_type, ...rest }) => (
+    Requests.get(`stats/c_class?${Requests.makeParams({ content_type, ...rest })}`)
+  );
+
   static labelsStats = rest => (
     Requests.get(`stats/label_class?${Requests.makeParams(rest)}`)
   );

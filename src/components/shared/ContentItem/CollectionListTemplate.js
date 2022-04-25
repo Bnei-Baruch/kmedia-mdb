@@ -15,7 +15,7 @@ const imageWidthBySize = {
   'big': 287,
 };
 
-const CollectionListTemplate = ({ language, cID, size = 'big', t }) => {
+const CollectionListTemplate = ({ cID, size = 'big', t }) => {
   const c = useSelector(state => selectors.getDenormCollection(state.mdb, cID));
 
   const dispatch = useDispatch();
@@ -60,8 +60,7 @@ const CollectionListTemplate = ({ language, cID, size = 'big', t }) => {
 };
 
 CollectionListTemplate.propTypes = {
-  cID: PropTypes.string,
-  language: PropTypes.string.isRequired,
+  cID: PropTypes.string
 };
 
 export default withNamespaces()(CollectionListTemplate);

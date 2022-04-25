@@ -18,15 +18,15 @@ const buildRowArr   = n => {
 
 const TagSourceItemModal = props => {
   const {
-    baseItems,
-    filterName,
-    parent,
-    open,
-    onClose,
-    getById,
-    getPath,
-    t
-  } = props;
+          baseItems,
+          filterName,
+          parent,
+          open,
+          onClose,
+          getById,
+          getPath,
+          t
+        } = props;
 
   const [query, setQuery] = useState('');
 
@@ -49,16 +49,19 @@ const TagSourceItemModal = props => {
   }
 
   const renderRow = (x, i) => (
-    <Table.Row>
+    <Table.Row key={i}>
       {children.slice(i * ITEMS_PER_ROW, (i + 1) * ITEMS_PER_ROW).map(renderItem)}
     </Table.Row>
   );
 
-  const renderItem = item => {
-    if (!item) return <Table.Cell />;
+  const renderItem = (item, i) => {
+    if (!item) return <Table.Cell key={i} />;
 
     return (
-      <Table.Cell className={clsx('tree_item_modal_content', { 'item single_item': !(item.children.length > 0) })}>
+      <Table.Cell
+        className={clsx('tree_item_modal_content', { 'item single_item': !(item.children.length > 0) })}
+        key={i}
+      >
         <TagSourceItem {...props} id={item.id} deep={-1} />
       </Table.Cell>
     );

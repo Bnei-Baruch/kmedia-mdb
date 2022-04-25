@@ -66,7 +66,7 @@ const ContentType = ({ namespace, t }) => {
                   />
                 </List.Content>
                 <List>
-                  {lessons.map(id => <ContentTypeItem namespace={namespace} id={id} />)}
+                  {lessons.map(id => <ContentTypeItem namespace={namespace} id={id} key={id} />)}
                 </List>
               </List.Item>
             )
@@ -85,12 +85,12 @@ const ContentType = ({ namespace, t }) => {
                   />
                 </List.Content>
                 <List>
-                  {events.map(id => <ContentTypeItem namespace={namespace} id={id} />)}
+                  {events.map(id => <ContentTypeItem namespace={namespace} id={id} key={id} />)}
                 </List>
               </List.Item>
             )
           }
-          {other.map(id => <ContentTypeItem namespace={namespace} id={id} />)}
+          {other.map(id => <ContentTypeItem namespace={namespace} id={id} key={id} />)}
         </>
       }
     />

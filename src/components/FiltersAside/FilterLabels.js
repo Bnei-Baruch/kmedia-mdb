@@ -26,19 +26,19 @@ const FilterLabels = ({ namespace, t }) => {
 
   const titleByFilterType = (fn, val) => {
     switch (fn) {
-      case FN_SOURCES_MULTI:
-        return getSourceById(val)?.name;
-      case FN_TOPICS:
-      case FN_TOPICS_MULTI:
-        return getTagById(val)?.label;
-      case FN_CONTENT_TYPE:
-        return t(`constants.content-types.${val}`);
-      case FN_DATE_FILTER:
-        return dateFilter.valueToTagLabel(val);
-      case FN_LANGUAGES:
-        return LANGUAGES[val]?.name;
-      default:
-        return null;
+    case FN_SOURCES_MULTI:
+      return getSourceById(val)?.name;
+    case FN_TOPICS:
+    case FN_TOPICS_MULTI:
+      return getTagById(val)?.label;
+    case FN_CONTENT_TYPE:
+      return t(`constants.content-types.${val}`);
+    case FN_DATE_FILTER:
+      return dateFilter.valueToTagLabel(val);
+    case FN_LANGUAGES:
+      return LANGUAGES[val]?.name;
+    default:
+      return null;
     }
 
   };
@@ -50,11 +50,12 @@ const FilterLabels = ({ namespace, t }) => {
     dispatch(actions.setFilterValueMulti(namespace, fn, val));
   };
 
-  const renderItem = (name, val) => (
+  const renderItem = (name, val, key) => (
     <Label
       basic
       circular
       size="tiny"
+      key={key}
     >
       {
         titleByFilterType(name, val)
@@ -66,7 +67,9 @@ const FilterLabels = ({ namespace, t }) => {
   return (
     <Container className="filter_aside_labels">
       {
-        list.filter(f => f.values?.length > 0).flatMap(f => f.values.map(v => renderItem(f.name, v)))
+        list.filter(f => f.values?.length > 0).flatMap((f, j) =>
+          f.values.map((v, i) => renderItem(f.name, v, `${j}_${i}`))
+        )
       }
     </Container>
   );

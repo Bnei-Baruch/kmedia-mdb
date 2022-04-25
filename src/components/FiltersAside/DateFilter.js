@@ -129,7 +129,7 @@ const DateFilter = ({ t, namespace }) => {
         )
         )
       }
-      <Accordion as={List} vertical className="date-filter">
+      <Accordion as={List} vertical="true" className="date-filter">
         <List.Item>
           <Accordion.Title
             active={showDay}
@@ -192,7 +192,6 @@ DateFilter.propTypes = {
   onCancel: PropTypes.func,
   onApply: PropTypes.func,
   t: PropTypes.func.isRequired,
-  language: PropTypes.string.isRequired,
 };
 
 DateFilter.defaultProps = {
