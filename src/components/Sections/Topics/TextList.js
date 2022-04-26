@@ -1,11 +1,12 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
 import { Container, Header } from 'semantic-ui-react';
-import { useSelector } from 'react-redux';
+import PropTypes from 'prop-types';
+
 import { selectors } from '../../../redux/modules/tags';
 import { selectors as mdb } from '../../../redux/modules/mdb';
-import TextItem from './TextItem';
+import TextListTemplate from '../../shared/ContentItem/TextListTemplate';
 
 const TextList = ({ t }) => {
   const denormCU    = useSelector(state => mdb.nestedGetDenormContentUnit(state.mdb));
@@ -22,7 +23,7 @@ const TextList = ({ t }) => {
     <Container className="padded topics_texts">
       <Header as="h3" content={`${t('topics.texts-title')} (${textTotal})`} />
       {
-        items?.map((x, i) => (<TextItem item={x} key={i} />))
+        items?.map(({ label, cu }, i) => (<TextListTemplate unit={cu} label={label} key={i} />))
       }
     </Container>
   );

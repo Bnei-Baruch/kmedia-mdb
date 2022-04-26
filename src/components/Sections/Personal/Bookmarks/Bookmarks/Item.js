@@ -11,8 +11,8 @@ import { OFFSET_TEXT_SEPARATOR } from '../../../../../helpers/scrollToSearch/hel
 import { getMyItemKey } from '../../../../../helpers/my';
 import Link from '../../../../Language/MultiLanguageLink';
 import Actions from './Actions';
-import { buildBookmarkLink, buildTitleByUnit } from './helper';
 import { selectors as sourcesSelectors, selectors as sources } from '../../../../../redux/modules/sources';
+import { buildTitleByUnit, textPartLink } from '../../../../shared/ContentItem/helper';
 
 const BookmarksItem = ({ bookmark, t }) => {
   const { properties, folder_ids = [], name, subject_uid } = bookmark;
@@ -26,7 +26,7 @@ const BookmarksItem = ({ bookmark, t }) => {
   if (!areSourcesLoaded)
     return null;
 
-  const link = buildBookmarkLink(bookmark, cu);
+  const link = textPartLink(bookmark?.properties, cu);
 
   const renderFolder = f => (
     <Label key={f.id} basic>

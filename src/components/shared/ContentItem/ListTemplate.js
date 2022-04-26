@@ -11,11 +11,7 @@ import { isLanguageRtl } from '../../../helpers/i18n-utils';
 import UnitLogo from '../Logo/UnitLogo';
 import Link from '../../Language/MultiLanguageLink';
 import { PLAYER_POSITION_STORAGE_KEY } from '../../AVPlayer/constants';
-
-const imageWidthBySize = {
-  'small': 144,
-  'big': 287,
-};
+import { imageWidthBySize } from './helper';
 
 const ListTemplate = ({
   unit,

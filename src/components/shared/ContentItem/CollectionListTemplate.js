@@ -9,11 +9,7 @@ import { withNamespaces } from 'react-i18next';
 import { canonicalLink } from '../../../helpers/links';
 import { useDispatch, useSelector } from 'react-redux';
 import { actions, selectors } from '../../../redux/modules/mdb';
-
-const imageWidthBySize = {
-  'small': 144,
-  'big': 287,
-};
+import { imageWidthBySize } from './helper';
 
 const CollectionListTemplate = ({ cID, size = 'big', t }) => {
   const c = useSelector(state => selectors.getDenormCollection(state.mdb, cID));
