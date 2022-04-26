@@ -22,7 +22,7 @@ const RenderPageMobile = ({ t }) => {
 
   const getPathByID = useSelector(state => selectors.getPathByID(state.tags));
   const language    = useSelector(state => settings.getLanguage(state.settings));
-  const dir   = getLanguageDirection(language);
+  const dir         = getLanguageDirection(language);
 
   const tagPath = getPathByID(id);
 
@@ -30,22 +30,25 @@ const RenderPageMobile = ({ t }) => {
   const breadCrumbSections = [{ id: '', label: t('nav.sidebar.topics') }, ...tagPath].map(getBreadCrumbSection);
 
   const breadCrumbIcon = `${isLanguageRtl(language) ? 'left' : 'right'} angle`;
-
+  const closeFilters   = () => setOpenFilters(false);
   return (
     <>
       <Modal
         closeIcon
         open={openFilters}
-        onClose={() => setOpenFilters(false)}
+        onClose={closeFilters}
         dir={dir}
         className={dir}
       >
-        <Modal.Content className="filters-aside-wrapper">
+        <Modal.Content className="filters-aside-wrapper" scrolling>
           <Filters
             namespace={`topics_${id}`}
             baseParams={{ tag: id }}
           />
         </Modal.Content>
+        <Modal.Actions>
+          <Button primary content={t('buttons.close')} onClick={closeFilters} />
+        </Modal.Actions>
       </Modal>
       <HelmetsBasic title={breadCrumbSections[breadCrumbSections.length - 1]?.content} />
       <Container className="padded topics">

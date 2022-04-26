@@ -31,7 +31,7 @@ const RenderPage = ({ t }) => {
   return (
     <>
       <HelmetsBasic title={breadCrumbSections[breadCrumbSections.length - 1]?.content} />
-      <Container className="padded topics">
+      <Container className="padded topics" fluid>
         <Breadcrumb icon={breadCrumbIcon} sections={breadCrumbSections} size="huge" />
         <Divider />
         <Grid divided>

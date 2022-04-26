@@ -49,7 +49,7 @@ const TagSourceItemModal = props => {
   }
 
   const renderRow = (x, i) => (
-    <Table.Row key={i}>
+    <Table.Row key={i} verticalAlign="top">
       {children.slice(i * ITEMS_PER_ROW, (i + 1) * ITEMS_PER_ROW).map(renderItem)}
     </Table.Row>
   );
@@ -73,7 +73,6 @@ const TagSourceItemModal = props => {
     <Modal
       open={open}
       className={clsx('filters_aside_tree_modal', { [dir]: true })}
-      size="large"
       dir={dir}
       onClose={onClose}
       closeIcon={<Icon name="times circle outline" />}

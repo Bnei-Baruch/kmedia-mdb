@@ -66,6 +66,7 @@ const SubTopics = ({ namespace, rootID, t }) => {
             baseItems={items}
             filterName={FN_TOPICS_MULTI}
             deep={0}
+            key={r}
           />
           )
       }
