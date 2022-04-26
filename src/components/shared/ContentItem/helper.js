@@ -57,6 +57,7 @@ export const buildTitleByUnit = (cu, t, getPathByID, nameOnly = false) => {
   if (content_type === CT_LIKUTIM) {
     return `${name} (${t('nav.sidebar.likutim')})`;
   }
+
   const collection = Object.values(collections)[0];
 
   if (nameOnly)
@@ -79,6 +80,7 @@ export const buildTextItemInfo = (cu, label, t, getPathByID) => {
     subTitle = title;
     title    = cu.name;
   }
+
   if (label) {
     const { author, name } = label;
     subTitle               = title;
@@ -99,6 +101,7 @@ const buildDescription = (cu, t) => {
     const part = Number(ccuNames[cu.id]);
     (part && !isNaN(part)) && res.push(t(cuPartNameByCCUType(content_type), { name: part }));
   }
+
   return res;
 };
 
