@@ -105,8 +105,7 @@ const playlist = (collection, location, playerLanguage, uiLanguage) => {
     return {};
   }
 
-  const preferredMT     = restorePreferredMediaType();
-  const mediaType       = getMediaTypeFromQuery(location, preferredMT);
+  const mediaType = getPlaylistMediaType(location);
   const contentLanguage = getLanguageFromQuery(location, playerLanguage);
 
   const units = collection.content_units || [];
@@ -199,8 +198,7 @@ const playlist = (collection, location, playerLanguage, uiLanguage) => {
 };
 
 const playlistFromUnits = (collection, location, contentLanguage, uiLanguage) => {
-  const preferredMT = restorePreferredMediaType();
-  const mediaType   = getMediaTypeFromQuery(location, preferredMT);
+  const mediaType   = getPlaylistMediaType(location);
 
   const items = collection.content_units
     .map(x => playableItem(x, mediaType, uiLanguage, contentLanguage))
@@ -211,6 +209,12 @@ const playlistFromUnits = (collection, location, contentLanguage, uiLanguage) =>
     });
 
   return { items, collection, mediaType, contentLanguage, uiLanguage, name: collection.name };
+};
+
+const getPlaylistMediaType = location => {
+  const preferredMT = restorePreferredMediaType();
+  const mediaType = getMediaTypeFromQuery(location, preferredMT);
+  return mediaType;
 };
 
 const getMediaTypeFromQuery = (location, defaultMediaType) => {
@@ -274,6 +278,7 @@ const exportMethods = {
   playableItem,
   playlist,
   playlistFromUnits,
+  getPlaylistMediaType,
   getMediaTypeFromQuery,
   setMediaTypeInQuery,
   getLanguageFromQuery,
