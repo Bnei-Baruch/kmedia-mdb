@@ -17,7 +17,7 @@ import {
 import { getQuery, stringify, updateQuery } from './url';
 import { canonicalLink } from './links';
 import MediaHelper from './media';
-import { isEmpty, physicalFile, randomizeArray } from './utils';
+import { isEmpty, physicalFile } from './utils';
 import { selectSuitableLanguage } from './language';
 
 const restorePreferredMediaType = () => localStorage.getItem('@@kmedia_player_media_type') || MT_VIDEO;
@@ -100,7 +100,7 @@ const playableItem = (unit, mediaType, uiLanguage, contentLanguage) => {
   };
 };
 
-const playlist = (collection, location, playerLanguage, uiLanguage, randomize = undefined) => {
+const playlist = (collection, location, playerLanguage, uiLanguage) => {
   if (!collection) {
     return {};
   }
@@ -184,11 +184,6 @@ const playlist = (collection, location, playerLanguage, uiLanguage, randomize = 
   items.forEach(x => {
     x.shareUrl = canonicalLink(x.unit, null, collection);
   });
-
-  // randomize items order - create an array of randoms and sort items by it
-  if (randomize) {
-    randomizeArray(items);
-  }
 
   const name = collection.content_type === CT_SONGS ? collection.name : null;
   const language = contentLanguage;
