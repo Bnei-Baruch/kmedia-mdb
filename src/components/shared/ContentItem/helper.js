@@ -76,7 +76,7 @@ export const buildTextItemInfo = (cu, label, t, getPathByID) => {
   title       = buildTitleByUnit(cu, t, getPathByID, true);
   description = buildDescription(cu, t);
   description.push(t('values.date', { date: label?.date || cu.film_date }));
-  if (cu.contextType === CT_ARTICLE) {
+  if (cu.content_type === CT_ARTICLE) {
     subTitle = title;
     title    = cu.name;
   }
