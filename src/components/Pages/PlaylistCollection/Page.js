@@ -89,17 +89,19 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
   useEffect(() => {
     if (playlist) {
       const { collection, mediaType, language } = playlist
-      const nPlaylist = playerHelper.playlist(collection, location, language, language, true);
 
-      if (
-        nPlaylist?.collection.id !== collection.id ||
-        nPlaylist?.mediaType !== mediaType ||
-       nPlaylist?.language !== language
-      ) {
+      // check if we need new playlist
+      const queryMT = playerHelper.getPlaylistMediaType(location);
+      const contentLanguage = playerHelper.getLanguageFromQuery(location, language);
+
+      if (queryMT !== mediaType ||
+          contentLanguage !== language) {
+        const nPlaylist = playerHelper.playlist(collection, location, contentLanguage, language);
         setPlaylist(nPlaylist);
       }
+
     } else {
-      const nPlaylist  = playerHelper.playlist(collection, location, contentLanguage, uiLanguage, true);
+      const nPlaylist  = playerHelper.playlist(collection, location, contentLanguage, uiLanguage);
       setPlaylist(nPlaylist);
     }
   }, [collection, contentLanguage, location, playlist, uiLanguage]);
