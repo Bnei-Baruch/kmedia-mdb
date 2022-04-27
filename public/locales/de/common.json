@@ -109,8 +109,7 @@
       "content-type-filter": "Section",
       "language-filter": "Language",
       "date-filter": "Date",
-      "lessons": "Lessons & Lectures",
-      "events": "Conventions & Events"
+      "EVENT_PART": "Misc"
     }
   },
   "buttons": {

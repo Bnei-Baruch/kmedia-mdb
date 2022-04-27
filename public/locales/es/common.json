@@ -109,8 +109,7 @@
       "content-type-filter": "Sección",
       "language-filter": "Idioma",
       "date-filter": "Fecha",
-      "lessons": "Lecciones y Charlas",
-      "events": "Congresos y Eventos"
+      "EVENT_PART": "Varios"
     }
   },
   "buttons": {

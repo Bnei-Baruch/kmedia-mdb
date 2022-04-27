@@ -110,8 +110,7 @@
       "content-type-filter": "Раздел",
       "language-filter": "Язык",
       "date-filter": "Дата",
-      "lessons": "Уроки и лекции",
-      "events": "Конгрессы, события"
+      "EVENT_PART": "Разное"
     }
   },
   "buttons": {

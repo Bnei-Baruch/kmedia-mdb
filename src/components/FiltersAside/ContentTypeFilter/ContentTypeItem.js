@@ -3,7 +3,7 @@ import { Checkbox, List } from 'semantic-ui-react';
 
 import { actions, selectors as filters } from '../../../redux/modules/filters';
 import { selectors as filtersAside } from '../../../redux/modules/filtersAside';
-import { FN_CONTENT_TYPE } from '../../../helpers/consts';
+import { CT_EVENT_PART, FN_CONTENT_TYPE } from '../../../helpers/consts';
 import { withNamespaces } from 'react-i18next';
 
 const ContentTypeItem = ({ namespace, id, t }) => {
@@ -18,9 +18,10 @@ const ContentTypeItem = ({ namespace, id, t }) => {
     if (checked) {
       val.push(id);
     }
-
     dispatch(actions.setFilterValueMulti(namespace, FN_CONTENT_TYPE, val));
   };
+
+  const title = id !== CT_EVENT_PART ? `constants.content-types.${id}` : `filters.aside-filter.${id}`;
 
   return (
     <List.Item key={`${FN_CONTENT_TYPE}_${id}`} disabled={stat === 0} className="filters-aside-ct">
@@ -28,7 +29,7 @@ const ContentTypeItem = ({ namespace, id, t }) => {
         {`(${stat})`}
       </List.Content>
       <Checkbox
-        label={t(`constants.content-types.${id}`)}
+        label={t(title)}
         checked={selected.includes(id)}
         onChange={handleSelect}
         disabled={stat === 0}

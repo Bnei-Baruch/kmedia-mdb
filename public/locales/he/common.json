@@ -109,8 +109,7 @@
       "content-type-filter": "מדור",
       "language-filter": "שפה",
       "date-filter": "תאריך",
-      "lessons": "שיעורים והרצאות",
-      "events": "כנסים ואירועים"
+      "EVENT_PART": "שונות"
     }
   },
   "buttons": {
