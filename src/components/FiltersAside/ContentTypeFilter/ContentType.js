@@ -34,7 +34,7 @@ const ContentType = ({ namespace, t }) => {
           {
             Object.values(groupByName)
               .sort((g1, g2) => g1.order - g2.order)
-              .map(g => <ContentTypeItemGroup group={g} namespace={namespace} />)
+              .map(g => <ContentTypeItemGroup group={g} namespace={namespace} key={g.key} />)
           }
           {items.map(id => <ContentTypeItem namespace={namespace} id={id} key={id} />)}
         </>
