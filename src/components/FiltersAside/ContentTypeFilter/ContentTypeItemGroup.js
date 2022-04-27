@@ -31,6 +31,7 @@ const ContentTypeItemGroup = ({ namespace, group, t }) => {
     if (checked) {
       val.push(...cts.filter(ct => items.includes(ct)));
     }
+
     dispatch(actions.setFilterValueMulti(namespace, FN_CONTENT_TYPE, val));
   };
 
