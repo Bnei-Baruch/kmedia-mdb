@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Container } from 'semantic-ui-react';
+import { Container, Header } from 'semantic-ui-react';
 import clsx from 'clsx';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import UnitLogo from '../Logo/UnitLogo';
@@ -10,6 +10,8 @@ import { canonicalLink } from '../../../helpers/links';
 import { useDispatch, useSelector } from 'react-redux';
 import { actions, selectors } from '../../../redux/modules/mdb';
 import { imageWidthBySize } from './helper';
+import { assetUrl } from '../../../helpers/Api';
+import { fromToLocalized } from '../../../helpers/date';
 
 const CollectionListTemplate = ({ cID, size = 'big', t }) => {
   const c = useSelector(state => selectors.getDenormCollection(state.mdb, cID));
@@ -26,8 +28,8 @@ const CollectionListTemplate = ({ cID, size = 'big', t }) => {
   if (!c) return null;
 
   const width       = isMobileDevice ? 165 : imageWidthBySize[size];
-  const description = [];
-  if (c.film_date) description.push(t('values.date', { date: c.film_date }));
+  const description = [fromToLocalized(c.start_date, c.end_date)];
+  const cuId        = c.cuIDs[0];
 
   return (
     <Container
@@ -38,15 +40,15 @@ const CollectionListTemplate = ({ cID, size = 'big', t }) => {
     >
       <div>
         <div className="cu_item_img" style={{ width }}>
-          <UnitLogo collectionId={cID} width={width} />
+          <UnitLogo collectionId={cID} width={width} fallbackImg={cuId && assetUrl(`api/thumbnail/${cuId}`)} />
         </div>
       </div>
       <div className="cu_item_info">
-        <div className="cu_item_info_co ">
-          <span className="no-padding no-margin text_ellipsis">
-            {c.name}
-          </span>
-        </div>
+
+        <Header as={size === 'big' || isMobileDevice ? 'h5' : 'h3'} className="cu_item_name">
+          <Header.Content content={c.name} />
+          <Header.Subheader content={t(`constants.content-types.${c.content_type}`)} />
+        </Header>
         <div className={`cu_info_description text_ellipsis`}>
           {description.map((d, i) => (<span key={i}>{d}</span>))}
         </div>

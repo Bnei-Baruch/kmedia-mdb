@@ -60,10 +60,12 @@ export const buildTitleByUnit = (cu, t, getPathByID, nameOnly = false) => {
 
   const collection = Object.values(collections)[0];
 
+  if (!collection) return '';
+
   if (nameOnly)
     return collection.name;
 
-  const part     = Number(collection?.ccuNames[cu.id]);
+  const part     = Number(collection.ccuNames[cu.id]);
   const partName = t(cuPartNameByCCUType(content_type), { name: part });
   return `${collection.name} ${partName} (${t('values.date', { date: film_date })})`;
 };
