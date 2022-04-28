@@ -133,21 +133,15 @@
     }
   }
 
-  .topics_texts .cu_item_info {
-    padding-left: 0!important;
-    padding-right: 0!important;
-  }
+  .ui.breadcrumb {
+    font-weight: bold;
 
-  .cu_item {
-    vertical-align: top;
-
-    & > .image {
-      padding-top: 1em;
+    .icon.divider {
+      font-size: 1.1em;
+      vertical-align: middle;
     }
   }
-
-  .description {
-    opacity: 0.43;
-    color: #1b1c1d;
-  }
 }
+
+
+

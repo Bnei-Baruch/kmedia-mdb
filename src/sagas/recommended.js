@@ -242,7 +242,7 @@ function* fetchViews(action) {
   yield fetchViewsByUIDs(action.payload);
 }
 
-function* fetchViewsByUIDs(uids) {
+export function* fetchViewsByUIDs(uids) {
   uids = yield select(state => uids.filter(uid => recommended.getViews(uid, state.recommended) === -1));
   if (uids.length > 0) {
     const { data } = yield call(Api.views, uids);

@@ -8,13 +8,14 @@ const ScrollToTop = ({ location, children }) => {
   // see these links before putting more logic here
   // https://reactjs.org/docs/react-component.html#componentdidupdate
   // https://developmentarc.gitbooks.io/react-indepth/content/life_cycle/update/postrender_with_componentdidupdate.html
+
   useEffect(
     () => {
       if (window.pageYOffset) {
         window.scrollTo(0, 0);
       }
     },
-    [location]
+    [location.hash]
   );
 
   return children;

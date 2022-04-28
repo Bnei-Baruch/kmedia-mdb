@@ -95,13 +95,44 @@
     },
     "sections-filter": {
       "label": "Abschnitt",
-      "all": "All",
       "lessons": "Lektionen und Vorlesungen",
       "programs": "Programme und Clips",
       "events": "Kongresse, Veranstaltungen",
       "publications": "Veröffentlichungen",
       "sources": "Primäre Quellen",
       "all": "Alles"
+    },
+    "aside-filter": {
+      "filters-title": "Filter by interests:",
+      "sources-filter-multi": "Kabbalists",
+      "topics-filter-multi": "Topics",
+      "content-type-filter": "Section",
+      "language-filter": "Language",
+      "date-filter": "Date"
+    },
+    "content-types": {
+      "CONGRESS": "Kongresse",
+      "HOLIDAY": "Feiertage",
+      "UNITY_DAY": "Unity Days",
+      "FRIENDS_GATHERING": "Versammlungen der Freunde",
+      "MEAL": "Mahlzeiten",
+      "EVENT_PART": "Misc",
+      "LESSON_PART": "Täglicher Unterricht",
+      "VIRTUAL_LESSON": "Virtuelle Lektionen",
+      "LECTURE": "Vorträge",
+      "WOMEN_LESSON": "Lektionen für Frauen",
+      "CHILDREN_LESSON": "Unterricht für Kinder",
+      "LESSONS_SERIES": "Ausgewählte Trainingsserien",
+      "LECTURE_SERIES": "Vortragsreihe",
+      "CLIP": "Clips",
+      "VIDEO_PROGRAM_CHAPTER": "Programmes",
+      "ARTICLE": "Artikel",
+      "PUBLICATION": "Veröffentlichung",
+      "BLOG_POST": "Blog",
+      "TRAINING": "Training",
+      "KITEI_MAKOR": "Fragmente von Primärquellen",
+      "LIKUTIM": "Assorted Excerpts",
+      "SOURCE": "Bibliothek"
     }
   },
   "buttons": {
@@ -144,7 +175,7 @@
     },
     "download": {
       "iconHoverText": "Download the excerpt you marked",
-     "downloadButton": "Download",
+      "downloadButton": "Download",
       "copyButton": "Copy link"
     }
   },
@@ -329,7 +360,7 @@
       "description": "Aktualisierte Verknüpfung zur letzten täglichen Lektion"
     }
   },
-  "likutim":{
+  "likutim": {
     "header": {
       "text": "Excerpts from Kabbalistic Sources",
       "subtext": "Excerpts from the Sources on various subjects"
@@ -522,7 +553,8 @@
       "subtext": "A collection of all items for a selected topic."
     },
     "show-more": "Show more",
-    "show-less": "Show less"
+    "show-less": "Show less",
+    "texts-title": "Kabbalah Sources, Transcriptions, Publications"
   },
   "media-downloads": {
     "title": "Herunterladen",
@@ -642,7 +674,8 @@
       "BLOG_POST": "Blog",
       "LESSONS_SERIES": "Ausgewählte Trainingsserien",
       "KTAIM_NIVCHARIM": "Ausgewählte Highlights",
-      "sources": "Primäre Quellen"
+      "sources": "Primäre Quellen",
+      "SOURCE": "Primäre Quellen"
     },
     "media-types": {
       "video": "Video",

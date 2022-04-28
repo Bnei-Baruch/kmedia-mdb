@@ -6,6 +6,7 @@ import { reducer as lessons } from './modules/lessons';
 import { reducer as programs } from './modules/programs';
 import { reducer as publications } from './modules/publications';
 import { reducer as filters } from './modules/filters';
+import { reducer as filtersAside } from './modules/filtersAside';
 import { reducer as lists } from './modules/lists';
 import { reducer as sources } from './modules/sources';
 import { reducer as tags } from './modules/tags';
@@ -32,6 +33,7 @@ const reducers = history => combineReducers({
   lessons,
   publications,
   filters,
+  filtersAside,
   lists,
   sources,
   tags,

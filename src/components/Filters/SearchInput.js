@@ -1,26 +1,25 @@
-import { useState } from 'react'
+import { useState } from 'react';
 import { withNamespaces } from 'react-i18next';
-import { Input, Icon } from 'semantic-ui-react';
+import { Icon, Input } from 'semantic-ui-react';
 
-
-const SearchInput = ({ onSearch, onClear, t }) => {
-  const [value, setValue] = useState('');
+const SearchInput = ({ onSearch, onClear, defVal = '', t }) => {
+  const [value, setValue] = useState(defVal);
 
   const change = (e, data) => {
-    onSearch(e, data)
-    setValue(data.value)
-  }
+    onSearch(e, data);
+    setValue(data.value);
+  };
 
   const clear = () => {
-    setValue('')
-    onClear()
-  }
+    setValue('');
+    onClear();
+  };
 
   const keyDown = e => {
     if (e.keyCode === 27) { // Esc
       clear();
     }
-  }
+  };
 
   return (
     <Input
@@ -32,9 +31,9 @@ const SearchInput = ({ onSearch, onClear, t }) => {
       onKeyDown={keyDown}
     >
       <input value={value} />
-      <Icon name={value ? 'delete' : 'search'} link onClick={clear}/>
+      <Icon name={value ? 'delete' : 'search'} link onClick={clear} />
     </Input>
-  )
-}
+  );
+};
 
 export default withNamespaces()(SearchInput);

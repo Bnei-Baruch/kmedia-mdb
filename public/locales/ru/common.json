@@ -102,6 +102,42 @@
       "publications": "Публикации",
       "sources": "Первоисточники",
       "posts": "Блог"
+    },
+    "aside-filter": {
+      "filters-title": "Фильтровать по интересам:",
+      "sources-filter-multi": "Каббалисты",
+      "topics-filter-multi": "Темы",
+      "content-type-filter": "Раздел",
+      "language-filter": "Язык",
+      "date-filter": "Дата"
+    },
+    "content-types": {
+      "CONGRESS": "Конгрессы",
+      "HOLIDAY": "Праздники",
+      "UNITY_DAY": "Дни Единстваs",
+      "FRIENDS_GATHERING": "Собрания товарищей",
+      "MEAL": "Трапезы",
+      "EVENT_PART": "Разное",
+
+      "LESSON_PART": "Ежедневные уроки",
+      "VIRTUAL_LESSON": "Виртуальные уроки",
+      "LECTURE": "Лекции",
+      "WOMEN_LESSON": "Уроки для женщин",
+      "CHILDREN_LESSON": "Уроки для детей",
+      "LESSONS_SERIES": "Избранные серии обучения",
+      "LECTURE_SERIES": "Серия лекций",
+
+      "CLIP": "Клипы",
+      "VIDEO_PROGRAM_CHAPTER": "Программы",
+
+      "ARTICLE": "Статьи",
+      "PUBLICATION": "Публикация",
+      "BLOG_POST": "Блог",
+
+      "TRAINING": "Тренинг",
+      "KITEI_MAKOR": "Отрывки первоисточников",
+      "LIKUTIM": "Сборники",
+      "SOURCE": "Библиотека"
     }
   },
   "buttons": {
@@ -542,7 +578,8 @@
       "subtext": "Сборник материалов по выбранной теме"
     },
     "show-more": "Показать больше",
-    "show-less": "Показывай меньше"
+    "show-less": "Показывай меньше",
+    "texts-title": "Kabbalah Sources, Transcriptions, Publications"
   },
   "media-downloads": {
     "title": "Скачать",
@@ -662,7 +699,8 @@
       "BLOG_POST": "Пост блога",
       "LESSONS_SERIES": "Избранные серии обучения",
       "KTAIM_NIVCHARIM": "Избранные моменты",
-      "sources": "Первоисточники"
+      "sources": "Первоисточники",
+      "SOURCE": "Первоисточники"
     },
     "media-types": {
       "video": "Видео",

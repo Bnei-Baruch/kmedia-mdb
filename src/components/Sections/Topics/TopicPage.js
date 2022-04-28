@@ -1,131 +1,77 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { withNamespaces } from 'react-i18next';
-import { Breadcrumb, Container, Divider, Grid, Header } from 'semantic-ui-react';
-import { isLanguageRtl } from '../../../helpers/i18n-utils';
-import { isEmpty } from '../../../helpers/utils';
-import { stringify as urlSearchStringify } from '../../../helpers/url';
-import { filtersTransformer } from '../../../filters/index';
+import { Container, Divider, Header } from 'semantic-ui-react';
+
 import { actions, selectors } from '../../../redux/modules/tags';
 import { selectors as settings } from '../../../redux/modules/settings';
-import WipErr from '../../shared/WipErr/WipErr';
-import Link from '../../Language/MultiLanguageLink';
-import TopN from './TopN';
-import HelmetsBasic from '../../shared/Helmets/Basic';
-
-const TOP_N_ITEMS = 5;
-
-const getTopicUrl = (section, tagPath, language) => {
-  const query = tagPath
-    ? filtersTransformer
-      .toQueryParams([{ name: 'topics-filter', values: [tagPath.map(y => y.id)] }])
-    : '';
-
-  const realSection = section === 'publications'
-    ? 'publications/articles'
-    : section;
-
-  return `/${language}/${realSection}?${urlSearchStringify(query)}`;
-};
-
-const getBreadCrumbSection = (p, index, arr) => {
-  const section = {
-    key: p.id,
-    content: p.label,
-  };
-
-  if (index === arr.length - 1) {
-    section.active = true;
-  } else {
-    section.as = Link;
-    section.to = `/topics/${p.id}`;
-  }
-
-  return section;
-};
+import Pagination from '../../Pagination/Pagination';
+import { selectors as filters } from '../../../redux/modules/filters';
+import { isEqual } from 'lodash';
+import { DeviceInfoContext } from '../../../helpers/app-contexts';
+import RenderPage from './RenderPage';
+import RenderPageMobile from './RenderPageMobile';
 
 const TopicPage = ({ t }) => {
-  const wip             = useSelector(state => selectors.getWip(state.tags));
-  const error           = useSelector(state => selectors.getError(state.tags));
-  const sections        = useSelector(state => selectors.getSections(state.tags));
-  const getSectionUnits = useSelector(state => selectors.getSectionUnits(state.tags));
-  const getCounts       = useSelector(state => selectors.getCounts(state.tags));
+  const { id } = useParams();
+
+  const [pageNo, setPageNo] = useState(0);
+
+  const { isMobileDevice } = useContext(DeviceInfoContext);
+
+  const pageSize = isMobileDevice ? 10 : 50;
+
   const getPathByID = useSelector(state => selectors.getPathByID(state.tags));
   const getTags     = useSelector(state => selectors.getTags(state.tags));
   const language    = useSelector(state => settings.getLanguage(state.settings));
+  const selected    = useSelector(state => filters.getFilters(state.filters, `topics_${id}`), isEqual);
+
+  const { mediaTotal, textTotal } = useSelector(state => selectors.getItems(state.tags));
+  const total                     = Math.max(mediaTotal, textTotal);
 
   const dispatch = useDispatch();
 
-  const { id } = useParams();
-
   useEffect(() => {
-    dispatch(actions.fetchDashboard(id));
-  }, [id, language, dispatch]);
+    const page_no = pageNo > 1 ? pageNo : 1;
+    dispatch(actions.fetchDashboard({ tag: id, page_size: pageSize, page_no }));
+  }, [id, language, dispatch, pageNo, selected]);
 
-  const wipErr = WipErr({ wip, error, t });
-  if (wipErr) {
-    return wipErr;
-  }
-
-  if (getPathByID && !isEmpty(sections)) {
-    const tagPath = getPathByID(id);
-
-    // create breadCrumb sections from tagPath
-    const breadCrumbSections = [
-      { id: '', label: t('nav.sidebar.topics') },
-      ...tagPath,
-    ].map(getBreadCrumbSection);
-
-    const breadCrumbIcon = `${isLanguageRtl(language) ? 'left' : 'right'} angle`;
-
+  if (!getPathByID) {
+    const tag = getTags ? getTags[id] : null;
     return (
-      <>
-        <HelmetsBasic title={breadCrumbSections[breadCrumbSections.length - 1]?.content} />
-        <Container className="padded">
-          <Breadcrumb icon={breadCrumbIcon} sections={breadCrumbSections} size="large" />
-          <Divider hidden />
-          <Grid doubling columns={sections.length}>
-            {
-              sections.map(s => {
-                const sectionUnits = getSectionUnits(s);
-                const topicUrl     = getTopicUrl(s, tagPath, language);
-                const sectionCount = getCounts(s);
-
-                return isEmpty(sectionUnits)
-                  ? null
-                  : (
-                    <Grid.Column key={s}>
-                      <TopN
-                        section={s}
-                        units={sectionUnits}
-                        N={TOP_N_ITEMS}
-                        topicUrl={topicUrl}
-                        sectionCount={sectionCount}
-                      />
-                    </Grid.Column>
-                  );
-              })
-            }
-          </Grid>
-        </Container>
-      </>
+      <Container className="padded">
+        <Header as="h3">
+          {t(`nav.sidebar.topic`)}
+          {' "'}
+          {tag ? tag.label : id}
+          {'" '}
+          {t(`nav.sidebar.not-found`)}
+        </Header>
+      </Container>
     );
   }
 
-  const tag = getTags ? getTags[id] : null;
+  const onPageChange = n => setPageNo(n);
 
   return (
-    <Container className="padded">
-      <Header as="h3">
-        {t(`nav.sidebar.topic`)}
-        {' "'}
-        {tag ? tag.label : id}
-        {'" '}
-        {t(`nav.sidebar.not-found`)}
-      </Header>
-    </Container>
+    <>
+      {isMobileDevice ? <RenderPageMobile /> : <RenderPage />}
+      <Divider fitted />
+      <Container className="padded pagination-wrapper" textAlign="center">
+        {
+          total > 0 &&
+          <Pagination
+            pageNo={pageNo}
+            pageSize={pageSize}
+            total={total}
+            language={language}
+            onChange={onPageChange}
+          />
+        }
+      </Container>
+    </>
   );
 };
 

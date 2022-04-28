@@ -13,10 +13,10 @@ import WipErr from '../../../../shared/WipErr/WipErr';
 import NeedToLogin from '../../NeedToLogin';
 import { Header, List } from 'semantic-ui-react';
 import BookmarksItem from './Item';
-import { buildTitleByUnit } from './helper';
 import { selectors as mdb } from '../../../../../redux/modules/mdb';
 import { selectors as sources } from '../../../../../redux/modules/sources';
 import { selectors as settings } from '../../../../../redux/modules/settings';
+import { buildTitleByUnit } from '../../../../shared/ContentItem/helper';
 
 const BookmarkList = ({ t }) => {
   let items         = useSelector(state => selectors.getList(state.my, MY_NAMESPACE_BOOKMARKS));
@@ -28,7 +28,7 @@ const BookmarkList = ({ t }) => {
   const denormCU    = useSelector(state => mdb.nestedGetDenormContentUnit(state.mdb));
   const language    = useSelector(state => settings.getLanguage(state.settings));
 
-  const dispatch    = useDispatch();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(actions.fetch(MY_NAMESPACE_BOOKMARKS, { folder_id }));

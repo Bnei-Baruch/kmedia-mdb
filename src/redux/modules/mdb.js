@@ -8,31 +8,33 @@ import { types as ssr } from './ssr';
 
 /* Types */
 
-const FETCH_UNIT                  = 'MDB/FETCH_UNIT';
-const FETCH_UNIT_SUCCESS          = 'MDB/FETCH_UNIT_SUCCESS';
-const FETCH_UNIT_FAILURE          = 'MDB/FETCH_UNIT_FAILURE';
-const FETCH_UNITS_BY_IDS          = 'MDB/FETCH_UNITS_BY_IDS';
-const FETCH_UNITS_BY_IDS_SUCCESS  = 'MDB/FETCH_UNITS_BY_IDS_SUCCESS';
-const FETCH_UNITS_BY_IDS_FAILURE  = 'MDB/FETCH_UNITS_BY_IDS_FAILURE';
-const FETCH_COLLECTION            = 'MDB/FETCH_COLLECTION';
-const FETCH_COLLECTION_SUCCESS    = 'MDB/FETCH_COLLECTION_SUCCESS';
-const FETCH_COLLECTION_FAILURE    = 'MDB/FETCH_COLLECTION_FAILURE';
-const FETCH_LATEST_LESSON         = 'MDB/FETCH_LATEST_LESSON';
-const FETCH_LATEST_LESSON_SUCCESS = 'MDB/FETCH_LATEST_LESSON_SUCCESS';
-const FETCH_LATEST_LESSON_FAILURE = 'MDB/FETCH_LATEST_LESSON_FAILURE';
-const FETCH_SQDATA                = 'MDB/FETCH_SQDATA';
-const FETCH_SQDATA_SUCCESS        = 'MDB/FETCH_SQDATA_SUCCESS';
-const FETCH_SQDATA_FAILURE        = 'MDB/FETCH_SQDATA_FAILURE';
-const FETCH_WINDOW                = 'MDB/FETCH_WINDOW';
-const FETCH_WINDOW_SUCCESS        = 'MDB/FETCH_WINDOW_SUCCESS';
-const FETCH_WINDOW_FAILURE        = 'MDB/FETCH_WINDOW_FAILURE';
-const FETCH_DATEPICKER_CO         = 'MDB/FETCH_DATEPICKER_CO';
-const FETCH_DATEPICKER_CO_SUCCESS = 'MDB/FETCH_DATEPICKER_CO_SUCCESS';
-const FETCH_DATEPICKER_CO_FAILURE = 'MDB/FETCH_DATEPICKER_CO_FAILURE';
-const NULL_DATEPICKER_CO          = 'MDB/NULL_DATEPICKER_CO';
-const COUNT_CU                    = 'MDB/COUNT_CU';
-const COUNT_CU_SUCCESS            = 'MDB/COUNT_CU_SUCCESS';
-const COUNT_CU_FAILURE            = 'MDB/COUNT_CU_FAILURE';
+const FETCH_UNIT                       = 'MDB/FETCH_UNIT';
+const FETCH_UNIT_SUCCESS               = 'MDB/FETCH_UNIT_SUCCESS';
+const FETCH_UNIT_FAILURE               = 'MDB/FETCH_UNIT_FAILURE';
+const FETCH_UNITS_BY_IDS               = 'MDB/FETCH_UNITS_BY_IDS';
+const FETCH_UNITS_BY_IDS_SUCCESS       = 'MDB/FETCH_UNITS_BY_IDS_SUCCESS';
+const FETCH_UNITS_BY_IDS_FAILURE       = 'MDB/FETCH_UNITS_BY_IDS_FAILURE';
+const FETCH_COLLECTION                 = 'MDB/FETCH_COLLECTION';
+const FETCH_COLLECTION_SUCCESS         = 'MDB/FETCH_COLLECTION_SUCCESS';
+const FETCH_COLLECTION_FAILURE         = 'MDB/FETCH_COLLECTION_FAILURE';
+const FETCH_COLLECTIONS_SUCCESS        = 'MDB/FETCH_COLLECTIONS_SUCCESS';
+const FETCH_COLLECTIONS_BY_IDS_FAILURE = 'MDB/FETCH_COLLECTIONS_BY_IDS_FAILURE';
+const FETCH_LATEST_LESSON              = 'MDB/FETCH_LATEST_LESSON';
+const FETCH_LATEST_LESSON_SUCCESS      = 'MDB/FETCH_LATEST_LESSON_SUCCESS';
+const FETCH_LATEST_LESSON_FAILURE      = 'MDB/FETCH_LATEST_LESSON_FAILURE';
+const FETCH_SQDATA                     = 'MDB/FETCH_SQDATA';
+const FETCH_SQDATA_SUCCESS             = 'MDB/FETCH_SQDATA_SUCCESS';
+const FETCH_SQDATA_FAILURE             = 'MDB/FETCH_SQDATA_FAILURE';
+const FETCH_WINDOW                     = 'MDB/FETCH_WINDOW';
+const FETCH_WINDOW_SUCCESS             = 'MDB/FETCH_WINDOW_SUCCESS';
+const FETCH_WINDOW_FAILURE             = 'MDB/FETCH_WINDOW_FAILURE';
+const FETCH_DATEPICKER_CO              = 'MDB/FETCH_DATEPICKER_CO';
+const FETCH_DATEPICKER_CO_SUCCESS      = 'MDB/FETCH_DATEPICKER_CO_SUCCESS';
+const FETCH_DATEPICKER_CO_FAILURE      = 'MDB/FETCH_DATEPICKER_CO_FAILURE';
+const NULL_DATEPICKER_CO               = 'MDB/NULL_DATEPICKER_CO';
+const COUNT_CU                         = 'MDB/COUNT_CU';
+const COUNT_CU_SUCCESS                 = 'MDB/COUNT_CU_SUCCESS';
+const COUNT_CU_FAILURE                 = 'MDB/COUNT_CU_FAILURE';
 
 const RECEIVE_COLLECTIONS   = 'MDB/RECEIVE_COLLECTIONS';
 const RECEIVE_CONTENT_UNITS = 'MDB/RECEIVE_CONTENT_UNITS';
@@ -53,6 +55,7 @@ export const types = {
   FETCH_UNITS_BY_IDS_FAILURE,
   FETCH_COLLECTION,
   FETCH_COLLECTION_SUCCESS,
+  FETCH_COLLECTIONS_BY_IDS_FAILURE,
   FETCH_COLLECTION_FAILURE,
   FETCH_LATEST_LESSON,
   FETCH_LATEST_LESSON_SUCCESS,
@@ -82,31 +85,32 @@ export const types = {
 
 /* Actions */
 
-const fetchUnit                = createAction(FETCH_UNIT);
-const fetchUnitSuccess         = createAction(FETCH_UNIT_SUCCESS, (id, data) => ({ id, data }));
-const fetchUnitFailure         = createAction(FETCH_UNIT_FAILURE, (id, err) => ({ id, err }));
-const fetchUnitsByIDs          = createAction(FETCH_UNITS_BY_IDS);
-const fetchUnitsByIDsSuccess   = createAction(FETCH_UNITS_BY_IDS_SUCCESS);
-const fetchUnitsByIDsFailure   = createAction(FETCH_UNITS_BY_IDS_FAILURE);
-const fetchCollection          = createAction(FETCH_COLLECTION);
-const fetchCollectionSuccess   = createAction(FETCH_COLLECTION_SUCCESS, (id, data) => ({ id, data }));
-const fetchCollectionFailure   = createAction(FETCH_COLLECTION_FAILURE, (id, err) => ({ id, err }));
-const fetchLatestLesson        = createAction(FETCH_LATEST_LESSON);
-const fetchLatestLessonSuccess = createAction(FETCH_LATEST_LESSON_SUCCESS);
-const fetchLatestLessonFailure = createAction(FETCH_LATEST_LESSON_FAILURE);
-const fetchSQData              = createAction(FETCH_SQDATA);
-const fetchSQDataSuccess       = createAction(FETCH_SQDATA_SUCCESS);
-const fetchSQDataFailure       = createAction(FETCH_SQDATA_FAILURE);
-const fetchWindow              = createAction(FETCH_WINDOW);
-const fetchWindowSuccess       = createAction(FETCH_WINDOW_SUCCESS, (id, data) => ({ id, data }));
-const fetchWindowFailure       = createAction(FETCH_WINDOW_FAILURE, (id, err) => ({ id, err }));
-const fetchDatepickerCO        = createAction(FETCH_DATEPICKER_CO);
-const fetchDatepickerCOSuccess = createAction(FETCH_DATEPICKER_CO_SUCCESS);
-const fetchDatepickerCOFailure = createAction(FETCH_DATEPICKER_CO_FAILURE, err => ({ err }));
-const nullDatepickerCO         = createAction(NULL_DATEPICKER_CO);
-const countCU                  = createAction(COUNT_CU, (namespace, params) => ({ namespace, params }));
-const countCUSuccess           = createAction(COUNT_CU_SUCCESS, (namespace, total) => ({ namespace, total }));
-const countCUFailure           = createAction(COUNT_CU_FAILURE, (namespace, err) => ({ namespace, err }));
+const fetchUnit                    = createAction(FETCH_UNIT);
+const fetchUnitSuccess             = createAction(FETCH_UNIT_SUCCESS, (id, data) => ({ id, data }));
+const fetchUnitFailure             = createAction(FETCH_UNIT_FAILURE, (id, err) => ({ id, err }));
+const fetchUnitsByIDs              = createAction(FETCH_UNITS_BY_IDS);
+const fetchUnitsByIDsSuccess       = createAction(FETCH_UNITS_BY_IDS_SUCCESS);
+const fetchUnitsByIDsFailure       = createAction(FETCH_UNITS_BY_IDS_FAILURE);
+const fetchCollection              = createAction(FETCH_COLLECTION);
+const fetchCollectionSuccess       = createAction(FETCH_COLLECTION_SUCCESS, (id, data) => ({ id, data }));
+const fetchCollectionFailure       = createAction(FETCH_COLLECTION_FAILURE, (id, err) => ({ id, err }));
+const fetchCollectionsByIDsFailure = createAction(FETCH_COLLECTIONS_BY_IDS_FAILURE);
+const fetchLatestLesson            = createAction(FETCH_LATEST_LESSON);
+const fetchLatestLessonSuccess     = createAction(FETCH_LATEST_LESSON_SUCCESS);
+const fetchLatestLessonFailure     = createAction(FETCH_LATEST_LESSON_FAILURE);
+const fetchSQData                  = createAction(FETCH_SQDATA);
+const fetchSQDataSuccess           = createAction(FETCH_SQDATA_SUCCESS);
+const fetchSQDataFailure           = createAction(FETCH_SQDATA_FAILURE);
+const fetchWindow                  = createAction(FETCH_WINDOW);
+const fetchWindowSuccess           = createAction(FETCH_WINDOW_SUCCESS, (id, data) => ({ id, data }));
+const fetchWindowFailure           = createAction(FETCH_WINDOW_FAILURE, (id, err) => ({ id, err }));
+const fetchDatepickerCO            = createAction(FETCH_DATEPICKER_CO);
+const fetchDatepickerCOSuccess     = createAction(FETCH_DATEPICKER_CO_SUCCESS);
+const fetchDatepickerCOFailure     = createAction(FETCH_DATEPICKER_CO_FAILURE, err => ({ err }));
+const nullDatepickerCO             = createAction(NULL_DATEPICKER_CO);
+const countCU                      = createAction(COUNT_CU, (namespace, params) => ({ namespace, params }));
+const countCUSuccess               = createAction(COUNT_CU_SUCCESS, (namespace, total) => ({ namespace, total }));
+const countCUFailure               = createAction(COUNT_CU_FAILURE, (namespace, err) => ({ namespace, err }));
 
 const receiveCollections  = createAction(RECEIVE_COLLECTIONS);
 const receiveContentUnits = createAction(RECEIVE_CONTENT_UNITS);
@@ -128,6 +132,7 @@ export const actions = {
   fetchCollection,
   fetchCollectionSuccess,
   fetchCollectionFailure,
+  fetchCollectionsByIDsFailure,
   fetchLatestLesson,
   fetchLatestLessonSuccess,
   fetchLatestLessonFailure,
@@ -200,6 +205,7 @@ const setStatus = (state, action) => {
   const errors  = { ...state.errors };
   const fetched = { ...state.fetched };
   let units     = { errors: {}, wip: {} };
+  let collections;
 
   switch (action.type) {
     case FETCH_UNIT:
@@ -239,6 +245,14 @@ const setStatus = (state, action) => {
       wip.collections    = { ...wip.collections, [action.payload.id]: false };
       errors.collections = { ...errors.collections, [action.payload.id]: null };
       break;
+    case FETCH_COLLECTIONS_SUCCESS:
+      collections        = action.payload?.reduce((acc, { id }) => ({
+        wip: { ...acc.wip, [id]: false },
+        errors: { ...acc.errors, [id]: null }
+      }), { wip: {}, errors: {} });
+      wip.collections    = { ...wip.collections, ...collections.wip };
+      errors.collections = { ...errors.collections, ...collections.errors };
+      break;
     case FETCH_LATEST_LESSON_SUCCESS:
       wip.lastLesson    = false;
       errors.lastLesson = null;
@@ -271,6 +285,14 @@ const setStatus = (state, action) => {
       }), { wip: {}, errors: {} });
       wip.units    = { ...wip.units, ...units.wip };
       errors.units = { ...errors.units, ...units.errors };
+      break;
+    case FETCH_COLLECTIONS_BY_IDS_FAILURE:
+      collections        = action.payload.id?.reduce((acc, id) => ({
+        wip: { ...acc.wip, [id]: false },
+        errors: { ...acc.errors, [id]: action.payload.err }
+      }), { wip: {}, errors: {} });
+      wip.collections    = { ...wip.collections, ...collections.wip };
+      errors.collections = { ...errors.collections, ...collections.errors };
       break;
     case FETCH_COLLECTION_FAILURE:
       wip.collections    = { ...wip.collections, [action.payload.id]: false };
@@ -584,6 +606,7 @@ export const reducer = handleActions({
     setStatus(onReceiveCollections(state, { payload: [action.payload.data] }), action)
   ),
   [FETCH_COLLECTION_FAILURE]: setStatus,
+  [FETCH_COLLECTIONS_BY_IDS_FAILURE]: setStatus,
   [FETCH_LATEST_LESSON]: setStatus,
   [FETCH_LATEST_LESSON_SUCCESS]: (state, action) => ({
     ...setStatus(onReceiveCollections(state, { payload: [action.payload] }), action),

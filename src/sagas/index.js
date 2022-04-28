@@ -6,6 +6,7 @@ import { sagas as publications } from './publications';
 import { sagas as events } from './events';
 import { sagas as lessons } from './lessons';
 import { sagas as filters } from './filters';
+import { sagas as filtersAside } from './filtersAside';
 import { sagas as lists } from './lists';
 import { sagas as tags } from './tags';
 import { sagas as settings } from './settings';
@@ -28,6 +29,7 @@ const allSagas = [
   ...events,
   ...lessons,
   ...filters,
+  ...filtersAside,
   ...lists,
   ...tags,
   ...settings,

@@ -97,6 +97,38 @@
       "events": "Setkání a Události",
       "publications": "Publikace",
       "sources": "Zdroje"
+    },
+    "aside-filter": {
+      "filters-title": "Filter by interests:",
+      "sources-filter-multi": "Kabbalists",
+      "topics-filter-multi": "Topics",
+      "content-type-filter": "Section",
+      "language-filter": "Language",
+      "date-filter": "Date"
+    },
+    "content-types": {
+      "CONGRESS": "Congresy",
+      "HOLIDAY": "Svátky",
+      "UNITY_DAY": "Dny Jednoty",
+      "FRIENDS_GATHERING": "Setkání přátel",
+      "MEAL": "Jídla",
+      "EVENT_PART": "Misc",
+      "LESSON_PART": "Denní lekce",
+      "VIRTUAL_LESSON": "Virtuální lekce",
+      "LECTURE": "Přednášky",
+      "WOMEN_LESSON": "Ženské lekce",
+      "CHILDREN_LESSON": "Dětské lekce",
+      "LESSONS_SERIES": "Vybrané studijní série",
+      "LECTURE_SERIES": "Série přednášek",
+      "CLIP": "Clips",
+      "VIDEO_PROGRAM_CHAPTER": "Programs",
+      "ARTICLE": "Články",
+      "PUBLICATION": "Publikace",
+      "BLOG_POST": "Blog",
+      "TRAINING": "Výcvik",
+      "KITEI_MAKOR": "Zdrojové materiály",
+      "LIKUTIM": "Assorted Excerpts",
+      "SOURCE": "Knihovna"
     }
   },
   "buttons": {
@@ -529,7 +561,8 @@
       "subtext": "A collection of all items for a selected topic."
     },
     "show-more": "Show more",
-    "show-less": "Show less"
+    "show-less": "Show less",
+    "texts-title": "Kabbalah Sources, Transcriptions, Publications"
   },
   "media-downloads": {
     "title": "Stahování médií",
@@ -647,7 +680,8 @@
       "BLOG_POST": "Blog Post",
       "LESSONS_SERIES": "Selected Study Series",
       "KTAIM_NIVCHARIM": "Selected Highlights",
-      "sources": "Zdroje"
+      "sources": "Zdroje",
+      "SOURCE": "Zdroje"
     },
     "media-types": {
       "video": "Video",

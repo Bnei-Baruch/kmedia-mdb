@@ -102,6 +102,42 @@
       "publications": "Publicazioni",
       "sources": "Kabbalah Sources",
       "posts": "Blog"
+    },
+    "aside-filter": {
+      "filters-title": "Filter by interests:",
+      "sources-filter-multi": "Kabbalists",
+      "topics-filter-multi": "Topics",
+      "content-type-filter": "Section",
+      "language-filter": "Language",
+      "date-filter": "Date"
+    },
+    "content-types": {
+      "CONGRESS": "Convegni",
+      "HOLIDAY": "Festività",
+      "UNITY_DAY": "Giorni di Unità",
+      "FRIENDS_GATHERING": "Assemblea degli Amici",
+      "MEAL": "Pasti",
+      "EVENT_PART": "Misc",
+
+      "LESSON_PART": "Daily Lessons",
+      "VIRTUAL_LESSON": "Virtual Lessons",
+      "LECTURE": "Lectures",
+      "WOMEN_LESSON": "Women Lessons",
+      "CHILDREN_LESSON": "Children Lessons",
+      "LESSONS_SERIES": "Selected Study Series",
+      "LECTURE_SERIES": "Lecture Series",
+
+      "CLIP": "Clips",
+      "VIDEO_PROGRAM_CHAPTER": "Programmi",
+
+      "ARTICLE": "Articles",
+      "PUBLICATION": "Publication",
+      "BLOG_POST": "Blog",
+
+      "TRAINING": "Formazione",
+      "KITEI_MAKOR": "Estratti dalle fonti",
+      "LIKUTIM": "Assorted Excerpts",
+      "SOURCE": "Biblioteca"
     }
   },
   "buttons": {
@@ -528,7 +564,8 @@
       "subtext": "A collection of all items for a selected topic."
     },
     "show-more": "Show more",
-    "show-less": "Show less"
+    "show-less": "Show less",
+    "texts-title": "Kabbalah Sources, Transcriptions, Publications"
   },
   "media-downloads": {
     "title": "Downloads",
@@ -648,7 +685,8 @@
       "BLOG_POST": "Post dal Blog",
       "LESSONS_SERIES": "Selected Study Series",
       "KTAIM_NIVCHARIM": "Punti Salienti Selezionati",
-      "sources": "Kabbalah Sources"
+      "sources": "Kabbalah Sources",
+      "SOURCE": "Kabbalah Sources"
     },
     "media-types": {
       "video": "Video",

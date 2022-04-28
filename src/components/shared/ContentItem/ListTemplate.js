@@ -1,6 +1,6 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Container, Progress } from 'semantic-ui-react';
+import { Container, Header, Popup, Progress, Ref } from 'semantic-ui-react';
 import clsx from 'clsx';
 
 import * as shapes from '../../shapes';
@@ -11,11 +11,7 @@ import { isLanguageRtl } from '../../../helpers/i18n-utils';
 import UnitLogo from '../Logo/UnitLogo';
 import Link from '../../Language/MultiLanguageLink';
 import { PLAYER_POSITION_STORAGE_KEY } from '../../AVPlayer/constants';
-
-const imageWidthBySize = {
-  'small': 144,
-  'big': 287,
-};
+import { imageWidthBySize } from './helper';
 
 const ListTemplate = ({
   unit,
@@ -31,18 +27,28 @@ const ListTemplate = ({
   playTime,
   size = 'big',
   selected,
-  label,
+  label
 }) => {
+
   const dir                = isLanguageRtl(language) ? 'rtl' : 'ltr';
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
+  const [isNeedTooltip, setIsNeedTooltip] = useState(null);
+  const cuInfoRef                         = useRef();
+
+  useEffect(() => {
+    if (cuInfoRef.current.scrollHeight > cuInfoRef.current.clientHeight) {
+      setIsNeedTooltip(true);
+    }
+  }, [cuInfoRef.current]);
+
   const info = ((ccu || source || tag) && withCCUInfo) ? (
     <div className="cu_item_info_co ">
-      {
-        size === 'big' ? <h3 className="no-padding no-margin text_ellipsis">{ccu.name || NO_NAME}</h3>
-          : <h5 className="no-padding no-margin text_ellipsis">{(ccu && ccu.name) || (source && source.name) || (tag && tag.label) || NO_NAME}</h5>
-      }
-    </div>) : null;
+      <span className="no-padding no-margin text_ellipsis">
+        {(ccu && ccu.name) || (source && source.name) || (tag && tag.label) || NO_NAME}
+      </span>
+    </div>
+  ) : null;
 
   let percent = null;
   if (unit && playTime) {
@@ -55,6 +61,24 @@ const ListTemplate = ({
       />
     );
   }
+
+  const renderCUInfo = () => {
+    const name    = unit?.name || source?.name || tag?.label;
+    const content = <Header
+      as={size === 'big' || isMobileDevice ? 'h5' : 'h3'}
+      className="cu_item_name"
+      content={name} />;
+
+    if (!isNeedTooltip)
+      return content;
+
+    return <Popup
+      content={name}
+      dir={dir}
+      trigger={content}
+      position="top center"
+    />;
+  };
 
   const width = isMobileDevice ? 165 : imageWidthBySize[size];
   return (
@@ -69,14 +93,14 @@ const ListTemplate = ({
         {label ? <div className="cu_item_label">{label}</div> : null}
         {percent}
         <div className="cu_item_img" style={{ width }}>
-          <UnitLogo unitId={unit && unit.id} sourceId={source && source.id} width={width} />
+          <UnitLogo unitId={unit?.id} sourceId={source?.id} width={width} />
         </div>
       </div>
       <div className={clsx('cu_item_info', { [dir]: true, 'with_actions': !!children })}>
+        <Ref innerRef={cuInfoRef}>
+          {withCUInfo && renderCUInfo()}
+        </Ref>
         {info}
-        {withCUInfo && <div className={clsx('cu_item_name', { 'font_black': !info })}>
-          {(unit && unit.name) || (source && source.name) || (tag && tag.label)}
-        </div>}
         <div className={`cu_info_description ${dir} text_ellipsis`}>
           {description.map((d, i) => (<span key={i}>{d}</span>))}
         </div>

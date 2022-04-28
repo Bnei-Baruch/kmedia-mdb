@@ -114,6 +114,14 @@ class Api {
     Requests.get(`stats/cu_class?${Requests.makeParams({ content_type, ...rest })}`)
   );
 
+  static collectionsStats = ({ contentTypes: content_type, ...rest }) => (
+    Requests.get(`stats/c_class?${Requests.makeParams({ content_type, ...rest })}`)
+  );
+
+  static labelsStats = rest => (
+    Requests.get(`stats/label_class?${Requests.makeParams(rest)}`)
+  );
+
   static countCU = params => Requests.get(`count_cu?${Requests.makeParams(params)}`);
 
   static tweets = ({ pageNo: page_no, pageSize: page_size, ...rest }) => (
@@ -128,7 +136,7 @@ class Api {
 
   static labels = params => Requests.get(`labels?${Requests.makeParams(params)}`);
 
-  static tagDashboard = ({ id, ...params }) => Requests.get(`tags/${id}/dashboard?${Requests.makeParams(params)}`);
+  static tagDashboard = params => Requests.get(`tags/dashboard?${Requests.makeParams(params)}`);
 
   static autocomplete = ({ q, language }) => Requests.get(`autocomplete?${Requests.makeParams({ q, language })}`);
 

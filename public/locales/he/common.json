@@ -101,6 +101,38 @@
       "publications": "פרסומים",
       "sources": "מקורות",
       "posts": "בלוג"
+    },
+    "aside-filter": {
+      "filters-title": "סנן את מה שמעניין אותך:",
+      "sources-filter-multi": "מקובלים",
+      "topics-filter-multi": "נושאים",
+      "content-type-filter": "מדור",
+      "language-filter": "שפה",
+      "date-filter": "תאריך"
+    },
+    "content-types": {
+      "CONGRESS": "כנסים",
+      "HOLIDAY": "חגים ומועדים",
+      "UNITY_DAY": "ערבי איחוד",
+      "FRIENDS_GATHERING": "ישיבות חברים",
+      "MEAL": "סעודות",
+      "EVENT_PART": "שונות",
+      "LESSON_PART": "שיעורים יומיים",
+      "VIRTUAL_LESSON": "שיעורים וירטואלים",
+      "LECTURE": "הרצאות",
+      "WOMEN_LESSON": "שיעורי נשים",
+      "CHILDREN_LESSON": "שיעורי ילדים",
+      "LESSONS_SERIES": "סדרות לימוד נבחרות",
+      "LECTURE_SERIES": "סדרת הרצאות",
+      "CLIP": "קליפים",
+      "VIDEO_PROGRAM_CHAPTER": "תכניות",
+      "ARTICLE": "מאמרים",
+      "PUBLICATION": "פרסום",
+      "BLOG_POST": "בלוג",
+      "TRAINING": "הכשרה",
+      "KITEI_MAKOR": "קטעי מקור",
+      "LIKUTIM": "ליקוטי מקובלים",
+      "SOURCE": "ספריית כתבי מקובלים"
     }
   },
   "buttons": {
@@ -526,7 +558,8 @@
       "subtext": "אוסף תכנים בנושא נבחר"
     },
     "show-more": "הצג עוד",
-    "show-less": "הצג פחות"
+    "show-less": "הצג פחות",
+    "texts-title": "כתבי מקובלים, תמלילים, פרסומי הרב לייטמן ברשת"
   },
   "media-downloads": {
     "title": "קבצים להורדה",
@@ -646,7 +679,8 @@
       "BLOG_POST": "בלוג פוסט",
       "LESSONS_SERIES": "סדרות לימוד נבחרות",
       "KTAIM_NIVCHARIM": "קטעים נבחרים",
-      "sources": "מקורות"
+      "sources": "מקורות",
+      "SOURCE": "מקורות"
     },
     "media-types": {
       "video": "וידאו",

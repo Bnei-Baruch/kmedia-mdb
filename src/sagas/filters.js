@@ -33,6 +33,7 @@ export function* hydrateFilters(action) {
 
 const valueChangingActions = [
   filterTypes.SET_FILTER_VALUE,
+  filterTypes.SET_FILTER_VALUE_MULTI,
   filterTypes.RESET_FILTER,
   filterTypes.RESET_NAMESPACE,
 ];

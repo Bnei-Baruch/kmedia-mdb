@@ -99,6 +99,15 @@ const MDBDenormalizedCollection = {
   content_units: PropTypes.arrayOf(PropTypes.shape(MDBBaseContentUnit)),
 };
 
+const MDBBaseLabel = {
+  id: PropTypes.string.isRequired,
+  name: PropTypes.string,
+  author: PropTypes.string,
+  content_unit: PropTypes.string,
+  properties: PropTypes.object,
+  tags: PropTypes.arrayOf(PropTypes.string),
+};
+
 export const GenericCollection = PropTypes.shape(MDBDenormalizedCollection);
 
 export const ContentUnit = PropTypes.shape(MDBBaseContentUnit);
@@ -310,3 +319,5 @@ export const Children = PropTypes.oneOfType([
 ]);
 
 export const playerModeProp = PropTypes.oneOf(Object.values(PLAYER_MODE));
+
+export const Label = PropTypes.shape(MDBBaseLabel);

@@ -102,7 +102,7 @@ export const iconByContentTypeMap = new Map([
   [CT_VIRTUAL_LESSONS, 'lessons'],
   [CT_LESSONS_SERIES, 'lessons'],
   [CT_LECTURE, 'lessons'],
-  [CT_LIKUTIM, 'lessons'],
+  [CT_LIKUTIM, 'likutim'],
   [CT_FRIENDS_GATHERING, 'events'],
   [CT_MEAL, 'events'],
   [CT_EVENT_PART, 'events'],
@@ -121,6 +121,7 @@ export const iconByContentTypeMap = new Map([
   [CT_VIDEO_PROGRAM, 'programs'],
   [CT_CLIPS, 'programs'],
   [CT_SOURCE, 'sources'],
+  [CT_PUBLICATION, 'publications'],
   ['sources', 'sources'],
 ]);
 
@@ -584,3 +585,12 @@ export const SECTIONS_LINK_BY_CU_CONTENT_TYPE = {
 
 export const UNIT_TEXT_TYPE   = [CT_ARTICLE, CT_BLOG_POST, CT_PUBLICATION, CT_RESEARCH_MATERIAL, CT_SOURCE, CT_LIKUTIM];
 export const UNIT_VIDEOS_TYPE = [...UNIT_LESSONS_TYPE, ...UNIT_PROGRAMS_TYPE, ...UNIT_EVENTS_TYPE];
+
+export const FN_SOURCES      = 'sources-filter';
+export const FN_TOPICS       = 'topics-filter';
+export const FN_LANGUAGES    = 'language-filter';
+export const FN_CONTENT_TYPE = 'content-type-filter';
+export const FN_DATE_FILTER  = 'date-filter';
+
+export const FN_SOURCES_MULTI  = 'sources-filter-multi';
+export const FN_TOPICS_MULTI   = 'topics-filter-multi';

@@ -102,6 +102,38 @@
       "sources": "Першоджерела",
       "all": "Все",
       "posts": "Блог"
+    },
+    "aside-filter": {
+      "filters-title": "Filter by interests:",
+      "sources-filter-multi": "Kabbalists",
+      "topics-filter-multi": "Теми",
+      "content-type-filter": "Section",
+      "language-filter": "Language",
+      "date-filter": "Date"
+    },
+    "content-types": {
+      "CONGRESS": "Конгреси",
+      "HOLIDAY": "Свята",
+      "UNITY_DAY": "Дні Єдності",
+      "FRIENDS_GATHERING": "Зібрання Товаришів",
+      "MEAL": "Трапези",
+      "EVENT_PART": "Misc",
+      "LESSON_PART": "Щоденні уроки",
+      "VIRTUAL_LESSON": "Віртуальні уроки",
+      "LECTURE": "Лекції",
+      "WOMEN_LESSON": "Уроки для жінок",
+      "CHILDREN_LESSON": "Уроки для дітей",
+      "LESSONS_SERIES": "Избранные серии обучения",
+      "LECTURE_SERIES": "Lecture Series",
+      "CLIP": "Кліпи",
+      "VIDEO_PROGRAM_CHAPTER": "Програми",
+      "ARTICLE": "Статті",
+      "PUBLICATION": "Публікація",
+      "BLOG_POST": "Блог",
+      "TRAINING": "Тренування",
+      "KITEI_MAKOR": "Уривки першоджерел",
+      "LIKUTIM": "Assorted Excerpts",
+      "SOURCE": "Бібліотека"
     }
   },
   "buttons": {
@@ -332,7 +364,7 @@
       "description": "Оновлений ярлик до останнього денного уроку"
     }
   },
-  "likutim":{
+  "likutim": {
     "header": {
       "text": "Excerpts from Kabbalistic Sources",
       "subtext": "Excerpts from the Sources on various subjects"
@@ -504,7 +536,7 @@
       "new": "New",
       "same-source": "Same source"
     },
-    "playlist":{
+    "playlist": {
       "header": "Up Next"
     }
   },
@@ -527,7 +559,8 @@
       "subtext": "A collection of all items for a selected topic."
     },
     "show-more": "Показати більше",
-    "show-less": "Показати менше"
+    "show-less": "Показати менше",
+    "texts-title": "Kabbalah Sources, Transcriptions, Publications"
   },
   "media-downloads": {
     "title": "Скачати",
@@ -647,7 +680,8 @@
       "BLOG_POST": "Пост у блозі",
       "LESSONS_SERIES": "Вибрані серії навчання",
       "KTAIM_NIVCHARIM": "Вибрані моменти",
-      "sources": "Першоджерела"
+      "sources": "Першоджерела",
+      "SOURCE": "Першоджерела"
     },
     "media-types": {
       "video": "Відео",
