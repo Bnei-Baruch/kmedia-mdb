@@ -1,8 +1,8 @@
 import { createFilterDefinition } from './util';
-import { FN_LANGUAGES_MULI } from '../../helpers/consts';
+import { FN_LANGUAGES } from '../../helpers/consts';
 
 const languageFilterMulti = {
-  name: FN_LANGUAGES_MULI,
+  name: FN_LANGUAGES,
   queryKey: 'media-language',
   valueToApiParam: value => ({
     media_language: [value]
