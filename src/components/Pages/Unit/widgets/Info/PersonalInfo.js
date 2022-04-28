@@ -36,13 +36,11 @@ const PersonalInfo = ({ unit = {}, t, collection }) => {
     }
 
     dispatch(actions.reactionsCount({ 'uids': [id], type: content_type }));
-  }, [dispatch, user, key]);
+  }, [dispatch, key]);
 
   useEffect(() => {
     deleted && dispatch(actions.setDeleted(MY_NAMESPACE_REACTIONS, false));
   }, [deleted]);
-
-  if (!unit) return null;
 
   const toggleReaction = l => {
     if (!user)
