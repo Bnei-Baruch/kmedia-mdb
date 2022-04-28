@@ -156,6 +156,7 @@ const TopicContainer = ({ t }) => {
       {s ? ` (${s})` : ''}
     </Link>;
   };
+
   const renderNode = (node, grandchildrenClass = '') => {
     if (!node) {
       return null;

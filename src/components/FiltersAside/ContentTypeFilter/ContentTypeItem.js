@@ -18,6 +18,7 @@ const ContentTypeItem = ({ namespace, id, t }) => {
     if (checked) {
       val.push(id);
     }
+
     dispatch(actions.setFilterValueMulti(namespace, FN_CONTENT_TYPE, val));
   };
 
