@@ -32,7 +32,7 @@ const FilterLabels = ({ namespace, t }) => {
       case FN_TOPICS_MULTI:
         return getTagById(val)?.label;
       case FN_CONTENT_TYPE:
-        return t(`constants.content-types.${val}`);
+        return t(`filters.content-types.${val}`);
       case FN_DATE_FILTER:
         return dateFilter.valueToTagLabel(val);
       case FN_LANGUAGES:
