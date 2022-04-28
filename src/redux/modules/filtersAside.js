@@ -96,7 +96,7 @@ export const reducer = handleActions({
 }, initialState);
 
 /* Selectors */
-const getStats  = (state, ns, fn, id) => state[ns]?.[fn]?.byId[id] || 0;
+const getStats  = (state, ns, fn) => id => state[ns]?.[fn]?.byId[id] || 0;
 const getTree   = (state, ns, fn) => state[ns]?.[fn]?.tree || [];
 const isReady   = (state, ns) => !!state[ns]?.isReady;
 const getWipErr = (state, ns) => ({ wip: state[ns]?.wip || false, err: state[ns]?.err || null });

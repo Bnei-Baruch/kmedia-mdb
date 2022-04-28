@@ -1,42 +1,20 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import produce from 'immer';
 import debounce from 'lodash/debounce';
-import { useSelector } from 'react-redux';
-import { Button, Container, Divider, Grid, Header, Input, List } from 'semantic-ui-react';
+import isEqual from 'react-fast-compare';
+import { useDispatch, useSelector } from 'react-redux';
 
+import { Button, Container, Divider, Grid, Header, Input, List } from 'semantic-ui-react';
 import { selectors as topicsSelectors } from '../../../redux/modules/tags';
 import { getEscapedRegExp, isNotEmptyArray } from '../../../helpers/utils';
 import SectionHeader from '../../shared/SectionHeader';
 import Link from '../../Language/MultiLanguageLink';
-import {
-  COLLECTION_EVENTS_TYPE,
-  COLLECTION_LESSONS_TYPE,
-  COLLECTION_PROGRAMS_TYPE,
-  COLLECTION_PUBLICATIONS_TYPE,
-  CT_ARTICLE,
-  CT_PUBLICATION,
-  TOPICS_FOR_DISPLAY,
-  UNIT_EVENTS_TYPE,
-  UNIT_LESSONS_TYPE,
-  UNIT_PROGRAMS_TYPE
-} from '../../../helpers/consts';
-import isEqual from 'react-fast-compare';
+import { FN_TOPICS_MULTI, TOPICS_FOR_DISPLAY } from '../../../helpers/consts';
+import { actions, selectors as filtersAside } from '../../../redux/modules/filtersAside';
 
-const namespace   = 'topics';
-const contentType = [
-  ...UNIT_EVENTS_TYPE,
-  ...UNIT_EVENTS_TYPE,
-  ...UNIT_PROGRAMS_TYPE,
-  ...UNIT_LESSONS_TYPE,
-  ...COLLECTION_PUBLICATIONS_TYPE,
-  ...COLLECTION_EVENTS_TYPE,
-  ...COLLECTION_PROGRAMS_TYPE,
-  ...COLLECTION_LESSONS_TYPE,
-  CT_ARTICLE,
-  CT_PUBLICATION,
-];
+const namespace = 'topics';
 
 const hasChildren = node => node && isNotEmptyArray(node.children);
 
@@ -119,12 +97,18 @@ const filterData = (byId, match, sortedRoots) => {
   subroot will be subtitle
   the rest will be a tree - List of Lists */
 const TopicContainer = ({ t }) => {
-
-  const roots = useSelector(state => topicsSelectors.getDisplayRoots(state.tags), isEqual) || [];
-  const byId  = useSelector(state => topicsSelectors.getTags(state.tags), isEqual);
+  const statsById = useSelector(state => filtersAside.getStats(state.filtersAside, namespace, FN_TOPICS_MULTI));
+  const roots     = useSelector(state => topicsSelectors.getDisplayRoots(state.tags), isEqual) || [];
+  const byId      = useSelector(state => topicsSelectors.getTags(state.tags), isEqual);
 
   const [match, setMatch]                 = useState('');
   const [expandedNodes, setExpandedNodes] = useState(new Set());
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(actions.fetchStats(namespace, {}, true));
+  }, [dispatch]);
 
   const handleFilterChange = debounce((e, data) => {
     setMatch(data.value);
@@ -165,11 +149,13 @@ const TopicContainer = ({ t }) => {
     });
   };
 
-  const renderLeaf = node =>
-    <Link to={`/topics/${node.id}`}>
+  const renderLeaf = node => {
+    const s = statsById(node.id);
+    return <Link to={`/topics/${node.id}`}>
       {node.label}
+      {s ? ` (${s})` : ''}
     </Link>;
-
+  };
   const renderNode = (node, grandchildrenClass = '') => {
     if (!node) {
       return null;

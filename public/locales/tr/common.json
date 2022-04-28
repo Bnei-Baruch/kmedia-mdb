@@ -109,8 +109,31 @@
       "topics-filter-multi": "Konu",
       "content-type-filter": "Section",
       "language-filter": "Language",
-      "date-filter": "Date",
-      "EVENT_PART": "Misc"
+      "date-filter": "Date"
+    },
+    "content-types": {
+      "CONGRESS": "Kongreler",
+      "HOLIDAY": "Bayramlar",
+      "UNITY_DAY": "Birlik Günleri",
+      "FRIENDS_GATHERING": "Dostlar Toplantıları",
+      "MEAL": "Yemekler",
+      "EVENT_PART": "Misc",
+      "LESSON_PART": "Günlük Dersler",
+      "VIRTUAL_LESSON": "Sanal Dersler",
+      "LECTURE": "Konuşmalar",
+      "WOMEN_LESSON": "Kadın Dersleri",
+      "CHILDREN_LESSON": "Çocuk Dersleri",
+      "LESSONS_SERIES": "Seçilmiş Ders Serileri",
+      "LECTURE_SERIES": "Lecture Series",
+      "CLIP": "Klipler",
+      "VIDEO_PROGRAM_CHAPTER": "Programlar",
+      "ARTICLE": "Makaleler",
+      "PUBLICATION": "Publication",
+      "BLOG_POST": "Blok",
+      "TRAINING": "Eğitim",
+      "KITEI_MAKOR": "Kaynak Materyaller",
+      "LIKUTIM": "Assorted Excerpts",
+      "SOURCE": "Kütüphane"
     }
   },
   "buttons": {
@@ -127,7 +150,7 @@
     "previous-article": "Previous article",
     "next-article": "Next article",
     "copy": "Kopyala",
-    "view-all":  "Hepsini Görüntüle",
+    "view-all": "Hepsini Görüntüle",
     "save": "Save",
     "remove": "Remove"
   },
@@ -153,7 +176,7 @@
     },
     "download": {
       "iconHoverText": "Download the excerpt you marked",
-   "downloadButton": "Download",
+      "downloadButton": "Download",
       "copyButton": "Copy link"
     }
   },
@@ -172,7 +195,7 @@
   "messages": {
     "loading": "Yükleme",
     "loading-subtext": "Sıkı durun",
-    "server-error":  "Server Hatası",
+    "server-error": "Server Hatası",
     "not-found": "Pardon!",
     "not-found-subtext": "Aradığınız şeyi bulamıyoruz",
     "no-files": "Dosya Yok",
@@ -341,7 +364,7 @@
       "description": "En son Günlük dersin güncel kısa yolu"
     }
   },
-  "likutim":{
+  "likutim": {
     "header": {
       "text": "Excerpts from Kabbalistic Sources",
       "subtext": "Excerpts from the Sources on various subjects"
@@ -376,7 +399,7 @@
       "recommended": {
         "same-collection": {
           "title": "Aynı programın diğer bölümleri",
-          "item-title":  "{{name}} Bölümü"
+          "item-title": "{{name}} Bölümü"
         }
       }
     }
@@ -394,7 +417,7 @@
       "audio-blog": "Audio Blog"
     },
     "list": {
-      "item_from":  "Maddesi:"
+      "item_from": "Maddesi:"
     },
     "unit": {
       "recommended": {
@@ -512,7 +535,7 @@
       "new": "New",
       "same-source": "Same source"
     },
-    "playlist":{
+    "playlist": {
       "header": "Up Next"
     }
   },

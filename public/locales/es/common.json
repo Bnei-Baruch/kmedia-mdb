@@ -108,8 +108,35 @@
       "topics-filter-multi": "Temas",
       "content-type-filter": "Sección",
       "language-filter": "Idioma",
-      "date-filter": "Fecha",
-      "EVENT_PART": "Varios"
+      "date-filter": "Fecha"
+    },
+    "content-types": {
+      "CONGRESS": "Congresos",
+      "HOLIDAY": "Fiestas",
+      "UNITY_DAY": "Eventos de Unión",
+      "FRIENDS_GATHERING": "Asamblea de Amigos",
+      "MEAL": "Comidas",
+      "EVENT_PART": "Varios",
+
+      "LESSON_PART": "Lecciones Diarias",
+      "VIRTUAL_LESSON": "Lecciones Virtuales",
+      "LECTURE": "Charlas",
+      "WOMEN_LESSON": "Lección de Mujeres",
+      "CHILDREN_LESSON": "Lección de Niños",
+      "LESSONS_SERIES": "Serie de Estudios",
+      "LECTURE_SERIES": "Serie de Charlas",
+
+      "CLIP": "Clips",
+      "VIDEO_PROGRAM_CHAPTER": "Programas",
+
+      "ARTICLE": "Artículos",
+      "PUBLICATION": "Publicidad",
+      "BLOG_POST": "Blog",
+
+      "TRAINING": "Entrenamiento",
+      "KITEI_MAKOR": "Extractos de Fuentes",
+      "LIKUTIM": "Compilaciones",
+      "SOURCE": "Biblioteca"
     }
   },
   "buttons": {

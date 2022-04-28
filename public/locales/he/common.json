@@ -108,8 +108,31 @@
       "topics-filter-multi": "נושאים",
       "content-type-filter": "מדור",
       "language-filter": "שפה",
-      "date-filter": "תאריך",
-      "EVENT_PART": "שונות"
+      "date-filter": "תאריך"
+    },
+    "content-types": {
+      "CONGRESS": "כנסים",
+      "HOLIDAY": "חגים ומועדים",
+      "UNITY_DAY": "ערבי איחוד",
+      "FRIENDS_GATHERING": "ישיבות חברים",
+      "MEAL": "סעודות",
+      "EVENT_PART": "שונות",
+      "LESSON_PART": "שיעורים יומיים",
+      "VIRTUAL_LESSON": "שיעורים וירטואלים",
+      "LECTURE": "הרצאות",
+      "WOMEN_LESSON": "שיעורי נשים",
+      "CHILDREN_LESSON": "שיעורי ילדים",
+      "LESSONS_SERIES": "סדרות לימוד נבחרות",
+      "LECTURE_SERIES": "סדרת הרצאות",
+      "CLIP": "קליפים",
+      "VIDEO_PROGRAM_CHAPTER": "תכניות",
+      "ARTICLE": "מאמרים",
+      "PUBLICATION": "פרסום",
+      "BLOG_POST": "בלוג",
+      "TRAINING": "הכשרה",
+      "KITEI_MAKOR": "קטעי מקור",
+      "LIKUTIM": "ליקוטי מקובלים",
+      "SOURCE": "ספריית כתבי מקובלים"
     }
   },
   "buttons": {

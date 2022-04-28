@@ -109,8 +109,31 @@
       "topics-filter-multi": "Теми",
       "content-type-filter": "Section",
       "language-filter": "Language",
-      "date-filter": "Date",
-      "EVENT_PART": "Misc"
+      "date-filter": "Date"
+    },
+    "content-types": {
+      "CONGRESS": "Конгреси",
+      "HOLIDAY": "Свята",
+      "UNITY_DAY": "Дні Єдності",
+      "FRIENDS_GATHERING": "Зібрання Товаришів",
+      "MEAL": "Трапези",
+      "EVENT_PART": "Misc",
+      "LESSON_PART": "Щоденні уроки",
+      "VIRTUAL_LESSON": "Віртуальні уроки",
+      "LECTURE": "Лекції",
+      "WOMEN_LESSON": "Уроки для жінок",
+      "CHILDREN_LESSON": "Уроки для дітей",
+      "LESSONS_SERIES": "Избранные серии обучения",
+      "LECTURE_SERIES": "Lecture Series",
+      "CLIP": "Кліпи",
+      "VIDEO_PROGRAM_CHAPTER": "Програми",
+      "ARTICLE": "Статті",
+      "PUBLICATION": "Публікація",
+      "BLOG_POST": "Блог",
+      "TRAINING": "Тренування",
+      "KITEI_MAKOR": "Уривки першоджерел",
+      "LIKUTIM": "Assorted Excerpts",
+      "SOURCE": "Бібліотека"
     }
   },
   "buttons": {
@@ -341,7 +364,7 @@
       "description": "Оновлений ярлик до останнього денного уроку"
     }
   },
-  "likutim":{
+  "likutim": {
     "header": {
       "text": "Excerpts from Kabbalistic Sources",
       "subtext": "Excerpts from the Sources on various subjects"
@@ -513,7 +536,7 @@
       "new": "New",
       "same-source": "Same source"
     },
-    "playlist":{
+    "playlist": {
       "header": "Up Next"
     }
   },

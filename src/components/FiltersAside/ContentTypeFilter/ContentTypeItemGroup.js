@@ -14,12 +14,10 @@ const ContentTypeItemGroup = ({ namespace, group, t }) => {
   let items = useSelector(state => selectors.getTree(state.filtersAside, namespace, FN_CONTENT_TYPE));
   items     = items.filter(ct => cts.includes(ct));
 
-  let selected = useSelector(state => filters.getFilterByName(state.filters, namespace, FN_CONTENT_TYPE))?.values || [];
-  selected     = selected.filter(ct => cts.includes(ct));
-
-  const stats = useSelector(state => cts.reduce(
-    (acc, x) => acc + filtersAside.getStats(state.filtersAside, namespace, FN_CONTENT_TYPE, x), 0)
-  );
+  let selected    = useSelector(state => filters.getFilterByName(state.filters, namespace, FN_CONTENT_TYPE))?.values || [];
+  selected        = selected.filter(ct => cts.includes(ct));
+  const statsById = useSelector(state => filtersAside.getStats(state.filtersAside, namespace, FN_CONTENT_TYPE));
+  const stats     = cts.reduce((acc, x) => acc + statsById(x), 0);
 
   const dispatch = useDispatch();
 

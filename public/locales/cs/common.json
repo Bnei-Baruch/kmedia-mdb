@@ -104,8 +104,31 @@
       "topics-filter-multi": "Topics",
       "content-type-filter": "Section",
       "language-filter": "Language",
-      "date-filter": "Date",
-      "EVENT_PART": "Misc"
+      "date-filter": "Date"
+    },
+    "content-types": {
+      "CONGRESS": "Congresy",
+      "HOLIDAY": "Svátky",
+      "UNITY_DAY": "Dny Jednoty",
+      "FRIENDS_GATHERING": "Setkání přátel",
+      "MEAL": "Jídla",
+      "EVENT_PART": "Misc",
+      "LESSON_PART": "Denní lekce",
+      "VIRTUAL_LESSON": "Virtuální lekce",
+      "LECTURE": "Přednášky",
+      "WOMEN_LESSON": "Ženské lekce",
+      "CHILDREN_LESSON": "Dětské lekce",
+      "LESSONS_SERIES": "Vybrané studijní série",
+      "LECTURE_SERIES": "Série přednášek",
+      "CLIP": "Clips",
+      "VIDEO_PROGRAM_CHAPTER": "Programs",
+      "ARTICLE": "Články",
+      "PUBLICATION": "Publikace",
+      "BLOG_POST": "Blog",
+      "TRAINING": "Výcvik",
+      "KITEI_MAKOR": "Zdrojové materiály",
+      "LIKUTIM": "Assorted Excerpts",
+      "SOURCE": "Knihovna"
     }
   },
   "buttons": {

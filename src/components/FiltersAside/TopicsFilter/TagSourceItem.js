@@ -20,7 +20,7 @@ const TagSourceItem = props => {
   const [isSelected, setIsSelected]   = useState(defaultSel);
 
   const selected       = useSelector(state => filters.getFilterByName(state.filters, namespace, filterName))?.values || [];
-  const stat           = useSelector(state => filtersAside.getStats(state.filtersAside, namespace, filterName, id));
+  const stat           = useSelector(state => filtersAside.getStats(state.filtersAside, namespace, filterName)(id));
   const getSourceById  = useSelector(state => sources.getSourceById(state.sources));
   const getPathSources = useSelector(state => sources.getPathByID(state.sources));
   const getTagById     = useSelector(state => tags.getTagById(state.tags));
@@ -70,14 +70,14 @@ const TagSourceItem = props => {
       {
         childrenIDs.filter(r => baseItems.includes(r))
           .map(x => (
-            <TagSourceItem
-              {...props}
-              id={x}
-              deep={deep - 1}
-              defaultSel={isSelected}
-              key={x}
-            />
-          )
+              <TagSourceItem
+                {...props}
+                id={x}
+                deep={deep - 1}
+                defaultSel={isSelected}
+                key={x}
+              />
+            )
           )
       }
 

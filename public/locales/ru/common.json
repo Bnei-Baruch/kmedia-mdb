@@ -109,8 +109,35 @@
       "topics-filter-multi": "Темы",
       "content-type-filter": "Раздел",
       "language-filter": "Язык",
-      "date-filter": "Дата",
-      "EVENT_PART": "Разное"
+      "date-filter": "Дата"
+    },
+    "content-types": {
+      "CONGRESS": "Конгрессы",
+      "HOLIDAY": "Праздники",
+      "UNITY_DAY": "Дни Единстваs",
+      "FRIENDS_GATHERING": "Собрания товарищей",
+      "MEAL": "Трапезы",
+      "EVENT_PART": "Разное",
+
+      "LESSON_PART": "Ежедневные уроки",
+      "VIRTUAL_LESSON": "Виртуальные уроки",
+      "LECTURE": "Лекции",
+      "WOMEN_LESSON": "Уроки для женщин",
+      "CHILDREN_LESSON": "Уроки для детей",
+      "LESSONS_SERIES": "Избранные серии обучения",
+      "LECTURE_SERIES": "Серия лекций",
+
+      "CLIP": "Клипы",
+      "VIDEO_PROGRAM_CHAPTER": "Программы",
+
+      "ARTICLE": "Статьи",
+      "PUBLICATION": "Публикация",
+      "BLOG_POST": "Блог",
+
+      "TRAINING": "Тренинг",
+      "KITEI_MAKOR": "Отрывки первоисточников",
+      "LIKUTIM": "Сборники",
+      "SOURCE": "Библиотека"
     }
   },
   "buttons": {

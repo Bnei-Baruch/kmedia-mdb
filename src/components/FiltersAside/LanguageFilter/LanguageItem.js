@@ -7,7 +7,7 @@ import { FN_LANGUAGES, LANGUAGES } from '../../../helpers/consts';
 
 const LanguageItem = ({ namespace, id }) => {
   const selected = useSelector(state => filters.getFilterByName(state.filters, namespace, FN_LANGUAGES))?.values || [];
-  const stat     = useSelector(state => filtersAside.getStats(state.filtersAside, namespace, FN_LANGUAGES, id));
+  const stat     = useSelector(state => filtersAside.getStats(state.filtersAside, namespace, FN_LANGUAGES)(id));
 
   const dispatch = useDispatch();
 

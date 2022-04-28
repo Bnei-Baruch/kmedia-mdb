@@ -108,8 +108,31 @@
       "topics-filter-multi": "Topics",
       "content-type-filter": "Section",
       "language-filter": "Language",
-      "date-filter": "Date",
-      "EVENT_PART": "Misc"
+      "date-filter": "Date"
+    },
+    "content-types": {
+      "CONGRESS": "Kongresse",
+      "HOLIDAY": "Feiertage",
+      "UNITY_DAY": "Unity Days",
+      "FRIENDS_GATHERING": "Versammlungen der Freunde",
+      "MEAL": "Mahlzeiten",
+      "EVENT_PART": "Misc",
+      "LESSON_PART": "Täglicher Unterricht",
+      "VIRTUAL_LESSON": "Virtuelle Lektionen",
+      "LECTURE": "Vorträge",
+      "WOMEN_LESSON": "Lektionen für Frauen",
+      "CHILDREN_LESSON": "Unterricht für Kinder",
+      "LESSONS_SERIES": "Ausgewählte Trainingsserien",
+      "LECTURE_SERIES": "Vortragsreihe",
+      "CLIP": "Clips",
+      "VIDEO_PROGRAM_CHAPTER": "Programmes",
+      "ARTICLE": "Artikel",
+      "PUBLICATION": "Veröffentlichung",
+      "BLOG_POST": "Blog",
+      "TRAINING": "Training",
+      "KITEI_MAKOR": "Fragmente von Primärquellen",
+      "LIKUTIM": "Assorted Excerpts",
+      "SOURCE": "Bibliothek"
     }
   },
   "buttons": {
