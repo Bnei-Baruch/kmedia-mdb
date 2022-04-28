@@ -354,7 +354,7 @@ export const BS_TAAS_PARTS = {
   'AUArdCkH': 1297,
   'tit6XNAo': 1493,
   'FaKUG7ru': 1687,
-  'mW6eON0z': 1887,
+  'SU8TzXty': 1887,
   'li1hvo4P': 2034,
   'tcBbUnBZ': 2040,
   'TaGXjokb': 2075,
