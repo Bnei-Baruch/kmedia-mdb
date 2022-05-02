@@ -117,7 +117,7 @@ const Recommended = ({ unit, t, filterOutUnits = [], displayTitle = true }) => {
         sources: unitSources,
         collections: unitCollections,
         size: N,
-        skip: filterOutUnits.map(unit => unit.id),
+        skip: filterOutUnits?.map(unit => unit.id),
         variant: activeVariant,
       }));
     }
@@ -235,6 +235,19 @@ const Recommended = ({ unit, t, filterOutUnits = [], displayTitle = true }) => {
     }
   }
 
+  if (activeVariant !== AB_RECOMMEND_RANDOM && !isEmpty(recommendedUnits[DEFAULT])) {
+    renderRecommended.push(
+      <DisplayRecommended
+        key={DEFAULT}
+        unit={unit}
+        t={t}
+        recommendedUnits={recommendedUnits[DEFAULT]}
+        title={t(`materials.recommended.${DEFAULT}`)}
+        displayTitle={displayTitle}
+        viewLimit={activeVariant === AB_RECOMMEND_NEW ? 4 : 0}
+        feedName={DEFAULT}
+        showLabels={false} />);
+  }
 
   const wipErr = WipErr({ wip, err, t });
   if (wipErr) {
