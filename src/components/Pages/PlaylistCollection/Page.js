@@ -151,7 +151,8 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
           {
             unit &&
             <Container id="unit_container">
-              <Materials unit={unit} playlistComponent={PlaylistData} />
+              <Helmets.AVUnit unit={unit} language={uiLanguage} />
+              <Info unit={unit} currentCollection={collection} />
             </Container>
           }
         </Grid.Column>
