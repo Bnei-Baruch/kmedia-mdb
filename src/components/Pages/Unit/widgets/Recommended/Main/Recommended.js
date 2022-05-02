@@ -132,7 +132,7 @@ const Recommended = ({ unit, t, filterOutUnits = [], displayTitle = true }) => {
   const recommendedUnits = useRecommendedUnits(recommendedUnitsTypes);
 
   const renderRecommended = [];
-  if (activeVariant === AB_RECOMMEND_NEW) {
+  if (activeVariant === AB_RECOMMEND_NEW && !isEmpty(recommendedUnits[SERIES])) {
     renderRecommended.push(
       <DisplayRecommended
         key={SERIES}
