@@ -126,7 +126,6 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
         selected={selected}
       />
       <br />
-      <Recommended unit={recommendUnit} filterOutUnits={filterOutUnits} />
     </>;
 
   const computerWidth = isMobileDevice ? 16 : 10;

@@ -83,7 +83,11 @@ const Materials = ({ unit = undefined, t, playlistComponent = null }) => {
         label: t('materials.recommended.default'),
         component: <Recommended unit={unit} displayTitle={false} />
       }
-      : null;
+      : {
+        name: 'playlist',
+        label: t('materials.playlist.header'),
+        component: playlistComponent()
+      };
 
     items.unshift(item);
   }
