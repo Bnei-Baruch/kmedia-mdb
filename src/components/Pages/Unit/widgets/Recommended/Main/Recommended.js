@@ -124,6 +124,16 @@ const Recommended = ({ unit, t, filterOutUnits = [], displayTitle = true }) => {
   }, [dispatch, err, unitId, unitTags, unitCollections, filterOutUnits, prevUnitId, activeVariant, unitContentType, unitSources]);
 
   const recommendedUnitsTypes = [];
+  if (activeVariant === AB_RECOMMEND_NEW) {
+    recommendedUnitsTypes.push(RANDOM_PROGRAMS);
+    unitTags.forEach(tag => recommendedUnitsTypes.push(sameTopic(tag)));
+    unitSources.forEach(source => recommendedUnitsTypes.push(sameSource(source)));
+    unitSourceCollections.forEach(source => recommendedUnitsTypes.push(sameSourceCollection(source.id)));
+    unitCollections.forEach(collection => recommendedUnitsTypes.push(sameCollection(collection.id)));
+    recommendedUnitsTypes.push(SERIES);
+  } else if (activeVariant === AB_RECOMMEND_RANDOM) {
+    recommendedUnitsTypes.push(RANDOM_UNITS);
+  }
 
   if (activeVariant !== AB_RECOMMEND_RANDOM) {
     recommendedUnitsTypes.push(DEFAULT);

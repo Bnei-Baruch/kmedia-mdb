@@ -16,6 +16,7 @@ import { cuPartNameByCCUType, intersperse } from '../../../../../helpers/utils';
 import { selectors as tagsSelectors } from '../../../../../redux/modules/tags';
 import Link from '../../../../Language/MultiLanguageLink';
 import * as shapes from '../../../../shapes';
+import PersonalInfo from './PersonalInfo';
 import { selectors as recommended } from '../../../../../redux/modules/recommended';
 import UnitLogo from '../../../../shared/Logo/UnitLogo';
 import { selectors as mdb } from '../../../../../redux/modules/mdb';
@@ -100,6 +101,7 @@ const Info = ({ unit = {}, t, currentCollection = null }) => {
   const ccu                    = Object.values(collections)[0];
   return (
     <>
+      <PersonalInfo collection={currentCollection} unit={unit} />
       <div className="unit-info">
         {
           !isMultiLessons && noSSeries.length > 0 && (
