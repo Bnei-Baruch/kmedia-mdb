@@ -63,8 +63,8 @@ const RecommendedPlaylist = (recommendForUnit, units, selected, t, chronicles, v
             <div>
               <small className="text">
                 <Popup content={`${watchingNow(unit.id, index)} ${t('materials.recommended.watching-now')}`}
-                  trigger={
-                    <span>{`${watchingNowToString(watchingNow(unit.id, index))} ${t('materials.recommended.watching-now')}`}</span>}
+                       trigger={
+                         <span>{`${watchingNowToString(watchingNow(unit.id, index))} ${t('materials.recommended.watching-now')}`}</span>}
                 />
               </small>
             </div>
@@ -127,26 +127,26 @@ const RecommendedPlaylist = (recommendForUnit, units, selected, t, chronicles, v
                     label={unitLabels[index]}
                     size={'small'} />
                   : (unit.content_type && IsUnitContentType(unit.content_type) ?
-                    <ContentItemContainer
-                      id={unit.id}
-                      key={unit.id}
-                      asList
-                      label={unitLabels[index]}
-                      size={'small'} /> :
-                    (unit.type ?  /* TODO: Improve the distinction between source and topic. */
-                      <SourceItemContainer
+                      <ContentItemContainer
                         id={unit.id}
                         key={unit.id}
                         asList
                         label={unitLabels[index]}
                         size={'small'} /> :
-                      <TagItemContainer
-                        id={unit.id}
-                        key={unit.id}
-                        asList
-                        label={unitLabels[index]}
-                        size={'small'} />
-                    )
+                      (unit.type ?  /* TODO: Improve the distinction between source and topic. */
+                          <SourceItemContainer
+                            id={unit.id}
+                            key={unit.id}
+                            asList
+                            label={unitLabels[index]}
+                            size={'small'} /> :
+                          <TagItemContainer
+                            id={unit.id}
+                            key={unit.id}
+                            asList
+                            label={unitLabels[index]}
+                            size={'small'} />
+                      )
                   )
                 }
               </List.Item>
@@ -161,21 +161,23 @@ const RecommendedPlaylist = (recommendForUnit, units, selected, t, chronicles, v
   );
 };
 
-const DisplayRecommended = ({
-  unit,
-  t,
-  recommendedUnits,
-  displayTitle = true,
-  title = '',
-  viewLimit = 0,
-  feedName = 'default',
-  showLabels = true
-}) => {
+const DisplayRecommended = (
+  {
+    unit,
+    t,
+    recommendedUnits,
+    displayTitle = true,
+    title = '',
+    viewLimit = 0,
+    feedName = 'default',
+    showLabels = true
+  }
+) => {
   const chronicles       = useContext(ClientChroniclesContext);
   const unitCollection   = canonicalCollection(unit);
   const unitCollectionId = unitCollection ? unitCollection.id : null;
 
-  if (!isEmpty(recommendedUnits)) return  null
+  if (!isEmpty(recommendedUnits)) return null;
 
   return (
     <div className="avbox__playlist-wrapper">
@@ -194,6 +196,8 @@ DisplayRecommended.propTypes = {
 
 const areEqual = (prevProps, nextProps) =>
   prevProps.unit.id === nextProps.unit.id &&
+  prevProps.recommendedUnits &&
+  nextProps.recommendedUnits &&
   prevProps.recommendedUnits.length === nextProps.recommendedUnits.length &&
   prevProps.recommendedUnits.every((unit, index) => nextProps.recommendedUnits[index].id === unit.id);
 
