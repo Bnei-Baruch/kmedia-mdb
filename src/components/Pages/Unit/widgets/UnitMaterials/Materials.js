@@ -76,21 +76,7 @@ const Materials = ({ unit = undefined, t, playlistComponent = null }) => {
     });
   }
 
-  if (isMobileDevice) {
-    const item = playlistComponent === null
-      ? {
-        name: 'recommended',
-        label: t('materials.recommended.default'),
-        component: <Recommended unit={unit} displayTitle={false} />
-      }
-      : {
-        name: 'playlist',
-        label: t('materials.playlist.header'),
-        component: playlistComponent()
-      };
 
-    items.unshift(item);
-  }
 
   if (unit.content_type === CT_VIDEO_PROGRAM_CHAPTER && derivedTexts[CT_ARTICLE]) {
     items.push({
