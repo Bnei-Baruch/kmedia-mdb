@@ -1,6 +1,6 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
 import isEqual from 'react-fast-compare';
 
@@ -11,7 +11,7 @@ import * as shapes from '../../../../../shapes';
 import WipErr from '../../../../../shared/WipErr/WipErr';
 import DisplayRecommended from './DisplayRecommended';
 import useRecommendedUnits from './UseRecommendedUnits';
-import { usePrevious, getSourcesCollections } from '../../../../../../helpers/utils';
+import { getSourcesCollections, isEmpty, usePrevious } from '../../../../../../helpers/utils';
 import { AB_RECOMMEND_EXPERIMENT, AB_RECOMMEND_NEW, AB_RECOMMEND_RANDOM } from '../../../../../../helpers/ab-testing';
 import { AbTestingContext } from '../../../../../../helpers/app-contexts';
 import Link from '../../../../../Language/MultiLanguageLink';
@@ -27,14 +27,14 @@ import {
 // Number of items to try to recommend.
 const N = 12;
 
-const sameTopic = tag => `same-topic-${tag}`;
-const sameSource = source => `same-source-${source}`;
+const sameTopic            = tag => `same-topic-${tag}`;
+const sameSource           = source => `same-source-${source}`;
 const sameSourceCollection = source => `same-source-collection-${source}`;
-const sameCollection = collection => `same-collection-${collection}`;
-const DEFAULT = 'default';
-const SERIES = 'series';
-const RANDOM_PROGRAMS = 'random-programs';
-const RANDOM_UNITS = 'random-units';
+const sameCollection       = collection => `same-collection-${collection}`;
+const DEFAULT              = 'default';
+const SERIES               = 'series';
+const RANDOM_PROGRAMS      = 'random-programs';
+const RANDOM_UNITS         = 'random-units';
 
 const makeLandingPageLink = (t, landingPage) => (
   <Link key={landingPage} to={landingPageSectionLink(landingPage, [])}>
@@ -49,7 +49,7 @@ const makeSourceLink = (source, getSourceById) => {
   }
 
   return <Link key={id} to={`/sources/${id}`}>{name}</Link>;
-}
+};
 
 const makeTagLink = (tag, getTagById) => {
   const { id, label } = getTagById(tag);
@@ -58,44 +58,44 @@ const makeTagLink = (tag, getTagById) => {
   }
 
   return <Link key={id} to={`/topics/${id}`}>{label}</Link>;
-}
+};
 
 const makeCollectionLink = (collection, t) => {
   let display;
   switch (collection.content_type) {
-    case CT_DAILY_LESSON:
-    case CT_SPECIAL_LESSON: {
-      const ctLabel = t(`constants.content-types.${CT_DAILY_LESSON}`);
-      const fd      = t('values.date', { date: collection.film_date });
-      display       = `${ctLabel} ${fd}`;
-      break;
-    }
+  case CT_DAILY_LESSON:
+  case CT_SPECIAL_LESSON: {
+    const ctLabel = t(`constants.content-types.${CT_DAILY_LESSON}`);
+    const fd      = t('values.date', { date: collection.film_date });
+    display       = `${ctLabel} ${fd}`;
+    break;
+  }
 
-    default:
-      display = collection.name;
-      break;
+  default:
+    display = collection.name;
+    break;
   }
 
   return <Link key={collection.id} to={canonicalLink(collection)}>{display}</Link>;
-}
+};
 
 const Recommended = ({ unit, t, filterOutUnits = [], displayTitle = true }) => {
-  const abTesting = useContext(AbTestingContext);
-  const [unitId, setUnitId] = useState(null);
-  const [unitContentType, setUnitContentType] = useState(null);
-  const [unitTags, setUnitTags] = useState([]);
-  const [unitSources, setUnitSources] = useState([]);
+  const abTesting                                         = useContext(AbTestingContext);
+  const [unitId, setUnitId]                               = useState(null);
+  const [unitContentType, setUnitContentType]             = useState(null);
+  const [unitTags, setUnitTags]                           = useState([]);
+  const [unitSources, setUnitSources]                     = useState([]);
   const [unitSourceCollections, setUnitSourceCollections] = useState([]);
-  const [unitCollections, setUnitCollections] = useState([]);
-  const prevUnitId = usePrevious(unitId);
+  const [unitCollections, setUnitCollections]             = useState([]);
+  const prevUnitId                                        = usePrevious(unitId);
 
   const activeVariant = (abTesting && abTesting.getVariant(AB_RECOMMEND_EXPERIMENT)) || '';
 
-  const wip = useSelector(state => selectors.getWip(state.recommended));
-  const err = useSelector(state => selectors.getError(state.recommended));
-  const getTagById = useSelector(state => tagsSelectors.getTagById(state.tags));
+  const wip           = useSelector(state => selectors.getWip(state.recommended));
+  const err           = useSelector(state => selectors.getError(state.recommended));
+  const getTagById    = useSelector(state => tagsSelectors.getTagById(state.tags));
   const getSourceById = useSelector(state => sourcesSelectors.getSourceById(state.sources));
-  const getPathById = useSelector(state => sourcesSelectors.getPathByID(state.sources));
+  const getPathById   = useSelector(state => sourcesSelectors.getPathByID(state.sources));
 
   useEffect(() => {
     if (unit?.id && unit.id !== unitId) {
@@ -145,7 +145,7 @@ const Recommended = ({ unit, t, filterOutUnits = [], displayTitle = true }) => {
         showLabels={false} />
     );
     unitCollections.forEach(collection => {
-      if (recommendedUnits[sameCollection(collection.id)].length !== 0) {
+      if (!isEmpty(recommendedUnits[sameCollection(collection.id)])) {
         renderRecommended.push(
           <DisplayRecommended
             key={sameCollection(collection.id)}
@@ -160,7 +160,7 @@ const Recommended = ({ unit, t, filterOutUnits = [], displayTitle = true }) => {
       }
     });
     unitTags.forEach(tag => {
-      if (recommendedUnits[sameTopic(tag)].length !== 0) {
+      if (!isEmpty(recommendedUnits[sameTopic(tag)])) {
         renderRecommended.push(
           <DisplayRecommended
             key={sameTopic(tag)}
@@ -175,7 +175,7 @@ const Recommended = ({ unit, t, filterOutUnits = [], displayTitle = true }) => {
       }
     });
     unitSources.forEach(source => {
-      if (recommendedUnits[sameSource(source)].length !== 0) {
+      if (!isEmpty(recommendedUnits[sameSource(source)])) {
         renderRecommended.push(
           <DisplayRecommended
             key={sameSource(source)}
@@ -190,7 +190,7 @@ const Recommended = ({ unit, t, filterOutUnits = [], displayTitle = true }) => {
       }
     });
     unitSourceCollections.forEach(source => {
-      if (recommendedUnits[sameSourceCollection(source.id)].length !== 0) {
+      if (!isEmpty(recommendedUnits[sameSourceCollection(source.id)])) {
         renderRecommended.push(
           <DisplayRecommended
             key={sameSourceCollection(source.id)}
@@ -204,7 +204,7 @@ const Recommended = ({ unit, t, filterOutUnits = [], displayTitle = true }) => {
             showLabels={false} />);
       }
     });
-    if (recommendedUnits[RANDOM_PROGRAMS].length !== 0) {
+    if (!isEmpty(recommendedUnits[RANDOM_PROGRAMS])) {
       renderRecommended.push(
         <DisplayRecommended
           key={RANDOM_PROGRAMS}
@@ -219,7 +219,7 @@ const Recommended = ({ unit, t, filterOutUnits = [], displayTitle = true }) => {
       );
     }
   } else if (activeVariant === AB_RECOMMEND_RANDOM) {
-    if (recommendedUnits[RANDOM_UNITS].length !== 0) {
+    if (!isEmpty(recommendedUnits[RANDOM_UNITS])) {
       renderRecommended.push(
         <DisplayRecommended
           key={RANDOM_UNITS}
@@ -235,7 +235,7 @@ const Recommended = ({ unit, t, filterOutUnits = [], displayTitle = true }) => {
     }
   }
 
-  if (activeVariant !== AB_RECOMMEND_RANDOM && recommendedUnits[DEFAULT].length !== 0) {
+  if (activeVariant !== AB_RECOMMEND_RANDOM && !isEmpty(recommendedUnits[DEFAULT])) {
     renderRecommended.push(
       <DisplayRecommended
         key={DEFAULT}
@@ -259,14 +259,14 @@ const Recommended = ({ unit, t, filterOutUnits = [], displayTitle = true }) => {
   }
 
   return null;
-}
+};
 
 Recommended.propTypes = {
   unit: shapes.EventItem.isRequired,
   t: PropTypes.func.isRequired,
   filterOutUnits: PropTypes.arrayOf(shapes.EventItem),
   displayTitle: PropTypes.bool
-}
+};
 
 const areEqual = (prevProps, nextProps) =>
   prevProps.unit.id === nextProps.unit.id
