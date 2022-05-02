@@ -106,7 +106,7 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
   }
 
   const { items }      = playlist;
-  const filterOutUnits = items.map(item => item.unit).filter(u => !!u) || [];
+  const filterOutUnits = items?.map(item => item.unit).filter(u => !!u) || [];
 
   // Don't recommend lesson preparation, skip to next unit.
   let recommendUnit = unit;

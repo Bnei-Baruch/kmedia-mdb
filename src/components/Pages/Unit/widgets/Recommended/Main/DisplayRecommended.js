@@ -30,10 +30,10 @@ const RecommendedPlaylist = (recommendForUnit, units, selected, t, chronicles, v
   const [expanded, setExpanded] = useState(false);
   const unitsToDisplay = !expanded && viewLimit && viewLimit < units.length ? units.slice(0, viewLimit) : units;
   const recommendedItems = useSelector(state => selectors.getRecommendedItems(feedName, state.recommended)) || [];
-  const suggesters = new Map(recommendedItems.map(item => [item.uid, item.suggester]));
+  const suggesters = new Map(recommendedItems?.map(item => [item.uid, item.suggester]));
   const suggesterIncludes = (uid, str) => (suggesters.get(uid) || '').includes(str);
-  const unitsViews = useSelector(state => selectors.getManyViews(unitsToDisplay.map(unit => unit.id), state.recommended))
-  const unitsWatchingNow = useSelector(state => selectors.getManyWatchingNow(unitsToDisplay.map(unit => unit.id), state.recommended))
+  const unitsViews = useSelector(state => selectors.getManyViews(unitsToDisplay?.map(unit => unit.id), state.recommended))
+  const unitsWatchingNow = useSelector(state => selectors.getManyWatchingNow(unitsToDisplay?.map(unit => unit.id), state.recommended))
   const watchingNow = (uid, index) => (suggesterIncludes(uid, 'WatchingNow') && unitsWatchingNow[index]) || -1;
   const twoDaysAgo = new Date();
   twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
@@ -47,7 +47,7 @@ const RecommendedPlaylist = (recommendForUnit, units, selected, t, chronicles, v
   };
 
   const labelsUsed = new Map();
-  const unitLabels = unitsToDisplay.map((unit, index) => {
+  const unitLabels = unitsToDisplay?.map((unit, index) => {
     if (!showLabels) {
       return null;
     }
@@ -105,7 +105,7 @@ const RecommendedPlaylist = (recommendForUnit, units, selected, t, chronicles, v
       <div className="avbox__playlist-view">
         <List selection>
           {
-            unitsToDisplay.map((unit, index) => (
+            unitsToDisplay?.map((unit, index) => (
               <List.Item
                 key={unit.id}
                 name={`${index}`}
