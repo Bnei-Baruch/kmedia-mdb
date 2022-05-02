@@ -373,6 +373,10 @@ export const partialAssign = (target, source, what = true) => {
     return undefined;
   }
 
+  if (source === null || source === undefined) {
+    return source;
+  }
+
   if (typeof what === 'object' && what !== null) {
     for (const property in what) {
       if (source.hasOwnProperty(property)) {
