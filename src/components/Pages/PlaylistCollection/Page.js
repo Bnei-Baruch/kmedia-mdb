@@ -148,21 +148,7 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
             onLanguageChange={handleLanguageChange}
             onSwitchAV={handleSwitchAV}
           />
-          {
-            unit &&
-            <Container id="unit_container">
-              <Helmets.AVUnit unit={unit} language={uiLanguage} />
-              <Info unit={unit} currentCollection={collection} />
-              <Materials unit={unit} playlistComponent={PlaylistData} />
-            </Container>
-          }
         </Grid.Column>
-        {
-          !isMobileDevice &&
-          <Grid.Column mobile={16} tablet={6} computer={6}>
-            {PlaylistData()}
-          </Grid.Column>
-        }
       </Grid>
     ) :
     <Container mobile={16} tablet={16} computer={16} className="avbox">
