@@ -175,7 +175,7 @@ const DisplayRecommended = ({
   const unitCollection   = canonicalCollection(unit);
   const unitCollectionId = unitCollection ? unitCollection.id : null;
 
-  if(!isEmpty(recommendedUnits)) return  null
+  if (!isEmpty(recommendedUnits)) return  null
 
   return (
     <div className="avbox__playlist-wrapper">
