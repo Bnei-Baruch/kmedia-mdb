@@ -86,7 +86,7 @@ const Materials = ({ unit = undefined, t, playlistComponent = null }) => {
       : {
         name: 'playlist',
         label: t('materials.playlist.header'),
-        component: playlistComponent()
+        component: playlistComponent
       };
 
     items.unshift(item);

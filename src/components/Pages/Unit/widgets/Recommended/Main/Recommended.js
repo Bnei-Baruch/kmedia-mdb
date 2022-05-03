@@ -63,17 +63,17 @@ const makeTagLink = (tag, getTagById) => {
 const makeCollectionLink = (collection, t) => {
   let display;
   switch (collection.content_type) {
-    case CT_DAILY_LESSON:
-    case CT_SPECIAL_LESSON: {
-      const ctLabel = t(`constants.content-types.${CT_DAILY_LESSON}`);
-      const fd      = t('values.date', { date: collection.film_date });
-      display       = `${ctLabel} ${fd}`;
-      break;
-    }
+  case CT_DAILY_LESSON:
+  case CT_SPECIAL_LESSON: {
+    const ctLabel = t(`constants.content-types.${CT_DAILY_LESSON}`);
+    const fd      = t('values.date', { date: collection.film_date });
+    display       = `${ctLabel} ${fd}`;
+    break;
+  }
 
-    default:
-      display = collection.name;
-      break;
+  default:
+    display = collection.name;
+    break;
   }
 
   return <Link key={collection.id} to={canonicalLink(collection)}>{display}</Link>;
@@ -117,7 +117,7 @@ const Recommended = ({ unit, t, filterOutUnits = [], displayTitle = true }) => {
         sources: unitSources,
         collections: unitCollections,
         size: N,
-        skip: filterOutUnits?.map(unit => unit.id),
+        skip: filterOutUnits.map(unit => unit.id),
         variant: activeVariant,
       }));
     }
@@ -141,122 +141,99 @@ const Recommended = ({ unit, t, filterOutUnits = [], displayTitle = true }) => {
 
   const recommendedUnits = useRecommendedUnits(recommendedUnitsTypes);
 
-  const renderRecommended = [];
+  const recommendedProps = [];
   if (activeVariant === AB_RECOMMEND_NEW && !isEmpty(recommendedUnits[SERIES])) {
-    renderRecommended.push(
-      <DisplayRecommended
-        key={SERIES}
-        unit={unit}
-        t={t}
-        recommendedUnits={recommendedUnits[SERIES]}
-        title={<span>{makeLandingPageLink(t, SGLP_LESSON_SERIES)}</span>}
-        displayTitle={displayTitle}
-        feedName={SERIES}
-        showLabels={false} />
-    );
+    recommendedProps.push({
+      key: SERIES,
+      recommendedUnits: recommendedUnits[SERIES],
+      title: <span>{makeLandingPageLink(t, SGLP_LESSON_SERIES)}</span>,
+      feedName: SERIES,
+      showLabels: false
+    });
     unitCollections.forEach(collection => {
-      if (!isEmpty(recommendedUnits[sameCollection(collection.id)])) {
-        renderRecommended.push(
-          <DisplayRecommended
-            key={sameCollection(collection.id)}
-            unit={unit}
-            t={t}
-            recommendedUnits={recommendedUnits[sameCollection(collection.id)]}
-            title={<span>{t(`materials.recommended.same-collection`)} {makeCollectionLink(collection, t)}</span>}
-            displayTitle={displayTitle}
-            viewLimit={3}
-            feedName={sameCollection(collection.id)}
-            showLabels={true} />);
+      const key = sameCollection(collection.id);
+      if (!isEmpty(recommendedUnits[key])) {
+        recommendedProps.push({
+          key,
+          recommendedUnits: recommendedUnits[key],
+          title: <span>{t(`materials.recommended.same-collection`)} {makeCollectionLink(collection, t)}</span>,
+          feedName: key,
+          viewLimit: 3,
+          showLabels: true
+        });
       }
     });
     unitTags.forEach(tag => {
-      if (!isEmpty(recommendedUnits[sameTopic(tag)])) {
-        renderRecommended.push(
-          <DisplayRecommended
-            key={sameTopic(tag)}
-            unit={unit}
-            t={t}
-            recommendedUnits={recommendedUnits[sameTopic(tag)]}
-            title={<span>{t('materials.recommended.same-topic')}: {makeTagLink(tag, getTagById)}</span>}
-            displayTitle={displayTitle}
-            viewLimit={3}
-            feedName={sameTopic(tag)}
-            showLabels={false} />);
+      const key = sameTopic(tag);
+      if (!isEmpty(recommendedUnits[key])) {
+        recommendedProps.push({
+          key,
+          recommendedUnits: recommendedUnits[key],
+          title: <span>{t('materials.recommended.same-topic')}: {makeTagLink(tag, getTagById)}</span>,
+          feedName: key,
+          viewLimit: 3,
+          showLabels: false
+        });
       }
     });
     unitSources.forEach(source => {
-      if (!isEmpty(recommendedUnits[sameSource(source)])) {
-        renderRecommended.push(
-          <DisplayRecommended
-            key={sameSource(source)}
-            unit={unit}
-            t={t}
-            recommendedUnits={recommendedUnits[sameSource(source)]}
-            title={<span>{t('materials.recommended.same-source')}: {makeSourceLink(source, getSourceById)}</span>}
-            displayTitle={displayTitle}
-            viewLimit={3}
-            feedName={sameSource(source)}
-            showLabels={false} />);
+      const key = sameSource(source);
+      if (!isEmpty(recommendedUnits[key])) {
+        recommendedProps.push({
+          key,
+          recommendedUnits: recommendedUnits[key],
+          title: <span>{t('materials.recommended.same-source')}: {makeSourceLink(source, getSourceById)}</span>,
+          feedName: key,
+          viewLimit: 3,
+          showLabels: false
+        });
       }
     });
     unitSourceCollections.forEach(source => {
-      if (!isEmpty(recommendedUnits[sameSourceCollection(source.id)])) {
-        renderRecommended.push(
-          <DisplayRecommended
-            key={sameSourceCollection(source.id)}
-            unit={unit}
-            t={t}
-            recommendedUnits={recommendedUnits[sameSourceCollection(source.id)]}
-            title={<span>{t('materials.recommended.same-source')}: {makeSourceLink(source.id, getSourceById)}</span>}
-            displayTitle={displayTitle}
-            viewLimit={3}
-            feedName={sameSourceCollection(source.id)}
-            showLabels={false} />);
+      const key = sameSourceCollection(source.id);
+      if (!isEmpty(recommendedUnits[key])) {
+        recommendedProps.push({
+          key,
+          recommendedUnits: recommendedUnits[key],
+          title: <span>{t('materials.recommended.same-source')}: {makeSourceLink(source.id, getSourceById)}</span>,
+          feedName: key,
+          viewLimit: 3,
+          showLabels: false
+        });
       }
     });
     if (!isEmpty(recommendedUnits[RANDOM_PROGRAMS])) {
-      renderRecommended.push(
-        <DisplayRecommended
-          key={RANDOM_PROGRAMS}
-          unit={unit}
-          t={t}
-          recommendedUnits={recommendedUnits[RANDOM_PROGRAMS]}
-          title={<span>{makeLandingPageLink(t, SGLP_PRORGRAMS)}</span>}
-          displayTitle={displayTitle}
-          viewLimit={3}
-          feedName={RANDOM_PROGRAMS}
-          showLabels={false} />
-      );
+      recommendedProps.push({
+        key: RANDOM_PROGRAMS,
+        recommendedUnits: recommendedUnits[RANDOM_PROGRAMS],
+        title: <span>{makeLandingPageLink(t, SGLP_PRORGRAMS)}</span>,
+        feedName: RANDOM_PROGRAMS,
+        viewLimit: 3,
+        showLabels: false
+      });
     }
   } else if (activeVariant === AB_RECOMMEND_RANDOM) {
     if (!isEmpty(recommendedUnits[RANDOM_UNITS])) {
-      renderRecommended.push(
-        <DisplayRecommended
-          key={RANDOM_UNITS}
-          unit={unit}
-          t={t}
-          recommendedUnits={recommendedUnits[RANDOM_UNITS]}
-          title={t(`materials.recommended.${DEFAULT}`)}
-          displayTitle={displayTitle}
-          viewLimit={3}
-          feedName={RANDOM_UNITS}
-          showLabels={false} />
-      );
+      recommendedProps.push({
+        key: RANDOM_UNITS,
+        recommendedUnits: recommendedUnits[RANDOM_UNITS],
+        title: t(`materials.recommended.${DEFAULT}`),
+        feedName: RANDOM_UNITS,
+        viewLimit: 3,
+        showLabels: false
+      });
     }
   }
 
   if (activeVariant !== AB_RECOMMEND_RANDOM && !isEmpty(recommendedUnits[DEFAULT])) {
-    renderRecommended.push(
-      <DisplayRecommended
-        key={DEFAULT}
-        unit={unit}
-        t={t}
-        recommendedUnits={recommendedUnits[DEFAULT]}
-        title={t(`materials.recommended.${DEFAULT}`)}
-        displayTitle={displayTitle}
-        viewLimit={activeVariant === AB_RECOMMEND_NEW ? 4 : 0}
-        feedName={DEFAULT}
-        showLabels={false} />);
+    recommendedProps.push({
+      key: DEFAULT,
+      recommendedUnits: recommendedUnits[DEFAULT],
+      title: t(`materials.recommended.${DEFAULT}`),
+      feedName: DEFAULT,
+      viewLimit: activeVariant === AB_RECOMMEND_NEW ? 4 : 0,
+      showLabels: false
+    });
   }
 
   const wipErr = WipErr({ wip, err, t });
@@ -264,8 +241,12 @@ const Recommended = ({ unit, t, filterOutUnits = [], displayTitle = true }) => {
     return wipErr;
   }
 
-  if (renderRecommended.length) {
-    return renderRecommended;
+  if (!isEmpty(recommendedProps)) {
+    return (
+      <>
+        {recommendedProps.map(p => <DisplayRecommended {...p} unit={unit} t={t} displayTitle={displayTitle} />)}
+      </>
+    );
   }
 
   return null;

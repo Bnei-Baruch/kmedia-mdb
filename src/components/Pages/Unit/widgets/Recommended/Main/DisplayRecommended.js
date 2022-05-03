@@ -177,7 +177,7 @@ const DisplayRecommended = (
   const unitCollection   = canonicalCollection(unit);
   const unitCollectionId = unitCollection ? unitCollection.id : null;
 
-  if (!isEmpty(recommendedUnits)) return null;
+  if (isEmpty(recommendedUnits)) return null;
 
   return (
     <div className="avbox__playlist-wrapper">
@@ -196,8 +196,6 @@ DisplayRecommended.propTypes = {
 
 const areEqual = (prevProps, nextProps) =>
   prevProps.unit.id === nextProps.unit.id &&
-  prevProps.recommendedUnits &&
-  nextProps.recommendedUnits &&
   prevProps.recommendedUnits.length === nextProps.recommendedUnits.length &&
   prevProps.recommendedUnits.every((unit, index) => nextProps.recommendedUnits[index].id === unit.id);
 
