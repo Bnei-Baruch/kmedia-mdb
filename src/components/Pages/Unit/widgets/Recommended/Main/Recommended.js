@@ -109,7 +109,7 @@ const Recommended = ({ unit, t, filterOutUnits = [], displayTitle = true }) => {
   }, [unit, unitId, getPathById]);
   const dispatch = useDispatch();
   useEffect(() => {
-    if (unit?.id && !err && prevUnitId !== unit.id) {
+    if (unit?.id && !err && !wip && prevUnitId !== unit.id) {
       dispatch(actions.fetchRecommended({
         id: unit.id,
         content_type: unitContentType,
@@ -121,7 +121,7 @@ const Recommended = ({ unit, t, filterOutUnits = [], displayTitle = true }) => {
         variant: activeVariant,
       }));
     }
-  }, [dispatch, err, unitTags, unitCollections, filterOutUnits, prevUnitId, activeVariant, unitContentType, unitSources]);
+  }, [dispatch, err, wip, unitTags, unitCollections, filterOutUnits, prevUnitId, activeVariant, unitContentType, unitSources]);
 
   const recommendedUnitsTypes = [];
   if (activeVariant === AB_RECOMMEND_NEW) {
