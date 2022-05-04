@@ -155,7 +155,7 @@ const RecommendedPlaylist = ({ recommendForUnit, units, selected, t, chronicles,
         </List>
       </div>
       {
-        viewLimit && viewLimit < units.length ? (
+        viewLimit && !!units && viewLimit < units.length ? (
           <Link
             className="recommend-more"
             onClick={() => setExpanded(!expanded)}>
