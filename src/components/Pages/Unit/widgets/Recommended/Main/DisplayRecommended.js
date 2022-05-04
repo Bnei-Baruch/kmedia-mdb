@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Header, List, Popup } from 'semantic-ui-react';
+import { Container, Header, List, Popup } from 'semantic-ui-react';
 
 import * as shapes from '../../../../../shapes';
 import { canonicalCollection, isEmpty } from '../../../../../../helpers/utils';
@@ -29,7 +29,7 @@ const watchingNowToString = watchingNow => {
 
 const padOneZero = str => str.length === 1 ? `0${str}` : str;
 
-const RecommendedPlaylist = (recommendForUnit, units, selected, t, chronicles, viewLimit, feedName, showLabels) => {
+const RecommendedPlaylist = ({ recommendForUnit, units, selected, t, chronicles, viewLimit, feedName, showLabels }) => {
   const [expanded, setExpanded] = useState(false);
   const unitsToDisplay          = !expanded && viewLimit && !isEmpty(units) && viewLimit < units.length ? units.slice(0, viewLimit) : units || [];
   const recommendedItems        = useSelector(state => selectors.getRecommendedItems(feedName, state.recommended)) || [];
@@ -63,8 +63,8 @@ const RecommendedPlaylist = (recommendForUnit, units, selected, t, chronicles, v
             <div>
               <small className="text">
                 <Popup content={`${watchingNow(unit.id, index)} ${t('materials.recommended.watching-now')}`}
-                  trigger={
-                    <span>{`${watchingNowToString(watchingNow(unit.id, index))} ${t('materials.recommended.watching-now')}`}</span>}
+                       trigger={
+                         <span>{`${watchingNowToString(watchingNow(unit.id, index))} ${t('materials.recommended.watching-now')}`}</span>}
                 />
               </small>
             </div>
@@ -104,7 +104,7 @@ const RecommendedPlaylist = (recommendForUnit, units, selected, t, chronicles, v
   });
 
   return (
-    <div>
+    <Container>
       <div className="avbox__playlist-view">
         <List selection>
           {
@@ -127,26 +127,26 @@ const RecommendedPlaylist = (recommendForUnit, units, selected, t, chronicles, v
                     label={unitLabels[index]}
                     size={'small'} />
                   : (unit.content_type && IsUnitContentType(unit.content_type) ?
-                    <ContentItemContainer
-                      id={unit.id}
-                      key={unit.id}
-                      asList
-                      label={unitLabels[index]}
-                      size={'small'} /> :
-                    (unit.type ?  /* TODO: Improve the distinction between source and topic. */
-                      <SourceItemContainer
+                      <ContentItemContainer
                         id={unit.id}
                         key={unit.id}
                         asList
                         label={unitLabels[index]}
                         size={'small'} /> :
-                      <TagItemContainer
-                        id={unit.id}
-                        key={unit.id}
-                        asList
-                        label={unitLabels[index]}
-                        size={'small'} />
-                    )
+                      (unit.type ?  /* TODO: Improve the distinction between source and topic. */
+                          <SourceItemContainer
+                            id={unit.id}
+                            key={unit.id}
+                            asList
+                            label={unitLabels[index]}
+                            size={'small'} /> :
+                          <TagItemContainer
+                            id={unit.id}
+                            key={unit.id}
+                            asList
+                            label={unitLabels[index]}
+                            size={'small'} />
+                      )
                   )
                 }
               </List.Item>
@@ -154,10 +154,18 @@ const RecommendedPlaylist = (recommendForUnit, units, selected, t, chronicles, v
           }
         </List>
       </div>
-      {viewLimit && viewLimit < units.length ?
-        <Link className="recommend-more" onClick={() => setExpanded(!expanded)}>{expanded ? t('materials.recommended.less') : t('materials.recommended.more')}</Link>
-        : <div className="recommend-more-placeholder"></div>}
-    </div>
+      {
+        viewLimit && viewLimit < units.length ? (
+          <Link
+            className="recommend-more"
+            onClick={() => setExpanded(!expanded)}>
+            {
+              expanded ? t('materials.recommended.less') : t('materials.recommended.more')
+            }
+          </Link>
+        ) : <div className="recommend-more-placeholder" />
+      }
+    </Container>
   );
 };
 
@@ -178,11 +186,11 @@ const DisplayRecommended = (
   const unitCollectionId = unitCollection ? unitCollection.id : null;
 
   if (isEmpty(recommendedUnits)) return null;
-
+  const props = { unit, recommendedUnits, unitCollectionId, t, chronicles, viewLimit, feedName, showLabels };
   return (
     <div className="avbox__playlist-wrapper">
       {displayTitle && <Header as="h3" content={title} />}
-      {RecommendedPlaylist(unit, recommendedUnits, unitCollectionId, t, chronicles, viewLimit, feedName, showLabels)}
+      {<RecommendedPlaylist {...props} />}
     </div>
   );
 };
