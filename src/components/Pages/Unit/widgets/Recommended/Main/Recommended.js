@@ -117,7 +117,7 @@ const Recommended = ({ unit, t, filterOutUnits = [], displayTitle = true }) => {
         sources: unitSources,
         collections: unitCollections,
         size: N,
-        skip: filterOutUnits.map(unit => unit.id),
+        skip: filterOutUnits.map(x => x.id),
         variant: activeVariant,
       }));
     }
@@ -142,14 +142,17 @@ const Recommended = ({ unit, t, filterOutUnits = [], displayTitle = true }) => {
   const recommendedUnits = useRecommendedUnits(recommendedUnitsTypes);
 
   const recommendedProps = [];
-  if (activeVariant === AB_RECOMMEND_NEW && !isEmpty(recommendedUnits[SERIES])) {
-    recommendedProps.push({
-      key: SERIES,
-      recommendedUnits: recommendedUnits[SERIES],
-      title: <span>{makeLandingPageLink(t, SGLP_LESSON_SERIES)}</span>,
-      feedName: SERIES,
-      showLabels: false
-    });
+  if (activeVariant === AB_RECOMMEND_NEW) {
+    if (!isEmpty(recommendedUnits[SERIES])) {
+      recommendedProps.push({
+        key: SERIES,
+        recommendedUnits: recommendedUnits[SERIES],
+        title: <span>{makeLandingPageLink(t, SGLP_LESSON_SERIES)}</span>,
+        feedName: SERIES,
+        showLabels: false
+      });
+    }
+
     unitCollections.forEach(collection => {
       const key = sameCollection(collection.id);
       if (!isEmpty(recommendedUnits[key])) {
@@ -163,6 +166,7 @@ const Recommended = ({ unit, t, filterOutUnits = [], displayTitle = true }) => {
         });
       }
     });
+
     unitTags.forEach(tag => {
       const key = sameTopic(tag);
       if (!isEmpty(recommendedUnits[key])) {
@@ -175,6 +179,7 @@ const Recommended = ({ unit, t, filterOutUnits = [], displayTitle = true }) => {
           showLabels: false
         });
       }
+
     });
     unitSources.forEach(source => {
       const key = sameSource(source);
@@ -189,6 +194,7 @@ const Recommended = ({ unit, t, filterOutUnits = [], displayTitle = true }) => {
         });
       }
     });
+
     unitSourceCollections.forEach(source => {
       const key = sameSourceCollection(source.id);
       if (!isEmpty(recommendedUnits[key])) {
@@ -202,6 +208,7 @@ const Recommended = ({ unit, t, filterOutUnits = [], displayTitle = true }) => {
         });
       }
     });
+
     if (!isEmpty(recommendedUnits[RANDOM_PROGRAMS])) {
       recommendedProps.push({
         key: RANDOM_PROGRAMS,
