@@ -14,21 +14,21 @@ import { PLAYER_POSITION_STORAGE_KEY } from '../../AVPlayer/constants';
 import { imageWidthBySize } from './helper';
 
 const ListTemplate = ({
-  unit,
-  source,
-  tag,
-  language,
-  withCUInfo,
-  withCCUInfo,
-  link,
-  ccu,
-  description,
-  children,
-  playTime,
-  size = 'big',
-  selected,
-  label
-}) => {
+                        unit,
+                        source,
+                        tag,
+                        language,
+                        withCUInfo,
+                        withCCUInfo,
+                        link,
+                        ccu,
+                        description,
+                        children,
+                        playTime,
+                        size = 'big',
+                        selected,
+                        label
+                      }) => {
 
   const dir                = isLanguageRtl(language) ? 'rtl' : 'ltr';
   const { isMobileDevice } = useContext(DeviceInfoContext);
@@ -98,7 +98,9 @@ const ListTemplate = ({
       </div>
       <div className={clsx('cu_item_info', { [dir]: true, 'with_actions': !!children })}>
         <Ref innerRef={cuInfoRef}>
-          {withCUInfo && renderCUInfo()}
+          <Container>
+            {withCUInfo && renderCUInfo()}
+          </Container>
         </Ref>
         {info}
         <div className={`cu_info_description ${dir} text_ellipsis`}>
