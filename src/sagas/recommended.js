@@ -239,7 +239,7 @@ export function* fetchRecommended(action) {
 }
 
 function* fetchViews(action) {
-  yield fetchViewsByUIDs(action.payload);
+  fetchViewsByUIDs(action.payload);
 }
 
 export function* fetchViewsByUIDs(uids) {
