@@ -49,14 +49,14 @@ class SearchResultSeries extends SearchResultBase {
     };
   };
 
+  // Reduce series from all leaf tags/sources.
   getLowestLevelSeries = (series, rootId) => {
-    if (series.length <= 1)
-      return series[0];
+    if (!series || !series.length) return null;
     const root = series.find(s => s.parent_id === rootId || (!s.parent_id && !rootId));
-    if (!(root?.children?.length !== 0)) {
+    if (root && root.children && root.children.length) {
       return root;
     }
-
+    if (!root) return series[series.length - 1];
     return this.getLowestLevelSeries(series, root.id);
   };
 
@@ -88,8 +88,9 @@ class SearchResultSeries extends SearchResultBase {
       return null;
     }
 
-    //_uid is tags/sources uids separated by '_' (because tags/sources have tree build)
-    //and we need series that connected to the lowest level of tags/sources
+    // _uid is tags/sources uids separated by '_' (because tags/sources have tree build)
+    // We need all series that connected to the lowest level of tags/sources, e.g., that don't have parent id.
+    // TODO: https://issues.kbb1.com/issue/AS-142
     const series = _uid.split('_').map(getSerie);
     const s      = this.getLowestLevelSeries(series);
     if (!s) return null;
