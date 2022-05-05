@@ -4,8 +4,6 @@ import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { Container, Grid } from 'semantic-ui-react';
-import isEqual from 'react-fast-compare';
-import * as shapes from '../../shapes';
 
 import { selectors as settings } from '../../../redux/modules/settings';
 import { ClientChroniclesContext, DeviceInfoContext } from '../../../helpers/app-contexts';
@@ -50,6 +48,8 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
 
   const prev = usePrevious({ unit, collection });
 
+  console.log(' cuId:', cuId, '  nextLink, prevLink:', nextLink, prevLink, '  playlist:', playlist, '  collection:', collection)
+
   useEffect(() => {
     if (prev?.unit?.id !== unit?.id) {
       if (prev?.unit?.id) {
@@ -92,17 +92,19 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
 
       // check if we need new playlist
       const queryMT = playerHelper.getPlaylistMediaType(location);
-      const contentLanguage = playerHelper.getLanguageFromQuery(location, language);
+      const qryLang = playerHelper.getLanguageFromQuery(location, language);
 
       if (queryMT !== mediaType ||
-          contentLanguage !== language) {
-        const nPlaylist = playerHelper.playlist(collection, location, contentLanguage, language);
+          qryLang !== language) {
+        const nPlaylist = playerHelper.playlist(collection, location, qryLang, language);
         setPlaylist(nPlaylist);
+        console.log('update playlist:', nPlaylist)
       }
 
     } else {
-      const nPlaylist  = playerHelper.playlist(collection, location, contentLanguage, uiLanguage);
+      const nPlaylist = playerHelper.playlist(collection, location, contentLanguage, uiLanguage);
       setPlaylist(nPlaylist);
+      console.log('new playlist:', nPlaylist)
     }
   }, [collection, contentLanguage, location, playlist, uiLanguage]);
 
@@ -112,6 +114,7 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
       setSelected(newSel);
       const newUnit = playlist?.items[newSel]?.unit;
       setUnit(newUnit);
+      console.log('set new unit:', newSel, newUnit)
     }
   }, [playlist, cuId, location]);
 
@@ -185,16 +188,16 @@ PlaylistCollectionPage.propTypes = {
   collection: shapes.GenericCollection,
   nextLink: PropTypes.string,
   prevLink: PropTypes.string,
+  cuId: PropTypes.string
 };
 
 const isEqualLink = (link1, link2) =>
   (!link1 && !link2) || link1 === link2;
 
-const areEqual = (prevProps, nextProps) => (
-  isEqual(prevProps.collection, nextProps.collection)
-  && (prevProps.cuId === nextProps.cuId)
-  && isEqualLink(prevProps.prevLink, nextProps.prevLink)
-  && isEqualLink(prevProps.nextLink, nextProps.nextLink)
-);
+const areEqual = (prevProps, nextProps) =>
+  prevProps.collection.id === nextProps.collection.id
+    && (prevProps.cuId === nextProps.cuId)
+    && isEqualLink(prevProps.prevLink, nextProps.prevLink)
+    && isEqualLink(prevProps.nextLink, nextProps.nextLink);
 
 export default React.memo(PlaylistCollectionPage, areEqual);
