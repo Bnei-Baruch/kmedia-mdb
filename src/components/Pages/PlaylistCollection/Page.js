@@ -5,19 +5,19 @@ import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { Container, Grid } from 'semantic-ui-react';
 import isEqual from 'react-fast-compare';
+import * as shapes from '../../shapes';
 
 import { selectors as settings } from '../../../redux/modules/settings';
 import { ClientChroniclesContext, DeviceInfoContext } from '../../../helpers/app-contexts';
 import { usePrevious } from '../../../helpers/utils';
 import playerHelper from '../../../helpers/player';
 import Helmets from '../../shared/Helmets';
-import * as shapes from '../../shapes';
 import Info from '../Unit/widgets/Info/Info';
-import Materials from '../Unit/widgets/UnitMaterials/Materials';
 import Recommended from '../Unit/widgets/Recommended/Main/Recommended';
 import Playlist from './widgets/Playlist/Playlist';
 import PlaylistHeader from './widgets/Playlist/PlaylistHeader';
 import AVPlaylistPlayer from '../../AVPlayer/AVPlaylistPlayer';
+import Materials from '../Unit/widgets/UnitMaterials/Materials';
 
 const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, cuId }) => {
   const location           = useLocation();
@@ -119,7 +119,7 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
     }
   }
 
-  const PlaylistData = () =>
+  const playlistData = (
     <>
       <Playlist
         playlist={playlist}
@@ -127,7 +127,8 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
       />
       <br />
       <Recommended unit={recommendUnit} filterOutUnits={filterOutUnits} />
-    </>;
+    </>
+  );
 
   const computerWidth = isMobileDevice ? 16 : 10;
 
@@ -153,14 +154,14 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
             <Container id="unit_container">
               <Helmets.AVUnit unit={unit} language={uiLanguage} />
               <Info unit={unit} currentCollection={collection} />
-              <Materials unit={unit} playlistComponent={PlaylistData} />
+              <Materials unit={unit} playlistComponent={playlistData} />
             </Container>
           }
         </Grid.Column>
         {
           !isMobileDevice &&
           <Grid.Column mobile={16} tablet={6} computer={6}>
-            {PlaylistData()}
+            {playlistData}
           </Grid.Column>
         }
       </Grid>

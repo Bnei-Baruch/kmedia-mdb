@@ -98,7 +98,9 @@ const ListTemplate = ({
       </div>
       <div className={clsx('cu_item_info', { [dir]: true, 'with_actions': !!children })}>
         <Ref innerRef={cuInfoRef}>
-          {withCUInfo && renderCUInfo()}
+          <Container>
+            {withCUInfo && renderCUInfo()}
+          </Container>
         </Ref>
         {info}
         <div className={`cu_info_description ${dir} text_ellipsis`}>

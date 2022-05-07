@@ -1,6 +1,6 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
 import isEqual from 'react-fast-compare';
 
@@ -11,7 +11,7 @@ import * as shapes from '../../../../../shapes';
 import WipErr from '../../../../../shared/WipErr/WipErr';
 import DisplayRecommended from './DisplayRecommended';
 import useRecommendedUnits from './UseRecommendedUnits';
-import { usePrevious, getSourcesCollections } from '../../../../../../helpers/utils';
+import { getSourcesCollections, isEmpty, usePrevious } from '../../../../../../helpers/utils';
 import { AB_RECOMMEND_EXPERIMENT, AB_RECOMMEND_NEW, AB_RECOMMEND_RANDOM } from '../../../../../../helpers/ab-testing';
 import { AbTestingContext } from '../../../../../../helpers/app-contexts';
 import Link from '../../../../../Language/MultiLanguageLink';
@@ -27,14 +27,14 @@ import {
 // Number of items to try to recommend.
 const N = 12;
 
-const sameTopic = tag => `same-topic-${tag}`;
-const sameSource = source => `same-source-${source}`;
+const sameTopic            = tag => `same-topic-${tag}`;
+const sameSource           = source => `same-source-${source}`;
 const sameSourceCollection = source => `same-source-collection-${source}`;
-const sameCollection = collection => `same-collection-${collection}`;
-const DEFAULT = 'default';
-const SERIES = 'series';
-const RANDOM_PROGRAMS = 'random-programs';
-const RANDOM_UNITS = 'random-units';
+const sameCollection       = collection => `same-collection-${collection}`;
+const DEFAULT              = 'default';
+const SERIES               = 'series';
+const RANDOM_PROGRAMS      = 'random-programs';
+const RANDOM_UNITS         = 'random-units';
 
 const makeLandingPageLink = (t, landingPage) => (
   <Link key={landingPage} to={landingPageSectionLink(landingPage, [])}>
@@ -49,7 +49,7 @@ const makeSourceLink = (source, getSourceById) => {
   }
 
   return <Link key={id} to={`/sources/${id}`}>{name}</Link>;
-}
+};
 
 const makeTagLink = (tag, getTagById) => {
   const { id, label } = getTagById(tag);
@@ -58,7 +58,7 @@ const makeTagLink = (tag, getTagById) => {
   }
 
   return <Link key={id} to={`/topics/${id}`}>{label}</Link>;
-}
+};
 
 const makeCollectionLink = (collection, t) => {
   let display;
@@ -77,25 +77,25 @@ const makeCollectionLink = (collection, t) => {
   }
 
   return <Link key={collection.id} to={canonicalLink(collection)}>{display}</Link>;
-}
+};
 
 const Recommended = ({ unit, t, filterOutUnits = [], displayTitle = true }) => {
-  const abTesting = useContext(AbTestingContext);
-  const [unitId, setUnitId] = useState(null);
-  const [unitContentType, setUnitContentType] = useState(null);
-  const [unitTags, setUnitTags] = useState([]);
-  const [unitSources, setUnitSources] = useState([]);
+  const abTesting                                         = useContext(AbTestingContext);
+  const [unitId, setUnitId]                               = useState(null);
+  const [unitContentType, setUnitContentType]             = useState(null);
+  const [unitTags, setUnitTags]                           = useState([]);
+  const [unitSources, setUnitSources]                     = useState([]);
   const [unitSourceCollections, setUnitSourceCollections] = useState([]);
-  const [unitCollections, setUnitCollections] = useState([]);
-  const prevUnitId = usePrevious(unitId);
+  const [unitCollections, setUnitCollections]             = useState([]);
+  const prevUnitId                                        = usePrevious(unitId);
 
   const activeVariant = (abTesting && abTesting.getVariant(AB_RECOMMEND_EXPERIMENT)) || '';
 
-  const wip = useSelector(state => selectors.getWip(state.recommended));
-  const err = useSelector(state => selectors.getError(state.recommended));
-  const getTagById = useSelector(state => tagsSelectors.getTagById(state.tags));
+  const wip           = useSelector(state => selectors.getWip(state.recommended));
+  const err           = useSelector(state => selectors.getError(state.recommended));
+  const getTagById    = useSelector(state => tagsSelectors.getTagById(state.tags));
   const getSourceById = useSelector(state => sourcesSelectors.getSourceById(state.sources));
-  const getPathById = useSelector(state => sourcesSelectors.getPathByID(state.sources));
+  const getPathById   = useSelector(state => sourcesSelectors.getPathByID(state.sources));
 
   useEffect(() => {
     if (unit?.id && unit.id !== unitId) {
@@ -109,19 +109,19 @@ const Recommended = ({ unit, t, filterOutUnits = [], displayTitle = true }) => {
   }, [unit, unitId, getPathById]);
   const dispatch = useDispatch();
   useEffect(() => {
-    if (unitId && !err && prevUnitId !== unitId) {
+    if (unit?.id && !err && !wip && prevUnitId !== unit.id) {
       dispatch(actions.fetchRecommended({
-        id: unitId,
+        id: unit.id,
         content_type: unitContentType,
         tags: unitTags,
         sources: unitSources,
         collections: unitCollections,
         size: N,
-        skip: filterOutUnits.map(unit => unit.id),
+        skip: filterOutUnits.map(x => x.id),
         variant: activeVariant,
       }));
     }
-  }, [dispatch, err, unitId, unitTags, unitCollections, filterOutUnits, prevUnitId, activeVariant, unitContentType, unitSources]);
+  }, [dispatch, err, wip, unitTags, unitCollections, filterOutUnits, prevUnitId, activeVariant, unitContentType, unitSources]);
 
   const recommendedUnitsTypes = [];
   if (activeVariant === AB_RECOMMEND_NEW) {
@@ -141,122 +141,106 @@ const Recommended = ({ unit, t, filterOutUnits = [], displayTitle = true }) => {
 
   const recommendedUnits = useRecommendedUnits(recommendedUnitsTypes);
 
-  const renderRecommended = [];
+  const recommendedProps = [];
   if (activeVariant === AB_RECOMMEND_NEW) {
-    renderRecommended.push(
-      <DisplayRecommended
-        key={SERIES}
-        unit={unit}
-        t={t}
-        recommendedUnits={recommendedUnits[SERIES]}
-        title={<span>{makeLandingPageLink(t, SGLP_LESSON_SERIES)}</span>}
-        displayTitle={displayTitle}
-        feedName={SERIES}
-        showLabels={false} />
-    );
+    if (!isEmpty(recommendedUnits[SERIES])) {
+      recommendedProps.push({
+        key: SERIES,
+        recommendedUnits: recommendedUnits[SERIES],
+        title: <span>{makeLandingPageLink(t, SGLP_LESSON_SERIES)}</span>,
+        feedName: SERIES,
+        showLabels: false
+      });
+    }
+
     unitCollections.forEach(collection => {
-      if (recommendedUnits[sameCollection(collection.id)].length !== 0) {
-        renderRecommended.push(
-          <DisplayRecommended
-            key={sameCollection(collection.id)}
-            unit={unit}
-            t={t}
-            recommendedUnits={recommendedUnits[sameCollection(collection.id)]}
-            title={<span>{t(`materials.recommended.same-collection`)} {makeCollectionLink(collection, t)}</span>}
-            displayTitle={displayTitle}
-            viewLimit={3}
-            feedName={sameCollection(collection.id)}
-            showLabels={true} />);
+      const key = sameCollection(collection.id);
+      if (!isEmpty(recommendedUnits[key])) {
+        recommendedProps.push({
+          key,
+          recommendedUnits: recommendedUnits[key],
+          title: <span>{t(`materials.recommended.same-collection`)} {makeCollectionLink(collection, t)}</span>,
+          feedName: key,
+          viewLimit: 3,
+          showLabels: true
+        });
       }
     });
+
     unitTags.forEach(tag => {
-      if (recommendedUnits[sameTopic(tag)].length !== 0) {
-        renderRecommended.push(
-          <DisplayRecommended
-            key={sameTopic(tag)}
-            unit={unit}
-            t={t}
-            recommendedUnits={recommendedUnits[sameTopic(tag)]}
-            title={<span>{t('materials.recommended.same-topic')}: {makeTagLink(tag, getTagById)}</span>}
-            displayTitle={displayTitle}
-            viewLimit={3}
-            feedName={sameTopic(tag)}
-            showLabels={false} />);
+      const key = sameTopic(tag);
+      if (!isEmpty(recommendedUnits[key])) {
+        recommendedProps.push({
+          key,
+          recommendedUnits: recommendedUnits[key],
+          title: <span>{t('materials.recommended.same-topic')}: {makeTagLink(tag, getTagById)}</span>,
+          feedName: key,
+          viewLimit: 3,
+          showLabels: false
+        });
       }
+
     });
     unitSources.forEach(source => {
-      if (recommendedUnits[sameSource(source)].length !== 0) {
-        renderRecommended.push(
-          <DisplayRecommended
-            key={sameSource(source)}
-            unit={unit}
-            t={t}
-            recommendedUnits={recommendedUnits[sameSource(source)]}
-            title={<span>{t('materials.recommended.same-source')}: {makeSourceLink(source, getSourceById)}</span>}
-            displayTitle={displayTitle}
-            viewLimit={3}
-            feedName={sameSource(source)}
-            showLabels={false} />);
+      const key = sameSource(source);
+      if (!isEmpty(recommendedUnits[key])) {
+        recommendedProps.push({
+          key,
+          recommendedUnits: recommendedUnits[key],
+          title: <span>{t('materials.recommended.same-source')}: {makeSourceLink(source, getSourceById)}</span>,
+          feedName: key,
+          viewLimit: 3,
+          showLabels: false
+        });
       }
     });
+
     unitSourceCollections.forEach(source => {
-      if (recommendedUnits[sameSourceCollection(source.id)].length !== 0) {
-        renderRecommended.push(
-          <DisplayRecommended
-            key={sameSourceCollection(source.id)}
-            unit={unit}
-            t={t}
-            recommendedUnits={recommendedUnits[sameSourceCollection(source.id)]}
-            title={<span>{t('materials.recommended.same-source')}: {makeSourceLink(source.id, getSourceById)}</span>}
-            displayTitle={displayTitle}
-            viewLimit={3}
-            feedName={sameSourceCollection(source.id)}
-            showLabels={false} />);
+      const key = sameSourceCollection(source.id);
+      if (!isEmpty(recommendedUnits[key])) {
+        recommendedProps.push({
+          key,
+          recommendedUnits: recommendedUnits[key],
+          title: <span>{t('materials.recommended.same-source')}: {makeSourceLink(source.id, getSourceById)}</span>,
+          feedName: key,
+          viewLimit: 3,
+          showLabels: false
+        });
       }
     });
-    if (recommendedUnits[RANDOM_PROGRAMS].length !== 0) {
-      renderRecommended.push(
-        <DisplayRecommended
-          key={RANDOM_PROGRAMS}
-          unit={unit}
-          t={t}
-          recommendedUnits={recommendedUnits[RANDOM_PROGRAMS]}
-          title={<span>{makeLandingPageLink(t, SGLP_PRORGRAMS)}</span>}
-          displayTitle={displayTitle}
-          viewLimit={3}
-          feedName={RANDOM_PROGRAMS}
-          showLabels={false} />
-      );
+
+    if (!isEmpty(recommendedUnits[RANDOM_PROGRAMS])) {
+      recommendedProps.push({
+        key: RANDOM_PROGRAMS,
+        recommendedUnits: recommendedUnits[RANDOM_PROGRAMS],
+        title: <span>{makeLandingPageLink(t, SGLP_PRORGRAMS)}</span>,
+        feedName: RANDOM_PROGRAMS,
+        viewLimit: 3,
+        showLabels: false
+      });
     }
   } else if (activeVariant === AB_RECOMMEND_RANDOM) {
-    if (recommendedUnits[RANDOM_UNITS].length !== 0) {
-      renderRecommended.push(
-        <DisplayRecommended
-          key={RANDOM_UNITS}
-          unit={unit}
-          t={t}
-          recommendedUnits={recommendedUnits[RANDOM_UNITS]}
-          title={t(`materials.recommended.${DEFAULT}`)}
-          displayTitle={displayTitle}
-          viewLimit={3}
-          feedName={RANDOM_UNITS}
-          showLabels={false} />
-      );
+    if (!isEmpty(recommendedUnits[RANDOM_UNITS])) {
+      recommendedProps.push({
+        key: RANDOM_UNITS,
+        recommendedUnits: recommendedUnits[RANDOM_UNITS],
+        title: t(`materials.recommended.${DEFAULT}`),
+        feedName: RANDOM_UNITS,
+        viewLimit: 3,
+        showLabels: false
+      });
     }
   }
 
-  if (activeVariant !== AB_RECOMMEND_RANDOM && recommendedUnits[DEFAULT].length !== 0) {
-    renderRecommended.push(
-      <DisplayRecommended
-        key={DEFAULT}
-        unit={unit}
-        t={t}
-        recommendedUnits={recommendedUnits[DEFAULT]}
-        title={t(`materials.recommended.${DEFAULT}`)}
-        displayTitle={displayTitle}
-        viewLimit={activeVariant === AB_RECOMMEND_NEW ? 4 : 0}
-        feedName={DEFAULT}
-        showLabels={false} />);
+  if (activeVariant !== AB_RECOMMEND_RANDOM && !isEmpty(recommendedUnits[DEFAULT])) {
+    recommendedProps.push({
+      key: DEFAULT,
+      recommendedUnits: recommendedUnits[DEFAULT],
+      title: t(`materials.recommended.${DEFAULT}`),
+      feedName: DEFAULT,
+      viewLimit: activeVariant === AB_RECOMMEND_NEW ? 4 : 0,
+      showLabels: false
+    });
   }
 
   const wipErr = WipErr({ wip, err, t });
@@ -264,19 +248,23 @@ const Recommended = ({ unit, t, filterOutUnits = [], displayTitle = true }) => {
     return wipErr;
   }
 
-  if (renderRecommended.length) {
-    return renderRecommended;
+  if (!isEmpty(recommendedProps)) {
+    return (
+      <>
+        {recommendedProps.map(p => <DisplayRecommended {...p} unit={unit} t={t} displayTitle={displayTitle} />)}
+      </>
+    );
   }
 
   return null;
-}
+};
 
 Recommended.propTypes = {
   unit: shapes.EventItem.isRequired,
   t: PropTypes.func.isRequired,
   filterOutUnits: PropTypes.arrayOf(shapes.EventItem),
   displayTitle: PropTypes.bool
-}
+};
 
 const areEqual = (prevProps, nextProps) =>
   prevProps.unit.id === nextProps.unit.id

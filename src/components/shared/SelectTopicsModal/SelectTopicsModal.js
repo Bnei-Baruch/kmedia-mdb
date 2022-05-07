@@ -26,7 +26,6 @@ const SelectTopicsModal = ({ t, open, onClose, label, trigger }) => {
   const roots            = useSelector(state => selectors.getDisplayRoots(state.tags), isEqual) || [];
   const getTagById       = useSelector(state => selectors.getTagById(state.tags));
   const tree             = useMemo(() => getTree(roots, getTagById, null, t)[0], [roots.length, getTagById, t]);
-  const user             = useSelector(state => auth.getUser(state.auth));
 
   const language = useSelector(state => settings.getLanguage(state.settings));
   const dir      = getLanguageDirection(language);
