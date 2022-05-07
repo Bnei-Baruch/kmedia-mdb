@@ -340,8 +340,20 @@ export const RH_RECORDS  = '2GAdavz0';
 
 // This is exptected to be sorted by values
 export const BS_TAAS_PARTS = {
-  '9xNFLSSp': 1,
-  'XlukqLH8': 37,
+  '7scSATcZ': 1,
+  'LIMg3y94': 9,
+  'rhRuFdIP': 13,
+  'YR9r5s6q': 29,
+  'QCnCAagn': 30,
+  'EiUPsO0e': 31,
+  'nnGQFc43': 34,
+  'EgYCDrzH': 37,
+  'hwh1BLAL': 48,
+  'PtDrdt9v': 55,
+  'ydlHgmBg': 83,
+  'VBX3VORk': 84,
+  'YhAlwjNh': 86,
+  'F1dDm1OY': 93,
   'AerA1hNN': 101,
   '1kDKQxJb': 209,
   'o5lXptLo': 291,
