@@ -354,7 +354,26 @@ export const BS_TAAS_PARTS = {
   'VBX3VORk': 84,
   'YhAlwjNh': 86,
   'F1dDm1OY': 93,
-  'AerA1hNN': 101,
+  '37cdWCQP': 101,
+  'oL32UjM6': 106,
+  'p2bm9quF': 109,
+  '8ajjCTtg': 113,
+  'ulorFJ0c': 119,
+  'olYs3pHe': 123,
+  'kiTxkfet': 126,
+  'nZicYkes': 133,
+  '1bAtXKoc': 138,
+  'gqhAImdo': 145,
+  'AnVscbAJ': 149,
+  'EnFXBYxy': 154,
+  'B8ZHQh1D': 158,
+  'i3Wim559': 161,
+  'nOLBngLq': 164,
+  '1yRKGJfc': 167,
+  'zCY8AVzl': 185,
+  'S5mViX7z': 187,
+  '4KFDFg3m': 190,
+  'Levgq2jH': 197,
   '1kDKQxJb': 209,
   'o5lXptLo': 291,
   'eNwJXy4s': 389,
@@ -604,5 +623,5 @@ export const FN_LANGUAGES    = 'language-filter';
 export const FN_CONTENT_TYPE = 'content-type-filter';
 export const FN_DATE_FILTER  = 'date-filter';
 
-export const FN_SOURCES_MULTI  = 'sources-filter-multi';
-export const FN_TOPICS_MULTI   = 'topics-filter-multi';
+export const FN_SOURCES_MULTI = 'sources-filter-multi';
+export const FN_TOPICS_MULTI  = 'topics-filter-multi';
