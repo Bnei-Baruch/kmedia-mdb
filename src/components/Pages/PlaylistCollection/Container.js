@@ -141,6 +141,6 @@ PlaylistCollectionContainer.propTypes = {
 };
 
 const areEqual = (prevProps, nextProps) =>
-  (prevProps.cId === nextProps.cId) && (prevProps.cuId === nextProps.cuId);
+  (prevProps.cId === nextProps.cId) && ((!prevProps.cuId && !nextProps.cuId) || (prevProps.cuId === nextProps.cuId));
 
 export default React.memo(withNamespaces()(PlaylistCollectionContainer), areEqual);
