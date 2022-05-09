@@ -45,6 +45,16 @@ const getLikutimLanguages = unit => {
 
 const getSourceLanguages = idx => idx?.data ? [...Object.keys(idx.data)] : [];
 
+const getDownloadProps = (pdf, file) => {
+  const d = pdf || file;
+  if (!d) return {};
+
+  const path = physicalFile(d, true);
+
+  const { mimeType, name: filename } = d;
+  return { path, downloadAllowed: true, mimeType, filename };
+};
+
 const Sources = ({ unit, t, activeTab = 'sources' }) => {
   const getSourceById   = useSelector(state => selectors.getSourceById(state.sources), shallowEqual);
   const indexById       = useSelector(state => assetsSelectors.getSourceIndexById(state.assets), shallowEqual);
@@ -201,6 +211,7 @@ const Sources = ({ unit, t, activeTab = 'sources' }) => {
     );
   };
 
+
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
   const handleLanguageChanged = (e, lang) => setLanguage(lang);
@@ -214,7 +225,8 @@ const Sources = ({ unit, t, activeTab = 'sources' }) => {
     return noSourcesAvailableMsg;
   }
 
-  const url = file && physicalFile(file, true);
+  const downloadProps = getDownloadProps(pdf, file);
+
   return (
     <div
       className={clsx({
@@ -261,7 +273,9 @@ const Sources = ({ unit, t, activeTab = 'sources' }) => {
               </div>
             )
           }
-          {<Download path={url} mimeType={file.mimetype} downloadAllowed={true} filename={file.name} />}
+          {
+            <Download {...downloadProps} />
+          }
           <UnitBar
             handleSettings={setSettings}
             fontSize={setting.fontSize}
