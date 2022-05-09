@@ -4,14 +4,13 @@ import throttle from 'lodash/throttle';
 import { noop } from '../../../helpers/utils';
 import { withNamespaces } from 'react-i18next';
 import { Container, } from 'semantic-ui-react';
-import { Document, Page } from 'react-pdf';
-import { pdfjs } from 'react-pdf';
+import { Document, Page, pdfjs } from 'react-pdf';
 
-import { BS_TAAS_PARTS } from '../../../helpers/consts';
+import { BS_TAAS_PARTS, BS_TAAS_PARTS_PARTS_ONLY } from '../../../helpers/consts';
 import PDFMenu from './PDFMenu';
 import { ErrorSplash, LoadingSplash } from '../Splash/Splash';
 
-export const isTaas     = source => (BS_TAAS_PARTS[source] !== undefined);
+export const isTaas     = source => (BS_TAAS_PARTS[source] !== undefined) || (BS_TAAS_PARTS_PARTS_ONLY[source] !== undefined);
 export const startsFrom = source => BS_TAAS_PARTS[source];
 
 class PDF extends Component {

@@ -339,7 +339,7 @@ export const RH_ARTICLES = 'rQ6sIUZK';
 export const RH_RECORDS  = '2GAdavz0';
 
 // This is exptected to be sorted by values
-export const BS_TAAS_PARTS = {
+export const BS_TAAS_PARTS            = {
   '7scSATcZ': 1,
   'LIMg3y94': 9,
   'rhRuFdIP': 13,
@@ -391,6 +391,24 @@ export const BS_TAAS_PARTS = {
   'tcBbUnBZ': 2040,
   'TaGXjokb': 2075,
   'P727ETJu': 2080
+};
+export const BS_TAAS_PARTS_PARTS_ONLY = {
+  '9xNFLSSp': 1,
+  'XlukqLH8': 37,
+  'AerA1hNN': 101,
+  '1kDKQxJb': 209,
+  'o5lXptLo': 291,
+  'eNwJXy4s': 389,
+  'ahipVtPu': 485,
+  'Pscnn3pP': 599,
+  'Lfu7W3CD': 731,
+  'n03vXCJl': 865,
+  'UGcGGSpP': 1011,
+  'NpLQT0LX': 1127,
+  'AUArdCkH': 1297,
+  'tit6XNAo': 1493,
+  'FaKUG7ru': 1687,
+  'mW6eON0z': 1887,
 };
 
 // Persons

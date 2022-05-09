@@ -11,7 +11,7 @@ const ScrollToTop = ({ location, children }) => {
 
   useEffect(
     () => {
-      if (window.pageYOffset) {
+      if (window.pageYOffset && !location.search?.srchstart) {
         window.scrollTo(0, 0);
       }
     },
