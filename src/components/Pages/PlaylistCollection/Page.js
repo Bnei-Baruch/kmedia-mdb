@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { Container, Grid } from 'semantic-ui-react';
 
+import * as shapes from './../../../components/shapes';
 import { selectors as settings } from '../../../redux/modules/settings';
 import { ClientChroniclesContext, DeviceInfoContext } from '../../../helpers/app-contexts';
 import { usePrevious } from '../../../helpers/utils';

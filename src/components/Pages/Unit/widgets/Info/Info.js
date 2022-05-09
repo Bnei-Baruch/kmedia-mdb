@@ -19,7 +19,6 @@ import * as shapes from '../../../../shapes';
 import PersonalInfo from './PersonalInfo';
 import { selectors as recommended } from '../../../../../redux/modules/recommended';
 import UnitLogo from '../../../../shared/Logo/UnitLogo';
-import { selectors as mdb } from '../../../../../redux/modules/mdb';
 
 export const makeTagLinks = (tags = [], getTagById) =>
   Array.from(intersperse(
