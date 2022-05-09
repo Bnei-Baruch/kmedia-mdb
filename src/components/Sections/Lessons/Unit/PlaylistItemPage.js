@@ -19,9 +19,9 @@ const COLLECTION_TYPES_BY_ROUTING = {
 const PlaylistItemPage = ({ t }) => {
   const { id, routeType, tab } = useParams();
 
-  const unit     = useSelector(state => selectors.getDenormContentUnit(state.mdb, id), shallowEqual);
-  const wip      = useSelector(state => selectors.getWip(state.mdb).units[id], shallowEqual);
-  const err      = useSelector(state => selectors.getErrors(state.mdb).units[id], shallowEqual);
+  const unit = useSelector(state => selectors.getDenormContentUnit(state.mdb, id), shallowEqual);
+  const wip  = useSelector(state => selectors.getWip(state.mdb).units[id], shallowEqual);
+  const err  = useSelector(state => selectors.getErrors(state.mdb).units[id], shallowEqual);
 
   //fix bug with unit without collection
   const [needToFetch, setNeedToFetch] = useState();
@@ -51,11 +51,9 @@ const PlaylistItemPage = ({ t }) => {
 
   const collection = Object.values(unit.collections).find(c => cTypes.includes(c.content_type));
 
-  if (!collection) {
-    return <UnitPage />;
-  }
-
-  return <PlaylistCollectionContainer cId={collection.id} cuId={id} />;
+  return collection
+    ? <PlaylistCollectionContainer cId={collection.id} cuId={id} />
+    : <UnitPage />;
 };
 
 export default withNamespaces()(PlaylistItemPage);

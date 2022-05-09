@@ -24,8 +24,10 @@ const PlaylistCollectionContainer = ({ cId, t, cuId }) => {
 
   const dispatch = useDispatch();
 
+  const { id, film_date, cuIDs, content_units, content_type } = collection || false;
+  // console.log('collection data:', id, content_type, cuIDs, content_units)
+
   useEffect(() => {
-    const { cuIDs, content_units } = collection || false;
     // Fetch full units data if needed.
     if (cuIDs?.length > 0) {
       const cusForFetch = cuIDs.filter(cuID => {
@@ -44,7 +46,7 @@ const PlaylistCollectionContainer = ({ cId, t, cuId }) => {
     if (cuId && !fullUnitFetchedMap[cuId] && !wipMap.units[cuId] && !errorMap.units[cuId]) {
       dispatch(actions.fetchUnit(cuId));
     }
-  }, [collection, cuId, dispatch, errorMap.units, fullUnitFetchedMap, wipMap.units]);
+  }, [content_units, cuIDs, cuId, dispatch, errorMap.units, fullUnitFetchedMap, wipMap.units]);
 
   useEffect(() => {
     if (!Object.prototype.hasOwnProperty.call(wipMap.collections, cId)) {
@@ -64,18 +66,17 @@ const PlaylistCollectionContainer = ({ cId, t, cuId }) => {
   }, [collections]);
 
   const fetchWindow = useCallback(() => {
-    const { id, film_date } = collection || false;
     const filmDate = moment.utc(film_date);
     dispatch(actions.fetchWindow({
       id,
       start_date: filmDate.subtract(5, 'days').format(DATE_FORMAT),
       end_date: filmDate.add(10, 'days').format(DATE_FORMAT)
     }));
-  }, [collection, dispatch]);
+  }, [dispatch, film_date, id]);
 
   useEffect(() => {
     // next prev links only for lessons
-    if (COLLECTION_DAILY_LESSONS.includes(collection?.content_type)) {
+    if (COLLECTION_DAILY_LESSONS.includes(content_type)) {
       // empty or no window
       if (!cWindow.data || cWindow.data.length === 0) {
         if (!wipMap.cWindow[cId]) {
@@ -98,23 +99,23 @@ const PlaylistCollectionContainer = ({ cId, t, cuId }) => {
         }
       }
     }
-  }, [cId, cWindow, collection?.content_type, collections?.length, createPrevNextLinks, fetchWindow, wipMap.cWindow]);
+  }, [cId, cWindow, content_type, collections?.length, createPrevNextLinks, fetchWindow, wipMap.cWindow]);
 
   useEffect(() => {
-    if (collection?.cuIDs)
-      dispatch(recommended.fetchViews(collection.cuIDs));
-  }, [collection.cuIDs, dispatch]);
+    if (cuIDs)
+      dispatch(recommended.fetchViews(cuIDs));
+  }, [cuIDs, dispatch]);
 
-  if (!cId || !collection || !Array.isArray(collection.content_units)) {
+  if (!cId || !collection || !Array.isArray(content_units)) {
     return null;
   }
 
   // We're wip / err if some request is wip / err
   //don't wip for CU that fetched with full fetch cause its rerender Page component
-  const wip = wipMap.collections[cId] || (Array.isArray(collection.cuIDs) && collection.cuIDs.some(cuID => !fullUnitFetchedMap[cuID] && wipMap.units[cuID]));
+  const wip = wipMap.collections[cId] || (Array.isArray(cuIDs) && cuIDs.some(cuID => !fullUnitFetchedMap[cuID] && wipMap.units[cuID]));
   let err   = errorMap.collections[cId];
   if (!err) {
-    const cuIDwithError = Array.isArray(collection.cuIDs) && collection.cuIDs.find(cuID => errorMap.units[cuID]);
+    const cuIDwithError = Array.isArray(cuIDs) && cuIDs.find(cuID => errorMap.units[cuID]);
     err                 = cuIDwithError ? errorMap.units[cuIDwithError] : null;
   }
 
