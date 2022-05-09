@@ -87,7 +87,7 @@ class Transcription extends Component {
     }
 
     if (state.selectedFile && unit.id === state.unit_id) {
-      return { selectedFile: state.selectedFile, languages, language: newLanguage, textFiles };
+      return { languages, language: newLanguage, textFiles };
     }
 
     const fileFromLocation = textFiles.find(f => f.id === selectedFileId);
@@ -101,23 +101,21 @@ class Transcription extends Component {
       || (nextProps.contentLanguage !== props.contentLanguage)
       || (nextProps.unit && !props.unit)
       || (nextProps.unit.id !== props.unit.id)
-      || (nextProps.unit.files !== props.unit.files
+      || nextProps.unit.files !== props.unit.files
+      || (
+        nextState.settings !== state.settings
+        || nextState.language !== state.language
+        || nextState.fileCU !== state.fileCU
+        || nextState.selectedFile !== state.selectedFile
         || !isEqual(nextProps.doc2htmlById, props.doc2htmlById)
         || (state.selectedFile && props.doc2htmlById && (props.doc2htmlById[state.selectedFile.id]?.wip !== nextProps.doc2htmlById[state.selectedFile.id]?.wip))
-        || nextState.language !== state.language
-        || nextState.selectedFile !== state.selectedFile
-        || nextState.settings !== state.settings);
+      );
   }
 
   componentDidMount() {
     const { selectedFile } = this.state;
 
     this.loadFile(selectedFile);
-    document.addEventListener('mouseup', this.handleOnMouseUp);
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener('mouseup', this.handleOnMouseUp);
   }
 
   componentDidUpdate(prevProp, prevState) {
@@ -202,9 +200,11 @@ class Transcription extends Component {
     const urlParams         = `activeTab=${activeTab}${selectedFileProps}${!ap ? '' : `&ap=${ap}`}`;
     const direction         = getLanguageDirection(language);
 
-    return (
+    return fileCU && (
       <div className="font_settings-wrapper">
-        {this.getSelectFiles(selectedFile, textFiles)}
+        {
+          this.getSelectFiles(selectedFile, textFiles)
+        }
         <div
           className="font_settings doc2html"
           style={{ direction, textAlign: (direction === 'ltr' ? 'left' : 'right') }}
