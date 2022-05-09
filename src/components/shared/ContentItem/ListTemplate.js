@@ -37,7 +37,7 @@ const ListTemplate = ({
   const cuInfoRef                         = useRef();
 
   useEffect(() => {
-    if (cuInfoRef.current.scrollHeight > cuInfoRef.current.clientHeight) {
+    if (cuInfoRef.current && (cuInfoRef.current.scrollHeight > cuInfoRef.current.clientHeight)) {
       setIsNeedTooltip(true);
     }
   }, [cuInfoRef.current]);
