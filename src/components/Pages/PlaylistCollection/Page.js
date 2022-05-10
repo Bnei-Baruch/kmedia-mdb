@@ -49,7 +49,7 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
 
   const prev = usePrevious({ unit, collection });
 
-  console.log(' cuId:', cuId, ' selected:', selected,  ' unit:', unit?.id, '  playlist:', playlist,)
+  console.log(' cuId:', cuId, ' selected:', selected, ' unit:', unit?.id, '  playlist:', playlist)
 
   useEffect(() => {
     if (prev?.unit?.id !== unit?.id) {
@@ -111,26 +111,13 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
   }, [collection, contentLanguage, location, playlist, uiLanguage]);
 
   useEffect(() => {
-    if (cuId && playlist) {
-      const newSel = playlist.items.findIndex(i => i.unit.id === cuId)
-      if (!isNaN(newSel) && newSel !== -1) {
-        const newUnit = playlist.items[newSel]?.unit;
-        console.log('set new unit:', newSel, newUnit)
-        setSelected(newSel);
-        setUnit(newUnit);
-      }
+    const newSel = cuId ? playlist?.items.findIndex(i => i.unit.id === cuId) : playerHelper.getActivePartFromQuery(location);
+    if (!isNaN(newSel) && newSel !== -1) {
+      setSelected(newSel);
+      const newUnit = playlist?.items[newSel]?.unit;
+      setUnit(newUnit);
     }
-    // const newSel = cuId && playlist
-    //   ? playlist.items.findIndex(i => i.unit.id === cuId)
-    //   : playerHelper.getActivePartFromQuery(location);
-    // if (!isNaN(newSel) && newSel !== -1) {
-    //   const newUnit = playlist.items[newSel]?.unit;
-    //   console.log('set new unit:', newSel, newUnit)
-    //   setSelected(newSel);
-    //   setUnit(newUnit);
-    // }
-
-  }, [playlist, cuId, location]);
+  }, [cuId, location, playlist]);
 
   if (!collection || !Array.isArray(collection.content_units) || !playlist || !unit) {
     return null;

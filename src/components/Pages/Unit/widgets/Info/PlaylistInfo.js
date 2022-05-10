@@ -43,7 +43,7 @@ const PlaylistInfo = ({ cuID, t, handleClose = null }) => {
       setForUpdate({ ...forUpdate, ...update, count: forUpdate.count + s.length });
       setSelected([...s, ...saved]);
     }
-  }, [total]);
+  }, [countNew, forUpdate, playlists, saved, total]);
 
   const dir = getLanguageDirection(language);
 
