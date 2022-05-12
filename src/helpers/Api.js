@@ -126,6 +126,10 @@ class Api {
     Requests.get(`stats/label_class?${Requests.makeParams(rest)}`)
   );
 
+  static elasticStats = ({ q, language }) => (
+    Requests.get(`stats/search_class?${Requests.makeParams({ q, language })}`)
+  );
+
   static countCU = params => Requests.get(`count_cu?${Requests.makeParams(params)}`);
 
   static tweets = ({ pageNo: page_no, pageSize: page_size, ...rest }) => (
@@ -151,10 +155,9 @@ class Api {
     pageSize: page_size,
     sortBy: sort_by,
     deb,
-    suggest,
     searchId: search_id
   }) => (
-    Requests.get(`search?${Requests.makeParams({ q, language, page_no, page_size, sort_by, deb, suggest, search_id })}`)
+    Requests.get(`search?${Requests.makeParams({ q, language, page_no, page_size, sort_by, deb, search_id })}`)
   );
 
   static click = ({ mdbUid: mdb_uid, index, type, rank, searchId: search_id, deb }) => (

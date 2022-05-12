@@ -7,7 +7,6 @@ import NotImplemented from './components/NotImplemented';
 import PlaylistCollectionIdCheck from './components/Pages/PlaylistCollection/IdCheck';
 import PlaylistItemPage from './components/Pages/PlaylistItemPage';
 import PlaylistDecorator from './components/Pages/PlaylistMy/Decorator';
-import SearchResults from './components/Search/SearchResultsContainer';
 import Events from './components/Sections/Events/MainPage';
 import ExcerptContainer from './components/Sections/Excerpt/ExcerptContainer';
 // import ProjectStatus from './components/Sections/ProjectStatus/ProjectStatus';
@@ -36,6 +35,7 @@ import BlogPost from './components/Sections/Publications/tabs/Blog/Post/Containe
 import SimpleModeContainer from './components/Sections/SimpleMode/Container';
 import Topics from './components/Sections/Topics/TopicContainer';
 import Topic from './components/Sections/Topics/TopicPage';
+import SearchResults from './components/Search/SearchResults';
 import * as shapes from './components/shapes';
 import {
   DEFAULT_LANGUAGE,
