@@ -55,6 +55,16 @@ export const isEmpty = obj => {
 
 export const isNotEmptyArray = arr => (Array.isArray(arr) && arr.length > 0);
 
+export const randomizeArray = items => {
+  const randomArr = items.map(() => Math.random() * items.length);
+  items.sort((a, b) => {
+    const ai = items.indexOf(a);
+    const bi = items.indexOf(b);
+
+    return randomArr[ai] - randomArr[bi];
+  });
+};
+
 /**
  * Format the given error into a user friendly string
  * Intended to format axios errors but may be extended to handle other errors as well
@@ -341,8 +351,7 @@ export const getSectionForTranslation = content_type => {
   }
 };
 
-export const noop = () => {
-};
+export const noop = () => {};
 
 // Used in React hooks to remember previous props.
 export const usePrevious = value => {
