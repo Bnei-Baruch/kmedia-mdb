@@ -56,6 +56,7 @@ class SearchResultSeries extends SearchResultBase {
     if (root && root.children && root.children.length) {
       return root;
     }
+
     if (!root) return series[series.length - 1];
     return this.getLowestLevelSeries(series, root.id);
   };
