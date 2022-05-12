@@ -261,6 +261,10 @@
   &:first-child > .title {
     padding-top: 0;
   }
+  
+  .date-filter-presets {
+    display: flex;
+  }
 
   .date-filter {
     min-width: auto;
@@ -279,6 +283,7 @@
       }
 
       .content {
+
         width: fit-content;
 
         input {
@@ -300,6 +305,9 @@
   width: auto;
 
   & > .header {
+    display: flex;
+    align-items: center;
+
     text-align: start;
     margin: 0;
     padding-top: 0;
@@ -388,6 +396,7 @@
 
 .tree_item_content {
   display: flex;
+  max-width: 80vw;  // Required for mobile. Limits column width by viewport.
 
   .tree_item_title {
     margin-left: 8px;

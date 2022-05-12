@@ -180,16 +180,18 @@ export const lessonsCollectionPage = (store, match) => {
   return collectionPage('lessons-collection')(store, match);
 };
 
-export const searchPage = store => (Promise.all([store.sagaMiddleWare.run(searchSagas.hydrateUrl).done, store.sagaMiddleWare.run(filtersSagas.hydrateFilters, filtersActions.hydrateFilters('search')).done])
+export const searchPage = store => (Promise.all([
+  store.sagaMiddleWare.run(searchSagas.hydrateUrl).done,
+  store.sagaMiddleWare.run(filtersSagas.hydrateFilters, filtersActions.hydrateFilters('search')).done,
+])
   .then(() => {
     const state    = store.getState();
     const q        = searchSelectors.getQuery(state.search);
     const page     = searchSelectors.getPageNo(state.search);
     const pageSize = settingsSelectors.getPageSize(state.settings);
     const deb      = searchSelectors.getDeb(state.search);
-    const suggest  = searchSelectors.getSuggest(state.search);
 
-    store.dispatch(searchActions.search(q, page, pageSize, suggest, deb));
+    store.dispatch(searchActions.search(q, page, pageSize, deb));
   })
 );
 

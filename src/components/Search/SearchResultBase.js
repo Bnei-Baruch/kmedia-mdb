@@ -44,7 +44,6 @@ class SearchResultBase extends Component {
       ]))
     })).isRequired,
     location: shapes.HistoryLocation.isRequired,
-    click: PropTypes.func.isRequired,
     getTagById: PropTypes.func.isRequired,
     getSourceById: PropTypes.func.isRequired,
     hit: PropTypes.shape({}).isRequired,
@@ -80,10 +79,9 @@ class SearchResultBase extends Component {
     }, []);
 
   logClick = (mdbUid, index, type, rank, searchId) => {
-    const { click, location, chronicles } = this.props;
-    const deb                             = isDebMode(location);
+    const { location, chronicles } = this.props;
+    const deb = isDebMode(location);
     chronicles.searchSelected({ mdbUid, index, type, rank, searchId, deb });
-    click(mdbUid, index, type, rank, searchId, deb);
   };
 
   // Renders both direct and direct content unit files.
