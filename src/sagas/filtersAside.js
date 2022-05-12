@@ -72,10 +72,45 @@ export function* fetchStat(action) {
   }
 }
 
+export function* fetchElasticStat(action) {
+  const { namespace, params, isPrepare } = action.payload;
+
+  let filterParams = {};
+  if (!isPrepare) {
+    const filters = yield select(state => filterSelectors.getFilters(state.filters, namespace));
+    filterParams  = filtersTransformer.toApiParams(filters) || {};
+  }
+
+  //need when was filtered by base param (for example filter by topics on the topic page)
+  let isFilteredByBase = false;
+  Object.keys(params).forEach(p => {
+    if (filterParams[p]) {
+      filterParams[p]  = filterParams[p].filter(x => params[p] !== x);
+      isFilteredByBase = filterParams[p].length > 0;
+    } else {
+      filterParams[p] = params[p];
+    }
+  });
+
+  try {
+
+    const { data } = yield call(Api.elasticStats, filterParams);
+
+    yield put(actions.fetchElasticStatsSuccess({ data, namespace, isPrepare }));
+  } catch (err) {
+    yield put(actions.fetchStatsFailure(namespace, err));
+  }
+}
+
 function* watchFetchStat() {
   yield takeEvery(types.FETCH_STATS, fetchStat);
 }
 
+function* watchElasticFetchStat() {
+  yield takeEvery(types.FETCH_ELASTIC_STATS, fetchElasticStat);
+}
+
 export const sagas = [
   watchFetchStat,
+  watchElasticFetchStat,
 ];

@@ -31,6 +31,7 @@ import SearchResultSource from './SearchResultSource';
 import SearchResultPost from './SearchResultPost';
 import DidYouMean from './DidYouMean';
 import SearchResultSeries from './SearchResultSeries';
+import Filters from './Filters';
 
 const SearchResults = props => {
   /* Requested by Mizrahi
@@ -58,7 +59,8 @@ const SearchResults = props => {
       language,
       t,
       handlePageChange,
-      location
+      location,
+      baseParams
     } = props;
 
   const filterByHitType = hit => hitType ? hit.type === hitType : true;
@@ -67,17 +69,17 @@ const SearchResults = props => {
 
   const renderHit = (hit, rank, searchLanguage) => {
     const {
-      _source: {
-        mdb_uid: mdbUid,
-        result_type: resultType,
-        landing_page: landingPage,
-        filter_values: filterValues
-      }, _type: type, _index
-    }   = hit;
+            _source: {
+              mdb_uid: mdbUid,
+              result_type: resultType,
+              landing_page: landingPage,
+              filter_values: filterValues
+            }, _type: type, _index
+          }   = hit;
     const key = mdbUid ? `${mdbUid}_${type}` : `${landingPage}_${type}_${(filterValues || []).map(({
-      name,
-      value
-    }) => `${name}_${value}`).join('_')}`;
+                                                                                                     name,
+                                                                                                     value
+                                                                                                   }) => `${name}_${value}`).join('_')}`;
 
     searchLanguage = searchLanguageByIndex(_index, searchLanguage);
     const newProps = {
@@ -187,8 +189,16 @@ const SearchResults = props => {
   }
 
   return (
-    <Grid>
-      <Grid.Column key="1" computer={16} tablet={16} mobile={16}>
+
+    <Grid divided>
+      <Grid.Column width="4" className="filters-aside-wrapper">
+        <Filters
+          namespace={'search'}
+          baseParams={baseParams}
+        />
+      </Grid.Column>
+      <Grid.Column width="12">
+
         {/* Requested by Mizrahi renderTopNote() */}
         {typo_suggest && <DidYouMean typo_suggest={typo_suggest} />}
 
@@ -208,7 +218,6 @@ const SearchResults = props => {
           />
         </Container>
       </Grid.Column>
-      {/* <Grid.Column key="2" /> */}
     </Grid>
   );
 };

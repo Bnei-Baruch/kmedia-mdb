@@ -122,6 +122,10 @@ class Api {
     Requests.get(`stats/label_class?${Requests.makeParams(rest)}`)
   );
 
+  static elasticStats = rest => (
+    Requests.get(`stats/search_class?${Requests.makeParams(rest)}`)
+  );
+
   static countCU = params => Requests.get(`count_cu?${Requests.makeParams(params)}`);
 
   static tweets = ({ pageNo: page_no, pageSize: page_size, ...rest }) => (

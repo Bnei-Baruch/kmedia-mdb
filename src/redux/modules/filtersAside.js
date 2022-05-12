@@ -17,10 +17,17 @@ const FETCH_STATS         = 'Filters_aside/FETCH_STATS';
 const FETCH_STATS_FAILURE = 'Filters_aside/FETCH_STATS_FAILURE';
 const FETCH_STATS_SUCCESS = 'Filters_aside/FETCH_STATS_SUCCESS';
 
+const FETCH_ELASTIC_STATS         = 'Filters_aside/FETCH_ELASTIC_STATS';
+const FETCH_ELASTIC_STATS_FAILURE = 'Filters_aside/FETCH_ELASTIC_STATS_FAILURE';
+const FETCH_ELASTIC_STATS_SUCCESS = 'Filters_aside/FETCH_ELASTIC_STATS_SUCCESS';
+
 export const types = {
   FETCH_STATS,
   FETCH_STATS_FAILURE,
   FETCH_STATS_SUCCESS,
+  FETCH_ELASTIC_STATS,
+  FETCH_ELASTIC_STATS_FAILURE,
+  FETCH_ELASTIC_STATS_SUCCESS,
 };
 
 /* Actions */
@@ -33,10 +40,21 @@ const fetchStats        = createAction(FETCH_STATS, (namespace, params, isPrepar
 const fetchStatsSuccess = createAction(FETCH_STATS_SUCCESS);
 const fetchStatsFailure = createAction(FETCH_STATS_FAILURE);
 
+const fetchElasticStats        = createAction(FETCH_ELASTIC_STATS, (namespace, params, isPrepare) => ({
+  namespace,
+  params,
+  isPrepare
+}));
+const fetchElasticStatsSuccess = createAction(FETCH_ELASTIC_STATS_SUCCESS);
+const fetchElasticStatsFailure = createAction(FETCH_ELASTIC_STATS_FAILURE);
+
 export const actions = {
   fetchStats,
   fetchStatsSuccess,
   fetchStatsFailure,
+  fetchElasticStats,
+  fetchElasticStatsSuccess,
+  fetchElasticStatsFailure,
 };
 
 /* Reducer */
@@ -82,6 +100,29 @@ const onFetchStatsSuccess = (draft, { dataCU, dataC, dataL, namespace, isPrepare
   return draft;
 };
 
+const onFetchElasticStatsSuccess = (draft, { data, namespace, isPrepare }) => {
+  const ns = draft[namespace] || FILTER_NAMES.reduce((acc, fn) => {
+    acc[fn] = {};
+    return acc;
+  }, {});
+
+  FILTER_NAMES.forEach(fn => {
+    const acc = { tree: [], byId: {} };
+    const d   = data[fieldNameByFilter[fn]] || {};
+    Object.keys(d)
+      .filter(id => !!id)
+      .forEach(id => {
+        acc.byId[id] = d[id];
+        acc.tree.push(id);
+      });
+
+    ns[fn] = acc;
+  });
+
+  draft[namespace] = { ...ns, wip: false, err: null, isReady: true };
+  return draft;
+};
+
 const onFetchStatsFailure = (draft, ns, err) => {
   draft[ns].wip = false;
   draft[ns].err = err;
@@ -92,6 +133,7 @@ export const reducer = handleActions({
   [FETCH_STATS]: onFetchStats,
   [FETCH_STATS_SUCCESS]: onFetchStatsSuccess,
   [FETCH_STATS_FAILURE]: onFetchStatsFailure,
+  [FETCH_ELASTIC_STATS_SUCCESS]: onFetchElasticStatsSuccess,
 
 }, initialState);
 
