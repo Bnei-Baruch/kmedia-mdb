@@ -325,7 +325,7 @@ export const COLLECTION_PUBLICATIONS_TYPE = [CT_ARTICLES];
 export const UNIT_LESSONS_TYPE            = [CT_LESSON_PART, /* CT_CHILDREN_LESSON, */ CT_WOMEN_LESSON, CT_VIRTUAL_LESSON, CT_FULL_LESSON, CT_LECTURE];
 export const UNIT_PROGRAMS_TYPE           = [CT_VIDEO_PROGRAM_CHAPTER, CT_CLIP];
 export const UNIT_EVENTS_TYPE             = [CT_EVENT_PART, CT_MEAL, CT_FRIENDS_GATHERING];
-export const UNIT_PUBLICATIONS_TYPE       = [CT_ARTICLE, CT_PUBLICATION, CT_BLOG_POST, SCT_BLOG_POST, SCT_TWEET];
+export const UNIT_PUBLICATIONS_TYPE       = [CT_ARTICLE/*, CT_PUBLICATION*/, CT_BLOG_POST, SCT_TWEET];
 export const DERIVED_UNITS_CONTENT_TYPE   = [CT_VIDEO_PROGRAM_CHAPTER, CT_CLIP];
 
 export const COLLECTION_DAILY_LESSONS = [CT_DAILY_LESSON, CT_SPECIAL_LESSON];
@@ -722,6 +722,7 @@ export const FN_PERSON             = 'person-filter';
 export const FN_MEDIA_TYPE         = 'media-type-filter';
 export const FN_LOCATIONS          = 'locations-filter';
 export const FN_FREE_TEXT          = 'free-text';
+export const FN_SORT_BY_FILTER     = 'sort-by-filter';
 
 export const FN_SOURCES_MULTI    = 'sources-filter-multi';
 export const FN_TOPICS_MULTI     = 'topics-filter-multi';
