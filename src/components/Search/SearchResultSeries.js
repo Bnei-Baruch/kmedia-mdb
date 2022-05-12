@@ -23,7 +23,7 @@ class SearchResultSeries extends SearchResultBase {
     const { logLinkParams, canonicalLinkParams } = this.buildCollectionLinkParams(s);
 
     return (
-      <Button basic size="tiny" className="link_to_cu">
+      <Button basic size="tiny" className="link_to_cu" key={s.id}>
         {s.name}
         <Link
           key={s.id}
@@ -123,9 +123,8 @@ class SearchResultSeries extends SearchResultBase {
               (collecitons.length > 4) && (
                 <Button
                   basic
-                  icon={showAll ? 'minus' : 'plus'}
                   className="link_to_cu"
-                  size="tini"
+                  size="tiny"
                   onClick={this.handleToggle}
                 >
                   <Icon name={showAll ? 'minus' : 'plus'} size="small" />
