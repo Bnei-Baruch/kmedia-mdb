@@ -4,15 +4,16 @@ import { renderRoutes } from 'react-router-config';
 import LanguageSetter from './components/Language/LanguageSetter';
 import Layout from './components/Layout/Layout';
 import NotImplemented from './components/NotImplemented';
+import PlaylistCollectionIdCheck from './components/Pages/PlaylistCollection/IdCheck';
 import PlaylistItemPage from './components/Pages/PlaylistItemPage';
-import PlaylistMy from './components/Pages/WithPlayer/PlaylistMy/Container';
-import SearchResults from './components/Search/SearchResultsContainer';
+import PlaylistDecorator from './components/Pages/PlaylistMy/Decorator';
 import Events from './components/Sections/Events/MainPage';
 import ExcerptContainer from './components/Sections/Excerpt/ExcerptContainer';
 // import ProjectStatus from './components/Sections/ProjectStatus/ProjectStatus';
 import Help from './components/Sections/Help/Help';
 import HomePage from './components/Sections/Home/Container';
 import LastLessonCollection from './components/Sections/Lesson/LastDaily';
+import LessonCollection from './components/Sections/Lesson/LessonPage';
 import Lessons from './components/Sections/Lessons/MainPage';
 import LibraryHomepage from './components/Sections/Library/Homepage';
 import LibraryContainer from './components/Sections/Library/LibraryContainer';
@@ -34,6 +35,7 @@ import BlogPost from './components/Sections/Publications/tabs/Blog/Post/Containe
 import SimpleModeContainer from './components/Sections/SimpleMode/Container';
 import Topics from './components/Sections/Topics/TopicContainer';
 import Topic from './components/Sections/Topics/TopicPage';
+import SearchResults from './components/Search/SearchResults';
 import * as shapes from './components/shapes';
 import {
   DEFAULT_LANGUAGE,
@@ -46,7 +48,6 @@ import {
 
 // import Design from './components/Design/Design';
 import * as ssrDataLoaders from './routesSSRData';
-import PlaylistCollectionPage from './components/Pages/PlaylistCollectionPage';
 
 const routes = [
   { path: '', component: HomePage, options: { ssrData: ssrDataLoaders.home } },
@@ -55,7 +56,7 @@ const routes = [
   { path: `personal/${MY_NAMESPACE_HISTORY}`, component: HistoryPage },
   { path: `personal/${MY_NAMESPACE_REACTIONS}`, component: ReactionPage },
   { path: `personal/${MY_NAMESPACE_PLAYLISTS}/:id`, component: PlaylistPage },
-  { path: `${MY_NAMESPACE_PLAYLISTS}/:id`, component: PlaylistMy },
+  { path: `${MY_NAMESPACE_PLAYLISTS}/:id`, component: PlaylistDecorator },
   { path: `${MY_NAMESPACE_BOOKMARKS}`, component: BookmarksPage },
 
   { path: 'publications', component: Publications, options: { ssrData: ssrDataLoaders.publicationsPage } },
@@ -72,8 +73,13 @@ const routes = [
   { path: 'lessons', component: Lessons, options: { ssrData: ssrDataLoaders.lessonsPage } },
   { path: 'lessons/:tab', component: Lessons, options: { ssrData: ssrDataLoaders.lessonsPage } },
   {
+    path: 'lessons/virtual/c/:id',
+    component: LessonCollection,
+    options: { ssrData: ssrDataLoaders.lessonsCollectionPage }
+  },
+  {
     path: 'lessons/:tab/c/:id',
-    component: PlaylistCollectionPage,
+    component: PlaylistCollectionIdCheck,
     options: { ssrData: ssrDataLoaders.lessonsCollectionPage }
   },
   { path: ':routeType/:tab/cu/:id', component: PlaylistItemPage, options: { ssrData: ssrDataLoaders.cuPage } },
@@ -88,13 +94,13 @@ const routes = [
   { path: 'events', component: Events, options: { ssrData: ssrDataLoaders.eventsPage } },
   {
     path: 'events/c/:id',
-    component: PlaylistCollectionPage,
+    component: PlaylistCollectionIdCheck,
     options: { ssrData: ssrDataLoaders.playlistCollectionPage }
   },
   { path: 'music', component: Music, options: { ssrData: ssrDataLoaders.musicPage } },
   {
     path: 'music/c/:id',
-    component: PlaylistCollectionPage,
+    component: PlaylistCollectionIdCheck,
     options: { ssrData: ssrDataLoaders.playlistCollectionPage }
   },
   { path: 'sources', component: LibraryHomepage },
@@ -115,8 +121,8 @@ const routes = [
   // { path: 'design2', component: Design2 },
 ];
 
-export const NotFound = () => <h1>Page not found</h1>;
-const Root            = ({ route }) => renderRoutes(route.routes);
+const NotFound = () => <h1>Page not found</h1>;
+const Root     = ({ route }) => renderRoutes(route.routes);
 
 /** Creates a page route config */
 const pageRoute = (path, component, { prefix, subRoutes, ssrData } = {}) => ({
