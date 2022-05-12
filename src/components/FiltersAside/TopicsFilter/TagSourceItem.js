@@ -35,6 +35,8 @@ const TagSourceItem = props => {
   const getById     = isTag ? getTagById : getSourceById;
   const item        = getById(id);
   const childrenIDs = useMemo(() => item.children?.filter(x => baseItems.includes(x)) || [], [baseItems, item]);
+  const childrenStats = useSelector(state => filtersAside.getMultipleStats(state.filtersAside, namespace, filterName)(childrenIDs));
+  const finalStat = stat || childrenStats.reduce((sum, s) => sum + s, 0);
 
   useEffect(() => {
     const sel = selected.includes(id) || defaultSel;
@@ -79,13 +81,13 @@ const TagSourceItem = props => {
   );
 
   return (
-    <List.Item key={`${filterName}_${id}`} disabled={stat === 0}>
+    <List.Item key={`${filterName}_${id}`} disabled={finalStat === 0}>
       <List.Content className="tree_item_content">
         <Checkbox
           checked={isSelected}
           onChange={handleSelect}
           indeterminate={isOnSelPath}
-          disabled={stat === 0}
+          disabled={finalStat === 0}
         />
         <span
           className={clsx('tree_item_title', { 'bold-font': deep === 1 })}>
@@ -100,11 +102,11 @@ const TagSourceItem = props => {
               icon={`caret ${isLanguageRtl(language) ? 'left' : 'right'}`}
               onClick={toggleOpen}
               size="medium"
-              disabled={stat === 0}
+              disabled={finalStat === 0}
             />
           )
         }
-        <span className="stat">{`(${stat})`}</span>
+        <span className="stat">{`(${finalStat})`}</span>
       </List.Content>
       {
         (deep !== 0) && (childrenIDs.length > 0) ? renderSubList() :
