@@ -102,20 +102,20 @@ class SearchResultsContainer extends Component {
 
   render() {
     const {
-            wip,
-            err,
-            queryResult,
-            cMap,
-            cuMap,
-            postMap,
-            twitterMap,
-            pageNo,
-            pageSize,
-            language,
-            location,
-            click,
-            query
-          } = this.props;
+      wip,
+      err,
+      queryResult,
+      cMap,
+      cuMap,
+      postMap,
+      twitterMap,
+      pageNo,
+      pageSize,
+      language,
+      location,
+      click,
+      query
+    } = this.props;
 
     return (
       <div>
