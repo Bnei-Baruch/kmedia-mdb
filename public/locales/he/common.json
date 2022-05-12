@@ -113,7 +113,8 @@
       "person-filter": "מחבר",
       "original-language-filter": "שפת מקור",
       "locations-filter": "מיקום",
-      "free-text": "טקסט חופשי"
+      "free-text": "טקסט חופשי",
+      "sort-by-filter": "מיין לפי"
     },
     "media-types": {
       "audio" : "אודיו",
@@ -145,7 +146,8 @@
       "KITEI_MAKOR": "קטעי מקור",
       "LIKUTIM": "ליקוטי מקובלים",
       "SOURCE": "ספריית כתבי מקובלים",
-      "PICNIC": "פיקניק"
+      "PICNIC": "פיקניק",
+      "R_TWEET": "ציוצים"
     }
   },
   "buttons": {

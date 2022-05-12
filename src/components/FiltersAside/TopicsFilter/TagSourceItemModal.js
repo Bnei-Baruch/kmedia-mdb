@@ -33,7 +33,7 @@ const TagSourceItemModal = props => {
 
   const language = useSelector(state => settings.getLanguage(state.settings));
 
-  if (!parent) return null;
+  if (!parent || !parent.children) return null;
 
   const handleSetQuery = (e, data) => setQuery(data.value);
 
@@ -85,8 +85,8 @@ const TagSourceItemModal = props => {
       onClose={handleClose}
       closeIcon={<Icon name="times circle outline" />}
     >
-      <Modal.Header className="no-border nowrap">
-        {parent[field]}
+      <Modal.Header className="no-border">
+        <div>{parent[field]}</div>
         <Input
           className="search-input"
           placeholder={t('sources-library.filter')}
