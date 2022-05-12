@@ -29,6 +29,8 @@ const TopicPage = ({ t }) => {
 
   console.log('SELECTED', selected);
 
+  console.log('SELECTED', selected);
+
   const { mediaTotal, textTotal } = useSelector(state => selectors.getItems(state.tags));
   const total                     = Math.max(mediaTotal, textTotal);
 
