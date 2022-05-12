@@ -101,8 +101,11 @@ export function* fetchSQData() {
   try {
     const language = yield select(state => settings.getLanguage(state.settings));
     const { data } = yield call(Api.sqdata, { language });
+    //console.log('1111111111111111');
     yield put(sources.receiveSources({ sources: data.sources, language }));
+    //console.log('2222222222222222');
     yield put(tags.receiveTags(data.tags));
+    //console.log('3333333333333333');
     yield put(publications.receivePublishers(data.publishers));
     yield put(actions.receivePersons(data.persons));
     yield put(actions.fetchSQDataSuccess());

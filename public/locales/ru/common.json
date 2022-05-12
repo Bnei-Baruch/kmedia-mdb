@@ -114,7 +114,8 @@
       "person-filter": "Автор",
       "original-language-filter": "Язык оригинала",
       "locations-filter": "Место проведения",
-      "free-text": "Свободный текст"
+      "free-text": "Свободный текст",
+      "sort-by-filter": "Сортировать по"
     },
     "media-types": {
       "audio" : "Аудио",
@@ -146,7 +147,8 @@
       "KITEI_MAKOR": "Отрывки первоисточников",
       "LIKUTIM": "Сборники",
       "SOURCE": "Библиотека",
-      "PICNIC": "Пикник"
+      "PICNIC": "Пикник",
+      "R_TWEET": "Твиты"
     }
   },
   "buttons": {
@@ -270,9 +272,9 @@
     "programs": "передач",
     "sortby": "Сортировать по",
     "sorts": {
-      "relevance": "актуальности",
-      "newertoolder": "в обратном порядке обновления",
-      "oldertonewer": "в порядке обновления"
+      "relevance": "Актуальности",
+      "newertoolder": "В обратном порядке обновления",
+      "oldertonewer": "В порядке обновления"
     },
     "suggestions": {
       "categories": {
