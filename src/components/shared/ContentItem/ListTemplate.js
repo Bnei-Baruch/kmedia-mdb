@@ -37,7 +37,7 @@ const ListTemplate = ({
   const cuInfoRef                         = useRef();
 
   useEffect(() => {
-    if (cuInfoRef.current.scrollHeight > cuInfoRef.current.clientHeight) {
+    if (cuInfoRef.current && (cuInfoRef.current.scrollHeight > cuInfoRef.current.clientHeight)) {
       setIsNeedTooltip(true);
     }
   }, [cuInfoRef.current]);
@@ -64,10 +64,14 @@ const ListTemplate = ({
 
   const renderCUInfo = () => {
     const name    = unit?.name || source?.name || tag?.label;
-    const content = <Header
-      as={size === 'big' || isMobileDevice ? 'h5' : 'h3'}
-      className="cu_item_name"
-      content={name} />;
+    const content = (
+      <Ref innerRef={cuInfoRef}>
+        <Header
+          as={size === 'big' || isMobileDevice ? 'h5' : 'h3'}
+          className="cu_item_name"
+          content={name} />
+      </Ref>
+    );
 
     if (!isNeedTooltip)
       return content;
@@ -97,11 +101,7 @@ const ListTemplate = ({
         </div>
       </div>
       <div className={clsx('cu_item_info', { [dir]: true, 'with_actions': !!children })}>
-        <Ref innerRef={cuInfoRef}>
-          <Container>
-            {withCUInfo && renderCUInfo()}
-          </Container>
-        </Ref>
+        {withCUInfo && renderCUInfo()}
         {info}
         <div className={`cu_info_description ${dir} text_ellipsis`}>
           {description.map((d, i) => (<span key={i}>{d}</span>))}
