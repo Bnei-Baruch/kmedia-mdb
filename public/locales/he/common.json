@@ -189,7 +189,8 @@
       "UNITY_DAY": "חלקי האירוע",
       "LESSONS_SERIES": "שיעורי הסדרה",
       "SONGS": "שירים"
-    }
+    },
+    "shuffle": "לערבב את הפלייליסט"
   },
   "messages": {
     "loading": "טוען",

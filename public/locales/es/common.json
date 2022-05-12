@@ -193,7 +193,8 @@
       "UNITY_DAY": "Partes del evento",
       "LESSONS_SERIES": "Partes de la colección",
       "SONGS": "Music Playlist"
-    }
+    },
+    "shuffle": "Shuffle Playlist"
   },
   "messages": {
     "loading": "Cargando",
