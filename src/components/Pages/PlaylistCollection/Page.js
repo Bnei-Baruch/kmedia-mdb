@@ -95,6 +95,7 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
       const newUnit = playlist?.items[newSel]?.unit;
       setUnit(newUnit);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [playlist, cuId]);
 
   if (!collection || !Array.isArray(collection.content_units)) {
