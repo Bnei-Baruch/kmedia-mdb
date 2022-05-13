@@ -19,6 +19,21 @@ import PlaylistHeader from './widgets/Playlist/PlaylistHeader';
 import AVPlaylistPlayer from '../../AVPlayer/AVPlaylistPlayer';
 import Materials from '../Unit/widgets/UnitMaterials/Materials';
 
+// Don't recommend lesson preparation, skip to next unit.
+const getRecommendUnit = (unit, collection, items) => {
+  let recommendUnit = unit;
+  const { ccuNames } = collection;
+  const isUnitPrep = ccuNames?.[unit.id] === '0' && Object.values(ccuNames).filter(value => value === '0').length === 1;
+  if (isUnitPrep && Array.isArray(items)) {
+    const indexOfUnit = items.findIndex(item => item?.unit?.id === unit.id);
+    if (indexOfUnit !== -1 && indexOfUnit + 1 < items.length) {
+      recommendUnit = items[indexOfUnit + 1].unit;
+    }
+  }
+
+  return recommendUnit;
+};
+
 const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, cuId }) => {
   const location           = useLocation();
   const history            = useHistory();
@@ -72,18 +87,17 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
   // we need to calculate the playlist here, so we can filter items out of recommended
   // playlist { collection, language, mediaType, items, groups };
   useEffect(() => {
-    const preferredMT    = playerHelper.restorePreferredMediaType();
-    const mediaType      = playerHelper.getMediaTypeFromQuery(location, preferredMT);
-    const playerLanguage = playlist?.language || contentLanguage;
-    const uiLang         = playlist?.language || uiLanguage;
-    const contentLang    = playerHelper.getLanguageFromQuery(location, playerLanguage);
+    const mediaType = playerHelper.getMediaTypeFromQuery(location);
 
-    const nPlaylist = playerHelper.playlist(collection, mediaType, contentLang, uiLang);
-    if (
-      nPlaylist?.collection.id !== playlist?.collection.id ||
-      nPlaylist?.mediaType !== playlist?.mediaType ||
-      nPlaylist?.language !== playlist?.language
-    ) {
+    if (playlist) {
+      if (mediaType !== playlist.mediaType ||
+          contentLanguage !== playlist.language) {
+        const qryContentLang = playerHelper.getLanguageFromQuery(location, playlist.language);
+        const nPlaylist = playerHelper.playlist(collection, mediaType, qryContentLang, playlist.language);
+        setPlaylist(nPlaylist);
+      }
+    } else {
+      const nPlaylist = playerHelper.playlist(collection, mediaType, contentLanguage, uiLanguage);
       setPlaylist(nPlaylist);
     }
   }, [collection, contentLanguage, location, playlist, uiLanguage]);
@@ -110,15 +124,7 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
   const filterOutUnits = items.map(item => item.unit).filter(u => !!u) || [];
 
   // Don't recommend lesson preparation, skip to next unit.
-  let recommendUnit = unit;
-  const ccuNames    = collection?.ccuNames || {};
-  const isUnitPrep  = ccuNames?.[unit?.id] === '0' && Object.values(ccuNames).filter(value => value === '0').length === 1;
-  if (isUnitPrep && Array.isArray(playlist?.items)) {
-    const indexOfUnit = playlist.items.findIndex(item => item?.unit?.id === unit.id);
-    if (indexOfUnit !== -1 && indexOfUnit + 1 < playlist.items.length) {
-      recommendUnit = playlist.items[indexOfUnit + 1].unit;
-    }
-  }
+  const recommendUnit = getRecommendUnit(unit, collection, items);
 
   const playlistData = (
     <>
