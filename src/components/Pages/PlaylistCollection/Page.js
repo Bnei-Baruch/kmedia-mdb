@@ -11,6 +11,7 @@ import { selectors as settings } from '../../../redux/modules/settings';
 import { ClientChroniclesContext, DeviceInfoContext } from '../../../helpers/app-contexts';
 import { usePrevious } from '../../../helpers/utils';
 import playerHelper from '../../../helpers/player';
+import { CT_SONGS } from '../../../helpers/consts';
 import Helmets from '../../shared/Helmets';
 import Info from '../Unit/widgets/Info/Info';
 import Recommended from '../Unit/widgets/Recommended/Main/Recommended';
@@ -137,6 +138,7 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
     </>
   );
 
+  const startWithAutoPlay = collection.content_type === CT_SONGS;
   const computerWidth = isMobileDevice ? 16 : 10;
 
   return !embed ?
@@ -155,6 +157,7 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
             onSelectedChange={handleSelectedChange}
             onLanguageChange={handleLanguageChange}
             onSwitchAV={handleSwitchAV}
+            startWithAutoPlay={startWithAutoPlay}
           />
           {
             unit &&
@@ -180,6 +183,7 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
         onSelectedChange={handleSelectedChange}
         onLanguageChange={handleLanguageChange}
         onSwitchAV={handleSwitchAV}
+        startWithAutoPlay={startWithAutoPlay}
       />
     </Container>;
 };

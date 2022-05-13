@@ -12,7 +12,7 @@ import AVMobileCheck from './AVMobileCheck';
 import { getQuery } from '../../helpers/url';
 import { DeviceInfoContext } from '../../helpers/app-contexts';
 
-const AVPlaylistPlayer = ({ items, selected, onSelectedChange, onLanguageChange, onSwitchAV }) => {
+const AVPlaylistPlayer = ({ items, selected, onSelectedChange, onLanguageChange, onSwitchAV, startWithAutoPlay = false }) => {
   const { undefinedDevice } = useContext(DeviceInfoContext);
   const uiLanguage          = useSelector(state => settings.getLanguage(state.settings));
   const contentLanguage     = useSelector(state => settings.getContentLanguage(state.settings));
@@ -20,7 +20,7 @@ const AVPlaylistPlayer = ({ items, selected, onSelectedChange, onLanguageChange,
   const location = useLocation();
   const query    = getQuery(location);
 
-  const [autoPlay, setAutoPlay]                 = useState(!!query.sstart);
+  const [autoPlay, setAutoPlay]                 = useState(startWithAutoPlay || !!query.sstart);
   const [mediaEditMode, setMediaEditMode]       = useState(null);
   const [isDropdownOpened, setIsDropdownOpened] = useState(false);
 
