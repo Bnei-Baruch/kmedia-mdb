@@ -10,16 +10,6 @@ import { Header, Button } from 'semantic-ui-react';
 import { CT_SONGS } from '../../../../../helpers/consts';
 import {  randomizeArray } from '../../../../../helpers/utils';
 
-const randomizePlaylist = (playlistItems, selectedIndex) => {
-  const selectedItem = playlistItems[selectedIndex];
-  const newPlaylistItems = [...playlistItems];
-
-  // random sorting of the playlist
-  randomizeArray(newPlaylistItems)
-  const newSelectedIndex = newPlaylistItems.indexOf(selectedItem);
-
-  return { newPlaylistItems, newSelectedIndex }
-}
 
 const PlaylistWidget = ({ playlist, selected = 0, link, t }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
@@ -31,7 +21,13 @@ const PlaylistWidget = ({ playlist, selected = 0, link, t }) => {
   const [playlistItems, setPlaylistItems] = useState(items);
 
   const randomize = () => {
-    const { newPlaylistItems, newSelectedIndex } = randomizePlaylist(playlistItems, selectedIndex);
+    const selectedItem = playlistItems[selectedIndex];
+    // a new array for sorting
+    const newPlaylistItems = [...playlistItems];
+    // random sorting of the playlist
+    randomizeArray(newPlaylistItems)
+    const newSelectedIndex = newPlaylistItems.indexOf(selectedItem);
+
     setPlaylistItems(newPlaylistItems);
     setSelectedIndex(newSelectedIndex);
   }
