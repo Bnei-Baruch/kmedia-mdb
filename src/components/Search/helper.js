@@ -10,7 +10,7 @@ const PATH_SEPARATOR = ' > ';
 
 const MIN_NECESSARY_WORDS_FOR_SEARCH = 4;
 
-export const mlsToStrColon = (seconds) => {
+export const mlsToStrColon = seconds => {
   const duration = new Date(seconds * 1000); // ms
   const h        = duration.getUTCHours();
   let m          = duration.getUTCMinutes();
@@ -113,6 +113,4 @@ export const snippetFromHighlightWithLink = (highlight = {}, props = ['content',
 };
 
 export const parentTypeByIndex = index => (index === SEARCH_INTENT_INDEX_SOURCE) ? 'source' : 'tag';
-
-
 

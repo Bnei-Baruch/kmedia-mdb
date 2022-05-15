@@ -26,13 +26,11 @@ const ResultIntent = ({ hit, t }) => {
     dispatch(listsActions.fetchList(namespace, 1, params));
   }, []);
 
-  const renderItem = (cuID) => {
-    return (
-      <Grid.Column width="5">
-        <ContentItemContainer id={cuID} asList={true} size="small" withCCUInfo />
-      </Grid.Column>
-    );
-  };
+  const renderItem = cuID => (
+    <Grid.Column width="5">
+      <ContentItemContainer id={cuID} asList={true} size="small" withCCUInfo />
+    </Grid.Column>
+  );
 
   const { rows } = items.reduce((acc, x, i) => {
     if (i !== 0 && (i % 2 === 0 || i === (items.length))) {
@@ -42,10 +40,11 @@ const ResultIntent = ({ hit, t }) => {
         </Grid.Row>
       );
       return { rows: acc.rows, cols: [] };
-    } else {
-      acc.cols.push(x);
-      return acc;
     }
+
+    acc.cols.push(x);
+    return acc;
+
   }, { cols: [], rows: [] });
 
   return (

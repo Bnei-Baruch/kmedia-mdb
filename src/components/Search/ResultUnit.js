@@ -18,11 +18,11 @@ import UnitLogo from '../shared/Logo/UnitLogo';
 
 const ResultUnit = ({ hit, rank, t }) => {
   const {
-          _explanation: explanation,
-          _score: score,
-          _source: { _index: index, mdb_uid: mdbUid, result_type: resultType },
-          highlight
-        } = hit;
+    _explanation: explanation,
+    _score: score,
+    _source: { _index: index, mdb_uid: mdbUid, result_type: resultType },
+    highlight
+  } = hit;
 
   const filters     = useSelector(state => filterSelectors.getFilters(state.filters, 'search'));
   const location    = useLocation();
