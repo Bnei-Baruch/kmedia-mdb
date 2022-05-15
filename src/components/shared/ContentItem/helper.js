@@ -13,6 +13,7 @@ import { canonicalLink } from '../../../helpers/links';
 import { stringify } from '../../../helpers/url';
 
 export const imageWidthBySize = {
+  'tiny': 120,
   'small': 144,
   'big': 287,
 };

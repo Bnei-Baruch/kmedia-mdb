@@ -8,7 +8,8 @@ import {
   SEARCH_GRAMMAR_HIT_TYPES,
   SEARCH_INTENT_HIT_TYPE_SERIES_BY_SOURCE,
   SEARCH_INTENT_HIT_TYPE_SERIES_BY_TAG,
-  SEARCH_INTENT_HIT_TYPES
+  SEARCH_INTENT_HIT_TYPES,
+  SEARCH_RESULT_TYPES_TEXT
 } from '../../helpers/consts';
 import { isEmpty } from '../../helpers/utils';
 import { getQuery } from '../../helpers/url';
@@ -24,7 +25,6 @@ import Pagination from '../Pagination/Pagination';
 import ResultsPageHeader from '../Pagination/ResultsPageHeader';
 import SearchResultCU from './SearchResultCU';
 import SearchResultCollection from './SearchResultCollection';
-import SearchResultIntent from './SearchResultIntent';
 import SearchResultLandingPage from './SearchResultLandingPage';
 import SearchResultTwitters from './SearchResultTwitters';
 import SearchResultSource from './SearchResultSource';
@@ -32,6 +32,8 @@ import SearchResultPost from './SearchResultPost';
 import DidYouMean from './DidYouMean';
 import SearchResultSeries from './SearchResultSeries';
 import Filters from './Filters';
+import ResultUnit from './ResultUnit';
+import ResultIntent from './ResultIntent';
 
 const SearchResults = props => {
   /* Requested by Mizrahi
@@ -69,17 +71,17 @@ const SearchResults = props => {
 
   const renderHit = (hit, rank, searchLanguage) => {
     const {
-      _source: {
-        mdb_uid: mdbUid,
-        result_type: resultType,
-        landing_page: landingPage,
-        filter_values: filterValues
-      }, _type: type, _index
-    }   = hit;
+            _source: {
+              mdb_uid: mdbUid,
+              result_type: resultType,
+              landing_page: landingPage,
+              filter_values: filterValues
+            }, _type: type, _index
+          }   = hit;
     const key = mdbUid ? `${mdbUid}_${type}` : `${landingPage}_${type}_${(filterValues || []).map(({
-      name,
-      value
-    }) => `${name}_${value}`).join('_')}`;
+                                                                                                     name,
+                                                                                                     value
+                                                                                                   }) => `${name}_${value}`).join('_')}`;
 
     searchLanguage = searchLanguageByIndex(_index, searchLanguage);
     const newProps = {
@@ -93,7 +95,7 @@ const SearchResults = props => {
 
     // To be deprecated soon.
     if (SEARCH_INTENT_HIT_TYPES.includes(type)) {
-      return <SearchResultIntent {...newProps} />;
+      return <ResultIntent hit={hit} />;
     }
 
     if (type === 'tweets_many') {
@@ -102,6 +104,10 @@ const SearchResults = props => {
 
     if (type === SEARCH_INTENT_HIT_TYPE_SERIES_BY_TAG || type === SEARCH_INTENT_HIT_TYPE_SERIES_BY_SOURCE) {
       return <SearchResultSeries {...newProps} />;
+    }
+
+    if (SEARCH_RESULT_TYPES_TEXT.includes(resultType)) {
+      return <ResultUnit hit={hit} rank={rank} />;
     }
 
     let result = null;
