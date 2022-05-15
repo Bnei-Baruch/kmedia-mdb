@@ -47,7 +47,7 @@ const PlaylistCollectionContainer = ({ cId, t, cuId }) => {
       });
 
       if (cusForFetch?.length > 0) {
-        dispatch(actions.fetchUnitsByIDs({ id: cusForFetch, with_tags: true, with_files: true }));
+        dispatch(actions.fetchUnitsByIDs({ id: cusForFetch, with_tags: true, with_files: true, with_sources: true, with_derivations: true }));
       }
     }
 
