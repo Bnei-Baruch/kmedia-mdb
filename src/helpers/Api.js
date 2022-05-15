@@ -173,7 +173,7 @@ class Api {
     spec,
     specs,
     watchingNowMin: watching_now_min,
-    popularMin: popular_min
+    popularMin: popular_min,
   }) => ({
     more_items,
     'current_feed': [],
@@ -187,6 +187,7 @@ class Api {
       specs,
       watching_now_min,
       popular_min,
+      'with_posts': true,
     }
   });
 

@@ -5,10 +5,12 @@ import { IsCollectionContentType, IsUnitContentType } from '../helpers/consts';
 import { AB_RECOMMEND_NEW, AB_RECOMMEND_RANDOM } from '../helpers/ab-testing';
 import { actions, types, selectors as recommended } from '../redux/modules/recommended';
 import { actions as mdbActions, selectors as mdbSelectors } from '../redux/modules/mdb';
+import { actions as pActions, selectors as pSelectors } from '../redux/modules/publications';
 import { selectors as settings } from '../redux/modules/settings';
 import { selectors as sourcesSelectors } from '../redux/modules/sources';
 import { getSourcesCollections } from '../helpers/utils';
 import {
+  CT_BLOG_POST,
   CT_LESSONS_SERIES,
   CT_TAG,
   UNIT_LESSONS_TYPE,
@@ -139,6 +141,7 @@ export function* fetchRecommended(action) {
       specs.push({
         'name': 'DataContentUnitsSuggester',
         'order_selector': 3,
+        'filters': [{ 'filter_selector': 0, 'args': ['BLOG_POST'] }],
       });
     }
 
@@ -173,6 +176,7 @@ export function* fetchRecommended(action) {
       const fetchList = [
         fetchMissingUnits(data.feeds.flat().filter(item => item && IsUnitContentType(item.content_type))),
         fetchMissingCollections(data.feeds.flat().filter(item => item && IsCollectionContentType(item.content_type))),
+        fetchMissingBlogPosts(data.feeds.flat().filter(item => item && item.content_type === CT_BLOG_POST)),
       ];
       const viewUids = new Set();
       for (let i = 0; i < data.feeds.length; ++i) {
@@ -289,6 +293,23 @@ function* fetchMissingCollections(recommendedItems) {
     const language = yield select(state => settings.getLanguage(state.settings));
     const { data } = yield call(Api.collections, { id: missingCollectionIds, language });
     yield put(mdbActions.receiveCollections(data.collections));
+  }
+}
+
+function* fetchMissingBlogPosts(recommendedItems) {
+  const missingPostIds = yield select(state => recommendedItems
+    .filter(item => {
+      if (!item.uid.includes('_')) {
+        return false;
+      }
+      const [blogId, postId] = item.uid.split('_');
+      return !pSelectors.getBlogPost(state.publicAations, blogId, postId);
+    })
+    .map(item => item.uid));
+
+  if (missingPostIds.length > 0) {
+    const { data } = yield call(Api.posts, { id: missingPostIds });
+    yield put(pActions.receiveContentUnits(data.content_units));
   }
 }
 
