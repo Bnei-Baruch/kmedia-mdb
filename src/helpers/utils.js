@@ -20,6 +20,7 @@ import {
   CT_VIDEO_PROGRAM,
   CT_VIRTUAL_LESSONS,
   CT_WOMEN_LESSONS,
+  CT_SONGS,
   LANGUAGES
 } from './consts';
 import { Requests } from './Api';
@@ -434,6 +435,7 @@ export const imageByUnit = (unit, link) => {
 
 export const cuPartNameByCCUType = ct => {
   const prefix = 'pages.unit.info.';
+
   switch (ct) {
     case CT_DAILY_LESSON:
     case CT_SPECIAL_LESSON:
@@ -441,6 +443,8 @@ export const cuPartNameByCCUType = ct => {
       return `${prefix}lesson-episode`;
     case CT_LESSONS_SERIES:
       return `${prefix}series-episode`;
+    case CT_SONGS:
+      return `${prefix}song`;
     default:
       return `${prefix}episode`;
   }
