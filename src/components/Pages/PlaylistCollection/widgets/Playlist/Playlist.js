@@ -16,6 +16,30 @@ const PlaylistWidget = ({ playlist, selected = 0, link, t }) => {
   const location = useLocation();
 
   const { collection, items, name } = playlist;
+  const { content_type, ccuNames } = collection;
+
+  const getCollectionPartNumber = unitId => {
+    // put items with not valid collection part numbers at the end
+    const defaultVal = 1000000;
+
+    if (ccuNames[unitId]) {
+      const num = Number(ccuNames[unitId]);
+      return isNaN(num) ? defaultVal : num;
+    }
+
+    return defaultVal;
+  }
+
+  const sortItems = (item1, item2) => {
+    const val1 = getCollectionPartNumber(item1.unit.id);
+    const val2 = getCollectionPartNumber(item2.unit.id);
+
+    return val1 - val2;
+  }
+
+  // initially sort items by episode/song number
+  // if (content_type === CT_SONGS)
+  items.sort(sortItems);
 
   const [selectedIndex, setSelectedIndex] = useState(selected);
   const [playlistItems, setPlaylistItems] = useState(items);
@@ -37,8 +61,6 @@ const PlaylistWidget = ({ playlist, selected = 0, link, t }) => {
     const currentIndex = playlistItems.findIndex(item => location.pathname.includes(item.shareUrl));
     setSelectedIndex(currentIndex);
   }, [location, playlistItems])
-
-  const { content_type } = collection;
 
   const randomButton = content_type === CT_SONGS &&
     <Button
