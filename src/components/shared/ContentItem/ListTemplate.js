@@ -40,7 +40,7 @@ const ListTemplate = ({
     if (cuInfoRef.current && (cuInfoRef.current.scrollHeight > cuInfoRef.current.clientHeight)) {
       setIsNeedTooltip(true);
     }
-  }, [cuInfoRef.current]);
+  }, []);
 
   const info = ((ccu || source || tag) && withCCUInfo) ? (
     <div className="cu_item_info_co ">
