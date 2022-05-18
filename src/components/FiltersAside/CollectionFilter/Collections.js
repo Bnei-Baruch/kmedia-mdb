@@ -4,7 +4,7 @@ import { withNamespaces } from 'react-i18next';
 import { Button } from 'semantic-ui-react';
 
 import { selectors } from '../../../redux/modules/filtersAside';
-import { FN_COLLECTION_MULTI} from '../../../helpers/consts';
+import { FN_COLLECTION_MULTI } from '../../../helpers/consts';
 import FilterHeader from '../FilterHeader';
 import CollectionItem from './CollectionItem';
 import CollectionsModal from './CollectionsModal';
@@ -33,25 +33,25 @@ const Collections = ({ namespace, ctOnly = null, t }) => {
           {
             items.slice(0, MAX_SHOWED_ITEMS).map(x => <CollectionItem namespace={namespace} item={x} key={x.id} />)
           } {
-          items.length > MAX_SHOWED_ITEMS && (
-            <>
-              <Button
-                basic
-                icon="plus"
-                color="blue"
-                className="clear_button"
-                content={t('topics.show-more')}
-                onClick={toggleShowAll}
-              />
-              <CollectionsModal
-                items={items}
-                open={showAll}
-                onClose={toggleShowAll}
-                namespace={namespace}
-              />
-            </>
-          )
-        }
+            items.length > MAX_SHOWED_ITEMS && (
+              <>
+                <Button
+                  basic
+                  icon="plus"
+                  color="blue"
+                  className="clear_button"
+                  content={t('topics.show-more')}
+                  onClick={toggleShowAll}
+                />
+                <CollectionsModal
+                  items={items}
+                  open={showAll}
+                  onClose={toggleShowAll}
+                  namespace={namespace}
+                />
+              </>
+            )
+          }
         </>
       }
     />

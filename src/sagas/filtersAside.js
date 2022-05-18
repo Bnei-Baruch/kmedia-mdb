@@ -62,6 +62,7 @@ export function* fetchStat(action) {
         dataL[n]  = dataLPart[n];
       });
     }
+
     yield put(actions.fetchStatsSuccess({ dataCU, dataC, dataL, namespace, isPrepare }));
   } catch (err) {
     yield put(actions.fetchStatsFailure(namespace, err));

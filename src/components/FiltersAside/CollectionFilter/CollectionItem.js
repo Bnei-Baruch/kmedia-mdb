@@ -13,7 +13,7 @@ const CollectionItem = ({ namespace, item: { id, name } }) => {
 
   const dispatch     = useDispatch();
   const handleSelect = (e, { checked }) => {
-    let val = [...selected].filter(x => x !== id);
+    const val = [...selected].filter(x => x !== id);
     if (checked) {
       val.push(id);
     }
@@ -29,8 +29,8 @@ const CollectionItem = ({ namespace, item: { id, name } }) => {
         disabled={stat === 0}
       />
       <span className="tree_item_title">
-          {name}
-        </span>
+        {name}
+      </span>
       <span className="stat">{`(${stat})`}</span>
     </List.Content>
   </List.Item>);

@@ -72,4 +72,5 @@ const MainPage = () => {
     </Container>
   </>);
 };
+
 export default MainPage;
