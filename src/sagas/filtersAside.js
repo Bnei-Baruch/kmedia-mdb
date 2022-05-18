@@ -7,14 +7,11 @@ import { filtersTransformer } from '../filters';
 import uniq from 'lodash/uniq';
 
 const RESULT_NAME_BY_PARAM = {
-  'tag': 'tags',
-  'source': 'sources',
-  'author': 'sources',
-  'content_type': 'content_types'
+  'tag': 'tags', 'source': 'sources', 'author': 'sources', 'content_type': 'content_types'
 };
 
 export function* fetchStat(action) {
-  const { namespace, params, isPrepare } = action.payload;
+  const { namespace, params, options: { isPrepare, countC = false, countL = false } } = action.payload;
 
   let filterParams = {};
   if (!isPrepare) {
@@ -39,25 +36,25 @@ export function* fetchStat(action) {
     const requests = [];
 
     requests.push(call(Api.unitsStats, filterParams));
-    requests.push(call(Api.collectionsStats, filterParams));
-    requests.push(call(Api.labelsStats, filterParams));
+    countC && requests.push(call(Api.collectionsStats, filterParams));
+    countL && requests.push(call(Api.labelsStats, filterParams));
     if (isFilteredByBase) {
       const paramsPart = { ...filterParams, ...params };
       requests.push(call(Api.unitsStats, paramsPart));
-      requests.push(call(Api.collectionsStats, paramsPart));
-      requests.push(call(Api.labelsStats, paramsPart));
+      countC && requests.push(call(Api.collectionsStats, paramsPart));
+      countL && requests.push(call(Api.labelsStats, paramsPart));
     }
 
     const responses = yield all(requests);
 
     const { data: dataCU } = responses.shift();
-    const { data: dataC }  = responses.shift();
-    const { data: dataL }  = responses.shift();
+    const dataC            = countC ? responses.shift()?.data : {};
+    const dataL            = countL ? responses.shift()?.data : {};
 
     if (isFilteredByBase) {
       const { data: dataCUPart = {} } = responses.shift() || {};
-      const { data: dataCPart = {} }  = responses.shift() || {};
-      const { data: dataLPart = {} }  = responses.shift() || {};
+      const dataCPart                 = countC ? responses.shift()?.data : {};
+      const dataLPart                 = countL ? responses.shift()?.data : {};
 
       uniq(Object.keys(params).map(x => RESULT_NAME_BY_PARAM[x])).forEach(n => {
         dataCU[n] = dataCUPart[n];
@@ -65,7 +62,6 @@ export function* fetchStat(action) {
         dataL[n]  = dataLPart[n];
       });
     }
-
     yield put(actions.fetchStatsSuccess({ dataCU, dataC, dataL, namespace, isPrepare }));
   } catch (err) {
     yield put(actions.fetchStatsFailure(namespace, err));
@@ -110,7 +106,4 @@ function* watchElasticFetchStat() {
   yield takeEvery(types.FETCH_ELASTIC_STATS, fetchElasticStat);
 }
 
-export const sagas = [
-  watchFetchStat,
-  watchElasticFetchStat,
-];
+export const sagas = [watchFetchStat, watchElasticFetchStat];

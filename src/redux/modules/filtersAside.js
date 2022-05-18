@@ -1,16 +1,23 @@
 import { createAction } from 'redux-actions';
 
 import { handleActions } from './settings';
-import { FN_CONTENT_TYPE, FN_LANGUAGES, FN_SOURCES_MULTI, FN_TOPICS_MULTI } from '../../helpers/consts';
+import {
+  FN_CONTENT_TYPE,
+  FN_LANGUAGES,
+  FN_SOURCES_MULTI,
+  FN_TOPICS_MULTI,
+  FN_COLLECTION_MULTI
+} from '../../helpers/consts';
 
 const fieldNameByFilter = {
   [FN_SOURCES_MULTI]: 'sources',
   [FN_TOPICS_MULTI]: 'tags',
   [FN_CONTENT_TYPE]: 'content_types',
   [FN_LANGUAGES]: 'languages',
+  [FN_COLLECTION_MULTI]: 'collections',
 };
 
-const FILTER_NAMES = [FN_TOPICS_MULTI, FN_SOURCES_MULTI, FN_CONTENT_TYPE, FN_LANGUAGES];
+const FILTER_NAMES = [FN_TOPICS_MULTI, FN_SOURCES_MULTI, FN_CONTENT_TYPE, FN_LANGUAGES, FN_COLLECTION_MULTI];
 /* Types */
 
 const FETCH_STATS         = 'Filters_aside/FETCH_STATS';
@@ -32,10 +39,10 @@ export const types = {
 
 /* Actions */
 
-const fetchStats        = createAction(FETCH_STATS, (namespace, params, isPrepare) => ({
+const fetchStats        = createAction(FETCH_STATS, (namespace, params, options = {}) => ({
   namespace,
   params,
-  isPrepare
+  options
 }));
 const fetchStatsSuccess = createAction(FETCH_STATS_SUCCESS);
 const fetchStatsFailure = createAction(FETCH_STATS_FAILURE);
@@ -52,6 +59,7 @@ export const actions = {
   fetchStats,
   fetchStatsSuccess,
   fetchStatsFailure,
+
   fetchElasticStats,
   fetchElasticStatsSuccess,
   fetchElasticStatsFailure,

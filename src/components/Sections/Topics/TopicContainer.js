@@ -107,7 +107,7 @@ const TopicContainer = ({ t }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(actions.fetchStats(namespace, {}, true));
+    dispatch(actions.fetchStats(namespace, {}, { isPrepare: true, countC: true, countL: true }));
   }, [dispatch]);
 
   const handleFilterChange = debounce((e, data) => {

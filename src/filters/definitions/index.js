@@ -10,6 +10,7 @@ export { default as topicsFilterMultiDefinition } from './topicsFilterMulti';
 export { default as publishersFilterDefinition } from './publishersFilter';
 export { default as yearsFilterDefinition } from './yearsFilter';
 export { default as collectionsFilterDefinition } from './collectionsFilter';
+export { default as collectionsFilterMultiDefinition } from './collectionsFilterMulti';
 export { languageFilter as languageFilterDefinition } from './languageFilter';
 export { default as languageFilterMulti } from './languageFilterMulti';
 export { default as contentTypeFilter } from './contentTypeFilter';

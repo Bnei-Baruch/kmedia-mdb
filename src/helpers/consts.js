@@ -643,5 +643,9 @@ export const FN_LANGUAGES    = 'language-filter';
 export const FN_CONTENT_TYPE = 'content-type-filter';
 export const FN_DATE_FILTER  = 'date-filter';
 
-export const FN_SOURCES_MULTI = 'sources-filter-multi';
-export const FN_TOPICS_MULTI  = 'topics-filter-multi';
+export const FN_SOURCES_MULTI    = 'sources-filter-multi';
+export const FN_TOPICS_MULTI     = 'topics-filter-multi';
+export const FN_COLLECTION_MULTI = 'collections-filter-multi';
+
+export const PAGE_NS_TOPICS   = 'topic';
+export const PAGE_NS_PROGRAMS = 'programs';
