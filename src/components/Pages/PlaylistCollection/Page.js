@@ -88,17 +88,18 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
   // we need to calculate the playlist here, so we can filter items out of recommended
   // playlist { collection, language, mediaType, items, groups };
   useEffect(() => {
-    const mediaType = playerHelper.getMediaTypeFromQuery(location);
+    const { mediaType, language } = playlist || {}
+    const newMediaType = playerHelper.getMediaTypeFromQuery(location);
+    const qryContentLang = playerHelper.getLanguageFromQuery(location, language || contentLanguage);
 
     if (playlist) {
-      if (mediaType !== playlist.mediaType ||
-          contentLanguage !== playlist.language) {
-        const qryContentLang = playerHelper.getLanguageFromQuery(location, playlist.language);
-        const nPlaylist = playerHelper.playlist(collection, mediaType, qryContentLang, playlist.language);
+      if (newMediaType !== mediaType ||
+        qryContentLang !== language) {
+        const nPlaylist = playerHelper.playlist(collection, newMediaType, qryContentLang, language);
         setPlaylist(nPlaylist);
       }
     } else {
-      const nPlaylist = playerHelper.playlist(collection, mediaType, contentLanguage, uiLanguage);
+      const nPlaylist = playerHelper.playlist(collection, newMediaType, qryContentLang, uiLanguage);
       setPlaylist(nPlaylist);
     }
   }, [collection, contentLanguage, location, playlist, uiLanguage]);
