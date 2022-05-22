@@ -108,7 +108,8 @@ class Transcription extends Component {
         || nextState.fileCU !== state.fileCU
         || nextState.selectedFile !== state.selectedFile
         || !isEqual(nextProps.doc2htmlById, props.doc2htmlById)
-        || (state.selectedFile && props.doc2htmlById && (props.doc2htmlById[state.selectedFile.id]?.wip !== nextProps.doc2htmlById[state.selectedFile.id]?.wip))
+        || (!!state.selectedFile && props.doc2htmlById
+            && (props.doc2htmlById[state.selectedFile.id]?.wip !== nextProps.doc2htmlById[state.selectedFile.id]?.wip))
       );
   }
 

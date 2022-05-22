@@ -31,8 +31,8 @@ const AVLanguage = (
   const handleOnClose = () => onDropdownOpenedChange(false);
 
   useEffect(() => {
-    setOpenPopup(selectedLanguage !== lastRequestedLanguage);
-  }, [selectedLanguage, lastRequestedLanguage]);
+    setOpenPopup(selectedLanguage !== lastRequestedLanguage && !languages.includes(selectedLanguage));
+  }, [selectedLanguage, lastRequestedLanguage, languages]);
 
   const options = LANGUAGE_OPTIONS
     .filter(x => languages.includes(x.value))
