@@ -24,7 +24,7 @@ const TextListTemplate = ({ label, unit, t }) => {
       key={id}
       className="text_item"
     >
-      <Image verticalAlign="top">
+      <Image verticalAlign="top" >
         <SectionLogo name={icon} height="60" width="60" />
       </Image>
       <Container className="text_item__content">

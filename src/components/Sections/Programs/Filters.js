@@ -20,13 +20,14 @@ import TagSourceFilter from '../../FiltersAside/TopicsFilter/TagSourceFilter';
 import ContentTypeItem from '../../FiltersAside/ContentTypeFilter/ContentTypeItem';
 import FilterHeader from '../../FiltersAside/FilterHeader';
 import Collections from '../../FiltersAside/CollectionFilter/Collections';
+import CollectionsFilter from './CollectionsFilter';
 
 const Filters = ({ namespace, baseParams, t }) => {
   const [isHydrated, setIsHydrated] = useState(false);
 
-  const isReady = useSelector(state => selectors.isReady(state.filtersAside, namespace));
+  const isReady      = useSelector(state => selectors.isReady(state.filtersAside, namespace));
   const { wip, err } = useSelector(state => selectors.getWipErr(state.filtersAside, namespace));
-  const selected = useSelector(state => filters.getFilters(state.filters, namespace), isEqual);
+  const selected     = useSelector(state => filters.getFilters(state.filters, namespace), isEqual);
 
   const dispatch = useDispatch();
 
@@ -48,13 +49,7 @@ const Filters = ({ namespace, baseParams, t }) => {
     <Container className="padded">
       <FiltersHydrator namespace={namespace} onHydrated={handleOnHydrated} />
       <Header as="h3" content={t('filters.aside-filter.filters-title')} />
-      <FilterHeader
-        filterName={FN_CONTENT_TYPE}
-        children={
-          UNIT_PROGRAMS_TYPE.map(id => <ContentTypeItem namespace={namespace} id={id} key={id} />)
-        }
-      />
-      <Collections namespace={namespace} ctOnly={COLLECTION_PROGRAMS_TYPE} />
+      <CollectionsFilter namespace={namespace} />
       <TagSourceFilter namespace={namespace} filterName={FN_TOPICS_MULTI} />
       <TagSourceFilter namespace={namespace} filterName={FN_SOURCES_MULTI} />
       <Language namespace={namespace} />

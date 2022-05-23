@@ -73,7 +73,6 @@ const SubTopics = ({ namespace, rootID, t }) => {
       {
         children.length > MAX_SHOWED_ITEMS && (
           <>
-
             <Button
               basic
               icon="plus"

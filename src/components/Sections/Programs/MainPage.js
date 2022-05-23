@@ -14,6 +14,7 @@ import { PAGE_NS_PROGRAMS, UNIT_PROGRAMS_TYPE } from '../../../helpers/consts';
 import ContentItemContainer from '../../shared/ContentItem/ContentItemContainer';
 import Pagination from '../../Pagination/Pagination';
 import ResultsPageHeader from '../../Pagination/ResultsPageHeader';
+import ItemOfList from './ItemOfList';
 
 const MainPage = () => {
   const { items, total } = useSelector(state => lists.getNamespaceState(state.lists, PAGE_NS_PROGRAMS)) || {};
@@ -56,7 +57,7 @@ const MainPage = () => {
         <Grid.Column width="12">
           <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} />
           <FilterLabels namespace={PAGE_NS_PROGRAMS} />
-          {items?.map((id, i) => <ContentItemContainer id={id} size="small" asList={true} key={i} />)}
+          {items?.map((id, i) => <ItemOfList id={id} key={i} />)}
           <Divider fitted />
           <Container className="padded pagination-wrapper" textAlign="center">
             {total > 0 && <Pagination
