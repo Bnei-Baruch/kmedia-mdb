@@ -7,7 +7,7 @@ import { useLocation } from 'react-router';
 import { DeviceInfoContext } from '../../../../../helpers/app-contexts';
 import ContentItemContainer from '../../../../shared/ContentItem/ContentItemContainer';
 import { Header, Button } from 'semantic-ui-react';
-import { CT_SONGS } from '../../../../../helpers/consts';
+import { CT_HOLIDAY, CT_LESSONS_SERIES, CT_SONGS } from '../../../../../helpers/consts';
 import {  randomizeArray } from '../../../../../helpers/utils';
 
 
@@ -19,27 +19,35 @@ const PlaylistWidget = ({ playlist, selected = 0, link, t }) => {
   const { content_type, ccuNames } = collection;
 
   const getCollectionPartNumber = unitId => {
-    // put items with not valid collection part numbers at the end
     const defaultVal = 1000000;
+    const num = Number(ccuNames[unitId]);
 
-    if (ccuNames[unitId]) {
-      const num = Number(ccuNames[unitId]);
-      return isNaN(num) ? defaultVal : num;
-    }
-
-    return defaultVal;
+    // put items with not valid collection part numbers at the end
+    return (isNaN(num) || num <= 0) ? defaultVal : num;
   }
 
   const sortItems = (item1, item2) => {
     const val1 = getCollectionPartNumber(item1.unit.id);
     const val2 = getCollectionPartNumber(item2.unit.id);
+    const result = val1 - val2
 
-    return val1 - val2;
+    // if equal part number, sort by date and then name
+    if (result === 0) {
+      if (item1.unit.film_date < item2.unit.film_date) {
+        return -1
+      } else if (item1.unit.film_date > item2.unit.film_date) {
+        return 1
+      }
+
+      return item1.unit.name <= item2.unit.name ? -1 : 1;
+    }
+
+    return result;
   }
 
   // initially sort items by episode/song number
-  // if (content_type === CT_SONGS)
-  items.sort(sortItems);
+  if ([CT_SONGS, CT_LESSONS_SERIES, CT_HOLIDAY].includes(content_type))
+    items.sort(sortItems);
 
   const [selectedIndex, setSelectedIndex] = useState(selected);
   const [playlistItems, setPlaylistItems] = useState(items);
