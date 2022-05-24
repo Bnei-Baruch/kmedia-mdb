@@ -43,7 +43,7 @@ const SubTopics = ({ namespace, rootID, t }) => {
   const items = useMemo(() => getItemsRecursive(rootID, getTagById, baseItems) || [], [rootID, getTagById, baseItems]);
 
   useEffect(() => setQuery(null), []);
-  
+
   useEffect(() => {
     const sel = selected.includes(rootID);
     setIsSelected(sel);
@@ -63,13 +63,13 @@ const SubTopics = ({ namespace, rootID, t }) => {
       {
         children.slice(0, MAX_SHOWED_ITEMS)
           .map(r => <TagSourceItem
-              id={r}
-              namespace={namespace}
-              baseItems={items}
-              filterName={FN_TOPICS_MULTI}
-              deep={0}
-              key={r}
-            />
+            id={r}
+            namespace={namespace}
+            baseItems={items}
+            filterName={FN_TOPICS_MULTI}
+            deep={0}
+            key={r}
+          />
           )
       }
       {

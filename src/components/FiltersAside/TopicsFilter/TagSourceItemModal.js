@@ -18,15 +18,15 @@ const buildRowArr   = n => {
 
 const TagSourceItemModal = props => {
   const {
-          baseItems,
-          filterName,
-          parent,
-          open,
-          onClose,
-          getById,
-          getPath,
-          t
-        } = props;
+    baseItems,
+    filterName,
+    parent,
+    open,
+    onClose,
+    getById,
+    getPath,
+    t
+  } = props;
 
   const [query, setQuery] = useState('');
 
