@@ -8,7 +8,7 @@ import { DeviceInfoContext } from '../../../../../helpers/app-contexts';
 import ContentItemContainer from '../../../../shared/ContentItem/ContentItemContainer';
 import { Header, Button } from 'semantic-ui-react';
 import { CT_HOLIDAY, CT_LESSONS_SERIES, CT_SONGS } from '../../../../../helpers/consts';
-import {  randomizeArray } from '../../../../../helpers/utils';
+import {  randomizeArray, strCmp } from '../../../../../helpers/utils';
 
 
 const PlaylistWidget = ({ playlist, selected = 0, link, t }) => {
@@ -29,17 +29,12 @@ const PlaylistWidget = ({ playlist, selected = 0, link, t }) => {
   const sortItems = (item1, item2) => {
     const val1 = getCollectionPartNumber(item1.unit.id);
     const val2 = getCollectionPartNumber(item2.unit.id);
-    const result = val1 - val2
+    let result = val1 - val2
 
     // if equal part number, sort by date and then name
     if (result === 0) {
-      if (item1.unit.film_date < item2.unit.film_date) {
-        return -1
-      } else if (item1.unit.film_date > item2.unit.film_date) {
-        return 1
-      }
-
-      return item1.unit.name <= item2.unit.name ? -1 : 1;
+      result = strCmp(item1.unit.film_date, item2.unit.film_date)
+      return result === 0 ? strCmp(item1.unit.name, item2.unit.name) : result;
     }
 
     return result;

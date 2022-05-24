@@ -5,7 +5,7 @@ import produce from 'immer';
 import { Button, Header, Table, Image } from 'semantic-ui-react';
 
 import { SectionLogo } from '../../../helpers/images';
-import { isNotEmptyArray } from '../../../helpers/utils';
+import { isNotEmptyArray, strCmp } from '../../../helpers/utils';
 import * as renderUnitHelper from '../../../helpers/renderUnitHelper';
 import * as shapes from '../../shapes';
 
@@ -44,7 +44,7 @@ const getTopNUnits = (units, N) => {
     : topNUnits;
 };
 
-const compareUnits = (a, b) => (a && b && a.film_date <= b.film_date) ? 1 : -1;
+const compareUnits = (a, b) => (a && b && strCmp(b.film_date, a.film_date));
 
 const renderTable = (topNUnits, section, url, t) => (
   <Table unstackable basic="very">
