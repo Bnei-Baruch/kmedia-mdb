@@ -32,11 +32,13 @@ const ItemOfList = ({ id, t }) => {
     <div className="media_item__content">
       <TooltipIfNeed text={cu.name} Component={Header} as={Link} to={link} content={cu.name} />
       {
-        cu.description && (<TooltipIfNeed
-          text={cu.description}
-          Component={Container}
-          content={cu.description}
-        />)
+        cu.description && (
+          <TooltipIfNeed
+            text={cu.description}
+            Component={Container}
+            content={cu.description}
+          />
+        )
       }
       <div className="description">
         {description.map((d, i) => (<span key={i}>{d}</span>))}
