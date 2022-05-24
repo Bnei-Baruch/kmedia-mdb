@@ -35,7 +35,7 @@ const isButtonViewAllVisible = (totalUnits, N, url) => (
 const getTopNUnits = (units, N) => {
   const topNUnits = produce(units, draft => {
     if (isNotEmptyArray(draft)) {
-      draft.sort(compareUnits);
+      draft.filter(u => !!u).sort(compareUnits);
     }
   });
 
@@ -44,7 +44,7 @@ const getTopNUnits = (units, N) => {
     : topNUnits;
 };
 
-const compareUnits = (a, b) => (a && b && strCmp(b.film_date, a.film_date));
+const compareUnits = (u1, u2) => strCmp(u2.film_date, u1.film_date);
 
 const renderTable = (topNUnits, section, url, t) => (
   <Table unstackable basic="very">
