@@ -1,16 +1,13 @@
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
 import { Button, Icon, Input, Modal, Table } from 'semantic-ui-react';
 import {
-  COLLECTION_PROGRAMS_TYPE, CT_CLIP,
+  CT_CLIP,
   CT_CLIPS,
   CT_VIDEO_PROGRAM,
-  CT_VIDEO_PROGRAM_CHAPTER,
-  FN_COLLECTION_MULTI
+  CT_VIDEO_PROGRAM_CHAPTER
 } from '../../../helpers/consts';
-import { selectors } from '../../../redux/modules/filtersAside';
-import { selectors as mdb } from '../../../redux/modules/mdb';
 
 import { selectors as settings } from '../../../redux/modules/settings';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';

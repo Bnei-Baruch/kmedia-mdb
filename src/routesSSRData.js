@@ -48,7 +48,6 @@ import { isTaas } from './components/shared/PDF/PDF';
 
 import { tabs as eventsTabs } from './components/Sections/Events/MainPage';
 import { tabs as lessonsTabs } from './components/Sections/Lessons/MainPage';
-import { tabs as programsTabs } from './components/Sections/Programs/MainPage';
 import { tabs as pulicationsTabs } from './components/Sections/Publications/MainPage';
 
 export const home = store => {

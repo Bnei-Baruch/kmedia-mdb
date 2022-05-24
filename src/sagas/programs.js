@@ -3,8 +3,6 @@ import { call, put, select, takeLatest } from 'redux-saga/effects';
 import { selectors as settings } from '../redux/modules/settings';
 import { actions, selectors, types } from '../redux/modules/programs';
 import { actions as mdbActions } from '../redux/modules/mdb';
-import { types as listTypes } from '../redux/modules/lists';
-import { setTab } from './helpers/url';
 import Api from '../helpers/Api';
 import { CT_CLIPS, CT_VIDEO_PROGRAM } from '../helpers/consts';
 import { isEmpty } from '../helpers/utils';

@@ -1,13 +1,8 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import React from 'react';
 import moment from 'moment';
-import { noop } from '../../../../helpers/utils';
-import { Accordion, Button, Header, Menu, Segment } from 'semantic-ui-react';
 
 import 'react-day-picker/lib/style.css';
 import { today } from '../../../../helpers/date';
-import FastDayPicker from './FastDayPicker';
 
 export const TODAY        = 'TODAY';
 export const YESTERDAY    = 'YESTERDAY';

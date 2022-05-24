@@ -12,7 +12,6 @@ import SectionHeader from '../../shared/SectionHeader';
 import Filters from './Filters';
 import FilterLabels from '../../FiltersAside/FilterLabels';
 import { PAGE_NS_PROGRAMS, UNIT_PROGRAMS_TYPE } from '../../../helpers/consts';
-import ContentItemContainer from '../../shared/ContentItem/ContentItemContainer';
 import Pagination from '../../Pagination/Pagination';
 import ResultsPageHeader from '../../Pagination/ResultsPageHeader';
 import ItemOfList from './ItemOfList';

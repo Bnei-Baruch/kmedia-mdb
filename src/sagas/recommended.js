@@ -4,7 +4,6 @@ import Api from '../helpers/Api';
 import { IsCollectionContentType, IsUnitContentType } from '../helpers/consts';
 import { AB_RECOMMEND_NEW, AB_RECOMMEND_RANDOM } from '../helpers/ab-testing';
 import { actions, types, selectors as recommended } from '../redux/modules/recommended';
-import { actions as mdbActions, selectors as mdbSelectors } from '../redux/modules/mdb';
 import { selectors as settings } from '../redux/modules/settings';
 import { selectors as sourcesSelectors } from '../redux/modules/sources';
 import { getSourcesCollections } from '../helpers/utils';
