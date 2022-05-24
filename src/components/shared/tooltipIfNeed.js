@@ -6,6 +6,15 @@ import { Popup, Ref } from 'semantic-ui-react';
 import { selectors as settings } from '../../redux/modules/settings';
 import { isLanguageRtl } from '../../helpers/i18n-utils';
 
+/**
+ *
+ * @param props
+ * text: text that will be on the tooltip.
+ * component: component that we wrap.
+ * all other props - props of wrapped component
+ * @returns {JSX.Element}
+ * @constructor
+ */
 const TooltipIfNeed = props => {
   const [need, setNeed] = useState(false);
 

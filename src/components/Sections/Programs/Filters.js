@@ -5,22 +5,13 @@ import { isEqual } from 'lodash';
 import { withNamespaces } from 'react-i18next';
 import { Container, Header } from 'semantic-ui-react';
 
-import {
-  COLLECTION_PROGRAMS_TYPE,
-  FN_CONTENT_TYPE,
-  FN_SOURCES_MULTI,
-  FN_TOPICS_MULTI,
-  UNIT_PROGRAMS_TYPE
-} from '../../../helpers/consts';
+import { FN_SOURCES_MULTI, FN_TOPICS_MULTI } from '../../../helpers/consts';
 import { selectors as filters } from '../../../redux/modules/filters';
 import FiltersHydrator from '../../Filters/FiltersHydrator';
 import Language from '../../FiltersAside/LanguageFilter/Language';
 import DateFilter from '../../FiltersAside/DateFilter';
 import TagSourceFilter from '../../FiltersAside/TopicsFilter/TagSourceFilter';
-import ContentTypeItem from '../../FiltersAside/ContentTypeFilter/ContentTypeItem';
-import FilterHeader from '../../FiltersAside/FilterHeader';
-import Collections from '../../FiltersAside/CollectionFilter/Collections';
-import CollectionsFilter from './CollectionsFilter';
+import ContentTypesFilter from './ContentTypesFilter';
 
 const Filters = ({ namespace, baseParams, t }) => {
   const [isHydrated, setIsHydrated] = useState(false);
@@ -49,7 +40,7 @@ const Filters = ({ namespace, baseParams, t }) => {
     <Container className="padded">
       <FiltersHydrator namespace={namespace} onHydrated={handleOnHydrated} />
       <Header as="h3" content={t('filters.aside-filter.filters-title')} />
-      <CollectionsFilter namespace={namespace} />
+      <ContentTypesFilter namespace={namespace} />
       <TagSourceFilter namespace={namespace} filterName={FN_TOPICS_MULTI} />
       <TagSourceFilter namespace={namespace} filterName={FN_SOURCES_MULTI} />
       <Language namespace={namespace} />

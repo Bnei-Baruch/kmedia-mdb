@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Container, Divider, Grid } from 'semantic-ui-react';
 import { isEqual } from 'lodash';
+import { usePrevious } from '../../../helpers/utils';
 
 import { selectors as lists, actions } from '../../../redux/modules/lists';
 import { selectors as settings } from '../../../redux/modules/settings';
@@ -21,6 +22,7 @@ const MainPage = () => {
   const language         = useSelector(state => settings.getLanguage(state.settings));
   const pageSize         = useSelector(state => settings.getPageSize(state.settings));
   const selected         = useSelector(state => filters.getFilters(state.filters, PAGE_NS_PROGRAMS), isEqual);
+  const prevSel          = usePrevious(selected);
 
   const [pageNo, setPageNo] = useState(1);
 
@@ -30,19 +32,18 @@ const MainPage = () => {
   }, [language, dispatch]);
 
   useEffect(() => {
-    const page_no = pageNo > 1 ? pageNo : 1;
-    dispatch(actions.fetchList(PAGE_NS_PROGRAMS, page_no, { content_type: UNIT_PROGRAMS_TYPE, pageSize }));
-  }, [language, dispatch, pageNo]);
+    let page_no = pageNo > 1 ? pageNo : 1;
+    if (page_no !== 1 && prevSel !== selected) page_no = 1;
 
-  useEffect(() => {
-    if (pageNo !== 1) {
-      setPageNo(1);
-    } else {
-      dispatch(actions.fetchList(PAGE_NS_PROGRAMS, 1, { content_type: UNIT_PROGRAMS_TYPE, pageSize }));
-    }
-  }, [selected]);
+    dispatch(actions.fetchList(PAGE_NS_PROGRAMS, page_no, {
+      content_type: UNIT_PROGRAMS_TYPE,
+      pageSize,
+      withViews: true
+    }));
+  }, [language, dispatch, pageNo, selected]);
 
   const onPageChange = n => setPageNo(n);
+
   return (<>
     <SectionHeader section="programs" />
     <Container className="padded" fluid>

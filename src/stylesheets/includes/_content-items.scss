@@ -447,6 +447,7 @@
     .ui.header {
       font-size: 1.1rem;
       margin-bottom: 0;
+      color: #134D78;
 
       & .sub.header {
         font-size: .9rem;
@@ -459,10 +460,11 @@
     color: $midGrey;
     line-height: .9em;
     font-size: .9em;
+    margin-top: 1em;
 
 
     span {
-      opacity: 0.43;
+      opacity: 0.9;
       padding: 0 4px;
       border-right: 1px solid $midGrey;
       display: inline-block;
@@ -493,8 +495,8 @@
 }
 
 .media_item {
-  .image {
-    width: 140px;
+  .media_item__content {
+    padding: 0 1em
   }
 }
 

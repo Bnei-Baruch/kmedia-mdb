@@ -20,21 +20,24 @@ const ItemOfList = ({ id, t }) => {
   const ccu  = canonicalCollection(cu) || {};
 
   const description = [ccu.name];
+  const part        = Number(ccu?.ccuNames?.[cu.id]);
+  part && description.push(t('pages.unit.info.episode', { name: part }));
   description.push(t('values.date', { date: cu.film_date }));
   if (views > 0) description.push(t('pages.unit.info.views', { views }));
 
   return (<List.Item key={id} className="media_item">
-    <div style={{ minWidth: '144px' }}>
+    <div style={{ minWidth: '140px' }}>
       <UnitLogo unitId={id} width={144} />
     </div>
     <div className="media_item__content">
       <TooltipIfNeed text={cu.name} Component={Header} as={Link} to={link} content={cu.name} />
-      <TooltipIfNeed
-        text={ccu.description}
-        Component={Container}
-        content={ccu.description}
-        fluid={true}
-      />
+      {
+        cu.description && (<TooltipIfNeed
+          text={cu.description}
+          Component={Container}
+          content={cu.description}
+        />)
+      }
       <div className="description">
         {description.map((d, i) => (<span key={i}>{d}</span>))}
         {ccu && (<span className="opacity_1">
