@@ -18,15 +18,15 @@ const buildRowArr   = n => {
 
 const TagSourceItemModal = props => {
   const {
-    baseItems,
-    filterName,
-    parent,
-    open,
-    onClose,
-    getById,
-    getPath,
-    t
-  } = props;
+          baseItems,
+          filterName,
+          parent,
+          open,
+          onClose,
+          getById,
+          getPath,
+          t
+        } = props;
 
   const [query, setQuery] = useState('');
 
@@ -35,6 +35,11 @@ const TagSourceItemModal = props => {
   if (!parent) return null;
 
   const handleSetQuery = (e, data) => setQuery(data.value);
+
+  const handleClose = () => {
+    setQuery(null);
+    onClose();
+  };
 
   const dir   = getLanguageDirection(language);
   const isTag = filterName === FN_TOPICS_MULTI;
@@ -74,7 +79,7 @@ const TagSourceItemModal = props => {
       open={open}
       className={clsx('filters_aside_tree_modal', { [dir]: true })}
       dir={dir}
-      onClose={onClose}
+      onClose={handleClose}
       closeIcon={<Icon name="times circle outline" />}
     >
       <Modal.Header className="no-border nowrap">
@@ -94,7 +99,7 @@ const TagSourceItemModal = props => {
         </Table>
       </Modal.Content>
       <Modal.Actions>
-        <Button primary content={t('buttons.close')} onClick={onClose} />
+        <Button primary content={t('buttons.close')} onClick={handleClose} />
       </Modal.Actions>
     </Modal>
   );

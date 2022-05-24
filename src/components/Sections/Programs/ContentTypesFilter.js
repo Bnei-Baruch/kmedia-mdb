@@ -14,17 +14,17 @@ import CollectionsModal, { cCtByUnitCt } from './CollectionsModal';
 
 const ContentTypesFilter = ({ namespace, openModal, t }) => {
 
-  const [showCByCT, setShowCByCT] = useState('');
+  const [selectedCT, setSelectedCT] = useState('');
 
   const language = useSelector(state => settings.getLanguage(state.settings));
   const ids      = useSelector(state => selectors.getTree(state.filtersAside, namespace, FN_COLLECTION_MULTI));
   const getById  = useSelector(state => mdb.nestedGetCollectionById(state.mdb));
 
   const itemsMemo = useMemo(() => ids.map(getById).filter(x => !!x), [ids]);
-  const items     = itemsMemo.filter(x => cCtByUnitCt[showCByCT] === x.content_type);
+  const items     = (itemsMemo.sort((a, b) => a.name === b.name ? 0 : a.name > b.name ? 1 : -1)).filter(x => cCtByUnitCt[selectedCT] === x.content_type);
 
-  const selectedCT = useSelector(state => filters.getFilterByName(state.filters, namespace, FN_CONTENT_TYPE))?.values || [];
-  const getStat    = useSelector(state => filtersAside.getStats(state.filtersAside, namespace, FN_CONTENT_TYPE));
+  const selected = useSelector(state => filters.getFilterByName(state.filters, namespace, FN_CONTENT_TYPE))?.values || [];
+  const getStat  = useSelector(state => filtersAside.getStats(state.filtersAside, namespace, FN_CONTENT_TYPE));
 
   const dispatch = useDispatch();
 
@@ -38,7 +38,7 @@ const ContentTypesFilter = ({ namespace, openModal, t }) => {
       <div className="tree_item_content">
         <Radio
           label={t(`filters.content-types.${id}`)}
-          checked={selectedCT.includes(id)}
+          checked={selected.includes(id)}
           onChange={handleSelect}
           value={id}
           disabled={stat === 0}
@@ -49,7 +49,7 @@ const ContentTypesFilter = ({ namespace, openModal, t }) => {
           color="blue"
           className="clear_button no-shadow"
           icon={`caret ${isLanguageRtl(language) ? 'left' : 'right'}`}
-          onClick={() => setShowCByCT(id)}
+          onClick={() => setSelectedCT(id)}
           size="medium"
         />
         <span>{`(${stat})`}</span>
@@ -61,8 +61,8 @@ const ContentTypesFilter = ({ namespace, openModal, t }) => {
     <CollectionsModal
       namespace={namespace}
       items={items}
-      open={!!showCByCT}
-      onClose={() => setShowCByCT('')}
+      selectedCT={selectedCT}
+      onClose={() => setSelectedCT('')}
     />
     <FilterHeader
       filterName={FN_CONTENT_TYPE}

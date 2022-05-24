@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
@@ -25,7 +26,7 @@ export const cCtByUnitCt = {
   [CT_CLIP]: CT_CLIPS
 };
 
-const CollectionsModal = ({ namespace, items, open, onClose, t }) => {
+const CollectionsModal = ({ namespace, items, selectedCT, onClose, t }) => {
   const [query, setQuery] = useState('');
 
   const language = useSelector(state => settings.getLanguage(state.settings));
@@ -35,6 +36,11 @@ const CollectionsModal = ({ namespace, items, open, onClose, t }) => {
   const collections = items.filter(x => !query || (x.name && reg.test(x.name)));
 
   const handleSetQuery = (e, data) => setQuery(data.value);
+
+  const handleClose = () => {
+    setQuery(null);
+    onClose();
+  };
 
   const renderRow = (x, i) => (
     <Table.Row key={i} verticalAlign="top">
@@ -56,14 +62,15 @@ const CollectionsModal = ({ namespace, items, open, onClose, t }) => {
 
   return (
     <Modal
-      open={open}
+      open={!!selectedCT}
       dir={dir}
-      onClose={onClose}
+      onClose={handleClose}
+      className={clsx('filters_aside_tree_modal', { [dir]: true })}
       closeIcon={<Icon name="times circle outline" />}
       size="fullscreen"
     >
       <Modal.Header className="no-border nowrap">
-        {t('sources-library.filter')}
+        {t(`filters.content-types.${selectedCT}`)}
         <Input
           className="search-input"
           placeholder={t('sources-library.filter')}
@@ -79,7 +86,7 @@ const CollectionsModal = ({ namespace, items, open, onClose, t }) => {
         </Table>
       </Modal.Content>
       <Modal.Actions>
-        <Button primary content={t('buttons.close')} onClick={onClose} />
+        <Button primary content={t('buttons.close')} onClick={handleClose} />
       </Modal.Actions>
     </Modal>
   );
