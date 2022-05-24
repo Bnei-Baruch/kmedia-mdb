@@ -33,7 +33,7 @@ const ListTemplate = ({
   const dir                = isLanguageRtl(language) ? 'rtl' : 'ltr';
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
-  const [isNeedTooltip, setIsNeedTooltip] = useState(null);
+  const [isNeedTooltip, setIsNeedTooltip] = useState(true);
   const cuInfoRef                         = useRef();
 
   useEffect(() => {
