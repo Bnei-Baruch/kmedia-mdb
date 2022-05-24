@@ -33,9 +33,11 @@ const isButtonViewAllVisible = (totalUnits, N, url) => (
 );
 
 const getTopNUnits = (units, N) => {
-  const topNUnits = produce(units, draft => {
+  const validUnits = units.filter(u => !!u);
+
+  const topNUnits = produce(validUnits, draft => {
     if (isNotEmptyArray(draft)) {
-      draft.filter(u => !!u).sort(compareUnits);
+      draft.sort(compareUnits);
     }
   });
 
