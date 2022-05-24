@@ -70,4 +70,5 @@ const ContentTypesFilter = ({ namespace, openModal, t }) => {
     />
   </>);
 };
+
 export default withNamespaces()(ContentTypesFilter);
