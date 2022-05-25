@@ -33,22 +33,25 @@ const ListTemplate = ({
   const dir                = isLanguageRtl(language) ? 'rtl' : 'ltr';
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
-  const [isNeedTooltip, setIsNeedTooltip] = useState(true);
+  const [isNeedTooltip, setIsNeedTooltip] = useState(false);
   const cuInfoRef                         = useRef();
 
   useEffect(() => {
+    // console.log('cuInfoRef.current:', cuInfoRef.current)
     if (cuInfoRef.current && (cuInfoRef.current.scrollHeight > cuInfoRef.current.clientHeight)) {
       setIsNeedTooltip(true);
+      console.log('setIsNeedTooltip true:', cuInfoRef.current)
     }
   }, []);
 
-  const info = ((ccu || source || tag) && withCCUInfo) ? (
-    <div className="cu_item_info_co ">
-      <span className="no-padding no-margin text_ellipsis">
-        {ccu?.name || source?.name || tag?.label || NO_NAME}
-      </span>
-    </div>
-  ) : null;
+  const info = ((ccu || source || tag) && withCCUInfo)
+    ? (
+      <div className="cu_item_info_co ">
+        <span className="no-padding no-margin text_ellipsis">
+          {ccu?.name || source?.name || tag?.label || NO_NAME}
+        </span>
+      </div>
+    ) : null;
 
   let percent = null;
   if (unit && playTime) {
