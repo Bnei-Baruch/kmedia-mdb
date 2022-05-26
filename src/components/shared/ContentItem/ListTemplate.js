@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useLayoutEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Container, Header, Popup, Progress, Ref } from 'semantic-ui-react';
 import clsx from 'clsx';
@@ -36,7 +36,7 @@ const ListTemplate = ({
   const [isNeedTooltip, setIsNeedTooltip] = useState(false);
   const cuInfoRef                         = useRef();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (cuInfoRef.current && (cuInfoRef.current.scrollHeight > cuInfoRef.current.clientHeight)) {
       setIsNeedTooltip(true);
     }
