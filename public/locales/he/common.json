@@ -479,6 +479,7 @@
         "lesson-episodes": "{{name}} חלקים",
         "series-episode": "שיעור {{name}}",
         "series-episodes": "{{name}} שיעורים",
+        "song": "שיר {{name}}",
         "views": "{{views}} צפיות"
       },
       "recommended": {

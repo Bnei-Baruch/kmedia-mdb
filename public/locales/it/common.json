@@ -485,6 +485,7 @@
         "lesson-episodes": "{{name}} parts",
         "series-episode": "Lesson {{name}}",
         "series-episodes": "{{name}} lessons",
+        "song": "Canzone {{name}}",
         "views": "{{views}} Views"
       },
       "recommended": {

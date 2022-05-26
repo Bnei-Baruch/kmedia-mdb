@@ -483,6 +483,7 @@
         "lesson-episodes": "{{name}} parts",
         "series-episode": "Lección {{name}}",
         "series-episodes": "{{name}} lessons",
+        "song": "Canción {{name}}",
         "views": "{{views}} visualizaciones"
       },
       "recommended": {

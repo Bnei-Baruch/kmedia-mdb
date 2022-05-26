@@ -499,6 +499,7 @@
         "lesson-episodes": "{{name}} частей",
         "series-episode": "Урок {{name}}",
         "series-episodes": "{{name}} уроков",
+        "song": "Песня {{name}}",
         "views": "{{views}} просмотров"
       },
       "recommended": {
