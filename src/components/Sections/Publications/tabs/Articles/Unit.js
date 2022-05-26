@@ -107,7 +107,7 @@ const ArticlePage = ({ t }) => {
   const wip = useSelector(state => selectors.getWip(state.mdb).units[id]);
   const err = useSelector(state => selectors.getErrors(state.mdb).units[id]);
 
-  let tags = unit && unit.tags ? unit.tags : [];
+  const tags = unit && unit.tags ? unit.tags : [];
 
   const tagNames = tags.map(getTagById);
 
