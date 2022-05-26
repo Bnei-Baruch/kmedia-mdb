@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import { useLocation, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import {Button, Container, Grid, Header} from 'semantic-ui-react';
+import { Button, Container, Grid, Header } from 'semantic-ui-react';
 
 import { actions, selectors } from '../../../../../redux/modules/mdb';
 import { selectors as settings } from '../../../../../redux/modules/settings';
@@ -16,8 +16,8 @@ import WipErr from '../../../../shared/WipErr/WipErr';
 import Recommended from '../../../../Pages/Unit/widgets/Recommended/Main/Recommended';
 import playerHelper from '../../../../../helpers/player';
 import { ClientChroniclesContext } from '../../../../../helpers/app-contexts';
-import {selectors as tagSelectors} from "../../../../../redux/modules/tags";
-import Link from "../../../../Language/MultiLanguageLink";
+import { selectors as tagSelectors } from '../../../../../redux/modules/tags';
+import Link from '../../../../Language/MultiLanguageLink';
 
 const renderHeader = (unit, tagNames, t, language) => {
   const isRtl = isLanguageRtl(language);
@@ -107,7 +107,8 @@ const ArticlePage = ({ t }) => {
   const wip = useSelector(state => selectors.getWip(state.mdb).units[id]);
   const err = useSelector(state => selectors.getErrors(state.mdb).units[id]);
 
-  const { tags = [] } = unit;
+  let tags = unit && unit.tags ? unit.tags : [];
+
   const tagNames = tags.map(getTagById);
 
   const dispatch = useDispatch();
