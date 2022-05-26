@@ -1,4 +1,4 @@
-import React, { useContext, useLayoutEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Container, Header, Popup, Progress, Ref } from 'semantic-ui-react';
 import clsx from 'clsx';
@@ -33,14 +33,14 @@ const ListTemplate = ({
   const dir                = isLanguageRtl(language) ? 'rtl' : 'ltr';
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
-  const [isNeedTooltip, setIsNeedTooltip] = useState(false);
+  const [isNeedTooltip, setIsNeedTooltip] = useState(null);
   const cuInfoRef                         = useRef();
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (cuInfoRef.current && (cuInfoRef.current.scrollHeight > cuInfoRef.current.clientHeight)) {
       setIsNeedTooltip(true);
     }
-  }, []);
+  }, [cuInfoRef.current]);
 
   const info = ((ccu || source || tag) && withCCUInfo)
     ? (
