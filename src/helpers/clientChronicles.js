@@ -2,8 +2,6 @@ import { useContext, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 import { ulid } from 'ulid';
-import { chroniclesUrl, chroniclesBackendEnabled } from './Api';
-import { noop, partialAssign } from './utils';
 
 import { actions } from '../redux/modules/chronicles';
 import { selectors as settings } from '../redux/modules/settings';
@@ -11,6 +9,8 @@ import { types as recommendedTypes } from '../redux/modules/recommended';
 import { types as searchTypes } from '../redux/modules/search';
 import { types as authTypes } from '../redux/modules/auth';
 import { ClientChroniclesContext } from './app-contexts';
+import config from './config';
+import { noop, partialAssign } from './utils';
 
 // An array of DOM events that should be interpreted as user activity.
 const ACTIVITY_EVENTS = ['mousedown', 'mousemove', 'keydown', 'scroll', 'touchstart'];
@@ -45,10 +45,12 @@ const SUBFLOWS     = new Map(Object.entries(FLOWS.reduce((acc, flow) => {
 const MAX_INACTIVITY_MS = 60 * 1000; // Minute in milliseconds.
 const APPENDS_FLUSH_MS  = 60 * 1000; // Minute in milliseconds.
 
+const chroniclesUrl = path => `${config.chroniclesApi()}${path}`;
+
 export default class ClientChronicles {
   constructor(history, store) {
     // If chronicles backend not defined in env.
-    if (!chroniclesBackendEnabled) {
+    if (!config.chroniclesEnabled()) {
       this.append = noop;
       return;
     }
@@ -143,7 +145,7 @@ export default class ClientChronicles {
   }
 
   setAbTesting(abTesting) {
-    if (!chroniclesBackendEnabled) {
+    if (!config.chroniclesEnabled()) {
       return;
     }
 

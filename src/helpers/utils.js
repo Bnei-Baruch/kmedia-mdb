@@ -5,27 +5,12 @@ import _ from 'lodash';
 import isEqual from 'react-fast-compare';
 import { useEffect, useRef } from 'react';
 
+import { Requests } from './Api';
+import config from './config';
+import * as consts from './consts';
 import { CollectionsBreakdown } from './mdb';
 import { canonicalSectionByLink, canonicalSectionByUnit } from './links';
-import * as consts from './consts';
-import {
-  CT_CONGRESS,
-  CT_DAILY_LESSON,
-  CT_FRIENDS_GATHERINGS,
-  CT_HOLIDAY,
-  CT_LESSONS_SERIES,
-  CT_MEALS, CT_PICNIC,
-  CT_SPECIAL_LESSON,
-  CT_UNITY_DAY,
-  CT_VIDEO_PROGRAM,
-  CT_VIRTUAL_LESSONS,
-  CT_WOMEN_LESSONS,
-  LANGUAGES
-} from './consts';
-import { Requests } from './Api';
 
-const CDN_URL     = process.env.REACT_APP_CDN_URL;
-const PUBLIC_BASE = process.env.REACT_APP_PUBLIC_BASE;
 
 export const isEmpty = obj => {
   // null and undefined are "empty"
@@ -173,11 +158,11 @@ export const physicalFile = (file, ext = false) => {
     suffix = `.${filenameExtension(file.name)}`;
   }
 
-  return `${CDN_URL}${file.id}${suffix}`;
+  return `${config.cdnBase()}${file.id}${suffix}`;
   // return `https://cdn.kabbalahmedia.info/${file.id}${suffix}`;
 };
 
-export const publicFile = relativePath => `${PUBLIC_BASE}${relativePath}`;
+export const publicFile = relativePath => `${config.publicBase()}${relativePath}`;
 
 export const canonicalCollection = unit => {
   if (!unit) {
@@ -275,7 +260,7 @@ export const getRSSFeedByLang = language => {
 
 export const getRSSLinkByLang = language => `https://feeds.feedburner.com/${getRSSFeedByLang(language)}`;
 
-export const getRSSLinkByTopic = (topicId, language) => `https://kabbalahmedia.info/feeds/collections/${LANGUAGES[language].lang3}/${topicId}`;
+export const getRSSLinkByTopic = (topicId, language) => `https://kabbalahmedia.info/feeds/collections/${consts.LANGUAGES[language].lang3}/${topicId}`;
 
 const podcastLinks = new Map([
   [consts.LANG_HEBREW, 'קבלה-מדיה-mp3-kab-heb/id1109848638?l=iw'],
@@ -408,18 +393,18 @@ export const partialAssign = (target, source, what = true) => {
 export const imageByUnit = (unit, link) => {
   // collections -- prepare random image
   switch (unit.content_type) {
-    case CT_CONGRESS:
-    case CT_MEALS:
-    case CT_DAILY_LESSON:
-    case CT_SPECIAL_LESSON:
-    case CT_VIRTUAL_LESSONS:
-    case CT_WOMEN_LESSONS:
-    case CT_VIDEO_PROGRAM:
-    case CT_FRIENDS_GATHERINGS:
-    case CT_HOLIDAY:
-    case CT_PICNIC:
-    case CT_UNITY_DAY:
-    case CT_LESSONS_SERIES:
+    case consts.CT_CONGRESS:
+    case consts.CT_MEALS:
+    case consts.CT_DAILY_LESSON:
+    case consts.CT_SPECIAL_LESSON:
+    case consts.CT_VIRTUAL_LESSONS:
+    case consts.CT_WOMEN_LESSONS:
+    case consts.CT_VIDEO_PROGRAM:
+    case consts.CT_FRIENDS_GATHERINGS:
+    case consts.CT_HOLIDAY:
+    case consts.CT_PICNIC:
+    case consts.CT_UNITY_DAY:
+    case consts.CT_LESSONS_SERIES:
       return Requests.imaginaryRandom('resize', {
         width: 512,
         height: 288,
@@ -435,11 +420,11 @@ export const imageByUnit = (unit, link) => {
 export const cuPartNameByCCUType = ct => {
   const prefix = 'pages.unit.info.';
   switch (ct) {
-    case CT_DAILY_LESSON:
-    case CT_SPECIAL_LESSON:
-    case CT_CONGRESS:
+    case consts.CT_DAILY_LESSON:
+    case consts.CT_SPECIAL_LESSON:
+    case consts.CT_CONGRESS:
       return `${prefix}lesson-episode`;
-    case CT_LESSONS_SERIES:
+    case consts.CT_LESSONS_SERIES:
       return `${prefix}series-episode`;
     default:
       return `${prefix}episode`;

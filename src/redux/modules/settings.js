@@ -1,10 +1,11 @@
 import { createAction } from 'redux-actions';
 import produce, { setAutoFreeze } from 'immer';
 
+import config from '../../helpers/config';
 import { DEFAULT_LANGUAGE } from '../../helpers/consts';
 import { getQuery } from '../../helpers/url';
 
-setAutoFreeze(process.env.NODE_ENV !== 'production')
+setAutoFreeze(!config.isProductionBuild())
 
 /* Helpers */
 

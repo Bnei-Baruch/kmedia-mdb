@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Image } from 'semantic-ui-react';
 
+import config from '../../helpers/config';
 import { knownFallbackImages, NoneFallbackImage, SectionThumbnailFallback } from '../../helpers/images';
-import { IMAGINARY_URL } from '../../helpers/Api';
 
 // An adaptation of https://github.com/socialtables/react-image-fallback
 // for react semantic-ui
@@ -31,14 +31,14 @@ const buildImage = (src, fallbacks, onError, onLoad) => {
   };
 
   const handleLoaded = image => {
-    if (image.includes(IMAGINARY_URL))
+    if (image.includes(config.imaginaryApi()))
       imaginaryCalls--;
 
     onLoad(image);
   };
 
   const handleError = () => {
-    if (displayImage.src.includes(IMAGINARY_URL))
+    if (displayImage.src.includes(config.imaginaryApi()))
       imaginaryCalls--;
 
     if (typeof fallbacks[0] === 'string') {
@@ -67,13 +67,13 @@ const buildImage = (src, fallbacks, onError, onLoad) => {
       return;
     }
 
-    if (image.includes(IMAGINARY_URL) && imaginaryCalls >= MAX_IMAGINARY_CALLS) {
+    if (image.includes(config.imaginaryApi()) && imaginaryCalls >= MAX_IMAGINARY_CALLS) {
       setTimeout(() => setDisplayImage(image, fallbacks), 300);
       return;
     }
 
     if (typeof image === 'string') {
-      if (image.includes(IMAGINARY_URL)) imaginaryCalls++;
+      if (image.includes(config.imaginaryApi())) imaginaryCalls++;
       displayImage.src = image;
     } else {
       onLoad(image);

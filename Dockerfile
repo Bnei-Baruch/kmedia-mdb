@@ -20,19 +20,7 @@ ARG mdb_rest_api_url
 
 WORKDIR /app
 
-ENV REACT_APP_ENV=production \
-    REACT_APP_API_BACKEND=/backend/ \
-    REACT_APP_ASSETS_BACKEND=/assets/ \
-    REACT_APP_IMAGINARY_URL=/imaginary/ \
-    REACT_APP_IMAGINARY_INTERNAL_HOST=nginx \
-    REACT_APP_LOCALES_BACKEND=/ \
-    REACT_APP_CDN_URL=${cdn_url} \
-    REACT_APP_PUBLIC_BASE=${public_base} \
-    REACT_APP_FEED=${feed_api_url} \
-    REACT_APP_PERSONAL_API_BACKEND=${personal_api_url} \
-    REACT_APP_CHRONICLES_BACKEND=${chronicles_url} \
-    REACT_APP_FILE_TRIMMER_API=${file_trimmer_api_url} \
-    REACT_APP_MDB_REST_API_URL=${mdb_rest_api_url}
+ENV REACT_APP_ENV=production
 
 COPY . .
 
