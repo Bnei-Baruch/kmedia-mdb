@@ -26,7 +26,7 @@ const Filters = ({ namespace, baseParams, t }) => {
     if (!isReady && !wip && !err) {
       dispatch(actions.fetchStats(namespace, baseParams, true));
     }
-  }, [dispatch, isReady]);
+  }, [dispatch, isReady, baseParams]);
 
   useEffect(() => {
     if (selected, isHydrated && isReady && !wip && !err) {

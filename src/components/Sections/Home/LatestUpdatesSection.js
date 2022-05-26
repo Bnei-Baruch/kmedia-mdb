@@ -1,12 +1,13 @@
-import React, { useContext, useState } from 'react';
-import PropTypes from 'prop-types';
-import { Card, Container, Feed, Grid, Segment } from 'semantic-ui-react';
-import { isEqual } from 'lodash';
+import React, { useContext } from 'react';
 import moment from 'moment';
+import { isEqual } from 'lodash';
+import PropTypes from 'prop-types';
+import { Container } from 'semantic-ui-react';
+
 import * as consts from '../../../helpers/consts';
 import * as shapes from '../../shapes';
 import Section from './Section';
-import LatestUpdatesCardList from './LatestUpdatesCardList'
+import LatestUpdatesCardList from './LatestUpdatesCardList';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 
 const itemsByContentType = list => list.filter(x => !!x).reduce((acc, val) => {
@@ -30,8 +31,8 @@ const itemsByContentType = list => list.filter(x => !!x).reduce((acc, val) => {
 }, {});
 
 const LatestUpdatesSection = ({ latestItems = [], t, language }) => {
-  const { isMobileDevice }      = useContext(DeviceInfoContext);
-  const itemsByCT = itemsByContentType(latestItems);
+  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const itemsByCT          = itemsByContentType(latestItems);
 
   if (itemsByCT[consts.CT_DAILY_LESSON]) {
     itemsByCT[consts.CT_DAILY_LESSON] = itemsByCT[consts.CT_DAILY_LESSON].sort(
@@ -65,25 +66,25 @@ const LatestUpdatesSection = ({ latestItems = [], t, language }) => {
         <Section title={t('home.latest-updates.new-on-the-site')} className={'latestUpdateSection'} computer={13}>
           <div className="homepage__section__latestUpdates">
             <LatestUpdatesCardList t={t} language={language} title={t(`events.collection.playlist.lessons`)} itemsByCT={itemsByCT} maxItems={20} itemsPerRow={itemsPerRow} stackable={!isMobileDevice} cts={[
-              { ct:consts.CT_DAILY_LESSON, itemsPerPage:2 },
-              { ct:consts.CT_WOMEN_LESSON, daysBack: 30 },
-              { ct:consts.CT_VIRTUAL_LESSON, daysBack: 30 },
-              { ct:consts.CT_LESSONS_SERIES }]} />
+              { ct: consts.CT_DAILY_LESSON, itemsPerPage: 2 },
+              { ct: consts.CT_WOMEN_LESSON, daysBack: 30 },
+              { ct: consts.CT_VIRTUAL_LESSON, daysBack: 30 },
+              { ct: consts.CT_LESSONS_SERIES }]} />
 
-            <LatestUpdatesCardList  t={t} language={language} title={t(`programs.header.text`)} itemsByCT={itemsByCT} maxItems={20} itemsPerRow={itemsPerRow} stackable={!isMobileDevice} cts={[
-              { ct:consts.CT_VIDEO_PROGRAM_CHAPTER }]}  />
+            <LatestUpdatesCardList t={t} language={language} title={t(`programs.header.text`)} itemsByCT={itemsByCT} maxItems={20} itemsPerRow={itemsPerRow} stackable={!isMobileDevice} cts={[
+              { ct: consts.CT_VIDEO_PROGRAM_CHAPTER }]} />
 
-            <LatestUpdatesCardList  t={t} language={language} title={t(`programs.tabs.clips`)} itemsByCT={itemsByCT} maxItems={20} itemsPerRow={itemsPerRow} stackable={!isMobileDevice} cts={[
-              { ct:consts.CT_CLIP }]} />
+            <LatestUpdatesCardList t={t} language={language} title={t(`programs.tabs.clips`)} itemsByCT={itemsByCT} maxItems={20} itemsPerRow={itemsPerRow} stackable={!isMobileDevice} cts={[
+              { ct: consts.CT_CLIP }]} />
 
-            <LatestUpdatesCardList  t={t} language={language} title={t(`publications.header.text`)} itemsByCT={itemsByCT} maxItems={20} itemsPerRow={itemsPerRow} stackable={!isMobileDevice} cts={[
-              { ct:consts.CT_ARTICLE }]} />
+            <LatestUpdatesCardList t={t} language={language} title={t(`publications.header.text`)} itemsByCT={itemsByCT} maxItems={20} itemsPerRow={itemsPerRow} stackable={!isMobileDevice} cts={[
+              { ct: consts.CT_ARTICLE }]} />
 
-            <LatestUpdatesCardList  t={t} language={language} title={t(`nav.sidebar.events`)} itemsByCT={itemsByCT} maxItems={20} itemsPerRow={itemsPerRow} stackable={!isMobileDevice} cts={[
-              { ct:consts.CT_CONGRESS },
-              { ct:consts.CT_FRIENDS_GATHERING },
-              { ct:consts.CT_MEAL },
-              { ct:consts.CT_HOLIDAY }]} />
+            <LatestUpdatesCardList t={t} language={language} title={t(`nav.sidebar.events`)} itemsByCT={itemsByCT} maxItems={20} itemsPerRow={itemsPerRow} stackable={!isMobileDevice} cts={[
+              { ct: consts.CT_CONGRESS },
+              { ct: consts.CT_FRIENDS_GATHERING },
+              { ct: consts.CT_MEAL },
+              { ct: consts.CT_HOLIDAY }]} />
           </div>
         </Section>
       </Container>
