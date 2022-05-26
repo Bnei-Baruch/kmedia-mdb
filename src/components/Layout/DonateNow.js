@@ -48,7 +48,7 @@ const getDonateLinkDetails = language => {
       return { linkLang: 'es', utmTerm: 'spa' };
     default:
       return { linkLang: 'en', utmTerm: 'other_lang' };
-    }
+  }
 };
 
 const DonateNow = ({ t, language }) => {
