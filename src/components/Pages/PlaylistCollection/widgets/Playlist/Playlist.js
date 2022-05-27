@@ -7,8 +7,8 @@ import { useLocation } from 'react-router';
 import { DeviceInfoContext } from '../../../../../helpers/app-contexts';
 import ContentItemContainer from '../../../../shared/ContentItem/ContentItemContainer';
 import { Header, Button } from 'semantic-ui-react';
-import { CT_HOLIDAY, CT_LESSONS_SERIES, CT_SONGS } from '../../../../../helpers/consts';
-import {  randomizeArray, strCmp } from '../../../../../helpers/utils';
+import { CT_SONGS } from '../../../../../helpers/consts';
+import {  randomizeArray } from '../../../../../helpers/utils';
 
 
 const PlaylistWidget = ({ playlist, selected = 0, link, t }) => {
@@ -16,33 +16,7 @@ const PlaylistWidget = ({ playlist, selected = 0, link, t }) => {
   const location = useLocation();
 
   const { collection, items, name } = playlist;
-  const { content_type, ccuNames } = collection;
-
-  const getCollectionPartNumber = unitId => {
-    const defaultVal = 1000000;
-    const num = Number(ccuNames[unitId]);
-
-    // put items with not valid collection part numbers at the end
-    return (isNaN(num) || num <= 0) ? defaultVal : num;
-  }
-
-  const sortItems = (item1, item2) => {
-    const val1 = getCollectionPartNumber(item1.unit.id);
-    const val2 = getCollectionPartNumber(item2.unit.id);
-    let result = val1 - val2
-
-    // if equal part number, sort by date and then name
-    if (result === 0) {
-      result = strCmp(item1.unit.film_date, item2.unit.film_date)
-      return result === 0 ? strCmp(item1.unit.name, item2.unit.name) : result;
-    }
-
-    return result;
-  }
-
-  // initially sort items by episode/song number
-  if ([CT_SONGS, CT_LESSONS_SERIES, CT_HOLIDAY].includes(content_type))
-    items.sort(sortItems);
+  const { content_type } = collection;
 
   const [selectedIndex, setSelectedIndex] = useState(selected);
   const [playlistItems, setPlaylistItems] = useState(items);

@@ -9,6 +9,7 @@ import {
   CT_SONGS,
   EVENT_PREPARATION_TAG,
   EVENT_TYPES,
+  SORTABLE_TYPES,
   LANG_ENGLISH,
   MT_AUDIO,
   MT_VIDEO,
@@ -17,7 +18,7 @@ import {
 import { getQuery, stringify, updateQuery } from './url';
 import { canonicalLink } from './links';
 import MediaHelper from './media';
-import { isEmpty, physicalFile } from './utils';
+import { isEmpty, physicalFile, strCmp } from './utils';
 import { selectSuitableLanguage } from './language';
 
 const restorePreferredMediaType = () => localStorage.getItem('@@kmedia_player_media_type') || MT_VIDEO;
@@ -99,12 +100,38 @@ const playableItem = (unit, mediaType, uiLanguage, contentLanguage) => {
   };
 };
 
+const getCollectionPartNumber = (unitId, ccuNames) => {
+  const defaultVal = 1000000;
+  const num = Number(ccuNames[unitId]);
+
+  // put items with not valid collection part numbers at the end
+  return (isNaN(num) || num <= 0) ? defaultVal : num;
+}
+
+const sortUnits = (u1, u2, ccuNames) => {
+  const val1 = getCollectionPartNumber(u1.id, ccuNames);
+  const val2 = getCollectionPartNumber(u2.id, ccuNames);
+  let result = val1 - val2
+
+  // if equal part number, sort by date and then name
+  if (result === 0) {
+    result = strCmp(u1.film_date, u2.film_date)
+    return result === 0 ? strCmp(u1.name, u2.name) : result;
+  }
+
+  return result;
+}
+
 const playlist = (collection, mediaType, contentLanguage, uiLanguage) => {
   if (!collection) {
     return {};
   }
 
-  const units = collection.content_units || [];
+  const { content_units: units = [], content_type, ccuNames } = collection;
+
+  // initially sort units by episode/song number
+  if (SORTABLE_TYPES.includes(content_type))
+    units.sort((u1, u2) => sortUnits(u1, u2, ccuNames));
 
   let items;
   let groups = null;
