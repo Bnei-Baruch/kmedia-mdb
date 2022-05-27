@@ -28,21 +28,15 @@ const RenderAsTree = ({ namespace, filterName, baseItems }) => {
   const getPath = isTag ? getPathTags : getPathSources;
   const roots   = isTag ? rootsTags : rootsSources;
 
-  const items = useMemo(() => treeItems(baseItems, getPath), [baseItems, areSourcesLoaded]);
+  const items = useMemo(() => treeItems(baseItems, getPath), [baseItems, areSourcesLoaded, getPath]);
 
   return (
     <>
       {
         roots
           .filter(r => items.includes(r))
-          .map(r => <TagSourceItem
-            id={r}
-            namespace={namespace}
-            baseItems={items}
-            filterName={filterName}
-            deep={1}
-            key={r}
-          />
+          .map(r =>
+            <TagSourceItem id={r} namespace={namespace} baseItems={items} filterName={filterName} deep={1} key={r} />
           )
       }
     </>

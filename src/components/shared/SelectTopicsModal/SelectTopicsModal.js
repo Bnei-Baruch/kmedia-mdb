@@ -14,7 +14,6 @@ import { getTree } from '../../../helpers/topricTree';
 import NeedToLogin from '../../Sections/Personal/NeedToLogin';
 import AlertModal from '../AlertModal';
 import TopicBranch from './TopicBranch';
-import { selectors as auth } from '../../../redux/modules/auth';
 
 const SelectTopicsModal = ({ t, open, onClose, label, trigger }) => {
   const [selected, setSelected] = useState([]);
