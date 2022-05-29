@@ -24,13 +24,13 @@ const Filters = ({ namespace, baseParams, t }) => {
 
   useEffect(() => {
     if (!isReady && !wip && !err) {
-      dispatch(actions.fetchStats(namespace, baseParams, { isPrepare: true }));
+      dispatch(actions.fetchStats(namespace, { with_collections: true, ...baseParams }, { isPrepare: true }));
     }
   }, [dispatch, isReady]);
 
   useEffect(() => {
     if (isHydrated && isReady) {
-      dispatch(actions.fetchStats(namespace, baseParams, { isPrepare: false }));
+      dispatch(actions.fetchStats(namespace, { with_collections: true, ...baseParams }, { isPrepare: false, }));
     }
   }, [dispatch, isHydrated, isReady, selected]);
 

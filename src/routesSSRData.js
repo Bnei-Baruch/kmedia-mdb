@@ -15,6 +15,7 @@ import {
   LANG_UKRAINIAN,
   PAGE_NS_PROGRAMS,
   RABASH_PERSON_UID,
+  UNIT_PROGRAMS_TYPE,
 } from './helpers/consts';
 import MediaHelper from './helpers/media';
 import { canonicalCollection, isEmpty } from './helpers/utils';
@@ -71,26 +72,28 @@ export const cuPage = (store, match) => {
 
 const getExtraFetchParams = (ns, collectionID) => {
   switch (ns) {
-    case 'publications-articles':
-      return { content_type: [CT_ARTICLE] };
-    case 'events-meals':
-      return { content_type: [CT_MEAL] };
-    case 'events-friends-gatherings':
-      return { content_type: [CT_FRIENDS_GATHERING] };
-    case 'lessons-virtual':
-      return { content_type: [CT_VIRTUAL_LESSON] };
-    case 'lessons-lectures':
-      return { content_type: [CT_LECTURE] };
-    case 'lessons-women':
-      return { content_type: [CT_WOMEN_LESSON] };
-    case 'lessons-rabash':
-      return { content_type: [CT_LESSON_PART], person: RABASH_PERSON_UID };
+  case PAGE_NS_PROGRAMS:
+    return { content_type: UNIT_PROGRAMS_TYPE };
+  case 'publications-articles':
+    return { content_type: [CT_ARTICLE] };
+  case 'events-meals':
+    return { content_type: [CT_MEAL] };
+  case 'events-friends-gatherings':
+    return { content_type: [CT_FRIENDS_GATHERING] };
+  case 'lessons-virtual':
+    return { content_type: [CT_VIRTUAL_LESSON] };
+  case 'lessons-lectures':
+    return { content_type: [CT_LECTURE] };
+  case 'lessons-women':
+    return { content_type: [CT_WOMEN_LESSON] };
+  case 'lessons-rabash':
+    return { content_type: [CT_LESSON_PART], person: RABASH_PERSON_UID };
     // case 'lessons-children':
     //   return { content_type: [CT_CHILDREN_LESSON] };
-    default:
-      if (collectionID) {
-        return { collection: collectionID };
-      }
+  default:
+    if (collectionID) {
+      return { collection: collectionID };
+    }
   }
 
   return {};
@@ -110,7 +113,7 @@ export const cuListPage = (ns, collectionID = 0) => (store, match) => {
   const extraFetchParams = getExtraFetchParams(ns, collectionID);
 
   // dispatch fetchList
-  store.dispatch(listsActions.fetchList(ns, page, { ...extraFetchParams, pageSize }));
+  store.dispatch(listsActions.fetchList(ns, page, { ...extraFetchParams, pageSize, withViews: true }));
 
   return Promise.resolve(null);
 };
@@ -137,24 +140,20 @@ export const playlistCollectionPage = (store, match) => {
           store.dispatch(mdbActions.fetchUnit(cuID));
         });
       }
-
-      ;
     });
 };
 
-export const latestLesson = store => (
-  store.sagaMiddleWare.run(mdbSagas.fetchLatestLesson).done
-    .then(() => {
-      // TODO: replace this with a single call to backend with all IDs
-      // I don't think we need all files of every unit. Just for active one.
-      const state = store.getState();
-      const cID   = mdbSelectors.getLastLessonId(state.mdb);
-      const c     = mdbSelectors.getCollectionById(state.mdb, cID);
-      c.cuIDs.forEach(cuID => {
-        store.dispatch(mdbActions.fetchUnit(cuID));
-      });
-    })
-);
+export const latestLesson = store => (store.sagaMiddleWare.run(mdbSagas.fetchLatestLesson).done
+  .then(() => {
+    // TODO: replace this with a single call to backend with all IDs
+    // I don't think we need all files of every unit. Just for active one.
+    const state = store.getState();
+    const cID   = mdbSelectors.getLastLessonId(state.mdb);
+    const c     = mdbSelectors.getCollectionById(state.mdb, cID);
+    c.cuIDs.forEach(cuID => {
+      store.dispatch(mdbActions.fetchUnit(cuID));
+    });
+  }));
 
 export const musicPage = store => store.sagaMiddleWare.run(musicSagas.fetchMusic, musicActions.fetchMusic).done;
 
@@ -194,7 +193,7 @@ export const lessonsPage = (store, match) => {
 };
 
 export const programsPage = (store, match) => {
-  store.dispatch(programsActions.fetchCollections());
+  //store.dispatch(programsActions.fetchCollections());
   return cuListPage(PAGE_NS_PROGRAMS)(store, match);
 };
 
@@ -222,11 +221,7 @@ export const lessonsCollectionPage = (store, match) => {
   return collectionPage('lessons-collection')(store, match);
 };
 
-export const searchPage = store => (
-  Promise.all([
-    store.sagaMiddleWare.run(searchSagas.hydrateUrl).done,
-    store.sagaMiddleWare.run(filtersSagas.hydrateFilters, filtersActions.hydrateFilters('search')).done
-  ])
+export const searchPage = store => (Promise.all([store.sagaMiddleWare.run(searchSagas.hydrateUrl).done, store.sagaMiddleWare.run(filtersSagas.hydrateFilters, filtersActions.hydrateFilters('search')).done])
     .then(() => {
       const state    = store.getState();
       const q        = searchSelectors.getQuery(state.search);
@@ -315,19 +310,19 @@ export const tweetsListPage = (store, match) => {
   // extraFetchParams
   let extraFetchParams;
   switch (language) {
-    case LANG_HEBREW:
-      extraFetchParams = { username: 'laitman_co_il' };
-      break;
-    case LANG_UKRAINIAN:
-    case LANG_RUSSIAN:
-      extraFetchParams = { username: 'Michael_Laitman' };
-      break;
-    case LANG_SPANISH:
-      extraFetchParams = { username: 'laitman_es' };
-      break;
-    default:
-      extraFetchParams = { username: 'laitman' };
-      break;
+  case LANG_HEBREW:
+    extraFetchParams = { username: 'laitman_co_il' };
+    break;
+  case LANG_UKRAINIAN:
+  case LANG_RUSSIAN:
+    extraFetchParams = { username: 'Michael_Laitman' };
+    break;
+  case LANG_SPANISH:
+    extraFetchParams = { username: 'laitman_es' };
+    break;
+  default:
+    extraFetchParams = { username: 'laitman' };
+    break;
   }
 
   // dispatch fetchData
@@ -360,19 +355,19 @@ export const blogListPage = (store, match) => {
   // extraFetchParams
   let extraFetchParams;
   switch (language) {
-    case LANG_HEBREW:
-      extraFetchParams = { blog: 'laitman-co-il' };
-      break;
-    case LANG_UKRAINIAN:
-    case LANG_RUSSIAN:
-      extraFetchParams = { blog: 'laitman-ru' };
-      break;
-    case LANG_SPANISH:
-      extraFetchParams = { blog: 'laitman-es' };
-      break;
-    default:
-      extraFetchParams = { blog: 'laitman-com' };
-      break;
+  case LANG_HEBREW:
+    extraFetchParams = { blog: 'laitman-co-il' };
+    break;
+  case LANG_UKRAINIAN:
+  case LANG_RUSSIAN:
+    extraFetchParams = { blog: 'laitman-ru' };
+    break;
+  case LANG_SPANISH:
+    extraFetchParams = { blog: 'laitman-es' };
+    break;
+  default:
+    extraFetchParams = { blog: 'laitman-com' };
+    break;
   }
 
   // dispatch fetchData
@@ -391,14 +386,14 @@ export const publicationsPage = (store, match) => {
   }
 
   switch (tab) {
-    case 'articles':
-      return cuListPage(ns)(store, match);
-    case 'blog':
-      return blogListPage(store, match);
-    case 'twitter':
-      return tweetsListPage(store, match);
-    default:
-      return Promise.resolve(null);
+  case 'articles':
+    return cuListPage(ns)(store, match);
+  case 'blog':
+    return blogListPage(store, match);
+  case 'twitter':
+    return tweetsListPage(store, match);
+  default:
+    return Promise.resolve(null);
   }
 };
 

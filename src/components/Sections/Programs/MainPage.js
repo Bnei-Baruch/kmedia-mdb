@@ -27,7 +27,7 @@ const MainPage = () => {
 
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(progActions.fetchCollections());
+    //dispatch(progActions.fetchCollections());
   }, [language, dispatch]);
 
   useEffect(() => {
