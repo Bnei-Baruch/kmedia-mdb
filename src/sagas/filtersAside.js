@@ -9,6 +9,13 @@ import uniq from 'lodash/uniq';
 const RESULT_NAME_BY_PARAM = {
   'tag': 'tags', 'source': 'sources', 'author': 'sources', 'content_type': 'content_types'
 };
+const defaultStatParams    = {
+  with_sources: true,
+  with_tags: true,
+  with_collections: false,
+  with_languages: false,
+  with_content_types: true
+};
 
 export function* fetchStat(action) {
   const { namespace, params, options: { isPrepare, countC = false, countL = false } } = action.payload;
@@ -35,6 +42,7 @@ export function* fetchStat(action) {
 
     const requests = [];
 
+    filterParams = { ...defaultStatParams, ...filterParams };
     requests.push(call(Api.unitsStats, filterParams));
     countC && requests.push(call(Api.collectionsStats, filterParams));
     countL && requests.push(call(Api.labelsStats, filterParams));
@@ -64,6 +72,35 @@ export function* fetchStat(action) {
     }
 
     yield put(actions.fetchStatsSuccess({ dataCU, dataC, dataL, namespace, isPrepare }));
+    if (params.with_languages !== false) {
+      yield fetchLanguageStat(filterParams, namespace, dataC.languages, dataL.languages, isPrepare);
+    }
+  } catch (err) {
+    yield put(actions.fetchStatsFailure(namespace, err));
+  }
+}
+
+/**
+ * stats of cu languages are too slow, so we call it separately
+ * @param params
+ * @param namespace
+ * @param dataC if you have results of collections take from here
+ * @param dataL if you have results of collections take from here
+ * @param isPrepare
+ * @returns {Generator<*, void, *>}
+ */
+export function* fetchLanguageStat(params, namespace, dataC = {}, dataL = {}, isPrepare) {
+  params.with_sources       = false;
+  params.with_tags          = false;
+  params.with_collections   = false;
+  params.with_content_types = false;
+
+  params.with_languages = true;
+  params['media_language'] && delete params['media_language'];
+  try {
+    const { data: { languages: dataCU } } = yield call(Api.unitsStats, params);
+
+    yield put(actions.receiveLanguageStats({ dataCU, dataC, dataL, namespace, isPrepare }));
   } catch (err) {
     yield put(actions.fetchStatsFailure(namespace, err));
   }
