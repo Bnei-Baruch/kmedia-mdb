@@ -4,7 +4,6 @@ import Api from '../helpers/Api';
 import { CT_LESSON_PART } from '../helpers/consts';
 import { isEmpty } from '../helpers/utils';
 import { actions, selectors, types as stats } from '../redux/modules/stats';
-import { types as lists } from '../redux/modules/lists';
 import { types as tags } from '../redux/modules/tags';
 
 function* fetchCUStats(action) {
