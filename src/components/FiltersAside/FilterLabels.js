@@ -71,7 +71,7 @@ const FilterLabels = ({ namespace, t }) => {
 
   return (
     <Container className="filter_aside_labels">
-      <span>{t('filters.by')}</span>
+      <span>{t('filters.filters')}:</span>
       {
         list.filter(f => f.values?.length > 0).flatMap((f, j) =>
           f.values.map((v, i) => renderItem(f.name, v, `${j}_${i}`))
