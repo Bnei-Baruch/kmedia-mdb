@@ -8,8 +8,7 @@ import {
   SEARCH_GRAMMAR_HIT_TYPES,
   SEARCH_INTENT_HIT_TYPE_SERIES_BY_SOURCE,
   SEARCH_INTENT_HIT_TYPE_SERIES_BY_TAG,
-  SEARCH_INTENT_HIT_TYPES,
-  SEARCH_RESULT_TYPES_TEXT
+  SEARCH_INTENT_HIT_TYPES
 } from '../../helpers/consts';
 import { isEmpty } from '../../helpers/utils';
 import { getQuery } from '../../helpers/url';
@@ -25,15 +24,13 @@ import Pagination from '../Pagination/Pagination';
 import ResultsPageHeader from '../Pagination/ResultsPageHeader';
 import SearchResultCU from './SearchResultCU';
 import SearchResultCollection from './SearchResultCollection';
+import SearchResultIntent from './SearchResultIntent';
 import SearchResultLandingPage from './SearchResultLandingPage';
 import SearchResultTwitters from './SearchResultTwitters';
 import SearchResultSource from './SearchResultSource';
 import SearchResultPost from './SearchResultPost';
 import DidYouMean from './DidYouMean';
 import SearchResultSeries from './SearchResultSeries';
-import Filters from './Filters';
-import ResultUnit from './ResultUnit';
-import ResultIntent from './ResultIntent';
 
 const SearchResults = props => {
   /* Requested by Mizrahi
@@ -61,8 +58,7 @@ const SearchResults = props => {
       language,
       t,
       handlePageChange,
-      location,
-      baseParams
+      location
     } = props;
 
   const filterByHitType = hit => hitType ? hit.type === hitType : true;
@@ -95,7 +91,7 @@ const SearchResults = props => {
 
     // To be deprecated soon.
     if (SEARCH_INTENT_HIT_TYPES.includes(type)) {
-      return <ResultIntent hit={hit} />;
+      return <SearchResultIntent {...newProps} />;
     }
 
     if (type === 'tweets_many') {
@@ -104,10 +100,6 @@ const SearchResults = props => {
 
     if (type === SEARCH_INTENT_HIT_TYPE_SERIES_BY_TAG || type === SEARCH_INTENT_HIT_TYPE_SERIES_BY_SOURCE) {
       return <SearchResultSeries {...newProps} />;
-    }
-
-    if (SEARCH_RESULT_TYPES_TEXT.includes(resultType)) {
-      return <ResultUnit hit={hit} rank={rank} />;
     }
 
     let result = null;
@@ -195,16 +187,8 @@ const SearchResults = props => {
   }
 
   return (
-
-    <Grid divided>
-      <Grid.Column width="4" className="filters-aside-wrapper">
-        <Filters
-          namespace={'search'}
-          baseParams={baseParams}
-        />
-      </Grid.Column>
-      <Grid.Column width="12">
-
+    <Grid>
+      <Grid.Column key="1" computer={16} tablet={16} mobile={16}>
         {/* Requested by Mizrahi renderTopNote() */}
         {typo_suggest && <DidYouMean typo_suggest={typo_suggest} />}
 
@@ -224,6 +208,7 @@ const SearchResults = props => {
           />
         </Container>
       </Grid.Column>
+      {/* <Grid.Column key="2" /> */}
     </Grid>
   );
 };
