@@ -53,27 +53,25 @@ const MainPage = ({ t }) => {
 
   const toggleFilters = () => setOpenFilters(!openFilters);
 
-  const renderMobileFilters = () => {
-    return (
-      <Modal
-        closeIcon
-        open={openFilters}
-        onClose={toggleFilters}
-        dir={dir}
-        className={dir}
-      >
-        <Modal.Content className="filters-aside-wrapper" scrolling>
-          <Filters
-            namespace={PAGE_NS_PROGRAMS}
-            baseParams={{ content_type: UNIT_PROGRAMS_TYPE }}
-          />
-        </Modal.Content>
-        <Modal.Actions>
-          <Button primary content={t('buttons.close')} onClick={toggleFilters} />
-        </Modal.Actions>
-      </Modal>
-    );
-  };
+  const renderMobileFilters = () => (
+    <Modal
+      closeIcon
+      open={openFilters}
+      onClose={toggleFilters}
+      dir={dir}
+      className={dir}
+    >
+      <Modal.Content className="filters-aside-wrapper" scrolling>
+        <Filters
+          namespace={PAGE_NS_PROGRAMS}
+          baseParams={{ content_type: UNIT_PROGRAMS_TYPE }}
+        />
+      </Modal.Content>
+      <Modal.Actions>
+        <Button primary content={t('buttons.close')} onClick={toggleFilters} />
+      </Modal.Actions>
+    </Modal>
+  );
 
   return (
     <>
