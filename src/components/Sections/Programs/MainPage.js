@@ -1,7 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import { withNamespaces } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { Container, Divider, Grid } from 'semantic-ui-react';
+import { Button, Container, Divider, Grid, Modal } from 'semantic-ui-react';
 import { isEqual } from 'lodash';
+import { DeviceInfoContext } from '../../../helpers/app-contexts';
+import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import { usePrevious } from '../../../helpers/utils';
 
 import { selectors as lists, actions } from '../../../redux/modules/lists';
@@ -16,14 +19,19 @@ import Pagination from '../../Pagination/Pagination';
 import ResultsPageHeader from '../../Pagination/ResultsPageHeader';
 import ItemOfList from './ItemOfList';
 
-const MainPage = () => {
+const MainPage = ({ t }) => {
+  const { isMobileDevice } = useContext(DeviceInfoContext);
+
   const { items, total } = useSelector(state => lists.getNamespaceState(state.lists, PAGE_NS_PROGRAMS)) || {};
   const language         = useSelector(state => settings.getLanguage(state.settings));
   const pageSize         = useSelector(state => settings.getPageSize(state.settings));
   const selected         = useSelector(state => filters.getFilters(state.filters, PAGE_NS_PROGRAMS), isEqual);
-  const prevSel          = usePrevious(selected);
+  const dir              = getLanguageDirection(language);
 
-  const [pageNo, setPageNo] = useState(1);
+  const prevSel = usePrevious(selected);
+
+  const [pageNo, setPageNo]           = useState(1);
+  const [openFilters, setOpenFilters] = useState(false);
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -43,35 +51,66 @@ const MainPage = () => {
 
   const onPageChange = n => setPageNo(n);
 
-  return (<>
-    <SectionHeader section="programs" />
-    <Container className="padded" fluid>
-      <Divider />
-      <Grid divided>
-        <Grid.Column width="4" className="filters-aside-wrapper">
+  const toggleFilters = () => setOpenFilters(!openFilters);
+
+  const renderMobileFilters = () => {
+    return (
+      <Modal
+        closeIcon
+        open={openFilters}
+        onClose={toggleFilters}
+        dir={dir}
+        className={dir}
+      >
+        <Modal.Content className="filters-aside-wrapper" scrolling>
           <Filters
             namespace={PAGE_NS_PROGRAMS}
             baseParams={{ content_type: UNIT_PROGRAMS_TYPE }}
           />
-        </Grid.Column>
-        <Grid.Column width="12">
-          <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} />
-          <FilterLabels namespace={PAGE_NS_PROGRAMS} />
-          {items?.map((id, i) => <ItemOfList id={id} key={i} />)}
-          <Divider fitted />
-          <Container className="padded pagination-wrapper" textAlign="center">
-            {total > 0 && <Pagination
-              pageNo={pageNo}
-              pageSize={pageSize}
-              total={total}
-              language={language}
-              onChange={onPageChange}
-            />}
-          </Container>
-        </Grid.Column>
-      </Grid>
-    </Container>
-  </>);
+        </Modal.Content>
+        <Modal.Actions>
+          <Button primary content={t('buttons.close')} onClick={toggleFilters} />
+        </Modal.Actions>
+      </Modal>
+    );
+  };
+
+  return (
+    <>
+      <SectionHeader section="programs" />
+      <Container className="padded" fluid>
+        <Button className="" basic icon="filter" floated={'right'} onClick={toggleFilters} />
+        <Divider />
+        <Grid divided>
+          {
+            !isMobileDevice ? (
+              <Grid.Column width="4" className="filters-aside-wrapper">
+                <Filters
+                  namespace={PAGE_NS_PROGRAMS}
+                  baseParams={{ content_type: UNIT_PROGRAMS_TYPE }}
+                />
+              </Grid.Column>
+            ) : renderMobileFilters()
+          }
+          <Grid.Column width="12" mobile="16">
+            <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} />
+            <FilterLabels namespace={PAGE_NS_PROGRAMS} />
+            {items?.map((id, i) => <ItemOfList id={id} key={i} />)}
+            <Divider fitted />
+            <Container className="padded pagination-wrapper" textAlign="center">
+              {total > 0 && <Pagination
+                pageNo={pageNo}
+                pageSize={pageSize}
+                total={total}
+                language={language}
+                onChange={onPageChange}
+              />}
+            </Container>
+          </Grid.Column>
+        </Grid>
+      </Container>
+    </>
+  );
 };
 
-export default MainPage;
+export default withNamespaces()(MainPage);
