@@ -1,6 +1,5 @@
 import { createAction } from 'redux-actions';
 import mapValues from 'lodash/mapValues';
-import { PAGE_NS_LESSONS } from '../../helpers/consts';
 
 import { handleActions, types as settings } from './settings';
 import { types as ssr } from './ssr';

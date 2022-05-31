@@ -7,7 +7,8 @@ import {
   MY_NAMESPACE_HISTORY,
   MY_NAMESPACE_REACTIONS,
   MY_NAMESPACE_PLAYLISTS,
-  MY_NAMESPACE_BOOKMARKS, PAGE_NS_TOPICS, PAGE_NS_PROGRAMS
+  MY_NAMESPACE_BOOKMARKS,
+  PAGE_NS_PROGRAMS
 } from './helpers/consts';
 import LanguageSetter from './components/Language/LanguageSetter';
 import Layout from './components/Layout/Layout';

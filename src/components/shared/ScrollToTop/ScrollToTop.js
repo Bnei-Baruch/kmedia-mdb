@@ -15,7 +15,7 @@ const ScrollToTop = ({ location, children }) => {
         window.scrollTo(0, 0);
       }
     },
-    [location.pathname]
+    [location.pathname, location.search?.srchstart]
   );
 
   return children;

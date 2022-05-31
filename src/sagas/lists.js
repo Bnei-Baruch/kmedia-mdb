@@ -8,7 +8,7 @@ import { actions as mdbActions } from '../redux/modules/mdb';
 import { filtersTransformer } from '../filters';
 import Api from '../helpers/Api';
 import {
-  COLLECTION_LESSONS_TYPE, CT_VIDEO_PROGRAM_CHAPTER, PAGE_NS_LESSONS, UNIT_LESSONS_TYPE
+  COLLECTION_LESSONS_TYPE, CT_VIDEO_PROGRAM_CHAPTER, UNIT_LESSONS_TYPE
 } from '../helpers/consts';
 import { getQuery, pushQuery } from './helpers/url';
 import { fetchCollectionsByIDs, fetchUnitsByIDs } from './mdb';
@@ -123,4 +123,4 @@ function* watchSetPage() {
   yield takeLatest(types.SET_PAGE, updatePageInQuery);
 }
 
-export const sagas = [watchFetchList, watchFetchListLessons, watchSetPage,];
+export const sagas = [watchFetchList, watchFetchListLessons, watchSetPage];
