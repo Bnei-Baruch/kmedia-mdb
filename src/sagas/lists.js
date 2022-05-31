@@ -74,12 +74,15 @@ function* fetchListLessons(action) {
       cIDs      = items.filter(x => COLLECTION_LESSONS_TYPE.includes(x.content_type)).map(x => x.id);
       cuIDsView = cuIDs;
     }
+
     if (!isEmpty(cuIDs)) {
       yield fetchUnitsByIDs({ payload: { id: cuIDs } });
     }
+
     if (!isEmpty(cIDs)) {
       yield fetchCollectionsByIDs({ payload: { id: cIDs } });
     }
+
     if (withViews) {
       yield fetchViewsByUIDs(cuIDsView);
     }

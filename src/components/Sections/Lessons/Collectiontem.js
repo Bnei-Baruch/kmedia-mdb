@@ -21,6 +21,7 @@ const CollectionItem = ({ id, t }) => {
   } else if (start_date && end_date) {
     description.push(fromToLocalized(start_date, end_date));
   }
+
   return (<List.Item key={id} className="media_item">
     <div style={{ minWidth: '140px' }}>
       <UnitLogo unitId={cus[0].id} width={144} />

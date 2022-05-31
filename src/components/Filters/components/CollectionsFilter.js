@@ -2,7 +2,7 @@ import React from 'react';
 import { withNamespaces } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
-import { CT_ARTICLES} from '../../../helpers/consts';
+import { CT_ARTICLES } from '../../../helpers/consts';
 import { strCmp } from '../../../helpers/utils';
 import { selectors as publications } from '../../../redux/modules/publications';
 import { selectors as mdb } from '../../../redux/modules/mdb';

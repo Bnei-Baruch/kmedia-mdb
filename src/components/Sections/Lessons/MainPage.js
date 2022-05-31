@@ -62,7 +62,7 @@ const MainPage = () => {
           <FilterLabels namespace={PAGE_NS_LESSONS} />
           {
             items?.map(({ id, content_type }, i) => {
-                switch (true) {
+              switch (true) {
                 case content_type === CT_DAILY_LESSON:
                   return <DailyLessonItem id={id} key={i} />;
                 case COLLECTION_LESSONS_TYPE.includes(content_type):
@@ -71,8 +71,8 @@ const MainPage = () => {
                   return <UnitItem id={id} key={i} />;
                 default:
                   return null;
-                }
               }
+            }
             )
           }
           <Divider fitted />
