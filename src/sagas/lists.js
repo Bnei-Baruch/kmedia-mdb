@@ -1,4 +1,5 @@
 import { call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
+import { isEmpty } from '../helpers/utils';
 
 import { actions, types } from '../redux/modules/lists';
 import { selectors as settings } from '../redux/modules/settings';
@@ -6,59 +7,36 @@ import { selectors as filterSelectors } from '../redux/modules/filters';
 import { actions as mdbActions } from '../redux/modules/mdb';
 import { filtersTransformer } from '../filters';
 import Api from '../helpers/Api';
-import { CT_VIDEO_PROGRAM_CHAPTER } from '../helpers/consts';
+import {
+  COLLECTION_LESSONS_TYPE, CT_VIDEO_PROGRAM_CHAPTER, PAGE_NS_LESSONS, UNIT_LESSONS_TYPE
+} from '../helpers/consts';
 import { getQuery, pushQuery } from './helpers/url';
+import { fetchCollectionsByIDs, fetchUnitsByIDs } from './mdb';
 import { fetchViewsByUIDs } from './recommended';
 
 function* fetchList(action) {
-  let endpoint;
-  const { withViews = false, namespace, ...args } = action.payload;
+  let { withViews = false, namespace, ...args } = action.payload;
 
   if (namespace.startsWith('intents')) {
     args.with_files = true;
     if (args.content_type === 'lessons') {
-      endpoint = Api.lessons;
       args.content_type && delete args.content_type;
     } else {
-      endpoint          = Api.units;
       args.content_type = CT_VIDEO_PROGRAM_CHAPTER;
     }
   } else {
     const filters      = yield select(state => filterSelectors.getFilters(state.filters, namespace));
     const filterParams = filtersTransformer.toApiParams(filters) || {};
-    Object.assign(args, filterParams);
-    endpoint = namespace === 'lessons-daily' ? Api.lessons : Api.units;
+    args               = { ...args, filterParams };
   }
 
   const language = yield select(state => settings.getLanguage(state.settings));
 
   try {
-    const { data } = yield call(endpoint, { ...args, language });
+    const { data } = yield call(Api.units, { ...args, language });
 
     if (Array.isArray(data.content_units)) {
       yield put(mdbActions.receiveContentUnits(data.content_units));
-    }
-
-    if (Array.isArray(data.collections)) {
-      yield put(mdbActions.receiveCollections(data.collections));
-
-      // TODO edo: optimize data fetching
-      // Here comes another call for all content_units we got
-      // in order to fetch their possible additional collections.
-      // We need this to show 'related to' second line in list.
-      // This second round trip to the API is awful,
-      // we should strive for a single call to the API and get all the data we need.
-      // hmm, relay..., hmm ?
-      const cuIDsToFetch = data.collections.reduce((acc, val) => {
-        if (Array.isArray(val.content_units)) {
-          return acc.concat(val.content_units.map(x => x.id));
-        }
-
-        return acc;
-      }, []);
-      const pageSize     = cuIDsToFetch.length;
-      const resp         = yield call(Api.units, { id: cuIDsToFetch, pageSize, language });
-      yield put(mdbActions.receiveContentUnits(resp.data.content_units));
     }
 
     if (withViews) {
@@ -66,6 +44,47 @@ function* fetchList(action) {
     }
 
     yield put(actions.fetchListSuccess(namespace, data));
+  } catch (err) {
+    yield put(actions.fetchListFailure(namespace, err));
+  }
+}
+
+function* fetchListLessons(action) {
+  const { withViews = false, namespace, ...args } = action.payload;
+
+  const filters      = yield select(state => filterSelectors.getFilters(state.filters, namespace));
+  const filterParams = filtersTransformer.toApiParams(filters) || {};
+
+  const language = yield select(state => settings.getLanguage(state.settings));
+
+  try {
+    const { data: { items, content_units, total } } = yield call(Api.lessons, { ...args, ...filterParams, language });
+
+    let cuIDs;
+    let cuIDsView;
+    let cIDs;
+    const data = { total, items };
+
+    if (content_units) {
+      data.items = content_units;
+      cuIDsView  = content_units.map(x => x.id);
+      yield put(mdbActions.receiveContentUnits(content_units));
+    } else {
+      cuIDs     = items.filter(x => UNIT_LESSONS_TYPE.includes(x.content_type)).map(x => x.id);
+      cIDs      = items.filter(x => COLLECTION_LESSONS_TYPE.includes(x.content_type)).map(x => x.id);
+      cuIDsView = cuIDs;
+    }
+    if (!isEmpty(cuIDs)) {
+      yield fetchUnitsByIDs({ payload: { id: cuIDs } });
+    }
+    if (!isEmpty(cIDs)) {
+      yield fetchCollectionsByIDs({ payload: { id: cIDs } });
+    }
+    if (withViews) {
+      yield fetchViewsByUIDs(cuIDsView);
+    }
+
+    yield put(actions.fetchListLessonsSuccess(namespace, data));
   } catch (err) {
     yield put(actions.fetchListFailure(namespace, err));
   }
@@ -93,11 +112,12 @@ function* watchFetchList() {
   yield takeEvery(types.FETCH_LIST, fetchList);
 }
 
+function* watchFetchListLessons() {
+  yield takeEvery(types.FETCH_LIST_LESSONS, fetchListLessons);
+}
+
 function* watchSetPage() {
   yield takeLatest(types.SET_PAGE, updatePageInQuery);
 }
 
-export const sagas = [
-  watchFetchList,
-  watchSetPage,
-];
+export const sagas = [watchFetchList, watchFetchListLessons, watchSetPage,];

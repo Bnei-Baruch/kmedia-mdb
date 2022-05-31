@@ -649,3 +649,4 @@ export const FN_COLLECTION_MULTI = 'collections-filter-multi';
 
 export const PAGE_NS_TOPICS   = 'topic';
 export const PAGE_NS_PROGRAMS = 'programs';
+export const PAGE_NS_LESSONS = 'lessons';
