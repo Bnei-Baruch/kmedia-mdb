@@ -6,7 +6,12 @@ import { Button } from 'semantic-ui-react';
 import { LANG_ENGLISH, LANG_HEBREW, LANG_RUSSIAN, LANG_SPANISH } from '../../helpers/consts';
 
 const Vh_Button = ({ t, language }) => (
-  DButton({ content: t('home.virtual-home'), href: `https://kli.one/?bbref_internal=kmedia&bbref_lang=${language}&lang=${language}`, icon: 'globe', className: 'vh-button' })
+  DButton({
+    content: t('home.virtual-home'),
+    href: `https://kli.one/?bbref_internal=kmedia&bbref_lang=${language}&lang=${language}`,
+    icon: 'globe',
+    className: 'vh-button'
+  })
 );
 
 Vh_Button.propTypes = {
@@ -44,11 +49,11 @@ const getDonateLinkDetails = language => {
     default:
       return { linkLang: 'en', utmTerm: 'other_lang' };
   }
-}
+};
 
 const DonateNow = ({ t, language }) => {
   const { linkLang, utmTerm } = getDonateLinkDetails(language);
-  const link = `https://www.kab1.com/${linkLang}?utm_source=kabbalah_media&utm_medium=button&utm_campaign=donations&utm_id=donations&utm_term=${utmTerm}&utm_content=header_button_donate`;
+  const link                  = `https://www.kab1.com/${linkLang}?utm_source=kabbalah_media&utm_medium=button&utm_campaign=donations&utm_id=donations&utm_term=${utmTerm}&utm_content=header_button_donate`;
   return DButton({ content: t('home.donate'), href: link, icon: 'heart', className: 'donate-button' });
 };
 

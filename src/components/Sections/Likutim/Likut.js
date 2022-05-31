@@ -11,7 +11,7 @@ import { selectors as siteSettings } from '../../../redux/modules/settings';
 import { selectors as tagSelectors } from '../../../redux/modules/tags';
 import { actions, selectors } from '../../../redux/modules/mdb';
 import { getLangPropertyDirection, getLanguageDirection } from '../../../helpers/i18n-utils';
-import { physicalFile } from '../../../helpers/utils';
+import { physicalFile, strCmp } from '../../../helpers/utils';
 import { SectionLogo } from '../../../helpers/images';
 import { canonicalLink } from '../../../helpers/links';
 import { LANG_ENGLISH, LANG_HEBREW, UNIT_LESSONS_TYPE } from '../../../helpers/consts';
@@ -214,8 +214,9 @@ const Likut = ({ t }) => {
               </Grid.Row>
               <Grid.Row columns={3}>
                 {
+                  // sort by film date desc
                   relatedLessons
-                    .sort((u1, u2) => u1.film_date <= u2.film_date ? 1 : -1)
+                    .sort((u1, u2) => strCmp(u2.film_date, u1.film_date))
                     .map(u =>
                       <Grid.Column key={u.id}>
                         <Link to={canonicalLink(u)}>{t('values.date', { date: u.film_date })}</Link>

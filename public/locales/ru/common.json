@@ -194,7 +194,8 @@
       "UNITY_DAY": "Части события",
       "LESSONS_SERIES": "Части серии",
       "SONGS": "Песни"
-    }
+    },
+    "shuffle": "Перемешать плейлист"
   },
   "messages": {
     "loading": "Загрузка...",
@@ -498,6 +499,7 @@
         "lesson-episodes": "{{name}} частей",
         "series-episode": "Урок {{name}}",
         "series-episodes": "{{name}} уроков",
+        "song": "Песня {{name}}",
         "views": "{{views}} просмотров"
       },
       "recommended": {
