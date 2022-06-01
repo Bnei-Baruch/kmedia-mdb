@@ -108,15 +108,20 @@ const getCollectionPartNumber = (unitId, ccuNames) => {
   return (isNaN(num) || num <= 0) ? defaultVal : num;
 }
 
-const sortUnits = (u1, u2, ccuNames) => {
+const sortUnits = (u1, u2, collection) => {
+  const { content_type, ccuNames } = collection;
   const val1 = getCollectionPartNumber(u1.id, ccuNames);
   const val2 = getCollectionPartNumber(u2.id, ccuNames);
-  let result = val1 - val2
+
+  // sort songs in desc order, but the rest asc
+  let result = content_type === CT_SONGS ? val2 - val1 : val1 - val2;
 
   // if equal part number, sort by date and then name
   if (result === 0) {
     result = strCmp(u1.film_date, u2.film_date)
-    return result === 0 ? strCmp(u1.name, u2.name) : result;
+
+    if (result === 0)
+      result = strCmp(u1.name, u2.name);
   }
 
   return result;
@@ -127,18 +132,17 @@ const playlist = (collection, mediaType, contentLanguage, uiLanguage) => {
     return {};
   }
 
-  const { content_units: units = [], content_type, ccuNames } = collection;
+  const { start_date: sDate, end_date: eDate, content_units: units = [], content_type, name } = collection;
 
   // initially sort units by episode/song number
   if (SORTABLE_TYPES.includes(content_type))
-    units.sort((u1, u2) => sortUnits(u1, u2, ccuNames));
+    units.sort((u1, u2) => sortUnits(u1, u2, collection));
 
   let items;
   let groups = null;
-  if (EVENT_TYPES.indexOf(collection.content_type) !== -1) {
-    const { start_date: sDate, end_date: eDate } = collection;
-    const mSDate                                 = moment(sDate);
-    const mEDate                                 = moment(eDate);
+  if (EVENT_TYPES.indexOf(content_type) !== -1) {
+    const mSDate = moment(sDate);
+    const mEDate = moment(eDate);
 
     const breakdown = units.reduce((acc, val) => {
       const fDate = moment(val.film_date);
@@ -165,23 +169,6 @@ const playlist = (collection, mediaType, contentLanguage, uiLanguage) => {
       acc[k] = v;
       return acc;
     }, {});
-
-    // We better of sort things on the server...
-
-    // Object.values(breakdown).forEach(x => x.sort((a, b) => {
-    //   const fdCmp = strCmp(a.unit.film_date, b.unit.film_date);
-    //   if (fdCmp !== 0) {
-    //     return fdCmp;
-    //   }
-    //
-    //   // same film_date, try by ccuName
-    //   let aCcu = Object.keys(a.unit.collections || {}).find(x => x.startsWith(collection.id));
-    //   let bCcu = Object.keys(b.unit.collections || {}).find(x => x.startsWith(collection.id));
-    //
-    //   console.log('aCcu, bCcu', aCcu, bCcu);
-    //
-    //   return strCmp(aCcu, bCcu);
-    // }));
 
     let offset = 0;
     groups     = {};
@@ -213,7 +200,7 @@ const playlist = (collection, mediaType, contentLanguage, uiLanguage) => {
     mediaType,
     items,
     groups,
-    name: collection.content_type === CT_SONGS ? collection.name : null
+    name: content_type === CT_SONGS ? name : null
   };
 };
 
