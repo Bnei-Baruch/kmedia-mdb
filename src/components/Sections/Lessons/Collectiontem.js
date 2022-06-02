@@ -1,17 +1,17 @@
 import React from 'react';
 import { withNamespaces } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { Container, Header, List } from 'semantic-ui-react';
+import { List } from 'semantic-ui-react';
+
 import { fromToLocalized } from '../../../helpers/date';
 import { canonicalLink } from '../../../helpers/links';
-import { canonicalCollection } from '../../../helpers/utils';
-
 import { selectors as mdb } from '../../../redux/modules/mdb';
 import Link from '../../Language/MultiLanguageLink';
 import UnitLogo from '../../shared/Logo/UnitLogo';
 
 const CollectionItem = ({ id, t }) => {
   const c = useSelector(state => mdb.getDenormCollection(state.mdb, id));
+  if (!c) return null;
 
   const { film_date, name, content_type, content_units: cus, start_date, end_date } = c;
 

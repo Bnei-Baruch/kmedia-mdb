@@ -1,13 +1,12 @@
 import { createAction } from 'redux-actions';
-import groupBy from 'lodash/groupBy';
-import mapValues from 'lodash/mapValues';
+import { ALL_PAGE_NS } from '../../helpers/consts';
 
 import { handleActions, types as settings } from './settings';
 import { types as ssr } from './ssr';
 
 /* Types */
-const RECEIVE_COLLECTIONS = 'Programs/RECEIVE_COLLECTIONS';
-const FETCH_COLLECTIONS   = 'Programs/FETCH_COLLECTIONS';
+const RECEIVE_COLLECTIONS = 'Page/RECEIVE_COLLECTIONS';
+const FETCH_COLLECTIONS   = 'Page/FETCH_COLLECTIONS';
 
 export const types = {
   RECEIVE_COLLECTIONS,
@@ -15,7 +14,7 @@ export const types = {
 };
 
 /* Actions */
-const fetchCollections   = createAction(FETCH_COLLECTIONS);
+const fetchCollections   = createAction(FETCH_COLLECTIONS, (namespace, p) => ({ namespace, ...p }));
 const receiveCollections = createAction(RECEIVE_COLLECTIONS);
 
 export const actions = {
@@ -24,17 +23,14 @@ export const actions = {
 };
 
 /* Reducer */
+const initialState = ALL_PAGE_NS.reduce((acc, ns) => ({
+  ...acc, [ns]: {
+    collectionsFetched: false, wip: false, error: null
+  }
+}), {});
 
-const initialState = {
-  programsByType: {},
-  wip: false,
-  error: null
-};
-
-const onSetLanguage = draft => {
-  draft.programsByType = {};
-  draft.wip            = false;
-  draft.error          = null;
+const onSetLanguage = () => {
+  return initialState;
 };
 
 const onSSRPrepare = draft => {
@@ -43,8 +39,9 @@ const onSSRPrepare = draft => {
   }
 };
 
-const onReceiveCollections = (draft, payload) => {
-  draft.programsByType = mapValues(groupBy(payload, x => x.content_type), x => x.map(y => y.id));
+const onReceiveCollections = (draft, namespace) => {
+  draft[namespace] = { collectionsFetched: true, err: null, wip: false };
+  return draft;
 };
 
 export const reducer = handleActions({
@@ -56,8 +53,8 @@ export const reducer = handleActions({
 
 /* Selectors */
 
-const getProgramsByType = state => state.programsByType;
+const wasFetchedByNS = (state, ns) => state[ns]?.collectionsFetched;
 
 export const selectors = {
-  getProgramsByType,
+  wasFetchedByNS,
 };

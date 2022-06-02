@@ -1,22 +1,21 @@
+import { isEqual } from 'lodash';
 import React, { useContext, useEffect, useState } from 'react';
 import { withNamespaces } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Container, Divider, Grid, Modal } from 'semantic-ui-react';
-import { isEqual } from 'lodash';
+
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
+import { PAGE_NS_PROGRAMS, UNIT_PROGRAMS_TYPE } from '../../../helpers/consts';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import { usePrevious } from '../../../helpers/utils';
-
-import { selectors as lists, actions } from '../../../redux/modules/lists';
-import { selectors as settings } from '../../../redux/modules/settings';
 import { selectors as filters } from '../../../redux/modules/filters';
-import { actions as progActions } from '../../../redux/modules/programs';
-import SectionHeader from '../../shared/SectionHeader';
-import Filters from './Filters';
+import { actions, selectors as lists } from '../../../redux/modules/lists';
+import { selectors as settings } from '../../../redux/modules/settings';
 import FilterLabels from '../../FiltersAside/FilterLabels';
-import { PAGE_NS_PROGRAMS, UNIT_PROGRAMS_TYPE } from '../../../helpers/consts';
 import Pagination from '../../Pagination/Pagination';
 import ResultsPageHeader from '../../Pagination/ResultsPageHeader';
+import SectionHeader from '../../shared/SectionHeader';
+import Filters from './Filters';
 import ItemOfList from './ItemOfList';
 
 const MainPage = ({ t }) => {
@@ -34,10 +33,6 @@ const MainPage = ({ t }) => {
   const [openFilters, setOpenFilters] = useState(false);
 
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(progActions.fetchCollections());
-  }, [language, dispatch]);
-
   useEffect(() => {
     let page_no = pageNo > 1 ? pageNo : 1;
     if (page_no !== 1 && prevSel !== selected) page_no = 1;

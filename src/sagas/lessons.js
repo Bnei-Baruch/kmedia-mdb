@@ -31,6 +31,4 @@ function* watchFetchAllSeries() {
   yield takeLatest(types.FETCH_ALL_SERIES, fetchAllSeries);
 }
 
-export const sagas = [
-  watchFetchAllSeries,
-];
+export const sagas = [watchFetchAllSeries];

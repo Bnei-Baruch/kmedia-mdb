@@ -81,6 +81,7 @@ export const types = {
   CREATE_LABEL,
   FETCH_LABELS,
   FETCH_LABELS_SUCCESS,
+
 };
 
 /* Actions */

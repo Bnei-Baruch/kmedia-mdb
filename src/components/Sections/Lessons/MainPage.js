@@ -1,27 +1,30 @@
 import { isEqual } from 'lodash';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Container, Divider, Grid } from 'semantic-ui-react';
 
-import { actions, selectors as lists } from '../../../redux/modules/lists';
-import { selectors as settings } from '../../../redux/modules/settings';
-import { selectors as filters } from '../../../redux/modules/filters';
 import {
+  COLLECTION_DAILY_LESSONS,
   COLLECTION_LESSONS_TYPE,
-  CT_DAILY_LESSON,
+  CT_LESSON_PART,
+  FN_DATE_FILTER,
   PAGE_NS_LESSONS,
   UNIT_LESSONS_TYPE,
-  UNIT_PROGRAMS_TYPE
 } from '../../../helpers/consts';
-import { usePrevious } from '../../../helpers/utils';
-import SectionHeader from '../../shared/SectionHeader';
-import ResultsPageHeader from '../../Pagination/ResultsPageHeader';
+import { isEmpty, usePrevious } from '../../../helpers/utils';
+import { selectors as filters } from '../../../redux/modules/filters';
+import { actions, selectors as lists } from '../../../redux/modules/lists';
+import { selectors as settings } from '../../../redux/modules/settings';
 import FilterLabels from '../../FiltersAside/FilterLabels';
 import Pagination from '../../Pagination/Pagination';
-import Filters from './Filters';
+import ResultsPageHeader from '../../Pagination/ResultsPageHeader';
+import SectionHeader from '../../shared/SectionHeader';
 import CollectionItem from './Collectiontem';
 import DailyLessonItem from './DailyLessonItem';
+import Filters from './Filters';
 import UnitItem from './UnitItem';
+
+const CT_WITHOUT_LESSON_PART = [...UNIT_LESSONS_TYPE, ...COLLECTION_LESSONS_TYPE].filter(ct => ct !== CT_LESSON_PART);
 
 const MainPage = () => {
   const { items, total } = useSelector(state => lists.getNamespaceState(state.lists, PAGE_NS_LESSONS)) || {};
@@ -29,6 +32,8 @@ const MainPage = () => {
   const pageSize         = useSelector(state => settings.getPageSize(state.settings));
   const selected         = useSelector(state => filters.getFilters(state.filters, PAGE_NS_LESSONS), isEqual);
   const prevSel          = usePrevious(selected);
+
+  const ctForFetch = useMemo(() => selected.some(f => f.name !== FN_DATE_FILTER && !isEmpty(f.values)) ? [CT_LESSON_PART, ...CT_WITHOUT_LESSON_PART] : CT_WITHOUT_LESSON_PART, [selected]);
 
   const [pageNo, setPageNo] = useState(1);
 
@@ -40,9 +45,9 @@ const MainPage = () => {
     dispatch(actions.fetchListLessons(PAGE_NS_LESSONS, page_no, {
       pageSize,
       withViews: true,
-      content_type: [...UNIT_LESSONS_TYPE, ...COLLECTION_LESSONS_TYPE]
+      content_type: ctForFetch
     }));
-  }, [language, dispatch, pageNo, selected]);
+  }, [language, dispatch, pageNo, selected, ctForFetch]);
 
   const onPageChange = n => setPageNo(n);
 
@@ -54,7 +59,7 @@ const MainPage = () => {
         <Grid.Column width="4" className="filters-aside-wrapper">
           <Filters
             namespace={PAGE_NS_LESSONS}
-            baseParams={{ content_type: [...UNIT_LESSONS_TYPE, ...COLLECTION_LESSONS_TYPE] }}
+            baseParams={{ content_type: UNIT_LESSONS_TYPE }}
           />
         </Grid.Column>
         <Grid.Column width="12">
@@ -62,8 +67,8 @@ const MainPage = () => {
           <FilterLabels namespace={PAGE_NS_LESSONS} />
           {
             items?.map(({ id, content_type }, i) => {
-              switch (true) {
-                case content_type === CT_DAILY_LESSON:
+                switch (true) {
+                case COLLECTION_DAILY_LESSONS.includes(content_type):
                   return <DailyLessonItem id={id} key={i} />;
                 case COLLECTION_LESSONS_TYPE.includes(content_type):
                   return <CollectionItem id={id} key={i} />;
@@ -71,8 +76,8 @@ const MainPage = () => {
                   return <UnitItem id={id} key={i} />;
                 default:
                   return null;
+                }
               }
-            }
             )
           }
           <Divider fitted />

@@ -1,7 +1,7 @@
 import { all } from 'redux-saga/effects';
 
 import { sagas as mdb } from './mdb';
-import { sagas as programs } from './programs';
+import { sagas as preparePage } from './preparePage';
 import { sagas as publications } from './publications';
 import { sagas as events } from './events';
 import { sagas as lessons } from './lessons';
@@ -24,7 +24,7 @@ import { sagas as trim } from './trim';
 
 const allSagas = [
   ...mdb,
-  ...programs,
+  ...preparePage,
   ...publications,
   ...events,
   ...lessons,
