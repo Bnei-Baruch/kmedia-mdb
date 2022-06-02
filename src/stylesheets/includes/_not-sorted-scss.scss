@@ -1686,6 +1686,13 @@
   margin: 0 5px;
 }
 
+.unit-tags-bar {
+  margin: 10px 0 0 0;
+  a {
+    color: gray !important;
+  }
+}
+
 .display-inline {
   display: inline;
 }
@@ -2096,3 +2103,4 @@
 .latestUpdatesCardGroupMobile {
   margin-top: 0 !important;
 }
+
