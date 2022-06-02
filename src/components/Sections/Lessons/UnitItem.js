@@ -25,13 +25,11 @@ const UnitItem = ({ id, t }) => {
   description.push(t('values.date', { date: cu.film_date }));
   if (views > 0) description.push(t('pages.unit.info.views', { views }));
 
-  const renderCCU = c => {
-    return (
-      <Link to={canonicalLink(c)}>
-        {`${t(`constants.content-types.${c.content_type}`)}: ${c.name}`}
-      </Link>
-    );
-  };
+  const renderCCU = c => (
+    <Link to={canonicalLink(c)}>
+      {`${t(`constants.content-types.${c.content_type}`)}: ${c.name}`}
+    </Link>
+  );
 
   return (
     <List.Item key={id} className="media_item">

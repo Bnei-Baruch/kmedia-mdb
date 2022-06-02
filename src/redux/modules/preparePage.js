@@ -29,9 +29,7 @@ const initialState = ALL_PAGE_NS.reduce((acc, ns) => ({
   }
 }), {});
 
-const onSetLanguage = () => {
-  return initialState;
-};
+const onSetLanguage = () => initialState;
 
 const onSSRPrepare = draft => {
   if (draft.err) {
