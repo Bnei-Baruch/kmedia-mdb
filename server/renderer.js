@@ -223,10 +223,27 @@ export default function serverRender(req, res, next, htmlData) {
                 }
               );
 
+              const appConfig = serialize({
+                'node_env': 'production',
+                'public_base': process.env.REACT_APP_PUBLIC_BASE,
+                'cdn_url': process.env.REACT_APP_CDN_URL,
+                'api_backend': '/backend/',
+                'cms_backend': '/backend/cms/',
+                'assets_backend': '/assets/',
+                'imaginary_url': '/imaginary/',
+                'imaginary_internal_host': process.env.REACT_APP_IMAGINARY_INTERNAL_HOST,
+                'api_feed': process.env.REACT_APP_FEED,
+                'personal_api_backend': process.env.REACT_APP_PERSONAL_API_BACKEND,
+                'chronicles_backend': process.env.REACT_APP_CHRONICLES_BACKEND,
+                'file_trimmer_api': process.env.REACT_APP_FILE_TRIMMER_API,
+                'mdb_rest_api_url': process.env.REACT_APP_MDB_REST_API_URL,
+              })
+
               const rootDiv = `<div id="root" class="${direction}" style="direction: ${direction}">${markup}</div>
 <script>
   window.__data = ${storeData};
   window.__i18n = ${i18nData};
+  window.__config = ${appConfig};
 </script>`;
 
               const html = htmlData

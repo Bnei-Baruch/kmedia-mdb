@@ -12,8 +12,6 @@ import 'moment/locale/cs';
 
 import { DEFAULT_LANGUAGE } from './consts';
 
-const LOCALES_BACKEND = process.env.REACT_APP_LOCALES_BACKEND;
-
 export const options = {
   load: 'languageOnly',
   fallbackLng: DEFAULT_LANGUAGE,
@@ -39,7 +37,7 @@ i18n
   .init({
     ...options,
     backend: {
-      loadPath: `${LOCALES_BACKEND}locales/{{lng}}/{{ns}}.json`,
+      loadPath: '/locales/{{lng}}/{{ns}}.json',
       crossDomain: true
     },
 

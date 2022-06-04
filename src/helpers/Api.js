@@ -1,24 +1,15 @@
 import axios from 'axios';
+
+import config from './config';
 import { MY_NAMESPACE_LABELS, MY_NAMESPACE_PLAYLIST_EDIT, MY_NAMESPACE_PLAYLISTS } from './consts';
 
-const API_BACKEND             = process.env.REACT_APP_API_BACKEND;
-const ASSETS_BACKEND          = process.env.REACT_APP_ASSETS_BACKEND;
-const CMS_BACKEND             = process.env.REACT_APP_CMS_BACKEND || `${API_BACKEND}cms/`;
-export const IMAGINARY_URL    = process.env.REACT_APP_IMAGINARY_URL;
-const IMAGINARY_INTERNAL_HOST = process.env.REACT_APP_IMAGINARY_INTERNAL_HOST || 'localhost';
-const API_FEED                = process.env.REACT_APP_FEED;
-const CHRONICLES_BACKEND      = process.env.REACT_APP_CHRONICLES_BACKEND;
-const PERSONAL_API_BACKEND    = process.env.REACT_APP_PERSONAL_API_BACKEND;
-const FILE_TRIMMER_API        = process.env.REACT_APP_FILE_TRIMMER_API;
-const MDB_REST_API_URL        = process.env.REACT_APP_MDB_REST_API_URL || `${API_BACKEND}mdb-api/`;
-
-export const backendUrl               = path => `${API_BACKEND}${path}`;
-export const assetUrl                 = path => `${ASSETS_BACKEND}${path}`;
-export const cmsUrl                   = path => `${CMS_BACKEND}${path}`;
-export const imaginaryUrl             = path => `${IMAGINARY_URL}${path}`;
-export const feedUrl                  = path => `${API_FEED}${path}`;
-export const chroniclesUrl            = path => `${CHRONICLES_BACKEND}${path}`;
-export const chroniclesBackendEnabled = CHRONICLES_BACKEND !== undefined;
+export const backendUrl               = path => `${config.backendApi()}${path}`;
+export const assetUrl                 = path => `${config.assetsApi()}${path}`;
+export const cmsUrl                   = path => `${config.cmsApi()}${path}`;
+export const feedUrl                  = path => `${config.feedApi()}${path}`;
+export const personalUrl              = path => `${config.personalApi()}${path}`;
+export const fileTrimmerUrl           = path => `${config.fileTrimmerApi()}${path}`;
+export const mdbRestUrl               = path => `${config.mdbRestApi()}${path}`;
 
 export class Requests {
   static get = path => axios(backendUrl(path));
@@ -78,10 +69,10 @@ export class Requests {
 
   static imaginary = (action, params) => {
     if (!params.url.startsWith('http')) {
-      params.url = `http://${IMAGINARY_INTERNAL_HOST}${params.url}`;
+      params.url = `http://${config.imaginaryInternalHost()}${params.url}`;
     }
 
-    return `${imaginaryUrl('thumbnail')}?${Requests.makeParams(params)}`;
+    return `${config.imaginaryApi()}thumbnail?${Requests.makeParams(params)}`;
   };
 
   static encode = encodeURIComponent;
@@ -225,8 +216,9 @@ class Api {
 
   static my = (namespace, params, token, method = 'GET') => {
     let urlParam = namespace;
-    if (namespace === MY_NAMESPACE_PLAYLIST_EDIT)
+    if (namespace === MY_NAMESPACE_PLAYLIST_EDIT) {
       urlParam = MY_NAMESPACE_PLAYLISTS;
+    }
 
     if (params.id) {
       urlParam = `${urlParam}/${params.id}`;
@@ -258,26 +250,26 @@ class Api {
       isNotREST = true;
     }
 
-    const url = `${PERSONAL_API_BACKEND}${isNotREST ? '' : 'rest/'}${urlParam}`;
+    const url = `${personalUrl(isNotREST ? '' : 'rest/')}${urlParam}`;
     return Requests.auth(params, url, token, method);
   };
 
   static reactionsCount = params => {
-    const url    = `${PERSONAL_API_BACKEND}reaction_count?${Requests.makeParams(params)}`;
+    const url = `${personalUrl('reaction_count')}?${Requests.makeParams(params)}`;
     const config = { url, method: 'GET' };
     return axios(config);
   };
 
   static trimFile = params => {
-    const url    = `${FILE_TRIMMER_API}?${Requests.makeParams(params)}`;
+    const url = `${fileTrimmerUrl('')}?${Requests.makeParams(params)}`;
     const config = { url, method: 'GET' };
     return axios(config);
   };
 
   static mdbCreateLabel = (params, token) => {
-    const url     = `${MDB_REST_API_URL}labels/`;
+    const url = mdbRestUrl('labels/');
     const headers = { 'Content-Type': 'application/json', 'Authorization': `bearer ${token}` };
-    const config  = { url, headers, method: 'POST', data: JSON.stringify(params) };
+    const config = { url, headers, method: 'POST', data: JSON.stringify(params) };
     return axios(config);
   };
 }

@@ -19,6 +19,7 @@ import { createBrowserHistory } from 'history';
 import { HelmetProvider } from 'react-helmet-async';
 
 import { DEFAULT_LANGUAGE, LANG_UKRAINIAN } from './helpers/consts';
+import config from './helpers/config';
 import i18n from './helpers/i18nnext';
 import createStore from './redux/createStore';
 import { actions as mdb } from './redux/modules/mdb';
@@ -30,6 +31,9 @@ import ClientChronicles from './helpers/clientChronicles'
 import { CreateAbTesting } from './helpers/ab-testing'
 
 ReactGA.initialize('UA-108372395-1', { gaOptions: { transport: 'beacon' } });
+
+config.load(window.__config || {});
+config.dump();
 
 const history = createBrowserHistory();
 const store   = createStore(window.__data, history);
