@@ -419,6 +419,7 @@ export const imageByUnit = (unit, link) => {
 
 export const cuPartNameByCCUType = ct => {
   const prefix = 'pages.unit.info.';
+
   switch (ct) {
     case consts.CT_DAILY_LESSON:
     case consts.CT_SPECIAL_LESSON:
@@ -426,6 +427,8 @@ export const cuPartNameByCCUType = ct => {
       return `${prefix}lesson-episode`;
     case consts.CT_LESSONS_SERIES:
       return `${prefix}series-episode`;
+    case consts.CT_SONGS:
+      return `${prefix}song`;
     default:
       return `${prefix}episode`;
   }

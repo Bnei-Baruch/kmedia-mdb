@@ -7,7 +7,7 @@ import debounce from 'lodash/debounce';
 import { actions, selectors } from '../../../redux/modules/likutim';
 import { selectors as settings } from '../../../redux/modules/settings';
 import { canonicalLink } from '../../../helpers/links';
-import { noop } from '../../../helpers/utils';
+import { noop, strCmp } from '../../../helpers/utils';
 import { getFirstLetter } from '../../../helpers/strings';
 
 import Link from '../../Language/MultiLanguageLink';
@@ -66,7 +66,7 @@ const Main = ({ t }) => {
 
   const sortedLikutim = likutim
     .filter(lk => lk.name.toLowerCase().includes(match.toLowerCase()))
-    .sort((l1, l2) => l1.name < l2.name ? -1 : 1);
+    .sort((l1, l2) => strCmp(l1.name, l2.name));
 
   // creates a Map - key value structure of (likut, first letter of likut name)
   const firstLettersMap = useMemo(() => {
