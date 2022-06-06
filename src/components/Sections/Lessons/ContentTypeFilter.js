@@ -8,19 +8,21 @@ import {
   CT_LESSONS_SERIES,
   CT_VIRTUAL_LESSON,
   CT_WOMEN_LESSON,
-  FN_CONTENT_TYPE
+  FN_CONTENT_TYPE,
+  RABASH_PERSON_UID
 } from '../../../helpers/consts';
 import { isEmpty } from '../../../helpers/utils';
 import { selectors } from '../../../redux/modules/filtersAside';
 import ContentTypeItem from '../../FiltersAside/ContentTypeFilter/ContentTypeItem';
 import FilterHeader from '../../FiltersAside/FilterHeader';
 import CollectionsModal from './CollectionsModal';
+import PersonFilter from './PersonFilter';
 
-const SHOWED_CT = [CT_LESSON_PART, CT_VIRTUAL_LESSON, CT_WOMEN_LESSON, CT_LECTURE, CT_LESSONS_SERIES];
+const SHOWED_CT = [CT_LESSON_PART, CT_VIRTUAL_LESSON, CT_WOMEN_LESSON, CT_LECTURE, RABASH_PERSON_UID, CT_LESSONS_SERIES];
 
 const ContentTypeFilter = ({ namespace, t }) => {
   const fetchedCTs = useSelector(state => selectors.getTree(state.filtersAside, namespace, FN_CONTENT_TYPE));
-  const items      = SHOWED_CT.filter(ct => fetchedCTs.includes(ct));
+  const items = SHOWED_CT.filter(ct => ct === RABASH_PERSON_UID || fetchedCTs.includes(ct));
 
   if (isEmpty(items)) return null;
   return (
@@ -32,6 +34,10 @@ const ContentTypeFilter = ({ namespace, t }) => {
             items.map(x => {
               if (x === CT_VIRTUAL_LESSON) {
                 return <CollectionsModal namespace={namespace} ct={CT_VIRTUAL_LESSON} />;
+              }
+
+              if (x === RABASH_PERSON_UID) {
+                return <PersonFilter namespace={namespace} />;
               }
 
               return <ContentTypeItem namespace={namespace} id={x} key={x} />;

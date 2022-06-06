@@ -1,22 +1,25 @@
 import React from 'react';
+import { withNamespaces } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Container, Icon, Label } from 'semantic-ui-react';
-import { actions, selectors as filters } from '../../redux/modules/filters';
-import { selectors as sources } from '../../redux/modules/sources';
-import { selectors as tags } from '../../redux/modules/tags';
-import { withNamespaces } from 'react-i18next';
+
+import dateFilter from '../../filters/definitions/dateFilter';
 import {
   FN_COLLECTION_MULTI,
   FN_CONTENT_TYPE,
   FN_DATE_FILTER,
   FN_LANGUAGES,
+  FN_PERSON_FILTER,
   FN_SOURCES_MULTI,
   FN_TOPICS,
   FN_TOPICS_MULTI,
   LANGUAGES
 } from '../../helpers/consts';
-import dateFilter from '../../filters/definitions/dateFilter';
+import { selectors as assets } from '../../redux/modules/assets';
+import { actions, selectors as filters } from '../../redux/modules/filters';
 import { selectors as mdbSelectors } from '../../redux/modules/mdb';
+import { selectors as sources } from '../../redux/modules/sources';
+import { selectors as tags } from '../../redux/modules/tags';
 
 const FilterLabels = ({ namespace, t }) => {
 
@@ -24,26 +27,29 @@ const FilterLabels = ({ namespace, t }) => {
   const getSourceById = useSelector(state => sources.getSourceById(state.sources));
   const getTagById    = useSelector(state => tags.getTagById(state.tags));
   const getCById      = useSelector(state => mdbSelectors.nestedGetCollectionById(state.mdb));
+  const person        = useSelector(state => assets.getPerson(state.assets));
 
   const dispatch = useDispatch();
 
   const titleByFilterType = (fn, val) => {
     switch (fn) {
-      case FN_SOURCES_MULTI:
-        return getSourceById(val)?.name;
-      case FN_TOPICS:
-      case FN_TOPICS_MULTI:
-        return getTagById(val)?.label;
-      case FN_CONTENT_TYPE:
-        return t(`filters.content-types.${val}`);
-      case FN_DATE_FILTER:
-        return dateFilter.valueToTagLabel(val);
-      case FN_LANGUAGES:
-        return LANGUAGES[val]?.name;
-      case FN_COLLECTION_MULTI:
-        return getCById(val).name;
-      default:
-        return null;
+    case FN_SOURCES_MULTI:
+      return getSourceById(val)?.name;
+    case FN_TOPICS:
+    case FN_TOPICS_MULTI:
+      return getTagById(val)?.label;
+    case FN_CONTENT_TYPE:
+      return t(`filters.content-types.${val}`);
+    case FN_DATE_FILTER:
+      return dateFilter.valueToTagLabel(val);
+    case FN_LANGUAGES:
+      return LANGUAGES[val]?.name;
+    case FN_PERSON_FILTER:
+      return person.name;
+    case FN_COLLECTION_MULTI:
+      return getCById(val).name;
+    default:
+      return null;
     }
 
   };

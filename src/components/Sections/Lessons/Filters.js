@@ -1,23 +1,18 @@
+import { isEqual } from 'lodash';
 import React, { useEffect, useState } from 'react';
+import { withNamespaces } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Container, Header } from 'semantic-ui-react';
-import { withNamespaces } from 'react-i18next';
-import { isEqual } from 'lodash';
 
-import {
-  CT_VIRTUAL_LESSONS,
-  FN_SOURCES_MULTI,
-  FN_TOPICS_MULTI,
-  PAGE_NS_LESSONS
-} from '../../../helpers/consts';
-import { actions as prepareActions } from '../../../redux/modules/preparePage';
-import { actions, selectors } from '../../../redux/modules/filtersAside';
-import { selectors as settings } from '../../../redux/modules/settings';
+import { CT_VIRTUAL_LESSONS, FN_SOURCES_MULTI, FN_TOPICS_MULTI, PAGE_NS_LESSONS } from '../../../helpers/consts';
 import { selectors as filters } from '../../../redux/modules/filters';
+import { actions, selectors } from '../../../redux/modules/filtersAside';
+import { actions as prepareActions } from '../../../redux/modules/preparePage';
+import { selectors as settings } from '../../../redux/modules/settings';
 import FiltersHydrator from '../../Filters/FiltersHydrator';
-import TagSourceFilter from '../../FiltersAside/TopicsFilter/TagSourceFilter';
-import Language from '../../FiltersAside/LanguageFilter/Language';
 import DateFilter from '../../FiltersAside/DateFilter';
+import Language from '../../FiltersAside/LanguageFilter/Language';
+import TagSourceFilter from '../../FiltersAside/TopicsFilter/TagSourceFilter';
 import ContentTypeFilter from './ContentTypeFilter';
 
 const Filters = ({ namespace, baseParams, t }) => {
@@ -36,13 +31,24 @@ const Filters = ({ namespace, baseParams, t }) => {
 
   useEffect(() => {
     if (!isReady && !wip && !err) {
-      dispatch(actions.fetchStats(namespace, { ...baseParams, with_collections: true }, { isPrepare: true, countC: true }));
+      dispatch(actions.fetchStats(namespace, {
+        ...baseParams,
+        with_collections: true,
+        with_persons: true
+      }, { isPrepare: true, countC: true }));
     }
   }, [dispatch, isReady]);
 
   useEffect(() => {
     if (isHydrated && isReady) {
-      dispatch(actions.fetchStats(namespace, { ...baseParams, with_collections: true }, { isPrepare: false, countC: true }));
+      dispatch(actions.fetchStats(namespace, {
+        ...baseParams,
+        with_collections: true,
+        with_persons: true
+      }, {
+        isPrepare: false,
+        countC: true
+      }));
     }
   }, [dispatch, isHydrated, isReady, selected]);
 
