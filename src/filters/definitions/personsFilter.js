@@ -7,9 +7,7 @@ const personsFilter = {
   valueToQuery: value => value,
   queryToValue: queryValue => queryValue,
   valueToApiParam: value => ({ person: value }),
-  valueToTagLabel: () => {
-    return '';
-  }
+  valueToTagLabel: () => ''
 };
 
 export default createFilterDefinition(personsFilter);

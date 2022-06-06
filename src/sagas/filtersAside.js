@@ -74,6 +74,7 @@ export function* fetchStat(action) {
         dataL[n]  = dataLPart[n];
       });
     }
+
     yield put(actions.fetchStatsSuccess({ dataCU, dataC, dataL, namespace, isPrepare }));
 
     if (params.with_persons !== false) {
