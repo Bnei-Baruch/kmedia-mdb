@@ -36,13 +36,13 @@ const Filters = ({ namespace, baseParams, t }) => {
 
   useEffect(() => {
     if (!isReady && !wip && !err) {
-      dispatch(actions.fetchStats(namespace, { ...baseParams, with_collections: true }, { isPrepare: true }));
+      dispatch(actions.fetchStats(namespace, { ...baseParams, with_collections: true }, { isPrepare: true, countC: true }));
     }
   }, [dispatch, isReady]);
 
   useEffect(() => {
     if (isHydrated && isReady) {
-      dispatch(actions.fetchStats(namespace, { ...baseParams, with_collections: true }, { isPrepare: false }));
+      dispatch(actions.fetchStats(namespace, { ...baseParams, with_collections: true }, { isPrepare: false, countC: true }));
     }
   }, [dispatch, isHydrated, isReady, selected]);
 

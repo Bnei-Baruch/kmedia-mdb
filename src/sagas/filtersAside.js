@@ -1,10 +1,10 @@
+import uniq from 'lodash/uniq';
 import { all, call, put, select, takeEvery } from 'redux-saga/effects';
-
-import { actions, types } from '../redux/modules/filtersAside';
+import { filtersTransformer } from '../filters';
 import Api from '../helpers/Api';
 import { selectors as filterSelectors } from '../redux/modules/filters';
-import { filtersTransformer } from '../filters';
-import uniq from 'lodash/uniq';
+
+import { actions, types } from '../redux/modules/filtersAside';
 
 const RESULT_NAME_BY_PARAM = {
   'tag': 'tags', 'source': 'sources', 'author': 'sources', 'content_type': 'content_types'
@@ -44,7 +44,8 @@ export function* fetchStat(action) {
 
     filterParams = { ...defaultStatParams, ...filterParams };
     requests.push(call(Api.unitsStats, filterParams));
-    countC && requests.push(call(Api.collectionsStats, filterParams));
+    countC && requests.push(call(Api.collectionsStats, { id: filterParams.collection, ...filterParams }));
+
     countL && requests.push(call(Api.labelsStats, filterParams));
     if (isFilteredByBase) {
       const paramsPart = { ...filterParams, ...params };

@@ -13,7 +13,7 @@ import {
 import LanguageSetter from './components/Language/LanguageSetter';
 import Layout from './components/Layout/Layout';
 import Lessons from './components/Sections/Lessons/MainPage';
-import PlaylistItemPage from './components/Sections/Lessons/Unit/PlaylistItemPage';
+import PlaylistItemPage from './components/Pages/PlaylistItemPage';
 import LessonCollection from './components/Sections/Lessons/Collection/MainPage';
 import LastLessonCollection from './components/Sections/Lessons/Collection/LastDaily';
 import Programs from './components/Sections/Programs/MainPage';
