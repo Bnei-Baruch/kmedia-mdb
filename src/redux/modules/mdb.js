@@ -1,6 +1,6 @@
-import { createAction, handleActions } from 'redux-actions';
 import groupBy from 'lodash/groupBy';
 import mapValues from 'lodash/mapValues';
+import { createAction, handleActions } from 'redux-actions';
 
 import MediaHelper from '../../helpers/media';
 import { types as settings } from './settings';
@@ -45,6 +45,7 @@ const CREATE_LABEL_FAILURE = 'MDB/CREATE_LABEL_FAILURE';
 const FETCH_LABELS         = 'MDB/FETCH_LABELS';
 const FETCH_LABELS_SUCCESS = 'MDB/FETCH_LABELS_SUCCESS';
 const RECEIVE_LABELS       = 'MDB/RECEIVE_LABELS';
+const RECEIVE_PERSONS      = 'MDB/RECEIVE_PERSONS';
 
 export const types = {
   FETCH_UNIT,
@@ -122,6 +123,7 @@ const createLabelFailure = createAction(CREATE_LABEL_FAILURE);
 const fetchLabels        = createAction(FETCH_LABELS);
 const fetchLabelsSuccess = createAction(FETCH_LABELS_SUCCESS);
 const receiveLabels      = createAction(RECEIVE_LABELS);
+const receivePersons     = createAction(RECEIVE_PERSONS);
 
 export const actions = {
   fetchUnit,
@@ -160,6 +162,8 @@ export const actions = {
   createLabelFailure,
   fetchLabels,
   fetchLabelsSuccess,
+
+  receivePersons
 };
 
 /* Reducer */
@@ -209,119 +213,119 @@ const setStatus = (state, action) => {
   let collections;
 
   switch (action.type) {
-    case FETCH_UNIT:
-      wip.units     = { ...wip.units, [action.payload]: true };
-      fetched.units = { ...fetched.units, [action.payload]: true };
-      break;
-    case FETCH_UNITS_BY_IDS:
-      units.wip = action.payload.id?.reduce((acc, id) => ({ ...acc, [id]: true }), {});
-      wip.units = { ...wip.units, ...units.wip };
-      break;
-    case FETCH_COLLECTION:
-      wip.collections = { ...wip.collections, [action.payload]: true };
-      break;
-    case FETCH_LATEST_LESSON:
-      wip.lastLesson = true;
-      break;
-    case FETCH_WINDOW:
-      wip.cWindow = { ...wip.cWindow, [action.payload.id]: true };
-      break;
-    case FETCH_SQDATA:
-      wip.sqData = true;
-      break;
+  case FETCH_UNIT:
+    wip.units     = { ...wip.units, [action.payload]: true };
+    fetched.units = { ...fetched.units, [action.payload]: true };
+    break;
+  case FETCH_UNITS_BY_IDS:
+    units.wip = action.payload.id?.reduce((acc, id) => ({ ...acc, [id]: true }), {});
+    wip.units = { ...wip.units, ...units.wip };
+    break;
+  case FETCH_COLLECTION:
+    wip.collections = { ...wip.collections, [action.payload]: true };
+    break;
+  case FETCH_LATEST_LESSON:
+    wip.lastLesson = true;
+    break;
+  case FETCH_WINDOW:
+    wip.cWindow = { ...wip.cWindow, [action.payload.id]: true };
+    break;
+  case FETCH_SQDATA:
+    wip.sqData = true;
+    break;
 
-    case FETCH_UNIT_SUCCESS:
-      wip.units    = { ...wip.units, [action.payload.id]: false };
-      errors.units = { ...errors.units, [action.payload.id]: null };
-      break;
-    case FETCH_UNITS_BY_IDS_SUCCESS:
-      units        = action.payload?.reduce((acc, { id }) => ({
-        wip: { ...acc.wip, [id]: false },
-        errors: { ...acc.errors, [id]: null }
-      }), { wip: {}, errors: {} });
-      wip.units    = { ...wip.units, ...units.wip };
-      errors.units = { ...errors.units, ...units.errors };
-      break;
-    case FETCH_COLLECTION_SUCCESS:
-      wip.collections    = { ...wip.collections, [action.payload.id]: false };
-      errors.collections = { ...errors.collections, [action.payload.id]: null };
-      break;
-    case FETCH_COLLECTIONS_SUCCESS:
-      collections        = action.payload?.reduce((acc, { id }) => ({
-        wip: { ...acc.wip, [id]: false },
-        errors: { ...acc.errors, [id]: null }
-      }), { wip: {}, errors: {} });
-      wip.collections    = { ...wip.collections, ...collections.wip };
-      errors.collections = { ...errors.collections, ...collections.errors };
-      break;
-    case FETCH_LATEST_LESSON_SUCCESS:
-      wip.lastLesson    = false;
-      errors.lastLesson = null;
+  case FETCH_UNIT_SUCCESS:
+    wip.units    = { ...wip.units, [action.payload.id]: false };
+    errors.units = { ...errors.units, [action.payload.id]: null };
+    break;
+  case FETCH_UNITS_BY_IDS_SUCCESS:
+    units        = action.payload?.reduce((acc, { id }) => ({
+      wip: { ...acc.wip, [id]: false },
+      errors: { ...acc.errors, [id]: null }
+    }), { wip: {}, errors: {} });
+    wip.units    = { ...wip.units, ...units.wip };
+    errors.units = { ...errors.units, ...units.errors };
+    break;
+  case FETCH_COLLECTION_SUCCESS:
+    wip.collections    = { ...wip.collections, [action.payload.id]: false };
+    errors.collections = { ...errors.collections, [action.payload.id]: null };
+    break;
+  case FETCH_COLLECTIONS_SUCCESS:
+    collections        = action.payload?.reduce((acc, { id }) => ({
+      wip: { ...acc.wip, [id]: false },
+      errors: { ...acc.errors, [id]: null }
+    }), { wip: {}, errors: {} });
+    wip.collections    = { ...wip.collections, ...collections.wip };
+    errors.collections = { ...errors.collections, ...collections.errors };
+    break;
+  case FETCH_LATEST_LESSON_SUCCESS:
+    wip.lastLesson    = false;
+    errors.lastLesson = null;
 
-      // update wip & errors map to mark this collection was requested fully (single)
-      wip.collections    = { ...wip.collections, [action.payload.id]: false };
-      errors.collections = { ...errors.collections, [action.payload.id]: null };
-      break;
-    case FETCH_WINDOW_SUCCESS:
-      wip.cWindow    = { ...wip.cWindow, [action.payload.id]: false };
-      errors.cWindow = { ...errors.cWindow, [action.payload.id]: null };
-      break;
-    case FETCH_DATEPICKER_CO_SUCCESS:
-      wip.datepickerCO    = false;
-      errors.datepickerCO = null;
-      break;
-    case FETCH_SQDATA_SUCCESS:
-      wip.sqData    = false;
-      errors.sqData = null;
-      break;
+    // update wip & errors map to mark this collection was requested fully (single)
+    wip.collections    = { ...wip.collections, [action.payload.id]: false };
+    errors.collections = { ...errors.collections, [action.payload.id]: null };
+    break;
+  case FETCH_WINDOW_SUCCESS:
+    wip.cWindow    = { ...wip.cWindow, [action.payload.id]: false };
+    errors.cWindow = { ...errors.cWindow, [action.payload.id]: null };
+    break;
+  case FETCH_DATEPICKER_CO_SUCCESS:
+    wip.datepickerCO    = false;
+    errors.datepickerCO = null;
+    break;
+  case FETCH_SQDATA_SUCCESS:
+    wip.sqData    = false;
+    errors.sqData = null;
+    break;
 
-    case FETCH_UNIT_FAILURE:
-      wip.units    = { ...wip.units, [action.payload.id]: false };
-      errors.units = { ...errors.units, [action.payload.id]: action.payload.err };
-      break;
-    case FETCH_UNITS_BY_IDS_FAILURE:
-      units        = action.payload.id?.reduce((acc, id) => ({
-        wip: { ...acc.wip, [id]: false },
-        errors: { ...acc.errors, [id]: action.payload.err }
-      }), { wip: {}, errors: {} });
-      wip.units    = { ...wip.units, ...units.wip };
-      errors.units = { ...errors.units, ...units.errors };
-      break;
-    case FETCH_COLLECTIONS_BY_IDS_FAILURE:
-      collections        = action.payload.id?.reduce((acc, id) => ({
-        wip: { ...acc.wip, [id]: false },
-        errors: { ...acc.errors, [id]: action.payload.err }
-      }), { wip: {}, errors: {} });
-      wip.collections    = { ...wip.collections, ...collections.wip };
-      errors.collections = { ...errors.collections, ...collections.errors };
-      break;
-    case FETCH_COLLECTION_FAILURE:
-      wip.collections    = { ...wip.collections, [action.payload.id]: false };
-      errors.collections = { ...errors.collections, [action.payload.id]: action.payload.err };
-      break;
-    case FETCH_LATEST_LESSON_FAILURE:
-      wip.lastLesson    = false;
-      errors.lastLesson = action.payload.err;
-      break;
-    case FETCH_WINDOW_FAILURE:
-      wip.cWindow    = { ...wip.cWindow, [action.payload.id]: false };
-      errors.cWindow = { ...errors.cWindow, [action.payload.id]: action.payload.err };
-      break;
-    case FETCH_DATEPICKER_CO_FAILURE:
-      wip.datepickerCO    = false;
-      errors.datepickerCO = action.payload.err;
-      break;
-    case FETCH_SQDATA_FAILURE:
-      wip.sqData    = false;
-      errors.sqData = action.payload.err;
-      break;
-    case COUNT_CU_FAILURE:
-      wip.countCU    = false;
-      errors.countCU = action.payload.err;
-      break;
+  case FETCH_UNIT_FAILURE:
+    wip.units    = { ...wip.units, [action.payload.id]: false };
+    errors.units = { ...errors.units, [action.payload.id]: action.payload.err };
+    break;
+  case FETCH_UNITS_BY_IDS_FAILURE:
+    units        = action.payload.id?.reduce((acc, id) => ({
+      wip: { ...acc.wip, [id]: false },
+      errors: { ...acc.errors, [id]: action.payload.err }
+    }), { wip: {}, errors: {} });
+    wip.units    = { ...wip.units, ...units.wip };
+    errors.units = { ...errors.units, ...units.errors };
+    break;
+  case FETCH_COLLECTIONS_BY_IDS_FAILURE:
+    collections        = action.payload.id?.reduce((acc, id) => ({
+      wip: { ...acc.wip, [id]: false },
+      errors: { ...acc.errors, [id]: action.payload.err }
+    }), { wip: {}, errors: {} });
+    wip.collections    = { ...wip.collections, ...collections.wip };
+    errors.collections = { ...errors.collections, ...collections.errors };
+    break;
+  case FETCH_COLLECTION_FAILURE:
+    wip.collections    = { ...wip.collections, [action.payload.id]: false };
+    errors.collections = { ...errors.collections, [action.payload.id]: action.payload.err };
+    break;
+  case FETCH_LATEST_LESSON_FAILURE:
+    wip.lastLesson    = false;
+    errors.lastLesson = action.payload.err;
+    break;
+  case FETCH_WINDOW_FAILURE:
+    wip.cWindow    = { ...wip.cWindow, [action.payload.id]: false };
+    errors.cWindow = { ...errors.cWindow, [action.payload.id]: action.payload.err };
+    break;
+  case FETCH_DATEPICKER_CO_FAILURE:
+    wip.datepickerCO    = false;
+    errors.datepickerCO = action.payload.err;
+    break;
+  case FETCH_SQDATA_FAILURE:
+    wip.sqData    = false;
+    errors.sqData = action.payload.err;
+    break;
+  case COUNT_CU_FAILURE:
+    wip.countCU    = false;
+    errors.countCU = action.payload.err;
+    break;
 
-    default:
-      break;
+  default:
+    break;
   }
 
   return {
@@ -538,6 +542,21 @@ const onReceiveLabels = (state, action) => {
   };
 };
 
+const onReceivePersons = (state, action) => {
+  if (action.payload === 0) {
+    return state;
+  }
+
+  const personById = action.payload.reduce((acc, { id, name }) => {
+    if (!!id) {
+      acc[id] = { id, name };
+    }
+    return acc;
+  }, {});
+
+  return { ...state, personById };
+};
+
 const onFetchWindow = (state, action) => {
   const { id, data } = action.payload;
 
@@ -638,6 +657,7 @@ export const reducer = handleActions({
   [RECEIVE_CONTENT_UNITS]: (state, action) => onReceiveContentUnits(state, action),
 
   [RECEIVE_LABELS]: onReceiveLabels,
+  [RECEIVE_PERSONS]: onReceivePersons,
 }, freshStore());
 
 /* Selectors */
@@ -727,6 +747,8 @@ const skipFetchedCO = (state, ids) => ids.filter(id => !getDenormCollection(stat
 
 const getLabelsByCU = (state, id) => state.labelsByCU[id];
 
+const getPersonById = state => id => state.personById[id];
+
 export const selectors = {
   getCollectionById,
   nestedGetCollectionById,
@@ -749,4 +771,5 @@ export const selectors = {
   skipFetchedCO,
   getLabelsByCU,
   getDenormLabel,
+  getPersonById,
 };

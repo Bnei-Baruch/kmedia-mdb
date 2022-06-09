@@ -2,7 +2,8 @@ import { createAction } from 'redux-actions';
 import {
   FN_COLLECTION_MULTI,
   FN_CONTENT_TYPE,
-  FN_LANGUAGES, FN_PERSON_FILTER,
+  FN_LANGUAGES,
+  FN_PERSON,
   FN_SOURCES_MULTI,
   FN_TOPICS_MULTI
 } from '../../helpers/consts';
@@ -15,9 +16,10 @@ const fieldNameByFilter = {
   [FN_CONTENT_TYPE]: 'content_types',
   [FN_LANGUAGES]: 'languages',
   [FN_COLLECTION_MULTI]: 'collections',
+  [FN_PERSON]: 'persons',
 };
 
-const FILTER_NAMES = [FN_TOPICS_MULTI, FN_SOURCES_MULTI, FN_CONTENT_TYPE, FN_LANGUAGES, FN_COLLECTION_MULTI, FN_PERSON_FILTER];
+const FILTER_NAMES = [FN_TOPICS_MULTI, FN_SOURCES_MULTI, FN_CONTENT_TYPE, FN_LANGUAGES, FN_COLLECTION_MULTI, FN_PERSON];
 /* Types */
 
 const FETCH_STATS               = 'Filters_aside/FETCH_STATS';
@@ -111,7 +113,7 @@ const onFetchStatsSuccess = (draft, { dataCU, dataC, dataL, namespace, isPrepare
   return draft;
 };
 
-const onReceiveSingleTypeStats = (draft, { dataCU, dataC, dataL, namespace, isPrepare, fn }) => {
+const onReceiveSingleTypeStats = (draft, { dataCU = {}, dataC = {}, dataL = {}, namespace, isPrepare, fn }) => {
   const statsByFN = draft[namespace]?.[fn] || {};
 
   if (isPrepare) {

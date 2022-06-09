@@ -1,15 +1,13 @@
 import { call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
-import { isEmpty } from '../helpers/utils';
-
-import { actions, types } from '../redux/modules/lists';
-import { selectors as settings } from '../redux/modules/settings';
-import { selectors as filterSelectors } from '../redux/modules/filters';
-import { actions as mdbActions } from '../redux/modules/mdb';
 import { filtersTransformer } from '../filters';
 import Api from '../helpers/Api';
-import {
-  COLLECTION_LESSONS_TYPE, CT_VIDEO_PROGRAM_CHAPTER, UNIT_LESSONS_TYPE
-} from '../helpers/consts';
+import { COLLECTION_LESSONS_TYPE, CT_VIDEO_PROGRAM_CHAPTER, UNIT_LESSONS_TYPE } from '../helpers/consts';
+import { isEmpty } from '../helpers/utils';
+import { selectors as filterSelectors } from '../redux/modules/filters';
+
+import { actions, types } from '../redux/modules/lists';
+import { actions as mdbActions } from '../redux/modules/mdb';
+import { selectors as settings } from '../redux/modules/settings';
 import { getQuery, pushQuery } from './helpers/url';
 import { fetchCollectionsByIDs, fetchUnitsByIDs } from './mdb';
 import { fetchViewsByUIDs } from './recommended';

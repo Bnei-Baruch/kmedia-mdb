@@ -1,10 +1,10 @@
 import uniq from 'lodash/uniq';
 import { all, call, put, select, takeEvery } from 'redux-saga/effects';
+
 import { filtersTransformer } from '../filters';
 import Api from '../helpers/Api';
-import { FN_COLLECTION_MULTI, FN_CONTENT_TYPE, FN_LANGUAGES, FN_PERSON_FILTER } from '../helpers/consts';
+import { FN_LANGUAGES } from '../helpers/consts';
 import { selectors as filterSelectors } from '../redux/modules/filters';
-
 import { actions, types } from '../redux/modules/filtersAside';
 
 const RESULT_NAME_BY_PARAM = {
@@ -14,13 +14,13 @@ const defaultStatParams    = {
   with_sources: true,
   with_tags: true,
   with_collections: false,
-  with_languages: false,
+  with_languages: true,
   with_content_types: true,
   with_persons: false
 };
 
 export function* fetchStat(action) {
-  const { namespace, params, options: { isPrepare, countC = false, countL = false } } = action.payload;
+  let { namespace, params, options: { isPrepare, countC = false, countL = false } } = action.payload;
 
   let filterParams = {};
   if (!isPrepare) {
@@ -40,16 +40,17 @@ export function* fetchStat(action) {
   });
 
   try {
-    filterParams.for_filter   = true;
-    filterParams.with_persons = false;
-
-    const requests = [];
+    filterParams.for_filter = true;
 
     filterParams = { ...defaultStatParams, ...filterParams };
-    requests.push(call(Api.unitsStats, filterParams));
-    countC && requests.push(call(Api.collectionsStats, { id: filterParams.collection, ...filterParams }));
+    countC       = countC && !filterParams.person;
+    countL       = countL && !filterParams.person;
 
+    const requests = [];
+    requests.push(call(Api.unitsStats, { ...filterParams, with_languages: false }));
+    countC && requests.push(call(Api.collectionsStats, { id: filterParams.collection, ...filterParams }));
     countL && requests.push(call(Api.labelsStats, filterParams));
+
     if (isFilteredByBase) {
       const paramsPart = { ...filterParams, ...params };
       requests.push(call(Api.unitsStats, paramsPart));
@@ -77,12 +78,8 @@ export function* fetchStat(action) {
 
     yield put(actions.fetchStatsSuccess({ dataCU, dataC, dataL, namespace, isPrepare }));
 
-    if (params.with_persons !== false) {
-      yield fetchPersonsStat(filterParams, namespace, isPrepare);
-    }
-
-    if (params.with_languages !== false) {
-      yield fetchLanguageStat(filterParams, namespace, dataC.languages, dataL.languages, isPrepare);
+    if (filterParams.with_languages && !isPrepare) {
+      yield fetchLanguageStat({ ...filterParams }, namespace, dataC.languages, dataL.languages, isPrepare);
     }
   } catch (err) {
     yield put(actions.fetchStatsFailure(namespace, err));
@@ -111,34 +108,6 @@ export function* fetchLanguageStat(params, namespace, dataC = {}, dataL = {}, is
     const { data: { languages: dataCU } } = yield call(Api.unitsStats, params);
 
     yield put(actions.receiveSingleTypeStats({ dataCU, dataC, dataL, namespace, isPrepare, fn: FN_LANGUAGES }));
-  } catch (err) {
-    yield put(actions.fetchStatsFailure(namespace, err));
-  }
-}
-
-export function* fetchPersonsStat(params, namespace, isPrepare) {
-  params.with_sources       = false;
-  params.with_tags          = false;
-  params.with_collections   = false;
-  params.with_content_types = false;
-  params.with_languages     = false;
-
-  params.with_persons = true;
-
-  params['person'] && delete params['person'];
-  params['content_type'] && delete params['content_type'];
-
-  try {
-    const { data: { persons: dataCU } } = yield call(Api.unitsStats, params);
-
-    yield put(actions.receiveSingleTypeStats({
-      dataCU,
-      dataC: {},
-      dataL: {},
-      namespace,
-      isPrepare,
-      fn: FN_PERSON_FILTER
-    }));
   } catch (err) {
     yield put(actions.fetchStatsFailure(namespace, err));
   }

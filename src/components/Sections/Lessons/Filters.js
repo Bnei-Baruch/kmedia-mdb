@@ -12,6 +12,7 @@ import { selectors as settings } from '../../../redux/modules/settings';
 import FiltersHydrator from '../../Filters/FiltersHydrator';
 import DateFilter from '../../FiltersAside/DateFilter';
 import Language from '../../FiltersAside/LanguageFilter/Language';
+import PersonFilter from '../../FiltersAside/PersonFilter/Person';
 import TagSourceFilter from '../../FiltersAside/TopicsFilter/TagSourceFilter';
 import ContentTypeFilter from './ContentTypeFilter';
 
@@ -59,6 +60,7 @@ const Filters = ({ namespace, baseParams, t }) => {
       <FiltersHydrator namespace={namespace} onHydrated={handleOnHydrated} />
       <Header as="h3" content={t('filters.aside-filter.filters-title')} />
       <ContentTypeFilter namespace={namespace} />
+      <PersonFilter namespace={namespace} />
       <TagSourceFilter namespace={namespace} filterName={FN_SOURCES_MULTI} />
       <TagSourceFilter namespace={namespace} filterName={FN_TOPICS_MULTI} />
       <Language namespace={namespace} />

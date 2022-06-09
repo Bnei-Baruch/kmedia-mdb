@@ -36,7 +36,6 @@ const MainPage = () => {
   const prevSel          = usePrevious(selected);
 
   const ctForFetch = useMemo(() => selected.some(f => f.name !== FN_DATE_FILTER && !isEmpty(f.values)) ? CT_WITH_FILTERS : CT_WITHOUT_FILTERS, [selected]);
-  const _ctForFetch = selected.some(f => f.name !== FN_DATE_FILTER && !isEmpty(f.values));
 
   const [pageNo, setPageNo] = useState(1);
 
