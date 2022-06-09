@@ -5,7 +5,7 @@ import produce from 'immer';
 import { Button, Header, Table, Image } from 'semantic-ui-react';
 
 import { SectionLogo } from '../../../helpers/images';
-import { isNotEmptyArray } from '../../../helpers/utils';
+import { isNotEmptyArray, strCmp } from '../../../helpers/utils';
 import * as renderUnitHelper from '../../../helpers/renderUnitHelper';
 import * as shapes from '../../shapes';
 
@@ -33,7 +33,9 @@ const isButtonViewAllVisible = (totalUnits, N, url) => (
 );
 
 const getTopNUnits = (units, N) => {
-  const topNUnits = produce(units, draft => {
+  const validUnits = units.filter(u => !!u);
+
+  const topNUnits = produce(validUnits, draft => {
     if (isNotEmptyArray(draft)) {
       draft.sort(compareUnits);
     }
@@ -44,7 +46,7 @@ const getTopNUnits = (units, N) => {
     : topNUnits;
 };
 
-const compareUnits = (a, b) => (a && b && a.film_date <= b.film_date) ? 1 : -1;
+const compareUnits = (u1, u2) => strCmp(u2.film_date, u1.film_date);
 
 const renderTable = (topNUnits, section, url, t) => (
   <Table unstackable basic="very">

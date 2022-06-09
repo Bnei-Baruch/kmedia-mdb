@@ -37,7 +37,7 @@ const PlaylistReactionContainer = ({ t }) => {
 
   useEffect(() => {
     (cuUIDs.length > 0) && dispatch(recommended.fetchViews(cuUIDs));
-  }, [cuUIDs.length, dispatch]);
+  }, [cuUIDs, dispatch]);
 
   const wipErr = WipErr({ wip, err, t });
   if (wipErr) return wipErr;

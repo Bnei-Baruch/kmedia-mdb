@@ -112,12 +112,20 @@ const ContentItemContainer = ({ id, children, t, asList = false, link, playTime,
   }
 
   const description = [];
-  if (withCCUInfo && ccu?.content_units?.length) description.push(t(`${cuPartNameByCCUType(ccu?.content_type)}s`, { name: ccu?.content_units.length }));
+  if (withCCUInfo && ccu?.content_units?.length)
+    description.push(t(`${cuPartNameByCCUType(ccu?.content_type)}s`, { name: ccu?.content_units.length }));
+
   const part = Number(ccu?.ccuNames[unit.id]);
   const withPart = ccu && ![CT_DAILY_LESSON, CT_SPECIAL_LESSON, CT_CONGRESS].includes(ccu.content_type);
-  if (withPart && part && !isNaN(part)) description.push(t(cuPartNameByCCUType(ccu.content_type), { name: part }));
-  if (unit.film_date) description.push(t('values.date', { date: unit.film_date }));
-  if (!noViews && !(isMobileDevice && asList) && views > 0) description.push(t('pages.unit.info.views', { views }));
+
+  if (withPart && part && !isNaN(part))
+    description.push(t(cuPartNameByCCUType(ccu.content_type), { name: part }));
+
+  if (unit.film_date)
+    description.push(t('values.date', { date: unit.film_date }));
+
+  if (!noViews && !(isMobileDevice && asList) && views > 0)
+    description.push(t('pages.unit.info.views', { views }));
 
   const props = {
     unit,
