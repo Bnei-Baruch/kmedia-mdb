@@ -4,12 +4,12 @@ import { withNamespaces } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { Container, Divider, Grid } from 'semantic-ui-react';
+
 import { PAGE_NS_PROGRAMS } from '../../../helpers/consts';
-import { isEmpty, usePrevious } from '../../../helpers/utils';
+import { usePrevious } from '../../../helpers/utils';
 import { selectors as filters } from '../../../redux/modules/filters';
 import { actions, selectors as lists } from '../../../redux/modules/lists';
-
-import { selectors as mdb, actions as mdbActions } from '../../../redux/modules/mdb';
+import { selectors as mdb } from '../../../redux/modules/mdb';
 import { selectors as settings } from '../../../redux/modules/settings';
 import FilterLabels from '../../FiltersAside/FilterLabels';
 import PageHeader from '../../Pages/Collection/Header';
