@@ -1,22 +1,22 @@
+import { isEqual } from 'lodash';
 import React, { useContext, useEffect, useState } from 'react';
 import { withNamespaces } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Container, Divider, Grid, Modal } from 'semantic-ui-react';
-import { isEqual } from 'lodash';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
+import { PAGE_NS_PROGRAMS, UNIT_PROGRAMS_TYPE } from '../../../helpers/consts';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import { usePrevious } from '../../../helpers/utils';
-
-import { selectors as lists, actions } from '../../../redux/modules/lists';
-import { selectors as settings } from '../../../redux/modules/settings';
 import { selectors as filters } from '../../../redux/modules/filters';
+
+import { actions, selectors as lists } from '../../../redux/modules/lists';
 import { actions as progActions } from '../../../redux/modules/programs';
-import SectionHeader from '../../shared/SectionHeader';
-import Filters from './Filters';
+import { selectors as settings } from '../../../redux/modules/settings';
 import FilterLabels from '../../FiltersAside/FilterLabels';
-import { PAGE_NS_PROGRAMS, UNIT_PROGRAMS_TYPE } from '../../../helpers/consts';
 import Pagination from '../../Pagination/Pagination';
 import ResultsPageHeader from '../../Pagination/ResultsPageHeader';
+import SectionHeader from '../../shared/SectionHeader';
+import Filters from './Filters';
 import ItemOfList from './ItemOfList';
 
 const MainPage = ({ t }) => {
@@ -76,8 +76,9 @@ const MainPage = ({ t }) => {
   return (
     <>
       <SectionHeader section="programs" />
-      <Container className="padded" fluid>
-        <Button className="" basic icon="filter" floated={'right'} onClick={toggleFilters} />
+      <Container className="padded" fluid>{
+        isMobileDevice && <Button className="" basic icon="filter" floated={'right'} onClick={toggleFilters} />
+      }
         <Divider />
         <Grid divided>
           {
@@ -90,7 +91,7 @@ const MainPage = ({ t }) => {
               </Grid.Column>
             ) : renderMobileFilters()
           }
-          <Grid.Column width="12" mobile="16">
+          <Grid.Column width={isMobileDevice ? 16 : 12}>
             <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} />
             <FilterLabels namespace={PAGE_NS_PROGRAMS} />
             {items?.map((id, i) => <ItemOfList id={id} key={i} />)}
