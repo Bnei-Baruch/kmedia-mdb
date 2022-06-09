@@ -33,6 +33,7 @@ const ContentTypeFilter = ({ namespace, t }) => {
               if (x === CT_VIRTUAL_LESSON) {
                 return <CollectionsModal namespace={namespace} ct={CT_VIRTUAL_LESSON} />;
               }
+
               return <ContentTypeItem namespace={namespace} id={x} key={x} />;
             })
           }
