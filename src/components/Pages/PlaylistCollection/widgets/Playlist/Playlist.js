@@ -39,6 +39,21 @@ const PlaylistWidget = ({ playlist, selected = 0, link, t }) => {
     setSelectedIndex(currentIndex);
   }, [location, playlistItems])
 
+  useEffect(() => {
+    if (selectedIndex > 0) {
+      const { id } = playlistItems[selectedIndex].unit
+      const element = document.getElementById(id);
+      if (element === null) {
+        return;
+      }
+
+      // console.log('scroll into view', element)
+      element.scrollIntoView();
+      window.scrollTo(0, 0);
+    }
+
+  }, [playlistItems, selectedIndex])
+
   const randomButton = content_type === CT_SONGS &&
     <Button
       title={t('playlist.shuffle')}
@@ -49,6 +64,8 @@ const PlaylistWidget = ({ playlist, selected = 0, link, t }) => {
       onClick={() => randomize()}
     >
     </Button>
+
+  // console.log('selectedIndex:', selectedIndex)
 
   return (
     <div id="avbox_playlist" className="avbox__playlist-view">
