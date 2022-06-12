@@ -25,7 +25,7 @@ function* fetchList(action) {
   } else {
     const filters      = yield select(state => filterSelectors.getFilters(state.filters, namespace));
     const filterParams = filtersTransformer.toApiParams(filters) || {};
-    args               = { ...args, filterParams };
+    args               = { ...args, ...filterParams };
   }
 
   const language = yield select(state => settings.getLanguage(state.settings));

@@ -1,53 +1,53 @@
-import React from 'react';
 import PropTypes from 'prop-types';
+import React from 'react';
 import { renderRoutes } from 'react-router-config';
-
-import {
-  DEFAULT_LANGUAGE,
-  MY_NAMESPACE_HISTORY,
-  MY_NAMESPACE_REACTIONS,
-  MY_NAMESPACE_PLAYLISTS,
-  MY_NAMESPACE_BOOKMARKS,
-  PAGE_NS_PROGRAMS
-} from './helpers/consts';
 import LanguageSetter from './components/Language/LanguageSetter';
 import Layout from './components/Layout/Layout';
-import Lessons from './components/Sections/Lessons/MainPage';
-import PlaylistItemPage from './components/Pages/PlaylistItemPage';
-import LessonCollection from './components/Sections/Lessons/Collection/MainPage';
-import LastLessonCollection from './components/Sections/Lessons/Collection/LastDaily';
-import Programs from './components/Sections/Programs/MainPage';
-import Program from './components/Sections/Program/ProgramPage';
-import Publications from './components/Sections/Publications/MainPage';
-import ArticlePage from './components/Sections/Publications/tabs/Articles/Unit';
-import ArticleCollection from './components/Sections/Publications/tabs/Articles/Collection';
-import BlogPost from './components/Sections/Publications/tabs/Blog/Post/Container';
-import Events from './components/Sections/Events/MainPage';
+import NotImplemented from './components/NotImplemented';
 import PlaylistCollectionIdCheck from './components/Pages/PlaylistCollection/IdCheck';
+import PlaylistItemPage from './components/Pages/PlaylistItemPage';
+import PlaylistDecorator from './components/Pages/PlaylistMy/Decorator';
+import SearchResults from './components/Search/SearchResultsContainer';
+import Events from './components/Sections/Events/MainPage';
+import ExcerptContainer from './components/Sections/Excerpt/ExcerptContainer';
+// import ProjectStatus from './components/Sections/ProjectStatus/ProjectStatus';
+import Help from './components/Sections/Help/Help';
+import HomePage from './components/Sections/Home/Container';
+import LessonCollection from './components/Sections/Lesson/MainPage';
+import LastLessonCollection from './components/Sections/Lesson/LastDaily';
+import Lessons from './components/Sections/Lessons/MainPage';
 import LibraryHomepage from './components/Sections/Library/Homepage';
 import LibraryContainer from './components/Sections/Library/LibraryContainer';
 import LibraryPerson from './components/Sections/Library/LibraryPerson';
-import Topics from './components/Sections/Topics/TopicContainer';
-import Topic from './components/Sections/Topics/TopicPage';
-import SearchResults from './components/Search/SearchResultsContainer';
-import HomePage from './components/Sections/Home/Container';
-import Music from './components/Sections/Music/Music';
-// import ProjectStatus from './components/Sections/ProjectStatus/ProjectStatus';
-import Help from './components/Sections/Help/Help';
-import SimpleModeContainer from './components/Sections/SimpleMode/Container';
-import ExcerptContainer from './components/Sections/Excerpt/ExcerptContainer';
-import NotImplemented from './components/NotImplemented';
-// import Design from './components/Design/Design';
-import * as ssrDataLoaders from './routesSSRData';
-import * as shapes from './components/shapes';
-import Main from './components/Sections/Personal/Main/Page';
-import PlaylistDecorator from './components/Pages/PlaylistMy/Decorator';
-import PlaylistPage from './components/Sections/Personal/Playlist/Page';
-import ReactionPage from './components/Sections/Personal/Reaction/Page';
-import BookmarksPage from './components/Sections/Personal/Bookmarks/Page';
-import HistoryPage from './components/Sections/Personal/History/Page';
 import Likut from './components/Sections/Likutim/Likut';
 import LikutimMain from './components/Sections/Likutim/Main';
+import Music from './components/Sections/Music/Music';
+import BookmarksPage from './components/Sections/Personal/Bookmarks/Page';
+import HistoryPage from './components/Sections/Personal/History/Page';
+import Main from './components/Sections/Personal/Main/Page';
+import PlaylistPage from './components/Sections/Personal/Playlist/Page';
+import ReactionPage from './components/Sections/Personal/Reaction/Page';
+import Program from './components/Sections/Program/ProgramPage';
+import Programs from './components/Sections/Programs/MainPage';
+import Publications from './components/Sections/Publications/MainPage';
+import ArticleCollection from './components/Sections/Publications/tabs/Articles/Collection';
+import ArticlePage from './components/Sections/Publications/tabs/Articles/Unit';
+import BlogPost from './components/Sections/Publications/tabs/Blog/Post/Container';
+import SimpleModeContainer from './components/Sections/SimpleMode/Container';
+import Topics from './components/Sections/Topics/TopicContainer';
+import Topic from './components/Sections/Topics/TopicPage';
+import * as shapes from './components/shapes';
+
+import {
+  DEFAULT_LANGUAGE,
+  MY_NAMESPACE_BOOKMARKS,
+  MY_NAMESPACE_HISTORY,
+  MY_NAMESPACE_PLAYLISTS,
+  MY_NAMESPACE_REACTIONS,
+  PAGE_NS_PROGRAMS
+} from './helpers/consts';
+// import Design from './components/Design/Design';
+import * as ssrDataLoaders from './routesSSRData';
 
 const routes = [
   { path: '', component: HomePage, options: { ssrData: ssrDataLoaders.home } },

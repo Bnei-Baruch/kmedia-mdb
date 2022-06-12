@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
 
-import { actions, selectors } from '../../../../redux/modules/mdb';
-import Helmets from '../../../shared/Helmets';
-import WipErr from '../../../shared/WipErr/WipErr';
-import PlaylistCollectionContainer from '../../../Pages/PlaylistCollection/Container';
-import { publicFile } from '../../../../helpers/utils';
+import { actions, selectors } from '../../../redux/modules/mdb';
+import Helmets from '../../shared/Helmets';
+import WipErr from '../../shared/WipErr/WipErr';
+import PlaylistCollectionContainer from '../../Pages/PlaylistCollection/Container';
+import { publicFile } from '../../../helpers/utils';
 
 const LastLessonCollection = ({ t }) => {
   const lastLessonId = useSelector(state => selectors.getLastLessonId(state.mdb));
