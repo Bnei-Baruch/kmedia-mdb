@@ -1,7 +1,7 @@
 import { createFilterDefinition } from './util';
 import { FN_CONTENT_TYPE } from '../../helpers/consts';
 
-const topicsFilter = {
+const contentTypeFilter = {
   name: FN_CONTENT_TYPE,
   queryKey: 'content_type',
   valueToQuery: value => value,
@@ -16,4 +16,4 @@ const topicsFilter = {
   }
 };
 
-export default createFilterDefinition(topicsFilter);
+export default createFilterDefinition(contentTypeFilter);

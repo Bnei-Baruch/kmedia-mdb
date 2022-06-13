@@ -12,6 +12,7 @@ import { selectors as settings } from '../../../redux/modules/settings';
 import FiltersHydrator from '../../Filters/FiltersHydrator';
 import DateFilter from '../../FiltersAside/DateFilter';
 import Language from '../../FiltersAside/LanguageFilter/Language';
+import MediaTypeFilter from '../../FiltersAside/MediaTypeFilter/MediaType';
 import PersonFilter from '../../FiltersAside/PersonFilter/Person';
 import TagSourceFilter from '../../FiltersAside/TopicsFilter/TagSourceFilter';
 import ContentTypeFilter from './ContentTypeFilter';
@@ -35,7 +36,8 @@ const Filters = ({ namespace, baseParams, t }) => {
       dispatch(actions.fetchStats(namespace, {
         ...baseParams,
         with_collections: true,
-        with_persons: true
+        with_persons: true,
+        with_media: true,
       }, { isPrepare: true, countC: true }));
     }
   }, [dispatch, isReady]);
@@ -45,7 +47,8 @@ const Filters = ({ namespace, baseParams, t }) => {
       dispatch(actions.fetchStats(namespace, {
         ...baseParams,
         with_collections: true,
-        with_persons: true
+        with_persons: true,
+        with_media: true,
       }, {
         isPrepare: false,
         countC: true
@@ -65,6 +68,7 @@ const Filters = ({ namespace, baseParams, t }) => {
       <TagSourceFilter namespace={namespace} filterName={FN_TOPICS_MULTI} />
       <Language namespace={namespace} />
       <DateFilter namespace={namespace} />
+      <MediaTypeFilter namespace={namespace} />
     </Container>
   );
 };

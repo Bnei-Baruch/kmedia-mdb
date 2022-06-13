@@ -8,7 +8,7 @@ import {
   FN_COLLECTION_MULTI,
   FN_CONTENT_TYPE,
   FN_DATE_FILTER,
-  FN_LANGUAGES,
+  FN_LANGUAGES, FN_MEDIA_TYPE,
   FN_PERSON,
   FN_SOURCES_MULTI,
   FN_TOPICS,
@@ -47,6 +47,8 @@ const FilterLabels = ({ namespace, t }) => {
         return getPersonById(val).name;
       case FN_COLLECTION_MULTI:
         return getCById(val).name;
+      case FN_MEDIA_TYPE:
+        return  t(`filters.media-types.${val}`);
       default:
         return null;
     }
