@@ -1,13 +1,13 @@
 import { createAction } from 'redux-actions';
-
-import { handleActions } from './settings';
 import {
+  FN_COLLECTION_MULTI,
   FN_CONTENT_TYPE,
   FN_LANGUAGES,
   FN_SOURCES_MULTI,
-  FN_TOPICS_MULTI,
-  FN_COLLECTION_MULTI
+  FN_TOPICS_MULTI
 } from '../../helpers/consts';
+
+import { handleActions } from './settings';
 
 const fieldNameByFilter = {
   [FN_SOURCES_MULTI]: 'sources',
@@ -25,17 +25,10 @@ const FETCH_STATS_FAILURE    = 'Filters_aside/FETCH_STATS_FAILURE';
 const FETCH_STATS_SUCCESS    = 'Filters_aside/FETCH_STATS_SUCCESS';
 const RECEIVE_LANGUAGE_STATS = 'Filters_aside/RECEIVE_LANGUAGE_STATS';
 
-const FETCH_ELASTIC_STATS         = 'Filters_aside/FETCH_ELASTIC_STATS';
-const FETCH_ELASTIC_STATS_FAILURE = 'Filters_aside/FETCH_ELASTIC_STATS_FAILURE';
-const FETCH_ELASTIC_STATS_SUCCESS = 'Filters_aside/FETCH_ELASTIC_STATS_SUCCESS';
-
 export const types = {
   FETCH_STATS,
   FETCH_STATS_FAILURE,
   FETCH_STATS_SUCCESS,
-  FETCH_ELASTIC_STATS,
-  FETCH_ELASTIC_STATS_FAILURE,
-  FETCH_ELASTIC_STATS_SUCCESS,
 };
 
 /* Actions */
@@ -49,23 +42,11 @@ const fetchStatsSuccess    = createAction(FETCH_STATS_SUCCESS);
 const receiveLanguageStats = createAction(RECEIVE_LANGUAGE_STATS);
 const fetchStatsFailure    = createAction(FETCH_STATS_FAILURE);
 
-const fetchElasticStats        = createAction(FETCH_ELASTIC_STATS, (namespace, params, isPrepare) => ({
-  namespace,
-  params,
-  isPrepare
-}));
-const fetchElasticStatsSuccess = createAction(FETCH_ELASTIC_STATS_SUCCESS);
-const fetchElasticStatsFailure = createAction(FETCH_ELASTIC_STATS_FAILURE);
-
 export const actions = {
   fetchStats,
   fetchStatsSuccess,
   receiveLanguageStats,
   fetchStatsFailure,
-
-  fetchElasticStats,
-  fetchElasticStatsSuccess,
-  fetchElasticStatsFailure,
 };
 
 /* Reducer */
@@ -131,29 +112,6 @@ const onReceiveLanguageStats = (draft, { dataCU, dataC, dataL, namespace, isPrep
   return draft;
 };
 
-const onFetchElasticStatsSuccess = (draft, { data, namespace, isPrepare }) => {
-  const ns = draft[namespace] || FILTER_NAMES.reduce((acc, fn) => {
-    acc[fn] = {};
-    return acc;
-  }, {});
-
-  FILTER_NAMES.forEach(fn => {
-    const acc = { tree: [], byId: {} };
-    const d   = data[fieldNameByFilter[fn]] || {};
-    Object.keys(d)
-      .filter(id => !!id)
-      .forEach(id => {
-        acc.byId[id] = d[id];
-        acc.tree.push(id);
-      });
-
-    ns[fn] = acc;
-  });
-
-  draft[namespace] = { ...ns, wip: false, err: null, isReady: true };
-  return draft;
-};
-
 const onFetchStatsFailure = (draft, ns, err) => {
   draft[ns].wip = false;
   draft[ns].err = err;
@@ -165,7 +123,6 @@ export const reducer = handleActions({
   [FETCH_STATS_SUCCESS]: onFetchStatsSuccess,
   [RECEIVE_LANGUAGE_STATS]: onReceiveLanguageStats,
   [FETCH_STATS_FAILURE]: onFetchStatsFailure,
-  [FETCH_ELASTIC_STATS_SUCCESS]: onFetchElasticStatsSuccess,
 
 }, initialState);
 
