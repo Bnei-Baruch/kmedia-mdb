@@ -36,7 +36,8 @@ const PlaylistWidget = ({ playlist, selected = 0, link, t }) => {
   useEffect(() => {
     // select the item which url we are currently on
     const currentIndex = playlistItems.findIndex(item => location.pathname.includes(item.shareUrl));
-    setSelectedIndex(currentIndex);
+    if (currentIndex > -1)
+      setSelectedIndex(currentIndex);
   }, [location, playlistItems])
 
   useEffect(() => {
@@ -47,7 +48,6 @@ const PlaylistWidget = ({ playlist, selected = 0, link, t }) => {
         return;
       }
 
-      // console.log('scroll into view', element)
       element.scrollIntoView();
       window.scrollTo(0, 0);
     }
@@ -65,7 +65,6 @@ const PlaylistWidget = ({ playlist, selected = 0, link, t }) => {
     >
     </Button>
 
-  // console.log('selectedIndex:', selectedIndex)
 
   return (
     <div id="avbox_playlist" className="avbox__playlist-view">
