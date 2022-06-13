@@ -637,13 +637,14 @@ export const SECTIONS_LINK_BY_CU_CONTENT_TYPE = {
 export const UNIT_TEXT_TYPE   = [CT_ARTICLE, CT_BLOG_POST, CT_PUBLICATION, CT_RESEARCH_MATERIAL, CT_SOURCE, CT_LIKUTIM];
 export const UNIT_VIDEOS_TYPE = [...UNIT_LESSONS_TYPE, ...UNIT_PROGRAMS_TYPE, ...UNIT_EVENTS_TYPE];
 
-export const FN_SOURCES      = 'sources-filter';
-export const FN_TOPICS       = 'topics-filter';
-export const FN_LANGUAGES    = 'language-filter';
-export const FN_CONTENT_TYPE = 'content-type-filter';
-export const FN_DATE_FILTER  = 'date-filter';
-export const FN_PERSON       = 'person-filter';
-export const FN_MEDIA_TYPE   = 'media-type-filter';
+export const FN_SOURCES            = 'sources-filter';
+export const FN_TOPICS             = 'topics-filter';
+export const FN_LANGUAGES          = 'language-filter';
+export const FN_ORIGINAL_LANGUAGES = 'original-language-filter';
+export const FN_CONTENT_TYPE       = 'content-type-filter';
+export const FN_DATE_FILTER        = 'date-filter';
+export const FN_PERSON             = 'person-filter';
+export const FN_MEDIA_TYPE         = 'media-type-filter';
 
 export const FN_SOURCES_MULTI    = 'sources-filter-multi';
 export const FN_TOPICS_MULTI     = 'topics-filter-multi';

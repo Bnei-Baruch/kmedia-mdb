@@ -17,6 +17,7 @@ const defaultStatParams    = {
   with_languages: true,
   with_content_types: true,
   with_persons: false,
+  with_original_languages: false,
   with_media: false
 };
 
@@ -97,12 +98,13 @@ export function* fetchStat(action) {
  * @returns {Generator<*, void, *>}
  */
 export function* fetchLanguageStat(params, namespace, dataC = {}, dataL = {}, isPrepare) {
-  params.with_sources       = false;
-  params.with_tags          = false;
-  params.with_collections   = false;
-  params.with_content_types = false;
-  params.with_persons       = false;
-  params.with_media         = false;
+  params.with_sources            = false;
+  params.with_tags               = false;
+  params.with_collections        = false;
+  params.with_content_types      = false;
+  params.with_persons            = false;
+  params.with_media              = false;
+  params.with_original_languages = false;
 
   params.with_languages = true;
   params['media_language'] && delete params['media_language'];

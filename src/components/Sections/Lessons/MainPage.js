@@ -54,7 +54,7 @@ const MainPage = () => {
   const onPageChange = n => setPageNo(n);
 
   return (<>
-    <SectionHeader section="programs" />
+    <SectionHeader section="lessons" />
     <Container className="padded" fluid>
       <Divider />
       <Grid divided>
