@@ -51,15 +51,15 @@ const MainPage = () => {
           <FilterLabels namespace={PAGE_NS_EVENTS} />
           {
             items?.map(({ id, content_type }, i) => {
-                switch (true) {
+              switch (true) {
                 case EVENT_TYPES.includes(content_type):
                   return <CollectionItem id={id} key={i} />;
                 case [CT_MEAL, CT_FRIENDS_GATHERING].includes(content_type):
                   return <UnitItem id={id} key={i} />;
                 default:
                   return null;
-                }
               }
+            }
             )
           }
           <Divider fitted />
