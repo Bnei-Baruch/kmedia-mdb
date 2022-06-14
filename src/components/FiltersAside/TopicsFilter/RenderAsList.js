@@ -12,23 +12,17 @@ const RenderAsList = ({ namespace, filterName, baseItems, query }) => {
   const isTag   = filterName === FN_TOPICS_MULTI;
   const getById = isTag ? getTagById : getSourceById;
   const field   = isTag ? 'label' : 'name';
-  const reg     = new RegExp(query, 'i');
 
-  const items   = useMemo(() => baseItems.filter(id => {
-    const n = getById(id)?.[field];
+  const items = useMemo(() => baseItems.filter(id => {
+    const reg = new RegExp(query, 'i');
+    const n   = getById(id)?.[field];
     return n && reg.test(n);
-  }), [baseItems, query]);
+  }), [baseItems, query, field, getById]);
 
   return (
     <>
       {
-        items?.map(r => <TagSourceItem
-          id={r}
-          namespace={namespace}
-          baseItems={items}
-          filterName={filterName}
-        />
-        )
+        items?.map(r => <TagSourceItem id={r} namespace={namespace} baseItems={items} filterName={filterName} />)
       }
     </>
   );

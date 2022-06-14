@@ -20,6 +20,7 @@ import {
   CT_VIDEO_PROGRAM,
   CT_VIRTUAL_LESSONS,
   CT_WOMEN_LESSONS,
+  CT_SONGS,
   LANGUAGES
 } from './consts';
 import { Requests } from './Api';
@@ -54,6 +55,16 @@ export const isEmpty = obj => {
 };
 
 export const isNotEmptyArray = arr => (Array.isArray(arr) && arr.length > 0);
+
+export const randomizeArray = items => {
+  const randomArr = items.map(() => Math.random() * items.length);
+  items.sort((a, b) => {
+    const ai = items.indexOf(a);
+    const bi = items.indexOf(b);
+
+    return randomArr[ai] - randomArr[bi];
+  });
+};
 
 /**
  * Format the given error into a user friendly string
@@ -341,8 +352,7 @@ export const getSectionForTranslation = content_type => {
   }
 };
 
-export const noop = () => {
-};
+export const noop = () => {};
 
 // Used in React hooks to remember previous props.
 export const usePrevious = value => {
@@ -425,6 +435,7 @@ export const imageByUnit = (unit, link) => {
 
 export const cuPartNameByCCUType = ct => {
   const prefix = 'pages.unit.info.';
+
   switch (ct) {
     case CT_DAILY_LESSON:
     case CT_SPECIAL_LESSON:
@@ -432,6 +443,8 @@ export const cuPartNameByCCUType = ct => {
       return `${prefix}lesson-episode`;
     case CT_LESSONS_SERIES:
       return `${prefix}series-episode`;
+    case CT_SONGS:
+      return `${prefix}song`;
     default:
       return `${prefix}episode`;
   }

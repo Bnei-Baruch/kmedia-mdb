@@ -42,13 +42,14 @@ const ListTemplate = ({
     }
   }, [cuInfoRef.current]);
 
-  const info = ((ccu || source || tag) && withCCUInfo) ? (
-    <div className="cu_item_info_co ">
-      <span className="no-padding no-margin text_ellipsis">
-        {(ccu && ccu.name) || (source && source.name) || (tag && tag.label) || NO_NAME}
-      </span>
-    </div>
-  ) : null;
+  const info = ((ccu || source || tag) && withCCUInfo)
+    ? (
+      <div className="cu_item_info_co ">
+        <span className="no-padding no-margin text_ellipsis">
+          {ccu?.name || source?.name || tag?.label || NO_NAME}
+        </span>
+      </div>
+    ) : null;
 
   let percent = null;
   if (unit && playTime) {

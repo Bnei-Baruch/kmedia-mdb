@@ -55,18 +55,21 @@ const ScrollToSearch = ({ source, label, data, language, urlParams = '', pathnam
   const { content_unit } = label || {};
   const ids              = useSelector(state => mdb.getLabelsByCU(state.mdb, content_unit));
   const denorm           = useSelector(state => mdb.getDenormLabel(state.mdb));
-  const labels           = ids?.map(denorm).filter(l => (l.properties?.srchstart || l.properties?.srchend)) || [];
+  const labels           = useMemo(
+    () => ids?.map(denorm).filter(l => (l.properties?.srchstart || l.properties?.srchend)) || [],
+    [ids]
+  );
 
   const location                             = useLocation();
   const { srchstart, srchend, highlightAll } = getQuery(location);
-  const search                               = { srchstart, srchend };
+  const search                               = useMemo(() => ({ srchstart, srchend }), [srchstart, srchend]);
 
-  const offsets = useMemo(() => buildOffsets(labels), [labels.length]);
+  const offsets = useMemo(() => buildOffsets(labels), [labels]);
   const dir     = getLanguageDirection(language);
 
   const __html = useMemo(
     () => prepareScrollToSearch(data, search, highlightAll === 'true', labels),
-    [data, search, labels]
+    [data, search, labels, highlightAll]
   );
 
   const dispatch = useDispatch();

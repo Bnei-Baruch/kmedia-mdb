@@ -185,7 +185,8 @@
       "UNITY_DAY": "Parts of the event",
       "LESSONS_SERIES": "Parts of the collection",
       "SONGS": "Music Playlist"
-    }
+    },
+    "shuffle": "Shuffle Playlist"
   },
   "messages": {
     "loading": "Nahrávání",
@@ -481,6 +482,7 @@
         "lesson-episodes": "{{name}} parts",
         "series-episode": "Lesson {{name}}",
         "series-episodes": "{{name}} lessons",
+        "song": "Song {{name}}",
         "views": "{{views}} Views"
       },
       "recommended": {
