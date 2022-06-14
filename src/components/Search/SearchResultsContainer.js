@@ -13,6 +13,7 @@ import { BLOGS } from '../../helpers/consts';
 import * as shapes from '../shapes';
 import SectionHeader from '../shared/SectionHeader';
 import SearchResults from './SearchResults';
+import Filters from './Filters';
 
 class SearchResultsContainer extends Component {
   static propTypes = {
@@ -111,15 +112,22 @@ class SearchResultsContainer extends Component {
       twitterMap,
       pageNo,
       pageSize,
+      sortBy,
       language,
       location,
-      click,
-      query
+      click
     } = this.props;
 
     return (
       <div>
         <SectionHeader section="search" />
+        <Filters
+          sortBy={sortBy}
+          onChange={this.handleFiltersChanged}
+          onSortByChange={this.handleSortByChanged}
+          onHydrated={this.handleFiltersHydrated}
+          location={location}
+        />
         <Container className="padded">
           <SearchResults
             queryResult={queryResult}
@@ -135,7 +143,6 @@ class SearchResultsContainer extends Component {
             handlePageChange={this.handlePageChange}
             location={location}
             click={click}
-            baseParams={{ q: query, language: 'he' }}
           />
         </Container>
       </div>

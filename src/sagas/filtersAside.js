@@ -1,10 +1,10 @@
+import uniq from 'lodash/uniq';
 import { all, call, put, select, takeEvery } from 'redux-saga/effects';
-
-import { actions, types } from '../redux/modules/filtersAside';
+import { filtersTransformer } from '../filters';
 import Api from '../helpers/Api';
 import { selectors as filterSelectors } from '../redux/modules/filters';
-import { filtersTransformer } from '../filters';
-import uniq from 'lodash/uniq';
+
+import { actions, types } from '../redux/modules/filtersAside';
 
 const RESULT_NAME_BY_PARAM = {
   'tag': 'tags', 'source': 'sources', 'author': 'sources', 'content_type': 'content_types'
@@ -106,42 +106,8 @@ export function* fetchLanguageStat(params, namespace, dataC = {}, dataL = {}, is
   }
 }
 
-export function* fetchElasticStat(action) {
-  const { namespace, params, isPrepare } = action.payload;
-
-  let filterParams = {};
-  if (!isPrepare) {
-    const filters = yield select(state => filterSelectors.getFilters(state.filters, namespace));
-    filterParams  = filtersTransformer.toApiParams(filters) || {};
-  }
-
-  //need when was filtered by base param (for example filter by topics on the topic page)
-  let isFilteredByBase = false;
-  Object.keys(params).forEach(p => {
-    if (filterParams[p]) {
-      filterParams[p]  = filterParams[p].filter(x => params[p] !== x);
-      isFilteredByBase = filterParams[p].length > 0;
-    } else {
-      filterParams[p] = params[p];
-    }
-  });
-
-  try {
-
-    const { data } = yield call(Api.elasticStats, filterParams);
-
-    yield put(actions.fetchElasticStatsSuccess({ data, namespace, isPrepare }));
-  } catch (err) {
-    yield put(actions.fetchStatsFailure(namespace, err));
-  }
-}
-
 function* watchFetchStat() {
   yield takeEvery(types.FETCH_STATS, fetchStat);
 }
 
-function* watchElasticFetchStat() {
-  yield takeEvery(types.FETCH_ELASTIC_STATS, fetchElasticStat);
-}
-
-export const sagas = [watchFetchStat, watchElasticFetchStat];
+export const sagas = [watchFetchStat];
