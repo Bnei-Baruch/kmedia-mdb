@@ -187,7 +187,7 @@ export const canonicalLink = (entity, mediaLang, ccu) => {
   }
 
   if (collection?.content_type === CT_SONGS) {
-    return `/music/cu/${entity.id}`;
+    return `/music/${collection.id}/cu/${entity.id}`;
   }
 
   const mediaLangSuffix = mediaLang ? `?language=${mediaLang}` : '';
