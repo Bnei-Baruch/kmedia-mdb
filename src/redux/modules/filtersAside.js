@@ -1,7 +1,7 @@
 import { createAction } from 'redux-actions';
 import {
   FN_COLLECTION_MULTI,
-  FN_CONTENT_TYPE,
+  FN_CONTENT_TYPE, FN_COUNTRIES,
   FN_LANGUAGES,
   FN_MEDIA_TYPE,
   FN_ORIGINAL_LANGUAGES,
@@ -21,6 +21,7 @@ const fieldNameByFilter = {
   [FN_PERSON]: 'persons',
   [FN_MEDIA_TYPE]: 'media_types',
   [FN_ORIGINAL_LANGUAGES]: 'original_languages',
+  [FN_COUNTRIES]: 'countries',
 };
 
 const FILTER_NAMES = [
@@ -31,7 +32,8 @@ const FILTER_NAMES = [
   FN_COLLECTION_MULTI,
   FN_PERSON,
   FN_MEDIA_TYPE,
-  FN_ORIGINAL_LANGUAGES
+  FN_ORIGINAL_LANGUAGES,
+  FN_COUNTRIES,
 ];
 /* Types */
 

@@ -1,5 +1,5 @@
-import { createAction } from 'redux-actions';
 import mapValues from 'lodash/mapValues';
+import { createAction } from 'redux-actions';
 
 import { handleActions, types as settings } from './settings';
 import { types as ssr } from './ssr';
@@ -12,6 +12,7 @@ const FETCH_LIST_LESSONS         = 'Lists/FETCH_LIST_LESSONS';
 const FETCH_LIST_SUCCESS         = 'Lists/FETCH_LIST_SUCCESS';
 const FETCH_LIST_FAILURE         = 'Lists/FETCH_LIST_FAILURE';
 const FETCH_LIST_LESSONS_SUCCESS = 'Lists/FETCH_LIST_LESSONS_SUCCESS';
+const FETCH_LIST_EVENTS          = 'Lists/FETCH_LIST_EVENTS';
 
 export const types = {
   SET_PAGE,
@@ -20,6 +21,7 @@ export const types = {
   FETCH_LIST_FAILURE,
   FETCH_LIST_SUCCESS,
   FETCH_LIST_LESSONS_SUCCESS,
+  FETCH_LIST_EVENTS,
 };
 
 /* Actions */
@@ -32,6 +34,8 @@ const fetchListLessons        = createAction(FETCH_LIST_LESSONS,
 const fetchListFailure        = createAction(FETCH_LIST_FAILURE, (namespace, err) => ({ namespace, err }));
 const fetchListSuccess        = createAction(FETCH_LIST_SUCCESS, (namespace, data) => ({ namespace, data }));
 const fetchListLessonsSuccess = createAction(FETCH_LIST_LESSONS_SUCCESS, (namespace, data) => ({ namespace, data }));
+const fetchListEvents         = createAction(FETCH_LIST_EVENTS,
+  (namespace, pageNo, params = {}) => ({ namespace, pageNo, ...params, }));
 
 export const actions = {
   setPage,
@@ -40,6 +44,7 @@ export const actions = {
   fetchListFailure,
   fetchListSuccess,
   fetchListLessonsSuccess,
+  fetchListEvents,
 };
 
 /* Reducer */

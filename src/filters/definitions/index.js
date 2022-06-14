@@ -17,3 +17,4 @@ export { default as contentTypeFilter } from './contentTypeFilter';
 export { default as personsFilter } from './personsFilter';
 export { default as mediaTypeFilter } from './mediaTypeFilter';
 export { default as originalLanguageFilter } from './originalLanguageFilter';
+export { default as countriesFilter } from './countriesFilter';

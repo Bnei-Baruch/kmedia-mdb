@@ -18,7 +18,8 @@ const defaultStatParams    = {
   with_content_types: true,
   with_persons: false,
   with_original_languages: false,
-  with_media: false
+  with_media: false,
+  with_countries: false,
 };
 
 export function* fetchStat(action) {
@@ -105,6 +106,7 @@ export function* fetchLanguageStat(params, namespace, dataC = {}, dataL = {}, is
   params.with_persons            = false;
   params.with_media              = false;
   params.with_original_languages = false;
+  params.with_countries          = false;
 
   params.with_languages = true;
   params['media_language'] && delete params['media_language'];

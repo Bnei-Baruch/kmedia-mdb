@@ -13,8 +13,8 @@ import ExcerptContainer from './components/Sections/Excerpt/ExcerptContainer';
 // import ProjectStatus from './components/Sections/ProjectStatus/ProjectStatus';
 import Help from './components/Sections/Help/Help';
 import HomePage from './components/Sections/Home/Container';
-import LessonCollection from './components/Sections/Lesson/MainPage';
 import LastLessonCollection from './components/Sections/Lesson/LastDaily';
+import LessonCollection from './components/Sections/Lesson/MainPage';
 import Lessons from './components/Sections/Lessons/MainPage';
 import LibraryHomepage from './components/Sections/Library/Homepage';
 import LibraryContainer from './components/Sections/Library/LibraryContainer';
@@ -86,7 +86,6 @@ const routes = [
     options: { ssrData: ssrDataLoaders.collectionPage(PAGE_NS_PROGRAMS) }
   },
   { path: 'events', component: Events, options: { ssrData: ssrDataLoaders.eventsPage } },
-  { path: 'events/:tab', component: Events, options: { ssrData: ssrDataLoaders.eventsPage } },
   {
     path: 'events/c/:id',
     component: PlaylistCollectionIdCheck,

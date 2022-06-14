@@ -102,6 +102,10 @@ class Api {
     Requests.get(`lessons?${Requests.makeParams({ page_no, page_size, ...rest })}`)
   );
 
+  static events = ({ pageNo: page_no, pageSize: page_size, ...rest }) => (
+    Requests.get(`events?${Requests.makeParams({ page_no, page_size, ...rest })}`)
+  );
+
   static collections = ({ contentTypes: content_type, pageNo: page_no, pageSize: page_size, ...rest }) => (
     Requests.get(`collections?${Requests.makeParams({ page_no, page_size, content_type, ...rest })}`)
   );

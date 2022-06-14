@@ -44,7 +44,7 @@ const MainPage = () => {
     let page_no = pageNo > 1 ? pageNo : 1;
     if (page_no !== 1 && prevSel !== selected) page_no = 1;
 
-    dispatch(actions.fetchListLessons(PAGE_NS_LESSONS, page_no, {
+    dispatch(actions.fetchListEvents(PAGE_NS_LESSONS, page_no, {
       pageSize,
       withViews: true,
       content_type: ctForFetch
