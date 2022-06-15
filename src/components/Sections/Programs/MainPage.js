@@ -80,40 +80,40 @@ const MainPage = ({ t }) => {
   );
 
   return (<>
-      <SectionHeader section="programs" />
-      <Container className="padded" fluid>{
-        isMobileDevice && <Button className="" basic icon="filter" floated={'right'} onClick={toggleFilters} />
-      }
-        <Divider />
-        <Grid divided>
-          {
-            !isMobileDevice ? (
-              <Grid.Column width="4" className="filters-aside-wrapper">
-                <Filters
-                  namespace={PAGE_NS_PROGRAMS}
-                  baseParams={{ content_type: UNIT_PROGRAMS_TYPE }}
-                />
-              </Grid.Column>
-            ) : renderMobileFilters()
-          }
-          <Grid.Column width={isMobileDevice ? 16 : 12}>
-            <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} />
-            <FilterLabels namespace={PAGE_NS_PROGRAMS} />
-            {items?.map((id, i) => <ItemOfList id={id} key={i} />)}
-            <Divider fitted />
-            <Container className="padded pagination-wrapper" textAlign="center">
-              {total > 0 && <Pagination
-                pageNo={pageNo}
-                pageSize={pageSize}
-                total={total}
-                language={language}
-                onChange={setPage}
-              />}
-            </Container>
+    <SectionHeader section="programs" />
+    <Container className="padded" fluid>{
+      isMobileDevice && <Button className="" basic icon="filter" floated={'right'} onClick={toggleFilters} />
+    }
+    <Divider />
+    <Grid divided>
+      {
+        !isMobileDevice ? (
+          <Grid.Column width="4" className="filters-aside-wrapper">
+            <Filters
+              namespace={PAGE_NS_PROGRAMS}
+              baseParams={{ content_type: UNIT_PROGRAMS_TYPE }}
+            />
           </Grid.Column>
-        </Grid>
-      </Container>
-    </>
+        ) : renderMobileFilters()
+      }
+      <Grid.Column width={isMobileDevice ? 16 : 12}>
+        <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} />
+        <FilterLabels namespace={PAGE_NS_PROGRAMS} />
+        {items?.map((id, i) => <ItemOfList id={id} key={i} />)}
+        <Divider fitted />
+        <Container className="padded pagination-wrapper" textAlign="center">
+          {total > 0 && <Pagination
+            pageNo={pageNo}
+            pageSize={pageSize}
+            total={total}
+            language={language}
+            onChange={setPage}
+          />}
+        </Container>
+      </Grid.Column>
+    </Grid>
+    </Container>
+  </>
   );
 };
 
