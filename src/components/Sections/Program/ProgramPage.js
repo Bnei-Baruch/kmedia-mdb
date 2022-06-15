@@ -1,47 +1,55 @@
 import { isEqual } from 'lodash';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { withNamespaces } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { Container, Divider, Grid } from 'semantic-ui-react';
 import { PAGE_NS_PROGRAMS } from '../../../helpers/consts';
-import { isEmpty, usePrevious } from '../../../helpers/utils';
+import { usePrevious } from '../../../helpers/utils';
 import { selectors as filters } from '../../../redux/modules/filters';
 import { actions, selectors as lists } from '../../../redux/modules/lists';
 
-import { selectors as mdb, actions as mdbActions } from '../../../redux/modules/mdb';
+import { selectors as mdb } from '../../../redux/modules/mdb';
 import { selectors as settings } from '../../../redux/modules/settings';
 import FilterLabels from '../../FiltersAside/FilterLabels';
 import PageHeader from '../../Pages/Collection/Header';
 import Pagination from '../../Pagination/Pagination';
 import ResultsPageHeader from '../../Pagination/ResultsPageHeader';
+import { getPageFromLocation } from '../../Pagination/withPagination';
 import WipErr from '../../shared/WipErr/WipErr';
 import Filters from './Filters';
 import ItemOfList from './ItemOfList';
 
 const ProgramPage = ({ t }) => {
-  const [pageNo, setPageNo] = useState(1);
-
   const { id: cid } = useParams();
   const namespace   = `${PAGE_NS_PROGRAMS}_${cid}`;
 
   const collection = useSelector(state => mdb.getDenormCollection(state.mdb, cid));
 
-  const { items, total, wip, err } = useSelector(state => lists.getNamespaceState(state.lists, namespace)) || {};
-  const language                   = useSelector(state => settings.getLanguage(state.settings));
-  const pageSize                   = useSelector(state => settings.getPageSize(state.settings));
-  const selected                   = useSelector(state => filters.getFilters(state.filters, namespace), isEqual);
-  const prevSel                    = usePrevious(selected);
+  const {
+          items,
+          total,
+          wip,
+          err
+        }        = useSelector(state => lists.getNamespaceState(state.lists, namespace)) || {};
+  const language = useSelector(state => settings.getLanguage(state.settings));
+  const pageSize = useSelector(state => settings.getPageSize(state.settings));
+  const selected = useSelector(state => filters.getFilters(state.filters, namespace), isEqual);
 
   const dispatch = useDispatch();
+  const prevSel  = usePrevious(selected);
+  const setPage  = useCallback(pageNo => dispatch(actions.setPage(namespace, pageNo)), [dispatch]);
+
+  const location = useLocation();
+  const pageNo   = useMemo(() => getPageFromLocation(location) || 1, [location]);
+
   useEffect(() => {
-    let page_no = pageNo > 1 ? pageNo : 1;
-    if (page_no !== 1 && prevSel !== selected) page_no = 1;
-
-    dispatch(actions.fetchList(namespace, page_no, { collection: cid, pageSize, withViews: true }));
+    if (pageNo !== 1 && !!prevSel && prevSel !== selected) {
+      setPage(1);
+    } else {
+      dispatch(actions.fetchList(namespace, pageNo, { collection: cid, pageSize, withViews: true }));
+    }
   }, [language, pageNo, selected]);
-
-  const onPageChange = n => setPageNo(n);
 
   const wipErr = WipErr({ wip, err, t });
 
@@ -69,7 +77,7 @@ const ProgramPage = ({ t }) => {
               pageSize={pageSize}
               total={total}
               language={language}
-              onChange={onPageChange}
+              onChange={setPage}
             />}
           </Container>
         </Grid.Column>

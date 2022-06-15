@@ -44,6 +44,7 @@ const TooltipIfNeed = props => {
       dir={dir}
       trigger={content}
       position="top center"
+      className="tooltip_if_need"
     />
   );
 };

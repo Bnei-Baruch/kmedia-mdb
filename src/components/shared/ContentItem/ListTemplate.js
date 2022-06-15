@@ -1,34 +1,34 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import PropTypes from 'prop-types';
-import { Container, Header, Popup, Progress, Ref } from 'semantic-ui-react';
 import clsx from 'clsx';
-
-import * as shapes from '../../shapes';
+import PropTypes from 'prop-types';
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import { Container, Header, Popup, Progress, Ref } from 'semantic-ui-react';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { NO_NAME } from '../../../helpers/consts';
-import { formatDuration } from '../../../helpers/utils';
 import { isLanguageRtl } from '../../../helpers/i18n-utils';
-import UnitLogo from '../Logo/UnitLogo';
-import Link from '../../Language/MultiLanguageLink';
+import { formatDuration } from '../../../helpers/utils';
 import { PLAYER_POSITION_STORAGE_KEY } from '../../AVPlayer/constants';
+import Link from '../../Language/MultiLanguageLink';
+
+import * as shapes from '../../shapes';
+import UnitLogo from '../Logo/UnitLogo';
 import { imageWidthBySize } from './helper';
 
 const ListTemplate = ({
-  unit,
-  source,
-  tag,
-  language,
-  withCUInfo,
-  withCCUInfo,
-  link,
-  ccu,
-  description,
-  children,
-  playTime,
-  size = 'big',
-  selected,
-  label
-}) => {
+                        unit,
+                        source,
+                        tag,
+                        language,
+                        withCUInfo,
+                        withCCUInfo,
+                        link,
+                        ccu,
+                        description,
+                        children,
+                        playTime,
+                        size = 'big',
+                        selected,
+                        label
+                      }) => {
 
   const dir                = isLanguageRtl(language) ? 'rtl' : 'ltr';
   const { isMobileDevice } = useContext(DeviceInfoContext);

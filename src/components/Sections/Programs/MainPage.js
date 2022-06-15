@@ -1,19 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Container, Divider, Grid } from 'semantic-ui-react';
 import { isEqual } from 'lodash';
-import { usePrevious } from '../../../helpers/utils';
-
-import { selectors as lists, actions } from '../../../redux/modules/lists';
-import { selectors as settings } from '../../../redux/modules/settings';
-import { selectors as filters } from '../../../redux/modules/filters';
-import { actions as progActions } from '../../../redux/modules/programs';
-import SectionHeader from '../../shared/SectionHeader';
-import Filters from './Filters';
-import FilterLabels from '../../FiltersAside/FilterLabels';
+import React, { useCallback, useEffect, useMemo } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
+import { Container, Divider, Grid } from 'semantic-ui-react';
 import { PAGE_NS_PROGRAMS, UNIT_PROGRAMS_TYPE } from '../../../helpers/consts';
+import { usePrevious } from '../../../helpers/utils';
+import { selectors as filters } from '../../../redux/modules/filters';
+
+import { actions, selectors as lists } from '../../../redux/modules/lists';
+import { actions as progActions } from '../../../redux/modules/programs';
+import { selectors as settings } from '../../../redux/modules/settings';
+import FilterLabels from '../../FiltersAside/FilterLabels';
 import Pagination from '../../Pagination/Pagination';
 import ResultsPageHeader from '../../Pagination/ResultsPageHeader';
+import { getPageFromLocation } from '../../Pagination/withPagination';
+import SectionHeader from '../../shared/SectionHeader';
+import Filters from './Filters';
 import ItemOfList from './ItemOfList';
 
 const MainPage = () => {
@@ -23,25 +25,28 @@ const MainPage = () => {
   const selected         = useSelector(state => filters.getFilters(state.filters, PAGE_NS_PROGRAMS), isEqual);
   const prevSel          = usePrevious(selected);
 
-  const [pageNo, setPageNo] = useState(1);
+  const location = useLocation();
+  const pageNo   = useMemo(() => getPageFromLocation(location) || 1, [location]);
 
   const dispatch = useDispatch();
+  const setPage  = useCallback(pageNo => dispatch(actions.setPage(PAGE_NS_PROGRAMS, pageNo)), [dispatch]);
+
   useEffect(() => {
-    //dispatch(progActions.fetchCollections());
+    dispatch(progActions.fetchCollections());
   }, [language, dispatch]);
 
   useEffect(() => {
-    let page_no = pageNo > 1 ? pageNo : 1;
-    if (page_no !== 1 && prevSel !== selected) page_no = 1;
+    if (pageNo !== 1 && !!prevSel && prevSel !== selected) {
+      setPage(1);
+    } else {
+      dispatch(actions.fetchList(PAGE_NS_PROGRAMS, pageNo, {
+        content_type: UNIT_PROGRAMS_TYPE,
+        pageSize,
+        withViews: true
+      }));
+    }
 
-    dispatch(actions.fetchList(PAGE_NS_PROGRAMS, page_no, {
-      content_type: UNIT_PROGRAMS_TYPE,
-      pageSize,
-      withViews: true
-    }));
   }, [language, dispatch, pageNo, selected]);
-
-  const onPageChange = n => setPageNo(n);
 
   return (<>
     <SectionHeader section="programs" />
@@ -65,7 +70,7 @@ const MainPage = () => {
               pageSize={pageSize}
               total={total}
               language={language}
-              onChange={onPageChange}
+              onChange={setPage}
             />}
           </Container>
         </Grid.Column>
