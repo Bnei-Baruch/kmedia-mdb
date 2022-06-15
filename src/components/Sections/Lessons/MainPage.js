@@ -1,6 +1,7 @@
 import { isEqual } from 'lodash';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 import { Container, Divider, Grid } from 'semantic-ui-react';
 
 import {
@@ -19,6 +20,7 @@ import { selectors as settings } from '../../../redux/modules/settings';
 import FilterLabels from '../../FiltersAside/FilterLabels';
 import Pagination from '../../Pagination/Pagination';
 import ResultsPageHeader from '../../Pagination/ResultsPageHeader';
+import { getPageFromLocation } from '../../Pagination/withPagination';
 import SectionHeader from '../../shared/SectionHeader';
 import CollectionItem from './Collectiontem';
 import DailyLessonItem from './DailyLessonItem';
@@ -37,21 +39,23 @@ const MainPage = () => {
 
   const ctForFetch = useMemo(() => selected.some(f => f.name !== FN_DATE_FILTER && !isEmpty(f.values)) ? CT_WITH_FILTERS : CT_WITHOUT_FILTERS, [selected]);
 
-  const [pageNo, setPageNo] = useState(1);
-
   const dispatch = useDispatch();
+  const setPage  = useCallback(pageNo => dispatch(actions.setPage(PAGE_NS_LESSONS, pageNo)), [dispatch]);
+
+  const location = useLocation();
+  const pageNo   = useMemo(() => getPageFromLocation(location) || 1, [location]);
+
   useEffect(() => {
-    let page_no = pageNo > 1 ? pageNo : 1;
-    if (page_no !== 1 && prevSel !== selected) page_no = 1;
-
-    dispatch(actions.fetchListLessons(PAGE_NS_LESSONS, page_no, {
-      pageSize,
-      withViews: true,
-      content_type: ctForFetch
-    }));
+    if (pageNo !== 1 && !!prevSel && prevSel !== selected) {
+      setPage(1);
+    } else {
+      dispatch(actions.fetchListLessons(PAGE_NS_LESSONS, pageNo, {
+        pageSize,
+        withViews: true,
+        content_type: ctForFetch
+      }));
+    }
   }, [language, dispatch, pageNo, selected, ctForFetch]);
-
-  const onPageChange = n => setPageNo(n);
 
   return (<>
     <SectionHeader section="lessons" />
@@ -69,7 +73,7 @@ const MainPage = () => {
           <FilterLabels namespace={PAGE_NS_LESSONS} />
           {
             items?.map(({ id, content_type }, i) => {
-              switch (true) {
+                switch (true) {
                 case COLLECTION_DAILY_LESSONS.includes(content_type):
                   return <DailyLessonItem id={id} key={i} />;
                 case COLLECTION_LESSONS_TYPE.includes(content_type):
@@ -78,8 +82,8 @@ const MainPage = () => {
                   return <UnitItem id={id} key={i} />;
                 default:
                   return null;
+                }
               }
-            }
             )
           }
           <Divider fitted />
@@ -89,7 +93,7 @@ const MainPage = () => {
               pageSize={pageSize}
               total={total}
               language={language}
-              onChange={onPageChange}
+              onChange={setPage}
             />}
           </Container>
         </Grid.Column>

@@ -9,8 +9,8 @@ import { isEmpty } from '../../../helpers/utils';
 import { selectors as mdb } from '../../../redux/modules/mdb';
 import { selectors as recommended } from '../../../redux/modules/recommended';
 import Link from '../../Language/MultiLanguageLink';
-import UnitLogo from '../../shared/Logo/UnitLogo';
 import TooltipIfNeed from '../../shared/TooltipIfNeed';
+import UnitLogoWithDuration from '../../shared/UnitLogoWithDuration';
 
 const UnitItem = ({ id, t }) => {
   const cu    = useSelector(state => mdb.getDenormContentUnit(state.mdb, id));
@@ -33,8 +33,8 @@ const UnitItem = ({ id, t }) => {
 
   return (
     <List.Item key={id} className="media_item">
-      <Link to={link} style={{ minWidth: '140px' }}>
-        <UnitLogo unitId={id} width={144} />
+      <Link to={link}>
+        <UnitLogoWithDuration duration={cu.duration} unitId={cu.id} width={144} />
       </Link>
       <div className="media_item__content">
         <TooltipIfNeed text={cu.name} Component={Header} as={Link} to={link} content={cu.name} />

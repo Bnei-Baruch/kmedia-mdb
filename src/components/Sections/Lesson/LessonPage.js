@@ -1,11 +1,11 @@
 import { isEqual } from 'lodash';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { withNamespaces } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { Container, Divider, Grid } from 'semantic-ui-react';
 
-import { PAGE_NS_LESSONS, PAGE_NS_PROGRAMS } from '../../../helpers/consts';
+import { PAGE_NS_LESSONS } from '../../../helpers/consts';
 import { usePrevious } from '../../../helpers/utils';
 import { selectors as filters } from '../../../redux/modules/filters';
 import { actions, selectors as lists } from '../../../redux/modules/lists';
@@ -15,13 +15,12 @@ import FilterLabels from '../../FiltersAside/FilterLabels';
 import PageHeader from '../../Pages/Collection/Header';
 import Pagination from '../../Pagination/Pagination';
 import ResultsPageHeader from '../../Pagination/ResultsPageHeader';
+import { getPageFromLocation } from '../../Pagination/withPagination';
 import WipErr from '../../shared/WipErr/WipErr';
 import Filters from './Filters';
 import ItemOfList from './ItemOfList';
 
 const LessonPage = ({ t }) => {
-  const [pageNo, setPageNo] = useState(1);
-
   const { id: cid } = useParams();
   const namespace   = `${PAGE_NS_LESSONS}_${cid}`;
 
@@ -34,14 +33,18 @@ const LessonPage = ({ t }) => {
   const prevSel                    = usePrevious(selected);
 
   const dispatch = useDispatch();
+  const setPage  = useCallback(pageNo => dispatch(actions.setPage(namespace, pageNo)), [dispatch]);
+
+  const location = useLocation();
+  const pageNo   = useMemo(() => getPageFromLocation(location) || 1, [location]);
+
   useEffect(() => {
-    let page_no = pageNo > 1 ? pageNo : 1;
-    if (page_no !== 1 && prevSel !== selected) page_no = 1;
-
-    dispatch(actions.fetchList(namespace, page_no, { collection: cid, pageSize, withViews: true }));
+    if (pageNo !== 1 && !!prevSel && prevSel !== selected) {
+      setPage(1);
+    } else {
+      dispatch(actions.fetchList(namespace, pageNo, { collection: cid, pageSize, withViews: true }));
+    }
   }, [language, pageNo, selected]);
-
-  const onPageChange = n => setPageNo(n);
 
   const wipErr = WipErr({ wip, err, t });
 
@@ -69,7 +72,7 @@ const LessonPage = ({ t }) => {
               pageSize={pageSize}
               total={total}
               language={language}
-              onChange={onPageChange}
+              onChange={setPage}
             />}
           </Container>
         </Grid.Column>
