@@ -20,6 +20,8 @@ import Filters from './Filters';
 import ItemOfList from './ItemOfList';
 
 const MainPage = ({ t }) => {
+  const [openFilters, setOpenFilters] = useState(false);
+
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
   const { items, total } = useSelector(state => lists.getNamespaceState(state.lists, PAGE_NS_PROGRAMS)) || {};
@@ -30,26 +32,29 @@ const MainPage = ({ t }) => {
 
   const prevSel = usePrevious(selected);
 
-  const [pageNo, setPageNo]           = useState(1);
-  const [openFilters, setOpenFilters] = useState(false);
+  const location = useLocation();
+  const pageNo   = useMemo(() => getPageFromLocation(location) || 1, [location]);
 
   const dispatch = useDispatch();
+  const setPage  = useCallback(pageNo => dispatch(actions.setPage(PAGE_NS_PROGRAMS, pageNo)), [dispatch]);
+
   useEffect(() => {
     dispatch(prepareActions.fetchCollections());
   }, [language, dispatch]);
 
   useEffect(() => {
-    let page_no = pageNo > 1 ? pageNo : 1;
-    if (page_no !== 1 && prevSel !== selected) page_no = 1;
+    if (pageNo !== 1 && !!prevSel && prevSel !== selected) {
+      setPage(1);
+    } else {
+      dispatch(actions.fetchList(PAGE_NS_PROGRAMS, pageNo, {
+        content_type: UNIT_PROGRAMS_TYPE,
+        pageSize,
+        withViews: true
+      }));
+    }
 
-    dispatch(actions.fetchList(PAGE_NS_PROGRAMS, page_no, {
-      content_type: UNIT_PROGRAMS_TYPE,
-      pageSize,
-      withViews: true
-    }));
   }, [language, dispatch, pageNo, selected]);
 
-  const onPageChange = n => setPageNo(n);
 
   const toggleFilters = () => setOpenFilters(!openFilters);
 
@@ -73,8 +78,7 @@ const MainPage = ({ t }) => {
     </Modal>
   );
 
-  return (
-    <>
+  return (<>
       <SectionHeader section="programs" />
       <Container className="padded" fluid>{
         isMobileDevice && <Button className="" basic icon="filter" floated={'right'} onClick={toggleFilters} />
@@ -102,7 +106,7 @@ const MainPage = ({ t }) => {
               pageSize={pageSize}
               total={total}
               language={language}
-              onChange={onPageChange}
+              onChange={setPage}
             />}
           </Container>
         </Grid.Column>

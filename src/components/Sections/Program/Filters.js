@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { actions, selectors } from '../../../redux/modules/filtersAside';
 import { isEqual } from 'lodash';
+import React, { useEffect, useState } from 'react';
 import { withNamespaces } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
 import { Container, Header } from 'semantic-ui-react';
 
 import { FN_SOURCES_MULTI, FN_TOPICS_MULTI } from '../../../helpers/consts';
 import { selectors as filters } from '../../../redux/modules/filters';
+import { actions, selectors } from '../../../redux/modules/filtersAside';
 import FiltersHydrator from '../../Filters/FiltersHydrator';
-import Language from '../../FiltersAside/LanguageFilter/Language';
 import DateFilter from '../../FiltersAside/DateFilter';
+import Language from '../../FiltersAside/LanguageFilter/Language';
 import TagSourceFilter from '../../FiltersAside/TopicsFilter/TagSourceFilter';
 
 const Filters = ({ namespace, baseParams, t }) => {
@@ -20,7 +20,6 @@ const Filters = ({ namespace, baseParams, t }) => {
   const selected     = useSelector(state => filters.getFilters(state.filters, namespace), isEqual);
 
   const dispatch = useDispatch();
-
   useEffect(() => {
     if (!isReady && !wip && !err) {
       dispatch(actions.fetchStats(namespace, baseParams, { isPrepare: true }));
