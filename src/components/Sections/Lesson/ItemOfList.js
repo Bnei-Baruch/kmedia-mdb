@@ -9,7 +9,7 @@ import { selectors as recommended } from '../../../redux/modules/recommended';
 import { selectors as mdb } from '../../../redux/modules/mdb';
 import Link from '../../Language/MultiLanguageLink';
 import UnitLogo from '../../shared/Logo/UnitLogo';
-import TooltipIfNeed from '../../shared/tooltipIfNeed';
+import TooltipIfNeed from '../../shared/TooltipIfNeed';
 
 const ItemOfList = ({ id, ccu, t }) => {
 

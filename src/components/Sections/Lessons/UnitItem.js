@@ -10,7 +10,7 @@ import { selectors as mdb } from '../../../redux/modules/mdb';
 import { selectors as recommended } from '../../../redux/modules/recommended';
 import Link from '../../Language/MultiLanguageLink';
 import UnitLogo from '../../shared/Logo/UnitLogo';
-import TooltipIfNeed from '../../shared/tooltipIfNeed';
+import TooltipIfNeed from '../../shared/TooltipIfNeed';
 
 const UnitItem = ({ id, t }) => {
   const cu    = useSelector(state => mdb.getDenormContentUnit(state.mdb, id));
