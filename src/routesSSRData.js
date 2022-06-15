@@ -1,5 +1,11 @@
 import uniq from 'lodash/uniq';
 import moment from 'moment';
+import { getPageFromLocation } from './components/Pagination/withPagination';
+
+import { tabs as eventsTabs } from './components/Sections/Events/MainPage';
+import { tabs as lessonsTabs } from './components/Sections/Lessons/MainPage';
+import { tabs as pulicationsTabs } from './components/Sections/Publications/MainPage';
+import { isTaas } from './components/shared/PDF/PDF';
 
 import {
   CT_ARTICLE,
@@ -18,38 +24,32 @@ import {
   UNIT_PROGRAMS_TYPE,
 } from './helpers/consts';
 import MediaHelper from './helpers/media';
-import { canonicalCollection, isEmpty } from './helpers/utils';
 import { getQuery } from './helpers/url';
-import { selectors as settingsSelectors } from './redux/modules/settings';
-import { actions as mdbActions, selectors as mdbSelectors } from './redux/modules/mdb';
-import { actions as filtersActions } from './redux/modules/filters';
-import { actions as listsActions } from './redux/modules/lists';
-import { actions as homeActions } from './redux/modules/home';
-import { actions as eventsActions } from './redux/modules/events';
-import { actions as lessonsActions } from './redux/modules/lessons';
-import { actions as programsActions } from './redux/modules/programs';
-import { actions as searchActions, selectors as searchSelectors } from './redux/modules/search';
-import { selectors as sourcesSelectors } from './redux/modules/sources';
+import { canonicalCollection, isEmpty } from './helpers/utils';
 import { actions as assetsActions, selectors as assetsSelectors } from './redux/modules/assets';
-import { actions as tagsActions } from './redux/modules/tags';
-import { actions as publicationsActions } from './redux/modules/publications';
-import { actions as simpleModeActions } from './redux/modules/simpleMode';
+import { actions as eventsActions } from './redux/modules/events';
+import { actions as filtersActions } from './redux/modules/filters';
+import { actions as homeActions } from './redux/modules/home';
+import { actions as lessonsActions } from './redux/modules/lessons';
+import { actions as listsActions } from './redux/modules/lists';
+import { actions as mdbActions, selectors as mdbSelectors } from './redux/modules/mdb';
 import { actions as musicActions } from './redux/modules/music';
-import * as mdbSagas from './sagas/mdb';
-import * as filtersSagas from './sagas/filters';
-import * as eventsSagas from './sagas/events';
-import * as lessonsSagas from './sagas/lessons';
-import * as searchSagas from './sagas/search';
+import { actions as programsActions } from './redux/modules/programs';
+import { actions as publicationsActions } from './redux/modules/publications';
+import { actions as searchActions, selectors as searchSelectors } from './redux/modules/search';
+import { selectors as settingsSelectors } from './redux/modules/settings';
+import { actions as simpleModeActions } from './redux/modules/simpleMode';
+import { selectors as sourcesSelectors } from './redux/modules/sources';
+import { actions as tagsActions } from './redux/modules/tags';
 import * as assetsSagas from './sagas/assets';
-import * as tagsSagas from './sagas/tags';
-import * as publicationsSagas from './sagas/publications';
+import * as eventsSagas from './sagas/events';
+import * as filtersSagas from './sagas/filters';
+import * as lessonsSagas from './sagas/lessons';
+import * as mdbSagas from './sagas/mdb';
 import * as musicSagas from './sagas/music';
-import { getPageFromLocation } from './components/Pagination/withPagination';
-import { isTaas } from './components/shared/PDF/PDF';
-
-import { tabs as eventsTabs } from './components/Sections/Events/MainPage';
-import { tabs as lessonsTabs } from './components/Sections/Lessons/MainPage';
-import { tabs as pulicationsTabs } from './components/Sections/Publications/MainPage';
+import * as publicationsSagas from './sagas/publications';
+import * as searchSagas from './sagas/search';
+import * as tagsSagas from './sagas/tags';
 
 export const home = store => {
   store.dispatch(homeActions.fetchData(true));
@@ -193,7 +193,7 @@ export const lessonsPage = (store, match) => {
 };
 
 export const programsPage = (store, match) => {
-  //store.dispatch(programsActions.fetchCollections());
+  store.dispatch(programsActions.fetchCollections());
   return cuListPage(PAGE_NS_PROGRAMS)(store, match);
 };
 
