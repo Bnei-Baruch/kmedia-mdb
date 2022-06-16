@@ -3,10 +3,11 @@ import { useHistory, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
-import { Container, Grid } from 'semantic-ui-react';
+import { withNamespaces } from 'react-i18next';
+import { Container, Grid, Button, Header } from 'semantic-ui-react';
 import isEqual from 'react-fast-compare';
-import * as shapes from '../../shapes';
 
+import * as shapes from '../../shapes';
 import { selectors as settings } from '../../../redux/modules/settings';
 import { ClientChroniclesContext, DeviceInfoContext } from '../../../helpers/app-contexts';
 import { usePrevious, randomizeArray } from '../../../helpers/utils';
@@ -35,7 +36,7 @@ const getRecommendUnit = (unit, collection, items) => {
   return recommendUnit;
 };
 
-const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, cuId }) => {
+const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, cuId, t }) => {
   const location           = useLocation();
   const history            = useHistory();
   const { isMobileDevice } = useContext(DeviceInfoContext);
@@ -67,6 +68,25 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
     }
   }, [unit, prev?.unit, chronicles]);
 
+  // we need to calculate the playlist here, so we can filter items out of recommended
+  // playlist { collection, language, mediaType, items, groups };
+  useEffect(() => {
+    const { mediaType, language } = playlist || {}
+    const newMediaType = playerHelper.getMediaTypeFromQuery(location);
+    const qryContentLang = playerHelper.getLanguageFromQuery(location, language || contentLanguage);
+
+    if (playlist) {
+      if (newMediaType !== mediaType ||
+        qryContentLang !== language) {
+        const nPlaylist = playerHelper.playlist(collection, newMediaType, qryContentLang, language);
+        setPlaylist(nPlaylist);
+      }
+    } else {
+      const nPlaylist = playerHelper.playlist(collection, newMediaType, qryContentLang, uiLanguage);
+      setPlaylist(nPlaylist);
+    }
+  }, [collection, contentLanguage, location, playlist, uiLanguage]);
+
   const handleLanguageChange = useCallback((e, language) => {
     playerHelper.setLanguageInQuery(history, language);
   }, [history]);
@@ -97,25 +117,6 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
     setSelected(newSelectedIndex);
   }
 
-  // we need to calculate the playlist here, so we can filter items out of recommended
-  // playlist { collection, language, mediaType, items, groups };
-  useEffect(() => {
-    const { mediaType, language } = playlist || {}
-    const newMediaType = playerHelper.getMediaTypeFromQuery(location);
-    const qryContentLang = playerHelper.getLanguageFromQuery(location, language || contentLanguage);
-
-    if (playlist) {
-      if (newMediaType !== mediaType ||
-        qryContentLang !== language) {
-        const nPlaylist = playerHelper.playlist(collection, newMediaType, qryContentLang, language);
-        setPlaylist(nPlaylist);
-      }
-    } else {
-      const nPlaylist = playerHelper.playlist(collection, newMediaType, qryContentLang, uiLanguage);
-      setPlaylist(nPlaylist);
-    }
-  }, [collection, contentLanguage, location, playlist, uiLanguage]);
-
   useEffect(() => {
     const newSel = playlist?.items.findIndex(i => i.unit.id === cuId);
     if (!isNaN(newSel) && newSel !== -1) {
@@ -134,25 +135,49 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
     return null;
   }
 
-  const { items }      = playlist;
-  const filterOutUnits = items.map(item => item.unit).filter(u => !!u) || [];
+  const { items, name } = playlist;
+  const filterOutUnits  = items.map(item => item.unit).filter(u => !!u) || [];
 
   // Don't recommend lesson preparation, skip to next unit.
   const recommendUnit = getRecommendUnit(unit, collection, items);
 
+  const { content_type } = collection;
+
+  const startWithAutoPlay = content_type === CT_SONGS;
+  const randomButton = content_type === CT_SONGS &&
+    <Button
+      title={t('playlist.shuffle')}
+      style={{ padding: 'inherit', fontSize: '1em' }}
+      icon='random'
+      circular
+      primary
+      onClick={() => shufflePlaylist()}
+    >
+    </Button>
+
   const playlistData = (
     <>
-      <Playlist
-        playlist={playlist}
-        selected={selected}
-        shufflePlaylist={shufflePlaylist}
-      />
+      <div id="avbox_playlist">
+        {
+          isMobileDevice
+            ? <div style={{ float: 'right', padding: '0.3em' }}>{ randomButton }</div>
+            : <Header as="h3" className={'avbox__playlist-header h3'}>
+              {name || t(`playlist.title-by-type.${content_type}`)}
+              {randomButton}
+            </Header>
+        }
+      </div>
+      <div id="avbox_playlist_container" className="avbox__playlist-view">
+        <Playlist
+          playlist={playlist}
+          selected={selected}
+        />
+      </div>
       <br />
       <Recommended unit={recommendUnit} filterOutUnits={filterOutUnits} />
     </>
   );
 
-  const startWithAutoPlay = collection.content_type === CT_SONGS;
   const computerWidth = isMobileDevice ? 16 : 10;
 
   return !embed ?
@@ -218,4 +243,4 @@ const areEqual = (prevProps, nextProps) => (
   && isEqualLink(prevProps.nextLink, nextProps.nextLink)
 );
 
-export default React.memo(PlaylistCollectionPage, areEqual);
+export default React.memo(withNamespaces()(PlaylistCollectionPage), areEqual);
