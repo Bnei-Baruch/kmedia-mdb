@@ -1,7 +1,8 @@
 import uniq from 'lodash/uniq';
 import moment from 'moment';
-
 import { getPageFromLocation } from './components/Pagination/withPagination';
+
+import { tabs as eventsTabs } from './components/Sections/Events/MainPage';
 import { tabs as pulicationsTabs } from './components/Sections/Publications/MainPage';
 import { isTaas } from './components/shared/PDF/PDF';
 

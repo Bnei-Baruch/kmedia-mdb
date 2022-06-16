@@ -7,7 +7,7 @@ import { fromToLocalized } from '../../../helpers/date';
 import { canonicalLink } from '../../../helpers/links';
 import { selectors as mdb } from '../../../redux/modules/mdb';
 import Link from '../../Language/MultiLanguageLink';
-import UnitLogo from '../../shared/Logo/UnitLogo';
+import UnitLogoWithDuration from '../../shared/UnitLogoWithDuration';
 
 const CollectionItem = ({ id, t }) => {
   const c = useSelector(state => mdb.getDenormCollection(state.mdb, id));
@@ -23,9 +23,7 @@ const CollectionItem = ({ id, t }) => {
   }
 
   return (<List.Item key={id} className="media_item">
-    <div style={{ minWidth: '140px' }}>
-      <UnitLogo unitId={cus[0].id} width={144} />
-    </div>
+    <UnitLogoWithDuration duration={cus[0].duration} unitId={cus[0].id} width={144} />
     <div className="media_item__content">
       <Link to={canonicalLink(c)}>
         {name}

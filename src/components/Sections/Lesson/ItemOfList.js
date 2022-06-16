@@ -3,13 +3,12 @@ import { withNamespaces } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Container, Header, List } from 'semantic-ui-react';
 import { canonicalLink } from '../../../helpers/links';
-import { canonicalCollection } from '../../../helpers/utils';
+import { selectors as mdb } from '../../../redux/modules/mdb';
 
 import { selectors as recommended } from '../../../redux/modules/recommended';
-import { selectors as mdb } from '../../../redux/modules/mdb';
 import Link from '../../Language/MultiLanguageLink';
-import UnitLogo from '../../shared/Logo/UnitLogo';
-import TooltipIfNeed from '../../shared/tooltipIfNeed';
+import TooltipIfNeed from '../../shared/TooltipIfNeed';
+import UnitLogoWithDuration from '../../shared/UnitLogoWithDuration';
 
 const ItemOfList = ({ id, ccu, t }) => {
 
@@ -25,9 +24,7 @@ const ItemOfList = ({ id, ccu, t }) => {
   if (views > 0) description.push(t('pages.unit.info.views', { views }));
 
   return (<List.Item key={id} className="media_item">
-    <div style={{ minWidth: '140px' }}>
-      <UnitLogo unitId={id} width={144} />
-    </div>
+    <UnitLogoWithDuration duration={cu.duration} unitId={cu.id} width={144} />
     <div className="media_item__content">
       <TooltipIfNeed text={cu.name} Component={Header} as={Link} to={link} content={cu.name} />
       {

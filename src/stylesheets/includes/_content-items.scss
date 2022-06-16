@@ -494,6 +494,7 @@
     span {
       opacity: 0.9;
       padding: 0 4px;
+      margin: 2px 0;
       border-right: 1px solid $midGrey;
       display: inline-block;
 
@@ -533,4 +534,32 @@
   display: -webkit-box !important;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+.with_duration {
+  position: relative;
+
+  .duration {
+    font-size: 0.8em;
+    border-radius: 0;
+    background-color: $black;
+    color: white;
+    margin: 4px;
+    padding: 3px 4px;
+    display: inline-block;
+
+
+    position: absolute;
+    left: 0;
+    z-index: 2;
+    top: 0;
+    @include mobile {
+      margin: 4px;
+    }
+
+    .ltr & {
+      right: 0;
+      left: auto;
+    }
+  }
 }

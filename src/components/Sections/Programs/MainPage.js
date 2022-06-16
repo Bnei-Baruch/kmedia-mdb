@@ -1,7 +1,8 @@
 import { isEqual } from 'lodash';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { withNamespaces } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 import { Button, Container, Divider, Grid, Modal } from 'semantic-ui-react';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { PAGE_NS_PROGRAMS, UNIT_PROGRAMS_TYPE } from '../../../helpers/consts';
@@ -15,11 +16,14 @@ import { selectors as settings } from '../../../redux/modules/settings';
 import FilterLabels from '../../FiltersAside/FilterLabels';
 import Pagination from '../../Pagination/Pagination';
 import ResultsPageHeader from '../../Pagination/ResultsPageHeader';
+import { getPageFromLocation } from '../../Pagination/withPagination';
 import SectionHeader from '../../shared/SectionHeader';
 import Filters from './Filters';
 import ItemOfList from './ItemOfList';
 
 const MainPage = ({ t }) => {
+  const [openFilters, setOpenFilters] = useState(false);
+
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
   const { items, total } = useSelector(state => lists.getNamespaceState(state.lists, PAGE_NS_PROGRAMS)) || {};
@@ -30,26 +34,28 @@ const MainPage = ({ t }) => {
 
   const prevSel = usePrevious(selected);
 
-  const [pageNo, setPageNo]           = useState(1);
-  const [openFilters, setOpenFilters] = useState(false);
+  const location = useLocation();
+  const pageNo   = useMemo(() => getPageFromLocation(location) || 1, [location]);
 
   const dispatch = useDispatch();
+  const setPage  = useCallback(pageNo => dispatch(actions.setPage(PAGE_NS_PROGRAMS, pageNo)), [dispatch]);
+
   useEffect(() => {
     dispatch(prepareActions.fetchCollections());
   }, [language, dispatch]);
 
   useEffect(() => {
-    let page_no = pageNo > 1 ? pageNo : 1;
-    if (page_no !== 1 && prevSel !== selected) page_no = 1;
+    if (pageNo !== 1 && !!prevSel && prevSel !== selected) {
+      setPage(1);
+    } else {
+      dispatch(actions.fetchList(PAGE_NS_PROGRAMS, pageNo, {
+        content_type: UNIT_PROGRAMS_TYPE,
+        pageSize,
+        withViews: true
+      }));
+    }
 
-    dispatch(actions.fetchList(PAGE_NS_PROGRAMS, page_no, {
-      content_type: UNIT_PROGRAMS_TYPE,
-      pageSize,
-      withViews: true
-    }));
   }, [language, dispatch, pageNo, selected]);
-
-  const onPageChange = n => setPageNo(n);
 
   const toggleFilters = () => setOpenFilters(!openFilters);
 
@@ -73,42 +79,41 @@ const MainPage = ({ t }) => {
     </Modal>
   );
 
-  return (
-    <>
-      <SectionHeader section="programs" />
-      <Container className="padded" fluid>{
-        isMobileDevice && <Button className="" basic icon="filter" floated={'right'} onClick={toggleFilters} />
+  return (<>
+    <SectionHeader section="programs" />
+    <Container className="padded" fluid>{
+      isMobileDevice && <Button className="" basic icon="filter" floated={'right'} onClick={toggleFilters} />
+    }
+    <Divider />
+    <Grid divided>
+      {
+        !isMobileDevice ? (
+          <Grid.Column width="4" className="filters-aside-wrapper">
+            <Filters
+              namespace={PAGE_NS_PROGRAMS}
+              baseParams={{ content_type: UNIT_PROGRAMS_TYPE }}
+            />
+          </Grid.Column>
+        ) : renderMobileFilters()
       }
-      <Divider />
-      <Grid divided>
-        {
-          !isMobileDevice ? (
-            <Grid.Column width="4" className="filters-aside-wrapper">
-              <Filters
-                namespace={PAGE_NS_PROGRAMS}
-                baseParams={{ content_type: UNIT_PROGRAMS_TYPE }}
-              />
-            </Grid.Column>
-          ) : renderMobileFilters()
-        }
-        <Grid.Column width={isMobileDevice ? 16 : 12}>
-          <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} />
-          <FilterLabels namespace={PAGE_NS_PROGRAMS} />
-          {items?.map((id, i) => <ItemOfList id={id} key={i} />)}
-          <Divider fitted />
-          <Container className="padded pagination-wrapper" textAlign="center">
-            {total > 0 && <Pagination
-              pageNo={pageNo}
-              pageSize={pageSize}
-              total={total}
-              language={language}
-              onChange={onPageChange}
-            />}
-          </Container>
-        </Grid.Column>
-      </Grid>
-      </Container>
-    </>
+      <Grid.Column width={isMobileDevice ? 16 : 12}>
+        <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} />
+        <FilterLabels namespace={PAGE_NS_PROGRAMS} />
+        {items?.map((id, i) => <ItemOfList id={id} key={i} />)}
+        <Divider fitted />
+        <Container className="padded pagination-wrapper" textAlign="center">
+          {total > 0 && <Pagination
+            pageNo={pageNo}
+            pageSize={pageSize}
+            total={total}
+            language={language}
+            onChange={setPage}
+          />}
+        </Container>
+      </Grid.Column>
+    </Grid>
+    </Container>
+  </>
   );
 };
 
