@@ -1,48 +1,24 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import isEqual from 'react-fast-compare';
 import { withNamespaces } from 'react-i18next';
-import { useLocation } from 'react-router';
 
 import { DeviceInfoContext } from '../../../../../helpers/app-contexts';
 import ContentItemContainer from '../../../../shared/ContentItem/ContentItemContainer';
 import { Header, Button } from 'semantic-ui-react';
 import { CT_SONGS } from '../../../../../helpers/consts';
-import {  randomizeArray } from '../../../../../helpers/utils';
 
 
-const PlaylistWidget = ({ playlist, selected = 0, link, t }) => {
+const PlaylistWidget = ({ playlist, selected = 0, shufflePlaylist, link, t }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
-  const location = useLocation();
 
   const { collection, items, name } = playlist;
   const { content_type } = collection;
 
-  const [selectedIndex, setSelectedIndex] = useState(selected);
-  const [playlistItems, setPlaylistItems] = useState(items);
-
-  const randomize = () => {
-    const selectedItem = playlistItems[selectedIndex];
-    // a new array for sorting
-    const newPlaylistItems = [...playlistItems];
-    // random sorting of the playlist
-    randomizeArray(newPlaylistItems)
-    const newSelectedIndex = newPlaylistItems.indexOf(selectedItem);
-
-    setPlaylistItems(newPlaylistItems);
-    setSelectedIndex(newSelectedIndex);
-  }
-
   useEffect(() => {
-    // select the item which url we are currently on
-    const currentIndex = playlistItems.findIndex(item => location.pathname.includes(item.shareUrl));
-    if (currentIndex > -1)
-      setSelectedIndex(currentIndex);
-  }, [location, playlistItems])
-
-  useEffect(() => {
-    if (selectedIndex > 0) {
-      const { id } = playlistItems[selectedIndex].unit
+    // scroll to the selected items
+    if (selected > 0) {
+      const { id } = items[selected].unit
       const element = document.getElementById(id);
       if (element === null) {
         return;
@@ -52,7 +28,7 @@ const PlaylistWidget = ({ playlist, selected = 0, link, t }) => {
       window.scrollTo(0, 0);
     }
 
-  }, [playlistItems, selectedIndex])
+  }, [items, selected])
 
   const randomButton = content_type === CT_SONGS &&
     <Button
@@ -61,7 +37,7 @@ const PlaylistWidget = ({ playlist, selected = 0, link, t }) => {
       icon='random'
       circular
       primary
-      onClick={() => randomize()}
+      onClick={() => shufflePlaylist()}
     >
     </Button>
 
@@ -77,14 +53,14 @@ const PlaylistWidget = ({ playlist, selected = 0, link, t }) => {
           </Header>
       }
       {
-        playlistItems.map((item, i) => (
+        items.map((item, i) => (
           <ContentItemContainer
             key={item.unit.id}
             id={item.unit.id}
             ccuId={collection.id}
             size="small"
             asList={true}
-            selected={i === selectedIndex}
+            selected={i === selected}
             link={link ? `${link}?ap=${i}` : null}
           />
         ))
@@ -97,6 +73,8 @@ PlaylistWidget.propTypes = {
   playlist: PropTypes.shape({}).isRequired,
   selected: PropTypes.number,
   link: PropTypes.string,
+  shufflePlaylist: PropTypes.func,
+  t: PropTypes.func
 };
 
 const areEqual = (prevProps, nextProps) => (

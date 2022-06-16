@@ -9,7 +9,7 @@ import * as shapes from '../../shapes';
 
 import { selectors as settings } from '../../../redux/modules/settings';
 import { ClientChroniclesContext, DeviceInfoContext } from '../../../helpers/app-contexts';
-import { usePrevious } from '../../../helpers/utils';
+import { usePrevious, randomizeArray } from '../../../helpers/utils';
 import playerHelper from '../../../helpers/player';
 import { CT_SONGS } from '../../../helpers/consts';
 import Helmets from '../../shared/Helmets';
@@ -85,6 +85,18 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
     }
   }, [history, playlist, selected, uiLanguage]);
 
+  const shufflePlaylist = () => {
+    const selectedItem = playlist.items[selected];
+    // a new array for sorting
+    const newPlaylistItems = [...playlist.items];
+    // random sorting of the playlist
+    randomizeArray(newPlaylistItems)
+    const newSelectedIndex = newPlaylistItems.indexOf(selectedItem);
+    // replace current items by shuffled
+    playlist.items = [...newPlaylistItems];
+    setSelected(newSelectedIndex);
+  }
+
   // we need to calculate the playlist here, so we can filter items out of recommended
   // playlist { collection, language, mediaType, items, groups };
   useEffect(() => {
@@ -133,6 +145,7 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
       <Playlist
         playlist={playlist}
         selected={selected}
+        shufflePlaylist={shufflePlaylist}
       />
       <br />
       <Recommended unit={recommendUnit} filterOutUnits={filterOutUnits} />
