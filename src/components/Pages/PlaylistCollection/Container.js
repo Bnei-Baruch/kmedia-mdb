@@ -33,7 +33,16 @@ const PlaylistCollectionContainer = ({ cId, t, cuId }) => {
 
   const dispatch = useDispatch();
 
-  const createPrevNextLinks = curIndex => {
+  const fetchWindow = useCallback(() => {
+    const filmDate = moment.utc(film_date);
+    dispatch(actions.fetchWindow({
+      id,
+      start_date: filmDate.subtract(5, 'days').format(DATE_FORMAT),
+      end_date: filmDate.add(10, 'days').format(DATE_FORMAT)
+    }));
+  }, [dispatch, film_date, id]);
+
+  const createPrevNextLinks = useCallback(curIndex => {
     const prevCollection = curIndex < collections.length - 1 ? collections[curIndex + 1] : null;
     const prevLnk        = prevCollection ? canonicalLink(prevCollection) : null;
     setPrevLink(prevLnk);
@@ -41,7 +50,7 @@ const PlaylistCollectionContainer = ({ cId, t, cuId }) => {
     const nextCollection = curIndex > 0 ? collections[curIndex - 1] : null;
     const nextLnk        = nextCollection ? canonicalLink(nextCollection) : null;
     setNextLink(nextLnk);
-  };
+  }, [collections]);
 
   // Fetch units files if needed.
   const cusForFetch = useMemo(() => cuIDs?.filter(id => cuId !== id).filter(id => {
@@ -84,7 +93,7 @@ const PlaylistCollectionContainer = ({ cId, t, cuId }) => {
         const { id: cWindowId, data } = cWindow;
         const curIndex                = data.indexOf(cId);
         if (cId !== cWindowId
-          && (curIndex <= 0 || curIndex === collections.length - 1)
+          && (curIndex <= 0 || curIndex === collections?.length - 1)
           && !wipMap.cWindow[cId]) {
           // it's not our window,
           // we're not in it (at least not in the middle, we could reuse it otherwise)
@@ -96,21 +105,12 @@ const PlaylistCollectionContainer = ({ cId, t, cuId }) => {
         }
       }
     }
-  }, [cId, cWindow, content_type, wipMap.cWindow]);
-
-  const fetchWindow = () => {
-    const filmDate = moment.utc(film_date);
-    dispatch(actions.fetchWindow({
-      id,
-      start_date: filmDate.subtract(5, 'days').format(DATE_FORMAT),
-      end_date: filmDate.add(10, 'days').format(DATE_FORMAT)
-    }));
-  };
+  }, [cId, cWindow, collections?.length, content_type, createPrevNextLinks, fetchWindow, film_date, id, wipMap.cWindow]);
 
   useEffect(() => {
     if (cuIDs)
       dispatch(recommended.fetchViews(cuIDs));
-  }, [cuIDs]);
+  }, [cuIDs, dispatch]);
 
   if (!cId || !collection || isEmpty(content_units)) {
     return null;
