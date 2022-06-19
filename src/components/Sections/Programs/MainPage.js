@@ -52,25 +52,25 @@ const MainPage = () => {
     <SectionHeader section="programs" />
     <SectionFiltersWithMobile
       filters={
-          <Filters
-            namespace={PAGE_NS_PROGRAMS}
-            baseParams={{ content_type: UNIT_PROGRAMS_TYPE }}
-          />
+        <Filters
+          namespace={PAGE_NS_PROGRAMS}
+          baseParams={{ content_type: UNIT_PROGRAMS_TYPE }}
+        />
       }
     >
-          <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} />
-          <FilterLabels namespace={PAGE_NS_PROGRAMS} />
-          {items?.map((id, i) => <ItemOfList id={id} key={i} />)}
-          <Divider fitted />
-          <Container className="padded pagination-wrapper" textAlign="center">
-            {total > 0 && <Pagination
-              pageNo={pageNo}
-              pageSize={pageSize}
-              total={total}
-              language={language}
-              onChange={setPage}
-            />}
-          </Container>
+      <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} />
+      <FilterLabels namespace={PAGE_NS_PROGRAMS} />
+      {items?.map((id, i) => <ItemOfList id={id} key={i} />)}
+      <Divider fitted />
+      <Container className="padded pagination-wrapper" textAlign="center">
+        {total > 0 && <Pagination
+          pageNo={pageNo}
+          pageSize={pageSize}
+          total={total}
+          language={language}
+          onChange={setPage}
+        />}
+      </Container>
     </SectionFiltersWithMobile>
   </>
   );
