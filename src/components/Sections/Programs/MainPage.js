@@ -49,30 +49,30 @@ const MainPage = () => {
   }, [language, dispatch, pageNo, selected]);
 
   return (<>
-      <SectionHeader section="programs" />
-      <SectionFiltersWithMobile
-        filters={
-          <Filters
-            namespace={PAGE_NS_PROGRAMS}
-            baseParams={{ content_type: [...COLLECTION_PROGRAMS_TYPE, ...UNIT_PROGRAMS_TYPE] }}
-          />
-        }
-      >
-        <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} />
-        <FilterLabels namespace={PAGE_NS_PROGRAMS} />
-        {items?.map((id, i) => <ItemOfList id={id} key={i} />)}
-        <Divider fitted />
-        <Container className="padded pagination-wrapper" textAlign="center">
-          {total > 0 && <Pagination
-            pageNo={pageNo}
-            pageSize={pageSize}
-            total={total}
-            language={language}
-            onChange={setPage}
-          />}
-        </Container>
-      </SectionFiltersWithMobile>
-    </>
+    <SectionHeader section="programs" />
+    <SectionFiltersWithMobile
+      filters={
+        <Filters
+          namespace={PAGE_NS_PROGRAMS}
+          baseParams={{ content_type: [...COLLECTION_PROGRAMS_TYPE, ...UNIT_PROGRAMS_TYPE] }}
+        />
+      }
+    >
+      <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} />
+      <FilterLabels namespace={PAGE_NS_PROGRAMS} />
+      {items?.map((id, i) => <ItemOfList id={id} key={i} />)}
+      <Divider fitted />
+      <Container className="padded pagination-wrapper" textAlign="center">
+        {total > 0 && <Pagination
+          pageNo={pageNo}
+          pageSize={pageSize}
+          total={total}
+          language={language}
+          onChange={setPage}
+        />}
+      </Container>
+    </SectionFiltersWithMobile>
+  </>
   );
 };
 
