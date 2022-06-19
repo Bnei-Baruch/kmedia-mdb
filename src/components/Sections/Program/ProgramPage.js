@@ -34,7 +34,7 @@ const ProgramPage = ({ t }) => {
   const dispatch = useDispatch();
   const location = useLocation();
   const prevSel  = usePrevious(selected);
-  const setPage  = useCallback(pageNo => dispatch(actions.setPage(namespace, pageNo)), [dispatch]);
+  const setPage  = useCallback(pageNo => dispatch(actions.setPage(namespace, pageNo)), [namespace,dispatch]);
   const pageNo   = useMemo(() => getPageFromLocation(location) || 1, [location]);
 
   useEffect(() => {
