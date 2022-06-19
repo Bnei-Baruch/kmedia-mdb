@@ -53,27 +53,27 @@ const ProgramPage = ({ t }) => {
     <PageHeader collection={collection} namespace={namespace} title="programs-collection" />
     <SectionFiltersWithMobile
       filters={
-          <Filters
-            namespace={namespace}
-            baseParams={{ collection: [cid] }}
-          />
+        <Filters
+          namespace={namespace}
+          baseParams={{ collection: [cid] }}
+        />
       }
     >
-          <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} />
-          <FilterLabels namespace={namespace} />
-          {
-            wipErr || items?.map((id, i) => <ItemOfList id={id} ccu={collection} key={i} />)
-          }
-          <Divider fitted />
-          <Container className="padded pagination-wrapper" textAlign="center">
-            {total > 0 && <Pagination
-              pageNo={pageNo}
-              pageSize={pageSize}
-              total={total}
-              language={language}
-              onChange={setPage}
-            />}
-          </Container>
+      <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} />
+      <FilterLabels namespace={namespace} />
+      {
+        wipErr || items?.map((id, i) => <ItemOfList id={id} ccu={collection} key={i} />)
+      }
+      <Divider fitted />
+      <Container className="padded pagination-wrapper" textAlign="center">
+        {total > 0 && <Pagination
+          pageNo={pageNo}
+          pageSize={pageSize}
+          total={total}
+          language={language}
+          onChange={setPage}
+        />}
+      </Container>
     </SectionFiltersWithMobile>
   </>);
 };

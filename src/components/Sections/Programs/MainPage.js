@@ -1,12 +1,9 @@
 import { isEqual } from 'lodash';
-import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import { withNamespaces } from 'react-i18next';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
-import { Button, Container, Divider, Grid, Modal } from 'semantic-ui-react';
-import { DeviceInfoContext } from '../../../helpers/app-contexts';
-import { PAGE_NS_PROGRAMS, UNIT_PROGRAMS_TYPE } from '../../../helpers/consts';
-import { getLanguageDirection } from '../../../helpers/i18n-utils';
+import { Container, Divider } from 'semantic-ui-react';
+import { COLLECTION_PROGRAMS_TYPE, PAGE_NS_PROGRAMS, UNIT_PROGRAMS_TYPE } from '../../../helpers/consts';
 import { usePrevious } from '../../../helpers/utils';
 import { selectors as filters } from '../../../redux/modules/filters';
 import { actions, selectors as lists } from '../../../redux/modules/lists';
@@ -17,16 +14,16 @@ import FilterLabels from '../../FiltersAside/FilterLabels';
 import Pagination from '../../Pagination/Pagination';
 import ResultsPageHeader from '../../Pagination/ResultsPageHeader';
 import { getPageFromLocation } from '../../Pagination/withPagination';
+import SectionFiltersWithMobile from '../../shared/SectionFiltersWithMobile';
 import SectionHeader from '../../shared/SectionHeader';
 import Filters from './Filters';
 import ItemOfList from './ItemOfList';
 
-const MainPage = ({ t }) => {
+const MainPage = () => {
   const { items, total } = useSelector(state => lists.getNamespaceState(state.lists, PAGE_NS_PROGRAMS)) || {};
   const language         = useSelector(state => settings.getLanguage(state.settings));
   const pageSize         = useSelector(state => settings.getPageSize(state.settings));
   const selected         = useSelector(state => filters.getFilters(state.filters, PAGE_NS_PROGRAMS), isEqual);
-  const dir              = getLanguageDirection(language);
 
   const prevSel = usePrevious(selected);
 
@@ -52,54 +49,32 @@ const MainPage = ({ t }) => {
     }
   }, [language, dispatch, pageNo, selected]);
 
-  const toggleFilters = () => setOpenFilters(!openFilters);
-
-  const renderMobileFilters = () => (
-    <Modal
-      closeIcon
-      open={openFilters}
-      onClose={toggleFilters}
-      dir={dir}
-      className={dir}
-    >
-      <Modal.Content className="filters-aside-wrapper" scrolling>
-        <Filters
-          namespace={PAGE_NS_PROGRAMS}
-          baseParams={{ content_type: UNIT_PROGRAMS_TYPE }}
-        />
-      </Modal.Content>
-      <Modal.Actions>
-        <Button primary content={t('buttons.close')} onClick={toggleFilters} />
-      </Modal.Actions>
-    </Modal>
-  );
-
   return (<>
-    <SectionHeader section="programs" />
-    <SectionFiltersWithMobile
-      filters={
+      <SectionHeader section="programs" />
+      <SectionFiltersWithMobile
+        filters={
           <Filters
             namespace={PAGE_NS_PROGRAMS}
             baseParams={{ content_type: UNIT_PROGRAMS_TYPE }}
           />
-      }
-    >
-          <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} />
-          <FilterLabels namespace={PAGE_NS_PROGRAMS} />
-          {items?.map((id, i) => <ItemOfList id={id} key={i} />)}
-          <Divider fitted />
-          <Container className="padded pagination-wrapper" textAlign="center">
-            {total > 0 && <Pagination
-              pageNo={pageNo}
-              pageSize={pageSize}
-              total={total}
-              language={language}
-              onChange={setPage}
-            />}
-          </Container>
-    </SectionFiltersWithMobile>
-  </>
+        }
+      >
+        <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} />
+        <FilterLabels namespace={PAGE_NS_PROGRAMS} />
+        {items?.map((id, i) => <ItemOfList id={id} key={i} />)}
+        <Divider fitted />
+        <Container className="padded pagination-wrapper" textAlign="center">
+          {total > 0 && <Pagination
+            pageNo={pageNo}
+            pageSize={pageSize}
+            total={total}
+            language={language}
+            onChange={setPage}
+          />}
+        </Container>
+      </SectionFiltersWithMobile>
+    </>
   );
 };
 
-export default withNamespaces()(MainPage);
+export default MainPage;
