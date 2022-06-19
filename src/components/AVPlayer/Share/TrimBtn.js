@@ -1,12 +1,15 @@
 import React, { useContext, useState } from 'react';
+import moment from 'moment/moment';
 import PropTypes from 'prop-types';
-import { Button, Icon, Label, Popup } from 'semantic-ui-react';
-import { useDispatch } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
+import { useDispatch } from 'react-redux';
+import { Button, Icon, Label, Popup } from 'semantic-ui-react';
+
+import { ClientChroniclesContext } from '../../../helpers/app-contexts';
+import { fromHumanReadableTime } from '../../../helpers/time';
+import { noop } from '../../../helpers/utils';
 import { actions } from '../../../redux/modules/trim';
 import { MDBFile } from '../../shapes';
-import { ClientChroniclesContext } from '../../../helpers/app-contexts';
-import { noop } from '../../../helpers/utils';
 
 const TrimBtn = ({ file, sstart, send, width, t }) => {
   const [open, setOpen] = useState(false);
@@ -18,7 +21,13 @@ const TrimBtn = ({ file, sstart, send, width, t }) => {
   const handleCut = () => {
     if (sstart === send) return;
 
-    dispatch(actions.trim({ sstart, send, uid: file.id }));
+    const start    = fromHumanReadableTime(sstart);
+    const strStart = moment.utc(start.asMilliseconds())
+      .format(start.hours() === 0 ? 'mm[m]ss[s]' : 'HH[h]mm[m]ss[s]');
+    const end      = fromHumanReadableTime(send);
+    const strEnd   = moment.utc(end.asMilliseconds())
+      .format(end.hours() === 0 ? 'mm[m]ss[s]' : 'HH[h]mm[m]ss[s]');
+    dispatch(actions.trim({ sstart: strStart, send: strEnd, uid: file.id }));
     chroniclesAppend('download', { url: file.src, uid: file.id, sstart, send });
   };
 

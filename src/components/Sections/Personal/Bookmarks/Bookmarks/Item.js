@@ -23,7 +23,7 @@ const BookmarksItem = ({ bookmark, t }) => {
   const getPathByID      = useSelector(state => sources.getPathByID(state.sources));
   const areSourcesLoaded = useSelector(state => sourcesSelectors.areSourcesLoaded(state.sources));
 
-  if (!areSourcesLoaded)
+  if (!areSourcesLoaded || !cu)
     return null;
 
   const link = textPartLink(bookmark?.properties, cu);

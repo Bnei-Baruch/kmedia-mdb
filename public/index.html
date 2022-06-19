@@ -8,11 +8,19 @@
   <title>Kabbalah Media</title>
 
   <!-- Google Tag Manager -->
-  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-                                                j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-  })(window,document,'script','dataLayer','GTM-5WM8NVH');</script>
+  <script>(function (w, d, s, l, i) {
+    w[l] = w[l] || [];
+    w[l].push({
+      'gtm.start':
+        new Date().getTime(), event: 'gtm.js'
+    });
+    var f                          = d.getElementsByTagName(s)[0],
+        j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : '';
+    j.async                        = true;
+    j.src                          =
+      'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+    f.parentNode.insertBefore(j, f);
+  })(window, document, 'script', 'dataLayer', 'GTM-5WM8NVH');</script>
   <!-- End Google Tag Manager -->
 
   <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
@@ -39,17 +47,24 @@
 </head>
 <body>
 <!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5WM8NVH" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<noscript>
+  <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5WM8NVH" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+</noscript>
 <!-- End Google Tag Manager (noscript) -->
 <div id="root"></div>
 <script type="text/javascript">
-  (function() {
-    var url = new URL(window.location.href);
-    var embed = url.searchParams.get("embed");
-    if (embed === '1') // don't show usersnap in embed mode
-      return;
-    var s = document.createElement("script"); s.type = "text/javascript"; s.async = true; s.src = '//api.usersnap.com/load/2d48dac9-253b-4d56-a7bf-a58c6ece2f3c.js';
-    var x = document.getElementsByTagName('script')[0]; x.parentNode.insertBefore(s, x); })();
+  var url   = new URL(window.location.href);
+  var embed = url.searchParams.get('embed');
+  // don't show usersnap in embed mode
+  if (embed !== '1') {
+    window.onUsersnapCXLoad = function (api) {
+      api.init();
+    };
+    var script              = document.createElement('script');
+    script.defer            = 1;
+    script.src              = 'https://widget.usersnap.com/global/load/791b3a5c-3982-4bf6-833f-907d1bec2717?onload=onUsersnapCXLoad';
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
 </script>
 </body>
 </html>
