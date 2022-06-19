@@ -55,7 +55,7 @@ const MainPage = () => {
       filters={
         <Filters
           namespace={PAGE_NS_PROGRAMS}
-          baseParams={{ content_type: UNIT_PROGRAMS_TYPE }}
+          baseParams={{ content_type: [...COLLECTION_PROGRAMS_TYPE, ...UNIT_PROGRAMS_TYPE] }}
         />
       }
     >
