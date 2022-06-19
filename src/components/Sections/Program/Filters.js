@@ -23,7 +23,7 @@ const Filters = ({ namespace, baseParams, t }) => {
 
   const dispatch = useDispatch();
   useEffect(() => {
-    if (!isReady && !wip && !err) {
+    if (!isReady) {
       dispatch(actions.fetchStats(namespace, {
         ...baseParams,
         with_media: true,

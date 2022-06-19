@@ -39,7 +39,7 @@ const Filters = ({ namespace, baseParams, t }) => {
         with_original_languages: true,
       }, { isPrepare: true }));
     }
-  }, [dispatch, isReady]);
+  }, [dispatch, isReady, baseParams]);
 
   useEffect(() => {
     if (isHydrated && isReady) {
@@ -49,7 +49,7 @@ const Filters = ({ namespace, baseParams, t }) => {
         with_original_languages: true,
       }, { isPrepare: false }));
     }
-  }, [dispatch, isHydrated, isReady, selected]);
+  }, [dispatch, isHydrated, isReady, selected, baseParams]);
 
   const handleOnHydrated = () => setIsHydrated(true);
 
