@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useMemo } from 'react';
 import { withNamespaces } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useParams } from 'react-router-dom';
-import { Container, Divider, Grid } from 'semantic-ui-react';
+import { Container, Divider } from 'semantic-ui-react';
 
 import { PAGE_NS_LESSONS } from '../../../helpers/consts';
 import { usePrevious } from '../../../helpers/utils';
@@ -16,6 +16,7 @@ import PageHeader from '../../Pages/Collection/Header';
 import Pagination from '../../Pagination/Pagination';
 import ResultsPageHeader from '../../Pagination/ResultsPageHeader';
 import { getPageFromLocation } from '../../Pagination/withPagination';
+import SectionFiltersWithMobile from '../../shared/SectionFiltersWithMobile';
 import WipErr from '../../shared/WipErr/WipErr';
 import Filters from './Filters';
 import ItemOfList from './ItemOfList';
@@ -50,34 +51,32 @@ const LessonPage = ({ t }) => {
 
   return (<>
     <PageHeader collection={collection} namespace={namespace} title="lessons-collection" />
-    <Container className="padded" fluid>
-      <Divider />
-      <Grid divided>
-        <Grid.Column width="4" className="filters-aside-wrapper">
-          <Filters
-            namespace={namespace}
-            baseParams={{ collection: [cid] }}
-          />
-        </Grid.Column>
-        <Grid.Column width="12">
-          <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} />
-          <FilterLabels namespace={namespace} />
-          {
-            wipErr || items?.map((id, i) => <ItemOfList id={id} ccu={collection} key={i} />)
-          }
-          <Divider fitted />
-          <Container className="padded pagination-wrapper" textAlign="center">
-            {total > 0 && <Pagination
-              pageNo={pageNo}
-              pageSize={pageSize}
-              total={total}
-              language={language}
-              onChange={setPage}
-            />}
-          </Container>
-        </Grid.Column>
-      </Grid>
-    </Container>
+
+    <SectionFiltersWithMobile
+      filters={
+        <Filters
+          namespace={namespace}
+          baseParams={{ collection: [cid] }}
+        />
+      }
+    >
+
+      <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} />
+      <FilterLabels namespace={namespace} />
+      {
+        wipErr || items?.map((id, i) => <ItemOfList id={id} ccu={collection} key={i} />)
+      }
+      <Divider fitted />
+      <Container className="padded pagination-wrapper" textAlign="center">
+        {total > 0 && <Pagination
+          pageNo={pageNo}
+          pageSize={pageSize}
+          total={total}
+          language={language}
+          onChange={setPage}
+        />}
+      </Container>
+    </SectionFiltersWithMobile>
   </>);
 };
 
