@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { Container, Divider, Grid } from 'semantic-ui-react';
-import { PAGE_NS_PROGRAMS, UNIT_PROGRAMS_TYPE } from '../../../helpers/consts';
+import { COLLECTION_PROGRAMS_TYPE, PAGE_NS_PROGRAMS, UNIT_PROGRAMS_TYPE } from '../../../helpers/consts';
 import { usePrevious } from '../../../helpers/utils';
 import { selectors as filters } from '../../../redux/modules/filters';
 
@@ -32,7 +32,7 @@ const MainPage = () => {
   const setPage  = useCallback(pageNo => dispatch(actions.setPage(PAGE_NS_PROGRAMS, pageNo)), [dispatch]);
 
   useEffect(() => {
-    dispatch(progActions.fetchCollections());
+    dispatch(progActions.fetchCollections(PAGE_NS_PROGRAMS, { content_type: COLLECTION_PROGRAMS_TYPE }));
   }, [language, dispatch]);
 
   useEffect(() => {
@@ -45,7 +45,6 @@ const MainPage = () => {
         withViews: true
       }));
     }
-
   }, [language, dispatch, pageNo, selected]);
 
   return (<>
