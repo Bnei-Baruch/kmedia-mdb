@@ -37,6 +37,7 @@ const Filters = ({ namespace, baseParams, t }) => {
         ...baseParams,
         with_media: true,
         with_original_languages: true,
+        with_collections: true,
       }, { isPrepare: true }));
     }
   }, [dispatch, isReady, baseParams]);
@@ -47,6 +48,7 @@ const Filters = ({ namespace, baseParams, t }) => {
         ...baseParams,
         with_media: true,
         with_original_languages: true,
+        with_collections: true,
       }, { isPrepare: false }));
     }
   }, [dispatch, isHydrated, isReady, selected, baseParams]);
