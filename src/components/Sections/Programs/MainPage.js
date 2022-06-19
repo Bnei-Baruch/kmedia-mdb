@@ -9,8 +9,8 @@ import { PAGE_NS_PROGRAMS, UNIT_PROGRAMS_TYPE } from '../../../helpers/consts';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import { usePrevious } from '../../../helpers/utils';
 import { selectors as filters } from '../../../redux/modules/filters';
-
 import { actions, selectors as lists } from '../../../redux/modules/lists';
+
 import { actions as prepareActions } from '../../../redux/modules/preparePage';
 import { selectors as settings } from '../../../redux/modules/settings';
 import FilterLabels from '../../FiltersAside/FilterLabels';
@@ -22,10 +22,6 @@ import Filters from './Filters';
 import ItemOfList from './ItemOfList';
 
 const MainPage = ({ t }) => {
-  const [openFilters, setOpenFilters] = useState(false);
-
-  const { isMobileDevice } = useContext(DeviceInfoContext);
-
   const { items, total } = useSelector(state => lists.getNamespaceState(state.lists, PAGE_NS_PROGRAMS)) || {};
   const language         = useSelector(state => settings.getLanguage(state.settings));
   const pageSize         = useSelector(state => settings.getPageSize(state.settings));
@@ -41,7 +37,7 @@ const MainPage = ({ t }) => {
   const setPage  = useCallback(pageNo => dispatch(actions.setPage(PAGE_NS_PROGRAMS, pageNo)), [dispatch]);
 
   useEffect(() => {
-    dispatch(prepareActions.fetchCollections());
+    dispatch(prepareActions.fetchCollections(PAGE_NS_PROGRAMS, { content_type: COLLECTION_PROGRAMS_TYPE }));
   }, [language, dispatch]);
 
   useEffect(() => {
@@ -54,7 +50,6 @@ const MainPage = ({ t }) => {
         withViews: true
       }));
     }
-
   }, [language, dispatch, pageNo, selected]);
 
   const toggleFilters = () => setOpenFilters(!openFilters);
@@ -81,38 +76,28 @@ const MainPage = ({ t }) => {
 
   return (<>
     <SectionHeader section="programs" />
-    <Container className="padded" fluid>{
-      isMobileDevice && <Button className="" basic icon="filter" floated={'right'} onClick={toggleFilters} />
-    }
-    <Divider />
-    <Grid divided>
-      {
-        !isMobileDevice ? (
-          <Grid.Column width="4" className="filters-aside-wrapper">
-            <Filters
-              namespace={PAGE_NS_PROGRAMS}
-              baseParams={{ content_type: UNIT_PROGRAMS_TYPE }}
-            />
-          </Grid.Column>
-        ) : renderMobileFilters()
+    <SectionFiltersWithMobile
+      filters={
+          <Filters
+            namespace={PAGE_NS_PROGRAMS}
+            baseParams={{ content_type: UNIT_PROGRAMS_TYPE }}
+          />
       }
-      <Grid.Column width={isMobileDevice ? 16 : 12}>
-        <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} />
-        <FilterLabels namespace={PAGE_NS_PROGRAMS} />
-        {items?.map((id, i) => <ItemOfList id={id} key={i} />)}
-        <Divider fitted />
-        <Container className="padded pagination-wrapper" textAlign="center">
-          {total > 0 && <Pagination
-            pageNo={pageNo}
-            pageSize={pageSize}
-            total={total}
-            language={language}
-            onChange={setPage}
-          />}
-        </Container>
-      </Grid.Column>
-    </Grid>
-    </Container>
+    >
+          <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} />
+          <FilterLabels namespace={PAGE_NS_PROGRAMS} />
+          {items?.map((id, i) => <ItemOfList id={id} key={i} />)}
+          <Divider fitted />
+          <Container className="padded pagination-wrapper" textAlign="center">
+            {total > 0 && <Pagination
+              pageNo={pageNo}
+              pageSize={pageSize}
+              total={total}
+              language={language}
+              onChange={setPage}
+            />}
+          </Container>
+    </SectionFiltersWithMobile>
   </>
   );
 };
