@@ -1,8 +1,8 @@
-import { FN_COUNTRIES } from '../../helpers/consts';
+import { FN_LOCATIONS } from '../../helpers/consts';
 import { createFilterDefinition } from './util';
 
 const countriesFilter = {
-  name: FN_COUNTRIES,
+  name: FN_LOCATIONS,
   queryKey: 'countries',
   valueToApiParam: value => ({
     countries: [value]

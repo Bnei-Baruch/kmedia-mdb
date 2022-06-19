@@ -63,14 +63,14 @@ export function* fetchStat(action) {
 
     const responses = yield all(requests);
 
-    const { data: dataCU } = responses.shift();
-    const dataC            = countC ? responses.shift()?.data : {};
-    const dataL            = countL ? responses.shift()?.data : {};
+    const { data: dataCU }                  = responses.shift();
+    const { data: { locations, ...dataC } } = countC ? responses.shift() : {};
+    const dataL                             = countL ? responses.shift()?.data : {};
 
     if (isFilteredByBase) {
-      const { data: dataCUPart = {} } = responses.shift() || {};
-      const dataCPart                 = countC ? responses.shift()?.data : {};
-      const dataLPart                 = countL ? responses.shift()?.data : {};
+      const { data: dataCUPart = {} }             = responses.shift() || {};
+      const { data: { locations, ...dataCPart } } = countC ? responses.shift() : {};
+      const dataLPart                             = countL ? responses.shift()?.data : {};
 
       uniq(Object.keys(params).map(x => RESULT_NAME_BY_PARAM[x])).forEach(n => {
         dataCU[n] = dataCUPart[n];
@@ -79,6 +79,7 @@ export function* fetchStat(action) {
       });
     }
 
+    yield put(actions.receiveLocationsStats({ locations, namespace, isPrepare }));
     yield put(actions.fetchStatsSuccess({ dataCU, dataC, dataL, namespace, isPrepare }));
 
     if (filterParams.with_languages && !isPrepare) {
