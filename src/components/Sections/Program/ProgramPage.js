@@ -3,7 +3,8 @@ import React, { useCallback, useEffect, useMemo } from 'react';
 import { withNamespaces } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useParams } from 'react-router-dom';
-import { Container, Divider, Grid } from 'semantic-ui-react';
+import { Container, Divider } from 'semantic-ui-react';
+
 import { PAGE_NS_PROGRAMS } from '../../../helpers/consts';
 import { usePrevious } from '../../../helpers/utils';
 import { selectors as filters } from '../../../redux/modules/filters';
@@ -16,6 +17,7 @@ import PageHeader from '../../Pages/Collection/Header';
 import Pagination from '../../Pagination/Pagination';
 import ResultsPageHeader from '../../Pagination/ResultsPageHeader';
 import { getPageFromLocation } from '../../Pagination/withPagination';
+import SectionFiltersWithMobile from '../../shared/SectionFiltersWithMobile';
 import WipErr from '../../shared/WipErr/WipErr';
 import Filters from './Filters';
 import ItemOfList from './ItemOfList';
@@ -49,16 +51,14 @@ const ProgramPage = ({ t }) => {
 
   return (<>
     <PageHeader collection={collection} namespace={namespace} title="programs-collection" />
-    <Container className="padded" fluid>
-      <Divider />
-      <Grid divided>
-        <Grid.Column width="4" className="filters-aside-wrapper">
+    <SectionFiltersWithMobile
+      filters={
           <Filters
             namespace={namespace}
             baseParams={{ collection: [cid] }}
           />
-        </Grid.Column>
-        <Grid.Column width="12">
+      }
+    >
           <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} />
           <FilterLabels namespace={namespace} />
           {
@@ -74,9 +74,7 @@ const ProgramPage = ({ t }) => {
               onChange={setPage}
             />}
           </Container>
-        </Grid.Column>
-      </Grid>
-    </Container>
+    </SectionFiltersWithMobile>
   </>);
 };
 

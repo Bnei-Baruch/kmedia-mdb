@@ -14,6 +14,7 @@ import FilterLabels from '../../FiltersAside/FilterLabels';
 import Pagination from '../../Pagination/Pagination';
 import ResultsPageHeader from '../../Pagination/ResultsPageHeader';
 import { getPageFromLocation } from '../../Pagination/withPagination';
+import SectionFiltersWithMobile from '../../shared/SectionFiltersWithMobile';
 import SectionHeader from '../../shared/SectionHeader';
 import Filters from './Filters';
 import ItemOfList from './ItemOfList';
@@ -49,16 +50,14 @@ const MainPage = () => {
 
   return (<>
     <SectionHeader section="programs" />
-    <Container className="padded" fluid>
-      <Divider />
-      <Grid divided>
-        <Grid.Column width="4" className="filters-aside-wrapper">
+    <SectionFiltersWithMobile
+      filters={
           <Filters
             namespace={PAGE_NS_PROGRAMS}
             baseParams={{ content_type: UNIT_PROGRAMS_TYPE }}
           />
-        </Grid.Column>
-        <Grid.Column width="12">
+      }
+    >
           <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} />
           <FilterLabels namespace={PAGE_NS_PROGRAMS} />
           {items?.map((id, i) => <ItemOfList id={id} key={i} />)}
@@ -72,10 +71,9 @@ const MainPage = () => {
               onChange={setPage}
             />}
           </Container>
-        </Grid.Column>
-      </Grid>
-    </Container>
-  </>);
+    </SectionFiltersWithMobile>
+  </>
+  );
 };
 
 export default MainPage;
