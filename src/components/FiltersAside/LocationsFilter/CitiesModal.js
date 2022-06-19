@@ -2,12 +2,13 @@ import clsx from 'clsx';
 import React from 'react';
 import { withNamespaces } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { Button, Icon, Input, Modal, Table } from 'semantic-ui-react';
+import { Button, Icon, Modal, Table } from 'semantic-ui-react';
 
 import { FN_LOCATIONS } from '../../../helpers/consts';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import { isEmpty } from '../../../helpers/utils';
 import { selectors } from '../../../redux/modules/filtersAside';
+import { selectors as settings } from '../../../redux/modules/settings';
 import { getTitle } from './helper';
 import TagSourceItem from './TagSourceItem';
 
@@ -18,11 +19,12 @@ const buildRowArr   = n => {
   return Array(len).fill(0);
 };
 
-const CitiesModal = ({ county, open, onClose, t }) => {
+const CitiesModal = ({ county, namespace, open, onClose, t }) => {
 
   const items = useSelector(state => selectors.cityByCountry(state.filtersAside, namespace, FN_LOCATIONS)(county));
 
-  const dir = getLanguageDirection(language);
+  const language = useSelector(state => settings.getLanguage(state.settings));
+  const dir      = getLanguageDirection(language);
 
   if (isEmpty(items)) return null;
 
@@ -40,7 +42,7 @@ const CitiesModal = ({ county, open, onClose, t }) => {
         className={clsx('tree_item_modal_content', { 'item single_item': !(item.children.length > 0) })}
         key={i}
       >
-        <TagSourceItem {...props} id={item.id} deep={-1} />
+        {/*<TagSourceItem {...props} id={item.id} deep={-1} />*/}
       </Table.Cell>
     );
   };

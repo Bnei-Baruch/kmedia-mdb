@@ -18,10 +18,7 @@ const CountryItem = ({ namespace, id, t }) => {
   const selected        = useMemo(() => selectedFilters?.values || [], [selectedFilters]);
   const getStat         = useSelector(state => filtersAside.getStats(state.filtersAside, namespace, FN_LOCATIONS));
   const stat            = getStat(id);
-  if (id === 'Israel') {
-    console.log('s', stat);
-    console.log(getStat(id));
-  }
+
   const language = useSelector(state => settings.getLanguage(state.settings));
   const dispatch = useDispatch();
 

@@ -25,7 +25,7 @@ const CountryItem = ({ namespace, id, t }) => {
   };
 
   return (
-    <List.Item key={title} disabled={stat === 0}>
+    <List.Item key={getTitle(id, t)} disabled={stat === 0}>
       <List.Content className="tree_item_content">
         <Checkbox
           checked={selected.find(x => x.cities.includes(id))}
