@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import React from 'react';
 import { withNamespaces } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -36,7 +37,7 @@ const ItemOfList = ({ id, ccu, t }) => {
           />
         )
       }
-      <div className="description">
+      <div className={clsx('description', { 'is_single': description.length === 1 })}>
         {
           description.map((d, i) => (<span key={i}>{d}</span>))
         }

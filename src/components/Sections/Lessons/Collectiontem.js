@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import React from 'react';
 import { withNamespaces } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -30,7 +31,7 @@ const CollectionItem = ({ id, t }) => {
         <span className="display-iblock margin-left-8 margin-right-8">{t('values.date', { date: film_date })}</span>
       </Link>
       <div>{t(`constants.content-types.${content_type}`)}</div>
-      <div className="description">
+      <div className={clsx('description', { 'is_single': description.length === 1 })}>
         {description.map((d, i) => (<span key={i}>{d}</span>))}
       </div>
     </div>

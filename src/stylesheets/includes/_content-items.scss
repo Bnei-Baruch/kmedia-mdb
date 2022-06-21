@@ -465,6 +465,7 @@
 
   .separate_with_line {
     margin-top: .5em;
+
     a {
       color: $black;
       line-height: .9em;
@@ -518,7 +519,7 @@
     }
 
     &.is_single span {
-      border-right: none !important;
+      border: none !important;
     }
   }
 }

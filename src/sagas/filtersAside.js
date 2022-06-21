@@ -64,7 +64,7 @@ export function* fetchStat(action) {
     const responses = yield all(requests);
 
     const { data: dataCU }                  = responses.shift();
-    const { data: { locations, ...dataC } } = countC ? responses.shift() : {};
+    const { data: { locations, ...dataC } } = countC ? responses.shift() : { data: false };
     const dataL                             = countL ? responses.shift()?.data : {};
 
     if (isFilteredByBase) {
