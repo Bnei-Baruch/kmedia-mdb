@@ -109,7 +109,10 @@
       "content-type-filter": "מדור",
       "language-filter": "שפה",
       "date-filter": "תאריך",
-      "media-type-filter": "מדיה"
+      "media-type-filter": "מדיה",
+      "person-filter": "מחבר",
+      "original-language-filter": "original-language-filter",
+      "locations-filter": "מיקום"
     },
     "media-types": {
       "audio" : "אודיו",

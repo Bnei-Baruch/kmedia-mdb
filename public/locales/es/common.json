@@ -109,7 +109,10 @@
       "content-type-filter": "Sección",
       "language-filter": "Idioma",
       "date-filter": "Fecha",
-      "media-type-filter": "Medios"
+      "media-type-filter": "Medios",
+      "person-filter": "Autor",
+      "original-language-filter": "original-language-filter",
+      "locations-filter": "Ubicación"
     },
     "media-types": {
       "audio" : "Audio",

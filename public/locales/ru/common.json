@@ -110,7 +110,10 @@
       "content-type-filter": "Раздел",
       "language-filter": "Язык",
       "date-filter": "Дата",
-      "media-type-filter": "Медиа"
+      "media-type-filter": "Медиа",
+      "person-filter": "Автор",
+      "original-language-filter": "original-language-filter",
+      "locations-filter": "Место проведения"
     },
     "media-types": {
       "audio" : "Аудио",
