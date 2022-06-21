@@ -31,7 +31,7 @@ const ContentTypeFilter = ({ namespace, t }) => {
           {
             items.map(x => {
               if (x === CT_VIRTUAL_LESSON) {
-                return <CollectionsModal namespace={namespace} ct={CT_VIRTUAL_LESSON} />;
+                return <CollectionsModal namespace={namespace} ct={CT_VIRTUAL_LESSON} key={x} />;
               }
 
               return <ContentTypeItem namespace={namespace} id={x} key={x} />;
