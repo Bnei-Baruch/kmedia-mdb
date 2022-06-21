@@ -37,9 +37,10 @@ const Filters = ({ namespace, baseParams, t }) => {
         ...baseParams,
         with_media: true,
         with_original_languages: true,
+        with_collections: true,
       }, { isPrepare: true }));
     }
-  }, [dispatch, isReady]);
+  }, [dispatch, isReady, baseParams]);
 
   useEffect(() => {
     if (isHydrated && isReady) {
@@ -47,9 +48,10 @@ const Filters = ({ namespace, baseParams, t }) => {
         ...baseParams,
         with_media: true,
         with_original_languages: true,
+        with_collections: true,
       }, { isPrepare: false }));
     }
-  }, [dispatch, isHydrated, isReady, selected]);
+  }, [dispatch, isHydrated, isReady, selected, baseParams]);
 
   const handleOnHydrated = () => setIsHydrated(true);
 

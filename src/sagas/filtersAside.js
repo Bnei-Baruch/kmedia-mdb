@@ -55,7 +55,7 @@ export function* fetchStat(action) {
     countL && requests.push(call(Api.labelsStats, filterParams));
 
     if (isFilteredByBase) {
-      const paramsPart = { ...filterParams, ...params };
+      const paramsPart = { ...filterParams, ...params, with_languages: false };
       requests.push(call(Api.unitsStats, paramsPart));
       countC && requests.push(call(Api.collectionsStats, paramsPart));
       countL && requests.push(call(Api.labelsStats, paramsPart));

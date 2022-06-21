@@ -2,7 +2,7 @@ import { isEqual } from 'lodash';
 import React, { useCallback, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
-import { Container, Divider, Grid } from 'semantic-ui-react';
+import { Container, Divider } from 'semantic-ui-react';
 
 import {
   COLLECTION_DAILY_LESSONS,
@@ -21,6 +21,7 @@ import FilterLabels from '../../FiltersAside/FilterLabels';
 import Pagination from '../../Pagination/Pagination';
 import ResultsPageHeader from '../../Pagination/ResultsPageHeader';
 import { getPageFromLocation } from '../../Pagination/withPagination';
+import SectionFiltersWithMobile from '../../shared/SectionFiltersWithMobile';
 import SectionHeader from '../../shared/SectionHeader';
 import CollectionItem from './Collectiontem';
 import DailyLessonItem from './DailyLessonItem';
@@ -59,46 +60,42 @@ const MainPage = () => {
 
   return (<>
     <SectionHeader section="lessons" />
-    <Container className="padded" fluid>
-      <Divider />
-      <Grid divided>
-        <Grid.Column width="4" className="filters-aside-wrapper">
-          <Filters
-            namespace={PAGE_NS_LESSONS}
-            baseParams={{ content_type: CT_WITH_FILTERS }}
-          />
-        </Grid.Column>
-        <Grid.Column width="12">
-          <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} />
-          <FilterLabels namespace={PAGE_NS_LESSONS} />
-          {
-            items?.map(({ id, content_type }, i) => {
-              switch (true) {
-                case COLLECTION_DAILY_LESSONS.includes(content_type):
-                  return <DailyLessonItem id={id} key={i} />;
-                case COLLECTION_LESSONS_TYPE.includes(content_type):
-                  return <CollectionItem id={id} key={i} />;
-                case UNIT_LESSONS_TYPE.includes(content_type):
-                  return <UnitItem id={id} key={i} />;
-                default:
-                  return null;
-              }
-            }
-            )
+    <SectionFiltersWithMobile
+      filters={
+        <Filters
+          namespace={PAGE_NS_LESSONS}
+          baseParams={{ content_type: CT_WITH_FILTERS }}
+        />
+      }
+    >
+      <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} />
+      <FilterLabels namespace={PAGE_NS_LESSONS} />
+      {
+        items?.map(({ id, content_type }, i) => {
+          switch (true) {
+            case COLLECTION_DAILY_LESSONS.includes(content_type):
+              return <DailyLessonItem id={id} key={i} />;
+            case COLLECTION_LESSONS_TYPE.includes(content_type):
+              return <CollectionItem id={id} key={i} />;
+            case UNIT_LESSONS_TYPE.includes(content_type):
+              return <UnitItem id={id} key={i} />;
+            default:
+              return null;
           }
-          <Divider fitted />
-          <Container className="padded pagination-wrapper" textAlign="center">
-            {total > 0 && <Pagination
-              pageNo={pageNo}
-              pageSize={pageSize}
-              total={total}
-              language={language}
-              onChange={setPage}
-            />}
-          </Container>
-        </Grid.Column>
-      </Grid>
-    </Container>
+        }
+        )
+      }
+      <Divider fitted />
+      <Container className="padded pagination-wrapper" textAlign="center">
+        {total > 0 && <Pagination
+          pageNo={pageNo}
+          pageSize={pageSize}
+          total={total}
+          language={language}
+          onChange={setPage}
+        />}
+      </Container>
+    </SectionFiltersWithMobile>
   </>);
 };
 
