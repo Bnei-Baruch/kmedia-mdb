@@ -109,7 +109,17 @@
       "topics-filter-multi": "Теми",
       "content-type-filter": "Section",
       "language-filter": "Language",
-      "date-filter": "Date"
+      "date-filter": "Date",
+      "media-type-filter": "Media",
+      "person-filter": "Author",
+      "original-language-filter": "original-language-filter",
+      "locations-filter": "Location"
+    },
+    "media-types": {
+      "audio" : "Audio",
+      "video" : "Video",
+      "text" : "Transcription",
+      "image" : "Sketch"
     },
     "content-types": {
       "CONGRESS": "Конгреси",

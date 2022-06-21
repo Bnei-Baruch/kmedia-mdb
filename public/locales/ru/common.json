@@ -109,7 +109,17 @@
       "topics-filter-multi": "Темы",
       "content-type-filter": "Раздел",
       "language-filter": "Язык",
-      "date-filter": "Дата"
+      "date-filter": "Дата",
+      "media-type-filter": "Медиа",
+      "person-filter": "Автор",
+      "original-language-filter": "original-language-filter",
+      "locations-filter": "Место проведения"
+    },
+    "media-types": {
+      "audio" : "Аудио",
+      "video" : "Видео ",
+      "text" : "Стенограмма",
+      "image" : "Чертеж"
     },
     "content-types": {
       "CONGRESS": "Конгрессы",
