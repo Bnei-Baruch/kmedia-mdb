@@ -23,7 +23,7 @@ const SectionFiltersWithMobile = ({ filters, children, t }) => {
         isMobileDevice && <Button className="" basic icon="filter" floated={'right'} onClick={toggleFilters} />
       }
       <Divider />
-      <Grid divided>
+      <Grid container>
         {
           !isMobileDevice ? (
             <Grid.Column width="4" className="filters-aside-wrapper">
