@@ -3,18 +3,11 @@ import { call, put, select, takeLatest } from 'redux-saga/effects';
 import { selectors as settings } from '../redux/modules/settings';
 import { actions, selectors, types } from '../redux/modules/programs';
 import { actions as mdbActions } from '../redux/modules/mdb';
-import { types as listTypes } from '../redux/modules/lists';
-import { setTab } from './helpers/url';
 import Api from '../helpers/Api';
 import { CT_CLIPS, CT_VIDEO_PROGRAM } from '../helpers/consts';
 import { isEmpty } from '../helpers/utils';
 
-function* fetchProgramsList(action) {
-  if (action.payload.namespace !== 'programs-main'
-    && action.payload.namespace !== 'programs-clips') {
-    return;
-  }
-
+function* fetchProgramsList() {
   try {
     // fetch once
     const programs = yield select(state => selectors.getProgramsByType(state.programs));
@@ -42,14 +35,9 @@ function* fetchProgramsList(action) {
 }
 
 function* watchFetchList() {
-  yield takeLatest(listTypes.FETCH_LIST, fetchProgramsList);
-}
-
-function* watchSetTab() {
-  yield takeLatest(types.SET_TAB, setTab);
+  yield takeLatest(types.FETCH_COLLECTIONS, fetchProgramsList);
 }
 
 export const sagas = [
-  watchFetchList,
-  watchSetTab
+  watchFetchList
 ];

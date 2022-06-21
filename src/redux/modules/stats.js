@@ -81,8 +81,6 @@ const onSSRPrepare = draft => {
 };
 
 export const reducer = handleActions({
-  [ssr.PREPARE]: onSSRPrepare,
-
   [FETCH_CU_STATS]: onCURequest,
   [FETCH_CU_STATS_SUCCESS]: onCUSuccess,
   [FETCH_CU_STATS_FAILURE]: onCUFailure,

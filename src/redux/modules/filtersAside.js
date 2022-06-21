@@ -1,21 +1,29 @@
 import { createAction } from 'redux-actions';
+import {
+  FN_COLLECTION_MULTI,
+  FN_CONTENT_TYPE,
+  FN_LANGUAGES,
+  FN_SOURCES_MULTI,
+  FN_TOPICS_MULTI
+} from '../../helpers/consts';
 
 import { handleActions } from './settings';
-import { FN_CONTENT_TYPE, FN_LANGUAGES, FN_SOURCES_MULTI, FN_TOPICS_MULTI } from '../../helpers/consts';
 
 const fieldNameByFilter = {
   [FN_SOURCES_MULTI]: 'sources',
   [FN_TOPICS_MULTI]: 'tags',
   [FN_CONTENT_TYPE]: 'content_types',
   [FN_LANGUAGES]: 'languages',
+  [FN_COLLECTION_MULTI]: 'collections',
 };
 
-const FILTER_NAMES = [FN_TOPICS_MULTI, FN_SOURCES_MULTI, FN_CONTENT_TYPE, FN_LANGUAGES];
+const FILTER_NAMES = [FN_TOPICS_MULTI, FN_SOURCES_MULTI, FN_CONTENT_TYPE, FN_LANGUAGES, FN_COLLECTION_MULTI];
 /* Types */
 
-const FETCH_STATS         = 'Filters_aside/FETCH_STATS';
-const FETCH_STATS_FAILURE = 'Filters_aside/FETCH_STATS_FAILURE';
-const FETCH_STATS_SUCCESS = 'Filters_aside/FETCH_STATS_SUCCESS';
+const FETCH_STATS            = 'Filters_aside/FETCH_STATS';
+const FETCH_STATS_FAILURE    = 'Filters_aside/FETCH_STATS_FAILURE';
+const FETCH_STATS_SUCCESS    = 'Filters_aside/FETCH_STATS_SUCCESS';
+const RECEIVE_LANGUAGE_STATS = 'Filters_aside/RECEIVE_LANGUAGE_STATS';
 
 export const types = {
   FETCH_STATS,
@@ -25,17 +33,19 @@ export const types = {
 
 /* Actions */
 
-const fetchStats        = createAction(FETCH_STATS, (namespace, params, isPrepare) => ({
+const fetchStats           = createAction(FETCH_STATS, (namespace, params, options = {}) => ({
   namespace,
   params,
-  isPrepare
+  options
 }));
-const fetchStatsSuccess = createAction(FETCH_STATS_SUCCESS);
-const fetchStatsFailure = createAction(FETCH_STATS_FAILURE);
+const fetchStatsSuccess    = createAction(FETCH_STATS_SUCCESS);
+const receiveLanguageStats = createAction(RECEIVE_LANGUAGE_STATS);
+const fetchStatsFailure    = createAction(FETCH_STATS_FAILURE);
 
 export const actions = {
   fetchStats,
   fetchStatsSuccess,
+  receiveLanguageStats,
   fetchStatsFailure,
 };
 
@@ -82,6 +92,26 @@ const onFetchStatsSuccess = (draft, { dataCU, dataC, dataL, namespace, isPrepare
   return draft;
 };
 
+const onReceiveLanguageStats = (draft, { dataCU, dataC, dataL, namespace, isPrepare }) => {
+  const langStats = draft[namespace]?.[FN_LANGUAGES] || {};
+
+  if (isPrepare) {
+    [...Object.keys({ ...dataCU, ...dataC, ...dataL })]
+      .filter(id => !!id)
+      .forEach(id => {
+        langStats.byId[id] = (dataCU[id] || 0) + (dataC[id] || 0) + (dataL[id] || 0);
+        langStats.tree.push(id);
+      });
+  } else {
+    langStats.tree.forEach(id => {
+      langStats.byId[id] = (dataCU[id] || 0) + (dataC[id] || 0) + (dataL[id] || 0);
+    });
+  }
+
+  draft[namespace] = { ...draft[namespace], [FN_LANGUAGES]: langStats };
+  return draft;
+};
+
 const onFetchStatsFailure = (draft, ns, err) => {
   draft[ns].wip = false;
   draft[ns].err = err;
@@ -91,6 +121,7 @@ const onFetchStatsFailure = (draft, ns, err) => {
 export const reducer = handleActions({
   [FETCH_STATS]: onFetchStats,
   [FETCH_STATS_SUCCESS]: onFetchStatsSuccess,
+  [RECEIVE_LANGUAGE_STATS]: onReceiveLanguageStats,
   [FETCH_STATS_FAILURE]: onFetchStatsFailure,
 
 }, initialState);

@@ -641,16 +641,17 @@ export const reducer = handleActions({
 
 /* Selectors */
 
-const getCollectionById  = (state, id) => state.cById[id];
-const getUnitById        = (state, id) => state.cuById[id];
-const getLastLessonId    = state => state.lastLessonId;
-const getWip             = state => state.wip;
-const getFullUnitFetched = state => state.fetched.units;
-const getErrors          = state => state.errors;
-const getCollections     = state => state.items;
-const getWindow          = state => state.cWindow;
-const getDatepickerCO    = state => state.datepickerCO;
-const getSQDataWipErr    = state => !(getWip(state).sqData || getErrors(state).sqData);
+const getCollectionById       = (state, id) => state.cById[id];
+const nestedGetCollectionById = state => id => getCollectionById(state, id);
+const getUnitById             = (state, id) => state.cuById[id];
+const getLastLessonId         = state => state.lastLessonId;
+const getWip                  = state => state.wip;
+const getFullUnitFetched      = state => state.fetched.units;
+const getErrors               = state => state.errors;
+const getCollections          = state => state.items;
+const getWindow               = state => state.cWindow;
+const getDatepickerCO         = state => state.datepickerCO;
+const getSQDataWipErr         = state => !(getWip(state).sqData || getErrors(state).sqData);
 
 const getDenormCollection = (state, id) => {
   let c = state.cById[id];
@@ -727,6 +728,7 @@ const getLabelsByCU = (state, id) => state.labelsByCU[id];
 
 export const selectors = {
   getCollectionById,
+  nestedGetCollectionById,
   getUnitById,
   getWip,
   getFullUnitFetched,

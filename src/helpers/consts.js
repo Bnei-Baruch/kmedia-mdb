@@ -546,6 +546,8 @@ export const SEARCH_INTENT_HIT_TYPE_LESSONS          = 'lessons';
 export const SEARCH_INTENT_HIT_TYPE_SERIES_BY_TAG    = 'lessons_series_by_tag';
 export const SEARCH_INTENT_HIT_TYPE_SERIES_BY_SOURCE = 'lessons_series_by_source';
 
+export const SEARCH_RESULT_TYPES_TEXT = ['posts', 'sources', 'units'];
+
 export const SEARCH_INTENT_HIT_TYPES = [SEARCH_INTENT_HIT_TYPE_PROGRAMS, SEARCH_INTENT_HIT_TYPE_LESSONS];
 
 export const SEARCH_INTENT_NAMES = {
@@ -641,5 +643,9 @@ export const FN_LANGUAGES    = 'language-filter';
 export const FN_CONTENT_TYPE = 'content-type-filter';
 export const FN_DATE_FILTER  = 'date-filter';
 
-export const FN_SOURCES_MULTI = 'sources-filter-multi';
-export const FN_TOPICS_MULTI  = 'topics-filter-multi';
+export const FN_SOURCES_MULTI    = 'sources-filter-multi';
+export const FN_TOPICS_MULTI     = 'topics-filter-multi';
+export const FN_COLLECTION_MULTI = 'collections-filter-multi';
+
+export const PAGE_NS_TOPICS   = 'topic';
+export const PAGE_NS_PROGRAMS = 'programs';

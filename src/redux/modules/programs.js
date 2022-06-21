@@ -6,20 +6,20 @@ import { handleActions, types as settings } from './settings';
 import { types as ssr } from './ssr';
 
 /* Types */
-const SET_TAB             = 'Programs/SET_TAB';
 const RECEIVE_COLLECTIONS = 'Programs/RECEIVE_COLLECTIONS';
+const FETCH_COLLECTIONS   = 'Programs/FETCH_COLLECTIONS';
 
 export const types = {
-  SET_TAB,
   RECEIVE_COLLECTIONS,
+  FETCH_COLLECTIONS,
 };
 
 /* Actions */
-const setTab             = createAction(SET_TAB);
+const fetchCollections   = createAction(FETCH_COLLECTIONS);
 const receiveCollections = createAction(RECEIVE_COLLECTIONS);
 
 export const actions = {
-  setTab,
+  fetchCollections,
   receiveCollections,
 };
 

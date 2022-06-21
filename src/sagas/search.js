@@ -7,27 +7,27 @@ import { actions, selectors, types } from '../redux/modules/search';
 import { selectors as settings } from '../redux/modules/settings';
 import { actions as mdbActions } from '../redux/modules/mdb';
 import { actions as postsActions } from '../redux/modules/publications';
-import { selectors as filterSelectors, actions as filterActions } from '../redux/modules/filters';
+import { actions as filterActions, selectors as filterSelectors } from '../redux/modules/filters';
 import { filtersTransformer } from '../filters';
 
 // import { BLOGS } from '../helpers/consts';
 
 function* autocomplete(action) {
   try {
-    const language = yield select(state => settings.getLanguage(state.settings));
+    const language       = yield select(state => settings.getLanguage(state.settings));
     const autocompleteId = GenerateSearchId();
-    const request = { q: action.payload, language, autocompleteId };
-    const { data } = yield call(Api.autocomplete, request);
-    data.autocompleteId = autocompleteId;
+    const request        = { q: action.payload, language, autocompleteId };
+    const { data }       = yield call(Api.autocomplete, request);
+    data.autocompleteId  = autocompleteId;
     yield put(actions.autocompleteSuccess({ suggestions: data, request }));
   } catch (err) {
     yield put(actions.autocompleteFailure(err));
   }
 }
 
-function getIdsForFetch(hits, type) {
+function getIdsForFetch(hits, types) {
   return hits.reduce((acc, val) => {
-    if (val._source.result_type === type) {
+    if (types.includes(val._source.result_type)) {
       return acc.concat(val._source.mdb_uid);
     }
 
@@ -58,7 +58,7 @@ export function* search(action) {
     }
 
     const searchId = GenerateSearchId();
-    const request = {
+    const request  = {
       ...action.payload,
       q,
       sortBy,
@@ -76,9 +76,9 @@ export function* search(action) {
       // TODO edo: optimize data fetching
       // Server should return associated items (collections, units, posts...) together with search results
       // hmm, relay..., hmm ?
-      const cIDsToFetch    = getIdsForFetch(data.search_result.hits.hits, 'collections');
-      const cuIDsToFetch   = getIdsForFetch(data.search_result.hits.hits, 'units');
-      const postIDsToFetch = getIdsForFetch(data.search_result.hits.hits, 'posts');
+      const cIDsToFetch    = getIdsForFetch(data.search_result.hits.hits, ['collections']);
+      const cuIDsToFetch   = getIdsForFetch(data.search_result.hits.hits, ['units', 'sources']);
+      const postIDsToFetch = getIdsForFetch(data.search_result.hits.hits, ['posts']);
 
       if (cuIDsToFetch.length === 0 && cIDsToFetch.length === 0 && postIDsToFetch.length === 0) {
         yield put(actions.searchSuccess({ searchResults: data, searchRequest: request }));

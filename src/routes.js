@@ -7,7 +7,7 @@ import {
   MY_NAMESPACE_HISTORY,
   MY_NAMESPACE_REACTIONS,
   MY_NAMESPACE_PLAYLISTS,
-  MY_NAMESPACE_BOOKMARKS
+  MY_NAMESPACE_BOOKMARKS, PAGE_NS_TOPICS, PAGE_NS_PROGRAMS
 } from './helpers/consts';
 import LanguageSetter from './components/Language/LanguageSetter';
 import Layout from './components/Layout/Layout';
@@ -16,7 +16,7 @@ import PlaylistItemPage from './components/Sections/Lessons/Unit/PlaylistItemPag
 import LessonCollection from './components/Sections/Lessons/Collection/MainPage';
 import LastLessonCollection from './components/Sections/Lessons/Collection/LastDaily';
 import Programs from './components/Sections/Programs/MainPage';
-import ProgramCollection from './components/Sections/Programs/Collection';
+import Program from './components/Sections/Program/ProgramPage';
 import Publications from './components/Sections/Publications/MainPage';
 import ArticlePage from './components/Sections/Publications/tabs/Articles/Unit';
 import ArticleCollection from './components/Sections/Publications/tabs/Articles/Collection';
@@ -79,11 +79,10 @@ const routes = [
   { path: ':routeType/:tab/cu/:id', component: PlaylistItemPage, options: { ssrData: ssrDataLoaders.cuPage } },
   { path: 'lessons/daily/latest', component: LastLessonCollection, options: { ssrData: ssrDataLoaders.latestLesson } },
   { path: 'programs', component: Programs, options: { ssrData: ssrDataLoaders.programsPage } },
-  { path: 'programs/:tab', component: Programs, options: { ssrData: ssrDataLoaders.programsPage } },
   {
     path: 'programs/c/:id',
-    component: ProgramCollection,
-    options: { ssrData: ssrDataLoaders.collectionPage('programs-collection') }
+    component: Program,
+    options: { ssrData: ssrDataLoaders.collectionPage(PAGE_NS_PROGRAMS) }
   },
   { path: 'events', component: Events, options: { ssrData: ssrDataLoaders.eventsPage } },
   { path: 'events/:tab', component: Events, options: { ssrData: ssrDataLoaders.eventsPage } },

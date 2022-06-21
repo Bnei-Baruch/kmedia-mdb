@@ -6,7 +6,7 @@ import { selectors as filtersAside } from '../../../redux/modules/filtersAside';
 import { FN_CONTENT_TYPE } from '../../../helpers/consts';
 import { withNamespaces } from 'react-i18next';
 
-const ContentTypeItem = ({ namespace, id, t }) => {
+const ContentTypeItem = ({ namespace, id, action, isSelChild = false, t }) => {
 
   const selected = useSelector(state => filters.getFilterByName(state.filters, namespace, FN_CONTENT_TYPE))?.values || [];
   const stat     = useSelector(state => filtersAside.getStats(state.filtersAside, namespace, FN_CONTENT_TYPE)(id));
@@ -31,8 +31,12 @@ const ContentTypeItem = ({ namespace, id, t }) => {
         label={t(`filters.content-types.${id}`)}
         checked={selected.includes(id)}
         onChange={handleSelect}
+        indeterminate={isSelChild}
         disabled={stat === 0}
       />
+      {
+        !!action && action
+      }
     </List.Item>
   );
 };

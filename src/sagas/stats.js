@@ -43,7 +43,7 @@ export function* callUnitsStats(args, namespace) {
 }
 
 function* watchFetchList() {
-  yield takeLatest([lists.FETCH_LIST, tags.FETCH_STATS], fetchCUStats);
+  yield takeLatest([tags.FETCH_STATS], fetchCUStats);
   yield takeEvery([stats.FETCH_CU_STATS], fetchCUStats);
 }
 

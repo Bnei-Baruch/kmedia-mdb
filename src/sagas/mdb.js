@@ -1,7 +1,7 @@
 import { call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
 
 import Api from '../helpers/Api';
-import { actions as mdb, actions as mdbActions, actions, types } from '../redux/modules/mdb';
+import { actions, selectors as mdbSelectors, types } from '../redux/modules/mdb';
 import { selectors as settings } from '../redux/modules/settings';
 import { actions as sources } from '../redux/modules/sources';
 import { actions as tags } from '../redux/modules/tags';
@@ -24,9 +24,9 @@ export function* fetchUnitsByIDs(action) {
   try {
     const language = yield select(state => settings.getLanguage(state.settings));
     const { data } = yield call(Api.units, { ...action.payload, language, page_size: id.length });
-    yield put(mdbActions.fetchUnitsByIDsSuccess(data.content_units));
+    yield put(actions.fetchUnitsByIDsSuccess(data.content_units));
   } catch (err) {
-    yield put(mdbActions.fetchUnitsByIDsSuccess({ id, err }));
+    yield put(actions.fetchUnitsByIDsSuccess({ id, err }));
   }
 }
 
@@ -35,9 +35,9 @@ export function* fetchCollectionsByIDs(action) {
   try {
     const language = yield select(state => settings.getLanguage(state.settings));
     const { data } = yield call(Api.collections, { ...action.payload, language, page_size: id.length });
-    yield put(mdbActions.receiveCollections(data.collections));
+    yield put(actions.receiveCollections(data.collections));
   } catch (err) {
-    yield put(mdbActions.fetchCollectionsByIDsFailure({ id, err }));
+    yield put(actions.fetchCollectionsByIDsFailure({ id, err }));
   }
 }
 
@@ -57,8 +57,7 @@ export function* fetchWindow(action) {
   try {
     const language = yield select(state => settings.getLanguage(state.settings));
     const args     = {
-      ...action.payload,
-      language,
+      ...action.payload, language,
     };
     const { data } = yield call(Api.lessons, args);
     yield put(actions.fetchWindowSuccess(id, data));
@@ -114,14 +113,13 @@ export function* countCU(action) {
 function* createLabel(action) {
   try {
     const token = yield select(state => authSelectors.getToken(state.auth));
-    if (!token)
-      new Error('token is required');
+    if (!token) new Error('token is required');
 
     const { data: { uid } } = yield call(Api.mdbCreateLabel, action.payload, token);
 
     const language             = yield select(state => settings.getLanguage(state.settings));
     const { data: { labels } } = yield call(Api.labels, { id: uid, language });
-    yield put(mdbActions.receiveLabels(labels));
+    yield put(actions.receiveLabels(labels));
   } catch (err) {
     console.log(err);
   }
@@ -132,10 +130,32 @@ export function* fetchLabels(action) {
     const language = yield select(state => settings.getLanguage(state.settings));
     const params   = { ...action.payload, language };
     const { data } = yield call(Api.labels, params);
-    yield put(mdb.receiveLabels(data.labels));
+    yield put(actions.receiveLabels(data.labels));
     yield put(actions.fetchLabelsSuccess(data));
   } catch (err) {
     console.error('fetchLabels errors', err);
+  }
+}
+
+export function* fetchMissingUnits(uids) {
+  const missingUnitIds = yield select(state => uids.filter(uid => !mdbSelectors.getUnitById(state.mdb, uid)));
+
+  if (missingUnitIds.length > 0) {
+    const language = yield select(state => settings.getLanguage(state.settings));
+    const { data } = yield call(Api.units, { id: missingUnitIds, language, pageSize: missingUnitIds.length });
+    yield put(actions.receiveContentUnits(data.content_units));
+  }
+}
+
+export function* fetchMissingCollections(uids) {
+  const missingCollectionIds = yield select(state => uids.filter(uid => !mdbSelectors.getCollectionById(state.mdb, uid)));
+
+  if (missingCollectionIds.length > 0) {
+    const language = yield select(state => settings.getLanguage(state.settings));
+    const { data } = yield call(Api.collections, {
+      id: missingCollectionIds, language, pageSize: missingCollectionIds.length
+    });
+    yield put(actions.receiveCollections(data.collections));
   }
 }
 
@@ -179,15 +199,4 @@ function* watchFetchLabels() {
   yield takeEvery(types.FETCH_LABELS, fetchLabels);
 }
 
-export const sagas = [
-  watchFetchUnit,
-  watchFetchUnitsByIDs,
-  watchFetchCollection,
-  watchFetchLatestLesson,
-  watchFetchSQData,
-  watchFetchWindow,
-  watchFetchDatepickerCO,
-  watchCountCU,
-  watchCreateLabel,
-  watchFetchLabels,
-];
+export const sagas = [watchFetchUnit, watchFetchUnitsByIDs, watchFetchCollection, watchFetchLatestLesson, watchFetchSQData, watchFetchWindow, watchFetchDatepickerCO, watchCountCU, watchCreateLabel, watchFetchLabels,];
