@@ -5,7 +5,7 @@ import { selectors } from '../../../redux/modules/filtersAside';
 import FilterHeader from '../FilterHeader';
 import MediaTypeItem from './MediaTypeItem';
 
-const MT_FOR_SHOW = ['image', 'text'];
+const MT_FOR_SHOW = ['image', 'video', 'text', 'image'];
 const MediaType   = ({ namespace }) => {
   const items = useSelector(state => selectors.getTree(state.filtersAside, namespace, FN_MEDIA_TYPE));
 

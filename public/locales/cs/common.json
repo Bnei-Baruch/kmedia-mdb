@@ -104,7 +104,14 @@
       "topics-filter-multi": "Topics",
       "content-type-filter": "Section",
       "language-filter": "Language",
-      "date-filter": "Date"
+      "date-filter": "Date",
+      "media-type-filter": "Media"
+    },
+    "media-types": {
+      "audio" : "Audio",
+      "video" : "Video",
+      "text" : "Transcription",
+      "image" : "Sketch"
     },
     "content-types": {
       "CONGRESS": "Congresy",

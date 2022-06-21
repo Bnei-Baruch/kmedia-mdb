@@ -108,7 +108,14 @@
       "topics-filter-multi": "נושאים",
       "content-type-filter": "מדור",
       "language-filter": "שפה",
-      "date-filter": "תאריך"
+      "date-filter": "תאריך",
+      "media-type-filter": "מדיה"
+    },
+    "media-types": {
+      "audio" : "אודיו",
+      "video" : "וידאו",
+      "text" : "תמליל",
+      "image" : "שרטוט"
     },
     "content-types": {
       "CONGRESS": "כנסים",

@@ -108,7 +108,14 @@
       "topics-filter-multi": "Temas",
       "content-type-filter": "Sección",
       "language-filter": "Idioma",
-      "date-filter": "Fecha"
+      "date-filter": "Fecha",
+      "media-type-filter": "Medios"
+    },
+    "media-types": {
+      "audio" : "Audio",
+      "video" : "Video",
+      "text" : "Transcripción",
+      "image" : "Dibujo"
     },
     "content-types": {
       "CONGRESS": "Congresos",
