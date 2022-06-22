@@ -38,32 +38,32 @@ const CountryItem = ({ namespace, id, t }) => {
   const toggleOpen = () => setOpen(!open);
 
   return (<>
-      <List.Item key={title} disabled={stat === 0}>
-        <List.Content className="tree_item_content">
-          <Checkbox
-            checked={selected.includes(id)}
-            onChange={handleSelect}
-            disabled={stat === 0}
-            indeterminate={!selected.includes(id) && selected.some(x => cities.includes(x))}
-          />
-          <span
-            className="tree_item_title">
+    <List.Item key={title} disabled={stat === 0}>
+      <List.Content className="tree_item_content">
+        <Checkbox
+          checked={selected.includes(id)}
+          onChange={handleSelect}
+          disabled={stat === 0}
+          indeterminate={!selected.includes(id) && selected.some(x => cities.includes(x))}
+        />
+        <span
+          className="tree_item_title">
           {title}
         </span>
-          <Button
-            basic
-            color="blue"
-            className="clear_button no-shadow"
-            icon={`caret ${isLanguageRtl(language) ? 'left' : 'right'}`}
-            onClick={toggleOpen}
-            size="medium"
-            disabled={stat === 0}
-          />
-          <span className="stat">{`(${stat})`}</span>
-        </List.Content>
-      </List.Item>
-      <CitiesModal namespace={namespace} open={open} county={id} onClose={() => setOpen(false)} />
-    </>
+        <Button
+          basic
+          color="blue"
+          className="clear_button no-shadow"
+          icon={`caret ${isLanguageRtl(language) ? 'left' : 'right'}`}
+          onClick={toggleOpen}
+          size="medium"
+          disabled={stat === 0}
+        />
+        <span className="stat">{`(${stat})`}</span>
+      </List.Content>
+    </List.Item>
+    <CitiesModal namespace={namespace} open={open} county={id} onClose={() => setOpen(false)} />
+  </>
   );
 };
 

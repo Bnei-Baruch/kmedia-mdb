@@ -36,29 +36,29 @@ const FilterLabels = ({ namespace, t }) => {
 
   const titleByFilterType = (fn, val) => {
     switch (fn) {
-    case FN_SOURCES_MULTI:
-      return getSourceById(val)?.name;
-    case FN_TOPICS:
-    case FN_TOPICS_MULTI:
-      return getTagById(val)?.label;
-    case FN_CONTENT_TYPE:
-      return t(`filters.content-types.${val}`);
-    case FN_DATE_FILTER:
-      return dateFilter.valueToTagLabel(val);
-    case FN_LANGUAGES:
-      return LANGUAGES[val]?.name;
-    case FN_PERSON:
-      return getPersonById(val).name;
-    case FN_COLLECTION_MULTI:
-      return getCById(val).name;
-    case FN_MEDIA_TYPE:
-      return t(`filters.media-types.${val}`);
-    case FN_ORIGINAL_LANGUAGES:
-      return `${t('filters.original-languages')}: ${LANGUAGES[val]?.name}`;
-    case FN_LOCATIONS:
-      return getTitle(val, t);
-    default:
-      return null;
+      case FN_SOURCES_MULTI:
+        return getSourceById(val)?.name;
+      case FN_TOPICS:
+      case FN_TOPICS_MULTI:
+        return getTagById(val)?.label;
+      case FN_CONTENT_TYPE:
+        return t(`filters.content-types.${val}`);
+      case FN_DATE_FILTER:
+        return dateFilter.valueToTagLabel(val);
+      case FN_LANGUAGES:
+        return LANGUAGES[val]?.name;
+      case FN_PERSON:
+        return getPersonById(val).name;
+      case FN_COLLECTION_MULTI:
+        return getCById(val).name;
+      case FN_MEDIA_TYPE:
+        return t(`filters.media-types.${val}`);
+      case FN_ORIGINAL_LANGUAGES:
+        return `${t('filters.original-languages')}: ${LANGUAGES[val]?.name}`;
+      case FN_LOCATIONS:
+        return getTitle(val, t);
+      default:
+        return null;
     }
 
   };
