@@ -111,7 +111,7 @@
       "date-filter": "תאריך",
       "media-type-filter": "מדיה",
       "person-filter": "מחבר",
-      "original-language-filter": "original-language-filter",
+      "original-language-filter": "שפת מקור",
       "locations-filter": "מיקום"
     },
     "media-types": {

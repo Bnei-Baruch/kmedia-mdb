@@ -111,7 +111,7 @@
       "date-filter": "Date",
       "media-type-filter": "Media",
       "person-filter": "Author",
-      "original-language-filter": "original-language-filter",
+      "original-language-filter": "Original Language",
       "locations-filter": "Location"
     },
     "media-types": {
