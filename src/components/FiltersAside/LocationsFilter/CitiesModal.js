@@ -9,8 +9,8 @@ import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import { isEmpty } from '../../../helpers/utils';
 import { selectors } from '../../../redux/modules/filtersAside';
 import { selectors as settings } from '../../../redux/modules/settings';
+import CityItem from './CityItem';
 import { getTitle } from './helper';
-import TagSourceItem from './TagSourceItem';
 
 const ITEMS_PER_ROW = 3;
 const buildRowArr   = n => {
@@ -21,7 +21,7 @@ const buildRowArr   = n => {
 
 const CitiesModal = ({ county, namespace, open, onClose, t }) => {
 
-  const items = useSelector(state => selectors.cityByCountry(state.filtersAside, namespace, FN_LOCATIONS)(county));
+  const items = useSelector(state => selectors.citiesByCountry(state.filtersAside, namespace, FN_LOCATIONS)(county));
 
   const language = useSelector(state => settings.getLanguage(state.settings));
   const dir      = getLanguageDirection(language);
@@ -38,11 +38,8 @@ const CitiesModal = ({ county, namespace, open, onClose, t }) => {
     if (!item) return <Table.Cell key={i} />;
 
     return (
-      <Table.Cell
-        className={clsx('tree_item_modal_content', { 'item single_item': !(item.children.length > 0) })}
-        key={i}
-      >
-        {/*<TagSourceItem {...props} id={item.id} deep={-1} />*/}
+      <Table.Cell className="tree_item_modal_content" key={i}>
+        <CityItem namespace={namespace} id={item} county={county} />
       </Table.Cell>
     );
   };

@@ -8,17 +8,24 @@ import { actions, selectors as filters } from '../../../redux/modules/filters';
 import { selectors as filtersAside } from '../../../redux/modules/filtersAside';
 import { getTitle } from './helper';
 
-const CountryItem = ({ namespace, id, t }) => {
+const CityItem = ({ namespace, id, county, t }) => {
   const selectedFilters = useSelector(state => filters.getFilterByName(state.filters, namespace, FN_LOCATIONS));
   const selected        = useMemo(() => selectedFilters?.values || [], [selectedFilters]);
   const stat            = useSelector(state => filtersAside.getStats(state.filtersAside, namespace, FN_LOCATIONS)(id));
-
-  const dispatch = useDispatch();
+  const dispatch        = useDispatch();
+  const cities          = useSelector(state => filtersAside.citiesByCountry(state.filtersAside, namespace)(county));
 
   const handleSelect = (e, { checked }) => {
-    const val = [...selected].filter(x => x !== id);
-    if (checked) {
+    let val                = [...selected].filter(x => x !== id && x !== county);
+    const selCountryCities = val.filter(x => cities.includes(x));
+
+    if (checked && selCountryCities.length + 1 < cities.length) {
       val.push(id);
+    } else if (checked) {
+      val = val.filter(x => cities.includes(x));
+      val.push(county);
+    } else if (selected.includes(county)) {
+      val = [...val, ...cities.filter(x => x !== id)];
     }
 
     dispatch(actions.setFilterValueMulti(namespace, FN_LOCATIONS, val));
@@ -28,7 +35,7 @@ const CountryItem = ({ namespace, id, t }) => {
     <List.Item key={getTitle(id, t)} disabled={stat === 0}>
       <List.Content className="tree_item_content">
         <Checkbox
-          checked={selected.find(x => x.cities.includes(id))}
+          checked={!!selected.find(x => x === id || x === county)}
           onChange={handleSelect}
           disabled={stat === 0}
         />
@@ -41,4 +48,4 @@ const CountryItem = ({ namespace, id, t }) => {
   );
 };
 
-export default withNamespaces()(CountryItem);
+export default withNamespaces()(CityItem);

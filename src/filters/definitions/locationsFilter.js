@@ -1,10 +1,12 @@
+import { FN_LOCATIONS } from '../../helpers/consts';
 import { createFilterDefinition } from './util';
 
 const locationsFilter = {
-  name: 'locations-filter',
+  name: FN_LOCATIONS,
   queryKey: 'location',
-  valueToQuery: value => value.join('|'),
-  queryToValue: queryValue => queryValue.split('|'),
+  valueToApiParam: value => ({
+    location: [value]
+  }),
   valueToTagLabel: (value, props, store, t) => {
     if (!value || !Array.isArray(value)) {
       return '';

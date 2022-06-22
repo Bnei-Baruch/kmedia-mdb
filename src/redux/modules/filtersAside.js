@@ -143,6 +143,7 @@ const onReceiveLocationsStats = (draft, { locations, namespace, isPrepare }) => 
           stats.citiesByCountry[country] = [];
           stats.tree.push(country);
         }
+
         stats.citiesByCountry[country].push(city);
       });
   } else {
@@ -157,6 +158,7 @@ const onReceiveLocationsStats = (draft, { locations, namespace, isPrepare }) => 
     const c       = stats.citiesByCountry[k].reduce((acc, v) => acc + stats.byId[v], 0);
     stats.byId[k] = c;
   }
+
   console.log('222', stats.byId['Israel']);
   draft[namespace] = { ...draft[namespace], [FN_LOCATIONS]: stats };
   return draft;
@@ -178,16 +180,16 @@ export const reducer = handleActions({
 }, initialState);
 
 /* Selectors */
-const getStats      = (state, ns, fn) => id => state[ns]?.[fn]?.byId[id] || 0;
-const getTree       = (state, ns, fn) => state[ns]?.[fn]?.tree || [];
-const isReady       = (state, ns) => !!state[ns]?.isReady;
-const getWipErr     = (state, ns) => ({ wip: state[ns]?.wip || false, err: state[ns]?.err || null });
-const cityByCountry = (state, ns) => id => state[ns]?.[FN_LOCATIONS]?.citiesByCountry[id] || 0;
+const getStats        = (state, ns, fn) => id => state[ns]?.[fn]?.byId[id] || 0;
+const getTree         = (state, ns, fn) => state[ns]?.[fn]?.tree || [];
+const isReady         = (state, ns) => !!state[ns]?.isReady;
+const getWipErr       = (state, ns) => ({ wip: state[ns]?.wip || false, err: state[ns]?.err || null });
+const citiesByCountry = (state, ns) => id => state[ns]?.[FN_LOCATIONS]?.citiesByCountry[id] || [];
 
 export const selectors = {
   getStats,
   getTree,
   isReady,
   getWipErr,
-  cityByCountry,
+  citiesByCountry,
 };

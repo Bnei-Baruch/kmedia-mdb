@@ -9,6 +9,7 @@ import {
   FN_CONTENT_TYPE,
   FN_DATE_FILTER,
   FN_LANGUAGES,
+  FN_LOCATIONS,
   FN_MEDIA_TYPE,
   FN_ORIGINAL_LANGUAGES,
   FN_PERSON,
@@ -21,6 +22,7 @@ import { actions, selectors as filters } from '../../redux/modules/filters';
 import { selectors as mdbSelectors } from '../../redux/modules/mdb';
 import { selectors as sources } from '../../redux/modules/sources';
 import { selectors as tags } from '../../redux/modules/tags';
+import { getTitle } from './LocationsFilter/helper';
 
 const FilterLabels = ({ namespace, t }) => {
 
@@ -34,27 +36,29 @@ const FilterLabels = ({ namespace, t }) => {
 
   const titleByFilterType = (fn, val) => {
     switch (fn) {
-      case FN_SOURCES_MULTI:
-        return getSourceById(val)?.name;
-      case FN_TOPICS:
-      case FN_TOPICS_MULTI:
-        return getTagById(val)?.label;
-      case FN_CONTENT_TYPE:
-        return t(`filters.content-types.${val}`);
-      case FN_DATE_FILTER:
-        return dateFilter.valueToTagLabel(val);
-      case FN_LANGUAGES:
-        return LANGUAGES[val]?.name;
-      case FN_PERSON:
-        return getPersonById(val).name;
-      case FN_COLLECTION_MULTI:
-        return getCById(val).name;
-      case FN_MEDIA_TYPE:
-        return t(`filters.media-types.${val}`);
-      case FN_ORIGINAL_LANGUAGES:
-        return `${t('filters.original-languages')}: ${LANGUAGES[val]?.name}`;
-      default:
-        return null;
+    case FN_SOURCES_MULTI:
+      return getSourceById(val)?.name;
+    case FN_TOPICS:
+    case FN_TOPICS_MULTI:
+      return getTagById(val)?.label;
+    case FN_CONTENT_TYPE:
+      return t(`filters.content-types.${val}`);
+    case FN_DATE_FILTER:
+      return dateFilter.valueToTagLabel(val);
+    case FN_LANGUAGES:
+      return LANGUAGES[val]?.name;
+    case FN_PERSON:
+      return getPersonById(val).name;
+    case FN_COLLECTION_MULTI:
+      return getCById(val).name;
+    case FN_MEDIA_TYPE:
+      return t(`filters.media-types.${val}`);
+    case FN_ORIGINAL_LANGUAGES:
+      return `${t('filters.original-languages')}: ${LANGUAGES[val]?.name}`;
+    case FN_LOCATIONS:
+      return getTitle(val, t);
+    default:
+      return null;
     }
 
   };

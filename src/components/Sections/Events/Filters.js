@@ -26,7 +26,7 @@ const Filters = ({ namespace, baseParams, t }) => {
   useEffect(() => {
     if (!isReady && !wip && !err) {
       dispatch(actions.fetchStats(namespace,
-        { ...baseParams, with_original_languages: true, with_countries: true, },
+        { ...baseParams, with_original_languages: true, with_locations: true, },
         { isPrepare: true, countC: true }));
     }
   }, [dispatch, isReady]);
@@ -34,7 +34,7 @@ const Filters = ({ namespace, baseParams, t }) => {
   useEffect(() => {
     if (isHydrated && isReady) {
       dispatch(actions.fetchStats(namespace,
-        { ...baseParams, with_original_languages: true, with_countries: true, },
+        { ...baseParams, with_original_languages: true, with_locations: true, },
         { isPrepare: false, countC: true }
       ));
     }

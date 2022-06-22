@@ -1,3 +1,1 @@
-export const getTitle = (key, t) => {
-  return t(`locations.${key.trim().toLowerCase().replace(/[\s_.]+/g, '-')}`, { defaultValue: key });
-};
+export const getTitle = (key, t) => t(`locations.${key.trim().toLowerCase().replace(/[\s_.]+/g, '-')}`, { defaultValue: key });
