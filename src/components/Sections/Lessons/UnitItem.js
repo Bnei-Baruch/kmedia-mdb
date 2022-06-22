@@ -27,7 +27,7 @@ const UnitItem = ({ id, t }) => {
   if (views > 0) description.push(t('pages.unit.info.views', { views }));
 
   const renderCCU = c => (
-    <Link to={canonicalLink(c)}>
+    <Link to={canonicalLink(c)} key={c}>
       {`${t(`constants.content-types.${c.content_type}`)}: ${c.name}`}
     </Link>
   );

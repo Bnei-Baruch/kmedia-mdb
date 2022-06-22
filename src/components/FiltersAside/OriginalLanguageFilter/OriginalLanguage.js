@@ -1,16 +1,26 @@
-import React from 'react';
+import React, { useMemo, useState } from 'react';
+import { withNamespaces } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { ALL_LANGUAGES, FN_ORIGINAL_LANGUAGES } from '../../../helpers/consts';
-import { isEmpty } from '../../../helpers/utils';
+import { Button } from 'semantic-ui-react';
+import { ALL_LANGUAGES, FN_ORIGINAL_LANGUAGES, POPULAR_LANGUAGES } from '../../../helpers/consts';
+import { selectors as filters } from '../../../redux/modules/filters';
 import { selectors } from '../../../redux/modules/filtersAside';
 import FilterHeader from '../FilterHeader';
 import OriginalLanguageItem from './OriginalLanguageItem';
 
-const OriginalLanguage = ({ namespace }) => {
-  const items = useSelector(state => selectors.getTree(state.filtersAside, namespace, FN_ORIGINAL_LANGUAGES));
+const OriginalLanguage = ({ namespace, t }) => {
+  const items           = useSelector(state => selectors
+    .getTree(state.filtersAside, namespace, FN_ORIGINAL_LANGUAGES)
+    .filter(id => ALL_LANGUAGES.includes(id))
+  );
+  const selectedFilters = useSelector(state => filters.getFilterByName(state.filters, namespace, FN_ORIGINAL_LANGUAGES));
+  const selected        = useMemo(() => selectedFilters?.values || [], [selectedFilters]);
 
-  if (isEmpty(items))
-    return null;
+  const [showAll, setShowAll] = useState(selected.filter(x => POPULAR_LANGUAGES.includes(x)).length > 0);
+
+  if (!(items?.length > 0)) return null;
+
+  const toggleShowAll = () => setShowAll(!showAll);
 
   return (
     <FilterHeader
@@ -18,14 +28,27 @@ const OriginalLanguage = ({ namespace }) => {
       children={
         <>
           {
-            items.filter(id => ALL_LANGUAGES.includes(id)).map(id =>
+            items.filter(id => POPULAR_LANGUAGES.includes(id)).map(id =>
               <OriginalLanguageItem namespace={namespace} id={id} key={id} />
             )
           }
+          {
+            showAll && items.filter(id => !POPULAR_LANGUAGES.includes(id)).map(id =>
+              <OriginalLanguageItem namespace={namespace} id={id} key={id} />
+            )
+          }
+          <Button
+            basic
+            icon={showAll ? 'minus' : 'plus'}
+            color="blue"
+            className="clear_button"
+            content={t(`topics.show-${showAll ? 'less' : 'more'}`)}
+            onClick={toggleShowAll}
+          />
         </>
       }
     />
   );
 };
 
-export default OriginalLanguage;
+export default withNamespaces()(OriginalLanguage);

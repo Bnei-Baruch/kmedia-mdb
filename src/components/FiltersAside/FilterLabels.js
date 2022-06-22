@@ -52,7 +52,7 @@ const FilterLabels = ({ namespace, t }) => {
       case FN_MEDIA_TYPE:
         return t(`filters.media-types.${val}`);
       case FN_ORIGINAL_LANGUAGES:
-        return `${t('filters.original-languages')}: ${LANGUAGES[val]?.name}`;
+        return `${t('filters.aside-filter.original-language-filter')}: ${LANGUAGES[val]?.name}`;
       default:
         return null;
     }
