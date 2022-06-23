@@ -16,7 +16,7 @@ const PlaylistWidget = ({ playlist, selected = 0, link }) => {
         return;
       }
 
-      element.scrollIntoView();
+      element.scrollIntoView(false)
       window.scrollTo(0, 0);
     }
 
