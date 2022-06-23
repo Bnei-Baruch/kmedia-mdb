@@ -12,7 +12,7 @@ const PersonItem = ({ namespace, id }) => {
   const selected        = useMemo(() => selectedFilters?.values || [], [selectedFilters]);
 
   const stat     = useSelector(state => filtersAside.getStats(state.filtersAside, namespace, FN_PERSON)(id));
-  const { name } = useSelector(state => mdb.getPersonById(state.mdb)(id));
+  const { name } = useSelector(state => mdb.getPersonById(state.mdb)(id)) || false;
 
   const dispatch     = useDispatch();
   const handleSelect = (e, { checked }) => {
