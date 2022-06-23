@@ -1,21 +1,22 @@
-import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import clsx from 'clsx';
 import PropTypes from 'prop-types';
+import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 
 import { DeviceInfoContext, SessionInfoContext } from '../../../helpers/app-contexts';
-import { getQuery } from '../../../helpers/url';
+import { LANG_ENGLISH, SCROLL_SEARCH_ID } from '../../../helpers/consts';
+import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import {
   buildSearchLinkFromSelection,
   DOM_ROOT_ID,
   OFFSET_TEXT_SEPARATOR,
   prepareScrollToSearch
 } from '../../../helpers/scrollToSearch/helper';
-import Toolbar from './Toolbar';
-import { SCROLL_SEARCH_ID } from '../../../helpers/consts';
-import { useDispatch, useSelector } from 'react-redux';
+import { getQuery } from '../../../helpers/url';
 import { actions, selectors as mdb } from '../../../redux/modules/mdb';
 import LabelMark from './LabelMark';
-import { getLanguageDirection } from '../../../helpers/i18n-utils';
+import Toolbar from './Toolbar';
 
 //its not mus be accurate number (average number letters per line)
 const LETTERS_ON_LINE = 20;
@@ -154,7 +155,7 @@ const ScrollToSearch = ({ source, label, data, language, urlParams = '', pathnam
       className="search-on-doc--container"
       ref={containerRef}
     >
-      <div className="source__content">
+      <div className={clsx('source__content', { 'eng_styles': language === LANG_ENGLISH })}>
         {renderShareBar()}
         <div className={`label_bar ${dir}`}>
           {
