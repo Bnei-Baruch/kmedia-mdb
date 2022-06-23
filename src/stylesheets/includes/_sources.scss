@@ -209,7 +209,7 @@
     }
 
     .label_icon.icon {
-      padding: 4px!important;
+      padding: 4px !important;
 
       svg {
         height: 19px;
@@ -269,6 +269,56 @@
     padding-bottom: 1rem;
     padding-top: 1rem;
     position: relative;
+  }
+
+}
+
+.eng_styles {
+  font-family: Times New Roman, serif;
+  font-size: 1em;
+
+  h1 {
+    font-size: 2em;
+    text-align: center;
+    font-weight: bold;
+    font-family: inherit;
+  }
+
+  h2 {
+    font-size: 1.6em;
+    text-align: center;
+    font-weight: bold;
+    font-family: inherit;
+  }
+
+  h3 {
+    font-size: 1.2em;
+    line-height: 1.6em;
+    text-align: justify-all;
+    margin: 2.5em 0;
+    font-family: inherit;
+  }
+
+  h4 {
+    font-size: 1em;
+    line-height: 1.4em;
+    text-align: justify-all;
+    font-family: inherit;
+  }
+
+  h5 {
+    font-size: 1em;
+    line-height: 1.4em;
+    text-align: center;
+    margin: 2.5em 0;
+    font-family: inherit;
+  }
+
+  h6 {
+    font-size: 1.3em;
+    line-height: 1.6em;
+    text-align: justify-all;
+    font-family: inherit;
   }
 }
 
