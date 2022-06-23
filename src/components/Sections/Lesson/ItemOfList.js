@@ -16,6 +16,9 @@ const ItemOfList = ({ id, ccu, t }) => {
   const views = useSelector(state => recommended.getViews(id, state.recommended));
   const cu    = useSelector(state => mdb.getDenormContentUnit(state.mdb, id));
 
+  if (!cu)
+    return null;
+
   const link = canonicalLink(cu);
 
   const description = [];
