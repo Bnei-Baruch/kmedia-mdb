@@ -35,7 +35,7 @@ const PlaylistMyContainer = ({ t, history, location, id }) => {
 
   useEffect(() => {
     (cuUIDs.length > 0) && dispatch(recommended.fetchViews(cuUIDs));
-  }, [cuUIDs.length, dispatch]);
+  }, [cuUIDs, dispatch]);
 
   useEffect(() => {
     if (user && cuUID && !playerHelper.getActivePartFromQuery(location)) {
