@@ -238,7 +238,7 @@ const isEqualLink = (link1, link2) =>
 
 const areEqual = (prevProps, nextProps) => (
   isEqual(prevProps.collection, nextProps.collection)
-  && (prevProps.cuId === nextProps.cuId)
+  && ((!prevProps.cuId && !nextProps.cuId) || prevProps.cuId === nextProps.cuId)
   && isEqualLink(prevProps.prevLink, nextProps.prevLink)
   && isEqualLink(prevProps.nextLink, nextProps.nextLink)
 );
