@@ -5,7 +5,7 @@ const originalLanguageFilter = {
   name: FN_ORIGINAL_LANGUAGES,
   queryKey: 'original-language',
   valueToApiParam: value => ({
-    original_languages: [value]
+    original_language: [value]
   }),
   valueToTagLabel: (value, props, store, t) => {
     if (!value) {

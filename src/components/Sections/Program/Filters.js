@@ -18,7 +18,6 @@ const Filters = ({ namespace, baseParams, t }) => {
   const [isHydrated, setIsHydrated] = useState(false);
 
   const isReady      = useSelector(state => selectors.isReady(state.filtersAside, namespace));
-  const { wip, err } = useSelector(state => selectors.getWipErr(state.filtersAside, namespace));
   const selected     = useSelector(state => filters.getFilters(state.filters, namespace), isEqual);
 
   const dispatch = useDispatch();

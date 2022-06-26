@@ -33,11 +33,12 @@ const ProgramPage = ({ t }) => {
   const pageSize                   = useSelector(state => settings.getPageSize(state.settings));
   const selected                   = useSelector(state => filters.getFilters(state.filters, namespace), isEqual);
 
-  const dispatch = useDispatch();
-  const location = useLocation();
-  const prevSel  = usePrevious(selected);
-  const setPage  = useCallback(pageNo => dispatch(actions.setPage(namespace, pageNo)), [namespace, dispatch]);
-  const pageNo   = useMemo(() => getPageFromLocation(location) || 1, [location]);
+  const dispatch   = useDispatch();
+  const location   = useLocation();
+  const prevSel    = usePrevious(selected);
+  const setPage    = useCallback(pageNo => dispatch(actions.setPage(namespace, pageNo)), [namespace, dispatch]);
+  const pageNo     = useMemo(() => getPageFromLocation(location) || 1, [location]);
+  const baseParams = useMemo(() => ({ collection: [cid] }), [cid]);
 
   useEffect(() => {
     if (pageNo !== 1 && !!prevSel && prevSel !== selected) {
@@ -55,7 +56,7 @@ const ProgramPage = ({ t }) => {
       filters={
         <Filters
           namespace={namespace}
-          baseParams={{ collection: [cid] }}
+          baseParams={baseParams}
         />
       }
     >

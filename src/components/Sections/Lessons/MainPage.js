@@ -30,6 +30,7 @@ import UnitItem from './UnitItem';
 
 const CT_WITHOUT_FILTERS = [...(UNIT_LESSONS_TYPE.filter(ct => ct !== CT_LESSON_PART)), ...COLLECTION_LESSONS_TYPE];
 const CT_WITH_FILTERS    = [CT_LESSONS_SERIES, ...UNIT_LESSONS_TYPE];
+const FILTER_PARAMS      = { content_type: CT_WITH_FILTERS };
 
 const MainPage = () => {
   const { items, total } = useSelector(state => lists.getNamespaceState(state.lists, PAGE_NS_LESSONS)) || {};
@@ -64,7 +65,7 @@ const MainPage = () => {
       filters={
         <Filters
           namespace={PAGE_NS_LESSONS}
-          baseParams={{ content_type: CT_WITH_FILTERS }}
+          baseParams={FILTER_PARAMS}
         />
       }
     >
@@ -72,7 +73,7 @@ const MainPage = () => {
       <FilterLabels namespace={PAGE_NS_LESSONS} />
       {
         items?.map(({ id, content_type }, i) => {
-          switch (true) {
+            switch (true) {
             case COLLECTION_DAILY_LESSONS.includes(content_type):
               return <DailyLessonItem id={id} key={i} />;
             case COLLECTION_LESSONS_TYPE.includes(content_type):
@@ -81,8 +82,8 @@ const MainPage = () => {
               return <UnitItem id={id} key={i} />;
             default:
               return null;
+            }
           }
-        }
         )
       }
       <Divider fitted />

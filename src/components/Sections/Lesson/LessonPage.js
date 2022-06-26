@@ -36,8 +36,9 @@ const LessonPage = ({ t }) => {
   const dispatch = useDispatch();
   const setPage  = useCallback(pageNo => dispatch(actions.setPage(namespace, pageNo)), [dispatch]);
 
-  const location = useLocation();
-  const pageNo   = useMemo(() => getPageFromLocation(location) || 1, [location]);
+  const location   = useLocation();
+  const pageNo     = useMemo(() => getPageFromLocation(location) || 1, [location]);
+  const baseParams = useMemo(() => ({ collection: [cid] }), [cid]);
 
   useEffect(() => {
     if (pageNo !== 1 && !!prevSel && prevSel !== selected) {
@@ -56,7 +57,7 @@ const LessonPage = ({ t }) => {
       filters={
         <Filters
           namespace={namespace}
-          baseParams={{ collection: [cid] }}
+          baseParams={baseParams}
         />
       }
     >
