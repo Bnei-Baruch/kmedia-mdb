@@ -176,6 +176,8 @@ export const LANG_LATVIAN    = 'lv';
 export const LANG_SLOVAK     = 'sk';
 export const LANG_CZECH      = 'cs';
 export const LANG_AMHARIC    = 'am';
+export const LANG_INDONESIAN = 'id';
+export const LANG_ARMENIAN   = 'hy';
 export const LANG_UNKNOWN    = 'xx';
 
 export const LANGUAGES = {
@@ -190,7 +192,7 @@ export const LANGUAGES = {
   [LANG_PORTUGUESE]: { value: LANG_PORTUGUESE, locale: 'pt_PT', lang3: 'POR', name: 'Português' },
   [LANG_TURKISH]: { value: LANG_TURKISH, locale: 'tr_TR', lang3: 'TRK', name: 'Türkçe' },
   [LANG_POLISH]: { value: LANG_POLISH, locale: 'pl_PL', lang3: 'POL', name: 'Polski' },
-  [LANG_ARABIC]: { value: LANG_ARABIC, locale: 'ar_AR', lang3: 'ARB', name: 'اَلْعَرَبِيَّةُ' },
+  [LANG_ARABIC]: { value: LANG_ARABIC, locale: 'ar_AR', lang3: 'ARA', name: 'اَلْعَرَبِيَّةُ' },
   [LANG_HUNGARIAN]: { value: LANG_HUNGARIAN, locale: 'hu_HU', lang3: 'HUN', name: 'Magyar' },
   [LANG_FINNISH]: { value: LANG_FINNISH, locale: 'fi_FI', lang3: 'FIN', name: 'Suo̯mi' },
   [LANG_LITHUANIAN]: { value: LANG_LITHUANIAN, locale: 'lt_LT', lang3: 'LIT', name: 'Lietuvių' },
@@ -212,6 +214,8 @@ export const LANGUAGES = {
   [LANG_SLOVAK]: { value: LANG_SLOVAK, locale: 'sk_SK', lang3: 'SLK', name: 'slovenčina' },
   [LANG_CZECH]: { value: LANG_CZECH, locale: 'cs_CZ', lang3: 'CZE', name: 'Čeština' },
   [LANG_AMHARIC]: { value: LANG_AMHARIC, locale: 'am_ET', lang3: 'AMH', name: 'ኣማርኛ' },
+  [LANG_INDONESIAN]: { value: LANG_INDONESIAN, locale: 'in_ID', lang3: 'IND', name: 'Bahasa Indonesia' },
+  [LANG_ARMENIAN]: { value: LANG_ARMENIAN, locale: 'hy_AM', lang3: 'ARM', name: 'Հայերէն' },
 };
 
 export const ALL_LANGUAGES = [
@@ -247,6 +251,8 @@ export const ALL_LANGUAGES = [
   LANG_SLOVAK,
   LANG_CZECH,
   LANG_AMHARIC,
+  LANG_INDONESIAN,
+  LANG_ARMENIAN,
 ];
 
 export const POPULAR_LANGUAGES = [
