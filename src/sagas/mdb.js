@@ -1,12 +1,13 @@
 import { call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
 
 import Api from '../helpers/Api';
+import { CT_DAILY_LESSON, CT_SPECIAL_LESSON } from '../helpers/consts';
+import { selectors as authSelectors } from '../redux/modules/auth';
 import { actions, selectors as mdbSelectors, types } from '../redux/modules/mdb';
+import { actions as publications } from '../redux/modules/publications';
 import { selectors as settings } from '../redux/modules/settings';
 import { actions as sources } from '../redux/modules/sources';
 import { actions as tags } from '../redux/modules/tags';
-import { actions as publications } from '../redux/modules/publications';
-import { selectors as authSelectors } from '../redux/modules/auth';
 
 export function* fetchUnit(action) {
   const id = action.payload;
@@ -53,13 +54,17 @@ export function* fetchCollection(action) {
 }
 
 export function* fetchWindow(action) {
-  const { id } = action.payload;
+  const { id, ...payload } = action.payload;
   try {
     const language = yield select(state => settings.getLanguage(state.settings));
     const args     = {
-      ...action.payload, language,
+      ...payload,
+      language,
+      content_type: [CT_DAILY_LESSON, CT_SPECIAL_LESSON],
+      with_units: true
     };
-    const { data } = yield call(Api.lessons, args);
+
+    const { data } = yield call(Api.collections, args);
     yield put(actions.fetchWindowSuccess(id, data));
   } catch (err) {
     yield put(actions.fetchWindowFailure(id, err));
@@ -69,8 +74,13 @@ export function* fetchWindow(action) {
 export function* fetchDatepickerCO(action) {
   try {
     const language = yield select(state => settings.getLanguage(state.settings));
-    const args     = { ...action.payload, language };
-    const { data } = yield call(Api.lessons, args);
+    const args     = {
+      ...action.payload,
+      language,
+      content_type: [CT_DAILY_LESSON, CT_SPECIAL_LESSON],
+      with_units: true
+    };
+    const { data } = yield call(Api.collections, args);
     yield put(actions.fetchDatepickerCOSuccess(data));
   } catch (err) {
     yield put(actions.fetchDatepickerCOFailure(err));
