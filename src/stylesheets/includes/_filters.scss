@@ -437,6 +437,12 @@
   }
 }
 
+.filter_aside_labels, .pagination-results {
+  @include mobile {
+    padding: 0 1em;
+  }
+}
+
 .filters-aside-ct {
   font-weight: bold;
 

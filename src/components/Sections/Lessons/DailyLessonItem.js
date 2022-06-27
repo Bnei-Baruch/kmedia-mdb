@@ -26,7 +26,7 @@ const DailyLessonItem = ({ id, t }) => {
           {(number && number < 5) ? `(${t(`lessons.list.nameByNum_${number}`)})` : ''}
         </small>
       </Header>
-      <div className="separate_with_line">
+      <div className="additional_links">
         {content_units.map(cu => <Link to={canonicalLink(cu)} span key={cu.id}>{cu.name}</Link>)}
       </div>
     </div>

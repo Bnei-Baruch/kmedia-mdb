@@ -41,7 +41,7 @@ const UnitItem = ({ id, t }) => {
         <TooltipIfNeed text={cu.name} Component={Header} as={Link} to={link} content={cu.name} />
         {
           !isEmpty(additionCCUs) && (
-            <div className="separate_with_line">
+            <div className="additional_links">
               {additionCCUs.map(renderCCU)}
             </div>
           )
