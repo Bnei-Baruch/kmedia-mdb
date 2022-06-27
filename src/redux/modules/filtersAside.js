@@ -27,7 +27,6 @@ const FILTER_NAMES = [
   FN_TOPICS_MULTI,
   FN_SOURCES_MULTI,
   FN_CONTENT_TYPE,
-  FN_LANGUAGES,
   FN_COLLECTION_MULTI,
   FN_PERSON,
   FN_MEDIA_TYPE,
@@ -108,7 +107,7 @@ const onFetchStatsSuccess = (draft, { dataCU, dataC, dataL, namespace, isPrepare
 };
 
 const onReceiveSingleTypeStats = (draft, { dataCU = {}, dataC = {}, dataL = {}, namespace, isPrepare, fn }) => {
-  const statsByFN = draft[namespace]?.[fn] || {};
+  const statsByFN = draft[namespace]?.[fn] || { byId: {}, tree: [] };
 
   if (isPrepare) {
     [...Object.keys({ ...dataCU, ...dataC, ...dataL })]
