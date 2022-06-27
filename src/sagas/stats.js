@@ -1,10 +1,9 @@
 import { call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
 
 import Api from '../helpers/Api';
-import { CT_LESSON_PART } from '../helpers/consts';
+import { CT_LESSON_PART, PAGE_NS_LESSONS } from '../helpers/consts';
 import { isEmpty } from '../helpers/utils';
 import { actions, selectors, types as stats } from '../redux/modules/stats';
-import { types as lists } from '../redux/modules/lists';
 import { types as tags } from '../redux/modules/tags';
 
 function* fetchCUStats(action) {
@@ -16,14 +15,11 @@ function* fetchCUStats(action) {
   // fetch once
   const nsState = yield select(state => selectors.getCUStats(state.stats, namespace));
   if (!isEmpty(nsState) && !isEmpty(nsState.data)) {
-    // console.log('Allready in cache');
     return;
   }
 
-  // console.log('not in cache');
-
   const args = { ...action.payload };
-  if (namespace === 'lessons-daily') {
+  if (namespace === PAGE_NS_LESSONS) {
     args.content_type = [CT_LESSON_PART];
   }
 
@@ -43,7 +39,7 @@ export function* callUnitsStats(args, namespace) {
 }
 
 function* watchFetchList() {
-  yield takeLatest([lists.FETCH_LIST, tags.FETCH_STATS], fetchCUStats);
+  yield takeLatest([tags.FETCH_STATS], fetchCUStats);
   yield takeEvery([stats.FETCH_CU_STATS], fetchCUStats);
 }
 

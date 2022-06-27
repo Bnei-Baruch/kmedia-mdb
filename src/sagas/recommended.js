@@ -4,7 +4,6 @@ import Api from '../helpers/Api';
 import { IsCollectionContentType, IsUnitContentType } from '../helpers/consts';
 import { AB_RECOMMEND_NEW, AB_RECOMMEND_RANDOM } from '../helpers/ab-testing';
 import { actions, types, selectors as recommended } from '../redux/modules/recommended';
-import { actions as mdbActions, selectors as mdbSelectors } from '../redux/modules/mdb';
 import { selectors as settings } from '../redux/modules/settings';
 import { selectors as sourcesSelectors } from '../redux/modules/sources';
 import { getSourcesCollections } from '../helpers/utils';
@@ -13,6 +12,7 @@ import {
   CT_TAG,
   UNIT_LESSONS_TYPE,
 } from '../helpers/consts';
+import { fetchMissingCollections, fetchMissingUnits } from './mdb';
 
 const WATCHING_NOW_MIN = 50;
 const POPULAR_MIN      = 100;
@@ -29,7 +29,7 @@ export function* fetchRecommended(action) {
         skipUids.push(uid);
       }
     });
-    const getPathById = yield select(state => sourcesSelectors.getPathByID(state.sources));
+    const getPathById        = yield select(state => sourcesSelectors.getPathByID(state.sources));
     const sourcesCollections = yield select(state => getSourcesCollections(sources, getPathById));
 
     const specs = [];  // Order important due to skip uids.
@@ -47,7 +47,10 @@ export function* fetchRecommended(action) {
             'name': 'RoundRobinSuggester', 'specs': [
               {
                 'name': 'DataContentUnitsSuggester',
-                'filters': [{ 'filter_selector': 3 /* Sources */, 'args': [source] }, { 'filter_selector': 8 /* WatchingNowFilter */ }],
+                'filters': [{
+                  'filter_selector': 3 /* Sources */,
+                  'args': [source]
+                }, { 'filter_selector': 8 /* WatchingNowFilter */ }],
                 'order_selector': 5  // WatchingNow
               },
               {
@@ -72,7 +75,10 @@ export function* fetchRecommended(action) {
             'name': 'RoundRobinSuggester', 'specs': [
               {
                 'name': 'DataContentUnitsSuggester',
-                'filters': [{ 'filter_selector': 3 /* Sources */, 'args': sourcesCollection.children }, { 'filter_selector': 8 /* WatchingNowFilter */ }],
+                'filters': [{
+                  'filter_selector': 3 /* Sources */,
+                  'args': sourcesCollection.children
+                }, { 'filter_selector': 8 /* WatchingNowFilter */ }],
                 'order_selector': 5  // WatchingNow
               },
               {
@@ -95,7 +101,10 @@ export function* fetchRecommended(action) {
             'name': 'RoundRobinSuggester', 'specs': [
               {
                 'name': 'DataContentUnitsSuggester',
-                'filters': [{ 'filter_selector': 2 /* Tags */, 'args': [tag] }, { 'filter_selector': 8 /* WatchingNowFilter */ }],
+                'filters': [{
+                  'filter_selector': 2 /* Tags */,
+                  'args': [tag]
+                }, { 'filter_selector': 8 /* WatchingNowFilter */ }],
                 'order_selector': 5  // WatchingNow
               },
               {
@@ -117,7 +126,10 @@ export function* fetchRecommended(action) {
             'name': 'RoundRobinSuggester', 'specs': [
               {
                 'name': 'DataContentUnitsSuggester',
-                'filters': [{ 'filter_selector': 4 /* Collections */, 'args': [collection.id] }, { 'filter_selector': 8 /* WatchingNowFilter */ }],
+                'filters': [{
+                  'filter_selector': 4 /* Collections */,
+                  'args': [collection.id]
+                }, { 'filter_selector': 8 /* WatchingNowFilter */ }],
                 'order_selector': 5  // WatchingNow
               },
               {
@@ -171,10 +183,18 @@ export function* fetchRecommended(action) {
 
     if (Array.isArray(data.feeds) && data.feeds.length > 0) {
       const fetchList = [
-        fetchMissingUnits(data.feeds.flat().filter(item => item && IsUnitContentType(item.content_type))),
-        fetchMissingCollections(data.feeds.flat().filter(item => item && IsCollectionContentType(item.content_type))),
+        fetchMissingUnits(data.feeds
+          .flat()
+          .filter(item => item && IsUnitContentType(item.content_type))
+          .map(x => x.uid)
+        ),
+        fetchMissingCollections(data.feeds
+          .flat()
+          .filter(item => item && IsCollectionContentType(item.content_type))
+          .map(x => x.uid)
+        ),
       ];
-      const viewUids = new Set();
+      const viewUids  = new Set();
       for (let i = 0; i < data.feeds.length; ++i) {
         if (Array.isArray(data.feeds[i]) && data.feeds[i].length > 0) {
           data.feeds[i].forEach(f => viewUids.add(f.uid));
@@ -197,7 +217,7 @@ export function* fetchRecommended(action) {
       yield all(fetchList);
     }
 
-    const keysLength = Object.keys(data.feeds).length;
+    const keysLength     = Object.keys(data.feeds).length;
     const expectedLength = variant === AB_RECOMMEND_NEW ? specs.length + 1 : specs.length;
     if (keysLength !== expectedLength) {
       throw new Error(`Expected recommended feeds size to be ${expectedLength}`);
@@ -205,7 +225,7 @@ export function* fetchRecommended(action) {
 
     const feeds = variant === AB_RECOMMEND_RANDOM ? { 'random-units': data.feeds[0] } : { 'default': data.feeds[data.feeds.length - 1] };
     if (variant === AB_RECOMMEND_NEW) {
-      let index = 0;
+      let index                = 0;
       feeds['random-programs'] = data.feeds[index];
       index++;
       if (isLesson) {
@@ -256,7 +276,7 @@ export function* fetchViewsByUIDs(uids) {
   }
 }
 
-function* fetchWatchingNow(uids) {
+export function* fetchWatchingNow(uids) {
   uids = yield select(state => uids.filter(uid => recommended.getWatchingNow(uid, state.recommended) === -1));
   if (uids.length > 0) {
     const { data } = yield call(Api.watchingNow, uids);
@@ -268,29 +288,6 @@ function* fetchWatchingNow(uids) {
   }
 }
 
-function* fetchMissingUnits(recommendedItems) {
-  const missingUnitIds = yield select(state => recommendedItems
-    .filter(item => !mdbSelectors.getUnitById(state.mdb, item.uid))
-    .map(item => item.uid));
-
-  if (missingUnitIds.length > 0) {
-    const language = yield select(state => settings.getLanguage(state.settings));
-    const { data } = yield call(Api.units, { id: missingUnitIds, language });
-    yield put(mdbActions.receiveContentUnits(data.content_units));
-  }
-}
-
-function* fetchMissingCollections(recommendedItems) {
-  const missingCollectionIds = yield select(state => recommendedItems
-    .filter(item => !mdbSelectors.getCollectionById(state.mdb, item.uid))
-    .map(item => item.uid));
-
-  if (missingCollectionIds.length > 0) {
-    const language = yield select(state => settings.getLanguage(state.settings));
-    const { data } = yield call(Api.collections, { id: missingCollectionIds, language });
-    yield put(mdbActions.receiveCollections(data.collections));
-  }
-}
 
 function* watchFetchRecommended() {
   yield takeLatest(types.FETCH_RECOMMENDED, fetchRecommended);

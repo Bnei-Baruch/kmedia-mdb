@@ -1,6 +1,6 @@
-import { createFilterDefinition } from './util';
-import { selectors } from '../../redux/modules/tags';
 import { FN_TOPICS_MULTI } from '../../helpers/consts';
+import { selectors } from '../../redux/modules/tags';
+import { createFilterDefinition } from './util';
 
 const topicsFilterMulti = {
   name: FN_TOPICS_MULTI,

@@ -1,21 +1,18 @@
+import { useEffect } from 'react';
 import { withRouter } from 'react-router';
+import { getQuery } from '../../../helpers/url';
 
 import * as shapes from '../../shapes';
-import { useEffect } from 'react';
 
 const ScrollToTop = ({ location, children }) => {
-  // componentDidUpdate has a rather strict purpose
-  // see these links before putting more logic here
-  // https://reactjs.org/docs/react-component.html#componentdidupdate
-  // https://developmentarc.gitbooks.io/react-indepth/content/life_cycle/update/postrender_with_componentdidupdate.html
-
+  const { page, ...query } = getQuery(location);
   useEffect(
     () => {
-      if (window.pageYOffset && !location.search?.srchstart) {
+      if (window.pageYOffset) {
         window.scrollTo(0, 0);
       }
     },
-    [location.pathname]
+    [location.pathname, page]
   );
 
   return children;

@@ -1,21 +1,44 @@
 import { createAction } from 'redux-actions';
+import {
+  FN_COLLECTION_MULTI,
+  FN_CONTENT_TYPE,
+  FN_LANGUAGES,
+  FN_MEDIA_TYPE,
+  FN_ORIGINAL_LANGUAGES,
+  FN_PERSON,
+  FN_SOURCES_MULTI,
+  FN_TOPICS_MULTI
+} from '../../helpers/consts';
 
 import { handleActions } from './settings';
-import { FN_CONTENT_TYPE, FN_LANGUAGES, FN_SOURCES_MULTI, FN_TOPICS_MULTI } from '../../helpers/consts';
 
 const fieldNameByFilter = {
   [FN_SOURCES_MULTI]: 'sources',
   [FN_TOPICS_MULTI]: 'tags',
   [FN_CONTENT_TYPE]: 'content_types',
   [FN_LANGUAGES]: 'languages',
+  [FN_COLLECTION_MULTI]: 'collections',
+  [FN_PERSON]: 'persons',
+  [FN_MEDIA_TYPE]: 'media_types',
+  [FN_ORIGINAL_LANGUAGES]: 'original_languages',
 };
 
-const FILTER_NAMES = [FN_TOPICS_MULTI, FN_SOURCES_MULTI, FN_CONTENT_TYPE, FN_LANGUAGES];
+const FILTER_NAMES = [
+  FN_TOPICS_MULTI,
+  FN_SOURCES_MULTI,
+  FN_CONTENT_TYPE,
+  FN_LANGUAGES,
+  FN_COLLECTION_MULTI,
+  FN_PERSON,
+  FN_MEDIA_TYPE,
+  FN_ORIGINAL_LANGUAGES
+];
 /* Types */
 
-const FETCH_STATS         = 'Filters_aside/FETCH_STATS';
-const FETCH_STATS_FAILURE = 'Filters_aside/FETCH_STATS_FAILURE';
-const FETCH_STATS_SUCCESS = 'Filters_aside/FETCH_STATS_SUCCESS';
+const FETCH_STATS               = 'Filters_aside/FETCH_STATS';
+const FETCH_STATS_FAILURE       = 'Filters_aside/FETCH_STATS_FAILURE';
+const FETCH_STATS_SUCCESS       = 'Filters_aside/FETCH_STATS_SUCCESS';
+const RECEIVE_SINGLE_TYPE_STATS = 'Filters_aside/RECEIVE_SINGLE_TYPE_STATS';
 
 export const types = {
   FETCH_STATS,
@@ -25,17 +48,19 @@ export const types = {
 
 /* Actions */
 
-const fetchStats        = createAction(FETCH_STATS, (namespace, params, isPrepare) => ({
+const fetchStats             = createAction(FETCH_STATS, (namespace, params, options = {}) => ({
   namespace,
   params,
-  isPrepare
+  options
 }));
-const fetchStatsSuccess = createAction(FETCH_STATS_SUCCESS);
-const fetchStatsFailure = createAction(FETCH_STATS_FAILURE);
+const fetchStatsSuccess      = createAction(FETCH_STATS_SUCCESS);
+const receiveSingleTypeStats = createAction(RECEIVE_SINGLE_TYPE_STATS);
+const fetchStatsFailure      = createAction(FETCH_STATS_FAILURE);
 
 export const actions = {
   fetchStats,
   fetchStatsSuccess,
+  receiveSingleTypeStats,
   fetchStatsFailure,
 };
 
@@ -82,6 +107,26 @@ const onFetchStatsSuccess = (draft, { dataCU, dataC, dataL, namespace, isPrepare
   return draft;
 };
 
+const onReceiveSingleTypeStats = (draft, { dataCU = {}, dataC = {}, dataL = {}, namespace, isPrepare, fn }) => {
+  const statsByFN = draft[namespace]?.[fn] || {};
+
+  if (isPrepare) {
+    [...Object.keys({ ...dataCU, ...dataC, ...dataL })]
+      .filter(id => !!id)
+      .forEach(id => {
+        statsByFN.byId[id] = (dataCU[id] || 0) + (dataC[id] || 0) + (dataL[id] || 0);
+        statsByFN.tree.push(id);
+      });
+  } else {
+    statsByFN.tree.forEach(id => {
+      statsByFN.byId[id] = (dataCU[id] || 0) + (dataC[id] || 0) + (dataL[id] || 0);
+    });
+  }
+
+  draft[namespace] = { ...draft[namespace], [fn]: statsByFN };
+  return draft;
+};
+
 const onFetchStatsFailure = (draft, ns, err) => {
   draft[ns].wip = false;
   draft[ns].err = err;
@@ -91,6 +136,7 @@ const onFetchStatsFailure = (draft, ns, err) => {
 export const reducer = handleActions({
   [FETCH_STATS]: onFetchStats,
   [FETCH_STATS_SUCCESS]: onFetchStatsSuccess,
+  [RECEIVE_SINGLE_TYPE_STATS]: onReceiveSingleTypeStats,
   [FETCH_STATS_FAILURE]: onFetchStatsFailure,
 
 }, initialState);

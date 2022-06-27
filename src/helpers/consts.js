@@ -176,6 +176,8 @@ export const LANG_LATVIAN    = 'lv';
 export const LANG_SLOVAK     = 'sk';
 export const LANG_CZECH      = 'cs';
 export const LANG_AMHARIC    = 'am';
+export const LANG_INDONESIAN = 'id';
+export const LANG_ARMENIAN   = 'hy';
 export const LANG_UNKNOWN    = 'xx';
 
 export const LANGUAGES = {
@@ -190,7 +192,7 @@ export const LANGUAGES = {
   [LANG_PORTUGUESE]: { value: LANG_PORTUGUESE, locale: 'pt_PT', lang3: 'POR', name: 'Português' },
   [LANG_TURKISH]: { value: LANG_TURKISH, locale: 'tr_TR', lang3: 'TRK', name: 'Türkçe' },
   [LANG_POLISH]: { value: LANG_POLISH, locale: 'pl_PL', lang3: 'POL', name: 'Polski' },
-  [LANG_ARABIC]: { value: LANG_ARABIC, locale: 'ar_AR', lang3: 'ARB', name: 'اَلْعَرَبِيَّةُ' },
+  [LANG_ARABIC]: { value: LANG_ARABIC, locale: 'ar_AR', lang3: 'ARA', name: 'اَلْعَرَبِيَّةُ' },
   [LANG_HUNGARIAN]: { value: LANG_HUNGARIAN, locale: 'hu_HU', lang3: 'HUN', name: 'Magyar' },
   [LANG_FINNISH]: { value: LANG_FINNISH, locale: 'fi_FI', lang3: 'FIN', name: 'Suo̯mi' },
   [LANG_LITHUANIAN]: { value: LANG_LITHUANIAN, locale: 'lt_LT', lang3: 'LIT', name: 'Lietuvių' },
@@ -212,6 +214,8 @@ export const LANGUAGES = {
   [LANG_SLOVAK]: { value: LANG_SLOVAK, locale: 'sk_SK', lang3: 'SLK', name: 'slovenčina' },
   [LANG_CZECH]: { value: LANG_CZECH, locale: 'cs_CZ', lang3: 'CZE', name: 'Čeština' },
   [LANG_AMHARIC]: { value: LANG_AMHARIC, locale: 'am_ET', lang3: 'AMH', name: 'ኣማርኛ' },
+  [LANG_INDONESIAN]: { value: LANG_INDONESIAN, locale: 'in_ID', lang3: 'IND', name: 'Bahasa Indonesia' },
+  [LANG_ARMENIAN]: { value: LANG_ARMENIAN, locale: 'hy_AM', lang3: 'ARM', name: 'Հայերէն' },
 };
 
 export const ALL_LANGUAGES = [
@@ -247,6 +251,8 @@ export const ALL_LANGUAGES = [
   LANG_SLOVAK,
   LANG_CZECH,
   LANG_AMHARIC,
+  LANG_INDONESIAN,
+  LANG_ARMENIAN,
 ];
 
 export const POPULAR_LANGUAGES = [
@@ -313,7 +319,7 @@ export const EVENT_TYPES = [
 ];
 
 // Required for Sections filter.
-export const COLLECTION_LESSONS_TYPE      = [CT_DAILY_LESSON, CT_SPECIAL_LESSON, /* CT_CHILDREN_LESSONS, */ CT_WOMEN_LESSONS, CT_VIRTUAL_LESSONS, CT_LECTURE_SERIES];
+export const COLLECTION_LESSONS_TYPE      = [CT_DAILY_LESSON, CT_SPECIAL_LESSON, /* CT_CHILDREN_LESSONS, */ CT_WOMEN_LESSONS, CT_VIRTUAL_LESSONS, CT_LECTURE_SERIES, CT_LESSONS_SERIES];
 export const COLLECTION_PROGRAMS_TYPE     = [CT_VIDEO_PROGRAM, CT_CLIPS];
 export const COLLECTION_EVENTS_TYPE       = [CT_FRIENDS_GATHERINGS, CT_MEALS, ...EVENT_TYPES];
 export const COLLECTION_PUBLICATIONS_TYPE = [CT_ARTICLES];
@@ -546,6 +552,8 @@ export const SEARCH_INTENT_HIT_TYPE_LESSONS          = 'lessons';
 export const SEARCH_INTENT_HIT_TYPE_SERIES_BY_TAG    = 'lessons_series_by_tag';
 export const SEARCH_INTENT_HIT_TYPE_SERIES_BY_SOURCE = 'lessons_series_by_source';
 
+export const SEARCH_RESULT_TYPES_TEXT = ['posts', 'sources', 'units'];
+
 export const SEARCH_INTENT_HIT_TYPES = [SEARCH_INTENT_HIT_TYPE_PROGRAMS, SEARCH_INTENT_HIT_TYPE_LESSONS];
 
 export const SEARCH_INTENT_NAMES = {
@@ -635,11 +643,21 @@ export const SECTIONS_LINK_BY_CU_CONTENT_TYPE = {
 export const UNIT_TEXT_TYPE   = [CT_ARTICLE, CT_BLOG_POST, CT_PUBLICATION, CT_RESEARCH_MATERIAL, CT_SOURCE, CT_LIKUTIM];
 export const UNIT_VIDEOS_TYPE = [...UNIT_LESSONS_TYPE, ...UNIT_PROGRAMS_TYPE, ...UNIT_EVENTS_TYPE];
 
-export const FN_SOURCES      = 'sources-filter';
-export const FN_TOPICS       = 'topics-filter';
-export const FN_LANGUAGES    = 'language-filter';
-export const FN_CONTENT_TYPE = 'content-type-filter';
-export const FN_DATE_FILTER  = 'date-filter';
+export const FN_SOURCES            = 'sources-filter';
+export const FN_TOPICS             = 'topics-filter';
+export const FN_LANGUAGES          = 'language-filter';
+export const FN_ORIGINAL_LANGUAGES = 'original-language-filter';
+export const FN_CONTENT_TYPE       = 'content-type-filter';
+export const FN_DATE_FILTER        = 'date-filter';
+export const FN_PERSON             = 'person-filter';
+export const FN_MEDIA_TYPE         = 'media-type-filter';
 
-export const FN_SOURCES_MULTI = 'sources-filter-multi';
-export const FN_TOPICS_MULTI  = 'topics-filter-multi';
+export const FN_SOURCES_MULTI    = 'sources-filter-multi';
+export const FN_TOPICS_MULTI     = 'topics-filter-multi';
+export const FN_COLLECTION_MULTI = 'collections-filter-multi';
+
+export const PAGE_NS_TOPICS   = 'topic';
+export const PAGE_NS_PROGRAMS = 'programs';
+export const PAGE_NS_LESSONS  = 'lessons';
+
+export const ALL_PAGE_NS = [PAGE_NS_LESSONS, PAGE_NS_TOPICS, PAGE_NS_PROGRAMS];

@@ -13,14 +13,12 @@ import { selectors as settings } from '../../../redux/modules/settings';
 import ShareForm from './ShareForm';
 import SubscribeBtn from '../../shared/SubscribeBtn';
 
-const CollectionPageHeader = ({ collection = null, namespace, t }) => {
+const CollectionPageHeader = ({ collection = null, namespace, title = namespace, t }) => {
   const contentLanguage = useSelector(state => settings.getContentLanguage(state.settings));
 
   if (collection === null) {
     return <div className="collection-header" />;
   }
-
-  const itemCount = Array.isArray(collection.cuIDs) ? collection.cuIDs.length : 0;
 
   return (
     <div className="collection-header">
@@ -40,9 +38,6 @@ const CollectionPageHeader = ({ collection = null, namespace, t }) => {
                     {collection.name}
                   </span>
                   <Header.Subheader className="section-header__subtitle">
-                    {itemCount}&nbsp;
-                    {t(`pages.collection.items.${namespace}`)}
-                    <span className="margin-right-8 margin-left-8">&nbsp;</span>
                     <Button
                       icon="rss"
                       size="mini"

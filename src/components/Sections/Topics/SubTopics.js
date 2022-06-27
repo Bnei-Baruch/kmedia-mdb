@@ -43,6 +43,8 @@ const SubTopics = ({ namespace, rootID, t }) => {
   const root  = getTagById(rootID);
   const items = useMemo(() => getItemsRecursive(rootID, getTagById, baseItems) || [], [rootID, getTagById, baseItems]);
 
+  useEffect(() => setQuery(null), []);
+
   useEffect(() => {
     const sel = selected.includes(rootID);
     setIsSelected(sel);
@@ -74,7 +76,6 @@ const SubTopics = ({ namespace, rootID, t }) => {
       {
         children.length > MAX_SHOWED_ITEMS && (
           <>
-
             <Button
               basic
               icon="plus"

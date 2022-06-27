@@ -3,12 +3,12 @@ import { useParams } from 'react-router-dom';
 import { withNamespaces } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { actions, selectors } from '../../../../redux/modules/mdb';
-import { selectors as settings } from '../../../../redux/modules/settings';
-import WipErr from '../../../shared/WipErr/WipErr';
-import PlaylistCollectionContainer from '../../../Pages/PlaylistCollection/Container';
-import UnitPage from '../../../Pages/Unit/Page';
-import { COLLECTION_DAILY_LESSONS, CT_LESSONS_SERIES, CT_SONGS, EVENT_TYPES } from '../../../../helpers/consts';
+import { actions, selectors } from '../../redux/modules/mdb';
+import { selectors as settings } from '../../redux/modules/settings';
+import WipErr from '../shared/WipErr/WipErr';
+import PlaylistCollectionContainer from './PlaylistCollection/Container';
+import UnitPage from './Unit/Page';
+import { COLLECTION_DAILY_LESSONS, CT_LESSONS_SERIES, CT_SONGS, EVENT_TYPES } from '../../helpers/consts';
 
 const COLLECTION_TYPES_BY_ROUTING = {
   'lessons': COLLECTION_DAILY_LESSONS,

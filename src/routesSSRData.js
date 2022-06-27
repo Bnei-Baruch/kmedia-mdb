@@ -1,56 +1,55 @@
 import uniq from 'lodash/uniq';
 import moment from 'moment';
+import { getPageFromLocation } from './components/Pagination/withPagination';
+
+import { tabs as eventsTabs } from './components/Sections/Events/MainPage';
+import { tabs as pulicationsTabs } from './components/Sections/Publications/MainPage';
+import { isTaas } from './components/shared/PDF/PDF';
 
 import {
+  COLLECTION_PROGRAMS_TYPE,
   CT_ARTICLE,
-  CT_CLIP,
   CT_FRIENDS_GATHERING,
   CT_LECTURE,
   CT_LESSON_PART,
   CT_MEAL,
-  CT_VIDEO_PROGRAM_CHAPTER,
   CT_VIRTUAL_LESSON,
+  CT_VIRTUAL_LESSONS,
   CT_WOMEN_LESSON,
   LANG_HEBREW,
   LANG_RUSSIAN,
   LANG_SPANISH,
   LANG_UKRAINIAN,
+  PAGE_NS_LESSONS,
+  PAGE_NS_PROGRAMS,
   RABASH_PERSON_UID,
+  UNIT_PROGRAMS_TYPE,
 } from './helpers/consts';
 import MediaHelper from './helpers/media';
-import { canonicalCollection, isEmpty } from './helpers/utils';
 import { getQuery } from './helpers/url';
-import { selectors as settingsSelectors } from './redux/modules/settings';
-import { actions as mdbActions, selectors as mdbSelectors } from './redux/modules/mdb';
-import { actions as filtersActions } from './redux/modules/filters';
-import { actions as listsActions } from './redux/modules/lists';
-import { actions as homeActions } from './redux/modules/home';
-import { actions as eventsActions } from './redux/modules/events';
-import { actions as lessonsActions } from './redux/modules/lessons';
-import { actions as programsActions } from './redux/modules/programs';
-import { actions as searchActions, selectors as searchSelectors } from './redux/modules/search';
-import { selectors as sourcesSelectors } from './redux/modules/sources';
+import { canonicalCollection, isEmpty } from './helpers/utils';
 import { actions as assetsActions, selectors as assetsSelectors } from './redux/modules/assets';
-import { actions as tagsActions } from './redux/modules/tags';
-import { actions as publicationsActions } from './redux/modules/publications';
-import { actions as simpleModeActions } from './redux/modules/simpleMode';
+import { actions as eventsActions } from './redux/modules/events';
+import { actions as filtersActions } from './redux/modules/filters';
+import { actions as homeActions } from './redux/modules/home';
+import { actions as listsActions } from './redux/modules/lists';
+import { actions as mdbActions, selectors as mdbSelectors } from './redux/modules/mdb';
 import { actions as musicActions } from './redux/modules/music';
-import * as mdbSagas from './sagas/mdb';
-import * as filtersSagas from './sagas/filters';
-import * as eventsSagas from './sagas/events';
-import * as lessonsSagas from './sagas/lessons';
-import * as searchSagas from './sagas/search';
+import { actions as prepareActions } from './redux/modules/preparePage';
+import { actions as publicationsActions } from './redux/modules/publications';
+import { actions as searchActions, selectors as searchSelectors } from './redux/modules/search';
+import { selectors as settingsSelectors } from './redux/modules/settings';
+import { actions as simpleModeActions } from './redux/modules/simpleMode';
+import { selectors as sourcesSelectors } from './redux/modules/sources';
+import { actions as tagsActions } from './redux/modules/tags';
 import * as assetsSagas from './sagas/assets';
-import * as tagsSagas from './sagas/tags';
-import * as publicationsSagas from './sagas/publications';
+import * as eventsSagas from './sagas/events';
+import * as filtersSagas from './sagas/filters';
+import * as mdbSagas from './sagas/mdb';
 import * as musicSagas from './sagas/music';
-import { getPageFromLocation } from './components/Pagination/withPagination';
-import { isTaas } from './components/shared/PDF/PDF';
-
-import { tabs as eventsTabs } from './components/Sections/Events/MainPage';
-import { tabs as lessonsTabs } from './components/Sections/Lessons/MainPage';
-import { tabs as programsTabs } from './components/Sections/Programs/MainPage';
-import { tabs as pulicationsTabs } from './components/Sections/Publications/MainPage';
+import * as publicationsSagas from './sagas/publications';
+import * as searchSagas from './sagas/search';
+import * as tagsSagas from './sagas/tags';
 
 export const home = store => {
   store.dispatch(homeActions.fetchData(true));
@@ -73,10 +72,8 @@ export const cuPage = (store, match) => {
 
 const getExtraFetchParams = (ns, collectionID) => {
   switch (ns) {
-    case 'programs-main':
-      return { content_type: [CT_VIDEO_PROGRAM_CHAPTER] };
-    case 'programs-clips':
-      return { content_type: [CT_CLIP] };
+    case PAGE_NS_PROGRAMS:
+      return { content_type: UNIT_PROGRAMS_TYPE };
     case 'publications-articles':
       return { content_type: [CT_ARTICLE] };
     case 'events-meals':
@@ -116,13 +113,14 @@ export const cuListPage = (ns, collectionID = 0) => (store, match) => {
   const extraFetchParams = getExtraFetchParams(ns, collectionID);
 
   // dispatch fetchList
-  store.dispatch(listsActions.fetchList(ns, page, { ...extraFetchParams, pageSize }));
+  store.dispatch(listsActions.fetchList(ns, page, { ...extraFetchParams, pageSize, withViews: true }));
 
   return Promise.resolve(null);
 };
 
 export const collectionPage = ns => (store, match) => {
   const cID = match.params.id;
+  if (cID) ns = `${ns}_${cID}`;
   return store.sagaMiddleWare.run(mdbSagas.fetchCollection, mdbActions.fetchCollection(cID)).done
     .then(() => {
       cuListPage(ns, cID)(store, match);
@@ -142,26 +140,22 @@ export const playlistCollectionPage = (store, match) => {
           store.dispatch(mdbActions.fetchUnit(cuID));
         });
       }
-
-      ;
     });
 };
 
-export const latestLesson = store => (
-  store.sagaMiddleWare.run(mdbSagas.fetchLatestLesson).done
-    .then(() => {
-      // TODO: replace this with a single call to backend with all IDs
-      // I don't think we need all files of every unit. Just for active one.
-      const state = store.getState();
-      const cID   = mdbSelectors.getLastLessonId(state.mdb);
-      const c     = mdbSelectors.getCollectionById(state.mdb, cID);
-      c.cuIDs.forEach(cuID => {
-        store.dispatch(mdbActions.fetchUnit(cuID));
-      });
-    })
-);
+export const latestLesson = store => (store.sagaMiddleWare.run(mdbSagas.fetchLatestLesson).done
+  .then(() => {
+    // TODO: replace this with a single call to backend with all IDs
+    // I don't think we need all files of every unit. Just for active one.
+    const state = store.getState();
+    const cID   = mdbSelectors.getLastLessonId(state.mdb);
+    const c     = mdbSelectors.getCollectionById(state.mdb, cID);
+    c.cuIDs.forEach(cuID => {
+      store.dispatch(mdbActions.fetchUnit(cuID));
+    });
+  }));
 
-export const musicPage = store => store.sagaMiddleWare.run(musicSagas.fetchMusic, musicActions.fetchMusic).done
+export const musicPage = store => store.sagaMiddleWare.run(musicSagas.fetchMusic, musicActions.fetchMusic).done;
 
 export const eventsPage = (store, match) => {
   // hydrate tab
@@ -183,31 +177,13 @@ export const eventsPage = (store, match) => {
 };
 
 export const lessonsPage = (store, match) => {
-  // hydrate tab
-  const tab = match.params.tab || lessonsTabs[0];
-  const ns  = `lessons-${tab}`;
-
-  if (tab !== lessonsTabs[0]) {
-    store.dispatch(lessonsActions.setTab(ns));
-  }
-
-  if (tab === 'series') {
-    return store.sagaMiddleWare.run(lessonsSagas.fetchAllSeries, lessonsActions.fetchAllSeries).done;
-  }
-
-  return cuListPage(ns)(store, match);
+  store.dispatch(prepareActions.fetchCollections(PAGE_NS_LESSONS, { content_type: [CT_VIRTUAL_LESSONS] }));
+  cuListPage(PAGE_NS_LESSONS)(store, match);
 };
 
 export const programsPage = (store, match) => {
-  // hydrate tab
-  const tab = match.params.tab || programsTabs[0];
-  const ns  = `programs-${tab}`;
-
-  if (tab !== programsTabs[0]) {
-    store.dispatch(programsActions.setTab(ns));
-  }
-
-  return cuListPage(ns)(store, match);
+  store.dispatch(prepareActions.fetchCollections(PAGE_NS_PROGRAMS, { content_type: COLLECTION_PROGRAMS_TYPE }));
+  cuListPage(PAGE_NS_PROGRAMS)(store, match);
 };
 
 export const simpleMode = (store, match) => {
@@ -220,12 +196,7 @@ export const simpleMode = (store, match) => {
 };
 
 export const lessonsCollectionPage = (store, match) => {
-  // hydrate tab
-  const tab = match.params.tab || lessonsTabs[0];
-  if (tab !== lessonsTabs[0]) {
-    const namespace = `lessons-${tab}`;
-    store.dispatch(lessonsActions.setTab(namespace));
-  }
+  const { tab } = match.params;
 
   if (tab === 'daily' || tab === 'series') {
     return playlistCollectionPage(store, match);
@@ -234,21 +205,17 @@ export const lessonsCollectionPage = (store, match) => {
   return collectionPage('lessons-collection')(store, match);
 };
 
-export const searchPage = store => (
-  Promise.all([
-    store.sagaMiddleWare.run(searchSagas.hydrateUrl).done,
-    store.sagaMiddleWare.run(filtersSagas.hydrateFilters, filtersActions.hydrateFilters('search')).done
-  ])
-    .then(() => {
-      const state    = store.getState();
-      const q        = searchSelectors.getQuery(state.search);
-      const page     = searchSelectors.getPageNo(state.search);
-      const pageSize = settingsSelectors.getPageSize(state.settings);
-      const deb      = searchSelectors.getDeb(state.search);
-      const suggest  = searchSelectors.getSuggest(state.search);
+export const searchPage = store => (Promise.all([store.sagaMiddleWare.run(searchSagas.hydrateUrl).done, store.sagaMiddleWare.run(filtersSagas.hydrateFilters, filtersActions.hydrateFilters('search')).done])
+  .then(() => {
+    const state    = store.getState();
+    const q        = searchSelectors.getQuery(state.search);
+    const page     = searchSelectors.getPageNo(state.search);
+    const pageSize = settingsSelectors.getPageSize(state.settings);
+    const deb      = searchSelectors.getDeb(state.search);
+    const suggest  = searchSelectors.getSuggest(state.search);
 
-      store.dispatch(searchActions.search(q, page, pageSize, suggest, deb));
-    })
+    store.dispatch(searchActions.search(q, page, pageSize, suggest, deb));
+  })
 );
 
 function sleep(ms) {

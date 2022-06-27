@@ -109,7 +109,17 @@
       "topics-filter-multi": "Темы",
       "content-type-filter": "Раздел",
       "language-filter": "Язык",
-      "date-filter": "Дата"
+      "date-filter": "Дата",
+      "media-type-filter": "Медиа",
+      "person-filter": "Автор",
+      "original-language-filter": "Язык оригинала",
+      "locations-filter": "Место проведения"
+    },
+    "media-types": {
+      "audio" : "Аудио",
+      "video" : "Видео ",
+      "text" : "Стенограмма",
+      "image" : "Чертеж"
     },
     "content-types": {
       "CONGRESS": "Конгрессы",
@@ -387,7 +397,7 @@
   },
   "programs": {
     "header": {
-      "text": "Программы",
+      "text": "Программы и Клипы",
       "subtext": "Здесь вы найдете широкий ассортимент программ, включая: захватывающие беседы о смысле жизни, актуальные темы, программы для всей семьи и др."
     },
     "tabs": {

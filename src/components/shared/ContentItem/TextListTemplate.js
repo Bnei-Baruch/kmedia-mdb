@@ -1,15 +1,15 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
-import { withNamespaces } from 'react-i18next';
-import { Container, Header, Image, List } from 'semantic-ui-react';
 import clsx from 'clsx';
+import React from 'react';
+import { withNamespaces } from 'react-i18next';
+import { useSelector } from 'react-redux';
 
-import { selectors as sources } from '../../../redux/modules/sources';
+import { Container, Header, Image, List } from 'semantic-ui-react';
 import { iconByContentTypeMap } from '../../../helpers/consts';
 import { SectionLogo } from '../../../helpers/images';
-import { buildTextItemInfo, textPartLink } from './helper';
+import { selectors as sources } from '../../../redux/modules/sources';
 import Link from '../../Language/MultiLanguageLink';
 import * as shapes from '../../shapes';
+import { buildTextItemInfo, textPartLink } from './helper';
 
 const TextListTemplate = ({ label, unit, t }) => {
   const { id, content_type } = unit;
