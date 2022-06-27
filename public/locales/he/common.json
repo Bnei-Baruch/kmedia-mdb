@@ -108,7 +108,17 @@
       "topics-filter-multi": "נושאים",
       "content-type-filter": "מדור",
       "language-filter": "שפה",
-      "date-filter": "תאריך"
+      "date-filter": "תאריך",
+      "media-type-filter": "מדיה",
+      "person-filter": "מחבר",
+      "original-language-filter": "שפת מקור",
+      "locations-filter": "מיקום"
+    },
+    "media-types": {
+      "audio" : "אודיו",
+      "video" : "וידאו",
+      "text" : "תמליל",
+      "image" : "שרטוט"
     },
     "content-types": {
       "CONGRESS": "כנסים",
@@ -373,7 +383,7 @@
   },
   "programs": {
     "header": {
-      "text": "תוכניות",
+      "text": "תוכניות וקליפים",
       "subtext": "כאן תמצאו מגוון עשיר של תוכניות הכולל: שיחות מרתקות על משמעות החיים, אקטואליה, תוכניות לכל המשפחה ועוד."
     },
     "tabs": {

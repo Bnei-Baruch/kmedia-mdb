@@ -6,9 +6,9 @@ import { Container, Divider } from 'semantic-ui-react';
 import { COLLECTION_PROGRAMS_TYPE, PAGE_NS_PROGRAMS, UNIT_PROGRAMS_TYPE } from '../../../helpers/consts';
 import { usePrevious } from '../../../helpers/utils';
 import { selectors as filters } from '../../../redux/modules/filters';
-
 import { actions, selectors as lists } from '../../../redux/modules/lists';
-import { actions as progActions } from '../../../redux/modules/programs';
+
+import { actions as prepareActions } from '../../../redux/modules/preparePage';
 import { selectors as settings } from '../../../redux/modules/settings';
 import FilterLabels from '../../FiltersAside/FilterLabels';
 import Pagination from '../../Pagination/Pagination';
@@ -19,12 +19,15 @@ import SectionHeader from '../../shared/SectionHeader';
 import Filters from './Filters';
 import ItemOfList from './ItemOfList';
 
+const FILTER_PARAMS = { content_type: [...COLLECTION_PROGRAMS_TYPE, ...UNIT_PROGRAMS_TYPE] };
+
 const MainPage = () => {
   const { items, total } = useSelector(state => lists.getNamespaceState(state.lists, PAGE_NS_PROGRAMS)) || {};
   const language         = useSelector(state => settings.getLanguage(state.settings));
   const pageSize         = useSelector(state => settings.getPageSize(state.settings));
   const selected         = useSelector(state => filters.getFilters(state.filters, PAGE_NS_PROGRAMS), isEqual);
-  const prevSel          = usePrevious(selected);
+
+  const prevSel = usePrevious(selected);
 
   const location = useLocation();
   const pageNo   = useMemo(() => getPageFromLocation(location) || 1, [location]);
@@ -33,7 +36,7 @@ const MainPage = () => {
   const setPage  = useCallback(pageNo => dispatch(actions.setPage(PAGE_NS_PROGRAMS, pageNo)), [dispatch]);
 
   useEffect(() => {
-    dispatch(progActions.fetchCollections(PAGE_NS_PROGRAMS, { content_type: COLLECTION_PROGRAMS_TYPE }));
+    dispatch(prepareActions.fetchCollections(PAGE_NS_PROGRAMS, { content_type: COLLECTION_PROGRAMS_TYPE }));
   }, [language, dispatch]);
 
   useEffect(() => {
@@ -54,7 +57,7 @@ const MainPage = () => {
       filters={
         <Filters
           namespace={PAGE_NS_PROGRAMS}
-          baseParams={{ content_type: [...COLLECTION_PROGRAMS_TYPE, ...UNIT_PROGRAMS_TYPE] }}
+          baseParams={FILTER_PARAMS}
         />
       }
     >

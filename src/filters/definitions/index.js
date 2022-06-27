@@ -14,3 +14,6 @@ export { default as collectionsFilterMultiDefinition } from './collectionsFilter
 export { languageFilter as languageFilterDefinition } from './languageFilter';
 export { default as languageFilterMulti } from './languageFilterMulti';
 export { default as contentTypeFilter } from './contentTypeFilter';
+export { default as personsFilter } from './personsFilter';
+export { default as mediaTypeFilter } from './mediaTypeFilter';
+export { default as originalLanguageFilter } from './originalLanguageFilter';

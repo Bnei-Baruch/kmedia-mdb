@@ -109,7 +109,17 @@
       "topics-filter-multi": "Теми",
       "content-type-filter": "Section",
       "language-filter": "Language",
-      "date-filter": "Date"
+      "date-filter": "Date",
+      "media-type-filter": "Media",
+      "person-filter": "Author",
+      "original-language-filter": "Original Language",
+      "locations-filter": "Location"
+    },
+    "media-types": {
+      "audio" : "Audio",
+      "video" : "Video",
+      "text" : "Transcription",
+      "image" : "Sketch"
     },
     "content-types": {
       "CONGRESS": "Конгреси",
@@ -374,7 +384,7 @@
   },
   "programs": {
     "header": {
-      "text": "Програми",
+      "text": "Програми та Кліпи",
       "subtext": "Тут ви знайдете широкий асортимент програм, зокрема: захопливі бесіди про сенс життя, актуальні теми, програми для всієї родини та ін."
     },
     "tabs": {

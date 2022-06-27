@@ -1,16 +1,17 @@
-import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
-import { selectors } from '../../../redux/modules/filtersAside';
+import React, { useMemo, useState } from 'react';
 import { withNamespaces } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { Button } from 'semantic-ui-react';
 import { FN_LANGUAGES, POPULAR_LANGUAGES } from '../../../helpers/consts';
 import { selectors as filters } from '../../../redux/modules/filters';
+import { selectors } from '../../../redux/modules/filtersAside';
 import FilterHeader from '../FilterHeader';
 import LanguageItem from './LanguageItem';
-import { Button } from 'semantic-ui-react';
 
 const Language = ({ namespace, t }) => {
-  const items    = useSelector(state => selectors.getTree(state.filtersAside, namespace, FN_LANGUAGES));
-  const selected = useSelector(state => filters.getFilterByName(state.filters, namespace, FN_LANGUAGES))?.values || [];
+  const items           = useSelector(state => selectors.getTree(state.filtersAside, namespace, FN_LANGUAGES));
+  const selectedFilters = useSelector(state => filters.getFilterByName(state.filters, namespace, FN_LANGUAGES));
+  const selected        = useMemo(() => selectedFilters?.values || [], [selectedFilters]);
 
   const [showAll, setShowAll] = useState(selected.filter(x => POPULAR_LANGUAGES.includes(x)).length > 0);
 

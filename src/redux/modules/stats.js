@@ -1,6 +1,5 @@
 import { createAction } from 'redux-actions';
 
-import { types as ssr } from './ssr';
 import { handleActions } from './settings';
 
 /* Types */
@@ -70,14 +69,6 @@ const onCUSuccess = (draft, payload) => {
 
 const onClearCUStats = (draft, payload) => {
   draft.cuStats[payload.namespace] = {};
-};
-
-const onSSRPrepare = draft => {
-  Object.keys(draft.cuStats).forEach(namespace => {
-    if (draft.cuStats[namespace].err) {
-      draft.cuStats[namespace].err = draft.cuStats[namespace].err.toString;
-    }
-  });
 };
 
 export const reducer = handleActions({

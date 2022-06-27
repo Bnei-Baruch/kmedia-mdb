@@ -108,7 +108,17 @@
       "topics-filter-multi": "Temas",
       "content-type-filter": "Sección",
       "language-filter": "Idioma",
-      "date-filter": "Fecha"
+      "date-filter": "Fecha",
+      "media-type-filter": "Medios",
+      "person-filter": "Autor",
+      "original-language-filter": "Idioma original",
+      "locations-filter": "Ubicación"
+    },
+    "media-types": {
+      "audio" : "Audio",
+      "video" : "Video",
+      "text" : "Transcripción",
+      "image" : "Dibujo"
     },
     "content-types": {
       "CONGRESS": "Congresos",
@@ -377,7 +387,7 @@
   },
   "programs": {
     "header": {
-      "text": "Programas",
+      "text": "Programas y Clips",
       "subtext": "Aquí encontrará una gran variedad de programas que incluyen: conversaciones fascinantes sobre el significado de la vida, eventos actuales, programas para toda la familia y más."
     },
     "tabs": {

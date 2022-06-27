@@ -414,7 +414,7 @@
 
 .text_item, .media_item {
   vertical-align: top;
-  padding: 8px 0;
+  padding: 1em 0;
   border-bottom: 1px solid $midWhite;
   display: flex;
   flex-wrap: nowrap;
@@ -459,6 +459,35 @@
     }
   }
 
+  &.daily_lesson .media_item__content {
+    justify-content: flex-start;
+  }
+
+  .separate_with_line {
+    margin-top: .5em;
+
+    a {
+      color: $black;
+      line-height: .9em;
+      padding: 0 .5em;
+      border-right: 1px solid $midGrey;
+      display: inline-block;
+
+      &:first-child {
+        padding-left: 0;
+
+        .rtl & {
+          border-right: none;
+          padding-right: 0;
+          padding-left: .5em;
+        }
+      }
+
+      .ltr &:last-child {
+        border-right: none;
+      }
+    }
+  }
 
   .description {
     color: $midGrey;
@@ -494,7 +523,7 @@
     }
 
     &.is_single span {
-      border-right: none !important;
+      border: none !important;
     }
   }
 }

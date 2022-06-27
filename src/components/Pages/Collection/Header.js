@@ -20,8 +20,6 @@ const CollectionPageHeader = ({ collection = null, namespace, title = namespace,
     return <div className="collection-header" />;
   }
 
-  const itemCount = Array.isArray(collection.cuIDs) ? collection.cuIDs.length : 0;
-
   return (
     <div className="collection-header">
       <Helmets.Basic title={collection.name} description={collection.description} />
@@ -40,9 +38,6 @@ const CollectionPageHeader = ({ collection = null, namespace, title = namespace,
                     {collection.name}
                   </span>
                   <Header.Subheader className="section-header__subtitle">
-                    {itemCount}&nbsp;
-                    {t(`pages.collection.items.${title}`)}
-                    <span className="margin-right-8 margin-left-8">&nbsp;</span>
                     <Button
                       icon="rss"
                       size="mini"

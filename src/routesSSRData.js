@@ -3,22 +3,24 @@ import moment from 'moment';
 import { getPageFromLocation } from './components/Pagination/withPagination';
 
 import { tabs as eventsTabs } from './components/Sections/Events/MainPage';
-import { tabs as lessonsTabs } from './components/Sections/Lessons/MainPage';
 import { tabs as pulicationsTabs } from './components/Sections/Publications/MainPage';
 import { isTaas } from './components/shared/PDF/PDF';
 
 import {
+  COLLECTION_PROGRAMS_TYPE,
   CT_ARTICLE,
   CT_FRIENDS_GATHERING,
   CT_LECTURE,
   CT_LESSON_PART,
   CT_MEAL,
   CT_VIRTUAL_LESSON,
+  CT_VIRTUAL_LESSONS,
   CT_WOMEN_LESSON,
   LANG_HEBREW,
   LANG_RUSSIAN,
   LANG_SPANISH,
   LANG_UKRAINIAN,
+  PAGE_NS_LESSONS,
   PAGE_NS_PROGRAMS,
   RABASH_PERSON_UID,
   UNIT_PROGRAMS_TYPE,
@@ -30,11 +32,10 @@ import { actions as assetsActions, selectors as assetsSelectors } from './redux/
 import { actions as eventsActions } from './redux/modules/events';
 import { actions as filtersActions } from './redux/modules/filters';
 import { actions as homeActions } from './redux/modules/home';
-import { actions as lessonsActions } from './redux/modules/lessons';
 import { actions as listsActions } from './redux/modules/lists';
 import { actions as mdbActions, selectors as mdbSelectors } from './redux/modules/mdb';
 import { actions as musicActions } from './redux/modules/music';
-import { actions as programsActions } from './redux/modules/programs';
+import { actions as prepareActions } from './redux/modules/preparePage';
 import { actions as publicationsActions } from './redux/modules/publications';
 import { actions as searchActions, selectors as searchSelectors } from './redux/modules/search';
 import { selectors as settingsSelectors } from './redux/modules/settings';
@@ -44,7 +45,6 @@ import { actions as tagsActions } from './redux/modules/tags';
 import * as assetsSagas from './sagas/assets';
 import * as eventsSagas from './sagas/events';
 import * as filtersSagas from './sagas/filters';
-import * as lessonsSagas from './sagas/lessons';
 import * as mdbSagas from './sagas/mdb';
 import * as musicSagas from './sagas/music';
 import * as publicationsSagas from './sagas/publications';
@@ -177,24 +177,13 @@ export const eventsPage = (store, match) => {
 };
 
 export const lessonsPage = (store, match) => {
-  // hydrate tab
-  const tab = match.params.tab || lessonsTabs[0];
-  const ns  = `lessons-${tab}`;
-
-  if (tab !== lessonsTabs[0]) {
-    store.dispatch(lessonsActions.setTab(ns));
-  }
-
-  if (tab === 'series') {
-    return store.sagaMiddleWare.run(lessonsSagas.fetchAllSeries, lessonsActions.fetchAllSeries).done;
-  }
-
-  return cuListPage(ns)(store, match);
+  store.dispatch(prepareActions.fetchCollections(PAGE_NS_LESSONS, { content_type: [CT_VIRTUAL_LESSONS] }));
+  cuListPage(PAGE_NS_LESSONS)(store, match);
 };
 
 export const programsPage = (store, match) => {
-  store.dispatch(programsActions.fetchCollections());
-  return cuListPage(PAGE_NS_PROGRAMS)(store, match);
+  store.dispatch(prepareActions.fetchCollections(PAGE_NS_PROGRAMS, { content_type: COLLECTION_PROGRAMS_TYPE }));
+  cuListPage(PAGE_NS_PROGRAMS)(store, match);
 };
 
 export const simpleMode = (store, match) => {
@@ -207,12 +196,7 @@ export const simpleMode = (store, match) => {
 };
 
 export const lessonsCollectionPage = (store, match) => {
-  // hydrate tab
-  const tab = match.params.tab || lessonsTabs[0];
-  if (tab !== lessonsTabs[0]) {
-    const namespace = `lessons-${tab}`;
-    store.dispatch(lessonsActions.setTab(namespace));
-  }
+  const { tab } = match.params;
 
   if (tab === 'daily' || tab === 'series') {
     return playlistCollectionPage(store, match);

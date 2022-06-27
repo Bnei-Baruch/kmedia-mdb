@@ -1,6 +1,4 @@
 import { createAction } from 'redux-actions';
-import groupBy from 'lodash/groupBy';
-import mapValues from 'lodash/mapValues';
 
 import { isEmpty, isNotEmptyArray, strCmp, getEscapedRegExp } from '../../helpers/utils';
 import { SRC_VOLUME } from '../../helpers/consts';
@@ -13,7 +11,6 @@ import { types as ssr } from './ssr';
 /* Types */
 const SET_TAB = 'Lessons/SET_TAB';
 
-const RECEIVE_LECTURES         = 'Lessons/RECEIVE_LECTURES';
 const FETCH_ALL_SERIES         = 'Lessons/FETCH_ALL_SERIES';
 const FETCH_ALL_SERIES_SUCCESS = 'Lessons/FETCH_ALL_SERIES_SUCCESS';
 const FETCH_ALL_SERIES_FAILURE = 'Lessons/FETCH_ALL_SERIES_FAILURE';
@@ -21,7 +18,6 @@ const FETCH_ALL_SERIES_FAILURE = 'Lessons/FETCH_ALL_SERIES_FAILURE';
 export const types = {
   SET_TAB,
 
-  RECEIVE_LECTURES,
   FETCH_ALL_SERIES,
   FETCH_ALL_SERIES_SUCCESS,
   FETCH_ALL_SERIES_FAILURE,
@@ -30,7 +26,6 @@ export const types = {
 /* Actions */
 const setTab = createAction(SET_TAB);
 
-const receiveLectures       = createAction(RECEIVE_LECTURES);
 const fetchAllSeries        = createAction(FETCH_ALL_SERIES);
 const fetchAllSeriesSuccess = createAction(FETCH_ALL_SERIES_SUCCESS);
 const fetchAllSeriesFailure = createAction(FETCH_ALL_SERIES_FAILURE);
@@ -38,7 +33,6 @@ const fetchAllSeriesFailure = createAction(FETCH_ALL_SERIES_FAILURE);
 export const actions = {
   setTab,
 
-  receiveLectures,
   fetchAllSeries,
   fetchAllSeriesSuccess,
   fetchAllSeriesFailure,
@@ -48,13 +42,10 @@ export const actions = {
 
 const initialState = {
   seriesIDs: [],
-  lecturesByType: {},
   wip: {
-    lectures: false,
     series: false,
   },
   errors: {
-    lectures: null,
     series: null,
   },
 };
@@ -80,25 +71,16 @@ const setStatus = (draft, payload, type) => {
   }
 };
 
-const onReceiveLectures = (draft, payload) => {
-  draft.lecturesByType = mapValues(groupBy(payload, x => x.content_type), x => x.map(y => y.id));
-};
-
 const onFetchAllSeriesSuccess = (draft, payload, type) => {
   draft.seriesIDs = payload.collections.map(x => x.id);
   setStatus(draft, payload, type);
 };
 
 const onSetLanguage = draft => {
-  draft.lecturesByType = {};
-  draft.seriesIDs      = [];
+  draft.seriesIDs = [];
 };
 
 const onSSRPrepare = draft => {
-  if (draft.errors.lectures) {
-    draft.errors.lectures = draft.errors.lectures.toString();
-  }
-
   if (draft.errors.series) {
     draft.errors.series = draft.errors.series.toString();
   }
@@ -108,7 +90,6 @@ export const reducer = handleActions({
   [ssr.PREPARE]: onSSRPrepare,
   [settings.SET_LANGUAGE]: onSetLanguage,
 
-  [RECEIVE_LECTURES]: onReceiveLectures,
   [FETCH_ALL_SERIES]: setStatus,
   [FETCH_ALL_SERIES_SUCCESS]: onFetchAllSeriesSuccess,
   [FETCH_ALL_SERIES_FAILURE]: setStatus,
@@ -116,10 +97,9 @@ export const reducer = handleActions({
 
 /* Selectors */
 
-const getWip            = state => state.wip;
-const getErrors         = state => state.errors;
-const getLecturesByType = state => state.lecturesByType;
-const getSeriesIDs      = state => state.seriesIDs;
+const getWip       = state => state.wip;
+const getErrors    = state => state.errors;
+const getSeriesIDs = state => state.seriesIDs;
 
 const $$sortTree = node => {
   if (isEmpty(node)) {
@@ -145,7 +125,7 @@ const $$sortTree = node => {
 
   // sort the non leaf nodes (with an id but don't have a start_date ) and add them to children
   if (nId && !start_date) {
-    children.push(...nonLeafChildren.map($$sortTree))
+    children.push(...nonLeafChildren.map($$sortTree));
   }
 
   return {
@@ -218,7 +198,7 @@ const getTree = (state, match) => {
   }, {});
 
   return { bySourceTree, byTag };
-}
+};
 
 const addToTagsTree = (acc, path, series) => {
   let dir = acc;
@@ -226,17 +206,17 @@ const addToTagsTree = (acc, path, series) => {
     const { id, label, parent_id, type } = path[i];
 
     dir[id] = dir[id] || {};
-    dir = dir[id];
+    dir     = dir[id];
 
-    dir.id = id;
+    dir.id        = id;
     dir.parent_id = parent_id;
-    dir.name = label;
-    dir.type = type;
+    dir.name      = label;
+    dir.type      = type;
   }
 
   dir.children = dir.children || [];
   dir.children.push(series);
-}
+};
 
 const addToSourcesTree = (acc, path, series) => {
   const hasVolume = path.some(p => p.type === SRC_VOLUME);
@@ -245,12 +225,12 @@ const addToSourcesTree = (acc, path, series) => {
   let dir = acc;
   for (let i = 0; i < path.length; i++) {
     const { id, name, type } = path[i];
-    let { parent_id } = path[i];
+    let { parent_id }        = path[i];
 
     if (hasVolume) {
       // save volume data for later and skip the path part
       if (type === SRC_VOLUME) {
-        volumeId = id;
+        volumeId       = id;
         volumeParentId = parent_id;
         continue;
       }
@@ -262,12 +242,12 @@ const addToSourcesTree = (acc, path, series) => {
     }
 
     dir[id] = dir[id] || {};
-    dir = dir[id];
+    dir     = dir[id];
 
-    dir.id = id;
+    dir.id        = id;
     dir.parent_id = parent_id;
-    dir.name = name;
-    dir.type = type;
+    dir.name      = name;
+    dir.type      = type;
   }
 
   // mv series path.children
@@ -284,31 +264,31 @@ const getSeriesTree = (state, match) => {
 
   const roots         = sources.getRoots(state.sources);
   const getSourceById = sources.getSourceById(state.sources);
-  const authors = roots.map(getSourceById);
+  const authors       = roots.map(getSourceById);
 
   const getAuthorsDisplayName = authorId => {
-    const author = authors.find(a => a.id === authorId);
+    const author              = authors.find(a => a.id === authorId);
     const { name, full_name } = author;
 
     // don't display the long names like Rabbi Yehuda Leib Ashlag
     // but display full name of Rav - Michael Laitman, Ph.D
     const displayName = full_name.includes(name)
       ? full_name
-      : name
+      : name;
     return displayName;
   };
 
-  const fullTree = {}
+  const fullTree = {};
 
   Object.keys(bySourceTree).filter(key => key !== 'vk').forEach(key => {
     bySourceTree[key].name = getAuthorsDisplayName(key);
-    fullTree[key] = bySourceTree[key];
+    fullTree[key]          = bySourceTree[key];
   });
 
   fullTree['byTopics'] = { 'id': 'byTopics', 'name': 'By Topics' };
 
   Object.keys(byTag).forEach(key => {
-    fullTree['byTopics'][key] = byTag[key]
+    fullTree['byTopics'][key] = byTag[key];
   });
 
   const sortedTree = $$sortTree(fullTree);
@@ -316,13 +296,13 @@ const getSeriesTree = (state, match) => {
 };
 
 const getSerieBySourceId = (state, mdbState, sourcesState) => sId => {
-  const source = sources.getSourceById(sourcesState)(sId);
+  const source      = sources.getSourceById(sourcesState)(sId);
   const collections = state.seriesIDs.map(id => mdb.getCollectionById(mdbState, id)).filter(({ source_id }) => source_id === sId);
   return { ...source, collections };
 };
 
 const getSerieByTagId = (state, mdbState, tagsState) => tId => {
-  const tag = tags.getTagById(tagsState)(tId);
+  const tag         = tags.getTagById(tagsState)(tId);
   const collections = state.seriesIDs.map(id => mdb.getCollectionById(mdbState, id)).filter(({ tag_id }) => tag_id?.includes(tId));
   return { ...tag, collections };
 };
@@ -330,7 +310,6 @@ const getSerieByTagId = (state, mdbState, tagsState) => tId => {
 export const selectors = {
   getWip,
   getErrors,
-  getLecturesByType,
   getSeriesIDs,
   getSeriesTree,
   getSerieBySourceId,

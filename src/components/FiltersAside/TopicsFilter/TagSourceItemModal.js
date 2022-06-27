@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
-import { withNamespaces } from 'react-i18next';
-import { Button, Icon, Input, Modal, Table } from 'semantic-ui-react';
 import clsx from 'clsx';
+import React, { useState } from 'react';
+import { withNamespaces } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { Button, Icon, Input, Modal, Table } from 'semantic-ui-react';
 
 import { FN_TOPICS_MULTI } from '../../../helpers/consts';
-import { selectors as settings } from '../../../redux/modules/settings';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
+import { isEmpty } from '../../../helpers/utils';
+import { selectors as settings } from '../../../redux/modules/settings';
 import TagSourceItem from './TagSourceItem';
 
 const ITEMS_PER_ROW = 3;
@@ -52,6 +53,8 @@ const TagSourceItemModal = props => {
       .map(id => getById(id))
       .filter(x => x?.[field] && reg.test(x[field]));
   }
+
+  if (isEmpty(children)) return null;
 
   const renderRow = (x, i) => (
     <Table.Row key={i} verticalAlign="top">

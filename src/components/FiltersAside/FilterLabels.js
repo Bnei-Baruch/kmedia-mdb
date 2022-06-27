@@ -1,22 +1,26 @@
 import React from 'react';
+import { withNamespaces } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Container, Icon, Label } from 'semantic-ui-react';
-import { actions, selectors as filters } from '../../redux/modules/filters';
-import { selectors as sources } from '../../redux/modules/sources';
-import { selectors as tags } from '../../redux/modules/tags';
-import { withNamespaces } from 'react-i18next';
+
+import dateFilter from '../../filters/definitions/dateFilter';
 import {
   FN_COLLECTION_MULTI,
   FN_CONTENT_TYPE,
   FN_DATE_FILTER,
   FN_LANGUAGES,
+  FN_MEDIA_TYPE,
+  FN_ORIGINAL_LANGUAGES,
+  FN_PERSON,
   FN_SOURCES_MULTI,
   FN_TOPICS,
   FN_TOPICS_MULTI,
   LANGUAGES
 } from '../../helpers/consts';
-import dateFilter from '../../filters/definitions/dateFilter';
+import { actions, selectors as filters } from '../../redux/modules/filters';
 import { selectors as mdbSelectors } from '../../redux/modules/mdb';
+import { selectors as sources } from '../../redux/modules/sources';
+import { selectors as tags } from '../../redux/modules/tags';
 
 const FilterLabels = ({ namespace, t }) => {
 
@@ -24,6 +28,7 @@ const FilterLabels = ({ namespace, t }) => {
   const getSourceById = useSelector(state => sources.getSourceById(state.sources));
   const getTagById    = useSelector(state => tags.getTagById(state.tags));
   const getCById      = useSelector(state => mdbSelectors.nestedGetCollectionById(state.mdb));
+  const getPersonById = useSelector(state => mdbSelectors.getPersonById(state.mdb));
 
   const dispatch = useDispatch();
 
@@ -40,8 +45,14 @@ const FilterLabels = ({ namespace, t }) => {
         return dateFilter.valueToTagLabel(val);
       case FN_LANGUAGES:
         return LANGUAGES[val]?.name;
+      case FN_PERSON:
+        return getPersonById(val).name;
       case FN_COLLECTION_MULTI:
         return getCById(val).name;
+      case FN_MEDIA_TYPE:
+        return t(`filters.media-types.${val}`);
+      case FN_ORIGINAL_LANGUAGES:
+        return `${t('filters.aside-filter.original-language-filter')}: ${LANGUAGES[val]?.name}`;
       default:
         return null;
     }
@@ -71,7 +82,7 @@ const FilterLabels = ({ namespace, t }) => {
 
   return (
     <Container className="filter_aside_labels">
-      <span>{t('filters.by')}</span>
+      <span>{t('filters.filters')}:</span>
       {
         list.filter(f => f.values?.length > 0).flatMap((f, j) =>
           f.values.map((v, i) => renderItem(f.name, v, `${j}_${i}`))

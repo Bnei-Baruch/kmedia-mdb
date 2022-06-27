@@ -1,6 +1,6 @@
-import { createAction, handleActions } from 'redux-actions';
 import groupBy from 'lodash/groupBy';
 import mapValues from 'lodash/mapValues';
+import { createAction, handleActions } from 'redux-actions';
 
 import MediaHelper from '../../helpers/media';
 import { types as settings } from './settings';
@@ -45,6 +45,7 @@ const CREATE_LABEL_FAILURE = 'MDB/CREATE_LABEL_FAILURE';
 const FETCH_LABELS         = 'MDB/FETCH_LABELS';
 const FETCH_LABELS_SUCCESS = 'MDB/FETCH_LABELS_SUCCESS';
 const RECEIVE_LABELS       = 'MDB/RECEIVE_LABELS';
+const RECEIVE_PERSONS      = 'MDB/RECEIVE_PERSONS';
 
 export const types = {
   FETCH_UNIT,
@@ -81,6 +82,7 @@ export const types = {
   CREATE_LABEL,
   FETCH_LABELS,
   FETCH_LABELS_SUCCESS,
+
 };
 
 /* Actions */
@@ -121,6 +123,7 @@ const createLabelFailure = createAction(CREATE_LABEL_FAILURE);
 const fetchLabels        = createAction(FETCH_LABELS);
 const fetchLabelsSuccess = createAction(FETCH_LABELS_SUCCESS);
 const receiveLabels      = createAction(RECEIVE_LABELS);
+const receivePersons     = createAction(RECEIVE_PERSONS);
 
 export const actions = {
   fetchUnit,
@@ -159,6 +162,8 @@ export const actions = {
   createLabelFailure,
   fetchLabels,
   fetchLabelsSuccess,
+
+  receivePersons
 };
 
 /* Reducer */
@@ -170,6 +175,7 @@ const freshStore = () => ({
   cWindow: {},
   countCU: {},
   labelsByCU: {},
+  personById: {},
   datepickerCO: null,
   wip: {
     units: {},
@@ -537,6 +543,22 @@ const onReceiveLabels = (state, action) => {
   };
 };
 
+const onReceivePersons = (state, action) => {
+  if (action.payload === 0) {
+    return state;
+  }
+
+  const personById = action.payload.reduce((acc, { id, name }) => {
+    if (!!id) {
+      acc[id] = { id, name };
+    }
+
+    return acc;
+  }, {});
+
+  return { ...state, personById };
+};
+
 const onFetchWindow = (state, action) => {
   const { id, data } = action.payload;
 
@@ -637,6 +659,7 @@ export const reducer = handleActions({
   [RECEIVE_CONTENT_UNITS]: (state, action) => onReceiveContentUnits(state, action),
 
   [RECEIVE_LABELS]: onReceiveLabels,
+  [RECEIVE_PERSONS]: onReceivePersons,
 }, freshStore());
 
 /* Selectors */
@@ -726,6 +749,8 @@ const skipFetchedCO = (state, ids) => ids.filter(id => !getDenormCollection(stat
 
 const getLabelsByCU = (state, id) => state.labelsByCU[id];
 
+const getPersonById = state => id => state.personById[id];
+
 export const selectors = {
   getCollectionById,
   nestedGetCollectionById,
@@ -748,4 +773,5 @@ export const selectors = {
   skipFetchedCO,
   getLabelsByCU,
   getDenormLabel,
+  getPersonById,
 };

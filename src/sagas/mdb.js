@@ -94,6 +94,7 @@ export function* fetchSQData() {
     yield put(sources.receiveSources({ sources: data.sources, language }));
     yield put(tags.receiveTags(data.tags));
     yield put(publications.receivePublishers(data.publishers));
+    yield put(actions.receivePersons(data.persons));
     yield put(actions.fetchSQDataSuccess());
   } catch (err) {
     yield put(actions.fetchSQDataFailure(err));
@@ -199,4 +200,8 @@ function* watchFetchLabels() {
   yield takeEvery(types.FETCH_LABELS, fetchLabels);
 }
 
-export const sagas = [watchFetchUnit, watchFetchUnitsByIDs, watchFetchCollection, watchFetchLatestLesson, watchFetchSQData, watchFetchWindow, watchFetchDatepickerCO, watchCountCU, watchCreateLabel, watchFetchLabels,];
+function* watchFetchCollections() {
+  yield takeEvery(types.FETCH_LABELS, fetchLabels);
+}
+
+export const sagas = [watchFetchUnit, watchFetchUnitsByIDs, watchFetchCollection, watchFetchLatestLesson, watchFetchSQData, watchFetchWindow, watchFetchDatepickerCO, watchCountCU, watchCreateLabel, watchFetchLabels];

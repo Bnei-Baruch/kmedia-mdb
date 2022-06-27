@@ -319,7 +319,7 @@ export const EVENT_TYPES = [
 ];
 
 // Required for Sections filter.
-export const COLLECTION_LESSONS_TYPE      = [CT_DAILY_LESSON, CT_SPECIAL_LESSON, /* CT_CHILDREN_LESSONS, */ CT_WOMEN_LESSONS, CT_VIRTUAL_LESSONS, CT_LECTURE_SERIES];
+export const COLLECTION_LESSONS_TYPE      = [CT_DAILY_LESSON, CT_SPECIAL_LESSON, /* CT_CHILDREN_LESSONS, */ CT_WOMEN_LESSONS, CT_VIRTUAL_LESSONS, CT_LECTURE_SERIES, CT_LESSONS_SERIES];
 export const COLLECTION_PROGRAMS_TYPE     = [CT_VIDEO_PROGRAM, CT_CLIPS];
 export const COLLECTION_EVENTS_TYPE       = [CT_FRIENDS_GATHERINGS, CT_MEALS, ...EVENT_TYPES];
 export const COLLECTION_PUBLICATIONS_TYPE = [CT_ARTICLES];
@@ -646,8 +646,11 @@ export const UNIT_VIDEOS_TYPE = [...UNIT_LESSONS_TYPE, ...UNIT_PROGRAMS_TYPE, ..
 export const FN_SOURCES            = 'sources-filter';
 export const FN_TOPICS             = 'topics-filter';
 export const FN_LANGUAGES          = 'language-filter';
+export const FN_ORIGINAL_LANGUAGES = 'original-language-filter';
 export const FN_CONTENT_TYPE       = 'content-type-filter';
 export const FN_DATE_FILTER        = 'date-filter';
+export const FN_PERSON             = 'person-filter';
+export const FN_MEDIA_TYPE         = 'media-type-filter';
 
 export const FN_SOURCES_MULTI    = 'sources-filter-multi';
 export const FN_TOPICS_MULTI     = 'topics-filter-multi';
@@ -655,3 +658,6 @@ export const FN_COLLECTION_MULTI = 'collections-filter-multi';
 
 export const PAGE_NS_TOPICS   = 'topic';
 export const PAGE_NS_PROGRAMS = 'programs';
+export const PAGE_NS_LESSONS  = 'lessons';
+
+export const ALL_PAGE_NS = [PAGE_NS_LESSONS, PAGE_NS_TOPICS, PAGE_NS_PROGRAMS];

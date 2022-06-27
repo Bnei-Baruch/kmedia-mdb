@@ -36,7 +36,7 @@ const TopicPage = ({ t }) => {
   useEffect(() => {
     const page_no = pageNo > 1 ? pageNo : 1;
     dispatch(actions.fetchDashboard({ tag: id, page_size: pageSize, page_no }));
-  }, [id, language, dispatch, pageNo, selected]);
+  }, [id, language, dispatch, pageNo, pageSize, selected]);
 
   if (!getPathByID) {
     const tag = getTags ? getTags[id] : null;

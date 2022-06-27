@@ -109,7 +109,17 @@
       "topics-filter-multi": "Topics",
       "content-type-filter": "Section",
       "language-filter": "Language",
-      "date-filter": "Date"
+      "date-filter": "Date",
+      "media-type-filter": "Media",
+      "person-filter": "Author",
+      "original-language-filter": "Original Language",
+      "locations-filter": "Location"
+    },
+    "media-types": {
+      "audio" : "Audio",
+      "video" : "Video",
+      "text" : "Transcription",
+      "image" : "Sketch"
     },
     "content-types": {
       "CONGRESS": "Conventions",
@@ -374,7 +384,7 @@
   },
   "programs": {
     "header": {
-      "text": "Programs",
+      "text": "Programs & Clips",
       "subtext": "Here you will find a rich variety of programs that include: fascinating conversations about the meaning of life, current events, programs for the whole family, clips and more."
     },
     "tabs": {
