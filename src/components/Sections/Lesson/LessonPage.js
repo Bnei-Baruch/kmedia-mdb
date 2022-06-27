@@ -2,7 +2,7 @@ import { isEqual } from 'lodash';
 import React, { useCallback, useEffect, useMemo } from 'react';
 import { withNamespaces } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { Container, Divider } from 'semantic-ui-react';
 
 import { PAGE_NS_LESSONS } from '../../../helpers/consts';
@@ -21,9 +21,8 @@ import WipErr from '../../shared/WipErr/WipErr';
 import Filters from './Filters';
 import ItemOfList from './ItemOfList';
 
-const LessonPage = ({ t }) => {
-  const { id: cid } = useParams();
-  const namespace   = `${PAGE_NS_LESSONS}_${cid}`;
+const LessonPage = ({ cid, t }) => {
+  const namespace = `${PAGE_NS_LESSONS}_${cid}`;
 
   const collection = useSelector(state => mdb.getDenormCollection(state.mdb, cid));
 

@@ -482,6 +482,10 @@
           padding-left: .5em;
         }
       }
+
+      .ltr &:last-child {
+        border-right: none;
+      }
     }
   }
 
