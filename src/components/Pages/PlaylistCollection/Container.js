@@ -117,7 +117,6 @@ const PlaylistCollectionContainer = ({ cId, t, cuId }) => {
   }
 
   // We're wip / err if some request is wip / err
-  //don't wip for CU that fetched with full fetch cause its rerender Page component
   const wip = wipMap.collections[cId] || cusForFetch.length !== 0 || cuIDs.some(id => wipMap.units[id]);
   let err   = errorMap.collections[cId];
   if (!err) {
