@@ -175,6 +175,7 @@ const freshStore = () => ({
   cWindow: {},
   countCU: {},
   labelsByCU: {},
+  personById: {},
   datepickerCO: null,
   wip: {
     units: {},

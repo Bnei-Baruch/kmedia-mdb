@@ -11,8 +11,8 @@ const PersonItem = ({ namespace, id }) => {
   const selectedFilters = useSelector(state => filters.getFilterByName(state.filters, namespace, FN_PERSON));
   const selected        = useMemo(() => selectedFilters?.values || [], [selectedFilters]);
 
-  const stat     = useSelector(state => filtersAside.getStats(state.filtersAside, namespace, FN_PERSON)(id));
-  const { name } = useSelector(state => mdb.getPersonById(state.mdb)(id));
+  const stat   = useSelector(state => filtersAside.getStats(state.filtersAside, namespace, FN_PERSON)(id));
+  const person = useSelector(state => mdb.getPersonById(state.mdb)(id));
 
   const dispatch     = useDispatch();
   const handleSelect = (e, { checked }) => {
@@ -30,7 +30,7 @@ const PersonItem = ({ namespace, id }) => {
         {`(${stat})`}
       </List.Content>
       <Checkbox
-        label={name}
+        label={person?.name}
         checked={selected.includes(id)}
         onChange={handleSelect}
         disabled={stat === 0}

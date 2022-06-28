@@ -1,23 +1,24 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { withNamespaces } from 'react-i18next';
-import PropTypes from 'prop-types';
+import isEqual from 'lodash/isEqual';
 import moment from 'moment';
+import PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react';
+import { withNamespaces } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
+import { COLLECTION_DAILY_LESSONS, DATE_FORMAT } from '../../../helpers/consts';
+import { canonicalLink } from '../../../helpers/links';
 
 import { actions, selectors } from '../../../redux/modules/mdb';
 import { actions as recommended } from '../../../redux/modules/recommended';
-import { COLLECTION_DAILY_LESSONS, DATE_FORMAT } from '../../../helpers/consts';
-import { canonicalLink } from '../../../helpers/links';
 import WipErr from '../../shared/WipErr/WipErr';
 import Page from './Page';
 
 const PlaylistCollectionContainer = ({ cId, t, cuId }) => {
-  const collection         = useSelector(state => selectors.getDenormCollectionWUnits(state.mdb, cId));
-  const wipMap             = useSelector(state => selectors.getWip(state.mdb));
+  const collection = useSelector(state => selectors.getDenormCollectionWUnits(state.mdb, cId));
+  const wipMap = useSelector(state => selectors.getWip(state.mdb));
   const fullUnitFetchedMap = useSelector(state => selectors.getFullUnitFetched(state.mdb));
-  const errorMap           = useSelector(state => selectors.getErrors(state.mdb));
-  const cWindow            = useSelector(state => selectors.getWindow(state.mdb));
-  const collections        = useSelector(state => cWindow?.data?.map(id => selectors.getDenormCollection(state.mdb, id)).filter(c => !!c));
+  const errorMap = useSelector(state => selectors.getErrors(state.mdb));
+  const cWindow = useSelector(state => selectors.getWindow(state.mdb), isEqual);
+  const collections = useSelector(state => cWindow?.data?.map(id => selectors.getDenormCollection(state.mdb, id)).filter(c => !!c));
 
   const [nextLink, setNextLink] = useState(null);
   const [prevLink, setPrevLink] = useState(null);
@@ -47,7 +48,13 @@ const PlaylistCollectionContainer = ({ cId, t, cuId }) => {
       });
 
       if (cusForFetch?.length > 0) {
-        dispatch(actions.fetchUnitsByIDs({ id: cusForFetch, with_tags: true, with_files: true, with_sources: true, with_derivations: true }));
+        dispatch(actions.fetchUnitsByIDs({
+          id: cusForFetch,
+          with_tags: true,
+          with_files: true,
+          with_sources: true,
+          with_derivations: true
+        }));
       }
     }
 

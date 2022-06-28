@@ -17,43 +17,45 @@ const SectionFiltersWithMobile = ({ filters, children, t }) => {
 
   const toggleFilters = () => setOpenFilters(!openFilters);
 
-  return (<>
+  const render = () => (
     <Container className="padded" fluid>
-      {
-        isMobileDevice && <Button className="" basic icon="filter" floated={'right'} onClick={toggleFilters} />
-      }
       <Divider />
       <Grid container>
-        {
-          !isMobileDevice ? (
-            <Grid.Column width="4" className="filters-aside-wrapper">
-              {filters}
-            </Grid.Column>
-          ) : (
-            <Modal
-              closeIcon
-              open={openFilters}
-              onClose={toggleFilters}
-              dir={dir}
-              className={dir}
-            >
-              <Modal.Content className="filters-aside-wrapper" scrolling>
-                {filters}
-              </Modal.Content>
-              <Modal.Actions>
-                <Button primary content={t('buttons.close')} onClick={toggleFilters} />
-              </Modal.Actions>
-            </Modal>
-          )
-
-        }
-        <Grid.Column width={isMobileDevice ? 16 : 12}>
+        <Grid.Column width="4" className="filters-aside-wrapper">
+          {filters}
+        </Grid.Column>
+        <Grid.Column width={12}>
           {children}
         </Grid.Column>
       </Grid>
     </Container>
-  </>
   );
+
+  const renderMobile = () => (
+    <Container fluid>
+      <Button basic icon="filter" floated={'right'} onClick={toggleFilters} />
+      <Divider className="clear" />
+
+      {children}
+
+      <Modal
+        closeIcon
+        open={openFilters}
+        onClose={toggleFilters}
+        dir={dir}
+        className={dir}
+      >
+        <Modal.Content className="filters-aside-wrapper" scrolling>
+          {filters}
+        </Modal.Content>
+        <Modal.Actions>
+          <Button primary content={t('buttons.close')} onClick={toggleFilters} />
+        </Modal.Actions>
+      </Modal>
+    </Container>
+  );
+
+  return isMobileDevice ? renderMobile() : render();
 };
 
 export default withNamespaces()(SectionFiltersWithMobile);

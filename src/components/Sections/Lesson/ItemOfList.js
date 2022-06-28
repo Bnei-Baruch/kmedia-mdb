@@ -16,6 +16,9 @@ const ItemOfList = ({ id, ccu, t }) => {
   const views = useSelector(state => recommended.getViews(id, state.recommended));
   const cu    = useSelector(state => mdb.getDenormContentUnit(state.mdb, id));
 
+  if (!cu)
+    return null;
+
   const link = canonicalLink(cu);
 
   const description = [];
@@ -37,7 +40,7 @@ const ItemOfList = ({ id, ccu, t }) => {
           />
         )
       }
-      <div className={clsx('description', { 'is_single': description.length === 1 })}>
+      <div className={clsx('description', { 'is_single': !(description?.length > 1) })}>
         {
           description.map((d, i) => (<span key={i}>{d}</span>))
         }

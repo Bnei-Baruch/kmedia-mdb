@@ -1,7 +1,7 @@
 import { call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
 import { filtersTransformer } from '../filters';
 import Api from '../helpers/Api';
-import { CT_COLLECTIONS, CT_UNITS, CT_VIDEO_PROGRAM_CHAPTER } from '../helpers/consts';
+import { COLLECTION_LESSONS_TYPE, CT_VIDEO_PROGRAM_CHAPTER, UNIT_LESSONS_TYPE } from '../helpers/consts';
 import { isEmpty } from '../helpers/utils';
 import { selectors as filterSelectors } from '../redux/modules/filters';
 
@@ -56,7 +56,7 @@ function* fetchListLessons(action) {
   const language = yield select(state => settings.getLanguage(state.settings));
 
   try {
-    const { data: { items, content_units, total } } = yield call(Api.events, { ...args, ...filterParams, language });
+    const { data: { items, content_units, total } } = yield call(Api.lessons, { ...args, ...filterParams, language });
 
     let cuIDs;
     let cuIDsView;
@@ -68,8 +68,8 @@ function* fetchListLessons(action) {
       cuIDsView  = content_units.map(x => x.id);
       yield put(mdbActions.receiveContentUnits(content_units));
     } else {
-      cuIDs     = items.filter(x => CT_UNITS.includes(x.content_type)).map(x => x.id);
-      cIDs      = items.filter(x => CT_COLLECTIONS.includes(x.content_type)).map(x => x.id);
+      cuIDs     = items.filter(x => UNIT_LESSONS_TYPE.includes(x.content_type)).map(x => x.id);
+      cIDs      = items.filter(x => COLLECTION_LESSONS_TYPE.includes(x.content_type)).map(x => x.id);
       cuIDsView = cuIDs;
     }
 
@@ -114,7 +114,7 @@ function* watchFetchList() {
 }
 
 function* watchFetchListLessons() {
-  yield takeEvery([types.FETCH_LIST_LESSONS, types.FETCH_LIST_EVENTS], fetchListLessons);
+  yield takeEvery(types.FETCH_LIST_LESSONS, fetchListLessons);
 }
 
 function* watchSetPage() {

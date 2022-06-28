@@ -19,6 +19,8 @@ import SectionHeader from '../../shared/SectionHeader';
 import Filters from './Filters';
 import ItemOfList from './ItemOfList';
 
+const FILTER_PARAMS = { content_type: [...COLLECTION_PROGRAMS_TYPE, ...UNIT_PROGRAMS_TYPE] };
+
 const MainPage = () => {
   const { items, total } = useSelector(state => lists.getNamespaceState(state.lists, PAGE_NS_PROGRAMS)) || {};
   const language         = useSelector(state => settings.getLanguage(state.settings));
@@ -55,7 +57,7 @@ const MainPage = () => {
       filters={
         <Filters
           namespace={PAGE_NS_PROGRAMS}
-          baseParams={{ content_type: [...COLLECTION_PROGRAMS_TYPE, ...UNIT_PROGRAMS_TYPE] }}
+          baseParams={FILTER_PARAMS}
         />
       }
     >

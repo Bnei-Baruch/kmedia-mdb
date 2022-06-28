@@ -457,6 +457,43 @@
     .ui.container {
       width: 100%;
     }
+
+  }
+
+  .additional_links {
+    margin-top: .5em;
+
+    a {
+      color: $black;
+      padding: 0 .5em;
+      line-height: .9em;
+      border-right: 1px solid $midGrey;
+      display: inline-block;
+
+      &:first-child {
+        padding-left: 0;
+
+        .rtl & {
+          border-right: none;
+          padding-right: 0;
+          padding-left: .5em;
+        }
+      }
+
+      .ltr &:last-child {
+        border-right: none;
+      }
+
+      @include mobile {
+        border: none;
+        padding: 4px 0;
+        line-height: 1.1em;
+      }
+    }
+  }
+
+  &.daily_lesson .media_item__content {
+    justify-content: flex-start;
   }
 
   &.daily_lesson .media_item__content {

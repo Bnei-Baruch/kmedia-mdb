@@ -28,11 +28,10 @@ const FILTER_NAMES = [
   FN_TOPICS_MULTI,
   FN_SOURCES_MULTI,
   FN_CONTENT_TYPE,
-  FN_LANGUAGES,
   FN_COLLECTION_MULTI,
   FN_PERSON,
   FN_MEDIA_TYPE,
-  FN_ORIGINAL_LANGUAGES,
+  FN_ORIGINAL_LANGUAGES
 ];
 /* Types */
 
@@ -112,7 +111,7 @@ const onFetchStatsSuccess = (draft, { dataCU, dataC, dataL, namespace, isPrepare
 };
 
 const onReceiveSingleTypeStats = (draft, { dataCU = {}, dataC = {}, dataL = {}, namespace, isPrepare, fn }) => {
-  const statsByFN = draft[namespace]?.[fn] || {};
+  const statsByFN = draft[namespace]?.[fn] || { byId: {}, tree: [] };
 
   if (isPrepare) {
     [...Object.keys({ ...dataCU, ...dataC, ...dataL })]
@@ -130,6 +129,8 @@ const onReceiveSingleTypeStats = (draft, { dataCU = {}, dataC = {}, dataL = {}, 
   draft[namespace] = { ...draft[namespace], [fn]: statsByFN };
   return draft;
 };
+
+
 
 const onReceiveLocationsStats = (draft, { locations, namespace, isPrepare }) => {
   const stats = draft[namespace]?.[FN_LOCATIONS] || { byId: {}, citiesByCountry: {}, tree: [] };
@@ -153,13 +154,11 @@ const onReceiveLocationsStats = (draft, { locations, namespace, isPrepare }) => 
     });
   }
 
-  console.log('111', stats.byId['Israel']);
   for (const k in stats.citiesByCountry) {
     const c       = stats.citiesByCountry[k].reduce((acc, v) => acc + stats.byId[v], 0);
     stats.byId[k] = c;
   }
 
-  console.log('222', stats.byId['Israel']);
   draft[namespace] = { ...draft[namespace], [FN_LOCATIONS]: stats };
   return draft;
 };

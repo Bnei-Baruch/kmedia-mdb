@@ -112,7 +112,7 @@
       "date-filter": "Дата",
       "media-type-filter": "Медиа",
       "person-filter": "Автор",
-      "original-language-filter": "original-language-filter",
+      "original-language-filter": "Язык оригинала",
       "locations-filter": "Место проведения"
     },
     "media-types": {

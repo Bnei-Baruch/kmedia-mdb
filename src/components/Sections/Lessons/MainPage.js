@@ -30,6 +30,7 @@ import UnitItem from './UnitItem';
 
 const CT_WITHOUT_FILTERS = [...(UNIT_LESSONS_TYPE.filter(ct => ct !== CT_LESSON_PART)), ...COLLECTION_LESSONS_TYPE];
 const CT_WITH_FILTERS    = [CT_LESSONS_SERIES, ...UNIT_LESSONS_TYPE];
+const FILTER_PARAMS      = { content_type: CT_WITH_FILTERS };
 
 const MainPage = () => {
   const { items, total } = useSelector(state => lists.getNamespaceState(state.lists, PAGE_NS_LESSONS)) || {};
@@ -64,7 +65,7 @@ const MainPage = () => {
       filters={
         <Filters
           namespace={PAGE_NS_LESSONS}
-          baseParams={{ content_type: CT_WITH_FILTERS }}
+          baseParams={FILTER_PARAMS}
         />
       }
     >

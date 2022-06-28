@@ -176,6 +176,8 @@ export const LANG_LATVIAN    = 'lv';
 export const LANG_SLOVAK     = 'sk';
 export const LANG_CZECH      = 'cs';
 export const LANG_AMHARIC    = 'am';
+export const LANG_INDONESIAN = 'id';
+export const LANG_ARMENIAN   = 'hy';
 export const LANG_UNKNOWN    = 'xx';
 
 export const LANGUAGES = {
@@ -190,7 +192,7 @@ export const LANGUAGES = {
   [LANG_PORTUGUESE]: { value: LANG_PORTUGUESE, locale: 'pt_PT', lang3: 'POR', name: 'Português' },
   [LANG_TURKISH]: { value: LANG_TURKISH, locale: 'tr_TR', lang3: 'TRK', name: 'Türkçe' },
   [LANG_POLISH]: { value: LANG_POLISH, locale: 'pl_PL', lang3: 'POL', name: 'Polski' },
-  [LANG_ARABIC]: { value: LANG_ARABIC, locale: 'ar_AR', lang3: 'ARB', name: 'اَلْعَرَبِيَّةُ' },
+  [LANG_ARABIC]: { value: LANG_ARABIC, locale: 'ar_AR', lang3: 'ARA', name: 'اَلْعَرَبِيَّةُ' },
   [LANG_HUNGARIAN]: { value: LANG_HUNGARIAN, locale: 'hu_HU', lang3: 'HUN', name: 'Magyar' },
   [LANG_FINNISH]: { value: LANG_FINNISH, locale: 'fi_FI', lang3: 'FIN', name: 'Suo̯mi' },
   [LANG_LITHUANIAN]: { value: LANG_LITHUANIAN, locale: 'lt_LT', lang3: 'LIT', name: 'Lietuvių' },
@@ -212,6 +214,8 @@ export const LANGUAGES = {
   [LANG_SLOVAK]: { value: LANG_SLOVAK, locale: 'sk_SK', lang3: 'SLK', name: 'slovenčina' },
   [LANG_CZECH]: { value: LANG_CZECH, locale: 'cs_CZ', lang3: 'CZE', name: 'Čeština' },
   [LANG_AMHARIC]: { value: LANG_AMHARIC, locale: 'am_ET', lang3: 'AMH', name: 'ኣማርኛ' },
+  [LANG_INDONESIAN]: { value: LANG_INDONESIAN, locale: 'in_ID', lang3: 'IND', name: 'Bahasa Indonesia' },
+  [LANG_ARMENIAN]: { value: LANG_ARMENIAN, locale: 'hy_AM', lang3: 'ARM', name: 'Հայերէն' },
 };
 
 export const ALL_LANGUAGES = [
@@ -247,6 +251,8 @@ export const ALL_LANGUAGES = [
   LANG_SLOVAK,
   LANG_CZECH,
   LANG_AMHARIC,
+  LANG_INDONESIAN,
+  LANG_ARMENIAN,
 ];
 
 export const POPULAR_LANGUAGES = [
@@ -339,7 +345,7 @@ export const RH_ARTICLES = 'rQ6sIUZK';
 export const RH_RECORDS  = '2GAdavz0';
 
 // This is exptected to be sorted by values
-export const BS_TAAS_PARTS            = {
+export const BS_TAAS_PARTS = {
   '7scSATcZ': 1,
   'LIMg3y94': 9,
   'rhRuFdIP': 13,
@@ -374,14 +380,65 @@ export const BS_TAAS_PARTS            = {
   'S5mViX7z': 187,
   '4KFDFg3m': 190,
   'Levgq2jH': 197,
-  '1kDKQxJb': 209,
-  'o5lXptLo': 291,
-  'eNwJXy4s': 389,
-  'ahipVtPu': 485,
-  'Pscnn3pP': 599,
-  'Lfu7W3CD': 731,
-  'n03vXCJl': 865,
-  'UGcGGSpP': 1011,
+  'h97a60Mc': 209,
+  'MGl4GjjS': 218,
+  'EU5TTtcy': 224,
+  'ldrFtcev': 232,
+  'RTzg7sXm': 239,
+  'jnRyYLeP': 245,
+  'BjZJBha8': 257,
+  'PNEWuQYa': 275,
+  'Ut8PE5aO': 276,
+  'sL3XV5Dr': 283,
+  '1t0TL11u': 285,
+  '4pmOtkWY': 291,
+  'fSmz8o3A': 359,
+  'uyAWnLqJ': 360,
+  '2zI4yXlE': 364,
+  'H9JMve9K': 368,
+  '9Poika27': 386,
+  'DztxuIK7': 389,
+  'aA8oiLQA': 440,
+  'Py2DZ1ES': 452,
+  'kqEIM6f0': 462,
+  'jOttKP5x': 463,
+  'AkCMSd9U': 468,
+  'tDNxLdgR': 470,
+  'KGNYqv7h': 478,
+  'HXvOiFNY': 479,
+  'FWrR48Bb': 485,
+  '77Yq5OF7': 546,
+  'rutwuYR8': 561,
+  'dgNJLnA7': 570,
+  'P5q0Zmm6': 572,
+  'hdywOExs': 581,
+  'wOz46Ac9': 583,
+  'teM5Yc6B': 590,
+  'NlYgsUxe': 599,
+  'twSOJdmU': 688,
+  'OF3SI33X': 699,
+  'JQn92bOZ': 702,
+  'yBEWcZWe': 703,
+  'yG5OG3aS': 708,
+  'BeNvMLuu': 711,
+  'qk1TqqNn': 724,
+  'z6MVO6UG': 731,
+  'n74IfjUw': 813,
+  'oFfVR1sj': 821,
+  'X714OgYa': 823,
+  '56K73eNi': 844,
+  'DhYu7bEh': 847,
+  '1zYk2z7m': 865,
+  'L5xO0yDG': 956,
+  '9gSOlEJl': 970,
+  'LRQKRR2e': 972,
+  'ac3R2k8O': 987,
+  'Vw89jmcY': 990,
+  '1kY2wOt9': 1011,
+  'eUDvJPEz': 1083,
+  '38p1N7aA': 1085,
+  'h5CQQmY5': 1099,
+  'awbSqHpG': 1103,
   'NpLQT0LX': 1127,
   'AUArdCkH': 1297,
   'tit6XNAo': 1493,
@@ -392,6 +449,7 @@ export const BS_TAAS_PARTS            = {
   'TaGXjokb': 2075,
   'P727ETJu': 2080
 };
+
 export const BS_TAAS_PARTS_PARTS_ONLY = {
   '9xNFLSSp': 1,
   'XlukqLH8': 37,

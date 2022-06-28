@@ -27,7 +27,7 @@ const UnitItem = ({ id, t }) => {
   if (views > 0) description.push(t('pages.unit.info.views', { views }));
 
   const renderCCU = c => (
-    <Link to={canonicalLink(c)}>
+    <Link to={canonicalLink(c)} key={c}>
       {`${t(`constants.content-types.${c.content_type}`)}: ${c.name}`}
     </Link>
   );
@@ -38,16 +38,15 @@ const UnitItem = ({ id, t }) => {
         <UnitLogoWithDuration duration={cu.duration} unitId={cu.id} width={144} />
       </Link>
       <div className="media_item__content">
-        {description.length.toString()}
         <TooltipIfNeed text={cu.name} Component={Header} as={Link} to={link} content={cu.name} />
         {
           !isEmpty(additionCCUs) && (
-            <div className="separate_with_line">
+            <div className="additional_links">
               {additionCCUs.map(renderCCU)}
             </div>
           )
         }
-        <div className={clsx('description', { 'is_single': description.length === 1 })}>
+        <div className={clsx('description', { 'is_single': !(description?.length > 1) })}>
           {description.map((d, i) => (<span key={i}>{d}</span>))}
         </div>
       </div>

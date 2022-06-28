@@ -82,7 +82,7 @@ export function* fetchStat(action) {
     yield put(actions.receiveLocationsStats({ locations, namespace, isPrepare }));
     yield put(actions.fetchStatsSuccess({ dataCU, dataC, dataL, namespace, isPrepare }));
 
-    if (filterParams.with_languages && !isPrepare) {
+    if (filterParams.with_languages) {
       yield fetchLanguageStat({ ...filterParams }, namespace, dataC.languages, dataL.languages, isPrepare);
     }
   } catch (err) {
