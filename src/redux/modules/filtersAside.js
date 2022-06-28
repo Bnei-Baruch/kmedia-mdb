@@ -131,7 +131,6 @@ const onReceiveSingleTypeStats = (draft, { dataCU = {}, dataC = {}, dataL = {}, 
 };
 
 
-
 const onReceiveLocationsStats = (draft, { locations, namespace, isPrepare }) => {
   const stats = draft[namespace]?.[FN_LOCATIONS] || { byId: {}, citiesByCountry: {}, tree: [] };
 
