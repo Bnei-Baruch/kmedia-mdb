@@ -44,14 +44,12 @@ const PlaylistCollectionContainer = ({ cId, t, cuId }) => {
   };
 
   // Fetch units files if needed.
-  const cusForFetch = useMemo(() => {
-    return cuIDs?.filter(id => cuId !== id).filter(id => {
-      if (wipMap.units[id] || errorMap.units[id])
-        return false;
-      const cu = content_units.find(x => x.id === id);
-      return !cu?.files;
-    }) || [];
-  }, [cuIDs, content_units, wipMap.units, errorMap.units]);
+  const cusForFetch = useMemo(() => cuIDs?.filter(id => cuId !== id).filter(id => {
+    if (wipMap.units[id] || errorMap.units[id])
+      return false;
+    const cu = content_units.find(x => x.id === id);
+    return !cu?.files;
+  }) || [], [cuIDs, content_units, wipMap.units, errorMap.units]);
 
   useEffect(() => {
     if (cusForFetch?.length > 0) {
