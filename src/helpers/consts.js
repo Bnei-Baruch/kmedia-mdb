@@ -46,9 +46,67 @@ export const CT_RESEARCH_MATERIAL     = 'RESEARCH_MATERIAL';
 export const CT_KTAIM_NIVCHARIM       = 'KTAIM_NIVCHARIM';
 export const CT_LIKUTIM               = 'LIKUTIM';
 
-export const CT_UNITS = [CT_LESSON_PART, CT_LECTURE, CT_CHILDREN_LESSON, CT_WOMEN_LESSON, CT_VIRTUAL_LESSON, CT_FRIENDS_GATHERING, CT_MEAL, CT_VIDEO_PROGRAM_CHAPTER, CT_FULL_LESSON, CT_ARTICLE, CT_UNKNOWN, CT_EVENT_PART, CT_CLIP, CT_TRAINING, CT_KITEI_MAKOR, CT_PUBLICATION, CT_LELO_MIKUD, CT_BLOG_POST, CT_RESEARCH_MATERIAL, CT_KTAIM_NIVCHARIM, CT_LIKUTIM,];
+export const CT_UNITS = [
+  CT_LESSON_PART,
+  CT_LECTURE,
+  CT_CHILDREN_LESSON,
+  CT_WOMEN_LESSON,
+  CT_VIRTUAL_LESSON,
+  CT_FRIENDS_GATHERING,
+  CT_MEAL,
+  CT_VIDEO_PROGRAM_CHAPTER,
+  CT_FULL_LESSON,
+  CT_ARTICLE,
+  CT_UNKNOWN,
+  CT_EVENT_PART,
+  CT_CLIP,
+  CT_TRAINING,
+  CT_KITEI_MAKOR,
+  CT_PUBLICATION,
+  CT_LELO_MIKUD,
+  CT_BLOG_POST,
+  CT_RESEARCH_MATERIAL,
+  CT_KTAIM_NIVCHARIM,
+  CT_LIKUTIM,
+];
 
-export const iconByContentTypeMap = new Map([[CT_LESSON_PART, 'lessons'], [CT_FULL_LESSON, 'lessons'], [CT_VIRTUAL_LESSON, 'lessons'], [CT_WOMEN_LESSON, 'lessons'], [CT_CHILDREN_LESSON, 'lessons'], [CT_LELO_MIKUD, 'lessons'], [CT_DAILY_LESSON, 'lessons'], [CT_SPECIAL_LESSON, 'lessons'], [CT_LECTURE_SERIES, 'lessons'], [CT_CHILDREN_LESSONS, 'lessons'], [CT_WOMEN_LESSONS, 'lessons'], [CT_VIRTUAL_LESSONS, 'lessons'], [CT_LESSONS_SERIES, 'lessons'], [CT_LECTURE, 'lessons'], [CT_LIKUTIM, 'likutim'], [CT_FRIENDS_GATHERING, 'events'], [CT_MEAL, 'events'], [CT_EVENT_PART, 'events'], [CT_TRAINING, 'events'], [CT_UNITY_DAY, 'events'], [CT_FRIENDS_GATHERINGS, 'events'], [CT_CONGRESS, 'events'], [CT_MEALS, 'events'], [CT_HOLIDAY, 'events'], [CT_PICNIC, 'events'], [CT_ARTICLE, 'publications'], [CT_ARTICLES, 'publications'], [CT_BLOG_POST, 'publications'], [CT_VIDEO_PROGRAM_CHAPTER, 'programs'], [CT_CLIP, 'programs'], [CT_VIDEO_PROGRAM, 'programs'], [CT_CLIPS, 'programs'], [CT_SOURCE, 'sources'], [CT_PUBLICATION, 'publications'], ['sources', 'sources'],]);
+export const iconByContentTypeMap = new Map([
+  [CT_LESSON_PART, 'lessons'],
+  [CT_FULL_LESSON, 'lessons'],
+  [CT_VIRTUAL_LESSON, 'lessons'],
+  [CT_WOMEN_LESSON, 'lessons'],
+  [CT_CHILDREN_LESSON, 'lessons'],
+  [CT_LELO_MIKUD, 'lessons'],
+  [CT_DAILY_LESSON, 'lessons'],
+  [CT_SPECIAL_LESSON, 'lessons'],
+  [CT_LECTURE_SERIES, 'lessons'],
+  [CT_CHILDREN_LESSONS, 'lessons'],
+  [CT_WOMEN_LESSONS, 'lessons'],
+  [CT_VIRTUAL_LESSONS, 'lessons'],
+  [CT_LESSONS_SERIES, 'lessons'],
+  [CT_LECTURE, 'lessons'],
+  [CT_LIKUTIM, 'likutim'],
+  [CT_FRIENDS_GATHERING, 'events'],
+  [CT_MEAL, 'events'],
+  [CT_EVENT_PART, 'events'],
+  [CT_TRAINING, 'events'],
+  [CT_UNITY_DAY, 'events'],
+  [CT_FRIENDS_GATHERINGS, 'events'],
+  [CT_CONGRESS, 'events'],
+  [CT_MEALS, 'events'],
+  [CT_HOLIDAY, 'events'],
+  [CT_PICNIC, 'events'],
+  [CT_ARTICLE, 'publications'],
+  [CT_ARTICLES, 'publications'],
+  [CT_BLOG_POST, 'publications'],
+  [CT_VIDEO_PROGRAM_CHAPTER, 'programs'],
+  [CT_CLIP, 'programs'],
+  [CT_VIDEO_PROGRAM, 'programs'],
+  [CT_CLIPS, 'programs'],
+  [CT_SOURCE, 'sources'],
+  [CT_PUBLICATION, 'publications'],
+  ['sources', 'sources'],
+]);
 
 export const IsUnitContentType = contentType => CT_UNITS.includes(contentType);
 
@@ -123,9 +181,8 @@ export const LANGUAGES = {
   [LANG_LITHUANIAN]: { value: LANG_LITHUANIAN, locale: 'lt_LT', lang3: 'LIT', name: 'Lietuvių' },
   [LANG_JAPANESE]: { value: LANG_JAPANESE, locale: 'ja_JP', lang3: 'JPN', name: '日本語' },
   [LANG_BULGARIAN]: { value: LANG_BULGARIAN, locale: 'bg_BG', lang3: 'BUL', name: 'Български' },
-  [LANG_GEORGIAN]: {
-    value: LANG_GEORGIAN, locale: 'ka_GE', lang3: 'GEO', name: 'ქართული'
-  }, // TODO: choose from Norwegian Bokmål / Norwegian Nynorsk
+  [LANG_GEORGIAN]: { value: LANG_GEORGIAN, locale: 'ka_GE', lang3: 'GEO', name: 'ქართული' },
+  // TODO: choose from Norwegian Bokmål / Norwegian Nynorsk
   [LANG_NORWEGIAN]: { value: LANG_NORWEGIAN, locale: 'nb_NO', lang3: 'NOT', name: 'Norsk' },
   [LANG_SWEDISH]: { value: LANG_SWEDISH, locale: 'sv_SE', lang3: 'SWE', name: 'Svenska' },
   [LANG_CROATIAN]: { value: LANG_CROATIAN, locale: 'hr_HR', lang3: 'HRV', name: 'Hrvatski' },
@@ -144,11 +201,54 @@ export const LANGUAGES = {
   [LANG_ARMENIAN]: { value: LANG_ARMENIAN, locale: 'hy_AM', lang3: 'ARM', name: 'Հայերէն' },
 };
 
-export const ALL_LANGUAGES = [LANG_HEBREW, LANG_ENGLISH, LANG_RUSSIAN, LANG_SPANISH, LANG_ITALIAN, LANG_GERMAN, LANG_DUTCH, LANG_FRENCH, LANG_PORTUGUESE, LANG_TURKISH, LANG_POLISH, LANG_ARABIC, LANG_HUNGARIAN, LANG_FINNISH, LANG_LITHUANIAN, LANG_JAPANESE, LANG_BULGARIAN, LANG_GEORGIAN, LANG_NORWEGIAN, LANG_SWEDISH, LANG_CROATIAN, LANG_CHINESE, LANG_PERSIAN, LANG_ROMANIAN, LANG_HINDI, LANG_UKRAINIAN, LANG_MACEDONIAN, LANG_SLOVENIAN, LANG_LATVIAN, LANG_SLOVAK, LANG_CZECH, LANG_AMHARIC, LANG_INDONESIAN, LANG_ARMENIAN,];
+export const ALL_LANGUAGES = [
+  LANG_HEBREW,
+  LANG_ENGLISH,
+  LANG_RUSSIAN,
+  LANG_SPANISH,
+  LANG_ITALIAN,
+  LANG_GERMAN,
+  LANG_DUTCH,
+  LANG_FRENCH,
+  LANG_PORTUGUESE,
+  LANG_TURKISH,
+  LANG_POLISH,
+  LANG_ARABIC,
+  LANG_HUNGARIAN,
+  LANG_FINNISH,
+  LANG_LITHUANIAN,
+  LANG_JAPANESE,
+  LANG_BULGARIAN,
+  LANG_GEORGIAN,
+  LANG_NORWEGIAN,
+  LANG_SWEDISH,
+  LANG_CROATIAN,
+  LANG_CHINESE,
+  LANG_PERSIAN,
+  LANG_ROMANIAN,
+  LANG_HINDI,
+  LANG_UKRAINIAN,
+  LANG_MACEDONIAN,
+  LANG_SLOVENIAN,
+  LANG_LATVIAN,
+  LANG_SLOVAK,
+  LANG_CZECH,
+  LANG_AMHARIC,
+  LANG_INDONESIAN,
+  LANG_ARMENIAN,
+];
 
-export const POPULAR_LANGUAGES = [LANG_HEBREW, LANG_ENGLISH, LANG_RUSSIAN, LANG_SPANISH];
+export const POPULAR_LANGUAGES = [
+  LANG_HEBREW,
+  LANG_ENGLISH,
+  LANG_RUSSIAN,
+  LANG_SPANISH
+];
 
-export const AUDIO_BLOG_LANGUAGES = [LANG_RUSSIAN, LANG_ENGLISH];
+export const AUDIO_BLOG_LANGUAGES = [
+  LANG_RUSSIAN,
+  LANG_ENGLISH
+];
 
 export const DEFAULT_LANGUAGE = LANG_ENGLISH;
 
@@ -187,7 +287,9 @@ export const getVideoRes = (vsType, date) => {
 };
 
 export const VS_NAMES = {
-  [VS_NHD]: '360p', [VS_HD]: '720p', [VS_FHD]: '1080p',
+  [VS_NHD]: '360p',
+  [VS_HD]: '720p',
+  [VS_FHD]: '1080p',
 };
 
 export const TOPICS_FOR_DISPLAY    = ['VUpFlBnu', '0db5BBS3', 'g3ml0jum'];
@@ -195,7 +297,9 @@ export const EVENT_PREPARATION_TAG = 'Salvk5yF';
 
 export const DATE_FORMAT = 'YYYY-MM-DD';
 
-export const EVENT_TYPES = [CT_CONGRESS, CT_HOLIDAY, CT_PICNIC, CT_UNITY_DAY];
+export const EVENT_TYPES = [
+  CT_CONGRESS, CT_HOLIDAY, CT_PICNIC, CT_UNITY_DAY
+];
 
 // Required for Sections filter.
 export const COLLECTION_LESSONS_TYPE      = [CT_DAILY_LESSON, CT_SPECIAL_LESSON, /* CT_CHILDREN_LESSONS, */ CT_WOMEN_LESSONS, CT_VIRTUAL_LESSONS, CT_LECTURE_SERIES, CT_LESSONS_SERIES];
@@ -461,9 +565,12 @@ export const BLOG_ID_LAITMAN_RU    = 1;
 export const BLOG_ID_LAITMAN_COM   = 2;
 export const BLOG_ID_LAITMAN_ES    = 3;
 export const BLOG_ID_LAITMAN_CO_IL = 4;
-export const BLOGS                 = [{ id: BLOG_ID_LAITMAN_RU, name: 'laitman-ru' }, {
-  id: BLOG_ID_LAITMAN_COM, name: 'laitman-com'
-}, { id: BLOG_ID_LAITMAN_ES, name: 'laitman-es' }, { id: BLOG_ID_LAITMAN_CO_IL, name: 'laitman-co-il' }];
+export const BLOGS                 = [
+  { id: BLOG_ID_LAITMAN_RU, name: 'laitman-ru' },
+  { id: BLOG_ID_LAITMAN_COM, name: 'laitman-com' },
+  { id: BLOG_ID_LAITMAN_ES, name: 'laitman-es' },
+  { id: BLOG_ID_LAITMAN_CO_IL, name: 'laitman-co-il' }
+];
 
 export const SUGGEST_LIMIT = 10;
 
@@ -485,15 +592,18 @@ export const SEARCH_RESULT_TYPES_TEXT = ['posts', 'sources', 'units'];
 export const SEARCH_INTENT_HIT_TYPES = [SEARCH_INTENT_HIT_TYPE_PROGRAMS, SEARCH_INTENT_HIT_TYPE_LESSONS];
 
 export const SEARCH_INTENT_NAMES = {
-  [SEARCH_INTENT_INDEX_TOPIC]: 'Topic', [SEARCH_INTENT_INDEX_SOURCE]: 'Source',
+  [SEARCH_INTENT_INDEX_TOPIC]: 'Topic',
+  [SEARCH_INTENT_INDEX_SOURCE]: 'Source',
 };
 
 export const SEARCH_INTENT_FILTER_NAMES = {
-  [SEARCH_INTENT_INDEX_TOPIC]: 'topics-filter', [SEARCH_INTENT_INDEX_SOURCE]: 'sources-filter',
+  [SEARCH_INTENT_INDEX_TOPIC]: 'topics-filter',
+  [SEARCH_INTENT_INDEX_SOURCE]: 'sources-filter',
 };
 
 export const SEARCH_INTENT_SECTIONS = {
-  [SEARCH_INTENT_HIT_TYPE_LESSONS]: 'lessons', [SEARCH_INTENT_HIT_TYPE_PROGRAMS]: 'programs',
+  [SEARCH_INTENT_HIT_TYPE_LESSONS]: 'lessons',
+  [SEARCH_INTENT_HIT_TYPE_PROGRAMS]: 'programs',
 };
 
 export const SCROLL_SEARCH_ID = '__scrollSearchToHere__';
@@ -507,19 +617,49 @@ export const MY_NAMESPACE_BOOKMARKS     = 'bookmarks';
 export const MY_NAMESPACE_FOLDERS       = 'folders';
 export const MY_NAMESPACE_LABELS        = 'labels';
 
-export const MY_NAMESPACES = [MY_NAMESPACE_HISTORY, MY_NAMESPACE_REACTIONS, MY_NAMESPACE_PLAYLISTS, MY_NAMESPACE_SUBSCRIPTIONS, MY_NAMESPACE_PLAYLIST_EDIT, MY_NAMESPACE_BOOKMARKS, MY_NAMESPACE_FOLDERS, MY_NAMESPACE_LABELS,];
+export const MY_NAMESPACES = [
+  MY_NAMESPACE_HISTORY,
+  MY_NAMESPACE_REACTIONS,
+  MY_NAMESPACE_PLAYLISTS,
+  MY_NAMESPACE_SUBSCRIPTIONS,
+  MY_NAMESPACE_PLAYLIST_EDIT,
+  MY_NAMESPACE_BOOKMARKS,
+  MY_NAMESPACE_FOLDERS,
+  MY_NAMESPACE_LABELS,
+];
 
 export const MY_REACTION_KINDS = {
-  LIKE: 'like', SUPER: 'super',
+  LIKE: 'like',
+  SUPER: 'super',
 };
 
 export const MY_BOOKMARK_FILTER_FOLDER_ID = 'folder_id';
 export const MY_BOOKMARK_FILTER_QUERY     = 'bookmark_query';
 
-export const CT_SUBSCRIBE_BY_TYPE = [CT_FRIENDS_GATHERINGS, CT_WOMEN_LESSONS, CT_MEALS, CT_LECTURE, CT_MEAL, CT_LESSON_PART,];
+export const CT_SUBSCRIBE_BY_TYPE = [
+  CT_FRIENDS_GATHERINGS,
+  CT_WOMEN_LESSONS,
+  CT_MEALS,
+  CT_LECTURE,
+  CT_MEAL,
+  CT_LESSON_PART,
+];
 
-export const CT_SUBSCRIBE_BY_COLLECTION = [CT_LECTURE, CT_VIDEO_PROGRAM_CHAPTER, CT_ARTICLE, CT_EVENT_PART, CT_CLIP, CT_TRAINING, CT_KITEI_MAKOR, CT_PUBLICATION, //check language
-  CT_LELO_MIKUD, CT_BLOG_POST, CT_RESEARCH_MATERIAL, CT_KTAIM_NIVCHARIM, CT_LIKUTIM,];
+export const CT_SUBSCRIBE_BY_COLLECTION = [
+  CT_LECTURE,
+  CT_VIDEO_PROGRAM_CHAPTER,
+  CT_ARTICLE,
+  CT_EVENT_PART,
+  CT_CLIP,
+  CT_TRAINING,
+  CT_KITEI_MAKOR,
+  CT_PUBLICATION, //check language
+  CT_LELO_MIKUD,
+  CT_BLOG_POST,
+  CT_RESEARCH_MATERIAL,
+  CT_KTAIM_NIVCHARIM,
+  CT_LIKUTIM,
+];
 
 export const SECTIONS_LINK_BY_CU_CONTENT_TYPE = {
   [CT_LESSON_PART]: 'lessons/daily',
