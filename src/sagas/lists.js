@@ -73,6 +73,7 @@ function* fetchSectionList(action) {
       yield fetchViewsByUIDs(cuIDs);
 
     }
+
     if (!isEmpty(cIDs)) {
       yield fetchCollectionsByIDs({ payload: { id: cIDs } });
     }
