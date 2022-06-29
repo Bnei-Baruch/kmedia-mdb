@@ -1,11 +1,14 @@
 import isEqual from 'lodash/isEqual';
 import moment from 'moment';
 import PropTypes from 'prop-types';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { withNamespaces } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 import { COLLECTION_DAILY_LESSONS, DATE_FORMAT } from '../../../helpers/consts';
 import { canonicalLink } from '../../../helpers/links';
+import playerHelper from '../../../helpers/player';
+import { isEmpty } from '../../../helpers/utils';
 
 import { actions, selectors } from '../../../redux/modules/mdb';
 import { actions as recommended } from '../../../redux/modules/recommended';
@@ -13,17 +16,20 @@ import WipErr from '../../shared/WipErr/WipErr';
 import Page from './Page';
 
 const PlaylistCollectionContainer = ({ cId, t, cuId }) => {
-  const collection = useSelector(state => selectors.getDenormCollectionWUnits(state.mdb, cId));
-  const wipMap = useSelector(state => selectors.getWip(state.mdb));
+  const collection         = useSelector(state => selectors.getDenormCollectionWUnits(state.mdb, cId));
+  const wipMap             = useSelector(state => selectors.getWip(state.mdb));
   const fullUnitFetchedMap = useSelector(state => selectors.getFullUnitFetched(state.mdb));
-  const errorMap = useSelector(state => selectors.getErrors(state.mdb));
-  const cWindow = useSelector(state => selectors.getWindow(state.mdb), isEqual);
-  const collections = useSelector(state => cWindow?.data?.map(id => selectors.getDenormCollection(state.mdb, id)).filter(c => !!c));
+  const errorMap           = useSelector(state => selectors.getErrors(state.mdb));
+  const cWindow            = useSelector(state => selectors.getWindow(state.mdb), isEqual);
+  const collections        = useSelector(state => cWindow?.data?.map(id => selectors.getDenormCollection(state.mdb, id)).filter(c => !!c));
+  const location           = useLocation();
 
   const [nextLink, setNextLink] = useState(null);
   const [prevLink, setPrevLink] = useState(null);
 
   const { id, cuIDs, content_units, content_type, film_date } = collection || false;
+
+  cuId = cuId || cuIDs?.[playerHelper.getActivePartFromQuery(location)];
 
   const dispatch = useDispatch();
 
@@ -37,46 +43,37 @@ const PlaylistCollectionContainer = ({ cId, t, cuId }) => {
     setNextLink(nextLnk);
   };
 
+  // Fetch units files if needed.
+  const cusForFetch = useMemo(() => cuIDs?.filter(id => cuId !== id).filter(id => {
+    if (wipMap.units[id] || errorMap.units[id])
+      return false;
+    const cu = content_units.find(x => x.id === id);
+    return !cu?.files;
+  }) || [], [cuIDs, content_units, wipMap.units, errorMap.units]);
+
   useEffect(() => {
-    // Fetch full units data if needed.
-    if (cuIDs?.length > 0) {
-      const cusForFetch = cuIDs.filter(cuID => {
-        if (fullUnitFetchedMap[cuID] || wipMap.units[cuID] || errorMap.units[cuID])
-          return false;
-        const cu = content_units.find(x => x.id === cuID);
-        return !cu?.files;
-      });
-
-      if (cusForFetch?.length > 0) {
-        dispatch(actions.fetchUnitsByIDs({
-          id: cusForFetch,
-          with_tags: true,
-          with_files: true,
-          with_sources: true,
-          with_derivations: true
-        }));
-      }
+    if (cusForFetch?.length > 0) {
+      dispatch(actions.fetchUnitsByIDs({ id: cusForFetch, with_files: true }));
     }
+  }, [dispatch, cusForFetch]);
 
+  useEffect(() => {
     //full fetch currently played unit
     if (cuId && !fullUnitFetchedMap[cuId] && !wipMap.units[cuId] && !errorMap.units[cuId]) {
       dispatch(actions.fetchUnit(cuId));
     }
-
-  }, [dispatch, cuIDs, errorMap.units, wipMap.units]);
+  }, [dispatch, cuIDs, errorMap.units, wipMap.units, fullUnitFetchedMap]);
 
   useEffect(() => {
     if (!Object.prototype.hasOwnProperty.call(wipMap.collections, cId)) {
       // never fetched as full so fetch now
       dispatch(actions.fetchCollection(cId));
     }
-  }, [cId, dispatch, collection, wipMap.collections]);
+  }, [cId, dispatch, wipMap.collections]);
 
   useEffect(() => {
-
     // next prev links only for lessons
     if (COLLECTION_DAILY_LESSONS.includes(content_type)) {
-
       // empty or no window
       if (!cWindow.data || cWindow.data.length === 0) {
         if (!wipMap.cWindow[cId]) {
@@ -98,7 +95,6 @@ const PlaylistCollectionContainer = ({ cId, t, cuId }) => {
           createPrevNextLinks(curIndex);
         }
       }
-
     }
   }, [cId, cWindow, content_type, wipMap.cWindow]);
 
@@ -112,20 +108,19 @@ const PlaylistCollectionContainer = ({ cId, t, cuId }) => {
   };
 
   useEffect(() => {
-    if (collection?.cuIDs)
-      dispatch(recommended.fetchViews(collection.cuIDs));
-  }, [collection?.cuIDs?.length]);
+    if (cuIDs)
+      dispatch(recommended.fetchViews(cuIDs));
+  }, [cuIDs]);
 
-  if (!cId || !collection || !Array.isArray(collection.content_units)) {
+  if (!cId || !collection || isEmpty(content_units)) {
     return null;
   }
 
   // We're wip / err if some request is wip / err
-  //don't wip for CU that fetched with full fetch cause its rerender Page component
-  const wip = wipMap.collections[cId] || (Array.isArray(collection.cuIDs) && collection.cuIDs.some(cuID => !fullUnitFetchedMap[cuID] && wipMap.units[cuID]));
+  const wip = wipMap.collections[cId] || cusForFetch.length !== 0 || cuIDs.some(id => wipMap.units[id]);
   let err   = errorMap.collections[cId];
   if (!err) {
-    const cuIDwithError = Array.isArray(collection.cuIDs) && collection.cuIDs.find(cuID => errorMap.units[cuID]);
+    const cuIDwithError = cuIDs?.find(cuID => errorMap.units[cuID]);
     err                 = cuIDwithError ? errorMap.units[cuIDwithError] : null;
   }
 
