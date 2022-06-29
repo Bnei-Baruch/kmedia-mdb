@@ -236,16 +236,17 @@ const setStatus = (state, action) => {
       break;
 
     case FETCH_UNIT_SUCCESS:
-      wip.units    = { ...wip.units, [action.payload.id]: false };
-      errors.units = { ...errors.units, [action.payload.id]: null };
+      wip.units     = { ...wip.units, [action.payload.id]: false };
+      errors.units  = { ...errors.units, [action.payload.id]: null };
+      fetched.units = { ...fetched.units, [action.payload.id]: true };
       break;
     case FETCH_UNITS_BY_IDS_SUCCESS:
-      units        = action.payload?.reduce((acc, { id }) => ({
+      units = action.payload?.reduce((acc, { id }) => ({
         wip: { ...acc.wip, [id]: false },
         errors: { ...acc.errors, [id]: null }
       }), { wip: {}, errors: {} });
-      wip.units    = { ...wip.units, ...units.wip };
-      errors.units = { ...errors.units, ...units.errors };
+      wip.units     = { ...wip.units, ...units.wip };
+      errors.units  = { ...errors.units, ...units.errors };
       break;
     case FETCH_COLLECTION_SUCCESS:
       wip.collections    = { ...wip.collections, [action.payload.id]: false };

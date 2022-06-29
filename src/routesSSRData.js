@@ -131,28 +131,17 @@ export const playlistCollectionPage = (store, match) => {
   const cID = match.params.id;
   return store.sagaMiddleWare.run(mdbSagas.fetchCollection, mdbActions.fetchCollection(cID)).done
     .then(() => {
-      // TODO: replace this with a single call to backend with all IDs
-      // I don't think we need all files of every unit. Just for active one.
-
       const c = mdbSelectors.getCollectionById(store.getState().mdb, cID);
-      if (typeof c !== 'undefined') {
-        c.cuIDs.forEach(cuID => {
-          store.dispatch(mdbActions.fetchUnit(cuID));
-        });
-      }
+      store.dispatch(mdbActions.fetchUnit(c.cuIDs[0]));
     });
 };
 
 export const latestLesson = store => (store.sagaMiddleWare.run(mdbSagas.fetchLatestLesson).done
   .then(() => {
-    // TODO: replace this with a single call to backend with all IDs
-    // I don't think we need all files of every unit. Just for active one.
     const state = store.getState();
     const cID   = mdbSelectors.getLastLessonId(state.mdb);
     const c     = mdbSelectors.getCollectionById(state.mdb, cID);
-    c.cuIDs.forEach(cuID => {
-      store.dispatch(mdbActions.fetchUnit(cuID));
-    });
+    store.dispatch(mdbActions.fetchUnit(c.cuIDs[0]));
   }));
 
 export const musicPage = store => store.sagaMiddleWare.run(musicSagas.fetchMusic, musicActions.fetchMusic).done;
