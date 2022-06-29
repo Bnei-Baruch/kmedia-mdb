@@ -1,7 +1,7 @@
 import { call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
 import { filtersTransformer } from '../filters';
 import Api from '../helpers/Api';
-import { CT_COLLECTIONS, CT_UNITS, CT_VIDEO_PROGRAM_CHAPTER } from '../helpers/consts';
+import { CT_COLLECTIONS, CT_UNITS, CT_VIDEO_PROGRAM_CHAPTER, PAGE_NS_EVENTS, PAGE_NS_LESSONS } from '../helpers/consts';
 import { isEmpty } from '../helpers/utils';
 import { selectors as filterSelectors } from '../redux/modules/filters';
 
@@ -12,9 +12,9 @@ import { getQuery, pushQuery } from './helpers/url';
 import { fetchCollectionsByIDs, fetchUnitsByIDs } from './mdb';
 import { fetchViewsByUIDs } from './recommended';
 
-const endpointBySection = {
-  'lessons': Api.lessons,
-  'events': Api.events
+const endpointByNamespace = {
+  [PAGE_NS_LESSONS]: Api.lessons,
+  [PAGE_NS_EVENTS]: Api.events
 };
 
 function* fetchList(action) {
@@ -53,7 +53,7 @@ function* fetchList(action) {
 }
 
 function* fetchSectionList(action) {
-  const { namespace, section, ...args } = action.payload;
+  const { namespace, ...args } = action.payload;
 
   const filters      = yield select(state => filterSelectors.getFilters(state.filters, namespace));
   const filterParams = filtersTransformer.toApiParams(filters) || {};
@@ -61,7 +61,7 @@ function* fetchSectionList(action) {
   const language = yield select(state => settings.getLanguage(state.settings));
 
   try {
-    const { data } = yield call(endpointBySection[section], { ...args, ...filterParams, language });
+    const { data } = yield call(endpointByNamespace[namespace], { ...args, ...filterParams, language });
 
     const { items } = data;
 

@@ -32,7 +32,7 @@ const fetchList               = createAction(FETCH_LIST,
 const fetchListSuccess        = createAction(FETCH_LIST_SUCCESS, (namespace, data) => ({ namespace, data }));
 const fetchListFailure        = createAction(FETCH_LIST_FAILURE, (namespace, err) => ({ namespace, err }));
 const fetchSectionList        = createAction(FETCH_SECTION_LIST,
-  (namespace, section, pageNo, params = {}) => ({ namespace, section, pageNo, ...params, }));
+  (namespace, pageNo, params = {}) => ({ namespace, pageNo, ...params, }));
 const fetchSectionListSuccess = createAction(FETCH_SECTION_LIST_SUCCESS, (namespace, data) => ({ namespace, data }));
 
 export const actions = {

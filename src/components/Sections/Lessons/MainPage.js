@@ -53,7 +53,7 @@ const MainPage = ({ t }) => {
     if (pageNo !== 1 && !!prevSel && prevSel !== selected) {
       setPage(1);
     } else {
-      dispatch(actions.fetchSectionList(PAGE_NS_LESSONS, 'lessons', pageNo, {
+      dispatch(actions.fetchSectionList(PAGE_NS_LESSONS, pageNo, {
         pageSize,
         withViews: true,
         content_type: ctForFetch
@@ -77,7 +77,7 @@ const MainPage = ({ t }) => {
       <FilterLabels namespace={PAGE_NS_LESSONS} />
       {
         wipErr || items?.map(({ id, content_type }, i) => {
-          switch (true) {
+            switch (true) {
             case COLLECTION_DAILY_LESSONS.includes(content_type):
               return <DailyLessonItem id={id} key={i} />;
             case COLLECTION_LESSONS_TYPE.includes(content_type):
@@ -86,8 +86,8 @@ const MainPage = ({ t }) => {
               return <UnitItem id={id} key={i} />;
             default:
               return null;
+            }
           }
-        }
         )
       }
       <Divider fitted />

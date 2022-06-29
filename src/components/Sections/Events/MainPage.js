@@ -40,7 +40,7 @@ const MainPage = ({ t }) => {
     if (pageNo !== 1 && !!prevSel && prevSel !== selected) {
       setPage(1);
     } else {
-      dispatch(actions.fetchSectionList(PAGE_NS_EVENTS, 'events', pageNo, { pageSize, content_type: EVENT_PAGE_CTS }));
+      dispatch(actions.fetchSectionList(PAGE_NS_EVENTS, pageNo, { pageSize, content_type: EVENT_PAGE_CTS }));
     }
 
   }, [language, dispatch, pageNo, selected]);
