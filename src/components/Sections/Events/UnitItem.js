@@ -6,6 +6,7 @@ import { canonicalLink } from '../../../helpers/links';
 import { isEmpty } from '../../../helpers/utils';
 import { selectors as mdb } from '../../../redux/modules/mdb';
 import Link from '../../Language/MultiLanguageLink';
+import UnitLogoWithDuration from '../../shared/UnitLogoWithDuration';
 
 const UnitItem = ({ id, t }) => {
   const cu = useSelector(state => mdb.getDenormContentUnit(state.mdb, id));
@@ -15,11 +16,12 @@ const UnitItem = ({ id, t }) => {
   const collections = Object.values(cu.collections);
   return (
     <List.Item as={Link} to={link} key={id} className="media_item">
+      <UnitLogoWithDuration duration={cu.duration} unitId={cu.id} width={144} />
       <div className="media_item__content">
         <Header content={cu.name} />
         {
           !isEmpty(collections) && (
-            <div className="separate_with_line">
+            <div className="additional_links">
               {
                 collections.map(c => (
                   <Link to={canonicalLink(c)}>

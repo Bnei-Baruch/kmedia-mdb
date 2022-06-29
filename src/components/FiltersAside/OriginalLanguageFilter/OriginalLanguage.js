@@ -37,14 +37,17 @@ const OriginalLanguage = ({ namespace, t }) => {
               <OriginalLanguageItem namespace={namespace} id={id} key={id} />
             )
           }
-          <Button
-            basic
-            icon={showAll ? 'minus' : 'plus'}
-            color="blue"
-            className="clear_button"
-            content={t(`topics.show-${showAll ? 'less' : 'more'}`)}
-            onClick={toggleShowAll}
-          />
+          {
+            items.length > POPULAR_LANGUAGES.length &&
+            <Button
+              basic
+              icon={showAll ? 'minus' : 'plus'}
+              color="blue"
+              className="clear_button"
+              content={t(`topics.show-${showAll ? 'less' : 'more'}`)}
+              onClick={toggleShowAll}
+            />
+          }
         </>
       }
     />

@@ -1,18 +1,19 @@
 import React from 'react';
 import { withNamespaces } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { List } from 'semantic-ui-react';
+import { Header, List } from 'semantic-ui-react';
 
 import { fromToLocalized } from '../../../helpers/date';
 import { canonicalLink } from '../../../helpers/links';
 import { selectors as mdb } from '../../../redux/modules/mdb';
 import Link from '../../Language/MultiLanguageLink';
+import UnitLogoWithDuration from '../../shared/UnitLogoWithDuration';
 
 const CollectionItem = ({ id, t }) => {
   const c = useSelector(state => mdb.getDenormCollection(state.mdb, id));
   if (!c) return null;
 
-  const { film_date, name, content_type, start_date, end_date } = c;
+  const { film_date, name, content_units: cus, start_date, end_date } = c;
 
   const getDate = () => {
     if (film_date)
@@ -26,11 +27,10 @@ const CollectionItem = ({ id, t }) => {
 
   return (
     <List.Item as={Link} to={canonicalLink(c)} key={id} className="media_item">
+      <UnitLogoWithDuration duration={cus[0].duration} unitId={cus[0].id} width={144} />
       <div className="media_item__content">
-        {name}
-        <div className="description">
-          {getDate()}
-        </div>
+        <Header content={name} />
+        <div className="description">{getDate()}</div>
       </div>
     </List.Item>
   );

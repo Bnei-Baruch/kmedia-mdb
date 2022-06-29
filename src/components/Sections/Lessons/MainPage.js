@@ -1,5 +1,6 @@
 import { isEqual } from 'lodash';
 import React, { useCallback, useEffect, useMemo } from 'react';
+import { withNamespaces } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { Container, Divider } from 'semantic-ui-react';
@@ -23,6 +24,7 @@ import ResultsPageHeader from '../../Pagination/ResultsPageHeader';
 import { getPageFromLocation } from '../../Pagination/withPagination';
 import SectionFiltersWithMobile from '../../shared/SectionFiltersWithMobile';
 import SectionHeader from '../../shared/SectionHeader';
+import WipErr from '../../shared/WipErr/WipErr';
 import CollectionItem from './Collectiontem';
 import DailyLessonItem from './DailyLessonItem';
 import Filters from './Filters';
@@ -32,13 +34,13 @@ const CT_WITHOUT_FILTERS = [...(UNIT_LESSONS_TYPE.filter(ct => ct !== CT_LESSON_
 const CT_WITH_FILTERS    = [CT_LESSONS_SERIES, ...UNIT_LESSONS_TYPE];
 const FILTER_PARAMS      = { content_type: CT_WITH_FILTERS };
 
-const MainPage = () => {
-  const { items, total } = useSelector(state => lists.getNamespaceState(state.lists, PAGE_NS_LESSONS)) || {};
-  const language         = useSelector(state => settings.getLanguage(state.settings));
-  const pageSize         = useSelector(state => settings.getPageSize(state.settings));
-  const selected         = useSelector(state => filters.getFilters(state.filters, PAGE_NS_LESSONS), isEqual);
-  const prevSel          = usePrevious(selected);
+const MainPage = ({ t }) => {
+  const { items, total, wip, err } = useSelector(state => lists.getNamespaceState(state.lists, PAGE_NS_LESSONS)) || {};
+  const language                   = useSelector(state => settings.getLanguage(state.settings));
+  const pageSize                   = useSelector(state => settings.getPageSize(state.settings));
+  const selected                   = useSelector(state => filters.getFilters(state.filters, PAGE_NS_LESSONS), isEqual);
 
+  const prevSel    = usePrevious(selected);
   const ctForFetch = useMemo(() => selected.some(f => f.name !== FN_DATE_FILTER && !isEmpty(f.values)) ? CT_WITH_FILTERS : CT_WITHOUT_FILTERS, [selected]);
 
   const dispatch = useDispatch();
@@ -51,13 +53,15 @@ const MainPage = () => {
     if (pageNo !== 1 && !!prevSel && prevSel !== selected) {
       setPage(1);
     } else {
-      dispatch(actions.fetchListLessons(PAGE_NS_LESSONS, pageNo, {
+      dispatch(actions.fetchSectionList(PAGE_NS_LESSONS, 'lessons', pageNo, {
         pageSize,
         withViews: true,
         content_type: ctForFetch
       }));
     }
   }, [language, dispatch, pageNo, selected, ctForFetch]);
+
+  const wipErr = WipErr({ wip, err, t });
 
   return (<>
     <SectionHeader section="lessons" />
@@ -72,8 +76,8 @@ const MainPage = () => {
       <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} />
       <FilterLabels namespace={PAGE_NS_LESSONS} />
       {
-        items?.map(({ id, content_type }, i) => {
-          switch (true) {
+        wipErr || items?.map(({ id, content_type }, i) => {
+            switch (true) {
             case COLLECTION_DAILY_LESSONS.includes(content_type):
               return <DailyLessonItem id={id} key={i} />;
             case COLLECTION_LESSONS_TYPE.includes(content_type):
@@ -82,8 +86,8 @@ const MainPage = () => {
               return <UnitItem id={id} key={i} />;
             default:
               return null;
+            }
           }
-        }
         )
       }
       <Divider fitted />
@@ -100,4 +104,4 @@ const MainPage = () => {
   </>);
 };
 
-export default MainPage;
+export default withNamespaces()(MainPage);
