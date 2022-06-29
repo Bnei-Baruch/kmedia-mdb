@@ -1,7 +1,7 @@
 import isEqual from 'lodash/isEqual';
 import moment from 'moment';
 import PropTypes from 'prop-types';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState, useCallback } from 'react';
 import { withNamespaces } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
@@ -58,7 +58,7 @@ const PlaylistCollectionContainer = ({ cId, t, cuId }) => {
       return false;
     const cu = content_units.find(x => x.id === id);
     return !cu?.files;
-  }) || [], [cuIDs, content_units, wipMap.units, errorMap.units]);
+  }) || [], [cuIDs, cuId, wipMap.units, errorMap.units, content_units]);
 
   useEffect(() => {
     if (cusForFetch?.length > 0) {
@@ -71,7 +71,7 @@ const PlaylistCollectionContainer = ({ cId, t, cuId }) => {
     if (cuId && !fullUnitFetchedMap[cuId] && !wipMap.units[cuId] && !errorMap.units[cuId]) {
       dispatch(actions.fetchUnit(cuId));
     }
-  }, [dispatch, cuIDs, errorMap.units, wipMap.units, fullUnitFetchedMap]);
+  }, [dispatch, cuIDs, errorMap.units, wipMap.units, fullUnitFetchedMap, cuId]);
 
   useEffect(() => {
     if (!Object.prototype.hasOwnProperty.call(wipMap.collections, cId)) {
