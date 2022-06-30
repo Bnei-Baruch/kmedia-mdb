@@ -18,6 +18,7 @@ const CuName = ({ namespace }) => {
     if (temporaryName) {
       timer = setTimeout(() => dispatch(actions.setFilterValue(namespace, FN_CU_NAME, temporaryName)), 500);
     }
+
     return () => clearTimeout(timer);
 
   }, [dispatch, temporaryName]);
