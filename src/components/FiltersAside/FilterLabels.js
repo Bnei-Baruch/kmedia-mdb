@@ -6,7 +6,7 @@ import { Container, Icon, Label } from 'semantic-ui-react';
 import dateFilter from '../../filters/definitions/dateFilter';
 import {
   FN_COLLECTION_MULTI,
-  FN_CONTENT_TYPE,
+  FN_CONTENT_TYPE, FN_CU_NAME,
   FN_DATE_FILTER,
   FN_LANGUAGES, FN_LOCATIONS,
   FN_MEDIA_TYPE,
@@ -56,6 +56,8 @@ const FilterLabels = ({ namespace, t }) => {
         return `${t('filters.aside-filter.original-language-filter')}: ${LANGUAGES[val]?.name}`;
       case FN_LOCATIONS:
         return getTitle(val, t);
+      case FN_CU_NAME:
+        return `${t('filters.aside-filter.cu-name')}: ${val}`
       default:
         return null;
     }

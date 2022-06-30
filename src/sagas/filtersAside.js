@@ -45,30 +45,31 @@ export function* fetchStat(action) {
   try {
     filterParams.for_filter = true;
 
-    filterParams = { ...defaultStatParams, ...filterParams };
-    countC       = countC && !filterParams.person;
-    countL       = countL && !filterParams.person;
+    filterParams  = { ...defaultStatParams, ...filterParams };
+    const countCU = !filterParams.location;
+    countC        = countC && !filterParams.person;
+    countL        = countL && !filterParams.person;
 
     const requests = [];
-    requests.push(call(Api.unitsStats, { ...filterParams, with_languages: false }));
+    countCU && requests.push(call(Api.unitsStats, { ...filterParams, with_languages: false }));
     countC && requests.push(call(Api.collectionsStats, { id: filterParams.collection, ...filterParams }));
     countL && requests.push(call(Api.labelsStats, filterParams));
 
     if (isFilteredByBase) {
       const paramsPart = { ...filterParams, ...params, with_languages: false };
-      requests.push(call(Api.unitsStats, paramsPart));
+      countCU && requests.push(call(Api.unitsStats, paramsPart));
       countC && requests.push(call(Api.collectionsStats, paramsPart));
       countL && requests.push(call(Api.labelsStats, paramsPart));
     }
 
     const responses = yield all(requests);
 
-    const { data: dataCU }                  = responses.shift();
+    const dataCU                            = countCU ? responses.shift()?.data : {};
     const { data: { locations, ...dataC } } = countC ? responses.shift() : { data: false };
     const dataL                             = countL ? responses.shift()?.data : {};
 
     if (isFilteredByBase) {
-      const { data: dataCUPart = {} }             = responses.shift() || {};
+      const dataCUPart                            = countCU ? responses.shift()?.data : {};
       const { data: { locations, ...dataCPart } } = countC ? responses.shift() : {};
       const dataLPart                             = countL ? responses.shift()?.data : {};
 
@@ -83,7 +84,18 @@ export function* fetchStat(action) {
     yield put(actions.fetchStatsSuccess({ dataCU, dataC, dataL, namespace, isPrepare }));
 
     if (filterParams.with_languages) {
-      yield fetchLanguageStat({ ...filterParams }, namespace, dataC.languages, dataL.languages, isPrepare);
+      if (countCU) {
+        yield fetchLanguageStat({ ...filterParams }, namespace, dataC.languages, dataL.languages, isPrepare);
+      } else {
+        yield put(actions.receiveSingleTypeStats({
+          dataCU: {},
+          dataC: dataC.languages,
+          dataL: dataC.languages,
+          namespace,
+          isPrepare,
+          fn: FN_LANGUAGES
+        }));
+      }
     }
   } catch (err) {
     yield put(actions.fetchStatsFailure(namespace, err));
@@ -110,7 +122,7 @@ export function* fetchLanguageStat(params, namespace, dataC = {}, dataL = {}, is
   params.with_locations          = false;
 
   params.with_languages = true;
-  params['media_language'] && delete params['media_language'];
+  params.media_language && delete params.media_language;
   try {
     const { data: { languages: dataCU } } = yield call(Api.unitsStats, params);
 

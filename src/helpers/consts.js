@@ -704,6 +704,7 @@ export const FN_DATE_FILTER        = 'date-filter';
 export const FN_PERSON             = 'person-filter';
 export const FN_MEDIA_TYPE         = 'media-type-filter';
 export const FN_LOCATIONS          = 'locations-filter';
+export const FN_CU_NAME            = 'cu-name';
 
 export const FN_SOURCES_MULTI    = 'sources-filter-multi';
 export const FN_TOPICS_MULTI     = 'topics-filter-multi';
@@ -713,6 +714,7 @@ export const PAGE_NS_TOPICS   = 'topic';
 export const PAGE_NS_PROGRAMS = 'programs';
 export const PAGE_NS_LESSONS  = 'lessons';
 export const PAGE_NS_EVENTS   = 'events';
+export const PAGE_NS_LIKUTIM  = 'likutim';
 
 export const ALL_PAGE_NS = [PAGE_NS_LESSONS, PAGE_NS_TOPICS, PAGE_NS_PROGRAMS, PAGE_NS_EVENTS];
 

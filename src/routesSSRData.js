@@ -1,8 +1,6 @@
 import uniq from 'lodash/uniq';
 import moment from 'moment';
 import { getPageFromLocation } from './components/Pagination/withPagination';
-
-import { tabs as eventsTabs } from './components/Sections/Events/MainPage';
 import { tabs as pulicationsTabs } from './components/Sections/Publications/MainPage';
 import { isTaas } from './components/shared/PDF/PDF';
 
@@ -73,28 +71,28 @@ export const cuPage = (store, match) => {
 
 const getExtraFetchParams = (ns, collectionID) => {
   switch (ns) {
-    case PAGE_NS_PROGRAMS:
-      return { content_type: UNIT_PROGRAMS_TYPE };
-    case 'publications-articles':
-      return { content_type: [CT_ARTICLE] };
-    case 'events-meals':
-      return { content_type: [CT_MEAL] };
-    case 'events-friends-gatherings':
-      return { content_type: [CT_FRIENDS_GATHERING] };
-    case 'lessons-virtual':
-      return { content_type: [CT_VIRTUAL_LESSON] };
-    case 'lessons-lectures':
-      return { content_type: [CT_LECTURE] };
-    case 'lessons-women':
-      return { content_type: [CT_WOMEN_LESSON] };
-    case 'lessons-rabash':
-      return { content_type: [CT_LESSON_PART], person: RABASH_PERSON_UID };
+  case PAGE_NS_PROGRAMS:
+    return { content_type: UNIT_PROGRAMS_TYPE };
+  case 'publications-articles':
+    return { content_type: [CT_ARTICLE] };
+  case 'events-meals':
+    return { content_type: [CT_MEAL] };
+  case 'events-friends-gatherings':
+    return { content_type: [CT_FRIENDS_GATHERING] };
+  case 'lessons-virtual':
+    return { content_type: [CT_VIRTUAL_LESSON] };
+  case 'lessons-lectures':
+    return { content_type: [CT_LECTURE] };
+  case 'lessons-women':
+    return { content_type: [CT_WOMEN_LESSON] };
+  case 'lessons-rabash':
+    return { content_type: [CT_LESSON_PART], person: RABASH_PERSON_UID };
     // case 'lessons-children':
     //   return { content_type: [CT_CHILDREN_LESSON] };
-    default:
-      if (collectionID) {
-        return { collection: collectionID };
-      }
+  default:
+    if (collectionID) {
+      return { collection: collectionID };
+    }
   }
 
   return {};
@@ -183,16 +181,16 @@ export const lessonsCollectionPage = (store, match) => {
 };
 
 export const searchPage = store => (Promise.all([store.sagaMiddleWare.run(searchSagas.hydrateUrl).done, store.sagaMiddleWare.run(filtersSagas.hydrateFilters, filtersActions.hydrateFilters('search')).done])
-  .then(() => {
-    const state    = store.getState();
-    const q        = searchSelectors.getQuery(state.search);
-    const page     = searchSelectors.getPageNo(state.search);
-    const pageSize = settingsSelectors.getPageSize(state.settings);
-    const deb      = searchSelectors.getDeb(state.search);
-    const suggest  = searchSelectors.getSuggest(state.search);
+    .then(() => {
+      const state    = store.getState();
+      const q        = searchSelectors.getQuery(state.search);
+      const page     = searchSelectors.getPageNo(state.search);
+      const pageSize = settingsSelectors.getPageSize(state.settings);
+      const deb      = searchSelectors.getDeb(state.search);
+      const suggest  = searchSelectors.getSuggest(state.search);
 
-    store.dispatch(searchActions.search(q, page, pageSize, suggest, deb));
-  })
+      store.dispatch(searchActions.search(q, page, pageSize, suggest, deb));
+    })
 );
 
 function sleep(ms) {
@@ -271,19 +269,19 @@ export const tweetsListPage = (store, match) => {
   // extraFetchParams
   let extraFetchParams;
   switch (language) {
-    case LANG_HEBREW:
-      extraFetchParams = { username: 'laitman_co_il' };
-      break;
-    case LANG_UKRAINIAN:
-    case LANG_RUSSIAN:
-      extraFetchParams = { username: 'Michael_Laitman' };
-      break;
-    case LANG_SPANISH:
-      extraFetchParams = { username: 'laitman_es' };
-      break;
-    default:
-      extraFetchParams = { username: 'laitman' };
-      break;
+  case LANG_HEBREW:
+    extraFetchParams = { username: 'laitman_co_il' };
+    break;
+  case LANG_UKRAINIAN:
+  case LANG_RUSSIAN:
+    extraFetchParams = { username: 'Michael_Laitman' };
+    break;
+  case LANG_SPANISH:
+    extraFetchParams = { username: 'laitman_es' };
+    break;
+  default:
+    extraFetchParams = { username: 'laitman' };
+    break;
   }
 
   // dispatch fetchData
@@ -316,19 +314,19 @@ export const blogListPage = (store, match) => {
   // extraFetchParams
   let extraFetchParams;
   switch (language) {
-    case LANG_HEBREW:
-      extraFetchParams = { blog: 'laitman-co-il' };
-      break;
-    case LANG_UKRAINIAN:
-    case LANG_RUSSIAN:
-      extraFetchParams = { blog: 'laitman-ru' };
-      break;
-    case LANG_SPANISH:
-      extraFetchParams = { blog: 'laitman-es' };
-      break;
-    default:
-      extraFetchParams = { blog: 'laitman-com' };
-      break;
+  case LANG_HEBREW:
+    extraFetchParams = { blog: 'laitman-co-il' };
+    break;
+  case LANG_UKRAINIAN:
+  case LANG_RUSSIAN:
+    extraFetchParams = { blog: 'laitman-ru' };
+    break;
+  case LANG_SPANISH:
+    extraFetchParams = { blog: 'laitman-es' };
+    break;
+  default:
+    extraFetchParams = { blog: 'laitman-com' };
+    break;
   }
 
   // dispatch fetchData
@@ -347,14 +345,14 @@ export const publicationsPage = (store, match) => {
   }
 
   switch (tab) {
-    case 'articles':
-      return cuListPage(ns)(store, match);
-    case 'blog':
-      return blogListPage(store, match);
-    case 'twitter':
-      return tweetsListPage(store, match);
-    default:
-      return Promise.resolve(null);
+  case 'articles':
+    return cuListPage(ns)(store, match);
+  case 'blog':
+    return blogListPage(store, match);
+  case 'twitter':
+    return tweetsListPage(store, match);
+  default:
+    return Promise.resolve(null);
   }
 };
 
