@@ -181,11 +181,7 @@ export const physicalFile = (file, ext = false) => {
 export const publicFile = relativePath => `${PUBLIC_BASE}${relativePath}`;
 
 export const canonicalCollection = unit => {
-  if (!unit) {
-    return null;
-  }
-
-  if (isEmpty(unit.collections)) {
+  if (!unit || isEmpty(unit.collections)) {
     return null;
   }
 

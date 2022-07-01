@@ -128,8 +128,10 @@ const sortUnits = (u1, u2, collection) => {
 }
 
 const playlist = (collection, mediaType, contentLanguage, uiLanguage) => {
-  if (!collection) {
-    return {};
+  const { start_date: sDate, end_date: eDate, content_units: units = [], content_type, name } = collection || {};
+
+  if (isEmpty(units)) {
+    return null
   }
 
   const { start_date: sDate, end_date: eDate, content_units: units = [], content_type, name } = collection;
