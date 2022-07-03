@@ -1,6 +1,6 @@
 import { actions } from '../../redux/modules/auth';
 
-const KC_API = process.env.REACT_KC_API || 'https://raccounts.kab.info/auth';
+const KC_API = process.env.REACT_KC_API_URL;
 
 //for SSR use empty functions
 let login  = () => console.error('Must be override on browser, keycloak');
@@ -13,7 +13,7 @@ export const initKC = async (dispatch, language) => {
   //check is keycloak server is up
   try {
     const health = await fetch(`${KC_API}/realms/main/protocol/openid-connect/certs`);
-    if (!health.ok) throw 'keycloak is not up';
+    if (!health.ok) throw 'keycloak server is down';
   } catch (error) {
     console.error(error);
     dispatch(actions.loginFailure({ error }));
