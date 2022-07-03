@@ -1,5 +1,7 @@
 import { actions } from '../../redux/modules/auth';
 
+const KC_API = process.env.REACT_KC_API || 'https://raccounts.kab.info/auth';
+
 //for SSR use empty functions
 let login  = () => console.error('Must be override on browser, keycloak');
 let logout = () => console.error('Must be override on browser, keycloak');
@@ -7,10 +9,20 @@ let logout = () => console.error('Must be override on browser, keycloak');
 //because of keycloak-js module use windows on init we import it dynamic
 let keycloak;
 
-export const initKC = (dispatch, language) => {
+export const initKC = async (dispatch, language) => {
+  //check is keycloak server is up
+  try {
+    const health = await fetch(`${KC_API}/realms/main/protocol/openid-connect/certs`);
+    if (!health.ok) throw 'keycloak is not up';
+  } catch (error) {
+    console.error(error);
+    dispatch(actions.loginFailure({ error }));
+    return;
+  }
+
   import('keycloak-js').then(({ default: Keycloak }) => {
     const userManagerConfig = {
-      url: 'https://accounts.kab.info/auth',
+      url: KC_API,
       realm: 'main',
       clientId: 'kmedia-public',
       scope: 'profile',
