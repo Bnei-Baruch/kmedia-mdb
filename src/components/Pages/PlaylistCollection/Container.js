@@ -3,8 +3,9 @@ import moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { useEffect, useMemo, useState, useCallback } from 'react';
 import { withNamespaces } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { useLocation } from 'react-router-dom';
+
 import { COLLECTION_DAILY_LESSONS, DATE_FORMAT } from '../../../helpers/consts';
 import { canonicalLink } from '../../../helpers/links';
 import playerHelper from '../../../helpers/player';
@@ -16,12 +17,12 @@ import WipErr from '../../shared/WipErr/WipErr';
 import Page from './Page';
 
 const PlaylistCollectionContainer = ({ cId, t, cuId }) => {
-  const collection         = useSelector(state => selectors.getDenormCollectionWUnits(state.mdb, cId));
-  const wipMap             = useSelector(state => selectors.getWip(state.mdb));
-  const fullUnitFetchedMap = useSelector(state => selectors.getFullUnitFetched(state.mdb));
-  const errorMap           = useSelector(state => selectors.getErrors(state.mdb));
-  const cWindow            = useSelector(state => selectors.getWindow(state.mdb), isEqual);
-  const collections        = useSelector(state => cWindow?.data?.map(id => selectors.getDenormCollection(state.mdb, id)).filter(c => !!c));
+  const collection         = useSelector(state => selectors.getDenormCollectionWUnits(state.mdb, cId), shallowEqual);
+  const wipMap             = useSelector(state => selectors.getWip(state.mdb), shallowEqual);
+  const fullUnitFetchedMap = useSelector(state => selectors.getFullUnitFetched(state.mdb), shallowEqual);
+  const errorMap           = useSelector(state => selectors.getErrors(state.mdb), shallowEqual);
+  const cWindow            = useSelector(state => selectors.getWindow(state.mdb), shallowEqual);
+  const collections        = useSelector(state => cWindow?.data?.map(id => selectors.getDenormCollection(state.mdb, id)).filter(c => !!c), shallowEqual);
   const location           = useLocation();
 
   const [nextLink, setNextLink] = useState(null);
