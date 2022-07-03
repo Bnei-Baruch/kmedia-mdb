@@ -28,7 +28,7 @@ const PlaylistCollectionContainer = ({ cId, t, cuId }) => {
   const [nextLink, setNextLink] = useState(null);
   const [prevLink, setPrevLink] = useState(null);
 
-  const { id, cuIDs, content_units, content_type, film_date } = collection || false;
+  const { cuIDs, content_units, content_type, film_date } = collection || false;
 
   cuId = cuId || cuIDs?.[playerHelper.getActivePartFromQuery(location)];
 
@@ -37,11 +37,11 @@ const PlaylistCollectionContainer = ({ cId, t, cuId }) => {
   const fetchWindow = useCallback(() => {
     const filmDate = moment.utc(film_date);
     dispatch(actions.fetchWindow({
-      id,
+      cId,
       start_date: filmDate.subtract(5, 'days').format(DATE_FORMAT),
       end_date: filmDate.add(10, 'days').format(DATE_FORMAT)
     }));
-  }, [dispatch, film_date, id]);
+  }, [dispatch, film_date, cId]);
 
   const createPrevNextLinks = useCallback(curIndex => {
     const prevCollection = curIndex < collections.length - 1 ? collections[curIndex + 1] : null;
@@ -54,9 +54,10 @@ const PlaylistCollectionContainer = ({ cId, t, cuId }) => {
   }, [collections]);
 
   // Fetch units files if needed.
-  const cusForFetch = useMemo(() => cuIDs?.filter(id => cuId !== id).filter(id => {
-    if (wipMap.units[id] || errorMap.units[id])
+  const cusForFetch = useMemo(() => cuIDs?.filter(id => {
+    if (id === cuId || wipMap.units[id] || errorMap.units[id])
       return false;
+
     const cu = content_units.find(x => x.id === id);
     return !cu?.files;
   }) || [], [cuIDs, cuId, wipMap.units, errorMap.units, content_units]);
@@ -68,11 +69,16 @@ const PlaylistCollectionContainer = ({ cId, t, cuId }) => {
   }, [dispatch, cusForFetch]);
 
   useEffect(() => {
+    if (cuIDs)
+      dispatch(recommended.fetchViews(cuIDs));
+  }, [cuIDs, dispatch]);
+
+  useEffect(() => {
     //full fetch currently played unit
     if (cuId && !fullUnitFetchedMap[cuId] && !wipMap.units[cuId] && !errorMap.units[cuId]) {
       dispatch(actions.fetchUnit(cuId));
     }
-  }, [dispatch, cuIDs, errorMap.units, wipMap.units, fullUnitFetchedMap, cuId]);
+  }, [dispatch, errorMap.units, wipMap.units, fullUnitFetchedMap, cuId]);
 
   useEffect(() => {
     if (!Object.prototype.hasOwnProperty.call(wipMap.collections, cId)) {
@@ -88,7 +94,7 @@ const PlaylistCollectionContainer = ({ cId, t, cuId }) => {
       if (!cWindow.data || cWindow.data.length === 0) {
         if (!wipMap.cWindow[cId]) {
           // no wip, go fetch
-          fetchWindow(id, film_date);
+          fetchWindow(cId, film_date);
         }
       } else {
         const { id: cWindowId, data } = cWindow;
@@ -99,14 +105,15 @@ const PlaylistCollectionContainer = ({ cId, t, cuId }) => {
           // it's not our window,
           // we're not in it (at least not in the middle, we could reuse it otherwise)
           // and our window is not wip
-          fetchWindow(id, film_date);
+          fetchWindow(cId, film_date);
         } else {
           // it's a good window, extract the previous and next links
           createPrevNextLinks(curIndex);
         }
       }
     }
-  }, [cId, cWindow, collections?.length, content_type, createPrevNextLinks, fetchWindow, film_date, id, wipMap.cWindow]);
+  }, [cId, cWindow, collections?.length, content_type, createPrevNextLinks, fetchWindow, film_date, wipMap.cWindow]);
+
 
   useEffect(() => {
     if (cuIDs)
