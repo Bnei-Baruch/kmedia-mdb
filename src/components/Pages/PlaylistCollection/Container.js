@@ -1,4 +1,3 @@
-import isEqual from 'lodash/isEqual';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { useEffect, useMemo, useState, useCallback } from 'react';

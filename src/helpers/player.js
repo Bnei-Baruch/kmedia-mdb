@@ -134,8 +134,6 @@ const playlist = (collection, mediaType, contentLanguage, uiLanguage) => {
     return null
   }
 
-  const { start_date: sDate, end_date: eDate, content_units: units = [], content_type, name } = collection;
-
   // initially sort units by episode/song number
   if (SORTABLE_TYPES.includes(content_type))
     units.sort((u1, u2) => sortUnits(u1, u2, collection));

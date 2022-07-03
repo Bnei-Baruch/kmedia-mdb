@@ -231,6 +231,8 @@ PlaylistCollectionPage.propTypes = {
   collection: shapes.GenericCollection,
   nextLink: PropTypes.string,
   prevLink: PropTypes.string,
+  cuId: PropTypes.string,
+  t: PropTypes.func.isRequired
 };
 
 const isEqualLink = (link1, link2) =>
