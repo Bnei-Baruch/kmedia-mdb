@@ -5,10 +5,18 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { Container, Divider } from 'semantic-ui-react';
 
-import { CT_FRIENDS_GATHERING, CT_MEAL, EVENT_PAGE_CTS, EVENT_TYPES, PAGE_NS_EVENTS, } from '../../../helpers/consts';
+import {
+  CT_FRIENDS_GATHERING,
+  CT_HOLIDAY,
+  CT_MEAL,
+  EVENT_PAGE_CTS,
+  EVENT_TYPES,
+  PAGE_NS_EVENTS,
+} from '../../../helpers/consts';
 import { usePrevious } from '../../../helpers/utils';
 import { selectors as filters } from '../../../redux/modules/filters';
 import { actions, selectors as lists } from '../../../redux/modules/lists';
+import { actions as prepareActions } from '../../../redux/modules/preparePage';
 import { selectors as settings } from '../../../redux/modules/settings';
 import FilterLabels from '../../FiltersAside/FilterLabels';
 import Pagination from '../../Pagination/Pagination';
@@ -35,6 +43,10 @@ const MainPage = ({ t }) => {
 
   const dispatch = useDispatch();
   const setPage  = useCallback(pageNo => dispatch(actions.setPage(PAGE_NS_EVENTS, pageNo)), [dispatch]);
+
+  useEffect(() => {
+    dispatch(prepareActions.fetchCollections(PAGE_NS_EVENTS, { content_type: CT_HOLIDAY }));
+  }, [language, dispatch]);
 
   useEffect(() => {
     if (pageNo !== 1 && !!prevSel && prevSel !== selected) {

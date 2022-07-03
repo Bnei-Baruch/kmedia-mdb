@@ -13,7 +13,7 @@ import Language from '../../FiltersAside/LanguageFilter/Language';
 import Locations from '../../FiltersAside/LocationsFilter/Locations';
 import OriginalLanguageFilter from '../../FiltersAside/OriginalLanguageFilter/OriginalLanguage';
 import TagSourceFilter from '../../FiltersAside/TopicsFilter/TagSourceFilter';
-import ContentTypeFilter from './ContentTypeFilter';
+import ContentTypesFilter from './ContentTypesFilter';
 
 const Filters = ({ namespace, baseParams, t }) => {
   const [isHydrated, setIsHydrated] = useState(false);
@@ -26,7 +26,7 @@ const Filters = ({ namespace, baseParams, t }) => {
   useEffect(() => {
     if (!isReady && !wip && !err) {
       dispatch(actions.fetchStats(namespace,
-        { ...baseParams, with_original_languages: true, with_locations: true, },
+        { ...baseParams, with_original_languages: true, with_locations: true, with_collections: true, },
         { isPrepare: true, countC: true }));
     }
   }, [dispatch, isReady]);
@@ -34,7 +34,7 @@ const Filters = ({ namespace, baseParams, t }) => {
   useEffect(() => {
     if (isHydrated && isReady) {
       dispatch(actions.fetchStats(namespace,
-        { ...baseParams, with_original_languages: true, with_locations: true, },
+        { ...baseParams, with_original_languages: true, with_locations: true, with_collections: true, },
         { isPrepare: false, countC: true }
       ));
     }
@@ -46,7 +46,7 @@ const Filters = ({ namespace, baseParams, t }) => {
     <Container className="padded">
       <FiltersHydrator namespace={namespace} onHydrated={handleOnHydrated} />
       <Header as="h3" content={t('filters.aside-filter.filters-title')} />
-      <ContentTypeFilter namespace={namespace} />
+      <ContentTypesFilter namespace={namespace} />
       <Locations namespace={namespace} />
       <TagSourceFilter namespace={namespace} filterName={FN_SOURCES_MULTI} />
       <TagSourceFilter namespace={namespace} filterName={FN_TOPICS_MULTI} />
