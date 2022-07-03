@@ -1,6 +1,6 @@
 import { actions } from '../../redux/modules/auth';
 
-const KC_API = process.env.REACT_KC_API_URL;
+const KC_API = process.env.REACT_KC_API_URL || 'https://accounts.kab.info/auth';
 
 //for SSR use empty functions
 let login  = () => console.error('Must be override on browser, keycloak');
