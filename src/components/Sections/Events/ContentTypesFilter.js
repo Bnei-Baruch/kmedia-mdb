@@ -23,6 +23,7 @@ const ContentTypesFilter = ({ namespace, t }) => {
               if (ct === CT_HOLIDAY) {
                 return <Holidays namespace={namespace} key={ct} />;
               }
+
               return <ContentTypeItem namespace={namespace} id={ct} key={ct} />;
             })
           }
