@@ -74,7 +74,7 @@ const routes = [
   { path: 'lessons/:tab', component: Lessons, options: { ssrData: ssrDataLoaders.lessonsPage } },
   {
     path: 'lessons/:tab/c/:id',
-    component: LessonCollection,
+    component: PlaylistCollectionIdCheck,
     options: { ssrData: ssrDataLoaders.lessonsCollectionPage }
   },
   { path: ':routeType/:tab/cu/:id', component: PlaylistItemPage, options: { ssrData: ssrDataLoaders.cuPage } },
