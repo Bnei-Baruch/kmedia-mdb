@@ -7,7 +7,7 @@ import { knownFallbackImages, NoneFallbackImage, SectionThumbnailFallback } from
 // An adaptation of https://github.com/socialtables/react-image-fallback
 // for react semantic-ui
 
-let timeout               = null;
+const timeout               = null;
 const MAX_IMAGINARY_CALLS = 2;
 
 const findSrc = async srcs => {
@@ -17,6 +17,7 @@ const findSrc = async srcs => {
       return res;
     }
   }
+
   return null;
 };
 
@@ -28,9 +29,11 @@ const tryFetchImage = async (src, attempt = 0) => {
     if (resp.status === 200) {
       return src;
     }
+
     if (resp.status === 429) {
       return tryFetchImage(src, attempt++);
     }
+
     return null;
   } catch (err) {
     return null;
@@ -39,16 +42,16 @@ const tryFetchImage = async (src, attempt = 0) => {
 
 const FallbackImage = props => {
   const {
-          src,
-          fallbackImage = ['default'],
-          className,
-          onLoad,
-          onError,
-          width         = 'auto',
-          height        = 'auto',
-          floated,
-          ...rest
-        } = props;
+    src,
+    fallbackImage = ['default'],
+    className,
+    onLoad,
+    onError,
+    width         = 'auto',
+    height        = 'auto',
+    floated,
+    ...rest
+  } = props;
 
   const [imageSource, setImageSource] = useState();
 
