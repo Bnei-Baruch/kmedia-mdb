@@ -11,46 +11,61 @@ const MAX_IMAGINARY_CALLS = 2;
 
 const findSrc = async srcs => {
   for (const i in srcs) {
-    const res = await tryFetchImage(srcs[i]);
-    if (!!res) {
-      return res;
-    }
+    if (knownFallbackImages.includes(srcs[i]))
+      return srcs[i];
+
+    const isLoad = await tryLoadImage(srcs[i]);
+    if (isLoad)
+      return srcs[i];
+
+    const isFetch = await tryFetchImage(srcs[i]);
+    if (isFetch)
+      return srcs[i];
   }
 
   return null;
 };
 
+const tryLoadImage = src => {
+  return new Promise((resolve) => {
+    const img   = new window.Image();
+    img.onerror = () => resolve(false);
+    img.onload  = () => resolve(true);
+    img.src     = src;
+  });
+};
+
 const tryFetchImage = async (src, attempt = 0) => {
-  if (attempt > MAX_IMAGINARY_CALLS) return null;
+  if (attempt > MAX_IMAGINARY_CALLS) return false;
 
   try {
     const resp = await fetch(src);
     if (resp.status === 200) {
-      return src;
+      return true;
     }
 
     if (resp.status === 429) {
       return tryFetchImage(src, attempt++);
     }
 
-    return null;
+    return false;
   } catch (err) {
-    return null;
+    return false;
   }
 };
 
 const FallbackImage = props => {
   const {
-    src,
-    fallbackImage = ['default'],
-    className,
-    onLoad,
-    onError,
-    width         = 'auto',
-    height        = 'auto',
-    floated,
-    ...rest
-  } = props;
+          src,
+          fallbackImage = ['default'],
+          className,
+          onLoad,
+          onError,
+          width         = 'auto',
+          height        = 'auto',
+          floated,
+          ...rest
+        } = props;
 
   const [imageSource, setImageSource] = useState();
   const [wip, setWip]                 = useState(false);
