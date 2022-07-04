@@ -7,7 +7,6 @@ import { knownFallbackImages, NoneFallbackImage, SectionThumbnailFallback } from
 // An adaptation of https://github.com/socialtables/react-image-fallback
 // for react semantic-ui
 
-const timeout               = null;
 const MAX_IMAGINARY_CALLS = 2;
 
 const findSrc = async srcs => {
@@ -58,8 +57,6 @@ const FallbackImage = props => {
   useEffect(() => {
     findSrc([src, ...fallbackImage])
       .then(res => setImageSource(res));
-
-    return () => timeout && clearTimeout(timeout);
   }, [fallbackImage, src]);
 
   if (!imageSource || imageSource === NoneFallbackImage) {
