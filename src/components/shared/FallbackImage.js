@@ -1,126 +1,63 @@
-import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react';
 import { Image } from 'semantic-ui-react';
 
 import { knownFallbackImages, NoneFallbackImage, SectionThumbnailFallback } from '../../helpers/images';
-import { IMAGINARY_URL } from '../../helpers/Api';
 
 // An adaptation of https://github.com/socialtables/react-image-fallback
 // for react semantic-ui
 
-const loadStatus = {
-  error: -1,
-  loaded: 1
+let timeout               = null;
+const MAX_IMAGINARY_CALLS = 2;
+
+const findSrc = async srcs => {
+  for (const i in srcs) {
+    const res = await tryFetchImage(srcs[i]);
+    if (!!res) {
+      return res;
+    }
+  }
+  return null;
 };
 
-const imgLoadStatus       = new Map();
-let imaginaryCalls        = 0;
-const MAX_IMAGINARY_CALLS = 5;
+const tryFetchImage = async (src, attempt = 0) => {
+  if (attempt > MAX_IMAGINARY_CALLS) return null;
 
-const buildImage = (src, fallbacks, onError, onLoad) => {
-  const displayImage = new window.Image();
-
-  displayImage.onerror = () => {
-    imgLoadStatus.set(displayImage.src, loadStatus.error);
-    handleError(displayImage.src, fallbacks);
-  };
-
-  displayImage.onload = () => {
-    imgLoadStatus.set(displayImage.src, loadStatus.loaded);
-    handleLoaded(displayImage.src);
-  };
-
-  const handleLoaded = image => {
-    if (image.includes(IMAGINARY_URL))
-      imaginaryCalls--;
-
-    onLoad(image);
-  };
-
-  const handleError = () => {
-    if (displayImage.src.includes(IMAGINARY_URL))
-      imaginaryCalls--;
-
-    if (typeof fallbacks[0] === 'string') {
-      const image = fallbacks[0];
-      fallbacks   = fallbacks.slice(1);
-      setDisplayImage(image, fallbacks);
-      return;
+  try {
+    const resp = await fetch(src);
+    if (resp.status === 200) {
+      return src;
     }
-
-    onError();
-  };
-
-  const setDisplayImage = (image, fallbacks) => {
-    if (knownFallbackImages.includes(image)) {
-      handleLoaded(image);
-      return;
+    if (resp.status === 429) {
+      return tryFetchImage(src, attempt++);
     }
-
-    if (imgLoadStatus.get(image) === loadStatus.error) {
-      handleError();
-      return;
-    }
-
-    if (imgLoadStatus.get(image) === loadStatus.loaded) {
-      handleLoaded(image);
-      return;
-    }
-
-    if (image.includes(IMAGINARY_URL) && imaginaryCalls >= MAX_IMAGINARY_CALLS) {
-      setTimeout(() => setDisplayImage(image, fallbacks), 300);
-      return;
-    }
-
-    if (typeof image === 'string') {
-      if (image.includes(IMAGINARY_URL)) imaginaryCalls++;
-      displayImage.src = image;
-    } else {
-      onLoad(image);
-    }
-  };
-
-  setDisplayImage(src, fallbacks);
+    return null;
+  } catch (err) {
+    return null;
+  }
 };
 
 const FallbackImage = props => {
   const {
-    src,
-    fallbackImage = ['default'],
-    className,
-    onLoad,
-    onError,
-    width = 'auto',
-    height = 'auto',
-    floated,
-    ...rest
-  } = props;
+          src,
+          fallbackImage = ['default'],
+          className,
+          onLoad,
+          onError,
+          width         = 'auto',
+          height        = 'auto',
+          floated,
+          ...rest
+        } = props;
+
   const [imageSource, setImageSource] = useState();
 
   useEffect(() => {
-    const displayImage = buildImage(src, fallbackImage, handleError, handleLoaded);
+    findSrc([src, ...fallbackImage])
+      .then(res => setImageSource(res));
 
-    return () => {
-      displayImage && (displayImage.onerror = null);
-      displayImage && (displayImage.onload = null);
-    };
+    return () => timeout && clearTimeout(timeout);
   }, [fallbackImage, src]);
-
-  const handleLoaded = image => {
-    setImageSource(image);
-
-    if (onLoad) {
-      onLoad(image);
-    }
-  };
-
-  const handleError = () => {
-    setImageSource(null);
-
-    if (onError) {
-      onError(src);
-    }
-  };
 
   if (!imageSource || imageSource === NoneFallbackImage) {
     /* There is no fallbacks and src was not found */

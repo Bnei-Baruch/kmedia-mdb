@@ -61,7 +61,7 @@ const sectionThumbnailFallback = {
 
 export const knownFallbackImages = ['lessons', 'programs', 'lectures', 'sources', 'events', 'publications', 'default', NoneFallbackImage];
 
-export const SectionThumbnailFallback = ({ name, ...props }) => {
+export const SectionThumbnailFallback = ({ name, circular, ...props }) => {
   const Fallback = sectionThumbnailFallback[name];
   return <Fallback {...props} width="100%" height="100%" />;
 };
