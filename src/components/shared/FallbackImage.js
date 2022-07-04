@@ -41,16 +41,16 @@ const tryFetchImage = async (src, attempt = 0) => {
 
 const FallbackImage = props => {
   const {
-          src,
-          fallbackImage = ['default'],
-          className,
-          onLoad,
-          onError,
-          width         = 'auto',
-          height        = 'auto',
-          floated,
-          ...rest
-        } = props;
+    src,
+    fallbackImage = ['default'],
+    className,
+    onLoad,
+    onError,
+    width         = 'auto',
+    height        = 'auto',
+    floated,
+    ...rest
+  } = props;
 
   const [imageSource, setImageSource] = useState();
   const [wip, setWip]                 = useState(false);
