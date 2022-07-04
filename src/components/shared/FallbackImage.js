@@ -26,14 +26,12 @@ const findSrc = async srcs => {
   return null;
 };
 
-const tryLoadImage = src => {
-  return new Promise((resolve) => {
-    const img   = new window.Image();
-    img.onerror = () => resolve(false);
-    img.onload  = () => resolve(true);
-    img.src     = src;
-  });
-};
+const tryLoadImage = src => new Promise(resolve => {
+  const img   = new window.Image();
+  img.onerror = () => resolve(false);
+  img.onload  = () => resolve(true);
+  img.src     = src;
+});
 
 const tryFetchImage = async (src, attempt = 0) => {
   if (attempt > MAX_IMAGINARY_CALLS) return false;
@@ -56,16 +54,16 @@ const tryFetchImage = async (src, attempt = 0) => {
 
 const FallbackImage = props => {
   const {
-          src,
-          fallbackImage = ['default'],
-          className,
-          onLoad,
-          onError,
-          width         = 'auto',
-          height        = 'auto',
-          floated,
-          ...rest
-        } = props;
+    src,
+    fallbackImage = ['default'],
+    className,
+    onLoad,
+    onError,
+    width         = 'auto',
+    height        = 'auto',
+    floated,
+    ...rest
+  } = props;
 
   const [imageSource, setImageSource] = useState();
   const [wip, setWip]                 = useState(false);
