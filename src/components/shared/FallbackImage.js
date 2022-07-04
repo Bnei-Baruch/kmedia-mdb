@@ -41,23 +41,28 @@ const tryFetchImage = async (src, attempt = 0) => {
 
 const FallbackImage = props => {
   const {
-    src,
-    fallbackImage = ['default'],
-    className,
-    onLoad,
-    onError,
-    width         = 'auto',
-    height        = 'auto',
-    floated,
-    ...rest
-  } = props;
+          src,
+          fallbackImage = ['default'],
+          className,
+          onLoad,
+          onError,
+          width         = 'auto',
+          height        = 'auto',
+          floated,
+          ...rest
+        } = props;
 
   const [imageSource, setImageSource] = useState();
+  const [wip, setWip]                 = useState(false);
 
   useEffect(() => {
-    findSrc([src, ...fallbackImage])
-      .then(res => setImageSource(res));
-  }, [fallbackImage, src]);
+    setWip(true);
+    !wip && !imageSource && findSrc([src, ...fallbackImage])
+      .then(res => {
+        setImageSource(res);
+        setWip(false);
+      });
+  }, [fallbackImage, src, wip, imageSource]);
 
   if (!imageSource || imageSource === NoneFallbackImage) {
     /* There is no fallbacks and src was not found */
