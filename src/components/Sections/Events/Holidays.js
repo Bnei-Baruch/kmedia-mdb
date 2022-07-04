@@ -80,7 +80,7 @@ const Holidays = ({ namespace, t }) => {
   const isSelected = selectedCT.includes(CT_HOLIDAY);
   return (
     <List.Item disabled={stat === 0} className="tree_item_content">
-      <div>
+      <List.Content className="tree_item_content filters-aside-ct">
         <Checkbox
           label={t(`filters.content-types.${CT_HOLIDAY}`)}
           checked={isSelected}
@@ -97,8 +97,8 @@ const Holidays = ({ namespace, t }) => {
           onClick={() => setOpen(true)}
           size="medium"
         />
-        <span>{`(${stat})`}</span>
-      </div>
+        <span className="stat">{`(${stat})`}</span>
+      </List.Content>
 
       <Modal
         open={open}
