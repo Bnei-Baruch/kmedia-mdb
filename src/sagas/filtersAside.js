@@ -41,6 +41,7 @@ export function patchLessonFilters(filters) {
     if ([CT_LESSON_PART, CT_DAILY_LESSON].includes(ct)) {
       return asUnit ? CT_LESSON_PART : CT_DAILY_LESSON;
     }
+
     return ct;
   });
 }
