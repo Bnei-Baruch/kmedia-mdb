@@ -2,7 +2,17 @@ import uniq from 'lodash/uniq';
 import { all, call, put, select, takeEvery } from 'redux-saga/effects';
 import { filtersTransformer } from '../filters';
 import Api from '../helpers/Api';
-import { FN_LANGUAGES } from '../helpers/consts';
+import {
+  CT_DAILY_LESSON,
+  CT_LESSON_PART,
+  FN_CONTENT_TYPE,
+  FN_LANGUAGES,
+  FN_PERSON,
+  FN_SOURCES_MULTI,
+  FN_TOPICS_MULTI,
+  PAGE_NS_LESSONS
+} from '../helpers/consts';
+import { isEmpty } from '../helpers/utils';
 import { selectors as filterSelectors } from '../redux/modules/filters';
 
 import { actions, types } from '../redux/modules/filtersAside';
@@ -22,13 +32,27 @@ const defaultStatParams    = {
   with_locations: false,
 };
 
+// Todo david: patch for lesson page filters. Need replace on refactor filters when not select source, tag or person show as collection other as unit
+export function patchLessonFilters(filters) {
+  const ctFilter = filters.find(f => f.name === FN_CONTENT_TYPE && !isEmpty(f.values));
+  if (!ctFilter) return;
+  const asUnit    = filters.some(f => [FN_SOURCES_MULTI, FN_TOPICS_MULTI, FN_PERSON].includes(f.name) && !isEmpty(f.values));
+  ctFilter.values = ctFilter.values.map(ct => {
+    if ([CT_LESSON_PART, CT_DAILY_LESSON].includes(ct)) {
+      return asUnit ? CT_LESSON_PART : CT_DAILY_LESSON;
+    }
+    return ct;
+  });
+}
+
 export function* fetchStat(action) {
   let { namespace, params, options: { isPrepare, countC = false, countL = false } } = action.payload;
 
   let filterParams = {};
   if (!isPrepare) {
     const filters = yield select(state => filterSelectors.getFilters(state.filters, namespace));
-    filterParams  = filtersTransformer.toApiParams(filters) || {};
+    if (namespace === PAGE_NS_LESSONS) patchLessonFilters(filters);
+    filterParams = filtersTransformer.toApiParams(filters) || {};
   }
 
   //need when was filtered by base param (for example filter by topics on the topic page)

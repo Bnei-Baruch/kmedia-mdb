@@ -8,6 +8,7 @@ import { selectors as filterSelectors } from '../redux/modules/filters';
 import { actions, types } from '../redux/modules/lists';
 import { actions as mdbActions } from '../redux/modules/mdb';
 import { selectors as settings } from '../redux/modules/settings';
+import { patchLessonFilters } from './filtersAside';
 import { getQuery, pushQuery } from './helpers/url';
 import { fetchCollectionsByIDs, fetchUnitsByIDs } from './mdb';
 import { fetchViewsByUIDs } from './recommended';
@@ -55,7 +56,8 @@ function* fetchList(action) {
 function* fetchSectionList(action) {
   const { namespace, ...args } = action.payload;
 
-  const filters      = yield select(state => filterSelectors.getFilters(state.filters, namespace));
+  const filters = yield select(state => filterSelectors.getFilters(state.filters, namespace));
+  if (namespace === PAGE_NS_LESSONS) patchLessonFilters(filters);
   const filterParams = filtersTransformer.toApiParams(filters) || {};
 
   const language = yield select(state => settings.getLanguage(state.settings));
