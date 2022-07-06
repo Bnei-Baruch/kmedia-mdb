@@ -138,10 +138,6 @@ export function* fetchStat(action) {
     if (filterParams.with_languages) {
       yield fetchLanguageStat({ ...filterParams }, namespace, dataL.languages, isPrepare, countC);
     }
-
-    if (lessonAsCollection) {
-      yield fetchLanguageStat({ ...filterParams }, namespace, dataL.languages, isPrepare, countC);
-    }
   } catch (err) {
     yield put(actions.fetchStatsFailure(namespace, err));
   }
