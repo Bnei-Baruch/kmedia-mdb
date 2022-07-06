@@ -127,26 +127,24 @@
       "FRIENDS_GATHERING": "Asamblea de Amigos",
       "MEAL": "Comidas",
       "EVENT_PART": "Varios",
-
       "LESSON_PART": "Lecciones Diarias",
+      "DAILY_LESSON": "Lecciones Diarias",
       "VIRTUAL_LESSON": "Lecciones Virtuales",
       "LECTURE": "Charlas",
       "WOMEN_LESSON": "Lección de Mujeres",
       "CHILDREN_LESSON": "Lección de Niños",
       "LESSONS_SERIES": "Serie de Estudios",
       "LECTURE_SERIES": "Serie de Charlas",
-
       "CLIP": "Clips",
       "VIDEO_PROGRAM_CHAPTER": "Programas",
-
       "ARTICLE": "Artículos",
       "PUBLICATION": "Publicidad",
       "BLOG_POST": "Blog",
-
       "TRAINING": "Entrenamiento",
       "KITEI_MAKOR": "Extractos de Fuentes",
       "LIKUTIM": "Compilaciones",
-      "SOURCE": "Biblioteca"
+      "SOURCE": "Biblioteca",
+      "PICNIC": "Picnic"
     }
   },
   "buttons": {

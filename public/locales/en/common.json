@@ -116,10 +116,10 @@
       "locations-filter": "Location"
     },
     "media-types": {
-      "audio" : "Audio",
-      "video" : "Video",
-      "text" : "Transcription",
-      "image" : "Sketch"
+      "audio": "Audio",
+      "video": "Video",
+      "text": "Transcription",
+      "image": "Sketch"
     },
     "content-types": {
       "CONGRESS": "Conventions",
@@ -129,6 +129,7 @@
       "MEAL": "Meals",
       "EVENT_PART": "Misc",
       "LESSON_PART": "Daily Lessons",
+      "DAILY_LESSON": "Daily Lessons",
       "VIRTUAL_LESSON": "Virtual Lessons",
       "LECTURE": "Lectures",
       "WOMEN_LESSON": "Women Lessons",
@@ -143,7 +144,8 @@
       "TRAINING": "Training",
       "KITEI_MAKOR": "Sources Materials",
       "LIKUTIM": "Assorted Excerpts",
-      "SOURCE": "Kabbalah Library"
+      "SOURCE": "Kabbalah Library",
+      "PICNIC": "Picnic"
     }
   },
   "buttons": {

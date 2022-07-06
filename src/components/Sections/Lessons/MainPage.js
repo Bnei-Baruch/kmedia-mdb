@@ -8,9 +8,13 @@ import { Container, Divider } from 'semantic-ui-react';
 import {
   COLLECTION_DAILY_LESSONS,
   COLLECTION_LESSONS_TYPE,
+  CT_DAILY_LESSON,
+  CT_LECTURE,
   CT_LESSON_PART,
   CT_LESSONS_SERIES,
-  FN_DATE_FILTER,
+  CT_VIRTUAL_LESSON,
+  CT_WOMEN_LESSON,
+  FN_SHOW_LESSON_AS_UNITS,
   PAGE_NS_LESSONS,
   UNIT_LESSONS_TYPE,
 } from '../../../helpers/consts';
@@ -30,9 +34,11 @@ import DailyLessonItem from './DailyLessonItem';
 import Filters from './Filters';
 import UnitItem from './UnitItem';
 
-const CT_WITHOUT_FILTERS = [...(UNIT_LESSONS_TYPE.filter(ct => ct !== CT_LESSON_PART)), ...COLLECTION_LESSONS_TYPE];
-const CT_WITH_FILTERS    = [CT_LESSONS_SERIES, ...UNIT_LESSONS_TYPE];
-const FILTER_PARAMS      = { content_type: CT_WITH_FILTERS };
+const SHOWED_CT = [CT_VIRTUAL_LESSON, CT_WOMEN_LESSON, CT_LECTURE, CT_LESSONS_SERIES];
+
+export const LESSON_AS_COLLECTION = [CT_DAILY_LESSON, ...SHOWED_CT];
+export const LESSON_AS_UNIT       = [CT_LESSON_PART, ...SHOWED_CT];
+const FILTER_PARAMS               = { content_type: LESSON_AS_UNIT };
 
 const MainPage = ({ t }) => {
   const { items, total, wip, err } = useSelector(state => lists.getNamespaceState(state.lists, PAGE_NS_LESSONS)) || {};
@@ -41,7 +47,9 @@ const MainPage = ({ t }) => {
   const selected                   = useSelector(state => filters.getFilters(state.filters, PAGE_NS_LESSONS), isEqual);
 
   const prevSel    = usePrevious(selected);
-  const ctForFetch = useMemo(() => selected.some(f => f.name !== FN_DATE_FILTER && !isEmpty(f.values)) ? CT_WITH_FILTERS : CT_WITHOUT_FILTERS, [selected]);
+  const listParams = useMemo(() => selected.some(f => FN_SHOW_LESSON_AS_UNITS.includes(f.name) && !isEmpty(f.values))
+    ? { content_type: LESSON_AS_UNIT }
+    : { content_type: LESSON_AS_COLLECTION }, [selected]);
 
   const dispatch = useDispatch();
   const setPage  = useCallback(pageNo => dispatch(actions.setPage(PAGE_NS_LESSONS, pageNo)), [dispatch]);
@@ -56,10 +64,10 @@ const MainPage = ({ t }) => {
       dispatch(actions.fetchSectionList(PAGE_NS_LESSONS, pageNo, {
         pageSize,
         withViews: true,
-        content_type: ctForFetch
+        ...listParams
       }));
     }
-  }, [language, dispatch, pageNo, selected, ctForFetch]);
+  }, [language, dispatch, pageNo, selected, listParams]);
 
   const wipErr = WipErr({ wip, err, t });
 

@@ -19,8 +19,7 @@ const SectionFiltersWithMobile = ({ filters, children, t }) => {
 
   const render = () => (
     <Container className="padded" fluid>
-      <Divider />
-      <Grid container>
+      <Grid divided>
         <Grid.Column width="4" className="filters-aside-wrapper">
           {filters}
         </Grid.Column>

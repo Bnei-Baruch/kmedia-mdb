@@ -128,6 +128,7 @@
       "MEAL": "Mahlzeiten",
       "EVENT_PART": "Misc",
       "LESSON_PART": "Täglicher Unterricht",
+      "DAILY_LESSON": "Täglicher Unterricht",
       "VIRTUAL_LESSON": "Virtuelle Lektionen",
       "LECTURE": "Vorträge",
       "WOMEN_LESSON": "Lektionen für Frauen",
@@ -142,7 +143,8 @@
       "TRAINING": "Training",
       "KITEI_MAKOR": "Fragmente von Primärquellen",
       "LIKUTIM": "Assorted Excerpts",
-      "SOURCE": "Bibliothek"
+      "SOURCE": "Bibliothek",
+      "PICNIC": "Picknick"
     }
   },
   "buttons": {
