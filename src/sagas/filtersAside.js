@@ -137,7 +137,7 @@ export function* fetchStat(action) {
     yield put(actions.fetchStatsSuccess({ dataCU, dataC, dataL, namespace, isPrepare }));
 
     if (filterParams.with_languages) {
-      yield fetchLanguageStat({ ...filterParams }, namespace, dataL.languages, isPrepare, countC, countCU);
+      yield fetchLanguageStat({ ...filterParams }, namespace, dataL.languages, isPrepare, countCU, countC);
     }
 
     if (lessonAsCollection) {
@@ -157,17 +157,17 @@ export function* fetchStat(action) {
  * @param countC
  * @returns {Generator<*, void, *>}
  */
-export function* fetchLanguageStat(params, namespace, dataL = {}, isPrepare, countC) {
+export function* fetchLanguageStat(params, namespace, dataL = {}, isPrepare, countCU, countC) {
   setAllStatParamsFalse(params);
   params.with_languages = true;
   try {
     const requests = [];
-    requests.push(call(Api.unitsStats, params));
+    countCU && requests.push(call(Api.unitsStats, params));
     countC && requests.push(call(Api.collectionsStats, { ...params, id: params.collection, }));
 
     const responses = yield all(requests);
 
-    const { data: { languages: dataCU } } = responses.shift();
+    const { data: { languages: dataCU } } = countCU ? responses.shift() : { data: false };
     const { data: { languages: dataC } }  = countC ? responses.shift() : { data: false };
 
     yield put(actions.receiveSingleTypeStats({ dataCU, dataC, dataL, namespace, isPrepare, fn: FN_LANGUAGES }));

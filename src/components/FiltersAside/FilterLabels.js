@@ -57,7 +57,7 @@ const FilterLabels = ({ namespace, t }) => {
       case FN_LOCATIONS:
         return getTitle(val, t);
       case FN_CU_NAME:
-        return `${t('filters.aside-filter.cu-name')}: ${val}`
+        return `${t('filters.aside-filter.free-text')}: ${val}`
       default:
         return null;
     }
