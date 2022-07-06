@@ -18,7 +18,6 @@ import Page from './Page';
 const PlaylistCollectionContainer = ({ cId, t, cuId }) => {
   const collection         = useSelector(state => selectors.getDenormCollectionWUnits(state.mdb, cId), shallowEqual);
   const wipMap             = useSelector(state => selectors.getWip(state.mdb), shallowEqual);
-  const fullUnitFetchedMap = useSelector(state => selectors.getFullUnitFetched(state.mdb), shallowEqual);
   const errorMap           = useSelector(state => selectors.getErrors(state.mdb), shallowEqual);
   const cWindow            = useSelector(state => selectors.getWindow(state.mdb), shallowEqual);
   const collections        = useSelector(state => cWindow?.data?.map(id => selectors.getDenormCollection(state.mdb, id)).filter(c => !!c), shallowEqual);
@@ -54,12 +53,12 @@ const PlaylistCollectionContainer = ({ cId, t, cuId }) => {
 
   // Fetch units files if needed.
   const cusForFetch = useMemo(() => cuIDs?.filter(id => {
-    if (id === cuId || wipMap.units[id] || errorMap.units[id])
+    if (wipMap.units[id] || errorMap.units[id])
       return false;
 
     const cu = content_units.find(x => x.id === id);
     return !cu?.files;
-  }) || [], [cuIDs, cuId, wipMap.units, errorMap.units, content_units]);
+  }) || [], [cuIDs, wipMap.units, errorMap.units, content_units]);
 
   useEffect(() => {
     if (cusForFetch?.length > 0) {
@@ -71,13 +70,6 @@ const PlaylistCollectionContainer = ({ cId, t, cuId }) => {
     if (cuIDs)
       dispatch(recommended.fetchViews(cuIDs));
   }, [cuIDs, dispatch]);
-
-  useEffect(() => {
-    //full fetch currently played unit
-    if (cuId && !fullUnitFetchedMap[cuId] && !wipMap.units[cuId] && !errorMap.units[cuId]) {
-      dispatch(actions.fetchUnit(cuId));
-    }
-  }, [dispatch, errorMap.units, wipMap.units, fullUnitFetchedMap, cuId]);
 
   useEffect(() => {
     if (!Object.prototype.hasOwnProperty.call(wipMap.collections, cId)) {
@@ -113,11 +105,6 @@ const PlaylistCollectionContainer = ({ cId, t, cuId }) => {
     }
   }, [cId, cWindow, collections?.length, content_type, createPrevNextLinks, fetchWindow, film_date, wipMap.cWindow]);
 
-
-  useEffect(() => {
-    if (cuIDs)
-      dispatch(recommended.fetchViews(cuIDs));
-  }, [cuIDs, dispatch]);
 
   if (!cId || !collection || isEmpty(content_units)) {
     return null;
