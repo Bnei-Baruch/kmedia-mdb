@@ -50,6 +50,7 @@ function patchLessonFilters(filters) {
   if (ctFilter) {
     ctFilter.values = ctFilter.values.map(ct => (CT_LESSONS.includes(ct)) ? CT_LESSON_PART : ct);
   }
+
   return !filters.some(f => FN_SHOW_LESSON_AS_UNITS.includes(f.name) && !isEmpty(f.values));
 }
 
@@ -105,6 +106,7 @@ export function* fetchStat(action) {
       countC && requests.push(call(Api.collectionsStats, paramsPart));
       countL && requests.push(call(Api.labelsStats, paramsPart));
     }
+
     lessonAsCollection && requests.push(call(Api.collectionsStats, prepareDailyLessonParams({ ...params })));
 
     const responses = yield all(requests);
@@ -124,6 +126,7 @@ export function* fetchStat(action) {
         dataL[n]  = dataLPart[n];
       });
     }
+
     if (lessonAsCollection) {
       const ct           = responses.shift()?.data.content_type;
       dataC.content_type = { ...ct, ...dataC.content_type };
@@ -135,6 +138,7 @@ export function* fetchStat(action) {
     if (filterParams.with_languages) {
       yield fetchLanguageStat({ ...filterParams }, namespace, dataL.languages, isPrepare, countC);
     }
+
     if (lessonAsCollection) {
       yield fetchLanguageStat({ ...filterParams }, namespace, dataL.languages, isPrepare, countC);
     }
