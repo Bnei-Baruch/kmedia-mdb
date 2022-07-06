@@ -28,7 +28,7 @@ const DailyLessonItem = ({ id, t }) => {
           </small>
         </Header>
         <div className="additional_links">
-          {content_units.map(cu => <Link to={canonicalLink(cu)} span key={cu.id}>{cu.name}</Link>)}
+          {content_units.map(cu => <Link to={canonicalLink(cu)} as="span" key={cu.id}>{cu.name}</Link>)}
         </div>
       </div>
     </List.Item>

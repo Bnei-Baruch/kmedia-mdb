@@ -128,7 +128,6 @@
       "FRIENDS_GATHERING": "Assemblea degli Amici",
       "MEAL": "Pasti",
       "EVENT_PART": "Misc",
-
       "LESSON_PART": "Daily Lessons",
       "VIRTUAL_LESSON": "Virtual Lessons",
       "LECTURE": "Lectures",
@@ -136,18 +135,16 @@
       "CHILDREN_LESSON": "Children Lessons",
       "LESSONS_SERIES": "Selected Study Series",
       "LECTURE_SERIES": "Lecture Series",
-
       "CLIP": "Clips",
       "VIDEO_PROGRAM_CHAPTER": "Programmi",
-
       "ARTICLE": "Articles",
       "PUBLICATION": "Publication",
       "BLOG_POST": "Blog",
-
       "TRAINING": "Formazione",
       "KITEI_MAKOR": "Estratti dalle fonti",
       "LIKUTIM": "Assorted Excerpts",
-      "SOURCE": "Biblioteca"
+      "SOURCE": "Biblioteca",
+      "PICNIC": "Picnic"
     }
   },
   "buttons": {
