@@ -704,7 +704,7 @@ export const FN_DATE_FILTER        = 'date-filter';
 export const FN_PERSON             = 'person-filter';
 export const FN_MEDIA_TYPE         = 'media-type-filter';
 export const FN_LOCATIONS          = 'locations-filter';
-export const FN_CU_NAME            = 'cu-name';
+export const FN_FREE_TEXT          = 'free-text';
 
 export const FN_SOURCES_MULTI    = 'sources-filter-multi';
 export const FN_TOPICS_MULTI     = 'topics-filter-multi';
@@ -722,4 +722,4 @@ export const EVENT_PAGE_CTS = [...EVENT_TYPES, CT_MEAL, CT_FRIENDS_GATHERING, CT
 
 export const CT_LESSONS = [CT_LESSON_PART, CT_DAILY_LESSON];
 
-export const FN_SHOW_LESSON_AS_UNITS = [FN_SOURCES_MULTI, FN_TOPICS_MULTI, FN_PERSON, FN_LANGUAGES, FN_ORIGINAL_LANGUAGES, FN_MEDIA_TYPE]
+export const FN_SHOW_LESSON_AS_UNITS = [FN_SOURCES_MULTI, FN_TOPICS_MULTI, FN_PERSON, FN_LANGUAGES, FN_ORIGINAL_LANGUAGES, FN_MEDIA_TYPE];

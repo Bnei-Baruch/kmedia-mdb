@@ -14,11 +14,11 @@ import FilterLabels from '../../FiltersAside/FilterLabels';
 import Pagination from '../../Pagination/Pagination';
 import ResultsPageHeader from '../../Pagination/ResultsPageHeader';
 import { getPageFromLocation } from '../../Pagination/withPagination';
-import TextListTemplate from '../../shared/ContentItem/TextListTemplate';
 import SectionFiltersWithMobile from '../../shared/SectionFiltersWithMobile';
 import SectionHeader from '../../shared/SectionHeader';
 import WipErr from '../../shared/WipErr/WipErr';
 import Filters from './Filters';
+import TextListTemplate from './TextListTemplate';
 
 const FILTER_PARAMS = { content_type: [CT_LIKUTIM] };
 

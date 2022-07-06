@@ -1,8 +1,8 @@
-import { FN_CU_NAME } from '../../helpers/consts';
+import { FN_FREE_TEXT } from '../../helpers/consts';
 import { createFilterDefinition } from './util';
 
 const cuNameFilter = {
-  name: FN_CU_NAME,
+  name: FN_FREE_TEXT,
   queryKey: 'q',
   valueToApiParam: value => ({
     q: value
