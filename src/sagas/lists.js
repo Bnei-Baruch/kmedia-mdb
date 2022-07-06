@@ -1,14 +1,24 @@
 import { call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
 import { filtersTransformer } from '../filters';
 import Api from '../helpers/Api';
-import { CT_COLLECTIONS, CT_UNITS, CT_VIDEO_PROGRAM_CHAPTER, PAGE_NS_EVENTS, PAGE_NS_LESSONS } from '../helpers/consts';
+import {
+  CT_COLLECTIONS,
+  CT_DAILY_LESSON,
+  CT_LESSON_PART,
+  CT_LESSONS,
+  CT_UNITS,
+  CT_VIDEO_PROGRAM_CHAPTER,
+  FN_CONTENT_TYPE,
+  FN_SHOW_LESSON_AS_UNITS,
+  PAGE_NS_EVENTS,
+  PAGE_NS_LESSONS
+} from '../helpers/consts';
 import { isEmpty } from '../helpers/utils';
 import { selectors as filterSelectors } from '../redux/modules/filters';
 
 import { actions, types } from '../redux/modules/lists';
 import { actions as mdbActions } from '../redux/modules/mdb';
 import { selectors as settings } from '../redux/modules/settings';
-import { patchLessonFilters } from './filtersAside';
 import { getQuery, pushQuery } from './helpers/url';
 import { fetchCollectionsByIDs, fetchUnitsByIDs } from './mdb';
 import { fetchViewsByUIDs } from './recommended';
@@ -51,6 +61,20 @@ function* fetchList(action) {
   } catch (err) {
     yield put(actions.fetchListFailure(namespace, err));
   }
+}
+
+// Todo david: patch for lesson page filters. Need replace on refactor filters when not select source, tag or person show as collection other as unit
+function patchLessonFilters(filters) {
+  const ctFilter = filters.find(f => f.name === FN_CONTENT_TYPE && !isEmpty(f.values));
+  if (!ctFilter) return;
+  const asUnit    = filters.some(f => FN_SHOW_LESSON_AS_UNITS.includes(f.name) && !isEmpty(f.values));
+  ctFilter.values = ctFilter.values.map(ct => {
+    if (CT_LESSONS.includes(ct)) {
+      return asUnit ? CT_LESSON_PART : CT_DAILY_LESSON;
+    }
+
+    return ct;
+  });
 }
 
 function* fetchSectionList(action) {

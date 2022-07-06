@@ -8,10 +8,17 @@ import { Container, Divider } from 'semantic-ui-react';
 import {
   COLLECTION_DAILY_LESSONS,
   COLLECTION_LESSONS_TYPE,
+  CT_DAILY_LESSON,
+  CT_LECTURE,
+  CT_LESSON_PART,
+  CT_LESSONS_SERIES,
+  CT_VIRTUAL_LESSON,
+  CT_WOMEN_LESSON,
+  FN_SHOW_LESSON_AS_UNITS,
   PAGE_NS_LESSONS,
   UNIT_LESSONS_TYPE,
 } from '../../../helpers/consts';
-import { usePrevious } from '../../../helpers/utils';
+import { isEmpty, usePrevious } from '../../../helpers/utils';
 import { selectors as filters } from '../../../redux/modules/filters';
 import { actions, selectors as lists } from '../../../redux/modules/lists';
 import { selectors as settings } from '../../../redux/modules/settings';
@@ -27,7 +34,11 @@ import DailyLessonItem from './DailyLessonItem';
 import Filters from './Filters';
 import UnitItem from './UnitItem';
 
-const FILTER_PARAMS = { content_type: [...UNIT_LESSONS_TYPE, ...COLLECTION_LESSONS_TYPE] };
+const SHOWED_CT = [CT_VIRTUAL_LESSON, CT_WOMEN_LESSON, CT_LECTURE, CT_LESSONS_SERIES];
+
+export const LESSON_AS_COLLECTION = [CT_DAILY_LESSON, ...SHOWED_CT];
+export const LESSON_AS_UNIT       = [CT_LESSON_PART, ...SHOWED_CT];
+const FILTER_PARAMS               = { content_type: LESSON_AS_UNIT };
 
 const MainPage = ({ t }) => {
   const { items, total, wip, err } = useSelector(state => lists.getNamespaceState(state.lists, PAGE_NS_LESSONS)) || {};
@@ -35,7 +46,12 @@ const MainPage = ({ t }) => {
   const pageSize                   = useSelector(state => settings.getPageSize(state.settings));
   const selected                   = useSelector(state => filters.getFilters(state.filters, PAGE_NS_LESSONS), isEqual);
 
-  const prevSel = usePrevious(selected);
+  const prevSel    = usePrevious(selected);
+  const listParams = useMemo(() => {
+    return selected.some(f => FN_SHOW_LESSON_AS_UNITS.includes(f.name) && !isEmpty(f.values))
+      ? { content_type: LESSON_AS_UNIT }
+      : { content_type: LESSON_AS_COLLECTION };
+  }, [selected]);
 
   const dispatch = useDispatch();
   const setPage  = useCallback(pageNo => dispatch(actions.setPage(PAGE_NS_LESSONS, pageNo)), [dispatch]);
@@ -50,10 +66,10 @@ const MainPage = ({ t }) => {
       dispatch(actions.fetchSectionList(PAGE_NS_LESSONS, pageNo, {
         pageSize,
         withViews: true,
-        ...FILTER_PARAMS
+        ...listParams
       }));
     }
-  }, [language, dispatch, pageNo, selected]);
+  }, [language, dispatch, pageNo, selected, listParams]);
 
   const wipErr = WipErr({ wip, err, t });
 
@@ -71,7 +87,7 @@ const MainPage = ({ t }) => {
       <FilterLabels namespace={PAGE_NS_LESSONS} />
       {
         wipErr || items?.map(({ id, content_type }, i) => {
-          switch (true) {
+            switch (true) {
             case COLLECTION_DAILY_LESSONS.includes(content_type):
               return <DailyLessonItem id={id} key={i} />;
             case COLLECTION_LESSONS_TYPE.includes(content_type):
@@ -80,8 +96,8 @@ const MainPage = ({ t }) => {
               return <UnitItem id={id} key={i} />;
             default:
               return null;
+            }
           }
-        }
         )
       }
       <Divider fitted />

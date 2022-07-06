@@ -5,11 +5,10 @@ import Api from '../helpers/Api';
 import {
   CT_DAILY_LESSON,
   CT_LESSON_PART,
+  CT_LESSONS,
   FN_CONTENT_TYPE,
   FN_LANGUAGES,
-  FN_PERSON,
-  FN_SOURCES_MULTI,
-  FN_TOPICS_MULTI,
+  FN_SHOW_LESSON_AS_UNITS,
   PAGE_NS_LESSONS
 } from '../helpers/consts';
 import { isEmpty } from '../helpers/utils';
@@ -32,27 +31,45 @@ const defaultStatParams    = {
   with_locations: false,
 };
 
-// Todo david: patch for lesson page filters. Need replace on refactor filters when not select source, tag or person show as collection other as unit
-export function patchLessonFilters(filters) {
-  const ctFilter = filters.find(f => f.name === FN_CONTENT_TYPE && !isEmpty(f.values));
-  if (!ctFilter) return;
-  const asUnit    = filters.some(f => [FN_SOURCES_MULTI, FN_TOPICS_MULTI, FN_PERSON].includes(f.name) && !isEmpty(f.values));
-  ctFilter.values = ctFilter.values.map(ct => {
-    if ([CT_LESSON_PART, CT_DAILY_LESSON].includes(ct)) {
-      return asUnit ? CT_LESSON_PART : CT_DAILY_LESSON;
-    }
+const setAllStatParamsFalse = params => {
+  params.with_sources            = false;
+  params.with_tags               = false;
+  params.with_collections        = false;
+  params.with_persons            = false;
+  params.with_media              = false;
+  params.with_original_languages = false;
+  params.with_locations          = false;
+  params.with_languages          = false;
+  params.with_content_types      = false;
+  params['media_language'] && delete params['media_language'];
+  return params;
+};
 
-    return ct;
-  });
+function patchLessonFilters(filters) {
+  const ctFilter = filters.find(f => f.name === FN_CONTENT_TYPE && !isEmpty(f.values));
+  if (ctFilter) {
+    ctFilter.values = ctFilter.values.map(ct => (CT_LESSONS.includes(ct)) ? CT_LESSON_PART : ct);
+  }
+  return !filters.some(f => FN_SHOW_LESSON_AS_UNITS.includes(f.name) && !isEmpty(f.values));
+}
+
+function prepareDailyLessonParams(params) {
+  setAllStatParamsFalse(params);
+  params.with_content_types = true;
+  params.content_type       = [...params.content_type.filter(ct => ct === CT_LESSON_PART), CT_DAILY_LESSON];
+  return params;
 }
 
 export function* fetchStat(action) {
   let { namespace, params, options: { isPrepare, countC = false, countL = false } } = action.payload;
 
-  let filterParams = {};
+  let filterParams       = {};
+  let lessonAsCollection = false;
   if (!isPrepare) {
     const filters = yield select(state => filterSelectors.getFilters(state.filters, namespace));
-    if (namespace === PAGE_NS_LESSONS) patchLessonFilters(filters);
+    if (namespace === PAGE_NS_LESSONS)
+      lessonAsCollection = patchLessonFilters(filters);
+
     filterParams = filtersTransformer.toApiParams(filters) || {};
   }
 
@@ -76,7 +93,10 @@ export function* fetchStat(action) {
 
     const requests = [];
     requests.push(call(Api.unitsStats, { ...filterParams, with_languages: false }));
-    countC && requests.push(call(Api.collectionsStats, { id: filterParams.collection, ...filterParams }));
+    countC && requests.push(call(Api.collectionsStats, {
+      id: filterParams.collection, ...filterParams,
+      with_languages: false
+    }));
     countL && requests.push(call(Api.labelsStats, filterParams));
 
     if (isFilteredByBase) {
@@ -85,6 +105,7 @@ export function* fetchStat(action) {
       countC && requests.push(call(Api.collectionsStats, paramsPart));
       countL && requests.push(call(Api.labelsStats, paramsPart));
     }
+    lessonAsCollection && requests.push(call(Api.collectionsStats, prepareDailyLessonParams({ ...params })));
 
     const responses = yield all(requests);
 
@@ -103,12 +124,19 @@ export function* fetchStat(action) {
         dataL[n]  = dataLPart[n];
       });
     }
+    if (lessonAsCollection) {
+      const ct           = responses.shift()?.data.content_type;
+      dataC.content_type = { ...ct, ...dataC.content_type };
+    }
 
     yield put(actions.receiveLocationsStats({ locations, namespace, isPrepare }));
     yield put(actions.fetchStatsSuccess({ dataCU, dataC, dataL, namespace, isPrepare }));
 
     if (filterParams.with_languages) {
-      yield fetchLanguageStat({ ...filterParams }, namespace, dataC.languages, dataL.languages, isPrepare);
+      yield fetchLanguageStat({ ...filterParams }, namespace, dataL.languages, isPrepare, countC);
+    }
+    if (lessonAsCollection) {
+      yield fetchLanguageStat({ ...filterParams }, namespace, dataL.languages, isPrepare, countC);
     }
   } catch (err) {
     yield put(actions.fetchStatsFailure(namespace, err));
@@ -119,25 +147,23 @@ export function* fetchStat(action) {
  * stats of cu languages are too slow, so we call it separately
  * @param params
  * @param namespace
- * @param dataC if you have results of collections take from here
  * @param dataL if you have results of labels take from here
  * @param isPrepare
+ * @param countC
  * @returns {Generator<*, void, *>}
  */
-export function* fetchLanguageStat(params, namespace, dataC = {}, dataL = {}, isPrepare) {
-  params.with_sources            = false;
-  params.with_tags               = false;
-  params.with_collections        = false;
-  params.with_content_types      = false;
-  params.with_persons            = false;
-  params.with_media              = false;
-  params.with_original_languages = false;
-  params.with_locations          = false;
-
+export function* fetchLanguageStat(params, namespace, dataL = {}, isPrepare, countC) {
+  setAllStatParamsFalse(params);
   params.with_languages = true;
-  params['media_language'] && delete params['media_language'];
   try {
-    const { data: { languages: dataCU } } = yield call(Api.unitsStats, params);
+    const requests = [];
+    requests.push(call(Api.unitsStats, params));
+    countC && requests.push(call(Api.collectionsStats, { ...params, id: params.collection, }));
+
+    const responses = yield all(requests);
+
+    const { data: { languages: dataCU } } = responses.shift();
+    const { data: { languages: dataC } }  = countC ? responses.shift() : { data: false };
 
     yield put(actions.receiveSingleTypeStats({ dataCU, dataC, dataL, namespace, isPrepare, fn: FN_LANGUAGES }));
   } catch (err) {

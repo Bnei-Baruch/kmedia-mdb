@@ -26,14 +26,14 @@ const UnitItem = ({ id, t }) => {
   description.push(t('values.date', { date: cu.film_date }));
   if (views > 0) description.push(t('pages.unit.info.views', { views }));
 
-  const renderCCU = c => (
-    <Link to={canonicalLink(c)} key={c}>
+  const renderCCU = (c, i) => (
+    <Link to={canonicalLink(c)} key={i}>
       {`${t(`constants.content-types.${c.content_type}`)}: ${c.name}`}
     </Link>
   );
 
   return (
-    <List.Item key={id} className="media_item">
+    <List.Item className="media_item">
       <Link to={link}>
         <UnitLogoWithDuration duration={cu.duration} unitId={cu.id} width={144} />
       </Link>
