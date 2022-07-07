@@ -92,7 +92,7 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
     const newMediaType = playerHelper.getMediaTypeFromQuery(location);
     const qryContentLang = playerHelper.getLanguageFromQuery(location, language || contentLanguage);
 
-    if (playlist) {
+    if (playlist && prev?.collection.id === collection.id) {
       if (newMediaType !== mediaType ||
         qryContentLang !== language) {
         const nPlaylist = playerHelper.playlist(collection, newMediaType, qryContentLang, language);

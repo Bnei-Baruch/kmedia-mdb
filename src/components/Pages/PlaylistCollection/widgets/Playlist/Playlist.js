@@ -111,6 +111,7 @@ PlaylistWidget.propTypes = {
 
 const areEqual = (prevProps, nextProps) => (
   nextProps.selected === prevProps.selected
+  && nextProps.playlist?.collection?.id === prevProps.playlist?.collection?.id
   && nextProps.link === prevProps.link
   && isEqual(nextProps.playlist, prevProps.playlist)
 );
