@@ -106,6 +106,14 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
     }
   }, [history, playlist, selected, uiLanguage]);
 
+  const selectUnit = useCallback(selectedIndex => {
+    const newUnit = playlist?.items[selectedIndex]?.unit;
+    if (newUnit) {
+      setSelected(selectedIndex);
+      setUnit(newUnit);
+    }
+  }, [playlist?.items])
+
   const shufflePlaylist = () => {
     const selectedItem = playlist.items[selected];
     // a new array for sorting
@@ -115,18 +123,15 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
     const newSelectedIndex = newPlaylistItems.indexOf(selectedItem);
     // replace current items by shuffled
     playlist.items = [...newPlaylistItems];
-    setSelected(newSelectedIndex);
+    selectUnit(newSelectedIndex);
   }
 
   useEffect(() => {
     const newSel = playlist?.items.findIndex(i => i.unit.id === cuId);
-    if (!isNaN(newSel) && newSel !== -1) {
-      setSelected(newSel);
-      const newUnit = playlist?.items[newSel]?.unit;
-      setUnit(newUnit);
+    if (!isNaN(newSel) && newSel > -1) {
+      selectUnit(newSel);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [playlist, cuId]);
+  }, [playlist, cuId, selectUnit]);
 
   if (!collection || !Array.isArray(collection.content_units)) {
     return null;
