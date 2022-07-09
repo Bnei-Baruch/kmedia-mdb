@@ -36,7 +36,7 @@ const getRecommendUnit = (unit, collection, items) => {
   return recommendUnit;
 };
 
-const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, cuId, t }) => {
+const PlaylistCollectionPage = ({ collection, cuId, t }) => {
   const location           = useLocation();
   const history            = useHistory();
   const { isMobileDevice } = useContext(DeviceInfoContext);
@@ -193,7 +193,7 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
           {
             unit &&
             <div id="avbox_playlist">
-              <PlaylistHeader collection={collection} prevLink={prevLink} nextLink={nextLink} unit={unit} />
+              <PlaylistHeader collection={collection} unit={unit} />
             </div>
           }
           <AVPlaylistPlayer
@@ -235,20 +235,13 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
 
 PlaylistCollectionPage.propTypes = {
   collection: shapes.GenericCollection,
-  nextLink: PropTypes.string,
-  prevLink: PropTypes.string,
   cuId: PropTypes.string,
   t: PropTypes.func.isRequired
 };
 
-const isEqualLink = (link1, link2) =>
-  (!link1 && !link2) || link1 === link2;
-
 const areEqual = (prevProps, nextProps) => (
   isEqual(prevProps.collection, nextProps.collection)
   && ((!prevProps.cuId && !nextProps.cuId) || prevProps.cuId === nextProps.cuId)
-  && isEqualLink(prevProps.prevLink, nextProps.prevLink)
-  && isEqualLink(prevProps.nextLink, nextProps.nextLink)
 );
 
 export default React.memo(withNamespaces()(PlaylistCollectionPage), areEqual);
