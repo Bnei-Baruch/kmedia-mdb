@@ -45,15 +45,7 @@ const PlaylistCollectionContainer = ({ cId, t, cuId }) => {
     }
   }, [collection, content_units, cuId, history, location, uiLanguage])
 
-  const createPrevNextLinks = useCallback(curIndex => {
-    const prevCollection = curIndex < collections.length - 1 ? collections[curIndex + 1] : null;
-    const prevLnk        = prevCollection ? canonicalLink(prevCollection) : null;
-    setPrevLink(prevLnk);
-
-    const nextCollection = curIndex > 0 ? collections[curIndex - 1] : null;
-    const nextLnk        = nextCollection ? canonicalLink(nextCollection) : null;
-    setNextLink(nextLnk);
-  }, [collections]);
+  const dispatch = useDispatch();
 
   // Fetch units files if needed.
   const cusForFetch = useMemo(() => cuIDs?.filter(id => {
@@ -82,18 +74,38 @@ const PlaylistCollectionContainer = ({ cId, t, cuId }) => {
     }
   }, [cId, dispatch, wipMap.collections]);
 
+  const fetchWindow = useCallback(() => {
+    const filmDate = moment.utc(film_date);
+    dispatch(actions.fetchWindow({
+      cId,
+      start_date: filmDate.subtract(5, 'days').format(DATE_FORMAT),
+      end_date: filmDate.add(10, 'days').format(DATE_FORMAT)
+    }));
+  }, [cId, film_date, dispatch]);
+
+  const createPrevNextLinks = useCallback(curIndex => {
+    const prevCollection = curIndex < collections.length - 1 ? collections[curIndex + 1] : null;
+    const prevLnk        = prevCollection ? canonicalLink(prevCollection) : null;
+    setPrevLink(prevLnk);
+
+    const nextCollection = curIndex > 0 ? collections[curIndex - 1] : null;
+    const nextLnk        = nextCollection ? canonicalLink(nextCollection) : null;
+    setNextLink(nextLnk);
+  }, [collections]);
+
   useEffect(() => {
     // next prev links only for lessons
     if (COLLECTION_DAILY_LESSONS.includes(content_type)) {
+      const { id: cWindowId, data } = cWindow || {};
       // empty or no window
-      if (!cWindow.data || cWindow.data.length === 0) {
+      if (!data || data.length === 0) {
         if (!wipMap.cWindow[cId]) {
           // no wip, go fetch
           fetchWindow(cId, film_date);
         }
       } else {
-        const { id: cWindowId, data } = cWindow;
-        const curIndex                = data.indexOf(cId);
+        const curIndex = data.indexOf(cId);
+
         if (cId !== cWindowId
           && (curIndex <= 0 || curIndex === collections?.length - 1)
           && !wipMap.cWindow[cId]) {

@@ -104,15 +104,22 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
     if (nSelected !== selected && playlist?.items && playlist?.items[nSelected]) {
       history.push(`/${uiLanguage}${playlist.items[nSelected].shareUrl}`);
     }
-  }, [history, playlist, selected, uiLanguage]);
+  }, [history, playlist?.items, selected, uiLanguage]);
 
   const selectUnit = useCallback(selectedIndex => {
-    const newUnit = playlist?.items[selectedIndex]?.unit;
+    const { unit: newUnit } = playlist?.items[selectedIndex] || {};
     if (newUnit) {
       setSelected(selectedIndex);
       setUnit(newUnit);
     }
   }, [playlist?.items])
+
+  useEffect(() => {
+    const newSel = playlist?.items.findIndex(i => i.unit.id === cuId);
+    if (!isNaN(newSel) && newSel > -1) {
+      selectUnit(newSel);
+    }
+  }, [playlist, cuId, selectUnit]);
 
   const shufflePlaylist = () => {
     const selectedItem = playlist.items[selected];
@@ -125,13 +132,6 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
     playlist.items = [...newPlaylistItems];
     selectUnit(newSelectedIndex);
   }
-
-  useEffect(() => {
-    const newSel = playlist?.items.findIndex(i => i.unit.id === cuId);
-    if (!isNaN(newSel) && newSel > -1) {
-      selectUnit(newSel);
-    }
-  }, [playlist, cuId, selectUnit]);
 
   if (!collection || !Array.isArray(collection.content_units)) {
     return null;
