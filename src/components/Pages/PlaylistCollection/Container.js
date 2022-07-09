@@ -62,10 +62,12 @@ const PlaylistCollectionContainer = ({ cId, t, cuId }) => {
     }
   }, [dispatch, cusForFetch]);
 
-  useEffect(() => {
-    if (cuIDs)
-      dispatch(recommended.fetchViews(cuIDs));
-  }, [cuIDs, dispatch]);
+  // useEffect(() => {
+  //   if (cuIDs) {
+  //     console.log('recommended.fetchViews:', cuIDs)
+  //     dispatch(recommended.fetchViews(cuIDs));
+  //   }
+  // }, [cuIDs, dispatch]);
 
   useEffect(() => {
     if (!Object.prototype.hasOwnProperty.call(wipMap.collections, cId)) {
