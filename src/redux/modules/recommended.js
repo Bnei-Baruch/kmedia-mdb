@@ -1,7 +1,8 @@
-import { createAction, handleActions } from 'redux-actions';
-import { types as ssr } from './ssr';
-import { types as player } from './player';
+import { createAction } from 'redux-actions';
 import { types as chronicles } from './chronicles';
+import { types as player } from './player';
+import { handleActions } from './settings';
+import { types as ssr } from './ssr';
 
 const FETCH_RECOMMENDED         = 'FETCH_RECOMMENDED';
 const FETCH_RECOMMENDED_SUCCESS = 'FETCH_RECOMMENDED_SUCCESS';

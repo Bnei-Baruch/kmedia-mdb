@@ -1,14 +1,15 @@
 import { applyMiddleware, compose, createStore as reduxCreateStore } from 'redux';
 import createSagaMiddleware, { END } from 'redux-saga';
-import { rootSaga } from '../sagas';
 // import { createLogger } from 'redux-logger';
+
 import sagaMonitor from '../sagas/helpers/sagaMonitor';
+import createMultiLanguageRouterMiddleware from './middleware/multiLanguageRouterMiddleware';
 // import createDeferredSagasMiddleware from './middleware/defferedSagasMiddleware';
 import reducer from './index';
-import createMultiLanguageRouterMiddleware from './middleware/multiLanguageRouterMiddleware';
+import { rootSaga } from '../sagas';
 
 const isBrowser             = (typeof window !== 'undefined' && window.document);
-const isProduction          = true;//process.env.NODE_ENV === 'production';
+const isProduction          = process.env.NODE_ENV === 'production';
 const devToolsArePresent    = typeof window === 'object' && typeof window.__REDUX_DEVTOOLS_EXTENSION__ !== 'undefined';
 const devToolsStoreEnhancer = () => (isBrowser && devToolsArePresent ? window.__REDUX_DEVTOOLS_EXTENSION__() : f => f);
 
@@ -39,17 +40,15 @@ export default function createStore(initialState, history) {
     // middlewares.push(logger);
   }
 
-  console.log('views_bug history reduxCreateStore', history);
   const store = reduxCreateStore(reducer(history), initialState, compose(
     applyMiddleware(...middlewares),
     devToolsStoreEnhancer()
   ));
 
-  console.log('views_bug after reduxCreateStore', store.getState());
   // used server side
   store.rootSagaPromise = sagaMiddleWare.run(rootSaga).done;
-  store.stopSagas       = () => store.dispatch(END);
-  store.sagaMiddleWare  = sagaMiddleWare;
+  store.stopSagas      = () => store.dispatch(END);
+  store.sagaMiddleWare = sagaMiddleWare;
 
   return store;
 }
