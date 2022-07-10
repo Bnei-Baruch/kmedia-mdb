@@ -39,12 +39,13 @@ export default function createStore(initialState, history) {
     // middlewares.push(logger);
   }
 
-  console.log('views_bug reduxCreateStore', initialState);
+  console.log('views_bug initialState reduxCreateStore', initialState);
   const store = reduxCreateStore(reducer(history), initialState, compose(
     applyMiddleware(...middlewares),
     devToolsStoreEnhancer()
   ));
 
+  console.log('views_bug after reduxCreateStore', store.getState());
   // used server side
   store.rootSagaPromise = sagaMiddleWare.run(rootSaga).done;
   store.stopSagas       = () => store.dispatch(END);

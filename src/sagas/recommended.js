@@ -263,7 +263,6 @@ function* fetchViews(action) {
 }
 
 export function* fetchViewsByUIDs(uids) {
-  console.log('views_bug sagas recommended uids', uids)
   uids = yield select(state => uids.filter(uid => recommended.getViews(uid, state.recommended) === -1));
   if (uids.length > 0) {
     const { data } = yield call(Api.views, uids);
