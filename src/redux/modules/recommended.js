@@ -85,7 +85,6 @@ const onUserInactive = state => {
 };
 
 const onReceiveViews = (state, action) => {
-  console.log('views_bug redux onReceiveViews', state.views.length)
   Object.assign(state.views, action.payload);
   return state;
 };
