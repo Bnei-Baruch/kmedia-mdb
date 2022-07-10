@@ -154,6 +154,7 @@ export default function serverRender(req, res, next, htmlData) {
     }
 
     const store = createStore(initialState, history);
+    console.log("views_bug after create store", store.getState())
     store.dispatch(settings.setLanguage(language));
 
     const context = {
