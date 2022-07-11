@@ -77,7 +77,7 @@ const onReceiveViews = (draft, payload) => draft.views = { ...draft.views, ...pa
 
 const onReceiveWatchingNow = (draft, payload) => draft.watchingNow = { ...draft.watchingNow, ...payload };
 
-const onRecommended = (draft) => draft.wip = true;
+const onRecommended = draft => draft.wip = true;
 
 export const reducer = handleActions({
   [ssr.PREPARE]: onSSRPrepare,
