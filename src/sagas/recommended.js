@@ -1,17 +1,18 @@
-import { all, call, put, takeLatest, select } from 'redux-saga/effects';
+import { all, call, put, select, takeLatest } from 'redux-saga/effects';
+import { AB_RECOMMEND_NEW, AB_RECOMMEND_RANDOM } from '../helpers/ab-testing';
 
 import Api from '../helpers/Api';
-import { IsCollectionContentType, IsUnitContentType } from '../helpers/consts';
-import { AB_RECOMMEND_NEW, AB_RECOMMEND_RANDOM } from '../helpers/ab-testing';
-import { actions, types, selectors as recommended } from '../redux/modules/recommended';
-import { selectors as settings } from '../redux/modules/settings';
-import { selectors as sourcesSelectors } from '../redux/modules/sources';
-import { getSourcesCollections } from '../helpers/utils';
 import {
   CT_LESSONS_SERIES,
   CT_TAG,
-  UNIT_LESSONS_TYPE,
+  IsCollectionContentType,
+  IsUnitContentType,
+  UNIT_LESSONS_TYPE
 } from '../helpers/consts';
+import { getSourcesCollections } from '../helpers/utils';
+import { actions, selectors as recommended, types } from '../redux/modules/recommended';
+import { selectors as settings } from '../redux/modules/settings';
+import { selectors as sourcesSelectors } from '../redux/modules/sources';
 import { fetchMissingCollections, fetchMissingUnits } from './mdb';
 
 const WATCHING_NOW_MIN = 50;
@@ -22,7 +23,7 @@ export function* fetchRecommended(action) {
   try {
     const isLesson = UNIT_LESSONS_TYPE.includes(content_type);
     const language = yield select(state => settings.getContentLanguage(state.settings));
-    const skipUids = yield select(state => recommended.getSkipUids(state.recommended));
+    const [...skipUids] = yield select(state => recommended.getSkipUids(state.recommended));
     const skipSet  = new Set(skipUids);
     skip.forEach(uid => {
       if (!skipSet.has(uid)) {
@@ -254,6 +255,7 @@ export function* fetchRecommended(action) {
 
     yield put(actions.fetchRecommendedSuccess({ feeds, requestData }));
   } catch (err) {
+    console.error(err);
     yield put(actions.fetchRecommendedFailure(err));
   }
 }
@@ -287,7 +289,6 @@ export function* fetchWatchingNow(uids) {
     yield put(actions.receiveWatchingNow(views));
   }
 }
-
 
 function* watchFetchRecommended() {
   yield takeLatest(types.FETCH_RECOMMENDED, fetchRecommended);

@@ -47,10 +47,10 @@ const initialState = {
   watchingNow: {},
 };
 
-const onSuccess = (state, action) => {
+const onSuccess = (state, payload) => {
   state.wip   = false;
   state.err   = null;
-  state.feeds = action.payload.feeds;
+  state.feeds = payload.feeds;
 
   return state;
 };
@@ -71,10 +71,9 @@ const onSSRPrepare = state => {
   return state;
 };
 
-const onPlayerPlay = (state, action) => {
-  const unitUid = action.payload;
-  if (unitUid && !state.skipUids.includes(unitUid)) {
-    state.skipUids.push(unitUid);
+const onPlayerPlay = (state, payload) => {
+  if (payload && !state.skipUids.includes(payload)) {
+    state.skipUids.push(payload);
   }
 
   return state;
@@ -85,13 +84,18 @@ const onUserInactive = state => {
   return state;
 };
 
-const onReceiveViews = (state, action) => {
-  Object.assign(state.views, action.payload);
+const onReceiveViews = (state, payload) => {
+  state.views = { ...state.views, ...payload };
   return state;
 };
 
-const onReceiveWatchingNow = (state, action) => {
-  Object.assign(state.watchingNow, action.payload);
+const onReceiveWatchingNow = (state, payload) => {
+  state.watchingNow = { ...state.watchingNow, ...payload };
+  return state;
+};
+
+const onRecommended = (state) => {
+  state.wip = true;
   return state;
 };
 
@@ -100,7 +104,7 @@ export const reducer = handleActions({
   [player.PLAYER_PLAY]: onPlayerPlay,
   [chronicles.USER_INACTIVE]: onUserInactive,
 
-  [FETCH_RECOMMENDED]: state => ({ wip: true, ...state }),
+  [FETCH_RECOMMENDED]: onRecommended,
   [FETCH_RECOMMENDED_SUCCESS]: onSuccess,
   [FETCH_RECOMMENDED_FAILURE]: onFailure,
   [RECEIVE_VIEWS]: onReceiveViews,
