@@ -1,4 +1,5 @@
-import { createAction, handleActions } from 'redux-actions';
+import { createAction } from 'redux-actions';
+import { handleActions } from './settings';
 import { types as ssr } from './ssr';
 
 const FETCH_LIKUTIM           = 'FETCH_LIKUTIM';
@@ -29,10 +30,10 @@ const initialState = {
   likutim: [],
 };
 
-const onSuccess = (state, action) => {
+const onSuccess = (state, payload) => {
   state.wip = false;
   state.err = null;
-  state.likutim = action.payload.content_units;
+  state.likutim = payload.content_units;
 
   return state;
 };
