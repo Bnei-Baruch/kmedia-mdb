@@ -47,57 +47,37 @@ const initialState = {
   watchingNow: {},
 };
 
-const onSuccess = (state, payload) => {
-  state.wip   = false;
-  state.err   = null;
-  state.feeds = payload.feeds;
-
-  return state;
+const onSuccess = (draft, payload) => {
+  draft.wip   = false;
+  draft.err   = null;
+  draft.feeds = payload.feeds;
 };
 
-const onFailure = (state, payload) => {
-  state.wip   = false;
-  state.err   = payload;
-  state.feeds = {};
-
-  return state;
+const onFailure = (draft, payload) => {
+  draft.wip   = false;
+  draft.err   = payload;
+  draft.feeds = {};
 };
 
-const onSSRPrepare = state => {
-  if (state.err) {
-    state.err = state.err.toString();
+const onSSRPrepare = draft => {
+  if (draft.err) {
+    draft.err = draft.err.toString();
   }
-
-  return state;
 };
 
-const onPlayerPlay = (state, payload) => {
-  if (payload && !state.skipUids.includes(payload)) {
-    state.skipUids.push(payload);
+const onPlayerPlay = (draft, payload) => {
+  if (payload && !draft.skipUids.includes(payload)) {
+    draft.skipUids.push(payload);
   }
-
-  return state;
 };
 
-const onUserInactive = state => {
-  state.skipUids.length = 0;
-  return state;
-};
+const onUserInactive = draft => draft.skipUids.length = 0;
 
-const onReceiveViews = (state, payload) => {
-  state.views = { ...state.views, ...payload };
-  return state;
-};
+const onReceiveViews = (draft, payload) => draft.views = { ...draft.views, ...payload };
 
-const onReceiveWatchingNow = (state, payload) => {
-  state.watchingNow = { ...state.watchingNow, ...payload };
-  return state;
-};
+const onReceiveWatchingNow = (draft, payload) => draft.watchingNow = { ...draft.watchingNow, ...payload };
 
-const onRecommended = (state) => {
-  state.wip = true;
-  return state;
-};
+const onRecommended = (draft) => draft.wip = true;
 
 export const reducer = handleActions({
   [ssr.PREPARE]: onSSRPrepare,
