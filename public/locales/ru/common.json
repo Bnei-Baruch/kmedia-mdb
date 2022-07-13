@@ -113,7 +113,8 @@
       "media-type-filter": "Медиа",
       "person-filter": "Автор",
       "original-language-filter": "Язык оригинала",
-      "locations-filter": "Место проведения"
+      "locations-filter": "Место проведения",
+      "free-text": "Свободный текст"
     },
     "media-types": {
       "audio" : "Аудио",

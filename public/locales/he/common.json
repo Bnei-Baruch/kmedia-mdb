@@ -112,7 +112,8 @@
       "media-type-filter": "מדיה",
       "person-filter": "מחבר",
       "original-language-filter": "שפת מקור",
-      "locations-filter": "מיקום"
+      "locations-filter": "מיקום",
+      "free-text": "טקסט חופשי"
     },
     "media-types": {
       "audio" : "אודיו",

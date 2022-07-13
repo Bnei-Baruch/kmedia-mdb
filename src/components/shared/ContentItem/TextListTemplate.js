@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import PropTypes from 'prop-types';
 import React from 'react';
 import { withNamespaces } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -6,22 +7,25 @@ import { useSelector } from 'react-redux';
 import { Container, Header, Image, List } from 'semantic-ui-react';
 import { iconByContentTypeMap } from '../../../helpers/consts';
 import { SectionLogo } from '../../../helpers/images';
+import { selectors as mdb } from '../../../redux/modules/mdb';
 import { selectors as sources } from '../../../redux/modules/sources';
 import Link from '../../Language/MultiLanguageLink';
-import * as shapes from '../../shapes';
 import { buildTextItemInfo, textPartLink } from './helper';
 
-const TextListTemplate = ({ label, unit, t }) => {
-  const { id, content_type } = unit;
+const TextListTemplate = ({ cuID, lID, t }) => {
+  const cu               = useSelector(state => mdb.getDenormContentUnit(state.mdb, cuID));
+  const label            = useSelector(state => mdb.getDenormLabel(state.mdb)(lID));
+  const areSourcesLoaded = useSelector(state => sources.areSourcesLoaded(state.sources));
+  const getPathByID      = useSelector(state => sources.getPathByID(state.sources));
 
-  const areSourcesLoaded                 = useSelector(state => sources.areSourcesLoaded(state.sources));
-  const getPathByID                      = useSelector(state => sources.getPathByID(state.sources));
-  const icon                             = !!label ? 'label' : iconByContentTypeMap.get(content_type) || null;
-  const link                             = textPartLink(label?.properties, unit);
-  const { subTitle, title, description } = buildTextItemInfo(unit, label, t, areSourcesLoaded && getPathByID);
+  if (!cu) return null;
+  const icon = !!label ? 'label' : iconByContentTypeMap.get(cu.content_type) || null;
+  const link = textPartLink(label?.properties, cu);
+
+  const { subTitle, title, description } = buildTextItemInfo(cu, label, t, areSourcesLoaded && getPathByID);
   return (
     <List.Item
-      key={id}
+      key={cuID}
       className="text_item"
     >
       <Image verticalAlign="top">
@@ -41,8 +45,8 @@ const TextListTemplate = ({ label, unit, t }) => {
 };
 
 TextListTemplate.propTypes = {
-  unit: shapes.ContentUnit,
-  label: shapes.Label,
+  cuID: PropTypes.string,
+  lID: PropTypes.string,
 
 };
 

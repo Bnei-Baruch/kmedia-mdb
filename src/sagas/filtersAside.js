@@ -41,7 +41,7 @@ const setAllStatParamsFalse = params => {
   params.with_locations          = false;
   params.with_languages          = false;
   params.with_content_types      = false;
-  params['media_language'] && delete params['media_language'];
+  params.media_language && delete params.media_language;
   return params;
 };
 
@@ -88,12 +88,13 @@ export function* fetchStat(action) {
   try {
     filterParams.for_filter = true;
 
-    filterParams = { ...defaultStatParams, ...filterParams };
-    countC       = countC && !filterParams.person;
-    countL       = countL && !filterParams.person;
+    filterParams  = { ...defaultStatParams, ...filterParams };
+    const countCU = !filterParams.location;
+    countC        = countC && !filterParams.person;
+    countL        = countL && !filterParams.person;
 
     const requests = [];
-    requests.push(call(Api.unitsStats, { ...filterParams, with_languages: false }));
+    countCU && requests.push(call(Api.unitsStats, { ...filterParams, with_languages: false }));
     countC && requests.push(call(Api.collectionsStats, {
       id: filterParams.collection, ...filterParams,
       with_languages: false
@@ -102,7 +103,7 @@ export function* fetchStat(action) {
 
     if (isFilteredByBase) {
       const paramsPart = { ...filterParams, ...params, with_languages: false };
-      requests.push(call(Api.unitsStats, paramsPart));
+      countCU && requests.push(call(Api.unitsStats, paramsPart));
       countC && requests.push(call(Api.collectionsStats, paramsPart));
       countL && requests.push(call(Api.labelsStats, paramsPart));
     }
@@ -111,12 +112,12 @@ export function* fetchStat(action) {
 
     const responses = yield all(requests);
 
-    const { data: dataCU }                  = responses.shift();
+    const dataCU                            = countCU ? responses.shift()?.data : {};
     const { data: { locations, ...dataC } } = countC ? responses.shift() : { data: false };
     const dataL                             = countL ? responses.shift()?.data : {};
 
     if (isFilteredByBase) {
-      const { data: dataCUPart = {} }             = responses.shift() || {};
+      const dataCUPart                            = countCU ? responses.shift()?.data : {};
       const { data: { locations, ...dataCPart } } = countC ? responses.shift() : {};
       const dataLPart                             = countL ? responses.shift()?.data : {};
 
@@ -136,7 +137,7 @@ export function* fetchStat(action) {
     yield put(actions.fetchStatsSuccess({ dataCU, dataC, dataL, namespace, isPrepare }));
 
     if (filterParams.with_languages) {
-      yield fetchLanguageStat({ ...filterParams }, namespace, dataL.languages, isPrepare, countC);
+      yield fetchLanguageStat({ ...filterParams }, namespace, dataL.languages, isPrepare, countCU, countC);
     }
   } catch (err) {
     yield put(actions.fetchStatsFailure(namespace, err));
@@ -152,17 +153,17 @@ export function* fetchStat(action) {
  * @param countC
  * @returns {Generator<*, void, *>}
  */
-export function* fetchLanguageStat(params, namespace, dataL = {}, isPrepare, countC) {
+export function* fetchLanguageStat(params, namespace, dataL = {}, isPrepare, countCU, countC) {
   setAllStatParamsFalse(params);
   params.with_languages = true;
   try {
     const requests = [];
-    requests.push(call(Api.unitsStats, params));
+    countCU && requests.push(call(Api.unitsStats, params));
     countC && requests.push(call(Api.collectionsStats, { ...params, id: params.collection, }));
 
     const responses = yield all(requests);
 
-    const { data: { languages: dataCU } } = responses.shift();
+    const { data: { languages: dataCU } } = countCU ? responses.shift() : { data: false };
     const { data: { languages: dataC } }  = countC ? responses.shift() : { data: false };
 
     yield put(actions.receiveSingleTypeStats({ dataCU, dataC, dataL, namespace, isPrepare, fn: FN_LANGUAGES }));

@@ -210,8 +210,4 @@ function* watchFetchLabels() {
   yield takeEvery(types.FETCH_LABELS, fetchLabels);
 }
 
-function* watchFetchCollections() {
-  yield takeEvery(types.FETCH_LABELS, fetchLabels);
-}
-
 export const sagas = [watchFetchUnit, watchFetchUnitsByIDs, watchFetchCollection, watchFetchLatestLesson, watchFetchSQData, watchFetchWindow, watchFetchDatepickerCO, watchCountCU, watchCreateLabel, watchFetchLabels];

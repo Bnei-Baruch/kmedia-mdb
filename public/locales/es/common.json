@@ -112,7 +112,8 @@
       "media-type-filter": "Medios",
       "person-filter": "Autor",
       "original-language-filter": "Idioma original",
-      "locations-filter": "Ubicación"
+      "locations-filter": "Ubicación",
+      "free-text": "Texto libre"
     },
     "media-types": {
       "audio" : "Audio",

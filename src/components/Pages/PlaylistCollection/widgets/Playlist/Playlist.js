@@ -63,7 +63,11 @@ const PlaylistWidget = ({ playlist, selected = 0, link, t }) => {
     // select the item which url we are currently on
     const currentIndex = playlistItems.findIndex(item => location.pathname.includes(item.shareUrl));
     setSelectedIndex(currentIndex);
-  }, [location, playlistItems])
+  }, [location, playlistItems]);
+
+  useEffect(() => {
+    setPlaylistItems(items)
+  }, [items]);
 
   const randomButton = content_type === CT_SONGS &&
     <Button
@@ -111,6 +115,7 @@ PlaylistWidget.propTypes = {
 
 const areEqual = (prevProps, nextProps) => (
   nextProps.selected === prevProps.selected
+  && nextProps.playlist?.collection?.id === prevProps.playlist?.collection?.id
   && nextProps.link === prevProps.link
   && isEqual(nextProps.playlist, prevProps.playlist)
 );

@@ -9,21 +9,16 @@ import { selectors as mdb } from '../../../redux/modules/mdb';
 import TextListTemplate from '../../shared/ContentItem/TextListTemplate';
 
 const TextList = ({ t }) => {
-  const denormCU    = useSelector(state => mdb.nestedGetDenormContentUnit(state.mdb));
-  const denormLabel = useSelector(state => mdb.getDenormLabel(state.mdb));
 
   const { items: ids, textTotal } = useSelector(state => selectors.getItems(state.tags));
 
-  const items = ids?.filter(x => !!x.isText).map(({ cuID, lID }) => ({
-    cu: denormCU(cuID),
-    label: denormLabel(lID)
-  })).filter(x => !!x.cu) || [];
+  const items = ids?.filter(x => !!x.isText) || [];
 
   return (
     <Container className="padded topics_texts">
       <Header as="h3" content={`${t('topics.texts-title')} (${textTotal})`} />
       {
-        items?.map(({ label, cu }, i) => (<TextListTemplate unit={cu} label={label} key={i} />))
+        items?.map(({ cuID, lID }, i) => (<TextListTemplate cuID={cuID} lID={lID} key={i} />))
       }
     </Container>
   );
