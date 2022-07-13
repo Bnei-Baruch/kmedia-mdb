@@ -113,7 +113,8 @@
       "media-type-filter": "Media",
       "person-filter": "Author",
       "original-language-filter": "Original Language",
-      "locations-filter": "Location"
+      "locations-filter": "Location",
+      "free-text": "Free Text"
     },
     "media-types": {
       "audio" : "Audio",
@@ -129,6 +130,7 @@
       "MEAL": "Yemekler",
       "EVENT_PART": "Misc",
       "LESSON_PART": "Günlük Dersler",
+      "DAILY_LESSON": "Günlük Dersler",
       "VIRTUAL_LESSON": "Sanal Dersler",
       "LECTURE": "Konuşmalar",
       "WOMEN_LESSON": "Kadın Dersleri",
@@ -143,7 +145,8 @@
       "TRAINING": "Eğitim",
       "KITEI_MAKOR": "Kaynak Materyaller",
       "LIKUTIM": "Assorted Excerpts",
-      "SOURCE": "Kütüphane"
+      "SOURCE": "Kütüphane",
+      "PICNIC": "Piknik"
     }
   },
   "buttons": {

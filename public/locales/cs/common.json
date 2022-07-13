@@ -108,7 +108,8 @@
       "media-type-filter": "Media",
       "person-filter": "Author",
       "original-language-filter": "Original Language",
-      "locations-filter": "Location"
+      "locations-filter": "Location",
+      "free-text": "Free Text"
     },
     "media-types": {
       "audio" : "Audio",
@@ -124,6 +125,7 @@
       "MEAL": "Jídla",
       "EVENT_PART": "Misc",
       "LESSON_PART": "Denní lekce",
+      "DAILY_LESSON": "Denní lekce",
       "VIRTUAL_LESSON": "Virtuální lekce",
       "LECTURE": "Přednášky",
       "WOMEN_LESSON": "Ženské lekce",
@@ -138,7 +140,8 @@
       "TRAINING": "Výcvik",
       "KITEI_MAKOR": "Zdrojové materiály",
       "LIKUTIM": "Assorted Excerpts",
-      "SOURCE": "Knihovna"
+      "SOURCE": "Knihovna",
+      "PICNIC": "Piknik"
     }
   },
   "buttons": {

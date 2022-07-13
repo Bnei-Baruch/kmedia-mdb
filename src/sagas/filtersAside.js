@@ -2,7 +2,16 @@ import uniq from 'lodash/uniq';
 import { all, call, put, select, takeEvery } from 'redux-saga/effects';
 import { filtersTransformer } from '../filters';
 import Api from '../helpers/Api';
-import { FN_LANGUAGES } from '../helpers/consts';
+import {
+  CT_DAILY_LESSON,
+  CT_LESSON_PART,
+  CT_LESSONS,
+  FN_CONTENT_TYPE,
+  FN_LANGUAGES,
+  FN_SHOW_LESSON_AS_UNITS,
+  PAGE_NS_LESSONS
+} from '../helpers/consts';
+import { isEmpty } from '../helpers/utils';
 import { selectors as filterSelectors } from '../redux/modules/filters';
 
 import { actions, types } from '../redux/modules/filtersAside';
@@ -18,16 +27,51 @@ const defaultStatParams    = {
   with_content_types: true,
   with_persons: false,
   with_original_languages: false,
-  with_media: false
+  with_media: false,
+  with_locations: false,
 };
+
+const setAllStatParamsFalse = params => {
+  params.with_sources            = false;
+  params.with_tags               = false;
+  params.with_collections        = false;
+  params.with_persons            = false;
+  params.with_media              = false;
+  params.with_original_languages = false;
+  params.with_locations          = false;
+  params.with_languages          = false;
+  params.with_content_types      = false;
+  params.media_language && delete params.media_language;
+  return params;
+};
+
+function patchLessonFilters(filters) {
+  const ctFilter = filters.find(f => f.name === FN_CONTENT_TYPE && !isEmpty(f.values));
+  if (ctFilter) {
+    ctFilter.values = ctFilter.values.map(ct => (CT_LESSONS.includes(ct)) ? CT_LESSON_PART : ct);
+  }
+
+  return !filters.some(f => FN_SHOW_LESSON_AS_UNITS.includes(f.name) && !isEmpty(f.values));
+}
+
+function prepareDailyLessonParams(params) {
+  setAllStatParamsFalse(params);
+  params.with_content_types = true;
+  params.content_type       = [...params.content_type.filter(ct => ct === CT_LESSON_PART), CT_DAILY_LESSON];
+  return params;
+}
 
 export function* fetchStat(action) {
   let { namespace, params, options: { isPrepare, countC = false, countL = false } } = action.payload;
 
-  let filterParams = {};
+  let filterParams       = {};
+  let lessonAsCollection = false;
   if (!isPrepare) {
     const filters = yield select(state => filterSelectors.getFilters(state.filters, namespace));
-    filterParams  = filtersTransformer.toApiParams(filters) || {};
+    if (namespace === PAGE_NS_LESSONS)
+      lessonAsCollection = patchLessonFilters(filters);
+
+    filterParams = filtersTransformer.toApiParams(filters) || {};
   }
 
   //need when was filtered by base param (for example filter by topics on the topic page)
@@ -44,32 +88,38 @@ export function* fetchStat(action) {
   try {
     filterParams.for_filter = true;
 
-    filterParams = { ...defaultStatParams, ...filterParams };
-    countC       = countC && !filterParams.person;
-    countL       = countL && !filterParams.person;
+    filterParams  = { ...defaultStatParams, ...filterParams };
+    const countCU = !filterParams.location;
+    countC        = countC && !filterParams.person;
+    countL        = countL && !filterParams.person;
 
     const requests = [];
-    requests.push(call(Api.unitsStats, { ...filterParams, with_languages: false }));
-    countC && requests.push(call(Api.collectionsStats, { id: filterParams.collection, ...filterParams }));
+    countCU && requests.push(call(Api.unitsStats, { ...filterParams, with_languages: false }));
+    countC && requests.push(call(Api.collectionsStats, {
+      id: filterParams.collection, ...filterParams,
+      with_languages: false
+    }));
     countL && requests.push(call(Api.labelsStats, filterParams));
 
     if (isFilteredByBase) {
       const paramsPart = { ...filterParams, ...params, with_languages: false };
-      requests.push(call(Api.unitsStats, paramsPart));
+      countCU && requests.push(call(Api.unitsStats, paramsPart));
       countC && requests.push(call(Api.collectionsStats, paramsPart));
       countL && requests.push(call(Api.labelsStats, paramsPart));
     }
 
+    lessonAsCollection && requests.push(call(Api.collectionsStats, prepareDailyLessonParams({ ...params })));
+
     const responses = yield all(requests);
 
-    const { data: dataCU } = responses.shift();
-    const dataC            = countC ? responses.shift()?.data : {};
-    const dataL            = countL ? responses.shift()?.data : {};
+    const dataCU                            = countCU ? responses.shift()?.data : {};
+    const { data: { locations, ...dataC } } = countC ? responses.shift() : { data: false };
+    const dataL                             = countL ? responses.shift()?.data : {};
 
     if (isFilteredByBase) {
-      const { data: dataCUPart = {} } = responses.shift() || {};
-      const dataCPart                 = countC ? responses.shift()?.data : {};
-      const dataLPart                 = countL ? responses.shift()?.data : {};
+      const dataCUPart                            = countCU ? responses.shift()?.data : {};
+      const { data: { locations, ...dataCPart } } = countC ? responses.shift() : {};
+      const dataLPart                             = countL ? responses.shift()?.data : {};
 
       uniq(Object.keys(params).map(x => RESULT_NAME_BY_PARAM[x])).forEach(n => {
         dataCU[n] = dataCUPart[n];
@@ -78,10 +128,16 @@ export function* fetchStat(action) {
       });
     }
 
+    if (lessonAsCollection) {
+      const ct           = responses.shift()?.data.content_type;
+      dataC.content_type = { ...ct, ...dataC.content_type };
+    }
+
+    yield put(actions.receiveLocationsStats({ locations, namespace, isPrepare }));
     yield put(actions.fetchStatsSuccess({ dataCU, dataC, dataL, namespace, isPrepare }));
 
     if (filterParams.with_languages) {
-      yield fetchLanguageStat({ ...filterParams }, namespace, dataC.languages, dataL.languages, isPrepare);
+      yield fetchLanguageStat({ ...filterParams }, namespace, dataL.languages, isPrepare, countCU, countC);
     }
   } catch (err) {
     yield put(actions.fetchStatsFailure(namespace, err));
@@ -92,24 +148,23 @@ export function* fetchStat(action) {
  * stats of cu languages are too slow, so we call it separately
  * @param params
  * @param namespace
- * @param dataC if you have results of collections take from here
  * @param dataL if you have results of labels take from here
  * @param isPrepare
+ * @param countC
  * @returns {Generator<*, void, *>}
  */
-export function* fetchLanguageStat(params, namespace, dataC = {}, dataL = {}, isPrepare) {
-  params.with_sources            = false;
-  params.with_tags               = false;
-  params.with_collections        = false;
-  params.with_content_types      = false;
-  params.with_persons            = false;
-  params.with_media              = false;
-  params.with_original_languages = false;
-
+export function* fetchLanguageStat(params, namespace, dataL = {}, isPrepare, countCU, countC) {
+  setAllStatParamsFalse(params);
   params.with_languages = true;
-  params['media_language'] && delete params['media_language'];
   try {
-    const { data: { languages: dataCU } } = yield call(Api.unitsStats, params);
+    const requests = [];
+    countCU && requests.push(call(Api.unitsStats, params));
+    countC && requests.push(call(Api.collectionsStats, { ...params, id: params.collection, }));
+
+    const responses = yield all(requests);
+
+    const { data: { languages: dataCU } } = countCU ? responses.shift() : { data: false };
+    const { data: { languages: dataC } }  = countC ? responses.shift() : { data: false };
 
     yield put(actions.receiveSingleTypeStats({ dataCU, dataC, dataL, namespace, isPrepare, fn: FN_LANGUAGES }));
   } catch (err) {

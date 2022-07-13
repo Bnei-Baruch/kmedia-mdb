@@ -496,6 +496,9 @@
     justify-content: flex-start;
   }
 
+  &.daily_lesson .media_item__content {
+    justify-content: flex-start;
+  }
 
   .description {
     color: $midGrey;

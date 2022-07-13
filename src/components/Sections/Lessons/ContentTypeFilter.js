@@ -1,26 +1,35 @@
-import React from 'react';
-import { withNamespaces } from 'react-i18next';
+import { isEqual } from 'lodash';
+import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 
 import {
+  CT_DAILY_LESSON,
   CT_LECTURE,
   CT_LESSON_PART,
   CT_LESSONS_SERIES,
   CT_VIRTUAL_LESSON,
   CT_WOMEN_LESSON,
-  FN_CONTENT_TYPE
+  FN_CONTENT_TYPE,
+  FN_SHOW_LESSON_AS_UNITS,
+  PAGE_NS_LESSONS
 } from '../../../helpers/consts';
 import { isEmpty } from '../../../helpers/utils';
+import { selectors as filters } from '../../../redux/modules/filters';
 import { selectors } from '../../../redux/modules/filtersAside';
-import ContentTypeItem from '../../FiltersAside/ContentTypeFilter/ContentTypeItem';
 import FilterHeader from '../../FiltersAside/FilterHeader';
 import CollectionsModal from './CollectionsModal';
+import ContentTypeItem from './ContentTypeItem';
+import { LESSON_AS_COLLECTION, LESSON_AS_UNIT } from './MainPage';
 
-const SHOWED_CT = [CT_LESSON_PART, CT_VIRTUAL_LESSON, CT_WOMEN_LESSON, CT_LECTURE, CT_LESSONS_SERIES];
 
-const ContentTypeFilter = ({ namespace, t }) => {
+const ContentTypeFilter = ({ namespace }) => {
   const fetchedCTs = useSelector(state => selectors.getTree(state.filtersAside, namespace, FN_CONTENT_TYPE));
-  const items      = SHOWED_CT.filter(ct => fetchedCTs.includes(ct));
+  const selected   = useSelector(state => filters.getFilters(state.filters, PAGE_NS_LESSONS), isEqual);
+
+  const items = useMemo(() => {
+    const isUnit = selected.some(f => FN_SHOW_LESSON_AS_UNITS.includes(f.name) && !isEmpty(f.values));
+    return (isUnit ? LESSON_AS_UNIT : LESSON_AS_COLLECTION).filter(ct => fetchedCTs.includes(ct));
+  }, [selected, fetchedCTs]);
 
   if (isEmpty(items)) return null;
   return (
@@ -43,4 +52,4 @@ const ContentTypeFilter = ({ namespace, t }) => {
   );
 };
 
-export default withNamespaces()(ContentTypeFilter);
+export default ContentTypeFilter;

@@ -3,6 +3,7 @@ import {
   FN_COLLECTION_MULTI,
   FN_CONTENT_TYPE,
   FN_LANGUAGES,
+  FN_LOCATIONS,
   FN_MEDIA_TYPE,
   FN_ORIGINAL_LANGUAGES,
   FN_PERSON,
@@ -38,6 +39,7 @@ const FETCH_STATS               = 'Filters_aside/FETCH_STATS';
 const FETCH_STATS_FAILURE       = 'Filters_aside/FETCH_STATS_FAILURE';
 const FETCH_STATS_SUCCESS       = 'Filters_aside/FETCH_STATS_SUCCESS';
 const RECEIVE_SINGLE_TYPE_STATS = 'Filters_aside/RECEIVE_SINGLE_TYPE_STATS';
+const RECEIVE_LOCATIONS_STATS   = 'Filters_aside/RECEIVE_LOCATIONS_STATS';
 
 export const types = {
   FETCH_STATS,
@@ -55,12 +57,14 @@ const fetchStats             = createAction(FETCH_STATS, (namespace, params, opt
 const fetchStatsSuccess      = createAction(FETCH_STATS_SUCCESS);
 const receiveSingleTypeStats = createAction(RECEIVE_SINGLE_TYPE_STATS);
 const fetchStatsFailure      = createAction(FETCH_STATS_FAILURE);
+const receiveLocationsStats  = createAction(RECEIVE_LOCATIONS_STATS);
 
 export const actions = {
   fetchStats,
   fetchStatsSuccess,
   receiveSingleTypeStats,
   fetchStatsFailure,
+  receiveLocationsStats,
 };
 
 /* Reducer */
@@ -126,6 +130,38 @@ const onReceiveSingleTypeStats = (draft, { dataCU = {}, dataC = {}, dataL = {}, 
   return draft;
 };
 
+
+const onReceiveLocationsStats = (draft, { locations, namespace, isPrepare }) => {
+  const stats = draft[namespace]?.[FN_LOCATIONS] || { byId: {}, citiesByCountry: {}, tree: [] };
+
+  if (isPrepare) {
+    Object.values(locations)
+      .filter(x => !!x.city)
+      .forEach(({ city, country, count }) => {
+        stats.byId[city] = count;
+        if (!stats.citiesByCountry[country]) {
+          stats.citiesByCountry[country] = [];
+          stats.tree.push(country);
+        }
+
+        stats.citiesByCountry[country].push(city);
+      });
+  } else {
+    Object.keys(stats.byId).forEach(id => {
+      if (!stats.citiesByCountry[id])
+        stats.byId[id] = locations[id]?.count || 0;
+    });
+  }
+
+  for (const k in stats.citiesByCountry) {
+    const c       = stats.citiesByCountry[k].reduce((acc, v) => acc + stats.byId[v], 0);
+    stats.byId[k] = c;
+  }
+
+  draft[namespace] = { ...draft[namespace], [FN_LOCATIONS]: stats };
+  return draft;
+};
+
 const onFetchStatsFailure = (draft, ns, err) => {
   draft[ns].wip = false;
   draft[ns].err = err;
@@ -137,18 +173,21 @@ export const reducer = handleActions({
   [FETCH_STATS_SUCCESS]: onFetchStatsSuccess,
   [RECEIVE_SINGLE_TYPE_STATS]: onReceiveSingleTypeStats,
   [FETCH_STATS_FAILURE]: onFetchStatsFailure,
+  [RECEIVE_LOCATIONS_STATS]: onReceiveLocationsStats,
 
 }, initialState);
 
 /* Selectors */
-const getStats  = (state, ns, fn) => id => state[ns]?.[fn]?.byId[id] || 0;
-const getTree   = (state, ns, fn) => state[ns]?.[fn]?.tree || [];
-const isReady   = (state, ns) => !!state[ns]?.isReady;
-const getWipErr = (state, ns) => ({ wip: state[ns]?.wip || false, err: state[ns]?.err || null });
+const getStats        = (state, ns, fn) => id => state[ns]?.[fn]?.byId[id] || 0;
+const getTree         = (state, ns, fn) => state[ns]?.[fn]?.tree || [];
+const isReady         = (state, ns) => !!state[ns]?.isReady;
+const getWipErr       = (state, ns) => ({ wip: state[ns]?.wip || false, err: state[ns]?.err || null });
+const citiesByCountry = (state, ns) => id => state[ns]?.[FN_LOCATIONS]?.citiesByCountry[id] || [];
 
 export const selectors = {
   getStats,
   getTree,
   isReady,
   getWipErr,
+  citiesByCountry,
 };

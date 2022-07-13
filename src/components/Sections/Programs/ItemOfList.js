@@ -4,11 +4,10 @@ import { useSelector } from 'react-redux';
 import { Container, Header, List } from 'semantic-ui-react';
 import { canonicalLink } from '../../../helpers/links';
 import { canonicalCollection } from '../../../helpers/utils';
+import { selectors as mdb } from '../../../redux/modules/mdb';
 
 import { selectors as recommended } from '../../../redux/modules/recommended';
-import { selectors as mdb } from '../../../redux/modules/mdb';
 import Link from '../../Language/MultiLanguageLink';
-import UnitLogo from '../../shared/Logo/UnitLogo';
 import TooltipIfNeed from '../../shared/TooltipIfNeed';
 import UnitLogoWithDuration from '../../shared/UnitLogoWithDuration';
 

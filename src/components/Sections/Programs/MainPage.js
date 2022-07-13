@@ -1,5 +1,6 @@
 import { isEqual } from 'lodash';
 import React, { useCallback, useEffect, useMemo } from 'react';
+import { withNamespaces } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { Container, Divider } from 'semantic-ui-react';
@@ -16,16 +17,17 @@ import ResultsPageHeader from '../../Pagination/ResultsPageHeader';
 import { getPageFromLocation } from '../../Pagination/withPagination';
 import SectionFiltersWithMobile from '../../shared/SectionFiltersWithMobile';
 import SectionHeader from '../../shared/SectionHeader';
+import WipErr from '../../shared/WipErr/WipErr';
 import Filters from './Filters';
 import ItemOfList from './ItemOfList';
 
 const FILTER_PARAMS = { content_type: [...COLLECTION_PROGRAMS_TYPE, ...UNIT_PROGRAMS_TYPE] };
 
-const MainPage = () => {
-  const { items, total } = useSelector(state => lists.getNamespaceState(state.lists, PAGE_NS_PROGRAMS)) || {};
-  const language         = useSelector(state => settings.getLanguage(state.settings));
-  const pageSize         = useSelector(state => settings.getPageSize(state.settings));
-  const selected         = useSelector(state => filters.getFilters(state.filters, PAGE_NS_PROGRAMS), isEqual);
+const MainPage = ({ t }) => {
+  const { items, total, wip, err } = useSelector(state => lists.getNamespaceState(state.lists, PAGE_NS_PROGRAMS)) || {};
+  const language                   = useSelector(state => settings.getLanguage(state.settings));
+  const pageSize                   = useSelector(state => settings.getPageSize(state.settings));
+  const selected                   = useSelector(state => filters.getFilters(state.filters, PAGE_NS_PROGRAMS), isEqual);
 
   const prevSel = usePrevious(selected);
 
@@ -51,6 +53,8 @@ const MainPage = () => {
     }
   }, [language, dispatch, pageNo, selected]);
 
+  const wipErr = WipErr({ wip, err, t });
+
   return (<>
     <SectionHeader section="programs" />
     <SectionFiltersWithMobile
@@ -63,7 +67,9 @@ const MainPage = () => {
     >
       <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} />
       <FilterLabels namespace={PAGE_NS_PROGRAMS} />
-      {items?.map((id, i) => <ItemOfList id={id} key={i} />)}
+      {
+        wipErr || items?.map((id, i) => <ItemOfList id={id} key={i} />)
+      }
       <Divider fitted />
       <Container className="padded pagination-wrapper" textAlign="center">
         {total > 0 && <Pagination
@@ -79,4 +85,4 @@ const MainPage = () => {
   );
 };
 
-export default MainPage;
+export default withNamespaces()(MainPage);
