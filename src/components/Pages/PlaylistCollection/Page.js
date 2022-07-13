@@ -1,30 +1,30 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import PropTypes from 'prop-types';
 import clsx from 'clsx';
-import { Container, Grid } from 'semantic-ui-react';
+import PropTypes from 'prop-types';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import isEqual from 'react-fast-compare';
-import * as shapes from '../../shapes';
+import { useSelector } from 'react-redux';
+import { useHistory, useLocation } from 'react-router-dom';
+import { Container, Grid } from 'semantic-ui-react';
+import { ClientChroniclesContext, DeviceInfoContext } from '../../../helpers/app-contexts';
+import { CT_SONGS } from '../../../helpers/consts';
+import playerHelper from '../../../helpers/player';
+import { usePrevious } from '../../../helpers/utils';
 
 import { selectors as settings } from '../../../redux/modules/settings';
-import { ClientChroniclesContext, DeviceInfoContext } from '../../../helpers/app-contexts';
-import { usePrevious } from '../../../helpers/utils';
-import playerHelper from '../../../helpers/player';
-import { CT_SONGS } from '../../../helpers/consts';
+import AVPlaylistPlayer from '../../AVPlayer/AVPlaylistPlayer';
+import * as shapes from '../../shapes';
 import Helmets from '../../shared/Helmets';
 import Info from '../Unit/widgets/Info/Info';
 import Recommended from '../Unit/widgets/Recommended/Main/Recommended';
+import Materials from '../Unit/widgets/UnitMaterials/Materials';
 import Playlist from './widgets/Playlist/Playlist';
 import PlaylistHeader from './widgets/Playlist/PlaylistHeader';
-import AVPlaylistPlayer from '../../AVPlayer/AVPlaylistPlayer';
-import Materials from '../Unit/widgets/UnitMaterials/Materials';
 
 // Don't recommend lesson preparation, skip to next unit.
 const getRecommendUnit = (unit, collection, items) => {
-  let recommendUnit = unit;
+  let recommendUnit  = unit;
   const { ccuNames } = collection;
-  const isUnitPrep = ccuNames?.[unit.id] === '0' && Object.values(ccuNames).filter(value => value === '0').length === 1;
+  const isUnitPrep   = ccuNames?.[unit.id] === '0' && Object.values(ccuNames).filter(value => value === '0').length === 1;
   if (isUnitPrep && Array.isArray(items)) {
     const indexOfUnit = items.findIndex(item => item?.unit?.id === unit.id);
     if (indexOfUnit !== -1 && indexOfUnit + 1 < items.length) {
@@ -92,7 +92,7 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
     const newMediaType = playerHelper.getMediaTypeFromQuery(location);
     const qryContentLang = playerHelper.getLanguageFromQuery(location, language || contentLanguage);
 
-    if (playlist) {
+    if (playlist && prev?.collection.id === collection.id) {
       if (newMediaType !== mediaType ||
         qryContentLang !== language) {
         const nPlaylist = playerHelper.playlist(collection, newMediaType, qryContentLang, language);
