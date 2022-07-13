@@ -113,7 +113,8 @@
       "media-type-filter": "Media",
       "person-filter": "Author",
       "original-language-filter": "Original Language",
-      "locations-filter": "Location"
+      "locations-filter": "Location",
+      "free-text": "Free Text"
     },
     "media-types": {
       "audio" : "Audio",
@@ -129,6 +130,7 @@
       "MEAL": "Pasti",
       "EVENT_PART": "Misc",
       "LESSON_PART": "Daily Lessons",
+      "DAILY_LESSON": "Daily Lessons",
       "VIRTUAL_LESSON": "Virtual Lessons",
       "LECTURE": "Lectures",
       "WOMEN_LESSON": "Women Lessons",

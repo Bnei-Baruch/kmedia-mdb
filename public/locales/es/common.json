@@ -112,7 +112,8 @@
       "media-type-filter": "Medios",
       "person-filter": "Autor",
       "original-language-filter": "Idioma original",
-      "locations-filter": "Ubicación"
+      "locations-filter": "Ubicación",
+      "free-text": "Texto libre"
     },
     "media-types": {
       "audio" : "Audio",
@@ -128,6 +129,7 @@
       "MEAL": "Comidas",
       "EVENT_PART": "Varios",
       "LESSON_PART": "Lecciones Diarias",
+      "DAILY_LESSON": "Lecciones Diarias",
       "VIRTUAL_LESSON": "Lecciones Virtuales",
       "LECTURE": "Charlas",
       "WOMEN_LESSON": "Lección de Mujeres",

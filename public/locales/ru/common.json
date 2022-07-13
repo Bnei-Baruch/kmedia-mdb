@@ -113,7 +113,8 @@
       "media-type-filter": "Медиа",
       "person-filter": "Автор",
       "original-language-filter": "Язык оригинала",
-      "locations-filter": "Место проведения"
+      "locations-filter": "Место проведения",
+      "free-text": "Свободный текст"
     },
     "media-types": {
       "audio" : "Аудио",
@@ -129,6 +130,7 @@
       "MEAL": "Трапезы",
       "EVENT_PART": "Разное",
       "LESSON_PART": "Ежедневные уроки",
+      "DAILY_LESSON": "Ежедневные уроки",
       "VIRTUAL_LESSON": "Виртуальные уроки",
       "LECTURE": "Лекции",
       "WOMEN_LESSON": "Уроки для женщин",
