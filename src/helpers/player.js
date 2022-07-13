@@ -140,24 +140,24 @@ const playlist = (collection, mediaType, contentLanguage, uiLanguage) => {
 
   let items;
   let groups = null;
-  if (EVENT_TYPES.indexOf(content_type) !== -1) {
+  if (EVENT_TYPES.includes(content_type)) {
     const mSDate = moment(sDate);
     const mEDate = moment(eDate);
 
-    const breakdown = units.reduce((acc, val) => {
-      const fDate = moment(val.film_date);
+    const breakdown = units.reduce((acc, u) => {
+      const fDate = moment(u.film_date);
 
       let k;
       if (fDate.isBefore(mSDate)) {
         k = 'preparation';
       } else if (fDate.isAfter(mEDate)) {
         k = 'appendices';
-      } else if (val.content_type === CT_LESSON_PART || val.content_type === CT_FULL_LESSON) {
+      } else if (u.content_type === CT_LESSON_PART || u.content_type === CT_FULL_LESSON) {
         k = 'lessons';
 
         // fix for daily lessons in same day as event
         // this is necessary as we don't have film_date resolution in hours.
-        if (Array.isArray(val.tags) && val.tags.indexOf(EVENT_PREPARATION_TAG) !== -1) {
+        if (Array.isArray(u.tags) && u.tags.indexOf(EVENT_PREPARATION_TAG) !== -1) {
           k = 'preparation';
         }
       } else {
@@ -165,7 +165,7 @@ const playlist = (collection, mediaType, contentLanguage, uiLanguage) => {
       }
 
       const v = acc[k] || [];
-      v.push(playableItem(val, mediaType, uiLanguage, contentLanguage));
+      v.push(playableItem(u, mediaType, uiLanguage, contentLanguage));
       acc[k] = v;
       return acc;
     }, {});
@@ -183,8 +183,9 @@ const playlist = (collection, mediaType, contentLanguage, uiLanguage) => {
 
       return acc.concat(v);
     }, []);
+
   } else {
-    items = units.map(x => playableItem(x, mediaType, uiLanguage, contentLanguage));
+    items = units.map(u => playableItem(u, mediaType, uiLanguage, contentLanguage));
   }
 
   // don't include items without unit
