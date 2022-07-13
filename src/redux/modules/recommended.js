@@ -1,7 +1,8 @@
-import { createAction, handleActions } from 'redux-actions';
-import { types as ssr } from './ssr';
-import { types as player } from './player';
+import { createAction } from 'redux-actions';
 import { types as chronicles } from './chronicles';
+import { types as player } from './player';
+import { handleActions } from './settings';
+import { types as ssr } from './ssr';
 
 const FETCH_RECOMMENDED         = 'FETCH_RECOMMENDED';
 const FETCH_RECOMMENDED_SUCCESS = 'FETCH_RECOMMENDED_SUCCESS';
@@ -46,60 +47,44 @@ const initialState = {
   watchingNow: {},
 };
 
-const onSuccess = (state, action) => {
-  state.wip   = false;
-  state.err   = null;
-  state.feeds = action.payload.feeds;
-
-  return state;
+const onSuccess = (draft, payload) => {
+  draft.wip   = false;
+  draft.err   = null;
+  draft.feeds = payload.feeds;
 };
 
-const onFailure = (state, payload) => {
-  state.wip   = false;
-  state.err   = payload;
-  state.feeds = {};
-
-  return state;
+const onFailure = (draft, payload) => {
+  draft.wip   = false;
+  draft.err   = payload;
+  draft.feeds = {};
 };
 
-const onSSRPrepare = state => {
-  if (state.err) {
-    state.err = state.err.toString();
+const onSSRPrepare = draft => {
+  if (draft.err) {
+    draft.err = draft.err.toString();
   }
-
-  return state;
 };
 
-const onPlayerPlay = (state, action) => {
-  const unitUid = action.payload;
-  if (unitUid && !state.skipUids.includes(unitUid)) {
-    state.skipUids.push(unitUid);
+const onPlayerPlay = (draft, payload) => {
+  if (payload && !draft.skipUids.includes(payload)) {
+    draft.skipUids.push(payload);
   }
-
-  return state;
 };
 
-const onUserInactive = state => {
-  state.skipUids.length = 0;
-  return state;
-};
+const onUserInactive = draft => draft.skipUids.length = 0;
 
-const onReceiveViews = (state, action) => {
-  Object.assign(state.views, action.payload);
-  return state;
-};
+const onReceiveViews = (draft, payload) => draft.views = { ...draft.views, ...payload };
 
-const onReceiveWatchingNow = (state, action) => {
-  Object.assign(state.watchingNow, action.payload);
-  return state;
-};
+const onReceiveWatchingNow = (draft, payload) => draft.watchingNow = { ...draft.watchingNow, ...payload };
+
+const onRecommended = draft => draft.wip = true;
 
 export const reducer = handleActions({
   [ssr.PREPARE]: onSSRPrepare,
   [player.PLAYER_PLAY]: onPlayerPlay,
   [chronicles.USER_INACTIVE]: onUserInactive,
 
-  [FETCH_RECOMMENDED]: state => ({ wip: true, ...state }),
+  [FETCH_RECOMMENDED]: onRecommended,
   [FETCH_RECOMMENDED_SUCCESS]: onSuccess,
   [FETCH_RECOMMENDED_FAILURE]: onFailure,
   [RECEIVE_VIEWS]: onReceiveViews,
