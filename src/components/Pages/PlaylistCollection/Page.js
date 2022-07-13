@@ -115,11 +115,19 @@ const PlaylistCollectionPage = ({ collection, cuId, t }) => {
   }, [playlist?.items])
 
   useEffect(() => {
-    const newSel = playlist?.items.findIndex(i => i.unit.id === cuId);
-    if (!isNaN(newSel) && newSel > -1) {
-      selectUnit(newSel);
+    let newSel = playlist?.items.findIndex(i => i.unit.id === cuId);
+
+    if (isNaN(newSel) || newSel < 0) {
+      newSel = 0;
+
+      const { shareUrl } = playlist?.items[newSel] || {};
+      if (shareUrl && !location.pathname.includes(shareUrl)) {
+        history.replace(`/${uiLanguage}${shareUrl}`)
+      }
     }
-  }, [playlist, cuId, selectUnit]);
+
+    selectUnit(newSel);
+  }, [playlist, cuId, selectUnit, location.pathname, history, uiLanguage]);
 
   const shufflePlaylist = () => {
     const selectedItem = playlist.items[selected];
