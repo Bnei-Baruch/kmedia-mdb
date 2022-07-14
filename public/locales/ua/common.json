@@ -113,7 +113,8 @@
       "media-type-filter": "Media",
       "person-filter": "Author",
       "original-language-filter": "Original Language",
-      "locations-filter": "Location"
+      "locations-filter": "Location",
+      "free-text": "Free Text"
     },
     "media-types": {
       "audio" : "Audio",
@@ -129,6 +130,7 @@
       "MEAL": "Трапези",
       "EVENT_PART": "Misc",
       "LESSON_PART": "Щоденні уроки",
+      "DAILY_LESSON": "Щоденні уроки",
       "VIRTUAL_LESSON": "Віртуальні уроки",
       "LECTURE": "Лекції",
       "WOMEN_LESSON": "Уроки для жінок",
@@ -143,7 +145,8 @@
       "TRAINING": "Тренування",
       "KITEI_MAKOR": "Уривки першоджерел",
       "LIKUTIM": "Assorted Excerpts",
-      "SOURCE": "Бібліотека"
+      "SOURCE": "Бібліотека",
+      "PICNIC": "Пікнік"
     }
   },
   "buttons": {

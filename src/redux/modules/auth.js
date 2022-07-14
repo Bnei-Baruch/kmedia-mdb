@@ -1,4 +1,5 @@
-import { createAction, handleActions } from 'redux-actions';
+import { createAction } from 'redux-actions';
+import { handleActions } from './settings';
 
 /* Types */
 const LOGIN         = 'Auth/LOGIN';
@@ -14,16 +15,16 @@ export const types = { LOGIN, LOGIN_SUCCESS, LOGOUT_SUCCESS, LOGOUT };
 /* Reducer */
 const initialState = { user: undefined, token: null, error: null, isKcReady: false };
 
-const onLoginSuccess = (draft, action) => {
-  const { user, token } = action.payload;
+const onLoginSuccess = (draft, payload) => {
+  const { user, token } = payload;
   draft.user            = user;
   draft.token           = token;
   draft.error           = null;
   return draft;
 };
 
-const onLoginFailure = (draft, action) => {
-  const { error } = action.payload;
+const onLoginFailure = (draft, payload) => {
+  const { error } = payload;
   draft.user      = null;
   draft.token     = null;
   draft.error     = error;
@@ -37,8 +38,8 @@ const onLogoutSuccess = draft => {
   return draft;
 };
 
-const onUpdateToken = (draft, action) => {
-  draft.token = action.payload;
+const onUpdateToken = (draft, payload) => {
+  draft.token = payload;
   return draft;
 };
 

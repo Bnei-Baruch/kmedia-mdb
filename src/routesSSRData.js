@@ -1,8 +1,6 @@
 import uniq from 'lodash/uniq';
 import moment from 'moment';
 import { getPageFromLocation } from './components/Pagination/withPagination';
-
-import { tabs as eventsTabs } from './components/Sections/Events/MainPage';
 import { tabs as pulicationsTabs } from './components/Sections/Publications/MainPage';
 import { isTaas } from './components/shared/PDF/PDF';
 
@@ -20,6 +18,7 @@ import {
   LANG_RUSSIAN,
   LANG_SPANISH,
   LANG_UKRAINIAN,
+  PAGE_NS_EVENTS,
   PAGE_NS_LESSONS,
   PAGE_NS_PROGRAMS,
   RABASH_PERSON_UID,
@@ -146,22 +145,9 @@ export const latestLesson = store => (store.sagaMiddleWare.run(mdbSagas.fetchLat
 
 export const musicPage = store => store.sagaMiddleWare.run(musicSagas.fetchMusic, musicActions.fetchMusic).done;
 
-export const eventsPage = (store, match) => {
-  // hydrate tab
-  const tab = match.params.tab || eventsTabs[0];
-  const ns  = `events-${tab}`;
-
-  if (tab !== eventsTabs[0]) {
-    store.dispatch(eventsActions.setTab(ns));
-  }
-
-  // UnitList
-  if (tab === 'friends-gatherings' || tab === 'meals') {
-    return cuListPage(ns)(store, match);
-  }
-
+export const eventsPage = store => {
   // CollectionList
-  store.dispatch(filtersActions.hydrateFilters(ns));
+  store.dispatch(filtersActions.hydrateFilters(PAGE_NS_EVENTS));
   return store.sagaMiddleWare.run(eventsSagas.fetchAllEvents, eventsActions.fetchAllEvents()).done;
 };
 

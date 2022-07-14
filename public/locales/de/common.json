@@ -112,7 +112,8 @@
       "media-type-filter": "Media",
       "person-filter": "Author",
       "original-language-filter": "Original Language",
-      "locations-filter": "Location"
+      "locations-filter": "Location",
+      "free-text": "Free Text"
     },
     "media-types": {
       "audio" : "Audio",
@@ -128,6 +129,7 @@
       "MEAL": "Mahlzeiten",
       "EVENT_PART": "Misc",
       "LESSON_PART": "Täglicher Unterricht",
+      "DAILY_LESSON": "Täglicher Unterricht",
       "VIRTUAL_LESSON": "Virtuelle Lektionen",
       "LECTURE": "Vorträge",
       "WOMEN_LESSON": "Lektionen für Frauen",
@@ -142,7 +144,8 @@
       "TRAINING": "Training",
       "KITEI_MAKOR": "Fragmente von Primärquellen",
       "LIKUTIM": "Assorted Excerpts",
-      "SOURCE": "Bibliothek"
+      "SOURCE": "Bibliothek",
+      "PICNIC": "Picknick"
     }
   },
   "buttons": {

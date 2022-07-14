@@ -113,7 +113,8 @@
       "media-type-filter": "Media",
       "person-filter": "Author",
       "original-language-filter": "Original Language",
-      "locations-filter": "Location"
+      "locations-filter": "Location",
+      "free-text": "Free Text"
     },
     "media-types": {
       "audio" : "Audio",
@@ -128,26 +129,24 @@
       "FRIENDS_GATHERING": "Assemblea degli Amici",
       "MEAL": "Pasti",
       "EVENT_PART": "Misc",
-
       "LESSON_PART": "Daily Lessons",
+      "DAILY_LESSON": "Daily Lessons",
       "VIRTUAL_LESSON": "Virtual Lessons",
       "LECTURE": "Lectures",
       "WOMEN_LESSON": "Women Lessons",
       "CHILDREN_LESSON": "Children Lessons",
       "LESSONS_SERIES": "Selected Study Series",
       "LECTURE_SERIES": "Lecture Series",
-
       "CLIP": "Clips",
       "VIDEO_PROGRAM_CHAPTER": "Programmi",
-
       "ARTICLE": "Articles",
       "PUBLICATION": "Publication",
       "BLOG_POST": "Blog",
-
       "TRAINING": "Formazione",
       "KITEI_MAKOR": "Estratti dalle fonti",
       "LIKUTIM": "Assorted Excerpts",
-      "SOURCE": "Biblioteca"
+      "SOURCE": "Biblioteca",
+      "PICNIC": "Picnic"
     }
   },
   "buttons": {

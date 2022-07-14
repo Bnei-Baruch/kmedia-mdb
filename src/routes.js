@@ -13,14 +13,14 @@ import ExcerptContainer from './components/Sections/Excerpt/ExcerptContainer';
 // import ProjectStatus from './components/Sections/ProjectStatus/ProjectStatus';
 import Help from './components/Sections/Help/Help';
 import HomePage from './components/Sections/Home/Container';
-import LessonCollection from './components/Sections/Lesson/MainPage';
 import LastLessonCollection from './components/Sections/Lesson/LastDaily';
+import LessonCollection from './components/Sections/Lesson/LessonPage';
 import Lessons from './components/Sections/Lessons/MainPage';
 import LibraryHomepage from './components/Sections/Library/Homepage';
 import LibraryContainer from './components/Sections/Library/LibraryContainer';
 import LibraryPerson from './components/Sections/Library/LibraryPerson';
 import Likut from './components/Sections/Likutim/Likut';
-import LikutimMain from './components/Sections/Likutim/Main';
+import LikutimMain from './components/Sections/Likutim/MainPage';
 import Music from './components/Sections/Music/Music';
 import BookmarksPage from './components/Sections/Personal/Bookmarks/Page';
 import HistoryPage from './components/Sections/Personal/History/Page';
@@ -74,7 +74,7 @@ const routes = [
   { path: 'lessons/:tab', component: Lessons, options: { ssrData: ssrDataLoaders.lessonsPage } },
   {
     path: 'lessons/:tab/c/:id',
-    component: LessonCollection,
+    component: PlaylistCollectionIdCheck,
     options: { ssrData: ssrDataLoaders.lessonsCollectionPage }
   },
   { path: ':routeType/:tab/cu/:id', component: PlaylistItemPage, options: { ssrData: ssrDataLoaders.cuPage } },
@@ -87,7 +87,6 @@ const routes = [
     options: { ssrData: ssrDataLoaders.collectionPage(PAGE_NS_PROGRAMS) }
   },
   { path: 'events', component: Events, options: { ssrData: ssrDataLoaders.eventsPage } },
-  { path: 'events/:tab', component: Events, options: { ssrData: ssrDataLoaders.eventsPage } },
   {
     path: 'events/c/:id',
     component: PlaylistCollectionIdCheck,

@@ -1,5 +1,5 @@
-import { createAction } from 'redux-actions';
 import mapValues from 'lodash/mapValues';
+import { createAction } from 'redux-actions';
 
 import { handleActions, types as settings } from './settings';
 import { types as ssr } from './ssr';
@@ -8,18 +8,20 @@ import { types as ssr } from './ssr';
 
 const SET_PAGE                   = 'Lists/SET_PAGE';
 const FETCH_LIST                 = 'Lists/FETCH_LIST';
-const FETCH_LIST_LESSONS         = 'Lists/FETCH_LIST_LESSONS';
 const FETCH_LIST_SUCCESS         = 'Lists/FETCH_LIST_SUCCESS';
 const FETCH_LIST_FAILURE         = 'Lists/FETCH_LIST_FAILURE';
-const FETCH_LIST_LESSONS_SUCCESS = 'Lists/FETCH_LIST_LESSONS_SUCCESS';
+const FETCH_SECTION_LIST         = 'Lists/FETCH_SECTION_LIST';
+const FETCH_SECTION_LIST_SUCCESS = 'Lists/FETCH_SECTION_LIST_SUCCESS';
 
 export const types = {
   SET_PAGE,
+
   FETCH_LIST,
-  FETCH_LIST_LESSONS,
-  FETCH_LIST_FAILURE,
   FETCH_LIST_SUCCESS,
-  FETCH_LIST_LESSONS_SUCCESS,
+  FETCH_LIST_FAILURE,
+
+  FETCH_SECTION_LIST,
+  FETCH_SECTION_LIST_SUCCESS,
 };
 
 /* Actions */
@@ -27,19 +29,19 @@ export const types = {
 const setPage                 = createAction(SET_PAGE, (namespace, pageNo) => ({ namespace, pageNo }));
 const fetchList               = createAction(FETCH_LIST,
   (namespace, pageNo, params = {}) => ({ namespace, pageNo, ...params, }));
-const fetchListLessons        = createAction(FETCH_LIST_LESSONS,
-  (namespace, pageNo, params = {}) => ({ namespace, pageNo, ...params, }));
-const fetchListFailure        = createAction(FETCH_LIST_FAILURE, (namespace, err) => ({ namespace, err }));
 const fetchListSuccess        = createAction(FETCH_LIST_SUCCESS, (namespace, data) => ({ namespace, data }));
-const fetchListLessonsSuccess = createAction(FETCH_LIST_LESSONS_SUCCESS, (namespace, data) => ({ namespace, data }));
+const fetchListFailure        = createAction(FETCH_LIST_FAILURE, (namespace, err) => ({ namespace, err }));
+const fetchSectionList        = createAction(FETCH_SECTION_LIST,
+  (namespace, pageNo, params = {}) => ({ namespace, pageNo, ...params, }));
+const fetchSectionListSuccess = createAction(FETCH_SECTION_LIST_SUCCESS, (namespace, data) => ({ namespace, data }));
 
 export const actions = {
   setPage,
   fetchList,
-  fetchListLessons,
-  fetchListFailure,
   fetchListSuccess,
-  fetchListLessonsSuccess,
+  fetchListFailure,
+  fetchSectionList,
+  fetchSectionListSuccess,
 };
 
 /* Reducer */
@@ -84,7 +86,7 @@ const onSuccess = (draft, { namespace, data }) => {
   draft[namespace].items = (data.collections || data.content_units || []).map(x => x.id);
 };
 
-const onSuccessLessons = (draft, { namespace, data: { total, items } }) => {
+const onSectionSuccess = (draft, { namespace, data: { total, items } }) => {
   if (draft[namespace] === undefined) {
     draft[namespace] = { ...defaultNSvalue };
   }
@@ -110,10 +112,10 @@ export const reducer = handleActions({
 
   [SET_PAGE]: onSetPage,
   [FETCH_LIST]: onRequest,
-  [FETCH_LIST_LESSONS]: onRequest,
   [FETCH_LIST_FAILURE]: onFailure,
   [FETCH_LIST_SUCCESS]: onSuccess,
-  [FETCH_LIST_LESSONS_SUCCESS]: onSuccessLessons,
+  [FETCH_SECTION_LIST]: onRequest,
+  [FETCH_SECTION_LIST_SUCCESS]: onSectionSuccess,
 }, initialState);
 
 /* Selectors */
