@@ -177,17 +177,21 @@ export const canonicalLink = (entity, mediaLang, ccu) => {
   }
 
   // units whose canonical collection is an event goes as an event item
-  const collection = !ccu ? canonicalCollection(entity) : ccu;
-  if (collection && EVENT_TYPES.indexOf(collection.content_type) !== -1) {
-    return `/events/cu/${entity.id}`;
-  }
+  const collection = ccu || canonicalCollection(entity);
+  if (collection) {
+    const { id, content_type } = collection
 
-  if (collection?.content_type === CT_LESSONS_SERIES) {
-    return `/lessons/series/cu/${entity.id}`;
-  }
+    if (EVENT_TYPES.includes(content_type)) {
+      return `/events/cu/${entity.id}`;
+    }
 
-  if (collection?.content_type === CT_SONGS) {
-    return `/music/cu/${entity.id}`;
+    if (content_type === CT_LESSONS_SERIES) {
+      return `/lessons/series/cu/${entity.id}`;
+    }
+
+    if (content_type === CT_SONGS) {
+      return `/music/${id}/cu/${entity.id}`;
+    }
   }
 
   const mediaLangSuffix = mediaLang ? `?language=${mediaLang}` : '';

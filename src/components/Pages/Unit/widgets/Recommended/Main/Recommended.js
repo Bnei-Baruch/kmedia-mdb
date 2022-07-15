@@ -107,6 +107,7 @@ const Recommended = ({ unit, t, filterOutUnits = [], displayTitle = true }) => {
       setUnitSourceCollections(getSourcesCollections(unit.sources || [], getPathById));
     }
   }, [unit, unitId, getPathById]);
+
   const dispatch = useDispatch();
   useEffect(() => {
     if (unit?.id && !err && !wip && prevUnitId !== unit.id) {
@@ -121,7 +122,7 @@ const Recommended = ({ unit, t, filterOutUnits = [], displayTitle = true }) => {
         variant: activeVariant,
       }));
     }
-  }, [dispatch, err, wip, unitTags, unitCollections, filterOutUnits, prevUnitId, activeVariant, unitContentType, unitSources]);
+  }, [dispatch, err, wip, unitTags, unitCollections, filterOutUnits, prevUnitId, activeVariant, unitContentType, unitSources, unit]);
 
   const recommendedUnitsTypes = [];
   if (activeVariant === AB_RECOMMEND_NEW) {

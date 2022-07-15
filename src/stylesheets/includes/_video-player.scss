@@ -177,6 +177,10 @@
     }
   }
 
+  #avbox_playlist_container {
+    max-height: 40rem;
+  }
+
   &__playlist-view {
     border: 1px solid $midWhite;
     clear: both;

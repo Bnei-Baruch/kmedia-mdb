@@ -32,7 +32,7 @@ const PlaylistItemPage = ({ t }) => {
 
   useEffect(() => {
     setNeedToFetch(!unit || Object.keys(unit.collections).length === 0);
-  }, [id, language]);
+  }, [id, language, unit]);
 
   useEffect(() => {
     if (!wip && !err && needToFetch) {
@@ -48,16 +48,23 @@ const PlaylistItemPage = ({ t }) => {
 
   if (routeType === 'program' || !unit.collections) return <UnitPage />;
 
-  const cTypes = COLLECTION_TYPES_BY_ROUTING[!tab ? routeType : `${routeType}_${tab}`];
-  if (!cTypes) return <UnitPage />;
+  let cId;
+  if (routeType === 'music' && tab) {
+    cId = tab;  //tab has current collectionId, so use it
+  } else {
+    const cTypes = COLLECTION_TYPES_BY_ROUTING[!tab ? routeType : `${routeType}_${tab}`];
+    if (!cTypes) return <UnitPage />;
 
-  const collection = Object.values(unit.collections).find(c => cTypes.includes(c.content_type));
+    const collection = Object.values(unit.collections).find(c => cTypes.includes(c.content_type));
 
-  if (!collection) {
-    return <UnitPage />;
+    if (!collection) {
+      return <UnitPage />;
+    }
+
+    cId = collection.id;
   }
 
-  return <PlaylistCollectionContainer cId={collection.id} cuId={id} />;
+  return <PlaylistCollectionContainer cId={cId} cuId={id} />;
 };
 
 export default withNamespaces()(PlaylistItemPage);

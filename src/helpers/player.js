@@ -9,6 +9,7 @@ import {
   CT_SONGS,
   EVENT_PREPARATION_TAG,
   EVENT_TYPES,
+  SORTABLE_TYPES,
   LANG_ENGLISH,
   MT_AUDIO,
   MT_VIDEO,
@@ -17,7 +18,7 @@ import {
 import { getQuery, stringify, updateQuery } from './url';
 import { canonicalLink } from './links';
 import MediaHelper from './media';
-import { isEmpty, physicalFile } from './utils';
+import { isEmpty, physicalFile, strCmp } from './utils';
 import { selectSuitableLanguage } from './language';
 
 const restorePreferredMediaType = () => localStorage.getItem('@@kmedia_player_media_type') || MT_VIDEO;
@@ -99,34 +100,64 @@ const playableItem = (unit, mediaType, uiLanguage, contentLanguage) => {
   };
 };
 
-const playlist = (collection, mediaType, contentLanguage, uiLanguage) => {
-  if (!collection) {
-    return {};
+const getCollectionPartNumber = (unitId, ccuNames) => {
+  const defaultVal = 1000000;
+  const num = Number(ccuNames[unitId]);
+
+  // put items with not valid collection part numbers at the end
+  return (isNaN(num) || num <= 0) ? defaultVal : num;
+}
+
+const sortUnits = (u1, u2, collection) => {
+  const { content_type, ccuNames } = collection;
+  const val1 = getCollectionPartNumber(u1.id, ccuNames);
+  const val2 = getCollectionPartNumber(u2.id, ccuNames);
+
+  // sort songs in desc order, but the rest asc
+  let result = content_type === CT_SONGS ? val2 - val1 : val1 - val2;
+
+  // if equal part number, sort by date and then name
+  if (result === 0) {
+    result = strCmp(u1.film_date, u2.film_date)
+
+    if (result === 0)
+      result = strCmp(u1.name, u2.name);
   }
 
-  const units = collection.content_units || [];
+  return result;
+}
+
+const playlist = (collection, mediaType, contentLanguage, uiLanguage) => {
+  const { start_date: sDate, end_date: eDate, content_units: units = [], content_type, name } = collection || {};
+
+  if (isEmpty(units)) {
+    return null
+  }
+
+  // initially sort units by episode/song number
+  if (SORTABLE_TYPES.includes(content_type))
+    units.sort((u1, u2) => sortUnits(u1, u2, collection));
 
   let items;
   let groups = null;
-  if (EVENT_TYPES.indexOf(collection.content_type) !== -1) {
-    const { start_date: sDate, end_date: eDate } = collection;
-    const mSDate                                 = moment(sDate);
-    const mEDate                                 = moment(eDate);
+  if (EVENT_TYPES.includes(content_type)) {
+    const mSDate = moment(sDate);
+    const mEDate = moment(eDate);
 
-    const breakdown = units.reduce((acc, val) => {
-      const fDate = moment(val.film_date);
+    const breakdown = units.reduce((acc, u) => {
+      const fDate = moment(u.film_date);
 
       let k;
       if (fDate.isBefore(mSDate)) {
         k = 'preparation';
       } else if (fDate.isAfter(mEDate)) {
         k = 'appendices';
-      } else if (val.content_type === CT_LESSON_PART || val.content_type === CT_FULL_LESSON) {
+      } else if (u.content_type === CT_LESSON_PART || u.content_type === CT_FULL_LESSON) {
         k = 'lessons';
 
         // fix for daily lessons in same day as event
         // this is necessary as we don't have film_date resolution in hours.
-        if (Array.isArray(val.tags) && val.tags.indexOf(EVENT_PREPARATION_TAG) !== -1) {
+        if (Array.isArray(u.tags) && u.tags.indexOf(EVENT_PREPARATION_TAG) !== -1) {
           k = 'preparation';
         }
       } else {
@@ -134,27 +165,10 @@ const playlist = (collection, mediaType, contentLanguage, uiLanguage) => {
       }
 
       const v = acc[k] || [];
-      v.push(playableItem(val, mediaType, uiLanguage, contentLanguage));
+      v.push(playableItem(u, mediaType, uiLanguage, contentLanguage));
       acc[k] = v;
       return acc;
     }, {});
-
-    // We better of sort things on the server...
-
-    // Object.values(breakdown).forEach(x => x.sort((a, b) => {
-    //   const fdCmp = strCmp(a.unit.film_date, b.unit.film_date);
-    //   if (fdCmp !== 0) {
-    //     return fdCmp;
-    //   }
-    //
-    //   // same film_date, try by ccuName
-    //   let aCcu = Object.keys(a.unit.collections || {}).find(x => x.startsWith(collection.id));
-    //   let bCcu = Object.keys(b.unit.collections || {}).find(x => x.startsWith(collection.id));
-    //
-    //   console.log('aCcu, bCcu', aCcu, bCcu);
-    //
-    //   return strCmp(aCcu, bCcu);
-    // }));
 
     let offset = 0;
     groups     = {};
@@ -169,8 +183,9 @@ const playlist = (collection, mediaType, contentLanguage, uiLanguage) => {
 
       return acc.concat(v);
     }, []);
+
   } else {
-    items = units.map(x => playableItem(x, mediaType, uiLanguage, contentLanguage));
+    items = units.map(u => playableItem(u, mediaType, uiLanguage, contentLanguage));
   }
 
   // don't include items without unit
@@ -186,7 +201,7 @@ const playlist = (collection, mediaType, contentLanguage, uiLanguage) => {
     mediaType,
     items,
     groups,
-    name: collection.content_type === CT_SONGS ? collection.name : null
+    name: content_type === CT_SONGS ? name : null
   };
 };
 

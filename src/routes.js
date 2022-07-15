@@ -37,15 +37,15 @@ import SimpleModeContainer from './components/Sections/SimpleMode/Container';
 import Topics from './components/Sections/Topics/TopicContainer';
 import Topic from './components/Sections/Topics/TopicPage';
 import * as shapes from './components/shapes';
-
 import {
   DEFAULT_LANGUAGE,
-  MY_NAMESPACE_BOOKMARKS,
   MY_NAMESPACE_HISTORY,
-  MY_NAMESPACE_PLAYLISTS,
   MY_NAMESPACE_REACTIONS,
+  MY_NAMESPACE_PLAYLISTS,
+  MY_NAMESPACE_BOOKMARKS,
   PAGE_NS_PROGRAMS
 } from './helpers/consts';
+
 // import Design from './components/Design/Design';
 import * as ssrDataLoaders from './routesSSRData';
 

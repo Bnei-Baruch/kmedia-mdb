@@ -1,18 +1,21 @@
-import React, { useContext } from 'react';
+import React, { useContext, useCallback, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
+import { useSelector, shallowEqual, useDispatch } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
 import { Header, Icon } from 'semantic-ui-react';
 import clsx from 'clsx';
+import moment from 'moment';
 
+import * as shapes from '../../../../shapes';
+import { actions, selectors } from '../../../../../redux/modules/mdb';
 import { selectors as settings } from '../../../../../redux/modules/settings';
 import { selectors as sources } from '../../../../../redux/modules/sources';
-import * as shapes from '../../../../shapes';
-import { COLLECTION_DAILY_LESSONS, CT_LESSONS_SERIES } from '../../../../../helpers/consts';
+import { COLLECTION_DAILY_LESSONS, CT_LESSONS_SERIES, DATE_FORMAT } from '../../../../../helpers/consts';
 import { getLanguageDirection } from '../../../../../helpers/i18n-utils';
 import { DeviceInfoContext } from '../../../../../helpers/app-contexts';
 import { cuPartNameByCCUType } from '../../../../../helpers/utils';
 import { fromToLocalized } from '../../../../../helpers/date';
+import { canonicalLink } from '../../../../../helpers/links';
 import Link from '../../../../Language/MultiLanguageLink';
 import CollectionDatePicker from './CollectionDatePicker';
 import PlaylistPlayIcon from '../../../../../images/icons/PlaylistPlay';
@@ -42,16 +45,71 @@ const getPrevLink = (langDir, t, link) => (
   </Link>
 );
 
-const PlaylistHeader = ({ collection, unit, t, prevLink = null, nextLink = null }) => {
+const PlaylistHeader = ({ collection, unit, t }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
+  const wipMap             = useSelector(state => selectors.getWip(state.mdb), shallowEqual);
+  const cWindow            = useSelector(state => selectors.getWindow(state.mdb), shallowEqual);
+  const collections        = useSelector(state => cWindow?.data?.map(id => selectors.getDenormCollection(state.mdb, id)).filter(c => !!c), shallowEqual);
+  const getPath            = useSelector(state => sources.getPathByID(state.sources));
   const uiLanguage         = useSelector(state => settings.getLanguage(state.settings));
   const langDir            = getLanguageDirection(uiLanguage);
 
-  const getPath = useSelector(state => sources.getPathByID(state.sources));
+  const [nextLink, setNextLink] = useState(null);
+  const [prevLink, setPrevLink] = useState(null);
 
-  const { content_type, number, name, film_date, start_date, end_date, tag_id, source_id } = collection;
+  const { id, content_type, number, name, film_date, start_date, end_date, tag_id, source_id } = collection;
 
   const isLesson = COLLECTION_DAILY_LESSONS.includes(content_type);
+
+  const dispatch = useDispatch();
+
+  const fetchWindow = useCallback(() => {
+    const filmDate = moment.utc(film_date);
+    dispatch(actions.fetchWindow({
+      id,
+      start_date: filmDate.subtract(5, 'days').format(DATE_FORMAT),
+      end_date: filmDate.add(10, 'days').format(DATE_FORMAT)
+    }));
+  }, [id, film_date, dispatch]);
+
+  const createPrevNextLinks = useCallback(curIndex => {
+    const prevCollection = curIndex < collections.length - 1 ? collections[curIndex + 1] : null;
+    const prevLnk        = prevCollection ? canonicalLink(prevCollection) : null;
+    setPrevLink(prevLnk);
+
+    const nextCollection = curIndex > 0 ? collections[curIndex - 1] : null;
+    const nextLnk        = nextCollection ? canonicalLink(nextCollection) : null;
+    setNextLink(nextLnk);
+  }, [collections]);
+
+  useEffect(() => {
+    // next prev links only for lessons
+    if (isLesson) {
+      const { id: cWindowId, data } = cWindow || {};
+      // empty or no window
+      if (!data || data.length === 0) {
+        if (!wipMap.cWindow[id]) {
+          // no wip, go fetch
+          fetchWindow(id, film_date);
+        }
+      } else {
+        const curIndex = data.indexOf(id);
+
+        if (id !== cWindowId
+          && (curIndex <= 0 || curIndex === collections?.length - 1)
+          && !wipMap.cWindow[id]) {
+          // it's not our window,
+          // we're not in it (at least not in the middle, we could reuse it otherwise)
+          // and our window is not wip
+          fetchWindow(id, film_date);
+        } else {
+          // it's a good window, extract the previous and next links
+          createPrevNextLinks(curIndex);
+        }
+      }
+    }
+  }, [cWindow, collections, createPrevNextLinks, fetchWindow, film_date, id, isLesson, wipMap.cWindow]);
+
 
   const getSubHeader = () => {
     if (!isLesson) return null;
@@ -164,8 +222,6 @@ PlaylistHeader.propTypes = {
   collection: shapes.GenericCollection.isRequired,
   unit: shapes.ContentUnit,
   t: PropTypes.func.isRequired,
-  nextLink: PropTypes.string,
-  prevLink: PropTypes.string,
 };
 
 export default withNamespaces()(PlaylistHeader);

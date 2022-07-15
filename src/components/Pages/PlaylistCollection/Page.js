@@ -1,30 +1,31 @@
-import clsx from 'clsx';
-import PropTypes from 'prop-types';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-import isEqual from 'react-fast-compare';
-import { useSelector } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
-import { Container, Grid } from 'semantic-ui-react';
-import { ClientChroniclesContext, DeviceInfoContext } from '../../../helpers/app-contexts';
-import { CT_SONGS } from '../../../helpers/consts';
-import playerHelper from '../../../helpers/player';
-import { usePrevious } from '../../../helpers/utils';
+import { useSelector } from 'react-redux';
+import PropTypes from 'prop-types';
+import clsx from 'clsx';
+import { withNamespaces } from 'react-i18next';
+import { Container, Grid, Button, Header } from 'semantic-ui-react';
+import isEqual from 'react-fast-compare';
 
-import { selectors as settings } from '../../../redux/modules/settings';
-import AVPlaylistPlayer from '../../AVPlayer/AVPlaylistPlayer';
 import * as shapes from '../../shapes';
+import { selectors as settings } from '../../../redux/modules/settings';
+import { ClientChroniclesContext, DeviceInfoContext } from '../../../helpers/app-contexts';
+import { usePrevious, randomizeArray } from '../../../helpers/utils';
+import playerHelper from '../../../helpers/player';
+import { CT_SONGS } from '../../../helpers/consts';
 import Helmets from '../../shared/Helmets';
 import Info from '../Unit/widgets/Info/Info';
 import Recommended from '../Unit/widgets/Recommended/Main/Recommended';
-import Materials from '../Unit/widgets/UnitMaterials/Materials';
 import Playlist from './widgets/Playlist/Playlist';
 import PlaylistHeader from './widgets/Playlist/PlaylistHeader';
+import AVPlaylistPlayer from '../../AVPlayer/AVPlaylistPlayer';
+import Materials from '../Unit/widgets/UnitMaterials/Materials';
 
 // Don't recommend lesson preparation, skip to next unit.
 const getRecommendUnit = (unit, collection, items) => {
-  let recommendUnit  = unit;
+  let recommendUnit = unit;
   const { ccuNames } = collection;
-  const isUnitPrep   = ccuNames?.[unit.id] === '0' && Object.values(ccuNames).filter(value => value === '0').length === 1;
+  const isUnitPrep = ccuNames?.[unit.id] === '0' && Object.values(ccuNames).filter(value => value === '0').length === 1;
   if (isUnitPrep && Array.isArray(items)) {
     const indexOfUnit = items.findIndex(item => item?.unit?.id === unit.id);
     if (indexOfUnit !== -1 && indexOfUnit + 1 < items.length) {
@@ -35,7 +36,7 @@ const getRecommendUnit = (unit, collection, items) => {
   return recommendUnit;
 };
 
-const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, cuId }) => {
+const PlaylistCollectionPage = ({ collection, cuId, t }) => {
   const location           = useLocation();
   const history            = useHistory();
   const { isMobileDevice } = useContext(DeviceInfoContext);
@@ -67,6 +68,26 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
     }
   }, [unit, prev?.unit, chronicles]);
 
+  // we need to calculate the playlist here, so we can filter items out of recommended
+  // playlist { collection, language, mediaType, items, groups };
+  useEffect(() => {
+    const newMediaType = playerHelper.getMediaTypeFromQuery(location);
+    const qryContentLang = playerHelper.getLanguageFromQuery(location, contentLanguage);
+
+    if (playlist) {
+      const { mediaType, language } = playlist;
+
+      if (newMediaType !== mediaType ||
+        qryContentLang !== language) {
+        const nPlaylist = playerHelper.playlist(collection, newMediaType, qryContentLang, language);
+        setPlaylist(nPlaylist);
+      }
+    } else {
+      const nPlaylist = playerHelper.playlist(collection, newMediaType, qryContentLang, uiLanguage);
+      setPlaylist(nPlaylist);
+    }
+  }, [collection, contentLanguage, location, playlist, uiLanguage]);
+
   const handleLanguageChange = useCallback((e, language) => {
     playerHelper.setLanguageInQuery(history, language);
   }, [history]);
@@ -83,36 +104,42 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
     if (nSelected !== selected && playlist?.items && playlist?.items[nSelected]) {
       history.push(`/${uiLanguage}${playlist.items[nSelected].shareUrl}`);
     }
-  }, [history, playlist, selected, uiLanguage]);
+  }, [history, playlist?.items, selected, uiLanguage]);
 
-  // we need to calculate the playlist here, so we can filter items out of recommended
-  // playlist { collection, language, mediaType, items, groups };
-  useEffect(() => {
-    const { mediaType, language } = playlist || {}
-    const newMediaType = playerHelper.getMediaTypeFromQuery(location);
-    const qryContentLang = playerHelper.getLanguageFromQuery(location, language || contentLanguage);
-
-    if (playlist && prev?.collection.id === collection.id) {
-      if (newMediaType !== mediaType ||
-        qryContentLang !== language) {
-        const nPlaylist = playerHelper.playlist(collection, newMediaType, qryContentLang, language);
-        setPlaylist(nPlaylist);
-      }
-    } else {
-      const nPlaylist = playerHelper.playlist(collection, newMediaType, qryContentLang, uiLanguage);
-      setPlaylist(nPlaylist);
-    }
-  }, [collection, contentLanguage, location, playlist, uiLanguage]);
-
-  useEffect(() => {
-    const newSel = playlist?.items.findIndex(i => i.unit.id === cuId);
-    if (!isNaN(newSel) && newSel !== -1) {
-      setSelected(newSel);
-      const newUnit = playlist?.items[newSel]?.unit;
+  const selectUnit = useCallback(selectedIndex => {
+    const { unit: newUnit } = playlist?.items[selectedIndex] || {};
+    if (newUnit) {
+      setSelected(selectedIndex);
       setUnit(newUnit);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [playlist, cuId]);
+  }, [playlist?.items])
+
+  useEffect(() => {
+    let newSel = playlist?.items.findIndex(i => i.unit.id === cuId);
+
+    if (isNaN(newSel) || newSel < 0) {
+      newSel = 0;
+
+      const { shareUrl } = playlist?.items[newSel] || {};
+      if (shareUrl && !location.pathname.includes(shareUrl)) {
+        history.replace(`/${uiLanguage}${shareUrl}`)
+      }
+    }
+
+    selectUnit(newSel);
+  }, [playlist, cuId, selectUnit, location.pathname, history, uiLanguage]);
+
+  const shufflePlaylist = () => {
+    const selectedItem = playlist.items[selected];
+    // a new array for sorting
+    const newPlaylistItems = [...playlist.items];
+    // random sorting of the playlist
+    randomizeArray(newPlaylistItems)
+    const newSelectedIndex = newPlaylistItems.indexOf(selectedItem);
+    // replace current items by shuffled
+    playlist.items = [...newPlaylistItems];
+    selectUnit(newSelectedIndex);
+  }
 
   if (!collection || !Array.isArray(collection.content_units)) {
     return null;
@@ -122,24 +149,49 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
     return null;
   }
 
-  const { items }      = playlist;
-  const filterOutUnits = items.map(item => item.unit).filter(u => !!u) || [];
+  const { items, name } = playlist;
+  const filterOutUnits  = items.map(item => item.unit).filter(u => !!u) || [];
 
   // Don't recommend lesson preparation, skip to next unit.
   const recommendUnit = getRecommendUnit(unit, collection, items);
 
+  const { content_type } = collection;
+
+  const startWithAutoPlay = content_type === CT_SONGS;
+  const randomButton = content_type === CT_SONGS &&
+    <Button
+      title={t('playlist.shuffle')}
+      style={{ padding: 'inherit', fontSize: '1em' }}
+      icon='random'
+      circular
+      primary
+      onClick={() => shufflePlaylist()}
+    >
+    </Button>
+
   const playlistData = (
     <>
-      <Playlist
-        playlist={playlist}
-        selected={selected}
-      />
+      <div id="avbox_playlist">
+        {
+          isMobileDevice
+            ? <div style={{ float: 'right', padding: '0.3em' }}>{ randomButton }</div>
+            : <Header as="h3" className={'avbox__playlist-header h3'}>
+              {name || t(`playlist.title-by-type.${content_type}`)}
+              {randomButton}
+            </Header>
+        }
+      </div>
+      <div id="avbox_playlist_container" className="avbox__playlist-view">
+        <Playlist
+          playlist={playlist}
+          selected={selected}
+        />
+      </div>
       <br />
       <Recommended unit={recommendUnit} filterOutUnits={filterOutUnits} />
     </>
   );
 
-  const startWithAutoPlay = collection.content_type === CT_SONGS;
   const computerWidth = isMobileDevice ? 16 : 10;
 
   return !embed ?
@@ -149,7 +201,7 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
           {
             unit &&
             <div id="avbox_playlist">
-              <PlaylistHeader collection={collection} prevLink={prevLink} nextLink={nextLink} unit={unit} />
+              <PlaylistHeader collection={collection} unit={unit} />
             </div>
           }
           <AVPlaylistPlayer
@@ -191,18 +243,13 @@ const PlaylistCollectionPage = ({ collection, nextLink = null, prevLink = null, 
 
 PlaylistCollectionPage.propTypes = {
   collection: shapes.GenericCollection,
-  nextLink: PropTypes.string,
-  prevLink: PropTypes.string,
+  cuId: PropTypes.string,
+  t: PropTypes.func.isRequired
 };
-
-const isEqualLink = (link1, link2) =>
-  (!link1 && !link2) || link1 === link2;
 
 const areEqual = (prevProps, nextProps) => (
   isEqual(prevProps.collection, nextProps.collection)
-  && (prevProps.cuId === nextProps.cuId)
-  && isEqualLink(prevProps.prevLink, nextProps.prevLink)
-  && isEqualLink(prevProps.nextLink, nextProps.nextLink)
+  && ((!prevProps.cuId && !nextProps.cuId) || prevProps.cuId === nextProps.cuId)
 );
 
-export default React.memo(PlaylistCollectionPage, areEqual);
+export default React.memo(withNamespaces()(PlaylistCollectionPage), areEqual);
