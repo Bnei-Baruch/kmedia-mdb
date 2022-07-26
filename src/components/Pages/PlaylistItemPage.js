@@ -9,6 +9,7 @@ import WipErr from '../shared/WipErr/WipErr';
 import PlaylistCollectionContainer from './PlaylistCollection/Container';
 import UnitPage from './Unit/Page';
 import { COLLECTION_DAILY_LESSONS, CT_LESSONS_SERIES, CT_SONGS, EVENT_TYPES } from '../../helpers/consts';
+import { isEmpty } from '../../helpers/utils';
 
 const COLLECTION_TYPES_BY_ROUTING = {
   'lessons': COLLECTION_DAILY_LESSONS,
@@ -31,8 +32,8 @@ const PlaylistItemPage = ({ t }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    setNeedToFetch(!unit || Object.keys(unit.collections).length === 0);
-  }, [id, language, unit]);
+    setNeedToFetch(!unit?.id || Object.keys(unit.collections).length === 0);
+  }, [id, language, unit.id]);
 
   useEffect(() => {
     if (!wip && !err && needToFetch) {
@@ -46,7 +47,7 @@ const PlaylistItemPage = ({ t }) => {
 
   if (!unit) return null;
 
-  if (routeType === 'program' || !unit.collections) return <UnitPage />;
+  if (routeType === 'program' || isEmpty(unit.collections)) return <UnitPage />;
 
   let cId;
   if (routeType === 'music' && tab) {
