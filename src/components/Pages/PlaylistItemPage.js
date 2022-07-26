@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { withNamespaces } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 
 import { actions, selectors } from '../../redux/modules/mdb';
-import { selectors as settings } from '../../redux/modules/settings';
 import WipErr from '../shared/WipErr/WipErr';
 import PlaylistCollectionContainer from './PlaylistCollection/Container';
 import UnitPage from './Unit/Page';
@@ -20,19 +19,14 @@ const COLLECTION_TYPES_BY_ROUTING = {
 const PlaylistItemPage = ({ t }) => {
   const { id, routeType, tab } = useParams();
 
-  const unit     = useSelector(state => selectors.getDenormContentUnit(state.mdb, id));
-  const wip      = useSelector(state => selectors.getWip(state.mdb).units[id]);
-  const err      = useSelector(state => selectors.getErrors(state.mdb).units[id]);
-  const language = useSelector(state => settings.getLanguage(state.settings));
+  const unit = useSelector(state => selectors.getDenormContentUnit(state.mdb, id), shallowEqual);
+  const wip  = useSelector(state => selectors.getWip(state.mdb).units[id]);
+  const err  = useSelector(state => selectors.getErrors(state.mdb).units[id]);
 
-  //fix bug with unit without collection
-  const [needToFetch, setNeedToFetch] = useState();
+  //fetch unit if not exists or without collection only once
+  const [needToFetch, setNeedToFetch] = useState(!unit || Object.keys(unit.collections).length === 0);
 
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    setNeedToFetch(!unit || Object.keys(unit.collections).length === 0);
-  }, [id, language, unit]);
 
   useEffect(() => {
     if (!wip && !err && needToFetch) {
