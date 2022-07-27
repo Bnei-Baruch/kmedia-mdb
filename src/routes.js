@@ -73,6 +73,11 @@ const routes = [
   { path: 'lessons', component: Lessons, options: { ssrData: ssrDataLoaders.lessonsPage } },
   { path: 'lessons/:tab', component: Lessons, options: { ssrData: ssrDataLoaders.lessonsPage } },
   {
+    path: 'lessons/virtual/c/:id',
+    component: LessonCollection,
+    options: { ssrData: ssrDataLoaders.lessonsCollectionPage }
+  },
+  {
     path: 'lessons/:tab/c/:id',
     component: PlaylistCollectionIdCheck,
     options: { ssrData: ssrDataLoaders.lessonsCollectionPage }
