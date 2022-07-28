@@ -14,7 +14,8 @@ import {
   CT_FRIENDS_GATHERINGS,
   CT_HOLIDAY,
   CT_LESSONS_SERIES,
-  CT_MEALS, CT_PICNIC,
+  CT_MEALS,
+  CT_PICNIC,
   CT_SPECIAL_LESSON,
   CT_UNITY_DAY,
   CT_VIDEO_PROGRAM,
@@ -34,24 +35,19 @@ export const isEmpty = obj => {
     return true;
   }
 
-  // Assume if it has a length property with a non-zero value
-  // that property is correct.
-  if (obj.length > 0) {
-    return false;
+  if (obj.hasOwnProperty('length')) {
+    return obj.length === 0;
   }
 
-  if (obj.length === 0) {
-    return true;
+  if (typeof obj == 'object') {
+    return Object.getOwnPropertyNames(obj).length === 0;
   }
 
-  // If it isn't an object at this point
-  // it is empty, but it can't be anything *but* empty
-  // Is it empty?  Depends on your application.
-  if (typeof obj !== 'object') {
-    return true;
+  if (typeof obj == 'number') {
+    return isNaN(obj);
   }
 
-  return Object.getOwnPropertyNames(obj).length <= 0;
+  return false;
 };
 
 export const isNotEmptyArray = arr => (Array.isArray(arr) && arr.length > 0);
@@ -348,7 +344,8 @@ export const getSectionForTranslation = content_type => {
   }
 };
 
-export const noop = () => {};
+export const noop = () => {
+};
 
 // Used in React hooks to remember previous props.
 export const usePrevious = value => {
