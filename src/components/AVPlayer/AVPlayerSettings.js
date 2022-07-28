@@ -21,8 +21,8 @@ const AVPlayerSettings = ({ file, t }) => {
   const { qualityByLang, languages } = item;
   const { quality, language, cuId }  = info;
 
-  const handleSetSpeed   = (x) => window.jwplayer(JWPLAYER_ID).setPlaybackRate(x);
-  const handleSetQuality = (x) => {
+  const handleSetSpeed   = x => window.jwplayer(JWPLAYER_ID).setPlaybackRate(x);
+  const handleSetQuality = x => {
     dispatch(actions.continuePlay());
     dispatch(playlistActions.setQuality(x));
   };

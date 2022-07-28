@@ -5,11 +5,11 @@ import { isEmpty } from '../../helpers/utils';
 const PLAYER_EVENTS = ['ready', 'userActive', 'userInactive', 'play', 'pause', 'mute', 'volume', 'playbackRateChanged'];
 
 export const initPlayerEvents = (player, dispatch) => {
-  player.on('error', (e) => {
+  player.on('error', e => {
     console.error(e);
   });
 
-  player.on('all', (e) => {
+  player.on('all', e => {
     console.log('all', e);
   });
 
@@ -20,13 +20,13 @@ export const initPlayerEvents = (player, dispatch) => {
       return;
     }
 
-    player.on(name, (e) => {
+    player.on(name, e => {
       dispatch(action(e));
     });
   });
 };
 
-export const removePlayerButtons = (player) => {
+export const removePlayerButtons = player => {
   PLAYER_EVENTS.forEach(name => player.off(name));
 };
 
