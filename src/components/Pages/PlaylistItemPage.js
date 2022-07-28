@@ -6,9 +6,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { actions, selectors } from '../../redux/modules/mdb';
 import { selectors as settings } from '../../redux/modules/settings';
 import WipErr from '../shared/WipErr/WipErr';
-import PlaylistCollectionContainer from './PlaylistCollection/Container';
 import UnitPage from './Unit/Page';
 import { COLLECTION_DAILY_LESSONS, CT_LESSONS_SERIES, CT_SONGS, EVENT_TYPES } from '../../helpers/consts';
+import PlaylistContainer from './WithPlayer/Playlist/PlaylistContainer';
 
 const COLLECTION_TYPES_BY_ROUTING = {
   'lessons': COLLECTION_DAILY_LESSONS,
@@ -32,7 +32,7 @@ const PlaylistItemPage = ({ t }) => {
 
   useEffect(() => {
     setNeedToFetch(!unit || Object.keys(unit.collections).length === 0);
-  }, [id, language, unit]);
+  }, [id, language]);
 
   useEffect(() => {
     if (!wip && !err && needToFetch) {
@@ -48,23 +48,16 @@ const PlaylistItemPage = ({ t }) => {
 
   if (routeType === 'program' || !unit.collections) return <UnitPage />;
 
-  let cId;
-  if (routeType === 'music' && tab) {
-    cId = tab;  //tab has current collectionId, so use it
-  } else {
-    const cTypes = COLLECTION_TYPES_BY_ROUTING[!tab ? routeType : `${routeType}_${tab}`];
-    if (!cTypes) return <UnitPage />;
+  const cTypes = COLLECTION_TYPES_BY_ROUTING[!tab ? routeType : `${routeType}_${tab}`];
+  if (!cTypes) return <UnitPage />;
 
-    const collection = Object.values(unit.collections).find(c => cTypes.includes(c.content_type));
+  const collection = Object.values(unit.collections).find(c => cTypes.includes(c.content_type));
 
-    if (!collection) {
-      return <UnitPage />;
-    }
-
-    cId = collection.id;
+  if (!collection) {
+    return <UnitPage />;
   }
 
-  return <PlaylistCollectionContainer cId={cId} cuId={id} />;
+  return <PlaylistContainer cId={collection.id} cuId={id} />;
 };
 
 export default withNamespaces()(PlaylistItemPage);
