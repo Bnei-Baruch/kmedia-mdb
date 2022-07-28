@@ -76,7 +76,6 @@ const onInactive = (draft, payload) => {
   console.log('onInactive', payload);
   draft.controls = false;
 };
-
 const onActive   = (draft, payload) => {
   console.log('onActive', payload);
   draft.controls = true;
