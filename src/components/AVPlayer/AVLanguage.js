@@ -1,66 +1,54 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { noop } from '../../helpers/utils';
-import { Dropdown } from 'semantic-ui-react';
+import { Dropdown, Button } from 'semantic-ui-react';
 
-import { LANG_HEBREW, LANGUAGE_OPTIONS, LANGUAGES } from '../../helpers/consts';
+import { LANGUAGE_OPTIONS, LANGUAGES, JWPLAYER_ID } from '../../helpers/consts';
 import TimedPopup from '../shared/TimedPopup';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectors as settings } from '../../redux/modules/settings';
+import { actions as playlistActions, selectors as playlistSelectors } from '../../redux/modules/playlist';
+import { actions } from '../../redux/modules/player';
 
-const AVLanguage = (
-  {
-    languages = [],
-    selectedLanguage = LANG_HEBREW,
-    requestedLanguage = LANG_HEBREW,
-    uiLanguage = LANG_HEBREW,
-    onSelect = noop,
-    onDropdownOpenedChange,
-    t,
-    cuId,
-  }
-) => {
-  const [lastRequestedLanguage, setLastRequestedLanguage] = useState(requestedLanguage);
-  const [openPopup, setOpenPopup]                         = useState(false);
-  const [langSelectRef, setLangSelectRef]                 = useState();
+const AVLanguage = ({ languages, selectedLanguage, cuId, t, }) => {
 
-  const handleChange  = (e, data) => {
-    setLastRequestedLanguage(data.value);
-    onSelect(e, data.value);
+  const uiLanguage   = useSelector(state => settings.getLanguage(state.settings));
+  const { language } = useSelector(state => playlistSelectors.getInfo(state.playlist));
+
+  const [openPopup, setOpenPopup] = useState(language !== selectedLanguage);
+  const ref                       = useRef();
+
+  const dispatch = useDispatch();
+
+  const handleSelect = (e, { value }) => {
+    dispatch(playlistActions.setLanguage(value));
+    dispatch(actions.continuePlay(window.jwplayer(JWPLAYER_ID).getPosition()), );
   };
-
-  const handleOnOpen  = () => onDropdownOpenedChange(true);
-  const handleOnClose = () => onDropdownOpenedChange(false);
-
-  useEffect(() => {
-    setOpenPopup(selectedLanguage !== lastRequestedLanguage && !languages.includes(selectedLanguage));
-  }, [selectedLanguage, lastRequestedLanguage, languages]);
 
   const options = LANGUAGE_OPTIONS
     .filter(x => languages.includes(x.value))
     .map(x => ({ value: x.value, text: x.name }));
 
   return (
-    <div ref={setLangSelectRef} className="mediaplayer__languages">
-      <TimedPopup
+    <div ref={ref} className="mediaplayer__languages">
+     {/* <TimedPopup
         openOnInit={openPopup}
         message={t('messages.fallback-language')}
         downward={false}
         timeout={7000}
         language={uiLanguage}
-        refElement={langSelectRef}
+        refElement={ref}
         updateTrigger={cuId}
-      />
+      />*/}
       <Dropdown
-        floating
         scrolling
         upward
         icon={null}
         selectOnBlur={false}
         options={options}
         value={selectedLanguage}
-        onChange={handleChange}
-        trigger={<button type="button">{LANGUAGES[selectedLanguage].name}</button>}
-        onOpen={handleOnOpen}
-        onClose={handleOnClose}
+        onChange={handleSelect}
+        trigger={
+          <Button icon="angle right" className="clear_button" color="red" basic content={LANGUAGES[selectedLanguage].name} />}
       />
     </div>
   );
@@ -68,20 +56,9 @@ const AVLanguage = (
 
 AVLanguage.propTypes = {
   t: PropTypes.func.isRequired,
-  onSelect: PropTypes.func,
-  onDropdownOpenedChange: PropTypes.func.isRequired,
   selectedLanguage: PropTypes.string,
-  requestedLanguage: PropTypes.string,
   languages: PropTypes.arrayOf(PropTypes.string),
-  uiLanguage: PropTypes.string,
   cuId: PropTypes.string
 };
 
-const areEqual = (prevProps, nextProps) =>
-  prevProps.selectedLanguage === nextProps.selectedLanguage
-  && prevProps.requestedLanguage === nextProps.requestedLanguage
-  && prevProps.uiLanguage === nextProps.uiLanguage
-  && prevProps.languages === nextProps.languages
-  && prevProps.cuId === nextProps.cuId;
-
-export default React.memo(AVLanguage, areEqual);
+export default AVLanguage;
