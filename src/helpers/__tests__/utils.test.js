@@ -64,13 +64,14 @@ describe('isEmpty', () => {
 
   test('number', () => {
     expect(isEmpty(1)).toBe(false);
-    const a = new Number();
-    expect(isEmpty(a)).toBe(true);
+    const a = Number();
+    expect(isEmpty(a)).toBe(false);
+    expect(isEmpty(Number('a'))).toBe(true);
   });
 
   test('string', () => {
     expect(isEmpty('aaa')).toBe(false);
-    const a = new String();
+    const a = String();
     expect(isEmpty(a)).toBe(true);
     expect(isEmpty('')).toBe(true);
 
