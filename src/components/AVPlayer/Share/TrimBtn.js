@@ -1,33 +1,43 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useMemo } from 'react';
 import moment from 'moment/moment';
-import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Button, Icon, Label, Popup } from 'semantic-ui-react';
 
 import { ClientChroniclesContext } from '../../../helpers/app-contexts';
-import { fromHumanReadableTime } from '../../../helpers/time';
 import { noop } from '../../../helpers/utils';
 import { actions } from '../../../redux/modules/trim';
-import { MDBFile } from '../../shapes';
+import { findPlayedFile } from '../helper';
+import { selectors as playlist } from '../../../redux/modules/playlist';
+import { selectors as player } from '../../../redux/modules/player';
+import { isEqual } from 'lodash/lang';
 
-const TrimBtn = ({ file, sstart, send, width, t }) => {
+const TrimBtn = ({ width, t }) => {
   const [open, setOpen] = useState(false);
 
   const chronicles       = useContext(ClientChroniclesContext);
   const chroniclesAppend = chronicles ? chronicles.append.bind(chronicles) : noop;
 
-  const dispatch  = useDispatch();
-  const handleCut = () => {
-    if (sstart === send) return;
+  const { start, stop } = useSelector(state => player.getStartStop(state.player), isEqual);
+  const info            = useSelector(state => playlist.getInfo(state.playlist), isEqual);
+  const item            = useSelector(state => playlist.getPlayed(state.playlist), isEqual);
+  const file            = useMemo(() => findPlayedFile(item, info), [item, info]);
 
-    const start    = fromHumanReadableTime(sstart);
-    const strStart = moment.utc(start.asMilliseconds())
+  const dispatch = useDispatch();
+
+  const handleCut = () => {
+    if (start === stop) return;
+    const _start = moment.duration(start);
+    const sstart = moment
+      .utc(_start.asMilliseconds())
       .format(start.hours() === 0 ? 'mm[m]ss[s]' : 'HH[h]mm[m]ss[s]');
-    const end      = fromHumanReadableTime(send);
-    const strEnd   = moment.utc(end.asMilliseconds())
-      .format(end.hours() === 0 ? 'mm[m]ss[s]' : 'HH[h]mm[m]ss[s]');
-    dispatch(actions.trim({ sstart: strStart, send: strEnd, uid: file.id }));
+
+    const _stop = moment.duration(stop);
+    const send  = moment
+      .utc(_stop.asMilliseconds())
+      .format(_stop.hours() === 0 ? 'mm[m]ss[s]' : 'HH[h]mm[m]ss[s]');
+
+    dispatch(actions.trim({ sstart, send, uid: file.id }));
     chroniclesAppend('download', { url: file.src, uid: file.id, sstart, send });
   };
 
@@ -57,13 +67,6 @@ const TrimBtn = ({ file, sstart, send, width, t }) => {
       }
     />
   );
-};
-
-TrimBtn.propTypes = {
-  file: MDBFile,
-  sstart: PropTypes.string,
-  send: PropTypes.string,
-  width: PropTypes.number
 };
 
 export default withNamespaces()(TrimBtn);
