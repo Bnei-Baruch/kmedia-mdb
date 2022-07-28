@@ -24,7 +24,7 @@ const UnitItem = ({ id, t }) => {
             <div className="additional_links">
               {
                 collections.map(c => (
-                  <Link to={canonicalLink(c)}>
+                  <Link key={c.id} to={canonicalLink(c)}>
                     {`${t(`constants.content-types.${c.content_type}`)}: ${c.name}`}
                   </Link>
                 ))
