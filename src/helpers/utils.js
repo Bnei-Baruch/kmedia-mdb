@@ -43,11 +43,7 @@ export const isEmpty = obj => {
     return Object.getOwnPropertyNames(obj).length === 0;
   }
 
-  if (typeof obj == 'number') {
-    return isNaN(obj);
-  }
-
-  return false;
+  return true;
 };
 
 export const isNotEmptyArray = arr => (Array.isArray(arr) && arr.length > 0);
