@@ -22,30 +22,30 @@ const AVPlayerOnControl = ({ file }) => {
 
   const dispatch = useDispatch();
 
-  const handleSeekForward  = (e) => seek(e, 10);
-  const handleSeekBackward = (e) => seek(e, -10);
+  const handleSeekForward  = e => seek(e, 10);
+  const handleSeekBackward = e => seek(e, -10);
 
   const handlePlayPause = () => {
     const p = window.jwplayer(JWPLAYER_ID);
     (p.getState() === 'playing') ? p.pause() : p.play();
   };
 
-  const handleOpenSettings = (e) => {
+  const handleOpenSettings = e => {
     dispatch(actions.setOverMode(PLAYER_OVER_MODES.settings));
     stopBubbling(e);
   };
 
-  const handleOpenShare = (e) => {
+  const handleOpenShare = e => {
     dispatch(actions.setOverMode(PLAYER_OVER_MODES.share));
     stopBubbling(e);
   };
 
-  const handleNext = (e) => {
+  const handleNext = e => {
     dispatch(playlistActions.next());
     stopBubbling(e);
   };
 
-  const handlePrev = (e) => {
+  const handlePrev = e => {
     dispatch(playlistActions.prev());
     stopBubbling(e);
   };
