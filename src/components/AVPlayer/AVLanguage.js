@@ -21,7 +21,7 @@ const AVLanguage = ({ languages, selectedLanguage, cuId, t, }) => {
 
   const handleSelect = (e, { value }) => {
     dispatch(playlistActions.setLanguage(value));
-    dispatch(actions.continuePlay(window.jwplayer(JWPLAYER_ID).getPosition()), );
+    dispatch(actions.continuePlay(window.jwplayer(JWPLAYER_ID).getPosition()),);
   };
 
   const options = LANGUAGE_OPTIONS
@@ -30,7 +30,7 @@ const AVLanguage = ({ languages, selectedLanguage, cuId, t, }) => {
 
   return (
     <div ref={ref} className="mediaplayer__languages">
-     {/* <TimedPopup
+      {/* <TimedPopup
         openOnInit={openPopup}
         message={t('messages.fallback-language')}
         downward={false}
