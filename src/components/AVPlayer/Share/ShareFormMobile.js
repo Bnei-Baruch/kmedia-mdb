@@ -4,7 +4,7 @@ import CopyToClipboard from 'react-copy-to-clipboard';
 import { withNamespaces } from 'react-i18next';
 
 import BaseShareForm from './BaseShareForm';
-import ShareBar from './ShareBar';
+import ShareBar from './ShareBarPlayer';
 import { toHumanReadableTime } from '../../../helpers/time';
 
 const POPOVER_CONFIRMATION_TIMEOUT = 2500;

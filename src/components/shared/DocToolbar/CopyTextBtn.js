@@ -5,8 +5,7 @@ import { Button, MenuItem, Popup, } from 'semantic-ui-react';
 
 import useStateWithCallback from '../../../helpers/use-state-with-callback';
 import { withNamespaces } from 'react-i18next';
-
-const POPOVER_CONFIRMATION_TIMEOUT = 2500;
+import { POPOVER_CONFIRMATION_TIMEOUT } from '../../AVPlayer/Share/helper';
 
 const CopyTextBtn = ({ t, text }) => {
   const [open, setOpen] = useStateWithCallback(false, open => {
@@ -44,7 +43,7 @@ const CopyTextBtn = ({ t, text }) => {
                 onCopy={handleCopied}
               >
                 <MenuItem>
-                  <Button circular icon="copy"/>
+                  <Button circular icon="copy" />
                   {t('share-text.copy-text')}
                 </MenuItem>
               </CopyToClipboard>
