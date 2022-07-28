@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Button, Header, List } from 'semantic-ui-react';
@@ -15,7 +14,6 @@ import { canonicalLink } from '../../../../../helpers/links';
 import { cuPartNameByCCUType, intersperse } from '../../../../../helpers/utils';
 import { selectors as tagsSelectors } from '../../../../../redux/modules/tags';
 import Link from '../../../../Language/MultiLanguageLink';
-import * as shapes from '../../../../shapes';
 import PersonalInfo from './PersonalInfo';
 import { selectors as recommended } from '../../../../../redux/modules/recommended';
 import UnitLogo from '../../../../shared/Logo/UnitLogo';
@@ -71,9 +69,11 @@ const getEpisodeInfo = (ct, cIDs, currentCollection, filmDate, t) => {
   ));
 };
 
-const Info = ({ unit = {}, t, currentCollection = null }) => {
+const Info = ({ cId, cuId, t }) => {
 
-  const getTagById = useSelector(state => tagsSelectors.getTagById(state.tags));
+  const getTagById        = useSelector(state => tagsSelectors.getTagById(state.tags));
+  const unit              = useSelector(state => mdb.getDenormContentUnit(state.mdb, cuId));
+  const currentCollection = useSelector(state => mdb.getDenormCollection(state.mdb, cId));
 
   const { id, name, film_date: filmDate, collections, content_type: ct, cIDs, tags = [] } = unit;
 
@@ -163,12 +163,6 @@ const Info = ({ unit = {}, t, currentCollection = null }) => {
       </div>
     </>
   );
-};
-
-Info.propTypes = {
-  unit: shapes.ContentUnit,
-  section: PropTypes.string,
-  currentCollection: shapes.Collection
 };
 
 export default withNamespaces()(Info);
