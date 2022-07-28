@@ -1,14 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { withNamespaces } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { actions, selectors } from '../../redux/modules/mdb';
+import { selectors as settings } from '../../redux/modules/settings';
 import WipErr from '../shared/WipErr/WipErr';
-import PlaylistCollectionContainer from './PlaylistCollection/Container';
 import UnitPage from './Unit/Page';
 import { COLLECTION_DAILY_LESSONS, CT_LESSONS_SERIES, CT_SONGS, EVENT_TYPES } from '../../helpers/consts';
-import { isEmpty } from '../../helpers/utils';
+import PlaylistContainer from './WithPlayer/Playlist/PlaylistContainer';
 
 const COLLECTION_TYPES_BY_ROUTING = {
   'lessons': COLLECTION_DAILY_LESSONS,
@@ -20,43 +20,44 @@ const COLLECTION_TYPES_BY_ROUTING = {
 const PlaylistItemPage = ({ t }) => {
   const { id, routeType, tab } = useParams();
 
-  const unit    = useSelector(state => selectors.getDenormContentUnit(state.mdb, id));
-  const wip     = useSelector(state => selectors.getWip(state.mdb).units[id]);
-  const err     = useSelector(state => selectors.getErrors(state.mdb).units[id]);
-  const fetched = useSelector(state => selectors.getFullUnitFetched(state.mdb)[id]);
+  const unit     = useSelector(state => selectors.getDenormContentUnit(state.mdb, id));
+  const wip      = useSelector(state => selectors.getWip(state.mdb).units[id]);
+  const err      = useSelector(state => selectors.getErrors(state.mdb).units[id]);
+  const language = useSelector(state => settings.getLanguage(state.settings));
+
+  //fix bug with unit without collection
+  const [needToFetch, setNeedToFetch] = useState();
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!wip && !err && !fetched) {
+    setNeedToFetch(!unit || Object.keys(unit.collections).length === 0);
+  }, [id, language]);
+
+  useEffect(() => {
+    if (!wip && !err && needToFetch) {
       dispatch(actions.fetchUnit(id));
+      setNeedToFetch(false);
     }
-  }, [dispatch, err, id, wip, fetched]);
+  }, [dispatch, err, id, wip, needToFetch]);
 
   const wipErr = WipErr({ wip, err, t });
   if (wipErr) return wipErr;
 
   if (!unit) return null;
 
-  if (routeType === 'program' || isEmpty(unit.collections)) return <UnitPage />;
+  if (routeType === 'program' || !unit.collections) return <UnitPage />;
 
-  let cId;
-  if (routeType === 'music' && tab) {
-    cId = tab;  //tab has current collectionId, so use it
-  } else {
-    const cTypes = COLLECTION_TYPES_BY_ROUTING[!tab ? routeType : `${routeType}_${tab}`];
-    if (!cTypes) return <UnitPage />;
+  const cTypes = COLLECTION_TYPES_BY_ROUTING[!tab ? routeType : `${routeType}_${tab}`];
+  if (!cTypes) return <UnitPage />;
 
-    const collection = Object.values(unit.collections).find(c => cTypes.includes(c.content_type));
+  const collection = Object.values(unit.collections).find(c => cTypes.includes(c.content_type));
 
-    if (!collection) {
-      return <UnitPage />;
-    }
-
-    cId = collection.id;
+  if (!collection) {
+    return <UnitPage />;
   }
 
-  return <PlaylistCollectionContainer cId={cId} cuId={id} />;
+  return <PlaylistContainer cId={collection.id} cuId={id} />;
 };
 
 export default withNamespaces()(PlaylistItemPage);
