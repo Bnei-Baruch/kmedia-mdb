@@ -23,9 +23,9 @@ import Materials from '../Unit/widgets/UnitMaterials/Materials';
 
 // Don't recommend lesson preparation, skip to next unit.
 const getRecommendUnit = (unit, collection, items) => {
-  let recommendUnit = unit;
+  let recommendUnit  = unit;
   const { ccuNames } = collection;
-  const isUnitPrep = ccuNames?.[unit.id] === '0' && Object.values(ccuNames).filter(value => value === '0').length === 1;
+  const isUnitPrep   = ccuNames?.[unit.id] === '0' && Object.values(ccuNames).filter(value => value === '0').length === 1;
   if (isUnitPrep && Array.isArray(items)) {
     const indexOfUnit = items.findIndex(item => item?.unit?.id === unit.id);
     if (indexOfUnit !== -1 && indexOfUnit + 1 < items.length) {
@@ -71,10 +71,10 @@ const PlaylistCollectionPage = ({ collection, cuId, t }) => {
   // we need to calculate the playlist here, so we can filter items out of recommended
   // playlist { collection, language, mediaType, items, groups };
   useEffect(() => {
-    const newMediaType = playerHelper.getMediaTypeFromQuery(location);
+    const newMediaType   = playerHelper.getMediaTypeFromQuery(location);
     const qryContentLang = playerHelper.getLanguageFromQuery(location, contentLanguage);
 
-    if (playlist) {
+    if (playlist && (playlist?.collection?.id === collection?.id)) {
       const { mediaType, language } = playlist;
 
       if (newMediaType !== mediaType ||
@@ -112,17 +112,17 @@ const PlaylistCollectionPage = ({ collection, cuId, t }) => {
       setSelected(selectedIndex);
       setUnit(newUnit);
     }
-  }, [playlist?.items])
+  }, [playlist?.items]);
 
   useEffect(() => {
     let newSel = playlist?.items.findIndex(i => i.unit.id === cuId);
 
-    if (isNaN(newSel) || newSel < 0) {
+    if ((playlist?.collection?.id === collection?.id) && (isNaN(newSel) || newSel < 0)) {
       newSel = 0;
 
       const { shareUrl } = playlist?.items[newSel] || {};
       if (shareUrl && !location.pathname.includes(shareUrl)) {
-        history.replace(`/${uiLanguage}${shareUrl}`)
+        history.replace(`/${uiLanguage}${shareUrl}`);
       }
     }
 
@@ -130,16 +130,16 @@ const PlaylistCollectionPage = ({ collection, cuId, t }) => {
   }, [playlist, cuId, selectUnit, location.pathname, history, uiLanguage]);
 
   const shufflePlaylist = () => {
-    const selectedItem = playlist.items[selected];
+    const selectedItem     = playlist.items[selected];
     // a new array for sorting
     const newPlaylistItems = [...playlist.items];
     // random sorting of the playlist
-    randomizeArray(newPlaylistItems)
+    randomizeArray(newPlaylistItems);
     const newSelectedIndex = newPlaylistItems.indexOf(selectedItem);
     // replace current items by shuffled
-    playlist.items = [...newPlaylistItems];
+    playlist.items         = [...newPlaylistItems];
     selectUnit(newSelectedIndex);
-  }
+  };
 
   if (!collection || !Array.isArray(collection.content_units)) {
     return null;
@@ -158,23 +158,23 @@ const PlaylistCollectionPage = ({ collection, cuId, t }) => {
   const { content_type } = collection;
 
   const startWithAutoPlay = content_type === CT_SONGS;
-  const randomButton = content_type === CT_SONGS &&
+  const randomButton      = content_type === CT_SONGS &&
     <Button
       title={t('playlist.shuffle')}
       style={{ padding: 'inherit', fontSize: '1em' }}
-      icon='random'
+      icon="random"
       circular
       primary
       onClick={() => shufflePlaylist()}
     >
-    </Button>
+    </Button>;
 
   const playlistData = (
     <>
       <div id="avbox_playlist">
         {
           isMobileDevice
-            ? <div style={{ float: 'right', padding: '0.3em' }}>{ randomButton }</div>
+            ? <div style={{ float: 'right', padding: '0.3em' }}>{randomButton}</div>
             : <Header as="h3" className={'avbox__playlist-header h3'}>
               {name || t(`playlist.title-by-type.${content_type}`)}
               {randomButton}
