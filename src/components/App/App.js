@@ -19,7 +19,7 @@ import {
 import InitKC from '../shared/InitKC';
 
 const App = props => {
-  const [isShareTextEnabled, setEnableShareText]                                                             = useState(true);
+  const [isShareTextEnabled, setEnableShareText]                                                             = useState(false);
   const { i18n, store, history, initialI18nStore, initialLanguage, deviceInfo, clientChronicles, abTesting } = props;
 
   const sessionInfo       = {
