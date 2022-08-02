@@ -14,6 +14,7 @@ const UnitItem = ({ id, t }) => {
 
   const link        = canonicalLink(cu);
   const collections = Object.values(cu.collections);
+
   return (
     <List.Item as={Link} to={link} key={id} className="media_item">
       <UnitLogoWithDuration duration={cu.duration} unitId={cu.id} width={144} />
@@ -24,9 +25,9 @@ const UnitItem = ({ id, t }) => {
             <div className="additional_links">
               {
                 collections.map(c => (
-                  <Link key={c.id} to={canonicalLink(c)}>
+                  <span key={c.id}>
                     {`${t(`constants.content-types.${c.content_type}`)}: ${c.name}`}
-                  </Link>
+                  </span>
                 ))
               }
             </div>
