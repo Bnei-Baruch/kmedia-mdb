@@ -1,11 +1,12 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import { withNamespaces } from 'react-i18next';
 import { Container, Divider, Header } from 'semantic-ui-react';
 
 import { actions, selectors } from '../../../redux/modules/tags';
+import { actions as listsActions } from '../../../redux/modules/lists';
 import { selectors as settings } from '../../../redux/modules/settings';
 import Pagination from '../../Pagination/Pagination';
 import { selectors as filters } from '../../../redux/modules/filters';
@@ -13,15 +14,13 @@ import { isEqual } from 'lodash';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import RenderPage from './RenderPage';
 import RenderPageMobile from './RenderPageMobile';
+import { getPageFromLocation } from '../../Pagination/withPagination';
+import { PAGE_NS_TOPICS } from '../../../helpers/consts';
 
 const TopicPage = ({ t }) => {
   const { id } = useParams();
 
-  const [pageNo, setPageNo] = useState(0);
-
   const { isMobileDevice } = useContext(DeviceInfoContext);
-
-  const pageSize = isMobileDevice ? 10 : 50;
 
   const getPathByID = useSelector(state => selectors.getPathByID(state.tags));
   const getTags     = useSelector(state => selectors.getTags(state.tags));
@@ -32,6 +31,12 @@ const TopicPage = ({ t }) => {
   const total                     = Math.max(mediaTotal, textTotal);
 
   const dispatch = useDispatch();
+
+  const pageSize = useSelector(state => settings.getPageSize(state.settings));
+  const location = useLocation();
+  const pageNo   = useMemo(() => getPageFromLocation(location) || 1, [location]);
+
+  const handleSetPage = useCallback(pageNo => dispatch(listsActions.setPage(PAGE_NS_TOPICS, pageNo)), [dispatch]);
 
   useEffect(() => {
     const page_no = pageNo > 1 ? pageNo : 1;
@@ -53,8 +58,6 @@ const TopicPage = ({ t }) => {
     );
   }
 
-  const onPageChange = n => setPageNo(n);
-
   return (
     <>
       {isMobileDevice ? <RenderPageMobile /> : <RenderPage />}
@@ -67,7 +70,7 @@ const TopicPage = ({ t }) => {
             pageSize={pageSize}
             total={total}
             language={language}
-            onChange={onPageChange}
+            onChange={handleSetPage}
           />
         }
       </Container>
