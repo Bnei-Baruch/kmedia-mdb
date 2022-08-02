@@ -117,9 +117,11 @@ const CollectionsModal = ({ ct, namespace, t }) => {
         </Modal.Header>
         <Modal.Content scrolling>
           <Table celled={false} basic>
-            {
-              rows.map(renderRow)
-            }
+            <Table.Body>
+              {
+                rows.map(renderRow)
+              }
+            </Table.Body>
           </Table>
         </Modal.Content>
         <Modal.Actions>

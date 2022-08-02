@@ -96,9 +96,11 @@ const TagSourceItemModal = props => {
       </Modal.Header>
       <Modal.Content scrolling>
         <Table collapsing celled={false} basic>
-          {
-            rows.map(renderRow)
-          }
+          <Table.Body>
+            {
+              rows.map(renderRow)
+            }
+          </Table.Body>
         </Table>
       </Modal.Content>
       <Modal.Actions>
