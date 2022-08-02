@@ -18,9 +18,10 @@ const Locations = ({ namespace }) => {
       children={
         <>
           {
-            items.filter(id => !!id).map(id =>
-              <CountriesItem namespace={namespace} id={id} key={id} />
-            )
+            items
+              .filter(id => !!id)
+              .sort()
+              .map(id => <CountriesItem namespace={namespace} id={id} key={id} />)
           }
         </>
       }
