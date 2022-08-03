@@ -56,32 +56,32 @@ const MainPage = ({ t }) => {
   const wipErr = WipErr({ wip, err, t });
 
   return (<>
-      <SectionHeader section="programs" />
-      <SectionFiltersWithMobile
-        filters={
-          <Filters
-            namespace={PAGE_NS_PROGRAMS}
-            baseParams={FILTER_PARAMS}
-          />
-        }
-      >
-        <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} />
-        <FilterLabels namespace={PAGE_NS_PROGRAMS} />
-        {
-          wipErr || items?.map((id, i) => <ItemOfList id={id} key={i} />)
-        }
-        <Divider fitted />
-        <Container className="padded pagination-wrapper" textAlign="center">
-          {total > 0 && <Pagination
-            pageNo={pageNo}
-            pageSize={pageSize}
-            total={total}
-            language={language}
-            onChange={setPage}
-          />}
-        </Container>
-      </SectionFiltersWithMobile>
-    </>
+    <SectionHeader section="programs" />
+    <SectionFiltersWithMobile
+      filters={
+        <Filters
+          namespace={PAGE_NS_PROGRAMS}
+          baseParams={FILTER_PARAMS}
+        />
+      }
+    >
+      <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} />
+      <FilterLabels namespace={PAGE_NS_PROGRAMS} />
+      {
+        wipErr || items?.map((id, i) => <ItemOfList id={id} key={i} />)
+      }
+      <Divider fitted />
+      <Container className="padded pagination-wrapper" textAlign="center">
+        {total > 0 && <Pagination
+          pageNo={pageNo}
+          pageSize={pageSize}
+          total={total}
+          language={language}
+          onChange={setPage}
+        />}
+      </Container>
+    </SectionFiltersWithMobile>
+  </>
   );
 };
 
