@@ -21,10 +21,9 @@ import CollectionsModal from './CollectionsModal';
 import ContentTypeItem from './ContentTypeItem';
 import { LESSON_AS_COLLECTION, LESSON_AS_UNIT } from './MainPage';
 
-
 const ContentTypeFilter = ({ namespace }) => {
   const fetchedCTs = useSelector(state => selectors.getTree(state.filtersAside, namespace, FN_CONTENT_TYPE));
-  const selected   = useSelector(state => filters.getFilters(state.filters, PAGE_NS_LESSONS), isEqual);
+  const selected   = useSelector(state => filters.getNotEmptyFilters(state.filters, PAGE_NS_LESSONS), isEqual);
 
   const items = useMemo(() => {
     const isUnit = selected.some(f => FN_SHOW_LESSON_AS_UNITS.includes(f.name) && !isEmpty(f.values));

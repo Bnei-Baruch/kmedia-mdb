@@ -44,7 +44,7 @@ const MainPage = ({ t }) => {
   const { items, total, wip, err } = useSelector(state => lists.getNamespaceState(state.lists, PAGE_NS_LESSONS)) || {};
   const language                   = useSelector(state => settings.getLanguage(state.settings));
   const pageSize                   = useSelector(state => settings.getPageSize(state.settings));
-  const selected                   = useSelector(state => filters.getFilters(state.filters, PAGE_NS_LESSONS), isEqual);
+  const selected                   = useSelector(state => filters.getNotEmptyFilters(state.filters, PAGE_NS_LESSONS), isEqual);
 
   const prevSel    = usePrevious(selected);
   const listParams = useMemo(() => selected.some(f => FN_SHOW_LESSON_AS_UNITS.includes(f.name) && !isEmpty(f.values))
@@ -85,7 +85,7 @@ const MainPage = ({ t }) => {
       <FilterLabels namespace={PAGE_NS_LESSONS} />
       {
         wipErr || items?.map(({ id, content_type }, i) => {
-          switch (true) {
+            switch (true) {
             case COLLECTION_DAILY_LESSONS.includes(content_type):
               return <DailyLessonItem id={id} key={i} />;
             case COLLECTION_LESSONS_TYPE.includes(content_type):
@@ -94,8 +94,8 @@ const MainPage = ({ t }) => {
               return <UnitItem id={id} key={i} />;
             default:
               return null;
+            }
           }
-        }
         )
       }
       <Divider fitted />

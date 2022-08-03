@@ -24,7 +24,7 @@ const Filters = ({ namespace, baseParams, t }) => {
   const language     = useSelector(state => settings.getLanguage(state.settings));
   const isReady      = useSelector(state => selectors.isReady(state.filtersAside, namespace));
   const { wip, err } = useSelector(state => selectors.getWipErr(state.filtersAside, namespace));
-  const selected     = useSelector(state => filters.getFilters(state.filters, namespace), isEqual);
+  const selected     = useSelector(state => filters.getNotEmptyFilters(state.filters, namespace), isEqual);
 
   const dispatch = useDispatch();
 
