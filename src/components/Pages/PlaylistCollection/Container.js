@@ -5,13 +5,14 @@ import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 
 import { isEmpty } from '../../../helpers/utils';
 import { actions, selectors } from '../../../redux/modules/mdb';
+import { actions as recommended } from '../../../redux/modules/recommended';
 import WipErr from '../../shared/WipErr/WipErr';
 import Page from './Page';
 
 const PlaylistCollectionContainer = ({ cId, t, cuId }) => {
-  const collection   = useSelector(state => selectors.getDenormCollectionWUnits(state.mdb, cId), shallowEqual);
-  const wipMap       = useSelector(state => selectors.getWip(state.mdb), shallowEqual);
-  const errorMap     = useSelector(state => selectors.getErrors(state.mdb), shallowEqual);
+  const collection = useSelector(state => selectors.getDenormCollectionWUnits(state.mdb, cId), shallowEqual);
+  const wipMap     = useSelector(state => selectors.getWip(state.mdb), shallowEqual);
+  const errorMap   = useSelector(state => selectors.getErrors(state.mdb), shallowEqual);
 
   const { cuIDs, content_units } = collection || false;
 
@@ -32,7 +33,6 @@ const PlaylistCollectionContainer = ({ cId, t, cuId }) => {
     }
   }, [dispatch, cusForFetch]);
 
-
   useEffect(() => {
     if (!Object.prototype.hasOwnProperty.call(wipMap.collections, cId)) {
       // never fetched as full so fetch now
@@ -40,6 +40,10 @@ const PlaylistCollectionContainer = ({ cId, t, cuId }) => {
     }
   }, [cId, dispatch, wipMap.collections]);
 
+  useEffect(() => {
+    if (cuIDs)
+      dispatch(recommended.fetchViews(cuIDs));
+  }, [cuIDs]);
 
   if (!cId || !collection || isEmpty(content_units)) {
     return null;
