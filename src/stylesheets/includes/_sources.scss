@@ -273,7 +273,7 @@
 
 }
 
-.eng_styles {
+.en_styles {
   font-family: Georgia, “Times New Roman”, Times, serif;
   font-size: 1em;
 
@@ -319,6 +319,64 @@
     line-height: 1.6em;
     text-align: justify-all;
     font-family: inherit;
+  }
+}
+
+/*@import url('https://fonts.googleapis.com/css?family=Montserrat');*/
+.ru_styles {
+  font-family: Helvetica, sans-serif;
+  font-size: 1em;
+  text-align: left;
+  font-weight: normal;
+
+  h1 {
+    font-size: 2.5em;
+    font-family: inherit;
+    font-weight: 100;
+    padding: 1em 0;
+  }
+
+  h2 {
+    font-size: 1.5em;
+    font-family: inherit;
+    font-weight: 500;
+  }
+
+  h3 {
+    font-size: 1.2em;
+    line-height: 1.6em;
+    font-family: inherit;
+    font-style: normal;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  h4 {
+    font-size: 1.3em;
+    line-height: 1.7em;
+    font-family: inherit;
+    font-weight: 500;
+  }
+
+  h5 {
+    font-size: 12em;
+    line-height: 1.4em;
+    margin: 0 5em;
+    font-family: inherit;
+  }
+
+  h6 {
+    font-size: 12em;
+    line-height: 1.4em;
+    margin: 0 5em;
+    font-family: inherit;
+  }
+
+  p {
+    font-size: 1em;
+    line-height: 1.6em;
+    font-family: inherit;
+    font-weight: 300;
   }
 }
 
