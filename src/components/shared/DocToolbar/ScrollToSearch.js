@@ -1,11 +1,10 @@
-import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 
 import { DeviceInfoContext, SessionInfoContext } from '../../../helpers/app-contexts';
-import { LANG_ENGLISH, SCROLL_SEARCH_ID } from '../../../helpers/consts';
+import { SCROLL_SEARCH_ID } from '../../../helpers/consts';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import {
   buildSearchLinkFromSelection,
@@ -155,7 +154,7 @@ const ScrollToSearch = ({ source, label, data, language, urlParams = '', pathnam
       className="search-on-doc--container"
       ref={containerRef}
     >
-      <div className={clsx('source__content', { 'eng_styles': language === LANG_ENGLISH })}>
+      <div className={`source__content ${language}_styles`}>
         {renderShareBar()}
         <div className={`label_bar ${dir}`}>
           {
