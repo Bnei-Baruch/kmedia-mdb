@@ -3,7 +3,7 @@ import { connectRouter } from 'connected-react-router';
 import { reducer as settings } from './modules/settings';
 import { reducer as events } from './modules/events';
 import { reducer as lessons } from './modules/lessons';
-import { reducer as programs } from './modules/preparePage';
+import { reducer as preparePage } from './modules/preparePage';
 import { reducer as publications } from './modules/publications';
 import { reducer as filters } from './modules/filters';
 import { reducer as filtersAside } from './modules/filtersAside';
@@ -28,7 +28,7 @@ import { reducer as trim } from './modules/trim';
 const reducers = history => combineReducers({
   router: connectRouter(history),
   settings,
-  programs,
+  preparePage,
   events,
   lessons,
   publications,

@@ -11,7 +11,7 @@ function* fetchCollectionsList(action) {
   const { namespace, ...params } = action.payload;
   try {
     // fetch once
-    const wasFetched = yield select(state => selectors.wasFetchedByNS(state.programs, namespace));
+    const wasFetched = yield select(state => selectors.wasFetchedByNS(state.preparePage, namespace));
 
     if (wasFetched) return;
 
