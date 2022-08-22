@@ -1,5 +1,4 @@
 import React, { useMemo, useState } from 'react';
-import { withNamespaces } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Checkbox, List } from 'semantic-ui-react';
 import { FN_LOCATIONS } from '../../../helpers/consts';
@@ -9,9 +8,10 @@ import { actions, selectors as filters } from '../../../redux/modules/filters';
 import { selectors as filtersAside } from '../../../redux/modules/filtersAside';
 import { selectors as settings } from '../../../redux/modules/settings';
 import CitiesModal from './CitiesModal';
-import { getTitle } from './helper';
 
-const CountryItem = ({ namespace, id, t }) => {
+const CountryItem = ({ namespace, loc }) => {
+
+  const { id, desc } = loc;
 
   const [open, setOpen] = useState(false);
 
@@ -33,12 +33,10 @@ const CountryItem = ({ namespace, id, t }) => {
     dispatch(actions.setFilterValueMulti(namespace, FN_LOCATIONS, val));
   };
 
-  const title = getTitle(id, t);
-
   const toggleOpen = () => setOpen(!open);
 
   return (<>
-    <List.Item key={title} disabled={stat === 0}>
+    <List.Item key={id} disabled={stat === 0}>
       <List.Content className="tree_item_content">
         <Checkbox
           checked={selected.includes(id)}
@@ -48,7 +46,7 @@ const CountryItem = ({ namespace, id, t }) => {
         />
         <span
           className="tree_item_title">
-          {title}
+          {desc}
         </span>
         <Button
           basic
@@ -67,4 +65,4 @@ const CountryItem = ({ namespace, id, t }) => {
   );
 };
 
-export default withNamespaces()(CountryItem);
+export default CountryItem;

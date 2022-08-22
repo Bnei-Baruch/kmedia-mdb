@@ -59,9 +59,11 @@ const CitiesModal = ({ county, namespace, open, onClose, t }) => {
       </Modal.Header>
       <Modal.Content scrolling>
         <Table collapsing celled={false} basic>
-          {
-            rows.map(renderRow)
-          }
+          <Table.Body>
+            {
+              rows.map(renderRow)
+            }
+          </Table.Body>
         </Table>
       </Modal.Content>
       <Modal.Actions>

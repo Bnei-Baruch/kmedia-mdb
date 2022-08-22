@@ -1,16 +1,26 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
+import { withNamespaces } from 'react-i18next';
+
 import { FN_LOCATIONS } from '../../../helpers/consts';
 import { isEmpty } from '../../../helpers/utils';
 import { selectors } from '../../../redux/modules/filtersAside';
 import FilterHeader from '../FilterHeader';
-import CountriesItem from './CountryItem';
+import CountryItem from './CountryItem';
+import { getTitle } from './helper';
 
-const Locations = ({ namespace }) => {
+const Locations = ({ namespace, t }) => {
   const items = useSelector(state => selectors.getTree(state.filtersAside, namespace, FN_LOCATIONS));
 
   if (isEmpty(items))
     return null;
+
+  const locs = items
+    .filter(id => !!id)
+    .map(id => {
+      const desc = getTitle(id, t);
+      return { id, desc }
+    });
 
   return (
     <FilterHeader
@@ -18,9 +28,9 @@ const Locations = ({ namespace }) => {
       children={
         <>
           {
-            items.filter(id => !!id).map(id =>
-              <CountriesItem namespace={namespace} id={id} key={id} />
-            )
+            locs
+              .sort((t1, t2) => t1.desc < t2.desc ? -1 : 1)
+              .map(loc => <CountryItem namespace={namespace} loc={loc} key={loc.id} />)
           }
         </>
       }
@@ -28,4 +38,4 @@ const Locations = ({ namespace }) => {
   );
 };
 
-export default Locations;
+export default withNamespaces()(Locations);

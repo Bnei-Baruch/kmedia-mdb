@@ -14,11 +14,14 @@ const UnitItem = ({ id, t }) => {
 
   const link        = canonicalLink(cu);
   const collections = Object.values(cu.collections);
+
   return (
-    <List.Item as={Link} to={link} key={id} className="media_item">
-      <UnitLogoWithDuration duration={cu.duration} unitId={cu.id} width={144} />
+    <List.Item key={id} className="media_item">
+      <Link to={link}>
+        <UnitLogoWithDuration duration={cu.duration} unitId={cu.id} width={144} />
+      </Link>
       <div className="media_item__content">
-        <Header content={cu.name} />
+        <Header content={cu.name} as={Link} to={link} />
         {
           !isEmpty(collections) && (
             <div className="additional_links">
