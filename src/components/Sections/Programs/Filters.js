@@ -21,7 +21,7 @@ const Filters = ({ namespace, baseParams, t }) => {
   const [isHydrated, setIsHydrated] = useState(false);
 
   const isReady  = useSelector(state => selectors.isReady(state.filtersAside, namespace));
-  const selected = useSelector(state => filters.getFilters(state.filters, namespace), isEqual);
+  const selected = useSelector(state => filters.getNotEmptyFilters(state.filters, namespace), isEqual);
   const language = useSelector(state => settings.getLanguage(state.settings));
 
   const dispatch = useDispatch();

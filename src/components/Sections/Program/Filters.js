@@ -17,8 +17,8 @@ import TagSourceFilter from '../../FiltersAside/TopicsFilter/TagSourceFilter';
 const Filters = ({ namespace, baseParams, t }) => {
   const [isHydrated, setIsHydrated] = useState(false);
 
-  const isReady      = useSelector(state => selectors.isReady(state.filtersAside, namespace));
-  const selected     = useSelector(state => filters.getFilters(state.filters, namespace), isEqual);
+  const isReady  = useSelector(state => selectors.isReady(state.filtersAside, namespace));
+  const selected = useSelector(state => filters.getNotEmptyFilters(state.filters, namespace), isEqual);
 
   const dispatch = useDispatch();
   useEffect(() => {

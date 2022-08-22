@@ -22,7 +22,7 @@ const ContentTypesFilter = ({ namespace, t }) => {
   const selectedCollections = useSelector(state => filters.getFilterByName(state.filters, namespace, FN_COLLECTION_MULTI));
   const indeterminateCT     = useMemo(() => cCtByUnitCt[getById(selectedCollections?.values[0])?.content_type], [selectedCollections, getById]);
 
-  const itemsMemo = useMemo(() => ids.map(getById).filter(x => !!x), [ids]);
+  const itemsMemo = useMemo(() => ids.map(getById).filter(x => !!x), [ids, getById]);
   const items     = (itemsMemo.sort((a, b) => a.name === b.name ? 0 : a.name > b.name ? 1 : -1)).filter(x => cCtByUnitCt[selectedCT] === x.content_type);
 
   const selected = useSelector(state => filters.getFilterByName(state.filters, namespace, FN_CONTENT_TYPE))?.values || [];

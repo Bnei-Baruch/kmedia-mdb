@@ -169,11 +169,14 @@ const getFilters = (state, namespace) => {
   }));
 };
 
+const getNotEmptyFilters = (state, namespace) => getFilters(state, namespace).filter(x => !isEmpty(x?.values));
+
 const getIsHydrated = (state, namespace) => !!state.isHydrated && !!state.isHydrated[namespace];
 
 export const selectors = {
   getNSFilters,
   getFilters,
+  getNotEmptyFilters,
   getIsHydrated,
   getFilterByName,
 };

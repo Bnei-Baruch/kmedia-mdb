@@ -35,7 +35,7 @@ const MainPage = ({ t }) => {
   const { items, total, wip, err } = useSelector(state => lists.getNamespaceState(state.lists, PAGE_NS_EVENTS)) || {};
   const language                   = useSelector(state => settings.getLanguage(state.settings));
   const pageSize                   = useSelector(state => settings.getPageSize(state.settings));
-  const selected                   = useSelector(state => filters.getFilters(state.filters, PAGE_NS_EVENTS), isEqual);
+  const selected                   = useSelector(state => filters.getNotEmptyFilters(state.filters, PAGE_NS_EVENTS), isEqual);
   const prevSel                    = usePrevious(selected);
 
   const location = useLocation();

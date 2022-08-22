@@ -31,7 +31,7 @@ const ProgramPage = ({ t }) => {
   const { items, total, wip, err } = useSelector(state => lists.getNamespaceState(state.lists, namespace)) || {};
   const language                   = useSelector(state => settings.getLanguage(state.settings));
   const pageSize                   = useSelector(state => settings.getPageSize(state.settings));
-  const selected                   = useSelector(state => filters.getFilters(state.filters, namespace), isEqual);
+  const selected                   = useSelector(state => filters.getNotEmptyFilters(state.filters, namespace), isEqual);
 
   const dispatch   = useDispatch();
   const location   = useLocation();

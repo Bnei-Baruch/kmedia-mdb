@@ -29,7 +29,11 @@ const initialState = ALL_PAGE_NS.reduce((acc, ns) => ({
   }
 }), {});
 
-const onSetLanguage = () => initialState;
+const onSetLanguage = draft => {
+  for (const ns in draft) {
+    draft[ns].collectionsFetched = false;
+  }
+};
 
 const onSSRPrepare = draft => {
   if (draft.err) {

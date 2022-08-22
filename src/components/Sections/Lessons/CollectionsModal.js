@@ -33,7 +33,7 @@ const CollectionsModal = ({ ct, namespace, t }) => {
   const selectedCTFilters = useSelector(state => filters.getFilterByName(state.filters, namespace, FN_CONTENT_TYPE));
   const selectedCT        = useMemo(() => selectedCTFilters?.values || [], [selectedCTFilters]);
 
-  const itemsMemo = useMemo(() => ids.map(getById).filter(x => !!x), [ids]);
+  const itemsMemo = useMemo(() => ids.map(getById).filter(x => !!x), [ids, getById]);
   const items     = (itemsMemo.sort((a, b) => a.name === b.name ? 0 : a.name > b.name ? 1 : -1))
     .filter(x => x.content_type === CT_VIRTUAL_LESSONS);
 
