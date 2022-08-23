@@ -5,14 +5,14 @@ import { useSelector } from 'react-redux';
 import { Container, Grid } from 'semantic-ui-react';
 
 import Helmets from '../../shared/Helmets';
-import Materials from '../Unit/widgets/UnitMaterials/Materials';
+import Materials from '../WithPlayer/widgets/UnitMaterials/Materials';
 import Playlist from '../PlaylistCollection/widgets/Playlist/Playlist';
 import playerHelper from '../../../helpers/player';
 import { selectors as settings } from '../../../redux/modules/settings';
 import AVPlaylistPlayer from '../../AVPlayer/AVPlaylistPlayer';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 
-import Info from '../Unit/widgets/Info/Info';
+import Info from '../WithPlayer/widgets/Info/Info';
 import PlaylistHeader from '../PlaylistCollection/widgets/Playlist/PlaylistHeader';
 import * as shapes from '../../shapes';
 import { MY_NAMESPACE_PLAYLISTS } from '../../../helpers/consts';

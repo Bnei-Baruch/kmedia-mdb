@@ -1,34 +1,33 @@
 import React, { useContext, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import clsx from 'clsx';
 import { useLocation, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Container, Grid } from 'semantic-ui-react';
 
-import { actions, selectors } from '../../../redux/modules/mdb';
-import { selectors as settings } from '../../../redux/modules/settings';
-import WipErr from '../../shared/WipErr/WipErr';
-import Helmets from '../../shared/Helmets';
-import AVBox from '../WithPlayer/widgets/AVBox/AVBox';
-import Materials from '../WithPlayer/widgets/UnitMaterials/Materials';
-import Info from '../WithPlayer/widgets/Info/Info';
-import Recommended from '../WithPlayer/widgets/Recommended/Main/Recommended';
-import playerHelper from '../../../helpers/player';
-import { DeviceInfoContext } from '../../../helpers/app-contexts';
+import { actions, selectors, selectors as mdb } from '../../../../redux/modules/mdb';
+import { selectors as settings } from '../../../../redux/modules/settings';
+import WipErr from '../../../shared/WipErr/WipErr';
+import Helmets from '../../../shared/Helmets';
+import Materials from './../widgets/UnitMaterials/Materials';
+import Info from './../widgets/Info/Info';
+import Recommended from './../widgets/Recommended/Main/Recommended';
+import playerHelper from '../../../../helpers/player';
+import { DeviceInfoContext } from '../../../../helpers/app-contexts';
+import AVPlayer from '../../../AVPlayer/AVPlayer';
 
-const renderPlayer = unit => <AVBox unit={unit} />;
+const SinglePage = ({ t }) => {
 
-const UnitPage = ({ t, currentCollection }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const location           = useLocation();
   const { id }             = useParams();
+  const unit               = useSelector(state => mdb.getDenormContentUnit(state.mdb, id));
 
   const embed      = playerHelper.getEmbedFromQuery(location);
   const uiLanguage = useSelector(state => settings.getLanguage(state.settings));
-  const unit       = useSelector(state => selectors.getDenormContentUnit(state.mdb, id));
-  const wip        = useSelector(state => selectors.getWip(state.mdb).units[id]);
-  const err        = useSelector(state => selectors.getErrors(state.mdb).units[id]);
+
+  const wip = useSelector(state => selectors.getWip(state.mdb).units[id]);
+  const err = useSelector(state => selectors.getErrors(state.mdb).units[id]);
 
   const dispatch = useDispatch();
 
@@ -65,33 +64,29 @@ const UnitPage = ({ t, currentCollection }) => {
             >
               <Grid.Row>
                 <Grid.Column>
-                  {renderPlayer(unit)}
+                  <AVPlayer />
                 </Grid.Column>
               </Grid.Row>
               <Grid.Row>
                 <Grid.Column>
                   <Container className="unit_container">
-                    <Info unit={unit} currentCollection={currentCollection} />
+                    <Info cuId={id} />
                     <Materials unit={unit} />
                   </Container>
                 </Grid.Column>
               </Grid.Row>
             </Grid.Column>
             {!isMobileDevice &&
-            <Grid.Column mobile={16} tablet={6} computer={6}>
-              <Recommended unit={unit} />
-            </Grid.Column>
+              <Grid.Column mobile={16} tablet={6} computer={6}>
+                <Recommended unit={unit} />
+              </Grid.Column>
             }
           </Grid.Row>
         </Grid>
       </>
     ) : (
-      renderPlayer(unit)
+      <AVPlayer />
     );
 };
 
-UnitPage.propTypes = {
-  t: PropTypes.func.isRequired
-};
-
-export default withNamespaces()(UnitPage);
+export default withNamespaces()(SinglePage);
