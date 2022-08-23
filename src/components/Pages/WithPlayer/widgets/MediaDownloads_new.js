@@ -1,3 +1,4 @@
+/*
 import React, { useContext, useState } from 'react';
 import { withNamespaces } from 'react-i18next';
 import { connect } from 'react-redux';
@@ -103,15 +104,15 @@ const getDerivedFilesByContentType = (units, contentLanguage, uiLanguage) => {
 
 const getI18nTypeOverridesKey = unit => {
   switch (unit.content_type) {
-  case CT_LESSON_PART:
-  case CT_FULL_LESSON:
-    return 'lesson';
-  case CT_VIDEO_PROGRAM_CHAPTER:
-    return 'program';
-  case CT_ARTICLE:
-    return 'publication';
-  default:
-    return '';
+    case CT_LESSON_PART:
+    case CT_FULL_LESSON:
+      return 'lesson';
+    case CT_VIDEO_PROGRAM_CHAPTER:
+      return 'program';
+    case CT_ARTICLE:
+      return 'publication';
+    default:
+      return '';
   }
 };
 
@@ -132,7 +133,7 @@ const MediaDownloads = props => {
   const rows        = getRows(byType, t, typeOverrides);
   const derivedRows = getDerivedRows(derivedGroups, language, t, typeOverrides, publisherById);
 
-  /*
+  /!*
 
 
     static getDerivedStateFromProps(props, state) {
@@ -176,21 +177,21 @@ const MediaDownloads = props => {
       );
     }
 
-  */
+  *!/
 
   const handleChangeLanguage = (e, l) => {
     setLanguage(l);
   };
 
   const handleCopied = url => {
-    /*setState({ isCopyPopupOpen: { ...state.isCopyPopupOpen, [url]: true } }, () => {
+    /!*setState({ isCopyPopupOpen: { ...state.isCopyPopupOpen, [url]: true } }, () => {
       setTimeout(() => setState({
         isCopyPopupOpen: {
           ...state.isCopyPopupOpen,
           [url]: false
         }
       }), POPOVER_CONFIRMATION_TIMEOUT);
-    });*/
+    });*!/
   };
 
   const renderRow = (file, label, t) => {
@@ -373,3 +374,4 @@ export default connect(state => (
     contentLanguage: settings.getContentLanguage(state.settings),
   })
 )(withNamespaces()(MediaDownloads));
+*/
