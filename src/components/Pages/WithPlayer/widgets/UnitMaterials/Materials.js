@@ -16,7 +16,7 @@ import TabsMenu from '../../../../shared/TabsMenu';
 import Summary from './Summary/Summary';
 import Sources from './Sources/Sources';
 import Sketches from './Sketches';
-import MediaDownloads from '../Downloads/MediaDownloads';
+import MediaDownloads from '../MediaDownloads';
 import TranscriptionContainer from './Transcription/TranscriptionContainer';
 import { isEmpty, noop } from '../../../../../helpers/utils';
 import { ClientChroniclesContext, DeviceInfoContext } from '../../../../../helpers/app-contexts';

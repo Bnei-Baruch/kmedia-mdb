@@ -5,14 +5,12 @@ import { useSelector } from 'react-redux';
 import AVPlayer from '../../../AVPlayer/AVPlayer';
 import Helmets from '../../../shared/Helmets';
 import PlaylistHeader from './PlaylistHeader';
-import Info from '../../Unit/widgets/Info/Info';
-import Materials from '../../Unit/widgets/UnitMaterials/Materials';
+import Info from '../widgets/Info/Info';
+import Materials from '../widgets/UnitMaterials/Materials';
 import Playlist from './Playlist';
 import { selectors as settings } from '../../../../redux/modules/settings';
-import Recommended from '../../Unit/widgets/Recommended/Main/Recommended';
+import Recommended from '../widgets/Recommended/Main/Recommended';
 import { selectors as mdb } from '../../../../redux/modules/mdb';
-import ShareFormDesktop from '../../../AVPlayer/Share/ShareFormDesktop';
-import { PLAYER_OVER_MODES } from '../../../../helpers/consts';
 import { selectors as player } from '../../../../redux/modules/player';
 
 const PlaylistPage = ({ cId, cuId }) => {

@@ -11,7 +11,8 @@ import {
   CT_FULL_LESSON,
   CT_KITEI_MAKOR,
   CT_LELO_MIKUD,
-  CT_LESSON_PART, CT_LIKUTIM,
+  CT_LESSON_PART,
+  CT_LIKUTIM,
   CT_PUBLICATION,
   CT_RESEARCH_MATERIAL,
   CT_VIDEO_PROGRAM_CHAPTER,
@@ -20,15 +21,15 @@ import {
   MT_TEXT,
   MT_VIDEO,
   VS_NAMES
-} from '../../../../../helpers/consts';
-import { selectSuitableLanguage } from '../../../../../helpers/language';
-import { physicalFile } from '../../../../../helpers/utils';
-import { selectors as settings } from '../../../../../redux/modules/settings';
-import { selectors } from '../../../../../redux/modules/publications';
-import * as shapes from '../../../../shapes';
-import { DeviceInfoContext } from '../../../../../helpers/app-contexts';
+} from '../../../../helpers/consts';
+import { selectSuitableLanguage } from '../../../../helpers/language';
+import { physicalFile } from '../../../../helpers/utils';
+import { selectors as settings } from '../../../../redux/modules/settings';
+import { selectors } from '../../../../redux/modules/publications';
+import * as shapes from '../../../shapes';
+import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import classNames from 'classnames';
-import MenuLanguageSelector from '../../../../Language/Selector/MenuLanguageSelector';
+import MenuLanguageSelector from '../../../Language/Selector/MenuLanguageSelector';
 
 const MEDIA_ORDER = [
   MT_VIDEO,
@@ -89,19 +90,6 @@ class MediaDownloads extends Component {
 
     return { groups, derivedGroups, isCopyPopupOpen, languages, language, uiLanguage, contentLanguage, unit };
 
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    const { unit, contentLanguage, language: uiLanguage } = nextProps;
-    const { props, state }                                = this;
-
-    return !(
-      state.language === nextState.language
-      && uiLanguage === props.language
-      && contentLanguage === props.contentLanguage
-      && isEqual(unit, props.unit)
-      && isEqual(state.isCopyPopupOpen, nextState.isCopyPopupOpen)
-    );
   }
 
   static getFilesByLanguage = (files = [], contentLanguage, uiLanguage) => {
@@ -170,17 +158,30 @@ class MediaDownloads extends Component {
 
   static getI18nTypeOverridesKey = unit => {
     switch (unit.content_type) {
-      case CT_LESSON_PART:
-      case CT_FULL_LESSON:
-        return 'lesson';
-      case CT_VIDEO_PROGRAM_CHAPTER:
-        return 'program';
-      case CT_ARTICLE:
-        return 'publication';
-      default:
-        return '';
+    case CT_LESSON_PART:
+    case CT_FULL_LESSON:
+      return 'lesson';
+    case CT_VIDEO_PROGRAM_CHAPTER:
+      return 'program';
+    case CT_ARTICLE:
+      return 'publication';
+    default:
+      return '';
     }
   };
+
+  shouldComponentUpdate(nextProps, nextState) {
+    const { unit, contentLanguage, language: uiLanguage } = nextProps;
+    const { props, state }                                = this;
+
+    return !(
+      state.language === nextState.language
+      && uiLanguage === props.language
+      && contentLanguage === props.contentLanguage
+      && isEqual(unit, props.unit)
+      && isEqual(state.isCopyPopupOpen, nextState.isCopyPopupOpen)
+    );
+  }
 
   handleChangeLanguage = (e, language) => {
     this.setState({ language });
@@ -265,8 +266,8 @@ class MediaDownloads extends Component {
         {languages.length > 1 ?
           <Grid container padded={false} columns={isMobileDevice ? 1 : 2} className={classNames({ 'padding_r_l_0': !isMobileDevice })}>
             {!isMobileDevice &&
-            <Grid.Column width={12}>
-            </Grid.Column>}
+              <Grid.Column width={12}>
+              </Grid.Column>}
             <Grid.Column width={isMobileDevice ? 16 : 4} textAlign={'right'} className={classNames({ 'padding_r_l_0': !isMobileDevice })}>
               <MenuLanguageSelector
                 languages={languages}

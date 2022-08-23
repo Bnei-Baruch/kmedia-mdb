@@ -14,12 +14,12 @@ import { usePrevious, randomizeArray } from '../../../helpers/utils';
 import playerHelper from '../../../helpers/player';
 import { CT_SONGS } from '../../../helpers/consts';
 import Helmets from '../../shared/Helmets';
-import Info from '../Unit/widgets/Info/Info';
-import Recommended from '../Unit/widgets/Recommended/Main/Recommended';
+import Info from '../WithPlayer/widgets/Info/Info';
+import Recommended from '../WithPlayer/widgets/Recommended/Main/Recommended';
 import Playlist from './widgets/Playlist/Playlist';
 import PlaylistHeader from './widgets/Playlist/PlaylistHeader';
 import AVPlaylistPlayer from '../../AVPlayer/AVPlaylistPlayer';
-import Materials from '../Unit/widgets/UnitMaterials/Materials';
+import Materials from '../WithPlayer/widgets/UnitMaterials/Materials';
 
 // Don't recommend lesson preparation, skip to next unit.
 const getRecommendUnit = (unit, collection, items) => {
