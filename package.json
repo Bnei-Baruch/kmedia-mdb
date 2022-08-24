@@ -30,13 +30,8 @@
     "test:coverage": "react-scripts test --verbose --watchAll --coverage",
     "lint": "yarn run eslint src",
     "lint-fix": "yarn run lint --fix",
-    "postinstall": "patch-package"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "",
-      "pre-push": "yarn run lint-fix"
-    }
+    "postinstall": "patch-package",
+    "prepare": "husky install"
   },
   "devDependencies": {
     "@babel/traverse": "^7.18.13",
@@ -53,7 +48,7 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "express-watcher": "^1.0.3",
     "http-proxy-middleware": "^2.0.6",
-    "husky": "^4.3.0",
+    "husky": "^8.0.0",
     "jest-axe": "^4.0.0",
     "jest-environment-enzyme": "^7.0.2",
     "jest-enzyme": "^7.0.2",
