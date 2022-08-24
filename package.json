@@ -30,7 +30,6 @@
     "test:coverage": "react-scripts test --verbose --watchAll --coverage",
     "lint": "yarn run eslint src",
     "lint-fix": "yarn run lint --fix",
-    "postinstall": "patch-package",
     "prepare": "husky install"
   },
   "devDependencies": {
@@ -118,7 +117,6 @@
     "mock-local-storage": "^1.1.15",
     "moment": "^2.29.2",
     "moment-duration-format": "^2.2.2",
-    "patch-package": "^6.2.2",
     "postinstall-postinstall": "^2.1.0",
     "prop-types": "^15.6.1",
     "qs": "^6.9.0",
