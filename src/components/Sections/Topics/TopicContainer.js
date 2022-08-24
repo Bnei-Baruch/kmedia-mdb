@@ -173,7 +173,11 @@ const TopicContainer = ({ t }) => {
             children
               .filter(isIncluded)
               .map(cId => (
-                <List.Item key={cId} className={filteredById[cId].visible ? '' : 'hide-topic'}>
+                <List.Item key={cId} className={filteredById[cId].visible
+                  ? isNotEmptyArray(filteredById[cId].children)
+                    ? 'subTopic'
+                    : ''
+                  : 'hide-topic'}>
                   {renderSubTopic(filteredById[cId])}
                 </List.Item>
               ))

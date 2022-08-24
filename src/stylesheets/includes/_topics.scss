@@ -80,6 +80,10 @@
       .item {
         @include item-font;
 
+        &.subTopic {
+          margin-bottom: 0 !important;
+        }
+
         &.hide-topic {
           display: none !important;
         }
