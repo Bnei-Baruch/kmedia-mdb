@@ -46,7 +46,7 @@ RUN yarn install --frozen-lockfile && \
     rm -rf node_modules && \
     yarn install --production --frozen-lockfile
 
-FROM node:15-slim
+FROM node:16-slim
 
 ARG cdn_url
 ARG public_base
