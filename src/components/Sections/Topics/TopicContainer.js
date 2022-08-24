@@ -201,7 +201,7 @@ const TopicContainer = ({ t }) => {
       isNotEmptyArray(children)
         ? (
           <div key={id}>
-            { renderLeaf(node) }
+            { renderLeaf(node, true) }
             { renderChildren(node) }
           </div>
         )
