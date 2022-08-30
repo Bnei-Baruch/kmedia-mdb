@@ -13,7 +13,7 @@
     "build:css": "echo '>>> Building CSS'; yarn critical-css && yarn apply-critical-css",
     "build:svgs": "echo '>>> Building Icons...'; npx @svgr/cli -d src/images/ --ignore-existing src/images/",
     "build:scripts": "echo '>>> Building Scripts...'; react-scripts build",
-    "analyze": "yarn build:local && source-map-explorer build/static/js/main.*",
+    "analyze": "yarn build:production && source-map-explorer build/static/js/main.*",
     "start-js": "react-scripts start",
     "start-server:live": "cross-env NODE_ENV=development npx nodemon server/index.js",
     "start-server": "cross-env NODE_ENV=development node server/index.js",
