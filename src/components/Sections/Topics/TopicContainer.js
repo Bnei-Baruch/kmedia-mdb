@@ -136,6 +136,8 @@ const TopicContainer = ({ t }) => {
 
   const isIncluded = id => !!filteredById[id];
 
+  const isIncludedWithChildren = id => !!filteredById[id] && hasChildren(filteredById[id]);
+
   const handleShowMoreClick = nodeId => {
     setExpandedNodes(expNodes => {
       // a new set has to be created to update the state
@@ -149,65 +151,92 @@ const TopicContainer = ({ t }) => {
     });
   };
 
-  const renderLeaf = node => {
-    const s = statsById(node.id);
-    return <Link to={`/topics/${node.id}`}>
-      {node.label}
+  const renderLeaf = (node, withStats) => {
+    const { id, label } = node;
+    const s = withStats ? statsById(id) : null;
+
+    return <Link to={`/topics/${id}`}>
+      {label}
       {s ? ` (${s})` : ''}
     </Link>;
   };
 
-  const renderNode = (node, grandchildrenClass = '') => {
+  const renderChildren = node => {
+    const { id, children } = node;
+    const showExpandButton = children?.length > 3;
+    const expanded         = expandedNodes.has(id);
+
+    return (
+      <>
+        <List>
+          {
+            children
+              .filter(isIncluded)
+              .map(cId => (
+                <List.Item key={cId} className={filteredById[cId].visible
+                  ? isNotEmptyArray(filteredById[cId].children)
+                    ? 'subTopic'
+                    : ''
+                  : 'hide-topic'}>
+                  {renderSubTopic(filteredById[cId])}
+                </List.Item>
+              ))
+          }
+        </List>
+        {
+          showExpandButton &&
+            <Button
+              basic
+              icon={expanded ? 'minus' : 'plus'}
+              className={`topics__button ${showExpandButton ? '' : 'hide-button'}`}
+              size="mini"
+              content={t(`topics.show-${expanded ? 'less' : 'more'}`)}
+              onClick={() => handleShowMoreClick(id)}
+            />
+        }
+      </>
+    )
+  }
+
+  const renderSubTopic = node => {
+    const { id, children } = node;
+
+    return (
+      isNotEmptyArray(children)
+        ? (
+          <div key={id}>
+            { renderLeaf(node, true) }
+            { renderChildren(node) }
+          </div>
+        )
+        : renderLeaf(node, true)
+    )
+  }
+
+  const renderTopicCard = node => {
     if (!node) {
       return null;
     }
 
-    const { id, label, children } = node;
-    const showExpandButton        = children?.length > 3;
-    const expanded                = expandedNodes.has(id);
+    const { id, children } = node;
 
     return (
       <Fragment key={`f-${id}`}>
         {
           isNotEmptyArray(children)
             ? (
-              <div key={id} className={`topics__card ${grandchildrenClass}`}>
+              <div key={id} className={`topics__card`}>
                 <Header as="h4" className="topics__subtitle">
-                  <Link to={`/topics/${id}`}>
-                    {label}
-                  </Link>
+                  {renderLeaf(node)}
                 </Header>
-                <List>
-                  {
-                    children
-                      .filter(isIncluded)
-                      .map(cId => (
-                        <List.Item key={cId} className={filteredById[cId].visible ? '' : 'hide-topic'}>
-                          {renderNode(filteredById[cId], 'grandchildren')}
-                        </List.Item>
-                      ))
-                  }
-                </List>
-                {
-                  showExpandButton &&
-                  <Button
-                    basic
-                    icon={expanded ? 'minus' : 'plus'}
-                    className={`topics__button ${showExpandButton ? '' : 'hide-button'}`}
-                    size="mini"
-                    content={t(`topics.show-${expanded ? 'less' : 'more'}`)}
-                    onClick={() => handleShowMoreClick(id)}
-                  />
-                }
+                { renderChildren(node) }
               </div>
             )
-            : renderLeaf(node)
+            : renderLeaf(node, true)
         }
       </Fragment>
     );
   };
-
-  const renderSubHeader = node => hasChildren(node) ? renderNode(node) : null;
 
   const renderBranch = rootId => {
     const rootNode = filteredById[rootId];
@@ -220,8 +249,8 @@ const TopicContainer = ({ t }) => {
         <div className="topics__list">
           {
             rootNode.children
-              .filter(isIncluded)
-              .map(id => renderSubHeader(filteredById[id]))
+              .filter(isIncludedWithChildren)
+              .map(id => renderTopicCard(filteredById[id]))
           }
         </div>
       </Grid.Column>
