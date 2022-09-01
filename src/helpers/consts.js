@@ -314,8 +314,8 @@ export const EVENT_PREPARATION_TAG = 'Salvk5yF';
 
 export const DATE_FORMAT = 'YYYY-MM-DD';
 
-export const EVENT_TYPES = [CT_CONGRESS, CT_HOLIDAY, CT_PICNIC, CT_UNITY_DAY];
-export const SORTABLE_TYPES = [CT_SONGS, CT_LESSONS_SERIES, CT_HOLIDAY]
+export const EVENT_TYPES    = [CT_CONGRESS, CT_HOLIDAY, CT_PICNIC, CT_UNITY_DAY];
+export const SORTABLE_TYPES = [CT_SONGS, CT_LESSONS_SERIES, CT_HOLIDAY];
 
 // Required for Sections filter.
 export const COLLECTION_LESSONS_TYPE      = [CT_DAILY_LESSON, CT_SPECIAL_LESSON, /* CT_CHILDREN_LESSONS, */ CT_WOMEN_LESSONS, CT_VIRTUAL_LESSONS, CT_LECTURE_SERIES, CT_LESSONS_SERIES];
@@ -438,10 +438,28 @@ export const BS_TAAS_PARTS = {
   '38p1N7aA': 1085,
   'h5CQQmY5': 1099,
   'awbSqHpG': 1103,
-  'NpLQT0LX': 1127,
-  'AUArdCkH': 1297,
-  'tit6XNAo': 1493,
-  'FaKUG7ru': 1687,
+  'OyVZGDKM': 1127,
+  'nO9GGoAX': 1244,
+  'XCjEhLDK': 1249,
+  'ga3l0sjf': 1252,
+  '0quwYeDZ': 1278,
+  '1uquRur7': 1282,
+  'TndRK0X8': 1297,
+  's7NzunI1': 1436,
+  'w7qMVrQ0': 1448,
+  'jdYR1m8g': 1451,
+  'DDYm2kER': 1478,
+  'JRgKUhzy': 1480,
+  'LrYhEexG': 1493,
+  '9Bh6AztV': 1621,
+  '2mI59NJA': 1625,
+  'oB3J4iLO': 1658,
+  'T2hJcy9X': 1662,
+  'It7YBuab': 1687,
+  'feo7h6Fe': 1820,
+  'PtJHZD93': 1823,
+  'ur26eJ0c': 1850,
+  'vpnmTC4W': 1857,
   'SU8TzXty': 1887,
   'li1hvo4P': 2034,
   'tcBbUnBZ': 2040,
