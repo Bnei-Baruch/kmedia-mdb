@@ -27,6 +27,7 @@ app.use(middleware.errorHandler);
 app.use(helmet({
   frameguard: false,          // we want to allow embed in iframes
   dnsPrefetchControl: false,  // we use dns prefetch in index.html to speed things up.
+  crossOriginEmbedderPolicy: false,
   contentSecurityPolicy: {
     directives: {
       'default-src': [
