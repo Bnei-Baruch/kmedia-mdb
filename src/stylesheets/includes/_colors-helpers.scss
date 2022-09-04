@@ -6,7 +6,7 @@ $olive: #b5cc18;
 $green: #21ba45;
 $teal: #00b5ad;
 $blue: #2185d0;
-// $blue: #00aeef; //bb style guide blue
+// $blue: #00aeef; //bb style guide blue 
 $violet: #6435c9;
 $purple: #a333c8;
 $pink: #e03997;
@@ -44,7 +44,7 @@ $text-colors: (
 );
 
 @each $colorname, $colorvalue in $text-colors {
-  .text.#{"" + $colorname} {
+  .text.#{$colorname} {
     color: #{$colorvalue};
   }
 }
