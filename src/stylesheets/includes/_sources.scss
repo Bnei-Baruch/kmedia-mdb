@@ -329,6 +329,10 @@
   text-align: left;
   font-weight: normal;
 
+  strong{
+    font-weight: bold;
+  }
+
   h1 {
     font-size: 2.5em;
     font-family: inherit;
@@ -354,7 +358,7 @@
     font-weight: 700;
     text-transform: uppercase;
     margin: 0;
-    padding: 0 0 2.5em 0;
+    padding: 0 0 2em 0;
   }
 
   h4 {
@@ -372,10 +376,16 @@
   }
 
   h6 {
-    font-size: 1.3em;
+    font-size: 1.2em;
     line-height: 1.4em;
     padding: 0 0 2em 2em;
     margin: 0;
+    font-family: inherit;
+  }
+
+  h7 {
+    font-size: 1em;
+    font-weight: bold;
     font-family: inherit;
   }
 
