@@ -102,36 +102,36 @@ const playableItem = (unit, mediaType, uiLanguage, contentLanguage) => {
 
 const getCollectionPartNumber = (unitId, ccuNames) => {
   const defaultVal = 1000000;
-  const num = Number(ccuNames[unitId]);
+  const num        = Number(ccuNames[unitId]);
 
   // put items with not valid collection part numbers at the end
   return (isNaN(num) || num <= 0) ? defaultVal : num;
-}
+};
 
 const sortUnits = (u1, u2, collection) => {
   const { content_type, ccuNames } = collection;
-  const val1 = getCollectionPartNumber(u1.id, ccuNames);
-  const val2 = getCollectionPartNumber(u2.id, ccuNames);
+  const val1                       = getCollectionPartNumber(u1.id, ccuNames);
+  const val2                       = getCollectionPartNumber(u2.id, ccuNames);
 
   // sort songs in desc order, but the rest asc
   let result = content_type === CT_SONGS ? val2 - val1 : val1 - val2;
 
   // if equal part number, sort by date and then name
   if (result === 0) {
-    result = strCmp(u1.film_date, u2.film_date)
+    result = strCmp(u1.film_date, u2.film_date);
 
     if (result === 0)
       result = strCmp(u1.name, u2.name);
   }
 
   return result;
-}
+};
 
 const playlist = (collection, mediaType, contentLanguage, uiLanguage) => {
   const { start_date: sDate, end_date: eDate, content_units: units = [], content_type, name } = collection || {};
 
   if (isEmpty(units)) {
-    return null
+    return null;
   }
 
   // initially sort units by episode/song number
@@ -219,7 +219,7 @@ const playlistFromUnits = (collection, mediaType, contentLanguage, uiLanguage) =
 
 const getMediaTypeFromQuery = (location, defaultMediaType) => {
   if (!defaultMediaType) {
-    defaultMediaType = restorePreferredMediaType()
+    defaultMediaType = restorePreferredMediaType();
   }
 
   const query = getQuery(location);
@@ -227,8 +227,8 @@ const getMediaTypeFromQuery = (location, defaultMediaType) => {
   return mt === MT_VIDEO || mt === MT_AUDIO ? mt : defaultMediaType;
 };
 
-const setMediaTypeInQuery = (history, mediaType = MT_VIDEO) => {
-  updateQuery(history, query => ({
+const setMediaTypeInQuery = (navigate, location, mediaType = MT_VIDEO) => {
+  updateQuery(navigate, location, query => ({
     ...query,
     mediaType
   }));
@@ -240,8 +240,8 @@ const getLanguageFromQuery = (location, fallbackLanguage = LANG_ENGLISH) => {
   return language.toLowerCase();
 };
 
-const setLanguageInQuery = (history, language) =>
-  updateQuery(history, query => ({
+const setLanguageInQuery = (navigate, location, language) =>
+  updateQuery(navigate, location, query => ({
     ...query,
     language
   }));
@@ -252,11 +252,8 @@ const getActivePartFromQuery = (location, def = 0) => {
   return Number.isNaN(p) || p < 0 ? def : p;
 };
 
-const setActivePartInQuery = (history, ap) =>
-  updateQuery(history, query => ({
-    ...query,
-    ap
-  }));
+const setActivePartInQuery = (navigate, location, ap) =>
+  updateQuery(navigate, location, query => ({ ...query, ap }));
 
 const linkWithoutActivePart = location => {
   const { search } = getQuery(location);
@@ -268,12 +265,12 @@ const getEmbedFromQuery = location => {
   return query.embed === '1';
 };
 
-const switchAV = (selectedItem, history) => {
+const switchAV = (selectedItem, navigate, location) => {
   if (selectedItem.mediaType === MT_AUDIO && selectedItem.availableMediaTypes.includes(MT_VIDEO)) {
-    setMediaTypeInQuery(history, MT_VIDEO);
+    setMediaTypeInQuery(navigate, location, MT_VIDEO);
     persistPreferredMediaType(MT_VIDEO);
   } else if (selectedItem.mediaType === MT_VIDEO && selectedItem.availableMediaTypes.includes(MT_AUDIO)) {
-    setMediaTypeInQuery(history, MT_AUDIO);
+    setMediaTypeInQuery(navigate, location, MT_AUDIO);
     persistPreferredMediaType(MT_AUDIO);
   }
 };

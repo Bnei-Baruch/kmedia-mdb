@@ -68,7 +68,7 @@ const languageFn        = state => settings.getLanguage(state.settings);
 const wipFn             = state => selectors.getWip(state.home);
 const errFn             = state => selectors.getError(state.home);
 
-const HomePageContainer = ({ location, t }) => {
+const HomePageContainer = ({ t }) => {
   const dispatch  = useDispatch();
   const fetchData = useCallback(flag => dispatch(actions.fetchData(flag)), [dispatch]);
 
@@ -108,20 +108,16 @@ const HomePageContainer = ({ location, t }) => {
 
   return (
     <HomePage
-      location={location}
       latestLesson={latestLesson}
       latestItems={[...latestUnits, ...latestCos]}
       latestBlogPosts={latestBlogPosts}
       latestTweets={latestTweets}
       banners={banners}
-      language={language}
-      t={t}
     />
   );
 };
 
 HomePageContainer.propTypes = {
-  location: shapes.HistoryLocation.isRequired,
   t: PropTypes.func.isRequired
 };
 

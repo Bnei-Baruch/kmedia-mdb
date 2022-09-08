@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { withNamespaces } from 'react-i18next';
-import { withRouter } from 'react-router-dom';
 import { Grid } from 'semantic-ui-react';
 import isEqual from 'react-fast-compare';
 
@@ -10,10 +9,11 @@ import { MT_AUDIO, MT_VIDEO } from '../../../../../helpers/consts';
 import playerHelper from '../../../../../helpers/player';
 import * as shapes from '../../../../shapes';
 import AVPlaylistPlayer from '../../../../AVPlayer/AVPlaylistPlayer';
+import { withRouter } from '../../../../../helpers/withRouterPatch';
 
 class PlaylistAVBox extends Component {
   static propTypes = {
-    history: shapes.History.isRequired,
+    navigate: PropTypes.func.isRequired,
     location: shapes.HistoryLocation.isRequired,
     collection: shapes.GenericCollection.isRequired,
     // There is no consensus on what the right prototype would be
@@ -33,10 +33,10 @@ class PlaylistAVBox extends Component {
 
   constructor(props) {
     super(props);
-    const { collection, uiLanguage, contentLanguage, history, location, onSelectedChange } = props;
+    const { collection, uiLanguage, contentLanguage, navigate, location, onSelectedChange } = props;
 
     const preferredMT    = playerHelper.restorePreferredMediaType();
-    const mediaType      = playerHelper.getMediaTypeFromQuery(history.location, preferredMT);
+    const mediaType      = playerHelper.getMediaTypeFromQuery(location, preferredMT);
     const playerLanguage = playerHelper.getLanguageFromQuery(location, contentLanguage);
     const playlist       = playerHelper.playlist(collection, mediaType, playerLanguage, uiLanguage);
     let selected         = playerHelper.getActivePartFromQuery(location);
@@ -44,7 +44,7 @@ class PlaylistAVBox extends Component {
     if (Array.isArray(playlist.items) && playlist.items.length > 0) {
       if (selected >= playlist.items.length) {
         selected = 0;
-        playerHelper.setActivePartInQuery(history, selected);
+        playerHelper.setActivePartInQuery(navigate, location, selected);
       }
 
       onSelectedChange(playlist.items[selected].unit);
@@ -56,7 +56,7 @@ class PlaylistAVBox extends Component {
       embed: playerHelper.getEmbedFromQuery(location)
     };
 
-    playerHelper.setLanguageInQuery(history, playlist.language);
+    playerHelper.setLanguageInQuery(navigate, location, playlist.language);
   }
 
   static getDerivedStateFromProps(nextProps, state) {
@@ -86,7 +86,7 @@ class PlaylistAVBox extends Component {
 
     if (nSelected !== selected) {
       // case # 1
-      playerHelper.setActivePartInQuery(nextProps.history, nSelected);
+      playerHelper.setActivePartInQuery(nextProps.navigate, nextProps.location, nSelected);
       nextProps.onSelectedChange(nPlaylist.items[nSelected].unit);
       return { selected: nSelected, playlist: nPlaylist };
     }
@@ -140,32 +140,32 @@ class PlaylistAVBox extends Component {
   }
 
   handleSelectedChange = selected => {
-    const { history } = this.props;
-    playerHelper.setActivePartInQuery(history, selected);
+    const { navigate, location } = this.props;
+    playerHelper.setActivePartInQuery(navigate, location, selected);
   };
 
   handleLanguageChange = (e, language) => {
-    const { history } = this.props;
-    playerHelper.setLanguageInQuery(history, language);
+    const { navigate, location } = this.props;
+    playerHelper.setLanguageInQuery(navigate, location, language);
   };
 
   handleSwitchAV = () => {
-    const { history }            = this.props;
+    const { navigate, location } = this.props;
     const { playlist, selected } = this.state;
 
     const s = playlist.items[selected];
     if (s.mediaType === MT_AUDIO && s.availableMediaTypes.includes(MT_VIDEO)) {
-      playerHelper.setMediaTypeInQuery(history, MT_VIDEO);
+      playerHelper.setMediaTypeInQuery(navigate, location, MT_VIDEO);
       playerHelper.persistPreferredMediaType(MT_VIDEO);
     } else if (s.mediaType === MT_VIDEO && s.availableMediaTypes.includes(MT_AUDIO)) {
-      playerHelper.setMediaTypeInQuery(history, MT_AUDIO);
+      playerHelper.setMediaTypeInQuery(navigate, location, MT_AUDIO);
       playerHelper.persistPreferredMediaType(MT_AUDIO);
     }
   };
 
   render() {
-    const { PlayListComponent, uiLanguage, nextLink, prevLink, history } = this.props;
-    const { playlist, selected, embed }                                  = this.state;
+    const { PlayListComponent, uiLanguage, nextLink, prevLink } = this.props;
+    const { playlist, selected, embed }                         = this.state;
 
     if (!playlist
       || !Array.isArray(playlist.items)
@@ -191,10 +191,9 @@ class PlaylistAVBox extends Component {
           onSelectedChange={this.handleSelectedChange}
           onLanguageChange={this.handleLanguageChange}
           onSwitchAV={this.handleSwitchAV}
-          history={history}
         />
       </Grid.Column>
-      { !embed &&
+      {!embed &&
         <Grid.Column id="avbox__playlist" className="avbox__playlist" mobile={16} tablet={6} computer={6}>
           <PlayListComponent
             playlist={playlist}
@@ -206,7 +205,7 @@ class PlaylistAVBox extends Component {
           />
         </Grid.Column>
       }
-    </Grid.Row>
+    </Grid.Row>;
   }
 }
 

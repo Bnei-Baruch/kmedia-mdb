@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router';
 import { withNamespaces } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
@@ -15,7 +15,7 @@ import { DeviceInfoContext } from '../../../../../helpers/app-contexts';
 const CollectionDatePicker = ({ collection, t }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const { film_date, id }  = collection;
-  const history            = useHistory();
+  const navigate           = useNavigate();
 
   const dispatch = useDispatch();
   const language = useSelector(state => settings.getLanguage(state.settings));
@@ -26,10 +26,10 @@ const CollectionDatePicker = ({ collection, t }) => {
   useEffect(() => {
     if (co && co.id !== id) {
       const link = canonicalLink(co.content_units[0]);
-      history.push(`/${language}${link}`);
+      navigate(`/${language}${link}`);
       dispatch(actions.nullDatepickerCO());
     }
-  }, [coID]);
+  }, [coID, navigate, dispatch]);
 
   const fetchNextCO = date => {
     const filmDate = moment.utc(date);

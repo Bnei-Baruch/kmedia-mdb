@@ -16,14 +16,26 @@ import { ClientChroniclesContext } from './app-contexts';
 const ACTIVITY_EVENTS = ['mousedown', 'mousemove', 'keydown', 'scroll', 'touchstart'];
 
 const FLOWS = [
-  { start: 'page-enter',               end: 'page-leave',                 subFlows: ['recommend', 'search', 'autocomplete', 'user-inactive', 'download'] },
-  { start: 'unit-page-enter',          end: 'unit-page-leave',            subFlows: ['player-play', 'recommend', 'search', 'autocomplete', 'user-inactive', 'download'] },
-  { start: 'collection-page-enter',    end: 'collection-page-leave',      subFlows: ['collection-unit-selected', 'recommend', 'search', 'autocomplete', 'user-inactive', 'download'] },
+  {
+    start: 'page-enter',
+    end: 'page-leave',
+    subFlows: ['recommend', 'search', 'autocomplete', 'user-inactive', 'download']
+  },
+  {
+    start: 'unit-page-enter',
+    end: 'unit-page-leave',
+    subFlows: ['player-play', 'recommend', 'search', 'autocomplete', 'user-inactive', 'download']
+  },
+  {
+    start: 'collection-page-enter',
+    end: 'collection-page-leave',
+    subFlows: ['collection-unit-selected', 'recommend', 'search', 'autocomplete', 'user-inactive', 'download']
+  },
   { start: 'collection-unit-selected', end: 'collection-unit-unselected', subFlows: ['player-play', 'user-inactive'] },
-  { start: 'player-play',              end: 'player-stop',                subFlows: ['mute-unmute', 'user-inactive'] },
-  { start: 'recommend',                end: '',                           subFlows: ['recommend-selected'] },
-  { start: 'search',                   end: '',                           subFlows: ['search-selected'] },
-  { start: 'autocomplete',             end: '',                           subFlows: ['autocomplete-selected'] },
+  { start: 'player-play', end: 'player-stop', subFlows: ['mute-unmute', 'user-inactive'] },
+  { start: 'recommend', end: '', subFlows: ['recommend-selected'] },
+  { start: 'search', end: '', subFlows: ['search-selected'] },
+  { start: 'autocomplete', end: '', subFlows: ['autocomplete-selected'] },
 ];
 
 const PREV_HREF_EVENTS = ['page-leave', 'unit-page-leave', 'collection-page-leave', 'recommend-selected', 'search-selected'];
@@ -125,20 +137,20 @@ export default class ClientChronicles {
           this.appendPage('leave');
         }
 
-        this.prevPathname = this.currentPathname;
-        this.currentPathname = historyEvent.pathname;
+        this.prevPathname    = this.currentPathname;
+        this.currentPathname = historyEvent.location.pathname;
         this.appendPage('enter');
       }
 
       const currentUrl = new URL(this.currentHref);
       // Ignore params in comparison of prev page.
       if (`${window.location.origin}${window.location.pathname}` !== `${currentUrl.origin}${currentUrl.pathname}`) {
-        this.prevHref = this.currentHref;
+        this.prevHref    = this.currentHref;
         this.currentHref = window.location.href;
       }
     });
 
-    this.uiLanguage = '';
+    this.uiLanguage      = '';
     this.contentLanguage = '';
   }
 
@@ -344,7 +356,7 @@ export default class ClientChronicles {
       // Ending event of a flow.
       // 1. We don't set flowType for end, just for subflow (see else).
       // 2. We delete the start event so that other events won't use it as flow-event.
-      const { start } = FLOWS_BY_END.get(eventType);
+      const { start }  = FLOWS_BY_END.get(eventType);
       const startEvent = this.lastEntriesByType.has(start);
       if (startEvent) {
         flowId = startEvent.eventId;
@@ -391,12 +403,12 @@ export default class ClientChronicles {
 // Have to add the relevant actions to redux/modules/chronicles.js for this to work.
 export const ChroniclesActions = () => {
   const clientChronicles = useContext(ClientChroniclesContext);
-  const action = useSelector(state => state.chronicles.lastAction);
-  const actionsCount = useSelector(state => state.chronicles.actionsCount);
-  const uiLanguage = useSelector(state => settings.getLanguage(state.settings));
-  const contentLanguage = useSelector(state => settings.getContentLanguage(state.settings));
+  const action           = useSelector(state => state.chronicles.lastAction);
+  const actionsCount     = useSelector(state => state.chronicles.actionsCount);
+  const uiLanguage       = useSelector(state => settings.getLanguage(state.settings));
+  const contentLanguage  = useSelector(state => settings.getContentLanguage(state.settings));
   if (clientChronicles) {
-    clientChronicles.uiLanguage = uiLanguage;
+    clientChronicles.uiLanguage      = uiLanguage;
     clientChronicles.contentLanguage = contentLanguage;
   }
 

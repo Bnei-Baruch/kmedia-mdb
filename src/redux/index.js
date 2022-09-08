@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { connectRouter } from 'connected-react-router';
+import { createRouterReducer as connectRouter } from '@lagunovsky/redux-react-router';
 import { reducer as settings } from './modules/settings';
 import { reducer as events } from './modules/events';
 import { reducer as lessons } from './modules/lessons';

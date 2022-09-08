@@ -11,7 +11,6 @@ const languageFilterMulti = {
     if (!value) {
       return '';
     }
-
     return t(value);
   }
 };

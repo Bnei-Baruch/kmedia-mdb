@@ -1,5 +1,4 @@
 import React, { useContext, useEffect } from 'react';
-import { withRouter } from 'react-router';
 import { withNamespaces } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -19,6 +18,7 @@ import NeedToLogin from '../NeedToLogin';
 import { getMyItemKey } from '../../../../helpers/my';
 import { FrownSplash } from '../../../shared/Splash/Splash';
 import { stopBubbling } from '../../../../helpers/utils';
+import { withRouter } from '../../../../helpers/withRouterPatch';
 
 const Page = ({ t }) => {
   const { id } = useParams();

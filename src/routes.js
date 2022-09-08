@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { renderRoutes } from 'react-router-config';
 import LanguageSetter from './components/Language/LanguageSetter';
 import Layout from './components/Layout/Layout';
 import NotImplemented from './components/NotImplemented';
@@ -46,7 +45,6 @@ import {
   PAGE_NS_PROGRAMS
 } from './helpers/consts';
 
-// import Design from './components/Design/Design';
 import * as ssrDataLoaders from './routesSSRData';
 
 const routes = [
@@ -117,8 +115,6 @@ const routes = [
   { path: 'excerpt', component: ExcerptContainer },
   { path: 'likutim', component: LikutimMain },
   { path: 'likutim/:id', component: Likut, },
-  // { path: 'design', component: Design },
-  // { path: 'design2', component: Design2 },
 ];
 
 const NotFound = () => <h1>Page not found</h1>;

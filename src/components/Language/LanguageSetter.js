@@ -1,15 +1,13 @@
 import { useEffect } from 'react';
-import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { actions, selectors } from '../../redux/modules/settings';
 import { DEFAULT_LANGUAGE, LANGUAGES } from '../../helpers/consts';
-import * as shapes from '../shapes';
+import { useParams } from 'react-router-dom';
 
-// NOTE: yaniv -> edo: should we block rendering until language changed?
-
-const LanguageSetter = ({ language, children }) => {
-  const currentLanguage = useSelector(state => selectors.getLanguage(state.settings));
-  const dispatch        = useDispatch();
+const LanguageSetter = () => {
+  const { lang: language } = useParams();
+  const currentLanguage    = useSelector(state => selectors.getLanguage(state.settings));
+  const dispatch           = useDispatch();
 
   useEffect(() => {
     // catch language change only on client
@@ -23,12 +21,7 @@ const LanguageSetter = ({ language, children }) => {
     }
   }, [language, currentLanguage, dispatch]);
 
-  return children;
-};
-
-LanguageSetter.propTypes = {
-  language: PropTypes.string,
-  children: shapes.Children.isRequired,
+  return null;
 };
 
 export default LanguageSetter;
