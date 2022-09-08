@@ -1,5 +1,4 @@
 import React, { useCallback, useContext, useEffect } from 'react';
-import { withRouter } from 'react-router';
 import { withNamespaces } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Container, Grid, Header, Icon } from 'semantic-ui-react';
@@ -18,6 +17,7 @@ import { getPageFromLocation } from '../../../Pagination/withPagination';
 import Pagination from '../../../Pagination/Pagination';
 import Actions from './Actions';
 import NeedToLogin from '../NeedToLogin';
+import { withRouter } from '../../../../helpers/withRouterPatch';
 
 const PAGE_SIZE = 20;
 const Page      = ({ location, t }) => {

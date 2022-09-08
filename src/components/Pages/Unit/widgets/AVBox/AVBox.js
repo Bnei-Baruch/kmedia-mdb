@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import clsx from 'clsx';
 import { Media } from 'react-media-player';
 import isEqual from 'react-fast-compare';
@@ -19,34 +19,34 @@ import useRecommendedUnits from '../Recommended/Main/UseRecommendedUnits';
 
 const AVBox = ({ unit, t }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
-  const history = useHistory();
-  const location = useLocation();
+  const navigate           = useNavigate();
+  const location           = useLocation();
 
-  const uiLanguage = useSelector(state => settings.getLanguage(state.settings));
+  const uiLanguage      = useSelector(state => settings.getLanguage(state.settings));
   const contentLanguage = useSelector(state => settings.getContentLanguage(state.settings));
 
-  const [playableItem, setPlayableItem] = useState(null);
-  const [mediaEditMode, setMediaEditMode] = useState(0);
+  const [playableItem, setPlayableItem]         = useState(null);
+  const [mediaEditMode, setMediaEditMode]       = useState(0);
   const [isDropdownOpened, setIsDropdownOpened] = useState(false);
 
-  const handleChangeLanguage = useCallback((e, language) => playerHelper.setLanguageInQuery(history, language), [history]);
-  const handleMediaEditModeChange = useCallback(newMediaEditMode => setMediaEditMode(newMediaEditMode), []);
+  const handleChangeLanguage       = useCallback((e, language) => playerHelper.setLanguageInQuery(navigate, location, language), [navigate, location]);
+  const handleMediaEditModeChange  = useCallback(newMediaEditMode => setMediaEditMode(newMediaEditMode), []);
   const handleDropdownOpenedChange = useCallback(dropdownOpened => setIsDropdownOpened(dropdownOpened), []);
 
   useEffect(() => {
-    const preferredMT = playerHelper.restorePreferredMediaType();
-    const mediaType = playerHelper.getMediaTypeFromQuery(location, preferredMT);
+    const preferredMT       = playerHelper.restorePreferredMediaType();
+    const mediaType         = playerHelper.getMediaTypeFromQuery(location, preferredMT);
     const newPlayerLanguage = playerHelper.getLanguageFromQuery(location, contentLanguage);
-    const newPlayableItem = playerHelper.playableItem(unit, mediaType, uiLanguage, newPlayerLanguage);
+    const newPlayableItem   = playerHelper.playableItem(unit, mediaType, uiLanguage, newPlayerLanguage);
 
     setPlayableItem(playItem => isEqual(playItem, newPlayableItem) ? playItem : newPlayableItem);
   }, [unit, location, uiLanguage, contentLanguage]);
 
   const handleSwitchAV = useCallback(() => {
     if (playableItem) {
-      playerHelper.switchAV(playableItem, history);
+      playerHelper.switchAV(playableItem, navigate, location);
     }
-  }, [history, playableItem]);
+  }, [navigate, location, playableItem]);
 
   const recommendedUnits = useRecommendedUnits(['default']);
 
@@ -55,7 +55,7 @@ const AVBox = ({ unit, t }) => {
 
     if (nextRecommendedUnit) {
       const link = canonicalLink(nextRecommendedUnit);
-      history.push(link);
+      navigate(link);
     }
   };
 
@@ -96,7 +96,7 @@ const AVBox = ({ unit, t }) => {
       </div>
     </div>
   );
-}
+};
 
 AVBox.propTypes = {
   unit: shapes.ContentUnit,

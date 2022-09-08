@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import { Dropdown, Menu } from 'semantic-ui-react';
-import { useHistory, useLocation } from 'react-router';
+import { useNavigate, useLocation } from 'react-router';
 import { useSelector } from 'react-redux';
 
 import { selectors as settings } from '../../redux/modules/settings';
@@ -43,7 +43,7 @@ const DesktopLanguage = ({ language, contentLanguage }) => (
 
 const MobileLanguage = ({ language, contentLanguage }) => {
   // We need dependency on location in order to change Link every time url changes
-  const history = useHistory();
+  const navigate = useNavigate();
   const location = useLocation();
 
   const onMobileChange = (e, contentLanguage) => {
@@ -51,7 +51,7 @@ const MobileLanguage = ({ language, contentLanguage }) => {
     storeUILanguage(selectedLang);
 
     const link = getToWithLanguage(null, location, selectedLang, contentLanguage);
-    history.push(link);
+    navigate(link);
   };
 
   return (

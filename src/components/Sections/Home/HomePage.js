@@ -14,6 +14,10 @@ import TwitterFeed from '../Publications/tabs/Twitter/Feed';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { isEqual } from 'lodash';
 import { useInterval } from '../../../helpers/timer';
+import { useLocation } from 'react-router-dom';
+import { withNamespaces } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { selectors as settings } from '../../../redux/modules/settings';
 
 const SWITCH_BANNERS_TIMEOUT = 5 * 1000; // every 5 sec
 
@@ -66,20 +70,20 @@ const renderBlogPostsAndTweets = (latestBlogPosts, latestTweets, language, t) =>
 const renderActiveSections = (t, isMobileDevice) => {
   const iconSize = isMobileDevice ? 50 : 100;
   const fontSize = isMobileDevice ? 'small' : 'large';
-  const map = x =>
+  const map      = x =>
     <Grid.Column width={4} key={x.name} textAlign="center" className={!isMobileDevice && x.className}>
       <Topic title={t(`nav.sidebar.${x.name}`)} src={x.name} href={`/${x.name}`} width={iconSize} height={iconSize} fontSize={fontSize} />
     </Grid.Column>;
 
   const sections = [
-    { name:'lessons', className: 'topIcon' },
-    { name:'programs', className: 'topIcon' },
-    { name:'topics', className: 'topIcon' },
-    { name:'sources', className: 'topIcon' },
-    { name:'events', className: '' },
-    { name:'likutim', className: '' },
-    { name:'publications', className: '' },
-    { name:'simple-mode', className: '' }
+    { name: 'lessons', className: 'topIcon' },
+    { name: 'programs', className: 'topIcon' },
+    { name: 'topics', className: 'topIcon' },
+    { name: 'sources', className: 'topIcon' },
+    { name: 'events', className: '' },
+    { name: 'likutim', className: '' },
+    { name: 'publications', className: '' },
+    { name: 'simple-mode', className: '' }
   ];
 
   return sections.map(map);
@@ -132,25 +136,28 @@ const setBanners = (allBanners, bannerIdx, setBannerIdx) => {
   }
 };
 
-const HomePage = ({
-  banners,
-  language,
-  location,
-  latestItems = [],
-  latestLesson = null,
-  latestBlogPosts = [],
-  latestTweets = [],
-  t,
-}) => {
+const HomePage = (
+  {
+    banners,
+    latestItems = [],
+    latestLesson = null,
+    latestBlogPosts = [],
+    latestTweets = [],
+    t,
+  }
+) => {
 
   const { isMobileDevice } = useContext(DeviceInfoContext);
+  const location           = useLocation();
+  const language           = useSelector(state => settings.getLanguage(state.settings));
 
   const [bannerIdx, setBannerIdx] = useState(-1);
   useEffect(() => {
-    setBanners(banners.data.length, bannerIdx, setBannerIdx);
+    setBanners(banners?.data.length, bannerIdx, setBannerIdx);
   }, [banners?.data?.length]);
+
   useInterval(() => {
-    setBanners(banners.data.length, bannerIdx, setBannerIdx);
+    setBanners(banners?.data.length, bannerIdx, setBannerIdx);
   }, SWITCH_BANNERS_TIMEOUT);
   const banner = bannerIdx === -1 ? null : banners.data[bannerIdx];
 
@@ -168,13 +175,11 @@ const HomePage = ({
 };
 
 HomePage.propTypes = {
-  location: shapes.HistoryLocation.isRequired,
   latestLesson: shapes.LessonCollection,
   latestItems: PropTypes.arrayOf(PropTypes.oneOfType([shapes.ContentUnit, shapes.Collection])),
   latestBlogPosts: PropTypes.arrayOf(shapes.BlogPost),
   latestTweets: PropTypes.arrayOf(shapes.Tweet),
   banner: shapes.Banner,
-  language: PropTypes.string.isRequired,
   t: PropTypes.func.isRequired,
 };
 
@@ -186,4 +191,4 @@ const arePropsEqual = (prevProps, nextProps) =>
   isEqual(prevProps.latestTweets, nextProps.latestTweets) &&
   isEqual(prevProps.banner, nextProps.banner);
 
-export default React.memo(HomePage, arePropsEqual);
+export default React.memo(withNamespaces()(HomePage), arePropsEqual);

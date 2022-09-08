@@ -2,7 +2,6 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { isEmpty, noop } from '../../helpers/utils';
 import debounce from 'lodash/debounce';
-import { withRouter } from 'react-router-dom';
 import { Player, utils, withMediaProps } from 'react-media-player';
 import enableInlineVideo from 'iphone-inline-video';
 import { withNamespaces } from 'react-i18next';
@@ -37,9 +36,10 @@ import { DeviceInfoContext } from '../../helpers/app-contexts';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { actions } from '../../redux/modules/player';
+import { withRouter } from '../../helpers/withRouterPatch';
 
-const DEFAULT_PLAYER_VOLUME       = 0.8;
-const PLAYER_VOLUME_STORAGE_KEY   = '@@kmedia_player_volume';
+const DEFAULT_PLAYER_VOLUME     = 0.8;
+const PLAYER_VOLUME_STORAGE_KEY = '@@kmedia_player_volume';
 
 // Converts playback rate string to float: 1.0x => 1.0
 const playbackToValue = playback => parseFloat(playback.slice(0, -1));
@@ -64,7 +64,8 @@ class AVPlayer extends Component {
     onSwitchAV: PropTypes.func.isRequired,
 
     // Slice props
-    history: shapes.History.isRequired,
+    location: shapes.HistoryLocation.isRequired,
+    navigate: PropTypes.func.isRequired,
 
     // Playlist props
     autoPlay: PropTypes.bool,
@@ -96,49 +97,7 @@ class AVPlayer extends Component {
     onNext: noop,
     requestedLanguage: 'en',
   };
-
-  static chooseSource = props => {
-    const { item, t } = props;
-    if (isEmpty(item.byQuality)) {
-      return { error: true, errorReason: t('messages.no-playable-files') };
-    }
-
-    let videoSize     = playerHelper.restorePreferredVideoSize();
-    let file  = item.byQuality[videoSize];
-
-    // if we can't find the user preferred video size we fallback.
-    // first we try to go down from where he was.
-    // if we can't find anything on our way down we start go up.
-    if (!file) {
-      const vss = [VS_NHD, VS_HD, VS_FHD];
-      const idx = vss.indexOf(videoSize);
-      const o   = vss.slice(0, idx).reverse().concat(vss.slice(idx + 1));
-      videoSize = o.find(x => !!item.byQuality[x]);
-      file      = item.byQuality[videoSize];
-    }
-
-    return { file, videoSize };
-  };
-
   static persistVolume = debounce(volume => localStorage.setItem(PLAYER_VOLUME_STORAGE_KEY, volume), 200);
-
-  static getSliceModeState(media, mode, properties = {}, state) {
-    let { sliceStart, sliceEnd } = properties;
-    if (typeof sliceStart === 'undefined') {
-      sliceStart = state.sliceStart || 0;
-    }
-
-    if (typeof sliceEnd === 'undefined') {
-      sliceEnd = state.sliceEnd || media.duration || Infinity;
-    }
-
-    return {
-      mode,
-      sliceStart,
-      sliceEnd
-    };
-  }
-
   state = {
     controlsVisible: true,
     error: false,
@@ -155,13 +114,13 @@ class AVPlayer extends Component {
 
   constructor(props) {
     super(props);
-    const { history, media } = this.props;
+    const { navigate, location, media } = this.props;
 
     let sstart = 0;
     let send   = Infinity;
 
     let playerMode = PLAYER_MODE.NORMAL;
-    const query    = getQuery(history.location);
+    const query    = getQuery(location);
 
     if (query.sstart) {
       playerMode = PLAYER_MODE.SLICE_VIEW;
@@ -189,11 +148,51 @@ class AVPlayer extends Component {
     }
   }
 
+  static chooseSource = props => {
+    const { item, t } = props;
+    if (isEmpty(item.byQuality)) {
+      return { error: true, errorReason: t('messages.no-playable-files') };
+    }
+
+    let videoSize = playerHelper.restorePreferredVideoSize();
+    let file      = item.byQuality[videoSize];
+
+    // if we can't find the user preferred video size we fallback.
+    // first we try to go down from where he was.
+    // if we can't find anything on our way down we start go up.
+    if (!file) {
+      const vss = [VS_NHD, VS_HD, VS_FHD];
+      const idx = vss.indexOf(videoSize);
+      const o   = vss.slice(0, idx).reverse().concat(vss.slice(idx + 1));
+      videoSize = o.find(x => !!item.byQuality[x]);
+      file      = item.byQuality[videoSize];
+    }
+
+    return { file, videoSize };
+  };
+
+  static getSliceModeState(media, mode, properties = {}, state) {
+    let { sliceStart, sliceEnd } = properties;
+    if (typeof sliceStart === 'undefined') {
+      sliceStart = state.sliceStart || 0;
+    }
+
+    if (typeof sliceEnd === 'undefined') {
+      sliceEnd = state.sliceEnd || media.duration || Infinity;
+    }
+
+    return {
+      mode,
+      sliceStart,
+      sliceEnd
+    };
+  }
+
   // the player has to re-render during play because of the media changes,
   // so no need to shouldComponentUpdate here
 
   componentDidMount() {
-    const { history: { location }, media, item, autoPlay } = this.props;
+    const { location, media, item, autoPlay } = this.props;
 
     const query = getQuery(location);
     const start = PlayerStartEnum.GetFromQuery(query);
@@ -267,67 +266,67 @@ class AVPlayer extends Component {
     const { media, item } = this.props;
     try {
       switch (event.data.command) {
-        case 'play':
-          media.play();
-          break;
-        case 'stop':
-          media.stop();
-          break;
-        case 'pause':
-          media.pause();
-          break;
-        case 'exitFullscreen':
-          media.exitFullscreen();
-          break;
-        case 'mute':
-          media.mute(true);
-          break;
-        case 'muteUnmute':
-          media.muteUnmute();
-          break;
-        case 'setVolume':
-          if (event.data.volume === undefined) {
-            event.data.volume = 50;
-          }
+      case 'play':
+        media.play();
+        break;
+      case 'stop':
+        media.stop();
+        break;
+      case 'pause':
+        media.pause();
+        break;
+      case 'exitFullscreen':
+        media.exitFullscreen();
+        break;
+      case 'mute':
+        media.mute(true);
+        break;
+      case 'muteUnmute':
+        media.muteUnmute();
+        break;
+      case 'setVolume':
+        if (event.data.volume === undefined) {
+          event.data.volume = 50;
+        }
 
-          media.setVolume(event.data.volume);
-          break;
-        case 'getVolume':
-          this.sendCallbackMessage(event.data, { status: 'ok', result: media.volume });
-          return;
-        case 'getCurrentTime':
-          this.sendCallbackMessage(event.data, { status: 'ok', result: media.currentTime });
-          return;
-        case 'setCurrentTime':
-          if (event.data.currentTime === undefined) {
-            event.data.currentTime = 0;
-          }
+        media.setVolume(event.data.volume);
+        break;
+      case 'getVolume':
+        this.sendCallbackMessage(event.data, { status: 'ok', result: media.volume });
+        return;
+      case 'getCurrentTime':
+        this.sendCallbackMessage(event.data, { status: 'ok', result: media.currentTime });
+        return;
+      case 'setCurrentTime':
+        if (event.data.currentTime === undefined) {
+          event.data.currentTime = 0;
+        }
 
-          media.seekTo(event.data.currentTime);
-          break;
-        case 'getInfo':
-          this.sendCallbackMessage(event.data, { status: 'ok', result: item });
-          return;
-        case 'isFullScreen':
-          this.sendCallbackMessage(event.data, { status: 'ok', result: media.isFullScreen });
-          return;
-        case 'isLoading':
-          this.sendCallbackMessage(event.data, { status: 'ok', result: media.isLoading });
-          return;
-        case 'isMuted':
-          this.sendCallbackMessage(event.data, { status: 'ok', result: media.isMuted });
-          return;
-        case 'isPlaying':
-          this.sendCallbackMessage(event.data, { status: 'ok', result: media.isPlaying });
-          return;
-        default:
+        media.seekTo(event.data.currentTime);
+        break;
+      case 'getInfo':
+        this.sendCallbackMessage(event.data, { status: 'ok', result: item });
+        return;
+      case 'isFullScreen':
+        this.sendCallbackMessage(event.data, { status: 'ok', result: media.isFullScreen });
+        return;
+      case 'isLoading':
+        this.sendCallbackMessage(event.data, { status: 'ok', result: media.isLoading });
+        return;
+      case 'isMuted':
+        this.sendCallbackMessage(event.data, { status: 'ok', result: media.isMuted });
+        return;
+      case 'isPlaying':
+        this.sendCallbackMessage(event.data, { status: 'ok', result: media.isPlaying });
+        return;
+      default:
         // Ignore commands that weren't sent to us
-          return;
+        return;
       }
 
       this.sendCallbackMessage(event.data, { status: 'ok' });
     } catch (e) {
-      console.error(`Error while receive external message in AVPlayer: ${  e}`);
+      console.error(`Error while receive external message in AVPlayer: ${e}`);
     }
   }
 
@@ -414,7 +413,7 @@ class AVPlayer extends Component {
   };
 
   onPause = e => {
-    const { browserName } = this.state;
+    const { browserName }                         = this.state;
     const { onPause, onFinish, item, chronicles } = this.props;
     // when we're close to the end regard this as finished
     if (browserName !== 'IE'
@@ -447,7 +446,7 @@ class AVPlayer extends Component {
   };
 
   onMuteUnmute = () => {
-    const { chronicles } = this.props;
+    const { chronicles }   = this.props;
     const { unMuteButton } = this.state;
     this.setUnMuteButton(!unMuteButton);
     if (this.isUnitExistAndPlaying()) {

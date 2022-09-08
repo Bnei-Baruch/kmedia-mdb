@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { areEqual, noop } from '../../helpers/utils';
 import debounce from 'lodash/debounce';
-import { withRouter } from 'react-router-dom';
 import { withNamespaces } from 'react-i18next';
 import { Button, Icon, Message } from 'semantic-ui-react';
 
@@ -24,6 +23,7 @@ import { PlayerStartEnum } from './playerStartEnum';
 import clsx from 'clsx';
 import { DeviceInfoContext } from '../../helpers/app-contexts';
 import { buildAppendData } from './utils';
+import { withRouter } from '../../helpers/withRouterPatch';
 
 const DEFAULT_PLAYER_VOLUME     = 0.8;
 const PLAYER_VOLUME_STORAGE_KEY = '@@kmedia_player_volume';
@@ -50,7 +50,8 @@ class AVPlayerMobile extends Component {
     onSwitchAV: PropTypes.func.isRequired,
 
     // Slice props
-    history: shapes.History.isRequired,
+    location: shapes.HistoryLocation.isRequired,
+    navigate: PropTypes.func.isRequired,
 
     // Playlist props
     autoPlay: PropTypes.bool,
@@ -79,13 +80,13 @@ class AVPlayerMobile extends Component {
 
   constructor(props) {
     super(props);
-    const { history } = props;
+    const { location } = props;
 
     let sliceStart = 0;
     let sliceEnd   = Infinity;
 
     let mode    = PLAYER_MODE.NORMAL;
-    const query = getQuery(history.location);
+    const query = getQuery(location);
 
     if (query.sstart) {
       mode       = PLAYER_MODE.SLICE_VIEW;
@@ -116,7 +117,7 @@ class AVPlayerMobile extends Component {
       unMuteButton: false,
       autoPlay,
       start,
-      embed: playerHelper.getEmbedFromQuery(history.location),
+      embed: playerHelper.getEmbedFromQuery(location),
     };
   }
 

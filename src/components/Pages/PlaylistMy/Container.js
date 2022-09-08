@@ -12,8 +12,13 @@ import playerHelper from '../../../helpers/player';
 import Page from './Page';
 import { actions as recommended } from '../../../redux/modules/recommended';
 import { getMyItemKey } from '../../../helpers/my';
+import { useParams, useLocation, useNavigate } from 'react-router';
 
-const PlaylistMyContainer = ({ t, history, location, id }) => {
+const PlaylistMyContainer = ({ t }) => {
+  const { id }   = useParams();
+  const location = useLocation();
+  const navigate  = useNavigate();
+
   const { key }  = getMyItemKey(MY_NAMESPACE_PLAYLISTS, { id });
   const playlist = useSelector(state => selectors.getItemByKey(state.my, MY_NAMESPACE_PLAYLISTS, key)) || {};
   /*
@@ -42,9 +47,9 @@ const PlaylistMyContainer = ({ t, history, location, id }) => {
   useEffect(() => {
     if (user && cuUID && !playerHelper.getActivePartFromQuery(location)) {
       const selected = content_units.findIndex(u => u.id === cuUID);
-      playerHelper.setActivePartInQuery(history, selected);
+      playerHelper.setActivePartInQuery(navigate, location, selected);
     }
-  }, [cuUID, content_units, history, location, user]);
+  }, [cuUID, content_units, navigate, location, user]);
 
   if (content_units.length === 0)
     return (<Header size="large" content={t('personal.playlistNoResult')} />);

@@ -1,7 +1,7 @@
 import { URL } from 'url';
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
-import { matchRoutes } from 'react-router-config';
+import { matchRoutes } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
 import pick from 'lodash/pick';
 import moment from 'moment';
@@ -13,7 +13,7 @@ import { HelmetProvider } from 'react-helmet-async';
 import { parse as cookieParse } from 'cookie';
 import crawlers from 'crawler-user-agents';
 
-import routes from '../src/routes';
+import routes from '../src/route/routes';
 import { COOKIE_CONTENT_LANG, LANG_UI_LANGUAGES, LANG_UKRAINIAN } from '../src/helpers/consts';
 import { getLanguageDirection, getLanguageLocaleWORegion } from '../src/helpers/i18n-utils';
 import { getLanguageFromPath } from '../src/helpers/url';
@@ -165,15 +165,16 @@ export default function serverRender(req, res, next, htmlData) {
 
     const reqPath = req.originalUrl.split('?')[0];
     const branch  = matchRoutes(routes, reqPath);
+    console.log('serverRender: for path %s was found branch %o', reqPath, branch);
 
     let hrstart    = process.hrtime();
-    const promises = branch.map(({ route, match }) => (
+    const promises = branch.map(({ route, params }) => (
       route.ssrData
-        ? route.ssrData(store, { ...match, parsedURL: new URL(req.originalUrl, 'https://example.com') })
+        ? route.ssrData(store, { params, parsedURL: new URL(req.originalUrl, 'https://example.com') })
         : Promise.resolve(null)
     ));
+    let hrend      = process.hrtime(hrstart);
 
-    let hrend = process.hrtime(hrstart);
     console.log('serverRender: fire ssrLoaders %ds %dms', hrend[0], hrend[1] / 1000000);
     hrstart = process.hrtime();
 

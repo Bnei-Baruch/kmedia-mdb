@@ -1,4 +1,4 @@
-import { CALL_HISTORY_METHOD, routerMiddleware as createRouterMiddleware } from 'connected-react-router';
+import { createRouterMiddleware } from '@lagunovsky/redux-react-router';
 
 import { prefixWithLanguage } from '../../helpers/url';
 
@@ -6,12 +6,12 @@ import { prefixWithLanguage } from '../../helpers/url';
  * This middleware uses connected-react-router's middleware and prefixes the location change depending on the language
  */
 
-export default function multiLanguageRouterMidrdleware(history) {
-  const routerMiddleware = createRouterMiddleware(history);
+export default function multiLanguageRouterMiddleware(history) {
+  const routerMiddleware        = createRouterMiddleware(history);
   const appliedRouterMiddleware = routerMiddleware(history);
 
   return () => next => action => {
-    if (action.type !== CALL_HISTORY_METHOD) {
+    if (action.type !== 'CALL_HISTORY_METHOD') {
       return next(action);
     }
 

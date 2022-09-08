@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
@@ -38,7 +38,7 @@ const getRecommendUnit = (unit, collection, items) => {
 
 const PlaylistCollectionPage = ({ collection, cuId, t }) => {
   const location           = useLocation();
-  const history            = useHistory();
+  const navigate            = useNavigate();
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const chronicles         = useContext(ClientChroniclesContext);
 
@@ -89,22 +89,22 @@ const PlaylistCollectionPage = ({ collection, cuId, t }) => {
   }, [collection, contentLanguage, location, playlist, uiLanguage]);
 
   const handleLanguageChange = useCallback((e, language) => {
-    playerHelper.setLanguageInQuery(history, language);
-  }, [history]);
+    playerHelper.setLanguageInQuery(navigate, location, language);
+  }, [navigate, location]);
 
   const handleSwitchAV = useCallback(() => {
     const selectedItem = playlist?.items[selected];
 
     if (selectedItem) {
-      playerHelper.switchAV(selectedItem, history);
+      playerHelper.switchAV(selectedItem, navigate);
     }
-  }, [history, playlist, selected]);
+  }, [navigate, playlist, selected]);
 
   const handleSelectedChange = useCallback(nSelected => {
     if (nSelected !== selected && playlist?.items && playlist?.items[nSelected]) {
-      history.push(`/${uiLanguage}${playlist.items[nSelected].shareUrl}`);
+      navigate.push(`/${uiLanguage}${playlist.items[nSelected].shareUrl}`);
     }
-  }, [history, playlist?.items, selected, uiLanguage]);
+  }, [navigate, playlist?.items, selected, uiLanguage]);
 
   const selectUnit = useCallback(selectedIndex => {
     const { unit: newUnit } = playlist?.items[selectedIndex] || {};
@@ -122,12 +122,12 @@ const PlaylistCollectionPage = ({ collection, cuId, t }) => {
 
       const { shareUrl } = playlist?.items[newSel] || {};
       if (shareUrl && !location.pathname.includes(shareUrl)) {
-        history.replace(`/${uiLanguage}${shareUrl}`);
+        navigate.replace(`/${uiLanguage}${shareUrl}`);
       }
     }
 
     selectUnit(newSel);
-  }, [playlist, cuId, selectUnit, location.pathname, history, uiLanguage]);
+  }, [playlist, cuId, selectUnit, location.pathname, navigate, uiLanguage]);
 
   const shufflePlaylist = () => {
     const selectedItem     = playlist.items[selected];

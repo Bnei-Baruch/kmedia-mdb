@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { renderRoutes } from 'react-router-config';
 import { Provider } from 'react-redux';
-import { ConnectedRouter } from 'connected-react-router';
+import { ReduxRouter as ConnectedRouter } from '@lagunovsky/redux-react-router';
+
 import { I18nextProvider } from 'react-i18next';
 
-import routes from '../../routes';
 import ScrollToTop from '../shared/ScrollToTop/ScrollToTop';
 import '../../stylesheets/Kmedia.scss';
 import * as shapes from '../shapes';
@@ -17,6 +16,7 @@ import {
   SessionInfoContext,
 } from '../../helpers/app-contexts';
 import InitKC from '../shared/InitKC';
+import Layout from '../Layout/Layout';
 
 const App = props => {
   const [isShareTextEnabled, setEnableShareText]                                                             = useState(false);
@@ -42,7 +42,7 @@ const App = props => {
                   <ChroniclesActions />
                   <ConnectedRouter history={history}>
                     <ScrollToTop>
-                      {renderRoutes(routes)}
+                      <Layout />
                     </ScrollToTop>
                   </ConnectedRouter>
                 </SessionInfoContext.Provider>

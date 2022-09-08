@@ -3,15 +3,14 @@ import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { push as routerPush } from 'connected-react-router';
+import { push as routerPush } from '@lagunovsky/redux-react-router';
 import debounce from 'lodash/debounce';
-import { noop } from '../../helpers/utils';
+import { noop, isEmpty } from '../../helpers/utils';
 import { Icon, Input, Search } from 'semantic-ui-react';
 
 import { SuggestionsHelper } from '../../helpers/search';
 import { getQuery, isDebMode } from '../../helpers/url';
 import { isLanguageRtl } from '../../helpers/i18n-utils';
-import { isEmpty } from '../../helpers/utils';
 import { filtersTransformer } from '../../filters';
 import { actions as filtersActions, selectors as filterSelectors } from '../../redux/modules/filters';
 import { actions, selectors } from '../../redux/modules/search';
@@ -153,7 +152,7 @@ export class OmniBox extends Component {
 
   handleResultSelect = (e, data) => {
     const { updateQuery, setSuggest, query, chronicles } = this.props;
-    const { suggestionsHelper } = this.state;
+    const { suggestionsHelper }                          = this.state;
 
     const { title } = data.result;
     const prevQuery = query;
@@ -166,8 +165,8 @@ export class OmniBox extends Component {
   };
 
   handleSearchKeyDown = e => {
-    const { updateQuery } = this.props;
-    const { getSelectedResult }  = this.search;
+    const { updateQuery }       = this.props;
+    const { getSelectedResult } = this.search;
 
     // Only search when no suggest results as they are handled by handleResultSelect.
     if (e.keyCode === 13 && !getSelectedResult()) {

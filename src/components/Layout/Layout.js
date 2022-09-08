@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { connect } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
-import { renderRoutes } from 'react-router-config';
 import { Header, Icon, Menu, Ref, Segment } from 'semantic-ui-react';
 import Headroom from 'react-headroom';
 
@@ -23,6 +22,8 @@ import Logo from '../../images/icons/Logo';
 import { ClientChroniclesContext, DeviceInfoContext } from '../../helpers/app-contexts';
 import Login from './Login';
 import DownloadTrim from '../AVPlayer/Share/DownloadTrim';
+import KmediaRouters from '../../route/KmediaRouters';
+import { withRouter } from '../../helpers/withRouterPatch';
 
 const WrappedOmniBoxWithChronicles = ({ location }) => {
   const chronicles = useContext(ClientChroniclesContext);
@@ -61,7 +62,6 @@ class Layout extends Component {
 
   static propTypes = {
     location: shapes.HistoryLocation.isRequired,
-    route: shapes.Route.isRequired,
     language: PropTypes.string.isRequired,
     t: PropTypes.func.isRequired,
   };
@@ -161,7 +161,7 @@ class Layout extends Component {
   };
 
   render() {
-    const { t, location, route, language }             = this.props;
+    const { t, location, language }                    = this.props;
     const { sidebarActive, embed, isShowHeaderSearch } = this.state;
     const { isMobileDevice }                           = this.context;
 
@@ -174,7 +174,7 @@ class Layout extends Component {
     if (embed) {
       return (
         <div>
-          {renderRoutes(route.routes)}
+          <KmediaRouters />
         </div>
       );
     }
@@ -267,7 +267,7 @@ class Layout extends Component {
         <div className="layout__main">
           <div className="layout__content">
             <DownloadTrim />
-            {renderRoutes(route.routes)}
+            <KmediaRouters />
           </div>
           <Footer />
         </div>
@@ -276,6 +276,6 @@ class Layout extends Component {
   }
 }
 
-export default connect(state => ({
+export default withRouter(connect(state => ({
   language: settings.getLanguage(state.settings),
-}))(withNamespaces()(Layout));
+}))(withNamespaces()(Layout)));

@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import clsx from 'clsx';
 import { useSelector } from 'react-redux';
 import { Container, Grid } from 'semantic-ui-react';
@@ -19,7 +19,7 @@ import { MY_NAMESPACE_PLAYLISTS } from '../../../helpers/consts';
 
 const PlaylistMyPage = ({ collection }) => {
   const location           = useLocation();
-  const history            = useHistory();
+  const navigate            = useNavigate();
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
   const language        = useSelector(state => settings.getLanguage(state.settings));
@@ -32,22 +32,22 @@ const PlaylistMyPage = ({ collection }) => {
 
   const handleSelectedChange = useCallback(nSelected => {
     if (nSelected !== selected) {
-      playerHelper.setActivePartInQuery(history, nSelected);
+      playerHelper.setActivePartInQuery(navigate, location, nSelected);
       setSelected(nSelected);
     }
-  }, [history, selected]);
+  }, [navigate, location, selected]);
 
   const handleLanguageChange = useCallback((e, language) => {
-    playerHelper.setLanguageInQuery(history, language);
-  }, [history]);
+    playerHelper.setLanguageInQuery(navigate, location, language);
+  }, [navigate, location]);
 
   const handleSwitchAV = useCallback(() => {
     const selectedItem = playlist?.items[selected];
 
     if (selectedItem) {
-      playerHelper.switchAV(selectedItem, history);
+      playerHelper.switchAV(selectedItem, navigate, location);
     }
-  }, [history, playlist, selected]);
+  }, [navigate, location, playlist, selected]);
 
   useEffect(() => {
     const preferredMT = playerHelper.restorePreferredMediaType();
