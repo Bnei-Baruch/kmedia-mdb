@@ -1,6 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useLocation } from 'react-router';
 import { Button, Icon, Input, Loader, Search } from 'semantic-ui-react';
 import { withNamespaces } from 'react-i18next';
 
@@ -30,7 +29,6 @@ const OmniBox = ({ isHomePage = false, t }) => {
   const [inputFocused, setInputFocused] = useState(!isMobileDevice);
   const [userInteracted, setUserInteracted] = useState(false);
 
-  const location = useLocation();
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -50,7 +48,7 @@ const OmniBox = ({ isHomePage = false, t }) => {
 
   const doSearch = () => {
     setUserInteracted(true);
-    dispatch(actions.search(!!location.pathname.endsWith('search')));
+    dispatch(actions.search());
   };
 
   const keyDown = e => {

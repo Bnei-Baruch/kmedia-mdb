@@ -27,10 +27,6 @@ const TopicPage = ({ t }) => {
   const language    = useSelector(state => settings.getLanguage(state.settings));
   const selected    = useSelector(state => filters.getNotEmptyFilters(state.filters, `topics_${id}`), isEqual);
 
-  console.log('SELECTED', selected);
-
-  console.log('SELECTED', selected);
-
   const { mediaTotal, textTotal } = useSelector(state => selectors.getItems(state.tags));
   const total                     = Math.max(mediaTotal, textTotal);
 
