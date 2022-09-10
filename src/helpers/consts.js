@@ -16,7 +16,6 @@ export const CT_CLIPS              = 'CLIPS';
 export const CT_ARTICLES           = 'ARTICLES';
 export const CT_LESSONS_SERIES     = 'LESSONS_SERIES';
 export const CT_SONGS              = 'SONGS';
-export const CT_SOURCE             = 'SOURCE';
 export const CT_TAG                = 'TAG';
 
 export const CT_COLLECTIONS = [
@@ -62,6 +61,7 @@ export const CT_BLOG_POST             = 'BLOG_POST';
 export const CT_RESEARCH_MATERIAL     = 'RESEARCH_MATERIAL';
 export const CT_KTAIM_NIVCHARIM       = 'KTAIM_NIVCHARIM';
 export const CT_LIKUTIM               = 'LIKUTIM';
+export const CT_SOURCE                = 'SOURCE';
 
 export const CT_UNITS = [
   CT_LESSON_PART,
@@ -123,6 +123,8 @@ export const iconByContentTypeMap = new Map([
   [CT_SOURCE, 'sources'],
   [CT_PUBLICATION, 'publications'],
   ['sources', 'sources'],
+  ['downloads', 'simple-mode'],
+  ['help', 'help'],
 ]);
 
 export const IsUnitContentType = contentType => CT_UNITS.includes(contentType);
@@ -498,6 +500,7 @@ export const LANG_UI_LANGUAGES   = [LANG_HEBREW, LANG_ENGLISH, LANG_RUSSIAN, LAN
 export const SEARCH_GRAMMAR_HIT_TYPE_LANDING_PAGE = 'landing-page';
 
 // Search Grammar Landing Pages (SGL) constants.
+// TODO: Missing music section.
 const SGLP_LESSONS              = 'lessons';
 const SGLP_VIRTUAL_LESSONS      = 'virtual_lessons';
 const SGLP_LECTURES             = 'lectures';
@@ -520,6 +523,30 @@ const SGLP_ARTICLES             = 'articles';
 const SGLP_DOWNLOADS            = 'downloads';
 const SGLP_HELP                 = 'help';
 
+export const SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_CONTENT_TYPE = {
+  [SGLP_LESSONS]: CT_DAILY_LESSON,
+  [SGLP_VIRTUAL_LESSONS]: CT_VIRTUAL_LESSONS,
+  [SGLP_LECTURES]: CT_LECTURE,
+  [SGLP_WOMEN_LESSONS]: CT_WOMEN_LESSON,
+  [SGLP_RABASH_LESSONS]: CT_LESSON_PART,
+  [SGLP_LESSON_SERIES]: CT_LESSON_PART,
+  [SGLP_PRORGRAMS]: CT_VIDEO_PROGRAM_CHAPTER,
+  [SGLP_CLIPS]: CT_CLIPS,
+  [SGLP_LIBRARY]: CT_SOURCE,
+  [SGLP_GROUP_ARTICLES]: CT_ARTICLE,
+  [SGLP_CONVENTIONS]: CT_CONGRESS,
+  [SGLP_HOLIDAYS]: CT_EVENT_PART,
+  [SGLP_UNITY_DAYS]: CT_EVENT_PART,
+  [SGLP_FRIENDS_GATHERINGS]: CT_EVENT_PART,
+  [SGLP_MEALS]: CT_EVENT_PART,
+  [SGLP_TOPICS]: CT_TAG,
+  [SGLP_BLOG]: CT_BLOG_POST,
+  [SGLP_TWITTER]: SCT_TWEET,
+  [SGLP_ARTICLES]: CT_ARTICLES,
+  [SGLP_DOWNLOADS]: 'downloads',
+  [SGLP_HELP]: 'help',
+};
+
 export const SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_LINK = {
   [SGLP_LESSONS]: 'lessons/daily',
   [SGLP_VIRTUAL_LESSONS]: 'lessons/virtual',
@@ -531,11 +558,11 @@ export const SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_LINK = {
   [SGLP_CLIPS]: 'programs/clips',
   [SGLP_LIBRARY]: 'sources',
   [SGLP_GROUP_ARTICLES]: 'sources/grRABASH',
-  [SGLP_CONVENTIONS]: 'events/conventions',
-  [SGLP_HOLIDAYS]: 'events/holidays',
-  [SGLP_UNITY_DAYS]: 'events/unity-days',
-  [SGLP_FRIENDS_GATHERINGS]: 'events/friends-gatherings',
-  [SGLP_MEALS]: 'events/meals',
+  [SGLP_CONVENTIONS]: 'events?content_type=CONGRESS',
+  [SGLP_HOLIDAYS]: 'events?content_type=HOLIDAY',
+  [SGLP_UNITY_DAYS]: 'events?content_type=UNITY_DAY',
+  [SGLP_FRIENDS_GATHERINGS]: 'events?content_type=FRIENDS_GATHERING',
+  [SGLP_MEALS]: 'events?content_type=MEAL',
   [SGLP_TOPICS]: 'topics',
   [SGLP_BLOG]: 'publications/blog',
   [SGLP_TWITTER]: 'publications/twitter',
@@ -630,11 +657,6 @@ export const SEARCH_INTENT_NAMES = {
   [SEARCH_INTENT_INDEX_SOURCE]: 'Source',
 };
 
-export const SEARCH_INTENT_FILTER_NAMES = {
-  [SEARCH_INTENT_INDEX_TOPIC]: 'topics-filter',
-  [SEARCH_INTENT_INDEX_SOURCE]: 'sources-filter',
-};
-
 export const SEARCH_INTENT_SECTIONS = {
   [SEARCH_INTENT_HIT_TYPE_LESSONS]: 'lessons',
   [SEARCH_INTENT_HIT_TYPE_PROGRAMS]: 'programs',
@@ -727,6 +749,11 @@ export const FN_SORT_BY_FILTER     = 'sort-by-filter';
 export const FN_SOURCES_MULTI    = 'sources-filter-multi';
 export const FN_TOPICS_MULTI     = 'topics-filter-multi';
 export const FN_COLLECTION_MULTI = 'collections-filter-multi';
+
+export const SEARCH_INTENT_FILTER_NAMES = {
+  [SEARCH_INTENT_INDEX_TOPIC]: FN_TOPICS_MULTI,
+  [SEARCH_INTENT_INDEX_SOURCE]: FN_SOURCES_MULTI,
+};
 
 export const PAGE_NS_TOPICS   = 'topic';
 export const PAGE_NS_PROGRAMS = 'programs';

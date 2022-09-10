@@ -1,4 +1,4 @@
-import { canonicalCollection, tracePath } from './utils';
+import { canonicalCollection } from './utils';
 import { filtersTransformer } from '../filters/index';
 import { stringify as urlSearchStringify } from './url';
 
@@ -61,24 +61,12 @@ export const landingPageSectionLink = (landingPage, filterValues) => {
     linkParts.push(params);
   }
 
-  return linkParts.join('?');
+  const separator = linkParts[0].includes('?') ? '&' : '?';
+  return linkParts.join(separator);
 };
 
 export const intentSectionLink = (section, filters) => {
-  const filterValues = filters.map(({ name, value, getFilterById }) => {
-    if (['topics-filter', 'sources-filter'].includes(name)) {
-      const tagOrSource = getFilterById(value);
-      if (!tagOrSource) {
-        return null;
-      }
-
-      const path = tracePath(tagOrSource, getFilterById);
-      return { name, values: [path.map(y => y.id)] };
-    }
-
-    return { name, values: [value] };
-  });
-  const query        = filtersTransformer.toQueryParams(filterValues.filter(f => !!f));
+  const query = filtersTransformer.toQueryParams(filters);
   return `/${section}?${urlSearchStringify(query)}`;
 };
 

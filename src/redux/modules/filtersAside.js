@@ -70,11 +70,7 @@ const receiveSingleTypeStats = createAction(RECEIVE_SINGLE_TYPE_STATS);
 const fetchStatsFailure      = createAction(FETCH_STATS_FAILURE);
 const receiveLocationsStats  = createAction(RECEIVE_LOCATIONS_STATS);
 
-const fetchElasticStats = createAction(FETCH_ELASTIC_STATS, (namespace, params, isPrepare) => ({
-  namespace,
-  params,
-  isPrepare
-}));
+const fetchElasticStats = createAction(FETCH_ELASTIC_STATS, namespace => ({ namespace }));
 const fetchElasticStatsSuccess = createAction(FETCH_ELASTIC_STATS_SUCCESS);
 const fetchElasticStatsFailure = createAction(FETCH_ELASTIC_STATS_FAILURE);
 
