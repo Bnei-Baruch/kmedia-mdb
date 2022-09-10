@@ -4,6 +4,7 @@ import { selectors } from '../../../redux/modules/filtersAside';
 import { withNamespaces } from 'react-i18next';
 import {
   CT_LESSONS_SERIES,
+  CT_SOURCE,
   FN_CONTENT_TYPE,
   UNIT_EVENTS_TYPE,
   UNIT_LESSONS_TYPE,
@@ -15,13 +16,13 @@ import FilterHeader from '../FilterHeader';
 import ContentTypeItemGroup from './ContentTypeItemGroup';
 
 const groupByName = {
-  lessons: { cts: [CT_LESSONS_SERIES, ...UNIT_LESSONS_TYPE], key: 'lessons', order: 1 },
-  events: { cts: UNIT_EVENTS_TYPE, key: 'events', order: 2 },
-  programs: { cts: UNIT_PROGRAMS_TYPE, key: 'programs', order: 3 },
-  publications: { cts: UNIT_PUBLICATIONS_TYPE, key: 'publications', order: 4 }
-
+  lessons: { cts: [CT_LESSONS_SERIES, ...UNIT_LESSONS_TYPE], key: 'lessons', order: 2 },
+  events: { cts: UNIT_EVENTS_TYPE, key: 'events', order: 3 },
+  programs: { cts: UNIT_PROGRAMS_TYPE, key: 'programs', order: 4 },
+  publications: { cts: UNIT_PUBLICATIONS_TYPE, key: 'publications', order: 5 },
+  sources: { cts: [CT_SOURCE], key: 'sources', order: 1 },
 };
-const cts         = Object.values(groupByName).flatMap(x => x.cts);
+const cts = Object.values(groupByName).flatMap(x => x.cts);
 
 const ContentType = ({ namespace, t }) => {
   let items = useSelector(state => selectors.getTree(state.filtersAside, namespace, FN_CONTENT_TYPE));
