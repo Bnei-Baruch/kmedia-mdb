@@ -20,7 +20,7 @@ const ResultsPageHeader = ({ pageNo, pageSize, total, t }) => {
     );
   }
 
-  return <Container className="pagination-results" content={content} />;
+  return <Container content={content} />;
 };
 
 ResultsPageHeader.propTypes = {
