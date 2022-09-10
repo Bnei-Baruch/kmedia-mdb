@@ -42,6 +42,7 @@ export const actions = {
 
 const initialState = {
   seriesIDs: [],
+  seriesLoaded: false,
   wip: {
     series: false,
   },
@@ -61,6 +62,7 @@ const setStatus = (draft, payload, type) => {
     case FETCH_ALL_SERIES_SUCCESS:
       draft.wip.series    = false;
       draft.errors.series = null;
+      draft.seriesLoaded = true;
       break;
     case FETCH_ALL_SERIES_FAILURE:
       draft.wip.series    = false;
@@ -97,9 +99,10 @@ export const reducer = handleActions({
 
 /* Selectors */
 
-const getWip       = state => state.wip;
-const getErrors    = state => state.errors;
-const getSeriesIDs = state => state.seriesIDs;
+const getWip          = state => state.wip;
+const getErrors       = state => state.errors;
+const getSeriesIDs    = state => state.seriesIDs;
+const getSeriesLoaded = state => state.seriesLoaded;
 
 const $$sortTree = node => {
   if (isEmpty(node)) {
@@ -311,6 +314,7 @@ export const selectors = {
   getWip,
   getErrors,
   getSeriesIDs,
+  getSeriesLoaded,
   getSeriesTree,
   getSerieBySourceId,
   getSerieByTagId,

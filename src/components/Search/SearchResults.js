@@ -1,9 +1,9 @@
-import React, { useContext, useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Trans, withNamespaces } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router';
-import { Button, Container, Divider, Grid, Modal } from 'semantic-ui-react';
+import { Container, Divider } from 'semantic-ui-react';
 
 import {
   SEARCH_GRAMMAR_HIT_TYPES,
@@ -13,9 +13,8 @@ import {
   BLOGS,
 } from '../../helpers/consts';
 import { isEmpty } from '../../helpers/utils';
-import { getQuery } from '../../helpers/url';
-import { ClientChroniclesContext, DeviceInfoContext } from '../../helpers/app-contexts';
-import { getLanguageDirection } from '../../helpers/i18n-utils';
+import { getQuery, isDebMode } from '../../helpers/url';
+
 import { actions, selectors } from '../../redux/modules/search';
 import { selectors as mdbSelectors } from '../../redux/modules/mdb';
 import { selectors as settings } from '../../redux/modules/settings';
@@ -23,22 +22,27 @@ import { selectors as filterSelectors } from '../../redux/modules/filters';
 import { selectors as sourcesSelectors } from '../../redux/modules/sources';
 import { selectors as tagsSelectors } from '../../redux/modules/tags';
 import { selectors as publicationSelectors } from '../../redux/modules/publications';
+
 import { filtersTransformer } from '../../filters';
 import WipErr from '../shared/WipErr/WipErr';
+import SectionFiltersWithMobile from '../shared/SectionFiltersWithMobile';
 import SectionHeader from '../shared/SectionHeader';
 import Pagination from '../Pagination/Pagination';
 import ResultsPageHeader from '../Pagination/ResultsPageHeader';
-import SearchResultCU from './SearchResultCU';
-import SearchResultCollection from './SearchResultCollection';
-import SearchResultIntent from './SearchResultIntent';
-import SearchResultLandingPage from './SearchResultLandingPage';
-import SearchResultTwitters from './SearchResultTwitters';
-import SearchResultSource from './SearchResultSource';
-import SearchResultPost from './SearchResultPost';
+import {
+  SearchResultCU,
+  SearchResultCollection,
+  SearchResultIntent,
+  SearchResultLandingPage,
+  SearchResultPost,
+  SearchResultSeries,
+  SearchResultSource,
+  SearchResultTweets,
+} from './SearchResultHooks';
 import DidYouMean from './DidYouMean';
-import SearchResultSeries from './SearchResultSeries';
 import Filters from './Filters';
 import FilterLabels from '../FiltersAside/FilterLabels';
+import ScoreDebug from './ScoreDebug';
 
 const cuMapFromState = (state, results) => (
   results && results.hits && Array.isArray(results.hits.hits)
@@ -90,9 +94,6 @@ const cMapFromState = (state, results) => (
 );
 
 const SearchResults = ({ t }) => {
-  const [openFilters, setOpenFilters] = useState(false);  // For mobile only.
-  const closeFilters   = () => setOpenFilters(false);
-
   const queryResult = useSelector(state => selectors.getQueryResult(state.search));
   const searchResults     = queryResult.search_result;
 
@@ -115,13 +116,7 @@ const SearchResults = ({ t }) => {
    */
   const filters            = useSelector(state => filterSelectors.getFilters(state.filters, 'search'));
   const areSourcesLoaded   = useSelector(state => sourcesSelectors.areSourcesLoaded(state.sources));
-  const getTagById         = useSelector(state => tagsSelectors.getTagById(state.tags));
-  const getSourcePath      = useSelector(state => sourcesSelectors.getSourceById(state.sources));
-  const getSourceById      = useSelector(state => sourcesSelectors.getSourceById(state.sources));
-  const contentLanguage    = useSelector(state => settings.getContentLanguage(state.settings));
-  const chronicles         = useContext(ClientChroniclesContext);
-  const { isMobileDevice } = useContext(DeviceInfoContext);
-  const dir                = getLanguageDirection(language);
+  const areTagsLoaded      = useSelector(state => tagsSelectors.areTagsLoaded(state.tags));
 
   const handlePageChange = page => {
     dispatch(actions.setPage(page));
@@ -129,61 +124,52 @@ const SearchResults = ({ t }) => {
 
   const searchLanguageByIndex = (index, def) => index.split('_')[2] ?? def;
 
-  const renderHit = (hit, rank, searchLanguage) => {
+  const renderHit = (hit, rank, searchId, searchLanguage, deb) => {
     const {
-      _source: {
-        mdb_uid: mdbUid,
-        result_type: resultType,
-        landing_page: landingPage,
-        filter_values: filterValues
-      }, _type: type, _index
-    }   = hit;
-    const key = mdbUid ? `${mdbUid}_${type}` : `${landingPage}_${type}_${(filterValues || []).map(({
-      name,
-      value
-    }) => `${name}_${value}`).join('_')}`;
-
-    searchLanguage = searchLanguageByIndex(_index, searchLanguage);
-    const newProps = {
-      queryResult, t, location, filters, getTagById, getSourceById, contentLanguage, getSourcePath, searchLanguage,
-      hit, rank, key, chronicles,
-    };
-
-    if (SEARCH_GRAMMAR_HIT_TYPES.includes(type)) {
-      return <SearchResultLandingPage {...newProps} />;
-    }
-
-    // To be deprecated soon.
-    if (SEARCH_INTENT_HIT_TYPES.includes(type)) {
-      return <SearchResultIntent {...newProps} />;
-    }
-
-    if (type === 'tweets_many') {
-      return <SearchResultTwitters  {...newProps} />;
-    }
-
-    if (type === SEARCH_INTENT_HIT_TYPE_SERIES_BY_TAG || type === SEARCH_INTENT_HIT_TYPE_SERIES_BY_SOURCE) {
-      return <SearchResultSeries {...newProps} />;
-    }
+      _source: { mdb_uid: mdbUid, result_type: resultType },
+      _type: type,
+      _index: index,
+      _explanation: explanation,
+      _score: score,
+    } = hit;
+    searchLanguage = searchLanguageByIndex(index, searchLanguage);
+    const clickData = {mdbUid, index, type: resultType, rank, searchId, search_language: searchLanguage, deb};
 
     let result = null;
-    const cu   = cuMap[mdbUid];
-    const c    = cMap[mdbUid];
-    const p    = postMap[mdbUid];
-
-    if (cu) {
-      result = <SearchResultCU {...newProps} cu={cu} />;
-    } else if (c) {
-      result = <SearchResultCollection c={c} {...newProps} />;
-    } else if (p) {
-      return <SearchResultPost {...newProps} post={p} />;
-    } else if (resultType === 'sources') {
-      result = <SearchResultSource {...newProps} />;
+    if (SEARCH_GRAMMAR_HIT_TYPES.includes(type)) {
+      result = <SearchResultLandingPage landingPage={hit._source.landing_page} filterValues={hit._source.filter_values} clickData={clickData} />;
+    } else if (SEARCH_INTENT_HIT_TYPES.includes(type)) {
+      result = <SearchResultIntent id={hit._source.mdb_uid} name={hit._source.name} type={hit._type} index={index} highlight={hit.highlight} clickData={clickData} />;
+    } else if (type === 'tweets_many') {
+      result = <SearchResultTweets source={hit._source} clickData={clickData} />;
+    } else if (type === SEARCH_INTENT_HIT_TYPE_SERIES_BY_TAG || type === SEARCH_INTENT_HIT_TYPE_SERIES_BY_SOURCE) {
+      result = <SearchResultSeries id={hit._uid} type={type} mdbUid={hit._source.mdb_uid} clickData={clickData} />;
+    } else {
+      const cu   = cuMap[mdbUid];
+      const c    = cMap[mdbUid];
+      const p    = postMap[mdbUid];
+      if (cu) {
+        result = <SearchResultCU cu={cu} highlight={hit.highlight} clickData={clickData} />;
+      } else if (c) {
+        result = <SearchResultCollection c={c} highlight={hit.highlight} clickData={clickData} />;
+      } else if (p) {
+        result = <SearchResultPost id={hit._source.mdb_uid} post={p} highlight={hit.highlight} clickData={clickData} />;
+      } else if (resultType === 'sources') {
+        result = <SearchResultSource id={hit._source.mdb_uid} title={hit._source.title} highlight={hit.highlight} clickData={clickData} />;
+      } else {
+        console.error('Unexpected result type!');
+      }
     }
 
-    // maybe content_units are still loading ?
-    // maybe stale data in elasticsearch ?
-    return result;
+    if (!deb) {
+      return result;
+    }
+    return (
+      <>
+        <ScoreDebug score={score} explanation={explanation} />
+        {result}
+      </>
+    )
   };
 
   /* Requested by Mizrahi
@@ -215,13 +201,14 @@ const SearchResults = ({ t }) => {
   };
    */
 
-  const wipErr = WipErr({ wip: !areSourcesLoaded, err, t });
+  const wipErr = WipErr({ wip: wip || !areSourcesLoaded || !areTagsLoaded, err, t });
   if (wipErr) {
     return wipErr;
   }
 
   // Query from URL (not changed until pressed Enter)
   const query = getQuery(location).q;
+  const deb = isDebMode(location);
 
   if (query === '' && !Object.values(filtersTransformer.toApiParams(filters)).length) {
     return <div>{t('search.results.empty-query')}</div>;
@@ -233,94 +220,38 @@ const SearchResults = ({ t }) => {
     return null;
   }
 
-  const { /* took, */ hits: { total, hits } } = results;
+  const { searchId, hits: { total, hits } } = results;
   // Elastic too slow and might fails on more than 1k results.
-  const totalForPagination                    = Math.min(1000, total);
+  const totalForPagination = Math.min(1000, total);
 
-  const renderFilters = () => (<Filters namespace={'search'} />);
-  const renderSearchResults = () => (
+  //const wipErr = WipErr({ wip, err: null, t });
+
+  return (
     <>
-      {/* Requested by Mizrahi renderTopNote() */}
-      {typo_suggest && <DidYouMean typo_suggest={typo_suggest} />}
-
-      <FilterLabels namespace={'search'} />
-
-      {total === 0 ?
-        <Trans i18nKey="search.results.no-results">
+      <SectionHeader section="search" />
+      <SectionFiltersWithMobile filters={<Filters namespace={'search'} />}>
+        {typo_suggest && <DidYouMean typo_suggest={typo_suggest} />}
+        {total === 0 && <Trans i18nKey="search.results.no-results">
           Your search for
           <strong style={{ fontStyle: 'italic' }}>{{ query }}</strong>
           found no results.
-        </Trans>
-        :
-        <>
-          <div className="searchResult_content">
-            {wip ?
-              WipErr({ wip, err: null, t })
-              :
-              <>
-                <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} t={t} />
-                {hits.map((h, rank) => renderHit(h, rank, searchLanguage))}
-              </>
-            }
-          </div>
-          <Divider fitted />
-          <Container className="padded pagination-wrapper" textAlign="center">
-            <Pagination
-              pageNo={pageNo}
-              pageSize={pageSize}
-              total={totalForPagination}
-              language={language}
-              onChange={handlePageChange}
-            />
-          </Container>
-        </>
-      }
+        </Trans>}
+        {total !== 0 && <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} t={t} />}
+        <FilterLabels namespace={'search'} />
+        {/* Requested by Mizrahi renderTopNote() */}
+        {wipErr || hits.map((h, rank) => renderHit(h, rank, searchId, searchLanguage, deb))}
+        <Divider fitted />
+        <Container className="padded pagination-wrapper" textAlign="center">
+          {total > 0 && <Pagination
+            pageNo={pageNo}
+            pageSize={pageSize}
+            total={totalForPagination}
+            language={language}
+            onChange={handlePageChange}
+          />}
+        </Container>
+      </SectionFiltersWithMobile>
     </>);
-
-  return (
-    <div>
-      <>
-        { isMobileDevice &&
-          <>
-            <Button className="search_mobile_filter" basic icon="filter" floated={'right'} onClick={() => setOpenFilters(true)} />
-            <Modal
-              closeIcon
-              open={openFilters}
-              onClose={closeFilters}
-              dir={dir}
-              className={dir}
-            >
-              <Modal.Content className="filters-aside-wrapper" scrolling>
-                {renderFilters()}
-              </Modal.Content>
-              <Modal.Actions>
-                <Button primary content={t('buttons.close')} onClick={closeFilters} />
-              </Modal.Actions>
-            </Modal>
-          </>
-        }
-        <SectionHeader section="search" />
-      </>
-      <Container className="padded">
-        { isMobileDevice ?
-          <Grid divided>
-            <Grid.Column>
-              {renderSearchResults()}
-            </Grid.Column>
-          </Grid>
-          :
-          <Grid divided>
-            <Grid.Column width="4" className="filters-aside-wrapper">
-              {renderFilters()}
-            </Grid.Column>
-            <Grid.Column width="12">
-              {renderSearchResults()}
-            </Grid.Column>
-          </Grid>
-        }
-      </Container>
-    </div>
-  );
 };
 
 SearchResults.propTypes = {

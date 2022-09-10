@@ -64,15 +64,9 @@ const Filters = ({ namespace, t }) => {
 
   useEffect(() => {
     if (isHydrated && !wip && !err) {
-      dispatch(actions.fetchElasticStats(namespace, false));
+      dispatch(actions.fetchElasticStats(namespace));
     }
   }, [dispatch, isHydrated]);
-
-  useEffect(() => {
-    if (selected, isHydrated && !wip && !err) {
-      dispatch(actions.fetchElasticStats(namespace, false));
-    }
-  }, [dispatch, isHydrated, selected]);
 
   const handleOnHydrated = () => setIsHydrated(true);
 

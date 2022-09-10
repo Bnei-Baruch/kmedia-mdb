@@ -199,10 +199,8 @@ function* watchFetchStat() {
 }
 
 function* watchElasticFetchStat() {
-  yield takeLatest([
-    searchTypes.SEARCH,
-    types.FETCH_ELASTIC_STATS,
-  ], fetchElasticStat);
+  // TODO: Move search stats fetch parallel to search, not after.
+  yield takeLatest(types.FETCH_ELASTIC_STATS, fetchElasticStat);
 }
 
 export const sagas = [
