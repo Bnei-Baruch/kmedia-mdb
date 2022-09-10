@@ -55,6 +55,7 @@ const initialState = {
   error: null,
   getByID: identity,
   dashboard: { items: [], mediaTotal: 0, textTotal: 0 },
+  loaded: false,
 };
 
 const buildById = items => {
@@ -80,9 +81,10 @@ const buildById = items => {
 
 const onSSRPrepare = draft => {
   draft.wip         = false;
+  draft.loaded      = false;
   draft.getByID     = identity;
   draft.getPathByID = () => [];
-  draft.dashboard      = { items: [], mediaTotal: 0, textTotal: 0 };
+  draft.dashboard   = { items: [], mediaTotal: 0, textTotal: 0 };
 
   if (draft.error) {
     draft.error = draft.error.toString();
@@ -114,6 +116,7 @@ const onReceiveTags = (draft, payload) => {
   draft.getPathByID  = getPathByID;
   draft.roots        = roots;
   draft.displayRoots = displayRoots;
+  draft.loaded       = true;
 };
 
 const onDashboard = draft => {
@@ -121,15 +124,16 @@ const onDashboard = draft => {
 };
 
 const onDashboardSuccess = (draft, { items = [], mediaTotal, textTotal }) => {
-  draft.wip    = false;
-  draft.error  = null;
+  draft.wip       = false;
+  draft.error     = null;
   draft.dashboard = { items, mediaTotal, textTotal };
 };
 
 const onSetLanguage = draft => {
+  draft.loaded  = false;
   draft.wip     = false;
   draft.err     = null;
-  draft.getByID         = identity;
+  draft.getByID = identity;
 };
 
 const onFetchDashboardFailure = (draft, payload) => {
@@ -151,6 +155,7 @@ export const reducer = handleActions({
 
 /* Selectors */
 
+const areTagsLoaded   = state => state.loaded;
 const getTags         = state => state.byId;
 const getRoots        = state => state.roots;
 const getDisplayRoots = state => state.displayRoots;
@@ -163,6 +168,7 @@ const getError        = state => state.error;
 const getItems = state => state.dashboard || {};
 
 export const selectors = {
+  areTagsLoaded,
   getWip,
   getError,
   getTags,
