@@ -7,8 +7,6 @@ import { formatDuration } from '../../helpers/utils';
 import UnitLogo from './Logo/UnitLogo';
 import { getProgress } from './ContentItem/helper';
 
-const widthBySize = { 'normal': '140px' };
-
 export const getLogoUnit = (content_units, historyItems) => {
   let logoUnit;
   if (historyItems.length > 0) {
@@ -19,15 +17,19 @@ export const getLogoUnit = (content_units, historyItems) => {
   return logoUnit || content_units[0];
 };
 
-const UnitLogoWithDuration = ({ unit, size = 'normal', width = 144, ...propz }) => {
+const UnitLogoWithDuration = ({ unit, ...propz }) => {
   const { id, duration } = unit;
 
   const historyItems = useSelector(state => my.getList(state.my, MY_NAMESPACE_HISTORY)) || [];
   const historyUnit = historyItems.find(x => x.content_unit_uid === id);
   const playTime = historyUnit?.data.current_time;
 
+  if (propz.width === undefined) {
+    propz.width = 140;
+  }
+
   return (
-    <div className="with_duration" style={{ minWidth: widthBySize[size] }}>
+    <div className="with_duration" style={{ minWidth: propz.width }}>
       {
         duration && (
           <div className="duration">
@@ -36,7 +38,7 @@ const UnitLogoWithDuration = ({ unit, size = 'normal', width = 144, ...propz }) 
         )
       }
       {getProgress(unit, playTime)}
-      <UnitLogo unitId={id} width={width} {...propz} />
+      <UnitLogo unitId={id} {...propz} />
     </div>
   );
 };

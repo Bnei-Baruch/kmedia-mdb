@@ -18,7 +18,6 @@ import { selectors as settingsSelectors } from '../redux/modules/settings';
 //import { selectFilterParams } from './search';
 import { selectors as searchSelectors } from '../redux/modules/search';
 import { actions, types } from '../redux/modules/filtersAside';
-import { types as searchTypes } from '../redux/modules/search';
 
 const RESULT_NAME_BY_PARAM = {
   'tag': 'tags', 'source': 'sources', 'author': 'sources', 'content_type': 'content_types'
@@ -199,10 +198,8 @@ function* watchFetchStat() {
 }
 
 function* watchElasticFetchStat() {
-  yield takeLatest([
-    searchTypes.SEARCH,
-    types.FETCH_ELASTIC_STATS,
-  ], fetchElasticStat);
+  // TODO: Move search stats fetch parallel to search, not after.
+  yield takeLatest(types.FETCH_ELASTIC_STATS, fetchElasticStat);
 }
 
 export const sagas = [

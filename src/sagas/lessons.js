@@ -10,8 +10,10 @@ export function* fetchAllSeries(action) {
   try {
     const language = yield select(state => settings.getLanguage(state.settings));
     const params   = { ...action.payload };
-    //add default param with_units
-    !params.with_units && (params.with_units = false);
+    // add default param with_units
+    if (params.with_units === undefined) {
+      params.with_units = false;
+    }
 
     const { data } = yield call(Api.collections, {
       ...params,
