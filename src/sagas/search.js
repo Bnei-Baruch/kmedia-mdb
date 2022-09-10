@@ -5,10 +5,13 @@ import Api from '../helpers/Api';
 import { getQuery, updateQuery as urlUpdateQuery } from './helpers/url';
 import { GenerateSearchId } from '../helpers/search';
 import { actions, selectors, types } from '../redux/modules/search';
-import { selectors as settings } from '../redux/modules/settings';
+import { selectors as settings, types as settingsTypes } from '../redux/modules/settings';
 import { actions as mdbActions } from '../redux/modules/mdb';
 import { actions as postsActions } from '../redux/modules/publications';
-import { selectors as filterSelectors, types as filterTypes } from '../redux/modules/filters';
+import { selectors as filterSelectors, actions as filterActions, types as filterTypes } from '../redux/modules/filters';
+import { selectors as lessonsSelectors, actions as lessonsActions } from '../redux/modules/lessons';
+import { fetchAllSeries } from './lessons';
+import { fetchViewsByUIDs } from './recommended';
 import { filtersTransformer } from '../filters';
 
 // TODO: Use debounce after redux-saga updated.
@@ -17,7 +20,7 @@ const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 function* autocomplete(action) {
   try {
     if (!action.payload.autocomplete) {
-      yield put(actions.autocompleteSuccess({ suggestions: []/*, request*/ }));
+      yield put(actions.autocompleteSuccess({ suggestions: [] }));
       return;
     }
 
@@ -33,7 +36,7 @@ function* autocomplete(action) {
       suggestions = data;
     }
 
-    yield put(actions.autocompleteSuccess({ suggestions/*, request*/ }));
+    yield put(actions.autocompleteSuccess({ suggestions }));
   } catch (err) {
     yield put(actions.autocompleteFailure(err));
   }
@@ -52,11 +55,33 @@ function getIdsForFetch(hits, types) {
 
 export function* search(action) {
   try {
+    const query     = yield select(state => selectors.getQuery(state.search));
+    const prevQuery = yield select(state => selectors.getPrevQuery(state.search));
+    let pageNo      = yield select(state => selectors.getPageNo(state.search));
+
     // Prepare filters values.
     const filters         = yield select(state => filterSelectors.getFilters(state.filters, 'search'));
     const params          = filtersTransformer.toApiParams(filters);
     const filterKeyValues = Object.entries(params).map(([v, k]) => `${v}:${k}`).join(' ');
-    const filterParams    = filterKeyValues ? ` ${filterKeyValues}` : '';
+    let filterParams      = filterKeyValues ? ` ${filterKeyValues}` : '';
+
+    // Clear pagination and filters.
+    if (prevQuery !== '' && prevQuery !== query && (pageNo !== 1 || !!filterParams)) {
+      if (pageNo !== 1) {
+        yield put(actions.setPage(1));
+        yield* urlUpdateQuery(query => Object.assign(query, { page: 1 }));
+        pageNo = 1;
+      }
+
+      if (!!filterParams) {
+        for (const filter of filters) {
+          const { name } = filter;
+          yield put(filterActions.resetFilter('search', name));
+        }
+
+        filterParams = '';
+      }
+    }
 
     if (action.type === filterTypes.SET_FILTER_VALUE_MULTI) {
       const prevFilterParams = yield select(state => selectors.getPrevFilterParams(state.search));
@@ -66,11 +91,9 @@ export function* search(action) {
       }
     }
 
-    const query    = yield select(state => selectors.getQuery(state.search));
-    const language = yield select(state => settings.getLanguage(state.settings));
-    const sortBy   = yield select(state => selectors.getSortBy(state.search));
-    const deb      = yield select(state => selectors.getDeb(state.search));
-    const pageNo   = yield select(state => selectors.getPageNo(state.search));
+    const language  = yield select(state => settings.getLanguage(state.settings));
+    const sortBy    = yield select(state => selectors.getSortBy(state.search));
+    const deb       = yield select(state => selectors.getDeb(state.search));
 
     // Redirect from home page.
     if (action.type === types.SEARCH && !action.payload) {
@@ -108,9 +131,10 @@ export function* search(action) {
       const cIDsToFetch    = getIdsForFetch(data.search_result.hits.hits, ['collections']);
       const cuIDsToFetch   = getIdsForFetch(data.search_result.hits.hits, ['units', 'sources']);
       const postIDsToFetch = getIdsForFetch(data.search_result.hits.hits, ['posts']);
+      const seriesLoaded   = yield select(state => lessonsSelectors.getSeriesLoaded(state.lessons));
 
-      if (cuIDsToFetch.length === 0 && cIDsToFetch.length === 0 && postIDsToFetch.length === 0) {
-        yield put(actions.searchSuccess({ searchResults: data, searchRequest: request }));
+      if (cuIDsToFetch.length === 0 && cIDsToFetch.length === 0 && postIDsToFetch.length === 0 && seriesLoaded) {
+        yield put(actions.searchSuccess({ searchResults: data, searchRequest: request, filterParams, query }));
         return;
       }
 
@@ -134,6 +158,15 @@ export function* search(action) {
         requests.push(call(Api.posts, { id: postIDsToFetch, pageSize: postIDsToFetch.length, language: lang }));
       }
 
+      if (!seriesLoaded) {
+        // Load lesson series if were not loaded yet or language was changed.
+        requests.push(call(fetchAllSeries, lessonsActions.fetchAllSeries({ with_units: true })));
+      }
+
+      if (cuIDsToFetch.length > 0) {
+        requests.push(call(fetchViewsByUIDs, cuIDsToFetch));
+      }
+
       const responses = yield all(requests);
       if (cuIDsToFetch.length > 0) {
         const respCU = responses.shift();
@@ -151,7 +184,7 @@ export function* search(action) {
       }
     }
 
-    yield put(actions.searchSuccess({ searchResults: data, searchRequest: request, filterParams }));
+    yield put(actions.searchSuccess({ searchResults: data, searchRequest: request, filterParams, query }));
   } catch (err) {
     yield put(actions.searchFailure(err));
   }
@@ -213,12 +246,13 @@ function* watchQueryUpdate() {
 
 function* watchSearch() {
   yield takeLatest([
-    types.SEARCH,
-    types.SET_SORT_BY,
-    types.SET_PAGE,
-    types.SET_DEB,
     filterTypes.SET_FILTER_VALUE,
     filterTypes.SET_FILTER_VALUE_MULTI,
+    settingsTypes.SET_LANGUAGE,
+    types.SEARCH,
+    types.SET_DEB,
+    types.SET_PAGE,
+    types.SET_SORT_BY,
   ], search);
 }
 

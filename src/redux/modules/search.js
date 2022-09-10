@@ -62,6 +62,7 @@ export const actions = {
 const initialState = {
   suggestions: {},
   q: '',
+  prevQuery: '',
   prevFilterParams: '',
   queryResult: {},
   pageNo: 1,
@@ -96,7 +97,8 @@ export const reducer = handleActions({
     draft.wip              = false;
     draft.error            = null;
     draft.queryResult      = payload.searchResults;
-    draft.prevFilterParams = payload.filterPrams;
+    draft.prevFilterParams = payload.filterParams;
+    draft.prevQuery        = payload.query;
   },
   [SEARCH_FAILURE]: (draft, payload) => {
     draft.wip   = false;
@@ -124,6 +126,7 @@ const getError            = state => state.error;
 const getPageNo           = state => state.pageNo;
 const getPrevFilterParams = state => state.prevFilterParams;
 const getQuery            = state => state.q;
+const getPrevQuery        = state => state.prevQuery;
 const getQueryResult      = state => state.queryResult;
 const getSortBy           = state => state.sortBy;
 const getSuggestions      = state => state.suggestions;
@@ -136,6 +139,7 @@ export const selectors = {
   getPageNo,
   getPrevFilterParams,
   getQuery,
+  getPrevQuery,
   getQueryResult,
   getSortBy,
   getSuggestions,
