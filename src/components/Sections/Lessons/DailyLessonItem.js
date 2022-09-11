@@ -6,7 +6,7 @@ import { canonicalLink } from '../../../helpers/links';
 
 import { selectors as mdb } from '../../../redux/modules/mdb';
 import Link from '../../Language/MultiLanguageLink';
-import UnitLogo from '../../shared/Logo/UnitLogo';
+import UnitLogoWithDuration from '../../shared/UnitLogoWithDuration';
 
 const DailyLessonItem = ({ id, t }) => {
   const c = useSelector(state => mdb.getDenormCollection(state.mdb, id));
@@ -17,7 +17,7 @@ const DailyLessonItem = ({ id, t }) => {
   return (
     <List.Item key={id} className="media_item daily_lesson">
       <div style={{ minWidth: '140px' }}>
-        <UnitLogo unitId={content_units[0].id} width={144} />
+        <UnitLogoWithDuration unit={content_units[0]} />
       </div>
       <div className="media_item__content">
         <Header as={Link} to={canonicalLink(c)}>
