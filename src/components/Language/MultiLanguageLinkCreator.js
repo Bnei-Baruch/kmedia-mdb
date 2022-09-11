@@ -2,8 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import hoistStatics from 'hoist-non-react-statics';
 
-import { getToWithLanguage } from '../../helpers/url';
+import { getToWithLanguage, stringify } from '../../helpers/url';
 import { useLocation } from 'react-router';
+import { KC_SEARCH_KEY_SESSION, KC_SEARCH_KEYS } from '../../sagas/helpers/keycklockManager';
+import { parse } from 'qs';
+import { omit } from 'lodash/object';
 
 /**
  * multiLanguageLinkCreator - an higher order component to create a link that allows navigating
@@ -23,11 +26,24 @@ import { useLocation } from 'react-router';
  */
 
 const multiLanguageLinkCreator = () => WrappedComponent => {
-  const MultiLanguageLinkHOC = ({ to = undefined, language = '', contentLanguage = undefined, staticContext, ...rest }) => {
+  const MultiLanguageLinkHOC = (
+    {
+      to = undefined,
+      language = '',
+      contentLanguage = undefined,
+      staticContext,
+      ...rest
+    }
+  ) => {
 
     // We need to use "unused constants" in order to get proper "rest"
     const location       = useLocation();
     const toWithLanguage = getToWithLanguage(to, location, language, contentLanguage);
+
+    if (toWithLanguage?.hash && toWithLanguage.hash.indexOf(KC_SEARCH_KEY_SESSION) !== -1) {
+      const q             = parse(toWithLanguage.hash);
+      toWithLanguage.hash = stringify(omit(q, KC_SEARCH_KEYS));
+    }
 
     return <WrappedComponent to={toWithLanguage} {...rest} />;
   };
