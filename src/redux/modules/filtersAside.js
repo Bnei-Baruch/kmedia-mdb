@@ -134,7 +134,7 @@ const onReceiveSingleTypeStats = (draft, { dataCU = {}, dataC = {}, dataL = {}, 
 const onReceiveLocationsStats = (draft, { locations, namespace, isPrepare }) => {
   const stats = draft[namespace]?.[FN_LOCATIONS] || { byId: {}, citiesByCountry: {}, tree: [] };
 
-  if (isPrepare) {
+  if (isPrepare && locations) {
     Object.values(locations)
       .filter(x => !!x.city)
       .forEach(({ city, country, count }) => {
