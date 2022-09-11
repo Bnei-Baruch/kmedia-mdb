@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
 import { Header } from 'semantic-ui-react';
@@ -14,19 +14,23 @@ import { actions as recommended } from '../../../redux/modules/recommended';
 import { getMyItemKey } from '../../../helpers/my';
 
 const PlaylistMyContainer = ({ t, history, location, id }) => {
-  const { key }      = getMyItemKey(MY_NAMESPACE_PLAYLISTS, { id });
+  const { key }  = getMyItemKey(MY_NAMESPACE_PLAYLISTS, { id });
   const playlist = useSelector(state => selectors.getItemByKey(state.my, MY_NAMESPACE_PLAYLISTS, key)) || {};
   /*
   const wip           = useSelector(state => selectors.getWIP(state.my, MY_NAMESPACE_PLAYLISTS));
   const err           = useSelector(state => selectors.getErr(state.my, MY_NAMESPACE_PLAYLISTS));
   */
-  const uiLanguage    = useSelector(state => settings.getLanguage(state.settings));
-  const content_units = useSelector(state => playlist.items?.map(x => mdbSelectors.getDenormContentUnit(state.mdb, x.content_unit_uid)).filter(x => !!x)) || [];
-  const user          = useSelector(state => auth.getUser(state.auth));
+  const uiLanguage = useSelector(state => settings.getLanguage(state.settings));
+  const denormCU   = useSelector(state => mdbSelectors.nestedGetDenormContentUnit(state.mdb));
+  const user       = useSelector(state => auth.getUser(state.auth));
 
-  const cuUIDs            = content_units.map(c => c.id);
+  const content_units     = useMemo(() => playlist.items?.map(x => denormCU(x.content_unit_uid)).filter(x => !!x) || [],
+    [playlist.items]);
+  const cuUIDs            = useMemo(() => content_units.map(c => c.id), [content_units]);
   const cuUID             = playlist.last_played || cuUIDs[0];
-  const fictiveCollection = { content_units, id, cuIDs: cuUIDs, name: playlist.name };
+  const fictiveCollection = useMemo(() => {
+    return ({ content_units, id, cuIDs: cuUIDs, name: playlist.name });
+  }, [id, content_units, cuUIDs, playlist.name]);
 
   const dispatch = useDispatch();
   useEffect(() => {
