@@ -72,7 +72,7 @@ export const initKC = async (dispatch, language) => {
 
     return keycloak.init(options).then(ok => {
       if (!ok) {
-        dispatch(actions.loginFailure({}));
+        dispatch(actions.loginFailure({ error: 'problem to init keycloak' }));
         return;
       }
 
