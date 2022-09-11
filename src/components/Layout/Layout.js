@@ -172,11 +172,7 @@ class Layout extends Component {
       : <Icon name="sidebar" />;
 
     if (embed) {
-      return (
-        <div>
-          <KmediaRouters />
-        </div>
-      );
+      return (<KmediaRouters />);
     }
 
     return (

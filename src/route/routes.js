@@ -116,7 +116,4 @@ const routes = [
   { path: 'likutim/:id', component: <Likut />, },
 ];
 
-export default routes.map(r => {
-  r.path = `/:lang/${r.path}`;
-  return r;
-});
+export default routes;

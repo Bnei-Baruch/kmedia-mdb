@@ -164,7 +164,7 @@ export default function serverRender(req, res, next, htmlData) {
     };
 
     const reqPath = req.originalUrl.split('?')[0];
-    const branch  = matchRoutes(routes, reqPath);
+    const branch  = matchRoutes(routes, reqPath) || [];
     console.log('serverRender: for path %s was found branch %o', reqPath, branch);
 
     let hrstart    = process.hrtime();
