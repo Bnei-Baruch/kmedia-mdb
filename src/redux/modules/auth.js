@@ -20,7 +20,6 @@ const onLoginSuccess = (draft, payload) => {
   draft.user            = user;
   draft.token           = token;
   draft.error           = null;
-  return draft;
 };
 
 const onLoginFailure = (draft, payload) => {
@@ -28,19 +27,16 @@ const onLoginFailure = (draft, payload) => {
   draft.user      = null;
   draft.token     = null;
   draft.error     = error;
-  return draft;
 };
 
 const onLogoutSuccess = draft => {
   draft.user  = null;
   draft.token = null;
   draft.error = null;
-  return draft;
 };
 
 const onUpdateToken = (draft, payload) => {
   draft.token = payload;
-  return draft;
 };
 
 export const reducer = handleActions({

@@ -28,9 +28,7 @@ const PlaylistMyContainer = ({ t, history, location, id }) => {
     [playlist.items]);
   const cuUIDs            = useMemo(() => content_units.map(c => c.id), [content_units]);
   const cuUID             = playlist.last_played || cuUIDs[0];
-  const fictiveCollection = useMemo(() => {
-    return ({ content_units, id, cuIDs: cuUIDs, name: playlist.name });
-  }, [id, content_units, cuUIDs, playlist.name]);
+  const fictiveCollection = useMemo(() => ({ content_units, id, cuIDs: cuUIDs, name: playlist.name }), [id, content_units, cuUIDs, playlist.name]);
 
   const dispatch = useDispatch();
   useEffect(() => {
