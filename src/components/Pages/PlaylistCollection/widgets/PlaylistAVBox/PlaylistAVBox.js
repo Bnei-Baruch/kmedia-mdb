@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { Grid } from 'semantic-ui-react';
 import isEqual from 'react-fast-compare';
 
@@ -209,4 +209,4 @@ class PlaylistAVBox extends Component {
   }
 }
 
-export default withRouter(withNamespaces()(PlaylistAVBox));
+export default withRouter(withTranslation()(PlaylistAVBox));

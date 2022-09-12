@@ -2,7 +2,7 @@ import React, { Component, createRef, useContext } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { connect } from 'react-redux';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { Header, Icon, Menu, Ref, Segment } from 'semantic-ui-react';
 import Headroom from 'react-headroom';
 
@@ -272,6 +272,6 @@ class Layout extends Component {
   }
 }
 
-export default withRouter(connect(state => ({
-  language: settings.getLanguage(state.settings),
-}))(withNamespaces()(Layout)));
+export default connect(
+  state => ({ language: settings.getLanguage(state.settings) })
+)(withRouter(withTranslation()(Layout)));

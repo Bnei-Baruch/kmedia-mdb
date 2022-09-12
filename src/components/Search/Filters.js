@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Button, Dropdown, Icon, Menu } from 'semantic-ui-react';
@@ -189,4 +189,4 @@ export default connect(
   dispatch => bindActionCreators({
     setFilterValue: actions.setFilterValue
   }, dispatch)
-)(withNamespaces()(SearchResultsFilters));
+)(withTranslation()(SearchResultsFilters));

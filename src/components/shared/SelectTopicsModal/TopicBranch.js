@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { Button, Checkbox, Container, Grid, Header, List } from 'semantic-ui-react';
 
 import { getEscapedRegExp } from '../../../helpers/utils';
@@ -80,4 +80,4 @@ TopicBranch.propTypes = {
   setSelected: PropTypes.func.isRequired
 };
 
-export default withNamespaces()(TopicBranch);
+export default withTranslation()(TopicBranch);

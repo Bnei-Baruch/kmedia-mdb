@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import React, { useMemo, useState } from 'react';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Checkbox, Icon, Input, List, Modal, Table } from 'semantic-ui-react';
 
@@ -132,4 +132,4 @@ const CollectionsModal = ({ ct, namespace, t }) => {
   );
 };
 
-export default withNamespaces()(CollectionsModal);
+export default withTranslation()(CollectionsModal);

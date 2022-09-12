@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import React from 'react';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Header, List } from 'semantic-ui-react';
 
@@ -37,4 +37,4 @@ const CollectionItem = ({ id, t }) => {
   );
 };
 
-export default withNamespaces()(CollectionItem);
+export default withTranslation()(CollectionItem);

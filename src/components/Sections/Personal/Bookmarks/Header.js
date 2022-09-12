@@ -1,5 +1,5 @@
 import React from 'react';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { Grid, Header, Icon, Input } from 'semantic-ui-react';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -48,4 +48,4 @@ const BookmarkHeader = ({ t }) => {
   );
 };
 
-export default withNamespaces()(BookmarkHeader);
+export default withTranslation()(BookmarkHeader);

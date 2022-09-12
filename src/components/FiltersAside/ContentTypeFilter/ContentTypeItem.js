@@ -1,5 +1,5 @@
 import React from 'react';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Checkbox, List } from 'semantic-ui-react';
 
@@ -39,4 +39,4 @@ const ContentTypeItem = ({ namespace, id, isSelChild = false, t }) => {
   );
 };
 
-export default withNamespaces()(ContentTypeItem);
+export default withTranslation()(ContentTypeItem);

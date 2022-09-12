@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import produce from 'immer';
 import debounce from 'lodash/debounce';
 import isEqual from 'react-fast-compare';
@@ -258,4 +258,4 @@ TopicContainer.propTypes = {
   t: PropTypes.func.isRequired,
 };
 
-export default withNamespaces()(TopicContainer);
+export default withTranslation()(TopicContainer);

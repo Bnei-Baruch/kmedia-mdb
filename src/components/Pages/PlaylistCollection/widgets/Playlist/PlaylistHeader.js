@@ -1,7 +1,7 @@
 import React, { useContext, useCallback, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector, shallowEqual, useDispatch } from 'react-redux';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { Header, Icon } from 'semantic-ui-react';
 import clsx from 'clsx';
 import moment from 'moment';
@@ -224,4 +224,4 @@ PlaylistHeader.propTypes = {
   t: PropTypes.func.isRequired,
 };
 
-export default withNamespaces()(PlaylistHeader);
+export default withTranslation()(PlaylistHeader);

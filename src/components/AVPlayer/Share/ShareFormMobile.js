@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Form, Input, Popup } from 'semantic-ui-react';
 import CopyToClipboard from 'react-copy-to-clipboard';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 
 import BaseShareForm from './BaseShareForm';
 import ShareBar from './ShareBar';
@@ -113,4 +113,4 @@ class ShareFormMobile extends BaseShareForm {
   }
 }
 
-export default withNamespaces()(ShareFormMobile);
+export default withTranslation()(ShareFormMobile);

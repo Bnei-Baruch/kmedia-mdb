@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import {
   Button,
   Checkbox, Container,
@@ -208,4 +208,4 @@ BookmarkForm.propTypes = {
   bookmarkId: PropTypes.number
 };
 
-export default withNamespaces()(BookmarkForm);
+export default withTranslation()(BookmarkForm);

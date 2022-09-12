@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { Container, Header } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 
@@ -28,4 +28,4 @@ TextList.propTypes = {
   t: PropTypes.func.isRequired,
 };
 
-export default withNamespaces()(TextList);
+export default withTranslation()(TextList);

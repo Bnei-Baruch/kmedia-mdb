@@ -15,7 +15,7 @@ import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { isEqual } from 'lodash';
 import { useInterval } from '../../../helpers/timer';
 import { useLocation } from 'react-router-dom';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { selectors as settings } from '../../../redux/modules/settings';
 
@@ -191,4 +191,4 @@ const arePropsEqual = (prevProps, nextProps) =>
   isEqual(prevProps.latestTweets, nextProps.latestTweets) &&
   isEqual(prevProps.banner, nextProps.banner);
 
-export default React.memo(withNamespaces()(HomePage), arePropsEqual);
+export default React.memo(withTranslation()(HomePage), arePropsEqual);

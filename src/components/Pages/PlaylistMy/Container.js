@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { Header } from 'semantic-ui-react';
 
 import { actions, selectors } from '../../../redux/modules/my';
@@ -59,4 +59,4 @@ const PlaylistMyContainer = ({ t }) => {
   );
 };
 
-export default withNamespaces()(PlaylistMyContainer);
+export default withTranslation()(PlaylistMyContainer);

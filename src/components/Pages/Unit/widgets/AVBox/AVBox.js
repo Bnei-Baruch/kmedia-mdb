@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
 import clsx from 'clsx';
@@ -103,4 +103,4 @@ AVBox.propTypes = {
   t: PropTypes.func.isRequired,
 };
 
-export default withNamespaces()(AVBox);
+export default withTranslation()(AVBox);

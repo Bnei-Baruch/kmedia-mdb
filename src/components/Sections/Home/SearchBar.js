@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { useLocation } from 'react-router';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { Button, Grid, Header, Icon, Input } from 'semantic-ui-react';
 import { mapState as obMS, OmniBox, wrap } from '../../Search/OmniBox';
 import ButtonDayPicker from '../../Filters/components/Date/ButtonDayPicker';
@@ -53,7 +53,7 @@ class MyOmniBox extends OmniBox {
   }
 }
 
-const MyWrappedOmniBox = wrap(withNamespaces()(MyOmniBox), state => ({
+const MyWrappedOmniBox = wrap(withTranslation()(MyOmniBox), state => ({
   ...obMS(state)
 }));
 
@@ -81,4 +81,4 @@ SearchBar.propTypes = {
   t: PropTypes.func.isRequired,
 };
 
-export default withNamespaces()(SearchBar);
+export default withTranslation()(SearchBar);

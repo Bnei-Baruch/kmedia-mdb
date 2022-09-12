@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { push as routerPush } from '@lagunovsky/redux-react-router';
@@ -242,4 +242,4 @@ export const mapDispatch = dispatch => bindActionCreators({
 
 export const wrap = (WrappedComponent, ms = mapState, md = mapDispatch) => connect(ms, md)(WrappedComponent);
 
-export default wrap(withNamespaces()(OmniBox));
+export default wrap(withTranslation()(OmniBox));

@@ -1,5 +1,5 @@
 import React from 'react';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
 import { CT_ARTICLES } from '../../../helpers/consts';
@@ -47,4 +47,4 @@ const CollectionsFilter = props => {
   return <HierarchicalFilter name="collections-filter" tree={tree} {...props} t={t} />;
 };
 
-export default (withNamespaces()(CollectionsFilter));
+export default (withTranslation()(CollectionsFilter));

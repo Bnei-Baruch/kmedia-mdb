@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { push as routerPush, replace as routerReplace } from '@lagunovsky/redux-react-router';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { Button, Container, Grid, Header, Input, Ref, Segment } from 'semantic-ui-react';
 import Headroom from 'react-headroom';
 
@@ -575,4 +575,4 @@ export default withRouter(connect(
     push: routerPush,
     replace: routerReplace,
   }, dispatch)
-)(withNamespaces()(withRouter(LibraryContainer))));
+)(withTranslation()(withRouter(LibraryContainer))));

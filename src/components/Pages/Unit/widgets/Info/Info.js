@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Button, Header, List } from 'semantic-ui-react';
 
@@ -171,4 +171,4 @@ Info.propTypes = {
   currentCollection: shapes.Collection
 };
 
-export default withNamespaces()(Info);
+export default withTranslation()(Info);
