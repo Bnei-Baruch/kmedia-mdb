@@ -51,15 +51,15 @@ ReactDOM.hydrate(
   <React.StrictMode>
     <ErrorBoundary>
       <HelmetProvider>
-          <App
-            i18n={i18n}
-            store={store}
-            history={history}
-            deviceInfo={deviceInfo}
-            clientChronicles={clientChronicles}
-            abTesting={abTesting}
-            {...i18nData}
-          />
+        <App
+          i18n={i18n}
+          store={store}
+          history={history}
+          deviceInfo={deviceInfo}
+          clientChronicles={clientChronicles}
+          abTesting={abTesting}
+          {...i18nData}
+        />
       </HelmetProvider>
     </ErrorBoundary>
   </React.StrictMode>,
