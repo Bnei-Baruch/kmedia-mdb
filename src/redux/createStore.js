@@ -39,7 +39,7 @@ export default function createStore(initialState, history) {
     // middlewares.push(logger);
   }
 
-//TODO David: need replace to @reduxjs/toolkit
+  //TODO David: need replace to @reduxjs/toolkit
   const store = reduxCreateStore(reducer(history), initialState, compose(
     applyMiddleware(...middlewares),
     devToolsStoreEnhancer()
