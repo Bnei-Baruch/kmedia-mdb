@@ -10,7 +10,7 @@ import clsx from 'clsx';
 import { Button, Icon } from 'semantic-ui-react';
 import isEqual from 'react-fast-compare';
 
-import { MT_AUDIO, MT_VIDEO, VS_DEFAULT, VS_FHD, VS_HD, VS_NHD } from '../../helpers/consts';
+import { MT_AUDIO, MT_VIDEO, VS_DEFAULT, VS_FHD, VS_HD, VS_NHD, MY_NAMESPACE_HISTORY } from '../../helpers/consts';
 import playerHelper from '../../helpers/player';
 import { fromHumanReadableTime } from '../../helpers/time';
 import { getQuery } from '../../helpers/url';
@@ -37,6 +37,7 @@ import { DeviceInfoContext } from '../../helpers/app-contexts';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { actions } from '../../redux/modules/player';
+import { selectors as my, actions as myActions } from '../../redux/modules/my';
 
 const DEFAULT_PLAYER_VOLUME       = 0.8;
 const PLAYER_VOLUME_STORAGE_KEY   = '@@kmedia_player_volume';
@@ -53,6 +54,7 @@ class AVPlayer extends Component {
     uiLanguage: PropTypes.string.isRequired,
     requestedLanguage: PropTypes.string,
     chronicles: PropTypes.shape(),
+    myHistoryItems: PropTypes.array,
 
     // Language dropdown props.
     languages: PropTypes.arrayOf(PropTypes.string).isRequired,
@@ -82,6 +84,7 @@ class AVPlayer extends Component {
 
     // Player actions.
     actionPlayerPlay: PropTypes.func.isRequired,
+    myHistoryFetch: PropTypes.func
   };
 
   static defaultProps = {
@@ -193,7 +196,9 @@ class AVPlayer extends Component {
   // so no need to shouldComponentUpdate here
 
   componentDidMount() {
-    const { history: { location }, media, item, autoPlay } = this.props;
+    const { history: { location }, media, item, autoPlay, myHistoryFetch } = this.props;
+
+    myHistoryFetch(MY_NAMESPACE_HISTORY, { page_no: 1, page_size: 20 });
 
     const query = getQuery(location);
     const start = PlayerStartEnum.GetFromQuery(query);
@@ -677,7 +682,7 @@ class AVPlayer extends Component {
   saveCurrentTime = () => {
     const { currentTime, firstSeek } = this.state;
     const { media, item }            = this.props;
-    if (media && item && item.unit && item.unit.id && !firstSeek) {
+    if (media && item?.unit?.id && !firstSeek) {
       const currentMediaTime = Math.round(media.currentTime);
       if (currentMediaTime !== currentTime) {
         this.setState({ currentTime: currentMediaTime });
@@ -688,19 +693,28 @@ class AVPlayer extends Component {
 
   clearCurrentTime = () => {
     const { item } = this.props;
-    if (item && item.unit && item.unit.id) {
+    if (item?.unit?.id) {
       localStorage.removeItem(`${PLAYER_POSITION_STORAGE_KEY}_${item.unit.id}`);
     }
   };
 
   getSavedTime = () => {
-    const { item } = this.props;
-    // Try to get the current time from local storage if available
-    if (item && item.unit && item.unit.id) {
+    const { item, myHistoryItems } = this.props;
+
+    if (item?.unit?.id) {
+      // try get the current time from my personal history
+      const histItem = myHistoryItems.find(hi => hi.content_unit_uid === item.unit.id)
+
+      if (histItem?.data.current_time) {
+        return parseInt(histItem?.data.current_time, 10)
+      }
+
+      // Try to get the current time from local storage if available
       const savedTime = localStorage.getItem(`${PLAYER_POSITION_STORAGE_KEY}_${item.unit.id}`);
       if (savedTime) {
         return parseInt(savedTime, 10);
       }
+
     }
 
     return null;
@@ -919,10 +933,15 @@ class AVPlayer extends Component {
   }
 }
 
+const mapState = state => ({
+  myHistoryItems: my.getList(state.my, MY_NAMESPACE_HISTORY)
+})
+
 const mapDispatch = dispatch => (
   bindActionCreators({
     actionPlayerPlay: actions.playerPlay,
+    myHistoryFetch: myActions.fetch,
   }, dispatch)
 );
 
-export default withNamespaces()(withMediaProps(withRouter(connect(() => ({}), mapDispatch)(AVPlayer))));
+export default withNamespaces()(withMediaProps(withRouter(connect(mapState, mapDispatch)(AVPlayer))));
