@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Container, Grid, Popup } from 'semantic-ui-react';
@@ -130,4 +130,4 @@ const Page = ({ t }) => {
   );
 };
 
-export default withNamespaces()(withRouter(Page));
+export default withTranslation()(withRouter(Page));

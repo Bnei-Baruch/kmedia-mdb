@@ -1,5 +1,5 @@
 import React from 'react';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Header, List } from 'semantic-ui-react';
 import { canonicalLink } from '../../../helpers/links';
@@ -35,4 +35,4 @@ const DailyLessonItem = ({ id, t }) => {
   );
 };
 
-export default withNamespaces()(DailyLessonItem);
+export default withTranslation()(DailyLessonItem);

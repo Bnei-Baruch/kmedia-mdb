@@ -1,5 +1,5 @@
-import { URL } from 'url';
 import React from 'react';
+import { URL } from 'url';
 import ReactDOMServer from 'react-dom/server';
 import { matchRoutes } from 'react-router-dom';
 import { createMemoryHistory } from 'history';

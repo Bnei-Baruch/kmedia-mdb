@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Header, Image } from 'semantic-ui-react';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import * as shapes from '../../shapes';
 import Link from '../../Language/MultiLanguageLink';
 import { Requests } from '../../../helpers/Api';
@@ -42,4 +42,4 @@ LatestDailyLesson.propTypes = {
   t: PropTypes.func.isRequired,
 };
 
-export default withNamespaces()(LatestDailyLesson);
+export default withTranslation()(LatestDailyLesson);

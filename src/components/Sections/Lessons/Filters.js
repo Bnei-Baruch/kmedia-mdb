@@ -1,6 +1,6 @@
 import { isEqual } from 'lodash';
 import React, { useEffect, useState } from 'react';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Container, Header } from 'semantic-ui-react';
 import { CT_VIRTUAL_LESSONS, FN_SOURCES_MULTI, FN_TOPICS_MULTI, PAGE_NS_LESSONS } from '../../../helpers/consts';
@@ -77,4 +77,4 @@ const Filters = ({ namespace, baseParams, t }) => {
   );
 };
 
-export default withNamespaces()(Filters);
+export default withTranslation()(Filters);

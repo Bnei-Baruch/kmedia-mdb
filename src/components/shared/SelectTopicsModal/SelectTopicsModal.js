@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Container, Grid, Header, Input, Label, Modal } from 'semantic-ui-react';
 import isEqual from 'react-fast-compare';
@@ -172,4 +172,4 @@ SelectTopicsModal.propTypes = {
   onClose: PropTypes.func.isRequired,
 };
 
-export default withNamespaces()(SelectTopicsModal);
+export default withTranslation()(SelectTopicsModal);

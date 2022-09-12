@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Checkbox, List } from 'semantic-ui-react';
 import { FN_LOCATIONS } from '../../../helpers/consts';
@@ -48,4 +48,4 @@ const CityItem = ({ namespace, id, county, t }) => {
   );
 };
 
-export default withNamespaces()(CityItem);
+export default withTranslation()(CityItem);

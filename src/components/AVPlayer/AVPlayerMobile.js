@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { areEqual, noop } from '../../helpers/utils';
 import debounce from 'lodash/debounce';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { Button, Icon, Message } from 'semantic-ui-react';
 
 import { LANG_HEBREW, MT_AUDIO, MT_VIDEO } from '../../helpers/consts';
@@ -586,4 +586,4 @@ class AVPlayerMobile extends Component {
   }
 }
 
-export default withRouter(withNamespaces()(AVPlayerMobile));
+export default withRouter(withTranslation()(AVPlayerMobile));

@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { useEffect, useMemo } from 'react';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 
 import { isEmpty } from '../../../helpers/utils';
@@ -80,4 +80,4 @@ const areEqual = (prevProps, nextProps) =>
   ((!prevProps.cId && !nextProps.cId) || prevProps.cId === nextProps.cId)
   && ((!prevProps.cuId && !nextProps.cuId) || prevProps.cuId === nextProps.cuId);
 
-export default React.memo(withNamespaces()(PlaylistCollectionContainer), areEqual);
+export default React.memo(withTranslation()(PlaylistCollectionContainer), areEqual);

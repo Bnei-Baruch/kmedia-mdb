@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import isEqual from 'react-fast-compare';
@@ -333,4 +333,4 @@ const mapDispatch = dispatch => bindActionCreators({
   unzip: actions.unzip
 }, dispatch);
 
-export default connect(mapState, mapDispatch)(withNamespaces()(Sketches));
+export default connect(mapState, mapDispatch)(withTranslation()(Sketches));

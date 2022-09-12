@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { Header } from 'semantic-ui-react';
 
 import { IsCollectionContentType, MY_NAMESPACE_REACTIONS } from '../../../helpers/consts';
@@ -49,4 +49,4 @@ const PlaylistReactionContainer = ({ t }) => {
   );
 };
 
-export default withNamespaces()(PlaylistReactionContainer);
+export default withTranslation()(PlaylistReactionContainer);

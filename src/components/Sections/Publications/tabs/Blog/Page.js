@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { Container, Divider } from 'semantic-ui-react';
 
 import * as shapes from '../../../../shapes';
@@ -83,4 +83,4 @@ BlogPage.propTypes = {
   onFiltersHydrated: PropTypes.func.isRequired,
 };
 
-export default withNamespaces()(BlogPage);
+export default withTranslation()(BlogPage);

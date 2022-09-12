@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Confirm, Dropdown, Modal } from 'semantic-ui-react';
 
@@ -105,4 +105,4 @@ const Actions = ({ bookmark, t }) => {
   );
 };
 
-export default withNamespaces()(Actions);
+export default withTranslation()(Actions);

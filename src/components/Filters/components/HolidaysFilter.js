@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import countBy from 'lodash/countBy';
 import { useSelector } from 'react-redux';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 
 import { CT_HOLIDAY } from '../../../helpers/consts';
 import { selectors } from '../../../redux/modules/events';
@@ -46,4 +46,4 @@ HolidaysFilter.propTypes = {
   t: PropTypes.func.isRequired,
 };
 
-export default withNamespaces()(HolidaysFilter);
+export default withTranslation()(HolidaysFilter);

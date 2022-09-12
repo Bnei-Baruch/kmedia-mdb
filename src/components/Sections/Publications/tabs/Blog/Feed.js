@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 
 import * as shapes from '../../../../shapes';
 import { renderBlogItemForHomepage, renderBlogItemForPublications } from './renderFeedHelpers';
@@ -27,4 +27,4 @@ BlogFeed.propTypes = {
   language: PropTypes.string.isRequired,
 };
 
-export default withNamespaces()(BlogFeed);
+export default withTranslation()(BlogFeed);

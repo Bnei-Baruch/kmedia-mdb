@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { Container, Grid, Button, Header } from 'semantic-ui-react';
 import isEqual from 'react-fast-compare';
 
@@ -252,4 +252,4 @@ const areEqual = (prevProps, nextProps) => (
   && ((!prevProps.cuId && !nextProps.cuId) || prevProps.cuId === nextProps.cuId)
 );
 
-export default React.memo(withNamespaces()(PlaylistCollectionPage), areEqual);
+export default React.memo(withTranslation()(PlaylistCollectionPage), areEqual);

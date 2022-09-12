@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import clsx from 'clsx';
 import { useLocation, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
@@ -94,4 +94,4 @@ UnitPage.propTypes = {
   t: PropTypes.func.isRequired
 };
 
-export default withNamespaces()(UnitPage);
+export default withTranslation()(UnitPage);

@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
 import { isEmpty } from '../../../helpers/utils';
@@ -44,4 +44,4 @@ SourcesFilter.propTypes = {
   t: PropTypes.func.isRequired,
 };
 
-export default withNamespaces()(SourcesFilter);
+export default withTranslation()(SourcesFilter);

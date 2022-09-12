@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 
 import { actions, selectors } from '../../../redux/modules/mdb';
 import Helmets from '../../shared/Helmets';
@@ -49,4 +49,4 @@ LastLessonCollection.propTypes = {
   t: PropTypes.func.isRequired
 }
 
-export default withNamespaces()(LastLessonCollection);
+export default withTranslation()(LastLessonCollection);

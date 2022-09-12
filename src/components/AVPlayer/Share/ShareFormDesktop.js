@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Form, Message, Popup } from 'semantic-ui-react';
 import CopyToClipboard from 'react-copy-to-clipboard';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 
 import BaseShareForm from './BaseShareForm';
 import ShareBar from './ShareBar';
@@ -124,4 +124,4 @@ class ShareFormDesktop extends BaseShareForm {
   }
 }
 
-export default withNamespaces()(ShareFormDesktop);
+export default withTranslation()(ShareFormDesktop);

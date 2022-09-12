@@ -1,5 +1,5 @@
 import i18n from 'i18next';
-import backend from 'i18next-xhr-backend';
+import backend from 'i18next-http-backend';
 import moment from 'moment';
 import 'moment/locale/he';
 import 'moment/locale/ru';
@@ -44,7 +44,7 @@ i18n
     },
 
     react: {
-      wait: true, // globally set to wait for loaded translations in withNamespaces hoc
+      wait: true, // globally set to wait for loaded translations in withTranslation hoc
     },
   });
 

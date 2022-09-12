@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 
 import { useInterval } from '../../../helpers/timer';
 import { LANG_HEBREW, LANG_RUSSIAN, LANG_SPANISH, LANG_UKRAINIAN } from '../../../helpers/consts';
@@ -121,4 +121,4 @@ HomePageContainer.propTypes = {
   t: PropTypes.func.isRequired
 };
 
-export default withNamespaces()(HomePageContainer);
+export default withTranslation()(HomePageContainer);

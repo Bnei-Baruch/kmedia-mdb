@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { Button, Popup, } from 'semantic-ui-react';
 
 import { SectionLogo } from '../../../helpers/images';
@@ -40,4 +40,4 @@ LabelButton.propTypes = {
   label: PropTypes.object.isRequired,
 };
 
-export default withNamespaces()(LabelButton);
+export default withTranslation()(LabelButton);

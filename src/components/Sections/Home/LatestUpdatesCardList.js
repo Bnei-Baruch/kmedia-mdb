@@ -3,7 +3,7 @@ import { Swipeable } from 'react-swipeable';
 import { Button, Card } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import LatestUpdate from './LatestUpdate';
 import { getSectionForTranslation } from '../../../helpers/utils';
 import { isLanguageRtl } from '../../../helpers/i18n-utils';
@@ -145,4 +145,4 @@ LatestUpdatesCardList.propTypes = {
   itemsByCT: PropTypes.any
 };
 
-export default withNamespaces()(LatestUpdatesCardList);
+export default withTranslation()(LatestUpdatesCardList);

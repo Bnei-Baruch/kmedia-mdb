@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { Menu, Segment } from 'semantic-ui-react';
 import isEqual from 'react-fast-compare';
 import PropTypes from 'prop-types';
@@ -318,4 +318,4 @@ Transcription.defaultProps = {
   type: null,
 };
 
-export default withNamespaces()(Transcription);
+export default withTranslation()(Transcription);

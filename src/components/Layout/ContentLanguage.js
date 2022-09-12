@@ -1,6 +1,6 @@
 import React, { useContext, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { Dropdown, Menu } from 'semantic-ui-react';
 import { useNavigate, useLocation } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
@@ -111,4 +111,4 @@ ContentLanguage.propTypes = {
   t: PropTypes.func.isRequired,
 };
 
-export default withNamespaces()(ContentLanguage);
+export default withTranslation()(ContentLanguage);

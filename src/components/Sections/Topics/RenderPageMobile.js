@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { Breadcrumb, Button, Container, Divider, Modal } from 'semantic-ui-react';
 import { getLanguageDirection, isLanguageRtl } from '../../../helpers/i18n-utils';
 
@@ -67,4 +67,4 @@ RenderPageMobile.propTypes = {
   t: PropTypes.func.isRequired,
 };
 
-export default withNamespaces()(RenderPageMobile);
+export default withTranslation()(RenderPageMobile);

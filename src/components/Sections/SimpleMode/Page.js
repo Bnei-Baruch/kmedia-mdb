@@ -4,7 +4,7 @@ import moment from 'moment';
 import DayPicker from 'react-day-picker';
 import Navbar from 'react-day-picker/build/Navbar';
 import MomentLocaleUtils from 'react-day-picker/moment';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { Button, Card, Divider, Grid, Input, MenuItem } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
 
@@ -233,4 +233,4 @@ SimpleModePage.propTypes = {
   blinkLangSelect: PropTypes.bool.isRequired,
 };
 
-export default withNamespaces()(SimpleModePage);
+export default withTranslation()(SimpleModePage);

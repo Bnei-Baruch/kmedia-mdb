@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { Segment } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 
@@ -245,4 +245,4 @@ Library.propTypes = {
   t: PropTypes.func.isRequired,
 };
 
-export default withNamespaces()(Library);
+export default withTranslation()(Library);
