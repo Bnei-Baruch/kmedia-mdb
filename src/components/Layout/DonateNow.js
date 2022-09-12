@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { Button } from 'semantic-ui-react';
 
 import { LANG_ENGLISH, LANG_HEBREW, LANG_RUSSIAN, LANG_SPANISH } from '../../helpers/consts';
@@ -19,7 +19,7 @@ Vh_Button.propTypes = {
   t: PropTypes.func.isRequired,
 };
 
-export const VirtualHomeButton = withNamespaces()(Vh_Button);
+export const VirtualHomeButton = withTranslation()(Vh_Button);
 
 const DButton = ({ content, href, icon, className, color = 'blue' }) => (
   <Button
@@ -62,4 +62,4 @@ DonateNow.propTypes = {
   t: PropTypes.func.isRequired,
 };
 
-export default withNamespaces()(DonateNow);
+export default withTranslation()(DonateNow);

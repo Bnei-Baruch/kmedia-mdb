@@ -10,7 +10,7 @@ import ContentType from '../../FiltersAside/ContentTypeFilter/ContentType';
 import TagSourceFilter from '../../FiltersAside/TopicsFilter/TagSourceFilter';
 import { isEqual } from 'lodash';
 import { Container, Header } from 'semantic-ui-react';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import SubTopics from './SubTopics';
 
 const Filters = ({ namespace, baseParams, t }) => {
@@ -49,4 +49,4 @@ const Filters = ({ namespace, baseParams, t }) => {
   );
 };
 
-export default withNamespaces()(Filters);
+export default withTranslation()(Filters);

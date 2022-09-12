@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import moment from 'moment/moment';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { Button, Icon, Label, Popup } from 'semantic-ui-react';
 
@@ -66,4 +66,4 @@ TrimBtn.propTypes = {
   width: PropTypes.number
 };
 
-export default withNamespaces()(TrimBtn);
+export default withTranslation()(TrimBtn);

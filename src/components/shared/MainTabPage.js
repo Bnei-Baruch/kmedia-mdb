@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useParams } from 'react-router';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { Menu } from 'semantic-ui-react';
 
 import NavLink from '../Language/MultiLanguageNavLink';
@@ -39,4 +39,4 @@ MainTabPage.propTypes = {
   t: PropTypes.func.isRequired,
 };
 
-export default withNamespaces()(MainTabPage);
+export default withTranslation()(MainTabPage);

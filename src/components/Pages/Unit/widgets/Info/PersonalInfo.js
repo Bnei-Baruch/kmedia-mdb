@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Icon, Menu, Modal } from 'semantic-ui-react';
 
@@ -94,4 +94,4 @@ PersonalInfo.propTypes = {
 
 const areEqual = (prevProps, nextProps) => nextProps.unit && prevProps.unit?.id === nextProps.unit.id;
 
-export default React.memo(withNamespaces()(PersonalInfo), areEqual);
+export default React.memo(withTranslation()(PersonalInfo), areEqual);

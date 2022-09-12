@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { Breadcrumb, Container, Divider, Grid } from 'semantic-ui-react';
 import { isLanguageRtl } from '../../../helpers/i18n-utils';
 
@@ -62,4 +62,4 @@ RenderPage.propTypes = {
   t: PropTypes.func.isRequired,
 };
 
-export default withNamespaces()(RenderPage);
+export default withTranslation()(RenderPage);

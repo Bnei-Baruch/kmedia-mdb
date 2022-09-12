@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import isEqual from 'react-fast-compare';
 
 import { actions, selectors } from '../../../../../../redux/modules/recommended';
@@ -271,4 +271,4 @@ const areEqual = (prevProps, nextProps) =>
   prevProps.unit.id === nextProps.unit.id
   && isEqual(prevProps.filterOutUnits, nextProps.filterOutUnits);
 
-export default React.memo(withNamespaces()(Recommended), areEqual);
+export default React.memo(withTranslation()(Recommended), areEqual);

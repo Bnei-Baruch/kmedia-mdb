@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { Segment } from 'semantic-ui-react';
 
 import * as shapes from '../../../../../shapes';
@@ -22,4 +22,4 @@ Summary.propTypes = {
   t: PropTypes.func.isRequired,
 };
 
-export default withNamespaces()(Summary);
+export default withTranslation()(Summary);

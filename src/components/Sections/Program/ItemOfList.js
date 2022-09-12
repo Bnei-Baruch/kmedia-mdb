@@ -1,5 +1,5 @@
 import React from 'react';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Container, Header, List } from 'semantic-ui-react';
 import { canonicalLink } from '../../../helpers/links';
@@ -47,4 +47,4 @@ const ItemOfList = ({ id, ccu, t }) => {
   </List.Item>);
 };
 
-export default withNamespaces()(ItemOfList);
+export default withTranslation()(ItemOfList);

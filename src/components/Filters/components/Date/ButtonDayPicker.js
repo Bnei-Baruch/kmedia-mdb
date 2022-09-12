@@ -13,7 +13,7 @@ import { getLanguageDirection, getLanguageLocaleWORegion } from '../../../../hel
 import YearMonthForm from './YearMonthForm';
 
 import DayPicker from 'react-day-picker';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import clsx from 'clsx';
 
@@ -273,4 +273,4 @@ class ButtonDayPicker extends Component {
   }
 }
 
-export default withNamespaces()(ButtonDayPicker);
+export default withTranslation()(ButtonDayPicker);

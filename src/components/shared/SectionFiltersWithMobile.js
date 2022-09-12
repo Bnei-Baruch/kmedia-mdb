@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Button, Container, Divider, Grid, Modal } from 'semantic-ui-react';
 
@@ -57,4 +57,4 @@ const SectionFiltersWithMobile = ({ filters, children, t }) => {
   return isMobileDevice ? renderMobile() : render();
 };
 
-export default withNamespaces()(SectionFiltersWithMobile);
+export default withTranslation()(SectionFiltersWithMobile);

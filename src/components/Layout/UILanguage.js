@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { Dropdown, Menu } from 'semantic-ui-react';
 import { useNavigate, useLocation } from 'react-router';
 import { useSelector } from 'react-redux';
@@ -96,4 +96,4 @@ UILanguage.propTypes = {
   t: PropTypes.func.isRequired,
 };
 
-export default withNamespaces()(UILanguage);
+export default withTranslation()(UILanguage);

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { actions, selectors } from '../../redux/modules/mdb';
@@ -59,4 +59,4 @@ const PlaylistItemPage = ({ t }) => {
   return <PlaylistCollectionContainer cId={cId} cuId={id} />;
 };
 
-export default withNamespaces()(PlaylistItemPage);
+export default withTranslation()(PlaylistItemPage);

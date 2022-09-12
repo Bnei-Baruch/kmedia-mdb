@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import identity from 'lodash/identity';
 import { Button, Header, Menu, Sidebar } from 'semantic-ui-react';
 
@@ -157,4 +157,4 @@ MenuItems.defaultProps = {
   onItemClick: identity
 };
 
-export default withNamespaces()(MenuItems);
+export default withTranslation()(MenuItems);

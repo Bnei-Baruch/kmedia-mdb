@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import moment from 'moment';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 
 import { getQuery, updateQuery } from '../../../helpers/url';
 import { isEmpty, noop } from '../../../helpers/utils';
@@ -96,4 +96,4 @@ const SimpleModeContainer = () => {
   return <Page {...pageProps} />;
 };
 
-export default withNamespaces()(SimpleModeContainer);
+export default withTranslation()(SimpleModeContainer);

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { noop } from '../../../helpers/utils';
 import { Accordion, Button, Header, Menu, Segment } from 'semantic-ui-react';
 import { ALL_LANGUAGES, AUDIO_BLOG_LANGUAGES, LANGUAGES, POPULAR_LANGUAGES } from '../../../helpers/consts';
@@ -55,4 +55,4 @@ LanguageFilter.propTypes = {
   t: PropTypes.func.isRequired,
 };
 
-export default withNamespaces()(LanguageFilter);
+export default withTranslation()(LanguageFilter);

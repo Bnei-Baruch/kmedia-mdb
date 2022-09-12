@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 
@@ -54,4 +54,4 @@ CollectionDatePicker.propTypes = {
   collection: shapes.GenericCollection.isRequired
 };
 
-export default withNamespaces()(CollectionDatePicker);
+export default withTranslation()(CollectionDatePicker);

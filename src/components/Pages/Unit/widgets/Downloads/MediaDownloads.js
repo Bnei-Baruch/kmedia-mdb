@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { Button, Grid, Popup, Table, Divider } from 'semantic-ui-react';
@@ -392,4 +392,4 @@ export default connect(state => (
     language: settings.getLanguage(state.settings),
     contentLanguage: settings.getContentLanguage(state.settings),
   })
-)(withNamespaces()(MediaDownloads));
+)(withTranslation()(MediaDownloads));

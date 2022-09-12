@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { Icon, Input } from 'semantic-ui-react';
 
 const SearchInput = ({ onSearch, onClear, defVal = '', t }) => {
@@ -36,4 +36,4 @@ const SearchInput = ({ onSearch, onClear, defVal = '', t }) => {
   );
 };
 
-export default withNamespaces()(SearchInput);
+export default withTranslation()(SearchInput);

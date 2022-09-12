@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { selectors } from '../../../redux/modules/filtersAside';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import {
   CT_LESSONS_SERIES,
   FN_CONTENT_TYPE,
@@ -44,4 +44,4 @@ const ContentType = ({ namespace, t }) => {
   );
 };
 
-export default withNamespaces()(ContentType);
+export default withTranslation()(ContentType);

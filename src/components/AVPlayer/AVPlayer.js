@@ -4,7 +4,7 @@ import { isEmpty, noop } from '../../helpers/utils';
 import debounce from 'lodash/debounce';
 import { Player, utils, withMediaProps } from 'react-media-player';
 import enableInlineVideo from 'iphone-inline-video';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import clsx from 'clsx';
 import { Button, Icon } from 'semantic-ui-react';
 import isEqual from 'react-fast-compare';
@@ -925,4 +925,4 @@ const mapDispatch = dispatch => (
   }, dispatch)
 );
 
-export default withNamespaces()(withMediaProps(withRouter(connect(() => ({}), mapDispatch)(AVPlayer))));
+export default withTranslation()(withMediaProps(withRouter(connect(() => ({}), mapDispatch)(AVPlayer))));

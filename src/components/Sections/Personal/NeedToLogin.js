@@ -1,13 +1,13 @@
 import React, { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { Button, Divider, Header } from 'semantic-ui-react';
 
 import { actions, selectors } from '../../../redux/modules/auth';
 import { selectors as settings } from '../../../redux/modules/settings';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
 
-const ShowNeedToLogin = withNamespaces()(
+const ShowNeedToLogin = withTranslation()(
   ({ t, children }) => {
     const dispatch = useDispatch();
     const language = useSelector(state => settings.getLanguage(state.settings));

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { List } from 'semantic-ui-react';
 import { isEmpty } from '../../../../src/helpers/utils';
 
@@ -51,4 +51,4 @@ AlphabetFilter.propTypes = {
   onLetterClick: PropTypes.func.isRequired
 }
 
-export default withNamespaces()(AlphabetFilter);
+export default withTranslation()(AlphabetFilter);
