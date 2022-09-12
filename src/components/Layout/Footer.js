@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Container, Grid, Header, Button } from 'semantic-ui-react';
@@ -54,7 +53,6 @@ const Footer = () => {
     </div>
   );
 };
-
 
 export default Footer;
 
