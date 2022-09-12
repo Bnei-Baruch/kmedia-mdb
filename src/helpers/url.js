@@ -99,7 +99,7 @@ export const getQuery = location => {
   return {};
 };
 
-export const updateQuery = (navigate,location, updater) => {
+export const updateQuery = (navigate, location, updater) => {
   const query = getQuery(location);
   if (!query.deb) {
     delete query.deb;
