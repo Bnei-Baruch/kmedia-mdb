@@ -56,9 +56,9 @@ const multiLanguageLinkCreator = () => WrappedComponent => {
     language: PropTypes.string, // language shorthand, for example: "ru"
     contentLanguage: PropTypes.string, // language shorthand, for example: "ru"
   };
-//TODO David: I dont see that we use any static methods on MultiLanguageLinkHOC (except propTypes)
-// so can we remove it?
-// https://reactjs.org/docs/higher-order-components.html#static-methods-must-be-copied-over
+  //TODO David: I dont see that we use any static methods on MultiLanguageLinkHOC (except propTypes)
+  // so can we remove it?
+  // https://reactjs.org/docs/higher-order-components.html#static-methods-must-be-copied-over
 
   return hoistStatics(MultiLanguageLinkHOC, WrappedComponent);
 };
