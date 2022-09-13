@@ -87,8 +87,6 @@ const getExtraFetchParams = (ns, collectionID) => {
       return { content_type: [CT_WOMEN_LESSON] };
     case 'lessons-rabash':
       return { content_type: [CT_LESSON_PART], person: RABASH_PERSON_UID };
-    // case 'lessons-children':
-    //   return { content_type: [CT_CHILDREN_LESSON] };
     default:
       if (collectionID) {
         return { collection: collectionID };

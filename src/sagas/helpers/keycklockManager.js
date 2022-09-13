@@ -4,7 +4,8 @@ const KC_API = process.env.REACT_KC_API_URL || 'https://accounts.kab.info/auth';
 
 export const KC_SEARCH_KEY_SESSION = 'session_state';
 export const KC_SEARCH_KEY_STATE   = 'state';
-export const KC_SEARCH_KEYS        = [KC_SEARCH_KEY_STATE, KC_SEARCH_KEY_SESSION];
+export const KC_SEARCH_KEY_CODE    = 'code';
+export const KC_SEARCH_KEYS        = [KC_SEARCH_KEY_SESSION, KC_SEARCH_KEY_STATE, KC_SEARCH_KEY_CODE];
 
 //for SSR use empty functions
 let login  = () => console.error('Must be override on browser, keycloak');

@@ -1,7 +1,5 @@
 import React, { useEffect } from 'react';
-import { Route, Routes, Outlet, useParams } from 'react-router-dom';
-import routes from './routes';
-import HomePage from '../components/Sections/Home/HomePage';
+import { Outlet, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectors, actions } from '../redux/modules/settings';
 import { LANGUAGES, DEFAULT_LANGUAGE } from '../helpers/consts';

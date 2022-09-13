@@ -40,9 +40,10 @@ const multiLanguageLinkCreator = () => WrappedComponent => {
     const location       = useLocation();
     const toWithLanguage = getToWithLanguage(to, location, language, contentLanguage);
 
+    //clear keycloak hash params from url
     if (toWithLanguage?.hash && toWithLanguage.hash.indexOf(KC_SEARCH_KEY_SESSION) !== -1) {
-      const q             = parse(toWithLanguage.hash);
-      toWithLanguage.hash = stringify(omit(q, KC_SEARCH_KEYS));
+      const h             = toWithLanguage.hash.startsWith('#') ? toWithLanguage.hash.substr(1) : toWithLanguage.hash;
+      toWithLanguage.hash = stringify(omit(parse(h), KC_SEARCH_KEYS));
     }
 
     return <WrappedComponent to={toWithLanguage} {...rest} />;
