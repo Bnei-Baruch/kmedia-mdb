@@ -2,7 +2,6 @@ import React from 'react';
 import { Grid, Container, Divider } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
 
-import AVPlayer from '../../../AVPlayer/AVPlayer';
 import Helmets from '../../../shared/Helmets';
 import PlaylistHeader from './PlaylistHeader';
 import Info from '../widgets/Info/Info';
@@ -12,6 +11,7 @@ import { selectors as settings } from '../../../../redux/modules/settings';
 import Recommended from '../widgets/Recommended/Main/Recommended';
 import { selectors as mdb } from '../../../../redux/modules/mdb';
 import { selectors as player } from '../../../../redux/modules/player';
+import Player from '../../../Player/Player';
 
 const PlaylistPage = ({ cId, cuId }) => {
   const language = useSelector(state => settings.getLanguage(state.settings));
@@ -25,7 +25,7 @@ const PlaylistPage = ({ cId, cuId }) => {
         <div id="avbox_playlist">
           <PlaylistHeader cId={cId} cuId={cuId} />
         </div>
-        <AVPlayer />
+        <Player />
         {/*{overMode === PLAYER_OVER_MODES.share && <ShareFormDesktop start={start} end={end} onExit={() => null} />}*/}
         <Container id="unit_container">
           <Helmets.AVUnit cuId={cuId} language={language} />

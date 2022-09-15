@@ -1,120 +1,497 @@
-.player_wrapper {
-  position: relative;
+$controls-bg: rgba(27, 28, 29, .9);
+$controls-bg-hover: rgba(27, 28, 29, 1);
+$controls-radius: 4px;
+@use "sass:color";
+
+//Colors
+/*$whatsappColor: #25d366;
+$whatsappHoverColor: color.scale(darken($whatsappColor, 5%), $saturation: 10%);
+$whatsappDownColor: darken($whatsappColor, 10%);
+$telegramColor: #27a6e6;
+$telegramHoverColor: color.scale(darken($telegramColor, 5%), $saturation: 10%);
+$telegramDownColor: darken($telegramColor, 10%);
+$odnoklassnikiColor: #EE8208;
+$odnoklassnikiHoverColor: color.scale(darken($odnoklassnikiColor, 5%), $saturation: 10%);
+$odnoklassnikiDownColor: darken($odnoklassnikiColor, 10%);*/
+
+/*
+body{
+    padding: 40px;
+    background: #000;
+}
+*/
+
+.todo {
+  color: white;
 }
 
-.jw-cue-type-highlight {
-  background: RED !important;
-  opacity: .7;
+video {
+  width: 100%;
+  height: auto;
+  display: block;
+}
 
+.web {
+  width: 985px;
+  width: 100%;
+  // background: lime;
+  position: relative;
+  // *, *::after, *::before {
+  //     box-sizing: border-box!important;
+  // }
+}
 
-  &_0 {
-    width: 0 !important;
+.controls {
+  z-index: 1;
+  .icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    // vertical-align: top;
+
+    // background: lime;
+    &::before {
+      color: hsla(0, 0%, 100%, .8) !important;
+    }
   }
 
-  &_1 {
-    width: 1% !important;
-    background: RED !important;
-    opacity: .7;
+  position: absolute;
+  // background: yellow;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  // background: yellow;
+  overflow: hidden;
+  color: #fff;
+
+  &__prev, &__rewind, &__forward, &__next {
+    // filter: invert(1);
+    // mix-blend-mode: difference;
+    position: absolute;
+    top: calc((100% - 54px) / 2 - 34px);
+    width: 68px;
+    height: 68px;
+    background: $controls-bg;
+    border-radius: $controls-radius;
+    transition: all ease-out 0.2s;
+    cursor: pointer;
+
+    &:hover {
+      cursor: pointer;
+      background: $controls-bg-hover;
+
+      .icon {
+        &:before {
+          color: hsla(0, 0%, 100%, 1) !important;
+        }
+      }
+    }
   }
 
-  &_5 {
-    width: 5% !important;
-    background: RED !important;
-    opacity: .7;
+  &__prev {
+    border-radius: 0 $controls-radius $controls-radius 0;
+    left: -68px - 12px - 68px;
   }
 
-  &_10 {
-    width: 10% !important;
-    background: RED !important;
-    opacity: .7;
+  &__rewind {
+    left: -68px;
   }
+
+  &__forward {
+    right: -68px;
+  }
+
+  &__next {
+    border-radius: $controls-radius 0 0 $controls-radius;
+    right: -68px - 12px - 68px;
+  }
+
+  &__bar {
+    position: absolute;
+    height: 54px;
+    left: 0;
+    right: 0;
+    background: $controls-bg;
+    bottom: -54px;
+    transition: all ease-out 0.2s;
+    display: flex;
+    padding: 10px;
+    align-items: stretch;
+
+    > * {
+      flex: 0 0 34px;
+      position: relative;
+      // outline:#fff 1px solid;
+      &:hover {
+        // background: $controls-bg-hover;
+        .icon {
+          &:before {
+            color: hsla(0, 0%, 100%, 1) !important;
+          }
+        }
+      }
+
+      // background: rgba(255,0,0,.2);
+      // margin: 2px;
+    }
+
+    .icon {
+      line-height: 100%;
+    }
+
+  }
+
+  &__volume {
+    // flex: 0 0 auto;
+    display: flex;
+    // margin-right:8px;
+    &-icon {
+      width: 34px;
+      position: relative;
+      // margin-right: 8px;
+    }
+  }
+
+  &__timecode {
+    flex: 0 0 auto;
+    line-height: 34px;
+    font-size: 11px;
+    padding: 0 8px;
+  }
+
+  &__progress {
+    flex: 1 0 auto;
+  }
+
+  &:hover, .is-sharing & {
+    .controls__prev {
+      left: 0;
+    }
+
+    .controls__rewind {
+      left: 68px + 12px;
+    }
+
+    .controls__forward {
+      right: 68px + 12px;
+    }
+
+    .controls__next {
+      right: 0;
+    }
+
+    .controls__bar {
+      bottom: 0;
+    }
+  }
+
+  .is-settings & {
+    .controls__bar {
+      bottom: 0;
+    }
+
+    .controls__prev {
+      left: 0;
+    }
+
+    .controls__rewind {
+      left: 68px + 12px;
+    }
+
+    .controls__forward {
+      right: 68px + 12px;
+    }
+
+    .controls__next {
+      right: 0;
+    }
+
+    &:hover {
+      // .controls__prev {
+      //     left: -68px - 12px - 68px;
+      // }
+      // .controls__rewind {
+      //     left: -68px;
+      // }
+      // .controls__forward {
+      //     right: -68px;
+      // }
+      // .controls__next {
+      //     right: -68px - 12px - 68px;
+      // }
+    }
+  }
+
+}
+
+.controls__slider {
+  position: relative;
+  height: 100%;
+
+  * {
+    position: absolute;
+  }
+
+  .slider {
+    &__wrapper {
+      background: #000;
+      height: 4px;
+      left: 12px;
+      right: 12px;
+      top: calc(50% - 2px);
+
+    }
+
+    &__slice {
+      top: 5px;
+      height: 4px;
+      background-color: #2185d0;
+      background-image: linear-gradient(-45deg, hsla(0, 0%, 100%, .25) 25%, transparent 0, transparent 50%, hsla(0, 0%, 100%, .25) 0, hsla(0, 0%, 100%, .25) 75%, transparent 0, transparent);
+      background-size: 1rem 1rem;
+      left: 20%;
+      right: 20%;
+    }
+
+    &__value, &__loaded {
+      height: 100%;
+      left: 0;
+      top: 0;
+    }
+
+    &__value {
+      background: #fff;
+      width: 50%;
+    }
+
+    &__loaded {
+      background: #888;
+      width: 70%;
+    }
+
+    &__thumb {
+      display: none;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      top: -5px;
+      left: 50%;
+      background: #fff;
+      transform: translateX(-50%);
+    }
+
+
+  }
+
+  .controls__volume & {
+    // width:120px;
+    transition: width ease-out 0.2s;
+    width: 0;
+    overflow: hidden;
+
+    .slider {
+      &__wrapper {
+        left: 4px;
+      }
+
+      &__thumb {
+        display: block;
+      }
+    }
+  }
+
+  .controls__volume:hover & {
+    width: 120px;
+  }
+
+  .controls__progress & {
+    width: 100%;
+
+    &:hover {
+      .slider {
+        &__wrapper {
+          height: 6px;
+          top: calc(50% - 3px);
+        }
+
+        &__slice {
+          top: 7px;
+        }
+
+        &__thumb {
+          display: block;
+          top: -4px;
+        }
+      }
+    }
+  }
+}
+
+.sharing {
+  z-index: 1;
+  display: none;
+
+  .is-sharing & {
+    display: flex;
+  }
+
+  position: absolute;
+  background: $controls-bg;
+  left: 8px;
+  right: 8px;
+  bottom: 54px + 8px;
+  padding: 16px;
+  flex-direction: column;
+
+  &__times {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+
+  &__inputs {
+    > * {
+      margin-right: 16px;
+    }
+  }
+
+  &__buttons {
+    display: flex;
+    // flex-direction: row;
+    .input {
+      margin-right: 32px;
+      flex: 1 0 auto;
+    }
+  }
+
 }
 
 .settings {
-  display: flex;
-  justify-content: space-between;
-  flex-direction: column;
-  position: absolute;
-  top: 0;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  width: 100%;
-  z-index: 3;
-  vertical-align: middle;
-  color: white;
+  z-index: 1;
+  display: none;
 
-  & > div {
+  .is-settings & {
+    display: flex;
+  }
+
+  position: absolute;
+  align-items: flex-end;
+  right: 8px;
+  top: 8px;
+  bottom: 54px + 8px;
+
+  overflow: hidden;
+
+  &__pane {
+    background: $controls-bg;
+    padding: 16px;
+    overflow: hidden;
+
+    &:first-child {
+
+    }
+
+    &:last-child {
+      display: flex;
+      flex-direction: column;
+      align-self: stretch;
+      width: 0;
+      padding: 0;
+
+      button {
+        flex: 0 0 auto;
+      }
+
+      .menu {
+        flex: 1 1 auto;
+        overflow-y: auto;
+        margin-left: 0;
+        margin-right: 0;
+      }
+
+    }
+  }
+
+  .is-language & {
+    .settings__pane {
+      &:first-child {
+        width: 0;
+        padding: 0;
+
+      }
+
+      &:last-child {
+        width: auto;
+        padding: 16px;
+      }
+    }
+  }
+
+  &__row {
+    flex: 1 1 auto;
     display: flex;
     justify-content: space-between;
+    align-items: center;
+
+    + .settings__row {
+      margin-top: 8px;
+    }
+  }
+
+  .header {
+    color: #fff;
+    margin: 0 24px 0 0;
+    font-weight: 400;
   }
 }
 
-.settings, .control {
-  &.hide {
-    display: none;
-  }
+/* Twitter */
+/*
+
+.ui.whatsapp.button {
+    background-color: $whatsappColor;
+    color: #FFFFFF;
 }
 
-.fullScreenClass {
-  background-color: red !important;
-
-  &::before {
-    content: '';
-  }
+.ui.whatsapp.button:hover {
+    background-color: $whatsappHoverColor;
 }
 
-.control {
-  display: flex;
-  justify-content: space-between;
-  position: absolute;
-  width: 100%;
-  z-index: 2;
-  top: 0;
-  bottom: 4em;
-
-  & .seek {
-    height: 100%;
-    width: 20%;
-    background-color: #0e8c8c;
-  }
+.ui.whatsapp.button:active {
+    background-color: $whatsappDownColor;
+}
+.ui.telegram.button {
+    background-color: $telegramColor;
+    color: #FFFFFF;
 }
 
-.jw-controls {
-  z-index: 2;
+.ui.telegram.button:hover {
+    background-color: $telegramHoverColor;
 }
 
-.player_on-hover {
-  display: flex;
-  justify-content: space-between;
-  flex-direction: column;
-  position: absolute;
-  width: 100%;
-  z-index: 1;
-  top: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-
-  & > div {
-    display: flex;
-    justify-content: space-between;
-  }
+.ui.telegram.button:active {
+    background-color: $telegramDownColor;
+}
+.ui.odnoklassniki.button {
+    background-color: $odnoklassnikiColor;
+    color: #FFFFFF;
 }
 
-
-.seekbar {
-  position: absolute;
-  bottom: 51px;
-  top: auto;
-  right: 12px;
-  left: 12px;
-  z-index: 1;
-
-  .is-slice {
-    background-color: $blue;
-    background-image: linear-gradient(45deg, rgba($white, .25) 25%, transparent 25%, transparent 50%, rgba($white, .25) 50%, rgba($white, .25) 75%, transparent 75%, transparent);
-    background-size: 1rem 1rem;
-    border-radius: 0;
-    height: 4px;
-    position: absolute;
-  }
+.ui.odnoklassniki.button:hover {
+    background-color: $odnoklassnikiHoverColor;
 }
+
+.ui.odnoklassniki.button:active {
+    background-color: $odnoklassnikiDownColor;
+}
+*/
+
+
+// &-slice{
+//     top: 22px;
+//     height: 4px;
+//     background-color: #2185d0;
+//     background-image: linear-gradient(-45deg,hsla(0,0%,100%,.25) 25%,transparent 0,transparent 50%,hsla(0,0%,100%,.25) 0,hsla(0,0%,100%,.25) 75%,transparent 0,transparent);
+//     background-size: 1rem 1rem;
+// }
