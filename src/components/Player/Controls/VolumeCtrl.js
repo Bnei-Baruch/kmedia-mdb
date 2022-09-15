@@ -3,19 +3,16 @@ import { Popup, Icon } from 'semantic-ui-react';
 import { VolumeKnob } from './VolumeKnob';
 import { useSelector } from 'react-redux';
 import { selectors as player } from '../../../redux/modules/player';
-import isFunction from 'lodash/isFunction';
 
 export const VolumeCtrl = () => {
   const widthRef = useRef({});
   const isReady  = useSelector(state => player.isReady(state.player));
 
-  const [volume, setVolume] = useState(isReady && window.jwplayer().getVolume());
+  const [volume, setVolume] = useState(0);
   const [left, setLeft]     = useState();
   const [right, setRight]   = useState();
 
   const updateVolume = useCallback(({ volume }) => setVolume(volume), [setVolume]);
-  const isMuted      = isFunction(window.jwplayer()?.getMute) ? window.jwplayer()?.getMute() : false;
-  const icon         = isMuted ? 'off' : volume < 40 ? 'down' : 'up';
 
   useEffect(() => {
     const { left, right } = widthRef.current.getBoundingClientRect();
@@ -28,7 +25,6 @@ export const VolumeCtrl = () => {
 
     const p = window.jwplayer();
     p.on('volume', updateVolume);
-    setVolume(p.getVolume());
 
     return () => p.off('volume', updateVolume);
   }, [isReady]);
@@ -45,7 +41,7 @@ export const VolumeCtrl = () => {
     <div className="controls__volume">
       <Popup content="Mute" inverted size="mini" position="top center" trigger={
         <div className="controls__volume-icon" onClick={handleMute}>
-          <Icon fitted name={`volume ${icon}`} />
+          <Icon fitted name="volume down" />
         </div>
       } />
       <div className="controls__slider">
