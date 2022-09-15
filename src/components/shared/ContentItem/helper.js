@@ -22,11 +22,11 @@ export const imageWidthBySize = {
 };
 
 export const getProgress = (unit, playTime) => {
-  let percent = null;
+  let progressIndicator = null;
 
   if (unit && playTime) {
     localStorage.setItem(`${PLAYER_POSITION_STORAGE_KEY}_${unit.id}`, playTime);
-    percent = (
+    progressIndicator = (
       <Progress
         size="tiny"
         className="cu_item_progress"
@@ -34,7 +34,7 @@ export const getProgress = (unit, playTime) => {
     );
   }
 
-  return percent;
+  return progressIndicator;
 };
 
 export const textPartLink = (properties, cu) => {
