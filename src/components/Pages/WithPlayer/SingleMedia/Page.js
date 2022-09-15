@@ -14,7 +14,7 @@ import Info from './../widgets/Info/Info';
 import Recommended from './../widgets/Recommended/Main/Recommended';
 import playerHelper from '../../../../helpers/player';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
-import AVPlayer from '../../../AVPlayer/AVPlayer';
+import Player from '../../../Player/Player';
 
 const SinglePage = ({ t }) => {
 
@@ -64,7 +64,7 @@ const SinglePage = ({ t }) => {
             >
               <Grid.Row>
                 <Grid.Column>
-                  <AVPlayer />
+                  <Player />
                 </Grid.Column>
               </Grid.Row>
               <Grid.Row>
@@ -85,7 +85,7 @@ const SinglePage = ({ t }) => {
         </Grid>
       </>
     ) : (
-      <AVPlayer />
+      <Player />
     );
 };
 

@@ -58,7 +58,7 @@ export const actions = {
 };
 
 /* Reducer */
-const initialState = { overMode: null, continuePlay: { pos: -1, isPlayed: false } };
+const initialState = { overMode: null, continuePlay: { pos: -1, isPlayed: false }, isReady: false };
 
 const onReady = (draft, e) => {
   console.log('onReady', e);
@@ -70,6 +70,7 @@ const onReady = (draft, e) => {
     draft.continuePlay = { pos: -1, isPlayed: false };
     draft.overMode     = null;
   }
+  draft.ready = true;
 };
 
 const onInactive = (draft, payload) => {
@@ -77,7 +78,7 @@ const onInactive = (draft, payload) => {
   draft.controls = false;
 };
 
-const onActive   = (draft, payload) => {
+const onActive = (draft, payload) => {
   console.log('onActive', payload);
   draft.controls = true;
 };
@@ -127,6 +128,7 @@ export const reducer = handleActions({
   [PLAYER_SHARE_STOP]: (draft, payload) => draft.stop = payload,
 }, initialState);
 
+const isReady      = state => state.ready;
 const isControls   = state => state.controls;
 const isAudio      = state => state.isAudio;
 const isPlay       = state => state.played;
@@ -141,6 +143,7 @@ export const selectors = {
   getOverMode,
   getRate,
   getStartStop,
+  isReady
 };
 
 export const PLAYER_ACTIONS_BY_EVENT = {

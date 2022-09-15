@@ -1,0 +1,120 @@
+.player_wrapper {
+  position: relative;
+}
+
+.jw-cue-type-highlight {
+  background: RED !important;
+  opacity: .7;
+
+
+  &_0 {
+    width: 0 !important;
+  }
+
+  &_1 {
+    width: 1% !important;
+    background: RED !important;
+    opacity: .7;
+  }
+
+  &_5 {
+    width: 5% !important;
+    background: RED !important;
+    opacity: .7;
+  }
+
+  &_10 {
+    width: 10% !important;
+    background: RED !important;
+    opacity: .7;
+  }
+}
+
+.settings {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  position: absolute;
+  top: 0;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  width: 100%;
+  z-index: 3;
+  vertical-align: middle;
+  color: white;
+
+  & > div {
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+.settings, .control {
+  &.hide {
+    display: none;
+  }
+}
+
+.fullScreenClass {
+  background-color: red !important;
+
+  &::before {
+    content: '';
+  }
+}
+
+.control {
+  display: flex;
+  justify-content: space-between;
+  position: absolute;
+  width: 100%;
+  z-index: 2;
+  top: 0;
+  bottom: 4em;
+
+  & .seek {
+    height: 100%;
+    width: 20%;
+    background-color: #0e8c8c;
+  }
+}
+
+.jw-controls {
+  z-index: 2;
+}
+
+.player_on-hover {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  position: absolute;
+  width: 100%;
+  z-index: 1;
+  top: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+
+  & > div {
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+
+.seekbar {
+  position: absolute;
+  bottom: 51px;
+  top: auto;
+  right: 12px;
+  left: 12px;
+  z-index: 1;
+
+  .is-slice {
+    background-color: $blue;
+    background-image: linear-gradient(45deg, rgba($white, .25) 25%, transparent 25%, transparent 50%, rgba($white, .25) 50%, rgba($white, .25) 75%, transparent 75%, transparent);
+    background-size: 1rem 1rem;
+    border-radius: 0;
+    height: 4px;
+    position: absolute;
+  }
+}
