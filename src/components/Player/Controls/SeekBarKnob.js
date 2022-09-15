@@ -2,21 +2,32 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { Popup } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
 import { selectors as player } from '../../../redux/modules/player';
+import { formatDuration } from '../../../helpers/utils';
 
-export const VolumeKnob = ({ left, right }) => {
+export const SeekBarKnob = ({ left, right }) => {
   const [activated, setActivated] = useState(false);
-  const [volume, setVolume]       = useState(0);
+  const [pos, setPos]             = useState(0);
+  const [time, setTime]           = useState(0);
 
   const isReady = useSelector(state => player.isReady(state.player));
 
-  const updateVolume = useCallback(({ volume }) => setVolume(volume), [setVolume]);
+  const checkTimeAfterSeek = useCallback(d => {
+    const pos = (100 * d.currentTime) / window.jwplayer().getDuration();
+    setPos(pos);
+    setTime(Math.round(d.currentTime));
+  }, [setPos, setTime]);
 
   useEffect(() => {
     if (!isReady) return () => null;
 
     const p = window.jwplayer();
-    p.on('volume', updateVolume);
-    return () => p.off('volume', updateVolume);
+    p.on('seek', checkTimeAfterSeek);
+    p.on('time', checkTimeAfterSeek);
+    return () => {
+      p.off('seeked', checkTimeAfterSeek);
+      p.off('time', checkTimeAfterSeek);
+    };
+
   }, [isReady]);
 
   const handleStart = e => {
@@ -32,8 +43,9 @@ export const VolumeKnob = ({ left, right }) => {
     // Resolve clientX from mouse or touch event.
     const clientX = e.touches ? e.touches[e.touches.length - 1].clientX : e.clientX;
     const delta   = right - left;
-    const v       = Math.round(100 * Math.min(Math.max(0, clientX - left), delta) / delta);
-    window.jwplayer().setVolume(v);
+    const offset  = Math.min(Math.max(0, clientX - left), delta) / delta;
+    const p       = window.jwplayer();
+    p.seek(p.getDuration() * offset);
   }, [activated]);
 
   useEffect(() => {
@@ -64,7 +76,7 @@ export const VolumeKnob = ({ left, right }) => {
       trigger={
         <div
           className="slider__thumb"
-          style={{ left: `${volume}%` }}
+          style={{ left: `${pos}%` }}
           onMouseDown={handleStart}
           onTouchStart={handleStart}
         ></div>
@@ -75,7 +87,7 @@ export const VolumeKnob = ({ left, right }) => {
       open={activated}
     >
       <Popup.Content>
-        <span>{`${volume} %`}</span>
+        <span>{formatDuration(time)}</span>
       </Popup.Content>
     </Popup>
   );

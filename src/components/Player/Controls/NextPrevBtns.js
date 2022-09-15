@@ -1,61 +1,44 @@
 import React from 'react';
 import { Popup, Icon } from 'semantic-ui-react';
-import { useSelector } from 'react-redux';
+import { JWPLAYER_ID } from '../../../helpers/consts';
+import { stopBubbling } from '../../../helpers/utils';
+import { actions as playlistActions } from '../../../redux/modules/playlist';
+import { useDispatch } from 'react-redux';
 
-import { selectors } from '../../../redux/modules/playlist';
-import { selectors as mdb } from '../../../redux/modules/mdb';
-import { canonicalLink } from '../../../helpers/links';
-import Link from '../../Language/MultiLanguageLink';
+const seek = (e, pos) => {
+  const p = window.jwplayer(JWPLAYER_ID);
+  p.seek(p.getPosition() + pos);
+  stopBubbling(e);
+};
 
 export const PrevBtn = () => {
-  const { id, cId, idx } = useSelector(state => selectors.getPrevData(state.playlist));
-  const cu               = useSelector(state => mdb.getDenormContentUnit(state.mdb, id));
-  const baseLink         = useSelector(state => selectors.getInfo(state.playlist).baseLink);
+  const dispatch = useDispatch();
 
-  if (!cu) return null;
+  const handlePrev = e => {
+    dispatch(playlistActions.prev());
+    stopBubbling(e);
+  };
 
-  let link = '';
-  if (baseLink) {
-    link = `${baseLink}?ap=${idx}`;
-  } else {
-    link = canonicalLink(cu, null, cId);
-  }
   return (
-    <Popup content="Previous video" inverted size="mini" position="top left" trigger={
-      <Link
-        as="div"
-        className="controls__prev"
-        to={link}
-      >
-        <Icon fitted size="big" name="backward" />
-      </Link>
+    <Popup content="Next video" inverted size="mini" position="top right" trigger={
+      <div className="controls__next" onClick={handlePrev}>
+        <Icon fitted size="big" name="forward" />
+      </div>
     } />
   );
 };
 
 export const NextBtn = () => {
-  const { id, cId, idx } = useSelector(state => selectors.getNextData(state.playlist));
-  const cu               = useSelector(state => mdb.getDenormContentUnit(state.mdb, id));
-  const baseLink         = useSelector(state => selectors.getInfo(state.playlist).baseLink);
-
-  if (!cu) return null;
-
-  let link = '';
-  if (baseLink) {
-    link = `${baseLink}?ap=${idx}`;
-  } else {
-    link = canonicalLink(cu, null, cId);
-  }
-
+  const dispatch   = useDispatch();
+  const handleNext = e => {
+    dispatch(playlistActions.next());
+    stopBubbling(e);
+  };
   return (
     <Popup content="Next video" inverted size="mini" position="top right" trigger={
-      <Link
-        as="div"
-        className="controls__next"
-        to={link}
-      >
+      <div className="controls__next" onClick={handleNext}>
         <Icon fitted size="big" name="forward" />
-      </Link>
+      </div>
     } />
   );
 };

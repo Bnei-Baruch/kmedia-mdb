@@ -1,22 +1,17 @@
 import { PLAYER_ACTIONS_BY_EVENT } from '../../redux/modules/player';
-import { MT_VIDEO, MT_AUDIO } from '../../helpers/consts';
+import { DEFAULT_LANGUAGE, MT_VIDEO, MT_AUDIO } from '../../helpers/consts';
 import { isEmpty } from '../../helpers/utils';
-import { PLAYER_POSITION_STORAGE_KEY } from './constants';
 
-export const DEFAULT_PLAYER_VOLUME     = 80;
-export const PLAYER_VOLUME_STORAGE_KEY = 'jwplayer.volume';
+const PLAYER_EVENTS = ['ready', 'userActive', 'userInactive', 'play', 'pause', 'mute', 'volume', 'playbackRateChanged'];
 
-const PLAYER_EVENTS = ['ready', 'remove', 'play', 'pause', 'playbackRateChanged', 'playlistItem'];
-
-export const initPlayerEvents = (dispatch) => {
-  const player = window.jwplayer();
+export const initPlayerEvents = (player, dispatch) => {
   player.on('error', e => {
     console.error(e);
   });
 
-  player.on('remove', () => player.off('all'));
-
-  player.on('all', (name, e) => console.log('jwplayer all events', name, e));
+  player.on('all', e => {
+    console.log('all', e);
+  });
 
   PLAYER_EVENTS.forEach(name => {
     const action = PLAYER_ACTIONS_BY_EVENT[name];
@@ -31,21 +26,25 @@ export const initPlayerEvents = (dispatch) => {
   });
 };
 
+export const removePlayerButtons = player => {
+  PLAYER_EVENTS.forEach(name => player.off(name));
+};
+
 export const findPlayedFile = (item, info, lang, mt, q) => {
-  if (isEmpty(item) || !info.isReady) return {};
+  if (isEmpty(item) || isEmpty(info)) return {};
   const { mediaType, language, quality } = info;
 
   lang = lang || language;
   mt   = mt || mediaType;
   q    = q || quality;
 
-  const { filesByLang, qualityByLang, mtByLang, languages } = item;
+  const { filesByLang, qualityByLang, mtByLang } = item;
 
   const byLang = filesByLang[lang];
 
   //can't find language - take default
-  if (!byLang) {
-    return findPlayedFile(item, info, languages[0]);
+  if (byLang.length === 0) {
+    return findPlayedFile(item, info, DEFAULT_LANGUAGE);
   }
 
   //can't find media type - take other
@@ -59,14 +58,6 @@ export const findPlayedFile = (item, info, lang, mt, q) => {
     return findPlayedFile(item, info, lang, mt, qualityByLang[lang][0]);
   }
 
-  const f     = byLang.find(f => {
-    return f.type === mt && (mt === MT_AUDIO || !f.video_size || f.video_size === q);
-  });
-  const image = f.type === MT_VIDEO ? item.preImageUrl : 'https://arvut.kli.one/user/static/media/audio_only.svg';
-  return { ...f, image };
-};
-
-export const getSavedTime = (cuId) => {
-  const savedTime = localStorage.getItem(`${PLAYER_POSITION_STORAGE_KEY}_${cuId}`) || 0;
-  return parseInt(savedTime, 10);
+  const file = byLang.find(f => f.type === mt && f.video_size === q);
+  return file;
 };
