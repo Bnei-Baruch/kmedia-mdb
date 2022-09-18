@@ -7,12 +7,19 @@ import { isEqual } from 'lodash/lang';
 import { initPlayerEvents, removePlayerButtons, findPlayedFile } from './helper';
 import { selectors as player } from '../../redux/modules/player';
 import { selectors as playlist } from '../../redux/modules/playlist';
-import { JWPLAYER_ID, MT_VIDEO } from '../../helpers/consts';
+import { JWPLAYER_ID, MT_VIDEO, PLAYER_OVER_MODES } from '../../helpers/consts';
 import Controls from './Controls/Controls';
-import Settings from './Settings';
+import Settings from './Settings/Settings';
 import Sharing from './Sharing/Sharing';
 import { startEndFromQuery } from './Controls/helper';
 import { useLocation } from 'react-router-dom';
+
+const CLASSES_BY_MODE = {
+  [PLAYER_OVER_MODES.settings]: ' is-settings',
+  [PLAYER_OVER_MODES.languages]: ' is-settings is-language',
+  [PLAYER_OVER_MODES.share]: 'is-sharing',
+  [PLAYER_OVER_MODES.none]: '',
+};
 
 const Player = () => {
 
@@ -20,10 +27,11 @@ const Player = () => {
 
   const { start, end } = startEndFromQuery(location);
 
-  const overMode   = useSelector(state => player.getOverMode(state.player));
+  const overMode = useSelector(state => player.getOverMode(state.player));
+  /*
   const isControls = useSelector(state => player.isControls(state.player));
   const isPlay     = useSelector(state => player.isPlay(state.player));
-
+*/
   const info    = useSelector(state => playlist.getInfo(state.playlist), isEqual);
   const item    = useSelector(state => playlist.getPlayed(state.playlist), isEqual);
   const isReady = useSelector(state => player.isReady(state.player));
@@ -95,10 +103,7 @@ const Player = () => {
   return (
     <Ref innerRef={settRef}>
       <div className="player">
-        {/* <div className="web">*/}
-        <div className="web is-sharing">
-          {/* <div className='web is-settings'> */}
-          {/* <div className='web is-settings is-language'> */}
+        <div className={`web ${CLASSES_BY_MODE[overMode]}`}>
 
           <Controls fullScreen={handleFullScreen} />
           <Settings file={file} />

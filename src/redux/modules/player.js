@@ -1,6 +1,6 @@
 import { createAction } from 'redux-actions';
 import { handleActions } from './settings';
-import { JWPLAYER_ID } from '../../helpers/consts';
+import { JWPLAYER_ID, PLAYER_OVER_MODES } from '../../helpers/consts';
 
 const PLAYER_READY    = 'Player/READY';
 const PLAYER_ACTIVE   = 'Player/PLAYER_ACTIVE';
@@ -139,7 +139,7 @@ const isReady      = state => state.ready;
 const isControls   = state => state.controls;
 const isAudio      = state => state.isAudio;
 const isPlay       = state => state.played;
-const getOverMode  = state => state.overMode;
+const getOverMode  = state => state.overMode || PLAYER_OVER_MODES.none;
 const getRate      = state => state.rate || 1;
 const getStartStop = ({ start, stop }) => ({ start, stop });
 const getShareUrl  = state => state.shareUrl || '';
