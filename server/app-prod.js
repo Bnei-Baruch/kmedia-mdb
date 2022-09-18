@@ -57,6 +57,7 @@ app.use(helmet({
         '*.usersnap.com',
         'cdnjs.cloudflare.com',         // for pdf worker
         'cdn.jwplayer.com',
+        '*.jwpcdn.com',
       ],
       'style-src': [
         '\'self\'',
