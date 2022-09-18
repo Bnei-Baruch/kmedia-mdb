@@ -1,49 +1,19 @@
-import React, { useRef, useEffect, useState, useCallback } from 'react';
-import { SeekBarKnob } from './SeekBarKnob';
-import { useSelector } from 'react-redux';
-import { selectors as player } from '../../../redux/modules/player';
+import React, { useRef, useEffect, useState } from 'react';
+import { ProgressBar } from './ProgressBar';
 import { stopBubbling } from '../../../helpers/utils';
+import { SlicesBar } from './SlicesBar';
 
 export const ProgressCtrl = () => {
   const widthRef = useRef({});
 
-  const [pos, setPos]         = useState(0);
-  const [buffPos, setBuffPos] = useState(0);
-  const [left, setLeft]       = useState();
-  const [right, setRight]     = useState();
-
-  const isReady = useSelector(state => player.isReady(state.player));
-
-  const checkStopTime = useCallback(d => {
-    const pos = (100 * d.currentTime) / window.jwplayer().getDuration();
-    setPos(pos);
-  }, [setPos]);
-
-  const checkBufferTime = useCallback(d => {
-    const pos = (100 * d.currentTime) / window.jwplayer().getDuration();
-    setBuffPos(pos);
-  }, [setBuffPos]);
+  const [left, setLeft]   = useState();
+  const [right, setRight] = useState();
 
   useEffect(() => {
     const { left, right } = widthRef.current.getBoundingClientRect();
     setLeft(left);
     setRight(right);
   }, [widthRef.current]);
-
-  useEffect(() => {
-    if (!isReady) return () => null;
-
-    const p = window.jwplayer();
-    p.on('time', checkStopTime);
-    p.on('seek', checkStopTime);
-    p.on('bufferChange', checkBufferTime);
-
-    return () => {
-      p.off('time', checkStopTime);
-      p.off('seek', checkStopTime);
-      p.off('bufferChange', checkBufferTime);
-    };
-  }, [isReady]);
 
   const handleProgressClick = e => {
     const clientX = e.touches ? e.touches[e.touches.length - 1].clientX : e.clientX;
@@ -61,16 +31,8 @@ export const ProgressCtrl = () => {
     >
       <div className="controls__slider">
         <div className="slider__wrapper" ref={widthRef}>
-          <div className="slider__slice"></div>
-          <div
-            className="slider__loaded"
-            style={{ width: `${buffPos}%` }}
-          ></div>
-          <div
-            className="slider__value"
-            style={{ width: `${pos}%` }}
-          ></div>
-          <SeekBarKnob left={left} right={right} />
+          <SlicesBar />
+          <ProgressBar left={left} right={right} />
         </div>
       </div>
     </div>

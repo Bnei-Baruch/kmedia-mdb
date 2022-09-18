@@ -4,7 +4,6 @@ import { actions, selectors } from '../../redux/modules/player';
 import { actions as playlistActions, selectors as playlistSelectors } from '../../redux/modules/playlist';
 import { useDispatch, useSelector } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
-import { JWPLAYER_ID } from '../../helpers/consts';
 import AVLanguage from './AVLanguage';
 
 const PLAYER_SPEEDS    = [0.75, 1, 1.25, 1.5, 2];
@@ -21,8 +20,8 @@ const AVPlayerSettings = ({ file, t }) => {
   const { qualityByLang, languages } = item;
   const { quality, language, cuId }  = info;
 
-  const handleSetSpeed   = (x) => window.jwplayer(JWPLAYER_ID).setPlaybackRate(x);
-  const handleSetQuality = (x) => {
+  const handleSetSpeed   = x => window.jwplayer().setPlaybackRate(x);
+  const handleSetQuality = x => {
     dispatch(actions.continuePlay());
     dispatch(playlistActions.setQuality(x));
   };
