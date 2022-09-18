@@ -10,16 +10,23 @@ import { selectors as playlist } from '../../redux/modules/playlist';
 import { JWPLAYER_ID, MT_VIDEO } from '../../helpers/consts';
 import Controls from './Controls/Controls';
 import Settings from './Settings';
-import Sharing from './Sharing';
+import Sharing from './Sharing/Sharing';
+import { startEndFromQuery } from './Controls/helper';
+import { useLocation } from 'react-router-dom';
 
-const Player = ({ start = 100, end = 115 }) => {
+const Player = () => {
+
+  const location = useLocation();
+
+  const { start, end } = startEndFromQuery(location);
 
   const overMode   = useSelector(state => player.getOverMode(state.player));
   const isControls = useSelector(state => player.isControls(state.player));
   const isPlay     = useSelector(state => player.isPlay(state.player));
 
-  const info = useSelector(state => playlist.getInfo(state.playlist), isEqual);
-  const item = useSelector(state => playlist.getPlayed(state.playlist), isEqual);
+  const info    = useSelector(state => playlist.getInfo(state.playlist), isEqual);
+  const item    = useSelector(state => playlist.getPlayed(state.playlist), isEqual);
+  const isReady = useSelector(state => player.isReady(state.player));
 
   const { preImageUrl } = item;
 
@@ -37,6 +44,7 @@ const Player = ({ start = 100, end = 115 }) => {
   const file     = useMemo(() => findPlayedFile(item, info), [item, info]);
   const dispatch = useDispatch();
 
+  //init jwplayer by element id
   useEffect(() => {
     const player = window.jwplayer(JWPLAYER_ID);
 
@@ -50,11 +58,6 @@ const Player = ({ start = 100, end = 115 }) => {
       });
 
       initPlayerEvents(player, dispatch);
-
-      if (start || end) {
-        player.play().seek(start).pause();
-        player.on('time', checkStopTime);
-      }
     }
 
     return () => {
@@ -63,6 +66,22 @@ const Player = ({ start = 100, end = 115 }) => {
     };
   }, [ref.current, preImageUrl, file.src, start, end]);
 
+  //start and stop slice
+  useEffect(() => {
+    if (!isReady) return () => null;
+
+    const player         = window.jwplayer();
+    const { start, end } = startEndFromQuery(location);
+    if (start || end) {
+      player.play().seek(start).pause();
+      player.on('time', checkStopTime);
+    }
+    return () => {
+      player.off('time', checkStopTime);
+    };
+  }, [isReady, location]);
+
+  //Switch played file
   useEffect(() => {
     const player = window.jwplayer(JWPLAYER_ID);
     if (player.load && file.src) {
@@ -76,8 +95,8 @@ const Player = ({ start = 100, end = 115 }) => {
   return (
     <Ref innerRef={settRef}>
       <div className="player">
-        <div className="web">
-          {/*<div className="web is-sharing">*/}
+        {/* <div className="web">*/}
+        <div className="web is-sharing">
           {/* <div className='web is-settings'> */}
           {/* <div className='web is-settings is-language'> */}
 

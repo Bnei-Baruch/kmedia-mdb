@@ -4,9 +4,10 @@ import { useSelector } from 'react-redux';
 import { selectors as player } from '../../../redux/modules/player';
 import { formatDuration } from '../../../helpers/utils';
 
-export const SeekBarKnob = ({ left, right }) => {
+export const ProgressBar = ({ left, right }) => {
   const [activated, setActivated] = useState(false);
   const [pos, setPos]             = useState(0);
+  const [buffPos, setBuffPos]     = useState(0);
   const [time, setTime]           = useState(0);
 
   const isReady = useSelector(state => player.isReady(state.player));
@@ -17,6 +18,11 @@ export const SeekBarKnob = ({ left, right }) => {
     setTime(Math.round(d.currentTime));
   }, [setPos, setTime]);
 
+  const checkBufferTime = useCallback(d => {
+    const pos = (100 * d.currentTime) / window.jwplayer().getDuration();
+    setBuffPos(pos);
+  }, [setBuffPos]);
+
   useEffect(() => {
     if (!isReady) return () => null;
 
@@ -26,6 +32,7 @@ export const SeekBarKnob = ({ left, right }) => {
     return () => {
       p.off('seeked', checkTimeAfterSeek);
       p.off('time', checkTimeAfterSeek);
+      p.on('bufferChange', checkBufferTime);
     };
 
   }, [isReady]);
@@ -71,24 +78,33 @@ export const SeekBarKnob = ({ left, right }) => {
     return removeListeners;
   }, [isReady, activated]);
 
-  return (
-    <Popup
-      trigger={
-        <div
-          className="slider__thumb"
-          style={{ left: `${pos}%` }}
-          onMouseDown={handleStart}
-          onTouchStart={handleStart}
-        ></div>
-      }
-      inverted
-      size="mini"
-      position="top center"
-      open={activated}
-    >
-      <Popup.Content>
-        <span>{formatDuration(time)}</span>
-      </Popup.Content>
-    </Popup>
+  return (<>
+      <div
+        className="slider__loaded"
+        style={{ width: `${buffPos}%` }}
+      ></div>
+      <div
+        className="slider__value"
+        style={{ width: `${pos}%` }}
+      ></div>
+      <Popup
+        trigger={
+          <div
+            className="slider__thumb"
+            style={{ left: `${pos}%` }}
+            onMouseDown={handleStart}
+            onTouchStart={handleStart}
+          ></div>
+        }
+        inverted
+        size="mini"
+        position="top center"
+        open={activated}
+      >
+        <Popup.Content>
+          <span>{formatDuration(time)}</span>
+        </Popup.Content>
+      </Popup>
+    </>
   );
 };
