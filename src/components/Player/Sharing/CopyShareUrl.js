@@ -1,10 +1,11 @@
 import { Input, Button } from 'semantic-ui-react';
 import React from 'react';
+import { useSelector } from 'react-redux';
+import { selectors } from '../../../redux/modules/player';
 import CopyToClipboard from 'react-copy-to-clipboard';
-import useShareUrl from '../hooks/StartEnd';
 
 const CopyShareUrl = () => {
-  const shareUrl = useShareUrl();
+  const shareUrl = useSelector(state => selectors.getShareUrl(state.player));
 
   return (
     <Input
