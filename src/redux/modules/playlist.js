@@ -49,17 +49,17 @@ const initialState = {
 
 const onBuildSuccess = (draft, payload) => {
   const {
-    cId,
-    cuId,
-    language,
-    items,
-    name
-  } = payload;
+          cId,
+          cuId,
+          language,
+          items,
+          name
+        } = payload;
 
   draft.playlist  = items.map(({ id }) => id);
   draft.itemById  = items.reduce((acc, x) => ({ ...acc, [x.id]: x }), {});
-  const quality   = draft.info.quality || draft.itemById[cuId].qualityByLang[0];
-  const mediaType = draft.info.quality || draft.itemById[cuId].mtByLang[0];
+  const quality   = draft.info.quality || draft.itemById[cuId].qualityByLang[language][0];
+  const mediaType = draft.info.mediaType || draft.itemById[cuId].mtByLang[language][0];
 
   draft.info = { played: cuId, cId, name, language, quality, mediaType, };
 };
@@ -95,7 +95,7 @@ export const reducer = handleActions({
 const getPlaylist = state => state.playlist;
 const getPlayed   = state => state.itemById[state.info.played] || false;
 
-const getInfo     = state => state.info;
+const getInfo = state => state.info;
 
 export const selectors = {
   getPlaylist,
