@@ -3,8 +3,6 @@ import { Popup } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
 import { selectors as player } from '../../../redux/modules/player';
 import { formatDuration } from '../../../helpers/utils';
-import { JWPLAYER_ID } from '../../../helpers/consts';
-import { selectors as playlist } from '../../../redux/modules/playlist';
 
 export const ProgressBar = ({ left, right }) => {
   const [activated, setActivated] = useState(false);
@@ -12,46 +10,38 @@ export const ProgressBar = ({ left, right }) => {
   const [buffPos, setBuffPos]     = useState(0);
   const [time, setTime]           = useState(0);
 
-  const isReady          = useSelector(state => player.isReady(state.player));
-  const file             = useSelector(state => player.getFile(state.player));
-  const { cuId, isPlay } = useSelector(state => playlist.getInfo(state.playlist));
+  const isReady = useSelector(state => player.isReady(state.player));
 
-  const checkTimeAfterSeek = d => {
-    const time = Math.round(d.currentTime);
-    const pos  = Math.round(10 * (100 * time) / window.jwplayer().getDuration()) / 10;
+  const checkTimeAfterSeek = useCallback(d => {
+    const pos = (100 * d.currentTime) / window.jwplayer().getDuration();
     setPos(pos);
-    setTime(time);
-  };
+    setTime(Math.round(d.currentTime));
+  }, [setPos, setTime]);
 
-  const checkBufferTime = d => setBuffPos(Math.round(d.bufferPercent));
-
-  useEffect(() => {
-    setPos(0);
-    setBuffPos(0);
-  }, [cuId]);
+  const checkBufferTime = useCallback(d => {
+    const pos = (100 * d.currentTime) / window.jwplayer().getDuration();
+    setBuffPos(pos);
+  }, [setBuffPos]);
 
   useEffect(() => {
     if (!isReady) return () => null;
 
-    const p = window.jwplayer(JWPLAYER_ID);
-
+    const p = window.jwplayer();
     p.on('seek', checkTimeAfterSeek);
     p.on('time', checkTimeAfterSeek);
-    p.on('bufferChange', checkBufferTime);
     return () => {
-      p.off('seek', checkTimeAfterSeek);
+      p.off('seeked', checkTimeAfterSeek);
       p.off('time', checkTimeAfterSeek);
-      p.off('bufferChange', checkBufferTime);
+      p.on('bufferChange', checkBufferTime);
     };
 
-  }, [isReady, file?.src]);
+  }, [isReady]);
 
   const handleStart = e => {
+    e.preventDefault();
     // regard only left mouse button click (0). touch is undefined
     !e.button && setActivated(true);
   };
-
-  const handleEnd = e => setActivated(false);
 
   const handleMove = useCallback(e => {
     e.preventDefault();
@@ -61,32 +51,34 @@ export const ProgressBar = ({ left, right }) => {
     const clientX = e.touches ? e.touches[e.touches.length - 1].clientX : e.clientX;
     const delta   = right - left;
     const offset  = Math.min(Math.max(0, clientX - left), delta) / delta;
-
-    const p = window.jwplayer(JWPLAYER_ID);
+    const p       = window.jwplayer();
     p.seek(p.getDuration() * offset);
   }, [activated]);
 
-  const removeListeners = () => {
-    document.removeEventListener('mousemove', handleMove);
-    document.removeEventListener('touchmove', handleMove);
-    document.removeEventListener('mouseup', handleEnd);
-    document.removeEventListener('touchend', handleEnd);
-  };
-
   useEffect(() => {
-    if (isReady && activated) {
-      document.addEventListener('mousemove', handleMove, { passive: false });
-      document.addEventListener('touchmove', handleMove, { passive: false });
-      document.addEventListener('mouseup', handleEnd, { passive: false });
-      document.addEventListener('touchend', handleEnd, { passive: false });
-    }
+    if (!isReady) return () => null;
 
-    if (isReady && !activated) removeListeners();
+    const handleEnd = e => {
+      e.preventDefault();
+      setActivated(false);
+      removeListeners();
+    };
+
+    document.addEventListener('mousemove', handleMove, { passive: false });
+    document.addEventListener('touchmove', handleMove, { passive: false });
+    document.addEventListener('mouseup', handleEnd, { passive: false });
+    document.addEventListener('touchend', handleEnd, { passive: false });
+
+    const removeListeners = () => {
+      document.removeEventListener('mousemove', handleMove);
+      document.removeEventListener('touchmove', handleMove);
+      document.removeEventListener('mouseup', handleEnd);
+      document.removeEventListener('touchend', handleEnd);
+    };
     return removeListeners;
   }, [isReady, activated]);
 
-  return (
-    <>
+  return (<>
       <div
         className="slider__loaded"
         style={{ width: `${buffPos}%` }}
