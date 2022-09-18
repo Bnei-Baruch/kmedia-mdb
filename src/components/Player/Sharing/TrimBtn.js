@@ -2,12 +2,12 @@ import React, { useContext, useState, useMemo } from 'react';
 import moment from 'moment/moment';
 import { withNamespaces } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Icon, Label, Popup } from 'semantic-ui-react';
+import { Button, Icon, Popup } from 'semantic-ui-react';
 
 import { ClientChroniclesContext } from '../../../helpers/app-contexts';
 import { noop } from '../../../helpers/utils';
 import { actions } from '../../../redux/modules/trim';
-import { findPlayedFile } from '../../Player/helper';
+import { findPlayedFile } from '../helper';
 import { selectors as playlist } from '../../../redux/modules/playlist';
 import { selectors as player } from '../../../redux/modules/player';
 import { isEqual } from 'lodash/lang';
@@ -43,6 +43,7 @@ const TrimBtn = ({ width, t }) => {
 
   return (
     <Popup
+      inverted
       open={open}
       onOpen={() => setOpen(true)}
       onClose={() => setOpen(false)}
@@ -57,11 +58,6 @@ const TrimBtn = ({ width, t }) => {
           size="big"
           className="cut_and_download_btn"
         >
-          <Label
-            color="red"
-            floating
-            content={t('messages.new')}
-          />
           <Icon name="cloud download" />
         </Button>
       }

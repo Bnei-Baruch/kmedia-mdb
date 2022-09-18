@@ -745,5 +745,7 @@ export const JWPLAYER_ID = 'jwplayer';
 
 export const PLAYER_OVER_MODES = {
   settings: 'settings',
+  languages: 'languages',
   share: 'share',
+  none: null,
 };
