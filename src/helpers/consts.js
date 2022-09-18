@@ -314,8 +314,8 @@ export const EVENT_PREPARATION_TAG = 'Salvk5yF';
 
 export const DATE_FORMAT = 'YYYY-MM-DD';
 
-export const EVENT_TYPES = [CT_CONGRESS, CT_HOLIDAY, CT_PICNIC, CT_UNITY_DAY];
-export const SORTABLE_TYPES = [CT_SONGS, CT_LESSONS_SERIES, CT_HOLIDAY]
+export const EVENT_TYPES    = [CT_CONGRESS, CT_HOLIDAY, CT_PICNIC, CT_UNITY_DAY];
+export const SORTABLE_TYPES = [CT_SONGS, CT_LESSONS_SERIES, CT_HOLIDAY];
 
 // Required for Sections filter.
 export const COLLECTION_LESSONS_TYPE      = [CT_DAILY_LESSON, CT_SPECIAL_LESSON, /* CT_CHILDREN_LESSONS, */ CT_WOMEN_LESSONS, CT_VIRTUAL_LESSONS, CT_LECTURE_SERIES, CT_LESSONS_SERIES];
@@ -727,5 +727,7 @@ export const JWPLAYER_ID = 'jwplayer';
 
 export const PLAYER_OVER_MODES = {
   settings: 'settings',
+  languages: 'languages',
   share: 'share',
+  none: null,
 };
