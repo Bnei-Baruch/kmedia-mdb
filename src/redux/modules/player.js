@@ -16,6 +16,7 @@ const PLAYER_CONTINUE_PLAY_FROM = 'Player/CONTINUE_PLAY_FROM';
 
 const PLAYER_SHARE_START = 'Player/PLAYER_SHARE_START';
 const PLAYER_SHARE_STOP  = 'Player/PLAYER_SHARE_STOP';
+const SET_SHARE_URL      = 'Player/SET_SHARE_URL';
 
 export const types = {
   PLAYER_READY,
@@ -41,6 +42,8 @@ const continuePlay = createAction(PLAYER_CONTINUE_PLAY_FROM);
 const playerShareStart = createAction(PLAYER_SHARE_START);
 const playerShareStop  = createAction(PLAYER_SHARE_STOP);
 
+const setShareUrl = createAction(SET_SHARE_URL);
+
 export const actions = {
   playerReady,
   playerActive,
@@ -54,7 +57,9 @@ export const actions = {
   continuePlay,
 
   playerShareStart,
-  playerShareStop
+  playerShareStop,
+
+  setShareUrl
 };
 
 /* Reducer */
@@ -126,6 +131,8 @@ export const reducer = handleActions({
 
   [PLAYER_SHARE_START]: (draft, payload) => draft.start = payload,
   [PLAYER_SHARE_STOP]: (draft, payload) => draft.stop = payload,
+
+  [SET_SHARE_URL]: (draft, payload) => draft.shareUrl = payload,
 }, initialState);
 
 const isReady      = state => state.ready;
@@ -135,6 +142,7 @@ const isPlay       = state => state.played;
 const getOverMode  = state => state.overMode;
 const getRate      = state => state.rate || 1;
 const getStartStop = ({ start, stop }) => ({ start, stop });
+const getShareUrl  = state => state.shareUrl || '';
 
 export const selectors = {
   isControls,
@@ -143,7 +151,8 @@ export const selectors = {
   getOverMode,
   getRate,
   getStartStop,
-  isReady
+  isReady,
+  getShareUrl
 };
 
 export const PLAYER_ACTIONS_BY_EVENT = {

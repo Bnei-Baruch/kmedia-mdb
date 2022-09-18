@@ -3,6 +3,7 @@ import { Popup, Icon } from 'semantic-ui-react';
 import { VolumeKnob } from './VolumeKnob';
 import { useSelector } from 'react-redux';
 import { selectors as player } from '../../../redux/modules/player';
+import isFunction from 'lodash/isFunction';
 
 export const VolumeCtrl = () => {
   const widthRef = useRef({});
@@ -13,6 +14,8 @@ export const VolumeCtrl = () => {
   const [right, setRight]   = useState();
 
   const updateVolume = useCallback(({ volume }) => setVolume(volume), [setVolume]);
+  const isMuted      = isFunction(window.jwplayer()?.getMute) ? window.jwplayer()?.getMute() : false;
+  const icon         = isMuted ? 'off' : volume < 40 ? 'down' : 'up';
 
   useEffect(() => {
     const { left, right } = widthRef.current.getBoundingClientRect();
@@ -41,7 +44,7 @@ export const VolumeCtrl = () => {
     <div className="controls__volume">
       <Popup content="Mute" inverted size="mini" position="top center" trigger={
         <div className="controls__volume-icon" onClick={handleMute}>
-          <Icon fitted name="volume down" />
+          <Icon fitted name={`volume ${icon}`} />
         </div>
       } />
       <div className="controls__slider">
