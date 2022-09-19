@@ -1,18 +1,19 @@
-import React, { useCallback, useEffect, useRef, useMemo } from 'react';
+import React, { useEffect, useRef, useMemo, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import fscreen from 'fscreen';
 import { Ref } from 'semantic-ui-react';
 import { isEqual } from 'lodash/lang';
 
-import { initPlayerEvents, removePlayerButtons, findPlayedFile } from './helper';
-import { selectors as player } from '../../redux/modules/player';
+import { findPlayedFile, initPlayerEvents, removePlayerEvents } from './helper';
+import { selectors as player, actions } from '../../redux/modules/player';
 import { selectors as playlist } from '../../redux/modules/playlist';
-import { JWPLAYER_ID, MT_VIDEO, PLAYER_OVER_MODES } from '../../helpers/consts';
+import { MT_VIDEO, PLAYER_OVER_MODES, JWPLAYER_ID } from '../../helpers/consts';
 import Controls from './Controls/Controls';
 import Settings from './Settings/Settings';
 import Sharing from './Sharing/Sharing';
-import { startEndFromQuery } from './Controls/helper';
 import { useLocation } from 'react-router-dom';
+import { startEndFromQuery } from './Controls/helper';
+import { noop } from '../../helpers/utils';
 
 const CLASSES_BY_MODE = {
   [PLAYER_OVER_MODES.settings]: ' is-settings',
@@ -22,64 +23,52 @@ const CLASSES_BY_MODE = {
 };
 
 const Player = () => {
+  const settRef = useRef();
+  const ref     = useRef();
 
-  const location = useLocation();
-
-  const { start, end } = startEndFromQuery(location);
-
-  const overMode = useSelector(state => player.getOverMode(state.player));
-  /*
-  const isControls = useSelector(state => player.isControls(state.player));
-  const isPlay     = useSelector(state => player.isPlay(state.player));
-*/
+  const mode    = useSelector(state => player.getOverMode(state.player));
   const info    = useSelector(state => playlist.getInfo(state.playlist), isEqual);
   const item    = useSelector(state => playlist.getPlayed(state.playlist), isEqual);
   const isReady = useSelector(state => player.isReady(state.player));
 
   const { preImageUrl } = item;
 
+  const file     = useMemo(() => findPlayedFile(item, info), [item, info]);
+  const dispatch = useDispatch();
+
+  const location       = useLocation();
+  const { start, end } = startEndFromQuery(location);
+
   const checkStopTime = useCallback(d => {
     if (d.currentTime > end) {
-      const player = window.jwplayer(JWPLAYER_ID);
+      const player = window.jwplayer();
       player.pause();
       player.off('time', checkStopTime);
     }
   }, [end]);
 
-  const ref     = useRef();
-  const settRef = useRef();
-
-  const file     = useMemo(() => findPlayedFile(item, info), [item, info]);
-  const dispatch = useDispatch();
-
-  //init jwplayer by element id
+  //init jwplayer by element id,
   useEffect(() => {
+    // can't be init without file, but it must be call once
     const player = window.jwplayer(JWPLAYER_ID);
-
-    if (player.setup && file.src) {
+    if (!isReady || !!file.src) {
       player.setup({
         controls: false,
-        playlist: [{
-          'file': file.src,
-          'image': preImageUrl
-        }]
+        playlist: [{ 'file': file.src }]
       });
-
       initPlayerEvents(player, dispatch);
     }
-
     return () => {
-      removePlayerButtons(player);
+      removePlayerEvents(player);
       player.remove();
     };
-  }, [ref.current, preImageUrl, file.src, start, end]);
+  }, [ref.current, file.src]);
 
   //start and stop slice
   useEffect(() => {
-    if (!isReady) return () => null;
+    if (!isReady) return noop;
 
-    const player         = window.jwplayer();
-    const { start, end } = startEndFromQuery(location);
+    const player = window.jwplayer();
     if (start || end) {
       player.play().seek(start).pause();
       player.on('time', checkStopTime);
@@ -87,28 +76,31 @@ const Player = () => {
     return () => {
       player.off('time', checkStopTime);
     };
-  }, [isReady, location]);
+  }, [isReady, start, end]);
 
-  //Switch played file
+  //load file to jwplayer
   useEffect(() => {
-    const player = window.jwplayer(JWPLAYER_ID);
-    if (player.load && file.src) {
-      const img = file.type === MT_VIDEO ? preImageUrl : '';
-      player.load([{ 'file': file.src, 'image': img }]);
+    if (isReady) {
+      const player = window.jwplayer();
+      if (file) {
+        const img = file.type === MT_VIDEO ? preImageUrl : '';
+        player.load([{ 'file': file.src, 'image': img }]);
+        dispatch(actions.setFile(file));
+      }
     }
-  }, [file.src]);
+  }, [isReady, file]);
 
   const handleFullScreen = () => fscreen.requestFullscreen(settRef.current);
 
+  const handleLeave = () => dispatch(actions.setOverMode(PLAYER_OVER_MODES.none));
+
   return (
     <Ref innerRef={settRef}>
-      <div className="player">
-        <div className={`web ${CLASSES_BY_MODE[overMode]}`}>
-
+      <div className="player" onMouseLeave={handleLeave}>
+        <div className={`web ${CLASSES_BY_MODE[mode]}`}>
           <Controls fullScreen={handleFullScreen} />
-          <Settings file={file} />
+          <Settings />
           <Sharing />
-
           <Ref innerRef={ref}>
             <div id={JWPLAYER_ID}> video</div>
           </Ref>

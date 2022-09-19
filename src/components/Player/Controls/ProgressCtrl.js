@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useLayoutEffect, useState } from 'react';
 import { ProgressBar } from './ProgressBar';
 import { stopBubbling } from '../../../helpers/utils';
 import { SlicesBar } from './SlicesBar';
@@ -9,14 +9,14 @@ export const ProgressCtrl = () => {
   const [left, setLeft]   = useState();
   const [right, setRight] = useState();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const { left, right } = widthRef.current.getBoundingClientRect();
     setLeft(left);
     setRight(right);
   }, [widthRef.current]);
 
   const handleProgressClick = e => {
-    const clientX = e.touches ? e.touches[e.touches.length - 1].clientX : e.clientX;
+    const clientX = (e.touches ? e.touches[e.touches.length - 1].clientX : e.clientX) - 28/2;
     const delta   = right - left;
     const offset  = Math.min(Math.max(0, clientX - left), delta) / delta;
     const p       = window.jwplayer();
@@ -29,10 +29,10 @@ export const ProgressCtrl = () => {
       className="controls__progress"
       onClick={handleProgressClick}
     >
-      <div className="controls__slider">
-        <div className="slider__wrapper" ref={widthRef}>
+      <div className="controls__slider" ref={widthRef}>
+        <div className="slider__wrapper">
           <SlicesBar />
-          <ProgressBar left={left} right={right} />
+          <ProgressBar left={left + 12} right={right - 12} />
         </div>
       </div>
     </div>

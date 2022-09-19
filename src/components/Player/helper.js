@@ -2,7 +2,7 @@ import { PLAYER_ACTIONS_BY_EVENT } from '../../redux/modules/player';
 import { DEFAULT_LANGUAGE, MT_VIDEO, MT_AUDIO } from '../../helpers/consts';
 import { isEmpty } from '../../helpers/utils';
 
-const PLAYER_EVENTS = ['ready', 'userActive', 'userInactive', 'play', 'pause', 'mute', 'volume', 'playbackRateChanged'];
+const PLAYER_EVENTS = ['ready', 'play', 'pause', 'seeked', 'time', 'bufferedTime', 'playbackRateChanged'];
 
 export const initPlayerEvents = (player, dispatch) => {
   player.on('error', e => {
@@ -26,7 +26,7 @@ export const initPlayerEvents = (player, dispatch) => {
   });
 };
 
-export const removePlayerButtons = player => {
+export const removePlayerEvents = player => {
   PLAYER_EVENTS.forEach(name => player.off(name));
 };
 
