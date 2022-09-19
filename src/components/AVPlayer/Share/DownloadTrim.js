@@ -71,7 +71,7 @@ const DownloadTrim = ({ t }) => {
             <Container className="padded content">
               <Grid>
                 {
-                  list.map((item, i) => <DownloadTrimItem pos={i + 1} item={item} />)
+                  list.map((item, i) => <DownloadTrimItem key={i} pos={i + 1} item={item} />)
                 }
                 {
                   wips.map(renderWip)

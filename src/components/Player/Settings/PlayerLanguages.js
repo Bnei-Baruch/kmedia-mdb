@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { actions as playlistActions, selectors as playlistSelectors } from '../../../redux/modules/playlist';
 import { actions } from '../../../redux/modules/player';
 
-const Languages = ({ active }) => {
+const PlayerLanguages = ({ active }) => {
 
   const { languages } = useSelector(state => playlistSelectors.getPlayed(state.playlist));
 
@@ -37,6 +37,7 @@ const Languages = ({ active }) => {
                   content={x.name}
                   active={active === x.value}
                   onClick={handleSelect}
+                  key={x.value}
                 />
               )
             )
@@ -46,4 +47,4 @@ const Languages = ({ active }) => {
   );
 };
 
-export default Languages;
+export default PlayerLanguages;
