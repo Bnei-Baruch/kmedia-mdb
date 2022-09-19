@@ -11,40 +11,46 @@ export const ProgressBar = ({ left, right }) => {
   const [time, setTime]           = useState(0);
 
   const isReady = useSelector(state => player.isReady(state.player));
+  const file    = useSelector(state => player.getFile(state.player));
 
   const checkTimeAfterSeek = useCallback(d => {
-    const pos = (100 * d.currentTime) / window.jwplayer().getDuration();
+    const time = Math.round(d.currentTime);
+    const pos  = Math.round(10 * (100 * time) / window.jwplayer().getDuration()) / 10;
     setPos(pos);
-    setTime(Math.round(d.currentTime));
-  }, [setPos, setTime]);
+    setTime(time);
+  }, []);
 
   const checkBufferTime = useCallback(d => {
     const pos = (100 * d.currentTime) / window.jwplayer().getDuration();
     setBuffPos(pos);
-  }, [setBuffPos]);
+  }, []);
 
   useEffect(() => {
     if (!isReady) return () => null;
 
     const p = window.jwplayer();
+
     p.on('seek', checkTimeAfterSeek);
     p.on('time', checkTimeAfterSeek);
+    p.on('bufferChange', checkBufferTime);
     return () => {
-      p.off('seeked', checkTimeAfterSeek);
+      p.off('seek', checkTimeAfterSeek);
       p.off('time', checkTimeAfterSeek);
-      p.on('bufferChange', checkBufferTime);
+      p.off('bufferChange', checkBufferTime);
     };
 
-  }, [isReady]);
+  }, [isReady, file?.src]);
 
   const handleStart = e => {
-    e.preventDefault();
     // regard only left mouse button click (0). touch is undefined
     !e.button && setActivated(true);
   };
 
+  const handleEnd = e => setActivated(false);
+
   const handleMove = useCallback(e => {
     e.preventDefault();
+    console.log('progress bar: move e.clientX', e.clientX);
     if (!activated) return;
 
     // Resolve clientX from mouse or touch event.
@@ -52,33 +58,32 @@ export const ProgressBar = ({ left, right }) => {
     const delta   = right - left;
     const offset  = Math.min(Math.max(0, clientX - left), delta) / delta;
     const p       = window.jwplayer();
+
+    console.log('progress bar: move', offset * 100, clientX, right, left);
     p.seek(p.getDuration() * offset);
   }, [activated]);
 
+  const removeListeners = () => {
+    document.removeEventListener('mousemove', handleMove);
+    document.removeEventListener('touchmove', handleMove);
+    document.removeEventListener('mouseup', handleEnd);
+    document.removeEventListener('touchend', handleEnd);
+  };
+
   useEffect(() => {
-    if (!isReady) return () => null;
+    if (isReady && activated) {
+      document.addEventListener('mousemove', handleMove, { passive: false });
+      document.addEventListener('touchmove', handleMove, { passive: false });
+      document.addEventListener('mouseup', handleEnd, { passive: false });
+      document.addEventListener('touchend', handleEnd, { passive: false });
+    }
 
-    const handleEnd = e => {
-      e.preventDefault();
-      setActivated(false);
-      removeListeners();
-    };
-
-    document.addEventListener('mousemove', handleMove, { passive: false });
-    document.addEventListener('touchmove', handleMove, { passive: false });
-    document.addEventListener('mouseup', handleEnd, { passive: false });
-    document.addEventListener('touchend', handleEnd, { passive: false });
-
-    const removeListeners = () => {
-      document.removeEventListener('mousemove', handleMove);
-      document.removeEventListener('touchmove', handleMove);
-      document.removeEventListener('mouseup', handleEnd);
-      document.removeEventListener('touchend', handleEnd);
-    };
+    if (isReady && !activated) removeListeners();
     return removeListeners;
   }, [isReady, activated]);
 
-  return (<>
+  return (
+    <>
       <div
         className="slider__loaded"
         style={{ width: `${buffPos}%` }}

@@ -29,9 +29,9 @@ const Settings      = ({ t }) => {
     dispatch(playlistActions.setQuality(x));
   };
 
-  const handleSetMediaType = (e, { name }) => {
+  const handleSetMediaType = x => {
     dispatch(actions.continuePlay());
-    dispatch(playlistActions.setMediaType(name));
+    dispatch(playlistActions.setMediaType(x));
   };
 
   const handleOpenLangs = () => dispatch(actions.setOverMode(PLAYER_OVER_MODES.languages));
@@ -84,7 +84,7 @@ const Settings      = ({ t }) => {
           <Header size="tiny">Quality</Header>
           <Button.Group size="mini" inverted>
             {
-              qualityByLang[language]?.map((x, i) => (
+              qualityByLang[language].map((x, i) => (
                 <Button
                   inverted
                   content={x}

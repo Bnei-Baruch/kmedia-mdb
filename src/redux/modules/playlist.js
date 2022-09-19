@@ -1,6 +1,7 @@
 import { createAction } from 'redux-actions';
 import { handleActions } from './settings';
 import { DEFAULT_LANGUAGE, MT_VIDEO } from '../../helpers/consts';
+import { updateQuery } from '../../helpers/url';
 
 const PLAYLIST_BUILD         = 'Playlist/BUILD';
 const PLAYLIST_BUILD_SUCCESS = 'Playlist/BUILD_SUCCESS';
@@ -9,6 +10,7 @@ const PLAYLIST_NEXT          = 'Playlist/NEXT';
 const PLAYLIST_PREV          = 'Playlist/PREV';
 const PLAYER_SET_QUALITY     = 'Player/SET_QUALITY';
 const PLAYER_SET_LANGUAGE    = 'Player/SET_LANGUAGE';
+const PLAYER_SET_MEDIA_TYPE  = 'Player/SET_MEDIA_TYPE';
 
 export const types = {
   PLAYLIST_BUILD,
@@ -26,6 +28,7 @@ const next         = createAction(PLAYLIST_NEXT);
 const prev         = createAction(PLAYLIST_PREV);
 const setQuality   = createAction(PLAYER_SET_QUALITY);
 const setLanguage  = createAction(PLAYER_SET_LANGUAGE);
+const setMediaType = createAction(PLAYER_SET_MEDIA_TYPE);
 
 export const actions = {
   build,
@@ -35,6 +38,7 @@ export const actions = {
   prev,
   setQuality,
   setLanguage,
+  setMediaType,
 };
 
 /* Reducer */
@@ -79,9 +83,14 @@ const onPrev = draft => {
   draft.info.played = draft.playlist[idx > 1 ? idx - 1 : 0];
 };
 
-const onSetQuality = (draft, payload) => draft.info.quality = payload;
+const onSetQuality = (draft, payload) => {
+  draft.info.quality = payload;
+  updateQuery()
+}
 
 const onSetLanguage = (draft, payload) => draft.info.language = payload;
+
+const onSetMediaType = (draft, payload) => draft.info.mediaType = payload;
 
 export const reducer = handleActions({
   [PLAYLIST_BUILD_SUCCESS]: onBuildSuccess,
@@ -90,6 +99,7 @@ export const reducer = handleActions({
   [PLAYLIST_PREV]: onPrev,
   [PLAYER_SET_QUALITY]: onSetQuality,
   [PLAYER_SET_LANGUAGE]: onSetLanguage,
+  [PLAYER_SET_MEDIA_TYPE]: onSetMediaType,
 }, initialState);
 
 const getPlaylist = state => state.playlist;

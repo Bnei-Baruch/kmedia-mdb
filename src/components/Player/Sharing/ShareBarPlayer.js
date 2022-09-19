@@ -20,8 +20,7 @@ import {
 import CutAndDownload from './TrimBtn';
 import EmbeddedShareButton from './EmbeddedShareButton';
 import { Popup } from 'semantic-ui-react';
-import { useSelector } from 'react-redux';
-import { selectors } from '../../../redux/modules/player';
+import useShareUrl from '../hooks/StartEnd';
 
 const bsPixelsBySize = {
   tiny: 26,
@@ -33,7 +32,7 @@ const ShareBarPlayer = ({ t }) => {
 
   const bsPixels = bsPixelsBySize.small;
   const title    = t('player.share.title');
-  const url      = useSelector(state => selectors.getShareUrl(state.player));
+  const url      = useShareUrl();
 
   return (
     <>
