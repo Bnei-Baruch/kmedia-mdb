@@ -1,21 +1,21 @@
 import React from 'react';
 import { Button, Icon, Menu } from 'semantic-ui-react';
-import { useSelector, useDispatch, batch } from 'react-redux';
 
-import { LANGUAGE_OPTIONS, PLAYER_OVER_MODES } from '../../../helpers/consts';
+import { LANGUAGE_OPTIONS, JWPLAYER_ID, PLAYER_OVER_MODES } from '../../../helpers/consts';
+import { useSelector, useDispatch } from 'react-redux';
 import { actions as playlistActions, selectors as playlistSelectors } from '../../../redux/modules/playlist';
-import { actions, selectors } from '../../../redux/modules/player';
-import { withNamespaces } from 'react-i18next';
+import { actions } from '../../../redux/modules/player';
 
-const PlayerLanguages = ({ t }) => {
-  const { languages = [] } = useSelector(state => playlistSelectors.getPlayed(state.playlist));
-  const { language }       = useSelector(state => selectors.getFile(state.player));
-  const dispatch           = useDispatch();
+const PlayerLanguages = ({ active }) => {
 
-  const handleSelect = (e, { name }) => batch(() => {
-    dispatch(actions.continuePlay());
+  const { languages } = useSelector(state => playlistSelectors.getPlayed(state.playlist));
+
+  const dispatch = useDispatch();
+
+  const handleSelect = (e, { name }) => {
     dispatch(playlistActions.setLanguage(name));
-  });
+    dispatch(actions.continuePlay(window.jwplayer(JWPLAYER_ID).getPosition()),);
+  };
 
   const handleCloseLangs = () => dispatch(actions.setOverMode(PLAYER_OVER_MODES.settings));
 
@@ -24,7 +24,7 @@ const PlayerLanguages = ({ t }) => {
     <div className="settings__pane">
       <Button inverted fluid onClick={handleCloseLangs}>
         <Icon name="left chevron" />
-        {t('player.settings.language')}
+        Language
       </Button>
       <Menu secondary vertical inverted size="small">
         {
@@ -35,7 +35,7 @@ const PlayerLanguages = ({ t }) => {
                   link
                   name={x.value}
                   content={x.name}
-                  active={language === x.value}
+                  active={active === x.value}
                   onClick={handleSelect}
                   key={x.value}
                 />
@@ -47,4 +47,4 @@ const PlayerLanguages = ({ t }) => {
   );
 };
 
-export default withNamespaces()(PlayerLanguages);
+export default PlayerLanguages;

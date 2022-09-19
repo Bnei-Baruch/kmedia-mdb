@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Ref } from 'semantic-ui-react';
-import { initPlayerEvents, removePlayerButtons, findPlayedFile } from '../Player/helper';
+import { initPlayerEvents, removePlayerEvents, findPlayedFile } from '../Player/helper';
 import fscreen from 'fscreen';
 import { selectors as player } from '../../redux/modules/player';
 import { selectors as playlist } from '../../redux/modules/playlist';
@@ -65,7 +65,7 @@ const AVPlayer = ({ start = 100, end = 115 }) => {
     }
 
     return () => {
-      removePlayerButtons(player);
+      removePlayerEvents(player);
       player.remove();
     };
   }, [ref.current, preImageUrl, file.src, start, end]);
