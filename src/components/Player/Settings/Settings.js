@@ -1,6 +1,6 @@
 import { Button, Header, Icon } from 'semantic-ui-react';
 import React from 'react';
-import { useSelector, useDispatch, batch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { selectors, actions } from '../../../redux/modules/player';
 import { selectors as playlistSelectors, actions as playlistActions } from '../../../redux/modules/playlist';
 import { withNamespaces } from 'react-i18next';
@@ -25,17 +25,13 @@ const Settings      = ({ t }) => {
   const handleSetSpeed = x => window.jwplayer().setPlaybackRate(x);
 
   const handleSetQuality = x => {
-    batch(() => {
-      dispatch(actions.continuePlay());
-      dispatch(playlistActions.setQuality(x));
-    });
+    dispatch(actions.continuePlay());
+    dispatch(playlistActions.setQuality(x));
   };
 
-  const handleSetMediaType = (e, { name }) => {
-    batch(() => {
-      dispatch(actions.continuePlay());
-      dispatch(playlistActions.setMediaType(name));
-    });
+  const handleSetMediaType = x => {
+    dispatch(actions.continuePlay());
+    dispatch(playlistActions.setMediaType(x));
   };
 
   const handleOpenLangs = () => dispatch(actions.setOverMode(PLAYER_OVER_MODES.languages));
@@ -88,7 +84,7 @@ const Settings      = ({ t }) => {
           <Header size="tiny">Quality</Header>
           <Button.Group size="mini" inverted>
             {
-              qualityByLang[language]?.map((x, i) => (
+              qualityByLang[language].map((x, i) => (
                 <Button
                   inverted
                   content={x}

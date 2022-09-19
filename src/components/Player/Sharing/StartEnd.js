@@ -1,52 +1,29 @@
 import { Input, Button } from 'semantic-ui-react';
-import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import React from 'react';
 import { toHumanReadableTime } from '../../../helpers/time';
 import { useDispatch, useSelector } from 'react-redux';
-import { actions } from '../../../redux/modules/player';
-import { selectors as playlist } from '../../../redux/modules/playlist';
-import { selectors as settings } from '../../../redux/modules/settings';
-import { splitPathByLanguage } from '../../../helpers/url';
+import { actions, selectors } from '../../../redux/modules/player';
 
 const StartEnd = () => {
-  const [start, setStart] = useState(null);
-  const [end, setEnd]     = useState(null);
+  const { start, end } = useSelector(state => selectors.getShareStartEnd(state.player));
 
-  const location = useLocation();
   const dispatch = useDispatch();
-
-  const { mediaType } = useSelector(state => playlist.getInfo(state.playlist));
-  const language      = useSelector(state => settings.getLanguage(state.settings));
-
-  useEffect(() => {
-    const { protocol, hostname, port, pathname } = window.location;
-
-    const { path } = splitPathByLanguage(pathname);
-
-    const url = new URL(`${protocol}//${hostname}${port ? `:${port}` : ''}${path}`);
-    (!!start) && url.searchParams.set('sstart', toHumanReadableTime(start));
-    (!!end && end !== Infinity) && url.searchParams.set('send', toHumanReadableTime(end));
-    url.searchParams.set('mediaType', mediaType);
-    url.searchParams.set('shareLang', language);
-    dispatch(actions.setShareUrl(url.toString()));
-  }, [start, end, mediaType, language, location]);
 
   const handleSetStart = () => {
     const start = window.jwplayer().getPosition();
-    if (start >= end) setEnd(Infinity);
-    setStart(start);
+    const d     = { end, start };
+    if (start >= end) d.end = Infinity;
+    dispatch(actions.setShareStartEnd(d));
   };
 
   const handleSetEnd = () => {
     const end = window.jwplayer().getPosition();
-    if (end <= start) setStart(0);
-    setEnd(end);
+    const d   = { end, start };
+    if (end <= start) d.start = 0;
+    dispatch(actions.setShareStartEnd(d));
   };
 
-  const handleSetFull = () => {
-    setEnd(Infinity);
-    setStart(0);
-  };
+  const handleSetFull = () => dispatch(actions.setShareStartEnd({ end: Infinity, start: 0 }));
 
   return (
     <>
