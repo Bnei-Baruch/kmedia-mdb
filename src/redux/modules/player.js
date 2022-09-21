@@ -2,10 +2,11 @@ import { createAction } from 'redux-actions';
 import { handleActions } from './settings';
 import { JWPLAYER_ID, PLAYER_OVER_MODES } from '../../helpers/consts';
 
-const PLAYER_READY            = 'Player/READY';
-const PLAYER_PLAY             = 'Player/PLAY';
-const PLAYER_PAUSE            = 'Player/PAUSE';
-const PLAYER_SET_FILE         = 'Player/SET_FILE';
+const PLAYER_READY    = 'Player/READY';
+const PLAYER_REMOVE   = 'Player/REMOVE';
+const PLAYER_PLAY     = 'Player/PLAY';
+const PLAYER_PAUSE    = 'Player/PAUSE';
+const PLAYER_SET_FILE = 'Player/SET_FILE';
 
 const PLAYER_SET_OVER_MODE      = 'Player/SET_OVER_MODE';
 const PLAYER_CONTINUE_PLAY_FROM = 'Player/CONTINUE_PLAY_FROM';
@@ -18,26 +19,25 @@ export const types = {
 };
 
 // Actions
-const playerReady = createAction(PLAYER_READY);
-const setFile     = createAction(PLAYER_SET_FILE);
+const playerReady  = createAction(PLAYER_READY);
+const playerRemove = createAction(PLAYER_REMOVE);
+const setFile      = createAction(PLAYER_SET_FILE);
 
-const playerPlay           = createAction(PLAYER_PLAY);
-const playerPause          = createAction(PLAYER_PAUSE);
-const setOverMode          = createAction(PLAYER_SET_OVER_MODE);
-const continuePlay         = createAction(PLAYER_CONTINUE_PLAY_FROM);
+const playerPlay   = createAction(PLAYER_PLAY);
+const playerPause  = createAction(PLAYER_PAUSE);
+const setOverMode  = createAction(PLAYER_SET_OVER_MODE);
+const continuePlay = createAction(PLAYER_CONTINUE_PLAY_FROM);
 
 const setShareStartEnd = createAction(SET_SHARE_START_END);
 
 export const actions = {
-  playerReady,
   setFile,
+  setOverMode,
+  setShareStartEnd,
 
   playerPlay,
   playerPause,
-  setOverMode,
   continuePlay,
-
-  setShareStartEnd
 };
 
 /* Reducer */
@@ -50,7 +50,6 @@ const initialState = {
 };
 
 const onReady = (draft, e) => {
-  console.log('onReady', e);
   if (draft.continuePlay && draft.continuePlay.pos !== -1) {
     const p = window.jwplayer(JWPLAYER_ID);
     p.stop().seek(draft.continuePlay.pos);
@@ -60,6 +59,12 @@ const onReady = (draft, e) => {
     draft.overMode     = null;
   }
   draft.ready = true;
+};
+
+const onRemove = draft => {
+  draft.continuePlay = initialState.continuePlay;
+  draft.overMode     = null;
+  draft.ready        = false;
 };
 
 const onSetFile = (draft, payload) => draft.file = payload;
@@ -79,6 +84,7 @@ const onContinuePlay = (draft, payload = -1) => {
 
 export const reducer = handleActions({
   [PLAYER_READY]: onReady,
+  [PLAYER_REMOVE]: onRemove,
   [PLAYER_SET_FILE]: onSetFile,
 
   [PLAYER_PLAY]: onPlay,
@@ -110,6 +116,7 @@ export const selectors = {
 
 export const PLAYER_ACTIONS_BY_EVENT = {
   'ready': playerReady,
+  'remove': playerRemove,
   'play': playerPlay,
   'pause': playerPause,
 };
