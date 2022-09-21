@@ -7,6 +7,7 @@ import isEqual from 'react-fast-compare';
 import { actions, selectors } from '../../../../../../redux/modules/recommended';
 import { selectors as tagsSelectors } from '../../../../../../redux/modules/tags';
 import { selectors as sourcesSelectors } from '../../../../../../redux/modules/sources';
+import { selectors as playlist } from '../../../../../../redux/modules/playlist';
 import * as shapes from '../../../../../shapes';
 import WipErr from '../../../../../shared/WipErr/WipErr';
 import DisplayRecommended from './DisplayRecommended';
@@ -23,6 +24,7 @@ import {
   SGLP_LESSON_SERIES,
   SGLP_PRORGRAMS,
 } from '../../../../../../helpers/consts';
+import { selectors as mdb } from '../../../../../../redux/modules/mdb';
 
 // Number of items to try to recommend.
 const N = 12;
@@ -63,23 +65,23 @@ const makeTagLink = (tag, getTagById) => {
 const makeCollectionLink = (collection, t) => {
   let display;
   switch (collection.content_type) {
-    case CT_DAILY_LESSON:
-    case CT_SPECIAL_LESSON: {
-      const ctLabel = t(`constants.content-types.${CT_DAILY_LESSON}`);
-      const fd      = t('values.date', { date: collection.film_date });
-      display       = `${ctLabel} ${fd}`;
-      break;
-    }
+  case CT_DAILY_LESSON:
+  case CT_SPECIAL_LESSON: {
+    const ctLabel = t(`constants.content-types.${CT_DAILY_LESSON}`);
+    const fd      = t('values.date', { date: collection.film_date });
+    display       = `${ctLabel} ${fd}`;
+    break;
+  }
 
-    default:
-      display = collection.name;
-      break;
+  default:
+    display = collection.name;
+    break;
   }
 
   return <Link key={collection.id} to={canonicalLink(collection)}>{display}</Link>;
 };
 
-const Recommended = ({ unit, t, filterOutUnits = [], displayTitle = true }) => {
+const Recommended = ({ t, filterOutUnits = [], displayTitle = true }) => {
   const abTesting                                         = useContext(AbTestingContext);
   const [unitId, setUnitId]                               = useState(null);
   const [unitContentType, setUnitContentType]             = useState(null);
@@ -91,6 +93,8 @@ const Recommended = ({ unit, t, filterOutUnits = [], displayTitle = true }) => {
 
   const activeVariant = (abTesting && abTesting.getVariant(AB_RECOMMEND_EXPERIMENT)) || '';
 
+  const { cuId }      = useSelector(state => playlist.getInfo(state.playlist));
+  const unit          = useSelector(state => mdb.getDenormContentUnit(state.mdb, cuId));
   const wip           = useSelector(state => selectors.getWip(state.recommended));
   const err           = useSelector(state => selectors.getError(state.recommended));
   const getTagById    = useSelector(state => tagsSelectors.getTagById(state.tags));
@@ -261,14 +265,9 @@ const Recommended = ({ unit, t, filterOutUnits = [], displayTitle = true }) => {
 };
 
 Recommended.propTypes = {
-  unit: shapes.EventItem.isRequired,
   t: PropTypes.func.isRequired,
   filterOutUnits: PropTypes.arrayOf(shapes.EventItem),
   displayTitle: PropTypes.bool
 };
 
-const areEqual = (prevProps, nextProps) =>
-  prevProps.unit.id === nextProps.unit.id
-  && isEqual(prevProps.filterOutUnits, nextProps.filterOutUnits);
-
-export default React.memo(withNamespaces()(Recommended), areEqual);
+export default withNamespaces()(Recommended);

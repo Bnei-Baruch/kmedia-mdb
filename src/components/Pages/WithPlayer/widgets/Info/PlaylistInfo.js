@@ -1,21 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import * as PropTypes from 'prop-types';
 import { Button, Checkbox, Icon, Input, List, Modal, Divider } from 'semantic-ui-react';
 
 import { actions, selectors } from '../../../../../redux/modules/my';
 import { selectors as auth } from '../../../../../redux/modules/auth';
 import { selectors as settings } from '../../../../../redux/modules/settings';
+import { selectors as playlist } from '../../../../../redux/modules/playlist';
 import { MY_NAMESPACE_PLAYLIST_EDIT, MY_NAMESPACE_PLAYLISTS } from '../../../../../helpers/consts';
 import { getLanguageDirection } from '../../../../../helpers/i18n-utils';
 import AlertModal from '../../../../shared/AlertModal';
 import PlaylistAddIcon from '../../../../../images/icons/PlaylistAdd';
 import NeedToLogin from '../../../../Sections/Personal/NeedToLogin';
 import { stopBubbling } from '../../../../../helpers/utils';
+import { withNamespaces } from 'react-i18next';
 
 const updateStatus = { save: 1, delete: 2 };
 
-const PlaylistInfo = ({ cuID, t, handleClose = null }) => {
+const PlaylistInfo = ({ t, handleClose = null }) => {
   const [isOpen, setIsOpen]               = useState(false);
   const [alertMsg, setAlertMsg]           = useState();
   const [isNeedLogin, setIsNeedLogin]     = useState();
@@ -27,6 +28,7 @@ const PlaylistInfo = ({ cuID, t, handleClose = null }) => {
 
   const dispatch = useDispatch();
 
+  const { cuId }  = useSelector(state => playlist.getInfo(state.playlist));
   const playlists = useSelector(state => selectors.getList(state.my, MY_NAMESPACE_PLAYLIST_EDIT));
   const total     = useSelector(state => selectors.getTotal(state.my, MY_NAMESPACE_PLAYLIST_EDIT));
   const language  = useSelector(state => settings.getLanguage(state.settings));
@@ -51,7 +53,7 @@ const PlaylistInfo = ({ cuID, t, handleClose = null }) => {
     setSelected([]);
     setCountNew(0);
     setForUpdate({ count: 0 });
-    dispatch(actions.fetch(MY_NAMESPACE_PLAYLIST_EDIT, { 'exist_cu': cuID, order_by: 'id DESC' }));
+    dispatch(actions.fetch(MY_NAMESPACE_PLAYLIST_EDIT, { 'exist_cu': cuId, order_by: 'id DESC' }));
   };
 
   const handleChange = (checked, p) => {
@@ -83,7 +85,7 @@ const PlaylistInfo = ({ cuID, t, handleClose = null }) => {
   };
 
   const handleSaveNewPlaylist = e => {
-    stopBubbling(e)
+    stopBubbling(e);
     !!newPlaylist && dispatch(actions.add(MY_NAMESPACE_PLAYLIST_EDIT, { name: newPlaylist }));
     setAlertMsg(t('personal.newPlaylistSuccessful', { name: newPlaylist }));
     setCountNew(countNew + 1);
@@ -92,7 +94,7 @@ const PlaylistInfo = ({ cuID, t, handleClose = null }) => {
   };
 
   const handleOpenModal = e => {
-    stopBubbling(e)
+    stopBubbling(e);
     toggle();
   };
 
@@ -109,7 +111,7 @@ const PlaylistInfo = ({ cuID, t, handleClose = null }) => {
     const adds = selected.filter(p => !saved.some(x => p.id === x.id));
     adds.forEach((p, i) => dispatch(actions.add(MY_NAMESPACE_PLAYLISTS, {
       id: p.id,
-      items: [{ position: -1, content_unit_uid: cuID }],
+      items: [{ position: -1, content_unit_uid: cuId }],
       changeItems: true
     })));
     const deletes = saved.filter(p => !selected.some(x => p.id === x.id));
@@ -130,7 +132,7 @@ const PlaylistInfo = ({ cuID, t, handleClose = null }) => {
 
   const renderPlaylist = p => (
     <List.Item key={p.id}>
-      <List.Content floated='left'>
+      <List.Content floated="left">
         <Checkbox
           checked={selected.some(x => x.id === p.id)}
           onChange={(e, { checked }) => handleChange(checked, p)}
@@ -184,7 +186,7 @@ const PlaylistInfo = ({ cuID, t, handleClose = null }) => {
               isNewPlaylist || playlists.length === 0
                 ? (
                   <List.Item key="playlist_form">
-                    <List.Content floated='right'>
+                    <List.Content floated="right">
                       <Button
                         color="green"
                         icon="check"
@@ -209,7 +211,7 @@ const PlaylistInfo = ({ cuID, t, handleClose = null }) => {
                 )
                 : (
                   <List.Item key="add_playlist" onClick={handleAddPlaylist}>
-                    <List.Content floated='left'>
+                    <List.Content floated="left">
                       <Icon name="plus" />
                     </List.Content>
                     <List.Content>
@@ -244,8 +246,4 @@ const PlaylistInfo = ({ cuID, t, handleClose = null }) => {
   );
 };
 
-PlaylistInfo.propTypes = {
-  cuID: PropTypes.string.isRequired,
-};
-
-export default PlaylistInfo;
+export default withNamespaces()(PlaylistInfo);

@@ -18,6 +18,7 @@ import PersonalInfo from './PersonalInfo';
 import { selectors as recommended } from '../../../../../redux/modules/recommended';
 import UnitLogo from '../../../../shared/Logo/UnitLogo';
 import { selectors as mdb } from '../../../../../redux/modules/mdb';
+import { selectors } from '../../../../../redux/modules/playlist';
 
 export const makeTagLinks = (tags = [], getTagById) =>
   Array.from(intersperse(
@@ -69,11 +70,11 @@ const getEpisodeInfo = (ct, cIDs, currentCollection, filmDate, t) => {
   ));
 };
 
-const Info = ({ cId, cuId, t }) => {
-
-  const getTagById        = useSelector(state => tagsSelectors.getTagById(state.tags));
-  const unit              = useSelector(state => mdb.getDenormContentUnit(state.mdb, cuId));
+const Info = ({ t }) => {
+  const { cId, cuId }     = useSelector(state => selectors.getInfo(state.playlist));
   const currentCollection = useSelector(state => mdb.getDenormCollection(state.mdb, cId));
+  const unit              = useSelector(state => mdb.getDenormContentUnit(state.mdb, cuId));
+  const getTagById        = useSelector(state => tagsSelectors.getTagById(state.tags));
 
   const { id, name, film_date: filmDate, collections, content_type: ct, cIDs, tags = [] } = unit;
 

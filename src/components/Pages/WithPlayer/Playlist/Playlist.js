@@ -8,11 +8,10 @@ import { Header } from 'semantic-ui-react';
 import { selectors as mdb } from '../../../../redux/modules/mdb';
 
 const PlaylistWidget = ({ t }) => {
-
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
   const cuIds                  = useSelector(state => selectors.getPlaylist(state.playlist));
-  const { cId, played }        = useSelector(state => selectors.getInfo(state.playlist));
+  const { cId, cuId }          = useSelector(state => selectors.getInfo(state.playlist));
   const { name, content_type } = useSelector(state => mdb.getDenormCollection(state.mdb, cId)) || false;
 
   return (
@@ -34,7 +33,7 @@ const PlaylistWidget = ({ t }) => {
             ccuId={cId}
             size="small"
             asList={true}
-            selected={i === played}
+            selected={i === cuId}
           />
         ))
       }
