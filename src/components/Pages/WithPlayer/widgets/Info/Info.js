@@ -71,10 +71,10 @@ const getEpisodeInfo = (ct, cIDs, currentCollection, filmDate, t) => {
 };
 
 const Info = ({ t }) => {
-  const { cId, cuId, isSingleMedia } = useSelector(state => selectors.getInfo(state.playlist));
-  const currentCollection            = useSelector(state => mdb.getDenormCollection(state.mdb, cId));
-  const unit                         = useSelector(state => mdb.getDenormContentUnit(state.mdb, cuId));
-  const getTagById                   = useSelector(state => tagsSelectors.getTagById(state.tags));
+  const { cId, cuId }     = useSelector(state => selectors.getInfo(state.playlist));
+  const currentCollection = useSelector(state => mdb.getDenormCollection(state.mdb, cId));
+  const unit              = useSelector(state => mdb.getDenormContentUnit(state.mdb, cuId));
+  const getTagById        = useSelector(state => tagsSelectors.getTagById(state.tags));
 
   const { id, name, film_date: filmDate, collections, content_type: ct, cIDs, tags = [] } = unit;
 
@@ -96,13 +96,13 @@ const Info = ({ t }) => {
   };
 
   const tagLinks               = makeTagLinks(mergeTags(), getTagById);
-  const { noSSeries, sSeries } = makeCollectionsLinks(collections, t, isSingleMedia ? null : currentCollection);
+  const { noSSeries, sSeries } = makeCollectionsLinks(collections, t, currentCollection);
   const isMultiLessons         = Object.values(collections).some(col => col.content_type === CT_LESSONS_SERIES || col.content_type === CT_CONGRESS);
   const episodeInfo            = getEpisodeInfo(ct, cIDs, currentCollection || Object.values(collections)[0], filmDate, t);
   const ccu                    = Object.values(collections)[0];
   return (
     <>
-      <PersonalInfo collection={currentCollection} />
+      <PersonalInfo collection={currentCollection} unit={unit} />
       <div className="unit-info">
         {
           !isMultiLessons && noSSeries.length > 0 && (

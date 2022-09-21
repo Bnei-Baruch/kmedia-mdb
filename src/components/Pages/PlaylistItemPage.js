@@ -5,7 +5,7 @@ import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 
 import { actions, selectors, selectors as mdb } from '../../redux/modules/mdb';
 import WipErr from '../shared/WipErr/WipErr';
-import SingleMediaContainer from './WithPlayer/SingleMedia/SingleMediaContainer';
+import SingleMedia from './WithPlayer/SingleMedia/Page';
 import { COLLECTION_DAILY_LESSONS, CT_LESSONS_SERIES, CT_SONGS, EVENT_TYPES } from '../../helpers/consts';
 import PlaylistContainer from './WithPlayer/Playlist/PlaylistContainer';
 import { NotFound } from '../../routes';
@@ -21,9 +21,9 @@ const PlaylistItemPage = ({ t }) => {
   const { id, routeType, tab } = useParams();
 
   const unit    = useSelector(state => selectors.getDenormContentUnit(state.mdb, id), shallowEqual);
+  const err     = useSelector(state => selectors.getErrors(state.mdb).units[id]);
   const fetched = useSelector(state => mdb.getFullUnitFetched(state.mdb), shallowEqual);
   const wip     = useSelector(state => selectors.getWip(state.mdb).units[id]) && !fetched[id];
-  const err     = useSelector(state => selectors.getErrors(state.mdb).units[id]);
 
   const dispatch = useDispatch();
 
@@ -38,15 +38,15 @@ const PlaylistItemPage = ({ t }) => {
 
   if (!unit) return <NotFound />;
 
-  if (routeType === 'program' || !unit.collections) return <SingleMediaContainer />;
+  if (routeType === 'program' || !unit.collections) return <SingleMedia />;
 
   const cTypes = COLLECTION_TYPES_BY_ROUTING[!tab ? routeType : `${routeType}_${tab}`];
-  if (!cTypes) return <SingleMediaContainer />;
+  if (!cTypes) return <SingleMedia />;
 
   const collection = Object.values(unit.collections).find(c => cTypes.includes(c.content_type));
 
   if (!collection) {
-    return <SingleMediaContainer />;
+    return <SingleMedia />;
   }
 
   return <PlaylistContainer cId={collection.id} cuId={id} />;
