@@ -154,14 +154,10 @@ const playlistFromUnits = (collection, mediaType, contentLanguage, uiLanguage) =
   return { items, collection, mediaType, contentLanguage, uiLanguage, name: collection.name };
 };
 
-const getMediaTypeFromQuery = (location, defaultMediaType) => {
-  if (!defaultMediaType) {
-    defaultMediaType = restorePreferredMediaType();
-  }
-
-  const query = getQuery(location);
+const getMediaTypeFromQuery = (location) => {
+  const query = getQuery(location || window?.location);
   const mt    = (query.mediaType || '').toLowerCase();
-  return mt === MT_VIDEO || mt === MT_AUDIO ? mt : defaultMediaType;
+  return [MT_VIDEO, MT_AUDIO].includes(mt) ? mt : restorePreferredMediaType();
 };
 
 const setMediaTypeInQuery = (history, mediaType = MT_VIDEO) => {

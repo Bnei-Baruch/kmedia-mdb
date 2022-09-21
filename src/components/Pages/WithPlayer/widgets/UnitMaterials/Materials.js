@@ -22,6 +22,9 @@ import { isEmpty, noop } from '../../../../../helpers/utils';
 import { ClientChroniclesContext, DeviceInfoContext } from '../../../../../helpers/app-contexts';
 import DerivedUnits from './DerivedUnits';
 import Recommended from '../Recommended/Main/Recommended';
+import { useSelector } from 'react-redux';
+import { selectors } from '../../../../../redux/modules/playlist';
+import { selectors as mdb } from '../../../../../redux/modules/mdb';
 
 const derivedTextUnits = unit => {
   const types    = {};
@@ -35,9 +38,12 @@ const derivedTextUnits = unit => {
   return types;
 };
 
-const Materials = ({ unit = undefined, t, playlistComponent = null }) => {
+const Materials = ({ t, playlistComponent = null }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const chronicles         = useContext(ClientChroniclesContext);
+
+  const { cuId } = useSelector(state => selectors.getInfo(state.playlist));
+  const unit     = useSelector(state => mdb.getDenormContentUnit(state.mdb, cuId));
 
   if (!unit) {
     return null;

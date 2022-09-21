@@ -5,17 +5,20 @@ import { Button, Icon, Menu, Modal } from 'semantic-ui-react';
 
 import { selectors } from '../../../../../redux/modules/auth';
 import { actions, selectors as my } from '../../../../../redux/modules/my';
+import { selectors as playlist } from '../../../../../redux/modules/playlist';
 import { MY_NAMESPACE_REACTIONS, MY_REACTION_KINDS } from '../../../../../helpers/consts';
 import { getMyItemKey } from '../../../../../helpers/my';
 import SubscribeBtn from '../../../../shared/SubscribeBtn';
 import * as shapes from '../../../../shapes';
 import NeedToLogin from '../../../../Sections/Personal/NeedToLogin';
 import PlaylistInfo from './PlaylistInfo';
+import { selectors as mdb } from '../../../../../redux/modules/mdb';
 
-const PersonalInfo = ({ unit = {}, t, collection }) => {
+const PersonalInfo = ({ collection }) => {
   const [isNeedLogin, setIsNeedLogin] = useState();
 
-  const { id, content_type } = unit;
+  const { cuId }             = useSelector(state => playlist.getInfo(state.playlist));
+  const { id, content_type } = useSelector(state => mdb.getDenormContentUnit(state.mdb, cuId));
   const likeParams           = {
     kind: MY_REACTION_KINDS.LIKE,
     subject_type: content_type,
@@ -76,10 +79,10 @@ const PersonalInfo = ({ unit = {}, t, collection }) => {
           </Button>
         </Menu.Item>
         <Menu.Item>
-          <PlaylistInfo cuID={unit.id} t={t} />
+          <PlaylistInfo />
         </Menu.Item>
         <Menu.Item>
-          <SubscribeBtn collection={collection} unit={unit} />
+          <SubscribeBtn collection={collection} />
         </Menu.Item>
       </Menu>
     </>
@@ -87,11 +90,7 @@ const PersonalInfo = ({ unit = {}, t, collection }) => {
 };
 
 PersonalInfo.propTypes = {
-  unit: shapes.ContentUnit,
   collection: shapes.Collection,
-
 };
 
-const areEqual = (prevProps, nextProps) => nextProps.unit && prevProps.unit?.id === nextProps.unit.id;
-
-export default React.memo(withNamespaces()(PersonalInfo), areEqual);
+export default withNamespaces()(PersonalInfo);

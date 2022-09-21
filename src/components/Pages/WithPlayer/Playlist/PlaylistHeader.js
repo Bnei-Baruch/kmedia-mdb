@@ -15,6 +15,7 @@ import Link from '../../../Language/MultiLanguageLink';
 import CollectionDatePicker from './CollectionDatePicker';
 import PlaylistPlayIcon from '../../../../images/icons/PlaylistPlay';
 import { selectors as mdb } from '../../../../redux/modules/mdb';
+import { selectors } from '../../../../redux/modules/playlist';
 
 const getNextLink = (langDir, t, link) => (
   link ?
@@ -41,14 +42,15 @@ const getPrevLink = (langDir, t, link) => (
   </Link>
 );
 
-const PlaylistHeader = ({ cId, cuId, t, nextLink = null, prevLink = null }) => {
+const PlaylistHeader = ({ t, nextLink = null, prevLink = null }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
-  const unit       = useSelector(state => mdb.getDenormContentUnit(state.mdb, cuId));
-  const collection = useSelector(state => mdb.getDenormCollection(state.mdb, cId));
-  const getPath    = useSelector(state => sources.getPathByID(state.sources));
-  const uiLanguage = useSelector(state => settings.getLanguage(state.settings));
-  const langDir    = getLanguageDirection(uiLanguage);
+  const { cId, cuId } = useSelector(state => selectors.getInfo(state.playlist));
+  const unit          = useSelector(state => mdb.getDenormContentUnit(state.mdb, cuId));
+  const collection    = useSelector(state => mdb.getDenormCollection(state.mdb, cId));
+  const getPath       = useSelector(state => sources.getPathByID(state.sources));
+  const language      = useSelector(state => settings.getLanguage(state.settings));
+  const langDir       = getLanguageDirection(language);
 
   const { content_type, number, name, film_date, start_date, end_date, tag_id, source_id } = collection;
 

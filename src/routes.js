@@ -4,7 +4,6 @@ import { renderRoutes } from 'react-router-config';
 import LanguageSetter from './components/Language/LanguageSetter';
 import Layout from './components/Layout/Layout';
 import NotImplemented from './components/NotImplemented';
-import PlaylistCollectionIdCheck from './components/Pages/PlaylistCollection/IdCheck';
 import PlaylistItemPage from './components/Pages/PlaylistItemPage';
 import PlaylistDecorator from './components/Pages/PlaylistMy/Decorator';
 import SearchResults from './components/Search/SearchResultsContainer';
@@ -14,7 +13,6 @@ import ExcerptContainer from './components/Sections/Excerpt/ExcerptContainer';
 import Help from './components/Sections/Help/Help';
 import HomePage from './components/Sections/Home/Container';
 import LastLessonCollection from './components/Sections/Lesson/LastDaily';
-import LessonCollection from './components/Sections/Lesson/LessonPage';
 import Lessons from './components/Sections/Lessons/MainPage';
 import LibraryHomepage from './components/Sections/Library/Homepage';
 import LibraryContainer from './components/Sections/Library/LibraryContainer';
@@ -48,6 +46,7 @@ import {
 
 // import Design from './components/Design/Design';
 import * as ssrDataLoaders from './routesSSRData';
+import PlaylistCollectionPage from './components/Pages/PlaylistCollectionPage';
 
 const routes = [
   { path: '', component: HomePage, options: { ssrData: ssrDataLoaders.home } },
@@ -74,7 +73,7 @@ const routes = [
   { path: 'lessons/:tab', component: Lessons, options: { ssrData: ssrDataLoaders.lessonsPage } },
   {
     path: 'lessons/:tab/c/:id',
-    component: PlaylistCollectionIdCheck,
+    component: PlaylistCollectionPage,
     options: { ssrData: ssrDataLoaders.lessonsCollectionPage }
   },
   { path: ':routeType/:tab/cu/:id', component: PlaylistItemPage, options: { ssrData: ssrDataLoaders.cuPage } },
@@ -89,13 +88,13 @@ const routes = [
   { path: 'events', component: Events, options: { ssrData: ssrDataLoaders.eventsPage } },
   {
     path: 'events/c/:id',
-    component: PlaylistCollectionIdCheck,
+    component: PlaylistCollectionPage,
     options: { ssrData: ssrDataLoaders.playlistCollectionPage }
   },
   { path: 'music', component: Music, options: { ssrData: ssrDataLoaders.musicPage } },
   {
     path: 'music/c/:id',
-    component: PlaylistCollectionIdCheck,
+    component: PlaylistCollectionPage,
     options: { ssrData: ssrDataLoaders.playlistCollectionPage }
   },
   { path: 'sources', component: LibraryHomepage },
@@ -116,7 +115,7 @@ const routes = [
   // { path: 'design2', component: Design2 },
 ];
 
-const NotFound = () => <h1>Page not found</h1>;
+export const NotFound = () => <h1>Page not found</h1>;
 const Root     = ({ route }) => renderRoutes(route.routes);
 
 /** Creates a page route config */
