@@ -8,7 +8,7 @@ import { Header } from 'semantic-ui-react';
 import { selectors as mdb } from '../../../../redux/modules/mdb';
 import { COLLECTION_DAILY_LESSONS } from '../../../../helpers/consts';
 
-const PlaylistItems = ({ t }) => {
+const PlaylistWidget = ({ t }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
   const cuIds                  = useSelector(state => selectors.getPlaylist(state.playlist));
@@ -43,4 +43,4 @@ const PlaylistItems = ({ t }) => {
   );
 };
 
-export default withNamespaces()(PlaylistItems);
+export default withNamespaces()(PlaylistWidget);

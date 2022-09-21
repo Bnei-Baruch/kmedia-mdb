@@ -2,15 +2,17 @@ import { PLAYER_ACTIONS_BY_EVENT } from '../../redux/modules/player';
 import { DEFAULT_LANGUAGE, MT_VIDEO, MT_AUDIO } from '../../helpers/consts';
 import { isEmpty } from '../../helpers/utils';
 
-const PLAYER_EVENTS = ['ready', 'play', 'pause', 'seeked', 'time', 'bufferedTime', 'playbackRateChanged'];
+const PLAYER_EVENTS = ['ready', 'remove', 'play', 'pause', 'seeked', 'playbackRateChanged'];
 
-export const initPlayerEvents = (player, dispatch) => {
+export const initPlayerEvents = (dispatch) => {
+  const player = window.jwplayer();
   player.on('error', e => {
     console.error(e);
   });
 
-  player.on('all', e => {
-    console.log('all', e);
+  //TODO david: not clear why player.on('remove') is not work
+  player.on('remove', e => {
+    PLAYER_EVENTS.forEach(name => player.off(name));
   });
 
   PLAYER_EVENTS.forEach(name => {
@@ -24,10 +26,6 @@ export const initPlayerEvents = (player, dispatch) => {
       dispatch(action(e));
     });
   });
-};
-
-export const removePlayerEvents = player => {
-  PLAYER_EVENTS.forEach(name => player.off(name));
 };
 
 export const findPlayedFile = (item, info, lang, mt, q) => {
