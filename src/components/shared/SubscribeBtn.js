@@ -24,7 +24,7 @@ const SubscribeBtn = ({ t, collection }) => {
   const user     = useSelector(state => selectors.getUser(state.auth));
 
   const { cuId }                                = useSelector(state => playlist.getInfo(state.playlist));
-  const { collections, content_type: type, id } = useSelector(state => mdb.getDenormContentUnit(state.mdb, cuId)) || {};
+  const { collections, content_type: type, id } = useSelector(state => mdb.getDenormContentUnit(state.mdb, cuId));
 
   const subsByType = CT_SUBSCRIBE_BY_TYPE.includes(type) ? type : null;
   const cId        = collection?.id || (collections && Object.values(collections)[0]?.id);

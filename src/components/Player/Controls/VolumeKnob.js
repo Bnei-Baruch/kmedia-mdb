@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { Popup } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
 import { selectors as player } from '../../../redux/modules/player';
+import { JWPLAYER_ID } from '../../../helpers/consts';
 
 export const VolumeKnob = ({ left, right }) => {
   const [activated, setActivated] = useState(false);
@@ -14,7 +15,7 @@ export const VolumeKnob = ({ left, right }) => {
   useEffect(() => {
     if (!isReady) return () => null;
 
-    const p = window.jwplayer();
+    const p = window.jwplayer(JWPLAYER_ID);
     p.on('volume', updateVolume);
     return () => p.off('volume', updateVolume);
   }, [isReady]);
