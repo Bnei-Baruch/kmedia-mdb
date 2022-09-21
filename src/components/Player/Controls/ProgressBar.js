@@ -3,6 +3,7 @@ import { Popup } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
 import { selectors as player } from '../../../redux/modules/player';
 import { formatDuration } from '../../../helpers/utils';
+import { JWPLAYER_ID } from '../../../helpers/consts';
 
 export const ProgressBar = ({ left, right }) => {
   const [activated, setActivated] = useState(false);
@@ -28,7 +29,7 @@ export const ProgressBar = ({ left, right }) => {
   useEffect(() => {
     if (!isReady) return () => null;
 
-    const p = window.jwplayer();
+    const p = window.jwplayer(JWPLAYER_ID);
 
     p.on('seek', checkTimeAfterSeek);
     p.on('time', checkTimeAfterSeek);
@@ -57,7 +58,7 @@ export const ProgressBar = ({ left, right }) => {
     const clientX = e.touches ? e.touches[e.touches.length - 1].clientX : e.clientX;
     const delta   = right - left;
     const offset  = Math.min(Math.max(0, clientX - left), delta) / delta;
-    const p       = window.jwplayer();
+    const p       = window.jwplayer(JWPLAYER_ID);
 
     console.log('progress bar: move', offset * 100, clientX, right, left);
     p.seek(p.getDuration() * offset);

@@ -7,14 +7,12 @@ import { actions as playlistActions, selectors as playlistSelectors } from '../.
 import { actions } from '../../../redux/modules/player';
 
 const PlayerLanguages = ({ active }) => {
-
   const { languages } = useSelector(state => playlistSelectors.getPlayed(state.playlist));
-
-  const dispatch = useDispatch();
+  const dispatch      = useDispatch();
 
   const handleSelect = (e, { name }) => {
     dispatch(playlistActions.setLanguage(name));
-    dispatch(actions.continuePlay(window.jwplayer(JWPLAYER_ID).getPosition()),);
+    dispatch(actions.continuePlay(window.jwplayer(JWPLAYER_ID).getPosition()));
   };
 
   const handleCloseLangs = () => dispatch(actions.setOverMode(PLAYER_OVER_MODES.settings));
