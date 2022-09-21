@@ -1,7 +1,7 @@
 import { createAction } from 'redux-actions';
 import { handleActions } from './settings';
-import { DEFAULT_LANGUAGE, MT_VIDEO } from '../../helpers/consts';
-import { updateQuery } from '../../helpers/url';
+import { DEFAULT_LANGUAGE } from '../../helpers/consts';
+import helper from '../../helpers/player';
 
 const PLAYLIST_BUILD         = 'Playlist/BUILD';
 const PLAYLIST_BUILD_SUCCESS = 'Playlist/BUILD_SUCCESS';
@@ -47,9 +47,11 @@ const initialState = {
   itemById: {},
   info: {
     language: DEFAULT_LANGUAGE,
-    mediaType: MT_VIDEO
-  }
+  },
+  isReady: false
 };
+
+const onBuild = draft => draft.info = { isReady: false };
 
 const onBuildSuccess = (draft, payload) => {
   const {
@@ -60,39 +62,42 @@ const onBuildSuccess = (draft, payload) => {
           name
         } = payload;
 
-  draft.playlist  = items.map(({ id }) => id);
-  draft.itemById  = items.reduce((acc, x) => ({ ...acc, [x.id]: x }), {});
-  const quality   = draft.info.quality || draft.itemById[cuId].qualityByLang[language][0];
-  const mediaType = draft.info.mediaType || draft.itemById[cuId].mtByLang[language][0];
+  draft.playlist = items.map(({ id }) => id);
+  draft.itemById = items.reduce((acc, x) => ({ ...acc, [x.id]: x }), {});
+  const quality  = draft.info.quality || draft.itemById[cuId].qualityByLang[language][0];
 
-  draft.info = { played: cuId, cId, name, language, quality, mediaType, };
+  const mt        = helper.getMediaTypeFromQuery();
+  const mts       = draft.itemById[cuId].mtByLang[language];
+  const mediaType = mts.includes(mt) ? mt : mts.filter(x => x !== mt)[0];
+
+  draft.info = { cuId, cId, name, language, quality, mediaType, isReady: true };
 };
 
 const onSelect = (draft, payload) => {
-  draft.info.played = payload;
+  draft.info.cuId = payload;
 };
 
 const onNext = draft => {
-  const idx         = draft.playlist.findIndex(x => x === draft.info.played);
-  const lastIdx     = draft.playlist.length - 1;
-  draft.info.played = draft.playlist[(idx < lastIdx) ? idx + 1 : lastIdx];
+  const idx       = draft.playlist.findIndex(x => x === draft.info.cuId);
+  const lastIdx   = draft.playlist.length - 1;
+  draft.info.cuId = draft.playlist[(idx < lastIdx) ? idx + 1 : lastIdx];
 };
 
 const onPrev = draft => {
-  const idx         = draft.playlist.findIndex(x => x === draft.info.played);
-  draft.info.played = draft.playlist[idx > 1 ? idx - 1 : 0];
+  const idx       = draft.playlist.findIndex(x => x === draft.info.cuId);
+  draft.info.cuId = draft.playlist[idx > 1 ? idx - 1 : 0];
 };
 
-const onSetQuality = (draft, payload) => {
-  draft.info.quality = payload;
-  updateQuery()
-}
+const onSetQuality = (draft, payload) => draft.info.quality = payload;
 
-const onSetLanguage = (draft, payload) => draft.info.language = payload;
+const onSetLanguage = (draft, payload) => {
+  draft.info.language = payload;
+}
 
 const onSetMediaType = (draft, payload) => draft.info.mediaType = payload;
 
 export const reducer = handleActions({
+  [PLAYLIST_BUILD]: onBuild,
   [PLAYLIST_BUILD_SUCCESS]: onBuildSuccess,
   [PLAYLIST_SELECT]: onSelect,
   [PLAYLIST_NEXT]: onNext,
@@ -103,7 +108,7 @@ export const reducer = handleActions({
 }, initialState);
 
 const getPlaylist = state => state.playlist;
-const getPlayed   = state => state.itemById[state.info.played] || false;
+const getPlayed   = state => state.itemById[state.info.cuId] || false;
 
 const getInfo = state => state.info;
 
@@ -111,5 +116,4 @@ export const selectors = {
   getPlaylist,
   getPlayed,
   getInfo,
-
 };
