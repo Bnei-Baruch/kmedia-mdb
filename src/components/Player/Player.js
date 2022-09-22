@@ -68,7 +68,6 @@ const Player = ({ file }) => {
     }
   }, [isReady, cuId, start, end]);
 
-  console.log('volume', isReady && window.jwplayer().getVolume());
   return (
     <div ref={ref}>
       <div id={JWPLAYER_ID}> video</div>
