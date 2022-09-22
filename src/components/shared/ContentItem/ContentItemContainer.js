@@ -26,7 +26,17 @@ import CardTemplate from './CardTemplate';
 
 const NOT_LESSONS_COLLECTIONS = [CT_VIDEO_PROGRAM, CT_VIRTUAL_LESSONS, CT_CLIPS];
 
-const TagItemContainerHook = ({ id, t, asList = false, link, size, selected, noViews, label = '', withInfo = undefined }) => {
+const TagItemContainerHook = ({
+                                id,
+                                t,
+                                asList = false,
+                                link,
+                                size,
+                                selected,
+                                noViews,
+                                label = '',
+                                withInfo = undefined
+                              }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const tag                = useSelector(state => tags.getTagById(state.tags)(id));
   const language           = useSelector(state => settings.getLanguage(state.settings));
@@ -55,7 +65,17 @@ const TagItemContainerHook = ({ id, t, asList = false, link, size, selected, noV
   return (asList ? <ListTemplate {...props} /> : <CardTemplate {...props} />);
 };
 
-const SourceItemContainerHook = ({ id, t, asList = false, link, size, selected, noViews, label = '', withInfo = undefined }) => {
+const SourceItemContainerHook = ({
+                                   id,
+                                   t,
+                                   asList = false,
+                                   link,
+                                   size,
+                                   selected,
+                                   noViews,
+                                   label = '',
+                                   withInfo = undefined
+                                 }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const source             = useSelector(state => sources.getSourceById(state.sources)(id));
   const language           = useSelector(state => settings.getLanguage(state.settings));
@@ -84,7 +104,23 @@ const SourceItemContainerHook = ({ id, t, asList = false, link, size, selected, 
   return (asList ? <ListTemplate {...props} /> : <CardTemplate {...props} />);
 };
 
-const ContentItemContainer = ({ id, children, t, asList = false, link, playTime, size, selected, ccuId, noViews, label = '', withCCUInfo = undefined, withCUInfo = undefined }) => {
+const ContentItemContainer = (
+  {
+    id,
+    children,
+    t,
+    asList = false,
+    link,
+    playTime,
+    size,
+    selected,
+    ccuId,
+    noViews,
+    label = '',
+    withCCUInfo = undefined,
+    withCUInfo = undefined
+  }
+) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const unit               = useSelector(state => selectors.getDenormContentUnit(state.mdb, id));
   const language           = useSelector(state => settings.getLanguage(state.settings));
@@ -115,7 +151,7 @@ const ContentItemContainer = ({ id, children, t, asList = false, link, playTime,
   if (withCCUInfo && ccu?.content_units?.length)
     description.push(t(`${cuPartNameByCCUType(ccu?.content_type)}s`, { name: ccu?.content_units.length }));
 
-  const part = Number(ccu?.ccuNames[unit.id]);
+  const part     = Number(ccu?.ccuNames[unit.id]);
   const withPart = ccu && ![CT_DAILY_LESSON, CT_SPECIAL_LESSON, CT_CONGRESS].includes(ccu.content_type);
 
   if (withPart && part && !isNaN(part))
@@ -127,6 +163,9 @@ const ContentItemContainer = ({ id, children, t, asList = false, link, playTime,
   if (!noViews && !(isMobileDevice && asList) && views > 0)
     description.push(t('pages.unit.info.views', { views }));
 
+  if (unit.id === 'Jpm8p4ps') {
+    console.log('playlist ContentItemContainer', selected);
+  }
   const props = {
     unit,
     language,
@@ -159,4 +198,4 @@ SourceItemContainerHook.propTypes = {
 
 export default withNamespaces()(ContentItemContainer);
 export const SourceItemContainer = withNamespaces()(SourceItemContainerHook);
-export const TagItemContainer = withNamespaces()(TagItemContainerHook);
+export const TagItemContainer    = withNamespaces()(TagItemContainerHook);
