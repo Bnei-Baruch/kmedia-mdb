@@ -6,8 +6,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import { actions as playlistActions, selectors as playlistSelectors } from '../../../redux/modules/playlist';
 import { actions } from '../../../redux/modules/player';
 
-const PlayerLanguages = ({ active }) => {
+const PlayerLanguages = () => {
   const { languages } = useSelector(state => playlistSelectors.getPlayed(state.playlist));
+  const { language }  = useSelector(state => playlistSelectors.getInfo(state.playlist));
   const dispatch      = useDispatch();
 
   const handleSelect = (e, { name }) => {
@@ -33,7 +34,7 @@ const PlayerLanguages = ({ active }) => {
                   link
                   name={x.value}
                   content={x.name}
-                  active={active === x.value}
+                  active={language === x.value}
                   onClick={handleSelect}
                   key={x.value}
                 />
