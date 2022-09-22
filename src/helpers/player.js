@@ -70,7 +70,7 @@ const playableItem = unit => {
   const qualityByLang = languages.reduce((acc, l) => (
     {
       ...acc,
-      [l]: filesByLang[l].map(f => f.video_size || VS_DEFAULT)
+      [l]: filesByLang[l].filter(f => f.type === MT_VIDEO).map(f => f.video_size || VS_DEFAULT)
     }
   ), {});
 
