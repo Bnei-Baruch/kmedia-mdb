@@ -59,16 +59,19 @@ const onBuildSuccess = (draft, payload) => {
           cuId,
           language,
           items,
-          name
+          name,
+          mediaType
         } = payload;
 
   draft.playlist = items.map(({ id }) => id);
   draft.itemById = items.reduce((acc, x) => ({ ...acc, [x.id]: x }), {});
   const quality  = draft.info.quality || draft.itemById[cuId].qualityByLang[language][0];
+/*
 
   const mt        = helper.getMediaTypeFromQuery();
   const mts       = draft.itemById[cuId].mtByLang[language];
   const mediaType = mts.includes(mt) ? mt : mts.filter(x => x !== mt)[0];
+*/
 
   draft.info = { cuId, cId, name, language, quality, mediaType, isReady: true };
 };

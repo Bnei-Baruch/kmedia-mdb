@@ -29,9 +29,9 @@ const Settings      = ({ t }) => {
     dispatch(playlistActions.setQuality(x));
   };
 
-  const handleSetMediaType = x => {
+  const handleSetMediaType = (e, { name }) => {
     dispatch(actions.continuePlay());
-    dispatch(playlistActions.setMediaType(x));
+    dispatch(playlistActions.setMediaType(name));
   };
 
   const handleOpenLangs = () => dispatch(actions.setOverMode(PLAYER_OVER_MODES.languages));
