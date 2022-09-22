@@ -4,6 +4,7 @@ import { assetUrl } from './Api';
 import {
   CT_FULL_LESSON,
   CT_LESSON_PART,
+  CT_SONGS,
   EVENT_PREPARATION_TAG,
   EVENT_TYPES,
   LANG_ENGLISH,
@@ -11,11 +12,18 @@ import {
   MT_VIDEO,
   VS_DEFAULT,
 } from './consts';
-import { getQuery, updateQuery } from './url';
+import { getQuery, stringify, updateQuery } from './url';
+import { canonicalLink } from './links';
 import MediaHelper from './media';
 import { isEmpty, physicalFile } from './utils';
 
 const restorePreferredMediaType = () => localStorage.getItem('@@kmedia_player_media_type') || MT_VIDEO;
+
+const persistPreferredMediaType = value => localStorage.setItem('@@kmedia_player_media_type', value);
+
+const restorePreferredVideoSize = () => localStorage.getItem('@@kmedia_player_video_size') || VS_DEFAULT;
+
+const persistPreferredVideoSize = value => localStorage.setItem('@@kmedia_player_video_size', value);
 
 const isPlayable = file => MediaHelper.IsMp4(file) || MediaHelper.IsMp3(file);
 
@@ -43,7 +51,7 @@ const calcAvailableLanguages = unit => {
       new Set()));
 };
 
-export const playableItem = (unit, preImageUrl) => {
+const playableItem = unit => {
   if (!unit) {
     return {};
   }
@@ -59,14 +67,13 @@ export const playableItem = (unit, preImageUrl) => {
   const filesByLang   = languages.reduce((acc, l) => (
     { ...acc, [l]: files.filter(f => f.language === l) }
   ), {});
-  const qualityByLang = languages.reduce((acc, l) => {
-    const qs = filesByLang[l].filter(f => f.type === MT_VIDEO).map(f => f.video_size || VS_DEFAULT);
-    if (qs.length === 0) return acc;
-    return { ...acc, [l]: qs };
-  }, {});
-  if (!preImageUrl) {
-    preImageUrl = assetUrl(`api/thumbnail/${unit.id}`);
-  }
+  const qualityByLang = languages.reduce((acc, l) => (
+    {
+      ...acc,
+      [l]: filesByLang[l].filter(f => f.type === MT_VIDEO).map(f => f.video_size || VS_DEFAULT)
+    }
+  ), {});
+
   return {
     id: unit.id,
     languages,
@@ -74,19 +81,19 @@ export const playableItem = (unit, preImageUrl) => {
     filesByLang,
     qualityByLang,
     files,
-    preImageUrl,
+    preImageUrl: assetUrl(`api/thumbnail/${unit.id}`),
   };
 };
 
-export const playlist = collection => {
+const playlist = collection => {
   if (!collection) {
     return {};
   }
 
-  const { content_units: units = [], name, content_type } = collection;
+  const units = collection.content_units || [];
 
   let items;
-  if (EVENT_TYPES.indexOf(content_type) !== -1) {
+  if (EVENT_TYPES.indexOf(collection.content_type) !== -1) {
     const { start_date: sDate, end_date: eDate } = collection;
     const mSDate                                 = moment(sDate);
     const mEDate                                 = moment(eDate);
@@ -126,46 +133,101 @@ export const playlist = collection => {
       return acc.concat(v);
     }, []);
   } else {
-    items = units.map(x => playableItem(x));
+    items = units.map(playableItem);
   }
 
   // don't include items without unit
-  items = items.filter(item => !!item);
+  items      = items.filter(item => !!item);
+  const name = collection.content_type === CT_SONGS ? collection.name : null;
   return { items, name };
 };
 
-//query utilities
-export const getMediaTypeFromQuery = (location) => {
+const playlistFromUnits = (collection, mediaType, contentLanguage, uiLanguage) => {
+  const items = collection.content_units
+    .map(x => playableItem(x, mediaType, uiLanguage, contentLanguage))
+    .filter(item => !!item.unit)
+    .map(x => {
+      x.shareUrl = canonicalLink(x.unit, null, collection);
+      return x;
+    });
+
+  return { items, collection, mediaType, contentLanguage, uiLanguage, name: collection.name };
+};
+
+const getMediaTypeFromQuery = (location) => {
   const query = getQuery(location || window?.location);
   const mt    = (query.mediaType || '').toLowerCase();
   return [MT_VIDEO, MT_AUDIO].includes(mt) ? mt : restorePreferredMediaType();
 };
 
-export const setMediaTypeInQuery = (history, mediaType = MT_VIDEO) => {
+const setMediaTypeInQuery = (history, mediaType = MT_VIDEO) => {
   updateQuery(history, query => ({
     ...query,
     mediaType
   }));
 };
 
-export const getLanguageFromQuery = (location, fallbackLanguage = LANG_ENGLISH) => {
+const getLanguageFromQuery = (location, fallbackLanguage = LANG_ENGLISH) => {
   const query    = getQuery(location);
   const language = query.language || fallbackLanguage || LANG_ENGLISH;
   return language.toLowerCase();
 };
 
-export const setLanguageInQuery = (history, language) => updateQuery(history, query => ({
-  ...query,
-  language
-}));
+const setLanguageInQuery = (history, language) =>
+  updateQuery(history, query => ({
+    ...query,
+    language
+  }));
 
-export const getActivePartFromQuery = (location, def = 0) => {
+const getActivePartFromQuery = (location, def = 0) => {
   const q = getQuery(location);
   const p = q.ap ? parseInt(q.ap, 10) : def;
   return Number.isNaN(p) || p < 0 ? def : p;
 };
 
-export const getEmbedFromQuery = location => {
+const setActivePartInQuery = (history, ap) =>
+  updateQuery(history, query => ({
+    ...query,
+    ap
+  }));
+
+const linkWithoutActivePart = location => {
+  const { search } = getQuery(location);
+  return `${location.pathname || '/'}${stringify(search)}`;
+};
+
+const getEmbedFromQuery = location => {
   const query = getQuery(location);
   return query.embed === '1';
 };
+
+const switchAV = (selectedItem, history) => {
+  if (selectedItem.mediaType === MT_AUDIO && selectedItem.availableMediaTypes.includes(MT_VIDEO)) {
+    setMediaTypeInQuery(history, MT_VIDEO);
+    persistPreferredMediaType(MT_VIDEO);
+  } else if (selectedItem.mediaType === MT_VIDEO && selectedItem.availableMediaTypes.includes(MT_AUDIO)) {
+    setMediaTypeInQuery(history, MT_AUDIO);
+    persistPreferredMediaType(MT_AUDIO);
+  }
+};
+
+const exportMethods = {
+  playableItem,
+  playlist,
+  playlistFromUnits,
+  getMediaTypeFromQuery,
+  setMediaTypeInQuery,
+  getLanguageFromQuery,
+  setLanguageInQuery,
+  getActivePartFromQuery,
+  setActivePartInQuery,
+  linkWithoutActivePart,
+  restorePreferredMediaType,
+  persistPreferredMediaType,
+  restorePreferredVideoSize,
+  persistPreferredVideoSize,
+  getEmbedFromQuery,
+  switchAV
+};
+
+export default exportMethods;
