@@ -6,6 +6,7 @@ const PLAYER_READY  = 'Player/READY';
 const PLAYER_REMOVE = 'Player/REMOVE';
 const PLAYER_PLAY   = 'Player/PLAY';
 const PLAYER_PAUSE  = 'Player/PAUSE';
+const PLAYER_RATE               = 'Player/RATE';
 
 const PLAYER_SET_FILE           = 'Player/SET_FILE';
 const PLAYER_SET_OVER_MODE      = 'Player/SET_OVER_MODE';
@@ -25,6 +26,7 @@ const setFile      = createAction(PLAYER_SET_FILE);
 
 const playerPlay  = createAction(PLAYER_PLAY);
 const playerPause = createAction(PLAYER_PAUSE);
+const playerRate   = createAction(PLAYER_RATE);
 
 const setOverMode  = createAction(PLAYER_SET_OVER_MODE);
 const continuePlay = createAction(PLAYER_CONTINUE_PLAY_FROM);
@@ -74,6 +76,8 @@ const onPlay = (draft, payload) => draft.played = payload;
 
 const onPause = draft => draft.played = false;
 
+const onRate = (draft, payload) => draft.rate = payload.playbackRate;
+
 const onSetOverMode = (draft, payload) => draft.overMode = payload;
 
 const onContinuePlay = (draft, payload = -1) => {
@@ -90,6 +94,7 @@ export const reducer = handleActions({
 
   [PLAYER_PLAY]: onPlay,
   [PLAYER_PAUSE]: onPause,
+  [PLAYER_RATE]: onRate,
 
   [PLAYER_SET_OVER_MODE]: onSetOverMode,
   [PLAYER_CONTINUE_PLAY_FROM]: onContinuePlay,
@@ -119,5 +124,6 @@ export const PLAYER_ACTIONS_BY_EVENT = {
   'ready': playerReady,
   'remove': playerRemove,
   'play': playerPlay,
+  'playbackRateChanged': playerRate,
   'pause': playerPause,
 };
