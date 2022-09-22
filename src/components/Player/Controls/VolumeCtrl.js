@@ -9,7 +9,7 @@ export const VolumeCtrl = () => {
   const widthRef = useRef({});
   const isReady  = useSelector(state => player.isReady(state.player));
 
-  const [volume, setVolume] = useState(0);
+  const [volume, setVolume] = useState(isReady && window.jwplayer().getVolume());
   const [left, setLeft]     = useState();
   const [right, setRight]   = useState();
 
@@ -28,6 +28,7 @@ export const VolumeCtrl = () => {
 
     const p = window.jwplayer();
     p.on('volume', updateVolume);
+    setVolume(p.getVolume());
 
     return () => p.off('volume', updateVolume);
   }, [isReady]);

@@ -92,16 +92,18 @@ const onSetQuality = (draft, payload) => draft.info.quality = payload;
 
 const onSetLanguage = (draft, payload) => {
   draft.info.language = payload;
-}
+};
 
 const onSetMediaType = (draft, payload) => draft.info.mediaType = payload;
 
 export const reducer = handleActions({
   [PLAYLIST_BUILD]: onBuild,
   [PLAYLIST_BUILD_SUCCESS]: onBuildSuccess,
+
   [PLAYLIST_SELECT]: onSelect,
   [PLAYLIST_NEXT]: onNext,
   [PLAYLIST_PREV]: onPrev,
+
   [PLAYER_SET_QUALITY]: onSetQuality,
   [PLAYER_SET_LANGUAGE]: onSetLanguage,
   [PLAYER_SET_MEDIA_TYPE]: onSetMediaType,

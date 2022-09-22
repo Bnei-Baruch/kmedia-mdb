@@ -2,12 +2,12 @@ import { createAction } from 'redux-actions';
 import { handleActions } from './settings';
 import { JWPLAYER_ID, PLAYER_OVER_MODES } from '../../helpers/consts';
 
-const PLAYER_READY    = 'Player/READY';
-const PLAYER_REMOVE   = 'Player/REMOVE';
-const PLAYER_PLAY     = 'Player/PLAY';
-const PLAYER_PAUSE    = 'Player/PAUSE';
-const PLAYER_SET_FILE = 'Player/SET_FILE';
+const PLAYER_READY  = 'Player/READY';
+const PLAYER_REMOVE = 'Player/REMOVE';
+const PLAYER_PLAY   = 'Player/PLAY';
+const PLAYER_PAUSE  = 'Player/PAUSE';
 
+const PLAYER_SET_FILE           = 'Player/SET_FILE';
 const PLAYER_SET_OVER_MODE      = 'Player/SET_OVER_MODE';
 const PLAYER_CONTINUE_PLAY_FROM = 'Player/CONTINUE_PLAY_FROM';
 
@@ -15,7 +15,7 @@ const SET_SHARE_START_END = 'Player/SET_SHARE_START_END';
 
 export const types = {
   PLAYER_READY,
-  PLAYER_PLAY,
+  PLAYER_PLAY
 };
 
 // Actions
@@ -23,8 +23,9 @@ const playerReady  = createAction(PLAYER_READY);
 const playerRemove = createAction(PLAYER_REMOVE);
 const setFile      = createAction(PLAYER_SET_FILE);
 
-const playerPlay   = createAction(PLAYER_PLAY);
-const playerPause  = createAction(PLAYER_PAUSE);
+const playerPlay  = createAction(PLAYER_PLAY);
+const playerPause = createAction(PLAYER_PAUSE);
+
 const setOverMode  = createAction(PLAYER_SET_OVER_MODE);
 const continuePlay = createAction(PLAYER_CONTINUE_PLAY_FROM);
 
@@ -46,7 +47,7 @@ const initialState = {
   continuePlay: { pos: -1, isPlayed: false },
   isReady: false,
   file: null,
-  shareStartEnd: { start: 0, end: Infinity }
+  shareStartEnd: { start: 0, end: Infinity },
 };
 
 const onReady = (draft, e) => {
@@ -71,7 +72,7 @@ const onSetFile = (draft, payload) => draft.file = payload;
 
 const onPlay = (draft, payload) => draft.played = payload;
 
-const onPause = (draft, payload) => draft.played = false;
+const onPause = draft => draft.played = false;
 
 const onSetOverMode = (draft, payload) => draft.overMode = payload;
 
@@ -111,7 +112,7 @@ export const selectors = {
   getFile,
   getOverMode,
   getRate,
-  getShareStartEnd
+  getShareStartEnd,
 };
 
 export const PLAYER_ACTIONS_BY_EVENT = {
