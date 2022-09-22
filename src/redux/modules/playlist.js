@@ -112,8 +112,23 @@ const getPlayed   = state => state.itemById[state.info.cuId] || false;
 
 const getInfo = state => state.info;
 
+const getNextData = state => {
+  const idx = state.playlist.findIndex(x => x === state.info.cuId);
+  if (state.playlist.length <= idx) return false;
+  return { id: state.playlist[idx + 1], cId: state.info.cId };
+};
+
+const getPrevData = state => {
+  const idx = state.playlist.findIndex(x => x === state.info.cuId);
+  if (1 > idx) return false;
+  return { id: state.playlist[idx - 1], cId: state.info.cId };
+};
+
 export const selectors = {
   getPlaylist,
   getPlayed,
   getInfo,
+  getNextData,
+  getPrevData
+
 };
