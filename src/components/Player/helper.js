@@ -1,8 +1,12 @@
 import { PLAYER_ACTIONS_BY_EVENT } from '../../redux/modules/player';
 import { DEFAULT_LANGUAGE, MT_VIDEO, MT_AUDIO } from '../../helpers/consts';
 import { isEmpty } from '../../helpers/utils';
+import { PLAYER_POSITION_STORAGE_KEY } from '../AVPlayer/constants';
 
-const PLAYER_EVENTS = ['ready', 'remove', 'play', 'pause', 'seeked', 'playbackRateChanged'];
+export const DEFAULT_PLAYER_VOLUME     = 80;
+export const PLAYER_VOLUME_STORAGE_KEY = 'jwplayer.volume';
+
+const PLAYER_EVENTS = ['ready', 'remove', 'play', 'pause', 'playbackRateChanged'];
 
 export const initPlayerEvents = (dispatch) => {
   const player = window.jwplayer();
@@ -10,10 +14,9 @@ export const initPlayerEvents = (dispatch) => {
     console.error(e);
   });
 
-  //TODO david: not clear why player.on('remove') is not work
-  player.on('remove', e => {
-    PLAYER_EVENTS.forEach(name => player.off(name));
-  });
+  player.on('remove', () => player.off('all'));
+
+  player.on('all', e => console.log('jwplayer all events', e));
 
   PLAYER_EVENTS.forEach(name => {
     const action = PLAYER_ACTIONS_BY_EVENT[name];
@@ -58,4 +61,9 @@ export const findPlayedFile = (item, info, lang, mt, q) => {
 
   const file = byLang.find(f => f.type === mt && f.video_size === q);
   return file;
+};
+
+export const getSavedTime = (cuId) => {
+  const savedTime = localStorage.getItem(`${PLAYER_POSITION_STORAGE_KEY}_${cuId}`) || 0;
+  return parseInt(savedTime, 10);
 };

@@ -3,6 +3,7 @@ import { Popup } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
 import { selectors as player } from '../../../redux/modules/player';
 import { JWPLAYER_ID } from '../../../helpers/consts';
+import { PLAYER_VOLUME_STORAGE_KEY, DEFAULT_PLAYER_VOLUME } from '../helper';
 
 export const VolumeKnob = ({ left, right }) => {
   const [activated, setActivated] = useState(false);
@@ -17,6 +18,12 @@ export const VolumeKnob = ({ left, right }) => {
 
     const p = window.jwplayer(JWPLAYER_ID);
     p.on('volume', updateVolume);
+
+    let v = localStorage.getItem(PLAYER_VOLUME_STORAGE_KEY);
+    if (isNaN(v)) v = DEFAULT_PLAYER_VOLUME;
+    p.setVolume(Number.parseInt(v, 10));
+    setVolume(v)
+
     return () => p.off('volume', updateVolume);
   }, [isReady]);
 
