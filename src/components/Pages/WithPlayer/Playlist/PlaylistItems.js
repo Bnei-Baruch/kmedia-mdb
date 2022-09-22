@@ -26,16 +26,19 @@ const PlaylistWidget = ({ t }) => {
         )
       }
       {
-        cuIds.map((id, i) => (
-          <ContentItemContainer
-            key={id}
-            id={id}
-            ccuId={cId}
-            size="small"
-            asList={true}
-            selected={i === cuId}
-          />
-        ))
+        cuIds.map((id, i) => {
+          const selected = id === cuId;
+          return (
+            <ContentItemContainer
+              key={id}
+              id={id}
+              ccuId={cId}
+              size="small"
+              asList={true}
+              selected={selected}
+            />
+          );
+        })
       }
     </div>
   );
