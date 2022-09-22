@@ -56,6 +56,5 @@ export const findPlayedFile = (item, info, lang, mt, q) => {
     return findPlayedFile(item, info, lang, mt, qualityByLang[lang][0]);
   }
 
-  const file = byLang.find(f => f.type === mt && f.video_size === q);
-  return file;
+  return byLang.find(f => f.type === mt && (mt === MT_AUDIO || f.video_size === q));
 };
