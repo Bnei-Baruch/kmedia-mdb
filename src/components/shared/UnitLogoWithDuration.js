@@ -10,28 +10,27 @@ import { getProgress } from './ContentItem/helper';
 const widthBySize = { 'normal': '140px' };
 
 const UnitLogoWithDuration = ({ unit, size = 'normal', width = 144, ...propz }) => {
-  const dispatch = useDispatch();
+  const { id, duration } = unit;
 
   useEffect(() => {
     dispatch(myActions.fetch(MY_NAMESPACE_HISTORY, { cu_uids: [unit.id] }));
   }, [dispatch, unit.id]);
 
   const historyItems = useSelector(state => my.getList(state.my, MY_NAMESPACE_HISTORY)) || [];
-  const historyUnit = historyItems.find(x => x.content_unit_uid === unit.id);
+  const historyUnit = historyItems.find(x => x.content_unit_uid === id);
   const playTime = historyUnit?.data.current_time;
 
   return (
     <div className="with_duration" style={{ minWidth: widthBySize[size] }}>
       {
-        unit.duration && (
-          <div className="duration">{
-            formatDuration(unit.duration, null)
-          }
+        duration && (
+          <div className="duration">
+            { formatDuration(duration, null) }
           </div>
         )
       }
       {getProgress(unit, playTime)}
-      <UnitLogo unitId={unit.id} width={width} {...propz} />
+      <UnitLogo unitId={id} width={width} {...propz} />
     </div>
   );
 };
