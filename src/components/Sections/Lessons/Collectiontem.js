@@ -1,20 +1,26 @@
 import clsx from 'clsx';
 import React from 'react';
 import { withNamespaces } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { useSelector, shallowEqual } from 'react-redux';
 import { Header, List } from 'semantic-ui-react';
 
+import { MY_NAMESPACE_HISTORY } from '../../../helpers/consts';
 import { fromToLocalized } from '../../../helpers/date';
 import { canonicalLink } from '../../../helpers/links';
 import { selectors as mdb } from '../../../redux/modules/mdb';
+import { selectors as my } from '../../../redux/modules/my';
 import Link from '../../Language/MultiLanguageLink';
-import UnitLogoWithDuration from '../../shared/UnitLogoWithDuration';
+import UnitLogoWithDuration, { getLogoUnit }  from '../../shared/UnitLogoWithDuration';
 
 const CollectionItem = ({ id, t }) => {
   const c = useSelector(state => mdb.getDenormCollection(state.mdb, id));
+  const historyItems = useSelector(state => my.getList(state.my, MY_NAMESPACE_HISTORY), shallowEqual) || [];
+
   if (!c) return null;
 
-  const { film_date, name, content_type, content_units: cus, start_date, end_date } = c;
+  const { film_date, name, content_type, content_units, start_date, end_date } = c;
+
+  const logoUnit = getLogoUnit(content_units, historyItems);
 
   const description = [];
   if (film_date) {
@@ -25,7 +31,7 @@ const CollectionItem = ({ id, t }) => {
 
   return (
     <List.Item key={id} className="media_item">
-      <UnitLogoWithDuration unit={cus[0]} />
+      <UnitLogoWithDuration unit={logoUnit} />
       <div className="media_item__content">
         <Header as={Link} to={canonicalLink(c)} content={name} />
         <div>{t(`constants.content-types.${content_type}`)}</div>
