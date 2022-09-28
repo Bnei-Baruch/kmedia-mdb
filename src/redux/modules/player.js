@@ -6,11 +6,12 @@ const PLAYER_READY  = 'Player/READY';
 const PLAYER_REMOVE = 'Player/REMOVE';
 const PLAYER_PLAY   = 'Player/PLAY';
 const PLAYER_PAUSE  = 'Player/PAUSE';
-const PLAYER_RATE               = 'Player/RATE';
+const PLAYER_RATE   = 'Player/RATE';
 
 const PLAYER_SET_FILE           = 'Player/SET_FILE';
 const PLAYER_SET_OVER_MODE      = 'Player/SET_OVER_MODE';
 const PLAYER_CONTINUE_PLAY_FROM = 'Player/CONTINUE_PLAY_FROM';
+const PLAYER_NEW_PLAYLIST_ITEM  = 'Player/NEW_PLAYLIST_ITEM';
 
 const SET_SHARE_START_END = 'Player/SET_SHARE_START_END';
 
@@ -26,10 +27,11 @@ const setFile      = createAction(PLAYER_SET_FILE);
 
 const playerPlay  = createAction(PLAYER_PLAY);
 const playerPause = createAction(PLAYER_PAUSE);
-const playerRate   = createAction(PLAYER_RATE);
+const playerRate  = createAction(PLAYER_RATE);
 
-const setOverMode  = createAction(PLAYER_SET_OVER_MODE);
-const continuePlay = createAction(PLAYER_CONTINUE_PLAY_FROM);
+const setOverMode     = createAction(PLAYER_SET_OVER_MODE);
+const continuePlay    = createAction(PLAYER_CONTINUE_PLAY_FROM);
+const newPlaylistItem = createAction(PLAYER_NEW_PLAYLIST_ITEM);
 
 const setShareStartEnd = createAction(SET_SHARE_START_END);
 
@@ -52,17 +54,7 @@ const initialState = {
   shareStartEnd: { start: 0, end: Infinity },
 };
 
-const onReady = (draft, e) => {
-  if (draft.continuePlay && draft.continuePlay.pos !== -1) {
-    const p = window.jwplayer(JWPLAYER_ID);
-    p.stop().seek(draft.continuePlay.pos);
-    draft.continuePlay.isPlayed ? p.play() : p.pause();
-
-    draft.continuePlay = { pos: -1, isPlayed: false };
-    draft.overMode     = null;
-  }
-  draft.ready = true;
-};
+const onReady = draft => draft.ready = true;
 
 const onRemove = draft => {
   draft.continuePlay = initialState.continuePlay;
@@ -70,7 +62,19 @@ const onRemove = draft => {
   draft.ready        = false;
 };
 
-const onSetFile = (draft, payload) => draft.file = payload;
+const onNewPlaylistItem = (draft, e) => {
+  const p = window.jwplayer(JWPLAYER_ID);
+  if (draft.continuePlay && draft.continuePlay.pos !== -1) {
+    p.stop().seek(draft.continuePlay.pos);
+    draft.continuePlay.isPlayed ? p.play() : p.pause();
+
+    draft.continuePlay = { pos: -1, isPlayed: false };
+    draft.overMode     = null;
+  } else {
+    p.play().pause();
+  }
+};
+const onSetFile         = (draft, payload) => draft.file = payload;
 
 const onPlay = (draft, payload) => draft.played = payload;
 
@@ -98,6 +102,7 @@ export const reducer = handleActions({
 
   [PLAYER_SET_OVER_MODE]: onSetOverMode,
   [PLAYER_CONTINUE_PLAY_FROM]: onContinuePlay,
+  [PLAYER_NEW_PLAYLIST_ITEM]: onNewPlaylistItem,
 
   [SET_SHARE_START_END]: (draft, payload) => {
     draft.shareStartEnd = payload;
@@ -126,4 +131,5 @@ export const PLAYER_ACTIONS_BY_EVENT = {
   'play': playerPlay,
   'playbackRateChanged': playerRate,
   'pause': playerPause,
+  'playlistItem': newPlaylistItem,
 };

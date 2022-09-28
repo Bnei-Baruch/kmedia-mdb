@@ -1,8 +1,8 @@
 import React from 'react';
 import { Button, Icon, Menu } from 'semantic-ui-react';
+import { useSelector, useDispatch, batch } from 'react-redux';
 
-import { LANGUAGE_OPTIONS, JWPLAYER_ID, PLAYER_OVER_MODES } from '../../../helpers/consts';
-import { useSelector, useDispatch } from 'react-redux';
+import { LANGUAGE_OPTIONS, PLAYER_OVER_MODES } from '../../../helpers/consts';
 import { actions as playlistActions, selectors as playlistSelectors } from '../../../redux/modules/playlist';
 import { actions } from '../../../redux/modules/player';
 
@@ -11,10 +11,10 @@ const PlayerLanguages = () => {
   const { language }  = useSelector(state => playlistSelectors.getInfo(state.playlist));
   const dispatch      = useDispatch();
 
-  const handleSelect = (e, { name }) => {
+  const handleSelect = (e, { name }) => batch(() => {
+    dispatch(actions.continuePlay());
     dispatch(playlistActions.setLanguage(name));
-    dispatch(actions.continuePlay(window.jwplayer(JWPLAYER_ID).getPosition()));
-  };
+  });
 
   const handleCloseLangs = () => dispatch(actions.setOverMode(PLAYER_OVER_MODES.settings));
 
