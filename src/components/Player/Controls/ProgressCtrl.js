@@ -16,11 +16,11 @@ export const ProgressCtrl = () => {
   }, [widthRef.current]);
 
   const handleProgressClick = e => {
-    const clientX = (e.touches ? e.touches[e.touches.length - 1].clientX : e.clientX) - 28/2;
+    const clientX = (e.touches ? e.touches[e.touches.length - 1].clientX : e.clientX) - 28 / 2;
     const delta   = right - left;
     const offset  = Math.min(Math.max(0, clientX - left), delta) / delta;
     const p       = window.jwplayer();
-    p.seek(p.getDuration() * offset).play().pause();
+    p.seek(p.getDuration() * offset);
     stopBubbling(e);
   };
 

@@ -6,7 +6,7 @@ import { PLAYER_POSITION_STORAGE_KEY } from '../AVPlayer/constants';
 export const DEFAULT_PLAYER_VOLUME     = 80;
 export const PLAYER_VOLUME_STORAGE_KEY = 'jwplayer.volume';
 
-const PLAYER_EVENTS = ['ready', 'remove', 'play', 'pause', 'playbackRateChanged'];
+const PLAYER_EVENTS = ['ready', 'remove', 'play', 'pause', 'playbackRateChanged', 'playlistItem'];
 
 export const initPlayerEvents = (dispatch) => {
   const player = window.jwplayer();
@@ -16,7 +16,7 @@ export const initPlayerEvents = (dispatch) => {
 
   player.on('remove', () => player.off('all'));
 
-  player.on('all', e => console.log('jwplayer all events', e));
+  //player.on('all', e => console.log('jwplayer all events', e));
 
   PLAYER_EVENTS.forEach(name => {
     const action = PLAYER_ACTIONS_BY_EVENT[name];

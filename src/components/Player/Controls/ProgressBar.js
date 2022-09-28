@@ -60,7 +60,6 @@ export const ProgressBar = ({ left, right }) => {
     const offset  = Math.min(Math.max(0, clientX - left), delta) / delta;
     const p       = window.jwplayer(JWPLAYER_ID);
 
-    console.log('progress bar: move', offset * 100, clientX, right, left);
     p.seek(p.getDuration() * offset);
   }, [activated]);
 

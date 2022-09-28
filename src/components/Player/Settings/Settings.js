@@ -1,6 +1,6 @@
 import { Button, Header, Icon } from 'semantic-ui-react';
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch, batch } from 'react-redux';
 import { selectors, actions } from '../../../redux/modules/player';
 import { selectors as playlistSelectors, actions as playlistActions } from '../../../redux/modules/playlist';
 import { withNamespaces } from 'react-i18next';
@@ -25,13 +25,17 @@ const Settings      = ({ t }) => {
   const handleSetSpeed = x => window.jwplayer().setPlaybackRate(x);
 
   const handleSetQuality = x => {
-    dispatch(actions.continuePlay());
-    dispatch(playlistActions.setQuality(x));
+    batch(() => {
+      dispatch(actions.continuePlay());
+      dispatch(playlistActions.setQuality(x));
+    });
   };
 
   const handleSetMediaType = (e, { name }) => {
-    dispatch(actions.continuePlay());
-    dispatch(playlistActions.setMediaType(name));
+    batch(() => {
+      dispatch(actions.continuePlay());
+      dispatch(playlistActions.setMediaType(name));
+    });
   };
 
   const handleOpenLangs = () => dispatch(actions.setOverMode(PLAYER_OVER_MODES.languages));

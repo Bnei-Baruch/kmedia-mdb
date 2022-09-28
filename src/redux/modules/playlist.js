@@ -1,7 +1,6 @@
 import { createAction } from 'redux-actions';
 import { handleActions } from './settings';
 import { DEFAULT_LANGUAGE } from '../../helpers/consts';
-import helper from '../../helpers/player';
 
 const PLAYLIST_BUILD         = 'Playlist/BUILD';
 const PLAYLIST_BUILD_SUCCESS = 'Playlist/BUILD_SUCCESS';
@@ -66,19 +65,10 @@ const onBuildSuccess = (draft, payload) => {
   draft.playlist = items.map(({ id }) => id);
   draft.itemById = items.reduce((acc, x) => ({ ...acc, [x.id]: x }), {});
   const quality  = draft.info.quality || draft.itemById[cuId].qualityByLang[language][0];
-/*
-
-  const mt        = helper.getMediaTypeFromQuery();
-  const mts       = draft.itemById[cuId].mtByLang[language];
-  const mediaType = mts.includes(mt) ? mt : mts.filter(x => x !== mt)[0];
-*/
-
-  draft.info = { cuId, cId, name, language, quality, mediaType, isReady: true };
+  draft.info     = { cuId, cId, name, language, quality, mediaType, isReady: true };
 };
 
-const onSelect = (draft, payload) => {
-  draft.info.cuId = payload;
-};
+const onSelect = (draft, payload) => draft.info.cuId = payload;
 
 const onNext = draft => {
   const idx       = draft.playlist.findIndex(x => x === draft.info.cuId);
@@ -93,9 +83,7 @@ const onPrev = draft => {
 
 const onSetQuality = (draft, payload) => draft.info.quality = payload;
 
-const onSetLanguage = (draft, payload) => {
-  draft.info.language = payload;
-};
+const onSetLanguage = (draft, payload) => draft.info.language = payload;
 
 const onSetMediaType = (draft, payload) => draft.info.mediaType = payload;
 
@@ -103,9 +91,9 @@ export const reducer = handleActions({
   [PLAYLIST_BUILD]: onBuild,
   [PLAYLIST_BUILD_SUCCESS]: onBuildSuccess,
 
-  [PLAYLIST_SELECT]: onSelect,
   [PLAYLIST_NEXT]: onNext,
   [PLAYLIST_PREV]: onPrev,
+  [PLAYLIST_SELECT]: onSelect,
 
   [PLAYER_SET_QUALITY]: onSetQuality,
   [PLAYER_SET_LANGUAGE]: onSetLanguage,
@@ -135,5 +123,4 @@ export const selectors = {
   getInfo,
   getNextData,
   getPrevData
-
 };
