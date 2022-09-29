@@ -219,6 +219,25 @@
   }
 }
 
+
+.avbox__playlist-prev-button, .avbox__playlist-next-button {
+  @include mobile {
+    padding: 0 4px;
+  }
+
+  i.icon {
+    margin: 0 .25rem !important;
+    color: white;
+    width: 15px;
+    display: inline-block;
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+}
+
+
 .cut_and_download_btn, .embed-share-button {
   padding: 0 !important;
   margin: 0 1px !important;
@@ -230,6 +249,7 @@
     margin: 0 !important;
     width: auto !important;
   }
+
   & > .ui.floating.label {
     right: 100%;
     left: auto;

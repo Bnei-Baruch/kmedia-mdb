@@ -1,72 +1,29 @@
 import React, { useContext } from 'react';
 import { useSelector } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
-import { Header, Icon } from 'semantic-ui-react';
+import { Header } from 'semantic-ui-react';
 import clsx from 'clsx';
-
-import { selectors as settings } from '../../../../redux/modules/settings';
 import { selectors as sources } from '../../../../redux/modules/sources';
 import { COLLECTION_DAILY_LESSONS, CT_LESSONS_SERIES } from '../../../../helpers/consts';
-import { getLanguageDirection } from '../../../../helpers/i18n-utils';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import { cuPartNameByCCUType } from '../../../../helpers/utils';
 import { fromToLocalized } from '../../../../helpers/date';
-import Link from '../../../Language/MultiLanguageLink';
-import CollectionDatePicker from './CollectionDatePicker';
 import PlaylistPlayIcon from '../../../../images/icons/PlaylistPlay';
 import { selectors as mdb } from '../../../../redux/modules/mdb';
 import { selectors } from '../../../../redux/modules/playlist';
+import LessonDatePicker from './LessonDatePickerContainer';
 
-const getNextLink = (langDir, t, link) => (
-  link ?
-    <Link
-      to={link}
-      className="avbox__playlist-next-button"
-      title={t('buttons.next-lesson')}
-    >
-      <Icon size="large" name={`triangle ${langDir === 'ltr' ? 'right' : 'left'}`} />
-    </Link> :
-    <span className="avbox__playlist-next-button">
-      <Icon disabled size="large" name={`triangle ${langDir === 'ltr' ? 'right' : 'left'}`} />
-    </span>
-);
-
-const getPrevLink = (langDir, t, link) => (
-  link &&
-  <Link
-    to={link}
-    className="avbox__playlist-prev-button"
-    title={t('buttons.previous-lesson')}
-  >
-    <Icon size="large" name={`triangle ${langDir === 'ltr' ? 'left' : 'right'}`} />
-  </Link>
-);
-
-const PlaylistHeader = ({ t, nextLink = null, prevLink = null }) => {
+const PlaylistHeader = ({ t }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
   const { cId, cuId } = useSelector(state => selectors.getInfo(state.playlist));
   const unit          = useSelector(state => mdb.getDenormContentUnit(state.mdb, cuId));
   const collection    = useSelector(state => mdb.getDenormCollection(state.mdb, cId));
   const getPath       = useSelector(state => sources.getPathByID(state.sources));
-  const language      = useSelector(state => settings.getLanguage(state.settings));
-  const langDir       = getLanguageDirection(language);
 
   const { content_type, number, name, film_date, start_date, end_date, tag_id, source_id } = collection;
 
   const isLesson = COLLECTION_DAILY_LESSONS.includes(content_type);
-
-  const getSubHeader = () => {
-    if (!isLesson) return null;
-
-    return (
-      <Header.Subheader className={isMobileDevice ? '' : langDir === 'rtl' ? 'float-left' : 'float-right'}>
-        {getPrevLink(langDir, t, prevLink)}
-        <CollectionDatePicker collection={collection} />
-        {getNextLink(langDir, t, nextLink)}
-      </Header.Subheader>
-    );
-  };
 
   const getTitle = () => {
     if (!content_type)
@@ -130,7 +87,7 @@ const PlaylistHeader = ({ t, nextLink = null, prevLink = null }) => {
 
     return (
       <>
-        {!isMobileDevice && getSubHeader()}
+        {isLesson && !isMobileDevice && <LessonDatePicker />}
         {getTitle()}
         {
           subheader && (
@@ -158,7 +115,7 @@ const PlaylistHeader = ({ t, nextLink = null, prevLink = null }) => {
   return (
     <Header as="h2" className={clsx('avbox__playlist-header', { 'flex_column': !isLesson })}>
       <Header.Content content={getTitleByCO()} />
-      {isMobileDevice && getSubHeader()}
+      {isLesson && isMobileDevice && <LessonDatePicker />}
     </Header>
   );
 };

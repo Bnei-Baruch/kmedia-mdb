@@ -1,7 +1,7 @@
 import { Input, Button } from 'semantic-ui-react';
 import React from 'react';
 import CopyToClipboard from 'react-copy-to-clipboard';
-import useShareUrl from '../hooks/StartEnd';
+import useShareUrl from '../hooks/useShareUrl';
 
 const CopyShareUrl = () => {
   const shareUrl = useShareUrl();

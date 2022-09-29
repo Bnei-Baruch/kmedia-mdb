@@ -20,7 +20,7 @@ import {
 import CutAndDownload from './TrimBtn';
 import EmbeddedShareButton from './EmbeddedShareButton';
 import { Popup } from 'semantic-ui-react';
-import useShareUrl from '../hooks/StartEnd';
+import useShareUrl from '../hooks/useShareUrl';
 
 const bsPixelsBySize = {
   tiny: 26,

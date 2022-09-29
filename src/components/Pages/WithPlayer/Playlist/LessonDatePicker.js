@@ -3,33 +3,33 @@ import { useHistory } from 'react-router';
 import { withNamespaces } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
-
-import * as shapes from '../../../shapes';
 import { DATE_FORMAT } from '../../../../helpers/consts';
 import { selectors as settings } from '../../../../redux/modules/settings';
 import { actions, selectors } from '../../../../redux/modules/mdb';
+import { selectors as playlist } from '../../../../redux/modules/playlist';
 import ButtonDayPicker from '../../../Filters/components/Date/ButtonDayPicker';
 import { canonicalLink } from '../../../../helpers/links';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 
-const CollectionDatePicker = ({ collection, t }) => {
+const LessonDatePicker = ({ t }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
-  const { film_date, id }  = collection;
-  const history            = useHistory();
+
+  const history  = useHistory();
+  const language = useSelector(state => settings.getLanguage(state.settings));
+
+  const { cId }      = useSelector(state => playlist.getInfo(state.playlist));
+  const collection   = useSelector(state => selectors.getDenormCollectionWUnits(state.mdb, cId)) || false;
+  const dpId         = useSelector(state => selectors.getDatepickerCO(state.mdb));
+  const dpCollection = useSelector(state => selectors.getDenormCollectionWUnits(state.mdb, dpId)) || false;
 
   const dispatch = useDispatch();
-  const language = useSelector(state => settings.getLanguage(state.settings));
-  const coID     = useSelector(state => selectors.getDatepickerCO(state.mdb));
-
-  const co = useSelector(state => selectors.getDenormCollectionWUnits(state.mdb, coID));
-
   useEffect(() => {
-    if (co && co.id !== id) {
-      const link = canonicalLink(co.content_units[0]);
+    if (dpCollection && collection.id !== dpCollection.id) {
+      const link = canonicalLink(dpCollection.content_units[0]);
       history.push(`/${language}${link}`);
       dispatch(actions.nullDatepickerCO());
     }
-  }, [coID]);
+  }, [collection, dpCollection, language, history, dispatch]);
 
   const fetchNextCO = date => {
     const filmDate = moment.utc(date);
@@ -41,17 +41,13 @@ const CollectionDatePicker = ({ collection, t }) => {
 
   return (
     <ButtonDayPicker
-      label={isMobileDevice ? film_date : t('values.date', { date: film_date })}
+      label={isMobileDevice ? collection.film_date : t('values.date', { date: collection.film_date })}
       language={language}
       onDayChange={fetchNextCO}
-      value={new Date(film_date)}
+      value={new Date(collection.film_date)}
       withLabel={true}
     />
   );
 };
 
-CollectionDatePicker.propTypes = {
-  collection: shapes.GenericCollection.isRequired
-};
-
-export default withNamespaces()(CollectionDatePicker);
+export default withNamespaces()(LessonDatePicker);
