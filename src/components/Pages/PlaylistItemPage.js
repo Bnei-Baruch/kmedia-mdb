@@ -5,7 +5,7 @@ import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 
 import { actions, selectors, selectors as mdb } from '../../redux/modules/mdb';
 import WipErr from '../shared/WipErr/WipErr';
-import SingleMedia from './WithPlayer/SingleMedia/Page';
+import SingleMedia from './WithPlayer/SingleMedia';
 import { COLLECTION_DAILY_LESSONS, CT_LESSONS_SERIES, CT_SONGS, EVENT_TYPES } from '../../helpers/consts';
 import PlaylistContainer from './WithPlayer/Playlist/PlaylistContainer';
 import { NotFound } from '../../routes';

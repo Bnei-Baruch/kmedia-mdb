@@ -249,8 +249,8 @@ const setStatus = (state, action) => {
     errors.units = { ...errors.units, ...units.errors };
     break;
   case FETCH_COLLECTION_SUCCESS:
-    wip.collections     = { ...wip.collections, [action.payload.id]: false };
-    errors.collections  = { ...errors.collections, [action.payload.id]: null };
+    wip.collections    = { ...wip.collections, [action.payload.id]: false };
+    errors.collections = { ...errors.collections, [action.payload.id]: null };
     fetched.collections = { ...fetched.collections, [action.payload.id]: true };
     break;
   case FETCH_COLLECTIONS_SUCCESS:
