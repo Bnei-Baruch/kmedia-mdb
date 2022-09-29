@@ -5,16 +5,16 @@ import { useLocation, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Container, Grid } from 'semantic-ui-react';
 
-import { actions, selectors, selectors as mdb } from '../../../../redux/modules/mdb';
-import { selectors as settings } from '../../../../redux/modules/settings';
-import WipErr from '../../../shared/WipErr/WipErr';
-import Helmets from '../../../shared/Helmets';
-import Materials from './../widgets/UnitMaterials/Materials';
-import Info from './../widgets/Info/Info';
-import Recommended from './../widgets/Recommended/Main/Recommended';
-import playerHelper from '../../../../helpers/player';
-import { DeviceInfoContext } from '../../../../helpers/app-contexts';
-import PlayerContainer from '../../../Player/PlayerContainer';
+import { actions, selectors, selectors as mdb } from '../../../redux/modules/mdb';
+import { selectors as settings } from '../../../redux/modules/settings';
+import WipErr from '../../shared/WipErr/WipErr';
+import Helmets from '../../shared/Helmets';
+import Materials from './widgets/UnitMaterials/Materials';
+import Info from './widgets/Info/Info';
+import Recommended from './widgets/Recommended/Main/Recommended';
+import playerHelper from '../../../helpers/player';
+import { DeviceInfoContext } from '../../../helpers/app-contexts';
+import PlayerContainer from '../../Player/PlayerContainer';
 
 const SinglePage = ({ t }) => {
 
