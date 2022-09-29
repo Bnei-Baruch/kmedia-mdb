@@ -195,23 +195,6 @@
   align-items: start;
 }
 
-.avbox__playlist-prev-button, .avbox__playlist-next-button {
-  @include mobile {
-    padding: 0 4px;
-  }
-
-  i.icon {
-    margin: 0 .25rem !important;
-    color: white;
-    width: 15px;
-    display: inline-block;
-
-    &:hover {
-      opacity: 0.8;
-    }
-  }
-}
-
 // filters redesign
 // .index-filters {
 //   margin-top: .5rem !important;

@@ -58,8 +58,8 @@ export const ProgressBar = ({ left, right }) => {
     const clientX = e.touches ? e.touches[e.touches.length - 1].clientX : e.clientX;
     const delta   = right - left;
     const offset  = Math.min(Math.max(0, clientX - left), delta) / delta;
-    const p       = window.jwplayer(JWPLAYER_ID);
 
+    const p = window.jwplayer(JWPLAYER_ID);
     p.seek(p.getDuration() * offset);
   }, [activated]);
 
