@@ -1,37 +1,39 @@
 import { createAction } from 'redux-actions';
 import { handleActions } from './settings';
 import { DEFAULT_LANGUAGE } from '../../helpers/consts';
-import helper from '../../helpers/player';
 
-const PLAYLIST_BUILD         = 'Playlist/BUILD';
-const PLAYLIST_BUILD_SUCCESS = 'Playlist/BUILD_SUCCESS';
-const PLAYLIST_SELECT        = 'Playlist/SELECT';
-const PLAYLIST_NEXT          = 'Playlist/NEXT';
-const PLAYLIST_PREV          = 'Playlist/PREV';
-const PLAYER_SET_QUALITY     = 'Player/SET_QUALITY';
-const PLAYER_SET_LANGUAGE    = 'Player/SET_LANGUAGE';
-const PLAYER_SET_MEDIA_TYPE  = 'Player/SET_MEDIA_TYPE';
+const PLAYLIST_BUILD             = 'Playlist/BUILD';
+const PLAYLIST_BUILD_SUCCESS     = 'Playlist/BUILD_SUCCESS';
+const SINGLE_MEDIA_BUILD         = 'Playlist/SINGLE_MEDIA_BUILD';
+const SINGLE_MEDIA_BUILD_SUCCESS = 'Playlist/SINGLE_MEDIA_BUILD_SUCCESS';
+
+const PLAYLIST_SELECT       = 'Playlist/SELECT';
+const PLAYLIST_NEXT         = 'Playlist/NEXT';
+const PLAYLIST_PREV         = 'Playlist/PREV';
+const PLAYER_SET_QUALITY    = 'Player/SET_QUALITY';
+const PLAYER_SET_LANGUAGE   = 'Player/SET_LANGUAGE';
+const PLAYER_SET_MEDIA_TYPE = 'Player/SET_MEDIA_TYPE';
 
 export const types = {
   PLAYLIST_BUILD,
-  PLAYLIST_BUILD_SUCCESS,
-  PLAYLIST_SELECT,
-  PLAYLIST_NEXT,
-  PLAYLIST_PREV,
+  SINGLE_MEDIA_BUILD
+
 };
 
 // Actions
-const build        = createAction(PLAYLIST_BUILD, (cId, cuId) => ({ cId, cuId }));
-const buildSuccess = createAction(PLAYLIST_BUILD_SUCCESS);
-const select       = createAction(PLAYLIST_SELECT);
-const next         = createAction(PLAYLIST_NEXT);
-const prev         = createAction(PLAYLIST_PREV);
-const setQuality   = createAction(PLAYER_SET_QUALITY);
-const setLanguage  = createAction(PLAYER_SET_LANGUAGE);
-const setMediaType = createAction(PLAYER_SET_MEDIA_TYPE);
+const build            = createAction(PLAYLIST_BUILD, (cId, cuId) => ({ cId, cuId }));
+const buildSuccess     = createAction(PLAYLIST_BUILD_SUCCESS);
+const singleMediaBuild = createAction(SINGLE_MEDIA_BUILD);
+const select           = createAction(PLAYLIST_SELECT);
+const next             = createAction(PLAYLIST_NEXT);
+const prev             = createAction(PLAYLIST_PREV);
+const setQuality       = createAction(PLAYER_SET_QUALITY);
+const setLanguage      = createAction(PLAYER_SET_LANGUAGE);
+const setMediaType     = createAction(PLAYER_SET_MEDIA_TYPE);
 
 export const actions = {
   build,
+  singleMediaBuild,
   buildSuccess,
   select,
   next,
@@ -60,25 +62,17 @@ const onBuildSuccess = (draft, payload) => {
           language,
           items,
           name,
-          mediaType
+          mediaType,
+          isSingleMedia = false
         } = payload;
 
   draft.playlist = items.map(({ id }) => id);
   draft.itemById = items.reduce((acc, x) => ({ ...acc, [x.id]: x }), {});
   const quality  = draft.info.quality || draft.itemById[cuId].qualityByLang[language][0];
-/*
-
-  const mt        = helper.getMediaTypeFromQuery();
-  const mts       = draft.itemById[cuId].mtByLang[language];
-  const mediaType = mts.includes(mt) ? mt : mts.filter(x => x !== mt)[0];
-*/
-
-  draft.info = { cuId, cId, name, language, quality, mediaType, isReady: true };
+  draft.info     = { cuId, cId, name, language, quality, mediaType, isSingleMedia, isReady: true };
 };
 
-const onSelect = (draft, payload) => {
-  draft.info.cuId = payload;
-};
+const onSelect = (draft, payload) => draft.info.cuId = payload;
 
 const onNext = draft => {
   const idx       = draft.playlist.findIndex(x => x === draft.info.cuId);
@@ -93,18 +87,18 @@ const onPrev = draft => {
 
 const onSetQuality = (draft, payload) => draft.info.quality = payload;
 
-const onSetLanguage = (draft, payload) => {
-  draft.info.language = payload;
-}
+const onSetLanguage = (draft, payload) => draft.info.language = payload;
 
 const onSetMediaType = (draft, payload) => draft.info.mediaType = payload;
 
 export const reducer = handleActions({
   [PLAYLIST_BUILD]: onBuild,
   [PLAYLIST_BUILD_SUCCESS]: onBuildSuccess,
-  [PLAYLIST_SELECT]: onSelect,
+
   [PLAYLIST_NEXT]: onNext,
   [PLAYLIST_PREV]: onPrev,
+  [PLAYLIST_SELECT]: onSelect,
+
   [PLAYER_SET_QUALITY]: onSetQuality,
   [PLAYER_SET_LANGUAGE]: onSetLanguage,
   [PLAYER_SET_MEDIA_TYPE]: onSetMediaType,
@@ -133,5 +127,4 @@ export const selectors = {
   getInfo,
   getNextData,
   getPrevData
-
 };
