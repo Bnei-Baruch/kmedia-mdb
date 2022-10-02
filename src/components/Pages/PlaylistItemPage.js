@@ -5,7 +5,7 @@ import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 
 import { actions, selectors, selectors as mdb } from '../../redux/modules/mdb';
 import WipErr from '../shared/WipErr/WipErr';
-import SingleMedia from './WithPlayer/SingleMedia';
+import SingleMediaContainer from './WithPlayer/SingleMedia/SingleMediaContainer';
 import { COLLECTION_DAILY_LESSONS, CT_LESSONS_SERIES, CT_SONGS, EVENT_TYPES } from '../../helpers/consts';
 import PlaylistContainer from './WithPlayer/Playlist/PlaylistContainer';
 import { NotFound } from '../../routes';
@@ -38,15 +38,15 @@ const PlaylistItemPage = ({ t }) => {
 
   if (!unit) return <NotFound />;
 
-  if (routeType === 'program' || !unit.collections) return <SingleMedia />;
+  if (routeType === 'program' || !unit.collections) return <SingleMediaContainer />;
 
   const cTypes = COLLECTION_TYPES_BY_ROUTING[!tab ? routeType : `${routeType}_${tab}`];
-  if (!cTypes) return <SingleMedia />;
+  if (!cTypes) return <SingleMediaContainer />;
 
   const collection = Object.values(unit.collections).find(c => cTypes.includes(c.content_type));
 
   if (!collection) {
-    return <SingleMedia />;
+    return <SingleMediaContainer />;
   }
 
   return <PlaylistContainer cId={collection.id} cuId={id} />;

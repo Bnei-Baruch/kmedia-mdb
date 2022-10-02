@@ -16,7 +16,7 @@ export const initPlayerEvents = (dispatch) => {
 
   player.on('remove', () => player.off('all'));
 
-  //player.on('all', e => console.log('jwplayer all events', e));
+  player.on('all', (name, e) => console.log('jwplayer all events', name, e));
 
   PLAYER_EVENTS.forEach(name => {
     const action = PLAYER_ACTIONS_BY_EVENT[name];

@@ -39,9 +39,9 @@ const PlayerContainer = ({ t }) => {
   useEffect(() => {
     if (isReady && file) {
       const player = window.jwplayer(JWPLAYER_ID);
-      const img    = file.type === MT_VIDEO ? preImageUrl : 'https://arvut.kli.one/user/static/media/audio_only.svg';
+      const image  = file.type === MT_VIDEO ? preImageUrl : 'https://arvut.kli.one/user/static/media/audio_only.svg';
       dispatch(actions.setFile(file));
-      player.load([{ 'file': file.src, 'image': img }]);
+      player.load([{ 'file': file.src, image }]);
     }
   }, [isReady, file]);
 
