@@ -75,9 +75,10 @@ const playableItem = (unit, mediaType, uiLanguage, contentLanguage) => {
     targetMediaType = mediaType === MT_AUDIO ? MT_VIDEO : MT_AUDIO;
   }
 
-  const files     = (unit.files || []).filter(f => (
+  const files = (unit.files || []).filter(f => (
     f.language === language
     && (targetMediaType === MT_VIDEO ? MediaHelper.IsMp4(f) : MediaHelper.IsMp3(f))));
+
   const byQuality = mapValues(
     groupBy(files, x => x.video_size || VS_DEFAULT),
     val => ({
