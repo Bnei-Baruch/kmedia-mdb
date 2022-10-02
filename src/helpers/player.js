@@ -51,7 +51,7 @@ const calcAvailableLanguages = unit => {
       new Set()));
 };
 
-const playableItem = unit => {
+const playableItem = (unit, preImageUrl) => {
   if (!unit) {
     return {};
   }
@@ -81,7 +81,7 @@ const playableItem = unit => {
     filesByLang,
     qualityByLang,
     files,
-    preImageUrl: assetUrl(`api/thumbnail/${unit.id}`),
+    preImageUrl: preImageUrl ?? assetUrl(`api/thumbnail/${unit.id}`),
   };
 };
 
