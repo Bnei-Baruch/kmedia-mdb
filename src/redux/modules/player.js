@@ -2,11 +2,11 @@ import { createAction } from 'redux-actions';
 import { handleActions } from './settings';
 import { JWPLAYER_ID, PLAYER_OVER_MODES } from '../../helpers/consts';
 
-const PLAYER_READY  = 'Player/READY';
-const PLAYER_REMOVE = 'Player/REMOVE';
-const PLAYER_PLAY   = 'Player/PLAY';
-const PLAYER_PAUSE  = 'Player/PAUSE';
-const PLAYER_RATE   = 'Player/RATE';
+const PLAYER_READY         = 'Player/READY';
+const PLAYER_REMOVE        = 'Player/REMOVE';
+const PLAYER_PLAY          = 'Player/PLAY';
+const PLAYER_PAUSE         = 'Player/PAUSE';
+const PLAYER_RATE          = 'Player/RATE';
 
 const PLAYER_SET_FILE           = 'Player/SET_FILE';
 const PLAYER_SET_OVER_MODE      = 'Player/SET_OVER_MODE';
@@ -25,9 +25,9 @@ const playerReady  = createAction(PLAYER_READY);
 const playerRemove = createAction(PLAYER_REMOVE);
 const setFile      = createAction(PLAYER_SET_FILE);
 
-const playerPlay  = createAction(PLAYER_PLAY);
-const playerPause = createAction(PLAYER_PAUSE);
-const playerRate  = createAction(PLAYER_RATE);
+const playerPlay        = createAction(PLAYER_PLAY);
+const playerPause       = createAction(PLAYER_PAUSE);
+const playerRate        = createAction(PLAYER_RATE);
 
 const setOverMode     = createAction(PLAYER_SET_OVER_MODE);
 const continuePlay    = createAction(PLAYER_CONTINUE_PLAY_FROM);
@@ -76,7 +76,7 @@ const onNewPlaylistItem = (draft, e) => {
 };
 const onSetFile         = (draft, payload) => draft.file = payload;
 
-const onPlay = (draft, payload) => draft.played = payload;
+const onPlay = (draft, payload) => draft.played = payload.newstate === 'playing';
 
 const onPause = draft => draft.played = false;
 
