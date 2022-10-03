@@ -1,17 +1,17 @@
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { Container, Header, Popup, Progress, Ref } from 'semantic-ui-react';
+import { Container, Header, Popup, Ref } from 'semantic-ui-react';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { NO_NAME } from '../../../helpers/consts';
 import { isLanguageRtl } from '../../../helpers/i18n-utils';
 import { formatDuration } from '../../../helpers/utils';
-import { PLAYER_POSITION_STORAGE_KEY } from '../../AVPlayer/constants';
 import Link from '../../Language/MultiLanguageLink';
 
 import * as shapes from '../../shapes';
 import UnitLogo from '../Logo/UnitLogo';
-import { imageWidthBySize } from './helper';
+import { imageWidthBySize, getProgress } from './helper';
+
 
 const ListTemplate = ({
   unit,
@@ -51,18 +51,6 @@ const ListTemplate = ({
       </div>
     ) : null;
 
-  let percent = null;
-  if (unit && playTime) {
-    localStorage.setItem(`${PLAYER_POSITION_STORAGE_KEY}_${unit.id}`, playTime);
-    percent = (
-      <Progress
-        size="tiny"
-        className="cu_item_progress"
-        percent={playTime * 100 / unit.duration}
-      />
-    );
-  }
-
   const renderCUInfo = () => {
     const name    = unit?.name || source?.name || tag?.label;
     const content = (
@@ -86,6 +74,7 @@ const ListTemplate = ({
   };
 
   const width = isMobileDevice ? 165 : imageWidthBySize[size];
+
   return (
     <Container
       id={unit?.id}
@@ -97,7 +86,7 @@ const ListTemplate = ({
       <div>
         {withCUInfo && unit?.duration && <div className="cu_item_duration">{formatDuration(unit.duration)}</div>}
         {label ? <div className="cu_item_label">{label}</div> : null}
-        {percent}
+        {getProgress(unit, playTime)}
         <div className="cu_item_img" style={{ width }}>
           <UnitLogo unitId={unit?.id} sourceId={source?.id} width={width} />
         </div>

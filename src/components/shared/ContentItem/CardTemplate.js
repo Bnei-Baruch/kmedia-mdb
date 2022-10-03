@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Container, Card, Header, Popup, Divider, Progress } from 'semantic-ui-react';
+import { Container, Card, Header, Popup, Divider } from 'semantic-ui-react';
 
 import * as shapes from '../../shapes';
 import { NO_NAME } from '../../../helpers/consts';
@@ -8,22 +8,10 @@ import { formatDuration } from '../../../helpers/utils';
 import { isLanguageRtl } from '../../../helpers/i18n-utils';
 import UnitLogo from '../Logo/UnitLogo';
 import Link from '../../Language/MultiLanguageLink';
-import { PLAYER_POSITION_STORAGE_KEY } from '../../AVPlayer/constants';
+import { getProgress } from './helper';
 
 const CardTemplate = ({ unit, language, withCCUInfo, link, ccu, description, children, playTime }) => {
   const dir = isLanguageRtl(language) ? 'rtl' : 'ltr';
-
-  let percent = null;
-  if (playTime) {
-    localStorage.setItem(`${PLAYER_POSITION_STORAGE_KEY}_${unit.id}`, playTime);
-    percent   = (
-      <Progress
-        size="tiny"
-        className="cu_item_progress"
-        percent={playTime * 100 / unit.duration}
-      />
-    );
-  }
 
   const coInfo = ccu && withCCUInfo ? (
     <div className="cu_item_info_co">
@@ -46,7 +34,7 @@ const CardTemplate = ({ unit, language, withCCUInfo, link, ccu, description, chi
         <Container className="cu_item_img_info" textAlign="right">
           {unit.duration && <div className="cu_item_duration">{formatDuration(unit.duration)}</div>}
           {coInfo}
-          {percent}
+          {getProgress(unit, playTime)}
         </Container>
       </div>
       <Card.Content>

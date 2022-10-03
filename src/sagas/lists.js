@@ -29,6 +29,7 @@ const endpointByNamespace = {
 };
 
 function* fetchList(action) {
+  // eslint-disable-next-line prefer-const
   let { withViews = false, namespace, ...args } = action.payload;
 
   if (namespace.startsWith('intents')) {
