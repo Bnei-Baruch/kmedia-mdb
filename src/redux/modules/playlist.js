@@ -2,10 +2,9 @@ import { createAction } from 'redux-actions';
 import { handleActions } from './settings';
 import { DEFAULT_LANGUAGE } from '../../helpers/consts';
 
-const PLAYLIST_BUILD             = 'Playlist/BUILD';
-const PLAYLIST_BUILD_SUCCESS     = 'Playlist/BUILD_SUCCESS';
-const SINGLE_MEDIA_BUILD         = 'Playlist/SINGLE_MEDIA_BUILD';
-const SINGLE_MEDIA_BUILD_SUCCESS = 'Playlist/SINGLE_MEDIA_BUILD_SUCCESS';
+const PLAYLIST_BUILD         = 'Playlist/BUILD';
+const PLAYLIST_BUILD_SUCCESS = 'Playlist/BUILD_SUCCESS';
+const SINGLE_MEDIA_BUILD     = 'Playlist/SINGLE_MEDIA_BUILD';
 
 const PLAYLIST_SELECT       = 'Playlist/SELECT';
 const PLAYLIST_NEXT         = 'Playlist/NEXT';
@@ -17,24 +16,25 @@ const PLAYER_SET_MEDIA_TYPE = 'Player/SET_MEDIA_TYPE';
 export const types = {
   PLAYLIST_BUILD,
   SINGLE_MEDIA_BUILD
-
 };
 
 // Actions
 const build            = createAction(PLAYLIST_BUILD, (cId, cuId) => ({ cId, cuId }));
 const buildSuccess     = createAction(PLAYLIST_BUILD_SUCCESS);
 const singleMediaBuild = createAction(SINGLE_MEDIA_BUILD);
-const select           = createAction(PLAYLIST_SELECT);
-const next             = createAction(PLAYLIST_NEXT);
-const prev             = createAction(PLAYLIST_PREV);
-const setQuality       = createAction(PLAYER_SET_QUALITY);
-const setLanguage      = createAction(PLAYER_SET_LANGUAGE);
-const setMediaType     = createAction(PLAYER_SET_MEDIA_TYPE);
+
+const select       = createAction(PLAYLIST_SELECT);
+const next         = createAction(PLAYLIST_NEXT);
+const prev         = createAction(PLAYLIST_PREV);
+const setQuality   = createAction(PLAYER_SET_QUALITY);
+const setLanguage  = createAction(PLAYER_SET_LANGUAGE);
+const setMediaType = createAction(PLAYER_SET_MEDIA_TYPE);
 
 export const actions = {
   build,
   singleMediaBuild,
   buildSuccess,
+
   select,
   next,
   prev,
