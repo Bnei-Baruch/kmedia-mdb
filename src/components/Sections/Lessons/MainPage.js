@@ -17,11 +17,14 @@ import {
   FN_SHOW_LESSON_AS_UNITS,
   PAGE_NS_LESSONS,
   UNIT_LESSONS_TYPE,
+  MY_NAMESPACE_HISTORY
 } from '../../../helpers/consts';
 import { isEmpty, usePrevious } from '../../../helpers/utils';
 import { selectors as filters } from '../../../redux/modules/filters';
 import { actions, selectors as lists } from '../../../redux/modules/lists';
 import { selectors as settings } from '../../../redux/modules/settings';
+import { actions as myActions } from '../../../redux/modules/my';
+
 import FilterLabels from '../../FiltersAside/FilterLabels';
 import Pagination from '../../Pagination/Pagination';
 import ResultsPageHeader from '../../Pagination/ResultsPageHeader';
@@ -68,6 +71,10 @@ const MainPage = ({ t }) => {
       }));
     }
   }, [language, dispatch, pageNo, selected, listParams]);
+
+  useEffect(() => {
+    dispatch(myActions.fetch(MY_NAMESPACE_HISTORY));
+  }, [dispatch]);
 
   const wipErr = WipErr({ wip, err, t });
 
