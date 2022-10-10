@@ -33,7 +33,7 @@ const CollectionItem = ({ id, t }) => {
     <List.Item key={id} className="media_item">
       <UnitLogoWithDuration unit={logoUnit} />
       <div className="media_item__content">
-        <Header as={Link} to={canonicalLink(c)} content={name} />
+        <Header as={Link} to={canonicalLink(logoUnit)} content={name} />
         <div>{t(`constants.content-types.${content_type}`)}</div>
         <div className={clsx('description', { 'is_single': !(description?.length > 1) })}>
           {description.map((d, i) => (<span key={i}>{d}</span>))}
