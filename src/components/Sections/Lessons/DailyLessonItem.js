@@ -27,7 +27,7 @@ const DailyLessonItem = ({ id, t }) => {
         <UnitLogoWithDuration unit={logoUnit} />
       </div>
       <div className="media_item__content">
-        <Header as={Link} to={canonicalLink(c)}>
+        <Header as={Link} to={canonicalLink(logoUnit)}>
           {t('constants.content-types.DAILY_LESSON')}
           <small>
             <span className="display-iblock margin-left-8 margin-right-8">{t('values.date', { date: film_date })}</span>
