@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { useHistory } from 'react-router';
 import { Header } from 'semantic-ui-react';
 
@@ -9,8 +9,8 @@ import playerHelper from '../../../../helpers/player';
 import Page from './Page';
 import { withNamespaces } from 'react-i18next';
 
-const PlaylistMyContainer = ({ id, t }) => {
-
+const PlaylistMyContainer = ({ t }) => {
+  const { id }   = useParams();
   const location = useLocation();
   const history  = useHistory();
 
