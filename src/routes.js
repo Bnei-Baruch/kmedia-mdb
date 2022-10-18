@@ -5,6 +5,7 @@ import LanguageSetter from './components/Language/LanguageSetter';
 import Layout from './components/Layout/Layout';
 import NotImplemented from './components/NotImplemented';
 import PlaylistItemPage from './components/Pages/PlaylistItemPage';
+import PlaylistDecorator from './components/Pages/WithPlayer/PlaylistMy/Decorator';
 import PlaylistMy from './components/Pages/WithPlayer/PlaylistMy/Container';
 import Events from './components/Sections/Events/MainPage';
 import ExcerptContainer from './components/Sections/Excerpt/ExcerptContainer';

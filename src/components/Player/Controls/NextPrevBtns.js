@@ -8,12 +8,18 @@ import { canonicalLink } from '../../../helpers/links';
 import Link from '../../Language/MultiLanguageLink';
 
 export const PrevBtn = () => {
-  const { id, cId } = useSelector(state => selectors.getPrevData(state.playlist));
-  const cu          = useSelector(state => mdb.getDenormContentUnit(state.mdb, id));
+  const { id, cId, idx } = useSelector(state => selectors.getPrevData(state.playlist));
+  const cu               = useSelector(state => mdb.getDenormContentUnit(state.mdb, id));
+  const baseLink         = useSelector(state => selectors.getInfo(state.playlist).baseLink);
 
   if (!cu) return null;
 
-  const link = canonicalLink(cu, null, cId);
+  let link = '';
+  if (baseLink) {
+    link = `${baseLink}?ap=${idx}`;
+  } else {
+    link = canonicalLink(cu, null, cId);
+  }
   return (
     <Popup content="Previous video" inverted size="mini" position="top left" trigger={
       <Link
@@ -28,12 +34,19 @@ export const PrevBtn = () => {
 };
 
 export const NextBtn = () => {
-  const { id, cId } = useSelector(state => selectors.getNextData(state.playlist));
-  const cu          = useSelector(state => mdb.getDenormContentUnit(state.mdb, id));
+  const { id, cId, idx } = useSelector(state => selectors.getNextData(state.playlist));
+  const cu               = useSelector(state => mdb.getDenormContentUnit(state.mdb, id));
+  const baseLink         = useSelector(state => selectors.getInfo(state.playlist).baseLink);
 
   if (!cu) return null;
 
-  const link = canonicalLink(cu, null, cId);
+  let link = '';
+  if (baseLink) {
+    link = `${baseLink}?ap=${idx}`;
+  } else {
+    link = canonicalLink(cu, null, cId);
+  }
+
   return (
     <Popup content="Next video" inverted size="mini" position="top right" trigger={
       <Link

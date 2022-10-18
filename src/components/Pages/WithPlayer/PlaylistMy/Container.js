@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { useHistory } from 'react-router';
 import { Header } from 'semantic-ui-react';
 
@@ -10,8 +10,8 @@ import Page from './Page';
 import { withNamespaces } from 'react-i18next';
 import { getActivePartFromQuery } from '../../../../helpers/player';
 
-const PlaylistMyContainer = ({ t }) => {
-  const { id }   = useParams();
+const PlaylistMyContainer = ({ id, t }) => {
+
   const location = useLocation();
   const history  = useHistory();
 

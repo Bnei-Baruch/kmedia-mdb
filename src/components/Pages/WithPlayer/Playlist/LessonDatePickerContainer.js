@@ -33,7 +33,7 @@ const LessonDatePickerContainer = ({ t }) => {
   const wipMap  = useSelector(state => mdb.getWip(state.mdb), shallowEqual);
   const cWindow = useSelector(state => mdb.getWindow(state.mdb), shallowEqual);
 
-  const { cId }  = useSelector(state => selectors.getInfo(state.playlist));
+  const cId      = useSelector(state => selectors.getInfo(state.playlist).cId);
   const denorm   = useSelector(state => mdb.nestedGetDenormCollection(state.mdb));
   const language = useSelector(state => settings.getLanguage(state.settings));
   const langDir  = getLanguageDirection(language);
@@ -60,7 +60,6 @@ const LessonDatePickerContainer = ({ t }) => {
       const nextLnk        = nextCollection ? canonicalLink(nextCollection) : null;
       setNextLink(nextLnk);
     }
-
   }, [cId, cWindow.data, denorm]);
 
   const isLtr = langDir === 'ltr';
