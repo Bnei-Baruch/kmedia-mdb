@@ -1,32 +1,61 @@
 import React from 'react';
 import { Popup, Icon } from 'semantic-ui-react';
-import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 
-import { actions as playlistActions } from '../../../redux/modules/playlist';
+import { selectors } from '../../../redux/modules/playlist';
+import { selectors as mdb } from '../../../redux/modules/mdb';
+import { canonicalLink } from '../../../helpers/links';
+import Link from '../../Language/MultiLanguageLink';
 
 export const PrevBtn = () => {
-  const dispatch = useDispatch();
+  const { id, cId, idx } = useSelector(state => selectors.getPrevData(state.playlist));
+  const cu               = useSelector(state => mdb.getDenormContentUnit(state.mdb, id));
+  const baseLink         = useSelector(state => selectors.getInfo(state.playlist).baseLink);
 
-  const handlePrev = () => dispatch(playlistActions.prev());
+  if (!cu) return null;
 
+  let link = '';
+  if (baseLink) {
+    link = `${baseLink}?ap=${idx}`;
+  } else {
+    link = canonicalLink(cu, null, cId);
+  }
   return (
     <Popup content="Previous video" inverted size="mini" position="top left" trigger={
-      <div className="controls__prev" onClick={handlePrev}>
+      <Link
+        as="div"
+        className="controls__prev"
+        to={link}
+      >
         <Icon fitted size="big" name="backward" />
-      </div>
+      </Link>
     } />
   );
 };
 
 export const NextBtn = () => {
-  const dispatch   = useDispatch();
-  const handleNext = () => dispatch(playlistActions.next());
+  const { id, cId, idx } = useSelector(state => selectors.getNextData(state.playlist));
+  const cu               = useSelector(state => mdb.getDenormContentUnit(state.mdb, id));
+  const baseLink         = useSelector(state => selectors.getInfo(state.playlist).baseLink);
+
+  if (!cu) return null;
+
+  let link = '';
+  if (baseLink) {
+    link = `${baseLink}?ap=${idx}`;
+  } else {
+    link = canonicalLink(cu, null, cId);
+  }
 
   return (
     <Popup content="Next video" inverted size="mini" position="top right" trigger={
-      <div className="controls__next" onClick={handleNext}>
+      <Link
+        as="div"
+        className="controls__next"
+        to={link}
+      >
         <Icon fitted size="big" name="forward" />
-      </div>
+      </Link>
     } />
   );
 };
