@@ -2,11 +2,11 @@ import { createAction } from 'redux-actions';
 import { handleActions } from './settings';
 import { JWPLAYER_ID, PLAYER_OVER_MODES } from '../../helpers/consts';
 
-const PLAYER_READY         = 'Player/READY';
-const PLAYER_REMOVE        = 'Player/REMOVE';
-const PLAYER_PLAY          = 'Player/PLAY';
-const PLAYER_PAUSE         = 'Player/PAUSE';
-const PLAYER_RATE          = 'Player/RATE';
+const PLAYER_READY  = 'Player/READY';
+const PLAYER_REMOVE = 'Player/REMOVE';
+const PLAYER_PLAY   = 'Player/PLAY';
+const PLAYER_PAUSE  = 'Player/PAUSE';
+const PLAYER_RATE   = 'Player/RATE';
 
 const PLAYER_SET_FILE           = 'Player/SET_FILE';
 const PLAYER_SET_OVER_MODE      = 'Player/SET_OVER_MODE';
@@ -16,8 +16,8 @@ const PLAYER_NEW_PLAYLIST_ITEM  = 'Player/NEW_PLAYLIST_ITEM';
 const SET_SHARE_START_END = 'Player/SET_SHARE_START_END';
 
 export const types = {
-  PLAYER_READY,
-  PLAYER_PLAY
+  PLAYER_PLAY,
+  PLAYER_REMOVE
 };
 
 // Actions
@@ -25,9 +25,9 @@ const playerReady  = createAction(PLAYER_READY);
 const playerRemove = createAction(PLAYER_REMOVE);
 const setFile      = createAction(PLAYER_SET_FILE);
 
-const playerPlay        = createAction(PLAYER_PLAY);
-const playerPause       = createAction(PLAYER_PAUSE);
-const playerRate        = createAction(PLAYER_RATE);
+const playerPlay  = createAction(PLAYER_PLAY);
+const playerPause = createAction(PLAYER_PAUSE);
+const playerRate  = createAction(PLAYER_RATE);
 
 const setOverMode     = createAction(PLAYER_SET_OVER_MODE);
 const continuePlay    = createAction(PLAYER_CONTINUE_PLAY_FROM);
@@ -70,8 +70,6 @@ const onNewPlaylistItem = (draft, e) => {
 
     draft.continuePlay = { pos: -1, isPlayed: false };
     draft.overMode     = null;
-  } else {
-    p.play().pause();
   }
 };
 const onSetFile         = (draft, payload) => draft.file = payload;

@@ -67,13 +67,14 @@ const playableItem = (unit, preImageUrl) => {
   const filesByLang   = languages.reduce((acc, l) => (
     { ...acc, [l]: files.filter(f => f.language === l) }
   ), {});
-  const qualityByLang = languages.reduce((acc, l) => (
-    {
-      ...acc,
-      [l]: filesByLang[l].filter(f => f.type === MT_VIDEO).map(f => f.video_size || VS_DEFAULT)
-    }
-  ), {});
-
+  const qualityByLang = languages.reduce((acc, l) => {
+    const qs = filesByLang[l].filter(f => f.type === MT_VIDEO).map(f => f.video_size || VS_DEFAULT);
+    if (qs.length === 0) return acc;
+    return { ...acc, [l]: qs };
+  }, {});
+  if (!preImageUrl) {
+    preImageUrl = assetUrl(`api/thumbnail/${unit.id}`);
+  }
   return {
     id: unit.id,
     languages,
@@ -81,7 +82,7 @@ const playableItem = (unit, preImageUrl) => {
     filesByLang,
     qualityByLang,
     files,
-    preImageUrl: preImageUrl ?? assetUrl(`api/thumbnail/${unit.id}`),
+    preImageUrl,
   };
 };
 
@@ -133,7 +134,7 @@ const playlist = collection => {
       return acc.concat(v);
     }, []);
   } else {
-    items = units.map(playableItem);
+    items = units.map(x => playableItem(x));
   }
 
   // don't include items without unit
@@ -144,7 +145,7 @@ const playlist = collection => {
 
 const playlistFromUnits = (collection, mediaType, contentLanguage, uiLanguage) => {
   const items = collection.content_units
-    .map(x => playableItem(x, mediaType, uiLanguage, contentLanguage))
+    .map(x => playableItem(x))
     .filter(item => !!item.unit)
     .map(x => {
       x.shareUrl = canonicalLink(x.unit, null, collection);
