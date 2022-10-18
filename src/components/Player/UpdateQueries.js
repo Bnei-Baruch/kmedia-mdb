@@ -13,13 +13,13 @@ const UpdateQueries = () => {
   const { mediaType, language } = useSelector(state => playlist.getInfo(state.playlist));
 
   useEffect(() => {
-    if (language !== q.language) {
+    if (language && language !== q.language) {
       helper.setLanguageInQuery(history, language);
     }
   }, [language, q.language]);
 
   useEffect(() => {
-    if (mediaType !== q.mediaType) {
+    if (mediaType && mediaType !== q.mediaType) {
       helper.setMediaTypeInQuery(history, mediaType);
     }
   }, [mediaType, q.mediaType]);
