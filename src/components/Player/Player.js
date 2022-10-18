@@ -1,21 +1,27 @@
-import React, { useEffect, useRef, useCallback } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useEffect, useRef, useCallback, useMemo } from 'react';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 
-import { initPlayerEvents, getSavedTime } from './helper';
-import { selectors as player } from '../../redux/modules/player';
+import { initPlayerEvents, getSavedTime, findPlayedFile } from './helper';
+import { selectors as player, actions } from '../../redux/modules/player';
 import { JWPLAYER_ID } from '../../helpers/consts';
 import { useLocation } from 'react-router-dom';
 import { startEndFromQuery } from './Controls/helper';
 import { selectors as playlist } from '../../redux/modules/playlist';
+import isFunction from 'lodash/isFunction';
 
-const Player = ({ file }) => {
+const Player = () => {
   const ref            = useRef();
   const dispatch       = useDispatch();
   const location       = useLocation();
   const { start, end } = startEndFromQuery(location);
 
-  const isReady      = useSelector(state => player.isReady(state.player));
-  const { id: cuId } = useSelector(state => playlist.getPlayed(state.playlist));
+  const isReady = useSelector(state => player.isReady(state.player));
+
+  const item = useSelector(state => playlist.getPlayed(state.playlist), shallowEqual);
+  const info = useSelector(state => playlist.getInfo(state.playlist), shallowEqual);
+  const file = useMemo(() => findPlayedFile(item, info), [item, info]);
+
+  const { cuId } = info;
 
   const checkStopTime = useCallback(d => {
     if (d.currentTime > end) {
@@ -25,45 +31,45 @@ const Player = ({ file }) => {
     }
   }, [end]);
 
+  useEffect(() => {
+    return () => {
+      const player = window.jwplayer(JWPLAYER_ID);
+      isFunction(player?.remove) && player.remove();
+    };
+  }, []);
+
   //init jwplayer by element id,
   useEffect(() => {
-    // can't be init without file, but it must be call once
-    const player = window.jwplayer(JWPLAYER_ID);
-
-    if (!isReady && file?.src) {
-      player.setup({
-        controls: false,
-        playlist: [{ 'file': file.src }]
-      });
-      initPlayerEvents(dispatch);
+    if (file?.src) {
+      const item = { 'file': file.src, image: file.image };
+      if (!isReady) {
+        const player = window.jwplayer(JWPLAYER_ID);
+        player.setup({ controls: false, playlist: [item] });
+        initPlayerEvents(dispatch);
+      } else {
+        const player = window.jwplayer();
+        isFunction(player.load) && player.load([item]);
+      }
+      dispatch(actions.setFile(file));
     }
-
-    return () => {
-      player.remove();
-    };
-  }, [file?.src]);
+  }, [file, isReady]);
 
   //start and stop slice
   useEffect(() => {
-    const player = window.jwplayer(JWPLAYER_ID);
-
     if (isReady && (start || end)) {
-      player.play().seek(start).pause();
-      player.on('time', checkStopTime);
+      const jwp = window.jwplayer(JWPLAYER_ID);
+      jwp.play().seek(start).pause();
+      jwp.on('time', checkStopTime);
     }
-
-    return () => {
-      player.off('time', checkStopTime);
-    };
   }, [isReady, start, end]);
 
-  //start and stop slice
+  //start from before saved time
   useEffect(() => {
     if (isReady && !start && !end) {
-      const player = window.jwplayer();
-      const seek   = getSavedTime(cuId);
-      if (!isNaN(seek)) {
-        player.play().seek(seek).pause();
+      const jwp  = window.jwplayer();
+      const seek = getSavedTime(cuId);
+      if (!isNaN(seek) && seek > 0) {
+        jwp.play().seek(seek).pause();
       }
     }
   }, [isReady, cuId, start, end]);
@@ -75,5 +81,4 @@ const Player = ({ file }) => {
   );
 };
 
-//this component init jwplayer behaviors that must happen once only
-export default React.memo(Player, () => true);
+export default Player;

@@ -16,17 +16,17 @@ import LessonDatePicker from './LessonDatePickerContainer';
 const PlaylistHeader = ({ t }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
-  const { cId, cuId } = useSelector(state => selectors.getInfo(state.playlist));
-  const unit          = useSelector(state => mdb.getDenormContentUnit(state.mdb, cuId));
-  const collection    = useSelector(state => mdb.getDenormCollection(state.mdb, cId));
-  const getPath       = useSelector(state => sources.getPathByID(state.sources));
+  const { cId, cuId, name } = useSelector(state => selectors.getInfo(state.playlist));
+  const unit                = useSelector(state => mdb.getDenormContentUnit(state.mdb, cuId));
+  const collection          = useSelector(state => mdb.getDenormCollection(state.mdb, cId));
+  const getPath             = useSelector(state => sources.getPathByID(state.sources));
 
-  const { content_type, number, name, film_date, start_date, end_date, tag_id, source_id } = collection;
+  const { content_type, number, film_date, start_date, end_date, tag_id, source_id } = collection || false;
 
   const isLesson = COLLECTION_DAILY_LESSONS.includes(content_type);
 
   const getTitle = () => {
-    if (!content_type)
+    if (!collection)
       return (
         <>
           <PlaylistPlayIcon className="playlist_icon" fill="#FFFFFF" />

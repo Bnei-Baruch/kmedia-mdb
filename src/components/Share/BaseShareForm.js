@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { noop } from '../../../helpers/utils';
+import { noop } from '../../helpers/utils';
 
-import { toHumanReadableTime } from '../../../helpers/time';
-import { getQuery, splitPathByLanguage, stringify } from '../../../helpers/url';
+import { toHumanReadableTime } from '../../helpers/time';
+import { getQuery, splitPathByLanguage, stringify } from '../../helpers/url';
 import moment from 'moment/moment';
 
 class BaseShareForm extends React.Component {

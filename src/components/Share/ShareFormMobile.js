@@ -5,7 +5,7 @@ import { withNamespaces } from 'react-i18next';
 
 import BaseShareForm from './BaseShareForm';
 import ShareBar from './ShareBarPlayer';
-import { toHumanReadableTime } from '../../../helpers/time';
+import { toHumanReadableTime } from '../../helpers/time';
 
 const POPOVER_CONFIRMATION_TIMEOUT = 2500;
 

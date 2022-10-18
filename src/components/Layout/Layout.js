@@ -22,7 +22,7 @@ import DonateNow, { VirtualHomeButton } from './DonateNow';
 import Logo from '../../images/icons/Logo';
 import { ClientChroniclesContext, DeviceInfoContext } from '../../helpers/app-contexts';
 import Login from './Login';
-import DownloadTrim from '../AVPlayer/Share/DownloadTrim';
+import DownloadTrim from '../Player/Sharing/DownloadTrim';
 
 const WrappedOmniBoxWithChronicles = ({ location }) => {
   const chronicles = useContext(ClientChroniclesContext);

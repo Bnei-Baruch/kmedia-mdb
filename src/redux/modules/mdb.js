@@ -249,8 +249,9 @@ const setStatus = (state, action) => {
     errors.units = { ...errors.units, ...units.errors };
     break;
   case FETCH_COLLECTION_SUCCESS:
-    wip.collections    = { ...wip.collections, [action.payload.id]: false };
-    errors.collections = { ...errors.collections, [action.payload.id]: null };
+    wip.collections     = { ...wip.collections, [action.payload.id]: false };
+    errors.collections  = { ...errors.collections, [action.payload.id]: null };
+    fetched.collections = { ...fetched.collections, [action.payload.id]: true };
     break;
   case FETCH_COLLECTIONS_SUCCESS:
     collections        = action.payload?.reduce((acc, { id }) => ({
@@ -665,17 +666,18 @@ export const reducer = handleActions({
 
 /* Selectors */
 
-const getCollectionById       = (state, id) => state.cById[id];
-const nestedGetCollectionById = state => id => getCollectionById(state, id);
-const getUnitById             = (state, id) => state.cuById[id];
-const getLastLessonId         = state => state.lastLessonId;
-const getWip                  = state => state.wip;
-const getFullUnitFetched      = state => state.fetched.units;
-const getErrors               = state => state.errors;
-const getCollections          = state => state.items;
-const getWindow               = state => state.cWindow;
-const getDatepickerCO         = state => state.datepickerCO;
-const getSQDataWipErr         = state => !(getWip(state).sqData || getErrors(state).sqData);
+const getCollectionById        = (state, id) => state.cById[id];
+const nestedGetCollectionById  = state => id => getCollectionById(state, id);
+const getUnitById              = (state, id) => state.cuById[id];
+const getLastLessonId          = state => state.lastLessonId;
+const getWip                   = state => state.wip;
+const getFullUnitFetched       = state => state.fetched.units;
+const getFullCollectionFetched = state => state.fetched.collections;
+const getErrors                = state => state.errors;
+const getCollections           = state => state.items;
+const getWindow                = state => state.cWindow;
+const getDatepickerCO          = state => state.datepickerCO;
+const getSQDataWipErr          = state => !(getWip(state).sqData || getErrors(state).sqData);
 
 const getDenormCollection = (state, id) => {
   let c = state.cById[id];
@@ -759,8 +761,9 @@ export const selectors = {
   nestedGetCollectionById,
   getUnitById,
   getWip,
-  getFullUnitFetched,
   getErrors,
+  getFullUnitFetched,
+  getFullCollectionFetched,
   getDenormCollection,
   nestedGetDenormCollection,
   getDenormCollectionWUnits,

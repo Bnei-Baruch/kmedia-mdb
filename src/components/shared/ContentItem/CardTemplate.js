@@ -8,7 +8,7 @@ import { formatDuration } from '../../../helpers/utils';
 import { isLanguageRtl } from '../../../helpers/i18n-utils';
 import UnitLogo from '../Logo/UnitLogo';
 import Link from '../../Language/MultiLanguageLink';
-import { PLAYER_POSITION_STORAGE_KEY } from '../../AVPlayer/constants';
+import { PLAYER_POSITION_STORAGE_KEY } from '../../Player/constants';
 
 const CardTemplate = ({ unit, language, withCCUInfo, link, ccu, description, children, playTime }) => {
   const dir = isLanguageRtl(language) ? 'rtl' : 'ltr';
