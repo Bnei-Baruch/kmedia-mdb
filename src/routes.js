@@ -5,8 +5,8 @@ import LanguageSetter from './components/Language/LanguageSetter';
 import Layout from './components/Layout/Layout';
 import NotImplemented from './components/NotImplemented';
 import PlaylistItemPage from './components/Pages/PlaylistItemPage';
-import PlaylistDecorator from './components/Pages/WithPlayer/PlaylistMy/Decorator';
 import PlaylistMy from './components/Pages/WithPlayer/PlaylistMy/Container';
+import SearchResults from './components/Search/SearchResultsContainer';
 import Events from './components/Sections/Events/MainPage';
 import ExcerptContainer from './components/Sections/Excerpt/ExcerptContainer';
 // import ProjectStatus from './components/Sections/ProjectStatus/ProjectStatus';
@@ -27,7 +27,6 @@ import PlaylistPage from './components/Sections/Personal/Playlist/Page';
 import ReactionPage from './components/Sections/Personal/Reaction/Page';
 import Program from './components/Sections/Program/ProgramPage';
 import Programs from './components/Sections/Programs/MainPage';
-import Sketches from './components/Sections/Sketches/MainPage';
 import Publications from './components/Sections/Publications/MainPage';
 import ArticleCollection from './components/Sections/Publications/tabs/Articles/Collection';
 import ArticlePage from './components/Sections/Publications/tabs/Articles/Unit';
@@ -35,7 +34,6 @@ import BlogPost from './components/Sections/Publications/tabs/Blog/Post/Containe
 import SimpleModeContainer from './components/Sections/SimpleMode/Container';
 import Topics from './components/Sections/Topics/TopicContainer';
 import Topic from './components/Sections/Topics/TopicPage';
-import SearchResults from './components/Search/SearchResults';
 import * as shapes from './components/shapes';
 import {
   DEFAULT_LANGUAGE,
@@ -73,11 +71,6 @@ const routes = [
   { path: ':routeType/cu/:id', component: PlaylistItemPage, options: { ssrData: ssrDataLoaders.cuPage } },
   { path: 'lessons', component: Lessons, options: { ssrData: ssrDataLoaders.lessonsPage } },
   { path: 'lessons/:tab', component: Lessons, options: { ssrData: ssrDataLoaders.lessonsPage } },
-  {
-    path: 'lessons/virtual/c/:id',
-    component: LessonCollection,
-    options: { ssrData: ssrDataLoaders.lessonsCollectionPage }
-  },
   {
     path: 'lessons/:tab/c/:id',
     component: PlaylistCollectionPage,
@@ -118,7 +111,8 @@ const routes = [
   { path: 'excerpt', component: ExcerptContainer },
   { path: 'likutim', component: LikutimMain },
   { path: 'likutim/:id', component: Likut, },
-  { path: 'sketches', component: Sketches, options: { ssrData: ssrDataLoaders.programsPage } },
+  // { path: 'design', component: Design },
+  // { path: 'design2', component: Design2 },
 ];
 
 export const NotFound = () => <h1>Page not found</h1>;
