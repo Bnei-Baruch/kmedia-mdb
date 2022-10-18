@@ -3,9 +3,9 @@ import { Form } from 'semantic-ui-react';
 import { withNamespaces } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { formatDuration } from '../../../helpers/utils';
-import { actions, selectors } from '../../../redux/modules/player';
-import { JWPLAYER_ID } from '../../../helpers/consts';
+import { formatDuration } from '../../helpers/utils';
+import { actions, selectors } from '../../redux/modules/player';
+import { JWPLAYER_ID } from '../../helpers/consts';
 
 const StartStopButtons = ({ t }) => {
   const { start, stop } = useSelector(state => selectors.getStartStop(state.player));

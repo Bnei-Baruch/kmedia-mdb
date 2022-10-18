@@ -405,5 +405,6 @@ export const ChroniclesActions = () => {
       clientChronicles.onAction(action);
     }
   }, [action, actionsCount, clientChronicles]);
+
   return null;
 };

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useParams, withRouter } from 'react-router-dom';
 
-import { MY_NAMESPACE_REACTIONS } from '../../../helpers/consts';
+import { MY_NAMESPACE_REACTIONS } from '../../../../helpers/consts';
 import PlaylistReactionContainer from './ContainerReaction';
 import PlaylistMyContainer from './Container';
 

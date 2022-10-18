@@ -1,5 +1,5 @@
-import { splitPathByLanguage, getQuery, stringify } from '../../../helpers/url';
-import { toHumanReadableTime } from '../../../helpers/time';
+import { splitPathByLanguage, getQuery, stringify } from '../../helpers/url';
+import { toHumanReadableTime } from '../../helpers/time';
 
 export const POPOVER_CONFIRMATION_TIMEOUT = 2500;
 

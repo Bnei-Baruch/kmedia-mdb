@@ -4,7 +4,7 @@ import { withNamespaces } from 'react-i18next';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { Button, Message, Popup, } from 'semantic-ui-react';
 
-import ShareBar from '../../AVPlayer/Share/ShareBarPlayer';
+import ShareBar from '../../Share/ShareBarPlayer';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import useStateWithCallback from '../../../helpers/use-state-with-callback';
 

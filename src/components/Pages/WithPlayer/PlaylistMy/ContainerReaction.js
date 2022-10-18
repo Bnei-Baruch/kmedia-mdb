@@ -3,14 +3,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
 import { Header } from 'semantic-ui-react';
 
-import { IsCollectionContentType, MY_NAMESPACE_REACTIONS } from '../../../helpers/consts';
-import { actions, selectors } from '../../../redux/modules/my';
-import { selectors as mdbSelectors } from '../../../redux/modules/mdb';
-import { selectors as settings } from '../../../redux/modules/settings';
-import { selectors as auth } from '../../../redux/modules/auth';
-import WipErr from '../../shared/WipErr/WipErr';
+import { actions as recommended } from '../../../../redux/modules/recommended';
+import { selectors as settings } from '../../../../redux/modules/settings';
+import { selectors as mdbSelectors } from '../../../../redux/modules/mdb';
+import { selectors as auth } from '../../../../redux/modules/auth';
+import { actions, selectors } from '../../../../redux/modules/my';
+import { IsCollectionContentType, MY_NAMESPACE_REACTIONS } from '../../../../helpers/consts';
+import WipErr from '../../../shared/WipErr/WipErr';
 import Page from './Page';
-import { actions as recommended } from '../../../redux/modules/recommended';
 
 const PlaylistReactionContainer = ({ t }) => {
   const items      = useSelector(state => selectors.getList(state.my, MY_NAMESPACE_REACTIONS));

@@ -106,7 +106,7 @@ function* fetch(action) {
   }
 }
 
-function* fetchOne(action) {
+export function* fetchOne(action) {
   const token = yield select(state => authSelectors.getToken(state.auth));
   if (!token) return;
   const { namespace, ...params } = action.payload;
