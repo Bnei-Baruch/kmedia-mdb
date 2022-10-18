@@ -10,6 +10,7 @@ import UnitLogo from '../Logo/UnitLogo';
 import Link from '../../Language/MultiLanguageLink';
 import { PLAYER_POSITION_STORAGE_KEY } from '../../Player/constants';
 import { getProgress } from './helper';
+import { PLAYER_POSITION_STORAGE_KEY } from '../../Player/constants';
 
 const CardTemplate = ({ unit, language, withCCUInfo, link, ccu, description, children, playTime }) => {
   const dir = isLanguageRtl(language) ? 'rtl' : 'ltr';

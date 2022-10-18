@@ -5,7 +5,8 @@ import LanguageSetter from './components/Language/LanguageSetter';
 import Layout from './components/Layout/Layout';
 import NotImplemented from './components/NotImplemented';
 import PlaylistItemPage from './components/Pages/PlaylistItemPage';
-import PlaylistDecorator from './components/Pages/PlaylistMy/Decorator';
+import PlaylistDecorator from './components/Pages/WithPlayer/PlaylistMy/Decorator';
+import SearchResults from './components/Search/SearchResultsContainer';
 import Events from './components/Sections/Events/MainPage';
 import ExcerptContainer from './components/Sections/Excerpt/ExcerptContainer';
 // import ProjectStatus from './components/Sections/ProjectStatus/ProjectStatus';
@@ -121,7 +122,7 @@ const routes = [
 ];
 
 export const NotFound = () => <h1>Page not found</h1>;
-const Root     = ({ route }) => renderRoutes(route.routes);
+const Root            = ({ route }) => renderRoutes(route.routes);
 
 /** Creates a page route config */
 const pageRoute = (path, component, { prefix, subRoutes, ssrData } = {}) => ({
