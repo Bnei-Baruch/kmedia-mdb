@@ -84,7 +84,7 @@ const Settings      = ({ t }) => {
           <Header size="tiny">Quality</Header>
           <Button.Group size="mini" inverted>
             {
-              qualityByLang[language].map((x, i) => (
+              qualityByLang[language]?.map((x, i) => (
                 <Button
                   inverted
                   content={x}

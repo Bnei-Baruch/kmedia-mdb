@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { selectors as player } from '../../../redux/modules/player';
 import { formatDuration } from '../../../helpers/utils';
 import { JWPLAYER_ID } from '../../../helpers/consts';
+import { selectors as playlist } from '../../../redux/modules/playlist';
 
 export const ProgressBar = ({ left, right }) => {
   const [activated, setActivated] = useState(false);
@@ -13,18 +14,21 @@ export const ProgressBar = ({ left, right }) => {
 
   const isReady = useSelector(state => player.isReady(state.player));
   const file    = useSelector(state => player.getFile(state.player));
+  const cuId    = useSelector(state => playlist.getInfo(state.playlist).cuId);
 
-  const checkTimeAfterSeek = useCallback(d => {
+  const checkTimeAfterSeek = d => {
     const time = Math.round(d.currentTime);
     const pos  = Math.round(10 * (100 * time) / window.jwplayer().getDuration()) / 10;
     setPos(pos);
     setTime(time);
-  }, []);
+  };
 
-  const checkBufferTime = useCallback(d => {
-    const pos = (100 * d.currentTime) / window.jwplayer().getDuration();
-    setBuffPos(pos);
-  }, []);
+  const checkBufferTime = d => setBuffPos(Math.round(d.bufferPercent));
+
+  useEffect(() => {
+    setPos(0);
+    setBuffPos(0);
+  }, [cuId]);
 
   useEffect(() => {
     if (!isReady) return () => null;
