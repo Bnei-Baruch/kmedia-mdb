@@ -19,7 +19,7 @@ const clear = () => {
   }
 };
 
-const EmbeddedShareButton = ({ url = '', bsPixels, t, }) => {
+const EmbeddedShareButton = ({ url = '', t, }) => {
 
   const [open, setOpen] = useState(false);
 
@@ -36,13 +36,7 @@ const EmbeddedShareButton = ({ url = '', bsPixels, t, }) => {
       position="bottom right"
       trigger={(
         <CopyToClipboard text={getEmbed(url)} onCopy={handleCopied}>
-          <Button
-            icon="code"
-            style={{ width: `${bsPixels - 1}px`, height: `${bsPixels - 1}px` }}
-            size="big"
-            circular
-            className="embed-share-button"
-          />
+          <Button circular icon="code" className="react-share__ShareButton" />
         </CopyToClipboard>
       )}
     />
