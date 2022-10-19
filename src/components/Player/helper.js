@@ -6,7 +6,7 @@ import { PLAYER_POSITION_STORAGE_KEY } from './constants';
 export const DEFAULT_PLAYER_VOLUME     = 80;
 export const PLAYER_VOLUME_STORAGE_KEY = 'jwplayer.volume';
 
-const PLAYER_EVENTS = ['ready', 'remove', 'play', 'pause', 'playbackRateChanged', 'playlistItem'];
+const PLAYER_EVENTS = ['ready', 'remove', 'play', 'pause', 'playbackRateChanged', 'playlistItem', 'resize'];
 
 export const initPlayerEvents = (dispatch) => {
   const player = window.jwplayer();
@@ -16,8 +16,7 @@ export const initPlayerEvents = (dispatch) => {
 
   player.on('remove', () => player.off('all'));
 
-  //for debug, catch all jwplayer events
-  // player.on('all', (name, e) => console.log('jwplayer all events', name, e));
+  player.on('all', (name, e) => console.log('jwplayer all events', name, e));
 
   PLAYER_EVENTS.forEach(name => {
     const action = PLAYER_ACTIONS_BY_EVENT[name];
