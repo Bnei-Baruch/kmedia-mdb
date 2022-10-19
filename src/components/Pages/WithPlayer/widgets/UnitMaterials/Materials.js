@@ -25,6 +25,7 @@ import Recommended from '../Recommended/Main/Recommended';
 import { useSelector } from 'react-redux';
 import { selectors } from '../../../../../redux/modules/playlist';
 import { selectors as mdb } from '../../../../../redux/modules/mdb';
+import PlaylistItems from '../../Playlist/PlaylistItems';
 
 const derivedTextUnits = unit => {
   const types    = {};
@@ -38,12 +39,12 @@ const derivedTextUnits = unit => {
   return types;
 };
 
-const Materials = ({ t, playlistComponent = null }) => {
+const Materials = ({ t }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const chronicles         = useContext(ClientChroniclesContext);
 
-  const { cuId } = useSelector(state => selectors.getInfo(state.playlist));
-  const unit     = useSelector(state => mdb.getDenormContentUnit(state.mdb, cuId));
+  const { cuId, isSingleMedia } = useSelector(state => selectors.getInfo(state.playlist));
+  const unit                    = useSelector(state => mdb.getDenormContentUnit(state.mdb, cuId));
 
   if (!unit) {
     return null;
@@ -83,7 +84,7 @@ const Materials = ({ t, playlistComponent = null }) => {
   }
 
   if (isMobileDevice) {
-    const item = playlistComponent === null
+    const item = isSingleMedia
       ? {
         name: 'recommended',
         label: t('materials.recommended.default'),
@@ -92,7 +93,7 @@ const Materials = ({ t, playlistComponent = null }) => {
       : {
         name: 'playlist',
         label: t('materials.playlist.header'),
-        component: playlistComponent
+        component: <PlaylistItems />
       };
 
     items.unshift(item);

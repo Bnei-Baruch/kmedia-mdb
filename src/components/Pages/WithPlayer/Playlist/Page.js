@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Grid, Container, Divider } from 'semantic-ui-react';
 
 import Helmets from '../../../shared/Helmets';
@@ -10,13 +10,15 @@ import Recommended from '../widgets/Recommended/Main/Recommended';
 import PlayerContainer from '../../../Player/PlayerContainer';
 import { useSelector } from 'react-redux';
 import { selectors as playlist } from '../../../../redux/modules/playlist';
+import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 
 const Page = () => {
+  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const isReady            = useSelector(state => playlist.getInfo(state.playlist).isReady);
 
-  const isReady = useSelector(state => playlist.getInfo(state.playlist).isReady);
   return (
     <Grid className="avbox">
-      <Grid.Column width={10}>
+      <Grid.Column width={isMobileDevice ? 16 : 10}>
         <div id="avbox_playlist">
           {isReady && <PlaylistHeader />}
         </div>
@@ -33,11 +35,15 @@ const Page = () => {
           }
         </Container>
       </Grid.Column>
-      <Grid.Column width={6}>
-        <PlaylistItems />
-        <Divider hidden />
-        {isReady && <Recommended filterOutUnits={[]} />}
-      </Grid.Column>
+      {
+        !isMobileDevice && (
+          <Grid.Column width={6}>
+            <PlaylistItems />
+            <Divider hidden />
+            {isReady && <Recommended filterOutUnits={[]} />}
+          </Grid.Column>
+        )
+      }
     </Grid>
   );
 
