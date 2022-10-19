@@ -14,17 +14,9 @@ import EmbeddedShareButton from './EmbeddedShareButton';
 import { Popup, Button } from 'semantic-ui-react';
 import useShareUrl from '../hooks/useShareUrl';
 
-const bsPixelsBySize = {
-  tiny: 26,
-  small: 36,
-  big: 46,
-};
-
 const ShareBarPlayer = ({ t }) => {
-
-  const bsPixels = bsPixelsBySize.small;
-  const title    = t('player.share.title');
-  const url      = useShareUrl();
+  const title = t('player.share.title');
+  const url   = useShareUrl();
 
   return (
     <>
@@ -102,7 +94,7 @@ const ShareBarPlayer = ({ t }) => {
 
       <button className="custom_ShareButton">
         <Popup content="Embed media" inverted size="mini" position="top center" trigger={
-          <EmbeddedShareButton url={url} bsPixels={bsPixels} />
+          <EmbeddedShareButton url={url} />
         } />
       </button>
     </>
