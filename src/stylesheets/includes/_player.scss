@@ -4,15 +4,16 @@ $controls-radius: 4px;
 @use "sass:color";
 
 //Colors
-/*$whatsappColor: #25d366;
-$whatsappHoverColor: color.scale(darken($whatsappColor, 5%), $saturation: 10%);
+$whatsappColor: #25d366;
+//$whatsappHoverColor: color.scale(darken($whatsappColor, 5%), $saturation: 10%);
 $whatsappDownColor: darken($whatsappColor, 10%);
 $telegramColor: #27a6e6;
-$telegramHoverColor: color.scale(darken($telegramColor, 5%), $saturation: 10%);
+//$telegramHoverColor: color.scale(darken($telegramColor, 5%), $saturation: 10%);
 $telegramDownColor: darken($telegramColor, 10%);
+
 $odnoklassnikiColor: #EE8208;
-$odnoklassnikiHoverColor: color.scale(darken($odnoklassnikiColor, 5%), $saturation: 10%);
-$odnoklassnikiDownColor: darken($odnoklassnikiColor, 10%);*/
+//$odnoklassnikiHoverColor: color.scale(darken($odnoklassnikiColor, 5%), $saturation: 10%);
+$odnoklassnikiDownColor: darken($odnoklassnikiColor, 10%);
 
 /*
 body{
@@ -43,6 +44,7 @@ video {
 
 .controls {
   z-index: 1;
+
   .icon {
     position: absolute;
     top: 50%;
@@ -448,7 +450,7 @@ video {
 }
 
 /* Twitter */
-/*
+
 
 .ui.whatsapp.button {
     background-color: $whatsappColor;
@@ -456,7 +458,7 @@ video {
 }
 
 .ui.whatsapp.button:hover {
-    background-color: $whatsappHoverColor;
+    //background-color: $whatsappHoverColor;
 }
 
 .ui.whatsapp.button:active {
@@ -468,27 +470,28 @@ video {
 }
 
 .ui.telegram.button:hover {
-    background-color: $telegramHoverColor;
+    //background-color: $telegramHoverColor;
 }
 
 .ui.telegram.button:active {
     background-color: $telegramDownColor;
 }
 .ui.odnoklassniki.button {
-    background-color: $odnoklassnikiColor;
-    color: #FFFFFF;
+  background-color: $odnoklassnikiColor;
+  color: #FFFFFF;
 }
 
 .ui.odnoklassniki.button:hover {
-    background-color: $odnoklassnikiHoverColor;
+ // background-color: $odnoklassnikiHoverColor;
 }
 
 .ui.odnoklassniki.button:active {
-    background-color: $odnoklassnikiDownColor;
+  background-color: $odnoklassnikiDownColor;
 }
-*/
 
-
+.custom_ShareButton{
+  background-color: transparent; border: none; padding: 0px; font: inherit; color: inherit; cursor: pointer;
+}
 // &-slice{
 //     top: 22px;
 //     height: 4px;

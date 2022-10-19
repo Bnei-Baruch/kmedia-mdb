@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import moment from 'moment/moment';
 import { withNamespaces } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Icon, Popup } from 'semantic-ui-react';
+import { Button, Popup } from 'semantic-ui-react';
 
 import { ClientChroniclesContext } from '../../../helpers/app-contexts';
 import { noop } from '../../../helpers/utils';
@@ -11,10 +11,10 @@ import { selectors as player } from '../../../redux/modules/player';
 import { isEqual } from 'lodash/lang';
 import { toHumanReadableTime } from '../../../helpers/time';
 
-const TrimBtn = ({ width, t }) => {
+const TrimBtn = ({ t }) => {
   const [open, setOpen] = useState(false);
 
-  const chronicles = useContext(ClientChroniclesContext);
+  const chronicles       = useContext(ClientChroniclesContext);
   const chroniclesAppend = chronicles ? chronicles.append.bind(chronicles) : noop;
 
   const { start, end } = useSelector(state => player.getShareStartEnd(state.player), isEqual);
@@ -50,16 +50,7 @@ const TrimBtn = ({ width, t }) => {
       content={t('player.download.iconHoverText')}
       position={'top right'}
       trigger={
-        <Button
-          circular
-          onClick={handleCut}
-          compact
-          style={{ width: `${width}px`, height: `${width}px` }}
-          size="big"
-          className="cut_and_download_btn"
-        >
-          <Icon name="cloud download" />
-        </Button>
+        <Button circular icon="download" onClick={handleCut} />
       }
     />
   );
