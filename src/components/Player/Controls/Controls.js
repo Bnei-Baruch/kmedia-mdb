@@ -3,18 +3,14 @@ import React from 'react';
 import { SeekBackwardBtn, SeekForwardBtn } from './SeekBtns';
 import { NextBtn, PrevBtn } from './NextPrevBtns';
 import { FullscreenBtn, ShareBtn, SettingsBtn } from './ControlBtns';
-import PlayPauseBtn from './PlayPauseBtn';
-import VolumeCtrl from './VolumeCtrl';
+import { PlayPauseBtn } from './PlayPauseBtn';
+import { VolumeCtrl } from './VolumeCtrl';
 import { Timecode } from './Timecode';
 import { ProgressCtrl } from './ProgressCtrl';
-import PlayPauseBg from './PlayPauseBg';
-import AudioBg from './AudioBg';
 
-const Controls = ({ openOnFull }) => {
+const Controls = ({fullScreen}) => {
   return (
     <div className="controls" dir="ltr">
-      <PlayPauseBg />
-      <AudioBg />
       <PrevBtn />
       <SeekBackwardBtn />
       <SeekForwardBtn />
@@ -26,7 +22,7 @@ const Controls = ({ openOnFull }) => {
         <ProgressCtrl />
         <SettingsBtn />
         <ShareBtn />
-        <FullscreenBtn openOnFull={openOnFull} />
+        <FullscreenBtn fullScreen={fullScreen} />
       </div>
     </div>
   );
