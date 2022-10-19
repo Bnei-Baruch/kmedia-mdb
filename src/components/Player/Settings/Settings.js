@@ -1,16 +1,14 @@
-import React from 'react';
 import { Button, Header, Icon } from 'semantic-ui-react';
-import { withNamespaces } from 'react-i18next';
+import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-
 import { selectors, actions } from '../../../redux/modules/player';
-import { LANGUAGES, PLAYER_OVER_MODES } from '../../../helpers/consts';
 import PlayerLanguages from './PlayerLanguages';
+import { LANGUAGES, PLAYER_OVER_MODES } from '../../../helpers/consts';
 import QualityControl from './QualityControl';
 import MediaTypeControl from './MediaTypeControl';
 import RateControl from './RateControl';
 
-const Settings = ({ t }) => {
+const Settings = () => {
   const file = useSelector(state => selectors.getFile(state.player));
 
   const dispatch = useDispatch();
@@ -24,7 +22,7 @@ const Settings = ({ t }) => {
         <RateControl />
         <QualityControl />
         <div className="settings__row">
-          <Header size="tiny">{t('player.settings.language')}</Header>
+          <Header size="tiny">Language</Header>
           <Button.Group size="mini" inverted>
             <Button inverted onClick={handleOpenLangs}>
               {LANGUAGES[file.language]?.name}
@@ -38,4 +36,4 @@ const Settings = ({ t }) => {
   );
 };
 
-export default withNamespaces()(Settings);
+export default Settings;

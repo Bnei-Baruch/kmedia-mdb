@@ -1,9 +1,8 @@
-import React from 'react';
 import { Button, Header } from 'semantic-ui-react';
-import { withNamespaces } from 'react-i18next';
+import React from 'react';
 import { useSelector } from 'react-redux';
-
 import { selectors } from '../../../redux/modules/player';
+import { withNamespaces } from 'react-i18next';
 
 const PLAYER_SPEEDS = [0.75, 1, 1.25, 1.5, 2];
 
@@ -17,11 +16,11 @@ const RateControl = ({ t }) => {
 
   return (
     <div className="settings__row">
-      <Header size="tiny">t('player.settings.playback-speed')</Header>
+      <Header size="tiny">Playback speed</Header>
       <Button.Group size="mini" inverted>
         {
           PLAYER_SPEEDS.map(x => {
-            const content = x !== 1 ? `${x}x` : t('player.settings.normal');
+            const content = x !== 1 ? `${x}x` : t('normal');
             return (
               <Button
                 inverted
