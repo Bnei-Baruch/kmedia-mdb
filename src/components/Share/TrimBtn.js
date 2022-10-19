@@ -3,13 +3,13 @@ import moment from 'moment/moment';
 import { withNamespaces } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Popup } from 'semantic-ui-react';
-import { isEqual } from 'lodash/lang';
 
-import { selectors as player } from '../../redux/modules/player';
-import { actions } from '../../redux/modules/trim';
 import { ClientChroniclesContext } from '../../helpers/app-contexts';
-import { toHumanReadableTime } from '../../helpers/time';
 import { noop } from '../../helpers/utils';
+import { actions } from '../../redux/modules/trim';
+import { selectors as player } from '../../redux/modules/player';
+import { isEqual } from 'lodash/lang';
+import { toHumanReadableTime } from '../../helpers/time';
 
 const TrimBtn = ({ t }) => {
   const [open, setOpen] = useState(false);
@@ -47,7 +47,7 @@ const TrimBtn = ({ t }) => {
       open={open}
       onOpen={() => setOpen(true)}
       onClose={() => setOpen(false)}
-      content={t('player.download.icon-hoverText')}
+      content={t('player.download.iconHoverText')}
       position={'top right'}
       trigger={
         <Button circular icon="download" onClick={handleCut} />
