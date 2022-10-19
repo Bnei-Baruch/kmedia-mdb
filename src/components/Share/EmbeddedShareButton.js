@@ -19,7 +19,7 @@ const clear = () => {
   }
 };
 
-const EmbeddedShareButton = ({ url = '', size = 'medium', t, }) => {
+const EmbeddedShareButton = ({ url = '', size = 'normal', t, }) => {
 
   const [open, setOpen] = useState(false);
 
