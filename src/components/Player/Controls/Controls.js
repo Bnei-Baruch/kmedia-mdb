@@ -10,7 +10,7 @@ import { ProgressCtrl } from './ProgressCtrl';
 
 const Controls = ({fullScreen}) => {
   return (
-    <div className="controls">
+    <div className="controls" dir="ltr">
       <PrevBtn />
       <SeekBackwardBtn />
       <SeekForwardBtn />
