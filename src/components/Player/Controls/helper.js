@@ -1,12 +1,10 @@
 import { getQuery } from '../../../helpers/url';
 import { fromHumanReadableTime } from '../../../helpers/time';
 
-export const timeToPercent = sec => {
+export const timeToPercent = (sec, duration) => {
   if (!sec || sec === Infinity) return 0;
-  const d = window.jwplayer().getDuration();
-  if (!d) return 0;
-  console.log('timeToPercent', sec, d, (100 * sec) / d);
-  return (100 * sec) / d;
+  if (!duration) return 0;
+  return (100 * sec) / duration;
 };
 
 export const startEndFromQuery = (location) => {

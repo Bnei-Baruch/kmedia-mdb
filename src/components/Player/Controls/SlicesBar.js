@@ -1,31 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+
 import { selectors as player } from '../../../redux/modules/player';
 import { startEndFromQuery, timeToPercent } from './helper';
 
 export const SlicesBar = () => {
-  const [start, setStart] = useState();
-  const [end, setEnd]     = useState();
+  const [left, setLeft]   = useState(0);
+  const [width, setWidth] = useState(0);
 
   const location = useLocation();
-  const isReady  = useSelector(state => player.isReady(state.player));
+  const duration = useSelector(state => player.getFile(state.player)?.duration);
 
   useEffect(() => {
-    if (isReady) {
+    if (duration) {
       const { start, end } = startEndFromQuery(location);
-      setStart(start);
-      setEnd(end);
+      setLeft(timeToPercent(start, duration));
+      setWidth(timeToPercent(end - start, duration));
     }
-  }, [isReady, location]);
+  }, [duration, location]);
 
   return (
     <div
       className="slider__slice"
-      style={{
-        left: `${timeToPercent(start)}%`,
-        width: `${timeToPercent(end - start)}%`,
-      }}
+      style={{ left: `${left}%`, width: `${width}%` }}
     ></div>
   );
 };
