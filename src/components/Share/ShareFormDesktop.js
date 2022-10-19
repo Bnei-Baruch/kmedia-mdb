@@ -8,7 +8,7 @@ import { actions, selectors as player } from '../../redux/modules/player';
 import { selectors as playlist } from '../../redux/modules/playlist';
 import { selectors as mdb } from '../../redux/modules/mdb';
 import { canonicalLink } from '../../helpers/links';
-import ShareBarPlayer from './ShareBarPlayer';
+import ShareBarPlayer from './ShareBar';
 import ShareInputCopy from './ShareInputCopy';
 import StartStopButtons from './StartStopButtons';
 import { getUrl } from './helper';

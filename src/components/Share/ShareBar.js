@@ -14,8 +14,6 @@ import {
   WhatsappIcon,
   WhatsappShareButton,
 } from 'react-share';
-
-import CutAndDownload from './TrimBtn';
 import EmbeddedShareButton from './EmbeddedShareButton';
 
 const bsPixelsBySize = {
@@ -24,14 +22,13 @@ const bsPixelsBySize = {
   big: 46,
 };
 
-const ShareBarPlayer = ({ url, t, }) => {
+const ShareBar = ({ url, t, }) => {
 
   const bsPixels = bsPixelsBySize.big;
   const title    = t('player.share.title');
 
   return (
     <div className="social-buttons">
-      <CutAndDownload width={bsPixels - 1} size="medium" />
       <FacebookShareButton url={url} quote={title}>
         <FacebookIcon size={bsPixels} round />
       </FacebookShareButton>
@@ -50,9 +47,9 @@ const ShareBarPlayer = ({ url, t, }) => {
       <EmailShareButton url={url} subject={title} body={url}>
         <EmailIcon size={bsPixels} round />
       </EmailShareButton>
-      <EmbeddedShareButton url={url} bsPixels={bsPixels} />
+      <EmbeddedShareButton url={url} size={'big'} />
     </div>
   );
 };
 
-export default withNamespaces()(ShareBarPlayer);
+export default withNamespaces()(ShareBar);
