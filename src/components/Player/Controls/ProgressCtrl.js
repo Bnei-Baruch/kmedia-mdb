@@ -2,6 +2,8 @@ import React, { useRef, useLayoutEffect, useState } from 'react';
 import { ProgressBar } from './ProgressBar';
 import { stopBubbling } from '../../../helpers/utils';
 import { SlicesBar } from './SlicesBar';
+import { useSelector, shallowEqual } from 'react-redux';
+import { selectors as player } from '../../../redux/modules/player';
 
 export const ProgressCtrl = () => {
   const widthRef = useRef({});
@@ -9,11 +11,14 @@ export const ProgressCtrl = () => {
   const [left, setLeft]   = useState();
   const [right, setRight] = useState();
 
+  //recount position on resize
+  const width = useSelector(state => player.getPlayerWidth(state.player), shallowEqual);
+
   useLayoutEffect(() => {
     const { left, right } = widthRef.current.getBoundingClientRect();
     setLeft(left);
     setRight(right);
-  }, [widthRef.current]);
+  }, [widthRef.current, width]);
 
   const handleProgressClick = e => {
     const clientX = (e.touches ? e.touches[e.touches.length - 1].clientX : e.clientX) - 28 / 2;

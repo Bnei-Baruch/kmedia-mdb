@@ -7,6 +7,7 @@ const PLAYER_REMOVE = 'Player/REMOVE';
 const PLAYER_PLAY   = 'Player/PLAY';
 const PLAYER_PAUSE  = 'Player/PAUSE';
 const PLAYER_RATE   = 'Player/RATE';
+const PLAYER_RESIZE = 'Player/RESIZE';
 
 const PLAYER_SET_FILE           = 'Player/SET_FILE';
 const PLAYER_SET_OVER_MODE      = 'Player/SET_OVER_MODE';
@@ -25,9 +26,10 @@ const playerReady  = createAction(PLAYER_READY);
 const playerRemove = createAction(PLAYER_REMOVE);
 const setFile      = createAction(PLAYER_SET_FILE);
 
-const playerPlay  = createAction(PLAYER_PLAY);
-const playerPause = createAction(PLAYER_PAUSE);
-const playerRate  = createAction(PLAYER_RATE);
+const playerPlay   = createAction(PLAYER_PLAY);
+const playerPause  = createAction(PLAYER_PAUSE);
+const playerRate   = createAction(PLAYER_RATE);
+const playerResize = createAction(PLAYER_RESIZE);
 
 const setOverMode     = createAction(PLAYER_SET_OVER_MODE);
 const continuePlay    = createAction(PLAYER_CONTINUE_PLAY_FROM);
@@ -80,6 +82,8 @@ const onPause = draft => draft.played = false;
 
 const onRate = (draft, payload) => draft.rate = payload.playbackRate;
 
+const onResize = (draft, payload) => draft.width = payload.width;
+
 const onSetOverMode = (draft, payload) => draft.overMode = payload;
 
 const onContinuePlay = (draft, payload = -1) => {
@@ -97,6 +101,7 @@ export const reducer = handleActions({
   [PLAYER_PLAY]: onPlay,
   [PLAYER_PAUSE]: onPause,
   [PLAYER_RATE]: onRate,
+  [PLAYER_RESIZE]: onResize,
 
   [PLAYER_SET_OVER_MODE]: onSetOverMode,
   [PLAYER_CONTINUE_PLAY_FROM]: onContinuePlay,
@@ -113,6 +118,7 @@ const getFile          = state => state.file;
 const getOverMode      = state => state.overMode || PLAYER_OVER_MODES.none;
 const getRate          = state => state.rate || 1;
 const getShareStartEnd = state => state.shareStartEnd;
+const getPlayerWidth   = state => state.width;
 
 export const selectors = {
   isReady,
@@ -121,6 +127,7 @@ export const selectors = {
   getOverMode,
   getRate,
   getShareStartEnd,
+  getPlayerWidth,
 };
 
 export const PLAYER_ACTIONS_BY_EVENT = {
@@ -130,4 +137,5 @@ export const PLAYER_ACTIONS_BY_EVENT = {
   'playbackRateChanged': playerRate,
   'pause': playerPause,
   'playlistItem': newPlaylistItem,
+  'resize': playerResize,
 };
