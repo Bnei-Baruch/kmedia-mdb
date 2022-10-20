@@ -1,10 +1,12 @@
-import { Input, Button } from 'semantic-ui-react';
 import React from 'react';
-import { toHumanReadableTime } from '../../../helpers/time';
+import { Input, Button } from 'semantic-ui-react';
 import { useDispatch, useSelector } from 'react-redux';
-import { actions, selectors } from '../../../redux/modules/player';
 
-const StartEnd = () => {
+import { toHumanReadableTime } from '../../../helpers/time';
+import { actions, selectors } from '../../../redux/modules/player';
+import { withNamespaces } from 'react-i18next';
+
+const StartEnd = ({ t }) => {
   const { start, end } = useSelector(state => selectors.getShareStartEnd(state.player));
 
   const dispatch = useDispatch();
@@ -27,41 +29,40 @@ const StartEnd = () => {
 
   return (
     <>
-
       <div className="sharing__times">
         <div className="sharing__inputs">
           <Input
             size="mini"
             actionPosition="left"
             action={{
-              content: 'start time',
+              content: t('player.share.start-position'),
               size: 'small',
               compact: true,
               onClick: handleSetStart
             }}
-            placeholder="Click to set"
+            placeholder={t('player.share.click-to-set')}
             value={toHumanReadableTime(start)}
           />
           <Input
             size="mini"
             actionPosition="left"
             action={{
-              content: 'end time',
+              content: t('player.share.end-position'),
               size: 'small',
               compact: true,
               onClick: handleSetEnd
             }}
-            placeholder="Click to set"
+            placeholder={t('player.share.click-to-set')}
             value={toHumanReadableTime(end)}
           />
         </div>
       </div>
 
       <div className="sharing__reset" onClick={handleSetFull}>
-        <Button size="small">Reset to full video</Button>
+        <Button size="small">t('player.share.reset-to-full')</Button>
       </div>
     </>
   );
 };
 
-export default StartEnd;
+export default withNamespaces()(StartEnd);

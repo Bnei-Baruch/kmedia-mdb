@@ -15,7 +15,7 @@ const DownloadTrimItem = ({ item, pos, t }) => {
       </GridColumn>
       <GridColumn width="3" textAlign="right">
         <Popup
-          content={t('player.download.downloadButton')}
+          content={t('player.download.download-button')}
           trigger={
             <Button
               as="a"

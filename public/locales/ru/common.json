@@ -173,13 +173,7 @@
     },
     "buttons": {
       "edit-back": "Назад",
-      "start-position": "Начало",
-      "end-position": "Конец",
-      "click-to-set": "Жми",
       "tap-to-unmute": "Включить звук"
-    },
-    "share": {
-      "title": "Посмотри это видео"
     },
     "error": {
       "loading": "Ошибка при загрузке файла."
@@ -188,9 +182,25 @@
       "series-by-topic": "Серия уроков по теме:"
     },
     "download": {
-      "iconHoverText": "Загрузите отрывок, который вы отметили",
-      "downloadButton": "Скачать",
+      "icon-hover-text": "Загрузите отрывок, который вы отметили",
+      "download-button": "Скачать",
       "copyButton": "Копировать линк"
+    },
+    "settings": {
+      "playback": "Playback",
+      "playback-speed": "Playback speed",
+      "quality": "Quality",
+      "language": "Language",
+      "audio": "Аудио",
+      "video": "Видео",
+      "normal": "normal"
+    },
+    "share": {
+      "title": "Посмотри это видео",
+      "start-position": "Начало",
+      "end-position": "Конец",
+      "click-to-set": "Жми",
+      "reset-to-full": "Reset to full video"
     }
   },
   "playlist": {
