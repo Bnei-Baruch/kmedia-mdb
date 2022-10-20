@@ -47,7 +47,7 @@ const TrimBtn = ({ t }) => {
       open={open}
       onOpen={() => setOpen(true)}
       onClose={() => setOpen(false)}
-      content={t('player.download.icon-hoverText')}
+      content={t('player.download.icon-hover-text')}
       position={'top right'}
       trigger={
         <Button circular icon="download" onClick={handleCut} />
