@@ -5,7 +5,6 @@ import { Ref } from 'semantic-ui-react';
 
 import { selectors as player, actions } from '../../redux/modules/player';
 import { PLAYER_OVER_MODES } from '../../helpers/consts';
-import { withNamespaces } from 'react-i18next';
 import Player from './Player';
 import UpdateQueries from './UpdateQueries';
 import PlayerToolBars from './PlayerToolBars';
@@ -17,7 +16,7 @@ const CLASSES_BY_MODE = {
   [PLAYER_OVER_MODES.none]: '',
 };
 
-const PlayerContainer = ({ t }) => {
+const PlayerContainer = () => {
   const settRef = useRef();
   const mode    = useSelector(state => player.getOverMode(state.player));
 
@@ -31,7 +30,7 @@ const PlayerContainer = ({ t }) => {
     <Ref innerRef={settRef}>
       <div className="player" onMouseLeave={handleLeave}>
         <UpdateQueries />
-        <div className={`web ${CLASSES_BY_MODE[mode]}`}>
+        <div className={`web is-sharing ${CLASSES_BY_MODE[mode]}`}>
           <PlayerToolBars handleFullScreen={handleFullScreen} />
           <Player />
         </div>
@@ -41,4 +40,4 @@ const PlayerContainer = ({ t }) => {
 
 };
 
-export default withNamespaces()(React.memo(PlayerContainer));
+export default React.memo(PlayerContainer);
