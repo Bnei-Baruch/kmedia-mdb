@@ -21,7 +21,7 @@ const Player = () => {
   const info = useSelector(state => playlist.getInfo(state.playlist), shallowEqual);
   const file = useMemo(() => findPlayedFile(item, info), [item, info]);
 
-  const { cuId } = info;
+  const { cuId, isSingleMedia } = info;
 
   const checkStopTime = useCallback(d => {
     if (d.currentTime > end) {
@@ -71,8 +71,11 @@ const Player = () => {
       if (!isNaN(seek) && seek > 0) {
         jwp.play().seek(seek).pause();
       }
+      if (isSingleMedia) {
+        jwp.play();
+      }
     }
-  }, [isReady, cuId, start, end]);
+  }, [isReady, cuId, isSingleMedia, start, end]);
 
   return (
     <div ref={ref}>
