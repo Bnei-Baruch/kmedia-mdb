@@ -3,12 +3,12 @@ import React from 'react';
 import { SeekBackwardBtn, SeekForwardBtn } from './SeekBtns';
 import { NextBtn, PrevBtn } from './NextPrevBtns';
 import { FullscreenBtn, ShareBtn, SettingsBtn } from './ControlBtns';
-import { PlayPauseBtn } from './PlayPauseBtn';
-import { VolumeCtrl } from './VolumeCtrl';
+import PlayPauseBtn from './PlayPauseBtn';
+import VolumeCtrl from './VolumeCtrl';
 import { Timecode } from './Timecode';
 import { ProgressCtrl } from './ProgressCtrl';
 
-const Controls = ({fullScreen}) => {
+const Controls = ({ openOnFull }) => {
   return (
     <div className="controls" dir="ltr">
       <PrevBtn />
@@ -22,7 +22,7 @@ const Controls = ({fullScreen}) => {
         <ProgressCtrl />
         <SettingsBtn />
         <ShareBtn />
-        <FullscreenBtn fullScreen={fullScreen} />
+        <FullscreenBtn openOnFull={openOnFull} />
       </div>
     </div>
   );
