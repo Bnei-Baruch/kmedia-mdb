@@ -163,9 +163,6 @@ const ContentItemContainer = (
   if (!noViews && !(isMobileDevice && asList) && views > 0)
     description.push(t('pages.unit.info.views', { views }));
 
-  if (unit.id === 'Jpm8p4ps') {
-    console.log('playlist ContentItemContainer', selected);
-  }
   const props = {
     unit,
     language,
