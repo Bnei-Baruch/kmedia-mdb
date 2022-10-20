@@ -7,10 +7,12 @@ import PlayPauseBtn from './PlayPauseBtn';
 import VolumeCtrl from './VolumeCtrl';
 import { Timecode } from './Timecode';
 import { ProgressCtrl } from './ProgressCtrl';
+import PlayPauseBg from './PlayPauseBg';
 
 const Controls = ({ openOnFull }) => {
   return (
     <div className="controls" dir="ltr">
+      <PlayPauseBg />
       <PrevBtn />
       <SeekBackwardBtn />
       <SeekForwardBtn />
