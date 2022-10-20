@@ -1,14 +1,16 @@
-import { Button, Header } from 'semantic-ui-react';
 import React from 'react';
+import { Button, Header } from 'semantic-ui-react';
+import { withNamespaces } from 'react-i18next';
 import { useSelector, useDispatch, batch } from 'react-redux';
+
+import { selectors as playlist, actions as playlistActions } from '../../../redux/modules/playlist';
 import { actions } from '../../../redux/modules/player';
-import { selectors as playlistSelectors, actions as playlistActions } from '../../../redux/modules/playlist';
 import { MT_AUDIO } from '../../../helpers/consts';
 
-const QualityControl = () => {
+const QualityControl = ({ t }) => {
 
-  const { qualityByLang }                = useSelector(state => playlistSelectors.getPlayed(state.playlist));
-  const { quality, language, mediaType } = useSelector(state => playlistSelectors.getInfo(state.playlist));
+  const { qualityByLang }                = useSelector(state => playlist.getPlayed(state.playlist));
+  const { quality, language, mediaType } = useSelector(state => playlist.getInfo(state.playlist));
 
   const dispatch = useDispatch();
 
@@ -23,7 +25,7 @@ const QualityControl = () => {
 
   return (
     <div className="settings__row">
-      <Header size="tiny">Quality</Header>
+      <Header size="tiny">t('player.settings.quality')</Header>
       <Button.Group size="mini" inverted>
         {
           qualityByLang?.[language]?.map((x, i) => (
@@ -41,4 +43,4 @@ const QualityControl = () => {
   );
 };
 
-export default QualityControl;
+export default withNamespaces()(QualityControl);
