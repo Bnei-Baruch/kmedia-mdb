@@ -59,7 +59,7 @@ const StartEnd = ({ t }) => {
       </div>
 
       <div className="sharing__reset" onClick={handleSetFull}>
-        <Button size="small">t('player.share.reset-to-full')</Button>
+        <Button size="small">{t('player.share.reset-to-full')}</Button>
       </div>
     </>
   );
