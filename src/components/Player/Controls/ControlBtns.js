@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import fscreen from 'fscreen';
 import { withNamespaces } from 'react-i18next';
 import { Popup, Icon } from 'semantic-ui-react';
 
-import { actions } from '../../../redux/modules/player';
+import { actions, selectors as player } from '../../../redux/modules/player';
 import { PLAYER_OVER_MODES } from '../../../helpers/consts';
 import { stopBubbling } from '../../../helpers/utils';
 
@@ -29,11 +29,14 @@ export const FullscreenBtn = withNamespaces()(({ openOnFull, t }) => {
   );
 });
 
-export const ShareBtn = withNamespaces()(({t}) => {
+export const ShareBtn = withNamespaces()(({ t }) => {
+  const mode = useSelector(state => player.getOverMode(state.player));
+
   const dispatch = useDispatch();
 
   const handleOpen = e => {
-    dispatch(actions.setOverMode(PLAYER_OVER_MODES.share));
+    const newMode = (mode === PLAYER_OVER_MODES.share) ? PLAYER_OVER_MODES.none : PLAYER_OVER_MODES.share;
+    dispatch(actions.setOverMode(newMode));
     stopBubbling(e);
   };
 
@@ -46,11 +49,14 @@ export const ShareBtn = withNamespaces()(({t}) => {
   );
 });
 
-export const SettingsBtn = withNamespaces()(({t}) => {
+export const SettingsBtn = withNamespaces()(({ t }) => {
+  const mode = useSelector(state => player.getOverMode(state.player));
+
   const dispatch = useDispatch();
 
   const handleOpen = e => {
-    dispatch(actions.setOverMode(PLAYER_OVER_MODES.settings));
+    const newMode = (mode === PLAYER_OVER_MODES.settings) ? PLAYER_OVER_MODES.none : PLAYER_OVER_MODES.settings;
+    dispatch(actions.setOverMode(newMode));
     stopBubbling(e);
   };
 

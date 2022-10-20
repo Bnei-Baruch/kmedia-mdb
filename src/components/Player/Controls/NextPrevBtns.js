@@ -11,6 +11,7 @@ import { withNamespaces } from 'react-i18next';
 export const PrevBtn = withNamespaces()(({ t }) => {
   const { id, cId, idx } = useSelector(state => selectors.getPrevData(state.playlist));
   const cu               = useSelector(state => mdb.getDenormContentUnit(state.mdb, id));
+  const ccu              = useSelector(state => mdb.getDenormCollection(state.mdb, cId));
   const baseLink         = useSelector(state => selectors.getInfo(state.playlist).baseLink);
 
   if (!cu) return null;
@@ -19,7 +20,7 @@ export const PrevBtn = withNamespaces()(({ t }) => {
   if (baseLink) {
     link = `${baseLink}?ap=${idx}`;
   } else {
-    link = canonicalLink(cu, null, cId);
+    link = canonicalLink(cu, null, ccu);
   }
   return (
     <Popup content={t('player.controls.prev-video')} inverted size="mini" position="top left" trigger={
@@ -37,6 +38,7 @@ export const PrevBtn = withNamespaces()(({ t }) => {
 export const NextBtn = withNamespaces()(({ t }) => {
   const { id, cId, idx } = useSelector(state => selectors.getNextData(state.playlist));
   const cu               = useSelector(state => mdb.getDenormContentUnit(state.mdb, id));
+  const ccu              = useSelector(state => mdb.getDenormCollection(state.mdb, cId));
   const baseLink         = useSelector(state => selectors.getInfo(state.playlist).baseLink);
 
   if (!cu) return null;
@@ -45,7 +47,7 @@ export const NextBtn = withNamespaces()(({ t }) => {
   if (baseLink) {
     link = `${baseLink}?ap=${idx}`;
   } else {
-    link = canonicalLink(cu, null, cId);
+    link = canonicalLink(cu, null, ccu);
   }
 
   return (
