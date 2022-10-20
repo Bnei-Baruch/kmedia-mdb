@@ -5,8 +5,9 @@ import { LANGUAGE_OPTIONS, JWPLAYER_ID, PLAYER_OVER_MODES } from '../../../helpe
 import { useSelector, useDispatch } from 'react-redux';
 import { actions as playlistActions, selectors as playlistSelectors } from '../../../redux/modules/playlist';
 import { actions } from '../../../redux/modules/player';
+import { withNamespaces } from 'react-i18next';
 
-const PlayerLanguages = () => {
+const PlayerLanguages = ({ t }) => {
   const { languages = [] } = useSelector(state => playlistSelectors.getPlayed(state.playlist));
   const { language }       = useSelector(state => playlistSelectors.getInfo(state.playlist));
   const dispatch           = useDispatch();
@@ -23,7 +24,7 @@ const PlayerLanguages = () => {
     <div className="settings__pane">
       <Button inverted fluid onClick={handleCloseLangs}>
         <Icon name="left chevron" />
-        Language
+        {t('player.settings.language')}
       </Button>
       <Menu secondary vertical inverted size="small">
         {
@@ -46,4 +47,4 @@ const PlayerLanguages = () => {
   );
 };
 
-export default PlayerLanguages;
+export default withNamespaces()(PlayerLanguages);

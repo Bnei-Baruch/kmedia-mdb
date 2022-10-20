@@ -197,18 +197,6 @@
       "end-position": "Konec",
       "click-to-set": "Kliknout pro nastavení",
       "reset-to-full": "Reset to full video"
-    },
-    "controls": {
-      "pause": "Pause",
-      "play": "Play",
-      "mute": "Mute",
-      "fullscreen": "Fullscreen",
-      "share": "Share",
-      "settings": "Settings",
-      "rewind10": "Rewind 10 seconds",
-      "skip10": "Skip 10 seconds",
-      "next-video": "Next video",
-      "prev-video": "Previous video"
     }
   },
   "playlist": {
