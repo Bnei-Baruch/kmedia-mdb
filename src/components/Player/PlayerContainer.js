@@ -30,7 +30,7 @@ const PlayerContainer = () => {
     <Ref innerRef={settRef}>
       <div className="player" onMouseLeave={handleLeave}>
         <UpdateQueries />
-        <div className={`web is-sharing ${CLASSES_BY_MODE[mode]}`}>
+        <div className={`web ${CLASSES_BY_MODE[mode]}`}>
           <PlayerToolBars handleFullScreen={handleFullScreen} />
           <Player />
         </div>
