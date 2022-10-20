@@ -2,11 +2,12 @@ import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { Popup, Icon } from 'semantic-ui-react';
 import { useSelector, shallowEqual } from 'react-redux';
 import isFunction from 'lodash/isFunction';
+import { withNamespaces } from 'react-i18next';
 
 import { selectors as player } from '../../../redux/modules/player';
 import { VolumeKnob } from './VolumeKnob';
 
-export const VolumeCtrl = () => {
+const VolumeCtrl = ({ t }) => {
   const widthRef = useRef({});
   const isReady  = useSelector(state => player.isReady(state.player));
 
@@ -47,7 +48,7 @@ export const VolumeCtrl = () => {
 
   return (
     <div className="controls__volume">
-      <Popup content="Mute" inverted size="mini" position="top center" trigger={
+      <Popup content={t('player.controls.mute')} inverted size="mini" position="top center" trigger={
         <div className="controls__volume-icon" onClick={handleMute}>
           <Icon fitted name={`volume ${icon}`} />
         </div>
@@ -64,3 +65,5 @@ export const VolumeCtrl = () => {
     </div>
   );
 };
+
+export default withNamespaces()(VolumeCtrl);
