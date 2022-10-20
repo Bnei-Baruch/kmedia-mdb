@@ -5,7 +5,7 @@ import UnitLogo from './Logo/UnitLogo';
 const widthBySize          = {
   'normal': '140px',
 };
-const UnitLogoWithDuration = ({ duration, size = 'normal', ...propz }) => (
+const UnitLogoWithDuration = ({ duration, size = 'medium', ...propz }) => (
   <div className="with_duration" style={{ minWidth: widthBySize[size] }}>
     {
       duration && (
