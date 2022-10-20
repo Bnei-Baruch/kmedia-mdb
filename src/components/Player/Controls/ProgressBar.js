@@ -55,7 +55,6 @@ export const ProgressBar = ({ left, right }) => {
 
   const handleMove = useCallback(e => {
     e.preventDefault();
-    console.log('progress bar: move e.clientX', e.clientX);
     if (!activated) return;
 
     // Resolve clientX from mouse or touch event.

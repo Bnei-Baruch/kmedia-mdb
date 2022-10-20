@@ -7,9 +7,9 @@ import { actions as playlistActions, selectors as playlistSelectors } from '../.
 import { actions } from '../../../redux/modules/player';
 
 const PlayerLanguages = () => {
-  const { languages } = useSelector(state => playlistSelectors.getPlayed(state.playlist));
-  const { language }  = useSelector(state => playlistSelectors.getInfo(state.playlist));
-  const dispatch      = useDispatch();
+  const { languages = [] } = useSelector(state => playlistSelectors.getPlayed(state.playlist));
+  const { language }       = useSelector(state => playlistSelectors.getInfo(state.playlist));
+  const dispatch           = useDispatch();
 
   const handleSelect = (e, { name }) => batch(() => {
     dispatch(actions.continuePlay());
