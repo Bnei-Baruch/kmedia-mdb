@@ -80,6 +80,7 @@ video {
     border-radius: $controls-radius;
     transition: all ease-out 0.2s;
     cursor: pointer;
+    z-index: 10;
 
     &:hover {
       cursor: pointer;
@@ -122,6 +123,7 @@ video {
     display: flex;
     padding: 10px;
     align-items: stretch;
+    z-index: 1;
 
     > * {
       flex: 0 0 34px;
@@ -228,6 +230,15 @@ video {
     }
   }
 
+  &__bg_play {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    cursor: pointer;
+    z-index: 1;
+  }
 }
 
 .controls__slider {
@@ -454,45 +465,53 @@ video {
 
 
 .ui.whatsapp.button {
-    background-color: $whatsappColor;
-    color: #FFFFFF;
+  background-color: $whatsappColor;
+  color: #FFFFFF;
 }
 
 .ui.whatsapp.button:hover {
-    //background-color: $whatsappHoverColor;
+  //background-color: $whatsappHoverColor;
 }
 
 .ui.whatsapp.button:active {
-    background-color: $whatsappDownColor;
+  background-color: $whatsappDownColor;
 }
+
 .ui.telegram.button {
-    background-color: $telegramColor;
-    color: #FFFFFF;
+  background-color: $telegramColor;
+  color: #FFFFFF;
 }
 
 .ui.telegram.button:hover {
-    //background-color: $telegramHoverColor;
+  //background-color: $telegramHoverColor;
 }
 
 .ui.telegram.button:active {
-    background-color: $telegramDownColor;
+  background-color: $telegramDownColor;
 }
+
 .ui.odnoklassniki.button {
   background-color: $odnoklassnikiColor;
   color: #FFFFFF;
 }
 
 .ui.odnoklassniki.button:hover {
- // background-color: $odnoklassnikiHoverColor;
+  // background-color: $odnoklassnikiHoverColor;
 }
 
 .ui.odnoklassniki.button:active {
   background-color: $odnoklassnikiDownColor;
 }
 
-.custom_ShareButton{
-  background-color: transparent; border: none; padding: 0px; font: inherit; color: inherit; cursor: pointer;
+.custom_ShareButton {
+  background-color: transparent;
+  border: none;
+  padding: 0px;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
 }
+
 // &-slice{
 //     top: 22px;
 //     height: 4px;
