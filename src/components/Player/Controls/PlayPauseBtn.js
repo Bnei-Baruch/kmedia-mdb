@@ -1,10 +1,12 @@
 import React from 'react';
 import { Popup, Icon } from 'semantic-ui-react';
-import { JWPLAYER_ID } from '../../../helpers/consts';
 import { useSelector } from 'react-redux';
+import { withNamespaces } from 'react-i18next';
+
+import { JWPLAYER_ID } from '../../../helpers/consts';
 import { selectors as player } from '../../../redux/modules/player';
 
-export const PlayPauseBtn = () => {
+const PlayPauseBtn = ({ t }) => {
   const isPlay = useSelector(state => player.isPlay(state.player));
   const p      = window.jwplayer(JWPLAYER_ID);
 
@@ -17,7 +19,7 @@ export const PlayPauseBtn = () => {
       inverted
       size="mini"
       position="top left"
-      content={isPlay ? 'Pause':'Play'}
+      content={t(`player.controls.${isPlay ? 'pause' : 'play'}`)}
       trigger={
         <div className="controls__play" onClick={handlePlayPause}>
           <Icon fitted name={isPlay ? 'pause' : 'play'} />
@@ -25,3 +27,5 @@ export const PlayPauseBtn = () => {
       } />
   );
 };
+
+export default withNamespaces()(PlayPauseBtn);

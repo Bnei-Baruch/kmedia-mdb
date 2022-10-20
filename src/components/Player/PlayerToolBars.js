@@ -24,7 +24,7 @@ const PlayerToolBars = ({ handleFullScreen, t }) => {
       {
         isPlayerReady ? (
           <>
-            <Controls fullScreen={handleFullScreen} />
+            <Controls openOnFull={handleFullScreen} />
             <Settings />
             <Sharing />
           </>

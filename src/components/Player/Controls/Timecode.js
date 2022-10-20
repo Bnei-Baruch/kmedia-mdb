@@ -32,7 +32,6 @@ export const Timecode = () => {
       p.off('seeked', checkTimeAfterSeek);
       p.off('time', checkTimeAfterSeek);
     };
-
   }, [isReady, cuId]);
 
   return (
