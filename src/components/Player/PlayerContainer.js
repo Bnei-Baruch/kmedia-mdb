@@ -1,9 +1,9 @@
 import React, { useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import fscreen from 'fscreen';
 import { Ref } from 'semantic-ui-react';
 
-import { selectors as player, actions } from '../../redux/modules/player';
+import { selectors as player } from '../../redux/modules/player';
 import { PLAYER_OVER_MODES } from '../../helpers/consts';
 import Player from './Player';
 import UpdateQueries from './UpdateQueries';
@@ -20,15 +20,11 @@ const PlayerContainer = () => {
   const settRef = useRef();
   const mode    = useSelector(state => player.getOverMode(state.player));
 
-  const dispatch = useDispatch();
-
   const handleFullScreen = () => fscreen.requestFullscreen(settRef.current);
-
-  const handleLeave = () => dispatch(actions.setOverMode(PLAYER_OVER_MODES.none));
 
   return (
     <Ref innerRef={settRef}>
-      <div className="player" onMouseLeave={handleLeave}>
+      <div className="player">
         <UpdateQueries />
         <div className={`web ${CLASSES_BY_MODE[mode]}`}>
           <PlayerToolBars handleFullScreen={handleFullScreen} />
