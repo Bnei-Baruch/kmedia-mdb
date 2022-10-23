@@ -47,6 +47,7 @@ import {
 // import Design from './components/Design/Design';
 import * as ssrDataLoaders from './routesSSRData';
 import PlaylistCollectionPage from './components/Pages/PlaylistCollectionPage';
+import PlaylistItemPageMusic from './components/Sections/Music/PlaylistItemPageMusic';
 
 const routes = [
   { path: '', component: HomePage, options: { ssrData: ssrDataLoaders.home } },
@@ -75,6 +76,11 @@ const routes = [
     path: 'lessons/:tab/c/:id',
     component: PlaylistCollectionPage,
     options: { ssrData: ssrDataLoaders.lessonsCollectionPage }
+  },
+  {
+    path: 'music/:id/cu/:cuId',
+    component: PlaylistItemPageMusic,
+    options: { ssrData: ssrDataLoaders.playlistCollectionPage }
   },
   { path: ':routeType/:tab/cu/:id', component: PlaylistItemPage, options: { ssrData: ssrDataLoaders.cuPage } },
   { path: 'lessons/daily/latest', component: LastLessonCollection, options: { ssrData: ssrDataLoaders.latestLesson } },
