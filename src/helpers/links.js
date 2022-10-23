@@ -50,6 +50,7 @@ import {
   UNIT_PROGRAMS_TYPE,
   UNIT_PUBLICATIONS_TYPE,
 } from './consts';
+import moment from 'moment';
 
 export const landingPageSectionLink = (landingPage, filterValues) => {
   const linkParts = [SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_LINK[landingPage]];
@@ -88,7 +89,7 @@ const blogNames = new Map([
   [BLOG_ID_LAITMAN_CO_IL, 'laitman-co-il'],
 ]);
 
-const mediaPrefix = new Map([
+const mediaPrefix                   = new Map([
   [CT_LESSON_PART, '/lessons/cu/'],
   [CT_LECTURE, '/lessons/cu/'],
   [CT_VIRTUAL_LESSON, '/lessons/cu/'],
@@ -104,6 +105,17 @@ const mediaPrefix = new Map([
   [CT_MEAL, '/events/cu/'],
   [CT_ARTICLE, '/publications/articles/cu/'],
 ]);
+const FIRST_PREPARATIONS_FOR_LESSON = moment('2017-01-01');
+
+const getCuByCcuSkipPreparation = (ccu) => {
+  if (!ccu.cuIDs) return null;
+
+  if (ccu.cuIDs.length < 2 || !ccu.film_date) {
+    return ccu.cuIDs[0];
+  }
+
+  return moment(ccu.film_date).isAfter(FIRST_PREPARATIONS_FOR_LESSON) ? ccu.cuIDs[1] : ccu.cuIDs[0];
+};
 
 /* WARNING!!!
    This function MUST be synchronized with the next one: canonicalContentType
@@ -132,54 +144,54 @@ export const canonicalLink = (entity, mediaLang, ccu) => {
 
   // collections
   switch (entity.content_type) {
-    case CT_DAILY_LESSON:
-    case CT_SPECIAL_LESSON:
-      const cuId = entity.cuIDs?.[0];
-      if (!cuId)
-        return `/lessons/daily/c/${entity.id}?ap=0`;
-      return `/lessons/cu/${cuId}`;
-    case CT_VIRTUAL_LESSONS:
-      return `/lessons/virtual/c/${entity.id}`;
-    case CT_LECTURE_SERIES:
-      return `/lessons/lectures/c/${entity.id}`;
-    case CT_WOMEN_LESSONS:
-      return `/lessons/women/c/${entity.id}`;
+  case CT_DAILY_LESSON:
+  case CT_SPECIAL_LESSON:
+    const cuId = getCuByCcuSkipPreparation(entity);
+    if (!cuId)
+      return `/lessons/daily/c/${entity.id}?ap=0`;
+    return `/lessons/cu/${cuId}`;
+  case CT_VIRTUAL_LESSONS:
+    return `/lessons/virtual/c/${entity.id}`;
+  case CT_LECTURE_SERIES:
+    return `/lessons/lectures/c/${entity.id}`;
+  case CT_WOMEN_LESSONS:
+    return `/lessons/women/c/${entity.id}`;
     // case CT_CHILDREN_LESSONS:
     //   return `/lessons/children/c/${entity.id}`;
-    case CT_LESSONS_SERIES:
-      return `/lessons/series/c/${entity.id}`;
-    case CT_VIDEO_PROGRAM:
-    case CT_CLIPS:
-      return `/programs/c/${entity.id}`;
-    case CT_ARTICLES:
-      return `/publications/articles/c/${entity.id}`;
-    case CT_FRIENDS_GATHERINGS:
-    case CT_MEALS:
-    case CT_CONGRESS:
-    case CT_HOLIDAY:
-    case CT_PICNIC:
-    case CT_UNITY_DAY:
-      return `/events/c/${entity.id}`;
-    case CT_SONGS:
-      return `/music/c/${entity.id}`;
-    default:
-      break;
+  case CT_LESSONS_SERIES:
+    return `/lessons/series/c/${entity.id}`;
+  case CT_VIDEO_PROGRAM:
+  case CT_CLIPS:
+    return `/programs/c/${entity.id}`;
+  case CT_ARTICLES:
+    return `/publications/articles/c/${entity.id}`;
+  case CT_FRIENDS_GATHERINGS:
+  case CT_MEALS:
+  case CT_CONGRESS:
+  case CT_HOLIDAY:
+  case CT_PICNIC:
+  case CT_UNITY_DAY:
+    return `/events/c/${entity.id}`;
+  case CT_SONGS:
+    return `/music/c/${entity.id}`;
+  default:
+    break;
   }
 
   // content units
   switch (entity.content_type) {
-    case CT_ARTICLE:
-      return `/publications/articles/cu/${entity.id}`;
-    case CT_LIKUTIM:
-      return `/likutim/${entity.id}`;
-    default:
-      break;
+  case CT_ARTICLE:
+    return `/publications/articles/cu/${entity.id}`;
+  case CT_LIKUTIM:
+    return `/likutim/${entity.id}`;
+  default:
+    break;
   }
 
   // units whose canonical collection is an event goes as an event item
   const collection = ccu || canonicalCollection(entity);
   if (collection) {
-    const { id, content_type } = collection
+    const { id, content_type } = collection;
 
     if (EVENT_TYPES.includes(content_type)) {
       return `/events/cu/${entity.id}`;
@@ -209,18 +221,18 @@ export const canonicalLink = (entity, mediaLang, ccu) => {
  */
 export const canonicalContentType = entity => {
   switch (entity) {
-    case 'sources':
-      return ['SOURCE'];
-    case 'lessons':
-      return [...COLLECTION_LESSONS_TYPE, ...UNIT_LESSONS_TYPE];
-    case 'programs':
-      return [...COLLECTION_PROGRAMS_TYPE, ...UNIT_PROGRAMS_TYPE];
-    case 'publications':
-      return ['POST', CT_ARTICLES, ...COLLECTION_PUBLICATIONS_TYPE, ...UNIT_PUBLICATIONS_TYPE];
-    case 'events':
-      return [...COLLECTION_EVENTS_TYPE, ...UNIT_EVENTS_TYPE];
-    default:
-      return [];
+  case 'sources':
+    return ['SOURCE'];
+  case 'lessons':
+    return [...COLLECTION_LESSONS_TYPE, ...UNIT_LESSONS_TYPE];
+  case 'programs':
+    return [...COLLECTION_PROGRAMS_TYPE, ...UNIT_PROGRAMS_TYPE];
+  case 'publications':
+    return ['POST', CT_ARTICLES, ...COLLECTION_PUBLICATIONS_TYPE, ...UNIT_PUBLICATIONS_TYPE];
+  case 'events':
+    return [...COLLECTION_EVENTS_TYPE, ...UNIT_EVENTS_TYPE];
+  default:
+    return [];
   }
 };
 
