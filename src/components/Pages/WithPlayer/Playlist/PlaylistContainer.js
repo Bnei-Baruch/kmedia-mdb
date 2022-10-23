@@ -3,19 +3,23 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import Page from './Page';
 import { actions, selectors } from '../../../../redux/modules/playlist';
+import { usePrevious } from '../../../../helpers/utils';
 
-const PlaylistContainer = ({ cId, cuId }) => {
-  const { cuId: pCuId, cId: pCId } = useSelector(state => selectors.getInfo(state.playlist));
+const PlaylistContainer = ({ cId, cuId, isC = false }) => {
+  const { cuId: prevCuId, cId: prevCId } = useSelector(state => selectors.getInfo(state.playlist));
 
+  const prevIsC  = usePrevious(isC);
   const dispatch = useDispatch();
 
+  //isC and prevIsC need for fix bug when go to the unit url from collection url
+  //example: /lessons/series/cu/[cuUID] from lessons/series/c/[cUID]
   useEffect(() => {
-    if (cId !== pCId) {
+    if (cId !== prevCId || isC !== prevIsC) {
       dispatch(actions.build(cId, cuId));
-    } else if (cuId && pCuId !== cuId) {
+    } else if (cuId && prevCuId !== cuId) {
       dispatch(actions.select(cuId));
     }
-  }, [cId, cuId]);
+  }, [cId, cuId, isC, prevIsC]);
 
   return <Page />;
 };
