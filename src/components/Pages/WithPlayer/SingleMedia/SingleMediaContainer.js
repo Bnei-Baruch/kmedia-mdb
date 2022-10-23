@@ -10,15 +10,17 @@ const SingleMediaContainer = ({ t }) => {
 
   const { id } = useParams();
 
-  const cuId = useSelector(state => selectors.getInfo(state.playlist).cuId);
+  const { cuId, wip } = useSelector(state => selectors.getInfo(state.playlist));
 
   const dispatch = useDispatch();
 
   useEffect(() => {
+    if (wip) return;
+
     if (id !== cuId) {
       dispatch(actions.singleMediaBuild(id));
     }
-  }, [cuId, id]);
+  }, [cuId, id, wip]);
 
   return <SingleMediaPage />;
 };

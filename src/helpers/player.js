@@ -4,7 +4,6 @@ import { assetUrl } from './Api';
 import {
   CT_FULL_LESSON,
   CT_LESSON_PART,
-  CT_SONGS,
   EVENT_PREPARATION_TAG,
   EVENT_TYPES,
   LANG_ENGLISH,
@@ -91,10 +90,10 @@ const playlist = collection => {
     return {};
   }
 
-  const units = collection.content_units || [];
+  const { content_units: units = [], name, content_type } = collection;
 
   let items;
-  if (EVENT_TYPES.indexOf(collection.content_type) !== -1) {
+  if (EVENT_TYPES.indexOf(content_type) !== -1) {
     const { start_date: sDate, end_date: eDate } = collection;
     const mSDate                                 = moment(sDate);
     const mEDate                                 = moment(eDate);
@@ -138,8 +137,7 @@ const playlist = collection => {
   }
 
   // don't include items without unit
-  items      = items.filter(item => !!item);
-  const name = collection.content_type === CT_SONGS ? collection.name : null;
+  items = items.filter(item => !!item);
   return { items, name };
 };
 

@@ -59,7 +59,7 @@ const initialState = {
 };
 
 const onBuild = draft => {
-  draft.info = { isReady: false };
+  draft.info = { isReady: false, wip: true };
 };
 
 const onBuildSuccess = (draft, payload) => {
@@ -73,7 +73,7 @@ const onBuildSuccess = (draft, payload) => {
     language = draft.itemById[cuId].languages[0];
   }
   const quality = draft.info.quality || draft.itemById[cuId].qualityByLang[language]?.[0];
-  draft.info    = { ...info, cuId, language, quality, isReady: true };
+  draft.info    = { ...info, cuId, language, quality, isReady: true, wip: false };
   console.log(draft.info);
 };
 
@@ -104,6 +104,8 @@ const onSetMediaType = (draft, payload) => draft.info.mediaType = payload;
 
 export const reducer = handleActions({
   [PLAYLIST_BUILD]: onBuild,
+  [SINGLE_MEDIA_BUILD]: onBuild,
+  [MY_PLAYLIST_BUILD]: onBuild,
   [PLAYLIST_BUILD_SUCCESS]: onBuildSuccess,
   [playerTypes.PLAYER_REMOVE]: onRemovePlayer,
 
