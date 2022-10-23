@@ -5,8 +5,9 @@ import { stopBubbling } from '../../../helpers/utils';
 import { withNamespaces } from 'react-i18next';
 
 const seek = (e, pos) => {
-  const p = window.jwplayer(JWPLAYER_ID);
-  p.seek(p.getPosition() + pos);
+  const p    = window.jwplayer(JWPLAYER_ID);
+  const nPos = p.getPosition() + pos;
+  p.seek(nPos > 0 ? nPos : 0);
   stopBubbling(e);
 };
 
