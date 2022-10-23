@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import { withNamespaces } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -26,7 +26,7 @@ const PlaylistCollectionPage = ({ t }) => {
   if (wipErr) return wipErr;
   const cuId = collection.content_units[0]?.id;
 
-  return <PlaylistContainer cId={id} cuId={cuId} />;
+  return <PlaylistContainer cId={id} cuId={cuId} isC={true} />;
 };
 
 export default withNamespaces()(PlaylistCollectionPage);
