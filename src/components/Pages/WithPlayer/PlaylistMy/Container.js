@@ -14,16 +14,16 @@ const PlaylistMyContainer = ({ t }) => {
   const location = useLocation();
   const history  = useHistory();
 
-  const { pId, cuId } = useSelector(state => selectors.getInfo(state.playlist));
-  const cuIds         = useSelector(state => selectors.getPlaylist(state.playlist));
+  const { pId, cuId, wip } = useSelector(state => selectors.getInfo(state.playlist));
+  const cuIds              = useSelector(state => selectors.getPlaylist(state.playlist));
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (id !== pId) {
+    if (id !== pId && !wip) {
       dispatch(actions.myPlaylistBuild(id));
     }
-  }, [id, pId]);
+  }, [id, pId, wip]);
 
   useEffect(() => {
     if (cuId) {
