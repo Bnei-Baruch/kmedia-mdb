@@ -12,7 +12,7 @@ import ExcerptContainer from './components/Sections/Excerpt/ExcerptContainer';
 // import ProjectStatus from './components/Sections/ProjectStatus/ProjectStatus';
 import Help from './components/Sections/Help/Help';
 import HomePage from './components/Sections/Home/Container';
-import LastLessonCollection from './components/Sections/Lesson/LastDaily';
+import LastLessonCollection from './components/Pages/PlaylistLastDaily';
 import Lessons from './components/Sections/Lessons/MainPage';
 import LibraryHomepage from './components/Sections/Library/Homepage';
 import LibraryContainer from './components/Sections/Library/LibraryContainer';

@@ -11,7 +11,7 @@ import { fromToLocalized } from '../../../../helpers/date';
 import PlaylistPlayIcon from '../../../../images/icons/PlaylistPlay';
 import { selectors as mdb } from '../../../../redux/modules/mdb';
 import { selectors } from '../../../../redux/modules/playlist';
-import LessonDatePicker from './LessonDatePickerContainer';
+import LessonDatePickerContainer from './LessonDatePickerContainer';
 
 const PlaylistHeader = ({ t }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
@@ -87,7 +87,7 @@ const PlaylistHeader = ({ t }) => {
 
     return (
       <>
-        {isLesson && !isMobileDevice && <LessonDatePicker />}
+        {isLesson && !isMobileDevice && <LessonDatePickerContainer />}
         {getTitle()}
         {
           subheader && (
@@ -115,7 +115,7 @@ const PlaylistHeader = ({ t }) => {
   return (
     <Header as="h2" className={clsx('avbox__playlist-header', { 'flex_column': !isLesson })}>
       <Header.Content content={getTitleByCO()} />
-      {isLesson && isMobileDevice && <LessonDatePicker />}
+      {isLesson && isMobileDevice && <LessonDatePickerContainer />}
     </Header>
   );
 };

@@ -41,7 +41,8 @@ const LessonDatePickerContainer = ({ t }) => {
   const dispatch = useDispatch();
   useEffect(() => {
     const idx = cWindow?.data?.indexOf(cId) || -1;
-    if (idx < 1 && !wipMap.cWindow[cId]) {
+
+    if (idx < 1 && !wipMap.cWindow[cId] && cId !== cWindow.id) {
       const { film_date }            = denorm(cId);
       const { start_date, end_date } = getStartEndByFilmDate(film_date);
       dispatch(actions.fetchWindow({ id: cId, start_date, end_date }));
