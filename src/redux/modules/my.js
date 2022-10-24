@@ -104,32 +104,37 @@ export const actions = {
 };
 
 /* Reducer */
+const newNamespace      = {
+  keys: [],
+  byKey: {},
+  total: 0,
+  wip: false,
+  errors: null,
+  pageNo: 0,
+  deleted: false
+};
 const initialNamespaces = MY_NAMESPACES.reduce((acc, n) => {
-  acc[n] = {
-    keys: [],
-    byKey: {},
-    total: 0,
-    wip: false,
-    errors: null,
-    pageNo: 0,
-    deleted: false
-  };
+  acc[n] = { ...newNamespace };
   return acc;
 }, {});
 
 const onSetPage = (draft, { namespace, pageNo }) => draft[namespace].pageNo = pageNo;
 
 const onFetch = (draft, { namespace, addToList = true }) => {
+  if (!draft[namespace]) draft[namespace] = { ...newNamespace };
+
   addToList && (draft[namespace].total = 0);
-  draft[namespace].wip    = true;
-  draft[namespace].errors = false;
+  draft[namespace].wip     = true;
+  draft[namespace].errors  = false;
+  draft[namespace].fetched = false;
   return draft;
 };
 
 const onFetchSuccess = (draft, { namespace, addToList = true, items, total }) => {
-  draft[namespace].total  = total;
-  draft[namespace].wip    = false;
-  draft[namespace].errors = false;
+  draft[namespace].total   = total;
+  draft[namespace].wip     = false;
+  draft[namespace].errors  = false;
+  draft[namespace].fetched = true;
 
   const keys = addToList ? [] : draft[namespace].keys;
   Object.values(items).forEach(x => {
@@ -143,8 +148,9 @@ const onFetchSuccess = (draft, { namespace, addToList = true, items, total }) =>
 };
 
 const onFetchFailure = (draft, { namespace }) => {
-  draft[namespace].wip    = false;
-  draft[namespace].errors = true;
+  draft[namespace].wip     = false;
+  draft[namespace].errors  = true;
+  draft[namespace].fetched = true;
   return draft;
 };
 
@@ -216,7 +222,7 @@ const onReactionsCountSuccess = (draft, data) => {
       const { key } = getMyItemKey(MY_NAMESPACE_REACTIONS, x);
       acc[key]      = x.total;
       return acc;
-    }, draft.reactionsCount)
+    }, draft.reactionsCount);
   }
 
   return draft;
@@ -242,11 +248,18 @@ export const reducer = handleActions({
 }, { reactionsCount: {}, ...initialNamespaces });
 
 /* Selectors */
-const getList      = (state, namespace) => state[namespace].keys.map(key => getItemByKey(state, namespace, key));
+const getList      = (state, namespace) => state[namespace]?.keys.map(key => getItemByKey(state, namespace, key));
 const getItemByKey = (state, namespace, key) => state[namespace].byKey[key];
 
-const getWIP            = (state, namespace) => state[namespace].wip;
-const getErr            = (state, namespace) => state[namespace].errors;
+const getWIP            = (state, namespace) => state[namespace]?.wip || false;
+const getErr            = (state, namespace) => state[namespace]?.errors || null;
+const getInfo           = (state, namespace) => (
+  {
+    err: state[namespace]?.errors || null,
+    wip: state[namespace]?.wip || false,
+    fetched: state[namespace]?.fetched || false
+  }
+);
 const getDeleted        = (state, namespace) => state[namespace].deleted;
 const getPageNo         = (state, namespace) => state[namespace].pageNo;
 const getTotal          = (state, namespace) => state[namespace].total;
@@ -257,6 +270,7 @@ export const selectors = {
   getItemByKey,
   getWIP,
   getErr,
+  getInfo,
   getDeleted,
   getPageNo,
   getTotal,
