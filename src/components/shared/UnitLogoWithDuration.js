@@ -22,7 +22,6 @@ export const getLogoUnit = (content_units, historyItems) => {
 const UnitLogoWithDuration = ({ unit, size = 'normal', width = 144, ...propz }) => {
   const { id, duration } = unit;
 
-
   const historyItems = useSelector(state => my.getList(state.my, MY_NAMESPACE_HISTORY)) || [];
   const historyUnit = historyItems.find(x => x.content_unit_uid === id);
   const playTime = historyUnit?.data.current_time;

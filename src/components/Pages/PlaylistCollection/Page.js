@@ -127,7 +127,7 @@ const PlaylistCollectionPage = ({ collection, cuId, t }) => {
     }
 
     selectUnit(newSel);
-  }, [playlist, cuId, selectUnit, location.pathname, history, uiLanguage]);
+  }, [playlist, cuId, selectUnit, location.pathname, history, uiLanguage, collection?.id]);
 
   const shufflePlaylist = () => {
     const selectedItem     = playlist.items[selected];
