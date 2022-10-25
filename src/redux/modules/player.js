@@ -2,12 +2,14 @@ import { createAction } from 'redux-actions';
 import { handleActions } from './settings';
 import { JWPLAYER_ID, PLAYER_OVER_MODES } from '../../helpers/consts';
 
-const PLAYER_READY  = 'Player/READY';
-const PLAYER_REMOVE = 'Player/REMOVE';
-const PLAYER_PLAY   = 'Player/PLAY';
-const PLAYER_PAUSE  = 'Player/PAUSE';
-const PLAYER_RATE   = 'Player/RATE';
-const PLAYER_RESIZE = 'Player/RESIZE';
+const PLAYER_READY          = 'Player/READY';
+const PLAYER_REMOVE         = 'Player/REMOVE';
+const PLAYER_PLAY           = 'Player/PLAY';
+const PLAYER_PAUSE          = 'Player/PAUSE';
+const PLAYER_RATE           = 'Player/RATE';
+const PLAYER_RESIZE         = 'Player/RESIZE';
+const PLAYER_MUTE_UNMUTE    = 'Player/MUTE_UNMUTE';
+const PLAYER_DESTROY_PLUGIN = 'Player/DESTROY_PLUGIN';
 
 const PLAYER_SET_FILE           = 'Player/SET_FILE';
 const PLAYER_SET_OVER_MODE      = 'Player/SET_OVER_MODE';
@@ -18,7 +20,10 @@ const SET_SHARE_START_END = 'Player/SET_SHARE_START_END';
 
 export const types = {
   PLAYER_PLAY,
-  PLAYER_REMOVE
+  PLAYER_PAUSE,
+  PLAYER_MUTE_UNMUTE,
+  PLAYER_REMOVE,
+  PLAYER_DESTROY_PLUGIN
 };
 
 // Actions
@@ -26,10 +31,12 @@ const playerReady  = createAction(PLAYER_READY);
 const playerRemove = createAction(PLAYER_REMOVE);
 const setFile      = createAction(PLAYER_SET_FILE);
 
-const playerPlay   = createAction(PLAYER_PLAY);
-const playerPause  = createAction(PLAYER_PAUSE);
-const playerRate   = createAction(PLAYER_RATE);
-const playerResize = createAction(PLAYER_RESIZE);
+const playerPlay          = createAction(PLAYER_PLAY);
+const playerPause         = createAction(PLAYER_PAUSE);
+const playerRate          = createAction(PLAYER_RATE);
+const playerResize        = createAction(PLAYER_RESIZE);
+const playerMuteUnmute    = createAction(PLAYER_MUTE_UNMUTE);
+const playerDestroyPlugin = createAction(PLAYER_DESTROY_PLUGIN);
 
 const setOverMode     = createAction(PLAYER_SET_OVER_MODE);
 const continuePlay    = createAction(PLAYER_CONTINUE_PLAY_FROM);
@@ -56,8 +63,6 @@ const initialState = {
   shareStartEnd: { start: 0, end: Infinity },
 };
 
-const onReady = draft => draft.ready = true;
-
 const onRemove = draft => {
   draft.continuePlay = initialState.continuePlay;
   draft.overMode     = null;
@@ -74,17 +79,6 @@ const onNewPlaylistItem = (draft, e) => {
     draft.overMode     = null;
   }
 };
-const onSetFile         = (draft, payload) => draft.file = payload;
-
-const onPlay = (draft, payload) => draft.played = payload.newstate === 'playing';
-
-const onPause = draft => draft.played = false;
-
-const onRate = (draft, payload) => draft.rate = payload.playbackRate;
-
-const onResize = (draft, payload) => draft.width = payload.width;
-
-const onSetOverMode = (draft, payload) => draft.overMode = payload;
 
 const onContinuePlay = (draft, payload = -1) => {
   const p            = window.jwplayer(JWPLAYER_ID);
@@ -94,22 +88,21 @@ const onContinuePlay = (draft, payload = -1) => {
 };
 
 export const reducer = handleActions({
-  [PLAYER_READY]: onReady,
+  [PLAYER_READY]: draft => draft.ready = true,
   [PLAYER_REMOVE]: onRemove,
-  [PLAYER_SET_FILE]: onSetFile,
+  [PLAYER_SET_FILE]: (draft, payload) => draft.file = payload,
 
-  [PLAYER_PLAY]: onPlay,
-  [PLAYER_PAUSE]: onPause,
-  [PLAYER_RATE]: onRate,
-  [PLAYER_RESIZE]: onResize,
+  [PLAYER_PLAY]: (draft, payload) => draft.played = payload.newstate === 'playing',
+  [PLAYER_PAUSE]: draft => draft.played = false,
+  [PLAYER_RATE]: (draft, payload) => draft.rate = payload.playbackRate,
+  [PLAYER_RESIZE]: (draft, payload) => draft.width = payload.width,
+  [PLAYER_MUTE_UNMUTE]: (draft, payload) => draft.muteUnmute = payload,
 
-  [PLAYER_SET_OVER_MODE]: onSetOverMode,
+  [PLAYER_SET_OVER_MODE]: (draft, payload) => draft.overMode = payload,
   [PLAYER_CONTINUE_PLAY_FROM]: onContinuePlay,
   [PLAYER_NEW_PLAYLIST_ITEM]: onNewPlaylistItem,
 
-  [SET_SHARE_START_END]: (draft, payload) => {
-    draft.shareStartEnd = payload;
-  },
+  [SET_SHARE_START_END]: (draft, payload) => draft.shareStartEnd = payload
 }, initialState);
 
 const isReady          = state => state.ready;
@@ -138,4 +131,6 @@ export const PLAYER_ACTIONS_BY_EVENT = {
   'pause': playerPause,
   'playlistItem': newPlaylistItem,
   'resize': playerResize,
+  'mute': playerMuteUnmute,
+  'destroyPlugin': playerDestroyPlugin,
 };
