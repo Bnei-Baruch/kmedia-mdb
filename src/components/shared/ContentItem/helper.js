@@ -11,8 +11,8 @@ import {
 import { canonicalCollection, cuPartNameByCCUType } from '../../../helpers/utils';
 import { canonicalLink } from '../../../helpers/links';
 import { stringify } from '../../../helpers/url';
-import { PLAYER_POSITION_STORAGE_KEY } from '../../AVPlayer/constants';
 import { Progress } from 'semantic-ui-react';
+import { PLAYER_POSITION_STORAGE_KEY } from '../../Player/constants';
 
 
 export const imageWidthBySize = {
