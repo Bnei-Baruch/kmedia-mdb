@@ -105,9 +105,10 @@ const mediaPrefix                   = new Map([
   [CT_MEAL, '/events/cu/'],
   [CT_ARTICLE, '/publications/articles/cu/'],
 ]);
+
 const FIRST_PREPARATIONS_FOR_LESSON = moment('2017-01-01');
 
-const getCuByCcuSkipPreparation = (ccu) => {
+export const getCuByCcuSkipPreparation = (ccu) => {
   if (!ccu.cuIDs) return null;
 
   if (ccu.cuIDs.length < 2 || !ccu.film_date) {

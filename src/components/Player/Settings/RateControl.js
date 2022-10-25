@@ -17,7 +17,7 @@ const RateControl = ({ t }) => {
 
   return (
     <div className="settings__row">
-      <Header size="tiny">t('player.settings.playback-speed')</Header>
+      <Header size="tiny">{t('player.settings.playback-speed')}</Header>
       <Button.Group size="mini" inverted>
         {
           PLAYER_SPEEDS.map(x => {
