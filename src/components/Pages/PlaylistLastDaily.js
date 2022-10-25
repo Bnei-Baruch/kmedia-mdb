@@ -35,7 +35,7 @@ const LastLessonCollection = ({ t }) => {
     }
   }, [dispatch, cu_uids, myWip, myErr]);
 
-  const wipErr = WipErr({ wip: wip || !fetched, err: err && myErr, t });
+  const wipErr = WipErr({ wip: wip || !fetched || !cu_uids?.length, err: err && myErr, t });
 
   if (wipErr) {
     return wipErr;
