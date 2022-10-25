@@ -6,6 +6,7 @@ import { selectors } from '../../../../redux/modules/playlist';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import { Header } from 'semantic-ui-react';
 import { selectors as mdb } from '../../../../redux/modules/mdb';
+import { COLLECTION_DAILY_LESSONS } from '../../../../helpers/consts';
 
 const PlaylistItems = ({ t }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
@@ -13,6 +14,7 @@ const PlaylistItems = ({ t }) => {
   const cuIds                  = useSelector(state => selectors.getPlaylist(state.playlist));
   const { cId, cuId }          = useSelector(state => selectors.getInfo(state.playlist));
   const { name, content_type } = useSelector(state => mdb.getDenormCollection(state.mdb, cId)) || false;
+  const title                  = COLLECTION_DAILY_LESSONS.includes(content_type) ? t('constants.content-types.DAILY_LESSON') : name;
 
   return (
     <div id="avbox_playlist" className="avbox__playlist-view">
@@ -21,7 +23,7 @@ const PlaylistItems = ({ t }) => {
           <Header
             as="h3"
             className="avbox__playlist-header h3"
-            content={name || t(`playlist.title-by-type.${content_type}`)}
+            content={title || t(`playlist.title-by-type.${content_type}`)}
           />
         )
       }
