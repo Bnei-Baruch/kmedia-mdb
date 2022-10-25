@@ -74,7 +74,6 @@ const onBuildSuccess = (draft, payload) => {
   }
   const quality = draft.info.quality || draft.itemById[cuId].qualityByLang[language]?.[0];
   draft.info    = { ...info, cuId, language, quality, isReady: true, wip: false };
-  console.log(draft.info);
 };
 
 const onRemovePlayer = draft => {

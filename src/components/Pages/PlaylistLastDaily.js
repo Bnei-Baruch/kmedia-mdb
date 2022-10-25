@@ -9,17 +9,17 @@ import Helmets from '../shared/Helmets';
 import WipErr from '../shared/WipErr/WipErr';
 import { publicFile } from '../../helpers/utils';
 import PlaylistContainer from './WithPlayer/Playlist/PlaylistContainer';
-import { PAGE_NS_LESSONS } from '../../helpers/consts';
+import { MY_NAMESPACE_HISTORY } from '../../helpers/consts';
 import { isEqual } from 'lodash';
 
 const LastLessonCollection = ({ t }) => {
   const lastLessonId                        = useSelector(state => selectors.getLastLessonId(state.mdb));
   const wip                                 = useSelector(state => selectors.getWip(state.mdb).lastLesson);
   const err                                 = useSelector(state => selectors.getErrors(state.mdb).lastLesson);
-  const { cuIDs: cu_uids }                  = useSelector(state => selectors.getDenormCollection(state.mdb, lastLessonId), isEqual);
+  const { cuIDs: cu_uids }                  = useSelector(state => selectors.getDenormCollection(state.mdb, lastLessonId), isEqual) || false;
   const ccuFetched                          = useSelector(state => selectors.getFullCollectionFetched(state.mdb, lastLessonId)?.[lastLessonId], shallowEqual);
-  const lastLooked                          = useSelector(state => my.getList(state.my, PAGE_NS_LESSONS))?.[0];
-  const { wip: myWip, err: myErr, fetched } = useSelector(state => my.getInfo(state.my, PAGE_NS_LESSONS));
+  const { content_unit_uid: lastLooked }    = useSelector(state => my.getList(state.my, MY_NAMESPACE_HISTORY)?.[0]) || false;
+  const { wip: myWip, err: myErr, fetched } = useSelector(state => my.getInfo(state.my, MY_NAMESPACE_HISTORY));
 
   const dispatch = useDispatch();
 
@@ -31,7 +31,7 @@ const LastLessonCollection = ({ t }) => {
 
   useEffect(() => {
     if (cu_uids && !myWip && !fetched) {
-      dispatch(myActions.fetch(PAGE_NS_LESSONS, { cu_uids, page_size: cu_uids.length }));
+      dispatch(myActions.fetch(MY_NAMESPACE_HISTORY, { cu_uids, page_size: cu_uids.length }));
     }
   }, [dispatch, cu_uids, myWip, myErr]);
 
@@ -41,7 +41,7 @@ const LastLessonCollection = ({ t }) => {
     return wipErr;
   }
 
-  const cuId = lastLooked || cu_uids.length > 1 ? cu_uids[1] : cu_uids[0];
+  const cuId = lastLooked || (cu_uids.length > 1 ? cu_uids[1] : cu_uids[0]);
   return (
     <div>
       <Helmets.Basic title={t('lessons.last.title')} description={t('lessons.last.description')} />
