@@ -66,7 +66,7 @@ export const findPlayedFile = (item, info, lang, mt, q) => {
   }
 
   //can't find quality - take first
-  if (!qualityByLang[lang].includes(q)) {
+  if (mt !== MT_AUDIO && !qualityByLang[lang].includes(q)) {
     return findPlayedFile(item, info, lang, mt, qualityByLang[lang][0]);
   }
 
