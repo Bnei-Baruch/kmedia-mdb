@@ -25,13 +25,19 @@ export const getProgress = (unit, playTime) => {
   let progressIndicator = null;
 
   if (unit && playTime) {
-    localStorage.setItem(`${PLAYER_POSITION_STORAGE_KEY}_${unit.id}`, playTime);
     progressIndicator = (
       <Progress
         size="tiny"
         className="cu_item_progress"
         percent={playTime * 100 / unit.duration} />
     );
+
+    // if item had been fully played, start from the beginning
+    if (Math.abs(playTime - unit.duration) < 1) {
+      playTime = 0;
+    }
+
+    localStorage.setItem(`${PLAYER_POSITION_STORAGE_KEY}_${unit.id}`, playTime);
   }
 
   return progressIndicator;
