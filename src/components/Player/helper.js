@@ -1,23 +1,33 @@
-import { PLAYER_ACTIONS_BY_EVENT } from '../../redux/modules/player';
+import { batch } from 'react-redux';
+
+import { PLAYER_ACTIONS_BY_EVENT, actions } from '../../redux/modules/player';
 import { MT_VIDEO, MT_AUDIO } from '../../helpers/consts';
 import { isEmpty } from '../../helpers/utils';
 import { PLAYER_POSITION_STORAGE_KEY } from './constants';
+import { actions as playlistActions } from '../../redux/modules/playlist';
 
 export const DEFAULT_PLAYER_VOLUME     = 80;
 export const PLAYER_VOLUME_STORAGE_KEY = 'jwplayer.volume';
 
-const PLAYER_EVENTS = ['ready', 'remove', 'play', 'pause', 'playbackRateChanged', 'playlistItem', 'resize'];
+const PLAYER_EVENTS = ['ready', 'remove', 'play', 'pause', 'playbackRateChanged', 'playlistItem', 'resize', 'mute'];
 
 export const initPlayerEvents = (dispatch) => {
   const player = window.jwplayer();
-  player.on('error', e => {
-    console.error(e);
-  });
+
+  //for debug, catch all jwplayer events
+  //player.on('all', (name, e) => console.log('jwplayer all events', name, e));
+
+  player.on('error', e => console.error(e));
 
   player.on('remove', () => player.off('all'));
 
-  //for debug, catch all jwplayer events
-  // player.on('all', (name, e) => console.log('jwplayer all events', name, e));
+  player.on('complete', () => {
+    batch(() => {
+      dispatch(actions.continuePlay());
+      dispatch(playlistActions.next());
+      window.jwplayer().play();
+    });
+  });
 
   PLAYER_EVENTS.forEach(name => {
     const action = PLAYER_ACTIONS_BY_EVENT[name];

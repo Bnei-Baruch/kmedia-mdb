@@ -8,6 +8,7 @@ import { PLAYER_OVER_MODES } from '../../helpers/consts';
 import Player from './Player';
 import UpdateQueries from './UpdateQueries';
 import PlayerToolBars from './PlayerToolBars';
+import AppendChronicle from './AppendChronicle';
 
 const CLASSES_BY_MODE = {
   [PLAYER_OVER_MODES.settings]: 'is-settings',
@@ -25,6 +26,7 @@ const PlayerContainer = () => {
   return (
     <Ref innerRef={settRef}>
       <div className="player">
+        <AppendChronicle />
         <UpdateQueries />
         <div className={`web ${CLASSES_BY_MODE[mode]}`}>
           <PlayerToolBars handleFullScreen={handleFullScreen} />
