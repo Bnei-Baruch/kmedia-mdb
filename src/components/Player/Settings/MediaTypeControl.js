@@ -21,7 +21,7 @@ const MediaTypeControl = ({ t }) => {
 
   return (
     <div className="settings__row">
-      <Header size="tiny">t('player.settings.playback')</Header>
+      <Header size="tiny">{t('player.settings.playback')}</Header>
       <Button.Group size="mini" inverted>
         {
           [MT_VIDEO, MT_AUDIO].map(mt => (

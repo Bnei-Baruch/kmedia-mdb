@@ -25,7 +25,7 @@ const QualityControl = ({ t }) => {
 
   return (
     <div className="settings__row">
-      <Header size="tiny">t('player.settings.quality')</Header>
+      <Header size="tiny">{t('player.settings.quality')}</Header>
       <Button.Group size="mini" inverted>
         {
           qualityByLang?.[language]?.map((x, i) => (
