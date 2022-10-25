@@ -9,7 +9,6 @@ import { isLanguageRtl } from '../../../helpers/i18n-utils';
 import UnitLogo from '../Logo/UnitLogo';
 import Link from '../../Language/MultiLanguageLink';
 import { getProgress } from './helper';
-import { PLAYER_POSITION_STORAGE_KEY } from '../../Player/constants';
 
 const CardTemplate = ({ unit, language, withCCUInfo, link, ccu, description, children, playTime }) => {
   const dir = isLanguageRtl(language) ? 'rtl' : 'ltr';
@@ -26,7 +25,7 @@ const CardTemplate = ({ unit, language, withCCUInfo, link, ccu, description, chi
     </div>
   ) : null;
 
-  const trimText = (title, len = 150) => title.length < len ? title : `${title.substr(0, title.lastIndexOf(' ', len))  }...`;
+  const trimText = (title, len = 150) => title.length < len ? title : `${title.substr(0, title.lastIndexOf(' ', len))}...`;
 
   return (
     <Card raised className="cu_item" as={Link} to={link}>
