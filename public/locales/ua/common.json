@@ -8,7 +8,7 @@
       "lessons": "Уроки та Лекції",
       "programs": "Програми та Кліпи",
       "sources": "Бібліотека",
-      "likutim": "Likutim",
+      "likutim": "Збірники",
       "events": "Конгреси, події",
       "books": "Книжки",
       "topics": "Теми",
@@ -144,7 +144,7 @@
       "BLOG_POST": "Блог",
       "TRAINING": "Тренування",
       "KITEI_MAKOR": "Уривки першоджерел",
-      "LIKUTIM": "Assorted Excerpts",
+      "LIKUTIM": "Збірники",
       "SOURCE": "Бібліотека",
       "PICNIC": "Пікнік"
     }
