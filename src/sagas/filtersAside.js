@@ -1,19 +1,22 @@
 import uniq from 'lodash/uniq';
-import { all, call, put, select, takeEvery } from 'redux-saga/effects';
-import { filtersTransformer } from '../filters';
+import { all, call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
+
 import Api from '../helpers/Api';
 import {
   CT_DAILY_LESSON,
-  CT_LESSON_PART,
   CT_LESSONS,
+  CT_LESSON_PART,
   FN_CONTENT_TYPE,
   FN_LANGUAGES,
   FN_SHOW_LESSON_AS_UNITS,
-  PAGE_NS_LESSONS
+  PAGE_NS_LESSONS,
 } from '../helpers/consts';
 import { isEmpty } from '../helpers/utils';
+import { filtersTransformer } from '../filters';
 import { selectors as filterSelectors } from '../redux/modules/filters';
-
+import { selectors as settingsSelectors } from '../redux/modules/settings';
+//import { selectFilterParams } from './search';
+import { selectors as searchSelectors } from '../redux/modules/search';
 import { actions, types } from '../redux/modules/filtersAside';
 
 const RESULT_NAME_BY_PARAM = {
@@ -172,8 +175,34 @@ export function* fetchLanguageStat(params, namespace, dataL = {}, isPrepare, cou
   }
 }
 
+export function* fetchElasticStat(action) {
+  const filters         = yield select(state => filterSelectors.getFilters(state.filters, 'search'));
+  const apiParams       = filtersTransformer.toApiParams(filters);
+  const filterKeyValues = Object.entries(apiParams).map(([v, k]) => `${v}:${k}`).join(' ');
+  const filterParams    = filterKeyValues ? ` ${filterKeyValues}` : '';
+  const language        = yield select(state => settingsSelectors.getLanguage(state.settings));
+  const query           = yield select(state => searchSelectors.getQuery(state.search));
+  const q               = query.trim() ? `${query.trim()}${filterParams}` : filterParams;
+
+  try {
+    const { data } = yield call(Api.elasticStats, { q, language });
+
+    yield put(actions.fetchElasticStatsSuccess({ data, namespace: 'search' }));
+  } catch (err) {
+    yield put(actions.fetchElasticStatsFailure('search', err));
+  }
+}
+
 function* watchFetchStat() {
   yield takeEvery(types.FETCH_STATS, fetchStat);
 }
 
-export const sagas = [watchFetchStat];
+function* watchElasticFetchStat() {
+  // TODO: Move search stats fetch parallel to search, not after.
+  yield takeLatest(types.FETCH_ELASTIC_STATS, fetchElasticStat);
+}
+
+export const sagas = [
+  watchFetchStat,
+  watchElasticFetchStat,
+];

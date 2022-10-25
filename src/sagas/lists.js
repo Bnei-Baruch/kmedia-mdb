@@ -33,9 +33,10 @@ function* fetchList(action) {
   let { withViews = false, namespace, ...args } = action.payload;
 
   if (namespace.startsWith('intents')) {
+    // Handle special case for search intents result, lessons or programs.
     args.with_files = true;
     if (args.content_type === 'lessons') {
-      args.content_type && delete args.content_type;
+      args.content_type = CT_LESSON_PART;
     } else {
       args.content_type = CT_VIDEO_PROGRAM_CHAPTER;
     }
