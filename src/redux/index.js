@@ -16,6 +16,7 @@ import { reducer as music } from './modules/music';
 import { reducer as my } from './modules/my';
 import { reducer as player } from './modules/player';
 import { reducer as playlist } from './modules/playlist';
+import { reducer as preparePage } from './modules/preparePage';
 import { reducer as publications } from './modules/publications';
 import { reducer as recommended } from './modules/recommended';
 import { reducer as search } from './modules/search';

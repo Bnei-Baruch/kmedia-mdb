@@ -12,7 +12,8 @@ import ExcerptContainer from './components/Sections/Excerpt/ExcerptContainer';
 // import ProjectStatus from './components/Sections/ProjectStatus/ProjectStatus';
 import Help from './components/Sections/Help/Help';
 import HomePage from './components/Sections/Home/Container';
-import LastLessonCollection from './components/Sections/Lesson/LastDaily';
+import LastLessonCollection from './components/Pages/PlaylistLastDaily';
+import LessonCollection from './components/Sections/Lesson/LessonPage';
 import Lessons from './components/Sections/Lessons/MainPage';
 import LibraryHomepage from './components/Sections/Library/Homepage';
 import LibraryContainer from './components/Sections/Library/LibraryContainer';
@@ -47,6 +48,7 @@ import {
 // import Design from './components/Design/Design';
 import * as ssrDataLoaders from './routesSSRData';
 import PlaylistCollectionPage from './components/Pages/PlaylistCollectionPage';
+import PlaylistItemPageMusic from './components/Sections/Music/PlaylistItemPageMusic';
 
 const routes = [
   { path: '', component: HomePage, options: { ssrData: ssrDataLoaders.home } },
@@ -75,6 +77,11 @@ const routes = [
     path: 'lessons/:tab/c/:id',
     component: PlaylistCollectionPage,
     options: { ssrData: ssrDataLoaders.lessonsCollectionPage }
+  },
+  {
+    path: 'music/:id/cu/:cuId',
+    component: PlaylistItemPageMusic,
+    options: { ssrData: ssrDataLoaders.playlistCollectionPage }
   },
   { path: ':routeType/:tab/cu/:id', component: PlaylistItemPage, options: { ssrData: ssrDataLoaders.cuPage } },
   { path: 'lessons/daily/latest', component: LastLessonCollection, options: { ssrData: ssrDataLoaders.latestLesson } },
