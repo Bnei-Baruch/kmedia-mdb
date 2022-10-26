@@ -11,18 +11,11 @@ import {
   MT_VIDEO,
   VS_DEFAULT,
 } from './consts';
-import { getQuery, stringify, updateQuery } from './url';
-import { canonicalLink } from './links';
+import { getQuery, updateQuery } from './url';
 import MediaHelper from './media';
 import { isEmpty, physicalFile } from './utils';
 
 const restorePreferredMediaType = () => localStorage.getItem('@@kmedia_player_media_type') || MT_VIDEO;
-
-const persistPreferredMediaType = value => localStorage.setItem('@@kmedia_player_media_type', value);
-
-const restorePreferredVideoSize = () => localStorage.getItem('@@kmedia_player_video_size') || VS_DEFAULT;
-
-const persistPreferredVideoSize = value => localStorage.setItem('@@kmedia_player_video_size', value);
 
 const isPlayable = file => MediaHelper.IsMp4(file) || MediaHelper.IsMp3(file);
 
@@ -50,7 +43,7 @@ const calcAvailableLanguages = unit => {
       new Set()));
 };
 
-const playableItem = (unit, preImageUrl) => {
+export const playableItem = (unit, preImageUrl) => {
   if (!unit) {
     return {};
   }
@@ -85,7 +78,7 @@ const playableItem = (unit, preImageUrl) => {
   };
 };
 
-const playlist = collection => {
+export const playlist = collection => {
   if (!collection) {
     return {};
   }
@@ -141,92 +134,38 @@ const playlist = collection => {
   return { items, name };
 };
 
-const playlistFromUnits = (collection, mediaType, contentLanguage, uiLanguage) => {
-  const items = collection.content_units
-    .map(x => playableItem(x))
-    .filter(item => !!item.unit)
-    .map(x => {
-      x.shareUrl = canonicalLink(x.unit, null, collection);
-      return x;
-    });
-
-  return { items, collection, mediaType, contentLanguage, uiLanguage, name: collection.name };
-};
-
-const getMediaTypeFromQuery = (location) => {
+//query utilities
+export const getMediaTypeFromQuery = (location) => {
   const query = getQuery(location || window?.location);
   const mt    = (query.mediaType || '').toLowerCase();
   return [MT_VIDEO, MT_AUDIO].includes(mt) ? mt : restorePreferredMediaType();
 };
 
-const setMediaTypeInQuery = (history, mediaType = MT_VIDEO) => {
+export const setMediaTypeInQuery = (history, mediaType = MT_VIDEO) => {
   updateQuery(history, query => ({
     ...query,
     mediaType
   }));
 };
 
-const getLanguageFromQuery = (location, fallbackLanguage = LANG_ENGLISH) => {
+export const getLanguageFromQuery = (location, fallbackLanguage = LANG_ENGLISH) => {
   const query    = getQuery(location);
   const language = query.language || fallbackLanguage || LANG_ENGLISH;
   return language.toLowerCase();
 };
 
-const setLanguageInQuery = (history, language) =>
-  updateQuery(history, query => ({
-    ...query,
-    language
-  }));
+export const setLanguageInQuery = (history, language) => updateQuery(history, query => ({
+  ...query,
+  language
+}));
 
-const getActivePartFromQuery = (location, def = 0) => {
+export const getActivePartFromQuery = (location, def = 0) => {
   const q = getQuery(location);
   const p = q.ap ? parseInt(q.ap, 10) : def;
   return Number.isNaN(p) || p < 0 ? def : p;
 };
 
-const setActivePartInQuery = (history, ap) =>
-  updateQuery(history, query => ({
-    ...query,
-    ap
-  }));
-
-const linkWithoutActivePart = location => {
-  const { search } = getQuery(location);
-  return `${location.pathname || '/'}${stringify(search)}`;
-};
-
-const getEmbedFromQuery = location => {
+export const getEmbedFromQuery = location => {
   const query = getQuery(location);
   return query.embed === '1';
 };
-
-const switchAV = (selectedItem, history) => {
-  if (selectedItem.mediaType === MT_AUDIO && selectedItem.availableMediaTypes.includes(MT_VIDEO)) {
-    setMediaTypeInQuery(history, MT_VIDEO);
-    persistPreferredMediaType(MT_VIDEO);
-  } else if (selectedItem.mediaType === MT_VIDEO && selectedItem.availableMediaTypes.includes(MT_AUDIO)) {
-    setMediaTypeInQuery(history, MT_AUDIO);
-    persistPreferredMediaType(MT_AUDIO);
-  }
-};
-
-const exportMethods = {
-  playableItem,
-  playlist,
-  playlistFromUnits,
-  getMediaTypeFromQuery,
-  setMediaTypeInQuery,
-  getLanguageFromQuery,
-  setLanguageInQuery,
-  getActivePartFromQuery,
-  setActivePartInQuery,
-  linkWithoutActivePart,
-  restorePreferredMediaType,
-  persistPreferredMediaType,
-  restorePreferredVideoSize,
-  persistPreferredVideoSize,
-  getEmbedFromQuery,
-  switchAV
-};
-
-export default exportMethods;

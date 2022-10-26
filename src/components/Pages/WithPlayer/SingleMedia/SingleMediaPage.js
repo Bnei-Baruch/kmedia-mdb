@@ -6,7 +6,7 @@ import Recommended from '../widgets/Recommended/Main/Recommended';
 import PlayerContainer from '../../../Player/PlayerContainer';
 import clsx from 'clsx';
 import { useLocation } from 'react-router-dom';
-import playerHelper from '../../../../helpers/player';
+import { getEmbedFromQuery } from '../../../../helpers/player';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import { useSelector } from 'react-redux';
 import { selectors } from '../../../../redux/modules/playlist';
@@ -19,7 +19,7 @@ const SingleMediaPage = ({ t }) => {
 
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const location           = useLocation();
-  const embed              = playerHelper.getEmbedFromQuery(location);
+  const embed              = getEmbedFromQuery(location);
 
   const isReady = useSelector(state => selectors.getInfo(state.playlist).isReady);
 

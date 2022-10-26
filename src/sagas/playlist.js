@@ -9,7 +9,13 @@ import { selectors as mdb } from '../redux/modules/mdb';
 import { MY_NAMESPACE_PLAYLISTS, MY_NAMESPACE_REACTIONS, IsCollectionContentType } from '../helpers/consts';
 import { canonicalCollection } from '../helpers/utils';
 import { getMyItemKey } from '../helpers/my';
-import playerHelper from '../helpers/player';
+import {
+  getActivePartFromQuery,
+  getMediaTypeFromQuery,
+  playlist as playlistBuilder,
+  getLanguageFromQuery,
+  playableItem
+} from '../helpers/player';
 import { assetUrl } from '../helpers/Api';
 import { fetchCollection, fetchUnit, fetchUnitsByIDs } from './mdb';
 import { fetchViewsByUIDs } from './recommended';
@@ -28,7 +34,7 @@ function* build(action) {
   let c = yield select(state => mdb.getDenormCollection(state.mdb, cId));
 
   if (!cuId) {
-    cuId = c.cuIDs?.[playerHelper.getActivePartFromQuery(location)];
+    cuId = c.cuIDs?.[getActivePartFromQuery(location)];
   }
 
   const cu = yield select(state => mdb.getDenormContentUnit(state.mdb, cuId));
@@ -48,10 +54,10 @@ function* build(action) {
   const siteLang    = yield select(state => settings.getLanguage(state.settings));
   const contentLang = yield select(state => settings.getContentLanguage(state.settings));
 
-  const mediaType = playerHelper.getMediaTypeFromQuery(location);
-  const language  = playerHelper.getLanguageFromQuery(location, siteLang || contentLang);
+  const mediaType = getMediaTypeFromQuery(location);
+  const language  = getLanguageFromQuery(location, siteLang || contentLang);
 
-  const data = playerHelper.playlist(c);
+  const data = playlistBuilder(c);
 
   yield put(actions.buildSuccess({ ...data, language, mediaType, cuId, cId }));
   yield fetchViewsByUIDs(data.items.map(x => x.id));
@@ -73,10 +79,10 @@ function* singleMediaBuild(action) {
   const siteLang    = yield select(state => settings.getLanguage(state.settings));
   const contentLang = yield select(state => settings.getContentLanguage(state.settings));
 
-  const mediaType   = playerHelper.getMediaTypeFromQuery(location);
-  const language    = playerHelper.getLanguageFromQuery(location, siteLang || contentLang);
+  const mediaType   = getMediaTypeFromQuery(location);
+  const language    = getLanguageFromQuery(location, siteLang || contentLang);
   const preImageUrl = !!c ? assetUrl(`logos/collections/${c.id}.jpg`) : null;
-  const item        = playerHelper.playableItem(cu, preImageUrl);
+  const item        = playableItem(cu, preImageUrl);
 
   yield put(actions.buildSuccess({ items: [item], language, mediaType, cuId, cId: c.id, isSingleMedia: true }));
   yield fetchViewsByUIDs([cuId]);
@@ -97,10 +103,10 @@ function* myPlaylistBuild(action) {
   const contentLang = yield select(state => settings.getContentLanguage(state.settings));
 
   const { location } = yield select(state => state.router);
-  const mediaType    = playerHelper.getMediaTypeFromQuery(location);
-  const language     = playerHelper.getLanguageFromQuery(location, siteLang || contentLang);
-  const ap           = playerHelper.getActivePartFromQuery(location);
-  const items        = content_units.map(cu => playerHelper.playableItem(cu));
+  const mediaType    = getMediaTypeFromQuery(location);
+  const language     = getLanguageFromQuery(location, siteLang || contentLang);
+  const ap           = getActivePartFromQuery(location);
+  const items        = content_units.map(cu => playableItem(cu));
   const cuId         = items[ap]?.id || items[0].id;
   const baseLink     = `/${siteLang}/${MY_NAMESPACE_PLAYLISTS}/${pId}`;
 

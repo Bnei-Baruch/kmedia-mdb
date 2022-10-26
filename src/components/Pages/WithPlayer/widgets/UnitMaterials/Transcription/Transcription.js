@@ -11,7 +11,7 @@ import { selectSuitableLanguage } from '../../../../../../helpers/language';
 import { getLanguageDirection } from '../../../../../../helpers/i18n-utils';
 import { DeviceInfoContext } from '../../../../../../helpers/app-contexts';
 import { physicalFile } from '../../../../../../helpers/utils';
-import playerHelper from '../../../../../../helpers/player';
+import { getActivePartFromQuery } from '../../../../../../helpers/player';
 import MediaHelper from '../../../../../../helpers/media';
 import { getQuery } from '../../../../../../helpers/url';
 import ScrollToSearch from '../../../../../shared/DocToolbar/ScrollToSearch';
@@ -109,7 +109,7 @@ class Transcription extends Component {
         || nextState.selectedFile !== state.selectedFile
         || !isEqual(nextProps.doc2htmlById, props.doc2htmlById)
         || (!!state.selectedFile && props.doc2htmlById
-            && (props.doc2htmlById[state.selectedFile.id]?.wip !== nextProps.doc2htmlById[state.selectedFile.id]?.wip))
+          && (props.doc2htmlById[state.selectedFile.id]?.wip !== nextProps.doc2htmlById[state.selectedFile.id]?.wip))
       );
   }
 
@@ -196,7 +196,7 @@ class Transcription extends Component {
     const { textFiles, selectedFile, language, fileCU } = this.state;
     const { location, activeTab, unit }                 = this.props;
 
-    const ap                = playerHelper.getActivePartFromQuery(location);
+    const ap                = getActivePartFromQuery(location);
     const selectedFileProps = selectedFile ? `&selectedFileId=${selectedFile.id}` : '';
     const urlParams         = `activeTab=${activeTab}${selectedFileProps}${!ap ? '' : `&ap=${ap}`}`;
     const direction         = getLanguageDirection(language);

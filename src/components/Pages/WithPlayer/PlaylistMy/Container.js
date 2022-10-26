@@ -5,9 +5,10 @@ import { useHistory } from 'react-router';
 import { Header } from 'semantic-ui-react';
 
 import { actions, selectors } from '../../../../redux/modules/playlist';
-import playerHelper from '../../../../helpers/player';
+
 import Page from './Page';
 import { withNamespaces } from 'react-i18next';
+import { getActivePartFromQuery } from '../../../../helpers/player';
 
 const PlaylistMyContainer = ({ t }) => {
   const { id }   = useParams();
@@ -28,7 +29,7 @@ const PlaylistMyContainer = ({ t }) => {
   useEffect(() => {
     if (cuId) {
       const up    = cuIds.findIndex(id => cuId === id);
-      const newUp = playerHelper.getActivePartFromQuery(location);
+      const newUp = getActivePartFromQuery(location);
       if (up !== newUp) {
         dispatch(actions.select(cuIds[newUp]));
       }
