@@ -5,6 +5,8 @@ import { selectors as playlist } from '../../../redux/modules/playlist';
 import { formatDuration } from '../../../helpers/utils';
 import isFunction from 'lodash/isFunction';
 import { PLAYER_POSITION_STORAGE_KEY } from '../constants';
+import { noop } from 'lodash/util';
+import { JWPLAYER_ID } from '../../../helpers/consts';
 
 export const Timecode = () => {
   const [time, setTime] = useState(0);
@@ -13,23 +15,21 @@ export const Timecode = () => {
   const isReady = useSelector(state => player.isReady(state.player));
   const cuId    = useSelector(state => playlist.getInfo(state.playlist).cuId);
 
-  useEffect(() => {
-    setTime(0);
-  }, [cuId]);
+  useEffect(() => setTime(0), [cuId]);
+
+  const checkTimeAfterSeek = d => {
+    setTime(Math.round(d.currentTime));
+    localStorage.setItem(`${PLAYER_POSITION_STORAGE_KEY}_${cuId}`, d.currentTime);
+  };
 
   useEffect(() => {
-    if (!isReady) return () => null;
+    if (!isReady) return noop;
 
-    const checkTimeAfterSeek = d => {
-      setTime(Math.round(d.currentTime));
-      localStorage.setItem(`${PLAYER_POSITION_STORAGE_KEY}_${cuId}`, d.currentTime);
-    };
-
-    const p = window.jwplayer();
+    const p = window.jwplayer(JWPLAYER_ID);
     p.on('seek', checkTimeAfterSeek);
     p.on('time', checkTimeAfterSeek);
     return () => {
-      p.off('seeked', checkTimeAfterSeek);
+      p.off('seek', checkTimeAfterSeek);
       p.off('time', checkTimeAfterSeek);
     };
   }, [isReady, cuId]);

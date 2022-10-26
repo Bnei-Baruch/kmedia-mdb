@@ -6,30 +6,28 @@ import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { NO_NAME } from '../../../helpers/consts';
 import { isLanguageRtl } from '../../../helpers/i18n-utils';
 import { formatDuration } from '../../../helpers/utils';
-import { PLAYER_POSITION_STORAGE_KEY } from '../../Player/constants';
 import Link from '../../Language/MultiLanguageLink';
 
 import * as shapes from '../../shapes';
 import UnitLogo from '../Logo/UnitLogo';
 import { imageWidthBySize, getProgress } from './helper';
 
-
 const ListTemplate = ({
-  unit,
-  source,
-  tag,
-  language,
-  withCUInfo,
-  withCCUInfo,
-  link,
-  ccu,
-  description,
-  children,
-  playTime,
-  size = 'big',
-  selected,
-  label
-}) => {
+                        unit,
+                        source,
+                        tag,
+                        language,
+                        withCUInfo,
+                        withCCUInfo,
+                        link,
+                        ccu,
+                        description,
+                        children,
+                        playTime,
+                        size = 'big',
+                        selected,
+                        label
+                      }) => {
 
   const dir                = isLanguageRtl(language) ? 'rtl' : 'ltr';
   const { isMobileDevice } = useContext(DeviceInfoContext);

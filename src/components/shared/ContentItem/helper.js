@@ -12,8 +12,6 @@ import { canonicalCollection, cuPartNameByCCUType } from '../../../helpers/utils
 import { canonicalLink } from '../../../helpers/links';
 import { stringify } from '../../../helpers/url';
 import { Progress } from 'semantic-ui-react';
-import { PLAYER_POSITION_STORAGE_KEY } from '../../Player/constants';
-
 
 export const imageWidthBySize = {
   'tiny': 120,
@@ -25,7 +23,6 @@ export const getProgress = (unit, playTime) => {
   let progressIndicator = null;
 
   if (unit && playTime) {
-    localStorage.setItem(`${PLAYER_POSITION_STORAGE_KEY}_${unit.id}`, playTime);
     progressIndicator = (
       <Progress
         size="tiny"

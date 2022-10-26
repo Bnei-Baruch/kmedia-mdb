@@ -8,6 +8,7 @@ import { useLocation } from 'react-router-dom';
 import { startEndFromQuery } from './Controls/helper';
 import { selectors as playlist } from '../../redux/modules/playlist';
 import isFunction from 'lodash/isFunction';
+import { usePrevious } from '../../helpers/utils';
 
 const Player = () => {
   const ref            = useRef();
@@ -16,12 +17,15 @@ const Player = () => {
   const { start, end } = startEndFromQuery(location);
 
   const isReady = useSelector(state => player.isReady(state.player));
+  const isPlay  = useSelector(state => player.isPlay(state.player));
 
   const item = useSelector(state => playlist.getPlayed(state.playlist), shallowEqual);
   const info = useSelector(state => playlist.getInfo(state.playlist), shallowEqual);
   const file = useMemo(() => findPlayedFile(item, info), [item, info]);
 
   const { cuId, isSingleMedia } = info;
+
+  const pCuId = usePrevious(cuId);
 
   const checkStopTime = useCallback(d => {
     if (d.currentTime > end) {
@@ -63,23 +67,22 @@ const Player = () => {
     }
   }, [isReady, start, end]);
 
-  //start from before saved time
+  //start from saved time on load
   useEffect(() => {
-    if (isReady && !start && !end) {
-      const jwp  = window.jwplayer();
-      const seek = getSavedTime(cuId);
-      if (!isNaN(seek) && seek > 0) {
-        jwp.play().seek(seek).pause();
-      }
-      if (isSingleMedia) {
-        jwp.play();
-      }
+    if (!isReady || start || end || (!pCuId && cuId === pCuId)) return;
+
+    const jwp  = window.jwplayer(JWPLAYER_ID);
+    const seek = getSavedTime(cuId);
+
+    if (!isNaN(seek) && seek > 0 && (seek + 10 < file.duration)) {
+      jwp.seek(seek).play()[(isPlay || isSingleMedia) ? 'play' : 'pause']();
     }
-  }, [isReady, cuId, isSingleMedia, start, end]);
+   // (isPlay || isSingleMedia) ? jwp.play() : jwp.pause();
+  }, [isReady, cuId, pCuId, isPlay, start, end, isSingleMedia, file.duration]);
 
   return (
     <div ref={ref}>
-      <div id={JWPLAYER_ID}> video</div>
+      <div id={JWPLAYER_ID}></div>
     </div>
   );
 };

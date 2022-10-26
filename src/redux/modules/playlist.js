@@ -58,9 +58,7 @@ const initialState = {
   isReady: false
 };
 
-const onBuild = draft => {
-  draft.info = { isReady: false, wip: true };
-};
+const onBuild = draft => draft.info = { isReady: false, wip: true };
 
 const onBuildSuccess = (draft, payload) => {
   const { cuId, items, ...info } = payload;
@@ -80,10 +78,6 @@ const onRemovePlayer = draft => {
   draft.info = { isReady: false };
 };
 
-const onSelect = (draft, payload) => {
-  draft.info.cuId = payload;
-};
-
 const onNext = draft => {
   const idx       = draft.playlist.findIndex(x => x === draft.info.cuId);
   const lastIdx   = draft.playlist.length - 1;
@@ -95,12 +89,6 @@ const onPrev = draft => {
   draft.info.cuId = draft.playlist[idx > 1 ? idx - 1 : 0];
 };
 
-const onSetQuality = (draft, payload) => draft.info.quality = payload;
-
-const onSetLanguage = (draft, payload) => draft.info.language = payload;
-
-const onSetMediaType = (draft, payload) => draft.info.mediaType = payload;
-
 export const reducer = handleActions({
   [PLAYLIST_BUILD]: onBuild,
   [SINGLE_MEDIA_BUILD]: onBuild,
@@ -110,11 +98,11 @@ export const reducer = handleActions({
 
   [PLAYLIST_NEXT]: onNext,
   [PLAYLIST_PREV]: onPrev,
-  [PLAYLIST_SELECT]: onSelect,
+  [PLAYLIST_SELECT]: (draft, payload) => draft.info.cuId = payload,
 
-  [PLAYER_SET_QUALITY]: onSetQuality,
-  [PLAYER_SET_LANGUAGE]: onSetLanguage,
-  [PLAYER_SET_MEDIA_TYPE]: onSetMediaType,
+  [PLAYER_SET_QUALITY]: (draft, payload) => draft.info.quality = payload,
+  [PLAYER_SET_LANGUAGE]: (draft, payload) => draft.info.language = payload,
+  [PLAYER_SET_MEDIA_TYPE]: (draft, payload) => draft.info.mediaType = payload,
 }, initialState);
 
 const getPlaylist = state => state.playlist;
