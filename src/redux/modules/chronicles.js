@@ -1,8 +1,6 @@
-import { createAction } from 'redux-actions';
-
+import { createAction, handleActions } from 'redux-actions';
 import { types as authTypes } from './auth';
 import { types as playerTypes } from './player';
-import { handleActions } from './settings';
 
 const USER_INACTIVE = 'USER_INACTIVE';
 
@@ -27,6 +25,7 @@ const initialState = {
 const onAction = (draft, payload) => {
   draft.actionsCount = draft.actionsCount + 1;
   draft.lastAction   = payload;
+  return draft;
 };
 
 export const reducer = handleActions({
@@ -37,10 +36,10 @@ export const reducer = handleActions({
   [authTypes.LOGIN_SUCCESS]: onAction,
   [authTypes.LOGOUT_SUCCESS]: onAction,
 
-  [playerTypes.PLAYER_PLAY]: draft => draft.event = 'player-play',
-  [playerTypes.PLAYER_PAUSE]: draft => draft.event = 'player-stop',
-  [playerTypes.PLAYER_DESTROY_PLUGIN]: draft => draft.event = 'player-stop',
-  [playerTypes.PLAYER_MUTE_UNMUTE]: draft => draft.event = 'mute-unmute',
+  [playerTypes.PLAYER_PLAY]: draft => ({ ...draft, event: 'player-play' }),
+  [playerTypes.PLAYER_PAUSE]: draft => ({ ...draft, event: 'player-stop' }),
+  [playerTypes.PLAYER_DESTROY_PLUGIN]: draft => ({ ...draft, event: 'player-stop' }),
+  [playerTypes.PLAYER_MUTE_UNMUTE]: draft => ({ ...draft, event: 'mute-unmute' }),
 
 }, initialState);
 
