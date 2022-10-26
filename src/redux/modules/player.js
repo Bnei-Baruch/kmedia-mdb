@@ -80,10 +80,10 @@ const onNewPlaylistItem = (draft, e) => {
   }
 };
 
-const onContinuePlay = (draft, payload = -1) => {
-  const p            = window.jwplayer(JWPLAYER_ID);
-  const pos          = p.getPosition();
-  const isPlayed     = p.getState() === 'playing';
+const onContinuePlay = draft => {
+  const p        = window.jwplayer(JWPLAYER_ID);
+  const pos      = p.getPosition();
+  const isPlayed = p.getState() === 'playing';
   draft.continuePlay = { pos, isPlayed };
 };
 
@@ -99,8 +99,8 @@ export const reducer = handleActions({
   [PLAYER_MUTE_UNMUTE]: (draft, payload) => draft.muteUnmute = payload,
 
   [PLAYER_SET_OVER_MODE]: (draft, payload) => draft.overMode = payload,
-  [PLAYER_CONTINUE_PLAY_FROM]: onContinuePlay,
   [PLAYER_NEW_PLAYLIST_ITEM]: onNewPlaylistItem,
+  [PLAYER_CONTINUE_PLAY_FROM]: onContinuePlay,
 
   [SET_SHARE_START_END]: (draft, payload) => draft.shareStartEnd = payload
 }, initialState);
