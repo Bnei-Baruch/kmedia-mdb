@@ -3,12 +3,12 @@ import { Button, Header } from 'semantic-ui-react';
 import { useSelector, useDispatch, batch } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
 
-import { actions } from '../../../redux/modules/player';
-import { selectors as playlistSelectors, actions as playlistActions } from '../../../redux/modules/playlist';
+import { actions, selectors } from '../../../redux/modules/player';
+import { actions as playlistActions } from '../../../redux/modules/playlist';
 import { MT_VIDEO, MT_AUDIO } from '../../../helpers/consts';
 
 const MediaTypeControl = ({ t }) => {
-  const mediaType = useSelector(state => playlistSelectors.getInfo(state.playlist).mediaType);
+  const { type } = useSelector(state => selectors.getFile(state.player));
 
   const dispatch = useDispatch();
 
@@ -31,7 +31,7 @@ const MediaTypeControl = ({ t }) => {
                 name={mt}
                 key={mt}
                 content={t(`player.settings.${mt}`)}
-                active={mediaType === mt}
+                active={type === mt}
               />
             )
           )
