@@ -6,7 +6,12 @@ import { selectors as settings } from '../redux/modules/settings';
 import { selectors as my, selectors } from '../redux/modules/my';
 import { types, actions } from '../redux/modules/playlist';
 import { selectors as mdb } from '../redux/modules/mdb';
-import { MY_NAMESPACE_PLAYLISTS, MY_NAMESPACE_REACTIONS, IsCollectionContentType } from '../helpers/consts';
+import {
+  MY_NAMESPACE_PLAYLISTS,
+  MY_NAMESPACE_REACTIONS,
+  IsCollectionContentType,
+  MY_NAMESPACE_HISTORY
+} from '../helpers/consts';
 import { canonicalCollection } from '../helpers/utils';
 import { getMyItemKey } from '../helpers/my';
 import {
@@ -60,7 +65,9 @@ function* build(action) {
   const data = playlistBuilder(c);
 
   yield put(actions.buildSuccess({ ...data, language, mediaType, cuId, cId }));
-  yield fetchViewsByUIDs(data.items.map(x => x.id));
+  const cu_uids = data.items.map(x => x.id);
+  yield fetchViewsByUIDs(cu_uids);
+  yield fetchMy({ payload: { namespace: MY_NAMESPACE_HISTORY, cu_uids, page_size: cu_uids.length } });
 }
 
 function* singleMediaBuild(action) {
@@ -112,8 +119,9 @@ function* myPlaylistBuild(action) {
 
   yield put(actions.buildSuccess({ items, cuId, name, language, mediaType, pId, baseLink }));
 
-  const cuUIDs = content_units.map(c => c.id);
-  yield fetchViewsByUIDs(cuUIDs);
+  const cu_uids = content_units.map(c => c.id);
+  yield fetchViewsByUIDs(cu_uids);
+  yield fetchMy({ payload: { namespace: MY_NAMESPACE_HISTORY, cu_uids, page_size: cu_uids.length } });
 }
 
 function* fetchMyPlaylist(id) {
