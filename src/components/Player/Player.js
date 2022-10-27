@@ -8,7 +8,6 @@ import { useLocation } from 'react-router-dom';
 import { startEndFromQuery } from './Controls/helper';
 import { selectors as playlist } from '../../redux/modules/playlist';
 import isFunction from 'lodash/isFunction';
-import { usePrevious } from '../../helpers/utils';
 
 const Player = () => {
   const ref            = useRef();
@@ -25,7 +24,7 @@ const Player = () => {
 
   const { cuId, isSingleMedia } = info;
 
-  const pCuId = usePrevious(cuId);
+  const cuIdRef = useRef();
 
   const checkStopTime = useCallback(d => {
     if (d.currentTime > end) {
@@ -67,18 +66,20 @@ const Player = () => {
     }
   }, [isReady, start, end]);
 
-  //start from saved time on load
+  //start from saved time on load or switch playlist item
   useEffect(() => {
-    if (!isReady || start || end || (!pCuId && cuId === pCuId)) return;
+    if (!isReady || start || end || cuId === cuIdRef.current) return;
 
     const jwp  = window.jwplayer(JWPLAYER_ID);
     const seek = getSavedTime(cuId);
 
     if (!isNaN(seek) && seek > 0 && (seek + 10 < file.duration)) {
       jwp.seek(seek).play()[(isPlay || isSingleMedia) ? 'play' : 'pause']();
+    } else if (isPlay || isSingleMedia) {
+      jwp.play();
     }
-   // (isPlay || isSingleMedia) ? jwp.play() : jwp.pause();
-  }, [isReady, cuId, pCuId, isPlay, start, end, isSingleMedia, file.duration]);
+    cuIdRef.current = cuId;
+  }, [isReady, cuId, cuIdRef.current, isPlay, start, end, isSingleMedia, file.duration]);
 
   return (
     <div ref={ref}>
