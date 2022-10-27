@@ -238,6 +238,17 @@ video {
     left: 0;
     z-index: 1;
   }
+
+  &__bg_audio {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    z-index: 0;
+    background: center url("https://arvut.kli.one/user/static/media/audio_only.svg") no-repeat;
+    background-size: 40%;
+  }
 }
 
 .controls__slider {

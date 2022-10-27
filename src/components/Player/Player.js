@@ -61,7 +61,7 @@ const Player = () => {
   useEffect(() => {
     if (isReady && (start || end)) {
       const jwp = window.jwplayer(JWPLAYER_ID);
-      jwp.play().seek(start).pause();
+      jwp.seek(start).pause();
       jwp.on('time', checkStopTime);
     }
   }, [isReady, start, end]);
@@ -74,7 +74,7 @@ const Player = () => {
     const seek = getSavedTime(cuId);
 
     if (!isNaN(seek) && seek > 0 && (seek + 10 < file.duration)) {
-      jwp.seek(seek).play()[(isPlay || isSingleMedia) ? 'play' : 'pause']();
+      jwp.seek(seek)[(isPlay || isSingleMedia) ? 'play' : 'pause']();
     } else if (isPlay || isSingleMedia) {
       jwp.play();
     }

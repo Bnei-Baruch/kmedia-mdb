@@ -12,9 +12,9 @@ export const ProgressBar = ({ left, right }) => {
   const [buffPos, setBuffPos]     = useState(0);
   const [time, setTime]           = useState(0);
 
-  const isReady = useSelector(state => player.isReady(state.player));
-  const file    = useSelector(state => player.getFile(state.player));
-  const cuId    = useSelector(state => playlist.getInfo(state.playlist).cuId);
+  const isReady          = useSelector(state => player.isReady(state.player));
+  const file             = useSelector(state => player.getFile(state.player));
+  const { cuId, isPlay } = useSelector(state => playlist.getInfo(state.playlist));
 
   const checkTimeAfterSeek = d => {
     const time = Math.round(d.currentTime);

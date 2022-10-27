@@ -25,7 +25,6 @@ export const initPlayerEvents = (dispatch) => {
     batch(() => {
       dispatch(actions.continuePlay());
       dispatch(playlistActions.next());
-      window.jwplayer().play();
     });
   });
 
@@ -73,7 +72,7 @@ export const findPlayedFile = (item, info, lang, mt, q) => {
   const f     = byLang.find(f => {
     return f.type === mt && (mt === MT_AUDIO || !f.video_size || f.video_size === q);
   });
-  const image = f.type === MT_VIDEO ? item.preImageUrl : 'https://arvut.kli.one/user/static/media/audio_only.svg';
+  const image = f.type === MT_VIDEO ? item.preImageUrl : null;
   return { ...f, image };
 };
 
