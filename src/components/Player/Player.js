@@ -22,7 +22,7 @@ const Player = () => {
   const info = useSelector(state => playlist.getInfo(state.playlist), shallowEqual);
   const file = useMemo(() => findPlayedFile(item, info), [item, info]);
 
-  const { cuId, isSingleMedia } = info;
+  const { cuId, cId, isSingleMedia } = info;
 
   const cuIdRef = useRef();
 
@@ -66,18 +66,25 @@ const Player = () => {
     }
   }, [isReady, start, end]);
 
+  //must be before next useEffect (don't autostart on change collection)
+  useEffect(() => {
+    cuIdRef.current = null;
+  }, [cId]);
+
   //start from saved time on load or switch playlist item
   useEffect(() => {
     if (!isReady || start || end || cuId === cuIdRef.current) return;
 
-    const jwp  = window.jwplayer(JWPLAYER_ID);
-    const seek = getSavedTime(cuId);
+    const autoplay = !!cuIdRef.current || isPlay || isSingleMedia;
+    const jwp      = window.jwplayer(JWPLAYER_ID);
+    const seek     = getSavedTime(cuId);
 
     if (!isNaN(seek) && seek > 0 && (seek + 10 < file.duration)) {
-      jwp.seek(seek)[(isPlay || isSingleMedia) ? 'play' : 'pause']();
-    } else if (isPlay || isSingleMedia) {
+      jwp.seek(seek)[autoplay ? 'play' : 'pause']();
+    } else if (autoplay) {
       jwp.play();
     }
+
     cuIdRef.current = cuId;
   }, [isReady, cuId, cuIdRef.current, isPlay, start, end, isSingleMedia, file.duration]);
 
