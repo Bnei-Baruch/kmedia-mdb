@@ -3,11 +3,12 @@ import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 
 import { initPlayerEvents, getSavedTime, findPlayedFile } from './helper';
 import { selectors as player, actions } from '../../redux/modules/player';
-import { JWPLAYER_ID } from '../../helpers/consts';
+import { JWPLAYER_ID, MY_NAMESPACE_HISTORY } from '../../helpers/consts';
 import { useLocation } from 'react-router-dom';
 import { startEndFromQuery } from './Controls/helper';
 import { selectors as playlist } from '../../redux/modules/playlist';
 import isFunction from 'lodash/isFunction';
+import { selectors as my } from '../../redux/modules/my';
 
 const Player = () => {
   const ref            = useRef();
@@ -23,6 +24,9 @@ const Player = () => {
   const file = useMemo(() => findPlayedFile(item, info), [item, info]);
 
   const { cuId, cId, isSingleMedia } = info;
+
+  const historyItem = useSelector(state => my.getList(state.my, MY_NAMESPACE_HISTORY)?.find(x => x.content_unit_uid === cuId));
+  const { fetched } = useSelector(state => my.getInfo(state.my, MY_NAMESPACE_HISTORY));
 
   const cuIdRef = useRef();
 
@@ -73,11 +77,11 @@ const Player = () => {
 
   //start from saved time on load or switch playlist item
   useEffect(() => {
-    if (!isReady || start || end || cuId === cuIdRef.current) return;
+    if (!isReady || start || end || cuId === cuIdRef.current || !fetched) return;
 
     const autoplay = !!cuIdRef.current || isPlay || isSingleMedia;
     const jwp      = window.jwplayer(JWPLAYER_ID);
-    const seek     = getSavedTime(cuId);
+    const seek     = getSavedTime(cuId, historyItem);
 
     if (!isNaN(seek) && seek > 0 && (seek + 10 < file.duration)) {
       jwp.seek(seek)[autoplay ? 'play' : 'pause']();
@@ -86,7 +90,7 @@ const Player = () => {
     }
 
     cuIdRef.current = cuId;
-  }, [isReady, cuId, cuIdRef.current, isPlay, start, end, isSingleMedia, file.duration]);
+  }, [isReady, cuId, cuIdRef.current, isPlay, start, end, isSingleMedia, file.duration, historyItem, fetched]);
 
   return (
     <div ref={ref}>

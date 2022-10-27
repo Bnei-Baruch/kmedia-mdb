@@ -19,7 +19,11 @@ export const Timecode = () => {
 
   const checkTimeAfterSeek = d => {
     setTime(Math.round(d.currentTime));
-    localStorage.setItem(`${PLAYER_POSITION_STORAGE_KEY}_${cuId}`, d.currentTime);
+    const msg = {
+      timestamp: (new Date).toISOString(),
+      current_time: d.currentTime
+    };
+    localStorage.setItem(`${PLAYER_POSITION_STORAGE_KEY}_${cuId}`, JSON.stringify(msg));
   };
 
   useEffect(() => {
