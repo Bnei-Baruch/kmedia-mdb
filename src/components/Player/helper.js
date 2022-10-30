@@ -78,15 +78,14 @@ export const findPlayedFile = (item, info, lang, mt, q) => {
 };
 
 export const getSavedTime = (cuId, ht) => {
-  const now  = { current_time: 0, timestamp: (new Date).toUTCString() };
   const json = localStorage.getItem(`${PLAYER_POSITION_STORAGE_KEY}_${cuId}`);
   let lt;
   try {
-    lt = JSON.parse(json) || now;
+    lt = JSON.parse(json);
   } catch (e) {
-    lt = now;
+    console.error('broken json', json);
   }
 
-  const time = !ht || moment(lt.timestamp).isAfter(ht.timestamp) ? lt.current_time : ht.data.current_time;
+  const time = lt && (!ht || moment(lt.timestamp).isAfter(ht.timestamp)) ? lt.current_time : ht.data.current_time;
   return parseInt(time, 10);
 };
