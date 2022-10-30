@@ -15,7 +15,9 @@ const PlayPauseBg = () => {
   };
 
   return (
-    <div className="controls__bg_play" onClick={handleClick}></div>
+    <div className="controls__bg_play" onClick={handleClick}>
+
+    </div>
   );
 };
 
