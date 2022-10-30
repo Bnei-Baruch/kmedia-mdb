@@ -9,8 +9,9 @@ import { formatDuration } from '../../../helpers/utils';
 import Link from '../../Language/MultiLanguageLink';
 
 import * as shapes from '../../shapes';
-import UnitLogo from '../Logo/UnitLogo';
 import { imageWidthBySize, getProgress } from './helper';
+import UnitLogoWithDuration from '../UnitLogoWithDuration';
+import UnitLogo from '../Logo/UnitLogo';
 
 const ListTemplate = ({
                         unit,
@@ -87,7 +88,7 @@ const ListTemplate = ({
         {label ? <div className="cu_item_label">{label}</div> : null}
         {getProgress(unit, playTime)}
         <div className="cu_item_img" style={{ width }}>
-          <UnitLogo unitId={unit?.id} sourceId={source?.id} width={width} />
+          {unit ? <UnitLogoWithDuration unit={unit} sourceId={source?.id} /> : <UnitLogo sourceId={source?.id}  width={width} />}
         </div>
       </div>
       <div className={clsx('cu_item_info', { [dir]: true, 'with_actions': !!children })}>

@@ -5,6 +5,7 @@ import { MT_VIDEO, MT_AUDIO } from '../../helpers/consts';
 import { isEmpty } from '../../helpers/utils';
 import { PLAYER_POSITION_STORAGE_KEY } from './constants';
 import { actions as playlistActions } from '../../redux/modules/playlist';
+import moment from 'moment';
 
 export const DEFAULT_PLAYER_VOLUME     = 80;
 export const PLAYER_VOLUME_STORAGE_KEY = 'jwplayer.volume';
@@ -25,7 +26,6 @@ export const initPlayerEvents = (dispatch) => {
     batch(() => {
       dispatch(actions.continuePlay());
       dispatch(playlistActions.next());
-      window.jwplayer().play();
     });
   });
 
@@ -66,18 +66,27 @@ export const findPlayedFile = (item, info, lang, mt, q) => {
   }
 
   //can't find quality - take first
-  if (!qualityByLang[lang].includes(q)) {
+  if (mt !== MT_AUDIO && !qualityByLang[lang].includes(q)) {
     return findPlayedFile(item, info, lang, mt, qualityByLang[lang][0]);
   }
 
   const f     = byLang.find(f => {
     return f.type === mt && (mt === MT_AUDIO || !f.video_size || f.video_size === q);
   });
-  const image = f.type === MT_VIDEO ? item.preImageUrl : 'https://arvut.kli.one/user/static/media/audio_only.svg';
+  const image = f.type === MT_VIDEO ? item.preImageUrl : null;
   return { ...f, image };
 };
 
-export const getSavedTime = (cuId) => {
-  const savedTime = localStorage.getItem(`${PLAYER_POSITION_STORAGE_KEY}_${cuId}`) || 0;
-  return parseInt(savedTime, 10);
+export const getSavedTime = (cuId, ht) => {
+  const now  = { current_time: 0, timestamp: (new Date).toUTCString() };
+  const json = localStorage.getItem(`${PLAYER_POSITION_STORAGE_KEY}_${cuId}`);
+  let lt;
+  try {
+    lt = JSON.parse(json) || now;
+  } catch (e) {
+    lt = now;
+  }
+
+  const time = !ht || moment(lt.timestamp).isAfter(ht.timestamp) ? lt.current_time : ht.data.current_time;
+  return parseInt(time, 10);
 };

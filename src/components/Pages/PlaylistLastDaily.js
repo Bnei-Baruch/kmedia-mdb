@@ -13,12 +13,14 @@ import { MY_NAMESPACE_HISTORY } from '../../helpers/consts';
 import { isEqual } from 'lodash';
 
 const LastLessonCollection = ({ t }) => {
-  const lastLessonId                        = useSelector(state => selectors.getLastLessonId(state.mdb));
-  const wip                                 = useSelector(state => selectors.getWip(state.mdb).lastLesson);
-  const err                                 = useSelector(state => selectors.getErrors(state.mdb).lastLesson);
-  const { cuIDs: cu_uids }                  = useSelector(state => selectors.getDenormCollection(state.mdb, lastLessonId), isEqual) || false;
-  const ccuFetched                          = useSelector(state => selectors.getFullCollectionFetched(state.mdb, lastLessonId)?.[lastLessonId], shallowEqual);
-  const { content_unit_uid: lastLooked }    = useSelector(state => my.getList(state.my, MY_NAMESPACE_HISTORY)?.[0]) || false;
+  const lastLessonId       = useSelector(state => selectors.getLastLessonId(state.mdb));
+  const wip                = useSelector(state => selectors.getWip(state.mdb).lastLesson);
+  const err                = useSelector(state => selectors.getErrors(state.mdb).lastLesson);
+  const { cuIDs: cu_uids } = useSelector(state => selectors.getDenormCollection(state.mdb, lastLessonId), isEqual) || false;
+  const ccuFetched         = useSelector(state => selectors.getFullCollectionFetched(state.mdb, lastLessonId)?.[lastLessonId], shallowEqual);
+  const historyItems       = useSelector(state => my.getList(state.my, MY_NAMESPACE_HISTORY));
+
+  const lastLooked                          = !!cu_uids && historyItems?.find(x => cu_uids.includes(x.content_unit_uid));
   const { wip: myWip, err: myErr, fetched } = useSelector(state => my.getInfo(state.my, MY_NAMESPACE_HISTORY));
 
   const dispatch = useDispatch();
@@ -41,7 +43,7 @@ const LastLessonCollection = ({ t }) => {
     return wipErr;
   }
 
-  const cuId = lastLooked || (cu_uids.length > 1 ? cu_uids[1] : cu_uids[0]);
+  const cuId = lastLooked?.content_unit_uid || (cu_uids.length > 1 ? cu_uids[1] : cu_uids[0]);
   return (
     <div>
       <Helmets.Basic title={t('lessons.last.title')} description={t('lessons.last.description')} />
