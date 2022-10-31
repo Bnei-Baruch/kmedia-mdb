@@ -61,6 +61,7 @@ export const MDBFile = PropTypes.shape({
   subtype: PropTypes.string,
   mimetype: PropTypes.string,
   language: PropTypes.string,
+  insert_type: PropTypes.string,
   size: PropTypes.number,
   duration: PropTypes.number,
 });
