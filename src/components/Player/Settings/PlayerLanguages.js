@@ -4,12 +4,12 @@ import { useSelector, useDispatch, batch } from 'react-redux';
 
 import { LANGUAGE_OPTIONS, PLAYER_OVER_MODES } from '../../../helpers/consts';
 import { actions as playlistActions, selectors as playlistSelectors } from '../../../redux/modules/playlist';
-import { actions } from '../../../redux/modules/player';
+import { actions, selectors } from '../../../redux/modules/player';
 import { withNamespaces } from 'react-i18next';
 
 const PlayerLanguages = ({ t }) => {
   const { languages = [] } = useSelector(state => playlistSelectors.getPlayed(state.playlist));
-  const { language }       = useSelector(state => playlistSelectors.getInfo(state.playlist));
+  const { language }       = useSelector(state => selectors.getFile(state.player));
   const dispatch           = useDispatch();
 
   const handleSelect = (e, { name }) => batch(() => {

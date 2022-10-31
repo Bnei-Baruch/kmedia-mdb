@@ -52,9 +52,7 @@ export const actions = {
 const initialState = {
   playlist: [],
   itemById: {},
-  info: {
-    language: DEFAULT_LANGUAGE,
-  },
+  info: {},
   isReady: false
 };
 
@@ -63,7 +61,7 @@ const onBuild = draft => draft.info = { isReady: false, wip: true };
 const onBuildSuccess = (draft, payload) => {
   const { cuId, items, ...info } = payload;
 
-  let language = payload.language;
+  let language = draft.info.language || payload.language || DEFAULT_LANGUAGE;
 
   draft.playlist = items.map(({ id }) => id);
   draft.itemById = items.reduce((acc, x) => ({ ...acc, [x.id]: x }), {});
