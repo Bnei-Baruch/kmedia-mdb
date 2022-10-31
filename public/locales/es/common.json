@@ -359,7 +359,7 @@
     },
     "tabs": {
       "daily": "Lecciones Diarias",
-      "virtual": "Lecciones Virtuales",
+      "virtual": "Webinars",
       "lectures": "Charlas",
       "women": "Lección de Mujeres",
       "rabash": "Lecciones de Rabash",
@@ -687,7 +687,7 @@
       "LECTURE_SERIES": "Serie de Charlas",
       "CHILDREN_LESSONS": "Lección de Niños",
       "WOMEN_LESSONS": "Lección de Mujeres",
-      "VIRTUAL_LESSONS": "Lecciones Virtuales",
+      "VIRTUAL_LESSONS": "Webinars",
       "MEALS": "Comidas",
       "HOLIDAY": "Fiestas",
       "PICNIC": "Picnic",
