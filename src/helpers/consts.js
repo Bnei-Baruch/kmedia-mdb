@@ -87,6 +87,8 @@ export const CT_UNITS = [
   CT_LIKUTIM,
 ];
 
+export const INSERT_TYPE_SUMMARY = 'summary';
+
 export const iconByContentTypeMap = new Map([
   [CT_LESSON_PART, 'lessons'],
   [CT_FULL_LESSON, 'lessons'],
@@ -768,3 +770,4 @@ export const EVENT_PAGE_CTS = [...EVENT_TYPES, CT_MEAL, CT_FRIENDS_GATHERING, CT
 export const CT_LESSONS = [CT_LESSON_PART, CT_DAILY_LESSON];
 
 export const FN_SHOW_LESSON_AS_UNITS = [FN_SOURCES_MULTI, FN_TOPICS_MULTI, FN_PERSON, FN_LANGUAGES, FN_ORIGINAL_LANGUAGES, FN_MEDIA_TYPE];
+
