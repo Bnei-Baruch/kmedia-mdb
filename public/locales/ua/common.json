@@ -8,7 +8,7 @@
       "lessons": "Уроки та Лекції",
       "programs": "Програми та Кліпи",
       "sources": "Бібліотека",
-      "likutim": "Likutim",
+      "likutim": "Збірники",
       "events": "Конгреси, події",
       "books": "Книжки",
       "topics": "Теми",
@@ -135,7 +135,7 @@
       "LECTURE": "Лекції",
       "WOMEN_LESSON": "Уроки для жінок",
       "CHILDREN_LESSON": "Уроки для дітей",
-      "LESSONS_SERIES": "Избранные серии обучения",
+      "LESSONS_SERIES": "Серии обучения",
       "LECTURE_SERIES": "Lecture Series",
       "CLIP": "Кліпи",
       "VIDEO_PROGRAM_CHAPTER": "Програми",
@@ -144,7 +144,7 @@
       "BLOG_POST": "Блог",
       "TRAINING": "Тренування",
       "KITEI_MAKOR": "Уривки першоджерел",
-      "LIKUTIM": "Assorted Excerpts",
+      "LIKUTIM": "Збірники",
       "SOURCE": "Бібліотека",
       "PICNIC": "Пікнік"
     }
@@ -343,7 +343,7 @@
       "women": "Уроки для жінок",
       "rabash": "Уроки Рабаша",
       "children": "Уроки для дітей",
-      "series": "Избранные серии обучения",
+      "series": "Серии обучения",
       "seriesTree": {
         "byTopics": "By Topics",
         "bySourcesOf": "By Sources Of"
