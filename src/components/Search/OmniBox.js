@@ -52,6 +52,7 @@ const OmniBox = ({ isHomePage = false, t }) => {
 
   const doSearch = () => {
     setUserInteracted(true);
+    setInputFocused(false);
     dispatch(actions.search());
   };
 
@@ -63,6 +64,7 @@ const OmniBox = ({ isHomePage = false, t }) => {
 
   const inputChange = e => {
     setUserInteracted(true);
+    setInputFocused(true);
     dispatch(actions.updateQuery({ query: e.target.value, autocomplete: true }));
   }
 
