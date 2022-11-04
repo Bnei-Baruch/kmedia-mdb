@@ -87,7 +87,7 @@ const filterData = (byId, match, sortedRoots) => {
 
   // add the parents to filteredById
   parentIdsArr.forEach(parentKey => {
-    filteredById[parentKey] = byId[parentKey];
+    filteredById[parentKey] = { ...byId[parentKey], visible: true };
   });
 
   return [filteredById, filteredRoots];
