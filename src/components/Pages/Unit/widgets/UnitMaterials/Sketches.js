@@ -16,6 +16,7 @@ import { selectors as settings } from '../../../../../redux/modules/settings';
 import * as shapes from '../../../../shapes';
 import WipErr from '../../../../shared/WipErr/WipErr';
 import MenuLanguageSelector from '../../../../Language/Selector/MenuLanguageSelector';
+import { imageGalleryItem } from './helper';
 
 class Sketches extends React.Component {
   static propTypes = {
@@ -193,31 +194,6 @@ class Sketches extends React.Component {
   removeErroneousImages = item =>
     !item.path?.toUpperCase().includes('MACOSX');
 
-  // converts images from server format (path, size) to ImageGallery format
-  imageGalleryItem = item => {
-    let src;
-    let alt;
-    if (item.path) {
-      // opened zip file
-      src = assetUrl(item.path.substr(8));
-      alt = item.path.substr(item.path.lastIndexOf('_') + 1);
-    } else {
-      // image file
-      src = physicalFile(item);
-      alt = item.name;
-    }
-
-    const thumbSrc = Requests.imaginary('thumbnail', { url: src, width: 100, stripmeta: true });
-
-    return {
-      original: src,
-      thumbnail: thumbSrc,
-      originalAlt: alt,
-      thumbnailAlt: `${alt}-thumbnail`,
-      thumbnailTitle: `${alt}`,
-    };
-  };
-
   renderLeftNav = (onClick, disabled) => (
     <Button
       color="black"
@@ -275,7 +251,7 @@ class Sketches extends React.Component {
         // prepare the image array for the gallery and sort it
         const items = imageObjsArr
           .filter(this.removeErroneousImages)
-          .map(this.imageGalleryItem)
+          .map(imageGalleryItem)
           .sort((a, b) => strCmp(a.original, b.original));
 
         return (

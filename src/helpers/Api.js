@@ -21,6 +21,8 @@ export const chroniclesUrl            = path => `${CHRONICLES_BACKEND}${path}`;
 export const chroniclesBackendEnabled = CHRONICLES_BACKEND !== undefined;
 
 export class Requests {
+  static encode = encodeURIComponent;
+
   static get = path => axios(backendUrl(path));
 
   static getAsset = path => axios(assetUrl(path));
@@ -83,8 +85,6 @@ export class Requests {
 
     return `${imaginaryUrl('thumbnail')}?${Requests.makeParams(params)}`;
   };
-
-  static encode = encodeURIComponent;
 }
 
 class Api {
@@ -166,22 +166,31 @@ class Api {
 
   static getAsset = path => Requests.getAsset(path);
 
+  static getAssetTemp = path => axios(`http://localhost:5001/${path}`);
+
+  static getUnzipUIDs = uid => {
+    const params = Requests.makeParams({ uid });
+    return axios(`http://localhost:5001/unzip_uids?${params}`);
+  };
+
   static getCMS = (item, options) => Requests.getCMS(item, options);
 
   static simpleMode = ({ language, startDate: start_date, endDate: end_date }) => (
     Requests.get(`simple?${Requests.makeParams({ language, start_date, end_date })}`)
   );
 
-  static recommendedRequestData = ({
-    uid,
-    languages,
-    skipUids: skip_uids,
-    size: more_items,
-    spec,
-    specs,
-    watchingNowMin: watching_now_min,
-    popularMin: popular_min
-  }) => ({
+  static recommendedRequestData = (
+    {
+      uid,
+      languages,
+      skipUids: skip_uids,
+      size: more_items,
+      spec,
+      specs,
+      watchingNowMin: watching_now_min,
+      popularMin: popular_min
+    }
+  ) => ({
     more_items,
     'current_feed': [],
     'options': {
