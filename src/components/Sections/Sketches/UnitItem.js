@@ -41,6 +41,7 @@ const UnitItem = ({ id, t }) => {
   if (isEmpty(uniq)) return null;
 
   const { title, description } = buildTextItemInfo(cu, null, t, getPathByID, false);
+  const to                   = `${canonicalLink(cu)}?activeTab=sketches`;
 
   return (
     <>
@@ -49,7 +50,7 @@ const UnitItem = ({ id, t }) => {
           <Card>
             <GalleryModal id={fId} uniqIdx={idx} />
             <Card.Content>
-              <Card.Header as={Link} to={canonicalLink(cu)}>{cu.name}</Card.Header>
+              <Card.Header as={Link} to={to}>{cu.name}</Card.Header>
             </Card.Content>
 
             <Card.Meta className={`cu_info_description ${dir}`}>
