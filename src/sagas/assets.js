@@ -18,7 +18,7 @@ function* unzipList(action) {
   const ids = action.payload;
 
   try {
-    const { data } = yield call(Api.getUnzipUIDs, ids);
+    const { data } = yield call(Api.getUnzipUIDs, { path: 'api/unzip_uids', ids });
     yield put(actions.unzipListSuccess(data));
   } catch (err) {
     yield put(actions.unzipListFailure(ids, err));

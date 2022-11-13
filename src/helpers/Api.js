@@ -166,11 +166,9 @@ class Api {
 
   static getAsset = path => Requests.getAsset(path);
 
-  static getAssetTemp = path => axios(`http://localhost:5001/${path}`);
-
-  static getUnzipUIDs = uid => {
-    const params = Requests.makeParams({ uid });
-    return axios(`http://localhost:5001/unzip_uids?${params}`);
+  static getUnzipUIDs = ({ path, ids }) => {
+    const params = Requests.makeParams({ uid: ids });
+    return Requests.getAsset(`${path}?${params}`);
   };
 
   static getCMS = (item, options) => Requests.getCMS(item, options);
