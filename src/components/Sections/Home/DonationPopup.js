@@ -1,13 +1,13 @@
-import React, {useContext, useState} from 'react'
+import React, { useContext, useState } from 'react'
 import { Button, Header, Icon, Modal } from 'semantic-ui-react'
-import {DeviceInfoContext} from "../../../helpers/app-contexts";
-import {LANG_ENGLISH, LANG_HEBREW, LANG_RUSSIAN, LANG_SPANISH} from "../../../helpers/consts";
-import * as shapes from "../../shapes";
-import PropTypes from "prop-types";
-import {getQuery} from "../../../helpers/url";
+import { DeviceInfoContext } from '../../../helpers/app-contexts';
+import { LANG_ENGLISH, LANG_HEBREW, LANG_RUSSIAN, LANG_SPANISH } from '../../../helpers/consts';
+import * as shapes from '../../shapes';
+import PropTypes from 'prop-types';
+import { getQuery } from '../../../helpers/url';
 
 function DonationPopup({ t, language, location }) {
-  const shouldOpen = ()=> {
+  const shouldOpen = () => {
     const query    = getQuery(location);
     if (!!query.showPopup)
       return true;
@@ -22,7 +22,6 @@ function DonationPopup({ t, language, location }) {
 
   const { linkLang, utmTerm } = getDonateLinkDetails(language);
   const link = `https://www.kab1.com/${linkLang}?utm_source=kabbalah_media&utm_medium=button&utm_campaign=donations&utm_id=donations&utm_term=${utmTerm}&utm_content=header_button_donate`;
-
 
 
   const getContent = () => {
@@ -110,11 +109,11 @@ function DonationPopup({ t, language, location }) {
       </Modal.Content>
       <Modal.Actions>
         <Button onClick={() => setOpen(false)}
-                href={link}
-                as="a"
-                target="_blank"
-                content={' ' +t('home.donate') + ' '}
-                icon={'heart'}
+          href={link}
+          as="a"
+          target="_blank"
+          content={` ${ t('home.donate')  } `}
+          icon={'heart'}
         />
       </Modal.Actions>
     </Modal>

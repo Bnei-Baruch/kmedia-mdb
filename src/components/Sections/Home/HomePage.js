@@ -14,7 +14,7 @@ import TwitterFeed from '../Publications/tabs/Twitter/Feed';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { isEqual } from 'lodash';
 import { useInterval } from '../../../helpers/timer';
-import DonationPopup from "./DonationPopup";
+import DonationPopup from './DonationPopup';
 
 const SWITCH_BANNERS_TIMEOUT = 5 * 1000; // every 5 sec
 
