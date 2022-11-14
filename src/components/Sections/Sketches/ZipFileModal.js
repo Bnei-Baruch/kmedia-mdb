@@ -10,7 +10,7 @@ import { imageGalleryItem } from '../../Pages/Unit/widgets/UnitMaterials/helper'
 import FallbackImage from '../../shared/FallbackImage';
 import { assetUrl } from '../../../helpers/Api';
 
-const GalleryModal = ({ id, uniqIdx }) => {
+const ZipFileModal = ({ id, uniqIdx }) => {
   const [open, setOpen] = useState(false);
 
   const getZipById = useSelector(state => assets.nestedGetZipById(state.assets));
@@ -58,11 +58,6 @@ const GalleryModal = ({ id, uniqIdx }) => {
     />
   );
 
-  console.group('gallery items');
-  console.log('info', uniqIdx, item, prev, startIdx, endIdx);
-  console.log('paths', items.map(x => x.original).map(item => item.substring(item.lastIndexOf('_') + 1)));
-  console.groupEnd();
-
   return (
     <>
       <FallbackImage
@@ -98,4 +93,4 @@ const GalleryModal = ({ id, uniqIdx }) => {
   );
 };
 
-export default withNamespaces()(GalleryModal);
+export default withNamespaces()(ZipFileModal);

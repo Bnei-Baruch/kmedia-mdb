@@ -12,7 +12,8 @@ import { buildTextItemInfo } from '../../shared/ContentItem/helper';
 import { selectors as sources } from '../../../redux/modules/sources';
 import { isLanguageRtl } from '../../../helpers/i18n-utils';
 import { selectors as settings } from '../../../redux/modules/settings';
-import GalleryModal from './GalleryModal';
+import GalleryModal from './ZipFileModal';
+import ImageFileModal from './ImageFileModal';
 
 const UnitItem = ({ id, t }) => {
   const cu          = useSelector(state => mdb.getDenormContentUnit(state.mdb, id));
@@ -23,21 +24,36 @@ const UnitItem = ({ id, t }) => {
   if (!cu) return null;
 
   const dir  = isLanguageRtl(language) ? 'rtl' : 'ltr';
+  const imgs = cu.files
+    .filter(x => MediaHelper.IsImage(x) && x.name.slice(-4) !== '.zip');
   const uniq = cu.files
-    .filter(x => MediaHelper.IsImage(x))
+    .filter(x => MediaHelper.IsImage(x) && x.name.slice(-4) === '.zip')
     .flatMap(f => {
         const { data } = getZipById(f.id) || false;
         return data?.uniq.map(() => f.id);
       }
     ).filter(x => !!x);
 
-  if (isEmpty(uniq)) return null;
+  if (isEmpty(uniq) && isEmpty(imgs)) return null;
 
   const { title, description } = buildTextItemInfo(cu, null, t, getPathByID, false);
-  const to                   = `${canonicalLink(cu)}?activeTab=sketches`;
+  const to                     = `${canonicalLink(cu)}?activeTab=sketches`;
 
   return (
     <>
+      {
+        imgs.map((f) => (
+          <Card>
+            <ImageFileModal file={f} />
+            <Card.Content>
+              <Card.Header as={Link} to={to}>{cu.name}</Card.Header>
+            </Card.Content>
+            <Card.Meta className={`cu_info_description ${dir}`}>
+              {[title, ...description].map((d, i) => (<span key={i}>{d}</span>))}
+            </Card.Meta>
+          </Card>
+        ))
+      }
       {
         uniq.map((fId, idx) => (
           <Card>

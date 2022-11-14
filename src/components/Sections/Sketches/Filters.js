@@ -12,7 +12,7 @@ import DateFilter from '../../FiltersAside/DateFilter';
 import Language from '../../FiltersAside/LanguageFilter/Language';
 import OriginalLanguageFilter from '../../FiltersAside/OriginalLanguageFilter/OriginalLanguage';
 import TagSourceFilter from '../../FiltersAside/TopicsFilter/TagSourceFilter';
-import ContentTypeFilter from '../../FiltersAside/ContentTypeFilter/ContentType';
+import ContentTypeFilter from './ContentTypeFilter';
 
 const Filters = ({ namespace, baseParams, t }) => {
   const [isHydrated, setIsHydrated] = useState(false);
