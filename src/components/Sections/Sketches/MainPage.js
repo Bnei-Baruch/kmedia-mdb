@@ -1,5 +1,5 @@
 import { isEqual } from 'lodash';
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useContext } from 'react';
 import { withNamespaces } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
@@ -83,8 +83,7 @@ const MainPage = ({ t }) => {
     >
       <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} />
       <FilterLabels namespace={PAGE_NS_SKETCHES} />
-      <CardGroup itemsPerRow={4}>
-
+      <CardGroup itemsPerRow={4} doubling stackable>
         {
           items?.map(({ id }, i) => <UnitItem id={id} key={i} />)
         }

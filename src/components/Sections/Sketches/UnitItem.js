@@ -29,14 +29,7 @@ const UnitItem = ({ id, t }) => {
         const { data } = getZipById(f.id) || false;
         return data?.uniq.map(() => f.id);
       }
-    ).filter(x => !!x);/*
-    .reduce((acc, f) => {
-      const { data } = getZipById(f.id) || false;
-      if (!data?.uniq) return acc;
-
-      const items = data.uniq.map(() => f.id);
-      return [...acc, ...items];
-    }, []);*/
+    ).filter(x => !!x);
 
   if (isEmpty(uniq)) return null;
 
