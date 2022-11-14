@@ -24,7 +24,7 @@ import MediaHelper from '../../../helpers/media';
 
 export const SKETCHES_SHOWED_CTS = [...UNIT_LESSONS_TYPE, CT_VIDEO_PROGRAM_CHAPTER];
 const FILTER_PARAMS              = {
-  content_types: SKETCHES_SHOWED_CTS,
+  content_type: SKETCHES_SHOWED_CTS,
   media_type: MT_IMAGE,
   withViews: false,
   with_files: true,
