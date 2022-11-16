@@ -24,10 +24,10 @@ const findZipFile = (cu, language) => {
 
   // if no files by language - return original language files
   if (files.length === 0) {
-    files = files.filter(f => f.language === cu.original_language);
+    files = zips.filter(f => f.language === cu.original_language);
   }
 
-  return files[0];
+  return files[0] || zips[0];
 };
 
 const UnitItem = ({ id, t }) => {
@@ -42,7 +42,7 @@ const UnitItem = ({ id, t }) => {
 
   const imgs = cu.files.filter(x => MediaHelper.IsImage(x) && !isZipFile(x));
   const zip  = findZipFile(cu, language);
-  const uniq = getZipById(zip.id)?.data?.uniq.map(x => x.path);
+  const uniq = zip ? getZipById(zip.id)?.data?.uniq.map(x => x.path) : [];
 
   if (isEmpty(uniq) && isEmpty(imgs)) return null;
 
@@ -56,7 +56,7 @@ const UnitItem = ({ id, t }) => {
           <Card>
             <ImageFileModal file={f} />
             <Card.Content>
-              <Card.Header as={Link} to={to}>{cu.name}</Card.Header>
+              <Card.Description as={Link} to={to} content={cu.name} />
             </Card.Content>
             <Card.Meta className={`cu_info_description ${dir}`}>
               {[title, ...description].map((d, i) => (<span key={i}>{d}</span>))}
@@ -69,7 +69,7 @@ const UnitItem = ({ id, t }) => {
           <Card>
             <GalleryModal id={zip.id} path={path} />
             <Card.Content>
-              <Card.Header as={Link} to={to}>{cu.name}</Card.Header>
+              <Card.Description as={Link} to={to} content={cu.name} />
             </Card.Content>
 
             <Card.Meta className={`cu_info_description ${dir}`}>

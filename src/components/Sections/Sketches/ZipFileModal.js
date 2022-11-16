@@ -73,6 +73,7 @@ const ZipFileModal = ({ id, path }) => {
       >
         <Modal.Content dir={isLanguageRtl(language) ? 'rtl' : 'ltr'}>
           <ImageGallery
+            startIndex={items.length - 1}
             ref={ref}
             lazyLoad
             showFullscreenButton

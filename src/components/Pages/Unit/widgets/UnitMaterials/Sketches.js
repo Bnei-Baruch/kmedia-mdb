@@ -21,7 +21,7 @@ class Sketches extends React.Component {
     unit: shapes.ContentUnit.isRequired,
     t: PropTypes.func.isRequired,
     zipIndexById: PropTypes.objectOf(shapes.DataWipErr).isRequired,
-    unzip: PropTypes.func.isRequired,
+    unzipList: PropTypes.func.isRequired,
     uiLanguage: PropTypes.string.isRequired,
     contentLanguage: PropTypes.string.isRequired,
   };
@@ -171,11 +171,11 @@ class Sketches extends React.Component {
   };
 
   unzipFiles = file => {
-    const { zipIndexById, unzip } = this.props;
+    const { zipIndexById, unzipList } = this.props;
     const { data, wip, err }      = zipIndexById[file.id] || {};
 
     if (!wip && !err && isEmpty(data) && !Object.prototype.hasOwnProperty.call(zipIndexById, file.id)) {
-      unzip(file.id);
+      unzipList([file.id]);
     }
   };
 
@@ -231,7 +231,7 @@ class Sketches extends React.Component {
       return wipErr;
     }
 
-    const imageObjs = imageFiles || data;
+    const imageObjs = imageFiles || data?.full;
 
     // if imageObjs is not an array - create it
     let imageObjsArr = [];
@@ -301,7 +301,7 @@ const mapState = state => ({
 });
 
 const mapDispatch = dispatch => bindActionCreators({
-  unzip: actions.unzip
+  unzipList: actions.unzipList
 }, dispatch);
 
 export default connect(mapState, mapDispatch)(withNamespaces()(Sketches));
