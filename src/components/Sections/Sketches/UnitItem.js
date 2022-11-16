@@ -52,7 +52,7 @@ const UnitItem = ({ id, t }) => {
   return (
     <>
       {
-        imgs.map((f) => (
+        imgs?.map((f) => (
           <Card>
             <ImageFileModal file={f} />
             <Card.Content>
@@ -65,7 +65,7 @@ const UnitItem = ({ id, t }) => {
         ))
       }
       {
-        uniq.map(path => (
+        uniq?.map(path => (
           <Card>
             <GalleryModal id={zip.id} path={path} />
             <Card.Content>
