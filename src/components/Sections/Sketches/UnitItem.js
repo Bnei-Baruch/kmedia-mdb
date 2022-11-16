@@ -14,6 +14,21 @@ import { isLanguageRtl } from '../../../helpers/i18n-utils';
 import { selectors as settings } from '../../../redux/modules/settings';
 import GalleryModal from './ZipFileModal';
 import ImageFileModal from './ImageFileModal';
+import { isZipFile } from '../../Pages/Unit/widgets/UnitMaterials/helper';
+
+const findZipFile = (cu, language) => {
+  const zips = cu.files
+    .filter(x => MediaHelper.IsImage(x) && isZipFile(x));
+  // try filter by language
+  let files  = zips.filter(file => file.language === language);
+
+  // if no files by language - return original language files
+  if (files.length === 0) {
+    files = files.filter(f => f.language === cu.original_language);
+  }
+
+  return files[0];
+};
 
 const UnitItem = ({ id, t }) => {
   const cu          = useSelector(state => mdb.getDenormContentUnit(state.mdb, id));
@@ -23,16 +38,11 @@ const UnitItem = ({ id, t }) => {
 
   if (!cu) return null;
 
-  const dir  = isLanguageRtl(language) ? 'rtl' : 'ltr';
-  const imgs = cu.files
-    .filter(x => MediaHelper.IsImage(x) && x.name.slice(-4) !== '.zip');
-  const uniq = cu.files
-    .filter(x => MediaHelper.IsImage(x) && x.name.slice(-4) === '.zip')
-    .flatMap(f => {
-        const { data } = getZipById(f.id) || false;
-        return data?.uniq.map(() => f.id);
-      }
-    ).filter(x => !!x);
+  const dir = isLanguageRtl(language) ? 'rtl' : 'ltr';
+
+  const imgs = cu.files.filter(x => MediaHelper.IsImage(x) && !isZipFile(x));
+  const zip  = findZipFile(cu, language);
+  const uniq = getZipById(zip.id)?.data?.uniq.map(x => x.path);
 
   if (isEmpty(uniq) && isEmpty(imgs)) return null;
 
@@ -55,9 +65,9 @@ const UnitItem = ({ id, t }) => {
         ))
       }
       {
-        uniq.map((fId, idx) => (
+        uniq.map(path => (
           <Card>
-            <GalleryModal id={fId} uniqIdx={idx} />
+            <GalleryModal id={zip.id} path={path} />
             <Card.Content>
               <Card.Header as={Link} to={to}>{cu.name}</Card.Header>
             </Card.Content>

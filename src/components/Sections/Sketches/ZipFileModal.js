@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { withNamespaces } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { Modal, Button, Icon } from 'semantic-ui-react';
+import { Modal, Button } from 'semantic-ui-react';
 import { selectors as assets } from '../../../redux/modules/assets';
 import { isLanguageRtl } from '../../../helpers/i18n-utils';
 import { selectors as settings } from '../../../redux/modules/settings';
@@ -10,7 +10,7 @@ import { imageGalleryItem } from '../../Pages/Unit/widgets/UnitMaterials/helper'
 import FallbackImage from '../../shared/FallbackImage';
 import { assetUrl } from '../../../helpers/Api';
 
-const ZipFileModal = ({ id, uniqIdx }) => {
+const ZipFileModal = ({ id, path }) => {
   const [open, setOpen] = useState(false);
 
   const getZipById = useSelector(state => assets.nestedGetZipById(state.assets));
@@ -19,10 +19,10 @@ const ZipFileModal = ({ id, uniqIdx }) => {
 
   const { data: { uniq, full } } = getZipById(id);
 
-  const item     = uniq[uniqIdx];
+  const uniqIdx  = uniq.findIndex(x => x.path === path);
   const prev     = uniq?.[uniqIdx - 1] || null;
   const startIdx = prev ? full.findIndex(x => x.path === prev.path) + 1 : 0;
-  const endIdx   = full.findIndex(x => x.path === item.path);
+  const endIdx   = full.findIndex(x => x.path === path);
 
   const items = full.slice(startIdx, endIdx + 1).map(imageGalleryItem);
 
@@ -61,7 +61,7 @@ const ZipFileModal = ({ id, uniqIdx }) => {
   return (
     <>
       <FallbackImage
-        src={assetUrl(item.path.substring(8))}
+        src={assetUrl(path.substring(8))}
         width={280}
         className={`unit-logo ui image`}
         onClick={e => setOpen(true)}

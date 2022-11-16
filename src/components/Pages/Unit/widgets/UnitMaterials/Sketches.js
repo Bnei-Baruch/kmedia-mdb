@@ -6,17 +6,15 @@ import { connect } from 'react-redux';
 import isEqual from 'react-fast-compare';
 import ImageGallery from 'react-image-gallery';
 import { Button, Container, Segment } from 'semantic-ui-react';
-
-import { assetUrl, Requests } from '../../../../../helpers/Api';
 import { selectSuitableLanguage } from '../../../../../helpers/language';
 import { isLanguageRtl } from '../../../../../helpers/i18n-utils';
-import { isEmpty, physicalFile, strCmp } from '../../../../../helpers/utils';
+import { isEmpty, strCmp } from '../../../../../helpers/utils';
 import { actions, selectors } from '../../../../../redux/modules/assets';
 import { selectors as settings } from '../../../../../redux/modules/settings';
 import * as shapes from '../../../../shapes';
 import WipErr from '../../../../shared/WipErr/WipErr';
 import MenuLanguageSelector from '../../../../Language/Selector/MenuLanguageSelector';
-import { imageGalleryItem } from './helper';
+import { imageGalleryItem, isZipFile } from './helper';
 
 class Sketches extends React.Component {
   static propTypes = {
@@ -26,6 +24,13 @@ class Sketches extends React.Component {
     unzip: PropTypes.func.isRequired,
     uiLanguage: PropTypes.string.isRequired,
     contentLanguage: PropTypes.string.isRequired,
+  };
+  state = {
+    zipFiles: null,
+    zipFileId: null,
+    imageFiles: null,
+    languages: null,
+    language: null,
   };
 
   static getUnitSketchFiles = unit => {
@@ -62,24 +67,14 @@ class Sketches extends React.Component {
 
     // if there are many zip files - use the first one
     if (files.length > 0) {
-      const zipFileArr = files.filter(file => Sketches.isZipFile(file));
+      const zipFileArr = files.filter(file => isZipFile(file));
       files            = zipFileArr.length > 0 ? zipFileArr[0] : files;
     }
 
     return files;
   };
 
-  static isZipFile = file => file.name.endsWith('.zip');
-
   static isZipOrImageFileType = file => file.type === 'image';
-
-  state = {
-    zipFiles: null,
-    zipFileId: null,
-    imageFiles: null,
-    languages: null,
-    language: null,
-  };
 
   isPropsChanged = prevProps => {
     const { unit, zipIndexById, contentLanguage, uiLanguage } = this.props;
@@ -159,7 +154,7 @@ class Sketches extends React.Component {
     let state = {};
     if (file) {
       // not zip, image files only
-      if (Array.isArray(file) || !Sketches.isZipFile(file)) {
+      if (Array.isArray(file) || !isZipFile(file)) {
         state = { imageFiles: file };
       } else {
         // zip file

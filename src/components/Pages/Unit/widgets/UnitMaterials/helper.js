@@ -25,3 +25,5 @@ export const imageGalleryItem = item => {
     thumbnailTitle: `${alt}`,
   };
 };
+
+export const isZipFile = file => file.name.endsWith('.zip');
