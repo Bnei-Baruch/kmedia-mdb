@@ -15,9 +15,9 @@ import PDF, { isTaas, startsFrom } from '../../shared/PDF/PDF';
 import ScrollToSearch from '../../shared/DocToolbar/ScrollToSearch';
 import Download from '../../shared/Download/Download';
 import WipErr from '../../shared/WipErr/WipErr';
+import AudioPlayer from '../../shared/AudioPlayer';
 import MenuLanguageSelector from '../../Language/Selector/MenuLanguageSelector';
 import { getPageFromLocation } from '../../Pagination/withPagination';
-import PlayAudioIcon from '../../../images/icons/PlayAudio';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { CT_SOURCE } from '../../../helpers/consts';
 
@@ -59,8 +59,6 @@ const Library = ({ data, source, downloadAllowed, t }) => {
   const [pageNumber, setPageNumber] = useState(getPageFromLocation(location));
   const [language, setLanguage]     = useState(null);
   const [languages, setLanguages]   = useState([]);
-  const [playing, setPlaying]       = useState(false);
-  const [audioInfo, setAudioInfo]   = useState(null);
 
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
@@ -97,30 +95,6 @@ const Library = ({ data, source, downloadAllowed, t }) => {
     }
   }, [data, language, source, dispatch]);
 
-  useEffect(() => {
-    if (!data?.[language]) {
-      clearAudioInfo();
-    } else {
-      const { mp3 } = data[language];
-      if (!mp3) {
-        clearAudioInfo();
-      } else {
-        const newAudioInfo = { url: physicalFile(mp3, true), name: mp3.name };
-        if (audioInfo?.url !== newAudioInfo.url) {
-          setAudioInfo(newAudioInfo);
-          setPlaying(false);
-        }
-      }
-    }
-  }, [data, language]);
-
-  const clearAudioInfo = () => {
-    if (audioInfo !== null) {
-      setAudioInfo(null);
-      setPlaying(false);
-    }
-  };
-
   if (!data) {
     return <Segment basic>&nbsp;</Segment>;
   }
@@ -138,26 +112,24 @@ const Library = ({ data, source, downloadAllowed, t }) => {
     setLanguage(language);
   };
 
-  const getAudioPlayer = () => audioInfo && <span className="library-audio-player">
-    {playing ?
-      <audio controls src={audioInfo?.url} autoPlay={true} preload="metadata" /> :
-      <a onClick={() => setPlaying(true)}>{t('sources-library.play-audio-file')}<PlayAudioIcon
-        className="playAudioIcon" /></a>
-    }
-  </span>;
+  const getAudioPlayer = () => {
+    const { mp3 } = data[language];
+    return mp3 ? <AudioPlayer mp3={mp3} /> : null;
+  }
 
   const getLanguageBar = () => {
     const languageBar = languages.length > 0 &&
       <div className="library-language-container">
-        {(!isMobileDevice || !playing) && getAudioPlayer()}
+        {!isMobileDevice && getAudioPlayer()}
         <MenuLanguageSelector
           languages={languages}
           defaultValue={language}
           onSelect={handleLanguageChanged}
           fluid={false}
         />
-        {isMobileDevice && playing && getAudioPlayer()}
+        {isMobileDevice && getAudioPlayer()}
       </div>;
+
     return languageBar;
   };
 
