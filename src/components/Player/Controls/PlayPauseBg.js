@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { selectors } from '../../../redux/modules/player';
 import { JWPLAYER_ID } from '../../../helpers/consts';
 import { stopBubbling } from '../../../helpers/utils';
+import { Popup, Icon } from 'semantic-ui-react';
 
 const PlayPauseBg = () => {
   const isPlay = useSelector(state => selectors.isPlay(state.player));
@@ -15,9 +16,11 @@ const PlayPauseBg = () => {
   };
 
   return (
-    <div className="controls__bg_play" onClick={handleClick}>
-
-    </div>
+    <Popup content="Pause video" inverted size="mini" position="top center" trigger={
+      <div className="controls__pause" onClick={handleClick}>
+        <Icon fitted size="big" name={isPlay ? 'pause' : 'play'} />
+      </div>
+    } />
   );
 };
 

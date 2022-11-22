@@ -3,12 +3,10 @@ import ShareBarPlayer from './ShareBarPlayer';
 import StartEnd from './StartEnd';
 import CopyShareUrl from './CopyShareUrl';
 
-const Settings = () => {
+const Sharing = () => {
   return (
     <div className="sharing">
-      <div className="sharing__times">
-        <StartEnd />
-      </div>
+      <StartEnd />
       <div className="sharing__buttons">
         <CopyShareUrl />
         <ShareBarPlayer />
@@ -17,4 +15,4 @@ const Settings = () => {
   );
 };
 
-export default Settings;
+export default Sharing;

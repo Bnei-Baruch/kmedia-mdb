@@ -13,10 +13,10 @@ import AudioBg from './AudioBg';
 const Controls = ({ openOnFull }) => {
   return (
     <div className="controls" dir="ltr">
-      <PlayPauseBg />
       <AudioBg />
       <PrevBtn />
       <SeekBackwardBtn />
+      <PlayPauseBg />
       <SeekForwardBtn />
       <NextBtn />
       <div className="controls__bar">

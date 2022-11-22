@@ -86,7 +86,7 @@ const ListTemplate = ({
         {label ? <div className="cu_item_label">{label}</div> : null}
         {getProgress(unit, playTime)}
         <div className="cu_item_img" style={{ width }}>
-          {withCUInfo ? <UnitLogoWithDuration unit={unit} sourceId={source?.id} /> :
+          {withCUInfo ? <UnitLogoWithDuration unit={unit} sourceId={source?.id} width={width} /> :
             <UnitLogo unitId={unit?.id} sourceId={source?.id} width={width} />}
         </div>
       </div>

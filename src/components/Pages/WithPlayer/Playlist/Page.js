@@ -11,14 +11,21 @@ import PlayerContainer from '../../../Player/PlayerContainer';
 import { useSelector } from 'react-redux';
 import { selectors as playlist } from '../../../../redux/modules/playlist';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
+import clsx from 'clsx';
 
 const Page = () => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const isReady            = useSelector(state => playlist.getInfo(state.playlist).isReady);
 
+  const computerWidth = !isMobileDevice ? 10 : 16;
+
   return (
-    <Grid className="avbox">
-      <Grid.Column width={isMobileDevice ? 16 : 10}>
+    <Grid padded={!isMobileDevice} className="avbox">
+      <Grid.Column
+        mobile={16}
+        tablet={computerWidth}
+        computer={computerWidth}
+        className={clsx({ 'is-fitted': isMobileDevice })}>
         <div id="avbox_playlist">
           {isReady && <PlaylistHeader />}
         </div>

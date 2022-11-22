@@ -747,5 +747,6 @@ export const PLAYER_OVER_MODES = {
   settings: 'settings',
   languages: 'languages',
   share: 'share',
+  active: 'active',
   none: null,
 };

@@ -15,6 +15,7 @@ const PLAYER_SET_FILE           = 'Player/SET_FILE';
 const PLAYER_SET_OVER_MODE      = 'Player/SET_OVER_MODE';
 const PLAYER_CONTINUE_PLAY_FROM = 'Player/CONTINUE_PLAY_FROM';
 const PLAYER_NEW_PLAYLIST_ITEM  = 'Player/NEW_PLAYLIST_ITEM';
+const PLAYER_SET_IS_FULLSCREEN  = 'Player/SET_IS_FULLSCREEN';
 
 const SET_SHARE_START_END = 'Player/SET_SHARE_START_END';
 
@@ -41,6 +42,7 @@ const playerDestroyPlugin = createAction(PLAYER_DESTROY_PLUGIN);
 const setOverMode     = createAction(PLAYER_SET_OVER_MODE);
 const continuePlay    = createAction(PLAYER_CONTINUE_PLAY_FROM);
 const newPlaylistItem = createAction(PLAYER_NEW_PLAYLIST_ITEM);
+const setFullScreen   = createAction(PLAYER_SET_IS_FULLSCREEN);
 
 const setShareStartEnd = createAction(SET_SHARE_START_END);
 
@@ -48,6 +50,7 @@ export const actions = {
   setFile,
   setOverMode,
   setShareStartEnd,
+  setFullScreen,
 
   playerPlay,
   playerPause,
@@ -61,11 +64,13 @@ const initialState = {
   isReady: false,
   file: null,
   shareStartEnd: { start: 0, end: Infinity },
+  isFullScreen: false
 };
 
 const onRemove = draft => {
   draft.continuePlay = initialState.continuePlay;
   draft.overMode     = null;
+  draft.isFullScreen = false;
   draft.ready        = false;
 };
 
@@ -81,9 +86,9 @@ const onNewPlaylistItem = (draft, e) => {
 };
 
 const onContinuePlay = draft => {
-  const p        = window.jwplayer(JWPLAYER_ID);
-  const pos      = p.getPosition();
-  const isPlayed = p.getState() === 'playing';
+  const p            = window.jwplayer(JWPLAYER_ID);
+  const pos          = p.getPosition();
+  const isPlayed     = p.getState() === 'playing';
   draft.continuePlay = { pos, isPlayed };
 };
 
@@ -101,6 +106,7 @@ export const reducer = handleActions({
   [PLAYER_SET_OVER_MODE]: (draft, payload) => draft.overMode = payload,
   [PLAYER_NEW_PLAYLIST_ITEM]: onNewPlaylistItem,
   [PLAYER_CONTINUE_PLAY_FROM]: onContinuePlay,
+  [PLAYER_SET_IS_FULLSCREEN]: (draft, payload) => draft.isFullScreen = payload,
 
   [SET_SHARE_START_END]: (draft, payload) => draft.shareStartEnd = payload
 }, initialState);
@@ -109,6 +115,7 @@ const isReady          = state => state.ready;
 const isPlay           = state => state.played;
 const getFile          = state => state.file;
 const getOverMode      = state => state.overMode || PLAYER_OVER_MODES.none;
+const isFullScreen     = state => state.isFullScreen;
 const getRate          = state => state.rate || 1;
 const getShareStartEnd = state => state.shareStartEnd;
 const getPlayerWidth   = state => state.width;
@@ -118,6 +125,7 @@ export const selectors = {
   isPlay,
   getFile,
   getOverMode,
+  isFullScreen,
   getRate,
   getShareStartEnd,
   getPlayerWidth,

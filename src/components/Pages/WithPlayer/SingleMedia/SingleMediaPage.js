@@ -31,36 +31,34 @@ const SingleMediaPage = ({ t }) => {
     <>
       <Helmets.AVUnit />
       <Grid padded={!isMobileDevice} className="avbox">
-        <Grid.Row>
-          <Grid.Column
-            mobile={16}
-            tablet={computerWidth}
-            computer={computerWidth}
-            className={clsx({ 'is-fitted': isMobileDevice })}>
-            <Grid.Row>
-              <Grid.Column>
-                <PlayerContainer />
-              </Grid.Column>
-            </Grid.Row>
-            <Grid.Row>
-              <Grid.Column>
-                <Container className="unit_container">
-                  {wipErr || (
-                    <>
-                      <Info />
-                      <Materials />
-                    </>
-                  )}
-                </Container>
-              </Grid.Column>
-            </Grid.Row>
-          </Grid.Column>
-          {!isMobileDevice &&
-            <Grid.Column mobile={16} tablet={6} computer={6}>
-              {wipErr || <Recommended />}
+        <Grid.Column
+          mobile={16}
+          tablet={computerWidth}
+          computer={computerWidth}
+          className={clsx({ 'is-fitted': isMobileDevice })}>
+          <Grid.Row>
+            <Grid.Column>
+              <PlayerContainer />
             </Grid.Column>
-          }
-        </Grid.Row>
+          </Grid.Row>
+          <Grid.Row>
+            <Grid.Column>
+              <Container className="unit_container">
+                {wipErr || (
+                  <>
+                    <Info />
+                    <Materials />
+                  </>
+                )}
+              </Container>
+            </Grid.Column>
+          </Grid.Row>
+        </Grid.Column>
+        {!isMobileDevice &&
+          <Grid.Column mobile={16} tablet={6} computer={6}>
+            {wipErr || <Recommended />}
+          </Grid.Column>
+        }
       </Grid>
     </>
   );
