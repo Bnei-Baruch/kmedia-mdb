@@ -41,7 +41,6 @@ video {
 
   .controls {
     display: none;
-    z-index: 1;
 
     background: $controls-overlay;
     position: absolute;
@@ -460,7 +459,7 @@ video {
     }
     */
 
-    &:nth-child(3) {
+    &:nth-child(2) {
       .flex-spacer {
         display: none;
       }

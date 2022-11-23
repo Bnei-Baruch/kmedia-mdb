@@ -36,6 +36,8 @@ const StartEnd = ({ t }) => {
           size="mini"
           actionPosition="left"
           fluid
+          onClick={handleSetStart}
+          readonly
           action={{
             content: t('player.share.start-position'),
             size: 'small',
@@ -49,6 +51,8 @@ const StartEnd = ({ t }) => {
           size="mini"
           actionPosition="left"
           fluid
+          onClick={handleSetEnd}
+          readonly
           action={{
             content: t('player.share.end-position'),
             size: 'small',

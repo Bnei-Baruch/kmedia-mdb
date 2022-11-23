@@ -10,7 +10,7 @@ import { ProgressCtrl } from './ProgressCtrl';
 import PlayPauseBg from './PlayPauseBg';
 import AudioBg from './AudioBg';
 
-const Controls = ({ openOnFull }) => {
+const ControlsWeb = ({ openOnFull }) => {
   return (
     <div className="controls" dir="ltr">
       <AudioBg />
@@ -32,4 +32,4 @@ const Controls = ({ openOnFull }) => {
   );
 };
 
-export default Controls;
+export default ControlsWeb;

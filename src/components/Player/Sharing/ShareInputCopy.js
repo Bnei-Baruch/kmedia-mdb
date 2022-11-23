@@ -6,7 +6,7 @@ import { POPOVER_CONFIRMATION_TIMEOUT } from './helper';
 
 let timeout = null;
 
-const clearTimeout   = () => {
+const clearTimeout = () => {
   if (timeout) {
     clearTimeout(timeout);
     timeout = null;

@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 
 import { selectors as player } from '../../redux/modules/player';
 import { PLAYER_OVER_MODES } from '../../helpers/consts';
-import Controls from './Controls/Controls';
+import ControlsWeb from './Controls/ControlsWeb';
 import WipErr from '../shared/WipErr/WipErr';
 import { withNamespaces } from 'react-i18next';
 import Settings from './Settings/Settings';
@@ -17,7 +17,7 @@ const PlayerToolsWeb = ({ handleFullScreen, t }) => {
       {
         isPlayerReady ? (
           <>
-            <Controls openOnFull={handleFullScreen} />
+            <ControlsWeb openOnFull={handleFullScreen} />
             <Settings />
             <Sharing />
           </>

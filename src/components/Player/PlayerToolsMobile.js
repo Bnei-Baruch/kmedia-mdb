@@ -6,7 +6,7 @@ import { selectors as player, actions } from '../../redux/modules/player';
 import WipErr from '../shared/WipErr/WipErr';
 import Settings from './Settings/Settings';
 import Sharing from './Sharing/Sharing';
-import ControlsMobile from './ControlsMobile';
+import ControlsMobile from './Controls/ControlsMobile';
 import { PLAYER_OVER_MODES } from '../../helpers/consts';
 import { stopBubbling } from '../../helpers/utils';
 
