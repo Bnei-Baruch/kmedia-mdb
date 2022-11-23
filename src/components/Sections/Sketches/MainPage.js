@@ -72,7 +72,7 @@ const MainPage = ({ t }) => {
   }, [dispatch, zipIdsForFetch, wipAll]);
 
   return (<>
-    <SectionHeader section="lessons" />
+    <SectionHeader section="sketches" />
     <SectionFiltersWithMobile
       filters={
         <Filters

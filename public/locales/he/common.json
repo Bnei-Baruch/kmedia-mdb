@@ -24,7 +24,8 @@
       "old-site": "לאתר הישן",
       "podcast": "פודקאסט",
       "subscribe": "הרשם לעדכונים",
-      "bookmarks": "סימניות"
+      "bookmarks": "סימניות",
+      "sketches": "שרטוטים"
     },
     "footer": {
       "copyright": "© כל הזכויות שמורות 2003-{{year}}",
@@ -471,6 +472,12 @@
     "header": {
       "text": "עזרה",
       "subtext": "כאן תוכלו למצוא קליפים קצרים שיעזרו לכם להיתמצא בקלות באתר"
+    }
+  },
+  "sketches": {
+    "header": {
+      "text": "שרטוטים",
+      "subtext": ""
     }
   },
   "pages": {

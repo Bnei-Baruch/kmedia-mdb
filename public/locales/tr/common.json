@@ -25,7 +25,8 @@
       "old-site": "Eski Site",
       "podcast": "Dijital ses dosyası",
       "subscribe": "Güncellemeler İçin Abone Ol",
-      "bookmarks": "Bookmarks"
+      "bookmarks": "Bookmarks",
+      "sketches": "Skeçler"
     },
     "footer": {
       "copyright": "Telif Hakkı © 2003-{{year}}",
@@ -470,6 +471,12 @@
     "header": {
       "text": "Yardım",
       "subtext": "Bu bölümde bu siteyi en iyi nasıl kullanacağınız dair görüntülü açıklamalar bulacaksınız."
+    }
+  },
+  "sketches": {
+    "header": {
+      "text": "Skeçler",
+      "subtext": ""
     }
   },
   "pages": {

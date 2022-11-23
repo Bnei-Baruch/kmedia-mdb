@@ -25,7 +25,8 @@
       "old-site": "Vecchio sito",
       "podcast": "Podcast",
       "subscribe": "Iscriviti per gli aggiornamenti",
-      "bookmarks": "Bookmarks"
+      "bookmarks": "Bookmarks",
+      "sketches": "Sketches"
     },
     "footer": {
       "copyright": "Copyright © 2003-{{year}}",
@@ -471,6 +472,12 @@
     "header": {
       "text": "Help",
       "subtext": "In this section you will find video tutorials and best practices on how to use the site"
+    }
+  },
+  "sketches": {
+    "header": {
+      "text": "Sketches",
+      "subtext": ""
     }
   },
   "pages": {
