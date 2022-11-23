@@ -1,10 +1,13 @@
 import React, { useContext, useState } from 'react'
-import { Button, Header, Icon, Modal } from 'semantic-ui-react'
+import {Button, Grid, Header, Icon, Image, Modal} from 'semantic-ui-react'
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { LANG_ENGLISH, LANG_HEBREW, LANG_RUSSIAN, LANG_SPANISH } from '../../../helpers/consts';
 import * as shapes from '../../shapes';
 import PropTypes from 'prop-types';
 import { getQuery } from '../../../helpers/url';
+import {assetUrl} from "../../../helpers/Api";
+import banner from '../../../images/DonationBanner.jpg'
+import clsx from "clsx";
 
 function DonationPopup({ t, language, location }) {
   const shouldOpen = () => {
@@ -98,18 +101,31 @@ function DonationPopup({ t, language, location }) {
   return (
     <Modal
       closeIcon
+      className="donationPopup"
       centered={!isMobileDevice}
+      size="large"
+      dimmer="inverted"
       open={open}
       onClose={() => setOpen(false)}
       onOpen={() => setOpen(true)}
     >
       {/*<Header content='Donate'/>*/}
       <Modal.Content scrolling>
-        {getContent()}
+        <Grid>
+          <Grid.Row columns={isMobileDevice ? 1 : 2}>
+            <Grid.Column>
+              <Image src={banner} />
+            </Grid.Column>
+            <Grid.Column>
+              {getContent()}
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
       </Modal.Content>
       <Modal.Actions>
         <Button onClick={() => setOpen(false)}
           href={link}
+          className="donate-button"
           as="a"
           target="_blank"
           content={` ${ t('home.donate')  } `}
