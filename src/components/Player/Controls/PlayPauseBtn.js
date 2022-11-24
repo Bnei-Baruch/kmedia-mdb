@@ -8,10 +8,10 @@ import { selectors as player } from '../../../redux/modules/player';
 
 const PlayPauseBtn = ({ t }) => {
   const isPlay = useSelector(state => player.isPlay(state.player));
-  const p      = window.jwplayer(JWPLAYER_ID);
 
   const handlePlayPause = () => {
-    isPlay ? p.pause() : p.play();
+    const p = window.jwplayer(JWPLAYER_ID);
+    isPlay ? p.pause() : p.play().play();
   };
 
   return (

@@ -50,7 +50,6 @@ import {
   UNIT_PROGRAMS_TYPE,
   UNIT_PUBLICATIONS_TYPE,
 } from './consts';
-import moment from 'moment';
 
 export const landingPageSectionLink = (landingPage, filterValues) => {
   const linkParts = [SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_LINK[landingPage]];
@@ -89,7 +88,7 @@ const blogNames = new Map([
   [BLOG_ID_LAITMAN_CO_IL, 'laitman-co-il'],
 ]);
 
-const mediaPrefix                   = new Map([
+const mediaPrefix = new Map([
   [CT_LESSON_PART, '/lessons/cu/'],
   [CT_LECTURE, '/lessons/cu/'],
   [CT_VIRTUAL_LESSON, '/lessons/cu/'],
@@ -106,16 +105,10 @@ const mediaPrefix                   = new Map([
   [CT_ARTICLE, '/publications/articles/cu/'],
 ]);
 
-const FIRST_PREPARATIONS_FOR_LESSON = moment('2017-01-01');
-
 export const getCuByCcuSkipPreparation = (ccu) => {
-  if (!ccu.cuIDs) return null;
+  if (!ccu?.cuIDs) return null;
 
-  if (ccu.cuIDs.length < 2 || !ccu.film_date) {
-    return ccu.cuIDs[0];
-  }
-
-  return moment(ccu.film_date).isAfter(FIRST_PREPARATIONS_FOR_LESSON) ? ccu.cuIDs[1] : ccu.cuIDs[0];
+  return ccu.cuIDs.filter(cu => !ccu.ccuNames || Number(ccu.ccuNames[cu.id]) !== 0)[0];
 };
 
 /* WARNING!!!

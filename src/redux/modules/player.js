@@ -1,6 +1,6 @@
 import { createAction } from 'redux-actions';
 import { handleActions } from './settings';
-import { JWPLAYER_ID, PLAYER_OVER_MODES } from '../../helpers/consts';
+import { PLAYER_OVER_MODES } from '../../helpers/consts';
 
 const PLAYER_READY          = 'Player/READY';
 const PLAYER_REMOVE         = 'Player/REMOVE';
@@ -11,11 +11,9 @@ const PLAYER_RESIZE         = 'Player/RESIZE';
 const PLAYER_MUTE_UNMUTE    = 'Player/MUTE_UNMUTE';
 const PLAYER_DESTROY_PLUGIN = 'Player/DESTROY_PLUGIN';
 
-const PLAYER_SET_FILE           = 'Player/SET_FILE';
-const PLAYER_SET_OVER_MODE      = 'Player/SET_OVER_MODE';
-const PLAYER_CONTINUE_PLAY_FROM = 'Player/CONTINUE_PLAY_FROM';
-const PLAYER_NEW_PLAYLIST_ITEM  = 'Player/NEW_PLAYLIST_ITEM';
-const PLAYER_SET_IS_FULLSCREEN  = 'Player/SET_IS_FULLSCREEN';
+const PLAYER_SET_FILE          = 'Player/SET_FILE';
+const PLAYER_SET_OVER_MODE     = 'Player/SET_OVER_MODE';
+const PLAYER_SET_IS_FULLSCREEN = 'Player/SET_IS_FULLSCREEN';
 
 const SET_SHARE_START_END = 'Player/SET_SHARE_START_END';
 
@@ -39,10 +37,8 @@ const playerResize        = createAction(PLAYER_RESIZE);
 const playerMuteUnmute    = createAction(PLAYER_MUTE_UNMUTE);
 const playerDestroyPlugin = createAction(PLAYER_DESTROY_PLUGIN);
 
-const setOverMode     = createAction(PLAYER_SET_OVER_MODE);
-const continuePlay    = createAction(PLAYER_CONTINUE_PLAY_FROM);
-const newPlaylistItem = createAction(PLAYER_NEW_PLAYLIST_ITEM);
-const setFullScreen   = createAction(PLAYER_SET_IS_FULLSCREEN);
+const setOverMode   = createAction(PLAYER_SET_OVER_MODE);
+const setFullScreen = createAction(PLAYER_SET_IS_FULLSCREEN);
 
 const setShareStartEnd = createAction(SET_SHARE_START_END);
 
@@ -54,13 +50,11 @@ export const actions = {
 
   playerPlay,
   playerPause,
-  continuePlay,
 };
 
 /* Reducer */
 const initialState = {
   overMode: null,
-  continuePlay: { pos: -1, isPlayed: false },
   isReady: false,
   file: null,
   shareStartEnd: { start: 0, end: Infinity },
@@ -68,28 +62,9 @@ const initialState = {
 };
 
 const onRemove = draft => {
-  draft.continuePlay = initialState.continuePlay;
   draft.overMode     = null;
   draft.isFullScreen = false;
   draft.ready        = false;
-};
-
-const onNewPlaylistItem = (draft, e) => {
-  const p = window.jwplayer(JWPLAYER_ID);
-  if (draft.continuePlay && draft.continuePlay.pos !== -1) {
-    p.stop().seek(draft.continuePlay.pos);
-    draft.continuePlay.isPlayed ? p.play() : p.pause();
-
-    draft.continuePlay = { pos: -1, isPlayed: false };
-    draft.overMode     = null;
-  }
-};
-
-const onContinuePlay = draft => {
-  const p            = window.jwplayer(JWPLAYER_ID);
-  const pos          = p.getPosition();
-  const isPlayed     = p.getState() === 'playing';
-  draft.continuePlay = { pos, isPlayed };
 };
 
 export const reducer = handleActions({
@@ -104,8 +79,6 @@ export const reducer = handleActions({
   [PLAYER_MUTE_UNMUTE]: (draft, payload) => draft.muteUnmute = payload,
 
   [PLAYER_SET_OVER_MODE]: (draft, payload) => draft.overMode = payload,
-  [PLAYER_NEW_PLAYLIST_ITEM]: onNewPlaylistItem,
-  [PLAYER_CONTINUE_PLAY_FROM]: onContinuePlay,
   [PLAYER_SET_IS_FULLSCREEN]: (draft, payload) => draft.isFullScreen = payload,
 
   [SET_SHARE_START_END]: (draft, payload) => draft.shareStartEnd = payload
@@ -137,7 +110,6 @@ export const PLAYER_ACTIONS_BY_EVENT = {
   'play': playerPlay,
   'playbackRateChanged': playerRate,
   'pause': playerPause,
-  'playlistItem': newPlaylistItem,
   'resize': playerResize,
   'mute': playerMuteUnmute,
   'destroyPlugin': playerDestroyPlugin,

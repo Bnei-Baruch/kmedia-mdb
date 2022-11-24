@@ -1,24 +1,16 @@
 import { Button, Header, Icon } from 'semantic-ui-react';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { actions } from '../../../redux/modules/player';
 import { selectors as playlistSelectors, actions as playlistActions } from '../../../redux/modules/playlist';
 import { withNamespaces } from 'react-i18next';
 import PlayerLanguages from './PlayerLanguages';
 import { LANGUAGES, MT_VIDEO, MT_AUDIO } from '../../../helpers/consts';
-import { updateQuery } from '../../../helpers/url';
-import { useHistory } from 'react-router-dom';
 
 const AudioVideoBtns = ({ file, t }) => {
-  const history       = useHistory();
   const { mediaType } = useSelector(state => playlistSelectors.getInfo(state.playlist));
   const dispatch      = useDispatch();
 
-
-  const handleSetMediaType = x => {
-    dispatch(actions.continuePlay());
-    dispatch(playlistActions.setMediaType(x));
-  };
+  const handleSetMediaType = x => dispatch(playlistActions.setMediaType(x));
 
   return (
     <div className="settings">

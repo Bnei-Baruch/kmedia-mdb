@@ -17,7 +17,6 @@ const Player = () => {
   const { start, end } = startEndFromQuery(location);
 
   const isReady = useSelector(state => player.isReady(state.player));
-  const isPlay  = useSelector(state => player.isPlay(state.player));
 
   const item = useSelector(state => playlist.getPlayed(state.playlist), shallowEqual);
   const info = useSelector(state => playlist.getInfo(state.playlist), shallowEqual);
@@ -28,7 +27,7 @@ const Player = () => {
   const historyItem = useSelector(state => my.getList(state.my, MY_NAMESPACE_HISTORY)?.find(x => x.content_unit_uid === cuId));
   const { fetched } = useSelector(state => my.getInfo(state.my, MY_NAMESPACE_HISTORY));
 
-  const cuIdRef = useRef();
+  const fileIdRef = useRef();
 
   const checkStopTime = useCallback(d => {
     if (d.currentTime > end) {
@@ -72,14 +71,14 @@ const Player = () => {
 
   //must be before next useEffect (don't autostart on change collection)
   useEffect(() => {
-    cuIdRef.current = null;
+    fileIdRef.current = null;
   }, [cId]);
 
   //start from saved time on load or switch playlist item
   useEffect(() => {
-    if (!isReady || start || end || cuId === cuIdRef.current || !fetched) return;
+    if (!isReady || start || end || !fetched || file.id === fileIdRef.current) return;
 
-    const autoplay = !!cuIdRef.current || isPlay || isSingleMedia;
+    const autoplay = !!fileIdRef.current || isSingleMedia;
     const jwp      = window.jwplayer(JWPLAYER_ID);
     const seek     = getSavedTime(cuId, historyItem);
 
@@ -89,8 +88,8 @@ const Player = () => {
       jwp.play();
     }
 
-    cuIdRef.current = cuId;
-  }, [isReady, cuId, cuIdRef.current, isPlay, start, end, isSingleMedia, file.duration, historyItem, fetched]);
+    fileIdRef.current = file.id;
+  }, [isReady, cuId, fileIdRef.current, start, end, isSingleMedia, file, historyItem, fetched]);
 
   return (
     <div ref={ref}>

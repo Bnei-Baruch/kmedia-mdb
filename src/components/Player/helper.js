@@ -1,6 +1,4 @@
-import { batch } from 'react-redux';
-
-import { PLAYER_ACTIONS_BY_EVENT, actions } from '../../redux/modules/player';
+import { PLAYER_ACTIONS_BY_EVENT } from '../../redux/modules/player';
 import { MT_VIDEO, MT_AUDIO } from '../../helpers/consts';
 import { isEmpty } from '../../helpers/utils';
 import { PLAYER_POSITION_STORAGE_KEY } from './constants';
@@ -10,7 +8,7 @@ import moment from 'moment';
 export const DEFAULT_PLAYER_VOLUME     = 80;
 export const PLAYER_VOLUME_STORAGE_KEY = 'jwplayer.volume';
 
-const PLAYER_EVENTS = ['ready', 'remove', 'play', 'pause', 'playbackRateChanged', 'playlistItem', 'resize', 'mute'];
+const PLAYER_EVENTS = ['ready', 'remove', 'play', 'pause', 'playbackRateChanged', 'resize', 'mute'];
 
 export const initPlayerEvents = (dispatch) => {
   const player = window.jwplayer();
@@ -22,12 +20,7 @@ export const initPlayerEvents = (dispatch) => {
 
   player.on('remove', () => player.off('all'));
 
-  player.on('complete', () => {
-    batch(() => {
-      dispatch(actions.continuePlay());
-      dispatch(playlistActions.next());
-    });
-  });
+  player.on('complete', () => dispatch(playlistActions.next()));
 
   PLAYER_EVENTS.forEach(name => {
     const action = PLAYER_ACTIONS_BY_EVENT[name];

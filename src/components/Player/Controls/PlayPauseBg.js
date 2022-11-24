@@ -11,7 +11,7 @@ const PlayPauseBg = () => {
 
   const handleClick = e => {
     const p = window.jwplayer(JWPLAYER_ID);
-    isPlay ? p.pause() : p.play();
+    isPlay ? p.pause() : p.play().play();
     stopBubbling(e);
   };
 
