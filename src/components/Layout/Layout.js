@@ -23,7 +23,7 @@ import Logo from '../../images/icons/Logo';
 import { ClientChroniclesContext, DeviceInfoContext } from '../../helpers/app-contexts';
 import Login from './Login';
 import DownloadTrim from '../AVPlayer/Share/DownloadTrim';
-import DonationPopup from "../Sections/Home/DonationPopup";
+import DonationPopup from '../Sections/Home/DonationPopup';
 
 const WrappedOmniBoxWithChronicles = ({ location }) => {
   const chronicles = useContext(ClientChroniclesContext);

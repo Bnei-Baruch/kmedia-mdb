@@ -8,7 +8,7 @@ import { getQuery } from '../../../helpers/url';
 import { assetUrl } from '../../../helpers/Api';
 import banner from '../../../images/DonationBanner.jpg'
 import clsx from 'clsx';
-import {isLanguageRtl} from "../../../helpers/i18n-utils";
+import { isLanguageRtl } from '../../../helpers/i18n-utils';
 
 function DonationPopup({ t, language, location }) {
   const shouldOpen = () => {
@@ -18,7 +18,16 @@ function DonationPopup({ t, language, location }) {
     const d = new Date();
     const firstWeek = d.getDate();
     const theDay = d.getDay();
-    return (firstWeek <= 7 && (theDay == 0 || theDay == 6));  // First Sunday and Saturday of the week
+    const popupCountKey = `showDonationPopup_${d.toISOString().split('T')[0]}`;
+    const popupCount = parseInt(localStorage.getItem(popupCountKey) ?? 0);
+    if (popupCount > 1)
+      return false;
+    // First Sunday and Saturday of the week
+    if (firstWeek <= 7 && (theDay == 0 || theDay == 6)) {
+      localStorage.setItem(popupCountKey, (popupCount + 1).toString());
+      return true;
+    }
+    return false;
   }
 
   const [open, setOpen] = React.useState(shouldOpen())
@@ -121,9 +130,9 @@ function DonationPopup({ t, language, location }) {
           <Grid.Row columns={isMobileDevice ? 1 : 2}>
             <Grid.Column>
               <Image src={banner}
-                     href={link}
-                     as="a"
-                     target="_blank" />
+                href={link}
+                as="a"
+                target="_blank" />
             </Grid.Column>
             <Grid.Column>
               {getContent()}
