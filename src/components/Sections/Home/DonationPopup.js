@@ -27,6 +27,7 @@ function DonationPopup({ t, language, location }) {
       localStorage.setItem(popupCountKey, (popupCount + 1).toString());
       return true;
     }
+
     return false;
   }
 
