@@ -14,7 +14,6 @@ import TwitterFeed from '../Publications/tabs/Twitter/Feed';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { isEqual } from 'lodash';
 import { useInterval } from '../../../helpers/timer';
-import DonationPopup from './DonationPopup';
 
 const SWITCH_BANNERS_TIMEOUT = 5 * 1000; // every 5 sec
 
@@ -125,9 +124,6 @@ const renderLatestLessonAndBanner = (latestLesson, banner) =>
     </Container>
   </div>;
 
-const renderDonationPopup = (t, language, location) =>
-  <DonationPopup open={true} t={t} language={language} location={location} />
-
 const setBanners = (allBanners, bannerIdx, setBannerIdx) => {
   if (allBanners > 0) {
     setBannerIdx(() => (bannerIdx + 1) % allBanners);
@@ -166,7 +162,6 @@ const HomePage = ({
       {renderActiveSectionsGrid(t, isMobileDevice)}
       <LatestUpdatesSection latestItems={latestItems} t={t} language={language} />
       {renderBlogPostsAndTweets(latestBlogPosts, latestTweets, language, t)}
-      {renderDonationPopup(t, language, location)}
     </div>
   );
 };

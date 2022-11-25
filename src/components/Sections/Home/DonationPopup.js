@@ -1,13 +1,14 @@
 import React, { useContext, useState } from 'react'
-import {Button, Grid, Header, Icon, Image, Modal} from 'semantic-ui-react'
+import { Button, Grid, Header, Icon, Image, Modal } from 'semantic-ui-react'
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { LANG_ENGLISH, LANG_HEBREW, LANG_RUSSIAN, LANG_SPANISH } from '../../../helpers/consts';
 import * as shapes from '../../shapes';
 import PropTypes from 'prop-types';
 import { getQuery } from '../../../helpers/url';
-import {assetUrl} from "../../../helpers/Api";
+import { assetUrl } from '../../../helpers/Api';
 import banner from '../../../images/DonationBanner.jpg'
-import clsx from "clsx";
+import clsx from 'clsx';
+import {isLanguageRtl} from "../../../helpers/i18n-utils";
 
 function DonationPopup({ t, language, location }) {
   const shouldOpen = () => {
@@ -22,6 +23,8 @@ function DonationPopup({ t, language, location }) {
 
   const [open, setOpen] = React.useState(shouldOpen())
   const { isMobileDevice } = useContext(DeviceInfoContext);
+
+  const isRTL = isLanguageRtl(language);
 
   const { linkLang, utmTerm } = getDonateLinkDetails(language);
   const link = `https://www.kab1.com/${linkLang}?utm_source=kabbalah_media&utm_medium=button&utm_campaign=donations&utm_id=donations&utm_term=${utmTerm}&utm_content=header_button_donate`;
@@ -101,7 +104,10 @@ function DonationPopup({ t, language, location }) {
   return (
     <Modal
       closeIcon
-      className="donationPopup"
+      className=""
+      className={clsx('donationPopup', {
+        'rtl': isRTL
+      })}
       centered={!isMobileDevice}
       size="large"
       dimmer="inverted"
@@ -114,7 +120,10 @@ function DonationPopup({ t, language, location }) {
         <Grid>
           <Grid.Row columns={isMobileDevice ? 1 : 2}>
             <Grid.Column>
-              <Image src={banner} />
+              <Image src={banner}
+                     href={link}
+                     as="a"
+                     target="_blank" />
             </Grid.Column>
             <Grid.Column>
               {getContent()}
