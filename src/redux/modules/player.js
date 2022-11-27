@@ -54,7 +54,7 @@ export const actions = {
 
 /* Reducer */
 const initialState = {
-  overMode: null,
+  overMode: PLAYER_OVER_MODES.firstTime,
   isReady: false,
   file: null,
   shareStartEnd: { start: 0, end: Infinity },
@@ -62,7 +62,7 @@ const initialState = {
 };
 
 const onRemove = draft => {
-  draft.overMode     = null;
+  draft.overMode     = PLAYER_OVER_MODES.firstTime;
   draft.isFullScreen = false;
   draft.ready        = false;
 };
@@ -72,7 +72,11 @@ export const reducer = handleActions({
   [PLAYER_REMOVE]: onRemove,
   [PLAYER_SET_FILE]: (draft, payload) => draft.file = payload,
 
-  [PLAYER_PLAY]: (draft, payload) => draft.played = payload.newstate === 'playing',
+  [PLAYER_PLAY]: (draft, payload) => {
+    draft.played = payload.newstate === 'playing';
+    if (draft.overMode === PLAYER_OVER_MODES.firstTime)
+      draft.overMode = PLAYER_OVER_MODES.active;
+  },
   [PLAYER_PAUSE]: draft => draft.played = false,
   [PLAYER_RATE]: (draft, payload) => draft.rate = payload.playbackRate,
   [PLAYER_RESIZE]: (draft, payload) => draft.width = payload.width,
@@ -87,7 +91,7 @@ export const reducer = handleActions({
 const isReady          = state => state.ready;
 const isPlay           = state => state.played;
 const getFile          = state => state.file;
-const getOverMode      = state => state.overMode || PLAYER_OVER_MODES.none;
+const getOverMode      = state => state.overMode;
 const isFullScreen     = state => state.isFullScreen;
 const getRate          = state => state.rate || 1;
 const getShareStartEnd = state => state.shareStartEnd;

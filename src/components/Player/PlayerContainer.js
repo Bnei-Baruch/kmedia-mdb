@@ -18,6 +18,7 @@ const CLASSES_BY_MODE = {
   [PLAYER_OVER_MODES.languages]: 'is-settings is-language',
   [PLAYER_OVER_MODES.share]: 'is-sharing',
   [PLAYER_OVER_MODES.active]: 'is-active',
+  [PLAYER_OVER_MODES.firstTime]: 'is-active is-first-time',
   [PLAYER_OVER_MODES.none]: '',
 };
 
