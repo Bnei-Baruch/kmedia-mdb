@@ -1,8 +1,8 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Popup } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
 import { selectors as player } from '../../../redux/modules/player';
-import { formatDuration } from '../../../helpers/utils';
+import { formatDuration, stopBubbling } from '../../../helpers/utils';
 import { JWPLAYER_ID } from '../../../helpers/consts';
 import { selectors as playlist } from '../../../redux/modules/playlist';
 
@@ -12,12 +12,12 @@ export const ProgressBar = ({ left, right }) => {
   const [buffPos, setBuffPos]     = useState(0);
   const [time, setTime]           = useState(0);
 
-  const isReady          = useSelector(state => player.isReady(state.player));
-  const file             = useSelector(state => player.getFile(state.player));
+  const isReady  = useSelector(state => player.isReady(state.player));
+  const file     = useSelector(state => player.getFile(state.player));
   const { cuId } = useSelector(state => playlist.getInfo(state.playlist));
 
   const checkTimeAfterSeek = d => {
-    const time = Math.round(d.currentTime);
+    const time = Math.round(d.offset ?? d.currentTime);
     const pos  = Math.round(10 * (100 * time) / window.jwplayer().getDuration()) / 10;
     setPos(pos);
     setTime(time);
@@ -44,17 +44,20 @@ export const ProgressBar = ({ left, right }) => {
       p.off('bufferChange', checkBufferTime);
     };
 
-  }, [isReady, file?.src]);
+  }, [isReady, file?.src, cuId]);
 
   const handleStart = e => {
     // regard only left mouse button click (0). touch is undefined
     !e.button && setActivated(true);
   };
 
-  const handleEnd = e => setActivated(false);
+  const handleEnd = e => {
+    stopBubbling(e);
+    setActivated(false);
+  };
 
-  const handleMove = useCallback(e => {
-    e.preventDefault();
+  const handleMove = e => {
+    stopBubbling(e);
     if (!activated) return;
 
     // Resolve clientX from mouse or touch event.
@@ -64,7 +67,7 @@ export const ProgressBar = ({ left, right }) => {
 
     const p = window.jwplayer(JWPLAYER_ID);
     p.seek(p.getDuration() * offset);
-  }, [activated]);
+  };
 
   const removeListeners = () => {
     document.removeEventListener('mousemove', handleMove);

@@ -21,7 +21,7 @@ export const ProgressCtrl = () => {
   }, [widthRef.current, width]);
 
   const handleProgressClick = e => {
-    const clientX = (e.touches ? e.touches[e.touches.length - 1].clientX : e.clientX) - 28 / 2;
+    const clientX = e.touches ? e.touches[e.touches.length - 1].clientX : e.clientX;
     const delta   = right - left;
     const offset  = Math.min(Math.max(0, clientX - left), delta) / delta;
     const p       = window.jwplayer();
@@ -32,12 +32,12 @@ export const ProgressCtrl = () => {
   return (
     <div
       className="controls__progress"
-      onClick={handleProgressClick}
+      onMouseDown={handleProgressClick}
     >
-      <div className="controls__slider" ref={widthRef}>
-        <div className="slider__wrapper">
+      <div className="controls__slider">
+        <div className="slider__wrapper" ref={widthRef}>
           <SlicesBar />
-          <ProgressBar left={left + 12} right={right - 12} />
+          <ProgressBar left={left} right={right} />
         </div>
       </div>
     </div>

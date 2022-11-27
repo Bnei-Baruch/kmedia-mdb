@@ -1,5 +1,6 @@
 import { getQuery } from '../../../helpers/url';
 import { fromHumanReadableTime } from '../../../helpers/time';
+import { PLAYER_POSITION_STORAGE_KEY } from '../constants';
 
 export const timeToPercent = (sec, duration) => {
   if (!sec || sec === Infinity) return 0;
@@ -16,4 +17,12 @@ export const startEndFromQuery = (location) => {
   if (start > end)
     return { start: end, end: start };
   return { start, end };
+};
+
+export const saveTimeOnLocalstorage = (time, uid) => {
+  const msg = {
+    timestamp: (new Date).toISOString(),
+    current_time: time
+  };
+  localStorage.setItem(`${PLAYER_POSITION_STORAGE_KEY}_${uid}`, JSON.stringify(msg));
 };

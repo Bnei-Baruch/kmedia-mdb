@@ -4,9 +4,9 @@ import { selectors as player } from '../../../redux/modules/player';
 import { selectors as playlist } from '../../../redux/modules/playlist';
 import { formatDuration } from '../../../helpers/utils';
 import isFunction from 'lodash/isFunction';
-import { PLAYER_POSITION_STORAGE_KEY } from '../constants';
 import { noop } from 'lodash/util';
 import { JWPLAYER_ID } from '../../../helpers/consts';
+import { saveTimeOnLocalstorage } from './helper';
 
 export const Timecode = () => {
   const [time, setTime] = useState(0);
@@ -18,12 +18,9 @@ export const Timecode = () => {
   useEffect(() => setTime(0), [cuId]);
 
   const checkTimeAfterSeek = d => {
-    setTime(Math.round(d.currentTime));
-    const msg = {
-      timestamp: (new Date).toISOString(),
-      current_time: d.currentTime
-    };
-    localStorage.setItem(`${PLAYER_POSITION_STORAGE_KEY}_${cuId}`, JSON.stringify(msg));
+    const t = d.offset ?? d.currentTime;
+    setTime(Math.round(t));
+    saveTimeOnLocalstorage(t, cuId);
   };
 
   useEffect(() => {
