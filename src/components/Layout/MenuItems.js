@@ -23,7 +23,6 @@ const ITEMS = [
   'music',
   'simple-mode',
   'sketches',
-  // 'project-status',
   'help',
 ];
 
