@@ -113,7 +113,6 @@ function DonationPopup({ t, language, location }) {
   return (
     <Modal
       closeIcon
-      className=""
       className={clsx('donationPopup', {
         'rtl': isRTL
       })}
@@ -124,7 +123,7 @@ function DonationPopup({ t, language, location }) {
       onClose={() => setOpen(false)}
       onOpen={() => setOpen(true)}
     >
-      {/*<Header content='Donate'/>*/}
+      { isMobileDevice ? <Header className="popupHeader" /> : ""}
       <Modal.Content scrolling>
         <Grid>
           <Grid.Row columns={isMobileDevice ? 1 : 2}>
