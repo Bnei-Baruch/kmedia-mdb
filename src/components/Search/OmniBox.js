@@ -110,9 +110,9 @@ const OmniBox = ({ isHomePage = false, t }) => {
         {!isMobileDevice ? t('buttons.search').toUpperCase() : null}
       </Button>
       <ButtonDayPicker
-          label={t('filters.date-filter.presets.CUSTOM_DAY')}
-          language={language}
-          onDayChange={handleFromInputChange} />
+        label={t('filters.date-filter.presets.CUSTOM_DAY')}
+        language={language}
+        onDayChange={handleFromInputChange} />
 
     </Input> :
     <Input

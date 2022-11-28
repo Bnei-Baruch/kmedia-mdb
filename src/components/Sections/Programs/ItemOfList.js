@@ -45,10 +45,10 @@ const ItemOfList = ({ id, t }) => {
         <div className="description">
           {description.map((d, i) => (<span key={i}>{d}</span>))}
           {ccu && (<span className="opacity_1">
-          <Link as={'a'} to={canonicalLink(ccu)}>
-            {t('programs.list.show_all')}
-          </Link>
-        </span>)}
+            <Link as={'a'} to={canonicalLink(ccu)}>
+              {t('programs.list.show_all')}
+            </Link>
+          </span>)}
         </div>
       </div>
     </List.Item>
