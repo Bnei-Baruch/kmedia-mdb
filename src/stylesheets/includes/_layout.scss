@@ -134,7 +134,7 @@ body {
   flex: 0 1 auto !important;
 
   img {
-    display: none !important;
+    display: inline-block !important;
   }
 
   h1.header {
@@ -142,7 +142,7 @@ body {
       font-size: 1.28571429rem !important;
     }
     font-size: 1.71428571rem;
-    margin-left: 0;
+    margin-left: 16px;
     margin-top: 0;
   }
 }
@@ -187,15 +187,6 @@ body {
 
   .logo {
     min-width: $sidebar-width;
-
-    img {
-      display: inline-block !important;
-    }
-
-    h1.header {
-      margin-left: 16px;
-      margin-top: 0;
-    }
   }
 }
 
