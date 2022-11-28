@@ -8,7 +8,7 @@ import { Header, Icon, Menu, Ref, Segment } from 'semantic-ui-react';
 import Headroom from 'react-headroom';
 
 import { ALL_LANGUAGES } from '../../helpers/consts';
-import { getEmbedFromQuery } from '../../helpers/player';
+import playerHelper from '../../helpers/player';
 import { selectors as settings } from '../../redux/modules/settings';
 import * as shapes from '../shapes';
 import Link from '../Language/MultiLanguageLink';
@@ -22,7 +22,8 @@ import DonateNow, { VirtualHomeButton } from './DonateNow';
 import Logo from '../../images/icons/Logo';
 import { ClientChroniclesContext, DeviceInfoContext } from '../../helpers/app-contexts';
 import Login from './Login';
-import DownloadTrim from '../Share/DownloadTrim';
+import DownloadTrim from '../AVPlayer/Share/DownloadTrim';
+import DonationPopup from '../Sections/Home/DonationPopup';
 
 const WrappedOmniBoxWithChronicles = ({ location }) => {
   const chronicles = useContext(ClientChroniclesContext);
@@ -73,7 +74,7 @@ class Layout extends Component {
     this.state = {
       sidebarActive: false,
       isShowHeaderSearch: false,
-      embed: getEmbedFromQuery(location),
+      embed: playerHelper.getEmbedFromQuery(location),
     };
   }
 
@@ -271,6 +272,7 @@ class Layout extends Component {
           </div>
           <Footer />
         </div>
+        <DonationPopup />
       </div>
     );
   }
