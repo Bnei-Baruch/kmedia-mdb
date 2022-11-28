@@ -18,12 +18,12 @@ function DonationPopup({ t, language, location }) {
     const d = new Date();
     const firstWeek = d.getDate();
     const theDay = d.getDay();
-    const popupCountKey = `showDonationPopup_${d.toISOString().split('T')[0]}`;
-    const popupCount = parseInt(localStorage.getItem(popupCountKey) ?? 0);
-    if (popupCount > 1)
-      return false;
     // First Sunday and Saturday of the week
     if (firstWeek <= 7 && (theDay == 0 || theDay == 6)) {
+      const popupCountKey = `showDonationPopup_${d.toISOString().split('T')[0]}`;
+      const popupCount = parseInt(localStorage.getItem(popupCountKey) ?? 0);
+      if (popupCount > 1)
+        return false;
       localStorage.setItem(popupCountKey, (popupCount + 1).toString());
       return true;
     }
@@ -37,8 +37,7 @@ function DonationPopup({ t, language, location }) {
   const isRTL = isLanguageRtl(language);
 
   const { linkLang, utmTerm } = getDonateLinkDetails(language);
-  const link = `https://www.kab1.com/${linkLang}?utm_source=kabbalah_media&utm_medium=button&utm_campaign=donations&utm_id=donations&utm_term=${utmTerm}&utm_content=header_button_donate`;
-
+  const link = `https://www.kab1.com/${linkLang}?utm_source=kabbalah_media&utm_medium=popup&utm_campaign=donations&utm_id=donations&utm_term=${utmTerm}&utm_content=popup_link_donate`;
 
   const getContent = () => {
     switch (language) {
