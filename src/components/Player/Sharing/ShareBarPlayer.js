@@ -57,13 +57,13 @@ const ShareBarPlayer = ({ t }) => {
       }
       />
       <button className="custom_share_button">
-        <Popup content="Download file" inverted size="mini" position="top center" trigger={
+        <Popup content={t('player.settings.download-file')} inverted size="mini" position="top center" trigger={
           <CutAndDownload />
         } />
       </button>
 
       <button className="custom_share_button">
-        <Popup content="Embed media" inverted size="mini" position="top center" trigger={
+        <Popup content={t('player.share.embedded')} inverted size="mini" position="top center" trigger={
           <EmbeddedShareButton url={url} />
         } />
       </button>

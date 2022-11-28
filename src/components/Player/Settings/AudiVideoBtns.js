@@ -20,9 +20,9 @@ const AudioVideoBtns = ({ file, t }) => {
           <Button.Group size="mini" inverted>
             <Button
               inverted
-              onClick={handleSetMediaType}
               value={MT_VIDEO}
-              content="Video"
+              onClick={handleSetMediaType}
+              content={t(`player.settings.${mediaType}`)}
               active={mediaType === MT_VIDEO}
             />
             <Button

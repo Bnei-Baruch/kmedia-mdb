@@ -16,11 +16,17 @@ const PlayPauseBg = () => {
   };
 
   return (
-    <Popup content="Pause video" inverted size="mini" position="top center" trigger={
-      <div className="controls__pause" onClick={handleClick}>
-        <Icon fitted size="big" name={isPlay ? 'pause' : 'play'} />
-      </div>
-    } />
+    <Popup
+      inverted
+      size="mini"
+      position="top center"
+      content={t(`player.controls.${isPlay ? 'pause' : 'play'}`)}
+      trigger={
+        <div className="controls__pause" onClick={handleClick}>
+          <Icon fitted size="big" name={isPlay ? 'pause' : 'play'} />
+        </div>
+      }
+    />
   );
 };
 

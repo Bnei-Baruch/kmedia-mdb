@@ -22,7 +22,7 @@ export const FullscreenBtn = withNamespaces()(({ openOnFull, t }) => {
     }
   };
   return (
-    <Popup content={t('player.controls.fullscreen')} inverted size="mini" position="top right" trigger={
+    <Popup content={t(`player.controls.${isFullScreen ? 'fullscreen-exit' : 'fullscreen-enter'}`)} inverted size="mini" position="top right" trigger={
       <div className="controls__fullscreen" onClick={handleFullScreen}>
         <Icon fitted name={isFullScreen ? 'compress' : 'expand'} />
       </div>

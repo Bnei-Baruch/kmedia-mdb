@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Button, Header, Icon } from 'semantic-ui-react';
 import { withNamespaces } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
@@ -10,12 +10,11 @@ import QualityControl from './QualityControl';
 import MediaTypeControl from './MediaTypeControl';
 import RateControl from './RateControl';
 import CloseBtn from '../Controls/CloseBtn';
-import { DeviceInfoContext } from '../../../helpers/app-contexts';
 
 const Settings = ({ t }) => {
-  const file               = useSelector(state => selectors.getFile(state.player));
-  const mode               = useSelector(state => player.getOverMode(state.player));
-  const dispatch           = useDispatch();
+  const file     = useSelector(state => selectors.getFile(state.player));
+  const mode     = useSelector(state => player.getOverMode(state.player));
+  const dispatch = useDispatch();
 
   const handleOpenLangs = () => dispatch(actions.setOverMode(PLAYER_OVER_MODES.languages));
 
