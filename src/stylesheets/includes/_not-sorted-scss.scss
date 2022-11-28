@@ -1375,17 +1375,6 @@
   transform: rotate(0);
 }
 
-/* fix for svg in logo */
-.logo svg {
-  display: none !important;
-}
-
-@media only screen and (min-width: $largeMonitorBreakpoint) {
-  .logo svg {
-    display: inline-block !important;
-  }
-}
-
 .ui.menu .item > svg:not(.ui) {
   display: inline-block;
   vertical-align: middle;
