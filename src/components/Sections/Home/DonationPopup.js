@@ -8,11 +8,11 @@ import { getQuery } from '../../../helpers/url';
 import { assetUrl } from '../../../helpers/Api';
 import banner from '../../../images/DonationBanner.jpg'
 import clsx from 'clsx';
-import {getLanguageDirection, isLanguageRtl} from '../../../helpers/i18n-utils';
-import {connect, useSelector} from "react-redux";
-import {selectors as settings} from "../../../redux/modules/settings";
-import {withNamespaces} from "react-i18next";
-import {useLocation} from "react-router-dom";
+import { getLanguageDirection, isLanguageRtl } from '../../../helpers/i18n-utils';
+import { connect, useSelector } from 'react-redux';
+import { selectors as settings } from '../../../redux/modules/settings';
+import { withNamespaces } from 'react-i18next';
+import { useLocation } from 'react-router-dom';
 
 function DonationPopup({ t }) {
   const shouldOpen = () => {
