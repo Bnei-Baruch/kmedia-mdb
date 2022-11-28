@@ -39,7 +39,7 @@ const LastLessonCollection = ({ t }) => {
     const ht        = historyItems.find(x => x.content_unit_uid === id);
     const timestamp = getSavedTime(id, ht);
     return { id, timestamp };
-  }).sort((a, b) => b.timestamp - a.timestamp)[0];
+  }).filter(x => x.timestamp > 0).sort((a, b) => b.timestamp - a.timestamp)[0];
 
   const cuId = lastLooked?.id || getCuByCcuSkipPreparation(ccu);
   return (

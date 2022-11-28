@@ -1,4 +1,4 @@
-import { canonicalCollection, tracePath } from './utils';
+import { canonicalCollection, tracePath, isEmpty } from './utils';
 import { filtersTransformer } from '../filters/index';
 import { stringify as urlSearchStringify } from './url';
 
@@ -106,9 +106,9 @@ const mediaPrefix = new Map([
 ]);
 
 export const getCuByCcuSkipPreparation = (ccu) => {
-  if (!ccu?.cuIDs) return null;
+  if (isEmpty(ccu?.cuIDs)) return null;
 
-  return ccu.cuIDs.filter(cu => !ccu.ccuNames || Number(ccu.ccuNames[cu.id]) !== 0)[0];
+  return ccu.cuIDs.filter(id => !ccu.ccuNames || Number(ccu.ccuNames[id]) !== 0)[0];
 };
 
 /* WARNING!!!
