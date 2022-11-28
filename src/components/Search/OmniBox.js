@@ -1,9 +1,11 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useLocation } from 'react-router';
+import { useHistory } from 'react-router-dom';
 import { Button, Icon, Input, Loader, Search } from 'semantic-ui-react';
 import { withNamespaces } from 'react-i18next';
+import moment from 'moment';
 
+import ButtonDayPicker from '../Filters/components/Date/ButtonDayPicker';
 import { ClientChroniclesContext, DeviceInfoContext } from '../../helpers/app-contexts';
 import { SuggestionsHelper } from '../../helpers/search';
 import { isLanguageRtl } from '../../helpers/i18n-utils';
@@ -30,8 +32,8 @@ const OmniBox = ({ isHomePage = false, t }) => {
   const [inputFocused, setInputFocused] = useState(!isMobileDevice);
   const [userInteracted, setUserInteracted] = useState(false);
 
-  const location = useLocation();
   const dispatch = useDispatch();
+  const history = useHistory();
 
   useEffect(() => {
     if (suggestions) {
@@ -50,7 +52,8 @@ const OmniBox = ({ isHomePage = false, t }) => {
 
   const doSearch = () => {
     setUserInteracted(true);
-    dispatch(actions.search(!!location.pathname.endsWith('search')));
+    setInputFocused(false);
+    dispatch(actions.search());
   };
 
   const keyDown = e => {
@@ -61,6 +64,7 @@ const OmniBox = ({ isHomePage = false, t }) => {
 
   const inputChange = e => {
     setUserInteracted(true);
+    setInputFocused(true);
     dispatch(actions.updateQuery({ query: e.target.value, autocomplete: true }));
   }
 
@@ -78,6 +82,10 @@ const OmniBox = ({ isHomePage = false, t }) => {
     chronicles.autocompleteSelected(title, autocompleteId);
     dispatch(actions.updateQuery({ query: title, autocomplete: false }));
     doSearch();
+  };
+
+  const handleFromInputChange = value => {
+    history.push(`/${ language }/simple-mode?date=${ moment(value).format('YYYY-MM-DD') }`);
   };
 
   const renderInput = () => isHomePage ?
@@ -101,6 +109,11 @@ const OmniBox = ({ isHomePage = false, t }) => {
         }
         {!isMobileDevice ? t('buttons.search').toUpperCase() : null}
       </Button>
+      <ButtonDayPicker
+        label={t('filters.date-filter.presets.CUSTOM_DAY')}
+        language={language}
+        onDayChange={handleFromInputChange} />
+
     </Input> :
     <Input
       autoFocus={inputFocused}  // auto focus on desktop only.
