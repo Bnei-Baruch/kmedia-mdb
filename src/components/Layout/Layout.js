@@ -22,7 +22,8 @@ import DonateNow, { VirtualHomeButton } from './DonateNow';
 import Logo from '../../images/icons/Logo';
 import { ClientChroniclesContext, DeviceInfoContext } from '../../helpers/app-contexts';
 import Login from './Login';
-import DownloadTrim from '../Player/Sharing/DownloadTrim';
+import DownloadTrim from '../AVPlayer/Share/DownloadTrim';
+import DonationPopup from '../Sections/Home/DonationPopup';
 
 const WrappedOmniBoxWithChronicles = ({ location }) => {
   const chronicles = useContext(ClientChroniclesContext);
@@ -271,6 +272,7 @@ class Layout extends Component {
           </div>
           <Footer />
         </div>
+        <DonationPopup />
       </div>
     );
   }
