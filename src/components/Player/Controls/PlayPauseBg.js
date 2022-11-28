@@ -5,8 +5,9 @@ import { selectors } from '../../../redux/modules/player';
 import { JWPLAYER_ID } from '../../../helpers/consts';
 import { stopBubbling } from '../../../helpers/utils';
 import { Popup, Icon } from 'semantic-ui-react';
+import { withNamespaces } from 'react-i18next';
 
-const PlayPauseBg = () => {
+const PlayPauseBg = ({ t }) => {
   const isPlay = useSelector(state => selectors.isPlay(state.player));
 
   const handleClick = e => {
@@ -30,4 +31,4 @@ const PlayPauseBg = () => {
   );
 };
 
-export default PlayPauseBg;
+export default withNamespaces()(PlayPauseBg);
