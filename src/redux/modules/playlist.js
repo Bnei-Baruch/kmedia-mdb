@@ -2,6 +2,7 @@ import { createAction } from 'redux-actions';
 import { handleActions } from './settings';
 import { DEFAULT_LANGUAGE } from '../../helpers/consts';
 import { types as playerTypes } from './player';
+import { saveTimeOnLocalstorage } from '../../components/Player/Controls/helper';
 
 const PLAYLIST_BUILD         = 'Playlist/BUILD';
 const PLAYLIST_BUILD_SUCCESS = 'Playlist/BUILD_SUCCESS';
@@ -76,10 +77,12 @@ const onRemovePlayer = draft => {
   draft.info = { isReady: false };
 };
 
-const onNext = draft => {
-  const idx       = draft.playlist.findIndex(x => x === draft.info.cuId);
-  const lastIdx   = draft.playlist.length - 1;
-  draft.info.cuId = draft.playlist[(idx < lastIdx) ? idx + 1 : lastIdx];
+const onNext = (draft, restart = false) => {
+  const idx     = draft.playlist.findIndex(x => x === draft.info.cuId);
+  const lastIdx = draft.playlist.length - 1;
+  const nextId  = draft.playlist[(idx < lastIdx) ? idx + 1 : lastIdx];
+  if (restart) saveTimeOnLocalstorage(0, nextId);
+  draft.info.cuId = nextId;
 };
 
 const onPrev = draft => {
@@ -108,24 +111,27 @@ const getPlayed   = state => state.itemById[state.info.cuId] || false;
 
 const getInfo = state => state.info;
 
-const getNextData = state => {
+const getNextId = state => {
   const curIdx = state.playlist.findIndex(x => x === state.info.cuId);
   if (state.playlist.length <= curIdx) return false;
   const idx = curIdx + 1;
-  return { id: state.playlist[idx], cId: state.info.cId, idx };
+  return state.playlist[idx];
 };
 
-const getPrevData = state => {
+const getPrevId = state => {
   const curIdx = state.playlist.findIndex(x => x === state.info.cuId);
   if (1 > curIdx) return false;
   const idx = curIdx - 1;
-  return { id: state.playlist[idx], cId: state.info.cId, idx };
+  return state.playlist[idx];
 };
+
+const getIndexById = (state, id) => state.playlist.findIndex(x => x === id);
 
 export const selectors = {
   getPlaylist,
   getPlayed,
   getInfo,
-  getNextData,
-  getPrevData
+  getNextId,
+  getPrevId,
+  getIndexById
 };

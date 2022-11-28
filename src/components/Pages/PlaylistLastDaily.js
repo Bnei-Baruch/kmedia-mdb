@@ -13,6 +13,7 @@ import { MY_NAMESPACE_HISTORY } from '../../helpers/consts';
 import { isEqual } from 'lodash';
 import { getSavedTime } from '../Player/helper';
 import { getCuByCcuSkipPreparation } from '../../helpers/links';
+import moment from 'moment';
 
 const LastLessonCollection = ({ t }) => {
   const lastLessonId = useSelector(state => selectors.getLastLessonId(state.mdb));
@@ -35,13 +36,17 @@ const LastLessonCollection = ({ t }) => {
   if (wipErr) {
     return wipErr;
   }
-  const lastLooked = ccu.cuIDs.map(id => {
-    const ht        = historyItems.find(x => x.content_unit_uid === id);
-    const timestamp = getSavedTime(id, ht);
+  const sorted = ccu.cuIDs.map(id => {
+    const ht            = historyItems.find(x => x.content_unit_uid === id);
+    const { timestamp } = getSavedTime(id, ht);
     return { id, timestamp };
-  }).filter(x => x.timestamp > 0).sort((a, b) => b.timestamp - a.timestamp)[0];
+  }).filter(x => !!x.timestamp).sort((a, b) => {
+    const mta = moment(a.timestamp);
+    const mtb = moment(b.timestamp);
+    return mta.isAfter(mtb) ? -1 : 1;
+  });
 
-  const cuId = lastLooked?.id || getCuByCcuSkipPreparation(ccu);
+  const cuId = sorted[0]?.id || getCuByCcuSkipPreparation(ccu);
   return (
     <div>
       <Helmets.Basic title={t('lessons.last.title')} description={t('lessons.last.description')} />

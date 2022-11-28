@@ -13,9 +13,9 @@ const widthBySize = { 'normal': '140px' };
 const UnitLogoWithDuration = ({ unit, size = 'normal', width = 144, ...propz }) => {
   const { id, duration } = unit;
 
-  const historyItems = useSelector(state => my.getList(state.my, MY_NAMESPACE_HISTORY)) || [];
-  const historyUnit  = historyItems.find(x => x.content_unit_uid === id);
-  const playTime     = getSavedTime(id, historyUnit);
+  const historyItems               = useSelector(state => my.getList(state.my, MY_NAMESPACE_HISTORY)) || [];
+  const historyUnit                = historyItems.find(x => x.content_unit_uid === id);
+  const { current_time: playTime } = getSavedTime(id, historyUnit);
 
   return (
     <div className="with_duration" style={{ minWidth: widthBySize[size] }}>

@@ -20,7 +20,7 @@ export const initPlayerEvents = (dispatch) => {
 
   player.on('remove', () => player.off('all'));
 
-  player.on('complete', () => dispatch(playlistActions.next()));
+  player.on('complete', () => dispatch(playlistActions.next(true)));
 
   PLAYER_EVENTS.forEach(name => {
     const action = PLAYER_ACTIONS_BY_EVENT[name];
@@ -79,6 +79,5 @@ export const getSavedTime = (cuId, ht) => {
     console.error('broken json', json);
   }
 
-  const time = lt && (!ht || moment(lt.timestamp).isAfter(ht.timestamp)) ? lt.current_time : ht?.data?.current_time || 0;
-  return parseInt(time, 10);
+  return lt && (!ht || moment(lt.timestamp).isAfter(ht.timestamp)) ? lt : ht?.data || false;
 };

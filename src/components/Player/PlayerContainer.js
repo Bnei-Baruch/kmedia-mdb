@@ -6,7 +6,7 @@ import { Ref } from 'semantic-ui-react';
 import { selectors as player, selectors } from '../../redux/modules/player';
 import { PLAYER_OVER_MODES } from '../../helpers/consts';
 import Player from './Player';
-import UpdateQueries from './UpdateQueries';
+import UpdateLocation from './UpdateLocation';
 import PlayerToolsWeb from './PlayerToolsWeb';
 import PlayerToolsMobile from './PlayerToolsMobile';
 import AppendChronicle from './AppendChronicle';
@@ -35,7 +35,7 @@ const PlayerContainer = () => {
     <Ref innerRef={settRef}>
       <div className="player">
         <AppendChronicle />
-        <UpdateQueries />
+        <UpdateLocation />
         <div className={clsx(CLASSES_BY_MODE[mode], isMobileDevice ? 'is-mobile' : 'is-web', { 'is-fullscreen': isFullScreen })}>
           {
             isMobileDevice ? (

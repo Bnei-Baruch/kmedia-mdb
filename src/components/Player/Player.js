@@ -77,10 +77,9 @@ const Player = () => {
   //start from saved time on load or switch playlist item
   useEffect(() => {
     if (!isReady || start || end || !fetched || file.id === fileIdRef.current) return;
-
-    const autoplay = !!fileIdRef.current || isSingleMedia;
-    const jwp      = window.jwplayer(JWPLAYER_ID);
-    const seek     = getSavedTime(cuId, historyItem);
+    const autoplay               = !!fileIdRef.current || isSingleMedia;
+    const jwp                    = window.jwplayer(JWPLAYER_ID);
+    const { current_time: seek } = getSavedTime(cuId, historyItem);
 
     if (!isNaN(seek) && seek > 0 && (seek + 10 < file.duration)) {
       jwp.seek(seek)[autoplay ? 'play' : 'pause']();
