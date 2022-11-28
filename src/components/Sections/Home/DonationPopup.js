@@ -123,7 +123,7 @@ function DonationPopup({ t, language, location }) {
       onClose={() => setOpen(false)}
       onOpen={() => setOpen(true)}
     >
-      { isMobileDevice ? <Header className="popupHeader" /> : ""}
+      { isMobileDevice ? <Header className="popupHeader" /> : ''}
       <Modal.Content scrolling>
         <Grid>
           <Grid.Row columns={isMobileDevice ? 1 : 2}>
