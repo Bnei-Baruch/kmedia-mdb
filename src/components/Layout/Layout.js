@@ -272,7 +272,7 @@ class Layout extends Component {
           </div>
           <Footer />
         </div>
-        <DonationPopup t={t} language={language} location={location} />
+        <DonationPopup />
       </div>
     );
   }

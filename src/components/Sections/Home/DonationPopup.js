@@ -8,9 +8,13 @@ import { getQuery } from '../../../helpers/url';
 import { assetUrl } from '../../../helpers/Api';
 import banner from '../../../images/DonationBanner.jpg'
 import clsx from 'clsx';
-import { isLanguageRtl } from '../../../helpers/i18n-utils';
+import {getLanguageDirection, isLanguageRtl} from '../../../helpers/i18n-utils';
+import {connect, useSelector} from "react-redux";
+import {selectors as settings} from "../../../redux/modules/settings";
+import {withNamespaces} from "react-i18next";
+import {useLocation} from "react-router-dom";
 
-function DonationPopup({ t, language, location }) {
+function DonationPopup({ t }) {
   const shouldOpen = () => {
     const query    = getQuery(location);
     if (!!query.showPopup)
@@ -31,10 +35,16 @@ function DonationPopup({ t, language, location }) {
     return false;
   }
 
+  const location = useLocation();
+
+  const language = useSelector(state => settings.getLanguage(state.settings));
+
   const [open, setOpen] = React.useState(shouldOpen())
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
   const isRTL = isLanguageRtl(language);
+
+  const langDir = getLanguageDirection(language);
 
   const { linkLang, utmTerm } = getDonateLinkDetails(language);
   const link = `https://www.kab1.com/${linkLang}?utm_source=kabbalah_media&utm_medium=popup&utm_campaign=donations&utm_id=donations&utm_term=${utmTerm}&utm_content=popup_link_donate`;
@@ -42,7 +52,7 @@ function DonationPopup({ t, language, location }) {
   const getContent = () => {
     switch (language) {
       case LANG_HEBREW:
-        return <div dir="rtl">
+        return <div>
           <p>חברים וחברות יקרים,</p>
           <p>רגע לפני שאתם גוללים הלאה ונהנים מהתכנים המקוריים באתר, אנחנו רוצים להזמין אתכם להיות שותפים שלנו במפעל
             ההפצה של עמותת &quot;בני ברוך &ndash; קבלה לעם&quot;.</p>
@@ -116,6 +126,7 @@ function DonationPopup({ t, language, location }) {
       className={clsx('donationPopup', {
         'rtl': isRTL
       })}
+      dir={langDir}
       centered={!isMobileDevice}
       size="large"
       dimmer="inverted"
@@ -174,4 +185,4 @@ DonationPopup.propTypes = {
   location: shapes.HistoryLocation.isRequired,
 };
 
-export default DonationPopup
+export default withNamespaces()(DonationPopup)
