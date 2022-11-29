@@ -30,8 +30,9 @@ const AudioPlayer = ({ mp3, t }) => {
 
   return audioInfo &&
     <span className="library-audio-player">
-      {playing ?
-        <audio controls src={audioInfo?.url} autoPlay={true} preload="metadata" /> :
+      {playing
+        ? <audio controls src={audioInfo?.url} autoPlay={true} preload="metadata" />
+        :
         <a onClick={() => setPlaying(true)}>
           {t('sources-library.play-audio-file')}
           <PlayAudioIcon className="playAudioIcon" />
