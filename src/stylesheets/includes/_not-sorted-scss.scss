@@ -1620,24 +1620,20 @@
   padding-right: 0;
   padding-left: 0;
   margin-bottom: 1em;
-  text-align: right;
-}
-
-.rtl .library-language-container {
-  text-align: left;
+  text-align: end;
 }
 
 .library-audio-player {
-  margin-left: 0;
-  margin-right: 20px;
+  margin-inline-start: 0;
+  margin-inline-end: 20px;
   cursor: pointer;
 
   a {
     svg {
       position: relative;
       top: 5px;
-      margin-right: 5px;
-      margin-left: 5px;
+      margin-inline-end: 5px;
+      margin-inline-start: 5px;
     }
   }
 
@@ -1653,17 +1649,7 @@
   }
 
   .playAudioIcon {
-    margin-left: 10px;
-  }
-}
-
-.rtl .library-audio-player {
-  margin-left: 20px;
-  margin-right: 0;
-
-  .playAudioIcon {
-    margin-right: 10px;
-    margin-left: 0;
+    margin-inline-start: 10px;
   }
 }
 
