@@ -244,12 +244,12 @@ const Sources = ({ unit, t }) => {
         stackable
         secondary
         compact
-        fluid
+        fluid={!isMobileDevice}
         className={
           clsx({
             'no-margin-top': !isMobileDevice,
             'no_print': true,
-            // 'justify_content_end': true
+            'justify_content_end': true,
           })
         }
       >
@@ -264,7 +264,7 @@ const Sources = ({ unit, t }) => {
             onChange={handleSourceChanged}
           />
         </Menu.Item>
-        <Menu.Item className="justify_content_end">
+        <Menu.Item>
           {
             languages.length > 0 && (
               <div className="display-iblock margin-right-8 margin-left-8">
