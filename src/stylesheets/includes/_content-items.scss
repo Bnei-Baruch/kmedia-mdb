@@ -158,6 +158,7 @@
   .bar {
     background: #04eaf6;
     border-radius: 0;
+    min-width: auto;
     @include mobile {
       height: 3px;
     }
