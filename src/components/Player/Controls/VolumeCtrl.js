@@ -1,7 +1,6 @@
-import React, { useEffect, useRef, useState, useCallback } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Popup, Icon } from 'semantic-ui-react';
 import { useSelector, shallowEqual } from 'react-redux';
-import isFunction from 'lodash/isFunction';
 import { withNamespaces } from 'react-i18next';
 
 import { selectors as player } from '../../../redux/modules/player';
@@ -12,12 +11,11 @@ const VolumeCtrl = ({ t }) => {
   const isReady  = useSelector(state => player.isReady(state.player));
 
   const [volume, setVolume] = useState(isReady && window.jwplayer().getVolume());
+  const [mute, setMute]     = useState(isReady && window.jwplayer().getMute());
   const [left, setLeft]     = useState();
   const [right, setRight]   = useState();
 
-  const updateVolume = useCallback(({ volume }) => setVolume(volume), [setVolume]);
-  const isMuted      = isFunction(window.jwplayer()?.getMute) ? window.jwplayer()?.getMute() : false;
-  const icon         = isMuted ? 'off' : volume < 40 ? 'down' : 'up';
+  const icon = mute ? 'off' : volume < 40 ? 'down' : 'up';
 
   //recount position on resize
   const width = useSelector(state => player.getPlayerWidth(state.player), shallowEqual);
@@ -31,11 +29,18 @@ const VolumeCtrl = ({ t }) => {
   useEffect(() => {
     if (!isReady) return () => null;
 
+    const updateVolume = ({ volume }) => setVolume(volume);
+    const updateMute   = ({ mute }) => setMute(mute);
+
     const p = window.jwplayer();
     p.on('volume', updateVolume);
+    p.on('mute', updateMute);
     setVolume(p.getVolume());
 
-    return () => p.off('volume', updateVolume);
+    return () => {
+      p.off('volume', updateVolume);
+      p.off('mute', updateMute);
+    };
   }, [isReady]);
 
   useEffect(() => {
