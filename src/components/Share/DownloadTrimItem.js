@@ -1,19 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Button, GridColumn, GridRow, Popup } from 'semantic-ui-react';
 import { withNamespaces } from 'react-i18next';
 import CopyToClipboard from 'react-copy-to-clipboard';
+import { DeviceInfoContext } from '../../helpers/app-contexts';
 
 const DownloadTrimItem = ({ item, pos, t }) => {
   const [open, setOpen] = useState(false);
 
   const { link, download, name } = item;
-
+  const { isMobileDevice }       = useContext(DeviceInfoContext);
   return (
     <GridRow key={`file_${pos}`}>
-      <GridColumn width="13">
+      <GridColumn width={isMobileDevice ? 11 : 13}>
         {`${pos}. ${name}`}
       </GridColumn>
-      <GridColumn width="3" textAlign="right">
+      <GridColumn width={isMobileDevice ? 5 : 3} textAlign="right">
         <Popup
           content={t('player.download.download-button')}
           trigger={
