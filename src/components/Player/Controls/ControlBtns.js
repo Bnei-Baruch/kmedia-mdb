@@ -2,11 +2,12 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import fscreen from 'fscreen';
 import { withNamespaces } from 'react-i18next';
-import { Popup, Icon } from 'semantic-ui-react';
+import { Icon } from 'semantic-ui-react';
 
 import { actions, selectors } from '../../../redux/modules/player';
 import { PLAYER_OVER_MODES } from '../../../helpers/consts';
 import { stopBubbling } from '../../../helpers/utils';
+import WebWrapTooltip from '../../shared/WebWrapTooltip';
 
 export const FullscreenBtn = withNamespaces()(({ openOnFull, t }) => {
   const dispatch     = useDispatch();
@@ -22,11 +23,14 @@ export const FullscreenBtn = withNamespaces()(({ openOnFull, t }) => {
     }
   };
   return (
-    <Popup content={t(`player.controls.${isFullScreen ? 'fullscreen-exit' : 'fullscreen-enter'}`)} inverted size="mini" position="top right" trigger={
-      <div className="controls__fullscreen" onClick={handleFullScreen}>
-        <Icon fitted name={isFullScreen ? 'compress' : 'expand'} />
-      </div>
-    } />
+    <WebWrapTooltip
+      content={t(`player.controls.${isFullScreen ? 'fullscreen-exit' : 'fullscreen-enter'}`)}
+      position="top right"
+      trigger={
+        <div className="controls__fullscreen" onClick={handleFullScreen}>
+          <Icon fitted name={isFullScreen ? 'compress' : 'expand'} />
+        </div>
+      } />
   );
 });
 
@@ -41,11 +45,14 @@ export const ShareBtn = withNamespaces()(({ t }) => {
   };
 
   return (
-    <Popup content={t('player.controls.share')} inverted size="mini" position="top center" trigger={
-      <div className="controls__share" onClick={handleOpen}>
-        <Icon fitted name="share alternate" />
-      </div>
-    } />
+    <WebWrapTooltip
+      content={t('player.controls.share')}
+      trigger={
+        <div className="controls__share" onClick={handleOpen}>
+          <Icon fitted name="share alternate" />
+        </div>
+      }
+    />
   );
 });
 
@@ -61,10 +68,13 @@ export const SettingsBtn = withNamespaces()(({ t }) => {
   };
 
   return (
-    <Popup content={t('player.controls.settings')} inverted size="mini" position="top center" trigger={
-      <div className="controls__settings" onClick={handleOpen}>
-        <Icon fitted name="setting" />
-      </div>
-    } />
+    <WebWrapTooltip
+      content={t('player.controls.settings')}
+      trigger={
+        <div className="controls__settings" onClick={handleOpen}>
+          <Icon fitted name="setting" />
+        </div>
+      }
+    />
   );
 });

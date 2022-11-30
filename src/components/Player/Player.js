@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useCallback, useMemo } from 'react';
+import React, { useEffect, useRef, useMemo } from 'react';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 
 import { initPlayerEvents, getSavedTime, findPlayedFile } from './helper';
@@ -29,13 +29,13 @@ const Player = () => {
 
   const fileIdRef = useRef();
 
-  const checkStopTime = useCallback(d => {
+  const checkStopTime = d => {
     if (d.currentTime > end) {
       const player = window.jwplayer();
       player.pause();
       player.off('time', checkStopTime);
     }
-  }, [end]);
+  };
 
   useEffect(() => {
     return () => {

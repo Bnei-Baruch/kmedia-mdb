@@ -469,6 +469,7 @@ video {
 
 .controls__prev,
 .controls__next {
+  color: white;
   .is-mobile.is-sharing & {
     display: none;
   }

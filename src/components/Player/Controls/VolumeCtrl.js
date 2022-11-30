@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Popup, Icon } from 'semantic-ui-react';
+import { Icon } from 'semantic-ui-react';
 import { useSelector, shallowEqual } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
 
 import { selectors as player } from '../../../redux/modules/player';
 import { VolumeKnob } from './VolumeKnob';
+import WebWrapTooltip from '../../shared/WebWrapTooltip';
 
 const VolumeCtrl = ({ t }) => {
   const widthRef = useRef({});
@@ -53,11 +54,14 @@ const VolumeCtrl = ({ t }) => {
 
   return (
     <div className="controls__volume">
-      <Popup content={t('player.controls.mute')} inverted size="mini" position="top center" trigger={
-        <div className="controls__volume-icon" onClick={handleMute}>
-          <Icon fitted name={`volume ${icon}`} />
-        </div>
-      } />
+      <WebWrapTooltip
+        content={t('player.controls.mute')}
+        trigger={
+          <div className="controls__volume-icon" onClick={handleMute}>
+            <Icon fitted name={`volume ${icon}`} />
+          </div>
+        }
+      />
       <div className="controls__slider">
         <div className="slider__wrapper" ref={widthRef}>
           <div

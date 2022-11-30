@@ -67,6 +67,11 @@ const onRemove = draft => {
   draft.ready        = false;
 };
 
+const onSetMode = (draft, payload) => {
+  draft.overMode      = payload;
+  draft.shareStartEnd = initialState.shareStartEnd;
+};
+
 export const reducer = handleActions({
   [PLAYER_READY]: draft => draft.ready = true,
   [PLAYER_REMOVE]: onRemove,
@@ -82,7 +87,7 @@ export const reducer = handleActions({
   [PLAYER_RESIZE]: (draft, payload) => draft.width = payload.width,
   [PLAYER_MUTE_UNMUTE]: (draft, payload) => draft.muteUnmute = payload,
 
-  [PLAYER_SET_OVER_MODE]: (draft, payload) => draft.overMode = payload,
+  [PLAYER_SET_OVER_MODE]: onSetMode,
   [PLAYER_SET_IS_FULLSCREEN]: (draft, payload) => draft.isFullScreen = payload,
 
   [SET_SHARE_START_END]: (draft, payload) => draft.shareStartEnd = payload

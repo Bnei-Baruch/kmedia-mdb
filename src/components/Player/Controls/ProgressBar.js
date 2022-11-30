@@ -99,6 +99,10 @@ export const ProgressBar = ({ left, right }) => {
         style={{ width: `${pos}%` }}
       ></div>
       <Popup
+        inverted
+        size="mini"
+        position="top center"
+        open={activated}
         trigger={
           <div
             className="slider__thumb"
@@ -107,10 +111,6 @@ export const ProgressBar = ({ left, right }) => {
             onTouchStart={handleStart}
           ></div>
         }
-        inverted
-        size="mini"
-        position="top center"
-        open={activated}
       >
         <Popup.Content>
           <span>{formatDuration(time)}</span>

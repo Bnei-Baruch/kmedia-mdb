@@ -4,8 +4,9 @@ import { useSelector } from 'react-redux';
 import { selectors } from '../../../redux/modules/player';
 import { JWPLAYER_ID } from '../../../helpers/consts';
 import { stopBubbling } from '../../../helpers/utils';
-import { Popup, Icon } from 'semantic-ui-react';
+import { Icon } from 'semantic-ui-react';
 import { withNamespaces } from 'react-i18next';
+import WebWrapTooltip from '../../shared/WebWrapTooltip';
 
 const PlayPauseBg = ({ t }) => {
   const isPlay = useSelector(state => selectors.isPlay(state.player));
@@ -17,10 +18,7 @@ const PlayPauseBg = ({ t }) => {
   };
 
   return (
-    <Popup
-      inverted
-      size="mini"
-      position="top center"
+    <WebWrapTooltip
       content={t(`player.controls.${isPlay ? 'pause' : 'play'}`)}
       trigger={
         <div className="controls__pause" onClick={handleClick}>
