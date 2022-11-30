@@ -29,7 +29,9 @@ const PlayerContainer = () => {
   const isFullScreen = useSelector(state => selectors.isFullScreen(state.player));
 
   const { isMobileDevice } = useContext(DeviceInfoContext);
-  const handleFullScreen   = () => fscreen.requestFullscreen(settRef.current);
+  const handleFullScreen   = () => {
+    fscreen.fullscreenEnabled ? fscreen.requestFullscreen(settRef.current): alert("fullscreen not supported");
+  };
 
   return (
     <Ref innerRef={settRef}>

@@ -17,7 +17,7 @@ export const FullscreenBtn = withNamespaces()(({ openOnFull, t }) => {
     if (!isFullScreen) {
       openOnFull();
       dispatch(actions.setFullScreen(true));
-    } else {
+    } else if (fscreen.fullscreenEnabled) {
       fscreen.exitFullscreen();
       dispatch(actions.setFullScreen(false));
     }
