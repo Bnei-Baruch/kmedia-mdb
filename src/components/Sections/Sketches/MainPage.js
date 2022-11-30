@@ -53,7 +53,7 @@ const MainPage = ({ t }) => {
     .filter(id => {
       const x             = getZipById(id) || false;
       const { wip, data } = x;
-      if (wip) wipAll = !!wip;
+      if (wip) wipAll = true
       return !wip && isEmpty(data);
     });
 
