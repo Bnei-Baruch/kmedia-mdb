@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { selectors as playlist } from '../../redux/modules/playlist';
-import { setLanguageInQuery, setMediaTypeInQuery } from '../../helpers/player';
+import { setLanguageInQuery, setMediaTypeInQuery, persistPreferredMediaType } from '../../helpers/player';
 import { getQuery } from '../../helpers/url';
 import usePlaylistItemLink from './hooks/usePlaylistItemLink';
 
@@ -25,6 +25,7 @@ const UpdateLocation = () => {
   useEffect(() => {
     if (mediaType && mediaType !== q.mediaType) {
       setMediaTypeInQuery(history, mediaType);
+      persistPreferredMediaType(mediaType);
     }
   }, [mediaType, q.mediaType]);
 

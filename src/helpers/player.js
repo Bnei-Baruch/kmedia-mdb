@@ -17,6 +17,8 @@ import { isEmpty, physicalFile } from './utils';
 
 const restorePreferredMediaType = () => localStorage.getItem('@@kmedia_player_media_type') || MT_VIDEO;
 
+export const persistPreferredMediaType = value => localStorage.setItem('@@kmedia_player_media_type', value);
+
 const isPlayable = file => MediaHelper.IsMp4(file) || MediaHelper.IsMp3(file);
 
 const calcAvailableMediaTypes = (unit, language) => {
@@ -138,6 +140,7 @@ export const playlist = collection => {
 export const getMediaTypeFromQuery = (location) => {
   const query = getQuery(location || window?.location);
   const mt    = (query.mediaType || '').toLowerCase();
+
   return [MT_VIDEO, MT_AUDIO].includes(mt) ? mt : restorePreferredMediaType();
 };
 
