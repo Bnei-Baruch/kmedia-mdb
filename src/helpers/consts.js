@@ -762,6 +762,7 @@ export const PAGE_NS_PROGRAMS = 'programs';
 export const PAGE_NS_LESSONS  = 'lessons';
 export const PAGE_NS_EVENTS   = 'events';
 export const PAGE_NS_LIKUTIM  = 'likutim';
+export const PAGE_NS_SKETCHES = 'sketches';
 
 export const ALL_PAGE_NS = [PAGE_NS_LESSONS, PAGE_NS_TOPICS, PAGE_NS_PROGRAMS, PAGE_NS_EVENTS, PAGE_NS_LIKUTIM];
 
