@@ -28,6 +28,7 @@ import PlaylistPage from './components/Sections/Personal/Playlist/Page';
 import ReactionPage from './components/Sections/Personal/Reaction/Page';
 import Program from './components/Sections/Program/ProgramPage';
 import Programs from './components/Sections/Programs/MainPage';
+import Sketches from './components/Sections/Sketches/MainPage';
 import Publications from './components/Sections/Publications/MainPage';
 import ArticleCollection from './components/Sections/Publications/tabs/Articles/Collection';
 import ArticlePage from './components/Sections/Publications/tabs/Articles/Unit';
@@ -117,8 +118,7 @@ const routes = [
   { path: 'excerpt', component: ExcerptContainer },
   { path: 'likutim', component: LikutimMain },
   { path: 'likutim/:id', component: Likut, },
-  // { path: 'design', component: Design },
-  // { path: 'design2', component: Design2 },
+  { path: 'sketches', component: Sketches, options: { ssrData: ssrDataLoaders.programsPage } },
 ];
 
 const NotFound = () => <h1>Page not found</h1>;

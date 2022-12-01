@@ -167,7 +167,6 @@ export const physicalFile = (file, ext = false) => {
   }
 
   return `${CDN_URL}${file.id}${suffix}`;
-  // return `https://cdn.kabbalahmedia.info/${file.id}${suffix}`;
 };
 
 export const publicFile = relativePath => `${PUBLIC_BASE}${relativePath}`;

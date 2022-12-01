@@ -25,7 +25,8 @@
       "podcast": "Подкаст",
       "old-site": "Старий сайт",
       "subscribe": "Підписатися на оновлення",
-      "bookmarks": "Bookmarks"
+      "bookmarks": "Bookmarks",
+      "sketches": "Креслення"
     },
     "footer": {
       "copyright": "Copyright © 2003-{{year}}",
@@ -494,6 +495,12 @@
     "header": {
       "text": "Help",
       "subtext": "In this section you will find video tutorials and best practices on how to use the site"
+    }
+  },
+  "sketches": {
+    "header": {
+      "text": "Креслення",
+      "subtext": ""
     }
   },
   "pages": {

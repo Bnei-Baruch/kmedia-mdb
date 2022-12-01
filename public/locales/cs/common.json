@@ -22,7 +22,8 @@
       "help": "Pomoc",
       "old-site": "Stará stránka",
       "subscribe": "Subscribe For Updates",
-      "bookmarks": "Bookmarks"
+      "bookmarks": "Bookmarks",
+      "sketches": "Sketches"
     },
     "footer": {
       "copyright": "Copyright © 2003-{{year}}",
@@ -495,6 +496,12 @@
     "header": {
       "text": "Pomoc",
       "subtext": "V této části najdete video návody a osvědčené postupy, jak používat stránky"
+    }
+  },
+  "sketches": {
+    "header": {
+      "text": "Nákresy",
+      "subtext": ""
     }
   },
   "pages": {

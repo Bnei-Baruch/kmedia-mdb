@@ -12,22 +12,22 @@ import {
   FN_SHOW_LESSON_AS_UNITS,
   PAGE_NS_EVENTS,
   PAGE_NS_LESSONS,
-  MY_NAMESPACE_HISTORY
+  PAGE_NS_SKETCHES
 } from '../helpers/consts';
 import { isEmpty } from '../helpers/utils';
 import { selectors as filterSelectors } from '../redux/modules/filters';
 
 import { actions, types } from '../redux/modules/lists';
-import { actions as mdbActions, selectors as mdb } from '../redux/modules/mdb';
+import { actions as mdbActions } from '../redux/modules/mdb';
 import { selectors as settings } from '../redux/modules/settings';
 import { getQuery, pushQuery } from './helpers/url';
 import { fetchCollectionsByIDs, fetchUnitsByIDs } from './mdb';
-import { fetch as fetchMy } from './my';
 import { fetchViewsByUIDs } from './recommended';
 
 const endpointByNamespace = {
   [PAGE_NS_LESSONS]: Api.lessons,
-  [PAGE_NS_EVENTS]: Api.events
+  [PAGE_NS_EVENTS]: Api.events,
+  [PAGE_NS_SKETCHES]: Api.units
 };
 
 function* fetchList(action) {
@@ -92,10 +92,13 @@ function* fetchSectionList(action) {
 
   try {
     const { data } = yield call(endpointByNamespace[namespace], { ...args, ...filterParams, language });
+    if (!data.items && data.content_units) {
+      data.items = [...data.content_units];
+    }
 
     const { items } = data;
 
-    const cuIDs = items.filter(x => CT_UNITS.includes(x.content_type)).map(x => x.id);
+    const cuIDs = isEmpty(data.content_units) ? items.filter(x => CT_UNITS.includes(x.content_type)).map(x => x.id) : [];
     const cIDs  = items.filter(x => CT_COLLECTIONS.includes(x.content_type)).map(x => x.id);
 
     if (!isEmpty(cuIDs)) {
@@ -103,20 +106,15 @@ function* fetchSectionList(action) {
       yield fetchViewsByUIDs(cuIDs);
     }
 
-    yield put(actions.fetchSectionListSuccess(namespace, data));
-
-    const cu_uids = [...cuIDs];
-    if (!isEmpty(cIDs)) {
-      yield call(fetchCollectionsByIDs, { payload: { id: cIDs } });
-      const denormCcu = yield select(state => mdb.nestedGetDenormCollection(state.mdb));
-      cIDs.map(denormCcu).map(x => {
-        return x.cuIDs;
-      }).flat().forEach(id => {
-        cu_uids.push(id);
-      });
+    if (!isEmpty(data.content_units)) {
+      yield put(mdbActions.fetchUnitsByIDsSuccess(data.content_units));
     }
 
-    yield fetchMy({ payload: { namespace: MY_NAMESPACE_HISTORY, cu_uids, page_size: cu_uids.length } });
+    if (!isEmpty(cIDs)) {
+      yield fetchCollectionsByIDs({ payload: { id: cIDs } });
+    }
+
+    yield put(actions.fetchSectionListSuccess(namespace, data));
   } catch (err) {
     yield put(actions.fetchListFailure(namespace, err));
   }
