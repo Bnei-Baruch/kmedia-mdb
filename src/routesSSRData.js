@@ -130,11 +130,11 @@ export const collectionPage = ns => (store, match) => {
 };
 
 export const playlistCollectionPage = (store, match) => {
-  const { id: cID, cuId } = match.params.id;
+  const { id: cID, cuId } = match.params;
   return store.sagaMiddleWare.run(mdbSagas.fetchCollection, mdbActions.fetchCollection(cID)).done
     .then(() => {
       const c = mdbSelectors.getCollectionById(store.getState().mdb, cID);
-      store.dispatch(mdbActions.fetchUnit(cuId || c.cuIDs[0]));
+      store.dispatch(mdbActions.fetchUnit(cuId || c?.cuIDs[0]));
     });
 };
 
