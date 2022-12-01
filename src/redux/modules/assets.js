@@ -7,6 +7,9 @@ import { types as ssr } from './ssr';
 const UNZIP                = 'Assets/UNZIP';
 const UNZIP_SUCCESS        = 'Assets/UNZIP_SUCCESS';
 const UNZIP_FAILURE        = 'Assets/UNZIP_FAILURE';
+const UNZIP_LIST           = 'Assets/UNZIP_LIST';
+const UNZIP_LIST_SUCCESS   = 'Assets/UNZIP_LIST_SUCCESS';
+const UNZIP_LIST_FAILURE   = 'Assets/UNZIP_LIST_FAILURE';
 const DOC2HTML             = 'Assets/DOC2HTML';
 const DOC2HTML_SUCCESS     = 'Assets/DOC2HTML_SUCCESS';
 const DOC2HTML_FAILURE     = 'Assets/DOC2HTML_FAILURE';
@@ -24,6 +27,7 @@ export const types = {
   UNZIP,
   UNZIP_SUCCESS,
   UNZIP_FAILURE,
+  UNZIP_LIST,
   DOC2HTML,
   DOC2HTML_SUCCESS,
   DOC2HTML_FAILURE,
@@ -41,6 +45,9 @@ export const types = {
 const unzip              = createAction(UNZIP);
 const unzipSuccess       = createAction(UNZIP_SUCCESS, (id, data) => ({ id, data }));
 const unzipFailure       = createAction(UNZIP_FAILURE, (id, err) => ({ id, err }));
+const unzipList          = createAction(UNZIP_LIST);
+const unzipListSuccess   = createAction(UNZIP_LIST_SUCCESS);
+const unzipListFailure   = createAction(UNZIP_LIST_FAILURE);
 const doc2html           = createAction(DOC2HTML);
 const doc2htmlSuccess    = createAction(DOC2HTML_SUCCESS, (id, data) => ({ id, data }));
 const doc2htmlFailure    = createAction(DOC2HTML_FAILURE, (id, err) => ({ id, err }));
@@ -58,6 +65,9 @@ export const actions = {
   unzip,
   unzipSuccess,
   unzipFailure,
+  unzipList,
+  unzipListSuccess,
+  unzipListFailure,
   doc2html,
   doc2htmlSuccess,
   doc2htmlFailure,
@@ -100,20 +110,23 @@ const onSSRPrepare = draft => {
 
 const getActionKey = type => {
   switch (type) {
-    case UNZIP:
-    case UNZIP_SUCCESS:
-    case UNZIP_FAILURE:
-      return 'zipIndexById';
-    case DOC2HTML:
-    case DOC2HTML_SUCCESS:
-    case DOC2HTML_FAILURE:
-      return 'doc2htmlById';
-    case SOURCE_INDEX:
-    case SOURCE_INDEX_SUCCESS:
-    case SOURCE_INDEX_FAILURE:
-      return 'sourceIndexById';
-    default:
-      throw new Error(`Unknown action key: ${type}`);
+  case UNZIP:
+  case UNZIP_SUCCESS:
+  case UNZIP_FAILURE:
+  case UNZIP_LIST:
+  case UNZIP_LIST_SUCCESS:
+  case UNZIP_LIST_FAILURE:
+    return 'zipIndexById';
+  case DOC2HTML:
+  case DOC2HTML_SUCCESS:
+  case DOC2HTML_FAILURE:
+    return 'doc2htmlById';
+  case SOURCE_INDEX:
+  case SOURCE_INDEX_SUCCESS:
+  case SOURCE_INDEX_FAILURE:
+    return 'sourceIndexById';
+  default:
+    throw new Error(`Unknown action key: ${type}`);
   }
 };
 
@@ -138,6 +151,16 @@ const onFetchByIdFailure = (draft, payload, type) => {
   draft[key][id].err = err;
   draft[key][id].wip = false;
 };
+
+const onFetchList = (draft, payload, type) => {
+  payload.forEach(p => onFetchById(draft, p, type));
+};
+
+const onFetchListSuccess = (draft, payload, type) => {
+  payload.forEach(p => onFetchByIdSuccess(draft, { id: p.uid, data: p }, type));
+};
+
+const onFetchListFailure = (draft, payload, type) => payload.forEach(p => onFetchByIdFailure(draft, p, type));
 
 const onFetchAsset = draft => {
   draft.asset.wip = true;
@@ -175,6 +198,9 @@ export const reducer = handleActions({
   [UNZIP]: onFetchById,
   [UNZIP_SUCCESS]: onFetchByIdSuccess,
   [UNZIP_FAILURE]: onFetchByIdFailure,
+  [UNZIP_LIST]: onFetchList,
+  [UNZIP_LIST_SUCCESS]: onFetchListSuccess,
+  [UNZIP_LIST_FAILURE]: onFetchListFailure,
 
   [DOC2HTML]: onFetchById,
   [DOC2HTML_SUCCESS]: onFetchByIdSuccess,
@@ -196,6 +222,7 @@ export const reducer = handleActions({
 /* Selectors */
 
 const getZipIndexById    = state => state.zipIndexById;
+const nestedGetZipById   = state => id => state.zipIndexById[id];
 const getDoc2htmlById    = state => state.doc2htmlById;
 const getSourceIndexById = state => state.sourceIndexById;
 const getAsset           = state => state.asset;
@@ -203,6 +230,7 @@ const getPerson          = state => state.person;
 
 export const selectors = {
   getZipIndexById,
+  nestedGetZipById,
   getDoc2htmlById,
   getSourceIndexById,
   getAsset,

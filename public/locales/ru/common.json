@@ -25,7 +25,8 @@
       "podcast": "Подкаст",
       "old-site": "Старый сайт",
       "subscribe": "Подписаться на обновления",
-      "bookmarks": "Закладки"
+      "bookmarks": "Закладки",
+      "sketches": "Чертежи"
     },
     "footer": {
       "copyright": "Copyright © 2003-{{year}}",
@@ -482,6 +483,12 @@
     "header": {
       "text": "Поддержка",
       "subtext": "В этом разделе вы найдете видео уроки и лучшие практики по использованию сайта"
+    }
+  },
+  "sketches": {
+    "header": {
+      "text": "Чертежи",
+      "subtext": ""
     }
   },
   "twitter": {

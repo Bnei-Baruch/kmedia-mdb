@@ -14,6 +14,17 @@ function* unzip(action) {
   }
 }
 
+function* unzipList(action) {
+  const ids = action.payload;
+
+  try {
+    const { data } = yield call(Api.getUnzipUIDs, { path: 'api/unzip_uids', ids });
+    yield put(actions.unzipListSuccess(data));
+  } catch (err) {
+    yield put(actions.unzipListFailure(ids, err));
+  }
+}
+
 function* doc2Html(action) {
   const id = action.payload;
 
@@ -65,6 +76,10 @@ function* watchUnzip() {
   yield takeLatest(types.UNZIP, unzip);
 }
 
+function* watchUnzipList() {
+  yield takeLatest(types.UNZIP_LIST, unzipList);
+}
+
 function* watchDoc2Html() {
   yield takeLatest([types.DOC2HTML], doc2Html);
 }
@@ -95,6 +110,7 @@ function cuFilesToData(cu) {
 
 export const sagas = [
   watchUnzip,
+  watchUnzipList,
   watchDoc2Html,
   watchSourceIndex,
   watchFetchAsset,
