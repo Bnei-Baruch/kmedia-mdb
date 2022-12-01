@@ -1,4 +1,4 @@
-import { MT_AUDIO, MT_TEXT, MT_VIDEO } from './consts';
+import { MT_AUDIO, MT_TEXT, MT_VIDEO, MT_IMAGE } from './consts';
 
 function makeMediaTypePredicate(...args) {
   return function predicate(file) {
@@ -25,7 +25,7 @@ export default class MediaHelper {
 
   static IsText = makeMediaTypePredicate(MT_TEXT);
 
-  static IsImage = makeMediaTypePredicate(MT_TEXT);
+  static IsImage = makeMediaTypePredicate(MT_IMAGE);
 
   static IsAudioVideo = makeMediaTypePredicate(MT_AUDIO, MT_VIDEO);
 
