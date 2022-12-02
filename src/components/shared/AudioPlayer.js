@@ -3,6 +3,7 @@ import { withNamespaces } from 'react-i18next';
 
 import PlayAudioIcon from '../../images/icons/PlayAudio';
 import { physicalFile } from '../../helpers/utils';
+import { Button } from 'semantic-ui-react';
 
 
 const AudioPlayer = ({ mp3, t }) => {
@@ -33,10 +34,10 @@ const AudioPlayer = ({ mp3, t }) => {
       {playing
         ? <audio controls src={audioInfo?.url} autoPlay={true} preload="metadata" />
         :
-        <a onClick={() => setPlaying(true)}>
-          {t('sources-library.play-audio-file')}
+        <Button onClick={() => setPlaying(true)}>
+          { t('sources-library.play-audio-file') }
           <PlayAudioIcon className="playAudioIcon" />
-        </a>
+        </Button>
       }
     </span>;
 }
