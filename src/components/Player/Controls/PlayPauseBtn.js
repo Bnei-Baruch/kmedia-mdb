@@ -6,13 +6,13 @@ import { withNamespaces } from 'react-i18next';
 import { JWPLAYER_ID } from '../../../helpers/consts';
 import { selectors as player } from '../../../redux/modules/player';
 import WebWrapTooltip from '../../shared/WebWrapTooltip';
+import pause, { play } from '../../../pkg/jwpAdapter';
 
 const PlayPauseBtn = ({ t }) => {
   const isPlay = useSelector(state => player.isPlay(state.player));
 
   const handlePlayPause = () => {
-    const p = window.jwplayer(JWPLAYER_ID);
-    isPlay ? p.pause() : p.play().play();
+    isPlay ? pause() : play().play();
   };
 
   return (

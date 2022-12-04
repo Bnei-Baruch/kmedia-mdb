@@ -6,6 +6,7 @@ import { toHumanReadableTime } from '../../../helpers/time';
 import { actions, selectors } from '../../../redux/modules/player';
 import { withNamespaces } from 'react-i18next';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
+import { getPosition } from '../../../pkg/jwpAdapter';
 
 const StartEnd = ({ t }) => {
   const { start, end }     = useSelector(state => selectors.getShareStartEnd(state.player));
@@ -13,14 +14,14 @@ const StartEnd = ({ t }) => {
   const dispatch           = useDispatch();
 
   const handleSetStart = () => {
-    const start = window.jwplayer().getPosition();
+    const start = getPosition();
     const d     = { end, start };
     if (start >= end) d.end = Infinity;
     dispatch(actions.setShareStartEnd(d));
   };
 
   const handleSetEnd = () => {
-    const end = window.jwplayer().getPosition();
+    const end = getPosition();
     const d   = { end, start };
     if (end <= start) d.start = 0;
     dispatch(actions.setShareStartEnd(d));

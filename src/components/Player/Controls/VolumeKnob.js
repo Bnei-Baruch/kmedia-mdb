@@ -1,31 +1,17 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { Popup } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
+
 import { selectors as player } from '../../../redux/modules/player';
-import { JWPLAYER_ID } from '../../../helpers/consts';
-import { PLAYER_VOLUME_STORAGE_KEY, DEFAULT_PLAYER_VOLUME } from '../helper';
+import useSubscribeVolume from '../../../pkg/jwpAdapter/useSubscribeVolume';
+import { setVolume } from '../../../pkg/jwpAdapter';
 
 export const VolumeKnob = ({ left, right }) => {
   const [activated, setActivated] = useState(false);
-  const [volume, setVolume]       = useState(0);
 
   const isReady = useSelector(state => player.isReady(state.player));
 
-  const updateVolume = useCallback(({ volume }) => setVolume(volume), [setVolume]);
-
-  useEffect(() => {
-    if (!isReady) return () => null;
-
-    const p = window.jwplayer(JWPLAYER_ID);
-    p.on('volume', updateVolume);
-
-    let v = localStorage.getItem(PLAYER_VOLUME_STORAGE_KEY);
-    if (isNaN(v)) v = DEFAULT_PLAYER_VOLUME;
-    p.setVolume(Number.parseInt(v, 10));
-    setVolume(v)
-
-    return () => p.off('volume', updateVolume);
-  }, [isReady]);
+  const { volume } = useSubscribeVolume();
 
   const handleStart = e => {
     e.preventDefault();
@@ -41,7 +27,7 @@ export const VolumeKnob = ({ left, right }) => {
     const clientX = e.touches ? e.touches[e.touches.length - 1].clientX : e.clientX;
     const delta   = right - left;
     const v       = Math.round(100 * Math.min(Math.max(0, clientX - left), delta) / delta);
-    window.jwplayer().setVolume(v);
+    setVolume(v);
   }, [activated]);
 
   useEffect(() => {

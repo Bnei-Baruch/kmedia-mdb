@@ -1,19 +1,18 @@
 import React from 'react';
 import { Icon } from 'semantic-ui-react';
-import { JWPLAYER_ID } from '../../../helpers/consts';
 import { stopBubbling } from '../../../helpers/utils';
 import { withNamespaces } from 'react-i18next';
 import WebWrapTooltip from '../../shared/WebWrapTooltip';
+import { getPosition, seek } from '../../../pkg/jwpAdapter';
 
-const seek = (e, pos) => {
-  const p    = window.jwplayer(JWPLAYER_ID);
-  const nPos = p.getPosition() + pos;
-  p.seek(nPos > 0 ? nPos : 0);
+const handleSeek = (e, pos) => {
+  const nPos = getPosition() + pos;
+  seek(nPos > 0 ? nPos : 0);
   stopBubbling(e);
 };
 
 export const SeekBackwardBtn = withNamespaces()(({ t }) => {
-  const handleSeekBackward = e => seek(e, -10);
+  const handleSeekBackward = e => handleSeek(e, -10);
   return (
     <WebWrapTooltip
       content={t('player.controls.rewind10')}
@@ -27,7 +26,7 @@ export const SeekBackwardBtn = withNamespaces()(({ t }) => {
 });
 
 export const SeekForwardBtn = withNamespaces()(({ t }) => {
-  const handleSeekForward = e => seek(e, 10);
+  const handleSeekForward = e => handleSeek(e, 10);
   return (
     <WebWrapTooltip
       content={t('player.controls.skip10')}

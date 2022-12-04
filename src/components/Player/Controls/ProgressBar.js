@@ -1,50 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { Popup } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
+
 import { selectors as player } from '../../../redux/modules/player';
 import { formatDuration, stopBubbling } from '../../../helpers/utils';
-import { JWPLAYER_ID } from '../../../helpers/consts';
-import { selectors as playlist } from '../../../redux/modules/playlist';
+import { useSubscribeSeekAndTime, useSubscribeBuffer, getDuration, seek } from '../../../pkg/jwpAdapter';
 
 export const ProgressBar = ({ left, right }) => {
+
   const [activated, setActivated] = useState(false);
-  const [pos, setPos]             = useState(0);
-  const [buffPos, setBuffPos]     = useState(0);
-  const [time, setTime]           = useState(0);
 
-  const isReady  = useSelector(state => player.isReady(state.player));
-  const file     = useSelector(state => player.getFile(state.player));
-  const { cuId } = useSelector(state => playlist.getInfo(state.playlist));
+  const isReady = useSelector(state => player.isReady(state.player));
 
-  const checkTimeAfterSeek = d => {
-    const time = Math.round(d.offset ?? d.currentTime);
-    const pos  = Math.round(10 * (100 * time) / window.jwplayer().getDuration()) / 10;
-    setPos(pos);
-    setTime(time);
-  };
-
-  const checkBufferTime = d => setBuffPos(Math.round(d.bufferPercent));
-
-  useEffect(() => {
-    setPos(0);
-    setBuffPos(0);
-  }, [cuId]);
-
-  useEffect(() => {
-    if (!isReady) return () => null;
-
-    const p = window.jwplayer(JWPLAYER_ID);
-
-    p.on('seek', checkTimeAfterSeek);
-    p.on('time', checkTimeAfterSeek);
-    p.on('bufferChange', checkBufferTime);
-    return () => {
-      p.off('seek', checkTimeAfterSeek);
-      p.off('time', checkTimeAfterSeek);
-      p.off('bufferChange', checkBufferTime);
-    };
-
-  }, [isReady, file?.src, cuId]);
+  const { pos, time } = useSubscribeSeekAndTime();
+  const buffPos       = useSubscribeBuffer();
 
   const handleStart = e => {
     // regard only left mouse button click (0). touch is undefined
@@ -65,8 +34,7 @@ export const ProgressBar = ({ left, right }) => {
     const delta   = right - left;
     const offset  = Math.min(Math.max(0, clientX - left), delta) / delta;
 
-    const p = window.jwplayer(JWPLAYER_ID);
-    p.seek(p.getDuration() * offset);
+    seek(getDuration() * offset);
   };
 
   const removeListeners = () => {

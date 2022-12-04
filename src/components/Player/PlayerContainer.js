@@ -5,7 +5,7 @@ import { Ref } from 'semantic-ui-react';
 
 import { selectors as player, selectors } from '../../redux/modules/player';
 import { PLAYER_OVER_MODES } from '../../helpers/consts';
-import Player from './Player';
+import Player from '../../pkg/jwpAdapter/Player';
 import UpdateLocation from './UpdateLocation';
 import PlayerToolsWeb from './PlayerToolsWeb';
 import PlayerToolsMobile from './PlayerToolsMobile';

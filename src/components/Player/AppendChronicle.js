@@ -6,10 +6,9 @@ import { selectors as player } from '../../redux/modules/player';
 import { selectors as chrSelectors } from '../../redux/modules/chronicles';
 import { ClientChroniclesContext } from '../../helpers/app-contexts';
 import { usePrevious } from '../../helpers/utils';
-import { JWPLAYER_ID } from '../../helpers/consts';
+import { getDuration, getMute, getPosition } from '../../pkg/jwpAdapter';
 
 const buildAppendData = (autoPlay, item, file) => {
-  const jwp = window.jwplayer(JWPLAYER_ID);
 
   const { id: file_uid, language: file_language, src: file_src } = file || false;
   const { id: unit_uid }                                         = item;
@@ -19,9 +18,9 @@ const buildAppendData = (autoPlay, item, file) => {
     file_uid,
     file_language,
     auto_play: autoPlay,
-    current_time: jwp.getPosition(),
-    duration: jwp.getDuration(),
-    was_muted: jwp.getMute(),
+    current_time: getPosition(),
+    duration: getDuration(),
+    was_muted: getMute(),
   };
 };
 

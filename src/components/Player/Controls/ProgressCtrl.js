@@ -4,6 +4,7 @@ import { stopBubbling } from '../../../helpers/utils';
 import { SlicesBar } from './SlicesBar';
 import { useSelector, shallowEqual } from 'react-redux';
 import { selectors as player } from '../../../redux/modules/player';
+import { seek, getDuration } from '../../../pkg/jwpAdapter';
 
 export const ProgressCtrl = () => {
   const widthRef = useRef({});
@@ -24,8 +25,7 @@ export const ProgressCtrl = () => {
     const clientX = e.touches ? e.touches[e.touches.length - 1].clientX : e.clientX;
     const delta   = right - left;
     const offset  = Math.min(Math.max(0, clientX - left), delta) / delta;
-    const p       = window.jwplayer();
-    p.seek(p.getDuration() * offset);
+    seek(getDuration() * offset);
     stopBubbling(e);
   };
 

@@ -8,33 +8,6 @@ import moment from 'moment';
 export const DEFAULT_PLAYER_VOLUME     = 80;
 export const PLAYER_VOLUME_STORAGE_KEY = 'jwplayer.volume';
 
-const PLAYER_EVENTS = ['ready', 'remove', 'play', 'pause', 'playbackRateChanged', 'resize', 'mute'];
-
-export const initPlayerEvents = (dispatch) => {
-  const player = window.jwplayer();
-
-  //for debug, catch all jwplayer events
-  //player.on('all', (name, e) => console.log('jwplayer all events', name, e));
-
-  player.on('error', e => console.error(e));
-
-  player.on('remove', () => player.off('all'));
-
-  player.on('complete', () => dispatch(playlistActions.next(true)));
-
-  PLAYER_EVENTS.forEach(name => {
-    const action = PLAYER_ACTIONS_BY_EVENT[name];
-    if (!action) {
-      console.log(`no redux for action: ${name}`);
-      return;
-    }
-
-    player.on(name, e => {
-      dispatch(action(e));
-    });
-  });
-};
-
 export const findPlayedFile = (item, info, lang, mt, q) => {
   if (isEmpty(item) || !info.isReady) return {};
   const { mediaType, language, quality } = info;
