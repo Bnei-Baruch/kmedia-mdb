@@ -4,7 +4,6 @@ import { actions, types } from '../redux/modules/my';
 import Api from '../helpers/Api';
 import { selectors as authSelectors } from '../redux/modules/auth';
 import { actions as mdbActions, selectors as mdbSelectors } from '../redux/modules/mdb';
-import { actions as recommendedActions } from '../redux/modules/recommended';
 import {
   IsCollectionContentType,
   MY_NAMESPACE_BOOKMARKS,
@@ -15,6 +14,7 @@ import {
 } from '../helpers/consts';
 import { updateQuery } from './helpers/url';
 import { selectors as settings } from '../redux/modules/settings';
+import { fetchViewsByUIDs } from './recommended';
 
 function* updatePageInQuery(action) {
   const { pageNo } = action.payload;
@@ -91,15 +91,9 @@ export function* fetch(action) {
     yield put(actions.fetchSuccess({ namespace, addToList, ...data }));
 
     try {
-      const { data: viewData } = yield call(Api.views, cu_uids);
-      const views              = cu_uids.reduce((acc, uid, i) => {
-        acc[uid] = viewData.views[i];
-        return acc;
-      }, {});
-      yield put(recommendedActions.receiveViews(views));
+      yield fetchViewsByUIDs(cu_uids);
     } catch (err) {
       console.error('error on recommendation service', err);
-      yield put(recommendedActions.receiveViews({}));
     }
   } catch (err) {
     yield put(actions.fetchFailure({ namespace, ...err }));
