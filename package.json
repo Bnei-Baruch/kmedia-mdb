@@ -126,7 +126,7 @@
     "patch-package": "^6.2.2",
     "postinstall-postinstall": "^2.1.0",
     "prop-types": "^15.6.1",
-    "qs": "^6.9.0",
+    "qs": "^6.10.3",
     "react": "^17.0.1",
     "react-app-polyfill": "^2.0.0",
     "react-copy-to-clipboard": "^5.0.0",
