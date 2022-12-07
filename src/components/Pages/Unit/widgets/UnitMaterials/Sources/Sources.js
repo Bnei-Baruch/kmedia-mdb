@@ -253,18 +253,20 @@ const Sources = ({ unit, t }) => {
           })
         }
       >
-        <Menu.Item>
-          <Dropdown
-            fluid={isMobileDevice}
-            selection
-            value={selectedUnitId}
-            options={sourcesDropDownOptions}
-            selectOnBlur={false}
-            selectOnNavigation={false}
-            onChange={handleSourceChanged}
-          />
-        </Menu.Item>
-        <Menu.Item>
+        {
+          sourcesDropDownOptions.length > 1 &&
+            <Menu.Item>
+              <Dropdown
+                fluid={isMobileDevice}
+                selection
+                value={selectedUnitId}
+                options={sourcesDropDownOptions}
+                selectOnBlur={false}
+                selectOnNavigation={false}
+                onChange={handleSourceChanged}
+              />
+            </Menu.Item>
+        }
           {
             languages.length > 0 && (
               <div className="display-iblock margin-right-8 margin-left-8">
@@ -277,9 +279,7 @@ const Sources = ({ unit, t }) => {
               </div>
             )
           }
-          {
-            <Download {...downloadProps} />
-          }
+          { <Download {...downloadProps} /> }
           <UnitBar
             handleSettings={setSettings}
             fontSize={setting.fontSize}

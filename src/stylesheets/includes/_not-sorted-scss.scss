@@ -1629,9 +1629,10 @@
   text-align: end;
   cursor: pointer;
 
-  button {
+  .button {
     background: transparent;
     border: none;
+
     svg {
       position: relative;
       top: 5px;
