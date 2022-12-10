@@ -265,7 +265,7 @@ class Transcription extends Component {
             fluid
             className={
               clsx({
-                'no-margin-top': !isMobileDevice,
+                'no-margin-top': isMobileDevice,
                 'no_print': true,
                 'justify_content_end': true
               })
