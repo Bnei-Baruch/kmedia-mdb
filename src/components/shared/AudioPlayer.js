@@ -34,7 +34,7 @@ const AudioPlayer = ({ mp3, t }) => {
       {playing
         ? <audio controls src={audioInfo?.url} autoPlay={true} preload="metadata" />
         :
-        <Button onClick={() => setPlaying(true)}>
+        <Button compact onClick={() => setPlaying(true)}>
           { t('sources-library.play-audio-file') }
           <PlayAudioIcon className="playAudioIcon" />
         </Button>

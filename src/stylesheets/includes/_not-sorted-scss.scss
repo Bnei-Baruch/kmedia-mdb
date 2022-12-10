@@ -1624,6 +1624,11 @@
 }
 
 .library-audio-player {
+  @include mobile {
+    margin-inline-end: 0;
+    width: inherit;
+  }
+
   margin-inline-start: 0;
   margin-inline-end: 20px;
   text-align: end;
@@ -1643,12 +1648,10 @@
 
   audio {
     height: 25px;
-    position: relative;
     top: 7px;
+
     @include mobile {
-      margin-top: 15px;
-      height: 54px;
-      width: 100%;
+      width: -webkit-fill-available;
     }
   }
 

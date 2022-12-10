@@ -243,11 +243,10 @@ const Sources = ({ unit, t }) => {
       <Menu
         stackable
         secondary
-        compact
-        fluid={!isMobileDevice}
+        floated='right'
         className={
           clsx({
-            'no-margin-top': !isMobileDevice,
+            'no-margin-top': isMobileDevice,
             'no_print': true,
             'justify_content_end': true,
           })
@@ -267,6 +266,7 @@ const Sources = ({ unit, t }) => {
               />
             </Menu.Item>
         }
+        <Menu.Item fitted>
           {
             languages.length > 0 && (
               <div className="display-iblock margin-right-8 margin-left-8">
@@ -287,8 +287,9 @@ const Sources = ({ unit, t }) => {
             label={{ content_unit: selectedUnitId }}
           />
         </Menu.Item>
-        { mp3 &&
-          <Menu.Item>
+        {
+          mp3 &&
+          <Menu.Item fitted='horizontally'>
             <AudioPlayer mp3={mp3} />
           </Menu.Item>
         }
