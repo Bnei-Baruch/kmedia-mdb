@@ -2,11 +2,9 @@ import React from 'react';
 import { Icon } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
 import { withNamespaces } from 'react-i18next';
-
-import { JWPLAYER_ID } from '../../../helpers/consts';
 import { selectors as player } from '../../../redux/modules/player';
 import WebWrapTooltip from '../../shared/WebWrapTooltip';
-import pause, { play } from '../../../pkg/jwpAdapter';
+import { pause, play } from '../../../pkg/jwpAdapter/adapter';
 
 const PlayPauseBtn = ({ t }) => {
   const isPlay = useSelector(state => player.isPlay(state.player));

@@ -15,7 +15,7 @@ import clsx from 'clsx';
 
 const Page = () => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
-  const isReady            = useSelector(state => playlist.getInfo(state.playlist).isReady);
+  const isPlaylistReady    = useSelector(state => playlist.getInfo(state.playlist).isReady);
 
   const computerWidth = !isMobileDevice ? 10 : 16;
 
@@ -27,12 +27,12 @@ const Page = () => {
         computer={computerWidth}
         className={clsx({ 'is-fitted': isMobileDevice })}>
         <div id="avbox_playlist">
-          {isReady && <PlaylistHeader />}
+          {isPlaylistReady && <PlaylistHeader />}
         </div>
         <PlayerContainer />
         <Container id="unit_container">
           {
-            isReady && (
+            isPlaylistReady && (
               <>
                 <Helmets.AVUnit />
                 <Info />
@@ -47,7 +47,7 @@ const Page = () => {
           <Grid.Column width={6}>
             <PlaylistItems />
             <Divider hidden />
-            {isReady && <Recommended filterOutUnits={[]} />}
+            {isPlaylistReady && <Recommended filterOutUnits={[]} />}
           </Grid.Column>
         )
       }

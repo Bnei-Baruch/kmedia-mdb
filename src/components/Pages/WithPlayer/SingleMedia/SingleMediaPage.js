@@ -1,31 +1,30 @@
 import React, { useContext } from 'react';
 import { Grid, Container } from 'semantic-ui-react';
+import clsx from 'clsx';
+import { useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { withNamespaces } from 'react-i18next';
 
 import Helmets from '../../../shared/Helmets';
 import Recommended from '../widgets/Recommended/Main/Recommended';
-import PlayerContainer from '../../../Player/PlayerContainer';
-import clsx from 'clsx';
-import { useLocation } from 'react-router-dom';
 import { getEmbedFromQuery } from '../../../../helpers/player';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
-import { useSelector } from 'react-redux';
-import { selectors } from '../../../../redux/modules/playlist';
-import { withNamespaces } from 'react-i18next';
 import WipErr from '../../../shared/WipErr/WipErr';
 import Info from '../widgets/Info/Info';
 import Materials from '../widgets/UnitMaterials/Materials';
+import { selectors, selectors as playlist } from '../../../../redux/modules/playlist';
 
-const SingleMediaPage = ({ t }) => {
-
+const SingleMediaPage = ({ player, t }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
-  const location           = useLocation();
-  const embed              = getEmbedFromQuery(location);
 
-  const isReady = useSelector(state => selectors.getInfo(state.playlist).isReady);
+  const location        = useLocation();
+  const embed           = getEmbedFromQuery(location);
+  const isPlaylistReady    = useSelector(state => playlist.getInfo(state.playlist).isReady);
 
-  const wipErr        = WipErr({ wip: !isReady, t });
+  if (embed) return player;
+
+  const wipErr        = WipErr({ wip: !isPlaylistReady, t });
   const computerWidth = !isMobileDevice ? 10 : 16;
-  if (embed) return <PlayerContainer />;
 
   return (
     <>
@@ -38,7 +37,7 @@ const SingleMediaPage = ({ t }) => {
           className={clsx({ 'is-fitted': isMobileDevice })}>
           <Grid.Row>
             <Grid.Column>
-              <PlayerContainer />
+              {player}
             </Grid.Column>
           </Grid.Row>
           <Grid.Row>

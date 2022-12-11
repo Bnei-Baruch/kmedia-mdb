@@ -132,7 +132,7 @@ export const playlist = collection => {
   }
 
   // don't include items without unit
-  items = items.filter(item => !!item);
+  items = items.filter(item => item?.id);
   return { items, name };
 };
 

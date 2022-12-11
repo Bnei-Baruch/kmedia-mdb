@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 
 import { selectors as player } from '../../redux/modules/player';
 import { JWPLAYER_ID } from '../../helpers/consts';
-import { useLocation } from 'react-router-dom';
 import { startEndFromQuery } from '../../components/Player/Controls/helper';
-import pause from './index';
+import { pause } from './adapter';
 
-const useStartStopSlice = () => {
+const BehaviorStartStopSlice = () => {
   const location       = useLocation();
   const { start, end } = startEndFromQuery(location);
   const isReady        = useSelector(state => player.isReady(state.player));
@@ -27,6 +27,7 @@ const useStartStopSlice = () => {
       jwp.on('time', checkStopTime);
     }
   });
+  return null;
 };
 
-export default useStartStopSlice;
+export default BehaviorStartStopSlice;

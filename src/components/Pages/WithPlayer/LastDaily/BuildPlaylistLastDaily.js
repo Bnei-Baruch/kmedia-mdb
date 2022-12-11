@@ -1,21 +1,18 @@
 import React, { useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { useSelector, useDispatch, shallowEqual } from 'react-redux';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
+import { selectors, actions } from '../../../../redux/modules/mdb';
+import moment from 'moment/moment';
+import { isEqual } from 'lodash';
+
+import { selectors as my } from '../../../../redux/modules/my';
+import { getCuByCcuSkipPreparation } from '../../../../helpers/links';
+import { MY_NAMESPACE_HISTORY } from '../../../../helpers/consts';
+import { getSavedTime } from '../../../Player/helper';
+import WipErr from '../../../shared/WipErr/WipErr';
+import BuildPlaylistByCollection from '../BuildPlaylistByCollection';
 import { withNamespaces } from 'react-i18next';
 
-import { actions, selectors } from '../../redux/modules/mdb';
-import { selectors as my } from '../../redux/modules/my';
-import Helmets from '../shared/Helmets';
-import WipErr from '../shared/WipErr/WipErr';
-import { publicFile } from '../../helpers/utils';
-import PlaylistContainer from './WithPlayer/Playlist/PlaylistContainer';
-import { MY_NAMESPACE_HISTORY } from '../../helpers/consts';
-import { isEqual } from 'lodash';
-import { getSavedTime } from '../Player/helper';
-import { getCuByCcuSkipPreparation } from '../../helpers/links';
-import moment from 'moment';
-
-const LastLessonCollection = ({ t }) => {
+const BuildPlaylistLastDaily = ({ t }) => {
   const lastLessonId = useSelector(state => selectors.getLastLessonId(state.mdb));
   const wip          = useSelector(state => selectors.getWip(state.mdb).lastLesson);
   const err          = useSelector(state => selectors.getErrors(state.mdb).lastLesson);
@@ -47,17 +44,8 @@ const LastLessonCollection = ({ t }) => {
   });
 
   const cuId = sorted[0]?.id || getCuByCcuSkipPreparation(ccu);
-  return (
-    <div>
-      <Helmets.Basic title={t('lessons.last.title')} description={t('lessons.last.description')} />
-      <Helmets.Image unitOrUrl={publicFile('seo/last_lesson.jpg')} />
-      <PlaylistContainer cId={lastLessonId} cuId={cuId} />
-    </div>
-  );
+
+  return <BuildPlaylistByCollection cuId={cuId} id={ccu.id} />;
 };
 
-LastLessonCollection.propTypes = {
-  t: PropTypes.func.isRequired
-};
-
-export default withNamespaces()(LastLessonCollection);
+export default withNamespaces()(BuildPlaylistLastDaily);

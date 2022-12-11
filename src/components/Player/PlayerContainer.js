@@ -12,6 +12,7 @@ import PlayerToolsMobile from './PlayerToolsMobile';
 import AppendChronicle from './AppendChronicle';
 import { DeviceInfoContext } from '../../helpers/app-contexts';
 import clsx from 'clsx';
+import Preloader from './Controls/Preloader';
 
 const CLASSES_BY_MODE = {
   [PLAYER_OVER_MODES.settings]: 'is-settings',
@@ -38,7 +39,11 @@ const PlayerContainer = () => {
       <div className="player">
         <AppendChronicle />
         <UpdateLocation />
+        {/*
+        <UpdateNextPrevLink />
+        */}
         <div className={clsx(CLASSES_BY_MODE[mode], isMobileDevice ? 'is-mobile' : 'is-web', { 'is-fullscreen': isFullScreen })}>
+          <Preloader />
           {
             isMobileDevice ? (
               <PlayerToolsMobile Player={<Player />} handleFullScreen={handleFullScreen} />

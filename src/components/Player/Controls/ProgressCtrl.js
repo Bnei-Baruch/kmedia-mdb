@@ -4,7 +4,7 @@ import { stopBubbling } from '../../../helpers/utils';
 import { SlicesBar } from './SlicesBar';
 import { useSelector, shallowEqual } from 'react-redux';
 import { selectors as player } from '../../../redux/modules/player';
-import { seek, getDuration } from '../../../pkg/jwpAdapter';
+import { getDuration, seek } from '../../../pkg/jwpAdapter/adapter';
 
 export const ProgressCtrl = () => {
   const widthRef = useRef({});

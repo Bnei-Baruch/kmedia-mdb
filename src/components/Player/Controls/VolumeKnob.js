@@ -3,8 +3,8 @@ import { Popup } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
 
 import { selectors as player } from '../../../redux/modules/player';
-import useSubscribeVolume from '../../../pkg/jwpAdapter/useSubscribeVolume';
-import { setVolume } from '../../../pkg/jwpAdapter';
+import { useSubscribeVolume } from '../../../pkg/jwpAdapter';
+import { setVolume } from '../../../pkg/jwpAdapter/adapter';
 
 export const VolumeKnob = ({ left, right }) => {
   const [activated, setActivated] = useState(false);

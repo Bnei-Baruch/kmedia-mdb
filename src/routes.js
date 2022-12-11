@@ -4,15 +4,18 @@ import { renderRoutes } from 'react-router-config';
 import LanguageSetter from './components/Language/LanguageSetter';
 import Layout from './components/Layout/Layout';
 import NotImplemented from './components/NotImplemented';
-import PlaylistItemPage from './components/Pages/PlaylistItemPage';
+import {
+  PlaylistItemPageLesson,
+  PlaylistItemPageEvent,
+  PlaylistCollectionPage, PlaylistItemPageSeries
+} from './components/Pages/WithPlayer/PlaylistPageDispecher';
 import PlaylistMy from './components/Pages/WithPlayer/PlaylistMy/Container';
 import SearchResults from './components/Search/SearchResultsContainer';
 import Events from './components/Sections/Events/MainPage';
 import ExcerptContainer from './components/Sections/Excerpt/ExcerptContainer';
-// import ProjectStatus from './components/Sections/ProjectStatus/ProjectStatus';
 import Help from './components/Sections/Help/Help';
 import HomePage from './components/Sections/Home/Container';
-import LastLessonCollection from './components/Pages/PlaylistLastDaily';
+import LastLessonCollection from './components/Pages/WithPlayer/LastDaily/PlaylistLastDaily';
 import LessonCollection from './components/Sections/Lesson/LessonPage';
 import Lessons from './components/Sections/Lessons/MainPage';
 import LibraryHomepage from './components/Sections/Library/Homepage';
@@ -45,10 +48,9 @@ import {
   PAGE_NS_PROGRAMS
 } from './helpers/consts';
 
-// import Design from './components/Design/Design';
 import * as ssrDataLoaders from './routesSSRData';
-import PlaylistCollectionPage from './components/Pages/PlaylistCollectionPage';
 import PlaylistItemPageMusic from './components/Sections/Music/PlaylistItemPageMusic';
+import SingleMediaContainer from './components/Pages/WithPlayer/SingleMedia/SingleMediaContainer';
 
 const routes = [
   { path: '', component: HomePage, options: { ssrData: ssrDataLoaders.home } },
@@ -70,7 +72,6 @@ const routes = [
   },
   { path: 'publications/blog/:blog/:id', component: BlogPost, options: { ssrData: ssrDataLoaders.blogPostPage } },
 
-  { path: ':routeType/cu/:id', component: PlaylistItemPage, options: { ssrData: ssrDataLoaders.cuPage } },
   { path: 'lessons', component: Lessons, options: { ssrData: ssrDataLoaders.lessonsPage } },
   { path: 'lessons/:tab', component: Lessons, options: { ssrData: ssrDataLoaders.lessonsPage } },
   {
@@ -83,13 +84,22 @@ const routes = [
     component: PlaylistCollectionPage,
     options: { ssrData: ssrDataLoaders.lessonsCollectionPage }
   },
+  { path: 'lessons/cu/:id', component: PlaylistItemPageLesson, options: { ssrData: ssrDataLoaders.cuPage } },
   {
-    path: 'music/:id/cu/:cuId',
-    component: PlaylistItemPageMusic,
-    options: { ssrData: ssrDataLoaders.playlistCollectionPage }
+    path: 'lessons/series/cu/:id',
+    component: PlaylistItemPageSeries,
+    options: { ssrData: ssrDataLoaders.cuPage }
   },
-  { path: ':routeType/:tab/cu/:id', component: PlaylistItemPage, options: { ssrData: ssrDataLoaders.cuPage } },
-  { path: 'lessons/daily/latest', component: LastLessonCollection, options: { ssrData: ssrDataLoaders.latestLesson } },
+  {
+    path: 'lessons/:tab/cu/:id',
+    component: PlaylistItemPageLesson,
+    options: { ssrData: ssrDataLoaders.cuPage }
+  },
+  {
+    path: 'lessons/daily/latest',
+    component: LastLessonCollection,
+    options: { ssrData: ssrDataLoaders.latestLesson }
+  },
   { path: 'programs', component: Programs, options: { ssrData: ssrDataLoaders.programsPage } },
   { path: 'programs/:tab', component: Programs, options: { ssrData: ssrDataLoaders.programsPage } },
   {
@@ -97,15 +107,26 @@ const routes = [
     component: Program,
     options: { ssrData: ssrDataLoaders.collectionPage(PAGE_NS_PROGRAMS) }
   },
+  { path: 'programs/cu/:id', component: SingleMediaContainer, options: { ssrData: ssrDataLoaders.cuPage } },
+  { path: 'programs/:tab/cu/:id', component: SingleMediaContainer, options: { ssrData: ssrDataLoaders.cuPage } },
+
   { path: 'events', component: Events, options: { ssrData: ssrDataLoaders.eventsPage } },
   {
     path: 'events/c/:id',
     component: PlaylistCollectionPage,
     options: { ssrData: ssrDataLoaders.playlistCollectionPage }
   },
+  { path: 'events/cu/:id', component: PlaylistItemPageEvent, options: { ssrData: ssrDataLoaders.cuPage } },
+  { path: 'events/:tab/cu/:id', component: PlaylistItemPageEvent, options: { ssrData: ssrDataLoaders.cuPage } },
+
   { path: 'music', component: Music, options: { ssrData: ssrDataLoaders.musicPage } },
   {
     path: 'music/c/:id',
+    component: PlaylistCollectionPage,
+    options: { ssrData: ssrDataLoaders.playlistCollectionPage }
+  },
+  {
+    path: 'music/:id/cu/:cuId',
     component: PlaylistCollectionPage,
     options: { ssrData: ssrDataLoaders.playlistCollectionPage }
   },

@@ -1,31 +1,47 @@
-import { noop } from 'lodash/util';
 import { actions as playlistActions } from '../../redux/modules/playlist';
 import { PLAYER_ACTIONS_BY_EVENT } from '../../redux/modules/player';
+import { JWPLAYER_ID } from '../../helpers/consts';
 
-export const getDuration = window.jwplayer()?.getDuration || noop;
+const playerRef    = { current: null };
+export const setup = (conf) => {
+  const player = window.jwplayer(JWPLAYER_ID);
+  player.setup(conf);
+  playerRef.current = player;
+};
 
-export const getMute = window.jwplayer()?.getMute || noop;
-export const setMute = window.jwplayer()?.setMute || noop;
+export const init = (dispatch) => {
+  playerRef.current = window.jwplayer(JWPLAYER_ID);
+  initPlayerEvents(dispatch);
+};
 
-export const setVolume = window.jwplayer()?.setVolume || noop;
+export const getDuration = () => playerRef.current?.getDuration() || 0;
 
-export const setPlaybackRate = window.jwplayer()?.setPlaybackRate || noop;
+export const getMute = () => playerRef.current?.getMute() || false;
+export const setMute = () => playerRef.current?.setMute() || false;
 
-export const getPosition = window.jwplayer()?.getPosition || noop;
+export const setVolume = (vol) => playerRef.current?.setVolume(vol) || 0;
 
-export const play = window.jwplayer()?.play || noop;
+export const setPlaybackRate = (rate) => playerRef.current?.setPlaybackRate(rate) || 0;
 
-export const pause = window.jwplayer()?.pause || noop;
+export const getPosition = () => {
+  return playerRef.current?.getPosition() || 0;
+};
 
-export const seek = window.jwplayer()?.seek || noop;
+export const play = () => playerRef.current?.play() || false;
+
+export const pause = () => playerRef.current?.pause() || false;
+
+export const seek = (pos) => playerRef.current?.seek(pos) || false;
+
+export const load = (items) => playerRef.current?.load(items) || false;
 
 const PLAYER_EVENTS = ['ready', 'remove', 'play', 'pause', 'playbackRateChanged', 'resize', 'mute'];
 
-export const initPlayerEvents = (dispatch) => {
+const initPlayerEvents = (dispatch) => {
   const player = window.jwplayer();
 
   //for debug, catch all jwplayer events
-  //player.on('all', (name, e) => console.log('jwplayer all events', name, e));
+  // player.on('all', (name, e) => console.log('jwplayer all events', name, e));
 
   player.on('error', e => console.error(e));
 
@@ -45,3 +61,4 @@ export const initPlayerEvents = (dispatch) => {
     });
   });
 };
+

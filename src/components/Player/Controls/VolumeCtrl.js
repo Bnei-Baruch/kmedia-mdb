@@ -6,8 +6,8 @@ import { withNamespaces } from 'react-i18next';
 import { selectors as player } from '../../../redux/modules/player';
 import { VolumeKnob } from './VolumeKnob';
 import WebWrapTooltip from '../../shared/WebWrapTooltip';
-import useSubscribeVolume from '../../../pkg/jwpAdapter/useSubscribeVolume';
-import setMute from '../../../pkg/jwpAdapter';
+import { useSubscribeVolume } from '../../../pkg/jwpAdapter';
+import { setMute } from '../../../pkg/jwpAdapter/adapter';
 
 const VolumeCtrl = ({ t }) => {
   const widthRef = useRef({});

@@ -93,6 +93,8 @@ function* singleMediaBuild(action) {
 
   yield put(actions.buildSuccess({ items: [item], language, mediaType, cuId, cId: c.id, isSingleMedia: true }));
   yield fetchViewsByUIDs([cuId]);
+  yield fetchMy({ payload: { namespace: MY_NAMESPACE_HISTORY, cu_uids: [cuId], page_size: 1 } });
+
 }
 
 function* myPlaylistBuild(action) {

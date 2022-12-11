@@ -14,6 +14,7 @@ const PLAYER_DESTROY_PLUGIN = 'Player/DESTROY_PLUGIN';
 const PLAYER_SET_FILE          = 'Player/SET_FILE';
 const PLAYER_SET_OVER_MODE     = 'Player/SET_OVER_MODE';
 const PLAYER_SET_IS_FULLSCREEN = 'Player/SET_IS_FULLSCREEN';
+const PLAYER_SET_LOADED        = 'Player/PLAYER_SET_LOADED';
 
 const SET_SHARE_START_END = 'Player/SET_SHARE_START_END';
 
@@ -39,6 +40,7 @@ const playerDestroyPlugin = createAction(PLAYER_DESTROY_PLUGIN);
 
 const setOverMode   = createAction(PLAYER_SET_OVER_MODE);
 const setFullScreen = createAction(PLAYER_SET_IS_FULLSCREEN);
+const setLoaded     = createAction(PLAYER_SET_LOADED);
 
 const setShareStartEnd = createAction(SET_SHARE_START_END);
 
@@ -47,6 +49,7 @@ export const actions = {
   setOverMode,
   setShareStartEnd,
   setFullScreen,
+  setLoaded,
 
   playerPlay,
   playerPause,
@@ -65,6 +68,7 @@ const onRemove = draft => {
   draft.overMode     = PLAYER_OVER_MODES.firstTime;
   draft.isFullScreen = false;
   draft.ready        = false;
+  draft.played       = false;
 };
 
 const onSetMode = (draft, payload) => {
@@ -72,10 +76,15 @@ const onSetMode = (draft, payload) => {
   draft.shareStartEnd = initialState.shareStartEnd;
 };
 
+const onSetFile = (draft, payload) => {
+  draft.file   = payload;
+  draft.loaded = false;
+};
+
 export const reducer = handleActions({
   [PLAYER_READY]: draft => draft.ready = true,
   [PLAYER_REMOVE]: onRemove,
-  [PLAYER_SET_FILE]: (draft, payload) => draft.file = payload,
+  [PLAYER_SET_FILE]: onSetFile,
 
   [PLAYER_PLAY]: (draft, payload) => {
     draft.played = payload.newstate === 'playing';
@@ -89,11 +98,13 @@ export const reducer = handleActions({
 
   [PLAYER_SET_OVER_MODE]: onSetMode,
   [PLAYER_SET_IS_FULLSCREEN]: (draft, payload) => draft.isFullScreen = payload,
+  [PLAYER_SET_LOADED]: (draft, payload) => draft.loaded = payload,
 
   [SET_SHARE_START_END]: (draft, payload) => draft.shareStartEnd = payload
 }, initialState);
 
 const isReady          = state => state.ready;
+const isLoaded         = state => state.loaded;
 const isPlay           = state => state.played;
 const getFile          = state => state.file;
 const getOverMode      = state => state.overMode;
@@ -104,6 +115,7 @@ const getPlayerWidth   = state => state.width;
 
 export const selectors = {
   isReady,
+  isLoaded,
   isPlay,
   getFile,
   getOverMode,

@@ -4,7 +4,8 @@ import { useSelector } from 'react-redux';
 
 import { selectors as player } from '../../../redux/modules/player';
 import { formatDuration, stopBubbling } from '../../../helpers/utils';
-import { useSubscribeSeekAndTime, useSubscribeBuffer, getDuration, seek } from '../../../pkg/jwpAdapter';
+import { useSubscribeSeekAndTime, useSubscribeBuffer } from '../../../pkg/jwpAdapter';
+import { getDuration, seek } from '../../../pkg/jwpAdapter/adapter';
 
 export const ProgressBar = ({ left, right }) => {
 

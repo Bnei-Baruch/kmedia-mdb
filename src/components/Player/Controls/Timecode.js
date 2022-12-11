@@ -3,7 +3,8 @@ import { useSelector } from 'react-redux';
 import { selectors as playlist } from '../../../redux/modules/playlist';
 import { formatDuration } from '../../../helpers/utils';
 import { saveTimeOnLocalstorage } from './helper';
-import { useSubscribeSeekAndTime, getDuration } from '../../../pkg/jwpAdapter';
+import { useSubscribeSeekAndTime } from '../../../pkg/jwpAdapter';
+import { getDuration } from '../../../pkg/jwpAdapter/adapter';
 
 export const Timecode = () => {
   const duration = getDuration();

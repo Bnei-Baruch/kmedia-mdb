@@ -1,16 +1,15 @@
 import React, { useEffect, useRef, useMemo } from 'react';
-import { useSelector, useDispatch, shallowEqual } from 'react-redux';
+import { useSelector, shallowEqual, useDispatch } from 'react-redux';
 
-import { selectors as player } from '../../redux/modules/player';
+import { actions, selectors as player } from '../../redux/modules/player';
 import { JWPLAYER_ID, MY_NAMESPACE_HISTORY } from '../../helpers/consts';
 import { useLocation } from 'react-router-dom';
 import { startEndFromQuery } from '../../components/Player/Controls/helper';
-import pause from './index';
 import { getSavedTime, findPlayedFile } from '../../components/Player/helper';
 import { selectors as playlist } from '../../redux/modules/playlist';
 import { selectors as my } from '../../redux/modules/my';
 
-const useStartPlay = () => {
+const BehaviorStartPlay = () => {
   const location       = useLocation();
   const { start, end } = startEndFromQuery(location);
 
@@ -26,8 +25,7 @@ const useStartPlay = () => {
   const { fetched } = useSelector(state => my.getInfo(state.my, MY_NAMESPACE_HISTORY));
 
   const fileIdRef = useRef();
-
-
+  const dispatch  = useDispatch();
 
   // must be before next useEffect
   // null prev file id when open other collection
@@ -46,11 +44,14 @@ const useStartPlay = () => {
       jwp.seek(seek)[autoplay ? 'play' : 'pause']();
     } else if (autoplay) {
       jwp.play();
+    } else {
+      dispatch(actions.setLoaded(true));
     }
 
     fileIdRef.current = file.id;
   }, [isReady, cuId, fileIdRef.current, start, end, isSingleMedia, file, historyItem, fetched]);
 
+  return null;
 };
 
-export default useStartPlay;
+export default BehaviorStartPlay;

@@ -4,7 +4,7 @@ import { withNamespaces } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
 import { selectors } from '../../../redux/modules/player';
-import { setPlaybackRate } from '../../../pkg/jwpAdapter';
+import { setPlaybackRate } from '../../../pkg/jwpAdapter/adapter';
 
 const PLAYER_SPEEDS = [0.75, 1, 1.25, 1.5, 2];
 

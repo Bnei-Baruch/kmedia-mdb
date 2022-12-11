@@ -1,28 +1,15 @@
-import React, { useEffect } from 'react';
-import { withNamespaces } from 'react-i18next';
-import { useParams } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
 
 import SingleMediaPage from './SingleMediaPage';
-import { actions, selectors } from '../../../../redux/modules/playlist';
+import PlayerContainer from '../../../Player/PlayerContainer';
+import BuildSingleMediaPlaylist from './BuildSingleMediaPlaylist';
 
-const SingleMediaContainer = ({ t }) => {
-
-  const { id } = useParams();
-
-  const { cuId, wip } = useSelector(state => selectors.getInfo(state.playlist));
-
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (wip) return;
-
-    if (id !== cuId) {
-      dispatch(actions.singleMediaBuild(id));
-    }
-  }, [cuId, id, wip]);
-
-  return <SingleMediaPage />;
+const SingleMediaContainer = () => {
+  const player = <PlayerContainer />;
+  return <>
+    <BuildSingleMediaPlaylist />
+    <SingleMediaPage player={player} />
+  </>;
 };
 
-export default React.memo(withNamespaces()(SingleMediaContainer));
+export default SingleMediaContainer;

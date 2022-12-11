@@ -1,7 +1,6 @@
 import { createAction } from 'redux-actions';
 import { handleActions } from './settings';
-import { DEFAULT_LANGUAGE } from '../../helpers/consts';
-import { types as playerTypes } from './player';
+import { DEFAULT_LANGUAGE, VS_DEFAULT } from '../../helpers/consts';
 import { saveTimeOnLocalstorage } from '../../components/Player/Controls/helper';
 
 const PLAYLIST_BUILD         = 'Playlist/BUILD';
@@ -57,7 +56,9 @@ const initialState = {
   isReady: false
 };
 
-const onBuild = draft => draft.info = { isReady: false, wip: true };
+const onBuild = draft => {
+  draft.info = { isReady: false, wip: true };
+};
 
 const onBuildSuccess = (draft, payload) => {
   const { cuId, items, ...info } = payload;
@@ -66,15 +67,11 @@ const onBuildSuccess = (draft, payload) => {
 
   draft.playlist = items.map(({ id }) => id);
   draft.itemById = items.reduce((acc, x) => ({ ...acc, [x.id]: x }), {});
-  if (!draft.itemById[cuId].qualityByLang[language]) {
+  if (draft.itemById[cuId] && !draft.itemById[cuId].qualityByLang[language]) {
     language = draft.itemById[cuId].languages[0];
   }
-  const quality = draft.info.quality || draft.itemById[cuId].qualityByLang[language]?.[0];
+  const quality = draft.info.quality || draft.itemById[cuId]?.qualityByLang[language]?.[0] || VS_DEFAULT;
   draft.info    = { ...info, cuId, language, quality, isReady: true, wip: false };
-};
-
-const onRemovePlayer = draft => {
-  draft.info = { isReady: false };
 };
 
 const onNext = (draft, restart = false) => {
@@ -95,7 +92,6 @@ export const reducer = handleActions({
   [SINGLE_MEDIA_BUILD]: onBuild,
   [MY_PLAYLIST_BUILD]: onBuild,
   [PLAYLIST_BUILD_SUCCESS]: onBuildSuccess,
-  [playerTypes.PLAYER_REMOVE]: onRemovePlayer,
 
   [PLAYLIST_NEXT]: onNext,
   [PLAYLIST_PREV]: onPrev,
@@ -109,7 +105,9 @@ export const reducer = handleActions({
 const getPlaylist = state => state.playlist;
 const getPlayed   = state => state.itemById[state.info.cuId] || false;
 
-const getInfo = state => state.info;
+const getInfo = state => {
+  return state.info;
+};
 
 const getNextId = state => {
   const curIdx = state.playlist.findIndex(x => x === state.info.cuId);

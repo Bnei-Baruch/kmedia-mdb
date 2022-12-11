@@ -3,7 +3,7 @@ import { Icon } from 'semantic-ui-react';
 import { stopBubbling } from '../../../helpers/utils';
 import { withNamespaces } from 'react-i18next';
 import WebWrapTooltip from '../../shared/WebWrapTooltip';
-import { getPosition, seek } from '../../../pkg/jwpAdapter';
+import { getPosition, seek } from '../../../pkg/jwpAdapter/adapter';
 
 const handleSeek = (e, pos) => {
   const nPos = getPosition() + pos;

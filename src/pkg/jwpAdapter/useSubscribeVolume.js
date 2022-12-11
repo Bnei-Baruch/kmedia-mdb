@@ -9,7 +9,7 @@ const useSubscribeVolume = () => {
   const [mute, setMute]     = useState(isReady && window.jwplayer().getMute());
 
   useEffect(() => {
-    if (!isReady) return () => null;
+    if (isReady) return () => null;
 
     const updateVolume = ({ volume }) => setVolume(volume);
     const updateMute   = ({ mute }) => setMute(mute);

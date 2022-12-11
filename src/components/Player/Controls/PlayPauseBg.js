@@ -6,7 +6,7 @@ import { stopBubbling } from '../../../helpers/utils';
 import { Icon } from 'semantic-ui-react';
 import { withNamespaces } from 'react-i18next';
 import WebWrapTooltip from '../../shared/WebWrapTooltip';
-import { pause, play } from '../../../pkg/jwpAdapter';
+import { pause, play } from '../../../pkg/jwpAdapter/adapter';
 
 const PlayPauseBg = ({ t }) => {
   const isPlay = useSelector(state => selectors.isPlay(state.player));

@@ -6,7 +6,7 @@ import { selectors as player } from '../../redux/modules/player';
 import { selectors as chrSelectors } from '../../redux/modules/chronicles';
 import { ClientChroniclesContext } from '../../helpers/app-contexts';
 import { usePrevious } from '../../helpers/utils';
-import { getDuration, getMute, getPosition } from '../../pkg/jwpAdapter';
+import { getDuration, getMute, getPosition } from '../../pkg/jwpAdapter/adapter';
 
 const buildAppendData = (autoPlay, item, file) => {
 
@@ -32,13 +32,14 @@ const AppendChronicle = () => {
   const item                        = useSelector(state => playlist.getPlayed(state.playlist));
   const { isSingleMedia: autoPlay } = useSelector(state => playlist.getInfo(state.playlist));
   const prevEvent                   = usePrevious(event);
+  const isPlayerReady               = useSelector(state => player.isReady(state.player));
 
   useEffect(() => {
-    if (event && event !== prevEvent) {
+    if (isPlayerReady && event && event !== prevEvent) {
       const data = buildAppendData(autoPlay, item, file);
       chronicles.append(event, data);
     }
-  }, [event, prevEvent, file, item, autoPlay]);
+  }, [event, prevEvent, file, item, autoPlay, isPlayerReady]);
 
   return null;
 };

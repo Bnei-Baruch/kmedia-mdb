@@ -6,7 +6,7 @@ import { toHumanReadableTime } from '../../../helpers/time';
 import { actions, selectors } from '../../../redux/modules/player';
 import { withNamespaces } from 'react-i18next';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
-import { getPosition } from '../../../pkg/jwpAdapter';
+import { getPosition } from '../../../pkg/jwpAdapter/adapter';
 
 const StartEnd = ({ t }) => {
   const { start, end }     = useSelector(state => selectors.getShareStartEnd(state.player));
