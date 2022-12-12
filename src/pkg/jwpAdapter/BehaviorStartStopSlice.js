@@ -5,28 +5,30 @@ import { useLocation } from 'react-router-dom';
 import { selectors as player } from '../../redux/modules/player';
 import { JWPLAYER_ID } from '../../helpers/consts';
 import { startEndFromQuery } from '../../components/Player/Controls/helper';
-import { pause } from './adapter';
+import { pause, seek } from './adapter';
 
 const BehaviorStartStopSlice = () => {
   const location       = useLocation();
   const { start, end } = startEndFromQuery(location);
   const isReady        = useSelector(state => player.isReady(state.player));
 
-  const checkStopTime = d => {
-    if (d.currentTime > end) {
-      const player = window.jwplayer();
-      pause();
-      player.off('time', checkStopTime);
-    }
-  };
-
   useEffect(() => {
-    if (isReady && (start || end)) {
-      const jwp = window.jwplayer(JWPLAYER_ID);
-      jwp.seek(start).pause();
-      jwp.on('time', checkStopTime);
-    }
-  });
+    if (!isReady || (!start && !end))
+      return () => null;
+
+    const jwp = window.jwplayer(JWPLAYER_ID);
+
+    const checkStopTime = d => {
+      if (d.currentTime > end) {
+        pause();
+        jwp.off('time', checkStopTime);
+      }
+    };
+    seek(start).pause();
+    jwp.on('time', checkStopTime);
+
+    return () => jwp.off('time', checkStopTime);
+  }, [isReady, start, end]);
   return null;
 };
 
