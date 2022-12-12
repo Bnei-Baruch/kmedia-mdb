@@ -1,21 +1,20 @@
 import React, { useContext } from 'react';
-import { Grid, Container, Divider } from 'semantic-ui-react';
+import { useSelector } from 'react-redux';
+import clsx from 'clsx';
 
+import { Grid, Container, Divider } from 'semantic-ui-react';
 import Helmets from '../../../shared/Helmets';
 import PlaylistHeader from './PlaylistHeader';
 import Info from '../widgets/Info/Info';
 import Materials from '../widgets/UnitMaterials/Materials';
 import PlaylistItems from './PlaylistItems';
 import Recommended from '../widgets/Recommended/Main/Recommended';
-import PlayerContainer from '../../../Player/PlayerContainer';
-import { useSelector } from 'react-redux';
 import { selectors as playlist } from '../../../../redux/modules/playlist';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
-import clsx from 'clsx';
 
-const Page = () => {
-  const { isMobileDevice } = useContext(DeviceInfoContext);
-  const isPlaylistReady    = useSelector(state => playlist.getInfo(state.playlist).isReady);
+const Page = ({ playerContainer }) => {
+  const { isMobileDevice }           = useContext(DeviceInfoContext);
+  const { isReady: isPlaylistReady } = useSelector(state => playlist.getInfo(state.playlist));
 
   const computerWidth = !isMobileDevice ? 10 : 16;
 
@@ -29,7 +28,7 @@ const Page = () => {
         <div id="avbox_playlist">
           {isPlaylistReady && <PlaylistHeader />}
         </div>
-        <PlayerContainer />
+        {playerContainer}
         <Container id="unit_container">
           {
             isPlaylistReady && (

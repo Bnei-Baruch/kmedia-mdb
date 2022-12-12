@@ -5,10 +5,10 @@ import PlayerContainer from '../../../Player/PlayerContainer';
 import BuildSingleMediaPlaylist from './BuildSingleMediaPlaylist';
 
 const SingleMediaContainer = () => {
-  const player = <PlayerContainer />;
+  const playerContainer = <PlayerContainer />;
   return <>
     <BuildSingleMediaPlaylist />
-    <SingleMediaPage player={player} />
+    <SingleMediaPage playerContainer={playerContainer} />
   </>;
 };
 

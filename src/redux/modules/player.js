@@ -77,8 +77,9 @@ const onSetMode = (draft, payload) => {
 };
 
 const onSetFile = (draft, payload) => {
-  draft.file   = payload;
+  draft.played = false;
   draft.loaded = false;
+  draft.file   = payload;
 };
 
 export const reducer = handleActions({

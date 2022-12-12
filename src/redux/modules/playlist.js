@@ -56,7 +56,7 @@ const initialState = {
   isReady: false
 };
 
-const onBuild = draft => {
+const onBuild      = draft => {
   draft.info = { isReady: false, wip: true };
 };
 

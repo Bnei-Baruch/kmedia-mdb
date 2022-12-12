@@ -10,6 +10,7 @@ import { selectors as playlist } from '../../../../redux/modules/playlist';
 import ButtonDayPicker from '../../../Filters/components/Date/ButtonDayPicker';
 import { canonicalLink } from '../../../../helpers/links';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
+import { isEmpty } from '../../../../helpers/utils';
 
 const LessonDatePicker = ({ t }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
@@ -24,7 +25,7 @@ const LessonDatePicker = ({ t }) => {
 
   const dispatch = useDispatch();
   useEffect(() => {
-    if (dpCollection && collection.id !== dpCollection.id) {
+    if (!isEmpty(dpCollection?.content_units) && collection.id !== dpCollection.id) {
       const link = canonicalLink(dpCollection.content_units[0]);
       history.push(`/${language}${link}`);
       dispatch(actions.nullDatepickerCO());

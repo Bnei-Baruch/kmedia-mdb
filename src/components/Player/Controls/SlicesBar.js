@@ -3,22 +3,23 @@ import { useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 import { selectors as player } from '../../../redux/modules/player';
-import { startEndFromQuery, timeToPercent } from './helper';
+import { timeToPercent, startEndFromQuery } from './helper';
 
 export const SlicesBar = () => {
   const [left, setLeft]   = useState(0);
   const [width, setWidth] = useState(0);
 
-  const location = useLocation();
-  const duration = useSelector(state => player.getFile(state.player)?.duration);
+  const location       = useLocation();
+  const { start, end } = startEndFromQuery(location);
+
+  const duration = useSelector(state => player.getFile(state.player).duration);
 
   useEffect(() => {
     if (duration) {
-      const { start, end } = startEndFromQuery(location);
       setLeft(timeToPercent(start, duration));
       setWidth(timeToPercent(end - start, duration));
     }
-  }, [duration, location]);
+  }, [duration, start, end]);
 
   return (
     <div

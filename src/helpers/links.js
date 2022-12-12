@@ -108,7 +108,7 @@ const mediaPrefix = new Map([
 export const getCuByCcuSkipPreparation = (ccu) => {
   if (isEmpty(ccu?.cuIDs)) return null;
 
-  return ccu.cuIDs.filter(id => !ccu.ccuNames || Number(ccu.ccuNames[id]) !== 0)[0];
+  return ccu.cuIDs.filter(id => !ccu.ccuNames || Number(ccu.ccuNames[id]) !== 0)[0] || ccu.cuIDs[0];
 };
 
 /* WARNING!!!

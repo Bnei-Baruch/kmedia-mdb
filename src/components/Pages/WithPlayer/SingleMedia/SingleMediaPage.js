@@ -12,16 +12,16 @@ import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import WipErr from '../../../shared/WipErr/WipErr';
 import Info from '../widgets/Info/Info';
 import Materials from '../widgets/UnitMaterials/Materials';
-import { selectors, selectors as playlist } from '../../../../redux/modules/playlist';
+import { selectors as playlist } from '../../../../redux/modules/playlist';
 
-const SingleMediaPage = ({ player, t }) => {
+const SingleMediaPage = ({ playerContainer, t }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
   const location        = useLocation();
   const embed           = getEmbedFromQuery(location);
-  const isPlaylistReady    = useSelector(state => playlist.getInfo(state.playlist).isReady);
+  const isPlaylistReady = useSelector(state => playlist.getInfo(state.playlist).isReady);
 
-  if (embed) return player;
+  if (embed) return playerContainer;
 
   const wipErr        = WipErr({ wip: !isPlaylistReady, t });
   const computerWidth = !isMobileDevice ? 10 : 16;
@@ -37,7 +37,7 @@ const SingleMediaPage = ({ player, t }) => {
           className={clsx({ 'is-fitted': isMobileDevice })}>
           <Grid.Row>
             <Grid.Column>
-              {player}
+              {playerContainer}
             </Grid.Column>
           </Grid.Row>
           <Grid.Row>
