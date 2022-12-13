@@ -7,7 +7,8 @@ import NotImplemented from './components/NotImplemented';
 import {
   PlaylistItemPageLesson,
   PlaylistItemPageEvent,
-  PlaylistCollectionPage, PlaylistItemPageSeries
+  PlaylistCollectionPage,
+  PlaylistItemPageSeries
 } from './components/Pages/WithPlayer/PlaylistPageDispecher';
 import PlaylistMy from './components/Pages/WithPlayer/PlaylistMy/Container';
 import SearchResults from './components/Search/SearchResultsContainer';
@@ -49,7 +50,6 @@ import {
 } from './helpers/consts';
 
 import * as ssrDataLoaders from './routesSSRData';
-import PlaylistItemPageMusic from './components/Sections/Music/PlaylistItemPageMusic';
 import SingleMediaContainer from './components/Pages/WithPlayer/SingleMedia/SingleMediaContainer';
 
 const routes = [

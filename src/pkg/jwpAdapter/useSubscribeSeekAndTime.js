@@ -14,16 +14,16 @@ const useSubscribeSeekAndTime = () => {
   const file     = useSelector(state => player.getFile(state.player));
   const { cuId } = useSelector(state => playlist.getInfo(state.playlist));
 
-  const checkTimeAfterSeek = d => {
-    if (d.duration === 0) return;
-    const time = Math.round(d.offset ?? d.currentTime);
-    const pos  = Math.round(10 * (100 * time) / d.duration) / 10;
-    setPos(pos);
-    setTime(time);
-  };
-
   useEffect(() => {
-    if (!isReady)  return noop;
+    if (!isReady) return noop;
+
+    const checkTimeAfterSeek = d => {
+      if (d.duration === 0) return;
+      const time = Math.round(d.offset ?? d.currentTime);
+      const pos  = Math.round(10 * (100 * time) / d.duration) / 10;
+      setPos(pos);
+      setTime(time);
+    };
 
     const p = window.jwplayer(JWPLAYER_ID);
     p.on('seek', checkTimeAfterSeek);

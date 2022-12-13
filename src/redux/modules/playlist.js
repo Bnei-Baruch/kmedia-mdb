@@ -1,6 +1,7 @@
 import { createAction } from 'redux-actions';
 import { handleActions } from './settings';
 import { DEFAULT_LANGUAGE, VS_DEFAULT } from '../../helpers/consts';
+import { types as playerTypes } from './player';
 import { saveTimeOnLocalstorage } from '../../components/Player/Controls/helper';
 
 const PLAYLIST_BUILD         = 'Playlist/BUILD';
@@ -56,7 +57,7 @@ const initialState = {
   isReady: false
 };
 
-const onBuild      = draft => {
+const onBuild = draft => {
   draft.info = { isReady: false, wip: true };
 };
 
@@ -72,6 +73,10 @@ const onBuildSuccess = (draft, payload) => {
   }
   const quality = draft.info.quality || draft.itemById[cuId]?.qualityByLang[language]?.[0] || VS_DEFAULT;
   draft.info    = { ...info, cuId, language, quality, isReady: true, wip: false };
+};
+
+const onRemovePlayer = draft => {
+  draft.info = { isReady: false };
 };
 
 const onNext = (draft, restart = false) => {
@@ -92,6 +97,7 @@ export const reducer = handleActions({
   [SINGLE_MEDIA_BUILD]: onBuild,
   [MY_PLAYLIST_BUILD]: onBuild,
   [PLAYLIST_BUILD_SUCCESS]: onBuildSuccess,
+  [playerTypes.PLAYER_REMOVE]: onRemovePlayer,
 
   [PLAYLIST_NEXT]: onNext,
   [PLAYLIST_PREV]: onPrev,

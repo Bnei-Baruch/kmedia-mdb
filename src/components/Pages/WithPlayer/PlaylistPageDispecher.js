@@ -7,9 +7,7 @@ import BuildPlaylistByCollectionByParams from './BuildPlaylistByCollectionByPara
 import PlayerContainer from '../../Player/PlayerContainer';
 import { useSelector } from 'react-redux';
 import { selectors as playlist } from '../../../redux/modules/playlist';
-import WipErr from '../../shared/WipErr/WipErr';
 import SingleMediaPage from './SingleMedia/SingleMediaPage';
-import { withNamespaces } from 'react-i18next';
 
 export const PlaylistItemPageSeries = () => {
   const builder = <BuildPlaylistByUnit cts={[CT_LESSONS_SERIES]} />;
@@ -32,7 +30,7 @@ export const PlaylistCollectionPage = () => {
 };
 
 const Decorator = ({ builder }) => {
-  const playerContainer = <PlayerContainer key="player" />;
+  const playerContainer = <PlayerContainer />;
   return (
     <>
       {builder}
@@ -41,14 +39,12 @@ const Decorator = ({ builder }) => {
   );
 };
 
-const PageSwitcher = withNamespaces()(({ playerContainer, t }) => {
-  const { isReady: isPlaylistReady, isSingleMedia } = useSelector(state => playlist.getInfo(state.playlist));
-
-  const wipErr = WipErr({ wip: !isPlaylistReady, t });
-  if (wipErr) return wipErr;
-
+const PageSwitcher = ({ playerContainer }) => {
+  const { isReady, isSingleMedia } = useSelector(state => playlist.getInfo(state.playlist));
+  if (!isReady)
+    return null;
   if (isSingleMedia)
     return <SingleMediaPage playerContainer={playerContainer} />;
 
   return <PlaylistPage playerContainer={playerContainer} />;
-});
+};

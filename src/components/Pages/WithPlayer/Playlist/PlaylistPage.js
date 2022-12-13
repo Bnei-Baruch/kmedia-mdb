@@ -9,10 +9,17 @@ import Materials from '../widgets/UnitMaterials/Materials';
 import PlaylistItems from './PlaylistItems';
 import Recommended from '../widgets/Recommended/Main/Recommended';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
+import { useSelector } from 'react-redux';
+import { selectors as playlist } from '../../../../redux/modules/playlist';
+import WipErr from '../../../shared/WipErr/WipErr';
+import { withNamespaces } from 'react-i18next';
 
-const PlaylistPage = ({ playerContainer }) => {
+const PlaylistPage = ({ playerContainer, t }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
-  const computerWidth      = !isMobileDevice ? 10 : 16;
+  const isPlaylistReady    = useSelector(state => playlist.getInfo(state.playlist).isReady);
+
+  const wipErr        = WipErr({ wip: !isPlaylistReady, t });
+  const computerWidth = !isMobileDevice ? 10 : 16;
 
   return (
     <Grid padded={!isMobileDevice} className="avbox">
@@ -22,17 +29,23 @@ const PlaylistPage = ({ playerContainer }) => {
         computer={computerWidth}
         className={clsx({ 'is-fitted': isMobileDevice })}>
         <div id="avbox_playlist">
-          <PlaylistHeader />
+          {!wipErr && <PlaylistHeader />}
         </div>
         {playerContainer}
         <Container id="unit_container">
-          <Helmets.AVUnit />
-          <Info />
-          <Materials />
+          {
+            wipErr || (
+              <>
+                <Helmets.AVUnit />
+                <Info />
+                <Materials />
+              </>
+            )
+          }
         </Container>
       </Grid.Column>
       {
-        !isMobileDevice && (
+        !isMobileDevice && !wipErr && (
           <Grid.Column width={6}>
             <PlaylistItems />
             <Divider hidden />
@@ -42,7 +55,6 @@ const PlaylistPage = ({ playerContainer }) => {
       }
     </Grid>
   );
-
 };
 
-export default PlaylistPage;
+export default withNamespaces()(PlaylistPage);

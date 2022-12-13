@@ -11,7 +11,7 @@ const PlaylistMyContainer = ({ t }) => {
   if (isEmpty)
     return <Header size="large" content={t('personal.playlistNoResult')} />;
 
-  const playerContainer = <PlayerContainer key="player" />;
+  const playerContainer = <PlayerContainer />;;
   return <Page playerContainer={playerContainer} />;
 };
 

@@ -9,7 +9,7 @@ import { selectors as playlist } from '../../../../redux/modules/playlist';
 import BuildSingleMediaPlaylist from './BuildSingleMediaPlaylist';
 
 const SingleMediaContainer = () => {
-  const playerContainer = <PlayerContainer key="player" />;
+  const playerContainer = <PlayerContainer />;;
   return (
     <>
       <BuildSingleMediaPlaylist />

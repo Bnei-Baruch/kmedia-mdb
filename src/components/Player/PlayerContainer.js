@@ -38,9 +38,6 @@ const PlayerContainer = () => {
       <div className="player">
         <AppendChronicle />
         <UpdateLocation />
-        {/*
-        <UpdateNextPrevLink />
-        */}
         <div className={clsx(CLASSES_BY_MODE[mode], isMobileDevice ? 'is-mobile' : 'is-web', { 'is-fullscreen': isFullScreen })}>
           <Preloader />
           {
@@ -60,4 +57,4 @@ const PlayerContainer = () => {
 
 };
 
-export default React.memo(PlayerContainer);
+export default PlayerContainer;

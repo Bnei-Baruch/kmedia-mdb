@@ -14,7 +14,8 @@ const PLAYER_DESTROY_PLUGIN = 'Player/DESTROY_PLUGIN';
 const PLAYER_SET_FILE          = 'Player/SET_FILE';
 const PLAYER_SET_OVER_MODE     = 'Player/SET_OVER_MODE';
 const PLAYER_SET_IS_FULLSCREEN = 'Player/SET_IS_FULLSCREEN';
-const PLAYER_SET_LOADED        = 'Player/PLAYER_SET_LOADED';
+const PLAYER_SET_LOADED        = 'Player/SET_LOADED';
+const PLAYER_SET_WIP           = 'Player/SET_WIP';
 
 const SET_SHARE_START_END = 'Player/SET_SHARE_START_END';
 
@@ -41,6 +42,7 @@ const playerDestroyPlugin = createAction(PLAYER_DESTROY_PLUGIN);
 const setOverMode   = createAction(PLAYER_SET_OVER_MODE);
 const setFullScreen = createAction(PLAYER_SET_IS_FULLSCREEN);
 const setLoaded     = createAction(PLAYER_SET_LOADED);
+const setWIP        = createAction(PLAYER_SET_WIP);
 
 const setShareStartEnd = createAction(SET_SHARE_START_END);
 
@@ -50,6 +52,7 @@ export const actions = {
   setShareStartEnd,
   setFullScreen,
   setLoaded,
+  setWIP,
 
   playerPlay,
   playerPause,
@@ -61,7 +64,13 @@ const initialState = {
   isReady: false,
   file: null,
   shareStartEnd: { start: 0, end: Infinity },
-  isFullScreen: false
+  isFullScreen: false,
+  wip: false
+};
+
+const onReady = draft => {
+  draft.wip   = false;
+  draft.ready = true;
 };
 
 const onRemove = draft => {
@@ -69,6 +78,7 @@ const onRemove = draft => {
   draft.isFullScreen = false;
   draft.ready        = false;
   draft.played       = false;
+  draft.wip          = false;
 };
 
 const onSetMode = (draft, payload) => {
@@ -82,16 +92,18 @@ const onSetFile = (draft, payload) => {
   draft.file   = payload;
 };
 
+const onPlay = (draft, payload) => {
+  draft.played = payload.newstate === 'playing';
+  if (draft.overMode === PLAYER_OVER_MODES.firstTime)
+    draft.overMode = PLAYER_OVER_MODES.active;
+};
+
 export const reducer = handleActions({
-  [PLAYER_READY]: draft => draft.ready = true,
+  [PLAYER_READY]: onReady,
   [PLAYER_REMOVE]: onRemove,
   [PLAYER_SET_FILE]: onSetFile,
 
-  [PLAYER_PLAY]: (draft, payload) => {
-    draft.played = payload.newstate === 'playing';
-    if (draft.overMode === PLAYER_OVER_MODES.firstTime)
-      draft.overMode = PLAYER_OVER_MODES.active;
-  },
+  [PLAYER_PLAY]: onPlay,
   [PLAYER_PAUSE]: draft => draft.played = false,
   [PLAYER_RATE]: (draft, payload) => draft.rate = payload.playbackRate,
   [PLAYER_RESIZE]: (draft, payload) => draft.width = payload.width,
@@ -100,6 +112,7 @@ export const reducer = handleActions({
   [PLAYER_SET_OVER_MODE]: onSetMode,
   [PLAYER_SET_IS_FULLSCREEN]: (draft, payload) => draft.isFullScreen = payload,
   [PLAYER_SET_LOADED]: (draft, payload) => draft.loaded = payload,
+  [PLAYER_SET_WIP]: (draft, payload) => draft.wip = payload,
 
   [SET_SHARE_START_END]: (draft, payload) => draft.shareStartEnd = payload
 }, initialState);
@@ -109,6 +122,7 @@ const isLoaded         = state => state.loaded;
 const isPlay           = state => state.played;
 const getFile          = state => state.file;
 const getOverMode      = state => state.overMode;
+const getWIP           = state => state.wip;
 const isFullScreen     = state => state.isFullScreen;
 const getRate          = state => state.rate || 1;
 const getShareStartEnd = state => state.shareStartEnd;
@@ -120,6 +134,7 @@ export const selectors = {
   isPlay,
   getFile,
   getOverMode,
+  getWIP,
   isFullScreen,
   getRate,
   getShareStartEnd,

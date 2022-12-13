@@ -12,7 +12,7 @@ import { selectors as playlist } from '../../../../redux/modules/playlist';
 import WipErr from '../../../shared/WipErr/WipErr';
 
 const PlaylistLastDaily = ({ t }) => {
-  const playerContainer = <PlayerContainer />;
+  const playerContainer = <PlayerContainer />;;
 
   const { isReady: isPlaylistReady } = useSelector(state => playlist.getInfo(state.playlist));
   const wipErr                       = WipErr({ wip: !isPlaylistReady, t });
