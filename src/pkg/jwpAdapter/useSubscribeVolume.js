@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectors as player } from '../../redux/modules/player';
+import { noop } from '../../helpers/utils';
 
 const useSubscribeVolume = () => {
   const isReady = useSelector(state => player.isReady(state.player));
@@ -9,7 +10,7 @@ const useSubscribeVolume = () => {
   const [mute, setMute]     = useState(isReady && window.jwplayer().getMute());
 
   useEffect(() => {
-    if (isReady) return () => null;
+    if (isReady) return noop;
 
     const updateVolume = ({ volume }) => setVolume(volume);
     const updateMute   = ({ mute }) => setMute(mute);

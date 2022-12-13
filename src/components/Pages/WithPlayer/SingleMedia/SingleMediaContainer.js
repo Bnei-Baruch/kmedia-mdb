@@ -1,15 +1,30 @@
 import React from 'react';
+import { withNamespaces } from 'react-i18next';
+import { useSelector } from 'react-redux';
 
 import SingleMediaPage from './SingleMediaPage';
 import PlayerContainer from '../../../Player/PlayerContainer';
+import WipErr from '../../../shared/WipErr/WipErr';
+import { selectors as playlist } from '../../../../redux/modules/playlist';
 import BuildSingleMediaPlaylist from './BuildSingleMediaPlaylist';
 
 const SingleMediaContainer = () => {
-  const playerContainer = <PlayerContainer />;
-  return <>
-    <BuildSingleMediaPlaylist />
-    <SingleMediaPage playerContainer={playerContainer} />
-  </>;
+  const playerContainer = <PlayerContainer key="player" />;
+  return (
+    <>
+      <BuildSingleMediaPlaylist />
+      <PageSwitcher playerContainer={playerContainer} />
+    </>
+  );
 };
+
+const PageSwitcher = withNamespaces()(({ playerContainer, t }) => {
+  const { isReady } = useSelector(state => playlist.getInfo(state.playlist));
+
+  const wipErr = WipErr({ wip: !isReady, t });
+  if (wipErr) return wipErr;
+
+  return <SingleMediaPage playerContainer={playerContainer} />;
+});
 
 export default SingleMediaContainer;

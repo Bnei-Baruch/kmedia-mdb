@@ -1,46 +1,54 @@
 import React from 'react';
 
 import { COLLECTION_DAILY_LESSONS, EVENT_TYPES, CT_LESSONS_SERIES } from '../../../helpers/consts';
-import BuildPlaylistByUnit from './Playlist/BuildPlaylistByUnit';
-import Page from './Playlist/Page';
-import BuildPlaylistByCollectionByParams from './Playlist/BuildPlaylistByCollectionByParams';
+import BuildPlaylistByUnit from './BuildPlaylistByUnit';
+import PlaylistPage from './Playlist/PlaylistPage';
+import BuildPlaylistByCollectionByParams from './BuildPlaylistByCollectionByParams';
 import PlayerContainer from '../../Player/PlayerContainer';
+import { useSelector } from 'react-redux';
+import { selectors as playlist } from '../../../redux/modules/playlist';
+import WipErr from '../../shared/WipErr/WipErr';
+import SingleMediaPage from './SingleMedia/SingleMediaPage';
+import { withNamespaces } from 'react-i18next';
 
 export const PlaylistItemPageSeries = () => {
-  const playerContainer = <PlayerContainer />;
-  return (
-    <>
-      <BuildPlaylistByUnit cts={[CT_LESSONS_SERIES]} />
-      <Page playerContainer={playerContainer} />
-    </>
-  );
+  const builder = <BuildPlaylistByUnit cts={[CT_LESSONS_SERIES]} />;
+  return <Decorator builder={builder} />;
 };
+
 export const PlaylistItemPageLesson = () => {
-  const playerContainer = <PlayerContainer />;
-  return (
-    <>
-      <BuildPlaylistByUnit cts={COLLECTION_DAILY_LESSONS} />
-      <Page playerContainer={playerContainer} />
-    </>
-  );
+  const builder = <BuildPlaylistByUnit cts={COLLECTION_DAILY_LESSONS} />;
+  return <Decorator builder={builder} />;
 };
 
 export const PlaylistItemPageEvent = () => {
-  const playerContainer = <PlayerContainer />;
+  const builder = <BuildPlaylistByUnit cts={EVENT_TYPES} />;
+  return <Decorator builder={builder} />;
+};
+
+export const PlaylistCollectionPage = () => {
+  const builder = <BuildPlaylistByCollectionByParams />;
+  return <Decorator builder={builder} />;
+};
+
+const Decorator = ({ builder }) => {
+  const playerContainer = <PlayerContainer key="player" />;
   return (
     <>
-      <BuildPlaylistByUnit cts={EVENT_TYPES} />
-      <Page playerContainer={playerContainer} />
+      {builder}
+      <PageSwitcher playerContainer={playerContainer} />
     </>
   );
 };
 
-export const PlaylistCollectionPage = () => {
-  const playerContainer = <PlayerContainer />;
-  return (
-    <>
-      <BuildPlaylistByCollectionByParams />
-      <Page playerContainer={playerContainer} />§
-    </>
-  );
-};
+const PageSwitcher = withNamespaces()(({ playerContainer, t }) => {
+  const { isReady: isPlaylistReady, isSingleMedia } = useSelector(state => playlist.getInfo(state.playlist));
+
+  const wipErr = WipErr({ wip: !isPlaylistReady, t });
+  if (wipErr) return wipErr;
+
+  if (isSingleMedia)
+    return <SingleMediaPage playerContainer={playerContainer} />;
+
+  return <PlaylistPage playerContainer={playerContainer} />;
+});

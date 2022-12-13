@@ -24,7 +24,6 @@ const CLASSES_BY_MODE = {
 };
 
 const PlayerContainer = () => {
-
   const settRef      = useRef();
   const mode         = useSelector(state => player.getOverMode(state.player));
   const isFullScreen = useSelector(state => selectors.isFullScreen(state.player));

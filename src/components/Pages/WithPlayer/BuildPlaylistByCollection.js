@@ -7,7 +7,7 @@ import { selectors as mdb } from '../../../redux/modules/mdb';
 const BuildPlaylistByCollection = ({ cuId, id }) => {
   const { cuId: prevCuId, cId: prevCId, wip } = useSelector(state => selectors.getInfo(state.playlist));
 
-  const fetched  = useSelector(state => mdb.getFullCollectionFetched(state.mdb))[id];
+  const fetched  = useSelector(state => mdb.getFullCollectionFetched(state.mdb))?.[id];
   const dispatch = useDispatch();
 
   useEffect(() => {

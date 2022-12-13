@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { selectors as playlist } from '../../redux/modules/playlist';
 import { selectors as player } from '../../redux/modules/player';
 import { JWPLAYER_ID } from '../../helpers/consts';
+import { noop } from '../../helpers/utils';
 
 const useSubscribeSeekAndTime = () => {
   const [pos, setPos]   = useState(0);
@@ -22,7 +23,7 @@ const useSubscribeSeekAndTime = () => {
   };
 
   useEffect(() => {
-    if (!isReady) return () => null;
+    if (!isReady)  return noop;
 
     const p = window.jwplayer(JWPLAYER_ID);
     p.on('seek', checkTimeAfterSeek);

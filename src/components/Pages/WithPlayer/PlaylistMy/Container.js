@@ -4,13 +4,15 @@ import { Header } from 'semantic-ui-react';
 import Page from './Page';
 import { withNamespaces } from 'react-i18next';
 import useBuildMyPlaylist from './useBuildMyPlaylist';
+import PlayerContainer from '../../../Player/PlayerContainer';
 
 const PlaylistMyContainer = ({ t }) => {
   const isEmpty = useBuildMyPlaylist();
   if (isEmpty)
     return <Header size="large" content={t('personal.playlistNoResult')} />;
 
-  return <Page />;
+  const playerContainer = <PlayerContainer key="player" />;
+  return <Page playerContainer={playerContainer} />;
 };
 
 export default withNamespaces()(PlaylistMyContainer);

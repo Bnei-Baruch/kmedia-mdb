@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { selectors as playlist } from '../../redux/modules/playlist';
 import { selectors as player } from '../../redux/modules/player';
 import { JWPLAYER_ID } from '../../helpers/consts';
+import { noop } from '../../helpers/utils';
 
 const useSubscribeSeekAndTime = () => {
   const [buffPos, setBuffPos] = useState(0);
@@ -12,12 +13,12 @@ const useSubscribeSeekAndTime = () => {
   const file     = useSelector(state => player.getFile(state.player));
   const { cuId } = useSelector(state => playlist.getInfo(state.playlist));
 
-  const checkBufferTime = d => setBuffPos(Math.round(d.bufferPercent));
-
   useEffect(() => {
-    if (!isReady) return () => null;
+    if (!isReady) return noop;
 
-    const p = window.jwplayer(JWPLAYER_ID);
+    const checkBufferTime = d => setBuffPos(Math.round(d.bufferPercent));
+
+    const p               = window.jwplayer(JWPLAYER_ID);
     p.on('bufferChange', checkBufferTime);
     return () => {
       p.off('bufferChange', checkBufferTime);
@@ -26,6 +27,6 @@ const useSubscribeSeekAndTime = () => {
 
   }, [isReady, file?.src, cuId]);
 
-  return buffPos ;
+  return buffPos;
 };
 export default useSubscribeSeekAndTime;

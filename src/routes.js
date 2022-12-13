@@ -15,7 +15,7 @@ import Events from './components/Sections/Events/MainPage';
 import ExcerptContainer from './components/Sections/Excerpt/ExcerptContainer';
 import Help from './components/Sections/Help/Help';
 import HomePage from './components/Sections/Home/Container';
-import LastLessonCollection from './components/Pages/WithPlayer/LastDaily/PlaylistLastDaily';
+import PlaylistLastDaily from './components/Pages/WithPlayer/LastDaily/PlaylistLastDaily';
 import LessonCollection from './components/Sections/Lesson/LessonPage';
 import Lessons from './components/Sections/Lessons/MainPage';
 import LibraryHomepage from './components/Sections/Library/Homepage';
@@ -97,7 +97,7 @@ const routes = [
   },
   {
     path: 'lessons/daily/latest',
-    component: LastLessonCollection,
+    component: PlaylistLastDaily,
     options: { ssrData: ssrDataLoaders.latestLesson }
   },
   { path: 'programs', component: Programs, options: { ssrData: ssrDataLoaders.programsPage } },

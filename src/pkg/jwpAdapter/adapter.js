@@ -1,6 +1,7 @@
 import { actions as playlistActions } from '../../redux/modules/playlist';
 import { PLAYER_ACTIONS_BY_EVENT } from '../../redux/modules/player';
 import { JWPLAYER_ID } from '../../helpers/consts';
+import isFunction from 'lodash/isFunction';
 
 const playerRef    = { current: null };
 export const setup = (conf) => {
@@ -24,7 +25,9 @@ export const setVolume = (vol) => playerRef.current?.setVolume(vol) || 0;
 export const setPlaybackRate = (rate) => playerRef.current?.setPlaybackRate(rate) || 0;
 
 export const getPosition = () => {
-  return playerRef.current?.getPosition() || 0;
+  if (!isFunction(playerRef.current?.getPosition))
+    return 0;
+  return playerRef.current.getPosition();
 };
 
 export const play = () => playerRef.current?.play() || false;

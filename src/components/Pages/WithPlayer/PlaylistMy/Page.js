@@ -10,7 +10,7 @@ import PlaylistHeader from '../Playlist/PlaylistHeader';
 import PlaylistItems from './PlaylistItems';
 import { selectors as playlist } from '../../../../redux/modules/playlist';
 
-const PlaylistMyPage = () => {
+const PlaylistMyPage = ({playerContainer}) => {
   const isPlaylistReady = useSelector(state => playlist.getInfo(state.playlist).isReady);
 
   return (
@@ -19,7 +19,7 @@ const PlaylistMyPage = () => {
         <div id="avbox_playlist">
           {isPlaylistReady && <PlaylistHeader />}
         </div>
-        <PlayerContainer />
+        {playerContainer}
         <Container id="unit_container">
           {
             isPlaylistReady && (

@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import { selectors as player } from '../../../redux/modules/player';
 import { useSubscribeVolume } from '../../../pkg/jwpAdapter';
 import { setVolume } from '../../../pkg/jwpAdapter/adapter';
+import { noop } from '../../../helpers/utils';
 
 export const VolumeKnob = ({ left, right }) => {
   const [activated, setActivated] = useState(false);
@@ -31,7 +32,7 @@ export const VolumeKnob = ({ left, right }) => {
   }, [activated]);
 
   useEffect(() => {
-    if (!isReady) return () => null;
+    if (!isReady) return noop;
 
     const handleEnd = e => {
       e.preventDefault();

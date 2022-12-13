@@ -268,6 +268,7 @@ const setStatus = (state, action) => {
     // update wip & errors map to mark this collection was requested fully (single)
     wip.collections    = { ...wip.collections, [action.payload.id]: false };
     errors.collections = { ...errors.collections, [action.payload.id]: null };
+    fetched.collections = { ...fetched.collections, [action.payload.id]: true };
     break;
   case FETCH_WINDOW_SUCCESS:
     wip.cWindow    = { ...wip.cWindow, [action.payload.id]: false };

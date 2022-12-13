@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react';
-import { useDispatch, useSelector, shallowEqual } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { selectors, actions } from '../../../../redux/modules/mdb';
 import moment from 'moment/moment';
-import { isEqual } from 'lodash';
 
 import { selectors as my } from '../../../../redux/modules/my';
 import { getCuByCcuSkipPreparation } from '../../../../helpers/links';
@@ -16,17 +15,16 @@ const BuildPlaylistLastDaily = ({ t }) => {
   const lastLessonId = useSelector(state => selectors.getLastLessonId(state.mdb));
   const wip          = useSelector(state => selectors.getWip(state.mdb).lastLesson);
   const err          = useSelector(state => selectors.getErrors(state.mdb).lastLesson);
-  const ccu          = useSelector(state => selectors.getDenormCollection(state.mdb, lastLessonId), isEqual) || false;
-  const ccuFetched   = useSelector(state => selectors.getFullCollectionFetched(state.mdb, lastLessonId)?.[lastLessonId], shallowEqual);
+  const ccu          = useSelector(state => selectors.getDenormCollection(state.mdb, lastLessonId)) || false;
   const historyItems = useSelector(state => my.getList(state.my, MY_NAMESPACE_HISTORY));
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!wip && !err && !lastLessonId && !ccuFetched) {
+    if (!wip && !err && !lastLessonId) {
       dispatch(actions.fetchLatestLesson());
     }
-  }, [lastLessonId, ccuFetched, wip, err, dispatch]);
+  }, [lastLessonId, wip, err, dispatch]);
 
   const wipErr = WipErr({ wip: wip || !ccu.cuIDs?.length, err, t });
 

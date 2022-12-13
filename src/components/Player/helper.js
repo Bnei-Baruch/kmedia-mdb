@@ -1,9 +1,8 @@
-import { PLAYER_ACTIONS_BY_EVENT } from '../../redux/modules/player';
+import moment from 'moment';
+
 import { MT_VIDEO, MT_AUDIO } from '../../helpers/consts';
 import { isEmpty } from '../../helpers/utils';
 import { PLAYER_POSITION_STORAGE_KEY } from './constants';
-import { actions as playlistActions } from '../../redux/modules/playlist';
-import moment from 'moment';
 
 export const DEFAULT_PLAYER_VOLUME     = 80;
 export const PLAYER_VOLUME_STORAGE_KEY = 'jwplayer.volume';
