@@ -9,18 +9,12 @@ import { getEmbedFromQuery } from '../../../../helpers/player';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import Info from '../widgets/Info/Info';
 import Materials from '../widgets/UnitMaterials/Materials';
-import { useSelector } from 'react-redux';
-import { selectors as playlist } from '../../../../redux/modules/playlist';
-import WipErr from '../../../shared/WipErr/WipErr';
-import { withNamespaces } from 'react-i18next';
 
-const SingleMediaPage = ({ playerContainer, t }) => {
+const SingleMediaPage = ({ playerContainer }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const location           = useLocation();
 
-  const isPlaylistReady = useSelector(state => playlist.getInfo(state.playlist).isReady);
-  const wipErr          = WipErr({ wip: !isPlaylistReady, t });
-  const embed           = getEmbedFromQuery(location);
+  const embed = getEmbedFromQuery(location);
 
   if (embed) return playerContainer;
 
@@ -41,19 +35,15 @@ const SingleMediaPage = ({ playerContainer, t }) => {
           </Grid.Row>
           <Grid.Row>
             <Grid.Column>
-              {
-                !wipErr && (
-                  <Container className="unit_container">
-                    <Info />
-                    <Materials />
-                  </Container>
-                )
-              }
+              <Container className="unit_container">
+                <Info />
+                <Materials />
+              </Container>
             </Grid.Column>
           </Grid.Row>
         </Grid.Column>
         {
-          !isMobileDevice && !wipErr && (
+          !isMobileDevice && (
             <Grid.Column mobile={16} tablet={6} computer={6}>
               <Recommended />
             </Grid.Column>
@@ -64,4 +54,4 @@ const SingleMediaPage = ({ playerContainer, t }) => {
   );
 };
 
-export default withNamespaces()(SingleMediaPage);
+export default SingleMediaPage;

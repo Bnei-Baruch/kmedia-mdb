@@ -14,7 +14,7 @@ const BuildPlaylistByUnit = ({ cts }) => {
   const fetched     = useSelector(state => mdb.getFullUnitFetched(state.mdb)[id], shallowEqual);
   const wipCU       = useSelector(state => mdb.getWip(state.mdb).units[id]);
   const errCU       = useSelector(state => mdb.getErrors(state.mdb).units[id]);
-  const { id: cId } = Object.values(unit.collections).find(c => cts.includes(c.content_type)) || false;
+  const { id: cId } = unit && Object.values(unit.collections).find(c => cts.includes(c.content_type)) || false;
 
   const dispatch = useDispatch();
 

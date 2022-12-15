@@ -4,6 +4,7 @@ import { usePreloader } from '../../../pkg/jwpAdapter';
 
 const Preloader = () => {
   const loaded = usePreloader();
+
   if (loaded === true) return null;
 
   return (

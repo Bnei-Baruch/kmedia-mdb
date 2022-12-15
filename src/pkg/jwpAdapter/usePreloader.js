@@ -10,17 +10,21 @@ const usePreloader = () => {
 
   const dispatch = useDispatch();
   useEffect(() => {
-    if (loaded !== false || !isReady) return null;
+    if (loaded || !isReady) return null;
 
     const p = window.jwplayer(JWPLAYER_ID);
 
-    const checkBufferTime = () => {
+    const markAsLoaded = (e) => {
       dispatch(actions.setLoaded(true));
-      p.off('bufferChange', checkBufferTime);
+      p.off('meta', markAsLoaded);
+      p.off('bufferFull', markAsLoaded);
     };
-
-    p.on('bufferChange', checkBufferTime);
-    return () => p.off('bufferChange', checkBufferTime);
+    p.on('meta', markAsLoaded);
+    p.on('bufferFull', markAsLoaded);
+    return () => {
+      p.off('meta', markAsLoaded);
+      p.off('bufferFull', markAsLoaded);
+    };
 
   }, [loaded, isReady]);
 

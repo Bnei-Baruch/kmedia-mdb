@@ -9,7 +9,8 @@ import { selectors as playlist } from '../../../../redux/modules/playlist';
 import BuildSingleMediaPlaylist from './BuildSingleMediaPlaylist';
 
 const SingleMediaContainer = () => {
-  const playerContainer = <PlayerContainer />;;
+  const playerContainer = <PlayerContainer />;
+  ;
   return (
     <>
       <BuildSingleMediaPlaylist />
@@ -21,8 +22,8 @@ const SingleMediaContainer = () => {
 const PageSwitcher = withNamespaces()(({ playerContainer, t }) => {
   const { isReady } = useSelector(state => playlist.getInfo(state.playlist));
 
-  const wipErr = WipErr({ wip: !isReady, t });
-  if (wipErr) return wipErr;
+  if (!isReady)
+    return WipErr({ wip: !isReady, t });
 
   return <SingleMediaPage playerContainer={playerContainer} />;
 });

@@ -28,7 +28,7 @@ const CollectionItem = ({ id, t }) => {
 
   return (
     <List.Item key={id} className="media_item">
-      <UnitLogo unitId={cu.id} collectionId={id} />
+      <UnitLogo unitId={cu?.id} collectionId={id} />
       <div className="media_item__content">
         <Header as={Link} to={canonicalLink(c)} content={name} />
         <div>{t(`constants.content-types.${content_type}`)}</div>

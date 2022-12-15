@@ -8,6 +8,8 @@ import PlayerContainer from '../../Player/PlayerContainer';
 import { useSelector } from 'react-redux';
 import { selectors as playlist } from '../../../redux/modules/playlist';
 import SingleMediaPage from './SingleMedia/SingleMediaPage';
+import { withNamespaces } from 'react-i18next';
+import WipErr from '../../shared/WipErr/WipErr';
 
 export const PlaylistItemPageSeries = () => {
   const builder = <BuildPlaylistByUnit cts={[CT_LESSONS_SERIES]} />;
@@ -39,12 +41,13 @@ const Decorator = ({ builder }) => {
   );
 };
 
-const PageSwitcher = ({ playerContainer }) => {
+const PageSwitcher = withNamespaces()(({ playerContainer, t }) => {
   const { isReady, isSingleMedia } = useSelector(state => playlist.getInfo(state.playlist));
   if (!isReady)
-    return null;
+    return WipErr({ wip: !isReady, t });
+
   if (isSingleMedia)
     return <SingleMediaPage playerContainer={playerContainer} />;
 
   return <PlaylistPage playerContainer={playerContainer} />;
-};
+});

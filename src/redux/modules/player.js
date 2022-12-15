@@ -2,14 +2,13 @@ import { createAction } from 'redux-actions';
 import { handleActions } from './settings';
 import { PLAYER_OVER_MODES } from '../../helpers/consts';
 
-const PLAYER_READY          = 'Player/READY';
-const PLAYER_REMOVE         = 'Player/REMOVE';
-const PLAYER_PLAY           = 'Player/PLAY';
-const PLAYER_PAUSE          = 'Player/PAUSE';
-const PLAYER_RATE           = 'Player/RATE';
-const PLAYER_RESIZE         = 'Player/RESIZE';
-const PLAYER_MUTE_UNMUTE    = 'Player/MUTE_UNMUTE';
-const PLAYER_DESTROY_PLUGIN = 'Player/DESTROY_PLUGIN';
+const PLAYER_READY       = 'Player/READY';
+const PLAYER_REMOVE      = 'Player/REMOVE';
+const PLAYER_PLAY        = 'Player/PLAY';
+const PLAYER_PAUSE       = 'Player/PAUSE';
+const PLAYER_RATE        = 'Player/RATE';
+const PLAYER_RESIZE      = 'Player/RESIZE';
+const PLAYER_MUTE_UNMUTE = 'Player/MUTE_UNMUTE';
 
 const PLAYER_SET_FILE          = 'Player/SET_FILE';
 const PLAYER_SET_OVER_MODE     = 'Player/SET_OVER_MODE';
@@ -23,8 +22,7 @@ export const types = {
   PLAYER_PLAY,
   PLAYER_PAUSE,
   PLAYER_MUTE_UNMUTE,
-  PLAYER_REMOVE,
-  PLAYER_DESTROY_PLUGIN
+  PLAYER_REMOVE
 };
 
 // Actions
@@ -32,12 +30,11 @@ const playerReady  = createAction(PLAYER_READY);
 const playerRemove = createAction(PLAYER_REMOVE);
 const setFile      = createAction(PLAYER_SET_FILE);
 
-const playerPlay          = createAction(PLAYER_PLAY);
-const playerPause         = createAction(PLAYER_PAUSE);
-const playerRate          = createAction(PLAYER_RATE);
-const playerResize        = createAction(PLAYER_RESIZE);
-const playerMuteUnmute    = createAction(PLAYER_MUTE_UNMUTE);
-const playerDestroyPlugin = createAction(PLAYER_DESTROY_PLUGIN);
+const playerPlay       = createAction(PLAYER_PLAY);
+const playerPause      = createAction(PLAYER_PAUSE);
+const playerRate       = createAction(PLAYER_RATE);
+const playerResize     = createAction(PLAYER_RESIZE);
+const playerMuteUnmute = createAction(PLAYER_MUTE_UNMUTE);
 
 const setOverMode   = createAction(PLAYER_SET_OVER_MODE);
 const setFullScreen = createAction(PLAYER_SET_IS_FULLSCREEN);
@@ -69,8 +66,9 @@ const initialState = {
 };
 
 const onReady = draft => {
-  draft.wip   = false;
-  draft.ready = true;
+  draft.wip    = false;
+  draft.ready  = true;
+  draft.loaded = false;
 };
 
 const onRemove = draft => {
@@ -87,9 +85,12 @@ const onSetMode = (draft, payload) => {
 };
 
 const onSetFile = (draft, payload) => {
-  draft.played = false;
-  draft.loaded = false;
-  draft.file   = payload;
+  //fix preload bug
+  if (draft.file?.id !== payload.id) {
+    draft.played = false;
+    draft.loaded = false;
+  }
+  draft.file = payload;
 };
 
 const onPlay = (draft, payload) => {
@@ -149,5 +150,4 @@ export const PLAYER_ACTIONS_BY_EVENT = {
   'pause': playerPause,
   'resize': playerResize,
   'mute': playerMuteUnmute,
-  'destroyPlugin': playerDestroyPlugin,
 };

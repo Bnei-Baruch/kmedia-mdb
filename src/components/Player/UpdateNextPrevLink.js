@@ -7,7 +7,7 @@ import usePlaylistItemLink from './hooks/usePlaylistItemLink';
 const UpdateLocation = () => {
   const history = useHistory();
 
-  const { cuId, cId, wip, isReady } = useSelector(state => playlist.getInfo(state.playlist));
+  const { cuId, cId, wip } = useSelector(state => playlist.getInfo(state.playlist));
   const prevCId                     = useRef(null);
   const prevCuId                    = useRef(null);
   const link                        = usePlaylistItemLink(cuId);

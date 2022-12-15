@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useMemo } from 'react';
 import { useSelector, shallowEqual, useDispatch } from 'react-redux';
 
-import { actions, selectors as player } from '../../redux/modules/player';
+import { selectors as player, actions } from '../../redux/modules/player';
 import { JWPLAYER_ID, MY_NAMESPACE_HISTORY } from '../../helpers/consts';
 import { useLocation } from 'react-router-dom';
 import { startEndFromQuery } from '../../components/Player/Controls/helper';
