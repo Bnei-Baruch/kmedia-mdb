@@ -7,7 +7,7 @@ import { Header, Icon, Menu, Ref, Segment } from 'semantic-ui-react';
 import Headroom from 'react-headroom';
 
 import { ALL_LANGUAGES } from '../../helpers/consts';
-import playerHelper from '../../helpers/player';
+import { getEmbedFromQuery } from '../../helpers/player';
 import { selectors as settings } from '../../redux/modules/settings';
 import * as shapes from '../shapes';
 import Link from '../Language/MultiLanguageLink';
@@ -25,6 +25,7 @@ import DownloadTrim from '../AVPlayer/Share/DownloadTrim';
 import KmediaRouters from '../../route/KmediaRouters';
 import { withRouter } from '../../helpers/withRouterPatch';
 import DonationPopup from '../Sections/Home/DonationPopup';
+import DownloadTrim from '../Share/DownloadTrim';
 
 const WrappedOmniBoxWithChronicles = ({ location }) => {
   const chronicles = useContext(ClientChroniclesContext);
@@ -74,7 +75,7 @@ class Layout extends Component {
     this.state = {
       sidebarActive: false,
       isShowHeaderSearch: false,
-      embed: playerHelper.getEmbedFromQuery(location),
+      embed: getEmbedFromQuery(location),
     };
   }
 

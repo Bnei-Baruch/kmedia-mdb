@@ -16,14 +16,12 @@ import {
   CT_WOMEN_LESSON,
   FN_SHOW_LESSON_AS_UNITS,
   PAGE_NS_LESSONS,
-  UNIT_LESSONS_TYPE,
-  MY_NAMESPACE_HISTORY
+  UNIT_LESSONS_TYPE
 } from '../../../helpers/consts';
 import { isEmpty, usePrevious } from '../../../helpers/utils';
 import { selectors as filters } from '../../../redux/modules/filters';
 import { actions, selectors as lists } from '../../../redux/modules/lists';
 import { selectors as settings } from '../../../redux/modules/settings';
-import { actions as myActions } from '../../../redux/modules/my';
 
 import FilterLabels from '../../FiltersAside/FilterLabels';
 import Pagination from '../../Pagination/Pagination';
@@ -72,10 +70,6 @@ const MainPage = ({ t }) => {
     }
   }, [language, dispatch, pageNo, selected, listParams]);
 
-  useEffect(() => {
-    dispatch(myActions.fetch(MY_NAMESPACE_HISTORY));
-  }, [dispatch]);
-
   const wipErr = WipErr({ wip, err, t });
 
   return (<>
@@ -93,17 +87,16 @@ const MainPage = ({ t }) => {
       {
         wipErr || items?.map(({ id, content_type }, i) => {
           switch (true) {
-            case COLLECTION_DAILY_LESSONS.includes(content_type):
-              return <DailyLessonItem id={id} key={i} />;
-            case COLLECTION_LESSONS_TYPE.includes(content_type):
-              return <CollectionItem id={id} key={i} />;
-            case UNIT_LESSONS_TYPE.includes(content_type):
-              return <UnitItem id={id} key={i} />;
-            default:
-              return null;
+          case COLLECTION_DAILY_LESSONS.includes(content_type):
+            return <DailyLessonItem id={id} key={i} />;
+          case COLLECTION_LESSONS_TYPE.includes(content_type):
+            return <CollectionItem id={id} key={i} />;
+          case UNIT_LESSONS_TYPE.includes(content_type):
+            return <UnitItem id={id} key={i} />;
+          default:
+            return null;
           }
-        }
-        )
+        })
       }
       <Divider fitted />
       <Container className="padded pagination-wrapper" textAlign="center">

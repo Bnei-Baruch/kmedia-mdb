@@ -175,13 +175,7 @@
     },
     "buttons": {
       "edit-back": "חזור",
-      "start-position": "התחלה",
-      "end-position": "סיום",
-      "click-to-set": "לחץ לסימון",
       "tap-to-unmute": "לחץ לביטול השתקה"
-    },
-    "share": {
-      "title": "צפה בסרטון"
     },
     "error": {
       "loading": "שגיאה בטעינת קובץ"
@@ -190,9 +184,37 @@
       "series-by-topic": "סדרת שיעורים בנושא:"
     },
     "download": {
-      "iconHoverText": "להוריד את הקטע שסימנת",
-      "downloadButton": "הורד",
+      "icon-hover-text": "להוריד את הקטע שסימנת",
+      "download-button": "הורד",
       "copyButton": "העתק קישור"
+    },
+    "settings": {
+      "playback": "Playback",
+      "playback-speed": "Playback speed",
+      "quality": "Quality",
+      "language": "Language",
+      "audio": "אודיו",
+      "video": "וידאו",
+      "normal": "normal"
+    },
+    "share": {
+      "title": "צפה בסרטון",
+      "start-position": "התחלה",
+      "end-position": "סיום",
+      "click-to-set": "לחץ לסימון",
+      "reset-to-full": "Reset to full video"
+    },
+    "controls": {
+      "pause": "Pause",
+      "play": "Play",
+      "mute": "Mute",
+      "fullscreen": "Fullscreen",
+      "share": "Share",
+      "settings": "Settings",
+      "rewind10": "Rewind 10 seconds",
+      "skip10": "Skip 10 seconds",
+      "next-video": "Next video",
+      "prev-video": "Previous video"
     }
   },
   "playlist": {

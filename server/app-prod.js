@@ -57,6 +57,8 @@ app.use(helmet({
         'archive',                      // suitcase
         '*.usersnap.com',
         'cdnjs.cloudflare.com',         // for pdf worker
+        'cdn.jwplayer.com',
+        '*.jwpcdn.com',
       ],
       'style-src': [
         '\'self\'',

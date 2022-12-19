@@ -1,3 +1,4 @@
+/*
 $player-color: $black;
 
 .mediaplayer {
@@ -64,9 +65,18 @@ $player-color: $black;
       padding: 0 .5rem;
       text-transform: lowercase;
       cursor: pointer;
-      &:hover {background: rgba($white, .2);}
-      &:focus {outline: none;}
-      i {margin: 0 !important;}
+
+      &:hover {
+        background: rgba($white, .2);
+      }
+
+      &:focus {
+        outline: none;
+      }
+
+      i {
+        margin: 0 !important;
+      }
 
       @include small-mobile {
         min-width: 2rem;
@@ -284,3 +294,4 @@ $player-color: $black;
   }
 
 }
+*/

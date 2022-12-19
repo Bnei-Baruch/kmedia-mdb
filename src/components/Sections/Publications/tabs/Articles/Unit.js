@@ -8,19 +8,20 @@ import { Button, Container, Grid, Header } from 'semantic-ui-react';
 import { actions, selectors } from '../../../../../redux/modules/mdb';
 import { selectors as settings } from '../../../../../redux/modules/settings';
 import Helmets from '../../../../shared/Helmets/index';
-import TranscriptionContainer from '../../../../Pages/Unit/widgets/UnitMaterials/Transcription/TranscriptionContainer';
+import TranscriptionContainer
+  from '../../../../Pages/WithPlayer/widgets/UnitMaterials/Transcription/TranscriptionContainer';
 import Share from '../../../Library/Share';
 import { isLanguageRtl } from '../../../../../helpers/i18n-utils';
-import MediaDownloads from '../../../../Pages/Unit/widgets/Downloads/MediaDownloads';
+import MediaDownloads from '../../../../Pages/WithPlayer/widgets/MediaDownloads';
 import WipErr from '../../../../shared/WipErr/WipErr';
-import Recommended from '../../../../Pages/Unit/widgets/Recommended/Main/Recommended';
-import playerHelper from '../../../../../helpers/player';
+import Recommended from '../../../../Pages/WithPlayer/widgets/Recommended/Main/Recommended';
+import { getEmbedFromQuery } from '../../../../../helpers/player';
 import { ClientChroniclesContext } from '../../../../../helpers/app-contexts';
 import { selectors as tagSelectors } from '../../../../../redux/modules/tags';
 import Link from '../../../../Language/MultiLanguageLink';
 
 const renderHeader = (unit, tagNames, t, language) => {
-  const isRtl = isLanguageRtl(language);
+  const isRtl    = isLanguageRtl(language);
   const position = isRtl ? 'right' : 'left';
   const subText2 = t(`publications.header.subtext2`);
 
@@ -48,13 +49,13 @@ const renderHeader = (unit, tagNames, t, language) => {
                   {unit.name}
                   {
                     unit.description &&
-                      <Header.Subheader>{unit.description}</Header.Subheader>
+                    <Header.Subheader>{unit.description}</Header.Subheader>
                   }
                   {
                     subText2 &&
-                      <Header.Subheader className="section-header__subtitle2">
-                        {subText2}
-                      </Header.Subheader>
+                    <Header.Subheader className="section-header__subtitle2">
+                      {subText2}
+                    </Header.Subheader>
                   }
                 </Header.Content>
               </Header>
@@ -71,7 +72,7 @@ const renderHeader = (unit, tagNames, t, language) => {
       </Container>
     </div>
   );
-}
+};
 
 const renderHelmet = unit => (
   <Fragment>
@@ -98,14 +99,14 @@ const renderArticle = (unit, chroniclesAppend) => (
 const ArticlePage = ({ t }) => {
   const getTagById = useSelector(state => tagSelectors.getTagById(state.tags));
 
-  const location = useLocation();
-  const { id } = useParams();
+  const location   = useLocation();
+  const { id }     = useParams();
   const chronicles = useContext(ClientChroniclesContext);
 
   const language = useSelector(state => settings.getLanguage(state.settings));
-  const unit = useSelector(state => selectors.getDenormContentUnit(state.mdb, id));
-  const wip = useSelector(state => selectors.getWip(state.mdb).units[id]);
-  const err = useSelector(state => selectors.getErrors(state.mdb).units[id]);
+  const unit     = useSelector(state => selectors.getDenormContentUnit(state.mdb, id));
+  const wip      = useSelector(state => selectors.getWip(state.mdb).units[id]);
+  const err      = useSelector(state => selectors.getErrors(state.mdb).units[id]);
 
   const tags = unit && unit.tags ? unit.tags : [];
 
@@ -119,7 +120,7 @@ const ArticlePage = ({ t }) => {
     }
 
     dispatch(actions.fetchUnit(id));
-  }, [dispatch, err, id, unit, wip])
+  }, [dispatch, err, id, unit, wip]);
 
   const wipErr = WipErr({ wip, err, t });
   if (wipErr) {
@@ -130,10 +131,9 @@ const ArticlePage = ({ t }) => {
     return null;
   }
 
-  const chroniclesAppend = chronicles ?chronicles.append.bind(chronicles) : () => null;
+  const chroniclesAppend = chronicles ? chronicles.append.bind(chronicles) : () => null;
 
-  const embed = playerHelper.getEmbedFromQuery(location);
-
+  const embed = getEmbedFromQuery(location);
   return !embed
     ? (
       <>
@@ -161,7 +161,7 @@ const ArticlePage = ({ t }) => {
     ) : (
       renderHeader(unit, t, language)
     );
-}
+};
 
 ArticlePage.propTypes = {
   t: PropTypes.func.isRequired,

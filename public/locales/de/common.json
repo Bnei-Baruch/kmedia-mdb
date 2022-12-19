@@ -173,13 +173,7 @@
     },
     "buttons": {
       "edit-back": "Zurück",
-      "start-position": "Start",
-      "end-position": "Ende",
-      "click-to-set": "Bestätigen",
       "tap-to-unmute": "Ton einschalten"
-    },
-    "share": {
-      "title": "Dieses Video ansehen"
     },
     "error": {
       "loading": "Beim Laden der Datei ist ein Fehler aufgetreten."
@@ -188,9 +182,37 @@
       "series-by-topic": "Series of lessons on the topic:"
     },
     "download": {
-      "iconHoverText": "Download the excerpt you marked",
-      "downloadButton": "Download",
+      "icon-hover-text": "Download the excerpt you marked",
+      "download-button": "Download",
       "copyButton": "Copy link"
+    },
+    "settings": {
+      "playback": "Playback",
+      "playback-speed": "Playback speed",
+      "quality": "Quality",
+      "language": "Language",
+      "audio": "Audio",
+      "video": "Video",
+      "normal": "normal"
+    },
+    "share": {
+      "title": "Dieses Video ansehen",
+      "start-position": "Start",
+      "end-position": "Ende",
+      "click-to-set": "Bestätigen",
+      "reset-to-full": "Reset to full video"
+    },
+    "controls": {
+      "pause": "Pause",
+      "play": "Play",
+      "mute": "Mute",
+      "fullscreen": "Fullscreen",
+      "share": "Share",
+      "settings": "Settings",
+      "rewind10": "Rewind 10 seconds",
+      "skip10": "Skip 10 seconds",
+      "next-video": "Next video",
+      "prev-video": "Previous video"
     }
   },
   "playlist": {

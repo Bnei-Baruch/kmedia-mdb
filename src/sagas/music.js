@@ -28,11 +28,4 @@ function* watchFetchMusic() {
   yield takeLatest(types.FETCH_MUSIC, fetchMusic);
 }
 
-// function* watchSetTab() {
-//   yield takeLatest(types.SET_TAB, setTab);
-// }
-
-export const sagas = [
-  watchFetchMusic,
-  // watchSetTab,
-];
+export const sagas = [watchFetchMusic];

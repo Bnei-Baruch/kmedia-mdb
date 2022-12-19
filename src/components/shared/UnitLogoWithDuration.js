@@ -6,6 +6,7 @@ import { MY_NAMESPACE_HISTORY } from '../../helpers/consts';
 import { formatDuration } from '../../helpers/utils';
 import UnitLogo from './Logo/UnitLogo';
 import { getProgress } from './ContentItem/helper';
+import { getSavedTime } from '../Player/helper';
 
 export const getLogoUnit = (content_units, historyItems) => {
   let logoUnit;
@@ -20,9 +21,9 @@ export const getLogoUnit = (content_units, historyItems) => {
 const UnitLogoWithDuration = ({ unit, ...propz }) => {
   const { id, duration } = unit;
 
-  const historyItems = useSelector(state => my.getList(state.my, MY_NAMESPACE_HISTORY)) || [];
-  const historyUnit = historyItems.find(x => x.content_unit_uid === id);
-  const playTime = historyUnit?.data.current_time;
+  const historyItems               = useSelector(state => my.getList(state.my, MY_NAMESPACE_HISTORY)) || [];
+  const historyUnit                = historyItems.find(x => x.content_unit_uid === id);
+  const { current_time: playTime } = getSavedTime(id, historyUnit);
 
   if (propz.width === undefined) {
     propz.width = 140;
@@ -33,7 +34,7 @@ const UnitLogoWithDuration = ({ unit, ...propz }) => {
       {
         duration && (
           <div className="duration">
-            { formatDuration(duration, null) }
+            {formatDuration(duration, null)}
           </div>
         )
       }

@@ -4,7 +4,6 @@ import { actions, types } from '../redux/modules/my';
 import Api from '../helpers/Api';
 import { selectors as authSelectors } from '../redux/modules/auth';
 import { actions as mdbActions, selectors as mdbSelectors } from '../redux/modules/mdb';
-import { actions as recommendedActions } from '../redux/modules/recommended';
 import {
   IsCollectionContentType,
   MY_NAMESPACE_BOOKMARKS,
@@ -15,6 +14,7 @@ import {
 } from '../helpers/consts';
 import { updateQuery } from './helpers/url';
 import { selectors as settings } from '../redux/modules/settings';
+import { fetchViewsByUIDs } from './recommended';
 
 function* updatePageInQuery(action) {
   const { pageNo } = action.payload;
@@ -22,7 +22,7 @@ function* updatePageInQuery(action) {
   yield* updateQuery(query => Object.assign(query, { page }));
 }
 
-function* fetch(action) {
+export function* fetch(action) {
   const token = yield select(state => authSelectors.getToken(state.auth));
   if (!token) return;
   // eslint-disable-next-line prefer-const
@@ -41,29 +41,29 @@ function* fetch(action) {
     let co_uids = [];
 
     switch (namespace) {
-      case MY_NAMESPACE_HISTORY:
-        cu_uids = data.items?.map(x => x.content_unit_uid) || [];
-        break;
-      case MY_NAMESPACE_REACTIONS:
-        cu_uids = data.items?.filter(x => !IsCollectionContentType(x.subject_type)).map(x => x.subject_uid) || [];
-        break;
-      case MY_NAMESPACE_PLAYLISTS:
-        if (data.items) {
-          cu_uids = data.items.filter(p => p.items)
-            .reduce((acc, p) => acc.concat(p.items.flatMap(x => x.poster_unit_uid)), []);
-        }
+    case MY_NAMESPACE_HISTORY:
+      cu_uids = data.items?.map(x => x.content_unit_uid) || [];
+      break;
+    case MY_NAMESPACE_REACTIONS:
+      cu_uids = data.items?.filter(x => !IsCollectionContentType(x.subject_type)).map(x => x.subject_uid) || [];
+      break;
+    case MY_NAMESPACE_PLAYLISTS:
+      if (data.items) {
+        cu_uids = data.items.filter(p => p.items)
+          .reduce((acc, p) => acc.concat(p.items.flatMap(x => x.poster_unit_uid)), []);
+      }
 
-        cu_uids.concat(data.items.map(x => x.content_unit_uid).filter(x => !!x));
-        break;
-      case MY_NAMESPACE_SUBSCRIPTIONS:
-        cu_uids = data.items?.map(x => x.content_unit_uid) || [];
-        co_uids = data.items?.filter(s => s.collection_uid).map(s => s.collection_uid) || [];
-        break;
-      case MY_NAMESPACE_BOOKMARKS:
-        cu_uids          = data.items?.map(x => x.subject_uid) || [];
-        with_derivations = true;
-        break;
-      default:
+      cu_uids.concat(data.items.map(x => x.content_unit_uid).filter(x => !!x));
+      break;
+    case MY_NAMESPACE_SUBSCRIPTIONS:
+      cu_uids = data.items?.map(x => x.content_unit_uid) || [];
+      co_uids = data.items?.filter(s => s.collection_uid).map(s => s.collection_uid) || [];
+      break;
+    case MY_NAMESPACE_BOOKMARKS:
+      cu_uids          = data.items?.map(x => x.subject_uid) || [];
+      with_derivations = true;
+      break;
+    default:
     }
 
     cu_uids = yield select(state => mdbSelectors.skipFetchedCU(state.mdb, cu_uids, with_files));
@@ -91,22 +91,16 @@ function* fetch(action) {
     yield put(actions.fetchSuccess({ namespace, addToList, ...data }));
 
     try {
-      const { data: viewData } = yield call(Api.views, cu_uids);
-      const views              = cu_uids.reduce((acc, uid, i) => {
-        acc[uid] = viewData.views[i];
-        return acc;
-      }, {});
-      yield put(recommendedActions.receiveViews(views));
+      yield fetchViewsByUIDs(cu_uids);
     } catch (err) {
       console.error('error on recommendation service', err);
-      yield put(recommendedActions.receiveViews({}));
     }
   } catch (err) {
     yield put(actions.fetchFailure({ namespace, ...err }));
   }
 }
 
-function* fetchOne(action) {
+export function* fetchOne(action) {
   const token = yield select(state => authSelectors.getToken(state.auth));
   if (!token) return;
   const { namespace, ...params } = action.payload;
@@ -117,10 +111,10 @@ function* fetchOne(action) {
 
     let cu_uids = [];
     switch (namespace) {
-      case MY_NAMESPACE_PLAYLISTS:
-        cu_uids = data.items?.map(x => x.content_unit_uid) || [];
-        break;
-      default:
+    case MY_NAMESPACE_PLAYLISTS:
+      cu_uids = data.items?.map(x => x.content_unit_uid) || [];
+      break;
+    default:
     }
 
     if (cu_uids.length > 0) {

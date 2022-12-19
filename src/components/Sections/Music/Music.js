@@ -9,18 +9,11 @@ import SectionHeader from '../../shared/SectionHeader';
 import WipErr from '../../shared/WipErr/WipErr';
 import { selectors, actions } from '../../../redux/modules/music';
 import List from './List';
-// import filterComponents from '../../Filters/components/index';
-// import Filters from '../../Filters/Filters';
-// import { noop } from '../../../helpers/utils';
-
-// const filters = [
-//   { name: 'date-filter', component: filterComponents.DateFilter },
-// ];
 
 const Music = ({ t }) => {
-  const wip = useSelector(state => selectors.getWip(state.music));
-  const err = useSelector(state => selectors.getError(state.music));
-  const items = useSelector(state => selectors.getMusicData(state.music));
+  const wip                         = useSelector(state => selectors.getWip(state.music));
+  const err                         = useSelector(state => selectors.getError(state.music));
+  const items                       = useSelector(state => selectors.getMusicData(state.music));
   const [dataLoaded, setDataLoaded] = useState(false);
 
   const dispatch = useDispatch();
@@ -33,7 +26,6 @@ const Music = ({ t }) => {
 
   }, [dispatch, wip, err, dataLoaded]);
 
-  // console.log('items:', items);
 
   const content = WipErr({ wip, err, t }) || (
     <Container className="padded">
@@ -47,19 +39,13 @@ const Music = ({ t }) => {
     <>
       <SectionHeader section="music" />
       <Divider fitted />
-      {/* <Filters
-        namespace="music"
-        filters={filters}
-        onChange={noop}
-        onHydrated={noop}
-      /> */}
       {content}
     </>
   );
-}
+};
 
 Music.propTypes = {
   t: PropTypes.func.isRequired,
-}
+};
 
 export default withTranslation()(Music);

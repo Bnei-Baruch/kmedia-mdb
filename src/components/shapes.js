@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { PLAYER_MODE } from './AVPlayer/constants';
+import { PLAYER_MODE } from './Player/constants';
 
 export const WIP    = PropTypes.bool;
 export const WipMap = PropTypes.objectOf(PropTypes.oneOfType([WIP, PropTypes.objectOf(WIP)]));

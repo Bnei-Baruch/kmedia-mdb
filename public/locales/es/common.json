@@ -173,13 +173,7 @@
     },
     "buttons": {
       "edit-back": "Regreso",
-      "start-position": "Inicio",
-      "end-position": "Final",
-      "click-to-set": "Clic para marcar",
       "tap-to-unmute": "Activar el sonido"
-    },
-    "share": {
-      "title": "Mira el video"
     },
     "error": {
       "loading": "Error al cargar el video"
@@ -188,9 +182,37 @@
       "series-by-topic": "Serie de lecciones sobre el tema:"
     },
     "download": {
-      "iconHoverText": "Descarga el extracto que marcaste",
-      "downloadButton": "Descargar",
+      "icon-hover-text": "Descarga el extracto que marcaste",
+      "download-button": "Descargar",
       "copyButton": "Copiar link"
+    },
+    "settings": {
+      "playback": "Playback",
+      "playback-speed": "Playback speed",
+      "quality": "Quality",
+      "language": "Language",
+      "audio": "Audio",
+      "video": "Video",
+      "normal": "normal"
+    },
+    "share": {
+      "title": "Mira el video",
+      "start-position": "Inicio",
+      "end-position": "Final",
+      "click-to-set": "Clic para marcar",
+      "reset-to-full": "Reset to full video"
+    },
+    "controls": {
+      "pause": "Pause",
+      "play": "Play",
+      "mute": "Mute",
+      "fullscreen": "Fullscreen",
+      "share": "Share",
+      "settings": "Settings",
+      "rewind10": "Rewind 10 seconds",
+      "skip10": "Skip 10 seconds",
+      "next-video": "Next video",
+      "prev-video": "Previous video"
     }
   },
   "playlist": {

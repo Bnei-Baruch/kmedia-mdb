@@ -12,7 +12,7 @@ import UnitLogoWithDuration from '../../shared/UnitLogoWithDuration';
 const CollectionItem = ({ id }) => {
   const { t } = useTranslation();
   const c     = useSelector(state => mdb.getDenormCollection(state.mdb, id));
-  if (!c) return null;
+  if (!c?.content_units) return null;
 
   const { film_date, name, content_units: cus, start_date, end_date } = c;
 
