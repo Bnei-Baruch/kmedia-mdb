@@ -25,7 +25,8 @@
       "old-site": "Old Site",
       "podcast": "Podcast",
       "subscribe": "Subscribe For Updates",
-      "bookmarks": "Bookmarks"
+      "bookmarks": "Bookmarks",
+      "sketches": "Sketches"
     },
     "footer": {
       "copyright": "Copyright © 2003-{{year}}",
@@ -114,7 +115,8 @@
       "person-filter": "Author",
       "original-language-filter": "Original Language",
       "locations-filter": "Location",
-      "free-text": "Free Text"
+      "free-text": "Free Text",
+      "sort-by-filter": "Sort by"
     },
     "media-types": {
       "audio": "Audio",
@@ -135,7 +137,7 @@
       "LECTURE": "Lectures",
       "WOMEN_LESSON": "Women Lessons",
       "CHILDREN_LESSON": "Children Lessons",
-      "LESSONS_SERIES": "Selected Study Series",
+      "LESSONS_SERIES": "Study Series",
       "LECTURE_SERIES": "Lecture Series",
       "CLIP": "Clips",
       "VIDEO_PROGRAM_CHAPTER": "Programs",
@@ -146,7 +148,8 @@
       "KITEI_MAKOR": "Sources Materials",
       "LIKUTIM": "Assorted Excerpts",
       "SOURCE": "Kabbalah Library",
-      "PICNIC": "Picnic"
+      "PICNIC": "Picnic",
+      "R_TWEET": "Tweets"
     }
   },
   "buttons": {
@@ -270,9 +273,9 @@
     "programs": "Programs",
     "sortby": "sort by",
     "sorts": {
-      "relevance": "relevance",
-      "newertoolder": "newer to older",
-      "oldertonewer": "older to newer"
+      "relevance": "Relevance",
+      "newertoolder": "Newer to older",
+      "oldertonewer": "Older to newer"
     },
     "results": {
       "empty-query": "No search term given. Please use the box above to search.",
@@ -318,7 +321,8 @@
     },
     "latest-updates": {
       "new-on-the-site": "New on the site"
-    }
+    },
+    "donate-modal": "<p>Dear Friends,</p> <p>Before you scroll further and enjoy the original contents on the site, we would like to invite you to become our partners in the dissemination enterprise of the \"Bnei Baruch - Kabbalah La'am\" association.</p> <p>To date we have distributed unprecedented amounts of valuable and unique material all over the world, and it is all thanks to you, thousands of loyal volunteers.</p> <p>But it is not enough. Day by day the world falls into a more acute crisis in all areas of life, and it needs content that only our organization can provide; content that explains the importance of the connection between people and brings them closer to solving all crises.</p> <p>That is why now, more than ever, we invite you to donate financially and participate in increasing the dissemination of our content to humanity.</p> <p>In this way, each and every one of us can fulfill the Kabbalists' dream to spread the wisdom of Kabbalah to the masses and pour the light of confidence to the world, as the Baal HaSulam wrote: \"Only by the expansion of the wisdom of Kabbalah will we be rewarded with complete redemption.\"</p> <p>On this occasion we wish to thank the friends who have donated and keep donating on a regular basis, and we thank in advance everyone who now joins in for your important contribution to the dissemination of the wisdom of Kabbalah.</p> <p><b>The management of the \"Bnei Baruch - Kabbalah La'am\" association.</b></p>"
   },
   "events": {
     "header": {
@@ -360,12 +364,12 @@
     },
     "tabs": {
       "daily": "Daily Lessons",
-      "virtual": "Virtual Lessons",
+      "virtual": "Webinars",
       "lectures": "Lectures",
       "women": "Women Lessons",
       "rabash": "Rabash Lessons",
       "children": "Children Lessons",
-      "series": "Selected Study Series",
+      "series": "Seltudy Series",
       "seriesTree": {
         "byTopics": "By Topics",
         "bySourcesOf": "By Sources Of"
@@ -492,6 +496,12 @@
     "header": {
       "text": "Help",
       "subtext": "In this section you will find video tutorials and best practices on how to use the site"
+    }
+  },
+  "sketches": {
+    "header": {
+      "text": "Sketches",
+      "subtext": ""
     }
   },
   "pages": {
@@ -689,7 +699,7 @@
       "LECTURE_SERIES": "Lecture Series",
       "CHILDREN_LESSONS": "Children Lessons",
       "WOMEN_LESSONS": "Women Lessons",
-      "VIRTUAL_LESSONS": "Virtual Lessons",
+      "VIRTUAL_LESSONS": "Webinars",
       "MEALS": "Meals",
       "HOLIDAY": "Holiday",
       "PICNIC": "Picnic",
@@ -715,10 +725,11 @@
       "PUBLICATION": "Publication",
       "LELO_MIKUD": "Edited - No Focus Group",
       "BLOG_POST": "Blog Post",
-      "LESSONS_SERIES": "Selected Study Series",
+      "LESSONS_SERIES": "Study Series",
       "KTAIM_NIVCHARIM": "Selected Highlights",
       "sources": "Kabbalah Sources",
-      "SOURCE": "Kabbalah Sources"
+      "SOURCE": "Kabbalah SourAces",
+      "downloads": "Downloads"
     },
     "media-types": {
       "video": "Video",

@@ -36,7 +36,7 @@ import { actions as mdbActions, selectors as mdbSelectors } from './redux/module
 import { actions as musicActions } from './redux/modules/music';
 import { actions as prepareActions } from './redux/modules/preparePage';
 import { actions as publicationsActions } from './redux/modules/publications';
-import { actions as searchActions, selectors as searchSelectors } from './redux/modules/search';
+import { actions as searchActions } from './redux/modules/search';
 import { selectors as settingsSelectors } from './redux/modules/settings';
 import { actions as simpleModeActions } from './redux/modules/simpleMode';
 import { selectors as sourcesSelectors } from './redux/modules/sources';
@@ -183,18 +183,10 @@ export const lessonsCollectionPage = (store, match) => {
   return collectionPage('lessons-collection')(store, match);
 };
 
-export const searchPage = store => (Promise.all([store.sagaMiddleWare.run(searchSagas.hydrateUrl).done, store.sagaMiddleWare.run(filtersSagas.hydrateFilters, filtersActions.hydrateFilters('search')).done])
-    .then(() => {
-      const state    = store.getState();
-      const q        = searchSelectors.getQuery(state.search);
-      const page     = searchSelectors.getPageNo(state.search);
-      const pageSize = settingsSelectors.getPageSize(state.settings);
-      const deb      = searchSelectors.getDeb(state.search);
-      const suggest  = searchSelectors.getSuggest(state.search);
-
-      store.dispatch(searchActions.search(q, page, pageSize, suggest, deb));
-    })
-);
+export const searchPage = store => (Promise.all([
+  store.sagaMiddleWare.run(searchSagas.hydrateUrl).done,
+  store.sagaMiddleWare.run(filtersSagas.hydrateFilters, filtersActions.hydrateFilters('search')).done,
+]).then(() => store.dispatch(searchActions.search())));
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));

@@ -18,16 +18,12 @@ const ITEMS = [
   'sources',
   'likutim',
   'events',
-  // 'books',
   'topics',
   'publications',
   'music',
   'simple-mode',
-  // 'project-status',
+  'sketches',
   'help',
-  // 'photos',
-  // 'design',
-  // 'design2',
 ];
 
 const MenuItems = ({ simple = false, visible = false, t, onItemClick = identity, language }) => {

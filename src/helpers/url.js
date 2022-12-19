@@ -86,6 +86,7 @@ export const prefixWithLanguage = (path, location, toLanguage) => {
   return language ? `/${language}${pathSuffix}` : pathSuffix;
 };
 
+// Extracts search query parameters from url, return object.
 export const getQuery = location => {
   if (location?.search) {
     const q = parse(location.search.slice(1));
@@ -100,6 +101,7 @@ export const getQuery = location => {
 };
 
 export const updateQuery = (history, updater) => {
+  console.log('helper updateQuery');
   if (!history) {
     return;
   }

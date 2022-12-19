@@ -12,6 +12,9 @@ import {
 } from './components/Pages/WithPlayer/PlaylistPageDispecher';
 import PlaylistMy from './components/Pages/WithPlayer/PlaylistMy/Container';
 import SearchResults from './components/Search/SearchResultsContainer';
+import PlaylistCollectionIdCheck from './components/Pages/PlaylistCollection/IdCheck';
+import PlaylistItemPage from './components/Pages/PlaylistItemPage';
+import PlaylistDecorator from './components/Pages/PlaylistMy/Decorator';
 import Events from './components/Sections/Events/MainPage';
 import ExcerptContainer from './components/Sections/Excerpt/ExcerptContainer';
 import Help from './components/Sections/Help/Help';
@@ -32,6 +35,7 @@ import PlaylistPage from './components/Sections/Personal/Playlist/Page';
 import ReactionPage from './components/Sections/Personal/Reaction/Page';
 import Program from './components/Sections/Program/ProgramPage';
 import Programs from './components/Sections/Programs/MainPage';
+import Sketches from './components/Sections/Sketches/MainPage';
 import Publications from './components/Sections/Publications/MainPage';
 import ArticleCollection from './components/Sections/Publications/tabs/Articles/Collection';
 import ArticlePage from './components/Sections/Publications/tabs/Articles/Unit';
@@ -39,6 +43,7 @@ import BlogPost from './components/Sections/Publications/tabs/Blog/Post/Containe
 import SimpleModeContainer from './components/Sections/SimpleMode/Container';
 import Topics from './components/Sections/Topics/TopicContainer';
 import Topic from './components/Sections/Topics/TopicPage';
+import SearchResults from './components/Search/SearchResults';
 import * as shapes from './components/shapes';
 import {
   DEFAULT_LANGUAGE,
@@ -144,8 +149,7 @@ const routes = [
   { path: 'excerpt', component: ExcerptContainer },
   { path: 'likutim', component: LikutimMain },
   { path: 'likutim/:id', component: Likut, },
-  // { path: 'design', component: Design },
-  // { path: 'design2', component: Design2 },
+  { path: 'sketches', component: Sketches, options: { ssrData: ssrDataLoaders.programsPage } },
 ];
 
 export const NotFound = () => <h1>Page not found</h1>;

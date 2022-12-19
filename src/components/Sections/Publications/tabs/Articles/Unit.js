@@ -131,8 +131,9 @@ const ArticlePage = ({ t }) => {
     return null;
   }
 
-  const embed = getEmbedFromQuery(location);
+  const chroniclesAppend = chronicles ? chronicles.append.bind(chronicles) : () => null;
 
+  const embed = getEmbedFromQuery(location);
   return !embed
     ? (
       <>
@@ -146,7 +147,7 @@ const ArticlePage = ({ t }) => {
                 </Grid.Row>
                 <Grid.Row>
                   <Grid.Column>
-                    {renderArticle(unit, chronicles.append.bind(chronicles))}
+                    {renderArticle(unit, chroniclesAppend)}
                   </Grid.Column>
                 </Grid.Row>
               </Grid.Column>

@@ -21,6 +21,8 @@ export const chroniclesUrl            = path => `${CHRONICLES_BACKEND}${path}`;
 export const chroniclesBackendEnabled = CHRONICLES_BACKEND !== undefined;
 
 export class Requests {
+  static encode = encodeURIComponent;
+
   static get = path => axios(backendUrl(path));
 
   static getAsset = path => axios(assetUrl(path));
@@ -83,8 +85,6 @@ export class Requests {
 
     return `${imaginaryUrl('thumbnail')}?${Requests.makeParams(params)}`;
   };
-
-  static encode = encodeURIComponent;
 }
 
 class Api {
@@ -126,6 +126,10 @@ class Api {
     Requests.get(`stats/label_class?${Requests.makeParams(rest)}`)
   );
 
+  static elasticStats = ({ q, language }) => (
+    Requests.get(`stats/search_class?${Requests.makeParams({ q, language })}`)
+  );
+
   static countCU = params => Requests.get(`count_cu?${Requests.makeParams(params)}`);
 
   static tweets = ({ pageNo: page_no, pageSize: page_size, ...rest }) => (
@@ -151,10 +155,9 @@ class Api {
     pageSize: page_size,
     sortBy: sort_by,
     deb,
-    suggest,
     searchId: search_id
   }) => (
-    Requests.get(`search?${Requests.makeParams({ q, language, page_no, page_size, sort_by, deb, suggest, search_id })}`)
+    Requests.get(`search?${Requests.makeParams({ q, language, page_no, page_size, sort_by, deb, search_id })}`)
   );
 
   static click = ({ mdbUid: mdb_uid, index, type, rank, searchId: search_id, deb }) => (
@@ -163,22 +166,29 @@ class Api {
 
   static getAsset = path => Requests.getAsset(path);
 
+  static getUnzipUIDs = ({ path, ids }) => {
+    const params = Requests.makeParams({ uid: ids });
+    return Requests.getAsset(`${path}?${params}`);
+  };
+
   static getCMS = (item, options) => Requests.getCMS(item, options);
 
   static simpleMode = ({ language, startDate: start_date, endDate: end_date }) => (
     Requests.get(`simple?${Requests.makeParams({ language, start_date, end_date })}`)
   );
 
-  static recommendedRequestData = ({
-    uid,
-    languages,
-    skipUids: skip_uids,
-    size: more_items,
-    spec,
-    specs,
-    watchingNowMin: watching_now_min,
-    popularMin: popular_min
-  }) => ({
+  static recommendedRequestData = (
+    {
+      uid,
+      languages,
+      skipUids: skip_uids,
+      size: more_items,
+      spec,
+      specs,
+      watchingNowMin: watching_now_min,
+      popularMin: popular_min
+    }
+  ) => ({
     more_items,
     'current_feed': [],
     'options': {

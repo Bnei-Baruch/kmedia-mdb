@@ -11,7 +11,7 @@ import Link from '../../Language/MultiLanguageLink';
 import UnitLogo from '../../shared/Logo/UnitLogo';
 
 const CollectionItem = ({ id, t }) => {
-  const c = useSelector(state => mdb.getDenormCollection(state.mdb, id));
+  const c            = useSelector(state => mdb.getDenormCollection(state.mdb, id));
 
   if (!c) return null;
 
@@ -26,9 +26,12 @@ const CollectionItem = ({ id, t }) => {
     description.push(fromToLocalized(start_date, end_date));
   }
 
+  const link = canonicalLink(logoUnit, '', c);
   return (
     <List.Item key={id} className="media_item">
-      <UnitLogo unitId={cu?.id} collectionId={id} />
+      <Link to={link} style={{ minWidth: '140px' }}>
+        <UnitLogoWithDuration unit={logoUnit} />
+      </Link>
       <div className="media_item__content">
         <Header as={Link} to={canonicalLink(c)} content={name} />
         <div>{t(`constants.content-types.${content_type}`)}</div>
