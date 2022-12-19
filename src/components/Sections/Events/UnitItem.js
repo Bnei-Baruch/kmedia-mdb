@@ -18,7 +18,7 @@ const UnitItem = ({ id, t }) => {
   return (
     <List.Item key={id} className="media_item">
       <Link to={link}>
-        <UnitLogoWithDuration duration={cu.duration} unitId={cu.id} width={144} />
+        <UnitLogoWithDuration unit={cu} />
       </Link>
       <div className="media_item__content">
         <Header content={cu.name} as={Link} to={link} />

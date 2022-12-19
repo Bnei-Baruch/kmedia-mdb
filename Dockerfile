@@ -7,7 +7,7 @@ ARG file_trimmer_api_url="https://trim.kab.sh/rest/trim"
 ARG mdb_rest_api_url="https://staging-archive.kabbalahmedia.info/mdb-api/"
 ARG kc_api_url="https://accounts.kab.info/auth"
 
-FROM bneibaruch/kmedia_base:2 as build
+FROM bneibaruch/kmedia_base:1 as build
 
 LABEL maintainer="edoshor@gmail.com"
 
@@ -46,7 +46,7 @@ RUN yarn install --frozen-lockfile && \
     rm -rf node_modules && \
     yarn install --production --frozen-lockfile
 
-FROM node:16-slim
+FROM node:15-slim
 
 ARG cdn_url
 ARG public_base

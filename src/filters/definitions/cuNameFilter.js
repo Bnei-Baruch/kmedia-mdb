@@ -3,7 +3,7 @@ import { createFilterDefinition } from './util';
 
 const cuNameFilter = {
   name: FN_FREE_TEXT,
-  queryKey: 'q',
+  queryKey: 'name',
   valueToApiParam: value => ({
     q: value
   })

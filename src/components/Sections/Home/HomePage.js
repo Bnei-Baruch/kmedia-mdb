@@ -164,7 +164,6 @@ const HomePage = (
   return (
     <div className="homepage">
       <Helmets.Basic title={t('home.header.text')} description={t('home.header.subtext')} />
-
       {renderSearchBar(location)}
       {renderLatestLessonAndBanner(latestLesson, banner)}
       {renderActiveSectionsGrid(t, isMobileDevice)}

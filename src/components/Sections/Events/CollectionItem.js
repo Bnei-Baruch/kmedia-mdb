@@ -28,7 +28,7 @@ const CollectionItem = ({ id }) => {
 
   return (
     <List.Item as={Link} to={canonicalLink(c)} key={id} className="media_item">
-      <UnitLogoWithDuration duration={cus[0].duration} unitId={cus[0].id} width={144} />
+      <UnitLogoWithDuration unit={cus[0]} />
       <div className="media_item__content">
         <Header content={name} />
         <div className="description">{getDate()}</div>

@@ -6,25 +6,31 @@ import { connect } from 'react-redux';
 import isEqual from 'react-fast-compare';
 import ImageGallery from 'react-image-gallery';
 import { Button, Container, Segment } from 'semantic-ui-react';
-
-import { assetUrl, Requests } from '../../../../../helpers/Api';
 import { selectSuitableLanguage } from '../../../../../helpers/language';
 import { isLanguageRtl } from '../../../../../helpers/i18n-utils';
-import { isEmpty, physicalFile, strCmp } from '../../../../../helpers/utils';
+import { isEmpty, strCmp } from '../../../../../helpers/utils';
 import { actions, selectors } from '../../../../../redux/modules/assets';
 import { selectors as settings } from '../../../../../redux/modules/settings';
 import * as shapes from '../../../../shapes';
 import WipErr from '../../../../shared/WipErr/WipErr';
 import MenuLanguageSelector from '../../../../Language/Selector/MenuLanguageSelector';
+import { imageGalleryItem, isZipFile } from './helper';
 
 class Sketches extends React.Component {
   static propTypes = {
     unit: shapes.ContentUnit.isRequired,
     t: PropTypes.func.isRequired,
     zipIndexById: PropTypes.objectOf(shapes.DataWipErr).isRequired,
-    unzip: PropTypes.func.isRequired,
+    unzipList: PropTypes.func.isRequired,
     uiLanguage: PropTypes.string.isRequired,
     contentLanguage: PropTypes.string.isRequired,
+  };
+  state = {
+    zipFiles: null,
+    zipFileId: null,
+    imageFiles: null,
+    languages: null,
+    language: null,
   };
 
   static getUnitSketchFiles = unit => {
@@ -61,24 +67,14 @@ class Sketches extends React.Component {
 
     // if there are many zip files - use the first one
     if (files.length > 0) {
-      const zipFileArr = files.filter(file => Sketches.isZipFile(file));
+      const zipFileArr = files.filter(file => isZipFile(file));
       files            = zipFileArr.length > 0 ? zipFileArr[0] : files;
     }
 
     return files;
   };
 
-  static isZipFile = file => file.name.endsWith('.zip');
-
   static isZipOrImageFileType = file => file.type === 'image';
-
-  state = {
-    zipFiles: null,
-    zipFileId: null,
-    imageFiles: null,
-    languages: null,
-    language: null,
-  };
 
   isPropsChanged = prevProps => {
     const { unit, zipIndexById, contentLanguage, uiLanguage } = this.props;
@@ -158,7 +154,7 @@ class Sketches extends React.Component {
     let state = {};
     if (file) {
       // not zip, image files only
-      if (Array.isArray(file) || !Sketches.isZipFile(file)) {
+      if (Array.isArray(file) || !isZipFile(file)) {
         state = { imageFiles: file };
       } else {
         // zip file
@@ -175,11 +171,11 @@ class Sketches extends React.Component {
   };
 
   unzipFiles = file => {
-    const { zipIndexById, unzip } = this.props;
+    const { zipIndexById, unzipList } = this.props;
     const { data, wip, err }      = zipIndexById[file.id] || {};
 
     if (!wip && !err && isEmpty(data) && !Object.prototype.hasOwnProperty.call(zipIndexById, file.id)) {
-      unzip(file.id);
+      unzipList([file.id]);
     }
   };
 
@@ -192,31 +188,6 @@ class Sketches extends React.Component {
 
   removeErroneousImages = item =>
     !item.path?.toUpperCase().includes('MACOSX');
-
-  // converts images from server format (path, size) to ImageGallery format
-  imageGalleryItem = item => {
-    let src;
-    let alt;
-    if (item.path) {
-      // opened zip file
-      src = assetUrl(item.path.substr(8));
-      alt = item.path.substr(item.path.lastIndexOf('_') + 1);
-    } else {
-      // image file
-      src = physicalFile(item);
-      alt = item.name;
-    }
-
-    const thumbSrc = Requests.imaginary('thumbnail', { url: src, width: 100, stripmeta: true });
-
-    return {
-      original: src,
-      thumbnail: thumbSrc,
-      originalAlt: alt,
-      thumbnailAlt: `${alt}-thumbnail`,
-      thumbnailTitle: `${alt}`,
-    };
-  };
 
   renderLeftNav = (onClick, disabled) => (
     <Button
@@ -260,7 +231,7 @@ class Sketches extends React.Component {
       return wipErr;
     }
 
-    const imageObjs = imageFiles || data;
+    const imageObjs = imageFiles || data?.full;
 
     // if imageObjs is not an array - create it
     let imageObjsArr = [];
@@ -275,7 +246,7 @@ class Sketches extends React.Component {
         // prepare the image array for the gallery and sort it
         const items = imageObjsArr
           .filter(this.removeErroneousImages)
-          .map(this.imageGalleryItem)
+          .map(imageGalleryItem)
           .sort((a, b) => strCmp(a.original, b.original));
 
         return (
@@ -330,7 +301,7 @@ const mapState = state => ({
 });
 
 const mapDispatch = dispatch => bindActionCreators({
-  unzip: actions.unzip
+  unzipList: actions.unzipList
 }, dispatch);
 
 export default connect(mapState, mapDispatch)(withTranslation()(Sketches));

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-/* TODO: used for player only need remove after player update*/
 import fscreen from 'fscreen';
 import { Icon } from 'semantic-ui-react';
 

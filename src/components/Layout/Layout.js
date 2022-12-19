@@ -24,6 +24,7 @@ import Login from './Login';
 import DownloadTrim from '../AVPlayer/Share/DownloadTrim';
 import KmediaRouters from '../../route/KmediaRouters';
 import { withRouter } from '../../helpers/withRouterPatch';
+import DonationPopup from '../Sections/Home/DonationPopup';
 
 const WrappedOmniBoxWithChronicles = ({ location }) => {
   const chronicles = useContext(ClientChroniclesContext);
@@ -267,6 +268,7 @@ class Layout extends Component {
           </div>
           <Footer />
         </div>
+        <DonationPopup />
       </div>
     );
   }

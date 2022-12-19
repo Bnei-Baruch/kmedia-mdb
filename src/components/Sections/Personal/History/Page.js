@@ -19,7 +19,8 @@ import Actions from './Actions';
 import NeedToLogin from '../NeedToLogin';
 import { withRouter } from '../../../../helpers/withRouterPatch';
 
-const PAGE_SIZE = 20;
+export const PAGE_SIZE = 20;
+
 const Page      = ({ location, t }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
 

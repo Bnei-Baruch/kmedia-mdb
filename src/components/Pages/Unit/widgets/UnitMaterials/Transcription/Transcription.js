@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import uniq from 'lodash/uniq';
 import clsx from 'clsx';
 
-import { CT_ARTICLE, CT_RESEARCH_MATERIAL, MT_TEXT } from '../../../../../../helpers/consts';
+import { CT_ARTICLE, CT_RESEARCH_MATERIAL, MT_TEXT, INSERT_TYPE_SUMMARY } from '../../../../../../helpers/consts';
 import { selectSuitableLanguage } from '../../../../../../helpers/language';
 import { getLanguageDirection } from '../../../../../../helpers/i18n-utils';
 import { DeviceInfoContext } from '../../../../../../helpers/app-contexts';
@@ -39,14 +39,13 @@ class Transcription extends Component {
   };
 
   static getTextFiles = (unit, type) => {
-    // const { unit, type } = props;
     if (!unit || !Array.isArray(unit.files)) {
       return [];
     }
 
     if (!type) {
       // filter text files, but not PDF
-      return unit.files.filter(x => MediaHelper.IsText(x) && !MediaHelper.IsPDF(x));
+      return unit.files.filter(x => MediaHelper.IsText(x) && !MediaHelper.IsPDF(x) && x.insert_type !== INSERT_TYPE_SUMMARY);
     }
 
     return Transcription.getUnitDerivedArticle(unit, type);
@@ -109,7 +108,7 @@ class Transcription extends Component {
         || nextState.selectedFile !== state.selectedFile
         || !isEqual(nextProps.doc2htmlById, props.doc2htmlById)
         || (!!state.selectedFile && props.doc2htmlById
-            && (props.doc2htmlById[state.selectedFile.id]?.wip !== nextProps.doc2htmlById[state.selectedFile.id]?.wip))
+          && (props.doc2htmlById[state.selectedFile.id]?.wip !== nextProps.doc2htmlById[state.selectedFile.id]?.wip))
       );
   }
 

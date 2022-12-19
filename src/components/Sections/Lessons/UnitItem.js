@@ -35,7 +35,7 @@ const UnitItem = ({ id, t }) => {
   return (
     <List.Item className="media_item">
       <Link to={link}>
-        <UnitLogoWithDuration duration={cu.duration} unitId={cu.id} width={144} />
+        <UnitLogoWithDuration unit={cu} />
       </Link>
       <div className="media_item__content">
         <TooltipIfNeed text={cu.name} Component={Header} as={Link} to={link} content={cu.name} />

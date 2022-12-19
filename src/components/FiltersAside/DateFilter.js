@@ -18,9 +18,12 @@ import { FN_DATE_FILTER } from '../../helpers/consts';
 import FastDayPicker from '../Filters/components/Date/FastDayPicker';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectors as settings } from '../../redux/modules/settings';
+import { selectors as filtersAside } from '../../redux/modules/filtersAside';
 import { actions, selectors as filters } from '../../redux/modules/filters';
 import FilterHeader from './FilterHeader';
 import { isLanguageRtl } from '../../helpers/i18n-utils';
+
+const ENABLED_STATS_NAMESPACE = ['search'];
 
 const DateFilter = ({ t, namespace }) => {
   const [to, setTo]               = useState();
@@ -32,6 +35,8 @@ const DateFilter = ({ t, namespace }) => {
   const selected = useSelector(state => filters.getFilterByName(state.filters, namespace, FN_DATE_FILTER));
 
   const language = useSelector(state => settings.getLanguage(state.settings));
+
+  const stats = useSelector(state => filtersAside.getMultipleStats(state.filtersAside, namespace, FN_DATE_FILTER)(datePresets));
 
   const dispatch = useDispatch();
 
@@ -48,7 +53,6 @@ const DateFilter = ({ t, namespace }) => {
   const updateFilter = (_preset, _from, _to) => {
     const r = buildRange(_preset, _from, _to);
     dispatch(actions.setFilterValue(namespace, FN_DATE_FILTER, r));
-
   };
 
   const buildRange = (_preset, _from = from, _to = to) => {
@@ -117,13 +121,14 @@ const DateFilter = ({ t, namespace }) => {
       {
         datePresets.map((x, i) => (
           <List.Item key={`${FN_DATE_FILTER}_${i}`}>
-            <List.Content>
+            <List.Content className="date-filter-presets">
               <Checkbox
                 label={t(`filters.date-filter.presets.${x}`)}
                 checked={preset === x}
                 value={x}
                 onChange={handleDatePresetsChange}
               />
+              {ENABLED_STATS_NAMESPACE.includes(namespace) && <span className="stat">{`(${stats[i]})`}</span>}
             </List.Content>
           </List.Item>
         )

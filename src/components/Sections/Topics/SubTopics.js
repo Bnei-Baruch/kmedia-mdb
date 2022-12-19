@@ -36,9 +36,12 @@ const SubTopics = ({ namespace, rootID, t }) => {
 
   const getTagById      = useSelector(state => tags.getTagById(state.tags));
   const getPathTags     = useSelector(state => tags.getPathByID(state.tags));
+  const roots           = useSelector(state => tags.getRoots(state.tags));
   const baseItems       = useSelector(state => selectors.getTree(state.filtersAside, namespace, FN_TOPICS_MULTI));
   const selectedFilters = useSelector(state => filters.getFilterByName(state.filters, namespace, FN_TOPICS_MULTI));
   const selected        = useMemo(() => selectedFilters?.values || [], [selectedFilters]);
+
+  console.log('SELECTED', selected);
 
   const root  = getTagById(rootID);
   const items = useMemo(() => getItemsRecursive(rootID, getTagById, baseItems) || [], [rootID, getTagById, baseItems]);
@@ -54,7 +57,8 @@ const SubTopics = ({ namespace, rootID, t }) => {
 
   const handleSetQuery = (e, data) => setQuery(data.value);
 
-  const children = root.children?.filter(r => items.includes(r));
+  console.log('roots', roots);
+  const children = rootID ? root.children?.filter(r => items.includes(r)) : roots;
 
   if (!(children?.length > 0))
     return null;

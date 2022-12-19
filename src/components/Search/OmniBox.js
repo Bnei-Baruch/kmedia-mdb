@@ -1,245 +1,141 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, { useState, useContext, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { Button, Icon, Input, Loader, Search } from 'semantic-ui-react';
 import { withTranslation } from 'react-i18next';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
-import { push as routerPush } from '@lagunovsky/redux-react-router';
-import debounce from 'lodash/debounce';
-import { noop, isEmpty } from '../../helpers/utils';
-import { Icon, Input, Search } from 'semantic-ui-react';
+import moment from 'moment';
 
+import ButtonDayPicker from '../Filters/components/Date/ButtonDayPicker';
+import { ClientChroniclesContext, DeviceInfoContext } from '../../helpers/app-contexts';
 import { SuggestionsHelper } from '../../helpers/search';
-import { getQuery, isDebMode } from '../../helpers/url';
 import { isLanguageRtl } from '../../helpers/i18n-utils';
-import { filtersTransformer } from '../../filters';
-import { actions as filtersActions, selectors as filterSelectors } from '../../redux/modules/filters';
+
 import { actions, selectors } from '../../redux/modules/search';
 import { selectors as settingsSelectors } from '../../redux/modules/settings';
-import * as shapes from '../shapes';
 
-export class OmniBox extends Component {
-  static propTypes = {
-    location: shapes.HistoryLocation.isRequired,
-    autocomplete: PropTypes.func.isRequired,
-    search: PropTypes.func.isRequired,
-    push: PropTypes.func.isRequired,
-    suggestions: PropTypes.shape({}),
-    query: PropTypes.string.isRequired,
-    updateQuery: PropTypes.func.isRequired,
-    setSuggest: PropTypes.func.isRequired,
-    language: PropTypes.string.isRequired,
-    pageSize: PropTypes.number.isRequired,
-    filters: PropTypes.arrayOf(PropTypes.object).isRequired,
-    resetFilterNS: PropTypes.func.isRequired,
-    onSearch: PropTypes.func,
-    chronicles: PropTypes.shape(),
-  };
-
-  static defaultProps = {
-    suggestions: {},
-    onSearch: noop,
-  };
-
-  doAutocomplete = debounce(() => {
-    const { query, autocomplete } = this.props;
-    if (query.trim()) {
-      autocomplete(query);
-    } else {
-      this.setState({ suggestionsHelper: new SuggestionsHelper() });
-    }
-  }, 100);
-
-  constructor(props) {
-    super(props);
-    this.search = null;
-
-    this.state = {
-      suggestionsHelper: new SuggestionsHelper(),
-      suggestions: {},
-      query: '',
-      pathname: ''
-
-    };
-  }
-
-  static getDerivedStateFromProps(nextProps, state) {
-    const { suggestions, query, pathname } = state;
-    const { updateQuery, setSuggest }      = nextProps;
-    let newState                           = null;
-
-    if (nextProps.suggestions !== suggestions) {
-      newState = {
-        suggestionsHelper: new SuggestionsHelper(nextProps.suggestions),
-        suggestions: nextProps.suggestions,
-      };
-    }
-
-    // Clear search query when navigating from the search page into other pages (AS-38)
-    if (query
-      && !nextProps.location.pathname.endsWith('search')
-      && nextProps.location.pathname !== pathname) {
-      newState = { ...newState, pathname: nextProps.location.pathname, query: nextProps.query };
-      updateQuery('');
-      setSuggest('');
-    }
-
-    return newState;
-  }
-
-  componentDidMount() {
-    const { suggestions, query, location: { pathname } } = this.props;
-    this.setState({ suggestions, query, pathname });
-  }
-
-  isEmptyQuery = query => {
-    const { filters } = this.props;
-    const params      = filtersTransformer.toApiParams(filters);
-    return isEmpty(query) && isEmpty(params);
-  };
-
-  doSearchFromClickEvent = () => {
-    this.doSearch();
-  };
-
-  doSearch = (q = null, suggest = '', locationSearch = '') => {
-    const { isOpen, query: squery }                                                    = this.state;
-    const { search, location, push, pageSize, resetFilterNS, onSearch, query: pquery } = this.props;
-    let query;
-
-    if (q != null) {
-      query = q;
-    } else if (!isEmpty(pquery)) {
-      query = pquery;
-    } else {
-      query = squery;
-    }
-
-    if (this.isEmptyQuery(query)) {
-      return;
-    }
-
-    // First of all redirect to search results page if we're not there
-    if (!location.pathname.endsWith('search')) {
-      // In case a filter was updated, React location object is not updated yet
-      // so we use the second function parameter to pass the search part (to persist filters
-      // to the search page when we redirect).
-
-      push({ pathname: 'search', search: locationSearch });
-    } else {
-      const deb = isDebMode(location);
-
-      // Reset filters for new search (query changed)
-      if (query && getQuery(location).q !== query) {
-        resetFilterNS('search');
-        const params = new URLSearchParams('');
-        if (deb) {
-          params.append('deb', 'true');
-        }
-
-        push({ search: params.toString() });
-      }
-
-      search(query, 1, pageSize, suggest, deb);
-      if (isOpen) {
-        this.setState({ isOpen: false });
-      }
-
-      onSearch();
-      // So as to close the suggestions on "enter search" (KeyDown 13)
-      this.setState({ suggestionsHelper: new SuggestionsHelper() });
-    }
-  };
-
-  handleResultSelect = (e, data) => {
-    const { updateQuery, setSuggest, query, chronicles } = this.props;
-    const { suggestionsHelper }                          = this.state;
-
-    const { title } = data.result;
-    const prevQuery = query;
-
-    chronicles.autocompleteSelected(title, suggestionsHelper.autocompleteId);
-
-    updateQuery(title);
-    setSuggest(prevQuery);
-    this.doSearch(title, prevQuery);
-  };
-
-  handleSearchKeyDown = e => {
-    const { updateQuery }       = this.props;
-    const { getSelectedResult } = this.search;
-
-    // Only search when no suggest results as they are handled by handleResultSelect.
-    if (e.keyCode === 13 && !getSelectedResult()) {
-      this.doSearch();
-    }
-
-    if (e.keyCode === 27) { // Esc
-      this.setState({ query: '' }, () => updateQuery(''));
-    }
-  };
-
-  handleSearchChange = (e, data) => {
-    const { updateQuery, setSuggest, query } = this.props;
-    updateQuery(data.value);
-    setSuggest(query);
-    if (data.value.trim()) {
-      this.doAutocomplete();
-    }
-  };
-
-  makeResult = (language, result) => ({
-    ...result,
-    className: isLanguageRtl(language) ? 'search-result-rtl' : '',
-  });
-
-  renderInput() {
-    return <Input onKeyDown={this.handleSearchKeyDown} />;
-  }
-
-  render() {
-    const { language, query }   = this.props;
-    const { suggestionsHelper } = this.state;
-
-    const results = suggestionsHelper.getSuggestions()
-      .map(s => (this.makeResult(language, { key: s, title: s })));
-
-    return (
-      <Search
-        ref={s => {
-          this.search = s;
-        }}
-        fluid
-        className="search-omnibox"
-        size="small"
-        results={results}
-        value={query}
-        input={this.renderInput()}
-        icon={<Icon link name="search" onClick={this.doSearchFromClickEvent} />}
-        showNoResults={false}
-        onSearchChange={this.handleSearchChange}
-        onResultSelect={this.handleResultSelect}
-      />
-    );
-  }
-}
-
-export const mapState = state => ({
-  suggestions: selectors.getSuggestions(state.search),
-  query: selectors.getQuery(state.search),
-  pageSize: settingsSelectors.getPageSize(state.settings),
-  language: settingsSelectors.getLanguage(state.settings),
-  filters: filterSelectors.getFilters(state.filters, 'search'),
+const makeResult = (language, result) => ({
+  ...result,
+  className: isLanguageRtl(language) ? 'search-result-rtl' : '',
 });
 
-export const mapDispatch = dispatch => bindActionCreators({
-  autocomplete: actions.autocomplete,
-  search: actions.search,
-  updateQuery: actions.updateQuery,
-  setSuggest: actions.setSuggest,
-  resetFilterNS: filtersActions.resetNamespace,
-  push: routerPush,
-}, dispatch);
+const OmniBox = ({ isHomePage = false, t }) => {
+  const query = useSelector(state => selectors.getQuery(state.search));
+  const suggestions = useSelector(state => selectors.getSuggestions(state.search));
+  const wip = useSelector(state => selectors.getAutocompleteWip(state.search));
+  const language = useSelector(state => settingsSelectors.getLanguage(state.settings));
 
-export const wrap = (WrappedComponent, ms = mapState, md = mapDispatch) => connect(ms, md)(WrappedComponent);
+  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const chronicles = useContext(ClientChroniclesContext);
 
-export default wrap(withTranslation()(OmniBox));
+  const [autocompleteResults, setAutocompleteResults] = useState([]);
+  const [autocompleteId, setAutocompleteId] = useState('');
+  const [inputFocused, setInputFocused] = useState(!isMobileDevice);
+  const [userInteracted, setUserInteracted] = useState(false);
+
+  const dispatch = useDispatch();
+  const history = useHistory();
+
+  useEffect(() => {
+    if (suggestions) {
+      const helper = new SuggestionsHelper(suggestions);
+      setAutocompleteId(helper.autocompleteId);
+      setAutocompleteResults(helper.getSuggestions().map(s => (makeResult(language, { key: s, title: s }))));
+    } else {
+      setAutocompleteResults([]);
+      setAutocompleteId('');
+    }
+  }, [suggestions, language]);
+
+  useEffect(() => {
+    dispatch(actions.hydrateUrl());
+  }, [dispatch]);
+
+  const doSearch = () => {
+    setUserInteracted(true);
+    setInputFocused(false);
+    dispatch(actions.search());
+  };
+
+  const keyDown = e => {
+    if (e.keyCode === 13) {
+      doSearch();
+    }
+  }
+
+  const inputChange = e => {
+    setUserInteracted(true);
+    setInputFocused(true);
+    dispatch(actions.updateQuery({ query: e.target.value, autocomplete: true }));
+  }
+
+  const onFocus = () => {
+    setInputFocused(true);
+  }
+
+  const onBlur = () => {
+    setInputFocused(false);
+    setUserInteracted(true);
+  }
+
+  const handleResultSelect = (e, data) => {
+    const { title } = data.result;
+    chronicles.autocompleteSelected(title, autocompleteId);
+    dispatch(actions.updateQuery({ query: title, autocomplete: false }));
+    doSearch();
+  };
+
+  const handleFromInputChange = value => {
+    history.push(`/${ language }/simple-mode?date=${ moment(value).format('YYYY-MM-DD') }`);
+  };
+
+  const renderInput = () => isHomePage ?
+    <Input
+      autoFocus={inputFocused}  // auto focus on desktop only.
+      onFocus={onFocus}
+      onBlur={onBlur}
+      onChange={inputChange}
+      onKeyDown={keyDown}
+      className={'right action'}
+      icon={null}
+      input={null}
+      placeholder={`${t('buttons.search')}...`}
+      style={{ width: '100%' }}
+      type="text">
+      <input />
+      <Button type='submit' className="searchButton" onClick={doSearch}>
+        {/* fix isLanguageRtl for style below */}
+        {wip ? <Loader active size='tiny' style={{ position: 'relative', left: '0', marginLeft: '4px' }}/> :
+          <Icon name='search' size={isMobileDevice ? 'large' : null} />
+        }
+        {!isMobileDevice ? t('buttons.search').toUpperCase() : null}
+      </Button>
+      <ButtonDayPicker
+        label={t('filters.date-filter.presets.CUSTOM_DAY')}
+        language={language}
+        onDayChange={handleFromInputChange} />
+
+    </Input> :
+    <Input
+      autoFocus={inputFocused}  // auto focus on desktop only.
+      onChange={inputChange}
+      onKeyDown={keyDown}
+      onFocus={onFocus}
+      onBlur={onBlur}
+    />;
+
+  return <Search
+    fluid
+    className="search-omnibox"
+    size="small"
+    results={autocompleteResults}
+    open={userInteracted && inputFocused && !!autocompleteResults.length}
+    value={query}
+    input={renderInput()}
+    icon={<Icon link name="search" onClick={doSearch} />}
+    showNoResults={false}
+    loading={wip}
+    onResultSelect={handleResultSelect}
+  />;
+};
+
+export default withTranslation()(OmniBox);

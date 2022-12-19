@@ -43,7 +43,7 @@ const PlaylistCollectionContainer = ({ cId, t, cuId }) => {
   useEffect(() => {
     if (cuIDs)
       dispatch(recommended.fetchViews(cuIDs));
-  }, [cuIDs]);
+  }, [cuIDs, dispatch]);
 
   if (!cId || !collection || isEmpty(content_units)) {
     return null;

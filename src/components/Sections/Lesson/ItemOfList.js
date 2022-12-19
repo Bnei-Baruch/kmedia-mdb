@@ -28,7 +28,7 @@ const ItemOfList = ({ id, ccu, t }) => {
   if (views > 0) description.push(t('pages.unit.info.views', { views }));
 
   return (<List.Item key={id} className="media_item">
-    <UnitLogoWithDuration duration={cu.duration} unitId={cu.id} width={144} />
+    <UnitLogoWithDuration unit={cu} />
     <div className="media_item__content">
       <TooltipIfNeed text={cu.name} Component={Header} as={Link} to={link} content={cu.name} />
       {

@@ -11,7 +11,8 @@ import {
   FN_CONTENT_TYPE,
   FN_SHOW_LESSON_AS_UNITS,
   PAGE_NS_EVENTS,
-  PAGE_NS_LESSONS
+  PAGE_NS_LESSONS,
+  PAGE_NS_SKETCHES
 } from '../helpers/consts';
 import { isEmpty } from '../helpers/utils';
 import { selectors as filterSelectors } from '../redux/modules/filters';
@@ -25,16 +26,19 @@ import { fetchViewsByUIDs } from './recommended';
 
 const endpointByNamespace = {
   [PAGE_NS_LESSONS]: Api.lessons,
-  [PAGE_NS_EVENTS]: Api.events
+  [PAGE_NS_EVENTS]: Api.events,
+  [PAGE_NS_SKETCHES]: Api.units
 };
 
 function* fetchList(action) {
+  // eslint-disable-next-line prefer-const
   let { withViews = false, namespace, ...args } = action.payload;
 
   if (namespace.startsWith('intents')) {
+    // Handle special case for search intents result, lessons or programs.
     args.with_files = true;
     if (args.content_type === 'lessons') {
-      args.content_type && delete args.content_type;
+      args.content_type = CT_LESSON_PART;
     } else {
       args.content_type = CT_VIDEO_PROGRAM_CHAPTER;
     }
@@ -88,16 +92,22 @@ function* fetchSectionList(action) {
 
   try {
     const { data } = yield call(endpointByNamespace[namespace], { ...args, ...filterParams, language });
+    if (!data.items && data.content_units) {
+      data.items = [...data.content_units];
+    }
 
     const { items } = data;
 
-    const cuIDs = items.filter(x => CT_UNITS.includes(x.content_type)).map(x => x.id);
+    const cuIDs = isEmpty(data.content_units) ? items.filter(x => CT_UNITS.includes(x.content_type)).map(x => x.id) : [];
     const cIDs  = items.filter(x => CT_COLLECTIONS.includes(x.content_type)).map(x => x.id);
 
     if (!isEmpty(cuIDs)) {
       yield fetchUnitsByIDs({ payload: { id: cuIDs } });
       yield fetchViewsByUIDs(cuIDs);
+    }
 
+    if (!isEmpty(data.content_units)) {
+      yield put(mdbActions.fetchUnitsByIDsSuccess(data.content_units));
     }
 
     if (!isEmpty(cIDs)) {

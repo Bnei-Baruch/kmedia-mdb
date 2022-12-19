@@ -8,11 +8,10 @@ import { Checkbox, List } from 'semantic-ui-react';
 import { actions, selectors as filters } from '../../../redux/modules/filters';
 
 const ContentTypeItemGroup = ({ namespace, group, t }) => {
-
   const { cts, key } = group;
 
-  let items = useSelector(state => selectors.getTree(state.filtersAside, namespace, FN_CONTENT_TYPE));
-  items     = items.filter(ct => cts.includes(ct));
+  const selectedItems = useSelector(state => filtersAside.getTree(state.filtersAside, namespace, FN_CONTENT_TYPE));
+  const items = selectedItems.filter(ct => cts.includes(ct));
 
   let selected    = useSelector(state => filters.getFilterByName(state.filters, namespace, FN_CONTENT_TYPE)?.values || []);
   selected        = selected.filter(ct => cts.includes(ct));

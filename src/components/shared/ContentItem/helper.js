@@ -11,11 +11,35 @@ import {
 import { canonicalCollection, cuPartNameByCCUType } from '../../../helpers/utils';
 import { canonicalLink } from '../../../helpers/links';
 import { stringify } from '../../../helpers/url';
+import { PLAYER_POSITION_STORAGE_KEY } from '../../AVPlayer/constants';
+import { Progress } from 'semantic-ui-react';
 
 export const imageWidthBySize = {
   'tiny': 120,
   'small': 144,
   'big': 287,
+};
+
+export const getProgress = (unit, playTime) => {
+  let progressIndicator = null;
+
+  if (unit && playTime) {
+    progressIndicator = (
+      <Progress
+        size="tiny"
+        className="cu_item_progress"
+        percent={playTime * 100 / unit.duration} />
+    );
+
+    // if item had been fully played, start from the beginning
+    if (Math.abs(playTime - unit.duration) < 1) {
+      playTime = 0;
+    }
+
+    localStorage.setItem(`${PLAYER_POSITION_STORAGE_KEY}_${unit.id}`, playTime);
+  }
+
+  return progressIndicator;
 };
 
 export const textPartLink = (properties, cu) => {
@@ -38,14 +62,15 @@ export const textPartLink = (properties, cu) => {
   return link;
 };
 
-export const buildTitleByUnit = (cu, t, getPathByID, nameOnly = false) => {
+export const buildTitleByUnit = (cu, t, getPathByID, nameOnly = false, withDate = true) => {
   if (!cu) return '';
 
   const { content_type, film_date, collections, name } = cu;
 
   if (content_type === CT_LESSON_PART) {
     const ctLabel = t(`constants.content-types.${CT_DAILY_LESSON}`);
-    const fd      = t('values.date', { date: film_date });
+    if (!withDate) return ctLabel;
+    const fd = t('values.date', { date: film_date });
     return `${ctLabel} (${fd})`;
   }
 
@@ -71,12 +96,12 @@ export const buildTitleByUnit = (cu, t, getPathByID, nameOnly = false) => {
   return `${collection.name} ${partName} (${t('values.date', { date: film_date })})`;
 };
 
-export const buildTextItemInfo = (cu, label, t, getPathByID) => {
+export const buildTextItemInfo = (cu, label, t, getPathByID, titleWithDate = true) => {
   let subTitle = '', title = '', description = [];
   if (!cu || !getPathByID)
     return { subTitle, title, description };
 
-  title       = buildTitleByUnit(cu, t, getPathByID, true);
+  title       = buildTitleByUnit(cu, t, getPathByID, true, titleWithDate);
   description = buildDescription(cu, t);
   description.push(t('values.date', { date: label?.date || cu.film_date }));
   if (cu.content_type === CT_ARTICLE) {

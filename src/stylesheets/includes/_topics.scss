@@ -63,7 +63,6 @@
         font-size: 18px !important;
         line-height: 22px !important;
         font-weight: 700;
-        // position: -webkit-sticky;
         position: sticky;
         top: 58px;
         z-index: 9;
@@ -81,8 +80,17 @@
       .item {
         @include item-font;
 
+        &.subTopic {
+          margin-bottom: 0 !important;
+        }
+
         &.hide-topic {
           display: none !important;
+        }
+
+        .list {
+          padding-top: 0.25em;
+          padding-bottom: 0.1em;
         }
       }
 
