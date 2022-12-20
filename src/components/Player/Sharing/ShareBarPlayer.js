@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import {
   EmailShareButton,
   FacebookShareButton,
@@ -96,4 +96,4 @@ const ShareBarPlayer = ({ t }) => {
   );
 };
 
-export default withNamespaces()(ShareBarPlayer);
+export default withTranslation()(ShareBarPlayer);

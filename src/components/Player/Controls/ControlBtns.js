@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import fscreen from 'fscreen';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { Icon } from 'semantic-ui-react';
 
 import { actions, selectors } from '../../../redux/modules/player';
@@ -9,7 +9,7 @@ import { PLAYER_OVER_MODES } from '../../../helpers/consts';
 import { stopBubbling } from '../../../helpers/utils';
 import WebWrapTooltip from '../../shared/WebWrapTooltip';
 
-export const FullscreenBtn = withNamespaces()(({ openOnFull, t }) => {
+export const FullscreenBtn = withTranslation()(({ openOnFull, t }) => {
   const dispatch     = useDispatch();
   const isFullScreen = useSelector(state => selectors.isFullScreen(state.player));
 
@@ -34,7 +34,7 @@ export const FullscreenBtn = withNamespaces()(({ openOnFull, t }) => {
   );
 });
 
-export const ShareBtn = withNamespaces()(({ t }) => {
+export const ShareBtn = withTranslation()(({ t }) => {
   const mode     = useSelector(state => selectors.getOverMode(state.player));
   const dispatch = useDispatch();
 
@@ -56,7 +56,7 @@ export const ShareBtn = withNamespaces()(({ t }) => {
   );
 });
 
-export const SettingsBtn = withNamespaces()(({ t }) => {
+export const SettingsBtn = withTranslation()(({ t }) => {
   const mode = useSelector(state => selectors.getOverMode(state.player));
 
   const dispatch = useDispatch();

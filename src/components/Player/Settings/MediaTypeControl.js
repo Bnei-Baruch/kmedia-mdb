@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Header } from 'semantic-ui-react';
 import { useSelector, useDispatch } from 'react-redux';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 
 import { selectors } from '../../../redux/modules/player';
 import { actions as playlistActions } from '../../../redux/modules/playlist';
@@ -36,4 +36,4 @@ const MediaTypeControl = ({ t }) => {
   );
 };
 
-export default withNamespaces()(MediaTypeControl);
+export default withTranslation()(MediaTypeControl);

@@ -4,11 +4,11 @@ import { useSelector } from 'react-redux';
 
 import { selectors } from '../../../redux/modules/playlist';
 import Link from '../../Language/MultiLanguageLink';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import usePlaylistItemLink from '../hooks/usePlaylistItemLink';
 import WebWrapTooltip from '../../shared/WebWrapTooltip';
 
-export const PrevBtn = withNamespaces()(({ t }) => {
+export const PrevBtn = withTranslation()(({ t }) => {
   const id = useSelector(state => selectors.getPrevId(state.playlist));
 
   const link = usePlaylistItemLink(id);
@@ -30,7 +30,7 @@ export const PrevBtn = withNamespaces()(({ t }) => {
   );
 });
 
-export const NextBtn = withNamespaces()(({ t }) => {
+export const NextBtn = withTranslation()(({ t }) => {
   const id = useSelector(state => selectors.getNextId(state.playlist));
 
   const link = usePlaylistItemLink(id);

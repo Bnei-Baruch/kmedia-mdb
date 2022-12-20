@@ -21,7 +21,6 @@ import DonateNow, { VirtualHomeButton } from './DonateNow';
 import Logo from '../../images/icons/Logo';
 import { ClientChroniclesContext, DeviceInfoContext } from '../../helpers/app-contexts';
 import Login from './Login';
-import DownloadTrim from '../AVPlayer/Share/DownloadTrim';
 import KmediaRouters from '../../route/KmediaRouters';
 import { withRouter } from '../../helpers/withRouterPatch';
 import DonationPopup from '../Sections/Home/DonationPopup';

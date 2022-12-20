@@ -1,23 +1,22 @@
 import React from 'react';
 import { withTranslation } from 'react-i18next';
-import { useSelector, shallowEqual } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Header, List } from 'semantic-ui-react';
 import { canonicalLink, getCuByCcuSkipPreparation } from '../../../helpers/links';
 
 import { selectors as mdb } from '../../../redux/modules/mdb';
 import Link from '../../Language/MultiLanguageLink';
-import UnitLogoWithDuration, { getLogoUnit } from '../../shared/UnitLogoWithDuration';
-import { MY_NAMESPACE_HISTORY } from '../../../helpers/consts';
+import UnitLogoWithDuration from '../../shared/UnitLogoWithDuration';
 
 const DailyLessonItem = ({ id, t }) => {
   const ccu = useSelector(state => mdb.getDenormCollection(state.mdb, id));
 
   const { number, film_date, content_units = [] } = ccu || {};
 
-
   if (!ccu || content_units.length === 0) return null;
-  const link     = canonicalLink(logoUnit);
+
   const logoUnit = content_units.find(x => x.id === getCuByCcuSkipPreparation(ccu));
+  const link     = canonicalLink(logoUnit);
 
   return (
     <List.Item key={id} className="media_item daily_lesson">

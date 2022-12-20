@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
-import { useLocation, useHistory } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { selectors as playlist } from '../../redux/modules/playlist';
 import { setLanguageInQuery, setMediaTypeInQuery, persistPreferredMediaType } from '../../helpers/player';
 import { getQuery } from '../../helpers/url';
 
 const UpdateLocation = () => {
-  const history  = useHistory();
+  const navigate = useNavigate();
   const location = useLocation();
 
   const q                       = getQuery(location);
@@ -14,16 +14,16 @@ const UpdateLocation = () => {
 
   useEffect(() => {
     if (language && language !== q.language) {
-      setLanguageInQuery(history, language);
+      setLanguageInQuery(navigate, location, language,);
     }
-  }, [language, q.language]);
+  }, [language, q.language, navigate]);
 
   useEffect(() => {
     if (mediaType && mediaType !== q.mediaType) {
-      setMediaTypeInQuery(history, mediaType);
+      setMediaTypeInQuery(navigate, location, mediaType);
       persistPreferredMediaType(mediaType);
     }
-  }, [mediaType, q.mediaType]);
+  }, [mediaType, q.mediaType, location, navigate]);
 
   return null;
 };

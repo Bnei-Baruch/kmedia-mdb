@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useSelector, shallowEqual, useDispatch } from 'react-redux';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { Header, Icon } from 'semantic-ui-react';
 
 import { selectors as settings } from '../../../../redux/modules/settings';
@@ -99,4 +99,4 @@ const LessonDatePickerContainer = ({ t }) => {
   );
 };
 
-export default withNamespaces()(LessonDatePickerContainer);
+export default withTranslation()(LessonDatePickerContainer);

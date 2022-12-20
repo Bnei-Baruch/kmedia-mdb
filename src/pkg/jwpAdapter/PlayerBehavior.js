@@ -22,7 +22,7 @@ const PlayerBehavior = () => {
 
     const item = { 'file': file.src, image: file.image };
     if (!isReady) {
-      setup({ controls: false, playlist: [item], preload: 'auto' });
+      setup({ controls: false, playlist: [item], preload: 'auto'/*, autostart:true*/ });
       init(dispatch);
       dispatch(playerActions.setWIP(true));
     } else {

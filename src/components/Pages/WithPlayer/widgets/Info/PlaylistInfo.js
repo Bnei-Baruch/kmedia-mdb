@@ -12,7 +12,7 @@ import AlertModal from '../../../../shared/AlertModal';
 import PlaylistAddIcon from '../../../../../images/icons/PlaylistAdd';
 import NeedToLogin from '../../../../Sections/Personal/NeedToLogin';
 import { stopBubbling } from '../../../../../helpers/utils';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 
 const updateStatus = { save: 1, delete: 2 };
 
@@ -246,4 +246,4 @@ const PlaylistInfo = ({ t, handleClose = null }) => {
   );
 };
 
-export default withNamespaces()(PlaylistInfo);
+export default withTranslation()(PlaylistInfo);

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react';
-import { useHistory } from 'react-router';
-import { withNamespaces } from 'react-i18next';
+import { useNavigate } from 'react-router';
+import { withTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import { DATE_FORMAT } from '../../../../helpers/consts';
@@ -15,7 +15,7 @@ import { isEmpty } from '../../../../helpers/utils';
 const LessonDatePicker = ({ t }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
-  const history  = useHistory();
+  const navigate = useNavigate();
   const language = useSelector(state => settings.getLanguage(state.settings));
 
   const { cId }      = useSelector(state => playlist.getInfo(state.playlist));
@@ -27,10 +27,10 @@ const LessonDatePicker = ({ t }) => {
   useEffect(() => {
     if (!isEmpty(dpCollection?.content_units) && collection.id !== dpCollection.id) {
       const link = canonicalLink(dpCollection.content_units[0]);
-      history.push(`/${language}${link}`);
+      navigate.push(`/${language}${link}`);
       dispatch(actions.nullDatepickerCO());
     }
-  }, [collection, dpCollection, language, history, dispatch]);
+  }, [collection, dpCollection, language, navigate, dispatch]);
 
   const fetchNextCO = date => {
     const filmDate = moment.utc(date);
@@ -51,4 +51,4 @@ const LessonDatePicker = ({ t }) => {
   );
 };
 
-export default withNamespaces()(LessonDatePicker);
+export default withTranslation()(LessonDatePicker);

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Icon } from 'semantic-ui-react';
 import { useSelector, shallowEqual } from 'react-redux';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 
 import { selectors as player } from '../../../redux/modules/player';
 import { VolumeKnob } from './VolumeKnob';
@@ -58,4 +58,4 @@ const VolumeCtrl = ({ t }) => {
   );
 };
 
-export default withNamespaces()(VolumeCtrl);
+export default withTranslation()(VolumeCtrl);

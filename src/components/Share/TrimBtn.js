@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import moment from 'moment/moment';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Popup } from 'semantic-ui-react';
 import { isEqual } from 'lodash/lang';
@@ -56,4 +56,4 @@ const TrimBtn = ({ t }) => {
   );
 };
 
-export default withNamespaces()(TrimBtn);
+export default withTranslation()(TrimBtn);

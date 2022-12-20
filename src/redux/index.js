@@ -1,7 +1,9 @@
-import { connectRouter } from 'connected-react-router';
 import { combineReducers } from 'redux';
+import { reducer as assets } from './modules/assets';
 import { createRouterReducer as connectRouter } from '@lagunovsky/redux-react-router';
-import { reducer as settings } from './modules/settings';
+import { reducer as auth } from './modules/auth';
+import { reducer as bookmarkFilter } from './modules/bookmarkFilter';
+import { reducer as chronicles } from './modules/chronicles';
 import { reducer as events } from './modules/events';
 import { reducer as filters } from './modules/filters';
 import { reducer as filtersAside } from './modules/filtersAside';

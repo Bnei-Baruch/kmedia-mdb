@@ -2,7 +2,7 @@ import { Button, Header, Icon } from 'semantic-ui-react';
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectors as playlistSelectors, actions as playlistActions } from '../../../redux/modules/playlist';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import PlayerLanguages from './PlayerLanguages';
 import { LANGUAGES, MT_VIDEO, MT_AUDIO } from '../../../helpers/consts';
 
@@ -83,4 +83,4 @@ const AudioVideoBtns = ({ file, t }) => {
   );
 };
 
-export default withNamespaces()(AudioVideoBtns);
+export default withTranslation()(AudioVideoBtns);

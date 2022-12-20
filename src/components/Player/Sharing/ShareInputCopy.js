@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Message, Popup } from 'semantic-ui-react';
 import CopyToClipboard from 'react-copy-to-clipboard';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { POPOVER_CONFIRMATION_TIMEOUT } from './helper';
 
 let timeout = null;
@@ -39,4 +39,4 @@ const ShareInputCopy = ({ url, t }) => {
   );
 };
 
-export default withNamespaces()(ShareInputCopy);
+export default withTranslation()(ShareInputCopy);

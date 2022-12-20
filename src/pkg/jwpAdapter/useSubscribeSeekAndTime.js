@@ -18,7 +18,7 @@ const useSubscribeSeekAndTime = () => {
     if (!isReady) return noop;
 
     const checkTimeAfterSeek = d => {
-      if (d.duration === 0) return;
+      if (!d?.duration) return;
       const time = Math.round(d.offset ?? d.currentTime);
       const pos  = Math.round(10 * (100 * time) / d.duration) / 10;
       setPos(pos);

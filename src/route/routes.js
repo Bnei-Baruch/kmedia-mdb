@@ -1,6 +1,5 @@
 import React from 'react';
 import NotImplemented from './../components/NotImplemented';
-import PlaylistItemPage from './../components/Pages/PlaylistItemPage';
 import Events from './../components/Sections/Events/MainPage';
 import ExcerptContainer from './../components/Sections/Excerpt/ExcerptContainer';
 import Help from './../components/Sections/Help/Help';
@@ -36,16 +35,17 @@ import {
 } from '../helpers/consts';
 import Sketches from './../components/Sections/Sketches/MainPage';
 import SearchResults from './../components/Search/SearchResults';
-import PlaylistLastDaily from './components/Pages/WithPlayer/LastDaily/PlaylistLastDaily';
+import PlaylistLastDaily from './../components/Pages/WithPlayer/LastDaily/PlaylistLastDaily';
 import {
   PlaylistItemPageLesson,
   PlaylistItemPageEvent,
   PlaylistCollectionPage,
   PlaylistItemPageSeries
-} from './../components/Pages/WithPlayer/PlaylistPageDispecher';
+} from '../components/Pages/WithPlayer/PlaylistPageDispecher';
 
 import * as ssrDataLoaders from './routesSSRData';
 import SingleMediaContainer from './../components/Pages/WithPlayer/SingleMedia/SingleMediaContainer';
+import PlaylistMy from './../components/Pages/WithPlayer/PlaylistMy/Container';
 
 const routes = [
   { path: '', component: <HomePage />, ssrData: ssrDataLoaders.home },
@@ -68,8 +68,8 @@ const routes = [
   { path: 'publications/blog/:blog/:id', component: <BlogPost />, ssrData: ssrDataLoaders.blogPostPage },
 
   { path: 'lessons', component: <Lessons />, ssrData: ssrDataLoaders.lessonsPage },
-  { path: 'lessons/:tab', component: Lessons, ssrData: ssrDataLoaders.lessonsPage },
-  { path: 'lessons/cu/:id', component: <PlaylistItemPage />, ssrData: ssrDataLoaders.cuPage },
+  { path: 'lessons/:tab', component: <Lessons />, ssrData: ssrDataLoaders.lessonsPage },
+  { path: 'lessons/cu/:id', component: <PlaylistItemPageLesson />, ssrData: ssrDataLoaders.cuPage },
   {
     path: 'lessons/virtual/c/:id',
     component: <LessonCollection />,
@@ -98,8 +98,8 @@ const routes = [
   },
 
   ,
-  { path: 'programs', component: Programs, ssrData: ssrDataLoaders.programsPage },
-  { path: 'programs/:tab', component: Programs, ssrData: ssrDataLoaders.programsPage },
+  { path: 'programs', component: <Programs />, ssrData: ssrDataLoaders.programsPage },
+  { path: 'programs/:tab', component: <Programs />, ssrData: ssrDataLoaders.programsPage },
   {
     path: 'programs/c/:id',
     component: <Program />,
@@ -108,7 +108,7 @@ const routes = [
   { path: 'programs/cu/:id', component: <SingleMediaContainer />, ssrData: ssrDataLoaders.cuPage },
   { path: 'programs/:tab/cu/:id', component: <SingleMediaContainer />, ssrData: ssrDataLoaders.cuPage },
 
-  { path: 'events', component: Events, ssrData: ssrDataLoaders.eventsPage },
+  { path: 'events', component: <Events />, ssrData: ssrDataLoaders.eventsPage },
   {
     path: 'events/c/:id',
     component: <PlaylistCollectionPage />,

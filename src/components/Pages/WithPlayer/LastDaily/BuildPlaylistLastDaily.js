@@ -9,7 +9,7 @@ import { MY_NAMESPACE_HISTORY } from '../../../../helpers/consts';
 import { getSavedTime } from '../../../Player/helper';
 import WipErr from '../../../shared/WipErr/WipErr';
 import BuildPlaylistByCollection from '../BuildPlaylistByCollection';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 
 const BuildPlaylistLastDaily = ({ t }) => {
   const lastLessonId = useSelector(state => selectors.getLastLessonId(state.mdb));
@@ -46,4 +46,4 @@ const BuildPlaylistLastDaily = ({ t }) => {
   return <BuildPlaylistByCollection cuId={cuId} id={ccu.id} />;
 };
 
-export default withNamespaces()(BuildPlaylistLastDaily);
+export default withTranslation()(BuildPlaylistLastDaily);

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Icon } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { selectors as player } from '../../../redux/modules/player';
 import WebWrapTooltip from '../../shared/WebWrapTooltip';
 import { pause, play } from '../../../pkg/jwpAdapter/adapter';
@@ -25,4 +25,4 @@ const PlayPauseBtn = ({ t }) => {
   );
 };
 
-export default withNamespaces()(PlayPauseBtn);
+export default withTranslation()(PlayPauseBtn);

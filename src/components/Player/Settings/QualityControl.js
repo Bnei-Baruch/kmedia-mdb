@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Header } from 'semantic-ui-react';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { selectors as playlist, actions as playlistActions } from '../../../redux/modules/playlist';
@@ -38,4 +38,4 @@ const QualityControl = ({ t }) => {
   );
 };
 
-export default withNamespaces()(QualityControl);
+export default withTranslation()(QualityControl);

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Icon } from 'semantic-ui-react';
 import { stopBubbling } from '../../../helpers/utils';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import WebWrapTooltip from '../../shared/WebWrapTooltip';
 import { getPosition, seek } from '../../../pkg/jwpAdapter/adapter';
 
@@ -11,7 +11,7 @@ const handleSeek = (e, pos) => {
   stopBubbling(e);
 };
 
-export const SeekBackwardBtn = withNamespaces()(({ t }) => {
+export const SeekBackwardBtn = withTranslation()(({ t }) => {
   const handleSeekBackward = e => handleSeek(e, -10);
   return (
     <WebWrapTooltip
@@ -25,7 +25,7 @@ export const SeekBackwardBtn = withNamespaces()(({ t }) => {
   );
 });
 
-export const SeekForwardBtn = withNamespaces()(({ t }) => {
+export const SeekForwardBtn = withTranslation()(({ t }) => {
   const handleSeekForward = e => handleSeek(e, 10);
   return (
     <WebWrapTooltip

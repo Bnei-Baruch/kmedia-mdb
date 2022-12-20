@@ -1,16 +1,16 @@
 import React, { useEffect, useRef } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { useSelector } from 'react-redux';
 import { selectors as playlist } from '../../redux/modules/playlist';
 import usePlaylistItemLink from './hooks/usePlaylistItemLink';
 
 const UpdateLocation = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const { cuId, cId, wip } = useSelector(state => playlist.getInfo(state.playlist));
-  const prevCId                     = useRef(null);
-  const prevCuId                    = useRef(null);
-  const link                        = usePlaylistItemLink(cuId);
+  const prevCId            = useRef(null);
+  const prevCuId           = useRef(null);
+  const link               = usePlaylistItemLink(cuId);
 
   useEffect(() => {
     if (cId !== prevCId.current) {
@@ -21,10 +21,10 @@ const UpdateLocation = () => {
 
   useEffect(() => {
     if (!wip && prevCuId.current && prevCuId.current !== cuId) {
-      history.push(link);
+      navigate.push(link);
       prevCuId.current = link;
     }
-  }, [cuId, prevCuId, link, wip]);
+  }, [cuId, prevCuId, link, wip, navigate]);
 
   return null;
 };

@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { toHumanReadableTime } from '../../../helpers/time';
 import { actions, selectors } from '../../../redux/modules/player';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { getPosition } from '../../../pkg/jwpAdapter/adapter';
 
@@ -77,4 +77,4 @@ const StartEnd = ({ t }) => {
   );
 };
 
-export default withNamespaces()(StartEnd);
+export default withTranslation()(StartEnd);

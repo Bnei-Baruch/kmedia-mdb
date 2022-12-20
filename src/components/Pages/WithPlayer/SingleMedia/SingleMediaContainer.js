@@ -1,5 +1,5 @@
 import React from 'react';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
 import SingleMediaPage from './SingleMediaPage';
@@ -19,7 +19,7 @@ const SingleMediaContainer = () => {
   );
 };
 
-const PageSwitcher = withNamespaces()(({ playerContainer, t }) => {
+const PageSwitcher = withTranslation()(({ playerContainer, t }) => {
   const { isReady } = useSelector(state => playlist.getInfo(state.playlist));
 
   if (!isReady)

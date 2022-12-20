@@ -1,3 +1,5 @@
+@use "sass:math";
+
 @import 'rtl/homepage';
 
 .homepage {
@@ -207,11 +209,11 @@
 .thumbnail {
   @include mobile {
     margin-bottom: 1rem;
-    padding-top: percentage(1/2.5);
+    padding-top: percentage(math.div(1, 2.5));
   }
   height: 0;
   overflow: hidden;
-  padding-top: percentage(9/16);
+  padding-top: percentage(math.div(9, 16));
   position: relative;
 
   .label {
@@ -287,7 +289,7 @@
   }
 
   .homepage-posters & {
-    padding-top: percentage(1.6/1);
+    padding-top: percentage(math.div(1.6, 1));
 
     &__image {
       background-position: center center;

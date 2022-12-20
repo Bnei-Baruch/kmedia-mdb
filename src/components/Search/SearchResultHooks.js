@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import clsx from 'clsx';
 import {
   Button,
@@ -172,7 +172,7 @@ const searchResultClick = (chronicles, dispatch, clickData) => link => {
   chronicles.searchSelected({ ...clickData, link });
 }
 
-export const SearchResultCU = withNamespaces()(({ cu, highlight = {}, clickData, hideContent = false, onlyViewsAndDate = false, t }) => {
+export const SearchResultCU = withTranslation()(({ cu, highlight = {}, clickData, hideContent = false, onlyViewsAndDate = false, t }) => {
   const views = useSelector(state => recommended.getViews(cu.id, state.recommended));
   const chronicles = useContext(ClientChroniclesContext);
   const dispatch = useDispatch();
@@ -208,7 +208,7 @@ export const SearchResultCU = withNamespaces()(({ cu, highlight = {}, clickData,
   return <SearchResultOneItem {...props} />;
 });
 
-export const SearchResultPost = withNamespaces()(({ id, post, highlight, clickData, t }) => {
+export const SearchResultPost = withTranslation()(({ id, post, highlight, clickData, t }) => {
   const views = useSelector(state => recommended.getViews(id, state.recommended));
   const chronicles = useContext(ClientChroniclesContext);
   const dispatch = useDispatch();
@@ -234,7 +234,7 @@ export const SearchResultPost = withNamespaces()(({ id, post, highlight, clickDa
   return <SearchResultOneItem {...props} />;
 });
 
-export const SearchResultCollection = withNamespaces()(({ c, highlight, clickData, t }) => {
+export const SearchResultCollection = withTranslation()(({ c, highlight, clickData, t }) => {
   const views = useSelector(state => recommended.getViews(c.id, state.recommended));
   const chronicles = useContext(ClientChroniclesContext);
   const dispatch = useDispatch();
@@ -262,7 +262,7 @@ export const SearchResultCollection = withNamespaces()(({ c, highlight, clickDat
   return <SearchResultOneItem {...props} />;
 });
 
-export const SearchResultSource = withNamespaces()(({ id, title, highlight, clickData, t }) => {
+export const SearchResultSource = withTranslation()(({ id, title, highlight, clickData, t }) => {
   const views = useSelector(state => recommended.getViews(id, state.recommended));
   const chronicles = useContext(ClientChroniclesContext);
   const dispatch = useDispatch();
@@ -286,7 +286,7 @@ export const SearchResultSource = withNamespaces()(({ id, title, highlight, clic
   return <SearchResultOneItem {...props} />;
 });
 
-export const SearchResultLandingPage = withNamespaces()(({ landingPage, filterValues, clickData, t }) => {
+export const SearchResultLandingPage = withTranslation()(({ landingPage, filterValues, clickData, t }) => {
   const link = landingPageSectionLink(landingPage, filterValues);
   const chronicles = useContext(ClientChroniclesContext);
   const dispatch = useDispatch();
@@ -308,7 +308,7 @@ export const SearchResultLandingPage = withNamespaces()(({ landingPage, filterVa
   return <SearchResultOneItem {...props} />;
 });
 
-export const SearchResultOneItem = withNamespaces()(({
+export const SearchResultOneItem = withTranslation()(({
   key,
   title,
   link,
@@ -361,7 +361,7 @@ const getFilterById = (getTagById, getSourceById, index) => {
   }
 };
 
-export const SearchResultIntent = withNamespaces()(({ id, name, type, index, highlight, clickData, t }) => {
+export const SearchResultIntent = withTranslation()(({ id, name, type, index, highlight, clickData, t }) => {
   const chronicles = useContext(ClientChroniclesContext);
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const namespace = `intents_${id}_${type}`;
@@ -421,7 +421,7 @@ export const SearchResultIntent = withNamespaces()(({ id, name, type, index, hig
   return <SearchResultManyItems {...props} />;
 });
 
-export const SearchResultManyItems = withNamespaces()(({ logo, link, title, description, parts, resultsType, wip, err, items, click, t }) => {
+export const SearchResultManyItems = withTranslation()(({ logo, link, title, description, parts, resultsType, wip, err, items, click, t }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const wipError = WipErr({ wip: wip || items.some(item => !item), err, t });
   return (
@@ -480,7 +480,7 @@ const renderSerie = (s, click, link, t) =>
     </Button>
   );
 
-export const SearchResultSeries = withNamespaces()(({ id, type, mdbUid, clickData, t }) => {
+export const SearchResultSeries = withTranslation()(({ id, type, mdbUid, clickData, t }) => {
   const chronicles = useContext(ClientChroniclesContext);
   const dispatch = useDispatch();
   const click = searchResultClick(chronicles, dispatch, clickData);
@@ -540,7 +540,7 @@ const twitterMapFromState = (state, tweets) => tweets.map(tweet => {
   return { twitter, highlight: content };
 });
 
-export const SearchResultTweets = withNamespaces()(({ source, t }) => {
+export const SearchResultTweets = withTranslation()(({ source, t }) => {
   const ids = source.map(x => x._source.mdb_uid) || [];
   const wip = useSelector(state => publicationSelectors.getTweetsWip(state.publications));
   const err = useSelector(state => publicationSelectors.getTweetsError(state.publications));

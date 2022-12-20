@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 import { Button, Grid, Header, Image, Modal } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
@@ -107,4 +107,4 @@ const getDonateLinkDetails = language => {
 
 DonationPopup.propTypes = { t: PropTypes.func.isRequired };
 
-export default withNamespaces()(DonationPopup);
+export default withTranslation()(DonationPopup);

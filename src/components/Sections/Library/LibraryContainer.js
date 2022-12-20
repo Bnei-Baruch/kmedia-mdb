@@ -186,7 +186,8 @@ class LibraryContainer extends Component {
     window.addEventListener('load', this.updateSticky);
 
     const { sourceId, areSourcesLoaded, location } = this.props;
-    const { state: { tocIsActive = false } }       = location;
+
+    const tocIsActive = location.state?.tocIsActive || false;
 
     if (tocIsActive || sourceId === 'grRABASH') {
       this.setState({ tocIsActive: true });

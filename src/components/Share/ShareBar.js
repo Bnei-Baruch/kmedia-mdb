@@ -1,5 +1,5 @@
 import React from 'react';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import {
   EmailIcon,
   EmailShareButton,
@@ -52,4 +52,4 @@ const ShareBar = ({ url, t, }) => {
   );
 };
 
-export default withNamespaces()(ShareBar);
+export default withTranslation()(ShareBar);
