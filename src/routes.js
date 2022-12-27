@@ -11,10 +11,6 @@ import {
   PlaylistItemPageSeries
 } from './components/Pages/WithPlayer/PlaylistPageDispecher';
 import PlaylistMy from './components/Pages/WithPlayer/PlaylistMy/Container';
-import SearchResults from './components/Search/SearchResultsContainer';
-import PlaylistCollectionIdCheck from './components/Pages/PlaylistCollection/IdCheck';
-import PlaylistItemPage from './components/Pages/PlaylistItemPage';
-import PlaylistDecorator from './components/Pages/PlaylistMy/Decorator';
 import Events from './components/Sections/Events/MainPage';
 import ExcerptContainer from './components/Sections/Excerpt/ExcerptContainer';
 import Help from './components/Sections/Help/Help';
@@ -43,7 +39,6 @@ import BlogPost from './components/Sections/Publications/tabs/Blog/Post/Containe
 import SimpleModeContainer from './components/Sections/SimpleMode/Container';
 import Topics from './components/Sections/Topics/TopicContainer';
 import Topic from './components/Sections/Topics/TopicPage';
-import SearchResults from './components/Search/SearchResults';
 import * as shapes from './components/shapes';
 import {
   DEFAULT_LANGUAGE,
@@ -56,6 +51,7 @@ import {
 
 import * as ssrDataLoaders from './routesSSRData';
 import SingleMediaContainer from './components/Pages/WithPlayer/SingleMedia/SingleMediaContainer';
+import SearchResults from './components/Search/SearchResults';
 
 const routes = [
   { path: '', component: HomePage, options: { ssrData: ssrDataLoaders.home } },

@@ -21,7 +21,7 @@ import SectionHeader from '../../shared/SectionHeader';
 import Filters from './Filters';
 import UnitItem from './UnitItem';
 import MediaHelper from '../../../helpers/media';
-import { isZipFile } from '../../Pages/Unit/widgets/UnitMaterials/helper';
+import { isZipFile } from '../../Pages/WithPlayer/widgets/UnitMaterials/helper';
 
 export const SKETCHES_SHOWED_CTS = [...UNIT_LESSONS_TYPE, CT_VIDEO_PROGRAM_CHAPTER];
 const FILTER_PARAMS              = {
@@ -53,7 +53,7 @@ const MainPage = ({ t }) => {
     .filter(id => {
       const x             = getZipById(id) || false;
       const { wip, data } = x;
-      if (wip) wipAll = true
+      if (wip) wipAll = true;
       return !wip && isEmpty(data);
     });
 

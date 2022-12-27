@@ -6,9 +6,9 @@ import { selectors as assets } from '../../../redux/modules/assets';
 import { isLanguageRtl } from '../../../helpers/i18n-utils';
 import { selectors as settings } from '../../../redux/modules/settings';
 import ImageGallery from 'react-image-gallery';
-import { imageGalleryItem } from '../../Pages/Unit/widgets/UnitMaterials/helper';
 import FallbackImage from '../../shared/FallbackImage';
 import { assetUrl } from '../../../helpers/Api';
+import { imageGalleryItem } from '../../Pages/WithPlayer/widgets/UnitMaterials/helper';
 
 const ZipFileModal = ({ id, path }) => {
   const [open, setOpen] = useState(false);
