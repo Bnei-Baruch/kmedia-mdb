@@ -11,7 +11,7 @@ const useSubscribeVolume = () => {
   const [mute, setMute]     = useState(false);
 
   useEffect(() => {
-    if (isReady) return noop;
+    if (!isReady) return noop;
 
     const updateVolume = ({ volume }) => setVolume(volume);
     const updateMute   = ({ mute }) => setMute(mute);
