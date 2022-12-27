@@ -30,7 +30,7 @@ const PlayerContainer = () => {
 
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const handleFullScreen   = () => {
-    fscreen.fullscreenEnabled ? fscreen.requestFullscreen(settRef.current) : alert('fullscreen not supported');
+    return fscreen.fullscreenEnabled ? fscreen.requestFullscreen(settRef.current) : Promise.reject('not supported');
   };
 
   return (

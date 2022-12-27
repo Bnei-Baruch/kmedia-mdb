@@ -16,8 +16,8 @@ const DailyLessonItem = ({ id, t }) => {
 
 
   if (!ccu || content_units.length === 0) return null;
-  const link     = canonicalLink(logoUnit);
   const logoUnit = content_units.find(x => x.id === getCuByCcuSkipPreparation(ccu));
+  const link     = canonicalLink(logoUnit);
 
   return (
     <List.Item key={id} className="media_item daily_lesson">

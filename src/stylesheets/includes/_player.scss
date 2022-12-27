@@ -25,6 +25,9 @@ video {
   display: block;
 }
 
+.is-fullscreen {
+  height: 100VH;
+}
 
 //MOBILE
 .is-mobile {
@@ -37,6 +40,10 @@ video {
 
   .player-wrapper {
     position: relative;
+
+    .is-fullscreen & {
+      height: 100VH;
+    }
   }
 
   .controls {
@@ -64,10 +71,10 @@ video {
       align-items: center;
       justify-content: space-between;
 
-     /* &:nth-child(1) {
-        justify-content: flex-end;
-        display: none;
-      }*/
+      /* &:nth-child(1) {
+         justify-content: flex-end;
+         display: none;
+       }*/
     }
 
     &__settings, &__share, &__prev, &__rewind, &__forward, &__next, &__pause, &__fullscreen, &__close {
@@ -448,6 +455,7 @@ video {
       background: $controls-bg;
       border-radius: 4px;
     }
+
     /*
 
     &:nth-child(1) {
@@ -470,6 +478,7 @@ video {
 .controls__prev,
 .controls__next {
   color: white;
+
   .is-mobile.is-sharing & {
     display: none;
   }

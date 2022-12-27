@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import fscreen from 'fscreen';
 import { withNamespaces } from 'react-i18next';
@@ -8,18 +8,41 @@ import { actions, selectors } from '../../../redux/modules/player';
 import { PLAYER_OVER_MODES } from '../../../helpers/consts';
 import { stopBubbling } from '../../../helpers/utils';
 import WebWrapTooltip from '../../shared/WebWrapTooltip';
+import { DeviceInfoContext } from '../../../helpers/app-contexts';
 
 export const FullscreenBtn = withNamespaces()(({ openOnFull, t }) => {
-  const dispatch     = useDispatch();
-  const isFullScreen = useSelector(state => selectors.isFullScreen(state.player));
+  const dispatch           = useDispatch();
+  const isFullScreen       = useSelector(state => selectors.isFullScreen(state.player));
+  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const handleClick        = () => {
+    if (fscreen.fullscreenElement !== null) {
+      exitFullScreen();
+    } else {
+      enterFullScreen();
+    }
+  };
+  const enterFullScreen    = () => {
+    openOnFull().then((r) => {
+      console.log(r);
+      // fscreen.addEventListener('fullscreenchange', () => dispatch(actions.setFullScreen(false)), { once: true });
+    });
+    dispatch(actions.setFullScreen(true));
+    try {
+      isMobileDevice && window.screen.orientation.lock('landscape');
+    } catch (e) {
+      console.error(e);
+    }
+  };
+  const exitFullScreen     = () => {
+    if (!fscreen.fullscreenEnabled) return;
 
-  const handleFullScreen = () => {
-    if (!isFullScreen) {
-      openOnFull();
-      dispatch(actions.setFullScreen(true));
-    } else if (fscreen.fullscreenEnabled) {
-      fscreen.exitFullscreen();
-      dispatch(actions.setFullScreen(false));
+    fscreen.fullscreenElement && fscreen.exitFullscreen();
+    dispatch(actions.setFullScreen(false));
+
+    try {
+      isMobileDevice && window.screen.orientation.unlock();
+    } catch (e) {
+      console.error(e);
     }
   };
   return (
@@ -27,7 +50,7 @@ export const FullscreenBtn = withNamespaces()(({ openOnFull, t }) => {
       content={t(`player.controls.${isFullScreen ? 'fullscreen-exit' : 'fullscreen-enter'}`)}
       position="top right"
       trigger={
-        <div className="controls__fullscreen" onClick={handleFullScreen}>
+        <div className="controls__fullscreen" onClick={handleClick}>
           <Icon fitted name={isFullScreen ? 'compress' : 'expand'} />
         </div>
       } />
