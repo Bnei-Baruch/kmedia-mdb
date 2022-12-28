@@ -20,6 +20,7 @@ export const startEndFromQuery = (location) => {
 };
 
 export const saveTimeOnLocalstorage = (time, uid) => {
+  if (time === 0) return;
   const msg = {
     timestamp: (new Date).toISOString(),
     current_time: time
