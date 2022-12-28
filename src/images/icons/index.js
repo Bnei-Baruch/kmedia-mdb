@@ -1,4 +1,5 @@
 export { default as LabelIcon } from './LabelIcon'
+export { default as Audio } from './Audio'
 export { default as Dailylessons } from './Dailylessons'
 export { default as Download } from './Download'
 export { default as Events } from './Events'

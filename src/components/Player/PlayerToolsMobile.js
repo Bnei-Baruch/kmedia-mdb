@@ -7,6 +7,7 @@ import Sharing from './Sharing/Sharing';
 import ControlsMobile from './Controls/ControlsMobile';
 import { PLAYER_OVER_MODES } from '../../helpers/consts';
 import { stopBubbling } from '../../helpers/utils';
+import AudioBg from './AudioBg';
 
 const PlayerToolsMobile = ({ handleFullScreen, Player }) => {
   const isPlayerReady = useSelector(state => player.isReady(state.player));
@@ -27,6 +28,7 @@ const PlayerToolsMobile = ({ handleFullScreen, Player }) => {
       {
         isPlayerReady && (
           <>
+            <AudioBg />
             <Settings />
             <Sharing />
           </>

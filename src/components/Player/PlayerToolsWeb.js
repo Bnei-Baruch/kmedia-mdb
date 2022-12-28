@@ -5,6 +5,7 @@ import { selectors as player } from '../../redux/modules/player';
 import ControlsWeb from './Controls/ControlsWeb';
 import Settings from './Settings/Settings';
 import Sharing from './Sharing/Sharing';
+import AudioBg from './AudioBg';
 
 const PlayerToolsWeb = ({ handleFullScreen }) => {
   const isPlayerReady = useSelector(state => player.isReady(state.player));
@@ -13,6 +14,7 @@ const PlayerToolsWeb = ({ handleFullScreen }) => {
 
   return (
     <>
+      <AudioBg />
       <ControlsWeb openOnFull={handleFullScreen} />
       <Settings />
       <Sharing />

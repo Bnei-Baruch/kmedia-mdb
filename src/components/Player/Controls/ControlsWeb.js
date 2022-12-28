@@ -8,12 +8,11 @@ import VolumeCtrl from './VolumeCtrl';
 import { Timecode } from './Timecode';
 import { ProgressCtrl } from './ProgressCtrl';
 import PlayPauseBg from './PlayPauseBg';
-import AudioBg from './AudioBg';
+import AudioBg from '../AudioBg';
 
 const ControlsWeb = ({ openOnFull }) => {
   return (
     <div className="controls" dir="ltr">
-      <AudioBg />
       <PrevBtn />
       <SeekBackwardBtn />
       <PlayPauseBg />
