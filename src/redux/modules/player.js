@@ -73,7 +73,7 @@ const onReady = draft => {
 
 const onRemove = draft => {
   draft.overMode     = PLAYER_OVER_MODES.firstTime;
-  draft.isFullScreen = false;
+  //draft.isFullScreen = false;
   draft.ready        = false;
   draft.played       = false;
   draft.wip          = false;

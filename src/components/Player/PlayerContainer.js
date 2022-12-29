@@ -1,7 +1,6 @@
 import React, { useRef, useContext } from 'react';
 import { useSelector } from 'react-redux';
 import fscreen from 'fscreen';
-import { Ref } from 'semantic-ui-react';
 
 import { selectors as player, selectors } from '../../redux/modules/player';
 import { PLAYER_OVER_MODES } from '../../helpers/consts';
@@ -13,6 +12,8 @@ import AppendChronicle from './AppendChronicle';
 import { DeviceInfoContext } from '../../helpers/app-contexts';
 import clsx from 'clsx';
 import Preloader from './Controls/Preloader';
+import { Ref } from 'semantic-ui-react';
+import FullscreenIOS from './FullscreenIOS';
 
 const CLASSES_BY_MODE = {
   [PLAYER_OVER_MODES.settings]: 'is-settings',
@@ -28,31 +29,48 @@ const PlayerContainer = () => {
   const mode         = useSelector(state => player.getOverMode(state.player));
   const isFullScreen = useSelector(state => selectors.isFullScreen(state.player));
 
-  const { isMobileDevice } = useContext(DeviceInfoContext);
-  const handleFullScreen   = () => {
-    return fscreen.fullscreenEnabled ? fscreen.requestFullscreen(settRef.current) : Promise.reject('not supported');
+  const { isMobileDevice, isIOS } = useContext(DeviceInfoContext);
+  const handleFullScreen          = () => {
+    if (fscreen.fullscreenEnabled) {
+      fscreen.requestFullscreen(settRef.current);
+      return;
+    }
+
+    if (isIOS && isMobileDevice)
+      return;
+
+    console.error('fullscreen not supported');
   };
+  const content                   = (
+    <div className="player">
+      <AppendChronicle />
+      <UpdateLocation />
+      <div className={clsx(CLASSES_BY_MODE[mode], isMobileDevice ? 'is-mobile' : 'is-web', { 'is-fullscreen': isFullScreen })}>
+        <Preloader />
+        {
+          isMobileDevice ? (
+            <PlayerToolsMobile Player={<Player />} handleFullScreen={handleFullScreen} />
+          ) : (
+            <>
+              <Player />
+              <PlayerToolsWeb handleFullScreen={handleFullScreen} />
+            </>
+          )
+        }
+      </div>
+    </div>
+  );
 
   return (
-    <Ref innerRef={settRef}>
-      <div className="player">
-        <AppendChronicle />
-        <UpdateLocation />
-        <div className={clsx(CLASSES_BY_MODE[mode], isMobileDevice ? 'is-mobile' : 'is-web', { 'is-fullscreen': isFullScreen })}>
-          <Preloader />
-          {
-            isMobileDevice ? (
-              <PlayerToolsMobile Player={<Player />} handleFullScreen={handleFullScreen} />
-            ) : (
-              <>
-                <Player />
-                <PlayerToolsWeb handleFullScreen={handleFullScreen} />
-              </>
-            )
-          }
-        </div>
-      </div>
-    </Ref>
+    isIOS && isMobileDevice && isFullScreen ? (
+      <FullscreenIOS>
+        {content}
+      </FullscreenIOS>
+    ) : (
+      <Ref innerRef={settRef}>
+        {content}
+      </Ref>
+    )
   );
 
 };

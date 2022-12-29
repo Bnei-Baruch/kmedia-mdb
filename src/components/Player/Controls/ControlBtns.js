@@ -14,36 +14,35 @@ export const FullscreenBtn = withNamespaces()(({ openOnFull, t }) => {
   const dispatch           = useDispatch();
   const isFullScreen       = useSelector(state => selectors.isFullScreen(state.player));
   const { isMobileDevice } = useContext(DeviceInfoContext);
-  const handleClick        = () => {
-    if (fscreen.fullscreenElement !== null) {
+
+  const handleClick     = () => {
+    if ((fscreen.fullscreenEnabled && fscreen.fullscreenElement !== null) || isFullScreen) {
       exitFullScreen();
     } else {
       enterFullScreen();
     }
   };
-  const enterFullScreen    = () => {
-    openOnFull().then((r) => {
-      console.log(r);
-      // fscreen.addEventListener('fullscreenchange', () => dispatch(actions.setFullScreen(false)), { once: true });
-    });
+  const enterFullScreen = () => {
+    openOnFull();
     dispatch(actions.setFullScreen(true));
     try {
       isMobileDevice && window.screen.orientation.lock('landscape');
     } catch (e) {
       console.error(e);
     }
+    window.scrollTo(0, 0);
   };
-  const exitFullScreen     = () => {
-    if (!fscreen.fullscreenEnabled) return;
-
-    fscreen.fullscreenElement && fscreen.exitFullscreen();
-    dispatch(actions.setFullScreen(false));
-
+  const exitFullScreen  = () => {
     try {
       isMobileDevice && window.screen.orientation.unlock();
     } catch (e) {
       console.error(e);
     }
+
+    if (fscreen.fullscreenEnabled) {
+      fscreen.fullscreenElement && fscreen.exitFullscreen();
+    }
+    dispatch(actions.setFullScreen(false));
   };
   return (
     <WebWrapTooltip

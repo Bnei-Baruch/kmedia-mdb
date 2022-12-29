@@ -1071,13 +1071,42 @@ video {
 }
 
 
-.audio_bg{
+.audio_bg {
   position: absolute;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
 }
+
+.modals {
+  padding: 0 !important;
+  marging: 0 !important;
+}
+
+.ui.fullscreen.modal.is-IOS-fullscreen {
+  padding: 0 !important;
+  margin: 0 !important;
+  width: 100VW !important;
+  height: 100VH !important;
+  z-index: 2147483648;
+  border: 1px solid green;
+  display: flex !important;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+
+
+  @media screen and (orientation: portrait) {
+    .rotate-player {
+      width: 100VH !important;
+      height: 100VW !important;
+      transform: rotate(90deg);
+    }
+  }
+}
+
 
 // &-slice{
 //     top: 22px;
