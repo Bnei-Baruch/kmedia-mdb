@@ -1,4 +1,4 @@
-import React, { useRef, useContext } from 'react';
+import React, { useRef, useContext, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import fscreen from 'fscreen';
 
@@ -25,54 +25,56 @@ const CLASSES_BY_MODE = {
 };
 
 const PlayerContainer = () => {
-  const settRef      = useRef();
-  const mode         = useSelector(state => player.getOverMode(state.player));
-  const isFullScreen = useSelector(state => selectors.isFullScreen(state.player));
+        const settRef      = useRef();
+        const mode         = useSelector(state => player.getOverMode(state.player));
+        const isFullScreen = useSelector(state => selectors.isFullScreen(state.player));
 
-  const { isMobileDevice, isIOS } = useContext(DeviceInfoContext);
-  const handleFullScreen          = () => {
-    if (fscreen.fullscreenEnabled) {
-      fscreen.requestFullscreen(settRef.current);
-      return;
-    }
+        const { isMobileDevice, isIOS } = useContext(DeviceInfoContext);
 
-    if (isIOS && isMobileDevice)
-      return;
+        const handleFullScreen = useCallback(() => {
+          if (fscreen.fullscreenEnabled) {
+            fscreen.requestFullscreen(settRef.current);
+            return;
+          }
+          if (isIOS && isMobileDevice)
+            return;
 
-    console.error('fullscreen not supported');
-  };
-  const content                   = (
-    <div className="player">
-      <AppendChronicle />
-      <UpdateLocation />
-      <div className={clsx(CLASSES_BY_MODE[mode], isMobileDevice ? 'is-mobile' : 'is-web', { 'is-fullscreen': isFullScreen })}>
-        <Preloader />
-        {
-          isMobileDevice ? (
-            <PlayerToolsMobile Player={<Player />} handleFullScreen={handleFullScreen} />
+          console.error('fullscreen not supported');
+        }, [settRef.current, isIOS && isMobileDevice]);
+
+        const content = (
+          <div className="player">
+            <AppendChronicle />
+            <UpdateLocation />
+            <div className={clsx(CLASSES_BY_MODE[mode], isMobileDevice ? 'is-mobile' : 'is-web', { 'is-fullscreen': isFullScreen })}>
+              <Preloader />
+              {
+                isMobileDevice ? (
+                  <PlayerToolsMobile Player={<Player />} handleFullScreen={handleFullScreen} />
+                ) : (
+                  <>
+                    <Player />
+                    <PlayerToolsWeb handleFullScreen={handleFullScreen} />
+                  </>
+                )
+              }
+            </div>
+          </div>
+        );
+
+        return (
+          isIOS && isMobileDevice && isFullScreen ? (
+            <FullscreenIOS>
+              {content}
+            </FullscreenIOS>
           ) : (
-            <>
-              <Player />
-              <PlayerToolsWeb handleFullScreen={handleFullScreen} />
-            </>
+            <Ref innerRef={settRef}>
+              {content}
+            </Ref>
           )
-        }
-      </div>
-    </div>
-  );
+        );
 
-  return (
-    isIOS && isMobileDevice && isFullScreen ? (
-      <FullscreenIOS>
-        {content}
-      </FullscreenIOS>
-    ) : (
-      <Ref innerRef={settRef}>
-        {content}
-      </Ref>
-    )
-  );
-
-};
+      }
+;
 
 export default PlayerContainer;
