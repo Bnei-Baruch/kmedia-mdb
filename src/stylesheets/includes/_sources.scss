@@ -478,4 +478,13 @@
       padding-bottom: 0.5em !important;
     }
   }
+
+  &__audio {
+    padding-top: 1em;
+    text-align: end;
+
+    .library-audio-player {
+      margin-inline-end: 0 !important;
+    }
+  }
 }
