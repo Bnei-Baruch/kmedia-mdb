@@ -113,7 +113,7 @@ const Library = ({ data, source, downloadAllowed, t }) => {
   };
 
   const getAudioPlayer = () => {
-    const { mp3 } = data[language];
+    const { mp3 } = data[language] || {};
     return mp3 ? <AudioPlayer mp3={mp3} /> : null;
   }
 

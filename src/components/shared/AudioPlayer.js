@@ -31,7 +31,7 @@ const AudioPlayer = ({ mp3, t }) => {
 
   return audioInfo &&
     <span className="library-audio-player">
-      {playing
+      { playing
         ? <audio controls src={audioInfo?.url} autoPlay={true} preload="metadata" />
         :
         <Button compact onClick={() => setPlaying(true)}>
