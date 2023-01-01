@@ -12,7 +12,7 @@ import AudioBg from '../AudioBg';
 
 const ControlsWeb = ({ openOnFull }) => {
   return (
-    <div className="controls" dir="ltr">
+    <div className="controls">
       <PrevBtn />
       <SeekBackwardBtn />
       <PlayPauseBg />

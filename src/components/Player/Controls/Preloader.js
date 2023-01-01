@@ -1,5 +1,4 @@
 import React from 'react';
-import { Icon } from 'semantic-ui-react';
 import { usePreloader } from '../../../pkg/jwpAdapter';
 
 const Preloader = () => {
@@ -8,10 +7,12 @@ const Preloader = () => {
   if (loaded === true) return null;
 
   return (
-    <>
-      {loaded?.toString()}
-      <Icon name="circle notch" loading />
-    </>
+    <div className="preloader">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
   );
 };
 

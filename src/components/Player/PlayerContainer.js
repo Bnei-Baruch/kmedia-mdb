@@ -43,11 +43,10 @@ const PlayerContainer = () => {
         }, [settRef.current, isIOS && isMobileDevice]);
 
         const content = (
-          <div className="player">
+          <div className="player" dir="ltr">
             <AppendChronicle />
             <UpdateLocation />
             <div className={clsx(CLASSES_BY_MODE[mode], isMobileDevice ? 'is-mobile' : 'is-web', { 'is-fullscreen': isFullScreen })}>
-              <Preloader />
               {
                 isMobileDevice ? (
                   <PlayerToolsMobile Player={<Player />} handleFullScreen={handleFullScreen} />
@@ -58,6 +57,7 @@ const PlayerContainer = () => {
                   </>
                 )
               }
+              <Preloader />
             </div>
           </div>
         );
