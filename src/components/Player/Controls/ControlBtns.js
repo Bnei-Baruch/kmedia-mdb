@@ -30,7 +30,7 @@ export const FullscreenBtn = withNamespaces()(({ fullscreenRef, t }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
   const handleClick     = () => {
-    if (true/*!fscreen.fullscreenEnabled*/) {
+    if (!fscreen.fullscreenEnabled) {
       enterFullScreenIOS();
       return;
     }
