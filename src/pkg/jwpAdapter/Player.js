@@ -4,6 +4,7 @@ import PlayerBehavior from './PlayerBehavior';
 import BehaviorStartPlay from './BehaviorStartPlay';
 import BehaviorStartStopSlice from './BehaviorStartStopSlice';
 import isFunction from 'lodash/isFunction';
+import { Ref } from 'semantic-ui-react';
 
 const Player = () => {
   const ref = useRef();
@@ -20,9 +21,9 @@ const Player = () => {
       <PlayerBehavior />
       <BehaviorStartPlay />
       <BehaviorStartStopSlice />
-      <div ref={ref}>
+      <Ref innerRef={ref}>
         <div id={JWPLAYER_ID}></div>
-      </div>
+      </Ref>
     </>
   );
 };

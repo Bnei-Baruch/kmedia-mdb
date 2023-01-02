@@ -420,6 +420,11 @@ video {
 }
 
 .player-wrapper {
+  .is-mobile.is-fullscreen & {
+    height: auto;
+    width: 100%;
+  }
+
   .is-mobile.is-fullscreen.is-sharing & {
     height: auto;
     flex: 1 1 auto;;
@@ -1167,7 +1172,6 @@ video {
   width: 100VW !important;
   height: 100VH !important;
   z-index: 2147483648;
-  border: 1px solid green;
   display: flex !important;
   flex-direction: column;
   justify-content: center;
@@ -1175,11 +1179,26 @@ video {
   overflow: hidden;
 
 
-  @media screen and (orientation: portrait) {
-    .rotate-player {
-      width: 100VH !important;
-      height: 100VW !important;
-      transform: rotate(90deg);
+  .rotate-player {
+    width: 100%;
+    height: 100%;
+
+    .player-wrapper {
+      height: 100VH;
+      width: 100VW;
+    }
+
+    @media screen and (orientation: portrait) {
+      & {
+        width: 100VH !important;
+        height: 100VW !important;
+        transform: rotate(90deg);
+
+        .player-wrapper {
+          height: 100VW;
+          width: 100VH;
+        }
+      }
     }
   }
 }
