@@ -11,7 +11,7 @@ import { selectors as player } from '../../../redux/modules/player';
 import { ProgressCtrl } from './ProgressCtrl';
 import MediaTypeControlMobile from '../Settings/MediaTypeControlMobile';
 
-const ControlsMobile = ({ openOnFull }) => {
+const ControlsMobile = ({ fullscreenRef }) => {
 
   const mode = useSelector(state => player.getOverMode(state.player));
 
@@ -47,7 +47,7 @@ const ControlsMobile = ({ openOnFull }) => {
         <div className="controls__bar">
           <Timecode />
           <div className="flex-spacer"></div>
-          <FullscreenBtn openOnFull={openOnFull} />
+          <FullscreenBtn fullscreenRef={fullscreenRef} />
         </div>
       </div>
       <ProgressCtrl />

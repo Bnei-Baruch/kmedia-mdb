@@ -10,40 +10,63 @@ import { stopBubbling } from '../../../helpers/utils';
 import WebWrapTooltip from '../../shared/WebWrapTooltip';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 
-export const FullscreenBtn = withNamespaces()(({ openOnFull, t }) => {
+const lockLandscape        = () => {
+  try {
+    window.screen.orientation.lock('landscape');
+  } catch (e) {
+    console.error(e);
+  }
+};
+const unlockLandscape      = () => {
+  try {
+    window.screen.orientation.unlock();
+  } catch (e) {
+    console.error(e);
+  }
+};
+export const FullscreenBtn = withNamespaces()(({ fullscreenRef, t }) => {
   const dispatch           = useDispatch();
   const isFullScreen       = useSelector(state => selectors.isFullScreen(state.player));
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
   const handleClick     = () => {
-    if (/*(fscreen.fullscreenEnabled && fscreen.fullscreenElement !== null) || */isFullScreen) {
-      exitFullScreen();
+    if (true/*!fscreen.fullscreenEnabled*/) {
+      enterFullScreenIOS();
+      return;
+    }
+    if (fscreen.fullscreenElement !== null) {
+      exitFullscreen();
     } else {
-      enterFullScreen();
+      enterFullscreen();
     }
   };
-  const enterFullScreen = () => {
-    openOnFull();
+  const enterFullscreen = () => {
+    lockLandscape();
+    fscreen.requestFullscreen(fullscreenRef.current);
     dispatch(actions.setFullScreen(true));
-    try {
-      isMobileDevice && window.screen.orientation.lock('landscape');
-    } catch (e) {
-      console.error(e);
-    }
-    window.scrollTo(0, 0);
   };
-  const exitFullScreen  = () => {
-    try {
-      isMobileDevice && window.screen.orientation.unlock();
-    } catch (e) {
-      console.error(e);
-    }
-
-    if (fscreen.fullscreenEnabled) {
-      //fscreen.fullscreenElement && fscreen.exitFullscreen();
-    }
+  const exitFullscreen  = () => {
+    fscreen.fullscreenElement && fscreen.exitFullscreen();
     dispatch(actions.setFullScreen(false));
+    unlockLandscape();
   };
+
+  const enterFullScreenIOS = () => {
+    const player = window.jwplayer();
+    player.setFullscreen(true).setAllowFullscreen(true).setControls(true);
+    dispatch(actions.setFullScreen(false));
+    lockLandscape();
+    player.on('fullscreen', exitFullScreenIOS);
+  };
+
+  const exitFullScreenIOS = () => {
+    const player = window.jwplayer();
+    player.off('fullscreen', exitFullScreenIOS);
+    player().setFullscreen(false).setAllowFullscreen(false).setControls(false);
+    dispatch(actions.setFullScreen(false));
+    unlockLandscape();
+  };
+
   return (
     <WebWrapTooltip
       content={t(`player.controls.${isFullScreen ? 'fullscreen-exit' : 'fullscreen-enter'}`)}

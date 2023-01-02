@@ -10,7 +10,7 @@ import { ProgressCtrl } from './ProgressCtrl';
 import PlayPauseBg from './PlayPauseBg';
 import AudioBg from '../AudioBg';
 
-const ControlsWeb = ({ openOnFull }) => {
+const ControlsWeb = ({ fullscreenRef }) => {
   return (
     <div className="controls">
       <PrevBtn />
@@ -25,7 +25,7 @@ const ControlsWeb = ({ openOnFull }) => {
         <ProgressCtrl />
         <SettingsBtn />
         <ShareBtn />
-        <FullscreenBtn openOnFull={openOnFull} />
+        <FullscreenBtn fullscreenRef={fullscreenRef} />
       </div>
     </div>
   );

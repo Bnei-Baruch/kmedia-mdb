@@ -1,6 +1,5 @@
-import React, { useRef, useContext, useCallback } from 'react';
+import React, { useRef, useContext } from 'react';
 import { useSelector } from 'react-redux';
-import fscreen from 'fscreen';
 
 import { selectors as player, selectors } from '../../redux/modules/player';
 import { PLAYER_OVER_MODES } from '../../helpers/consts';
@@ -11,9 +10,7 @@ import PlayerToolsMobile from './PlayerToolsMobile';
 import AppendChronicle from './AppendChronicle';
 import { DeviceInfoContext } from '../../helpers/app-contexts';
 import clsx from 'clsx';
-import Preloader from './Controls/Preloader';
 import { Ref } from 'semantic-ui-react';
-import FullscreenIOS from './FullscreenIOS';
 
 const CLASSES_BY_MODE = {
   [PLAYER_OVER_MODES.settings]: 'is-settings',
@@ -25,24 +22,11 @@ const CLASSES_BY_MODE = {
 };
 
 const PlayerContainer = () => {
-        const settRef      = useRef();
-        const mode         = useSelector(state => player.getOverMode(state.player));
-        const isFullScreen = useSelector(state => selectors.isFullScreen(state.player));
+        const fullscreenRef = useRef();
+        const mode          = useSelector(state => player.getOverMode(state.player));
+        const isFullScreen  = useSelector(state => selectors.isFullScreen(state.player));
 
-        const { isMobileDevice, isIOS } = useContext(DeviceInfoContext);
-
-        const handleFullScreen = useCallback(() => {
-          /*if (fscreen.fullscreenEnabled) {
-            fscreen.requestFullscreen(settRef.current);
-            return;
-          }*/
-          if (isIOS && isMobileDevice) {
-            window.scrollTo(0, 1);
-            return;
-          }
-
-          console.error('fullscreen not supported');
-        }, [settRef.current, isIOS && isMobileDevice]);
+        const { isMobileDevice } = useContext(DeviceInfoContext);
 
         const content = (
           <div className="player" dir="ltr">
@@ -51,29 +35,22 @@ const PlayerContainer = () => {
             <div className={clsx(CLASSES_BY_MODE[mode], isMobileDevice ? 'is-mobile' : 'is-web', { 'is-fullscreen': isFullScreen })}>
               {
                 isMobileDevice ? (
-                  <PlayerToolsMobile Player={<Player />} handleFullScreen={handleFullScreen} />
+                  <PlayerToolsMobile Player={<Player />} fullscreenRef={fullscreenRef} />
                 ) : (
                   <>
                     <Player />
-                    <PlayerToolsWeb handleFullScreen={handleFullScreen} />
+                    <PlayerToolsWeb fullscreenRef={fullscreenRef} />
                   </>
                 )
               }
-              <Preloader />
             </div>
           </div>
         );
 
         return (
-          isIOS && isMobileDevice && isFullScreen ? (
-            <FullscreenIOS>
-              {content}
-            </FullscreenIOS>
-          ) : (
-            <Ref innerRef={settRef}>
-              {content}
-            </Ref>
-          )
+          <Ref innerRef={fullscreenRef}>
+            {content}
+          </Ref>
         );
 
       }
