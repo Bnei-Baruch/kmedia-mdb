@@ -18,7 +18,7 @@ const ControlsMobile = ({ openOnFull }) => {
   return (
     <>
 
-      <div className="controls" dir="ltr">
+      <div className="controls">
         {
           (mode === PLAYER_OVER_MODES.share) ? (
             <div className="controls__bar">

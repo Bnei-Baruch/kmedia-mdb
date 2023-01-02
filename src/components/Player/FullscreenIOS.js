@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useRef, useState, useLayoutEffect } from 'react';
 import { Modal } from 'semantic-ui-react';
 
 const FullscreenIOS = ({ children }) => {
+
   return (
     <Modal
       open={true}

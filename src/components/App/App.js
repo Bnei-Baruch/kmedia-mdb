@@ -27,7 +27,8 @@ const App = props => {
   };
   const deviceInfoContext = {
     deviceInfo,
-    isMobileDevice: deviceInfo.device?.type === 'mobile',
+    isMobileDevice: true,//deviceInfo.device?.type === 'mobile',
+    isIOS: true,//deviceInfo.os?.name === 'iOS',
     undefinedDevice: deviceInfo.device?.type === undefined
   };
 

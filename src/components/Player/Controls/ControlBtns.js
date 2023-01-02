@@ -16,7 +16,7 @@ export const FullscreenBtn = withNamespaces()(({ openOnFull, t }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
   const handleClick     = () => {
-    if ((fscreen.fullscreenEnabled && fscreen.fullscreenElement !== null) || isFullScreen) {
+    if (/*(fscreen.fullscreenEnabled && fscreen.fullscreenElement !== null) || */isFullScreen) {
       exitFullScreen();
     } else {
       enterFullScreen();
@@ -40,7 +40,7 @@ export const FullscreenBtn = withNamespaces()(({ openOnFull, t }) => {
     }
 
     if (fscreen.fullscreenEnabled) {
-      fscreen.fullscreenElement && fscreen.exitFullscreen();
+      //fscreen.fullscreenElement && fscreen.exitFullscreen();
     }
     dispatch(actions.setFullScreen(false));
   };

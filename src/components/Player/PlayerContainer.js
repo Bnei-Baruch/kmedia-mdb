@@ -32,12 +32,14 @@ const PlayerContainer = () => {
         const { isMobileDevice, isIOS } = useContext(DeviceInfoContext);
 
         const handleFullScreen = useCallback(() => {
-          if (fscreen.fullscreenEnabled) {
+          /*if (fscreen.fullscreenEnabled) {
             fscreen.requestFullscreen(settRef.current);
             return;
-          }
-          if (isIOS && isMobileDevice)
+          }*/
+          if (isIOS && isMobileDevice) {
+            window.scrollTo(0, 1);
             return;
+          }
 
           console.error('fullscreen not supported');
         }, [settRef.current, isIOS && isMobileDevice]);
