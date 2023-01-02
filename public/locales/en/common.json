@@ -191,7 +191,7 @@
     },
     "settings": {
       "playback": "Playback",
-      "playback-speed": "Playback speed",
+      "playback-speed": "Speed",
       "quality": "Quality",
       "language": "Language",
       "audio": "Audio",
@@ -203,19 +203,22 @@
       "start-position": "Start",
       "end-position": "End",
       "click-to-set": "Click to set",
-      "reset-to-full": "Reset to full video"
+      "embedded": "Embed",
+      "reset-to-full": "Reset to full",
+      "download-file": "Download excerpt"
     },
     "controls": {
       "pause": "Pause",
       "play": "Play",
       "mute": "Mute",
-      "fullscreen": "Fullscreen",
       "share": "Share",
       "settings": "Settings",
-      "rewind10": "Rewind 10 seconds",
-      "skip10": "Skip 10 seconds",
+      "rewind10": "Rewind 10 sec",
+      "skip10": "Skip 10 sec",
       "next-video": "Next video",
-      "prev-video": "Previous video"
+      "prev-video": "Previous video",
+      "fullscreen": "Fullscreen",
+      "fullscreen-exit": "Esc fullscreen"
     }
   },
   "playlist": {

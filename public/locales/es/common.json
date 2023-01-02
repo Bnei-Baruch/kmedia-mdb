@@ -187,10 +187,10 @@
       "copyButton": "Copiar link"
     },
     "settings": {
-      "playback": "Playback",
-      "playback-speed": "Playback speed",
-      "quality": "Quality",
-      "language": "Language",
+      "playback": "Reproducción",
+      "playback-speed": "Velocidad",
+      "quality": "Calidad",
+      "language": "Idioma",
       "audio": "Audio",
       "video": "Video",
       "normal": "normal"
@@ -200,19 +200,22 @@
       "start-position": "Inicio",
       "end-position": "Final",
       "click-to-set": "Clic para marcar",
-      "reset-to-full": "Reset to full video"
+      "embedded": "Empotrar",
+      "reset-to-full": "Restablecer a completo",
+      "download-file": "Descargar extracto"
     },
     "controls": {
-      "pause": "Pause",
-      "play": "Play",
-      "mute": "Mute",
-      "fullscreen": "Fullscreen",
-      "share": "Share",
-      "settings": "Settings",
-      "rewind10": "Rewind 10 seconds",
-      "skip10": "Skip 10 seconds",
+      "pause": "Pausa",
+      "play": "Reproducir",
+      "mute": "Mudo",
+      "share": "Cuota",
+      "settings": "Configuración",
+      "rewind10": "Rebobinar 10 seg",
+      "skip10": "Saltar 10 seg",
       "next-video": "Next video",
-      "prev-video": "Previous video"
+      "prev-video": "Previous video",
+      "fullscreen": "Fullscreen",
+      "fullscreen-exit": "Esc fullscreen"
     }
   },
   "playlist": {

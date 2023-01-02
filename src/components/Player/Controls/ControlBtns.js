@@ -65,7 +65,7 @@ export const FullscreenBtn = withNamespaces()(({ fullscreenRef, t }) => {
 
   return (
     <WebWrapTooltip
-      content={t(`player.controls.${isFullScreen ? 'fullscreen-exit' : 'fullscreen-enter'}`)}
+      content={t(`player.controls.${isFullScreen ? 'fullscreen-exit' : 'fullscreen'}`)}
       position="top right"
       trigger={
         <div className="controls__fullscreen" onClick={handleClick}>
