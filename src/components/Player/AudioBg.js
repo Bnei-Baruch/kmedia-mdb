@@ -5,7 +5,7 @@ import { selectors } from '../../redux/modules/player';
 import { Icon } from 'semantic-ui-react';
 
 const AudioBg = () => {
-  const { type } = useSelector(state => selectors.getFile(state.player));
+  const { type } = useSelector(state => selectors.getFile(state.player)) || false;
   if (type !== MT_AUDIO) return null;
   return (
     <div className="audio-backdrop">

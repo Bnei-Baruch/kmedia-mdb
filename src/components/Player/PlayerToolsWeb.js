@@ -15,8 +15,8 @@ const PlayerToolsWeb = ({ fullscreenRef }) => {
 
   return (
     <>
-      <Preloader />
       <AudioBg />
+      <Preloader />
       <ControlsWeb fullscreenRef={fullscreenRef} />
       <Settings />
       <Sharing />

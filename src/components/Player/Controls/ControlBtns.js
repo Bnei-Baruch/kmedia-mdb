@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import fscreen from 'fscreen';
 import { withNamespaces } from 'react-i18next';
@@ -8,7 +8,6 @@ import { actions, selectors } from '../../../redux/modules/player';
 import { PLAYER_OVER_MODES } from '../../../helpers/consts';
 import { stopBubbling } from '../../../helpers/utils';
 import WebWrapTooltip from '../../shared/WebWrapTooltip';
-import { DeviceInfoContext } from '../../../helpers/app-contexts';
 
 const lockLandscape        = () => {
   try {
@@ -25,9 +24,8 @@ const unlockLandscape      = () => {
   }
 };
 export const FullscreenBtn = withNamespaces()(({ fullscreenRef, t }) => {
-  const dispatch           = useDispatch();
-  const isFullScreen       = useSelector(state => selectors.isFullScreen(state.player));
-  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const dispatch     = useDispatch();
+  const isFullScreen = useSelector(state => selectors.isFullScreen(state.player));
 
   const handleClick     = () => {
     if (!fscreen.fullscreenEnabled) {
@@ -41,29 +39,28 @@ export const FullscreenBtn = withNamespaces()(({ fullscreenRef, t }) => {
     }
   };
   const enterFullscreen = () => {
-    lockLandscape();
-    fscreen.requestFullscreen(fullscreenRef.current);
+    fscreen.requestFullscreen(fullscreenRef.current).then(lockLandscape);
     dispatch(actions.setFullScreen(true));
   };
   const exitFullscreen  = () => {
-    fscreen.fullscreenElement && fscreen.exitFullscreen();
-    dispatch(actions.setFullScreen(false));
     unlockLandscape();
+    dispatch(actions.setFullScreen(false));
+    fscreen.fullscreenElement && fscreen.exitFullscreen();
   };
 
   const enterFullScreenIOS = () => {
     const player = window.jwplayer();
     player.setFullscreen(true).setControls(true);
     dispatch(actions.setFullScreen(false));
-    lockLandscape();
     player.once('fullscreen', exitFullScreenIOS);
+    lockLandscape();
   };
 
   const exitFullScreenIOS = () => {
-    const player = window.jwplayer();
-    player.setControls(false);
     dispatch(actions.setFullScreen(false));
     unlockLandscape();
+    const player = window.jwplayer();
+    player.setControls(false);
   };
 
   return (

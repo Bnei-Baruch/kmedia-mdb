@@ -24,13 +24,13 @@ const PlayerToolsMobile = ({ fullscreenRef, Player }) => {
     <>
       <div className="player-wrapper" onClick={handleTouch}>
         {Player}
+        <AudioBg />
         {isPlayerReady && <ControlsMobile fullscreenRef={fullscreenRef} />}
       </div>
       {
         isPlayerReady && (
           <>
             <Preloader />
-            <AudioBg />
             <Settings />
             <Sharing />
           </>
