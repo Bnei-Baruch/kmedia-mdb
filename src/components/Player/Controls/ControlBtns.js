@@ -53,16 +53,15 @@ export const FullscreenBtn = withNamespaces()(({ fullscreenRef, t }) => {
 
   const enterFullScreenIOS = () => {
     const player = window.jwplayer();
-    player.setFullscreen(true).setAllowFullscreen(true).setControls(true);
+    player.setFullscreen(true).setControls(true);
     dispatch(actions.setFullScreen(false));
     lockLandscape();
-    player.on('fullscreen', exitFullScreenIOS);
+    player.once('fullscreen', exitFullScreenIOS);
   };
 
   const exitFullScreenIOS = () => {
     const player = window.jwplayer();
-    player.off('fullscreen', exitFullScreenIOS);
-    player().setFullscreen(false).setAllowFullscreen(false).setControls(false);
+    player.setControls(false);
     dispatch(actions.setFullScreen(false));
     unlockLandscape();
   };
