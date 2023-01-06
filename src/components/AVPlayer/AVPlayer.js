@@ -227,12 +227,17 @@ class AVPlayer extends Component {
     window.addEventListener('message', this.receiveMessageFunc, false);
   }
 
+  chroniclesPlayerStop() {
+    const { chronicles } = this.props;
+    chronicles.append('player-stop', this.buildAppendData());
+  }
+
   componentDidUpdate(prevProps) {
     const { item, chronicles, media } = this.props;
 
     if (!isEqual(this.state.item, item)) {
       if (this.isUnitExistAndPlaying() && this.state?.item?.unit?.id !== item?.unit?.id) {
-        chronicles.append('player-stop', this.buildAppendData());
+        this.chroniclesPlayerStop();
       }
 
       this.setState({
@@ -260,7 +265,7 @@ class AVPlayer extends Component {
 
     window.removeEventListener('message', this.receiveMessageFunc, false);
     if (this.isUnitExistAndPlaying()) {
-      chronicles.append('player-stop', this.buildAppendData());
+      this.chroniclesPlayerStop()
     }
   }
 
@@ -413,7 +418,7 @@ class AVPlayer extends Component {
 
     const unitId = item?.unit?.id;
     if (unitId) {
-      chronicles.append('player-play', this.buildAppendData());
+      chronicles.append('player-play', this.buildAppendData(), /*sync*/ false, () => this.chroniclesPlayerStop());
       actionPlayerPlay(unitId);
     }
   };
@@ -431,7 +436,7 @@ class AVPlayer extends Component {
     }
 
     if (item?.unit?.id) {
-      chronicles.append('player-stop', this.buildAppendData());
+      this.chroniclesPlayerStop()
     }
   };
 
