@@ -52,7 +52,7 @@ const getDownloadProps = (pdf, file) => {
 
   const path = physicalFile(d, true);
 
-  const { mimeType, name: filename } = d;
+  const { mimetype: mimeType, name: filename } = d;
   return { path, downloadAllowed: true, mimeType, filename };
 };
 
