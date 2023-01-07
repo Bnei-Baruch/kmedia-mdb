@@ -12,7 +12,7 @@ import { selectors as settings } from '../../../../../../redux/modules/settings'
 import { selectSuitableLanguage } from '../../../../../../helpers/language';
 import { getLanguageDirection } from '../../../../../../helpers/i18n-utils';
 import { DeviceInfoContext } from '../../../../../../helpers/app-contexts';
-import { CT_LIKUTIM, CT_SOURCE, MT_TEXT } from '../../../../../../helpers/consts';
+import { CT_LIKUTIM, CT_SOURCE, MT_TEXT, MT_AUDIO } from '../../../../../../helpers/consts';
 import { getSourceErrorSplash, wipLoadingSplash } from '../../../../../shared/WipErr/WipErr';
 import AudioPlayer from '../../../../../shared/AudioPlayer';
 import PDF, { isTaas, startsFrom } from '../../../../../shared/PDF/PDF';
@@ -36,11 +36,11 @@ const getLikutimFiles = (unit, cuId) => {
     ? likUnits.find(x => x.id === cuId)
     : likUnits.length > 0 && likUnits[0];
 
-  return cu?.files?.filter(f => f.type === MT_TEXT) || [];
+  return cu?.files || [];
 };
 
 const getLikutimLanguages = unit => {
-  const files = getLikutimFiles(unit);
+  const files = getLikutimFiles(unit).filter(f => f.type === MT_TEXT);
   return files.length > 0 ? files.map(f => f.language) : [];
 };
 
@@ -133,12 +133,16 @@ const Sources = ({ unit, t }) => {
   useEffect(() => {
     let file;
     if (isLikutim) {
-      file = getLikutimFiles(unit, selectedUnitId).find(x => x.language === language);
+      const files = getLikutimFiles(unit, selectedUnitId).filter(f => f.language === language);
+      file = files.find(f => f.type === MT_TEXT);
+      const mp3 = files.find(f => f.type === MT_AUDIO);
+      setMp3(mp3);
     } else {
       const langFiles = indexById[selectedUnitId]?.data?.[language];
 
       if (langFiles) {
         const { pdf, docx, doc, mp3 } = langFiles;
+
         if (pdf && isTaas(selectedUnitId)) {
           // pdf.js fetch it on his own (smarter than us), we fetch it for nothing.
           setPdf(pdf);
@@ -163,7 +167,6 @@ const Sources = ({ unit, t }) => {
 
     const newFetch = `${selectedUnitId}#${language}#${file.id}`;
     if (newFetch === fetched) {
-      // console.log('fetched already', newFetch);
       return;
     }
 
