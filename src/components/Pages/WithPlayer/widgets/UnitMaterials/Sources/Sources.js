@@ -14,6 +14,7 @@ import { getLanguageDirection } from '../../../../../../helpers/i18n-utils';
 import { DeviceInfoContext } from '../../../../../../helpers/app-contexts';
 import { CT_LIKUTIM, CT_SOURCE, MT_TEXT } from '../../../../../../helpers/consts';
 import { getSourceErrorSplash, wipLoadingSplash } from '../../../../../shared/WipErr/WipErr';
+import AudioPlayer from '../../../../../shared/AudioPlayer';
 import PDF, { isTaas, startsFrom } from '../../../../../shared/PDF/PDF';
 import ScrollToSearch from '../../../../../shared/DocToolbar/ScrollToSearch';
 import Download from '../../../../../shared/Download/Download';
@@ -55,7 +56,7 @@ const getDownloadProps = (pdf, file) => {
   return { path, downloadAllowed: true, mimeType, filename };
 };
 
-const Sources = ({ unit, t, activeTab = 'sources' }) => {
+const Sources = ({ unit, t }) => {
   const getSourceById   = useSelector(state => selectors.getSourceById(state.sources), shallowEqual);
   const indexById       = useSelector(state => assetsSelectors.getSourceIndexById(state.assets), shallowEqual);
   const uiLanguage      = useSelector(state => settings.getLanguage(state.settings));
@@ -70,6 +71,7 @@ const Sources = ({ unit, t, activeTab = 'sources' }) => {
   const [selectedUnitId, setSelectedUnitId] = useState(null);
   const [pdf, setPdf]                       = useState(null);
   const [file, setFile]                     = useState(null);
+  const [mp3, setMp3]                       = useState(null);
   const [setting, setSettings]              = useState({});
 
   // get files data for all sources
@@ -136,13 +138,15 @@ const Sources = ({ unit, t, activeTab = 'sources' }) => {
       const langFiles = indexById[selectedUnitId]?.data?.[language];
 
       if (langFiles) {
-        const { pdf, docx, doc } = langFiles;
+        const { pdf, docx, doc, mp3 } = langFiles;
         if (pdf && isTaas(selectedUnitId)) {
           // pdf.js fetch it on his own (smarter than us), we fetch it for nothing.
           setPdf(pdf);
           setFile(null);
           return;
         }
+
+        setMp3(mp3);
 
         file = docx || doc || {};
       }
@@ -239,28 +243,30 @@ const Sources = ({ unit, t, activeTab = 'sources' }) => {
       <Menu
         stackable
         secondary
-        compact
-        fluid
+        floated='right'
         className={
           clsx({
-            'no-margin-top': !isMobileDevice,
+            'no-margin-top': isMobileDevice,
             'no_print': true,
-            'justify_content_end': true
+            'justify_content_end': true,
           })
         }
       >
-        <Menu.Item>
-          <Dropdown
-            fluid={isMobileDevice}
-            selection
-            value={selectedUnitId}
-            options={sourcesDropDownOptions}
-            selectOnBlur={false}
-            selectOnNavigation={false}
-            onChange={handleSourceChanged}
-          />
-        </Menu.Item>
-        <Menu.Item className="justify_content_end">
+        {
+          sourcesDropDownOptions.length > 1 &&
+            <Menu.Item>
+              <Dropdown
+                fluid={isMobileDevice}
+                selection
+                value={selectedUnitId}
+                options={sourcesDropDownOptions}
+                selectOnBlur={false}
+                selectOnNavigation={false}
+                onChange={handleSourceChanged}
+              />
+            </Menu.Item>
+        }
+        <Menu.Item fitted>
           {
             languages.length > 0 && (
               <div className="display-iblock margin-right-8 margin-left-8">
@@ -273,9 +279,7 @@ const Sources = ({ unit, t, activeTab = 'sources' }) => {
               </div>
             )
           }
-          {
-            <Download {...downloadProps} />
-          }
+          { <Download {...downloadProps} /> }
           <UnitBar
             handleSettings={setSettings}
             fontSize={setting.fontSize}
@@ -283,6 +287,12 @@ const Sources = ({ unit, t, activeTab = 'sources' }) => {
             label={{ content_unit: selectedUnitId }}
           />
         </Menu.Item>
+        {
+          mp3 &&
+          <Menu.Item fitted='horizontally'>
+            <AudioPlayer mp3={mp3} />
+          </Menu.Item>
+        }
       </Menu>
       <Divider hidden fitted className="clear" />
       {getContents()}

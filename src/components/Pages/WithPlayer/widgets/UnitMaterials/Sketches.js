@@ -25,6 +25,7 @@ class Sketches extends React.Component {
     uiLanguage: PropTypes.string.isRequired,
     contentLanguage: PropTypes.string.isRequired,
   };
+
   state = {
     zipFiles: null,
     zipFileId: null,

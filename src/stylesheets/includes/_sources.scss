@@ -10,6 +10,7 @@
       @include mobile {
         height: auto;
       }
+
       height: 100%;
     }
 
@@ -17,6 +18,7 @@
       @include mobile {
         margin: 0 0 1em;
       }
+
       @include small-mobile {
         margin: 0 auto 1em;
       }
@@ -28,7 +30,7 @@
           height: 100%;
 
           &:nth-child(2) {
-            > div {
+            >div {
               height: 100%;
               overflow: auto;
               position: relative;
@@ -40,6 +42,7 @@
           @include mobile {
             position: static;
           }
+
           position: absolute;
         }
 
@@ -47,6 +50,7 @@
           @include mobile {
             position: static;
           }
+
           position: absolute;
         }
       }
@@ -62,7 +66,7 @@
     right: 0;
     top: 0;
 
-    > div:nth-child(2) {
+    >div:nth-child(2) {
       flex: 1 1 auto;
       overflow: hidden;
       position: relative;
@@ -72,6 +76,7 @@
       @include mobile {
         margin-top: -.214286em !important;
       }
+
       align-content: flex-start;
       bottom: 0;
       display: flex;
@@ -85,12 +90,15 @@
         @include mobile {
           width: 50%;
         }
+
         @include small-mobile {
           width: 100%;
         }
+
         @include tablet {
           width: 50%;
         }
+
         padding: .214286em 0 !important;
         width: 33.333333333%;
       }
@@ -126,7 +134,7 @@
     }
 
     .source__toc {
-      > div:nth-child(2) {
+      >div:nth-child(2) {
         top: calc(1em + 60px) !important;
 
         @include tablet-mobile {
@@ -145,7 +153,7 @@
   }
 
   &__toc {
-    > div:nth-child(2) {
+    >div:nth-child(2) {
       @include tablet-mobile {
         background: $white !important;
         bottom: 0 !important;
@@ -159,6 +167,7 @@
         width: 100% !important;
         z-index: 1;
       }
+
       height: 100vh;
       -webkit-overflow-scrolling: touch;
       overflow-y: auto;
@@ -196,10 +205,10 @@
     display: flex;
     justify-content: flex-end;
 
-    > * {
+    >* {
       margin: 0 !important;
 
-      + * {
+      +* {
         margin-left: .25em !important;
       }
     }
@@ -329,7 +338,7 @@
   text-align: left;
   font-weight: normal;
 
-  strong{
+  strong {
     font-weight: bold;
   }
 
@@ -418,7 +427,7 @@
     margin: 0 !important;
     white-space: nowrap;
 
-    + .menu {
+    +.menu {
       border-top: 1px solid rgba(34, 36, 38, .1) !important;
     }
 
@@ -476,6 +485,15 @@
     .column {
       padding-top: 0.5em !important;
       padding-bottom: 0.5em !important;
+    }
+  }
+
+  &__audio {
+    padding-top: 1em;
+    text-align: end;
+
+    .library-audio-player {
+      margin-inline-end: 0 !important;
     }
   }
 }

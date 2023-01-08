@@ -1,0 +1,9 @@
+[{
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.bb.kmedia",
+      "sha256_cert_fingerprints":
+      ["C2:64:99:23:B8:A8:C5:23:33:FB:A9:F7:0B:74:7C:C8:D6:22:3C:C8:63:27:FA:47:3C:D7:B2:EC:67:E8:80:4C"]
+    }
+  }]

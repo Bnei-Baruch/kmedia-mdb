@@ -14,13 +14,15 @@ import { getLangPropertyDirection, getLanguageDirection } from '../../../helpers
 import { physicalFile, strCmp } from '../../../helpers/utils';
 import { SectionLogo } from '../../../helpers/images';
 import { canonicalLink } from '../../../helpers/links';
-import { LANG_ENGLISH, LANG_HEBREW, UNIT_LESSONS_TYPE } from '../../../helpers/consts';
+import { LANG_ENGLISH, LANG_HEBREW, UNIT_LESSONS_TYPE, MT_AUDIO, MT_TEXT } from '../../../helpers/consts';
 import LibraryBar from '../Library/LibraryBar';
 import MenuLanguageSelector from '../../../components/Language/Selector/MenuLanguageSelector';
 import Link from '../../../components/Language/MultiLanguageLink';
 import WipErr from '../../shared/WipErr/WipErr';
 import Download from '../../shared/Download/Download';
 import ScrollToSearch from '../../shared/DocToolbar/ScrollToSearch';
+import AudioPlayer from '../../shared/AudioPlayer';
+
 
 // expected unit of type Likutim
 const Likut = ({ t }) => {
@@ -41,6 +43,7 @@ const Likut = ({ t }) => {
   const [scrollTopPosition, setScrollTopPosition] = useState(0);
   const [scrollingElement, setScrollingElement]   = useState(null);
   const articleRef                                = useRef();
+
 
   useEffect(() => {
     const scrollingElement = isReadable ? articleRef.current : document.scrollingElement;
@@ -66,15 +69,15 @@ const Likut = ({ t }) => {
 
   useEffect(() => {
     if (unit?.files) {
-      let f = unit.files.find(x => x.language === language);
+      let f = unit.files.find(x => x.language === language && x.type === MT_TEXT);
 
       if (!f && language !== LANG_ENGLISH) {
-        f = unit.files.find(x => x.language === LANG_ENGLISH);
+        f = unit.files.find(x => x.language === LANG_ENGLISH && x.type === MT_TEXT);
         setLanguage(LANG_ENGLISH);
       }
 
       if (!f && language !== LANG_HEBREW) {
-        f = unit.files.find(x => x.language === LANG_HEBREW);
+        f = unit.files.find(x => x.language === LANG_HEBREW && x.type === MT_TEXT);
         setLanguage(LANG_HEBREW);
       }
 
@@ -128,6 +131,8 @@ const Likut = ({ t }) => {
   const bookmarkSource     = { subject_uid: unit.id, subject_type: unit.content_type, language };
   const labelSource        = { content_unit: unit.id, language };
 
+  const mp3File = files.find(f => f.language === language && f.type === MT_AUDIO);
+
   return (
     <div
       ref={articleRef}
@@ -179,6 +184,10 @@ const Likut = ({ t }) => {
               </Grid.Column>
             </Grid>
           </div>
+          <div className='likut__audio'>
+            { mp3File && <AudioPlayer mp3={mp3File} /> }
+          </div>
+
           {/* content */}
           <div
             className={`source__content-wrapper font_settings-wrapper size${fontSize}`}

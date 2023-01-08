@@ -92,16 +92,16 @@ function DonationPopup({ t }) {
 
 const getDonateLinkDetails = language => {
   switch (language) {
-  case LANG_HEBREW:
-    return { linkLang: '', utmTerm: 'heb' };
-  case LANG_ENGLISH:
-    return { linkLang: 'en', utmTerm: 'eng' };
-  case LANG_RUSSIAN:
-    return { linkLang: 'ru', utmTerm: 'rus' };
-  case LANG_SPANISH:
-    return { linkLang: 'es', utmTerm: 'spa' };
-  default:
-    return { linkLang: 'en', utmTerm: 'other_lang' };
+    case LANG_HEBREW:
+      return { linkLang: '', utmTerm: 'heb' };
+    case LANG_ENGLISH:
+      return { linkLang: 'en', utmTerm: 'eng' };
+    case LANG_RUSSIAN:
+      return { linkLang: 'ru', utmTerm: 'rus' };
+    case LANG_SPANISH:
+      return { linkLang: 'es', utmTerm: 'spa' };
+    default:
+      return { linkLang: 'en', utmTerm: 'other_lang' };
   }
 };
 
