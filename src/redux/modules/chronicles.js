@@ -38,7 +38,7 @@ export const reducer = handleActions({
 
   [playerTypes.PLAYER_PLAY]: draft => ({ ...draft, event: 'player-play' }),
   [playerTypes.PLAYER_PAUSE]: draft => ({ ...draft, event: 'player-stop' }),
-  [playerTypes.PLAYER_DESTROY_PLUGIN]: draft => ({ ...draft, event: 'player-stop' }),
+  [playerTypes.PLAYER_REMOVE]: draft => ({ ...draft, event: 'player-stop' }),
   [playerTypes.PLAYER_MUTE_UNMUTE]: draft => ({ ...draft, event: 'mute-unmute' }),
 
 }, initialState);
