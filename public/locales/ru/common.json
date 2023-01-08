@@ -215,10 +215,10 @@
       "settings": "Настройки",
       "rewind10": "Rewind 10 sec",
       "skip10": "Skip 10 sec",
-      "next-video": "Next video",
-      "prev-video": "Previous video",
-      "fullscreen": "Fullscreen",
-      "fullscreen-exit": "Esc fullscreen"
+      "next-video": "Следующее видео",
+      "prev-video": "Предыдущее видео",
+      "fullscreen": "Во весь экран",
+      "fullscreen-exit": "Выйти из полноэкранного режима"
     }
   },
   "playlist": {

@@ -5,8 +5,9 @@ import useShareUrl from '../hooks/useShareUrl';
 import { useSelector } from 'react-redux';
 import { selectors as settings } from '../../../redux/modules/settings';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
+import { withNamespaces } from 'react-i18next';
 
-const CopyShareUrl = () => {
+const CopyShareUrl = ({ t }) => {
   const language = useSelector(state => settings.getLanguage(state.settings));
   const dir      = getLanguageDirection(language);
 
@@ -23,7 +24,7 @@ const CopyShareUrl = () => {
       <input dir={'ltr'} />
       <CopyToClipboard text={shareUrl}>
         <Button
-          content="copy"
+          content={t('buttons.copy')}
           size="small"
           compact
         />
@@ -32,4 +33,4 @@ const CopyShareUrl = () => {
   );
 };
 
-export default CopyShareUrl;
+export default withNamespaces()(CopyShareUrl);
