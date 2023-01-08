@@ -7,10 +7,14 @@ import { actions, selectors } from '../../../redux/modules/player';
 import { withNamespaces } from 'react-i18next';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { getPosition } from '../../../pkg/jwpAdapter/adapter';
+import { getLanguageDirection } from '../../../helpers/i18n-utils';
+import { selectors as settings } from '../../../redux/modules/settings';
 
 const StartEnd = ({ t }) => {
   const { start, end }     = useSelector(state => selectors.getShareStartEnd(state.player));
   const { isMobileDevice } = useContext(DeviceInfoContext);
+  const language           = useSelector(state => settings.getLanguage(state.settings));
+  const dir                = getLanguageDirection(language);
   const dispatch           = useDispatch();
 
   const handleSetStart = () => {
@@ -32,13 +36,13 @@ const StartEnd = ({ t }) => {
   return (
     <div className="sharing__times">
       <div className="sharing__inputs">
-
         <Input
           size="mini"
           actionPosition="left"
           fluid
           onClick={handleSetStart}
           readonly
+          type="text"
           action={{
             content: t('player.share.start-position'),
             size: 'small',
@@ -47,6 +51,7 @@ const StartEnd = ({ t }) => {
           }}
           placeholder={t('player.share.click-to-set')}
           value={toHumanReadableTime(start)}
+          dir={dir}
         />
         <Input
           size="mini"
@@ -62,6 +67,7 @@ const StartEnd = ({ t }) => {
           }}
           placeholder={t('player.share.click-to-set')}
           value={toHumanReadableTime(end)}
+          dir={dir}
         />
       </div>
 

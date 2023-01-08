@@ -456,6 +456,10 @@ video {
   .is-mobile:not(.is-fullscreen) & {
     padding: 16px 8px;
   }
+
+  .is-web & input{
+    font-size: 11px;
+  }
 }
 
 .sharing__inputs {
