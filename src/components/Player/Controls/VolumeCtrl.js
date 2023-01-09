@@ -15,11 +15,12 @@ const VolumeCtrl = ({ t }) => {
   const [left, setLeft]   = useState();
   const [right, setRight] = useState();
 
+  const isMuted = useSelector(state => player.isMuted(state.player));
   //recount position on resize
-  const width            = useSelector(state => player.getPlayerWidth(state.player), shallowEqual);
-  const { volume, mute } = useSubscribeVolume();
+  const width   = useSelector(state => player.getPlayerWidth(state.player), shallowEqual);
+  const volume  = useSubscribeVolume();
 
-  const icon = mute ? 'off' : volume < 40 ? 'down' : 'up';
+  const icon = isMuted ? 'off' : volume < 40 ? 'down' : 'up';
 
   useEffect(() => {
     const { left, right } = widthRef.current.getBoundingClientRect();
@@ -37,7 +38,7 @@ const VolumeCtrl = ({ t }) => {
     setVolume(v);
   }, [left, right]);
 
-  const handleMute = () => setMute();
+  const handleMute = () => setMute(!isMuted);
 
   return (
     <div className="controls__volume">

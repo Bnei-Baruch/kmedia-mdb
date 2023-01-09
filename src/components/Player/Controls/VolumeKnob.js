@@ -11,7 +11,7 @@ export const VolumeKnob = ({ onChangePosition }) => {
 
   const isReady = useSelector(state => player.isReady(state.player));
 
-  const { volume } = useSubscribeVolume();
+  const volume = useSubscribeVolume();
 
   const handleStart = e => {
     e.preventDefault();

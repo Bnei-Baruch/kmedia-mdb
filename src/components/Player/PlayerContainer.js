@@ -1,5 +1,5 @@
 import React, { useRef, useContext } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, shallowEqual } from 'react-redux';
 
 import { selectors as player, selectors } from '../../redux/modules/player';
 import { PLAYER_OVER_MODES } from '../../helpers/consts';
@@ -23,8 +23,8 @@ const CLASSES_BY_MODE = {
 
 const PlayerContainer = () => {
         const fullscreenRef = useRef();
-        const mode          = useSelector(state => player.getOverMode(state.player));
-        const isFullScreen  = useSelector(state => selectors.isFullScreen(state.player));
+        const mode          = useSelector(state => player.getOverMode(state.player), shallowEqual);
+        const isFullScreen  = useSelector(state => selectors.isFullScreen(state.player), shallowEqual);
 
         const { isMobileDevice } = useContext(DeviceInfoContext);
 
@@ -52,7 +52,6 @@ const PlayerContainer = () => {
             {content}
           </Ref>
         );
-
       }
 ;
 
