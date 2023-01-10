@@ -52,7 +52,7 @@ const UnitItem = ({ id, t }) => {
   return (
     <>
       {
-        imgs?.map((f) => (
+        imgs?.map(f => (
           <Card>
             <ImageFileModal file={f} />
             <Card.Content>

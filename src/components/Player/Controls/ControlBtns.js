@@ -9,25 +9,66 @@ import { PLAYER_OVER_MODES } from '../../../helpers/consts';
 import { stopBubbling } from '../../../helpers/utils';
 import WebWrapTooltip from '../../shared/WebWrapTooltip';
 
-export const FullscreenBtn = withTranslation()(({ openOnFull, t }) => {
+const lockLandscape        = () => {
+  try {
+    window.screen.orientation.lock('landscape');
+  } catch (e) {
+    console.error(e);
+  }
+};
+const unlockLandscape      = () => {
+  try {
+    window.screen.orientation.unlock();
+  } catch (e) {
+    console.error(e);
+  }
+};
+export const FullscreenBtn = withTranslation()(({ fullscreenRef, t }) => {
   const dispatch     = useDispatch();
   const isFullScreen = useSelector(state => selectors.isFullScreen(state.player));
 
-  const handleFullScreen = () => {
-    if (!isFullScreen) {
-      openOnFull();
-      dispatch(actions.setFullScreen(true));
-    } else if (fscreen.fullscreenEnabled) {
-      fscreen.exitFullscreen();
-      dispatch(actions.setFullScreen(false));
+  const handleClick     = () => {
+    if (!fscreen.fullscreenEnabled) {
+      enterFullScreenIOS();
+      return;
+    }
+    if (fscreen.fullscreenElement !== null) {
+      exitFullscreen();
+    } else {
+      enterFullscreen();
     }
   };
+  const enterFullscreen = () => {
+    fscreen.requestFullscreen(fullscreenRef.current).then(lockLandscape);
+    dispatch(actions.setFullScreen(true));
+  };
+  const exitFullscreen  = () => {
+    unlockLandscape();
+    dispatch(actions.setFullScreen(false));
+    fscreen.fullscreenElement && fscreen.exitFullscreen();
+  };
+
+  const enterFullScreenIOS = () => {
+    const player = window.jwplayer();
+    player.setFullscreen(true).setControls(true);
+    dispatch(actions.setFullScreen(false));
+    player.once('fullscreen', exitFullScreenIOS);
+    lockLandscape();
+  };
+
+  const exitFullScreenIOS = () => {
+    dispatch(actions.setFullScreen(false));
+    unlockLandscape();
+    const player = window.jwplayer();
+    player.setControls(false);
+  };
+
   return (
     <WebWrapTooltip
-      content={t(`player.controls.${isFullScreen ? 'fullscreen-exit' : 'fullscreen-enter'}`)}
+      content={t(`player.controls.${isFullScreen ? 'fullscreen-exit' : 'fullscreen'}`)}
       position="top right"
       trigger={
-        <div className="controls__fullscreen" onClick={handleFullScreen}>
+        <div className="controls__fullscreen" onClick={handleClick}>
           <Icon fitted name={isFullScreen ? 'compress' : 'expand'} />
         </div>
       } />

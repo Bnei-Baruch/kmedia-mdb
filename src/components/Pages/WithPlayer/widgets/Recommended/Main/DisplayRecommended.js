@@ -212,7 +212,8 @@ DisplayRecommended.propTypes = {
 };
 
 const areEqual = (prevProps, nextProps) =>
-  prevProps.unit.id === nextProps.unit.id &&
+  !nextProps.unit ||
+  prevProps.unit?.id === nextProps.unit.id &&
   prevProps.recommendedUnits.length === nextProps.recommendedUnits.length &&
   prevProps.recommendedUnits.every((unit, index) => nextProps.recommendedUnits[index].id === unit.id);
 

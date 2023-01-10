@@ -221,10 +221,14 @@ class Layout extends Component {
                       </Menu.Item>
                     </Ref>
                   }
-                  <Menu.Item position="right" className="mobile-hidden">
-                    <DonateNow language={language} />
-                    <VirtualHomeButton language={language} />
-                  </Menu.Item>
+                  {
+                    !isMobileDevice && (
+                      <Menu.Item position="right">
+                        <DonateNow language={language} />
+                        <VirtualHomeButton language={language} />
+                      </Menu.Item>
+                    )
+                  }
                   <Menu.Item position="right">
                     <Login language={language} />
                   </Menu.Item>

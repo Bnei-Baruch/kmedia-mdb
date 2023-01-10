@@ -190,32 +190,35 @@
       "copyButton": "Копировать линк"
     },
     "settings": {
-      "playback": "Playback",
-      "playback-speed": "Playback speed",
-      "quality": "Quality",
-      "language": "Language",
+      "playback": "Воспроизведение",
+      "playback-speed": "Скорость",
+      "quality": "Качество",
+      "language": "Язык",
       "audio": "Аудио",
       "video": "Видео",
-      "normal": "normal"
+      "normal": "норм."
     },
     "share": {
       "title": "Посмотри это видео",
       "start-position": "Начало",
       "end-position": "Конец",
-      "click-to-set": "Жми",
-      "reset-to-full": "Reset to full video"
+      "click-to-set": "Нажмите",
+      "embedded": "Встроить",
+      "reset-to-full": "Полный сброс",
+      "download-file": "Скачать отрывок"
     },
     "controls": {
-      "pause": "Pause",
-      "play": "Play",
-      "mute": "Mute",
-      "fullscreen": "Fullscreen",
-      "share": "Share",
-      "settings": "Settings",
-      "rewind10": "Rewind 10 seconds",
-      "skip10": "Skip 10 seconds",
-      "next-video": "Next video",
-      "prev-video": "Previous video"
+      "pause": "Пауза",
+      "play": "Воспроизвести",
+      "mute": "Заглушить",
+      "share": "Поделиться",
+      "settings": "Настройки",
+      "rewind10": "Rewind 10 sec",
+      "skip10": "Skip 10 sec",
+      "next-video": "Следующее видео",
+      "prev-video": "Предыдущее видео",
+      "fullscreen": "Во весь экран",
+      "fullscreen-exit": "Выйти из полноэкранного режима"
     }
   },
   "playlist": {

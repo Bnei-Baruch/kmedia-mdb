@@ -189,32 +189,35 @@
       "copyButton": "העתק קישור"
     },
     "settings": {
-      "playback": "Playback",
-      "playback-speed": "Playback speed",
-      "quality": "Quality",
-      "language": "Language",
+      "playback": "צורת הפעלה",
+      "playback-speed": "מהירות",
+      "quality": "איכות",
+      "language": "שפה",
       "audio": "אודיו",
       "video": "וידאו",
-      "normal": "normal"
+      "normal": "רגיל"
     },
     "share": {
       "title": "צפה בסרטון",
       "start-position": "התחלה",
       "end-position": "סיום",
       "click-to-set": "לחץ לסימון",
-      "reset-to-full": "Reset to full video"
+      "embedded": "הטמעה",
+      "reset-to-full": "אפס למלא",
+      "download-file": "הורד מקטע"
     },
     "controls": {
-      "pause": "Pause",
-      "play": "Play",
-      "mute": "Mute",
-      "fullscreen": "Fullscreen",
-      "share": "Share",
-      "settings": "Settings",
-      "rewind10": "Rewind 10 seconds",
-      "skip10": "Skip 10 seconds",
-      "next-video": "Next video",
-      "prev-video": "Previous video"
+      "pause": "השהה",
+      "play": "נגן",
+      "mute": "השתק",
+      "share": "שתף",
+      "settings": "הגדרות",
+      "rewind10": "חזור 10 שנ",
+      "skip10": "דלג 10 שנ",
+      "next-video": "לאייטם הבא",
+      "prev-video": "לאייטם הקודם",
+      "fullscreen": "מסך מלא",
+      "fullscreen-exit": "מזער"
     }
   },
   "playlist": {
@@ -406,7 +409,7 @@
   "likutim": {
     "header": {
       "text": "ליקוטי מקובלים",
-      "subtext": "במדור זה תמצאו ליקוטים מתוך כתבי גדולי המקובלים הנלמדים בשיעורי הקבלה היומיים עם הרב ד\"ר מיכאל לייטמן. הליקוטים עוסקים בעבודה הרוחנית ובמבנה העולמות העליונים; לנוחיותכם הם מסודרים לפי סדר הא\"ב."
+      "subtext": "במדור זה תמצאו ליקוטים מתוך כתבי גדולי המקובלים הנלמדים בשיעורי הקבלה היומיים עם הרב ד\"ר מיכאל לייטמן. הליקוטים עוסקים בעבודה הרוחנית ובמבנה העולמות העליונים."
     },
     "item-header": "ליקוטי מקובלים בנושא:"
   },

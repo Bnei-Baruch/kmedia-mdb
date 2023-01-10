@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { withTranslation } from 'react-i18next';
-import isEqual from 'react-fast-compare';
 
 import { actions, selectors } from '../../../../../../redux/modules/recommended';
 import { selectors as tagsSelectors } from '../../../../../../redux/modules/tags';

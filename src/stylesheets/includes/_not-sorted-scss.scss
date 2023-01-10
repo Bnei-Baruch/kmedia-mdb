@@ -36,7 +36,7 @@
     width: 100%;
   }
 
-  > .results {
+  >.results {
 
     &.visible {
       /* Limit suggest box height and allow scrolling if more then ~10. */
@@ -46,13 +46,14 @@
 
     // this falls sub-pixel apart from the category name table-cell,
     // it doesn't look good. so we cancel it
-    > .category {
-      > .name {
+    >.category {
+      >.name {
         border-bottom: none !important;
       }
 
       .result {
         background-color: $white;
+
         //border-bottom: none !important;
         &:last-child {
           border-bottom: 1px solid rgba(34, 36, 38, .1) !important;
@@ -93,7 +94,8 @@
     padding: 0 1em;
   }
 
-  h1, h2 {
+  h1,
+  h2 {
     padding: 0 0.5em;
   }
 
@@ -146,7 +148,7 @@
 }
 
 /* limit the height of the media player languages dropdown in order to not get out of the screen */
-.mediaplayer__languages .ui.floating.dropdown > .menu {
+.mediaplayer__languages .ui.floating.dropdown>.menu {
   max-height: 220px;
 }
 
@@ -164,7 +166,10 @@
     white-space: nowrap;
   }
 
-  .dateButton, .dateButton:hover, .dateButton:active, .dateButton:focus {
+  .dateButton,
+  .dateButton:hover,
+  .dateButton:active,
+  .dateButton:focus {
     color: white;
     background-color: transparent;
     margin: 0;
@@ -235,7 +240,7 @@
         display: block;
       }
 
-      .DayPicker-Caption > div {
+      .DayPicker-Caption>div {
         font-size: 1rem;
       }
     }
@@ -351,7 +356,9 @@
 }
 
 .rtl {
-  .mobileShareCopyLinkButton, .shareCopyLinkButton {
+
+  .mobileShareCopyLinkButton,
+  .shareCopyLinkButton {
     margin: 0 10px 0 0 !important;
   }
 }
@@ -402,7 +409,10 @@
   }
 }
 
-.ui.column.grid > [class*="eight wide"].column, .ui.grid > .column.row > [class*="eight wide"].column, .ui.grid > .row > [class*="eight wide"].column, .ui.grid > [class*="eight wide"].column {
+.ui.column.grid>[class*="eight wide"].column,
+.ui.grid>.column.row>[class*="eight wide"].column,
+.ui.grid>.row>[class*="eight wide"].column,
+.ui.grid>[class*="eight wide"].column {
   width: 70% !important;
 
   @include mobile {
@@ -411,14 +421,22 @@
 }
 
 .collection-header {
-  .ui.column.grid > [class*="four wide"].column, .ui.grid > .column.row > [class*="four wide"].column, .ui.grid > .row > [class*="four wide"].column, .ui.grid > [class*="four wide"].column {
+
+  .ui.column.grid>[class*="four wide"].column,
+  .ui.grid>.column.row>[class*="four wide"].column,
+  .ui.grid>.row>[class*="four wide"].column,
+  .ui.grid>[class*="four wide"].column {
     width: 20% !important;
+
     @include mobile {
       width: 30% !important;
     }
   }
 
-  .ui.column.grid > [class*="eight wide"].column, .ui.grid > .column.row > [class*="eight wide"].column, .ui.grid > .row > [class*="eight wide"].column, .ui.grid > [class*="eight wide"].column {
+  .ui.column.grid>[class*="eight wide"].column,
+  .ui.grid>.column.row>[class*="eight wide"].column,
+  .ui.grid>.row>[class*="eight wide"].column,
+  .ui.grid>[class*="eight wide"].column {
     @include mobile {
       width: 70% !important;
     }
@@ -469,7 +487,8 @@
 
   /* ********** wordpress style ********** */
 
-  img.userpic, img.ngg-singlepic {
+  img.userpic,
+  img.ngg-singlepic {
     float: left;
     padding: 0 5px 5px 0;
     border: 0 none;
@@ -515,7 +534,8 @@
     margin-top: 10px;
   }
 
-  .entry ul, .entry ol {
+  .entry ul,
+  .entry ol {
     margin: 0 0 15px 40px;
   }
 
@@ -527,7 +547,10 @@
     margin: 0 0 5px 0;
   }
 
-  .entry ul li ul, .entry ul li ol, .entry ol li ul, .entry ol li ol {
+  .entry ul li ul,
+  .entry ul li ol,
+  .entry ol li ul,
+  .entry ol li ol {
     margin: 5px 0 5px 30px;
   }
 
@@ -694,7 +717,11 @@
 
   // normalize laitman.co.il headings in entry
   .entry {
-    h1, h2, h3, h4 {
+
+    h1,
+    h2,
+    h3,
+    h4 {
       font-size: 1rem;
     }
   }
@@ -716,6 +743,7 @@
 }
 
 @media print {
+
   .source__toc,
   .layout__header,
   .layout__sidebar,
@@ -747,7 +775,10 @@
     padding-top: 0 !important; // remove existing padding
   }
 
-  div, p, ol, ul {
+  div,
+  p,
+  ol,
+  ul {
     margin: 0 !important;
     padding: 0 !important;
   }
@@ -954,7 +985,9 @@
       font-weight: normal !important;
     }
 
-    &:hover, &:hover .icon, &:hover a {
+    &:hover,
+    &:hover .icon,
+    &:hover a {
       color: #fff !important;
     }
   }
@@ -1097,6 +1130,7 @@
       color: #134D78;
       font-size: 1.6em;
       margin-right: 0.2em;
+
       @include mobile {
         font-size: 1.5em;
       }
@@ -1119,7 +1153,8 @@
   .blog-posts {
     max-width: 100%;
 
-    .post:last-of-type, .divider:last-of-type {
+    .post:last-of-type,
+    .divider:last-of-type {
       margin-bottom: 0 !important;
     }
   }
@@ -1142,7 +1177,9 @@
       width: auto;
     }
 
-    img, style, .bwg_container {
+    img,
+    style,
+    .bwg_container {
       display: none !important;
     }
 
@@ -1220,7 +1257,8 @@
   line-height: 1;
 }
 
-.dropdown-language-selector.blink, .blink {
+.dropdown-language-selector.blink,
+.blink {
   box-shadow: 0 0 0 6px #7dcff5 inset;
   animation: dropdown-blink .8s ease-in-out;
   animation-iteration-count: 5;
@@ -1231,6 +1269,7 @@
   0% {
     box-shadow: 0 0 0 5px #7dcff5 inset;
   }
+
   100% {
     box-shadow: none;
   }
@@ -1309,6 +1348,7 @@
 }
 
 @media screen and (-webkit-min-device-pixel-ratio: 0) {
+
   select,
   textarea,
   input {
@@ -1353,12 +1393,12 @@
   z-index: 10000;
 }
 
-.ui.accordion.menu .item .title > .dropdown.icon {
+.ui.accordion.menu .item .title>.dropdown.icon {
   -webkit-transform: rotate(0);
   transform: rotate(0);
 }
 
-.ui.menu .item > svg:not(.ui) {
+.ui.menu .item>svg:not(.ui) {
   display: inline-block;
   vertical-align: middle;
   margin: -.3em 0;
@@ -1400,6 +1440,7 @@
       padding-right: 0 !important;
     }
   }
+
   .dateButton {
     padding-left: 8px !important;
     padding-right: 0 !important;
@@ -1429,6 +1470,7 @@
         margin-left: 5px !important;
       }
     }
+
     .dateButton {
       padding-left: 5px !important;
       padding-right: 8px !important;
@@ -1465,6 +1507,7 @@
         margin-left: 0;
         width: 100%;
       }
+
       margin-left: $sidebar-width;
     }
   }
@@ -1477,6 +1520,7 @@
         margin-right: 0;
         width: 100%;
       }
+
       margin-right: $sidebar-width;
       margin-left: 0;
     }
@@ -1489,6 +1533,7 @@
 
 .unit-tags-bar {
   margin: 10px 0 0 0;
+
   a {
     color: gray !important;
   }
@@ -1562,6 +1607,7 @@
   0% {
     box-shadow: 1px 1px 5px 1px #7dcff5;
   }
+
   100% {
     box-shadow: none;
   }
@@ -1603,50 +1649,44 @@
   padding-right: 0;
   padding-left: 0;
   margin-bottom: 1em;
-  text-align: right;
-}
-
-.rtl .library-language-container {
-  text-align: left;
+  text-align: end;
 }
 
 .library-audio-player {
-  margin-left: 0;
-  margin-right: 20px;
+  @include mobile {
+    margin-inline-end: 0;
+    width: inherit;
+  }
+
+  margin-inline-start: 0;
+  margin-inline-end: 20px;
+  text-align: end;
   cursor: pointer;
 
-  a {
+  .button {
+    background: none;
+    color: #2185d0;
+    font-weight: 400;
+
     svg {
       position: relative;
       top: 5px;
-      margin-right: 5px;
-      margin-left: 5px;
+      margin-inline-end: 5px;
+      margin-inline-start: 5px;
     }
   }
 
   audio {
     height: 25px;
-    position: relative;
     top: 7px;
+
     @include mobile {
-      margin-top: 15px;
-      height: 54px;
-      width: 100%;
+      width: -webkit-fill-available;
     }
   }
 
   .playAudioIcon {
-    margin-left: 10px;
-  }
-}
-
-.rtl .library-audio-player {
-  margin-left: 20px;
-  margin-right: 0;
-
-  .playAudioIcon {
-    margin-right: 10px;
-    margin-left: 0;
+    margin-inline-start: 10px;
   }
 }
 
@@ -1681,6 +1721,7 @@
 
   .unit-logo {
     width: 100%;
+
     @include mobile {
       max-width: 160px;
     }
@@ -1789,7 +1830,9 @@
   padding: 0;
   box-shadow: none !important;
 
-  &:hover, &:active, &:focus {
+  &:hover,
+  &:active,
+  &:focus {
     background: none !important;
     box-shadow: none !important;
   }
@@ -1798,13 +1841,16 @@
 .my_playlist_header.ui.header {
   @include mobile {
     display: block;
+
     svg {
       vertical-align: bottom;
     }
+
     .content {
       vertical-align: bottom;
       margin: 0 8px;
     }
+
     .sub.header {
       display: inline-block;
       vertical-align: baseline;
@@ -1817,11 +1863,12 @@
   display: flex;
   justify-content: flex-end;
   margin-bottom: 0;
+
   @include mobile {
     margin-top: 0;
   }
 
-  & > .item {
+  &>.item {
     margin: 0;
     padding-left: 0.5em;
     padding-right: 0.5em;
@@ -1904,4 +1951,3 @@
 .latestUpdatesCardGroupMobile {
   margin-top: 0 !important;
 }
-

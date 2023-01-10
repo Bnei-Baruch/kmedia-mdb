@@ -1,7 +1,5 @@
 import React, { useRef, useContext } from 'react';
-import { useSelector } from 'react-redux';
-import fscreen from 'fscreen';
-import { Ref } from 'semantic-ui-react';
+import { useSelector, shallowEqual } from 'react-redux';
 
 import { selectors as player, selectors } from '../../redux/modules/player';
 import { PLAYER_OVER_MODES } from '../../helpers/consts';
@@ -12,7 +10,7 @@ import PlayerToolsMobile from './PlayerToolsMobile';
 import AppendChronicle from './AppendChronicle';
 import { DeviceInfoContext } from '../../helpers/app-contexts';
 import clsx from 'clsx';
-import Preloader from './Controls/Preloader';
+import { Ref } from 'semantic-ui-react';
 
 const CLASSES_BY_MODE = {
   [PLAYER_OVER_MODES.settings]: 'is-settings',
@@ -24,37 +22,37 @@ const CLASSES_BY_MODE = {
 };
 
 const PlayerContainer = () => {
-  const settRef      = useRef();
-  const mode         = useSelector(state => player.getOverMode(state.player));
-  const isFullScreen = useSelector(state => selectors.isFullScreen(state.player));
+        const fullscreenRef = useRef();
+        const mode          = useSelector(state => player.getOverMode(state.player), shallowEqual);
+        const isFullScreen  = useSelector(state => selectors.isFullScreen(state.player), shallowEqual);
 
-  const { isMobileDevice } = useContext(DeviceInfoContext);
-  const handleFullScreen   = () => {
-    fscreen.fullscreenEnabled ? fscreen.requestFullscreen(settRef.current) : alert('fullscreen not supported');
-  };
+        const { isMobileDevice } = useContext(DeviceInfoContext);
 
-  return (
-    <Ref innerRef={settRef}>
-      <div className="player">
-        <AppendChronicle />
-        <UpdateLocation />
-        <div className={clsx(CLASSES_BY_MODE[mode], isMobileDevice ? 'is-mobile' : 'is-web', { 'is-fullscreen': isFullScreen })}>
-          <Preloader />
-          {
-            isMobileDevice ? (
-              <PlayerToolsMobile Player={<Player />} handleFullScreen={handleFullScreen} />
-            ) : (
-              <>
-                <Player />
-                <PlayerToolsWeb handleFullScreen={handleFullScreen} />
-              </>
-            )
-          }
-        </div>
-      </div>
-    </Ref>
-  );
+        const content = (
+          <div className="player" dir="ltr">
+            <AppendChronicle />
+            <UpdateLocation />
+            <div className={clsx(CLASSES_BY_MODE[mode], isMobileDevice ? 'is-mobile' : 'is-web', { 'is-fullscreen': isFullScreen })}>
+              {
+                isMobileDevice ? (
+                  <PlayerToolsMobile Player={<Player />} fullscreenRef={fullscreenRef} />
+                ) : (
+                  <>
+                    <Player />
+                    <PlayerToolsWeb fullscreenRef={fullscreenRef} />
+                  </>
+                )
+              }
+            </div>
+          </div>
+        );
 
-};
+        return (
+          <Ref innerRef={fullscreenRef}>
+            {content}
+          </Ref>
+        );
+      }
+;
 
 export default PlayerContainer;

@@ -108,6 +108,12 @@ export default class ClientChronicles {
         this.appendPage('leave', /* sync= */ false);
       }
 
+      for (let {onBeforeUnloadClosure} of this.lastEntriesByType.values()) {
+        if (!!onBeforeUnloadClosure) {
+          onBeforeUnloadClosure();
+        }
+      }
+
       this.append('user-inactive', { activities: Array.from(this.sessionActivities) }, /* sync= */ true);
       store.dispatch(actions.userInactive());
     }, true);
@@ -343,7 +349,7 @@ export default class ClientChronicles {
     }
   }
 
-  append(eventType, data, sync = false) {
+  append(eventType, data, sync = false, onBeforeUnloadClosure = undefined) {
     data.ab               = this.abTesting;
     data.ui_language      = this.uiLanguage;
     data.content_language = this.contentLanguage;
@@ -357,8 +363,8 @@ export default class ClientChronicles {
       // 1. We don't set flowType for end, just for subflow (see else).
       // 2. We delete the start event so that other events won't use it as flow-event.
       const { start }  = FLOWS_BY_END.get(eventType);
-      const startEvent = this.lastEntriesByType.has(start);
-      if (startEvent) {
+      const startEvent = this.lastEntriesByType.get(start);
+      if (!!startEvent) {
         flowId = startEvent.eventId;
         this.lastEntriesByType.delete(start);
       }
@@ -391,7 +397,7 @@ export default class ClientChronicles {
       append.client_id = this.userId;
     }
 
-    this.lastEntriesByType.set(eventType, { timestamp: nowTimestampMs, eventId });
+    this.lastEntriesByType.set(eventType, { timestamp: nowTimestampMs, eventId, onBeforeUnloadClosure });
 
     this.timestampedAppends.push({ timestamp: nowTimestampMs, append });
     if (sync) {

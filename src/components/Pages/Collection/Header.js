@@ -38,6 +38,7 @@ const CollectionPageHeader = ({ collection = null, namespace, title = namespace,
                     {collection.name}
                   </span>
                   <Header.Subheader className="section-header__subtitle">
+                    <p className="section-header__description">{collection.description}</p>
                     <Button
                       icon="rss"
                       size="mini"
@@ -51,7 +52,7 @@ const CollectionPageHeader = ({ collection = null, namespace, title = namespace,
                   </Header.Subheader>
                 </Header.Content>
               </Header>
-              <p className="section-header__description">{collection.description}</p>
+
             </Grid.Column>
           </Grid.Row>
         </Grid>

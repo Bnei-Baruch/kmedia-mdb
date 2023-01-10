@@ -14,7 +14,6 @@ const DailyLessonItem = ({ id, t }) => {
   const { number, film_date, content_units = [] } = ccu || {};
 
   if (!ccu || content_units.length === 0) return null;
-
   const logoUnit = content_units.find(x => x.id === getCuByCcuSkipPreparation(ccu));
   const link     = canonicalLink(logoUnit);
 

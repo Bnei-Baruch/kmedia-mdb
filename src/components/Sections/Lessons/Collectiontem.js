@@ -11,6 +11,8 @@ import { selectors as mdb } from '../../../redux/modules/mdb';
 import { selectors as my } from '../../../redux/modules/my';
 import Link from '../../Language/MultiLanguageLink';
 import UnitLogoWithDuration, { getLogoUnit } from '../../shared/UnitLogoWithDuration';
+import { MY_NAMESPACE_HISTORY } from '../../../helpers/consts';
+import { selectors as my } from '../../../redux/modules/my';
 
 const CollectionItem = ({ id, t }) => {
   const c            = useSelector(state => mdb.getDenormCollection(state.mdb, id));

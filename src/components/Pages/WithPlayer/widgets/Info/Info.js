@@ -77,13 +77,14 @@ const Info = ({ t }) => {
   const unit                         = useSelector(state => mdb.getDenormContentUnit(state.mdb, cuId));
   const getTagById                   = useSelector(state => tagsSelectors.getTagById(state.tags));
 
-  const { id, name, film_date: filmDate, collections, content_type: ct, cIDs, tags = [] } = unit;
+  const { id, name, film_date: filmDate, collections, content_type: ct, cIDs, tags = [] } = unit || {};
 
   const views = useSelector(state => recommended.getViews(id, state.recommended));
 
   const lids   = useSelector(state => mdb.getLabelsByCU(state.mdb, id));
   const denorm = useSelector(state => mdb.getDenormLabel(state.mdb));
 
+  if(!unit) return null
   const mergeTags = () => {
     let ids = [];
     if (tags?.length > 0) ids = tags;

@@ -8,12 +8,10 @@ import VolumeCtrl from './VolumeCtrl';
 import { Timecode } from './Timecode';
 import { ProgressCtrl } from './ProgressCtrl';
 import PlayPauseBg from './PlayPauseBg';
-import AudioBg from './AudioBg';
 
-const ControlsWeb = ({ openOnFull }) => {
+const ControlsWeb = ({ fullscreenRef }) => {
   return (
-    <div className="controls" dir="ltr">
-      <AudioBg />
+    <div className="controls">
       <PrevBtn />
       <SeekBackwardBtn />
       <PlayPauseBg />
@@ -26,7 +24,7 @@ const ControlsWeb = ({ openOnFull }) => {
         <ProgressCtrl />
         <SettingsBtn />
         <ShareBtn />
-        <FullscreenBtn openOnFull={openOnFull} />
+        <FullscreenBtn fullscreenRef={fullscreenRef} />
       </div>
     </div>
   );

@@ -14,12 +14,13 @@ const BehaviorStartPlay = () => {
   const { start, end } = startEndFromQuery(location);
 
   const isReady = useSelector(state => player.isReady(state.player));
+  const isMuted = useSelector(state => player.isMuted(state.player));
 
   const item = useSelector(state => playlist.getPlayed(state.playlist), shallowEqual);
   const info = useSelector(state => playlist.getInfo(state.playlist), shallowEqual);
   const file = useMemo(() => findPlayedFile(item, info), [item, info]);
 
-  const { cuId, cId, isSingleMedia } = info;
+  const { cuId, isSingleMedia } = info;
 
   const historyItem = useSelector(state => my.getList(state.my, MY_NAMESPACE_HISTORY)?.find(x => x.content_unit_uid === cuId));
   const { fetched } = useSelector(state => my.getInfo(state.my, MY_NAMESPACE_HISTORY));
@@ -27,29 +28,29 @@ const BehaviorStartPlay = () => {
   const fileIdRef = useRef();
   const dispatch  = useDispatch();
 
-  // must be before next useEffect
-  // null prev file id when open other collection
+  //mute for autostart
   useEffect(() => {
-    fileIdRef.current = null;
-  }, [cId]);
+    if (isMuted !== undefined) return;
+    window.jwplayer(JWPLAYER_ID).setConfig({ mute: isSingleMedia });
+    dispatch(actions.setIsMuted(isSingleMedia));
+  }, [isMuted, isSingleMedia]);
 
   //start from saved time on load or switch playlist item
   useEffect(() => {
     if (!isReady || start || end || !fetched || file.id === fileIdRef.current) return;
-    const autoplay               = !!fileIdRef.current || isSingleMedia;
-    const jwp                    = window.jwplayer(JWPLAYER_ID);
+
+    const jwp       = window.jwplayer(JWPLAYER_ID);
+    const autostart = !!fileIdRef.current || isSingleMedia;
+    jwp.setConfig({ autostart });
     const { current_time: seek } = getSavedTime(cuId, historyItem);
 
     if (!isNaN(seek) && seek > 0 && (seek + 10 < file.duration)) {
-      jwp.seek(seek)[autoplay ? 'play' : 'pause']();
-    } else if (autoplay) {
-      jwp.play();
-    } else {
+      jwp.seek(seek)[autostart ? 'play' : 'pause']();
+    } else if (!autostart) {
       dispatch(actions.setLoaded(true));
     }
-
     fileIdRef.current = file.id;
-  }, [isReady, cuId, fileIdRef.current, start, end, isSingleMedia, file, historyItem, fetched]);
+  }, [isReady, start, end, cuId, file, historyItem, fileIdRef.current, isSingleMedia]);
 
   return null;
 };

@@ -7,8 +7,10 @@ import Sharing from './Sharing/Sharing';
 import ControlsMobile from './Controls/ControlsMobile';
 import { PLAYER_OVER_MODES } from '../../helpers/consts';
 import { stopBubbling } from '../../helpers/utils';
+import AudioBg from './AudioBg';
+import Preloader from './Controls/Preloader';
 
-const PlayerToolsMobile = ({ handleFullScreen, Player }) => {
+const PlayerToolsMobile = ({ fullscreenRef, Player }) => {
   const isPlayerReady = useSelector(state => player.isReady(state.player));
 
   const dispatch = useDispatch();
@@ -22,11 +24,13 @@ const PlayerToolsMobile = ({ handleFullScreen, Player }) => {
     <>
       <div className="player-wrapper" onClick={handleTouch}>
         {Player}
-        {isPlayerReady && <ControlsMobile openOnFull={handleFullScreen} />}
+        <AudioBg />
+        {isPlayerReady && <ControlsMobile fullscreenRef={fullscreenRef} />}
       </div>
       {
         isPlayerReady && (
           <>
+            <Preloader />
             <Settings />
             <Sharing />
           </>

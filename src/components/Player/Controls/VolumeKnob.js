@@ -1,18 +1,17 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Popup } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
 
 import { selectors as player } from '../../../redux/modules/player';
 import { useSubscribeVolume } from '../../../pkg/jwpAdapter';
-import { setVolume } from '../../../pkg/jwpAdapter/adapter';
 import { noop } from '../../../helpers/utils';
 
-export const VolumeKnob = ({ left, right }) => {
+export const VolumeKnob = ({ onChangePosition }) => {
   const [activated, setActivated] = useState(false);
 
   const isReady = useSelector(state => player.isReady(state.player));
 
-  const { volume } = useSubscribeVolume();
+  const volume = useSubscribeVolume();
 
   const handleStart = e => {
     e.preventDefault();
@@ -20,16 +19,11 @@ export const VolumeKnob = ({ left, right }) => {
     !e.button && setActivated(true);
   };
 
-  const handleMove = useCallback(e => {
-    e.preventDefault();
+  const handleMove = e => {
     if (!activated) return;
 
-    // Resolve clientX from mouse or touch event.
-    const clientX = e.touches ? e.touches[e.touches.length - 1].clientX : e.clientX;
-    const delta   = right - left;
-    const v       = Math.round(100 * Math.min(Math.max(0, clientX - left), delta) / delta);
-    setVolume(v);
-  }, [activated]);
+    onChangePosition(e);
+  };
 
   useEffect(() => {
     if (!isReady) return noop;

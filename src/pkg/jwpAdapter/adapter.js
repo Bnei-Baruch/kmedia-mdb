@@ -27,7 +27,7 @@ const functionByName = (name, def = 0, val) => {
 export const getDuration = () => functionByName('getDuration');
 
 export const getMute = () => functionByName('getMute', false);
-export const setMute = () => functionByName('setMute', noop);
+export const setMute = (val) => functionByName('setMute', noop, val);
 
 export const setVolume = (vol) => functionByName('setVolume', noop, vol);
 
