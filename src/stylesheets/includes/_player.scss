@@ -457,7 +457,7 @@ video {
     padding: 16px 8px;
   }
 
-  .is-web & input{
+  .is-web & input {
     font-size: 11px;
   }
 }
@@ -520,8 +520,9 @@ video {
       padding: 0.78571429em 0.9em 0.78571429em;
     }
   }
-  > .buttons{
-    direction: ltr;
+
+  .rtl & > .buttons {
+    direction: rtl;
   }
 }
 
