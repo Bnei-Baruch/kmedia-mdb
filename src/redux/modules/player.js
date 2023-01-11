@@ -1,5 +1,5 @@
 import { createAction } from 'redux-actions';
-import { handleActions } from './settings';
+import { handleActions, types as settings } from './settings';
 import { PLAYER_OVER_MODES } from '../../helpers/consts';
 
 const PLAYER_READY       = 'Player/READY';
@@ -119,7 +119,9 @@ export const reducer = handleActions({
   [PLAYER_SET_WIP]: (draft, payload) => draft.wip = payload,
 
   [SET_SHARE_START_END]: (draft, payload) => draft.shareStartEnd = payload,
-  [SET_IS_MUTED]: (draft, payload) => draft.isMuted = payload
+  [SET_IS_MUTED]: (draft, payload) => draft.isMuted = payload,
+
+  [settings.SET_LANGUAGE]: onRemove,
 }, initialState);
 
 const isReady          = state => state.ready;

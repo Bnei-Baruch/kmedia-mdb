@@ -1,5 +1,5 @@
 import { createAction } from 'redux-actions';
-import { handleActions } from './settings';
+import { handleActions, types as settings } from './settings';
 import { DEFAULT_LANGUAGE, VS_DEFAULT } from '../../helpers/consts';
 import { types as playerTypes } from './player';
 import { saveTimeOnLocalstorage } from '../../components/Player/Controls/helper';
@@ -106,6 +106,8 @@ export const reducer = handleActions({
   [PLAYER_SET_QUALITY]: (draft, payload) => draft.info.quality = payload,
   [PLAYER_SET_LANGUAGE]: (draft, payload) => draft.info.language = payload,
   [PLAYER_SET_MEDIA_TYPE]: (draft, payload) => draft.info.mediaType = payload,
+
+  [settings.SET_LANGUAGE]: onRemovePlayer,
 }, initialState);
 
 const getPlaylist = state => state.playlist;

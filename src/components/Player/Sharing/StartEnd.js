@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { Input, Button } from 'semantic-ui-react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { toHumanReadableTime } from '../../../helpers/time';
+import { toHumanReadableTime, formatTime } from '../../../helpers/time';
 import { actions, selectors } from '../../../redux/modules/player';
 import { withNamespaces } from 'react-i18next';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
@@ -50,7 +50,7 @@ const StartEnd = ({ t }) => {
             onClick: handleSetStart
           }}
           placeholder={t('player.share.click-to-set')}
-          value={toHumanReadableTime(start)}
+          value={formatTime(start)}
           dir={dir}
         />
         <Input
@@ -66,7 +66,7 @@ const StartEnd = ({ t }) => {
             onClick: handleSetEnd
           }}
           placeholder={t('player.share.click-to-set')}
-          value={toHumanReadableTime(end)}
+          value={formatTime(end)}
           dir={dir}
         />
       </div>
