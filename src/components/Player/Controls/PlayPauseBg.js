@@ -12,7 +12,7 @@ const PlayPauseBg = ({ t }) => {
   const isPlay = useSelector(state => selectors.isPlay(state.player));
 
   const handleClick = e => {
-    isPlay ? pause() : play().play();
+    isPlay ? pause() : play();
     stopBubbling(e);
   };
 
