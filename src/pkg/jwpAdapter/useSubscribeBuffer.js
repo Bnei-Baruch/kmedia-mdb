@@ -3,10 +3,9 @@ import { useSelector } from 'react-redux';
 
 import { selectors as playlist } from '../../redux/modules/playlist';
 import { selectors as player } from '../../redux/modules/player';
-import { JWPLAYER_ID } from '../../helpers/consts';
 import { noop } from '../../helpers/utils';
 
-const useSubscribeSeekAndTime = () => {
+const useSubscribeBuffer = () => {
   const [buffPos, setBuffPos] = useState(0);
 
   const isReady  = useSelector(state => player.isReady(state.player));
@@ -17,11 +16,10 @@ const useSubscribeSeekAndTime = () => {
     if (!isReady) return noop;
 
     const checkBufferTime = d => setBuffPos(Math.round(d.bufferPercent));
-
-    const p               = window.jwplayer(JWPLAYER_ID);
-    p.on('bufferChange', checkBufferTime);
+    window.jwplayer().on('bufferChange', checkBufferTime);
     return () => {
-      p.off('bufferChange', checkBufferTime);
+      const jwp = window.jwplayer();
+      jwp.off && jwp.off('bufferChange', checkBufferTime);
       setBuffPos(0);
     };
 
@@ -29,4 +27,4 @@ const useSubscribeSeekAndTime = () => {
 
   return buffPos;
 };
-export default useSubscribeSeekAndTime;
+export default useSubscribeBuffer;

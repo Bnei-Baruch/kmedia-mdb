@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { selectors, actions, selectors as player } from '../../redux/modules/player';
-import { JWPLAYER_ID } from '../../helpers/consts';
 
 const usePreloader = () => {
   const loaded  = useSelector(state => selectors.isLoaded(state.player));
@@ -12,18 +11,24 @@ const usePreloader = () => {
   useEffect(() => {
     if (loaded || !isReady) return null;
 
-    const p = window.jwplayer(JWPLAYER_ID);
-
     const markAsLoaded = (e) => {
       dispatch(actions.setLoaded(true));
-      p.off('meta', markAsLoaded);
-      p.off('bufferFull', markAsLoaded);
+      const jwp = window.jwplayer();
+      if (jwp.off) {
+        jwp.off('meta', markAsLoaded);
+        jwp.off('bufferFull', markAsLoaded);
+      }
     };
-    p.on('meta', markAsLoaded);
-    p.on('bufferFull', markAsLoaded);
+
+    const jwp = window.jwplayer();
+    jwp.on('meta', markAsLoaded);
+    jwp.on('bufferFull', markAsLoaded);
     return () => {
-      p.off('meta', markAsLoaded);
-      p.off('bufferFull', markAsLoaded);
+      const jwp = window.jwplayer();
+      if (jwp.off) {
+        jwp.off('meta', markAsLoaded);
+        jwp.off('bufferFull', markAsLoaded);
+      }
     };
 
   }, [loaded, isReady]);

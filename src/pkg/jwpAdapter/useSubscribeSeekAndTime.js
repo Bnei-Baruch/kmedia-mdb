@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux';
 
 import { selectors as playlist } from '../../redux/modules/playlist';
 import { selectors as player } from '../../redux/modules/player';
-import { JWPLAYER_ID } from '../../helpers/consts';
 import { noop } from '../../helpers/utils';
 
 const useSubscribeSeekAndTime = () => {
@@ -25,14 +24,17 @@ const useSubscribeSeekAndTime = () => {
       setTime(time);
     };
 
-    const p = window.jwplayer(JWPLAYER_ID);
-    p.on('seek', checkTimeAfterSeek);
-    p.on('time', checkTimeAfterSeek);
+    const jwp = window.jwplayer();
+    jwp.on('seek', checkTimeAfterSeek);
+    jwp.on('time', checkTimeAfterSeek);
     return () => {
       setPos(0);
       setTime(0);
-      p.off('seek', checkTimeAfterSeek);
-      p.off('time', checkTimeAfterSeek);
+      const jwp = window.jwplayer();
+      if(jwp.off) {
+        jwp.off('seek', checkTimeAfterSeek);
+        jwp.off('time', checkTimeAfterSeek);
+      }
     };
 
   }, [isReady, file?.src, cuId]);
