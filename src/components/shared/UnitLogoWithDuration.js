@@ -17,7 +17,7 @@ export const getLogoUnit = (content_units, historyItems) => {
   return logoUnit || content_units[0];
 };
 
-const UnitLogoWithDuration = ({ unit, ...propz }) => {
+const UnitLogoWithDuration = ({ unit, totalDuration, ...propz }) => {
   const { id, duration } = unit;
 
   const historyItems = useSelector(state => my.getList(state.my, MY_NAMESPACE_HISTORY)) || [];
@@ -28,12 +28,14 @@ const UnitLogoWithDuration = ({ unit, ...propz }) => {
     propz.width = 140;
   }
 
+  const displayDuration = totalDuration || duration;
+
   return (
     <div className="with_duration" style={{ minWidth: propz.width }}>
       {
-        duration && (
+        displayDuration && (
           <div className="duration">
-            { formatDuration(duration, null) }
+            { formatDuration(displayDuration, null) }
           </div>
         )
       }

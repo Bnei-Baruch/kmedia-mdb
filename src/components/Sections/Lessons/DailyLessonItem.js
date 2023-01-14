@@ -9,6 +9,7 @@ import { selectors as my } from '../../../redux/modules/my';
 import Link from '../../Language/MultiLanguageLink';
 import UnitLogoWithDuration, { getLogoUnit } from '../../shared/UnitLogoWithDuration';
 import { MY_NAMESPACE_HISTORY } from '../../../helpers/consts';
+import { CT_LESSON_PART } from './../../../helpers/consts';
 
 const DailyLessonItem = ({ id, t }) => {
   const c            = useSelector(state => mdb.getDenormCollection(state.mdb, id));
@@ -20,11 +21,14 @@ const DailyLessonItem = ({ id, t }) => {
 
   const logoUnit = getLogoUnit(content_units, historyItems);
   const link     = canonicalLink(logoUnit);
+  const totalDuration = content_units
+    .filter(cu => cu.content_type === CT_LESSON_PART)
+    .reduce((acc, cu) => acc += cu.duration, 0);
 
   return (
     <List.Item key={id} className="media_item daily_lesson">
       <Link to={link} style={{ minWidth: '140px' }}>
-        <UnitLogoWithDuration unit={logoUnit} />
+        <UnitLogoWithDuration unit={logoUnit} totalDuration={totalDuration} />
       </Link>
       <div className="media_item__content">
         <Header as={Link} to={link}>
