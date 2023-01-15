@@ -17,30 +17,28 @@ export const getLogoUnit = (content_units, historyItems) => {
   return logoUnit || content_units[0];
 };
 
-const UnitLogoWithDuration = ({ unit, totalDuration, ...propz }) => {
-  const { id, duration } = unit;
-
+const UnitLogoWithDuration = ({ unit, ...propz }) => {
   const historyItems = useSelector(state => my.getList(state.my, MY_NAMESPACE_HISTORY)) || [];
-  const historyUnit = historyItems.find(x => x.content_unit_uid === id);
+  const historyUnit = historyItems.find(x => x.content_unit_uid === unit.id);
   const playTime = historyUnit?.data.current_time;
 
-  if (propz.width === undefined) {
-    propz.width = 140;
-  }
+  const { width = 140, displayDuration = true, totalDuration, ...rest } = propz;
 
-  const displayDuration = totalDuration || duration;
+  const durationToDisplay = displayDuration
+    ? totalDuration || unit.duration
+    : null;
 
   return (
-    <div className="with_duration" style={{ minWidth: propz.width }}>
+    <div className="with_duration" style={{ minWidth: width }}>
       {
-        displayDuration && (
+        durationToDisplay && (
           <div className="duration">
-            { formatDuration(displayDuration, null) }
+            { formatDuration(durationToDisplay, null) }
           </div>
         )
       }
       {getProgress(unit, playTime)}
-      <UnitLogo unitId={id} {...propz} />
+      <UnitLogo unitId={unit.id} width={width} {...rest} />
     </div>
   );
 };

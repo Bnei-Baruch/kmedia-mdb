@@ -4,7 +4,7 @@ import { withNamespaces } from 'react-i18next';
 import { useSelector, shallowEqual } from 'react-redux';
 import { Header, List } from 'semantic-ui-react';
 
-import { MY_NAMESPACE_HISTORY } from '../../../helpers/consts';
+import { CT_LESSONS_SERIES, MY_NAMESPACE_HISTORY } from '../../../helpers/consts';
 import { fromToLocalized } from '../../../helpers/date';
 import { canonicalLink } from '../../../helpers/links';
 import { selectors as mdb } from '../../../redux/modules/mdb';
@@ -30,10 +30,12 @@ const CollectionItem = ({ id, t }) => {
   }
 
   const link = canonicalLink(logoUnit, '', c);
+  const displayDuration = content_type !== CT_LESSONS_SERIES;
+
   return (
     <List.Item key={id} className="media_item">
       <Link to={link} style={{ minWidth: '140px' }}>
-        <UnitLogoWithDuration unit={logoUnit} />
+        <UnitLogoWithDuration unit={logoUnit} displayDuration={displayDuration} />
       </Link>
       <div className="media_item__content">
         <Header as={Link} to={link} content={name} />
