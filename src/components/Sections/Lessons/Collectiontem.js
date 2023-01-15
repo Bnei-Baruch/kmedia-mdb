@@ -21,8 +21,12 @@ const CollectionItem = ({ id, t }) => {
   const { film_date, name, content_type, content_units, start_date, end_date } = c;
 
   const logoUnit = getLogoUnit(content_units, historyItems);
-
   const description = [];
+
+  if (content_type === CT_LESSONS_SERIES) {
+    description.push(t(`pages.unit.info.series-episodes`, { name: content_units.length }))
+  }
+
   if (film_date) {
     description.push(t('values.date', { date: film_date }));
   } else if (start_date && end_date) {
@@ -40,7 +44,7 @@ const CollectionItem = ({ id, t }) => {
       <div className="media_item__content">
         <Header as={Link} to={link} content={name} />
         <div>{t(`constants.content-types.${content_type}`)}</div>
-        <div className={clsx('description', { 'is_single': !(description?.length > 1) })}>
+        <div className={clsx('description', { 'is_single': description.length <= 1 })}>
           {description.map((d, i) => (<span key={i}>{d}</span>))}
         </div>
       </div>
