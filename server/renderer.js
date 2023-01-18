@@ -19,7 +19,6 @@ import createStore from '../src/redux/createStore';
 import { actions as ssr } from '../src/redux/modules/ssr';
 import { actions as settings, initialState as settingsInitialState } from '../src/redux/modules/settings';
 import i18nnext from './i18nnext';
-import AppTmp from '../src/components/App/AppTmp';
 import App from '../src/components/App/App';
 import moment from 'moment/moment';
 import { pick } from 'lodash/object';
@@ -31,95 +30,7 @@ const helmetContext = {};
 // eslint-disable-next-line no-unused-vars
 const DoNotRemove = localStorage; // DO NOT REMOVE - the import above does all the work
 
-const BASE_URL    = process.env.REACT_APP_BASE_URL;
-const ABORT_DELAY = process.env.ABORT_DELAY || 10000;
-
-// see https://yoast.com/rel-canonical/
-function canonicalLink(req, lang) {
-  // strip ui language from path
-  let cPath = req.originalUrl;
-  if (lang && cPath.startsWith(`/${lang}`)) {
-    cPath = cPath.substring(3);
-  }
-
-  const s = cPath.split('?');
-
-  // start with path part
-  cPath = s[0];
-
-  // strip leading slash as it comes from BASE_URL
-  if (cPath.startsWith('/')) {
-    cPath = cPath.substring(1);
-  }
-
-  // strip trailing slash as we don't use those
-  if (cPath.endsWith('/')) {
-    cPath = cPath.substring(0, cPath.length - 1);
-  }
-
-  // clean content invariant keys from search part (query)
-  if (s.length > 1) {
-    const q = qs.parse(s[1]);
-    delete q.sstart;      // player slice start
-    delete q.send;        // player slice end
-    delete q.language;    // content language
-
-    // This one is conceptually wrong.
-    // As changing the active part in a playlist would most definitely
-    // change the page's content.
-    // Most of the content would seem to duplicate the CU page.
-    // However, it's logically not easy and some units may not
-    // have their own CU page so we skip it.
-    delete q.ap;          // playlist active part
-
-    if (!isEmpty(q)) {
-      cPath = `${cPath}?${qs.stringify(q)}`;
-    }
-  }
-
-  if (/\/gr-/.test(cPath)) { // Rabash Group Articles
-    const result = /(.+)\/gr-(.+)$/.exec(cPath);
-    cPath        = `${result[1]}/${result[2]}`;
-  }
-
-  return `<link rel="canonical" href="${BASE_URL}${cPath}" />`;
-}
-
-// see https://yoast.com/hreflang-ultimate-guide/
-function alternateLinks(req, lang) {
-  // strip ui language from path
-  let aPath = req.originalUrl;
-  if (lang && aPath.startsWith(`/${lang}`)) {
-    aPath = aPath.substring(3);
-  }
-
-  // strip leading slash as it comes from BASE_URL
-  if (aPath.startsWith('/')) {
-    aPath = aPath.substring(1);
-  }
-
-  return LANG_UI_LANGUAGES
-    .map(x => {
-      const l = getLanguageLocaleWORegion(x);
-      return `<link rel="alternate" href="${BASE_URL}${x}/${aPath}" hreflang="${l}" />`;
-    })
-    .join('');
-}
-
-function ogUrl(req, lang) {
-  // strip ui language from path
-  let aPath = req.originalUrl;
-  if (lang && aPath.startsWith(`/${lang}`)) {
-    aPath = aPath.substring(3);
-  }
-
-  // strip leading slash as it comes from BASE_URL
-  if (aPath.startsWith('/')) {
-    aPath = aPath.substring(1);
-  }
-
-  return `<meta property="og:url" content="${BASE_URL}${lang}/${aPath}" />`;
-}
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 export default function serverRender(req, res, next, htmlData) {
   console.log('serverRender', req.originalUrl);
@@ -131,21 +42,18 @@ export default function serverRender(req, res, next, htmlData) {
     res.end();
     return;
   }
-  if (isBot(req)) {
-    serverRenderForBots(req, res, next, htmlData, language);
-    return;
-  }
 
   const cookies = cookieParse(req.headers.cookie || '');
-  if (cookies['authorised']) {
-    serverRenderAuthorised(req, res, next, htmlData, language);
+  const bot     = isBot(req);
+  if (cookies['authorised'] || bot) {
+    serverRenderAuthorised(req, res, next, htmlData, language, bot);
     return;
   }
   serverRenderSSOAuth(req, res, next, htmlData, language);
 }
 
 function serverRenderSSOAuth(req, res, next, htmlData) {
-  const rootDiv = `<div>SSO Auth</div>
+  const rootDiv = `<h1 style="text-align: center">We try to authorise</h1>
     <script>window.__isAuthApp = true;</script>`;
   const html    = htmlData.replace(/<div id="root"><\/div>/, rootDiv);
 
@@ -153,7 +61,7 @@ function serverRenderSSOAuth(req, res, next, htmlData) {
   res.send(html);
 }
 
-async function serverRenderAuthorised(req, res, next, htmlData, language) {
+async function serverRenderAuthorised(req, res, next, htmlData, language, bot) {
 
   moment.locale(language === LANG_UKRAINIAN ? 'uk' : language);
 
@@ -175,6 +83,10 @@ async function serverRenderAuthorised(req, res, next, htmlData, language) {
     const initialState = {
       settings: { ...settingsInitialState, language, contentLanguage: cookies[COOKIE_CONTENT_LANG], },
     };
+
+    if (bot) {
+      initialState.auth = { user: { name: 'bot' } };
+    }
 
     const store = createStore(initialState, history);
     store.dispatch(settings.setLanguage(language));
@@ -281,30 +193,93 @@ async function serverRenderAuthorised(req, res, next, htmlData, language) {
   });
 }
 
-function serverRenderForBots(req, res, next, htmlData, language) {
-
-  const history = createMemoryHistory({ initialEntries: [req.originalUrl], });
-
-  const cookies = cookieParse(req.headers.cookie || '');
-
-  const initialState = {
-    settings: { ...settingsInitialState, language, contentLanguage: cookies[COOKIE_CONTENT_LANG], },
-  };
-
-  const store = createStore(initialState, history);
-  store.dispatch(settings.setLanguage(language));
-
-  const markup = ReactDOMServer.renderToString(<AppTmp store={store} />);
-
-  store.dispatch(ssr.prepare());
-  const storeData = serialize(store.getState());
-
-  const rootDiv = `<div id="root">${markup}</div><script>  window.__data = ${storeData};</script>`;
-  const html    = htmlData.replace(/<div id="root"><\/div>/, rootDiv);
-
-  res.send(html);
-}
-
 function isBot(req) {
   return crawlers.some(entry => RegExp(entry.pattern).test(req.headers['user-agent']));
+}
+
+// see https://yoast.com/rel-canonical/
+function canonicalLink(req, lang) {
+  // strip ui language from path
+  let cPath = req.originalUrl;
+  if (lang && cPath.startsWith(`/${lang}`)) {
+    cPath = cPath.substring(3);
+  }
+
+  const s = cPath.split('?');
+
+  // start with path part
+  cPath = s[0];
+
+  // strip leading slash as it comes from BASE_URL
+  if (cPath.startsWith('/')) {
+    cPath = cPath.substring(1);
+  }
+
+  // strip trailing slash as we don't use those
+  if (cPath.endsWith('/')) {
+    cPath = cPath.substring(0, cPath.length - 1);
+  }
+
+  // clean content invariant keys from search part (query)
+  if (s.length > 1) {
+    const q = qs.parse(s[1]);
+    delete q.sstart;      // player slice start
+    delete q.send;        // player slice end
+    delete q.language;    // content language
+
+    // This one is conceptually wrong.
+    // As changing the active part in a playlist would most definitely
+    // change the page's content.
+    // Most of the content would seem to duplicate the CU page.
+    // However, it's logically not easy and some units may not
+    // have their own CU page so we skip it.
+    delete q.ap;          // playlist active part
+
+    if (!isEmpty(q)) {
+      cPath = `${cPath}?${qs.stringify(q)}`;
+    }
+  }
+
+  if (/\/gr-/.test(cPath)) { // Rabash Group Articles
+    const result = /(.+)\/gr-(.+)$/.exec(cPath);
+    cPath        = `${result[1]}/${result[2]}`;
+  }
+
+  return `<link rel="canonical" href="${BASE_URL}${cPath}" />`;
+}
+
+// see https://yoast.com/hreflang-ultimate-guide/
+function alternateLinks(req, lang) {
+  // strip ui language from path
+  let aPath = req.originalUrl;
+  if (lang && aPath.startsWith(`/${lang}`)) {
+    aPath = aPath.substring(3);
+  }
+
+  // strip leading slash as it comes from BASE_URL
+  if (aPath.startsWith('/')) {
+    aPath = aPath.substring(1);
+  }
+
+  return LANG_UI_LANGUAGES
+    .map(x => {
+      const l = getLanguageLocaleWORegion(x);
+      return `<link rel="alternate" href="${BASE_URL}${x}/${aPath}" hreflang="${l}" />`;
+    })
+    .join('');
+}
+
+function ogUrl(req, lang) {
+  // strip ui language from path
+  let aPath = req.originalUrl;
+  if (lang && aPath.startsWith(`/${lang}`)) {
+    aPath = aPath.substring(3);
+  }
+
+  // strip leading slash as it comes from BASE_URL
+  if (aPath.startsWith('/')) {
+    aPath = aPath.substring(1);
+  }
+
+  return `<meta property="og:url" content="${BASE_URL}${lang}/${aPath}" />`;
 }
