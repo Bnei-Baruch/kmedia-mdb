@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Swipeable } from 'react-swipeable';
+import { useSwipeable } from 'react-swipeable';
 import { Button, Card } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
@@ -10,9 +10,19 @@ import { isLanguageRtl } from '../../../helpers/i18n-utils';
 import clsx from 'clsx';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 
-const LatestUpdatesCardList = ({ t, language, title, maxItems, cts, itemsByCT, itemsPerRow = 4, itemsCount= 4, stackable = true }) => {
+const LatestUpdatesCardList = ({
+                                 t,
+                                 language,
+                                 title,
+                                 maxItems,
+                                 cts,
+                                 itemsByCT,
+                                 itemsPerRow = 4,
+                                 itemsCount = 4,
+                                 stackable = true
+                               }) => {
 
-  const { isMobileDevice }      = useContext(DeviceInfoContext);
+  const { isMobileDevice } = useContext(DeviceInfoContext);
 
   const [pageNo, setPageNo] = useState(0);
 
@@ -38,7 +48,7 @@ const LatestUpdatesCardList = ({ t, language, title, maxItems, cts, itemsByCT, i
       const entryItems = [...itemsByCT[entry.ct]];
       //return entryItems;
       return entry.daysBack ? entryItems.filter(item => moment().diff(moment(item.film_date), 'days') < entry.daysBack) : entryItems;
-    }
+    };
 
     cts.forEach(entry => items[entry.ct] = getEntryItems(entry));
     let hasItems = true;
@@ -46,7 +56,7 @@ const LatestUpdatesCardList = ({ t, language, title, maxItems, cts, itemsByCT, i
       hasItems = false;
       cts.forEach(ct => {
         const curItems = items[ct.ct];
-        let count = ct.itemsPerPage ? ct.itemsPerPage : 1;
+        let count      = ct.itemsPerPage ? ct.itemsPerPage : 1;
         while (curItems.length > 0 && count > 0) {
           cards.push((curItems.shift()));
           count--;
@@ -71,14 +81,11 @@ const LatestUpdatesCardList = ({ t, language, title, maxItems, cts, itemsByCT, i
     setPageStart(newPageStart);
   };
 
-  const getSwipeProps = () => {
-    const isRTL = isLanguageRtl(language);
-    return {
-      onSwipedLeft: isRTL ? onScrollRight : onScrollLeft,
-      onSwipedRight: isRTL ? onScrollLeft : onScrollRight
-    };
-  };
-
+  const isRTL         = isLanguageRtl(language);
+  const swipeHandlers = useSwipeable({
+    onSwipedLeft: isRTL ? onScrollRight : onScrollLeft,
+    onSwipedRight: isRTL ? onScrollLeft : onScrollRight
+  });
 
   const renderScrollRight = () => {
     const dir = isLanguageRtl(language) ? 'right' : 'left';
@@ -96,7 +103,7 @@ const LatestUpdatesCardList = ({ t, language, title, maxItems, cts, itemsByCT, i
 
   const renderScrollLeft = () => {
     const dir = isLanguageRtl(language) ? 'left' : 'right';
-    return (pageNo+1) * itemsCount >= cardsArray.length ? null : (
+    return (pageNo + 1) * itemsCount >= cardsArray.length ? null : (
       <Button
         icon={`chevron ${dir}`}
         basic
@@ -113,29 +120,31 @@ const LatestUpdatesCardList = ({ t, language, title, maxItems, cts, itemsByCT, i
   }, [cts]);
 
   const cardsRow = (
-    <Card.Group className={clsx({ 'latestUpdatesCardGroup' : !isMobileDevice, 'latestUpdatesCardGroupMobile': isMobileDevice })} itemsPerRow={itemsPerRow} stackable={stackable}>
+    <Card.Group className={clsx({
+      'latestUpdatesCardGroup': !isMobileDevice,
+      'latestUpdatesCardGroupMobile': isMobileDevice
+    })} itemsPerRow={itemsPerRow} stackable={stackable}>
       {getPageCardArray()}
-      { !isMobileDevice && renderScrollLeft() }
-      { !isMobileDevice && renderScrollRight() }
+      {!isMobileDevice && renderScrollLeft()}
+      {!isMobileDevice && renderScrollRight()}
     </Card.Group>
   );
 
   const swipCards = !isMobileDevice ?
     (
-      <Swipeable swipeProps={getSwipeProps()}>
-        { cardsRow }
-      </Swipeable>
+      <div {...swipeHandlers}>
+        {cardsRow}
+      </div>
     )
     : cardsRow;
-
 
   return <>
     <div className="cardsTitle">
       {title}
     </div>
-    { swipCards }
+    {swipCards}
   </>;
-}
+};
 
 LatestUpdatesCardList.propTypes = {
   t: PropTypes.func.isRequired,

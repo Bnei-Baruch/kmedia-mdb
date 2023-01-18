@@ -10,15 +10,21 @@ import { selectors as playlist } from '../../../redux/modules/playlist';
 import SingleMediaPage from './SingleMedia/SingleMediaPage';
 import { withTranslation } from 'react-i18next';
 import WipErr from '../../shared/WipErr/WipErr';
+import { Icon } from 'semantic-ui-react';
 
 export const PlaylistItemPageSeries = () => {
   const builder = <BuildPlaylistByUnit cts={[CT_LESSONS_SERIES]} />;
   return <Decorator builder={builder} />;
 };
 
-export const PlaylistItemPageLesson = () => {
-  const builder = <BuildPlaylistByUnit cts={COLLECTION_DAILY_LESSONS} />;
-  return <Decorator builder={builder} />;
+export const PlaylistItemPageLesson = ({ player }) => {
+  const { isReady } = useSelector(state => playlist.getInfo(state.playlist));
+  return (
+    <>
+      {<BuildPlaylistByUnit cts={COLLECTION_DAILY_LESSONS} />}
+      {isReady ? <PlaylistPage playerContainer={player} /> : <Icon name="circle notch" color="blue" loading />}
+    </>
+  );
 };
 
 export const PlaylistItemPageEvent = () => {

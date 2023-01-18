@@ -133,7 +133,7 @@ class LibraryContainer extends Component {
     return { title, labelPosition, buttonAlign, icon };
   }
 
-  static nextPrevLink(children, index, isNext, { push, t, language, getSourceById }) {
+  static nextPrevLink(children,index, isNext, { push, t, language, getSourceById }) {
     if (index < 0 || index > children.length - 1) {
       return null;
     }

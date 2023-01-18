@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 
 import PlayAudioIcon from '../../images/icons/PlayAudio';
 import { physicalFile } from '../../helpers/utils';
@@ -42,4 +42,4 @@ const AudioPlayer = ({ mp3, t }) => {
     </span>;
 }
 
-export default withNamespaces()(AudioPlayer);
+export default withTranslation()(AudioPlayer);

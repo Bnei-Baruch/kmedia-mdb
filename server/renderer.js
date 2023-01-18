@@ -3,33 +3,36 @@ import { URL } from 'url';
 import ReactDOMServer from 'react-dom/server';
 import { matchRoutes } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
-import pick from 'lodash/pick';
-import moment from 'moment';
 import qs from 'qs';
 import serialize from 'serialize-javascript';
-import UAParser from 'ua-parser-js';
 import localStorage from 'mock-local-storage';
-import { HelmetProvider } from 'react-helmet-async';
 import { parse as cookieParse } from 'cookie';
 import crawlers from 'crawler-user-agents';
+import UAParser from 'ua-parser-js';
 
-import routes from '../src/route/routes';
+import useRoutes from '../src/route/routes';
 import { COOKIE_CONTENT_LANG, LANG_UI_LANGUAGES, LANG_UKRAINIAN } from '../src/helpers/consts';
-import { getLanguageDirection, getLanguageLocaleWORegion } from '../src/helpers/i18n-utils';
+import { getLanguageLocaleWORegion, getLanguageDirection } from '../src/helpers/i18n-utils';
 import { getLanguageFromPath } from '../src/helpers/url';
 import { isEmpty } from '../src/helpers/utils';
 import createStore from '../src/redux/createStore';
 import { actions as ssr } from '../src/redux/modules/ssr';
 import { actions as settings, initialState as settingsInitialState } from '../src/redux/modules/settings';
-import App from '../src/components/App/App';
 import i18nnext from './i18nnext';
+import AppTmp from '../src/components/App/AppTmp';
+import App from '../src/components/App/App';
+import moment from 'moment/moment';
+import { pick } from 'lodash/object';
+import { HelmetProvider } from 'react-helmet-async';
+import ErrorBoundary from '../src/components/ErrorBoundary';
 
 const helmetContext = {};
 
 // eslint-disable-next-line no-unused-vars
 const DoNotRemove = localStorage; // DO NOT REMOVE - the import above does all the work
 
-const BASE_URL = process.env.REACT_APP_BASE_URL;
+const BASE_URL    = process.env.REACT_APP_BASE_URL;
+const ABORT_DELAY = process.env.ABORT_DELAY || 10000;
 
 // see https://yoast.com/rel-canonical/
 function canonicalLink(req, lang) {
@@ -128,6 +131,29 @@ export default function serverRender(req, res, next, htmlData) {
     res.end();
     return;
   }
+  if (isBot(req)) {
+    serverRenderForBots(req, res, next, htmlData, language);
+    return;
+  }
+
+  const cookies = cookieParse(req.headers.cookie || '');
+  if (cookies['authorised']) {
+    serverRenderAuthorised(req, res, next, htmlData, language);
+    return;
+  }
+  serverRenderSSOAuth(req, res, next, htmlData, language);
+}
+
+function serverRenderSSOAuth(req, res, next, htmlData) {
+  const rootDiv = `<div>SSO Auth</div>
+    <script>window.__isAuthApp = true;</script>`;
+  const html    = htmlData.replace(/<div id="root"><\/div>/, rootDiv);
+
+  console.log('AuthApp server render');
+  res.send(html);
+}
+
+async function serverRenderAuthorised(req, res, next, htmlData, language) {
 
   moment.locale(language === LANG_UKRAINIAN ? 'uk' : language);
 
@@ -149,9 +175,6 @@ export default function serverRender(req, res, next, htmlData) {
     const initialState = {
       settings: { ...settingsInitialState, language, contentLanguage: cookies[COOKIE_CONTENT_LANG], },
     };
-    if (isBot(req)) {
-      initialState.auth = { user: { name: 'bot' } };
-    }
 
     const store = createStore(initialState, history);
     store.dispatch(settings.setLanguage(language));
@@ -163,6 +186,7 @@ export default function serverRender(req, res, next, htmlData) {
       i18n: i18nServer,
     };
 
+    const routes  = useRoutes();
     const reqPath = req.originalUrl.split('?')[0];
     const branch  = matchRoutes(routes, reqPath) || [];
     console.log('serverRender: for path %s was found branch %o', reqPath, branch);
@@ -189,11 +213,17 @@ export default function serverRender(req, res, next, htmlData) {
           .then(() => {
             hrend = process.hrtime(hrstart);
             console.log('serverRender: rootSagaPromise.then %ds %dms', hrend[0], hrend[1] / 1000000);
-            hrstart = process.hrtime();
-
+            hrstart      = process.hrtime();
             // actual render
             const markup = ReactDOMServer.renderToString(
-              <HelmetProvider context={helmetContext}><App i18n={context.i18n} store={store} history={history} deviceInfo={deviceInfo} /></HelmetProvider>);
+              <React.StrictMode>
+                <ErrorBoundary>
+                  <HelmetProvider context={helmetContext}>
+                    <App i18n={context.i18n} store={store} history={history} deviceInfo={deviceInfo} />
+                  </HelmetProvider>
+                </ErrorBoundary>
+              </React.StrictMode>
+            );
             hrend        = process.hrtime(hrstart);
             console.log('serverRender: renderToString %ds %dms', hrend[0], hrend[1] / 1000000);
             hrstart = process.hrtime();
@@ -249,6 +279,30 @@ export default function serverRender(req, res, next, htmlData) {
       })
       .catch(next);
   });
+}
+
+function serverRenderForBots(req, res, next, htmlData, language) {
+
+  const history = createMemoryHistory({ initialEntries: [req.originalUrl], });
+
+  const cookies = cookieParse(req.headers.cookie || '');
+
+  const initialState = {
+    settings: { ...settingsInitialState, language, contentLanguage: cookies[COOKIE_CONTENT_LANG], },
+  };
+
+  const store = createStore(initialState, history);
+  store.dispatch(settings.setLanguage(language));
+
+  const markup = ReactDOMServer.renderToString(<AppTmp store={store} />);
+
+  store.dispatch(ssr.prepare());
+  const storeData = serialize(store.getState());
+
+  const rootDiv = `<div id="root">${markup}</div><script>  window.__data = ${storeData};</script>`;
+  const html    = htmlData.replace(/<div id="root"><\/div>/, rootDiv);
+
+  res.send(html);
 }
 
 function isBot(req) {

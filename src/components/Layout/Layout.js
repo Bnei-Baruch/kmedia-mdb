@@ -178,13 +178,6 @@ class Layout extends Component {
 
     return (
       <div className="layout">
-        {/* <div className="debug">
-          <span className="widescreen-only">widescreen</span>
-          <span className="large-screen-only">large screen</span>
-          <span className="computer-only">computer</span>
-          <span className="tablet-only">tablet</span>
-          <span className="mobile-only">mobile</span>
-        </div> */}
         <GAPageView location={location} />
         <div className="headroom-z-index-802">
           <Headroom>

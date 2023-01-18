@@ -4,9 +4,10 @@ import hoistStatics from 'hoist-non-react-statics';
 
 import { getToWithLanguage, stringify } from '../../helpers/url';
 import { useLocation } from 'react-router';
-import { KC_SEARCH_KEY_SESSION, KC_SEARCH_KEYS } from '../../sagas/helpers/keycklockManager';
+
 import { parse } from 'qs';
 import { omit } from 'lodash/object';
+import { KC_SEARCH_KEY_SESSION, KC_SEARCH_KEYS } from '../../pkg/ksAdapter/adapter';
 
 /**
  * multiLanguageLinkCreator - an higher order component to create a link that allows navigating

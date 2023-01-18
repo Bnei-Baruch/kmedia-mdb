@@ -108,7 +108,7 @@ export default class ClientChronicles {
         this.appendPage('leave', /* sync= */ false);
       }
 
-      for (let {onBeforeUnloadClosure} of this.lastEntriesByType.values()) {
+      for (let { onBeforeUnloadClosure } of this.lastEntriesByType.values()) {
         if (!!onBeforeUnloadClosure) {
           onBeforeUnloadClosure();
         }
@@ -244,11 +244,11 @@ export default class ClientChronicles {
       this.append('autocomplete', appendData);
     }
 
-    if (action.type === authTypes.LOGIN_SUCCESS) {
-      this.keycloakId = action.payload.user?.id;
+    if (action.type === authTypes.UPDATE_TOKEN) {
+      this.keycloakId = action.payload;
     }
 
-    if (action.type === authTypes.LOGOUT_SUCCESS) {
+    if (action.type === authTypes.UPDATE_USER && !action.payload) {
       this.keycloakId = null;
     }
   }

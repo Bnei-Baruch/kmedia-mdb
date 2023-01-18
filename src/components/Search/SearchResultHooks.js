@@ -2,19 +2,8 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import clsx from 'clsx';
-import {
-  Button,
-  Card,
-  Container,
-  Feed,
-  Grid,
-  Header,
-  Icon,
-  Image,
-  List,
-  Segment,
-} from 'semantic-ui-react';
-import { Swipeable } from 'react-swipeable';
+import { Button, Card, Container, Feed, Grid, Header, Icon, Image, List, Segment, } from 'semantic-ui-react';
+import { useSwipeable } from 'react-swipeable';
 import TwitterFeed from '../Sections/Publications/tabs/Twitter/Feed';
 
 import { ClientChroniclesContext, DeviceInfoContext } from '../../helpers/app-contexts';
@@ -57,12 +46,12 @@ import UnitLogoWithDuration from '../shared/UnitLogoWithDuration';
 import UnitLogo from '../shared/Logo/UnitLogo';
 import WipErr from '../shared/WipErr/WipErr';
 
-const PATH_SEPARATOR = ' > ';
+const PATH_SEPARATOR                 = ' > ';
 const MIN_NECESSARY_WORDS_FOR_SEARCH = 4;
 
 const titleFromHighlight = (highlight, defVal) => {
   let prop = ['title', 'title_language'].find(p => highlight && p in highlight && Array.isArray(highlight[p]) && highlight[p].length);
-  prop = highlight && highlight[prop] ? highlight[prop].join(PATH_SEPARATOR) : defVal;
+  prop     = highlight && highlight[prop] ? highlight[prop].join(PATH_SEPARATOR) : defVal;
 
   if (!prop) {
     return null;
@@ -123,7 +112,6 @@ const highlightWrapToLink = (__html, index, baseLink, /*search/*, logLinkParams*
   </Link>);
 };
 
-
 const snippetFromHighlightWithLink = (baseLink, highlight, props) => {
   const prop = props.find(p => highlight && p in highlight && Array.isArray(highlight[p]) && highlight[p].length);
 
@@ -154,7 +142,7 @@ const renderSnippet = (link, highlight, defaultDescription, t) => {
 const iconByContentType = (type, t, link) => {
   const icon    = iconByContentTypeMap.get(type) || null;
   const content = <div className="icon">
-    <SectionLogo name={icon} width='70' height='70' />
+    <SectionLogo name={icon} width="70" height="70" />
     <span style={{ whiteSpace: 'nowrap' }}>{t(`constants.content-types.${type}`)}</span>
   </div>;
 
@@ -162,7 +150,7 @@ const iconByContentType = (type, t, link) => {
     return content;
 
   return (
-    <Link /*onClick={() => this.logClick(...logLinkParams)}*/ to={{ pathname: link }} >
+    <Link /*onClick={() => this.logClick(...logLinkParams)}*/ to={{ pathname: link }}>
       {content}
     </Link>
   );
@@ -170,19 +158,26 @@ const iconByContentType = (type, t, link) => {
 
 const searchResultClick = (chronicles, dispatch, clickData) => link => {
   chronicles.searchSelected({ ...clickData, link });
-}
+};
 
-export const SearchResultCU = withTranslation()(({ cu, highlight = {}, clickData, hideContent = false, onlyViewsAndDate = false, t }) => {
-  const views = useSelector(state => recommended.getViews(cu.id, state.recommended));
+export const SearchResultCU = withTranslation()(({
+                                                   cu,
+                                                   highlight = {},
+                                                   clickData,
+                                                   hideContent = false,
+                                                   onlyViewsAndDate = false,
+                                                   t
+                                                 }) => {
+  const views      = useSelector(state => recommended.getViews(cu.id, state.recommended));
   const chronicles = useContext(ClientChroniclesContext);
-  const dispatch = useDispatch();
+  const dispatch   = useDispatch();
 
   // If filter used for specific language, make sure the link will redirect to that language.
-  const filters = useSelector(state => filterSelectors.getFilters(state.filters, 'search'));
+  const filters       = useSelector(state => filterSelectors.getFilters(state.filters, 'search'));
   const mediaLanguage = getMediaLanguage(filters);
 
   const link = canonicalLink(cu, mediaLanguage);
-  const ccu = canonicalCollection(cu) || {};
+  const ccu  = canonicalCollection(cu) || {};
   // const collectionLink = canonicalLink(ccu, mediaLanguage);
 
   const logo = cu.content_type === CT_ARTICLE ?
@@ -209,15 +204,15 @@ export const SearchResultCU = withTranslation()(({ cu, highlight = {}, clickData
 });
 
 export const SearchResultPost = withTranslation()(({ id, post, highlight, clickData, t }) => {
-  const views = useSelector(state => recommended.getViews(id, state.recommended));
+  const views      = useSelector(state => recommended.getViews(id, state.recommended));
   const chronicles = useContext(ClientChroniclesContext);
-  const dispatch = useDispatch();
+  const dispatch   = useDispatch();
 
   // If filter used for specific language, make sure the link will redirect to that language.
-  const filters = useSelector(state => filterSelectors.getFilters(state.filters, 'search'));
+  const filters       = useSelector(state => filterSelectors.getFilters(state.filters, 'search'));
   const mediaLanguage = getMediaLanguage(filters);
   // Should I replace POST with CT_BLOG_POST everywhere?
-  const link = canonicalLink({ id, content_type: 'POST' }, mediaLanguage);
+  const link          = canonicalLink({ id, content_type: 'POST' }, mediaLanguage);
 
   const props = {
     key: id,
@@ -235,14 +230,14 @@ export const SearchResultPost = withTranslation()(({ id, post, highlight, clickD
 });
 
 export const SearchResultCollection = withTranslation()(({ c, highlight, clickData, t }) => {
-  const views = useSelector(state => recommended.getViews(c.id, state.recommended));
+  const views      = useSelector(state => recommended.getViews(c.id, state.recommended));
   const chronicles = useContext(ClientChroniclesContext);
-  const dispatch = useDispatch();
+  const dispatch   = useDispatch();
 
   // If filter used for specific language, make sure the link will redirect to that language.
-  const filters = useSelector(state => filterSelectors.getFilters(state.filters, 'search'));
+  const filters       = useSelector(state => filterSelectors.getFilters(state.filters, 'search'));
   const mediaLanguage = getMediaLanguage(filters);
-  const link = canonicalLink(c, mediaLanguage);
+  const link          = canonicalLink(c, mediaLanguage);
 
   const logo = c.content_type !== CT_VIDEO_PROGRAM ? iconByContentType(c.content_type, t, link) :
     <div style={{ minWidth: 144 }}><UnitLogo collectionId={c.id} width={144} /></div>;
@@ -263,14 +258,14 @@ export const SearchResultCollection = withTranslation()(({ c, highlight, clickDa
 });
 
 export const SearchResultSource = withTranslation()(({ id, title, highlight, clickData, t }) => {
-  const views = useSelector(state => recommended.getViews(id, state.recommended));
+  const views      = useSelector(state => recommended.getViews(id, state.recommended));
   const chronicles = useContext(ClientChroniclesContext);
-  const dispatch = useDispatch();
+  const dispatch   = useDispatch();
 
   // If filter used for specific language, make sure the link will redirect to that language.
-  const filters = useSelector(state => filterSelectors.getFilters(state.filters, 'search'));
+  const filters       = useSelector(state => filterSelectors.getFilters(state.filters, 'search'));
   const mediaLanguage = getMediaLanguage(filters);
-  const link = canonicalLink({ id, content_type: 'SOURCE' }, mediaLanguage);
+  const link          = canonicalLink({ id, content_type: 'SOURCE' }, mediaLanguage);
 
   const props = {
     key: id,
@@ -287,13 +282,13 @@ export const SearchResultSource = withTranslation()(({ id, title, highlight, cli
 });
 
 export const SearchResultLandingPage = withTranslation()(({ landingPage, filterValues, clickData, t }) => {
-  const link = landingPageSectionLink(landingPage, filterValues);
+  const link       = landingPageSectionLink(landingPage, filterValues);
   const chronicles = useContext(ClientChroniclesContext);
-  const dispatch = useDispatch();
+  const dispatch   = useDispatch();
 
-  const linkTitle = SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_TEXT[landingPage] || 'home.sections';
+  const linkTitle         = SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_TEXT[landingPage] || 'home.sections';
   const valuesTitleSuffix = (filterValues && filterValues.filter(filterValue => filterValue.name !== 'text').map(filterValue => filterValue.origin || filterValue.value).join(' ')) || '';
-  const subText = t(SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_SUBTEXT[landingPage]);
+  const subText           = t(SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_SUBTEXT[landingPage]);
 
   const props = {
     key: landingPage,
@@ -309,20 +304,20 @@ export const SearchResultLandingPage = withTranslation()(({ landingPage, filterV
 });
 
 export const SearchResultOneItem = withTranslation()(({
-  key,
-  title,
-  link,
-  logo,
-  content,
-  part,
-  parts,
-  date,
-  views,
-  collectionTitle,
-  collectionLink,
-  t,
-  click,
-}) => {
+                                                        key,
+                                                        title,
+                                                        link,
+                                                        logo,
+                                                        content,
+                                                        part,
+                                                        parts,
+                                                        date,
+                                                        views,
+                                                        collectionTitle,
+                                                        collectionLink,
+                                                        t,
+                                                        click,
+                                                      }) => {
   const description = [];
   collectionTitle && description.push(collectionTitle);
   part && description.push(t('pages.unit.info.episode', { name: part }));
@@ -339,7 +334,7 @@ export const SearchResultOneItem = withTranslation()(({
         <div className={clsx('description', { 'is_single': !(description?.length > 1) })}>
           {description.map((d, i) => (<span key={i}>{d}</span>))}
           {collectionLink && (<span className="opacity_1">
-            <Link as={'a'} to={collectionLink}  onClick={() => click(collectionLink)}>
+            <Link as={'a'} to={collectionLink} onClick={() => click(collectionLink)}>
               {/* ARTICLES should have different text, then "To all episodes..." should be "To all articles..." */}
               {t('programs.list.show_all')}
             </Link>
@@ -352,20 +347,20 @@ export const SearchResultOneItem = withTranslation()(({
 
 const getFilterById = (getTagById, getSourceById, index) => {
   switch (index) {
-    case SEARCH_INTENT_INDEX_TOPIC:
-      return getTagById;
-    case SEARCH_INTENT_INDEX_SOURCE:
-      return getSourceById;
-    default:
-      return x => x;
+  case SEARCH_INTENT_INDEX_TOPIC:
+    return getTagById;
+  case SEARCH_INTENT_INDEX_SOURCE:
+    return getSourceById;
+  default:
+    return x => x;
   }
 };
 
 export const SearchResultIntent = withTranslation()(({ id, name, type, index, highlight, clickData, t }) => {
-  const chronicles = useContext(ClientChroniclesContext);
+  const chronicles         = useContext(ClientChroniclesContext);
   const { isMobileDevice } = useContext(DeviceInfoContext);
-  const namespace = `intents_${id}_${type}`;
-  const dispatch = useDispatch();
+  const namespace          = `intents_${id}_${type}`;
+  const dispatch           = useDispatch();
   useEffect(() => {
     const params = {
       content_type: type,
@@ -374,36 +369,36 @@ export const SearchResultIntent = withTranslation()(({ id, name, type, index, hi
     };
     dispatch(listsActions.fetchList(namespace, 1, params));
   }, [dispatch]);
-  const { items, wip, err, total } = useSelector(state => lists.getNamespaceState(state.lists, namespace))
+  const { items, wip, err, total } = useSelector(state => lists.getNamespaceState(state.lists, namespace));
   // MAP items to SearchResultOneItem
-  const cuItems =  useSelector(state => (items || []).map(x => mdb.getDenormContentUnit(state.mdb, x)));
+  const cuItems                    = useSelector(state => (items || []).map(x => mdb.getDenormContentUnit(state.mdb, x)));
 
-  const getTagById = useSelector(state => tagsSelectors.getTagById(state.tags));
+  const getTagById    = useSelector(state => tagsSelectors.getTagById(state.tags));
   const getSourceById = useSelector(state => sourcesSelectors.getSourceById(state.sources));
 
-  const section = SEARCH_INTENT_SECTIONS[type];
+  const section    = SEARCH_INTENT_SECTIONS[type];
   const intentType = SEARCH_INTENT_NAMES[index];
   const filterName = SEARCH_INTENT_FILTER_NAMES[index];
 
-  const logo = <SectionLogo name={type} height='50' width='50' />;
-  const getById = getFilterById(getTagById, getSourceById, index);
-  const link = intentSectionLink(section, [{ name: filterName, values: [id] }]);
-  const description = t(`search.intent-prefix.${section}-${intentType.toLowerCase()}`)
+  const logo        = <SectionLogo name={type} height="50" width="50" />;
+  const getById     = getFilterById(getTagById, getSourceById, index);
+  const link        = intentSectionLink(section, [{ name: filterName, values: [id] }]);
+  const description = t(`search.intent-prefix.${section}-${intentType.toLowerCase()}`);
 
   let resultsType = '';
   const path      = tracePath(getById(id), getById);
   let display     = '';
   switch (index) {
-    case SEARCH_INTENT_INDEX_TOPIC:
-      display     = path[path.length - 1].label;
-      resultsType = SEARCH_INTENT_HIT_TYPE_PROGRAMS;
-      break;
-    case SEARCH_INTENT_INDEX_SOURCE:
-      display     = path.map(y => y.name).join(' > ');
-      resultsType = SEARCH_INTENT_HIT_TYPE_LESSONS;
-      break;
-    default:
-      display = name;
+  case SEARCH_INTENT_INDEX_TOPIC:
+    display     = path[path.length - 1].label;
+    resultsType = SEARCH_INTENT_HIT_TYPE_PROGRAMS;
+    break;
+  case SEARCH_INTENT_INDEX_SOURCE:
+    display     = path.map(y => y.name).join(' > ');
+    resultsType = SEARCH_INTENT_HIT_TYPE_LESSONS;
+    break;
+  default:
+    display = name;
   }
 
   const props = {
@@ -421,9 +416,21 @@ export const SearchResultIntent = withTranslation()(({ id, name, type, index, hi
   return <SearchResultManyItems {...props} />;
 });
 
-export const SearchResultManyItems = withTranslation()(({ logo, link, title, description, parts, resultsType, wip, err, items, click, t }) => {
+export const SearchResultManyItems = withTranslation()(({
+                                                          logo,
+                                                          link,
+                                                          title,
+                                                          description,
+                                                          parts,
+                                                          resultsType,
+                                                          wip,
+                                                          err,
+                                                          items,
+                                                          click,
+                                                          t
+                                                        }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
-  const wipError = WipErr({ wip: wip || items.some(item => !item), err, t });
+  const wipError           = WipErr({ wip: wip || items.some(item => !item), err, t });
   return (
     <List.Item className="media_item">
       <List.Content>
@@ -466,9 +473,9 @@ const getLowestLevelSeries = (series, rootId) => {
 const renderSerie = (s, click, link, t) =>
   (
     <Button basic size="tiny" className="link_to_cu" key={s.id}
-      as={Link} to={link}
-      onClick={() => click(link)}
-      style={{ minWidth: '290px', marginBottom: '0.5em', display: 'flex', justifyContent: 'space-between' }}>
+            as={Link} to={link}
+            onClick={() => click(link)}
+            style={{ minWidth: '290px', marginBottom: '0.5em', display: 'flex', justifyContent: 'space-between' }}>
       {s.name}
       &nbsp;
       <Link key={s.id} to={link} onClick={() => click(link)}>
@@ -481,20 +488,20 @@ const renderSerie = (s, click, link, t) =>
   );
 
 export const SearchResultSeries = withTranslation()(({ id, type, mdbUid, clickData, t }) => {
-  const chronicles = useContext(ClientChroniclesContext);
-  const dispatch = useDispatch();
-  const click = searchResultClick(chronicles, dispatch, clickData);
-  const logo = <SectionLogo name={'lessons'} height='50' width='50' />;
+  const chronicles                       = useContext(ClientChroniclesContext);
+  const dispatch                         = useDispatch();
+  const click                            = searchResultClick(chronicles, dispatch, clickData);
+  const logo                             = <SectionLogo name={'lessons'} height="50" width="50" />;
   const { lectures: wipL, series: wipS } = useSelector(state => lessonsSelectors.getWip(state.lessons));
-  const isByTag  = type === SEARCH_INTENT_HIT_TYPE_SERIES_BY_TAG;
-  const getSerieBySource = useSelector(state => lessonsSelectors.getSerieBySourceId(state.lessons, state.mdb, state.sources));
-  const getSerieByTag = useSelector(state => lessonsSelectors.getSerieByTagId(state.lessons, state.mdb, state.tags));
-  const getSerie = isByTag ? getSerieByTag : getSerieBySource;
-  const series = id.split('_').map(getSerie);
-  const s = getLowestLevelSeries(series);
+  const isByTag                          = type === SEARCH_INTENT_HIT_TYPE_SERIES_BY_TAG;
+  const getSerieBySource                 = useSelector(state => lessonsSelectors.getSerieBySourceId(state.lessons, state.mdb, state.sources));
+  const getSerieByTag                    = useSelector(state => lessonsSelectors.getSerieByTagId(state.lessons, state.mdb, state.tags));
+  const getSerie                         = isByTag ? getSerieByTag : getSerieBySource;
+  const series                           = id.split('_').map(getSerie);
+  const s                                = getLowestLevelSeries(series);
   if (s.collections.length === 1) {
     const nestedDenormCollectionWUnits = useSelector(state => mdb.nestedDenormCollectionWUnits(state.mdb));
-    const c = nestedDenormCollectionWUnits(s.collections[0].id);
+    const c                            = nestedDenormCollectionWUnits(s.collections[0].id);
     return (
       <SearchResultCollection c={c} clickData={clickData} />
     );
@@ -506,7 +513,7 @@ export const SearchResultSeries = withTranslation()(({ id, type, mdbUid, clickDa
   const wipError = WipErr({ wip: wipL || wipS || collections.some(c => !c), err: null, t });
 
   // If filter used for specific language, make sure the link will redirect to that language.
-  const filters = useSelector(state => filterSelectors.getFilters(state.filters, 'search'));
+  const filters       = useSelector(state => filterSelectors.getFilters(state.filters, 'search'));
   const mediaLanguage = getMediaLanguage(filters);
 
   return (
@@ -541,16 +548,16 @@ const twitterMapFromState = (state, tweets) => tweets.map(tweet => {
 });
 
 export const SearchResultTweets = withTranslation()(({ source, t }) => {
-  const ids = source.map(x => x._source.mdb_uid) || [];
-  const wip = useSelector(state => publicationSelectors.getTweetsWip(state.publications));
-  const err = useSelector(state => publicationSelectors.getTweetsError(state.publications));
-  const wipError = WipErr({ wip, err, t });
-  const items = useSelector(state => twitterMapFromState(state, source));
+  const ids                = source.map(x => x._source.mdb_uid) || [];
+  const wip                = useSelector(state => publicationSelectors.getTweetsWip(state.publications));
+  const err                = useSelector(state => publicationSelectors.getTweetsError(state.publications));
+  const wipError           = WipErr({ wip, err, t });
+  const items              = useSelector(state => twitterMapFromState(state, source));
   const { isMobileDevice } = useContext(DeviceInfoContext);
-  const language = useSelector(state => settingsSelectors.getLanguage(state.settings));
+  const language           = useSelector(state => settingsSelectors.getLanguage(state.settings));
 
   const [pageNo, setPageNo] = useState(0);
-  const pageSize = isMobileDevice ? 1 : 3;
+  const pageSize            = isMobileDevice ? 1 : 3;
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -572,16 +579,14 @@ export const SearchResultTweets = withTranslation()(({ source, t }) => {
   };
 
   const onScrollRight = () => onScrollChange(pageNo + 1);
-  const onScrollLeft = () => onScrollChange(pageNo - 1);
-  const getSwipeProps = () => {
-    const isRTL = isLanguageRtl(language);
-    return {
-      onSwipedLeft: isRTL ? onScrollRight : onScrollLeft,
-      onSwipedRight: isRTL ? onScrollLeft : onScrollRight
-    };
-  };
+  const onScrollLeft  = () => onScrollChange(pageNo - 1);
 
-  const renderItem = ({ twitter, highlight }) => (
+  const isRTL = isLanguageRtl(language);
+  const swipeHandlers          = useSwipeable({
+    onSwipedLeft: isRTL ? onScrollRight : onScrollLeft,
+    onSwipedRight: isRTL ? onScrollLeft : onScrollRight
+  });
+  const renderItem             = ({ twitter, highlight }) => (
     <Card key={twitter.twitter_id} className="bg_hover_grey home-twitter" raised>
       <Card.Content>
         <Feed className="min-height-200">
@@ -592,8 +597,8 @@ export const SearchResultTweets = withTranslation()(({ source, t }) => {
   );
   const renderScrollPagination = () => {
     const numberOfPages = Math.round(ids.length / pageSize);
-    const pages   = new Array(numberOfPages).fill('a');
-    const content = pages.map((p, i) => (
+    const pages         = new Array(numberOfPages).fill('a');
+    const content       = pages.map((p, i) => (
       <Button onClick={() => onScrollChange(i)} key={i} icon className="bg_transparent">
         <Icon name={pageNo === i ? 'circle thin' : 'circle outline'} color="blue" size="small" />
       </Button>
@@ -619,7 +624,7 @@ export const SearchResultTweets = withTranslation()(({ source, t }) => {
 
   const renderScrollLeft = () => {
     const numberOfPages = Math.round(ids.length / pageSize);
-    const dir = isLanguageRtl(language) ? 'left' : 'right';
+    const dir           = isLanguageRtl(language) ? 'left' : 'right';
 
     return (pageNo >= numberOfPages - 1) ? null : (
       <Button
@@ -645,11 +650,11 @@ export const SearchResultTweets = withTranslation()(({ source, t }) => {
         </div>
         {wipError}
         {!wipError && (
-          <Swipeable {...getSwipeProps()} >
+          <div {...swipeHandlers} >
             <Card.Group className={`${isMobileDevice ? 'margin-top-8' : null} search__cards`} itemsPerRow={3} stackable>
               {items.slice(pageNo * pageSize, (pageNo + 1) * pageSize).filter(x => x && x.twitter).map(renderItem)}
             </Card.Group>
-          </Swipeable>
+          </div>
         )}
         {pageSize < ids.length ? renderScrollLeft() : null}
         {pageSize < ids.length ? renderScrollRight() : null}

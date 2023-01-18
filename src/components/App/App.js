@@ -15,12 +15,22 @@ import {
   DeviceInfoContext,
   SessionInfoContext,
 } from '../../helpers/app-contexts';
-import InitKC from '../shared/InitKC';
+import InitKC from '../../pkg/ksAdapter/InitKC';
 import Layout from '../Layout/Layout';
 
 const App = props => {
-  const [isShareTextEnabled, setEnableShareText]                                                             = useState(false);
-  const { i18n, store, history, initialI18nStore, initialLanguage, deviceInfo, clientChronicles, abTesting } = props;
+  const [isShareTextEnabled, setEnableShareText] = useState(false);
+
+  const {
+          i18n,
+          store,
+          history,
+          initialI18nStore,
+          initialLanguage,
+          deviceInfo,
+          clientChronicles,
+          abTesting
+        } = props;
 
   const sessionInfo       = {
     enableShareText: { isShareTextEnabled, setEnableShareText }
@@ -34,22 +44,21 @@ const App = props => {
   return (
     <I18nextProvider i18n={i18n} initialI18nStore={initialI18nStore} initialLanguage={initialLanguage}>
       <Provider store={store}>
-        <InitKC>
-          <ClientChroniclesContext.Provider value={clientChronicles}>
-            <AbTestingContext.Provider value={abTesting}>
-              <DeviceInfoContext.Provider value={deviceInfoContext}>
-                <SessionInfoContext.Provider value={sessionInfo}>
-                  <ChroniclesActions />
-                  <ConnectedRouter history={history}>
-                    <ScrollToTop>
-                      <Layout />
-                    </ScrollToTop>
-                  </ConnectedRouter>
-                </SessionInfoContext.Provider>
-              </DeviceInfoContext.Provider>
-            </AbTestingContext.Provider>
-          </ClientChroniclesContext.Provider>
-        </InitKC>
+        <InitKC />
+        <ClientChroniclesContext.Provider value={clientChronicles}>
+          <AbTestingContext.Provider value={abTesting}>
+            <DeviceInfoContext.Provider value={deviceInfoContext}>
+              <SessionInfoContext.Provider value={sessionInfo}>
+                <ChroniclesActions />
+                <ConnectedRouter history={history}>
+                  <ScrollToTop>
+                    <Layout />
+                  </ScrollToTop>
+                </ConnectedRouter>
+              </SessionInfoContext.Provider>
+            </DeviceInfoContext.Provider>
+          </AbTestingContext.Provider>
+        </ClientChroniclesContext.Provider>
       </Provider>
     </I18nextProvider>
   );
