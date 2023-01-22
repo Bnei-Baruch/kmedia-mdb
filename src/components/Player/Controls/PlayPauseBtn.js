@@ -10,7 +10,7 @@ const PlayPauseBtn = ({ t }) => {
   const isPlay = useSelector(state => player.isPlay(state.player));
 
   const handlePlayPause = () => {
-    isPlay ? pause() : play().play();
+    isPlay ? pause() : play();
   };
 
   return (

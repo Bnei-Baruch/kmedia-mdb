@@ -17,6 +17,7 @@ const PlayerBehavior = () => {
   const info    = useSelector(state => playlist.getInfo(state.playlist), shallowEqual);
   const file    = useMemo(() => findPlayedFile(item, info), [item, info]);
   const prevSrc = usePrevious(file.src);
+
   //init jwplayer by element id,
   useEffect(() => {
     if (!file?.src || wip || !info.isReady || prevSrc === file.src) return;
