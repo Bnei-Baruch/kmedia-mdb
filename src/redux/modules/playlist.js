@@ -106,6 +106,7 @@ export const reducer = handleActions({
   [PLAYER_SET_QUALITY]: (draft, payload) => draft.info.quality = payload,
   [PLAYER_SET_LANGUAGE]: (draft, payload) => draft.info.language = payload,
   [PLAYER_SET_MEDIA_TYPE]: (draft, payload) => draft.info.mediaType = payload,
+  [playerTypes.PLAYER_COMPLETE]: onNext,
 
   [settings.SET_LANGUAGE]: onRemovePlayer,
 }, initialState);

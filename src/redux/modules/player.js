@@ -9,6 +9,7 @@ const PLAYER_PAUSE       = 'Player/PAUSE';
 const PLAYER_RATE        = 'Player/RATE';
 const PLAYER_RESIZE      = 'Player/RESIZE';
 const PLAYER_TOGGLE_MUTE = 'Player/TOGGLE_MUTE';
+const PLAYER_COMPLETE    = 'Player/COMPLETE';
 
 const PLAYER_SET_FILE          = 'Player/SET_FILE';
 const PLAYER_SET_OVER_MODE     = 'Player/SET_OVER_MODE';
@@ -23,7 +24,8 @@ export const types = {
   PLAYER_PLAY,
   PLAYER_PAUSE,
   PLAYER_TOGGLE_MUTE,
-  PLAYER_REMOVE
+  PLAYER_REMOVE,
+  PLAYER_COMPLETE
 };
 
 // Actions
@@ -36,6 +38,7 @@ const playerPause      = createAction(PLAYER_PAUSE);
 const playerRate       = createAction(PLAYER_RATE);
 const playerResize     = createAction(PLAYER_RESIZE);
 const playerToggleMute = createAction(PLAYER_TOGGLE_MUTE);
+const playerComplete   = createAction(PLAYER_COMPLETE);
 
 const setOverMode   = createAction(PLAYER_SET_OVER_MODE);
 const setFullScreen = createAction(PLAYER_SET_IS_FULLSCREEN);
@@ -158,4 +161,5 @@ export const PLAYER_ACTIONS_BY_EVENT = {
   'pause': playerPause,
   'resize': playerResize,
   'mute': playerToggleMute,
+  'complete': playerComplete,
 };

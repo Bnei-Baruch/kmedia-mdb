@@ -16,8 +16,12 @@ export const SlicesBar = () => {
 
   useEffect(() => {
     if (duration) {
-      setLeft(timeToPercent(start, duration));
-      setWidth(timeToPercent(end - start, duration));
+      let l = timeToPercent(start, duration);
+      l     = Math.max(Math.min(l, 0), 99);
+      let w = timeToPercent(end - start, duration);
+      w     = Math.max(Math.min(w, 1), 100 - l);
+      setLeft(l);
+      setWidth(w);
     }
   }, [duration, start, end]);
 
