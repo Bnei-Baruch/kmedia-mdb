@@ -9,6 +9,7 @@ import { DeviceInfoContext } from '../../helpers/app-contexts';
 import { getLanguageDirection } from '../../helpers/i18n-utils';
 import Link from '../Language/MultiLanguageLink';
 import { login, logout } from '../../pkg/ksAdapter/adapter';
+import useIsLoggedIn from '../shared/useIsLoggedIn';
 
 const Login = ({ t, language }) => {
   const [isActive, setIsActive] = useState(false);
@@ -16,6 +17,7 @@ const Login = ({ t, language }) => {
   const direction               = getLanguageDirection(language);
   const popupStyle              = { direction };
   const user                    = useSelector(state => selectors.getUser(state.auth));
+  const loggedIn                = useIsLoggedIn();
 
   const handlePopupOpen  = () => setIsActive(true);
   const handlePopupClose = () => setIsActive(false);
@@ -86,12 +88,9 @@ const Login = ({ t, language }) => {
     />
   );
 
-  return user ? renderAccount() : renderLogin();
+  return loggedIn ? renderAccount() : renderLogin();
 };
 
-Login.propTypes =
-  {
-    t: PropTypes.func.isRequired,
-  };
+Login.propTypes = { t: PropTypes.func.isRequired, };
 
 export default withTranslation()(Login);

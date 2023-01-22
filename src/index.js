@@ -29,7 +29,6 @@ import { CreateAbTesting } from './helpers/ab-testing';
 import { initKC } from './pkg/ksAdapter/adapter';
 import ErrorBoundary from './components/ErrorBoundary';
 import { HelmetProvider } from 'react-helmet-async';
-import { hydrate } from 'react-dom';
 
 function hydrateApp(kcInfo) {
 
@@ -40,11 +39,11 @@ function hydrateApp(kcInfo) {
   const store = createStore({ ...window.__data, auth: kcInfo }, history);
 
   store.dispatch(ssr.hydrate());
-// console.log('window.__data', window.__data);
+  // console.log('window.__data', window.__data);
 
   const i18nData = window.__i18n || {};
 
-// Initialize moment global locale to default language
+  // Initialize moment global locale to default language
   const language = i18nData.initialLanguage ?? DEFAULT_LANGUAGE;
   moment.locale(language === LANG_UKRAINIAN ? 'uk' : language);
 
@@ -63,25 +62,19 @@ function hydrateApp(kcInfo) {
             deviceInfo={deviceInfo}
             clientChronicles={clientChronicles}
             abTesting={abTesting}
-            kcInfo={kcInfo}
-            {...i18nData}
+            i18nData={i18nData}
           />
         </HelmetProvider>
       </ErrorBoundary>
     </React.StrictMode>
   );
   const el        = document.getElementById('root');
-  //hydrateRoot(el, component);
-  // const root      = createRoot(el);
-  //root.render(component);
-  //TODO david: we cant use react 18 for this moment because of wrong html
-  hydrate(component, el);
-// We ask for semi-quasi static data here since
-// we strip it from SSR to save initial network bandwidth
+  hydrateRoot(el, component);
+  // We ask for semi-quasi static data here since
+  // we strip it from SSR to save initial network bandwidth
   store.dispatch(mdb.fetchSQData());
 }
 
-console.log('hydrateRoot', window.__isAuthApp);
 if (window.__isAuthApp) {
   initKC();
 } else {

@@ -15,36 +15,26 @@ import {
   DeviceInfoContext,
   SessionInfoContext,
 } from '../../helpers/app-contexts';
-import InitKC from '../../pkg/ksAdapter/InitKC';
+import InitKCEvents from '../../pkg/ksAdapter/InitKCEvents';
 import Layout from '../Layout/Layout';
 
 const App = props => {
   const [isShareTextEnabled, setEnableShareText] = useState(false);
 
-  const {
-          i18n,
-          store,
-          history,
-          initialI18nStore,
-          initialLanguage,
-          deviceInfo,
-          clientChronicles,
-          abTesting
-        } = props;
-
-  const sessionInfo       = {
+  const { i18n, store, history, deviceInfo, clientChronicles, abTesting, i18nData } = props;
+  const sessionInfo                                                                 = {
     enableShareText: { isShareTextEnabled, setEnableShareText }
   };
-  const deviceInfoContext = {
+  const deviceInfoContext                                                           = {
     deviceInfo,
     isMobileDevice: deviceInfo.device?.type === 'mobile',
     undefinedDevice: deviceInfo.device?.type === undefined
   };
-
+  console.log('render App');
   return (
-    <I18nextProvider i18n={i18n} initialI18nStore={initialI18nStore} initialLanguage={initialLanguage}>
+    <I18nextProvider i18n={i18n}>
       <Provider store={store}>
-        <InitKC />
+        <InitKCEvents />
         <ClientChroniclesContext.Provider value={clientChronicles}>
           <AbTestingContext.Provider value={abTesting}>
             <DeviceInfoContext.Provider value={deviceInfoContext}>
@@ -52,7 +42,7 @@ const App = props => {
                 <ChroniclesActions />
                 <ConnectedRouter history={history}>
                   <ScrollToTop>
-                    <Layout />
+                    <Layout {...i18nData} />
                   </ScrollToTop>
                 </ConnectedRouter>
               </SessionInfoContext.Provider>

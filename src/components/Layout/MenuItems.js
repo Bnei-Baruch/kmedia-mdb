@@ -8,9 +8,9 @@ import { getPodcastLinkByLang, getRSSLinkByLang } from '../../helpers/utils';
 import NavLink from '../Language/MultiLanguageNavLink';
 import DonateNow, { VirtualHomeButton } from './DonateNow';
 import FeedBurner from './FeedBurner';
-import { useDispatch, useSelector } from 'react-redux';
-import { actions, selectors } from '../../redux/modules/auth';
 import { MY_NAMESPACE_BOOKMARKS } from '../../helpers/consts';
+import useIsLoggedIn from '../shared/useIsLoggedIn';
+import { login } from '../../pkg/ksAdapter/adapter';
 
 const ITEMS = [
   'lessons',
@@ -27,9 +27,7 @@ const ITEMS = [
 ];
 
 const MenuItems = ({ simple = false, visible = false, t, onItemClick = identity, language }) => {
-  const user     = useSelector(state => selectors.getUser(state.auth));
-  const dispatch = useDispatch();
-  const login    = () => dispatch(actions.login(language));
+  const loggedIn = useIsLoggedIn();
 
   const items = ITEMS.map(x => (
     <Menu.Item
@@ -43,7 +41,7 @@ const MenuItems = ({ simple = false, visible = false, t, onItemClick = identity,
     />
   ));
 
-  const personal = !user ? (
+  const personal = !loggedIn ? (
     <Menu.Item key={'personal'}>
       <Header as="h3" className="margin-bottom-4">
         <Header.Content content={t('nav.sidebar.personal')} className="weight-normal" />
@@ -74,7 +72,7 @@ const MenuItems = ({ simple = false, visible = false, t, onItemClick = identity,
     />
   );
 
-  const bookmark = !!user ? (
+  const bookmark = loggedIn ? (
     <Menu.Item
       key={MY_NAMESPACE_BOOKMARKS}
       as={NavLink}

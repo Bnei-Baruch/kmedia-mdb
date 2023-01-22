@@ -131,7 +131,12 @@ async function serverRenderAuthorised(req, res, next, htmlData, language, bot) {
               <React.StrictMode>
                 <ErrorBoundary>
                   <HelmetProvider context={helmetContext}>
-                    <App i18n={context.i18n} store={store} history={history} deviceInfo={deviceInfo} />
+                    <App
+                      i18n={context.i18n}
+                      store={store}
+                      history={history}
+                      deviceInfo={deviceInfo}
+                    />
                   </HelmetProvider>
                 </ErrorBoundary>
               </React.StrictMode>

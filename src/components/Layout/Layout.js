@@ -2,7 +2,7 @@ import React, { Component, createRef, useContext } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { connect } from 'react-redux';
-import { withTranslation } from 'react-i18next';
+import { withTranslation, withSSR } from 'react-i18next';
 import { Header, Icon, Menu, Ref, Segment } from 'semantic-ui-react';
 import Headroom from 'react-headroom';
 
@@ -162,6 +162,7 @@ class Layout extends Component {
   };
 
   render() {
+
     const { t, location, language }                    = this.props;
     const { sidebarActive, embed, isShowHeaderSearch } = this.state;
     const { isMobileDevice }                           = this.context;
@@ -273,4 +274,4 @@ class Layout extends Component {
 
 export default connect(
   state => ({ language: settings.getLanguage(state.settings) })
-)(withRouter(withTranslation()(Layout)));
+)(withSSR()(withTranslation()(withRouter(Layout))));
