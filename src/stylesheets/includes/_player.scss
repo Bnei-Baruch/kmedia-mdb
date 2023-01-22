@@ -887,6 +887,14 @@ video {
       transition: all ease-out .2s;
     }
   }
+  .controls__pause_bg {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    cursor: pointer;
+  }
 
   .is-web.is-sharing & {
     .controls__prev, .controls__next {

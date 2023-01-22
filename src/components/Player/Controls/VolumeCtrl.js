@@ -57,7 +57,7 @@ const VolumeCtrl = ({ t }) => {
           onClick={onChangePosition}
         >
           <div
-            style={{ width: `${volume}%` }}
+            style={{ width: `${isMuted ? 0 : volume}%` }}
             className="slider__value"
           ></div>
           <VolumeKnob onChangePosition={onChangePosition} />

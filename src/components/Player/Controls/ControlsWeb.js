@@ -12,9 +12,9 @@ import PlayPauseBg from './PlayPauseBg';
 const ControlsWeb = ({ fullscreenRef }) => {
   return (
     <div className="controls">
+      <PlayPauseBg />
       <PrevBtn />
       <SeekBackwardBtn />
-      <PlayPauseBg />
       <SeekForwardBtn />
       <NextBtn />
       <div className="controls__bar">
