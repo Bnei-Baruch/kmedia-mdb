@@ -2,11 +2,11 @@ import React, { useContext } from 'react';
 import { Input, Button } from 'semantic-ui-react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { toHumanReadableTime, formatTime } from '../../../helpers/time';
+import { formatTime } from '../../../helpers/time';
 import { actions, selectors } from '../../../redux/modules/player';
 import { withNamespaces } from 'react-i18next';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
-import { getPosition } from '../../../pkg/jwpAdapter/adapter';
+import { getPosition, getDuration } from '../../../pkg/jwpAdapter/adapter';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import { selectors as settings } from '../../../redux/modules/settings';
 
@@ -66,7 +66,7 @@ const StartEnd = ({ t }) => {
             onClick: handleSetEnd
           }}
           placeholder={t('player.share.click-to-set')}
-          value={formatTime(end)}
+          value={formatTime(end !== Infinity ? end : getDuration())}
           dir={dir}
         />
       </div>

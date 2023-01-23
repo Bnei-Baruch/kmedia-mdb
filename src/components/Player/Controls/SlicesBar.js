@@ -15,11 +15,11 @@ export const SlicesBar = () => {
   const duration = useSelector(state => player.getFile(state.player).duration);
 
   useEffect(() => {
-    if (duration) {
+    if (duration && (start || end)) {
       let l = timeToPercent(start, duration);
-      l     = Math.max(Math.min(l, 0), 99);
-      let w = timeToPercent(end - start, duration);
-      w     = Math.max(Math.min(w, 1), 100 - l);
+      l     = Math.min(Math.max(l, 0), 99);
+      let w = timeToPercent(end - start, duration) || 100;
+      w     = Math.min(Math.max(w, 1), 100 - l);
       setLeft(l);
       setWidth(w);
     }
