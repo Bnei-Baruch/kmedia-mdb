@@ -13,6 +13,7 @@ const PLAYLIST_SELECT       = 'Playlist/SELECT';
 const PLAYER_SET_QUALITY    = 'Player/SET_QUALITY';
 const PLAYER_SET_LANGUAGE   = 'Player/SET_LANGUAGE';
 const PLAYER_SET_MEDIA_TYPE = 'Player/SET_MEDIA_TYPE';
+const PLAYER_NULL_NEXT_UNIT = 'Player/NULL_NEXT_UNIT';
 
 export const types = {
   PLAYLIST_BUILD,
@@ -30,6 +31,7 @@ const select       = createAction(PLAYLIST_SELECT);
 const setQuality   = createAction(PLAYER_SET_QUALITY);
 const setLanguage  = createAction(PLAYER_SET_LANGUAGE);
 const setMediaType = createAction(PLAYER_SET_MEDIA_TYPE);
+const nullNextUnit = createAction(PLAYER_NULL_NEXT_UNIT);
 
 export const actions = {
   build,
@@ -41,6 +43,7 @@ export const actions = {
   setQuality,
   setLanguage,
   setMediaType,
+  nullNextUnit
 };
 
 /* Reducer */
@@ -79,8 +82,7 @@ const onComplete = (draft) => {
   if (idx === lastIdx) return;
   const nextId = draft.playlist[(idx < lastIdx) ? idx + 1 : lastIdx];
   saveTimeOnLocalstorage(0, nextId);
-  draft.info.cuId = nextId;
-  draft.item      = draft.itemById[nextId];
+  draft.info.nextUnitId = nextId;
 };
 
 export const reducer = handleActions({
@@ -95,6 +97,7 @@ export const reducer = handleActions({
   [PLAYER_SET_QUALITY]: (draft, payload) => draft.info.quality = payload,
   [PLAYER_SET_LANGUAGE]: (draft, payload) => draft.info.language = payload,
   [PLAYER_SET_MEDIA_TYPE]: (draft, payload) => draft.info.mediaType = payload,
+  [PLAYER_NULL_NEXT_UNIT]: (draft, payload = null) => draft.info.nextUnitId = payload,
   [playerTypes.PLAYER_COMPLETE]: onComplete,
 
   [settings.SET_LANGUAGE]: onRemovePlayer,

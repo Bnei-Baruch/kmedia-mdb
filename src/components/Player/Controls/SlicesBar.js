@@ -6,8 +6,8 @@ import { selectors as player } from '../../../redux/modules/player';
 import { timeToPercent, startEndFromQuery } from './helper';
 
 export const SlicesBar = () => {
-  const [left, setLeft]   = useState(0);
-  const [width, setWidth] = useState(0);
+  const [left, setLeft]   = useState(null);
+  const [width, setWidth] = useState(null);
 
   const location       = useLocation();
   const { start, end } = startEndFromQuery(location);
@@ -22,6 +22,9 @@ export const SlicesBar = () => {
       w     = Math.min(Math.max(w, 1), 100 - l);
       setLeft(l);
       setWidth(w);
+    } else {
+      setLeft(0);
+      setWidth(0);
     }
   }, [duration, start, end]);
 

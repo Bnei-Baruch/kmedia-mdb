@@ -61,8 +61,6 @@ const initPlayerEvents = (dispatch) => {
 
   player.on('remove', () => player.off('all'));
 
-  player.on('complete', () => dispatch(playlistActions.next(true)));
-
   PLAYER_EVENTS.forEach(name => {
     const action = PLAYER_ACTIONS_BY_EVENT[name];
     if (!action) {
