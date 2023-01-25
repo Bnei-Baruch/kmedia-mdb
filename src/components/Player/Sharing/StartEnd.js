@@ -41,7 +41,7 @@ const StartEnd = ({ t }) => {
           actionPosition="left"
           fluid
           onClick={handleSetStart}
-          readonly
+          readOnly
           type="text"
           action={{
             content: t('player.share.start-position'),
@@ -58,7 +58,7 @@ const StartEnd = ({ t }) => {
           actionPosition="left"
           fluid
           onClick={handleSetEnd}
-          readonly
+          readOnly
           action={{
             content: t('player.share.end-position'),
             size: 'small',

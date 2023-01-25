@@ -50,7 +50,7 @@ const TrimBtn = ({ t }) => {
       content={t('player.download.icon-hover-text')}
       position={'top right'}
       trigger={
-        <Button circular icon="download" onClick={handleCut} />
+        <Button as="span" circular icon="download" onClick={handleCut} />
       }
     />
   );
