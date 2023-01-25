@@ -35,7 +35,7 @@ const UpdateLocation = () => {
   useEffect(() => {
     if (nextUnitId && nextUnitId !== prevNextUnitId) {
       const link = canonicalLink(denormUnit(nextUnitId));
-      history.push({ pathname: link, search: location.search });
+      history.push({ pathname: `/${language}${link}`, search: location.search });
       dispatch(action.nullNextUnit());
     }
   }, [nextUnitId, location.search, history, denormUnit]);

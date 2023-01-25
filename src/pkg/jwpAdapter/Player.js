@@ -14,9 +14,11 @@ const Player = () => {
   useEffect(() => {
     return () => {
       dispatch(actions.pauseOnLeave());
-      const player = window.jwplayer(JWPLAYER_ID);
       //TODO david; temporary fix double rerender need to remove after update react-router and use singleton player component
-      setTimeout(() => isFunction(player?.remove) && player.remove(), 0);
+      setTimeout(() => {
+        const player = window.jwplayer(JWPLAYER_ID);
+        isFunction(player?.remove) && player.remove();
+      }, 0);
     };
   }, []);
 
