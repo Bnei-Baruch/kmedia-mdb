@@ -22,37 +22,36 @@ const CLASSES_BY_MODE = {
 };
 
 const PlayerContainer = () => {
-        const fullscreenRef = useRef();
-        const mode          = useSelector(state => player.getOverMode(state.player), shallowEqual);
-        const isFullScreen  = useSelector(state => selectors.isFullScreen(state.player), shallowEqual);
+  const fullscreenRef = useRef();
+  const mode          = useSelector(state => player.getOverMode(state.player), shallowEqual);
+  const isFullScreen  = useSelector(state => selectors.isFullScreen(state.player), shallowEqual);
 
-        const { isMobileDevice } = useContext(DeviceInfoContext);
+  const { isMobileDevice } = useContext(DeviceInfoContext);
 
-        const content = (
-          <div className="player" dir="ltr">
-            <AppendChronicle />
-            <UpdateLocation />
-            <div className={clsx(CLASSES_BY_MODE[mode], isMobileDevice ? 'is-mobile' : 'is-web', { 'is-fullscreen': isFullScreen })}>
-              {
-                isMobileDevice ? (
-                  <PlayerToolsMobile Player={<Player />} fullscreenRef={fullscreenRef} />
-                ) : (
-                  <>
-                    <Player />
-                    <PlayerToolsWeb fullscreenRef={fullscreenRef} />
-                  </>
-                )
-              }
-            </div>
-          </div>
-        );
+  const content = (
+    <div className="player" dir="ltr">
+      <AppendChronicle />
+      <UpdateLocation />
+      <div className={clsx(CLASSES_BY_MODE[mode], isMobileDevice ? 'is-mobile' : 'is-web', { 'is-fullscreen': isFullScreen })}>
+        {
+          isMobileDevice ? (
+            <PlayerToolsMobile Player={<Player />} fullscreenRef={fullscreenRef} />
+          ) : (
+            <>
+              <Player />
+              <PlayerToolsWeb fullscreenRef={fullscreenRef} />
+            </>
+          )
+        }
+      </div>
+    </div>
+  );
 
-        return (
-          <Ref innerRef={fullscreenRef}>
-            {content}
-          </Ref>
-        );
-      }
-;
-
-export default PlayerContainer;
+  return (
+    <Ref innerRef={fullscreenRef}>
+      {content}
+    </Ref>
+  );
+};
+//TODO david remove memo after react-router update
+export default React.memo(PlayerContainer);

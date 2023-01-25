@@ -5,14 +5,18 @@ import BehaviorStartPlay from './BehaviorStartPlay';
 import BehaviorStartStopSlice from './BehaviorStartStopSlice';
 import isFunction from 'lodash/isFunction';
 import { Ref } from 'semantic-ui-react';
+import { actions } from '../../redux/modules/chronicles';
+import { useDispatch } from 'react-redux';
 
 const Player = () => {
-  const ref = useRef();
-
+  const ref      = useRef();
+  const dispatch = useDispatch();
   useEffect(() => {
     return () => {
+      dispatch(actions.pauseOnLeave());
       const player = window.jwplayer(JWPLAYER_ID);
-      isFunction(player?.remove) && player.remove();
+      //TODO david; temporary fix double rerender need to remove after update react-router and use singleton player component
+      setTimeout(() => isFunction(player?.remove) && player.remove(), 0);
     };
   }, []);
 
