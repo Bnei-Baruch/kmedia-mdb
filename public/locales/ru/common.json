@@ -196,7 +196,9 @@
       "language": "Язык",
       "audio": "Аудио",
       "video": "Видео",
-      "normal": "норм."
+      "normal": "норм.",
+      "audio-only-on": "Аудиорежим ВКЛ.",
+      "audio-only-off": "Аудиорежим ВЫКЛ."
     },
     "share": {
       "title": "Посмотри это видео",

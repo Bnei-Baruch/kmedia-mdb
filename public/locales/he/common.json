@@ -195,7 +195,9 @@
       "language": "שפה",
       "audio": "אודיו",
       "video": "וידאו",
-      "normal": "רגיל"
+      "normal": "רגיל",
+      "audio-only-on": "Audio only ON",
+      "audio-only-off": "Audio only OFF"
     },
     "share": {
       "title": "צפה בסרטון",

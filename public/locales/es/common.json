@@ -193,7 +193,9 @@
       "language": "Idioma",
       "audio": "Audio",
       "video": "Video",
-      "normal": "normal"
+      "normal": "normal",
+      "audio-only-on": "Solo audio ACTIVADO",
+      "audio-only-off": "Solo audio APAGADO"
     },
     "share": {
       "title": "Mira el video",

@@ -19,7 +19,7 @@ const MediaTypeControlMobile = ({ t }) => {
       <Checkbox
         checked={type === MT_AUDIO}
         onChange={handleChange}
-        label={t(`player.settings.${type}`)}
+        label={t(`player.settings.audio-only-${type === MT_AUDIO ? 'on' : 'off'}`)}
         toggle
       />
     </div>

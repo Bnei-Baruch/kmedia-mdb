@@ -1,5 +1,4 @@
 import { PLAYER_ACTIONS_BY_EVENT } from '../../redux/modules/player';
-import { actions as playlistActions } from '../../redux/modules/playlist';
 import { JWPLAYER_ID } from '../../helpers/consts';
 import { noop } from '../../helpers/utils';
 import isFunction from 'lodash/isFunction';

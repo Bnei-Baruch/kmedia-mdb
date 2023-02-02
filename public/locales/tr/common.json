@@ -194,7 +194,9 @@
       "language": "Language",
       "audio": "Ses",
       "video": "Görüntü",
-      "normal": "normal"
+      "normal": "normal",
+      "audio-only-on": "Audio only ON",
+      "audio-only-off": "Audio only OFF"
     },
     "share": {
       "title": "bu videoyu seyret",

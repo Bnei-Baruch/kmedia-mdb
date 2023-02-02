@@ -77,6 +77,15 @@ video {
       align-items: center;
       justify-content: space-between;
 
+      .unmute-btn {
+        padding: 6px 1em;
+        line-height: 16px;
+
+        .icon {
+          line-height: 16px;
+        }
+      }
+
       /* &:nth-child(1) {
          justify-content: flex-end;
          display: none;
@@ -113,6 +122,12 @@ video {
             &:after {
               background: #000;
               left: 24px;
+
+              .rtl & {
+                right: 24px;
+                left: auto;
+
+              }
             }
           }
         }
@@ -124,6 +139,10 @@ video {
           line-height: 16px;
           font-size: 11px;
           padding: 0 0 0 44px;
+
+          .rtl & {
+            padding: 0 44px 0 0;
+          }
 
           &:before {
             width: 36px;
@@ -140,6 +159,11 @@ video {
             left: 4px;
             background: #fff;
             box-shadow: none;
+
+            .rtl & {
+              right: 4px;
+              left: auto;
+            }
           }
         }
       }
