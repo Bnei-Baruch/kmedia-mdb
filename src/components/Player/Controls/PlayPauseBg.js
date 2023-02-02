@@ -10,6 +10,9 @@ import { pause, play } from '../../../pkg/jwpAdapter/adapter';
 
 const PlayPauseBg = ({ t }) => {
   const isPlay = useSelector(state => selectors.isPlay(state.player));
+  const loaded = useSelector(state => selectors.isLoaded(state.player));
+
+  if (loaded !== true) return null;
 
   const handleClick = e => {
     isPlay ? pause() : play()?.play();
@@ -18,14 +21,18 @@ const PlayPauseBg = ({ t }) => {
 
   return (
     <div className="controls__pause_bg" onClick={handleClick}>
-      <WebWrapTooltip
-        content={t(`player.controls.${isPlay ? 'pause' : 'play'}`)}
-        trigger={
-          <div className="controls__pause">
-            <Icon fitted size="big" name={isPlay ? 'pause' : 'play'} />
-          </div>
-        }
-      />
+      {
+        (loaded === true) && (
+          <WebWrapTooltip
+            content={t(`player.controls.${isPlay ? 'pause' : 'play'}`)}
+            trigger={
+              <div className="controls__pause">
+                <Icon fitted size="big" name={isPlay ? 'pause' : 'play'} />
+              </div>
+            }
+          />
+        )
+      }
     </div>
   );
 };
