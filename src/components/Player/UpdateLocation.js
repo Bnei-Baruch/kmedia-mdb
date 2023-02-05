@@ -8,16 +8,20 @@ import { setLanguageInQuery, setMediaTypeInQuery, persistPreferredMediaType } fr
 import { getQuery } from '../../helpers/url';
 import { usePrevious } from '../../helpers/utils';
 import { canonicalLink } from '../../helpers/links';
+import { selectors as settings } from '../../redux/modules/settings';
 
 const UpdateLocation = () => {
   const history  = useHistory();
   const location = useLocation();
 
-  const dispatch                            = useDispatch();
-  const q                                   = getQuery(location);
-  const { mediaType, language, nextUnitId } = useSelector(state => playlist.getInfo(state.playlist));
-  const denormUnit                          = useSelector(state => mdb.nestedGetDenormContentUnit(state.mdb));
-  const prevNextUnitId                      = usePrevious(nextUnitId);
+  const dispatch                                 = useDispatch();
+  const q                                        = getQuery(location);
+  const { mediaType, language, nextUnitId, cId } = useSelector(state => playlist.getInfo(state.playlist));
+  const uiLanguage                               = useSelector(state => settings.getLanguage(state.settings));
+
+  const denormUnit        = useSelector(state => mdb.nestedGetDenormContentUnit(state.mdb));
+  const denormCollectiont = useSelector(state => mdb.nestedGetDenormCollection(state.mdb));
+  const prevNextUnitId    = usePrevious(nextUnitId);
 
   useEffect(() => {
     if (language && language !== q.language) {
@@ -34,11 +38,11 @@ const UpdateLocation = () => {
 
   useEffect(() => {
     if (nextUnitId && nextUnitId !== prevNextUnitId) {
-      const link = canonicalLink(denormUnit(nextUnitId));
-      history.push({ pathname: `/${language}${link}`, search: location.search });
+      const link = canonicalLink(denormUnit(nextUnitId), null, denormCollectiont(cId));
+      history.push({ pathname: `/${uiLanguage}${link}`, search: location.search });
       dispatch(action.nullNextUnit());
     }
-  }, [nextUnitId, location.search, history, denormUnit]);
+  }, [nextUnitId, cId, location.search, history, uiLanguage, denormUnit, denormCollectiont]);
 
   return null;
 };

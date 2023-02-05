@@ -90,7 +90,7 @@ export const reducer = handleActions({
   [SINGLE_MEDIA_BUILD]: onBuild,
   [MY_PLAYLIST_BUILD]: onBuild,
   [PLAYLIST_BUILD_SUCCESS]: onBuildSuccess,
-  [playerTypes.PLAYER_REMOVE]: onRemovePlayer,
+  /*[playerTypes.PLAYER_REMOVE]: onRemovePlayer,*/
 
   [PLAYLIST_SELECT]: (draft, payload) => draft.info.cuId = payload,
 

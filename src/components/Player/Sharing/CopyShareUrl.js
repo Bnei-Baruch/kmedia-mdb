@@ -10,7 +10,7 @@ import { POPOVER_CONFIRMATION_TIMEOUT } from './helper';
 
 let timeout;
 const CopyShareUrl = ({ t }) => {
-  const [open, setOpen] = useState();
+  const [open, setOpen] = useState(false);
 
   const language = useSelector(state => settings.getLanguage(state.settings));
   const dir      = getLanguageDirection(language);
