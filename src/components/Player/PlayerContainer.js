@@ -1,7 +1,7 @@
-import React, { useRef, useContext } from 'react';
-import { useSelector, shallowEqual } from 'react-redux';
+import React, { useRef, useContext, useEffect } from 'react';
+import { useSelector, shallowEqual, useDispatch } from 'react-redux';
 
-import { selectors as player, selectors } from '../../redux/modules/player';
+import { selectors as player, selectors, actions } from '../../redux/modules/player';
 import { PLAYER_OVER_MODES } from '../../helpers/consts';
 import Player from '../../pkg/jwpAdapter/Player';
 import UpdateLocation from './UpdateLocation';
@@ -11,6 +11,17 @@ import AppendChronicle from './AppendChronicle';
 import { DeviceInfoContext } from '../../helpers/app-contexts';
 import clsx from 'clsx';
 import { Ref } from 'semantic-ui-react';
+
+const HIDE_CONTROLS_TIMEOUT = 3000;
+
+let timeout;
+const runTimeout          = (dispatch) => {
+  clearTimeout(timeout);
+  timeout = setTimeout(() => {
+    dispatch(actions.setOverMode(PLAYER_OVER_MODES.none));
+  }, HIDE_CONTROLS_TIMEOUT);
+};
+const CONTROL_BTS_CLASSES = ['controls__pause'];
 
 const CLASSES_BY_MODE = {
   [PLAYER_OVER_MODES.settings]: 'is-settings',
@@ -28,11 +39,46 @@ const PlayerContainer = () => {
 
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (mode === PLAYER_OVER_MODES.active) {
+      runTimeout(dispatch);
+    }
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [mode]);
+
+  const handleTouch = (e) => {
+    if (mode === PLAYER_OVER_MODES.active) {
+      if (e.target.className.indexOf('icon') === -1) {
+        clearTimeout(timeout);
+        dispatch(actions.setOverMode(PLAYER_OVER_MODES.none));
+      } else {
+        runTimeout(dispatch);
+      }
+    }
+    if (mode === PLAYER_OVER_MODES.none) {
+      dispatch(actions.setOverMode(PLAYER_OVER_MODES.active));
+    }
+  };
+
+  const handleMouseMove = (e) => {
+    if (mode === PLAYER_OVER_MODES.none) {
+      dispatch(actions.setOverMode(PLAYER_OVER_MODES.active));
+    }
+  };
+
   const content = (
     <div className="player" dir="ltr">
       <AppendChronicle />
       <UpdateLocation />
-      <div className={clsx(CLASSES_BY_MODE[mode], isMobileDevice ? 'is-mobile' : 'is-web', { 'is-fullscreen': isFullScreen })}>
+      <div
+        className={clsx(CLASSES_BY_MODE[mode], isMobileDevice ? 'is-mobile' : 'is-web', { 'is-fullscreen': isFullScreen })}
+        onTouchStart={handleTouch}
+        onMouseMove={handleMouseMove}
+      >
         {
           isMobileDevice ? (
             <PlayerToolsMobile Player={<Player />} fullscreenRef={fullscreenRef} />

@@ -882,7 +882,7 @@ video {
 }
 
 .controls {
-  .is-web &:hover, .is-web.is-first-time &, .is-web.is-sharing & {
+  .is-web.is-active &, .is-web.is-first-time &, .is-web.is-sharing & {
     .controls__prev {
       left: 0;
     }

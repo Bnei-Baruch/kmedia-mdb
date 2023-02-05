@@ -13,7 +13,6 @@ const PlayPauseBg = ({ t }) => {
 
   const handleClick = e => {
     isPlay ? pause() : play()?.play();
-    stopBubbling(e);
   };
 
   return (
