@@ -196,8 +196,8 @@
       "audio": "אודיו",
       "video": "וידאו",
       "normal": "רגיל",
-      "audio-only-on": "Audio only ON",
-      "audio-only-off": "Audio only OFF"
+      "audio-only-on": "אודיו בלבד דלוק",
+      "audio-only-off": "אודיו בלבד כבוי"
     },
     "share": {
       "title": "צפה בסרטון",
