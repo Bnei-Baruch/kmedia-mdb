@@ -1,6 +1,7 @@
 import { createAction } from 'redux-actions';
 import { handleActions, types as settings } from './settings';
 import { PLAYER_OVER_MODES } from '../../helpers/consts';
+import { LOCALSTORAGE_MUTE } from '../../pkg/jwpAdapter/adapter';
 
 const PLAYER_READY       = 'Player/READY';
 const PLAYER_REMOVE      = 'Player/REMOVE';
@@ -68,7 +69,8 @@ const initialState = {
   file: null,
   shareStartEnd: { start: 0, end: Infinity },
   isFullScreen: false,
-  wip: false
+  wip: false,
+  isMuted: localStorage.getItem(LOCALSTORAGE_MUTE) !== 'false'
 };
 
 const onReady = draft => {

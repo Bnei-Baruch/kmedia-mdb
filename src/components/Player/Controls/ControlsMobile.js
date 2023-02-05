@@ -13,8 +13,9 @@ import { selectors as player, selectors } from '../../../redux/modules/player';
 import { ProgressCtrl } from './ProgressCtrl';
 import MediaTypeControlMobile from '../Settings/MediaTypeControlMobile';
 import { setMute } from '../../../pkg/jwpAdapter/adapter';
+import { withNamespaces } from 'react-i18next';
 
-const ControlsMobile = ({ fullscreenRef }) => {
+const ControlsMobile = ({ fullscreenRef, t }) => {
   const mode    = useSelector(state => player.getOverMode(state.player));
   const isMuted = useSelector(state => player.isMuted(state.player));
   const loaded  = useSelector(state => selectors.isLoaded(state.player));
@@ -36,10 +37,9 @@ const ControlsMobile = ({ fullscreenRef }) => {
                 isMuted && (
                   <Button
                     onClick={() => setMute(false)}
-                    icon="mute"
                     className="unmute-btn"
                     size="tiny"
-                    inverted
+                    content={t('player.buttons.tap-to-unmute')}
                   />
                 )
               }
@@ -73,4 +73,4 @@ const ControlsMobile = ({ fullscreenRef }) => {
   );
 };
 
-export default ControlsMobile;
+export default withNamespaces()(ControlsMobile);

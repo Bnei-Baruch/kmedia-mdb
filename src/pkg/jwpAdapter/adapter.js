@@ -3,6 +3,8 @@ import { JWPLAYER_ID } from '../../helpers/consts';
 import { noop } from '../../helpers/utils';
 import isFunction from 'lodash/isFunction';
 
+export const LOCALSTORAGE_MUTE = 'jwplayer.mute';
+
 const playerRef    = { current: null };
 export const setup = (conf) => {
   const player = window.jwplayer(JWPLAYER_ID);
