@@ -65,7 +65,7 @@ const PlayerContainer = () => {
   };
 
   const handleMouseMove = (e) => {
-    if (mode === PLAYER_OVER_MODES.none) {
+    if (mode === PLAYER_OVER_MODES.none && !isMobileDevice) {
       dispatch(actions.setOverMode(PLAYER_OVER_MODES.active));
     }
   };
