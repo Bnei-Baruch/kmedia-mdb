@@ -15,7 +15,6 @@ import Events from './components/Sections/Events/MainPage';
 import ExcerptContainer from './components/Sections/Excerpt/ExcerptContainer';
 import Help from './components/Sections/Help/Help';
 import HomePage from './components/Sections/Home/Container';
-import PlaylistLastDaily from './components/Pages/WithPlayer/LastDaily/PlaylistLastDaily';
 import LessonCollection from './components/Sections/Lesson/LessonPage';
 import Lessons from './components/Sections/Lessons/MainPage';
 import LibraryHomepage from './components/Sections/Library/Homepage';
@@ -52,6 +51,7 @@ import {
 import * as ssrDataLoaders from './routesSSRData';
 import SingleMediaContainer from './components/Pages/WithPlayer/SingleMedia/SingleMediaContainer';
 import SearchResults from './components/Search/SearchResults';
+import BuildPlaylistLastDaily from './components/Pages/WithPlayer/LastDaily/BuildPlaylistLastDaily';
 
 const routes = [
   { path: '', component: HomePage, options: { ssrData: ssrDataLoaders.home } },
@@ -98,7 +98,7 @@ const routes = [
   },
   {
     path: 'lessons/daily/latest',
-    component: PlaylistLastDaily,
+    component: BuildPlaylistLastDaily,
     options: { ssrData: ssrDataLoaders.latestLesson }
   },
   { path: 'programs', component: Programs, options: { ssrData: ssrDataLoaders.programsPage } },
