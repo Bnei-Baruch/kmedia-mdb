@@ -82,7 +82,7 @@ const onComplete = draft => {
   const lastIdx = draft.playlist.length - 1;
   if (idx === lastIdx) return;
   const nextId = draft.playlist[(idx < lastIdx) ? idx + 1 : lastIdx];
-  saveTimeOnLocalstorage(0, nextId);
+  saveTimeOnLocalstorage(1, nextId);
   draft.info.nextUnitId = nextId;
 };
 

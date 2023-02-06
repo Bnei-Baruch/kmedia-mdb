@@ -49,7 +49,7 @@ const PlayerContainer = () => {
     };
   }, [mode]);
 
-  const handleTouch = e => {
+  const handleClick = e => {
     if (mode === PLAYER_OVER_MODES.active) {
       if (e.target.className.indexOf('icon') === -1) {
         clearTimeout(timeout);
@@ -75,7 +75,7 @@ const PlayerContainer = () => {
       <UpdateLocation />
       <div
         className={clsx(CLASSES_BY_MODE[mode], isMobileDevice ? 'is-mobile' : 'is-web', { 'is-fullscreen': isFullScreen })}
-        onTouchStart={handleTouch}
+        onClick={handleClick}
         onMouseMove={handleMouseMove}
       >
         {

@@ -18,6 +18,7 @@ export const ProgressBar = ({ left, right }) => {
 
   const handleStart = e => {
     // regard only left mouse button click (0). touch is undefined
+    stopBubbling(e);
     !e.button && setActivated(true);
   };
 
