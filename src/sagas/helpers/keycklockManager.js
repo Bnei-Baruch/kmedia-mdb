@@ -13,7 +13,9 @@ export const initKC = async (dispatch, language) => {
   //check is keycloak server is up
   try {
     const health = await fetch(`${KC_API}/realms/main/protocol/openid-connect/certs`);
-    if (!health.ok) throw 'keycloak server is down';
+    if (!health.ok) {
+      throw Error('keycloak server is down');
+    }
   } catch (error) {
     console.error(error);
     dispatch(actions.loginFailure({ error }));

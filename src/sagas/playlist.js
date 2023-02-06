@@ -36,8 +36,8 @@ function* build(action) {
   if (!fetched?.[cId]) {
     yield call(fetchCollection, { payload: cId });
   }
-  let c = yield select(state => mdb.getDenormCollection(state.mdb, cId));
 
+  let c = yield select(state => mdb.getDenormCollection(state.mdb, cId));
   if (!cuId) {
     cuId = c.cuIDs?.[getActivePartFromQuery(location)];
   }
@@ -134,6 +134,7 @@ function* fetchMyPlaylist(id) {
     yield call(fetchOne, { payload: { namespace: MY_NAMESPACE_PLAYLISTS, id } });
     playlistData = yield select(state => my.getItemByKey(state.my, MY_NAMESPACE_PLAYLISTS, key));
   }
+
   return playlistData;
 }
 

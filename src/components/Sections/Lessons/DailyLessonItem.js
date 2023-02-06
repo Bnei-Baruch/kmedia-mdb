@@ -6,14 +6,12 @@ import { canonicalLink, getCuByCcuSkipPreparation } from '../../../helpers/links
 
 import { selectors as mdb } from '../../../redux/modules/mdb';
 import Link from '../../Language/MultiLanguageLink';
-import UnitLogoWithDuration, { getLogoUnit } from '../../shared/UnitLogoWithDuration';
-import { MY_NAMESPACE_HISTORY } from '../../../helpers/consts';
+import UnitLogoWithDuration from '../../shared/UnitLogoWithDuration';
 
 const DailyLessonItem = ({ id, t }) => {
   const ccu = useSelector(state => mdb.getDenormCollection(state.mdb, id));
 
   const { number, film_date, content_units = [] } = ccu || {};
-
 
   if (!ccu || content_units.length === 0) return null;
   const logoUnit = content_units.find(x => x.id === getCuByCcuSkipPreparation(ccu));

@@ -68,6 +68,7 @@ const onBuildSuccess = (draft, payload) => {
   if (draft.itemById[cuId] && !draft.itemById[cuId].qualityByLang[language]) {
     language = draft.itemById[cuId].languages[0];
   }
+
   const quality = draft.info.quality || draft.itemById[cuId]?.qualityByLang[language]?.[0] || VS_DEFAULT;
   draft.info    = { ...info, cuId, language, quality, isReady: true, wip: false };
 };
@@ -76,7 +77,7 @@ const onRemovePlayer = draft => {
   draft.info = { isReady: false };
 };
 
-const onComplete = (draft) => {
+const onComplete = draft => {
   const idx     = draft.playlist.findIndex(x => x === draft.info.cuId);
   const lastIdx = draft.playlist.length - 1;
   if (idx === lastIdx) return;
@@ -106,9 +107,7 @@ export const reducer = handleActions({
 const getPlaylist = state => state.playlist;
 const getPlayed   = state => state.itemById[state.info.cuId] || false;
 
-const getInfo = state => {
-  return state.info;
-};
+const getInfo = state => state.info;
 
 const getNextId = state => {
   const curIdx = state.playlist.findIndex(x => x === state.info.cuId);

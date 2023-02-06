@@ -5,7 +5,7 @@ import { getQuery } from '../../../helpers/url';
 import * as shapes from '../../shapes';
 
 const ScrollToTop = ({ location, children }) => {
-  const { page, ...query } = getQuery(location);
+  const { page } = getQuery(location);
   useEffect(
     () => {
       if (window.pageYOffset) {

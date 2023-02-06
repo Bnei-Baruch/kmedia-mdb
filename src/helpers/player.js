@@ -69,6 +69,7 @@ export const playableItem = (unit, preImageUrl) => {
   if (!preImageUrl) {
     preImageUrl = assetUrl(`api/thumbnail/${unit.id}`);
   }
+
   return {
     id: unit.id,
     languages,

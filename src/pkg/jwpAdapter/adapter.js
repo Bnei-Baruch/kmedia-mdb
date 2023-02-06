@@ -6,7 +6,7 @@ import isFunction from 'lodash/isFunction';
 export const LOCALSTORAGE_MUTE = 'jwplayer.mute';
 
 const playerRef    = { current: null };
-export const setup = (conf) => {
+export const setup = conf => {
   const player = window.jwplayer(JWPLAYER_ID);
   player.setup(conf);
   playerRef.current = player;
@@ -22,6 +22,7 @@ const functionByName = (name, def = 0, val) => {
   } catch (e) {
     console.log('jwplayer error', e);
   }
+
   return resp;
 };
 

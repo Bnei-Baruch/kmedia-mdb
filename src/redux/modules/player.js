@@ -98,6 +98,7 @@ const onSetFile = (draft, payload) => {
     draft.played = false;
     draft.loaded = false;
   }
+
   draft.file = payload;
 };
 

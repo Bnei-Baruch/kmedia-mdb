@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+
 import { selectors as player } from '../../redux/modules/player';
 import { noop } from '../../helpers/utils';
 import { DEFAULT_PLAYER_VOLUME } from '../../components/Player/helper';
@@ -24,4 +25,5 @@ const useSubscribeVolume = () => {
 
   return volume;
 };
+
 export default useSubscribeVolume;

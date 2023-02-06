@@ -15,13 +15,12 @@ import { Ref } from 'semantic-ui-react';
 const HIDE_CONTROLS_TIMEOUT = 3000;
 
 let timeout;
-const runTimeout          = (dispatch) => {
+const runTimeout = dispatch => {
   clearTimeout(timeout);
   timeout = setTimeout(() => {
     dispatch(actions.setOverMode(PLAYER_OVER_MODES.none));
   }, HIDE_CONTROLS_TIMEOUT);
 };
-const CONTROL_BTS_CLASSES = ['controls__pause'];
 
 const CLASSES_BY_MODE = {
   [PLAYER_OVER_MODES.settings]: 'is-settings',
@@ -50,7 +49,7 @@ const PlayerContainer = () => {
     };
   }, [mode]);
 
-  const handleTouch = (e) => {
+  const handleTouch = e => {
     if (mode === PLAYER_OVER_MODES.active) {
       if (e.target.className.indexOf('icon') === -1) {
         clearTimeout(timeout);
