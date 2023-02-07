@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Popup } from 'semantic-ui-react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
-import { selectors as player } from '../../../redux/modules/player';
+import { selectors as player, actions } from '../../../redux/modules/player';
 import { formatDuration, stopBubbling } from '../../../helpers/utils';
 import { useSubscribeSeekAndTime, useSubscribeBuffer } from '../../../pkg/jwpAdapter';
 import { getDuration, seek } from '../../../pkg/jwpAdapter/adapter';
+import { PLAYER_OVER_MODES } from '../../../helpers/consts';
 
 export const ProgressBar = ({ left, right }) => {
-
   const [activated, setActivated] = useState(false);
 
   const isReady = useSelector(state => player.isReady(state.player));
@@ -16,15 +16,31 @@ export const ProgressBar = ({ left, right }) => {
   const { pos, time } = useSubscribeSeekAndTime();
   const buffPos       = useSubscribeBuffer();
 
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (isReady && activated) {
+      document.addEventListener('mousemove', handleMove, { passive: false });
+      document.addEventListener('touchmove', handleMove, { passive: false });
+      document.addEventListener('mouseup', handleEnd, { passive: false });
+      document.addEventListener('touchend', handleEnd, { passive: false });
+    }
+
+    if (isReady && !activated) removeListeners();
+    return removeListeners;
+  }, [isReady, activated]);
+
   const handleStart = e => {
     // regard only left mouse button click (0). touch is undefined
     stopBubbling(e);
     !e.button && setActivated(true);
+    dispatch(actions.setOverMode(PLAYER_OVER_MODES.dragKnob));
   };
 
   const handleEnd = e => {
     stopBubbling(e);
     setActivated(false);
+    dispatch(actions.setOverMode(PLAYER_OVER_MODES.active));
   };
 
   const handleMove = e => {
@@ -45,18 +61,6 @@ export const ProgressBar = ({ left, right }) => {
     document.removeEventListener('mouseup', handleEnd);
     document.removeEventListener('touchend', handleEnd);
   };
-
-  useEffect(() => {
-    if (isReady && activated) {
-      document.addEventListener('mousemove', handleMove, { passive: false });
-      document.addEventListener('touchmove', handleMove, { passive: false });
-      document.addEventListener('mouseup', handleEnd, { passive: false });
-      document.addEventListener('touchend', handleEnd, { passive: false });
-    }
-
-    if (isReady && !activated) removeListeners();
-    return removeListeners;
-  }, [isReady, activated]);
 
   return (
     <>

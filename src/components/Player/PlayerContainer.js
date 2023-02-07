@@ -27,6 +27,7 @@ const CLASSES_BY_MODE = {
   [PLAYER_OVER_MODES.languages]: 'is-settings is-language',
   [PLAYER_OVER_MODES.share]: 'is-sharing',
   [PLAYER_OVER_MODES.active]: 'is-active',
+  [PLAYER_OVER_MODES.dragKnob]: 'is-active',
   [PLAYER_OVER_MODES.firstTime]: 'is-active is-first-time',
   [PLAYER_OVER_MODES.none]: '',
 };
@@ -44,6 +45,7 @@ const PlayerContainer = () => {
     if (mode === PLAYER_OVER_MODES.active) {
       runTimeout(dispatch);
     }
+
     return () => {
       clearTimeout(timeout);
     };
@@ -51,12 +53,19 @@ const PlayerContainer = () => {
 
   const handleClick = e => {
     if (mode === PLAYER_OVER_MODES.active) {
-      if (e.target.className.indexOf('icon') === -1) {
-        clearTimeout(timeout);
-        dispatch(actions.setOverMode(PLAYER_OVER_MODES.none));
-      } else {
+      if (e.target.className.indexOf('icon') !== -1 || e.target.tagName === 'LABEL') {
         runTimeout(dispatch);
+        return;
       }
+
+      if (e.target.className.indexOf('slider__thumb') !== -1) {
+        clearTimeout(timeout);
+        return;
+      }
+
+      clearTimeout(timeout);
+      dispatch(actions.setOverMode(PLAYER_OVER_MODES.none));
+
     }
     if (mode === PLAYER_OVER_MODES.none) {
       dispatch(actions.setOverMode(PLAYER_OVER_MODES.active));
