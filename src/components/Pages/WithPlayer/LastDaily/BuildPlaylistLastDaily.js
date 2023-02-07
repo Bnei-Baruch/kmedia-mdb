@@ -44,7 +44,7 @@ const BuildPlaylistLastDaily = ({ t }) => {
     });
 
     const cuId = sorted[0]?.id || getCuByCcuSkipPreparation(ccu);
-    const link = canonicalLink(denormCU(cuId), ccu);
+    const link = canonicalLink(denormCU(cuId), null, ccu);
     history.push(`/${language}${link}`);
   }, [ccu, historyItems, history]);
 
