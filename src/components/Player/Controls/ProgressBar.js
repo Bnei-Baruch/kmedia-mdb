@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Popup } from 'semantic-ui-react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 
 import { selectors as player, actions } from '../../../redux/modules/player';
 import { formatDuration, stopBubbling } from '../../../helpers/utils';
@@ -12,6 +12,7 @@ export const ProgressBar = ({ left, right }) => {
   const [activated, setActivated] = useState(false);
 
   const isReady = useSelector(state => player.isReady(state.player));
+  const mode    = useSelector(state => player.getOverMode(state.player), shallowEqual);
 
   const { pos, time } = useSubscribeSeekAndTime();
   const buffPos       = useSubscribeBuffer();
@@ -31,15 +32,17 @@ export const ProgressBar = ({ left, right }) => {
   }, [isReady, activated]);
 
   const handleStart = e => {
-    // regard only left mouse button click (0). touch is undefined
     stopBubbling(e);
-    !e.button && setActivated(true);
-    dispatch(actions.setOverMode(PLAYER_OVER_MODES.dragKnob));
+    // regard only left mouse button click (0). touch is undefined
+    if (mode === PLAYER_OVER_MODES.active && !e.button)
+      dispatch(actions.setOverMode(PLAYER_OVER_MODES.dragKnob));
+    setActivated(true);
   };
 
   const handleEnd = e => {
     stopBubbling(e);
     setActivated(false);
+    if (mode === PLAYER_OVER_MODES.dragKnob) return;
     dispatch(actions.setOverMode(PLAYER_OVER_MODES.active));
   };
 
