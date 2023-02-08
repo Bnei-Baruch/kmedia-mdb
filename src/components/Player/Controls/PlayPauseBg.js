@@ -1,18 +1,21 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useSelector } from 'react-redux';
 
 import { selectors } from '../../../redux/modules/player';
-import { stopBubbling } from '../../../helpers/utils';
 import { Icon } from 'semantic-ui-react';
 import { withNamespaces } from 'react-i18next';
 import WebWrapTooltip from '../../shared/WebWrapTooltip';
-import { pause, play } from '../../../pkg/jwpAdapter/adapter';
+import { pause, play, getPosition } from '../../../pkg/jwpAdapter/adapter';
+import { DeviceInfoContext } from '../../../helpers/app-contexts';
 
 const PlayPauseBg = ({ t }) => {
-  const isPlay = useSelector(state => selectors.isPlay(state.player));
+  const isPlay       = useSelector(state => selectors.isPlay(state.player));
+  const { isIPhone } = useContext(DeviceInfoContext);
 
   const handleClick = e => {
-    isPlay ? pause() : play()?.play();
+    const pos = getPosition();
+    console.log('iphone clip bug: handlePlayPause', pos);
+    isPlay ? pause() : isIPhone ? play().seek(pos).play() : play()?.play();
   };
 
   return (
