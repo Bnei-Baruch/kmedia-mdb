@@ -42,8 +42,10 @@ export const ProgressBar = ({ left, right }) => {
   const handleEnd = e => {
     stopBubbling(e);
     setActivated(false);
-    if (mode === PLAYER_OVER_MODES.dragKnob) return;
-    dispatch(actions.setOverMode(PLAYER_OVER_MODES.active));
+    if (mode === PLAYER_OVER_MODES.dragKnob) {
+      //need switch mode after event click will bubble
+      setTimeout(() => dispatch(actions.setOverMode(PLAYER_OVER_MODES.active)), 0);
+    }
   };
 
   const handleMove = e => {
@@ -86,6 +88,7 @@ export const ProgressBar = ({ left, right }) => {
             style={{ left: `${pos}%` }}
             onMouseDown={handleStart}
             onTouchStart={handleStart}
+            onClick={stopBubbling}
           ></div>
         }
       >

@@ -15,11 +15,15 @@ import { Ref } from 'semantic-ui-react';
 const HIDE_CONTROLS_TIMEOUT = 3000;
 
 let timeout;
+const sleep = ms => new Promise(r => {
+  timeout && clearTimeout(timeout);
+  timeout = setTimeout(r, ms);
+});
+
 const runTimeout = dispatch => {
-  clearTimeout(timeout);
-  timeout = setTimeout(() => {
+  sleep(HIDE_CONTROLS_TIMEOUT).then(() => {
     dispatch(actions.setOverMode(PLAYER_OVER_MODES.none));
-  }, HIDE_CONTROLS_TIMEOUT);
+  });
 };
 
 const CLASSES_BY_MODE = {
@@ -45,21 +49,13 @@ const PlayerContainer = () => {
     if (mode === PLAYER_OVER_MODES.active) {
       runTimeout(dispatch);
     }
-
-    return () => {
-      clearTimeout(timeout);
-    };
+    return () => clearTimeout(timeout);
   }, [mode]);
 
   const handleClick = e => {
     if (mode === PLAYER_OVER_MODES.active) {
       if (e.target.className.indexOf('icon') !== -1 || e.target.tagName === 'LABEL') {
         runTimeout(dispatch);
-        return;
-      }
-
-      if (e.target.className.indexOf('slider__thumb') !== -1) {
-        clearTimeout(timeout);
         return;
       }
 
