@@ -11,7 +11,7 @@ import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import { selectors as settings } from '../../../redux/modules/settings';
 
 const StartEnd = ({ t }) => {
-  const { start, end }     = useSelector(state => selectors.getShareStartEnd(state.player));
+  const { start = 0, end }     = useSelector(state => selectors.getShareStartEnd(state.player));
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const language           = useSelector(state => settings.getLanguage(state.settings));
   const dir                = getLanguageDirection(language);

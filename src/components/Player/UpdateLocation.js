@@ -9,6 +9,8 @@ import { getQuery } from '../../helpers/url';
 import { usePrevious } from '../../helpers/utils';
 import { canonicalLink } from '../../helpers/links';
 import { selectors as settings } from '../../redux/modules/settings';
+import { actions } from '../../redux/modules/player';
+import { startEndFromQuery } from './Controls/helper';
 
 const UpdateLocation = () => {
   const history  = useHistory();
@@ -23,6 +25,11 @@ const UpdateLocation = () => {
   const denormCollectiont = useSelector(state => mdb.nestedGetDenormCollection(state.mdb));
   const prevNextUnitId    = usePrevious(nextUnitId);
 
+  //init redux start end from location
+  useEffect(() => {
+    dispatch(actions.setShareStartEnd(startEndFromQuery(location)));
+  }, [location]);
+
   useEffect(() => {
     if (language && language !== q.language) {
       setLanguageInQuery(history, language);
@@ -36,6 +43,7 @@ const UpdateLocation = () => {
     }
   }, [mediaType, q.mediaType]);
 
+  //go to next on playlist
   useEffect(() => {
     if (nextUnitId && nextUnitId !== prevNextUnitId) {
       const link = canonicalLink(denormUnit(nextUnitId), null, denormCollectiont(cId));

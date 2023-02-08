@@ -89,7 +89,6 @@ const onRemove = draft => {
 
 const onSetMode = (draft, payload) => {
   draft.overMode      = payload;
-  draft.shareStartEnd = initialState.shareStartEnd;
 };
 
 const onSetFile = (draft, payload) => {
