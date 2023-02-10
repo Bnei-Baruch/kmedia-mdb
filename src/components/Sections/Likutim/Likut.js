@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useParams } from 'react-router-dom';
-import { Button, Grid, Header, Image } from 'semantic-ui-react';
+import { Grid, Header, Image } from 'semantic-ui-react';
 import clsx from 'clsx';
 
 import { actions as assetsActions, selectors as assetsSelectors } from '../../../redux/modules/assets';
@@ -11,7 +11,7 @@ import { selectors as siteSettings } from '../../../redux/modules/settings';
 import { selectors as tagSelectors } from '../../../redux/modules/tags';
 import { actions, selectors } from '../../../redux/modules/mdb';
 import { getLangPropertyDirection, getLanguageDirection } from '../../../helpers/i18n-utils';
-import { physicalFile, strCmp } from '../../../helpers/utils';
+import { physicalFile, strCmp, renderTags } from '../../../helpers/utils';
 import { SectionLogo } from '../../../helpers/images';
 import { canonicalLink } from '../../../helpers/links';
 import { LANG_ENGLISH, LANG_HEBREW, UNIT_LESSONS_TYPE, MT_AUDIO, MT_TEXT } from '../../../helpers/consts';
@@ -112,19 +112,6 @@ const Likut = ({ t }) => {
   const languages                                                = files.map(f => f.language);
   const tagNames                                                 = tags.map(getTagById);
 
-  const renderTags = () => (
-    tagNames.length > 0 &&
-    <div>
-      {
-        tagNames.map((tag, index) =>
-          <Button key={`${tag.id}${index}`} basic compact size="small">
-            <Link to={`/topics/${tag.id}`}>{tag.label}</Link>
-          </Button>
-        )
-      }
-    </div>
-  );
-
   const url                = file && physicalFile(file, true);
   const relatedLessons     = Object.values(source_units).filter(u => UNIT_LESSONS_TYPE.includes(u.content_type));
   const relatedLessonsSize = relatedLessons.length > 0 ? 6 : 0;
@@ -154,7 +141,7 @@ const Likut = ({ t }) => {
             {/* toolbar */}
             <Grid className="likut__toolbar" columns={2} stackable>
               <Grid.Column>
-                {renderTags()}
+                {renderTags(tagNames)}
               </Grid.Column>
               <Grid.Column>
                 <div className="source__header-toolbar">

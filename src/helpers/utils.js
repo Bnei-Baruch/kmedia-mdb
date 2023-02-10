@@ -4,9 +4,11 @@ import escapeRegExp from 'lodash/escapeRegExp';
 import _ from 'lodash';
 import isEqual from 'react-fast-compare';
 import { useEffect, useRef } from 'react';
+import { Button } from 'semantic-ui-react';
 
 import { CollectionsBreakdown } from './mdb';
 import { canonicalSectionByLink, canonicalSectionByUnit } from './links';
+import Link from '../components/Language/MultiLanguageLink';
 import * as consts from './consts';
 import {
   CT_CONGRESS,
@@ -455,3 +457,20 @@ export const getSourcesCollections = (sources, getPathById) =>
       return acc;
     }, {})).filter(source => source && source.children && source.children.length);
 
+// helper function to filter array and get unique values - arr.filter(distinct)
+export const distinct = (value, index, arr) => arr.indexOf(value) === index;
+
+export const renderTags = tagNames => (
+  tagNames?.length > 0 &&
+      <div className="unit-tags-bar">
+        {
+          tagNames
+            .filter(distinct)
+            .map((tag, index) =>
+              <Button key={`${tag.id}${index}`} basic compact size="small">
+                <Link to={`/topics/${tag.id}`}>{tag.label}</Link>
+              </Button>
+            )
+        }
+      </div>
+);

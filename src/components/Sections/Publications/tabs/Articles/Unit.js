@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { withNamespaces } from 'react-i18next';
 import { useLocation, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { Button, Container, Grid, Header } from 'semantic-ui-react';
+import { Container, Grid, Header } from 'semantic-ui-react';
 
 import { actions, selectors } from '../../../../../redux/modules/mdb';
 import { selectors as settings } from '../../../../../redux/modules/settings';
@@ -16,26 +16,13 @@ import WipErr from '../../../../shared/WipErr/WipErr';
 import Recommended from '../../../../Pages/Unit/widgets/Recommended/Main/Recommended';
 import playerHelper from '../../../../../helpers/player';
 import { ClientChroniclesContext } from '../../../../../helpers/app-contexts';
+import { renderTags } from '../../../../../helpers/utils';
 import { selectors as tagSelectors } from '../../../../../redux/modules/tags';
-import Link from '../../../../Language/MultiLanguageLink';
 
 const renderHeader = (unit, tagNames, t, language) => {
   const isRtl = isLanguageRtl(language);
   const position = isRtl ? 'right' : 'left';
   const subText2 = t(`publications.header.subtext2`);
-
-  const renderTags = () => (
-    tagNames.length > 0 &&
-    <div className="unit-tags-bar">
-      {
-        tagNames.map((tag, index) =>
-          <Button key={`${tag.id}${index}`} basic compact size="small">
-            <Link to={`/topics/${tag.id}`}>{tag.label}</Link>
-          </Button>
-        )
-      }
-    </div>
-  );
 
   return (
     <div className="section-header">
@@ -64,7 +51,7 @@ const renderHeader = (unit, tagNames, t, language) => {
               <span className="share-publication">
                 <Share position={position} />
               </span>
-              {renderTags()}
+              {renderTags(tagNames)}
             </Grid.Column>
           </Grid.Row>
         </Grid>
@@ -107,10 +94,6 @@ const ArticlePage = ({ t }) => {
   const wip = useSelector(state => selectors.getWip(state.mdb).units[id]);
   const err = useSelector(state => selectors.getErrors(state.mdb).units[id]);
 
-  const tags = unit && unit.tags ? unit.tags : [];
-
-  const tagNames = tags.map(getTagById);
-
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -129,6 +112,9 @@ const ArticlePage = ({ t }) => {
   if (!unit) {
     return null;
   }
+
+  const tags = unit.tags || [];
+  const tagNames = tags.map(getTagById);
 
   const chroniclesAppend = chronicles ?chronicles.append.bind(chronicles) : () => null;
 
