@@ -3,7 +3,7 @@ import { withNamespaces } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Modal, Button } from 'semantic-ui-react';
 import { selectors as assets } from '../../../redux/modules/assets';
-import { isLanguageRtl } from '../../../helpers/i18n-utils';
+import { isLanguageRtl, getLanguageDirection } from '../../../helpers/i18n-utils';
 import { selectors as settings } from '../../../redux/modules/settings';
 import ImageGallery from 'react-image-gallery';
 import { imageGalleryItem } from '../../Pages/Unit/widgets/UnitMaterials/helper';
@@ -71,7 +71,7 @@ const ZipFileModal = ({ id, path }) => {
         onClose={() => setOpen(false)}
         closeIcon
       >
-        <Modal.Content dir={isLanguageRtl(language) ? 'rtl' : 'ltr'}>
+        <Modal.Content dir={getLanguageDirection(language)}>
           <ImageGallery
             startIndex={items.length - 1}
             ref={ref}

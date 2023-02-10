@@ -2,7 +2,7 @@ import React from 'react';
 import { Card, Container, Header, Icon } from 'semantic-ui-react';
 
 import { MY_NAMESPACE_PLAYLISTS } from '../../../../helpers/consts';
-import { isLanguageRtl } from '../../../../helpers/i18n-utils';
+import { getLanguageDirection } from '../../../../helpers/i18n-utils';
 import UnitLogo from '../../../shared/Logo/UnitLogo';
 import Link from '../../../Language/MultiLanguageLink';
 import PlaylistPlayIcon from '../../../../images/icons/PlaylistPlay';
@@ -10,14 +10,14 @@ import { getMyItemKey } from '../../../../helpers/my';
 import clsx from 'clsx';
 
 export const PlaylistItem = ({ item, t, language, asList = false }) => {
-  const isRtl   = isLanguageRtl(language);
+  const dir = getLanguageDirection(language)
   const link    = `/personal/${MY_NAMESPACE_PLAYLISTS}/${item.id}`;
   const { key } = getMyItemKey(MY_NAMESPACE_PLAYLISTS, item);
 
   const renderAsCard = () => (
     <Card as={Link} to={link} raised>
       <div className="my_playlist_item">
-        <div className={`over_layer ${isRtl ? 'rtl' : 'ltr'}`}>
+        <div className={`over_layer ${dir}`}>
           <Header as={'h2'}>{item.total_items}</Header>
           <PlaylistPlayIcon className="playlist_icon" fill="#FFFFFF" />
         </div>
@@ -43,7 +43,7 @@ export const PlaylistItem = ({ item, t, language, asList = false }) => {
         </div>
         <UnitLogo unitId={item.poster_unit_uid || 'null'} width={165} />
       </div>
-      <div className={`cu_item_info ${isRtl ? 'rtl' : 'ltr'}`}>
+      <div className={`cu_item_info ${dir}`}>
 
         <Header as="h4" className="weight-normal no-margin-top">
           {item.name}

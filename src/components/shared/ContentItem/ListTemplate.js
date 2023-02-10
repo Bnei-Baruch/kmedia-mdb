@@ -4,7 +4,7 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Container, Header, Popup, Ref } from 'semantic-ui-react';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { NO_NAME } from '../../../helpers/consts';
-import { isLanguageRtl } from '../../../helpers/i18n-utils';
+import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import { formatDuration } from '../../../helpers/utils';
 import Link from '../../Language/MultiLanguageLink';
 
@@ -30,7 +30,7 @@ const ListTemplate = ({
   label
 }) => {
 
-  const dir                = isLanguageRtl(language) ? 'rtl' : 'ltr';
+  const dir                = getLanguageDirection(language);
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
   const [isNeedTooltip, setIsNeedTooltip] = useState(null);

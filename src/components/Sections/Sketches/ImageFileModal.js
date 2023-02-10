@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import { withNamespaces } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Modal, Button } from 'semantic-ui-react';
-import { isLanguageRtl } from '../../../helpers/i18n-utils';
+import { isLanguageRtl, getLanguageDirection } from '../../../helpers/i18n-utils';
 import { selectors as settings } from '../../../redux/modules/settings';
 import ImageGallery from 'react-image-gallery';
 import { imageGalleryItem } from '../../Pages/Unit/widgets/UnitMaterials/helper';
@@ -38,7 +38,7 @@ const ImageFileModal = ({ file }) => {
         onClose={() => setOpen(false)}
         closeIcon
       >
-        <Modal.Content dir={isLanguageRtl(language) ? 'rtl' : 'ltr'}>
+        <Modal.Content dir={getLanguageDirection(language)}>
           <ImageGallery
             ref={ref}
             lazyLoad

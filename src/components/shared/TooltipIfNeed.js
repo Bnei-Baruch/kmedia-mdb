@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { Popup, Ref } from 'semantic-ui-react';
 
 import { selectors as settings } from '../../redux/modules/settings';
-import { isLanguageRtl } from '../../helpers/i18n-utils';
+import { getLanguageDirection } from '../../helpers/i18n-utils';
 
 /**
  *
@@ -22,7 +22,7 @@ const TooltipIfNeed = props => {
   const ref = useRef();
 
   const language = useSelector(state => settings.getLanguage(state.settings));
-  const dir      = isLanguageRtl(language) ? 'rtl' : 'ltr';
+  const dir      = getLanguageDirection(language);
 
   useEffect(() => {
     if (ref.current && (ref.current.scrollHeight > ref.current.clientHeight)) {

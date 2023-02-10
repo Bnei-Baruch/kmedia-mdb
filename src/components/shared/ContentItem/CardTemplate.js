@@ -5,13 +5,13 @@ import { Container, Card, Header, Popup, Divider } from 'semantic-ui-react';
 import * as shapes from '../../shapes';
 import { NO_NAME } from '../../../helpers/consts';
 import { formatDuration } from '../../../helpers/utils';
-import { isLanguageRtl } from '../../../helpers/i18n-utils';
+import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import UnitLogo from '../Logo/UnitLogo';
 import Link from '../../Language/MultiLanguageLink';
 import { getProgress } from './helper';
 
 const CardTemplate = ({ unit, language, withCCUInfo, link, ccu, description, children, playTime }) => {
-  const dir = isLanguageRtl(language) ? 'rtl' : 'ltr';
+  const dir = getLanguageDirection(language);
 
   const coInfo = ccu && withCCUInfo ? (
     <div className="cu_item_info_co">

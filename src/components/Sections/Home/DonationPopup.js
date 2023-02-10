@@ -40,7 +40,6 @@ function DonationPopup({ t }) {
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
   const isRTL = isLanguageRtl(language);
-
   const langDir = getLanguageDirection(language);
 
   const { linkLang, utmTerm } = getDonateLinkDetails(language);
