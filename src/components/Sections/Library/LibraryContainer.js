@@ -13,6 +13,8 @@ import { isEmpty } from '../../../helpers/utils';
 import { actions as assetsActions, selectors as assets } from '../../../redux/modules/assets';
 import { actions as sourceActions, selectors as sources } from '../../../redux/modules/sources';
 import { selectors as settings } from '../../../redux/modules/settings';
+import { actions as mdbActions, selectors as mdb } from '../../../redux/modules/mdb';
+import { selectors as tags } from '../../../redux/modules/tags';
 import * as shapes from '../../shapes';
 import { getSourceErrorSplash } from '../../shared/WipErr/WipErr';
 import Helmets from '../../shared/Helmets';
@@ -24,6 +26,7 @@ import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { getQuery } from '../../../helpers/url';
 import { SCROLL_SEARCH_ID } from '../../../helpers/consts';
+import { renderTags } from '../../../helpers/utils';
 
 const waitForRenderElement = async (attempts = 0) => {
   if (attempts > 10) return Promise.reject();
@@ -41,13 +44,16 @@ class LibraryContainer extends Component {
 
   static propTypes = {
     sourceId: PropTypes.string.isRequired,
+    unit: shapes.ContentUnit,
     indexMap: PropTypes.objectOf(shapes.DataWipErr),
     language: PropTypes.string.isRequired,
     contentLanguage: PropTypes.string.isRequired,
+    fetchUnit: PropTypes.func.isRequired,
     fetchIndex: PropTypes.func.isRequired,
     sourcesSortBy: PropTypes.func.isRequired,
     getSourceById: PropTypes.func.isRequired,
     getPathByID: PropTypes.func,
+    getTagById: PropTypes.func,
     sortBy: PropTypes.string.isRequired,
     NotToSort: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
     NotToFilter: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
@@ -176,12 +182,13 @@ class LibraryContainer extends Component {
   }
 
   fetchIndices = sourceId => {
-    const { indexMap, fetchIndex } = this.props;
+    const { indexMap, fetchIndex, fetchUnit } = this.props;
     if (isEmpty(sourceId) || !isEmpty(indexMap[sourceId])) {
       return;
     }
 
     fetchIndex(sourceId);
+    fetchUnit(sourceId);
   };
 
   firstLeafId = sourceId => {
@@ -442,7 +449,7 @@ class LibraryContainer extends Component {
   }
 
   render() {
-    const { sourceId, getSourceById, getPathByID, language, contentLanguage, t, push, areSourcesLoaded } = this.props;
+    const { sourceId, getSourceById, getPathByID, getTagById, language, contentLanguage, t, push, areSourcesLoaded, unit } = this.props;
 
     if (!areSourcesLoaded)
       return null;
@@ -455,6 +462,7 @@ class LibraryContainer extends Component {
     const parentId    = this.properParentId(fullPath);
     const matchString = this.matchString(parentId, t);
     const active      = !this.context.isMobileDevice || tocIsActive;
+    const tagNames    = unit?.tags?.map(getTagById);
 
     return (
       <div
@@ -490,7 +498,11 @@ class LibraryContainer extends Component {
                     </div>
                   </Grid.Column>
                   <Grid.Column mobile={16} tablet={16} computer={12} className="source__content-header">
-                    <div className="source__header-title">{this.header(sourceId, parentId)}</div>
+                    <div className="source__header-title">
+                      { this.header(sourceId, parentId) }
+                      { tagNames && renderTags(tagNames) }
+                    </div>
+
                     <LibraryBar
                       handleSettings={this.handleSettings}
                       handleIsReadable={this.handleIsReadable}
@@ -557,17 +569,20 @@ class LibraryContainer extends Component {
 export default withRouter(connect(
   (state, ownProps) => ({
     sourceId: ownProps.match.params.id,
+    unit: mdb.getDenormContentUnit(state.mdb, ownProps.match.params.id),
     indexMap: assets.getSourceIndexById(state.assets),
     language: settings.getLanguage(state.settings),
     contentLanguage: settings.getContentLanguage(state.settings, ownProps.history.location),
     getSourceById: sources.getSourceById(state.sources),
     getPathByID: sources.getPathByID(state.sources),
+    getTagById: tags.getTagById(state.tags),
     sortBy: sources.sortBy(state.sources),
     areSourcesLoaded: sources.areSourcesLoaded(state.sources),
     NotToSort: sources.NotToSort,
     NotToFilter: sources.NotToFilter,
   }),
   dispatch => bindActionCreators({
+    fetchUnit: mdbActions.fetchUnit,
     fetchIndex: assetsActions.sourceIndex,
     sourcesSortBy: sourceActions.sourcesSortBy,
     push: routerPush,
