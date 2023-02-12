@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { selectors as playlist, actions as action } from '../../redux/modules/playlist';
+import { selectors as playlist, actions as action, selectors } from '../../redux/modules/playlist';
 import { selectors as mdb } from '../../redux/modules/mdb';
 import { setLanguageInQuery, setMediaTypeInQuery, persistPreferredMediaType } from '../../helpers/player';
 import { getQuery } from '../../helpers/url';
@@ -16,14 +16,16 @@ const UpdateLocation = () => {
   const history  = useHistory();
   const location = useLocation();
 
-  const dispatch                                 = useDispatch();
-  const q                                        = getQuery(location);
-  const { mediaType, language, nextUnitId, cId } = useSelector(state => playlist.getInfo(state.playlist));
-  const uiLanguage                               = useSelector(state => settings.getLanguage(state.settings));
+  const dispatch   = useDispatch();
+  const q          = getQuery(location);
+  const uiLanguage = useSelector(state => settings.getLanguage(state.settings));
+
+  const { mediaType, language, nextUnitId, cId, basePath } = useSelector(state => playlist.getInfo(state.playlist));
 
   const denormUnit        = useSelector(state => mdb.nestedGetDenormContentUnit(state.mdb));
   const denormCollectiont = useSelector(state => mdb.nestedGetDenormCollection(state.mdb));
   const prevNextUnitId    = usePrevious(nextUnitId);
+  const ap                = useSelector(state => selectors.getIndexById(state.playlist, nextUnitId));
 
   //init redux start end from location
   useEffect(() => {
@@ -44,13 +46,19 @@ const UpdateLocation = () => {
   }, [mediaType, q.mediaType]);
 
   //go to next on playlist
+  const search = basePath ? { ap, ...location.search } : location.search;
   useEffect(() => {
     if (nextUnitId && nextUnitId !== prevNextUnitId) {
-      const link = canonicalLink(denormUnit(nextUnitId), null, denormCollectiont(cId));
-      history.push({ pathname: `/${uiLanguage}${link}`, search: location.search });
+      let link;
+      if (basePath) {
+        link = basePath;
+      } else {
+        link = canonicalLink(denormUnit(nextUnitId), null, denormCollectiont(cId));
+      }
+      history.push({ pathname: `/${uiLanguage}${link}`, search });
       dispatch(action.nullNextUnit());
     }
-  }, [nextUnitId, cId, location.search, history, uiLanguage, denormUnit, denormCollectiont]);
+  }, [nextUnitId, cId, search, uiLanguage, basePath, history, denormUnit, denormCollectiont]);
 
   return null;
 };
