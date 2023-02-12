@@ -25,7 +25,7 @@ const StartEnd = ({ t }) => {
   };
 
   const handleSetEnd = () => {
-    const end = getPosition();
+    const end = getPosition() || Infinity;
     const d   = { end, start };
     if (end <= start) d.start = 0;
     dispatch(actions.setShareStartEnd(d));

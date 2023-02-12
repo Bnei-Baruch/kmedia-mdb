@@ -33,7 +33,7 @@ export const SlicesBar = () => {
     setWidth(w);
   }, [duration, start, end]);
 
-  if (!isShare && !(start || end))
+  if (!isShare && start === 0 && end === Infinity)
     return null;
 
   return (
