@@ -5,8 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { selectors as playlist, actions as action, selectors } from '../../redux/modules/playlist';
 import { selectors as mdb } from '../../redux/modules/mdb';
 import { setLanguageInQuery, setMediaTypeInQuery, persistPreferredMediaType } from '../../helpers/player';
-import { getQuery } from '../../helpers/url';
-import { usePrevious } from '../../helpers/utils';
+import { getQuery, stringify } from '../../helpers/url';
 import { canonicalLink } from '../../helpers/links';
 import { selectors as settings } from '../../redux/modules/settings';
 import { actions } from '../../redux/modules/player';
@@ -20,11 +19,10 @@ const UpdateLocation = () => {
   const q          = getQuery(location);
   const uiLanguage = useSelector(state => settings.getLanguage(state.settings));
 
-  const { mediaType, language, nextUnitId, cId, basePath } = useSelector(state => playlist.getInfo(state.playlist));
+  const { mediaType, language, nextUnitId, cId, baseLink } = useSelector(state => playlist.getInfo(state.playlist));
 
   const denormUnit        = useSelector(state => mdb.nestedGetDenormContentUnit(state.mdb));
   const denormCollectiont = useSelector(state => mdb.nestedGetDenormCollection(state.mdb));
-  const prevNextUnitId    = usePrevious(nextUnitId);
   const ap                = useSelector(state => selectors.getIndexById(state.playlist, nextUnitId));
 
   //init redux start end from location
@@ -46,19 +44,19 @@ const UpdateLocation = () => {
   }, [mediaType, q.mediaType]);
 
   //go to next on playlist
-  const search = basePath ? { ap, ...location.search } : location.search;
+  const search = baseLink ? `?${stringify({ ...q, ap })}` : location.search;
   useEffect(() => {
-    if (nextUnitId && nextUnitId !== prevNextUnitId) {
+    if (nextUnitId) {
       let link;
-      if (basePath) {
-        link = basePath;
+      if (baseLink) {
+        link = baseLink;
       } else {
         link = canonicalLink(denormUnit(nextUnitId), null, denormCollectiont(cId));
       }
       history.push({ pathname: `/${uiLanguage}${link}`, search });
       dispatch(action.nullNextUnit());
     }
-  }, [nextUnitId, cId, search, uiLanguage, basePath, history, denormUnit, denormCollectiont]);
+  }, [nextUnitId, cId, search, uiLanguage, baseLink, history, denormUnit, denormCollectiont]);
 
   return null;
 };

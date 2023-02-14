@@ -24,6 +24,7 @@ const usePreloader = () => {
 
     jwp.on('meta', markAsLoaded);
     jwp.on('bufferFull', markAsLoaded);
+
     return () => {
       const jwp = window.jwplayer();
       if (jwp.off) {

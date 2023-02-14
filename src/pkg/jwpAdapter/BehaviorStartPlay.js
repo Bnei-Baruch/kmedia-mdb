@@ -37,17 +37,19 @@ const BehaviorStartPlay = () => {
 
   //start from saved time on load or switch playlist item
   useEffect(() => {
-    if (!isReady || start || end || !fetched || file.id === fileIdRef.current) return;
+    if (!isReady || start || end !== Infinity || !fetched || file.id === fileIdRef.current) return;
 
     const jwp       = window.jwplayer(JWPLAYER_ID);
     const autostart = !!fileIdRef.current || isSingleMedia;
-    jwp.setConfig({ autostart });
+
     const { current_time: seek } = getSavedTime(cuId, historyItem);
 
     if (!isNaN(seek) && seek > 0 && (seek + 10 < file.duration)) {
       jwp.seek(seek)[autostart ? 'play' : 'pause']();
     } else if (!autostart) {
       dispatch(actions.setLoaded(true));
+    } else {
+      jwp.play()
     }
     fileIdRef.current = file.id;
   }, [isReady, start, end, cuId, file, historyItem, fileIdRef.current, isSingleMedia]);

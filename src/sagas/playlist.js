@@ -117,7 +117,7 @@ function* myPlaylistBuild(action) {
   const ap           = getActivePartFromQuery(location);
   const items        = content_units.map(cu => playableItem(cu));
   const cuId         = items[ap]?.id || items[0].id;
-  const baseLink     = `/${siteLang}/${MY_NAMESPACE_PLAYLISTS}/${pId}`;
+  const baseLink     = `/${MY_NAMESPACE_PLAYLISTS}/${pId}`;
 
   yield put(actions.buildSuccess({ items, cuId, name, language, mediaType, pId, baseLink }));
 
