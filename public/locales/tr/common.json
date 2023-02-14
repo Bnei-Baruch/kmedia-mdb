@@ -200,9 +200,8 @@
     },
     "share": {
       "title": "bu videoyu seyret",
-      "start-position": "Başlat",
-      "end-position": "Bitir",
-      "click-to-set": "Düzenlemek için tıkla",
+      "start-position": "Düzenlemek için tıkla başlat",
+      "end-position": "Düzenlemek için tıkla bitir",
       "embedded": "Embed",
       "reset-to-full": "Reset to full",
       "download-file": "Download excerpt"

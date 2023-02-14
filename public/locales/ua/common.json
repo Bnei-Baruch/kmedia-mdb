@@ -200,9 +200,8 @@
     },
     "share": {
       "title": "Переглянь це відео",
-      "start-position": "Початок",
-      "end-position": "Кінець",
-      "click-to-set": "Натискай",
+      "start-position": "Натискай Початок",
+      "end-position": "Натискай Кінець",
       "embedded": "Embed",
       "reset-to-full": "Reset to full",
       "download-file": "Download excerpt"

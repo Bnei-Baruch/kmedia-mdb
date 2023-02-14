@@ -202,9 +202,8 @@
     },
     "share": {
       "title": "watch this video",
-      "start-position": "Start",
-      "end-position": "End",
-      "click-to-set": "Click to set",
+      "start-position": "Click to set start",
+      "end-position": "Click to set end",
       "embedded": "Embed",
       "reset-to-full": "Reset to full",
       "download-file": "Download excerpt"
