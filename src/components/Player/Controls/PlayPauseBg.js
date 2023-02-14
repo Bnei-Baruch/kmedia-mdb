@@ -14,7 +14,6 @@ const PlayPauseBg = ({ t }) => {
 
   const handleClick = e => {
     const pos = getPosition();
-    console.log('iphone clip bug: handlePlayPause', pos);
     isPlay ? pause() : isIPhone ? play().seek(pos).play() : play()?.play();
   };
 

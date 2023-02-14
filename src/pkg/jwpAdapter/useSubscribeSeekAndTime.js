@@ -15,6 +15,8 @@ const useSubscribeSeekAndTime = () => {
 
   useEffect(() => {
     if (!isReady) return noop;
+    const jwp = window.jwplayer();
+    if (!jwp.on) return null;
 
     const checkTimeAfterSeek = d => {
       if (d.duration === 0) return;
@@ -24,14 +26,13 @@ const useSubscribeSeekAndTime = () => {
       setTime(time);
     };
 
-    const jwp = window.jwplayer();
     jwp.on('seek', checkTimeAfterSeek);
     jwp.on('time', checkTimeAfterSeek);
     return () => {
       setPos(0);
       setTime(0);
       const jwp = window.jwplayer();
-      if(jwp.off) {
+      if (jwp.off) {
         jwp.off('seek', checkTimeAfterSeek);
         jwp.off('time', checkTimeAfterSeek);
       }

@@ -14,9 +14,11 @@ const useSubscribeBuffer = () => {
 
   useEffect(() => {
     if (!isReady) return noop;
+    const jwp = window.jwplayer();
+    if (!jwp.on) return noop;
 
     const checkBufferTime = d => setBuffPos(Math.round(d.bufferPercent));
-    window.jwplayer().on('bufferChange', checkBufferTime);
+    jwp.on('bufferChange', checkBufferTime);
     return () => {
       const jwp = window.jwplayer();
       jwp.off && jwp.off('bufferChange', checkBufferTime);

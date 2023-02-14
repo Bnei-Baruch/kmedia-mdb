@@ -14,6 +14,8 @@ const useSubscribeVolume = () => {
     if (!isReady) return noop;
 
     const jwp = window.jwplayer();
+    if (!jwp.on) return null;
+
     jwp.on('volume', updateVolume);
     setVolume(jwp.getVolume());
 

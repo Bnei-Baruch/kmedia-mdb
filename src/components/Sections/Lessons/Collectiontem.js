@@ -16,7 +16,7 @@ const CollectionItem = ({ id, t }) => {
   const c            = useSelector(state => mdb.getDenormCollection(state.mdb, id));
   const historyItems = useSelector(state => my.getList(state.my, MY_NAMESPACE_HISTORY), shallowEqual) || [];
 
-  if (!c) return null;
+  if (!c?.content_units) return null;
 
   const { film_date, name, content_type, content_units, start_date, end_date } = c;
 

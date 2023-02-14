@@ -10,6 +10,8 @@ const usePreloader = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     if (loaded || !isReady) return null;
+    const jwp = window.jwplayer();
+    if (!jwp.on) return null;
 
     const markAsLoaded = (e) => {
       dispatch(actions.setLoaded(true));
@@ -20,9 +22,8 @@ const usePreloader = () => {
       }
     };
 
-    const jwp = window.jwplayer();
-    jwp?.on('meta', markAsLoaded);
-    jwp?.on('bufferFull', markAsLoaded);
+    jwp.on('meta', markAsLoaded);
+    jwp.on('bufferFull', markAsLoaded);
     return () => {
       const jwp = window.jwplayer();
       if (jwp.off) {
