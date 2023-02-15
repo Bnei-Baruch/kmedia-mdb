@@ -201,8 +201,8 @@
     },
     "share": {
       "title": "צפה בסרטון",
-      "start-position": "לחץ לסימון התחלה",
-      "end-position": "לחץ לסימון סיום",
+      "start-position": "לחץ התחלה",
+      "end-position": "לחץ סיום",
       "embedded": "הטמעה",
       "reset-to-full": "אפס למלא",
       "download-file": "הורד מקטע"

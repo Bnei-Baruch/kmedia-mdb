@@ -199,8 +199,8 @@
     },
     "share": {
       "title": "Mira el video",
-      "start-position": "Clic para marcar inicio",
-      "end-position": "Clic para marcar final",
+      "start-position": "Clic inicio",
+      "end-position": "Clic final",
       "embedded": "Empotrar",
       "reset-to-full": "Restablecer a completo",
       "download-file": "Descargar extracto"

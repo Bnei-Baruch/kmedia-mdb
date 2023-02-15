@@ -195,8 +195,8 @@
     },
     "share": {
       "title": "spustit toto video",
-      "start-position": "Kliknout pro nastavení začátek",
-      "end-position": "Kliknout pro nastavení konec",
+      "start-position": "Kliknout začátek",
+      "end-position": "Kliknout konec",
       "embedded": "Embed",
       "reset-to-full": "Reset to full video",
       "download-file": "Download excerpt"
