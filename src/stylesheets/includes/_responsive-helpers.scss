@@ -15,12 +15,15 @@ $widescreenMonitorBreakpoint: 1920px;
   }
 }
 @mixin mobile {
-  @media only screen and (max-width: $tabletBreakpoint - 1) {
+  @media only screen and (max-width: $tabletBreakpoint - 1) and (orientation: portrait){
+    @content;
+  }
+  @media only screen and (max-width: $computerBreakpoint - 1) and (orientation: landscape) {
     @content;
   }
 }
 @mixin tablet-mobile {
-  @media only screen and (max-width: $computerBreakpoint - 1) {
+  @media only screen and (max-width: $computerBreakpoint - 1) and (orientation: portrait) {
     @content;
   }
 }

@@ -5,8 +5,8 @@ import { Modal, Button } from 'semantic-ui-react';
 import { isLanguageRtl } from '../../../helpers/i18n-utils';
 import { selectors as settings } from '../../../redux/modules/settings';
 import ImageGallery from 'react-image-gallery';
-import { imageGalleryItem } from '../../Pages/Unit/widgets/UnitMaterials/helper';
 import FallbackImage from '../../shared/FallbackImage';
+import { imageGalleryItem } from '../../Pages/WithPlayer/widgets/UnitMaterials/helper';
 
 const ImageFileModal = ({ file }) => {
   const [open, setOpen] = useState(false);

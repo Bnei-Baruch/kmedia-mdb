@@ -8,7 +8,7 @@ import { Header, Icon, Menu, Ref, Segment } from 'semantic-ui-react';
 import Headroom from 'react-headroom';
 
 import { ALL_LANGUAGES } from '../../helpers/consts';
-import playerHelper from '../../helpers/player';
+import { getEmbedFromQuery } from '../../helpers/player';
 import { selectors as settings } from '../../redux/modules/settings';
 import * as shapes from '../shapes';
 import Link from '../Language/MultiLanguageLink';
@@ -22,8 +22,8 @@ import DonateNow, { VirtualHomeButton } from './DonateNow';
 import Logo from '../../images/icons/Logo';
 import { ClientChroniclesContext, DeviceInfoContext } from '../../helpers/app-contexts';
 import Login from './Login';
-import DownloadTrim from '../AVPlayer/Share/DownloadTrim';
 import DonationPopup from '../Sections/Home/DonationPopup';
+import DownloadTrim from '../Share/DownloadTrim';
 
 const WrappedOmniBoxWithChronicles = ({ location }) => {
   const chronicles = useContext(ClientChroniclesContext);
@@ -74,7 +74,7 @@ class Layout extends Component {
     this.state = {
       sidebarActive: false,
       isShowHeaderSearch: false,
-      embed: playerHelper.getEmbedFromQuery(location),
+      embed: getEmbedFromQuery(location),
     };
   }
 
@@ -225,10 +225,14 @@ class Layout extends Component {
                       </Menu.Item>
                     </Ref>
                   }
-                  <Menu.Item position="right" className="mobile-hidden">
-                    <DonateNow language={language} />
-                    <VirtualHomeButton language={language} />
-                  </Menu.Item>
+                  {
+                    !isMobileDevice && (
+                      <Menu.Item position="right">
+                        <DonateNow language={language} />
+                        <VirtualHomeButton language={language} />
+                      </Menu.Item>
+                    )
+                  }
                   <Menu.Item position="right">
                     <Login language={language} />
                   </Menu.Item>

@@ -14,7 +14,7 @@ import { isLanguageRtl } from '../../../helpers/i18n-utils';
 import { selectors as settings } from '../../../redux/modules/settings';
 import GalleryModal from './ZipFileModal';
 import ImageFileModal from './ImageFileModal';
-import { isZipFile } from '../../Pages/Unit/widgets/UnitMaterials/helper';
+import { isZipFile } from '../../Pages/WithPlayer/widgets/UnitMaterials/helper';
 
 const findZipFile = (cu, language) => {
   const zips = cu.files

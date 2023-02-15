@@ -25,7 +25,7 @@ const CardTemplate = ({ unit, language, withCCUInfo, link, ccu, description, chi
     </div>
   ) : null;
 
-  const trimText = (title, len = 150) => title.length < len ? title : `${title.substr(0, title.lastIndexOf(' ', len))  }...`;
+  const trimText = (title, len = 150) => title.length < len ? title : `${title.substr(0, title.lastIndexOf(' ', len))}...`;
 
   return (
     <Card raised className="cu_item" as={Link} to={link}>

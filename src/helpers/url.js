@@ -101,7 +101,6 @@ export const getQuery = location => {
 };
 
 export const updateQuery = (history, updater) => {
-  console.log('helper updateQuery');
   if (!history) {
     return;
   }
