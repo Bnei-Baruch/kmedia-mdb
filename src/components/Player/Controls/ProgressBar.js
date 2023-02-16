@@ -1,29 +1,51 @@
 import React, { useEffect, useState } from 'react';
 import { Popup } from 'semantic-ui-react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 
-import { selectors as player } from '../../../redux/modules/player';
+import { selectors as player, actions } from '../../../redux/modules/player';
 import { formatDuration, stopBubbling } from '../../../helpers/utils';
 import { useSubscribeSeekAndTime, useSubscribeBuffer } from '../../../pkg/jwpAdapter';
 import { getDuration, seek } from '../../../pkg/jwpAdapter/adapter';
+import { PLAYER_OVER_MODES } from '../../../helpers/consts';
 
 export const ProgressBar = ({ left, right }) => {
-
   const [activated, setActivated] = useState(false);
 
   const isReady = useSelector(state => player.isReady(state.player));
+  const mode    = useSelector(state => player.getOverMode(state.player), shallowEqual);
 
   const { pos, time } = useSubscribeSeekAndTime();
   const buffPos       = useSubscribeBuffer();
 
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (isReady && activated) {
+      document.addEventListener('mousemove', handleMove, { passive: false });
+      document.addEventListener('touchmove', handleMove, { passive: false });
+      document.addEventListener('mouseup', handleEnd, { passive: false });
+      document.addEventListener('touchend', handleEnd, { passive: false });
+    }
+
+    if (isReady && !activated) removeListeners();
+    return removeListeners;
+  }, [isReady, activated]);
+
   const handleStart = e => {
+    stopBubbling(e);
     // regard only left mouse button click (0). touch is undefined
-    !e.button && setActivated(true);
+    if (mode === PLAYER_OVER_MODES.active && !e.button)
+      dispatch(actions.setOverMode(PLAYER_OVER_MODES.dragKnob));
+    setActivated(true);
   };
 
   const handleEnd = e => {
     stopBubbling(e);
     setActivated(false);
+    if (mode === PLAYER_OVER_MODES.dragKnob) {
+      //need switch mode after event click will bubble
+      setTimeout(() => dispatch(actions.setOverMode(PLAYER_OVER_MODES.active)), 0);
+    }
   };
 
   const handleMove = e => {
@@ -44,18 +66,6 @@ export const ProgressBar = ({ left, right }) => {
     document.removeEventListener('mouseup', handleEnd);
     document.removeEventListener('touchend', handleEnd);
   };
-
-  useEffect(() => {
-    if (isReady && activated) {
-      document.addEventListener('mousemove', handleMove, { passive: false });
-      document.addEventListener('touchmove', handleMove, { passive: false });
-      document.addEventListener('mouseup', handleEnd, { passive: false });
-      document.addEventListener('touchend', handleEnd, { passive: false });
-    }
-
-    if (isReady && !activated) removeListeners();
-    return removeListeners;
-  }, [isReady, activated]);
 
   return (
     <>
@@ -78,6 +88,7 @@ export const ProgressBar = ({ left, right }) => {
             style={{ left: `${pos}%` }}
             onMouseDown={handleStart}
             onTouchStart={handleStart}
+            onClick={stopBubbling}
           ></div>
         }
       >

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withTranslation } from 'react-i18next';
+import { withNamespaces } from 'react-i18next';
 
 import Helmets from '../../../shared/Helmets';
 import { publicFile } from '../../../../helpers/utils';
@@ -33,4 +33,4 @@ PlaylistLastDaily.propTypes = {
   t: PropTypes.func.isRequired
 };
 
-export default withTranslation()(PlaylistLastDaily);
+export default withNamespaces()(PlaylistLastDaily);

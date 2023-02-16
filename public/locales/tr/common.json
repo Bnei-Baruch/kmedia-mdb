@@ -194,13 +194,14 @@
       "language": "Language",
       "audio": "Ses",
       "video": "Görüntü",
-      "normal": "normal"
+      "normal": "normal",
+      "audio-only-on": "Audio only ON",
+      "audio-only-off": "Audio only OFF"
     },
     "share": {
       "title": "bu videoyu seyret",
-      "start-position": "Başlat",
-      "end-position": "Bitir",
-      "click-to-set": "Düzenlemek için tıkla",
+      "start-position": "Düzenlemek başlat",
+      "end-position": "Düzenlemek bitir",
       "embedded": "Embed",
       "reset-to-full": "Reset to full",
       "download-file": "Download excerpt"

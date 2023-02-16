@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react';
-import { withTranslation } from 'react-i18next';
+import { withNamespaces } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 
@@ -193,6 +193,6 @@ SourceItemContainerHook.propTypes = {
   asList: PropTypes.bool,
 };
 
-export default withTranslation()(ContentItemContainer);
-export const SourceItemContainer = withTranslation()(SourceItemContainerHook);
-export const TagItemContainer = withTranslation()(TagItemContainerHook);
+export default withNamespaces()(ContentItemContainer);
+export const SourceItemContainer = withNamespaces()(SourceItemContainerHook);
+export const TagItemContainer    = withNamespaces()(TagItemContainerHook);

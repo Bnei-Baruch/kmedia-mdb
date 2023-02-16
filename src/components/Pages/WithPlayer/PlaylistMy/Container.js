@@ -2,7 +2,7 @@ import React from 'react';
 import { Header } from 'semantic-ui-react';
 
 import Page from './Page';
-import { withTranslation } from 'react-i18next';
+import { withNamespaces } from 'react-i18next';
 import useBuildMyPlaylist from './useBuildMyPlaylist';
 import PlayerContainer from '../../../Player/PlayerContainer';
 
@@ -15,4 +15,4 @@ const PlaylistMyContainer = ({ t }) => {
   return <Page playerContainer={playerContainer} />;
 };
 
-export default withTranslation()(PlaylistMyContainer);
+export default withNamespaces()(PlaylistMyContainer);

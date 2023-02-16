@@ -36,11 +36,13 @@ const EmbeddedShareButton = ({ url = '', size = 'medium', t, }) => {
       position="bottom right"
       trigger={(
         <CopyToClipboard text={getEmbed(url)} onCopy={handleCopied}>
-          <Button
-            icon="code"
-            size={size}
-            circular
-          />
+          <button className="custom_share_button">
+            <Button
+              icon="code"
+              size={size}
+              circular
+            />
+          </button>
         </CopyToClipboard>
       )}
     />

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import fscreen from 'fscreen';
-import { withTranslation } from 'react-i18next';
+import { withNamespaces } from 'react-i18next';
 import { Icon } from 'semantic-ui-react';
 
 import { actions, selectors } from '../../../redux/modules/player';
@@ -9,21 +9,23 @@ import { PLAYER_OVER_MODES } from '../../../helpers/consts';
 import { stopBubbling } from '../../../helpers/utils';
 import WebWrapTooltip from '../../shared/WebWrapTooltip';
 
-const lockLandscape        = () => {
+const lockLandscape = () => {
   try {
     window.screen.orientation.lock('landscape');
   } catch (e) {
     console.error(e);
   }
 };
-const unlockLandscape      = () => {
+
+const unlockLandscape = () => {
   try {
     window.screen.orientation.unlock();
   } catch (e) {
     console.error(e);
   }
 };
-export const FullscreenBtn = withTranslation()(({ fullscreenRef, t }) => {
+
+export const FullscreenBtn = withNamespaces()(({ fullscreenRef, t }) => {
   const dispatch     = useDispatch();
   const isFullScreen = useSelector(state => selectors.isFullScreen(state.player));
 
@@ -75,7 +77,7 @@ export const FullscreenBtn = withTranslation()(({ fullscreenRef, t }) => {
   );
 });
 
-export const ShareBtn = withTranslation()(({ t }) => {
+export const ShareBtn = withNamespaces()(({ t }) => {
   const mode     = useSelector(state => selectors.getOverMode(state.player));
   const dispatch = useDispatch();
 
@@ -97,7 +99,7 @@ export const ShareBtn = withTranslation()(({ t }) => {
   );
 });
 
-export const SettingsBtn = withTranslation()(({ t }) => {
+export const SettingsBtn = withNamespaces()(({ t }) => {
   const mode = useSelector(state => selectors.getOverMode(state.player));
 
   const dispatch = useDispatch();

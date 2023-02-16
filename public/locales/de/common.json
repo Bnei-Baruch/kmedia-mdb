@@ -193,13 +193,14 @@
       "language": "Language",
       "audio": "Audio",
       "video": "Video",
-      "normal": "normal"
+      "normal": "normal",
+      "audio-only-on": "Audio only ON",
+      "audio-only-off": "Audio only OFF"
     },
     "share": {
       "title": "Dieses Video ansehen",
-      "start-position": "Start",
-      "end-position": "Ende",
-      "click-to-set": "Bestätigen",
+      "start-position": "Bestätigen Start",
+      "end-position": "Bestätigen Ende",
       "embedded": "Embed",
       "reset-to-full": "Reset to full video",
       "download-file": "Download excerpt"

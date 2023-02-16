@@ -2,7 +2,8 @@ import { createAction, handleActions } from 'redux-actions';
 import { types as authTypes } from './auth';
 import { types as playerTypes } from './player';
 
-const USER_INACTIVE = 'USER_INACTIVE';
+const USER_INACTIVE         = 'USER_INACTIVE';
+const PLAYER_PAUSE_ON_LEAVE = 'PLAYER_PAUSE_ON_LEAVE';
 
 export const types = {
   USER_INACTIVE,
@@ -10,9 +11,11 @@ export const types = {
 
 // Actions
 const userInactive = createAction(USER_INACTIVE);
+const pauseOnLeave = createAction(PLAYER_PAUSE_ON_LEAVE);
 
 export const actions = {
   userInactive,
+  pauseOnLeave
 };
 
 /* Reducer */
@@ -39,6 +42,7 @@ export const reducer = handleActions({
   [playerTypes.PLAYER_PLAY]: draft => ({ ...draft, event: 'player-play' }),
   [playerTypes.PLAYER_PAUSE]: draft => ({ ...draft, event: 'player-stop' }),
   [playerTypes.PLAYER_REMOVE]: draft => ({ ...draft, event: 'player-stop' }),
+  [PLAYER_PAUSE_ON_LEAVE]: draft => ({ ...draft, event: 'player-stop' }),
   [playerTypes.PLAYER_TOGGLE_MUTE]: draft => ({ ...draft, event: 'mute-unmute' }),
 
 }, initialState);

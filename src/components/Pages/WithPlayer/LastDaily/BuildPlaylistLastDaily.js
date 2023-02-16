@@ -1,22 +1,25 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectors, actions } from '../../../../redux/modules/mdb';
-import moment from 'moment/moment';
 
 import { selectors as my } from '../../../../redux/modules/my';
-import { getCuByCcuSkipPreparation } from '../../../../helpers/links';
 import { MY_NAMESPACE_HISTORY } from '../../../../helpers/consts';
+import { withNamespaces } from 'react-i18next';
+import { useHistory } from 'react-router';
+import { selectors as settings } from '../../../../redux/modules/settings';
 import { getSavedTime } from '../../../Player/helper';
-import WipErr from '../../../shared/WipErr/WipErr';
-import BuildPlaylistByCollection from '../BuildPlaylistByCollection';
-import { withTranslation } from 'react-i18next';
+import moment from 'moment';
+import { getCuByCcuSkipPreparation, canonicalLink } from '../../../../helpers/links';
 
 const BuildPlaylistLastDaily = ({ t }) => {
   const lastLessonId = useSelector(state => selectors.getLastLessonId(state.mdb));
   const wip          = useSelector(state => selectors.getWip(state.mdb).lastLesson);
   const err          = useSelector(state => selectors.getErrors(state.mdb).lastLesson);
   const ccu          = useSelector(state => selectors.getDenormCollection(state.mdb, lastLessonId)) || false;
+  const denormCU     = useSelector(state => selectors.nestedGetDenormContentUnit(state.mdb));
   const historyItems = useSelector(state => my.getList(state.my, MY_NAMESPACE_HISTORY));
+  const history      = useHistory();
+  const language     = useSelector(state => settings.getLanguage(state.settings));
 
   const dispatch = useDispatch();
 
@@ -26,24 +29,26 @@ const BuildPlaylistLastDaily = ({ t }) => {
     }
   }, [lastLessonId, wip, err, dispatch]);
 
-  const wipErr = WipErr({ wip: wip || !ccu.cuIDs?.length, err, t });
+  useEffect(() => {
+    if (!ccu)
+      return;
 
-  if (wipErr) {
-    return wipErr;
-  }
-  const sorted = ccu.cuIDs.map(id => {
-    const ht            = historyItems.find(x => x.content_unit_uid === id);
-    const { timestamp } = getSavedTime(id, ht);
-    return { id, timestamp };
-  }).filter(x => !!x.timestamp).sort((a, b) => {
-    const mta = moment(a.timestamp);
-    const mtb = moment(b.timestamp);
-    return mta.isAfter(mtb) ? -1 : 1;
-  });
+    const sorted = ccu.cuIDs.map(id => {
+      const ht            = historyItems.find(x => x.content_unit_uid === id);
+      const { timestamp } = getSavedTime(id, ht);
+      return { id, timestamp };
+    }).filter(x => !!x.timestamp).sort((a, b) => {
+      const mta = moment(a.timestamp);
+      const mtb = moment(b.timestamp);
+      return mta.isAfter(mtb) ? -1 : 1;
+    });
 
-  const cuId = sorted[0]?.id || getCuByCcuSkipPreparation(ccu);
+    const cuId = sorted[0]?.id || getCuByCcuSkipPreparation(ccu);
+    const link = canonicalLink(denormCU(cuId), null, ccu);
+    history.replace(`/${language}${link}`);
+  }, [ccu, historyItems, history]);
 
-  return <BuildPlaylistByCollection cuId={cuId} id={ccu.id} />;
+  return null;
 };
 
-export default withTranslation()(BuildPlaylistLastDaily);
+export default withNamespaces()(BuildPlaylistLastDaily);

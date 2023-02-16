@@ -9,6 +9,9 @@ import { getProgress } from './ContentItem/helper';
 import { getSavedTime } from '../Player/helper';
 
 export const getLogoUnit = (content_units, historyItems) => {
+  if (!content_units)
+    return null;
+  
   let logoUnit;
   if (historyItems.length > 0) {
     // select the latest of the history units because they arrive sorted desc by timestamp

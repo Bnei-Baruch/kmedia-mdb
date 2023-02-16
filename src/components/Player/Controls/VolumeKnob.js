@@ -8,10 +8,9 @@ import { noop } from '../../../helpers/utils';
 
 export const VolumeKnob = ({ onChangePosition }) => {
   const [activated, setActivated] = useState(false);
-
-  const isReady = useSelector(state => player.isReady(state.player));
-
-  const volume = useSubscribeVolume();
+  const isReady                   = useSelector(state => player.isReady(state.player));
+  const isMuted                   = useSelector(state => player.isMuted(state.player));
+  const volume                    = useSubscribeVolume();
 
   const handleStart = e => {
     e.preventDefault();
@@ -53,7 +52,7 @@ export const VolumeKnob = ({ onChangePosition }) => {
       trigger={
         <div
           className="slider__thumb"
-          style={{ left: `${volume}%` }}
+          style={{ left: `${isMuted ? 0 : volume}%` }}
           onMouseDown={handleStart}
           onTouchStart={handleStart}
         ></div>

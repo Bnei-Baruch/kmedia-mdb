@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { withTranslation } from 'react-i18next';
+import { withNamespaces } from 'react-i18next';
 import ContentItemContainer from '../../../shared/ContentItem/ContentItemContainer';
 import { useSelector } from 'react-redux';
 import { selectors } from '../../../../redux/modules/playlist';
@@ -46,4 +46,4 @@ const PlaylistItems = ({ t }) => {
   );
 };
 
-export default withTranslation()(PlaylistItems);
+export default withNamespaces()(PlaylistItems);

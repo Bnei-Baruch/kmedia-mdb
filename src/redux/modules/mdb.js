@@ -197,6 +197,7 @@ const freshStore = () => ({
   },
   fetched: {
     units: {},
+    collections: {},
   },
 });
 
@@ -216,7 +217,6 @@ const setStatus = (state, action) => {
   switch (action.type) {
   case FETCH_UNIT:
     wip.units     = { ...wip.units, [action.payload]: true };
-    fetched.units = { ...fetched.units, [action.payload]: true };
     break;
   case FETCH_UNITS_BY_IDS:
     units.wip = action.payload.id?.reduce((acc, id) => ({ ...acc, [id]: true }), {});
@@ -614,7 +614,7 @@ const onCountCUSuccess = (state, action) => {
 
 export const reducer = handleActions({
   [ssr.PREPARE]: onSSRPrepare,
-  [settings.SET_LANGUAGE]: () => freshStore(),
+  [settings.SET_LANGUAGE]: freshStore,
 
   [FETCH_UNIT]: setStatus,
   [FETCH_UNIT_SUCCESS]: (state, action) => (

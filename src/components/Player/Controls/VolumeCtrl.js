@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { Icon } from 'semantic-ui-react';
 import { useSelector, shallowEqual } from 'react-redux';
-import { withTranslation } from 'react-i18next';
+import { withNamespaces } from 'react-i18next';
 
 import { selectors as player } from '../../../redux/modules/player';
 import { VolumeKnob } from './VolumeKnob';
@@ -57,7 +57,7 @@ const VolumeCtrl = ({ t }) => {
           onClick={onChangePosition}
         >
           <div
-            style={{ width: `${volume}%` }}
+            style={{ width: `${isMuted ? 0 : volume}%` }}
             className="slider__value"
           ></div>
           <VolumeKnob onChangePosition={onChangePosition} />
@@ -67,4 +67,4 @@ const VolumeCtrl = ({ t }) => {
   );
 };
 
-export default withTranslation()(VolumeCtrl);
+export default withNamespaces()(VolumeCtrl);

@@ -27,7 +27,7 @@ const DownloadTrim = ({ t }) => {
       <GridRow key={`wip_${i}`}>
         <GridColumn width={9} verticalAlign={'middle'}>
           {`${i}. ${t('messages.trimmed-content-wip')} `}
-          <Splash isLoading icon="circle notch" color="blue" width="20" />
+          <Splash isLoading icon="circle notch" color="blue" width="20"  text=""/>
         </GridColumn>
         <GridColumn>
         </GridColumn>

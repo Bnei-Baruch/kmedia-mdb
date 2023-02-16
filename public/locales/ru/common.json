@@ -196,13 +196,14 @@
       "language": "Язык",
       "audio": "Аудио",
       "video": "Видео",
-      "normal": "норм."
+      "normal": "норм.",
+      "audio-only-on": "Аудиорежим ВКЛ.",
+      "audio-only-off": "Аудиорежим ВЫКЛ."
     },
     "share": {
       "title": "Посмотри это видео",
-      "start-position": "Начало",
-      "end-position": "Конец",
-      "click-to-set": "Нажмите",
+      "start-position": "Нажмите начало",
+      "end-position": "Нажмите конец",
       "embedded": "Встроить",
       "reset-to-full": "Полный сброс",
       "download-file": "Скачать отрывок"

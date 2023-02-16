@@ -1,11 +1,12 @@
 import { PLAYER_ACTIONS_BY_EVENT } from '../../redux/modules/player';
-import { actions as playlistActions } from '../../redux/modules/playlist';
 import { JWPLAYER_ID } from '../../helpers/consts';
 import { noop } from '../../helpers/utils';
 import isFunction from 'lodash/isFunction';
 
+export const LOCALSTORAGE_MUTE = 'jwplayer.mute';
+
 const playerRef    = { current: null };
-export const setup = (conf) => {
+export const setup = conf => {
   const player = window.jwplayer(JWPLAYER_ID);
   player.setup(conf);
   playerRef.current = player;
@@ -21,6 +22,7 @@ const functionByName = (name, def = 0, val) => {
   } catch (e) {
     console.log('jwplayer error', e);
   }
+
   return resp;
 };
 
@@ -50,7 +52,7 @@ export const init = (dispatch) => {
   initPlayerEvents(dispatch);
 };
 
-const PLAYER_EVENTS    = ['ready', 'remove', 'play', 'pause', 'playbackRateChanged', 'resize', 'mute'];
+const PLAYER_EVENTS    = ['ready', 'remove', 'play', 'pause', 'playbackRateChanged', 'resize', 'mute', 'complete'];
 const initPlayerEvents = (dispatch) => {
   const player = window.jwplayer();
 
@@ -60,8 +62,6 @@ const initPlayerEvents = (dispatch) => {
   player.on('error', e => console.error(e));
 
   player.on('remove', () => player.off('all'));
-
-  player.on('complete', () => dispatch(playlistActions.next(true)));
 
   PLAYER_EVENTS.forEach(name => {
     const action = PLAYER_ACTIONS_BY_EVENT[name];

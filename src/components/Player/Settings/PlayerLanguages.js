@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { LANGUAGE_OPTIONS, PLAYER_OVER_MODES } from '../../../helpers/consts';
 import { actions as playlistActions, selectors as playlistSelectors } from '../../../redux/modules/playlist';
 import { actions, selectors } from '../../../redux/modules/player';
-import { withTranslation } from 'react-i18next';
+import { withNamespaces } from 'react-i18next';
 
 const PlayerLanguages = ({ t }) => {
   const { languages = [] } = useSelector(state => playlistSelectors.getPlayed(state.playlist));
@@ -22,7 +22,7 @@ const PlayerLanguages = ({ t }) => {
         <Icon name="left chevron" />
         {t('player.settings.language')}
       </Button>
-      <Menu secondary vertical inverted size="small">
+      <Menu secondary vertical inverted size="small" fluid>
         {
           LANGUAGE_OPTIONS
             .filter(x => languages.includes(x.value))
@@ -43,4 +43,4 @@ const PlayerLanguages = ({ t }) => {
   );
 };
 
-export default withTranslation()(PlayerLanguages);
+export default withNamespaces()(PlayerLanguages);
