@@ -2,7 +2,6 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
 import { List } from 'semantic-ui-react';
-import { isEmpty } from '../../../../src/helpers/utils';
 
 
 const AlphabetFilter = ({ letters, onLetterClick, t }) => {

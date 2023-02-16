@@ -38,9 +38,11 @@ const EmbeddedShareButton = ({ url = '', size = 'medium', t, }) => {
         <CopyToClipboard text={getEmbed(url)} onCopy={handleCopied}>
           <button className="custom_share_button">
             <Button
+              as="span"
               icon="code"
               size={size}
               circular
+              className="custom_share_button"
             />
           </button>
         </CopyToClipboard>
