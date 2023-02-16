@@ -47,6 +47,7 @@ const BehaviorStartPlay = () => {
     if (!isNaN(seek) && seek > 0 && (seek + 10 < file.duration)) {
       jwp.seek(seek)[autostart ? 'play' : 'pause']();
     } else if (!autostart) {
+      jwp.pause();
       dispatch(actions.setLoaded(true));
     } else {
       jwp.play();
