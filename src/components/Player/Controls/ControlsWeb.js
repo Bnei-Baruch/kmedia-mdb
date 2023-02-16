@@ -8,14 +8,19 @@ import VolumeCtrl from './VolumeCtrl';
 import { Timecode } from './Timecode';
 import { ProgressCtrl } from './ProgressCtrl';
 import PlayPauseBg from './PlayPauseBg';
+import { useSelector } from 'react-redux';
+import { selectors } from '../../../redux/modules/player';
 
 const ControlsWeb = ({ fullscreenRef }) => {
+
+  const loaded = useSelector(state => selectors.isLoaded(state.player));
+
   return (
     <div className="controls">
+      {loaded && <PlayPauseBg />}
       <PrevBtn />
-      <SeekBackwardBtn />
-      <PlayPauseBg />
-      <SeekForwardBtn />
+      {loaded && <SeekBackwardBtn />}
+      {loaded && <SeekForwardBtn />}
       <NextBtn />
       <div className="controls__bar">
         <PlayPauseBtn />

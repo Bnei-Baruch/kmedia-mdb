@@ -13,7 +13,7 @@ const WebWrapTooltip = ({ trigger, ...propz }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
   if (isMobileDevice)
     return trigger;
-  
+
   const props = { ...defProps, ...propz };
   return (
     <Popup
@@ -25,7 +25,7 @@ const WebWrapTooltip = ({ trigger, ...propz }) => {
 
 WebWrapTooltip.propTypes = {
   content: PropTypes.string,
-  trigger: PropTypes.elementType.isRequired
+  trigger: PropTypes.object.isRequired
 };
 
 export default WebWrapTooltip;

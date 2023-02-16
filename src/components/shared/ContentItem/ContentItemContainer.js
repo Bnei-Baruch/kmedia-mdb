@@ -195,4 +195,4 @@ SourceItemContainerHook.propTypes = {
 
 export default withTranslation()(ContentItemContainer);
 export const SourceItemContainer = withTranslation()(SourceItemContainerHook);
-export const TagItemContainer = withTranslation()(TagItemContainerHook);
+export const TagItemContainer    = withTranslation()(TagItemContainerHook);

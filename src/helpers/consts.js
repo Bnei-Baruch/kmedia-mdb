@@ -779,6 +779,7 @@ export const PLAYER_OVER_MODES = {
   languages: 'languages',
   share: 'share',
   active: 'active',
+  dragKnob: 'drag-knob',
   firstTime: 'first-time',
   none: null,
 

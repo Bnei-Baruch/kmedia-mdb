@@ -4,11 +4,9 @@ import { withTranslation } from 'react-i18next';
 import { useSelector, shallowEqual } from 'react-redux';
 import { Header, List } from 'semantic-ui-react';
 
-import { MY_NAMESPACE_HISTORY } from '../../../helpers/consts';
 import { fromToLocalized } from '../../../helpers/date';
 import { canonicalLink } from '../../../helpers/links';
 import { selectors as mdb } from '../../../redux/modules/mdb';
-import { selectors as my } from '../../../redux/modules/my';
 import Link from '../../Language/MultiLanguageLink';
 import UnitLogoWithDuration, { getLogoUnit } from '../../shared/UnitLogoWithDuration';
 
@@ -16,7 +14,7 @@ const CollectionItem = ({ id, t }) => {
   const c            = useSelector(state => mdb.getDenormCollection(state.mdb, id));
   const historyItems = useSelector(state => my.getList(state.my, MY_NAMESPACE_HISTORY), shallowEqual) || [];
 
-  if (!c) return null;
+  if (!c?.content_units) return null;
 
   const { film_date, name, content_type, content_units, start_date, end_date } = c;
 

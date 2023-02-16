@@ -69,6 +69,7 @@ export const playableItem = (unit, preImageUrl) => {
   if (!preImageUrl) {
     preImageUrl = assetUrl(`api/thumbnail/${unit.id}`);
   }
+
   return {
     id: unit.id,
     languages,
@@ -144,8 +145,12 @@ export const getMediaTypeFromQuery = (location) => {
   return [MT_VIDEO, MT_AUDIO].includes(mt) ? mt : restorePreferredMediaType();
 };
 
-export const setMediaTypeInQuery = (navigate, location, mediaType = MT_VIDEO) =>
-  updateQuery(navigate, location, query => ({ ...query, mediaType }));
+export const setMediaTypeInQuery = (history, mediaType = MT_VIDEO) => {
+  updateQuery(history, query => ({
+    ...query,
+    mediaType
+  }));
+};
 
 export const getLanguageFromQuery = (location, fallbackLanguage = LANG_ENGLISH) => {
   const query    = getQuery(location);
@@ -153,8 +158,10 @@ export const getLanguageFromQuery = (location, fallbackLanguage = LANG_ENGLISH) 
   return language.toLowerCase();
 };
 
-export const setLanguageInQuery = (navigate, location, language) =>
-  updateQuery(navigate, location, query => ({ ...query, language }));
+export const setLanguageInQuery = (history, language) => updateQuery(history, query => ({
+  ...query,
+  language
+}));
 
 export const getActivePartFromQuery = (location, def = 0) => {
   const q = getQuery(location);

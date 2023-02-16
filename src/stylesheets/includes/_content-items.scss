@@ -111,7 +111,7 @@
 }
 
 
-.ltr .cu_info_description > span {
+.ltr > .cu_info_description > span {
   border-right-width: 0;
 
   &:first-child {
@@ -124,7 +124,7 @@
   }
 }
 
-.rtl .cu_info_description > span {
+.rtl > .cu_info_description > span {
   border-left-width: 0;
 
   &:first-child {

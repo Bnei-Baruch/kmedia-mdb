@@ -193,13 +193,14 @@
       "language": "Idioma",
       "audio": "Audio",
       "video": "Video",
-      "normal": "normal"
+      "normal": "normal",
+      "audio-only-on": "Solo audio ACTIVADO",
+      "audio-only-off": "Solo audio APAGADO"
     },
     "share": {
       "title": "Mira el video",
-      "start-position": "Inicio",
-      "end-position": "Final",
-      "click-to-set": "Clic para marcar",
+      "start-position": "Clic inicio",
+      "end-position": "Clic final",
       "embedded": "Empotrar",
       "reset-to-full": "Restablecer a completo",
       "download-file": "Descargar extracto"

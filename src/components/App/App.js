@@ -28,7 +28,8 @@ const App = props => {
   const deviceInfoContext                                                           = {
     deviceInfo,
     isMobileDevice: deviceInfo.device?.type === 'mobile',
-    undefinedDevice: deviceInfo.device?.type === undefined
+    undefinedDevice: deviceInfo.device?.type === undefined,
+    isIPhone: ['iPhone Simulator', 'iPhone'].includes(deviceInfo.device?.model)
   };
   console.log('render App');
   return (

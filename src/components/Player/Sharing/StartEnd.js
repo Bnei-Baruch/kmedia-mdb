@@ -2,16 +2,16 @@ import React, { useContext } from 'react';
 import { Input, Button } from 'semantic-ui-react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { toHumanReadableTime } from '../../../helpers/time';
+import { formatTime } from '../../../helpers/time';
 import { actions, selectors } from '../../../redux/modules/player';
 import { withTranslation } from 'react-i18next';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
-import { getPosition } from '../../../pkg/jwpAdapter/adapter';
+import { getPosition, getDuration } from '../../../pkg/jwpAdapter/adapter';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import { selectors as settings } from '../../../redux/modules/settings';
 
 const StartEnd = ({ t }) => {
-  const { start, end }     = useSelector(state => selectors.getShareStartEnd(state.player));
+  const { start = 0, end }     = useSelector(state => selectors.getShareStartEnd(state.player));
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const language           = useSelector(state => settings.getLanguage(state.settings));
   const dir                = getLanguageDirection(language);
@@ -25,7 +25,7 @@ const StartEnd = ({ t }) => {
   };
 
   const handleSetEnd = () => {
-    const end = getPosition();
+    const end = getPosition() || Infinity;
     const d   = { end, start };
     if (end <= start) d.start = 0;
     dispatch(actions.setShareStartEnd(d));
@@ -41,7 +41,7 @@ const StartEnd = ({ t }) => {
           actionPosition="left"
           fluid
           onClick={handleSetStart}
-          readonly
+          readOnly
           type="text"
           action={{
             content: t('player.share.start-position'),
@@ -50,7 +50,7 @@ const StartEnd = ({ t }) => {
             onClick: handleSetStart
           }}
           placeholder={t('player.share.click-to-set')}
-          value={toHumanReadableTime(start)}
+          value={formatTime(start)}
           dir={dir}
         />
         <Input
@@ -58,7 +58,7 @@ const StartEnd = ({ t }) => {
           actionPosition="left"
           fluid
           onClick={handleSetEnd}
-          readonly
+          readOnly
           action={{
             content: t('player.share.end-position'),
             size: 'small',
@@ -66,7 +66,7 @@ const StartEnd = ({ t }) => {
             onClick: handleSetEnd
           }}
           placeholder={t('player.share.click-to-set')}
-          value={toHumanReadableTime(end)}
+          value={formatTime(end !== Infinity ? end : getDuration())}
           dir={dir}
         />
       </div>

@@ -189,13 +189,14 @@
       "language": "Language",
       "audio": "Audio",
       "video": "Video",
-      "normal": "normal"
+      "normal": "normal",
+      "audio-only-on": "Audio only ON",
+      "audio-only-off": "Audio only OFF"
     },
     "share": {
       "title": "spustit toto video",
-      "start-position": "Začátek",
-      "end-position": "Konec",
-      "click-to-set": "Kliknout pro nastavení",
+      "start-position": "Kliknout začátek",
+      "end-position": "Kliknout konec",
       "embedded": "Embed",
       "reset-to-full": "Reset to full video",
       "download-file": "Download excerpt"

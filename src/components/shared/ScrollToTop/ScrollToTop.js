@@ -5,8 +5,8 @@ import * as shapes from '../../shapes';
 import { useLocation } from 'react-router-dom';
 
 const ScrollToTop = ({ children }) => {
-  const location           = useLocation();
-  const { page, ...query } = getQuery(location);
+  const location = useLocation();
+  const { page } = getQuery(location);
 
   useEffect(
     () => {

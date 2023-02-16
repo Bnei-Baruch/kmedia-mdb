@@ -1,4 +1,4 @@
-import { canonicalCollection, tracePath, isEmpty } from './utils';
+import { canonicalCollection, isEmpty } from './utils';
 import { filtersTransformer } from '../filters/index';
 import { stringify as urlSearchStringify } from './url';
 

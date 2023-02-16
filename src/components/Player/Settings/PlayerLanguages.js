@@ -22,7 +22,7 @@ const PlayerLanguages = ({ t }) => {
         <Icon name="left chevron" />
         {t('player.settings.language')}
       </Button>
-      <Menu secondary vertical inverted size="small">
+      <Menu secondary vertical inverted size="small" fluid>
         {
           LANGUAGE_OPTIONS
             .filter(x => languages.includes(x.value))

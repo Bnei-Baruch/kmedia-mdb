@@ -195,13 +195,14 @@
       "language": "שפה",
       "audio": "אודיו",
       "video": "וידאו",
-      "normal": "רגיל"
+      "normal": "רגיל",
+      "audio-only-on": "אודיו בלבד דלוק",
+      "audio-only-off": "אודיו בלבד כבוי"
     },
     "share": {
       "title": "צפה בסרטון",
-      "start-position": "התחלה",
-      "end-position": "סיום",
-      "click-to-set": "לחץ לסימון",
+      "start-position": "לחץ התחלה",
+      "end-position": "לחץ סיום",
       "embedded": "הטמעה",
       "reset-to-full": "אפס למלא",
       "download-file": "הורד מקטע"
@@ -212,8 +213,8 @@
       "mute": "השתק",
       "share": "שתף",
       "settings": "הגדרות",
-      "rewind10": "חזור 10 שנ",
-      "skip10": "דלג 10 שנ",
+      "rewind10": "חזור 10 שניות",
+      "skip10": "דלג 10 שניות",
       "next-video": "לאייטם הבא",
       "prev-video": "לאייטם הקודם",
       "fullscreen": "מסך מלא",

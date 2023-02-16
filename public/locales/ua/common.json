@@ -194,13 +194,14 @@
       "language": "Language",
       "audio": "Аудіо",
       "video": "Відео",
-      "normal": "normal"
+      "normal": "normal",
+      "audio-only-on": "Audio only ON",
+      "audio-only-off": "Audio only OFF"
     },
     "share": {
       "title": "Переглянь це відео",
-      "start-position": "Початок",
-      "end-position": "Кінець",
-      "click-to-set": "Натискай",
+      "start-position": "Натискай Початок",
+      "end-position": "Натискай Кінець",
       "embedded": "Embed",
       "reset-to-full": "Reset to full",
       "download-file": "Download excerpt"

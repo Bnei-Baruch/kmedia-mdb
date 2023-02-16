@@ -27,7 +27,7 @@ const ShareBarPlayer = ({ t }) => {
         content="Facebook"
         trigger={
           <FacebookShareButton url={url} quote={title}>
-            <Button circular color="facebook" icon="facebook" />
+            <Button as="span" circular color="facebook" icon="facebook" />
           </FacebookShareButton>
         }
       />
@@ -35,7 +35,7 @@ const ShareBarPlayer = ({ t }) => {
         content="Twitter"
         trigger={
           <TwitterShareButton url={url} title={title}>
-            <Button circular color="twitter" icon="twitter" />
+            <Button as="span" circular color="twitter" icon="twitter" />
           </TwitterShareButton>
         }
       />
@@ -43,7 +43,7 @@ const ShareBarPlayer = ({ t }) => {
         content="Whatsapp"
         trigger={
           <WhatsappShareButton url={url} title={title} separator=": ">
-            <Button circular color="whatsapp" icon="whatsapp" />
+            <Button as="span" circular className="whatsapp" icon="whatsapp" />
           </WhatsappShareButton>
         }
       />
@@ -51,7 +51,7 @@ const ShareBarPlayer = ({ t }) => {
         content="Telegram"
         trigger={
           <TelegramShareButton url={url} title={title}>
-            <Button circular color="telegram" icon="telegram" />
+            <Button as="span" circular icon="telegram" className="telegram" />
           </TelegramShareButton>
         }
       />
@@ -59,7 +59,7 @@ const ShareBarPlayer = ({ t }) => {
         content="Odnoklassniki"
         trigger={
           <OKShareButton url={url} title={title}>
-            <Button circular color="odnoklassniki" icon="odnoklassniki" />
+            <Button as="span" circular icon="odnoklassniki" className="odnoklassniki" />
           </OKShareButton>
         }
       />
@@ -67,28 +67,24 @@ const ShareBarPlayer = ({ t }) => {
         content="Email"
         trigger={
           <EmailShareButton url={url} subject={title} body={url}>
-            <Button circular icon="mail" />
+            <Button as="span" circular icon="mail" />
           </EmailShareButton>
         }
       />
       {
         !isMobileDevice && (
           <>
-            <button className="custom_share_button">
-              <WebWrapTooltip
-                content={t('player.settings.download-file')}
-                trigger={
-                  <CutAndDownload />
-                } />
-            </button>
-            <button className="custom_share_button">
-              <WebWrapTooltip
-                content={t('player.share.embedded')}
-                trigger={
-                  <EmbeddedShareButton url={url} />
-                }
-              />
-            </button>
+            <WebWrapTooltip
+              content={t('player.settings.download-file')}
+              trigger={
+                <CutAndDownload />
+              } />
+            <WebWrapTooltip
+              content={t('player.share.embedded')}
+              trigger={
+                <EmbeddedShareButton url={url} />
+              }
+            />
           </>
         )
       }

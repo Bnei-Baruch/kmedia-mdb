@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useSelector } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import { Container, Grid, Divider } from 'semantic-ui-react';
@@ -10,15 +10,23 @@ import PlaylistHeader from '../Playlist/PlaylistHeader';
 import PlaylistItems from './PlaylistItems';
 import { selectors as playlist } from '../../../../redux/modules/playlist';
 import WipErr from '../../../shared/WipErr/WipErr';
+import clsx from 'clsx';
+import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 
 const PlaylistMyPage = ({ playerContainer, t }) => {
-  const isReady = useSelector(state => playlist.getInfo(state.playlist).isReady);
+  const isReady            = useSelector(state => playlist.getInfo(state.playlist).isReady);
+  const { isMobileDevice } = useContext(DeviceInfoContext);
   if (!isReady)
     return WipErr({ wip: !isReady, t });
 
+  const computerWidth = !isMobileDevice ? 10 : 16;
   return (
     <Grid className="avbox">
-      <Grid.Column width={10}>
+      <Grid.Column
+        mobile={16}
+        tablet={computerWidth}
+        computer={computerWidth}
+        className={clsx({ 'is-fitted': isMobileDevice })}>
         <div id="avbox_playlist">
           <PlaylistHeader />
         </div>
@@ -28,11 +36,15 @@ const PlaylistMyPage = ({ playerContainer, t }) => {
           <Materials />
         </Container>
       </Grid.Column>
-      <Grid.Column width={6}>
-        <PlaylistItems />
-        <Divider hidden />
-        <Recommended filterOutUnits={[]} />
-      </Grid.Column>
+      {
+        !isMobileDevice && (
+          <Grid.Column width={6}>
+            <PlaylistItems />
+            <Divider hidden />
+            <Recommended filterOutUnits={[]} />
+          </Grid.Column>
+        )
+      }
     </Grid>
   );
 };
