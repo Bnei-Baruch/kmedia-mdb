@@ -23,7 +23,7 @@ const BehaviorStartPlay = () => {
   const { cuId, isSingleMedia } = info;
 
   const historyItem = useSelector(state => my.getList(state.my, MY_NAMESPACE_HISTORY)?.find(x => x.content_unit_uid === cuId));
-  const { fetched } = useSelector(state => my.getInfo(state.my, MY_NAMESPACE_HISTORY));
+  const { fetched } = useSelector(state => my.getInfo(state.my, MY_NAMESPACE_HISTORY), shallowEqual);
 
   const fileIdRef = useRef();
   const dispatch  = useDispatch();
@@ -39,20 +39,21 @@ const BehaviorStartPlay = () => {
   useEffect(() => {
     if (!isReady || start || end !== Infinity || !fetched || file.id === fileIdRef.current) return;
 
-    const jwp       = window.jwplayer(JWPLAYER_ID);
+    const jwp       = window.jwplayer();
     const autostart = !!fileIdRef.current || isSingleMedia;
 
     const { current_time: seek } = getSavedTime(cuId, historyItem);
-
+    jwp.setConfig({ autostart });
     if (!isNaN(seek) && seek > 0 && (seek + 10 < file.duration)) {
       jwp.seek(seek)[autostart ? 'play' : 'pause']();
     } else if (!autostart) {
+      jwp.pause();
       dispatch(actions.setLoaded(true));
     } else {
-      jwp.play()
+      jwp.play();
     }
     fileIdRef.current = file.id;
-  }, [isReady, start, end, cuId, file, historyItem, fileIdRef.current, isSingleMedia]);
+  }, [isReady, start, end, cuId, file, historyItem, fileIdRef.current, isSingleMedia, fetched]);
 
   return null;
 };

@@ -14,7 +14,7 @@ const BehaviorStartStopSlice = () => {
   const isReady        = useSelector(state => player.isReady(state.player));
 
   useEffect(() => {
-    if (!isReady || (!start && !end)) return noop;
+    if (!isReady || (!start && end === Infinity)) return noop;
 
     const jwp = window.jwplayer(JWPLAYER_ID);
 
@@ -24,7 +24,7 @@ const BehaviorStartStopSlice = () => {
         jwp.off('time', checkStopTime);
       }
     };
-    seek(start).pause();
+    seek(start);
     jwp.on('time', checkStopTime);
 
     return () => jwp.off('time', checkStopTime);
