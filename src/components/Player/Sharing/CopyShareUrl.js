@@ -5,7 +5,7 @@ import useShareUrl from '../hooks/useShareUrl';
 import { useSelector } from 'react-redux';
 import { selectors as settings } from '../../../redux/modules/settings';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { POPOVER_CONFIRMATION_TIMEOUT } from './helper';
 
 let timeout;
@@ -50,4 +50,4 @@ const CopyShareUrl = ({ t }) => {
   );
 };
 
-export default withNamespaces()(CopyShareUrl);
+export default withTranslation()(CopyShareUrl);

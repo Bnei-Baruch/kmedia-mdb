@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { useSelector } from 'react-redux';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { Header } from 'semantic-ui-react';
 import clsx from 'clsx';
 import { selectors as sources } from '../../../../redux/modules/sources';
@@ -120,4 +120,4 @@ const PlaylistHeader = ({ t }) => {
   );
 };
 
-export default withNamespaces()(PlaylistHeader);
+export default withTranslation()(PlaylistHeader);

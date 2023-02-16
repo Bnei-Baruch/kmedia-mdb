@@ -4,8 +4,8 @@ import { selectors, actions } from '../../../../redux/modules/mdb';
 
 import { selectors as my } from '../../../../redux/modules/my';
 import { MY_NAMESPACE_HISTORY } from '../../../../helpers/consts';
-import { withNamespaces } from 'react-i18next';
-import { useHistory } from 'react-router';
+import { withTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router';
 import { selectors as settings } from '../../../../redux/modules/settings';
 import { getSavedTime } from '../../../Player/helper';
 import moment from 'moment';
@@ -18,7 +18,7 @@ const BuildPlaylistLastDaily = ({ t }) => {
   const ccu          = useSelector(state => selectors.getDenormCollection(state.mdb, lastLessonId)) || false;
   const denormCU     = useSelector(state => selectors.nestedGetDenormContentUnit(state.mdb));
   const historyItems = useSelector(state => my.getList(state.my, MY_NAMESPACE_HISTORY));
-  const history      = useHistory();
+  const navigate     = useNavigate();
   const language     = useSelector(state => settings.getLanguage(state.settings));
 
   const dispatch = useDispatch();
@@ -45,10 +45,10 @@ const BuildPlaylistLastDaily = ({ t }) => {
 
     const cuId = sorted[0]?.id || getCuByCcuSkipPreparation(ccu);
     const link = canonicalLink(denormCU(cuId), null, ccu);
-    history.replace(`/${language}${link}`);
-  }, [ccu, historyItems, history]);
+    navigate.push(`/${language}${link}`, { replace: true });
+  }, [ccu, historyItems, navigate]);
 
   return null;
 };
 
-export default withNamespaces()(BuildPlaylistLastDaily);
+export default withTranslation()(BuildPlaylistLastDaily);

@@ -13,7 +13,7 @@ import { selectors as player, selectors } from '../../../redux/modules/player';
 import { ProgressCtrl } from './ProgressCtrl';
 import MediaTypeControlMobile from '../Settings/MediaTypeControlMobile';
 import { setMute } from '../../../pkg/jwpAdapter/adapter';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 
 const ControlsMobile = ({ fullscreenRef, t }) => {
   const mode    = useSelector(state => player.getOverMode(state.player));
@@ -73,4 +73,4 @@ const ControlsMobile = ({ fullscreenRef, t }) => {
   );
 };
 
-export default withNamespaces()(ControlsMobile);
+export default withTranslation()(ControlsMobile);

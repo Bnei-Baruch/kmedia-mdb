@@ -1,6 +1,6 @@
 import React from 'react';
 import { Icon } from 'semantic-ui-react';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import WebWrapTooltip from '../../shared/WebWrapTooltip';
 import { getPosition, seek } from '../../../pkg/jwpAdapter/adapter';
 
@@ -9,7 +9,7 @@ const handleSeek = pos => {
   seek(nPos > 0 ? nPos : 0);
 };
 
-export const SeekBackwardBtn = withNamespaces()(({ t }) => {
+export const SeekBackwardBtn = withTranslation()(({ t }) => {
   const handleSeekBackward = () => handleSeek(-10);
   return (
     <WebWrapTooltip
@@ -23,7 +23,7 @@ export const SeekBackwardBtn = withNamespaces()(({ t }) => {
   );
 });
 
-export const SeekForwardBtn = withNamespaces()(({ t }) => {
+export const SeekForwardBtn = withTranslation()(({ t }) => {
   const handleSeekForward = () => handleSeek(10);
   return (
     <WebWrapTooltip
