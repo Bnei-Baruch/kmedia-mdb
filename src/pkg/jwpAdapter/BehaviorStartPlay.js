@@ -1,20 +1,23 @@
-import React, { useEffect, useRef, useMemo } from 'react';
+import React, { useEffect, useRef, useMemo, useContext } from 'react';
 import { useSelector, shallowEqual, useDispatch } from 'react-redux';
 
 import { selectors as player, actions } from '../../redux/modules/player';
-import { JWPLAYER_ID, MY_NAMESPACE_HISTORY } from '../../helpers/consts';
+import { MY_NAMESPACE_HISTORY } from '../../helpers/consts';
 import { useLocation } from 'react-router-dom';
 import { startEndFromQuery } from '../../components/Player/Controls/helper';
 import { getSavedTime, findPlayedFile } from '../../components/Player/helper';
 import { selectors as playlist } from '../../redux/modules/playlist';
 import { selectors as my } from '../../redux/modules/my';
+import { DeviceInfoContext } from '../../helpers/app-contexts';
+import { LOCALSTORAGE_MUTE } from './adapter';
 
 const BehaviorStartPlay = () => {
   const location       = useLocation();
   const { start, end } = startEndFromQuery(location);
 
-  const isReady = useSelector(state => player.isReady(state.player));
-  const isMuted = useSelector(state => player.isMuted(state.player));
+  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const isReady            = useSelector(state => player.isReady(state.player));
+  const isMuted            = useSelector(state => player.isMuted(state.player));
 
   const item = useSelector(state => playlist.getPlayed(state.playlist), shallowEqual);
   const info = useSelector(state => playlist.getInfo(state.playlist), shallowEqual);
@@ -31,9 +34,14 @@ const BehaviorStartPlay = () => {
   //mute for autostart
   useEffect(() => {
     if (isMuted !== undefined) return;
-    window.jwplayer(JWPLAYER_ID).setConfig({ mute: isSingleMedia });
-    dispatch(actions.setIsMuted(isSingleMedia));
-  }, [isMuted, isSingleMedia]);
+    let mute = localStorage.getItem(LOCALSTORAGE_MUTE) === 'true';
+
+    if (isSingleMedia && isMobileDevice) {
+      mute = true;
+      window.jwplayer().setConfig({ mute });
+    }
+    dispatch(actions.setIsMuted(mute));
+  }, [isMuted, isSingleMedia, isMobileDevice]);
 
   //start from saved time on load or switch playlist item
   useEffect(() => {
@@ -43,7 +51,8 @@ const BehaviorStartPlay = () => {
     const autostart = !!fileIdRef.current || isSingleMedia;
 
     const { current_time: seek } = getSavedTime(cuId, historyItem);
-    jwp.setConfig({ autostart, mute: autostart && !navigator?.userActivation.hasBeenActive });
+    jwp.setConfig({ autostart });
+
     if (!isNaN(seek) && seek > 0 && (seek + 10 < file.duration)) {
       jwp.seek(seek)[autostart ? 'play' : 'pause']();
     } else if (!autostart) {
