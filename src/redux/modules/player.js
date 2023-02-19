@@ -70,7 +70,6 @@ const initialState = {
   shareStartEnd: { start: 0, end: Infinity },
   isFullScreen: false,
   wip: false,
-  isMuted: localStorage.getItem(LOCALSTORAGE_MUTE) === 'true'
 };
 
 const onReady = draft => {
