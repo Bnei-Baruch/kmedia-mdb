@@ -23,11 +23,16 @@ function* updatePageInQuery(action) {
 }
 
 export function* fetch(action) {
-  const token = yield select(state => authSelectors.getToken(state.auth));
-  if (!token) return;
   // eslint-disable-next-line prefer-const
   const { namespace, with_files = false, addToList = true, ...params } = action.payload;
-  let with_derivations                                                 = false;
+
+  const token = yield select(state => authSelectors.getToken(state.auth));
+  if (!token) {
+    yield put(actions.fetchSuccess({ namespace, items: [] }));
+    return;
+  }
+
+  let with_derivations = false;
 
   const language = yield select(state => settings.getLanguage(state.settings));
   try {

@@ -43,7 +43,7 @@ const BehaviorStartPlay = () => {
     const autostart = !!fileIdRef.current || isSingleMedia;
 
     const { current_time: seek } = getSavedTime(cuId, historyItem);
-    jwp.setConfig({ autostart });
+    jwp.setConfig({ autostart, mute: autostart && !navigator?.userActivation.hasBeenActive });
     if (!isNaN(seek) && seek > 0 && (seek + 10 < file.duration)) {
       jwp.seek(seek)[autostart ? 'play' : 'pause']();
     } else if (!autostart) {

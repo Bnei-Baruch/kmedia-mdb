@@ -144,7 +144,6 @@ const onFetchSuccess = (draft, { namespace, addToList = true, items, total }) =>
   });
 
   draft[namespace].keys = keys;
-  return draft;
 };
 
 const onFetchFailure = (draft, { namespace }) => {
