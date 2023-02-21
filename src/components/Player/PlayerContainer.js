@@ -112,6 +112,7 @@ const PlayerContainer = () => {
     }
   }, [fullscreenRef, dispatch]);
 
+
   useEffect(() => {
     if (mode === PLAYER_OVER_MODES.active) {
       runTimeout(dispatch);
