@@ -29,4 +29,4 @@ const Player = () => {
   );
 };
 
-export default React.memo(Player, () => true);
+export default Player;
