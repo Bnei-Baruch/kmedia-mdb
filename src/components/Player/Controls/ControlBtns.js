@@ -26,7 +26,6 @@ const unlockLandscape = () => {
 };
 
 export const FullscreenBtn = withNamespaces()(({ fullscreenRef, t }) => {
-  const dispatch     = useDispatch();
   const isFullScreen = useSelector(state => selectors.isFullScreen(state.player));
 
   const handleClick     = () => {
@@ -42,24 +41,20 @@ export const FullscreenBtn = withNamespaces()(({ fullscreenRef, t }) => {
   };
   const enterFullscreen = () => {
     fscreen.requestFullscreen(fullscreenRef.current).then(lockLandscape);
-    dispatch(actions.setFullScreen(true));
   };
   const exitFullscreen  = () => {
     unlockLandscape();
-    dispatch(actions.setFullScreen(false));
     fscreen.fullscreenElement && fscreen.exitFullscreen();
   };
 
   const enterFullScreenIOS = () => {
     const player = window.jwplayer();
     player.setFullscreen(true).setControls(true);
-    dispatch(actions.setFullScreen(false));
     player.once('fullscreen', exitFullScreenIOS);
     lockLandscape();
   };
 
   const exitFullScreenIOS = () => {
-    dispatch(actions.setFullScreen(false));
     unlockLandscape();
     const player = window.jwplayer();
     player.setControls(false);

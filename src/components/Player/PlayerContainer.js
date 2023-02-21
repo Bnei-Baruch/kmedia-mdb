@@ -101,6 +101,18 @@ const PlayerContainer = () => {
   }, [mode]);
 
   useEffect(() => {
+    const handleFullscreenChange = () => {
+      const isFull = fullscreenRef.current === document.fullscreenElement;
+      dispatch(actions.setFullScreen(isFull));
+    };
+
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFullscreenChange);
+    }
+  }, [fullscreenRef, dispatch]);
+
+  useEffect(() => {
     if (mode === PLAYER_OVER_MODES.active) {
       runTimeout(dispatch);
     }
