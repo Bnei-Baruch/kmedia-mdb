@@ -52,7 +52,7 @@ const PlayerContainer = () => {
       if (e.defaultPrevented) {
         return; // Do nothing if the event was already processed
       }
-      const coef = e.shiftKey ? 2 : e.altKey ? 0.2 : 1;
+      const coef = e.shiftKey ? 3 : e.altKey ? 0.2 : 1;
       switch (e.key) {
       case 'Down': // IE/Edge specific value
       case 'ArrowDown': {
