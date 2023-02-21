@@ -52,7 +52,7 @@ const PlayerContainer = () => {
       if (e.defaultPrevented) {
         return; // Do nothing if the event was already processed
       }
-      const coef = e.shiftKey ? 2 : e.altKey ? 0.2 : 1;
+      const coef = e.shiftKey ? 3 : e.altKey ? 0.2 : 1;
       switch (e.key) {
       case 'Down': // IE/Edge specific value
       case 'ArrowDown': {
@@ -69,13 +69,13 @@ const PlayerContainer = () => {
       case 'Left': // IE/Edge specific value
       case 'ArrowLeft': {
         const pos = getPosition();
-        seek(Math.max(pos - coef * 10, 0));
+        seek(Math.max(pos - coef * 5, 0));
         break;
       }
       case 'Right': // IE/Edge specific value
       case 'ArrowRight': {
         const pos = getPosition();
-        seek(Math.min(pos + coef * 10, getDuration()));
+        seek(Math.min(pos + coef * 5, getDuration()));
         break;
       }
       case 'Esc': // IE/Edge specific value
@@ -99,6 +99,19 @@ const PlayerContainer = () => {
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [mode]);
+
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      const isFull = fullscreenRef.current === document.fullscreenElement;
+      dispatch(actions.setFullScreen(isFull));
+    };
+
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFullscreenChange);
+    }
+  }, [fullscreenRef, dispatch]);
+
 
   useEffect(() => {
     if (mode === PLAYER_OVER_MODES.active) {

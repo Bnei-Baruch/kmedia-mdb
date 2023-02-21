@@ -10,7 +10,7 @@ const handleSeek = pos => {
 };
 
 export const SeekBackwardBtn = withNamespaces()(({ t }) => {
-  const handleSeekBackward = () => handleSeek(-10);
+  const handleSeekBackward = () => handleSeek(-5);
   return (
     <WebWrapTooltip
       content={t('player.controls.rewind10')}
@@ -24,7 +24,7 @@ export const SeekBackwardBtn = withNamespaces()(({ t }) => {
 });
 
 export const SeekForwardBtn = withNamespaces()(({ t }) => {
-  const handleSeekForward = () => handleSeek(10);
+  const handleSeekForward = () => handleSeek(5);
   return (
     <WebWrapTooltip
       content={t('player.controls.skip10')}
