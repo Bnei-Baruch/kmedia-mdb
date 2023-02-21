@@ -46,10 +46,8 @@ import {
 import * as ssrDataLoaders from './routesSSRData';
 import SingleMediaContainer from './../components/Pages/WithPlayer/SingleMedia/SingleMediaContainer';
 import PlaylistMy from './../components/Pages/WithPlayer/PlaylistMy/Container';
-import PlayerContainer from '../components/Player/PlayerContainer';
 
-const useRoutes = () => {
-  const player = <PlayerContainer />;
+const useRoutes = ({ playerContainer }) => {
   return [
     { path: '', component: <HomePage />, ssrData: ssrDataLoaders.home },
 
@@ -72,7 +70,11 @@ const useRoutes = () => {
 
     { path: 'lessons', component: <Lessons />, ssrData: ssrDataLoaders.lessonsPage },
     { path: 'lessons/:tab', component: <Lessons />, ssrData: ssrDataLoaders.lessonsPage },
-    { path: 'lessons/cu/:id', component: <PlaylistItemPageLesson player={player} />, ssrData: ssrDataLoaders.cuPage },
+    {
+      path: 'lessons/cu/:id',
+      component: <PlaylistItemPageLesson playerContainer={playerContainer} />,
+      ssrData: ssrDataLoaders.cuPage
+    },
     {
       path: 'lessons/virtual/c/:id',
       component: <LessonCollection />,
@@ -80,23 +82,27 @@ const useRoutes = () => {
     },
     {
       path: 'lessons/:tab/c/:id',
-      component: <PlaylistCollectionPage />,
+      component: <PlaylistCollectionPage playerContainer={playerContainer} />,
       ssrData: ssrDataLoaders.lessonsCollectionPage
     },
-    { path: 'lessons/cu/:id', component: <PlaylistItemPageLesson />, ssrData: ssrDataLoaders.cuPage },
+    {
+      path: 'lessons/cu/:id',
+      component: <PlaylistItemPageLesson playerContainer={playerContainer} />,
+      ssrData: ssrDataLoaders.cuPage
+    },
     {
       path: 'lessons/series/cu/:id',
-      component: <PlaylistItemPageSeries />,
+      component: <PlaylistItemPageSeries playerContainer={playerContainer} />,
       ssrData: ssrDataLoaders.cuPage
     },
     {
       path: 'lessons/:tab/cu/:id',
-      component: <PlaylistItemPageLesson />,
+      component: <PlaylistItemPageLesson playerContainer={playerContainer} />,
       ssrData: ssrDataLoaders.cuPage
     },
     {
       path: 'lessons/daily/latest',
-      component: <PlaylistLastDaily />,
+      component: <PlaylistLastDaily playerContainer={playerContainer} />,
       ssrData: ssrDataLoaders.latestLesson
     },
     { path: 'programs', component: <Programs />, ssrData: ssrDataLoaders.programsPage },
@@ -106,27 +112,43 @@ const useRoutes = () => {
       component: <Program />,
       ssrData: ssrDataLoaders.collectionPage(PAGE_NS_PROGRAMS)
     },
-    { path: 'programs/cu/:id', component: <SingleMediaContainer />, ssrData: ssrDataLoaders.cuPage },
-    { path: 'programs/:tab/cu/:id', component: <SingleMediaContainer />, ssrData: ssrDataLoaders.cuPage },
+    {
+      path: 'programs/cu/:id',
+      component: <SingleMediaContainer playerContainer={playerContainer} />,
+      ssrData: ssrDataLoaders.cuPage
+    },
+    {
+      path: 'programs/:tab/cu/:id',
+      component: <SingleMediaContainer playerContainer={playerContainer} />,
+      ssrData: ssrDataLoaders.cuPage
+    },
 
     { path: 'events', component: <Events />, ssrData: ssrDataLoaders.eventsPage },
     {
       path: 'events/c/:id',
-      component: <PlaylistCollectionPage />,
+      component: <PlaylistCollectionPage playerContainer={playerContainer} />,
       ssrData: ssrDataLoaders.playlistCollectionPage
     },
-    { path: 'events/cu/:id', component: <PlaylistItemPageEvent />, ssrData: ssrDataLoaders.cuPage },
-    { path: 'events/:tab/cu/:id', component: <PlaylistItemPageEvent />, ssrData: ssrDataLoaders.cuPage },
+    {
+      path: 'events/cu/:id',
+      component: <PlaylistItemPageEvent playerContainer={playerContainer} />,
+      ssrData: ssrDataLoaders.cuPage
+    },
+    {
+      path: 'events/:tab/cu/:id',
+      component: <PlaylistItemPageEvent playerContainer={playerContainer} />,
+      ssrData: ssrDataLoaders.cuPage
+    },
 
     { path: 'music', component: <Music />, ssrData: ssrDataLoaders.musicPage },
     {
       path: 'music/c/:id',
-      component: <PlaylistCollectionPage />,
+      component: <PlaylistCollectionPage playerContainer={playerContainer} />,
       ssrData: ssrDataLoaders.playlistCollectionPage
     },
     {
       path: 'music/:id/cu/:cuId',
-      component: <PlaylistCollectionPage />,
+      component: <PlaylistCollectionPage playerContainer={playerContainer} />,
       ssrData: ssrDataLoaders.playlistCollectionPage
     },
 
@@ -135,8 +157,6 @@ const useRoutes = () => {
     { path: 'topics', component: <Topics /> },
     { path: 'topics/:id', component: <Topic />, ssrData: ssrDataLoaders.topicsPage },
     { path: 'persons/:id', component: <LibraryPerson />, ssrData: ssrDataLoaders.libraryPage },
-    { path: 'books', component: <NotImplemented /> },
-    { path: 'photos', component: <NotImplemented /> },
     { path: 'search', component: <SearchResults />, ssrData: ssrDataLoaders.searchPage },
     { path: 'help', component: <Help /> },
     { path: 'simple-mode', component: <SimpleModeContainer />, ssrData: ssrDataLoaders.simpleMode },

@@ -4,12 +4,13 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { selectors as playlist, actions as action, selectors } from '../../redux/modules/playlist';
 import { selectors as mdb } from '../../redux/modules/mdb';
-import { setLanguageInQuery, setMediaTypeInQuery, persistPreferredMediaType } from '../../helpers/player';
-import { getQuery, stringify } from '../../helpers/url';
+import { persistPreferredMediaType } from '../../helpers/player';
+import { getQuery, stringify, updateQuery } from '../../helpers/url';
 import { canonicalLink } from '../../helpers/links';
 import { selectors as settings } from '../../redux/modules/settings';
 import { actions } from '../../redux/modules/player';
 import { startEndFromQuery } from './Controls/helper';
+import { isEmpty } from '../../helpers/utils';
 
 const UpdateLocation = () => {
   const navigate = useNavigate();
@@ -31,17 +32,19 @@ const UpdateLocation = () => {
   }, [location]);
 
   useEffect(() => {
+    const newq = {};
     if (language && language !== q.language) {
-      setLanguageInQuery(navigate, language);
+      newq.language = language;
     }
-  }, [language, q.language]);
 
-  useEffect(() => {
     if (mediaType && mediaType !== q.mediaType) {
-      setMediaTypeInQuery(navigate, mediaType);
+      newq.mediaType = mediaType;
       persistPreferredMediaType(mediaType);
     }
-  }, [mediaType, q.mediaType]);
+    if (!isEmpty(newq)) {
+      updateQuery(navigate, location, query => ({ ...query, ...newq }));
+    }
+  }, [mediaType, language, q, navigate, location]);
 
   //go to next on playlist
   const search = baseLink ? `?${stringify({ ...q, ap })}` : location.search;
@@ -53,7 +56,7 @@ const UpdateLocation = () => {
       } else {
         link = canonicalLink(denormUnit(nextUnitId), null, denormCollectiont(cId));
       }
-      navigate.push({ pathname: `/${uiLanguage}${link}`, search });
+      navigate({ pathname: `/${uiLanguage}${link}`, search });
       dispatch(action.nullNextUnit());
     }
   }, [nextUnitId, cId, search, uiLanguage, baseLink, navigate, denormUnit, denormCollectiont]);

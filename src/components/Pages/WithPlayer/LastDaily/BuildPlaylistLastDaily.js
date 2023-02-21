@@ -4,14 +4,13 @@ import { selectors, actions } from '../../../../redux/modules/mdb';
 
 import { selectors as my } from '../../../../redux/modules/my';
 import { MY_NAMESPACE_HISTORY } from '../../../../helpers/consts';
-import { withTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import { selectors as settings } from '../../../../redux/modules/settings';
 import { getSavedTime } from '../../../Player/helper';
 import moment from 'moment';
 import { getCuByCcuSkipPreparation, canonicalLink } from '../../../../helpers/links';
 
-const BuildPlaylistLastDaily = ({ t }) => {
+const BuildPlaylistLastDaily = () => {
   const lastLessonId = useSelector(state => selectors.getLastLessonId(state.mdb));
   const wip          = useSelector(state => selectors.getWip(state.mdb).lastLesson);
   const err          = useSelector(state => selectors.getErrors(state.mdb).lastLesson);
@@ -51,4 +50,4 @@ const BuildPlaylistLastDaily = ({ t }) => {
   return null;
 };
 
-export default withTranslation()(BuildPlaylistLastDaily);
+export default BuildPlaylistLastDaily;

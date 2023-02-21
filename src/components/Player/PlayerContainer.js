@@ -4,13 +4,13 @@ import { useSelector, shallowEqual, useDispatch } from 'react-redux';
 import { selectors as player, selectors, actions } from '../../redux/modules/player';
 import { PLAYER_OVER_MODES } from '../../helpers/consts';
 import Player from '../../pkg/jwpAdapter/Player';
-import UpdateLocation from './UpdateLocation';
 import PlayerToolsWeb from './PlayerToolsWeb';
 import PlayerToolsMobile from './PlayerToolsMobile';
 import AppendChronicle from './AppendChronicle';
 import { DeviceInfoContext } from '../../helpers/app-contexts';
 import clsx from 'clsx';
 import { Ref } from 'semantic-ui-react';
+import UpdateLocation from './UpdateLocation';
 
 const HIDE_CONTROLS_TIMEOUT = 3000;
 
@@ -98,10 +98,11 @@ const PlayerContainer = () => {
   );
 
   return (
-    <Ref innerRef={fullscreenRef}>
-      {content}
-    </Ref>
+    <div>
+      <Ref innerRef={fullscreenRef}>
+        {content}
+      </Ref>
+    </div>
   );
 };
-//TODO david remove memo after react-router update
-export default React.memo(PlayerContainer);
+export default PlayerContainer;

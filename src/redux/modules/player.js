@@ -1,11 +1,12 @@
 import { createAction } from 'redux-actions';
-import { handleActions, types as settings } from './settings';
+import { handleActions } from './settings';
 import { PLAYER_OVER_MODES } from '../../helpers/consts';
 import { LOCALSTORAGE_MUTE } from '../../pkg/jwpAdapter/adapter';
 
 const PLAYER_READY       = 'Player/READY';
 const PLAYER_REMOVE      = 'Player/REMOVE';
 const PLAYER_PLAY        = 'Player/PLAY';
+const PLAYER_BUFFER      = 'Player/BUFFER';
 const PLAYER_PAUSE       = 'Player/PAUSE';
 const PLAYER_RATE        = 'Player/RATE';
 const PLAYER_RESIZE      = 'Player/RESIZE';
@@ -35,6 +36,7 @@ const playerRemove = createAction(PLAYER_REMOVE);
 const setFile      = createAction(PLAYER_SET_FILE);
 
 const playerPlay       = createAction(PLAYER_PLAY);
+const playerBuffer     = createAction(PLAYER_BUFFER);
 const playerPause      = createAction(PLAYER_PAUSE);
 const playerRate       = createAction(PLAYER_RATE);
 const playerResize     = createAction(PLAYER_RESIZE);
@@ -74,9 +76,8 @@ const initialState = {
 };
 
 const onReady = draft => {
-  draft.wip    = false;
-  draft.ready  = true;
-  draft.loaded = false;
+  draft.wip   = false;
+  draft.ready = true;
 };
 
 const onRemove = draft => {
@@ -88,7 +89,7 @@ const onRemove = draft => {
 };
 
 const onSetMode = (draft, payload) => {
-  draft.overMode      = payload;
+  draft.overMode = payload;
 };
 
 const onSetFile = (draft, payload) => {
@@ -103,6 +104,7 @@ const onSetFile = (draft, payload) => {
 
 const onPlay = (draft, payload) => {
   draft.played = payload.newstate === 'playing';
+  draft.loaded = true;
   if (draft.overMode === PLAYER_OVER_MODES.firstTime)
     draft.overMode = PLAYER_OVER_MODES.active;
 };
@@ -114,6 +116,7 @@ export const reducer = handleActions({
 
   [PLAYER_PLAY]: onPlay,
   [PLAYER_PAUSE]: draft => draft.played = false,
+  [PLAYER_BUFFER]: draft => draft.loaded = false,
   [PLAYER_RATE]: (draft, payload) => draft.rate = payload.playbackRate,
   [PLAYER_RESIZE]: (draft, payload) => draft.width = payload.width,
   [PLAYER_TOGGLE_MUTE]: (draft, payload) => draft.isMuted = payload.mute,
@@ -126,7 +129,7 @@ export const reducer = handleActions({
   [SET_SHARE_START_END]: (draft, payload) => draft.shareStartEnd = payload,
   [SET_IS_MUTED]: (draft, payload) => draft.isMuted = payload,
 
-  [settings.SET_LANGUAGE]: onRemove,
+  //[settings.SET_LANGUAGE]: onRemove,
 }, initialState);
 
 const isReady          = state => state.ready;
@@ -157,7 +160,8 @@ export const selectors = {
 
 export const PLAYER_ACTIONS_BY_EVENT = {
   'ready': playerReady,
-  'remove': playerRemove,
+  'destroyPlugin': playerRemove,
+  'buffer': playerBuffer,
   'play': playerPlay,
   'playbackRateChanged': playerRate,
   'pause': playerPause,

@@ -4,41 +4,39 @@ import { COLLECTION_DAILY_LESSONS, EVENT_TYPES, CT_LESSONS_SERIES } from '../../
 import BuildPlaylistByUnit from './BuildPlaylistByUnit';
 import PlaylistPage from './Playlist/PlaylistPage';
 import BuildPlaylistByCollectionByParams from './BuildPlaylistByCollectionByParams';
-import PlayerContainer from '../../Player/PlayerContainer';
 import { useSelector } from 'react-redux';
 import { selectors as playlist } from '../../../redux/modules/playlist';
 import SingleMediaPage from './SingleMedia/SingleMediaPage';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import WipErr from '../../shared/WipErr/WipErr';
 import { Icon } from 'semantic-ui-react';
 
-export const PlaylistItemPageSeries = () => {
+export const PlaylistItemPageSeries = ({ playerContainer }) => {
   const builder = <BuildPlaylistByUnit cts={[CT_LESSONS_SERIES]} />;
-  return <Decorator builder={builder} />;
+  return <Decorator builder={builder} playerContainer={playerContainer} />;
 };
 
-export const PlaylistItemPageLesson = ({ player }) => {
+export const PlaylistItemPageLesson = ({ playerContainer }) => {
   const { isReady } = useSelector(state => playlist.getInfo(state.playlist));
   return (
     <>
       {<BuildPlaylistByUnit cts={COLLECTION_DAILY_LESSONS} />}
-      {isReady ? <PlaylistPage playerContainer={player} /> : <Icon name="circle notch" color="blue" loading />}
+      {isReady ? <PlaylistPage playerContainer={playerContainer} /> : <Icon name="circle notch" color="blue" loading />}
     </>
   );
 };
 
-export const PlaylistItemPageEvent = () => {
+export const PlaylistItemPageEvent = ({ playerContainer }) => {
   const builder = <BuildPlaylistByUnit cts={EVENT_TYPES} />;
-  return <Decorator builder={builder} />;
+  return <Decorator builder={builder} playerContainer={playerContainer} />;
 };
 
-export const PlaylistCollectionPage = () => {
+export const PlaylistCollectionPage = ({ playerContainer }) => {
   const builder = <BuildPlaylistByCollectionByParams />;
-  return <Decorator builder={builder} />;
+  return <Decorator builder={builder} playerContainer={playerContainer} />;
 };
 
-const Decorator = ({ builder }) => {
-  const playerContainer = <PlayerContainer />;
+const Decorator = ({ builder, playerContainer }) => {
   return (
     <>
       {builder}
@@ -47,7 +45,8 @@ const Decorator = ({ builder }) => {
   );
 };
 
-const PageSwitcher = withTranslation()(({ playerContainer, t }) => {
+const PageSwitcher = ({ playerContainer }) => {
+  const { t }                      = useTranslation();
   const { isReady, isSingleMedia } = useSelector(state => playlist.getInfo(state.playlist));
   if (!isReady)
     return WipErr({ wip: !isReady, t });
@@ -56,4 +55,4 @@ const PageSwitcher = withTranslation()(({ playerContainer, t }) => {
     return <SingleMediaPage playerContainer={playerContainer} />;
 
   return <PlaylistPage playerContainer={playerContainer} />;
-});
+};

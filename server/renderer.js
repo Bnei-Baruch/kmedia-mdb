@@ -98,7 +98,7 @@ async function serverRenderAuthorised(req, res, next, htmlData, language, bot) {
       i18n: i18nServer,
     };
 
-    const routes  = useRoutes();
+    const routes  = useRoutes(<></>);
     const reqPath = req.originalUrl.split('?')[0];
     const branch  = matchRoutes(routes, reqPath) || [];
     console.log('serverRender: for path %s was found branch %o', reqPath, branch);

@@ -17,21 +17,22 @@ import {
 } from '../../helpers/app-contexts';
 import InitKCEvents from '../../pkg/ksAdapter/InitKCEvents';
 import Layout from '../Layout/Layout';
+import PlayerContainer from '../Player/PlayerContainer';
 
 const App = props => {
   const [isShareTextEnabled, setEnableShareText] = useState(false);
 
   const { i18n, store, history, deviceInfo, clientChronicles, abTesting, i18nData } = props;
-  const sessionInfo                                                                 = {
-    enableShareText: { isShareTextEnabled, setEnableShareText }
-  };
-  const deviceInfoContext                                                           = {
+
+  const sessionInfo       = { enableShareText: { isShareTextEnabled, setEnableShareText } };
+  const deviceInfoContext = {
     deviceInfo,
     isMobileDevice: deviceInfo.device?.type === 'mobile',
     undefinedDevice: deviceInfo.device?.type === undefined,
     isIPhone: ['iPhone Simulator', 'iPhone'].includes(deviceInfo.device?.model)
   };
-  console.log('render App');
+
+  const playerContainer = <PlayerContainer />;
   return (
     <I18nextProvider i18n={i18n}>
       <Provider store={store}>
@@ -42,9 +43,8 @@ const App = props => {
               <SessionInfoContext.Provider value={sessionInfo}>
                 <ChroniclesActions />
                 <ConnectedRouter history={history}>
-                  <ScrollToTop>
-                    <Layout {...i18nData} />
-                  </ScrollToTop>
+                  <ScrollToTop />
+                  <Layout {...i18nData} playerContainer={playerContainer} />
                 </ConnectedRouter>
               </SessionInfoContext.Provider>
             </DeviceInfoContext.Provider>

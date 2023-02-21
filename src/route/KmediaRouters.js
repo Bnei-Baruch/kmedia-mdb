@@ -4,15 +4,15 @@ import useRoutes from './routes';
 import HomePage from '../components/Sections/Home/HomePage';
 import LanguageRouter from './LanguageRouters';
 
-const KmediaRouters = () => {
-  const routes = useRoutes();
+const KmediaRouters = (playerContainer) => {
+  console.log("rerender routers: KmediaRouters render")
+  const routes = useRoutes(playerContainer);
   return (
     <Routes>
       <Route element={<HomePage />} index key="route_home_page" />
       <Route path="/:lang" key="route_language" element={<LanguageRouter />}>
         {
-          routes.map(({ path, component }, i) => <Route element={component} path={path} key={`route_${path}`} />
-          )
+          routes.map(({ path, component }, i) => <Route element={component} path={path} key={`route_${path}`} />)
         }
       </Route>
     </Routes>

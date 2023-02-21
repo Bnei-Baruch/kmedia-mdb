@@ -133,7 +133,7 @@ export default class ClientChronicles {
         }
 
         this.prevPathname    = this.currentPathname;
-        this.currentPathname = historyEvent.pathname;
+        this.currentPathname = historyEvent.location.pathname;
         this.appendPage('enter');
       }
 

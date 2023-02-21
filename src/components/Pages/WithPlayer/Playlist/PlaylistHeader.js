@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { useSelector } from 'react-redux';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { Header } from 'semantic-ui-react';
 import clsx from 'clsx';
 import { selectors as sources } from '../../../../redux/modules/sources';
@@ -13,8 +13,9 @@ import { selectors as mdb } from '../../../../redux/modules/mdb';
 import { selectors } from '../../../../redux/modules/playlist';
 import LessonDatePickerContainer from './LessonDatePickerContainer';
 
-const PlaylistHeader = ({ t }) => {
+const PlaylistHeader = () => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
+  const { t }              = useTranslation();
 
   const { cId, cuId, name } = useSelector(state => selectors.getInfo(state.playlist));
   const unit                = useSelector(state => mdb.getDenormContentUnit(state.mdb, cuId));
@@ -120,4 +121,4 @@ const PlaylistHeader = ({ t }) => {
   );
 };
 
-export default withTranslation()(PlaylistHeader);
+export default PlaylistHeader;

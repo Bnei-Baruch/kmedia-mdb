@@ -1,5 +1,5 @@
 import { isEqual } from 'lodash';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { withTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Container, Header } from 'semantic-ui-react';
@@ -29,8 +29,10 @@ const Filters = ({ namespace, baseParams, t }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(prepareActions.fetchCollections(PAGE_NS_LESSONS, { content_type: [CT_VIRTUAL_LESSONS] }));
-  }, [language, dispatch]);
+    if (!isReady && !wip && !err) {
+      dispatch(prepareActions.fetchCollections(PAGE_NS_LESSONS, { content_type: [CT_VIRTUAL_LESSONS] }));
+    }
+  }, [language, dispatch, isReady, wip, err]);
 
   useEffect(() => {
     if (!isReady && !wip && !err) {

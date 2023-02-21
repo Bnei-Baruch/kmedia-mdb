@@ -69,19 +69,12 @@ const MainPage = ({ t }) => {
       }));
     }
   }, [language, dispatch, pageNo, selected, listParams]);
-
-  const wipErr = WipErr({ wip, err, t });
-
+  console.log('Main page render');
+  const wipErr          = WipErr({ wip, err, t });
+  const filterComponent = <Filters namespace={PAGE_NS_LESSONS} baseParams={FILTER_PARAMS} />;
   return (<>
     <SectionHeader section="lessons" />
-    <SectionFiltersWithMobile
-      filters={
-        <Filters
-          namespace={PAGE_NS_LESSONS}
-          baseParams={FILTER_PARAMS}
-        />
-      }
-    >
+    <SectionFiltersWithMobile filters={filterComponent}>
       <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} />
       <FilterLabels namespace={PAGE_NS_LESSONS} />
       {

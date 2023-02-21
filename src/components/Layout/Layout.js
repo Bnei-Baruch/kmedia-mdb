@@ -162,8 +162,7 @@ class Layout extends Component {
   };
 
   render() {
-
-    const { t, location, language }                    = this.props;
+    const { t, location, language, playerContainer }   = this.props;
     const { sidebarActive, embed, isShowHeaderSearch } = this.state;
     const { isMobileDevice }                           = this.context;
 
@@ -174,7 +173,7 @@ class Layout extends Component {
       : <Icon name="sidebar" />;
 
     if (embed) {
-      return (<KmediaRouters />);
+      return (<KmediaRouters playerContainer={playerContainer} />);
     }
 
     return (
@@ -262,7 +261,7 @@ class Layout extends Component {
         <div className="layout__main">
           <div className="layout__content">
             <DownloadTrim />
-            <KmediaRouters />
+            <KmediaRouters playerContainer={playerContainer} />
           </div>
           <Footer />
         </div>

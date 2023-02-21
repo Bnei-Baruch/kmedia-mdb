@@ -52,7 +52,7 @@ export const init = (dispatch) => {
   initPlayerEvents(dispatch);
 };
 
-const PLAYER_EVENTS    = ['ready', 'remove', 'play', 'pause', 'playbackRateChanged', 'resize', 'mute', 'complete'];
+const PLAYER_EVENTS    = ['ready', 'remove', 'play', 'pause', 'playbackRateChanged', 'resize', 'mute', 'complete', 'destroyPlugin', 'buffer'];
 const initPlayerEvents = (dispatch) => {
   const player = window.jwplayer();
 

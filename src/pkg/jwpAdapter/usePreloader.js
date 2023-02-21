@@ -9,9 +9,9 @@ const usePreloader = () => {
 
   const dispatch = useDispatch();
   useEffect(() => {
-    if (loaded || !isReady) return null;
+    if (loaded || !isReady) return undefined;
     const jwp = window.jwplayer();
-    if (!jwp.on) return null;
+    if (!jwp.on) return undefined;
 
     const markAsLoaded = (e) => {
       dispatch(actions.setLoaded(true));
