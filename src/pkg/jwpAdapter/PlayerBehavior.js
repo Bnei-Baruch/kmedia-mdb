@@ -29,7 +29,7 @@ const PlayerBehavior = () => {
       setup({
         controls: false,
         playlist: [item],
-        preload: 'auto',
+        preload: 'auto'
       });
       init(dispatch);
       dispatch(playerActions.setWIP(true));

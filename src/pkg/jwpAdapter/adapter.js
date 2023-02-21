@@ -32,6 +32,7 @@ export const getMute = () => functionByName('getMute', false);
 export const setMute = (val) => functionByName('setMute', noop, val);
 
 export const setVolume = (vol) => functionByName('setVolume', noop, vol);
+export const getVolume = () => functionByName('getVolume', noop);
 
 export const setPlaybackRate = (rate) => functionByName('setPlaybackRate', noop, rate);
 
@@ -39,7 +40,12 @@ export const getPosition = () => functionByName('getPosition');
 
 export const play = () => functionByName('play');
 
-export const pause = () => functionByName('pause', false);
+export const pause      = () => functionByName('pause', false);
+export const togglePlay = () => {
+  const state = functionByName('getState');
+  if (!state) return;
+  (state !== 'playing') ? play() : pause();
+};
 
 export const seek = (pos) => functionByName('seek', noop, pos);
 

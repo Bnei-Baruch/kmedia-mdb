@@ -10,6 +10,7 @@ import AppendChronicle from './AppendChronicle';
 import { DeviceInfoContext } from '../../helpers/app-contexts';
 import clsx from 'clsx';
 import { Ref } from 'semantic-ui-react';
+import { seek, getPosition, setVolume, getVolume, togglePlay, getDuration } from '../../pkg/jwpAdapter/adapter';
 import UpdateLocation from './UpdateLocation';
 
 const HIDE_CONTROLS_TIMEOUT = 3000;
@@ -44,6 +45,60 @@ const PlayerContainer = () => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      console.log(e);
+      if (e.defaultPrevented) {
+        return; // Do nothing if the event was already processed
+      }
+      const coef = e.shiftKey ? 2 : e.altKey ? 0.2 : 1;
+      switch (e.key) {
+      case 'Down': // IE/Edge specific value
+      case 'ArrowDown': {
+        const v = getVolume();
+        setVolume(Math.max(0, v - coef * 5));
+        break;
+      }
+      case 'Up': // IE/Edge specific value
+      case 'ArrowUp': {
+        const v = getVolume();
+        setVolume(Math.min(100, v + coef * 5));
+        break;
+      }
+      case 'Left': // IE/Edge specific value
+      case 'ArrowLeft': {
+        const pos = getPosition();
+        seek(Math.max(pos - coef * 10, 0));
+        break;
+      }
+      case 'Right': // IE/Edge specific value
+      case 'ArrowRight': {
+        const pos = getPosition();
+        seek(Math.min(pos + coef * 10, getDuration()));
+        break;
+      }
+      case 'Esc': // IE/Edge specific value
+      case 'Escape':
+        break;
+      case ' ':
+        togglePlay();
+        break;
+      default:
+        return;
+      }
+
+      if (mode === PLAYER_OVER_MODES.active) {
+        runTimeout(dispatch);
+      }
+      if (mode === PLAYER_OVER_MODES.none) {
+        dispatch(actions.setOverMode(PLAYER_OVER_MODES.active));
+      }
+      e.preventDefault();
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [mode]);
 
   useEffect(() => {
     if (mode === PLAYER_OVER_MODES.active) {
