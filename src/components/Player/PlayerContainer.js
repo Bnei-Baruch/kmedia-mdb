@@ -69,13 +69,13 @@ const PlayerContainer = () => {
       case 'Left': // IE/Edge specific value
       case 'ArrowLeft': {
         const pos = getPosition();
-        seek(Math.max(pos - coef * 10, 0));
+        seek(Math.max(pos - coef * 5, 0));
         break;
       }
       case 'Right': // IE/Edge specific value
       case 'ArrowRight': {
         const pos = getPosition();
-        seek(Math.min(pos + coef * 10, getDuration()));
+        seek(Math.min(pos + coef * 5, getDuration()));
         break;
       }
       case 'Esc': // IE/Edge specific value
