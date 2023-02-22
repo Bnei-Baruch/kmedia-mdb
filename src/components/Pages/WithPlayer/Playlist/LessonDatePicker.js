@@ -27,7 +27,7 @@ const LessonDatePicker = ({ t }) => {
   useEffect(() => {
     if (!isEmpty(dpCollection?.content_units) && collection.id !== dpCollection.id) {
       const link = canonicalLink(dpCollection.content_units[0]);
-      navigate.push(`/${language}${link}`);
+      navigate(`/${language}${link}`);
       dispatch(actions.nullDatepickerCO());
     }
   }, [collection, dpCollection, language, navigate, dispatch]);

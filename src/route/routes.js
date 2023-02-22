@@ -1,5 +1,4 @@
 import React from 'react';
-import NotImplemented from './../components/NotImplemented';
 import Events from './../components/Sections/Events/MainPage';
 import ExcerptContainer from './../components/Sections/Excerpt/ExcerptContainer';
 import Help from './../components/Sections/Help/Help';
@@ -47,7 +46,7 @@ import * as ssrDataLoaders from './routesSSRData';
 import SingleMediaContainer from './../components/Pages/WithPlayer/SingleMedia/SingleMediaContainer';
 import PlaylistMy from './../components/Pages/WithPlayer/PlaylistMy/Container';
 
-const useRoutes = ({ playerContainer }) => {
+const useRoutes = (playerContainer) => {
   return [
     { path: '', component: <HomePage />, ssrData: ssrDataLoaders.home },
 

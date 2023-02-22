@@ -85,7 +85,7 @@ const OmniBox = ({ isHomePage = false, t }) => {
   };
 
   const handleFromInputChange = value => {
-    navigate.push(`/${ language }/simple-mode?date=${ moment(value).format('YYYY-MM-DD') }`);
+    navigate(`/${ language }/simple-mode?date=${ moment(value).format('YYYY-MM-DD') }`);
   };
 
   const renderInput = () => isHomePage ?

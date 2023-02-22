@@ -4,7 +4,7 @@ import useRoutes from './routes';
 import HomePage from '../components/Sections/Home/HomePage';
 import LanguageRouter from './LanguageRouters';
 
-const KmediaRouters = (playerContainer) => {
+const KmediaRouters = ({ playerContainer }) => {
   console.log("rerender routers: KmediaRouters render")
   const routes = useRoutes(playerContainer);
   return (

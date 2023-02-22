@@ -52,7 +52,7 @@ const MobileLanguage = ({ language, contentLanguage, setContentLanguage }) => {
     storeContentLanguage(selectedContentLang, setContentLanguage);
 
     const link = getToWithLanguage(null, location, language, selectedContentLang);
-    navigate.push(link);
+    navigate(link);
   };
 
   return (
