@@ -30,8 +30,7 @@
     "test:coverage": "react-scripts test --verbose --watchAll --coverage",
     "lint": "yarn run eslint src",
     "lint-fix": "yarn run lint --fix",
-    "prepare": "husky install",
-    "@babel/register": "^7.18.9"
+    "prepare": "husky install"
   },
   "devDependencies": {
     "@babel/cli": "^7.19.3",
@@ -85,6 +84,7 @@
     "source-map-explorer": "^2.5.3"
   },
   "dependencies": {
+    "@babel/register": "^7.21.0",
     "@lagunovsky/redux-react-router": "^4.3.0",
     "@marvelapp/react-ab-test": "^3.1.0",
     "@testing-library/jest-dom": "^5.16.5",
