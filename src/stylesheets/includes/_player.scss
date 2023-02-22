@@ -368,13 +368,13 @@ video {
 
 //MOBILE STATES
 .is-mobile.is-fullscreen.is-sharing {
-  > div {
-    display: flex;
-    height: 100%;
-    flex-direction: column;
-  }
+  display: flex;
+  flex-direction: column;
 
-  background: #000;
+  .sharing {
+    height: fit-content;
+    background: #000;
+  }
 }
 
 
@@ -384,8 +384,8 @@ video {
   }
 
   .is-mobile.is-fullscreen.is-sharing & {
-    height: auto;
-    flex: 1 1 auto;;
+    height: calc(100% - 130px);
+    flex: 1 1 auto;
     position: relative;
   }
 }
@@ -394,6 +394,22 @@ video {
   .is-mobile.is-fullscreen.is-sharing & {
     position: absolute;
     height: calc(100% - 40px);
+  }
+}
+
+
+.jwplayer {
+  .is-mobile.is-fullscreen & {
+    @media only screen and (orientation: portrait) {
+      height: 100VW !important;
+    }
+    @media only screen and (orientation: landscape) {
+      height: 100VH !important;
+    }
+
+    video {
+      object-fit: contain !important;
+    }
   }
 }
 
