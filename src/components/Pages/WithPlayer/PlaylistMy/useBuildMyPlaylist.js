@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
-import { useLocation } from 'react-router';
+import { useParams, useLocation } from 'react-router-dom';
 
 import { actions, selectors } from '../../../../redux/modules/playlist';
 import { getActivePartFromQuery } from '../../../../helpers/player';
