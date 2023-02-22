@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { Icon, Input } from 'semantic-ui-react';
 
-const SearchInput = ({ onSearch, onClear, defVal = '', t }) => {
+const SearchInput = ({ onSearch, onClear, defVal = '' }) => {
+  const { t }             = useTranslation();
   const [value, setValue] = useState(defVal);
 
   const change = (e, data) => {
@@ -36,4 +37,4 @@ const SearchInput = ({ onSearch, onClear, defVal = '', t }) => {
   );
 };
 
-export default withTranslation()(SearchInput);
+export default SearchInput;

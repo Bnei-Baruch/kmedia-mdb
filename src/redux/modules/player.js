@@ -1,7 +1,6 @@
 import { createAction } from 'redux-actions';
 import { handleActions } from './settings';
 import { PLAYER_OVER_MODES } from '../../helpers/consts';
-import { LOCALSTORAGE_MUTE } from '../../pkg/jwpAdapter/adapter';
 
 const PLAYER_READY       = 'Player/READY';
 const PLAYER_REMOVE      = 'Player/REMOVE';
@@ -159,6 +158,7 @@ export const selectors = {
 export const PLAYER_ACTIONS_BY_EVENT = {
   'ready': playerReady,
   'destroyPlugin': playerRemove,
+  'remove': playerRemove,
   'buffer': playerBuffer,
   'play': playerPlay,
   'playbackRateChanged': playerRate,

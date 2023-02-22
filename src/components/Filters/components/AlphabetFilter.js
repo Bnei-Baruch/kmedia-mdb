@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { List } from 'semantic-ui-react';
 import { isEmpty } from '../../../helpers/utils';
 
-const AlphabetFilter = ({ letters, onLetterClick, t }) => {
+const AlphabetFilter = ({ letters, onLetterClick }) => {
+  const { t }                             = useTranslation();
   const [clickedLetter, setClickedLetter] = useState(null);
 
   const labelOnClick = (e, data) => {
@@ -50,4 +51,4 @@ AlphabetFilter.propTypes = {
   onLetterClick: PropTypes.func.isRequired
 };
 
-export default withTranslation()(AlphabetFilter);
+export default AlphabetFilter;

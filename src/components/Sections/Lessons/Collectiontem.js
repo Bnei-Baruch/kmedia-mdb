@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import React from 'react';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useSelector, shallowEqual } from 'react-redux';
 import { Header, List } from 'semantic-ui-react';
 
@@ -12,7 +12,8 @@ import Link from '../../Language/MultiLanguageLink';
 import UnitLogoWithDuration, { getLogoUnit } from '../../shared/UnitLogoWithDuration';
 import { MY_NAMESPACE_HISTORY } from '../../../helpers/consts';
 
-const CollectionItem = ({ id, t }) => {
+const CollectionItem = ({ id }) => {
+  const { t }        = useTranslation();
   const c            = useSelector(state => mdb.getDenormCollection(state.mdb, id));
   const historyItems = useSelector(state => my.getList(state.my, MY_NAMESPACE_HISTORY), shallowEqual) || [];
 
@@ -46,4 +47,4 @@ const CollectionItem = ({ id, t }) => {
   );
 };
 
-export default withTranslation()(CollectionItem);
+export default CollectionItem;

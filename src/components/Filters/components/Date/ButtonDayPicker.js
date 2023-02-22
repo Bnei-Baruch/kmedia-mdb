@@ -33,12 +33,6 @@ class ButtonDayPicker extends Component {
     label: '',
     onDayChange: noop,
   };
-
-  constructor(props) {
-    super(props);
-    this.myRef = createRef();
-  }
-
   state = {
     month: null,
     isPopupOpen: false,
@@ -46,9 +40,13 @@ class ButtonDayPicker extends Component {
     value: null,
     stringValue: null,
   };
-
   localeDateFormat      = moment.localeData().longDateFormat('L');
   localeDateFormatShort = this.localeDateFormat.replace('DD', 'D').replace('MM', 'M');
+
+  constructor(props) {
+    super(props);
+    this.myRef = createRef();
+  }
 
   static getDerivedStateFromProps(props, state) {
     const { value, language } = state;
@@ -242,13 +240,13 @@ class ButtonDayPicker extends Component {
       <Popup
         basic
         flowing
-        on='focus'
+        on="focus"
         open={isPopupOpen}
         onOpen={this.openPopup}
         onClose={this.closePopup}
         trigger={
           <Button className="dateButton" onClick={this.doSearchFromClickEvent}>
-            <Icon name='calendar alternate outline' />
+            <Icon name="calendar alternate outline" />
             {label}
           </Button>
         }
