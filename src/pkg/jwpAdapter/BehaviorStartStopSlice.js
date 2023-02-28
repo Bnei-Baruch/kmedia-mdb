@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 
 import { selectors as player } from '../../redux/modules/player';
-import { JWPLAYER_ID } from '../../helpers/consts';
 import { startEndFromQuery } from '../../components/Player/Controls/helper';
 import { pause, seek } from './adapter';
 import { noop } from '../../helpers/utils';

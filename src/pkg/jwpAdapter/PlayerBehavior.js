@@ -32,6 +32,7 @@ const PlayerBehavior = () => {
 
       load([playlistItem]);
     }
+
     dispatch(actions.setFile(file));
   }, [file.src, info.isReady, dispatch]);
 

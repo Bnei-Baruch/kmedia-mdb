@@ -27,7 +27,7 @@ const Filters = ({ namespace, baseParams, t }) => {
     if (!isReady && notWipErr) {
       dispatch(actions.fetchStats(namespace, baseParams, { isPrepare: true, countC: true, countL: true }));
     }
-  }, [isReady, baseParams, dispatch, notWipErr]);
+  }, [isReady, baseParams, namespace, dispatch, notWipErr]);
 
   const needFetch = isHydrated && isReady && notWipErr;
   useEffect(() => {

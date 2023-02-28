@@ -57,9 +57,7 @@ export const remove        = () => functionByName('remove', noop);
  * check if jwplayer builded, use if not need rerender on build
  * @returns {boolean}
  */
-export const isPlayerReady = () => {
-  return window.jwplayer()?.id === JWPLAYER_ID;
-};
+export const isPlayerReady = () => window.jwplayer()?.id === JWPLAYER_ID;
 
 const PLAYER_EVENTS = [
   'ready',

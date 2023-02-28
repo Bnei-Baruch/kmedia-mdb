@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
@@ -14,7 +14,7 @@ const BuildPlaylistByUnit = ({ cts }) => {
   const fetched     = useSelector(state => mdb.getFullUnitFetched(state.mdb))[id];
   const wipCU       = useSelector(state => mdb.getWip(state.mdb).units)[id];
   const errCU       = useSelector(state => mdb.getErrors(state.mdb).units)[id];
-  const { id: cId } = unit && Object.values(unit.collections).find(c => cts.includes(c.content_type)) || false;
+  const { id: cId } = (unit && Object.values(unit.collections).find(c => cts.includes(c.content_type))) || false;
 
   const dispatch = useDispatch();
 

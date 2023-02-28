@@ -5,7 +5,7 @@ import { selectors as player, actions } from '../../../redux/modules/player';
 import { PLAYER_OVER_MODES } from '../../../helpers/consts';
 import { seek, getPosition, setVolume, getVolume, togglePlay, getDuration } from '../../../pkg/jwpAdapter/adapter';
 
-export const useKeyboardControl = (runTimeout) => {
+export const useKeyboardControl = runTimeout => {
   const mode = useSelector(state => player.getOverMode(state.player));
 
   const dispatch = useDispatch();
@@ -52,6 +52,8 @@ export const useKeyboardControl = (runTimeout) => {
         case ' ':
           togglePlay();
           break;
+        default:
+          break;
       }
 
       if (mode === PLAYER_OVER_MODES.active) {
@@ -61,6 +63,7 @@ export const useKeyboardControl = (runTimeout) => {
       if (mode === PLAYER_OVER_MODES.none) {
         dispatch(actions.setOverMode(PLAYER_OVER_MODES.active));
       }
+
       dispatch(actions.setKeyboardCoef(coef));
       e.preventDefault();
     };

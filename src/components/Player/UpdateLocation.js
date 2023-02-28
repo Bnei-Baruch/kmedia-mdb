@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -31,7 +31,6 @@ const UpdateLocation = () => {
   useEffect(() => {
     const _q = startEndFromQuery(location);
     if (_q.start !== prevStart || _q.end !== prevEnd) {
-    console.log('startEndFromQuery', _q, prevStart, prevEnd);
       dispatch(actions.setShareStartEnd(_q));
     }
   }, [location, prevStart, prevEnd]);
@@ -48,8 +47,6 @@ const UpdateLocation = () => {
     }
 
     if (!isEmpty(newq)) {
-
-      console.log('updateQuery');
       updateQuery(navigate, location, query => ({ ...query, ...newq }));
     }
   }, [mediaType, language, q, navigate, location]);

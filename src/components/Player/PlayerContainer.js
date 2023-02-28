@@ -4,7 +4,6 @@ import clsx from 'clsx';
 import { Ref } from 'semantic-ui-react';
 
 import { selectors as player, selectors, actions } from '../../redux/modules/player';
-import { actions as chroniclesActions } from '../../redux/modules/chronicles';
 import { PLAYER_OVER_MODES } from '../../helpers/consts';
 import Player from '../../pkg/jwpAdapter/Player';
 import PlayerToolsWeb from './PlayerToolsWeb';
@@ -13,7 +12,6 @@ import AppendChronicle from './AppendChronicle';
 import { DeviceInfoContext } from '../../helpers/app-contexts';
 import UpdateLocation from './UpdateLocation';
 import { useKeyboardControl } from './hooks/useKeyboardControl';
-import { remove } from '../../pkg/jwpAdapter/adapter';
 
 const HIDE_CONTROLS_TIMEOUT = 3000;
 
@@ -91,6 +89,7 @@ const PlayerContainer = () => {
       dispatch(actions.setOverMode(PLAYER_OVER_MODES.active));
     }
   };
+
   const playerComponent = <Player />;
 
   const content = (

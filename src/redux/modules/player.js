@@ -75,12 +75,7 @@ const initialState = {
   keyboardCoef: 1
 };
 
-const onRemove        = draft => {
-  draft.overMode = PLAYER_OVER_MODES.firstTime;
-  draft.ready    = false;
-  draft.played   = false;
-};
-const onDestroyPlugin = draft => {
+const onRemove = draft => {
   draft.overMode = PLAYER_OVER_MODES.firstTime;
   draft.ready    = false;
   draft.played   = false;

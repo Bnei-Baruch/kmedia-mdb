@@ -13,11 +13,9 @@ const Player = () => {
   const ref      = useRef();
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    return () => {
-      dispatch(chroniclesActions.pauseOnLeave());
-      remove()
-    };
+  useEffect(() => () => {
+    dispatch(chroniclesActions.pauseOnLeave());
+    remove()
   }, []);
   return (
     <>

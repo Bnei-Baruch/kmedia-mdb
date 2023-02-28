@@ -69,7 +69,7 @@ const MainPage = ({ t }) => {
       }));
     }
   }, [language, dispatch, pageNo, selected, listParams]);
-  console.log('Main page render');
+
   const wipErr          = WipErr({ wip, err, t });
   const filterComponent = <Filters namespace={PAGE_NS_LESSONS} baseParams={FILTER_PARAMS} />;
   return (<>

@@ -26,7 +26,7 @@ const VolumeCtrl = ({ t }) => {
     const { left, right } = widthRef.current.getBoundingClientRect();
     setLeft(left);
     setRight(right + 120);
-  }, [widthRef.current, width]);
+  }, [widthRef, width]);
 
   const onChangePosition = useCallback(e => {
     e.preventDefault();

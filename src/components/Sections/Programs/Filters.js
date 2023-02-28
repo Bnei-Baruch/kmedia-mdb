@@ -50,7 +50,7 @@ const Filters = ({ namespace, baseParams, t }) => {
         with_collections: true,
       }, { isPrepare: false }));
     }
-  }, [dispatch, isHydrated, isReady, selected, baseParams]);
+  }, [dispatch, isHydrated, isReady, namespace, selected, baseParams]);
 
   const handleOnHydrated = () => setIsHydrated(true);
 
