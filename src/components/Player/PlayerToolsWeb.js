@@ -9,9 +9,8 @@ import AudioBg from './AudioBg';
 import Preloader from './Controls/Preloader';
 
 const PlayerToolsWeb = ({ fullscreenRef }) => {
-  const isPlayerReady = useSelector(state => player.isReady(state.player));
-
-  if (!isPlayerReady) return null;
+  const isReady = useSelector(state => player.isReady(state.player));
+  if (!isReady) return null;
 
   return (
     <>

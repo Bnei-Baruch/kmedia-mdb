@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import React, { useMemo, useState } from 'react';
 import { withTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Checkbox, Icon, Input, List, Modal, Table, TableBody } from 'semantic-ui-react';
+import { Button, Checkbox, Icon, Input, List, Modal, Table } from 'semantic-ui-react';
 import { CT_HOLIDAY, FN_COLLECTION_MULTI, FN_CONTENT_TYPE } from '../../../helpers/consts';
 import { getLanguageDirection, isLanguageRtl } from '../../../helpers/i18n-utils';
 import { isEmpty } from '../../../helpers/utils';

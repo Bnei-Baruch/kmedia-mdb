@@ -1,11 +1,12 @@
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { selectors, actions, selectors as player } from '../../redux/modules/player';
+import { selectors, actions } from '../../redux/modules/player';
+import { isPlayerReady } from './adapter';
 
 const usePreloader = () => {
   const loaded  = useSelector(state => selectors.isLoaded(state.player));
-  const isReady = useSelector(state => player.isReady(state.player));
+  const isReady = isPlayerReady();
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -13,7 +14,7 @@ const usePreloader = () => {
     const jwp = window.jwplayer();
     if (!jwp.on) return undefined;
 
-    const markAsLoaded = (e) => {
+    const markAsLoaded = e => {
       dispatch(actions.setLoaded(true));
       const jwp = window.jwplayer();
       if (jwp.off) {
@@ -33,7 +34,7 @@ const usePreloader = () => {
       }
     };
 
-  }, [loaded, isReady]);
+  }, [loaded, isReady, dispatch]);
 
   return loaded;
 };

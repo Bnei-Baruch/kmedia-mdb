@@ -21,7 +21,7 @@ const CollectionListTemplate = ({ cID, size = 'big', t }) => {
     if (!c) {
       dispatch(actions.fetchCollection(cID));
     }
-  }, [cID, dispatch]);
+  }, [cID, c, dispatch]);
 
   const { isMobileDevice } = useContext(DeviceInfoContext);
 

@@ -20,6 +20,7 @@ const CopyShareUrl = ({ t }) => {
     setOpen(true);
     timeout = setTimeout(() => setOpen(false), POPOVER_CONFIRMATION_TIMEOUT);
   };
+
   const shareUrl     = useShareUrl();
 
   return (

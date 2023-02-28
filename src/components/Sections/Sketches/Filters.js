@@ -22,15 +22,15 @@ const Filters = ({ namespace, baseParams, t }) => {
   const selected     = useSelector(state => filters.getNotEmptyFilters(state.filters, namespace), isEqual);
 
   const dispatch = useDispatch();
-
+  const _isReady = !isReady && !wip && !err;
   useEffect(() => {
-    if (!isReady && !wip && !err) {
+    if (_isReady) {
       dispatch(actions.fetchStats(namespace,
         { ...baseParams, with_original_languages: true },
         { isPrepare: true }
       ));
     }
-  }, [dispatch, isReady, baseParams]);
+  }, [namespace, _isReady, baseParams, dispatch]);
 
   useEffect(() => {
     if (isHydrated && isReady) {
@@ -39,7 +39,7 @@ const Filters = ({ namespace, baseParams, t }) => {
         { isPrepare: false }
       ));
     }
-  }, [dispatch, isHydrated, isReady, selected, baseParams]);
+  }, [isHydrated, isReady, selected, baseParams, namespace, dispatch]);
 
   const handleOnHydrated = () => setIsHydrated(true);
 

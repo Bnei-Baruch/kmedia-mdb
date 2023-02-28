@@ -80,14 +80,14 @@ const MainPage = ({ t }) => {
       {
         wipErr || items?.map(({ id, content_type }, i) => {
           switch (true) {
-          case COLLECTION_DAILY_LESSONS.includes(content_type):
-            return <DailyLessonItem id={id} key={i} />;
-          case COLLECTION_LESSONS_TYPE.includes(content_type):
-            return <CollectionItem id={id} key={i} />;
-          case UNIT_LESSONS_TYPE.includes(content_type):
-            return <UnitItem id={id} key={i} />;
-          default:
-            return null;
+            case COLLECTION_DAILY_LESSONS.includes(content_type):
+              return <DailyLessonItem id={id} key={i} />;
+            case COLLECTION_LESSONS_TYPE.includes(content_type):
+              return <CollectionItem id={id} key={i} />;
+            case UNIT_LESSONS_TYPE.includes(content_type):
+              return <UnitItem id={id} key={i} />;
+            default:
+              return null;
           }
         })
       }

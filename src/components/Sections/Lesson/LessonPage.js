@@ -35,7 +35,7 @@ const LessonPage = ({ t }) => {
   const prevSel                    = usePrevious(selected);
 
   const dispatch = useDispatch();
-  const setPage  = useCallback(pageNo => dispatch(actions.setPage(namespace, pageNo)), [dispatch]);
+  const setPage  = useCallback(pageNo => dispatch(actions.setPage(namespace, pageNo)), [namespace, dispatch]);
 
   const location   = useLocation();
   const pageNo     = useMemo(() => getPageFromLocation(location) || 1, [location]);

@@ -21,7 +21,7 @@ function DonationPopup({ t }) {
     const firstWeek = d.getDate();
     const theDay    = d.getDay();
     // First Sunday and Saturday of the week
-    if (firstWeek <= 7 && (theDay == 0 || theDay == 6)) {
+    if (firstWeek <= 7 && (theDay === 0 || theDay === 6)) {
       const popupCountKey = `showDonationPopup_${d.toISOString().split('T')[0]}`;
       const popupCount    = parseInt(localStorage.getItem(popupCountKey) ?? 0);
       if (popupCount > 1)

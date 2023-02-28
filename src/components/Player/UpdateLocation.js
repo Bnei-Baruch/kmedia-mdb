@@ -8,7 +8,7 @@ import { persistPreferredMediaType } from '../../helpers/player';
 import { getQuery, stringify, updateQuery } from '../../helpers/url';
 import { canonicalLink } from '../../helpers/links';
 import { selectors as settings } from '../../redux/modules/settings';
-import { actions } from '../../redux/modules/player';
+import { actions, selectors as player } from '../../redux/modules/player';
 import { startEndFromQuery } from './Controls/helper';
 import { isEmpty } from '../../helpers/utils';
 
@@ -16,9 +16,10 @@ const UpdateLocation = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const dispatch   = useDispatch();
-  const q          = getQuery(location);
-  const uiLanguage = useSelector(state => settings.getLanguage(state.settings));
+  const dispatch                           = useDispatch();
+  const q                                  = getQuery(location);
+  const uiLanguage                         = useSelector(state => settings.getLanguage(state.settings));
+  const { start: prevStart, end: prevEnd } = useSelector(state => player.getShareStartEnd(state.player));
 
   const { mediaType, language, nextUnitId, cId, baseLink } = useSelector(state => playlist.getInfo(state.playlist));
 
@@ -28,8 +29,12 @@ const UpdateLocation = () => {
 
   //init redux start end from location
   useEffect(() => {
-    dispatch(actions.setShareStartEnd(startEndFromQuery(location)));
-  }, [location]);
+    const _q = startEndFromQuery(location);
+    if (_q.start !== prevStart || _q.end !== prevEnd) {
+    console.log('startEndFromQuery', _q, prevStart, prevEnd);
+      dispatch(actions.setShareStartEnd(_q));
+    }
+  }, [location, prevStart, prevEnd]);
 
   useEffect(() => {
     const newq = {};
@@ -41,7 +46,10 @@ const UpdateLocation = () => {
       newq.mediaType = mediaType;
       persistPreferredMediaType(mediaType);
     }
+
     if (!isEmpty(newq)) {
+
+      console.log('updateQuery');
       updateQuery(navigate, location, query => ({ ...query, ...newq }));
     }
   }, [mediaType, language, q, navigate, location]);
@@ -56,6 +64,7 @@ const UpdateLocation = () => {
       } else {
         link = canonicalLink(denormUnit(nextUnitId), null, denormCollectiont(cId));
       }
+
       navigate({ pathname: `/${uiLanguage}${link}`, search });
       dispatch(action.nullNextUnit());
     }

@@ -64,17 +64,17 @@ const makeTagLink = (tag, getTagById) => {
 const makeCollectionLink = (collection, t) => {
   let display;
   switch (collection.content_type) {
-  case CT_DAILY_LESSON:
-  case CT_SPECIAL_LESSON: {
-    const ctLabel = t(`constants.content-types.${CT_DAILY_LESSON}`);
-    const fd      = t('values.date', { date: collection.film_date });
-    display       = `${ctLabel} ${fd}`;
-    break;
-  }
+    case CT_DAILY_LESSON:
+    case CT_SPECIAL_LESSON: {
+      const ctLabel = t(`constants.content-types.${CT_DAILY_LESSON}`);
+      const fd      = t('values.date', { date: collection.film_date });
+      display       = `${ctLabel} ${fd}`;
+      break;
+    }
 
-  default:
-    display = collection.name;
-    break;
+    default:
+      display = collection.name;
+      break;
   }
 
   return <Link key={collection.id} to={canonicalLink(collection)}>{display}</Link>;

@@ -1,11 +1,13 @@
 import React, { useRef, useEffect } from 'react';
+import { Ref } from 'semantic-ui-react';
+import { useDispatch } from 'react-redux';
+
+import { actions as chroniclesActions } from '../../redux/modules/chronicles';
 import { JWPLAYER_ID } from '../../helpers/consts';
 import PlayerBehavior from './PlayerBehavior';
 import BehaviorStartPlay from './BehaviorStartPlay';
 import BehaviorStartStopSlice from './BehaviorStartStopSlice';
-import { Ref } from 'semantic-ui-react';
-import { actions } from '../../redux/modules/chronicles';
-import { useDispatch } from 'react-redux';
+import { remove } from './adapter';
 
 const Player = () => {
   const ref      = useRef();
@@ -13,10 +15,10 @@ const Player = () => {
 
   useEffect(() => {
     return () => {
-      dispatch(actions.pauseOnLeave());
+      dispatch(chroniclesActions.pauseOnLeave());
+      remove()
     };
   }, []);
-
   return (
     <>
       <PlayerBehavior />

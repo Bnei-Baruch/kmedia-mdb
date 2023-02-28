@@ -20,16 +20,15 @@ const MediaTypeControl = ({ t }) => {
       <Button.Group size="mini" inverted>
         {
           [MT_VIDEO, MT_AUDIO].map(mt => (
-              <Button
-                inverted
-                onClick={handleSetMediaType}
-                name={mt}
-                key={mt}
-                content={t(`player.settings.${mt}`)}
-                active={type === mt}
-              />
-            )
-          )
+            <Button
+              inverted
+              onClick={handleSetMediaType}
+              name={mt}
+              key={mt}
+              content={t(`player.settings.${mt}`)}
+              active={type === mt}
+            />
+          ))
         }
       </Button.Group>
     </div>

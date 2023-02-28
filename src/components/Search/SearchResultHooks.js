@@ -161,13 +161,13 @@ const searchResultClick = (chronicles, dispatch, clickData) => link => {
 };
 
 export const SearchResultCU = withTranslation()(({
-                                                   cu,
-                                                   highlight = {},
-                                                   clickData,
-                                                   hideContent = false,
-                                                   onlyViewsAndDate = false,
-                                                   t
-                                                 }) => {
+  cu,
+  highlight = {},
+  clickData,
+  hideContent = false,
+  onlyViewsAndDate = false,
+  t
+}) => {
   const views      = useSelector(state => recommended.getViews(cu.id, state.recommended));
   const chronicles = useContext(ClientChroniclesContext);
   const dispatch   = useDispatch();
@@ -304,20 +304,20 @@ export const SearchResultLandingPage = withTranslation()(({ landingPage, filterV
 });
 
 export const SearchResultOneItem = withTranslation()(({
-                                                        key,
-                                                        title,
-                                                        link,
-                                                        logo,
-                                                        content,
-                                                        part,
-                                                        parts,
-                                                        date,
-                                                        views,
-                                                        collectionTitle,
-                                                        collectionLink,
-                                                        t,
-                                                        click,
-                                                      }) => {
+  key,
+  title,
+  link,
+  logo,
+  content,
+  part,
+  parts,
+  date,
+  views,
+  collectionTitle,
+  collectionLink,
+  t,
+  click,
+}) => {
   const description = [];
   collectionTitle && description.push(collectionTitle);
   part && description.push(t('pages.unit.info.episode', { name: part }));
@@ -347,12 +347,12 @@ export const SearchResultOneItem = withTranslation()(({
 
 const getFilterById = (getTagById, getSourceById, index) => {
   switch (index) {
-  case SEARCH_INTENT_INDEX_TOPIC:
-    return getTagById;
-  case SEARCH_INTENT_INDEX_SOURCE:
-    return getSourceById;
-  default:
-    return x => x;
+    case SEARCH_INTENT_INDEX_TOPIC:
+      return getTagById;
+    case SEARCH_INTENT_INDEX_SOURCE:
+      return getSourceById;
+    default:
+      return x => x;
   }
 };
 
@@ -389,16 +389,16 @@ export const SearchResultIntent = withTranslation()(({ id, name, type, index, hi
   const path      = tracePath(getById(id), getById);
   let display     = '';
   switch (index) {
-  case SEARCH_INTENT_INDEX_TOPIC:
-    display     = path[path.length - 1].label;
-    resultsType = SEARCH_INTENT_HIT_TYPE_PROGRAMS;
-    break;
-  case SEARCH_INTENT_INDEX_SOURCE:
-    display     = path.map(y => y.name).join(' > ');
-    resultsType = SEARCH_INTENT_HIT_TYPE_LESSONS;
-    break;
-  default:
-    display = name;
+    case SEARCH_INTENT_INDEX_TOPIC:
+      display     = path[path.length - 1].label;
+      resultsType = SEARCH_INTENT_HIT_TYPE_PROGRAMS;
+      break;
+    case SEARCH_INTENT_INDEX_SOURCE:
+      display     = path.map(y => y.name).join(' > ');
+      resultsType = SEARCH_INTENT_HIT_TYPE_LESSONS;
+      break;
+    default:
+      display = name;
   }
 
   const props = {
@@ -417,18 +417,18 @@ export const SearchResultIntent = withTranslation()(({ id, name, type, index, hi
 });
 
 export const SearchResultManyItems = withTranslation()(({
-                                                          logo,
-                                                          link,
-                                                          title,
-                                                          description,
-                                                          parts,
-                                                          resultsType,
-                                                          wip,
-                                                          err,
-                                                          items,
-                                                          click,
-                                                          t
-                                                        }) => {
+  logo,
+  link,
+  title,
+  description,
+  parts,
+  resultsType,
+  wip,
+  err,
+  items,
+  click,
+  t
+}) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const wipError           = WipErr({ wip: wip || items.some(item => !item), err, t });
   return (
@@ -473,9 +473,9 @@ const getLowestLevelSeries = (series, rootId) => {
 const renderSerie = (s, click, link, t) =>
   (
     <Button basic size="tiny" className="link_to_cu" key={s.id}
-            as={Link} to={link}
-            onClick={() => click(link)}
-            style={{ minWidth: '290px', marginBottom: '0.5em', display: 'flex', justifyContent: 'space-between' }}>
+      as={Link} to={link}
+      onClick={() => click(link)}
+      style={{ minWidth: '290px', marginBottom: '0.5em', display: 'flex', justifyContent: 'space-between' }}>
       {s.name}
       &nbsp;
       <Link key={s.id} to={link} onClick={() => click(link)}>

@@ -36,18 +36,17 @@ export const PlaylistCollectionPage = ({ playerContainer }) => {
   return <Decorator builder={builder} playerContainer={playerContainer} />;
 };
 
-const Decorator = ({ builder, playerContainer }) => {
-  return (
-    <>
-      {builder}
-      <PageSwitcher playerContainer={playerContainer} />
-    </>
-  );
-};
+const Decorator = ({ builder, playerContainer }) => (
+  <>
+    {builder}
+    <PageSwitcher playerContainer={playerContainer} />
+  </>
+);
 
 const PageSwitcher = ({ playerContainer }) => {
   const { t }                      = useTranslation();
   const { isReady, isSingleMedia } = useSelector(state => playlist.getInfo(state.playlist));
+
   if (!isReady)
     return WipErr({ wip: !isReady, t });
 

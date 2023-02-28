@@ -25,4 +25,5 @@ const PlaylistLastDaily = ({ playerContainer }) => {
     </div>
   );
 };
+
 export default PlaylistLastDaily;

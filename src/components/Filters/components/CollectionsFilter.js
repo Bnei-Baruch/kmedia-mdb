@@ -28,12 +28,12 @@ const mapNS2Tree = (state, namespace, t) => {
   let cIDs;
 
   switch (namespace) {
-  case 'publications-articles':
-    ct   = CT_ARTICLES;
-    cIDs = publications.getCollections(state.publications)[ct];
-    break;
-  default:
-    break;
+    case 'publications-articles':
+      ct   = CT_ARTICLES;
+      cIDs = publications.getCollections(state.publications)[ct];
+      break;
+    default:
+      break;
   }
 
   const collections = (cIDs || []).map(x => mdb.getCollectionById(state.mdb, x));

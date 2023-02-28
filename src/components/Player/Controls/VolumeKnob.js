@@ -5,13 +5,14 @@ import { useSelector } from 'react-redux';
 import { selectors as player } from '../../../redux/modules/player';
 import { useSubscribeVolume } from '../../../pkg/jwpAdapter';
 import { noop } from '../../../helpers/utils';
+import { isPlayerReady } from '../../../pkg/jwpAdapter/adapter';
 
 export const VolumeKnob = ({ onChangePosition }) => {
   const [activated, setActivated] = useState(false);
-  const isReady                   = useSelector(state => player.isReady(state.player));
   const isMuted                   = useSelector(state => player.isMuted(state.player));
   const volume                    = useSubscribeVolume();
 
+  const isReady     = isPlayerReady();
   const handleStart = e => {
     e.preventDefault();
     // regard only left mouse button click (0). touch is undefined
@@ -44,6 +45,7 @@ export const VolumeKnob = ({ onChangePosition }) => {
       document.removeEventListener('mouseup', handleEnd);
       document.removeEventListener('touchend', handleEnd);
     };
+
     return removeListeners;
   }, [isReady, activated]);
 

@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Button, Header, List } from 'semantic-ui-react';
@@ -84,7 +83,7 @@ const Info = ({ t }) => {
   const lids   = useSelector(state => mdb.getLabelsByCU(state.mdb, id));
   const denorm = useSelector(state => mdb.getDenormLabel(state.mdb));
 
-  if(!unit) return null
+  if (!unit) return null;
   const mergeTags = () => {
     let ids = [];
     if (tags?.length > 0) ids = tags;

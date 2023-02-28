@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useMemo, useContext } from 'react';
+import { useEffect, useRef, useMemo, useContext } from 'react';
 import { useSelector, shallowEqual, useDispatch } from 'react-redux';
 
 import { selectors as player, actions } from '../../redux/modules/player';
@@ -40,12 +40,14 @@ const BehaviorStartPlay = () => {
       mute = true;
       window.jwplayer().setConfig({ mute });
     }
+
     dispatch(actions.setIsMuted(mute));
-  }, [isMuted, isSingleMedia, isMobileDevice]);
+  }, [isMuted, isSingleMedia, isMobileDevice, dispatch]);
 
   //start from saved time on load or switch playlist item
+  const isClip = start || end !== Infinity;
   useEffect(() => {
-    if (!isReady || start || end !== Infinity || !fetched || file.id === fileIdRef.current) return;
+    if (!isReady || isClip || !fetched || file.id === fileIdRef.current) return;
 
     const jwp       = window.jwplayer();
     const autostart = !!fileIdRef.current || isSingleMedia;
@@ -61,8 +63,9 @@ const BehaviorStartPlay = () => {
     } else {
       jwp.play();
     }
+
     fileIdRef.current = file.id;
-  }, [isReady, start, end, cuId, file, historyItem, fileIdRef.current, isSingleMedia, fetched]);
+  }, [isReady, isClip, cuId, file, historyItem, fileIdRef, isSingleMedia, fetched, dispatch]);
 
   return null;
 };

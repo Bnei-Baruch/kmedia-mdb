@@ -33,6 +33,7 @@ class ButtonDayPicker extends Component {
     label: '',
     onDayChange: noop,
   };
+
   state = {
     month: null,
     isPopupOpen: false,
@@ -40,6 +41,7 @@ class ButtonDayPicker extends Component {
     value: null,
     stringValue: null,
   };
+
   localeDateFormat      = moment.localeData().longDateFormat('L');
   localeDateFormatShort = this.localeDateFormat.replace('DD', 'D').replace('MM', 'M');
 

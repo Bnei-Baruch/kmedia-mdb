@@ -27,16 +27,15 @@ const PlayerLanguages = ({ t }) => {
           LANGUAGE_OPTIONS
             .filter(x => languages.includes(x.value))
             .map(x => (
-                <Menu.Item
-                  link
-                  name={x.value}
-                  content={x.name}
-                  active={language === x.value}
-                  onClick={handleSelect}
-                  key={x.value}
-                />
-              )
-            )
+              <Menu.Item
+                link
+                name={x.value}
+                content={x.name}
+                active={language === x.value}
+                onClick={handleSelect}
+                key={x.value}
+              />
+            ))
         }
       </Menu>
     </div>

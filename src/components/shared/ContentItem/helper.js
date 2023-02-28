@@ -27,7 +27,8 @@ export const getProgress = (unit, playTime) => {
       <Progress
         size="tiny"
         className="cu_item_progress"
-        percent={playTime * 100 / unit.duration} />
+        percent={playTime * 100 / unit.duration}
+      />
     );
   }
 

@@ -5,13 +5,13 @@ import { noop } from '../../../helpers/utils';
 import { Button, Header, Menu, Segment } from 'semantic-ui-react';
 
 const FlatListFilter = ({
-                          options = [],
-                          value = null,
-                          onCancel = noop,
-                          onApply = noop,
-                          renderItem = x => x.text,
-                          name
-                        }) => {
+  options = [],
+  value = null,
+  onCancel = noop,
+  onApply = noop,
+  renderItem = x => x.text,
+  name
+}) => {
   const { t } = useTranslation();
   const [sValue, setSValue] = useState(value);
 

@@ -33,15 +33,18 @@ export const FullscreenBtn = withTranslation()(({ fullscreenRef, t }) => {
       enterFullScreenIOS();
       return;
     }
+
     if (fscreen.fullscreenElement !== null) {
       exitFullscreen();
     } else {
       enterFullscreen();
     }
   };
+
   const enterFullscreen = () => {
     fscreen.requestFullscreen(fullscreenRef.current).then(lockLandscape);
   };
+
   const exitFullscreen  = () => {
     unlockLandscape();
     fscreen.fullscreenElement && fscreen.exitFullscreen();

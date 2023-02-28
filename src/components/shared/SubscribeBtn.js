@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { withTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Confirm, Modal } from 'semantic-ui-react';
@@ -30,7 +30,11 @@ const SubscribeBtn = ({ t, collection }) => {
   const cId        = collection?.id || (collections && Object.values(collections)[0]?.id);
 
   const subsByCO  = !type || CT_SUBSCRIBE_BY_COLLECTION.includes(type) ? cId : null;
-  const subParams = { 'collection_uid': subsByCO, 'content_type': subsByType, 'content_unit_uid': id };
+  const subParams = useMemo(() => ({
+    'collection_uid': subsByCO,
+    'content_type': subsByType,
+    'content_unit_uid': id
+  }), [subsByCO, subsByType, id]);
   const { key }   = getMyItemKey(MY_NAMESPACE_SUBSCRIPTIONS, subParams);
 
   const sub      = useSelector(state => myselector.getItemByKey(state.my, MY_NAMESPACE_SUBSCRIPTIONS, key));
@@ -48,7 +52,7 @@ const SubscribeBtn = ({ t, collection }) => {
     if (!sub && (subsByType || subsByCO)) {
       dispatch(actions.fetch(MY_NAMESPACE_SUBSCRIPTIONS, { addToList: false, ...subParams }));
     }
-  }, [dispatch, key, sub, subsByType, subsByCO]);
+  }, [dispatch, key, sub, subsByType, subsByCO, subParams]);
 
   const subsUnsubs = s => {
     if (!user)

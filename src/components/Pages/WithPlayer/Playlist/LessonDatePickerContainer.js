@@ -14,7 +14,7 @@ import moment from 'moment';
 import { DATE_FORMAT } from '../../../../helpers/consts';
 import { canonicalLink } from '../../../../helpers/links';
 
-const getStartEndByFilmDate = (d) => {
+const getStartEndByFilmDate = d => {
   const filmDate = moment.utc(d);
   return (
     {

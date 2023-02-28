@@ -28,7 +28,7 @@ const TooltipIfNeed = props => {
     if (ref.current && (ref.current.scrollHeight > ref.current.clientHeight)) {
       setNeed(true);
     }
-  }, [ref.current]);
+  }, [ref]);
 
   const content = (
     <Ref innerRef={ref}>

@@ -35,9 +35,7 @@ export const findPlayedFile = (item, info, lang, mt, q) => {
     return findPlayedFile(item, info, lang, mt, qualityByLang[lang][0]);
   }
 
-  const f     = byLang.find(f => {
-    return f.type === mt && (mt === MT_AUDIO || !f.video_size || f.video_size === q);
-  });
+  const f     = byLang.find(f => f.type === mt && (mt === MT_AUDIO || !f.video_size || f.video_size === q));
   const image = f.type === MT_VIDEO ? item.preImageUrl : null;
 
   return { ...f, image };

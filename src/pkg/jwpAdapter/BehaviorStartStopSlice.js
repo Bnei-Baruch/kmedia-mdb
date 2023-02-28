@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 
@@ -16,7 +16,7 @@ const BehaviorStartStopSlice = () => {
   useEffect(() => {
     if (!isReady || (!start && end === Infinity)) return noop;
 
-    const jwp = window.jwplayer(JWPLAYER_ID);
+    const jwp = window.jwplayer();
 
     const checkStopTime = d => {
       if (d.currentTime > end) {
@@ -24,6 +24,7 @@ const BehaviorStartStopSlice = () => {
         jwp.off('time', checkStopTime);
       }
     };
+
     seek(start);
     jwp.on('time', checkStopTime);
 

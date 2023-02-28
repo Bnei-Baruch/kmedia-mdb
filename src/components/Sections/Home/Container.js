@@ -9,7 +9,6 @@ import { actions, selectors } from '../../../redux/modules/home';
 import { selectors as mdb } from '../../../redux/modules/mdb';
 import { actions as publicationsActions, selectors as publications } from '../../../redux/modules/publications';
 import { selectors as settings } from '../../../redux/modules/settings';
-import * as shapes from '../../shapes';
 import WipErr from '../../shared/WipErr/WipErr';
 import HomePage from './HomePage';
 
@@ -31,15 +30,15 @@ const chooseTwitterByLanguage = language => {
 
 const chooseBlogByLanguage = language => {
   switch (language) {
-    case LANG_HEBREW:
-      return { blog: 'laitman-co-il' };
-    case LANG_UKRAINIAN:
-    case LANG_RUSSIAN:
-      return { blog: 'laitman-ru' };
-    case LANG_SPANISH:
-      return { blog: 'laitman-es' };
-    default:
-      return { blog: 'laitman-com' };
+  case LANG_HEBREW:
+    return { blog: 'laitman-co-il' };
+  case LANG_UKRAINIAN:
+  case LANG_RUSSIAN:
+    return { blog: 'laitman-ru' };
+  case LANG_SPANISH:
+    return { blog: 'laitman-es' };
+  default:
+    return { blog: 'laitman-com' };
   }
 };
 

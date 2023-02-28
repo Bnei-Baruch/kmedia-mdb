@@ -51,11 +51,12 @@ export const initKC = async () => {
   });
 };
 
-const updateUser  = (user) => {
+const updateUser  = user => {
   const ev = new CustomEvent(KC_UPDATE_USER, { detail: user });
   window.dispatchEvent(ev);
 };
-const updateToken = (token) => {
+
+const updateToken = token => {
   const ev = new CustomEvent(KC_UPDATE_TOKEN, { detail: token });
   window.dispatchEvent(ev);
 };
@@ -77,6 +78,7 @@ const renewRetry    = (retry, err) => {
     setTimeout(() => renewToken(retry), 10000);
   }
 };
+
 const renewToken    = retry => {
   retry++;
   keycloak.updateToken(70).then(refreshed => {
@@ -89,6 +91,7 @@ const renewToken    = retry => {
     renewRetry(retry, err);
   });
 };
+
 const healthCheckKC = async () => {
   const health = await fetch(`${KC_API}/realms/main/protocol/openid-connect/certs`);
   if (!health.ok) {

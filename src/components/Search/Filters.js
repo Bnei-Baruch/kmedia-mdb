@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Checkbox, Container, Header, List, Segment } from 'semantic-ui-react';
-import { isEqual } from 'lodash';
 
 import { actions, selectors } from '../../redux/modules/filtersAside';
-import { selectors as filters } from '../../redux/modules/filters';
 import { selectors as search, actions as searchActions } from '../../redux/modules/search';
 import { FN_SORT_BY_FILTER, FN_TOPICS_MULTI, FN_SOURCES_MULTI } from '../../helpers/consts';
 

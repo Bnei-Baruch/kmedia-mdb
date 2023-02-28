@@ -12,22 +12,24 @@ import { imageWidthBySize, getProgress } from './helper';
 import UnitLogoWithDuration from '../UnitLogoWithDuration';
 import UnitLogo from '../Logo/UnitLogo';
 
-const ListTemplate = ({
-                        unit,
-                        source,
-                        tag,
-                        language,
-                        withCUInfo,
-                        withCCUInfo,
-                        link,
-                        ccu,
-                        description,
-                        children,
-                        playTime,
-                        size = 'big',
-                        selected,
-                        label
-                      }) => {
+const ListTemplate = (
+  {
+    unit,
+    source,
+    tag,
+    language,
+    withCUInfo,
+    withCCUInfo,
+    link,
+    ccu,
+    description,
+    children,
+    playTime,
+    size = 'big',
+    selected,
+    label
+  }
+) => {
 
   const dir                = isLanguageRtl(language) ? 'rtl' : 'ltr';
   const { isMobileDevice } = useContext(DeviceInfoContext);
@@ -39,7 +41,7 @@ const ListTemplate = ({
     if (cuInfoRef.current && (cuInfoRef.current.scrollHeight > cuInfoRef.current.clientHeight)) {
       setIsNeedTooltip(true);
     }
-  }, [cuInfoRef.current]);
+  }, [cuInfoRef]);
 
   const info = ((ccu || source || tag) && withCCUInfo)
     ? (

@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { actions } from '../../redux/modules/auth';
 import { KC_UPDATE_USER, KC_UPDATE_TOKEN } from './adapter';
 
-const eventsToRedux = (dispatch) => {
+const eventsToRedux = dispatch => {
   window.addEventListener(KC_UPDATE_USER, ({ detail: user }) => {
     dispatch(actions.updateUser(user));
   });

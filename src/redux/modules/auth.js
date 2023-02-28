@@ -16,6 +16,7 @@ const onUpdateUser  = (draft, payload) => {
     draft.token = null;
   }
 };
+
 const onUpdateToken = (draft, payload) => {
   draft.token = payload;
   if (!payload) {

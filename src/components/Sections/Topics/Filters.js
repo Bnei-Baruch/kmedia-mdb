@@ -22,17 +22,19 @@ const Filters = ({ namespace, baseParams, t }) => {
 
   const dispatch = useDispatch();
 
+  const notWipErr = !wip && !err;
   useEffect(() => {
-    if (!isReady && !wip && !err) {
+    if (!isReady && notWipErr) {
       dispatch(actions.fetchStats(namespace, baseParams, { isPrepare: true, countC: true, countL: true }));
     }
-  }, [dispatch, isReady, baseParams]);
+  }, [isReady, baseParams, dispatch, notWipErr]);
 
+  const needFetch = isHydrated && isReady && notWipErr;
   useEffect(() => {
-    if (isHydrated && isReady && !wip && !err) {
+    if (needFetch) {
       dispatch(actions.fetchStats(namespace, baseParams, { isPrepare: false, countC: true, countL: true }));
     }
-  }, [dispatch, isHydrated, isReady, selected]);
+  }, [needFetch, selected, baseParams, namespace, dispatch]);
 
   const handleOnHydrated = () => setIsHydrated(true);
 

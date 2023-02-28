@@ -11,16 +11,16 @@ import clsx from 'clsx';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 
 const LatestUpdatesCardList = ({
-                                 t,
-                                 language,
-                                 title,
-                                 maxItems,
-                                 cts,
-                                 itemsByCT,
-                                 itemsPerRow = 4,
-                                 itemsCount = 4,
-                                 stackable = true
-                               }) => {
+  t,
+  language,
+  title,
+  maxItems,
+  cts,
+  itemsByCT,
+  itemsPerRow = 4,
+  itemsCount = 4,
+  stackable = true
+}) => {
 
   const { isMobileDevice } = useContext(DeviceInfoContext);
 

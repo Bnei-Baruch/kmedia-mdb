@@ -138,7 +138,7 @@ export const playlist = collection => {
 };
 
 //query utilities
-export const getMediaTypeFromQuery = (location) => {
+export const getMediaTypeFromQuery = location => {
   const query = getQuery(location || window?.location);
   const mt    = (query.mediaType || '').toLowerCase();
 

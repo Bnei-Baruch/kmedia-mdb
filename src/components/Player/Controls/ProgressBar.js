@@ -5,20 +5,19 @@ import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import { selectors as player, actions } from '../../../redux/modules/player';
 import { formatDuration, stopBubbling } from '../../../helpers/utils';
 import { useSubscribeSeekAndTime, useSubscribeBuffer } from '../../../pkg/jwpAdapter';
-import { getDuration, seek } from '../../../pkg/jwpAdapter/adapter';
+import { getDuration, seek, isPlayerReady } from '../../../pkg/jwpAdapter/adapter';
 import { PLAYER_OVER_MODES } from '../../../helpers/consts';
 
 export const ProgressBar = ({ left, right }) => {
   const [activated, setActivated] = useState(false);
 
-  const isReady = useSelector(state => player.isReady(state.player));
-  const mode    = useSelector(state => player.getOverMode(state.player), shallowEqual);
-
+  const mode          = useSelector(state => player.getOverMode(state.player), shallowEqual);
   const { pos, time } = useSubscribeSeekAndTime();
-  const buffPos       = useSubscribeBuffer();
 
+  const buffPos  = useSubscribeBuffer();
   const dispatch = useDispatch();
 
+  const isReady = isPlayerReady();
   useEffect(() => {
     if (isReady && activated) {
       document.addEventListener('mousemove', handleMove, { passive: false });

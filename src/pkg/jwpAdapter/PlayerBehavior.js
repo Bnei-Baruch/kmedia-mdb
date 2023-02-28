@@ -1,51 +1,39 @@
-import React, { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 
 import { findPlayedFile } from '../../components/Player/helper';
-import { selectors as player, actions, actions as playerActions } from '../../redux/modules/player';
+import { actions } from '../../redux/modules/player';
 import { selectors as playlist } from '../../redux/modules/playlist';
-import { load, setup, init } from './adapter';
-import { noop } from '../../helpers/utils';
+import { load, setup, init, isPlayerReady } from './adapter';
 
 const PlayerBehavior = () => {
   const dispatch = useDispatch();
 
-  const isReady = useSelector(state => player.isReady(state.player));
-  const wip     = useSelector(state => player.getWIP(state.player));
+  const item = useSelector(state => playlist.getPlayed(state.playlist), shallowEqual);
+  const info = useSelector(state => playlist.getInfo(state.playlist), shallowEqual);
 
-  const item    = useSelector(state => playlist.getPlayed(state.playlist), shallowEqual);
-  const info    = useSelector(state => playlist.getInfo(state.playlist), shallowEqual);
-  const file    = useMemo(() => findPlayedFile(item, info), [item, info]);
-  const prevSrc = useRef();
+  const file = useMemo(() => findPlayedFile(item, info), [item, info]);
 
   //init jwplayer by element id,
   useEffect(() => {
-    if (!file?.src || wip || !info.isReady || prevSrc.current === file.src)
-      return noop;
+    if (!info.isReady || !file?.src) return;
 
-    const item = { 'file': file.src, image: file.image };
-
-    if (!isReady) {
+    const playlistItem = { 'file': file.src, image: file.image };
+    if (!isPlayerReady()) {
       setup({
         controls: false,
-        playlist: [item],
+        playlist: [playlistItem],
         preload: 'auto'
       });
       init(dispatch);
-      dispatch(playerActions.setWIP(true));
     } else {
-      load([item]);
+      const { file: prevSrc } = window.jwplayer().getPlaylist()?.[0] || false;
+      if (prevSrc === file.src) return;
+
+      load([playlistItem]);
     }
     dispatch(actions.setFile(file));
-
-    prevSrc.current = file.src;
-
-    //TODO its fix bug when c switch to cu - remove when <Player /> will be singleton
-    return () => {
-      isReady && (prevSrc.current = null);
-    };
-
-  }, [file, isReady, info.isReady, prevSrc]);
+  }, [file.src, info.isReady, dispatch]);
 
   return null;
 };

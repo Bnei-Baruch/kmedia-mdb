@@ -96,7 +96,7 @@ export default class ClientChronicles {
         this.appendPage('leave', /* sync= */ false);
       }
 
-      for (let { onBeforeUnloadClosure } of this.lastEntriesByType.values()) {
+      for (const { onBeforeUnloadClosure } of this.lastEntriesByType.values()) {
         if (!!onBeforeUnloadClosure) {
           onBeforeUnloadClosure();
         }

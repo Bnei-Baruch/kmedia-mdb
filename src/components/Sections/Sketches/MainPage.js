@@ -63,7 +63,7 @@ const MainPage = ({ t }) => {
     } else {
       dispatch(actions.fetchSectionList(PAGE_NS_SKETCHES, pageNo, { pageSize, ...FILTER_PARAMS }));
     }
-  }, [language, dispatch, pageNo, selected]);
+  }, [language, dispatch, pageNo, selected, pageSize, prevSel, setPage]);
 
   useEffect(() => {
     if (!wipAll && zipIdsForFetch?.length > 0) {
