@@ -53,8 +53,28 @@ export default function serverRender(req, res, next, htmlData) {
 }
 
 function serverRenderSSOAuth(req, res, next, htmlData) {
-  const rootDiv = `<h1 style="text-align: center">We try to authorise</h1>
-    <script>window.__isAuthApp = true;</script>`;
+  const rootDiv = `
+    <style>
+      .loader {
+        margin: auto;
+        border: 16px solid #f3f3f3;
+        border-top: 16px solid #3498db;
+        border-radius: 50%;
+        width: 120px;
+        height: 120px;
+        animation: spin 2s linear infinite;
+      }
+
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+    </style>
+    <div class="container">
+      <div class="loader"></div>
+    </div>
+    <script>window.__isAuthApp = true;</script>
+    `;
   const html    = htmlData.replace(/<div id="root"><\/div>/, rootDiv);
 
   console.log('AuthApp server render');
