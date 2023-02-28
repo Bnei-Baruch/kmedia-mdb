@@ -119,6 +119,7 @@ function ogUrl(req, lang) {
 }
 
 export default function serverRender(req, res, next, htmlData) {
+  if (req.originalUrl.indexOf('anonymous') !== -1) return;
   console.log('serverRender', req.originalUrl);
   const { language, redirect } = getLanguageFromPath(req.originalUrl, req.headers, req.get('user-agent'));
   if (redirect) {

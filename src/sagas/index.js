@@ -19,6 +19,7 @@ import { sagas as recommended } from './recommended';
 import { sagas as music } from './music';
 import { sagas as auth } from './auth';
 import { sagas as my } from './my';
+import { sagas as notes } from './myNotes';
 import { sagas as likutim } from './likutim';
 import { sagas as trim } from './trim';
 
@@ -42,6 +43,7 @@ const allSagas = [
   ...music,
   ...auth,
   ...my,
+  ...notes,
   ...music,
   ...likutim,
   ...trim

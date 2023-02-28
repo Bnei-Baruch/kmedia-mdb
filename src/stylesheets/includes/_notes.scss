@@ -1,0 +1,58 @@
+
+.notes_bar {
+  height: 100%;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: -50px;
+
+  .note_mark {
+    position: absolute;
+    width: 30px;
+    left: 0px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: space-around;
+
+    .button {
+      z-index: 1;
+    }
+
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+}
+
+.ui.popup.label_mark_popup {
+  opacity: 0.95;
+
+  .link_to_cu {
+    padding: 2px 3px !important;
+    font-size: smaller;
+    background: $midGrey !important;
+    color: white !important;
+
+    &:hover {
+      background-color: $sepia-bg;
+    }
+  }
+}
+
+.ltr.label_bar {
+  right: auto;
+  left: -10PX;
+}
+
+.note_modal {
+  & > .actions{
+    display: flex;
+    justify-content: space-between;
+  }
+  &_textarea {
+    min-height: 40VH;
+  }
+}

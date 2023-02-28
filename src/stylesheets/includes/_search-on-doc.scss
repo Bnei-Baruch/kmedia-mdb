@@ -56,11 +56,11 @@
 
     &.pinned {
       width: max-content;
-      right: -50px;
+      right: -60px;
       left: auto;
-      padding: 4px;
+      padding: 2px;
       border-radius: 8px;
-      background: $black;
+      border: 1px solid $black;
 
     }
   }
@@ -77,6 +77,10 @@
     text-align: center;
     opacity: 0.95;
 
+    .pinned & {
+      background: $white;
+    }
+
     & > .header {
       color: $white;
       margin-top: 4px;
@@ -86,24 +90,33 @@
     & > .button {
       margin: 4px !important;
 
+      &:first-child {
+        margin-bottom: 1em !important;
+      }
+
       &.pin {
         box-shadow: none !important;
-        font-size: 1em;
-        line-height: 26px;
-        height: 26px;
-        width: 26px;
+        font-size: 17px;
+        line-height: 28px;
+        height: 30px;
+        width: 30px;
         padding: 0;
       }
 
       &.circular {
-        width: 20px;
-        height: 20px;
-        line-height: 20px;
+        width: 30px;
+        height: 30px;
+        line-height: 30px;
         padding: 0 !important;
-        font-size: 10px;
+        font-size: 14px;
 
         .icon {
           font-size: 1em;
+        }
+
+        .attached.label {
+          padding: 4px 8px;
+          width: auto;
         }
       }
     }
@@ -131,6 +144,7 @@
             width: 2.2em;
             color: $grey;
           }
+
           .icon {
             font-size: 1.7em;
             line-height: 1em;

@@ -1,4 +1,4 @@
-import { KEEP_LETTERS_RE, OFFSET_TEXT_SEPARATOR } from './helper';
+import { KEEP_LETTERS_RE, OFFSET_TEXT_SEPARATOR, textMarksPrefixByType } from './helper';
 
 export class RenderBase {
   tagPositions = [];
@@ -9,10 +9,10 @@ export class RenderBase {
     this.end    = end;
   }
 
-  build(labels) {
+  build(textMarks) {
     this.clearHtmlFromTags();
     this.defineMatch();
-    this.insertLabels(labels);
+    this.insertTextMarkers(textMarks);
     return this.buildHtml();
   }
 
@@ -43,34 +43,37 @@ export class RenderBase {
     throw new Error('abstract method');
   }
 
-  insertLabels(labels) {
-    if (!labels?.length)
+  insertTextMarkers(textMarks) {
+    if (!textMarks?.length)
       return;
-    const lPositions = labels.reduce((acc, { properties: { srchstart, srchend } = {}, id }) => {
-      const start = srchstart?.split(OFFSET_TEXT_SEPARATOR);
+    const markPos = textMarks.reduce((acc, { properties: { srchstart, srchend } = {}, id, type }) => {
+      const start    = srchstart?.split(OFFSET_TEXT_SEPARATOR);
+      const prefixes = textMarksPrefixByType[type];
       if (start) {
         const match     = this.findClose(this.buildMatch(start[0], this.dataCleanHtml), start[1]);
         const noHtmlPos = match?.index - 1;
-        acc.push({ str: `<span class="label_pos" id="start_${id}"></span>`, noHtmlPos, isAdded: true });
+        const str       = `<span class={prefixes.class} id="${prefixes.start}${id}"></span>`;
+        acc.push({ str, noHtmlPos, isAdded: true });
       }
 
       const end = srchend?.split(OFFSET_TEXT_SEPARATOR);
       if (end) {
         const match     = this.findClose(this.buildMatch(end[0], this.dataCleanHtml), end[1]);
         const noHtmlPos = match?.index + end[0].length + 1;
-        acc.push({ str: `<span class="label_pos" id="end_${id}"></span>`, noHtmlPos, isAdded: true });
+        const str       = `<span class={prefixes.class} id="${prefixes.end}${id}"></span>`;
+        acc.push({ str, noHtmlPos, isAdded: true });
       }
 
       return acc;
     }, []);
-    lPositions.sort((a, b) => a.noHtmlPos - b.noHtmlPos);
+    markPos.sort((a, b) => a.noHtmlPos - b.noHtmlPos);
 
-    const len          = lPositions.length + this.tagPositions.length;
+    const len          = markPos.length + this.tagPositions.length;
     const tagPositions = [];
     let diffp          = 0, diffl = 0;
     for (let i = 0, j = 0; i + j < len;) {
       const ti = this.tagPositions[i];
-      const lj = lPositions[j];
+      const lj = markPos[j];
       if (!lj || (ti && ti.noHtmlPos <= lj.noHtmlPos)) {
         tagPositions.push(ti);
         i++;

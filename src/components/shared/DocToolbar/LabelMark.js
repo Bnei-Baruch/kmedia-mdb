@@ -7,7 +7,9 @@ import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import { makeTagLinks } from '../../Pages/Unit/widgets/Info/Info';
 import { useSelector } from 'react-redux';
 import { selectors as tagsSelectors } from '../../../redux/modules/tags';
+import { textMarksPrefixByType } from '../../../helpers/scrollToSearch/helper';
 
+const idPrefix = textMarksPrefixByType['label']
 const LabelMark = ({ label, offset, t }) => {
   const [top, setTop]       = useState(0);
   const [bottom, setBottom] = useState(0);
@@ -16,8 +18,8 @@ const LabelMark = ({ label, offset, t }) => {
 
   const { language, author, name, id, tags = [] } = label;
   useEffect(() => {
-    let start = document.getElementById(`start_${id}`);
-    let end   = document.getElementById(`end_${id}`);
+    let start = document.getElementById(`${idPrefix.start}${id}`);
+    let end   = document.getElementById(`${idPrefix.start}${id}`);
     start     = start || end || null;
     end       = end || start || null;
     if (start) {
@@ -53,7 +55,7 @@ const LabelMark = ({ label, offset, t }) => {
           {
             t('personal.label.createdBy', { author })
           }
-          <Container content={tagLinks} />
+          <div>{tagLinks}</div>
         </Popup.Content>
       </Popup>
     </div>

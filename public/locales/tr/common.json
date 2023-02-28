@@ -166,7 +166,8 @@
     "copy": "Kopyala",
     "view-all": "Hepsini Görüntüle",
     "save": "Save",
-    "remove": "Remove"
+    "remove": "Remove",
+    "edit": "Edit"
   },
   "player": {
     "messages": {

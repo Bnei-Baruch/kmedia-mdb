@@ -165,7 +165,8 @@
     "copy": "Copiar",
     "view-all": "Ver todo",
     "save": "Guardar",
-    "remove": "Eliminar"
+    "remove": "Eliminar",
+    "edit": "Editar"
   },
   "player": {
     "messages": {

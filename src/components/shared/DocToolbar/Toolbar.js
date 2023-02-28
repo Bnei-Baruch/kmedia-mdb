@@ -8,6 +8,7 @@ import CopyTextBtn from './CopyTextBtn';
 import CopyLinkBtn from './CopyLinkBtn';
 import ShareBtn from './ShareBtn';
 import LabelBtn from './LabelBtn';
+import AddNoteBtn from './AddNoteBtn';
 
 const DocToolbar = ({ t, url, text, source, label, position, setPinned, isPinned }) => {
   const [open, setOpen] = useState(!!url);
@@ -28,7 +29,7 @@ const DocToolbar = ({ t, url, text, source, label, position, setPinned, isPinned
         <Popup
           content={t('share-text.disable-share')}
           trigger={<Button
-            inverted
+            inverted={!isPinned}
             floated={isPinned ? 'none' : 'right'}
             icon="close"
             circular
@@ -66,6 +67,9 @@ const DocToolbar = ({ t, url, text, source, label, position, setPinned, isPinned
               </Menu>
             </>
           )
+        }
+        {
+          isPinned && <AddNoteBtn properties={source} />
         }
       </div>
     </div>

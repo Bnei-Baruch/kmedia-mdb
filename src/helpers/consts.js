@@ -674,6 +674,7 @@ export const MY_NAMESPACE_SUBSCRIPTIONS = 'subscriptions';
 export const MY_NAMESPACE_BOOKMARKS     = 'bookmarks';
 export const MY_NAMESPACE_FOLDERS       = 'folders';
 export const MY_NAMESPACE_LABELS        = 'labels';
+export const MY_NAMESPACE_NOTES        = 'notes';
 
 export const MY_NAMESPACES = [
   MY_NAMESPACE_HISTORY,
