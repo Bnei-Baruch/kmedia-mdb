@@ -168,7 +168,8 @@
     "copy": "Copy",
     "view-all": "View All",
     "save": "Save",
-    "remove": "Remove"
+    "remove": "Remove",
+    "edit": "Edit"
   },
   "player": {
     "messages": {
