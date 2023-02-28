@@ -37,7 +37,7 @@ const LessonDatePickerContainer = () => {
   const langDir  = getLanguageDirection(language);
 
   const dispatch = useDispatch();
-  const curIndex = cWindow?.data?.indexOf(cId) || -1;
+  const curIndex = cWindow?.data?.indexOf(cId) ?? -1;
   useEffect(() => {
     if (curIndex < 1 && !wipMap.cWindow[cId] && cId !== cWindow.id) {
       const { film_date }            = denorm(cId);
