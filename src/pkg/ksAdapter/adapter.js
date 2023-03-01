@@ -11,8 +11,10 @@ export const KC_UPDATE_USER  = 'KC_UPDATE_USER';
 export const KC_UPDATE_TOKEN = 'KC_UPDATE_TOKEN';
 
 export const login = () => {
-  keycloak.login()
-    .then(r => updateUser(r))
+  keycloak.login({redirectUri:`${window.location.href}?authorised=true`})
+    .then(r => {
+      updateUser(r);
+    })
     .catch(() => updateUser(null));
 };
 
@@ -51,7 +53,7 @@ export const initKC = async () => {
   });
 };
 
-const updateUser  = user => {
+const updateUser = user => {
   const ev = new CustomEvent(KC_UPDATE_USER, { detail: user });
   window.dispatchEvent(ev);
 };
@@ -70,7 +72,7 @@ const userManagerConfig = {
 };
 const keycloak          = typeof window !== 'undefined' ? new Keycloak(userManagerConfig) : {};
 
-const renewRetry    = (retry, err) => {
+const renewRetry = (retry, err) => {
   if (retry > 5) {
     keycloak.clearToken();
     updateUser(null);
@@ -79,7 +81,7 @@ const renewRetry    = (retry, err) => {
   }
 };
 
-const renewToken    = retry => {
+const renewToken = retry => {
   retry++;
   keycloak.updateToken(70).then(refreshed => {
     if (refreshed) {

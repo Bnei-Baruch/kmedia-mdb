@@ -13,7 +13,7 @@ import UAParser from 'ua-parser-js';
 import useRoutes from '../src/route/routes';
 import { COOKIE_CONTENT_LANG, LANG_UI_LANGUAGES, LANG_UKRAINIAN } from '../src/helpers/consts';
 import { getLanguageLocaleWORegion, getLanguageDirection } from '../src/helpers/i18n-utils';
-import { getLanguageFromPath } from '../src/helpers/url';
+import { getLanguageFromPath, parse } from '../src/helpers/url';
 import { isEmpty } from '../src/helpers/utils';
 import createStore from '../src/redux/createStore';
 import { actions as ssr } from '../src/redux/modules/ssr';
@@ -34,7 +34,9 @@ const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 export default function serverRender(req, res, next, htmlData) {
   console.log('serverRender', req.originalUrl);
+
   const { language, redirect } = getLanguageFromPath(req.originalUrl, req.headers, req.get('user-agent'));
+  const parsedPath             = parse(req.originalUrl);
   if (redirect) {
     const newUrl = `${BASE_URL}${language}${req.originalUrl}`;
     console.log(`serverRender: redirect (${language}) => ${newUrl}`);
@@ -45,10 +47,11 @@ export default function serverRender(req, res, next, htmlData) {
 
   const cookies = cookieParse(req.headers.cookie || '');
   const bot     = isBot(req);
-  if (cookies['authorised'] || bot) {
+  if (cookies['authorised'] || req.query.authorised || bot) {
     serverRenderAuthorised(req, res, next, htmlData, language, bot);
     return;
   }
+
   serverRenderSSOAuth(req, res, next, htmlData, language);
 }
 
