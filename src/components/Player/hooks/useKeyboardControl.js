@@ -12,7 +12,7 @@ export const useKeyboardControl = runTimeout => {
 
   useEffect(() => {
     const handleKeyDown = e => {
-      if (e.defaultPrevented) {
+      if (e.defaultPrevented || e.target.nodeName === 'INPUT' || e.target.nodeName === 'TEXTAREA') {
         return; // Do nothing if the event was already processed
       }
 
