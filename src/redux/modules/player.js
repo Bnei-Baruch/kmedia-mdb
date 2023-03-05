@@ -70,7 +70,7 @@ const initialState = {
   overMode: PLAYER_OVER_MODES.firstTime,
   ready: false,
   file: null,
-  shareStartEnd: { start: 0, end: Infinity },
+  shareStartEnd: { start: null, end: null },
   isFullScreen: false,
   keyboardCoef: 1
 };
@@ -122,8 +122,6 @@ export const reducer = handleActions({
 
   [SET_SHARE_START_END]: (draft, payload) => draft.shareStartEnd = payload,
   [SET_IS_MUTED]: (draft, payload) => draft.isMuted = payload,
-
-  //[settings.SET_LANGUAGE]: onRemove,
 }, initialState);
 
 const isReady          = state => state.ready;

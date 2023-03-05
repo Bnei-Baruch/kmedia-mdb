@@ -29,8 +29,8 @@ const UpdateLocation = () => {
 
   //init redux start end from location
   useEffect(() => {
-    const _q = startEndFromQuery(location);
-    if (_q.start !== prevStart || _q.end !== prevEnd) {
+    if (prevStart === null && prevEnd === null) {
+      const _q = startEndFromQuery(location);
       dispatch(actions.setShareStartEnd(_q));
     }
   }, [location, prevStart, prevEnd]);
