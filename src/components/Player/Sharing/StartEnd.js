@@ -33,6 +33,7 @@ const StartEnd = ({ t }) => {
 
   const handleSetFull = () => dispatch(actions.setShareStartEnd({ end: Infinity, start: 0 }));
 
+  const fTimeEnd = formatTime(end !== Infinity ? end : getDuration())
   return (
     <div className="sharing__times">
       <div className="sharing__inputs">
@@ -66,7 +67,7 @@ const StartEnd = ({ t }) => {
             onClick: handleSetEnd
           }}
           placeholder={t('player.share.click-to-set')}
-          value={formatTime(end !== Infinity ? end : getDuration())}
+          value={fTimeEnd}
           dir={dir}
         />
       </div>

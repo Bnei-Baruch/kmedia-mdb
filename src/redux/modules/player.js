@@ -1,5 +1,5 @@
 import { createAction } from 'redux-actions';
-import { handleActions, types as settingsTypes} from './settings';
+import { handleActions } from './settings';
 import { PLAYER_OVER_MODES } from '../../helpers/consts';
 
 const PLAYER_READY       = 'Player/READY';
@@ -105,7 +105,10 @@ const onPlay = (draft, payload) => {
 export const reducer = handleActions({
   [PLAYER_READY]: draft => draft.ready = true,
   [PLAYER_REMOVE]: onRemove,
-  [DESTROY_PLUGIN]: draft => draft.loaded = false,
+  [DESTROY_PLUGIN]: draft => {
+    draft.loaded        = false;
+    draft.shareStartEnd = { start: 0, end: Infinity };
+  },
   [PLAYER_SET_FILE]: onSetFile,
 
   [PLAYER_PLAY]: onPlay,
