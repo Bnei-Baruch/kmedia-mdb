@@ -6,14 +6,15 @@ import { selectors as player } from '../../redux/modules/player';
 import { startEndFromQuery } from '../../components/Player/Controls/helper';
 import { pause, seek } from './adapter';
 import { noop } from '../../helpers/utils';
+import { findPlayedFile } from '../../components/Player/helper';
 
 const BehaviorStartStopSlice = () => {
   const location       = useLocation();
   const { start, end } = startEndFromQuery(location);
-  const isReady        = useSelector(state => player.isReady(state.player));
+  const { id }     = useSelector(state => player.getFile(state.player)) || {};
 
   useEffect(() => {
-    if (!isReady || (!start && end === Infinity)) return noop;
+    if (!id || (!start && end === Infinity)) return noop;
 
     const jwp = window.jwplayer();
 
@@ -28,7 +29,7 @@ const BehaviorStartStopSlice = () => {
     jwp.on('time', checkStopTime);
 
     return () => jwp.off('time', checkStopTime);
-  }, [isReady, start, end]);
+  }, [id, start, end]);
   return null;
 };
 

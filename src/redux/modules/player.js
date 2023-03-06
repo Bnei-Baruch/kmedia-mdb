@@ -1,5 +1,5 @@
 import { createAction } from 'redux-actions';
-import { handleActions } from './settings';
+import { handleActions, types as settingsTypes} from './settings';
 import { PLAYER_OVER_MODES } from '../../helpers/consts';
 
 const PLAYER_READY       = 'Player/READY';
