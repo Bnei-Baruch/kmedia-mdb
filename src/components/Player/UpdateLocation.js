@@ -20,7 +20,7 @@ const UpdateLocation = () => {
   const uiLanguage                         = useSelector(state => settings.getLanguage(state.settings));
   const { start: prevStart, end: prevEnd } = useSelector(state => player.getShareStartEnd(state.player));
 
-  const { mediaType, nextUnitId, cId, baseLink } = useSelector(state => playlist.getInfo(state.playlist));
+  const { mediaType, nextUnitId, cId, cuId, baseLink } = useSelector(state => playlist.getInfo(state.playlist));
 
   const denormUnit        = useSelector(state => mdb.nestedGetDenormContentUnit(state.mdb));
   const denormCollectiont = useSelector(state => mdb.nestedGetDenormCollection(state.mdb));
@@ -28,11 +28,10 @@ const UpdateLocation = () => {
 
   //init redux start end from location
   useEffect(() => {
-    if (prevStart === null && prevEnd === null) {
       const _q = startEndFromQuery(location);
       dispatch(actions.setShareStartEnd(_q));
-    }
-  }, [location, prevStart, prevEnd]);
+  }, [location, cuId]);
+
 
   useEffect(() => {
     if (mediaType && mediaType !== q.mediaType) {

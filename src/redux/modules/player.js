@@ -105,10 +105,7 @@ const onPlay = (draft, payload) => {
 export const reducer = handleActions({
   [PLAYER_READY]: draft => draft.ready = true,
   [PLAYER_REMOVE]: onRemove,
-  [DESTROY_PLUGIN]: draft => {
-    draft.loaded        = false;
-    draft.shareStartEnd = { start: 0, end: Infinity };
-  },
+  [DESTROY_PLUGIN]: draft => draft.loaded = false,
   [PLAYER_SET_FILE]: onSetFile,
 
   [PLAYER_PLAY]: onPlay,
