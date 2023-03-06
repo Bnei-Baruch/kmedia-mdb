@@ -10,7 +10,6 @@ import { canonicalLink } from '../../helpers/links';
 import { selectors as settings } from '../../redux/modules/settings';
 import { actions, selectors as player } from '../../redux/modules/player';
 import { startEndFromQuery } from './Controls/helper';
-import { isEmpty } from '../../helpers/utils';
 
 const UpdateLocation = () => {
   const navigate = useNavigate();
@@ -21,7 +20,7 @@ const UpdateLocation = () => {
   const uiLanguage                         = useSelector(state => settings.getLanguage(state.settings));
   const { start: prevStart, end: prevEnd } = useSelector(state => player.getShareStartEnd(state.player));
 
-  const { mediaType, language, nextUnitId, cId, baseLink } = useSelector(state => playlist.getInfo(state.playlist));
+  const { mediaType, nextUnitId, cId, baseLink } = useSelector(state => playlist.getInfo(state.playlist));
 
   const denormUnit        = useSelector(state => mdb.nestedGetDenormContentUnit(state.mdb));
   const denormCollectiont = useSelector(state => mdb.nestedGetDenormCollection(state.mdb));
@@ -36,20 +35,13 @@ const UpdateLocation = () => {
   }, [location, prevStart, prevEnd]);
 
   useEffect(() => {
-    const newq = {};
-    if (language && language !== q.language) {
-      newq.language = language;
-    }
-
     if (mediaType && mediaType !== q.mediaType) {
+      const newq     = {};
       newq.mediaType = mediaType;
       persistPreferredMediaType(mediaType);
-    }
-
-    if (!isEmpty(newq)) {
       updateQuery(navigate, location, query => ({ ...query, ...newq }));
     }
-  }, [mediaType, language, q, navigate, location]);
+  }, [mediaType, q, navigate, location]);
 
   //go to next on playlist
   const search = baseLink ? `?${stringify({ ...q, ap })}` : location.search;
