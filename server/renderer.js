@@ -13,7 +13,7 @@ import UAParser from 'ua-parser-js';
 import useRoutes from '../src/route/routes';
 import { COOKIE_CONTENT_LANG, LANG_UI_LANGUAGES, LANG_UKRAINIAN } from '../src/helpers/consts';
 import { getLanguageLocaleWORegion, getLanguageDirection } from '../src/helpers/i18n-utils';
-import { getLanguageFromPath, parse } from '../src/helpers/url';
+import { getLanguageFromPath } from '../src/helpers/url';
 import { isEmpty } from '../src/helpers/utils';
 import createStore from '../src/redux/createStore';
 import { actions as ssr } from '../src/redux/modules/ssr';
@@ -120,7 +120,7 @@ async function serverRenderAuthorised(req, res, next, htmlData, language, bot) {
       i18n: i18nServer,
     };
 
-    const routes  = useRoutes(<></>);
+    const routes  = useRoutes(<></>).map(r => ({ ...r, path: `${language}/${r.path}` }));
     const reqPath = req.originalUrl.split('?')[0];
     const branch  = matchRoutes(routes, reqPath) || [];
     console.log('serverRender: for path %s was found branch %o', reqPath, branch);
