@@ -175,11 +175,13 @@ video {
       height: 4px;
       left: 0;
       right: 0;
+      padding: 0 7px;
+      background-color: black;
     }
 
     &__slider {
       position: absolute;
-      width: 100%;
+      width: calc(100% - 14px);
       height: 100%;
 
       * {
