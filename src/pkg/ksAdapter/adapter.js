@@ -36,7 +36,7 @@ export const initKC = async () => {
     enableLogging: true,
     onLoad: 'check-sso'
   };
-  document.cookie = 'authorised=true;max-age=1';
+  document.cookie = 'authorised=true;max-age=10';
   const resp      = { user: null, token: null };
   return keycloak.init(options).then(ok => {
     if (!ok) {
