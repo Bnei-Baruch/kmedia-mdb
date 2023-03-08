@@ -16,7 +16,7 @@ const AddNoteBtn = ({ t, properties }) => {
 
   return (
     <>
-      <NoteModal open={open} toggleOpen={handleToggleOpen} properties={properties} />
+      {open && <NoteModal toggleOpen={handleToggleOpen} properties={properties} />}
       <Popup
         content={t('share-text.tag-button-alt')}
         trigger={

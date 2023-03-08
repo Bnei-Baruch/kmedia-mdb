@@ -7,7 +7,7 @@ import moment, { now } from 'moment/moment';
 import { withNamespaces } from 'react-i18next';
 import { selectors as settings } from '../../redux/modules/settings';
 
-const NoteModal = ({ note = false, properties, open, toggleOpen, t }) => {
+const NoteModal = ({ note = false, properties, open = true, toggleOpen, t }) => {
   const [content, setContent] = useState(note.content || '');
   const [confirm, setConfirm] = useState(false);
 
@@ -63,7 +63,7 @@ const NoteModal = ({ note = false, properties, open, toggleOpen, t }) => {
           </Form>
         </Modal.Content>
 
-        <Modal.Actions>
+        <Modal.Actions dir="ltr">
           <Button
             onClick={handleSave}
             content={t('buttons.save')}
