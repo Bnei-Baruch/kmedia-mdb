@@ -27,6 +27,7 @@ import {
 import { Requests } from './Api';
 
 const CDN_URL     = process.env.REACT_APP_CDN_URL;
+const CDN_HLS_URL = process.env.REACT_APP_CDN_HLS_URL;
 const PUBLIC_BASE = process.env.REACT_APP_PUBLIC_BASE;
 
 export const isEmpty = obj => {
@@ -73,9 +74,9 @@ export const formatError = error => {
     // that falls out of the range of 2xx
     let msg = error.response.data?.error;
     if (!msg) {
-      msg = error.message
+      msg = error.message;
     } else {
-      msg = error.response.statusText + (msg ? `: ${msg}` : '')
+      msg = error.response.statusText + (msg ? `: ${msg}` : '');
     }
 
     return msg;
@@ -167,6 +168,9 @@ export const filenameExtension = name => {
  * @param ext {boolean} include file name extension in url or not
  */
 export const physicalFile = (file, ext = false) => {
+  if (file.video_size === 'HLS') {
+    return `${CDN_HLS_URL}${file.id}.m3u8`;
+  }
   let suffix = '';
   if (ext) {
     suffix = `.${filenameExtension(file.name)}`;

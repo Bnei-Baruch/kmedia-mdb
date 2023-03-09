@@ -286,6 +286,7 @@ export const MT_PRESENTATION = 'presentation';
 export const VS_NHD     = 'nHD';
 export const VS_HD      = 'HD';
 export const VS_FHD     = 'FHD';
+export const VS_HLS     = 'HLS';
 export const VS_DEFAULT = VS_NHD;
 
 export const getVideoRes = (vsType, date) => {

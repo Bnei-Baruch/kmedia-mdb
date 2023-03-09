@@ -8,6 +8,7 @@ const PLAYLIST_BUILD         = 'Playlist/BUILD';
 const PLAYLIST_BUILD_SUCCESS = 'Playlist/BUILD_SUCCESS';
 const SINGLE_MEDIA_BUILD     = 'Playlist/SINGLE_MEDIA_BUILD';
 const MY_PLAYLIST_BUILD      = 'Playlist/MY_PLAYLIST_BUILD';
+const UPDATE_PLAYED          = 'Playlist/UPDATE_PLAYED';
 
 const PLAYLIST_SELECT       = 'Playlist/SELECT';
 const PLAYER_SET_QUALITY    = 'Player/SET_QUALITY';
@@ -26,6 +27,7 @@ const build            = createAction(PLAYLIST_BUILD, (cId, cuId) => ({ cId, cuI
 const buildSuccess     = createAction(PLAYLIST_BUILD_SUCCESS);
 const singleMediaBuild = createAction(SINGLE_MEDIA_BUILD);
 const myPlaylistBuild  = createAction(MY_PLAYLIST_BUILD, pId => ({ pId }));
+const updatePlayed     = createAction(UPDATE_PLAYED);
 
 const select       = createAction(PLAYLIST_SELECT);
 const setQuality   = createAction(PLAYER_SET_QUALITY);
@@ -38,6 +40,7 @@ export const actions = {
   singleMediaBuild,
   myPlaylistBuild,
   buildSuccess,
+  updatePlayed,
 
   select,
   setQuality,
@@ -65,11 +68,12 @@ const onBuildSuccess = (draft, payload) => {
 
   draft.playlist = items.map(({ id }) => id);
   draft.itemById = items.reduce((acc, x) => ({ ...acc, [x.id]: x }), {});
-  if (draft.itemById[cuId] && !draft.itemById[cuId].qualityByLang[language]) {
-    language = draft.itemById[cuId].languages[0];
+  const curItem  = draft.itemById?.[cuId];
+  if (curItem && !curItem.isHLS && !curItem.qualityByLang[language]) {
+    language = curItem.languages[0];
   }
 
-  const quality = draft.info.quality || draft.itemById[cuId]?.qualityByLang[language]?.[0] || VS_DEFAULT;
+  const quality = draft.info.quality || curItem?.qualityByLang?.[language]?.[0] || VS_DEFAULT;
   draft.info    = { ...info, cuId, language, quality, isReady: true, wip: false };
 };
 
@@ -86,12 +90,16 @@ const onComplete = draft => {
   draft.info.nextUnitId = nextId;
 };
 
+const onUpdatePlayed = (draft, { qualities, languages }) => {
+  draft.currentHLS = { qualities, languages };
+};
+
 export const reducer = handleActions({
   [PLAYLIST_BUILD]: onBuild,
   [SINGLE_MEDIA_BUILD]: onBuild,
   [MY_PLAYLIST_BUILD]: onBuild,
   [PLAYLIST_BUILD_SUCCESS]: onBuildSuccess,
-  /*[playerTypes.PLAYER_REMOVE]: onRemovePlayer,*/
+  [UPDATE_PLAYED]: onUpdatePlayed,
 
   [PLAYLIST_SELECT]: (draft, payload) => draft.info.cuId = payload,
 
@@ -106,7 +114,11 @@ export const reducer = handleActions({
 }, initialState);
 
 const getPlaylist = state => state.playlist;
-const getPlayed   = state => state.itemById[state.info.cuId] || false;
+const getPlayed   = state => {
+  const item = state.itemById[state.info.cuId] || false;
+  if (!item.isHLS) return item;
+  return { ...item, ...state.currentHLS };
+};
 
 const getInfo = state => state.info;
 

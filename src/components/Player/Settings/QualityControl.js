@@ -8,9 +8,9 @@ import { selectors } from '../../../redux/modules/player';
 import { MT_AUDIO } from '../../../helpers/consts';
 
 const QualityControl = ({ t }) => {
-  const { qualityByLang }     = useSelector(state => playlist.getPlayed(state.playlist));
+  const playedItem            = useSelector(state => playlist.getPlayed(state.playlist));
   const { quality, language } = useSelector(state => playlist.getInfo(state.playlist));
-  const { type }              = useSelector(state => selectors.getFile(state.player));
+  const { type }       = useSelector(state => selectors.getFile(state.player));
 
   const dispatch = useDispatch();
 
@@ -18,12 +18,13 @@ const QualityControl = ({ t }) => {
 
   if (type === MT_AUDIO) return null;
 
+  const qualities = !playedItem.isHLS ? playedItem.qualityByLang?.[language] : playedItem.qualities;
   return (
     <div className="settings__row">
       <Header size="tiny">{t('player.settings.quality')}</Header>
       <Button.Group size="mini" inverted>
         {
-          qualityByLang?.[language]?.map((x, i) => (
+          qualities?.map((x, i) => (
             <Button
               inverted
               content={x}

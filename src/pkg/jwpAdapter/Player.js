@@ -4,10 +4,8 @@ import { useDispatch } from 'react-redux';
 
 import { actions as chroniclesActions } from '../../redux/modules/chronicles';
 import { JWPLAYER_ID } from '../../helpers/consts';
-import PlayerBehavior from './PlayerBehavior';
-import BehaviorStartPlay from './BehaviorStartPlay';
-import BehaviorStartStopSlice from './BehaviorStartStopSlice';
 import { remove } from './adapter';
+import PlayerBehaviorBuilder from './PlayerBehaviorBuilder';
 
 const Player = () => {
   const ref      = useRef();
@@ -15,13 +13,11 @@ const Player = () => {
 
   useEffect(() => () => {
     dispatch(chroniclesActions.pauseOnLeave());
-    remove()
+    remove();
   }, []);
   return (
     <>
-      <PlayerBehavior />
-      <BehaviorStartPlay />
-      <BehaviorStartStopSlice />
+      <PlayerBehaviorBuilder />
       <Ref innerRef={ref}>
         <div id={JWPLAYER_ID}></div>
       </Ref>

@@ -9,6 +9,8 @@ export const PLAYER_VOLUME_STORAGE_KEY = 'jwplayer.volume';
 
 export const findPlayedFile = (item, info, lang, mt, q) => {
   if (isEmpty(item) || !info.isReady) return {};
+  if (item.isHLS) return item.file;
+
   const { mediaType, language, quality } = info;
 
   lang = lang || language;
