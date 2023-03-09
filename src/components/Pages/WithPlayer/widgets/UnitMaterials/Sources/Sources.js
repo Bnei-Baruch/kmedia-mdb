@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { Divider, Dropdown, Menu, Segment } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
@@ -305,4 +305,4 @@ Sources.propTypes = {
   t: PropTypes.func.isRequired,
 };
 
-export default withNamespaces()(Sources);
+export default withTranslation()(Sources);

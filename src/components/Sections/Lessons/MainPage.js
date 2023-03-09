@@ -1,6 +1,6 @@
 import { isEqual } from 'lodash';
 import React, { useCallback, useEffect, useMemo } from 'react';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { Container, Divider } from 'semantic-ui-react';
@@ -70,31 +70,24 @@ const MainPage = ({ t }) => {
     }
   }, [language, dispatch, pageNo, selected, listParams]);
 
-  const wipErr = WipErr({ wip, err, t });
-
+  const wipErr          = WipErr({ wip, err, t });
+  const filterComponent = <Filters namespace={PAGE_NS_LESSONS} baseParams={FILTER_PARAMS} />;
   return (<>
     <SectionHeader section="lessons" />
-    <SectionFiltersWithMobile
-      filters={
-        <Filters
-          namespace={PAGE_NS_LESSONS}
-          baseParams={FILTER_PARAMS}
-        />
-      }
-    >
+    <SectionFiltersWithMobile filters={filterComponent}>
       <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} />
       <FilterLabels namespace={PAGE_NS_LESSONS} />
       {
         wipErr || items?.map(({ id, content_type }, i) => {
           switch (true) {
-          case COLLECTION_DAILY_LESSONS.includes(content_type):
-            return <DailyLessonItem id={id} key={i} />;
-          case COLLECTION_LESSONS_TYPE.includes(content_type):
-            return <CollectionItem id={id} key={i} />;
-          case UNIT_LESSONS_TYPE.includes(content_type):
-            return <UnitItem id={id} key={i} />;
-          default:
-            return null;
+            case COLLECTION_DAILY_LESSONS.includes(content_type):
+              return <DailyLessonItem id={id} key={i} />;
+            case COLLECTION_LESSONS_TYPE.includes(content_type):
+              return <CollectionItem id={id} key={i} />;
+            case UNIT_LESSONS_TYPE.includes(content_type):
+              return <UnitItem id={id} key={i} />;
+            default:
+              return null;
           }
         })
       }
@@ -112,4 +105,4 @@ const MainPage = ({ t }) => {
   </>);
 };
 
-export default withNamespaces()(MainPage);
+export default withTranslation()(MainPage);

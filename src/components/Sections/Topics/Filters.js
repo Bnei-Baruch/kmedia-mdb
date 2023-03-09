@@ -10,7 +10,7 @@ import ContentType from '../../FiltersAside/ContentTypeFilter/ContentType';
 import TagSourceFilter from '../../FiltersAside/TopicsFilter/TagSourceFilter';
 import { isEqual } from 'lodash';
 import { Container, Header } from 'semantic-ui-react';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import SubTopics from './SubTopics';
 
 const Filters = ({ namespace, baseParams, t }) => {
@@ -22,17 +22,19 @@ const Filters = ({ namespace, baseParams, t }) => {
 
   const dispatch = useDispatch();
 
+  const notWipErr = !wip && !err;
   useEffect(() => {
-    if (!isReady && !wip && !err) {
+    if (!isReady && notWipErr) {
       dispatch(actions.fetchStats(namespace, baseParams, { isPrepare: true, countC: true, countL: true }));
     }
-  }, [dispatch, isReady, baseParams]);
+  }, [isReady, baseParams, namespace, dispatch, notWipErr]);
 
+  const needFetch = isHydrated && isReady && notWipErr;
   useEffect(() => {
-    if (isHydrated && isReady && !wip && !err) {
+    if (needFetch) {
       dispatch(actions.fetchStats(namespace, baseParams, { isPrepare: false, countC: true, countL: true }));
     }
-  }, [dispatch, isHydrated, isReady, selected]);
+  }, [needFetch, selected, baseParams, namespace, dispatch]);
 
   const handleOnHydrated = () => setIsHydrated(true);
 
@@ -49,4 +51,4 @@ const Filters = ({ namespace, baseParams, t }) => {
   );
 };
 
-export default withNamespaces()(Filters);
+export default withTranslation()(Filters);

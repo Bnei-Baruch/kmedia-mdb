@@ -117,10 +117,10 @@
       "free-text": "Texto libre"
     },
     "media-types": {
-      "audio" : "Audio",
-      "video" : "Video",
-      "text" : "Transcripción",
-      "image" : "Dibujo"
+      "audio": "Audio",
+      "video": "Video",
+      "text": "Transcripción",
+      "image": "Dibujo"
     },
     "content-types": {
       "CONGRESS": "Congresos",
@@ -211,8 +211,8 @@
       "mute": "Mudo",
       "share": "Cuota",
       "settings": "Configuración",
-      "rewind10": "Rebobinar 10 seg",
-      "skip10": "Saltar 10 seg",
+      "rewind": "Rebobinar {{seek}} seg",
+      "skip": "Saltar {{seek}} seg",
       "next-video": "Next video",
       "prev-video": "Previous video",
       "fullscreen": "Fullscreen",

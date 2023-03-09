@@ -1,25 +1,26 @@
-import React, { useEffect } from 'react';
-import { useLocation, useHistory } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { selectors as playlist, actions as action, selectors } from '../../redux/modules/playlist';
 import { selectors as mdb } from '../../redux/modules/mdb';
-import { setLanguageInQuery, setMediaTypeInQuery, persistPreferredMediaType } from '../../helpers/player';
-import { getQuery, stringify } from '../../helpers/url';
+import { persistPreferredMediaType } from '../../helpers/player';
+import { getQuery, stringify, updateQuery } from '../../helpers/url';
 import { canonicalLink } from '../../helpers/links';
 import { selectors as settings } from '../../redux/modules/settings';
-import { actions } from '../../redux/modules/player';
+import { actions, selectors as player } from '../../redux/modules/player';
 import { startEndFromQuery } from './Controls/helper';
 
 const UpdateLocation = () => {
-  const history  = useHistory();
+  const navigate = useNavigate();
   const location = useLocation();
 
-  const dispatch   = useDispatch();
-  const q          = getQuery(location);
-  const uiLanguage = useSelector(state => settings.getLanguage(state.settings));
+  const dispatch                           = useDispatch();
+  const q                                  = getQuery(location);
+  const uiLanguage                         = useSelector(state => settings.getLanguage(state.settings));
+  const { start: prevStart, end: prevEnd } = useSelector(state => player.getShareStartEnd(state.player));
 
-  const { mediaType, language, nextUnitId, cId, baseLink } = useSelector(state => playlist.getInfo(state.playlist));
+  const { mediaType, nextUnitId, cId, cuId, baseLink } = useSelector(state => playlist.getInfo(state.playlist));
 
   const denormUnit        = useSelector(state => mdb.nestedGetDenormContentUnit(state.mdb));
   const denormCollectiont = useSelector(state => mdb.nestedGetDenormCollection(state.mdb));
@@ -27,21 +28,19 @@ const UpdateLocation = () => {
 
   //init redux start end from location
   useEffect(() => {
-    dispatch(actions.setShareStartEnd(startEndFromQuery(location)));
-  }, [location]);
+      const _q = startEndFromQuery(location);
+      dispatch(actions.setShareStartEnd(_q));
+  }, [location, cuId]);
 
-  useEffect(() => {
-    if (language && language !== q.language) {
-      setLanguageInQuery(history, language);
-    }
-  }, [language, q.language]);
 
   useEffect(() => {
     if (mediaType && mediaType !== q.mediaType) {
-      setMediaTypeInQuery(history, mediaType);
+      const newq     = {};
+      newq.mediaType = mediaType;
       persistPreferredMediaType(mediaType);
+      updateQuery(navigate, location, query => ({ ...query, ...newq }));
     }
-  }, [mediaType, q.mediaType]);
+  }, [mediaType, q, navigate, location]);
 
   //go to next on playlist
   const search = baseLink ? `?${stringify({ ...q, ap })}` : location.search;
@@ -53,10 +52,11 @@ const UpdateLocation = () => {
       } else {
         link = canonicalLink(denormUnit(nextUnitId), null, denormCollectiont(cId));
       }
-      history.push({ pathname: `/${uiLanguage}${link}`, search });
+
+      navigate({ pathname: `/${uiLanguage}${link}`, search });
       dispatch(action.nullNextUnit());
     }
-  }, [nextUnitId, cId, search, uiLanguage, baseLink, history, denormUnit, denormCollectiont]);
+  }, [nextUnitId, cId, search, uiLanguage, baseLink, navigate, denormUnit, denormCollectiont]);
 
   return null;
 };

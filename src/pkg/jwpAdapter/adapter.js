@@ -1,22 +1,22 @@
 import { PLAYER_ACTIONS_BY_EVENT } from '../../redux/modules/player';
 import { JWPLAYER_ID } from '../../helpers/consts';
 import { noop } from '../../helpers/utils';
-import isFunction from 'lodash/isFunction';
 
 export const LOCALSTORAGE_MUTE = 'jwplayer.mute';
 
-const playerRef    = { current: null };
 export const setup = conf => {
-  const player = window.jwplayer(JWPLAYER_ID);
-  player.setup(conf);
-  playerRef.current = player;
+  const jwp = window.jwplayer(JWPLAYER_ID);
+  jwp.setup(conf);
 };
 
 const functionByName = (name, def = 0, val) => {
-  const foo = playerRef.current?.[name];
-  if (!isFunction(foo))
+  const jwp = window.jwplayer();
+  if (!jwp?.id) {
     return def;
-  let resp = def;
+  }
+
+  const foo = jwp[name];
+  let resp  = def;
   try {
     resp = foo(val);
   } catch (e) {
@@ -29,14 +29,15 @@ const functionByName = (name, def = 0, val) => {
 export const getDuration = () => functionByName('getDuration');
 
 export const getMute = () => functionByName('getMute', false);
-export const setMute = (val) => functionByName('setMute', noop, val);
+export const setMute = val => functionByName('setMute', noop, val);
 
-export const setVolume = (vol) => functionByName('setVolume', noop, vol);
+export const setVolume = vol => functionByName('setVolume', noop, vol);
 export const getVolume = () => functionByName('getVolume', noop);
 
-export const setPlaybackRate = (rate) => functionByName('setPlaybackRate', noop, rate);
+export const setPlaybackRate = rate => functionByName('setPlaybackRate', noop, rate);
 
-export const getPosition = () => functionByName('getPosition');
+export const getPosition     = () => functionByName('getPosition');
+export const getPlaylistItem = () => functionByName('getPlaylistItem', noop);
 
 export const play = () => functionByName('play');
 
@@ -47,23 +48,37 @@ export const togglePlay = () => {
   (state !== 'playing') ? play() : pause();
 };
 
-export const seek = (pos) => functionByName('seek', noop, pos);
+export const seek = pos => functionByName('seek', noop, pos);
 
-export const load = (items) => functionByName('load', noop, items);
+export const load = items => functionByName('load', noop, items);
 
-export const remove = () => functionByName('remove', noop);
+export const remove        = () => functionByName('remove', noop);
+/**
+ * check if jwplayer builded, use if not need rerender on build
+ * @returns {boolean}
+ */
+export const isPlayerReady = () => window.jwplayer()?.id === JWPLAYER_ID;
 
-export const init = (dispatch) => {
-  playerRef.current = window.jwplayer(JWPLAYER_ID);
-  initPlayerEvents(dispatch);
-};
+const PLAYER_EVENTS = [
+  'ready',
+  'playlistItem',
+  'remove',
+  'destroyPlugin',
 
-const PLAYER_EVENTS    = ['ready', 'remove', 'play', 'pause', 'playbackRateChanged', 'resize', 'mute', 'complete'];
-const initPlayerEvents = (dispatch) => {
+  'play',
+  'pause',
+
+  'playbackRateChanged',
+  'resize',
+  'mute',
+  'complete',
+  'buffer'
+];
+export const init   = dispatch => {
   const player = window.jwplayer();
 
   //for debug, catch all jwplayer events
-  //player.on('all', (name, e) => console.log('jwplayer all events', name, e));
+  //player.on('all', (name, e) => console.log('jwplayer all events', name));
 
   player.on('error', e => console.error(e));
 

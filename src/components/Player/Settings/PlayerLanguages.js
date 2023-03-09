@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { LANGUAGE_OPTIONS, PLAYER_OVER_MODES } from '../../../helpers/consts';
 import { actions as playlistActions, selectors as playlistSelectors } from '../../../redux/modules/playlist';
 import { actions, selectors } from '../../../redux/modules/player';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 
 const PlayerLanguages = ({ t }) => {
   const { languages = [] } = useSelector(state => playlistSelectors.getPlayed(state.playlist));
@@ -27,20 +27,19 @@ const PlayerLanguages = ({ t }) => {
           LANGUAGE_OPTIONS
             .filter(x => languages.includes(x.value))
             .map(x => (
-                <Menu.Item
-                  link
-                  name={x.value}
-                  content={x.name}
-                  active={language === x.value}
-                  onClick={handleSelect}
-                  key={x.value}
-                />
-              )
-            )
+              <Menu.Item
+                link
+                name={x.value}
+                content={x.name}
+                active={language === x.value}
+                onClick={handleSelect}
+                key={x.value}
+              />
+            ))
         }
       </Menu>
     </div>
   );
 };
 
-export default withNamespaces()(PlayerLanguages);
+export default withTranslation()(PlayerLanguages);

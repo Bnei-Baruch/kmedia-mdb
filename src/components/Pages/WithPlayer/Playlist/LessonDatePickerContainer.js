@@ -1,6 +1,6 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useSelector, shallowEqual, useDispatch } from 'react-redux';
-import { withNamespaces } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { Header, Icon } from 'semantic-ui-react';
 
 import { selectors as settings } from '../../../../redux/modules/settings';
@@ -10,11 +10,11 @@ import Link from '../../../Language/MultiLanguageLink';
 import CollectionDatePicker from './LessonDatePicker';
 import { selectors as mdb, actions } from '../../../../redux/modules/mdb';
 import { selectors } from '../../../../redux/modules/playlist';
-import { canonicalLink } from '../../../../helpers/links';
 import moment from 'moment';
 import { DATE_FORMAT } from '../../../../helpers/consts';
+import { canonicalLink } from '../../../../helpers/links';
 
-const getStartEndByFilmDate = (d) => {
+const getStartEndByFilmDate = d => {
   const filmDate = moment.utc(d);
   return (
     {
@@ -24,11 +24,9 @@ const getStartEndByFilmDate = (d) => {
   );
 };
 
-const LessonDatePickerContainer = ({ t }) => {
-  const [prevLink, setPrevLink] = useState(null);
-  const [nextLink, setNextLink] = useState(null);
-
+const LessonDatePickerContainer = () => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
+  const { t }              = useTranslation();
 
   const wipMap  = useSelector(state => mdb.getWip(state.mdb), shallowEqual);
   const cWindow = useSelector(state => mdb.getWindow(state.mdb), shallowEqual);
@@ -39,30 +37,21 @@ const LessonDatePickerContainer = ({ t }) => {
   const langDir  = getLanguageDirection(language);
 
   const dispatch = useDispatch();
+  const curIndex = cWindow?.data?.indexOf(cId) ?? -1;
   useEffect(() => {
-    const idx = cWindow?.data?.indexOf(cId) || -1;
-
-    if (idx < 1 && !wipMap.cWindow[cId] && cId !== cWindow.id) {
+    if (curIndex < 1 && !wipMap.cWindow[cId] && cId !== cWindow.id) {
       const { film_date }            = denorm(cId);
       const { start_date, end_date } = getStartEndByFilmDate(film_date);
       dispatch(actions.fetchWindow({ id: cId, start_date, end_date }));
     }
-  }, [cId, denorm, cWindow, wipMap.cWindow]);
+  }, [cId, cWindow, wipMap.cWindow, curIndex]);
 
-  useEffect(() => {
-    if (cWindow.data && cWindow.data.length > 0) {
-      const curIndex       = cWindow.data.indexOf(cId);
-      const prevCollection = curIndex < cWindow.data.length - 1 ? denorm(cWindow.data[curIndex + 1]) : null;
-      const prevLnk        = prevCollection ? canonicalLink(prevCollection) : null;
-      setPrevLink(prevLnk);
+  const isLtr          = langDir === 'ltr';
+  const prevCollection = curIndex >= 0 && curIndex < cWindow.data.length - 1 ? denorm(cWindow.data[curIndex + 1]) : null;
+  const nextCollection = curIndex > 0 ? denorm(cWindow.data[curIndex - 1]) : null;
 
-      const nextCollection = curIndex > 0 ? denorm(cWindow.data[curIndex - 1]) : null;
-      const nextLnk        = nextCollection ? canonicalLink(nextCollection) : null;
-      setNextLink(nextLnk);
-    }
-  }, [cId, cWindow.data, denorm]);
-
-  const isLtr = langDir === 'ltr';
+  const prevLink = prevCollection ? canonicalLink(prevCollection) : null;
+  const nextLink = nextCollection ? canonicalLink(nextCollection) : null;
   return (
     <Header.Subheader
       className={isMobileDevice ? '' : isLtr ? 'float-right' : 'float-left'}
@@ -99,4 +88,4 @@ const LessonDatePickerContainer = ({ t }) => {
   );
 };
 
-export default withNamespaces()(LessonDatePickerContainer);
+export default LessonDatePickerContainer;

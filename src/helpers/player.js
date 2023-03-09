@@ -11,7 +11,7 @@ import {
   MT_VIDEO,
   VS_DEFAULT,
 } from './consts';
-import { getQuery, updateQuery } from './url';
+import { getQuery } from './url';
 import MediaHelper from './media';
 import { isEmpty, physicalFile } from './utils';
 
@@ -138,18 +138,11 @@ export const playlist = collection => {
 };
 
 //query utilities
-export const getMediaTypeFromQuery = (location) => {
+export const getMediaTypeFromQuery = location => {
   const query = getQuery(location || window?.location);
   const mt    = (query.mediaType || '').toLowerCase();
 
   return [MT_VIDEO, MT_AUDIO].includes(mt) ? mt : restorePreferredMediaType();
-};
-
-export const setMediaTypeInQuery = (history, mediaType = MT_VIDEO) => {
-  updateQuery(history, query => ({
-    ...query,
-    mediaType
-  }));
 };
 
 export const getLanguageFromQuery = (location, fallbackLanguage = LANG_ENGLISH) => {
@@ -157,11 +150,6 @@ export const getLanguageFromQuery = (location, fallbackLanguage = LANG_ENGLISH) 
   const language = query.language || fallbackLanguage || LANG_ENGLISH;
   return language.toLowerCase();
 };
-
-export const setLanguageInQuery = (history, language) => updateQuery(history, query => ({
-  ...query,
-  language
-}));
 
 export const getActivePartFromQuery = (location, def = 0) => {
   const q = getQuery(location);

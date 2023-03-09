@@ -1,7 +1,6 @@
 import { applyMiddleware, compose, createStore as reduxCreateStore } from 'redux';
 import createSagaMiddleware, { END } from 'redux-saga';
 // import { createLogger } from 'redux-logger';
-
 import sagaMonitor from '../sagas/helpers/sagaMonitor';
 import createMultiLanguageRouterMiddleware from './middleware/multiLanguageRouterMiddleware';
 // import createDeferredSagasMiddleware from './middleware/defferedSagasMiddleware';
@@ -40,6 +39,7 @@ export default function createStore(initialState, history) {
     // middlewares.push(logger);
   }
 
+  //TODO David: need replace to @reduxjs/toolkit
   const store = reduxCreateStore(reducer(history), initialState, compose(
     applyMiddleware(...middlewares),
     devToolsStoreEnhancer()
@@ -47,8 +47,8 @@ export default function createStore(initialState, history) {
 
   // used server side
   store.rootSagaPromise = sagaMiddleWare.run(rootSaga).done;
-  store.stopSagas      = () => store.dispatch(END);
-  store.sagaMiddleWare = sagaMiddleWare;
+  store.stopSagas       = () => store.dispatch(END);
+  store.sagaMiddleWare  = sagaMiddleWare;
 
   return store;
 }

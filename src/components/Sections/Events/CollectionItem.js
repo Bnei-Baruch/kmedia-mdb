@@ -1,5 +1,5 @@
 import React from 'react';
-import { withNamespaces } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Header, List } from 'semantic-ui-react';
 
@@ -9,8 +9,9 @@ import { selectors as mdb } from '../../../redux/modules/mdb';
 import Link from '../../Language/MultiLanguageLink';
 import UnitLogoWithDuration from '../../shared/UnitLogoWithDuration';
 
-const CollectionItem = ({ id, t }) => {
-  const c = useSelector(state => mdb.getDenormCollection(state.mdb, id));
+const CollectionItem = ({ id }) => {
+  const { t } = useTranslation();
+  const c     = useSelector(state => mdb.getDenormCollection(state.mdb, id));
   if (!c?.content_units) return null;
 
   const { film_date, name, content_units: cus, start_date, end_date } = c;
@@ -36,4 +37,4 @@ const CollectionItem = ({ id, t }) => {
   );
 };
 
-export default withNamespaces()(CollectionItem);
+export default CollectionItem;

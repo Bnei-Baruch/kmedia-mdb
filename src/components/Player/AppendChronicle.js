@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react';
+import { useEffect, useContext } from 'react';
 import { useSelector } from 'react-redux';
 
 import { selectors as playlist } from '../../redux/modules/playlist';

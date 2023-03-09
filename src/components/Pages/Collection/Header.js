@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { Button, Container, Grid, Header } from 'semantic-ui-react';
 
 import { assetUrl } from '../../../helpers/Api';
@@ -67,4 +67,4 @@ CollectionPageHeader.propTypes = {
   t: PropTypes.func.isRequired,
 };
 
-export default withNamespaces()(CollectionPageHeader);
+export default withTranslation()(CollectionPageHeader);

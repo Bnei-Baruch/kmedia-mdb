@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { Dropdown } from 'semantic-ui-react';
 
@@ -47,4 +47,4 @@ const Actions = ({ history, t }) => {
   );
 };
 
-export default withNamespaces()(Actions);
+export default withTranslation()(Actions);

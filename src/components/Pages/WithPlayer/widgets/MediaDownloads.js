@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { Button, Grid, Popup, Table, Divider } from 'semantic-ui-react';
@@ -158,15 +158,15 @@ class MediaDownloads extends Component {
 
   static getI18nTypeOverridesKey = unit => {
     switch (unit.content_type) {
-    case CT_LESSON_PART:
-    case CT_FULL_LESSON:
-      return 'lesson';
-    case CT_VIDEO_PROGRAM_CHAPTER:
-      return 'program';
-    case CT_ARTICLE:
-      return 'publication';
-    default:
-      return '';
+      case CT_LESSON_PART:
+      case CT_FULL_LESSON:
+        return 'lesson';
+      case CT_VIDEO_PROGRAM_CHAPTER:
+        return 'program';
+      case CT_ARTICLE:
+        return 'publication';
+      default:
+        return '';
     }
   };
 
@@ -393,4 +393,4 @@ export default connect(state => (
     language: settings.getLanguage(state.settings),
     contentLanguage: settings.getContentLanguage(state.settings),
   })
-)(withNamespaces()(MediaDownloads));
+)(withTranslation()(MediaDownloads));

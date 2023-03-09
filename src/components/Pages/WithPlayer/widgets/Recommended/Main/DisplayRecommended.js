@@ -212,9 +212,10 @@ DisplayRecommended.propTypes = {
 };
 
 const areEqual = (prevProps, nextProps) =>
-  !nextProps.unit ||
-  prevProps.unit?.id === nextProps.unit.id &&
-  prevProps.recommendedUnits.length === nextProps.recommendedUnits.length &&
-  prevProps.recommendedUnits.every((unit, index) => nextProps.recommendedUnits[index].id === unit.id);
+  !nextProps.unit || (
+    prevProps.unit?.id === nextProps.unit.id &&
+    prevProps.recommendedUnits.length === nextProps.recommendedUnits.length &&
+    prevProps.recommendedUnits.every((unit, index) => nextProps.recommendedUnits[index].id === unit.id)
+  );
 
 export default React.memo(DisplayRecommended, areEqual);

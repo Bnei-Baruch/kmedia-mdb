@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { Button, Header, Icon } from 'semantic-ui-react';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { selectors, actions, selectors as player } from '../../../redux/modules/player';
@@ -46,4 +46,4 @@ const Settings = ({ t }) => {
   );
 };
 
-export default withNamespaces()(Settings);
+export default withTranslation()(Settings);

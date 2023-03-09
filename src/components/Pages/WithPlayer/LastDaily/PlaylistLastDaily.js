@@ -1,19 +1,16 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 import Helmets from '../../../shared/Helmets';
 import { publicFile } from '../../../../helpers/utils';
 import PlaylistPage from '../Playlist/PlaylistPage';
 import BuildPlaylistLastDaily from './BuildPlaylistLastDaily';
-import PlayerContainer from '../../../Player/PlayerContainer';
 import { useSelector } from 'react-redux';
 import { selectors as playlist } from '../../../../redux/modules/playlist';
 import WipErr from '../../../shared/WipErr/WipErr';
 
-const PlaylistLastDaily = ({ t }) => {
-  const playerContainer = <PlayerContainer />;;
-
+const PlaylistLastDaily = ({ playerContainer }) => {
+  const { t }                        = useTranslation();
   const { isReady: isPlaylistReady } = useSelector(state => playlist.getInfo(state.playlist));
   const wipErr                       = WipErr({ wip: !isPlaylistReady, t });
 
@@ -29,8 +26,4 @@ const PlaylistLastDaily = ({ t }) => {
   );
 };
 
-PlaylistLastDaily.propTypes = {
-  t: PropTypes.func.isRequired
-};
-
-export default withNamespaces()(PlaylistLastDaily);
+export default PlaylistLastDaily;

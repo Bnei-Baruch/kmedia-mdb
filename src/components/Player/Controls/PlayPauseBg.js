@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 
 import { selectors } from '../../../redux/modules/player';
 import { Icon } from 'semantic-ui-react';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import WebWrapTooltip from '../../shared/WebWrapTooltip';
 import { pause, play, getPosition } from '../../../pkg/jwpAdapter/adapter';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
@@ -31,4 +31,4 @@ const PlayPauseBg = ({ t }) => {
   );
 };
 
-export default withNamespaces()(PlayPauseBg);
+export default withTranslation()(PlayPauseBg);

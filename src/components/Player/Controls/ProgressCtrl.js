@@ -19,7 +19,7 @@ export const ProgressCtrl = () => {
     const { left, right } = widthRef.current.getBoundingClientRect();
     setLeft(left);
     setRight(right);
-  }, [widthRef.current, width]);
+  }, [widthRef, width]);
 
   const handleProgressClick = e => {
     const clientX = e.touches ? e.touches[e.touches.length - 1].clientX : e.clientX;

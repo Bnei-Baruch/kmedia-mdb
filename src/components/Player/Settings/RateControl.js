@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Header } from 'semantic-ui-react';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
 import { selectors } from '../../../redux/modules/player';
@@ -37,4 +37,4 @@ const RateControl = ({ t }) => {
   );
 };
 
-export default withNamespaces()(RateControl);
+export default withTranslation()(RateControl);

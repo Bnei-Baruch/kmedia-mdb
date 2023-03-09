@@ -13,51 +13,70 @@ import 'moment/locale/de';
 import 'moment/locale/tr';
 import 'moment/locale/cs';
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { hydrateRoot } from 'react-dom/client';
 import ReactGA from 'react-ga';
 import { createBrowserHistory } from 'history';
-import { HelmetProvider } from 'react-helmet-async';
 
 import { DEFAULT_LANGUAGE, LANG_UKRAINIAN } from './helpers/consts';
 import i18n from './helpers/i18nnext';
 import createStore from './redux/createStore';
 import { actions as mdb } from './redux/modules/mdb';
-import ErrorBoundary from './components/ErrorBoundary';
 import { actions as ssr } from './redux/modules/ssr';
 import App from './components/App/App';
 import UAParser from 'ua-parser-js';
-import ClientChronicles from './helpers/clientChronicles'
-import { CreateAbTesting } from './helpers/ab-testing'
+import ClientChronicles from './helpers/clientChronicles';
+import { CreateAbTesting } from './helpers/ab-testing';
+import { initKC } from './pkg/ksAdapter/adapter';
+import ErrorBoundary from './components/ErrorBoundary';
+import { HelmetProvider } from 'react-helmet-async';
 
-ReactGA.initialize('UA-108372395-1', { gaOptions: { transport: 'beacon' } });
+function hydrateApp(kcInfo) {
 
-const history = createBrowserHistory();
-const store   = createStore(window.__data, history);
-store.dispatch(ssr.hydrate());
-// console.log('window.__data', window.__data);
+  ReactGA.initialize('UA-108372395-1', { gaOptions: { transport: 'beacon' } });
 
-const i18nData = window.__i18n || {};
+  const history = createBrowserHistory();
 
-// Initialize moment global locale to default language
-const language = i18nData.initialLanguage ?? DEFAULT_LANGUAGE;
-moment.locale(language === LANG_UKRAINIAN ? 'uk' : language);
+  const store = createStore({ ...window.__data, auth: kcInfo }, history);
 
-const deviceInfo = new UAParser().getResult();
-const clientChronicles = new ClientChronicles(history, store);
-const abTesting = CreateAbTesting(clientChronicles.userId);
-clientChronicles.setAbTesting(abTesting);
+  store.dispatch(ssr.hydrate());
+  // console.log('window.__data', window.__data);
 
-ReactDOM.hydrate(
-  <React.StrictMode>
-    <ErrorBoundary>
-      <HelmetProvider>
-        <App i18n={i18n} store={store} history={history} deviceInfo={deviceInfo} clientChronicles={clientChronicles} abTesting={abTesting} {...i18nData} />
-      </HelmetProvider>
-    </ErrorBoundary>
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+  const i18nData = window.__i18n || {};
 
-// We ask for semi-quasi static data here since
-// we strip it from SSR to save initial network bandwidth
-store.dispatch(mdb.fetchSQData());
+  // Initialize moment global locale to default language
+  const language = i18nData.initialLanguage ?? DEFAULT_LANGUAGE;
+  moment.locale(language === LANG_UKRAINIAN ? 'uk' : language);
+
+  const deviceInfo       = new UAParser().getResult();
+  const clientChronicles = new ClientChronicles(history, store);
+  const abTesting        = CreateAbTesting(clientChronicles.userId);
+  clientChronicles.setAbTesting(abTesting);
+  const component = (
+    <React.StrictMode>
+      <ErrorBoundary>
+        <HelmetProvider>
+          <App
+            i18n={i18n}
+            store={store}
+            history={history}
+            deviceInfo={deviceInfo}
+            clientChronicles={clientChronicles}
+            abTesting={abTesting}
+            i18nData={i18nData}
+          />
+        </HelmetProvider>
+      </ErrorBoundary>
+    </React.StrictMode>
+  );
+  const el        = document.getElementById('root');
+  hydrateRoot(el, component);
+  // We ask for semi-quasi static data here since
+  // we strip it from SSR to save initial network bandwidth
+  store.dispatch(mdb.fetchSQData());
+}
+
+if (window.__isAuthApp) {
+  initKC();
+} else {
+  initKC().then(info => hydrateApp(info));
+}

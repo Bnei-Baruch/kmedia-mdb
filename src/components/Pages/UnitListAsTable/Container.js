@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
 
 import { selectors as settings } from '../../../redux/modules/settings';
 import { actions as filtersActions, selectors as filters } from '../../../redux/modules/filters';
@@ -11,6 +10,7 @@ import { selectors as mdb } from '../../../redux/modules/mdb';
 import withPagination, { getPageFromLocation } from '../../Pagination/withPagination';
 import * as shapes from '../../shapes';
 import Page from './Page';
+import { withRouter } from '../../../helpers/withRouterPatch';
 
 export class UnitListContainer extends withPagination {
   static propTypes = {

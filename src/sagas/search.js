@@ -1,5 +1,4 @@
 import { all, call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
-import { push } from 'connected-react-router';
 
 import Api from '../helpers/Api';
 import { getQuery, updateQuery as urlUpdateQuery } from './helpers/url';
@@ -13,6 +12,7 @@ import { selectors as lessonsSelectors, actions as lessonsActions } from '../red
 import { fetchAllSeries } from './lessons';
 import { fetchViewsByUIDs } from './recommended';
 import { filtersTransformer } from '../filters';
+import { push } from '@lagunovsky/redux-react-router';
 
 // TODO: Use debounce after redux-saga updated.
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -25,15 +25,15 @@ function* autocomplete(action) {
     }
 
     yield delay(100);  // Debounce autocomplete.
-    const query    = yield select(state => selectors.getQuery(state.search));
-    const language = yield select(state => settings.getLanguage(state.settings));
+    const query          = yield select(state => selectors.getQuery(state.search));
+    const language       = yield select(state => settings.getLanguage(state.settings));
     const autocompleteId = GenerateSearchId();
-    const request = { q: query, language };
-    let suggestions = null;
+    const request        = { q: query, language };
+    let suggestions      = null;
     if (query) {
-      const { data } = yield call(Api.autocomplete, request);
+      const { data }      = yield call(Api.autocomplete, request);
       data.autocompleteId = autocompleteId;
-      suggestions = data;
+      suggestions         = data;
     }
 
     yield put(actions.autocompleteSuccess({ suggestions }));
@@ -51,7 +51,6 @@ function getIdsForFetch(hits, types) {
     return acc;
   }, []);
 }
-
 
 export function* search(action) {
   try {
@@ -91,9 +90,9 @@ export function* search(action) {
       }
     }
 
-    const language  = yield select(state => settings.getLanguage(state.settings));
-    const sortBy    = yield select(state => selectors.getSortBy(state.search));
-    const deb       = yield select(state => selectors.getDeb(state.search));
+    const language = yield select(state => settings.getLanguage(state.settings));
+    const sortBy   = yield select(state => selectors.getSortBy(state.search));
+    const deb      = yield select(state => selectors.getDeb(state.search));
 
     // Redirect from home page.
     if (action.type === types.SEARCH && !action.payload) {
@@ -192,7 +191,7 @@ export function* search(action) {
 
 // Propogate URL search params to redux.
 export function* hydrateUrl() {
-  const urlQuery = yield* getQuery();
+  const urlQuery                       = yield* getQuery();
   const { q, page = '1', deb = false } = urlQuery;
 
   const reduxQuery  = yield select(state => selectors.getQuery(state.search));
@@ -221,7 +220,7 @@ export function* hydrateUrl() {
 // Update URL from query.
 export function* updateUrl(action) {
   const urlQuery = yield* getQuery();
-  const { q } = urlQuery;
+  const { q }    = urlQuery;
 
   const reduxQuery = yield select(state => selectors.getQuery(state.search));
   if (reduxQuery && reduxQuery !== q) {

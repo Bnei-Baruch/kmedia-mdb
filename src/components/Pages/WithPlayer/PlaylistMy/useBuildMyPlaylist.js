@@ -1,19 +1,13 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useLocation, useParams } from 'react-router-dom';
-import { useHistory } from 'react-router';
-import { Header } from 'semantic-ui-react';
+import { useParams, useLocation } from 'react-router-dom';
 
 import { actions, selectors } from '../../../../redux/modules/playlist';
-
-import Page from './Page';
-import { withNamespaces } from 'react-i18next';
 import { getActivePartFromQuery } from '../../../../helpers/player';
 
 const useBuildMyPlaylist = () => {
   const { id }   = useParams();
   const location = useLocation();
-  const history  = useHistory();
 
   const { pId, cuId, wip } = useSelector(state => selectors.getInfo(state.playlist));
   const cuIds              = useSelector(state => selectors.getPlaylist(state.playlist));
@@ -34,7 +28,7 @@ const useBuildMyPlaylist = () => {
         dispatch(actions.select(cuIds[newUp]));
       }
     }
-  }, [cuIds, cuId, history, location]);
+  }, [cuIds, cuId, location]);
 
   return cuIds.length === 0;
 };

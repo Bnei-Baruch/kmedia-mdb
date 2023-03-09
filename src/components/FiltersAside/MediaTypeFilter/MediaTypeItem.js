@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Checkbox, List } from 'semantic-ui-react';
 import { FN_MEDIA_TYPE } from '../../../helpers/consts';
@@ -38,4 +38,4 @@ const MediaTypeItem = ({ namespace, id, t }) => {
   );
 };
 
-export default withNamespaces()(MediaTypeItem);
+export default withTranslation()(MediaTypeItem);

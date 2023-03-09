@@ -1,8 +1,8 @@
 import React, { useContext, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { Dropdown, Menu } from 'semantic-ui-react';
-import { useHistory, useLocation } from 'react-router';
+import { useNavigate, useLocation } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { actions, selectors as settings } from '../../redux/modules/settings';
@@ -44,7 +44,7 @@ const DesktopLanguage = ({ language, contentLanguage, setContentLanguage }) => (
 
 const MobileLanguage = ({ language, contentLanguage, setContentLanguage }) => {
 // We need dependency on location in order to change Link every time url changes
-  const history = useHistory();
+  const navigate = useNavigate();
   const location = useLocation();
 
   const onMobileChange = (e, language, setContentLanguage) => {
@@ -52,7 +52,7 @@ const MobileLanguage = ({ language, contentLanguage, setContentLanguage }) => {
     storeContentLanguage(selectedContentLang, setContentLanguage);
 
     const link = getToWithLanguage(null, location, language, selectedContentLang);
-    history.push(link);
+    navigate(link);
   };
 
   return (
@@ -111,4 +111,4 @@ ContentLanguage.propTypes = {
   t: PropTypes.func.isRequired,
 };
 
-export default withNamespaces()(ContentLanguage);
+export default withTranslation()(ContentLanguage);

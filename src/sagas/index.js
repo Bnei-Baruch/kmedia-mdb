@@ -17,7 +17,6 @@ import { sagas as stats } from './stats';
 import { sagas as simpleMode } from './simpleMode';
 import { sagas as recommended } from './recommended';
 import { sagas as music } from './music';
-import { sagas as auth } from './auth';
 import { sagas as my } from './my';
 import { sagas as likutim } from './likutim';
 import { sagas as trim } from './trim';
@@ -41,7 +40,6 @@ const allSagas = [
   ...simpleMode,
   ...recommended,
   ...music,
-  ...auth,
   ...my,
   ...music,
   ...likutim,

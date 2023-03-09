@@ -1,8 +1,8 @@
 import uniq from 'lodash/uniq';
 import moment from 'moment';
-import { getPageFromLocation } from './components/Pagination/withPagination';
-import { tabs as pulicationsTabs } from './components/Sections/Publications/MainPage';
-import { isTaas } from './components/shared/PDF/PDF';
+import { getPageFromLocation } from '../components/Pagination/withPagination';
+import { tabs as pulicationsTabs } from '../components/Sections/Publications/MainPage';
+import { isTaas } from '../components/shared/PDF/PDF';
 
 import {
   COLLECTION_PROGRAMS_TYPE,
@@ -23,32 +23,32 @@ import {
   PAGE_NS_PROGRAMS,
   RABASH_PERSON_UID,
   UNIT_PROGRAMS_TYPE,
-} from './helpers/consts';
-import MediaHelper from './helpers/media';
-import { getQuery } from './helpers/url';
-import { canonicalCollection, isEmpty } from './helpers/utils';
-import { actions as assetsActions, selectors as assetsSelectors } from './redux/modules/assets';
-import { actions as eventsActions } from './redux/modules/events';
-import { actions as filtersActions } from './redux/modules/filters';
-import { actions as homeActions } from './redux/modules/home';
-import { actions as listsActions } from './redux/modules/lists';
-import { actions as mdbActions, selectors as mdbSelectors } from './redux/modules/mdb';
-import { actions as musicActions } from './redux/modules/music';
-import { actions as prepareActions } from './redux/modules/preparePage';
-import { actions as publicationsActions } from './redux/modules/publications';
-import { actions as searchActions } from './redux/modules/search';
-import { selectors as settingsSelectors } from './redux/modules/settings';
-import { actions as simpleModeActions } from './redux/modules/simpleMode';
-import { selectors as sourcesSelectors } from './redux/modules/sources';
-import { actions as tagsActions } from './redux/modules/tags';
-import * as assetsSagas from './sagas/assets';
-import * as eventsSagas from './sagas/events';
-import * as filtersSagas from './sagas/filters';
-import * as mdbSagas from './sagas/mdb';
-import * as musicSagas from './sagas/music';
-import * as publicationsSagas from './sagas/publications';
-import * as searchSagas from './sagas/search';
-import * as tagsSagas from './sagas/tags';
+} from '../helpers/consts';
+import MediaHelper from './../helpers/media';
+import { getQuery } from '../helpers/url';
+import { canonicalCollection, isEmpty } from '../helpers/utils';
+import { actions as assetsActions, selectors as assetsSelectors } from './../redux/modules/assets';
+import { actions as eventsActions } from './../redux/modules/events';
+import { actions as filtersActions } from './../redux/modules/filters';
+import { actions as homeActions } from './../redux/modules/home';
+import { actions as listsActions } from './../redux/modules/lists';
+import { actions as mdbActions, selectors as mdbSelectors } from './../redux/modules/mdb';
+import { actions as musicActions } from './../redux/modules/music';
+import { actions as prepareActions } from './../redux/modules/preparePage';
+import { actions as publicationsActions } from './../redux/modules/publications';
+import { actions as searchActions } from './../redux/modules/search';
+import { selectors as settingsSelectors } from './../redux/modules/settings';
+import { actions as simpleModeActions } from './../redux/modules/simpleMode';
+import { selectors as sourcesSelectors } from './../redux/modules/sources';
+import { actions as tagsActions } from './../redux/modules/tags';
+import * as assetsSagas from './../sagas/assets';
+import * as eventsSagas from './../sagas/events';
+import * as filtersSagas from './../sagas/filters';
+import * as mdbSagas from './../sagas/mdb';
+import * as musicSagas from './../sagas/music';
+import * as publicationsSagas from './../sagas/publications';
+import * as searchSagas from './../sagas/search';
+import * as tagsSagas from './../sagas/tags';
 
 export const home = store => {
   store.dispatch(homeActions.fetchData(true));
@@ -60,6 +60,7 @@ export const cuPage = (store, match) => {
   if (cuID === '%3Canonymous%3E') {
     return Promise.resolve();
   }
+
   return store.sagaMiddleWare.run(mdbSagas.fetchUnit, mdbActions.fetchUnit(cuID)).done
     .then(() => {
       const state = store.getState();
@@ -74,28 +75,26 @@ export const cuPage = (store, match) => {
 
 const getExtraFetchParams = (ns, collectionID) => {
   switch (ns) {
-  case PAGE_NS_PROGRAMS:
-    return { content_type: UNIT_PROGRAMS_TYPE };
-  case 'publications-articles':
-    return { content_type: [CT_ARTICLE] };
-  case 'events-meals':
-    return { content_type: [CT_MEAL] };
-  case 'events-friends-gatherings':
-    return { content_type: [CT_FRIENDS_GATHERING] };
-  case 'lessons-virtual':
-    return { content_type: [CT_VIRTUAL_LESSON] };
-  case 'lessons-lectures':
-    return { content_type: [CT_LECTURE] };
-  case 'lessons-women':
-    return { content_type: [CT_WOMEN_LESSON] };
-  case 'lessons-rabash':
-    return { content_type: [CT_LESSON_PART], person: RABASH_PERSON_UID };
-    // case 'lessons-children':
-    //   return { content_type: [CT_CHILDREN_LESSON] };
-  default:
-    if (collectionID) {
-      return { collection: collectionID };
-    }
+    case PAGE_NS_PROGRAMS:
+      return { content_type: UNIT_PROGRAMS_TYPE };
+    case 'publications-articles':
+      return { content_type: [CT_ARTICLE] };
+    case 'events-meals':
+      return { content_type: [CT_MEAL] };
+    case 'events-friends-gatherings':
+      return { content_type: [CT_FRIENDS_GATHERING] };
+    case 'lessons-virtual':
+      return { content_type: [CT_VIRTUAL_LESSON] };
+    case 'lessons-lectures':
+      return { content_type: [CT_LECTURE] };
+    case 'lessons-women':
+      return { content_type: [CT_WOMEN_LESSON] };
+    case 'lessons-rabash':
+      return { content_type: [CT_LESSON_PART], person: RABASH_PERSON_UID };
+    default:
+      if (collectionID) {
+        return { collection: collectionID };
+      }
   }
 
   return {};
@@ -264,19 +263,19 @@ export const tweetsListPage = (store, match) => {
   // extraFetchParams
   let extraFetchParams;
   switch (language) {
-  case LANG_HEBREW:
-    extraFetchParams = { username: 'laitman_co_il' };
-    break;
-  case LANG_UKRAINIAN:
-  case LANG_RUSSIAN:
-    extraFetchParams = { username: 'Michael_Laitman' };
-    break;
-  case LANG_SPANISH:
-    extraFetchParams = { username: 'laitman_es' };
-    break;
-  default:
-    extraFetchParams = { username: 'laitman' };
-    break;
+    case LANG_HEBREW:
+      extraFetchParams = { username: 'laitman_co_il' };
+      break;
+    case LANG_UKRAINIAN:
+    case LANG_RUSSIAN:
+      extraFetchParams = { username: 'Michael_Laitman' };
+      break;
+    case LANG_SPANISH:
+      extraFetchParams = { username: 'laitman_es' };
+      break;
+    default:
+      extraFetchParams = { username: 'laitman' };
+      break;
   }
 
   // dispatch fetchData
@@ -309,19 +308,19 @@ export const blogListPage = (store, match) => {
   // extraFetchParams
   let extraFetchParams;
   switch (language) {
-  case LANG_HEBREW:
-    extraFetchParams = { blog: 'laitman-co-il' };
-    break;
-  case LANG_UKRAINIAN:
-  case LANG_RUSSIAN:
-    extraFetchParams = { blog: 'laitman-ru' };
-    break;
-  case LANG_SPANISH:
-    extraFetchParams = { blog: 'laitman-es' };
-    break;
-  default:
-    extraFetchParams = { blog: 'laitman-com' };
-    break;
+    case LANG_HEBREW:
+      extraFetchParams = { blog: 'laitman-co-il' };
+      break;
+    case LANG_UKRAINIAN:
+    case LANG_RUSSIAN:
+      extraFetchParams = { blog: 'laitman-ru' };
+      break;
+    case LANG_SPANISH:
+      extraFetchParams = { blog: 'laitman-es' };
+      break;
+    default:
+      extraFetchParams = { blog: 'laitman-com' };
+      break;
   }
 
   // dispatch fetchData
@@ -340,14 +339,14 @@ export const publicationsPage = (store, match) => {
   }
 
   switch (tab) {
-  case 'articles':
-    return cuListPage(ns)(store, match);
-  case 'blog':
-    return blogListPage(store, match);
-  case 'twitter':
-    return tweetsListPage(store, match);
-  default:
-    return Promise.resolve(null);
+    case 'articles':
+      return cuListPage(ns)(store, match);
+    case 'blog':
+      return blogListPage(store, match);
+    case 'twitter':
+      return tweetsListPage(store, match);
+    default:
+      return Promise.resolve(null);
   }
 };
 

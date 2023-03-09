@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { Button, Message, Popup, } from 'semantic-ui-react';
 
@@ -90,4 +90,4 @@ LibraryShare.propTypes = {
   position: PropTypes.string.isRequired,
 };
 
-export default withNamespaces()(LibraryShare);
+export default withTranslation()(LibraryShare);

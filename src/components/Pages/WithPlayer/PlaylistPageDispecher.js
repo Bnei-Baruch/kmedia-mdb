@@ -4,45 +4,49 @@ import { COLLECTION_DAILY_LESSONS, EVENT_TYPES, CT_LESSONS_SERIES } from '../../
 import BuildPlaylistByUnit from './BuildPlaylistByUnit';
 import PlaylistPage from './Playlist/PlaylistPage';
 import BuildPlaylistByCollectionByParams from './BuildPlaylistByCollectionByParams';
-import PlayerContainer from '../../Player/PlayerContainer';
 import { useSelector } from 'react-redux';
 import { selectors as playlist } from '../../../redux/modules/playlist';
 import SingleMediaPage from './SingleMedia/SingleMediaPage';
-import { withNamespaces } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import WipErr from '../../shared/WipErr/WipErr';
+import { Icon } from 'semantic-ui-react';
 
-export const PlaylistItemPageSeries = () => {
+export const PlaylistItemPageSeries = ({ playerContainer }) => {
   const builder = <BuildPlaylistByUnit cts={[CT_LESSONS_SERIES]} />;
-  return <Decorator builder={builder} />;
+  return <Decorator builder={builder} playerContainer={playerContainer} />;
 };
 
-export const PlaylistItemPageLesson = () => {
-  const builder = <BuildPlaylistByUnit cts={COLLECTION_DAILY_LESSONS} />;
-  return <Decorator builder={builder} />;
-};
-
-export const PlaylistItemPageEvent = () => {
-  const builder = <BuildPlaylistByUnit cts={EVENT_TYPES} />;
-  return <Decorator builder={builder} />;
-};
-
-export const PlaylistCollectionPage = () => {
-  const builder = <BuildPlaylistByCollectionByParams />;
-  return <Decorator builder={builder} />;
-};
-
-const Decorator = ({ builder }) => {
-  const playerContainer = <PlayerContainer />;
+export const PlaylistItemPageLesson = ({ playerContainer }) => {
+  const { isReady } = useSelector(state => playlist.getInfo(state.playlist));
   return (
     <>
-      {builder}
-      <PageSwitcher playerContainer={playerContainer} />
+      {<BuildPlaylistByUnit cts={COLLECTION_DAILY_LESSONS} />}
+      {isReady ? <PlaylistPage playerContainer={playerContainer} /> : <Icon name="circle notch" color="blue" loading />}
     </>
   );
 };
 
-const PageSwitcher = withNamespaces()(({ playerContainer, t }) => {
+export const PlaylistItemPageEvent = ({ playerContainer }) => {
+  const builder = <BuildPlaylistByUnit cts={EVENT_TYPES} />;
+  return <Decorator builder={builder} playerContainer={playerContainer} />;
+};
+
+export const PlaylistCollectionPage = ({ playerContainer }) => {
+  const builder = <BuildPlaylistByCollectionByParams />;
+  return <Decorator builder={builder} playerContainer={playerContainer} />;
+};
+
+const Decorator = ({ builder, playerContainer }) => (
+  <>
+    {builder}
+    <PageSwitcher playerContainer={playerContainer} />
+  </>
+);
+
+const PageSwitcher = ({ playerContainer }) => {
+  const { t }                      = useTranslation();
   const { isReady, isSingleMedia } = useSelector(state => playlist.getInfo(state.playlist));
+
   if (!isReady)
     return WipErr({ wip: !isReady, t });
 
@@ -50,4 +54,4 @@ const PageSwitcher = withNamespaces()(({ playerContainer, t }) => {
     return <SingleMediaPage playerContainer={playerContainer} />;
 
   return <PlaylistPage playerContainer={playerContainer} />;
-});
+};

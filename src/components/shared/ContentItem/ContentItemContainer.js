@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 
@@ -27,16 +27,16 @@ import CardTemplate from './CardTemplate';
 const NOT_LESSONS_COLLECTIONS = [CT_VIDEO_PROGRAM, CT_VIRTUAL_LESSONS, CT_CLIPS];
 
 const TagItemContainerHook = ({
-                                id,
-                                t,
-                                asList = false,
-                                link,
-                                size,
-                                selected,
-                                noViews,
-                                label = '',
-                                withInfo = undefined
-                              }) => {
+  id,
+  t,
+  asList = false,
+  link,
+  size,
+  selected,
+  noViews,
+  label = '',
+  withInfo = undefined
+}) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const tag                = useSelector(state => tags.getTagById(state.tags)(id));
   const language           = useSelector(state => settings.getLanguage(state.settings));
@@ -66,16 +66,16 @@ const TagItemContainerHook = ({
 };
 
 const SourceItemContainerHook = ({
-                                   id,
-                                   t,
-                                   asList = false,
-                                   link,
-                                   size,
-                                   selected,
-                                   noViews,
-                                   label = '',
-                                   withInfo = undefined
-                                 }) => {
+  id,
+  t,
+  asList = false,
+  link,
+  size,
+  selected,
+  noViews,
+  label = '',
+  withInfo = undefined
+}) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const source             = useSelector(state => sources.getSourceById(state.sources)(id));
   const language           = useSelector(state => settings.getLanguage(state.settings));
@@ -193,6 +193,6 @@ SourceItemContainerHook.propTypes = {
   asList: PropTypes.bool,
 };
 
-export default withNamespaces()(ContentItemContainer);
-export const SourceItemContainer = withNamespaces()(SourceItemContainerHook);
-export const TagItemContainer    = withNamespaces()(TagItemContainerHook);
+export default withTranslation()(ContentItemContainer);
+export const SourceItemContainer = withTranslation()(SourceItemContainerHook);
+export const TagItemContainer    = withTranslation()(TagItemContainerHook);

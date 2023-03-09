@@ -1,20 +1,21 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Input, Button } from 'semantic-ui-react';
 import { useDispatch, useSelector } from 'react-redux';
+import { withTranslation } from 'react-i18next';
 
 import { formatTime } from '../../../helpers/time';
 import { actions, selectors } from '../../../redux/modules/player';
-import { withNamespaces } from 'react-i18next';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { getPosition, getDuration } from '../../../pkg/jwpAdapter/adapter';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import { selectors as settings } from '../../../redux/modules/settings';
 
 const StartEnd = ({ t }) => {
-  const { start = 0, end }     = useSelector(state => selectors.getShareStartEnd(state.player));
+  const { start = 0, end } = useSelector(state => selectors.getShareStartEnd(state.player));
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const language           = useSelector(state => settings.getLanguage(state.settings));
   const dir                = getLanguageDirection(language);
+  const { duration }              = useSelector(state => selectors.getFile(state.player));
   const dispatch           = useDispatch();
 
   const handleSetStart = () => {
@@ -33,6 +34,7 @@ const StartEnd = ({ t }) => {
 
   const handleSetFull = () => dispatch(actions.setShareStartEnd({ end: Infinity, start: 0 }));
 
+  const fTimeEnd = formatTime(end !== Infinity ? end : duration);
   return (
     <div className="sharing__times">
       <div className="sharing__inputs">
@@ -66,7 +68,7 @@ const StartEnd = ({ t }) => {
             onClick: handleSetEnd
           }}
           placeholder={t('player.share.click-to-set')}
-          value={formatTime(end !== Infinity ? end : getDuration())}
+          value={fTimeEnd}
           dir={dir}
         />
       </div>
@@ -83,4 +85,4 @@ const StartEnd = ({ t }) => {
   );
 };
 
-export default withNamespaces()(StartEnd);
+export default withTranslation()(StartEnd);

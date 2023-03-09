@@ -5,7 +5,7 @@ import clsx from 'clsx';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import BookmarkList from './Bookmarks/List';
 import NeedToLogin from '../NeedToLogin';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import FolderList from './Folders/List';
 import BookmarkHeader from './Header';
 import BookmarkHeaderMobile from './HeaderMobile';
@@ -43,4 +43,4 @@ const Page = ({ t }) => {
   );
 };
 
-export default withNamespaces()(Page);
+export default withTranslation()(Page);

@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import { withTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Checkbox, Container, Header, List, Segment } from 'semantic-ui-react';
-import { withNamespaces } from 'react-i18next';
-import { isEqual } from 'lodash';
 
 import { actions, selectors } from '../../redux/modules/filtersAside';
-import { selectors as filters } from '../../redux/modules/filters';
 import { selectors as search, actions as searchActions } from '../../redux/modules/search';
 import { FN_SORT_BY_FILTER, FN_TOPICS_MULTI, FN_SOURCES_MULTI } from '../../helpers/consts';
 
@@ -27,7 +25,7 @@ const SortBy = ({ namespace, t }) => {
 
   const onSortByChange = (e, data) => {
     dispatch(searchActions.setSortBy(data.value));
-  }
+  };
 
   const renderSortBy = () => (
     <Segment.Group className="filter-popup__wrapper">
@@ -52,7 +50,7 @@ const SortBy = ({ namespace, t }) => {
       children={renderSortBy()}
     />
   );
-}
+};
 
 const Filters = ({ namespace, t }) => {
   const [isHydrated, setIsHydrated] = useState(false);
@@ -85,4 +83,4 @@ const Filters = ({ namespace, t }) => {
   );
 };
 
-export default withNamespaces()(Filters);
+export default withTranslation()(Filters);

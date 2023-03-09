@@ -8,7 +8,7 @@ export const timeToPercent = (sec, duration) => {
   return (100 * sec) / duration;
 };
 
-export const startEndFromQuery = (location) => {
+export const startEndFromQuery = location => {
   const q     = getQuery(location);
   const start = q.sstart ? fromHumanReadableTime(q.sstart).asSeconds() : 0;
   const end   = q.send ? fromHumanReadableTime(q.send).asSeconds() : Infinity;
@@ -20,7 +20,7 @@ export const startEndFromQuery = (location) => {
 export const saveTimeOnLocalstorage = (time, uid) => {
   if (time === 0) return;
   const msg = {
-    timestamp: (new Date).toISOString(),
+    timestamp: (new Date()).toISOString(),
     current_time: time
   };
   localStorage.setItem(`${PLAYER_POSITION_STORAGE_KEY}_${uid}`, JSON.stringify(msg));

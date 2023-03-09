@@ -1,24 +1,23 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectors, actions } from '../../../../redux/modules/mdb';
 
 import { selectors as my } from '../../../../redux/modules/my';
 import { MY_NAMESPACE_HISTORY } from '../../../../helpers/consts';
-import { withNamespaces } from 'react-i18next';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import { selectors as settings } from '../../../../redux/modules/settings';
 import { getSavedTime } from '../../../Player/helper';
 import moment from 'moment';
 import { getCuByCcuSkipPreparation, canonicalLink } from '../../../../helpers/links';
 
-const BuildPlaylistLastDaily = ({ t }) => {
+const BuildPlaylistLastDaily = () => {
   const lastLessonId = useSelector(state => selectors.getLastLessonId(state.mdb));
   const wip          = useSelector(state => selectors.getWip(state.mdb).lastLesson);
   const err          = useSelector(state => selectors.getErrors(state.mdb).lastLesson);
   const ccu          = useSelector(state => selectors.getDenormCollection(state.mdb, lastLessonId)) || false;
   const denormCU     = useSelector(state => selectors.nestedGetDenormContentUnit(state.mdb));
   const historyItems = useSelector(state => my.getList(state.my, MY_NAMESPACE_HISTORY));
-  const history      = useHistory();
+  const navigate     = useNavigate();
   const language     = useSelector(state => settings.getLanguage(state.settings));
 
   const dispatch = useDispatch();
@@ -45,10 +44,10 @@ const BuildPlaylistLastDaily = ({ t }) => {
 
     const cuId = sorted[0]?.id || getCuByCcuSkipPreparation(ccu);
     const link = canonicalLink(denormCU(cuId), null, ccu);
-    history.replace(`/${language}${link}`);
-  }, [ccu, historyItems, history]);
+    navigate(`/${language}${link}`, { replace: true });
+  }, [ccu, historyItems, navigate]);
 
   return null;
 };
 
-export default withNamespaces()(BuildPlaylistLastDaily);
+export default BuildPlaylistLastDaily;

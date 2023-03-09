@@ -118,10 +118,10 @@
       "sort-by-filter": "מיין לפי"
     },
     "media-types": {
-      "audio" : "אודיו",
-      "video" : "וידאו",
-      "text" : "תמליל",
-      "image" : "שרטוט"
+      "audio": "אודיו",
+      "video": "וידאו",
+      "text": "תמליל",
+      "image": "שרטוט"
     },
     "content-types": {
       "CONGRESS": "כנסים",
@@ -213,8 +213,8 @@
       "mute": "השתק",
       "share": "שתף",
       "settings": "הגדרות",
-      "rewind10": "חזור 10 שניות",
-      "skip10": "דלג 10 שניות",
+      "rewind": "חזור {{seek}} שניות",
+      "skip": "דלג {{seek}} שניות",
       "next-video": "לאייטם הבא",
       "prev-video": "לאייטם הקודם",
       "fullscreen": "מסך מלא",

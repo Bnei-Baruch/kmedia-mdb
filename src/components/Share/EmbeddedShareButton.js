@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { Button, Popup } from 'semantic-ui-react';
 import CopyToClipboard from 'react-copy-to-clipboard';
 
@@ -52,4 +52,4 @@ const EmbeddedShareButton = ({ url = '', size = 'medium', t, }) => {
   );
 };
 
-export default withNamespaces()(EmbeddedShareButton);
+export default withTranslation()(EmbeddedShareButton);

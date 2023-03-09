@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { Button, Dropdown, MenuItem, Popup } from 'semantic-ui-react';
 
 import {
@@ -93,4 +93,4 @@ ShareBtn.propTypes = {
   url: PropTypes.string.isRequired,
 };
 
-export default withNamespaces()(ShareBtn);
+export default withTranslation()(ShareBtn);

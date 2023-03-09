@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { Container, Grid, Header } from 'semantic-ui-react';
 
 import * as shapes from '../../../../../shapes';
@@ -78,4 +78,4 @@ BlogPostPage.propTypes = {
   t: PropTypes.func.isRequired,
 };
 
-export default withNamespaces()(BlogPostPage);
+export default withTranslation()(BlogPostPage);

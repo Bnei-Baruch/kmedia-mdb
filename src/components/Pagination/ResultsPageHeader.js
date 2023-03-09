@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { Container } from 'semantic-ui-react';
 
 const ResultsPageHeader = ({ pageNo, pageSize, total, t }) => {
@@ -32,4 +32,4 @@ ResultsPageHeader.propTypes = {
 
 ResultsPageHeader.defaultProps = {};
 
-export default withNamespaces()(ResultsPageHeader);
+export default withTranslation()(ResultsPageHeader);

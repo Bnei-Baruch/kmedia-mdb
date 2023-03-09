@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { Button, GridColumn, GridRow, Popup } from 'semantic-ui-react';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { DeviceInfoContext } from '../../helpers/app-contexts';
 
@@ -52,4 +52,4 @@ const DownloadTrimItem = ({ item, pos, t }) => {
   );
 };
 
-export default withNamespaces()(DownloadTrimItem);
+export default withTranslation()(DownloadTrimItem);

@@ -1,8 +1,8 @@
 import { isEqual } from 'lodash';
 import React, { useCallback, useEffect, useMemo } from 'react';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router';
 import { Container, Divider, CardGroup } from 'semantic-ui-react';
 
 import { MT_IMAGE, PAGE_NS_SKETCHES, UNIT_LESSONS_TYPE, CT_VIDEO_PROGRAM_CHAPTER } from '../../../helpers/consts';
@@ -63,7 +63,7 @@ const MainPage = ({ t }) => {
     } else {
       dispatch(actions.fetchSectionList(PAGE_NS_SKETCHES, pageNo, { pageSize, ...FILTER_PARAMS }));
     }
-  }, [language, dispatch, pageNo, selected]);
+  }, [language, dispatch, pageNo, selected, pageSize, prevSel, setPage]);
 
   useEffect(() => {
     if (!wipAll && zipIdsForFetch?.length > 0) {
@@ -103,4 +103,4 @@ const MainPage = ({ t }) => {
   </>);
 };
 
-export default withNamespaces()(MainPage);
+export default withTranslation()(MainPage);

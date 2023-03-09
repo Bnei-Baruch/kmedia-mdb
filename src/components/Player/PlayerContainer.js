@@ -1,17 +1,17 @@
 import React, { useRef, useContext, useEffect } from 'react';
 import { useSelector, shallowEqual, useDispatch } from 'react-redux';
+import clsx from 'clsx';
+import { Ref } from 'semantic-ui-react';
 
 import { selectors as player, selectors, actions } from '../../redux/modules/player';
 import { PLAYER_OVER_MODES } from '../../helpers/consts';
 import Player from '../../pkg/jwpAdapter/Player';
-import UpdateLocation from './UpdateLocation';
 import PlayerToolsWeb from './PlayerToolsWeb';
 import PlayerToolsMobile from './PlayerToolsMobile';
 import AppendChronicle from './AppendChronicle';
 import { DeviceInfoContext } from '../../helpers/app-contexts';
-import clsx from 'clsx';
-import { Ref } from 'semantic-ui-react';
-import { seek, getPosition, setVolume, getVolume, togglePlay, getDuration } from '../../pkg/jwpAdapter/adapter';
+import UpdateLocation from './UpdateLocation';
+import { useKeyboardControl } from './hooks/useKeyboardControl';
 
 const HIDE_CONTROLS_TIMEOUT = 3000;
 
@@ -45,60 +45,7 @@ const PlayerContainer = () => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      console.log(e);
-      if (e.defaultPrevented) {
-        return; // Do nothing if the event was already processed
-      }
-      const coef = e.shiftKey ? 3 : e.altKey ? 0.2 : 1;
-      switch (e.key) {
-      case 'Down': // IE/Edge specific value
-      case 'ArrowDown': {
-        const v = getVolume();
-        setVolume(Math.max(0, v - coef * 5));
-        break;
-      }
-      case 'Up': // IE/Edge specific value
-      case 'ArrowUp': {
-        const v = getVolume();
-        setVolume(Math.min(100, v + coef * 5));
-        break;
-      }
-      case 'Left': // IE/Edge specific value
-      case 'ArrowLeft': {
-        const pos = getPosition();
-        seek(Math.max(pos - coef * 5, 0));
-        break;
-      }
-      case 'Right': // IE/Edge specific value
-      case 'ArrowRight': {
-        const pos = getPosition();
-        seek(Math.min(pos + coef * 5, getDuration()));
-        break;
-      }
-      case 'Esc': // IE/Edge specific value
-      case 'Escape':
-        break;
-      case ' ':
-        togglePlay();
-        break;
-      default:
-        return;
-      }
-
-      if (mode === PLAYER_OVER_MODES.active) {
-        runTimeout(dispatch);
-      }
-      if (mode === PLAYER_OVER_MODES.none) {
-        dispatch(actions.setOverMode(PLAYER_OVER_MODES.active));
-      }
-      e.preventDefault();
-    };
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [mode]);
+  useKeyboardControl(runTimeout);
 
   useEffect(() => {
     const handleFullscreenChange = () => {
@@ -109,14 +56,14 @@ const PlayerContainer = () => {
     document.addEventListener('fullscreenchange', handleFullscreenChange);
     return () => {
       document.removeEventListener('fullscreenchange', handleFullscreenChange);
-    }
+    };
   }, [fullscreenRef, dispatch]);
-
 
   useEffect(() => {
     if (mode === PLAYER_OVER_MODES.active) {
       runTimeout(dispatch);
     }
+
     return () => clearTimeout(timeout);
   }, [mode]);
 
@@ -131,16 +78,19 @@ const PlayerContainer = () => {
       dispatch(actions.setOverMode(PLAYER_OVER_MODES.none));
 
     }
+
     if (mode === PLAYER_OVER_MODES.none) {
       dispatch(actions.setOverMode(PLAYER_OVER_MODES.active));
     }
   };
 
-  const handleMouseMove = (e) => {
+  const handleMouseMove = e => {
     if (mode === PLAYER_OVER_MODES.none && !isMobileDevice) {
       dispatch(actions.setOverMode(PLAYER_OVER_MODES.active));
     }
   };
+
+  const playerComponent = <Player />;
 
   const content = (
     <div className="player" dir="ltr">
@@ -153,10 +103,10 @@ const PlayerContainer = () => {
       >
         {
           isMobileDevice ? (
-            <PlayerToolsMobile Player={<Player />} fullscreenRef={fullscreenRef} />
+            <PlayerToolsMobile Player={playerComponent} fullscreenRef={fullscreenRef} />
           ) : (
             <>
-              <Player />
+              {playerComponent}
               <PlayerToolsWeb fullscreenRef={fullscreenRef} />
             </>
           )
@@ -166,10 +116,12 @@ const PlayerContainer = () => {
   );
 
   return (
-    <Ref innerRef={fullscreenRef}>
-      {content}
-    </Ref>
+    <div>
+      <Ref innerRef={fullscreenRef}>
+        {content}
+      </Ref>
+    </div>
   );
 };
-//TODO david remove memo after react-router update
-export default React.memo(PlayerContainer);
+
+export default PlayerContainer;

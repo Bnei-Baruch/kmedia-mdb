@@ -1,6 +1,6 @@
 import React, { Fragment, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { useLocation, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button, Container, Grid, Header } from 'semantic-ui-react';
@@ -167,4 +167,4 @@ ArticlePage.propTypes = {
   t: PropTypes.func.isRequired,
 };
 
-export default withNamespaces()(ArticlePage);
+export default withTranslation()(ArticlePage);

@@ -64,12 +64,12 @@ export const getLanguageFromPath = (path, headers, userAgent) => {
       console.log(`header-languages: ${headerLanguages}\n`);
       // THAT'S NOT STRUCTURE, THAT'S ARRAY OF LANGUAGES
       language = headerLanguages[0];
-      return { language, redirect: language !== DEFAULT_LANGUAGE };
+      return { language, redirect: true };
     }
   }
 
   // English
-  return { language: DEFAULT_LANGUAGE, redirect: false };
+  return { language: DEFAULT_LANGUAGE, redirect: true };
 };
 
 export const prefixWithLanguage = (path, location, toLanguage) => {
@@ -100,21 +100,21 @@ export const getQuery = location => {
   return {};
 };
 
-export const updateQuery = (history, updater) => {
-  if (!history) {
+export const updateQuery = (navigate, location, updater) => {
+  if (!navigate) {
     return;
   }
 
-  const query = getQuery(history.location);
+  const query = getQuery(location);
   if (!query.deb) {
     delete query.deb;
   }
 
-  history.replace({
+  navigate({
     search: stringify(updater(query)),
-    state: history.location?.state ?? '',
-    hash: history.location.hash
-  });
+    state: location?.state ?? '',
+    hash: location.hash
+  }, { replace: true });
 };
 
 export const isDebMode = location => getQuery(location).deb || false;

@@ -1,6 +1,6 @@
 import { isEqual } from 'lodash';
 import React, { useEffect, useState } from 'react';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Container, Header } from 'semantic-ui-react';
 
@@ -50,7 +50,7 @@ const Filters = ({ namespace, baseParams, t }) => {
         with_collections: true,
       }, { isPrepare: false }));
     }
-  }, [dispatch, isHydrated, isReady, selected, baseParams]);
+  }, [dispatch, isHydrated, isReady, namespace, selected, baseParams]);
 
   const handleOnHydrated = () => setIsHydrated(true);
 
@@ -69,4 +69,4 @@ const Filters = ({ namespace, baseParams, t }) => {
   );
 };
 
-export default withNamespaces()(Filters);
+export default withTranslation()(Filters);

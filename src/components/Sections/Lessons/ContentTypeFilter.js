@@ -2,17 +2,7 @@ import { isEqual } from 'lodash';
 import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 
-import {
-  CT_DAILY_LESSON,
-  CT_LECTURE,
-  CT_LESSON_PART,
-  CT_LESSONS_SERIES,
-  CT_VIRTUAL_LESSON,
-  CT_WOMEN_LESSON,
-  FN_CONTENT_TYPE,
-  FN_SHOW_LESSON_AS_UNITS,
-  PAGE_NS_LESSONS
-} from '../../../helpers/consts';
+import { CT_VIRTUAL_LESSON, FN_CONTENT_TYPE, FN_SHOW_LESSON_AS_UNITS, PAGE_NS_LESSONS } from '../../../helpers/consts';
 import { isEmpty } from '../../../helpers/utils';
 import { selectors as filters } from '../../../redux/modules/filters';
 import { selectors } from '../../../redux/modules/filtersAside';

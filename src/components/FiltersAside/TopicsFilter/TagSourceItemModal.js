@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import React, { useState } from 'react';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Button, Icon, Input, Modal, Table } from 'semantic-ui-react';
 
@@ -110,4 +110,4 @@ const TagSourceItemModal = props => {
   );
 };
 
-export default withNamespaces()(TagSourceItemModal);
+export default withTranslation()(TagSourceItemModal);

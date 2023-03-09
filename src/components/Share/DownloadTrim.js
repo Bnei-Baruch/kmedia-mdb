@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Container, Divider, Grid, GridColumn, GridRow, Header, Segment } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { selectors } from '../../redux/modules/trim';
 import { Splash } from '../shared/Splash/Splash';
 import DownloadTrimItem from './DownloadTrimItem';
@@ -87,4 +87,4 @@ const DownloadTrim = ({ t }) => {
   );
 };
 
-export default withNamespaces()(DownloadTrim);
+export default withTranslation()(DownloadTrim);

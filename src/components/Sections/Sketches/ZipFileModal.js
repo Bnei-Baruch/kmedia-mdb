@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Modal, Button } from 'semantic-ui-react';
 import { selectors as assets } from '../../../redux/modules/assets';
@@ -94,4 +94,4 @@ const ZipFileModal = ({ id, path }) => {
   );
 };
 
-export default withNamespaces()(ZipFileModal);
+export default withTranslation()(ZipFileModal);

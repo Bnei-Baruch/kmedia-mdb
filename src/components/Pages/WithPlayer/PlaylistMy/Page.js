@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { useSelector } from 'react-redux';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { Container, Grid, Divider } from 'semantic-ui-react';
 
 import Materials from '../widgets/UnitMaterials/Materials';
@@ -49,4 +49,4 @@ const PlaylistMyPage = ({ playerContainer, t }) => {
   );
 };
 
-export default withNamespaces()(PlaylistMyPage);
+export default withTranslation()(PlaylistMyPage);

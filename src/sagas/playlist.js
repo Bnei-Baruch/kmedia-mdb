@@ -60,7 +60,7 @@ function* build(action) {
   const contentLang = yield select(state => settings.getContentLanguage(state.settings));
 
   const mediaType = getMediaTypeFromQuery(location);
-  const language  = getLanguageFromQuery(location, siteLang || contentLang);
+  const language  = getLanguageFromQuery(location, contentLang || siteLang);
 
   const data = playlistBuilder(c);
 
@@ -87,7 +87,7 @@ function* singleMediaBuild(action) {
   const contentLang = yield select(state => settings.getContentLanguage(state.settings));
 
   const mediaType   = getMediaTypeFromQuery(location);
-  const language    = getLanguageFromQuery(location, siteLang || contentLang);
+  const language    = getLanguageFromQuery(location, contentLang || siteLang);
   const preImageUrl = !!c ? assetUrl(`logos/collections/${c.id}.jpg`) : null;
   const item        = playableItem(cu, preImageUrl);
 
@@ -113,7 +113,7 @@ function* myPlaylistBuild(action) {
 
   const { location } = yield select(state => state.router);
   const mediaType    = getMediaTypeFromQuery(location);
-  const language     = getLanguageFromQuery(location, siteLang || contentLang);
+  const language     = getLanguageFromQuery(location, contentLang || siteLang);
   const ap           = getActivePartFromQuery(location);
   const items        = content_units.map(cu => playableItem(cu));
   const cuId         = items[ap]?.id || items[0].id;

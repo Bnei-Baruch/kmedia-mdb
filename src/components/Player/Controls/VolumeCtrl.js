@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { Icon } from 'semantic-ui-react';
 import { useSelector, shallowEqual } from 'react-redux';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 
 import { selectors as player } from '../../../redux/modules/player';
 import { VolumeKnob } from './VolumeKnob';
@@ -26,7 +26,7 @@ const VolumeCtrl = ({ t }) => {
     const { left, right } = widthRef.current.getBoundingClientRect();
     setLeft(left);
     setRight(right + 120);
-  }, [widthRef.current, width]);
+  }, [widthRef, width]);
 
   const onChangePosition = useCallback(e => {
     e.preventDefault();
@@ -67,4 +67,4 @@ const VolumeCtrl = ({ t }) => {
   );
 };
 
-export default withNamespaces()(VolumeCtrl);
+export default withTranslation()(VolumeCtrl);

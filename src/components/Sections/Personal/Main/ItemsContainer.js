@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Card, Container } from 'semantic-ui-react';
@@ -91,4 +91,4 @@ ItemsContainer.propTypes = {
   pageNo: PropTypes.number,
 };
 
-export default withNamespaces()(ItemsContainer);
+export default withTranslation()(ItemsContainer);

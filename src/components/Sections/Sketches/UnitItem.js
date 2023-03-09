@@ -1,5 +1,5 @@
 import React from 'react';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Card } from 'semantic-ui-react';
 import { canonicalLink } from '../../../helpers/links';
@@ -82,4 +82,4 @@ const UnitItem = ({ id, t }) => {
   );
 };
 
-export default withNamespaces()(UnitItem);
+export default withTranslation()(UnitItem);

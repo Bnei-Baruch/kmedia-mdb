@@ -20,7 +20,7 @@ export const formatTime = current => {
 };
 
 export const toHumanReadableTime = current => {
-  if(current === 0) return '0s'
+  if (current === 0) return '0s'
   if (!current || current === Infinity) return '';
 
   const h = Math.floor(current / 3600);

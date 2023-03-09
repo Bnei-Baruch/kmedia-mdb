@@ -1,5 +1,5 @@
 import { isEmpty } from '../utils';
-
+/* eslint no-use-before-define: 0 */
 describe('isEmpty', () => {
   test('object', () => {
     {

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import throttle from 'lodash/throttle';
 import { noop } from '../../../helpers/utils';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { Container, } from 'semantic-ui-react';
 import { Document, Page, pdfjs } from 'react-pdf';
 
@@ -138,4 +138,4 @@ class PDF extends Component {
   }
 }
 
-export default withNamespaces()(PDF);
+export default withTranslation()(PDF);

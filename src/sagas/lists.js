@@ -118,9 +118,7 @@ function* fetchSectionList(action) {
     if (!isEmpty(cIDs)) {
       yield call(fetchCollectionsByIDs, { payload: { id: cIDs } });
       const denormCcu = yield select(state => mdb.nestedGetDenormCollection(state.mdb));
-      cIDs.map(denormCcu).map(x => {
-        return x.cuIDs;
-      }).flat().forEach(id => {
+      cIDs.map(denormCcu).map(x => x.cuIDs).flat().forEach(id => {
         cu_uids.push(id);
       });
     }
