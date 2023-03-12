@@ -39,12 +39,12 @@ ENV REACT_APP_ENV=production \
 
 COPY . .
 
-RUN yarn install && \
+RUN yarn install --frozen-lockfile && \
     yarn build:svgs && \
     yarn build:scripts && \
     yarn build:css && \
     rm -rf node_modules && \
-    yarn install --production
+    yarn install --production --frozen-lockfile
 
 FROM node:16-slim
 
