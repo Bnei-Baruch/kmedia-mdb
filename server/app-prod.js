@@ -46,6 +46,7 @@ app.use(helmet({
         'stats.g.doubleclick.net',
         'accounts.kab.info',
         'trim.kab.sh',
+        'cdn.kab.info',
       ],
       'script-src': [
         '\'self\'',
