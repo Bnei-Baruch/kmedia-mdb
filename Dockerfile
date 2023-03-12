@@ -44,7 +44,7 @@ RUN yarn install --frozen-lockfile && \
     yarn build:scripts && \
     yarn build:css && \
     rm -rf node_modules && \
-    yarn install --production --frozen-lockfile
+    yarn install --production
 
 FROM node:16-slim
 
