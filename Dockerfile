@@ -39,7 +39,7 @@ ENV REACT_APP_ENV=production \
 
 COPY . .
 
-RUN yarn install --frozen-lockfile && \
+RUN yarn install && \
     yarn build:svgs && \
     yarn build:scripts && \
     yarn build:css && \
