@@ -1,27 +1,24 @@
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { selectors as playlist } from '../../redux/modules/playlist';
+import { selectors as playlist, selectors as playlistSelectors } from '../../redux/modules/playlist';
 
 const PlayerBehaviorHls = () => {
-  const { quality, language } = useSelector(state => playlist.getInfo(state.playlist));
+  const { quality, language }    = useSelector(state => playlist.getInfo(state.playlist));
+  const { languages, qualities } = useSelector(state => playlistSelectors.getPlayed(state.playlist));
 
   useEffect(() => {
-    const jwp    = window.jwplayer();
-    const tracks = jwp.getAudioTracks();
-    if (!tracks) return;
+    if (!languages) return;
 
-    const idx = tracks.findIndex(q => q.language === language);
-    jwp.setCurrentAudioTrack(idx);
-  }, [language]);
+    const idx = languages.findIndex(l => l === language);
+    window.jwplayer().setCurrentAudioTrack(idx);
+  }, [language, languages]);
 
   useEffect(() => {
-    const jwp    = window.jwplayer();
-    const levels = jwp.getQualityLevels();
-    if (!levels) return;
+    if (!qualities) return;
 
-    const idx = levels.findIndex(q => q.label === quality);
-    jwp.setCurrentQuality(idx);
-  }, [quality]);
+    const idx = qualities.findIndex(q => q === quality);
+    window.jwplayer().setCurrentQuality(idx);
+  }, [quality, qualities]);
 
   return null;
 };

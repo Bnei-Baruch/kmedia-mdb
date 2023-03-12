@@ -17,6 +17,7 @@ const PlayerBehaviorHls = () => {
       const languages = jwp.getAudioTracks().map(t => t.language);
       const qualities = jwp.getQualityLevels().map(t => t.label);
       dispatch(actions.updatePlayed({ qualities, languages }));
+
       jwp.off('metadataCueParsed', onMetadata);
     };
 

@@ -1,6 +1,6 @@
 import { createAction } from 'redux-actions';
 import { handleActions, types as settings, types as settingsTypes } from './settings';
-import { DEFAULT_LANGUAGE, VS_DEFAULT } from '../../helpers/consts';
+import { DEFAULT_LANGUAGE, VS_DEFAULT, MT_AUDIO } from '../../helpers/consts';
 import { types as playerTypes } from './player';
 import { saveTimeOnLocalstorage } from '../../components/Player/Controls/helper';
 
@@ -90,8 +90,11 @@ const onComplete = draft => {
   draft.info.nextUnitId = nextId;
 };
 
-const onUpdatePlayed = (draft, { qualities, languages }) => {
+const onUpdatePlayed    = (draft, { qualities, languages }) => {
   draft.currentHLS = { qualities, languages };
+};
+const onUpdateMediaType = (draft, payload) => {
+  draft.info.mediaType = payload;
 };
 
 export const reducer = handleActions({
@@ -105,7 +108,7 @@ export const reducer = handleActions({
 
   [PLAYER_SET_QUALITY]: (draft, payload) => draft.info.quality = payload,
   [PLAYER_SET_LANGUAGE]: (draft, payload) => draft.info.language = payload,
-  [PLAYER_SET_MEDIA_TYPE]: (draft, payload) => draft.info.mediaType = payload,
+  [PLAYER_SET_MEDIA_TYPE]: onUpdateMediaType,
   [PLAYER_NULL_NEXT_UNIT]: (draft, payload = null) => draft.info.nextUnitId = payload,
   [playerTypes.PLAYER_COMPLETE]: onComplete,
 
