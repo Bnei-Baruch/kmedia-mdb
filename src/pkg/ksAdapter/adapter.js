@@ -26,6 +26,8 @@ export const initKC = async () => {
   try {
     await healthCheckKC();
   } catch (e) {
+    document.cookie = 'authorised=true;max-age=10';
+    window.location.reload();
     return null;
   }
 
