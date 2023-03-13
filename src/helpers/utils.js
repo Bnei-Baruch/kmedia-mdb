@@ -168,7 +168,7 @@ export const filenameExtension = name => {
  * @param ext {boolean} include file name extension in url or not
  */
 export const physicalFile = (file, ext = false) => {
-  if (file.video_size === 'HLS') {
+  if (file.is_hls) {
     return `${CDN_HLS_URL}${file.id}.m3u8`;
   }
   let suffix = '';
@@ -177,6 +177,14 @@ export const physicalFile = (file, ext = false) => {
   }
 
   return `${CDN_URL}${file.id}${suffix}`;
+};
+export const downloadLink = (file, ext = false) => {
+  if (file.is_hls) {
+    const { lang3 } = LANGUAGES[file.language];
+    return `${CDN_HLS_URL}get/${file.id}.mp4?audio=${lang3.toLowerCase()}&video=${file.video_size.toLowerCase()}`;
+  }
+
+  return physicalFile(file, ext);
 };
 
 export const publicFile = relativePath => `${PUBLIC_BASE}${relativePath}`;

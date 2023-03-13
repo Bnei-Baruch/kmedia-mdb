@@ -23,7 +23,7 @@ import {
   VS_NAMES
 } from '../../../../helpers/consts';
 import { selectSuitableLanguage } from '../../../../helpers/language';
-import { physicalFile } from '../../../../helpers/utils';
+import { physicalFile, downloadLink } from '../../../../helpers/utils';
 import { selectors as settings } from '../../../../redux/modules/settings';
 import { selectors } from '../../../../redux/modules/publications';
 import * as shapes from '../../../shapes';
@@ -102,7 +102,22 @@ class MediaDownloads extends Component {
     // we give them the images of their fallback language.
     const images = [];
 
-    files.forEach(file => {
+    const hls = files.find(f => f.video_size === 'HLS');
+    hls?.languages.forEach(l => {
+      const byType = new Map();
+      byType.set(MT_AUDIO, [{ ...hls, type: MT_AUDIO, language: l, size: 4624433502 }]);
+      const videos = hls.video_qualities?.map(q => ({
+        ...hls,
+        type: MT_VIDEO,
+        video_size: q,
+        language: l,
+        size: 4624433502
+      }));
+      byType.set(MT_VIDEO, videos);
+      groups.set(l, byType);
+    });
+
+    files.filter(f => !hls || [MT_VIDEO, MT_AUDIO].includes(f.type)).forEach(file => {
       if (!groups.has(file.language)) {
         groups.set(file.language, new Map());
       }
@@ -120,7 +135,11 @@ class MediaDownloads extends Component {
     });
 
     // sort file lists by size
-    groups.forEach(byType => byType.forEach(v => v.sort((a, b) => a.size - b.size)));
+    groups.forEach(byType => byType.forEach(v => {
+      v.sort((a, b) => {
+        return a.size - b.size;
+      });
+    }));
 
     // fill in images fallback into every language
     if (images.length > 0) {
@@ -202,7 +221,7 @@ class MediaDownloads extends Component {
     const { chroniclesAppend } = this.props;
     const { isCopyPopupOpen }  = this.state;
     const ext                  = file.name.substring(file.name.lastIndexOf('.') + 1);
-    const url                  = physicalFile(file);
+    const url                  = downloadLink(file);
 
     return (
       <Table.Row key={file.id} className="media-downloads__file" verticalAlign="top">

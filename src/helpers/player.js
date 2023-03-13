@@ -51,7 +51,7 @@ const calcAvailableLanguages = unit => {
 };
 
 export const playableItem = (unit, preImageUrl) => {
-  if (!unit) {
+  if (!unit?.files) {
     return {};
   }
 

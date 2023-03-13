@@ -90,11 +90,11 @@ const onComplete = draft => {
   draft.info.nextUnitId = nextId;
 };
 
-const onUpdatePlayed = (draft, { qualities, languages }) => {
+const onUpdatePlayed = (draft, { video_qualities, languages }) => {
   const item = draft.itemById[draft.info.cuId] || false;
   const id   = `${item?.file.id}_${draft.info.mediaType}`;
 
-  draft.currentHLS = { qualities, languages, id };
+  draft.currentHLS = { video_qualities, languages, id };
 };
 
 const onUpdateMediaType = (draft, payload) => draft.info.mediaType = payload;

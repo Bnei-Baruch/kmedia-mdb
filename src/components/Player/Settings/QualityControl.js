@@ -18,7 +18,7 @@ const QualityControl = ({ t }) => {
 
   if (type === MT_AUDIO) return null;
 
-  const qualities = !playedItem.isHLS ? playedItem.qualityByLang?.[language] : playedItem.qualities;
+  const qualities = !playedItem.isHLS ? playedItem.qualityByLang?.[language] : playedItem.video_qualities;
   return (
     <div className="settings__row">
       <Header size="tiny">{t('player.settings.quality')}</Header>
