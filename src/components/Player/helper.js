@@ -12,9 +12,8 @@ export const findPlayedFile = (item, info, lang, mt, q) => {
 
   const { mediaType, language, quality } = info;
   if (item.isHLS) {
-    const id  = `${item.file.id}_${mediaType}`;
     const src = `${item.file.src}?no_video=${mediaType === MT_AUDIO}`;
-    return { ...item.file, src, type: mediaType, id };
+    return { ...item.file, src, type: mediaType };
   }
 
   lang = lang || language;

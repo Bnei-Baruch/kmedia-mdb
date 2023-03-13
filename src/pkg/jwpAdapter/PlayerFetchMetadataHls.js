@@ -2,32 +2,23 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { selectors as player } from '../../redux/modules/player';
-import { actions } from '../../redux/modules/playlist';
-import { isPlayerReady } from './adapter';
-import { noop } from '../../helpers/utils';
+import { actions, selectors as playlist } from '../../redux/modules/playlist';
 
 const PlayerBehaviorHls = () => {
-  const isReady = useSelector(state => player.isReady(state.player));
+  const isMetadataReady = useSelector(state => player.isMetadataReady(state.player));
+  const { mediaType }   = useSelector(state => playlist.getInfo(state.playlist));
 
   const dispatch = useDispatch();
   useEffect(() => {
-    if (!isReady || !isPlayerReady()) return noop;
-    const onMetadata = () => {
-      const jwp       = window.jwplayer();
-      const languages = jwp.getAudioTracks().map(t => t.language);
-      const qualities = jwp.getQualityLevels().map(t => t.label);
-      dispatch(actions.updatePlayed({ qualities, languages }));
+    if (!isMetadataReady) return;
 
-      jwp.off('metadataCueParsed', onMetadata);
-    };
+    const jwp       = window.jwplayer();
+    const languages = jwp.getAudioTracks().map(t => t.language);
+    const qualities = jwp.getQualityLevels().map(t => t.label);
 
-    window.jwplayer().on('metadataCueParsed', onMetadata);
+    dispatch(actions.updatePlayed({ qualities, languages }));
 
-    return () => {
-      window.jwplayer().off('metadataCueParsed', onMetadata);
-    };
-
-  }, [isReady, dispatch]);
+  }, [isMetadataReady, mediaType, dispatch]);
 
   return null;
 };

@@ -61,6 +61,7 @@ export const isPlayerReady = () => window.jwplayer()?.id === JWPLAYER_ID;
 
 const PLAYER_EVENTS = [
   'ready',
+  'meta',
   'playlistItem',
   'remove',
   'destroyPlugin',
@@ -78,7 +79,7 @@ export const init   = dispatch => {
   const player = window.jwplayer();
 
   //for debug, catch all jwplayer events
-  player.on('all', (name, e) => console.log('jwplayer all events', name, e));
+  //player.on('all', (name, e) => console.log('jwplayer all events', name, e));
 
   player.on('error', e => console.error(e));
 

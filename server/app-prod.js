@@ -89,12 +89,13 @@ app.use(helmet({
         '*.usersnap.com',
         '*.twimg.com',
       ],
-      'media-src':[
+      'media-src': [
         '\'self\'',
         'data:',
         'blob:',
         '*.kabbalahmedia.info',
-
+        '*.kab.info',
+        '*.kab.sh'
       ]
     },
     browserSniff: false       // we're not targeting really old browsers

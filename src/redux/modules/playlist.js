@@ -1,6 +1,6 @@
 import { createAction } from 'redux-actions';
 import { handleActions, types as settings, types as settingsTypes } from './settings';
-import { DEFAULT_LANGUAGE, VS_DEFAULT, MT_AUDIO } from '../../helpers/consts';
+import { DEFAULT_LANGUAGE, VS_DEFAULT } from '../../helpers/consts';
 import { types as playerTypes } from './player';
 import { saveTimeOnLocalstorage } from '../../components/Player/Controls/helper';
 
@@ -90,12 +90,14 @@ const onComplete = draft => {
   draft.info.nextUnitId = nextId;
 };
 
-const onUpdatePlayed    = (draft, { qualities, languages }) => {
-  draft.currentHLS = { qualities, languages };
+const onUpdatePlayed = (draft, { qualities, languages }) => {
+  const item = draft.itemById[draft.info.cuId] || false;
+  const id   = `${item?.file.id}_${draft.info.mediaType}`;
+
+  draft.currentHLS = { qualities, languages, id };
 };
-const onUpdateMediaType = (draft, payload) => {
-  draft.info.mediaType = payload;
-};
+
+const onUpdateMediaType = (draft, payload) => draft.info.mediaType = payload;
 
 export const reducer = handleActions({
   [PLAYLIST_BUILD]: onBuild,
@@ -120,7 +122,8 @@ const getPlaylist = state => state.playlist;
 const getPlayed   = state => {
   const item = state.itemById[state.info.cuId] || false;
   if (!item.isHLS) return item;
-  return { ...item, ...state.currentHLS };
+  const { id, ...file } = item;
+  return { ...file, ...state.currentHLS };
 };
 
 const getInfo = state => state.info;

@@ -18,18 +18,15 @@ const usePreloader = () => {
       dispatch(actions.setLoaded(true));
       const jwp = window.jwplayer();
       if (jwp.off) {
-        jwp.off('meta', markAsLoaded);
         jwp.off('bufferFull', markAsLoaded);
       }
     };
 
-    jwp.on('meta', markAsLoaded);
     jwp.on('bufferFull', markAsLoaded);
 
     return () => {
       const jwp = window.jwplayer();
       if (jwp.off) {
-        jwp.off('meta', markAsLoaded);
         jwp.off('bufferFull', markAsLoaded);
       }
     };

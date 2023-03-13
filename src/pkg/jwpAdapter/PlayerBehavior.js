@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 
 import { findPlayedFile } from '../../components/Player/helper';
@@ -12,7 +12,7 @@ const PlayerBehavior = () => {
   const item = useSelector(state => playlist.getPlayed(state.playlist), shallowEqual);
   const info = useSelector(state => playlist.getInfo(state.playlist), shallowEqual);
 
-  const file = useMemo(() => findPlayedFile(item, info), [item, info]);
+  const file = findPlayedFile(item, info);
 
   //init jwplayer by element id,
   useEffect(() => {
