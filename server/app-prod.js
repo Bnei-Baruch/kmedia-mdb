@@ -44,9 +44,8 @@ app.use(helmet({
         '*.youtube-nocookie.com',
         '*.google-analytics.com',
         'stats.g.doubleclick.net',
-        'accounts.kab.info',
+        '*.kab.info',
         '*.kab.sh',
-        'cdn.kab.info',
       ],
       'script-src': [
         '\'self\'',
