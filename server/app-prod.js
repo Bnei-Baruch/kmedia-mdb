@@ -92,6 +92,7 @@ app.use(helmet({
       'media-src':[
         '\'self\'',
         'data:',
+        'blob:',
         '*.kabbalahmedia.info',
 
       ]
