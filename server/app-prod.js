@@ -88,6 +88,12 @@ app.use(helmet({
         'stats.g.doubleclick.net',
         '*.usersnap.com',
         '*.twimg.com',
+      ],
+      'media-src':[
+        '\'self\'',
+        'data:',
+        '*.kabbalahmedia.info',
+
       ]
     },
     browserSniff: false       // we're not targeting really old browsers
