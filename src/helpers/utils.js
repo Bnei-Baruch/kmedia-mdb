@@ -22,7 +22,8 @@ import {
   CT_VIRTUAL_LESSONS,
   CT_WOMEN_LESSONS,
   CT_SONGS,
-  LANGUAGES
+  LANGUAGES,
+  VS_HLS
 } from './consts';
 import { Requests } from './Api';
 
@@ -168,7 +169,7 @@ export const filenameExtension = name => {
  * @param ext {boolean} include file name extension in url or not
  */
 export const physicalFile = (file, ext = false) => {
-  if (file.is_hls) {
+  if (file.video_size === VS_HLS) {
     return `${CDN_HLS_URL}${file.id}.m3u8`;
   }
   let suffix = '';

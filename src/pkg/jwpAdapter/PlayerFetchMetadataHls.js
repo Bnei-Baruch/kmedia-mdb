@@ -12,11 +12,11 @@ const PlayerBehaviorHls = () => {
   useEffect(() => {
     if (!isMetadataReady) return;
 
-    const jwp       = window.jwplayer();
-    const languages = jwp.getAudioTracks().map(t => t.language);
-    const qualities = jwp.getQualityLevels().map(t => t.label);
+    const jwp             = window.jwplayer();
+    const languages       = jwp.getAudioTracks().map(t => t.language);
+    const video_qualities = jwp.getQualityLevels().map(t => t.label);
 
-    dispatch(actions.updatePlayed({ qualities, languages }));
+    dispatch(actions.updatePlayed({ video_qualities, languages }));
 
   }, [isMetadataReady, mediaType, dispatch]);
 
