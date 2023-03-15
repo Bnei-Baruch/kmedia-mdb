@@ -17,7 +17,8 @@ const PlayerBehaviorHls = () => {
     const video_qualities = jwp.getQualityLevels().map(t => t.label);
 
     dispatch(actions.updatePlayed({ video_qualities, languages }));
-
+    const qIdx = jwp.getCurrentQuality();
+    dispatch(actions.setQuality(video_qualities[qIdx]));
   }, [isMetadataReady, mediaType, dispatch]);
 
   return null;

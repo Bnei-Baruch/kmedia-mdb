@@ -1,24 +1,29 @@
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { selectors as playlist, selectors as playlistSelectors } from '../../redux/modules/playlist';
+import { selectors as playlist } from '../../redux/modules/playlist';
+import { selectors as player } from '../../redux/modules/player';
 
 const PlayerBehaviorHls = () => {
-  const { quality, language }    = useSelector(state => playlist.getInfo(state.playlist));
-  const { languages, qualities } = useSelector(state => playlistSelectors.getPlayed(state.playlist));
+
+  const isMetadataReady       = useSelector(state => player.isMetadataReady(state.player));
+  const { quality, language } = useSelector(state => playlist.getInfo(state.playlist));
 
   useEffect(() => {
-    if (!languages) return;
-
-    const idx = languages.findIndex(l => l === language);
-    window.jwplayer().setCurrentAudioTrack(idx);
-  }, [language, languages]);
+    if (!isMetadataReady) return;
+    const jwp    = window.jwplayer();
+    const tracks = jwp.getAudioTracks();
+    const idx    = tracks.findIndex(q => q.language === language);
+    jwp.setCurrentAudioTrack(idx);
+  }, [language, isMetadataReady]);
 
   useEffect(() => {
-    if (!qualities) return;
+    const jwp    = window.jwplayer();
+    const levels = jwp.getQualityLevels();
+    if (!levels) return;
 
-    const idx = qualities.findIndex(q => q === quality);
-    window.jwplayer().setCurrentQuality(idx);
-  }, [quality, qualities]);
+    const idx = levels.findIndex(q => q.label === quality);
+    jwp.setCurrentQuality(idx);
+  }, [quality]);
 
   return null;
 };
