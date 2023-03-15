@@ -113,7 +113,7 @@ export const reducer = handleActions({
       draft.metadataReady = true;
   },
   [PLAYER_REMOVE]: onRemove,
-  [DESTROY_PLUGIN]: draft => draft.loaded = false,
+  [DESTROY_PLUGIN]: onRemove,
   [PLAYER_SET_FILE]: onSetFile,
 
   [PLAYER_PLAY]: onPlay,
