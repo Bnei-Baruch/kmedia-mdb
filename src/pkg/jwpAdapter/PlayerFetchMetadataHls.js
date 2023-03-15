@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { selectors as player } from '../../redux/modules/player';
 import { actions, selectors as playlist } from '../../redux/modules/playlist';
+import { noop } from '../../helpers/utils';
+import { seek } from './adapter';
 
 const PlayerBehaviorHls = () => {
   const isMetadataReady = useSelector(state => player.isMetadataReady(state.player));
@@ -11,7 +13,16 @@ const PlayerBehaviorHls = () => {
 
   const dispatch = useDispatch();
 
-  //insert file id to HLS playlist item
+  //patch of get metadata from HLS need start fetch it before any user activity
+  useEffect(() => {
+    if (!isReady) return noop;
+    const jwp            = window.jwplayer();
+    const activeteJwpHls = () => seek(0);
+    jwp.once('autostartNotAllowed', activeteJwpHls);
+    return () => jwp.off('autostartNotAllowed', activeteJwpHls);
+  }, [isReady]);
+
+  //insert file id by media_type to HLS playlist item
   useEffect(() => {
     if (!isReady) return;
     dispatch(actions.updatePlayed({}));
