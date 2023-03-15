@@ -6,9 +6,17 @@ import { actions, selectors as playlist } from '../../redux/modules/playlist';
 
 const PlayerBehaviorHls = () => {
   const isMetadataReady = useSelector(state => player.isMetadataReady(state.player));
+  const isReady         = useSelector(state => player.isReady(state.player));
   const { mediaType }   = useSelector(state => playlist.getInfo(state.playlist));
 
   const dispatch = useDispatch();
+
+  //insert file id to HLS playlist item
+  useEffect(() => {
+    if (!isReady) return;
+    dispatch(actions.updatePlayed({}));
+  }, [isReady, mediaType, dispatch]);
+
   useEffect(() => {
     if (!isMetadataReady) return;
 
@@ -19,7 +27,7 @@ const PlayerBehaviorHls = () => {
     dispatch(actions.updatePlayed({ video_qualities, languages }));
     const qIdx = jwp.getCurrentQuality();
     dispatch(actions.setQuality(video_qualities[qIdx]));
-  }, [isMetadataReady, mediaType, dispatch]);
+  }, [isMetadataReady, dispatch]);
 
   return null;
 };

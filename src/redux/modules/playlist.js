@@ -91,10 +91,16 @@ const onComplete = draft => {
 };
 
 const onUpdatePlayed = (draft, { video_qualities, languages }) => {
-  const item = draft.itemById[draft.info.cuId] || false;
-  const id   = `${item?.file.id}_${draft.info.mediaType}`;
-
-  draft.currentHLS = { video_qualities, languages, id };
+  const item       = draft.itemById[draft.info.cuId] || false;
+  const id         = `${item?.file.id}_${draft.info.mediaType}`;
+  const currentHLS = { id };
+  if (video_qualities) {
+    currentHLS.video_qualities = video_qualities;
+  }
+  if (languages) {
+    currentHLS.languages = languages;
+  }
+  draft.currentHLS = currentHLS;
 };
 
 const onUpdateMediaType = (draft, payload) => draft.info.mediaType = payload;

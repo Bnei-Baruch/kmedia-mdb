@@ -45,6 +45,7 @@ export const pause      = () => functionByName('pause', false);
 export const togglePlay = () => {
   const state = functionByName('getState');
   if (!state) return;
+
   (state !== 'playing') ? play() : pause();
 };
 

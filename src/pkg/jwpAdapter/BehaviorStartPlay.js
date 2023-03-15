@@ -9,7 +9,7 @@ import { getSavedTime } from '../../components/Player/helper';
 import { selectors as playlist } from '../../redux/modules/playlist';
 import { selectors as my } from '../../redux/modules/my';
 import { DeviceInfoContext } from '../../helpers/app-contexts';
-import { LOCALSTORAGE_MUTE, seek, play, pause } from './adapter';
+import { LOCALSTORAGE_MUTE, seek, play } from './adapter';
 
 const BehaviorStartPlay = () => {
   const location       = useLocation();
@@ -17,11 +17,13 @@ const BehaviorStartPlay = () => {
 
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const isReady            = useSelector(state => player.isReady(state.player));
-  const isMuted            = useSelector(state => player.isMuted(state.player));
-  const { duration }       = useSelector(state => player.getFile(state.player)) || {};
+  const isMetadataReady    = useSelector(state => player.isMetadataReady(state.player));
 
-  const { id: fileId }          = useSelector(state => playlist.getPlayed(state.playlist));
-  const { cuId, isSingleMedia } = useSelector(state => playlist.getInfo(state.playlist), shallowEqual);
+  const isMuted                  = useSelector(state => player.isMuted(state.player));
+  const { duration, id: fileId } = useSelector(state => player.getFile(state.player)) || {};
+
+  const { id: fileIdHls, isHLS } = useSelector(state => playlist.getPlayed(state.playlist));
+  const { cuId, isSingleMedia }  = useSelector(state => playlist.getInfo(state.playlist), shallowEqual);
 
   const historyItem = useSelector(state => my.getList(state.my, MY_NAMESPACE_HISTORY)?.find(x => x.content_unit_uid === cuId));
   const { fetched } = useSelector(state => my.getInfo(state.my, MY_NAMESPACE_HISTORY), shallowEqual);
@@ -43,28 +45,25 @@ const BehaviorStartPlay = () => {
   }, [isMuted, isSingleMedia, isMobileDevice, dispatch]);
 
   //start from saved time on load or switch playlist item
-  const isClip = start || end !== Infinity;
+  const isClip   = start || end !== Infinity;
+  const _isReady = isHLS ? isMetadataReady : isReady;
+  const _fileId  = isHLS ? fileIdHls : fileId;
   useEffect(() => {
-    if (!isReady || isClip || !fetched || fileId === fileIdRef.current) return;
+    if (!_isReady || isClip || !fetched || _fileId === fileIdRef.current) return;
 
-    const jwp       = window.jwplayer();
     const autostart = !!fileIdRef.current || isSingleMedia;
 
     const { current_time: offset } = getSavedTime(cuId, historyItem);
-    jwp.setConfig({ autostart });
     if (!isNaN(offset) && offset > 0 && (offset + 10 < duration)) {
       seek(offset);
     }
-
-    if (!autostart) {
-      pause();
-    } else {
+    if (autostart) {
       play();
     }
-
     dispatch(actions.setLoaded(true));
-    fileIdRef.current = fileId;
-  }, [isReady, isClip, cuId, fileId, duration, historyItem, fileIdRef, isSingleMedia, fetched, dispatch]);
+
+    fileIdRef.current = _fileId;
+  }, [_isReady, isClip, cuId, _fileId, duration, historyItem, fileIdRef, isSingleMedia, fetched, dispatch]);
 
   return null;
 };
