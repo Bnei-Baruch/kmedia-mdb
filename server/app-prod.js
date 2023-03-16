@@ -88,6 +88,10 @@ app.use(helmet({
         'stats.g.doubleclick.net',
         '*.usersnap.com',
         '*.twimg.com',
+      ],
+      "woker-src":[
+        'blob:',
+        '*.kabbalahmedia.info'
       ]
     },
     browserSniff: false       // we're not targeting really old browsers
