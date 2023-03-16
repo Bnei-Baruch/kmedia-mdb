@@ -23,13 +23,14 @@ import {
   VS_NAMES
 } from '../../../../helpers/consts';
 import { selectSuitableLanguage } from '../../../../helpers/language';
-import { physicalFile, downloadLink } from '../../../../helpers/utils';
+import { downloadLink } from '../../../../helpers/utils';
 import { selectors as settings } from '../../../../redux/modules/settings';
 import { selectors } from '../../../../redux/modules/publications';
 import * as shapes from '../../../shapes';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import classNames from 'classnames';
 import MenuLanguageSelector from '../../../Language/Selector/MenuLanguageSelector';
+import { sizeByQuality } from './helper';
 
 const MEDIA_ORDER = [
   MT_VIDEO,
@@ -102,22 +103,22 @@ class MediaDownloads extends Component {
     // we give them the images of their fallback language.
     const images = [];
 
-    const hls = files.find(f => f.video_size === 'HLS');
-    hls?.languages.forEach(l => {
+    const hls = files.find(f => f.video_size === 'HLS' && f.hls_languages && f.video_qualities);
+    hls?.hls_languages.forEach(l => {
       const byType = new Map();
-      byType.set(MT_AUDIO, [{ ...hls, type: MT_AUDIO, language: l, size: 4624433502 }]);
-      const videos = hls.video_qualities?.map(q => ({
+      byType.set(MT_AUDIO, [{ ...hls, type: MT_AUDIO, language: l, name: 'audio.mp3', video_size: null}]);
+      const videos = hls.video_qualities.map(q => ({
         ...hls,
         type: MT_VIDEO,
         video_size: q,
         language: l,
-        size: 4624433502
+        size: sizeByQuality(q, hls.duration)
       }));
       byType.set(MT_VIDEO, videos);
       groups.set(l, byType);
     });
 
-    files.filter(f => !hls || [MT_VIDEO, MT_AUDIO].includes(f.type)).forEach(file => {
+    files.filter(f => !(hls && [MT_VIDEO, MT_AUDIO].includes(f.type))).forEach(file => {
       if (!groups.has(file.language)) {
         groups.set(file.language, new Map());
       }
@@ -135,11 +136,7 @@ class MediaDownloads extends Component {
     });
 
     // sort file lists by size
-    groups.forEach(byType => byType.forEach(v => {
-      v.sort((a, b) => {
-        return a.size - b.size;
-      });
-    }));
+    groups.forEach(byType => byType.forEach(v => v.sort((a, b) => a.size - b.size)));
 
     // fill in images fallback into every language
     if (images.length > 0) {
@@ -224,7 +221,7 @@ class MediaDownloads extends Component {
     const url                  = downloadLink(file);
 
     return (
-      <Table.Row key={file.id} className="media-downloads__file" verticalAlign="top">
+      <Table.Row key={`${file.id}_${file.video_size}`} className="media-downloads__file" verticalAlign="top">
         <Table.Cell>
           <span className="media-downloads__file-label">{label}</span>
         </Table.Cell>

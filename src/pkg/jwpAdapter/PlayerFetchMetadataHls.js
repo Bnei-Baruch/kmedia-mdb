@@ -32,12 +32,14 @@ const PlayerBehaviorHls = () => {
     if (!isMetadataReady) return;
 
     const jwp             = window.jwplayer();
-    const languages       = jwp.getAudioTracks().map(t => t.language);
-    const video_qualities = jwp.getQualityLevels().map(t => t.label);
+    const languages       = jwp.getAudioTracks()?.map(t => t.language);
+    const video_qualities = jwp.getQualityLevels()?.map(t => t.label);
 
     dispatch(actions.updatePlayed({ video_qualities, languages }));
-    const qIdx = jwp.getCurrentQuality();
-    dispatch(actions.setQuality(video_qualities[qIdx]));
+    if (video_qualities) {
+      const qIdx = jwp.getCurrentQuality();
+      dispatch(actions.setQuality(video_qualities[qIdx]));
+    }
   }, [isMetadataReady, dispatch]);
 
   return null;

@@ -182,7 +182,11 @@ export const physicalFile = (file, ext = false) => {
 export const downloadLink = (file, ext = false) => {
   if (file.is_hls) {
     const { lang3 } = LANGUAGES[file.language];
-    return `${CDN_HLS_URL}get/${file.id}.mp4?audio=${lang3.toLowerCase()}&video=${file.video_size.toLowerCase()}`;
+    let src         = `${CDN_HLS_URL}get/${file.id}.mp4?audio=${lang3.toLowerCase()}`;
+
+    if (file.video_size)
+      src = `${src}&video=${file.video_size.toLowerCase()}`;
+    return src;
   }
 
   return physicalFile(file, ext);

@@ -12,7 +12,9 @@ const PlayerBehaviorHls = () => {
     if (!isMetadataReady) return;
     const jwp    = window.jwplayer();
     const tracks = jwp.getAudioTracks();
-    const idx    = tracks.findIndex(q => q.language === language);
+
+    if (!tracks) return;
+    const idx = tracks.findIndex(q => q.language === language);
     jwp.setCurrentAudioTrack(idx);
   }, [language, isMetadataReady]);
 
