@@ -6,7 +6,4 @@ const SIZE_BY_QUALITY      = {
   [VS_NHD]: 600 * 1000,
   [MT_AUDIO]: 64 * 1000
 };
-export const sizeByQuality = (quality, duration) => {
-  const s = SIZE_BY_QUALITY[quality] * duration;
-  return s;
-};
+export const sizeByQuality = (quality, duration) => SIZE_BY_QUALITY[quality] * duration;
