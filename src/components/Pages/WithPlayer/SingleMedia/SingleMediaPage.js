@@ -20,7 +20,7 @@ const SingleMediaPage = ({ playerContainer }) => {
 
   const computerWidth = !isMobileDevice ? 10 : 16;
   return (
-    <>
+    <div>
       <Helmets.AVUnit />
       <Grid padded={!isMobileDevice} className="avbox">
         <Grid.Column
@@ -50,7 +50,7 @@ const SingleMediaPage = ({ playerContainer }) => {
           )
         }
       </Grid>
-    </>
+    </div>
   );
 };
 
