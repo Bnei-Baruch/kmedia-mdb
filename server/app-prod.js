@@ -89,7 +89,7 @@ app.use(helmet({
         '*.usersnap.com',
         '*.twimg.com',
       ],
-      "woker-src":[
+      'worker-src': [
         'blob:',
         '*.kabbalahmedia.info'
       ]
