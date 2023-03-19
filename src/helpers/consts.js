@@ -182,6 +182,7 @@ export const LANG_CZECH      = 'cs';
 export const LANG_AMHARIC    = 'am';
 export const LANG_INDONESIAN = 'id';
 export const LANG_ARMENIAN   = 'hy';
+export const LANG_ORIGINAL    = 'or';
 export const LANG_UNKNOWN    = 'xx';
 
 export const LANGUAGES = {
@@ -220,6 +221,7 @@ export const LANGUAGES = {
   [LANG_AMHARIC]: { value: LANG_AMHARIC, locale: 'am_ET', lang3: 'AMH', name: 'ኣማርኛ' },
   [LANG_INDONESIAN]: { value: LANG_INDONESIAN, locale: 'in_ID', lang3: 'IND', name: 'Bahasa Indonesia' },
   [LANG_ARMENIAN]: { value: LANG_ARMENIAN, locale: 'hy_AM', lang3: 'ARM', name: 'Հայերէն' },
+  [LANG_ORIGINAL]: { value: LANG_ORIGINAL, locale: 'he_IL', lang3: 'ORG', name: 'Original' },
 };
 
 export const ALL_LANGUAGES = [
@@ -257,6 +259,7 @@ export const ALL_LANGUAGES = [
   LANG_AMHARIC,
   LANG_INDONESIAN,
   LANG_ARMENIAN,
+  LANG_ORIGINAL,
 ];
 
 export const POPULAR_LANGUAGES = [
