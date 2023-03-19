@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
 import { selectors as my } from '../../redux/modules/my';
 import { MY_NAMESPACE_HISTORY } from '../../helpers/consts';
 import { formatDuration } from '../../helpers/utils';
 import UnitLogo from './Logo/UnitLogo';
-import { getProgress } from './ContentItem/helper';
 import { getSavedTime } from '../Player/helper';
+import { UnitProgress } from './ContentItem/UnitProgress';
 
 export const getLogoUnit = (content_units, historyItems) => {
   if (!content_units)
@@ -22,11 +22,14 @@ export const getLogoUnit = (content_units, historyItems) => {
 };
 
 const UnitLogoWithDuration = ({ unit, ...propz }) => {
-  const { id, duration } = unit;
+  const [playTime, setPlayTime] = useState();
+  const { id, duration }        = unit;
 
-  const historyItems               = useSelector(state => my.getList(state.my, MY_NAMESPACE_HISTORY)) || [];
-  const historyUnit                = historyItems.find(x => x.content_unit_uid === id);
-  const { current_time: playTime } = getSavedTime(id, historyUnit);
+  const historyItems = useSelector(state => my.getList(state.my, MY_NAMESPACE_HISTORY)) || [];
+  const historyUnit  = historyItems.find(x => x.content_unit_uid === id);
+  useEffect(() => {
+    setPlayTime(getSavedTime(id, historyUnit));
+  }, [id, historyUnit]);
 
   if (propz.width === undefined) {
     propz.width = 140;
@@ -41,7 +44,7 @@ const UnitLogoWithDuration = ({ unit, ...propz }) => {
           </div>
         )
       }
-      {getProgress(unit, playTime)}
+      <UnitProgress unit={unit} playTime={playTime} />
       <UnitLogo unitId={id} {...propz} />
     </div>
   );
