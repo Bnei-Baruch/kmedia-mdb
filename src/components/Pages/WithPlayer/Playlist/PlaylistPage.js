@@ -2,7 +2,6 @@ import React, { useContext } from 'react';
 import clsx from 'clsx';
 
 import { Grid, Container, Divider } from 'semantic-ui-react';
-import Helmets from '../../../shared/Helmets';
 import PlaylistHeader from './PlaylistHeader';
 import Info from '../widgets/Info/Info';
 import Materials from '../widgets/UnitMaterials/Materials';
@@ -27,7 +26,6 @@ const PlaylistPage = ({ playerContainer }) => {
         </div>
         {playerContainer}
         <Container id="unit_container">
-          <Helmets.AVUnit />
           <Info />
           <Materials />
         </Container>

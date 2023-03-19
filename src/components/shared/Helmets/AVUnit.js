@@ -7,7 +7,6 @@ import Basic from './Basic';
 import Image from './Image';
 import Video from './Video';
 import { useSelector } from 'react-redux';
-import { selectors } from '../../../redux/modules/playlist';
 import { selectors as settings } from '../../../redux/modules/settings';
 import { selectors as mdb } from '../../../redux/modules/mdb';
 
@@ -53,9 +52,8 @@ const areEqual = (prevProps, nextProps) =>
 
 const AVUnitMemo = React.memo(AVUnitWithDep, areEqual);
 
-const AVUnit = () => {
-  const { cuId } = useSelector(state => selectors.getInfo(state.playlist));
-  const unit     = useSelector(state => mdb.getDenormContentUnit(state.mdb, cuId));
+const AVUnit = ({ id }) => {
+  const unit     = useSelector(state => mdb.getDenormContentUnit(state.mdb, id));
   const language = useSelector(state => settings.getLanguage(state.settings));
   if (!unit || !unit.files || !language) {
     return null;

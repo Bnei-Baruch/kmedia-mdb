@@ -3,7 +3,6 @@ import { Grid, Container } from 'semantic-ui-react';
 import clsx from 'clsx';
 import { useLocation } from 'react-router-dom';
 
-import Helmets from '../../../shared/Helmets';
 import Recommended from '../widgets/Recommended/Main/Recommended';
 import { getEmbedFromQuery } from '../../../../helpers/player';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
@@ -20,8 +19,7 @@ const SingleMediaPage = ({ playerContainer }) => {
 
   const computerWidth = !isMobileDevice ? 10 : 16;
   return (
-    <div>
-      <Helmets.AVUnit />
+    <>
       <Grid padded={!isMobileDevice} className="avbox">
         <Grid.Column
           mobile={16}
@@ -50,7 +48,7 @@ const SingleMediaPage = ({ playerContainer }) => {
           )
         }
       </Grid>
-    </div>
+    </>
   );
 };
 
