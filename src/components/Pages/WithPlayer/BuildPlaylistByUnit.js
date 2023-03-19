@@ -1,9 +1,10 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
 import { actions, selectors } from '../../../redux/modules/playlist';
 import { selectors as mdb, actions as mdbActions } from '../../../redux/modules/mdb';
+import Helmets from '../../shared/Helmets';
 
 const BuildPlaylistByUnit = ({ cts }) => {
   const { id } = useParams();
@@ -35,7 +36,7 @@ const BuildPlaylistByUnit = ({ cts }) => {
     }
   }, [cId, id, prevCuId, wip, fetched]);
 
-  return null;
+  return <Helmets.AVUnit id={id} />;
 };
 
 export default BuildPlaylistByUnit;

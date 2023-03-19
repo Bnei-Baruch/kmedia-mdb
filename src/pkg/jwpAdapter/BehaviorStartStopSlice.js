@@ -6,12 +6,11 @@ import { selectors as player } from '../../redux/modules/player';
 import { startEndFromQuery } from '../../components/Player/Controls/helper';
 import { pause, seek } from './adapter';
 import { noop } from '../../helpers/utils';
-import { findPlayedFile } from '../../components/Player/helper';
 
 const BehaviorStartStopSlice = () => {
   const location       = useLocation();
   const { start, end } = startEndFromQuery(location);
-  const { id }     = useSelector(state => player.getFile(state.player)) || {};
+  const { id }         = useSelector(state => player.getFile(state.player)) || {};
 
   useEffect(() => {
     if (!id || (!start && end === Infinity)) return noop;
