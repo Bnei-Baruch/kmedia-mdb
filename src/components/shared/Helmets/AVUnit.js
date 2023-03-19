@@ -11,24 +11,13 @@ import { selectors } from '../../../redux/modules/playlist';
 import { selectors as settings } from '../../../redux/modules/settings';
 import { selectors as mdb } from '../../../redux/modules/mdb';
 
-const AVUnit = () => {
-  const { cuId } = useSelector(state => selectors.getInfo(state.playlist));
-  const unit     = useSelector(state => mdb.getDenormContentUnit(state.mdb, cuId));
-  const language = useSelector(state => settings.getLanguage(state.settings));
-  if (!unit || !unit.files) {
-    return null;
-  }
-
-  if (!language) {
-    return null;
-  }
-
+const AVUnitWithDep = ({ unit, language }) => {
   // if unit.description doesn't exist, use the collection description
   let { description } = unit;
   if (isEmpty(description)) {
     const collections = Object.values(unit.collections);
     if (collections.length > 0) {
-      ({ description } = collections[0]);
+      description = collections[0].description;
     }
   }
 
@@ -58,4 +47,19 @@ const AVUnit = () => {
   );
 };
 
+const areEqual = (prevProps, nextProps) =>
+  ((!prevProps.unit && !nextProps.unit) || prevProps.unit.id === nextProps.unit.id)
+  && prevProps.language === nextProps.language;
+
+const AVUnitMemo = React.memo(AVUnitWithDep, areEqual);
+
+const AVUnit = () => {
+  const { cuId } = useSelector(state => selectors.getInfo(state.playlist));
+  const unit     = useSelector(state => mdb.getDenormContentUnit(state.mdb, cuId));
+  const language = useSelector(state => settings.getLanguage(state.settings));
+  if (!unit || !unit.files || !language) {
+    return null;
+  }
+  return <AVUnitMemo unit={unit} language={language} />;
+};
 export default AVUnit;
