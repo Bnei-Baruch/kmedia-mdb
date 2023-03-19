@@ -88,6 +88,7 @@ app.use(helmet({
         'stats.g.doubleclick.net',
         '*.usersnap.com',
         '*.twimg.com',
+        'prd.jwpltx.com',
       ],
       'worker-src': [
         'blob:',

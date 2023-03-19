@@ -16,7 +16,7 @@ const BuildSingleMediaPlaylist = () => {
     }
   }, [cuId, id, wip]);
 
-  return <Helmets.AVUnit id={cuId} />;
+  return <Helmets.AVUnit id={id} />;
 };
 
 export default BuildSingleMediaPlaylist;
