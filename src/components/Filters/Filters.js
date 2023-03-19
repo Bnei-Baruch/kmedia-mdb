@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { bindActionCreators } from 'redux';
 import { connect, ReactReduxContext } from 'react-redux';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { Container, Icon, Label, Menu, Popup } from 'semantic-ui-react';
 import isEqual from 'react-fast-compare';
 
@@ -235,4 +235,4 @@ export default connect(
     setFilterValue: actions.setFilterValue,
     resetFilter: actions.resetFilter,
   }, dispatch)
-)(withNamespaces()(Filters));
+)(withTranslation()(Filters));

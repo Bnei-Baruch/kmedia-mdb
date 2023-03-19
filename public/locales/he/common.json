@@ -118,10 +118,10 @@
       "sort-by-filter": "מיין לפי"
     },
     "media-types": {
-      "audio" : "אודיו",
-      "video" : "וידאו",
-      "text" : "תמליל",
-      "image" : "שרטוט"
+      "audio": "אודיו",
+      "video": "וידאו",
+      "text": "תמליל",
+      "image": "שרטוט"
     },
     "content-types": {
       "CONGRESS": "כנסים",
@@ -175,13 +175,7 @@
     },
     "buttons": {
       "edit-back": "חזור",
-      "start-position": "התחלה",
-      "end-position": "סיום",
-      "click-to-set": "לחץ לסימון",
       "tap-to-unmute": "לחץ לביטול השתקה"
-    },
-    "share": {
-      "title": "צפה בסרטון"
     },
     "error": {
       "loading": "שגיאה בטעינת קובץ"
@@ -190,9 +184,41 @@
       "series-by-topic": "סדרת שיעורים בנושא:"
     },
     "download": {
-      "iconHoverText": "להוריד את הקטע שסימנת",
-      "downloadButton": "הורד",
+      "icon-hover-text": "להוריד את הקטע שסימנת",
+      "download-button": "הורד",
       "copyButton": "העתק קישור"
+    },
+    "settings": {
+      "playback": "צורת הפעלה",
+      "playback-speed": "מהירות",
+      "quality": "איכות",
+      "language": "שפה",
+      "audio": "אודיו",
+      "video": "וידאו",
+      "normal": "רגיל",
+      "audio-only-on": "אודיו בלבד דלוק",
+      "audio-only-off": "אודיו בלבד כבוי"
+    },
+    "share": {
+      "title": "צפה בסרטון",
+      "start-position": "לחץ התחלה",
+      "end-position": "לחץ סיום",
+      "embedded": "הטמעה",
+      "reset-to-full": "אפס למלא",
+      "download-file": "הורד מקטע"
+    },
+    "controls": {
+      "pause": "השהה",
+      "play": "נגן",
+      "mute": "השתק",
+      "share": "שתף",
+      "settings": "הגדרות",
+      "rewind": "חזור {{seek}} שניות",
+      "skip": "דלג {{seek}} שניות",
+      "next-video": "לאייטם הבא",
+      "prev-video": "לאייטם הקודם",
+      "fullscreen": "מסך מלא",
+      "fullscreen-exit": "מזער"
     }
   },
   "playlist": {

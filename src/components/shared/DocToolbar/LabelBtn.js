@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { Button, MenuItem, Popup } from 'semantic-ui-react';
 import SelectTopicsModal from '../SelectTopicsModal/SelectTopicsModal';
 import { SectionLogo } from '../../../helpers/images';
@@ -44,4 +44,4 @@ LabelBtn.propTypes = {
   label: PropTypes.object,
 };
 
-export default withNamespaces()(LabelBtn);
+export default withTranslation()(LabelBtn);

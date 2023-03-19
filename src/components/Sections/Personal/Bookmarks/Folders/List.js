@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Segment, Divider, Button, Input, Grid, Icon, Header, Container } from 'semantic-ui-react';
 
@@ -156,4 +156,4 @@ const FolderList = ({ t, close }) => {
   );
 };
 
-export default withNamespaces()(FolderList);
+export default withTranslation()(FolderList);

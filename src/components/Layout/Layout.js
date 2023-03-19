@@ -2,13 +2,12 @@ import React, { Component, createRef, useContext } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { connect } from 'react-redux';
-import { withNamespaces } from 'react-i18next';
-import { renderRoutes } from 'react-router-config';
+import { withTranslation, withSSR } from 'react-i18next';
 import { Header, Icon, Menu, Ref, Segment } from 'semantic-ui-react';
 import Headroom from 'react-headroom';
 
 import { ALL_LANGUAGES } from '../../helpers/consts';
-import playerHelper from '../../helpers/player';
+import { getEmbedFromQuery } from '../../helpers/player';
 import { selectors as settings } from '../../redux/modules/settings';
 import * as shapes from '../shapes';
 import Link from '../Language/MultiLanguageLink';
@@ -22,8 +21,10 @@ import DonateNow, { VirtualHomeButton } from './DonateNow';
 import Logo from '../../images/icons/Logo';
 import { ClientChroniclesContext, DeviceInfoContext } from '../../helpers/app-contexts';
 import Login from './Login';
-import DownloadTrim from '../AVPlayer/Share/DownloadTrim';
+import KmediaRouters from '../../route/KmediaRouters';
+import { withRouter } from '../../helpers/withRouterPatch';
 import DonationPopup from '../Sections/Home/DonationPopup';
+import DownloadTrim from '../Share/DownloadTrim';
 
 const WrappedOmniBoxWithChronicles = ({ location }) => {
   const chronicles = useContext(ClientChroniclesContext);
@@ -62,7 +63,6 @@ class Layout extends Component {
 
   static propTypes = {
     location: shapes.HistoryLocation.isRequired,
-    route: shapes.Route.isRequired,
     language: PropTypes.string.isRequired,
     t: PropTypes.func.isRequired,
   };
@@ -74,7 +74,7 @@ class Layout extends Component {
     this.state = {
       sidebarActive: false,
       isShowHeaderSearch: false,
-      embed: playerHelper.getEmbedFromQuery(location),
+      embed: getEmbedFromQuery(location),
     };
   }
 
@@ -162,7 +162,7 @@ class Layout extends Component {
   };
 
   render() {
-    const { t, location, route, language }             = this.props;
+    const { t, location, language, playerContainer }   = this.props;
     const { sidebarActive, embed, isShowHeaderSearch } = this.state;
     const { isMobileDevice }                           = this.context;
 
@@ -173,22 +173,11 @@ class Layout extends Component {
       : <Icon name="sidebar" />;
 
     if (embed) {
-      return (
-        <div>
-          {renderRoutes(route.routes)}
-        </div>
-      );
+      return (<KmediaRouters playerContainer={playerContainer} />);
     }
 
     return (
       <div className="layout">
-        {/* <div className="debug">
-          <span className="widescreen-only">widescreen</span>
-          <span className="large-screen-only">large screen</span>
-          <span className="computer-only">computer</span>
-          <span className="tablet-only">tablet</span>
-          <span className="mobile-only">mobile</span>
-        </div> */}
         <GAPageView location={location} />
         <div className="headroom-z-index-802">
           <Headroom>
@@ -225,10 +214,14 @@ class Layout extends Component {
                       </Menu.Item>
                     </Ref>
                   }
-                  <Menu.Item position="right" className="mobile-hidden">
-                    <DonateNow language={language} />
-                    <VirtualHomeButton language={language} />
-                  </Menu.Item>
+                  {
+                    !isMobileDevice && (
+                      <Menu.Item position="right">
+                        <DonateNow language={language} />
+                        <VirtualHomeButton language={language} />
+                      </Menu.Item>
+                    )
+                  }
                   <Menu.Item position="right">
                     <Login language={language} />
                   </Menu.Item>
@@ -268,7 +261,7 @@ class Layout extends Component {
         <div className="layout__main">
           <div className="layout__content">
             <DownloadTrim />
-            {renderRoutes(route.routes)}
+            <KmediaRouters playerContainer={playerContainer} />
           </div>
           <Footer />
         </div>
@@ -278,6 +271,6 @@ class Layout extends Component {
   }
 }
 
-export default connect(state => ({
-  language: settings.getLanguage(state.settings),
-}))(withNamespaces()(Layout));
+export default connect(
+  state => ({ language: settings.getLanguage(state.settings) })
+)(withSSR()(withTranslation()(withRouter(Layout))));

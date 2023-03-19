@@ -1,5 +1,5 @@
 import React from 'react';
-import { withNamespaces } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
 import { CT_ARTICLES } from '../../../helpers/consts';
@@ -41,10 +41,11 @@ const mapNS2Tree = (state, namespace, t) => {
 };
 
 const CollectionsFilter = props => {
-  const { namespace, t } = props;
-  const tree             = useSelector(state => mapNS2Tree(state, namespace, t));
+  const { t }         = useTranslation();
+  const { namespace } = props;
+  const tree          = useSelector(state => mapNS2Tree(state, namespace, t));
 
   return <HierarchicalFilter name="collections-filter" tree={tree} {...props} t={t} />;
 };
 
-export default (withNamespaces()(CollectionsFilter));
+export default CollectionsFilter;

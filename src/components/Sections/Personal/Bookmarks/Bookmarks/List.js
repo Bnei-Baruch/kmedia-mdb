@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 
 import { actions, selectors } from '../../../../../redux/modules/my';
 import { selectors as filters } from '../../../../../redux/modules/bookmarkFilter';
@@ -70,4 +70,4 @@ const BookmarkList = ({ t }) => {
   );
 };
 
-export default withNamespaces()(BookmarkList);
+export default withTranslation()(BookmarkList);

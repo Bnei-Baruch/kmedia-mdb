@@ -1,4 +1,5 @@
 import { all, call, put, select, takeLatest } from 'redux-saga/effects';
+import { takeEvery } from 'redux-saga';
 import { AB_RECOMMEND_NEW, AB_RECOMMEND_RANDOM } from '../helpers/ab-testing';
 
 import Api from '../helpers/Api';
@@ -14,6 +15,8 @@ import { actions, selectors as recommended, types } from '../redux/modules/recom
 import { selectors as settings } from '../redux/modules/settings';
 import { selectors as sourcesSelectors } from '../redux/modules/sources';
 import { fetchMissingCollections, fetchMissingUnits } from './mdb';
+import { types as playerTypes } from '../redux/modules/player';
+import { selectors as playlist } from '../redux/modules/playlist';
 
 const WATCHING_NOW_MIN = 50;
 const POPULAR_MIN      = 100;
@@ -21,10 +24,10 @@ const POPULAR_MIN      = 100;
 export function* fetchRecommended(action) {
   const { id, content_type, tags, sources, collections, size, skip, variant } = action.payload;
   try {
-    const isLesson = UNIT_LESSONS_TYPE.includes(content_type);
-    const language = yield select(state => settings.getContentLanguage(state.settings));
+    const isLesson      = UNIT_LESSONS_TYPE.includes(content_type);
+    const language      = yield select(state => settings.getContentLanguage(state.settings));
     const [...skipUids] = yield select(state => recommended.getSkipUids(state.recommended));
-    const skipSet  = new Set(skipUids);
+    const skipSet       = new Set(skipUids);
     skip.forEach(uid => {
       if (!skipSet.has(uid)) {
         skipUids.push(uid);
@@ -290,6 +293,11 @@ export function* fetchWatchingNow(uids) {
   }
 }
 
+function* playerPlayWithUidProxy() {
+  const { cuId } = yield select(state => playlist.getInfo(state.playlist));
+  yield put(actions.playerPlayWithUid(cuId));
+}
+
 function* watchFetchRecommended() {
   yield takeLatest(types.FETCH_RECOMMENDED, fetchRecommended);
 }
@@ -298,7 +306,12 @@ function* watchFetchViews() {
   yield takeLatest(types.FETCH_VIEWS, fetchViews);
 }
 
+function* watchPlayerPlayWithUidProxy() {
+  yield takeEvery(playerTypes.PLAYER_PLAY, playerPlayWithUidProxy);
+}
+
 export const sagas = [
   watchFetchRecommended,
   watchFetchViews,
+  watchPlayerPlayWithUidProxy
 ];

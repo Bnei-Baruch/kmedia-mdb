@@ -1,14 +1,14 @@
 import React, { useRef, useState } from 'react';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Modal, Button } from 'semantic-ui-react';
 import { selectors as assets } from '../../../redux/modules/assets';
 import { isLanguageRtl, getLanguageDirection } from '../../../helpers/i18n-utils';
 import { selectors as settings } from '../../../redux/modules/settings';
 import ImageGallery from 'react-image-gallery';
-import { imageGalleryItem } from '../../Pages/Unit/widgets/UnitMaterials/helper';
 import FallbackImage from '../../shared/FallbackImage';
 import { assetUrl } from '../../../helpers/Api';
+import { imageGalleryItem } from '../../Pages/WithPlayer/widgets/UnitMaterials/helper';
 
 const ZipFileModal = ({ id, path }) => {
   const [open, setOpen] = useState(false);
@@ -94,4 +94,4 @@ const ZipFileModal = ({ id, path }) => {
   );
 };
 
-export default withNamespaces()(ZipFileModal);
+export default withTranslation()(ZipFileModal);

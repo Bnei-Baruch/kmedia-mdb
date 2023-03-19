@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Button } from 'semantic-ui-react';
 import { ALL_LANGUAGES, FN_ORIGINAL_LANGUAGES, POPULAR_LANGUAGES } from '../../../helpers/consts';
@@ -54,4 +54,4 @@ const OriginalLanguage = ({ namespace, t }) => {
   );
 };
 
-export default withNamespaces()(OriginalLanguage);
+export default withTranslation()(OriginalLanguage);

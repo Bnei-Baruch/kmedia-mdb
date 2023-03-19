@@ -9,26 +9,29 @@ import { formatDuration } from '../../../helpers/utils';
 import Link from '../../Language/MultiLanguageLink';
 
 import * as shapes from '../../shapes';
+import { imageWidthBySize } from './helper';
+import UnitLogoWithDuration from '../UnitLogoWithDuration';
 import UnitLogo from '../Logo/UnitLogo';
-import { imageWidthBySize, getProgress } from './helper';
+import { UnitProgress } from './UnitProgress';
 
-
-const ListTemplate = ({
-  unit,
-  source,
-  tag,
-  language,
-  withCUInfo,
-  withCCUInfo,
-  link,
-  ccu,
-  description,
-  children,
-  playTime,
-  size = 'big',
-  selected,
-  label
-}) => {
+const ListTemplate = (
+  {
+    unit,
+    source,
+    tag,
+    language,
+    withCUInfo,
+    withCCUInfo,
+    link,
+    ccu,
+    description,
+    children,
+    playTime,
+    size = 'big',
+    selected,
+    label
+  }
+) => {
 
   const dir                = getLanguageDirection(language);
   const { isMobileDevice } = useContext(DeviceInfoContext);
@@ -40,7 +43,7 @@ const ListTemplate = ({
     if (cuInfoRef.current && (cuInfoRef.current.scrollHeight > cuInfoRef.current.clientHeight)) {
       setIsNeedTooltip(true);
     }
-  }, [cuInfoRef.current]);
+  }, [cuInfoRef]);
 
   const info = ((ccu || source || tag) && withCCUInfo)
     ? (
@@ -84,11 +87,11 @@ const ListTemplate = ({
       className={clsx('cu_item cu_item_list no-thumbnail', { [size]: !!size, selected })}
     >
       <div>
-        {withCUInfo && unit?.duration && <div className="cu_item_duration">{formatDuration(unit.duration)}</div>}
         {label ? <div className="cu_item_label">{label}</div> : null}
-        {getProgress(unit, playTime)}
+        <UnitProgress unit={unit} playTime={playTime} />
         <div className="cu_item_img" style={{ width }}>
-          <UnitLogo unitId={unit?.id} sourceId={source?.id} width={width} />
+          {withCUInfo ? <UnitLogoWithDuration unit={unit} sourceId={source?.id} width={width} /> :
+            <UnitLogo unitId={unit?.id} sourceId={source?.id} width={width} />}
         </div>
       </div>
       <div className={clsx('cu_item_info', { [dir]: true, 'with_actions': !!children })}>

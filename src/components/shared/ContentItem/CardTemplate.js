@@ -8,7 +8,7 @@ import { formatDuration } from '../../../helpers/utils';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import UnitLogo from '../Logo/UnitLogo';
 import Link from '../../Language/MultiLanguageLink';
-import { getProgress } from './helper';
+import { UnitProgress } from './UnitProgress';
 
 const CardTemplate = ({ unit, language, withCCUInfo, link, ccu, description, children, playTime }) => {
   const dir = getLanguageDirection(language);
@@ -25,7 +25,7 @@ const CardTemplate = ({ unit, language, withCCUInfo, link, ccu, description, chi
     </div>
   ) : null;
 
-  const trimText = (title, len = 150) => title.length < len ? title : `${title.substr(0, title.lastIndexOf(' ', len))  }...`;
+  const trimText = (title, len = 150) => title.length < len ? title : `${title.substr(0, title.lastIndexOf(' ', len))}...`;
 
   return (
     <Card raised className="cu_item" as={Link} to={link}>
@@ -34,7 +34,7 @@ const CardTemplate = ({ unit, language, withCCUInfo, link, ccu, description, chi
         <Container className="cu_item_img_info" textAlign="right">
           {unit.duration && <div className="cu_item_duration">{formatDuration(unit.duration)}</div>}
           {coInfo}
-          {getProgress(unit, playTime)}
+          <UnitProgress unit={unit} playTime={playTime} />
         </Container>
       </div>
       <Card.Content>

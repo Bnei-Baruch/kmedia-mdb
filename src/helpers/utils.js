@@ -73,8 +73,14 @@ export const formatError = error => {
   if (error.response) {
     // The request was made and the server responded with a status code
     // that falls out of the range of 2xx
-    const msg = error.response.data.error;
-    return error.response.statusText + (msg ? `: ${msg}` : '');
+    let msg = error.response.data?.error;
+    if (!msg) {
+      msg = error.message
+    } else {
+      msg = error.response.statusText + (msg ? `: ${msg}` : '')
+    }
+
+    return msg;
   }
 
   if (error.request) {

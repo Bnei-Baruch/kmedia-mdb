@@ -1,5 +1,5 @@
 import React from 'react';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
 import { FN_PERSON } from '../../../helpers/consts';
@@ -22,4 +22,4 @@ const Person = ({ namespace, t }) => {
   );
 };
 
-export default withNamespaces()(Person);
+export default withTranslation()(Person);

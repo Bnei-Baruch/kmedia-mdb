@@ -1,5 +1,5 @@
 import React from 'react';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
 import { isEmpty } from '../../../helpers/utils';
@@ -22,4 +22,4 @@ const TagsFilter = props => {
   return <HierarchicalFilter name="topics-filter" tree={tree} {...props} />;
 };
 
-export default withNamespaces()(TagsFilter);
+export default withTranslation()(TagsFilter);

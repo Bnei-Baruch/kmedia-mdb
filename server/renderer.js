@@ -1,28 +1,29 @@
-import { URL } from 'url';
 import React from 'react';
+import { URL } from 'url';
 import ReactDOMServer from 'react-dom/server';
-import { matchRoutes } from 'react-router-config';
+import { matchRoutes } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
-import pick from 'lodash/pick';
-import moment from 'moment';
 import qs from 'qs';
 import serialize from 'serialize-javascript';
-import UAParser from 'ua-parser-js';
 import localStorage from 'mock-local-storage';
-import { HelmetProvider } from 'react-helmet-async';
 import { parse as cookieParse } from 'cookie';
 import crawlers from 'crawler-user-agents';
+import UAParser from 'ua-parser-js';
 
-import routes from '../src/routes';
+import useRoutes from '../src/route/routes';
 import { COOKIE_CONTENT_LANG, LANG_UI_LANGUAGES, LANG_UKRAINIAN } from '../src/helpers/consts';
-import { getLanguageDirection, getLanguageLocaleWORegion } from '../src/helpers/i18n-utils';
+import { getLanguageLocaleWORegion, getLanguageDirection } from '../src/helpers/i18n-utils';
 import { getLanguageFromPath } from '../src/helpers/url';
 import { isEmpty } from '../src/helpers/utils';
 import createStore from '../src/redux/createStore';
 import { actions as ssr } from '../src/redux/modules/ssr';
 import { actions as settings, initialState as settingsInitialState } from '../src/redux/modules/settings';
-import App from '../src/components/App/App';
 import i18nnext from './i18nnext';
+import App from '../src/components/App/App';
+import moment from 'moment/moment';
+import { pick } from 'lodash/object';
+import { HelmetProvider } from 'react-helmet-async';
+import ErrorBoundary from '../src/components/ErrorBoundary';
 
 const helmetContext = {};
 
@@ -30,6 +31,198 @@ const helmetContext = {};
 const DoNotRemove = localStorage; // DO NOT REMOVE - the import above does all the work
 
 const BASE_URL = process.env.REACT_APP_BASE_URL;
+
+export default function serverRender(req, res, next, htmlData) {
+  console.log('serverRender', req.originalUrl);
+
+  const { language, redirect } = getLanguageFromPath(req.originalUrl, req.headers, req.get('user-agent'));
+  if (redirect) {
+    const newUrl = `${BASE_URL}${language}${req.originalUrl}`;
+    console.log(`serverRender: redirect (${language}) => ${newUrl}`);
+    res.writeHead(307, { Location: newUrl });
+    res.end();
+    return;
+  }
+
+  const cookies = cookieParse(req.headers.cookie || '');
+  const bot     = isBot(req);
+  if (cookies['authorised'] || req.query.authorised || bot) {
+    serverRenderAuthorised(req, res, next, htmlData, language, bot);
+    return;
+  }
+
+  serverRenderSSOAuth(req, res, next, htmlData, language);
+}
+
+function serverRenderSSOAuth(req, res, next, htmlData) {
+  const rootDiv = `
+    <style>
+      .loader {
+        margin: auto;
+        border: 16px solid #f3f3f3;
+        border-top: 16px solid #3498db;
+        border-radius: 50%;
+        width: 120px;
+        height: 120px;
+        animation: spin 2s linear infinite;
+      }
+
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+    </style>
+    <div class="container">
+      <div class="loader"></div>
+    </div>
+    <script>window.__isAuthApp = true;</script>
+    `;
+  const html    = htmlData.replace(/<div id="root"><\/div>/, rootDiv);
+
+  console.log('AuthApp server render');
+  res.send(html);
+}
+
+async function serverRenderAuthorised(req, res, next, htmlData, language, bot) {
+
+  moment.locale(language === LANG_UKRAINIAN ? 'uk' : language);
+
+  const i18nServer = i18nnext.cloneInstance();
+  i18nServer.changeLanguage(language, err => {
+    if (err) {
+      next(err);
+      return;
+    }
+
+    const history = createMemoryHistory({
+      initialEntries: [req.originalUrl],
+    });
+
+    const cookies = cookieParse(req.headers.cookie || '');
+
+    const deviceInfo = new UAParser(req.get('user-agent')).getResult();
+
+    const initialState = {
+      settings: { ...settingsInitialState, language, contentLanguage: cookies[COOKIE_CONTENT_LANG], },
+    };
+
+    if (bot) {
+      initialState.auth = { user: { name: 'bot' } };
+    }
+
+    const store = createStore(initialState, history);
+    store.dispatch(settings.setLanguage(language));
+
+    const context = {
+      req,
+      data: {},
+      head: [],
+      i18n: i18nServer,
+    };
+
+    const routes  = useRoutes(<></>).map(r => ({ ...r, path: `${language}/${r.path}` }));
+    const reqPath = req.originalUrl.split('?')[0];
+    const branch  = matchRoutes(routes, reqPath) || [];
+    console.log('serverRender: for path %s was found branch %o', reqPath, branch);
+
+    let hrstart    = process.hrtime();
+    const promises = branch.map(({ route, params }) => (
+      route.ssrData
+        ? route.ssrData(store, { params, parsedURL: new URL(req.originalUrl, 'https://example.com') })
+        : Promise.resolve(null)
+    ));
+    let hrend      = process.hrtime(hrstart);
+
+    console.log('serverRender: fire ssrLoaders %ds %dms', hrend[0], hrend[1] / 1000000);
+    hrstart = process.hrtime();
+
+    Promise.all(promises)
+      .then(() => {
+        store.stopSagas();
+        hrend = process.hrtime(hrstart);
+        console.log('serverRender: Promise.all(promises) %ds %dms', hrend[0], hrend[1] / 1000000);
+        hrstart = process.hrtime();
+
+        store.rootSagaPromise
+          .then(() => {
+            hrend = process.hrtime(hrstart);
+            console.log('serverRender: rootSagaPromise.then %ds %dms', hrend[0], hrend[1] / 1000000);
+            hrstart      = process.hrtime();
+            // actual render
+            const markup = ReactDOMServer.renderToString(
+              <React.StrictMode>
+                <ErrorBoundary>
+                  <HelmetProvider context={helmetContext}>
+                    <App
+                      i18n={context.i18n}
+                      store={store}
+                      history={history}
+                      deviceInfo={deviceInfo}
+                    />
+                  </HelmetProvider>
+                </ErrorBoundary>
+              </React.StrictMode>
+            );
+            hrend        = process.hrtime(hrstart);
+            console.log('serverRender: renderToString %ds %dms', hrend[0], hrend[1] / 1000000);
+            hrstart = process.hrtime();
+
+            const { helmet } = helmetContext;
+            hrend            = process.hrtime(hrstart);
+            console.log('serverRender:  Helmet.renderStatic %ds %dms', hrend[0], hrend[1] / 1000000);
+
+            if (context.url) {
+              // Somewhere a `<Redirect>` was rendered
+              res.redirect(301, context.url);
+            } else {
+              // we're good, add in markup, send the response
+              const direction    = getLanguageDirection(language);
+              const cssDirection = direction === 'ltr' ? '' : '.rtl';
+
+              store.dispatch(ssr.prepare());
+              // console.log(require('util').inspect(store.getState(), { showHidden: true, depth: 2 }));
+              const storeData = serialize(store.getState());
+
+              const i18nData = serialize(
+                {
+                  initialLanguage: context.i18n.language,
+                  initialI18nStore: pick(context.i18n.services.resourceStore.data, [
+                    context.i18n.language,
+                    context.i18n.options.fallbackLng,
+                  ]),
+                }
+              );
+
+              const rootDiv = `<div id="root" class="${direction}" style="direction: ${direction}">${markup}</div>
+<script>
+  window.__data = ${storeData};
+  window.__i18n = ${i18nData};
+</script>`;
+
+              const html = htmlData
+                .replace(/<html lang="en">/, `<html lang="en" ${helmet.htmlAttributes.toString()} >`)
+                .replace(/<title>.*<\/title>/, helmet.title.toString())
+                .replace(/<\/head>/, `${helmet.meta.toString()}${helmet.link.toString()}${canonicalLink(req, language)}${alternateLinks(req, language)}${ogUrl(req, language)}</head>`)
+                .replace(/<body>/, `<body ${helmet.bodyAttributes.toString()} >`)
+                .replace(/semantic_v4.min.css/g, `semantic_v4${cssDirection}.min.css`)
+                .replace(/<div id="root"><\/div>/, rootDiv);
+
+              if (context.code) {
+                res.status(context.code);
+              }
+
+              res.send(html);
+            }
+          })
+          .catch(next);
+      })
+      .catch(next);
+  });
+}
+
+function isBot(req) {
+  return crawlers.some(entry => RegExp(entry.pattern).test(req.headers['user-agent']));
+}
 
 // see https://yoast.com/rel-canonical/
 function canonicalLink(req, lang) {
@@ -116,140 +309,4 @@ function ogUrl(req, lang) {
   }
 
   return `<meta property="og:url" content="${BASE_URL}${lang}/${aPath}" />`;
-}
-
-export default function serverRender(req, res, next, htmlData) {
-  console.log('serverRender', req.originalUrl);
-  const { language, redirect } = getLanguageFromPath(req.originalUrl, req.headers, req.get('user-agent'));
-  if (redirect) {
-    const newUrl = `${BASE_URL}${language}${req.originalUrl}`;
-    console.log(`serverRender: redirect (${language}) => ${newUrl}`);
-    res.writeHead(307, { Location: newUrl });
-    res.end();
-    return;
-  }
-
-  moment.locale(language === LANG_UKRAINIAN ? 'uk' : language);
-
-  const i18nServer = i18nnext.cloneInstance();
-  i18nServer.changeLanguage(language, err => {
-    if (err) {
-      next(err);
-      return;
-    }
-
-    const history = createMemoryHistory({
-      initialEntries: [req.originalUrl],
-    });
-
-    const cookies = cookieParse(req.headers.cookie || '');
-
-    const deviceInfo = new UAParser(req.get('user-agent')).getResult();
-
-    const initialState = {
-      settings: { ...settingsInitialState, language, contentLanguage: cookies[COOKIE_CONTENT_LANG], },
-    };
-    if (isBot(req)) {
-      initialState.auth = { user: { name: 'bot' } };
-    }
-
-    const store = createStore(initialState, history);
-    store.dispatch(settings.setLanguage(language));
-
-    const context = {
-      req,
-      data: {},
-      head: [],
-      i18n: i18nServer,
-    };
-
-    const reqPath = req.originalUrl.split('?')[0];
-    const branch  = matchRoutes(routes, reqPath);
-
-    let hrstart    = process.hrtime();
-    const promises = branch.map(({ route, match }) => (
-      route.ssrData
-        ? route.ssrData(store, { ...match, parsedURL: new URL(req.originalUrl, 'https://example.com') })
-        : Promise.resolve(null)
-    ));
-
-    let hrend = process.hrtime(hrstart);
-    console.log('serverRender: fire ssrLoaders %ds %dms', hrend[0], hrend[1] / 1000000);
-    hrstart = process.hrtime();
-
-    Promise.all(promises)
-      .then(() => {
-        store.stopSagas();
-        hrend = process.hrtime(hrstart);
-        console.log('serverRender: Promise.all(promises) %ds %dms', hrend[0], hrend[1] / 1000000);
-        hrstart = process.hrtime();
-
-        store.rootSagaPromise
-          .then(() => {
-            hrend = process.hrtime(hrstart);
-            console.log('serverRender: rootSagaPromise.then %ds %dms', hrend[0], hrend[1] / 1000000);
-            hrstart = process.hrtime();
-
-            // actual render
-            const markup = ReactDOMServer.renderToString(
-              <HelmetProvider context={helmetContext}><App i18n={context.i18n} store={store} history={history} deviceInfo={deviceInfo} /></HelmetProvider>);
-            hrend        = process.hrtime(hrstart);
-            console.log('serverRender: renderToString %ds %dms', hrend[0], hrend[1] / 1000000);
-            hrstart = process.hrtime();
-
-            const { helmet } = helmetContext;
-            hrend            = process.hrtime(hrstart);
-            console.log('serverRender:  Helmet.renderStatic %ds %dms', hrend[0], hrend[1] / 1000000);
-
-            if (context.url) {
-              // Somewhere a `<Redirect>` was rendered
-              res.redirect(301, context.url);
-            } else {
-              // we're good, add in markup, send the response
-              const direction    = getLanguageDirection(language);
-              const cssDirection = direction === 'ltr' ? '' : '.rtl';
-
-              store.dispatch(ssr.prepare());
-              // console.log(require('util').inspect(store.getState(), { showHidden: true, depth: 2 }));
-              const storeData = serialize(store.getState());
-
-              const i18nData = serialize(
-                {
-                  initialLanguage: context.i18n.language,
-                  initialI18nStore: pick(context.i18n.services.resourceStore.data, [
-                    context.i18n.language,
-                    context.i18n.options.fallbackLng,
-                  ]),
-                }
-              );
-
-              const rootDiv = `<div id="root" class="${direction}" style="direction: ${direction}">${markup}</div>
-<script>
-  window.__data = ${storeData};
-  window.__i18n = ${i18nData};
-</script>`;
-
-              const html = htmlData
-                .replace(/<html lang="en">/, `<html lang="en" ${helmet.htmlAttributes.toString()} >`)
-                .replace(/<title>.*<\/title>/, helmet.title.toString())
-                .replace(/<\/head>/, `${helmet.meta.toString()}${helmet.link.toString()}${canonicalLink(req, language)}${alternateLinks(req, language)}${ogUrl(req, language)}</head>`)
-                .replace(/<body>/, `<body ${helmet.bodyAttributes.toString()} >`)
-                .replace(/semantic_v4.min.css/g, `semantic_v4${cssDirection}.min.css`)
-                .replace(/<div id="root"><\/div>/, rootDiv);
-
-              if (context.code) {
-                res.status(context.code);
-              }
-
-              res.send(html);
-            }
-          })
-          .catch(next);
-      })
-      .catch(next);
-  });
-}
-
-function isBot(req) {
-  return crawlers.some(entry => RegExp(entry.pattern).test(req.headers['user-agent']));
 }

@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { Button, Modal, } from 'semantic-ui-react';
 
 import NeedToLogin from '../../Sections/Personal/NeedToLogin';
@@ -61,4 +61,4 @@ BookmarkButton.propTypes = {
   source: PropTypes.object.isRequired,
 };
 
-export default withNamespaces()(BookmarkButton);
+export default withTranslation()(BookmarkButton);

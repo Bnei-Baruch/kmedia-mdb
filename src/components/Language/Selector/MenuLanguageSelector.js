@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { Dropdown } from 'semantic-ui-react';
 import classNames from 'classnames';
 import { noop } from '../../../helpers/utils';
@@ -51,4 +51,4 @@ const MenuLanguageSelector = ({ languages = [], defaultValue: value = LANG_HEBRE
     DesktopLanguageSelector(value, fluid, options, handleSelect, blink);
 };
 
-export default withNamespaces()(MenuLanguageSelector);
+export default withTranslation()(MenuLanguageSelector);

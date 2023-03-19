@@ -1,15 +1,14 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectors, actions } from '../../redux/modules/filters';
 
 const FiltersHydrator = ({ namespace, onHydrated }) => {
 
-  const isHydrated  = useSelector(state => selectors.getIsHydrated(state.filters, namespace));
-  const [hydrated, setHydrated] = useState(false);
+  const isHydrated = useSelector(state => selectors.getIsHydrated(state.filters, namespace));
+  const hydrated   = useRef(false);
 
   const dispatch = useDispatch();
-
   useEffect(() => {
     if (isHydrated) {
       dispatch(actions.filtersHydrated(namespace));
@@ -17,15 +16,14 @@ const FiltersHydrator = ({ namespace, onHydrated }) => {
       if (onHydrated) {
         onHydrated(namespace);
       }
-
-    } else if (!hydrated) {
+    } else if (!hydrated.current) {
       dispatch(actions.hydrateFilters(namespace));
-      setHydrated(true);
+      hydrated.current = true;
     }
-  }, [dispatch, hydrated, isHydrated, namespace, onHydrated]);
+  }, [dispatch, hydrated.current, isHydrated, namespace]);
 
   return null;
-}
+};
 
 FiltersHydrator.propTypes = {
   namespace: PropTypes.string.isRequired,

@@ -3,9 +3,8 @@ import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
-import { push as routerPush, replace as routerReplace } from 'connected-react-router';
-import { withNamespaces } from 'react-i18next';
+import { push as routerPush, replace as routerReplace } from '@lagunovsky/redux-react-router';
+import { withTranslation } from 'react-i18next';
 import { Button, Container, Grid, Header, Input, Ref, Segment } from 'semantic-ui-react';
 import Headroom from 'react-headroom';
 
@@ -26,6 +25,7 @@ import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { getQuery } from '../../../helpers/url';
 import { SCROLL_SEARCH_ID } from '../../../helpers/consts';
+import { withRouter } from '../../../helpers/withRouterPatch';
 import { renderTags } from '../../../helpers/utils';
 
 const waitForRenderElement = async (attempts = 0) => {
@@ -61,7 +61,7 @@ class LibraryContainer extends Component {
     t: PropTypes.func.isRequired,
     push: PropTypes.func.isRequired,
     replace: PropTypes.func.isRequired,
-    history: shapes.History.isRequired,
+    navigate: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -83,6 +83,84 @@ class LibraryContainer extends Component {
     match: '',
     scrollTopPosition: 0,
   };
+
+  static getFullPath = (sourceId, getPathByID) => {
+    // Go to the root of this sourceId
+    if (!getPathByID) {
+      return [{ id: '0' }, { id: sourceId }];
+    }
+
+    const path = getPathByID(sourceId);
+
+    if (!path || path.length < 2 || !path[1]) {
+      return [{ id: '0' }, { id: sourceId }];
+    }
+
+    return path;
+  };
+
+  static nextPrevButtons = props => {
+    const { sourceId, getPathByID } = props;
+
+    if (isTaas(sourceId)) {
+      return null;
+    }
+
+    const fullPath = LibraryContainer.getFullPath(sourceId, getPathByID);
+
+    const len = fullPath.length;
+
+    if (len < 2) {
+      return null;
+    }
+
+    const activeIndex = getIndex(fullPath[len - 2], fullPath[len - 1]);
+    if (activeIndex === -1) {
+      return null;
+    }
+
+    const { children } = fullPath[len - 2];
+    return (
+      <div className="library__nextPrevButtons">
+        {LibraryContainer.nextPrevLink(children, activeIndex - 1, false, props)}
+        {LibraryContainer.nextPrevLink(children, activeIndex + 1, true, props)}
+      </div>
+    );
+  };
+
+  static getNextPrevDetails(isNext, language, t) {
+    const langDir = getLanguageDirection(language);
+
+    const title         = isNext ? t('buttons.next-article') : t('buttons.previous-article');
+    const labelPosition = isNext ? 'right' : 'left';
+    const icon          = isNext ? (langDir === 'ltr' ? 'forward' : 'backward') : (langDir === 'ltr' ? 'backward' : 'forward');
+    const buttonAlign   = isNext ? (langDir === 'ltr' ? 'right' : 'left') : (langDir === 'ltr' ? 'left' : 'right');
+
+    return { title, labelPosition, buttonAlign, icon };
+  }
+
+  static nextPrevLink(children, index, isNext, { push, t, language, getSourceById }) {
+    if (index < 0 || index > children.length - 1) {
+      return null;
+    }
+
+    const { title, labelPosition, buttonAlign, icon } = LibraryContainer.getNextPrevDetails(isNext, language, t);
+    const sourceId                                    = children[index];
+    const source                                      = getSourceById(sourceId);
+    return (
+      <Button
+        onClick={e => {
+          push(`sources/${sourceId}`);
+          e.target.blur();
+        }}
+        className={`library__nextPrevButton align-${buttonAlign}`}
+        size="mini"
+        icon={icon}
+        labelPosition={labelPosition}
+        content={title}
+        title={source.name} />
+    );
+  }
 
   shouldComponentUpdate(nextProps, nextState) {
     const { sourceId, indexMap, language, contentLanguage, sortBy, areSourcesLoaded }                    = this.props;
@@ -113,8 +191,9 @@ class LibraryContainer extends Component {
     window.addEventListener('resize', this.updateSticky);
     window.addEventListener('load', this.updateSticky);
 
-    const { sourceId, areSourcesLoaded, history }                                      = this.props;
-    const { location: { state: { tocIsActive } = { state: { tocIsActive: false } } } } = history;
+    const { sourceId, areSourcesLoaded, location } = this.props;
+
+    const tocIsActive = location.state?.tocIsActive || false;
 
     if (tocIsActive || sourceId === 'grRABASH') {
       this.setState({ tocIsActive: true });
@@ -202,6 +281,8 @@ class LibraryContainer extends Component {
     return this.firstLeafId(children[0]);
   };
 
+  // handleLangContainerRef = (ref) => this.langContainerRef = ref;
+
   updateSticky = () => {
     // check fixed header width in pixels for text-overflow:ellipsis
     if (this.contentHeaderRef) {
@@ -217,8 +298,6 @@ class LibraryContainer extends Component {
   handleContentArticleRef = ref => this.articleRef = ref;
 
   handleContentHeaderRef = ref => this.contentHeaderRef = ref;
-
-  // handleLangContainerRef = (ref) => this.langContainerRef = ref;
 
   handleTocIsActive = () => {
     const { tocIsActive } = this.state;
@@ -348,21 +427,6 @@ class LibraryContainer extends Component {
     );
   };
 
-  static getFullPath = (sourceId, getPathByID) => {
-    // Go to the root of this sourceId
-    if (!getPathByID) {
-      return [{ id: '0' }, { id: sourceId }];
-    }
-
-    const path = getPathByID(sourceId);
-
-    if (!path || path.length < 2 || !path[1]) {
-      return [{ id: '0' }, { id: sourceId }];
-    }
-
-    return path;
-  };
-
   getContent = () => {
     const { sourceId, indexMap, t } = this.props;
     const index                     = isEmpty(sourceId) ? {} : indexMap[sourceId];
@@ -374,79 +438,18 @@ class LibraryContainer extends Component {
       content = getSourceErrorSplash(err, t);
     } else {
       const downloadAllowed = this.context.deviceInfo.os.name !== 'iOS';
-      content               =
+
+      content = (
         <Library
           source={sourceId}
           data={data}
           downloadAllowed={downloadAllowed}
-        />;
+        />
+      );
     }
 
     return content;
   };
-
-  static nextPrevButtons = props => {
-    const { sourceId, getPathByID } = props;
-
-    if (isTaas(sourceId)) {
-      return null;
-    }
-
-    const fullPath = LibraryContainer.getFullPath(sourceId, getPathByID);
-
-    const len = fullPath.length;
-
-    if (len < 2) {
-      return null;
-    }
-
-    const activeIndex = getIndex(fullPath[len - 2], fullPath[len - 1]);
-    if (activeIndex === -1) {
-      return null;
-    }
-
-    const { children } = fullPath[len - 2];
-    return (
-      <div className="library__nextPrevButtons">
-        {LibraryContainer.nextPrevLink(children, activeIndex - 1, false, props)}
-        {LibraryContainer.nextPrevLink(children, activeIndex + 1, true, props)}
-      </div>
-    );
-  };
-
-  static getNextPrevDetails(isNext, language, t) {
-    const langDir = getLanguageDirection(language);
-
-    const title         = isNext ? t('buttons.next-article') : t('buttons.previous-article');
-    const labelPosition = isNext ? 'right' : 'left';
-    const icon          = isNext ? (langDir === 'ltr' ? 'forward' : 'backward') : (langDir === 'ltr' ? 'backward' : 'forward');
-    const buttonAlign   = isNext ? (langDir === 'ltr' ? 'right' : 'left') : (langDir === 'ltr' ? 'left' : 'right');
-
-    return { title, labelPosition, buttonAlign, icon };
-  }
-
-  static nextPrevLink(children, index, isNext, { push, t, language, getSourceById }) {
-    if (index < 0 || index > children.length - 1) {
-      return null;
-    }
-
-    const { title, labelPosition, buttonAlign, icon } = LibraryContainer.getNextPrevDetails(isNext, language, t);
-    const sourceId                                    = children[index];
-    const source                                      = getSourceById(sourceId);
-    return (
-      <Button
-        onClick={e => {
-          push(`sources/${sourceId}`);
-          e.target.blur();
-        }}
-        className={`library__nextPrevButton align-${buttonAlign}`}
-        size="mini"
-        icon={icon}
-        labelPosition={labelPosition}
-        content={title}
-        title={source.name} />
-    );
-  }
 
   render() {
     const { sourceId, getSourceById, getPathByID, getTagById, language, contentLanguage, t, push, areSourcesLoaded, unit } = this.props;
@@ -572,7 +575,7 @@ export default withRouter(connect(
     unit: mdb.getDenormContentUnit(state.mdb, ownProps.match.params.id),
     indexMap: assets.getSourceIndexById(state.assets),
     language: settings.getLanguage(state.settings),
-    contentLanguage: settings.getContentLanguage(state.settings, ownProps.history.location),
+    contentLanguage: settings.getContentLanguage(state.settings, ownProps.location),
     getSourceById: sources.getSourceById(state.sources),
     getPathByID: sources.getPathByID(state.sources),
     getTagById: tags.getTagById(state.tags),
@@ -588,4 +591,4 @@ export default withRouter(connect(
     push: routerPush,
     replace: routerReplace,
   }, dispatch)
-)(withNamespaces()(withRouter(LibraryContainer))));
+)(withTranslation()(withRouter(LibraryContainer))));

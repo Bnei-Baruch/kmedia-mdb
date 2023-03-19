@@ -1,6 +1,6 @@
 import { isEqual } from 'lodash';
 import React, { useCallback, useEffect, useMemo } from 'react';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useParams } from 'react-router-dom';
 import { Container, Divider } from 'semantic-ui-react';
@@ -35,7 +35,7 @@ const LessonPage = ({ t }) => {
   const prevSel                    = usePrevious(selected);
 
   const dispatch = useDispatch();
-  const setPage  = useCallback(pageNo => dispatch(actions.setPage(namespace, pageNo)), [dispatch]);
+  const setPage  = useCallback(pageNo => dispatch(actions.setPage(namespace, pageNo)), [namespace, dispatch]);
 
   const location   = useLocation();
   const pageNo     = useMemo(() => getPageFromLocation(location) || 1, [location]);
@@ -82,4 +82,4 @@ const LessonPage = ({ t }) => {
   </>);
 };
 
-export default withNamespaces()(LessonPage);
+export default withTranslation()(LessonPage);

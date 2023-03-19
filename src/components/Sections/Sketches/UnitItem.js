@@ -1,5 +1,5 @@
 import React from 'react';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Card } from 'semantic-ui-react';
 import { canonicalLink } from '../../../helpers/links';
@@ -14,7 +14,7 @@ import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import { selectors as settings } from '../../../redux/modules/settings';
 import GalleryModal from './ZipFileModal';
 import ImageFileModal from './ImageFileModal';
-import { isZipFile } from '../../Pages/Unit/widgets/UnitMaterials/helper';
+import { isZipFile } from '../../Pages/WithPlayer/widgets/UnitMaterials/helper';
 
 const findZipFile = (cu, language) => {
   const zips = cu.files
@@ -82,4 +82,4 @@ const UnitItem = ({ id, t }) => {
   );
 };
 
-export default withNamespaces()(UnitItem);
+export default withTranslation()(UnitItem);
