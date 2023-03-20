@@ -92,7 +92,8 @@ app.use(helmet({
       'worker-src': [
         'blob:',
         '*.kabbalahmedia.info'
-      ]
+      ],
+      'frame-ancestors': ['*']
     },
     browserSniff: false       // we're not targeting really old browsers
   }
