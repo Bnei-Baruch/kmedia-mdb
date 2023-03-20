@@ -8,7 +8,7 @@ import { withTranslation } from 'react-i18next';
 import { Button, Container, Grid, Header, Input, Ref, Segment } from 'semantic-ui-react';
 import Headroom from 'react-headroom';
 
-import { isEmpty } from '../../../helpers/utils';
+import { isEmpty, renderTags } from '../../../helpers/utils';
 import { actions as assetsActions, selectors as assets } from '../../../redux/modules/assets';
 import { actions as sourceActions, selectors as sources } from '../../../redux/modules/sources';
 import { selectors as settings } from '../../../redux/modules/settings';
@@ -26,7 +26,6 @@ import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { getQuery } from '../../../helpers/url';
 import { SCROLL_SEARCH_ID } from '../../../helpers/consts';
 import { withRouter } from '../../../helpers/withRouterPatch';
-import { renderTags } from '../../../helpers/utils';
 
 const waitForRenderElement = async (attempts = 0) => {
   if (attempts > 10) return Promise.reject();
@@ -261,13 +260,16 @@ class LibraryContainer extends Component {
   }
 
   fetchIndices = sourceId => {
-    const { indexMap, fetchIndex, fetchUnit } = this.props;
+    const { indexMap, fetchIndex, fetchUnit, unitFetched } = this.props;
     if (isEmpty(sourceId) || !isEmpty(indexMap[sourceId])) {
       return;
     }
 
     fetchIndex(sourceId);
-    fetchUnit(sourceId);
+
+    if (!unitFetched) {
+      fetchUnit(sourceId);
+    }
   };
 
   firstLeafId = sourceId => {
@@ -452,7 +454,18 @@ class LibraryContainer extends Component {
   };
 
   render() {
-    const { sourceId, getSourceById, getPathByID, getTagById, language, contentLanguage, t, push, areSourcesLoaded, unit } = this.props;
+    const {
+            sourceId,
+            getSourceById,
+            getPathByID,
+            getTagById,
+            language,
+            contentLanguage,
+            t,
+            push,
+            areSourcesLoaded,
+            unit
+          } = this.props;
 
     if (!areSourcesLoaded)
       return null;
@@ -502,8 +515,8 @@ class LibraryContainer extends Component {
                   </Grid.Column>
                   <Grid.Column mobile={16} tablet={16} computer={12} className="source__content-header">
                     <div className="source__header-title">
-                      { this.header(sourceId, parentId) }
-                      { tagNames && renderTags(tagNames) }
+                      {this.header(sourceId, parentId)}
+                      {tagNames && renderTags(tagNames)}
                     </div>
 
                     <LibraryBar
@@ -550,7 +563,6 @@ class LibraryContainer extends Component {
                   [`size${fontSize}`]: true,
                 })}
               >
-                {/*<div ref={this.handleLangContainerRef}></div>*/}
                 <Ref innerRef={this.handleContextRef}>
                   <div
                     className="source__content font_settings"
@@ -569,11 +581,12 @@ class LibraryContainer extends Component {
   }
 }
 
-export default withRouter(connect(
+export default withTranslation()(withRouter(connect(
   (state, ownProps) => ({
-    sourceId: ownProps.match.params.id,
-    unit: mdb.getDenormContentUnit(state.mdb, ownProps.match.params.id),
+    sourceId: ownProps.params?.id,
+    unit: mdb.getDenormContentUnit(state.mdb, ownProps.params?.id),
     indexMap: assets.getSourceIndexById(state.assets),
+    unitFetched: mdb.getFullUnitFetched(state.mdb)[ownProps.params?.id],
     language: settings.getLanguage(state.settings),
     contentLanguage: settings.getContentLanguage(state.settings, ownProps.location),
     getSourceById: sources.getSourceById(state.sources),
@@ -591,4 +604,4 @@ export default withRouter(connect(
     push: routerPush,
     replace: routerReplace,
   }, dispatch)
-)(withTranslation()(withRouter(LibraryContainer))));
+)(LibraryContainer)));

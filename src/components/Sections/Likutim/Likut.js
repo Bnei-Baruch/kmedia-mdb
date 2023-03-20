@@ -23,7 +23,6 @@ import Download from '../../shared/Download/Download';
 import ScrollToSearch from '../../shared/DocToolbar/ScrollToSearch';
 import AudioPlayer from '../../shared/AudioPlayer';
 
-
 // expected unit of type Likutim
 const Likut = ({ t }) => {
   const { id } = useParams();
@@ -43,7 +42,6 @@ const Likut = ({ t }) => {
   const [scrollTopPosition, setScrollTopPosition] = useState(0);
   const [scrollingElement, setScrollingElement]   = useState(null);
   const articleRef                                = useRef();
-
 
   useEffect(() => {
     const scrollingElement = isReadable ? articleRef.current : document.scrollingElement;
@@ -81,11 +79,11 @@ const Likut = ({ t }) => {
         setLanguage(LANG_HEBREW);
       }
 
-      if (f) {
+      if (f && f.id !== file?.id) {
         setFile(f);
       }
     }
-  }, [dispatch, language, unit]);
+  }, [dispatch, language, unit, file]);
 
   useEffect(() => {
     if (file) {
@@ -171,8 +169,8 @@ const Likut = ({ t }) => {
               </Grid.Column>
             </Grid>
           </div>
-          <div className='likut__audio'>
-            { mp3File && <AudioPlayer mp3={mp3File} /> }
+          <div className="likut__audio">
+            {mp3File && <AudioPlayer mp3={mp3File} />}
           </div>
 
           {/* content */}

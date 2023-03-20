@@ -10,7 +10,7 @@ import { getMyItemKey } from '../../../../helpers/my';
 import clsx from 'clsx';
 
 export const PlaylistItem = ({ item, t, language, asList = false }) => {
-  const dir = getLanguageDirection(language)
+  const dir     = getLanguageDirection(language);
   const link    = `/personal/${MY_NAMESPACE_PLAYLISTS}/${item.id}`;
   const { key } = getMyItemKey(MY_NAMESPACE_PLAYLISTS, item);
 
