@@ -5,7 +5,6 @@ import { Container, Header, Popup, Ref } from 'semantic-ui-react';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { NO_NAME } from '../../../helpers/consts';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
-import { formatDuration } from '../../../helpers/utils';
 import Link from '../../Language/MultiLanguageLink';
 
 import * as shapes from '../../shapes';

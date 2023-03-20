@@ -5,7 +5,7 @@ import { FN_TOPICS_MULTI } from '../../../helpers/consts';
 import { selectors as tags } from '../../../redux/modules/tags';
 import TagSourceItem from '../../FiltersAside/TopicsFilter/TagSourceItem';
 import TagSourceItemModal from '../../FiltersAside/TopicsFilter/TagSourceItemModal';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { selectors as filters } from '../../../redux/modules/filters';
 import FilterHeader from '../../FiltersAside/FilterHeader';
 import { Button, Input } from 'semantic-ui-react';
@@ -29,11 +29,11 @@ const getItemsRecursive = (rootID, getById, base) => {
   return resp;
 };
 
-const SubTopics = ({ namespace, rootID, t }) => {
-  const [open, setOpen]             = useState(false);
-  const [isSelected, setIsSelected] = useState(false);
-  const [query, setQuery]           = useState();
+const SubTopics = ({ namespace, rootID }) => {
+  const [open, setOpen]   = useState(false);
+  const [query, setQuery] = useState();
 
+  const { t }           = useTranslation();
   const getTagById      = useSelector(state => tags.getTagById(state.tags));
   const getPathTags     = useSelector(state => tags.getPathByID(state.tags));
   const roots           = useSelector(state => tags.getRoots(state.tags));
@@ -41,23 +41,16 @@ const SubTopics = ({ namespace, rootID, t }) => {
   const selectedFilters = useSelector(state => filters.getFilterByName(state.filters, namespace, FN_TOPICS_MULTI));
   const selected        = useMemo(() => selectedFilters?.values || [], [selectedFilters]);
 
-  console.log('SELECTED', selected);
-
   const root  = getTagById(rootID);
   const items = useMemo(() => getItemsRecursive(rootID, getTagById, baseItems) || [], [rootID, getTagById, baseItems]);
 
   useEffect(() => setQuery(null), []);
-
-  useEffect(() => {
-    const sel = selected.includes(rootID);
-    setIsSelected(sel);
-  }, [selected, rootID]);
+  const isSelected = selected.includes(rootID);
 
   const toggleOpen = () => setOpen(!open);
 
   const handleSetQuery = (e, data) => setQuery(data.value);
 
-  console.log('roots', roots);
   const children = rootID ? root.children?.filter(r => items.includes(r)) : roots;
 
   if (!(children?.length > 0))
@@ -68,13 +61,13 @@ const SubTopics = ({ namespace, rootID, t }) => {
       {
         children.slice(0, MAX_SHOWED_ITEMS)
           .map(r => <TagSourceItem
-            id={r}
-            namespace={namespace}
-            baseItems={items}
-            filterName={FN_TOPICS_MULTI}
-            deep={0}
-            key={r}
-          />
+              id={r}
+              namespace={namespace}
+              baseItems={items}
+              filterName={FN_TOPICS_MULTI}
+              deep={0}
+              key={r}
+            />
           )
       }
       {
@@ -127,4 +120,4 @@ const SubTopics = ({ namespace, rootID, t }) => {
   );
 };
 
-export default withTranslation()(SubTopics);
+export default SubTopics;

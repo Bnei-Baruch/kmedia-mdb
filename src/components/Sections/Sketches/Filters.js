@@ -1,6 +1,6 @@
 import { isEqual } from 'lodash';
-import React, { useEffect, useState } from 'react';
-import { withTranslation } from 'react-i18next';
+import React, { useEffect, useState, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Container, Header } from 'semantic-ui-react';
 import { FN_SOURCES_MULTI, FN_TOPICS_MULTI } from '../../../helpers/consts';
@@ -14,12 +14,14 @@ import OriginalLanguageFilter from '../../FiltersAside/OriginalLanguageFilter/Or
 import TagSourceFilter from '../../FiltersAside/TopicsFilter/TagSourceFilter';
 import ContentTypeFilter from './ContentTypeFilter';
 
-const Filters = ({ namespace, baseParams, t }) => {
+const Filters = ({ namespace, baseParams }) => {
   const [isHydrated, setIsHydrated] = useState(false);
 
+  const { t }        = useTranslation();
   const isReady      = useSelector(state => selectors.isReady(state.filtersAside, namespace));
   const { wip, err } = useSelector(state => selectors.getWipErr(state.filtersAside, namespace));
   const selected     = useSelector(state => filters.getNotEmptyFilters(state.filters, namespace), isEqual);
+  const prevSelRef   = useRef(-1);
 
   const dispatch = useDispatch();
   const _isReady = !isReady && !wip && !err;
@@ -32,14 +34,16 @@ const Filters = ({ namespace, baseParams, t }) => {
     }
   }, [namespace, _isReady, baseParams, dispatch]);
 
+  const selLen = selected.reduce((acc, x) => acc + x.values.length, 0);
   useEffect(() => {
-    if (isHydrated && isReady) {
+    if (isHydrated && isReady && prevSelRef.current !== selLen) {
       dispatch(actions.fetchStats(namespace,
         { ...baseParams, with_original_languages: true },
         { isPrepare: false }
       ));
+      prevSelRef.current = selLen;
     }
-  }, [isHydrated, isReady, selected, baseParams, namespace, dispatch]);
+  }, [isHydrated, isReady, selLen, baseParams, namespace, dispatch]);
 
   const handleOnHydrated = () => setIsHydrated(true);
 
@@ -57,4 +61,4 @@ const Filters = ({ namespace, baseParams, t }) => {
   );
 };
 
-export default withTranslation()(Filters);
+export default Filters;

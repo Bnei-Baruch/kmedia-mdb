@@ -1,5 +1,4 @@
 import { createAction } from 'redux-actions';
-import identity from 'lodash/identity';
 
 import { tracePath } from '../../helpers/utils';
 import { TOPICS_FOR_DISPLAY } from '../../helpers/consts';
@@ -53,7 +52,6 @@ export const actions = {
 const initialState = {
   wip: false,
   error: null,
-  getByID: identity,
   dashboard: { items: [], mediaTotal: 0, textTotal: 0 },
   loaded: false,
 };
@@ -80,11 +78,9 @@ const buildById = items => {
 };
 
 const onSSRPrepare = draft => {
-  draft.wip         = false;
-  draft.loaded      = false;
-  draft.getByID     = identity;
-  draft.getPathByID = () => [];
-  draft.dashboard   = { items: [], mediaTotal: 0, textTotal: 0 };
+  draft.wip       = false;
+  draft.loaded    = false;
+  draft.dashboard = { items: [], mediaTotal: 0, textTotal: 0 };
 
   if (draft.error) {
     draft.error = draft.error.toString();
@@ -94,33 +90,17 @@ const onSSRPrepare = draft => {
 const onReceiveTags = (draft, payload) => {
   const byId = buildById(payload);
 
-  function getByID(id) {
-    return byId[id];
-  }
-
-  function getPath(source) {
-    return tracePath(source, getByID);
-  }
-
-  function getPathByID(id) {
-    return getPath(getByID(id));
-  }
-
   const roots        = payload.map(x => x.id);
   const displayRoots = roots.filter(x => TOPICS_FOR_DISPLAY.indexOf(x) !== -1);
 
   draft.byId         = byId;
-  // we keep those in state to avoid recreating them every time a selector is called
-  draft.getByID      = getByID;
-  draft.getPath      = getPath;
-  draft.getPathByID  = getPathByID;
   draft.roots        = roots;
   draft.displayRoots = displayRoots;
   draft.loaded       = true;
 };
 
 const onDashboard = draft => {
-  draft.wip    = true;
+  draft.wip = true;
 };
 
 const onDashboardSuccess = (draft, { items = [], mediaTotal, textTotal }) => {
@@ -130,10 +110,9 @@ const onDashboardSuccess = (draft, { items = [], mediaTotal, textTotal }) => {
 };
 
 const onSetLanguage = draft => {
-  draft.loaded  = false;
-  draft.wip     = false;
-  draft.err     = null;
-  draft.getByID = identity;
+  draft.loaded = false;
+  draft.wip    = false;
+  draft.err    = null;
 };
 
 const onFetchDashboardFailure = (draft, payload) => {
@@ -159,9 +138,12 @@ const areTagsLoaded   = state => state.loaded;
 const getTags         = state => state.byId;
 const getRoots        = state => state.roots;
 const getDisplayRoots = state => state.displayRoots;
-const getTagById      = state => state.getByID;
-const getPath         = state => state.getPath;
-const getPathByID     = state => state.getPathByID;
+const getTagById      = state => id => state.byId[id];
+const getPath         = state => (source) => tracePath(source, getTagById(state));
+const getPathByID     = state => {
+  const _byId = getTagById(state);
+  return id => tracePath(_byId(id), _byId);
+};
 const getWip          = state => state.wip;
 const getError        = state => state.error;
 

@@ -1,10 +1,10 @@
+import React, { useEffect, useRef } from 'react';
+import isEqual from 'react-fast-compare';
+import { Button } from 'semantic-ui-react';
+import escapeRegExp from 'lodash/escapeRegExp';
+import isFunction from 'lodash/isFunction';
 import moment from 'moment';
 import 'moment-duration-format';
-import escapeRegExp from 'lodash/escapeRegExp';
-import _ from 'lodash';
-import isEqual from 'react-fast-compare';
-import { useEffect, useRef } from 'react';
-import { Button } from 'semantic-ui-react';
 
 import { CollectionsBreakdown } from './mdb';
 import { canonicalSectionByLink, canonicalSectionByUnit } from './links';
@@ -75,9 +75,9 @@ export const formatError = error => {
     // that falls out of the range of 2xx
     let msg = error.response.data?.error;
     if (!msg) {
-      msg = error.message
+      msg = error.message;
     } else {
-      msg = error.response.statusText + (msg ? `: ${msg}` : '')
+      msg = error.response.statusText + (msg ? `: ${msg}` : '');
     }
 
     return msg;
@@ -292,7 +292,7 @@ const removeFunctions = fromObj => {
   const obj = {};
   // @description it only removes functions that are not inside nested object properties.
   // you can improve with recursion to remove all functions inside an object.
-  Object.keys(fromObj).forEach(key => !_.isFunction(fromObj[key]) && (obj[key] = fromObj[key]));
+  Object.keys(fromObj).forEach(key => !isFunction(fromObj[key]) && (obj[key] = fromObj[key]));
   return obj;
 };
 
@@ -468,15 +468,15 @@ export const distinct = (value, index, arr) => arr.indexOf(value) === index;
 
 export const renderTags = tagNames => (
   tagNames?.length > 0 &&
-      <div className="unit-tags-bar">
-        {
-          tagNames
-            .filter(distinct)
-            .map((tag, index) =>
-              <Button key={`${tag.id}${index}`} basic compact size="small">
-                <Link to={`/topics/${tag.id}`}>{tag.label}</Link>
-              </Button>
-            )
-        }
-      </div>
+  <div className="unit-tags-bar">
+    {
+      tagNames
+        .filter(distinct)
+        .map((tag, index) =>
+          <Button key={`${tag.id}${index}`} basic compact size="small">
+            <Link to={`/topics/${tag.id}`}>{tag.label}</Link>
+          </Button>
+        )
+    }
+  </div>
 );

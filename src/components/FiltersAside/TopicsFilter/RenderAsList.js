@@ -22,7 +22,13 @@ const RenderAsList = ({ namespace, filterName, baseItems, query }) => {
   return (
     <>
       {
-        items?.map(r => <TagSourceItem id={r} namespace={namespace} baseItems={items} filterName={filterName} />)
+        items?.map(r => <TagSourceItem
+          key={r}
+          id={r}
+          namespace={namespace}
+          baseItems={items}
+          filterName={filterName}
+        />)
       }
     </>
   );
