@@ -221,7 +221,7 @@ export const LANGUAGES = {
   [LANG_AMHARIC]: { value: LANG_AMHARIC, locale: 'am_ET', lang3: 'AMH', name: 'ኣማርኛ' },
   [LANG_INDONESIAN]: { value: LANG_INDONESIAN, locale: 'in_ID', lang3: 'IND', name: 'Bahasa Indonesia' },
   [LANG_ARMENIAN]: { value: LANG_ARMENIAN, locale: 'hy_AM', lang3: 'ARM', name: 'Հայերէն' },
-  [LANG_ORIGINAL]: { value: LANG_ORIGINAL, locale: 'he_IL', lang3: 'ORG', name: 'Original' },
+  [LANG_ORIGINAL]: { value: LANG_ORIGINAL, locale: 'he_IL', lang3: 'ORI', name: 'Original' },
 };
 
 export const ALL_LANGUAGES = [

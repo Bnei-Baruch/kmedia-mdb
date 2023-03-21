@@ -169,7 +169,7 @@ export const filenameExtension = name => {
  * @param ext {boolean} include file name extension in url or not
  */
 export const physicalFile = (file, ext = false) => {
-  if (file.video_size === VS_HLS) {
+  if (file.is_hls || file.video_size === VS_HLS) {
     return `${CDN_HLS_URL}${file.id}.m3u8`;
   }
   let suffix = '';

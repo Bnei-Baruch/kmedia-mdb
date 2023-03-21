@@ -323,7 +323,7 @@ class MediaDownloads extends Component {
     let derivedRows = [];
     if (kiteiMakorByType.size > 0) {
       derivedRows = MEDIA_ORDER.reduce((acc, val) => {
-        if (val === MT_TEXT) return acc;
+        if (val === MT_TEXT || val === MT_VIDEO) return acc;
         const label = `${t('constants.content-types.KITEI_MAKOR')} - ${t(`constants.media-types.${val}`)}`;
         const files = (kiteiMakorByType.get(val) || []).map(file => this.renderRow(file, label, t));
         return acc.concat(files);
