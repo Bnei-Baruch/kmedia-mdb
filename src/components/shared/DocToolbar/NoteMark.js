@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { Button, Popup } from 'semantic-ui-react';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import { textMarksPrefixByType } from '../../../helpers/scrollToSearch/helper';
@@ -8,10 +8,12 @@ import NoteModal from '../NoteModal';
 import moment from 'moment/moment';
 
 const idPrefix = textMarksPrefixByType.note;
-const NoteMark = ({ note, offset, t }) => {
+const NoteMark = ({ note, offset }) => {
   const [top, setTop]       = useState(0);
   const [bottom, setBottom] = useState(0);
   const [open, setOpen]     = useState(false);
+
+  const { t } = useTranslation();
 
   const handleOpen = () => {
     setOpen(true);
@@ -78,8 +80,7 @@ const NoteMark = ({ note, offset, t }) => {
 };
 
 NoteMark.propTypes = {
-  t: PropTypes.func.isRequired,
   note: PropTypes.object,
 };
 
-export default withNamespaces()(NoteMark);
+export default NoteMark;

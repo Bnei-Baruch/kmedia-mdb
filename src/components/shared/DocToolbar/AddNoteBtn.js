@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { withNamespaces } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { Button, Popup, Label, Icon } from 'semantic-ui-react';
 import NoteModal from '../NoteModal';
 
-const AddNoteBtn = ({ t, properties }) => {
+const AddNoteBtn = ({ properties }) => {
   const [open, setOpen] = useState(false);
-
-  const handleOpen = () => {
+  const { t }           = useTranslation();
+  const handleOpen      = () => {
     setOpen(true);
   };
 
@@ -26,9 +26,9 @@ const AddNoteBtn = ({ t, properties }) => {
             onClick={handleOpen}
             color="orange"
           >
-            <div style={{position: 'relative'}}>
+            <div style={{ position: 'relative' }}>
               <Icon name="comment outline" />
-              <Label color="red" floating content={'new'} attached="top left"  />
+              <Label color="red" floating content={'new'} attached="top left" />
             </div>
           </Button>
         }
@@ -37,4 +37,4 @@ const AddNoteBtn = ({ t, properties }) => {
   );
 };
 
-export default withNamespaces()(AddNoteBtn);
+export default AddNoteBtn;

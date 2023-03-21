@@ -4,13 +4,14 @@ import { getLanguageDirection } from '../../helpers/i18n-utils';
 import { useDispatch, useSelector } from 'react-redux';
 import { actions } from '../../redux/modules/myNotes';
 import moment, { now } from 'moment/moment';
-import { withNamespaces } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { selectors as settings } from '../../redux/modules/settings';
 
-const NoteModal = ({ note = false, properties, open = true, toggleOpen, t }) => {
+const NoteModal = ({ note = false, properties, open = true, toggleOpen }) => {
   const [content, setContent] = useState(note.content || '');
   const [confirm, setConfirm] = useState(false);
 
+  const { t }       = useTranslation();
   const defLanguage = useSelector(state => settings.getLanguage(state.settings));
   const dir         = getLanguageDirection(properties?.language || defLanguage);
   const dispatch    = useDispatch();
@@ -89,4 +90,4 @@ const NoteModal = ({ note = false, properties, open = true, toggleOpen, t }) => 
   );
 };
 
-export default withNamespaces()(NoteModal);
+export default NoteModal;
