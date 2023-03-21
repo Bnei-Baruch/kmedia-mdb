@@ -1,6 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { Container, Header } from 'semantic-ui-react';
 
 import ContentItemContainer from '../../shared/ContentItem/ContentItemContainer';
@@ -8,8 +7,9 @@ import CollectionListTemplate from '../../shared/ContentItem/CollectionListTempl
 import { useSelector } from 'react-redux';
 import { selectors } from '../../../redux/modules/tags';
 
-const VideoList = ({ t }) => {
+const VideoList = () => {
   const { items: ids, mediaTotal } = useSelector(state => selectors.getItems(state.tags));
+  const { t }                      = useTranslation();
 
   const items = ids?.filter(x => !x.isText).filter(x => !!x.cuID || !!x.cID) || [];
   const title = `${t('nav.sidebar.lessons')}, ${t('nav.sidebar.events')}, ${t('nav.sidebar.programs')} (${mediaTotal})`;
@@ -29,8 +29,4 @@ const VideoList = ({ t }) => {
   );
 };
 
-VideoList.propTypes = {
-  t: PropTypes.func.isRequired,
-};
-
-export default withTranslation()(VideoList);
+export default VideoList;
