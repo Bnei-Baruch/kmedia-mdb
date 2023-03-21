@@ -170,13 +170,7 @@
     },
     "buttons": {
       "edit-back": "Zpět na přehrávání",
-      "start-position": "Začátek",
-      "end-position": "Konec",
-      "click-to-set": "Kliknout pro nastavení",
       "tap-to-unmute": "TAP TO UNMUTE"
-    },
-    "share": {
-      "title": "spustit toto video"
     },
     "error": {
       "loading": "Chyba nahrávání souboru"
@@ -185,9 +179,41 @@
       "series-by-topic": "Series of lessons on the topic:"
     },
     "download": {
-      "iconHoverText": "Download the excerpt you marked",
-      "downloadButton": "Download",
+      "icon-hover-text": "Download the excerpt you marked",
+      "download-button": "Download",
       "copyButton": "Copy link"
+    },
+    "settings": {
+      "playback": "Playback",
+      "playback-speed": "Speed",
+      "quality": "Quality",
+      "language": "Language",
+      "audio": "Audio",
+      "video": "Video",
+      "normal": "normal",
+      "audio-only-on": "Audio only ON",
+      "audio-only-off": "Audio only OFF"
+    },
+    "share": {
+      "title": "spustit toto video",
+      "start-position": "Kliknout začátek",
+      "end-position": "Kliknout konec",
+      "embedded": "Embed",
+      "reset-to-full": "Reset to full video",
+      "download-file": "Download excerpt"
+    },
+    "controls": {
+      "pause": "Pause",
+      "play": "Play",
+      "mute": "Mute",
+      "share": "Share",
+      "settings": "Settings",
+      "rewind": "Rewind {{seek}} sec",
+      "skip": "Skip {{seek}} sec",
+      "next-video": "Next video",
+      "prev-video": "Previous video",
+      "fullscreen": "Fullscreen",
+      "fullscreen-exit": "Esc fullscreen"
     }
   },
   "playlist": {

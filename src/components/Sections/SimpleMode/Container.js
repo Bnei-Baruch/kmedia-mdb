@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
 import moment from 'moment';
 import { useSelector, useDispatch } from 'react-redux';
-import { useHistory, useLocation } from 'react-router-dom';
-import { withNamespaces } from 'react-i18next';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { withTranslation } from 'react-i18next';
 
 import { getQuery, updateQuery } from '../../../helpers/url';
 import { isEmpty, noop } from '../../../helpers/utils';
@@ -13,21 +13,21 @@ import { groupOtherMediaByType, renderCollection } from './RenderListHelpers';
 import { ClientChroniclesContext, DeviceInfoContext } from '../../../helpers/app-contexts';
 
 const SimpleModeContainer = () => {
-  const uiLanguage = useSelector(state => settings.getLanguage(state.settings));
+  const uiLanguage      = useSelector(state => settings.getLanguage(state.settings));
   const contentLanguage = useSelector(state => settings.getContentLanguage(state.settings));
 
   const { deviceInfo: { browser: { name: browserName } } } = useContext(DeviceInfoContext);
-  const chronicles = useContext(ClientChroniclesContext);
+  const chronicles                                         = useContext(ClientChroniclesContext);
 
-  const history = useHistory();
+  const navigate = useNavigate();
   const location = useLocation();
 
-  const [filesLanguage, setFilesLanguage] = useState(contentLanguage);
+  const [filesLanguage, setFilesLanguage]     = useState(contentLanguage);
   const [blinkLangSelect, setBlinkLangSelect] = useState(false);
 
   const [selectedDate, setSelectedDate] = useState(() => {
-    const query = getQuery(location);
-    const newDate  = (query.date && moment(query.date).isValid())
+    const query   = getQuery(location);
+    const newDate = (query.date && moment(query.date).isValid())
       ? moment(query.date, 'YYYY-MM-DD').toDate()
       : new Date();
 
@@ -41,7 +41,7 @@ const SimpleModeContainer = () => {
   }, [contentLanguage]);
 
   useEffect(() => {
-    dispatch(actions.fetchForDate({ date: selectedDate, language: uiLanguage }))
+    dispatch(actions.fetchForDate({ date: selectedDate, language: uiLanguage }));
   }, [dispatch, selectedDate, uiLanguage]);
 
   const handleLanguageChanged = (e, filesLang) => {
@@ -57,7 +57,7 @@ const SimpleModeContainer = () => {
 
     const currentDate = moment(selDate).format('YYYY-MM-DD');
 
-    updateQuery(history, query => ({
+    updateQuery(navigate, location, query => ({
       ...query,
       date: currentDate
     }));
@@ -77,13 +77,12 @@ const SimpleModeContainer = () => {
       : window.scrollTo(0, 0);
   };
 
-  const chroniclesAppend = chronicles ? chronicles.append.bind(chronicles) : noop;
+  const chroniclesAppend       = chronicles ? chronicles.append.bind(chronicles) : noop;
   const renderUnitOrCollection = (item, language, t) => (
     isEmpty(item.content_units)
       ? groupOtherMediaByType(item, language, t, helpChooseLang, chroniclesAppend)
       : renderCollection(item, language, t, helpChooseLang, chroniclesAppend)
   );
-
 
   const pageProps = {
     selectedDate,
@@ -95,6 +94,6 @@ const SimpleModeContainer = () => {
   };
 
   return <Page {...pageProps} />;
-}
+};
 
-export default withNamespaces()(SimpleModeContainer);
+export default withTranslation()(SimpleModeContainer);

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { Segment } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 
@@ -55,7 +55,7 @@ export const buildLabelData = source => {
 
 const Library = ({ data, source, downloadAllowed, t }) => {
   const location                    = useLocation();
-  const history                     = useHistory();
+  const navigate                    = useNavigate();
   const [pageNumber, setPageNumber] = useState(getPageFromLocation(location));
   const [language, setLanguage]     = useState(null);
   const [languages, setLanguages]   = useState([]);
@@ -101,14 +101,14 @@ const Library = ({ data, source, downloadAllowed, t }) => {
 
   const pageNumberHandler = pageNumber => {
     setPageNumber(pageNumber);
-    updateQuery(history, query => ({
+    updateQuery(navigate, location, query => ({
       ...query,
       page: pageNumber,
     }));
   };
 
   const handleLanguageChanged = (e, language) => {
-    updateQuery(history, query => ({ ...query, language }));
+    updateQuery(navigate, location, query => ({ ...query, language }));
     setLanguage(language);
   };
 
@@ -217,4 +217,4 @@ Library.propTypes = {
   t: PropTypes.func.isRequired,
 };
 
-export default withNamespaces()(Library);
+export default withTranslation()(Library);

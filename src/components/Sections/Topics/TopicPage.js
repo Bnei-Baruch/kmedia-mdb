@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useMemo, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useLocation } from 'react-router-dom';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { Container, Divider, Header } from 'semantic-ui-react';
 
 import { actions, selectors } from '../../../redux/modules/tags';
@@ -82,4 +82,4 @@ TopicPage.propTypes = {
   t: PropTypes.func.isRequired,
 };
 
-export default withNamespaces()(TopicPage);
+export default withTranslation()(TopicPage);

@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
 import { Container, Header, Image, List } from 'semantic-ui-react';
@@ -50,4 +50,4 @@ TextListTemplate.propTypes = {
 
 };
 
-export default withNamespaces()(TextListTemplate);
+export default withTranslation()(TextListTemplate);

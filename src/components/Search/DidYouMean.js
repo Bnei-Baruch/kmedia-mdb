@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { Container } from 'semantic-ui-react';
 
 const DidYouMean = ({ typo_suggest, t }) => {
@@ -24,4 +24,4 @@ DidYouMean.propTypes = {
   t: PropTypes.func.isRequired,
 };
 
-export default withNamespaces()(DidYouMean);
+export default withTranslation()(DidYouMean);

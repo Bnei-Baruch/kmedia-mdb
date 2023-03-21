@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { Container, Grid, Header, Menu } from 'semantic-ui-react';
 
 import Helmets from './Helmets';
@@ -61,4 +61,4 @@ SectionHeader.propTypes = {
   t: PropTypes.func.isRequired,
 };
 
-export default withNamespaces()(SectionHeader);
+export default withTranslation()(SectionHeader);

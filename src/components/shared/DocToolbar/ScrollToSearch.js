@@ -35,7 +35,8 @@ const ScrollToSearch = ({ source, label, data, language, urlParams = '', pathnam
 
   const location                             = useLocation();
   const { srchstart, srchend, highlightAll } = getQuery(location);
-  const search                               = useMemo(() => ({ srchstart, srchend }), [srchstart, srchend]);
+
+  const search = useMemo(() => ({ srchstart, srchend }), [srchstart, srchend]);
 
   const dir = getLanguageDirection(language);
 

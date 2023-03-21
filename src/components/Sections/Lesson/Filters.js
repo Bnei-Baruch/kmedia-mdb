@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { actions, selectors } from '../../../redux/modules/filtersAside';
 import { isEqual } from 'lodash';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { Container, Header } from 'semantic-ui-react';
 
 import { FN_SOURCES_MULTI, FN_TOPICS_MULTI } from '../../../helpers/consts';
@@ -25,7 +25,7 @@ const Filters = ({ namespace, baseParams, t }) => {
     if (!isReady && !wip && !err) {
       dispatch(actions.fetchStats(namespace, baseParams, { isPrepare: true }));
     }
-  }, [dispatch, isReady]);
+  }, [dispatch, isReady, wip, err]);
 
   useEffect(() => {
     if (isHydrated && isReady) {
@@ -47,4 +47,4 @@ const Filters = ({ namespace, baseParams, t }) => {
   );
 };
 
-export default withNamespaces()(Filters);
+export default withTranslation()(Filters);

@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { Button, Message, Popup, } from 'semantic-ui-react';
 
-import ShareBar from '../../AVPlayer/Share/ShareBar';
+import ShareBar from '../../Share/ShareBar';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import useStateWithCallback from '../../../helpers/use-state-with-callback';
 
@@ -90,4 +90,4 @@ LibraryShare.propTypes = {
   position: PropTypes.string.isRequired,
 };
 
-export default withNamespaces()(LibraryShare);
+export default withTranslation()(LibraryShare);

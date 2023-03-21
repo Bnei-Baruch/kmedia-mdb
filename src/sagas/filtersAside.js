@@ -15,7 +15,6 @@ import { isEmpty } from '../helpers/utils';
 import { filtersTransformer } from '../filters';
 import { selectors as filterSelectors } from '../redux/modules/filters';
 import { selectors as settingsSelectors } from '../redux/modules/settings';
-//import { selectFilterParams } from './search';
 import { selectors as searchSelectors } from '../redux/modules/search';
 import { actions, types } from '../redux/modules/filtersAside';
 
@@ -65,7 +64,8 @@ function prepareDailyLessonParams(params) {
 }
 
 export function* fetchStat(action) {
-  let { namespace, params, options: { isPrepare, countC = false, countL = false } } = action.payload;
+  const { namespace, params, options: { isPrepare } } = action.payload;
+  let { options: { countC = false, countL = false } } = action.payload;
 
   let filterParams       = {};
   let lessonAsCollection = false;

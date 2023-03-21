@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { renderRoutes } from 'react-router-config';
 import { Provider } from 'react-redux';
-import { ConnectedRouter } from 'connected-react-router';
+import { ReduxRouter as ConnectedRouter } from '@lagunovsky/redux-react-router';
+
 import { I18nextProvider } from 'react-i18next';
 
-import routes from '../../routes';
 import ScrollToTop from '../shared/ScrollToTop/ScrollToTop';
 import '../../stylesheets/Kmedia.scss';
 import * as shapes from '../shapes';
@@ -16,40 +15,41 @@ import {
   DeviceInfoContext,
   SessionInfoContext,
 } from '../../helpers/app-contexts';
-import InitKC from '../shared/InitKC';
+import InitKCEvents from '../../pkg/ksAdapter/InitKCEvents';
+import Layout from '../Layout/Layout';
+import PlayerContainer from '../Player/PlayerContainer';
 
 const App = props => {
-  const [isShareTextEnabled, setEnableShareText]                                                             = useState(false);
-  const { i18n, store, history, initialI18nStore, initialLanguage, deviceInfo, clientChronicles, abTesting } = props;
+  const [isShareTextEnabled, setEnableShareText] = useState(false);
 
-  const sessionInfo       = {
-    enableShareText: { isShareTextEnabled, setEnableShareText }
-  };
+  const { i18n, store, history, deviceInfo, clientChronicles, abTesting, i18nData } = props;
+
+  const sessionInfo       = { enableShareText: { isShareTextEnabled, setEnableShareText } };
   const deviceInfoContext = {
     deviceInfo,
     isMobileDevice: deviceInfo.device?.type === 'mobile',
-    undefinedDevice: deviceInfo.device?.type === undefined
+    undefinedDevice: deviceInfo.device?.type === undefined,
+    isIPhone: ['iPhone Simulator', 'iPhone'].includes(deviceInfo.device?.model)
   };
 
+  const playerContainer = <PlayerContainer />;
   return (
-    <I18nextProvider i18n={i18n} initialI18nStore={initialI18nStore} initialLanguage={initialLanguage}>
+    <I18nextProvider i18n={i18n}>
       <Provider store={store}>
-        <InitKC>
-          <ClientChroniclesContext.Provider value={clientChronicles}>
-            <AbTestingContext.Provider value={abTesting}>
-              <DeviceInfoContext.Provider value={deviceInfoContext}>
-                <SessionInfoContext.Provider value={sessionInfo}>
-                  <ChroniclesActions />
-                  <ConnectedRouter history={history}>
-                    <ScrollToTop>
-                      {renderRoutes(routes)}
-                    </ScrollToTop>
-                  </ConnectedRouter>
-                </SessionInfoContext.Provider>
-              </DeviceInfoContext.Provider>
-            </AbTestingContext.Provider>
-          </ClientChroniclesContext.Provider>
-        </InitKC>
+        <InitKCEvents />
+        <ClientChroniclesContext.Provider value={clientChronicles}>
+          <AbTestingContext.Provider value={abTesting}>
+            <DeviceInfoContext.Provider value={deviceInfoContext}>
+              <SessionInfoContext.Provider value={sessionInfo}>
+                <ChroniclesActions />
+                <ConnectedRouter history={history}>
+                  <ScrollToTop />
+                  <Layout {...i18nData} playerContainer={playerContainer} />
+                </ConnectedRouter>
+              </SessionInfoContext.Provider>
+            </DeviceInfoContext.Provider>
+          </AbTestingContext.Provider>
+        </ClientChroniclesContext.Provider>
       </Provider>
     </I18nextProvider>
   );

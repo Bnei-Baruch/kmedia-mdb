@@ -2,64 +2,38 @@ import { createAction } from 'redux-actions';
 import { handleActions } from './settings';
 
 /* Types */
-const LOGIN         = 'Auth/LOGIN';
-const LOGIN_SUCCESS = 'Auth/LOGIN_SUCCESS';
-const LOGIN_FAILURE = 'Auth/LOGIN_FAILURE';
+const UPDATE_USER  = 'Auth/UPDATE_USER';
+const UPDATE_TOKEN = 'Auth/UPDATE_TOKEN';
 
-const LOGOUT         = 'Auth/LOGOUT';
-const LOGOUT_SUCCESS = 'Auth/LOGOUT_SUCCESS';
-const UPDATE_TOKEN   = 'Auth/UPDATE_TOKEN';
-
-export const types = { LOGIN, LOGIN_SUCCESS, LOGOUT_SUCCESS, LOGOUT };
+export const types = { UPDATE_TOKEN, UPDATE_USER };
 
 /* Reducer */
-const initialState = { user: undefined, token: null, error: null, isKcReady: false };
+const initialState = { user: undefined, token: null };
 
-const onLoginSuccess = (draft, payload) => {
-  const { user, token } = payload;
-  draft.user            = user;
-  draft.token           = token;
-  draft.error           = null;
-  return draft;
-};
-
-const onLoginFailure = (draft, payload) => {
-  const { error } = payload;
-  draft.user      = null;
-  draft.token     = null;
-  draft.error     = error;
-  return draft;
-};
-
-const onLogoutSuccess = draft => {
-  draft.user  = null;
-  draft.token = null;
-  draft.error = null;
-  return draft;
+const onUpdateUser  = (draft, payload) => {
+  draft.user = payload;
+  if (!payload) {
+    draft.token = null;
+  }
 };
 
 const onUpdateToken = (draft, payload) => {
   draft.token = payload;
-  return draft;
+  if (!payload) {
+    draft.user = null;
+  }
 };
 
 export const reducer = handleActions({
-  [LOGIN_SUCCESS]: onLoginSuccess,
-  [LOGIN_FAILURE]: onLoginFailure,
-  [LOGOUT_SUCCESS]: onLogoutSuccess,
+  [UPDATE_USER]: onUpdateUser,
   [UPDATE_TOKEN]: onUpdateToken,
 }, initialState);
 
 /* Actions */
-const login        = createAction(LOGIN);
-const loginSuccess = createAction(LOGIN_SUCCESS);
-const loginFailure = createAction(LOGIN_FAILURE);
+const updateUser  = createAction(UPDATE_USER);
+const updateToken = createAction(UPDATE_TOKEN);
 
-const logout        = createAction(LOGOUT);
-const logoutSuccess = createAction(LOGOUT_SUCCESS);
-const updateToken   = createAction(UPDATE_TOKEN);
-
-export const actions = { login, loginSuccess, loginFailure, logout, logoutSuccess, updateToken };
+export const actions = { updateUser, updateToken };
 
 /* Selectors */
 const getUser          = state => state.user;

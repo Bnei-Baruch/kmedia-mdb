@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 
@@ -13,7 +13,7 @@ import { getMyItemKey } from '../../../../helpers/my';
 
 const PlaylistHeaderContainer = ({ playlist }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
-  const history            = useHistory();
+  const navigate           = useNavigate();
   const dispatch           = useDispatch();
   const language           = useSelector(state => settings.getLanguage(state.settings));
   const { key }            = getMyItemKey(MY_NAMESPACE_PLAYLISTS, playlist);
@@ -22,7 +22,7 @@ const PlaylistHeaderContainer = ({ playlist }) => {
 
   const confirmSuccess = () => {
     dispatch(actions.remove(MY_NAMESPACE_PLAYLISTS, { id: playlist.id, key }));
-    history.push(`/${language}/personal`);
+    navigate(`/${language}/personal`);
   };
 
   if (!playlist) return null;

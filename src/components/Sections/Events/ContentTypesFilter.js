@@ -1,5 +1,5 @@
 import React from 'react';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { CT_HOLIDAY, EVENT_PAGE_CTS, FN_CONTENT_TYPE } from '../../../helpers/consts';
 import { selectors } from '../../../redux/modules/filtersAside';
@@ -33,4 +33,4 @@ const ContentTypesFilter = ({ namespace, t }) => {
   </>);
 };
 
-export default withNamespaces()(ContentTypesFilter);
+export default withTranslation()(ContentTypesFilter);

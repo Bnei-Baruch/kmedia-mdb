@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { Button, Header, Icon, Popup } from 'semantic-ui-react';
 
 import UILanguage from './UILanguage';
@@ -75,4 +75,4 @@ HandleLanguages.propTypes = {
   t: PropTypes.func.isRequired,
 };
 
-export default withNamespaces()(HandleLanguages);
+export default withTranslation()(HandleLanguages);

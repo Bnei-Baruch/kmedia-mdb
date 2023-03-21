@@ -4,9 +4,9 @@ import 'moment-duration-format';
 export const formatTime = current => {
   if (!current) return '00:00';
 
-  const h = Math.floor(current / 3600);
-  const m = Math.floor((current - (h * 3600)) / 60);
-  const s = Math.floor(current % 60);
+  const h      = Math.floor(current / 3600);
+  const m      = Math.floor((current - (h * 3600)) / 60);
+  const s      = Math.floor(current % 60);
   const result = [];
 
   if (h > 0) {
@@ -19,9 +19,9 @@ export const formatTime = current => {
   return result.join(':');
 };
 
-
 export const toHumanReadableTime = current => {
-  if (!current) return '0s';
+  if (current === 0) return '0s'
+  if (!current || current === Infinity) return '';
 
   const h = Math.floor(current / 3600);
   const m = Math.floor((current - (h * 3600)) / 60);

@@ -1,5 +1,5 @@
 import React from 'react';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { Icon, Image, Label, List } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
 
@@ -75,4 +75,4 @@ const BookmarksItem = ({ bookmark, t }) => {
   );
 };
 
-export default withNamespaces()(BookmarksItem);
+export default withTranslation()(BookmarksItem);
