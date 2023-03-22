@@ -15,9 +15,7 @@ const DocToolbar = ({ t, url, text, source, label, position, setPinned, isPinned
 
   const contextRef = useRef();
 
-  const handleToggle = () => {
-    setOpen(!open);
-  };
+  const handleToggle = () => setOpen(!open);
 
   return open && (
     <div
@@ -30,7 +28,7 @@ const DocToolbar = ({ t, url, text, source, label, position, setPinned, isPinned
           content={t('share-text.disable-share')}
           trigger={<Button
             inverted={!isPinned}
-            floated={isPinned ? 'none' : 'right'}
+            floated={isPinned ? null : 'right'}
             icon="close"
             circular
             onClick={handleToggle}
@@ -69,7 +67,7 @@ const DocToolbar = ({ t, url, text, source, label, position, setPinned, isPinned
           )
         }
         {
-          isPinned && <AddNoteBtn properties={source} />
+          isPinned && <AddNoteBtn properties={source} toggleToolbar={handleToggle} />
         }
       </div>
     </div>

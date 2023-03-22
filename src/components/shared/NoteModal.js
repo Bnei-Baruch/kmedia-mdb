@@ -60,6 +60,8 @@ const NoteModal = ({ note = false, properties, open = true, toggleOpen }) => {
               onChange={handleOnChange}
               value={content}
               className="note_modal_textarea"
+              placeholder={t('messages.add-new-note')}
+              dir={dir}
             />
           </Form>
         </Modal.Content>

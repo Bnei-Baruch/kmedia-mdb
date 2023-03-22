@@ -9,18 +9,20 @@ import moment from 'moment/moment';
 
 const idPrefix = textMarksPrefixByType.note;
 const NoteMark = ({ note, offset }) => {
-  const [pos, setPos]   = useState(0);
-  const [open, setOpen] = useState(false);
+  const [pos, setPos]                 = useState(0);
+  const [open, setOpen]               = useState(false);
+  const [openTooltip, setOpenTooltip] = useState(false);
 
   const { t } = useTranslation();
 
   const handleOpen = () => {
     setOpen(true);
+    setOpenTooltip(false);
   };
 
-  const handleToggleOpen = (o) => {
-    setOpen(o);
-  };
+  const handleToggleOpen   = (o) => setOpen(o);
+  const handleOpenTooltip  = () => setOpenTooltip(true);
+  const handleCloseTooltip = () => setOpenTooltip(false);
 
   const { language, content, id } = note;
 
@@ -58,6 +60,9 @@ const NoteMark = ({ note, offset }) => {
             />
           </div>
         }
+        open={openTooltip}
+        onOpen={handleOpenTooltip}
+        onClose={handleCloseTooltip}
         inverted
         on="hover"
         hoverable

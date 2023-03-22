@@ -260,7 +260,8 @@
     "trim-expiration": "* The link will be available for download for 7 days only",
     "trimmed-title": "Your files are ready",
     "trimmed-title-wip": "We prepare the file for you",
-    "trimmed-content-wip": "A few minutes..."
+    "trimmed-content-wip": "A few minutes...",
+    "add-new-note": "Write down notes, things you heard during lessons or anything important to keep for the future..."
   },
   "search": {
     "header": {
