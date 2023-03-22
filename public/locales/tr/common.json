@@ -174,13 +174,7 @@
     },
     "buttons": {
       "edit-back": "Tekrar oynat",
-      "start-position": "Başlat",
-      "end-position": "Bitir",
-      "click-to-set": "Düzenlemek için tıkla",
       "tap-to-unmute": "Sesize almak için tıkla"
-    },
-    "share": {
-      "title": "bu videoyu seyret"
     },
     "error": {
       "loading": "Dosya yükleme hatası."
@@ -189,9 +183,41 @@
       "series-by-topic": "Series of lessons on the topic:"
     },
     "download": {
-      "iconHoverText": "Download the excerpt you marked",
-      "downloadButton": "Download",
+      "icon-hover-text": "Download the excerpt you marked",
+      "download-button": "Download",
       "copyButton": "Copy link"
+    },
+    "settings": {
+      "playback": "Playback",
+      "playback-speed": "Speed",
+      "quality": "Quality",
+      "language": "Language",
+      "audio": "Ses",
+      "video": "Görüntü",
+      "normal": "normal",
+      "audio-only-on": "Audio only ON",
+      "audio-only-off": "Audio only OFF"
+    },
+    "share": {
+      "title": "bu videoyu seyret",
+      "start-position": "Düzenlemek başlat",
+      "end-position": "Düzenlemek bitir",
+      "embedded": "Embed",
+      "reset-to-full": "Reset to full",
+      "download-file": "Download excerpt"
+    },
+    "controls": {
+      "pause": "Pause",
+      "play": "Play",
+      "mute": "Mute",
+      "share": "Share",
+      "settings": "Settings",
+      "rewind": "Rewind {{seek}} sec",
+      "skip": "Skip {{seek}} sec",
+      "next-video": "Next video",
+      "prev-video": "Previous video",
+      "fullscreen": "Fullscreen",
+      "fullscreen-exit": "Esc fullscreen"
     }
   },
   "playlist": {

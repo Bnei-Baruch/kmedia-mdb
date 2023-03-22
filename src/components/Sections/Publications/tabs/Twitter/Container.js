@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
 
 import { LANG_HEBREW, LANG_RUSSIAN, LANG_SPANISH, LANG_UKRAINIAN } from '../../../../../helpers/consts';
 import { selectors as settings } from '../../../../../redux/modules/settings';
@@ -11,6 +10,7 @@ import { actions, selectors } from '../../../../../redux/modules/publications';
 import withPagination, { getPageFromLocation } from '../../../../Pagination/withPagination';
 import * as shapes from '../../../../shapes';
 import Page from './Page';
+import { withRouter } from '../../../../../helpers/withRouterPatch';
 
 class TwitterContainer extends withPagination {
   static propTypes = {

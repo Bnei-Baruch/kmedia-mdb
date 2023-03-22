@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import countBy from 'lodash/countBy';
 import groupBy from 'lodash/groupBy';
 import mapValues from 'lodash/mapValues';
@@ -72,4 +72,4 @@ LocationsFilter.propTypes = {
   t: PropTypes.func.isRequired,
 };
 
-export default withNamespaces()(LocationsFilter);
+export default withTranslation()(LocationsFilter);

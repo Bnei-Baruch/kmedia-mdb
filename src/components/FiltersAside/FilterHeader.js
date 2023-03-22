@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button, List } from 'semantic-ui-react';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 
 const FilterHeader = ({ filterName, t, children }) => {
   const [open, setOpen] = useState(true);
@@ -24,4 +24,4 @@ const FilterHeader = ({ filterName, t, children }) => {
   );
 };
 
-export default withNamespaces()(FilterHeader);
+export default withTranslation()(FilterHeader);

@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { Button, Container, Popup } from 'semantic-ui-react';
 import { SectionLogo } from '../../../helpers/images';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
-import { makeTagLinks } from '../../Pages/Unit/widgets/Info/Info';
+import { makeTagLinks } from '../../Pages/WithPlayer/widgets/Info/Info';
 import { useSelector } from 'react-redux';
 import { selectors as tagsSelectors } from '../../../redux/modules/tags';
 
@@ -67,4 +67,4 @@ LabelMark.propTypes = {
   label: PropTypes.object,
 };
 
-export default withNamespaces()(LabelMark);
+export default withTranslation()(LabelMark);

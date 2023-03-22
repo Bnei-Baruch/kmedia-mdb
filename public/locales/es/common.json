@@ -117,10 +117,10 @@
       "free-text": "Texto libre"
     },
     "media-types": {
-      "audio" : "Audio",
-      "video" : "Video",
-      "text" : "Transcripción",
-      "image" : "Dibujo"
+      "audio": "Audio",
+      "video": "Video",
+      "text": "Transcripción",
+      "image": "Dibujo"
     },
     "content-types": {
       "CONGRESS": "Congresos",
@@ -173,13 +173,7 @@
     },
     "buttons": {
       "edit-back": "Regreso",
-      "start-position": "Inicio",
-      "end-position": "Final",
-      "click-to-set": "Clic para marcar",
       "tap-to-unmute": "Activar el sonido"
-    },
-    "share": {
-      "title": "Mira el video"
     },
     "error": {
       "loading": "Error al cargar el video"
@@ -188,9 +182,41 @@
       "series-by-topic": "Serie de lecciones sobre el tema:"
     },
     "download": {
-      "iconHoverText": "Descarga el extracto que marcaste",
-      "downloadButton": "Descargar",
+      "icon-hover-text": "Descarga el extracto que marcaste",
+      "download-button": "Descargar",
       "copyButton": "Copiar link"
+    },
+    "settings": {
+      "playback": "Reproducción",
+      "playback-speed": "Velocidad",
+      "quality": "Calidad",
+      "language": "Idioma",
+      "audio": "Audio",
+      "video": "Video",
+      "normal": "normal",
+      "audio-only-on": "Solo audio ACTIVADO",
+      "audio-only-off": "Solo audio APAGADO"
+    },
+    "share": {
+      "title": "Mira el video",
+      "start-position": "Clic inicio",
+      "end-position": "Clic final",
+      "embedded": "Empotrar",
+      "reset-to-full": "Restablecer a completo",
+      "download-file": "Descargar extracto"
+    },
+    "controls": {
+      "pause": "Pausa",
+      "play": "Reproducir",
+      "mute": "Mudo",
+      "share": "Cuota",
+      "settings": "Configuración",
+      "rewind": "Rebobinar {{seek}} seg",
+      "skip": "Saltar {{seek}} seg",
+      "next-video": "Next video",
+      "prev-video": "Previous video",
+      "fullscreen": "Fullscreen",
+      "fullscreen-exit": "Esc fullscreen"
     }
   },
   "playlist": {

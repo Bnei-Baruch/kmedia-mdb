@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Container, Grid, Header, Input, Label, Modal } from 'semantic-ui-react';
 import isEqual from 'react-fast-compare';
@@ -24,7 +24,7 @@ const SelectTopicsModal = ({ t, open, onClose, label, trigger }) => {
   const areSourcesLoaded = useSelector(state => sourcesSelectors.areSourcesLoaded(state.sources));
   const roots            = useSelector(state => selectors.getDisplayRoots(state.tags), isEqual) || [];
   const getTagById       = useSelector(state => selectors.getTagById(state.tags));
-  const tree             = useMemo(() => getTree(roots, getTagById, null, t)[0], [roots.length, getTagById, t]);
+  const tree             = useMemo(() => getTree(roots, getTagById, null, t)[0], [roots, getTagById, t]);
 
   const language = useSelector(state => settings.getLanguage(state.settings));
   const dir      = getLanguageDirection(language);
@@ -172,4 +172,4 @@ SelectTopicsModal.propTypes = {
   onClose: PropTypes.func.isRequired,
 };
 
-export default withNamespaces()(SelectTopicsModal);
+export default withTranslation()(SelectTopicsModal);

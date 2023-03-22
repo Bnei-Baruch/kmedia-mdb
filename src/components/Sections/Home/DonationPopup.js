@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 import { Button, Grid, Header, Image, Modal } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
@@ -21,7 +21,7 @@ function DonationPopup({ t }) {
     const firstWeek = d.getDate();
     const theDay    = d.getDay();
     // First Sunday and Saturday of the week
-    if (firstWeek <= 7 && (theDay == 0 || theDay == 6)) {
+    if (firstWeek <= 7 && (theDay === 0 || theDay === 6)) {
       const popupCountKey = `showDonationPopup_${d.toISOString().split('T')[0]}`;
       const popupCount    = parseInt(localStorage.getItem(popupCountKey) ?? 0);
       if (popupCount > 1)
@@ -107,4 +107,4 @@ const getDonateLinkDetails = language => {
 
 DonationPopup.propTypes = { t: PropTypes.func.isRequired };
 
-export default withNamespaces()(DonationPopup);
+export default withTranslation()(DonationPopup);

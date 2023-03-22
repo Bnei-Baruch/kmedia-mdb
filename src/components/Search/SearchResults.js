@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Trans, withNamespaces } from 'react-i18next';
+import { Trans, withTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { useLocation } from 'react-router';
+import { useLocation } from 'react-router-dom';
 import { Container, Divider } from 'semantic-ui-react';
 
 import {
@@ -268,4 +268,4 @@ SearchResults.defaultProps = {
   getSourcePath: undefined
 };
 
-export default withNamespaces()(SearchResults);
+export default withTranslation()(SearchResults);

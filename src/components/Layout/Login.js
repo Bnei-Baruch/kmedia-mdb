@@ -1,25 +1,23 @@
 import React, { useContext, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 
 import { Button, Divider, List, Popup } from 'semantic-ui-react';
-import { selectors, actions } from '../../redux/modules/auth';
+import { selectors } from '../../redux/modules/auth';
 import { DeviceInfoContext } from '../../helpers/app-contexts';
 import { getLanguageDirection } from '../../helpers/i18n-utils';
 import Link from '../Language/MultiLanguageLink';
+import { login, logout } from '../../pkg/ksAdapter/adapter';
+import useIsLoggedIn from '../shared/useIsLoggedIn';
 
 const Login = ({ t, language }) => {
   const [isActive, setIsActive] = useState(false);
   const { isMobileDevice }      = useContext(DeviceInfoContext);
   const direction               = getLanguageDirection(language);
   const popupStyle              = { direction };
-  const dispatch                = useDispatch();
   const user                    = useSelector(state => selectors.getUser(state.auth));
-
-  const login = () => dispatch(actions.login(language));
-
-  const logout = () => dispatch(actions.logout());
+  const loggedIn                = useIsLoggedIn();
 
   const handlePopupOpen  = () => setIsActive(true);
   const handlePopupClose = () => setIsActive(false);
@@ -37,7 +35,7 @@ const Login = ({ t, language }) => {
           circular
           compact
           className={'auth-button'}
-          content={user.name[0].toUpperCase()}
+          content={user?.name[0].toUpperCase()}
           onClick={handlePopupClose}
         />
       }
@@ -48,7 +46,7 @@ const Login = ({ t, language }) => {
       style={popupStyle}
       hideOnScroll
     >
-      <Popup.Header content={user.name} />
+      <Popup.Header content={user?.name} />
       <Divider />
       <Popup.Content>
         <List>
@@ -90,12 +88,9 @@ const Login = ({ t, language }) => {
     />
   );
 
-  return user ? renderAccount() : renderLogin();
+  return loggedIn ? renderAccount() : renderLogin();
 };
 
-Login.propTypes =
-  {
-    t: PropTypes.func.isRequired,
-  };
+Login.propTypes = { t: PropTypes.func.isRequired, };
 
-export default withNamespaces()(Login);
+export default withTranslation()(Login);

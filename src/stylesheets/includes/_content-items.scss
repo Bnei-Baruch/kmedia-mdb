@@ -111,7 +111,7 @@
 }
 
 
-.ltr .cu_info_description > span {
+.ltr > .cu_info_description > span {
   border-right-width: 0;
 
   &:first-child {
@@ -124,7 +124,7 @@
   }
 }
 
-.rtl .cu_info_description > span {
+.rtl > .cu_info_description > span {
   border-left-width: 0;
 
   &:first-child {
@@ -154,10 +154,12 @@
   margin: 0;
   border-radius: 0;
   z-index: 2;
+  direction: ltr;
 
   .bar {
     background: #04eaf6;
     border-radius: 0;
+    min-width: auto;
     @include mobile {
       height: 3px;
     }

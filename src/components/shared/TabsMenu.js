@@ -36,7 +36,7 @@ const TabsMenu = ({ items = [], active = '' }) => {
         scrollRef.current && scrollRef.current.scrollIntoView();
       }, 150);
     }
-  }, [scrollRef?.current]);
+  }, [scrollRef, activeLocation, isHighLighted]);
 
   return (
     <div className="unit-materials">

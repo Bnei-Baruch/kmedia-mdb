@@ -1,8 +1,8 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Button, Icon, Input, Loader, Search } from 'semantic-ui-react';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import moment from 'moment';
 
 import ButtonDayPicker from '../Filters/components/Date/ButtonDayPicker';
@@ -33,7 +33,7 @@ const OmniBox = ({ isHomePage = false, t }) => {
   const [userInteracted, setUserInteracted] = useState(false);
 
   const dispatch = useDispatch();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (suggestions) {
@@ -85,7 +85,7 @@ const OmniBox = ({ isHomePage = false, t }) => {
   };
 
   const handleFromInputChange = value => {
-    history.push(`/${ language }/simple-mode?date=${ moment(value).format('YYYY-MM-DD') }`);
+    navigate(`/${ language }/simple-mode?date=${ moment(value).format('YYYY-MM-DD') }`);
   };
 
   const renderInput = () => isHomePage ?
@@ -138,4 +138,4 @@ const OmniBox = ({ isHomePage = false, t }) => {
   />;
 };
 
-export default withNamespaces()(OmniBox);
+export default withTranslation()(OmniBox);

@@ -174,13 +174,7 @@
     },
     "buttons": {
       "edit-back": "Назад",
-      "start-position": "Початок",
-      "end-position": "Кінець",
-      "click-to-set": "Натискай",
       "tap-to-unmute": "Увімкніть звук"
-    },
-    "share": {
-      "title": "Переглянь це відео"
     },
     "error": {
       "loading": "Помилка при завантаженні файлу."
@@ -189,9 +183,41 @@
       "series-by-topic": "Series of lessons on the topic:"
     },
     "download": {
-      "iconHoverText": "Download the excerpt you marked",
-      "downloadButton": "Download",
+      "icon-hover-text": "Download the excerpt you marked",
+      "download-button": "Download",
       "copyButton": "Copy link"
+    },
+    "settings": {
+      "playback": "Playback",
+      "playback-speed": "Speed",
+      "quality": "Quality",
+      "language": "Language",
+      "audio": "Аудіо",
+      "video": "Відео",
+      "normal": "normal",
+      "audio-only-on": "Audio only ON",
+      "audio-only-off": "Audio only OFF"
+    },
+    "share": {
+      "title": "Переглянь це відео",
+      "start-position": "Натискай Початок",
+      "end-position": "Натискай Кінець",
+      "embedded": "Embed",
+      "reset-to-full": "Reset to full",
+      "download-file": "Download excerpt"
+    },
+    "controls": {
+      "pause": "Pause",
+      "play": "Play",
+      "mute": "Mute",
+      "share": "Share",
+      "settings": "Settings",
+      "rewind": "Rewind {{seek}} sec",
+      "skip": "Skip {{seek}} sec",
+      "next-video": "Next video",
+      "prev-video": "Previous video",
+      "fullscreen": "Fullscreen",
+      "fullscreen-exit": "Esc fullscreen"
     }
   },
   "playlist": {

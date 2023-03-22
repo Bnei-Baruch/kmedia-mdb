@@ -32,11 +32,17 @@ logs/
 public/assets/cms/**
 mdb.dump.*.sql
 node_modules/
-.yarn/
-.pnp.js
 .yarnrc.yml
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
 
 # do not ignore main theme
 !src/**/semantic.min.css
 !src/**/semantic.rtl.min.css
 .eslintcache
+

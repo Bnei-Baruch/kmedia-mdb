@@ -5,7 +5,7 @@ import clsx from 'clsx';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import UnitLogo from '../Logo/UnitLogo';
 import Link from '../../Language/MultiLanguageLink';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { canonicalLink } from '../../../helpers/links';
 import { useDispatch, useSelector } from 'react-redux';
 import { actions, selectors } from '../../../redux/modules/mdb';
@@ -21,7 +21,7 @@ const CollectionListTemplate = ({ cID, size = 'big', t }) => {
     if (!c) {
       dispatch(actions.fetchCollection(cID));
     }
-  }, [cID, dispatch]);
+  }, [cID, c, dispatch]);
 
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
@@ -61,4 +61,4 @@ CollectionListTemplate.propTypes = {
   cID: PropTypes.string
 };
 
-export default withNamespaces()(CollectionListTemplate);
+export default withTranslation()(CollectionListTemplate);

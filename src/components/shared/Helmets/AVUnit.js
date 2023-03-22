@@ -1,29 +1,22 @@
 import React from 'react';
 import moment from 'moment';
-import PropTypes from 'prop-types';
 
 import { getVideoRes } from '../../../helpers/consts';
 import { isEmpty, physicalFile } from '../../../helpers/utils';
-import * as shapes from '../../shapes';
 import Basic from './Basic';
 import Image from './Image';
 import Video from './Video';
+import { useSelector } from 'react-redux';
+import { selectors as settings } from '../../../redux/modules/settings';
+import { selectors as mdb } from '../../../redux/modules/mdb';
 
-const AVUnit = ({ unit = undefined, language = undefined }) => {
-  if (!unit || !unit.files) {
-    return null;
-  }
-
-  if (!language) {
-    return null;
-  }
-
+const AVUnitWithDep = ({ unit, language }) => {
   // if unit.description doesn't exist, use the collection description
   let { description } = unit;
   if (isEmpty(description)) {
     const collections = Object.values(unit.collections);
     if (collections.length > 0) {
-      ({ description } = collections[0]);
+      description = collections[0].description;
     }
   }
 
@@ -53,13 +46,18 @@ const AVUnit = ({ unit = undefined, language = undefined }) => {
   );
 };
 
-AVUnit.propTypes = {
-  unit: shapes.ContentUnit,
-  language: PropTypes.string
-};
-
 const areEqual = (prevProps, nextProps) =>
   ((!prevProps.unit && !nextProps.unit) || prevProps.unit.id === nextProps.unit.id)
   && prevProps.language === nextProps.language;
 
-export default React.memo(AVUnit, areEqual);
+const AVUnitMemo = React.memo(AVUnitWithDep, areEqual);
+
+const AVUnit = ({ id }) => {
+  const unit     = useSelector(state => mdb.getDenormContentUnit(state.mdb, id));
+  const language = useSelector(state => settings.getLanguage(state.settings));
+  if (!unit || !unit.files || !language) {
+    return null;
+  }
+  return <AVUnitMemo unit={unit} language={language} />;
+};
+export default AVUnit;

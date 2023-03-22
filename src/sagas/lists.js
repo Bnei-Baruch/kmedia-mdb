@@ -12,16 +12,18 @@ import {
   FN_SHOW_LESSON_AS_UNITS,
   PAGE_NS_EVENTS,
   PAGE_NS_LESSONS,
+  MY_NAMESPACE_HISTORY,
   PAGE_NS_SKETCHES
 } from '../helpers/consts';
 import { isEmpty } from '../helpers/utils';
 import { selectors as filterSelectors } from '../redux/modules/filters';
 
 import { actions, types } from '../redux/modules/lists';
-import { actions as mdbActions } from '../redux/modules/mdb';
+import { actions as mdbActions, selectors as mdb } from '../redux/modules/mdb';
 import { selectors as settings } from '../redux/modules/settings';
 import { getQuery, pushQuery } from './helpers/url';
 import { fetchCollectionsByIDs, fetchUnitsByIDs } from './mdb';
+import { fetch as fetchMy } from './my';
 import { fetchViewsByUIDs } from './recommended';
 
 const endpointByNamespace = {
@@ -110,11 +112,18 @@ function* fetchSectionList(action) {
       yield put(mdbActions.fetchUnitsByIDsSuccess(data.content_units));
     }
 
+    yield put(actions.fetchSectionListSuccess(namespace, data));
+
+    const cu_uids = [...cuIDs];
     if (!isEmpty(cIDs)) {
-      yield fetchCollectionsByIDs({ payload: { id: cIDs } });
+      yield call(fetchCollectionsByIDs, { payload: { id: cIDs } });
+      const denormCcu = yield select(state => mdb.nestedGetDenormCollection(state.mdb));
+      cIDs.map(denormCcu).map(x => x.cuIDs).flat().forEach(id => {
+        cu_uids.push(id);
+      });
     }
 
-    yield put(actions.fetchSectionListSuccess(namespace, data));
+    yield fetchMy({ payload: { namespace: MY_NAMESPACE_HISTORY, cu_uids, page_size: cu_uids.length } });
   } catch (err) {
     yield put(actions.fetchListFailure(namespace, err));
   }

@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { Button, Confirm, MenuItem, Modal, Popup } from 'semantic-ui-react';
 import BookmarkForm from '../SaveBookmark/BookmarkForm';
 import { useSelector } from 'react-redux';
@@ -103,4 +103,4 @@ BookmarkBtn.propTypes = {
   label: PropTypes.object,
 };
 
-export default withNamespaces()(BookmarkBtn);
+export default withTranslation()(BookmarkBtn);

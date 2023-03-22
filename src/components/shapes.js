@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { PLAYER_MODE } from './AVPlayer/constants';
+import { PLAYER_MODE } from './Player/constants';
 
 export const WIP    = PropTypes.bool;
 export const WipMap = PropTypes.objectOf(PropTypes.oneOfType([WIP, PropTypes.objectOf(WIP)]));
@@ -35,12 +35,9 @@ export const History = PropTypes.shape({
   createHref: PropTypes.func.isRequired,
   entries: PropTypes.arrayOf(HistoryLocation), // only in createMemoryHistory
   go: PropTypes.func.isRequired,
-  goBack: PropTypes.func.isRequired,
-  goForward: PropTypes.func.isRequired,
   index: PropTypes.number, // only in createMemoryHistory
   length: PropTypes.number,
   listen: PropTypes.func.isRequired,
-  location: HistoryLocation.isRequired,
   push: PropTypes.func.isRequired,
   replace: PropTypes.func.isRequired,
 });
