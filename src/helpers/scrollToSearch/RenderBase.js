@@ -52,7 +52,7 @@ export class RenderBase {
       if (start) {
         const match     = this.findClose(this.buildMatch(start[0], this.dataCleanHtml), start[1]);
         const noHtmlPos = match?.index - 1;
-        const str       = `<span class={prefixes.class} id="${prefixes.start}${id}"></span>`;
+        const str       = `<span class={${prefixes.class}} id="${prefixes.start}${id}"></span>`;
         acc.push({ str, noHtmlPos, isAdded: true });
       }
 
@@ -60,7 +60,7 @@ export class RenderBase {
       if (end) {
         const match     = this.findClose(this.buildMatch(end[0], this.dataCleanHtml), end[1]);
         const noHtmlPos = match?.index + end[0].length + 1;
-        const str       = `<span class={prefixes.class} id="${prefixes.end}${id}"></span>`;
+        const str       = `<span class={${prefixes.class}} id="${prefixes.end}${id}"></span>`;
         acc.push({ str, noHtmlPos, isAdded: true });
       }
 

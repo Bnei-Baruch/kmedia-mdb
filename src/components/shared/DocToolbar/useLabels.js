@@ -11,7 +11,6 @@ export const useLabels = (content_unit, language) => {
   const labels = ids
     .map(denorm)
     .filter(l => (l.properties?.srchstart || l.properties?.srchend))
-    .filter(l => (l.language === language))
     .map(l => ({ type: 'label', ...l }));
 
   const dispatch = useDispatch();
