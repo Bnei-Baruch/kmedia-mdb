@@ -9,9 +9,8 @@ import moment from 'moment/moment';
 
 const idPrefix = textMarksPrefixByType.note;
 const NoteMark = ({ note, offset }) => {
-  const [top, setTop]       = useState(0);
-  const [bottom, setBottom] = useState(0);
-  const [open, setOpen]     = useState(false);
+  const [pos, setPos]   = useState(0);
+  const [open, setOpen] = useState(false);
 
   const { t } = useTranslation();
 
@@ -26,24 +25,27 @@ const NoteMark = ({ note, offset }) => {
   const { language, content, id } = note;
 
   useEffect(() => {
-    let start = document.getElementById(`${idPrefix.start}${id}`);
-    let end   = document.getElementById(`${idPrefix.end}${id}`);
-    start     = start || end || null;
-    end       = end || start || null;
-    if (start) {
-      const b = start.offsetTop !== end.offsetTop ? end.offsetTop : end.offsetTop + 20;
-      setTop(Math.min(start.offsetTop, b));
-      setBottom(Math.max(start.offsetTop, b));
-    }
+    const findElPos = () => {
+      let start = document.getElementById(`${idPrefix.start}${id}`);
+      let end   = document.getElementById(`${idPrefix.end}${id}`);
+      start     = start || end || null;
+      end       = end || start || null;
+      if (start) {
+        const _pos = start.offsetTop + (end.offsetTop - start.offsetTop - 20) / 2;
+        setPos(_pos);
+      }
+    };
+    //need to wait till parent DOM will render for find element
+    setTimeout(findElPos, 0);
   }, [id]);
 
-  if (!top || !bottom)
+  if (!pos)
     return null;
 
   const dir = getLanguageDirection(language);
 
   return (
-    <div className="note_mark" style={{ top, height: bottom - top + 20, left: `${offset.x * 8}px` }}>
+    <div className="note_mark" style={{ top: `${pos}px`, left: `${offset.x * 8}px` }}>
       <NoteModal note={note} open={open} toggleOpen={handleToggleOpen} />
       <Popup
         trigger={

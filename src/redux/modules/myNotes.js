@@ -67,9 +67,9 @@ const initialNamespaces = {
 };
 
 const onFetch = draft => {
-  draft.ids    = [];
   draft.wip    = true;
   draft.errors = false;
+  draft.ids    = [];
   draft.byId   = {};
 };
 
@@ -77,6 +77,8 @@ const onFetchSuccess = (draft, { items }) => {
   draft.wip    = false;
   draft.errors = false;
 
+  draft.ids  = [];
+  draft.byId = {};
   Object.values(items).forEach(x => {
     draft.ids.push(x.id);
     draft.byId[x.id] = x;
@@ -123,7 +125,7 @@ export const reducer = handleActions({
 const getList = state => state.ids;
 const getById = (state, id) => {
   return state.byId[id];
-}
+};
 const getWIP  = state => state.wip;
 const getErr  = state => state.errors;
 

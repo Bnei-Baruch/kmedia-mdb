@@ -30,8 +30,8 @@ const ScrollToSearch = ({ source, label, data, language, urlParams = '', pathnam
 
   const { content_unit } = label || {};
 
-  const { notes, offsets: noteOffsets }               = useNotes(content_unit, language);
-  const { labels, offsets } = useLabels(content_unit, language);
+  const { notes, offsets: noteOffsets } = useNotes(content_unit, language);
+  const { labels, offsets }             = useLabels(content_unit, language);
 
   const location                             = useLocation();
   const { srchstart, srchend, highlightAll } = getQuery(location);
@@ -126,7 +126,7 @@ const ScrollToSearch = ({ source, label, data, language, urlParams = '', pathnam
         </div>
         <div className={`notes_bar ${dir}`}>
           {
-            notes.map((n, i) => <NoteMark note={n} key={n.id}  offset={noteOffsets[n.id]} />)
+            notes.map((n, i) => <NoteMark note={n} key={n.id} offset={noteOffsets[n.id]} />)
           }
         </div>
         <div

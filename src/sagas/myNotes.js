@@ -47,11 +47,11 @@ function* edit(action) {
 function* remove(action) {
   const token = yield select(state => authSelectors.getToken(state.auth));
   if (!token) return;
-  const namespace = MY_NAMESPACE_NOTES;
-  const params    = action.payload;
+
+  const { id } = action.payload;
   try {
-    yield call(Api.myNotes, params, token, 'DELETE');
-    yield put(actions.removeSuccess(params.id));
+    yield call(Api.myNotes, { id }, token, 'DELETE');
+    yield put(actions.removeSuccess(id));
   } catch (err) {
     console.log(err);
   }

@@ -3,12 +3,10 @@ import { OFFSET_TEXT_SEPARATOR } from '../../../helpers/scrollToSearch/helper';
 
 const LETTERS_ON_LINE = 20;
 
-export const buildOffsets = labels => labels.map(({ properties: { srchstart, srchend } = {}, id }) => {
+export const buildOffsets = markers => markers.map(({ properties: { srchstart, srchend } = {}, id }) => {
   let start = Math.round(Number(srchstart?.split(OFFSET_TEXT_SEPARATOR)[1]) / LETTERS_ON_LINE);
-  start     = Math.round(start / LETTERS_ON_LINE);
 
   let end = Math.round(Number(srchend?.split(OFFSET_TEXT_SEPARATOR)[1]) / LETTERS_ON_LINE);
-  end     = Math.round(end / LETTERS_ON_LINE);
 
   return {
     start: Math.min(start, end) || Math.max(start, end),
