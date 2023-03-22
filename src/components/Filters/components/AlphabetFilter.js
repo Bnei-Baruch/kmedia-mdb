@@ -1,22 +1,22 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { List } from 'semantic-ui-react';
-import { isEmpty } from '../../../../src/helpers/utils';
+import { isEmpty } from '../../../helpers/utils';
 
-
-const AlphabetFilter = ({ letters, onLetterClick, t }) => {
+const AlphabetFilter = ({ letters, onLetterClick }) => {
+  const { t }                             = useTranslation();
   const [clickedLetter, setClickedLetter] = useState(null);
 
   const labelOnClick = (e, data) => {
-    const letter = data.content
-    processClicked(letter === clickedLetter ? null : letter)
-  }
+    const letter = data.content;
+    processClicked(letter === clickedLetter ? null : letter);
+  };
 
   const processClicked = letter => {
     setClickedLetter(letter);
-    onLetterClick(letter)
-  }
+    onLetterClick(letter);
+  };
 
   if (isEmpty(letters)) {
     return null;
@@ -25,8 +25,8 @@ const AlphabetFilter = ({ letters, onLetterClick, t }) => {
   return (
     <List horizontal relaxed divided verticalAlign="middle">
       <List.Item
-        key='all'
-        as='a'
+        key="all"
+        as="a"
         onClick={() => processClicked(null)}
         active={clickedLetter == null}
         content={t('filters.all')}
@@ -35,7 +35,7 @@ const AlphabetFilter = ({ letters, onLetterClick, t }) => {
         letters.sort().map(lt =>
           <List.Item
             key={lt}
-            as='a'
+            as="a"
             onClick={labelOnClick}
             active={clickedLetter && lt === clickedLetter}
             content={lt}
@@ -44,11 +44,11 @@ const AlphabetFilter = ({ letters, onLetterClick, t }) => {
       }
     </List>
   );
-}
+};
 
 AlphabetFilter.propTypes = {
   letters: PropTypes.arrayOf(PropTypes.string).isRequired,
   onLetterClick: PropTypes.func.isRequired
-}
+};
 
-export default withNamespaces()(AlphabetFilter);
+export default AlphabetFilter;

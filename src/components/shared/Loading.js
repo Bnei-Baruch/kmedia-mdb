@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 
 import { ErrorSplash, FrownSplash, LoadingSplash } from './Splash/Splash';
 
@@ -29,4 +29,4 @@ Loading.propTypes = {
   retry: PropTypes.func,
 };
 
-export default withNamespaces()(Loading);
+export default withTranslation()(Loading);

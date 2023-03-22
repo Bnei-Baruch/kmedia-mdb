@@ -4,7 +4,6 @@ import { actions, types } from '../redux/modules/my';
 import Api from '../helpers/Api';
 import { selectors as authSelectors } from '../redux/modules/auth';
 import { actions as mdbActions, selectors as mdbSelectors } from '../redux/modules/mdb';
-import { actions as recommendedActions } from '../redux/modules/recommended';
 import {
   IsCollectionContentType,
   MY_NAMESPACE_BOOKMARKS,
@@ -15,6 +14,7 @@ import {
 } from '../helpers/consts';
 import { updateQuery } from './helpers/url';
 import { selectors as settings } from '../redux/modules/settings';
+import { fetchViewsByUIDs } from './recommended';
 
 function* updatePageInQuery(action) {
   const { pageNo } = action.payload;
@@ -22,12 +22,17 @@ function* updatePageInQuery(action) {
   yield* updateQuery(query => Object.assign(query, { page }));
 }
 
-function* fetch(action) {
-  const token = yield select(state => authSelectors.getToken(state.auth));
-  if (!token) return;
+export function* fetch(action) {
   // eslint-disable-next-line prefer-const
   const { namespace, with_files = false, addToList = true, ...params } = action.payload;
-  let with_derivations                                                 = false;
+
+  const token = yield select(state => authSelectors.getToken(state.auth));
+  if (!token) {
+    yield put(actions.fetchSuccess({ namespace, items: [] }));
+    return;
+  }
+
+  let with_derivations = false;
 
   const language = yield select(state => settings.getLanguage(state.settings));
   try {
@@ -91,22 +96,16 @@ function* fetch(action) {
     yield put(actions.fetchSuccess({ namespace, addToList, ...data }));
 
     try {
-      const { data: viewData } = yield call(Api.views, cu_uids);
-      const views              = cu_uids.reduce((acc, uid, i) => {
-        acc[uid] = viewData.views[i];
-        return acc;
-      }, {});
-      yield put(recommendedActions.receiveViews(views));
+      yield fetchViewsByUIDs(cu_uids);
     } catch (err) {
       console.error('error on recommendation service', err);
-      yield put(recommendedActions.receiveViews({}));
     }
   } catch (err) {
     yield put(actions.fetchFailure({ namespace, ...err }));
   }
 }
 
-function* fetchOne(action) {
+export function* fetchOne(action) {
   const token = yield select(state => authSelectors.getToken(state.auth));
   if (!token) return;
   const { namespace, ...params } = action.payload;

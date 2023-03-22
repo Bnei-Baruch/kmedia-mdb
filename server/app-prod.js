@@ -27,6 +27,7 @@ app.use(middleware.errorHandler);
 app.use(helmet({
   frameguard: false,          // we want to allow embed in iframes
   dnsPrefetchControl: false,  // we use dns prefetch in index.html to speed things up.
+  crossOriginEmbedderPolicy: false,
   contentSecurityPolicy: {
     directives: {
       'default-src': [
@@ -56,6 +57,8 @@ app.use(helmet({
         'archive',                      // suitcase
         '*.usersnap.com',
         'cdnjs.cloudflare.com',         // for pdf worker
+        'cdn.jwplayer.com',
+        '*.jwpcdn.com',
       ],
       'style-src': [
         '\'self\'',
@@ -85,6 +88,11 @@ app.use(helmet({
         'stats.g.doubleclick.net',
         '*.usersnap.com',
         '*.twimg.com',
+        'prd.jwpltx.com',
+      ],
+      'worker-src': [
+        'blob:',
+        '*.kabbalahmedia.info'
       ]
     },
     browserSniff: false       // we're not targeting really old browsers

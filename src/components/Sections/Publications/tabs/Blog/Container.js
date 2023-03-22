@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
 
 import { LANG_HEBREW, LANG_RUSSIAN, LANG_SPANISH, LANG_UKRAINIAN } from '../../../../../helpers/consts';
 import { selectors as settings } from '../../../../../redux/modules/settings';
@@ -131,4 +130,4 @@ export const mapDispatch = dispatch => (
   }, dispatch)
 );
 
-export default withRouter(connect(mapState, mapDispatch)(BlogContainer));
+export default connect(mapState, mapDispatch)(BlogContainer);

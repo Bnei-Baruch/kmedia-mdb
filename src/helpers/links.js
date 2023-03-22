@@ -1,4 +1,4 @@
-import { canonicalCollection } from './utils';
+import { canonicalCollection, isEmpty } from './utils';
 import { filtersTransformer } from '../filters/index';
 import { stringify as urlSearchStringify } from './url';
 
@@ -93,6 +93,12 @@ const mediaPrefix = new Map([
   [CT_ARTICLE, '/publications/articles/cu/'],
 ]);
 
+export const getCuByCcuSkipPreparation = ccu => {
+  if (isEmpty(ccu?.cuIDs)) return null;
+
+  return ccu.cuIDs.filter(id => !ccu.ccuNames || Number(ccu.ccuNames[id]) !== 0)[0] || ccu.cuIDs[0];
+};
+
 /* WARNING!!!
    This function MUST be synchronized with the next one: canonicalContentType
  */
@@ -122,7 +128,7 @@ export const canonicalLink = (entity, mediaLang, ccu) => {
   switch (entity.content_type) {
     case CT_DAILY_LESSON:
     case CT_SPECIAL_LESSON:
-      const cuId = entity.cuIDs?.[0];
+      const cuId = getCuByCcuSkipPreparation(entity);
       if (!cuId)
         return `/lessons/daily/c/${entity.id}?ap=0`;
       return `/lessons/cu/${cuId}`;
@@ -167,7 +173,7 @@ export const canonicalLink = (entity, mediaLang, ccu) => {
   // units whose canonical collection is an event goes as an event item
   const collection = ccu || canonicalCollection(entity);
   if (collection) {
-    const { id, content_type } = collection
+    const { id, content_type } = collection;
 
     if (EVENT_TYPES.includes(content_type)) {
       return `/events/cu/${entity.id}`;

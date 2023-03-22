@@ -1,11 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { noop } from '../../../helpers/utils';
 import { Button, Header, Menu, Segment } from 'semantic-ui-react';
 
-const FlatListFilter = ({ options = [], value = null, onCancel = noop, onApply = noop, renderItem = x => x.text, name, t }) => {
-
+const FlatListFilter = ({
+  options = [],
+  value = null,
+  onCancel = noop,
+  onApply = noop,
+  renderItem = x => x.text,
+  name
+}) => {
+  const { t } = useTranslation();
   const [sValue, setSValue] = useState(value);
 
   useEffect(() => {
@@ -74,4 +81,4 @@ FlatListFilter.propTypes = {
   renderItem: PropTypes.func,
 };
 
-export default withNamespaces()(FlatListFilter);
+export default FlatListFilter;

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { Grid, Header } from 'semantic-ui-react';
 import OmniBox from '../../Search/OmniBox';
 
@@ -23,4 +23,4 @@ SearchBar.propTypes = {
   t: PropTypes.func.isRequired,
 };
 
-export default withNamespaces()(SearchBar);
+export default withTranslation()(SearchBar);

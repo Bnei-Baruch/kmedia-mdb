@@ -2,8 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import hoistStatics from 'hoist-non-react-statics';
 
-import { getToWithLanguage } from '../../helpers/url';
+import { getToWithLanguage, stringify } from '../../helpers/url';
 import { useLocation } from 'react-router';
+
+import { parse } from 'qs';
+import { omit } from 'lodash/object';
+import { KC_SEARCH_KEY_SESSION, KC_SEARCH_KEYS } from '../../pkg/ksAdapter/adapter';
 
 /**
  * multiLanguageLinkCreator - an higher order component to create a link that allows navigating
@@ -23,11 +27,25 @@ import { useLocation } from 'react-router';
  */
 
 const multiLanguageLinkCreator = () => WrappedComponent => {
-  const MultiLanguageLinkHOC = ({ to = undefined, language = '', contentLanguage = undefined, staticContext, ...rest }) => {
+  const MultiLanguageLinkHOC = (
+    {
+      to = undefined,
+      language = '',
+      contentLanguage = undefined,
+      staticContext,
+      ...rest
+    }
+  ) => {
 
     // We need to use "unused constants" in order to get proper "rest"
     const location       = useLocation();
     const toWithLanguage = getToWithLanguage(to, location, language, contentLanguage);
+
+    //clear keycloak hash params from url
+    if (toWithLanguage?.hash && toWithLanguage.hash.indexOf(KC_SEARCH_KEY_SESSION) !== -1) {
+      const h             = toWithLanguage.hash.startsWith('#') ? toWithLanguage.hash.substr(1) : toWithLanguage.hash;
+      toWithLanguage.hash = stringify(omit(parse(h), KC_SEARCH_KEYS));
+    }
 
     return <WrappedComponent to={toWithLanguage} {...rest} />;
   };
@@ -40,6 +58,9 @@ const multiLanguageLinkCreator = () => WrappedComponent => {
     language: PropTypes.string, // language shorthand, for example: "ru"
     contentLanguage: PropTypes.string, // language shorthand, for example: "ru"
   };
+  //TODO David: I dont see that we use any static methods on MultiLanguageLinkHOC (except propTypes)
+  // so can we remove it?
+  // https://reactjs.org/docs/higher-order-components.html#static-methods-must-be-copied-over
 
   return hoistStatics(MultiLanguageLinkHOC, WrappedComponent);
 };

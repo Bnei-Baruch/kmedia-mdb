@@ -4,15 +4,17 @@ import { renderRoutes } from 'react-router-config';
 import LanguageSetter from './components/Language/LanguageSetter';
 import Layout from './components/Layout/Layout';
 import NotImplemented from './components/NotImplemented';
-import PlaylistCollectionIdCheck from './components/Pages/PlaylistCollection/IdCheck';
-import PlaylistItemPage from './components/Pages/PlaylistItemPage';
-import PlaylistDecorator from './components/Pages/PlaylistMy/Decorator';
+import {
+  PlaylistItemPageLesson,
+  PlaylistItemPageEvent,
+  PlaylistCollectionPage,
+  PlaylistItemPageSeries
+} from './components/Pages/WithPlayer/PlaylistPageDispecher';
+import PlaylistMy from './components/Pages/WithPlayer/PlaylistMy/Container';
 import Events from './components/Sections/Events/MainPage';
 import ExcerptContainer from './components/Sections/Excerpt/ExcerptContainer';
-// import ProjectStatus from './components/Sections/ProjectStatus/ProjectStatus';
 import Help from './components/Sections/Help/Help';
 import HomePage from './components/Sections/Home/Container';
-import LastLessonCollection from './components/Sections/Lesson/LastDaily';
 import LessonCollection from './components/Sections/Lesson/LessonPage';
 import Lessons from './components/Sections/Lessons/MainPage';
 import LibraryHomepage from './components/Sections/Library/Homepage';
@@ -36,7 +38,6 @@ import BlogPost from './components/Sections/Publications/tabs/Blog/Post/Containe
 import SimpleModeContainer from './components/Sections/SimpleMode/Container';
 import Topics from './components/Sections/Topics/TopicContainer';
 import Topic from './components/Sections/Topics/TopicPage';
-import SearchResults from './components/Search/SearchResults';
 import * as shapes from './components/shapes';
 import {
   DEFAULT_LANGUAGE,
@@ -47,8 +48,10 @@ import {
   PAGE_NS_PROGRAMS
 } from './helpers/consts';
 
-// import Design from './components/Design/Design';
 import * as ssrDataLoaders from './routesSSRData';
+import SingleMediaContainer from './components/Pages/WithPlayer/SingleMedia/SingleMediaContainer';
+import SearchResults from './components/Search/SearchResults';
+import BuildPlaylistLastDaily from './components/Pages/WithPlayer/LastDaily/BuildPlaylistLastDaily';
 
 const routes = [
   { path: '', component: HomePage, options: { ssrData: ssrDataLoaders.home } },
@@ -57,7 +60,7 @@ const routes = [
   { path: `personal/${MY_NAMESPACE_HISTORY}`, component: HistoryPage },
   { path: `personal/${MY_NAMESPACE_REACTIONS}`, component: ReactionPage },
   { path: `personal/${MY_NAMESPACE_PLAYLISTS}/:id`, component: PlaylistPage },
-  { path: `${MY_NAMESPACE_PLAYLISTS}/:id`, component: PlaylistDecorator },
+  { path: `${MY_NAMESPACE_PLAYLISTS}/:id`, component: PlaylistMy },
   { path: `${MY_NAMESPACE_BOOKMARKS}`, component: BookmarksPage },
 
   { path: 'publications', component: Publications, options: { ssrData: ssrDataLoaders.publicationsPage } },
@@ -70,7 +73,6 @@ const routes = [
   },
   { path: 'publications/blog/:blog/:id', component: BlogPost, options: { ssrData: ssrDataLoaders.blogPostPage } },
 
-  { path: ':routeType/cu/:id', component: PlaylistItemPage, options: { ssrData: ssrDataLoaders.cuPage } },
   { path: 'lessons', component: Lessons, options: { ssrData: ssrDataLoaders.lessonsPage } },
   { path: 'lessons/:tab', component: Lessons, options: { ssrData: ssrDataLoaders.lessonsPage } },
   {
@@ -80,11 +82,25 @@ const routes = [
   },
   {
     path: 'lessons/:tab/c/:id',
-    component: PlaylistCollectionIdCheck,
+    component: PlaylistCollectionPage,
     options: { ssrData: ssrDataLoaders.lessonsCollectionPage }
   },
-  { path: ':routeType/:tab/cu/:id', component: PlaylistItemPage, options: { ssrData: ssrDataLoaders.cuPage } },
-  { path: 'lessons/daily/latest', component: LastLessonCollection, options: { ssrData: ssrDataLoaders.latestLesson } },
+  { path: 'lessons/cu/:id', component: PlaylistItemPageLesson, options: { ssrData: ssrDataLoaders.cuPage } },
+  {
+    path: 'lessons/series/cu/:id',
+    component: PlaylistItemPageSeries,
+    options: { ssrData: ssrDataLoaders.cuPage }
+  },
+  {
+    path: 'lessons/:tab/cu/:id',
+    component: PlaylistItemPageLesson,
+    options: { ssrData: ssrDataLoaders.cuPage }
+  },
+  {
+    path: 'lessons/daily/latest',
+    component: BuildPlaylistLastDaily,
+    options: { ssrData: ssrDataLoaders.latestLesson }
+  },
   { path: 'programs', component: Programs, options: { ssrData: ssrDataLoaders.programsPage } },
   { path: 'programs/:tab', component: Programs, options: { ssrData: ssrDataLoaders.programsPage } },
   {
@@ -92,16 +108,27 @@ const routes = [
     component: Program,
     options: { ssrData: ssrDataLoaders.collectionPage(PAGE_NS_PROGRAMS) }
   },
+  { path: 'programs/cu/:id', component: SingleMediaContainer, options: { ssrData: ssrDataLoaders.cuPage } },
+  { path: 'programs/:tab/cu/:id', component: SingleMediaContainer, options: { ssrData: ssrDataLoaders.cuPage } },
+
   { path: 'events', component: Events, options: { ssrData: ssrDataLoaders.eventsPage } },
   {
     path: 'events/c/:id',
-    component: PlaylistCollectionIdCheck,
+    component: PlaylistCollectionPage,
     options: { ssrData: ssrDataLoaders.playlistCollectionPage }
   },
+  { path: 'events/cu/:id', component: PlaylistItemPageEvent, options: { ssrData: ssrDataLoaders.cuPage } },
+  { path: 'events/:tab/cu/:id', component: PlaylistItemPageEvent, options: { ssrData: ssrDataLoaders.cuPage } },
+
   { path: 'music', component: Music, options: { ssrData: ssrDataLoaders.musicPage } },
   {
     path: 'music/c/:id',
-    component: PlaylistCollectionIdCheck,
+    component: PlaylistCollectionPage,
+    options: { ssrData: ssrDataLoaders.playlistCollectionPage }
+  },
+  {
+    path: 'music/:id/cu/:cuId',
+    component: PlaylistCollectionPage,
     options: { ssrData: ssrDataLoaders.playlistCollectionPage }
   },
   { path: 'sources', component: LibraryHomepage },
@@ -121,8 +148,8 @@ const routes = [
   { path: 'sketches', component: Sketches, options: { ssrData: ssrDataLoaders.programsPage } },
 ];
 
-const NotFound = () => <h1>Page not found</h1>;
-const Root     = ({ route }) => renderRoutes(route.routes);
+export const NotFound = () => <h1>Page not found</h1>;
+const Root            = ({ route }) => renderRoutes(route.routes);
 
 /** Creates a page route config */
 const pageRoute = (path, component, { prefix, subRoutes, ssrData } = {}) => ({

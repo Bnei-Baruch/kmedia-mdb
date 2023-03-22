@@ -1,20 +1,18 @@
 import React, { useMemo } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { withNamespaces } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { withTranslation } from 'react-i18next';
 import { Button, Divider, Header } from 'semantic-ui-react';
 
-import { actions, selectors } from '../../../redux/modules/auth';
+import { selectors } from '../../../redux/modules/auth';
 import { selectors as settings } from '../../../redux/modules/settings';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
+import { login } from '../../../pkg/ksAdapter/adapter';
 
-const ShowNeedToLogin = withNamespaces()(
-  ({ t, children }) => {
-    const dispatch = useDispatch();
+const ShowNeedToLogin = withTranslation()(
+  ({ t }) => {
     const language = useSelector(state => settings.getLanguage(state.settings));
 
     const dir = getLanguageDirection(language);
-
-    const login = () => dispatch(actions.login(language));
 
     return (
       <div className="need_to_login">

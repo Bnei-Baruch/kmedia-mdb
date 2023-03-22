@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import produce from 'immer';
 import { Button, Header, Table, Image } from 'semantic-ui-react';
 
@@ -100,4 +100,4 @@ TopN.propTypes = {
   t: PropTypes.func.isRequired,
 };
 
-export default withNamespaces()(TopN);
+export default withTranslation()(TopN);

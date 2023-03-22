@@ -1,13 +1,14 @@
 import { call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
 
 import Api from '../helpers/Api';
-import { CT_DAILY_LESSON, CT_SPECIAL_LESSON } from '../helpers/consts';
+import { CT_DAILY_LESSON, CT_SPECIAL_LESSON, MY_NAMESPACE_HISTORY } from '../helpers/consts';
 import { selectors as authSelectors } from '../redux/modules/auth';
 import { actions, selectors as mdbSelectors, types } from '../redux/modules/mdb';
 import { actions as publications } from '../redux/modules/publications';
 import { selectors as settings } from '../redux/modules/settings';
 import { actions as sources } from '../redux/modules/sources';
 import { actions as tags } from '../redux/modules/tags';
+import { fetch as fetchMy } from './my';
 
 export function* fetchUnit(action) {
   const id = action.payload;
@@ -91,6 +92,8 @@ export function* fetchLatestLesson() {
   try {
     const language = yield select(state => settings.getLanguage(state.settings));
     const { data } = yield call(Api.latestLesson, { language });
+    const cu_uids  = data.content_units.map(cu => cu.id);
+    yield fetchMy({ payload: { namespace: MY_NAMESPACE_HISTORY, cu_uids, page_size: cu_uids.length } });
     yield put(actions.fetchLatestLessonSuccess(data));
   } catch (err) {
     yield put(actions.fetchCollectionFailure(err.id, err));

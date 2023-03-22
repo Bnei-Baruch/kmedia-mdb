@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 
 import * as shapes from '../../shapes';
 import WipErr from '../../shared/WipErr/WipErr';
@@ -35,4 +35,4 @@ CollectionPage.propTypes = {
   t: PropTypes.func.isRequired
 };
 
-export default withNamespaces()(CollectionPage);
+export default withTranslation()(CollectionPage);

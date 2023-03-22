@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
-import { withRouter } from 'react-router';
 import { getQuery } from '../../../helpers/url';
+import { useLocation } from 'react-router-dom';
 
-import * as shapes from '../../shapes';
+const ScrollToTop = () => {
+  const location = useLocation();
+  const { page } = getQuery(location);
 
-const ScrollToTop = ({ location, children }) => {
-  const { page, ...query } = getQuery(location);
   useEffect(
     () => {
       if (window.pageYOffset) {
@@ -15,12 +15,7 @@ const ScrollToTop = ({ location, children }) => {
     [location.pathname, page]
   );
 
-  return children;
+  return null;
 };
 
-ScrollToTop.propTypes = {
-  location: shapes.HistoryLocation.isRequired,
-  children: shapes.Children.isRequired
-};
-
-export default withRouter(ScrollToTop);
+export default ScrollToTop;

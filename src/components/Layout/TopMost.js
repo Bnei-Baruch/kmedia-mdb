@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
 import { LANG_UI_LANGUAGES } from '../../helpers/consts';
@@ -23,4 +23,4 @@ TopMost.propTypes = {
   t: PropTypes.func.isRequired,
 };
 
-export default withNamespaces()(TopMost);
+export default withTranslation()(TopMost);

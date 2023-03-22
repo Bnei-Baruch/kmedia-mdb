@@ -9,6 +9,12 @@
     & > .segment {
       padding: 0.3em 0.5em;
     }
+
+    @media (max-width: $mobileBreakpoint) {
+      width: auto;
+      right: 150px!important;
+      bottom: .5em;
+    }
   }
 }
 
@@ -22,6 +28,12 @@
   z-index: 1900;
   border: 1px solid $midGrey;
   border-radius: 5px 5px 0 0;
+
+  @media (max-width: $mobileBreakpoint) {
+    width: auto;
+    left: 0!important;
+    right: 0!important;
+  }
 
   & > .segment {
     background: $blue;

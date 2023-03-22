@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { noop } from '../../helpers/utils';
 import { Accordion, Checkbox, Icon, List, Segment } from 'semantic-ui-react';
 
@@ -207,4 +207,4 @@ DateFilter.defaultProps = {
   }
 };
 
-export default withNamespaces()(DateFilter);
+export default withTranslation()(DateFilter);

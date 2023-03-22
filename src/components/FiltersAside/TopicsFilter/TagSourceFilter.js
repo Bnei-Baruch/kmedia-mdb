@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux';
 import { selectors } from '../../../redux/modules/filtersAside';
 import React, { useState } from 'react';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import RenderAsList from './RenderAsList';
 import RenderAsTree from './RenderAsTree';
 import FilterHeader from '../FilterHeader';
@@ -44,4 +44,4 @@ const TagSourceFilter = ({ namespace, filterName, t }) => {
   );
 };
 
-export default withNamespaces()(TagSourceFilter);
+export default withTranslation()(TagSourceFilter);

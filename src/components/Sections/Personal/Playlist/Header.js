@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { Button, Confirm, Container, Header, Icon, Input } from 'semantic-ui-react';
 
 import { MY_NAMESPACE_PLAYLISTS } from '../../../../helpers/consts';
@@ -91,4 +91,4 @@ PlaylistHeader.propTypes = {
   save: PropTypes.func
 };
 
-export default withNamespaces()(PlaylistHeader);
+export default withTranslation()(PlaylistHeader);

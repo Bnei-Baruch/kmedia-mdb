@@ -5,7 +5,7 @@ import { FN_TOPICS_MULTI } from '../../../helpers/consts';
 import { selectors as tags } from '../../../redux/modules/tags';
 import TagSourceItem from '../../FiltersAside/TopicsFilter/TagSourceItem';
 import TagSourceItemModal from '../../FiltersAside/TopicsFilter/TagSourceItemModal';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { selectors as filters } from '../../../redux/modules/filters';
 import FilterHeader from '../../FiltersAside/FilterHeader';
 import { Button, Input } from 'semantic-ui-react';
@@ -127,4 +127,4 @@ const SubTopics = ({ namespace, rootID, t }) => {
   );
 };
 
-export default withNamespaces()(SubTopics);
+export default withTranslation()(SubTopics);

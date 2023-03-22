@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectors as filtersAside } from '../../../redux/modules/filtersAside';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 import { FN_CONTENT_TYPE } from '../../../helpers/consts';
 import ContentTypeItem from './ContentTypeItem';
 import { Checkbox, List } from 'semantic-ui-react';
@@ -11,7 +11,7 @@ const ContentTypeItemGroup = ({ namespace, group, t }) => {
   const { cts, key } = group;
 
   const selectedItems = useSelector(state => filtersAside.getTree(state.filtersAside, namespace, FN_CONTENT_TYPE));
-  const items = selectedItems.filter(ct => cts.includes(ct));
+  const items         = selectedItems.filter(ct => cts.includes(ct));
 
   let selected    = useSelector(state => filters.getFilterByName(state.filters, namespace, FN_CONTENT_TYPE)?.values || []);
   selected        = selected.filter(ct => cts.includes(ct));
@@ -59,4 +59,4 @@ const ContentTypeItemGroup = ({ namespace, group, t }) => {
   );
 };
 
-export default withNamespaces()(ContentTypeItemGroup);
+export default withTranslation()(ContentTypeItemGroup);

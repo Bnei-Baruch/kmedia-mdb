@@ -1,26 +1,22 @@
 import React from 'react';
-import { withNamespaces } from 'react-i18next';
-import { useSelector, shallowEqual } from 'react-redux';
+import { withTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 import { Header, List } from 'semantic-ui-react';
-import { canonicalLink } from '../../../helpers/links';
+import { canonicalLink, getCuByCcuSkipPreparation } from '../../../helpers/links';
 
 import { selectors as mdb } from '../../../redux/modules/mdb';
-import { selectors as my } from '../../../redux/modules/my';
 import Link from '../../Language/MultiLanguageLink';
-import UnitLogoWithDuration, { getLogoUnit } from '../../shared/UnitLogoWithDuration';
-import { MY_NAMESPACE_HISTORY } from '../../../helpers/consts';
+import UnitLogoWithDuration from '../../shared/UnitLogoWithDuration';
 import { CT_LESSON_PART } from './../../../helpers/consts';
 
 const DailyLessonItem = ({ id, t }) => {
-  const c            = useSelector(state => mdb.getDenormCollection(state.mdb, id));
-  const historyItems = useSelector(state => my.getList(state.my, MY_NAMESPACE_HISTORY), shallowEqual) || [];
+  const ccu = useSelector(state => mdb.getDenormCollection(state.mdb, id));
 
-  const { number, film_date, content_units = [] } = c || {};
+  const { number, film_date, content_units = [] } = ccu || {};
 
-  if (!c || content_units.length === 0) return null;
-
-  const logoUnit = getLogoUnit(content_units, historyItems);
-  const link     = canonicalLink(logoUnit);
+  if (!ccu || content_units.length === 0) return null;
+  const logoUnit      = content_units.find(x => x.id === getCuByCcuSkipPreparation(ccu));
+  const link          = canonicalLink(logoUnit);
   const totalDuration = content_units
     .filter(cu => cu.content_type === CT_LESSON_PART)
     .reduce((acc, cu) => acc += cu.duration, 0);
@@ -31,7 +27,7 @@ const DailyLessonItem = ({ id, t }) => {
         <UnitLogoWithDuration unit={logoUnit} totalDuration={totalDuration} />
       </Link>
       <div className="media_item__content">
-        <Header as={Link} to={link}>
+        <Header as={Link} to={canonicalLink(ccu)}>
           {t('constants.content-types.DAILY_LESSON')}
           <small>
             <span className="display-iblock margin-left-8 margin-right-8">{t('values.date', { date: film_date })}</span>
@@ -46,4 +42,4 @@ const DailyLessonItem = ({ id, t }) => {
   );
 };
 
-export default withNamespaces()(DailyLessonItem);
+export default withTranslation()(DailyLessonItem);

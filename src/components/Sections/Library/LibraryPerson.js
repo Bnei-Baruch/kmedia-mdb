@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { Container, Grid, Segment } from 'semantic-ui-react';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 
 import { actions, selectors } from '../../../redux/modules/assets';
 import { selectors as settings } from '../../../redux/modules/settings';
@@ -77,4 +77,4 @@ LibraryPerson.propTypes = {
   t: PropTypes.func.isRequired,
 };
 
-export default withNamespaces()(LibraryPerson);
+export default withTranslation()(LibraryPerson);

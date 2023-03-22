@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
-import { withNamespaces } from 'react-i18next';
+import { withTranslation } from 'react-i18next';
 
 import { useInterval } from '../../../helpers/timer';
 import { LANG_HEBREW, LANG_RUSSIAN, LANG_SPANISH, LANG_UKRAINIAN } from '../../../helpers/consts';
@@ -9,7 +9,6 @@ import { actions, selectors } from '../../../redux/modules/home';
 import { selectors as mdb } from '../../../redux/modules/mdb';
 import { actions as publicationsActions, selectors as publications } from '../../../redux/modules/publications';
 import { selectors as settings } from '../../../redux/modules/settings';
-import * as shapes from '../../shapes';
 import WipErr from '../../shared/WipErr/WipErr';
 import HomePage from './HomePage';
 
@@ -68,7 +67,7 @@ const languageFn        = state => settings.getLanguage(state.settings);
 const wipFn             = state => selectors.getWip(state.home);
 const errFn             = state => selectors.getError(state.home);
 
-const HomePageContainer = ({ location, t }) => {
+const HomePageContainer = ({ t }) => {
   const dispatch  = useDispatch();
   const fetchData = useCallback(flag => dispatch(actions.fetchData(flag)), [dispatch]);
 
@@ -108,21 +107,17 @@ const HomePageContainer = ({ location, t }) => {
 
   return (
     <HomePage
-      location={location}
       latestLesson={latestLesson}
       latestItems={[...latestUnits, ...latestCos]}
       latestBlogPosts={latestBlogPosts}
       latestTweets={latestTweets}
       banners={banners}
-      language={language}
-      t={t}
     />
   );
 };
 
 HomePageContainer.propTypes = {
-  location: shapes.HistoryLocation.isRequired,
   t: PropTypes.func.isRequired
 };
 
-export default withNamespaces()(HomePageContainer);
+export default withTranslation()(HomePageContainer);

@@ -1,6 +1,6 @@
-import { isEqual } from 'lodash';
 import React, { useEffect, useState } from 'react';
-import { withNamespaces } from 'react-i18next';
+import { isEqual } from 'lodash';
+import { withTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Container, Header } from 'semantic-ui-react';
 import { CT_VIRTUAL_LESSONS, FN_SOURCES_MULTI, FN_TOPICS_MULTI, PAGE_NS_LESSONS } from '../../../helpers/consts';
@@ -29,8 +29,10 @@ const Filters = ({ namespace, baseParams, t }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(prepareActions.fetchCollections(PAGE_NS_LESSONS, { content_type: [CT_VIRTUAL_LESSONS] }));
-  }, [language, dispatch]);
+    if (!isReady && !wip && !err) {
+      dispatch(prepareActions.fetchCollections(PAGE_NS_LESSONS, { content_type: [CT_VIRTUAL_LESSONS] }));
+    }
+  }, [language, dispatch, isReady, wip, err]);
 
   useEffect(() => {
     if (!isReady && !wip && !err) {
@@ -42,7 +44,7 @@ const Filters = ({ namespace, baseParams, t }) => {
         with_original_languages: true,
       }, { isPrepare: true, countC: true }));
     }
-  }, [dispatch, isReady, baseParams]);
+  }, [isReady, baseParams, wip, err, namespace, dispatch]);
 
   useEffect(() => {
     if (isHydrated && isReady) {
@@ -57,7 +59,7 @@ const Filters = ({ namespace, baseParams, t }) => {
         countC: true
       }));
     }
-  }, [dispatch, isHydrated, isReady, selected, baseParams]);
+  }, [isHydrated, isReady, selected, baseParams, namespace, dispatch]);
 
   const handleOnHydrated = () => setIsHydrated(true);
 
@@ -77,4 +79,4 @@ const Filters = ({ namespace, baseParams, t }) => {
   );
 };
 
-export default withNamespaces()(Filters);
+export default withTranslation()(Filters);

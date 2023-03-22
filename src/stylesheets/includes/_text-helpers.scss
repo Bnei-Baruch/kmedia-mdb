@@ -1,3 +1,5 @@
+@use "sass:math";
+
 $serif-family: 'Georgia, ' Times New Roman ', Times, serif';
 $max-readble-width: 700px;
 @import 'rtl/text-helpers';
@@ -79,51 +81,51 @@ blockquote {
   }
 
   .size8 & {
-    font-size: (24 / 16) + em;
+    font-size: math.div(24, 16) + em;
   }
 
   .size7 & {
-    font-size: (23 / 16) + em;
+    font-size: math.div(23, 16) + em;
   }
 
   .size6 & {
-    font-size: (22 / 16) + em;
+    font-size: math.div(22, 16) + em;
   }
 
   .size5 & {
-    font-size: (21 / 16) + em;
+    font-size: math.div(21, 16) + em;
   }
 
   .size4 & {
-    font-size: (20 / 16) + em;
+    font-size: math.div(20, 16) + em;
   }
 
   .size3 & {
-    font-size: (19 / 16) + em;
+    font-size: math.div(19, 16) + em;
   }
 
   .size2 & {
-    font-size: (18 / 16) + em;
+    font-size: math.div(18, 16) + em;
   }
 
   .size1 & {
-    font-size: (17 / 16) + em;
+    font-size: math.div(17, 16) + em;
   }
 
   .size0 & {
-    font-size: (16 / 16) + em;
+    font-size: math.div(16, 16) + em;
   }
 
   .size-1 & {
-    font-size: (15 / 16) + em;
+    font-size: math.div(15, 16) + em;
   }
 
   .size-2 & {
-    font-size: (14 / 16) + em;
+    font-size: math.div(14, 16) + em;
   }
 
   .size-3 & {
-    font-size: (13 / 16) + em;
+    font-size: math.div(13, 16) + em;
   }
 
   * {

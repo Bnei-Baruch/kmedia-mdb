@@ -70,7 +70,7 @@ const receiveSingleTypeStats = createAction(RECEIVE_SINGLE_TYPE_STATS);
 const fetchStatsFailure      = createAction(FETCH_STATS_FAILURE);
 const receiveLocationsStats  = createAction(RECEIVE_LOCATIONS_STATS);
 
-const fetchElasticStats = createAction(FETCH_ELASTIC_STATS, namespace => ({ namespace }));
+const fetchElasticStats        = createAction(FETCH_ELASTIC_STATS, namespace => ({ namespace }));
 const fetchElasticStatsSuccess = createAction(FETCH_ELASTIC_STATS_SUCCESS);
 const fetchElasticStatsFailure = createAction(FETCH_ELASTIC_STATS_FAILURE);
 
@@ -113,14 +113,15 @@ const onFetchStatsSuccess = (draft, { dataCU, dataC, dataL, namespace, isPrepare
         .filter(id => !!id)
         .forEach(id => {
           acc.byId[id] = (dcu[id] || 0) + (dc[id] || 0) + (dl[id] || 0);
-          acc.tree.push(id);
+          if (!acc.tree.includes(id)) {
+            acc.tree.push(id);
+          }
         });
     } else {
       acc.tree.forEach(id => {
         acc.byId[id] = (dcu[id] || 0) + (dc[id] || 0) + (dl[id] || 0);
       });
     }
-
     ns[fn] = acc;
   });
 
@@ -159,7 +160,9 @@ const onReceiveSingleTypeStats = (draft, { dataCU = {}, dataC = {}, dataL = {}, 
       .filter(id => !!id)
       .forEach(id => {
         statsByFN.byId[id] = (dataCU[id] || 0) + (dataC[id] || 0) + (dataL[id] || 0);
-        statsByFN.tree.push(id);
+        if (!statsByFN.tree.includes(id)) {
+          statsByFN.tree.push(id);
+        }
       });
   } else {
     statsByFN.tree.forEach(id => {
@@ -170,7 +173,6 @@ const onReceiveSingleTypeStats = (draft, { dataCU = {}, dataC = {}, dataL = {}, 
   draft[namespace] = { ...draft[namespace], [fn]: statsByFN };
   return draft;
 };
-
 
 const onReceiveLocationsStats = (draft, { locations, namespace, isPrepare }) => {
   const stats = draft[namespace]?.[FN_LOCATIONS] || { byId: {}, citiesByCountry: {}, tree: [] };
@@ -226,12 +228,12 @@ export const reducer = handleActions({
 }, initialState);
 
 /* Selectors */
-const citiesByCountry   = (state, ns) => id => state[ns]?.[FN_LOCATIONS]?.citiesByCountry[id] || [];
-const getMultipleStats  = (state, ns, fn) => ids => ids.map(id => getStats(state, ns, fn)(id));
-const getStats          = (state, ns, fn) => id => state[ns]?.[fn]?.byId[id] || 0;
-const getTree           = (state, ns, fn) => state[ns]?.[fn]?.tree || [];
-const getWipErr         = (state, ns) => ({ wip: state[ns]?.wip || false, err: state[ns]?.err || null });
-const isReady           = (state, ns) => !!state[ns]?.isReady;
+const citiesByCountry  = (state, ns) => id => state[ns]?.[FN_LOCATIONS]?.citiesByCountry[id] || [];
+const getMultipleStats = (state, ns, fn) => ids => ids.map(id => getStats(state, ns, fn)(id));
+const getStats         = (state, ns, fn) => id => state[ns]?.[fn]?.byId[id] || 0;
+const getTree          = (state, ns, fn) => state[ns]?.[fn]?.tree || [];
+const getWipErr        = (state, ns) => ({ wip: state[ns]?.wip || false, err: state[ns]?.err || null });
+const isReady          = (state, ns) => !!state[ns]?.isReady;
 
 export const selectors = {
   getStats,

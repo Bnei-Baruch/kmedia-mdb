@@ -1,6 +1,5 @@
 import { createAction } from 'redux-actions';
 import { types as chronicles } from './chronicles';
-import { types as player } from './player';
 import { handleActions } from './settings';
 import { types as ssr } from './ssr';
 
@@ -10,6 +9,7 @@ const FETCH_RECOMMENDED_FAILURE = 'FETCH_RECOMMENDED_FAILURE';
 const FETCH_VIEWS               = 'FETCH_VIEWS';
 const RECEIVE_VIEWS             = 'RECEIVE_VIEWS';
 const RECEIVE_WATCHING_NOW      = 'RECEIVE_WATCHING_NOW';
+const PLAYER_PLAY_WITH_UID      = 'PLAYER_PLAY_WITH_UID';
 
 export const types = {
   FETCH_RECOMMENDED,
@@ -27,6 +27,7 @@ const fetchRecommendedFailure = createAction(FETCH_RECOMMENDED_FAILURE);
 const receiveViews            = createAction(RECEIVE_VIEWS);
 const fetchViews              = createAction(FETCH_VIEWS);
 const receiveWatchingNow      = createAction(RECEIVE_WATCHING_NOW);
+const playerPlayWithUid       = createAction(PLAYER_PLAY_WITH_UID);
 
 export const actions = {
   fetchRecommended,
@@ -35,6 +36,7 @@ export const actions = {
   receiveViews,
   fetchViews,
   receiveWatchingNow,
+  playerPlayWithUid,
 };
 
 /* Reducer */
@@ -81,7 +83,7 @@ const onRecommended = draft => draft.wip = true;
 
 export const reducer = handleActions({
   [ssr.PREPARE]: onSSRPrepare,
-  [player.PLAYER_PLAY]: onPlayerPlay,
+  [PLAYER_PLAY_WITH_UID]: onPlayerPlay,
   [chronicles.USER_INACTIVE]: onUserInactive,
 
   [FETCH_RECOMMENDED]: onRecommended,

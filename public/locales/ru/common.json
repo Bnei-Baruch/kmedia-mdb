@@ -176,13 +176,7 @@
     },
     "buttons": {
       "edit-back": "Назад",
-      "start-position": "Начало",
-      "end-position": "Конец",
-      "click-to-set": "Жми",
       "tap-to-unmute": "Включить звук"
-    },
-    "share": {
-      "title": "Посмотри это видео"
     },
     "error": {
       "loading": "Ошибка при загрузке файла."
@@ -191,9 +185,41 @@
       "series-by-topic": "Серия уроков по теме:"
     },
     "download": {
-      "iconHoverText": "Загрузите отрывок, который вы отметили",
-      "downloadButton": "Скачать",
+      "icon-hover-text": "Загрузите отрывок, который вы отметили",
+      "download-button": "Скачать",
       "copyButton": "Копировать линк"
+    },
+    "settings": {
+      "playback": "Воспроизведение",
+      "playback-speed": "Скорость",
+      "quality": "Качество",
+      "language": "Язык",
+      "audio": "Аудио",
+      "video": "Видео",
+      "normal": "норм.",
+      "audio-only-on": "Аудиорежим ВКЛ.",
+      "audio-only-off": "Аудиорежим ВЫКЛ."
+    },
+    "share": {
+      "title": "Посмотри это видео",
+      "start-position": "Нажмите начало",
+      "end-position": "Нажмите конец",
+      "embedded": "Встроить",
+      "reset-to-full": "Полный сброс",
+      "download-file": "Скачать отрывок"
+    },
+    "controls": {
+      "pause": "Пауза",
+      "play": "Воспроизвести",
+      "mute": "Заглушить",
+      "share": "Поделиться",
+      "settings": "Настройки",
+      "rewind": "Rewind {{seek}} sec",
+      "skip": "Skip 10 sec",
+      "next-video": "Следующее видео",
+      "prev-video": "Предыдущее видео",
+      "fullscreen": "Во весь экран",
+      "fullscreen-exit": "Выйти из полноэкранного режима"
     }
   },
   "playlist": {

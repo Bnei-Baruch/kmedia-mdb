@@ -1,25 +1,21 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { withNamespaces } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { Button } from 'semantic-ui-react';
 
 import { LANG_ENGLISH, LANG_HEBREW, LANG_RUSSIAN, LANG_SPANISH } from '../../helpers/consts';
+import { useSelector } from 'react-redux';
+import { selectors as settings } from '../../redux/modules/settings';
 
-const Vh_Button = ({ t, language }) => (
-  DButton({
+export const VirtualHomeButton = () => {
+  const language = useSelector(state => settings.getLanguage(state.settings));
+  const { t }    = useTranslation();
+  return DButton({
     content: t('home.virtual-home'),
     href: `https://kli.one/?bbref_internal=kmedia&bbref_lang=${language}&lang=${language}`,
     icon: 'globe',
     className: 'vh-button'
-  })
-);
-
-Vh_Button.propTypes = {
-  language: PropTypes.string.isRequired,
-  t: PropTypes.func.isRequired,
+  });
 };
-
-export const VirtualHomeButton = withNamespaces()(Vh_Button);
 
 const DButton = ({ content, href, icon, className, color = 'blue' }) => (
   <Button
@@ -51,15 +47,13 @@ const getDonateLinkDetails = language => {
   }
 };
 
-const DonateNow = ({ t, language }) => {
+const DonateNow = () => {
+  const language = useSelector(state => settings.getLanguage(state.settings));
+  const { t }    = useTranslation();
+
   const { linkLang, utmTerm } = getDonateLinkDetails(language);
   const link                  = `https://www.kab1.com/${linkLang}?utm_source=kabbalah_media&utm_medium=button&utm_campaign=donations&utm_id=donations&utm_term=${utmTerm}&utm_content=header_button_donate`;
   return DButton({ content: t('home.donate'), href: link, icon: 'heart', className: 'donate-button' });
 };
 
-DonateNow.propTypes = {
-  language: PropTypes.string.isRequired,
-  t: PropTypes.func.isRequired,
-};
-
-export default withNamespaces()(DonateNow);
+export default DonateNow;
