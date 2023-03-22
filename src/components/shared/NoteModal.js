@@ -20,12 +20,8 @@ const NoteModal = ({ note = false, properties, open = true, toggleOpen }) => {
     !note ? dispatch(actions.add(content, properties)) : dispatch(actions.edit(content, note.id));
     toggleOpen(false);
   };
-  const handleOnClose         = () => {
-    toggleOpen(false);
-  };
-  const handleOnChange        = (e, { value }) => {
-    setContent(value);
-  };
+  const handleOnClose         = () => toggleOpen(false);
+  const handleOnChange        = (e, { value }) => setContent(value);
   const handleRemove          = () => {
     if (!note) {
       handleOnClose();
