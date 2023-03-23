@@ -35,7 +35,7 @@ const PlayerBehavior = () => {
     }
 
     dispatch(actions.setFile(file));
-  }, [file.src, info.isReady, dispatch]);
+  }, [file, info.isReady, dispatch]);
 
   return null;
 };

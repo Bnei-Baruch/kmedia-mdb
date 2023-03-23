@@ -60,6 +60,7 @@ app.use(helmet({
         'cdn.jwplayer.com',
         '*.jwpcdn.com',
         '*.hlsjs.js',
+        'blob:',
       ],
       'style-src': [
         '\'self\'',
