@@ -258,7 +258,8 @@
     "trimmed-title": "Your files are ready",
     "trimmed-title-wip": "We prepare the file for you",
     "trimmed-content-wip": "A few minutes...",
-    "add-new-note": "Write down notes, things you heard during lessons or anything important to keep for the future..."
+    "add-new-note": "Write down notes, things you heard during lessons or anything important to keep for the future...",
+    "confirm-remove-note": "Are you sure you want to delete the note?"
   },
   "search": {
     "header": {

@@ -18,11 +18,6 @@
     .button {
       z-index: 1;
     }
-
-    svg {
-      width: 20px;
-      height: 20px;
-    }
   }
 
 }
@@ -48,10 +43,11 @@
 }
 
 .note_modal {
-  & > .actions{
+  & > .actions {
     display: flex;
     justify-content: space-between;
   }
+
   &_textarea {
     min-height: 40VH;
   }

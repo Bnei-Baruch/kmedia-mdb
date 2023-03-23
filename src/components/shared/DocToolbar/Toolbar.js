@@ -41,9 +41,13 @@ const DocToolbar = ({ t, url, text, source, label, position, setPinned, isPinned
             className="pin"
             icon="thumbtack"
             floated="right"
+            circular
             onClick={setPinned}
           />}
         />
+        {
+          isPinned && <AddNoteBtn properties={source} toggleToolbar={handleToggle} />
+        }
         {
           !isPinned &&
           (
@@ -65,9 +69,6 @@ const DocToolbar = ({ t, url, text, source, label, position, setPinned, isPinned
               </Menu>
             </>
           )
-        }
-        {
-          isPinned && <AddNoteBtn properties={source} toggleToolbar={handleToggle} />
         }
       </div>
     </div>

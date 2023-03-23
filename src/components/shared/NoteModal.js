@@ -41,14 +41,19 @@ const NoteModal = ({ note = false, open = true, toggleOpen }) => {
 
   return (
     <>
-      <Confirm open={confirm} onConfirm={handleConfirmedRemove} onCancel={handleCancelConfirm} />
+      <Confirm
+        open={confirm}
+        onConfirm={handleConfirmedRemove}
+        onCancel={handleCancelConfirm}
+        content={t('messages.confirm-remove-note')}
+      />
       <Modal
-        closeIcon
         size="large"
         open={open}
         onClose={handleOnClose}
         dir={dir}
         className="note_modal"
+        closeOnDimmerClick={false}
       >
         <Modal.Content>
           <div>{moment.utc(note.created_at || now()).format('YYYY-MM-DD')}</div>

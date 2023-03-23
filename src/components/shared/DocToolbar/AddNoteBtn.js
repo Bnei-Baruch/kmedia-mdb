@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Popup, Label, Icon } from 'semantic-ui-react';
+import { Button, Popup } from 'semantic-ui-react';
 import NoteModal from '../NoteModal';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import { useSelector } from 'react-redux';
@@ -30,12 +30,8 @@ const AddNoteBtn = ({ properties, toggleToolbar }) => {
             circular
             onClick={handleOpen}
             color="orange"
-          >
-            <div style={{ position: 'relative' }}>
-              <Icon name="comment outline" />
-              <Label color="red" floating content={t('messages.new')} attached="top left" />
-            </div>
-          </Button>
+            icon="comment outline"
+          />
         }
       />
     </>
