@@ -62,7 +62,7 @@ export const isPlayerReady = () => window.jwplayer()?.id === JWPLAYER_ID;
 
 const PLAYER_EVENTS = [
   'ready',
-  'meta',
+  'audioTracks',
   'playlistItem',
   'remove',
   'destroyPlugin',

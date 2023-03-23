@@ -23,7 +23,8 @@ const PlayerBehavior = () => {
       setup({
         controls: false,
         playlist: [playlistItem],
-        preload: 'auto'
+        preload: 'auto',
+        autostart: true
       });
       init(dispatch);
     } else {
