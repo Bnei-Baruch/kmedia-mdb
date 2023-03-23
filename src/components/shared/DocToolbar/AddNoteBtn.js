@@ -21,7 +21,7 @@ const AddNoteBtn = ({ properties, toggleToolbar }) => {
 
   return (
     <>
-      {open && <NoteModal toggleOpen={handleToggleOpen} properties={properties} />}
+      {open && <NoteModal toggleOpen={handleToggleOpen} note={properties} />}
       <Popup
         content={t('messages.add-new-note')}
         dir={dir}

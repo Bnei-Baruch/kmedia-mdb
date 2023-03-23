@@ -7,17 +7,18 @@ import moment, { now } from 'moment/moment';
 import { useTranslation } from 'react-i18next';
 import { selectors as settings } from '../../redux/modules/settings';
 
-const NoteModal = ({ note = false, properties, open = true, toggleOpen }) => {
+const NoteModal = ({ note = false, open = true, toggleOpen }) => {
   const [content, setContent] = useState(note.content || '');
   const [confirm, setConfirm] = useState(false);
 
   const { t }       = useTranslation();
   const defLanguage = useSelector(state => settings.getLanguage(state.settings));
-  const dir         = getLanguageDirection(properties?.language || defLanguage);
-  const dispatch    = useDispatch();
+  const language    = note.properties?.language || defLanguage;
+  const dir         = getLanguageDirection(language);
 
+  const dispatch              = useDispatch();
   const handleSave            = () => {
-    !note ? dispatch(actions.add(content, properties)) : dispatch(actions.edit(content, note.id));
+    !note.id ? dispatch(actions.add(content, { ...note, language })) : dispatch(actions.edit(content, note.id));
     toggleOpen(false);
   };
   const handleOnClose         = () => toggleOpen(false);

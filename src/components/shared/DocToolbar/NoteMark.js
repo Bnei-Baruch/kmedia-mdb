@@ -48,7 +48,7 @@ const NoteMark = ({ note, offset }) => {
 
   return (
     <div className="note_mark" style={{ top: `${pos}px`, left: `${offset.x * 8}px` }}>
-      <NoteModal note={note} open={open} toggleOpen={handleToggleOpen} />
+      {open && <NoteModal note={note} toggleOpen={handleToggleOpen} />}
       <Popup
         trigger={
           <div>
