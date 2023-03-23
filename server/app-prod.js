@@ -59,6 +59,7 @@ app.use(helmet({
         'cdnjs.cloudflare.com',         // for pdf worker
         'cdn.jwplayer.com',
         '*.jwpcdn.com',
+        '*.hlsjs.js',
       ],
       'style-src': [
         '\'self\'',
@@ -88,6 +89,7 @@ app.use(helmet({
         'stats.g.doubleclick.net',
         '*.usersnap.com',
         '*.twimg.com',
+        '*.jwpltx.com',
       ],
       'media-src': [
         '\'self\'',
