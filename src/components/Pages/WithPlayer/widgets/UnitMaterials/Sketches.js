@@ -8,7 +8,7 @@ import ImageGallery from 'react-image-gallery';
 import { Button, Container, Segment } from 'semantic-ui-react';
 import { selectSuitableLanguage } from '../../../../../helpers/language';
 import { isLanguageRtl } from '../../../../../helpers/i18n-utils';
-import { distinct, isEmpty, strCmp } from '../../../../../helpers/utils';
+import { isEmpty, strCmp } from '../../../../../helpers/utils';
 import { actions, selectors } from '../../../../../redux/modules/assets';
 import { selectors as settings } from '../../../../../redux/modules/settings';
 import * as shapes from '../../../../shapes';
@@ -49,11 +49,8 @@ class Sketches extends React.Component {
   };
 
   static getFilesLanguages = (zipFiles, contentLanguage, uiLanguage) => {
-    const languages = zipFiles
-      .map(file => file.language)
-      .filter(distinct);
-
-    const language = selectSuitableLanguage(contentLanguage, uiLanguage, languages);
+    const languages = [...(new Set(zipFiles.map(file => file.language)))];
+    const language  = selectSuitableLanguage(contentLanguage, uiLanguage, languages);
     return { languages, language };
   };
 
@@ -173,7 +170,7 @@ class Sketches extends React.Component {
 
   unzipFiles = file => {
     const { zipIndexById, unzipList } = this.props;
-    const { data, wip, err }      = zipIndexById[file.id] || {};
+    const { data, wip, err }          = zipIndexById[file.id] || {};
 
     if (!wip && !err && isEmpty(data) && !Object.prototype.hasOwnProperty.call(zipIndexById, file.id)) {
       unzipList([file.id]);
