@@ -7,8 +7,9 @@ import { textMarksPrefixByType } from '../../../helpers/scrollToSearch/helper';
 import NoteModal from '../NoteModal';
 import moment from 'moment/moment';
 
-const idPrefix = textMarksPrefixByType.note;
-const NoteMark = ({ note, offset }) => {
+const idPrefix               = textMarksPrefixByType.note;
+const TOOLTIP_LETTERS_LENGTH = 20;
+const NoteMark               = ({ note, offset }) => {
   const [pos, setPos]                 = useState(0);
   const [open, setOpen]               = useState(false);
   const [openTooltip, setOpenTooltip] = useState(false);
@@ -24,7 +25,8 @@ const NoteMark = ({ note, offset }) => {
   const handleOpenTooltip  = () => setOpenTooltip(true);
   const handleCloseTooltip = () => setOpenTooltip(false);
 
-  const { language, content, id } = note;
+  const { language, id } = note;
+  const content          = note.content?.substring(0, TOOLTIP_LETTERS_LENGTH);
 
   useEffect(() => {
     const findElPos = () => {
@@ -71,7 +73,7 @@ const NoteMark = ({ note, offset }) => {
       >
         <Popup.Content>
           <div>{moment.utc(note.created_at).format('YYYY-MM-DD')}</div>
-          {content}
+          {`${content}...`}
         </Popup.Content>
         <Popup.Content>
           <Button

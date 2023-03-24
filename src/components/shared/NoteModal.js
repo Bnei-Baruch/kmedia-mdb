@@ -46,6 +46,9 @@ const NoteModal = ({ note = false, open = true, toggleOpen }) => {
         onConfirm={handleConfirmedRemove}
         onCancel={handleCancelConfirm}
         content={t('messages.confirm-remove-note')}
+        confirmButton={t('buttons.remove')}
+        cancelButton={t('buttons.cancel')}
+        dir={dir}
       />
       <Modal
         size="large"
