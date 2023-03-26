@@ -64,8 +64,7 @@ const ScrollToSearch = ({ source, label, data, language, urlParams = '', pathnam
       if (url) {
         setSearchText(text);
 
-        const s            = window.getSelection();
-        const selEl        = s.getRangeAt(0) || element;
+        const selEl        = window.getSelection().getRangeAt(0) || element;
         const rect         = selEl.getBoundingClientRect();
         const recContainer = containerRef.current?.getBoundingClientRect();
         setBarPosition({ y: rect.top - recContainer.top });
