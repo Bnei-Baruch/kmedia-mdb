@@ -6,6 +6,11 @@
   bottom: 0;
   right: -50px;
 
+  .ltr & {
+    left: -60px;
+    right: auto;
+  }
+
   .note_mark {
     position: absolute;
     width: 30px;

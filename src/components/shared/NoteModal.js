@@ -71,16 +71,12 @@ const NoteModal = ({ note = false, open = true, toggleOpen }) => {
           </Form>
         </Modal.Content>
 
-        <Modal.Actions dir="ltr">
-          <Button
-            onClick={handleSave}
-            content={t('buttons.save')}
-            color="blue"
-          />
+        <Modal.Actions dir={dir}>
           <Button
             inverted
             onClick={handleRemove}
             color="blue"
+            icon
           >
             {
               note ? (
@@ -91,6 +87,11 @@ const NoteModal = ({ note = false, open = true, toggleOpen }) => {
               ) : t('buttons.cancel')
             }
           </Button>
+          <Button
+            onClick={handleSave}
+            content={t('buttons.save')}
+            color="blue"
+          />
         </Modal.Actions>
       </Modal>
     </>

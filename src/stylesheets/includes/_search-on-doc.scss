@@ -1,10 +1,8 @@
-.ltr .search-on-doc- {
-
-  &-bar-position.pinned {
-    right: auto;
-    left: -50px;
-  }
+.ltr .search-on-doc--bar-position.pinned {
+  left: auto;
+  right: -50px;
 }
+
 
 .ltr .unit-materials .search-on-doc--bar-position.pinned {
   right: -25px;
@@ -59,8 +57,8 @@
 
     &.pinned {
       width: max-content;
-      right: -60px;
-      left: auto;
+      left: -50px;
+      right: auto;
       padding: 2px;
       border-radius: 8px;
       border: 1px solid $blue;
