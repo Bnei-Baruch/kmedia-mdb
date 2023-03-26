@@ -128,7 +128,7 @@ const ScrollToSearch = ({ source, label, data, language, urlParams = '', pathnam
         </div>
         <div className={`notes_bar ${dir}`}>
           {
-            isMobileDevice && notes.map((n, i) => <NoteMark note={n} key={n.id} offset={noteOffsets[n.id]} />)
+            !isMobileDevice && notes.map((n, i) => <NoteMark note={n} key={n.id} offset={noteOffsets[n.id]} />)
           }
         </div>
         <div
