@@ -17,8 +17,8 @@ import WipErr from '../../../../shared/WipErr/WipErr';
 import Recommended from '../../../../Pages/WithPlayer/widgets/Recommended/Main/Recommended';
 import { getEmbedFromQuery } from '../../../../../helpers/player';
 import { ClientChroniclesContext } from '../../../../../helpers/app-contexts';
-import { renderTags } from '../../../../../helpers/utils';
 import { selectors as tagSelectors } from '../../../../../redux/modules/tags';
+import TagsByNames from '../../../../shared/TagsByNames';
 
 const renderHeader = (unit, tagNames, t, language) => {
   const isRtl    = isLanguageRtl(language);
@@ -52,7 +52,7 @@ const renderHeader = (unit, tagNames, t, language) => {
               <span className="share-publication">
                 <Share position={position} />
               </span>
-              {renderTags(tagNames)}
+              <TagsByNames names={tagNames} />
             </Grid.Column>
           </Grid.Row>
         </Grid>
@@ -114,7 +114,7 @@ const ArticlePage = ({ t }) => {
     return null;
   }
 
-  const tags = unit.tags || [];
+  const tags     = unit.tags || [];
   const tagNames = tags.map(getTagById);
 
   const chroniclesAppend = chronicles ? chronicles.append.bind(chronicles) : () => null;

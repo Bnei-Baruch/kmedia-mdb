@@ -11,7 +11,7 @@ import { selectors as siteSettings } from '../../../redux/modules/settings';
 import { selectors as tagSelectors } from '../../../redux/modules/tags';
 import { actions, selectors } from '../../../redux/modules/mdb';
 import { getLangPropertyDirection, getLanguageDirection } from '../../../helpers/i18n-utils';
-import { physicalFile, strCmp, renderTags } from '../../../helpers/utils';
+import { physicalFile, strCmp } from '../../../helpers/utils';
 import { SectionLogo } from '../../../helpers/images';
 import { canonicalLink } from '../../../helpers/links';
 import { LANG_ENGLISH, LANG_HEBREW, UNIT_LESSONS_TYPE, MT_AUDIO, MT_TEXT } from '../../../helpers/consts';
@@ -22,6 +22,7 @@ import WipErr from '../../shared/WipErr/WipErr';
 import Download from '../../shared/Download/Download';
 import ScrollToSearch from '../../shared/DocToolbar/ScrollToSearch';
 import AudioPlayer from '../../shared/AudioPlayer';
+import TagsByNames from '../../shared/TagsByNames';
 
 // expected unit of type Likutim
 const Likut = ({ t }) => {
@@ -139,7 +140,7 @@ const Likut = ({ t }) => {
             {/* toolbar */}
             <Grid className="likut__toolbar" columns={2} stackable>
               <Grid.Column>
-                {renderTags(tagNames)}
+                <TagsByNames names={tagNames} />
               </Grid.Column>
               <Grid.Column>
                 <div className="source__header-toolbar">

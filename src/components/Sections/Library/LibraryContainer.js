@@ -8,7 +8,7 @@ import { withTranslation } from 'react-i18next';
 import { Button, Container, Grid, Header, Input, Ref, Segment } from 'semantic-ui-react';
 import Headroom from 'react-headroom';
 
-import { isEmpty, renderTags } from '../../../helpers/utils';
+import { isEmpty } from '../../../helpers/utils';
 import { actions as assetsActions, selectors as assets } from '../../../redux/modules/assets';
 import { actions as sourceActions, selectors as sources } from '../../../redux/modules/sources';
 import { selectors as settings } from '../../../redux/modules/settings';
@@ -26,6 +26,7 @@ import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { getQuery } from '../../../helpers/url';
 import { SCROLL_SEARCH_ID } from '../../../helpers/consts';
 import { withRouter } from '../../../helpers/withRouterPatch';
+import TagsByNames from '../../shared/TagsByNames';
 
 const waitForRenderElement = async (attempts = 0) => {
   if (attempts > 10) return Promise.reject();
@@ -516,7 +517,7 @@ class LibraryContainer extends Component {
                   <Grid.Column mobile={16} tablet={16} computer={12} className="source__content-header">
                     <div className="source__header-title">
                       {this.header(sourceId, parentId)}
-                      {tagNames && renderTags(tagNames)}
+                      <TagsByNames names={tagNames} />
                     </div>
 
                     <LibraryBar
