@@ -26,7 +26,7 @@ import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { getQuery } from '../../../helpers/url';
 import { SCROLL_SEARCH_ID } from '../../../helpers/consts';
 import { withRouter } from '../../../helpers/withRouterPatch';
-import TagsByNames from '../../shared/TagsByNames';
+import TagsByUnit from '../../shared/TagsByUnit';
 
 const waitForRenderElement = async (attempts = 0) => {
   if (attempts > 10) return Promise.reject();
@@ -53,7 +53,6 @@ class LibraryContainer extends Component {
     sourcesSortBy: PropTypes.func.isRequired,
     getSourceById: PropTypes.func.isRequired,
     getPathByID: PropTypes.func,
-    getTagById: PropTypes.func,
     sortBy: PropTypes.string.isRequired,
     NotToSort: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
     NotToFilter: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
@@ -459,7 +458,6 @@ class LibraryContainer extends Component {
             sourceId,
             getSourceById,
             getPathByID,
-            getTagById,
             language,
             contentLanguage,
             t,
@@ -479,7 +477,6 @@ class LibraryContainer extends Component {
     const parentId    = this.properParentId(fullPath);
     const matchString = this.matchString(parentId, t);
     const active      = !this.context.isMobileDevice || tocIsActive;
-    const tagNames    = unit?.tags?.map(getTagById);
 
     return (
       <div
@@ -517,9 +514,8 @@ class LibraryContainer extends Component {
                   <Grid.Column mobile={16} tablet={16} computer={12} className="source__content-header">
                     <div className="source__header-title">
                       {this.header(sourceId, parentId)}
-                      <TagsByNames names={tagNames} />
+                      <TagsByUnit id={unit?.id} />
                     </div>
-
                     <LibraryBar
                       handleSettings={this.handleSettings}
                       handleIsReadable={this.handleIsReadable}
@@ -592,7 +588,6 @@ export default withTranslation()(withRouter(connect(
     contentLanguage: settings.getContentLanguage(state.settings, ownProps.location),
     getSourceById: sources.getSourceById(state.sources),
     getPathByID: sources.getPathByID(state.sources),
-    getTagById: tags.getTagById(state.tags),
     sortBy: sources.sortBy(state.sources),
     areSourcesLoaded: sources.areSourcesLoaded(state.sources),
     NotToSort: sources.NotToSort,

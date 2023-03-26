@@ -53,7 +53,7 @@ const downloadAsset = (path, mimeType, downloadAllowed, name) => {
 
 const Download = props => {
   const { children = null, path = null, mimeType, downloadAllowed, filename = path?.split('/').slice(-1)[0] } = props;
-  if (path === null || typeof filename === 'undefined') {
+  if (path === null || typeof filename === 'undefined' || typeof document !== 'undefined') {
     return null;
   }
 
