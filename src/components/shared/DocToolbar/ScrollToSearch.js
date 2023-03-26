@@ -63,7 +63,10 @@ const ScrollToSearch = ({ source, label, data, language, urlParams = '', pathnam
       const { url, text, query, element } = buildSearchLinkFromSelection(language, pathname);
       if (url) {
         setSearchText(text);
-        const rect         = element.getBoundingClientRect();
+
+        const s            = window.getSelection();
+        const selEl        = s.getRangeAt(0) || element;
+        const rect         = selEl.getBoundingClientRect();
         const recContainer = containerRef.current?.getBoundingClientRect();
         setBarPosition({ y: rect.top - recContainer.top });
         setSearchUrl(`${url}&${urlParams}`);
