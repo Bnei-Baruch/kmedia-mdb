@@ -10,15 +10,17 @@ import { MT_AUDIO } from '../../../helpers/consts';
 const QualityControl = ({ t }) => {
   const playedItem            = useSelector(state => playlist.getPlayed(state.playlist));
   const { quality, language } = useSelector(state => playlist.getInfo(state.playlist));
-  const { type }       = useSelector(state => selectors.getFile(state.player));
+  const { type }              = useSelector(state => selectors.getFile(state.player));
 
   const dispatch = useDispatch();
-
-  const handleSetQuality = x => dispatch(playlistActions.setQuality(x));
 
   if (type === MT_AUDIO) return null;
 
   const qualities = !playedItem.isHLS ? playedItem.qualityByLang?.[language] : playedItem.video_qualities;
+
+  if (!qualities || qualities.length < 2) return null;
+
+  const handleSetQuality = x => dispatch(playlistActions.setQuality(x));
   return (
     <div className="settings__row">
       <Header size="tiny">{t('player.settings.quality')}</Header>

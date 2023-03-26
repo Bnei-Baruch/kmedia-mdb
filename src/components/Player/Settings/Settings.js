@@ -37,7 +37,7 @@ const Settings = ({ t }) => {
           <div className="settings__pane">
             {!isMobileDevice && <MediaTypeControl />}
             <RateControl />
-            {!isMobileDevice && <QualityControl />}
+            <QualityControl />
             <div className="settings__row">
               <Header size="tiny">{t('player.settings.language')}</Header>
               <Button.Group size="mini" inverted>
