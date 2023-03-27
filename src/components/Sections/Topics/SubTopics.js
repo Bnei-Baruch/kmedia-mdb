@@ -41,8 +41,6 @@ const SubTopics = ({ namespace, rootID, t }) => {
   const selectedFilters = useSelector(state => filters.getFilterByName(state.filters, namespace, FN_TOPICS_MULTI));
   const selected        = useMemo(() => selectedFilters?.values || [], [selectedFilters]);
 
-  console.log('SELECTED', selected);
-
   const root  = getTagById(rootID);
   const items = useMemo(() => getItemsRecursive(rootID, getTagById, baseItems) || [], [rootID, getTagById, baseItems]);
 
@@ -57,7 +55,6 @@ const SubTopics = ({ namespace, rootID, t }) => {
 
   const handleSetQuery = (e, data) => setQuery(data.value);
 
-  console.log('roots', roots);
   const children = rootID ? root.children?.filter(r => items.includes(r)) : roots;
 
   if (!(children?.length > 0))
