@@ -1,4 +1,4 @@
-import { useEffect, useRef, useContext } from 'react';
+import { useEffect, useRef } from 'react';
 import { useSelector, shallowEqual, useDispatch } from 'react-redux';
 
 import { selectors as player, actions } from '../../redux/modules/player';
@@ -8,18 +8,16 @@ import { startEndFromQuery } from '../../components/Player/Controls/helper';
 import { getSavedTime } from '../../components/Player/helper';
 import { selectors as playlist } from '../../redux/modules/playlist';
 import { selectors as my } from '../../redux/modules/my';
-import { DeviceInfoContext } from '../../helpers/app-contexts';
-import { LOCALSTORAGE_MUTE, seek, play } from './adapter';
+import { seek, play, setMute } from './adapter';
+import { noop } from 'lodash';
 
 const BehaviorStartPlay = () => {
   const location       = useLocation();
   const { start, end } = startEndFromQuery(location);
 
-  const { isMobileDevice } = useContext(DeviceInfoContext);
-  const isReady            = useSelector(state => player.isReady(state.player));
-  const isMetadataReady    = useSelector(state => player.isMetadataReady(state.player));
+  const isReady         = useSelector(state => player.isReady(state.player));
+  const isMetadataReady = useSelector(state => player.isMetadataReady(state.player));
 
-  const isMuted                  = useSelector(state => player.isMuted(state.player));
   const { duration, id: fileId } = useSelector(state => player.getFile(state.player)) || {};
 
   const { id: fileIdHls, isHLS } = useSelector(state => playlist.getPlayed(state.playlist));
@@ -31,18 +29,16 @@ const BehaviorStartPlay = () => {
   const fileIdRef = useRef();
   const dispatch  = useDispatch();
 
-  //mute for autostart
   useEffect(() => {
-    if (isMuted !== undefined) return;
-    let mute = localStorage.getItem(LOCALSTORAGE_MUTE) === 'true';
-
-    if (isSingleMedia && isMobileDevice) {
-      mute = true;
-      window.jwplayer().setConfig({ mute });
-    }
-
-    dispatch(actions.setIsMuted(mute));
-  }, [isMuted, isSingleMedia, isMobileDevice, dispatch]);
+    if (!isReady) return noop;
+    const jwp            = window.jwplayer();
+    const activeteJwpHls = () => {
+      setMute(true);
+      play();
+    };
+    jwp.once('autostartNotAllowed', activeteJwpHls);
+    return () => jwp.off('autostartNotAllowed', activeteJwpHls);
+  }, [isReady]);
 
   //start from saved time on load or switch playlist item
   const isClip   = start || end !== Infinity;
