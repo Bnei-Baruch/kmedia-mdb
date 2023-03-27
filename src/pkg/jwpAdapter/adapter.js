@@ -88,10 +88,7 @@ export const init   = (dispatch, deviceInfo, isHLS) => {
 
   if (isHLS && (deviceInfo.device?.type === 'mobile' || deviceInfo.browser?.name === 'Safari')) {
     player.on('playlistItem', () => {
-      //initial HLS fetch
-      const tracks = player.getAudioTracks();
-      if (tracks.length > 0)
-        player.play().pause();
+      player.play().pause();
     });
   } else {
     events_for_attach.push('meta');
