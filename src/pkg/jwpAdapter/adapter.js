@@ -87,12 +87,14 @@ export const init   = (dispatch, deviceInfo, isHLS) => {
   const events_for_attach = [...PLAYER_EVENTS];
 
   if (isHLS && (deviceInfo.device?.type === 'mobile' || deviceInfo.browser?.name === 'Safari')) {
-    player.on('playlistItem', () => {
-      player.play().pause();
+    events_for_attach.push('audioTracks');
+    player.on('playlistItem', e => {
+      dispatch(PLAYER_ACTIONS_BY_EVENT['audioTracks'](e));
     });
   } else {
     events_for_attach.push('meta');
   }
+
   events_for_attach.forEach(name => {
     const action = PLAYER_ACTIONS_BY_EVENT[name];
     if (!action) {
