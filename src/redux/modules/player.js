@@ -108,12 +108,7 @@ const onPlay = (draft, payload) => {
 
 export const reducer = handleActions({
   [PLAYER_READY]: draft => draft.ready = true,
-  [PLAYER_METADATA_READY]: (draft, { type, metadataType }) => {
-    if (type !== 'meta')
-      draft.metadataReady = true;
-    else if (metadataType === 'media')
-      draft.metadataReady = true;
-  },
+  [PLAYER_METADATA_READY]: draft => draft.metadataReady = true,
   [PLAYER_REMOVE]: onRemove,
   [DESTROY_PLUGIN]: onRemove,
   [PLAYER_SET_FILE]: onSetFile,
@@ -167,8 +162,8 @@ export const PLAYER_ACTIONS_BY_EVENT = {
   'playlistItem': playerReady,
   'remove': playerRemove,
   'destroyPlugin': playerDestroyPlugin,
-  'audioTracks': playerMetadataReady,
-  'meta': playerMetadataReady,
+  'initSafari': playerMetadataReady,
+  'bufferFull': playerMetadataReady,
 
   'buffer': playerBuffer,
   'play': playerPlay,

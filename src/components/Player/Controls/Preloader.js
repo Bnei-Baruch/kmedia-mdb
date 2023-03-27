@@ -1,8 +1,9 @@
 import React from 'react';
-import { usePreloader } from '../../../pkg/jwpAdapter';
+import { useSelector } from 'react-redux';
+import { selectors } from '../../../redux/modules/player';
 
 const Preloader = () => {
-  const loaded = usePreloader();
+  const loaded = useSelector(state => selectors.isLoaded(state.player));
 
   if (loaded === true) return null;
 

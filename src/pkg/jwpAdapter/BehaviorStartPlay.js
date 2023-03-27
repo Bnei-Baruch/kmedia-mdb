@@ -55,9 +55,9 @@ const BehaviorStartPlay = () => {
     }
     if (autostart) {
       play();
+    } else {
+      dispatch(actions.setLoaded(true));
     }
-    dispatch(actions.setLoaded(true));
-
     fileIdRef.current = _fileId;
   }, [_isReady, isClip, cuId, _fileId, duration, historyItem, fileIdRef, isSingleMedia, fetched, dispatch]);
 

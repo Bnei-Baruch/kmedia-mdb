@@ -75,7 +75,7 @@ const PLAYER_EVENTS = [
   'complete',
   'buffer'
 ];
-export const init   = (dispatch, deviceInfo, isHLS) => {
+export const init   = (dispatch, deviceInfo) => {
   const player = window.jwplayer();
 
   //for debug, catch all jwplayer events
@@ -86,10 +86,10 @@ export const init   = (dispatch, deviceInfo, isHLS) => {
   player.on('remove', () => player.off('all'));
 
   const events_for_attach = [...PLAYER_EVENTS];
-  if (isHLS && (deviceInfo.device?.type === 'mobile' || deviceInfo.browser?.name === 'Safari')) {
-    player.on('playlistItem', e => dispatch(PLAYER_ACTIONS_BY_EVENT['audioTracks'](e)));
+  if (deviceInfo.device?.type === 'mobile' || deviceInfo.browser?.name === 'Safari') {
+    player.on('playlistItem', e => dispatch(PLAYER_ACTIONS_BY_EVENT['initSafari'](e)));
   } else {
-    events_for_attach.push('meta');
+    events_for_attach.push('bufferFull');
   }
 
   events_for_attach.forEach(name => {
