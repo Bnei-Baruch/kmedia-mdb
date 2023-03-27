@@ -225,6 +225,7 @@ export const LANGUAGES = {
 };
 
 export const ALL_LANGUAGES = [
+  LANG_ORIGINAL,
   LANG_HEBREW,
   LANG_ENGLISH,
   LANG_RUSSIAN,
@@ -259,7 +260,6 @@ export const ALL_LANGUAGES = [
   LANG_AMHARIC,
   LANG_INDONESIAN,
   LANG_ARMENIAN,
-  LANG_ORIGINAL,
 ];
 
 export const POPULAR_LANGUAGES = [
