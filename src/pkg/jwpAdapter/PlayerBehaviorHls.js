@@ -19,13 +19,14 @@ const PlayerBehaviorHls = () => {
   }, [language, isMetadataReady]);
 
   useEffect(() => {
+    if (!isMetadataReady) return;
     const jwp    = window.jwplayer();
     const levels = jwp.getQualityLevels();
     if (!levels) return;
 
     const idx = levels.findIndex(q => q.label === quality);
     jwp.setCurrentQuality(idx);
-  }, [quality]);
+  }, [quality, isMetadataReady]);
 
   return null;
 };

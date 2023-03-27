@@ -28,7 +28,7 @@ const PlayerBehavior = () => {
         playlist: [playlistItem],
         preload: 'auto'
       });
-      init(dispatch, deviceInfo, file.video_size === 'HLS');
+      init(dispatch, deviceInfo);
     } else {
       const { file: prevSrc } = window.jwplayer().getPlaylist()?.[0] || false;
       if (prevSrc === file.src) return;

@@ -108,10 +108,10 @@ const onPlay = (draft, payload) => {
 
 export const reducer = handleActions({
   [PLAYER_READY]: draft => draft.ready = true,
-  [PLAYER_METADATA_READY]: (draft, payload) => {
-    if (payload.type !== 'meta')
+  [PLAYER_METADATA_READY]: (draft, { type, metadataType }) => {
+    if (type !== 'meta')
       draft.metadataReady = true;
-    else if (payload.metadataType === 'media')
+    else if (metadataType === 'media')
       draft.metadataReady = true;
   },
   [PLAYER_REMOVE]: onRemove,

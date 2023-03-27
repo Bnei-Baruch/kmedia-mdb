@@ -25,7 +25,9 @@ const PlayerLanguages = ({ language }) => {
       <Menu secondary vertical inverted size="small" fluid>
         {
           LANGUAGE_OPTIONS
-            .filter(x => languages.includes(x.value))
+            .filter(x => {
+              return languages.includes(x.value);
+            })
             .map(x => (
               <Menu.Item
                 link

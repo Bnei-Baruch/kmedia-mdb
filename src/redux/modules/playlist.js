@@ -8,7 +8,6 @@ const PLAYLIST_BUILD         = 'Playlist/BUILD';
 const PLAYLIST_BUILD_SUCCESS = 'Playlist/BUILD_SUCCESS';
 const SINGLE_MEDIA_BUILD     = 'Playlist/SINGLE_MEDIA_BUILD';
 const MY_PLAYLIST_BUILD      = 'Playlist/MY_PLAYLIST_BUILD';
-const UPDATE_PLAYED          = 'Playlist/UPDATE_PLAYED';
 
 const PLAYLIST_SELECT       = 'Playlist/SELECT';
 const PLAYER_SET_QUALITY    = 'Player/SET_QUALITY';
@@ -27,7 +26,6 @@ const build            = createAction(PLAYLIST_BUILD, (cId, cuId) => ({ cId, cuI
 const buildSuccess     = createAction(PLAYLIST_BUILD_SUCCESS);
 const singleMediaBuild = createAction(SINGLE_MEDIA_BUILD);
 const myPlaylistBuild  = createAction(MY_PLAYLIST_BUILD, pId => ({ pId }));
-const updatePlayed     = createAction(UPDATE_PLAYED);
 
 const select       = createAction(PLAYLIST_SELECT);
 const setQuality   = createAction(PLAYER_SET_QUALITY);
@@ -40,7 +38,6 @@ export const actions = {
   singleMediaBuild,
   myPlaylistBuild,
   buildSuccess,
-  updatePlayed,
 
   select,
   setQuality,
@@ -90,27 +87,20 @@ const onComplete = draft => {
   draft.info.nextUnitId = nextId;
 };
 
-const onUpdatePlayed = (draft, { video_qualities, languages }) => {
-  const item       = draft.itemById[draft.info.cuId] || false;
-  const id         = `${item?.file.id}_${draft.info.mediaType}`;
-  const currentHLS = { id };
-  if (video_qualities) {
-    currentHLS.video_qualities = video_qualities;
-  }
-  if (languages) {
-    currentHLS.languages = languages;
-  }
-  draft.currentHLS = currentHLS;
-};
+const onUpdateMediaType = (draft, payload) => {
+  draft.info.mediaType = payload;
 
-const onUpdateMediaType = (draft, payload) => draft.info.mediaType = payload;
+  const item = draft.itemById[draft.info.cuId] || false;
+  if (item.isHLS) {
+    draft.itemById[draft.info.cuId].id = `${item?.file.id}_${draft.info.mediaType}`;
+  }
+};
 
 export const reducer = handleActions({
   [PLAYLIST_BUILD]: onBuild,
   [SINGLE_MEDIA_BUILD]: onBuild,
   [MY_PLAYLIST_BUILD]: onBuild,
   [PLAYLIST_BUILD_SUCCESS]: onBuildSuccess,
-  [UPDATE_PLAYED]: onUpdatePlayed,
 
   [PLAYLIST_SELECT]: (draft, payload) => draft.info.cuId = payload,
 
@@ -124,30 +114,21 @@ export const reducer = handleActions({
   [settingsTypes.SET_CONTENT_LANGUAGE]: (draft, payload) => draft.info.language = payload,
 }, initialState);
 
-const getPlaylist = state => state.playlist;
-const getPlayed   = state => {
-  const item = state.itemById[state.info.cuId] || false;
-  if (!item.isHLS) return item;
-  const { id, ...file } = item;
-  return { ...file, ...state.currentHLS };
-};
-
-const getInfo = state => state.info;
-
-const getNextId = state => {
+const getPlaylist  = state => state.playlist;
+const getPlayed    = state => state.itemById[state.info.cuId] || false;
+const getInfo      = state => state.info;
+const getNextId    = state => {
   const curIdx = state.playlist.findIndex(x => x === state.info.cuId);
   if (state.playlist.length <= curIdx) return false;
   const idx = curIdx + 1;
   return state.playlist[idx];
 };
-
-const getPrevId = state => {
+const getPrevId    = state => {
   const curIdx = state.playlist.findIndex(x => x === state.info.cuId);
   if (1 > curIdx) return false;
   const idx = curIdx - 1;
   return state.playlist[idx];
 };
-
 const getIndexById = (state, id) => state.playlist.findIndex(x => x === id);
 
 export const selectors = {

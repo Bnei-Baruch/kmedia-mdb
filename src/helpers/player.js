@@ -22,7 +22,9 @@ export const persistPreferredMediaType = value => localStorage.setItem('@@kmedia
 
 const isPlayable = file => MediaHelper.IsMp4(file) || MediaHelper.IsMp3(file);
 
-const findHLS = files => files.find(f => f.video_size === VS_HLS);
+const findHLS = files => files.find(f => {
+  return f.video_size === VS_HLS && f.hls_languages && f.video_qualities;
+});
 
 const calcAvailableMediaTypes = (unit, language) => {
   if (!unit || !Array.isArray(unit.files)) {
@@ -64,7 +66,9 @@ export const playableItem = (unit, preImageUrl) => {
       id: unit.id,
       file: { ...hls, src: physicalFile(hls, true) },
       isHLS: true,
-      preImageUrl
+      preImageUrl,
+      languages: hls.hls_languages,
+      qualities: hls.video_qualities
     };
   }
 

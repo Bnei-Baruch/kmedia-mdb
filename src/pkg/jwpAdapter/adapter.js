@@ -84,13 +84,10 @@ export const init   = (dispatch, deviceInfo, isHLS) => {
   player.on('error', e => console.error(e));
 
   player.on('remove', () => player.off('all'));
-  const events_for_attach = [...PLAYER_EVENTS];
 
+  const events_for_attach = [...PLAYER_EVENTS];
   if (isHLS && (deviceInfo.device?.type === 'mobile' || deviceInfo.browser?.name === 'Safari')) {
-    events_for_attach.push('audioTracks');
-    player.on('playlistItem', e => {
-      dispatch(PLAYER_ACTIONS_BY_EVENT['audioTracks'](e));
-    });
+    player.on('playlistItem', e => dispatch(PLAYER_ACTIONS_BY_EVENT['audioTracks'](e)));
   } else {
     events_for_attach.push('meta');
   }

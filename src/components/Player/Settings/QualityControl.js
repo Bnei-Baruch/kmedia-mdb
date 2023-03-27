@@ -16,7 +16,7 @@ const QualityControl = ({ t }) => {
 
   if (type === MT_AUDIO) return null;
 
-  const qualities = !playedItem.isHLS ? playedItem.qualityByLang?.[language] : playedItem.video_qualities;
+  const qualities = !playedItem.isHLS ? playedItem.qualityByLang?.[language] : playedItem.qualities;
 
   if (!qualities || qualities.length < 2) return null;
 

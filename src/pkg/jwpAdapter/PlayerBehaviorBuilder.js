@@ -5,7 +5,6 @@ import { useSelector } from 'react-redux';
 import PlayerBehavior from './PlayerBehavior';
 import { selectors as playlist } from '../../redux/modules/playlist';
 import PlayerBehaviorHls from './PlayerBehaviorHls';
-import PlayerFetchMetadataHls from './PlayerFetchMetadataHls';
 
 const PlayerBehaviorBuilder = () => {
   const isHLS = useSelector(state => playlist.getPlayed(state.playlist).isHLS);
@@ -15,9 +14,6 @@ const PlayerBehaviorBuilder = () => {
       <PlayerBehavior />
       <BehaviorStartPlay />
       <BehaviorStartStopSlice />
-      {
-        isHLS && <PlayerFetchMetadataHls />
-      }
       {
         isHLS && <PlayerBehaviorHls />
       }
