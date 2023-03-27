@@ -1,13 +1,16 @@
-import { useEffect } from 'react';
+import { useEffect, useContext } from 'react';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 
 import { findPlayedFile } from '../../components/Player/helper';
 import { actions } from '../../redux/modules/player';
 import { selectors as playlist } from '../../redux/modules/playlist';
 import { load, setup, init, isPlayerReady } from './adapter';
+import { DeviceInfoContext } from '../../helpers/app-contexts';
 
 const PlayerBehavior = () => {
   const dispatch = useDispatch();
+
+  const { deviceInfo } = useContext(DeviceInfoContext);
 
   const item = useSelector(state => playlist.getPlayed(state.playlist), shallowEqual);
   const info = useSelector(state => playlist.getInfo(state.playlist), shallowEqual);
@@ -23,10 +26,9 @@ const PlayerBehavior = () => {
       setup({
         controls: false,
         playlist: [playlistItem],
-        preload: 'auto',
-        autostart: true
+        preload: 'auto'
       });
-      init(dispatch);
+      init(dispatch, deviceInfo);
     } else {
       const { file: prevSrc } = window.jwplayer().getPlaylist()?.[0] || false;
       if (prevSrc === file.src) return;
@@ -35,7 +37,7 @@ const PlayerBehavior = () => {
     }
 
     dispatch(actions.setFile(file));
-  }, [file, info.isReady, dispatch]);
+  }, [file, info.isReady, dispatch, deviceInfo]);
 
   return null;
 };

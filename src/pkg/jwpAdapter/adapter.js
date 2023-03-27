@@ -62,7 +62,6 @@ export const isPlayerReady = () => window.jwplayer()?.id === JWPLAYER_ID;
 
 const PLAYER_EVENTS = [
   'ready',
-  'audioTracks',
   'playlistItem',
   'remove',
   'destroyPlugin',
@@ -76,7 +75,7 @@ const PLAYER_EVENTS = [
   'complete',
   'buffer'
 ];
-export const init   = dispatch => {
+export const init   = (dispatch, deviceInfo) => {
   const player = window.jwplayer();
 
   //for debug, catch all jwplayer events
@@ -85,8 +84,19 @@ export const init   = dispatch => {
   player.on('error', e => console.error(e));
 
   player.on('remove', () => player.off('all'));
-
-  PLAYER_EVENTS.forEach(name => {
+  const events_for_attach = [...PLAYER_EVENTS];
+  if (deviceInfo.browser?.name === 'Safari') {
+    events_for_attach.push('audioTracks');
+    player.on('playlistItem', () => {
+      //safari HLS send only playlistItem event on select item of playlist
+      const tracks = player.getAudioTracks();
+      if (tracks.length > 0)
+        player.play().pause();
+    });
+  } else {
+    events_for_attach.push('meta');
+  }
+  events_for_attach.forEach(name => {
     const action = PLAYER_ACTIONS_BY_EVENT[name];
     if (!action) {
       console.log(`no redux for action: ${name}`);
