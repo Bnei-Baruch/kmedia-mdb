@@ -162,7 +162,7 @@ export const getMediaTypeFromQuery = location => {
 
 export const getLanguageFromQuery = (location, fallbackLanguage = LANG_ENGLISH) => {
   const query    = getQuery(location);
-  const language = query.language || fallbackLanguage || LANG_ENGLISH;
+  const language = query.shareLang || query.language || fallbackLanguage || LANG_ENGLISH;
   return language.toLowerCase();
 };
 
