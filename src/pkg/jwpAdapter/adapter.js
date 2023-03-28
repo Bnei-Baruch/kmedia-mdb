@@ -65,6 +65,7 @@ const PLAYER_EVENTS = [
   'playlistItem',
   'remove',
   'destroyPlugin',
+  'bufferFull',
 
   'play',
   'pause',
@@ -79,24 +80,23 @@ export const init   = (dispatch, deviceInfo) => {
   const player = window.jwplayer();
 
   //for debug, catch all jwplayer events
-  player.on('all', (name, e) => {
-    if (!['bufferChange', 'time'].includes(name)) {
-      console.log('bag: jwplayer all events', name, e);
-    }
-  });
+  /* player.on('all', (name, e) => {
+     if (!['bufferChange', 'time'].includes(name)) {
+       console.log('bag: jwplayer all events', name, e);
+     }
+   });*/
 
   player.on('error', e => console.error(e));
 
   player.on('remove', () => player.off('all'));
 
-  const events_for_attach = [...PLAYER_EVENTS];
-  if (deviceInfo.browser?.name === 'Safari') {
-    player.on('playlistItem', e => dispatch(PLAYER_ACTIONS_BY_EVENT['initSafari'](e)));
-  } else {
-    events_for_attach.push('bufferFull');
-  }
+  player.on('playlistItem', e => {
+    if (e.item.sources[0]?.type.toLowerCase() === 'hls') {
+      dispatch(PLAYER_ACTIONS_BY_EVENT['initSafari'](e));
+    }
+  });
 
-  events_for_attach.forEach(name => {
+  PLAYER_EVENTS.forEach(name => {
     const action = PLAYER_ACTIONS_BY_EVENT[name];
     if (!action) {
       console.log(`no redux for action: ${name}`);

@@ -5,7 +5,6 @@ import { PLAYER_OVER_MODES } from '../../helpers/consts';
 const PLAYER_READY          = 'Player/READY';
 const PLAYER_METADATA_READY = 'Player/PLAYER_METADATA_READY';
 const PLAYER_REMOVE         = 'Player/REMOVE';
-const DESTROY_PLUGIN        = 'Player/DESTROY_PLUGIN';
 const PLAYER_PLAY           = 'Player/PLAY';
 const PLAYER_BUFFER         = 'Player/BUFFER';
 const PLAYER_PAUSE          = 'Player/PAUSE';
@@ -35,7 +34,6 @@ export const types = {
 const playerReady         = createAction(PLAYER_READY);
 const playerMetadataReady = createAction(PLAYER_METADATA_READY);
 const playerRemove        = createAction(PLAYER_REMOVE);
-const playerDestroyPlugin = createAction(DESTROY_PLUGIN);
 const setFile             = createAction(PLAYER_SET_FILE);
 
 const playerPlay       = createAction(PLAYER_PLAY);
@@ -79,10 +77,12 @@ const initialState = {
 };
 
 const onRemove = draft => {
-  draft.overMode = PLAYER_OVER_MODES.firstTime;
-  draft.ready    = false;
-  draft.played   = false;
-  draft.loaded   = false;
+  console.log('loading bug: BehaviorStartPlayHLS onRemove');
+  draft.overMode      = PLAYER_OVER_MODES.firstTime;
+  draft.ready         = false;
+  draft.played        = false;
+  draft.loaded        = false;
+  draft.metadataReady = false;
 };
 
 const onSetMode = (draft, payload) => {
@@ -96,8 +96,7 @@ const onSetFile = (draft, payload) => {
     draft.loaded = false;
   }
 
-  draft.metadataReady = false;
-  draft.file          = payload;
+  draft.file = payload;
 };
 
 const onPlay = (draft, payload) => {
@@ -111,7 +110,6 @@ export const reducer = handleActions({
   [PLAYER_READY]: draft => draft.ready = true,
   [PLAYER_METADATA_READY]: draft => draft.metadataReady = true,
   [PLAYER_REMOVE]: onRemove,
-  [DESTROY_PLUGIN]: onRemove,
   [PLAYER_SET_FILE]: onSetFile,
 
   [PLAYER_PLAY]: onPlay,
@@ -131,7 +129,7 @@ export const reducer = handleActions({
 }, initialState);
 
 const isReady          = state => state.ready;
-const isMetadataReady  = state => state.ready && state.metadataReady;
+const isMetadataReady  = state => state.metadataReady;
 const isLoaded         = state => state.loaded;
 const isPlay           = state => state.played;
 const getFile          = state => state.file;
@@ -162,8 +160,9 @@ export const PLAYER_ACTIONS_BY_EVENT = {
   'ready': playerReady,
   'playlistItem': playerReady,
   'remove': playerRemove,
-  'destroyPlugin': playerDestroyPlugin,
-  'initSafari': playerMetadataReady,
+  'destroyPlugin': playerRemove,
+
+  'initSafari': playerReady,
   'bufferFull': playerMetadataReady,
 
   'buffer': playerBuffer,
