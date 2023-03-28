@@ -8,15 +8,14 @@ import { startEndFromQuery } from '../../components/Player/Controls/helper';
 import { getSavedTime } from '../../components/Player/helper';
 import { selectors as playlist } from '../../redux/modules/playlist';
 import { selectors as my } from '../../redux/modules/my';
-import { seek, play, setMute } from './adapter';
+import { seek, play, setMute, pause } from './adapter';
 import { noop } from 'lodash';
 
 const BehaviorStartPlay = () => {
   const location       = useLocation();
   const { start, end } = startEndFromQuery(location);
 
-  const isReady         = useSelector(state => player.isReady(state.player));
-  const isMetadataReady = useSelector(state => player.isMetadataReady(state.player));
+  const isReady = useSelector(state => player.isReady(state.player));
 
   const { duration, id: fileId } = useSelector(state => player.getFile(state.player)) || {};
 
@@ -29,8 +28,9 @@ const BehaviorStartPlay = () => {
   const fileIdRef = useRef();
   const dispatch  = useDispatch();
 
+  //mute and play on autostartNotAllowed
   useEffect(() => {
-    if (!isReady) return noop;
+    if (!isReady || !isSingleMedia) return noop;
     const jwp            = window.jwplayer();
     const activeteJwpHls = () => {
       setMute(true);
@@ -38,28 +38,29 @@ const BehaviorStartPlay = () => {
     };
     jwp.once('autostartNotAllowed', activeteJwpHls);
     return () => jwp.off('autostartNotAllowed', activeteJwpHls);
-  }, [isReady]);
+  }, [isReady, isSingleMedia]);
 
   //start from saved time on load or switch playlist item
-  const isClip   = start || end !== Infinity;
-  const _isReady = isHLS ? isMetadataReady : isReady;
-  const _fileId  = isHLS ? fileIdHls : fileId;
+  const isClip  = start || end !== Infinity;
+  const _fileId = isHLS ? fileIdHls : fileId;
   useEffect(() => {
-    if (!_isReady || isClip || !fetched || _fileId === fileIdRef.current) return;
+    if (!isReady || isClip || !fetched || _fileId === fileIdRef.current) return;
 
     const autostart = !!fileIdRef.current || isSingleMedia;
 
     const { current_time: offset } = getSavedTime(cuId, historyItem);
+    console.log('loading bug: BehaviorStartPlay effect', offset);
     if (!isNaN(offset) && offset > 0 && (offset + 10 < duration)) {
       seek(offset);
     }
     if (autostart) {
       play();
     } else {
+      pause();
       dispatch(actions.setLoaded(true));
     }
     fileIdRef.current = _fileId;
-  }, [_isReady, isClip, cuId, _fileId, duration, historyItem, fileIdRef, isSingleMedia, fetched, dispatch]);
+  }, [isReady, isClip, cuId, _fileId, duration, historyItem, fileIdRef, isSingleMedia, fetched, dispatch]);
 
   return null;
 };

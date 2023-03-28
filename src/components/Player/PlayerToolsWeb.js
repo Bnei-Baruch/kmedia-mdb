@@ -10,15 +10,18 @@ import Preloader from './Controls/Preloader';
 
 const PlayerToolsWeb = ({ fullscreenRef }) => {
   const isReady = useSelector(state => player.isReady(state.player));
-  if (!isReady) return null;
 
   return (
     <>
-      <AudioBg />
       <Preloader />
-      <ControlsWeb fullscreenRef={fullscreenRef} />
-      <Settings />
-      <Sharing />
+      {
+        isReady && <>
+          <AudioBg />
+          <ControlsWeb fullscreenRef={fullscreenRef} />
+          <Settings />
+          <Sharing />
+        </>
+      }
     </>
   );
 

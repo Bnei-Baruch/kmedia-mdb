@@ -26,7 +26,8 @@ const PlayerBehavior = () => {
       setup({
         controls: false,
         playlist: [playlistItem],
-        preload: 'auto'
+        preload: 'auto',
+        autoplay: true
       });
       init(dispatch, deviceInfo);
     } else {

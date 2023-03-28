@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { selectors as playlist } from '../../redux/modules/playlist';
 import { selectors as player } from '../../redux/modules/player';
+import { VS_NAMES } from '../../helpers/consts';
 
 const PlayerBehaviorHls = () => {
   const isMetadataReady = useSelector(state => player.isMetadataReady(state.player));
@@ -23,8 +24,8 @@ const PlayerBehaviorHls = () => {
     const jwp    = window.jwplayer();
     const levels = jwp.getQualityLevels();
     if (!levels) return;
-
-    const idx = levels.findIndex(q => q.label === quality);
+    const qN  = VS_NAMES[quality];
+    const idx = levels.findIndex(q => q.label === qN);
     jwp.setCurrentQuality(idx);
   }, [quality, isMetadataReady]);
 

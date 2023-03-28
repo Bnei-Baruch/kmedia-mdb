@@ -82,6 +82,7 @@ const onRemove = draft => {
   draft.overMode = PLAYER_OVER_MODES.firstTime;
   draft.ready    = false;
   draft.played   = false;
+  draft.loaded   = false;
 };
 
 const onSetMode = (draft, payload) => {

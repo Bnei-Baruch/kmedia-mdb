@@ -79,14 +79,18 @@ export const init   = (dispatch, deviceInfo) => {
   const player = window.jwplayer();
 
   //for debug, catch all jwplayer events
-  player.on('all', (name, e) => console.log('bag: jwplayer all events', name, e));
+  player.on('all', (name, e) => {
+    if (!['bufferChange', 'time'].includes(name)) {
+      console.log('bag: jwplayer all events', name, e);
+    }
+  });
 
   player.on('error', e => console.error(e));
 
   player.on('remove', () => player.off('all'));
 
   const events_for_attach = [...PLAYER_EVENTS];
-  if (deviceInfo.device?.type === 'mobile' || deviceInfo.browser?.name === 'Safari') {
+  if (deviceInfo.browser?.name === 'Safari') {
     player.on('playlistItem', e => dispatch(PLAYER_ACTIONS_BY_EVENT['initSafari'](e)));
   } else {
     events_for_attach.push('bufferFull');

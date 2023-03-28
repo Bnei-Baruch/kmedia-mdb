@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { selectors as playlist, actions as playlistActions } from '../../../redux/modules/playlist';
 import { selectors } from '../../../redux/modules/player';
-import { MT_AUDIO } from '../../../helpers/consts';
+import { MT_AUDIO, VS_NAMES } from '../../../helpers/consts';
 
 const QualityControl = ({ t }) => {
   const playedItem            = useSelector(state => playlist.getPlayed(state.playlist));
@@ -29,7 +29,7 @@ const QualityControl = ({ t }) => {
           qualities?.map((x, i) => (
             <Button
               inverted
-              content={x}
+              content={VS_NAMES[x]}
               onClick={() => handleSetQuality(x)}
               active={x === quality}
               key={`${x}_${i}`}
