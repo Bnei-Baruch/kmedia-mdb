@@ -31,21 +31,21 @@ const UnitLogoWithDuration = ({ unit, ...propz }) => {
     setPlayTime(getSavedTime(id, historyUnit));
   }, [id, historyUnit]);
 
-  if (propz.width === undefined) {
-    propz.width = 140;
-  }
+  const { width = 140, displayDuration = true, totalDuration, ...rest } = propz;
+
+  const durationToDisplay = displayDuration ? totalDuration || duration : null;
 
   return (
-    <div className="with_duration" style={{ minWidth: propz.width }}>
+    <div className="with_duration" style={{ minWidth: width }}>
       {
-        duration && (
+        durationToDisplay && (
           <div className="duration">
-            {formatDuration(duration, null)}
+            {formatDuration(durationToDisplay, null)}
           </div>
         )
       }
       <UnitProgress unit={unit} playTime={playTime} />
-      <UnitLogo unitId={id} {...propz} />
+      <UnitLogo unitId={unit.id} width={width} {...rest} />
     </div>
   );
 };
