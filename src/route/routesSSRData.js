@@ -219,7 +219,10 @@ export const libraryPage = async (store, match) => {
     sourceID            = firstLeafId(sourceID, getSourceById);
   }
 
-  return store.sagaMiddleWare.run(assetsSagas.sourceIndex, assetsActions.sourceIndex(sourceID)).done
+  return Promise.all([
+    store.sagaMiddleWare.run(assetsSagas.sourceIndex, assetsActions.sourceIndex(sourceID)).done,
+    store.sagaMiddleWare.run(mdbSagas.fetchUnit, mdbActions.fetchUnit(sourceID)).done
+  ])
     .then(() => {
       const state    = store.getState();
       const { data } = assetsSelectors.getSourceIndexById(state.assets)[sourceID];

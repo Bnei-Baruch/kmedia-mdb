@@ -12,13 +12,13 @@ import {
 } from '../../../../../helpers/consts';
 import { canonicalLink } from '../../../../../helpers/links';
 import { cuPartNameByCCUType, intersperse } from '../../../../../helpers/utils';
-import { selectors as tagsSelectors } from '../../../../../redux/modules/tags';
 import Link from '../../../../Language/MultiLanguageLink';
 import PersonalInfo from './PersonalInfo';
 import { selectors as recommended } from '../../../../../redux/modules/recommended';
 import UnitLogo from '../../../../shared/Logo/UnitLogo';
 import { selectors as mdb } from '../../../../../redux/modules/mdb';
 import { selectors } from '../../../../../redux/modules/playlist';
+import TagsByUnit from '../../../../shared/TagsByUnit';
 
 export const makeTagLinks = (tags = [], getTagById) =>
   Array.from(intersperse(
@@ -74,29 +74,12 @@ const Info = ({ t }) => {
   const { cId, cuId, isSingleMedia } = useSelector(state => selectors.getInfo(state.playlist));
   const currentCollection            = useSelector(state => mdb.getDenormCollection(state.mdb, cId));
   const unit                         = useSelector(state => mdb.getDenormContentUnit(state.mdb, cuId));
-  const getTagById                   = useSelector(state => tagsSelectors.getTagById(state.tags));
 
-  const { id, name, film_date: filmDate, collections, content_type: ct, cIDs, tags = [] } = unit || {};
+  const { id, name, film_date: filmDate, collections, content_type: ct, cIDs } = unit || {};
 
   const views = useSelector(state => recommended.getViews(id, state.recommended));
 
-  const lids   = useSelector(state => mdb.getLabelsByCU(state.mdb, id));
-  const denorm = useSelector(state => mdb.getDenormLabel(state.mdb));
-
   if (!unit) return null;
-  const mergeTags = () => {
-    let ids = [];
-    if (tags?.length > 0) ids = tags;
-
-    if (lids?.length > 0) {
-      const lTags = lids?.map(denorm).flatMap(l => (l.tags || [])) || [];
-      ids         = [...ids, ...lTags.filter(x => !ids.includes(x))];
-    }
-
-    return ids;
-  };
-
-  const tagLinks               = makeTagLinks(mergeTags(), getTagById);
   const { noSSeries, sSeries } = makeCollectionsLinks(collections, t, isSingleMedia ? null : currentCollection);
   const isMultiLessons         = Object.values(collections).some(col => col.content_type === CT_LESSONS_SERIES || col.content_type === CT_CONGRESS);
   const episodeInfo            = getEpisodeInfo(ct, cIDs, currentCollection || Object.values(collections)[0], filmDate, t);
@@ -134,13 +117,7 @@ const Info = ({ t }) => {
         </div>
 
         <List>
-          {
-            tagLinks.length > 0 && (
-              <List.Item className="unit-info__topics" key="topics">
-                {tagLinks}
-              </List.Item>
-            )
-          }
+          <TagsByUnit id={id} />
           {
             sSeries.length > 0 && (
               <List.Item key="co-links-series" className="margin-top-8">

@@ -55,7 +55,7 @@ export const getLanguageDirection = language => {
     return 'rtl';
   }
 
-  return rtlLngs.indexOf(language) >= 0 ? 'rtl' : 'ltr';
+  return isLanguageRtl(language) ? 'rtl' : 'ltr';
 };
 
 export const isLanguageRtl = language => rtlLngs.indexOf(language) >= 0;
