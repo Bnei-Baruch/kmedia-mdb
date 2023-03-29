@@ -43,7 +43,7 @@ const PersonalInfo = ({ collection }) => {
 
   useEffect(() => {
     deleted && dispatch(actions.setDeleted(MY_NAMESPACE_REACTIONS, false));
-  }, [deleted]);
+  }, [deleted, dispatch]);
 
   const toggleReaction = l => {
     if (!user)

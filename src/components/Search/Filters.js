@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Checkbox, Container, Header, List, Segment } from 'semantic-ui-react';
 
@@ -52,9 +52,10 @@ const SortBy = ({ namespace, t }) => {
   );
 };
 
-const Filters = ({ namespace, t }) => {
+const Filters = ({ namespace }) => {
   const [isHydrated, setIsHydrated] = useState(false);
 
+  const { t }        = useTranslation();
   const { wip, err } = useSelector(state => selectors.getWipErr(state.filtersAside, namespace));
 
   const dispatch = useDispatch();
@@ -83,4 +84,4 @@ const Filters = ({ namespace, t }) => {
   );
 };
 
-export default withTranslation()(Filters);
+export default Filters;
