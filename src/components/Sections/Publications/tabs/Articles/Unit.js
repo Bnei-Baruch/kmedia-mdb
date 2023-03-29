@@ -17,10 +17,9 @@ import WipErr from '../../../../shared/WipErr/WipErr';
 import Recommended from '../../../../Pages/WithPlayer/widgets/Recommended/Main/Recommended';
 import { getEmbedFromQuery } from '../../../../../helpers/player';
 import { ClientChroniclesContext } from '../../../../../helpers/app-contexts';
-import { renderTags } from '../../../../../helpers/utils';
-import { selectors as tagSelectors } from '../../../../../redux/modules/tags';
+import TagsByUnit from '../../../../shared/TagsByUnit';
 
-const renderHeader = (unit, tagNames, t, language) => {
+const renderHeader = (unit, t, language) => {
   const isRtl    = isLanguageRtl(language);
   const position = isRtl ? 'right' : 'left';
   const subText2 = t(`publications.header.subtext2`);
@@ -52,7 +51,7 @@ const renderHeader = (unit, tagNames, t, language) => {
               <span className="share-publication">
                 <Share position={position} />
               </span>
-              {renderTags(tagNames)}
+              <TagsByUnit id={unit.id} />
             </Grid.Column>
           </Grid.Row>
         </Grid>
@@ -84,8 +83,6 @@ const renderArticle = (unit, chroniclesAppend) => (
 );
 
 const ArticlePage = ({ t }) => {
-  const getTagById = useSelector(state => tagSelectors.getTagById(state.tags));
-
   const location   = useLocation();
   const { id }     = useParams();
   const chronicles = useContext(ClientChroniclesContext);
@@ -129,7 +126,7 @@ const ArticlePage = ({ t }) => {
             <Grid.Row>
               <Grid.Column mobile={16} tablet={10} computer={10}>
                 <Grid.Row>
-                  {renderHeader(unit, tagNames, t, language)}
+                  {renderHeader(unit, t, language)}
                 </Grid.Row>
                 <Grid.Row>
                   <Grid.Column>

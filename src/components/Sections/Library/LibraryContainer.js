@@ -26,6 +26,7 @@ import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { getQuery } from '../../../helpers/url';
 import { SCROLL_SEARCH_ID } from '../../../helpers/consts';
 import { withRouter } from '../../../helpers/withRouterPatch';
+import TagsByUnit from '../../shared/TagsByUnit';
 
 const waitForRenderElement = async (attempts = 0) => {
   if (attempts > 10) return Promise.reject();
@@ -516,9 +517,8 @@ class LibraryContainer extends Component {
                   <Grid.Column mobile={16} tablet={16} computer={12} className="source__content-header">
                     <div className="source__header-title">
                       {this.header(sourceId, parentId)}
-                      {tagNames && renderTags(tagNames)}
+                      <TagsByUnit id={unit?.id} />
                     </div>
-
                     <LibraryBar
                       handleSettings={this.handleSettings}
                       handleIsReadable={this.handleIsReadable}

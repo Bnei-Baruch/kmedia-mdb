@@ -98,7 +98,7 @@ const prepareById = payload => {
   return [byId, byIdAZ];
 };
 
-const onSSRPrepare = () => ({ ...initialState });
+const onChangeLanguage = () => ({ ...initialState });
 
 const groupRabash = [
   'IHYcOU8k', 'he3tEpLu', 'M53FJnYF', 'jXgT6Pa1', 'gzm3fAe8', 'L1OKGSxg',
@@ -134,9 +134,7 @@ const setRabash = (sources, language) => {
 };
 
 export const reducer = handleActions({
-  //[ssr.PREPARE]: onSSRPrepare,
-
-  [settings.SET_LANGUAGE]: onSSRPrepare,
+  [settings.SET_LANGUAGE]: onChangeLanguage,
 
   [RECEIVE_SOURCES]: (state, action) => {
     const { sources, language } = action.payload;

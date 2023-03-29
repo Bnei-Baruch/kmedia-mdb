@@ -8,7 +8,6 @@ import clsx from 'clsx';
 
 import { actions as assetsActions, selectors as assetsSelectors } from '../../../redux/modules/assets';
 import { selectors as siteSettings } from '../../../redux/modules/settings';
-import { selectors as tagSelectors } from '../../../redux/modules/tags';
 import { actions, selectors } from '../../../redux/modules/mdb';
 import { getLangPropertyDirection, getLanguageDirection } from '../../../helpers/i18n-utils';
 import { physicalFile, strCmp, renderTags } from '../../../helpers/utils';
@@ -22,6 +21,7 @@ import WipErr from '../../shared/WipErr/WipErr';
 import Download from '../../shared/Download/Download';
 import ScrollToSearch from '../../shared/DocToolbar/ScrollToSearch';
 import AudioPlayer from '../../shared/AudioPlayer';
+import TagsByUnit from '../../shared/TagsByUnit';
 
 // expected unit of type Likutim
 const Likut = ({ t }) => {
@@ -31,7 +31,6 @@ const Likut = ({ t }) => {
   const unit            = useSelector(state => selectors.getDenormContentUnit(state.mdb, id));
   const wip             = useSelector(state => selectors.getWip(state.mdb).units[id]);
   const err             = useSelector(state => selectors.getErrors(state.mdb).units[id]);
-  const getTagById      = useSelector(state => tagSelectors.getTagById(state.tags));
   const contentLanguage = useSelector(state => siteSettings.getContentLanguage(state.settings, location));
   const doc2htmlById    = useSelector(state => assetsSelectors.getDoc2htmlById(state.assets));
 
@@ -106,9 +105,8 @@ const Likut = ({ t }) => {
   const direction                                   = getLanguageDirection(language);
   const gridDirection                               = getLangPropertyDirection(language);
 
-  const { name, film_date, files = [], tags = [], source_units } = unit;
-  const languages                                                = files.map(f => f.language);
-  const tagNames                                                 = tags.map(getTagById);
+  const { name, film_date, files = [], source_units } = unit;
+  const languages                                     = files.map(f => f.language);
 
   const url                = file && physicalFile(file, true);
   const relatedLessons     = Object.values(source_units).filter(u => UNIT_LESSONS_TYPE.includes(u.content_type));
@@ -139,7 +137,7 @@ const Likut = ({ t }) => {
             {/* toolbar */}
             <Grid className="likut__toolbar" columns={2} stackable>
               <Grid.Column>
-                {renderTags(tagNames)}
+                <TagsByUnit id={id} />
               </Grid.Column>
               <Grid.Column>
                 <div className="source__header-toolbar">
