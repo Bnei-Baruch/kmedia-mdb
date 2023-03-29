@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { isEqual } from 'lodash';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Container, Header } from 'semantic-ui-react';
 import { CT_VIRTUAL_LESSONS, FN_SOURCES_MULTI, FN_TOPICS_MULTI, PAGE_NS_LESSONS } from '../../../helpers/consts';
@@ -18,13 +18,15 @@ import PersonFilter from '../../FiltersAside/PersonFilter/Person';
 import TagSourceFilter from '../../FiltersAside/TopicsFilter/TagSourceFilter';
 import ContentTypeFilter from './ContentTypeFilter';
 
-const Filters = ({ namespace, baseParams, t }) => {
+const Filters = ({ namespace, baseParams }) => {
   const [isHydrated, setIsHydrated] = useState(false);
 
+  const { t }        = useTranslation();
   const language     = useSelector(state => settings.getLanguage(state.settings));
   const isReady      = useSelector(state => selectors.isReady(state.filtersAside, namespace));
   const { wip, err } = useSelector(state => selectors.getWipErr(state.filtersAside, namespace));
   const selected     = useSelector(state => filters.getNotEmptyFilters(state.filters, namespace), isEqual);
+  const prevSelRef   = useRef(-1);
 
   const dispatch = useDispatch();
 
@@ -46,8 +48,9 @@ const Filters = ({ namespace, baseParams, t }) => {
     }
   }, [isReady, baseParams, wip, err, namespace, dispatch]);
 
+  const selLen = selected.reduce((acc, x) => acc + x.values.length, 0);
   useEffect(() => {
-    if (isHydrated && isReady) {
+    if (isHydrated && isReady && prevSelRef.current !== selLen) {
       dispatch(actions.fetchStats(namespace, {
         ...baseParams,
         with_collections: true,
@@ -58,8 +61,9 @@ const Filters = ({ namespace, baseParams, t }) => {
         isPrepare: false,
         countC: true
       }));
+      prevSelRef.current = selLen;
     }
-  }, [isHydrated, isReady, selected, baseParams, namespace, dispatch]);
+  }, [isHydrated, isReady, selLen, baseParams, namespace, dispatch]);
 
   const handleOnHydrated = () => setIsHydrated(true);
 
@@ -79,4 +83,4 @@ const Filters = ({ namespace, baseParams, t }) => {
   );
 };
 
-export default withTranslation()(Filters);
+export default Filters;

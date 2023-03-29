@@ -6,18 +6,16 @@ import { selectors as sources } from '../../../redux/modules/sources';
 import { selectors as tags } from '../../../redux/modules/tags';
 import { selectors as filtersAside } from '../../../redux/modules/filtersAside';
 import { FN_TOPICS_MULTI } from '../../../helpers/consts';
-import React, { useEffect, useMemo, useState } from 'react';
-import TagSourceItemModal from './TagSourceItemModal';
+import React, { useMemo, useState } from 'react';
 import { selectors as settings } from '../../../redux/modules/settings';
 import { isLanguageRtl } from '../../../helpers/i18n-utils';
 import clsx from 'clsx';
+import TagSourceItemModal from './TagSourceItemModal';
 
 const TagSourceItem = props => {
   const { namespace, id, baseItems, filterName, deep, defaultSel = false } = props;
 
-  const [open, setOpen]               = useState(false);
-  const [isOnSelPath, setIsOnSelPath] = useState(false);
-  const [isSelected, setIsSelected]   = useState(defaultSel);
+  const [open, setOpen] = useState(false);
 
   const selectedFilters = useSelector(state => filters.getFilterByName(state.filters, namespace, filterName));
   const selected        = useMemo(() => selectedFilters?.values || [], [selectedFilters]);
@@ -29,24 +27,21 @@ const TagSourceItem = props => {
   const getPathTags    = useSelector(state => tags.getPathByID(state.tags));
   const language       = useSelector(state => settings.getLanguage(state.settings));
 
-  const isTag       = filterName === FN_TOPICS_MULTI;
-  const getPath     = isTag ? getPathTags : getPathSources;
-  const pathIds     = getPath(id)?.map(x => x.id);
-  const getById     = isTag ? getTagById : getSourceById;
-  const item        = getById(id);
-  const childrenIDs = useMemo(() => item.children?.filter(x => baseItems.includes(x)) || [], [baseItems, item]);
+  const isTag = filterName === FN_TOPICS_MULTI;
+
+  const getById = isTag ? getTagById : getSourceById;
+  const getPath = isTag ? getPathTags : getPathSources;
+
+  const pathIds = getPath(id)?.map(x => x.id);
+
+  const item          = getById(id) || false;
+  const childrenIDs   = useMemo(() => item.children?.filter(x => baseItems.includes(x)) || [], [baseItems, item]);
   const childrenStats = useSelector(state => filtersAside.getMultipleStats(state.filtersAside, namespace, filterName)(childrenIDs));
-  const finalStat = stat || childrenStats.reduce((sum, s) => sum + s, 0);
+  const finalStat     = stat || childrenStats.reduce((sum, s) => sum + s, 0);
+  const isSelected    = selected.includes(id) || defaultSel;
 
-  useEffect(() => {
-    const sel = selected.includes(id) || defaultSel;
-    setIsSelected(sel);
-  }, [selected, id, defaultSel]);
-
-  useEffect(() => {
-    const pathIDs = selected.length > 0 ? selected.map(id => getPath(id)).flat().map(x => x.id) : [];
-    setIsOnSelPath(!selected.includes(id) && pathIDs.includes(id));
-  }, [selected, id, getPath]);
+  const pathIDs     = selected.length > 0 ? selected.map(id => getPath(id)).flat().map(x => x.id) : [];
+  const isOnSelPath = !selected.includes(id) && pathIDs.includes(id);
 
   const dispatch = useDispatch();
 

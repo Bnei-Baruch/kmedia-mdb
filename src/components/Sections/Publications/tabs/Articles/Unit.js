@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
 import { useLocation, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { Button, Container, Grid, Header } from 'semantic-ui-react';
+import { Container, Grid, Header } from 'semantic-ui-react';
 
 import { actions, selectors } from '../../../../../redux/modules/mdb';
 import { selectors as settings } from '../../../../../redux/modules/settings';
@@ -17,26 +17,12 @@ import WipErr from '../../../../shared/WipErr/WipErr';
 import Recommended from '../../../../Pages/WithPlayer/widgets/Recommended/Main/Recommended';
 import { getEmbedFromQuery } from '../../../../../helpers/player';
 import { ClientChroniclesContext } from '../../../../../helpers/app-contexts';
-import { selectors as tagSelectors } from '../../../../../redux/modules/tags';
-import Link from '../../../../Language/MultiLanguageLink';
+import TagsByUnit from '../../../../shared/TagsByUnit';
 
-const renderHeader = (unit, tagNames, t, language) => {
+const renderHeader = (unit, t, language) => {
   const isRtl    = isLanguageRtl(language);
   const position = isRtl ? 'right' : 'left';
   const subText2 = t(`publications.header.subtext2`);
-
-  const renderTags = () => (
-    tagNames.length > 0 &&
-    <div className="unit-tags-bar">
-      {
-        tagNames.map((tag, index) =>
-          <Button key={`${tag.id}${index}`} basic compact size="small">
-            <Link to={`/topics/${tag.id}`}>{tag.label}</Link>
-          </Button>
-        )
-      }
-    </div>
-  );
 
   return (
     <div className="section-header">
@@ -65,7 +51,7 @@ const renderHeader = (unit, tagNames, t, language) => {
               <span className="share-publication">
                 <Share position={position} />
               </span>
-              {renderTags()}
+              <TagsByUnit id={unit.id} />
             </Grid.Column>
           </Grid.Row>
         </Grid>
@@ -97,8 +83,6 @@ const renderArticle = (unit, chroniclesAppend) => (
 );
 
 const ArticlePage = ({ t }) => {
-  const getTagById = useSelector(state => tagSelectors.getTagById(state.tags));
-
   const location   = useLocation();
   const { id }     = useParams();
   const chronicles = useContext(ClientChroniclesContext);
@@ -107,10 +91,6 @@ const ArticlePage = ({ t }) => {
   const unit     = useSelector(state => selectors.getDenormContentUnit(state.mdb, id));
   const wip      = useSelector(state => selectors.getWip(state.mdb).units[id]);
   const err      = useSelector(state => selectors.getErrors(state.mdb).units[id]);
-
-  const tags = unit && unit.tags ? unit.tags : [];
-
-  const tagNames = tags.map(getTagById);
 
   const dispatch = useDispatch();
 
@@ -143,7 +123,7 @@ const ArticlePage = ({ t }) => {
             <Grid.Row>
               <Grid.Column mobile={16} tablet={10} computer={10}>
                 <Grid.Row>
-                  {renderHeader(unit, tagNames, t, language)}
+                  {renderHeader(unit, t, language)}
                 </Grid.Row>
                 <Grid.Row>
                   <Grid.Column>

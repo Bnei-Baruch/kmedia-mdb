@@ -49,11 +49,8 @@ class Sketches extends React.Component {
   };
 
   static getFilesLanguages = (zipFiles, contentLanguage, uiLanguage) => {
-    const languages = zipFiles
-      .map(file => file.language)
-      .filter((v, i, a) => a.indexOf(v) === i);
-
-    const language = selectSuitableLanguage(contentLanguage, uiLanguage, languages);
+    const languages = [...(new Set(zipFiles.map(file => file.language)))];
+    const language  = selectSuitableLanguage(contentLanguage, uiLanguage, languages);
     return { languages, language };
   };
 
@@ -173,7 +170,7 @@ class Sketches extends React.Component {
 
   unzipFiles = file => {
     const { zipIndexById, unzipList } = this.props;
-    const { data, wip, err }      = zipIndexById[file.id] || {};
+    const { data, wip, err }          = zipIndexById[file.id] || {};
 
     if (!wip && !err && isEmpty(data) && !Object.prototype.hasOwnProperty.call(zipIndexById, file.id)) {
       unzipList([file.id]);
