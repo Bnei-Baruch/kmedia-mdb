@@ -78,7 +78,6 @@ const PLAYER_EVENTS = [
 ];
 export const init   = (dispatch, deviceInfo) => {
   const player = window.jwplayer();
-
   //for debug, catch all jwplayer events
   /* player.on('all', (name, e) => {
      if (!['bufferChange', 'time'].includes(name)) {
@@ -91,8 +90,9 @@ export const init   = (dispatch, deviceInfo) => {
   player.on('remove', () => player.off('all'));
 
   player.on('playlistItem', e => {
-    if (e.item.sources[0]?.type.toLowerCase() === 'hls') {
-      dispatch(PLAYER_ACTIONS_BY_EVENT['initSafari'](e));
+    if (e.item.sources[0]?.type.toLowerCase() === 'hls'
+      && deviceInfo.browser?.name === 'Safari') {
+      player.play();
     }
   });
 

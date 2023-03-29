@@ -77,7 +77,6 @@ const initialState = {
 };
 
 const onRemove = draft => {
-  console.log('loading bug: BehaviorStartPlayHLS onRemove');
   draft.overMode      = PLAYER_OVER_MODES.firstTime;
   draft.ready         = false;
   draft.played        = false;

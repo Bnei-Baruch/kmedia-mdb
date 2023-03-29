@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Button, Header } from 'semantic-ui-react';
 import { withTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
@@ -6,8 +6,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import { selectors as playlist, actions as playlistActions } from '../../../redux/modules/playlist';
 import { selectors } from '../../../redux/modules/player';
 import { MT_AUDIO, VS_NAMES } from '../../../helpers/consts';
+import { DeviceInfoContext } from '../../../helpers/app-contexts';
 
 const QualityControl = ({ t }) => {
+  const { deviceInfo } = useContext(DeviceInfoContext);
+
   const playedItem            = useSelector(state => playlist.getPlayed(state.playlist));
   const { quality, language } = useSelector(state => playlist.getInfo(state.playlist));
   const { type }              = useSelector(state => selectors.getFile(state.player));
@@ -18,7 +21,7 @@ const QualityControl = ({ t }) => {
 
   const qualities = !playedItem.isHLS ? playedItem.qualityByLang?.[language] : playedItem.qualities;
 
-  if (!qualities || qualities.length < 2) return null;
+  if (!qualities || qualities.length < 2 || (playedItem.isHLS && deviceInfo.browser.name === 'Safari')) return null;
 
   const handleSetQuality = x => dispatch(playlistActions.setQuality(x));
   return (

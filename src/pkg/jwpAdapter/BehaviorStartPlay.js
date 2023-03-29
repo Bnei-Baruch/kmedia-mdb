@@ -37,7 +37,6 @@ const BehaviorStartPlay = () => {
 
     const { current_time: offset } = getSavedTime(cuId, historyItem);
     if (!isNaN(offset) && offset > 0 && (offset + 10 < duration)) {
-      play();
       seek(offset);
     }
     if (autostart) {
