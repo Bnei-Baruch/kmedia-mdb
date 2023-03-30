@@ -52,16 +52,18 @@ import {
 } from './consts';
 
 export const landingPageSectionLink = (landingPage, filterValues) => {
-  const linkParts = [SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_LINK[landingPage]];
+  const linkParts = (SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_LINK[landingPage] || '').split('?');
+  const hasPath   = linkParts.length > 1;
+  const search    = [hasPath ? linkParts[1] : linkParts[0]];
   const params    = filterValues &&
     filterValues.filter(filterValue => filterValue.name !== 'text')
       .map(filterValue => `${filterValue.name}=${filterValue.value}`).join('&');
+
   if (params) {
-    linkParts.push(params);
+    search.push(params);
   }
 
-  const separator = linkParts[0].includes('?') ? '&' : '?';
-  return linkParts.join(separator);
+  return { pathname: hasPath ? linkParts[0] : '', search: search.join('&') };
 };
 
 export const intentSectionLink = (section, filters) => {
