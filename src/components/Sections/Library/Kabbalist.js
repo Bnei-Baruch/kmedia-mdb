@@ -1,10 +1,15 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { Header, Image, List, Table } from 'semantic-ui-react';
 
 import * as shapes from '../../shapes';
 import NavLink from '../../Language/MultiLanguageNavLink';
+import portraitBS from '../../../images/portrait_bs.png';
+import portraitRB from '../../../images/portrait_rb.png';
+import portraitML from '../../../images/portrait_ml.png';
+
+const portraits = { bs: portraitBS, rb: portraitRB, ml: portraitML };
 
 const mapLinks = {
   ar: 'ari',
@@ -32,7 +37,13 @@ const renderBook = book => {
   );
 };
 
-const Kabbalist = ({ author: { name, full_name: fullName, children: volumes, id }, getSourceById, portrait }) => {
+const Kabbalist = ({ author: { name, full_name: fullName, children: volumes, id }, getSourceById, portraitIdx }) => {
+
+  const [portrait, setPortrait] = useState();
+  useEffect(() => {
+    setPortrait(portraits[portraitIdx]);
+  }, [portraitIdx]);
+
   let displayName = fullName || name;
   if (fullName && name) {
     displayName += ` (${name})`;
@@ -70,7 +81,7 @@ const Kabbalist = ({ author: { name, full_name: fullName, children: volumes, id 
 Kabbalist.propTypes = {
   getSourceById: PropTypes.func.isRequired,
   author: shapes.Author.isRequired,
-  portrait: PropTypes.string,
+  index: PropTypes.string,
 };
 
 Kabbalist.defaultProps = {
