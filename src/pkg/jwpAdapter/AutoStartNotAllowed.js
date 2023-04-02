@@ -1,22 +1,17 @@
 import { useEffect } from 'react';
-import { useSelector, shallowEqual, useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { selectors as player, actions } from '../../redux/modules/player';
-import { selectors as playlist } from '../../redux/modules/playlist';
-import { noop } from 'lodash/util';
 
 const AutoStartNotAllowed = () => {
-  const isReady           = useSelector(state => player.isReady(state.player));
-  const { isSingleMedia } = useSelector(state => playlist.getInfo(state.playlist), shallowEqual);
+  const isReady = useSelector(state => player.isReady(state.player));
 
   const dispatch = useDispatch();
-  //mute and play on autostartNotAllowed
   useEffect(() => {
-    if (!isReady) return noop;
+    if (!isReady) return;
     const jwp         = window.jwplayer();
     const muteAndPlay = () => dispatch(actions.setLoaded(true));
-    jwp.once('autostartNotAllowed', muteAndPlay);
-    return () => jwp.off('autostartNotAllowed', muteAndPlay);
+    jwp.once && jwp.once('autostartNotAllowed', muteAndPlay);
   }, [isReady, dispatch]);
 
   return null;

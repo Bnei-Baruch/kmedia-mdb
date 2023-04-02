@@ -8,7 +8,7 @@ import { startEndFromQuery } from '../../components/Player/Controls/helper';
 import { getSavedTime } from '../../components/Player/helper';
 import { selectors as playlist } from '../../redux/modules/playlist';
 import { selectors as my } from '../../redux/modules/my';
-import { seek, play } from './adapter';
+import { seek, play, pause } from './adapter';
 
 const BehaviorStartPlay = () => {
   const location       = useLocation();
@@ -48,6 +48,7 @@ const BehaviorStartPlay = () => {
     if (autostart) {
       play();
     } else {
+      pause()
       dispatch(actions.setLoaded(true));
     }
     console.log('start bug: BehaviorStartPlay effect 2');
