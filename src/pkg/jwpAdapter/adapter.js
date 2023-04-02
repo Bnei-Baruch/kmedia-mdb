@@ -1,7 +1,6 @@
 import { PLAYER_ACTIONS_BY_EVENT } from '../../redux/modules/player';
 import { JWPLAYER_ID } from '../../helpers/consts';
 import { noop } from '../../helpers/utils';
-import { getSavedTime } from '../../components/Player/helper';
 
 export const LOCALSTORAGE_MUTE = 'jwplayer.mute';
 
@@ -91,7 +90,7 @@ export const init   = (dispatch, deviceInfo) => {
   player.on('remove', () => player.off('all'));
 
   player.on('playlistItem', e => {
-    if (e.item.sources[0]?.type.toLowerCase() === 'hls'&& deviceInfo.browser?.name !== 'Chrome') {
+    if (e.item.sources[0]?.type.toLowerCase() === 'hls' && deviceInfo.browser?.name !== 'Chrome') {
       player.seek(-1);
     }
   });

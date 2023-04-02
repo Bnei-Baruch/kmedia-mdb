@@ -18,8 +18,8 @@ const BehaviorStartPlay = () => {
   const isMetadataReady = useSelector(state => player.isMetadataReady(state.player));
   const { duration }    = useSelector(state => player.getFile(state.player)) || {};
 
-  const { isHLS }               = useSelector(state => playlist.getPlayed(state.playlist));
-  const { cuId, isSingleMedia } = useSelector(state => playlist.getInfo(state.playlist), shallowEqual);
+  const { isHLS }                    = useSelector(state => playlist.getPlayed(state.playlist));
+  const { cuId, cId, isSingleMedia } = useSelector(state => playlist.getInfo(state.playlist), shallowEqual);
 
   const historyItem = useSelector(state => my.getList(state.my, MY_NAMESPACE_HISTORY)?.find(x => x.content_unit_uid === cuId));
   const { fetched } = useSelector(state => my.getInfo(state.my, MY_NAMESPACE_HISTORY), shallowEqual);
@@ -30,10 +30,15 @@ const BehaviorStartPlay = () => {
   //start from saved time on load or switch playlist item
   const _isReady = isHLS ? isMetadataReady : isReady;
   const isClip   = start || end !== Infinity;
+
+  useEffect(() => {
+    cId && (wasPlayedRef.current = false);
+  }, [cId]);
+
   useEffect(() => {
     if (!_isReady || isClip || !fetched) return;
 
-    const autostart = wasPlayedRef.current || isSingleMedia;
+    const autostart = !!(wasPlayedRef.current || isSingleMedia);
 
     const { current_time: offset } = getSavedTime(cuId, historyItem);
     if (!isNaN(offset) && offset > 0 && (offset + 10 < duration)) {
