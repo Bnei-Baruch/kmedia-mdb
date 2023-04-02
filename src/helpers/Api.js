@@ -276,6 +276,15 @@ class Api {
     return Requests.auth(params, url, token, method);
   };
 
+  static myNotes = (params, token, method = 'GET') => {
+    let url = `${PERSONAL_API_BACKEND}rest/notes`;
+    if (params.id) {
+      url = `${url}/${params.id}`;
+      delete params.id;
+    }
+    return Requests.auth(params, url, token, method);
+  };
+
   static reactionsCount = params => {
     const url    = `${PERSONAL_API_BACKEND}reaction_count?${Requests.makeParams(params)}`;
     const config = { url, method: 'GET' };

@@ -99,7 +99,12 @@ app.use(helmet({
         '*.kabbalahmedia.info',
         '*.kab.info',
         '*.kab.sh'
-      ]
+      ],
+      'worker-src': [
+        'blob:',
+        '*.kabbalahmedia.info'
+      ],
+      'frame-ancestors': ['*']
     },
     browserSniff: false       // we're not targeting really old browsers
   }

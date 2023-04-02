@@ -219,7 +219,10 @@ export const libraryPage = async (store, match) => {
     sourceID            = firstLeafId(sourceID, getSourceById);
   }
 
-  return store.sagaMiddleWare.run(assetsSagas.sourceIndex, assetsActions.sourceIndex(sourceID)).done
+  return Promise.all([
+    store.sagaMiddleWare.run(assetsSagas.sourceIndex, assetsActions.sourceIndex(sourceID)).done,
+    store.sagaMiddleWare.run(mdbSagas.fetchUnit, mdbActions.fetchUnit(sourceID)).done,
+  ])
     .then(() => {
       const state    = store.getState();
       const { data } = assetsSelectors.getSourceIndexById(state.assets)[sourceID];
@@ -227,13 +230,13 @@ export const libraryPage = async (store, match) => {
         return;
       }
 
-      let language    = null;
-      const location  = state?.router.location ?? {};
-      const query     = getQuery(location);
-      const uiLang    = query.language || settingsSelectors.getLanguage(state.settings);
-      const languages = [...Object.keys(data)];
+      let language      = null;
+      const location    = state?.router.location ?? {};
+      const query       = getQuery(location);
+      const contentLang = query.language || settingsSelectors.getContentLanguage(state.settings);
+      const languages   = [...Object.keys(data)];
       if (languages.length > 0) {
-        language = languages.indexOf(uiLang) === -1 ? languages[0] : uiLang;
+        language = languages.indexOf(contentLang) === -1 ? languages[0] : contentLang;
       }
 
       if (data[language]) {
@@ -243,6 +246,7 @@ export const libraryPage = async (store, match) => {
 
         const name = data[language].html;
         store.dispatch(assetsActions.fetchAsset(`sources/${sourceID}/${name}`));
+        store.dispatch(mdbActions.fetchLabels({ content_unit: sourceID, language: contentLang }));
       }
     });
 };

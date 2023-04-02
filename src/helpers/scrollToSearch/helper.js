@@ -6,17 +6,28 @@ import { RenderHighlightSingleString } from './RenderHighlightSingleString';
 import { RenderNoSearch } from './RenderNoSearch';
 
 /* eslint-disable  no-useless-escape */
-export const KEEP_LETTERS_RE = /[".,\/#!$%\^&\*;:{}=\-_`~()\[\]‘’”“]/g;
+export const KEEP_LETTERS_RE            = /[".,\/#!$%\^&\*;:{}=\-_`~()\[\]‘’”“]/g;
 export const KEEP_LETTERS_WITH_SPACE_RE = /[".,\/#!$%\^&\*;:{}=\-_`~()\[\]\s‘’”“]/g;
 
 export const OFFSET_TEXT_SEPARATOR = ':$:';
-const MIN_NUMBER_WORDS_IN_LINK = 5;
+const MIN_NUMBER_WORDS_IN_LINK     = 5;
+
+export const textMarksPrefixByType = {
+  label: { start: 'l_start_', end: 'l_end_', class: 'label_pos' },
+  note: { start: 'n_start_', end: 'n_end_', class: 'note_pos' }
+};
 
 /***
  * help functions for render html
  */
-export const prepareScrollToSearch = (data, { srchstart: start, srchend: end }, highlightAll = false, labels) => {
-  if (!start?.length && !labels?.length) {
+export const prepareScrollToSearch = (
+  data,
+  { srchstart: start, srchend: end },
+  highlightAll = false,
+  textMarks
+) => {
+
+  if (!start?.length && !textMarks?.length) {
     return data;
   }
 
@@ -30,7 +41,8 @@ export const prepareScrollToSearch = (data, { srchstart: start, srchend: end }, 
     render = new RenderHighlightAll(data, start, end);
   else
     render = new RenderHighlightBorder(data, start, end);
-  return render.build(labels);
+
+  return render.build(textMarks);
 };
 
 export const getPositionInHtml = (pos, tags) => tags
@@ -39,13 +51,13 @@ export const getPositionInHtml = (pos, tags) => tags
 
 export const filterTagsByBorder = (from, to, tags) => {
   const result = [];
-  let diff = 0;
+  let diff     = 0;
   for (const p of tags) {
     diff += p.str.length;
 
     const tagEndP = p.pos + p.str.length;
-    const startP = from + diff;
-    const endP = to + diff;
+    const startP  = from + diff;
+    const endP    = to + diff;
 
     if (tagEndP >= endP) {
       continue;
@@ -82,7 +94,7 @@ export const textToHtml = (source, from, to, allTags, isBold = true) => {
         return tags.map(t => t.str).join('');
 
       const r = tags.reduce((acc, t, i) => {
-        const p = t.noHtmlPos - from;
+        const p                      = t.noHtmlPos - from;
         // eslint-disable-next-line prefer-const
         let { prevPosition, result } = acc;
         if (p !== 0) {
@@ -104,7 +116,7 @@ export const textToHtml = (source, from, to, allTags, isBold = true) => {
 
 export const wrapSeekingPlace = (data, tags, fromNohtml, toNoHtml) => {
   const from = getPositionInHtml(fromNohtml, tags);
-  const to = getPositionInHtml(toNoHtml, tags);
+  const to   = getPositionInHtml(toNoHtml, tags);
 
   let openTagP;
   let closeTagP;
@@ -127,13 +139,13 @@ export const wrapSeekingPlace = (data, tags, fromNohtml, toNoHtml) => {
     }
   }
 
-  openTagP = openTagP ?? tags[0];
+  openTagP  = openTagP ?? tags[0];
   closeTagP = closeTagP ?? tags[tags.length - 1];
 
-  let before = insertAdded(data, tags, 0, openTagP.pos)
+  let before = insertAdded(data, tags, 0, openTagP.pos);
   before += insertAdded(data, tags, openTagP.pos, from).replace(/<p|<h/, x => `<div class="scroll-to-search" id="${SCROLL_SEARCH_ID}">${x}`);
 
-  let after = insertAdded(data, tags, to, closeTagP.pos)
+  let after = insertAdded(data, tags, to, closeTagP.pos);
   after += insertAdded(data, tags, closeTagP.pos, -1).replace(/<\/p>|<\/h\d>/, x => `${x}</div>`);
 
   return { before, after };
@@ -141,19 +153,19 @@ export const wrapSeekingPlace = (data, tags, fromNohtml, toNoHtml) => {
 
 export const insertAdded = (html, allTags, from, to) => {
   const tags = allTags.filter(t => t.isAdded && t.pos > from && (to < 0 || t.pos < to));
-  let result = '', start = from
+  let result = '', start = from;
   tags.forEach(t => {
     result += html.slice(start, t.pos) + t.str;
     start = t.pos;
-  })
-  result += html.slice(start, to)
+  });
+  result += html.slice(start, to);
   return result;
-}
+};
 
 /***
  * help functions for build link
  */
-export const DOM_ROOT_ID = 'roodNodeOfShareText';
+export const DOM_ROOT_ID                  = 'roodNodeOfShareText';
 export const buildSearchLinkFromSelection = (language, pathname) => {
   if (!window?.getSelection) {
     return { url: null };
@@ -173,8 +185,8 @@ export const buildSearchLinkFromSelection = (language, pathname) => {
   pathname = pathname || window.location.pathname;
 
   const { protocol, hostname, port } = window.location;
-  const sStart = words.slice(0, MIN_NUMBER_WORDS_IN_LINK).join(' ');
-  const sEnd = words.slice(-1 * MIN_NUMBER_WORDS_IN_LINK).join(' ');
+  const sStart                       = words.slice(0, MIN_NUMBER_WORDS_IN_LINK).join(' ');
+  const sEnd                         = words.slice(-1 * MIN_NUMBER_WORDS_IN_LINK).join(' ');
 
   const start = isForward ? { node: sel.anchorNode, offset: sel.anchorOffset }
     : { node: sel.focusNode, offset: sel.focusOffset };
@@ -223,7 +235,7 @@ const buildLinkForShortSelect = (words, sel, isForward, language) => {
     query.language = language;
   }
 
-  const url = `${protocol}//${hostname}${port ? `:${port}` : ''}${pathname}?${stringify(query)}`;
+  const url     = `${protocol}//${hostname}${port ? `:${port}` : ''}${pathname}?${stringify(query)}`;
   const element = sel.focusNode.nodeName.includes('text') ? sel.focusNode.parentElement : sel.focusNode;
   return { url, text: sel.toString(), query, element };
 };

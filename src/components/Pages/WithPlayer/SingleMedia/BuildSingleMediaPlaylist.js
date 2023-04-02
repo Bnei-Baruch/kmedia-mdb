@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+
+import Helmets from '../../../shared/Helmets';
 import { actions, selectors } from '../../../../redux/modules/playlist';
 
 const BuildSingleMediaPlaylist = () => {
@@ -14,7 +16,7 @@ const BuildSingleMediaPlaylist = () => {
     }
   }, [cuId, id, wip]);
 
-  return null;
+  return <Helmets.AVUnit id={id} />;
 };
 
 export default BuildSingleMediaPlaylist;

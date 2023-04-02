@@ -85,7 +85,7 @@ const MainPage = ({ t }) => {
       <FilterLabels namespace={PAGE_NS_SKETCHES} />
       <CardGroup itemsPerRow={4} doubling stackable>
         {
-          cus?.map(({ id }, i) => <UnitItem id={id} key={i} />)
+          cus?.map(({ id }) => <UnitItem id={id} key={id} />)
         }
       </CardGroup>
 

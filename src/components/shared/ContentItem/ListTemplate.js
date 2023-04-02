@@ -4,13 +4,14 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Container, Header, Popup, Ref } from 'semantic-ui-react';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { NO_NAME } from '../../../helpers/consts';
-import { isLanguageRtl } from '../../../helpers/i18n-utils';
+import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import Link from '../../Language/MultiLanguageLink';
 
 import * as shapes from '../../shapes';
-import { imageWidthBySize, getProgress } from './helper';
+import { imageWidthBySize } from './helper';
 import UnitLogoWithDuration from '../UnitLogoWithDuration';
 import UnitLogo from '../Logo/UnitLogo';
+import { UnitProgress } from './UnitProgress';
 
 const ListTemplate = (
   {
@@ -31,7 +32,7 @@ const ListTemplate = (
   }
 ) => {
 
-  const dir                = isLanguageRtl(language) ? 'rtl' : 'ltr';
+  const dir                = getLanguageDirection(language);
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
   const [isNeedTooltip, setIsNeedTooltip] = useState(null);
@@ -86,7 +87,7 @@ const ListTemplate = (
     >
       <div>
         {label ? <div className="cu_item_label">{label}</div> : null}
-        {getProgress(unit, playTime)}
+        <UnitProgress unit={unit} playTime={playTime} />
         <div className="cu_item_img" style={{ width }}>
           {withCUInfo ? <UnitLogoWithDuration unit={unit} sourceId={source?.id} width={width} /> :
             <UnitLogo unitId={unit?.id} sourceId={source?.id} width={width} />}

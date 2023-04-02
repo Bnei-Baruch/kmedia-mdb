@@ -8,15 +8,14 @@ import CopyTextBtn from './CopyTextBtn';
 import CopyLinkBtn from './CopyLinkBtn';
 import ShareBtn from './ShareBtn';
 import LabelBtn from './LabelBtn';
+import AddNoteBtn from './AddNoteBtn';
 
 const DocToolbar = ({ t, url, text, source, label, position, setPinned, isPinned }) => {
   const [open, setOpen] = useState(!!url);
 
   const contextRef = useRef();
 
-  const handleToggle = () => {
-    setOpen(!open);
-  };
+  const handleToggle = () => setOpen(!open);
 
   return open && (
     <div
@@ -28,8 +27,8 @@ const DocToolbar = ({ t, url, text, source, label, position, setPinned, isPinned
         <Popup
           content={t('share-text.disable-share')}
           trigger={<Button
-            inverted
-            floated={isPinned ? 'none' : 'right'}
+            inverted={!isPinned}
+            floated={isPinned ? null : 'right'}
             icon="close"
             circular
             onClick={handleToggle}
@@ -42,9 +41,13 @@ const DocToolbar = ({ t, url, text, source, label, position, setPinned, isPinned
             className="pin"
             icon="thumbtack"
             floated="right"
+            circular
             onClick={setPinned}
           />}
         />
+        {
+          isPinned && <AddNoteBtn properties={source} toggleToolbar={handleToggle} />
+        }
         {
           !isPinned &&
           (

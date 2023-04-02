@@ -72,37 +72,39 @@ const MainPage = ({ t }) => {
 
   const wipErr          = WipErr({ wip, err, t });
   const filterComponent = <Filters namespace={PAGE_NS_LESSONS} baseParams={FILTER_PARAMS} />;
-  return (<>
-    <SectionHeader section="lessons" />
-    <SectionFiltersWithMobile filters={filterComponent}>
-      <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} />
-      <FilterLabels namespace={PAGE_NS_LESSONS} />
-      {
-        wipErr || items?.map(({ id, content_type }, i) => {
-          switch (true) {
-            case COLLECTION_DAILY_LESSONS.includes(content_type):
-              return <DailyLessonItem id={id} key={i} />;
-            case COLLECTION_LESSONS_TYPE.includes(content_type):
-              return <CollectionItem id={id} key={i} />;
-            case UNIT_LESSONS_TYPE.includes(content_type):
-              return <UnitItem id={id} key={i} />;
-            default:
-              return null;
-          }
-        })
-      }
-      <Divider fitted />
-      <Container className="padded pagination-wrapper" textAlign="center">
-        {total > 0 && <Pagination
-          pageNo={pageNo}
-          pageSize={pageSize}
-          total={total}
-          language={language}
-          onChange={setPage}
-        />}
-      </Container>
-    </SectionFiltersWithMobile>
-  </>);
+  return (
+    <>
+      <SectionHeader section="lessons" />
+      <SectionFiltersWithMobile filters={filterComponent}>
+        <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} />
+        <FilterLabels namespace={PAGE_NS_LESSONS} />
+        {
+          wipErr || items?.map(({ id, content_type }, i) => {
+            switch (true) {
+              case COLLECTION_DAILY_LESSONS.includes(content_type):
+                return <DailyLessonItem id={id} key={i} />;
+              case COLLECTION_LESSONS_TYPE.includes(content_type):
+                return <CollectionItem id={id} key={i} />;
+              case UNIT_LESSONS_TYPE.includes(content_type):
+                return <UnitItem id={id} key={i} />;
+              default:
+                return null;
+            }
+          })
+        }
+        <Divider fitted />
+        <Container className="padded pagination-wrapper" textAlign="center">
+          {total > 0 && <Pagination
+            pageNo={pageNo}
+            pageSize={pageSize}
+            total={total}
+            language={language}
+            onChange={setPage}
+          />}
+        </Container>
+      </SectionFiltersWithMobile>
+    </>
+  );
 };
 
 export default withTranslation()(MainPage);

@@ -1,9 +1,9 @@
+import React, { useEffect, useRef } from 'react';
+import isEqual from 'react-fast-compare';
+import escapeRegExp from 'lodash/escapeRegExp';
+import isFunction from 'lodash/isFunction';
 import moment from 'moment';
 import 'moment-duration-format';
-import escapeRegExp from 'lodash/escapeRegExp';
-import _ from 'lodash';
-import isEqual from 'react-fast-compare';
-import { useEffect, useRef } from 'react';
 
 import { CollectionsBreakdown } from './mdb';
 import { canonicalSectionByLink, canonicalSectionByUnit } from './links';
@@ -307,7 +307,7 @@ const removeFunctions = fromObj => {
   const obj = {};
   // @description it only removes functions that are not inside nested object properties.
   // you can improve with recursion to remove all functions inside an object.
-  Object.keys(fromObj).forEach(key => !_.isFunction(fromObj[key]) && (obj[key] = fromObj[key]));
+  Object.keys(fromObj).forEach(key => !isFunction(fromObj[key]) && (obj[key] = fromObj[key]));
   return obj;
 };
 
@@ -477,4 +477,3 @@ export const getSourcesCollections = (sources, getPathById) =>
 
       return acc;
     }, {})).filter(source => source && source.children && source.children.length);
-

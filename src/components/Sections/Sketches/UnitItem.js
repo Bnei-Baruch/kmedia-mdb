@@ -10,7 +10,7 @@ import { isEmpty } from '../../../helpers/utils';
 import Link from '../../Language/MultiLanguageLink';
 import { buildTextItemInfo } from '../../shared/ContentItem/helper';
 import { selectors as sources } from '../../../redux/modules/sources';
-import { isLanguageRtl } from '../../../helpers/i18n-utils';
+import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import { selectors as settings } from '../../../redux/modules/settings';
 import GalleryModal from './ZipFileModal';
 import ImageFileModal from './ImageFileModal';
@@ -38,7 +38,7 @@ const UnitItem = ({ id, t }) => {
 
   if (!cu) return null;
 
-  const dir = isLanguageRtl(language) ? 'rtl' : 'ltr';
+  const dir = getLanguageDirection(language);
 
   const imgs = cu.files.filter(x => MediaHelper.IsImage(x) && !isZipFile(x));
   const zip  = findZipFile(cu, language);
@@ -53,7 +53,7 @@ const UnitItem = ({ id, t }) => {
     <>
       {
         imgs?.map(f => (
-          <Card>
+          <Card key={f.id}>
             <ImageFileModal file={f} />
             <Card.Content>
               <Card.Description as={Link} to={to} content={cu.name} />
@@ -66,7 +66,7 @@ const UnitItem = ({ id, t }) => {
       }
       {
         uniq?.map(path => (
-          <Card>
+          <Card key={path}>
             <GalleryModal id={zip.id} path={path} />
             <Card.Content>
               <Card.Description as={Link} to={to} content={cu.name} />

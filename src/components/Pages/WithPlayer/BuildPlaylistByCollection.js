@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { actions, selectors } from '../../../redux/modules/playlist';
 import { selectors as mdb } from '../../../redux/modules/mdb';
+import Helmets from '../../shared/Helmets';
 
 const BuildPlaylistByCollection = ({ cuId, id }) => {
   const { cuId: prevCuId, cId: prevCId, wip } = useSelector(state => selectors.getInfo(state.playlist));
@@ -20,7 +21,7 @@ const BuildPlaylistByCollection = ({ cuId, id }) => {
     }
   }, [id, cuId, wip, fetched]);
 
-  return null;
+  return <Helmets.AVUnit id={cuId} />;
 };
 
 export default BuildPlaylistByCollection;
