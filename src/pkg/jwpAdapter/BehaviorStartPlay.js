@@ -40,6 +40,7 @@ const BehaviorStartPlay = () => {
 
     const autostart = !!(wasPlayedRef.current || isSingleMedia);
 
+    console.log('start bug: BehaviorStartPlay effect 1');
     const { current_time: offset } = getSavedTime(cuId, historyItem);
     if (!isNaN(offset) && offset > 0 && (offset + 10 < duration)) {
       seek(offset);
@@ -49,6 +50,7 @@ const BehaviorStartPlay = () => {
     } else {
       dispatch(actions.setLoaded(true));
     }
+    console.log('start bug: BehaviorStartPlay effect 2');
     wasPlayedRef.current = true;
   }, [_isReady, isClip, cuId, duration, historyItem, isSingleMedia, fetched, dispatch]);
 

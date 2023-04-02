@@ -40,6 +40,7 @@ export const getPosition     = () => functionByName('getPosition');
 export const getPlaylistItem = () => functionByName('getPlaylistItem', noop);
 
 export const play = () => functionByName('play');
+export const stop = () => functionByName('stop');
 
 export const pause      = () => functionByName('pause', false);
 export const togglePlay = () => {
@@ -79,11 +80,11 @@ const PLAYER_EVENTS = [
 export const init   = (dispatch, deviceInfo) => {
   const player = window.jwplayer();
   //for debug, catch all jwplayer events
-  /* player.on('all', (name, e) => {
-     if (!['bufferChange', 'time'].includes(name)) {
-       console.log('bag: jwplayer all events', name, e);
-     }
-   });*/
+  player.on('all', (name, e) => {
+    if (!['bufferChange', 'time'].includes(name)) {
+      console.log('bag: jwplayer all events', name, e);
+    }
+  });
 
   player.on('error', e => console.error(e));
 
