@@ -8,7 +8,7 @@ import ImageGallery from 'react-image-gallery';
 import { Button, Container, Segment } from 'semantic-ui-react';
 import { selectSuitableLanguage } from '../../../../../helpers/language';
 import { isLanguageRtl } from '../../../../../helpers/i18n-utils';
-import { distinct, isEmpty, strCmp } from '../../../../../helpers/utils';
+import { isEmpty, strCmp } from '../../../../../helpers/utils';
 import { actions, selectors } from '../../../../../redux/modules/assets';
 import { selectors as settings } from '../../../../../redux/modules/settings';
 import * as shapes from '../../../../shapes';

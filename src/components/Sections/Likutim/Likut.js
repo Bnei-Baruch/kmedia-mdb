@@ -10,7 +10,7 @@ import { actions as assetsActions, selectors as assetsSelectors } from '../../..
 import { selectors as siteSettings } from '../../../redux/modules/settings';
 import { actions, selectors } from '../../../redux/modules/mdb';
 import { getLangPropertyDirection, getLanguageDirection } from '../../../helpers/i18n-utils';
-import { physicalFile, strCmp, renderTags } from '../../../helpers/utils';
+import { physicalFile, strCmp } from '../../../helpers/utils';
 import { SectionLogo } from '../../../helpers/images';
 import { canonicalLink } from '../../../helpers/links';
 import { LANG_ENGLISH, LANG_HEBREW, UNIT_LESSONS_TYPE, MT_AUDIO, MT_TEXT } from '../../../helpers/consts';

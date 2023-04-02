@@ -20,7 +20,7 @@ const LabelMark = ({ label, offset, t }) => {
   useEffect(() => {
     const findTopBot = () => {
       let start = document.getElementById(`${idPrefix.start}${id}`);
-      let end   = document.getElementById(`${idPrefix.start}${id}`);
+      let end   = document.getElementById(`${idPrefix.end}${id}`);
       start     = start || end || null;
       end       = end || start || null;
       if (start) {

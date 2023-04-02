@@ -111,9 +111,6 @@ const ArticlePage = ({ t }) => {
     return null;
   }
 
-  const tags = unit.tags || [];
-  const tagNames = tags.map(getTagById);
-
   const chroniclesAppend = chronicles ? chronicles.append.bind(chronicles) : () => null;
 
   const embed = getEmbedFromQuery(location);

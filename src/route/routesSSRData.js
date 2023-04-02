@@ -221,7 +221,7 @@ export const libraryPage = async (store, match) => {
 
   return Promise.all([
     store.sagaMiddleWare.run(assetsSagas.sourceIndex, assetsActions.sourceIndex(sourceID)).done,
-    store.sagaMiddleWare.run(mdbSagas.fetchUnit, mdbActions.fetchUnit(sourceID)).done
+    store.sagaMiddleWare.run(mdbSagas.fetchUnit, mdbActions.fetchUnit(sourceID)).done,
   ])
     .then(() => {
       const state    = store.getState();

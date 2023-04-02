@@ -7,7 +7,6 @@ import 'moment-duration-format';
 
 import { CollectionsBreakdown } from './mdb';
 import { canonicalSectionByLink, canonicalSectionByUnit } from './links';
-import Link from '../components/Language/MultiLanguageLink';
 import * as consts from './consts';
 import {
   CT_CONGRESS,

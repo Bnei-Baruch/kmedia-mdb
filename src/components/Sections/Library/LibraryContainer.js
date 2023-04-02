@@ -8,7 +8,7 @@ import { withTranslation } from 'react-i18next';
 import { Button, Container, Grid, Header, Input, Ref, Segment } from 'semantic-ui-react';
 import Headroom from 'react-headroom';
 
-import { isEmpty, renderTags } from '../../../helpers/utils';
+import { isEmpty } from '../../../helpers/utils';
 import { actions as assetsActions, selectors as assets } from '../../../redux/modules/assets';
 import { actions as sourceActions, selectors as sources } from '../../../redux/modules/sources';
 import { selectors as settings } from '../../../redux/modules/settings';
@@ -53,7 +53,6 @@ class LibraryContainer extends Component {
     sourcesSortBy: PropTypes.func.isRequired,
     getSourceById: PropTypes.func.isRequired,
     getPathByID: PropTypes.func,
-    getTagById: PropTypes.func,
     sortBy: PropTypes.string.isRequired,
     NotToSort: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
     NotToFilter: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
@@ -459,7 +458,6 @@ class LibraryContainer extends Component {
             sourceId,
             getSourceById,
             getPathByID,
-            getTagById,
             language,
             contentLanguage,
             t,
@@ -479,7 +477,6 @@ class LibraryContainer extends Component {
     const parentId    = this.properParentId(fullPath);
     const matchString = this.matchString(parentId, t);
     const active      = !this.context.isMobileDevice || tocIsActive;
-    const tagNames    = unit?.tags?.map(getTagById);
 
     return (
       <div
@@ -591,7 +588,6 @@ export default withTranslation()(withRouter(connect(
     contentLanguage: settings.getContentLanguage(state.settings, ownProps.location),
     getSourceById: sources.getSourceById(state.sources),
     getPathByID: sources.getPathByID(state.sources),
-    getTagById: tags.getTagById(state.tags),
     sortBy: sources.sortBy(state.sources),
     areSourcesLoaded: sources.areSourcesLoaded(state.sources),
     NotToSort: sources.NotToSort,
