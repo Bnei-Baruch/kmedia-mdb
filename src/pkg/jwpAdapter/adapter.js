@@ -92,7 +92,7 @@ export const init   = (dispatch, deviceInfo) => {
 
   player.on('playlistItem', e => {
     if (e.item.sources[0]?.type.toLowerCase() === 'hls' && deviceInfo.browser?.name !== 'Chrome') {
-      player.seek(-1);
+      player.stop();
     }
   });
 
