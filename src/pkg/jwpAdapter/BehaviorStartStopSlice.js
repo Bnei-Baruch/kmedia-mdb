@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 
 import { startEndFromQuery } from '../../components/Player/Controls/helper';
 import { pause, seek } from './adapter';
-import { selectors as player } from '../../redux/modules/player';
+import { selectors as player, actions } from '../../redux/modules/player';
 import { noop } from '../../helpers/utils';
 import { selectors as playlist } from '../../redux/modules/playlist';
 
@@ -17,6 +17,7 @@ const BehaviorStartStopSlice = () => {
   const { isHLS }       = useSelector(state => playlist.getPlayed(state.playlist));
   const _isReady        = isHLS ? isMetadataReady : isReady;
 
+  const dispatch = useDispatch();
   useEffect(() => {
     if (!_isReady || (!start && end === Infinity)) return noop;
 
@@ -29,10 +30,12 @@ const BehaviorStartStopSlice = () => {
     };
 
     seek(start);
+
+    dispatch(actions.setLoaded(true));
     jwp.on('time', checkStopTime);
 
     return () => jwp.off('time', checkStopTime);
-  }, [_isReady, start, end]);
+  }, [_isReady, start, end, dispatch]);
   return null;
 };
 

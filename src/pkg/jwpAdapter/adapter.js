@@ -80,13 +80,16 @@ const PLAYER_EVENTS = [
 export const init   = (dispatch, deviceInfo) => {
   const player = window.jwplayer();
   //for debug, catch all jwplayer events
-  player.on('all', (name, e) => {
+  /*player.on('all', (name, e) => {
     if (!['bufferChange', 'time'].includes(name)) {
       console.log('bag: jwplayer all events', name, e);
     }
-  });
+  });*/
 
-  player.on('error', e => console.error(e));
+  player.on('error', e => {
+    console.error(e);
+    dispatch(actions.setLoaded(true));
+  });
 
   player.on('remove', () => player.off('all'));
 
