@@ -15,7 +15,7 @@ const PlayPauseBg = () => {
   const mode     = useSelector(state => player.getOverMode(state.player));
   const { type } = useSelector(state => selectors.getFile(state.player)) || false;
 
-  const { isIPhone } = useContext(DeviceInfoContext);
+  const { isIPhone, isMobileDevice } = useContext(DeviceInfoContext);
 
   const handleClick = e => {
     const pos = getPosition();
@@ -25,7 +25,7 @@ const PlayPauseBg = () => {
   return (
     <div className="controls__pause_bg" onClick={handleClick}>
       {
-        (mode === PLAYER_OVER_MODES.firstTime || type === MT_AUDIO) && (
+        (mode === PLAYER_OVER_MODES.firstTime || type === MT_AUDIO || isMobileDevice) && (
           <WebWrapTooltip
             content={t(`player.controls.${isPlay ? 'pause' : 'play'}`)}
             trigger={
