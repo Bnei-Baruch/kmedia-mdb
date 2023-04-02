@@ -1,4 +1,4 @@
-import { PLAYER_ACTIONS_BY_EVENT } from '../../redux/modules/player';
+import { PLAYER_ACTIONS_BY_EVENT, actions } from '../../redux/modules/player';
 import { JWPLAYER_ID } from '../../helpers/consts';
 import { noop } from '../../helpers/utils';
 
@@ -96,6 +96,7 @@ export const init   = (dispatch, deviceInfo) => {
     }
   });
 
+  dispatch(actions.setIsMuted(localStorage.getItem(LOCALSTORAGE_MUTE) === 'true'));
   PLAYER_EVENTS.forEach(name => {
     const action = PLAYER_ACTIONS_BY_EVENT[name];
     if (!action) {
