@@ -167,7 +167,8 @@
     "copy": "העתק",
     "view-all": "הצג הכל",
     "save": "שמור",
-    "remove": "הסר"
+    "remove": "הסר",
+    "edit": "ערוך"
   },
   "player": {
     "messages": {
@@ -258,7 +259,9 @@
     "trim-expiration": "* הקישור יהיה זמין להורדה ל-7 ימים בלבד",
     "trimmed-title": "הקבצים שלך מוכנים",
     "trimmed-title-wip": "אנחנו מכינים את הקובץ בשבילך",
-    "trimmed-content-wip": "כמה דקות..."
+    "trimmed-content-wip": "כמה דקות...",
+    "add-new-note": "רשמו הערות, דברים ששמעתם בשיעור או כל דבר שחשוב לכם לשמור לעתיד...",
+    "confirm-remove-note": "בחרת למחוק את ההערה. להמשיך?"
   },
   "search": {
     "header": {

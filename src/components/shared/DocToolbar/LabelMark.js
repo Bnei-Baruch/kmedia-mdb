@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
-import { Button, Container, Popup } from 'semantic-ui-react';
+import { Button, Popup } from 'semantic-ui-react';
 import { SectionLogo } from '../../../helpers/images';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import { makeTagLinks } from '../../Pages/WithPlayer/widgets/Info/Info';
 import { useSelector } from 'react-redux';
 import { selectors as tagsSelectors } from '../../../redux/modules/tags';
+import { textMarksPrefixByType } from '../../../helpers/scrollToSearch/helper';
 
+const idPrefix  = textMarksPrefixByType['label'];
 const LabelMark = ({ label, offset, t }) => {
   const [top, setTop]       = useState(0);
   const [bottom, setBottom] = useState(0);
@@ -16,15 +18,19 @@ const LabelMark = ({ label, offset, t }) => {
 
   const { language, author, name, id, tags = [] } = label;
   useEffect(() => {
-    let start = document.getElementById(`start_${id}`);
-    let end   = document.getElementById(`end_${id}`);
-    start     = start || end || null;
-    end       = end || start || null;
-    if (start) {
-      const b = start.offsetTop !== end.offsetTop ? end.offsetTop : end.offsetTop + 20;
-      setTop(Math.min(start.offsetTop, b));
-      setBottom(Math.max(start.offsetTop, b));
-    }
+    const findTopBot = () => {
+      let start = document.getElementById(`${idPrefix.start}${id}`);
+      let end   = document.getElementById(`${idPrefix.end}${id}`);
+      start     = start || end || null;
+      end       = end || start || null;
+      if (start) {
+        const b = start.offsetTop !== end.offsetTop ? end.offsetTop : end.offsetTop + 20;
+        setTop(Math.min(start.offsetTop, b));
+        setBottom(Math.max(start.offsetTop, b));
+      }
+    };
+    //need to wait till parent DOM will render for find element
+    setTimeout(findTopBot, 0);
   }, [id]);
 
   if (!top || !bottom)
@@ -53,7 +59,7 @@ const LabelMark = ({ label, offset, t }) => {
           {
             t('personal.label.createdBy', { author })
           }
-          <Container content={tagLinks} />
+          <div>{tagLinks}</div>
         </Popup.Content>
       </Popup>
     </div>

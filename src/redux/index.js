@@ -25,6 +25,7 @@ import { reducer as simpleMode } from './modules/simpleMode';
 import { reducer as sources } from './modules/sources';
 import { reducer as stats } from './modules/stats';
 import { reducer as tags } from './modules/tags';
+import { reducer as notes } from './modules/myNotes';
 import { reducer as trim } from './modules/trim';
 
 const reducers = history => combineReducers({
@@ -50,6 +51,7 @@ const reducers = history => combineReducers({
   music,
   auth,
   my,
+  notes,
   likutim,
   bookmarkFilter,
   trim,
