@@ -52,13 +52,9 @@ const ControlsMobile = ({ fullscreenRef, t }) => {
         <div className="controls__bar">
           <PrevBtn />
           <div className="flex-spacer"></div>
-          {loaded && (
-            <>
-              <SeekBackwardBtn />
-              <PlayPauseBg />
-              <SeekForwardBtn />
-            </>
-          )}
+          <SeekBackwardBtn />
+          {loaded && <PlayPauseBg />}
+          <SeekForwardBtn />
           <div className="flex-spacer"></div>
           <NextBtn />
         </div>

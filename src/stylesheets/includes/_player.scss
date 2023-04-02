@@ -572,6 +572,38 @@ video {
 .is-web {
   position: relative;
 
+  &.is-video .controls {
+    &__prev, &__rewind, &__forward, &__next, &__pause {
+      transition: all .5s ease-out 1s;
+    }
+
+    &__prev {
+      left: -68px - 12px - 68px;
+    }
+
+    &__rewind {
+      left: -68px;
+    }
+
+    &__pause {
+      left: calc(50% - 68px / 2);
+      opacity: 0;
+    }
+
+    &__forward {
+      right: -68px;
+    }
+
+    &__next {
+      right: -68px - 12px - 68px;
+    }
+
+    &__bar {
+      bottom: -54px;
+      transition: all .5s ease-out 1s;
+    }
+  }
+
   .controls {
     position: absolute;
     top: 0;
@@ -599,7 +631,6 @@ video {
       height: 68px;
       background: $controls-bg;
       border-radius: $controls-radius;
-      transition: all .5s ease-out 1s;
       cursor: pointer;
 
       &:hover {
@@ -616,25 +647,14 @@ video {
 
     &__prev {
       border-radius: 0 $controls-radius $controls-radius 0;
-      left: -68px - 12px - 68px;
-    }
-
-    &__rewind {
-      left: -68px;
     }
 
     &__pause {
       left: calc(50% - 68px / 2);
-      opacity: 0;
-    }
-
-    &__forward {
-      right: -68px;
     }
 
     &__next {
       border-radius: $controls-radius 0 0 $controls-radius;
-      right: -68px - 12px - 68px;
     }
 
     &__bar {
@@ -643,8 +663,6 @@ video {
       left: 0;
       right: 0;
       background: $controls-bg;
-      bottom: -54px;
-      transition: all .5s ease-out 1s;
       display: flex;
       padding: 10px;
       align-items: stretch;
@@ -925,8 +943,10 @@ video {
       bottom: 0;
     }
 
-    .controls__prev, .controls__rewind, .controls__pause, .controls__forward, .controls__next, .controls__bar {
-      transition: all ease-out .2s;
+    .is-video & {
+      .controls__prev, .controls__rewind, .controls__pause, .controls__forward, .controls__next, .controls__bar {
+        transition: all ease-out .2s;
+      }
     }
   }
 
