@@ -9,9 +9,12 @@ const AutoStartNotAllowed = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     if (!isReady) return;
-    const jwp         = window.jwplayer();
-    const muteAndPlay = () => dispatch(actions.setLoaded(true));
-    jwp.once && jwp.once('autostartNotAllowed', muteAndPlay);
+    const jwp       = window.jwplayer();
+    const setLoaded = () => dispatch(actions.setLoaded(true));
+    if (jwp.once) {
+      jwp.once('autostartNotAllowed', setLoaded);
+      jwp.once('playAttemptFailed', setLoaded);
+    }
   }, [isReady, dispatch]);
 
   return null;

@@ -30,8 +30,6 @@ const BehaviorStartStopSlice = () => {
     };
 
     seek(start);
-
-    dispatch(actions.setLoaded(true));
     jwp.on('time', checkStopTime);
 
     return () => jwp.off('time', checkStopTime);

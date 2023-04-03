@@ -8,7 +8,7 @@ import { startEndFromQuery } from '../../components/Player/Controls/helper';
 import { getSavedTime } from '../../components/Player/helper';
 import { selectors as playlist } from '../../redux/modules/playlist';
 import { selectors as my } from '../../redux/modules/my';
-import { seek, play } from './adapter';
+import { seek, play, pause } from './adapter';
 
 const BehaviorStartPlay = () => {
   const location       = useLocation();
@@ -40,17 +40,18 @@ const BehaviorStartPlay = () => {
 
     const autostart = !!(wasPlayedRef.current || isSingleMedia);
 
-    console.log('start bug: BehaviorStartPlay effect 1');
     const { current_time: offset } = getSavedTime(cuId, historyItem);
     if (!isNaN(offset) && offset > 0 && (offset + 10 < duration)) {
-      seek(offset)[autostart ? 'play' : 'pause']();
+      seek(offset);
     } else if (autostart) {
       play();
     }
     if (!autostart) {
-      dispatch(actions.setLoaded(true));
+      setTimeout(() => {
+        pause();
+        dispatch(actions.setLoaded(true));
+      }, 0);
     }
-    console.log('start bug: BehaviorStartPlay effect 2');
     wasPlayedRef.current = true;
   }, [_isReady, isClip, cuId, duration, historyItem, isSingleMedia, fetched, dispatch]);
 

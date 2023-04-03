@@ -99,9 +99,8 @@ export const init   = (dispatch, deviceInfo) => {
   player.on('remove', () => player.off('all'));
 
   player.on('playlistItem', e => {
-    console.log('playlistItem',e.item.sources[0]?.type)
     if (e.item.sources[0]?.type.toLowerCase() === 'hls') {
-      player.stop();
+      player.play();
     }
   });
 

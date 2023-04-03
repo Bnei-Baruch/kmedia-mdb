@@ -128,7 +128,7 @@ export const reducer = handleActions({
 }, initialState);
 
 const isReady          = state => state.ready;
-const isMetadataReady  = state => state.metadataReady;
+const isMetadataReady  = state => state.metadataReady && state.ready;
 const isLoaded         = state => state.loaded;
 const isPlay           = state => state.played;
 const getFile          = state => state.file;
