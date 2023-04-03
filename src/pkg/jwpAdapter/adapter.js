@@ -91,10 +91,16 @@ export const init   = (dispatch, deviceInfo) => {
     dispatch(actions.setLoaded(true));
   });
 
+  player.on('warning', e => {
+    console.error(e);
+    dispatch(actions.setLoaded(true));
+  });
+
   player.on('remove', () => player.off('all'));
 
   player.on('playlistItem', e => {
-    if (e.item.sources[0]?.type.toLowerCase() === 'hls' && deviceInfo.browser?.name !== 'Chrome') {
+    console.log('playlistItem',e.item.sources[0]?.type)
+    if (e.item.sources[0]?.type.toLowerCase() === 'hls') {
       player.stop();
     }
   });

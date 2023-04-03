@@ -8,7 +8,7 @@ import { startEndFromQuery } from '../../components/Player/Controls/helper';
 import { getSavedTime } from '../../components/Player/helper';
 import { selectors as playlist } from '../../redux/modules/playlist';
 import { selectors as my } from '../../redux/modules/my';
-import { seek, play, pause } from './adapter';
+import { seek, play } from './adapter';
 
 const BehaviorStartPlay = () => {
   const location       = useLocation();
@@ -43,12 +43,11 @@ const BehaviorStartPlay = () => {
     console.log('start bug: BehaviorStartPlay effect 1');
     const { current_time: offset } = getSavedTime(cuId, historyItem);
     if (!isNaN(offset) && offset > 0 && (offset + 10 < duration)) {
-      seek(offset);
-    }
-    if (autostart) {
+      seek(offset)[autostart ? 'play' : 'pause']();
+    } else if (autostart) {
       play();
-    } else {
-      pause()
+    }
+    if (!autostart) {
       dispatch(actions.setLoaded(true));
     }
     console.log('start bug: BehaviorStartPlay effect 2');
