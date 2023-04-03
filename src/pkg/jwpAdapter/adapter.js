@@ -1,8 +1,16 @@
 import { PLAYER_ACTIONS_BY_EVENT, actions } from '../../redux/modules/player';
-import { JWPLAYER_ID } from '../../helpers/consts';
+import { JWPLAYER_ID, VS_NAMES } from '../../helpers/consts';
 import { noop } from '../../helpers/utils';
 
-export const LOCALSTORAGE_MUTE = 'jwplayer.mute';
+export const LOCALSTORAGE_MUTE    = 'jwplayer.mute';
+export const LOCALSTORAGE_QUALITY = 'jwplayer.qualityLabel';
+export const getQualitiesFromLS   = () => {
+  const lsKey = localStorage.getItem(LOCALSTORAGE_QUALITY);
+  const pair  = Object.entries(VS_NAMES).find(([k, v]) => {
+    return lsKey === v;
+  });
+  return pair?.[0];
+};
 
 export const setup = conf => {
   const jwp = window.jwplayer(JWPLAYER_ID);

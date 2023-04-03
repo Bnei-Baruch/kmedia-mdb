@@ -3,6 +3,7 @@ import { handleActions, types as settings, types as settingsTypes } from './sett
 import { DEFAULT_LANGUAGE, VS_DEFAULT } from '../../helpers/consts';
 import { types as playerTypes } from './player';
 import { saveTimeOnLocalstorage } from '../../components/Player/Controls/helper';
+import { getQualitiesFromLS } from '../../pkg/jwpAdapter/adapter';
 
 const PLAYLIST_BUILD         = 'Playlist/BUILD';
 const PLAYLIST_BUILD_SUCCESS = 'Playlist/BUILD_SUCCESS';
@@ -70,8 +71,18 @@ const onBuildSuccess = (draft, payload) => {
     language = curItem.languages[0];
   }
 
-  const quality = draft.info.quality || curItem?.qualityByLang?.[language]?.[0] || VS_DEFAULT;
-  draft.info    = { ...info, cuId, language, quality, isReady: true, wip: false };
+  let quality     = draft.info.quality;
+  const qualities = curItem.isHLS ? curItem.qualities : curItem?.qualityByLang?.[language];
+  if (!quality && qualities) {
+    const idx = qualities.findIndex(x => {
+      const y = getQualitiesFromLS();
+      return x === y;
+    });
+    quality   = qualities[idx];
+  }
+  if (!quality) quality = VS_DEFAULT;
+
+  draft.info = { ...info, cuId, language, quality, isReady: true, wip: false };
 };
 
 const onRemovePlayer = draft => {
