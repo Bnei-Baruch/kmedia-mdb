@@ -44,8 +44,8 @@ app.use(helmet({
         '*.youtube-nocookie.com',
         '*.google-analytics.com',
         'stats.g.doubleclick.net',
-        'accounts.kab.info',
-        'trim.kab.sh',
+        '*.kab.info',
+        '*.kab.sh',
       ],
       'script-src': [
         '\'self\'',
@@ -59,6 +59,8 @@ app.use(helmet({
         'cdnjs.cloudflare.com',         // for pdf worker
         'cdn.jwplayer.com',
         '*.jwpcdn.com',
+        '*.hlsjs.js',
+        'blob:',
       ],
       'style-src': [
         '\'self\'',
@@ -88,7 +90,15 @@ app.use(helmet({
         'stats.g.doubleclick.net',
         '*.usersnap.com',
         '*.twimg.com',
-        'prd.jwpltx.com',
+        '*.jwpltx.com',
+      ],
+      'media-src': [
+        '\'self\'',
+        'data:',
+        'blob:',
+        '*.kabbalahmedia.info',
+        '*.kab.info',
+        '*.kab.sh'
       ],
       'worker-src': [
         'blob:',

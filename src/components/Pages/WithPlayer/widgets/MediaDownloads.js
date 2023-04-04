@@ -23,13 +23,14 @@ import {
   VS_NAMES
 } from '../../../../helpers/consts';
 import { selectSuitableLanguage } from '../../../../helpers/language';
-import { physicalFile } from '../../../../helpers/utils';
+import { downloadLink } from '../../../../helpers/utils';
 import { selectors as settings } from '../../../../redux/modules/settings';
 import { selectors } from '../../../../redux/modules/publications';
 import * as shapes from '../../../shapes';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import classNames from 'classnames';
 import MenuLanguageSelector from '../../../Language/Selector/MenuLanguageSelector';
+import { sizeByQuality } from './helper';
 
 const MEDIA_ORDER = [
   MT_VIDEO,
@@ -102,7 +103,22 @@ class MediaDownloads extends Component {
     // we give them the images of their fallback language.
     const images = [];
 
-    files.forEach(file => {
+    const hls = files.find(f => f.video_size === 'HLS' && f.hls_languages && f.video_qualities);
+    hls?.hls_languages.forEach(l => {
+      const byType = new Map();
+      byType.set(MT_AUDIO, [{ ...hls, type: MT_AUDIO, language: l, name: 'audio.mp3', video_size: null}]);
+      const videos = hls.video_qualities.map(q => ({
+        ...hls,
+        type: MT_VIDEO,
+        video_size: q,
+        language: l,
+        size: sizeByQuality(q, hls.duration)
+      }));
+      byType.set(MT_VIDEO, videos);
+      groups.set(l, byType);
+    });
+
+    files.filter(f => !(hls && [MT_VIDEO, MT_AUDIO].includes(f.type))).forEach(file => {
       if (!groups.has(file.language)) {
         groups.set(file.language, new Map());
       }
@@ -202,10 +218,10 @@ class MediaDownloads extends Component {
     const { chroniclesAppend } = this.props;
     const { isCopyPopupOpen }  = this.state;
     const ext                  = file.name.substring(file.name.lastIndexOf('.') + 1);
-    const url                  = physicalFile(file);
+    const url                  = downloadLink(file);
 
     return (
-      <Table.Row key={file.id} className="media-downloads__file" verticalAlign="top">
+      <Table.Row key={`${file.id}_${file.video_size}`} className="media-downloads__file" verticalAlign="top">
         <Table.Cell>
           <span className="media-downloads__file-label">{label}</span>
         </Table.Cell>
@@ -307,7 +323,7 @@ class MediaDownloads extends Component {
     let derivedRows = [];
     if (kiteiMakorByType.size > 0) {
       derivedRows = MEDIA_ORDER.reduce((acc, val) => {
-        if (val === MT_TEXT) return acc;
+        if (val === MT_TEXT || val === MT_VIDEO) return acc;
         const label = `${t('constants.content-types.KITEI_MAKOR')} - ${t(`constants.media-types.${val}`)}`;
         const files = (kiteiMakorByType.get(val) || []).map(file => this.renderRow(file, label, t));
         return acc.concat(files);

@@ -18,10 +18,10 @@ const PlayerToolsMobile = ({ fullscreenRef, Player }) => {
         <AudioBg />
         {isPlayerReady && <ControlsMobile fullscreenRef={fullscreenRef} />}
       </div>
+      <Preloader />
       {
         isPlayerReady && (
           <>
-            <Preloader />
             <Settings />
             <Sharing />
           </>

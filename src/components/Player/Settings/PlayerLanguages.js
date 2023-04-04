@@ -3,14 +3,14 @@ import { Button, Icon, Menu } from 'semantic-ui-react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { LANGUAGE_OPTIONS, PLAYER_OVER_MODES } from '../../../helpers/consts';
-import { actions as playlistActions, selectors as playlistSelectors } from '../../../redux/modules/playlist';
-import { actions, selectors } from '../../../redux/modules/player';
-import { withTranslation } from 'react-i18next';
+import { actions as playlistActions, selectors as playlist } from '../../../redux/modules/playlist';
+import { actions } from '../../../redux/modules/player';
+import { useTranslation } from 'react-i18next';
 
-const PlayerLanguages = ({ t }) => {
-  const { languages = [] } = useSelector(state => playlistSelectors.getPlayed(state.playlist));
-  const { language }       = useSelector(state => selectors.getFile(state.player));
+const PlayerLanguages = ({ language }) => {
+  const { languages = [] } = useSelector(state => playlist.getPlayed(state.playlist));
   const dispatch           = useDispatch();
+  const { t }              = useTranslation();
 
   const handleSelect = (e, { name }) => dispatch(playlistActions.setLanguage(name));
 
@@ -25,7 +25,9 @@ const PlayerLanguages = ({ t }) => {
       <Menu secondary vertical inverted size="small" fluid>
         {
           LANGUAGE_OPTIONS
-            .filter(x => languages.includes(x.value))
+            .filter(x => {
+              return languages.includes(x.value);
+            })
             .map(x => (
               <Menu.Item
                 link
@@ -42,4 +44,4 @@ const PlayerLanguages = ({ t }) => {
   );
 };
 
-export default withTranslation()(PlayerLanguages);
+export default PlayerLanguages;

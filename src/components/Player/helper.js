@@ -9,7 +9,12 @@ export const PLAYER_VOLUME_STORAGE_KEY = 'jwplayer.volume';
 
 export const findPlayedFile = (item, info, lang, mt, q) => {
   if (isEmpty(item) || !info.isReady) return {};
+
   const { mediaType, language, quality } = info;
+  if (item.isHLS) {
+    const src = `${item.file.src}?no_video=${mediaType === MT_AUDIO}`;
+    return { ...item.file, src, type: mediaType, image: item.preImageUrl };
+  }
 
   lang = lang || language;
   mt   = mt || mediaType;
@@ -50,5 +55,5 @@ export const getSavedTime = (cuId, ht) => {
     console.error('broken json', json);
   }
 
-  return lt && (!ht || moment(lt.timestamp).isAfter(ht.timestamp)) ? lt : ht?.data || false;
+  return lt && (!ht || moment(lt.timestamp).isAfter(ht.timestamp)) ? lt : ht || false;
 };

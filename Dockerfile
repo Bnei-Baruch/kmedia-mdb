@@ -1,4 +1,5 @@
 ARG cdn_url="https://cdn.kabbalahmedia.info/"
+ARG cdn_hls_url="https://cdn.kab.info/"
 ARG public_base="https://kabbalahmedia.info/"
 ARG feed_api_url="https://kabbalahmedia.info/feed_api/"
 ARG personal_api_url="https://kabbalahmedia.info/backend/my/"
@@ -12,6 +13,7 @@ FROM bneibaruch/kmedia_base:7 as build
 LABEL maintainer="edoshor@gmail.com"
 
 ARG cdn_url
+ARG cdn_hls_url
 ARG public_base
 ARG feed_api_url
 ARG personal_api_url
@@ -29,6 +31,7 @@ ENV REACT_APP_ENV=production \
     REACT_APP_IMAGINARY_INTERNAL_HOST=nginx \
     REACT_APP_LOCALES_BACKEND=/ \
     REACT_APP_CDN_URL=${cdn_url} \
+    REACT_APP_CDN_HLS_URL=${cdn_hls_url} \
     REACT_APP_PUBLIC_BASE=${public_base} \
     REACT_APP_FEED=${feed_api_url} \
     REACT_APP_PERSONAL_API_BACKEND=${personal_api_url} \
@@ -49,6 +52,7 @@ RUN yarn install --frozen-lockfile && \
 FROM node:16-slim
 
 ARG cdn_url
+ARG cdn_hls_url
 ARG public_base
 ARG feed_api_url
 ARG personal_api_url
@@ -68,6 +72,7 @@ ENV NODE_ENV=production \
     REACT_APP_IMAGINARY_URL=${public_base}imaginary/ \
     REACT_APP_IMAGINARY_INTERNAL_HOST=nginx \
     REACT_APP_CDN_URL=${cdn_url} \
+    REACT_APP_CDN_HLS_URL=${cdn_hls_url} \
     REACT_APP_PUBLIC_BASE=${public_base} \
     REACT_APP_FEED=${feed_api_url} \
     REACT_APP_PERSONAL_API_BACKEND=${personal_api_url} \

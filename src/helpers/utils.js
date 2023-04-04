@@ -22,11 +22,13 @@ import {
   CT_VIRTUAL_LESSONS,
   CT_WOMEN_LESSONS,
   CT_SONGS,
-  LANGUAGES
+  LANGUAGES,
+  VS_HLS
 } from './consts';
 import { Requests } from './Api';
 
 const CDN_URL     = process.env.REACT_APP_CDN_URL;
+const CDN_HLS_URL = process.env.REACT_APP_CDN_HLS_URL;
 const PUBLIC_BASE = process.env.REACT_APP_PUBLIC_BASE;
 
 export const isEmpty = obj => {
@@ -167,12 +169,27 @@ export const filenameExtension = name => {
  * @param ext {boolean} include file name extension in url or not
  */
 export const physicalFile = (file, ext = false) => {
+  if (file.is_hls || file.video_size === VS_HLS) {
+    return `${CDN_HLS_URL}${file.id}.m3u8`;
+  }
   let suffix = '';
   if (ext) {
     suffix = `.${filenameExtension(file.name)}`;
   }
 
   return `${CDN_URL}${file.id}${suffix}`;
+};
+export const downloadLink = (file, ext = false) => {
+  if (file.is_hls) {
+    const { lang3 } = LANGUAGES[file.language];
+    let src         = `${CDN_HLS_URL}get/${file.id}.mp4?audio=${lang3.toLowerCase()}`;
+
+    if (file.video_size)
+      src = `${src}&video=${file.video_size.toLowerCase()}`;
+    return src;
+  }
+
+  return physicalFile(file, ext);
 };
 
 export const publicFile = relativePath => `${PUBLIC_BASE}${relativePath}`;

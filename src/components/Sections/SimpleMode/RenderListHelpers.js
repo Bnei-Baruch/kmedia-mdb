@@ -3,25 +3,29 @@ import groupBy from 'lodash/groupBy';
 import { Button, Card, Image, List } from 'semantic-ui-react';
 
 import {
-  CT_ARTICLE, CT_CLIP,
+  CT_ARTICLE,
+  CT_CLIP,
   CT_DAILY_LESSON,
   CT_FULL_LESSON,
   CT_KITEI_MAKOR,
   CT_LELO_MIKUD,
   CT_LESSON_PART,
-  CT_VIDEO_PROGRAM_CHAPTER, CT_VIRTUAL_LESSON,
+  CT_VIDEO_PROGRAM_CHAPTER,
+  CT_VIRTUAL_LESSON,
   MT_AUDIO,
   NO_NAME,
   UNIT_EVENTS_TYPE,
   UNIT_PROGRAMS_TYPE,
   UNIT_PUBLICATIONS_TYPE,
-  VS_NAMES
+  VS_NAMES,
+  MT_VIDEO
 } from '../../../helpers/consts';
 import { canonicalLink } from '../../../helpers/links';
-import { canonicalCollection, isEmpty, physicalFile } from '../../../helpers/utils';
+import { canonicalCollection, isEmpty, downloadLink } from '../../../helpers/utils';
 import { formatTime } from '../../../helpers/time';
 import Link from '../../Language/MultiLanguageLink';
 import { SectionLogo } from '../../../helpers/images';
+import { sizeByQuality } from '../../Pages/WithPlayer/widgets/helper';
 
 const CT_DAILY_LESSON_I18N_KEY = `constants.content-types.${CT_DAILY_LESSON}`;
 
@@ -66,16 +70,16 @@ const labelTextByFile = (file, contentType, t) => {
 
 const renderHorizontalFilesList = (files, contentType, t, chroniclesAppend) => (
   sortMediaFiles(files).map(file => {
-    const url   = physicalFile(file);
+    const url   = downloadLink(file);
     const label = labelTextByFile(file, contentType, t);
 
     return (
-      <List.Item key={file.id} className="media-file-button">
+      <List.Item key={`${file.id}_${file.type}_${file.video_size}`} className="media-file-button">
         <List.Content>
           <a href={url} onClick={() => chroniclesAppend('download', { url, uid: file.id })}>
             {label}
             <Image className="file-list-icon">
-              <SectionLogo name='downloads' />
+              <SectionLogo name="downloads" />
             </Image>
           </a>
         </List.Content>
@@ -87,8 +91,32 @@ const renderHorizontalFilesList = (files, contentType, t, chroniclesAppend) => (
 const filesForRenderByUnit = unit => {
   const leloMikudFiles  = unitDerivedFiles(unit, 'lelo-mikud', key => key.includes(CT_LELO_MIKUD), () => true);
   const kiteiMakorFiles = unitDerivedFiles(unit, 'KITEI_MAKOR', key => key.includes(CT_KITEI_MAKOR), f => f?.mimetype?.includes(MT_AUDIO));
+  const files           = prepareHlsFiles(unit);
 
-  return [...(unit.files || []), ...leloMikudFiles, ...kiteiMakorFiles];
+  return [...files, ...leloMikudFiles, ...kiteiMakorFiles];
+};
+
+const prepareHlsFiles = ({ files = [], content_type }) => {
+  const hls = files.find(f => f.video_size === 'HLS' && f.hls_languages && f.video_qualities);
+  if (!hls) return files;
+
+  const resp = hls.hls_languages.reduce((acc, l) => {
+    acc.push({ ...hls, type: MT_AUDIO, language: l, name: 'audio.mp3', video_size: null });
+    if (content_type !== CT_KITEI_MAKOR) {
+      hls.video_qualities.forEach(q => {
+        const f = {
+          ...hls,
+          type: MT_VIDEO,
+          video_size: q,
+          language: l,
+          size: sizeByQuality(q, hls.duration)
+        };
+        acc.push(f);
+      });
+    }
+    return acc;
+  }, []);
+  return resp;
 };
 
 const unitDerivedFiles = (unit, type, keyFilter, mimeFilter) => {
@@ -154,7 +182,7 @@ const renderUnits = (units, language, t, helpChooseLang, chroniclesAppend) => (
                 ? files
                 : (
                   <List.Item key={unit.id} className="no-files">
-                    <SectionLogo name='info'  />
+                    <SectionLogo name="info" />
                     <List.Content className="margin-right-8 margin-left-8">
                       <span className="bold-font">{t('simple-mode.no-files-found-for-lang')}</span>
                       <br />

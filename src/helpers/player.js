@@ -10,6 +10,7 @@ import {
   MT_AUDIO,
   MT_VIDEO,
   VS_DEFAULT,
+  VS_HLS,
 } from './consts';
 import { getQuery } from './url';
 import MediaHelper from './media';
@@ -20,6 +21,10 @@ const restorePreferredMediaType = () => localStorage.getItem('@@kmedia_player_me
 export const persistPreferredMediaType = value => localStorage.setItem('@@kmedia_player_media_type', value);
 
 const isPlayable = file => MediaHelper.IsMp4(file) || MediaHelper.IsMp3(file);
+
+const findHLS = files => files.find(f => {
+  return f.video_size === VS_HLS && f.hls_languages && f.video_qualities;
+});
 
 const calcAvailableMediaTypes = (unit, language) => {
   if (!unit || !Array.isArray(unit.files)) {
@@ -41,13 +46,30 @@ const calcAvailableLanguages = unit => {
   }
 
   return Array.from(
-    unit.files.filter(f => f.type === MT_VIDEO || f.type === MT_AUDIO).reduce((acc, val) => acc.add(val.language),
-      new Set()));
+    unit.files
+      .filter(f => f.type === MT_VIDEO || f.type === MT_AUDIO)
+      .reduce((acc, val) => acc.add(val.language), new Set())
+  );
 };
 
 export const playableItem = (unit, preImageUrl) => {
-  if (!unit) {
+  if (!unit?.files) {
     return {};
+  }
+
+  if (!preImageUrl) {
+    preImageUrl = assetUrl(`api/thumbnail/${unit.id}`);
+  }
+  const hls = findHLS(unit?.files);
+  if (hls) {
+    return {
+      id: unit.id,
+      file: { ...hls, src: physicalFile(hls, true) },
+      isHLS: true,
+      preImageUrl,
+      languages: hls.hls_languages,
+      qualities: hls.video_qualities
+    };
   }
 
   const languages = calcAvailableLanguages(unit);
@@ -66,9 +88,6 @@ export const playableItem = (unit, preImageUrl) => {
     if (qs.length === 0) return acc;
     return { ...acc, [l]: qs };
   }, {});
-  if (!preImageUrl) {
-    preImageUrl = assetUrl(`api/thumbnail/${unit.id}`);
-  }
 
   return {
     id: unit.id,
@@ -147,7 +166,7 @@ export const getMediaTypeFromQuery = location => {
 
 export const getLanguageFromQuery = (location, fallbackLanguage = LANG_ENGLISH) => {
   const query    = getQuery(location);
-  const language = query.language || fallbackLanguage || LANG_ENGLISH;
+  const language = query.shareLang || query.language || fallbackLanguage || LANG_ENGLISH;
   return language.toLowerCase();
 };
 
