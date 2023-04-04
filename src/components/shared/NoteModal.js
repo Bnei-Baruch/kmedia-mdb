@@ -21,6 +21,7 @@ const NoteModal = ({ note = false, open = true, toggleOpen }) => {
     !note.id ? dispatch(actions.add(content, { ...note, language })) : dispatch(actions.edit(content, note.id));
     toggleOpen(false);
   };
+
   const handleOnClose         = () => toggleOpen(false);
   const handleOnChange        = (e, { value }) => setContent(value);
   const handleRemove          = () => {
@@ -28,13 +29,16 @@ const NoteModal = ({ note = false, open = true, toggleOpen }) => {
       handleOnClose();
       return;
     }
+
     setConfirm(true);
   };
+
   const handleConfirmedRemove = () => {
     dispatch(actions.remove({ id: note.id }));
     handleOnClose();
     setConfirm(false);
   };
+
   const handleCancelConfirm   = () => {
     setConfirm(false);
   };

@@ -21,7 +21,7 @@ const NoteMark               = ({ note, offset }) => {
     setOpenTooltip(false);
   };
 
-  const handleToggleOpen   = (o) => setOpen(o);
+  const handleToggleOpen   = o => setOpen(o);
   const handleOpenTooltip  = () => setOpenTooltip(true);
   const handleCloseTooltip = () => setOpenTooltip(false);
 
@@ -39,6 +39,7 @@ const NoteMark               = ({ note, offset }) => {
         setPos(_pos);
       }
     };
+
     //need to wait till parent DOM will render for find element
     setTimeout(findElPos, 0);
   }, [id]);

@@ -29,6 +29,7 @@ const LabelMark = ({ label, offset, t }) => {
         setBottom(Math.max(start.offsetTop, b));
       }
     };
+
     //need to wait till parent DOM will render for find element
     setTimeout(findTopBot, 0);
   }, [id]);

@@ -282,6 +282,7 @@ class Api {
       url = `${url}/${params.id}`;
       delete params.id;
     }
+
     return Requests.auth(params, url, token, method);
   };
 

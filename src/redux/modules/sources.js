@@ -167,14 +167,17 @@ const getSourceById    = state => {
   const _byId = state.sortBy === 'AZ' ? state.byId : state.byIdAZ;
   return id => _byId[id];
 };
+
 const getPath          = state => {
   const _byId = getSourceById(state);
   return source => tracePath(source, _byId);
 };
+
 const getPathByID      = state => {
   const _byId = getSourceById(state);
   return id => tracePath(_byId(id), _byId);
 };
+
 const sortBy           = state => state.sortBy;
 
 export const selectors = {

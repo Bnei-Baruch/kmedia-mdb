@@ -14,7 +14,7 @@ const AddNoteBtn = ({ properties, toggleToolbar }) => {
   const dir      = getLanguageDirection(language);
 
   const handleOpen       = () => setOpen(true);
-  const handleToggleOpen = (o) => {
+  const handleToggleOpen = o => {
     setOpen(o);
     toggleToolbar(o);
   };

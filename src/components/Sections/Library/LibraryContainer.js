@@ -455,16 +455,16 @@ class LibraryContainer extends Component {
 
   render() {
     const {
-            sourceId,
-            getSourceById,
-            getPathByID,
-            language,
-            contentLanguage,
-            t,
-            push,
-            areSourcesLoaded,
-            unit
-          } = this.props;
+      sourceId,
+      getSourceById,
+      getPathByID,
+      language,
+      contentLanguage,
+      t,
+      push,
+      areSourcesLoaded,
+      unit
+    } = this.props;
 
     if (!areSourcesLoaded)
       return null;

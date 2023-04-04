@@ -28,8 +28,8 @@ const UpdateLocation = () => {
 
   //init redux start end from location
   useEffect(() => {
-      const _q = startEndFromQuery(location);
-      dispatch(actions.setShareStartEnd(_q));
+    const _q = startEndFromQuery(location);
+    dispatch(actions.setShareStartEnd(_q));
   }, [location, cuId]);
 
 
