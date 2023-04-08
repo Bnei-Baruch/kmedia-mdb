@@ -1,9 +1,19 @@
 [{
     "relation": ["delegate_permission/common.handle_all_urls"],
     "target": {
-      "namespace": "android_app",
-      "package_name": "com.bb.kmedia",
-      "sha256_cert_fingerprints":
-      ["C2:64:99:23:B8:A8:C5:23:33:FB:A9:F7:0B:74:7C:C8:D6:22:3C:C8:63:27:FA:47:3C:D7:B2:EC:67:E8:80:4C"]
+        "namespace": "android_app",
+        "package_name": "com.bb.kmedia",
+        "sha256_cert_fingerprints":
+        ["C2:64:99:23:B8:A8:C5:23:33:FB:A9:F7:0B:74:7C:C8:D6:22:3C:C8:63:27:FA:47:3C:D7:B2:EC:67:E8:80:4C"]
     }
-  }]
+},
+    {
+        "relation": ["delegate_permission/common.handle_all_urls"],
+        "target": {
+          "namespace": "android_app",
+          "package_name": "com.bb.kmedia",
+          "sha256_cert_fingerprints":
+          ["72:D4:6F:D4:C8:80:E7:C2:64:54:F7:DD:D5:CA:44:F2:90:B2:83:E6:78:B1:B2:DD:75:3D:D5:8C:09:6E:8B:C1"]
+        }
+      }
+]
