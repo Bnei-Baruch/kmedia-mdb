@@ -195,7 +195,7 @@ export const LANGUAGES = {
   [LANG_DUTCH]: { value: LANG_DUTCH, locale: 'nl_NL', lang3: 'DUT', name: 'Nederlands' },
   [LANG_FRENCH]: { value: LANG_FRENCH, locale: 'fr_FR', lang3: 'FRE', name: 'Français' },
   [LANG_PORTUGUESE]: { value: LANG_PORTUGUESE, locale: 'pt_PT', lang3: 'POR', name: 'Português' },
-  [LANG_TURKISH]: { value: LANG_TURKISH, locale: 'tr_TR', lang3: 'TRK', name: 'Türkçe' },
+  [LANG_TURKISH]: { value: LANG_TURKISH, locale: 'tr_TR', lang3: 'TUR', name: 'Türkçe' },
   [LANG_POLISH]: { value: LANG_POLISH, locale: 'pl_PL', lang3: 'POL', name: 'Polski' },
   [LANG_ARABIC]: { value: LANG_ARABIC, locale: 'ar_AR', lang3: 'ARA', name: 'اَلْعَرَبِيَّةُ' },
   [LANG_HUNGARIAN]: { value: LANG_HUNGARIAN, locale: 'hu_HU', lang3: 'HUN', name: 'Magyar' },
