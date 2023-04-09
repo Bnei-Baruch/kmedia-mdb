@@ -3,25 +3,28 @@ import mapValues from 'lodash/mapValues';
 
 import { handleActions } from './settings';
 import { types as ssr } from './ssr';
+import { isEmpty } from '../../helpers/utils';
 
-const UNZIP                = 'Assets/UNZIP';
-const UNZIP_SUCCESS        = 'Assets/UNZIP_SUCCESS';
-const UNZIP_FAILURE        = 'Assets/UNZIP_FAILURE';
-const UNZIP_LIST           = 'Assets/UNZIP_LIST';
-const UNZIP_LIST_SUCCESS   = 'Assets/UNZIP_LIST_SUCCESS';
-const UNZIP_LIST_FAILURE   = 'Assets/UNZIP_LIST_FAILURE';
-const DOC2HTML             = 'Assets/DOC2HTML';
-const DOC2HTML_SUCCESS     = 'Assets/DOC2HTML_SUCCESS';
-const DOC2HTML_FAILURE     = 'Assets/DOC2HTML_FAILURE';
-const SOURCE_INDEX         = 'Assets/SOURCE_INDEX';
-const SOURCE_INDEX_SUCCESS = 'Assets/SOURCE_INDEX_SUCCESS';
-const SOURCE_INDEX_FAILURE = 'Assets/SOURCE_INDEX_FAILURE';
-const FETCH_ASSET          = 'Assets/FETCH_ASSET';
-const FETCH_ASSET_SUCCESS  = 'Assets/FETCH_ASSET_SUCCESS';
-const FETCH_ASSET_FAILURE  = 'Assets/FETCH_ASSET_FAILURE';
-const FETCH_PERSON         = 'Assets/FETCH_PERSON';
-const FETCH_PERSON_SUCCESS = 'Assets/FETCH_PERSON_SUCCESS';
-const FETCH_PERSON_FAILURE = 'Assets/FETCH_PERSON_FAILURE';
+const UNZIP                   = 'Assets/UNZIP';
+const UNZIP_SUCCESS           = 'Assets/UNZIP_SUCCESS';
+const UNZIP_FAILURE           = 'Assets/UNZIP_FAILURE';
+const UNZIP_LIST              = 'Assets/UNZIP_LIST';
+const UNZIP_LIST_SUCCESS      = 'Assets/UNZIP_LIST_SUCCESS';
+const UNZIP_LIST_FAILURE      = 'Assets/UNZIP_LIST_FAILURE';
+const DOC2HTML                = 'Assets/DOC2HTML';
+const DOC2HTML_SUCCESS        = 'Assets/DOC2HTML_SUCCESS';
+const DOC2HTML_FAILURE        = 'Assets/DOC2HTML_FAILURE';
+const SOURCE_INDEX            = 'Assets/SOURCE_INDEX';
+const SOURCE_INDEX_SUCCESS    = 'Assets/SOURCE_INDEX_SUCCESS';
+const SOURCE_INDEX_FAILURE    = 'Assets/SOURCE_INDEX_FAILURE';
+const FETCH_ASSET             = 'Assets/FETCH_ASSET';
+const FETCH_ASSET_SUCCESS     = 'Assets/FETCH_ASSET_SUCCESS';
+const FETCH_ASSET_FAILURE     = 'Assets/FETCH_ASSET_FAILURE';
+const FETCH_PERSON            = 'Assets/FETCH_PERSON';
+const FETCH_PERSON_SUCCESS    = 'Assets/FETCH_PERSON_SUCCESS';
+const FETCH_PERSON_FAILURE    = 'Assets/FETCH_PERSON_FAILURE';
+const FETCH_TIME_CODE         = 'Assets/FETCH_TIME_CODE';
+const FETCH_TIME_CODE_SUCCESS = 'Assets/FETCH_TIME_CODE_SUCCESS';
 
 export const types = {
   UNZIP,
@@ -38,28 +41,31 @@ export const types = {
   FETCH_ASSET_SUCCESS,
   FETCH_ASSET_FAILURE,
   FETCH_PERSON,
+  FETCH_TIME_CODE,
 };
 
 /* Actions */
 
-const unzip              = createAction(UNZIP);
-const unzipSuccess       = createAction(UNZIP_SUCCESS, (id, data) => ({ id, data }));
-const unzipFailure       = createAction(UNZIP_FAILURE, (id, err) => ({ id, err }));
-const unzipList          = createAction(UNZIP_LIST);
-const unzipListSuccess   = createAction(UNZIP_LIST_SUCCESS);
-const unzipListFailure   = createAction(UNZIP_LIST_FAILURE);
-const doc2html           = createAction(DOC2HTML);
-const doc2htmlSuccess    = createAction(DOC2HTML_SUCCESS, (id, data) => ({ id, data }));
-const doc2htmlFailure    = createAction(DOC2HTML_FAILURE, (id, err) => ({ id, err }));
-const sourceIndex        = createAction(SOURCE_INDEX);
-const sourceIndexSuccess = createAction(SOURCE_INDEX_SUCCESS, (id, data) => ({ id, data }));
-const sourceIndexFailure = createAction(SOURCE_INDEX_FAILURE, (id, err) => ({ id, err }));
-const fetchAsset         = createAction(FETCH_ASSET);
-const fetchAssetSuccess  = createAction(FETCH_ASSET_SUCCESS);
-const fetchAssetFailure  = createAction(FETCH_ASSET_FAILURE);
-const fetchPerson        = createAction(FETCH_PERSON);
-const fetchPersonSuccess = createAction(FETCH_PERSON_SUCCESS);
-const fetchPersonFailure = createAction(FETCH_PERSON_FAILURE);
+const unzip                = createAction(UNZIP);
+const unzipSuccess         = createAction(UNZIP_SUCCESS, (id, data) => ({ id, data }));
+const unzipFailure         = createAction(UNZIP_FAILURE, (id, err) => ({ id, err }));
+const unzipList            = createAction(UNZIP_LIST);
+const unzipListSuccess     = createAction(UNZIP_LIST_SUCCESS);
+const unzipListFailure     = createAction(UNZIP_LIST_FAILURE);
+const doc2html             = createAction(DOC2HTML);
+const doc2htmlSuccess      = createAction(DOC2HTML_SUCCESS, (id, data) => ({ id, data }));
+const doc2htmlFailure      = createAction(DOC2HTML_FAILURE, (id, err) => ({ id, err }));
+const sourceIndex          = createAction(SOURCE_INDEX);
+const sourceIndexSuccess   = createAction(SOURCE_INDEX_SUCCESS, (id, data) => ({ id, data }));
+const sourceIndexFailure   = createAction(SOURCE_INDEX_FAILURE, (id, err) => ({ id, err }));
+const fetchAsset           = createAction(FETCH_ASSET);
+const fetchAssetSuccess    = createAction(FETCH_ASSET_SUCCESS);
+const fetchAssetFailure    = createAction(FETCH_ASSET_FAILURE);
+const fetchPerson          = createAction(FETCH_PERSON);
+const fetchPersonSuccess   = createAction(FETCH_PERSON_SUCCESS);
+const fetchPersonFailure   = createAction(FETCH_PERSON_FAILURE);
+const fetchTimeCode        = createAction(FETCH_TIME_CODE);
+const fetchTimeCodeSuccess = createAction(FETCH_TIME_CODE_SUCCESS);
 
 export const actions = {
   unzip,
@@ -80,6 +86,8 @@ export const actions = {
   fetchPerson,
   fetchPersonSuccess,
   fetchPersonFailure,
+  fetchTimeCode,
+  fetchTimeCodeSuccess,
 };
 
 /* Reducer */
@@ -98,6 +106,7 @@ const initialState = {
     wip: false,
     err: null,
   },
+  timeCode: []
 };
 
 const onSSRPrepare = draft => {
@@ -191,6 +200,13 @@ const onFetchPersonFailure = (draft, payload) => {
   draft.person.wip = false;
   draft.person.err = payload;
 };
+const onFetchTimeCode      = draft => {
+  draft.timeCode = [];
+};
+
+const onFetchTimeCodeSuccess = (draft, payload) => {
+  draft.timeCode = payload;
+};
 
 export const reducer = handleActions({
   [ssr.PREPARE]: onSSRPrepare,
@@ -217,6 +233,9 @@ export const reducer = handleActions({
   [FETCH_PERSON]: onFetchPerson,
   [FETCH_PERSON_SUCCESS]: onFetchPersonSuccess,
   [FETCH_PERSON_FAILURE]: onFetchPersonFailure,
+
+  [FETCH_TIME_CODE]: onFetchTimeCode,
+  [FETCH_TIME_CODE_SUCCESS]: onFetchTimeCodeSuccess,
 }, initialState);
 
 /* Selectors */
@@ -227,6 +246,12 @@ const getDoc2htmlById    = state => state.doc2htmlById;
 const getSourceIndexById = state => state.sourceIndexById;
 const getAsset           = state => state.asset;
 const getPerson          = state => state.person;
+const getTimeCode        = state => pos => recursiveTimeCode(pos, state);
+const recursiveTimeCode  = (pos, state) => {
+  if (pos === 0 || isEmpty(state.timeCode)) return 0;
+  if (state.timeCode[pos]) return state.timeCode[pos];
+  return recursiveTimeCode(pos - 1, state);
+};
 
 export const selectors = {
   getZipIndexById,
@@ -235,4 +260,5 @@ export const selectors = {
   getSourceIndexById,
   getAsset,
   getPerson,
+  getTimeCode,
 };
