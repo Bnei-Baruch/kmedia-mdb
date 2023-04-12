@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { selectors as playlist } from '../../redux/modules/playlist';
 import { selectors as player } from '../../redux/modules/player';
-import { VS_NAMES } from '../../helpers/consts';
+import { VS_NAMES, LANGUAGES } from '../../helpers/consts';
 
 const PlayerBehaviorHls = () => {
   const isMetadataReady = useSelector(state => player.isMetadataReady(state.player));
@@ -15,7 +15,10 @@ const PlayerBehaviorHls = () => {
     const tracks = jwp.getAudioTracks();
 
     if (!tracks) return;
-    const idx = tracks.findIndex(q => q.language === language);
+    //fix ukraine lang
+    const lOpt = LANGUAGES[language];
+    const l    = lOpt.hls || lOpt.value;
+    const idx  = tracks.findIndex(q => q.language === l);
     jwp.setCurrentAudioTrack(idx);
   }, [language, isMetadataReady]);
 
