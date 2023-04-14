@@ -58,6 +58,8 @@ const AVUnit = ({ id }) => {
   if (!unit || !unit.files || !language) {
     return null;
   }
+
   return <AVUnitMemo unit={unit} language={language} />;
 };
+
 export default AVUnit;

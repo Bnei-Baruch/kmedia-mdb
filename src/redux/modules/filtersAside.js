@@ -122,6 +122,7 @@ const onFetchStatsSuccess = (draft, { dataCU, dataC, dataL, namespace, isPrepare
         acc.byId[id] = (dcu[id] || 0) + (dc[id] || 0) + (dl[id] || 0);
       });
     }
+
     ns[fn] = acc;
   });
 

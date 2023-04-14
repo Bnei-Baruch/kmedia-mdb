@@ -11,7 +11,7 @@ export const KC_UPDATE_USER  = 'KC_UPDATE_USER';
 export const KC_UPDATE_TOKEN = 'KC_UPDATE_TOKEN';
 
 export const login = () => {
-  keycloak.login({redirectUri:`${window.location.href}?authorised=true`})
+  keycloak.login({ redirectUri:`${window.location.href}?authorised=true` })
     .then(r => {
       updateUser(r);
     })

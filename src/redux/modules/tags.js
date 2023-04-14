@@ -139,11 +139,12 @@ const getTags         = state => state.byId;
 const getRoots        = state => state.roots;
 const getDisplayRoots = state => state.displayRoots;
 const getTagById      = state => id => state.byId[id];
-const getPath         = state => (source) => tracePath(source, getTagById(state));
+const getPath         = state => source => tracePath(source, getTagById(state));
 const getPathByID     = state => {
   const _byId = getTagById(state);
   return id => tracePath(_byId(id), _byId);
 };
+
 const getWip          = state => state.wip;
 const getError        = state => state.error;
 
