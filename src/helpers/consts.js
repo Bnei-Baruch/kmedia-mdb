@@ -182,7 +182,7 @@ export const LANG_CZECH      = 'cs';
 export const LANG_AMHARIC    = 'am';
 export const LANG_INDONESIAN = 'id';
 export const LANG_ARMENIAN   = 'hy';
-export const LANG_ORIGINAL    = 'or';
+export const LANG_ORIGINAL   = 'or';
 export const LANG_UNKNOWN    = 'xx';
 
 export const LANGUAGES = {
@@ -208,11 +208,11 @@ export const LANGUAGES = {
   [LANG_NORWEGIAN]: { value: LANG_NORWEGIAN, locale: 'nb_NO', lang3: 'NOT', name: 'Norsk' },
   [LANG_SWEDISH]: { value: LANG_SWEDISH, locale: 'sv_SE', lang3: 'SWE', name: 'Svenska' },
   [LANG_CROATIAN]: { value: LANG_CROATIAN, locale: 'hr_HR', lang3: 'HRV', name: 'Hrvatski' },
-  [LANG_CHINESE]: { value: LANG_CHINESE, locale: 'zh_CN', lang3: 'CHN', name: '中文' },
+  [LANG_CHINESE]: { value: LANG_CHINESE, locale: 'zh_CN', lang3: 'CHN', name: '中文', hls: 'chi' },
   [LANG_PERSIAN]: { value: LANG_PERSIAN, locale: 'fa_IR', lang3: 'PER', name: 'کبالا فارسی' },
   [LANG_ROMANIAN]: { value: LANG_ROMANIAN, locale: 'ro_RO', lang3: 'RON', name: 'Românește' },
   [LANG_HINDI]: { value: LANG_HINDI, locale: 'hi_IN', lang3: 'HIN', name: 'हिन्दी' },
-  [LANG_UKRAINIAN]: { value: LANG_UKRAINIAN, locale: 'uk_UA', lang3: 'UKR', name: 'Українська', hls:'uk' },
+  [LANG_UKRAINIAN]: { value: LANG_UKRAINIAN, locale: 'uk_UA', lang3: 'UKR', name: 'Українська', hls: 'uk' },
   [LANG_MACEDONIAN]: { value: LANG_MACEDONIAN, locale: 'mk_MK', lang3: 'MKD', name: 'Македонски' },
   [LANG_SLOVENIAN]: { value: LANG_SLOVENIAN, locale: 'sl_SI', lang3: 'SLV', name: 'Slovenščina' },
   [LANG_LATVIAN]: { value: LANG_LATVIAN, locale: 'lv_LV', lang3: 'LAV', name: 'Latviešu' },
@@ -678,7 +678,7 @@ export const MY_NAMESPACE_SUBSCRIPTIONS = 'subscriptions';
 export const MY_NAMESPACE_BOOKMARKS     = 'bookmarks';
 export const MY_NAMESPACE_FOLDERS       = 'folders';
 export const MY_NAMESPACE_LABELS        = 'labels';
-export const MY_NAMESPACE_NOTES        = 'notes';
+export const MY_NAMESPACE_NOTES         = 'notes';
 
 export const MY_NAMESPACES = [
   MY_NAMESPACE_HISTORY,
