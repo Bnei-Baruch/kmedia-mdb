@@ -34,7 +34,7 @@ const HandleLanguages = ({ language, t }) => {
     </div>
   ));
 
-  const handlePopupOpen = () => setIsActive(true);
+  const handlePopupOpen  = () => setIsActive(true);
   const handlePopupClose = () => setIsActive(false);
 
   return (
@@ -42,8 +42,8 @@ const HandleLanguages = ({ language, t }) => {
       id="handleLanguagesPopup"
       key="handleLangs"
       flowing
-      position="bottom right"
-      trigger={ <Trigger /> }
+      position={`bottom ${direction === 'rtl' ? 'left' : 'right'}`}
+      trigger={<Trigger />}
       open={isActive}
       onOpen={handlePopupOpen}
       onClose={handlePopupClose}
