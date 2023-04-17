@@ -208,7 +208,7 @@ export const LANGUAGES = {
   [LANG_NORWEGIAN]: { value: LANG_NORWEGIAN, locale: 'nb_NO', lang3: 'NOT', name: 'Norsk' },
   [LANG_SWEDISH]: { value: LANG_SWEDISH, locale: 'sv_SE', lang3: 'SWE', name: 'Svenska' },
   [LANG_CROATIAN]: { value: LANG_CROATIAN, locale: 'hr_HR', lang3: 'HRV', name: 'Hrvatski' },
-  [LANG_CHINESE]: { value: LANG_CHINESE, locale: 'zh_CN', lang3: 'CHN', name: '中文', hls: 'chi' },
+  [LANG_CHINESE]: { value: LANG_CHINESE, locale: 'zh_CN', lang3: 'CHI', name: '中文'},
   [LANG_PERSIAN]: { value: LANG_PERSIAN, locale: 'fa_IR', lang3: 'PER', name: 'کبالا فارسی' },
   [LANG_ROMANIAN]: { value: LANG_ROMANIAN, locale: 'ro_RO', lang3: 'RON', name: 'Românește' },
   [LANG_HINDI]: { value: LANG_HINDI, locale: 'hi_IN', lang3: 'HIN', name: 'हिन्दी' },
