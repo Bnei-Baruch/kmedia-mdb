@@ -53,7 +53,7 @@ export const useKeyboardControl = runTimeout => {
           togglePlay();
           break;
         default:
-          break;
+          return;
       }
 
       if (mode === PLAYER_OVER_MODES.active) {
