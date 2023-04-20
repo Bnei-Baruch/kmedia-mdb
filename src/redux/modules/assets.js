@@ -205,7 +205,12 @@ const onFetchTimeCode      = draft => {
 };
 
 const onFetchTimeCodeSuccess = (draft, payload) => {
-  draft.timeCode = payload;
+  const timeCode = new Map();
+  for (const idx in payload) {
+    const { index, timeCode: tc } = payload[idx];
+    timeCode.set(index, tc);
+  }
+  draft.timeCode = timeCode;
 };
 
 export const reducer = handleActions({
@@ -249,7 +254,7 @@ const getPerson          = state => state.person;
 const getTimeCode        = state => pos => recursiveTimeCode(pos, state);
 const recursiveTimeCode  = (pos, state) => {
   if (pos === 0 || isEmpty(state.timeCode)) return 0;
-  if (state.timeCode[pos]) return state.timeCode[pos];
+  if (state.timeCode.has(pos)) return state.timeCode.get(pos);
   return recursiveTimeCode(pos - 1, state);
 };
 
