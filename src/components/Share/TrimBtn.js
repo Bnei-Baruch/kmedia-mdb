@@ -32,7 +32,7 @@ const TrimBtn = ({ t }) => {
       .utc(end * 1000)
       .format(end < 60 * 60 ? 'mm[m]ss[s]' : 'HH[h]mm[m]ss[s]');
 
-    dispatch(actions.trim({ sstart, send, uid: file.id }));
+    dispatch(actions.trim({ sstart, send, uid: file.id, is_hls: file.is_hls }));
     chroniclesAppend('download', {
       url: file.src,
       uid: file.id,
