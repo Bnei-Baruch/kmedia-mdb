@@ -216,7 +216,7 @@ const setStatus = (state, action) => {
 
   switch (action.type) {
     case FETCH_UNIT:
-      wip.units     = { ...wip.units, [action.payload]: true };
+      wip.units = { ...wip.units, [action.payload]: true };
       break;
     case FETCH_UNITS_BY_IDS:
       units.wip = action.payload.id?.reduce((acc, id) => ({ ...acc, [id]: true }), {});
@@ -266,8 +266,8 @@ const setStatus = (state, action) => {
       errors.lastLesson = null;
 
       // update wip & errors map to mark this collection was requested fully (single)
-      wip.collections    = { ...wip.collections, [action.payload.id]: false };
-      errors.collections = { ...errors.collections, [action.payload.id]: null };
+      wip.collections     = { ...wip.collections, [action.payload.id]: false };
+      errors.collections  = { ...errors.collections, [action.payload.id]: null };
       fetched.collections = { ...fetched.collections, [action.payload.id]: true };
       break;
     case FETCH_WINDOW_SUCCESS:
@@ -327,6 +327,8 @@ const setStatus = (state, action) => {
       wip.countCU    = false;
       errors.countCU = action.payload.err;
       break;
+    case FETCH_LABELS:
+      wip.labels = true;
 
     default:
       break;
@@ -538,9 +540,10 @@ const onReceiveLabels = (state, action) => {
       labelsByCU[content_unit] = [...(labelsByCU[content_unit] || []), id];
     }
   }
-
+  const wip = { ...state.wip.labels };
   return {
     ...state,
+    wip: { ...wip, labels: false },
     labelsByCU,
     labelById,
   };
@@ -661,6 +664,7 @@ export const reducer = handleActions({
   [RECEIVE_COLLECTIONS]: (state, action) => onReceiveCollections(state, action),
   [RECEIVE_CONTENT_UNITS]: (state, action) => onReceiveContentUnits(state, action),
 
+  [FETCH_LABELS]: setStatus,
   [RECEIVE_LABELS]: onReceiveLabels,
   [RECEIVE_PERSONS]: onReceivePersons,
 }, freshStore());
