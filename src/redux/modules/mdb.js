@@ -327,8 +327,6 @@ const setStatus = (state, action) => {
       wip.countCU    = false;
       errors.countCU = action.payload.err;
       break;
-    case FETCH_LABELS:
-      wip.labels = true;
 
     default:
       break;
@@ -540,10 +538,9 @@ const onReceiveLabels = (state, action) => {
       labelsByCU[content_unit] = [...(labelsByCU[content_unit] || []), id];
     }
   }
-  const wip = { ...state.wip.labels };
+
   return {
     ...state,
-    wip: { ...wip, labels: false },
     labelsByCU,
     labelById,
   };
@@ -664,7 +661,6 @@ export const reducer = handleActions({
   [RECEIVE_COLLECTIONS]: (state, action) => onReceiveCollections(state, action),
   [RECEIVE_CONTENT_UNITS]: (state, action) => onReceiveContentUnits(state, action),
 
-  [FETCH_LABELS]: setStatus,
   [RECEIVE_LABELS]: onReceiveLabels,
   [RECEIVE_PERSONS]: onReceivePersons,
 }, freshStore());
