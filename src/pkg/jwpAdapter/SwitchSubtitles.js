@@ -12,7 +12,7 @@ const SwitchSubtitles = () => {
   useEffect(() => {
     if (!isReady) return;
     const jwp = window.jwplayer();
-    const idx = jwp.getCaptionsList().find(c => c.language === subsLanguage) || 0;
+    const idx = jwp.getCaptionsList().findIndex(c => c.language === subsLanguage) || 0;
 
     jwp.setCurrentCaptions(idx);
   }, [isReady, subsLanguage]);

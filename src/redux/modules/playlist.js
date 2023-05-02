@@ -85,7 +85,7 @@ const onBuildSuccess = (draft, payload) => {
   }
   if (!quality) quality = VS_DEFAULT;
 
-  draft.info = { ...info, cuId, language, quality, isReady: true, wip: false };
+  draft.info = { ...info, cuId, language, quality, isReady: true, wip: false, subsLanguage: 'off' };
 };
 
 const onRemovePlayer = draft => {

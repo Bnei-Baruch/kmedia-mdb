@@ -5,13 +5,12 @@ import { selectors as playlist, actions } from '../../../redux/modules/playlist'
 import { useTranslation } from 'react-i18next';
 
 const SubsControl = () => {
-  const { subtitles }          = useSelector(state => playlist.getPlayed(state.playlist));
-  const subsLanguage           = useSelector(state => playlist.getPlayed(state.playlist).subsLanguage);
-  const { t }                  = useTranslation();
+  const { subtitles } = useSelector(state => playlist.getPlayed(state.playlist));
+  const subsLanguage  = useSelector(state => playlist.getInfo(state.playlist).subsLanguage);
+  const { t }         = useTranslation();
+
   const dispatch               = useDispatch();
-  const handleSetSubtitlesLang = l => {
-    dispatch(actions.setSubsLanguage(l));
-  };
+  const handleSetSubtitlesLang = l => dispatch(actions.setSubsLanguage(l));
 
   return (
     <div className="settings__row">
