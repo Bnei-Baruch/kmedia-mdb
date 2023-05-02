@@ -285,6 +285,7 @@ export const MT_TEXT         = 'text';
 export const MT_SHEET        = 'sheet';
 export const MT_BANNER       = 'banner';
 export const MT_PRESENTATION = 'presentation';
+export const MT_SUBTITLES    = 'subtitles';
 
 export const VS_NHD     = 'nHD';
 export const VS_HD      = 'HD';

@@ -12,6 +12,7 @@ import MediaTypeControl from './MediaTypeControl';
 import RateControl from './RateControl';
 import CloseBtn from '../Controls/CloseBtn';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
+import SubsControl from './SubsControl';
 
 const Settings = ({ t }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
@@ -36,6 +37,7 @@ const Settings = ({ t }) => {
         mode !== PLAYER_OVER_MODES.languages && (
           <div className="settings__pane">
             {!isMobileDevice && <MediaTypeControl />}
+            <SubsControl />
             <RateControl />
             <QualityControl />
             <div className="settings__row">

@@ -21,7 +21,16 @@ const PlayerBehavior = () => {
   useEffect(() => {
     if (!info.isReady || !file?.src) return;
 
-    const playlistItem = { 'file': file.src, image: file.image };
+    const playlistItem = {
+      file: file.src,
+      image: file.image,
+      tracks: file.subtitles.map(s => ({
+        kind: 'captions',
+        file: s.src,
+        label: s.language,
+        language: s.language
+      }))
+    };
     if (!isPlayerReady()) {
       setup({
         controls: false,

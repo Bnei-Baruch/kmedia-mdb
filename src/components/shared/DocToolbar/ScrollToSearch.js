@@ -8,7 +8,8 @@ import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import {
   buildSearchLinkFromSelection,
   DOM_ROOT_ID,
-  prepareScrollToSearch
+  prepareScrollToSearch,
+  KEEP_LETTERS_RE
 } from '../../../helpers/scrollToSearch/helper';
 import { getQuery } from '../../../helpers/url';
 import LabelMark from './LabelMark';
@@ -16,6 +17,9 @@ import Toolbar from './Toolbar';
 import { useNotes } from './useNotes';
 import { useLabels } from './useLabels';
 import NoteMark from './NoteMark';
+import { useSelector } from 'react-redux';
+import { selectors as assets } from '../../../redux/modules/assets';
+import { seek } from '../../../pkg/jwpAdapter/adapter';
 
 const ScrollToSearch = ({ source, label, data, language, urlParams = '', pathname }) => {
   const { enableShareText: { isShareTextEnabled, setEnableShareText } } = useContext(SessionInfoContext);
@@ -38,7 +42,7 @@ const ScrollToSearch = ({ source, label, data, language, urlParams = '', pathnam
   const { srchstart, srchend, highlightAll } = getQuery(location);
   const search                               = useMemo(() => ({ srchstart, srchend }), [srchstart, srchend]);
 
-  const dir     = getLanguageDirection(language);
+  const dir = getLanguageDirection(language);
 
   const __html = prepareScrollToSearch(data, search, highlightAll === 'true', [...labels, ...notes]);
 
@@ -96,7 +100,7 @@ const ScrollToSearch = ({ source, label, data, language, urlParams = '', pathnam
 */
     const all       = e.currentTarget.textContent.replace(KEEP_LETTERS_RE, '').replace(/\s+/g, ' ');
     const selText   = sel.anchorNode.textContent.replace(KEEP_LETTERS_RE, '');
-    const text   = selText.slice(sel.anchorOffset, sel.anchorOffset + 30).replace(/\s+/g, ' ');
+    const text      = selText.slice(sel.anchorOffset, sel.anchorOffset + 30).replace(/\s+/g, ' ');
     const pos       = all.indexOf(text);
     const startTime = timeCodeByPos(pos);
     seek(startTime).play();

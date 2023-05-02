@@ -10,11 +10,12 @@ const PLAYLIST_BUILD_SUCCESS = 'Playlist/BUILD_SUCCESS';
 const SINGLE_MEDIA_BUILD     = 'Playlist/SINGLE_MEDIA_BUILD';
 const MY_PLAYLIST_BUILD      = 'Playlist/MY_PLAYLIST_BUILD';
 
-const PLAYLIST_SELECT       = 'Playlist/SELECT';
-const PLAYER_SET_QUALITY    = 'Player/SET_QUALITY';
-const PLAYER_SET_LANGUAGE   = 'Player/SET_LANGUAGE';
-const PLAYER_SET_MEDIA_TYPE = 'Player/SET_MEDIA_TYPE';
-const PLAYER_NULL_NEXT_UNIT = 'Player/NULL_NEXT_UNIT';
+const PLAYLIST_SELECT          = 'Playlist/SELECT';
+const PLAYER_SET_QUALITY       = 'Player/SET_QUALITY';
+const PLAYER_SET_LANGUAGE      = 'Player/SET_LANGUAGE';
+const PLAYER_SET_MEDIA_TYPE    = 'Player/SET_MEDIA_TYPE';
+const PLAYER_SET_SUBS_LANGUAGE = 'Player/SET_SUBS_LANGUAGE';
+const PLAYER_NULL_NEXT_UNIT    = 'Player/NULL_NEXT_UNIT';
 
 export const types = {
   PLAYLIST_BUILD,
@@ -28,11 +29,12 @@ const buildSuccess     = createAction(PLAYLIST_BUILD_SUCCESS);
 const singleMediaBuild = createAction(SINGLE_MEDIA_BUILD);
 const myPlaylistBuild  = createAction(MY_PLAYLIST_BUILD, pId => ({ pId }));
 
-const select       = createAction(PLAYLIST_SELECT);
-const setQuality   = createAction(PLAYER_SET_QUALITY);
-const setLanguage  = createAction(PLAYER_SET_LANGUAGE);
-const setMediaType = createAction(PLAYER_SET_MEDIA_TYPE);
-const nullNextUnit = createAction(PLAYER_NULL_NEXT_UNIT);
+const select          = createAction(PLAYLIST_SELECT);
+const setQuality      = createAction(PLAYER_SET_QUALITY);
+const setLanguage     = createAction(PLAYER_SET_LANGUAGE);
+const setSubsLanguage = createAction(PLAYER_SET_SUBS_LANGUAGE);
+const setMediaType    = createAction(PLAYER_SET_MEDIA_TYPE);
+const nullNextUnit    = createAction(PLAYER_NULL_NEXT_UNIT);
 
 export const actions = {
   build,
@@ -43,6 +45,7 @@ export const actions = {
   select,
   setQuality,
   setLanguage,
+  setSubsLanguage,
   setMediaType,
   nullNextUnit
 };
@@ -117,6 +120,7 @@ export const reducer = handleActions({
 
   [PLAYER_SET_QUALITY]: (draft, payload) => draft.info.quality = payload,
   [PLAYER_SET_LANGUAGE]: (draft, payload) => draft.info.language = payload,
+  [PLAYER_SET_SUBS_LANGUAGE]: (draft, payload) => draft.info.subsLanguage = payload,
   [PLAYER_SET_MEDIA_TYPE]: onUpdateMediaType,
   [PLAYER_NULL_NEXT_UNIT]: (draft, payload = null) => draft.info.nextUnitId = payload,
   [playerTypes.PLAYER_COMPLETE]: onComplete,
