@@ -1,71 +1,59 @@
-import { useEffect, useRef, useMemo, useContext } from 'react';
+import { useEffect, useRef } from 'react';
 import { useSelector, shallowEqual, useDispatch } from 'react-redux';
 
 import { selectors as player, actions } from '../../redux/modules/player';
 import { MY_NAMESPACE_HISTORY } from '../../helpers/consts';
 import { useLocation } from 'react-router-dom';
 import { startEndFromQuery } from '../../components/Player/Controls/helper';
-import { getSavedTime, findPlayedFile } from '../../components/Player/helper';
+import { getSavedTime } from '../../components/Player/helper';
 import { selectors as playlist } from '../../redux/modules/playlist';
 import { selectors as my } from '../../redux/modules/my';
-import { DeviceInfoContext } from '../../helpers/app-contexts';
-import { LOCALSTORAGE_MUTE } from './adapter';
+import { seek, play, pause } from './adapter';
 
 const BehaviorStartPlay = () => {
   const location       = useLocation();
   const { start, end } = startEndFromQuery(location);
 
-  const { isMobileDevice } = useContext(DeviceInfoContext);
-  const isReady            = useSelector(state => player.isReady(state.player));
-  const isMuted            = useSelector(state => player.isMuted(state.player));
+  const isReady         = useSelector(state => player.isReady(state.player));
+  const isMetadataReady = useSelector(state => player.isMetadataReady(state.player));
+  const { duration }    = useSelector(state => player.getFile(state.player)) || {};
 
-  const item = useSelector(state => playlist.getPlayed(state.playlist), shallowEqual);
-  const info = useSelector(state => playlist.getInfo(state.playlist), shallowEqual);
-  const file = useMemo(() => findPlayedFile(item, info), [item, info]);
-
-  const { cuId, isSingleMedia } = info;
+  const { isHLS }                    = useSelector(state => playlist.getPlayed(state.playlist));
+  const { cuId, cId, isSingleMedia } = useSelector(state => playlist.getInfo(state.playlist), shallowEqual);
 
   const historyItem = useSelector(state => my.getList(state.my, MY_NAMESPACE_HISTORY)?.find(x => x.content_unit_uid === cuId));
   const { fetched } = useSelector(state => my.getInfo(state.my, MY_NAMESPACE_HISTORY), shallowEqual);
 
-  const fileIdRef = useRef();
-  const dispatch  = useDispatch();
-
-  //mute for autostart
-  useEffect(() => {
-    if (isMuted !== undefined) return;
-    let mute = localStorage.getItem(LOCALSTORAGE_MUTE) === 'true';
-
-    if (isSingleMedia && isMobileDevice) {
-      mute = true;
-      window.jwplayer().setConfig({ mute });
-    }
-
-    dispatch(actions.setIsMuted(mute));
-  }, [isMuted, isSingleMedia, isMobileDevice, dispatch]);
+  const dispatch     = useDispatch();
+  const wasPlayedRef = useRef(false);
 
   //start from saved time on load or switch playlist item
-  const isClip = start || end !== Infinity;
+  const _isReady = isHLS ? isMetadataReady : isReady;
+  const isClip   = start || end !== Infinity;
+
   useEffect(() => {
-    if (!isReady || isClip || !fetched || file.id === fileIdRef.current) return;
+    cId && (wasPlayedRef.current = false);
+  }, [cId]);
 
-    const jwp       = window.jwplayer();
-    const autostart = !!fileIdRef.current || isSingleMedia;
+  useEffect(() => {
+    if (!_isReady || isClip || !fetched) return;
 
-    const { current_time: seek } = getSavedTime(cuId, historyItem);
-    jwp.setConfig({ autostart });
+    const autostart = !!(wasPlayedRef.current || isSingleMedia);
 
-    if (!isNaN(seek) && seek > 0 && (seek + 10 < file.duration)) {
-      jwp.seek(seek)[autostart ? 'play' : 'pause']();
-    } else if (!autostart) {
-      jwp.pause();
-      dispatch(actions.setLoaded(true));
-    } else {
-      jwp.play();
+    const { current_time: offset } = getSavedTime(cuId, historyItem);
+    if (!isNaN(offset) && offset > 0 && (offset + 10 < duration)) {
+      seek(offset);
+    } else if (autostart) {
+      play();
     }
-
-    fileIdRef.current = file.id;
-  }, [isReady, isClip, cuId, file, historyItem, fileIdRef, isSingleMedia, fetched, dispatch]);
+    if (!autostart) {
+      setTimeout(() => {
+        pause();
+        dispatch(actions.setLoaded(true));
+      }, 0);
+    }
+    wasPlayedRef.current = true;
+  }, [_isReady, isClip, cuId, duration, historyItem, isSingleMedia, fetched, dispatch]);
 
   return null;
 };

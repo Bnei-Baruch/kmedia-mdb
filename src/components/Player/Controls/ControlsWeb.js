@@ -12,15 +12,14 @@ import { useSelector } from 'react-redux';
 import { selectors } from '../../../redux/modules/player';
 
 const ControlsWeb = ({ fullscreenRef }) => {
-
   const loaded = useSelector(state => selectors.isLoaded(state.player));
 
   return (
     <div className="controls">
-      {loaded && <PlayPauseBg />}
+      {loaded && < PlayPauseBg />}
       <PrevBtn />
-      {loaded && <SeekBackwardBtn />}
-      {loaded && <SeekForwardBtn />}
+      <SeekBackwardBtn />
+      <SeekForwardBtn />
       <NextBtn />
       <div className="controls__bar">
         <PlayPauseBtn />

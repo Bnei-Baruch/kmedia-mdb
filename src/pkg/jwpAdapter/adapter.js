@@ -1,8 +1,16 @@
-import { PLAYER_ACTIONS_BY_EVENT } from '../../redux/modules/player';
-import { JWPLAYER_ID } from '../../helpers/consts';
+import { PLAYER_ACTIONS_BY_EVENT, actions } from '../../redux/modules/player';
+import { JWPLAYER_ID, VS_NAMES } from '../../helpers/consts';
 import { noop } from '../../helpers/utils';
 
-export const LOCALSTORAGE_MUTE = 'jwplayer.mute';
+export const LOCALSTORAGE_MUTE    = 'jwplayer.mute';
+export const LOCALSTORAGE_QUALITY = 'jwplayer.qualityLabel';
+export const getQualitiesFromLS   = () => {
+  const lsKey = localStorage.getItem(LOCALSTORAGE_QUALITY);
+  const pair  = Object.entries(VS_NAMES).find(([k, v]) => {
+    return lsKey === v;
+  });
+  return pair?.[0];
+};
 
 export const setup = conf => {
   const jwp = window.jwplayer(JWPLAYER_ID);
@@ -40,11 +48,13 @@ export const getPosition     = () => functionByName('getPosition');
 export const getPlaylistItem = () => functionByName('getPlaylistItem', noop);
 
 export const play = () => functionByName('play');
+export const stop = () => functionByName('stop');
 
 export const pause      = () => functionByName('pause', false);
 export const togglePlay = () => {
   const state = functionByName('getState');
   if (!state) return;
+
   (state !== 'playing') ? play() : pause();
 };
 
@@ -64,6 +74,7 @@ const PLAYER_EVENTS = [
   'playlistItem',
   'remove',
   'destroyPlugin',
+  'bufferFull',
 
   'play',
   'pause',
@@ -74,16 +85,34 @@ const PLAYER_EVENTS = [
   'complete',
   'buffer'
 ];
-export const init   = dispatch => {
+export const init   = (dispatch, deviceInfo) => {
   const player = window.jwplayer();
-
   //for debug, catch all jwplayer events
-  //player.on('all', (name, e) => console.log('jwplayer all events', name));
+  /*player.on('all', (name, e) => {
+    if (!['bufferChange', 'time'].includes(name)) {
+      console.log('bag: jwplayer all events', name, e);
+    }
+  });*/
 
-  player.on('error', e => console.error(e));
+  player.on('error', e => {
+    console.error(e);
+    dispatch(actions.setLoaded(true));
+  });
+
+  player.on('warning', e => {
+    console.error(e);
+    dispatch(actions.setLoaded(true));
+  });
 
   player.on('remove', () => player.off('all'));
 
+  player.on('playlistItem', e => {
+    if (e.item.sources[0]?.type.toLowerCase() === 'hls') {
+      player.play();
+    }
+  });
+
+  dispatch(actions.setIsMuted(localStorage.getItem(LOCALSTORAGE_MUTE) === 'true'));
   PLAYER_EVENTS.forEach(name => {
     const action = PLAYER_ACTIONS_BY_EVENT[name];
     if (!action) {

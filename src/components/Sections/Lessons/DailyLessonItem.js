@@ -7,6 +7,7 @@ import { canonicalLink, getCuByCcuSkipPreparation } from '../../../helpers/links
 import { selectors as mdb } from '../../../redux/modules/mdb';
 import Link from '../../Language/MultiLanguageLink';
 import UnitLogoWithDuration from '../../shared/UnitLogoWithDuration';
+import { CT_LESSON_PART } from './../../../helpers/consts';
 
 const DailyLessonItem = ({ id, t }) => {
   const ccu = useSelector(state => mdb.getDenormCollection(state.mdb, id));
@@ -14,13 +15,16 @@ const DailyLessonItem = ({ id, t }) => {
   const { number, film_date, content_units = [] } = ccu || {};
 
   if (!ccu || content_units.length === 0) return null;
-  const logoUnit = content_units.find(x => x.id === getCuByCcuSkipPreparation(ccu));
-  const link     = canonicalLink(logoUnit);
+  const logoUnit      = content_units.find(x => x.id === getCuByCcuSkipPreparation(ccu));
+  const link          = canonicalLink(logoUnit);
+  const totalDuration = content_units
+    .filter(cu => cu.content_type === CT_LESSON_PART)
+    .reduce((acc, cu) => acc += cu.duration, 0);
 
   return (
     <List.Item key={id} className="media_item daily_lesson">
       <Link to={link} style={{ minWidth: '140px' }}>
-        <UnitLogoWithDuration unit={logoUnit} />
+        <UnitLogoWithDuration unit={logoUnit} totalDuration={totalDuration} />
       </Link>
       <div className="media_item__content">
         <Header as={Link} to={canonicalLink(ccu)}>

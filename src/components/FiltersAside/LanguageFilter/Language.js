@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { withTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Button } from 'semantic-ui-react';
-import { FN_LANGUAGES, POPULAR_LANGUAGES } from '../../../helpers/consts';
+import { FN_LANGUAGES, POPULAR_LANGUAGES, ALL_LANGUAGES } from '../../../helpers/consts';
 import { selectors as filters } from '../../../redux/modules/filters';
 import { selectors } from '../../../redux/modules/filtersAside';
 import FilterHeader from '../FilterHeader';
@@ -30,9 +30,12 @@ const Language = ({ namespace, t }) => {
             )
           }
           {
-            showAll && items.filter(id => !POPULAR_LANGUAGES.includes(id)).map(id =>
-              <LanguageItem namespace={namespace} id={id} key={id} />
-            )
+            showAll && items
+              .filter(id => ALL_LANGUAGES.includes(id))
+              .filter(id => !POPULAR_LANGUAGES.includes(id))
+              .map(id =>
+                <LanguageItem namespace={namespace} id={id} key={id} />
+              )
           }
 
           {

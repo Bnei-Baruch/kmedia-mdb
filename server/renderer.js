@@ -33,6 +33,7 @@ const DoNotRemove = localStorage; // DO NOT REMOVE - the import above does all t
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 export default function serverRender(req, res, next, htmlData) {
+  if (req.originalUrl.indexOf('anonymous') !== -1) return;
   console.log('serverRender', req.originalUrl);
 
   const { language, redirect } = getLanguageFromPath(req.originalUrl, req.headers, req.get('user-agent'));
@@ -46,7 +47,7 @@ export default function serverRender(req, res, next, htmlData) {
 
   const cookies = cookieParse(req.headers.cookie || '');
   const bot     = isBot(req);
-  if (cookies['authorised'] || req.query.authorised || bot) {
+  if (cookies['authorised'] || req.query.authorised || req.query.embed || bot) {
     serverRenderAuthorised(req, res, next, htmlData, language, bot);
     return;
   }

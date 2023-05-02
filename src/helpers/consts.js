@@ -182,6 +182,7 @@ export const LANG_CZECH      = 'cs';
 export const LANG_AMHARIC    = 'am';
 export const LANG_INDONESIAN = 'id';
 export const LANG_ARMENIAN   = 'hy';
+export const LANG_ORIGINAL   = 'or';
 export const LANG_UNKNOWN    = 'xx';
 
 export const LANGUAGES = {
@@ -194,7 +195,7 @@ export const LANGUAGES = {
   [LANG_DUTCH]: { value: LANG_DUTCH, locale: 'nl_NL', lang3: 'DUT', name: 'Nederlands' },
   [LANG_FRENCH]: { value: LANG_FRENCH, locale: 'fr_FR', lang3: 'FRE', name: 'Français' },
   [LANG_PORTUGUESE]: { value: LANG_PORTUGUESE, locale: 'pt_PT', lang3: 'POR', name: 'Português' },
-  [LANG_TURKISH]: { value: LANG_TURKISH, locale: 'tr_TR', lang3: 'TRK', name: 'Türkçe' },
+  [LANG_TURKISH]: { value: LANG_TURKISH, locale: 'tr_TR', lang3: 'TUR', name: 'Türkçe' },
   [LANG_POLISH]: { value: LANG_POLISH, locale: 'pl_PL', lang3: 'POL', name: 'Polski' },
   [LANG_ARABIC]: { value: LANG_ARABIC, locale: 'ar_AR', lang3: 'ARA', name: 'اَلْعَرَبِيَّةُ' },
   [LANG_HUNGARIAN]: { value: LANG_HUNGARIAN, locale: 'hu_HU', lang3: 'HUN', name: 'Magyar' },
@@ -207,11 +208,11 @@ export const LANGUAGES = {
   [LANG_NORWEGIAN]: { value: LANG_NORWEGIAN, locale: 'nb_NO', lang3: 'NOT', name: 'Norsk' },
   [LANG_SWEDISH]: { value: LANG_SWEDISH, locale: 'sv_SE', lang3: 'SWE', name: 'Svenska' },
   [LANG_CROATIAN]: { value: LANG_CROATIAN, locale: 'hr_HR', lang3: 'HRV', name: 'Hrvatski' },
-  [LANG_CHINESE]: { value: LANG_CHINESE, locale: 'zh_CN', lang3: 'CHN', name: '中文' },
+  [LANG_CHINESE]: { value: LANG_CHINESE, locale: 'zh_CN', lang3: 'CHI', name: '中文'},
   [LANG_PERSIAN]: { value: LANG_PERSIAN, locale: 'fa_IR', lang3: 'PER', name: 'کبالا فارسی' },
   [LANG_ROMANIAN]: { value: LANG_ROMANIAN, locale: 'ro_RO', lang3: 'RON', name: 'Românește' },
   [LANG_HINDI]: { value: LANG_HINDI, locale: 'hi_IN', lang3: 'HIN', name: 'हिन्दी' },
-  [LANG_UKRAINIAN]: { value: LANG_UKRAINIAN, locale: 'uk_UA', lang3: 'UKR', name: 'Українська' },
+  [LANG_UKRAINIAN]: { value: LANG_UKRAINIAN, locale: 'uk_UA', lang3: 'UKR', name: 'Українська', hls: 'uk' },
   [LANG_MACEDONIAN]: { value: LANG_MACEDONIAN, locale: 'mk_MK', lang3: 'MKD', name: 'Македонски' },
   [LANG_SLOVENIAN]: { value: LANG_SLOVENIAN, locale: 'sl_SI', lang3: 'SLV', name: 'Slovenščina' },
   [LANG_LATVIAN]: { value: LANG_LATVIAN, locale: 'lv_LV', lang3: 'LAV', name: 'Latviešu' },
@@ -220,9 +221,11 @@ export const LANGUAGES = {
   [LANG_AMHARIC]: { value: LANG_AMHARIC, locale: 'am_ET', lang3: 'AMH', name: 'ኣማርኛ' },
   [LANG_INDONESIAN]: { value: LANG_INDONESIAN, locale: 'in_ID', lang3: 'IND', name: 'Bahasa Indonesia' },
   [LANG_ARMENIAN]: { value: LANG_ARMENIAN, locale: 'hy_AM', lang3: 'ARM', name: 'Հայերէն' },
+  [LANG_ORIGINAL]: { value: LANG_ORIGINAL, locale: 'he_IL', lang3: 'ORI', name: 'Original' },
 };
 
 export const ALL_LANGUAGES = [
+  LANG_ORIGINAL,
   LANG_HEBREW,
   LANG_ENGLISH,
   LANG_RUSSIAN,
@@ -285,7 +288,8 @@ export const MT_PRESENTATION = 'presentation';
 
 export const VS_NHD     = 'nHD';
 export const VS_HD      = 'HD';
-export const VS_FHD     = 'FHD';
+export const VS_FHD     = 'fHD';
+export const VS_HLS     = 'HLS';
 export const VS_DEFAULT = VS_NHD;
 
 export const getVideoRes = (vsType, date) => {
@@ -674,6 +678,7 @@ export const MY_NAMESPACE_SUBSCRIPTIONS = 'subscriptions';
 export const MY_NAMESPACE_BOOKMARKS     = 'bookmarks';
 export const MY_NAMESPACE_FOLDERS       = 'folders';
 export const MY_NAMESPACE_LABELS        = 'labels';
+export const MY_NAMESPACE_NOTES         = 'notes';
 
 export const MY_NAMESPACES = [
   MY_NAMESPACE_HISTORY,

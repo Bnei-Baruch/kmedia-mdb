@@ -65,11 +65,13 @@ const LatestUpdate = ({ item, t, label }) => {
       title     = [t(`player.header.series-by-topic`), `${authorName}`, ` ${name}`] || t(`constants.content-types.${content_type}`);
       subheader = [fromToLocalized(start_date || film_date, end_date)];
       break;
-    case CT_SPECIAL_LESSON:
     case CT_CONGRESS:
+    case CT_HOLIDAY:
+      subheader = [fromToLocalized(start_date || film_date, end_date)];
+      break;
+    case CT_SPECIAL_LESSON:
     case CT_MEAL:
     case CT_FRIENDS_GATHERING:
-    case CT_HOLIDAY:
     case CT_PICNIC:
     case CT_UNITY_DAY:
       break;

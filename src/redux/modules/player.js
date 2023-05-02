@@ -2,16 +2,16 @@ import { createAction } from 'redux-actions';
 import { handleActions } from './settings';
 import { PLAYER_OVER_MODES } from '../../helpers/consts';
 
-const PLAYER_READY       = 'Player/READY';
-const PLAYER_REMOVE      = 'Player/REMOVE';
-const DESTROY_PLUGIN     = 'Player/DESTROY_PLUGIN';
-const PLAYER_PLAY        = 'Player/PLAY';
-const PLAYER_BUFFER      = 'Player/BUFFER';
-const PLAYER_PAUSE       = 'Player/PAUSE';
-const PLAYER_RATE        = 'Player/RATE';
-const PLAYER_RESIZE      = 'Player/RESIZE';
-const PLAYER_TOGGLE_MUTE = 'Player/TOGGLE_MUTE';
-const PLAYER_COMPLETE    = 'Player/COMPLETE';
+const PLAYER_READY          = 'Player/READY';
+const PLAYER_METADATA_READY = 'Player/PLAYER_METADATA_READY';
+const PLAYER_REMOVE         = 'Player/REMOVE';
+const PLAYER_PLAY           = 'Player/PLAY';
+const PLAYER_BUFFER         = 'Player/BUFFER';
+const PLAYER_PAUSE          = 'Player/PAUSE';
+const PLAYER_RATE           = 'Player/RATE';
+const PLAYER_RESIZE         = 'Player/RESIZE';
+const PLAYER_TOGGLE_MUTE    = 'Player/TOGGLE_MUTE';
+const PLAYER_COMPLETE       = 'Player/COMPLETE';
 
 const PLAYER_SET_FILE          = 'Player/SET_FILE';
 const PLAYER_SET_OVER_MODE     = 'Player/SET_OVER_MODE';
@@ -32,8 +32,8 @@ export const types = {
 
 // Actions
 const playerReady         = createAction(PLAYER_READY);
+const playerMetadataReady = createAction(PLAYER_METADATA_READY);
 const playerRemove        = createAction(PLAYER_REMOVE);
-const playerDestroyPlugin = createAction(DESTROY_PLUGIN);
 const setFile             = createAction(PLAYER_SET_FILE);
 
 const playerPlay       = createAction(PLAYER_PLAY);
@@ -69,6 +69,7 @@ export const actions = {
 const initialState = {
   overMode: PLAYER_OVER_MODES.firstTime,
   ready: false,
+  metadataReady: false,
   file: null,
   shareStartEnd: { start: null, end: null },
   isFullScreen: false,
@@ -76,9 +77,11 @@ const initialState = {
 };
 
 const onRemove = draft => {
-  draft.overMode = PLAYER_OVER_MODES.firstTime;
-  draft.ready    = false;
-  draft.played   = false;
+  draft.overMode      = PLAYER_OVER_MODES.firstTime;
+  draft.ready         = false;
+  draft.played        = false;
+  draft.loaded        = false;
+  draft.metadataReady = false;
 };
 
 const onSetMode = (draft, payload) => {
@@ -104,8 +107,8 @@ const onPlay = (draft, payload) => {
 
 export const reducer = handleActions({
   [PLAYER_READY]: draft => draft.ready = true,
+  [PLAYER_METADATA_READY]: draft => draft.metadataReady = true,
   [PLAYER_REMOVE]: onRemove,
-  [DESTROY_PLUGIN]: draft => draft.loaded = false,
   [PLAYER_SET_FILE]: onSetFile,
 
   [PLAYER_PLAY]: onPlay,
@@ -125,6 +128,7 @@ export const reducer = handleActions({
 }, initialState);
 
 const isReady          = state => state.ready;
+const isMetadataReady  = state => state.metadataReady && state.ready;
 const isLoaded         = state => state.loaded;
 const isPlay           = state => state.played;
 const getFile          = state => state.file;
@@ -138,6 +142,7 @@ const getKeyboardCoef  = state => state.keyboardCoef;
 
 export const selectors = {
   isReady,
+  isMetadataReady,
   isLoaded,
   isPlay,
   getFile,
@@ -154,7 +159,10 @@ export const PLAYER_ACTIONS_BY_EVENT = {
   'ready': playerReady,
   'playlistItem': playerReady,
   'remove': playerRemove,
-  'destroyPlugin': playerDestroyPlugin,
+  'destroyPlugin': playerRemove,
+
+  'initSafari': playerReady,
+  'bufferFull': playerMetadataReady,
 
   'buffer': playerBuffer,
   'play': playerPlay,

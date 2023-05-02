@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { selectors as playlist } from '../../../redux/modules/playlist';
 import { formatDuration } from '../../../helpers/utils';
@@ -11,9 +11,12 @@ export const Timecode = () => {
   const cuId     = useSelector(state => playlist.getInfo(state.playlist).cuId);
 
   const { time } = useSubscribeSeekAndTime();
+  const timeRef  = useRef(time);
 
   useEffect(() => {
+    if (time === timeRef.current) return;
     saveTimeOnLocalstorage(time, cuId);
+    timeRef.current = time;
   }, [time, cuId]);
 
   return (

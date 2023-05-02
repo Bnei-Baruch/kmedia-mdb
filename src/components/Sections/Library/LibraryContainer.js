@@ -12,6 +12,8 @@ import { isEmpty } from '../../../helpers/utils';
 import { actions as assetsActions, selectors as assets } from '../../../redux/modules/assets';
 import { actions as sourceActions, selectors as sources } from '../../../redux/modules/sources';
 import { selectors as settings } from '../../../redux/modules/settings';
+import { actions as mdbActions, selectors as mdb } from '../../../redux/modules/mdb';
+import { selectors as tags } from '../../../redux/modules/tags';
 import * as shapes from '../../shapes';
 import { getSourceErrorSplash } from '../../shared/WipErr/WipErr';
 import Helmets from '../../shared/Helmets';
@@ -24,6 +26,7 @@ import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { getQuery } from '../../../helpers/url';
 import { SCROLL_SEARCH_ID } from '../../../helpers/consts';
 import { withRouter } from '../../../helpers/withRouterPatch';
+import TagsByUnit from '../../shared/TagsByUnit';
 
 const waitForRenderElement = async (attempts = 0) => {
   if (attempts > 10) return Promise.reject();
@@ -41,9 +44,11 @@ class LibraryContainer extends Component {
 
   static propTypes = {
     sourceId: PropTypes.string.isRequired,
+    unit: shapes.ContentUnit,
     indexMap: PropTypes.objectOf(shapes.DataWipErr),
     language: PropTypes.string.isRequired,
     contentLanguage: PropTypes.string.isRequired,
+    fetchUnit: PropTypes.func.isRequired,
     fetchIndex: PropTypes.func.isRequired,
     sourcesSortBy: PropTypes.func.isRequired,
     getSourceById: PropTypes.func.isRequired,
@@ -255,12 +260,16 @@ class LibraryContainer extends Component {
   }
 
   fetchIndices = sourceId => {
-    const { indexMap, fetchIndex } = this.props;
+    const { indexMap, fetchIndex, fetchUnit, unitFetched } = this.props;
     if (isEmpty(sourceId) || !isEmpty(indexMap[sourceId])) {
       return;
     }
 
     fetchIndex(sourceId);
+
+    if (!unitFetched) {
+      fetchUnit(sourceId);
+    }
   };
 
   firstLeafId = sourceId => {
@@ -445,7 +454,17 @@ class LibraryContainer extends Component {
   };
 
   render() {
-    const { sourceId, getSourceById, getPathByID, language, contentLanguage, t, push, areSourcesLoaded } = this.props;
+    const {
+            sourceId,
+            getSourceById,
+            getPathByID,
+            language,
+            contentLanguage,
+            t,
+            push,
+            areSourcesLoaded,
+            unit
+          } = this.props;
 
     if (!areSourcesLoaded)
       return null;
@@ -493,7 +512,10 @@ class LibraryContainer extends Component {
                     </div>
                   </Grid.Column>
                   <Grid.Column mobile={16} tablet={16} computer={12} className="source__content-header">
-                    <div className="source__header-title">{this.header(sourceId, parentId)}</div>
+                    <div className="source__header-title">
+                      {this.header(sourceId, parentId)}
+                      <TagsByUnit id={unit?.id} />
+                    </div>
                     <LibraryBar
                       handleSettings={this.handleSettings}
                       handleIsReadable={this.handleIsReadable}
@@ -538,7 +560,6 @@ class LibraryContainer extends Component {
                   [`size${fontSize}`]: true,
                 })}
               >
-                {/*<div ref={this.handleLangContainerRef}></div>*/}
                 <Ref innerRef={this.handleContextRef}>
                   <div
                     className="source__content font_settings"
@@ -557,10 +578,12 @@ class LibraryContainer extends Component {
   }
 }
 
-export default withRouter(connect(
+export default withTranslation()(withRouter(connect(
   (state, ownProps) => ({
-    sourceId: ownProps.params.id,
+    sourceId: ownProps.params?.id,
+    unit: mdb.getDenormContentUnit(state.mdb, ownProps.params?.id),
     indexMap: assets.getSourceIndexById(state.assets),
+    unitFetched: mdb.getFullUnitFetched(state.mdb)[ownProps.params?.id],
     language: settings.getLanguage(state.settings),
     contentLanguage: settings.getContentLanguage(state.settings, ownProps.location),
     getSourceById: sources.getSourceById(state.sources),
@@ -571,9 +594,10 @@ export default withRouter(connect(
     NotToFilter: sources.NotToFilter,
   }),
   dispatch => bindActionCreators({
+    fetchUnit: mdbActions.fetchUnit,
     fetchIndex: assetsActions.sourceIndex,
     sourcesSortBy: sourceActions.sourcesSortBy,
     push: routerPush,
     replace: routerReplace,
   }, dispatch)
-)(withTranslation()(withRouter(LibraryContainer))));
+)(LibraryContainer)));

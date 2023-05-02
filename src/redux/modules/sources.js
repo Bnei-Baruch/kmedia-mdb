@@ -1,10 +1,8 @@
 import { createAction, handleActions } from 'redux-actions';
-import identity from 'lodash/identity';
 
 import { BS_ETZ_HAIM, BS_IGROT, BS_SHAMATI, BS_TAAS, MR_TORA, RB_IGROT, RH_ZOHAR } from '../../helpers/consts';
 import { strCmp, tracePath } from '../../helpers/utils';
 import { types as settings } from './settings';
-import { types as ssr } from './ssr';
 
 /* Types */
 
@@ -30,17 +28,8 @@ export const actions = {
 
 const initialState = {
   byId: {},
+  byIdAZ: {},
   roots: [],
-  sortedByAZ: {
-    getByID: identity,
-    getPath: identity,
-    getPathByID: identity,
-  },
-  sortedByBook: {
-    getByID: identity,
-    getPath: identity,
-    getPathByID: identity,
-  },
   loaded: false,
   sortBy: 'Book',
 };
@@ -109,16 +98,9 @@ const prepareById = payload => {
   return [byId, byIdAZ];
 };
 
-const getIdFuncs = byId => {
-  const getByID     = id => byId[id];
-  const getPath     = source => tracePath(source, getByID);
-  const getPathByID = id => getPath(getByID(id));
-  return { getByID, getPath, getPathByID };
-};
+const onChangeLanguage = () => ({ ...initialState });
 
-const onSSRPrepare = () => ({ ...initialState });
-
-const groupRabash      = [
+const groupRabash = [
   'IHYcOU8k', 'he3tEpLu', 'M53FJnYF', 'jXgT6Pa1', 'gzm3fAe8', 'L1OKGSxg',
   'O9a0iCL0', 'QpKRILZk', 'RVlfRn0W', '9nU3N2k2', 'rlfCtHnc', 'uJ34bVH5',
   'tuNiurqI', 'mVQJIMlj', 'VLuOsaN3', '0G3JOBRv', 'UAiHPiou', 'y5BKi0y2',
@@ -152,9 +134,7 @@ const setRabash = (sources, language) => {
 };
 
 export const reducer = handleActions({
-  [ssr.PREPARE]: onSSRPrepare,
-
-  [settings.SET_LANGUAGE]: onSSRPrepare,
+  [settings.SET_LANGUAGE]: onChangeLanguage,
 
   [RECEIVE_SOURCES]: (state, action) => {
     const { sources, language } = action.payload;
@@ -162,15 +142,10 @@ export const reducer = handleActions({
 
     const [byId, byIdAZ] = prepareById(sources);
 
-    // we keep selectors in state to avoid recreating them every time a selector is called
-    const sortedByBook = getIdFuncs(byId);
-    const sortedByAZ   = getIdFuncs(byIdAZ);
-
     return {
       ...state,
       byId,
-      sortedByBook,
-      sortedByAZ,
+      byIdAZ,
       loaded: true,
       roots: sources.map(x => x.id),
       sortBy: 'Book'
@@ -186,16 +161,20 @@ export const reducer = handleActions({
 
 /* Selectors */
 
-const $$getSourceBy = (state, idx) => {
-  const f = state.sortBy === 'AZ' ? state.sortedByAZ : state.sortedByBook;
-  return f[idx];
-};
-
 const areSourcesLoaded = state => state.loaded;
 const getRoots         = state => state.roots;
-const getSourceById    = state => $$getSourceBy(state, 'getByID');
-const getPath          = state => $$getSourceBy(state, 'getPath');
-const getPathByID      = state => $$getSourceBy(state, 'getPathByID');
+const getSourceById    = state => {
+  const _byId = state.sortBy === 'AZ' ? state.byId : state.byIdAZ;
+  return id => _byId[id];
+};
+const getPath          = state => {
+  const _byId = getSourceById(state);
+  return source => tracePath(source, _byId);
+};
+const getPathByID      = state => {
+  const _byId = getSourceById(state);
+  return id => tracePath(_byId(id), _byId);
+};
 const sortBy           = state => state.sortBy;
 
 export const selectors = {

@@ -1,8 +1,7 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { Breadcrumb, Container, Divider, Grid } from 'semantic-ui-react';
 import { isLanguageRtl } from '../../../helpers/i18n-utils';
 
@@ -15,8 +14,9 @@ import FilterLabels from '../../FiltersAside/FilterLabels';
 import HelmetsBasic from '../../shared/Helmets/Basic';
 import { getBreadCrumbSection } from './helper';
 
-const RenderPage = ({ t }) => {
+const RenderPage = () => {
   const { id } = useParams();
+  const { t }  = useTranslation();
 
   const getPathByID = useSelector(state => selectors.getPathByID(state.tags));
   const language    = useSelector(state => settings.getLanguage(state.settings));
@@ -27,7 +27,7 @@ const RenderPage = ({ t }) => {
   const breadCrumbSections = [{ id: '', label: t('nav.sidebar.topics') }, ...tagPath].map(getBreadCrumbSection);
 
   const breadCrumbIcon = `${isLanguageRtl(language) ? 'left' : 'right'} angle`;
-
+  const baseParams     = useMemo(() => ({ tag: id }), [id]);
   return (
     <>
       <HelmetsBasic title={breadCrumbSections[breadCrumbSections.length - 1]?.content} />
@@ -38,7 +38,7 @@ const RenderPage = ({ t }) => {
           <Grid.Column width="4" className="filters-aside-wrapper">
             <Filters
               namespace={`topics_${id}`}
-              baseParams={{ tag: id }}
+              baseParams={baseParams}
             />
           </Grid.Column>
           <Grid.Column width="12">
@@ -57,9 +57,4 @@ const RenderPage = ({ t }) => {
     </>
   );
 };
-
-RenderPage.propTypes = {
-  t: PropTypes.func.isRequired,
-};
-
-export default withTranslation()(RenderPage);
+export default RenderPage;

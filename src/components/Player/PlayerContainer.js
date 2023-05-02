@@ -1,10 +1,10 @@
 import React, { useRef, useContext, useEffect } from 'react';
-import { useSelector, shallowEqual, useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import clsx from 'clsx';
 import { Ref } from 'semantic-ui-react';
 
 import { selectors as player, selectors, actions } from '../../redux/modules/player';
-import { PLAYER_OVER_MODES } from '../../helpers/consts';
+import { PLAYER_OVER_MODES, MT_AUDIO } from '../../helpers/consts';
 import Player from '../../pkg/jwpAdapter/Player';
 import PlayerToolsWeb from './PlayerToolsWeb';
 import PlayerToolsMobile from './PlayerToolsMobile';
@@ -39,10 +39,11 @@ const CLASSES_BY_MODE = {
 
 const PlayerContainer = () => {
   const fullscreenRef = useRef();
-  const mode          = useSelector(state => player.getOverMode(state.player), shallowEqual);
-  const isFullScreen  = useSelector(state => selectors.isFullScreen(state.player), shallowEqual);
+  const mode          = useSelector(state => player.getOverMode(state.player));
+  const isFullScreen  = useSelector(state => selectors.isFullScreen(state.player));
 
   const { isMobileDevice } = useContext(DeviceInfoContext);
+  const { type }           = useSelector(state => selectors.getFile(state.player)) || false;
 
   const dispatch = useDispatch();
   useKeyboardControl(runTimeout);
@@ -91,13 +92,20 @@ const PlayerContainer = () => {
   };
 
   const playerComponent = <Player />;
+  const isVideo         = type !== MT_AUDIO;
+  const classes         = [
+    mode === PLAYER_OVER_MODES.none && !isVideo ? CLASSES_BY_MODE[PLAYER_OVER_MODES.firstTime] : CLASSES_BY_MODE[mode],
+    isMobileDevice ? 'is-mobile' : 'is-web',
+    { 'is-fullscreen': isFullScreen, 'is-video': isVideo },
+
+  ];
 
   const content = (
     <div className="player" dir="ltr">
       <AppendChronicle />
       <UpdateLocation />
       <div
-        className={clsx(CLASSES_BY_MODE[mode], isMobileDevice ? 'is-mobile' : 'is-web', { 'is-fullscreen': isFullScreen })}
+        className={clsx(...classes)}
         onClick={handleClick}
         onMouseMove={handleMouseMove}
       >

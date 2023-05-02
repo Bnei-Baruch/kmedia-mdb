@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 
 import { DeviceInfoContext, SessionInfoContext } from '../../../helpers/app-contexts';
@@ -9,40 +8,14 @@ import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import {
   buildSearchLinkFromSelection,
   DOM_ROOT_ID,
-  OFFSET_TEXT_SEPARATOR,
-  prepareScrollToSearch,
-  KEEP_LETTERS_RE
+  prepareScrollToSearch
 } from '../../../helpers/scrollToSearch/helper';
 import { getQuery } from '../../../helpers/url';
-import { actions, selectors as mdb } from '../../../redux/modules/mdb';
-import { selectors as assets } from '../../../redux/modules/assets';
 import LabelMark from './LabelMark';
 import Toolbar from './Toolbar';
-import { seek } from '../../../pkg/jwpAdapter/adapter';
-
-//its not mus be accurate number (average number letters per line)
-const LETTERS_ON_LINE = 20;
-
-const buildOffsets = labels => labels.map(({ properties: { srchstart, srchend } = {}, id }) => {
-  let start = Math.round(Number(srchstart?.split(OFFSET_TEXT_SEPARATOR)[1]) / LETTERS_ON_LINE);
-  start     = Math.round(start / LETTERS_ON_LINE);
-
-  let end = Math.round(Number(srchend?.split(OFFSET_TEXT_SEPARATOR)[1]) / LETTERS_ON_LINE);
-  end     = Math.round(end / LETTERS_ON_LINE);
-
-  return {
-    start: Math.min(start, end) || Math.max(start, end),
-    end: Math.max(start, end),
-    id
-  };
-}).reduce((acc, l, i, arr) => {
-  const cross = arr.filter(x => !(x.start > l.end + 2 || x.end < l.start - 2));
-  cross.sort((a, b) => (b.end - b.start) - (a.end - a.start));
-  const x   = cross.findIndex(x => x.id === l.id);
-  const y   = cross.filter(x => x.start - l.start === 0).findIndex(x => x.id === l.id);
-  acc[l.id] = { x, y };
-  return acc;
-}, {});
+import { useNotes } from './useNotes';
+import { useLabels } from './useLabels';
+import NoteMark from './NoteMark';
 
 const ScrollToSearch = ({ source, label, data, language, urlParams = '', pathname }) => {
   const { enableShareText: { isShareTextEnabled, setEnableShareText } } = useContext(SessionInfoContext);
@@ -56,33 +29,18 @@ const ScrollToSearch = ({ source, label, data, language, urlParams = '', pathnam
   const containerRef = useRef();
 
   const { content_unit } = label || {};
-  const ids              = useSelector(state => mdb.getLabelsByCU(state.mdb, content_unit));
-  const denorm           = useSelector(state => mdb.getDenormLabel(state.mdb));
-  const labels           = useMemo(
-    () => ids?.map(denorm).filter(l => (l.properties?.srchstart || l.properties?.srchend)) || [],
-    [ids]
-  );
+
+  const { notes, offsets: noteOffsets } = useNotes(content_unit, language);
+  const { labels, offsets }             = useLabels(content_unit, language);
 
   const timeCodeByPos                        = useSelector(state => assets.getTimeCode(state.assets));
   const location                             = useLocation();
   const { srchstart, srchend, highlightAll } = getQuery(location);
   const search                               = useMemo(() => ({ srchstart, srchend }), [srchstart, srchend]);
 
-  const offsets = useMemo(() => buildOffsets(labels), [labels]);
   const dir     = getLanguageDirection(language);
 
-  const __html = useMemo(
-    () => prepareScrollToSearch(data, search, highlightAll === 'true', labels),
-    [data, search, labels, highlightAll]
-  );
-
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (content_unit) {
-      dispatch(actions.fetchLabels({ content_unit, language }));
-    }
-  }, [dispatch, content_unit, language]);
+  const __html = prepareScrollToSearch(data, search, highlightAll === 'true', [...labels, ...notes]);
 
   useEffect(() => {
     const element = document.getElementById(SCROLL_SEARCH_ID);
@@ -105,7 +63,9 @@ const ScrollToSearch = ({ source, label, data, language, urlParams = '', pathnam
       const { url, text, query, element } = buildSearchLinkFromSelection(language, pathname);
       if (url) {
         setSearchText(text);
-        const rect         = element.getBoundingClientRect();
+
+        const selEl        = window.getSelection().getRangeAt(0) || element;
+        const rect         = selEl.getBoundingClientRect();
         const recContainer = containerRef.current?.getBoundingClientRect();
         setBarPosition({ y: rect.top - recContainer.top });
         setSearchUrl(`${url}&${urlParams}`);
@@ -163,6 +123,7 @@ const ScrollToSearch = ({ source, label, data, language, urlParams = '', pathnam
         setPinned={handlePinned}
         isPinned={!isShareTextEnabled}
         position={barPosition}
+        language={language}
       />
     );
   };
@@ -185,7 +146,12 @@ const ScrollToSearch = ({ source, label, data, language, urlParams = '', pathnam
         {renderShareBar()}
         <div className={`label_bar ${dir}`}>
           {
-            labels.map((l, i) => <LabelMark label={l} offset={offsets[l.id]} key={l.id} />)
+            labels.map(l => <LabelMark label={l} offset={offsets[l.id]} key={l.id} />)
+          }
+        </div>
+        <div className={`notes_bar ${dir}`}>
+          {
+            !isMobileDevice && notes.map((n, i) => <NoteMark note={n} key={n.id} offset={noteOffsets[n.id]} />)
           }
         </div>
         <div

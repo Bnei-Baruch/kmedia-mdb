@@ -165,7 +165,8 @@
     "copy": "Copiar",
     "view-all": "Ver todo",
     "save": "Guardar",
-    "remove": "Eliminar"
+    "remove": "Eliminar",
+    "edit": "Editar"
   },
   "player": {
     "messages": {
@@ -256,7 +257,9 @@
     "trim-expiration": "* El enlace estará disponible para descargar solo durante 7 días",
     "trimmed-title": "Tus archivos están listos",
     "trimmed-title-wip": "Preparamos para usted el archivo",
-    "trimmed-content-wip": "Un par de minutos..."
+    "trimmed-content-wip": "Un par de minutos...",
+    "add-new-note": "Escriba notas, cosas que escuchó durante las lecciones o cualquier cosa importante para guardar para el futuro...",
+    "confirm-remove-note": "¿Seguro que quieres eliminar?"
   },
   "search": {
     "header": {

@@ -1,9 +1,9 @@
+import React, { useEffect, useRef } from 'react';
+import isEqual from 'react-fast-compare';
+import escapeRegExp from 'lodash/escapeRegExp';
+import isFunction from 'lodash/isFunction';
 import moment from 'moment';
 import 'moment-duration-format';
-import escapeRegExp from 'lodash/escapeRegExp';
-import _ from 'lodash';
-import isEqual from 'react-fast-compare';
-import { useEffect, useRef } from 'react';
 
 import { CollectionsBreakdown } from './mdb';
 import { canonicalSectionByLink, canonicalSectionByUnit } from './links';
@@ -22,11 +22,13 @@ import {
   CT_VIRTUAL_LESSONS,
   CT_WOMEN_LESSONS,
   CT_SONGS,
-  LANGUAGES
+  LANGUAGES,
+  VS_HLS
 } from './consts';
 import { Requests } from './Api';
 
 const CDN_URL     = process.env.REACT_APP_CDN_URL;
+const CDN_HLS_URL = process.env.REACT_APP_CDN_HLS_URL;
 const PUBLIC_BASE = process.env.REACT_APP_PUBLIC_BASE;
 
 export const isEmpty = obj => {
@@ -73,9 +75,9 @@ export const formatError = error => {
     // that falls out of the range of 2xx
     let msg = error.response.data?.error;
     if (!msg) {
-      msg = error.message
+      msg = error.message;
     } else {
-      msg = error.response.statusText + (msg ? `: ${msg}` : '')
+      msg = error.response.statusText + (msg ? `: ${msg}` : '');
     }
 
     return msg;
@@ -167,12 +169,27 @@ export const filenameExtension = name => {
  * @param ext {boolean} include file name extension in url or not
  */
 export const physicalFile = (file, ext = false) => {
+  if (file.is_hls || file.video_size === VS_HLS) {
+    return `${CDN_HLS_URL}${file.id}.m3u8`;
+  }
   let suffix = '';
   if (ext) {
     suffix = `.${filenameExtension(file.name)}`;
   }
 
   return `${CDN_URL}${file.id}${suffix}`;
+};
+export const downloadLink = (file, ext = false) => {
+  if (file.is_hls) {
+    const { lang3 } = LANGUAGES[file.language];
+    let src         = `${CDN_HLS_URL}get/${file.id}.mp4?audio=${lang3.toLowerCase()}`;
+
+    if (file.video_size)
+      src = `${src}&video=${file.video_size.toLowerCase()}`;
+    return src;
+  }
+
+  return physicalFile(file, ext);
 };
 
 export const publicFile = relativePath => `${PUBLIC_BASE}${relativePath}`;
@@ -290,7 +307,7 @@ const removeFunctions = fromObj => {
   const obj = {};
   // @description it only removes functions that are not inside nested object properties.
   // you can improve with recursion to remove all functions inside an object.
-  Object.keys(fromObj).forEach(key => !_.isFunction(fromObj[key]) && (obj[key] = fromObj[key]));
+  Object.keys(fromObj).forEach(key => !isFunction(fromObj[key]) && (obj[key] = fromObj[key]));
   return obj;
 };
 
@@ -460,4 +477,3 @@ export const getSourcesCollections = (sources, getPathById) =>
 
       return acc;
     }, {})).filter(source => source && source.children && source.children.length);
-

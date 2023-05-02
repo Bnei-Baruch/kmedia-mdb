@@ -6,11 +6,6 @@ import { isEmpty } from '../../../helpers/utils';
 import { selectors as sources } from '../../../redux/modules/sources';
 import SectionHeader from '../../shared/SectionHeader';
 import Kabbalist from './Kabbalist';
-import portraitBS from '../../../images/portrait_bs.png';
-import portraitRB from '../../../images/portrait_rb.png';
-import portraitML from '../../../images/portrait_ml.png';
-
-const portraits = { bs: portraitBS, rb: portraitRB, ml: portraitML };
 
 const Homepage = () => {
   const roots         = useSelector(state => sources.getRoots(state.sources));
@@ -32,7 +27,7 @@ const Homepage = () => {
                     key={author.id}
                     author={author}
                     getSourceById={getSourceById}
-                    portrait={portraits[r]}
+                    portraitIdx={r}
                   />
               })
             }
