@@ -13,7 +13,8 @@ const FILE_TRIMMER_API        = process.env.REACT_APP_FILE_TRIMMER_API;
 const MDB_REST_API_URL        = process.env.REACT_APP_MDB_REST_API_URL || `${API_BACKEND}mdb-api/`;
 
 export const backendUrl               = path => `${API_BACKEND}${path}`;
-export const assetUrl                 = path => `${ASSETS_BACKEND}${path}`;
+export const assetUrl                 = path => `https://kabbalahmedia.info/assets/${path}`;
+//export const assetUrl                 = path => `${ASSETS_BACKEND}${path}`;
 export const cmsUrl                   = path => `${CMS_BACKEND}${path}`;
 export const imaginaryUrl             = path => `${IMAGINARY_URL}${path}`;
 export const feedUrl                  = path => `${API_FEED}${path}`;
