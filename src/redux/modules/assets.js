@@ -3,7 +3,6 @@ import mapValues from 'lodash/mapValues';
 
 import { handleActions } from './settings';
 import { types as ssr } from './ssr';
-import { isEmpty } from '../../helpers/utils';
 
 const UNZIP                   = 'Assets/UNZIP';
 const UNZIP_SUCCESS           = 'Assets/UNZIP_SUCCESS';
@@ -253,7 +252,7 @@ const getAsset           = state => state.asset;
 const getPerson          = state => state.person;
 const getTimeCode        = state => pos => recursiveTimeCode(pos, state);
 const recursiveTimeCode  = (pos, state) => {
-  if (pos === 0 || isEmpty(state.timeCode)) return 0;
+  if (pos === 0 || state.timeCode.size === 0) return 0;
   if (state.timeCode.has(pos)) return state.timeCode.get(pos);
   return recursiveTimeCode(pos - 1, state);
 };
