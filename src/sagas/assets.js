@@ -73,10 +73,10 @@ export function* fetchPerson(action) {
 }
 
 function* fetchTimeCode(action) {
-  const id = action.payload;
+  const { uid, language } = action.payload;
 
   try {
-    const { data } = yield call(Api.getAsset, `time_code/${id}`);
+    const { data } = yield call(Api.getAsset, `time_code?uid=${uid}&language=${language}`);
     yield put(actions.fetchTimeCodeSuccess(data));
   } catch (e) {
     console.error('fetch time code', e);

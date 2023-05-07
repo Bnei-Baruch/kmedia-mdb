@@ -64,7 +64,7 @@ const fetchAssetFailure    = createAction(FETCH_ASSET_FAILURE);
 const fetchPerson          = createAction(FETCH_PERSON);
 const fetchPersonSuccess   = createAction(FETCH_PERSON_SUCCESS);
 const fetchPersonFailure   = createAction(FETCH_PERSON_FAILURE);
-const fetchTimeCode        = createAction(FETCH_TIME_CODE);
+const fetchTimeCode        = createAction(FETCH_TIME_CODE, (uid, language) => ({ uid, language }));
 const fetchTimeCodeSuccess = createAction(FETCH_TIME_CODE_SUCCESS);
 
 export const actions = {

@@ -136,7 +136,7 @@ class Transcription extends Component {
 
     if (!data) {
       // load from redux
-      onContentChange(selectedFile.id);
+      onContentChange(selectedFile.id, selectedFile.language);
     }
   };
 
