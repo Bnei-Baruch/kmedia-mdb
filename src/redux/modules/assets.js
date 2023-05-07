@@ -105,7 +105,7 @@ const initialState = {
     wip: false,
     err: null,
   },
-  timeCode: []
+  timeCode: new Map()
 };
 
 const onSSRPrepare = draft => {
@@ -200,7 +200,7 @@ const onFetchPersonFailure = (draft, payload) => {
   draft.person.err = payload;
 };
 const onFetchTimeCode      = draft => {
-  draft.timeCode = [];
+  draft.timeCode = new Map();
 };
 
 const onFetchTimeCodeSuccess = (draft, payload) => {
