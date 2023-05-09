@@ -13,7 +13,7 @@ import { selectors as mdb } from '../../../../../redux/modules/mdb';
 import AddPlaylistForm from './AddPlaylistForm';
 import { ADD_PLAYLIST_ITEM_MODES } from './SavePlaylistItemBtn';
 
-const SaveAsPlaylistItem = ({ setModalMode, label }) => {
+const SaveAsPlaylistItem = ({ setModalMode }) => {
   const [selected, setSelected] = useState([]);
   const [isNew, setIsNew]       = useState(false);
 
@@ -50,16 +50,16 @@ const SaveAsPlaylistItem = ({ setModalMode, label }) => {
   };
 
   const handleSave = () => {
-    const { properties } = label;
-
     selected.forEach(p => dispatch(actions.add(MY_NAMESPACE_PLAYLISTS, {
       id: p.id,
-      items: [{ position: -1, content_unit_uid: cuId, name, properties }],
+      items: [{ position: -1, content_unit_uid: cuId, name }],
       changeItems: true
     })));
 
     setIsNew(false);
     setModalMode(ADD_PLAYLIST_ITEM_MODES.label);
+
+    dispatch(playerActions.setOverMode(PLAYER_OVER_MODES.none));
   };
 
   const handleNameChange = (e, { value }) => setName(value);
