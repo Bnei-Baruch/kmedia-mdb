@@ -28,7 +28,7 @@ const unlockLandscape = () => {
 export const FullscreenBtn = withTranslation()(({ fullscreenRef, t }) => {
   const isFullScreen = useSelector(state => selectors.isFullScreen(state.player));
 
-  const handleClick     = () => {
+  const handleClick = () => {
     if (!fscreen.fullscreenEnabled) {
       enterFullScreenIOS();
       return;
@@ -45,7 +45,7 @@ export const FullscreenBtn = withTranslation()(({ fullscreenRef, t }) => {
     fscreen.requestFullscreen(fullscreenRef.current).then(lockLandscape);
   };
 
-  const exitFullscreen  = () => {
+  const exitFullscreen = () => {
     unlockLandscape();
     fscreen.fullscreenElement && fscreen.exitFullscreen();
   };
