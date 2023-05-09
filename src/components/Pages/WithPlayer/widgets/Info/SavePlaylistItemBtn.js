@@ -34,7 +34,7 @@ const SavePlaylistItemBtn = ({ label }) => {
           modal = <NeedToLoginModal />;
 
         if (state?.mode === ADD_PLAYLIST_ITEM_MODES.playlist)
-          modal = <SaveAsPlaylistItem setModalMode={handleOpenAs} />;
+          modal = <SaveAsPlaylistItem setModalMode={handleOpenAs} label={label} />;
 
         if (state?.mode === ADD_PLAYLIST_ITEM_MODES.label)
           modal = <SaveAsLabel label={label} setModalMode={handleOpenAs} />;
