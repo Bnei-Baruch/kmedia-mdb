@@ -5,7 +5,7 @@ import { Dropdown } from 'semantic-ui-react';
 
 import { actions } from '../../../../redux/modules/my';
 import { MY_NAMESPACE_REACTIONS } from '../../../../helpers/consts';
-import PlaylistInfo from '../../../Pages/WithPlayer/widgets/Info/PlaylistInfo';
+import PlaylistInfo from '../../../Pages/WithPlayer/widgets/Info/SavePlaylistItemBtn';
 import { getMyItemKey } from '../../../../helpers/my';
 import { stopBubbling } from '../../../../helpers/utils';
 

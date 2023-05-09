@@ -32,7 +32,7 @@ const SelectTopicsModal = ({ t, open, onClose, label, trigger }) => {
   const dispatch = useDispatch();
 
   const create = () => {
-    const { content_unit, properties, language: l = language } = label;
+    const { content_unit, properties, language: l = language, media_type = 'text' } = label;
 
     const params = {
       i18n: {
@@ -41,7 +41,7 @@ const SelectTopicsModal = ({ t, open, onClose, label, trigger }) => {
       tags: selected,
       content_unit,
       properties,
-      media_type: 'text'
+      media_type
     };
 
     dispatch(actions.createLabel(params));
