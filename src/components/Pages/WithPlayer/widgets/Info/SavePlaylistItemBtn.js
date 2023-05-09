@@ -8,9 +8,10 @@ import NeedToLoginModal from './NeedToLoginModal';
 import SaveAsPlaylistItem from './SaveAsPlaylistItem';
 
 export const ADD_PLAYLIST_ITEM_MODES = {
-  'login': 'login_mode',
-  'playlist': 'playlist_mode',
-  'none': 'none',
+  login: 'login_mode',
+  playlist: 'playlist_mode',
+  label: 'label_mode',
+  none: 'none',
 };
 
 function reducer(state, action) {
