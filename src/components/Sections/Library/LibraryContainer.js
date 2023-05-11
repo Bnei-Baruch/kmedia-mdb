@@ -514,7 +514,7 @@ class LibraryContainer extends Component {
                   <Grid.Column mobile={16} tablet={16} computer={12} className="source__content-header">
                     <div className="source__header-title">
                       {this.header(sourceId, parentId)}
-                      <TagsByUnit id={unit?.id} />
+                      <TagsByUnit id={sourceId} />
                     </div>
                     <LibraryBar
                       handleSettings={this.handleSettings}
