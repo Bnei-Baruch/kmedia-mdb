@@ -9,12 +9,11 @@ import { selectors as tags } from '../../redux/modules/tags';
 const TagsByUnit = ({ id }) => {
   const unit       = useSelector(state => mdb.getDenormContentUnit(state.mdb, id));
   const lids       = useSelector(state => mdb.getLabelsByCU(state.mdb, id));
-  const wip        = useSelector(state => mdb.getWip(state.mdb).labels);
   const denorm     = useSelector(state => mdb.getDenormLabel(state.mdb));
   const labelTags  = lids?.map(denorm).flatMap(l => (l.tags || [])) || [];
   const getTagById = useSelector(state => tags.getTagById(state.tags));
 
-  if (isEmpty(unit?.tags) && isEmpty(lids) || wip)
+  if (isEmpty(unit?.tags) && isEmpty(lids))
     return null;
 
   const names = [...(new Set([...(unit?.tags || []), ...labelTags]))].map(getTagById);
