@@ -64,7 +64,8 @@ export default class ClientChronicles {
 
     this.abTesting = {};
 
-    this.keycloakId = null;
+    const authStore = store.getState().auth;
+    this.keycloakId = authStore?.user?.id || null;
 
     this.initSession(/* reinit= */ false);
 
