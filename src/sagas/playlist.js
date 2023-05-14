@@ -127,7 +127,7 @@ function* myPlaylistBuild(action) {
   const { cuId, id } = items[ap] || items[0];
   const baseLink     = `/${MY_NAMESPACE_PLAYLISTS}/${pId}`;
 
-  yield put(actions.buildSuccess({ items, id, cuId, name, language, mediaType, pId, baseLink }));
+  yield put(actions.buildSuccess({ items, id, cuId, name, language, mediaType, pId, baseLink, isMy: true }));
 
   const cu_uids = content_units.map(c => c.id);
   yield fetchViewsByUIDs(cu_uids);
