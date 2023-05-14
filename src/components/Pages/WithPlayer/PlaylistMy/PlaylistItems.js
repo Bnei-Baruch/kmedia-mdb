@@ -18,7 +18,9 @@ const PlaylistItems = () => {
         itemsIds.map((_id, i) => {
           const selected                   = _id === id;
           const { name, cuId, properties } = itemById(_id);
-          const params                     = stringify({ ...properties, ap: i });
+          if (!cuId) return null;
+
+          const params = stringify({ ...properties, ap: i });
           return (
             <ContentItemContainer
               key={_id}

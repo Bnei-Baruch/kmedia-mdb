@@ -45,7 +45,7 @@ const PlayerContainer = () => {
   const isFullScreen  = useSelector(state => selectors.isFullScreen(state.player));
 
   const { isMobileDevice } = useContext(DeviceInfoContext);
-  const { type }           = useSelector(state => selectors.getFile(state.player)) || false;
+  const type               = useSelector(state => selectors.getFile(state.player).file) || false;
 
   const dispatch = useDispatch();
   useKeyboardControl(runTimeout);
