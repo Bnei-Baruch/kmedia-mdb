@@ -57,10 +57,6 @@ export default class ClientChronicles {
     if (localStorage.getItem('user_id') === null) {
       localStorage.setItem('user_id', `local:${ulid()}`);
     }
-    const authStore = store.getState().auth;
-    if (authStore?.user?.id) {
-      this.keycloakId = authStore?.user?.id;
-    }
 
     this.userId = localStorage.getItem('user_id');
 
@@ -68,7 +64,8 @@ export default class ClientChronicles {
 
     this.abTesting = {};
 
-    this.keycloakId = null;
+    const authStore = store.getState().auth;
+    this.keycloakId = authStore?.user?.id || null;
 
     this.initSession(/* reinit= */ false);
 
