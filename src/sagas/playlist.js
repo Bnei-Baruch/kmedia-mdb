@@ -106,7 +106,12 @@ function* myPlaylistBuild(action) {
   const { items: data, name } = (pId === MY_NAMESPACE_REACTIONS) ?
     yield fetchMyReactions() : yield fetchMyPlaylist(pId);
 
-  const content_units = yield select(state => data?.map(x => mdb.getDenormContentUnit(state.mdb, x.content_unit_uid)).filter(x => !!x)) || [];
+  const content_units = yield select(state => data?.map(x => ({
+      ...mdb.getDenormContentUnit(state.mdb, x.content_unit_uid),
+      name: x.name,
+      properties: x.properties
+    })
+  ).filter(x => !!x)) || [];
 
   const siteLang    = yield select(state => settings.getLanguage(state.settings));
   const contentLang = yield select(state => settings.getContentLanguage(state.settings));
@@ -115,11 +120,14 @@ function* myPlaylistBuild(action) {
   const mediaType    = getMediaTypeFromQuery(location);
   const language     = getLanguageFromQuery(location, contentLang || siteLang);
   const ap           = getActivePartFromQuery(location);
-  const items        = content_units.map(cu => playableItem(cu));
-  const cuId         = items[ap]?.id || items[0].id;
+  const items        = content_units
+    .map(cu => playableItem(cu))
+    //change cu id cause on personal playlist item can save few items of one CU
+    .map((x, i) => ({ ...x, id: `${x.id}_${i}`, cuId: x.id }));
+  const { cuId, id } = items[ap] || items[0];
   const baseLink     = `/${MY_NAMESPACE_PLAYLISTS}/${pId}`;
 
-  yield put(actions.buildSuccess({ items, cuId, name, language, mediaType, pId, baseLink }));
+  yield put(actions.buildSuccess({ items, id, cuId, name, language, mediaType, pId, baseLink }));
 
   const cu_uids = content_units.map(c => c.id);
   yield fetchViewsByUIDs(cu_uids);

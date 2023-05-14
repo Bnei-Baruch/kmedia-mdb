@@ -4,7 +4,7 @@ import { useLocation } from 'react-router-dom';
 
 import { startEndFromQuery } from '../../components/Player/Controls/helper';
 import { pause, seek } from './adapter';
-import { selectors as player, actions } from '../../redux/modules/player';
+import { selectors as player } from '../../redux/modules/player';
 import { noop } from '../../helpers/utils';
 import { selectors as playlist } from '../../redux/modules/playlist';
 
@@ -28,7 +28,6 @@ const BehaviorStartStopSlice = () => {
         jwp.off('time', checkStopTime);
       }
     };
-
     seek(start);
     jwp.on('time', checkStopTime);
 

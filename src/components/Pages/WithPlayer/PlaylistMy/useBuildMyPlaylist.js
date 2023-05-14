@@ -9,8 +9,8 @@ const useBuildMyPlaylist = () => {
   const { id }   = useParams();
   const location = useLocation();
 
-  const { pId, cuId, wip } = useSelector(state => selectors.getInfo(state.playlist));
-  const cuIds              = useSelector(state => selectors.getPlaylist(state.playlist));
+  const { pId, id: itemId, wip } = useSelector(state => selectors.getInfo(state.playlist));
+  const itemIds                  = useSelector(state => selectors.getPlaylist(state.playlist));
 
   const dispatch = useDispatch();
 
@@ -21,16 +21,17 @@ const useBuildMyPlaylist = () => {
   }, [id, pId, wip]);
 
   useEffect(() => {
-    if (cuId) {
-      const up    = cuIds.findIndex(id => cuId === id);
-      const newUp = getActivePartFromQuery(location);
-      if (up !== newUp) {
-        dispatch(actions.select(cuIds[newUp]));
+    if (itemId) {
+      const arr   = itemId.split('_');
+      const newAp = getActivePartFromQuery(location);
+      if (arr[1] !== newAp) {
+        const id = itemIds[newAp];
+        dispatch(actions.select({ cuId: id.split('_')[0], id }));
       }
     }
-  }, [cuIds, cuId, location]);
+  }, [itemIds, itemId, location]);
 
-  return cuIds.length === 0;
+  return itemIds.length === 0;
 };
 
 export default useBuildMyPlaylist;

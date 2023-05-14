@@ -65,6 +65,7 @@ export const playableItem = (unit, preImageUrl) => {
     return {
       id: unit.id,
       name: unit.name,
+      properties: unit.properties,
       file: { ...hls, src: physicalFile(hls, true) },
       isHLS: true,
       preImageUrl,
@@ -93,6 +94,7 @@ export const playableItem = (unit, preImageUrl) => {
   return {
     id: unit.id,
     name: unit.name,
+    properties: unit.properties,
     languages,
     mtByLang,
     filesByLang,
