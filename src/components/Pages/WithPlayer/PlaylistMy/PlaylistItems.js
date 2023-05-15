@@ -15,12 +15,12 @@ const PlaylistItems = () => {
   return (
     <div id="avbox_playlist" className="avbox__playlist-view">
       {
-        itemsIds.map((_id, i) => {
-          const selected                   = _id === id;
-          const { name, cuId, properties } = itemById(_id);
+        itemsIds.map(_id => {
+          const selected                       = _id === id;
+          const { name, cuId, properties, ap } = itemById(_id);
           if (!cuId) return null;
 
-          const params = stringify({ ...properties, ap: i });
+          const params = stringify({ ...properties, ap });
           return (
             <ContentItemContainer
               key={_id}

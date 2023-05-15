@@ -66,7 +66,7 @@ const onBuildSuccess = (draft, payload) => {
 
   draft.playlist = items.map(({ id }) => id);
   //use curId - fix for my playlists
-  draft.itemById = items.reduce((acc, x) => ({ ...acc, [x.id]: x }), {});
+  draft.itemById = items.reduce((acc, x, ap) => ({ ...acc, [x.id]: x, ap }), {});
   const curItem  = draft.itemById?.[id];
   if (curItem && !curItem.isHLS && !curItem.qualityByLang[language]) {
     language = curItem.languages[0];
@@ -143,7 +143,7 @@ const getPrevId    = state => {
 };
 const getIndexById = (state, id) => state.playlist.findIndex(x => x === id);
 const getItemById  = state => id => {
-  return state.itemById[id];
+  return state.itemById[id] || false;
 };
 
 export const selectors = {
