@@ -24,7 +24,7 @@ const ControlsMobile = ({ fullscreenRef, t }) => {
     <>
       <div className="controls">
         {
-          (mode === PLAYER_OVER_MODES.share) ? (
+          ([PLAYER_OVER_MODES.share, PLAYER_OVER_MODES.playlist, PLAYER_OVER_MODES.tagging].includes(mode)) ? (
             <div className="controls__bar">
               <div className="flex-spacer"></div>
               <CloseBtn className="controls__close" />
