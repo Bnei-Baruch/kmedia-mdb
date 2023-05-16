@@ -3,7 +3,7 @@ import { withTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { selectors, actions } from '../../../redux/modules/mdb';
+import { selectors, actions, selectors as mdb } from '../../../redux/modules/mdb';
 import { selectors as settings } from '../../../redux/modules/settings';
 import { selectors as recommended } from '../../../redux/modules/recommended';
 import { selectors as sources } from '../../../redux/modules/sources';
@@ -23,20 +23,21 @@ import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { canonicalLink } from '../../../helpers/links';
 import ListTemplate from './ListTemplate';
 import CardTemplate from './CardTemplate';
+import { stringify } from '../../../helpers/url';
 
 const NOT_LESSONS_COLLECTIONS = [CT_VIDEO_PROGRAM, CT_VIRTUAL_LESSONS, CT_CLIPS];
 
 const TagItemContainerHook = ({
-  id,
-  t,
-  asList = false,
-  link,
-  size,
-  selected,
-  noViews,
-  label = '',
-  withInfo = undefined
-}) => {
+                                id,
+                                t,
+                                asList = false,
+                                link,
+                                size,
+                                selected,
+                                noViews,
+                                label = '',
+                                withInfo = undefined
+                              }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const tag                = useSelector(state => tags.getTagById(state.tags)(id));
   const language           = useSelector(state => settings.getLanguage(state.settings));
@@ -66,16 +67,16 @@ const TagItemContainerHook = ({
 };
 
 const SourceItemContainerHook = ({
-  id,
-  t,
-  asList = false,
-  link,
-  size,
-  selected,
-  noViews,
-  label = '',
-  withInfo = undefined
-}) => {
+                                   id,
+                                   t,
+                                   asList = false,
+                                   link,
+                                   size,
+                                   selected,
+                                   noViews,
+                                   label = '',
+                                   withInfo = undefined
+                                 }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const source             = useSelector(state => sources.getSourceById(state.sources)(id));
   const language           = useSelector(state => settings.getLanguage(state.settings));
@@ -119,7 +120,8 @@ const ContentItemContainer = (
     label = '',
     withCCUInfo = undefined,
     withCUInfo = undefined,
-    name
+    name,
+    lID
   }
 ) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
@@ -127,6 +129,7 @@ const ContentItemContainer = (
   const language           = useSelector(state => settings.getLanguage(state.settings));
   const views              = useSelector(state => recommended.getViews(id, state.recommended));
   const ccu                = useSelector(state => selectors.getDenormCollection(state.mdb, ccuId)) || canonicalCollection(unit);
+  const denormLabel        = useSelector(state => mdb.getDenormLabel(state.mdb));
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -163,6 +166,13 @@ const ContentItemContainer = (
 
   if (!noViews && !(isMobileDevice && asList) && views > 0)
     description.push(t('pages.unit.info.views', { views }));
+
+  if (lID) {
+    const { properties, name: n, author } = denormLabel(lID);
+    link                                  = link || `${canonicalLink(unit, null, ccu)}?${stringify(properties)}`;
+    name                                  = n;
+    description.push(t('personal.label.createdBy', { author }));
+  }
 
   const props = {
     unit,
