@@ -86,7 +86,7 @@ const ScrollToSearch = ({ source, label, data, language, urlParams = '', pathnam
 
   const playByText = () => {
     if (!wordOffset) return;
-    const startTime = timeCodeByPos(wordOffset);
+    const startTime = timeCodeByPos(wordOffset - 2);
     seek(startTime).play();
   };
 
