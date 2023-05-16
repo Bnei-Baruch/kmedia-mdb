@@ -9,13 +9,18 @@ import CopyLinkBtn from './CopyLinkBtn';
 import ShareBtn from './ShareBtn';
 import LabelBtn from './LabelBtn';
 import AddNoteBtn from './AddNoteBtn';
+import PlayByTextBtn from './PlayByTextBtn';
 
-const DocToolbar = ({ t, url, text, source, label, position, setPinned, isPinned }) => {
+const DocToolbar = ({ t, url, text, source, label, position, setPinned, isPinned, playByText }) => {
   const [open, setOpen] = useState(!!url);
 
   const contextRef = useRef();
 
-  const handleToggle = () => setOpen(!open);
+  const handleToggle     = () => setOpen(!open);
+  const handlePlayByText = () => {
+    playByText();
+    setOpen(!open);
+  };
 
   return open && (
     <div
@@ -46,7 +51,12 @@ const DocToolbar = ({ t, url, text, source, label, position, setPinned, isPinned
           />}
         />
         {
-          isPinned && <AddNoteBtn properties={source} toggleToolbar={handleToggle} />
+          isPinned && (
+            <>
+              <AddNoteBtn properties={source} toggleToolbar={handleToggle} />
+              <PlayByTextBtn handlePlay={handlePlayByText} />
+            </>
+          )
         }
         {
           !isPinned &&

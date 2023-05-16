@@ -8,8 +8,7 @@ import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import {
   buildSearchLinkFromSelection,
   DOM_ROOT_ID,
-  prepareScrollToSearch,
-  KEEP_LETTERS_RE
+  prepareScrollToSearch
 } from '../../../helpers/scrollToSearch/helper';
 import { getQuery } from '../../../helpers/url';
 import LabelMark from './LabelMark';
@@ -28,6 +27,7 @@ const ScrollToSearch = ({ source, label, data, language, urlParams = '', pathnam
   const [searchUrl, setSearchUrl]     = useState();
   const [barPosition, setBarPosition] = useState({});
   const [searchText, setSearchText]   = useState();
+  const [wordOffset, setWordOffset]   = useState();
   const [searchQuery, setSearchQuery] = useState();
 
   const containerRef = useRef();
@@ -64,9 +64,10 @@ const ScrollToSearch = ({ source, label, data, language, urlParams = '', pathnam
       if (e.path?.some(x => (typeof x.className === 'string') && x.className.includes('search-on-doc--toolbar')))
         return false;
 
-      const { url, text, query, element } = buildSearchLinkFromSelection(language, pathname);
+      const { url, text, query, element, wordOffset } = buildSearchLinkFromSelection(language, pathname);
       if (url) {
         setSearchText(text);
+        setWordOffset(wordOffset);
 
         const selEl        = window.getSelection().getRangeAt(0) || element;
         const rect         = selEl.getBoundingClientRect();
@@ -83,26 +84,9 @@ const ScrollToSearch = ({ source, label, data, language, urlParams = '', pathnam
     return () => document.removeEventListener('mouseup', handleOnMouseUp);
   }, [containerRef, isMobileDevice, isShareTextEnabled, language, pathname, urlParams]);
 
-  const playByString = (e) => {
-    const sel = window.getSelection();
-    if (sel.rangeCount > 1) {
-      console.log('playByString rangeCount', sel.rangeCount);
-      return;
-    }/*
-    const range = sel.getRangeAt(0);
-    //range.selectNodeContents(e.currentTarget);
-    //range.setEnd(range.endContainer, range.endOffset);
-    //const pos = range.toString().length;
-    const preCaretRange = range.cloneRange();
-    preCaretRange.selectNodeContents(e.currentTarget);
-    preCaretRange.setEnd(range.endContainer, range.endOffset);
-    const pos = preCaretRange.toString().length;
-*/
-    const all       = e.currentTarget.textContent.replace(KEEP_LETTERS_RE, '').replace(/\s+/g, ' ');
-    const selText   = sel.anchorNode.textContent.replace(KEEP_LETTERS_RE, '');
-    const text      = selText.slice(sel.anchorOffset, sel.anchorOffset + 30).replace(/\s+/g, ' ');
-    const pos       = all.indexOf(text);
-    const startTime = timeCodeByPos(pos);
+  const playByText = () => {
+    if (!wordOffset) return;
+    const startTime = timeCodeByPos(wordOffset);
     seek(startTime).play();
   };
 
@@ -128,6 +112,7 @@ const ScrollToSearch = ({ source, label, data, language, urlParams = '', pathnam
         isPinned={!isShareTextEnabled}
         position={barPosition}
         language={language}
+        playByText={playByText}
       />
     );
   };
@@ -161,7 +146,6 @@ const ScrollToSearch = ({ source, label, data, language, urlParams = '', pathnam
         <div
           id={DOM_ROOT_ID}
           onMouseDown={handleOnMouseDown}
-          onClick={playByString}
           dangerouslySetInnerHTML={{ __html }}
         />
       </div>
