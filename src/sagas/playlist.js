@@ -22,7 +22,7 @@ import {
   playableItem
 } from '../helpers/player';
 import { assetUrl } from '../helpers/Api';
-import { fetchCollection, fetchUnit, fetchUnitsByIDs } from './mdb';
+import { fetchCollection, fetchUnit, fetchUnitsByIDs, fetchLabels } from './mdb';
 import { fetchViewsByUIDs } from './recommended';
 import { fetchOne, fetch as fetchMy } from './my';
 
@@ -68,6 +68,7 @@ function* build(action) {
   const cu_uids = data.items.map(x => x.id);
   yield fetchViewsByUIDs(cu_uids);
   yield fetchMy({ payload: { namespace: MY_NAMESPACE_HISTORY, cu_uids, page_size: cu_uids.length } });
+  yield fetchLabels({ content_unit: cuId, language });
 }
 
 function* singleMediaBuild(action) {
@@ -94,6 +95,7 @@ function* singleMediaBuild(action) {
   yield put(actions.buildSuccess({ items: [item], language, mediaType, cuId, cId: c.id, isSingleMedia: true }));
   yield fetchViewsByUIDs([cuId]);
   yield fetchMy({ payload: { namespace: MY_NAMESPACE_HISTORY, cu_uids: [cuId], page_size: 1 } });
+  yield fetchLabels({ content_unit: cuId, language });
 
 }
 
@@ -132,6 +134,7 @@ function* myPlaylistBuild(action) {
   const cu_uids = content_units.map(c => c.id);
   yield fetchViewsByUIDs(cu_uids);
   yield fetchMy({ payload: { namespace: MY_NAMESPACE_HISTORY, cu_uids, page_size: cu_uids.length } });
+  yield fetchLabels({ content_unit: cuId, language });
 }
 
 function* fetchMyPlaylist(id) {
