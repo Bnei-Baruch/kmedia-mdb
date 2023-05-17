@@ -26,6 +26,7 @@ import { useSelector } from 'react-redux';
 import { selectors } from '../../../../../redux/modules/playlist';
 import { selectors as mdb } from '../../../../../redux/modules/mdb';
 import PlaylistItems from '../../Playlist/PlaylistItems';
+import PlaylistMyItems from '../../PlaylistMy/PlaylistItems';
 
 const derivedTextUnits = unit => {
   const types    = {};
@@ -43,8 +44,8 @@ const Materials = ({ t }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const chronicles         = useContext(ClientChroniclesContext);
 
-  const { cuId, isSingleMedia } = useSelector(state => selectors.getInfo(state.playlist));
-  const unit                    = useSelector(state => mdb.getDenormContentUnit(state.mdb, cuId));
+  const { cuId, isSingleMedia, isMy } = useSelector(state => selectors.getInfo(state.playlist));
+  const unit                          = useSelector(state => mdb.getDenormContentUnit(state.mdb, cuId));
 
   if (!unit) {
     return null;
@@ -93,7 +94,7 @@ const Materials = ({ t }) => {
       : {
         name: 'playlist',
         label: t('materials.playlist.header'),
-        component: <PlaylistItems />
+        component: isMy ? <PlaylistMyItems /> : <PlaylistItems />
       };
 
     items.unshift(item);

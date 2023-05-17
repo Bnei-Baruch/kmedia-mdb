@@ -7,6 +7,7 @@ import Sharing from './Sharing/Sharing';
 import ControlsMobile from './Controls/ControlsMobile';
 import AudioBg from './AudioBg';
 import Preloader from './Controls/Preloader';
+import LabelVideo from './Sharing/LabelVideo';
 
 const PlayerToolsMobile = ({ fullscreenRef, Player }) => {
   const isPlayerReady = useSelector(state => player.isReady(state.player));
@@ -24,6 +25,7 @@ const PlayerToolsMobile = ({ fullscreenRef, Player }) => {
           <>
             <Settings />
             <Sharing />
+            <LabelVideo />
           </>
         )
       }

@@ -53,7 +53,7 @@ const useRoutes = playerContainer => ([
   { path: `personal/${MY_NAMESPACE_HISTORY}`, component: <HistoryPage /> },
   { path: `personal/${MY_NAMESPACE_REACTIONS}`, component: <ReactionPage /> },
   { path: `personal/${MY_NAMESPACE_PLAYLISTS}/:id`, component: <PlaylistPage /> },
-  { path: `${MY_NAMESPACE_PLAYLISTS}/:id`, component: <PlaylistMy /> },
+  { path: `${MY_NAMESPACE_PLAYLISTS}/:id`, component: <PlaylistMy playerContainer={playerContainer} /> },
   { path: `${MY_NAMESPACE_BOOKMARKS}`, component: <BookmarksPage /> },
 
   { path: 'publications', component: <Publications />, ssrData: ssrDataLoaders.publicationsPage },

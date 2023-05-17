@@ -22,7 +22,7 @@ import {
   playableItem
 } from '../helpers/player';
 import { assetUrl } from '../helpers/Api';
-import { fetchCollection, fetchUnit, fetchUnitsByIDs } from './mdb';
+import { fetchCollection, fetchUnit, fetchUnitsByIDs, fetchLabels } from './mdb';
 import { fetchViewsByUIDs } from './recommended';
 import { fetchOne, fetch as fetchMy } from './my';
 
@@ -68,6 +68,7 @@ function* build(action) {
   const cu_uids = data.items.map(x => x.id);
   yield fetchViewsByUIDs(cu_uids);
   yield fetchMy({ payload: { namespace: MY_NAMESPACE_HISTORY, cu_uids, page_size: cu_uids.length } });
+  yield fetchLabels({ content_unit: cuId, language });
 }
 
 function* singleMediaBuild(action) {
@@ -94,6 +95,7 @@ function* singleMediaBuild(action) {
   yield put(actions.buildSuccess({ items: [item], language, mediaType, cuId, cId: c.id, isSingleMedia: true }));
   yield fetchViewsByUIDs([cuId]);
   yield fetchMy({ payload: { namespace: MY_NAMESPACE_HISTORY, cu_uids: [cuId], page_size: 1 } });
+  yield fetchLabels({ content_unit: cuId, language });
 
 }
 
@@ -106,7 +108,12 @@ function* myPlaylistBuild(action) {
   const { items: data, name } = (pId === MY_NAMESPACE_REACTIONS) ?
     yield fetchMyReactions() : yield fetchMyPlaylist(pId);
 
-  const content_units = yield select(state => data?.map(x => mdb.getDenormContentUnit(state.mdb, x.content_unit_uid)).filter(x => !!x)) || [];
+  const content_units = yield select(state => data?.map(x => ({
+      ...mdb.getDenormContentUnit(state.mdb, x.content_unit_uid),
+      name: x.name,
+      properties: x.properties
+    })
+  ).filter(x => !!x)) || [];
 
   const siteLang    = yield select(state => settings.getLanguage(state.settings));
   const contentLang = yield select(state => settings.getContentLanguage(state.settings));
@@ -115,15 +122,19 @@ function* myPlaylistBuild(action) {
   const mediaType    = getMediaTypeFromQuery(location);
   const language     = getLanguageFromQuery(location, contentLang || siteLang);
   const ap           = getActivePartFromQuery(location);
-  const items        = content_units.map(cu => playableItem(cu));
-  const cuId         = items[ap]?.id || items[0].id;
+  const items        = content_units
+    .map(cu => playableItem(cu))
+    //change cu id cause on personal playlist item can save few items of one CU
+    .map((x, i) => ({ ...x, id: `${x.id}_${i}`, cuId: x.id }));
+  const { cuId, id } = items[ap] || items[0];
   const baseLink     = `/${MY_NAMESPACE_PLAYLISTS}/${pId}`;
 
-  yield put(actions.buildSuccess({ items, cuId, name, language, mediaType, pId, baseLink }));
+  yield put(actions.buildSuccess({ items, id, cuId, name, language, mediaType, pId, baseLink, isMy: true }));
 
   const cu_uids = content_units.map(c => c.id);
   yield fetchViewsByUIDs(cu_uids);
   yield fetchMy({ payload: { namespace: MY_NAMESPACE_HISTORY, cu_uids, page_size: cu_uids.length } });
+  yield fetchLabels({ content_unit: cuId, language });
 }
 
 function* fetchMyPlaylist(id) {

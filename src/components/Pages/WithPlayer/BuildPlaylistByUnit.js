@@ -32,7 +32,7 @@ const BuildPlaylistByUnit = ({ cts }) => {
     } else if (cId !== prevCId) {
       dispatch(actions.build(cId, id));
     } else if (id && prevCuId !== id) {
-      dispatch(actions.select(id));
+      dispatch(actions.select({ cuId: id }));
     }
   }, [cId, id, prevCuId, wip, fetched]);
 

@@ -8,10 +8,9 @@ import NeedToLoginModal from './NeedToLoginModal';
 import SaveAsPlaylistItem from './SaveAsPlaylistItem';
 
 export const ADD_PLAYLIST_ITEM_MODES = {
-  login: 'login_mode',
-  playlist: 'playlist_mode',
-  label: 'label_mode',
-  none: 'none',
+  'login': 'login_mode',
+  'playlist': 'playlist_mode',
+  'none': 'none',
 };
 
 function reducer(state, action) {
@@ -35,7 +34,7 @@ const SavePlaylistItemBtn = ({ label }) => {
           modal = <NeedToLoginModal />;
 
         if (state?.mode === ADD_PLAYLIST_ITEM_MODES.playlist)
-          modal = <SaveAsPlaylistItem setModalMode={handleOpenAs} label={label} />;
+          modal = <SaveAsPlaylistItem setModalMode={handleOpenAs} />;
 
         if (state?.mode === ADD_PLAYLIST_ITEM_MODES.label)
           modal = <SaveAsLabel label={label} setModalMode={handleOpenAs} />;
