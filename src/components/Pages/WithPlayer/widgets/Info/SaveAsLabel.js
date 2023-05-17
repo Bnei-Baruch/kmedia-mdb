@@ -14,9 +14,8 @@ const SaveAsLabel = ({ label, setModalMode }) => {
   const [confirm, setConfirm] = useState(false);
 
   const { isMobileDevice } = useContext(DeviceInfoContext);
-
-  const language = useSelector(state => settings.getLanguage(state.settings));
-  const dir      = getLanguageDirection(language);
+  const language           = useSelector(state => settings.getLanguage(state.settings));
+  const dir                = getLanguageDirection(language);
 
   const { t } = useTranslation();
 
@@ -30,7 +29,7 @@ const SaveAsLabel = ({ label, setModalMode }) => {
       <Confirm
         size="tiny"
         open={true}
-        header={t('personal.addToPlaylistSuccessful', { name: '' })}
+        header={t('personal.playlist.playlistItemCreated')}
         onCancel={handleClose}
         onConfirm={handleClose}
         confirmButton={{ content: t('personal.label.ending') }}
