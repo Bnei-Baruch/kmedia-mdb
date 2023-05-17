@@ -92,7 +92,6 @@ const BookmarkBtn = ({ t, source, label, close }) => {
         {<BookmarkForm onClose={handleClose} source={source} />}
       </Modal>
     </>
-
   );
 };
 

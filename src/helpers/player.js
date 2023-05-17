@@ -64,11 +64,12 @@ export const playableItem = (unit, preImageUrl) => {
   if (hls) {
     return {
       id: unit.id,
+      name: unit.name,
       file: { ...hls, src: physicalFile(hls, true) },
       isHLS: true,
       preImageUrl,
       languages: hls.hls_languages,
-      qualities: hls.video_qualities
+      qualities: hls.video_qualities,
     };
   }
 
@@ -91,6 +92,7 @@ export const playableItem = (unit, preImageUrl) => {
 
   return {
     id: unit.id,
+    name: unit.name,
     languages,
     mtByLang,
     filesByLang,
