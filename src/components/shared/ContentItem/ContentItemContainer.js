@@ -168,7 +168,7 @@ const ContentItemContainer = (
     description.push(t('pages.unit.info.views', { views }));
 
   if (lID) {
-    const { properties, name: n, author } = denormLabel(lID);
+    const { properties, name: n, author } = denormLabel(lID) || false;
     link                                  = link || `${canonicalLink(unit, null, ccu)}?${stringify(properties)}`;
     name                                  = n;
     description.push(t('personal.label.createdBy', { author }));
