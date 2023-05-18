@@ -63,6 +63,7 @@ export const seek = pos => functionByName('seek', noop, pos);
 export const load = items => functionByName('load', noop, items);
 
 export const remove        = () => functionByName('remove', noop);
+export const setPip        = () => functionByName('setPip', noop, true);
 /**
  * check if jwplayer builded, use if not need rerender on build
  * @returns {boolean}
