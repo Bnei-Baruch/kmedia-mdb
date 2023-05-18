@@ -11,6 +11,7 @@ import {
   MT_VIDEO,
   VS_DEFAULT,
   VS_HLS,
+  MT_SUBTITLES,
 } from './consts';
 import { getQuery } from './url';
 import MediaHelper from './media';
@@ -60,7 +61,11 @@ export const playableItem = (unit, preImageUrl) => {
   if (!preImageUrl) {
     preImageUrl = assetUrl(`api/thumbnail/${unit.id}`);
   }
-  const hls = findHLS(unit?.files);
+  const subtitles = unit?.files.filter(f => f.type === MT_SUBTITLES).map(f => ({
+    src: physicalFile(f),
+    language: f.language
+  })) || [];
+  const hls       = findHLS(unit?.files);
   if (hls) {
     return {
       id: unit.id,
@@ -70,6 +75,7 @@ export const playableItem = (unit, preImageUrl) => {
       preImageUrl,
       languages: hls.hls_languages,
       qualities: hls.video_qualities,
+      subtitles,
     };
   }
 
@@ -99,6 +105,7 @@ export const playableItem = (unit, preImageUrl) => {
     qualityByLang,
     files,
     preImageUrl,
+    subtitles,
   };
 };
 

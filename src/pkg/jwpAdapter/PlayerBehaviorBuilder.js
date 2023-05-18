@@ -7,6 +7,7 @@ import PlayerBehavior from './PlayerBehavior';
 import { selectors as playlist, selectors } from '../../redux/modules/playlist';
 import PlayerBehaviorHls from './PlayerBehaviorHls';
 import AutoStartNotAllowed from './AutoStartNotAllowed';
+import SwitchSubtitles from './SwitchSubtitles';
 
 const PlayerBehaviorBuilder = () => {
   const isHLS = useSelector(state => playlist.getPlayed(state.playlist).isHLS);
@@ -17,6 +18,8 @@ const PlayerBehaviorBuilder = () => {
       <AutoStartNotAllowed />
       <PlayerBehavior />
       <BehaviorStartPlay />
+      <BehaviorStartStopSlice />
+      <SwitchSubtitles />
       {isMy ? <BehaviorStartStopSliceMy /> : <BehaviorStartStopSlice />}
       {isHLS && <PlayerBehaviorHls />}
     </>

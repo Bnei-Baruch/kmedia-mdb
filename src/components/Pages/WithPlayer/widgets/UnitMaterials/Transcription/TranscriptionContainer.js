@@ -17,7 +17,10 @@ const TranscriptionContainer = ({ unit, type = null, activeTab = 'transcription'
   const contentLanguage = useSelector(state => settings.getContentLanguage(state.settings, location));
   const dispatch        = useDispatch();
 
-  const handleContentChange = id => dispatch(actions.doc2html(id));
+  const handleContentChange = (id, l) => {
+    dispatch(actions.doc2html(id));
+    dispatch(actions.fetchTimeCode(unit.id, l));
+  };
 
   return (
     <SessionInfoContext.Consumer>

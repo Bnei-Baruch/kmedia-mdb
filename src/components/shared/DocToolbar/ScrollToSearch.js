@@ -16,6 +16,9 @@ import Toolbar from './Toolbar';
 import { useNotes } from './useNotes';
 import { useLabels } from './useLabels';
 import NoteMark from './NoteMark';
+import { useSelector } from 'react-redux';
+import { selectors as assets } from '../../../redux/modules/assets';
+import { seek, setPip } from '../../../pkg/jwpAdapter/adapter';
 
 const ScrollToSearch = ({ source, label, data, language, urlParams = '', pathname }) => {
   const { enableShareText: { isShareTextEnabled, setEnableShareText } } = useContext(SessionInfoContext);
@@ -24,6 +27,7 @@ const ScrollToSearch = ({ source, label, data, language, urlParams = '', pathnam
   const [searchUrl, setSearchUrl]     = useState();
   const [barPosition, setBarPosition] = useState({});
   const [searchText, setSearchText]   = useState();
+  const [wordOffset, setWordOffset]   = useState();
   const [searchQuery, setSearchQuery] = useState();
 
   const containerRef = useRef();
@@ -33,10 +37,10 @@ const ScrollToSearch = ({ source, label, data, language, urlParams = '', pathnam
   const { notes, offsets: noteOffsets } = useNotes(content_unit, language);
   const { labels, offsets }             = useLabels(content_unit, language);
 
+  const timeCodeByPos                        = useSelector(state => assets.getTimeCode(state.assets));
   const location                             = useLocation();
   const { srchstart, srchend, highlightAll } = getQuery(location);
-
-  const search = useMemo(() => ({ srchstart, srchend }), [srchstart, srchend]);
+  const search                               = useMemo(() => ({ srchstart, srchend }), [srchstart, srchend]);
 
   const dir = getLanguageDirection(language);
 
@@ -60,9 +64,10 @@ const ScrollToSearch = ({ source, label, data, language, urlParams = '', pathnam
       if (e.path?.some(x => (typeof x.className === 'string') && x.className.includes('search-on-doc--toolbar')))
         return false;
 
-      const { url, text, query, element } = buildSearchLinkFromSelection(language, pathname);
+      const { url, text, query, element, wordOffset } = buildSearchLinkFromSelection(language, pathname);
       if (url) {
         setSearchText(text);
+        setWordOffset(wordOffset);
 
         const selEl        = window.getSelection().getRangeAt(0) || element;
         const rect         = selEl.getBoundingClientRect();
@@ -78,6 +83,13 @@ const ScrollToSearch = ({ source, label, data, language, urlParams = '', pathnam
     document.addEventListener('mouseup', handleOnMouseUp);
     return () => document.removeEventListener('mouseup', handleOnMouseUp);
   }, [containerRef, isMobileDevice, isShareTextEnabled, language, pathname, urlParams]);
+
+  const playByText = () => {
+    if (!wordOffset) return;
+    const startTime = timeCodeByPos(wordOffset - 2);
+    seek(startTime).play();
+    setPip(true);
+  };
 
   if (!data) {
     return null;
@@ -101,6 +113,7 @@ const ScrollToSearch = ({ source, label, data, language, urlParams = '', pathnam
         isPinned={!isShareTextEnabled}
         position={barPosition}
         language={language}
+        playByText={playByText}
       />
     );
   };

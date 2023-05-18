@@ -194,8 +194,8 @@ export const buildSearchLinkFromSelection = (language, pathname) => {
   const end = isForward ? { node: sel.focusNode, offset: sel.focusOffset }
     : { node: sel.anchorNode, offset: sel.anchorOffset };
 
-  const sOffset = findOffsetOfDOMNode(start.node, start.offset);
-  const eOffset = findOffsetOfDOMNode(end.node, end.offset);
+  const { offset: sOffset, wordOffset } = findOffsetOfDOMNode(start.node, start.offset);
+  const { offset: eOffset }             = findOffsetOfDOMNode(end.node, end.offset);
 
   if (sOffset === null || eOffset === null)
     return { url: null, text: null };
@@ -212,7 +212,7 @@ export const buildSearchLinkFromSelection = (language, pathname) => {
   const url = `${protocol}//${hostname}${port ? `:${port}` : ''}${pathname}?${stringify(query)}`;
 
   const element = sel.focusNode.nodeName.includes('text') ? sel.focusNode.parentElement : sel.focusNode;
-  return { url, text: sel.toString(), query, element };
+  return { url, text: sel.toString(), query, element, wordOffset };
 };
 
 const buildLinkForShortSelect = (words, sel, isForward, language) => {
@@ -222,7 +222,7 @@ const buildLinkForShortSelect = (words, sel, isForward, language) => {
   const { node, offset } = isForward ? { node: sel.anchorNode, offset: sel.anchorOffset }
     : { node: sel.focusNode, offset: sel.focusOffset };
 
-  const fullOffset = findOffsetOfDOMNode(node, offset);
+  const { offset: fullOffset, wordOffset } = findOffsetOfDOMNode(node, offset);
 
   if (fullOffset === null)
     return { url: null, text: null };
@@ -237,17 +237,24 @@ const buildLinkForShortSelect = (words, sel, isForward, language) => {
 
   const url     = `${protocol}//${hostname}${port ? `:${port}` : ''}${pathname}?${stringify(query)}`;
   const element = sel.focusNode.nodeName.includes('text') ? sel.focusNode.parentElement : sel.focusNode;
-  return { url, text: sel.toString(), query, element };
+  return { url, text: sel.toString(), query, element, wordOffset };
 };
 
 const findOffsetOfDOMNode = (node, offset) => {
   offset += countOffsetFromParent(node);
   const parent = node.parentNode;
   if (parent.nodeName.toLowerCase() === 'body')
-    return null;
-  if (parent.id === DOM_ROOT_ID)
-    return offset;
-
+    return false;
+  if (parent.id === DOM_ROOT_ID) {
+    const wordOffset = parent
+      .textContent
+      .slice(0, offset)
+      .replace(/\r?\n|\r{1,}/g, ' ')
+      .split(' ')
+      .filter(x => !!x)
+      .length;
+    return { offset, wordOffset };
+  }
   return findOffsetOfDOMNode(parent, offset);
 };
 

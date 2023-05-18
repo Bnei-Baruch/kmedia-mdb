@@ -29,7 +29,7 @@ function* doc2Html(action) {
   const id = action.payload;
 
   try {
-    const { data } = yield call(Api.getAsset, `api/doc2html/${id}`);
+    const { data } = yield call(Api.getAsset, `doc2html/${id}`);
     yield put(actions.doc2htmlSuccess(id, data));
   } catch (err) {
     yield put(actions.doc2htmlFailure(id, err));
@@ -72,6 +72,17 @@ export function* fetchPerson(action) {
   }
 }
 
+function* fetchTimeCode(action) {
+  const { uid, language } = action.payload;
+
+  try {
+    const { data } = yield call(Api.getAsset, `time_code?uid=${uid}&language=${language}`);
+    yield put(actions.fetchTimeCodeSuccess(data));
+  } catch (e) {
+    console.error('fetch time code', e);
+  }
+}
+
 function* watchUnzip() {
   yield takeLatest(types.UNZIP, unzip);
 }
@@ -108,6 +119,10 @@ function cuFilesToData(cu) {
   }, {});
 }
 
+function* watchFetchTimeCode() {
+  yield takeLatest([types.FETCH_TIME_CODE], fetchTimeCode);
+}
+
 export const sagas = [
   watchUnzip,
   watchUnzipList,
@@ -115,4 +130,5 @@ export const sagas = [
   watchSourceIndex,
   watchFetchAsset,
   watchFetchPerson,
+  watchFetchTimeCode,
 ];
