@@ -18,7 +18,7 @@ import { useLabels } from './useLabels';
 import NoteMark from './NoteMark';
 import { useSelector } from 'react-redux';
 import { selectors as assets } from '../../../redux/modules/assets';
-import { seek } from '../../../pkg/jwpAdapter/adapter';
+import { seek, setPip } from '../../../pkg/jwpAdapter/adapter';
 
 const ScrollToSearch = ({ source, label, data, language, urlParams = '', pathname }) => {
   const { enableShareText: { isShareTextEnabled, setEnableShareText } } = useContext(SessionInfoContext);
@@ -88,6 +88,7 @@ const ScrollToSearch = ({ source, label, data, language, urlParams = '', pathnam
     if (!wordOffset) return;
     const startTime = timeCodeByPos(wordOffset - 2);
     seek(startTime).play();
+    setPip(true);
   };
 
   if (!data) {
