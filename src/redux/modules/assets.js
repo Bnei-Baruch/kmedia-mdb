@@ -256,6 +256,7 @@ const recursiveTimeCode  = (pos, state) => {
   if (state.timeCode.has(pos)) return state.timeCode.get(pos);
   return recursiveTimeCode(pos - 1, state);
 };
+const hasTimeCode        = state => state.timeCode?.size > 0;
 
 export const selectors = {
   getZipIndexById,
@@ -265,4 +266,5 @@ export const selectors = {
   getAsset,
   getPerson,
   getTimeCode,
+  hasTimeCode,
 };

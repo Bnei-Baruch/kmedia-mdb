@@ -10,11 +10,14 @@ import ShareBtn from './ShareBtn';
 import TagTextLabelBtn from './TagTextLabelBtn';
 import AddNoteBtn from './AddNoteBtn';
 import PlayByTextBtn from './PlayByTextBtn';
+import { useSelector } from 'react-redux';
+import { selectors as assets } from '../../../redux/modules/assets';
 
 const DocToolbar = ({ t, url, text, source, label, position, setPinned, isPinned, playByText }) => {
   const [open, setOpen] = useState(!!url);
 
-  const contextRef = useRef();
+  const hasTimeCode = useSelector(state => assets.hasTimeCode(state.assets));
+  const contextRef  = useRef();
 
   const handleToggle     = () => setOpen(!open);
   const handlePlayByText = () => {
@@ -54,7 +57,7 @@ const DocToolbar = ({ t, url, text, source, label, position, setPinned, isPinned
           isPinned && (
             <>
               <AddNoteBtn properties={source} toggleToolbar={handleToggle} />
-              <PlayByTextBtn handlePlay={handlePlayByText} />
+              {hasTimeCode && <PlayByTextBtn handlePlay={handlePlayByText} />}
             </>
           )
         }
