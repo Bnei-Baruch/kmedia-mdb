@@ -36,7 +36,8 @@ const PlayerBehavior = () => {
         controls: false,
         playlist: [playlistItem],
         preload: 'auto',
-        autostart: false
+        autostart: false,
+        pipIcon: 'enabled'
       });
       init(dispatch, deviceInfo);
     } else {
