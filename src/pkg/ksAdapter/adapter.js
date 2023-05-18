@@ -11,7 +11,7 @@ export const KC_UPDATE_USER  = 'KC_UPDATE_USER';
 export const KC_UPDATE_TOKEN = 'KC_UPDATE_TOKEN';
 
 export const login = () => {
-  keycloak.login({redirectUri:`${window.location.href}?authorised=true`})
+  keycloak.login({ redirectUri: `${window.location.href}?authorised=true` })
     .then(r => {
       updateUser(r);
     })
@@ -32,11 +32,7 @@ export const initKC = async () => {
   }
 
   const options   = {
-    checkLoginIframe: false,
-    flow: 'standard',
-    pkceMethod: 'S256',
-    enableLogging: true,
-    onLoad: 'check-sso'
+    checkLoginIframe: false, flow: 'standard', pkceMethod: 'S256', enableLogging: true, onLoad: 'check-sso'
   };
   document.cookie = 'authorised=true;max-age=10';
   const resp      = { user: null, token: null };
@@ -66,13 +62,13 @@ const updateToken = token => {
 };
 
 const userManagerConfig = {
-  url: KC_API,
-  realm: 'main',
-  clientId: 'kmedia-public',
-  scope: 'profile',
-  enableLogging: true
+  url: KC_API, realm: 'main', clientId: 'kmedia-public', scope: 'profile', enableLogging: true
 };
 const keycloak          = typeof window !== 'undefined' ? new Keycloak(userManagerConfig) : {};
+
+keycloak.onTokenExpired = () => {
+  renewRetry(0);
+};
 
 const renewRetry = (retry, err) => {
   if (retry > 5) {

@@ -61,6 +61,10 @@
       }
     }
   }
+
+  &.ui.modal > .label_topic_grid.content {
+    padding-top: 0 !important;
+  }
 }
 
 .label_bar {

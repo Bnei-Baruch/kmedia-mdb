@@ -31,6 +31,8 @@ const CLASSES_BY_MODE = {
   [PLAYER_OVER_MODES.settings]: 'is-settings',
   [PLAYER_OVER_MODES.languages]: 'is-settings is-language',
   [PLAYER_OVER_MODES.share]: 'is-sharing',
+  [PLAYER_OVER_MODES.tagging]: 'is-sharing is-tagging',
+  [PLAYER_OVER_MODES.playlist]: 'is-sharing is-tagging',
   [PLAYER_OVER_MODES.active]: 'is-active',
   [PLAYER_OVER_MODES.dragKnob]: 'is-active',
   [PLAYER_OVER_MODES.firstTime]: 'is-active is-first-time',
@@ -43,7 +45,7 @@ const PlayerContainer = () => {
   const isFullScreen  = useSelector(state => selectors.isFullScreen(state.player));
 
   const { isMobileDevice } = useContext(DeviceInfoContext);
-  const { type }           = useSelector(state => selectors.getFile(state.player)) || false;
+  const type               = useSelector(state => selectors.getFile(state.player)?.file) || false;
 
   const dispatch = useDispatch();
   useKeyboardControl(runTimeout);

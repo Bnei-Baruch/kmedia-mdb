@@ -28,7 +28,8 @@ const ListTemplate = (
     playTime,
     size = 'big',
     selected,
-    label
+    label,
+    name,
   }
 ) => {
 
@@ -54,13 +55,13 @@ const ListTemplate = (
     ) : null;
 
   const renderCUInfo = () => {
-    const name    = unit?.name || source?.name || tag?.label;
+    const _name   = name || unit?.name || source?.name || tag?.label;
     const content = (
       <Ref innerRef={cuInfoRef}>
         <Header
           as={size === 'big' || isMobileDevice ? 'h5' : 'h3'}
           className="cu_item_name"
-          content={name} />
+          content={_name} />
       </Ref>
     );
 
@@ -68,7 +69,7 @@ const ListTemplate = (
       return content;
 
     return <Popup
-      content={name}
+      content={_name}
       dir={dir}
       trigger={content}
       position="top center"

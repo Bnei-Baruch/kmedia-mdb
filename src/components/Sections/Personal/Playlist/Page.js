@@ -19,6 +19,7 @@ import { getMyItemKey } from '../../../../helpers/my';
 import { FrownSplash } from '../../../shared/Splash/Splash';
 import { stopBubbling } from '../../../../helpers/utils';
 import { withRouter } from '../../../../helpers/withRouterPatch';
+import { stringify } from '../../../../helpers/url';
 
 const Page = ({ t }) => {
   const { id } = useParams();
@@ -70,43 +71,49 @@ const Page = ({ t }) => {
     dispatch(actions.edit(MY_NAMESPACE_PLAYLISTS, { id, items: _items, changeItems: true }));
   };
 
-  const renderItem = (x, i) => (
-    <ContentItemContainer
-      id={x.content_unit_uid}
-      key={i}
-      link={`${link}?ap=${i}`}
-      asList
-    >
-      <div className="my_playlist_actions" onClick={stopBubbling}>
-        <Button
-          basic
-          icon="long arrow alternate up"
-          className="no-shadow"
-          disabled={i === 0}
-          onClick={() => changeItemPosition(i, true)}
-        />
-        <Popup
-          basic
-          content={t('personal.removeFromPlaylist')}
-          trigger={
-            <Button
-              basic
-              icon="remove circle"
-              className="no-shadow"
-              onClick={() => removeItem(x.id)}
-            />
-          }>
-        </Popup>
-        <Button
-          basic
-          icon="long arrow alternate down"
-          className="no-shadow"
-          disabled={i === items.length - 1}
-          onClick={() => changeItemPosition(i, false)}
-        />
-      </div>
-    </ContentItemContainer>
-  );
+  const renderItem = (x, i) => {
+    const { content_unit_uid, name, properties } = x;
+    const params                                 = stringify({ ...properties, ap: i });
+
+    return (
+      <ContentItemContainer
+        id={content_unit_uid}
+        key={i}
+        link={`${link}?${params}`}
+        name={name}
+        asList
+      >
+        <div className="my_playlist_actions" onClick={stopBubbling}>
+          <Button
+            basic
+            icon="long arrow alternate up"
+            className="no-shadow"
+            disabled={i === 0}
+            onClick={() => changeItemPosition(i, true)}
+          />
+          <Popup
+            basic
+            content={t('personal.removeFromPlaylist')}
+            trigger={
+              <Button
+                basic
+                icon="remove circle"
+                className="no-shadow"
+                onClick={() => removeItem(x.id)}
+              />
+            }>
+          </Popup>
+          <Button
+            basic
+            icon="long arrow alternate down"
+            className="no-shadow"
+            disabled={i === items.length - 1}
+            onClick={() => changeItemPosition(i, false)}
+          />
+        </div>
+      </ContentItemContainer>
+    );
+  };
 
   return (
     <Grid className="avbox no-background">

@@ -54,8 +54,7 @@ export const actions = {
 const initialState = {
   playlist: [],
   itemById: {},
-  info: {},
-  isReady: false
+  info: {}
 };
 
 const onBuild = draft => {
@@ -63,13 +62,15 @@ const onBuild = draft => {
 };
 
 const onBuildSuccess = (draft, payload) => {
-  const { cuId, items, ...info } = payload;
+  const { cuId, id: _id, items, ...info } = payload;
 
+  const id     = _id || cuId;
   let language = draft.info.language || payload.language || DEFAULT_LANGUAGE;
 
   draft.playlist = items.map(({ id }) => id);
-  draft.itemById = items.reduce((acc, x) => ({ ...acc, [x.id]: x }), {});
-  const curItem  = draft.itemById?.[cuId];
+  //use curId - fix for my playlists
+  draft.itemById = items.reduce((acc, x, ap) => ({ ...acc, [x.id]: x, ap }), {});
+  const curItem  = draft.itemById?.[id];
   if (curItem && !curItem.isHLS && !curItem.qualityByLang[language]) {
     language = curItem.languages[0];
   }
@@ -85,15 +86,7 @@ const onBuildSuccess = (draft, payload) => {
   }
   if (!quality) quality = VS_DEFAULT;
 
-  draft.info = {
-    ...info,
-    cuId,
-    language,
-    subsLanguage: language,
-    quality,
-    isReady: true,
-    wip: false
-  };
+  draft.info = { ...info, cuId, id, language, subsLanguage: language, quality, isReady: true, wip: false };
 };
 
 const onRemovePlayer = draft => {
@@ -101,7 +94,7 @@ const onRemovePlayer = draft => {
 };
 
 const onComplete = draft => {
-  const idx     = draft.playlist.findIndex(x => x === draft.info.cuId);
+  const idx     = draft.playlist.findIndex(x => x === draft.info.id);
   const lastIdx = draft.playlist.length - 1;
   if (idx === lastIdx) return;
   const nextId = draft.playlist[(idx < lastIdx) ? idx + 1 : lastIdx];
@@ -112,9 +105,9 @@ const onComplete = draft => {
 const onUpdateMediaType = (draft, payload) => {
   draft.info.mediaType = payload;
 
-  const item = draft.itemById[draft.info.cuId] || false;
+  const item = draft.itemById[draft.info.id] || false;
   if (item.isHLS) {
-    draft.itemById[draft.info.cuId].id = `${item?.file.id}_${draft.info.mediaType}`;
+    draft.itemById[draft.info.id].id = `${item?.file.id}_${draft.info.mediaType}`;
   }
 };
 
@@ -124,7 +117,7 @@ export const reducer = handleActions({
   [MY_PLAYLIST_BUILD]: onBuild,
   [PLAYLIST_BUILD_SUCCESS]: onBuildSuccess,
 
-  [PLAYLIST_SELECT]: (draft, payload) => draft.info.cuId = payload,
+  [PLAYLIST_SELECT]: (draft, payload) => draft.info = { ...draft.info, ...payload },
 
   [PLAYER_SET_QUALITY]: (draft, payload) => draft.info.quality = payload,
   [PLAYER_SET_LANGUAGE]: (draft, payload) => draft.info.language = payload,
@@ -138,21 +131,24 @@ export const reducer = handleActions({
 }, initialState);
 
 const getPlaylist  = state => state.playlist;
-const getPlayed    = state => state.itemById[state.info.cuId] || false;
+const getPlayed    = state => state.itemById[state.info.id] || false;
 const getInfo      = state => state.info;
 const getNextId    = state => {
-  const curIdx = state.playlist.findIndex(x => x === state.info.cuId);
+  const curIdx = state.playlist.findIndex(x => x === state.info.id);
   if (state.playlist.length <= curIdx) return false;
   const idx = curIdx + 1;
   return state.playlist[idx];
 };
 const getPrevId    = state => {
-  const curIdx = state.playlist.findIndex(x => x === state.info.cuId);
+  const curIdx = state.playlist.findIndex(x => x === state.info.id);
   if (1 > curIdx) return false;
   const idx = curIdx - 1;
   return state.playlist[idx];
 };
 const getIndexById = (state, id) => state.playlist.findIndex(x => x === id);
+const getItemById  = state => id => {
+  return state.itemById[id] || false;
+};
 
 export const selectors = {
   getPlaylist,
@@ -160,5 +156,6 @@ export const selectors = {
   getInfo,
   getNextId,
   getPrevId,
-  getIndexById
+  getIndexById,
+  getItemById
 };

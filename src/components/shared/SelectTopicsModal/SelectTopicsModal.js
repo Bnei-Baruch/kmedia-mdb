@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -14,12 +14,15 @@ import { getTree } from '../../../helpers/topricTree';
 import NeedToLogin from '../../Sections/Personal/NeedToLogin';
 import AlertModal from '../AlertModal';
 import TopicBranch from './TopicBranch';
+import { DeviceInfoContext } from '../../../helpers/app-contexts';
 
 const SelectTopicsModal = ({ t, open, onClose, label, trigger }) => {
   const [selected, setSelected] = useState([]);
   const [match, setMatch]       = useState('');
   const [name, setName]         = useState('');
   const [alertMsg, setAlertMsg] = useState();
+
+  const { isMobileDevice } = useContext(DeviceInfoContext);
 
   const areSourcesLoaded = useSelector(state => sourcesSelectors.areSourcesLoaded(state.sources));
   const roots            = useSelector(state => selectors.getDisplayRoots(state.tags), isEqual) || [];
@@ -32,7 +35,7 @@ const SelectTopicsModal = ({ t, open, onClose, label, trigger }) => {
   const dispatch = useDispatch();
 
   const create = () => {
-    const { content_unit, properties, language: l = language } = label;
+    const { content_unit, properties, language: l = language, media_type = 'text' } = label;
 
     const params = {
       i18n: {
@@ -41,7 +44,7 @@ const SelectTopicsModal = ({ t, open, onClose, label, trigger }) => {
       tags: selected,
       content_unit,
       properties,
-      media_type: 'text'
+      media_type
     };
 
     dispatch(actions.createLabel(params));
@@ -136,7 +139,7 @@ const SelectTopicsModal = ({ t, open, onClose, label, trigger }) => {
                 <Modal.Content scrolling className="label_topic_grid">
                   {
                     tree?.children && (
-                      <Grid columns={tree.children.length}>
+                      <Grid columns={isMobileDevice ? 1 : tree.children.length}>
                         <Grid.Row>
                           {
                             areSourcesLoaded && tree.children.map(renderColumn)

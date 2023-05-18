@@ -11,8 +11,9 @@ import { getMyItemKey } from '../../../../../helpers/my';
 import SubscribeBtn from '../../../../shared/SubscribeBtn';
 import * as shapes from '../../../../shapes';
 import NeedToLogin from '../../../../Sections/Personal/NeedToLogin';
-import PlaylistInfo from './PlaylistInfo';
 import { selectors as mdb } from '../../../../../redux/modules/mdb';
+import { TaggingBtn } from './TaggingBtn';
+import { ToPlaylistBtn } from './ToPlaylistBtn';
 
 const PersonalInfo = ({ collection }) => {
   const [isNeedLogin, setIsNeedLogin] = useState();
@@ -69,6 +70,9 @@ const PersonalInfo = ({ collection }) => {
       </Modal>
       <Menu secondary className="personal_info">
         <Menu.Item>
+          <TaggingBtn />
+        </Menu.Item>
+        <Menu.Item>
           <Button
             basic
             className="clear_button"
@@ -79,7 +83,7 @@ const PersonalInfo = ({ collection }) => {
           </Button>
         </Menu.Item>
         <Menu.Item>
-          <PlaylistInfo />
+          <ToPlaylistBtn />
         </Menu.Item>
         <Menu.Item>
           <SubscribeBtn collection={collection} />

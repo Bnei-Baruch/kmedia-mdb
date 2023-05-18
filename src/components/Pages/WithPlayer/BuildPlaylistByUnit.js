@@ -9,7 +9,7 @@ import Helmets from '../../shared/Helmets';
 const BuildPlaylistByUnit = ({ cts }) => {
   const { id } = useParams();
 
-  const { cuId: prevCuId, cId: prevCId, wip } = useSelector(state => selectors.getInfo(state.playlist));
+  const { id: prevCuId, cId: prevCId, wip } = useSelector(state => selectors.getInfo(state.playlist));
 
   const unit        = useSelector(state => mdb.getDenormContentUnit(state.mdb, id));
   const fetched     = useSelector(state => mdb.getFullUnitFetched(state.mdb))[id];
@@ -32,7 +32,7 @@ const BuildPlaylistByUnit = ({ cts }) => {
     } else if (cId !== prevCId) {
       dispatch(actions.build(cId, id));
     } else if (id && prevCuId !== id) {
-      dispatch(actions.select(id));
+      dispatch(actions.select({ id, cuId: id }));
     }
   }, [cId, id, prevCuId, wip, fetched]);
 

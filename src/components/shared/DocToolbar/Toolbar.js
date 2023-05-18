@@ -7,7 +7,7 @@ import BookmarkBtn from './BookmarkBtn';
 import CopyTextBtn from './CopyTextBtn';
 import CopyLinkBtn from './CopyLinkBtn';
 import ShareBtn from './ShareBtn';
-import LabelBtn from './LabelBtn';
+import TagTextLabelBtn from './TagTextLabelBtn';
 import AddNoteBtn from './AddNoteBtn';
 import PlayByTextBtn from './PlayByTextBtn';
 
@@ -75,7 +75,7 @@ const DocToolbar = ({ t, url, text, source, label, position, setPinned, isPinned
                 <CopyLinkBtn text={url} />
                 <CopyTextBtn text={text} />
                 {source && <BookmarkBtn source={source} label={label} close={handleToggle} />}
-                {label && <LabelBtn label={label} close={handleToggle} />}
+                {label && <TagTextLabelBtn label={label} close={handleToggle} />}
               </Menu>
             </>
           )
