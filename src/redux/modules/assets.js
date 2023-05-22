@@ -250,11 +250,11 @@ const getDoc2htmlById    = state => state.doc2htmlById;
 const getSourceIndexById = state => state.sourceIndexById;
 const getAsset           = state => state.asset;
 const getPerson          = state => state.person;
-const getTimeCode        = state => pos => recursiveTimeCode(pos, state);
-const recursiveTimeCode  = (pos, state) => {
+const getTimeCode        = state => pos => recursiveFindPrevTimeByPos(pos, state);
+const recursiveFindPrevTimeByPos  = (pos, state) => {
   if (pos === 0 || state.timeCode.size === 0) return 0;
   if (state.timeCode.has(pos)) return state.timeCode.get(pos);
-  return recursiveTimeCode(pos - 1, state);
+  return recursiveFindPrevTimeByPos(pos - 1, state);
 };
 const hasTimeCode        = state => state.timeCode?.size > 0;
 

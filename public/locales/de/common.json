@@ -762,7 +762,8 @@
     "copy-button-alt": "Copy text",
     "bookmark-button-alt": "Create a bookmark and save it in the personal area",
     "tag-button-alt": "Tag the selected text in the Topics section",
-    "docbar-title": "You have selected an excerpt from the text, what would you like to do?"
+    "docbar-title": "You have selected an excerpt from the text, what would you like to do?",
+    "play-from-text": "Play the chosen excerpt"
   },
   "personal": {
     "subsNewUnits": "new episodes",

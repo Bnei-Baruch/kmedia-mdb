@@ -766,7 +766,8 @@
     "copy-button-alt": "Copiar texto",
     "bookmark-button-alt": "Crea un marcador y guárdalo en la zona personal",
     "tag-button-alt": "Etiquete el texto seleccionado en la sección Temas",
-    "docbar-title": "Ha seleccionado un extracto del texto, ¿qué le gustaría hacer?"
+    "docbar-title": "Ha seleccionado un extracto del texto, ¿qué le gustaría hacer?",
+    "play-from-text": "Reproducir el extracto elegido"
   },
   "personal": {
     "subsNewUnits": "nuevos episodios",
