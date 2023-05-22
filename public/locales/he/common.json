@@ -858,7 +858,8 @@
     "copy-button-alt": "העתק טקסט",
     "bookmark-button-alt": "צור סימניה ושמור אותה באיזור האישי",
     "tag-button-alt": "תייג את הקטע במדור הנושאים",
-    "docbar-title": "בחרת קטע, מה תרצה לעשות?"
+    "docbar-title": "בחרת קטע, מה תרצה לעשות?",
+    "play-from-text": "נגן את הקטע הנבחר"
   },
   "personal": {
     "subsNewUnits": "פרקים חדשים",

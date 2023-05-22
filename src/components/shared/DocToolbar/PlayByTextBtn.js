@@ -13,7 +13,7 @@ const PlayByTextBtn = ({ handlePlay }) => {
 
   return (
       <Popup
-        content={t('messages.add-new-note')}
+        content={t('share-text.play-from-text')}
         dir={dir}
         trigger={
           <Button
