@@ -43,7 +43,7 @@ const tryFetchImage = async (src, attempt = 0) => {
     }
 
     if (resp.status === 429) {
-      return tryFetchImage(src, attempt++);
+      //return tryFetchImage(src, attempt++);
     }
 
     return false;
