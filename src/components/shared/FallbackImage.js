@@ -43,7 +43,7 @@ const tryFetchImage = async (src, attempt = 0) => {
     }
 
     if (resp.status === 429) {
-      return tryFetchImage(src, attempt++);
+      return tryFetchImage(src, ++attempt);
     }
 
     return false;
@@ -70,11 +70,13 @@ const FallbackImage = props => {
 
   useEffect(() => {
     setWip(true);
-    !wip && !imageSource && findSrc([src, ...fallbackImage])
-      .then(res => {
-        setImageSource(res);
-        setWip(false);
-      });
+    if (!wip && !imageSource) {
+      findSrc([src, ...fallbackImage])
+        .then(res => {
+          setImageSource(res);
+          setWip(false);
+        });
+    }
   }, [fallbackImage, src, wip, imageSource]);
 
   if (!imageSource || imageSource === NoneFallbackImage) {
