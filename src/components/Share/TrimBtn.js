@@ -18,11 +18,13 @@ const TrimBtn = ({ t }) => {
   const chronicles       = useContext(ClientChroniclesContext);
   const chroniclesAppend = chronicles ? chronicles.append.bind(chronicles) : noop;
 
-  const { start, end }                   = useSelector(state => player.getShareStartEnd(state.player));
+  const { start, end: _end }             = useSelector(state => player.getShareStartEnd(state.player));
   const file                             = useSelector(state => player.getFile(state.player));
   const { language, quality, mediaType } = useSelector(state => playlist.getInfo(state.playlist));
 
   const dispatch = useDispatch();
+
+  const end = _end === Infinity ? file.duration : _end;
 
   const handleCut = () => {
     if (start === end) return;
