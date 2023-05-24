@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { MY_NAMESPACE_LABELS, MY_NAMESPACE_PLAYLIST_EDIT, MY_NAMESPACE_PLAYLISTS } from './consts';
+import { kcUpdateToken } from '../pkg/ksAdapter/adapter';
 
 const API_BACKEND             = process.env.REACT_APP_API_BACKEND;
 const ASSETS_BACKEND          = process.env.REACT_APP_ASSETS_BACKEND;
@@ -43,15 +44,28 @@ export class Requests {
     return axios(url);
   };
 
-  static auth = (params, url, token, method = 'GET') => {
-    const config = { url, method, headers: { 'Content-Type': 'application/json', 'Authorization': `bearer ${token}` } };
+  static auth = (params, url, token, method = 'GET', retry = true) => {
+    const config = {
+      url,
+      method,
+      headers: { 'Content-Type': 'application/json', 'Authorization': `bearer ${token}` }
+    };
+
     if (method === 'GET') {
       config.url = `${url}?${Requests.makeParams(params)}`;
     } else {
       config.data = JSON.stringify(params);
     }
 
-    return axios(config);
+    return axios(config)
+      .catch(err => {
+        if (err.request?.status === 401 && retry) {
+          return kcUpdateToken()
+            .then(token => Requests.auth(params, url, token, method, false));
+        }
+        console.log('axios auth catch', err);
+        return err;
+      });
   };
 
   static makeParams = params => (
@@ -149,14 +163,14 @@ class Api {
   static autocomplete = ({ q, language }) => Requests.get(`autocomplete?${Requests.makeParams({ q, language })}`);
 
   static search = ({
-    q,
-    language,
-    pageNo: page_no,
-    pageSize: page_size,
-    sortBy: sort_by,
-    deb,
-    searchId: search_id
-  }) => (
+                     q,
+                     language,
+                     pageNo: page_no,
+                     pageSize: page_size,
+                     sortBy: sort_by,
+                     deb,
+                     searchId: search_id
+                   }) => (
     Requests.get(`search?${Requests.makeParams({ q, language, page_no, page_size, sort_by, deb, search_id })}`)
   );
 

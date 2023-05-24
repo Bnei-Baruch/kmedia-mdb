@@ -14,10 +14,7 @@ export const ADD_PLAYLIST_ITEM_MODES = {
   'none': 'none',
 };
 
-function reducer(state, action) {
-  console.log('reducer', state, action);
-  return { ...state, ...action };
-}
+const reducer = (state, action) => ({ ...state, ...action });
 
 const SavePlaylistItemBtn = ({ label }) => {
         const { t } = useTranslation();

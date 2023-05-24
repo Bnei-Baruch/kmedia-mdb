@@ -1,6 +1,6 @@
 import Keycloak from 'keycloak-js';
 
-export const KC_API = process.env.REACT_KC_API_URL || 'https://accounts.kab.info/auth';
+export const KC_API = process.env.REACT_KC_API_URL || 'https://accounts.kab.sh/auth';
 
 export const KC_SEARCH_KEY_SESSION = 'session_state';
 export const KC_SEARCH_KEY_STATE   = 'state';
@@ -81,7 +81,7 @@ const renewRetry = (retry, err) => {
   }
 };
 
-const renewToken = retry => {
+const renewToken           = retry => {
   retry++;
   keycloak.updateToken(70).then(refreshed => {
     if (refreshed) {
@@ -93,6 +93,12 @@ const renewToken = retry => {
     renewRetry(retry, err);
   });
 };
+export const kcUpdateToken = () => keycloak
+  .updateToken(70)
+  .then(ok => {
+    if (ok) updateToken(keycloak.token);
+    return keycloak.token;
+  });
 
 const healthCheckKC = async () => {
   const health = await fetch(`${KC_API}/realms/main/protocol/openid-connect/certs`);
