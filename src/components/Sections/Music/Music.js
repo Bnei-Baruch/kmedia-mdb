@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
-import { withTranslation } from 'react-i18next';
+import { withTranslation, useTranslation } from 'react-i18next';
 import { Container, Divider } from 'semantic-ui-react';
 
 import ResultsPageHeader from '../../Pagination/ResultsPageHeader';
@@ -10,13 +9,14 @@ import WipErr from '../../shared/WipErr/WipErr';
 import { selectors, actions } from '../../../redux/modules/music';
 import List from './List';
 
-const Music = ({ t }) => {
+const Music = () => {
   const wip                         = useSelector(state => selectors.getWip(state.music));
   const err                         = useSelector(state => selectors.getError(state.music));
   const items                       = useSelector(state => selectors.getMusicData(state.music));
   const [dataLoaded, setDataLoaded] = useState(false);
 
   const dispatch = useDispatch();
+  const { t }    = useTranslation();
 
   useEffect(() => {
     if (!wip && !err && !dataLoaded) {
@@ -25,7 +25,6 @@ const Music = ({ t }) => {
     }
 
   }, [dispatch, wip, err, dataLoaded]);
-
 
   const content = WipErr({ wip, err, t }) || (
     <Container className="padded">
@@ -42,10 +41,6 @@ const Music = ({ t }) => {
       {content}
     </>
   );
-};
-
-Music.propTypes = {
-  t: PropTypes.func.isRequired,
 };
 
 export default withTranslation()(Music);
