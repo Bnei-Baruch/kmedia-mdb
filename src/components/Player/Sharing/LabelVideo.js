@@ -21,7 +21,7 @@ const LabelVideo = () => {
   const label  = {
     properties: { sstart: toHumanReadableTime(start), send: toHumanReadableTime(end) },
     content_unit: unit.id,
-    media_type: MT_VIDEO
+    media_type: 'media'
   };
   const action = mode === PLAYER_OVER_MODES.tagging ? (
     <TagVideoLabelBtn label={label} />

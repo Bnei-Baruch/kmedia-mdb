@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { Breadcrumb, Button, Container, Divider, Modal } from 'semantic-ui-react';
 import { getLanguageDirection, isLanguageRtl } from '../../../helpers/i18n-utils';
 
@@ -15,8 +14,9 @@ import FilterLabels from '../../FiltersAside/FilterLabels';
 import HelmetsBasic from '../../shared/Helmets/Basic';
 import { getBreadCrumbSection } from './helper';
 
-const RenderPageMobile = ({ t }) => {
+const RenderPageMobile = () => {
   const { id } = useParams();
+  const { t }  = useTranslation();
 
   const [openFilters, setOpenFilters] = useState(false);
 
@@ -63,8 +63,4 @@ const RenderPageMobile = ({ t }) => {
   );
 };
 
-RenderPageMobile.propTypes = {
-  t: PropTypes.func.isRequired,
-};
-
-export default withTranslation()(RenderPageMobile);
+export default RenderPageMobile;

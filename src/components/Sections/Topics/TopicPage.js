@@ -1,8 +1,7 @@
 import React, { useContext, useEffect, useMemo, useCallback } from 'react';
-import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useLocation } from 'react-router-dom';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { Container, Divider, Header } from 'semantic-ui-react';
 
 import { actions, selectors } from '../../../redux/modules/tags';
@@ -17,9 +16,9 @@ import RenderPageMobile from './RenderPageMobile';
 import { getPageFromLocation } from '../../Pagination/withPagination';
 import { PAGE_NS_TOPICS } from '../../../helpers/consts';
 
-const TopicPage = ({ t }) => {
-  const { id } = useParams();
-
+const TopicPage = () => {
+  const { id }             = useParams();
+  const { t }              = useTranslation();
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
   const getPathByID = useSelector(state => selectors.getPathByID(state.tags));
@@ -78,8 +77,4 @@ const TopicPage = ({ t }) => {
   );
 };
 
-TopicPage.propTypes = {
-  t: PropTypes.func.isRequired,
-};
-
-export default withTranslation()(TopicPage);
+export default TopicPage;
