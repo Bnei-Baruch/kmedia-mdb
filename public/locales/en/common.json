@@ -199,7 +199,8 @@
       "video": "Video",
       "normal": "normal",
       "audio-only-on": "Audio only ON",
-      "audio-only-off": "Audio only OFF"
+      "audio-only-off": "Audio only OFF",
+      "subtitles": "Subtítulos"
     },
     "share": {
       "title": "watch this video",

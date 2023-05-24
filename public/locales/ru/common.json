@@ -199,7 +199,8 @@
       "video": "Видео",
       "normal": "норм.",
       "audio-only-on": "Аудиорежим ВКЛ.",
-      "audio-only-off": "Аудиорежим ВЫКЛ."
+      "audio-only-off": "Аудиорежим ВЫКЛ.",
+      "subtitles": "Субтитры"
     },
     "share": {
       "title": "Посмотри это видео",
