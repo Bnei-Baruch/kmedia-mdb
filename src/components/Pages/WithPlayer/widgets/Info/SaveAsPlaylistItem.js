@@ -58,8 +58,6 @@ const SaveAsPlaylistItem = ({ setModalMode }) => {
 
     setIsNew(false);
     setModalMode(ADD_PLAYLIST_ITEM_MODES.label);
-
-    dispatch(playerActions.setOverMode(PLAYER_OVER_MODES.none));
   };
 
   const handleNameChange = (e, { value }) => setName(value);

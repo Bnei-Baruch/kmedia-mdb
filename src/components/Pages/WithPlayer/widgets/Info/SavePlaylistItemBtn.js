@@ -10,6 +10,7 @@ import SaveAsPlaylistItem from './SaveAsPlaylistItem';
 export const ADD_PLAYLIST_ITEM_MODES = {
   'login': 'login_mode',
   'playlist': 'playlist_mode',
+  'label': 'label_mode',
   'none': 'none',
 };
 
