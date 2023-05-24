@@ -27,17 +27,19 @@ import { stringify } from '../../../helpers/url';
 
 const NOT_LESSONS_COLLECTIONS = [CT_VIDEO_PROGRAM, CT_VIRTUAL_LESSONS, CT_CLIPS];
 
-const TagItemContainerHook = ({
-                                id,
-                                t,
-                                asList = false,
-                                link,
-                                size,
-                                selected,
-                                noViews,
-                                label = '',
-                                withInfo = undefined
-                              }) => {
+const TagItemContainerHook = (
+  {
+    id,
+    t,
+    asList = false,
+    link,
+    size,
+    selected,
+    noViews,
+    label = '',
+    withInfo = undefined
+  }
+) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const tag                = useSelector(state => tags.getTagById(state.tags)(id));
   const language           = useSelector(state => settings.getLanguage(state.settings));
@@ -66,17 +68,19 @@ const TagItemContainerHook = ({
   return (asList ? <ListTemplate {...props} /> : <CardTemplate {...props} />);
 };
 
-const SourceItemContainerHook = ({
-                                   id,
-                                   t,
-                                   asList = false,
-                                   link,
-                                   size,
-                                   selected,
-                                   noViews,
-                                   label = '',
-                                   withInfo = undefined
-                                 }) => {
+const SourceItemContainerHook = (
+  {
+    id,
+    t,
+    asList = false,
+    link,
+    size,
+    selected,
+    noViews,
+    label = '',
+    withInfo = undefined
+  }
+) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const source             = useSelector(state => sources.getSourceById(state.sources)(id));
   const language           = useSelector(state => settings.getLanguage(state.settings));
