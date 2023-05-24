@@ -196,7 +196,8 @@
       "video": "Video",
       "normal": "normal",
       "audio-only-on": "Solo audio ACTIVADO",
-      "audio-only-off": "Solo audio APAGADO"
+      "audio-only-off": "Solo audio APAGADO",
+      "subtitles": "Subtitles"
     },
     "share": {
       "title": "Mira el video",

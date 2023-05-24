@@ -17,7 +17,7 @@ const BuildPlaylistByCollection = ({ cuId, id }) => {
     if (id !== prevCId) {
       dispatch(actions.build(id, cuId));
     } else if (cuId && prevCuId !== cuId) {
-      dispatch(actions.select({ cuId }));
+      dispatch(actions.select({ cuId, id: cuId }));
     }
   }, [id, cuId, wip, fetched]);
 

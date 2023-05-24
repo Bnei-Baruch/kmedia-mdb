@@ -367,6 +367,9 @@ video {
   }
 }
 
+.player {
+  user-select: none;
+}
 
 //MOBILE STATES
 .is-mobile.is-fullscreen.is-sharing {

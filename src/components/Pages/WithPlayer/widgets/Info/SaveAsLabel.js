@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Modal, Confirm, Button } from 'semantic-ui-react';
 import { selectors as settings } from '../../../../../redux/modules/settings';
 import { getLanguageDirection } from '../../../../../helpers/i18n-utils';
@@ -7,6 +7,8 @@ import { DeviceInfoContext } from '../../../../../helpers/app-contexts';
 import { useTranslation } from 'react-i18next';
 import TagVideoLabelBtn from './TagVideoLabelBtn';
 import { ADD_PLAYLIST_ITEM_MODES } from './SavePlaylistItemBtn';
+import { actions as playerActions } from '../../../../../redux/modules/player';
+import { PLAYER_OVER_MODES } from '../../../../../helpers/consts';
 
 const updateStatus = { save: 1, delete: 2 };
 
@@ -17,11 +19,13 @@ const SaveAsLabel = ({ label, setModalMode }) => {
   const language           = useSelector(state => settings.getLanguage(state.settings));
   const dir                = getLanguageDirection(language);
 
-  const { t } = useTranslation();
+  const dispatch = useDispatch();
+  const { t }    = useTranslation();
 
   const handleClose = () => {
     setModalMode(ADD_PLAYLIST_ITEM_MODES.none);
     setConfirm(false);
+    dispatch(playerActions.setOverMode(PLAYER_OVER_MODES.none));
   };
 
   return (
@@ -29,7 +33,7 @@ const SaveAsLabel = ({ label, setModalMode }) => {
       <Confirm
         size="tiny"
         open={true}
-        header={t('personal.playlist.playlistItemCreated')}
+        header={t('personal.addToPlaylistSuccessful', { name: '' })}
         onCancel={handleClose}
         onConfirm={handleClose}
         confirmButton={{ content: t('personal.label.ending') }}

@@ -125,7 +125,7 @@ function* myPlaylistBuild(action) {
   const items        = content_units
     .map(cu => playableItem(cu))
     //change cu id cause on personal playlist item can save few items of one CU
-    .map((x, i) => ({ ...x, id: `${x.id}_${i}`, cuId: x.id }));
+    .map((x, i) => ({ ...x, id: `${x.id}_${i}`, cuId: x.id, ap: i }));
   const { cuId, id } = items[ap] || items[0];
   const baseLink     = `/${MY_NAMESPACE_PLAYLISTS}/${pId}`;
 

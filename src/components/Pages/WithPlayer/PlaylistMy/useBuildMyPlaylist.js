@@ -26,7 +26,7 @@ const useBuildMyPlaylist = () => {
       const newAp = getActivePartFromQuery(location);
       if (arr[1] !== newAp) {
         const _id = itemIds[newAp];
-        dispatch(actions.select({ cuId: _id.split('_')[0], id: _id }));
+        _id && dispatch(actions.select({ cuId: _id.split('_')[0], id: _id }));
       }
     }
   }, [itemIds, itemId, location]);

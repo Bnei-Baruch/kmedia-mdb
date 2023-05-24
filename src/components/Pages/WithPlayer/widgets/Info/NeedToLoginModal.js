@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Modal } from 'semantic-ui-react';
 import { selectors as settings } from '../../../../../redux/modules/settings';
@@ -6,14 +6,16 @@ import { getLanguageDirection } from '../../../../../helpers/i18n-utils';
 import NeedToLogin from '../../../../Sections/Personal/NeedToLogin';
 
 const NeedToLoginModal = () => {
-  const language = useSelector(state => settings.getLanguage(state.settings));
-
-  const dir = getLanguageDirection(language);
+  const [open, setOpen] = useState(true);
+  const language        = useSelector(state => settings.getLanguage(state.settings));
+  const handleClose     = () => setOpen(false);
+  const dir             = getLanguageDirection(language);
   return (
     <Modal
       closeIcon
-      open={true}
+      open={open}
       dir={dir}
+      onClose={handleClose}
     >
       <Modal.Content>
         <NeedToLogin />

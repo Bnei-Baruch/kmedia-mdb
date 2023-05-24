@@ -23,20 +23,23 @@ import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { canonicalLink } from '../../../helpers/links';
 import ListTemplate from './ListTemplate';
 import CardTemplate from './CardTemplate';
+import { stringify } from '../../../helpers/url';
 
 const NOT_LESSONS_COLLECTIONS = [CT_VIDEO_PROGRAM, CT_VIRTUAL_LESSONS, CT_CLIPS];
 
-const TagItemContainerHook = ({
-  id,
-  t,
-  asList = false,
-  link,
-  size,
-  selected,
-  noViews,
-  label = '',
-  withInfo = undefined
-}) => {
+const TagItemContainerHook = (
+  {
+    id,
+    t,
+    asList = false,
+    link,
+    size,
+    selected,
+    noViews,
+    label = '',
+    withInfo = undefined
+  }
+) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const tag                = useSelector(state => tags.getTagById(state.tags)(id));
   const language           = useSelector(state => settings.getLanguage(state.settings));
@@ -65,17 +68,19 @@ const TagItemContainerHook = ({
   return (asList ? <ListTemplate {...props} /> : <CardTemplate {...props} />);
 };
 
-const SourceItemContainerHook = ({
-  id,
-  t,
-  asList = false,
-  link,
-  size,
-  selected,
-  noViews,
-  label = '',
-  withInfo = undefined
-}) => {
+const SourceItemContainerHook = (
+  {
+    id,
+    t,
+    asList = false,
+    link,
+    size,
+    selected,
+    noViews,
+    label = '',
+    withInfo = undefined
+  }
+) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const source             = useSelector(state => sources.getSourceById(state.sources)(id));
   const language           = useSelector(state => settings.getLanguage(state.settings));
@@ -119,7 +124,8 @@ const ContentItemContainer = (
     label = '',
     withCCUInfo = undefined,
     withCUInfo = undefined,
-    name
+    name,
+    lID
   }
 ) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
@@ -127,6 +133,7 @@ const ContentItemContainer = (
   const language           = useSelector(state => settings.getLanguage(state.settings));
   const views              = useSelector(state => recommended.getViews(id, state.recommended));
   const ccu                = useSelector(state => selectors.getDenormCollection(state.mdb, ccuId)) || canonicalCollection(unit);
+  const denormLabel        = useSelector(state => selectors.getDenormLabel(state.mdb));
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -164,10 +171,17 @@ const ContentItemContainer = (
   if (!noViews && !(isMobileDevice && asList) && views > 0)
     description.push(t('pages.unit.info.views', { views }));
 
+  link = link || canonicalLink(unit, null, ccu);
+  if (lID) {
+    const l = denormLabel(lID);
+    name    = name || l?.name;
+    link    = `${link}?${stringify(l?.properties)}`;
+  }
+
   const props = {
     unit,
     language,
-    link: link || canonicalLink(unit, null, ccu),
+    link,
     withCUInfo,
     withCCUInfo,
     ccu,
