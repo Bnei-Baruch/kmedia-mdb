@@ -8,11 +8,10 @@ const SwitchSubtitles = () => {
   const isReady     = useSelector(state => player.isReady(state.player));
   const subsLanguage = useSelector(state => playlist.getInfo(state.playlist).subsLanguage);
 
-  const dispatch = useDispatch();
   useEffect(() => {
     if (!isReady) return;
     const jwp = window.jwplayer();
-    const idx = jwp.getCaptionsList().findIndex(c => c.language === subsLanguage) || 0;
+    const idx = jwp.getCaptionsList()?.findIndex(c => c.language === subsLanguage) || 0;
 
     jwp.setCurrentCaptions(idx);
   }, [isReady, subsLanguage]);
