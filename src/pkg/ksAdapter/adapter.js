@@ -1,6 +1,6 @@
 import Keycloak from 'keycloak-js';
 
-export const KC_API = process.env.REACT_KC_API_URL || 'https://accounts.kab.sh/auth';
+export const KC_API = process.env.REACT_KC_API_URL || 'https://accounts.kab.info/auth';
 
 export const KC_SEARCH_KEY_SESSION = 'session_state';
 export const KC_SEARCH_KEY_STATE   = 'state';
