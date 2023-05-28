@@ -164,7 +164,7 @@ export const reducer = handleActions({
 const areSourcesLoaded = state => state.loaded;
 const getRoots         = state => state.roots;
 const getSourceById    = state => {
-  const _byId = state.sortBy === 'AZ' ? state.byId : state.byIdAZ;
+  const _byId = state.sortBy === 'AZ' ? state.byIdAZ : state.byId;
   return id => _byId[id];
 };
 const getPath          = state => {
