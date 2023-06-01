@@ -1794,19 +1794,20 @@
 }
 
 .playlist_add {
-  height: 30px;
+  height: 25px;
   width: 28px;
 }
 
-.my_playlist_add {
+.my_playlist_add, .my_tag {
   display: flex;
   flex-flow: nowrap;
   align-items: center;
 
   span {
-    margin: 0 8px;
+    margin: 0;
     display: inline-block;
     vertical-align: middle;
+    text-transform: uppercase;
   }
 
   svg {
@@ -1870,8 +1871,7 @@
 
   &>.item {
     margin: 0;
-    padding-left: 0.5em;
-    padding-right: 0.5em;
+    padding: 0 0.5em;
   }
 
   .icon.heart {

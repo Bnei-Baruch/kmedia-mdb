@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import fscreen from 'fscreen';
 import { withTranslation } from 'react-i18next';
 import { Icon } from 'semantic-ui-react';
+import clsx from 'clsx';
 
 import { actions, selectors } from '../../../redux/modules/player';
 import { PLAYER_OVER_MODES } from '../../../helpers/consts';
@@ -89,7 +90,10 @@ export const ShareBtn = withTranslation()(({ t }) => {
     <WebWrapTooltip
       content={t('player.controls.share')}
       trigger={
-        <div className="controls__share" onClick={handleOpen}>
+        <div
+          className={clsx('controls__settings', { 'active': PLAYER_OVER_MODES.share === mode })}
+          onClick={handleOpen}
+        >
           <Icon fitted name="share alternate" />
         </div>
       }
@@ -112,7 +116,10 @@ export const SettingsBtn = withTranslation()(({ t }) => {
     <WebWrapTooltip
       content={t('player.controls.settings')}
       trigger={
-        <div className="controls__settings" onClick={handleOpen}>
+        <div
+          className={clsx('controls__settings', { 'active': [PLAYER_OVER_MODES.settings, PLAYER_OVER_MODES.languages].includes(mode) })}
+          onClick={handleOpen}
+        >
           <Icon fitted name="setting" />
         </div>
       }

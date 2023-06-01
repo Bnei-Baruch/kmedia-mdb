@@ -22,10 +22,10 @@ export const TaggingBtn = () => {
   return (
     <Button
       basic
-      className="clear_button"
+      className="clear_button my_tag"
       onClick={handleOpen}
     >
-      <SectionLogo name="topics" color="grey" width="20" height="20" className="margin-right-4 margin-left-4" />
+      <SectionLogo name="topics" color="grey" width="20" height="20" />
       <span>{t('personal.label.tagging')}</span>
     </Button>
   );
