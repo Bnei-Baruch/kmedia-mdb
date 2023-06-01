@@ -32,7 +32,7 @@ const Settings = ({ t }) => {
 
   return (
     <div className="settings">
-      <CloseBtn className="settings__close" />
+      {isMobileDevice && <CloseBtn className="settings__close" />}
       {
         mode !== PLAYER_OVER_MODES.languages && (
           <div className="settings__pane">

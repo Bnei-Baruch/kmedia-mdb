@@ -681,6 +681,10 @@ video {
             }
           }
         }
+
+        &.active .icon:before {
+          color: $blue !important;
+        }
       }
 
       .icon {
@@ -759,8 +763,9 @@ video {
     right: 8px;
     top: 8px;
     bottom: 54px + 8px;
-
     overflow: hidden;
+    left: auto;
+    background: none;
 
     &__pane {
       background: $controls-bg;
