@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Icon, Menu } from 'semantic-ui-react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { LANGUAGE_OPTIONS, PLAYER_OVER_MODES } from '../../../helpers/consts';
+import { LANGUAGE_OPTIONS, PLAYER_OVER_MODES, LANG_SLOVENIAN, LANGUAGES } from '../../../helpers/consts';
 import { actions as playlistActions, selectors as playlist } from '../../../redux/modules/playlist';
 import { actions } from '../../../redux/modules/player';
 import { useTranslation } from 'react-i18next';
@@ -15,6 +15,7 @@ const PlayerLanguages = ({ language }) => {
   const handleSelect = (e, { name }) => dispatch(playlistActions.setLanguage(name));
 
   const handleCloseLangs = () => dispatch(actions.setOverMode(PLAYER_OVER_MODES.settings));
+  const langOptions      = [...LANGUAGE_OPTIONS, LANGUAGES[LANG_SLOVENIAN]];
 
   return (
     <div className="settings__pane">
@@ -24,7 +25,7 @@ const PlayerLanguages = ({ language }) => {
       </Button>
       <Menu secondary vertical inverted size="small" fluid>
         {
-          LANGUAGE_OPTIONS
+          langOptions
             .filter(x => {
               return languages.includes(x.value);
             })

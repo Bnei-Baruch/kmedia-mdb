@@ -177,7 +177,6 @@ export const LANG_UKRAINIAN  = 'ua';
 export const LANG_MACEDONIAN = 'mk';
 export const LANG_SLOVENIAN  = 'sl';
 export const LANG_LATVIAN    = 'lv';
-export const LANG_SLOVAK     = 'sk';
 export const LANG_CZECH      = 'cs';
 export const LANG_AMHARIC    = 'am';
 export const LANG_INDONESIAN = 'id';
@@ -214,15 +213,16 @@ export const LANGUAGES = {
   [LANG_HINDI]: { value: LANG_HINDI, locale: 'hi_IN', lang3: 'HIN', name: 'हिन्दी' },
   [LANG_UKRAINIAN]: { value: LANG_UKRAINIAN, locale: 'uk_UA', lang3: 'UKR', name: 'Українська', hls: 'uk' },
   [LANG_MACEDONIAN]: { value: LANG_MACEDONIAN, locale: 'mk_MK', lang3: 'MKD', name: 'Македонски' },
-  [LANG_SLOVENIAN]: { value: LANG_SLOVENIAN, locale: 'sl_SI', lang3: 'SLV', name: 'Slovenščina' },
   [LANG_LATVIAN]: { value: LANG_LATVIAN, locale: 'lv_LV', lang3: 'LAV', name: 'Latviešu' },
-  [LANG_SLOVAK]: { value: LANG_SLOVAK, locale: 'sk_SK', lang3: 'SLK', name: 'slovenčina' },
-  [LANG_CZECH]: { value: LANG_CZECH, locale: 'cs_CZ', lang3: 'CZE', name: 'Čeština' },
+  [LANG_CZECH]: { value: LANG_CZECH, locale: 'cs_CZ', lang3: 'SLV', name: 'CzechoSlovak' },
   [LANG_AMHARIC]: { value: LANG_AMHARIC, locale: 'am_ET', lang3: 'AMH', name: 'ኣማርኛ' },
   [LANG_INDONESIAN]: { value: LANG_INDONESIAN, locale: 'in_ID', lang3: 'IND', name: 'Bahasa Indonesia' },
   [LANG_ARMENIAN]: { value: LANG_ARMENIAN, locale: 'hy_AM', lang3: 'ARM', name: 'Հայերէն' },
   [LANG_ORIGINAL]: { value: LANG_ORIGINAL, locale: 'he_IL', lang3: 'ORI', name: 'Original' },
 };
+
+//for HLS old files
+LANGUAGES[LANG_SLOVENIAN] = { ...LANGUAGES[LANG_CZECH], value: LANG_SLOVENIAN };
 
 export const ALL_LANGUAGES = [
   LANG_ORIGINAL,
@@ -253,9 +253,7 @@ export const ALL_LANGUAGES = [
   LANG_HINDI,
   LANG_UKRAINIAN,
   LANG_MACEDONIAN,
-  LANG_SLOVENIAN,
   LANG_LATVIAN,
-  LANG_SLOVAK,
   LANG_CZECH,
   LANG_AMHARIC,
   LANG_INDONESIAN,
