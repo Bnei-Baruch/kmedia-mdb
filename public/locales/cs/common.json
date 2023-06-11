@@ -100,7 +100,7 @@
       "sources": "Zdroje"
     },
     "aside-filter": {
-      "filters-title": "Filter by interests:",
+      "filters-title": "Filter by interests",
       "sources-filter-multi": "Kabbalists",
       "topics-filter-multi": "Topics",
       "content-type-filter": "Section",

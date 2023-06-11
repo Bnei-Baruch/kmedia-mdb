@@ -26,7 +26,6 @@ import { selectors as publicationSelectors } from '../../redux/modules/publicati
 import { filtersTransformer } from '../../filters';
 import WipErr from '../shared/WipErr/WipErr';
 import SectionFiltersWithMobile from '../shared/SectionFiltersWithMobile';
-import SectionHeader from '../shared/SectionHeader';
 import Pagination from '../Pagination/Pagination';
 import ResultsPageHeader from '../Pagination/ResultsPageHeader';
 import {
@@ -43,6 +42,7 @@ import DidYouMean from './DidYouMean';
 import Filters from './Filters';
 import FilterLabels from '../FiltersAside/FilterLabels';
 import ScoreDebug from './ScoreDebug';
+import Helmets from '../shared/Helmets';
 
 const cuMapFromState = (state, results) => (
   results && results.hits && Array.isArray(results.hits.hits)
@@ -229,10 +229,15 @@ const SearchResults = ({ t }) => {
   const totalForPagination                  = Math.min(1000, total);
 
   //const wipErr = WipErr({ wip, err: null, t });
+  const renderHelmet = (section) => {
+    const title    = t(`${section}.header.text`);
+    const subText1 = t(`${section}.header.subtext`);
+    return <Helmets.Basic title={title} description={subText1} />;
+  };
 
   return (
     <>
-      <SectionHeader section="search" />
+      {renderHelmet('search')}
       <SectionFiltersWithMobile
         namespace={'search'}
         filters={<Filters namespace={'search'} />}

@@ -143,7 +143,7 @@ const iconByContentType = (type, t, link) => {
   const icon    = iconByContentTypeMap.get(type) || null;
   const content = <div className="icon">
     <SectionLogo name={icon} width="70" height="70" />
-    <span style={{ whiteSpace: 'nowrap' }}>{t(`constants.content-types.${type}`)}</span>
+    <span>{t(`constants.content-types.${type}`)}</span>
   </div>;
 
   if (!link)
@@ -161,13 +161,13 @@ const searchResultClick = (chronicles, dispatch, clickData) => link => {
 };
 
 export const SearchResultCU = withTranslation()(({
-  cu,
-  highlight = {},
-  clickData,
-  hideContent = false,
-  onlyViewsAndDate = false,
-  t
-}) => {
+                                                   cu,
+                                                   highlight = {},
+                                                   clickData,
+                                                   hideContent = false,
+                                                   onlyViewsAndDate = false,
+                                                   t
+                                                 }) => {
   const views      = useSelector(state => recommended.getViews(cu.id, state.recommended));
   const chronicles = useContext(ClientChroniclesContext);
   const dispatch   = useDispatch();
@@ -304,20 +304,20 @@ export const SearchResultLandingPage = withTranslation()(({ landingPage, filterV
 });
 
 export const SearchResultOneItem = withTranslation()(({
-  key,
-  title,
-  link,
-  logo,
-  content,
-  part,
-  parts,
-  date,
-  views,
-  collectionTitle,
-  collectionLink,
-  t,
-  click,
-}) => {
+                                                        key,
+                                                        title,
+                                                        link,
+                                                        logo,
+                                                        content,
+                                                        part,
+                                                        parts,
+                                                        date,
+                                                        views,
+                                                        collectionTitle,
+                                                        collectionLink,
+                                                        t,
+                                                        click,
+                                                      }) => {
   const description = [];
   collectionTitle && description.push(collectionTitle);
   part && description.push(t('pages.unit.info.episode', { name: part }));
@@ -357,14 +357,13 @@ const getFilterById = (getTagById, getSourceById, index) => {
 };
 
 export const SearchResultIntent = withTranslation()(({ id, name, type, index, highlight, clickData, t }) => {
-  const chronicles         = useContext(ClientChroniclesContext);
-  const { isMobileDevice } = useContext(DeviceInfoContext);
-  const namespace          = `intents_${id}_${type}`;
-  const dispatch           = useDispatch();
+  const chronicles = useContext(ClientChroniclesContext);
+  const namespace  = `intents_${id}_${type}`;
+  const dispatch   = useDispatch();
   useEffect(() => {
     const params = {
       content_type: type,
-      page_size: isMobileDevice ? 1 : 3,
+      page_size: 3,
       [index === SEARCH_INTENT_INDEX_SOURCE ? 'source' : 'tag']: id,
     };
     dispatch(listsActions.fetchList(namespace, 1, params));
@@ -417,42 +416,42 @@ export const SearchResultIntent = withTranslation()(({ id, name, type, index, hi
 });
 
 export const SearchResultManyItems = withTranslation()(({
-  logo,
-  link,
-  title,
-  description,
-  parts,
-  resultsType,
-  wip,
-  err,
-  items,
-  click,
-  t
-}) => {
+                                                          logo,
+                                                          link,
+                                                          title,
+                                                          description,
+                                                          parts,
+                                                          resultsType,
+                                                          wip,
+                                                          err,
+                                                          items,
+                                                          click,
+                                                          t
+                                                        }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const wipError           = WipErr({ wip: wip || items.some(item => !item), err, t });
   return (
     <List.Item className="media_item">
       <List.Content>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <Container className={clsx('padded', { 'padding_r_l_0': !isMobileDevice })}>
           <Header as="h2">
             <Image size="small" verticalAlign="bottom">{logo}</Image>
             &nbsp;
             <span>{description}</span>
-            &nbsp;
-            <Link to={link} onClick={() => click(link)}>{title}</Link>
           </Header>
-          <div textAlign={isMobileDevice ? 'left' : 'right'} className="no-padding no-border">
-            <Icon name="tasks" size="small" style={{ display: 'inline' }} />
-            <Link to={link} onClick={() => click(link)}><span>{`${t('search.showAll')} ${parts} ${t(`search.${resultsType}`)}`}</span></Link>
-          </div>
-        </div>
+        </Container>
         {wipError}
-        {!wipError && (<Grid columns="equal">
-          <Grid.Row>
-            {items.map(item => <Grid.Column>{item}</Grid.Column>)}
-          </Grid.Row>
-        </Grid>)}
+        {
+          !wipError && (<Grid columns="equal" stackable={true}>
+            <Grid.Row>
+              {items.map(item => <Grid.Column>{item}</Grid.Column>)}
+            </Grid.Row>
+          </Grid>)
+        }
+        <Container textAlign={'right'} className="no-border padded" fluid>
+          <Icon name="tasks" size="small" style={{ display: 'inline' }} />
+          <Link to={link} onClick={() => click(link)}><span>{`${t('search.showAll')} ${parts} ${t(`search.${resultsType}`)}`}</span></Link>
+        </Container>
       </List.Content>
     </List.Item>
   );
@@ -473,9 +472,9 @@ const getLowestLevelSeries = (series, rootId) => {
 const renderSerie = (s, click, link, t) =>
   (
     <Button basic size="tiny" className="link_to_cu" key={s.id}
-      as={Link} to={link}
-      onClick={() => click(link)}
-      style={{ minWidth: '290px', marginBottom: '0.5em', display: 'flex', justifyContent: 'space-between' }}>
+            as={Link} to={link}
+            onClick={() => click(link)}
+            style={{ minWidth: '290px', marginBottom: '0.5em', display: 'flex', justifyContent: 'space-between' }}>
       {s.name}
       &nbsp;
       <Link key={s.id} to={link} onClick={() => click(link)}>
@@ -520,7 +519,7 @@ export const SearchResultSeries = withTranslation()(({ id, type, mdbUid, clickDa
     <List.Item className="media_item">
       <List.Content>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Header as="h2">
+          <Header as="div">
             <Image size="small" verticalAlign="bottom">{logo}</Image>
             &nbsp;
             <span>{t(`constants.content-types.${CT_LESSONS_SERIES}`)}</span>
@@ -581,7 +580,7 @@ export const SearchResultTweets = withTranslation()(({ source, t }) => {
   const onScrollRight = () => onScrollChange(pageNo + 1);
   const onScrollLeft  = () => onScrollChange(pageNo - 1);
 
-  const isRTL = isLanguageRtl(language);
+  const isRTL                  = isLanguageRtl(language);
   const swipeHandlers          = useSwipeable({
     onSwipedLeft: isRTL ? onScrollRight : onScrollLeft,
     onSwipedRight: isRTL ? onScrollLeft : onScrollRight

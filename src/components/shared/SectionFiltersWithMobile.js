@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { Button, Container, Divider, Grid, Modal } from 'semantic-ui-react';
+import { Button, Container, Grid, Modal } from 'semantic-ui-react';
 
 import { DeviceInfoContext } from '../../helpers/app-contexts';
 import { getLanguageDirection } from '../../helpers/i18n-utils';
@@ -36,11 +36,16 @@ const SectionFiltersWithMobile = ({ filters, children, namespace }) => {
     <Container fluid>
       {/*additional hydrate for mobile cause of modal */}
       <FiltersHydrator namespace={namespace} />
-      <Button basic icon="filter" floated={'right'} onClick={toggleFilters} />
-      <Divider className="clear" />
-
+      <Container className="padded" fluid>
+        <Button
+          basic
+          icon="filter"
+          color="blue"
+          onClick={toggleFilters}
+          content={t('filters.aside-filter.filters-title')}
+        />
+      </Container>
       {children}
-
       <Modal
         closeIcon
         open={openFilters}
