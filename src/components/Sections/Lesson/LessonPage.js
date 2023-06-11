@@ -55,6 +55,7 @@ const LessonPage = ({ t }) => {
     <PageHeader collection={collection} namespace={namespace} title="lessons-collection" />
 
     <SectionFiltersWithMobile
+      namespace={namespace}
       filters={
         <Filters
           namespace={namespace}

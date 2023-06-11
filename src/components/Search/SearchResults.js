@@ -94,17 +94,17 @@ const cMapFromState = (state, results) => (
 );
 
 const SearchResults = ({ t }) => {
-  const queryResult = useSelector(state => selectors.getQueryResult(state.search));
+  const queryResult   = useSelector(state => selectors.getQueryResult(state.search));
   const searchResults = queryResult.search_result;
 
-  const cMap = useSelector(state => cMapFromState(state, searchResults));
-  const cuMap = useSelector(state => cuMapFromState(state, searchResults));
+  const cMap    = useSelector(state => cMapFromState(state, searchResults));
+  const cuMap   = useSelector(state => cuMapFromState(state, searchResults));
   const postMap = useSelector(state => postMapFromState(state, searchResults));
 
   const wip = useSelector(state => selectors.getWip(state.search));
   const err = useSelector(state => selectors.getError(state.search));
 
-  const pageNo = useSelector(state => selectors.getPageNo(state.search));
+  const pageNo   = useSelector(state => selectors.getPageNo(state.search));
   const pageSize = useSelector(state => settings.getPageSize(state.settings));
   const language = useSelector(state => settings.getLanguage(state.settings));
 
@@ -114,9 +114,9 @@ const SearchResults = ({ t }) => {
   /* Requested by Mizrahi
     const [showNote, setShowNote] = useState(true);
    */
-  const filters            = useSelector(state => filterSelectors.getFilters(state.filters, 'search'));
-  const areSourcesLoaded   = useSelector(state => sourcesSelectors.areSourcesLoaded(state.sources));
-  const areTagsLoaded      = useSelector(state => tagsSelectors.areTagsLoaded(state.tags));
+  const filters          = useSelector(state => filterSelectors.getFilters(state.filters, 'search'));
+  const areSourcesLoaded = useSelector(state => sourcesSelectors.areSourcesLoaded(state.sources));
+  const areTagsLoaded    = useSelector(state => tagsSelectors.areTagsLoaded(state.tags));
 
   const handlePageChange = page => {
     dispatch(actions.setPage(page));
@@ -126,28 +126,30 @@ const SearchResults = ({ t }) => {
 
   const renderHit = (hit, rank, searchId, searchLanguage, deb) => {
     const {
-      _source: { mdb_uid: mdbUid, result_type: resultType },
-      _type: type,
-      _index: index,
-      _explanation: explanation,
-      _score: score,
-    } = hit;
-    searchLanguage = searchLanguageByIndex(index, searchLanguage);
+            _source: { mdb_uid: mdbUid, result_type: resultType },
+            _type: type,
+            _index: index,
+            _explanation: explanation,
+            _score: score,
+          }         = hit;
+    searchLanguage  = searchLanguageByIndex(index, searchLanguage);
     const clickData = { mdbUid, index, type: resultType, rank, searchId, search_language: searchLanguage, deb };
 
     let result = null;
     if (SEARCH_GRAMMAR_HIT_TYPES.includes(type)) {
-      result = <SearchResultLandingPage landingPage={hit._source.landing_page} filterValues={hit._source.filter_values} clickData={clickData} />;
+      result =
+        <SearchResultLandingPage landingPage={hit._source.landing_page} filterValues={hit._source.filter_values} clickData={clickData} />;
     } else if (SEARCH_INTENT_HIT_TYPES.includes(type)) {
-      result = <SearchResultIntent id={hit._source.mdb_uid} name={hit._source.name} type={hit._type} index={index} highlight={hit.highlight} clickData={clickData} />;
+      result =
+        <SearchResultIntent id={hit._source.mdb_uid} name={hit._source.name} type={hit._type} index={index} highlight={hit.highlight} clickData={clickData} />;
     } else if (type === 'tweets_many') {
       result = <SearchResultTweets source={hit._source} clickData={clickData} />;
     } else if (type === SEARCH_INTENT_HIT_TYPE_SERIES_BY_TAG || type === SEARCH_INTENT_HIT_TYPE_SERIES_BY_SOURCE) {
       result = <SearchResultSeries id={hit._uid} type={type} mdbUid={hit._source.mdb_uid} clickData={clickData} />;
     } else {
-      const cu   = cuMap[mdbUid];
-      const c    = cMap[mdbUid];
-      const p    = postMap[mdbUid];
+      const cu = cuMap[mdbUid];
+      const c  = cMap[mdbUid];
+      const p  = postMap[mdbUid];
       if (cu) {
         result = <SearchResultCU cu={cu} highlight={hit.highlight} clickData={clickData} />;
       } else if (c) {
@@ -155,7 +157,8 @@ const SearchResults = ({ t }) => {
       } else if (p) {
         result = <SearchResultPost id={hit._source.mdb_uid} post={p} highlight={hit.highlight} clickData={clickData} />;
       } else if (resultType === 'sources') {
-        result = <SearchResultSource id={hit._source.mdb_uid} title={hit._source.title} highlight={hit.highlight} clickData={clickData} />;
+        result =
+          <SearchResultSource id={hit._source.mdb_uid} title={hit._source.title} highlight={hit.highlight} clickData={clickData} />;
       } else {
         console.error('Unexpected result type!');
       }
@@ -170,7 +173,7 @@ const SearchResults = ({ t }) => {
         <ScoreDebug score={score} explanation={explanation} />
         {result}
       </>
-    )
+    );
   };
 
   /* Requested by Mizrahi
@@ -209,7 +212,7 @@ const SearchResults = ({ t }) => {
 
   // Query from URL (not changed until pressed Enter)
   const query = getQuery(location).q;
-  const deb = isDebMode(location);
+  const deb   = isDebMode(location);
 
   if (query === '' && !Object.values(filtersTransformer.toApiParams(filters)).length) {
     return <div>{t('search.results.empty-query')}</div>;
@@ -223,14 +226,17 @@ const SearchResults = ({ t }) => {
 
   const { searchId, hits: { total, hits } } = results;
   // Elastic too slow and might fails on more than 1k results.
-  const totalForPagination = Math.min(1000, total);
+  const totalForPagination                  = Math.min(1000, total);
 
   //const wipErr = WipErr({ wip, err: null, t });
 
   return (
     <>
       <SectionHeader section="search" />
-      <SectionFiltersWithMobile filters={<Filters namespace={'search'} />}>
+      <SectionFiltersWithMobile
+        namespace={'search'}
+        filters={<Filters namespace={'search'} />}
+      >
         {typo_suggest && <DidYouMean typo_suggest={typo_suggest} />}
         {total === 0 && <Trans i18nKey="search.results.no-results">
           Your search for

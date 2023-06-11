@@ -74,6 +74,7 @@ const MainPage = ({ t }) => {
   return (<>
     <SectionHeader section="sketches" />
     <SectionFiltersWithMobile
+      namespace={PAGE_NS_SKETCHES}
       filters={
         <Filters
           namespace={PAGE_NS_SKETCHES}

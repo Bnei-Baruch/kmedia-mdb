@@ -48,6 +48,7 @@ const MainPage = ({ t }) => {
   return (<>
     <SectionHeader section="likutim" />
     <SectionFiltersWithMobile
+      namespace={PAGE_NS_LIKUTIM}
       filters={
         <Filters
           namespace={PAGE_NS_LIKUTIM}

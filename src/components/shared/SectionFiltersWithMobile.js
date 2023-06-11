@@ -1,14 +1,16 @@
 import React, { useContext, useState } from 'react';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Button, Container, Divider, Grid, Modal } from 'semantic-ui-react';
 
 import { DeviceInfoContext } from '../../helpers/app-contexts';
 import { getLanguageDirection } from '../../helpers/i18n-utils';
 import { selectors as settings } from '../../redux/modules/settings';
+import FiltersHydrator from '../Filters/FiltersHydrator';
 
-const SectionFiltersWithMobile = ({ filters, children, t }) => {
+const SectionFiltersWithMobile = ({ filters, children, namespace }) => {
   const [openFilters, setOpenFilters] = useState(false);
+  const { t }                         = useTranslation();
 
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
@@ -32,6 +34,8 @@ const SectionFiltersWithMobile = ({ filters, children, t }) => {
 
   const renderMobile = () => (
     <Container fluid>
+      {/*additional hydrate for mobile cause of modal */}
+      <FiltersHydrator namespace={namespace} />
       <Button basic icon="filter" floated={'right'} onClick={toggleFilters} />
       <Divider className="clear" />
 
@@ -57,4 +61,4 @@ const SectionFiltersWithMobile = ({ filters, children, t }) => {
   return isMobileDevice ? renderMobile() : render();
 };
 
-export default withTranslation()(SectionFiltersWithMobile);
+export default SectionFiltersWithMobile;
