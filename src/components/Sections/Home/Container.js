@@ -62,7 +62,6 @@ const latestUnitIDsFn   = state => selectors.getLatestUnits(state.home);
 const latestUnitsFn     = latestUnitIDs => state => Array.isArray(latestUnitIDs) ? latestUnitIDs.map(x => mdb.getDenormContentUnit(state.mdb, x)) : [];
 const latestBlogPostsFn = state => publications.getBlogPosts(state.publications);
 const latestTweetsFn    = state => publications.getTweets(state.publications);
-const bannerFn          = state => selectors.getBanner(state.home);
 const languageFn        = state => settings.getLanguage(state.settings);
 const wipFn             = state => selectors.getWip(state.home);
 const errFn             = state => selectors.getError(state.home);
@@ -85,7 +84,6 @@ const HomePageContainer = ({ t }) => {
   const fetchTweetsList = useCallback((type, id, options) => dispatch(publicationsActions.fetchTweets(type, id, options)), [dispatch]);
   const latestTweets    = useSelector(latestTweetsFn);
 
-  const banners      = useSelector(bannerFn);
   const fetchBanners = useCallback(language => dispatch(actions.fetchBanners(language)), [dispatch]);
   const language     = useSelector(languageFn);
   const wip          = useSelector(wipFn);
@@ -111,7 +109,6 @@ const HomePageContainer = ({ t }) => {
       latestItems={[...latestUnits, ...latestCos]}
       latestBlogPosts={latestBlogPosts}
       latestTweets={latestTweets}
-      banners={banners}
     />
   );
 };
