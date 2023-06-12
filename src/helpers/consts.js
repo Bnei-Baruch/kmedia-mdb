@@ -214,7 +214,7 @@ export const LANGUAGES = {
   [LANG_UKRAINIAN]: { value: LANG_UKRAINIAN, locale: 'uk_UA', lang3: 'UKR', name: 'Українська', hls: 'uk' },
   [LANG_MACEDONIAN]: { value: LANG_MACEDONIAN, locale: 'mk_MK', lang3: 'MKD', name: 'Македонски' },
   [LANG_LATVIAN]: { value: LANG_LATVIAN, locale: 'lv_LV', lang3: 'LAV', name: 'Latviešu' },
-  [LANG_CZECH]: { value: LANG_CZECH, locale: 'cs_CZ', lang3: 'SLV', name: 'CzechoSlovak' },
+  [LANG_CZECH]: { value: LANG_CZECH, locale: 'cs_CZ', lang3: 'SLV', name: 'CzechoSlovak', hls: LANG_SLOVENIAN },
   [LANG_AMHARIC]: { value: LANG_AMHARIC, locale: 'am_ET', lang3: 'AMH', name: 'ኣማርኛ' },
   [LANG_INDONESIAN]: { value: LANG_INDONESIAN, locale: 'in_ID', lang3: 'IND', name: 'Bahasa Indonesia' },
   [LANG_ARMENIAN]: { value: LANG_ARMENIAN, locale: 'hy_AM', lang3: 'ARM', name: 'Հայերէն' },
