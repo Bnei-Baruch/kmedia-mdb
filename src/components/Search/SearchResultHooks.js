@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
 import { Button, Card, Container, Feed, Grid, Header, Icon, Image, List, Segment, } from 'semantic-ui-react';
 import { useSwipeable } from 'react-swipeable';
-import TwitterFeed from '../Sections/Publications/tabs/Twitter/Feed';
 
+import TwitterFeed from '../Sections/Publications/tabs/Twitter/Feed';
 import { ClientChroniclesContext, DeviceInfoContext } from '../../helpers/app-contexts';
 import { canonicalCollection, tracePath } from '../../helpers/utils';
 import { selectors as mdb } from '../../redux/modules/mdb';
@@ -160,14 +160,8 @@ const searchResultClick = (chronicles, dispatch, clickData) => link => {
   chronicles.searchSelected({ ...clickData, link });
 };
 
-export const SearchResultCU = withTranslation()(({
-                                                   cu,
-                                                   highlight = {},
-                                                   clickData,
-                                                   hideContent = false,
-                                                   onlyViewsAndDate = false,
-                                                   t
-                                                 }) => {
+export const SearchResultCU = ({ cu, highlight = {}, clickData, hideContent = false, onlyViewsAndDate = false }) => {
+  const { t }      = useTranslation();
   const views      = useSelector(state => recommended.getViews(cu.id, state.recommended));
   const chronicles = useContext(ClientChroniclesContext);
   const dispatch   = useDispatch();
@@ -201,9 +195,10 @@ export const SearchResultCU = withTranslation()(({
   };
 
   return <SearchResultOneItem {...props} />;
-});
+};
 
-export const SearchResultPost = withTranslation()(({ id, post, highlight, clickData, t }) => {
+export const SearchResultPost = ({ id, post, highlight, clickData }) => {
+  const { t }      = useTranslation();
   const views      = useSelector(state => recommended.getViews(id, state.recommended));
   const chronicles = useContext(ClientChroniclesContext);
   const dispatch   = useDispatch();
@@ -227,9 +222,10 @@ export const SearchResultPost = withTranslation()(({ id, post, highlight, clickD
   };
 
   return <SearchResultOneItem {...props} />;
-});
+};
 
-export const SearchResultCollection = withTranslation()(({ c, highlight, clickData, t }) => {
+export const SearchResultCollection = ({ c, highlight, clickData }) => {
+  const { t }      = useTranslation();
   const views      = useSelector(state => recommended.getViews(c.id, state.recommended));
   const chronicles = useContext(ClientChroniclesContext);
   const dispatch   = useDispatch();
@@ -255,9 +251,10 @@ export const SearchResultCollection = withTranslation()(({ c, highlight, clickDa
   };
 
   return <SearchResultOneItem {...props} />;
-});
+};
 
-export const SearchResultSource = withTranslation()(({ id, title, highlight, clickData, t }) => {
+export const SearchResultSource = ({ id, title, highlight, clickData }) => {
+  const { t }      = useTranslation();
   const views      = useSelector(state => recommended.getViews(id, state.recommended));
   const chronicles = useContext(ClientChroniclesContext);
   const dispatch   = useDispatch();
@@ -279,9 +276,11 @@ export const SearchResultSource = withTranslation()(({ id, title, highlight, cli
   };
 
   return <SearchResultOneItem {...props} />;
-});
+};
 
-export const SearchResultLandingPage = withTranslation()(({ landingPage, filterValues, clickData, t }) => {
+export const SearchResultLandingPage = ({ landingPage, filterValues, clickData }) => {
+  const { t } = useTranslation();
+
   const link       = landingPageSectionLink(landingPage, filterValues);
   const chronicles = useContext(ClientChroniclesContext);
   const dispatch   = useDispatch();
@@ -296,28 +295,30 @@ export const SearchResultLandingPage = withTranslation()(({ landingPage, filterV
     link,
     logo: iconByContentType(SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_CONTENT_TYPE[landingPage], t, link),
     content: renderSnippet(link, null /* No highlights for landing pages. */, subText, t),
-    t,
     click: searchResultClick(chronicles, dispatch, clickData),
   };
 
   return <SearchResultOneItem {...props} />;
-});
+};
 
-export const SearchResultOneItem = withTranslation()(({
-                                                        key,
-                                                        title,
-                                                        link,
-                                                        logo,
-                                                        content,
-                                                        part,
-                                                        parts,
-                                                        date,
-                                                        views,
-                                                        collectionTitle,
-                                                        collectionLink,
-                                                        t,
-                                                        click,
-                                                      }) => {
+export const SearchResultOneItem = (
+  {
+    key,
+    title,
+    link,
+    logo,
+    content,
+    part,
+    parts,
+    date,
+    views,
+    collectionTitle,
+    collectionLink,
+    click,
+  }
+) => {
+  const { t } = useTranslation();
+
   const description = [];
   collectionTitle && description.push(collectionTitle);
   part && description.push(t('pages.unit.info.episode', { name: part }));
@@ -343,7 +344,7 @@ export const SearchResultOneItem = withTranslation()(({
       </div>
     </List.Item>
   );
-});
+};
 
 const getFilterById = (getTagById, getSourceById, index) => {
   switch (index) {
@@ -356,7 +357,8 @@ const getFilterById = (getTagById, getSourceById, index) => {
   }
 };
 
-export const SearchResultIntent = withTranslation()(({ id, name, type, index, highlight, clickData, t }) => {
+export const SearchResultIntent = ({ id, name, type, index, clickData }) => {
+  const { t }      = useTranslation();
   const chronicles = useContext(ClientChroniclesContext);
   const namespace  = `intents_${id}_${type}`;
   const dispatch   = useDispatch();
@@ -402,7 +404,6 @@ export const SearchResultIntent = withTranslation()(({ id, name, type, index, hi
 
   const props = {
     logo,
-    title: titleFromHighlight(highlight, display),
     link,
     resultsType,
     description,
@@ -412,24 +413,28 @@ export const SearchResultIntent = withTranslation()(({ id, name, type, index, hi
     parts: total,
     click: searchResultClick(chronicles, dispatch, clickData),
   };
-  return <SearchResultManyItems {...props} />;
-});
 
-export const SearchResultManyItems = withTranslation()(({
-                                                          logo,
-                                                          link,
-                                                          title,
-                                                          description,
-                                                          parts,
-                                                          resultsType,
-                                                          wip,
-                                                          err,
-                                                          items,
-                                                          click,
-                                                          t
-                                                        }) => {
+  return <SearchResultManyItems {...props} />;
+};
+
+export const SearchResultManyItems = (
+  {
+    logo,
+    link,
+    description,
+    parts,
+    resultsType,
+    wip,
+    err,
+    items,
+    click
+  }
+) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
-  const wipError           = WipErr({ wip: wip || items.some(item => !item), err, t });
+  const { t }              = useTranslation();
+
+  const wipError = WipErr({ wip: wip || items.some(item => !item), err, t });
+
   return (
     <List.Item className="media_item">
       <List.Content>
@@ -455,7 +460,7 @@ export const SearchResultManyItems = withTranslation()(({
       </List.Content>
     </List.Item>
   );
-});
+};
 
 // Reduce series from all leaf tags/sources.
 const getLowestLevelSeries = (series, rootId) => {
@@ -486,21 +491,25 @@ const renderSerie = (s, click, link, t) =>
     </Button>
   );
 
-export const SearchResultSeries = withTranslation()(({ id, type, mdbUid, clickData, t }) => {
-  const chronicles                       = useContext(ClientChroniclesContext);
-  const dispatch                         = useDispatch();
+export const SearchResultSeries = ({ id, type, mdbUid, clickData }) => {
+  const { t }                        = useTranslation();
+  const chronicles                   = useContext(ClientChroniclesContext);
+  const dispatch                     = useDispatch();
+  const nestedDenormCollectionWUnits = useSelector(state => mdb.nestedDenormCollectionWUnits(state.mdb));
+  const getSerieBySource             = useSelector(state => lessonsSelectors.getSerieBySourceId(state.lessons, state.mdb, state.sources));
+  const getSerieByTag                = useSelector(state => lessonsSelectors.getSerieByTagId(state.lessons, state.mdb, state.tags));
+  const filters                      = useSelector(state => filterSelectors.getFilters(state.filters, 'search'));
+
   const click                            = searchResultClick(chronicles, dispatch, clickData);
   const logo                             = <SectionLogo name={'lessons'} height="50" width="50" />;
   const { lectures: wipL, series: wipS } = useSelector(state => lessonsSelectors.getWip(state.lessons));
   const isByTag                          = type === SEARCH_INTENT_HIT_TYPE_SERIES_BY_TAG;
-  const getSerieBySource                 = useSelector(state => lessonsSelectors.getSerieBySourceId(state.lessons, state.mdb, state.sources));
-  const getSerieByTag                    = useSelector(state => lessonsSelectors.getSerieByTagId(state.lessons, state.mdb, state.tags));
   const getSerie                         = isByTag ? getSerieByTag : getSerieBySource;
   const series                           = id.split('_').map(getSerie);
   const s                                = getLowestLevelSeries(series);
+
   if (s.collections.length === 1) {
-    const nestedDenormCollectionWUnits = useSelector(state => mdb.nestedDenormCollectionWUnits(state.mdb));
-    const c                            = nestedDenormCollectionWUnits(s.collections[0].id);
+    const c = nestedDenormCollectionWUnits(s.collections[0].id);
     return (
       <SearchResultCollection c={c} clickData={clickData} />
     );
@@ -509,10 +518,8 @@ export const SearchResultSeries = withTranslation()(({ id, type, mdbUid, clickDa
   const collections = s.collections.filter(c => c.id !== mdbUid);
   collections.unshift(s.collections.find(c => c.id === mdbUid));
 
-  const wipError = WipErr({ wip: wipL || wipS || collections.some(c => !c), err: null, t });
-
-  // If filter used for specific language, make sure the link will redirect to that language.
-  const filters       = useSelector(state => filterSelectors.getFilters(state.filters, 'search'));
+  const wipError      = WipErr({ wip: wipL || wipS || collections.some(c => !c), err: null, t });
+// If filter used for specific language, make sure the link will redirect to that language.
   const mediaLanguage = getMediaLanguage(filters);
 
   return (
@@ -536,8 +543,7 @@ export const SearchResultSeries = withTranslation()(({ id, type, mdbUid, clickDa
       </List.Content>
     </List.Item>
   );
-
-});
+};
 
 const twitterMapFromState = (state, tweets) => tweets.map(tweet => {
   const content = tweet && tweet.highlight && tweet.highlight.content;
@@ -546,7 +552,8 @@ const twitterMapFromState = (state, tweets) => tweets.map(tweet => {
   return { twitter, highlight: content };
 });
 
-export const SearchResultTweets = withTranslation()(({ source, t }) => {
+export const SearchResultTweets = ({ source }) => {
+  const { t }              = useTranslation();
   const ids                = source.map(x => x._source.mdb_uid) || [];
   const wip                = useSelector(state => publicationSelectors.getTweetsWip(state.publications));
   const err                = useSelector(state => publicationSelectors.getTweetsError(state.publications));
@@ -661,5 +668,5 @@ export const SearchResultTweets = withTranslation()(({ source, t }) => {
       </List.Content>
     </List.Item>
   );
-});
+};
 

@@ -141,7 +141,7 @@ const SearchResults = ({ t }) => {
         <SearchResultLandingPage landingPage={hit._source.landing_page} filterValues={hit._source.filter_values} clickData={clickData} />;
     } else if (SEARCH_INTENT_HIT_TYPES.includes(type)) {
       result =
-        <SearchResultIntent id={hit._source.mdb_uid} name={hit._source.name} type={hit._type} index={index} highlight={hit.highlight} clickData={clickData} />;
+        <SearchResultIntent id={hit._source.mdb_uid} name={hit._source.name} type={hit._type} index={index} clickData={clickData} />;
     } else if (type === 'tweets_many') {
       result = <SearchResultTweets source={hit._source} clickData={clickData} />;
     } else if (type === SEARCH_INTENT_HIT_TYPE_SERIES_BY_TAG || type === SEARCH_INTENT_HIT_TYPE_SERIES_BY_SOURCE) {
