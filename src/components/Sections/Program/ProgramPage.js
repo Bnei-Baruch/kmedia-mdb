@@ -53,6 +53,7 @@ const ProgramPage = ({ t }) => {
   return (<>
     <PageHeader collection={collection} namespace={namespace} title="programs-collection" />
     <SectionFiltersWithMobile
+      namespace={namespace}
       filters={
         <Filters
           namespace={namespace}

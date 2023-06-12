@@ -20,7 +20,7 @@ const ResultsPageHeader = ({ pageNo, pageSize, total, t }) => {
     );
   }
 
-  return <Container content={content} />;
+  return <Container className="padded" content={content} />;
 };
 
 ResultsPageHeader.propTypes = {

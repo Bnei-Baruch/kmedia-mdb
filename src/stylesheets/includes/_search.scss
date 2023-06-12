@@ -19,7 +19,7 @@
   margin-bottom: -6px;
 
   span {
-    white-space: nowrap;
+    text-align: center;
     font-weight: bold;
     font-size: 1.3em;
   }
@@ -37,13 +37,13 @@
 }
 
 .search {
-  &__results.ui.divided.list>.item:first-child {
-    border-top: 1px solid rgba(34,36,38,.15);
+  &__results.ui.divided.list > .item:first-child {
+    border-top: 1px solid rgba(34, 36, 38, .15);
   }
 
-  &__results.ui.divided.list>.item {
-    border-right: 1px solid rgba(34,36,38,.15);
-    border-left: 1px solid rgba(34,36,38,.15);
+  &__results.ui.divided.list > .item {
+    border-right: 1px solid rgba(34, 36, 38, .15);
+    border-left: 1px solid rgba(34, 36, 38, .15);
 
     padding: 1em;
   }
@@ -53,8 +53,9 @@
   .bg_transparent {
     background: transparent;
   }
+
   .no-padding {
-    padding: 0!important;
+    padding: 0 !important;
   }
 }
 

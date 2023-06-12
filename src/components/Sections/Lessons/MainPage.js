@@ -75,7 +75,7 @@ const MainPage = ({ t }) => {
   return (
     <>
       <SectionHeader section="lessons" />
-      <SectionFiltersWithMobile filters={filterComponent}>
+      <SectionFiltersWithMobile filters={filterComponent} namespace={PAGE_NS_LESSONS}>
         <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} />
         <FilterLabels namespace={PAGE_NS_LESSONS} />
         {

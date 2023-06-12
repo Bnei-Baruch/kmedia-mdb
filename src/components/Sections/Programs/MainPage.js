@@ -60,7 +60,7 @@ const MainPage = () => {
   return (
     <>
       <SectionHeader section="programs" />
-      <SectionFiltersWithMobile filters={filterComponent}>
+      <SectionFiltersWithMobile  namespace={PAGE_NS_PROGRAMS} filters={filterComponent}>
         <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} />
         <FilterLabels namespace={PAGE_NS_PROGRAMS} />
         {
