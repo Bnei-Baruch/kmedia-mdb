@@ -5,19 +5,18 @@ import { useSelector } from 'react-redux';
 import { toHumanReadableTime } from '../../../helpers/time';
 import { selectors as player } from '../../../redux/modules/player';
 import { selectors as playlist } from '../../../redux/modules/playlist';
-import { selectors as settings } from '../../../redux/modules/settings';
-import { splitPathByLanguage } from '../../../helpers/url';
+import { splitPathByLanguage, getQuery } from '../../../helpers/url';
 
 const useShareUrl = () => {
   const [shareUrl, setShareUrl] = useState('');
 
   const location = useLocation();
 
-  const { start, end } = useSelector(state => player.getShareStartEnd(state.player));
-  const { mediaType, language }  = useSelector(state => playlist.getInfo(state.playlist));
+  const { start, end }          = useSelector(state => player.getShareStartEnd(state.player));
+  const { mediaType, language } = useSelector(state => playlist.getInfo(state.playlist));
 
   useEffect(() => {
-    const { protocol, hostname, port, pathname } = window.location;
+    const { protocol, hostname, port, pathname, search } = window.location;
 
     const { path } = splitPathByLanguage(pathname);
 
@@ -26,6 +25,8 @@ const useShareUrl = () => {
     (!!end && end !== Infinity) && url.searchParams.set('send', toHumanReadableTime(end));
     url.searchParams.set('mediaType', mediaType);
     url.searchParams.set('shareLang', language);
+    const { c } = getQuery(location);
+    if (c) url.searchParams.set('c', c);
     setShareUrl(url.toString());
   }, [start, end, mediaType, language, location]);
 

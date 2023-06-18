@@ -50,7 +50,11 @@ const ListTemplate = (
   }, [cuInfoRef]);
 
   useEffect(() => {
-    selected && itemRef.current.scrollIntoView({block: "start", inline: "nearest"});
+    if (selected && itemRef.current) {
+      const { scrollX, scrollY } = window;
+      itemRef.current.scrollIntoView(true);
+      window.scrollTo(scrollX, scrollY);
+    }
   }, [selected]);
 
   const info = ((ccu || source || tag) && withCCUInfo)

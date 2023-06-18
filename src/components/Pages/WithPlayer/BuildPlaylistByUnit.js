@@ -1,13 +1,14 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 
 import { actions, selectors } from '../../../redux/modules/playlist';
 import { selectors as mdb, actions as mdbActions } from '../../../redux/modules/mdb';
 import Helmets from '../../shared/Helmets';
 
 const BuildPlaylistByUnit = ({ cts }) => {
-  const { id } = useParams();
+  const { id }         = useParams();
+  const [searchParams] = useSearchParams();
 
   const { id: prevCuId, cId: prevCId, wip } = useSelector(state => selectors.getInfo(state.playlist));
 
@@ -17,7 +18,7 @@ const BuildPlaylistByUnit = ({ cts }) => {
   const errCU   = useSelector(state => mdb.getErrors(state.mdb).units)[id];
 
   const cs          = unit && Object.values(unit.collections) || [];
-  const { id: cId } = cs.find(c => c.id === prevCId) || cs.find(c => cts.includes(c.content_type));
+  const { id: cId } = cs.find(c => c.id === (searchParams.get('c') || prevCId)) || cs.find(c => cts.includes(c.content_type));
 
   const dispatch = useDispatch();
 
