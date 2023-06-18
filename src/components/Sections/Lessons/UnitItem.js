@@ -19,8 +19,8 @@ const UnitItem = ({ id, t }) => {
 
   if (!cu) return null;
 
-  const link         = canonicalLink(cu);
   const additionCCUs = Object.values(cu.collections).filter(c => !COLLECTION_DAILY_LESSONS.includes(c.content_type));
+  const link         = canonicalLink(cu, null, additionCCUs[0]);
 
   const description = [];
   description.push(t('values.date', { date: cu.film_date }));

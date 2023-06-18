@@ -33,6 +33,10 @@ const ListTemplate = (
   }
 ) => {
 
+  const itemRef = useRef(null);
+
+  const handleItemRef = r => itemRef.current = r;
+
   const dir                = getLanguageDirection(language);
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
@@ -44,6 +48,14 @@ const ListTemplate = (
       setIsNeedTooltip(true);
     }
   }, [cuInfoRef]);
+
+  useEffect(() => {
+    if (selected && itemRef.current) {
+      const { scrollX, scrollY } = window;
+      itemRef.current.scrollIntoView(true);
+      window.scrollTo(scrollX, scrollY);
+    }
+  }, [selected]);
 
   const info = ((ccu || source || tag) && withCCUInfo)
     ? (
@@ -79,36 +91,38 @@ const ListTemplate = (
   const width = isMobileDevice ? 165 : imageWidthBySize[size];
 
   return (
-    <Container
-      id={unit?.id}
-      as={Link}
-      to={link}
-      key={(unit && unit.id) || (source && source.id) || (tag && tag.id)}
-      className={clsx('cu_item cu_item_list no-thumbnail', { [size]: !!size, selected })}
-    >
-      <div>
-        {label ? <div className="cu_item_label">{label}</div> : null}
-        <UnitProgress unit={unit} playTime={playTime} />
-        <div className="cu_item_img" style={{ width }}>
-          {withCUInfo ? <UnitLogoWithDuration unit={unit} sourceId={source?.id} width={width} /> :
-            <UnitLogo unitId={unit?.id} sourceId={source?.id} width={width} />}
-        </div>
-      </div>
-      <div className={clsx('cu_item_info', { [dir]: true, 'with_actions': !!children })}>
-        {withCUInfo && renderCUInfo()}
-        {info}
-        <div className={`cu_info_description ${dir} text_ellipsis`}>
-          {description.map((d, i) => (<span key={i}>{d}</span>))}
-        </div>
-      </div>
-      {
-        children ? (
-          <div className="cu_item_actions">
-            {children}
+    <Ref innerRef={handleItemRef}>
+      <Container
+        id={unit?.id}
+        as={Link}
+        to={link}
+        key={(unit && unit.id) || (source && source.id) || (tag && tag.id)}
+        className={clsx('cu_item cu_item_list no-thumbnail', { [size]: !!size, selected })}
+      >
+        <div>
+          {label ? <div className="cu_item_label">{label}</div> : null}
+          <UnitProgress unit={unit} playTime={playTime} />
+          <div className="cu_item_img" style={{ width }}>
+            {withCUInfo ? <UnitLogoWithDuration unit={unit} sourceId={source?.id} width={width} /> :
+              <UnitLogo unitId={unit?.id} sourceId={source?.id} width={width} />}
           </div>
-        ) : null
-      }
-    </Container>
+        </div>
+        <div className={clsx('cu_item_info', { [dir]: true, 'with_actions': !!children })}>
+          {withCUInfo && renderCUInfo()}
+          {info}
+          <div className={`cu_info_description ${dir} text_ellipsis`}>
+            {description.map((d, i) => (<span key={i}>{d}</span>))}
+          </div>
+        </div>
+        {
+          children ? (
+            <div className="cu_item_actions">
+              {children}
+            </div>
+          ) : null
+        }
+      </Container>
+    </Ref>
   );
 };
 
