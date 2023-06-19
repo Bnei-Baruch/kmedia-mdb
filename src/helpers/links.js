@@ -178,11 +178,11 @@ export const canonicalLink = (entity, mediaLang, ccu) => {
     const { id, content_type } = collection;
 
     if (EVENT_TYPES.includes(content_type)) {
-      return `/events/cu/${entity.id}?c=${id}`;
+      return `/events/cu/${entity.id}`;
     }
 
     if (content_type === CT_LESSONS_SERIES) {
-      return `/lessons/series/cu/${entity.id}?c=${id}`;
+      return `/lessons/series/cu/${entity.id}` + ccu ? `?c=${id}` : '';
     }
 
     if (content_type === CT_SONGS) {
