@@ -18,7 +18,9 @@ const BuildPlaylistByUnit = ({ cts }) => {
   const errCU   = useSelector(state => mdb.getErrors(state.mdb).units)[id];
 
   const cs          = unit && Object.values(unit.collections) || [];
-  const { id: cId } = cs.find(c => c.id === (searchParams.get('c') || prevCId)) || cs.find(c => cts.includes(c.content_type));
+  const { id: cId } = cs.find(c => c.id === (searchParams.get('c') || prevCId))
+  || cs.find(c => cts.includes(c.content_type))
+  || false;
 
   const dispatch = useDispatch();
 
