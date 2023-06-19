@@ -1,6 +1,6 @@
 import { canonicalCollection, isEmpty } from './utils';
 import { filtersTransformer } from '../filters/index';
-import { stringify as urlSearchStringify } from './url';
+import { stringify as urlSearchStringify, stringify } from './url';
 
 import {
   BLOG_ID_LAITMAN_CO_IL,
@@ -178,11 +178,11 @@ export const canonicalLink = (entity, mediaLang, ccu) => {
     const { id, content_type } = collection;
 
     if (EVENT_TYPES.includes(content_type)) {
-      return `/events/cu/${entity.id}?c=${id}`;
+      return { pathname: `/events/cu/${entity.id}`, search: ccu ? stringify({ c: id }) : '' };
     }
 
     if (content_type === CT_LESSONS_SERIES) {
-      return `/lessons/series/cu/${entity.id}?c=${id}`;
+      return { pathname: `/lessons/series/cu/${entity.id}`, search: ccu ? stringify({ c: id }) : '' };
     }
 
     if (content_type === CT_SONGS) {
