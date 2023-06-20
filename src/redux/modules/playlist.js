@@ -1,6 +1,6 @@
 import { createAction } from 'redux-actions';
 import { handleActions, types as settings, types as settingsTypes } from './settings';
-import { DEFAULT_LANGUAGE, VS_DEFAULT } from '../../helpers/consts';
+import { DEFAULT_LANGUAGE, VS_DEFAULT, MT_VIDEO } from '../../helpers/consts';
 import { types as playerTypes } from './player';
 import { saveTimeOnLocalstorage } from '../../components/Player/Controls/helper';
 import { getQualitiesFromLS } from '../../pkg/jwpAdapter/adapter';
@@ -71,7 +71,7 @@ const onBuildSuccess = (draft, payload) => {
   //use curId - fix for my playlists
   draft.itemById = items.reduce((acc, x, ap) => ({ ...acc, [x.id]: x, ap }), {});
   const curItem  = draft.itemById?.[id];
-  if (curItem && !curItem.isHLS && !curItem.qualityByLang[language]) {
+  if (curItem && !curItem.isHLS && info.mediaType === MT_VIDEO && !curItem.qualityByLang[language]) {
     language = curItem.languages[0];
   }
 
