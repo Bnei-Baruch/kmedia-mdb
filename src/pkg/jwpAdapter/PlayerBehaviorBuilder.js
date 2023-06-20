@@ -10,7 +10,7 @@ import AutoStartNotAllowed from './AutoStartNotAllowed';
 import SwitchSubtitles from './SwitchSubtitles';
 
 const PlayerBehaviorBuilder = () => {
-  const isHLS = useSelector(state => playlist.getPlayed(state.playlist).isHLS);
+  const isHLS = useSelector(state => playlist.getPlayed(state.playlist)?.isHLS);
   const isMy  = useSelector(state => selectors.getInfo(state.playlist).isMy);
 
   return (
