@@ -17,7 +17,7 @@ const SubsControl = () => {
       <Header size="tiny">{t('player.settings.subtitles')}</Header>
       <Button.Group size="mini" inverted>
         {
-          ['off', ...subtitles.map(x => x.language)].map(l => {
+          subtitles && ['off', ...subtitles.map(x => x.language)].map(l => {
             return (
               <Button
                 inverted
