@@ -76,7 +76,7 @@ const onBuildSuccess = (draft, payload) => {
   }
 
   let quality     = draft.info.quality;
-  const qualities = curItem.isHLS ? curItem.qualities : curItem?.qualityByLang?.[language];
+  const qualities = curItem?.isHLS ? curItem.qualities : curItem?.qualityByLang?.[language] || [];
   if (!quality && qualities) {
     const idx = qualities.findIndex(x => {
       const y = getQualitiesFromLS();
