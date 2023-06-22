@@ -4,13 +4,16 @@ import { useSelector, useDispatch } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 
 import { selectors } from '../../../redux/modules/player';
-import { actions as playlistActions } from '../../../redux/modules/playlist';
+import { actions as playlistActions, selectors as playlist } from '../../../redux/modules/playlist';
 import { MT_VIDEO, MT_AUDIO } from '../../../helpers/consts';
 
 const MediaTypeControl = ({ t }) => {
-  const { type } = useSelector(state => selectors.getFile(state.player));
+  const { type, language }  = useSelector(state => selectors.getFile(state.player));
+  const { isHLS, mtByLang } = useSelector(state => playlist.getPlayed(state.playlist));
 
   const dispatch = useDispatch();
+
+  const hasVideo = isHLS || mtByLang[language]?.length > 1;
 
   const handleSetMediaType = (e, { name }) => dispatch(playlistActions.setMediaType(name));
 
@@ -21,12 +24,14 @@ const MediaTypeControl = ({ t }) => {
         {
           [MT_VIDEO, MT_AUDIO].map(mt => (
             <Button
+
               inverted
               onClick={handleSetMediaType}
               name={mt}
               key={mt}
               content={t(`player.settings.${mt}`)}
               active={type === mt}
+              disabled={mt === MT_VIDEO && !hasVideo}
             />
           ))
         }
