@@ -19,9 +19,9 @@ const QualityControl = ({ t }) => {
 
   if (type === MT_AUDIO) return null;
 
-  const qualities = !playedItem.isHLS ? playedItem.qualityByLang?.[language] : playedItem.qualities;
+  const qualities = !playedItem?.isHLS ? playedItem.qualityByLang?.[language] : playedItem.qualities;
 
-  if (!qualities || qualities.length < 2 || (playedItem.isHLS && deviceInfo.browser.name === 'Safari')) return null;
+  if (!qualities || qualities.length < 2 || (playedItem?.isHLS && deviceInfo.browser.name === 'Safari')) return null;
 
   const handleSetQuality = x => dispatch(playlistActions.setQuality(x));
   return (
