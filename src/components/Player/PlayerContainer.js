@@ -13,7 +13,7 @@ import { DeviceInfoContext } from '../../helpers/app-contexts';
 import UpdateLocation from './UpdateLocation';
 import { useKeyboardControl } from './hooks/useKeyboardControl';
 
-const HIDE_CONTROLS_TIMEOUT = 3000;
+const HIDE_CONTROLS_TIMEOUT = 4000;
 
 let timeout;
 const sleep = ms => new Promise(r => {
@@ -45,7 +45,8 @@ const PlayerContainer = () => {
   const isFullScreen  = useSelector(state => selectors.isFullScreen(state.player));
 
   const { isMobileDevice } = useContext(DeviceInfoContext);
-  const type               = useSelector(state => selectors.getFile(state.player)?.file) || false;
+  const { type }           = useSelector(state => selectors.getFile(state.player)) || false;
+  const isAudio            = type === MT_AUDIO;
 
   const dispatch = useDispatch();
   useKeyboardControl(runTimeout);
@@ -63,15 +64,15 @@ const PlayerContainer = () => {
   }, [fullscreenRef, dispatch]);
 
   useEffect(() => {
-    if (mode === PLAYER_OVER_MODES.active) {
+    if (mode === PLAYER_OVER_MODES.active && !isAudio) {
       runTimeout(dispatch);
     }
 
     return () => clearTimeout(timeout);
-  }, [mode]);
+  }, [mode, isAudio]);
 
   const handleClick = e => {
-    if (mode === PLAYER_OVER_MODES.active) {
+    if (mode === PLAYER_OVER_MODES.active && !isAudio) {
       if (e.target.className.indexOf('icon') !== -1 || e.target.tagName === 'LABEL') {
         runTimeout(dispatch);
         return;
@@ -94,11 +95,10 @@ const PlayerContainer = () => {
   };
 
   const playerComponent = <Player />;
-  const isVideo         = type !== MT_AUDIO;
   const classes         = [
-    mode === PLAYER_OVER_MODES.none && !isVideo ? CLASSES_BY_MODE[PLAYER_OVER_MODES.firstTime] : CLASSES_BY_MODE[mode],
+    mode === PLAYER_OVER_MODES.none && isAudio ? CLASSES_BY_MODE[PLAYER_OVER_MODES.firstTime] : CLASSES_BY_MODE[mode],
     isMobileDevice ? 'is-mobile' : 'is-web',
-    { 'is-fullscreen': isFullScreen, 'is-video': isVideo },
+    { 'is-fullscreen': isFullScreen, 'is-video': !isAudio },
 
   ];
 
