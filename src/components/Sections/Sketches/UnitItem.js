@@ -47,8 +47,10 @@ const UnitItem = ({ id, t }) => {
   if (isEmpty(uniq) && isEmpty(imgs)) return null;
 
   const { title, description } = buildTextItemInfo(cu, null, t, getPathByID, false);
-  const to                     = `${canonicalLink(cu)}?activeTab=sketches`;
+  const pathname               = canonicalLink(cu);
 
+  const to  = typeof pathname === 'string' ? { pathname: pathname } : pathname;
+  to.search = `${to.search?.length > 0 ? to.search + '&' : ''}activeTab=sketches`;
   return (
     <>
       {
