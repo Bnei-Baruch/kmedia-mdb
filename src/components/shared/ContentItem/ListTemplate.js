@@ -131,7 +131,7 @@ ListTemplate.propTypes = {
   source: shapes.Source,
   tag: shapes.Topic,
   language: PropTypes.string.isRequired,
-  link: PropTypes.string.isRequired,
+  link: PropTypes.any.isRequired,
   withCCUInfo: PropTypes.bool,
   ccu: shapes.Collection,
   description: PropTypes.array,
