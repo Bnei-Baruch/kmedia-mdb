@@ -8,22 +8,29 @@ import WebWrapTooltip from '../../shared/WebWrapTooltip';
 import { pause, play, getPosition } from '../../../pkg/jwpAdapter/adapter';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { PLAYER_OVER_MODES, MT_AUDIO } from '../../../helpers/consts';
+import { PlayerContext } from '../PlayerContainer';
 
 const PlayPauseBg = () => {
-  const { t }    = useTranslation();
+  const { t }                        = useTranslation();
+  const ctx                          = useContext(PlayerContext);
+  const { isIPhone, isMobileDevice } = useContext(DeviceInfoContext);
+
   const isPlay   = useSelector(state => selectors.isPlay(state.player));
   const mode     = useSelector(state => player.getOverMode(state.player));
   const { type } = useSelector(state => selectors.getFile(state.player)) || false;
 
-  const { isIPhone, isMobileDevice } = useContext(DeviceInfoContext);
-
-  const handleClick = e => {
+  const handleClick     = e => {
     const pos = getPosition();
     isPlay ? pause() : isIPhone ? play().seek(pos).play() : play()?.play();
   };
+  const handleMouseMove = () => ctx.showControls();
 
   return (
-    <div className="controls__pause_bg" onClick={handleClick}>
+    <div
+      className="controls__pause_bg"
+      onClick={handleClick}
+      onMouseMove={handleMouseMove}
+    >
       {
         (mode === PLAYER_OVER_MODES.firstTime || type === MT_AUDIO || isMobileDevice) && (
           <WebWrapTooltip
