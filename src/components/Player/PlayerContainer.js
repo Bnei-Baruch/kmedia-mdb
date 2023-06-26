@@ -86,6 +86,22 @@ const PlayerContainer      = () => {
     runTimeout(dispatch);
   };
 
+  const handleTouchEnd = e => {
+    clearTimeout(timeout);
+    console.log(e.target.className, mode);
+
+    if (mode === PLAYER_OVER_MODES.none) {
+      dispatch(actions.setOverMode(PLAYER_OVER_MODES.active));
+    }
+    if (mode !== PLAYER_OVER_MODES.active) return;
+
+    if (e.target.className.indexOf('icon') !== -1 || e.target.tagName === 'LABEL') {
+      runTimeout(dispatch);
+    } else {
+      dispatch(actions.setOverMode(PLAYER_OVER_MODES.none));
+    }
+  };
+
   const playerComponent = <Player />;
   const classes         = [
     mode === PLAYER_OVER_MODES.none && isAudio ? CLASSES_BY_MODE[PLAYER_OVER_MODES.firstTime] : CLASSES_BY_MODE[mode],
@@ -115,7 +131,7 @@ const PlayerContainer      = () => {
 
   return (
     <PlayerContext.Provider value={{ showControls, hideControls }}>
-      <div>
+      <div onTouchEnd={handleTouchEnd}>
         <Ref innerRef={fullscreenRef}>
           {content}
         </Ref>
