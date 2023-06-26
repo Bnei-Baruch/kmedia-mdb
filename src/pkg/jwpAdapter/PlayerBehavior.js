@@ -12,8 +12,8 @@ const PlayerBehavior = () => {
 
   const { deviceInfo } = useContext(DeviceInfoContext);
 
-  const item = useSelector(state => playlist.getPlayed(state.playlist), shallowEqual);
-  const info = useSelector(state => playlist.getInfo(state.playlist), shallowEqual);
+  const item = useSelector(state => playlist.getPlayed(state.playlist));
+  const info = useSelector(state => playlist.getInfo(state.playlist));
 
   const file = findPlayedFile(item, info);
 
