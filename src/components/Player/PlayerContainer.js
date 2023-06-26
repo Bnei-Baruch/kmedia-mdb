@@ -41,11 +41,11 @@ const CLASSES_BY_MODE = {
 
 export const PlayerContext = createContext(null);
 const PlayerContainer      = () => {
-  const fullscreenRef      = useRef();
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
-  const mode = useSelector(state => player.getOverMode(state.player));
+  const fullscreenRef = useRef();
 
+  const mode         = useSelector(state => player.getOverMode(state.player));
   const isFullScreen = useSelector(state => selectors.isFullScreen(state.player));
   const { type }     = useSelector(state => selectors.getFile(state.player)) || false;
   const isAudio      = type === MT_AUDIO;

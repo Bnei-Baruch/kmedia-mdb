@@ -30,9 +30,9 @@ export const textPartLink = (properties, cu) => {
   }
 
   if (urlParams) {
-    link = `${link}?${stringify(urlParams)}`;
+    link.search = stringify([...link.search, ...urlParams]);
     if (urlParams.activeTab)
-      link = `${link}&autoPlay=0`;
+      link.search = `${link.search}&autoPlay=0`;
   }
 
   return link;

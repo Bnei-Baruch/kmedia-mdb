@@ -50,16 +50,16 @@ const LessonDatePickerContainer = () => {
   const prevCollection = curIndex >= 0 && curIndex < cWindow.data.length - 1 ? denorm(cWindow.data[curIndex + 1]) : null;
   const nextCollection = curIndex > 0 ? denorm(cWindow.data[curIndex - 1]) : null;
 
-  const prevLink = prevCollection ? canonicalLink(prevCollection) : null;
-  const nextLink = nextCollection ? canonicalLink(nextCollection) : null;
+  const prevTo = prevCollection ? canonicalLink(prevCollection) : null;
+  const nextTo = nextCollection ? canonicalLink(nextCollection) : null;
   return (
     <Header.Subheader
       className={isMobileDevice ? '' : isLtr ? 'float-right' : 'float-left'}
     >
       {
-        !!prevLink && (
+        !!prevTo && (
           <Link
-            to={prevLink}
+            to={prevTo}
             className="avbox__playlist-prev-button"
             title={t('buttons.previous-lesson')}
           >
@@ -69,13 +69,13 @@ const LessonDatePickerContainer = () => {
       }
       <CollectionDatePicker />
       {
-        !nextLink ? (
+        !nextTo ? (
           <span className="avbox__playlist-next-button">
             <Icon disabled size="large" name={`triangle ${isLtr ? 'right' : 'left'}`} />
           </span>
         ) : (
           <Link
-            to={nextLink}
+            to={nextTo}
             className="avbox__playlist-next-button"
             title={t('buttons.next-lesson')}
           >

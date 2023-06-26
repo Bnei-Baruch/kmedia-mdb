@@ -20,7 +20,7 @@ const PlaylistItems = () => {
           const { name, cuId, properties, ap } = itemById(_id);
           if (!cuId) return null;
 
-          const params = stringify({ ...properties, ap });
+          const search = stringify({ ...properties, ap });
           return (
             <ContentItemContainer
               key={_id}
@@ -29,7 +29,7 @@ const PlaylistItems = () => {
               asList={true}
               selected={selected}
               name={name}
-              link={`/${language}/${MY_NAMESPACE_PLAYLISTS}/${pId}?${params}`}
+              link={{ pathname: `/${language}/${MY_NAMESPACE_PLAYLISTS}/${pId}`, search }}
             />
           );
         })

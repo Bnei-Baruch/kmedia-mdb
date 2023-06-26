@@ -20,7 +20,7 @@ const TextListTemplate = ({ cuID, lID, t }) => {
 
   if (!cu) return null;
   const icon = !!label ? 'label' : iconByContentTypeMap.get(cu.content_type) || null;
-  const link = textPartLink(label?.properties, cu);
+  const to = textPartLink(label?.properties, cu);
 
   const { subTitle, title, description } = buildTextItemInfo(cu, label, t, areSourcesLoaded && getPathByID);
   return (
@@ -32,7 +32,7 @@ const TextListTemplate = ({ cuID, lID, t }) => {
         <SectionLogo name={icon} height="60" width="60" />
       </Image>
       <Container className="text_item__content">
-        <Header as={Link} to={link}>
+        <Header as={Link} to={to}>
           <Header.Content content={title} />
           {subTitle && <Header.Subheader content={subTitle} />}
         </Header>

@@ -33,7 +33,7 @@ const BuildPlaylistLastDaily = () => {
       return;
 
     const sorted = ccu.cuIDs.map(id => {
-      const ht            = historyItems.find(x => x.content_unit_uid === id);
+      const ht                          = historyItems.find(x => x.content_unit_uid === id);
       const { current_time: timestamp } = getSavedTime(id, ht);
       return { id, timestamp };
     }).filter(x => !!x.timestamp).sort((a, b) => {
@@ -43,8 +43,8 @@ const BuildPlaylistLastDaily = () => {
     });
 
     const cuId = sorted[0]?.id || getCuByCcuSkipPreparation(ccu);
-    const link = canonicalLink(denormCU(cuId), null, ccu);
-    navigate(`/${language}${link}`, { replace: true });
+    const to   = canonicalLink(denormCU(cuId), null, ccu);
+    navigate({ ...to, pathname: `/${language}${to.pathname}` }, { replace: true });
   }, [ccu, historyItems, navigate]);
 
   return null;

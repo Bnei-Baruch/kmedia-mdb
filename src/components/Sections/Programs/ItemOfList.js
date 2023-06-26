@@ -17,7 +17,7 @@ const ItemOfList = ({ id, t }) => {
   if (!cu)
     return null;
 
-  const link = canonicalLink(cu);
+  const to = canonicalLink(cu);
   const ccu  = canonicalCollection(cu) || {};
 
   const description = [ccu.name];
@@ -28,11 +28,11 @@ const ItemOfList = ({ id, t }) => {
 
   return (
     <List.Item key={id} className="media_item">
-      <Link to={link} style={{ minWidth: '140px' }}>
+      <Link to={to} style={{ minWidth: '140px' }}>
         <UnitLogoWithDuration unit={cu} />
       </Link>
       <div className="media_item__content">
-        <TooltipIfNeed text={cu.name} Component={Header} as={Link} to={link} content={cu.name} />
+        <TooltipIfNeed text={cu.name} Component={Header} as={Link} to={to} content={cu.name} />
         {
           cu.description && (
             <TooltipIfNeed

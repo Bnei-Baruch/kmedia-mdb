@@ -94,7 +94,7 @@ const getMediaLanguage = filters => {
   return mediaLanguage;
 };
 
-const highlightWrapToLink = (__html, index, baseLink, /*search/*, logLinkParams*/) => {
+const highlightWrapToLink = (__html, index, to) => {
   const searchArr = clearStringForLink(__html).split(' ');
 
   const search = {
@@ -107,30 +107,30 @@ const highlightWrapToLink = (__html, index, baseLink, /*search/*, logLinkParams*
     key={`highlightLink_${index}`}
     //onClick={() => this.logClick(...logLinkParams)}
     className={'hover-under-line'}
-    to={{ pathname: baseLink, search: stringify(search) }}>
+    to={{ ...to, search: stringify([...to.search, ...search]) }}>
     <span dangerouslySetInnerHTML={{ __html: `...${__html}...` }} />
   </Link>);
 };
 
-const snippetFromHighlightWithLink = (baseLink, highlight, props) => {
+const snippetFromHighlightWithLink = (to, highlight, props) => {
   const prop = props.find(p => highlight && p in highlight && Array.isArray(highlight[p]) && highlight[p].length);
 
   if (!prop) {
     return null;
   }
 
-  const __html = highlight[prop].map((h, i) => highlightWrapToLink(h, i, baseLink, /*search/*, logLinkParams*/));
+  const __html = highlight[prop].map((h, i) => highlightWrapToLink(h, i, to));
   return <span>{__html}</span>;
 };
 
-const renderSnippet = (link, highlight, defaultDescription, t) => {
+const renderSnippet = (to, highlight, defaultDescription, t) => {
   const description = snippetFromHighlight(highlight, ['description', 'description_language']);
   if (description) {
     return (<div><strong>{t('search.result.description')} : {' '}</strong>{description}</div>);
   }
 
-  const content = link ?
-    snippetFromHighlightWithLink(link, highlight, ['content', 'content_language']) :
+  const content = to ?
+    snippetFromHighlightWithLink(to, highlight, ['content', 'content_language']) :
     snippetFromHighlight(highlight, ['content', 'content_language']);
   if (content) {
     return (<div><strong>{t('search.result.transcript')} : {' '}</strong>{content}</div>);
@@ -139,18 +139,18 @@ const renderSnippet = (link, highlight, defaultDescription, t) => {
   return defaultDescription;
 };
 
-const iconByContentType = (type, t, link) => {
+const iconByContentType = (type, t, to) => {
   const icon    = iconByContentTypeMap.get(type) || null;
   const content = <div className="icon">
     <SectionLogo name={icon} width="70" height="70" />
     <span>{t(`constants.content-types.${type}`)}</span>
   </div>;
 
-  if (!link)
+  if (!to)
     return content;
 
   return (
-    <Link /*onClick={() => this.logClick(...logLinkParams)}*/ to={{ pathname: link }}>
+    <Link to={to}>
       {content}
     </Link>
   );
@@ -170,19 +170,19 @@ export const SearchResultCU = ({ cu, highlight = {}, clickData, hideContent = fa
   const filters       = useSelector(state => filterSelectors.getFilters(state.filters, 'search'));
   const mediaLanguage = getMediaLanguage(filters);
 
-  const link = canonicalLink(cu, mediaLanguage);
-  const ccu  = canonicalCollection(cu) || {};
+  const to  = canonicalLink(cu, mediaLanguage);
+  const ccu = canonicalCollection(cu) || {};
   // const collectionLink = canonicalLink(ccu, mediaLanguage);
 
   const logo = cu.content_type === CT_ARTICLE ?
-    iconByContentType(cu.content_type, t, link) : <UnitLogoWithDuration unit={cu} width={144} />;
+    iconByContentType(cu.content_type, t, to) : <UnitLogoWithDuration unit={cu} width={144} />;
 
   const props = {
     key: cu.id,
     title: titleFromHighlight(highlight, cu.name),
-    link,
+    link: to,
     logo,
-    content: hideContent ? '' : renderSnippet(link, highlight, cu.description, t),
+    content: hideContent ? '' : renderSnippet(to, highlight, cu.description, t),
     part: onlyViewsAndDate ? undefined : Number(ccu.ccuNames?.[cu.id]),
     // Does not work for articles (should load canonical collection with cuIDs => after redirect into and back the count is correct)
     // parts: ccu?.cuIDs?.length,
@@ -233,17 +233,17 @@ export const SearchResultCollection = ({ c, highlight, clickData }) => {
   // If filter used for specific language, make sure the link will redirect to that language.
   const filters       = useSelector(state => filterSelectors.getFilters(state.filters, 'search'));
   const mediaLanguage = getMediaLanguage(filters);
-  const link          = canonicalLink(c, mediaLanguage);
+  const to            = canonicalLink(c, mediaLanguage);
 
-  const logo = c.content_type !== CT_VIDEO_PROGRAM ? iconByContentType(c.content_type, t, link) :
+  const logo = c.content_type !== CT_VIDEO_PROGRAM ? iconByContentType(c.content_type, t, to) :
     <div style={{ minWidth: 144 }}><UnitLogo collectionId={c.id} width={144} /></div>;
 
   const props = {
     key: c.id,
     title: titleFromHighlight(highlight, c.name),
-    link,
+    link: to,
     logo,
-    content: renderSnippet(link, highlight, c.description, t),
+    content: renderSnippet(to, highlight, c.description, t),
     parts: c.content_units.length,
     views,
     t,
@@ -262,14 +262,14 @@ export const SearchResultSource = ({ id, title, highlight, clickData }) => {
   // If filter used for specific language, make sure the link will redirect to that language.
   const filters       = useSelector(state => filterSelectors.getFilters(state.filters, 'search'));
   const mediaLanguage = getMediaLanguage(filters);
-  const link          = canonicalLink({ id, content_type: 'SOURCE' }, mediaLanguage);
+  const to            = canonicalLink({ id, content_type: 'SOURCE' }, mediaLanguage);
 
   const props = {
     key: id,
     title: titleFromHighlight(highlight, title),
-    link,
-    logo: iconByContentType('sources', t, link),
-    content: renderSnippet(link, highlight, null /* No default description */, t),
+    link: to,
+    logo: iconByContentType('sources', t, to),
+    content: renderSnippet(to, highlight, null /* No default description */, t),
     views,
     t,
     click: searchResultClick(chronicles, dispatch, clickData),
@@ -281,7 +281,7 @@ export const SearchResultSource = ({ id, title, highlight, clickData }) => {
 export const SearchResultLandingPage = ({ landingPage, filterValues, clickData }) => {
   const { t } = useTranslation();
 
-  const link       = landingPageSectionLink(landingPage, filterValues);
+  const to         = landingPageSectionLink(landingPage, filterValues);
   const chronicles = useContext(ClientChroniclesContext);
   const dispatch   = useDispatch();
 
@@ -292,9 +292,9 @@ export const SearchResultLandingPage = ({ landingPage, filterValues, clickData }
   const props = {
     key: landingPage,
     title: `${t(linkTitle)} ${valuesTitleSuffix}`,
-    link,
-    logo: iconByContentType(SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_CONTENT_TYPE[landingPage], t, link),
-    content: renderSnippet(link, null /* No highlights for landing pages. */, subText, t),
+    link: to,
+    logo: iconByContentType(SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_CONTENT_TYPE[landingPage], t, to),
+    content: renderSnippet(to, null /* No highlights for landing pages. */, subText, t),
     click: searchResultClick(chronicles, dispatch, clickData),
   };
 

@@ -10,8 +10,6 @@ import { ADD_PLAYLIST_ITEM_MODES } from './SavePlaylistItemBtn';
 import { actions as playerActions } from '../../../../../redux/modules/player';
 import { PLAYER_OVER_MODES } from '../../../../../helpers/consts';
 
-const updateStatus = { save: 1, delete: 2 };
-
 const SaveAsLabel = ({ label, setModalMode }) => {
   const [confirm, setConfirm] = useState(false);
 

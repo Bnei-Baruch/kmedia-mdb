@@ -26,8 +26,8 @@ const LessonDatePicker = ({ t }) => {
   const dispatch = useDispatch();
   useEffect(() => {
     if (!isEmpty(dpCollection?.content_units) && collection.id !== dpCollection.id) {
-      const link = canonicalLink(dpCollection.content_units[0]);
-      navigate(`/${language}${link}`);
+      const to = canonicalLink(dpCollection.content_units[0]);
+      navigate({ ...to, pathname: `/${language}${to.pathname}` });
       dispatch(actions.nullDatepickerCO());
     }
   }, [collection, dpCollection, language, navigate, dispatch]);
