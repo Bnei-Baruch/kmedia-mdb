@@ -15,6 +15,7 @@ import { selectors as settings } from '../../../redux/modules/settings';
 import GalleryModal from './ZipFileModal';
 import ImageFileModal from './ImageFileModal';
 import { isZipFile } from '../../Pages/WithPlayer/widgets/UnitMaterials/helper';
+import { stringify } from '../../../helpers/url';
 
 const findZipFile = (cu, language) => {
   const zips = cu.files
@@ -47,10 +48,9 @@ const UnitItem = ({ id, t }) => {
   if (isEmpty(uniq) && isEmpty(imgs)) return null;
 
   const { title, description } = buildTextItemInfo(cu, null, t, getPathByID, false);
-  const pathname               = canonicalLink(cu);
 
-  const to  = typeof pathname === 'string' ? { pathname: pathname } : pathname;
-  to.search = `${to.search?.length > 0 ? to.search + '&' : ''}activeTab=sketches`;
+  const to  = canonicalLink(cu);
+  to.search = stringify({ ...to.search, activeTab: 'sketches' });
   return (
     <>
       {
