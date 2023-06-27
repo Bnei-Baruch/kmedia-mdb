@@ -46,7 +46,7 @@ const Page = ({ t }) => {
 
   if (!playlist) return null;
 
-  const link          = `/${language}/${MY_NAMESPACE_PLAYLISTS}/${id}`;
+  const pathname          = `/${language}/${MY_NAMESPACE_PLAYLISTS}/${id}`;
   const computerWidth = isMobileDevice ? 16 : 10;
   const items         = [...playlist.items || []];
   items.sort((a, b) => b.position - a.position);
@@ -73,13 +73,13 @@ const Page = ({ t }) => {
 
   const renderItem = (x, i) => {
     const { content_unit_uid, name, properties } = x;
-    const params                                 = stringify({ ...properties, ap: i });
+    const search                                 = stringify({ ...properties, ap: i });
 
     return (
       <ContentItemContainer
         id={content_unit_uid}
         key={i}
-        link={`${link}?${params}`}
+        link={{ pathname, search }}
         name={name}
         asList
       >

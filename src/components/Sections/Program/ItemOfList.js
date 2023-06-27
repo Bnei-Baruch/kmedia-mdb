@@ -18,7 +18,7 @@ const ItemOfList = ({ id, ccu, t }) => {
   if (!cu)
     return null;
 
-  const link = canonicalLink(cu);
+  const to = canonicalLink(cu);
 
   const description = [];
   const part        = Number(ccu?.ccuNames?.[cu.id]);
@@ -29,7 +29,7 @@ const ItemOfList = ({ id, ccu, t }) => {
   return (<List.Item key={id} className="media_item">
     <UnitLogoWithDuration unit={cu} />
     <div className="media_item__content">
-      <TooltipIfNeed text={cu.name} Component={Header} as={Link} to={link} content={cu.name} />
+      <TooltipIfNeed text={cu.name} Component={Header} as={Link} to={to} content={cu.name} />
       {
         cu.description && (
           <TooltipIfNeed

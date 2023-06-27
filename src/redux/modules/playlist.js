@@ -71,7 +71,7 @@ const onBuildSuccess = (draft, payload) => {
   //use curId - fix for my playlists
   draft.itemById = items.reduce((acc, x, ap) => ({ ...acc, [x.id]: x, ap }), {});
   const curItem  = draft.itemById?.[id];
-  if (curItem && !curItem.isHLS && info.mediaType === MT_VIDEO && !curItem.qualityByLang[language]) {
+  if (curItem && !curItem.isHLS && !curItem.languages.includes(language)) {
     language = curItem.languages[0];
   }
 

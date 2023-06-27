@@ -29,7 +29,7 @@ import { fromToLocalized } from '../../../helpers/date';
 const LatestUpdate = ({ item, t, label }) => {
   const { content_type, name, film_date, name_in_collection, id, source_id, start_date, end_date, number } = item;
 
-  const link     = canonicalLink(item);
+  const to       = canonicalLink(item);
   let title      = name || `${t(`constants.content-types.${content_type}`)} ${t('lessons.list.number')} ${name_in_collection}`;
   let subheader  = [`${t('values.date', { date: item.film_date })} - ${label}`];
   let authorName = '';
@@ -76,11 +76,11 @@ const LatestUpdate = ({ item, t, label }) => {
     case CT_UNITY_DAY:
       break;
     default:
-      canonicalSection = canonicalSectionByLink(link);
+      canonicalSection = canonicalSectionByLink(to);
   }
 
   return (
-    <Card raised className="cu_item" as={Link} to={link}>
+    <Card raised className="cu_item" as={Link} to={to}>
       <div className="cu_item_img">
         <UnitLogo unitId={id} width={250} fallbackImg={canonicalSection} />
       </div>

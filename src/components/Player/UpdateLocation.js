@@ -28,10 +28,9 @@ const UpdateLocation = () => {
 
   //init redux start end from location
   useEffect(() => {
-      const _q = startEndFromQuery(location);
-      dispatch(actions.setShareStartEnd(_q));
+    const _q = startEndFromQuery(location);
+    dispatch(actions.setShareStartEnd(_q));
   }, [location, cuId]);
-
 
   useEffect(() => {
     if (mediaType && mediaType !== q.mediaType) {
@@ -43,17 +42,17 @@ const UpdateLocation = () => {
   }, [mediaType, q, navigate, location]);
 
   //go to next on playlist
-  const search = baseLink ? `?${stringify({ ...q, ap })}` : location.search;
+  const search = baseLink ? stringify({ ...q, ap }) : location.search.slice(1);
   useEffect(() => {
     if (nextUnitId) {
-      let link;
+      let to;
       if (baseLink) {
-        link = baseLink;
+        to = { pathname: baseLink };
       } else {
-        link = canonicalLink(denormUnit(nextUnitId), null, denormCollectiont(cId));
+        to = canonicalLink(denormUnit(nextUnitId), null, denormCollectiont(cId));
       }
 
-      navigate({ pathname: `/${uiLanguage}${link}`, search });
+      navigate({ pathname: `/${uiLanguage}${to.pathname}`, search });
       dispatch(action.nullNextUnit());
     }
   }, [nextUnitId, cId, search, uiLanguage, baseLink, navigate, denormUnit, denormCollectiont]);

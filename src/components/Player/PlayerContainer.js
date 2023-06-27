@@ -41,11 +41,11 @@ const CLASSES_BY_MODE = {
 
 export const PlayerContext = createContext(null);
 const PlayerContainer      = () => {
-  const fullscreenRef      = useRef();
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
-  const mode = useSelector(state => player.getOverMode(state.player));
+  const fullscreenRef = useRef();
 
+  const mode         = useSelector(state => player.getOverMode(state.player));
   const isFullScreen = useSelector(state => selectors.isFullScreen(state.player));
   const { type }     = useSelector(state => selectors.getFile(state.player)) || false;
   const isAudio      = type === MT_AUDIO;
@@ -86,6 +86,21 @@ const PlayerContainer      = () => {
     runTimeout(dispatch);
   };
 
+  const handleTouchEnd = e => {
+    clearTimeout(timeout);
+
+    if (mode === PLAYER_OVER_MODES.none) {
+      dispatch(actions.setOverMode(PLAYER_OVER_MODES.active));
+    }
+    if (mode !== PLAYER_OVER_MODES.active) return;
+
+    if (e.target.className.indexOf('icon') !== -1 || e.target.tagName === 'LABEL') {
+      runTimeout(dispatch);
+    } else {
+      dispatch(actions.setOverMode(PLAYER_OVER_MODES.none));
+    }
+  };
+
   const playerComponent = <Player />;
   const classes         = [
     mode === PLAYER_OVER_MODES.none && isAudio ? CLASSES_BY_MODE[PLAYER_OVER_MODES.firstTime] : CLASSES_BY_MODE[mode],
@@ -115,7 +130,7 @@ const PlayerContainer      = () => {
 
   return (
     <PlayerContext.Provider value={{ showControls, hideControls }}>
-      <div>
+      <div onTouchEnd={handleTouchEnd}>
         <Ref innerRef={fullscreenRef}>
           {content}
         </Ref>

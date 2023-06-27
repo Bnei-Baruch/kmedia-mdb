@@ -142,7 +142,7 @@ const renderUnits = (units, language, t, helpChooseLang, chroniclesAppend) => (
       return null;
     }
 
-    const link = canonicalLink(unit);
+    const to = canonicalLink(unit);
     let title;
     if (unit.content_type === CT_VIDEO_PROGRAM_CHAPTER || unit.content_type === CT_CLIP || unit.content_type === CT_VIRTUAL_LESSON) {
       const description = [];
@@ -155,16 +155,16 @@ const renderUnits = (units, language, t, helpChooseLang, chroniclesAppend) => (
       title = (
         <List.Header className="unit-header">
           <div className="margin-bottom-4">
-            <Link className="unit-link" to={link}>{ccu?.name || NO_NAME}</Link>
+            <Link className="unit-link" to={to}>{ccu?.name || NO_NAME}</Link>
             <span className="duration">{description.join('  |  ')}</span>
           </div>
-          <Link className="unit-link" to={link}>{unit.name || NO_NAME}</Link>
+          <Link className="unit-link" to={to}>{unit.name || NO_NAME}</Link>
         </List.Header>
       );
     } else {
       title = (
         <List.Header className="unit-header">
-          <Link className="unit-link" to={link}>{unit.name || NO_NAME}</Link>
+          <Link className="unit-link" to={to}>{unit.name || NO_NAME}</Link>
           {
             duration && <span className="duration">{duration}</span>
           }

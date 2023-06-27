@@ -11,8 +11,8 @@ import WebWrapTooltip from '../../shared/WebWrapTooltip';
 export const PrevBtn = withTranslation()(({ t }) => {
   const id = useSelector(state => selectors.getPrevId(state.playlist));
 
-  const link = usePlaylistItemLink(id);
-  if (!link) return null;
+  const to = usePlaylistItemLink(id);
+  if (!to) return null;
 
   return (
     <WebWrapTooltip
@@ -22,7 +22,7 @@ export const PrevBtn = withTranslation()(({ t }) => {
         <Link
           as="div"
           className="controls__prev"
-          to={link}
+          to={to}
         >
           <Icon fitted size="big" name="backward" />
         </Link>
@@ -33,8 +33,8 @@ export const PrevBtn = withTranslation()(({ t }) => {
 export const NextBtn = withTranslation()(({ t }) => {
   const id = useSelector(state => selectors.getNextId(state.playlist));
 
-  const link = usePlaylistItemLink(id);
-  if (!link) return null;
+  const to = usePlaylistItemLink(id);
+  if (!to) return null;
 
   return (
     <WebWrapTooltip
@@ -44,7 +44,7 @@ export const NextBtn = withTranslation()(({ t }) => {
         <Link
           as="div"
           className="controls__next"
-          to={link}
+          to={to}
         >
           <Icon fitted size="big" name="forward" />
         </Link>
