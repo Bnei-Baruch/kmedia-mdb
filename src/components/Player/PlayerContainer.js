@@ -88,7 +88,6 @@ const PlayerContainer      = () => {
 
   const handleTouchEnd = e => {
     clearTimeout(timeout);
-    console.log(e.target.className, mode);
 
     if (mode === PLAYER_OVER_MODES.none) {
       dispatch(actions.setOverMode(PLAYER_OVER_MODES.active));

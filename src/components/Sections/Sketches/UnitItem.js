@@ -50,7 +50,7 @@ const UnitItem = ({ id, t }) => {
   const { title, description } = buildTextItemInfo(cu, null, t, getPathByID, false);
 
   const to  = canonicalLink(cu);
-  to.search = stringify({ ...to.search, activeTab: 'sketches' });
+  to.search = [to.search, stringify({ activeTab: 'sketches' })].filter(x => !!x).join('&');
   return (
     <>
       {

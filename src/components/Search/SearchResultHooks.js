@@ -107,7 +107,7 @@ const highlightWrapToLink = (__html, index, to) => {
     key={`highlightLink_${index}`}
     //onClick={() => this.logClick(...logLinkParams)}
     className={'hover-under-line'}
-    to={{ ...to, search: stringify([...to.search, ...search]) }}>
+    to={{ ...to, search: [to.search, stringify(search)].filter(x => !!x).join('&') }}>
     <span dangerouslySetInnerHTML={{ __html: `...${__html}...` }} />
   </Link>);
 };
