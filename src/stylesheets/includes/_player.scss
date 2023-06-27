@@ -26,7 +26,7 @@ video {
 }
 
 .is-fullscreen {
-  height: auto;
+  height: 100%;
 }
 
 //MOBILE
@@ -576,8 +576,8 @@ video {
   position: relative;
 
   &.is-video .controls {
-    &__prev, &__rewind, &__forward, &__next, &__pause {
-      transition: all .5s ease-out 1s;
+    &__prev, &__rewind, &__forward, &__next, &__pause, &__bar {
+      transition: all 500ms 0ms ease-out;
     }
 
     &__prev {
@@ -603,7 +603,6 @@ video {
 
     &__bar {
       bottom: -54px;
-      transition: all .5s ease-out 1s;
     }
   }
 

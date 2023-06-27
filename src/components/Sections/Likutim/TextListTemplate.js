@@ -17,7 +17,7 @@ const TextListTemplate = ({ cuID, t }) => {
 
   const { content_type, film_date, name } = cu;
   const icon                              = iconByContentTypeMap.get(content_type);
-  const link                              = canonicalLink(cu);
+  const to                                = canonicalLink(cu);
 
   return (
     <List.Item
@@ -28,7 +28,7 @@ const TextListTemplate = ({ cuID, t }) => {
         <SectionLogo name={icon} height="60" width="60" />
       </Image>
       <Container className="text_item__content">
-        <Header as={Link} to={link} content={name} />
+        <Header as={Link} to={to} content={name} />
         <Container className="description is_single">
           <span>{t('values.date', { date: film_date })}</span>
         </Container>

@@ -104,7 +104,7 @@
       "posts": "Blog"
     },
     "aside-filter": {
-      "filters-title": "Filtrar por intereses:",
+      "filters-title": "Filtrar por intereses",
       "sources-filter-multi": "Cabalistas",
       "topics-filter-multi": "Temas",
       "content-type-filter": "Sección",

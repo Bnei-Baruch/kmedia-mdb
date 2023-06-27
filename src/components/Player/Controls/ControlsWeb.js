@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
 import { SeekBackwardBtn, SeekForwardBtn } from './SeekBtns';
 import { NextBtn, PrevBtn } from './NextPrevBtns';
@@ -10,18 +10,30 @@ import { ProgressCtrl } from './ProgressCtrl';
 import PlayPauseBg from './PlayPauseBg';
 import { useSelector } from 'react-redux';
 import { selectors } from '../../../redux/modules/player';
+import { PlayerContext } from '../PlayerContainer';
 
 const ControlsWeb = ({ fullscreenRef }) => {
+
+  const ctx    = useContext(PlayerContext);
   const loaded = useSelector(state => selectors.isLoaded(state.player));
 
+  const handleMouseLeave = () => ctx.showControls();
+  const handleMouseEnter = () => ctx.showControls(false);
+
   return (
-    <div className="controls">
-      {loaded && < PlayPauseBg />}
+    <div
+      className="controls"
+    >
+      {loaded && <PlayPauseBg />}
       <PrevBtn />
       <SeekBackwardBtn />
       <SeekForwardBtn />
       <NextBtn />
-      <div className="controls__bar">
+      <div
+        className="controls__bar"
+        onMouseLeave={handleMouseLeave}
+        onMouseEnter={handleMouseEnter}
+      >
         <PlayPauseBtn />
         <VolumeCtrl />
         <Timecode />

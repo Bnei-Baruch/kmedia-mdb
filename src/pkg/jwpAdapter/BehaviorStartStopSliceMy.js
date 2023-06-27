@@ -15,12 +15,12 @@ const BehaviorStartStopSliceMy = () => {
 
   const isReady         = useSelector(state => player.isReady(state.player));
   const isMetadataReady = useSelector(state => player.isMetadataReady(state.player));
-  const isHLS           = useSelector(state => playlist.getPlayed(state.playlist).isHLS);
+  const isHLS           = useSelector(state => playlist.getPlayed(state.playlist)?.isHLS);
   const id              = useSelector(state => selectors.getNextId(state.playlist));
 
   const { properties, ap } = useSelector(state => selectors.getItemById(state.playlist)(id));
 
-  const link     = id ? `.?${stringify({ ...properties, ap })}` : null;
+  const link     = id ? { search: stringify({ ...properties, ap }) } : null;
   const navigate = useNavigate();
 
   const _isReady = isHLS ? isMetadataReady : isReady;

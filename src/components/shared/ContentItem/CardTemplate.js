@@ -51,7 +51,7 @@ const CardTemplate = ({ unit, language, withCCUInfo, link, ccu, description, chi
 CardTemplate.propTypes = {
   unit: shapes.ContentUnit.isRequired,
   language: PropTypes.string.isRequired,
-  link: PropTypes.string.isRequired,
+  link: PropTypes.object.isRequired,
   withCCUInfo: PropTypes.bool,
   ccu: shapes.Collection,
   description: PropTypes.array,

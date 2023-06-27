@@ -22,7 +22,7 @@ const PlaylistHeaderContainer = ({ playlist }) => {
 
   const confirmSuccess = () => {
     dispatch(actions.remove(MY_NAMESPACE_PLAYLISTS, { id: playlist.id, key }));
-    navigate(`/${language}/personal`);
+    navigate({ pathname: `/${language}/personal` });
   };
 
   if (!playlist) return null;

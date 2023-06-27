@@ -1,4 +1,4 @@
-import React, { useRef, useContext, useEffect } from 'react';
+import React, { useRef, useContext, useEffect, createContext } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import clsx from 'clsx';
 import { Ref } from 'semantic-ui-react';
@@ -13,7 +13,7 @@ import { DeviceInfoContext } from '../../helpers/app-contexts';
 import UpdateLocation from './UpdateLocation';
 import { useKeyboardControl } from './hooks/useKeyboardControl';
 
-const HIDE_CONTROLS_TIMEOUT = 3000;
+const HIDE_CONTROLS_TIMEOUT = 4000;
 
 let timeout;
 const sleep = ms => new Promise(r => {
@@ -39,13 +39,16 @@ const CLASSES_BY_MODE = {
   [PLAYER_OVER_MODES.none]: '',
 };
 
-const PlayerContainer = () => {
-  const fullscreenRef = useRef();
-  const mode          = useSelector(state => player.getOverMode(state.player));
-  const isFullScreen  = useSelector(state => selectors.isFullScreen(state.player));
-
+export const PlayerContext = createContext(null);
+const PlayerContainer      = () => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
-  const type               = useSelector(state => selectors.getFile(state.player)?.file) || false;
+
+  const fullscreenRef = useRef();
+
+  const mode         = useSelector(state => player.getOverMode(state.player));
+  const isFullScreen = useSelector(state => selectors.isFullScreen(state.player));
+  const { type }     = useSelector(state => selectors.getFile(state.player)) || false;
+  const isAudio      = type === MT_AUDIO;
 
   const dispatch = useDispatch();
   useKeyboardControl(runTimeout);
@@ -63,42 +66,46 @@ const PlayerContainer = () => {
   }, [fullscreenRef, dispatch]);
 
   useEffect(() => {
-    if (mode === PLAYER_OVER_MODES.active) {
+    if (mode === PLAYER_OVER_MODES.active && !isAudio) {
       runTimeout(dispatch);
     }
 
     return () => clearTimeout(timeout);
-  }, [mode]);
+  }, [mode, isAudio, dispatch]);
 
-  const handleClick = e => {
-    if (mode === PLAYER_OVER_MODES.active) {
-      if (e.target.className.indexOf('icon') !== -1 || e.target.tagName === 'LABEL') {
-        runTimeout(dispatch);
-        return;
-      }
-
-      clearTimeout(timeout);
-      dispatch(actions.setOverMode(PLAYER_OVER_MODES.none));
-
+  const showControls = (withHide = true) => {
+    clearTimeout(timeout);
+    if (mode === PLAYER_OVER_MODES.none) {
+      dispatch(actions.setOverMode(PLAYER_OVER_MODES.active));
+    } else if (mode === PLAYER_OVER_MODES.active && withHide) {
+      runTimeout(dispatch);
     }
+  };
+  const hideControls = () => {
+    clearTimeout(timeout);
+    runTimeout(dispatch);
+  };
+
+  const handleTouchEnd = e => {
+    clearTimeout(timeout);
 
     if (mode === PLAYER_OVER_MODES.none) {
       dispatch(actions.setOverMode(PLAYER_OVER_MODES.active));
     }
-  };
+    if (mode !== PLAYER_OVER_MODES.active) return;
 
-  const handleMouseMove = e => {
-    if (mode === PLAYER_OVER_MODES.none && !isMobileDevice) {
-      dispatch(actions.setOverMode(PLAYER_OVER_MODES.active));
+    if (e.target.className.indexOf('icon') !== -1 || e.target.tagName === 'LABEL') {
+      runTimeout(dispatch);
+    } else {
+      dispatch(actions.setOverMode(PLAYER_OVER_MODES.none));
     }
   };
 
   const playerComponent = <Player />;
-  const isVideo         = type !== MT_AUDIO;
   const classes         = [
-    mode === PLAYER_OVER_MODES.none && !isVideo ? CLASSES_BY_MODE[PLAYER_OVER_MODES.firstTime] : CLASSES_BY_MODE[mode],
+    mode === PLAYER_OVER_MODES.none && isAudio ? CLASSES_BY_MODE[PLAYER_OVER_MODES.firstTime] : CLASSES_BY_MODE[mode],
     isMobileDevice ? 'is-mobile' : 'is-web',
-    { 'is-fullscreen': isFullScreen, 'is-video': isVideo },
+    { 'is-fullscreen': isFullScreen, 'is-video': !isAudio },
 
   ];
 
@@ -106,11 +113,7 @@ const PlayerContainer = () => {
     <div className="player" dir="ltr">
       <AppendChronicle />
       <UpdateLocation />
-      <div
-        className={clsx(...classes)}
-        onClick={handleClick}
-        onMouseMove={handleMouseMove}
-      >
+      <div className={clsx(...classes)}>
         {
           isMobileDevice ? (
             <PlayerToolsMobile Player={playerComponent} fullscreenRef={fullscreenRef} />
@@ -126,11 +129,13 @@ const PlayerContainer = () => {
   );
 
   return (
-    <div>
-      <Ref innerRef={fullscreenRef}>
-        {content}
-      </Ref>
-    </div>
+    <PlayerContext.Provider value={{ showControls, hideControls }}>
+      <div onTouchEnd={handleTouchEnd}>
+        <Ref innerRef={fullscreenRef}>
+          {content}
+        </Ref>
+      </div>
+    </PlayerContext.Provider>
   );
 };
 

@@ -77,8 +77,6 @@ export function* search(action) {
           const { name } = filter;
           yield put(filterActions.resetFilter('search', name));
         }
-
-        filterParams = '';
       }
     }
 

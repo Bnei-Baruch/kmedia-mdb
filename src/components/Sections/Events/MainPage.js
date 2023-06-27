@@ -61,6 +61,7 @@ const MainPage = ({ t }) => {
   return (<>
     <SectionHeader section="events" />
     <SectionFiltersWithMobile
+      namespace={PAGE_NS_EVENTS}
       filters={
         <Filters
           namespace={PAGE_NS_EVENTS}

@@ -175,7 +175,7 @@ const ContentItemContainer = (
   if (lID) {
     const l = denormLabel(lID);
     name    = name || l?.name;
-    link    = `${link}?${stringify(l?.properties)}`;
+    link    = { ...link, search: stringify(l?.properties) };
   }
 
   const props = {
@@ -198,14 +198,14 @@ const ContentItemContainer = (
 
 ContentItemContainer.propTypes = {
   id: PropTypes.string.isRequired,
-  link: PropTypes.string,
+  link: PropTypes.object,
   asList: PropTypes.bool,
   playTime: PropTypes.number,
 };
 
 SourceItemContainerHook.propTypes = {
   id: PropTypes.string.isRequired,
-  link: PropTypes.string,
+  link: PropTypes.object,
   asList: PropTypes.bool,
 };
 

@@ -1,6 +1,6 @@
 import { canonicalCollection, isEmpty } from './utils';
 import { filtersTransformer } from '../filters/index';
-import { stringify as urlSearchStringify } from './url';
+import { stringify as urlSearchStringify, stringify } from './url';
 
 import {
   BLOG_ID_LAITMAN_CO_IL,
@@ -106,24 +106,24 @@ export const getCuByCcuSkipPreparation = ccu => {
  */
 export const canonicalLink = (entity, mediaLang, ccu) => {
   if (!entity) {
-    return '/';
+    return { pathname: `.`, search: '' };
   }
 
   // source
   if (entity.content_type === CT_SOURCE) {
-    return `/sources/${entity.id}`;
+    return { pathname: `/sources/${entity.id}`, search: '' };
   }
 
   // tag
   if (entity.content_type === CT_TAG) {
-    return `/topics/${entity.id}`;
+    return { pathname: `/topics/${entity.id}`, search: '' };
   }
 
   if (entity.content_type === 'POST') {
     const [blogID, postID] = entity.id.split('-');
     const blogName         = blogNames.get(parseInt(blogID, 10)) || 'laitman-co-il';
 
-    return `/publications/blog/${blogName}/${postID}`;
+    return { pathname: `/publications/blog/${blogName}/${postID}`, search: '' };
   }
 
   // collections
@@ -132,32 +132,30 @@ export const canonicalLink = (entity, mediaLang, ccu) => {
     case CT_SPECIAL_LESSON:
       const cuId = getCuByCcuSkipPreparation(entity);
       if (!cuId)
-        return `/lessons/daily/c/${entity.id}?ap=0`;
-      return `/lessons/cu/${cuId}`;
+        return { pathname: `/lessons/daily/c/${entity.id}`, search: `ap=0` };
+      return { pathname: `/lessons/cu/${cuId}`, search: '' };
     case CT_VIRTUAL_LESSONS:
-      return `/lessons/virtual/c/${entity.id}`;
+      return { pathname: `/lessons/virtual/c/${entity.id}`, search: '' };
     case CT_LECTURE_SERIES:
-      return `/lessons/lectures/c/${entity.id}`;
+      return { pathname: `/lessons/lectures/c/${entity.id}`, search: '' };
     case CT_WOMEN_LESSONS:
-      return `/lessons/women/c/${entity.id}`;
-    // case CT_CHILDREN_LESSONS:
-    //   return `/lessons/children/c/${entity.id}`;
+      return { pathname: `/lessons/women/c/${entity.id}`, search: '' };
     case CT_LESSONS_SERIES:
-      return `/lessons/series/c/${entity.id}`;
+      return { pathname: `/lessons/series/c/${entity.id}`, search: '' };
     case CT_VIDEO_PROGRAM:
     case CT_CLIPS:
-      return `/programs/c/${entity.id}`;
+      return { pathname: `/programs/c/${entity.id}`, search: '' };
     case CT_ARTICLES:
-      return `/publications/articles/c/${entity.id}`;
+      return { pathname: `/publications/articles/c/${entity.id}`, search: '' };
     case CT_FRIENDS_GATHERINGS:
     case CT_MEALS:
     case CT_CONGRESS:
     case CT_HOLIDAY:
     case CT_PICNIC:
     case CT_UNITY_DAY:
-      return `/events/c/${entity.id}`;
+      return { pathname: `/events/c/${entity.id}`, search: '' };
     case CT_SONGS:
-      return `/music/c/${entity.id}`;
+      return { pathname: `/music/c/${entity.id}`, search: '' };
     default:
       break;
   }
@@ -165,9 +163,9 @@ export const canonicalLink = (entity, mediaLang, ccu) => {
   // content units
   switch (entity.content_type) {
     case CT_ARTICLE:
-      return `/publications/articles/cu/${entity.id}`;
+      return { pathname: `/publications/articles/cu/${entity.id}`, search: '' };
     case CT_LIKUTIM:
-      return `/likutim/${entity.id}`;
+      return { pathname: `/likutim/${entity.id}`, search: '' };
     default:
       break;
   }
@@ -178,26 +176,25 @@ export const canonicalLink = (entity, mediaLang, ccu) => {
     const { id, content_type } = collection;
 
     if (EVENT_TYPES.includes(content_type)) {
-      return `/events/cu/${entity.id}`;
+      return { pathname: `/events/cu/${entity.id}`, search: ccu ? stringify({ c: id }) : '' };
     }
 
     if (content_type === CT_LESSONS_SERIES) {
-      return `/lessons/series/cu/${entity.id}`;
+      return { pathname: `/lessons/series/cu/${entity.id}`, search: ccu ? stringify({ c: id }) : '' };
     }
 
     if (content_type === CT_SONGS) {
-      return `/music/${id}/cu/${entity.id}`;
+      return { pathname: `/music/${id}/cu/${entity.id}`, search: '' };
     }
   }
 
   const mediaLangSuffix = mediaLang ? `?language=${mediaLang}` : '';
 
   // unit based on type
-  const prefix = mediaPrefix.get(entity.content_type);
-
-  return prefix
-    ? `${prefix}${entity.id}${mediaLangSuffix}`
-    : '/';
+  const prefix   = mediaPrefix.get(entity.content_type);
+  const search   = mediaLang ? `language=${mediaLang}` : '';
+  const pathname = prefix ? `${prefix}${entity.id}` : '/';
+  return { pathname, search };
 };
 
 /* WARNING!!!
@@ -221,14 +218,12 @@ export const canonicalContentType = entity => {
 };
 
 export const canonicalSectionByUnit = unit => {
-  const link = canonicalLink(unit);
-  return canonicalSectionByLink(link);
+  const to = canonicalLink(unit);
+  return canonicalSectionByLink(to);
 };
 
-export const canonicalSectionByLink = link => {
-  const s                = link.split('/');
-  const canonicalSection = s.length > 2 ? s[1] : null;
-
-  return canonicalSection;
+export const canonicalSectionByLink = ({ pathname }) => {
+  const s = pathname.split('/');
+  return s.length > 2 ? s[1] : null;
 };
 

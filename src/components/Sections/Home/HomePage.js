@@ -1,25 +1,21 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Container, Feed, Grid } from 'semantic-ui-react';
 import * as shapes from '../../shapes';
 import Helmets from '../../shared/Helmets';
 import SearchBar from './SearchBar';
-import Promoted from './Promoted';
 import Topic from './Topic';
 import Section from './Section';
-import LatestDailyLesson from './LatestDailyLesson';
 import LatestUpdatesSection from './LatestUpdatesSection';
 import BlogFeed from '../Publications/tabs/Blog/Feed';
 import TwitterFeed from '../Publications/tabs/Twitter/Feed';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { isEqual } from 'lodash';
-import { useInterval } from '../../../helpers/timer';
 import { useLocation } from 'react-router-dom';
 import { withTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { selectors as settings } from '../../../redux/modules/settings';
-
-const SWITCH_BANNERS_TIMEOUT = 5 * 1000; // every 5 sec
+import HomeBanners from './HomeBanners';
 
 const renderBlogPosts = (latestBlogPosts, language, t) =>
   latestBlogPosts.length
@@ -109,36 +105,8 @@ const renderSearchBar = location =>
     </Container>
   </div>;
 
-const renderLatestLessonAndBanner = (latestLesson, banner) =>
-  <div className="homepage__featured homepage__section">
-    <Container className="padded horizontally">
-      <Grid centered>
-        <Grid.Row>
-          {
-            latestLesson
-            && <Grid.Column computer={6} tablet={7} mobile={16}>
-              <LatestDailyLesson collection={latestLesson} />
-            </Grid.Column>
-          }
-          <Grid.Column computer={6} tablet={7} mobile={16}>
-            {banner && <Promoted banner={banner} />}
-          </Grid.Column>
-        </Grid.Row>
-      </Grid>
-    </Container>
-  </div>;
-
-const setBanners = (allBanners, bannerIdx, setBannerIdx) => {
-  if (allBanners > 0) {
-    setBannerIdx(() => (bannerIdx + 1) % allBanners);
-  } else {
-    setBannerIdx(-1);
-  }
-};
-
 const HomePage = (
   {
-    banners,
     latestItems = [],
     latestLesson = null,
     latestBlogPosts = [],
@@ -151,21 +119,11 @@ const HomePage = (
   const location           = useLocation();
   const language           = useSelector(state => settings.getLanguage(state.settings));
 
-  const [bannerIdx, setBannerIdx] = useState(-1);
-  useEffect(() => {
-    setBanners(banners?.data.length, bannerIdx, setBannerIdx);
-  }, [banners?.data?.length]);
-
-  useInterval(() => {
-    setBanners(banners?.data.length, bannerIdx, setBannerIdx);
-  }, SWITCH_BANNERS_TIMEOUT);
-  const banner = bannerIdx === -1 ? null : banners.data[bannerIdx];
-
   return (
     <div className="homepage">
       <Helmets.Basic title={t('home.header.text')} description={t('home.header.subtext')} />
       {renderSearchBar(location)}
-      {renderLatestLessonAndBanner(latestLesson, banner)}
+      <HomeBanners latestLesson={latestLesson} />
       {renderActiveSectionsGrid(t, isMobileDevice)}
       <LatestUpdatesSection latestItems={latestItems} t={t} language={language} />
       {renderBlogPostsAndTweets(latestBlogPosts, latestTweets, language, t)}
@@ -178,7 +136,6 @@ HomePage.propTypes = {
   latestItems: PropTypes.arrayOf(PropTypes.oneOfType([shapes.ContentUnit, shapes.Collection])),
   latestBlogPosts: PropTypes.arrayOf(shapes.BlogPost),
   latestTweets: PropTypes.arrayOf(shapes.Tweet),
-  banner: shapes.Banner,
   t: PropTypes.func.isRequired,
 };
 
@@ -187,7 +144,6 @@ const arePropsEqual = (prevProps, nextProps) =>
   isEqual(prevProps.latestLesson, nextProps.latestLesson) &&
   isEqual(prevProps.latestUnits, nextProps.latestUnits) &&
   isEqual(prevProps.latestBlogPosts, nextProps.latestBlogPosts) &&
-  isEqual(prevProps.latestTweets, nextProps.latestTweets) &&
-  isEqual(prevProps.banner, nextProps.banner);
+  isEqual(prevProps.latestTweets, nextProps.latestTweets);
 
 export default React.memo(withTranslation()(HomePage), arePropsEqual);

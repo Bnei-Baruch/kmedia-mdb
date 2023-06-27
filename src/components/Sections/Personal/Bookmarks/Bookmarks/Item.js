@@ -26,7 +26,7 @@ const BookmarksItem = ({ bookmark, t }) => {
   if (!areSourcesLoaded || !cu)
     return null;
 
-  const link = textPartLink(bookmark?.properties, cu);
+  const to = textPartLink(bookmark?.properties, cu);
 
   const renderFolder = f => (
     <Label key={f.id} basic>
@@ -47,13 +47,13 @@ const BookmarksItem = ({ bookmark, t }) => {
   return (
     <List.Item className="bookmark_item">
       <List.Icon>
-        <Link to={link}>
+        <Link to={to}>
           <Image size="mini" verticalAlign="middle">
             <SectionLogo name={icon} width="25" height="25" />
           </Image>
         </Link>
       </List.Icon>
-      <List.Content as={Link} to={link} verticalAlign="bottom">
+      <List.Content as={Link} to={to} verticalAlign="bottom">
         <List.Header as="h3" className="display-iblock">
           {name}
           <span className="separator">|</span>
