@@ -1,5 +1,5 @@
 import React from 'react';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Container, Header, List } from 'semantic-ui-react';
 
@@ -11,9 +11,11 @@ import Link from '../../Language/MultiLanguageLink';
 import TooltipIfNeed from '../../shared/TooltipIfNeed';
 import UnitLogoWithDuration from '../../shared/UnitLogoWithDuration';
 
-const ItemOfList = ({ id, t }) => {
+const ItemOfList = ({ id }) => {
+  const { t } = useTranslation();
   const views = useSelector(state => recommended.getViews(id, state.recommended));
   const cu    = useSelector(state => mdb.getDenormContentUnit(state.mdb, id));
+
   if (!cu)
     return null;
 
@@ -55,4 +57,4 @@ const ItemOfList = ({ id, t }) => {
   );
 };
 
-export default withTranslation()(ItemOfList);
+export default ItemOfList;

@@ -63,7 +63,7 @@ const ProgramPage = ({ t }) => {
       <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} />
       <FilterLabels namespace={namespace} />
       {
-        wipErr || items?.map((id, i) => <ItemOfList id={id} ccu={collection} key={i} />)
+        wipErr || items?.map(id => <ItemOfList id={id} ccu={collection} key={id} />)
       }
       <Divider fitted />
       <Container className="padded pagination-wrapper" textAlign="center">

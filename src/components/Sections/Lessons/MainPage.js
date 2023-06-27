@@ -72,6 +72,7 @@ const MainPage = ({ t }) => {
 
   const wipErr          = WipErr({ wip, err, t });
   const filterComponent = <Filters namespace={PAGE_NS_LESSONS} baseParams={FILTER_PARAMS} />;
+
   return (
     <>
       <SectionHeader section="lessons" />
@@ -79,18 +80,19 @@ const MainPage = ({ t }) => {
         <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} />
         <FilterLabels namespace={PAGE_NS_LESSONS} />
         {
-          wipErr || items?.map(({ id, content_type }, i) => {
-            switch (true) {
-              case COLLECTION_DAILY_LESSONS.includes(content_type):
-                return <DailyLessonItem id={id} key={i} />;
-              case COLLECTION_LESSONS_TYPE.includes(content_type):
-                return <CollectionItem id={id} key={i} />;
-              case UNIT_LESSONS_TYPE.includes(content_type):
-                return <UnitItem id={id} key={i} />;
-              default:
-                return null;
-            }
-          })
+          wipErr || items?.filter(({ id }) => !!id)
+            .map(({ id, content_type }) => {
+              switch (true) {
+                case COLLECTION_DAILY_LESSONS.includes(content_type):
+                  return <DailyLessonItem id={id} key={id} />;
+                case COLLECTION_LESSONS_TYPE.includes(content_type):
+                  return <CollectionItem id={id} key={id} />;
+                case UNIT_LESSONS_TYPE.includes(content_type):
+                  return <UnitItem id={id} key={id} />;
+                default:
+                  return null;
+              }
+            })
         }
         <Divider fitted />
         <Container className="padded pagination-wrapper" textAlign="center">
