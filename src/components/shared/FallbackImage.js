@@ -7,10 +7,8 @@ import { knownFallbackImages, NoneFallbackImage, SectionThumbnailFallback } from
 import { selectors, actions } from '../../redux/modules/fetchImage';
 import WipErr from './WipErr/WipErr';
 import { useTranslation } from 'react-i18next';
-import useTraceUpdate from '../../pkg/useTraceUpdate';
 
 const FallbackImage = props => {
-  useTraceUpdate(props, 'FallbackImage');
   const {
           src,
           fallbackImage = ['default'],
