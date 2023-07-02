@@ -62,7 +62,6 @@ function* build(action) {
   const cu = yield select(state => mdb.getDenormContentUnit(state.mdb, cuId));
   if (!cu) {
     yield call(fetchUnit, { payload: cuId });
-    yield select(state => mdb.getDenormContentUnit(state.mdb, cuId));
   }
 
   yield put(actions.buildSuccess({ ...data, language, mediaType, cuId, cId }));
