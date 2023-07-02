@@ -38,6 +38,7 @@ const PlaylistItems = ({ t }) => {
               size="small"
               asList={true}
               selected={selected}
+              withCCUInfo={false}
             />
           );
         })
