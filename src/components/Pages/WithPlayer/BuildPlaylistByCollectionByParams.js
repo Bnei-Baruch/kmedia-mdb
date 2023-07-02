@@ -7,10 +7,9 @@ import BuildPlaylistByCollection from './BuildPlaylistByCollection';
 const BuildPlaylistByCollectionByParams = () => {
   const { id, cuId: routeCuId } = useParams();
 
-  const collection = useSelector(state => mdb.getDenormCollection(state.mdb, id));
-  const fetched    = useSelector(state => mdb.getFullCollectionFetched(state.mdb)?.[id]);
-  const wip        = useSelector(state => mdb.getWip(state.mdb).collections[id]);
-  const cuId       = routeCuId || collection?.content_units?.[0]?.id;
+  const fetched = useSelector(state => mdb.getFullCollectionFetched(state.mdb)?.[id]);
+  const wip     = useSelector(state => mdb.getWip(state.mdb).collections[id]);
+  const cuId    = routeCuId;
 
   const dispatch = useDispatch();
 

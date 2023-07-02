@@ -1,126 +1,41 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Image } from 'semantic-ui-react';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { knownFallbackImages, NoneFallbackImage, SectionThumbnailFallback } from '../../helpers/images';
-import { IMAGINARY_URL } from '../../helpers/Api';
-
-// An adaptation of https://github.com/socialtables/react-image-fallback
-// for react semantic-ui
-
-const loadStatus = {
-  error: -1,
-  loaded: 1
-};
-
-const imgLoadStatus       = new Map();
-let imaginaryCalls        = 0;
-const MAX_IMAGINARY_CALLS = 5;
-
-const buildImage = (src, fallbacks, onError, onLoad) => {
-  const displayImage = new window.Image();
-
-  displayImage.onerror = () => {
-    imgLoadStatus.set(displayImage.src, loadStatus.error);
-    handleError(displayImage.src, fallbacks);
-  };
-
-  displayImage.onload = () => {
-    imgLoadStatus.set(displayImage.src, loadStatus.loaded);
-    handleLoaded(displayImage.src);
-  };
-
-  const handleLoaded = image => {
-    if (image.includes(IMAGINARY_URL))
-      imaginaryCalls--;
-
-    onLoad(image);
-  };
-
-  const handleError = () => {
-    if (displayImage.src.includes(IMAGINARY_URL))
-      imaginaryCalls--;
-
-    if (typeof fallbacks[0] === 'string') {
-      const image = fallbacks[0];
-      fallbacks   = fallbacks.slice(1);
-      setDisplayImage(image, fallbacks);
-      return;
-    }
-
-    onError();
-  };
-
-  const setDisplayImage = (image, fallbacks) => {
-    if (knownFallbackImages.includes(image)) {
-      handleLoaded(image);
-      return;
-    }
-
-    if (imgLoadStatus.get(image) === loadStatus.error) {
-      handleError();
-      return;
-    }
-
-    if (imgLoadStatus.get(image) === loadStatus.loaded) {
-      handleLoaded(image);
-      return;
-    }
-
-    if (image.includes(IMAGINARY_URL) && imaginaryCalls >= MAX_IMAGINARY_CALLS) {
-      setTimeout(() => setDisplayImage(image, fallbacks), 300);
-      return;
-    }
-
-    if (typeof image === 'string') {
-      if (image.includes(IMAGINARY_URL)) imaginaryCalls++;
-      displayImage.src = image;
-    } else {
-      onLoad(image);
-    }
-  };
-
-  setDisplayImage(src, fallbacks);
-};
+import { selectors, actions } from '../../redux/modules/fetchImage';
+import WipErr from './WipErr/WipErr';
+import { useTranslation } from 'react-i18next';
 
 const FallbackImage = props => {
   const {
           src,
           fallbackImage = ['default'],
           className,
-          onLoad,
-          onError,
           width         = 'auto',
           height        = 'auto',
+
           floated,
           ...rest
-        }                             = props;
-  const [imageSource, setImageSource] = useState();
+        } = props;
+
+  const { src: imageSource, wip, err } = useSelector(state => selectors.getBySrc(state.fetchImage, src));
+  const dispatch                       = useDispatch();
+  const { t }                          = useTranslation();
 
   useEffect(() => {
-    const displayImage = buildImage(src, fallbackImage, handleError, handleLoaded);
-
-    return () => {
-      displayImage && (displayImage.onerror = null);
-      displayImage && (displayImage.onload = null);
-    };
-  }, [fallbackImage, src]);
-
-  const handleLoaded = image => {
-    setImageSource(image);
-
-    if (onLoad) {
-      onLoad(image);
+    if (!imageSource && !wip && !err) {
+      dispatch(actions.fetch(src, fallbackImage));
     }
-  };
+  }, [fallbackImage, src, imageSource, wip, err]);
 
-  const handleError = () => {
-    setImageSource(null);
-
-    if (onError) {
-      onError(src);
-    }
-  };
+  if (!imageSource || imageSource === NoneFallbackImage) {
+    /* There is no fallbacks and src was not found */
+    return null;
+  }
+  const wipErr = WipErr({ wip: (wip || !imageSource), err, t });
+  if (wipErr) return wipErr;
 
   if (!imageSource || imageSource === NoneFallbackImage) {
     /* There is no fallbacks and src was not found */
@@ -141,8 +56,8 @@ const FallbackImage = props => {
           className={className}
           style={{ top: 'calc(-50%)', width: '100%' }}
           floated={floated}
-          {...rest}
           src={imageSource}
+          {...rest}
         />
       </div>
     );
@@ -152,8 +67,8 @@ const FallbackImage = props => {
     <Image
       className={className}
       floated={floated}
-      {...rest}
       src={imageSource}
+      {...rest}
     />);
 };
 

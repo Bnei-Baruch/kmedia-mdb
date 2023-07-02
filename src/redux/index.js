@@ -27,6 +27,7 @@ import { reducer as stats } from './modules/stats';
 import { reducer as tags } from './modules/tags';
 import { reducer as notes } from './modules/myNotes';
 import { reducer as trim } from './modules/trim';
+import { reducer as fetchImage } from './modules/fetchImage';
 
 const reducers = history => combineReducers({
   router: connectRouter(history),
@@ -56,7 +57,8 @@ const reducers = history => combineReducers({
   bookmarkFilter,
   trim,
   player,
-  playlist
+  playlist,
+  fetchImage
 });
 
 export default reducers;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Header, List } from 'semantic-ui-react';
 import { canonicalLink, getCuByCcuSkipPreparation } from '../../../helpers/links';
@@ -7,18 +7,18 @@ import { canonicalLink, getCuByCcuSkipPreparation } from '../../../helpers/links
 import { selectors as mdb } from '../../../redux/modules/mdb';
 import Link from '../../Language/MultiLanguageLink';
 import UnitLogoWithDuration from '../../shared/UnitLogoWithDuration';
-import { CT_LESSON_PART } from './../../../helpers/consts';
+import { CT_LESSON_PART } from '../../../helpers/consts';
 
-const DailyLessonItem = ({ id, t }) => {
-  const ccu = useSelector(state => mdb.getDenormCollection(state.mdb, id));
+const DailyLessonItem = ({ id }) => {
+  const ccu   = useSelector(state => mdb.getDenormCollection(state.mdb, id));
+  const { t } = useTranslation();
 
   const { number, film_date, content_units = [] } = ccu || {};
 
   if (!ccu || content_units.length === 0) return null;
   const logoUnit      = content_units.find(x => x.id === getCuByCcuSkipPreparation(ccu));
   const link          = canonicalLink(logoUnit);
-  const totalDuration = content_units
-    .filter(cu => cu.content_type === CT_LESSON_PART)
+  const totalDuration = content_units.filter(cu => cu.content_type === CT_LESSON_PART)
     .reduce((acc, cu) => acc += cu.duration, 0);
 
   return (
@@ -42,4 +42,4 @@ const DailyLessonItem = ({ id, t }) => {
   );
 };
 
-export default withTranslation()(DailyLessonItem);
+export default DailyLessonItem;

@@ -38,15 +38,6 @@ function* build(action) {
   }
 
   let c = yield select(state => mdb.getDenormCollection(state.mdb, cId));
-  if (!cuId) {
-    cuId = c.cuIDs?.[getActivePartFromQuery(location)];
-  }
-
-  const cu = yield select(state => mdb.getDenormContentUnit(state.mdb, cuId));
-  if (!cu) {
-    yield call(fetchUnit, { payload: cuId });
-    yield select(state => mdb.getDenormContentUnit(state.mdb, cuId));
-  }
 
   {
     const id = c.content_units.filter(cu => !cu.files).map(x => x.id) || [];
@@ -63,6 +54,15 @@ function* build(action) {
   const language  = getLanguageFromQuery(location, contentLang || siteLang);
 
   const data = playlistBuilder(c);
+
+  if (!cuId) {
+    cuId = data.items[getActivePartFromQuery(location)]?.id;
+  }
+
+  const cu = yield select(state => mdb.getDenormContentUnit(state.mdb, cuId));
+  if (!cu) {
+    yield call(fetchUnit, { payload: cuId });
+  }
 
   yield put(actions.buildSuccess({ ...data, language, mediaType, cuId, cId }));
   const cu_uids = data.items.map(x => x.id);
