@@ -1,6 +1,11 @@
 import React from 'react';
 
-import { COLLECTION_DAILY_LESSONS, EVENT_TYPES, CT_LESSONS_SERIES } from '../../../helpers/consts';
+import {
+  COLLECTION_DAILY_LESSONS,
+  EVENT_TYPES,
+  CT_LESSONS_SERIES,
+  COLLECTION_PROGRAMS_TYPE
+} from '../../../helpers/consts';
 import BuildPlaylistByUnit from './BuildPlaylistByUnit';
 import PlaylistPage from './Playlist/PlaylistPage';
 import BuildPlaylistByCollectionByParams from './BuildPlaylistByCollectionByParams';
@@ -28,6 +33,11 @@ export const PlaylistItemPageLesson = ({ playerContainer }) => {
 
 export const PlaylistItemPageEvent = ({ playerContainer }) => {
   const builder = <BuildPlaylistByUnit cts={EVENT_TYPES} />;
+  return <Decorator builder={builder} playerContainer={playerContainer} />;
+};
+
+export const PlaylistItemPageProgram = ({ playerContainer }) => {
+  const builder = <BuildPlaylistByUnit cts={COLLECTION_PROGRAMS_TYPE} />;
   return <Decorator builder={builder} playerContainer={playerContainer} />;
 };
 
