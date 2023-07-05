@@ -104,7 +104,8 @@ app.use(helmet({
         'blob:',
         '*.kabbalahmedia.info'
       ],
-      'frame-ancestors': ['*']
+      'frame-ancestors': ['*'],
+      'object-src': ['*.youtube.com']
     },
     browserSniff: false       // we're not targeting really old browsers
   }
