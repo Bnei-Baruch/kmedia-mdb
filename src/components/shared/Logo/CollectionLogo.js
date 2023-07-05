@@ -10,7 +10,7 @@ const CollectionLogo = props => {
   const srcParams = { url: cLogoUrl(`${collectionId}.jpg`), width: 250, stripmeta: true };
   const src       = Requests.imaginary('thumbnail', srcParams);
   srcParams.url   = assetUrl(`logos/collections/${collectionId}.jpg`);
-  const fallbacks = [Requests.imaginary('thumbnail', srcParams)];
+  const fallbacks = [Requests.imaginary('thumbnail', srcParams), 'default'];
 
   return (
     <FallbackImage
