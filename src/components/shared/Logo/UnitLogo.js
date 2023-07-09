@@ -23,7 +23,7 @@ const makeImaginary = (cuId, cId, width, height) => {
     const srcParams = { url: cLogoUrl(`${cId}.jpg`), width, height, stripmeta: true };
     const src       = Requests.imaginary('thumbnail', srcParams);
     srcParams.url   = assetUrl(`logos/collections/${cId}.jpg`);
-    const fallbacks = [Requests.imaginary('thumbnail', srcParams), 'default'];
+    const fallbacks = [Requests.imaginary('thumbnail', srcParams)];
 
     return { src, fallbacks };
   }
