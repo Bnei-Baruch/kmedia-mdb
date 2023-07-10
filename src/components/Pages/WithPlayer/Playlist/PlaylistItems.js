@@ -4,7 +4,7 @@ import ContentItemContainer from '../../../shared/ContentItem/ContentItemContain
 import { useSelector, useDispatch } from 'react-redux';
 import { selectors, actions } from '../../../../redux/modules/playlist';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
-import { Header, Button } from 'semantic-ui-react';
+import { Header, Button, Container } from 'semantic-ui-react';
 import { selectors as mdb } from '../../../../redux/modules/mdb';
 import { COLLECTION_DAILY_LESSONS } from '../../../../helpers/consts';
 
@@ -42,11 +42,13 @@ const PlaylistItems = ({ t }) => {
 
       {
         from > 0 && (
-          <Button
-            icon={'arrow up'}
-            onClick={() => handleLoadMore(-1)}
-            fluid
-          />
+          <Container fluid>
+            <Button
+              icon={'arrow up'}
+              onClick={() => handleLoadMore(-1)}
+              fluid
+            />
+          </Container>
         )
       }
       {
@@ -70,11 +72,14 @@ const PlaylistItems = ({ t }) => {
       }
       {
         to < items.length && (
-          <Button
-            icon={'arrow down'}
-            onClick={() => handleLoadMore(1)}
-            fluid
-          />
+
+          <Container fluid>
+            <Button
+              icon={'arrow down'}
+              onClick={() => handleLoadMore(1)}
+              fluid
+            />
+          </Container>
         )
       }
     </div>
