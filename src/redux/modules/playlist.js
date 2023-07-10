@@ -1,9 +1,11 @@
 import { createAction } from 'redux-actions';
 import { handleActions, types as settings, types as settingsTypes } from './settings';
-import { DEFAULT_LANGUAGE, VS_DEFAULT, MT_VIDEO } from '../../helpers/consts';
+import { DEFAULT_LANGUAGE, VS_DEFAULT } from '../../helpers/consts';
 import { types as playerTypes } from './player';
 import { saveTimeOnLocalstorage } from '../../components/Player/Controls/helper';
 import { getQualitiesFromLS } from '../../pkg/jwpAdapter/adapter';
+
+export const SHOWED_PLAYLIST_ITEMS = 7;
 
 const PLAYLIST_BUILD         = 'Playlist/BUILD';
 const PLAYLIST_BUILD_SUCCESS = 'Playlist/BUILD_SUCCESS';
@@ -16,11 +18,15 @@ const PLAYER_SET_LANGUAGE      = 'Player/SET_LANGUAGE';
 const PLAYER_SET_MEDIA_TYPE    = 'Player/SET_MEDIA_TYPE';
 const PLAYER_SET_SUBS_LANGUAGE = 'Player/SET_SUBS_LANGUAGE';
 const PLAYER_NULL_NEXT_UNIT    = 'Player/NULL_NEXT_UNIT';
+const SHOW_IMAGES              = 'Player/SHOW_IMAGES';
+const FETCH_SHOW_DATA          = 'Player/FETCH_SHOW_DATA';
+const FETCH_SHOW_DATA_SUCCESS  = 'Player/FETCH_SHOW_DATA_SUCCESS';
 
 export const types = {
   PLAYLIST_BUILD,
   SINGLE_MEDIA_BUILD,
-  MY_PLAYLIST_BUILD
+  MY_PLAYLIST_BUILD,
+  FETCH_SHOW_DATA
 };
 
 // Actions
@@ -29,12 +35,15 @@ const buildSuccess     = createAction(PLAYLIST_BUILD_SUCCESS);
 const singleMediaBuild = createAction(SINGLE_MEDIA_BUILD);
 const myPlaylistBuild  = createAction(MY_PLAYLIST_BUILD, pId => ({ pId }));
 
-const select          = createAction(PLAYLIST_SELECT);
-const setQuality      = createAction(PLAYER_SET_QUALITY);
-const setLanguage     = createAction(PLAYER_SET_LANGUAGE);
-const setSubsLanguage = createAction(PLAYER_SET_SUBS_LANGUAGE);
-const setMediaType    = createAction(PLAYER_SET_MEDIA_TYPE);
-const nullNextUnit    = createAction(PLAYER_NULL_NEXT_UNIT);
+const select               = createAction(PLAYLIST_SELECT);
+const setQuality           = createAction(PLAYER_SET_QUALITY);
+const setLanguage          = createAction(PLAYER_SET_LANGUAGE);
+const setSubsLanguage      = createAction(PLAYER_SET_SUBS_LANGUAGE);
+const setMediaType         = createAction(PLAYER_SET_MEDIA_TYPE);
+const nullNextUnit         = createAction(PLAYER_NULL_NEXT_UNIT);
+const showImages           = createAction(SHOW_IMAGES);
+const fetchShowData        = createAction(FETCH_SHOW_DATA);
+const fetchShowDataSuccess = createAction(FETCH_SHOW_DATA_SUCCESS);
 
 export const actions = {
   build,
@@ -47,14 +56,18 @@ export const actions = {
   setLanguage,
   setSubsLanguage,
   setMediaType,
-  nullNextUnit
+  nullNextUnit,
+  showImages,
+  fetchShowData,
+  fetchShowDataSuccess
 };
 
 /* Reducer */
 const initialState = {
   playlist: [],
   itemById: {},
-  info: {}
+  info: {},
+  fetched: {}
 };
 
 const onBuild = draft => {
@@ -62,12 +75,10 @@ const onBuild = draft => {
 };
 
 const onBuildSuccess = (draft, payload) => {
-  const { cuId, id: _id, items, ...info } = payload;
+  const { cuId, id: _id, items, fetched, ...info } = payload;
+  const id                                         = _id || cuId;
+  let language                                     = draft.info.language || payload.language || DEFAULT_LANGUAGE;
 
-  const id     = _id || cuId;
-  let language = draft.info.language || payload.language || DEFAULT_LANGUAGE;
-
-  draft.playlist = items.map(({ id }) => ({ id }));
   //use curId - fix for my playlists
   draft.itemById = items.reduce((acc, x, ap) => ({ ...acc, [x.id]: x, ap }), {});
   const curItem  = draft.itemById?.[id];
@@ -85,8 +96,14 @@ const onBuildSuccess = (draft, payload) => {
     quality   = qualities[idx];
   }
   if (!quality) quality = VS_DEFAULT;
-
-  draft.info = { ...info, cuId, id, language, subsLanguage: language, quality, isReady: true, wip: false };
+  const playlist = items.map(({ id }) => ({ id }));
+  const selIndex = playlist.findIndex(x => x.id === (cuId || id));
+  draft.playlist = playlist.map((x, i) => {
+    const showImg = i > selIndex - 2 && i < selIndex + SHOWED_PLAYLIST_ITEMS;
+    return { ...x, showImg };
+  });
+  draft.info     = { ...info, cuId, id, language, subsLanguage: language, quality, isReady: true, wip: false };
+  draft.fetched  = fetched;
 };
 
 const onRemovePlayer = draft => {
@@ -102,7 +119,7 @@ const onComplete = draft => {
   draft.info.nextUnitId = nextId;
 };
 
-const onUpdateMediaType = (draft, payload) => {
+const onUpdateMediaType      = (draft, payload) => {
   draft.info.mediaType = payload;
 
   const item = draft.itemById[draft.info.id] || false;
@@ -110,8 +127,23 @@ const onUpdateMediaType = (draft, payload) => {
     draft.itemById[draft.info.id].id = `${item?.file.id}_${draft.info.mediaType}`;
   }
 };
-
-export const reducer = handleActions({
+const onShowImages           = (draft, idx) => {
+  draft.playlist.forEach((x, i) => {
+    if (x.showImg) return;
+    x.showImg = i > idx - 2 && i < idx + SHOWED_PLAYLIST_ITEMS;
+  });
+};
+const onFetchShowDataSuccess = (draft, { items, fetched }) => {
+  items.forEach(x => {
+    draft.itemById[x.id] = x;
+  });
+  draft.fetched = fetched;
+  draft.playlist.forEach((x, i) => {
+    if (i > fetched.from && i < fetched.to)
+      x.fetched = true;
+  });
+};
+export const reducer         = handleActions({
   [PLAYLIST_BUILD]: onBuild,
   [SINGLE_MEDIA_BUILD]: onBuild,
   [MY_PLAYLIST_BUILD]: onBuild,
@@ -125,6 +157,8 @@ export const reducer = handleActions({
   [PLAYER_SET_MEDIA_TYPE]: onUpdateMediaType,
   [PLAYER_NULL_NEXT_UNIT]: (draft, payload = null) => draft.info.nextUnitId = payload,
   [playerTypes.PLAYER_COMPLETE]: onComplete,
+  [SHOW_IMAGES]: onShowImages,
+  [FETCH_SHOW_DATA_SUCCESS]: onFetchShowDataSuccess,
 
   [settings.SET_LANGUAGE]: onRemovePlayer,
   [settingsTypes.SET_CONTENT_LANGUAGE]: (draft, payload) => draft.info.language = payload,
@@ -149,6 +183,7 @@ const getIndexById = (state, id) => state.playlist.findIndex(x => x.id === id);
 const getItemById  = state => id => {
   return state.itemById[id] || false;
 };
+const getFetched   = state => state.fetched;
 
 export const selectors = {
   getPlaylist,
@@ -157,5 +192,6 @@ export const selectors = {
   getNextId,
   getPrevId,
   getIndexById,
-  getItemById
+  getItemById,
+  getFetched
 };

@@ -7,7 +7,7 @@ import { PLAYER_POSITION_STORAGE_KEY } from './constants';
 export const DEFAULT_PLAYER_VOLUME     = 80;
 
 export const findPlayedFile = (item, info, lang, mt, q) => {
-  if (isEmpty(item) || !info.isReady) return {};
+  if (isEmpty(item) || !info.isReady || (!item.files && !item.file)) return {};
 
   const { mediaType, language, quality } = info;
   const { subtitles }                    = item;

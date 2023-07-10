@@ -4,7 +4,7 @@ import i18n from 'i18next';
 import { selectors as authSelectors } from '../redux/modules/auth';
 import { selectors as settings } from '../redux/modules/settings';
 import { selectors as my, selectors } from '../redux/modules/my';
-import { types, actions } from '../redux/modules/playlist';
+import { types, actions, selectors as playlist, SHOWED_PLAYLIST_ITEMS } from '../redux/modules/playlist';
 import { selectors as mdb } from '../redux/modules/mdb';
 import {
   MY_NAMESPACE_PLAYLISTS,
@@ -32,19 +32,9 @@ function* build(action) {
 
   const { location } = yield select(state => state.router);
 
-  const fetched = yield select(state => mdb.getFullCollectionFetched(state.mdb));
-  if (!fetched?.[cId]) {
+  const fetchedC = yield select(state => mdb.getFullCollectionFetched(state.mdb));
+  if (!fetchedC?.[cId]) {
     yield call(fetchCollection, { payload: cId });
-  }
-
-  let c = yield select(state => mdb.getDenormCollection(state.mdb, cId));
-
-  {
-    const id = c.content_units.filter(cu => !cu.files).map(x => x.id) || [];
-    if (id.length > 0) {
-      yield call(fetchUnitsByIDs, { payload: { id, with_files: true } });
-      c = yield select(state => mdb.getDenormCollection(state.mdb, cId));
-    }
   }
 
   const siteLang    = yield select(state => settings.getLanguage(state.settings));
@@ -52,6 +42,18 @@ function* build(action) {
 
   const mediaType = getMediaTypeFromQuery(location);
   const language  = getLanguageFromQuery(location, contentLang || siteLang);
+
+  let c = yield select(state => mdb.getDenormCollection(state.mdb, cId));
+  {
+    const idx = c.content_units.findIndex(cu => cu.id === cuId) || 0;
+    const id  = c.content_units?.slice(idx - SHOWED_PLAYLIST_ITEMS, idx + SHOWED_PLAYLIST_ITEMS)
+      .filter(cu => !cu.files)
+      .map(x => x.id) || [];
+
+    if (id.length > 0) {
+      c = yield select(state => mdb.getDenormCollection(state.mdb, cId));
+    }
+  }
 
   const data = playlistBuilder(c);
 
@@ -64,11 +66,38 @@ function* build(action) {
     yield call(fetchUnit, { payload: cuId });
   }
 
-  yield put(actions.buildSuccess({ ...data, language, mediaType, cuId, cId }));
-  const cu_uids = data.items.map(x => x.id);
+  const idx     = data.items.findIndex(x => x.id === cuId);
+  const fetched = { from: Math.max(0, idx - 25), to: Math.min(data.items.length - 1, idx + 25) };
+  yield put(actions.buildSuccess({ ...data, language, mediaType, cuId, cId, fetched }));
+
+  yield fetchLabels({ content_unit: cuId, language });
+
+  const cu_uids = data.items.slice(fetched.from, fetched.to).map(x => x.id);
   yield fetchViewsByUIDs(cu_uids);
   yield fetchMy({ payload: { namespace: MY_NAMESPACE_HISTORY, cu_uids, page_size: cu_uids.length } });
-  yield fetchLabels({ content_unit: cuId, language });
+}
+
+function* fetchShowData(action) {
+  console.log('lazy load: fetchShowData', action);
+  const dir            = action.payload;
+  const { ...fetched } = yield select(state => playlist.getFetched(state.playlist));
+  if (dir === -1) fetched.from = Math.max(0, fetched.from - 50);
+  else fetched.to = Math.max(0, fetched.to + 50);
+  const _playlist = yield select(state => playlist.getPlaylist(state.playlist));
+  const uids      = _playlist.slice(fetched.from, fetched.to)
+    .filter(x => !x.fetched)
+    .map(x => x.id);
+
+  if (uids.length > 0) {
+    yield call(fetchUnitsByIDs, { payload: { id: uids, with_files: true } });
+  }
+
+  const denormCU = yield select(state => mdb.nestedGetDenormContentUnit(state.mdb));
+  const items    = uids.map(uid => denormCU(uid)).map(cu => playableItem(cu));
+  yield put(actions.fetchShowDataSuccess({ items, fetched }));
+
+  yield fetchViewsByUIDs(uids);
+  yield fetchMy({ payload: { namespace: MY_NAMESPACE_HISTORY, uids, page_size: uids.length } });
 }
 
 function* singleMediaBuild(action) {
@@ -171,6 +200,10 @@ function* watchBuild() {
   yield takeEvery(types.PLAYLIST_BUILD, build);
 }
 
+function* watchFetchShowData() {
+  yield takeEvery(types.FETCH_SHOW_DATA, fetchShowData);
+}
+
 function* watchSingleMediaBuild() {
   yield takeEvery(types.SINGLE_MEDIA_BUILD, singleMediaBuild);
 }
@@ -179,4 +212,4 @@ function* watchMyPlaylistBuild() {
   yield takeEvery(types.MY_PLAYLIST_BUILD, myPlaylistBuild);
 }
 
-export const sagas = [watchBuild, watchSingleMediaBuild, watchMyPlaylistBuild];
+export const sagas = [watchBuild, watchFetchShowData, watchSingleMediaBuild, watchMyPlaylistBuild];
