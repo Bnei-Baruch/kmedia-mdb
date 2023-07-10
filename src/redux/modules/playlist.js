@@ -75,14 +75,14 @@ const onBuild = draft => {
 };
 
 const onBuildSuccess = (draft, payload) => {
-  const { cuId, id: _id, items, fetched, ...info } = payload;
+  const { cuId, id: _id, items, fetched = {}, ...info } = payload;
   const id                                         = _id || cuId;
   let language                                     = draft.info.language || payload.language || DEFAULT_LANGUAGE;
 
   //use curId - fix for my playlists
   draft.itemById = items.reduce((acc, x, ap) => ({ ...acc, [x.id]: x, ap }), {});
   const curItem  = draft.itemById?.[id];
-  if (curItem && !curItem.isHLS && !curItem.languages.includes(language)) {
+  if (curItem && !curItem.isHLS && (curItem.languages && !curItem.languages.includes(language))) {
     language = curItem.languages[0];
   }
 

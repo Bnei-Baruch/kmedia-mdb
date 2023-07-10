@@ -71,7 +71,7 @@ const PlaylistItems = ({ t }) => {
         })
       }
       {
-        to < items.length && (
+        to < items.length - 1 && (
 
           <Container fluid>
             <Button

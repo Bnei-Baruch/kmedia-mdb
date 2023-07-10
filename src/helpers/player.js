@@ -54,7 +54,6 @@ const calcAvailableLanguages = unit => {
 };
 
 export const playableItem = (unit, preImageUrl) => {
-
   if (!preImageUrl) {
     preImageUrl = assetUrl(`api/thumbnail/${unit.id}`);
   }
@@ -63,7 +62,9 @@ export const playableItem = (unit, preImageUrl) => {
     id: unit.id,
     name: unit.name,
     properties: unit.properties,
-    preImageUrl
+    preImageUrl,
+    mtByLang: {},
+    qualityByLang: {}
   };
   if (!unit?.files) return resp;
 
