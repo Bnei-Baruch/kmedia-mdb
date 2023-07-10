@@ -11,7 +11,7 @@ import { COLLECTION_DAILY_LESSONS } from '../../../../helpers/consts';
 const PlaylistItems = ({ t }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
-  const cuIds                  = useSelector(state => selectors.getPlaylist(state.playlist));
+  const items                  = useSelector(state => selectors.getPlaylist(state.playlist));
   const { cId, cuId }          = useSelector(state => selectors.getInfo(state.playlist));
   const { name, content_type } = useSelector(state => mdb.getDenormCollection(state.mdb, cId)) || false;
   const title                  = COLLECTION_DAILY_LESSONS.includes(content_type) ? t('constants.content-types.DAILY_LESSON') : name;
@@ -28,7 +28,7 @@ const PlaylistItems = ({ t }) => {
         )
       }
       {
-        cuIds.map((id, i) => {
+        items.map(({ id, showImg }) => {
           const selected = id === cuId;
           return (
             <ContentItemContainer
@@ -39,6 +39,7 @@ const PlaylistItems = ({ t }) => {
               asList={true}
               selected={selected}
               withCCUInfo={false}
+              showImg={showImg}
             />
           );
         })

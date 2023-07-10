@@ -8,14 +8,14 @@ import { stringify } from '../../../../helpers/url';
 
 const PlaylistItems = () => {
   const language    = useSelector(state => settings.getLanguage(state.settings));
-  const itemsIds    = useSelector(state => selectors.getPlaylist(state.playlist));
+  const items       = useSelector(state => selectors.getPlaylist(state.playlist));
   const { id, pId } = useSelector(state => selectors.getInfo(state.playlist));
   const itemById    = useSelector(state => selectors.getItemById(state.playlist));
 
   return (
     <div id="avbox_playlist" className="avbox__playlist-view">
       {
-        itemsIds.map(_id => {
+        items.map(({ id: _id, showImg }) => {
           const selected                       = _id === id;
           const { name, cuId, properties, ap } = itemById(_id);
           if (!cuId) return null;
@@ -30,6 +30,7 @@ const PlaylistItems = () => {
               selected={selected}
               name={name}
               link={{ pathname: `/${language}/${MY_NAMESPACE_PLAYLISTS}/${pId}`, search }}
+              showImg={showImg}
             />
           );
         })

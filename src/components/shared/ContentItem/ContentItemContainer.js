@@ -125,7 +125,8 @@ const ContentItemContainer = (
     withCCUInfo = undefined,
     withCUInfo = undefined,
     name,
-    lID
+    lID,
+    showImg
   }
 ) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
@@ -191,7 +192,8 @@ const ContentItemContainer = (
     size: !isMobileDevice ? size : '',
     selected,
     label,
-    name
+    name,
+    showImg
   };
   return (asList ? <ListTemplate {...props} /> : <CardTemplate {...props} />);
 };

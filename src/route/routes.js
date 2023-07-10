@@ -3,7 +3,6 @@ import Events from './../components/Sections/Events/MainPage';
 import ExcerptContainer from './../components/Sections/Excerpt/ExcerptContainer';
 import Help from './../components/Sections/Help/Help';
 import HomePage from './../components/Sections/Home/Container';
-import LessonCollection from './../components/Sections/Lesson/LessonPage';
 import Lessons from './../components/Sections/Lessons/MainPage';
 import LibraryHomepage from './../components/Sections/Library/Homepage';
 import LibraryContainer from './../components/Sections/Library/LibraryContainer';
@@ -39,11 +38,11 @@ import {
   PlaylistItemPageLesson,
   PlaylistItemPageEvent,
   PlaylistCollectionPage,
-  PlaylistItemPageSeries, PlaylistItemPageProgram
+  PlaylistItemPageSeries,
+  PlaylistItemPageProgram
 } from '../components/Pages/WithPlayer/PlaylistPageDispecher';
 
 import * as ssrDataLoaders from './routesSSRData';
-import SingleMediaContainer from './../components/Pages/WithPlayer/SingleMedia/SingleMediaContainer';
 import PlaylistMy from './../components/Pages/WithPlayer/PlaylistMy/Container';
 
 const useRoutes = playerContainer => ([
@@ -112,12 +111,12 @@ const useRoutes = playerContainer => ([
   },
   {
     path: 'programs/cu/:id',
-    component: <PlaylistItemPageProgram />,
+    component: <PlaylistItemPageProgram playerContainer={playerContainer} />,
     ssrData: ssrDataLoaders.cuPage
   },
   {
     path: 'programs/:tab/cu/:id',
-    component: <PlaylistItemPageProgram />,
+    component: <PlaylistItemPageProgram playerContainer={playerContainer} />,
     ssrData: ssrDataLoaders.cuPage
   },
 

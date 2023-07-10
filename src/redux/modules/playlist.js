@@ -67,7 +67,7 @@ const onBuildSuccess = (draft, payload) => {
   const id     = _id || cuId;
   let language = draft.info.language || payload.language || DEFAULT_LANGUAGE;
 
-  draft.playlist = items.map(({ id }) => id);
+  draft.playlist = items.map(({ id }) => ({ id }));
   //use curId - fix for my playlists
   draft.itemById = items.reduce((acc, x, ap) => ({ ...acc, [x.id]: x, ap }), {});
   const curItem  = draft.itemById?.[id];
@@ -94,10 +94,10 @@ const onRemovePlayer = draft => {
 };
 
 const onComplete = draft => {
-  const idx     = draft.playlist.findIndex(x => x === draft.info.id);
+  const idx     = draft.playlist.findIndex(x => x.id === draft.info.id);
   const lastIdx = draft.playlist.length - 1;
   if (idx === lastIdx) return;
-  const nextId = draft.playlist[(idx < lastIdx) ? idx + 1 : lastIdx];
+  const nextId = draft.playlist[(idx < lastIdx) ? idx + 1 : lastIdx]?.id;
   saveTimeOnLocalstorage(1, nextId);
   draft.info.nextUnitId = nextId;
 };
@@ -134,18 +134,18 @@ const getPlaylist  = state => state.playlist;
 const getPlayed    = state => state.itemById[state.info.id] || false;
 const getInfo      = state => state.info;
 const getNextId    = state => {
-  const curIdx = state.playlist.findIndex(x => x === state.info.id);
+  const curIdx = state.playlist.findIndex(x => x.id === state.info.id);
   if (state.playlist.length <= curIdx) return false;
   const idx = curIdx + 1;
-  return state.playlist[idx];
+  return state.playlist[idx]?.id;
 };
 const getPrevId    = state => {
-  const curIdx = state.playlist.findIndex(x => x === state.info.id);
+  const curIdx = state.playlist.findIndex(x => x.id === state.info.id);
   if (1 > curIdx) return false;
   const idx = curIdx - 1;
-  return state.playlist[idx];
+  return state.playlist[idx]?.id;
 };
-const getIndexById = (state, id) => state.playlist.findIndex(x => x === id);
+const getIndexById = (state, id) => state.playlist.findIndex(x => x.id === id);
 const getItemById  = state => id => {
   return state.itemById[id] || false;
 };

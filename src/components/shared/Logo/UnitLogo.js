@@ -36,19 +36,20 @@ const makeImaginary = (cuId, cId, width, height) => {
 
 const UnitLogo = props => {
   const {
-    unitId       = null,
-    collectionId = null,
-    sourceId     = null,
-    width        = 120,
-    height,
-    className    = '',
-    fallbackImg  = 'default',
-    ...rest
-  } = props;
+          unitId       = null,
+          collectionId = null,
+          sourceId     = null,
+          width        = 120,
+          height,
+          className    = '',
+          fallbackImg  = 'default',
+          showImg      = true,
+          ...rest
+        } = props;
 
   const sourcePath = useSelector(state => sources.getPathByID(state.sources)(sourceId));
 
-  const src = makeImaginary(unitId, collectionId, width, height);
+  const src = showImg ? makeImaginary(unitId, collectionId, width, height) : 'default';
 
   const fallback  = sourceId !== null && sourcePath && sourcePath.length ? portraits[sourcePath[0].id] : fallbackImg;
   const force16x9 = sourceId !== null ? 'true' : undefined;

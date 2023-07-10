@@ -10,7 +10,7 @@ const useBuildMyPlaylist = () => {
   const location = useLocation();
 
   const { pId, id: itemId, wip } = useSelector(state => selectors.getInfo(state.playlist));
-  const itemIds                  = useSelector(state => selectors.getPlaylist(state.playlist));
+  const items                  = useSelector(state => selectors.getPlaylist(state.playlist));
 
   const dispatch = useDispatch();
 
@@ -25,13 +25,13 @@ const useBuildMyPlaylist = () => {
       const arr   = itemId.split('_');
       const newAp = getActivePartFromQuery(location);
       if (arr[1] !== newAp) {
-        const _id = itemIds[newAp];
+        const { id: _id } = items[newAp] || false;
         _id && dispatch(actions.select({ cuId: _id.split('_')[0], id: _id }));
       }
     }
-  }, [itemIds, itemId, location]);
+  }, [items, itemId, location]);
 
-  return itemIds.length === 0;
+  return items.length === 0;
 };
 
 export default useBuildMyPlaylist;
