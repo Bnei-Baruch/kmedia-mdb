@@ -76,8 +76,9 @@ const onBuild = draft => {
 
 const onBuildSuccess = (draft, payload) => {
   const { cuId, id: _id, items, fetched = {}, ...info } = payload;
-  const id                                         = _id || cuId;
-  let language                                     = draft.info.language || payload.language || DEFAULT_LANGUAGE;
+
+  const id     = _id || cuId;
+  let language = draft.info.language || payload.language || DEFAULT_LANGUAGE;
 
   //use curId - fix for my playlists
   draft.itemById = items.reduce((acc, x, ap) => ({ ...acc, [x.id]: x, ap }), {});
@@ -100,7 +101,8 @@ const onBuildSuccess = (draft, payload) => {
   const selIndex = playlist.findIndex(x => x.id === (cuId || id));
   draft.playlist = playlist.map((x, i) => {
     const showImg = i > selIndex - 2 && i < selIndex + SHOWED_PLAYLIST_ITEMS;
-    return { ...x, showImg };
+    const f       = i >= fetched.from && i <= fetched.to;
+    return { ...x, showImg, fetched: f };
   });
   draft.info     = { ...info, cuId, id, language, subsLanguage: language, quality, isReady: true, wip: false };
   draft.fetched  = fetched;

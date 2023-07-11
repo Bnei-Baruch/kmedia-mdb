@@ -4,7 +4,7 @@ import i18n from 'i18next';
 import { selectors as authSelectors } from '../redux/modules/auth';
 import { selectors as settings } from '../redux/modules/settings';
 import { selectors as my, selectors } from '../redux/modules/my';
-import { types, actions, selectors as playlist, SHOWED_PLAYLIST_ITEMS } from '../redux/modules/playlist';
+import { types, actions, selectors as playlist } from '../redux/modules/playlist';
 import { selectors as mdb } from '../redux/modules/mdb';
 import {
   MY_NAMESPACE_PLAYLISTS,
@@ -26,6 +26,8 @@ import { fetchCollection, fetchUnit, fetchUnitsByIDs, fetchLabels } from './mdb'
 import { fetchViewsByUIDs } from './recommended';
 import { fetchOne, fetch as fetchMy } from './my';
 
+const ONE_FETCH_SIZE = 50;
+
 function* build(action) {
   const { cId } = action.payload;
   let { cuId }  = action.payload;
@@ -39,63 +41,49 @@ function* build(action) {
 
   const siteLang    = yield select(state => settings.getLanguage(state.settings));
   const contentLang = yield select(state => settings.getContentLanguage(state.settings));
+  const mediaType   = getMediaTypeFromQuery(location);
+  const language    = getLanguageFromQuery(location, contentLang || siteLang);
 
-  const mediaType = getMediaTypeFromQuery(location);
-  const language  = getLanguageFromQuery(location, contentLang || siteLang);
-
-  let c = yield select(state => mdb.getDenormCollection(state.mdb, cId));
-  {
-    const idx = c.content_units.findIndex(cu => cu.id === cuId) || 0;
-    const id  = c.content_units?.slice(idx - SHOWED_PLAYLIST_ITEMS, idx + SHOWED_PLAYLIST_ITEMS)
-      .filter(cu => !cu.files)
-      .map(x => x.id) || [];
-
-    if (id.length > 0) {
-      c = yield select(state => mdb.getDenormCollection(state.mdb, cId));
-    }
-  }
-
+  const c    = yield select(state => mdb.getDenormCollection(state.mdb, cId));
   const data = playlistBuilder(c);
-
   if (!cuId) {
     cuId = data.items[getActivePartFromQuery(location)]?.id;
   }
-
-  const cu = yield select(state => mdb.getDenormContentUnit(state.mdb, cuId));
-  if (!cu) {
-    yield call(fetchUnit, { payload: cuId });
-  }
-
   const idx     = data.items.findIndex(x => x.id === cuId);
-  const fetched = { from: Math.max(0, idx - 25), to: Math.min(data.items.length - 1, idx + 25) };
+  const fetched = {
+    from: Math.max(0, idx - ONE_FETCH_SIZE / 2),
+    to: Math.min(data.items.length - 1, idx + ONE_FETCH_SIZE / 2)
+  };
   yield put(actions.buildSuccess({ ...data, language, mediaType, cuId, cId, fetched }));
-
+  const uids = data.items.slice(fetched.from, fetched.to).map(x => x.id);
+  yield call(fetchPlaylistDataByCUs, { uids, fetched });
   yield fetchLabels({ content_unit: cuId, language });
-
-  const cu_uids = data.items.slice(fetched.from, fetched.to).map(x => x.id);
-  yield fetchViewsByUIDs(cu_uids);
-  yield fetchMy({ payload: { namespace: MY_NAMESPACE_HISTORY, cu_uids, page_size: cu_uids.length } });
 }
 
 function* fetchShowData(action) {
-  console.log('lazy load: fetchShowData', action);
   const dir            = action.payload;
   const { ...fetched } = yield select(state => playlist.getFetched(state.playlist));
-  if (dir === -1) fetched.from = Math.max(0, fetched.from - 50);
-  else fetched.to = Math.max(0, fetched.to + 50);
-  const _playlist = yield select(state => playlist.getPlaylist(state.playlist));
-  const uids      = _playlist.slice(fetched.from, fetched.to)
-    .filter(x => !x.fetched)
-    .map(x => x.id);
 
+  if (dir === -1)
+    fetched.from = Math.max(0, fetched.from - ONE_FETCH_SIZE);
+  else
+    fetched.to = Math.max(0, fetched.to + ONE_FETCH_SIZE);
+
+  const _playlist = yield select(state => playlist.getPlaylist(state.playlist));
+  const uids      = _playlist.slice(fetched.from, fetched.to).filter(x => !x.fetched).map(x => x.id);
+
+  yield call(fetchPlaylistDataByCUs, { uids, fetched });
+}
+
+function* fetchPlaylistDataByCUs({ uids, fetched }) {
   if (uids.length > 0) {
     yield call(fetchUnitsByIDs, { payload: { id: uids, with_files: true } });
   }
 
   const denormCU = yield select(state => mdb.nestedGetDenormContentUnit(state.mdb));
-  const items    = uids.map(uid => denormCU(uid)).map(cu => playableItem(cu));
+  const x        = uids.map(uid => denormCU(uid));
+  const items    = x.map(cu => playableItem(cu));
   yield put(actions.fetchShowDataSuccess({ items, fetched }));
-
   yield fetchViewsByUIDs(uids);
   yield fetchMy({ payload: { namespace: MY_NAMESPACE_HISTORY, uids, page_size: uids.length } });
 }

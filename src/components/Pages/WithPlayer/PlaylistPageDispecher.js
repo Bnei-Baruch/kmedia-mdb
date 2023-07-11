@@ -4,7 +4,8 @@ import {
   COLLECTION_DAILY_LESSONS,
   EVENT_TYPES,
   CT_LESSONS_SERIES,
-  COLLECTION_PROGRAMS_TYPE
+  COLLECTION_PROGRAMS_TYPE,
+  CT_VIRTUAL_LESSONS
 } from '../../../helpers/consts';
 import BuildPlaylistByUnit from './BuildPlaylistByUnit';
 import PlaylistPage from './Playlist/PlaylistPage';
@@ -21,11 +22,16 @@ export const PlaylistItemPageSeries = ({ playerContainer }) => {
   return <Decorator builder={builder} playerContainer={playerContainer} />;
 };
 
+export const PlaylistItemPageVirtual = ({ playerContainer }) => {
+  const builder = <BuildPlaylistByUnit cts={[CT_VIRTUAL_LESSONS]} />;
+  return <Decorator builder={builder} playerContainer={playerContainer} />;
+};
+
 export const PlaylistItemPageLesson = ({ playerContainer }) => {
   const { isReady } = useSelector(state => playlist.getInfo(state.playlist));
   return (
     <>
-      {<BuildPlaylistByUnit cts={COLLECTION_DAILY_LESSONS} />}
+      {<BuildPlaylistByUnit cts={[...COLLECTION_DAILY_LESSONS, CT_VIRTUAL_LESSONS]} />}
       {isReady ? <PlaylistPage playerContainer={playerContainer} /> : <Icon name="circle notch" color="blue" loading />}
     </>
   );
