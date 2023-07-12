@@ -6,26 +6,17 @@ import moment from 'moment';
 import 'moment-duration-format';
 
 import { CollectionsBreakdown } from './mdb';
-import { canonicalSectionByLink, canonicalSectionByUnit } from './links';
+import { canonicalSectionByUnit } from './links';
 import * as consts from './consts';
 import {
   CT_CONGRESS,
   CT_DAILY_LESSON,
-  CT_FRIENDS_GATHERINGS,
-  CT_HOLIDAY,
   CT_LESSONS_SERIES,
-  CT_MEALS,
-  CT_PICNIC,
   CT_SPECIAL_LESSON,
-  CT_UNITY_DAY,
-  CT_VIDEO_PROGRAM,
-  CT_VIRTUAL_LESSONS,
-  CT_WOMEN_LESSONS,
   CT_SONGS,
   LANGUAGES,
   VS_HLS
 } from './consts';
-import { Requests } from './Api';
 
 const CDN_URL     = process.env.REACT_APP_CDN_URL;
 const CDN_HLS_URL = process.env.REACT_APP_CDN_HLS_URL;
@@ -384,7 +375,7 @@ export const usePrevious = value => {
 //   source = {a: {b: 2, c: 3, d: {e: 1, f: 2}}}
 //   what {a: {b: true, f: }
 // will yield: {a: {b: 2}}
-export const partialAssign = (target, source, what = true) => {
+export const partialAssign       = (target, source, what = true) => {
   if (what === true) {
     target = source;
     return source;
@@ -416,34 +407,6 @@ export const partialAssign = (target, source, what = true) => {
   console.error('Unexpected what for partialAssign:', what);
   return {};
 };
-
-export const imageByUnit = (unit, link) => {
-  // collections -- prepare random image
-  switch (unit.content_type) {
-    case CT_CONGRESS:
-    case CT_MEALS:
-    case CT_DAILY_LESSON:
-    case CT_SPECIAL_LESSON:
-    case CT_VIRTUAL_LESSONS:
-    case CT_WOMEN_LESSONS:
-    case CT_VIDEO_PROGRAM:
-    case CT_FRIENDS_GATHERINGS:
-    case CT_HOLIDAY:
-    case CT_PICNIC:
-    case CT_UNITY_DAY:
-    case CT_LESSONS_SERIES:
-      return Requests.imaginaryRandom('resize', {
-        width: 512,
-        height: 288,
-        nocrop: false,
-        stripmeta: true,
-      }, `lessons/latest_lesson_%s.jpg`);
-    default:
-      return canonicalSectionByLink(link);
-
-  }
-};
-
 export const cuPartNameByCCUType = ct => {
   const prefix = 'pages.unit.info.';
 

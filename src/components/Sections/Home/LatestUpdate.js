@@ -7,7 +7,6 @@ import { canonicalLink, canonicalSectionByLink } from '../../../helpers/links';
 import * as shapes from '../../shapes';
 import Link from '../../Language/MultiLanguageLink';
 import UnitLogo from '../../shared/Logo/UnitLogo';
-import { Requests } from '../../../helpers/Api';
 import {
   CT_CLIP,
   CT_CONGRESS,
@@ -25,6 +24,7 @@ import {
 } from '../../../helpers/consts';
 import ContentItemContainer from '../../shared/ContentItem/ContentItemContainer';
 import { fromToLocalized } from '../../../helpers/date';
+import { getRandomLatestLesson } from './LatestDailyLesson';
 
 const LatestUpdate = ({ item, t, label }) => {
   const { content_type, name, film_date, name_in_collection, id, source_id, start_date, end_date, number } = item;
@@ -40,12 +40,7 @@ const LatestUpdate = ({ item, t, label }) => {
     authorName = getPathByID(source_id)?.[0]?.name;
   }
 
-  let canonicalSection = Requests.imaginaryRandom('resize', {
-    width: 512,
-    height: 288,
-    nocrop: false,
-    stripmeta: true,
-  }, `lessons/latest_lesson_%s.jpg`);
+  let canonicalSection = getRandomLatestLesson();
 
   // collections -- prepare random image
   switch (content_type) {
