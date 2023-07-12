@@ -23,7 +23,7 @@ const PlaylistItems = ({ t }) => {
   const handleScroll   = e => {
     if (timer !== null) clearTimeout(timer);
     timer = setTimeout(function () {
-      const idx = from + Math.max(0, Math.round(e.target.scrollTop / 104));
+      const idx = from + Math.max(0, Math.round(e.target.scrollTop / (isMobileDevice ? 128 : 104)));
       dispatch(actions.showImages(idx));
     }, 150);
   };
