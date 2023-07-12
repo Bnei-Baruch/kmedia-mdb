@@ -8,8 +8,10 @@ import { Header, Button, Container } from 'semantic-ui-react';
 import { selectors as mdb } from '../../../../redux/modules/mdb';
 import { COLLECTION_DAILY_LESSONS } from '../../../../helpers/consts';
 
+const PLAYLIST_ITEM_HEIGHT        = 104;
+const PLAYLIST_ITEM_HEIGHT_MOBILE = 128;
 let timer;
-const PlaylistItems = ({ t }) => {
+const PlaylistItems               = ({ t }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
   const { cId, cuId }          = useSelector(state => selectors.getInfo(state.playlist));
@@ -23,7 +25,8 @@ const PlaylistItems = ({ t }) => {
   const handleScroll   = e => {
     if (timer !== null) clearTimeout(timer);
     timer = setTimeout(function () {
-      const idx = from + Math.max(0, Math.round(e.target.scrollTop / (isMobileDevice ? 128 : 104)));
+      const h   = isMobileDevice ? PLAYLIST_ITEM_HEIGHT_MOBILE : PLAYLIST_ITEM_HEIGHT;
+      const idx = from + Math.max(0, Math.round(e.target.scrollTop / h));
       dispatch(actions.showImages(idx));
     }, 150);
   };
