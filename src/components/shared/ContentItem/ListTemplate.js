@@ -30,6 +30,7 @@ const ListTemplate = (
     selected,
     label,
     name,
+    showImg
   }
 ) => {
 
@@ -103,8 +104,8 @@ const ListTemplate = (
           {label ? <div className="cu_item_label">{label}</div> : null}
           <UnitProgress unit={unit} playTime={playTime} />
           <div className="cu_item_img" style={{ width }}>
-            {withCUInfo ? <UnitLogoWithDuration unit={unit} sourceId={source?.id} width={width} /> :
-              <UnitLogo unitId={unit?.id} sourceId={source?.id} width={width} />}
+            {withCUInfo ? <UnitLogoWithDuration unit={unit} sourceId={source?.id} width={width} showImg={showImg} /> :
+              <UnitLogo unitId={unit?.id} sourceId={source?.id} width={width} showImg={showImg} />}
           </div>
         </div>
         <div className={clsx('cu_item_info', { [dir]: true, 'with_actions': !!children })}>

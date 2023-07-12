@@ -54,29 +54,33 @@ const calcAvailableLanguages = unit => {
 };
 
 export const playableItem = (unit, preImageUrl) => {
-  if (!unit?.files) {
-    return {};
-  }
-
   if (!preImageUrl) {
     preImageUrl = assetUrl(`api/thumbnail/${unit.id}`);
   }
-  const subtitles = unit?.files.filter(f => f.type === MT_SUBTITLES).map(f => ({
+
+  let resp = {
+    id: unit.id,
+    name: unit.name,
+    properties: unit.properties,
+    preImageUrl,
+    mtByLang: {},
+    qualityByLang: {}
+  };
+  if (!unit?.files) return resp;
+
+  const subtitles = unit.files.filter(f => f.type === MT_SUBTITLES).map(f => ({
     src: physicalFile(f),
     language: f.language
   })) || [];
-  const hls       = findHLS(unit?.files);
+  const hls       = findHLS(unit.files);
   if (hls) {
     return {
-      id: unit.id,
-      name: unit.name,
-      properties: unit.properties,
+      ...resp,
       file: { ...hls, src: physicalFile(hls, true) },
       isHLS: true,
-      preImageUrl,
       languages: hls.hls_languages,
       qualities: hls.video_qualities,
-      subtitles,
+      subtitles
     };
   }
 
@@ -87,7 +91,7 @@ export const playableItem = (unit, preImageUrl) => {
 
   const mtByLang = languages.reduce((acc, l) => ({ ...acc, [l]: calcAvailableMediaTypes(unit, l) }), {});
 
-  const files         = (unit.files || []).filter(isPlayable).map(f => ({ ...f, src: physicalFile(f, true) }));
+  const files         = unit.files.filter(isPlayable).map(f => ({ ...f, src: physicalFile(f, true) }));
   const filesByLang   = languages.reduce((acc, l) => (
     { ...acc, [l]: files.filter(f => f.language === l) }
   ), {});
@@ -98,15 +102,12 @@ export const playableItem = (unit, preImageUrl) => {
   }, {});
 
   return {
-    id: unit.id,
-    name: unit.name,
-    properties: unit.properties,
+    ...resp,
     languages,
     mtByLang,
     filesByLang,
     qualityByLang,
     files,
-    preImageUrl,
     subtitles,
   };
 };

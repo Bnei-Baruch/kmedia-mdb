@@ -39,11 +39,12 @@ import {
   PlaylistItemPageLesson,
   PlaylistItemPageEvent,
   PlaylistCollectionPage,
-  PlaylistItemPageSeries
+  PlaylistItemPageSeries,
+  PlaylistItemPageProgram,
+  PlaylistItemPageVirtual
 } from '../components/Pages/WithPlayer/PlaylistPageDispecher';
 
 import * as ssrDataLoaders from './routesSSRData';
-import SingleMediaContainer from './../components/Pages/WithPlayer/SingleMedia/SingleMediaContainer';
 import PlaylistMy from './../components/Pages/WithPlayer/PlaylistMy/Container';
 
 const useRoutes = playerContainer => ([
@@ -68,15 +69,11 @@ const useRoutes = playerContainer => ([
 
   { path: 'lessons', component: <Lessons />, ssrData: ssrDataLoaders.lessonsPage },
   { path: 'lessons/:tab', component: <Lessons />, ssrData: ssrDataLoaders.lessonsPage },
+  { path: 'lessons/virtual/c/:id', component: <LessonCollection />, ssrData: ssrDataLoaders.lessonsCollectionPage },
   {
-    path: 'lessons/cu/:id',
-    component: <PlaylistItemPageLesson playerContainer={playerContainer} />,
+    path: 'lessons/virtual/cu/:id',
+    component: <PlaylistItemPageVirtual playerContainer={playerContainer} />,
     ssrData: ssrDataLoaders.cuPage
-  },
-  {
-    path: 'lessons/virtual/c/:id',
-    component: <LessonCollection />,
-    ssrData: ssrDataLoaders.lessonsCollectionPage
   },
   {
     path: 'lessons/:tab/c/:id',
@@ -112,12 +109,12 @@ const useRoutes = playerContainer => ([
   },
   {
     path: 'programs/cu/:id',
-    component: <SingleMediaContainer playerContainer={playerContainer} />,
+    component: <PlaylistItemPageProgram playerContainer={playerContainer} />,
     ssrData: ssrDataLoaders.cuPage
   },
   {
     path: 'programs/:tab/cu/:id',
-    component: <SingleMediaContainer playerContainer={playerContainer} />,
+    component: <PlaylistItemPageProgram playerContainer={playerContainer} />,
     ssrData: ssrDataLoaders.cuPage
   },
 

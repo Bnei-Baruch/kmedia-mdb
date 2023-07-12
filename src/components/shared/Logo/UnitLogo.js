@@ -40,12 +40,15 @@ const UnitLogo = props => {
           height,
           className    = '',
           fallbackImg  = 'default',
+          showImg      = true,
           ...rest
         } = props;
 
   const sourcePath = useSelector(state => sources.getPathByID(state.sources)(sourceId));
 
-  const { src, fallbacks } = makeImaginary(unitId, collectionId, width, height);
+  const { src, fallbacks } = showImg ?
+    makeImaginary(unitId, collectionId, width, height)
+    : { src: 'default', fallbacks: [] };
 
   const fallback  = sourceId !== null && sourcePath && sourcePath.length ? portraits[sourcePath[0].id] : fallbackImg;
   const force16x9 = sourceId !== null ? 'true' : undefined;

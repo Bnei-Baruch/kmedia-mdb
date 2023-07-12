@@ -1,5 +1,5 @@
 import { useEffect, useContext } from 'react';
-import { useDispatch, useSelector, shallowEqual } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { findPlayedFile } from '../../components/Player/helper';
 import { actions } from '../../redux/modules/player';
