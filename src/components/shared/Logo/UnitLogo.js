@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 
-import { assetUrl, Requests } from '../../../helpers/Api';
+import { assetUrl, Requests, cLogoUrl } from '../../../helpers/Api';
 import FallbackImage from '../FallbackImage';
 
 import { selectors as sources } from '../../../redux/modules/sources';
@@ -15,23 +15,20 @@ const portraits = { bs: portraitBS, rb: portraitRB, ml: portraitML };
 
 const makeImaginary = (cuId, cId, width, height) => {
   if (cuId) {
-    return Requests.imaginary('thumbnail', {
-      url: assetUrl(`api/thumbnail/${cuId}`),
-      width,
-      stripmeta: true,
-    });
+    const src = Requests.imaginary('thumbnail', { url: assetUrl(`api/thumbnail/${cuId}`), width, stripmeta: true, });
+    return { src, fallbacks: [] };
   }
 
   if (cId) {
-    return Requests.imaginary('thumbnail', {
-      url: assetUrl(`logos/collections/${cId}.jpg`),
-      width,
-      height,
-      stripmeta: true,
-    });
+    const srcParams = { url: cLogoUrl(`${cId}.jpg`), width, height, stripmeta: true };
+    const src       = Requests.imaginary('thumbnail', srcParams);
+    srcParams.url   = assetUrl(`logos/collections/${cId}.jpg`);
+    const fallbacks = [Requests.imaginary('thumbnail', srcParams)];
+
+    return { src, fallbacks };
   }
 
-  return '/fake_image_url_for_show_fallback';
+  return { src: '/fake_image_url_for_show_fallback', fallbacks: [] };
 };
 
 const UnitLogo = props => {
@@ -49,7 +46,9 @@ const UnitLogo = props => {
 
   const sourcePath = useSelector(state => sources.getPathByID(state.sources)(sourceId));
 
-  const src = showImg ? makeImaginary(unitId, collectionId, width, height) : 'default';
+  const { src, fallbacks } = showImg ?
+    makeImaginary(unitId, collectionId, width, height)
+    : { src: 'default', fallbacks: [] };
 
   const fallback  = sourceId !== null && sourcePath && sourcePath.length ? portraits[sourcePath[0].id] : fallbackImg;
   const force16x9 = sourceId !== null ? 'true' : undefined;
@@ -61,7 +60,7 @@ const UnitLogo = props => {
       width={width}
       height={height}
       className={`unit-logo ${className} ui image`}
-      fallbackImage={[fallback]}
+      fallbackImage={[...fallbacks, fallback]}
       force16x9={force16x9}
     />
   );
