@@ -3,6 +3,7 @@ import Events from './../components/Sections/Events/MainPage';
 import ExcerptContainer from './../components/Sections/Excerpt/ExcerptContainer';
 import Help from './../components/Sections/Help/Help';
 import HomePage from './../components/Sections/Home/Container';
+import LessonCollection from './../components/Sections/Lesson/LessonPage';
 import Lessons from './../components/Sections/Lessons/MainPage';
 import LibraryHomepage from './../components/Sections/Library/Homepage';
 import LibraryContainer from './../components/Sections/Library/LibraryContainer';
@@ -39,12 +40,12 @@ import {
   PlaylistItemPageEvent,
   PlaylistCollectionPage,
   PlaylistItemPageSeries,
-  PlaylistItemPageProgram, PlaylistItemPageVirtual
+  PlaylistItemPageProgram,
+  PlaylistItemPageVirtual
 } from '../components/Pages/WithPlayer/PlaylistPageDispecher';
 
 import * as ssrDataLoaders from './routesSSRData';
 import PlaylistMy from './../components/Pages/WithPlayer/PlaylistMy/Container';
-import { LessonCollection } from '../components/shapes';
 
 const useRoutes = playerContainer => ([
   { path: '', component: <HomePage />, ssrData: ssrDataLoaders.home },
@@ -68,11 +69,7 @@ const useRoutes = playerContainer => ([
 
   { path: 'lessons', component: <Lessons />, ssrData: ssrDataLoaders.lessonsPage },
   { path: 'lessons/:tab', component: <Lessons />, ssrData: ssrDataLoaders.lessonsPage },
-  {
-    path: 'lessons/virtual/c/:id',
-    component: <LessonCollection />,
-    ssrData: ssrDataLoaders.lessonsCollectionPage
-  },
+  { path: 'lessons/virtual/c/:id', component: <LessonCollection />, ssrData: ssrDataLoaders.lessonsCollectionPage },
   {
     path: 'lessons/virtual/cu/:id',
     component: <PlaylistItemPageVirtual playerContainer={playerContainer} />,
