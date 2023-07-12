@@ -44,6 +44,7 @@ import {
 
 import * as ssrDataLoaders from './routesSSRData';
 import PlaylistMy from './../components/Pages/WithPlayer/PlaylistMy/Container';
+import { LessonCollection } from '../components/shapes';
 
 const useRoutes = playerContainer => ([
   { path: '', component: <HomePage />, ssrData: ssrDataLoaders.home },
@@ -69,7 +70,7 @@ const useRoutes = playerContainer => ([
   { path: 'lessons/:tab', component: <Lessons />, ssrData: ssrDataLoaders.lessonsPage },
   {
     path: 'lessons/virtual/c/:id',
-    component: <PlaylistCollectionPage playerContainer={playerContainer} />,
+    component: <LessonCollection />,
     ssrData: ssrDataLoaders.lessonsCollectionPage
   },
   {
