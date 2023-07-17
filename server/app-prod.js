@@ -105,7 +105,8 @@ app.use(helmet({
         '*.kabbalahmedia.info'
       ],
       'frame-ancestors': ['*'],
-      'object-src': ['*.youtube.com']
+      'object-src': ['*.youtube.com'],
+      'connect-src': ['www.google-analytics.com']
     },
     browserSniff: false       // we're not targeting really old browsers
   }
