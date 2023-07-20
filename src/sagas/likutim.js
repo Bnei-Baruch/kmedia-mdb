@@ -24,7 +24,7 @@ function* fetchLikutimByTag(action) {
       pageSize: 10000,
       tag: key.split('_'),
       with_tags: true,
-      no_hierarchy: true
+      roots_only: true
     };
 
     const { data: { content_units } } = yield call(Api.units, params);
