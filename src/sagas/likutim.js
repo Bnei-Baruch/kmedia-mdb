@@ -1,40 +1,43 @@
-import { call, put, takeLatest, select } from 'redux-saga/effects';
+import { call, put, select } from 'redux-saga/effects';
+import { takeEvery } from 'redux-saga';
 
 import Api from '../helpers/Api';
 import { CT_LIKUTIM } from '../helpers/consts';
-import { actions, types } from '../redux/modules/likutim';
+import { actions, types, selectors } from '../redux/modules/likutim';
 import { actions as mdbActions } from '../redux/modules/mdb';
 import { selectors as settings } from '../redux/modules/settings';
-import { selectors as filterSelectors } from '../redux/modules/filters';
-import { callUnitsStats } from './stats';
-import { filtersTransformer } from '../filters';
 
-function* fetchLikutim() {
+function* fetchLikutimByTag(action) {
+  const key = action.payload;
+
+  const language = yield select(state => settings.getContentLanguage(state.settings));
+  const byTag    = yield select(state => selectors.getByTag(state.likutim));
+
+  if (byTag(key)) {
+    yield put(actions.fetchLikutimByTagsSuccess({ content_units: [], key }));
+    return;
+  }
   try {
-    const namespace    = 'likutim';
-    const filters      = yield select(state => filterSelectors.getFilters(state.filters, namespace));
-    const filterParams = filtersTransformer.toApiParams(filters) || {};
+    const params = {
+      content_type: CT_LIKUTIM,
+      language,
+      pageSize: 10000,
+      tag: key.split('_'),
+      with_tags: true,
+      no_hierarchy: true
+    };
 
-    const pageSize = 10000;
-    const language = yield select(state => settings.getContentLanguage(state.settings));
-    const { data } = yield call(Api.units, { content_type: CT_LIKUTIM, language, pageSize, ...filterParams });
+    const { data: { content_units } } = yield call(Api.units, params);
 
-    if (Array.isArray(data.content_units)) {
-      // get counts of filter data (Topics etc)
-      yield* callUnitsStats({ content_type: CT_LIKUTIM, language, pageSize }, namespace);
-
-      yield put(mdbActions.receiveContentUnits(data.content_units));
-      yield put(actions.fetchLikutimSuccess(data))
-    }
+    yield put(mdbActions.receiveContentUnits(content_units));
+    yield put(actions.fetchLikutimByTagsSuccess({ content_units, key }));
   } catch (err) {
-    yield put(actions.fetchLikutimFailure(err));
+    yield put(actions.fetchLikutimByTagsFailure({ err, key }));
   }
 }
 
-function* watchFetchLikutim() {
-  yield takeLatest(types.FETCH_LIKUTIM, fetchLikutim);
+function* watchFetchLikutimByTagSuccess() {
+  yield takeEvery(types.FETCH_LIKUTIM_BY_TAGS, fetchLikutimByTag);
 }
 
-export const sagas = [
-  watchFetchLikutim,
-]
+export const sagas = [watchFetchLikutimByTagSuccess];

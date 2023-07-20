@@ -11,6 +11,7 @@ import {
   SEARCH_INTENT_HIT_TYPE_SERIES_BY_TAG,
   SEARCH_INTENT_HIT_TYPES,
   BLOGS,
+  SEARCH_INTENT_HIT_TYPE_LIKUTIM_BY_TAG,
 } from '../../helpers/consts';
 import { isEmpty } from '../../helpers/utils';
 import { getQuery, isDebMode } from '../../helpers/url';
@@ -43,6 +44,7 @@ import Filters from './Filters';
 import FilterLabels from '../FiltersAside/FilterLabels';
 import ScoreDebug from './ScoreDebug';
 import Helmets from '../shared/Helmets';
+import { SearchResultLikutimByTag } from './SearchResultLikutimByTag';
 
 const cuMapFromState = (state, results) => (
   results && results.hits && Array.isArray(results.hits.hits)
@@ -146,6 +148,8 @@ const SearchResults = ({ t }) => {
       result = <SearchResultTweets source={hit._source} clickData={clickData} />;
     } else if (type === SEARCH_INTENT_HIT_TYPE_SERIES_BY_TAG || type === SEARCH_INTENT_HIT_TYPE_SERIES_BY_SOURCE) {
       result = <SearchResultSeries id={hit._uid} type={type} mdbUid={hit._source.mdb_uid} clickData={clickData} />;
+    } else if (type === SEARCH_INTENT_HIT_TYPE_LIKUTIM_BY_TAG) {
+      result = <SearchResultLikutimByTag hit={hit} type={type} clickData={clickData} />;
     } else {
       const cu = cuMap[mdbUid];
       const c  = cMap[mdbUid];

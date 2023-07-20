@@ -63,3 +63,24 @@
   position: absolute;
   right: 300px;
 }
+
+.likutim_item_of_list {
+  margin-bottom: 1em;
+
+  .media_item__content {
+    display: block;
+    margin-bottom: 1em;
+  }
+
+  .description {
+    padding: 0 4px;
+    margin: 0 4px;
+    border-right: 1px solid #828282;
+    white-space: nowrap;
+
+    .ltr & {
+      border-right: none;
+      border-left: 1px solid #828282;
+    }
+  }
+}

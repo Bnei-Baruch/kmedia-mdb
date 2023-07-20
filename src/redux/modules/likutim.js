@@ -2,73 +2,69 @@ import { createAction } from 'redux-actions';
 import { handleActions } from './settings';
 import { types as ssr } from './ssr';
 
-const FETCH_LIKUTIM           = 'FETCH_LIKUTIM';
-const FETCH_LIKUTIM_SUCCESS   = 'FETCH_LIKUTIM_SUCCESS';
-const FETCH_LIKUTIM_FAILURE   = 'FETCH_LIKUTIM_FAILURE';
+const FETCH_LIKUTIM_BY_TAGS         = 'FETCH_LIKUTIM_BY_TAGS';
+const FETCH_LIKUTIM_BY_TAGS_SUCCESS = 'FETCH_LIKUTIM_BY_TAGS_SUCCESS';
+const FETCH_LIKUTIM_BY_TAGS_FAILURE = 'FETCH_LIKUTIM_BY_TAGS_FAILURE';
 
 export const types = {
-  FETCH_LIKUTIM,
-  FETCH_LIKUTIM_SUCCESS,
-  FETCH_LIKUTIM_FAILURE,
-}
+  FETCH_LIKUTIM_BY_TAGS,
+  FETCH_LIKUTIM_BY_TAGS_SUCCESS,
+  FETCH_LIKUTIM_BY_TAGS_FAILURE,
+};
 
 // Actions
-const fetchLikutim         = createAction(FETCH_LIKUTIM);
-const fetchLikutimSuccess  = createAction(FETCH_LIKUTIM_SUCCESS);
-const fetchLikutimFailure  = createAction(FETCH_LIKUTIM_FAILURE);
+const fetchLikutimByTags        = createAction(FETCH_LIKUTIM_BY_TAGS);
+const fetchLikutimByTagsSuccess = createAction(FETCH_LIKUTIM_BY_TAGS_SUCCESS);
+const fetchLikutimByTagsFailure = createAction(FETCH_LIKUTIM_BY_TAGS_FAILURE);
 
 export const actions = {
-  fetchLikutim,
-  fetchLikutimSuccess,
-  fetchLikutimFailure,
+  fetchLikutimByTags,
+  fetchLikutimByTagsSuccess,
+  fetchLikutimByTagsFailure
 };
 
 /* Reducer */
-const initialState = {
-  wip: false,
-  err: null,
-  likutim: [],
-};
+const initialState = { wip: {}, err: {}, byKey: {} };
 
-const onSuccess = (state, payload) => {
-  state.wip = false;
-  state.err = null;
-  state.likutim = payload.content_units;
-
-  return state;
-};
-
-const onFailure = (state, payload) => {
-  state.wip = false;
-  state.err = payload;
-  state.likutim = [];
-
-  return state;
-};
-
-const onSSRPrepare = state => {
+const onSSRPrepare   = state => {
   if (state.err) {
     state.err = state.err.toString();
   }
 };
-
+const onByKey        = (state, key) => {
+  console.log('likutim onByKey', key);
+  state.err[key] = null;
+  state.wip[key] = true;
+};
+const onByKeySuccess = (state, { content_units, key }) => {
+  for (const cu of content_units) {
+    cu.tags.forEach(id => {
+      if (key.includes(id)) {
+        state.byKey[key] = [...(state.byKey[key] || []), cu.id];
+      }
+    });
+  }
+  console.log('likutim onByKeySuccess', key);
+  state.wip[key] = false;
+};
+const onByKeyFailure = (state, { err, key }) => {
+  state.err[key] = err;
+  state.wip[key] = false;
+};
 
 export const reducer = handleActions({
   [ssr.PREPARE]: onSSRPrepare,
-
-  [FETCH_LIKUTIM]: state => {
-    state.wip = true;
-  },
-  [FETCH_LIKUTIM_SUCCESS]: onSuccess,
-  [FETCH_LIKUTIM_FAILURE]: onFailure,
+  [FETCH_LIKUTIM_BY_TAGS]: onByKey,
+  [FETCH_LIKUTIM_BY_TAGS_SUCCESS]: onByKeySuccess,
+  [FETCH_LIKUTIM_BY_TAGS_FAILURE]: onByKeyFailure,
 }, initialState);
 
-const getWip       = state => state.wip;
-const getError     = state => state.err;
-const getLikutim   = state => state.likutim;
+const getWip   = (state, key) => state.wip[key];
+const getError = (state, key) => state.err[key];
+const getByTag = state => key => state.byKey[key];
 
 export const selectors = {
   getWip,
   getError,
-  getLikutim,
-}
+  getByTag,
+};
