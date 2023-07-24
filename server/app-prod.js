@@ -43,7 +43,7 @@ app.use(helmet({
         '*.youtube.com',
         '*.youtube-nocookie.com',
         '*.google-analytics.com',
-        'google-analytics.com',
+        'analytics.google.com',
         'stats.g.doubleclick.net',
         '*.kab.info',
         '*.kab.sh',
