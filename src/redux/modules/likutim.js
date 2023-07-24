@@ -1,6 +1,7 @@
 import { createAction } from 'redux-actions';
 import { handleActions } from './settings';
 import { types as ssr } from './ssr';
+import { isEmpty } from '../../helpers/utils';
 
 const FETCH_LIKUTIM_BY_TAGS         = 'FETCH_LIKUTIM_BY_TAGS';
 const FETCH_LIKUTIM_BY_TAGS_SUCCESS = 'FETCH_LIKUTIM_BY_TAGS_SUCCESS';
@@ -27,8 +28,8 @@ export const actions = {
 const initialState = { wip: {}, err: {}, byKey: {} };
 
 const onSSRPrepare   = state => {
-  if (state.err) {
-    state.err = state.err.toString();
+  if (!isEmpty(state.err)) {
+    state.err = JSON.stringify(state.err);
   }
 };
 const onByKey        = (state, key) => {
@@ -39,9 +40,10 @@ const onByKey        = (state, key) => {
 const onByKeySuccess = (state, { content_units, key }) => {
   for (const cu of content_units) {
     cu.tags.forEach(id => {
-      if (key.includes(id)) {
-        state.byKey[key] = [...(state.byKey[key] || []), cu.id];
-      }
+      if (!key.includes(id)) return;
+      const ids = state.byKey[key] ? state.byKey[key] : [];
+      if (ids.includes(cu.id)) return;
+      state.byKey[key] = [...ids, cu.id];
     });
   }
   console.log('likutim onByKeySuccess', key);

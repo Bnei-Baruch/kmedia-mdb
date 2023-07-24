@@ -12,6 +12,7 @@ import WipErr from '../shared/WipErr/WipErr';
 import Link from '../Language/MultiLanguageLink';
 import { canonicalLink } from '../../helpers/links';
 
+const MIN_SHOWED                      = 3;
 export const SearchResultLikutimByTag = ({ hit }) => {
   const { isMobileDevice }                = useContext(DeviceInfoContext);
   const [isMore, setIsMore]               = useState(false);
@@ -50,12 +51,12 @@ export const SearchResultLikutimByTag = ({ hit }) => {
             {title}
           </Header>
         </Container>
-        <Grid columns={3} stackable={true}>
+        <Grid columns={MIN_SHOWED} stackable={true}>
           <Grid.Row>
             {
               items?.filter(x => !!x)
                 .filter((x, i) => {
-                  return isMore || i < 3;
+                  return isMore || i < MIN_SHOWED;
                 })
                 .flatMap(id => denormCU(id))
                 .map(item => (
@@ -74,15 +75,19 @@ export const SearchResultLikutimByTag = ({ hit }) => {
             }
           </Grid.Row>
         </Grid>
-        <Button
-          fluid
-          textAlign="center"
-          className="clear_button no-background margin-top-8 no-padding-bottom"
-          onClick={handleShowMore}
-        >
-          <Icon name={`angle double ${isMore ? 'up' : 'down'}`} />
-          {isMore ? 'show less' : `show all ${items?.length}`}
-        </Button>
+        {
+          items?.length >= MIN_SHOWED && (
+            <Button
+              fluid
+              textAlign="center"
+              className="clear_button no-background margin-top-8 no-padding-bottom"
+              onClick={handleShowMore}
+            >
+              <Icon name={`angle double ${isMore ? 'up' : 'down'}`} />
+              {isMore ? 'show less' : `show all ${items?.length}`}
+            </Button>
+          )
+        }
       </List.Content>
     </List.Item>
   );

@@ -650,9 +650,9 @@ export const SearchResultTweets = ({ source }) => {
       <List.Content horizontal={!isMobileDevice} className="search__block" style={{ position: 'relative' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <Header as="h2" color="blue">{t('home.twitter-title')}</Header>
-          <div textAlign={isMobileDevice ? 'left' : 'right'} className="no-padding  no-border">
+          <Container textAlign={isMobileDevice ? 'left' : 'right'} className="no-padding  no-border">
             <a href={`/${language}/publications/twitter`}>{t('home.all-tweets')}</a>
-          </div>
+          </Container>
         </div>
         {wipError}
         {!wipError && (

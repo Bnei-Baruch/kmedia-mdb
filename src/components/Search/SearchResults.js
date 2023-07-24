@@ -155,14 +155,26 @@ const SearchResults = ({ t }) => {
       const c  = cMap[mdbUid];
       const p  = postMap[mdbUid];
       if (cu) {
-        result = <SearchResultCU cu={cu} highlight={hit.highlight} clickData={clickData} />;
+        result = <SearchResultCU cu={cu} highlight={hit.highlight} clickData={clickData} key={cu.id} />;
       } else if (c) {
-        result = <SearchResultCollection c={c} highlight={hit.highlight} clickData={clickData} />;
+        result = <SearchResultCollection c={c} highlight={hit.highlight} clickData={clickData} key={c.id} />;
       } else if (p) {
-        result = <SearchResultPost id={hit._source.mdb_uid} post={p} highlight={hit.highlight} clickData={clickData} />;
+        result = <SearchResultPost
+          id={hit._source.mdb_uid}
+          post={p}
+          highlight={hit.highlight}
+          clickData={clickData}
+          key={hit._source.mdb_uid}
+        />;
       } else if (resultType === 'sources') {
         result =
-          <SearchResultSource id={hit._source.mdb_uid} title={hit._source.title} highlight={hit.highlight} clickData={clickData} />;
+          <SearchResultSource
+            id={hit._source.mdb_uid}
+            title={hit._source.title}
+            highlight={hit.highlight}
+            clickData={clickData}
+            key={hit._source.mdb_uid}
+          />;
       } else {
         console.error('Unexpected result type!');
       }
