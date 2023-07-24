@@ -43,6 +43,7 @@ app.use(helmet({
         '*.youtube.com',
         '*.youtube-nocookie.com',
         '*.google-analytics.com',
+        'google-analytics.com',
         'stats.g.doubleclick.net',
         '*.kab.info',
         '*.kab.sh',
@@ -106,7 +107,6 @@ app.use(helmet({
       ],
       'frame-ancestors': ['*'],
       'object-src': ['*.youtube.com'],
-      //'connect-src': ['www.google-analytics.com']
     },
     browserSniff: false       // we're not targeting really old browsers
   }
