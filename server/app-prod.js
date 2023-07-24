@@ -106,7 +106,7 @@ app.use(helmet({
       ],
       'frame-ancestors': ['*'],
       'object-src': ['*.youtube.com'],
-      'connect-src': ['www.google-analytics.com']
+      //'connect-src': ['www.google-analytics.com']
     },
     browserSniff: false       // we're not targeting really old browsers
   }
