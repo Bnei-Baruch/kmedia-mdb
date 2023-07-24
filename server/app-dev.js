@@ -134,13 +134,7 @@ app.use(helmet({
         '*.kabbalahmedia.info'
       ],
       'frame-ancestors': ['*'],
-      'object-src': ['*.youtube.com'],
-      /*'connect-src': [
-        '\'self\'',
-        'bbdev6.kbb1.com',
-        'accounts.kab.info',
-        'www.google-analytics.com'
-      ]*/
+      'object-src': ['*.youtube.com']
     },
     browserSniff: false       // we're not targeting really old browsers
   }
