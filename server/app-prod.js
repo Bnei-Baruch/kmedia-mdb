@@ -46,6 +46,7 @@ app.use(helmet({
         '*.analytics.google.com',
         'analytics.google.com',
         '*.googletagmanager.com',
+        '*.g.doubleclick.net',
         '*.kab.info',
         '*.kab.sh',
       ],
