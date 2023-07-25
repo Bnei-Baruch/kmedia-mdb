@@ -30,18 +30,19 @@ const helmetContext = {};
 // eslint-disable-next-line no-unused-vars
 const DoNotRemove = localStorage; // DO NOT REMOVE - the import above does all the work
 
-const BASE_URL = process.env.REACT_APP_BASE_URL;
-
+const BASE_URL   = process.env.REACT_APP_BASE_URL;
+let show_console = false;
 export default function serverRender(req, res, next, htmlData) {
   if (req.originalUrl.indexOf('anonymous') !== -1) {
     return;
   }
-  console.log('serverRender', req.originalUrl);
+  show_console = req.originalUrl.includes('5hgo3hY6');
+  show_console && console.log('serverRender', req.originalUrl);
 
   const { language, redirect } = getLanguageFromPath(req.originalUrl, req.headers, req.get('user-agent'));
   if (redirect) {
     const newUrl = `${BASE_URL}${language}${req.originalUrl}`;
-    console.log(`serverRender: redirect (${language}) => ${newUrl}`);
+    show_console && console.log(`serverRender: redirect (${language}) => ${newUrl}`);
     res.writeHead(307, { Location: newUrl });
     res.end();
     return;
@@ -49,6 +50,8 @@ export default function serverRender(req, res, next, htmlData) {
 
   const cookies = cookieParse(req.headers.cookie || '');
   const bot     = isBot(req);
+
+  show_console && console.log('serverRender isbot', bot);
   if (cookies['authorised'] || req.query.authorised || req.query.embed || bot) {
     serverRenderAuthorised(req, res, next, htmlData, language, bot);
     return;
@@ -82,7 +85,7 @@ function serverRenderSSOAuth(req, res, next, htmlData) {
     `;
   const html    = htmlData.replace(/<div id="root"><\/div>/, rootDiv);
 
-  console.log('AuthApp server render');
+  show_console && console.log('AuthApp server render');
   res.send(html);
 }
 
@@ -126,7 +129,7 @@ async function serverRenderAuthorised(req, res, next, htmlData, language, bot) {
     const routes  = useRoutes(<></>).map(r => ({ ...r, path: `${language}/${r.path}` }));
     const reqPath = req.originalUrl.split('?')[0];
     const branch  = matchRoutes(routes, reqPath) || [];
-    console.log('serverRender: for path %s was found branch %o', reqPath, branch);
+    show_console && console.log('serverRender: for path %s was found branch %o', reqPath, branch);
 
     let hrstart    = process.hrtime();
     const promises = branch.map(({ route, params }) => (
@@ -136,20 +139,20 @@ async function serverRenderAuthorised(req, res, next, htmlData, language, bot) {
     ));
     let hrend      = process.hrtime(hrstart);
 
-    console.log('serverRender: fire ssrLoaders %ds %dms', hrend[0], hrend[1] / 1000000);
+    show_console && console.log('serverRender: fire ssrLoaders %ds %dms', hrend[0], hrend[1] / 1000000);
     hrstart = process.hrtime();
 
     Promise.all(promises)
       .then(() => {
         store.stopSagas();
         hrend = process.hrtime(hrstart);
-        console.log('serverRender: Promise.all(promises) %ds %dms', hrend[0], hrend[1] / 1000000);
+        show_console && console.log('serverRender: Promise.all(promises) %ds %dms', hrend[0], hrend[1] / 1000000);
         hrstart = process.hrtime();
 
         store.rootSagaPromise
           .then(() => {
             hrend = process.hrtime(hrstart);
-            console.log('serverRender: rootSagaPromise.then %ds %dms', hrend[0], hrend[1] / 1000000);
+            show_console && console.log('serverRender: rootSagaPromise.then %ds %dms', hrend[0], hrend[1] / 1000000);
             hrstart      = process.hrtime();
             // actual render
             const markup = ReactDOMServer.renderToString(
@@ -167,12 +170,12 @@ async function serverRenderAuthorised(req, res, next, htmlData, language, bot) {
               </React.StrictMode>
             );
             hrend        = process.hrtime(hrstart);
-            console.log('serverRender: renderToString %ds %dms', hrend[0], hrend[1] / 1000000);
+            show_console && console.log('serverRender: renderToString %ds %dms', hrend[0], hrend[1] / 1000000);
             hrstart = process.hrtime();
 
             const { helmet } = helmetContext;
             hrend            = process.hrtime(hrstart);
-            console.log('serverRender:  Helmet.renderStatic %ds %dms', hrend[0], hrend[1] / 1000000);
+            show_console && console.log('serverRender:  Helmet.renderStatic %ds %dms', hrend[0], hrend[1] / 1000000);
 
             if (context.url) {
               // Somewhere a `<Redirect>` was rendered
@@ -183,7 +186,7 @@ async function serverRenderAuthorised(req, res, next, htmlData, language, bot) {
               const cssDirection = direction === 'ltr' ? '' : '.rtl';
 
               store.dispatch(ssr.prepare());
-              // console.log(require('util').inspect(store.getState(), { showHidden: true, depth: 2 }));
+              // show_console && console.log(require('util').inspect(store.getState(), { showHidden: true, depth: 2 }));
               const storeData = serialize(store.getState());
 
               const i18nData = serialize(
