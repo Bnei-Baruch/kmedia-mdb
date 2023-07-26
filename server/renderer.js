@@ -129,7 +129,6 @@ async function serverRenderAuthorised(req, res, next, htmlData, language, bot) {
     const routes  = useRoutes(<></>).map(r => ({ ...r, path: `${language}/${r.path}` }));
     const reqPath = req.originalUrl.split('?')[0];
     const branch  = matchRoutes(routes, reqPath) || [];
-    show_console && console.log('serverRender: for path %s was found branch %o', reqPath, branch);
 
     let hrstart    = process.hrtime();
     const promises = branch.map(({ route, params }) => (
