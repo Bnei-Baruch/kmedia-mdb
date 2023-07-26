@@ -248,10 +248,8 @@ export const libraryPage = async (store, match, show_console = false) => {
           return; // no need to fetch pdf. we don't do that on SSR
         }
 
-        const name = data[language].html;
-
-        show_console && console.log('serverRender: libraryPage before fetch assets', sourceID, name);
-        store.dispatch(assetsActions.fetchAsset(`sources/${sourceID}/${name}`));
+        show_console && console.log('serverRender: libraryPage before fetch doc2html', sourceID);
+        store.dispatch(assetsActions.doc2html(sourceID));
         show_console && console.log('serverRender: libraryPage before fetch labels', sourceID, contentLang);
         store.dispatch(mdbActions.fetchLabels({ content_unit: sourceID, language: contentLang }));
       }
