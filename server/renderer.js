@@ -225,12 +225,11 @@ async function serverRenderAuthorised(req, res, next, htmlData, language, bot) {
   });
 }
 
+const ADDITIONAL_BOTS = ['Google-InspectionTool', 'Storebot-Google', 'GoogleOther'];
+
 function isBot(req) {
-  show_console && console.log('serverRender: isBot user agent', req.headers['user-agent']);
-  show_console && crawlers.forEach(entry => {
-    console.log('serverRender: isBot crawlers', entry.pattern, RegExp(entry.pattern).test(req.headers['user-agent']));
-  });
-  return crawlers.some(entry => RegExp(entry.pattern).test(req.headers['user-agent']));
+  return crawlers.some(entry => RegExp(entry.pattern).test(req.headers['user-agent']))
+    || ADDITIONAL_BOTS.some(p => RegExp(p).test(req.headers['user-agent']));
 }
 
 // see https://yoast.com/rel-canonical/
