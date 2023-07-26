@@ -36,7 +36,7 @@ export default function serverRender(req, res, next, htmlData) {
   if (req.originalUrl.indexOf('anonymous') !== -1) {
     return;
   }
-  show_console = req.originalUrl.includes('5hgo3hY6');
+  show_console = req.originalUrl.includes('ssr_debug');
   show_console && console.log('serverRender', req.originalUrl);
 
   const { language, redirect } = getLanguageFromPath(req.originalUrl, req.headers, req.get('user-agent'));
