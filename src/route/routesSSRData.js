@@ -256,6 +256,14 @@ export const libraryPage = async (store, match, show_console = false) => {
     });
 };
 
+export const likutPage = async (store, match, show_console = false) => {
+  const { id } = match.params;
+  return Promise.all([
+    store.sagaMiddleWare.run(mdbSagas.fetchUnit, mdbActions.fetchUnit(id)).done,
+    store.sagaMiddleWare.run(mdbSagas.fetchUnit, mdbActions.fetchUnit(id)).done,
+  ]);
+};
+
 export const tweetsListPage = (store, match) => {
   // hydrate filters
   store.dispatch(filtersActions.hydrateFilters('publications-twitter'));
