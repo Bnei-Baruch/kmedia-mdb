@@ -49,7 +49,7 @@ export default function serverRender(req, res, next, htmlData) {
 
   const cookies = cookieParse(req.headers.cookie || '');
   const bot     = isBot(req);
-  show_console  = !bot;
+  show_console  = bot;
 
   if (cookies['authorised'] || req.query.authorised || req.query.embed || bot) {
     serverRenderAuthorised(req, res, next, htmlData, language, bot);
