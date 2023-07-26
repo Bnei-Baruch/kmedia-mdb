@@ -36,6 +36,7 @@ export default function serverRender(req, res, next, htmlData) {
   if (req.originalUrl.indexOf('anonymous') !== -1) {
     return;
   }
+  show_console = req.originalUrl.includes('5hgo3hY6');
   show_console && console.log('serverRender', req.originalUrl);
 
   const { language, redirect } = getLanguageFromPath(req.originalUrl, req.headers, req.get('user-agent'));
@@ -50,7 +51,6 @@ export default function serverRender(req, res, next, htmlData) {
   const cookies = cookieParse(req.headers.cookie || '');
   const bot     = isBot(req);
 
-  show_console = bot;
   show_console && console.log('serverRender: isbot', bot, req.headers['user-agent']);
   if (cookies['authorised'] || req.query.authorised || req.query.embed || bot) {
     serverRenderAuthorised(req, res, next, htmlData, language, bot);
