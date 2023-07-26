@@ -36,7 +36,6 @@ export default function serverRender(req, res, next, htmlData) {
   if (req.originalUrl.indexOf('anonymous') !== -1) {
     return;
   }
-  show_console = req.originalUrl.includes('5hgo3hY6');
   show_console && console.log('serverRender', req.originalUrl);
 
   const { language, redirect } = getLanguageFromPath(req.originalUrl, req.headers, req.get('user-agent'));
@@ -50,8 +49,8 @@ export default function serverRender(req, res, next, htmlData) {
 
   const cookies = cookieParse(req.headers.cookie || '');
   const bot     = isBot(req);
+  show_console  = !bot;
 
-  show_console && console.log('serverRender isbot', bot);
   if (cookies['authorised'] || req.query.authorised || req.query.embed || bot) {
     serverRenderAuthorised(req, res, next, htmlData, language, bot);
     return;
@@ -85,7 +84,7 @@ function serverRenderSSOAuth(req, res, next, htmlData) {
     `;
   const html    = htmlData.replace(/<div id="root"><\/div>/, rootDiv);
 
-  show_console && console.log('AuthApp server render');
+  show_console && console.log('serverRender: AuthApp server render');
   res.send(html);
 }
 
@@ -131,16 +130,18 @@ async function serverRenderAuthorised(req, res, next, htmlData, language, bot) {
     const branch  = matchRoutes(routes, reqPath) || [];
 
     let hrstart    = process.hrtime();
-    const promises = branch.map(({ route, params }) => (
-      route.ssrData
-        ? route.ssrData(store, { params, parsedURL: new URL(req.originalUrl, 'https://example.com') })
-        : Promise.resolve(null)
-    ));
+    const promises = branch.map(({ route, params }) => {
+        show_console && console.log('serverRender: libraryPage source was found', route.ssrData?.name);
+        return route.ssrData
+          ? route.ssrData(store, { params, parsedURL: new URL(req.originalUrl, 'https://example.com') }, show_console)
+          : Promise.resolve(null);
+      }
+    );
     let hrend      = process.hrtime(hrstart);
 
     show_console && console.log('serverRender: fire ssrLoaders %ds %dms', hrend[0], hrend[1] / 1000000);
     hrstart = process.hrtime();
-
+    show_console && console.log('serverRender: promises', promises.length);
     Promise.all(promises)
       .then(() => {
         store.stopSagas();
