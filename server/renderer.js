@@ -51,7 +51,7 @@ export default function serverRender(req, res, next, htmlData) {
   const bot     = isBot(req);
 
   show_console = bot;
-  show_console && console.log('serverRender: isbot', bot);
+  show_console && console.log('serverRender: isbot', bot, req.headers['user-agent']);
   if (cookies['authorised'] || req.query.authorised || req.query.embed || bot) {
     serverRenderAuthorised(req, res, next, htmlData, language, bot);
     return;
