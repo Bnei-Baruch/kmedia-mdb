@@ -226,6 +226,10 @@ async function serverRenderAuthorised(req, res, next, htmlData, language, bot) {
 }
 
 function isBot(req) {
+  show_console && console.log('serverRender: isBot user agent', req.headers['user-agent']);
+  show_console && crawlers.forEach(entry => {
+    console.log('serverRender: isBot crawlers', entry.pattern, RegExp(entry.pattern).test(req.headers['user-agent']));
+  });
   return crawlers.some(entry => RegExp(entry.pattern).test(req.headers['user-agent']));
 }
 
