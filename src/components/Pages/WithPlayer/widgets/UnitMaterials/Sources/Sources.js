@@ -59,7 +59,6 @@ const getDownloadProps = (pdf, file) => {
 const Sources = ({ unit, t }) => {
   const getSourceById    = useSelector(state => selectors.getSourceById(state.sources), shallowEqual);
   const indexById        = useSelector(state => assetsSelectors.getSourceIndexById(state.assets), shallowEqual);
-  const uiLang           = useSelector(state => settings.getUILang(state.settings));
   const contentLanguages = useSelector(state => settings.getContentLanguages(state.settings));
   const doc2htmlById     = useSelector(state => assetsSelectors.getDoc2htmlById(state.assets));
   const dispatch         = useDispatch();
@@ -131,7 +130,7 @@ const Sources = ({ unit, t }) => {
     if (sourceLanguages.length > 0) {
       // Init selected language based on available source languages, user predefined content languages and
       // unit original language..
-      const newLanguage = selectSuitableLanguage(contentLanguages, sourceLanguages, unit.original_language);
+      const newLanguage = selectSuitableLanguage(contentLanguages, sourceLanguages, unit.original_language, /*defaultReturnLanguage=*/ '');
       setSelectedSourceLanguage(newLanguage);
     }
   }, [contentLanguages, sourceLanguages, unit.original_language]);
@@ -233,9 +232,7 @@ const Sources = ({ unit, t }) => {
     return noSourcesMsg;
   }
 
-  if (!selectedUnitId || (!pdf && !file)) {
-    return noSourcesAvailableMsg;
-  }
+  const disabled = !selectedUnitId || (!pdf && !file);
 
   const downloadProps = getDownloadProps(pdf, file);
 
@@ -278,21 +275,18 @@ const Sources = ({ unit, t }) => {
             </Menu.Item>
         }
         <Menu.Item fitted>
-          {
-            sourceLanguages.length > 0 && (
-              <div className="display-iblock margin-right-8 margin-left-8">
-                <MenuLanguageSelector
-                  languages={sourceLanguages}
-                  selected={selectedSourceLanguage}
-                  onLanguageChange={handleLanguageChanged}
-                  multiSelect={false}
-                  optionText={menuOptionText}
-                />
-              </div>
-            )
-          }
-          { <Download {...downloadProps} /> }
+          <div className="display-iblock margin-right-8 margin-left-8">
+            <MenuLanguageSelector
+              languages={sourceLanguages}
+              selected={selectedSourceLanguage}
+              onLanguageChange={handleLanguageChanged}
+              multiSelect={false}
+              optionText={menuOptionText}
+            />
+          </div>
+          <Download {...downloadProps} disabled={disabled} />
           <UnitBar
+            disabled={disabled}
             handleSettings={setSettings}
             fontSize={setting.fontSize}
             source={{ subject_uid: selectedUnitId, subject_type: isLikutim ? CT_LIKUTIM : CT_SOURCE }}

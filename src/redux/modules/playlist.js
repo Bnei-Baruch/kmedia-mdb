@@ -104,7 +104,7 @@ const onBuildSuccess = (draft, payload) => {
     const f       = i >= fetched.from && i <= fetched.to;
     return { ...x, showImg, fetched: f };
   });
-  draft.info     = { ...info, cuId, id, language, subsLanguage: language, quality, isReady: true, wip: false };
+  draft.info = { ...info, cuId, id, language, subsLanguage: language, quality, isReady: true, wip: false };
   draft.fetched  = fetched;
 };
 

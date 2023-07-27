@@ -205,7 +205,7 @@ const DisplayRecommended = (
 };
 
 DisplayRecommended.propTypes = {
-  unit: shapes.EventItem.isRequired,
+  unit: shapes.EventItem,
   recommendedUnits: PropTypes.arrayOf(shapes.EventItem),
   t: PropTypes.func.isRequired,
   displayTitle: PropTypes.bool

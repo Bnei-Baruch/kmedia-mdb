@@ -125,12 +125,12 @@ const SearchResults = ({ t }) => {
 
   const renderHit = (hit, rank, searchId, searchLanguage, deb) => {
     const {
-            _source: { mdb_uid: mdbUid, result_type: resultType },
-            _type: type,
-            _index: index,
-            _explanation: explanation,
-            _score: score,
-          }         = hit;
+      _source: { mdb_uid: mdbUid, result_type: resultType },
+      _type: type,
+      _index: index,
+      _explanation: explanation,
+      _score: score,
+    } = hit;
     searchLanguage  = searchLanguageByIndex(index, searchLanguage);
     const clickData = { mdbUid, index, type: resultType, rank, searchId, search_language: searchLanguage, deb };
 
@@ -228,7 +228,7 @@ const SearchResults = ({ t }) => {
   const totalForPagination                  = Math.min(1000, total);
 
   //const wipErr = WipErr({ wip, err: null, t });
-  const renderHelmet = (section) => {
+  const renderHelmet = section => {
     const title    = t(`${section}.header.text`);
     const subText1 = t(`${section}.header.subtext`);
     return <Helmets.Basic title={title} description={subText1} />;

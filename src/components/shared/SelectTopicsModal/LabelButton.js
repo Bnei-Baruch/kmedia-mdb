@@ -6,7 +6,7 @@ import { Button, Popup, } from 'semantic-ui-react';
 import { SectionLogo } from '../../../helpers/images';
 import SelectTopicsModal from './SelectTopicsModal';
 
-const LabelButton = ({ label }) => {
+const LabelButton = ({ label, disabled }) => {
   const [open, setOpen] = useState();
   const { t }           = useTranslation();
 
@@ -27,6 +27,7 @@ const LabelButton = ({ label }) => {
               size="small"
               icon={<SectionLogo name="topics" color="grey" />}
               onClick={handleOpen}
+              disabled={disabled}
               className="label_icon"
             />
           }

@@ -19,7 +19,8 @@ const PersonalInfo = ({ collection }) => {
   const [isNeedLogin, setIsNeedLogin] = useState();
 
   const { cuId }             = useSelector(state => playlist.getInfo(state.playlist));
-  const { id, content_type } = useSelector(state => mdb.getDenormContentUnit(state.mdb, cuId));
+  const cu = useSelector(state => mdb.getDenormContentUnit(state.mdb, cuId));
+  const { id, content_type } = cu || {};
   const likeParams           = {
     kind: MY_REACTION_KINDS.LIKE,
     subject_type: content_type,

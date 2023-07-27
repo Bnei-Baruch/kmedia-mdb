@@ -6,19 +6,19 @@ import LibrarySettings from '../../../../Sections/Library/LibrarySettings';
 import BookmarkButton from '../../../../shared/SaveBookmark/BookmarkButton';
 import LabelButton from '../../../../shared/SelectTopicsModal/LabelButton';
 
-const UnitBar = ({ fontSize = 0, handleSettings, source, label }) => {
+const UnitBar = ({ fontSize = 0, handleSettings, source, label, disabled }) => {
 
   const print = () => window.print();
 
   return (
     <div className="source__header-toolbar">
       {
-        source && <BookmarkButton source={source} />
+        source && <BookmarkButton source={source} disabled={disabled} />
       }
       {
-        label && <LabelButton label={label} />
+        label && <LabelButton label={label} disabled={disabled} />
       }
-      <Button compact size="small" className="mobile-hidden" icon="print" onClick={print} />
+      <Button compact size="small" className="mobile-hidden" icon="print" onClick={print} disabled={disabled} />
       {/* a portal is used to put the download button here in this div */}
       <div id="download-button" />
       <LibrarySettings fontSize={fontSize} handleSettings={handleSettings} />
