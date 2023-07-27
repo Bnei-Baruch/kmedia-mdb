@@ -10,7 +10,7 @@ import { selectors as settings } from '../../../redux/modules/settings';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import AlertModal from '../AlertModal';
 
-const BookmarkButton = ({ t, source }) => {
+const BookmarkButton = ({ t, source, disabled }) => {
   const [open, setOpen]         = useState();
   const [alertMsg, setAlertMsg] = useState();
   const needToLogin             = NeedToLogin({ t });
@@ -36,6 +36,7 @@ const BookmarkButton = ({ t, source }) => {
             size="small"
             icon="bookmark outline"
             onClick={handleOpen}
+            disabled={disabled}
           />
         }
         open={open}

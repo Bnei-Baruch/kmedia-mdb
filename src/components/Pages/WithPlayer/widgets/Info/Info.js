@@ -72,7 +72,7 @@ const Info = ({ t }) => {
   const currentCollection            = useSelector(state => mdb.getDenormCollection(state.mdb, cId));
   const unit                         = useSelector(state => mdb.getDenormContentUnit(state.mdb, cuId));
 
-  const { id, name, film_date: filmDate, collections, content_type: ct, cIDs } = unit || {};
+  const { id, name, film_date: filmDate, collections = [], content_type: ct, cIDs } = unit || {};
 
   const views = useSelector(state => recommended.getViews(id, state.recommended));
 

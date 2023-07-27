@@ -1,15 +1,17 @@
-import { DEFAULT_CONTENT_LANGUAGE, LANG_ENGLISH, LANGUAGE_OPTIONS } from './consts';
+import { DEFAULT_CONTENT_LANGUAGE, LANGUAGE_OPTIONS } from './consts';
 
 /**
- * Select language to use
- * @param contentLanguage -- preferable language for content
- * @param languages -- languages we've got to choose from
- * @returns the most appropriate language
+ * Selects language to use.
+ * @param contentLanguage       -- Languages user knows
+ * @param languages             -- languages available for content we've got to choose from
+ * @param originalLanguage      -- prefered language
+ * @param defaultReturnLanguage -- prefered language
+ * @returns the most appropriate language or empty string if nothing fits.
  */
-export const selectSuitableLanguage = (contentLanguages, languages = [], originalLanguage = '') => {
+export const selectSuitableLanguage = (contentLanguages, languages = [], originalLanguage = '', defaultReturnLanguage = DEFAULT_CONTENT_LANGUAGE) => {
   if (languages.length === 0) {
     // Content not available for any language.
-    return DEFAULT_CONTENT_LANGUAGE;
+    return defaultReturnLanguage;
   }
 
   // Prefer original languages that user knows.
@@ -23,13 +25,8 @@ export const selectSuitableLanguage = (contentLanguages, languages = [], origina
     return contentLanguage;
   }
 
-  // No matching language try default.
-  if (languages.includes(DEFAULT_CONTENT_LANGUAGE)) {
-    return DEFAULT_CONTENT_LANGUAGE;
-  }
-
-  // Or first available language.
-  return languages[0];
+  // Nothing fits.
+  return defaultReturnLanguage;
 };
 
 export const getLanguageName = (language) => {

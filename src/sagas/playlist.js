@@ -41,6 +41,12 @@ function* build(action) {
     yield call(fetchCollection, { payload: cId });
   }
 
+  const c    = yield select(state => mdb.getDenormCollection(state.mdb, cId));
+  const data = playlistBuilder(c);
+  if (!cuId) {
+    cuId = data.items[getActivePartFromQuery(location)]?.id;
+  }
+
   let cu = yield select(state => mdb.getDenormContentUnit(state.mdb, cuId));
   if (!cu || !cu.files) {
     yield call(fetchUnit, { payload: cuId });
@@ -49,13 +55,8 @@ function* build(action) {
 
   const contentLanguages = yield select(state => settings.getContentLanguages(state.settings));
   const mediaType = getMediaTypeFromQuery(location);
-  const language = getLanguageFromQuery(location) || selectSuitableLanguage(contentLanguages, calcAvailableLanguages(cu), cu.original_language);
+  const language = getLanguageFromQuery(location) || selectSuitableLanguage(contentLanguages, calcAvailableLanguages(cu), (cu && cu.original_language) || '');
 
-  const c    = yield select(state => mdb.getDenormCollection(state.mdb, cId));
-  const data = playlistBuilder(c);
-  if (!cuId) {
-    cuId = data.items[getActivePartFromQuery(location)]?.id;
-  }
   const idx     = data.items.findIndex(x => x.id === cuId);
   const fetched = {
     from: Math.max(0, idx - ONE_FETCH_SIZE / 2),

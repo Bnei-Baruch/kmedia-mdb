@@ -82,18 +82,13 @@ const Library = ({ data, source, downloadAllowed }) => {
   }
 
   const sourceLanguages = data ? Object.keys(data) : [];
-  const _language = selectSuitableLanguage(desiredLanguages, sourceLanguages, LANG_HEBREW);
+  const suitableLanguage = selectSuitableLanguage(desiredLanguages, sourceLanguages, LANG_HEBREW);
+  const [selectedSourceLanguage, setSelectedSourceLanguage] = useState('');
+  const finalLanguage = selectedSourceLanguage || suitableLanguage;
+
   const dispatch  = useDispatch();
 
-  const [selectedSourceLanguage, setSelectedSourceLanguage] = useState('');
-
-  useEffect(() => {
-    if (!selectedSourceLanguage && !!desiredLanguages.length) {
-      setSelectedSourceLanguage(selectSuitableLanguage(desiredLanguages, sourceLanguages, LANG_HEBREW));
-    }
-  }, [desiredLanguages.join(','), sourceLanguages.slice().sort().join(',')]);
-
-  const file    = getLibraryContentFile(data?.[selectedSourceLanguage], source);
+  const file    = getLibraryContentFile(data?.[finalLanguage], source);
   const fetched = !!doc2htmlById[file.id]?.data;
   useEffect(() => {
     if (file.id && !fetched)
@@ -120,7 +115,7 @@ const Library = ({ data, source, downloadAllowed }) => {
   };
 
   const getAudioPlayer = () => {
-    const { mp3 } = data[selectedSourceLanguage] || {};
+    const { mp3 } = data[finalLanguage] || {};
     return mp3 ? <AudioPlayer file={mp3} /> : null;
   };
 
@@ -130,7 +125,7 @@ const Library = ({ data, source, downloadAllowed }) => {
         {!isMobileDevice && getAudioPlayer()}
         <MenuLanguageSelector
           languages={sourceLanguages}
-          selected={selectedSourceLanguage}
+          selected={finalLanguage}
           onLanguageChange={handleLanguageChanged}
           multiSelect={false}
           optionText={(language) => getLanguageName(language) + (data && data[language] && data[language].mp3 ? ' \uD83D\uDD0A' : '')}
@@ -163,16 +158,16 @@ const Library = ({ data, source, downloadAllowed }) => {
         />
       );
     } else if (contentData) {
-      const direction = getLanguageDirection(selectedSourceLanguage);
+      const direction = getLanguageDirection(finalLanguage);
 
       return (
         <div
           style={{ direction, textAlign: (direction === 'ltr' ? 'left' : 'right') }}>
           <ScrollToSearch
             data={contentData}
-            language={selectedSourceLanguage}
-            source={{ selectedSourceLanguage, ...buildBookmarkSource(source) }}
-            label={{ selectedSourceLanguage, ...buildLabelData(source) }}
+            language={finalLanguage}
+            source={{ finalLanguage, ...buildBookmarkSource(source) }}
+            label={{ finalLanguage, ...buildLabelData(source) }}
           />
         </div>
       );

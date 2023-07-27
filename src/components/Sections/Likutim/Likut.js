@@ -55,7 +55,8 @@ const Likut                  = () => {
 
   const likutimLanguages = ((unit && unit.files) || []).map(f => f.language);
   const defaultLanguage = selectSuitableLanguage(contentLanguages, likutimLanguages, LANG_HEBREW);
-  const [selectedLanguage, setSelectedLanguage]   = useState(defaultLanguage);
+  const [selectedLanguage, setSelectedLanguage]   = useState('');
+  const finalLanguage = selectedLanguage || defaultLanguage;
   const [scrollTopPosition, setScrollTopPosition] = useState(0);
   const [scrollingElement, setScrollingElement]   = useState(null);
   const articleRef                                = useRef();
@@ -74,7 +75,7 @@ const Likut                  = () => {
     setIsReadable(!isReadable);
   };
 
-  const handleLanguageChanged = (selectedLanguage) => setSelectedLanguage(selectedLanguage);
+  const handleLanguageChanged = (language) => setSelectedLanguage(language);
 
   const dispatch = useDispatch();
 
@@ -82,8 +83,8 @@ const Likut                  = () => {
     (!fetched) && dispatch(actions.fetchUnit(id));
   }, [dispatch, id, fetched]);
 
-  const file      = selectLikutFile(unit?.files, selectedLanguage);
-  const lang      = file?.language || selectedLanguage;
+  const file      = selectLikutFile(unit?.files, finalLanguage);
+  const lang      = file?.language || finalLanguage;
   const needFetch = !doc2htmlById[file?.id];
   useEffect(() => {
     if (file?.id && needFetch) {
@@ -103,7 +104,7 @@ const Likut                  = () => {
   const { data } = doc2htmlById[file?.id] || {};
 
   const { theme = 'light', fontType, fontSize = 0 } = settings || {};
-  const direction                                   = getLanguageDirection(selectedLanguage);
+  const direction                                   = getLanguageDirection(finalLanguage);
   const gridDirection                               = getLangPropertyDirection(uiLang);
 
   const { name, film_date, files = [], source_units } = unit;
@@ -166,7 +167,7 @@ const Likut                  = () => {
                   <div className="library-language-container">
                     <MenuLanguageSelector
                       languages={likutimLanguages}
-                      selected={selectedLanguage}
+                      selected={finalLanguage}
                       onLanguageChange={handleLanguageChanged}
                       multiSelect={false}
                     />
