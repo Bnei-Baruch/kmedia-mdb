@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Container, Header } from 'semantic-ui-react';
 import { useTranslation } from 'react-i18next';
@@ -17,8 +17,8 @@ const Filters = ({ namespace, baseParams }) => {
   const [isHydrated, setIsHydrated] = useState(false);
   const { t }                       = useTranslation();
 
-  const isReady    = useSelector(state => selectors.isReady(state.filtersAside, namespace));
-  const selected   = useSelector(state => filters.getNotEmptyFilters(state.filters, namespace));
+  const isReady      = useSelector(state => selectors.isReady(state.filtersAside, namespace));
+  const selected     = useSelector(state => filters.getNotEmptyFilters(state.filters, namespace));
   const prevSelRef = useRef(-1);
 
   const dispatch = useDispatch();
@@ -30,13 +30,14 @@ const Filters = ({ namespace, baseParams }) => {
   }, [isReady, baseParams, namespace, dispatch]);
 
   const needFetch = isHydrated && isReady;
-  const selLen    = selected.reduce((acc, x) => acc + x.values.length, 0);
+  const selectedSignature = selected.slice().sort((a, b) => a.name.localeCompare(b.name)).reduce((acc, f) => acc + `-${f.name}|${f.values.slice().sort().join('_')}`, '');
   useEffect(() => {
-    if (needFetch && prevSelRef.current !== selLen) {
+    console.log('fetchStats needFetch', needFetch, selected, baseParams, namespace, isHydrated, isReady);
+    if (needFetch && prevSelRef.current !== selectedSignature) {
       dispatch(actions.fetchStats(namespace, baseParams, { isPrepare: false, countC: true, countL: true }));
-      prevSelRef.current = selLen;
+      prevSelRef.current = selectedSignature;
     }
-  }, [needFetch, selLen, baseParams, namespace, dispatch]);
+  }, [needFetch, baseParams, namespace, dispatch, selectedSignature]);
 
   const handleOnHydrated = () => setIsHydrated(true);
 

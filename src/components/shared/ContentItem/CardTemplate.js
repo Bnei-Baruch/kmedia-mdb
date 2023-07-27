@@ -1,17 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Container, Card, Header, Popup, Divider } from 'semantic-ui-react';
+import { useSelector } from 'react-redux';
 
 import * as shapes from '../../shapes';
 import { NO_NAME } from '../../../helpers/consts';
 import { formatDuration } from '../../../helpers/utils';
-import { getLanguageDirection } from '../../../helpers/i18n-utils';
+import { selectors as settings } from '../../../redux/modules/settings';
+
 import UnitLogo from '../Logo/UnitLogo';
 import Link from '../../Language/MultiLanguageLink';
 import { UnitProgress } from './UnitProgress';
 
-const CardTemplate = ({ unit, language, withCCUInfo, link, ccu, description, children, playTime }) => {
-  const dir = getLanguageDirection(language);
+const CardTemplate = ({ unit, withCCUInfo, link, ccu, description, children, playTime }) => {
+  const dir = useSelector(state => settings.getUIDir(state.settings));
 
   const coInfo = ccu && withCCUInfo ? (
     <div className="cu_item_info_co">
@@ -25,7 +27,12 @@ const CardTemplate = ({ unit, language, withCCUInfo, link, ccu, description, chi
     </div>
   ) : null;
 
-  const trimText = (title, len = 150) => title.length < len ? title : `${title.substr(0, title.lastIndexOf(' ', len))}...`;
+  const trimText = (title, len = 150) => {
+    if (!title) {
+      return '';
+    }
+    return title.length < len ? title : `${title.substr(0, title.lastIndexOf(' ', len))}...`;
+  }
 
   return (
     <Card raised className="cu_item" as={Link} to={link}>
@@ -50,7 +57,6 @@ const CardTemplate = ({ unit, language, withCCUInfo, link, ccu, description, chi
 
 CardTemplate.propTypes = {
   unit: shapes.ContentUnit.isRequired,
-  language: PropTypes.string.isRequired,
   link: PropTypes.object.isRequired,
   withCCUInfo: PropTypes.bool,
   ccu: shapes.Collection,

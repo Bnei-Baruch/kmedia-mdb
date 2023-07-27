@@ -50,5 +50,9 @@ export function today() {
 }
 
 export function setCookie(name, value) {
-  document.cookie = `${name}=${value}; path=/; Max-Age=${365 * 24 * 60 * 60}; Secure; SameSite=Lax`;
+  // Check if in browser.
+  if (typeof window === 'object') {
+    // document.cookie = `${name}=${value}; path=/; Max-Age=${365 * 24 * 60 * 60}; Secure; SameSite=Lax`;
+    document.cookie = `${name}=${value}; path=/; Max-Age=${365 * 24 * 60 * 60}; SameSite=Lax`;
+  }
 }

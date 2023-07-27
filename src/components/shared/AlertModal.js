@@ -1,15 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Modal } from 'semantic-ui-react';
-import { getLanguageDirection } from '../../helpers/i18n-utils';
 import { useSelector } from 'react-redux';
 import { selectors as settings } from '../../redux/modules/settings';
 
 const AlertModal = ({ message, open, onClose }) => {
-
-  const language = useSelector(state => settings.getLanguage(state.settings));
-  const dir      = getLanguageDirection(language);
-
+  const uiDir = useSelector(state => settings.getUIDir(state.settings));
   return (
     <Modal
       closeIcon
@@ -17,7 +13,7 @@ const AlertModal = ({ message, open, onClose }) => {
       open={open}
       onClose={onClose}
       content={message}
-      dir={dir}
+      dir={uiDir}
     />
   );
 };

@@ -9,7 +9,7 @@ import { selectors } from '../../../../../../redux/modules/sources';
 import { actions as assetsActions, selectors as assetsSelectors } from '../../../../../../redux/modules/assets';
 import { isEmpty, physicalFile, tracePath } from '../../../../../../helpers/utils';
 import { selectors as settings } from '../../../../../../redux/modules/settings';
-import { selectSuitableLanguage } from '../../../../../../helpers/language';
+import { getLanguageName, selectSuitableLanguage } from '../../../../../../helpers/language';
 import { getLanguageDirection } from '../../../../../../helpers/i18n-utils';
 import { DeviceInfoContext } from '../../../../../../helpers/app-contexts';
 import { CT_LIKUTIM, CT_SOURCE, MT_TEXT, MT_AUDIO } from '../../../../../../helpers/consts';
@@ -57,22 +57,22 @@ const getDownloadProps = (pdf, file) => {
 };
 
 const Sources = ({ unit, t }) => {
-  const getSourceById   = useSelector(state => selectors.getSourceById(state.sources), shallowEqual);
-  const indexById       = useSelector(state => assetsSelectors.getSourceIndexById(state.assets), shallowEqual);
-  const uiLanguage      = useSelector(state => settings.getLanguage(state.settings));
-  const contentLanguage = useSelector(state => settings.getContentLanguage(state.settings));
-  const doc2htmlById    = useSelector(state => assetsSelectors.getDoc2htmlById(state.assets));
-  const dispatch        = useDispatch();
+  const getSourceById    = useSelector(state => selectors.getSourceById(state.sources), shallowEqual);
+  const indexById        = useSelector(state => assetsSelectors.getSourceIndexById(state.assets), shallowEqual);
+  const uiLang           = useSelector(state => settings.getUILang(state.settings));
+  const contentLanguages = useSelector(state => settings.getContentLanguages(state.settings));
+  const doc2htmlById     = useSelector(state => assetsSelectors.getDoc2htmlById(state.assets));
+  const dispatch         = useDispatch();
 
   const [fetched, setFetched]               = useState(null);
   const [isLikutim, setIsLikutim]           = useState(false);
-  const [languages, setLanguages]           = useState([]);
-  const [language, setLanguage]             = useState(contentLanguage);
   const [selectedUnitId, setSelectedUnitId] = useState(null);
   const [pdf, setPdf]                       = useState(null);
   const [file, setFile]                     = useState(null);
   const [mp3, setMp3]                       = useState(null);
   const [setting, setSettings]              = useState({});
+  const [sourceLanguages, setSourceLanguages] = useState([]);
+  const [selectedSourceLanguage, setSelectedSourceLanguage] = useState('');
 
   // get files data for all sources
   useEffect(() => {
@@ -102,43 +102,49 @@ const Sources = ({ unit, t }) => {
     return [...sourceOptions, ...likutimOptions];
   }, [getSourceById, indexById, t, unit]);
 
-  // when options are changed, change selected unit if was not selected explicitly
+  // Following AsString variables are for useEffect to not evaluate infinitelly.
+  const optionsAsString = sourcesDropDownOptions.map(o => o.value).sort().join(',');
+  const sourcesAsString = (unit.sources || []).slice().sort().join(',');
+
+  // When options are changed, change selected unit if was not selected explicitly
   useEffect(() => {
     const newSelectedUnitId = sourcesDropDownOptions.find(x => !x.disabled)?.value;
     setSelectedUnitId(unitId => unitId && (unit.sources || []).includes(unitId) ? unitId : newSelectedUnitId);
-  }, [sourcesDropDownOptions, unit.sources]);
+  }, [optionsAsString, sourcesAsString]);
 
   useEffect(() => {
     const isLikutimVal = sourcesDropDownOptions.find(o => o.value === selectedUnitId && o.type === CT_LIKUTIM);
     setIsLikutim(!!isLikutimVal);
-  }, [sourcesDropDownOptions, selectedUnitId]);
+  }, [optionsAsString, selectedUnitId]);
 
   useEffect(() => {
     const newLanguages = isLikutim
       ? getLikutimLanguages(unit)
       : getSourceLanguages(indexById[selectedUnitId]);
 
-    setLanguages(newLanguages);
-  }, [indexById, isLikutim, selectedUnitId, unit]);
+    if (newLanguages.some((lang, index) => sourceLanguages[index] !== lang)) {
+      setSourceLanguages(newLanguages);
+    }
+  }, [indexById, isLikutim, selectedUnitId, unit, sourceLanguages]);
 
   useEffect(() => {
-    if (languages.length > 0) {
-      const newLanguage = selectSuitableLanguage(contentLanguage, uiLanguage, languages);
-
-      // use existing state language if included in available languages
-      setLanguage(lang => lang && languages.includes(lang) ? lang : newLanguage);
+    if (sourceLanguages.length > 0) {
+      // Init selected language based on available source languages, user predefined content languages and
+      // unit original language..
+      const newLanguage = selectSuitableLanguage(contentLanguages, sourceLanguages, unit.original_language);
+      setSelectedSourceLanguage(newLanguage);
     }
-  }, [contentLanguage, languages, uiLanguage]);
+  }, [contentLanguages, sourceLanguages, unit.original_language]);
 
   useEffect(() => {
     let file;
     if (isLikutim) {
-      const files = getLikutimFiles(unit, selectedUnitId).filter(f => f.language === language);
+      const files = getLikutimFiles(unit, selectedUnitId).filter(f => f.language === selectedSourceLanguage);
       file = files.find(f => f.type === MT_TEXT);
       const mp3 = files.find(f => f.type === MT_AUDIO);
       setMp3(mp3);
     } else {
-      const langFiles = indexById[selectedUnitId]?.data?.[language];
+      const langFiles = indexById[selectedUnitId]?.data?.[selectedSourceLanguage];
 
       if (langFiles) {
         const { pdf, docx, doc, mp3 } = langFiles;
@@ -158,21 +164,21 @@ const Sources = ({ unit, t }) => {
 
     setFile(file);
     setPdf(null);
-  }, [indexById, isLikutim, language, selectedUnitId, unit]);
+  }, [indexById, isLikutim, selectedSourceLanguage, selectedUnitId, unit]);
 
   useEffect(() => {
-    if (!selectedUnitId || !language || !file || !file.id) {
+    if (!selectedUnitId || !selectedSourceLanguage || !file || !file.id) {
       return;
     }
 
-    const newFetch = `${selectedUnitId}#${language}#${file.id}`;
+    const newFetch = `${selectedUnitId}#${selectedSourceLanguage}#${file.id}`;
     if (newFetch === fetched) {
       return;
     }
 
     dispatch(assetsActions.doc2html(file.id));
     setFetched(newFetch);
-  }, [dispatch, fetched, file, language, selectedUnitId]);
+  }, [dispatch, fetched, file, selectedSourceLanguage, selectedUnitId]);
 
   const noSourcesMsg          = <Segment basic>{t('materials.sources.no-sources')}</Segment>;
   const noSourcesAvailableMsg = <Segment basic>{t('materials.sources.no-source-available')}</Segment>;
@@ -196,7 +202,7 @@ const Sources = ({ unit, t }) => {
       return wipLoadingSplash(t);
     }
 
-    const direction = getLanguageDirection(language);
+    const direction = getLanguageDirection(selectedSourceLanguage);
     return (
       <div className="font_settings-wrapper">
         <div
@@ -205,8 +211,8 @@ const Sources = ({ unit, t }) => {
         >
           <ScrollToSearch
             data={data}
-            language={language}
-            pathname={`/${language}/${isLikutim ? 'likutim' : 'sources'}/${selectedUnitId}`}
+            language={selectedSourceLanguage}
+            pathname={`/${selectedSourceLanguage}/${isLikutim ? 'likutim' : 'sources'}/${selectedUnitId}`}
             source={{
               subject_uid: selectedUnitId,
               subject_type: isLikutim ? CT_LIKUTIM : CT_SOURCE
@@ -218,10 +224,9 @@ const Sources = ({ unit, t }) => {
     );
   };
 
-
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
-  const handleLanguageChanged = (e, lang) => setLanguage(lang);
+  const handleLanguageChanged = (lang) => setSelectedSourceLanguage(lang);
   const handleSourceChanged   = (e, data) => setSelectedUnitId(data.value);
 
   if (sourcesDropDownOptions.length === 0) {
@@ -233,6 +238,9 @@ const Sources = ({ unit, t }) => {
   }
 
   const downloadProps = getDownloadProps(pdf, file);
+
+  const unitData = indexById[selectedUnitId] && indexById[selectedUnitId].data;
+  const menuOptionText = (language) => getLanguageName(language) + (unitData && unitData[language] && unitData[language].mp3 ? ' \uD83D\uDD0A' : '')
 
   return (
     <div
@@ -271,13 +279,14 @@ const Sources = ({ unit, t }) => {
         }
         <Menu.Item fitted>
           {
-            languages.length > 0 && (
+            sourceLanguages.length > 0 && (
               <div className="display-iblock margin-right-8 margin-left-8">
                 <MenuLanguageSelector
-                  languages={languages}
-                  defaultValue={language}
-                  onSelect={handleLanguageChanged}
-                  fluid={false}
+                  languages={sourceLanguages}
+                  selected={selectedSourceLanguage}
+                  onLanguageChange={handleLanguageChanged}
+                  multiSelect={false}
+                  optionText={menuOptionText}
                 />
               </div>
             )

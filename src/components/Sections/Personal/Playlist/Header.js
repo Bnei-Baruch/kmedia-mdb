@@ -7,7 +7,6 @@ import { MY_NAMESPACE_PLAYLISTS } from '../../../../helpers/consts';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import Link from '../../../Language/MultiLanguageLink';
 import PlaylistPlayIcon from '../../../../images/icons/PlaylistPlay';
-import { getLanguageDirection } from '../../../../helpers/i18n-utils';
 import { useSelector } from 'react-redux';
 import { selectors as settings } from '../../../../redux/modules/settings';
 
@@ -17,8 +16,7 @@ const PlaylistHeader = ({ confirmSuccess, save, playlist, t }) => {
   const [confirm, setConfirm]       = useState();
 
   const { isMobileDevice } = useContext(DeviceInfoContext);
-  const language         = useSelector(state => settings.getLanguage(state.settings));
-  const dir = getLanguageDirection(language);
+  const uiDir              = useSelector(state => settings.getUIDir(state.settings));
 
   const handleChangeName = (e, { value }) => setName(value);
 
@@ -66,7 +64,7 @@ const PlaylistHeader = ({ confirmSuccess, save, playlist, t }) => {
             cancelButton={t('buttons.cancel')}
             confirmButton={t('buttons.apply')}
             content={t('personal.confirmRemovePlaylist', { name: playlist.name })}
-            dir={dir}
+            dir={uiDir}
           />
           <Button basic onClick={remove} className="clear_button">
             <Icon name={'trash alternate outline'} size="large" />

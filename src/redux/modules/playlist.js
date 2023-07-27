@@ -1,6 +1,6 @@
 import { createAction } from 'redux-actions';
 import { handleActions, types as settings, types as settingsTypes } from './settings';
-import { DEFAULT_LANGUAGE, VS_DEFAULT } from '../../helpers/consts';
+import { DEFAULT_CONTENT_LANGUAGE, VS_DEFAULT } from '../../helpers/consts';
 import { types as playerTypes } from './player';
 import { saveTimeOnLocalstorage } from '../../components/Player/Controls/helper';
 import { getQualitiesFromLS } from '../../pkg/jwpAdapter/adapter';
@@ -78,7 +78,7 @@ const onBuildSuccess = (draft, payload) => {
   const { cuId, id: _id, items, fetched = {}, ...info } = payload;
 
   const id     = _id || cuId;
-  let language = draft.info.language || payload.language || DEFAULT_LANGUAGE;
+  let language = draft.info.language || payload.language || DEFAULT_CONTENT_LANGUAGE;
 
   //use curId - fix for my playlists
   draft.itemById = items.reduce((acc, x, ap) => ({ ...acc, [x.id]: x, ap }), {});
@@ -162,7 +162,7 @@ export const reducer         = handleActions({
   [SHOW_IMAGES]: onShowImages,
   [FETCH_SHOW_DATA_SUCCESS]: onFetchShowDataSuccess,
 
-  [settings.SET_LANGUAGE]: onRemovePlayer,
+  [settings.SET_CONTENT_LANGUAGES]: onRemovePlayer,
   [settingsTypes.SET_CONTENT_LANGUAGE]: (draft, payload) => draft.info.language = payload,
 }, initialState);
 

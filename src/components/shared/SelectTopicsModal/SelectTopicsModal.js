@@ -9,7 +9,6 @@ import { selectors as sourcesSelectors } from '../../../redux/modules/sources';
 import { selectors as settings } from '../../../redux/modules/settings';
 import { selectors } from '../../../redux/modules/tags';
 import { actions } from '../../../redux/modules/mdb';
-import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import { getTree } from '../../../helpers/topricTree';
 import NeedToLogin from '../../Sections/Personal/NeedToLogin';
 import AlertModal from '../AlertModal';
@@ -29,8 +28,8 @@ const SelectTopicsModal = ({ t, open, onClose, label, trigger }) => {
   const getTagById       = useSelector(state => selectors.getTagById(state.tags));
   const tree             = useMemo(() => getTree(roots, getTagById, null, t)[0], [roots, getTagById, t]);
 
-  const language = useSelector(state => settings.getLanguage(state.settings));
-  const dir      = getLanguageDirection(language);
+  const language = useSelector(state => settings.getUILang(state.settings));
+  const dir      = useSelector(state => settings.getUIDir(state.settings));
 
   const dispatch = useDispatch();
 

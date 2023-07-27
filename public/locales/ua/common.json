@@ -2,7 +2,6 @@
   "nav": {
     "top": {
       "header": "Кабала Медіа"
-      "header": "Кабала Медіа"
     },
     "sidebar": {
       "personal": "My Library",
@@ -840,8 +839,11 @@
   },
   "languages": {
     "language": "Мова",
-    "website_language": "Мова веб-сайту",
-    "content_language": "Бажана мова вмісту"
+    "ui_language": "UI Language:",
+    "content_languages": "Content Languages",
+    "add_languages": "Add language...",
+    "show_all_content": "Show all content",
+    "show_all_content_explanation": "You will see content in other languages too."
   },
   "share-text": {
     "message-title": "Read this fragment",

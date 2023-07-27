@@ -16,7 +16,7 @@ const getYears = () => {
   return years;
 };
 
-const YearMonthForm = ({ date, onChange, localeUtils, language, className }) => {
+const YearMonthForm = ({ date, onChange, localeUtils, uiLang, className }) => {
   const month = date.getMonth();
   const year = date.getFullYear();
 
@@ -28,7 +28,7 @@ const YearMonthForm = ({ date, onChange, localeUtils, language, className }) => 
     onChange(new Date(data.value, month));
   };
 
-  const months = localeUtils.getMonths(language);
+  const months = localeUtils.getMonths(uiLang);
   const years = getYears();
 
   return (
@@ -58,7 +58,7 @@ YearMonthForm.propTypes = {
   date: PropTypes.any.isRequired,
   localeUtils: PropTypes.any.isRequired,
   onChange: PropTypes.func.isRequired,
-  language: PropTypes.string.isRequired,
+  uiLang: PropTypes.string.isRequired,
   className: PropTypes.string.isRequired,
 };
 

@@ -1,14 +1,12 @@
 import React, { Component, createRef, useContext } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
-import { connect } from 'react-redux';
 import { withTranslation, withSSR } from 'react-i18next';
 import { Header, Icon, Menu, Ref, Segment } from 'semantic-ui-react';
 import Headroom from 'react-headroom';
 
 import { ALL_LANGUAGES } from '../../helpers/consts';
 import { getEmbedFromQuery } from '../../helpers/player';
-import { selectors as settings } from '../../redux/modules/settings';
 import * as shapes from '../shapes';
 import Link from '../Language/MultiLanguageLink';
 import WrappedOmniBox from '../Search/OmniBox';
@@ -63,7 +61,6 @@ class Layout extends Component {
 
   static propTypes = {
     location: shapes.HistoryLocation.isRequired,
-    language: PropTypes.string.isRequired,
     t: PropTypes.func.isRequired,
   };
 
@@ -94,11 +91,10 @@ class Layout extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    const { location, language }                = this.props;
+    const { location }                = this.props;
     const { sidebarActive, isShowHeaderSearch } = this.state;
 
-    return (language !== nextProps.language
-      || location.pathname !== nextProps.location.pathname
+    return (location.pathname !== nextProps.location.pathname
       || sidebarActive !== nextState.sidebarActive
       || isShowHeaderSearch !== nextState.isShowHeaderSearch);
   }
@@ -162,7 +158,7 @@ class Layout extends Component {
   };
 
   render() {
-    const { t, location, language, playerContainer }   = this.props;
+    const { t, location, playerContainer }   = this.props;
     const { sidebarActive, embed, isShowHeaderSearch } = this.state;
     const { isMobileDevice }                           = this.context;
 
@@ -171,6 +167,7 @@ class Layout extends Component {
     const sideBarIcon = sidebarActive
       ? <Icon size="large" name="x" />
       : <Icon name="sidebar" />;
+
 
     if (embed) {
       return (<KmediaRouters playerContainer={playerContainer} />);
@@ -204,7 +201,7 @@ class Layout extends Component {
                 </Menu.Item>
                 <Menu.Menu position="right" className="layout__header-buttons">
                   <Menu.Item className="no-margin">
-                    <HandleLanguages language={language} />
+                    <HandleLanguages />
                   </Menu.Item>
                   {
                     showSearch && isMobileDevice &&
@@ -217,13 +214,13 @@ class Layout extends Component {
                   {
                     !isMobileDevice && (
                       <Menu.Item position="right">
-                        <DonateNow language={language} />
-                        <VirtualHomeButton language={language} />
+                        <DonateNow />
+                        <VirtualHomeButton />
                       </Menu.Item>
                     )
                   }
                   <Menu.Item position="right">
-                    <Login language={language} />
+                    <Login />
                   </Menu.Item>
                   <TopMost />
                 </Menu.Menu>
@@ -234,9 +231,7 @@ class Layout extends Component {
         </div>
         <div
           className={clsx('layout__sidebar', { 'is-active': sidebarActive })}
-          ref={el => {
-            this.sidebarElement = el;
-          }}
+          ref={el => { this.sidebarElement = el; }}
         >
           <Menu inverted size="huge" color="blue">
             <div ref={menuButtonElement2}>
@@ -255,7 +250,7 @@ class Layout extends Component {
             </Menu.Item>
           </Menu>
           <div className="layout__sidebar-menu">
-            <MenuItems simple language={language} onItemClick={this.closeSidebar} />
+            <MenuItems simple onItemClick={this.closeSidebar} />
           </div>
         </div>
         <div className="layout__main">
@@ -271,6 +266,4 @@ class Layout extends Component {
   }
 }
 
-export default connect(
-  state => ({ language: settings.getLanguage(state.settings) })
-)(withSSR()(withTranslation()(withRouter(Layout))));
+export default withSSR()(withTranslation()(withRouter(Layout)));

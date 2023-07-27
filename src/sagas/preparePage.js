@@ -15,8 +15,9 @@ function* fetchCollectionsList(action) {
 
     if (wasFetched) return;
 
-    const language = yield select(state => settings.getLanguage(state.settings));
-    const { data } = yield call(Api.collections, { ...DEF_PARAMS, language, ...params });
+    const uiLang = yield select(state => settings.getUILang(state.settings));
+    const contentLanguages = yield select(state => settings.getContentLanguages(state.settings));
+    const { data } = yield call(Api.collections, { ...DEF_PARAMS, ui_lang: uiLang, content_languages: contentLanguages, ...params });
 
     if (Array.isArray(data.collections)) {
       yield put(mdbActions.receiveCollections(data.collections));

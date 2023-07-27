@@ -18,7 +18,7 @@ const BuildPlaylistLastDaily = () => {
   const denormCU     = useSelector(state => selectors.nestedGetDenormContentUnit(state.mdb));
   const historyItems = useSelector(state => my.getList(state.my, MY_NAMESPACE_HISTORY));
   const navigate     = useNavigate();
-  const language     = useSelector(state => settings.getLanguage(state.settings));
+  const uiLang       = useSelector(state => settings.getUILang(state.settings));
 
   const dispatch = useDispatch();
 
@@ -44,7 +44,7 @@ const BuildPlaylistLastDaily = () => {
 
     const cuId = sorted[0]?.id || getCuByCcuSkipPreparation(ccu);
     const to   = canonicalLink(denormCU(cuId), null, ccu);
-    navigate({ ...to, pathname: `/${language}${to.pathname}` }, { replace: true });
+    navigate({ ...to, pathname: `/${uiLang}${to.pathname}` }, { replace: true });
   }, [ccu, historyItems, navigate]);
 
   return null;

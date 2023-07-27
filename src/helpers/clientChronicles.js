@@ -147,7 +147,7 @@ export default class ClientChronicles {
     });
 
     this.uiLanguage      = '';
-    this.contentLanguage = '';
+    this.contentLanguages = [];
   }
 
   setAbTesting(abTesting) {
@@ -342,12 +342,13 @@ export default class ClientChronicles {
   append(eventType, data, sync = false, onBeforeUnloadClosure = undefined) {
     data.ab               = this.abTesting;
     data.ui_language      = this.uiLanguage;
-    data.content_language = this.contentLanguage;
+    data.contentLanguages = this.contentLanguages;
     data.location         = PREV_HREF_EVENTS.includes(eventType) ? this.prevHref : window.location.href;
     const eventId         = ulid();
     const nowTimestampMs  = Date.now();
     let flowId            = '';
     let flowType          = '';
+
     if (FLOWS_BY_END.has(eventType)) {
       // Ending event of a flow.
       // 1. We don't set flowType for end, just for subflow (see else).
@@ -401,11 +402,11 @@ export const ChroniclesActions = () => {
   const clientChronicles = useContext(ClientChroniclesContext);
   const action           = useSelector(state => state.chronicles.lastAction);
   const actionsCount     = useSelector(state => state.chronicles.actionsCount);
-  const uiLanguage       = useSelector(state => settings.getLanguage(state.settings));
-  const contentLanguage  = useSelector(state => settings.getContentLanguage(state.settings));
+  const uiLanguage       = useSelector(state => settings.getUILang(state.settings));
+  const contentLanguages = useSelector(state => settings.getContentLanguages(state.settings));
   if (clientChronicles) {
-    clientChronicles.uiLanguage      = uiLanguage;
-    clientChronicles.contentLanguage = contentLanguage;
+    clientChronicles.uiLanguage       = uiLanguage;
+    clientChronicles.contentLanguages = contentLanguages;
   }
 
   useEffect(() => {

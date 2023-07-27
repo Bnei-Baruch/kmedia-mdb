@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { LANG_HEBREW, LANG_RUSSIAN, LANG_SPANISH, LANG_UKRAINIAN } from '../../../../../helpers/consts';
+import { LANG_ENGLISH, LANG_HEBREW, LANG_RUSSIAN, LANG_SPANISH, LANG_UKRAINIAN } from '../../../../../helpers/consts';
 import { selectors as settings } from '../../../../../redux/modules/settings';
 import { actions as filtersActions, selectors as filters } from '../../../../../redux/modules/filters';
 import { actions, selectors } from '../../../../../redux/modules/publications';
@@ -21,7 +21,7 @@ class BlogContainer extends withPagination {
     pageNo: PropTypes.number.isRequired,
     total: PropTypes.number.isRequired,
     pageSize: PropTypes.number.isRequired,
-    language: PropTypes.string.isRequired,
+    contentLanguages: PropTypes.arrayOf(PropTypes.string).isRequired,
     isFiltersHydrated: PropTypes.bool,
     fetchList: PropTypes.func.isRequired,
     setPage: PropTypes.func.isRequired,
@@ -59,18 +59,28 @@ class BlogContainer extends withPagination {
     super.componenDidUpdate(nextProps);
   }
 
-  extraFetchParams({ language }) {
-    switch (language) {
-      case LANG_HEBREW:
-        return { blog: 'laitman-co-il' };
-      case LANG_UKRAINIAN:
-      case LANG_RUSSIAN:
-        return { blog: 'laitman-ru' };
-      case LANG_SPANISH:
-        return { blog: 'laitman-es' };
-      default:
-        return { blog: 'laitman-com' };
+  // Map all content languages to proper blogs.
+  extraFetchParams({ contentLanguages }) {
+    const blogs = contentLanguages.map(language => {
+      switch (language) {
+        case LANG_HEBREW:
+          return 'laitman-co-il';
+        case LANG_UKRAINIAN:
+        case LANG_RUSSIAN:
+          return 'laitman-ru';
+        case LANG_SPANISH:
+          return 'laitman-es';
+        case LANG_ENGLISH:
+          return 'laitman-com';
+
+        default:
+          return null;
+      }
+    }).filter(blog => !!blog);
+    if (!blogs.length) {
+      blogs.push('laitman-com');
     }
+    return { blog: blogs };
   }
 
   handlePageChanged(pageNo) {
@@ -102,7 +112,6 @@ class BlogContainer extends withPagination {
         pageNo={pageNo}
         total={total}
         pageSize={pageSize}
-        language={language}
         onPageChange={this.handlePageChanged}
         onFiltersChanged={this.handleFiltersChanged}
         onFiltersHydrated={() => this.handleFiltersHydrated(location)}
@@ -118,7 +127,7 @@ export const mapState = (state, ownProps) => ({
   err: selectors.getBlogError(state.publications),
   pageNo: selectors.getBlogPageNo(state.publications),
   pageSize: settings.getPageSize(state.settings),
-  language: settings.getLanguage(state.settings),
+  contentLanguages: settings.getContentLanguages(state.settings),
   isFiltersHydrated: filters.getIsHydrated(state.filters, ownProps.namespace),
 });
 

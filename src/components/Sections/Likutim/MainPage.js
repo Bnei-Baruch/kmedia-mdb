@@ -24,7 +24,7 @@ const FILTER_PARAMS = { content_type: [CT_LIKUTIM] };
 
 const MainPage = ({ t }) => {
   const { items, total, wip, err } = useSelector(state => lists.getNamespaceState(state.lists, PAGE_NS_LIKUTIM)) || {};
-  const language                   = useSelector(state => settings.getLanguage(state.settings));
+  const contentLanguages           = useSelector(state => settings.getContentLanguages(state.settings));
   const pageSize                   = useSelector(state => settings.getPageSize(state.settings));
   const selected                   = useSelector(state => filters.getNotEmptyFilters(state.filters, PAGE_NS_LIKUTIM), isEqual);
 
@@ -41,7 +41,7 @@ const MainPage = ({ t }) => {
     } else {
       dispatch(actions.fetchList(PAGE_NS_LIKUTIM, pageNo, { pageSize, ...FILTER_PARAMS }));
     }
-  }, [language, dispatch, pageNo, selected]);
+  }, [contentLanguages, dispatch, pageNo, selected]);
 
   const wipErr = WipErr({ wip, err, t });
 
@@ -67,7 +67,6 @@ const MainPage = ({ t }) => {
           pageNo={pageNo}
           pageSize={pageSize}
           total={total}
-          language={language}
           onChange={setPage}
         />}
       </Container>

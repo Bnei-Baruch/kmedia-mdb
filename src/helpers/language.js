@@ -1,35 +1,40 @@
-import { DEFAULT_LANGUAGE, LANG_ENGLISH, LANGUAGE_OPTIONS } from './consts';
+import { DEFAULT_CONTENT_LANGUAGE, LANG_ENGLISH, LANGUAGE_OPTIONS } from './consts';
 
 /**
  * Select language to use
  * @param contentLanguage -- preferable language for content
- * @param uiLanguage -- language of UI
  * @param languages -- languages we've got to choose from
  * @returns the most appropriate language
  */
-export const selectSuitableLanguage = (contentLanguage, uiLanguage, languages = []) => {
+export const selectSuitableLanguage = (contentLanguages, languages = [], originalLanguage = '') => {
   if (languages.length === 0) {
-    // we don't have data for new UI language. Let's stay as we are.
-    return DEFAULT_LANGUAGE;
+    // Content not available for any language.
+    return DEFAULT_CONTENT_LANGUAGE;
   }
 
-  if (languages.includes(contentLanguage)) {
-    // Use content language [preferred one]
+  // Prefer original languages that user knows.
+  if (originalLanguage && contentLanguages.includes(originalLanguage) && languages.includes(originalLanguage)) {
+    return originalLanguage;
+  }
+
+  // Choose existing language 
+  const contentLanguage = contentLanguages.find(language => languages.includes(language));
+  if (contentLanguage) {
     return contentLanguage;
   }
 
-  if (languages.includes(uiLanguage)) {
-    // Or UI language
-    return uiLanguage;
+  // No matching language try default.
+  if (languages.includes(DEFAULT_CONTENT_LANGUAGE)) {
+    return DEFAULT_CONTENT_LANGUAGE;
   }
 
-  if (languages.includes(LANG_ENGLISH)) {
-    // Or English
-    return LANG_ENGLISH;
-  }
-
-  // Or first available language
+  // Or first available language.
   return languages[0];
+};
+
+export const getLanguageName = (language) => {
+  const option = LANGUAGE_OPTIONS.find(x => x.value === language);
+  return option && option.name || ''
 };
 
 export const getOptions = ({ languages }) =>

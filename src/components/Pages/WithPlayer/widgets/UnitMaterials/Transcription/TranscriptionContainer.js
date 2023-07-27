@@ -8,40 +8,9 @@ import { selectors as settings } from '../../../../../../redux/modules/settings'
 import * as shapes from '../../../../../shapes';
 import Transcription from './Transcription';
 
-import { SessionInfoContext } from '../../../../../../helpers/app-contexts';
-
+// DON'T MERGE, NO NEED FOR CONTAINER HERE!!!
 const TranscriptionContainer = ({ unit, type = null, activeTab = 'transcription' }) => {
-  const location        = useLocation();
-  const doc2htmlById    = useSelector(state => selectors.getDoc2htmlById(state.assets));
-  const language        = useSelector(state => settings.getLanguage(state.settings));
-  const contentLanguage = useSelector(state => settings.getContentLanguage(state.settings, location));
-  const dispatch        = useDispatch();
-
-  const handleContentChange = (id, l) => {
-    dispatch(actions.doc2html(id));
-    dispatch(actions.fetchTimeCode(unit.id, l));
-  };
-
-  return (
-    <SessionInfoContext.Consumer>
-      {
-        (sessionInfo = {}) =>
-          (
-            <Transcription
-              unit={unit}
-              doc2htmlById={doc2htmlById}
-              uiLanguage={language}
-              contentLanguage={contentLanguage}
-              type={type}
-              onContentChange={handleContentChange}
-              location={location}
-              activeTab={activeTab}
-              enableShareText={sessionInfo.enableShareText}
-            />
-          )
-      }
-    </SessionInfoContext.Consumer>
-  );
+  return <Transcription unit={unit} type={type} activeTab={activeTab} />;
 };
 
 TranscriptionContainer.propTypes = {

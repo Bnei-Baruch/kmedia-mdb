@@ -5,17 +5,18 @@ import { withTranslation } from 'react-i18next';
 
 import { Button, Divider, List, Popup } from 'semantic-ui-react';
 import { selectors } from '../../redux/modules/auth';
+import { selectors as settings } from '../../redux/modules/settings';
 import { DeviceInfoContext } from '../../helpers/app-contexts';
-import { getLanguageDirection } from '../../helpers/i18n-utils';
 import Link from '../Language/MultiLanguageLink';
 import { login, logout } from '../../pkg/ksAdapter/adapter';
 import useIsLoggedIn from '../shared/useIsLoggedIn';
 
-const Login = ({ t, language }) => {
+const Login = ({ t }) => {
   const [isActive, setIsActive] = useState(false);
   const { isMobileDevice }      = useContext(DeviceInfoContext);
-  const direction               = getLanguageDirection(language);
-  const popupStyle              = { direction };
+  const uiLang                  = useSelector(state => settings.getUILang(state.settings));
+  const uiDir                   = useSelector(state => settings.getUIDir(state.settings));
+  const popupStyle              = { uiDir };
   const user                    = useSelector(state => selectors.getUser(state.auth));
   const loggedIn                = useIsLoggedIn();
 
@@ -59,7 +60,7 @@ const Login = ({ t, language }) => {
           <List.Item
             key="account"
             as="a"
-            href={`https://accounts.kab.info/auth/realms/main/account/?kc_locale=${language}`}
+            href={`https://accounts.kab.info/auth/realms/main/account/?kc_locale=${uiLang}`}
             content={t('personal.account')}
           />
           <List.Item

@@ -7,7 +7,6 @@ import { actions } from '../../../../../redux/modules/my';
 import { MY_NAMESPACE_BOOKMARKS } from '../../../../../helpers/consts';
 import BookmarkForm from '../../../../shared/SaveBookmark/BookmarkForm';
 import { selectors as settings } from '../../../../../redux/modules/settings';
-import { getLanguageDirection } from '../../../../../helpers/i18n-utils';
 import { getMyItemKey } from '../../../../../helpers/my';
 import { stopBubbling } from '../../../../../helpers/utils';
 import AlertModal from '../../../../shared/AlertModal';
@@ -20,8 +19,7 @@ const Actions = ({ bookmark, t }) => {
 
   const dispatch = useDispatch();
 
-  const language = useSelector(state => settings.getLanguage(state.settings));
-  const dir      = getLanguageDirection(language);
+  const uiDir = useSelector(state => settings.getUIDir(state.settings));
 
   const { key } = getMyItemKey(MY_NAMESPACE_BOOKMARKS, bookmark);
 
@@ -66,7 +64,7 @@ const Actions = ({ bookmark, t }) => {
         cancelButton={t('buttons.cancel')}
         confirmButton={t('buttons.apply')}
         content={t('personal.bookmark.confirmRemoveBookmark', { name: bookmark.name })}
-        dir={dir}
+        dir={uiDir}
       />
       <Dropdown
         icon={{ name: 'ellipsis vertical', size: 'large', color: 'grey', className: 'margin-top-8' }}
@@ -87,7 +85,7 @@ const Actions = ({ bookmark, t }) => {
             open={openEdit}
             onClose={handleCloseEdit}
             size="tiny"
-            dir={dir}
+            dir={uiDir}
             className="bookmark_modal"
           >
             <Modal.Header content={t('personal.bookmark.editBookmark')} />

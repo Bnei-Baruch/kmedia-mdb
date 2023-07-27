@@ -17,7 +17,7 @@ const PlayerBehavior = () => {
 
   const file = useMemo(() => findPlayedFile(item, info), [item, info]);
 
-  //init jwplayer by element id,
+  // Init jwplayer by element id.
   useEffect(() => {
     if (!info.isReady || !file?.src) return;
 

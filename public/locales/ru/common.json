@@ -857,8 +857,14 @@
   },
   "languages": {
     "language": "Язык",
-    "website_language": "Язык сайта",
-    "content_language": "Язык контента"
+    "ui_language": "Язык интерфейса:",
+    "content_languages": "Языки контена",
+    "add_languages": "Добавить язык...",
+    "show_all_content": "Показать весь контент",
+    "show_all_content_explanation": "Контент будет также показан и на других языках.",
+    "url_language_prefix": "Вы исползуете {{lang}} из линка, нажмите ",
+    "url_language_here": "здесь",
+    "url_language_suffix": " чтобы использовать ваши языки."
   },
   "share-text": {
     "message-title": "Read this fragment",

@@ -9,15 +9,13 @@ import { MY_NAMESPACE_FOLDERS } from '../../../../../helpers/consts';
 import { getMyItemKey } from '../../../../../helpers/my';
 import { stopBubbling } from '../../../../../helpers/utils';
 import { selectors as settings } from '../../../../../redux/modules/settings';
-import { getLanguageDirection } from '../../../../../helpers/i18n-utils';
 
 const FolderItem = ({ folder, selectedId, selectFolder, t }) => {
   const [edit, setEdit]       = useState();
   const [name, setName]       = useState();
   const [confirm, setConfirm] = useState();
 
-  const language = useSelector(state => settings.getLanguage(state.settings));
-  const dir      = getLanguageDirection(language);
+  const uiDir = useSelector(state => settings.getUIDir(state.settings));
 
   const { id }  = folder;
   const { key } = getMyItemKey(MY_NAMESPACE_FOLDERS, folder);
@@ -130,7 +128,7 @@ const FolderItem = ({ folder, selectedId, selectFolder, t }) => {
               cancelButton={t('buttons.cancel')}
               confirmButton={t('buttons.apply')}
               content={t('personal.bookmark.confirmRemoveFolder', { name: folder.name })}
-              dir={dir}
+              dir={uiDir}
             />
           </Grid.Column>
         )

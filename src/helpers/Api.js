@@ -33,10 +33,10 @@ export class Requests {
     let url;
     switch (item) {
       case 'banner':
-        url = `${cmsUrl('banners-list')}/${options.language}`;
+        url = `${cmsUrl('banners-list')}?${Requests.makeParams({ content_languages: options.contentLanguages })}`;
         break;
       case 'person':
-        url = `${cmsUrl('persons')}/${options.id}?language=${options.language}`;
+        url = `${cmsUrl('persons')}/${options.id}?${Requests.makeParams({ content_languages: options.contentLanguages })}`;
         break;
       default:
         return null;
@@ -97,15 +97,15 @@ export class Requests {
 }
 
 class Api {
-  static collection = ({ id, language }) => Requests.get(`collections/${id}?${Requests.makeParams({ language })}`);
+  static collection = ({ id, ui_language, content_languages }) => Requests.get(`collections/${id}?${Requests.makeParams({ ui_language, content_languages })}`);
 
-  static unit = ({ id, language }) => Requests.get(`content_units/${id}?${Requests.makeParams({ language })}`);
+  static unit = ({ id, ui_language, content_languages }) => Requests.get(`content_units/${id}?${Requests.makeParams({ ui_language, content_languages })}`);
 
-  static home = ({ language }) => Requests.get(`home?${Requests.makeParams({ language })}`);
+  static home = ({ ui_language, content_languages }) => Requests.get(`home?${Requests.makeParams({ ui_language, content_languages })}`);
 
-  static latestLesson = ({ language }) => Requests.get(`latestLesson?${Requests.makeParams({ language })}`);
+  static latestLesson = ({ ui_language, content_languages }) => Requests.get(`latestLesson?${Requests.makeParams({ ui_language, content_languages })}`);
 
-  static sqdata = ({ language }) => Requests.get(`sqdata?${Requests.makeParams({ language })}`);
+  static sqdata = ({ ui_language, content_languages }) => Requests.get(`sqdata?${Requests.makeParams({ ui_language, content_languages })}`);
 
   static lessons = ({ pageNo: page_no, pageSize: page_size, ...rest }) => (
     Requests.get(`lessons?${Requests.makeParams({ page_no, page_size, ...rest })}`)
@@ -135,8 +135,8 @@ class Api {
     Requests.get(`stats/label_class?${Requests.makeParams(rest)}`)
   );
 
-  static elasticStats = ({ q, language }) => (
-    Requests.get(`stats/search_class?${Requests.makeParams({ q, language })}`)
+  static elasticStats = ({ q, ui_language, content_languages }) => (
+    Requests.get(`stats/search_class?${Requests.makeParams({ q, ui_language, content_languages })}`)
   );
 
   static countCU = params => Requests.get(`count_cu?${Requests.makeParams(params)}`);
@@ -155,18 +155,19 @@ class Api {
 
   static tagDashboard = params => Requests.get(`tags/dashboard?${Requests.makeParams(params)}`);
 
-  static autocomplete = ({ q, language }) => Requests.get(`autocomplete?${Requests.makeParams({ q, language })}`);
+  static autocomplete = ({ q, ui_language, content_languages }) => Requests.get(`autocomplete?${Requests.makeParams({ q, ui_language, content_languages })}`);
 
   static search = ({
-                     q,
-                     language,
-                     pageNo: page_no,
-                     pageSize: page_size,
-                     sortBy: sort_by,
-                     deb,
-                     searchId: search_id
-                   }) => (
-    Requests.get(`search?${Requests.makeParams({ q, language, page_no, page_size, sort_by, deb, search_id })}`)
+    q,
+    ui_language,
+    content_languages,
+    pageNo: page_no,
+    pageSize: page_size,
+    sortBy: sort_by,
+    deb,
+    searchId: search_id
+  }) => (
+    Requests.get(`search?${Requests.makeParams({ q, ui_language, content_languages, page_no, page_size, sort_by, deb, search_id })}`)
   );
 
   static click = ({ mdbUid: mdb_uid, index, type, rank, searchId: search_id, deb }) => (
@@ -182,8 +183,8 @@ class Api {
 
   static getCMS = (item, options) => Requests.getCMS(item, options);
 
-  static simpleMode = ({ language, startDate: start_date, endDate: end_date }) => (
-    Requests.get(`simple?${Requests.makeParams({ language, start_date, end_date })}`)
+  static simpleMode = ({ ui_language, content_languages, startDate: start_date, endDate: end_date }) => (
+    Requests.get(`simple?${Requests.makeParams({ ui_language, content_languages, start_date, end_date })}`)
   );
 
   static recommendedRequestData = (
@@ -293,6 +294,9 @@ class Api {
     }
     return Requests.auth(params, url, token, method);
   };
+
+  static postLanguages = (data, token) => Requests.auth(data, `${PERSONAL_API_BACKEND}settings`, token, 'POST');
+  static getLanguages = token => Requests.auth({}, `${PERSONAL_API_BACKEND}languages`, token, 'GET');
 
   static reactionsCount = params => {
     const url    = `${PERSONAL_API_BACKEND}reaction_count?${Requests.makeParams(params)}`;

@@ -24,7 +24,6 @@ import { selectors as tags } from '../../redux/modules/tags';
 import { getTitle } from './LocationsFilter/helper';
 
 const FilterLabels = ({ namespace, t }) => {
-
   const list          = useSelector(state => filters.getFilters(state.filters, namespace)) || [];
   const getSourceById = useSelector(state => sources.getSourceById(state.sources));
   const getTagById    = useSelector(state => tags.getTagById(state.tags));

@@ -34,11 +34,17 @@ export const initKC = async () => {
   }
 
   const options   = {
-    checkLoginIframe: false, flow: 'standard', pkceMethod: 'S256', enableLogging: true, onLoad: 'check-sso'
+    checkLoginIframe: false,
+    flow: 'standard',
+    pkceMethod: 'S256',
+    enableLogging: true,
+    onLoad: 'check-sso',
   };
   document.cookie = 'authorised=true;max-age=10';
   const resp      = { user: null, token: null };
+  console.log('BEFORE keycloak.init');
   return keycloak.init(options).then(ok => {
+    console.log('keycloak.init THEN OK!');
     if (!ok) {
       return resp;
     }
@@ -48,6 +54,7 @@ export const initKC = async () => {
     resp.token          = keycloak.token;
     return resp;
   }).catch(error => {
+    console.log('keycloak.init CATCH');
     console.error(error);
     return resp;
   });

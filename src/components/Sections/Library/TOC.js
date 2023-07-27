@@ -132,7 +132,7 @@ class TOC extends Component {
     contextRef: Reference,
     getSourceById: PropTypes.func.isRequired,
     apply: PropTypes.func.isRequired,
-    language: PropTypes.string.isRequired,
+    uiLang: PropTypes.string.isRequired,
     active: PropTypes.bool,
     match: PropTypes.string.isRequired,
     matchApplied: PropTypes.func,
@@ -206,8 +206,8 @@ class TOC extends Component {
   };
 
   getLeafTitle = (leafId, sourceId) => {
-    const { getSourceById, language } = this.props;
-    const isRTL                       = isLanguageRtl(language);
+    const { getSourceById, uiLang } = this.props;
+    const isRTL                       = isLanguageRtl(uiLang);
     const { name, number, year }      = getSourceById(leafId);
 
     let leafTitle;

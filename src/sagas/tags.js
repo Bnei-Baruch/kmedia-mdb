@@ -12,12 +12,18 @@ export function* fetchDashboard(action) {
   const { tag: id } = action.payload;
 
   try {
-    const language = yield select(state => settings.getLanguage(state.settings));
+    const uiLang = yield select(state => settings.getUILang(state.settings));
+    const contentLanguages = yield select(state => settings.getContentLanguages(state.settings));
 
     const filters      = yield select(state => filterSelectors.getFilters(state.filters, `topics_${id}`));
     const filterParams = filtersTransformer.toApiParams(filters) || {};
 
-    const { data } = yield call(Api.tagDashboard, { ...action.payload, ...filterParams, language });
+    const { data } = yield call(Api.tagDashboard, {
+      ...action.payload,
+      ...filterParams,
+      ui_language: uiLang,
+      content_languages: contentLanguages,
+    });
 
     const { items, media_total, text_total } = data;
 

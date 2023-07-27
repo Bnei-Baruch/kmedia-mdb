@@ -26,7 +26,7 @@ const Page = ({ t }) => {
 
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const { key }            = getMyItemKey(MY_NAMESPACE_PLAYLISTS, { id });
-  const language           = useSelector(state => settings.getLanguage(state.settings));
+  const uiLang             = useSelector(state => settings.getUILang(state.settings));
   const playlist           = useSelector(state => selectors.getItemByKey(state.my, MY_NAMESPACE_PLAYLISTS, key));
   const wip                = useSelector(state => selectors.getWIP(state.my, MY_NAMESPACE_PLAYLISTS));
   const err                = useSelector(state => selectors.getErr(state.my, MY_NAMESPACE_PLAYLISTS));
@@ -36,7 +36,7 @@ const Page = ({ t }) => {
 
   useEffect(() => {
     id && dispatch(actions.fetchOne(MY_NAMESPACE_PLAYLISTS, { id }));
-  }, [id, language, user, dispatch]);
+  }, [id, uiLang, user, dispatch]);
 
   const needToLogin = NeedToLogin({ t });
   if (needToLogin) return needToLogin;
@@ -46,7 +46,7 @@ const Page = ({ t }) => {
 
   if (!playlist) return null;
 
-  const pathname          = `/${language}/${MY_NAMESPACE_PLAYLISTS}/${id}`;
+  const pathname      = `/${uiLang}/${MY_NAMESPACE_PLAYLISTS}/${id}`;
   const computerWidth = isMobileDevice ? 16 : 10;
   const items         = [...playlist.items || []];
   items.sort((a, b) => b.position - a.position);

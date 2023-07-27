@@ -30,7 +30,7 @@ const itemsByContentType = list => list.filter(x => !!x).reduce((acc, val) => {
   return acc;
 }, {});
 
-const LatestUpdatesSection = ({ latestItems = [], t, language }) => {
+const LatestUpdatesSection = ({ latestItems = [], t }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const itemsByCT          = itemsByContentType(latestItems);
 
@@ -65,22 +65,22 @@ const LatestUpdatesSection = ({ latestItems = [], t, language }) => {
       <Container className="padded horizontally">
         <Section title={t('home.latest-updates.new-on-the-site')} className={'latestUpdateSection'} computer={13}>
           <div className="homepage__section__latestUpdates">
-            <LatestUpdatesCardList t={t} language={language} title={t(`events.collection.playlist.lessons`)} itemsByCT={itemsByCT} maxItems={20} itemsPerRow={itemsPerRow} stackable={!isMobileDevice} cts={[
+            <LatestUpdatesCardList t={t} title={t(`events.collection.playlist.lessons`)} itemsByCT={itemsByCT} maxItems={20} itemsPerRow={itemsPerRow} stackable={!isMobileDevice} cts={[
               { ct: consts.CT_DAILY_LESSON, itemsPerPage: 2 },
               { ct: consts.CT_WOMEN_LESSON, daysBack: 30 },
               { ct: consts.CT_VIRTUAL_LESSON, daysBack: 30 },
               { ct: consts.CT_LESSONS_SERIES }]} />
 
-            <LatestUpdatesCardList t={t} language={language} title={t(`programs.header.text`)} itemsByCT={itemsByCT} maxItems={20} itemsPerRow={itemsPerRow} stackable={!isMobileDevice} cts={[
+            <LatestUpdatesCardList t={t} title={t(`programs.header.text`)} itemsByCT={itemsByCT} maxItems={20} itemsPerRow={itemsPerRow} stackable={!isMobileDevice} cts={[
               { ct: consts.CT_VIDEO_PROGRAM_CHAPTER }]} />
 
-            <LatestUpdatesCardList t={t} language={language} title={t(`programs.tabs.clips`)} itemsByCT={itemsByCT} maxItems={20} itemsPerRow={itemsPerRow} stackable={!isMobileDevice} cts={[
+            <LatestUpdatesCardList t={t} title={t(`programs.tabs.clips`)} itemsByCT={itemsByCT} maxItems={20} itemsPerRow={itemsPerRow} stackable={!isMobileDevice} cts={[
               { ct: consts.CT_CLIP }]} />
 
-            <LatestUpdatesCardList t={t} language={language} title={t(`publications.header.text`)} itemsByCT={itemsByCT} maxItems={20} itemsPerRow={itemsPerRow} stackable={!isMobileDevice} cts={[
+            <LatestUpdatesCardList t={t} title={t(`publications.header.text`)} itemsByCT={itemsByCT} maxItems={20} itemsPerRow={itemsPerRow} stackable={!isMobileDevice} cts={[
               { ct: consts.CT_ARTICLE }]} />
 
-            <LatestUpdatesCardList t={t} language={language} title={t(`nav.sidebar.events`)} itemsByCT={itemsByCT} maxItems={20} itemsPerRow={itemsPerRow} stackable={!isMobileDevice} cts={[
+            <LatestUpdatesCardList t={t} title={t(`nav.sidebar.events`)} itemsByCT={itemsByCT} maxItems={20} itemsPerRow={itemsPerRow} stackable={!isMobileDevice} cts={[
               { ct: consts.CT_CONGRESS },
               { ct: consts.CT_FRIENDS_GATHERING },
               { ct: consts.CT_MEAL },
@@ -95,7 +95,6 @@ const LatestUpdatesSection = ({ latestItems = [], t, language }) => {
 LatestUpdatesSection.propTypes = {
   latestUnits: PropTypes.arrayOf(shapes.ContentUnit),
   t: PropTypes.func.isRequired,
-  language: PropTypes.string
 };
 
 const arePropsEqual = (prevProps, nextProps) => {

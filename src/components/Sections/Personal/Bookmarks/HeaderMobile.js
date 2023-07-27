@@ -12,7 +12,6 @@ import { actions as filtersActions, selectors as filters } from '../../../../red
 import { selectors as my } from '../../../../redux/modules/my';
 import { getMyItemKey } from '../../../../helpers/my';
 import FolderList from './Folders/List';
-import { getLanguageDirection } from '../../../../helpers/i18n-utils';
 import { selectors as settings } from '../../../../redux/modules/settings';
 
 const BookmarkHeaderMobile = ({ t }) => {
@@ -37,8 +36,7 @@ const BookmarkHeaderMobile = ({ t }) => {
 
   const placeholder = !folder ? t('personal.bookmark.searchBookmarks') : `${t('personal.bookmark.filterByFolder')}: ${folder.name}`;
 
-  const language = useSelector(state => settings.getLanguage(state.settings));
-  const dir = getLanguageDirection(language);
+  const uiDir = useSelector(state => settings.getUIDir(state.settings));
 
   const trigger = (
     <Container>
@@ -53,7 +51,7 @@ const BookmarkHeaderMobile = ({ t }) => {
         <Icon name="folder outline" color="grey"/>
         {t('personal.bookmark.folders')}
         <Icon
-          name={`caret ${dir === 'ltr' ? 'right' : 'left'}`}
+          name={`caret ${uiDir === 'ltr' ? 'right' : 'left'}`}
           className="margin-left-8 margin-right-8"
         />
       </Label>
@@ -97,7 +95,7 @@ const BookmarkHeaderMobile = ({ t }) => {
         onOpen={handleToggle}
         onClose={handleToggle}
         open={open}
-        dir={dir}
+        dir={uiDir}
         closeIcon
       >
         <Modal.Content>

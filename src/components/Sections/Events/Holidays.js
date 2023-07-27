@@ -4,7 +4,6 @@ import { withTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Checkbox, Icon, Input, List, Modal, Table } from 'semantic-ui-react';
 import { CT_HOLIDAY, FN_COLLECTION_MULTI, FN_CONTENT_TYPE } from '../../../helpers/consts';
-import { getLanguageDirection, isLanguageRtl } from '../../../helpers/i18n-utils';
 import { isEmpty } from '../../../helpers/utils';
 import { actions, selectors as filters } from '../../../redux/modules/filters';
 import { selectors as filtersAside, selectors } from '../../../redux/modules/filtersAside';
@@ -24,13 +23,12 @@ const Holidays = ({ namespace, t }) => {
   const [query, setQuery] = useState('');
   const [open, setOpen]   = useState(false);
 
-  const language            = useSelector(state => settings.getLanguage(state.settings));
+  const uiDir               = useSelector(state => settings.getUIDir(state.settings));
   const ids                 = useSelector(state => selectors.getTree(state.filtersAside, namespace, FN_COLLECTION_MULTI));
   const getById             = useSelector(state => mdb.nestedGetCollectionById(state.mdb));
   const selectedCollections = useSelector(state => filters.getFilterByName(state.filters, namespace, FN_COLLECTION_MULTI)?.values || []);
   const selectedCT          = useSelector(state => filters.getFilterByName(state.filters, namespace, FN_CONTENT_TYPE)?.values || []);
 
-  const dir  = getLanguageDirection(language);
   const stat = useSelector(state => filtersAside.getStats(state.filtersAside, namespace, FN_CONTENT_TYPE)(CT_HOLIDAY));
 
   const collections = useMemo(() => {
@@ -93,7 +91,7 @@ const Holidays = ({ namespace, t }) => {
           basic
           color="blue"
           className="clear_button no-shadow"
-          icon={`caret ${isLanguageRtl(language) ? 'left' : 'right'}`}
+          icon={`caret ${uiDir === 'rtl' ? 'left' : 'right'}`}
           onClick={() => setOpen(true)}
           size="medium"
         />
@@ -102,9 +100,9 @@ const Holidays = ({ namespace, t }) => {
 
       <Modal
         open={open}
-        dir={dir}
+        dir={uiDir}
         onClose={handleClose}
-        className={clsx('filters_aside_tree_modal', { [dir]: true })}
+        className={clsx('filters_aside_tree_modal', { [uiDir]: true })}
         closeIcon={<Icon name="times circle outline" />}
         size="fullscreen"
       >

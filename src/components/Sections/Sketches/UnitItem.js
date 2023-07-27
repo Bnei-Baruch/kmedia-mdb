@@ -10,39 +10,37 @@ import { isEmpty } from '../../../helpers/utils';
 import Link from '../../Language/MultiLanguageLink';
 import { buildTextItemInfo } from '../../shared/ContentItem/helper';
 import { selectors as sources } from '../../../redux/modules/sources';
-import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import { selectors as settings } from '../../../redux/modules/settings';
 import GalleryModal from './ZipFileModal';
 import ImageFileModal from './ImageFileModal';
 import { isZipFile } from '../../Pages/WithPlayer/widgets/UnitMaterials/helper';
 import { stringify } from '../../../helpers/url';
 
-const findZipFile = (cu, language) => {
+const findZipFile = (cu, contentLanguages) => {
   const zips = cu.files
     .filter(x => MediaHelper.IsImage(x) && isZipFile(x));
-  // try filter by language
-  let files  = zips.filter(file => file.language === language);
 
-  // if no files by language - return original language files
-  if (files.length === 0) {
-    files = zips.filter(f => f.language === cu.original_language);
+  let files = [];
+  if (contentLanguages.includes(cu.original_language)) {
+    files = zips.filter(file => file.language === cu.original_language);
+  } else {
+    files = zips.filter(file => contentLanguages.includes(file.language));
   }
 
   return files[0] || zips[0];
 };
 
 const UnitItem = ({ id, t }) => {
-  const cu          = useSelector(state => mdb.getDenormContentUnit(state.mdb, id));
-  const getZipById  = useSelector(state => assets.nestedGetZipById(state.assets));
-  const getPathByID = useSelector(state => sources.getPathByID(state.sources));
-  const language    = useSelector(state => settings.getLanguage(state.settings));
+  const cu               = useSelector(state => mdb.getDenormContentUnit(state.mdb, id));
+  const getZipById       = useSelector(state => assets.nestedGetZipById(state.assets));
+  const getPathByID      = useSelector(state => sources.getPathByID(state.sources));
+  const uiDir            = useSelector(state => settings.getUIDir(state.settings));
+  const contentLanguages = useSelector(state => settings.getContentLanguages(state.settings));
 
   if (!cu) return null;
 
-  const dir = getLanguageDirection(language);
-
   const imgs = cu.files.filter(x => MediaHelper.IsImage(x) && !isZipFile(x));
-  const zip  = findZipFile(cu, language);
+  const zip  = findZipFile(cu, contentLanguages);
   const uniq = zip ? getZipById(zip.id)?.data?.uniq.map(x => x.path) : [];
 
   if (isEmpty(uniq) && isEmpty(imgs)) return null;
@@ -60,7 +58,7 @@ const UnitItem = ({ id, t }) => {
             <Card.Content>
               <Card.Description as={Link} to={to} content={cu.name} />
             </Card.Content>
-            <Card.Meta className={`cu_info_description ${dir}`}>
+            <Card.Meta className={`cu_info_description ${uiDir}`}>
               {[title, ...description].map((d, i) => (<span key={i}>{d}</span>))}
             </Card.Meta>
           </Card>
@@ -74,7 +72,7 @@ const UnitItem = ({ id, t }) => {
               <Card.Description as={Link} to={to} content={cu.name} />
             </Card.Content>
 
-            <Card.Meta className={`cu_info_description ${dir}`}>
+            <Card.Meta className={`cu_info_description ${uiDir}`}>
               {[title, ...description].map((d, i) => (<span key={i}>{d}</span>))}
             </Card.Meta>
           </Card>
