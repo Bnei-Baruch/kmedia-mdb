@@ -13,7 +13,6 @@ import { actions as assetsActions, selectors as assets } from '../../../redux/mo
 import { actions as sourceActions, selectors as sources } from '../../../redux/modules/sources';
 import { selectors as settings } from '../../../redux/modules/settings';
 import { actions as mdbActions, selectors as mdb } from '../../../redux/modules/mdb';
-import { selectors as tags } from '../../../redux/modules/tags';
 import * as shapes from '../../shapes';
 import { getSourceErrorSplash } from '../../shared/WipErr/WipErr';
 import Helmets from '../../shared/Helmets';
@@ -477,6 +476,8 @@ class LibraryContainer extends Component {
     const parentId    = this.properParentId(fullPath);
     const matchString = this.matchString(parentId, t);
     const active      = !this.context.isMobileDevice || tocIsActive;
+
+    console.log('serverRender:  LibraryContainer content', content);
 
     return (
       <div

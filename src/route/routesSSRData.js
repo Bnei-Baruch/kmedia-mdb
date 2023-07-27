@@ -49,6 +49,7 @@ import * as musicSagas from './../sagas/music';
 import * as publicationsSagas from './../sagas/publications';
 import * as searchSagas from './../sagas/search';
 import * as tagsSagas from './../sagas/tags';
+import { getLibraryContentFile } from '../components/Sections/Library/Library';
 
 export const home = store => {
   store.dispatch(homeActions.fetchData(true));
@@ -247,9 +248,9 @@ export const libraryPage = async (store, match, show_console = false) => {
         if (data[language].pdf && isTaas(sourceID)) {
           return; // no need to fetch pdf. we don't do that on SSR
         }
-
-        show_console && console.log('serverRender: libraryPage before fetch doc2html', sourceID);
-        store.dispatch(assetsActions.doc2html(sourceID));
+        const { id } = getLibraryContentFile(data[language], sourceID);
+        show_console && console.log('serverRender: libraryPage before fetch doc2html', id);
+        store.dispatch(assetsActions.doc2html(id));
         show_console && console.log('serverRender: libraryPage before fetch labels', sourceID, contentLang);
         store.dispatch(mdbActions.fetchLabels({ content_unit: sourceID, language: contentLang }));
       }

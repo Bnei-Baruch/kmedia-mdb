@@ -214,6 +214,8 @@ async function serverRenderAuthorised(req, res, next, htmlData, language, bot) {
                 .replace(/semantic_v4.min.css/g, `semantic_v4${cssDirection}.min.css`)
                 .replace(/<div id="root"><\/div>/, rootDiv);
 
+              show_console && console.log('serverRender: rendered html', html);
+
               if (context.code) {
                 res.status(context.code);
               }
