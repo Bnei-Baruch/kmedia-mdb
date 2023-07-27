@@ -1,5 +1,6 @@
 import React, { Component, createRef } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { noop } from '../../../../helpers/utils';
 import moment from 'moment';
 import scrollIntoView from 'scroll-into-view';
@@ -9,8 +10,9 @@ import { Button, Icon, Input, Modal, Popup, Segment } from 'semantic-ui-react';
 import 'react-day-picker/lib/style.css';
 
 import { today } from '../../../../helpers/date';
-import { getLanguageDirection, getLanguageLocaleWORegion } from '../../../../helpers/i18n-utils';
+import { getLanguageLocaleWORegion } from '../../../../helpers/i18n-utils';
 import YearMonthForm from './YearMonthForm';
+import { selectors as settings } from '../../../../redux/modules/settings';
 
 import DayPicker from 'react-day-picker';
 import { withTranslation } from 'react-i18next';
@@ -24,7 +26,8 @@ class ButtonDayPicker extends Component {
     value: PropTypes.instanceOf(Date),
     label: PropTypes.string,
     onDayChange: PropTypes.func,
-    language: PropTypes.string.isRequired,
+    uiLang: PropTypes.string.isRequired,
+    uiDir: PropTypes.string.isRequired,
     withLabel: PropTypes.bool
   };
 
@@ -51,17 +54,17 @@ class ButtonDayPicker extends Component {
   }
 
   static getDerivedStateFromProps(props, state) {
-    const { value, language } = state;
+    const { value, uiLang } = state;
 
     if (props.value !== value ||
-      props.language !== language) {
+      props.uiLang !== uiLang) {
       return {
         value: props.value,
         month: props.value,
-        stringValue: ButtonDayPicker.formatDateValue(props.value, props.language),
-        language: props.language,
-        langDir: getLanguageDirection(props.language),
-        locale: getLanguageLocaleWORegion(props.language),
+        stringValue: ButtonDayPicker.formatDateValue(props.value, props.uiLang),
+        uiLang: props.uiLang,
+        uiDir: props.uiDir,
+        locale: getLanguageLocaleWORegion(props.uiLang),
       };
     }
 
@@ -124,14 +127,14 @@ class ButtonDayPicker extends Component {
     )
   );
 
-  getNavBarElement = (props, language) => {
+  getNavBarElement = (props, uiLang) => {
     const { month, localeUtils } = props;
     return (
       <div>
         <Navbar {...props} className="ButtonDayPicker-DayPicker-NavButton" />
         <YearMonthForm
           date={month}
-          language={language}
+          uiLang={uiLang}
           localeUtils={localeUtils}
           onChange={this.handleYearMonthChange}
           className="float-left"
@@ -174,9 +177,9 @@ class ButtonDayPicker extends Component {
   };
 
   render() {
-    const { language, t, value, label, withLabel }                                 = this.props;
-    const { month, isPopupOpen, isNativePopupOpen, selectedDate, langDir, locale } = this.state;
-    const { deviceInfo, isMobileDevice }                                           = this.context;
+    const { uiLang, t, value, label, withLabel }                                 = this.props;
+    const { month, isPopupOpen, isNativePopupOpen, selectedDate, uiDir, locale } = this.state;
+    const { deviceInfo, isMobileDevice }                                         = this.context;
 
     if (isMobileDevice) {
       const selected         = selectedDate || value;
@@ -214,7 +217,7 @@ class ButtonDayPicker extends Component {
             dateButton
           }
         >
-          <Modal.Content dir={langDir}>
+          <Modal.Content dir={uiDir}>
             <Input
               fluid
               size="small"
@@ -253,13 +256,13 @@ class ButtonDayPicker extends Component {
           </Button>
         }
       >
-        <Popup.Content dir={langDir}>
+        <Popup.Content dir={uiDir}>
           <DayPicker
             locale={locale}
             localeUtils={MomentLocaleUtils}
             disabledDays={{ after: new Date() }}
             captionElement={() => null}
-            navbarElement={props => this.getNavBarElement(props, language)}
+            navbarElement={props => this.getNavBarElement(props, uiLang)}
             month={month}
             toMonth={today().toDate()}
             ref={this.handleDayPickerRef}
@@ -273,4 +276,7 @@ class ButtonDayPicker extends Component {
   }
 }
 
-export default withTranslation()(ButtonDayPicker);
+export default connect(state => ({
+  uiLang: settings.getUILang(state.settings),
+  uiDir: settings.getUIDir(state.settings),
+}))(withTranslation()(ButtonDayPicker));

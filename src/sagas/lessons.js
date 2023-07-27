@@ -8,7 +8,8 @@ import { selectors as settings } from '../redux/modules/settings';
 
 export function* fetchAllSeries(action) {
   try {
-    const language = yield select(state => settings.getLanguage(state.settings));
+    const uiLang = yield select(state => settings.getUILang(state.settings));
+    const contentLanguages = yield select(state => settings.getContentLanguages(state.settings));
     const params   = { ...action.payload };
     // add default param with_units
     if (params.with_units === undefined) {
@@ -18,7 +19,8 @@ export function* fetchAllSeries(action) {
     const { data } = yield call(Api.collections, {
       ...params,
       contentTypes: [CT_LESSONS_SERIES],
-      language,
+      ui_language: uiLang,
+      content_languages: contentLanguages,
       pageNo: 1,
       pageSize: 1000, // NOTE: we need to get all, and the endpoint lets us fetch only with pagination,
     });

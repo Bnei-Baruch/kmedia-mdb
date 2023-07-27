@@ -25,8 +25,7 @@ export const SubscriptionsItem = ({ item, t }) => {
   const collection = useSelector(state => mdb.getDenormCollection(state.mdb, item.collection_uid));
   const cuStats    = useSelector(state => stats.getCUStats(state.stats, key));
 
-  const language = useSelector(state => settings.getLanguage(state.settings));
-  const dir      = getLanguageDirection(language);
+  const uiDir = useSelector(state => settings.getUIDir(state.settings));
 
   const dispatch = useDispatch();
   const remove   = () => setConfirm(true);
@@ -87,7 +86,7 @@ export const SubscriptionsItem = ({ item, t }) => {
           cancelButton={t('buttons.cancel')}
           confirmButton={t('buttons.apply')}
           content={t('personal.confirmUnsubscribe', { name: title })}
-          dir={dir}
+          dir={uiDir}
         />
         <Button
           basic

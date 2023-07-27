@@ -112,6 +112,10 @@ const onFetchStatsSuccess = (draft, { dataCU, dataC, dataL, namespace, isPrepare
       [...Object.keys({ ...dcu, ...dc, ...dl })]
         .filter(id => !!id)
         .forEach(id => {
+          if (!(id in acc.byId)) {
+            acc.tree.push(id);
+          }
+
           acc.byId[id] = (dcu[id] || 0) + (dc[id] || 0) + (dl[id] || 0);
           if (!acc.tree.includes(id)) {
             acc.tree.push(id);
@@ -141,8 +145,11 @@ const onFetchElasticStatsSuccess = (draft, { data, namespace }) => {
     Object.keys(d)
       .filter(id => !!id)
       .forEach(id => {
+        if (!(id in acc.byId)) {
+          acc.tree.push(id);
+        }
+
         acc.byId[id] = d[id];
-        acc.tree.push(id);
       });
 
     ns[fn] = acc;
@@ -159,6 +166,10 @@ const onReceiveSingleTypeStats = (draft, { dataCU = {}, dataC = {}, dataL = {}, 
     [...Object.keys({ ...dataCU, ...dataC, ...dataL })]
       .filter(id => !!id)
       .forEach(id => {
+        if (!(id in statsByFN.byId)) {
+          statsByFN.tree.push(id);
+        }
+
         statsByFN.byId[id] = (dataCU[id] || 0) + (dataC[id] || 0) + (dataL[id] || 0);
         if (!statsByFN.tree.includes(id)) {
           statsByFN.tree.push(id);

@@ -16,7 +16,7 @@ const ContentTypesFilter = ({ namespace, t }) => {
 
   const [selectedCT, setSelectedCT] = useState('');
 
-  const language            = useSelector(state => settings.getLanguage(state.settings));
+  const uiDir               = useSelector(state => settings.getUIDir(state.settings));
   const ids                 = useSelector(state => selectors.getTree(state.filtersAside, namespace, FN_COLLECTION_MULTI));
   const getById             = useSelector(state => mdb.nestedGetCollectionById(state.mdb));
   const selectedCollections = useSelector(state => filters.getFilterByName(state.filters, namespace, FN_COLLECTION_MULTI));
@@ -54,7 +54,7 @@ const ContentTypesFilter = ({ namespace, t }) => {
           basic
           color="blue"
           className="clear_button no-shadow"
-          icon={`caret ${isLanguageRtl(language) ? 'left' : 'right'}`}
+          icon={`caret ${uiDir === 'rtl' ? 'left' : 'right'}`}
           onClick={() => setSelectedCT(id)}
           size="medium"
         />

@@ -16,23 +16,29 @@ function changeDirectionIfNeeded(language) {
   }
 }
 
-function* setLanguage(action) {
-  const language = action.payload;
+function* setLanguages(action) {
+  const newUILang = action.type === types.SET_URL_LANGUAGE ? action.payload : action.payload.uiLang;
 
-  // TODO (edo): promisify callback and check for errors
-  i18n.changeLanguage(language);
+  console.log('switching languages', newUILang);
+  i18n.changeLanguage(newUILang, err => {
+    if (err) {
+      console.log(`Error switching to ${newUILang}: ${err}`);
+    }
+  });
 
-  // change global moment.js locale
-  moment.locale(language === LANG_UKRAINIAN ? 'uk' : language);
+  // Change global moment.js locale
+  moment.locale(newUILang === LANG_UKRAINIAN ? 'uk' : newUILang);
 
-  // change page direction and fetch css
-  changeDirectionIfNeeded(language);
+  // Change page direction and fetch css
+  changeDirectionIfNeeded(newUILang);
 
+  // Reload sources tags and more to match required languages.
+  console.log('setLanguages fetchSQData');
   yield put(mdb.fetchSQData());
 }
 
 function* watchSetLanguages() {
-  yield takeLatest([types.SET_LANGUAGE], setLanguage);
+  yield takeLatest([types.SET_UI_LANGUAGE, types.SET_URL_LANGUAGE], setLanguages);
 }
 
 export const sagas = [

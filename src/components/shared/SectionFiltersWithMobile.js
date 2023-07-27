@@ -4,7 +4,6 @@ import { useSelector } from 'react-redux';
 import { Button, Container, Grid, Modal } from 'semantic-ui-react';
 
 import { DeviceInfoContext } from '../../helpers/app-contexts';
-import { getLanguageDirection } from '../../helpers/i18n-utils';
 import { selectors as settings } from '../../redux/modules/settings';
 import FiltersHydrator from '../Filters/FiltersHydrator';
 
@@ -14,8 +13,7 @@ const SectionFiltersWithMobile = ({ filters, children, namespace }) => {
 
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
-  const language = useSelector(state => settings.getLanguage(state.settings));
-  const dir      = getLanguageDirection(language);
+  const dir = useSelector(state => settings.getUIDir(state.settings));
 
   const toggleFilters = () => setOpenFilters(!openFilters);
 

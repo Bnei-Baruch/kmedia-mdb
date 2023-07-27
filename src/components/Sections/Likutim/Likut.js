@@ -12,6 +12,7 @@ import { getLangPropertyDirection, getLanguageDirection } from '../../../helpers
 import { physicalFile, strCmp } from '../../../helpers/utils';
 import { SectionLogo } from '../../../helpers/images';
 import { canonicalLink } from '../../../helpers/links';
+import { selectSuitableLanguage } from '../../../helpers/language';
 import { LANG_ENGLISH, LANG_HEBREW, UNIT_LESSONS_TYPE, MT_AUDIO, MT_TEXT } from '../../../helpers/consts';
 import LibraryBar from '../Library/LibraryBar';
 import MenuLanguageSelector from '../../../components/Language/Selector/MenuLanguageSelector';
@@ -34,7 +35,8 @@ export const selectLikutFile = (files, language, idx = 0) => {
   }
   return selectLikutFile(files, DEFAULT_LANGUAGES[idx], idx++);
 };
-// expected unit of type Likutim
+
+// Expected unit of type Likutim.
 const Likut                  = () => {
   const { id } = useParams();
   const { t }  = useTranslation();
@@ -44,12 +46,16 @@ const Likut                  = () => {
   const fetched         = useSelector(state => mdb.getFullUnitFetched(state.mdb)[id]);
   const wip             = useSelector(state => selectors.getWip(state.mdb).units[id]);
   const err             = useSelector(state => selectors.getErrors(state.mdb).units[id]);
-  const contentLanguage = useSelector(state => siteSettings.getContentLanguage(state.settings, location));
+  const uiLang           = useSelector(state => siteSettings.getUILang(state.settings, location));
+  const contentLanguages = useSelector(state => siteSettings.getContentLanguages(state.settings, location));
   const doc2htmlById    = useSelector(state => assetsSelectors.getDoc2htmlById(state.assets));
 
   const [isReadable, setIsReadable]               = useState(false);
   const [settings, setSettings]                   = useState(null);
-  const [language, setLanguage]                   = useState(contentLanguage);
+
+  const likutimLanguages = ((unit && unit.files) || []).map(f => f.language);
+  const defaultLanguage = selectSuitableLanguage(contentLanguages, likutimLanguages, LANG_HEBREW);
+  const [selectedLanguage, setSelectedLanguage]   = useState(defaultLanguage);
   const [scrollTopPosition, setScrollTopPosition] = useState(0);
   const [scrollingElement, setScrollingElement]   = useState(null);
   const articleRef                                = useRef();
@@ -68,7 +74,7 @@ const Likut                  = () => {
     setIsReadable(!isReadable);
   };
 
-  const handleLanguageChanged = (e, lang) => setLanguage(lang);
+  const handleLanguageChanged = (selectedLanguage) => setSelectedLanguage(selectedLanguage);
 
   const dispatch = useDispatch();
 
@@ -76,8 +82,8 @@ const Likut                  = () => {
     (!fetched) && dispatch(actions.fetchUnit(id));
   }, [dispatch, id, fetched]);
 
-  const file      = selectLikutFile(unit?.files, language);
-  const lang      = file?.language || language;
+  const file      = selectLikutFile(unit?.files, selectedLanguage);
+  const lang      = file?.language || selectedLanguage;
   const needFetch = !doc2htmlById[file?.id];
   useEffect(() => {
     if (file?.id && needFetch) {
@@ -97,20 +103,18 @@ const Likut                  = () => {
   const { data } = doc2htmlById[file?.id] || {};
 
   const { theme = 'light', fontType, fontSize = 0 } = settings || {};
-
-  const direction     = getLanguageDirection(lang);
-  const gridDirection = getLangPropertyDirection(lang);
+  const direction                                   = getLanguageDirection(uiLang);
+  const gridDirection                               = getLangPropertyDirection(uiLang);
 
   const { name, film_date, files = [], source_units } = unit;
-  const languages                                     = files.map(f => f.language);
 
   const url                = file && physicalFile(file, true);
   const relatedLessons     = Object.values(source_units).filter(u => UNIT_LESSONS_TYPE.includes(u.content_type));
   const relatedLessonsSize = relatedLessons.length > 0 ? 6 : 0;
-  const bookmarkSource     = { subject_uid: unit.id, subject_type: unit.content_type, language: lang };
-  const labelSource        = { content_unit: unit.id, language: lang };
+  const bookmarkSource     = { subject_uid: unit.id, subject_type: unit.content_type, language: uiLang };
+  const labelSource        = { content_unit: unit.id, language: uiLang };
 
-  let mp3File = files.find(f => f.language === lang && f.type === MT_AUDIO);
+  const mp3File = files.find(f => f.language === selectedLanguage && f.type === MT_AUDIO);
 
   return (
     <div
@@ -159,10 +163,10 @@ const Likut                  = () => {
                   </div>
                   <div className="library-language-container">
                     <MenuLanguageSelector
-                      languages={languages}
-                      defaultValue={lang}
-                      onSelect={handleLanguageChanged}
-                      fluid={false}
+                      languages={likutimLanguages}
+                      selected={selectedLanguage}
+                      onLanguageChange={handleLanguageChanged}
+                      multiSelect={false}
                     />
                   </div>
                 </div>
@@ -184,7 +188,7 @@ const Likut                  = () => {
               {
                 data && (
                   <ScrollToSearch
-                    language={lang}
+                    language={uiLang}
                     data={data}
                     source={bookmarkSource}
                     label={labelSource}

@@ -25,7 +25,7 @@ const FILTER_PARAMS = { content_type: [...COLLECTION_PROGRAMS_TYPE, ...UNIT_PROG
 
 const MainPage = () => {
   const { items, total, wip, err } = useSelector(state => lists.getNamespaceState(state.lists, PAGE_NS_PROGRAMS)) || {};
-  const language                   = useSelector(state => settings.getLanguage(state.settings));
+  const contentLanguages           = useSelector(state => settings.getContentLanguages(state.settings));
   const pageSize                   = useSelector(state => settings.getPageSize(state.settings));
   const selected                   = useSelector(state => filters.getNotEmptyFilters(state.filters, PAGE_NS_PROGRAMS), isEqual);
 
@@ -40,7 +40,7 @@ const MainPage = () => {
 
   useEffect(() => {
     dispatch(prepareActions.fetchCollections(PAGE_NS_PROGRAMS, { content_type: COLLECTION_PROGRAMS_TYPE }));
-  }, [language, dispatch]);
+  }, [contentLanguages, dispatch]);
 
   useEffect(() => {
     if (pageNo !== 1 && !!prevSel && prevSel !== selected) {
@@ -52,7 +52,7 @@ const MainPage = () => {
         withViews: true
       }));
     }
-  }, [language, dispatch, pageNo, selected]);
+  }, [contentLanguages, dispatch, pageNo, selected]);
 
   const wipErr          = WipErr({ wip, err, t });
   const filterComponent = <Filters namespace={PAGE_NS_PROGRAMS} baseParams={FILTER_PARAMS} />;
@@ -72,7 +72,6 @@ const MainPage = () => {
             pageNo={pageNo}
             pageSize={pageSize}
             total={total}
-            language={language}
             onChange={setPage}
           />}
         </Container>

@@ -33,7 +33,7 @@ const BASE_PARAMS = { content_type: EVENT_PAGE_CTS };
 
 const MainPage = ({ t }) => {
   const { items, total, wip, err } = useSelector(state => lists.getNamespaceState(state.lists, PAGE_NS_EVENTS)) || {};
-  const language                   = useSelector(state => settings.getLanguage(state.settings));
+  const contentLanguages           = useSelector(state => settings.getContentLanguages(state.settings));
   const pageSize                   = useSelector(state => settings.getPageSize(state.settings));
   const selected                   = useSelector(state => filters.getNotEmptyFilters(state.filters, PAGE_NS_EVENTS), isEqual);
   const prevSel                    = usePrevious(selected);
@@ -46,7 +46,7 @@ const MainPage = ({ t }) => {
 
   useEffect(() => {
     dispatch(prepareActions.fetchCollections(PAGE_NS_EVENTS, { content_type: CT_HOLIDAY }));
-  }, [language, dispatch]);
+  }, [contentLanguages, dispatch]);
 
   useEffect(() => {
     if (pageNo !== 1 && !!prevSel && prevSel !== selected) {
@@ -55,7 +55,7 @@ const MainPage = ({ t }) => {
       dispatch(actions.fetchSectionList(PAGE_NS_EVENTS, pageNo, { pageSize, content_type: EVENT_PAGE_CTS }));
     }
 
-  }, [language, dispatch, pageNo, selected]);
+  }, [contentLanguages, dispatch, pageNo, selected]);
 
   const wipErr = WipErr({ wip, err, t });
   return (<>
@@ -91,7 +91,6 @@ const MainPage = ({ t }) => {
             pageNo={pageNo}
             pageSize={pageSize}
             total={total}
-            language={language}
             onChange={setPage}
           />
         }

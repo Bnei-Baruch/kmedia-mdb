@@ -61,13 +61,15 @@ const setStatus = (draft, payload, type) => {
 };
 
 const onFetchForDateSuccess = (draft, payload, type) => {
+  console.log('onFetchForDateSuccess simpleMode', payload);
   draft.items         = {};
   draft.items.lessons = (payload.lessons || []).map(x => x.id);
   draft.items.others  = (payload.others || []).map(x => x.id);
   setStatus(draft, payload, type);
 };
 
-const onSetLanguage = draft => {
+const onSetLanguage = (draft, payload) => {
+  console.log('onSetLanguage simpleMode', payload);
   draft.items.lessons = [];
   draft.items.others  = [];
 };
@@ -80,7 +82,8 @@ const onSSRPrepare = draft => {
 
 export const reducer = handleActions({
   [ssr.PREPARE]: onSSRPrepare,
-  [settings.SET_LANGUAGE]: onSetLanguage,
+  [settings.SET_UI_LANGUAGE]: onSetLanguage,
+  [settings.SET_CONTENT_LANGUAGES]: onSetLanguage,
 
   [FETCH_FOR_DATE]: setStatus,
   [FETCH_FOR_DATE_SUCCESS]: onFetchForDateSuccess,

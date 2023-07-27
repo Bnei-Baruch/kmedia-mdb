@@ -689,7 +689,47 @@ video {
       .icon {
         line-height: 100%;
       }
+    }
 
+    &__language {
+      .ui.dropdown {
+        position: absolute;
+        bottom: 16px;
+        right: 16px;
+
+        background: #fff;
+        color: rgba(0, 0, 0, 0.8);
+        min-width: 9em;
+        white-space: nowrap;
+        font-size: .785rem;
+
+        &:focus {
+          border: white solid 1px;
+        }
+        &.active {
+          border: white solid 1px;
+        }
+
+        div.menu {
+          border: white solid 1px;
+
+          .item {
+            background: rgba(27, 28, 29, 0.9);
+            color: #fff;
+            font-size: .785rem;
+          }
+        }
+
+        div.menu .item.language-selection-divider {
+          background-color: #fff !important;
+        }
+
+        i {
+          top: 50%;
+          margin: unset;
+        }
+
+      }
     }
 
     &__volume {
@@ -801,6 +841,8 @@ video {
       + .settings__row {
         margin-top: 8px;
       }
+
+      height: 30px;
     }
 
     .header {

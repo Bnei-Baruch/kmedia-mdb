@@ -30,7 +30,6 @@ const Page = ({ t }) => {
       <ItemsContainer namespace={MY_NAMESPACE_REACTIONS} withSeeAll={true} />
       <ItemsContainer namespace={MY_NAMESPACE_PLAYLISTS} withSeeAll={false} />
       <ItemsContainer namespace={MY_NAMESPACE_SUBSCRIPTIONS} withSeeAll={false} />
-
     </>
   );
 };

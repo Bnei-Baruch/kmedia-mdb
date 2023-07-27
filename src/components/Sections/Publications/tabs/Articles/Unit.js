@@ -19,9 +19,8 @@ import { getEmbedFromQuery } from '../../../../../helpers/player';
 import { ClientChroniclesContext } from '../../../../../helpers/app-contexts';
 import TagsByUnit from '../../../../shared/TagsByUnit';
 
-const renderHeader = (unit, t, language) => {
-  const isRtl    = isLanguageRtl(language);
-  const position = isRtl ? 'right' : 'left';
+const renderHeader = (unit, t, uiDir) => {
+  const position = uiDir === 'rtl' ? 'right' : 'left';
   const subText2 = t(`publications.header.subtext2`);
 
   return (
@@ -87,10 +86,10 @@ const ArticlePage = ({ t }) => {
   const { id }     = useParams();
   const chronicles = useContext(ClientChroniclesContext);
 
-  const language = useSelector(state => settings.getLanguage(state.settings));
-  const unit     = useSelector(state => selectors.getDenormContentUnit(state.mdb, id));
-  const wip      = useSelector(state => selectors.getWip(state.mdb).units[id]);
-  const err      = useSelector(state => selectors.getErrors(state.mdb).units[id]);
+  const uiDir = useSelector(state => settings.getUIDir(state.settings));
+  const unit  = useSelector(state => selectors.getDenormContentUnit(state.mdb, id));
+  const wip   = useSelector(state => selectors.getWip(state.mdb).units[id]);
+  const err   = useSelector(state => selectors.getErrors(state.mdb).units[id]);
 
   const dispatch = useDispatch();
 
@@ -123,7 +122,7 @@ const ArticlePage = ({ t }) => {
             <Grid.Row>
               <Grid.Column mobile={16} tablet={10} computer={10}>
                 <Grid.Row>
-                  {renderHeader(unit, t, language)}
+                  {renderHeader(unit, t, uiDir)}
                 </Grid.Row>
                 <Grid.Row>
                   <Grid.Column>
@@ -139,7 +138,7 @@ const ArticlePage = ({ t }) => {
         </Container>
       </>
     ) : (
-      renderHeader(unit, t, language)
+      renderHeader(unit, t, uiDir)
     );
 };
 

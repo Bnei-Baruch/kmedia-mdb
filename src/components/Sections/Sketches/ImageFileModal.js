@@ -12,7 +12,7 @@ const ImageFileModal = ({ file }) => {
   const [open, setOpen] = useState(false);
 
   const ref      = useRef();
-  const language = useSelector(state => settings.getLanguage(state.settings));
+  const uiLang = useSelector(state => settings.getUILang(state.settings));
   const items    = [file].map(imageGalleryItem);
 
   const renderFullscreenButton = (onClick, isFullscreen) => (
@@ -38,12 +38,12 @@ const ImageFileModal = ({ file }) => {
         onClose={() => setOpen(false)}
         closeIcon
       >
-        <Modal.Content dir={getLanguageDirection(language)}>
+        <Modal.Content dir={isLanguageRtl(uiLang) ? 'rtl' : 'ltr'}>
           <ImageGallery
             ref={ref}
             lazyLoad
             showFullscreenButton
-            isRTL={isLanguageRtl(language)}
+            isRTL={isLanguageRtl(uiLang)}
             items={items}
             thumbnailPosition="top"
             showPlayButton={false}

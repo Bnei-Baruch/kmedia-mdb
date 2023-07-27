@@ -7,8 +7,8 @@ import { selectors as settings } from '../../../../redux/modules/settings';
 import { stringify } from '../../../../helpers/url';
 
 const PlaylistItems = () => {
-  const language    = useSelector(state => settings.getLanguage(state.settings));
   const items       = useSelector(state => selectors.getPlaylist(state.playlist));
+  const uiLang      = useSelector(state => settings.getUILang(state.settings));
   const { id, pId } = useSelector(state => selectors.getInfo(state.playlist));
   const itemById    = useSelector(state => selectors.getItemById(state.playlist));
 
@@ -29,7 +29,7 @@ const PlaylistItems = () => {
               asList={true}
               selected={selected}
               name={name}
-              link={{ pathname: `/${language}/${MY_NAMESPACE_PLAYLISTS}/${pId}`, search }}
+              link={{ pathname: `/${uiLang}/${MY_NAMESPACE_PLAYLISTS}/${pId}`, search }}
               showImg={showImg}
             />
           );

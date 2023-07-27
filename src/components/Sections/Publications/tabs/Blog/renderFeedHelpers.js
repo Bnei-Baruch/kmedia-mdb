@@ -3,16 +3,19 @@ import moment from 'moment';
 import { Header, Segment } from 'semantic-ui-react';
 
 import Link from '../../../../Language/MultiLanguageLink';
+import { getLanguageDirection } from '../../../../../helpers/i18n-utils';
 
-export const renderBlogItemForHomepage = (item, language, t) => {
+export const renderBlogItemForHomepage = (item, uiLang, t) => {
+  // console.log('renderBlogItemForHomepage item', item);
   const { url, title, content, created_at: ts } = item;
-  const mts                                     = moment(ts);
-  const internalUrl                             = `/${language}/publications/blog/${item.blog}/${item.wp_id}`;
+  const mts = moment(ts);
+  const internalUrl = `/${uiLang}/publications/blog/${item.blog}/${item.wp_id}`;
+  const dir = item.blog.includes('il') ? 'rtl' : 'ltr';
 
-  const pHtml = `<span class="date">${mts.format('lll')} - </span>${content.replace(/href="\/publications\/blog\//gi, `href="/${language}/publications/blog/`)}<section>...</section></section>`;
+  const pHtml = `<span class="date">${mts.format('lll')} - </span>${content.replace(/href="\/publications\/blog\//gi, `href="/${uiLang}/publications/blog/`)}<section>...</section></section>`;
 
   return (
-    <div key={url} className="post">
+    <div key={url} className="post" style={{direction: dir}}>
       <Header color="blue">
         <a className="remove-indent" href={internalUrl} dangerouslySetInnerHTML={{ __html: title }} />
       </Header>
@@ -24,14 +27,16 @@ export const renderBlogItemForHomepage = (item, language, t) => {
   );
 };
 
-export const renderBlogItemForPublications = (item, language) => {
+export const renderBlogItemForPublications = (item, uiLang) => {
+  console.log('renderBlogItemForPublications item', item);
   const { url, title, content, created_at: ts } = item;
-  const mts                                     = moment(ts);
+  const mts = moment(ts);
+  const dir = item.blog.includes('il') ? 'rtl' : 'ltr';
 
-  const pHtml = content.replace(/href="\/publications\/blog\//gi, `href="/${language}/publications/blog/`);
+  const pHtml = content.replace(/href="\/publications\/blog\//gi, `href="/${uiLang}/publications/blog/`);
 
   return (
-    <div key={url} className="post">
+    <div key={url} className="post" style={{direction: dir}}>
       <Header>
         <div dangerouslySetInnerHTML={{ __html: title }} />
         <Header.Subheader>

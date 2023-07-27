@@ -13,16 +13,16 @@ import { isLanguageRtl } from '../../helpers/i18n-utils';
 import { actions, selectors } from '../../redux/modules/search';
 import { selectors as settingsSelectors } from '../../redux/modules/settings';
 
-const makeResult = (language, result) => ({
+const makeResult = (uiLang, result) => ({
   ...result,
-  className: isLanguageRtl(language) ? 'search-result-rtl' : '',
+  className: isLanguageRtl(uiLang) ? 'search-result-rtl' : '',
 });
 
 const OmniBox = ({ isHomePage = false, t }) => {
-  const query = useSelector(state => selectors.getQuery(state.search));
+  const query       = useSelector(state => selectors.getQuery(state.search));
   const suggestions = useSelector(state => selectors.getSuggestions(state.search));
-  const wip = useSelector(state => selectors.getAutocompleteWip(state.search));
-  const language = useSelector(state => settingsSelectors.getLanguage(state.settings));
+  const wip         = useSelector(state => selectors.getAutocompleteWip(state.search));
+  const uiLang      = useSelector(state => settingsSelectors.getUILang(state.settings));
 
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const chronicles = useContext(ClientChroniclesContext);
@@ -39,12 +39,12 @@ const OmniBox = ({ isHomePage = false, t }) => {
     if (suggestions) {
       const helper = new SuggestionsHelper(suggestions);
       setAutocompleteId(helper.autocompleteId);
-      setAutocompleteResults(helper.getSuggestions().map(s => (makeResult(language, { key: s, title: s }))));
+      setAutocompleteResults(helper.getSuggestions().map(s => (makeResult(uiLang, { key: s, title: s }))));
     } else {
       setAutocompleteResults([]);
       setAutocompleteId('');
     }
-  }, [suggestions, language]);
+  }, [suggestions, uiLang]);
 
   useEffect(() => {
     dispatch(actions.hydrateUrl());
@@ -85,7 +85,7 @@ const OmniBox = ({ isHomePage = false, t }) => {
   };
 
   const handleFromInputChange = value => {
-    navigate(`/${ language }/simple-mode?date=${ moment(value).format('YYYY-MM-DD') }`);
+    navigate(`/${ uiLang }/simple-mode?date=${ moment(value).format('YYYY-MM-DD') }`);
   };
 
   const renderInput = () => isHomePage ?
@@ -111,7 +111,6 @@ const OmniBox = ({ isHomePage = false, t }) => {
       </Button>
       <ButtonDayPicker
         label={t('filters.date-filter.presets.CUSTOM_DAY')}
-        language={language}
         onDayChange={handleFromInputChange} />
 
     </Input> :

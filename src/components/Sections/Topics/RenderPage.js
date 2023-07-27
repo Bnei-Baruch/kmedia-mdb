@@ -19,15 +19,16 @@ const RenderPage = () => {
   const { t }  = useTranslation();
 
   const getPathByID = useSelector(state => selectors.getPathByID(state.tags));
-  const language    = useSelector(state => settings.getLanguage(state.settings));
+  const uiLang      = useSelector(state => settings.getUILang(state.settings));
 
   const tagPath = getPathByID(id);
 
   // create breadCrumb sections from tagPath
   const breadCrumbSections = [{ id: '', label: t('nav.sidebar.topics') }, ...tagPath].map(getBreadCrumbSection);
 
-  const breadCrumbIcon = `${isLanguageRtl(language) ? 'left' : 'right'} angle`;
+  const breadCrumbIcon = `${isLanguageRtl(uiLang) ? 'left' : 'right'} angle`;
   const baseParams     = useMemo(() => ({ tag: id }), [id]);
+
   return (
     <>
       <HelmetsBasic title={breadCrumbSections[breadCrumbSections.length - 1]?.content} />

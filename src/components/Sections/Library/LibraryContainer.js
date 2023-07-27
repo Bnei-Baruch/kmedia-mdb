@@ -20,7 +20,6 @@ import { isTaas } from '../../shared/PDF/PDF';
 import Library, { buildBookmarkSource, buildLabelData } from './Library';
 import TOC, { getIndex } from './TOC';
 import LibraryBar from './LibraryBar';
-import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { getQuery } from '../../../helpers/url';
 import { SCROLL_SEARCH_ID } from '../../../helpers/consts';
@@ -45,8 +44,8 @@ class LibraryContainer extends Component {
     sourceId: PropTypes.string.isRequired,
     unit: shapes.ContentUnit,
     indexMap: PropTypes.objectOf(shapes.DataWipErr),
-    language: PropTypes.string.isRequired,
-    contentLanguage: PropTypes.string.isRequired,
+    uiLang: PropTypes.string.isRequired,
+    uiDir: PropTypes.string.isRequired,
     fetchUnit: PropTypes.func.isRequired,
     fetchIndex: PropTypes.func.isRequired,
     sourcesSortBy: PropTypes.func.isRequired,
@@ -126,23 +125,21 @@ class LibraryContainer extends Component {
     );
   };
 
-  static getNextPrevDetails(isNext, language, t) {
-    const langDir = getLanguageDirection(language);
-
+  static getNextPrevDetails(isNext, uiDir, t) {
     const title         = isNext ? t('buttons.next-article') : t('buttons.previous-article');
     const labelPosition = isNext ? 'right' : 'left';
-    const icon          = isNext ? (langDir === 'ltr' ? 'forward' : 'backward') : (langDir === 'ltr' ? 'backward' : 'forward');
-    const buttonAlign   = isNext ? (langDir === 'ltr' ? 'right' : 'left') : (langDir === 'ltr' ? 'left' : 'right');
+    const icon          = isNext ? (uiDir === 'ltr' ? 'forward' : 'backward') : (uiDir === 'ltr' ? 'backward' : 'forward');
+    const buttonAlign   = isNext ? (uiDir === 'ltr' ? 'right' : 'left') : (uiDir === 'ltr' ? 'left' : 'right');
 
     return { title, labelPosition, buttonAlign, icon };
   }
 
-  static nextPrevLink(children, index, isNext, { push, t, language, getSourceById }) {
+  static nextPrevLink(children, index, isNext, { push, t, uiDir, getSourceById }) {
     if (index < 0 || index > children.length - 1) {
       return null;
     }
 
-    const { title, labelPosition, buttonAlign, icon } = LibraryContainer.getNextPrevDetails(isNext, language, t);
+    const { title, labelPosition, buttonAlign, icon } = LibraryContainer.getNextPrevDetails(isNext, uiDir, t);
     const sourceId                                    = children[index];
     const source                                      = getSourceById(sourceId);
     return (
@@ -161,12 +158,11 @@ class LibraryContainer extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    const { sourceId, indexMap, language, contentLanguage, sortBy, areSourcesLoaded }                    = this.props;
+    const { sourceId, indexMap, uiLang, sortBy, areSourcesLoaded }                    = this.props;
     const { lastLoadedId, isReadable, fontSize, fontType, theme, tocIsActive, match, scrollTopPosition } = this.state;
 
     const equalProps = sourceId === nextProps.sourceId
-      && language === nextProps.language
-      && contentLanguage === nextProps.contentLanguage
+      && uiLang === nextProps.uiLang
       && sortBy === nextProps.sortBy
       && areSourcesLoaded === nextProps.areSourcesLoaded;
 
@@ -245,15 +241,15 @@ class LibraryContainer extends Component {
   }
 
   replaceOrFetch(nextSourceId) {
-    const { sourceId, replace, language } = this.props;
+    const { sourceId, replace, uiLang } = this.props;
 
     const firstLeafId = this.firstLeafId(nextSourceId);
     if (firstLeafId !== nextSourceId) {
       replace(`sources/${firstLeafId}`);
     } else if (sourceId !== nextSourceId
       || this.state.lastLoadedId !== nextSourceId
-      || this.state.language !== language) {
-      this.setState({ lastLoadedId: nextSourceId, language });
+      || this.state.uiLang !== uiLang) {
+      this.setState({ lastLoadedId: nextSourceId, uiLang });
       this.fetchIndices(nextSourceId);
     }
   }
@@ -454,16 +450,17 @@ class LibraryContainer extends Component {
 
   render() {
     const {
-            sourceId,
-            getSourceById,
-            getPathByID,
-            language,
-            contentLanguage,
-            t,
-            push,
-            areSourcesLoaded,
-            unit
-          } = this.props;
+        sourceId,
+        getSourceById,
+        getPathByID,
+        uiLang,
+        t,
+        push,
+        areSourcesLoaded,
+        unit,
+    } = this.props;
+
+    console.log('LibraryContainer', uiLang);
 
     if (!areSourcesLoaded)
       return null;
@@ -521,8 +518,10 @@ class LibraryContainer extends Component {
                       handleTocIsActive={this.handleTocIsActive}
                       isReadable={isReadable}
                       fontSize={fontSize}
-                      source={{ language: contentLanguage, ...buildBookmarkSource(sourceId) }}
-                      label={{ language: contentLanguage, ...buildLabelData(sourceId) }}
+                      // DON'T MERGE BEFORE FIXING THIS
+                      // Not sure why contentLanguage is being used here at all!
+                      source={{ language: uiLang, ...buildBookmarkSource(sourceId) }}
+                      label={{ language: uiLang, ...buildLabelData(sourceId) }}
                     />
                   </Grid.Column>
                 </Grid.Row>
@@ -540,7 +539,7 @@ class LibraryContainer extends Component {
                 onClick={this.handleTocIsActive}
               >
                 <TOC
-                  language={language}
+                  uiLang={uiLang}
                   match={matchString ? match : ''}
                   fullPath={fullPath}
                   rootId={parentId}
@@ -582,9 +581,9 @@ export default withTranslation()(withRouter(connect(
     sourceId: ownProps.params?.id,
     unit: mdb.getDenormContentUnit(state.mdb, ownProps.params?.id),
     indexMap: assets.getSourceIndexById(state.assets),
+    uiLang: settings.getUILang(state.settings),
+    uiDir: settings.getUIDir(state.settings),
     unitFetched: mdb.getFullUnitFetched(state.mdb)[ownProps.params?.id],
-    language: settings.getLanguage(state.settings),
-    contentLanguage: settings.getContentLanguage(state.settings, ownProps.location),
     getSourceById: sources.getSourceById(state.sources),
     getPathByID: sources.getPathByID(state.sources),
     sortBy: sources.sortBy(state.sources),

@@ -122,7 +122,7 @@ const onFetchDashboardFailure = (draft, payload) => {
 
 export const reducer = handleActions({
   [ssr.PREPARE]: onSSRPrepare,
-  [settings.SET_LANGUAGE]: onSetLanguage,
+  [settings.SET_UI_LANGUAGE]: onSetLanguage,
 
   [FETCH_DASHBOARD]: onDashboard,
   [FETCH_DASHBOARD_SUCCESS]: onDashboardSuccess,
@@ -139,11 +139,12 @@ const getTags         = state => state.byId;
 const getRoots        = state => state.roots;
 const getDisplayRoots = state => state.displayRoots;
 const getTagById      = state => id => state.byId[id];
-const getPath         = state => (source) => tracePath(source, getTagById(state));
+const getPath         = state => source => tracePath(source, getTagById(state));
 const getPathByID     = state => {
   const _byId = getTagById(state);
   return id => tracePath(_byId(id), _byId);
 };
+
 const getWip          = state => state.wip;
 const getError        = state => state.error;
 
@@ -161,3 +162,4 @@ export const selectors = {
   getPathByID,
   getItems
 };
+

@@ -107,7 +107,7 @@ const groupRabash = [
   'r0GUBxQQ', 'jmrf8Gud', 'HotkF4i5', 'aeUpX57j', 'oR4gtgR7', 'WhVeEvxC',
 ];
 
-// Plesae note that hose translations werer added to common.json files.
+// Plesae note that hose translations were added to common.json files.
 // Consider using common.json instead of this const.
 const groupRabashTitle = {
   'en': 'Group Articles',
@@ -115,7 +115,7 @@ const groupRabashTitle = {
   'ru': 'Статьи о группе',
 };
 
-const setRabash = (sources, language) => {
+const setRabash = (sources, uiLang) => {
   const rb         = sources.find(el => el.id === 'rb');
   const rbArticles = rb.children.find(el => el.id === 'rQ6sIUZK').children;
   const rbLetters  = rb.children.find(el => el.id === 'b8SHlrfH').children;
@@ -128,17 +128,17 @@ const setRabash = (sources, language) => {
     id: 'grRABASH',
     parent_id: 'rb',
     type: 'COLLECTION',
-    name: groupRabashTitle[language] || groupRabashTitle['en'],
+    name: groupRabashTitle[uiLang] || groupRabashTitle['en'],
     children,
   });
 };
 
 export const reducer = handleActions({
-  [settings.SET_LANGUAGE]: onChangeLanguage,
+  [settings.SET_UI_LANGUAGE]: onChangeLanguage,
 
   [RECEIVE_SOURCES]: (state, action) => {
-    const { sources, language } = action.payload;
-    setRabash(sources, language);
+    const { sources, uiLang } = action.payload;
+    setRabash(sources, uiLang);
 
     const [byId, byIdAZ] = prepareById(sources);
 
@@ -167,14 +167,17 @@ const getSourceById    = state => {
   const _byId = state.sortBy === 'AZ' ? state.byIdAZ : state.byId;
   return id => _byId[id];
 };
+
 const getPath          = state => {
   const _byId = getSourceById(state);
   return source => tracePath(source, _byId);
 };
+
 const getPathByID      = state => {
   const _byId = getSourceById(state);
   return id => tracePath(_byId(id), _byId);
 };
+
 const sortBy           = state => state.sortBy;
 
 export const selectors = {
@@ -187,3 +190,4 @@ export const selectors = {
   NotToSort,
   NotToFilter,
 };
+

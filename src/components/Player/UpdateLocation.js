@@ -17,7 +17,7 @@ const UpdateLocation = () => {
 
   const dispatch                           = useDispatch();
   const q                                  = getQuery(location);
-  const uiLanguage                         = useSelector(state => settings.getLanguage(state.settings));
+  const uiLang                             = useSelector(state => settings.getUILang(state.settings));
   const { start: prevStart, end: prevEnd } = useSelector(state => player.getShareStartEnd(state.player));
 
   const { mediaType, nextUnitId, cId, cuId, baseLink } = useSelector(state => playlist.getInfo(state.playlist));
@@ -52,10 +52,10 @@ const UpdateLocation = () => {
         to = canonicalLink(denormUnit(nextUnitId), null, denormCollectiont(cId));
       }
 
-      navigate({ pathname: `/${uiLanguage}${to.pathname}`, search });
+      navigate({ pathname: `/${uiLang}${to.pathname}`, search });
       dispatch(action.nullNextUnit());
     }
-  }, [nextUnitId, cId, search, uiLanguage, baseLink, navigate, denormUnit, denormCollectiont]);
+  }, [nextUnitId, cId, search, uiLang, baseLink, navigate, denormUnit, denormCollectiont]);
 
   return null;
 };

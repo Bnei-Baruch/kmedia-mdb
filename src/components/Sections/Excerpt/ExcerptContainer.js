@@ -4,7 +4,7 @@ import { Container, Header } from 'semantic-ui-react';
 
 import { selectors as settings } from '../../../redux/modules/settings';
 import excerpts from './excerpts';
-import { DEFAULT_LANGUAGE } from '../../../helpers/consts';
+import { DEFAULT_CONTENT_LANGUAGE } from '../../../helpers/consts';
 
 const renderer = ({ minutes, seconds, completed }) => {
   if (completed) {
@@ -18,7 +18,7 @@ const renderer = ({ minutes, seconds, completed }) => {
 };
 
 const chooseExcerpt = language => {
-  const items = excerpts[language] || excerpts[DEFAULT_LANGUAGE];
+  const items = excerpts[language] || excerpts[DEFAULT_CONTENT_LANGUAGE];
   return items[Math.floor(Math.random() * items.length)];
 };
 

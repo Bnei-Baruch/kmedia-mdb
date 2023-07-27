@@ -29,7 +29,7 @@ const ProgramPage = ({ t }) => {
   const collection = useSelector(state => mdb.getDenormCollection(state.mdb, cid));
 
   const { items, total, wip, err } = useSelector(state => lists.getNamespaceState(state.lists, namespace)) || {};
-  const language                   = useSelector(state => settings.getLanguage(state.settings));
+  const contentLanguages           = useSelector(state => settings.getContentLanguages(state.settings));
   const pageSize                   = useSelector(state => settings.getPageSize(state.settings));
   const selected                   = useSelector(state => filters.getNotEmptyFilters(state.filters, namespace), isEqual);
 
@@ -46,7 +46,7 @@ const ProgramPage = ({ t }) => {
     } else {
       dispatch(actions.fetchList(namespace, pageNo, { collection: cid, pageSize, withViews: true }));
     }
-  }, [language, pageNo, selected]);
+  }, [contentLanguages, pageNo, selected]);
 
   const wipErr = WipErr({ wip, err, t });
 
@@ -72,7 +72,6 @@ const ProgramPage = ({ t }) => {
           pageNo={pageNo}
           pageSize={pageSize}
           total={total}
-          language={language}
           onChange={setPage}
         />}
       </Container>

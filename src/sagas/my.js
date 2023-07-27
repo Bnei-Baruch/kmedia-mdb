@@ -34,7 +34,8 @@ export function* fetch(action) {
 
   let with_derivations = false;
 
-  const language = yield select(state => settings.getLanguage(state.settings));
+  const uiLang = yield select(state => settings.getUILang(state.settings));
+  const contentLanguages = yield select(state => settings.getContentLanguages(state.settings));
   try {
     const { data } = yield call(Api.my, namespace, params, token);
     if (!data?.items) {
@@ -79,7 +80,8 @@ export function* fetch(action) {
         pageSize: cu_uids.length,
         with_files,
         with_derivations,
-        language
+        ui_language: uiLang,
+        content_languages: contentLanguages,
       });
       yield put(mdbActions.receiveContentUnits(content_units));
     }
@@ -88,7 +90,8 @@ export function* fetch(action) {
       const { data: { collections } } = yield call(Api.collections, {
         id: co_uids,
         pageSize: co_uids.length,
-        language
+        ui_language: uiLang,
+        content_languages: contentLanguages,
       });
       yield put(mdbActions.receiveCollections(collections));
     }
@@ -110,7 +113,8 @@ export function* fetchOne(action) {
   if (!token) return;
   const { namespace, ...params } = action.payload;
   if (!params?.id) return;
-  const language = yield select(state => settings.getLanguage(state.settings));
+  const uiLang = yield select(state => settings.getUILang(state.settings));
+  const contentLanguages = yield select(state => settings.getContentLanguages(state.settings));
   try {
     const { data } = yield call(Api.my, namespace, params, token);
 
@@ -127,7 +131,8 @@ export function* fetchOne(action) {
         id: cu_uids,
         pageSize: cu_uids.length,
         with_files: true,
-        language,
+        ui_language: uiLang,
+        content_languages: contentLanguages,
       });
       yield put(mdbActions.receiveContentUnits(content_units));
     }

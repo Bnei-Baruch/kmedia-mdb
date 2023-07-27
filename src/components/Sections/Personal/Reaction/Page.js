@@ -25,7 +25,7 @@ const Page      = ({ location, t }) => {
 
   const pageNo   = useSelector(state => selectors.getPageNo(state.my, MY_NAMESPACE_REACTIONS));
   const total    = useSelector(state => selectors.getTotal(state.my, MY_NAMESPACE_REACTIONS));
-  const language = useSelector(state => settings.getLanguage(state.settings));
+  const contentLanguages = useSelector(state => settings.getContentLanguages(state.settings));
   const items    = useSelector(state => selectors.getList(state.my, MY_NAMESPACE_REACTIONS));
   const wip      = useSelector(state => selectors.getWIP(state.my, MY_NAMESPACE_REACTIONS));
   const err      = useSelector(state => selectors.getErr(state.my, MY_NAMESPACE_REACTIONS));
@@ -42,11 +42,11 @@ const Page      = ({ location, t }) => {
       const pageNoLocation = getPageFromLocation(location);
       if (pageNoLocation !== pageNo) setPage(pageNoLocation);
     }
-  }, [user, location, pageNo, language, setPage]);
+  }, [user, location, pageNo, contentLanguages, setPage]);
 
   useEffect(() => {
     dispatch(actions.fetch(MY_NAMESPACE_REACTIONS, { page_no: pageNo, page_size: PAGE_SIZE }));
-  }, [pageNo, language, dispatch]);
+  }, [pageNo, contentLanguages, dispatch]);
 
   const needToLogin = NeedToLogin({ t });
   if (needToLogin) return needToLogin;

@@ -14,7 +14,7 @@ const ZipFileModal = ({ id, path }) => {
   const [open, setOpen] = useState(false);
 
   const getZipById = useSelector(state => assets.nestedGetZipById(state.assets));
-  const language   = useSelector(state => settings.getLanguage(state.settings));
+  const uiLang     = useSelector(state => settings.getUILang(state.settings));
   const ref        = useRef();
 
   const { data: { uniq, full } } = getZipById(id);
@@ -71,13 +71,13 @@ const ZipFileModal = ({ id, path }) => {
         onClose={() => setOpen(false)}
         closeIcon
       >
-        <Modal.Content dir={getLanguageDirection(language)}>
+        <Modal.Content dir={isLanguageRtl(uiLang) ? 'rtl' : 'ltr'}>
           <ImageGallery
             startIndex={items.length - 1}
             ref={ref}
             lazyLoad
             showFullscreenButton
-            isRTL={isLanguageRtl(language)}
+            isRTL={isLanguageRtl(uiLang)}
             items={items}
             thumbnailPosition="top"
             showPlayButton={false}

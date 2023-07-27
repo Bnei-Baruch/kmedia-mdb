@@ -7,8 +7,14 @@ import { actions as mdb } from '../redux/modules/mdb';
 
 export function* fetchData() {
   try {
-    const language = yield select(state => settings.getLanguage(state.settings));
-    const { data } = yield call(Api.home, { language });
+    const uiLang = yield select(state => settings.getUILang(state.settings));
+    const contentLanguages = yield select(state => settings.getContentLanguages(state.settings));
+
+    console.log('fetchData home', uiLang, contentLanguages);
+    const { data } = yield call(Api.home, {
+      ui_language: uiLang,
+      content_languages: contentLanguages,
+    });
     yield put(mdb.receiveCollections([data.latest_daily_lesson, ...data.latest_cos]));
     yield put(mdb.receiveContentUnits(data.latest_units));
     yield put(actions.fetchDataSuccess(data));
@@ -20,7 +26,7 @@ export function* fetchData() {
 export function* fetchBanner(action) {
   try {
     const { data } = yield call(Api.getCMS, 'banner', {
-      language: action.payload,
+      contentLanguages: action.payload,
     });
     yield put(actions.fetchBannersSuccess(data));
   } catch (err) {

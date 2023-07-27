@@ -11,13 +11,20 @@ import crawlers from 'crawler-user-agents';
 import UAParser from 'ua-parser-js';
 
 import useRoutes from '../src/route/routes';
-import { COOKIE_CONTENT_LANG, LANG_UI_LANGUAGES, LANG_UKRAINIAN, KC_BOT_USER_NAME } from '../src/helpers/consts';
+import {
+  COOKIE_UI_LANG,
+  COOKIE_CONTENT_LANGS,
+  COOKIE_SHOW_ALL_CONTENT,
+  LANG_UI_LANGUAGES,
+  LANG_UKRAINIAN,
+  KC_BOT_USER_NAME,
+} from '../src/helpers/consts';
 import { getLanguageLocaleWORegion, getLanguageDirection } from '../src/helpers/i18n-utils';
-import { getLanguageFromPath } from '../src/helpers/url';
+import { getUILangFromPath } from '../src/helpers/url';
 import { isEmpty } from '../src/helpers/utils';
 import createStore from '../src/redux/createStore';
 import { actions as ssr } from '../src/redux/modules/ssr';
-import { actions as settings, initialState as settingsInitialState } from '../src/redux/modules/settings';
+import { actions as settings, initialState as settingsInitialState, onSetUILanguage, onSetContentLanguages, onSetUrlLanguage } from '../src/redux/modules/settings';
 import i18nnext from './i18nnext';
 import App from '../src/components/App/App';
 import moment from 'moment/moment';
@@ -37,11 +44,13 @@ export default function serverRender(req, res, next, htmlData) {
 
   show_console = req.originalUrl.includes('ssr_debug');
   show_console && console.log('serverRender', req.originalUrl);
+  show_console && console.log('headers', req.headers);
 
-  const { language, redirect } = getLanguageFromPath(req.originalUrl, req.headers, req.get('user-agent'));
+  const { language: uiLang, redirect } = getUILangFromPath(req.originalUrl, req.headers, req.get('user-agent'));
+  show_console && console.log('getUILangFromPath', uiLang, redirect);
   if (redirect) {
-    const newUrl = `${BASE_URL}${language}${req.originalUrl}`;
-    show_console && console.log(`serverRender: redirect (${language}) => ${newUrl}`);
+    const newUrl = `${BASE_URL}${uiLang}${req.originalUrl}`;
+    show_console && console.log(`serverRender: redirect (${uiLang}) => ${newUrl}`);
     res.writeHead(307, { Location: newUrl });
     res.end();
     return;
@@ -52,11 +61,11 @@ export default function serverRender(req, res, next, htmlData) {
 
   show_console && console.log('serverRender: isbot', bot, req.headers['user-agent']);
   if (cookies['authorised'] || req.query.authorised || bot) {
-    serverRenderAuthorised(req, res, next, htmlData, language, bot);
+    serverRenderAuthorised(req, res, next, htmlData, uiLang, bot);
     return;
   }
 
-  serverRenderSSOAuth(req, res, next, htmlData, language);
+  serverRenderSSOAuth(req, res, next, htmlData);
 }
 
 function serverRenderSSOAuth(req, res, next, htmlData) {
@@ -88,13 +97,16 @@ function serverRenderSSOAuth(req, res, next, htmlData) {
   res.send(html);
 }
 
-async function serverRenderAuthorised(req, res, next, htmlData, language, bot) {
+async function serverRenderAuthorised(req, res, next, htmlData, uiLang, bot) {
+  show_console && console.log('serverRenderAuthorised uiLang', uiLang);
 
-  moment.locale(language === LANG_UKRAINIAN ? 'uk' : language);
+  moment.locale(uiLang === LANG_UKRAINIAN ? 'uk' : uiLang);
 
   const i18nServer = i18nnext.cloneInstance();
-  i18nServer.changeLanguage(language, err => {
+  i18nServer.changeLanguage(uiLang, err => {
+    show_console && console.log('language changed', uiLang, err);
     if (err) {
+      console.log('Error next', err);
       next(err);
       return;
     }
@@ -107,16 +119,34 @@ async function serverRenderAuthorised(req, res, next, htmlData, language, bot) {
 
     const deviceInfo = new UAParser(req.get('user-agent')).getResult();
 
+    let cookieUILang = cookies[COOKIE_UI_LANG] || uiLang;
+    let cookieContentLanguages = cookies[COOKIE_CONTENT_LANGS] || [uiLang];
+    if (typeof cookieContentLanguages === 'string' || cookieContentLanguages  instanceof String) {
+      cookieContentLanguages = cookieContentLanguages.split(',');
+    }
+
     const initialState = {
-      settings: { ...settingsInitialState, language, contentLanguage: cookies[COOKIE_CONTENT_LANG], },
+      settings: {
+        ...settingsInitialState,
+        showAllContent: cookies[COOKIE_SHOW_ALL_CONTENT] === 'true' || false,
+      },
     };
+    // Update settings store with languages info.
+    show_console && console.log('onSetUILang', cookieUILang, cookieContentLanguages, cookies[COOKIE_UI_LANG], uiLang);
+    onSetUILanguage(initialState.settings, {uiLang: cookieUILang});
+    onSetContentLanguages(initialState.settings, {contentLanguages: cookieContentLanguages});
+    if (uiLang !== cookieUILang) {
+      onSetUrlLanguage(initialState.settings, uiLang);
+    }
 
     if (bot) {
       initialState.auth = { user: { name: KC_BOT_USER_NAME } };
     }
 
     const store = createStore(initialState, history);
-    store.dispatch(settings.setLanguage(language));
+    // Dispatching languages change updates tags and sources.
+    store.dispatch(settings.setUILanguage({ uiLang: cookieUILang }));
+    store.dispatch(settings.setContentLanguages({ contentLanguages: cookieContentLanguages }));
 
     const context = {
       req,
@@ -125,7 +155,7 @@ async function serverRenderAuthorised(req, res, next, htmlData, language, bot) {
       i18n: i18nServer,
     };
 
-    const routes  = useRoutes(<></>).map(r => ({ ...r, path: `${language}/${r.path}` }));
+    const routes  = useRoutes(<></>).map(r => ({ ...r, path: `${uiLang}/${r.path}` }));
     const reqPath = req.originalUrl.split('?')[0];
     const branch  = matchRoutes(routes, reqPath) || [];
 
@@ -154,7 +184,7 @@ async function serverRenderAuthorised(req, res, next, htmlData, language, bot) {
             hrend = process.hrtime(hrstart);
             show_console && console.log('serverRender: rootSagaPromise.then %ds %dms', hrend[0], hrend[1] / 1000000);
             hrstart      = process.hrtime();
-            // actual render
+            // Actual render.
             const markup = ReactDOMServer.renderToString(
               <React.StrictMode>
                 <ErrorBoundary>
@@ -180,11 +210,11 @@ async function serverRenderAuthorised(req, res, next, htmlData, language, bot) {
             show_console && console.log('serverRender:  Helmet.renderStatic %ds %dms', hrend[0], hrend[1] / 1000000);
 
             if (context.url) {
-              // Somewhere a `<Redirect>` was rendered
+              // Somewhere a `<Redirect>` was rendered.
               res.redirect(301, context.url);
             } else {
-              // we're good, add in markup, send the response
-              const direction    = getLanguageDirection(language);
+              // We're good, add in markup, send the response.
+              const direction    = getLanguageDirection(uiLang);
               const cssDirection = direction === 'ltr' ? '' : '.rtl';
 
               const i18nData = serialize(
@@ -214,7 +244,7 @@ async function serverRenderAuthorised(req, res, next, htmlData, language, bot) {
               const html = htmlData
                 .replace(/<html lang="en">/, `<html lang="en" ${helmet.htmlAttributes.toString()} >`)
                 .replace(/<title>.*<\/title>/, helmet.title.toString())
-                .replace(/<\/head>/, `${helmet.meta.toString()}${helmet.link.toString()}${canonicalLink(req, language)}${alternateLinks(req, language)}${ogUrl(req, language)}</head>`)
+                .replace(/<\/head>/, `${helmet.meta.toString()}${helmet.link.toString()}${canonicalLink(req, uiLang)}${alternateLinks(req, uiLang)}${ogUrl(req, uiLang)}</head>`)
                 .replace(/<body>/, `<body ${helmet.bodyAttributes.toString()} >`)
                 .replace(/semantic_v4.min.css/g, `semantic_v4${cssDirection}.min.css`)
                 .replace(/<div id="root"><\/div>/, rootDiv);
@@ -225,12 +255,19 @@ async function serverRenderAuthorised(req, res, next, htmlData, language, bot) {
                 res.status(context.code);
               }
 
+              console.log('STOP serverRenderAuthorised');
               res.send(html);
             }
           })
-          .catch(next);
+          .catch((a, b, c) => {
+            console.log('Error top catch', a, b, c);
+            return next(a);
+          });
       })
-      .catch(next);
+      .catch((a, b, c) => {
+        console.log('Error bottom catch', a, b, c);
+        return next(a);
+      });
   });
 }
 

@@ -33,7 +33,7 @@ const FILTER_PARAMS              = {
 
 const MainPage = ({ t }) => {
   const { items: cus, total } = useSelector(state => lists.getNamespaceState(state.lists, PAGE_NS_SKETCHES)) || {};
-  const language              = useSelector(state => settings.getLanguage(state.settings));
+  const contentLanguages      = useSelector(state => settings.getContentLanguages(state.settings));
   const pageSize              = useSelector(state => settings.getPageSize(state.settings));
   const selected              = useSelector(state => filters.getNotEmptyFilters(state.filters, PAGE_NS_SKETCHES), isEqual);
   const getZipById            = useSelector(state => assets.nestedGetZipById(state.assets));
@@ -63,7 +63,7 @@ const MainPage = ({ t }) => {
     } else {
       dispatch(actions.fetchSectionList(PAGE_NS_SKETCHES, pageNo, { pageSize, ...FILTER_PARAMS }));
     }
-  }, [language, dispatch, pageNo, selected, pageSize, prevSel, setPage]);
+  }, [contentLanguages, dispatch, pageNo, selected, pageSize, prevSel, setPage]);
 
   useEffect(() => {
     if (!wipAll && zipIdsForFetch?.length > 0) {
@@ -96,7 +96,6 @@ const MainPage = ({ t }) => {
           pageNo={pageNo}
           pageSize={pageSize}
           total={total}
-          language={language}
           onChange={setPage}
         />}
       </Container>

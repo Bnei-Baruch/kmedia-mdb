@@ -9,7 +9,6 @@ import Page from './Page';
 const BlogPostContainer = () => {
   const wip      = useSelector(state => selectors.getBlogWipPost(state.publications));
   const err      = useSelector(state => selectors.getBlogErrorPost(state.publications));
-  const language = useSelector(state => settings.getLanguage(state.settings));
 
   const { blog, id } = useParams();
   const post         = useSelector(state => selectors.getBlogPost(state.publications, blog, id));
@@ -36,7 +35,6 @@ const BlogPostContainer = () => {
   return (
     <Page
       post={wip || err ? null : post}
-      language={language}
       wip={wip}
       err={err}
     />

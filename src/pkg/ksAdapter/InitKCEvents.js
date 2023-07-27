@@ -9,11 +9,13 @@ const eventsToRedux = dispatch => {
     dispatch(actions.updateUser(user));
   });
   window.addEventListener(KC_UPDATE_TOKEN, ({ detail: token }) => {
+    console.log('KC_UPDATE_TOKEN', token);
     dispatch(actions.updateToken(token));
   });
 };
 
 const InitKCEvents = () => {
+  console.log('InitKCEvents');
   const dispatch = useDispatch();
   useEffect(() => {
     eventsToRedux(dispatch);

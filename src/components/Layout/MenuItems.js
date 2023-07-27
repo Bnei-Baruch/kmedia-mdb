@@ -3,8 +3,10 @@ import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
 import identity from 'lodash/identity';
 import { Button, Header, Menu, Sidebar } from 'semantic-ui-react';
+import { useSelector } from 'react-redux';
 
-import { getPodcastLinkByLang, getRSSLinkByLang } from '../../helpers/utils';
+import { selectors as settings } from '../../redux/modules/settings';
+import { getPodcastLinkByLangs, getRSSLinkByLangs } from '../../helpers/utils';
 import NavLink from '../Language/MultiLanguageNavLink';
 import DonateNow, { VirtualHomeButton } from './DonateNow';
 import FeedBurner from './FeedBurner';
@@ -26,8 +28,9 @@ const ITEMS = [
   'help',
 ];
 
-const MenuItems = ({ simple = false, visible = false, t, onItemClick = identity, language }) => {
-  const loggedIn = useIsLoggedIn();
+const MenuItems = ({ simple = false, visible = false, t, onItemClick = identity }) => {
+  const contentLanguages = useSelector(state => settings.getContentLanguages(state.settings));
+  const loggedIn  = useIsLoggedIn();
 
   const items = ITEMS.map(x => (
     <Menu.Item
@@ -97,8 +100,8 @@ const MenuItems = ({ simple = false, visible = false, t, onItemClick = identity,
           content={t('nav.sidebar.old-site')}
         />
         <Menu.Item className="mobile-only">
-          <DonateNow language={language} />
-          <VirtualHomeButton language={language} />
+          <DonateNow />
+          <VirtualHomeButton />
         </Menu.Item>
         <Menu.Item
           key="rss"
@@ -108,13 +111,13 @@ const MenuItems = ({ simple = false, visible = false, t, onItemClick = identity,
             icon="rss"
             size="mini"
             color="orange"
-            href={getRSSLinkByLang(language)} />
+            href={getRSSLinkByLangs(contentLanguages)} />
           <span className="margin-right-8 margin-left-8">RSS</span>
           <Button
             icon="apple"
             size="mini"
             className="margin-left-8"
-            href={getPodcastLinkByLang(language)} />
+            href={getPodcastLinkByLangs(contentLanguages)} />
           <span className="margin-right-8 margin-left-8">{t('nav.sidebar.podcast')}</span>
         </Menu.Item>
 
@@ -122,7 +125,7 @@ const MenuItems = ({ simple = false, visible = false, t, onItemClick = identity,
           key="feedBurner"
           className="sidebar-item"
         >
-          <FeedBurner language={language} />
+          <FeedBurner />
         </Menu.Item>
       </Menu>
     );
@@ -142,7 +145,6 @@ MenuItems.propTypes = {
   visible: PropTypes.bool,
   t: PropTypes.func.isRequired,
   onItemClick: PropTypes.func,
-  language: PropTypes.string.isRequired,
 };
 
 MenuItems.defaultProps = {

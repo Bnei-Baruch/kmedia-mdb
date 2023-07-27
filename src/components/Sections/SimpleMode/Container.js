@@ -13,8 +13,9 @@ import { groupOtherMediaByType, renderCollection } from './RenderListHelpers';
 import { ClientChroniclesContext, DeviceInfoContext } from '../../../helpers/app-contexts';
 
 const SimpleModeContainer = () => {
-  const uiLanguage      = useSelector(state => settings.getLanguage(state.settings));
-  const contentLanguage = useSelector(state => settings.getContentLanguage(state.settings));
+  console.log('SimpleModeContainer');
+  const uiLang           = useSelector(state => settings.getUILang(state.settings));
+  const contentLanguages = useSelector(state => settings.getContentLanguages(state.settings));
 
   const { deviceInfo: { browser: { name: browserName } } } = useContext(DeviceInfoContext);
   const chronicles                                         = useContext(ClientChroniclesContext);
@@ -22,7 +23,7 @@ const SimpleModeContainer = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [filesLanguage, setFilesLanguage]     = useState(contentLanguage);
+  const [filesLanguages, setFilesLanguages]   = useState(contentLanguages);
   const [blinkLangSelect, setBlinkLangSelect] = useState(false);
 
   const [selectedDate, setSelectedDate] = useState(() => {
@@ -37,18 +38,14 @@ const SimpleModeContainer = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    setFilesLanguage(contentLanguage);
-  }, [contentLanguage]);
+    setFilesLanguages(contentLanguages);
+  }, [contentLanguages]);
 
   useEffect(() => {
-    dispatch(actions.fetchForDate({ date: selectedDate, language: uiLanguage }));
-  }, [dispatch, selectedDate, uiLanguage]);
-
-  const handleLanguageChanged = (e, filesLang) => {
-    const language = filesLang || e.currentTarget.value;
-    setFilesLanguage(language);
-    setBlinkLangSelect(false);
-  };
+    console.log('fetchForDate...', uiLang);
+    // We want to fetch again when uiLang or the date changed.
+    dispatch(actions.fetchForDate({ date: selectedDate }));
+  }, [dispatch, selectedDate, uiLang]);
 
   const handleDayClick = (selDate, { disabled } = {}) => {
     if (disabled) {
@@ -78,18 +75,18 @@ const SimpleModeContainer = () => {
   };
 
   const chroniclesAppend       = chronicles ? chronicles.append.bind(chronicles) : noop;
-  const renderUnitOrCollection = (item, language, t) => (
+  const renderUnitOrCollection = (item, filesLanguages, t) => (
     isEmpty(item.content_units)
-      ? groupOtherMediaByType(item, language, t, helpChooseLang, chroniclesAppend)
-      : renderCollection(item, language, t, helpChooseLang, chroniclesAppend)
+      ? groupOtherMediaByType(item, filesLanguages, t, helpChooseLang, chroniclesAppend)
+      : renderCollection(item, filesLanguages, t, helpChooseLang, chroniclesAppend)
   );
 
   const pageProps = {
     selectedDate,
-    filesLanguage,
+    filesLanguages,
     renderUnit: renderUnitOrCollection,
     onDayClick: handleDayClick,
-    onLanguageChange: handleLanguageChanged,
+    onLanguageChange: selected => setFilesLanguages(selected),
     blinkLangSelect
   };
 

@@ -8,7 +8,6 @@ import { selectors as filtersAside } from '../../../redux/modules/filtersAside';
 import { FN_TOPICS_MULTI } from '../../../helpers/consts';
 import React, { useMemo, useState } from 'react';
 import { selectors as settings } from '../../../redux/modules/settings';
-import { isLanguageRtl } from '../../../helpers/i18n-utils';
 import clsx from 'clsx';
 import TagSourceItemModal from './TagSourceItemModal';
 
@@ -25,7 +24,7 @@ const TagSourceItem = props => {
   const getPathSources = useSelector(state => sources.getPathByID(state.sources));
   const getTagById     = useSelector(state => tags.getTagById(state.tags));
   const getPathTags    = useSelector(state => tags.getPathByID(state.tags));
-  const language       = useSelector(state => settings.getLanguage(state.settings));
+  const uiDir          = useSelector(state => settings.getUIDir(state.settings));
 
   const isTag = filterName === FN_TOPICS_MULTI;
 
@@ -94,7 +93,7 @@ const TagSourceItem = props => {
               basic
               color="blue"
               className="clear_button no-shadow"
-              icon={`caret ${isLanguageRtl(language) ? 'left' : 'right'}`}
+              icon={`caret ${uiDir === 'rtl' ? 'left' : 'right'}`}
               onClick={toggleOpen}
               size="medium"
               disabled={finalStat === 0}

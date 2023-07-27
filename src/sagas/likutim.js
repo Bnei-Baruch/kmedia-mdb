@@ -16,12 +16,13 @@ function* fetchLikutim() {
     const filterParams = filtersTransformer.toApiParams(filters) || {};
 
     const pageSize = 10000;
-    const language = yield select(state => settings.getContentLanguage(state.settings));
-    const { data } = yield call(Api.units, { content_type: CT_LIKUTIM, language, pageSize, ...filterParams });
+    const uiLang = yield select(state => settings.getUILang(state.settings));
+    const contentLanguages = yield select(state => settings.getContentLanguages(state.settings));
+    const { data } = yield call(Api.units, { content_type: CT_LIKUTIM, language: uiLang, pageSize, ...filterParams });
 
     if (Array.isArray(data.content_units)) {
       // get counts of filter data (Topics etc)
-      yield* callUnitsStats({ content_type: CT_LIKUTIM, language, pageSize }, namespace);
+      yield* callUnitsStats({ content_type: CT_LIKUTIM, content_languages: contentLanguages, ui_language: uiLang, pageSize }, namespace);
 
       yield put(mdbActions.receiveContentUnits(data.content_units));
       yield put(actions.fetchLikutimSuccess(data));

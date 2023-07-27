@@ -12,8 +12,7 @@ import { selectors as settings } from '../../../redux/modules/settings';
 const StartEnd = ({ action }) => {
   const { t }              = useTranslation();
   const { start = 0, end } = useSelector(state => selectors.getShareStartEnd(state.player));
-  const language           = useSelector(state => settings.getLanguage(state.settings));
-  const dir                = getLanguageDirection(language);
+  const uiDir              = useSelector(state => settings.getUIDir(state.settings));
   const { duration }       = useSelector(state => selectors.getFile(state.player));
   const dispatch           = useDispatch();
 
@@ -50,7 +49,7 @@ const StartEnd = ({ action }) => {
           }}
           placeholder={t('player.share.click-to-set')}
           value={formatTime(start)}
-          dir={dir}
+          dir={uiDir}
         />
         <Input
           size="mini"
@@ -66,7 +65,7 @@ const StartEnd = ({ action }) => {
           }}
           placeholder={t('player.share.click-to-set')}
           value={fTimeEnd}
-          dir={dir}
+          dir={uiDir}
         />
       </div>
       {action}

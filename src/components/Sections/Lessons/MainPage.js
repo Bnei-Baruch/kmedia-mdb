@@ -43,7 +43,7 @@ const FILTER_PARAMS               = { content_type: LESSON_AS_UNIT };
 
 const MainPage = ({ t }) => {
   const { items, total, wip, err } = useSelector(state => lists.getNamespaceState(state.lists, PAGE_NS_LESSONS)) || {};
-  const language                   = useSelector(state => settings.getLanguage(state.settings));
+  const contentLanguages           = useSelector(state => settings.getContentLanguages(state.settings));
   const pageSize                   = useSelector(state => settings.getPageSize(state.settings));
   const selected                   = useSelector(state => filters.getNotEmptyFilters(state.filters, PAGE_NS_LESSONS), isEqual);
 
@@ -68,7 +68,7 @@ const MainPage = ({ t }) => {
         ...listParams
       }));
     }
-  }, [language, dispatch, pageNo, selected, listParams]);
+  }, [contentLanguages, dispatch, pageNo, selected, listParams]);
 
   const wipErr          = WipErr({ wip, err, t });
   const filterComponent = <Filters namespace={PAGE_NS_LESSONS} baseParams={FILTER_PARAMS} />;
@@ -100,7 +100,6 @@ const MainPage = ({ t }) => {
             pageNo={pageNo}
             pageSize={pageSize}
             total={total}
-            language={language}
             onChange={setPage}
           />}
         </Container>

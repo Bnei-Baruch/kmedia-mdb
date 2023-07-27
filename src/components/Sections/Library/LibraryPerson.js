@@ -40,15 +40,15 @@ const convertImages = content => {
 
 const LibraryPerson = ({ t }) => {
   const { id: sourceId }            = useParams();
-  const language                    = useSelector(state => settings.getLanguage(state.settings));
+  const contentLanguages            = useSelector(state => settings.getContentLanguages(state.settings));
   const { wip, err, data: content } = useSelector(state => selectors.getPerson(state.assets));
   const dispatch                    = useDispatch();
 
   useEffect(
     () => {
-      dispatch(actions.fetchPerson({ sourceId, language }));
+      dispatch(actions.fetchPerson({ sourceId, contentLanguages }));
     },
-    [sourceId, language, dispatch]
+    [sourceId, contentLanguages, dispatch]
   );
 
   const wipErr = WipErr({ wip, err, t });
