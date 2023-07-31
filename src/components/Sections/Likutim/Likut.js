@@ -160,7 +160,7 @@ const Likut                  = () => {
                   <div className="library-language-container">
                     <MenuLanguageSelector
                       languages={languages}
-                      defaultValue={language}
+                      defaultValue={lang}
                       onSelect={handleLanguageChanged}
                       fluid={false}
                     />
