@@ -7,7 +7,7 @@ import clsx from 'clsx';
 
 import { actions as assetsActions, selectors as assetsSelectors } from '../../../redux/modules/assets';
 import { selectors as siteSettings } from '../../../redux/modules/settings';
-import { actions, selectors } from '../../../redux/modules/mdb';
+import { actions, selectors, selectors as mdb } from '../../../redux/modules/mdb';
 import { getLangPropertyDirection, getLanguageDirection } from '../../../helpers/i18n-utils';
 import { physicalFile, strCmp } from '../../../helpers/utils';
 import { SectionLogo } from '../../../helpers/images';
@@ -41,6 +41,7 @@ const Likut             = () => {
 
   const location        = useLocation();
   const unit            = useSelector(state => selectors.getDenormContentUnit(state.mdb, id));
+  const fetched         = useSelector(state => mdb.getFullUnitFetched(state.mdb)[id]);
   const wip             = useSelector(state => selectors.getWip(state.mdb).units[id]);
   const err             = useSelector(state => selectors.getErrors(state.mdb).units[id]);
   const contentLanguage = useSelector(state => siteSettings.getContentLanguage(state.settings, location));
@@ -72,16 +73,16 @@ const Likut             = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(actions.fetchUnit(id));
-  }, [dispatch, id]);
+    (!fetched) && dispatch(actions.fetchUnit(id));
+  }, [dispatch, id, fetched]);
 
   const file      = selectFile(unit?.files, language);
   const needFetch = !doc2htmlById[file?.id];
   useEffect(() => {
-    if (file && needFetch) {
+    if (file?.id && needFetch) {
       dispatch(assetsActions.doc2html(file.id));
     }
-  }, [dispatch, file.id, needFetch]);
+  }, [dispatch, file?.id, needFetch]);
 
   if (!unit) {
     return null;
