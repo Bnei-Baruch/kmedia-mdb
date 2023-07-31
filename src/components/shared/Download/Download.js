@@ -55,7 +55,7 @@ const Download = props => {
   const [ready, setReady]                                                                                     = useState(false);
   const { children = null, path = null, mimeType, downloadAllowed, filename = path?.split('/').slice(-1)[0] } = props;
   useEffect(() => {
-    setReady(path === null && typeof filename === 'undefined' && typeof document === 'undefined');
+    setReady(path !== null && typeof filename !== 'undefined' && typeof document !== 'undefined');
   }, [path, filename]);
 
   if (!ready) {
