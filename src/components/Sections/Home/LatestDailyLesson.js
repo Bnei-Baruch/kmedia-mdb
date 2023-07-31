@@ -4,21 +4,20 @@ import { Header, Image } from 'semantic-ui-react';
 import { withTranslation } from 'react-i18next';
 import * as shapes from '../../shapes';
 import Link from '../../Language/MultiLanguageLink';
-import { Requests } from '../../../helpers/Api';
+import { Requests, cmsUrl } from '../../../helpers/Api';
 
-const getRandomImage = () => (
-  Requests.imaginaryRandom('resize', {
-    width: 512,
-    height: 288,
-    nocrop: false,
-    stripmeta: true,
-  }, `lessons/latest_lesson_%s.jpg`)
-);
+export const getRandomLatestLesson = (width = 512, height = 288) => {
+  const params = { width, height, nocrop: false, stripmeta: true, };
+  const rand   = Math.floor(Math.random() * Math.floor(31)) + 1;
+  params.url   = cmsUrl(`images/lesson/latest_lesson_${rand}.jpg`);
+
+  return Requests.imaginary('resize', params);
+};
 
 const LatestDailyLesson = ({ collection, t }) => {
   const [imageSrc, setImage] = useState();
 
-  useEffect(() => setImage(getRandomImage()), []);
+  useEffect(() => setImage(getRandomLatestLesson()), []);
 
   return (
     <div className="thumbnail">
