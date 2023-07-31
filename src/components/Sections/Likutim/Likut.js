@@ -22,8 +22,8 @@ import ScrollToSearch from '../../shared/DocToolbar/ScrollToSearch';
 import AudioPlayer from '../../shared/AudioPlayer';
 import TagsByUnit from '../../shared/TagsByUnit';
 
-const DEFAULT_LANGUAGES = [LANG_ENGLISH, LANG_HEBREW];
-const selectFile        = (files, language, idx = 0) => {
+const DEFAULT_LANGUAGES      = [LANG_ENGLISH, LANG_HEBREW];
+export const selectLikutFile = (files, language, idx = 0) => {
   if (!files) return null;
 
   let file = files.find(x => x.language === language && x.type === MT_TEXT);
@@ -32,10 +32,10 @@ const selectFile        = (files, language, idx = 0) => {
     file = files.find(x => x.type === MT_TEXT);
     return file;
   }
-  return selectFile(files, DEFAULT_LANGUAGES[idx], idx++);
+  return selectLikutFile(files, DEFAULT_LANGUAGES[idx], idx++);
 };
 // expected unit of type Likutim
-const Likut             = () => {
+const Likut                  = () => {
   const { id } = useParams();
   const { t }  = useTranslation();
 
@@ -76,7 +76,8 @@ const Likut             = () => {
     (!fetched) && dispatch(actions.fetchUnit(id));
   }, [dispatch, id, fetched]);
 
-  const file      = selectFile(unit?.files, language);
+  const file      = selectLikutFile(unit?.files, language);
+  const lang      = file?.language || language;
   const needFetch = !doc2htmlById[file?.id];
   useEffect(() => {
     if (file?.id && needFetch) {
@@ -96,8 +97,9 @@ const Likut             = () => {
   const { data } = doc2htmlById[file?.id] || {};
 
   const { theme = 'light', fontType, fontSize = 0 } = settings || {};
-  const direction                                   = getLanguageDirection(file.language);
-  const gridDirection                               = getLangPropertyDirection(file.language);
+
+  const direction     = getLanguageDirection(lang);
+  const gridDirection = getLangPropertyDirection(lang);
 
   const { name, film_date, files = [], source_units } = unit;
   const languages                                     = files.map(f => f.language);
@@ -105,10 +107,10 @@ const Likut             = () => {
   const url                = file && physicalFile(file, true);
   const relatedLessons     = Object.values(source_units).filter(u => UNIT_LESSONS_TYPE.includes(u.content_type));
   const relatedLessonsSize = relatedLessons.length > 0 ? 6 : 0;
-  const bookmarkSource     = { subject_uid: unit.id, subject_type: unit.content_type, language: file.language };
-  const labelSource        = { content_unit: unit.id, language: file.language };
+  const bookmarkSource     = { subject_uid: unit.id, subject_type: unit.content_type, language: lang };
+  const labelSource        = { content_unit: unit.id, language: lang };
 
-  const mp3File = files.find(f => f.language === file.language && f.type === MT_AUDIO);
+  const mp3File = files.find(f => f.language === lang && f.type === MT_AUDIO);
 
   return (
     <div
@@ -182,7 +184,7 @@ const Likut             = () => {
               {
                 data && (
                   <ScrollToSearch
-                    language={file.language}
+                    language={lang}
                     data={data}
                     source={bookmarkSource}
                     label={labelSource}

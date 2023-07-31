@@ -50,6 +50,7 @@ import * as publicationsSagas from './../sagas/publications';
 import * as searchSagas from './../sagas/search';
 import * as tagsSagas from './../sagas/tags';
 import { getLibraryContentFile } from '../components/Sections/Library/Library';
+import { selectLikutFile } from '../components/Sections/Likutim/Likut';
 
 export const home = store => {
   store.dispatch(homeActions.fetchData(true));
@@ -259,10 +260,14 @@ export const libraryPage = async (store, match, show_console = false) => {
 
 export const likutPage = async (store, match, show_console = false) => {
   const { id } = match.params;
-  return Promise.all([
-    store.sagaMiddleWare.run(mdbSagas.fetchUnit, mdbActions.fetchUnit(id)).done,
-    store.sagaMiddleWare.run(mdbSagas.fetchUnit, mdbActions.fetchUnit(id)).done,
-  ]);
+  return store.sagaMiddleWare.run(mdbSagas.fetchUnit, mdbActions.fetchUnit(id)).done
+    .then(() => {
+      const state    = store.getState();
+      const language = settingsSelectors.getContentLanguage(state.settings);
+      const likut    = mdbSelectors.getDenormContentUnit(state.mdb, id);
+      const file     = selectLikutFile(likut?.files, language);
+      store.dispatch(assetsActions.doc2html(file?.id));
+    });
 };
 
 export const tweetsListPage = (store, match) => {
