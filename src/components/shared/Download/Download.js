@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
 import PropTypes from 'prop-types';
@@ -52,11 +52,15 @@ const downloadAsset = (path, mimeType, downloadAllowed, name) => {
 };
 
 const Download = props => {
+  const [ready, setReady]                                                                                     = useState(false);
   const { children = null, path = null, mimeType, downloadAllowed, filename = path?.split('/').slice(-1)[0] } = props;
-  if (path === null || typeof filename === 'undefined' || typeof document === 'undefined') {
+  useEffect(() => {
+    setReady(path === null && typeof filename === 'undefined' && typeof document === 'undefined');
+  }, [path, filename]);
+
+  if (!ready) {
     return null;
   }
-
   const mountPoint = document.getElementById('download-button');
   if (mountPoint === null) {
     return null;

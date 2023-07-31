@@ -65,18 +65,17 @@ export const getLibraryContentFile = (data = {}, sourceId) => {
 };
 
 const Library = ({ data, source, downloadAllowed, t }) => {
-  const location = useLocation();
-  const navigate = useNavigate();
+  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const location           = useLocation();
+  const navigate           = useNavigate();
 
   const doc2htmlById    = useSelector(state => selectors.getDoc2htmlById(state.assets));
   const uiLanguage      = useSelector(state => settings.getLanguage(state.settings));
   const contentLanguage = useSelector(state => settings.getContentLanguage(state.settings, location));
 
   const [pageNumber, setPageNumber] = useState(getPageFromLocation(location));
-  const languages                   = Object.keys(data);
+  const languages                   = data ? Object.keys(data) : [];
   const [language, setLanguage]     = useState(selectSuitableLanguage(contentLanguage, uiLanguage, languages));
-
-  const { isMobileDevice } = useContext(DeviceInfoContext);
 
   const dispatch = useDispatch();
 

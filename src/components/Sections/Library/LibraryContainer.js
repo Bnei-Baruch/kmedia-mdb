@@ -477,8 +477,6 @@ class LibraryContainer extends Component {
     const matchString = this.matchString(parentId, t);
     const active      = !this.context.isMobileDevice || tocIsActive;
 
-    console.log('serverRender:  LibraryContainer content', content);
-
     return (
       <div
         ref={this.handleContentArticleRef}

@@ -20,7 +20,7 @@ const UnitBar = ({ fontSize = 0, handleSettings, source, label }) => {
       }
       <Button compact size="small" className="mobile-hidden" icon="print" onClick={print} />
       {/* a portal is used to put the download button here in this div */}
-      <div id="download-button" />
+      <span id="download-button" />
       <LibrarySettings fontSize={fontSize} handleSettings={handleSettings} />
     </div>
   );
