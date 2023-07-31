@@ -12,6 +12,7 @@ import {
   SEARCH_INTENT_HIT_TYPES,
   BLOGS,
   SEARCH_INTENT_HIT_TYPE_LIKUTIM_BY_TAG,
+  CT_LIKUTIM,
 } from '../../helpers/consts';
 import { isEmpty } from '../../helpers/utils';
 import { getQuery, isDebMode } from '../../helpers/url';
@@ -38,6 +39,7 @@ import {
   SearchResultSeries,
   SearchResultSource,
   SearchResultTweets,
+  SearchResultLikut,
 } from './SearchResultHooks';
 import DidYouMean from './DidYouMean';
 import Filters from './Filters';
@@ -154,7 +156,9 @@ const SearchResults = ({ t }) => {
       const cu = cuMap[mdbUid];
       const c  = cMap[mdbUid];
       const p  = postMap[mdbUid];
-      if (cu) {
+      if (cu?.content_type === CT_LIKUTIM) {
+        result = <SearchResultLikut cu={cu} highlight={hit.highlight} clickData={clickData} />;
+      } else if (cu) {
         result = <SearchResultCU cu={cu} highlight={hit.highlight} clickData={clickData} key={cu.id} />;
       } else if (c) {
         result = <SearchResultCollection c={c} highlight={hit.highlight} clickData={clickData} key={c.id} />;

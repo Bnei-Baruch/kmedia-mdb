@@ -35,6 +35,7 @@ import {
   SEARCH_INTENT_NAMES,
   SEARCH_INTENT_SECTIONS,
   iconByContentTypeMap,
+  CT_LIKUTIM,
 } from '../../helpers/consts';
 import { isLanguageRtl } from '../../helpers/i18n-utils';
 import { SectionLogo } from '../../helpers/images';
@@ -271,6 +272,29 @@ export const SearchResultSource = ({ id, title, highlight, clickData }) => {
     logo: iconByContentType('sources', t, to),
     content: renderSnippet(to, highlight, null /* No default description */, t),
     views,
+    t,
+    click: searchResultClick(chronicles, dispatch, clickData),
+  };
+
+  return <SearchResultOneItem {...props} />;
+};
+export const SearchResultLikut  = ({ cu, title, highlight, clickData }) => {
+  const { t }      = useTranslation();
+  const chronicles = useContext(ClientChroniclesContext);
+  const dispatch   = useDispatch();
+
+  // If filter used for specific language, make sure the link will redirect to that language.
+  const filters       = useSelector(state => filterSelectors.getFilters(state.filters, 'search'));
+  const mediaLanguage = getMediaLanguage(filters);
+  const to            = canonicalLink(cu, mediaLanguage);
+
+  const props = {
+    key: cu.id,
+    title: titleFromHighlight(highlight, title),
+    link: to,
+    logo: iconByContentType(CT_LIKUTIM, t, to),
+    content: renderSnippet(to, highlight, null /* No default description */, t),
+    date: cu.film_date,
     t,
     click: searchResultClick(chronicles, dispatch, clickData),
   };
