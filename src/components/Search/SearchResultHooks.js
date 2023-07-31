@@ -179,7 +179,6 @@ export const SearchResultCU = ({ cu, highlight = {}, clickData, hideContent = fa
     iconByContentType(cu.content_type, t, to) : <UnitLogoWithDuration unit={cu} width={144} />;
 
   const props = {
-    key: cu.id,
     title: titleFromHighlight(highlight, cu.name),
     link: to,
     logo,
@@ -191,7 +190,6 @@ export const SearchResultCU = ({ cu, highlight = {}, clickData, hideContent = fa
     views,
     collectionTitle: onlyViewsAndDate ? undefined : ccu.name,
     // collectionLink,
-    t,
     click: searchResultClick(chronicles, dispatch, clickData),
   };
 
@@ -211,14 +209,12 @@ export const SearchResultPost = ({ id, post, highlight, clickData }) => {
   const link          = canonicalLink({ id, content_type: 'POST' }, mediaLanguage);
 
   const props = {
-    key: id,
     title: titleFromHighlight(highlight, post.title),
     link,
     logo: iconByContentType(CT_BLOG_POST, t, link),
     content: renderSnippet(null /* No highlight links for posts. */, highlight, post.content, t),
     date: post.created_at || '',
     views,
-    t,
     click: searchResultClick(chronicles, dispatch, clickData),
   };
 
@@ -240,14 +236,12 @@ export const SearchResultCollection = ({ c, highlight, clickData }) => {
     <div style={{ minWidth: 144 }}><UnitLogo collectionId={c.id} width={144} /></div>;
 
   const props = {
-    key: c.id,
     title: titleFromHighlight(highlight, c.name),
     link: to,
     logo,
     content: renderSnippet(to, highlight, c.description, t),
     parts: c.content_units.length,
     views,
-    t,
     click: searchResultClick(chronicles, dispatch, clickData),
   };
 
@@ -266,13 +260,11 @@ export const SearchResultSource = ({ id, title, highlight, clickData }) => {
   const to            = canonicalLink({ id, content_type: 'SOURCE' }, mediaLanguage);
 
   const props = {
-    key: id,
     title: titleFromHighlight(highlight, title),
     link: to,
     logo: iconByContentType('sources', t, to),
     content: renderSnippet(to, highlight, null /* No default description */, t),
     views,
-    t,
     click: searchResultClick(chronicles, dispatch, clickData),
   };
 
@@ -289,13 +281,11 @@ export const SearchResultLikut  = ({ cu, title, highlight, clickData }) => {
   const to            = canonicalLink(cu, mediaLanguage);
 
   const props = {
-    key: cu.id,
     title: titleFromHighlight(highlight, title),
     link: to,
     logo: iconByContentType(CT_LIKUTIM, t, to),
     content: renderSnippet(to, highlight, null /* No default description */, t),
     date: cu.film_date,
-    t,
     click: searchResultClick(chronicles, dispatch, clickData),
   };
 
@@ -314,7 +304,6 @@ export const SearchResultLandingPage = ({ landingPage, filterValues, clickData }
   const subText           = t(SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_SUBTEXT[landingPage]);
 
   const props = {
-    key: landingPage,
     title: `${t(linkTitle)} ${valuesTitleSuffix}`,
     link: to,
     logo: iconByContentType(SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_CONTENT_TYPE[landingPage], t, to),
@@ -327,7 +316,6 @@ export const SearchResultLandingPage = ({ landingPage, filterValues, clickData }
 
 export const SearchResultOneItem = (
   {
-    key,
     title,
     link,
     logo,
@@ -351,7 +339,7 @@ export const SearchResultOneItem = (
   !!views && views > 0 && description.push(t('pages.unit.info.views', { views }));
 
   return (
-    <List.Item key={key} className="media_item">
+    <List.Item className="media_item">
       <div className="media_item__logo">{logo}</div>
       <div className="media_item__content">
         <TooltipIfNeed text={title} Component={Header} as={Link} to={link} onClick={() => click(link)} content={title} />

@@ -90,10 +90,6 @@ const Likut = ({ t }) => {
     }
   }, [dispatch, file]);
 
-  if (!unit) {
-    return null;
-  }
-
   const wipErr = WipErr({ wip, err, t });
   if (wipErr) {
     return wipErr;

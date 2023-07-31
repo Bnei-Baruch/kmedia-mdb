@@ -33,7 +33,6 @@ const onSSRPrepare   = state => {
   }
 };
 const onByKey        = (state, key) => {
-  console.log('likutim onByKey', key);
   state.err[key] = null;
   state.wip[key] = true;
 };

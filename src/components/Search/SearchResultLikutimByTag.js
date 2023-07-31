@@ -79,8 +79,7 @@ export const SearchResultLikutimByTag = ({ hit }) => {
           items?.length >= MIN_SHOWED && (
             <Button
               fluid
-              textAlign="center"
-              className="clear_button no-background margin-top-8 no-padding-bottom"
+              className="clear_button no-background margin-top-8 no-padding-bottom centered"
               onClick={handleShowMore}
             >
               <Icon name={`angle double ${isMore ? 'up' : 'down'}`} />
