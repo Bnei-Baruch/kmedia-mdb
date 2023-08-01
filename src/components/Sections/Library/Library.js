@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { Segment } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 
@@ -64,24 +64,30 @@ export const getLibraryContentFile = (data = {}, sourceId) => {
   return { url: physicalFile(file, true), name: file.name, id: file.id };
 };
 
-const Library = ({ data, source, downloadAllowed, t }) => {
+const Library = ({ data, source, downloadAllowed }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const location           = useLocation();
   const navigate           = useNavigate();
+  const { t }              = useTranslation();
 
   const doc2htmlById    = useSelector(state => selectors.getDoc2htmlById(state.assets));
   const uiLanguage      = useSelector(state => settings.getLanguage(state.settings));
   const contentLanguage = useSelector(state => settings.getContentLanguage(state.settings, location));
 
   const [pageNumber, setPageNumber] = useState(getPageFromLocation(location));
-  const languages                   = data ? Object.keys(data) : [];
-  const [language, setLanguage]     = useState(selectSuitableLanguage(contentLanguage, uiLanguage, languages));
 
-  const dispatch = useDispatch();
+  const languages = data ? Object.keys(data) : [];
+  const _language = selectSuitableLanguage(contentLanguage, uiLanguage, languages);
+  const dispatch  = useDispatch();
+
+  const [language, setLanguage] = useState(_language);
+
+  useEffect(() => {
+    source && setLanguage(selectSuitableLanguage(contentLanguage, uiLanguage, languages));
+  }, [source, _language]);
 
   const file    = getLibraryContentFile(data?.[language], source);
   const fetched = doc2htmlById.hasOwnProperty(file.id);
-
   useEffect(() => {
     if (file.id && !fetched)
       dispatch(actions.doc2html(file.id));
@@ -188,7 +194,6 @@ Library.propTypes = {
   source: PropTypes.string,
   data: PropTypes.any,
   downloadAllowed: PropTypes.bool.isRequired,
-  t: PropTypes.func.isRequired,
 };
 
-export default withTranslation()(Library);
+export default Library;
