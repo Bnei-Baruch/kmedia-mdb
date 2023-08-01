@@ -16,6 +16,8 @@ import SingleMediaPage from './SingleMedia/SingleMediaPage';
 import { useTranslation } from 'react-i18next';
 import WipErr from '../../shared/WipErr/WipErr';
 import { Icon } from 'semantic-ui-react';
+import { useLocation } from 'react-router-dom';
+import { getEmbedFromQuery } from '../../../helpers/player';
 
 export const PlaylistItemPageSeries = ({ playerContainer }) => {
   const builder = <BuildPlaylistByUnit cts={[CT_LESSONS_SERIES]} />;
@@ -62,9 +64,11 @@ const Decorator = ({ builder, playerContainer }) => (
 const PageSwitcher = ({ playerContainer }) => {
   const { t }                      = useTranslation();
   const { isReady, isSingleMedia } = useSelector(state => playlist.getInfo(state.playlist));
+  const location                   = useLocation();
+  const embed                      = getEmbedFromQuery(location);
 
   if (!isReady)
-    return WipErr({ wip: !isReady, t });
+    return embed ? null : WipErr({ wip: !isReady, t });
 
   if (isSingleMedia)
     return <SingleMediaPage playerContainer={playerContainer} />;

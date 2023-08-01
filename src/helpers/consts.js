@@ -788,5 +788,6 @@ export const PLAYER_OVER_MODES = {
   dragKnob: 'drag-knob',
   firstTime: 'first-time',
   none: null,
-
 };
+
+export const KC_BOT_USER_NAME = "@__||bot||__@"

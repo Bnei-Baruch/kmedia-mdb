@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import fscreen from 'fscreen';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { Icon } from 'semantic-ui-react';
 import clsx from 'clsx';
 
@@ -9,6 +9,8 @@ import { actions, selectors } from '../../../redux/modules/player';
 import { PLAYER_OVER_MODES } from '../../../helpers/consts';
 import { stopBubbling } from '../../../helpers/utils';
 import WebWrapTooltip from '../../shared/WebWrapTooltip';
+import { useLocation } from 'react-router-dom';
+import { getEmbedFromQuery } from '../../../helpers/player';
 
 const lockLandscape = () => {
   try {
@@ -26,8 +28,9 @@ const unlockLandscape = () => {
   }
 };
 
-export const FullscreenBtn = withTranslation()(({ fullscreenRef, t }) => {
+export const FullscreenBtn = ({ fullscreenRef }) => {
   const isFullScreen = useSelector(state => selectors.isFullScreen(state.player));
+  const { t }        = useTranslation();
 
   const handleClick = () => {
     if (!fscreen.fullscreenEnabled) {
@@ -74,11 +77,15 @@ export const FullscreenBtn = withTranslation()(({ fullscreenRef, t }) => {
         </div>
       } />
   );
-});
+};
 
-export const ShareBtn = withTranslation()(({ t }) => {
+export const ShareBtn = () => {
   const mode     = useSelector(state => selectors.getOverMode(state.player));
   const dispatch = useDispatch();
+  const { t }    = useTranslation();
+  const location = useLocation();
+
+  if (getEmbedFromQuery(location)) return null;
 
   const handleOpen = e => {
     stopBubbling(e);
@@ -99,11 +106,11 @@ export const ShareBtn = withTranslation()(({ t }) => {
       }
     />
   );
-});
+};
 
-export const SettingsBtn = withTranslation()(({ t }) => {
-  const mode = useSelector(state => selectors.getOverMode(state.player));
-
+export const SettingsBtn = () => {
+  const mode     = useSelector(state => selectors.getOverMode(state.player));
+  const { t }    = useTranslation();
   const dispatch = useDispatch();
 
   const handleOpen = e => {
@@ -125,4 +132,5 @@ export const SettingsBtn = withTranslation()(({ t }) => {
       }
     />
   );
-});
+};
+

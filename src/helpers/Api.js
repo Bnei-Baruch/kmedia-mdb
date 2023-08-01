@@ -15,9 +15,9 @@ const MDB_REST_API_URL        = process.env.REACT_APP_MDB_REST_API_URL || `${API
 
 export const backendUrl               = path => `${API_BACKEND}${path}`;
 export const assetUrl                 = path => `${ASSETS_BACKEND}${path}`;
-export const cmsUrl       = path => `${CMS_BACKEND}${path}`;
-export const cLogoUrl     = path => `${cmsUrl('images/logos/' + path)}`;
-export const imaginaryUrl = path => `${IMAGINARY_URL}${path}`;
+export const cmsUrl                   = path => `${CMS_BACKEND}${path}`;
+export const cLogoUrl                 = path => `${cmsUrl('images/logos/' + path)}`;
+export const imaginaryUrl             = path => `${IMAGINARY_URL}${path}`;
 export const feedUrl                  = path => `${API_FEED}${path}`;
 export const chroniclesUrl            = path => `${CHRONICLES_BACKEND}${path}`;
 export const chroniclesBackendEnabled = CHRONICLES_BACKEND !== undefined;
@@ -86,12 +86,6 @@ export class Requests {
       .filter(p => p !== '')
       .join('&')}`
   );
-
-  static imaginaryRandom = (action, params, urlPattern) => {
-    const rand = Math.floor(Math.random() * Math.floor(31)) + 1;
-    params.url = assetUrl(urlPattern.replace(/%s/, rand));
-    return Requests.imaginary(action, params);
-  };
 
   static imaginary = (action, params) => {
     if (!params.url.startsWith('http')) {

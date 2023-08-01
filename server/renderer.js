@@ -11,7 +11,7 @@ import crawlers from 'crawler-user-agents';
 import UAParser from 'ua-parser-js';
 
 import useRoutes from '../src/route/routes';
-import { COOKIE_CONTENT_LANG, LANG_UI_LANGUAGES, LANG_UKRAINIAN } from '../src/helpers/consts';
+import { COOKIE_CONTENT_LANG, LANG_UI_LANGUAGES, LANG_UKRAINIAN, KC_BOT_USER_NAME } from '../src/helpers/consts';
 import { getLanguageLocaleWORegion, getLanguageDirection } from '../src/helpers/i18n-utils';
 import { getLanguageFromPath } from '../src/helpers/url';
 import { isEmpty } from '../src/helpers/utils';
@@ -48,10 +48,10 @@ export default function serverRender(req, res, next, htmlData) {
   }
 
   const cookies = cookieParse(req.headers.cookie || '');
-  const bot     = isBot(req);
+  const bot     = isBot(req) || !!req.query.embed;
 
   show_console && console.log('serverRender: isbot', bot, req.headers['user-agent']);
-  if (cookies['authorised'] || req.query.authorised || req.query.embed || bot) {
+  if (cookies['authorised'] || req.query.authorised || bot) {
     serverRenderAuthorised(req, res, next, htmlData, language, bot);
     return;
   }
@@ -112,7 +112,7 @@ async function serverRenderAuthorised(req, res, next, htmlData, language, bot) {
     };
 
     if (bot) {
-      initialState.auth = { user: { name: 'bot' } };
+      initialState.auth = { user: { name: KC_BOT_USER_NAME } };
     }
 
     const store = createStore(initialState, history);
@@ -187,10 +187,6 @@ async function serverRenderAuthorised(req, res, next, htmlData, language, bot) {
               const direction    = getLanguageDirection(language);
               const cssDirection = direction === 'ltr' ? '' : '.rtl';
 
-              store.dispatch(ssr.prepare());
-              // show_console && console.log(require('util').inspect(store.getState(), { showHidden: true, depth: 2 }));
-              const storeData = serialize(store.getState());
-
               const i18nData = serialize(
                 {
                   initialLanguage: context.i18n.language,
@@ -201,9 +197,14 @@ async function serverRenderAuthorised(req, res, next, htmlData, language, bot) {
                 }
               );
 
-              const rootDiv = `<div id="root" class="${direction}" style="direction: ${direction}">${markup}</div>
+              store.dispatch(ssr.prepare());
+              // console.log(require('util').inspect(store.getState(), { showHidden: true, depth: 2 }));
+              const storeData    = store.getState();
+              const storeDataStr = serialize(storeData);
+              const rootDiv      = `<div id="root" class="${direction}" style="direction: ${direction}">${markup}</div>
 <script>
-  window.__data = ${storeData};
+  window.__botKCInfo = ${serialize(storeData.auth)};
+  window.__data = ${storeDataStr};
   window.__i18n = ${i18nData};
 </script>`;
 
