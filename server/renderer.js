@@ -169,7 +169,9 @@ async function serverRenderAuthorised(req, res, next, htmlData, language, bot) {
                 </ErrorBoundary>
               </React.StrictMode>
             );
-            hrend        = process.hrtime(hrstart);
+
+            show_console && console.log('serverRender: markup', markup);
+            hrend = process.hrtime(hrstart);
             show_console && console.log('serverRender: renderToString %ds %dms', hrend[0], hrend[1] / 1000000);
             hrstart = process.hrtime();
 
@@ -200,6 +202,8 @@ async function serverRenderAuthorised(req, res, next, htmlData, language, bot) {
               );
 
               const rootDiv = `<div id="root" class="${direction}" style="direction: ${direction}">${markup}</div>
+
+              show_console && console.log('serverRender: storeData', storeData);
 <script>
   window.__data = ${storeData};
   window.__i18n = ${i18nData};
