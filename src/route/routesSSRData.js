@@ -49,6 +49,8 @@ import * as musicSagas from './../sagas/music';
 import * as publicationsSagas from './../sagas/publications';
 import * as searchSagas from './../sagas/search';
 import * as tagsSagas from './../sagas/tags';
+import { getLibraryContentFile } from '../components/Sections/Library/Library';
+import { selectLikutFile } from '../components/Sections/Likutim/Likut';
 
 export const home = store => {
   store.dispatch(homeActions.fetchData(true));
@@ -200,12 +202,13 @@ function firstLeafId(sourceId, getSourceById) {
   return firstLeafId(children[0], getSourceById);
 }
 
-export const libraryPage = async (store, match) => {
+export const libraryPage = async (store, match, show_console = false) => {
   // This is a rather ugly, timeout, sleep, loop.
   // We wait for sources to be loaded so we could
   // determine the firstLeafID for redirection.
   // Fix for AR-356
   let timeout = 5000;
+  show_console && console.log('serverRender: libraryPage before fetch sources');
   while (timeout && !sourcesSelectors.areSourcesLoaded(store.getState().sources)) {
     timeout -= 10;
     // eslint-disable-next-line no-await-in-loop
@@ -213,17 +216,20 @@ export const libraryPage = async (store, match) => {
   }
 
   const sourcesState = store.getState().sources;
-  let sourceID       = match.params.id;
+
+  show_console && console.log('serverRender: libraryPage sources was fetched', match.params.id, Object.keys(sourcesState.byId).length);
+  let sourceID = match.params.id;
   if (sourcesSelectors.areSourcesLoaded(sourcesState)) {
     const getSourceById = sourcesSelectors.getSourceById(sourcesState);
     sourceID            = firstLeafId(sourceID, getSourceById);
   }
-
+  show_console && console.log('serverRender: libraryPage source was found', sourceID);
   return Promise.all([
     store.sagaMiddleWare.run(assetsSagas.sourceIndex, assetsActions.sourceIndex(sourceID)).done,
     store.sagaMiddleWare.run(mdbSagas.fetchUnit, mdbActions.fetchUnit(sourceID)).done,
   ])
     .then(() => {
+      show_console && console.log('serverRender: libraryPage mdb data was fetched');
       const state    = store.getState();
       const { data } = assetsSelectors.getSourceIndexById(state.assets)[sourceID];
       if (!data) {
@@ -243,11 +249,24 @@ export const libraryPage = async (store, match) => {
         if (data[language].pdf && isTaas(sourceID)) {
           return; // no need to fetch pdf. we don't do that on SSR
         }
-
-        const name = data[language].html;
-        store.dispatch(assetsActions.fetchAsset(`sources/${sourceID}/${name}`));
+        const { id } = getLibraryContentFile(data[language], sourceID);
+        show_console && console.log('serverRender: libraryPage before fetch doc2html', id);
+        store.dispatch(assetsActions.doc2html(id));
+        show_console && console.log('serverRender: libraryPage before fetch labels', sourceID, contentLang);
         store.dispatch(mdbActions.fetchLabels({ content_unit: sourceID, language: contentLang }));
       }
+    });
+};
+
+export const likutPage = async (store, match, show_console = false) => {
+  const { id } = match.params;
+  return store.sagaMiddleWare.run(mdbSagas.fetchUnit, mdbActions.fetchUnit(id)).done
+    .then(() => {
+      const state    = store.getState();
+      const language = settingsSelectors.getContentLanguage(state.settings);
+      const likut    = mdbSelectors.getDenormContentUnit(state.mdb, id);
+      const file     = selectLikutFile(likut?.files, language);
+      store.dispatch(assetsActions.doc2html(file?.id));
     });
 };
 
