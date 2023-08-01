@@ -203,7 +203,7 @@ async function serverRenderAuthorised(req, res, next, htmlData, language, bot) {
               const storeDataStr = serialize(storeData);
               const rootDiv      = `<div id="root" class="${direction}" style="direction: ${direction}">${markup}</div>
 <script>
-  window.__botKCInfo = ${serialize(storeData.auth)};
+  window.__botKCInfo = ${storeData.auth.user === KC_BOT_USER_NAME ? serialize(storeData.auth) : false};
   window.__data = ${storeDataStr};
   window.__i18n = ${i18nData};
 </script>`;
