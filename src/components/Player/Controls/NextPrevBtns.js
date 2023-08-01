@@ -4,15 +4,19 @@ import { useSelector } from 'react-redux';
 
 import { selectors } from '../../../redux/modules/playlist';
 import Link from '../../Language/MultiLanguageLink';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import usePlaylistItemLink from '../hooks/usePlaylistItemLink';
 import WebWrapTooltip from '../../shared/WebWrapTooltip';
+import { useLocation } from 'react-router-dom';
+import { getEmbedFromQuery } from '../../../helpers/player';
 
-export const PrevBtn = withTranslation()(({ t }) => {
-  const id = useSelector(state => selectors.getPrevId(state.playlist));
+export const PrevBtn = () => {
+  const id       = useSelector(state => selectors.getPrevId(state.playlist));
+  const { t }    = useTranslation();
+  const location = useLocation();
+  const to       = usePlaylistItemLink(id);
 
-  const to = usePlaylistItemLink(id);
-  if (!to) return null;
+  if (getEmbedFromQuery(location) || !to) return null;
 
   return (
     <WebWrapTooltip
@@ -28,13 +32,15 @@ export const PrevBtn = withTranslation()(({ t }) => {
         </Link>
       } />
   );
-});
+};
 
-export const NextBtn = withTranslation()(({ t }) => {
-  const id = useSelector(state => selectors.getNextId(state.playlist));
+export const NextBtn = () => {
+  const id       = useSelector(state => selectors.getNextId(state.playlist));
+  const { t }    = useTranslation();
+  const location = useLocation();
+  const to       = usePlaylistItemLink(id);
 
-  const to = usePlaylistItemLink(id);
-  if (!to) return null;
+  if (getEmbedFromQuery(location) || !to) return null;
 
   return (
     <WebWrapTooltip
@@ -51,4 +57,5 @@ export const NextBtn = withTranslation()(({ t }) => {
       }
     />
   );
-});
+};
+
