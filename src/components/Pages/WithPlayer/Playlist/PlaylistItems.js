@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import ContentItemContainer from '../../../shared/ContentItem/ContentItemContainer';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectors, actions } from '../../../../redux/modules/playlist';
@@ -11,8 +11,9 @@ import { COLLECTION_DAILY_LESSONS } from '../../../../helpers/consts';
 const PLAYLIST_ITEM_HEIGHT        = 104;
 const PLAYLIST_ITEM_HEIGHT_MOBILE = 128;
 let timer;
-const PlaylistItems               = ({ t }) => {
+const PlaylistItems               = () => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
+  const { t }              = useTranslation();
 
   const { cId, cuId }          = useSelector(state => selectors.getInfo(state.playlist));
   const { from, to }           = useSelector(state => selectors.getFetched(state.playlist));
@@ -88,4 +89,4 @@ const PlaylistItems               = ({ t }) => {
   );
 };
 
-export default withTranslation()(PlaylistItems);
+export default PlaylistItems;
