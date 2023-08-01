@@ -48,8 +48,8 @@ export default function serverRender(req, res, next, htmlData) {
   }
 
   const cookies = cookieParse(req.headers.cookie || '');
-  const bot     = isBot(req);
-  if (cookies['authorised'] || req.query.authorised || req.query.embed || bot) {
+  const bot     = isBot(req) || !!req.query.embed;
+  if (cookies['authorised'] || req.query.authorised || bot) {
     serverRenderAuthorised(req, res, next, htmlData, language, bot);
     return;
   }
