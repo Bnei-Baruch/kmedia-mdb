@@ -33,9 +33,8 @@ const DoNotRemove = localStorage; // DO NOT REMOVE - the import above does all t
 const BASE_URL   = process.env.REACT_APP_BASE_URL;
 let show_console = false;
 export default function serverRender(req, res, next, htmlData) {
-  if (req.originalUrl.indexOf('anonymous') !== -1) {
-    return;
-  }
+  if (req.originalUrl.includes('anonymous')) return;
+
   show_console = req.originalUrl.includes('ssr_debug');
   show_console && console.log('serverRender', req.originalUrl);
 
