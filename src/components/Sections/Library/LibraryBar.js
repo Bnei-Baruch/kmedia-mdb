@@ -9,6 +9,7 @@ import LibrarySettings from './LibrarySettings';
 import Share from './Share';
 import BookmarkButton from '../../shared/SaveBookmark/BookmarkButton';
 import LabelButton from '../../shared/SelectTopicsModal/LabelButton';
+import LessonsBySourceButton from './LessonsBySourceButton';
 
 const LibraryBar = (
   {
@@ -29,6 +30,7 @@ const LibraryBar = (
 
   return (
     <div className="source__header-toolbar">
+      <LessonsBySourceButton source={source} />
       <BookmarkButton source={source} />
       <LabelButton label={label} />
       <Button compact size="small" className="mobile-hidden" icon="print" onClick={print} />
