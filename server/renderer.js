@@ -201,12 +201,15 @@ async function serverRenderAuthorised(req, res, next, htmlData, language, bot) {
               // console.log(require('util').inspect(store.getState(), { showHidden: true, depth: 2 }));
               const storeData    = store.getState();
               const storeDataStr = serialize(storeData);
-              const rootDiv      = `<div id="root" class="${direction}" style="direction: ${direction}">${markup}</div>
-<script>
-  window.__botKCInfo = ${serialize(storeData.auth)};
-  window.__data = ${storeDataStr};
-  window.__i18n = ${i18nData};
-</script>`;
+              show_console && console.log('serverRender: redux data before return', storeData.auth);
+              const rootDiv = `
+                <div id="root" class="${direction}" style="direction: ${direction}">${markup}</div>
+                <script>
+                  window.__botKCInfo = ${serialize(storeData.auth)};
+                  window.__data = ${storeDataStr};
+                  window.__i18n = ${i18nData};
+                </script>
+                `;
 
               const html = htmlData
                 .replace(/<html lang="en">/, `<html lang="en" ${helmet.htmlAttributes.toString()} >`)
