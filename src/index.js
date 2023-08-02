@@ -77,7 +77,7 @@ function hydrateApp(kcInfo) {
 
 if (window.__isAuthApp) {
   initKC();
-} else if (window.__botKCInfo) {
+} else if (window.__botKCInfo?.user?.name === KC_BOT_USER_NAME) {
   hydrateApp(window.__botKCInfo);
 } else {
   initKC().then(info => hydrateApp(info));
