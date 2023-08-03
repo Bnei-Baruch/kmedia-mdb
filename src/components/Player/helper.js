@@ -4,7 +4,7 @@ import { MT_VIDEO, MT_AUDIO } from '../../helpers/consts';
 import { isEmpty } from '../../helpers/utils';
 import { PLAYER_POSITION_STORAGE_KEY } from './constants';
 
-export const DEFAULT_PLAYER_VOLUME     = 80;
+export const DEFAULT_PLAYER_VOLUME = 80;
 
 export const findPlayedFile = (item, info, lang, mt, q) => {
   if (isEmpty(item) || !info.isReady || (!item.files && !item.file)) return {};
@@ -26,7 +26,7 @@ export const findPlayedFile = (item, info, lang, mt, q) => {
 
   //can't find language - take default
   if (!byLang) {
-    return findPlayedFile(item, info, languages[0]);
+    return findPlayedFile(item, info, Object.keys(filesByLang)[0]);
   }
 
   //can't find media type - take other
