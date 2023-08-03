@@ -38,16 +38,13 @@ export const makeTagLinks = (tags = [], getTagById) =>
 const makeCollectionsLinks = (collections = {}, t, currentCollection) => {
   // filter out the current collection
   const colValues           = Object.values(collections).filter(c => ![CT_DAILY_LESSON, CT_SPECIAL_LESSON].includes(c.content_type));
-  const collectionsForLinks = currentCollection
-    ? colValues.filter(col => col.id !== currentCollection.id)
-    : colValues;
 
   const noSSeries = Array.from(intersperse(
-    collectionsForLinks.filter(c => c.content_type !== CT_LESSONS_SERIES).map(x =>
+    colValues.filter(c => c.content_type !== CT_LESSONS_SERIES).map(x =>
       <Link key={x.id} to={canonicalLink(x)}>{x.name}</Link>), ', '));
 
   const sSeries = Array.from(intersperse(
-    collectionsForLinks.filter(c => c.content_type === CT_LESSONS_SERIES).map(x =>
+    colValues.filter(c => c.content_type === CT_LESSONS_SERIES).map(x =>
       <Link key={x.id} to={canonicalLink(x)}>{x.name}</Link>), ', '));
   return { noSSeries, sSeries };
 };
@@ -79,7 +76,6 @@ const Info = ({ t }) => {
 
   const views = useSelector(state => recommended.getViews(id, state.recommended));
 
-  if (!unit) return null;
   const { noSSeries, sSeries } = makeCollectionsLinks(collections, t, isSingleMedia ? null : currentCollection);
   const isMultiLessons         = Object.values(collections).some(col => col.content_type === CT_LESSONS_SERIES || col.content_type === CT_CONGRESS);
   const episodeInfo            = getEpisodeInfo(ct, cIDs, currentCollection || Object.values(collections)[0], filmDate, t);
