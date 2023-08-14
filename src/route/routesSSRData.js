@@ -22,7 +22,7 @@ import {
   PAGE_NS_LESSONS,
   PAGE_NS_PROGRAMS,
   RABASH_PERSON_UID,
-  UNIT_PROGRAMS_TYPE,
+  UNIT_PROGRAMS_TYPE, CT_SOURCE, MT_TEXT,
 } from '../helpers/consts';
 import MediaHelper from './../helpers/media';
 import { getQuery } from '../helpers/url';
@@ -51,6 +51,10 @@ import * as searchSagas from './../sagas/search';
 import * as tagsSagas from './../sagas/tags';
 import { getLibraryContentFile } from '../components/Sections/Library/Library';
 import { selectLikutFile } from '../components/Sections/Likutim/Likut';
+import {
+  getTextFiles,
+  selectFile
+} from '../components/Pages/WithPlayer/widgets/UnitMaterials/Transcription/Transcription';
 
 export const home = store => {
   store.dispatch(homeActions.fetchData(true));
@@ -72,6 +76,15 @@ export const cuPage = (store, match) => {
       if (c) {
         store.dispatch(mdbActions.fetchCollection(c.id));
       }
+      const location = state?.router.location ?? {};
+      const query    = getQuery(location);
+      if (query.activeTab === 'transcription') {
+        const textFiles = getTextFiles(unit);
+        const language  = settingsSelectors.getContentLanguage(state.settings);
+        const file      = selectFile(textFiles, language);
+        return store.dispatch(assetsActions.doc2html(file.id));
+      }
+      return true;
     });
 };
 

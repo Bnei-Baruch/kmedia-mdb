@@ -21,56 +21,59 @@ import * as shapes from '../../../../../shapes';
 import MenuLanguageSelector from '../../../../../Language/Selector/MenuLanguageSelector';
 import UnitBar from '../UnitBar';
 
+
+export const selectFile = (textFiles, language) => {
+  const selectedFiles = textFiles.filter(x => x.language === language);
+
+  if (selectedFiles.length <= 1) {
+    // use the only file found OR no files by language - use first text file
+    return selectedFiles[0];
+  }
+
+  // many files by language - get the largest - it is probably the transcription
+  return selectedFiles.reduce((acc, file) => (acc.size < file.size ? file : acc));
+};
+
+export const getTextFiles = (unit, type) => {
+  if (!unit || !Array.isArray(unit.files)) {
+    return [];
+  }
+
+  if (!type) {
+    // filter text files, but not PDF
+    return unit.files.filter(x => {
+      return MediaHelper.IsText(x) && !MediaHelper.IsPDF(x) && x.insert_type !== INSERT_TYPE_SUMMARY;
+    });
+  }
+
+  return getUnitDerivedArticle(unit, type);
+};
+
+export const getUnitDerivedArticle = (unit, type) =>{
+  // suitable for having either derived articles or research materials only
+  const ct    = type === 'articles' ? CT_ARTICLE : CT_RESEARCH_MATERIAL;
+  const units = Object.values(unit.derived_units || {})
+    .filter(x => x.content_type === ct
+      && (x.files || []).some(f => f.type === MT_TEXT));
+
+  units.forEach(unit => {
+    unit.files.forEach(file => file.title = unit.name);
+  });
+
+  return units.map(x => x.files)
+    .reduce((acc, files) => [...acc, ...files], []);
+}
+
 class Transcription extends Component {
   static contextType = DeviceInfoContext;
 
   state = {};
 
-  static selectFile = (textFiles, language) => {
-    const selectedFiles = textFiles.filter(x => x.language === language);
-
-    if (selectedFiles.length <= 1) {
-      // use the only file found OR no files by language - use first text file
-      return selectedFiles[0];
-    }
-
-    // many files by language - get the largest - it is probably the transcription
-    return selectedFiles.reduce((acc, file) => (acc.size < file.size ? file : acc));
-  };
-
-  static getTextFiles = (unit, type) => {
-    if (!unit || !Array.isArray(unit.files)) {
-      return [];
-    }
-
-    if (!type) {
-      // filter text files, but not PDF
-      return unit.files.filter(x => MediaHelper.IsText(x) && !MediaHelper.IsPDF(x) && x.insert_type !== INSERT_TYPE_SUMMARY);
-    }
-
-    return Transcription.getUnitDerivedArticle(unit, type);
-  };
-
-  static getUnitDerivedArticle(unit, type) {
-    // suitable for having either derived articles or research materials only
-    const ct    = type === 'articles' ? CT_ARTICLE : CT_RESEARCH_MATERIAL;
-    const units = Object.values(unit.derived_units || {})
-      .filter(x => x.content_type === ct
-        && (x.files || []).some(f => f.type === MT_TEXT));
-
-    units.forEach(unit => {
-      unit.files.forEach(file => file.title = unit.name);
-    });
-
-    return units.map(x => x.files)
-      .reduce((acc, files) => [...acc, ...files], []);
-  }
-
   static getDerivedStateFromProps(props, state) {
     const { contentLanguage, uiLanguage, unit, type, location } = props;
     const { selectedFileId }                                    = getQuery(location);
 
-    const textFiles = Transcription.getTextFiles(unit, type);
+    const textFiles = getTextFiles(unit, type);
     const languages = uniq(textFiles.map(x => x.language));
     let newLanguage = selectSuitableLanguage(contentLanguage, uiLanguage, languages);
     if (!newLanguage) {
@@ -90,7 +93,7 @@ class Transcription extends Component {
     }
 
     const fileFromLocation = textFiles.find(f => f.id === selectedFileId);
-    const selectedFile     = fileFromLocation || Transcription.selectFile(textFiles, newLanguage);
+    const selectedFile     = fileFromLocation || selectFile(textFiles, newLanguage);
     return { selectedFile, languages, language: newLanguage, textFiles, unit_id: unit.id };
   }
 
@@ -166,7 +169,7 @@ class Transcription extends Component {
       return;
     }
 
-    const selectedFile = Transcription.selectFile(textFiles, newLanguage);
+    const selectedFile = selectFile(textFiles, newLanguage);
 
     this.setState({ selectedFile, language: newLanguage });
   };
