@@ -55,6 +55,7 @@ import {
   getTextFiles,
   selectFile
 } from '../components/Pages/WithPlayer/widgets/UnitMaterials/Transcription/Transcription';
+import { actions } from '../redux/modules/playlist';
 
 export const home = store => {
   store.dispatch(homeActions.fetchData(true));
@@ -76,6 +77,7 @@ export const cuPage = (store, match) => {
       if (c) {
         store.dispatch(mdbActions.fetchCollection(c.id));
       }
+      store.dispatch(actions.build(c?.id, unit.id));
       const location = state?.router.location ?? {};
       const query    = getQuery(location);
       if (query.activeTab === 'transcription') {

@@ -12,6 +12,7 @@ import AppendChronicle from './AppendChronicle';
 import { DeviceInfoContext } from '../../helpers/app-contexts';
 import UpdateLocation from './UpdateLocation';
 import { useKeyboardControl } from './hooks/useKeyboardControl';
+import { isPlayerLoaded } from '../../pkg/jwpAdapter/adapter';
 
 const HIDE_CONTROLS_TIMEOUT = 4000;
 
