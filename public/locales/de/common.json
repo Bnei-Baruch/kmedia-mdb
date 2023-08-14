@@ -764,7 +764,8 @@
     "bookmark-button-alt": "Create a bookmark and save it in the personal area",
     "tag-button-alt": "Tag the selected text in the Topics section",
     "docbar-title": "You have selected an excerpt from the text, what would you like to do?",
-    "play-from-text": "Play the chosen excerpt"
+    "play-from-text": "Play the chosen excerpt",
+    "lessons-by-source": "To all lessons on the article"
   },
   "personal": {
     "subsNewUnits": "new episodes",
