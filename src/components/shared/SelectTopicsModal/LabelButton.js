@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { Button, Popup, } from 'semantic-ui-react';
 
 import { SectionLogo } from '../../../helpers/images';
 import SelectTopicsModal from './SelectTopicsModal';
 
-const LabelButton = ({ t, label }) => {
+const LabelButton = ({ label }) => {
   const [open, setOpen] = useState();
+  const { t }           = useTranslation();
 
   const handleOpen  = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -35,9 +36,6 @@ const LabelButton = ({ t, label }) => {
   );
 };
 
-LabelButton.propTypes = {
-  t: PropTypes.func.isRequired,
-  label: PropTypes.object.isRequired,
-};
+LabelButton.propTypes = { label: PropTypes.object.isRequired };
 
-export default withTranslation()(LabelButton);
+export default LabelButton;

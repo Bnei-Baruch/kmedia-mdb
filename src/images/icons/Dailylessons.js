@@ -1,6 +1,7 @@
 import * as React from "react";
 
 function SvgDailylessons(props) {
+  const { color = '#2185d0' } = props;
     return (
         <svg
             fill="none"
@@ -13,12 +14,12 @@ function SvgDailylessons(props) {
             <path
                 d="M8 6h27v38H8zM40 16h4v25h-4z"
                 fill="#fff"
-                stroke="#2185d0"
+                stroke={color}
                 strokeLinecap="square"
                 strokeWidth={2}
             />
             <path d="M42 8l2 6v2h-4v-2z" fill="#fff" />
-            <g stroke="#2185d0" strokeWidth={2}>
+            <g stroke={color} strokeWidth={2}>
                 <path d="M42 6v2m0 0l-2 6v2h4v-2z" strokeLinecap="square" />
                 <path
                     d="M40 41h4v2a1 1 0 01-1 1h-2a1 1 0 01-1-1z"

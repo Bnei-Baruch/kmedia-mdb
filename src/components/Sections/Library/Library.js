@@ -87,7 +87,7 @@ const Library = ({ data, source, downloadAllowed }) => {
   }, [source, _language]);
 
   const file    = getLibraryContentFile(data?.[language], source);
-  const fetched = doc2htmlById.hasOwnProperty(file.id);
+  const fetched = !!doc2htmlById[file.id]?.data;
   useEffect(() => {
     if (file.id && !fetched)
       dispatch(actions.doc2html(file.id));

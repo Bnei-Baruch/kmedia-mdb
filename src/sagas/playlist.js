@@ -52,7 +52,7 @@ function* build(action) {
   const idx     = data.items.findIndex(x => x.id === cuId);
   const fetched = {
     from: Math.max(0, idx - ONE_FETCH_SIZE / 2),
-    to: Math.min(data.items.length - 1, idx + ONE_FETCH_SIZE / 2)
+    to: Math.min(data.items.length, idx + ONE_FETCH_SIZE / 2)
   };
   yield put(actions.buildSuccess({ ...data, language, mediaType, cuId, cId, fetched }));
   const uids = data.items.slice(fetched.from, fetched.to).map(x => x.id);
