@@ -21,6 +21,7 @@ import Download from '../../shared/Download/Download';
 import ScrollToSearch from '../../shared/DocToolbar/ScrollToSearch';
 import TagsByUnit from '../../shared/TagsByUnit';
 import LikutAudioPlayer from './LikutAudioPlayer';
+import Helmets from '../../shared/Helmets';
 
 const DEFAULT_LANGUAGES      = [LANG_ENGLISH, LANG_HEBREW];
 export const selectLikutFile = (files, language, idx = 0) => {
@@ -111,6 +112,7 @@ const Likut                  = () => {
   const labelSource        = { content_unit: unit.id, language: lang };
 
   let mp3File = files.find(f => f.language === lang && f.type === MT_AUDIO);
+  const title = `${t('likutim.item-header')} ${name}`;
 
   return (
     <div
@@ -125,8 +127,9 @@ const Likut                  = () => {
         <Grid.Column mobile={16} tablet={16 - relatedLessonsSize} computer={16 - relatedLessonsSize}>
           <div className="section-header likut">
             <Header as="h2" className="topics__title-font">
+              <Helmets.Basic title={title} />
               <Header.Content>
-                {`${t('likutim.item-header')} ${name}`}
+                {title}
                 <Header.Subheader>{t('values.date', { date: film_date })}</Header.Subheader>
               </Header.Content>
             </Header>
