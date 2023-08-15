@@ -6,14 +6,17 @@ import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
-import { LANG_ENGLISH, LANG_HEBREW, LANG_RUSSIAN, LANG_SPANISH } from '../../../helpers/consts';
+import { LANG_ENGLISH, LANG_HEBREW, LANG_RUSSIAN, LANG_SPANISH, KC_BOT_USER_NAME } from '../../../helpers/consts';
 import { getQuery } from '../../../helpers/url';
 import banner from '../../../images/DonationBanner.jpg';
 import { getLanguageDirection, isLanguageRtl } from '../../../helpers/i18n-utils';
 import { selectors as settings } from '../../../redux/modules/settings';
+import { selectors } from '../../../redux/modules/auth';
 
 function DonationPopup({ t }) {
+  const user       = useSelector(state => selectors.getUser(state.auth));
   const shouldOpen = () => {
+    if (user?.name === KC_BOT_USER_NAME) return false;
     const query = getQuery(location);
     if (!!query.showPopup)
       return true;
@@ -39,7 +42,7 @@ function DonationPopup({ t }) {
   const [open, setOpen]    = React.useState(shouldOpen());
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
-  const isRTL = isLanguageRtl(language);
+  const isRTL   = isLanguageRtl(language);
   const langDir = getLanguageDirection(language);
 
   const { linkLang, utmTerm } = getDonateLinkDetails(language);
