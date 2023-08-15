@@ -83,6 +83,17 @@ function* fetchTimeCode(action) {
   }
 }
 
+function* mergeKiteiMakor(action) {
+  const { id, lang } = action.payload;
+
+  try {
+    const { data } = yield call(Api.getAsset, `api/km_audio/build/${id}?language=${lang}`);
+    yield put(actions.mergeKiteiMAkorSuccess({ id, lang, status: data }));
+  } catch (e) {
+    yield put(actions.mergeKiteiMAkorFailure({ id, lang, status: e }));
+  }
+}
+
 function* watchUnzip() {
   yield takeLatest(types.UNZIP, unzip);
 }
@@ -123,6 +134,10 @@ function* watchFetchTimeCode() {
   yield takeLatest([types.FETCH_TIME_CODE], fetchTimeCode);
 }
 
+function* watchMergeKiteiMakor() {
+  yield takeLatest(types.MERGE_KITEI_MAKOR, mergeKiteiMakor);
+}
+
 export const sagas = [
   watchUnzip,
   watchUnzipList,
@@ -131,4 +146,5 @@ export const sagas = [
   watchFetchAsset,
   watchFetchPerson,
   watchFetchTimeCode,
+  watchMergeKiteiMakor,
 ];
