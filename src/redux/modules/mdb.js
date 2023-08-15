@@ -413,7 +413,7 @@ const onReceiveCollections = (state, action) => {
     if (y.content_units) {
 
       y.ccuNames = y.ccuNames || {};
-      y.cuIDs    = y.content_units.filter(cu => !!cu).map(cu => {
+      y.cuIDs = y.content_units.filter(cu => !!cu).map(cu => {
         const ccuName     = cu.name_in_collection;
         y.ccuNames[cu.id] = ccuName;
 

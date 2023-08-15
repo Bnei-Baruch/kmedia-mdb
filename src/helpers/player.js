@@ -160,6 +160,7 @@ export const playlist = collection => {
       return acc.concat(v);
     }, []);
   } else {
+    units.sort((a, b) => new Date(b.film_date) - new Date(a.film_date));
     items = units.map(x => playableItem(x));
   }
 

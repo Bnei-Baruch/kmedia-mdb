@@ -24,7 +24,7 @@ function* fetchLikutim() {
       yield* callUnitsStats({ content_type: CT_LIKUTIM, language, pageSize }, namespace);
 
       yield put(mdbActions.receiveContentUnits(data.content_units));
-      yield put(actions.fetchLikutimSuccess(data))
+      yield put(actions.fetchLikutimSuccess(data));
     }
   } catch (err) {
     yield put(actions.fetchLikutimFailure(err));
@@ -35,6 +35,4 @@ function* watchFetchLikutim() {
   yield takeLatest(types.FETCH_LIKUTIM, fetchLikutim);
 }
 
-export const sagas = [
-  watchFetchLikutim,
-]
+export const sagas = [watchFetchLikutim];

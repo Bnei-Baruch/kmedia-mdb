@@ -19,8 +19,8 @@ import Link from '../../../components/Language/MultiLanguageLink';
 import WipErr from '../../shared/WipErr/WipErr';
 import Download from '../../shared/Download/Download';
 import ScrollToSearch from '../../shared/DocToolbar/ScrollToSearch';
-import AudioPlayer from '../../shared/AudioPlayer';
 import TagsByUnit from '../../shared/TagsByUnit';
+import LikutAudioPlayer from './LikutAudioPlayer';
 
 const DEFAULT_LANGUAGES      = [LANG_ENGLISH, LANG_HEBREW];
 export const selectLikutFile = (files, language, idx = 0) => {
@@ -110,7 +110,7 @@ const Likut                  = () => {
   const bookmarkSource     = { subject_uid: unit.id, subject_type: unit.content_type, language: lang };
   const labelSource        = { content_unit: unit.id, language: lang };
 
-  const mp3File = files.find(f => f.language === lang && f.type === MT_AUDIO);
+  let mp3File = files.find(f => f.language === lang && f.type === MT_AUDIO);
 
   return (
     <div
@@ -170,7 +170,7 @@ const Likut                  = () => {
             </Grid>
           </div>
           <div className="likut__audio">
-            {mp3File && <AudioPlayer mp3={mp3File} />}
+            <LikutAudioPlayer mp3={mp3File} id={id} lang={lang} />
           </div>
 
           {/* content */}

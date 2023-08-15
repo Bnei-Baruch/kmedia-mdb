@@ -21,7 +21,7 @@ const AudioPlayer = ({ mp3, t }) => {
     if (!mp3) {
       clearAudioInfo();
     } else {
-      const newAudioInfo = { url: physicalFile(mp3, true), name: mp3.name };
+      const newAudioInfo = { url: mp3, name: mp3.name };
       if (audioInfo?.url !== newAudioInfo.url) {
         setAudioInfo(newAudioInfo);
         setPlaying(false);
