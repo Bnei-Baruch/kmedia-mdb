@@ -5,20 +5,20 @@ import AudioPlayer from '../../shared/AudioPlayer';
 import { actions, selectors } from '../../../redux/modules/assets';
 import { assetUrl } from '../../../helpers/Api';
 
-const LikutAudioPlayer = ({ mp3, id, lang }) => {
+const LikutAudioPlayer = ({ file, id, lang }) => {
   const status   = useSelector(state => selectors.getMergeStatus(state.assets)(id, lang));
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!mp3 && !status) {
+    if (!file && !status) {
       dispatch(actions.mergeKiteiMAkor({ id, lang }));
     }
-  }, [mp3, id, lang, status]);
+  }, [file, id, lang, status]);
 
-  if (!mp3 && status !== 'ok') return null;
+  if (!file && status !== 'ok') return null;
 
-  const url = mp3 || assetUrl(`api/km_audio/file/${id}?language=${lang}`);
-  return <AudioPlayer mp3={url} />;
+  const url = file?.url || assetUrl(`api/km_audio/file/${id}?language=${lang}`);
+  return <AudioPlayer file={file} url={url} name={file.name} />;
 };
 
 export default LikutAudioPlayer;
