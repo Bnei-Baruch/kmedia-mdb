@@ -170,7 +170,7 @@ const Likut                  = () => {
             </Grid>
           </div>
           <div className="likut__audio">
-            <LikutAudioPlayer mp3={mp3File} id={id} lang={lang} />
+            <LikutAudioPlayer file={mp3File} id={id} lang={lang} />
           </div>
 
           {/* content */}
