@@ -18,7 +18,7 @@ const LikutAudioPlayer = ({ file, id, lang }) => {
   if (!file && status !== 'ok') return null;
 
   const url = file?.url || assetUrl(`api/km_audio/file/${id}?language=${lang}`);
-  return <AudioPlayer file={file} url={url} name={file.name} />;
+  return <AudioPlayer file={file} url={url} name={file?.name} />;
 };
 
 export default LikutAudioPlayer;
