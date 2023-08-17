@@ -1,7 +1,6 @@
 import { PLAYER_ACTIONS_BY_EVENT, actions } from '../../redux/modules/player';
 import { JWPLAYER_ID, VS_NAMES } from '../../helpers/consts';
 import { noop } from '../../helpers/utils';
-import isFunction from 'lodash/isFunction';
 
 export const LOCALSTORAGE_MUTE    = 'jwplayer.mute';
 export const LOCALSTORAGE_QUALITY = 'jwplayer.qualityLabel';
@@ -14,6 +13,7 @@ export const getQualitiesFromLS   = () => {
 };
 
 export const setup = conf => {
+  if (!isPlayerLoaded()) return;
   const jwp = window.jwplayer(JWPLAYER_ID);
   jwp.setup(conf);
 };
@@ -70,8 +70,8 @@ export const setPip         = () => functionByName('setPip', noop, true);
  * check if jwplayer builded, use if not need rerender on build
  * @returns {boolean}
  */
-export const isPlayerLoaded = () => typeof window !== 'undefined' && isFunction(window.jwplayer);
-export const isPlayerReady  = () => window.jwplayer()?.id === JWPLAYER_ID;
+export const isPlayerLoaded = () => typeof window !== 'undefined';
+export const isPlayerReady  = () => isPlayerLoaded() && window.jwplayer()?.id === JWPLAYER_ID;
 
 const PLAYER_EVENTS = [
   'ready',
@@ -90,6 +90,7 @@ const PLAYER_EVENTS = [
   'buffer'
 ];
 export const init   = (dispatch, deviceInfo) => {
+  if (!isPlayerLoaded()) return;
   const player = window.jwplayer();
   //for debug, catch all jwplayer events
   /*player.on('all', (name, e) => {

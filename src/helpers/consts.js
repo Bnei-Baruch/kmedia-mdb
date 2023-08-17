@@ -776,7 +776,7 @@ export const CT_LESSONS = [CT_LESSON_PART, CT_DAILY_LESSON];
 
 export const FN_SHOW_LESSON_AS_UNITS = [FN_SOURCES_MULTI, FN_TOPICS_MULTI, FN_PERSON, FN_LANGUAGES, FN_ORIGINAL_LANGUAGES, FN_MEDIA_TYPE];
 
-export const JWPLAYER_ID = 'jwplayer';
+export const JWPLAYER_ID = 'will_replaced_with_jwplayer';
 
 export const PLAYER_OVER_MODES = {
   settings: 'settings',
@@ -790,4 +790,4 @@ export const PLAYER_OVER_MODES = {
   none: null,
 };
 
-export const KC_BOT_USER_NAME = "@__||bot||__@"
+export const KC_BOT_USER_NAME = '@__||bot||__@';

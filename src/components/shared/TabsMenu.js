@@ -4,6 +4,7 @@ import { useLocation } from 'react-router-dom';
 import { Menu, Ref } from 'semantic-ui-react';
 
 import { getQuery } from '../../helpers/url';
+import Link from '../Language/MultiLanguageLink';
 
 const paramsFromLocation = location => {
   if (location.state && location.state.active)
@@ -38,26 +39,30 @@ const TabsMenu = ({ items = [], active = '' }) => {
     }
   }, [scrollRef, activeLocation, isHighLighted]);
 
+  const renderTab = item => {
+    const { name, label } = item;
+    const _props          = {
+      name: name,
+      className: `tab-${name}`,
+      active: internalActive === name,
+      onClick: handleActiveChange,
+      content: label
+    };
+    if (!_props.active && name === 'transcription') {
+      _props.as     = Link;
+      const _search = new URLSearchParams(location.search);
+      _search.set('activeTab', name);
+      _props.to = { pathname: location.pathname, search: _search.toString() };
+    }
+    return (<Menu.Item key={name} {..._props} />
+    );
+  };
+
   return (
     <div className="unit-materials">
       <Ref innerRef={scrollRef}>
         <Menu tabular secondary pointing color="blue" className="no_print">
-          {
-            items.map(item => {
-              const { name, label } = item;
-              return (
-                <Menu.Item
-                  key={name}
-                  name={name}
-                  className={`tab-${name}`}
-                  active={internalActive === name}
-                  onClick={handleActiveChange}
-                >
-                  {label}
-                </Menu.Item>
-              );
-            })
-          }
+          {items.map(renderTab)}
         </Menu>
       </Ref>
       {activeItem ? activeItem.component : null}
