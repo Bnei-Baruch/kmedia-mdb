@@ -270,14 +270,18 @@ function* fetchViews(action) {
 export function* fetchViewsByUIDs(uids) {
   uids = yield select(state => uids.filter(uid => recommended.getViews(uid, state.recommended) === -1));
   if (uids.length > 0) {
-    const { data } = yield call(Api.views, uids);
-    const views    = Array.isArray(data.views) && data.views.length > 0
-      ? uids.reduce((acc, uid, i) => {
-        acc[uid] = data.views[i];
-        return acc;
-      }, {})
-      : [];
-    yield put(actions.receiveViews(views));
+    try {
+      const { data } = yield call(Api.views, uids);
+      const views    = Array.isArray(data.views) && data.views.length > 0
+        ? uids.reduce((acc, uid, i) => {
+          acc[uid] = data.views[i];
+          return acc;
+        }, {})
+        : [];
+      yield put(actions.receiveViews(views));
+    } catch (e) {
+      console.error('error load views', e);
+    }
   }
 }
 
