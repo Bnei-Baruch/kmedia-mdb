@@ -17,7 +17,7 @@ import { hydrateRoot } from 'react-dom/client';
 import ReactGA from 'react-ga';
 import { createBrowserHistory } from 'history';
 
-import { DEFAULT_LANGUAGE, LANG_UKRAINIAN } from './helpers/consts';
+import { DEFAULT_LANGUAGE, LANG_UKRAINIAN, KC_BOT_USER_NAME } from './helpers/consts';
 import i18n from './helpers/i18nnext';
 import createStore from './redux/createStore';
 import { actions as mdb } from './redux/modules/mdb';
@@ -77,7 +77,7 @@ function hydrateApp(kcInfo) {
 
 if (window.__isAuthApp) {
   initKC();
-} else if (window.__botKCInfo) {
+} else if (window.__botKCInfo?.user?.name === KC_BOT_USER_NAME) {
   hydrateApp(window.__botKCInfo);
 } else {
   initKC().then(info => hydrateApp(info));

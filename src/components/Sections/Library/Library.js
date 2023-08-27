@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { Segment } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 
@@ -9,7 +9,7 @@ import { selectors as settings } from '../../../redux/modules/settings';
 import { actions, selectors } from '../../../redux/modules/assets';
 import { selectSuitableLanguage } from '../../../helpers/language';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
-import { isEmpty, physicalFile } from '../../../helpers/utils';
+import { physicalFile } from '../../../helpers/utils';
 import { updateQuery } from '../../../helpers/url';
 import PDF, { isTaas, startsFrom } from '../../shared/PDF/PDF';
 import ScrollToSearch from '../../shared/DocToolbar/ScrollToSearch';
@@ -43,7 +43,7 @@ export const buildBookmarkSource = source => {
   return s;
 };
 
-export const buildLabelData = source => {
+export const buildLabelData        = source => {
   const { uid, isGr } = checkRabashGroupArticles(source);
   const s             = { content_unit: uid };
   if (isGr) {
@@ -52,48 +52,46 @@ export const buildLabelData = source => {
 
   return s;
 };
+export const getLibraryContentFile = (data = {}, sourceId) => {
+  const { pdf, docx, doc } = data;
+  if (pdf && isTaas(sourceId))
+    return { url: physicalFile(pdf), isPDF: true, name: pdf.name };
 
-const Library = ({ data, source, downloadAllowed, t }) => {
-  const location                    = useLocation();
-  const navigate                    = useNavigate();
-  const [pageNumber, setPageNumber] = useState(getPageFromLocation(location));
-  const [language, setLanguage]     = useState(null);
-  const [languages, setLanguages]   = useState([]);
+  const file = docx || doc;
+  if (!file)
+    return {};
 
+  return { url: physicalFile(file, true), name: file.name, id: file.id };
+};
+
+const Library = ({ data, source, downloadAllowed }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
+  const location           = useLocation();
+  const navigate           = useNavigate();
+  const { t }              = useTranslation();
 
   const doc2htmlById    = useSelector(state => selectors.getDoc2htmlById(state.assets));
   const uiLanguage      = useSelector(state => settings.getLanguage(state.settings));
   const contentLanguage = useSelector(state => settings.getContentLanguage(state.settings, location));
 
-  useEffect(() => {
-    if (data) {
-      const languages = Object.keys(data);
-      setLanguages(languages);
-    }
-  }, [data]);
+  const [pageNumber, setPageNumber] = useState(getPageFromLocation(location));
+
+  const languages = data ? Object.keys(data) : [];
+  const _language = selectSuitableLanguage(contentLanguage, uiLanguage, languages);
+  const dispatch  = useDispatch();
+
+  const [language, setLanguage] = useState(_language);
 
   useEffect(() => {
-    const newLanguage = selectSuitableLanguage(contentLanguage, uiLanguage, languages);
-    if (newLanguage) {
-      setLanguage(newLanguage);
-    }
-  }, [contentLanguage, uiLanguage, languages]);
+    source && setLanguage(selectSuitableLanguage(contentLanguage, uiLanguage, languages));
+  }, [source, _language]);
 
-  const dispatch = useDispatch();
-
+  const file    = getLibraryContentFile(data?.[language], source);
+  const fetched = !!doc2htmlById[file.id]?.data;
   useEffect(() => {
-    if (data && language && !isEmpty(source)) {
-      const lData = data[language];
-
-      // In case of TAS we prefer PDF, otherwise HTML
-      // pdf.js fetch it on his own (smarter than us), we fetch it for nothing.
-      if (lData && (!lData.pdf || !isTaas(source))) {
-        const { id } = lData.docx || lData.doc || {};
-        id && dispatch(actions.doc2html(id));
-      }
-    }
-  }, [data, language, source, dispatch]);
+    if (file.id && !fetched)
+      dispatch(actions.doc2html(file.id));
+  }, [file.id, fetched]);
 
   if (!data) {
     return <Segment basic>&nbsp;</Segment>;
@@ -114,10 +112,10 @@ const Library = ({ data, source, downloadAllowed, t }) => {
 
   const getAudioPlayer = () => {
     const { mp3 } = data[language] || {};
-    return mp3 ? <AudioPlayer mp3={mp3} /> : null;
-  }
+    return mp3 ? <AudioPlayer file={mp3} /> : null;
+  };
 
-  const getLanguageBar = () => {
+  const getLanguageBar      = () => {
     const languageBar = languages.length > 0 &&
       <div className="library-language-container">
         {!isMobileDevice && getAudioPlayer()}
@@ -132,26 +130,8 @@ const Library = ({ data, source, downloadAllowed, t }) => {
 
     return languageBar;
   };
-
-  const languageBar = getLanguageBar();
-
-  const getContent = () => {
-    if (!data?.[language])
-      return null;
-
-    const { pdf, docx, doc } = data[language];
-    if (pdf && isTaas(source))
-      return { url: physicalFile(pdf), isPDF: true, name: pdf.name };
-
-    const file = docx || doc;
-    if (!file)
-      return null;
-
-    return { url: physicalFile(file, true), name: file.name, ...doc2htmlById[file.id] };
-  };
-
-  const content = getContent() || {};
-
+  const languageBar         = getLanguageBar();
+  const content             = (file.isPDF || !file) ? file : { ...file, ...doc2htmlById[file.id] };
   const getContentToDisplay = () => {
     const { wip, err, data: contentData, isPDF, url } = content;
 
@@ -214,7 +194,6 @@ Library.propTypes = {
   source: PropTypes.string,
   data: PropTypes.any,
   downloadAllowed: PropTypes.bool.isRequired,
-  t: PropTypes.func.isRequired,
 };
 
-export default withTranslation()(Library);
+export default Library;

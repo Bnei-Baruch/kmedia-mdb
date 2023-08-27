@@ -24,6 +24,12 @@ const FETCH_PERSON_SUCCESS    = 'Assets/FETCH_PERSON_SUCCESS';
 const FETCH_PERSON_FAILURE    = 'Assets/FETCH_PERSON_FAILURE';
 const FETCH_TIME_CODE         = 'Assets/FETCH_TIME_CODE';
 const FETCH_TIME_CODE_SUCCESS = 'Assets/FETCH_TIME_CODE_SUCCESS';
+const MARGIN_AUDIO            = 'Assets/MARGIN_AUDIO';
+const MARGIN_AUDIO_SUCCESS    = 'Assets/MARGIN_AUDIO_SUCCESS';
+
+const MERGE_KITEI_MAKOR         = 'MERGE_KITEI_MAKOR';
+const MERGE_KITEI_MAKOR_SUCCESS = 'MERGE_KITEI_MAKOR_SUCCESS';
+const MERGE_KITEI_MAKOR_FAILURE = 'MERGE_KITEI_MAKOR_FAILURE';
 
 export const types = {
   UNZIP,
@@ -41,30 +47,36 @@ export const types = {
   FETCH_ASSET_FAILURE,
   FETCH_PERSON,
   FETCH_TIME_CODE,
+  MERGE_KITEI_MAKOR,
 };
 
 /* Actions */
 
-const unzip                = createAction(UNZIP);
-const unzipSuccess         = createAction(UNZIP_SUCCESS, (id, data) => ({ id, data }));
-const unzipFailure         = createAction(UNZIP_FAILURE, (id, err) => ({ id, err }));
-const unzipList            = createAction(UNZIP_LIST);
-const unzipListSuccess     = createAction(UNZIP_LIST_SUCCESS);
-const unzipListFailure     = createAction(UNZIP_LIST_FAILURE);
-const doc2html             = createAction(DOC2HTML);
-const doc2htmlSuccess      = createAction(DOC2HTML_SUCCESS, (id, data) => ({ id, data }));
-const doc2htmlFailure      = createAction(DOC2HTML_FAILURE, (id, err) => ({ id, err }));
-const sourceIndex          = createAction(SOURCE_INDEX);
-const sourceIndexSuccess   = createAction(SOURCE_INDEX_SUCCESS, (id, data) => ({ id, data }));
-const sourceIndexFailure   = createAction(SOURCE_INDEX_FAILURE, (id, err) => ({ id, err }));
-const fetchAsset           = createAction(FETCH_ASSET);
-const fetchAssetSuccess    = createAction(FETCH_ASSET_SUCCESS);
-const fetchAssetFailure    = createAction(FETCH_ASSET_FAILURE);
-const fetchPerson          = createAction(FETCH_PERSON);
-const fetchPersonSuccess   = createAction(FETCH_PERSON_SUCCESS);
-const fetchPersonFailure   = createAction(FETCH_PERSON_FAILURE);
-const fetchTimeCode        = createAction(FETCH_TIME_CODE, (uid, language) => ({ uid, language }));
-const fetchTimeCodeSuccess = createAction(FETCH_TIME_CODE_SUCCESS);
+const unzip                  = createAction(UNZIP);
+const unzipSuccess           = createAction(UNZIP_SUCCESS, (id, data) => ({ id, data }));
+const unzipFailure           = createAction(UNZIP_FAILURE, (id, err) => ({ id, err }));
+const unzipList              = createAction(UNZIP_LIST);
+const unzipListSuccess       = createAction(UNZIP_LIST_SUCCESS);
+const unzipListFailure       = createAction(UNZIP_LIST_FAILURE);
+const doc2html               = createAction(DOC2HTML);
+const doc2htmlSuccess        = createAction(DOC2HTML_SUCCESS, (id, data) => ({ id, data }));
+const doc2htmlFailure        = createAction(DOC2HTML_FAILURE, (id, err) => ({ id, err }));
+const sourceIndex            = createAction(SOURCE_INDEX);
+const sourceIndexSuccess     = createAction(SOURCE_INDEX_SUCCESS, (id, data) => ({ id, data }));
+const sourceIndexFailure     = createAction(SOURCE_INDEX_FAILURE, (id, err) => ({ id, err }));
+const fetchAsset             = createAction(FETCH_ASSET);
+const fetchAssetSuccess      = createAction(FETCH_ASSET_SUCCESS);
+const fetchAssetFailure      = createAction(FETCH_ASSET_FAILURE);
+const fetchPerson            = createAction(FETCH_PERSON);
+const fetchPersonSuccess     = createAction(FETCH_PERSON_SUCCESS);
+const fetchPersonFailure     = createAction(FETCH_PERSON_FAILURE);
+const fetchTimeCode          = createAction(FETCH_TIME_CODE, (uid, language) => ({ uid, language }));
+const fetchTimeCodeSuccess   = createAction(FETCH_TIME_CODE_SUCCESS);
+const marginAudio            = createAction(MARGIN_AUDIO, (uid, language) => ({ uid, language }));
+const marginAudioSuccess     = createAction(MARGIN_AUDIO_SUCCESS);
+const mergeKiteiMAkor        = createAction(MERGE_KITEI_MAKOR);
+const mergeKiteiMAkorSuccess = createAction(MERGE_KITEI_MAKOR_SUCCESS);
+const mergeKiteiMAkorFailure = createAction(MERGE_KITEI_MAKOR_FAILURE);
 
 export const actions = {
   unzip,
@@ -87,6 +99,11 @@ export const actions = {
   fetchPersonFailure,
   fetchTimeCode,
   fetchTimeCodeSuccess,
+  marginAudio,
+  marginAudioSuccess,
+  mergeKiteiMAkor,
+  mergeKiteiMAkorSuccess,
+  mergeKiteiMAkorFailure,
 };
 
 /* Reducer */
@@ -105,7 +122,8 @@ const initialState = {
     wip: false,
     err: null,
   },
-  timeCode: new Map()
+  timeCode: new Map(),
+  mergedStatus: {}
 };
 
 const onSSRPrepare = draft => {
@@ -212,6 +230,16 @@ const onFetchTimeCodeSuccess = (draft, payload) => {
   draft.timeCode = timeCode;
 };
 
+const onMerge        = (state, { id, lang }) => {
+  state.mergedStatus[buildKey(id, lang)] = 'wip';
+};
+const onMergeSuccess = (state, { id, lang, status = 'ok' }) => {
+  state.mergedStatus[buildKey(id, lang)] = status;
+};
+const onMergeFailure = (state, { id, lang, status = 'none' }) => {
+  state.mergedStatus[buildKey(id, lang)] = status;
+};
+const buildKey       = (uid, lang) => `${uid}_${lang}`;
 export const reducer = handleActions({
   [ssr.PREPARE]: onSSRPrepare,
 
@@ -240,23 +268,30 @@ export const reducer = handleActions({
 
   [FETCH_TIME_CODE]: onFetchTimeCode,
   [FETCH_TIME_CODE_SUCCESS]: onFetchTimeCodeSuccess,
+
+  [MERGE_KITEI_MAKOR]: onMerge,
+  [MERGE_KITEI_MAKOR_SUCCESS]: onMergeSuccess,
+  [MERGE_KITEI_MAKOR_FAILURE]: onMergeFailure,
 }, initialState);
 
 /* Selectors */
 
-const getZipIndexById    = state => state.zipIndexById;
-const nestedGetZipById   = state => id => state.zipIndexById[id];
-const getDoc2htmlById    = state => state.doc2htmlById;
-const getSourceIndexById = state => state.sourceIndexById;
-const getAsset           = state => state.asset;
-const getPerson          = state => state.person;
-const getTimeCode        = state => pos => recursiveFindPrevTimeByPos(pos, state);
-const recursiveFindPrevTimeByPos  = (pos, state) => {
+const getZipIndexById            = state => state.zipIndexById;
+const nestedGetZipById           = state => id => state.zipIndexById[id];
+const getDoc2htmlById            = state => state.doc2htmlById;
+const getSourceIndexById         = state => state.sourceIndexById;
+const getAsset                   = state => state.asset;
+const getPerson                  = state => state.person;
+const getTimeCode                = state => pos => recursiveFindPrevTimeByPos(pos, state);
+const recursiveFindPrevTimeByPos = (pos, state) => {
   if (pos === 0 || state.timeCode.size === 0) return 0;
   if (state.timeCode.has(pos)) return state.timeCode.get(pos);
   return recursiveFindPrevTimeByPos(pos - 1, state);
 };
-const hasTimeCode        = state => state.timeCode?.size > 0;
+const hasTimeCode                = state => state.timeCode?.size > 0;
+const getMergeStatus             = state => (id, lang) => {
+  return state.mergedStatus[buildKey(id, lang)];
+};
 
 export const selectors = {
   getZipIndexById,
@@ -267,4 +302,5 @@ export const selectors = {
   getPerson,
   getTimeCode,
   hasTimeCode,
+  getMergeStatus,
 };

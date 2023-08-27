@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import { withTranslation } from 'react-i18next';
 import { Dropdown } from 'semantic-ui-react';
 import classNames from 'classnames';
 import { noop } from '../../../helpers/utils';
@@ -14,7 +13,7 @@ const DesktopLanguageSelector = (value, fluid, options, handleSelect, blink) => 
         options.map(lang =>
           <Dropdown.Item
             key={lang.value}
-            language={`${lang}`}
+            language={`${lang.value}`}
             active={lang.value === value}
             onClick={e => handleSelect(e, lang)}
             className={classNames('dropdown-language-selector', { blink: !!blink })}
@@ -42,13 +41,21 @@ const MobileLanguageSelector = (value, fluid, options, handleSelect) => (
   </select>
 );
 
-const MenuLanguageSelector = ({ languages = [], defaultValue: value = LANG_HEBREW, blink, onSelect = noop, fluid = true }) => {
+const MenuLanguageSelector = (props) => {
+  const {
+          languages           = [],
+          defaultValue: value = LANG_HEBREW,
+          blink,
+          onSelect            = noop,
+          fluid               = true
+        } = props;
+
   const { isMobileDevice } = useContext(DeviceInfoContext);
-  const handleSelect = (e, data) => onSelect(e, data.value);
-  const options = getOptions({ languages });
+  const handleSelect       = (e, data) => onSelect(e, data.value);
+  const options            = getOptions({ languages });
   return isMobileDevice ?
     MobileLanguageSelector(value, fluid, options, handleSelect) :
     DesktopLanguageSelector(value, fluid, options, handleSelect, blink);
 };
 
-export default withTranslation()(MenuLanguageSelector);
+export default MenuLanguageSelector;

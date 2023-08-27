@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import PropTypes from 'prop-types';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useParams } from 'react-router-dom';
 import { Grid, Header, Image } from 'semantic-ui-react';
@@ -8,7 +7,7 @@ import clsx from 'clsx';
 
 import { actions as assetsActions, selectors as assetsSelectors } from '../../../redux/modules/assets';
 import { selectors as siteSettings } from '../../../redux/modules/settings';
-import { actions, selectors } from '../../../redux/modules/mdb';
+import { actions, selectors, selectors as mdb } from '../../../redux/modules/mdb';
 import { getLangPropertyDirection, getLanguageDirection } from '../../../helpers/i18n-utils';
 import { physicalFile, strCmp } from '../../../helpers/utils';
 import { SectionLogo } from '../../../helpers/images';
@@ -20,15 +19,29 @@ import Link from '../../../components/Language/MultiLanguageLink';
 import WipErr from '../../shared/WipErr/WipErr';
 import Download from '../../shared/Download/Download';
 import ScrollToSearch from '../../shared/DocToolbar/ScrollToSearch';
-import AudioPlayer from '../../shared/AudioPlayer';
 import TagsByUnit from '../../shared/TagsByUnit';
+import LikutAudioPlayer from './LikutAudioPlayer';
 
+const DEFAULT_LANGUAGES      = [LANG_ENGLISH, LANG_HEBREW];
+export const selectLikutFile = (files, language, idx = 0) => {
+  if (!files) return null;
+
+  let file = files.find(x => x.language === language && x.type === MT_TEXT);
+  if (file) return file;
+  if (idx >= DEFAULT_LANGUAGES.length) {
+    file = files.find(x => x.type === MT_TEXT);
+    return file;
+  }
+  return selectLikutFile(files, DEFAULT_LANGUAGES[idx], idx++);
+};
 // expected unit of type Likutim
-const Likut = ({ t }) => {
+const Likut                  = () => {
   const { id } = useParams();
+  const { t }  = useTranslation();
 
   const location        = useLocation();
   const unit            = useSelector(state => selectors.getDenormContentUnit(state.mdb, id));
+  const fetched         = useSelector(state => mdb.getFullUnitFetched(state.mdb)[id]);
   const wip             = useSelector(state => selectors.getWip(state.mdb).units[id]);
   const err             = useSelector(state => selectors.getErrors(state.mdb).units[id]);
   const contentLanguage = useSelector(state => siteSettings.getContentLanguage(state.settings, location));
@@ -36,7 +49,6 @@ const Likut = ({ t }) => {
 
   const [isReadable, setIsReadable]               = useState(false);
   const [settings, setSettings]                   = useState(null);
-  const [file, setFile]                           = useState(null);
   const [language, setLanguage]                   = useState(contentLanguage);
   const [scrollTopPosition, setScrollTopPosition] = useState(0);
   const [scrollingElement, setScrollingElement]   = useState(null);
@@ -61,34 +73,17 @@ const Likut = ({ t }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(actions.fetchUnit(id));
-  }, [dispatch, id]);
+    (!fetched) && dispatch(actions.fetchUnit(id));
+  }, [dispatch, id, fetched]);
 
+  const file      = selectLikutFile(unit?.files, language);
+  const lang      = file?.language || language;
+  const needFetch = !doc2htmlById[file?.id];
   useEffect(() => {
-    if (unit?.files) {
-      let f = unit.files.find(x => x.language === language && x.type === MT_TEXT);
-
-      if (!f && language !== LANG_ENGLISH) {
-        f = unit.files.find(x => x.language === LANG_ENGLISH && x.type === MT_TEXT);
-        setLanguage(LANG_ENGLISH);
-      }
-
-      if (!f && language !== LANG_HEBREW) {
-        f = unit.files.find(x => x.language === LANG_HEBREW && x.type === MT_TEXT);
-        setLanguage(LANG_HEBREW);
-      }
-
-      if (f && f.id !== file?.id) {
-        setFile(f);
-      }
-    }
-  }, [dispatch, language, unit, file]);
-
-  useEffect(() => {
-    if (file) {
+    if (file?.id && needFetch) {
       dispatch(assetsActions.doc2html(file.id));
     }
-  }, [dispatch, file]);
+  }, [dispatch, file?.id, needFetch]);
 
   if (!unit) {
     return null;
@@ -102,8 +97,9 @@ const Likut = ({ t }) => {
   const { data } = doc2htmlById[file?.id] || {};
 
   const { theme = 'light', fontType, fontSize = 0 } = settings || {};
-  const direction                                   = getLanguageDirection(language);
-  const gridDirection                               = getLangPropertyDirection(language);
+
+  const direction     = getLanguageDirection(lang);
+  const gridDirection = getLangPropertyDirection(lang);
 
   const { name, film_date, files = [], source_units } = unit;
   const languages                                     = files.map(f => f.language);
@@ -111,10 +107,10 @@ const Likut = ({ t }) => {
   const url                = file && physicalFile(file, true);
   const relatedLessons     = Object.values(source_units).filter(u => UNIT_LESSONS_TYPE.includes(u.content_type));
   const relatedLessonsSize = relatedLessons.length > 0 ? 6 : 0;
-  const bookmarkSource     = { subject_uid: unit.id, subject_type: unit.content_type, language };
-  const labelSource        = { content_unit: unit.id, language };
+  const bookmarkSource     = { subject_uid: unit.id, subject_type: unit.content_type, language: lang };
+  const labelSource        = { content_unit: unit.id, language: lang };
 
-  const mp3File = files.find(f => f.language === language && f.type === MT_AUDIO);
+  let mp3File = files.find(f => f.language === lang && f.type === MT_AUDIO);
 
   return (
     <div
@@ -143,8 +139,14 @@ const Likut = ({ t }) => {
                 <div className="source__header-toolbar">
                   <div className="display-iblock margin-right-8 margin-left-8">
                     {
-                      file &&
-                      <Download path={url} mimeType={file.mimetype} downloadAllowed={true} filename={file.name} />
+                      file && (
+                        <Download
+                          path={url}
+                          mimeType={file.mimetype}
+                          downloadAllowed={true}
+                          filename={file.name}
+                        />
+                      )
                     }
                     <LibraryBar
                       fontSize={fontSize}
@@ -158,7 +160,7 @@ const Likut = ({ t }) => {
                   <div className="library-language-container">
                     <MenuLanguageSelector
                       languages={languages}
-                      defaultValue={language}
+                      defaultValue={lang}
                       onSelect={handleLanguageChanged}
                       fluid={false}
                     />
@@ -168,7 +170,7 @@ const Likut = ({ t }) => {
             </Grid>
           </div>
           <div className="likut__audio">
-            {mp3File && <AudioPlayer mp3={mp3File} />}
+            <LikutAudioPlayer file={mp3File} id={id} lang={lang} />
           </div>
 
           {/* content */}
@@ -182,7 +184,7 @@ const Likut = ({ t }) => {
               {
                 data && (
                   <ScrollToSearch
-                    language={language}
+                    language={lang}
                     data={data}
                     source={bookmarkSource}
                     label={labelSource}
@@ -223,8 +225,4 @@ const Likut = ({ t }) => {
   );
 };
 
-Likut.propTypes = {
-  t: PropTypes.func.isRequired,
-};
-
-export default withTranslation()(Likut);
+export default Likut;

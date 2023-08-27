@@ -157,7 +157,7 @@ const useRoutes = playerContainer => ([
   { path: 'simple-mode', component: <SimpleModeContainer />, ssrData: ssrDataLoaders.simpleMode },
   { path: 'excerpt', component: <ExcerptContainer /> },
   { path: 'likutim', component: <LikutimMain /> },
-  { path: 'likutim/:id', component: <Likut />, },
+  { path: 'likutim/:id', component: <Likut />, ssrData: ssrDataLoaders.likutPage },
   { path: 'sketches', component: <Sketches />, ssrData: ssrDataLoaders.programsPage },
 ]);
 

@@ -9,6 +9,7 @@ import LibrarySettings from './LibrarySettings';
 import Share from './Share';
 import BookmarkButton from '../../shared/SaveBookmark/BookmarkButton';
 import LabelButton from '../../shared/SelectTopicsModal/LabelButton';
+import LessonsBySourceButton from './LessonsBySourceButton';
 
 const LibraryBar = (
   {
@@ -29,6 +30,7 @@ const LibraryBar = (
 
   return (
     <div className="source__header-toolbar">
+      <LessonsBySourceButton source={source} />
       <BookmarkButton source={source} />
       <LabelButton label={label} />
       <Button compact size="small" className="mobile-hidden" icon="print" onClick={print} />
@@ -38,7 +40,7 @@ const LibraryBar = (
       <Button compact size="small" icon={isReadable ? 'compress' : 'expand'} onClick={handleIsReadable} />
       {handleTocIsActive &&
         <Button compact size="small" icon="list layout" onClick={handleTocIsActive}
-          className="computer-hidden large-screen-hidden widescreen-hidden" />
+                className="computer-hidden large-screen-hidden widescreen-hidden" />
       }
       <Share position={position} />
     </div>

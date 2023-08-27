@@ -293,7 +293,7 @@ const Sources = ({ unit, t }) => {
         {
           mp3 &&
           <Menu.Item fitted='horizontally'>
-            <AudioPlayer mp3={mp3} />
+            <AudioPlayer file={mp3} />
           </Menu.Item>
         }
       </Menu>
