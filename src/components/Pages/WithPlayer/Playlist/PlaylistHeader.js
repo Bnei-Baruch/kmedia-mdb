@@ -22,7 +22,7 @@ const PlaylistHeader = () => {
   const collection          = useSelector(state => mdb.getDenormCollection(state.mdb, cId));
   const getPath             = useSelector(state => sources.getPathByID(state.sources));
 
-  const { content_type, number, film_date, start_date, end_date, tag_id, source_id } = collection || false;
+  const { content_type, number, film_date, start_date, end_date, tag_id, source_id, likutim_id } = collection || false;
 
   const isLesson = COLLECTION_DAILY_LESSONS.includes(content_type);
 
@@ -51,6 +51,9 @@ const PlaylistHeader = () => {
       return `${t('player.header.series-by-topic')} ${name}`;
     }
 
+    if (likutim_id?.length > 0) {
+      return `${t('likutim.item-header')} ${name}`;
+    }
     if (source_id && getPath) {
       const path         = getPath(source_id);
       const nameFromPath = path[0]?.name ? path[0].name + ' - ' : '';
