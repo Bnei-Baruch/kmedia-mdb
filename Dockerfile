@@ -24,20 +24,20 @@ ARG kc_api_url
 
 WORKDIR /app
 
-ENV REACT_APP_ENV=production \
-    REACT_APP_API_BACKEND=/backend/ \
-    REACT_APP_ASSETS_BACKEND=/assets/ \
-    REACT_APP_IMAGINARY_URL=/imaginary/ \
-    REACT_APP_IMAGINARY_INTERNAL_HOST=nginx \
-    REACT_APP_LOCALES_BACKEND=/ \
-    REACT_APP_CDN_URL=${cdn_url} \
-    REACT_APP_CDN_HLS_URL=${cdn_hls_url} \
-    REACT_APP_PUBLIC_BASE=${public_base} \
-    REACT_APP_FEED=${feed_api_url} \
-    REACT_APP_PERSONAL_API_BACKEND=${personal_api_url} \
-    REACT_APP_CHRONICLES_BACKEND=${chronicles_url} \
-    REACT_APP_FILE_TRIMMER_API=${file_trimmer_api_url} \
-    REACT_APP_MDB_REST_API_URL=${mdb_rest_api_url} \
+ENV NEXT_PUBLIC_ENV=production \
+    NEXT_PUBLIC_API_BACKEND=/backend/ \
+    NEXT_PUBLIC_ASSETS_BACKEND=/assets/ \
+    NEXT_PUBLIC_IMAGINARY_URL=/imaginary/ \
+    NEXT_PUBLIC_IMAGINARY_INTERNAL_HOST=nginx \
+    NEXT_PUBLIC_LOCALES_BACKEND=/ \
+    NEXT_PUBLIC_CDN_URL=${cdn_url} \
+    NEXT_PUBLIC_CDN_HLS_URL=${cdn_hls_url} \
+    NEXT_PUBLIC_PUBLIC_BASE=${public_base} \
+    NEXT_PUBLIC_FEED=${feed_api_url} \
+    NEXT_PUBLIC_PERSONAL_API_BACKEND=${personal_api_url} \
+    NEXT_PUBLIC_CHRONICLES_BACKEND=${chronicles_url} \
+    NEXT_PUBLIC_FILE_TRIMMER_API=${file_trimmer_api_url} \
+    NEXT_PUBLIC_MDB_REST_API_URL=${mdb_rest_api_url} \
     REACT_KC_API_URL=${kc_api_url}
 
 COPY . .
@@ -65,20 +65,20 @@ WORKDIR /app
 COPY --from=build /app .
 
 ENV NODE_ENV=production \
-    REACT_APP_BASE_URL=${public_base} \
-    REACT_APP_API_BACKEND=http://nginx/backend/ \
-    REACT_APP_CMS_BACKEND=${public_base}cms/ \
-    REACT_APP_ASSETS_BACKEND=${public_base}assets/ \
-    REACT_APP_IMAGINARY_URL=${public_base}imaginary/ \
-    REACT_APP_IMAGINARY_INTERNAL_HOST=nginx \
-    REACT_APP_CDN_URL=${cdn_url} \
-    REACT_APP_CDN_HLS_URL=${cdn_hls_url} \
-    REACT_APP_PUBLIC_BASE=${public_base} \
-    REACT_APP_FEED=${feed_api_url} \
-    REACT_APP_PERSONAL_API_BACKEND=${personal_api_url} \
-    REACT_APP_CHRONICLES_BACKEND=${chronicles_url} \
-    REACT_APP_FILE_TRIMMER_API=${file_trimmer_api_url} \
-    REACT_APP_MDB_REST_API_URL=${mdb_rest_api_url} \
+    NEXT_PUBLIC_BASE_URL=${public_base} \
+    NEXT_PUBLIC_API_BACKEND=http://nginx/backend/ \
+    NEXT_PUBLIC_CMS_BACKEND=${public_base}cms/ \
+    NEXT_PUBLIC_ASSETS_BACKEND=${public_base}assets/ \
+    NEXT_PUBLIC_IMAGINARY_URL=${public_base}imaginary/ \
+    NEXT_PUBLIC_IMAGINARY_INTERNAL_HOST=nginx \
+    NEXT_PUBLIC_CDN_URL=${cdn_url} \
+    NEXT_PUBLIC_CDN_HLS_URL=${cdn_hls_url} \
+    NEXT_PUBLIC_PUBLIC_BASE=${public_base} \
+    NEXT_PUBLIC_FEED=${feed_api_url} \
+    NEXT_PUBLIC_PERSONAL_API_BACKEND=${personal_api_url} \
+    NEXT_PUBLIC_CHRONICLES_BACKEND=${chronicles_url} \
+    NEXT_PUBLIC_FILE_TRIMMER_API=${file_trimmer_api_url} \
+    NEXT_PUBLIC_MDB_REST_API_URL=${mdb_rest_api_url} \
     REACT_KC_API_URL=${kc_api_url}
 
 EXPOSE 3001

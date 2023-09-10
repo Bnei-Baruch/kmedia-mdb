@@ -1,5 +1,5 @@
 import React from 'react';
-import { withTranslation } from 'react-i18next';
+import { withTranslation } from 'next-i18next';
 import { useSelector } from 'react-redux';
 
 import { FN_PERSON } from '../../../helpers/consts';

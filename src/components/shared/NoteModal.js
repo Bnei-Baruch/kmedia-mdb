@@ -4,8 +4,8 @@ import { getLanguageDirection } from '../../helpers/i18n-utils';
 import { useDispatch, useSelector } from 'react-redux';
 import { actions } from '../../redux/modules/myNotes';
 import moment, { now } from 'moment/moment';
-import { useTranslation } from 'react-i18next';
-import { selectors as settings } from '../../redux/modules/settings';
+import { useTranslation } from 'next-i18next';
+import { selectors as settings } from '../../../lib/redux/slices/settingsSlice/settingsSlice';
 
 const NoteModal = ({ note = false, open = true, toggleOpen }) => {
   const [content, setContent] = useState(note.content || '');

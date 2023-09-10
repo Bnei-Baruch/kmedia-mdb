@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { Button } from 'semantic-ui-react';
 
-import { selectors as settings } from '../../../redux/modules/settings';
+import { selectors as settings } from '../../../../lib/redux/slices/settingsSlice/settingsSlice';
 import LibrarySettings from './LibrarySettings';
 import Share from './Share';
 import BookmarkButton from '../../shared/SaveBookmark/BookmarkButton';

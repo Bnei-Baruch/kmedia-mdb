@@ -1,10 +1,10 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { withTranslation } from 'react-i18next';
+import { withTranslation } from 'next-i18next';
 import { useSelector } from 'react-redux';
 
 import { isEmpty } from '../../../helpers/utils';
-import { selectors } from '../../../redux/modules/sources';
+import { selectors } from '../../../../lib/redux/slices/sourcesSlice/sourcesSlice';
 import { selectors as stats } from '../../../redux/modules/stats';
 import HierarchicalFilter from './HierarchicalFilter';
 

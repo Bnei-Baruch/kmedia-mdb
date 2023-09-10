@@ -19,8 +19,8 @@ import { isEmpty } from '../helpers/utils';
 import { selectors as filterSelectors } from '../redux/modules/filters';
 
 import { actions, types } from '../redux/modules/lists';
-import { actions as mdbActions, selectors as mdb } from '../redux/modules/mdb';
-import { selectors as settings } from '../redux/modules/settings';
+import { actions as mdbActions, selectors as mdb } from '../../lib/redux/slices/mdbSlice/mdbSlice';
+import { selectors as settings } from '../../lib/redux/slices/settingsSlice/settingsSlice';
 import { getQuery, pushQuery } from './helpers/url';
 import { fetchCollectionsByIDs, fetchUnitsByIDs } from './mdb';
 import { fetch as fetchMy } from './my';
@@ -56,7 +56,7 @@ function* fetchList(action) {
   try {
     const { data } = yield call(Api.units, {
       ...args,
-      ui_language: uiLang, 
+      ui_language: uiLang,
       content_languages: contentLanguages,
     });
 
@@ -101,8 +101,8 @@ function* fetchSectionList(action) {
   try {
     const { data } = yield call(endpointByNamespace[namespace], {
       ...args,
-      ...filterParams, 
-      ui_language: uiLang, 
+      ...filterParams,
+      ui_language: uiLang,
       content_languages: contentLanguages,
     });
     if (!data.items && data.content_units) {

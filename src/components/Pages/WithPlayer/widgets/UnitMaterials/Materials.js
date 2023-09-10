@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
-import { withTranslation } from 'react-i18next';
+import { withTranslation } from 'next-i18next';
 
 import {
   CT_ARTICLE,
@@ -24,7 +24,7 @@ import DerivedUnits from './DerivedUnits';
 import Recommended from '../Recommended/Main/Recommended';
 import { useSelector } from 'react-redux';
 import { selectors } from '../../../../../redux/modules/playlist';
-import { selectors as mdb } from '../../../../../redux/modules/mdb';
+import { selectors as mdb } from '../../../../../../lib/redux/slices/mdbSlice/mdbSlice';
 import PlaylistItems from '../../Playlist/PlaylistItems';
 import PlaylistMyItems from '../../PlaylistMy/PlaylistItems';
 

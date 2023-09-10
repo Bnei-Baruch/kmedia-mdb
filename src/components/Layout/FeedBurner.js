@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { withTranslation } from 'react-i18next';
+import { withTranslation } from 'next-i18next';
 import { getRSSFeedByLangs } from '../../helpers/utils';
 import { Form } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
-import { selectors as settings } from '../../redux/modules/settings';
+import { selectors as settings } from '../../../lib/redux/slices/settingsSlice/settingsSlice';
 
 const FeedBurner = ({ t }) => {
   const [email, setEmail] = useState('');

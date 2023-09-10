@@ -5,7 +5,7 @@ import { Checkbox, List } from 'semantic-ui-react';
 import { FN_PERSON } from '../../../helpers/consts';
 import { actions, selectors as filters } from '../../../redux/modules/filters';
 import { selectors as filtersAside } from '../../../redux/modules/filtersAside';
-import { selectors as mdb } from '../../../redux/modules/mdb';
+import { selectors as mdb } from '../../../../lib/redux/slices/mdbSlice/mdbSlice';
 
 const PersonItem = ({ namespace, id }) => {
   const selectedFilters = useSelector(state => filters.getFilterByName(state.filters, namespace, FN_PERSON));

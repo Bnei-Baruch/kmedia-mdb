@@ -5,7 +5,7 @@ import { selectors as playlist } from '../../redux/modules/playlist';
 import { selectors as player } from '../../redux/modules/player';
 import { selectors as chrSelectors } from '../../redux/modules/chronicles';
 import { ClientChroniclesContext } from '../../helpers/app-contexts';
-import { usePrevious } from '../../helpers/utils';
+import { usePrevious } from '../../helpers/hooks';
 import { getDuration, getMute } from '../../pkg/jwpAdapter/adapter';
 import { getSavedTime } from './helper';
 

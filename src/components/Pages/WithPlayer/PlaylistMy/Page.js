@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { useSelector } from 'react-redux';
-import { withTranslation } from 'react-i18next';
+import { withTranslation } from 'next-i18next';
 import { Container, Grid, Divider } from 'semantic-ui-react';
 
 import Materials from '../widgets/UnitMaterials/Materials';

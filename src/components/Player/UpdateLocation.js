@@ -3,11 +3,11 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { selectors as playlist, actions as action, selectors } from '../../redux/modules/playlist';
-import { selectors as mdb } from '../../redux/modules/mdb';
+import { selectors as mdb } from '../../../lib/redux/slices/mdbSlice/mdbSlice';
 import { persistPreferredMediaType } from '../../helpers/player';
 import { getQuery, stringify, updateQuery } from '../../helpers/url';
 import { canonicalLink } from '../../helpers/links';
-import { selectors as settings } from '../../redux/modules/settings';
+import { selectors as settings } from '../../../lib/redux/slices/settingsSlice/settingsSlice';
 import { actions, selectors as player } from '../../redux/modules/player';
 import { startEndFromQuery } from './Controls/helper';
 

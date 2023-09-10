@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Popup, Ref } from 'semantic-ui-react';
 
-import { selectors as settings } from '../../redux/modules/settings';
+import { selectors as settings } from '../../../lib/redux/slices/settingsSlice/settingsSlice';
 
 /**
  *

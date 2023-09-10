@@ -1,13 +1,16 @@
+'use client';
 import React, { useEffect, useState } from 'react';
 import { Button, Container, Divider, Grid, GridColumn, GridRow, Header, Segment } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
-import { withTranslation } from 'react-i18next';
-import { selectors } from '../../redux/modules/trim';
+import { useTranslation } from 'next-i18next';
+import { selectors } from '../../../lib/redux/slices/trimSlice';
 import { Splash } from '../shared/Splash/Splash';
 import DownloadTrimItem from './DownloadTrimItem';
 import clsx from 'clsx';
 
-const DownloadTrim = ({ t }) => {
+const DownloadTrim = () => {
+  const { t } = useTranslation();
+
   const [open, setOpen]   = useState(true);
   const [isMin, setIsMin] = useState(false);
 
@@ -27,7 +30,7 @@ const DownloadTrim = ({ t }) => {
       <GridRow key={`wip_${i}`}>
         <GridColumn width={9} verticalAlign={'middle'}>
           {`${i}. ${t('messages.trimmed-content-wip')} `}
-          <Splash isLoading icon="circle notch" color="blue" width="20"  text=""/>
+          <Splash isLoading icon="circle notch" color="blue" width="20" text="" />
         </GridColumn>
         <GridColumn>
         </GridColumn>
@@ -87,4 +90,4 @@ const DownloadTrim = ({ t }) => {
   );
 };
 
-export default withTranslation()(DownloadTrim);
+export default DownloadTrim;

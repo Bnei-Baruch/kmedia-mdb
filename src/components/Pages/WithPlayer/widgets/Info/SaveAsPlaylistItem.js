@@ -3,13 +3,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Button, Checkbox, Icon, Input, List, Modal, Divider } from 'semantic-ui-react';
 
 import { actions, selectors } from '../../../../../redux/modules/my';
-import { selectors as settings } from '../../../../../redux/modules/settings';
+import { selectors as settings } from '../../../../../../lib/redux/slices/settingsSlice/settingsSlice';
 import { selectors as playlist } from '../../../../../redux/modules/playlist';
 import { actions as playerActions } from '../../../../../redux/modules/player';
 import { MY_NAMESPACE_PLAYLIST_EDIT, MY_NAMESPACE_PLAYLISTS, PLAYER_OVER_MODES } from '../../../../../helpers/consts';
 import { getLanguageDirection } from '../../../../../helpers/i18n-utils';
-import { useTranslation } from 'react-i18next';
-import { selectors as mdb } from '../../../../../redux/modules/mdb';
+import { useTranslation } from 'next-i18next';
+import { selectors as mdb } from '../../../../../../lib/redux/slices/mdbSlice/mdbSlice';
 import AddPlaylistForm from './AddPlaylistForm';
 import { ADD_PLAYLIST_ITEM_MODES } from './SavePlaylistItemBtn';
 

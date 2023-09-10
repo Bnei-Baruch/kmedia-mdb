@@ -1,5 +1,5 @@
 import React from 'react';
-import { withTranslation } from 'react-i18next';
+import { withTranslation } from 'next-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Container, Icon, Label } from 'semantic-ui-react';
 
@@ -18,9 +18,9 @@ import {
   LANGUAGES
 } from '../../helpers/consts';
 import { actions, selectors as filters } from '../../redux/modules/filters';
-import { selectors as mdbSelectors } from '../../redux/modules/mdb';
-import { selectors as sources } from '../../redux/modules/sources';
-import { selectors as tags } from '../../redux/modules/tags';
+import { selectors as mdbSelectors } from '../../../lib/redux/slices/mdbSlice/mdbSlice';
+import { selectors as sources } from '../../../lib/redux/slices/sourcesSlice/sourcesSlice';
+import { selectors as tags } from '../../../lib/redux/slices/tagsSlice/tagsSlice';
 import { getTitle } from './LocationsFilter/helper';
 
 const FilterLabels = ({ namespace, t }) => {

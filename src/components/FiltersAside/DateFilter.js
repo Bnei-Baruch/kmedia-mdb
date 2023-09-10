@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { withTranslation } from 'react-i18next';
+import { withTranslation } from 'next-i18next';
 import { noop } from '../../helpers/utils';
 import { Accordion, Checkbox, Icon, List, Segment } from 'semantic-ui-react';
 
@@ -17,7 +17,7 @@ import {
 import { FN_DATE_FILTER } from '../../helpers/consts';
 import FastDayPicker from '../Filters/components/Date/FastDayPicker';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectors as settings } from '../../redux/modules/settings';
+import { selectors as settings } from '../../../lib/redux/slices/settingsSlice/settingsSlice';
 import { selectors as filtersAside } from '../../redux/modules/filtersAside';
 import { actions, selectors as filters } from '../../redux/modules/filters';
 import FilterHeader from './FilterHeader';

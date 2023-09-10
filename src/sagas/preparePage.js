@@ -1,9 +1,9 @@
 import { call, put, select, takeLatest } from 'redux-saga/effects';
 
 import Api from '../helpers/Api';
-import { actions as mdbActions } from '../redux/modules/mdb';
+import { actions as mdbActions } from '../../lib/redux/slices/mdbSlice/mdbSlice';
 import { actions, selectors, types } from '../redux/modules/preparePage';
-import { selectors as settings } from '../redux/modules/settings';
+import { selectors as settings } from '../../lib/redux/slices/settingsSlice/settingsSlice';
 
 const DEF_PARAMS = { pageNo: 1, pageSize: 1000, with_units: false, };
 

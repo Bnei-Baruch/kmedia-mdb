@@ -1,7 +1,7 @@
 import { Requests } from '../src/helpers/Api';
 import { canonicalLink } from '../src/helpers/links';
 
-const BASE_URL = process.env.REACT_APP_BASE_URL;
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 const LANG_MAP = {
   en: 'en',

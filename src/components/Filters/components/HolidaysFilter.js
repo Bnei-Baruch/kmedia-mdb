@@ -1,12 +1,12 @@
 import React, { useMemo } from 'react';
 import countBy from 'lodash/countBy';
 import { useSelector } from 'react-redux';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 
 import { CT_HOLIDAY } from '../../../helpers/consts';
 import { selectors } from '../../../redux/modules/events';
-import { selectors as mdb } from '../../../redux/modules/mdb';
-import { selectors as tags } from '../../../redux/modules/tags';
+import { selectors as mdb } from '../../../../lib/redux/slices/mdbSlice/mdbSlice';
+import { selectors as tags } from '../../../../lib/redux/slices/tagsSlice/tagsSlice';
 import HierarchicalFilter from './HierarchicalFilter';
 
 const getTree = (holidayEvents, getTagById, t) => {

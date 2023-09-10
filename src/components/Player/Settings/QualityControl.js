@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { Button, Header } from 'semantic-ui-react';
-import { withTranslation } from 'react-i18next';
+import { withTranslation } from 'next-i18next';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { selectors as playlist, actions as playlistActions } from '../../../redux/modules/playlist';

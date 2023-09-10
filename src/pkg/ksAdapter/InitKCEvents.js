@@ -1,7 +1,8 @@
+'use client';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { actions } from '../../redux/modules/auth';
+import { actions } from '../../../lib/redux/slices/authSlice/authSlice';
 import { KC_UPDATE_USER, KC_UPDATE_TOKEN } from './adapter';
 
 const eventsToRedux = dispatch => {

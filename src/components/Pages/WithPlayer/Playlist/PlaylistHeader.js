@@ -1,15 +1,15 @@
 import React, { useContext } from 'react';
 import { useSelector } from 'react-redux';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 import { Header } from 'semantic-ui-react';
 import clsx from 'clsx';
-import { selectors as sources } from '../../../../redux/modules/sources';
+import { selectors as sources } from '../../../../../lib/redux/slices/sourcesSlice/sourcesSlice';
 import { COLLECTION_DAILY_LESSONS, CT_LESSONS_SERIES } from '../../../../helpers/consts';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import { cuPartNameByCCUType } from '../../../../helpers/utils';
 import { fromToLocalized } from '../../../../helpers/date';
 import PlaylistPlayIcon from '../../../../images/icons/PlaylistPlay';
-import { selectors as mdb } from '../../../../redux/modules/mdb';
+import { selectors as mdb } from '../../../../../lib/redux/slices/mdbSlice/mdbSlice';
 import { selectors } from '../../../../redux/modules/playlist';
 import LessonDatePickerContainer from './LessonDatePickerContainer';
 

@@ -1,11 +1,11 @@
 import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
-import { withTranslation } from 'react-i18next';
+import { withTranslation } from 'next-i18next';
 import { Button, Confirm, MenuItem, Modal, Popup } from 'semantic-ui-react';
 import BookmarkForm from '../SaveBookmark/BookmarkForm';
 import { useSelector } from 'react-redux';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
-import { selectors as settings } from '../../../redux/modules/settings';
+import { selectors as settings } from '../../../../lib/redux/slices/settingsSlice/settingsSlice';
 import SelectTopicsModal from '../SelectTopicsModal/SelectTopicsModal';
 
 const BookmarkBtn = ({ t, source, label, close }) => {

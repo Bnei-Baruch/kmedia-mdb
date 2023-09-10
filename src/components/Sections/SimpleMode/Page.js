@@ -4,11 +4,11 @@ import moment from 'moment';
 import DayPicker from 'react-day-picker';
 import Navbar from 'react-day-picker/build/Navbar';
 import MomentLocaleUtils from 'react-day-picker/moment';
-import { withTranslation } from 'react-i18next';
+import { withTranslation } from 'next-i18next';
 import { Button, Card, Divider, Grid, Input } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
 
-import { selectors as settings } from '../../../redux/modules/settings';
+import { selectors as settings } from '../../../../lib/redux/slices/settingsSlice/settingsSlice';
 import { ALL_LANGUAGES } from '../../../helpers/consts';
 import { today } from '../../../helpers/date';
 import SectionHeader from '../../shared/SectionHeader';

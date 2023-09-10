@@ -2,13 +2,13 @@ import React, { useContext, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
-import { withTranslation } from 'react-i18next';
+import { withTranslation } from 'next-i18next';
 import { Button, Checkbox, Dropdown, Icon, List, Popup } from 'semantic-ui-react';
 
 import { ALL_LANGUAGES, LANGUAGES, LANG_UI_LANGUAGES } from '../../helpers/consts';
 import { DeviceInfoContext } from '../../helpers/app-contexts';
 
-import { selectors as settings, actions } from '../../redux/modules/settings';
+import { selectors as settings, actions } from '../../../lib/redux/slices/settingsSlice/settingsSlice';
 import Link from '../Language/MultiLanguageLink';
 
 const eqSet = (xs, ys) => xs.size === ys.size && [...xs].every(x => ys.has(x));

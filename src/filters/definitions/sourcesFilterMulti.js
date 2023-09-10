@@ -1,5 +1,5 @@
 import { createFilterDefinition } from './util';
-import { selectors } from '../../redux/modules/sources';
+import { selectors } from '../../../lib/redux/slices/sourcesSlice/sourcesSlice';
 import { FN_SOURCES_MULTI } from '../../helpers/consts';
 
 const sourcesFilterMulti = {

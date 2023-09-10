@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { Button, Header, Icon } from 'semantic-ui-react';
-import { withTranslation } from 'react-i18next';
+import { withTranslation } from 'next-i18next';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { actions, selectors as player } from '../../../redux/modules/player';

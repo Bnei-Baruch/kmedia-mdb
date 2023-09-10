@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import React from 'react';
-import { withTranslation } from 'react-i18next';
+import { withTranslation } from 'next-i18next';
 import { useSelector } from 'react-redux';
 import { Button, Icon, Modal, Table } from 'semantic-ui-react';
 
@@ -8,7 +8,7 @@ import { FN_LOCATIONS } from '../../../helpers/consts';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import { isEmpty } from '../../../helpers/utils';
 import { selectors } from '../../../redux/modules/filtersAside';
-import { selectors as settings } from '../../../redux/modules/settings';
+import { selectors as settings } from '../../../../lib/redux/slices/settingsSlice/settingsSlice';
 import CityItem from './CityItem';
 import { getTitle } from './helper';
 

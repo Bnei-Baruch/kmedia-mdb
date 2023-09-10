@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 import { noop } from '../../../helpers/utils';
 import { Button, Header, Menu, Segment } from 'semantic-ui-react';
 

@@ -1,11 +1,11 @@
 import React, { useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { withTranslation } from 'react-i18next';
+import { withTranslation } from 'next-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import { DATE_FORMAT } from '../../../../helpers/consts';
-import { selectors as settings } from '../../../../redux/modules/settings';
-import { actions, selectors } from '../../../../redux/modules/mdb';
+import { selectors as settings } from '../../../../../lib/redux/slices/settingsSlice/settingsSlice';
+import { actions, selectors } from '../../../../../lib/redux/slices/mdbSlice/mdbSlice';
 import { selectors as playlist } from '../../../../redux/modules/playlist';
 import ButtonDayPicker from '../../../Filters/components/Date/ButtonDayPicker';
 import { canonicalLink } from '../../../../helpers/links';

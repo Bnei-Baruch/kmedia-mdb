@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { assetUrl, Requests, cLogoUrl } from '../../../helpers/Api';
 import FallbackImage from '../FallbackImage';
 
-import { selectors as sources } from '../../../redux/modules/sources';
+import { selectors as sources } from '../../../../lib/redux/slices/sourcesSlice/sourcesSlice';
 
 import portraitBS from '../../../images/portrait_bs.png';
 import portraitRB from '../../../images/portrait_rb.png';

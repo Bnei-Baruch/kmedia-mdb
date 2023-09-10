@@ -13,7 +13,7 @@ import BuildPlaylistByCollectionByParams from './BuildPlaylistByCollectionByPara
 import { useSelector } from 'react-redux';
 import { selectors as playlist } from '../../../redux/modules/playlist';
 import SingleMediaPage from './SingleMedia/SingleMediaPage';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 import WipErr from '../../shared/WipErr/WipErr';
 import { Icon } from 'semantic-ui-react';
 import { useLocation } from 'react-router-dom';

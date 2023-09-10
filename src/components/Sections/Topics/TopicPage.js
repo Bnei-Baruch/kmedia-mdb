@@ -1,12 +1,12 @@
 import React, { useContext, useEffect, useMemo, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useLocation } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 import { Container, Divider, Header } from 'semantic-ui-react';
 
-import { actions, selectors } from '../../../redux/modules/tags';
+import { actions, selectors } from '../../../../lib/redux/slices/tagsSlice/tagsSlice';
 import { actions as listsActions } from '../../../redux/modules/lists';
-import { selectors as settings } from '../../../redux/modules/settings';
+import { selectors as settings } from '../../../../lib/redux/slices/settingsSlice/settingsSlice';
 import Pagination from '../../Pagination/Pagination';
 import { selectors as filters } from '../../../redux/modules/filters';
 import { isEqual } from 'lodash';

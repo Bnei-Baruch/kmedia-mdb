@@ -3,8 +3,8 @@ import React, { useState } from 'react';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import useShareUrl from '../hooks/useShareUrl';
 import { useSelector } from 'react-redux';
-import { selectors as settings } from '../../../redux/modules/settings';
-import { withTranslation } from 'react-i18next';
+import { selectors as settings } from '../../../../lib/redux/slices/settingsSlice/settingsSlice';
+import { withTranslation } from 'next-i18next';
 import { POPOVER_CONFIRMATION_TIMEOUT } from './helper';
 
 let timeout;

@@ -1,10 +1,10 @@
 import React, { useState, useContext } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Modal, Confirm, Button } from 'semantic-ui-react';
-import { selectors as settings } from '../../../../../redux/modules/settings';
+import { selectors as settings } from '../../../../../../lib/redux/slices/settingsSlice/settingsSlice';
 import { getLanguageDirection } from '../../../../../helpers/i18n-utils';
 import { DeviceInfoContext } from '../../../../../helpers/app-contexts';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 import TagVideoLabelBtn from './TagVideoLabelBtn';
 import { ADD_PLAYLIST_ITEM_MODES } from './SavePlaylistItemBtn';
 import { actions as playerActions } from '../../../../../redux/modules/player';

@@ -1,6 +1,6 @@
 import  { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { selectors } from '../../redux/modules/auth';
+import { selectors } from '../../../lib/redux/slices/authSlice/authSlice';
 
 const useIsLoggedIn = () => {
   const [loggedIn, setLoggedIn] = useState(false);

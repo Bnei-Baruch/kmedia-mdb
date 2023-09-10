@@ -3,8 +3,8 @@ import Link from '../Language/MultiLanguageLink';
 import React from 'react';
 import { isEmpty } from '../../helpers/utils';
 import { useSelector } from 'react-redux';
-import { selectors as mdb } from '../../redux/modules/mdb';
-import { selectors as tags } from '../../redux/modules/tags';
+import { selectors as mdb } from '../../../lib/redux/slices/mdbSlice/mdbSlice';
+import { selectors as tags } from '../../../lib/redux/slices/tagsSlice/tagsSlice';
 
 const TagsByUnit = ({ id }) => {
   const unit       = useSelector(state => mdb.getDenormContentUnit(state.mdb, id));

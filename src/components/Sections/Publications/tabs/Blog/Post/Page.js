@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { withTranslation } from 'react-i18next';
+import { withTranslation } from 'next-i18next';
 import { Container, Grid, Header } from 'semantic-ui-react';
 
 import * as shapes from '../../../../../shapes';

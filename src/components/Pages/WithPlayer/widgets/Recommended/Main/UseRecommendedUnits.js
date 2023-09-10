@@ -1,8 +1,8 @@
 import { useSelector } from 'react-redux';
 import { selectors } from '../../../../../../redux/modules/recommended';
-import { selectors as mdbSelectors } from '../../../../../../redux/modules/mdb';
-import { selectors as sourcesSelectors } from '../../../../../../redux/modules/sources';
-import { selectors as tagsSelectors } from '../../../../../../redux/modules/tags';
+import { selectors as mdbSelectors } from '../../../../../../../lib/redux/slices/mdbSlice/mdbSlice';
+import { selectors as sourcesSelectors } from '../../../../../../../lib/redux/slices/sourcesSlice/sourcesSlice';
+import { selectors as tagsSelectors } from '../../../../../../../lib/redux/slices/tagsSlice/tagsSlice';
 
 // A custom hook to get loaded recommended
 const useRecommendedUnits = feedNames => {

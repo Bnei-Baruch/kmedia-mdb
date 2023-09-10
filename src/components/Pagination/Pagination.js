@@ -29,7 +29,7 @@ import { useSelector } from 'react-redux';
 
 import { noop } from '../../helpers/utils';
 import { isLanguageRtl } from '../../helpers/i18n-utils';
-import { selectors as settings } from '../../redux/modules/settings';
+import { selectors as settings } from '../../../lib/redux/slices/settingsSlice/settingsSlice';
 
 const TITLES = {
   first: <Icon name="angle double left" />,

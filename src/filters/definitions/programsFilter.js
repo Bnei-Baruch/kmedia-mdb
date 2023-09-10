@@ -1,6 +1,6 @@
 import pickBy from 'lodash/pickBy';
 
-import { selectors as mdbSelectors } from '../../redux/modules/mdb';
+import { selectors as mdbSelectors } from '../../../lib/redux/slices/mdbSlice/mdbSlice';
 import { createFilterDefinition } from './util';
 
 const programsFilter = {

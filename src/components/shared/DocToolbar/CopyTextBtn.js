@@ -4,7 +4,7 @@ import CopyToClipboard from 'react-copy-to-clipboard';
 import { Button, MenuItem, Popup, } from 'semantic-ui-react';
 
 import useStateWithCallback from '../../../helpers/use-state-with-callback';
-import { withTranslation } from 'react-i18next';
+import { withTranslation } from 'next-i18next';
 import { POPOVER_CONFIRMATION_TIMEOUT } from '../../Player/Sharing/helper';
 
 const CopyTextBtn = ({ t, text }) => {

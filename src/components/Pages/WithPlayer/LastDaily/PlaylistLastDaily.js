@@ -1,5 +1,5 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 
 import Helmets from '../../../shared/Helmets';
 import { publicFile } from '../../../../helpers/utils';

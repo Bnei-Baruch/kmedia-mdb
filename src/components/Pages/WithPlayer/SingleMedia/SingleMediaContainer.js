@@ -5,7 +5,7 @@ import SingleMediaPage from './SingleMediaPage';
 import WipErr from '../../../shared/WipErr/WipErr';
 import { selectors as playlist } from '../../../../redux/modules/playlist';
 import BuildSingleMediaPlaylist from './BuildSingleMediaPlaylist';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 
 const SingleMediaContainer = ({ playerContainer }) => (
   <>

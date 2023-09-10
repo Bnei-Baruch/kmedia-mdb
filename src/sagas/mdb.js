@@ -2,12 +2,12 @@ import { call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
 
 import Api from '../helpers/Api';
 import { CT_DAILY_LESSON, CT_SPECIAL_LESSON, MY_NAMESPACE_HISTORY } from '../helpers/consts';
-import { selectors as authSelectors } from '../redux/modules/auth';
-import { actions, selectors as mdbSelectors, types } from '../redux/modules/mdb';
-import { actions as publications } from '../redux/modules/publications';
-import { selectors as settings } from '../redux/modules/settings';
-import { actions as sources } from '../redux/modules/sources';
-import { actions as tags } from '../redux/modules/tags';
+import { selectors as authSelectors } from '../../lib/redux/slices/authSlice/authSlice';
+import { actions, selectors as mdbSelectors, types } from '../../lib/redux/slices/mdbSlice/mdbSlice';
+import { actions as publications } from '../../lib/redux/slices/publicationsSlice/thunks';
+import { selectors as settings } from '../../lib/redux/slices/settingsSlice/settingsSlice';
+import { actions as sources } from '../../lib/redux/slices/sourcesSlice/sourcesSlice';
+import { actions as tags } from '../../lib/redux/slices/tagsSlice/tagsSlice';
 import { fetch as fetchMy } from './my';
 
 export function* fetchUnit(action) {

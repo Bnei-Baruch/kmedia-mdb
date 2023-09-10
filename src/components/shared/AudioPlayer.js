@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { withTranslation, useTranslation } from 'react-i18next';
+import { withTranslation, useTranslation } from 'next-i18next';
 
 import PlayAudioIcon from '../../images/icons/PlayAudio';
 import { physicalFile } from '../../helpers/utils';

@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Header, Image } from 'semantic-ui-react';
-import { withTranslation } from 'react-i18next';
+import { Header, Image, Grid } from 'semantic-ui-react';
+import { useTranslation } from 'next-i18next';
 import * as shapes from '../../shapes';
-import Link from '../../Language/MultiLanguageLink';
+import Link from 'next/link';
 import { Requests, cmsUrl } from '../../../helpers/Api';
+import { useSelector } from 'react-redux';
+import { selectors } from '../../../../lib/redux/slices/homeSlice';
+import { selectors as mdb } from '../../../../lib/redux/slices/mdbSlice';
+import { isEmpty } from '../../../helpers/utils';
 
 export const getRandomLatestLesson = (width = 512, height = 288) => {
   const params = { width, height, nocrop: false, stripmeta: true, };
@@ -14,25 +18,36 @@ export const getRandomLatestLesson = (width = 512, height = 288) => {
   return Requests.imaginary('resize', params);
 };
 
-const LatestDailyLesson = ({ collection, t }) => {
+const LatestDailyLesson = () => {
+  const { t } = useTranslation();
+
+  const latestLessonID = useSelector(state => selectors.getLatestLesson(state.home) || []);
+  const latestLesson   = useSelector(state => mdb.getCollectionById(state.mdb, latestLessonID));
+
   const [imageSrc, setImage] = useState();
 
   useEffect(() => setImage(getRandomLatestLesson()), []);
 
+  if (isEmpty(latestLesson)) return;
+
   return (
-    <div className="thumbnail">
-      <Link to="/lessons/daily/latest">
-        <Image fluid src={imageSrc} className="thumbnail__image" width={512} />
-        <Header as="h2" className="thumbnail__header">
-          <Header.Content>
-            <Header.Subheader>
-              {t('values.date', { date: collection.film_date })}
-            </Header.Subheader>
-            {t('home.last-lesson')}
-          </Header.Content>
-        </Header>
-      </Link>
-    </div>
+    <Grid.Column computer={6} tablet={7} mobile={16}>
+      <div className="thumbnail">
+        <Link href="/lessons/daily/latest">
+          <>
+            <Image fluid src={imageSrc} className="thumbnail__image" width={512} />
+            <Header as="h2" className="thumbnail__header">
+              <Header.Content>
+                <Header.Subheader>
+                  {t('values.date', { date: latestLesson.film_date })}
+                </Header.Subheader>
+                {t('home.last-lesson')}
+              </Header.Content>
+            </Header>
+          </>
+        </Link>
+      </div>
+    </Grid.Column>
   );
 };
 
@@ -41,4 +56,4 @@ LatestDailyLesson.propTypes = {
   t: PropTypes.func.isRequired,
 };
 
-export default withTranslation()(LatestDailyLesson);
+export default LatestDailyLesson;

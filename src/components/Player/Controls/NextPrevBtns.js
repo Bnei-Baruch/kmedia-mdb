@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 
 import { selectors } from '../../../redux/modules/playlist';
 import Link from '../../Language/MultiLanguageLink';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 import usePlaylistItemLink from '../hooks/usePlaylistItemLink';
 import WebWrapTooltip from '../../shared/WebWrapTooltip';
 import { useLocation } from 'react-router-dom';

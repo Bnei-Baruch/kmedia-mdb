@@ -1,11 +1,11 @@
 import React, { useContext, useState } from 'react';
 import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
-import { withTranslation } from 'react-i18next';
+import { withTranslation } from 'next-i18next';
 
 import { Button, Divider, List, Popup } from 'semantic-ui-react';
-import { selectors } from '../../redux/modules/auth';
-import { selectors as settings } from '../../redux/modules/settings';
+import { selectors } from '../../../lib/redux/slices/authSlice/authSlice';
+import { selectors as settings } from '../../../lib/redux/slices/settingsSlice/settingsSlice';
 import { DeviceInfoContext } from '../../helpers/app-contexts';
 import Link from '../Language/MultiLanguageLink';
 import { login, logout } from '../../pkg/ksAdapter/adapter';

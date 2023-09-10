@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withTranslation } from 'react-i18next';
+import { withTranslation } from 'next-i18next';
 import { useSelector } from 'react-redux';
 
-import { selectors as settings } from '../../../../../redux/modules/settings';
+import { selectors as settings } from '../../../../../../lib/redux/slices/settingsSlice/settingsSlice';
 import * as shapes from '../../../../shapes';
 import { renderBlogItemForHomepage, renderBlogItemForPublications } from './renderFeedHelpers';
 

@@ -1,4 +1,4 @@
-import { createAction } from 'redux-actions';
+import { createAction, handleActions } from 'redux-actions';
 import {
   FN_COLLECTION_MULTI,
   FN_CONTENT_TYPE,
@@ -11,8 +11,6 @@ import {
   FN_SOURCES_MULTI,
   FN_TOPICS_MULTI
 } from '../../helpers/consts';
-
-import { handleActions } from './settings';
 
 const fieldNameByFilter = {
   [FN_SOURCES_MULTI]: 'sources',

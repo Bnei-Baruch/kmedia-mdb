@@ -4,9 +4,9 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import { LANG_ENGLISH, LANG_HEBREW, LANG_RUSSIAN, LANG_SPANISH, LANG_UKRAINIAN } from '../../../../../helpers/consts';
-import { selectors as settings } from '../../../../../redux/modules/settings';
+import { selectors as settings } from '../../../../../../lib/redux/slices/settingsSlice/settingsSlice';
 import { actions as filtersActions, selectors as filters } from '../../../../../redux/modules/filters';
-import { actions, selectors } from '../../../../../redux/modules/publications';
+import { actions, selectors } from '../../../../../../lib/redux/slices/publicationsSlice/thunks';
 import withPagination, { getPageFromLocation } from '../../../../Pagination/withPagination';
 import * as shapes from '../../../../shapes';
 import Page from './Page';

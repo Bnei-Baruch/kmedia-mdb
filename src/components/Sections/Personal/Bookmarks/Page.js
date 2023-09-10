@@ -5,7 +5,7 @@ import clsx from 'clsx';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import BookmarkList from './Bookmarks/List';
 import NeedToLogin from '../NeedToLogin';
-import { withTranslation } from 'react-i18next';
+import { withTranslation } from 'next-i18next';
 import FolderList from './Folders/List';
 import BookmarkHeader from './Header';
 import BookmarkHeaderMobile from './HeaderMobile';

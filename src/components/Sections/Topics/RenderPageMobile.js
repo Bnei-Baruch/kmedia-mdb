@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 import { Breadcrumb, Button, Container, Divider, Modal } from 'semantic-ui-react';
 
-import { selectors } from '../../../redux/modules/tags';
-import { selectors as settings } from '../../../redux/modules/settings';
+import { selectors } from '../../../../lib/redux/slices/tagsSlice/tagsSlice';
+import { selectors as settings } from '../../../../lib/redux/slices/settingsSlice/settingsSlice';
 import Filters from './Filters';
 import VideoList from './VideoList';
 import TextList from './TextList';

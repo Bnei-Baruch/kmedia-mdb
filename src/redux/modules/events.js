@@ -1,11 +1,10 @@
-import { createAction } from 'redux-actions';
+import { createAction, handleActions } from 'redux-actions';
 import groupBy from 'lodash/groupBy';
 import mapValues from 'lodash/mapValues';
 
 import { isEmpty } from '../../helpers/utils';
-import { handleActions, types as settings } from './settings';
 import { types as ssr } from './ssr';
-import { selectors as mdb } from './mdb';
+import { selectors as mdb } from '../../../lib/redux/slices/mdbSlice/mdbSlice';
 
 /* Types */
 
@@ -70,7 +69,7 @@ const onSSRPrepare = draft => {
 
 export const reducer = handleActions({
   [ssr.PREPARE]: onSSRPrepare,
-  [settings.SET_CONTENT_LANGUAGES]: onSetLanguage,
+  //[settings.SET_CONTENT_LANGUAGES]: onSetLanguage,
 
   [FETCH_ALL_EVENTS]: draft => {
     draft.wip = true;

@@ -4,7 +4,7 @@ import { Card, Container, Divider, Grid } from 'semantic-ui-react';
 
 import { LANG_ENGLISH, LANG_HEBREW, LANG_RUSSIAN } from '../../../helpers/consts';
 import { assetUrl } from '../../../helpers/Api';
-import { selectors as settings } from '../../../redux/modules/settings';
+import { selectors as settings } from '../../../../lib/redux/slices/settingsSlice/settingsSlice';
 import SectionHeader from '../../shared/SectionHeader';
 
 const clips = ['1', '2', '3', '4-1', '4-2', '5', '6', '7'];

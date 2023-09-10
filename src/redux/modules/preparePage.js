@@ -1,7 +1,5 @@
-import { createAction } from 'redux-actions';
+import { createAction, handleActions } from 'redux-actions';
 import { ALL_PAGE_NS } from '../../helpers/consts';
-
-import { handleActions, types as settings } from './settings';
 import { types as ssr } from './ssr';
 
 /* Types */
@@ -48,7 +46,7 @@ const onReceiveCollections = (draft, namespace) => {
 
 export const reducer = handleActions({
   [ssr.PREPARE]: onSSRPrepare,
-  [settings.SET_CONTENT_LANGUAGES]: onSetLanguage,
+  //[settings.SET_CONTENT_LANGUAGES]: onSetLanguage,
 
   [RECEIVE_COLLECTIONS]: onReceiveCollections,
 }, initialState);

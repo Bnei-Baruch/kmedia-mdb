@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { Header, Segment } from 'semantic-ui-react';
 
 import { LANG_HEBREW, LANG_RUSSIAN, LANG_UKRAINIAN } from '../../../helpers/consts';
-import { selectors as settings } from '../../../redux/modules/settings';
+import { selectors as settings } from '../../../../lib/redux/slices/settingsSlice/settingsSlice';
 
 const ProjectStatus = () => {
   const language = useSelector(state => settings.getLanguage(state.settings));

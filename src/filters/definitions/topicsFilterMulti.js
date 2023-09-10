@@ -1,5 +1,5 @@
 import { FN_TOPICS_MULTI } from '../../helpers/consts';
-import { selectors } from '../../redux/modules/tags';
+import { selectors } from '../../../lib/redux/slices/tagsSlice/tagsSlice';
 import { createFilterDefinition } from './util';
 
 const topicsFilterMulti = {

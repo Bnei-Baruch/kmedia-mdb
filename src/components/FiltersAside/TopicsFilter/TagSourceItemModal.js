@@ -1,12 +1,12 @@
 import clsx from 'clsx';
 import React, { useState } from 'react';
-import { withTranslation } from 'react-i18next';
+import { withTranslation } from 'next-i18next';
 import { useSelector } from 'react-redux';
 import { Button, Icon, Input, Modal, Table } from 'semantic-ui-react';
 
 import { FN_TOPICS_MULTI } from '../../../helpers/consts';
 import { isEmpty } from '../../../helpers/utils';
-import { selectors as settings } from '../../../redux/modules/settings';
+import { selectors as settings } from '../../../../lib/redux/slices/settingsSlice/settingsSlice';
 import TagSourceItem from './TagSourceItem';
 
 const ITEMS_PER_ROW = 3;

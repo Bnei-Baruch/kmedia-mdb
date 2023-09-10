@@ -2,12 +2,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Button, Checkbox, List } from 'semantic-ui-react';
 
 import { actions, selectors as filters } from '../../../redux/modules/filters';
-import { selectors as sources } from '../../../redux/modules/sources';
-import { selectors as tags } from '../../../redux/modules/tags';
+import { selectors as sources } from '../../../../lib/redux/slices/sourcesSlice/sourcesSlice';
+import { selectors as tags } from '../../../../lib/redux/slices/tagsSlice/tagsSlice';
 import { selectors as filtersAside } from '../../../redux/modules/filtersAside';
 import { FN_TOPICS_MULTI } from '../../../helpers/consts';
 import React, { useMemo, useState } from 'react';
-import { selectors as settings } from '../../../redux/modules/settings';
+import { selectors as settings } from '../../../../lib/redux/slices/settingsSlice/settingsSlice';
 import clsx from 'clsx';
 import TagSourceItemModal from './TagSourceItemModal';
 

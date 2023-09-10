@@ -1,7 +1,6 @@
-import { createAction } from 'redux-actions';
+import { createAction, handleActions } from 'redux-actions';
 import isFunction from 'lodash/isFunction';
 
-import { handleActions } from './settings';
 import { isEmpty } from '../../helpers/utils';
 
 /* Types */

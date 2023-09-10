@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectors as filtersAside } from '../../../redux/modules/filtersAside';
-import { withTranslation } from 'react-i18next';
+import { withTranslation } from 'next-i18next';
 import { FN_CONTENT_TYPE } from '../../../helpers/consts';
 import ContentTypeItem from './ContentTypeItem';
 import { Checkbox, List } from 'semantic-ui-react';

@@ -1,8 +1,8 @@
 import React, { useReducer } from 'react';
 import { useSelector } from 'react-redux';
 import { Button } from 'semantic-ui-react';
-import { selectors as auth } from '../../../../../redux/modules/auth';
-import { useTranslation } from 'react-i18next';
+import { selectors as auth } from '../../../../../../lib/redux/slices/authSlice/authSlice';
+import { useTranslation } from 'next-i18next';
 import SaveAsLabel from './SaveAsLabel';
 import NeedToLoginModal from './NeedToLoginModal';
 import SaveAsPlaylistItem from './SaveAsPlaylistItem';

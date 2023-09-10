@@ -1,10 +1,10 @@
 import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
-import { withTranslation } from 'react-i18next';
+import { withTranslation } from 'next-i18next';
 import { Button, Divider, Header } from 'semantic-ui-react';
 
-import { selectors } from '../../../redux/modules/auth';
-import { selectors as settings } from '../../../redux/modules/settings';
+import { selectors } from '../../../../lib/redux/slices/authSlice/authSlice';
+import { selectors as settings } from '../../../../lib/redux/slices/settingsSlice/settingsSlice';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import { login } from '../../../pkg/ksAdapter/adapter';
 

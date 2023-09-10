@@ -1,4 +1,4 @@
-import { selectors as mdbSelectors } from '../../redux/modules/mdb';
+import { selectors as mdbSelectors } from '../../../lib/redux/slices/mdbSlice/mdbSlice';
 import { createFilterDefinition } from './util';
 import {  FN_COLLECTION_MULTI } from '../../helpers/consts';
 

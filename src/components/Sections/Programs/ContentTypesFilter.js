@@ -6,9 +6,9 @@ import { isLanguageRtl } from '../../../helpers/i18n-utils';
 import { actions, selectors as filters } from '../../../redux/modules/filters';
 import { selectors, selectors as filtersAside } from '../../../redux/modules/filtersAside';
 import { FN_COLLECTION_MULTI, FN_CONTENT_TYPE, UNIT_PROGRAMS_TYPE } from '../../../helpers/consts';
-import { withTranslation } from 'react-i18next';
-import { selectors as mdb } from '../../../redux/modules/mdb';
-import { selectors as settings } from '../../../redux/modules/settings';
+import { withTranslation } from 'next-i18next';
+import { selectors as mdb } from '../../../../lib/redux/slices/mdbSlice/mdbSlice';
+import { selectors as settings } from '../../../../lib/redux/slices/settingsSlice/settingsSlice';
 import FilterHeader from '../../FiltersAside/FilterHeader';
 import CollectionsModal, { cCtByUnitCt } from './CollectionsModal';
 

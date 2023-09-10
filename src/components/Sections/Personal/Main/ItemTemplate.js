@@ -14,7 +14,7 @@ import { isLanguageRtl } from '../../../../helpers/i18n-utils';
 import Link from '../../../Language/MultiLanguageLink';
 import PlaylistPlayIcon from '../../../../images/icons/PlaylistPlay';
 import SubscriptionsIcon from '../../../../images/icons/Subscriptions';
-import { selectors as settings } from '../../../../redux/modules/settings';
+import { selectors as settings } from '../../../../../lib/redux/slices/settingsSlice/settingsSlice';
 
 const iconByNamespace = {
   [MY_NAMESPACE_REACTIONS]: 'heart outline',

@@ -24,7 +24,7 @@ import { getUILangFromPath } from '../src/helpers/url';
 import { isEmpty } from '../src/helpers/utils';
 import createStore from '../src/redux/createStore';
 import { actions as ssr } from '../src/redux/modules/ssr';
-import { actions as settings, initialState as settingsInitialState, onSetUILanguage, onSetContentLanguages, onSetUrlLanguage } from '../src/redux/modules/settings';
+import { actions as settings, initialState as settingsInitialState, onSetUILanguage, onSetContentLanguages, onSetUrlLanguage } from '../lib/redux/slices/settingsSlice/settingsSlice';
 import i18nnext from './i18nnext';
 import App from '../src/components/App/App';
 import moment from 'moment/moment';
@@ -37,7 +37,7 @@ const helmetContext = {};
 // eslint-disable-next-line no-unused-vars
 const DoNotRemove = localStorage; // DO NOT REMOVE - the import above does all the work
 
-const BASE_URL   = process.env.REACT_APP_BASE_URL;
+const BASE_URL   = process.env.NEXT_PUBLIC_BASE_URL;
 let show_console = false;
 export default function serverRender(req, res, next, htmlData) {
   if (req.originalUrl.includes('anonymous')) return;

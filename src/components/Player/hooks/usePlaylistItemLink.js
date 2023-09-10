@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { selectors } from '../../../redux/modules/playlist';
-import { selectors as mdb } from '../../../redux/modules/mdb';
+import { selectors as mdb } from '../../../../lib/redux/slices/mdbSlice/mdbSlice';
 import { canonicalLink } from '../../../helpers/links';
 import { stringify } from '../../../helpers/url';
 

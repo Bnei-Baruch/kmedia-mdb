@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { withTranslation } from 'react-i18next';
+import { withTranslation } from 'next-i18next';
 import { Button, Container, Grid, Header, Icon, Input, Label, Modal } from 'semantic-ui-react';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -13,7 +13,7 @@ import { selectors as my } from '../../../../redux/modules/my';
 import { getMyItemKey } from '../../../../helpers/my';
 import FolderList from './Folders/List';
 import { getLanguageDirection } from '../../../../helpers/i18n-utils';
-import { selectors as settings } from '../../../../redux/modules/settings';
+import { selectors as settings } from '../../../../../lib/redux/slices/settingsSlice/settingsSlice';
 
 const BookmarkHeaderMobile = ({ t }) => {
   const [open, setOpen] = useState();

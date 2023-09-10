@@ -1,14 +1,14 @@
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { withTranslation } from 'react-i18next';
+import { withTranslation } from 'next-i18next';
 import { useSelector } from 'react-redux';
 
 import { Container, Header, Image, List } from 'semantic-ui-react';
 import { iconByContentTypeMap } from '../../../helpers/consts';
 import { SectionLogo } from '../../../helpers/images';
-import { selectors as mdb } from '../../../redux/modules/mdb';
-import { selectors as sources } from '../../../redux/modules/sources';
+import { selectors as mdb } from '../../../../lib/redux/slices/mdbSlice/mdbSlice';
+import { selectors as sources } from '../../../../lib/redux/slices/sourcesSlice/sourcesSlice';
 import Link from '../../Language/MultiLanguageLink';
 import { buildTextItemInfo, textPartLink } from './helper';
 

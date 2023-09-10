@@ -19,7 +19,7 @@ export const shallowRender = (component, props) => shallow(React.createElement(c
 
 export const mountedRender = (component, props) => mount(React.createElement(component, props));
 
-jest.mock('react-i18next', () => ({
+jest.mock('next-i18next', () => ({
   // this mock makes sure any components using the withTranslation HoC receive the t function as a prop
   withTranslation: () => c => {
     c.defaultProps = { ...c.defaultProps, t: k => k };

@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Checkbox, Container, Header, List, Segment } from 'semantic-ui-react';
 
 import { actions, selectors } from '../../redux/modules/filtersAside';
-import { selectors as search, actions as searchActions } from '../../redux/modules/search';
+import { selectors as search, actions as searchActions } from '../../../lib/redux/slices/searchSlice/searchSlice';
 import { FN_SORT_BY_FILTER, FN_TOPICS_MULTI, FN_SOURCES_MULTI } from '../../helpers/consts';
 
 import FiltersHydrator from '../Filters/FiltersHydrator';

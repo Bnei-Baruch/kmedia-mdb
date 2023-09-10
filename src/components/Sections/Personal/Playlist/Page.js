@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react';
-import { withTranslation } from 'react-i18next';
+import { withTranslation } from 'next-i18next';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Container, Grid, Popup } from 'semantic-ui-react';
@@ -7,8 +7,8 @@ import clsx from 'clsx';
 
 import { actions, selectors } from '../../../../redux/modules/my';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
-import { selectors as settings } from '../../../../redux/modules/settings';
-import { selectors as auth } from '../../../../redux/modules/auth';
+import { selectors as settings } from '../../../../../lib/redux/slices/settingsSlice/settingsSlice';
+import { selectors as auth } from '../../../../../lib/redux/slices/authSlice/authSlice';
 import { MY_NAMESPACE_PLAYLISTS } from '../../../../helpers/consts';
 import WipErr from '../../../shared/WipErr/WipErr';
 import ContentItemContainer from '../../../shared/ContentItem/ContentItemContainer';

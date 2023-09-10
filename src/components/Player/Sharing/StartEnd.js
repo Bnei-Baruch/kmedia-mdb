@@ -1,13 +1,13 @@
 import React from 'react';
 import { Input } from 'semantic-ui-react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 
 import { formatTime } from '../../../helpers/time';
 import { actions, selectors } from '../../../redux/modules/player';
 import { getPosition } from '../../../pkg/jwpAdapter/adapter';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
-import { selectors as settings } from '../../../redux/modules/settings';
+import { selectors as settings } from '../../../../lib/redux/slices/settingsSlice/settingsSlice';
 
 const StartEnd = ({ action }) => {
   const { t }              = useTranslation();

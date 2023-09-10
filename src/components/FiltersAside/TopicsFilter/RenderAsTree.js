@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
-import { selectors as tags } from '../../../redux/modules/tags';
-import { selectors as sources } from '../../../redux/modules/sources';
+import { selectors as tags } from '../../../../lib/redux/slices/tagsSlice/tagsSlice';
+import { selectors as sources } from '../../../../lib/redux/slices/sourcesSlice/sourcesSlice';
 import React, { useMemo } from 'react';
 import TagSourceItem from './TagSourceItem';
 import { FN_TOPICS_MULTI } from '../../../helpers/consts';

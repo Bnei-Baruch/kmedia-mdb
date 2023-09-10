@@ -1,12 +1,12 @@
 import React, { useContext, useEffect } from 'react';
-import { withTranslation } from 'react-i18next';
+import { withTranslation } from 'next-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { selectors, actions } from '../../../redux/modules/mdb';
+import { selectors, actions } from '../../../../lib/redux/slices/mdbSlice/mdbSlice';
 import { selectors as recommended } from '../../../redux/modules/recommended';
-import { selectors as sources } from '../../../redux/modules/sources';
-import { selectors as tags } from '../../../redux/modules/tags';
+import { selectors as sources } from '../../../../lib/redux/slices/sourcesSlice/sourcesSlice';
+import { selectors as tags } from '../../../../lib/redux/slices/tagsSlice/tagsSlice';
 import {
   CT_CLIPS,
   CT_CONGRESS,

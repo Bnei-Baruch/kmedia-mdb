@@ -2,8 +2,8 @@ import { call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
 
 import { actions, types } from '../redux/modules/my';
 import Api from '../helpers/Api';
-import { selectors as authSelectors } from '../redux/modules/auth';
-import { actions as mdbActions, selectors as mdbSelectors } from '../redux/modules/mdb';
+import { selectors as authSelectors } from '../../lib/redux/slices/authSlice/authSlice';
+import { actions as mdbActions, selectors as mdbSelectors } from '../../lib/redux/slices/mdbSlice/mdbSlice';
 import {
   IsCollectionContentType,
   MY_NAMESPACE_BOOKMARKS,
@@ -13,7 +13,7 @@ import {
   MY_NAMESPACE_SUBSCRIPTIONS
 } from '../helpers/consts';
 import { updateQuery } from './helpers/url';
-import { selectors as settings } from '../redux/modules/settings';
+import { selectors as settings } from '../../lib/redux/slices/settingsSlice/settingsSlice';
 import { fetchViewsByUIDs } from './recommended';
 
 function* updatePageInQuery(action) {

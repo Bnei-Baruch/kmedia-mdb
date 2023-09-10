@@ -1,9 +1,9 @@
 import React from 'react';
-import { withTranslation } from 'react-i18next';
+import { withTranslation } from 'next-i18next';
 import { useSelector } from 'react-redux';
 
 import { isEmpty } from '../../../helpers/utils';
-import { selectors } from '../../../redux/modules/tags';
+import { selectors } from '../../../../lib/redux/slices/tagsSlice/tagsSlice';
 import { selectors as stats } from '../../../redux/modules/stats';
 import HierarchicalFilter from './HierarchicalFilter';
 import { getTree } from '../../../helpers/topricTree';

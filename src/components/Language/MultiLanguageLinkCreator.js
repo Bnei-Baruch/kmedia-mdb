@@ -2,8 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import hoistStatics from 'hoist-non-react-statics';
 
-import { getToWithLanguage, stringify } from '../../helpers/url';
-import { useLocation } from 'react-router';
+import { stringify } from '../../helpers/url';
 
 import { parse } from 'qs';
 import { omit } from 'lodash/object';
@@ -38,8 +37,8 @@ const multiLanguageLinkCreator = () => WrappedComponent => {
   ) => {
 
     // We need to use "unused constants" in order to get proper "rest"
-    const location       = useLocation();
-    const toWithLanguage = getToWithLanguage(to, location, language, contentLanguage);
+    //const location       = useLocation();
+    const toWithLanguage = to;//getToWithLanguage(to, location, language, contentLanguage);
 
     // Clear keycloak hash params from url
     if (toWithLanguage?.hash && toWithLanguage.hash.indexOf(KC_SEARCH_KEY_SESSION) !== -1) {

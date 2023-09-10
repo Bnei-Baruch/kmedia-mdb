@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Container, Header } from 'semantic-ui-react';
 
-import { selectors as settings } from '../../../redux/modules/settings';
+import { selectors as settings } from '../../../../lib/redux/slices/settingsSlice/settingsSlice';
 import excerpts from './excerpts';
 import { DEFAULT_CONTENT_LANGUAGE } from '../../../helpers/consts';
 

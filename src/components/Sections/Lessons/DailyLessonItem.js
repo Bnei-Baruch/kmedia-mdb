@@ -1,10 +1,10 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 import { useSelector } from 'react-redux';
 import { Header, List } from 'semantic-ui-react';
 import { canonicalLink, getCuByCcuSkipPreparation } from '../../../helpers/links';
 
-import { selectors as mdb } from '../../../redux/modules/mdb';
+import { selectors as mdb } from '../../../../lib/redux/slices/mdbSlice/mdbSlice';
 import Link from '../../Language/MultiLanguageLink';
 import UnitLogoWithDuration from '../../shared/UnitLogoWithDuration';
 import { CT_LESSON_PART } from '../../../helpers/consts';

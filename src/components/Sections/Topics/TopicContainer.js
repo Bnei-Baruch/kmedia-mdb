@@ -1,13 +1,13 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { withTranslation } from 'react-i18next';
+import { withTranslation } from 'next-i18next';
 import produce from 'immer';
 import debounce from 'lodash/debounce';
 import isEqual from 'react-fast-compare';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Button, Container, Divider, Grid, Header, Input, List } from 'semantic-ui-react';
-import { selectors as topicsSelectors } from '../../../redux/modules/tags';
+import { selectors as topicsSelectors } from '../../../../lib/redux/slices/tagsSlice/tagsSlice';
 import { getEscapedRegExp, isNotEmptyArray } from '../../../helpers/utils';
 import SectionHeader from '../../shared/SectionHeader';
 import Link from '../../Language/MultiLanguageLink';

@@ -1,8 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 import { Button, Icon, Input, Loader, Search } from 'semantic-ui-react';
-import { withTranslation } from 'react-i18next';
+import { withTranslation } from 'next-i18next';
 import moment from 'moment';
 
 import ButtonDayPicker from '../Filters/components/Date/ButtonDayPicker';
@@ -10,8 +9,9 @@ import { ClientChroniclesContext, DeviceInfoContext } from '../../helpers/app-co
 import { SuggestionsHelper } from '../../helpers/search';
 import { isLanguageRtl } from '../../helpers/i18n-utils';
 
-import { actions, selectors } from '../../redux/modules/search';
-import { selectors as settingsSelectors } from '../../redux/modules/settings';
+import { actions, selectors } from '../../../lib/redux/slices/searchSlice/searchSlice';
+import { selectors as settingsSelectors } from '../../../lib/redux/slices/settingsSlice/settingsSlice';
+import { useRouter } from 'next/router';
 
 const makeResult = (uiLang, result) => ({
   ...result,
@@ -33,7 +33,7 @@ const OmniBox = ({ isHomePage = false, t }) => {
   const [userInteracted, setUserInteracted] = useState(false);
 
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const router = useRouter()
 
   useEffect(() => {
     if (suggestions) {
@@ -85,7 +85,7 @@ const OmniBox = ({ isHomePage = false, t }) => {
   };
 
   const handleFromInputChange = value => {
-    navigate(`/${ uiLang }/simple-mode?date=${ moment(value).format('YYYY-MM-DD') }`);
+    router.push(`/${ uiLang }/simple-mode?date=${ moment(value).format('YYYY-MM-DD') }`);
   };
 
   const renderInput = () => isHomePage ?

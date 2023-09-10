@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { withTranslation } from 'react-i18next';
+import { withTranslation } from 'next-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Confirm, Grid, Icon, Input } from 'semantic-ui-react';
 import clsx from 'clsx';
@@ -8,7 +8,7 @@ import { actions } from '../../../../../redux/modules/my';
 import { MY_NAMESPACE_FOLDERS } from '../../../../../helpers/consts';
 import { getMyItemKey } from '../../../../../helpers/my';
 import { stopBubbling } from '../../../../../helpers/utils';
-import { selectors as settings } from '../../../../../redux/modules/settings';
+import { selectors as settings } from '../../../../../../lib/redux/slices/settingsSlice/settingsSlice';
 
 const FolderItem = ({ folder, selectedId, selectFolder, t }) => {
   const [edit, setEdit]       = useState();

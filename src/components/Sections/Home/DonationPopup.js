@@ -1,24 +1,38 @@
-import React, { useContext } from 'react';
-import { withTranslation } from 'react-i18next';
-import { useLocation } from 'react-router-dom';
+'use client';
+import React, { useContext, useState } from 'react';
+import { useTranslation } from 'next-i18next';
 import { Button, Grid, Header, Image, Modal } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
-import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { LANG_ENGLISH, LANG_HEBREW, LANG_RUSSIAN, LANG_SPANISH, KC_BOT_USER_NAME } from '../../../helpers/consts';
-import { getQuery } from '../../../helpers/url';
+import { useSearchParams } from 'next/navigation';
 import banner from '../../../images/DonationBanner.jpg';
 import { isLanguageRtl } from '../../../helpers/i18n-utils';
-import { selectors as settings } from '../../../redux/modules/settings';
-import { selectors } from '../../../redux/modules/auth';
+import { selectors as settings } from '../../../../lib/redux/slices/settingsSlice/settingsSlice';
+import { selectors } from '../../../../lib/redux/slices/authSlice/authSlice';
 
-function DonationPopup({ t }) {
-  const user       = useSelector(state => selectors.getUser(state.auth));
+const DONATION_LINKS_DETAILS = new Map([
+  [LANG_HEBREW, { linkLang: '', utmTerm: 'heb' }],
+  [LANG_ENGLISH, { linkLang: 'en', utmTerm: 'eng' }],
+  [LANG_RUSSIAN, { linkLang: 'ru', utmTerm: 'rus' }],
+  [LANG_SPANISH, { linkLang: 'es', utmTerm: 'spa' }],
+]);
+
+const getDonateLinkDetails = contentLanguages => {
+  const language = contentLanguages.find(language => DONATION_LINKS_DETAILS.has(language));
+  return (language && DONATION_LINKS_DETAILS.get(language)) || { linkLang: 'en', utmTerm: 'other_lang' };
+};
+
+function DonationPopup() {
+  const { t }        = useTranslation();
+  const searchParams = useSearchParams();
+
+  const user = useSelector(state => selectors.getUser(state.auth));
+
   const shouldOpen = () => {
     if (user?.name === KC_BOT_USER_NAME) return false;
-    const query = getQuery(location);
-    if (!!query.showPopup)
+    if (searchParams.has('showPopup'))
       return true;
     const d         = new Date();
     const firstWeek = d.getDate();
@@ -36,13 +50,12 @@ function DonationPopup({ t }) {
     return false;
   };
 
-  const location = useLocation();
   const contentLanguages = useSelector(state => settings.getContentLanguages(state.settings));
-  const uiLang = useSelector(state => settings.getUILang(state.settings));
-  const uiDir = useSelector(state => settings.getUIDir(state.settings));
-  const isRTL = isLanguageRtl(uiLang);
+  const uiLang           = useSelector(state => settings.getUILang(state.settings));
+  const uiDir            = useSelector(state => settings.getUIDir(state.settings));
+  const isRTL            = isLanguageRtl(uiLang);
 
-  const [open, setOpen]    = React.useState(shouldOpen());
+  const [open, setOpen]    = useState(shouldOpen());
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
   const { linkLang, utmTerm } = getDonateLinkDetails(contentLanguages);
@@ -92,18 +105,4 @@ function DonationPopup({ t }) {
   );
 }
 
-const DONATION_LINKS_DETAILS = new Map([
-  [LANG_HEBREW, { linkLang: '', utmTerm: 'heb' }],
-  [LANG_ENGLISH, { linkLang: 'en', utmTerm: 'eng' }],
-  [LANG_RUSSIAN, { linkLang: 'ru', utmTerm: 'rus' }],
-  [LANG_SPANISH, { linkLang: 'es', utmTerm: 'spa' }],
-]);
-
-const getDonateLinkDetails = contentLanguages => {
-  const language = contentLanguages.find(language => DONATION_LINKS_DETAILS.has(language));
-  return (language && DONATION_LINKS_DETAILS.get(language)) || { linkLang: 'en', utmTerm: 'other_lang' };
-};
-
-DonationPopup.propTypes = { t: PropTypes.func.isRequired };
-
-export default withTranslation()(DonationPopup);
+export default DonationPopup;

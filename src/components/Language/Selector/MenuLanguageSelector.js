@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { withTranslation } from 'react-i18next';
+import { withTranslation } from 'next-i18next';
 import { Checkbox, Grid, Dropdown, Label, Modal } from 'semantic-ui-react';
 import { noop } from '../../../helpers/utils';
 import { getOptions } from '../../../helpers/language';
 import { ALL_LANGUAGES, LANGUAGES } from '../../../helpers/consts';
-import { selectors as settings } from '../../../redux/modules/settings';
+import { selectors as settings } from '../../../../lib/redux/slices/settingsSlice/settingsSlice';
 
 const applyChecked = (language, checked, selected, isAny) => {
   if (isAny) {

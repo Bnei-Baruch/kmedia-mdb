@@ -4,7 +4,7 @@ import moment from 'moment';
 import { Button, Card, Confirm, Header } from 'semantic-ui-react';
 
 import { actions } from '../../../../redux/modules/my';
-import { selectors as mdb } from '../../../../redux/modules/mdb';
+import { selectors as mdb } from '../../../../../lib/redux/slices/mdbSlice/mdbSlice';
 import { actions as statsActions, selectors as stats } from '../../../../redux/modules/stats';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import { MY_NAMESPACE_SUBSCRIPTIONS, SECTIONS_LINK_BY_CU_CONTENT_TYPE } from '../../../../helpers/consts';
@@ -12,7 +12,7 @@ import { canonicalLink } from '../../../../helpers/links';
 import Link from '../../../Language/MultiLanguageLink';
 import UnitLogo from '../../../shared/Logo/UnitLogo';
 import { getMyItemKey } from '../../../../helpers/my';
-import { selectors as settings } from '../../../../redux/modules/settings';
+import { selectors as settings } from '../../../../../lib/redux/slices/settingsSlice/settingsSlice';
 import { getLanguageDirection } from '../../../../helpers/i18n-utils';
 
 export const SubscriptionsItem = ({ item, t }) => {

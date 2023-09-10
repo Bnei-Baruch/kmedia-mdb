@@ -1,7 +1,5 @@
-import { createAction } from 'redux-actions';
+import { createAction, handleActions } from 'redux-actions';
 import mapValues from 'lodash/mapValues';
-
-import { handleActions } from './settings';
 import { types as ssr } from './ssr';
 
 const UNZIP                   = 'Assets/UNZIP';

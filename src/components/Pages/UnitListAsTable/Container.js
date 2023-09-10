@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { selectors as settings } from '../../../redux/modules/settings';
+import { selectors as settings } from '../../../../lib/redux/slices/settingsSlice/settingsSlice';
 import { actions as filtersActions, selectors as filters } from '../../../redux/modules/filters';
 import { actions as listsActions, selectors as lists } from '../../../redux/modules/lists';
-import { selectors as mdb } from '../../../redux/modules/mdb';
+import { selectors as mdb } from '../../../../lib/redux/slices/mdbSlice/mdbSlice';
 import withPagination, { getPageFromLocation } from '../../Pagination/withPagination';
 import * as shapes from '../../shapes';
 import Page from './Page';

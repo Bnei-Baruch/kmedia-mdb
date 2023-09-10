@@ -9,7 +9,7 @@ import Link from '../../../Language/MultiLanguageLink';
 import PlaylistPlayIcon from '../../../../images/icons/PlaylistPlay';
 import { getMyItemKey } from '../../../../helpers/my';
 import clsx from 'clsx';
-import { selectors as settings } from '../../../../redux/modules/settings';
+import { selectors as settings } from '../../../../../lib/redux/slices/settingsSlice/settingsSlice';
 
 export const PlaylistItem = ({ item, t, language, asList = false }) => {
   const uiDir = useSelector(state => settings.getUIDir(state.settings));

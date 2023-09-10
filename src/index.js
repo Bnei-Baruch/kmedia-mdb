@@ -1,3 +1,4 @@
+'use client';
 // full ES2015+ environment (no < Stage 4 proposals)
 import 'core-js/stable';
 import 'core-js/proposals/url';
@@ -18,9 +19,9 @@ import ReactGA from 'react-ga';
 import { createBrowserHistory } from 'history';
 
 import { DEFAULT_UI_LANGUAGE, LANG_UKRAINIAN, KC_BOT_USER_NAME } from './helpers/consts';
-import i18n from './helpers/i18nnext';
+import i18n from '../i18n/i18nnext';
 import createStore from './redux/createStore';
-import { actions as mdb } from './redux/modules/mdb';
+import { actions as mdb } from '../lib/redux/slices/mdbSlice/mdbSlice';
 import { actions as ssr } from './redux/modules/ssr';
 import App from './components/App/App';
 import UAParser from 'ua-parser-js';

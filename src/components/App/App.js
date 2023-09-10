@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import { Provider } from 'react-redux';
 import { ReduxRouter as ConnectedRouter } from '@lagunovsky/redux-react-router';
 
-import { I18nextProvider } from 'react-i18next';
+import { I18nextProvider } from 'next-i18next';
 
 import ScrollToTop from '../shared/ScrollToTop/ScrollToTop';
-import '../../stylesheets/Kmedia.scss';
+import '../../../stylesheets/Kmedia.scss';
 import * as shapes from '../shapes';
 import { ChroniclesActions } from '../../helpers/clientChronicles';
 import {

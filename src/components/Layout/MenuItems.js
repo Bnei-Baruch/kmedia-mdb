@@ -1,11 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withTranslation } from 'react-i18next';
 import identity from 'lodash/identity';
 import { Button, Header, Menu, Sidebar } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
 
-import { selectors as settings } from '../../redux/modules/settings';
+import { selectors as settings } from '../../../lib/redux/slices/settingsSlice/settingsSlice';
 import { getPodcastLinkByLangs, getRSSLinkByLangs } from '../../helpers/utils';
 import NavLink from '../Language/MultiLanguageNavLink';
 import DonateNow, { VirtualHomeButton } from './DonateNow';
@@ -13,6 +12,8 @@ import FeedBurner from './FeedBurner';
 import { MY_NAMESPACE_BOOKMARKS } from '../../helpers/consts';
 import useIsLoggedIn from '../shared/useIsLoggedIn';
 import { login } from '../../pkg/ksAdapter/adapter';
+import { useTranslation } from 'next-i18next';
+import { Link } from 'next/link';
 
 const ITEMS = [
   'lessons',
@@ -28,15 +29,16 @@ const ITEMS = [
   'help',
 ];
 
-const MenuItems = ({ simple = false, visible = false, t, onItemClick = identity }) => {
+const MenuItems = ({ simple = false, visible = false, onItemClick = identity }) => {
+  const { t }            = useTranslation();
   const contentLanguages = useSelector(state => settings.getContentLanguages(state.settings));
-  const loggedIn  = useIsLoggedIn();
+  const loggedIn         = useIsLoggedIn();
 
   const items = ITEMS.map(x => (
     <Menu.Item
       key={x}
-      as={NavLink}
-      to={`/${x}`}
+      as={Link}
+      href={`/${x}`}
       className="sidebar-item"
       activeClassName="active"
       content={t(`nav.sidebar.${x}`)}
@@ -143,7 +145,6 @@ const MenuItems = ({ simple = false, visible = false, t, onItemClick = identity 
 MenuItems.propTypes = {
   simple: PropTypes.bool,
   visible: PropTypes.bool,
-  t: PropTypes.func.isRequired,
   onItemClick: PropTypes.func,
 };
 
@@ -153,4 +154,4 @@ MenuItems.defaultProps = {
   onItemClick: identity
 };
 
-export default withTranslation()(MenuItems);
+export default MenuItems;

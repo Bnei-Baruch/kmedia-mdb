@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { Container, Divider, Table } from 'semantic-ui-react';
 
 import { isEmpty } from '../../../helpers/utils';
-import { selectors as sources } from '../../../redux/modules/sources';
+import { selectors as sources } from '../../../../lib/redux/slices/sourcesSlice/sourcesSlice';
 import SectionHeader from '../../shared/SectionHeader';
 import Kabbalist from './Kabbalist';
 

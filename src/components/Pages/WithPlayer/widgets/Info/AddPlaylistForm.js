@@ -6,7 +6,7 @@ import { actions } from '../../../../../redux/modules/my';
 import { MY_NAMESPACE_PLAYLIST_EDIT } from '../../../../../helpers/consts';
 import AlertModal from '../../../../shared/AlertModal';
 import { stopBubbling } from '../../../../../helpers/utils';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 
 const AddPlaylistForm = ({ close }) => {
   const { t } = useTranslation();

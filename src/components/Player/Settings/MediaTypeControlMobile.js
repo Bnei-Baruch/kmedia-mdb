@@ -1,7 +1,7 @@
 import React from 'react';
 import { Checkbox } from 'semantic-ui-react';
 import { useSelector, useDispatch } from 'react-redux';
-import { withTranslation } from 'react-i18next';
+import { withTranslation } from 'next-i18next';
 
 import { selectors } from '../../../redux/modules/player';
 import { actions as playlistActions } from '../../../redux/modules/playlist';

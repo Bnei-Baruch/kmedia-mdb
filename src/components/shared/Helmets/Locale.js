@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { useSelector } from 'react-redux';
 
 import { LANG_UI_LANGUAGES } from '../../../helpers/consts';
-import { selectors as settings } from '../../../redux/modules/settings';
+import { selectors as settings } from '../../../../lib/redux/slices/settingsSlice/settingsSlice';
 import { getLanguageLocale } from '../../../helpers/i18n-utils';
 
 const Locale = () => {

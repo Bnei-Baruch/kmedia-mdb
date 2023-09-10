@@ -1,7 +1,7 @@
 import React from 'react';
 import { Icon } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
-import { withTranslation } from 'react-i18next';
+import { withTranslation } from 'next-i18next';
 
 import { selectors } from '../../../redux/modules/player';
 import WebWrapTooltip from '../../shared/WebWrapTooltip';

@@ -1,12 +1,12 @@
 import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 import { Breadcrumb, Container, Divider, Grid } from 'semantic-ui-react';
 import { isLanguageRtl } from '../../../helpers/i18n-utils';
 
-import { selectors } from '../../../redux/modules/tags';
-import { selectors as settings } from '../../../redux/modules/settings';
+import { selectors } from '../../../../lib/redux/slices/tagsSlice/tagsSlice';
+import { selectors as settings } from '../../../../lib/redux/slices/settingsSlice/settingsSlice';
 import Filters from './Filters';
 import VideoList from './VideoList';
 import TextList from './TextList';

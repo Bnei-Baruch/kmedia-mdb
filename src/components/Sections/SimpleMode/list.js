@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withTranslation } from 'react-i18next';
+import { withTranslation } from 'next-i18next';
 import { Image, List } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
 
 import WipErr from '../../shared/WipErr/WipErr';
 import { FrownSplash } from '../../shared/Splash/Splash';
 import { selectors } from '../../../redux/modules/simpleMode';
-import { selectors as mdb } from '../../../redux/modules/mdb';
+import { selectors as mdb } from '../../../../lib/redux/slices/mdbSlice/mdbSlice';
 import { isEmpty } from '../../../helpers/utils';
 import { SectionLogo } from '../../../helpers/images';
 

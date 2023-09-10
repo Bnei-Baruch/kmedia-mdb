@@ -1,10 +1,10 @@
 import React, { useContext, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 import { useSelector } from 'react-redux';
 import { Button, Container, Grid, Modal } from 'semantic-ui-react';
 
 import { DeviceInfoContext } from '../../helpers/app-contexts';
-import { selectors as settings } from '../../redux/modules/settings';
+import { selectors as settings } from '../../../lib/redux/slices/settingsSlice/settingsSlice';
 import FiltersHydrator from '../Filters/FiltersHydrator';
 
 const SectionFiltersWithMobile = ({ filters, children, namespace }) => {

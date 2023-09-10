@@ -1,9 +1,9 @@
 import React, { useContext } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 import { useSelector } from 'react-redux';
 import { Container, Grid, Header, Button } from 'semantic-ui-react';
 import { getRSSLinkByLangs } from '../../helpers/utils';
-import { selectors as settings } from '../../redux/modules/settings';
+import { selectors as settings } from '../../../lib/redux/slices/settingsSlice/settingsSlice';
 import { DeviceInfoContext } from '../../helpers/app-contexts';
 
 const Footer = () => {

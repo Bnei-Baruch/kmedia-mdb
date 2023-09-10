@@ -12,10 +12,10 @@ import 'react-day-picker/lib/style.css';
 import { today } from '../../../../helpers/date';
 import { getLanguageLocaleWORegion } from '../../../../helpers/i18n-utils';
 import YearMonthForm from './YearMonthForm';
-import { selectors as settings } from '../../../../redux/modules/settings';
+import { selectors as settings } from '../../../../../lib/redux/slices/settingsSlice/settingsSlice';
 
 import DayPicker from 'react-day-picker';
-import { withTranslation } from 'react-i18next';
+import { withTranslation } from 'next-i18next';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import clsx from 'clsx';
 

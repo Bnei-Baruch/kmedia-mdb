@@ -3,9 +3,9 @@ import moment from 'moment';
 
 import { LANG_UKRAINIAN } from '../helpers/consts';
 import { changeDirection, getCurrentDirection, getLanguageDirection } from '../helpers/i18n-utils';
-import { types } from '../redux/modules/settings';
-import { actions as mdb } from '../redux/modules/mdb';
-import i18n from '../helpers/i18nnext';
+import { types } from '../../lib/redux/slices/settingsSlice/settingsSlice';
+import { actions as mdb } from '../../lib/redux/slices/mdbSlice/mdbSlice';
+import i18n from '../../i18n/settings';
 
 function changeDirectionIfNeeded(language) {
   const currentDirection = getCurrentDirection() || 'ltr';

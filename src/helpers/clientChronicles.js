@@ -1,3 +1,4 @@
+'use client';
 import { useContext, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
@@ -6,19 +7,31 @@ import { chroniclesUrl, chroniclesBackendEnabled } from './Api';
 import { noop, partialAssign } from './utils';
 
 import { actions } from '../redux/modules/chronicles';
-import { selectors as settings } from '../redux/modules/settings';
+import { selectors as settings } from '../../lib/redux/slices/settingsSlice/settingsSlice';
 import { types as recommendedTypes } from '../redux/modules/recommended';
-import { types as searchTypes } from '../redux/modules/search';
-import { types as authTypes } from '../redux/modules/auth';
+import { types as searchTypes } from '../../lib/redux/slices/searchSlice/searchSlice';
+import { types as authTypes } from '../../lib/redux/slices/authSlice/authSlice';
 import { ClientChroniclesContext } from './app-contexts';
 
 // An array of DOM events that should be interpreted as user activity.
 const ACTIVITY_EVENTS = ['mousedown', 'mousemove', 'keydown', 'scroll', 'touchstart'];
 
 const FLOWS = [
-  { start: 'page-enter',               end: 'page-leave',                 subFlows: ['recommend', 'search', 'autocomplete', 'user-inactive', 'download'] },
-  { start: 'unit-page-enter',          end: 'unit-page-leave',            subFlows: ['player-play', 'recommend', 'search', 'autocomplete', 'user-inactive', 'download'] },
-  { start: 'collection-page-enter',    end: 'collection-page-leave',      subFlows: ['collection-unit-selected', 'recommend', 'search', 'autocomplete', 'user-inactive', 'download'] },
+  {
+    start: 'page-enter',
+    end: 'page-leave',
+    subFlows: ['recommend', 'search', 'autocomplete', 'user-inactive', 'download']
+  },
+  {
+    start: 'unit-page-enter',
+    end: 'unit-page-leave',
+    subFlows: ['player-play', 'recommend', 'search', 'autocomplete', 'user-inactive', 'download']
+  },
+  {
+    start: 'collection-page-enter',
+    end: 'collection-page-leave',
+    subFlows: ['collection-unit-selected', 'recommend', 'search', 'autocomplete', 'user-inactive', 'download']
+  },
   { start: 'collection-unit-selected', end: 'collection-unit-unselected', subFlows: ['player-play', 'user-inactive'] },
   { start: 'player-play', end: 'player-stop', subFlows: ['mute-unmute', 'user-inactive'] },
   { start: 'recommend', end: '', subFlows: ['recommend-selected'] },
@@ -146,7 +159,7 @@ export default class ClientChronicles {
       }
     });
 
-    this.uiLanguage      = '';
+    this.uiLanguage       = '';
     this.contentLanguages = [];
   }
 

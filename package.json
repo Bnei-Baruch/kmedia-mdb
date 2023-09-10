@@ -8,87 +8,22 @@
     "url": "https://github.com/Bnei-Baruch/kmedia-mdb"
   },
   "scripts": {
-    "critical-css": "sass src/stylesheets/critical.scss | yarn run postcss --use autoprefixer --use cssnano -o build/critical.css --no-map",
-    "apply-critical-css": "sed -e 's/<\\/head>/\\\nHERE\\\n/' build/index.html | awk '!/HERE/ { print } /HERE/ { print \"<style type=\\\"text/css\\\">\"; while ((getline a < \"build/critical.css\") > 0) print a; print \"</style></head>\" }' > build/critical.html",
-    "build:css": "echo '>>> Building CSS'; yarn critical-css && yarn apply-critical-css",
-    "build:svgs": "echo '>>> Building Icons...'; npx @svgr/cli -d src/images/ --ignore-existing src/images/",
-    "build:scripts": "echo '>>> Building Scripts...'; react-scripts build",
-    "analyze": "yarn build:production && source-map-explorer build/static/js/main.*",
-    "start-js": "react-scripts start",
-    "start-server:live": "cross-env NODE_ENV=development npx nodemon server/index.js",
-    "start-server": "cross-env NODE_ENV=development node server/index.js",
-    "start-server:debug": "cross-env NODE_ENV=development ndb server/index.js",
-    "start-server:production": "cross-env NODE_ENV=production node server/index.js",
-    "start": "npm-run-all -p start-js start-server",
-    "start:live": "npm-run-all -p start-js start-server:live",
-    "build": "sh -ac '. ./.env.${REACT_APP_ENV}; yarn build:svgs && yarn build:scripts && yarn build:css'",
-    "build:local": "cross-env REACT_APP_ENV=production sh -ac '. ./.env; yarn build:svgs && yarn build:scripts && yarn build:css'",
-    "build:staging": "REACT_APP_ENV=staging yarn build",
-    "build:production": "REACT_APP_ENV=production yarn build",
-    "build:suitcase": "REACT_APP_ENV=suitcase yarn build",
-    "test": "react-scripts test --verbose --watchAll",
-    "test:coverage": "react-scripts test --verbose --watchAll --coverage",
-    "lint": "yarn run eslint src",
-    "lint-fix": "yarn run lint --fix",
-    "prepare": "husky install"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
   "devDependencies": {
-    "@testing-library/react": "^14.0.0",
-    "@wojtekmaj/enzyme-adapter-react-17": "^0.8.0",
-    "compression": "^1.7.4",
-    "enzyme": "^3.11.0",
-    "eslint-config-jest-enzyme": "^7.1.2",
-    "eslint-config-react-app": "^7.0.1",
-    "eslint-plugin-flowtype": "^8.0.3",
-    "eslint-plugin-import": "^2.27.5",
-    "eslint-plugin-jest": "^27.2.1",
-    "eslint-plugin-jsdoc": "^40.0.3",
-    "eslint-plugin-jsx-a11y": "^6.7.1",
-    "eslint-plugin-react": "^7.32.2",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "express-watcher": "^1.0.3",
     "http-proxy-middleware": "^2.0.6",
     "husky": "^8.0.3",
-    "jest-axe": "^7.0.0",
-    "jest-environment-enzyme": "^7.1.2",
-    "jest-enzyme": "^7.1.2",
-    "ndb": "^1.1.5",
-    "nodemon": "^2.0.21",
-    "npm-run-all": "^4.1.5",
-    "postcss": "^8.4.21",
-    "postcss-cli": "^10.1.0",
-    "react-scripts": "5.0.1",
-    "react-test-renderer": "^18.2.0",
-    "sass": "^1.59.3",
-    "sass-lint": "^1.13.1",
-    "script-ext-html-webpack-plugin": "^2.1.5",
-    "source-map-explorer": "^2.5.3"
+    "redux-logger": "3.0.6",
+    "typescript": "5.1.3"
   },
   "dependencies": {
-    "@babel/cli": "^7.21.0",
-    "@babel/core": "^7.21.3",
-    "@babel/eslint-parser": "^7.21.3",
-    "@babel/parser": "^7.21.3",
-    "@babel/plugin-proposal-class-properties": "^7.18.6",
-    "@babel/plugin-proposal-export-namespace-from": "^7.18.9",
-    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.18.6",
-    "@babel/plugin-proposal-optional-chaining": "^7.21.0",
-    "@babel/plugin-proposal-throw-expressions": "^7.18.6",
-    "@babel/plugin-syntax-dynamic-import": "^7.8.3",
-    "@babel/preset-env": "^7.20.2",
-    "@babel/preset-react": "^7.18.6",
-    "@babel/register": "^7.21.0",
-    "@babel/traverse": "^7.21.3",
-    "@babel/types": "^7.21.3",
     "@lagunovsky/redux-react-router": "^4.3.0",
     "@marvelapp/react-ab-test": "^3.1.0",
-    "@svgr/cli": "^6.5.1",
-    "@testing-library/jest-dom": "^5.16.5",
-    "axios": "^1.3.4",
-    "babel-plugin-dynamic-import-node": "^2.3.3",
-    "babel-plugin-lodash": "^3.3.4",
-    "babel-plugin-module-resolver": "^5.0.0",
-    "babel-preset-react-app": "^10.0.1",
+    "@reduxjs/toolkit": "1.9.5",
+    "axios": "^1.5.0",
     "clsx": "^1.2.1",
     "cookie": "^0.5.0",
     "core-js": "^3.29.1",
@@ -101,7 +36,7 @@
     "helmet": "^6.0.1",
     "history": "^5.3.0",
     "hoist-non-react-statics": "^3.3.2",
-    "i18next": "^22.4.11",
+    "i18next": "^23.4.6",
     "i18next-fs-backend": "^2.1.1",
     "i18next-http-backend": "^2.2.0",
     "ignore-styles": "^5.0.1",
@@ -110,11 +45,12 @@
     "iphone-inline-video": "^2.2.2",
     "jaybe-react-loadable": "^5.6.0",
     "keycloak-js": "^21.0.1",
-    "levenary": "^1.1.1",
     "lodash": "^4.17.21",
-    "mock-local-storage": "^1.1.23",
     "moment": "^2.29.4",
     "moment-duration-format": "^2.3.2",
+    "next": "^13.4.19",
+    "next-i18next": "^14.0.3",
+    "next-redux-wrapper": "^8.1.0",
     "postinstall-postinstall": "^2.1.0",
     "prop-types": "^15.8.1",
     "qs": "^6.11.1",
@@ -126,10 +62,10 @@
     "react-ga": "^3.3.1",
     "react-headroom": "^3.2.1",
     "react-helmet-async": "^1.3.0",
-    "react-i18next": "^12.2.0",
+    "react-i18next": "^13.2.2",
     "react-image-gallery": "^1.2.11",
     "react-pdf": "^5.7.2",
-    "react-redux": "^8.0.5",
+    "react-redux": "^8.1.2",
     "react-router": "^6.9.0",
     "react-router-dom": "^6.9.0",
     "react-share": "^4.4.1",
@@ -138,6 +74,7 @@
     "redux-actions": "^2.6.5",
     "redux-logger": "^3.0.6",
     "redux-saga": "^0.16.2",
+    "sass": "^1.66.1",
     "scroll-into-view": "^1.16.2",
     "semantic-ui-react": "^2.1.4",
     "serialize-javascript": "^6.0.1",
@@ -147,29 +84,8 @@
     "worker-loader": "^3.0.8"
   },
   "moduleRoots": [
-    "src",
     "node_modules"
   ],
-  "jest": {
-    "collectCoverageFrom": [
-      "src/**/*.{js,jsx}",
-      "!<rootDir>/node_modules/",
-      "!**/__tests__/**"
-    ],
-    "coverageThreshold": {
-      "global": {
-        "branches": 1,
-        "functions": 1,
-        "lines": 1,
-        "statements": 1
-      }
-    },
-    "coverageReporters": [
-      "text-summary",
-      "lcov"
-    ],
-    "snapshotSerializers": []
-  },
   "browserslist": {
     "production": [
       ">0.2%",
@@ -182,6 +98,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "packageManager": "yarn@3.3.1"
+  }
 }

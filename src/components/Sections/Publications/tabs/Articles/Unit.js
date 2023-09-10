@@ -1,12 +1,12 @@
 import React, { Fragment, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { withTranslation } from 'react-i18next';
+import { withTranslation } from 'next-i18next';
 import { useLocation, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Container, Grid, Header } from 'semantic-ui-react';
 
-import { actions, selectors } from '../../../../../redux/modules/mdb';
-import { selectors as settings } from '../../../../../redux/modules/settings';
+import { actions, selectors } from '../../../../../../lib/redux/slices/mdbSlice/mdbSlice';
+import { selectors as settings } from '../../../../../../lib/redux/slices/settingsSlice/settingsSlice';
 import Helmets from '../../../../shared/Helmets/index';
 import TranscriptionContainer
   from '../../../../Pages/WithPlayer/widgets/UnitMaterials/Transcription/TranscriptionContainer';

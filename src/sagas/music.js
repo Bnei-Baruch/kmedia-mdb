@@ -2,9 +2,9 @@ import { call, put, select, takeLatest } from 'redux-saga/effects';
 
 import Api from '../helpers/Api';
 import { CT_SONGS } from '../helpers/consts';
-import { selectors as settings } from '../redux/modules/settings';
+import { selectors as settings } from '../../lib/redux/slices/settingsSlice/settingsSlice';
 import { actions, types } from '../redux/modules/music';
-import { actions as mdbActions } from '../redux/modules/mdb';
+import { actions as mdbActions } from '../../lib/redux/slices/mdbSlice/mdbSlice';
 
 export function* fetchMusic(action) {
   try {

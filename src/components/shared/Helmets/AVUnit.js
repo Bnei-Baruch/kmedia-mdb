@@ -7,8 +7,8 @@ import Basic from './Basic';
 import Image from './Image';
 import Video from './Video';
 import { useSelector } from 'react-redux';
-import { selectors as settings } from '../../../redux/modules/settings';
-import { selectors as mdb } from '../../../redux/modules/mdb';
+import { selectors as settings } from '../../../../lib/redux/slices/settingsSlice/settingsSlice';
+import { selectors as mdb } from '../../../../lib/redux/slices/mdbSlice/mdbSlice';
 
 const AVUnitWithDep = ({ unit }) => {
   const contentLanguages = useSelector(state => settings.getContentLanguages(state.settings));

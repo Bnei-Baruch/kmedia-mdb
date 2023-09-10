@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withTranslation } from 'react-i18next';
+import { withTranslation } from 'next-i18next';
 import { Container, Divider, Feed } from 'semantic-ui-react';
 
 import * as shapes from '../../../../shapes';

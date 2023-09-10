@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
-import { withTranslation } from 'react-i18next';
+import { withTranslation } from 'next-i18next';
 import { Button, Confirm, Container, Header, Icon, Input } from 'semantic-ui-react';
 
 import { MY_NAMESPACE_PLAYLISTS } from '../../../../helpers/consts';
@@ -9,7 +9,7 @@ import Link from '../../../Language/MultiLanguageLink';
 import PlaylistPlayIcon from '../../../../images/icons/PlaylistPlay';
 import { getLanguageDirection } from '../../../../helpers/i18n-utils';
 import { useSelector } from 'react-redux';
-import { selectors as settings } from '../../../../redux/modules/settings';
+import { selectors as settings } from '../../../../../lib/redux/slices/settingsSlice/settingsSlice';
 
 const PlaylistHeader = ({ confirmSuccess, save, playlist, t }) => {
   const [isEditName, setIsEditName] = useState();

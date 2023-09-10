@@ -1,5 +1,5 @@
 import { createFilterDefinition } from './util';
-import { selectors } from '../../redux/modules/sources';
+import { selectors } from '../../../lib/redux/slices/sourcesSlice/sourcesSlice';
 
 const breadCrumb = (x, index, lastIndex) => {
   if (index === lastIndex) {

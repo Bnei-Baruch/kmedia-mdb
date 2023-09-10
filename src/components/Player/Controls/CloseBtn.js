@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { withTranslation } from 'react-i18next';
+import { withTranslation } from 'next-i18next';
 import { Icon } from 'semantic-ui-react';
 
 import { actions } from '../../../redux/modules/player';

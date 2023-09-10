@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { withTranslation } from 'react-i18next';
+import { withTranslation } from 'next-i18next';
 import countBy from 'lodash/countBy';
 import groupBy from 'lodash/groupBy';
 import mapValues from 'lodash/mapValues';
@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux';
 import { CT_CONGRESS } from '../../../helpers/consts';
 import { strCmp } from '../../../helpers/utils';
 import { selectors } from '../../../redux/modules/events';
-import { selectors as mdb } from '../../../redux/modules/mdb';
+import { selectors as mdb } from '../../../../lib/redux/slices/mdbSlice/mdbSlice';
 import HierarchicalFilter from './HierarchicalFilter';
 
 const cmpFn = (a, b) => strCmp(a.text, b.text);

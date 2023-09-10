@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { selectors as mdb, actions } from '../../../redux/modules/mdb';
+import { selectors as mdb, actions } from '../../../../lib/redux/slices/mdbSlice/mdbSlice';
 import { OFFSET_TEXT_SEPARATOR } from '../../../helpers/scrollToSearch/helper';
 import { buildOffsets } from './helper';
 

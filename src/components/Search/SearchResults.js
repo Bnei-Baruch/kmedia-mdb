@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Trans, withTranslation } from 'react-i18next';
+import { Trans, withTranslation } from 'next-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { Container, Divider } from 'semantic-ui-react';
@@ -15,13 +15,13 @@ import {
 import { isEmpty } from '../../helpers/utils';
 import { getQuery, isDebMode } from '../../helpers/url';
 
-import { actions, selectors } from '../../redux/modules/search';
-import { selectors as mdbSelectors } from '../../redux/modules/mdb';
-import { selectors as settings } from '../../redux/modules/settings';
+import { actions, selectors } from '../../../lib/redux/slices/searchSlice/searchSlice';
+import { selectors as mdbSelectors } from '../../../lib/redux/slices/mdbSlice/mdbSlice';
+import { selectors as settings } from '../../../lib/redux/slices/settingsSlice/settingsSlice';
 import { selectors as filterSelectors } from '../../redux/modules/filters';
-import { selectors as sourcesSelectors } from '../../redux/modules/sources';
-import { selectors as tagsSelectors } from '../../redux/modules/tags';
-import { selectors as publicationSelectors } from '../../redux/modules/publications';
+import { selectors as sourcesSelectors } from '../../../lib/redux/slices/sourcesSlice/sourcesSlice';
+import { selectors as tagsSelectors } from '../../../lib/redux/slices/tagsSlice/tagsSlice';
+import { selectors as publicationSelectors } from '../../../lib/redux/slices/publicationsSlice/thunks';
 
 import { filtersTransformer } from '../../filters';
 import WipErr from '../shared/WipErr/WipErr';

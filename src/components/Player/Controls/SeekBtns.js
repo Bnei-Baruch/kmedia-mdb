@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { Icon } from 'semantic-ui-react';
-import { withTranslation } from 'react-i18next';
+import { withTranslation } from 'next-i18next';
 import { useSelector } from 'react-redux';
 
 import WebWrapTooltip from '../../shared/WebWrapTooltip';

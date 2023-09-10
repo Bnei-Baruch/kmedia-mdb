@@ -1,11 +1,11 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 import { useSelector } from 'react-redux';
 
 import { CT_ARTICLES } from '../../../helpers/consts';
 import { strCmp } from '../../../helpers/utils';
-import { selectors as publications } from '../../../redux/modules/publications';
-import { selectors as mdb } from '../../../redux/modules/mdb';
+import { selectors as publications } from '../../../../lib/redux/slices/publicationsSlice/thunks';
+import { selectors as mdb } from '../../../../lib/redux/slices/mdbSlice/mdbSlice';
 import HierarchicalFilter from './HierarchicalFilter';
 
 const getTree = (collections, t) => {

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Modal } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
-import { selectors as settings } from '../../redux/modules/settings';
+import { selectors as settings } from '../../../lib/redux/slices/settingsSlice/settingsSlice';
 
 const AlertModal = ({ message, open, onClose }) => {
   const uiDir = useSelector(state => settings.getUIDir(state.settings));

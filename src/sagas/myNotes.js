@@ -2,7 +2,7 @@ import { call, put, select, takeEvery } from 'redux-saga/effects';
 
 import { actions, types } from '../redux/modules/myNotes';
 import Api from '../helpers/Api';
-import { selectors as authSelectors } from '../redux/modules/auth';
+import { selectors as authSelectors } from '../../lib/redux/slices/authSlice/authSlice';
 import { MY_NAMESPACE_NOTES } from '../helpers/consts';
 
 function* fetch(action) {

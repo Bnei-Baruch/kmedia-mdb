@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Button, MenuItem } from 'semantic-ui-react';
 import SelectTopicsModal from '../../../../shared/SelectTopicsModal/SelectTopicsModal';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 import { useDispatch } from 'react-redux';
 import { actions } from '../../../../../redux/modules/player';
 import { PLAYER_OVER_MODES } from '../../../../../helpers/consts';

@@ -1,12 +1,12 @@
 import React, { useContext, useState } from 'react';
 import moment from 'moment/moment';
-import { withTranslation } from 'react-i18next';
+import { withTranslation } from 'next-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Popup } from 'semantic-ui-react';
 
 import { selectors as player } from '../../redux/modules/player';
 import { selectors as playlist } from '../../redux/modules/playlist';
-import { actions } from '../../redux/modules/trim';
+import { trimSlice } from '../../../lib/redux/slices/trimSlice';
 import { ClientChroniclesContext } from '../../helpers/app-contexts';
 import { toHumanReadableTime } from '../../helpers/time';
 import { noop } from '../../helpers/utils';
@@ -41,7 +41,7 @@ const TrimBtn = ({ t }) => {
       params.audio    = lang3.toLowerCase();
       (mediaType === MT_VIDEO) && (params.video = quality.toLowerCase());
     }
-    dispatch(actions.trim(params));
+    dispatch(trimSlice.actions.trim(params));
     chroniclesAppend('download', {
       url: file.src,
       uid: file.id,

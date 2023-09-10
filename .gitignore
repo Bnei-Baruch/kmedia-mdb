@@ -13,7 +13,7 @@ cc-test-reporter
 
 # misc
 .DS_Store
-.env
+__.env
 .env.local
 .env.staging
 .env.production
@@ -45,4 +45,5 @@ node_modules/
 !src/**/semantic.min.css
 !src/**/semantic.rtl.min.css
 .eslintcache
+.next
 

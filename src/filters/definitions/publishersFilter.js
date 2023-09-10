@@ -1,5 +1,5 @@
 import { createFilterDefinition } from './util';
-import { selectors } from '../../redux/modules/publications';
+import { selectors } from '../../../lib/redux/slices/publicationsSlice/thunks';
 
 const publishersFilter = {
   name: 'publishers-filter',

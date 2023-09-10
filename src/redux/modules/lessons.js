@@ -1,11 +1,10 @@
-import { createAction } from 'redux-actions';
+import { createAction, handleActions } from 'redux-actions';
 
 import { isEmpty, isNotEmptyArray, strCmp, getEscapedRegExp } from '../../helpers/utils';
 import { SRC_VOLUME } from '../../helpers/consts';
-import { selectors as mdb } from './mdb';
-import { handleActions, types as settings } from './settings';
-import { selectors as sources } from './sources';
-import { selectors as tags } from './tags';
+import { selectors as mdb } from '../../../lib/redux/slices/mdbSlice/mdbSlice';
+import { selectors as sources } from '../../../lib/redux/slices/sourcesSlice/sourcesSlice';
+import { selectors as tags } from '../../../lib/redux/slices/tagsSlice/tagsSlice';
 import { types as ssr } from './ssr';
 
 /* Types */
@@ -92,7 +91,7 @@ const onSSRPrepare = draft => {
 
 export const reducer = handleActions({
   [ssr.PREPARE]: onSSRPrepare,
-  [settings.SET_CONTENT_LANGUAGES]: onSetLanguage,
+ // [settings.SET_CONTENT_LANGUAGES]: onSetLanguage,
 
   [FETCH_ALL_SERIES]: setStatus,
   [FETCH_ALL_SERIES_SUCCESS]: onFetchAllSeriesSuccess,

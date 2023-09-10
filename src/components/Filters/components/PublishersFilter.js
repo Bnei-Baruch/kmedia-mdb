@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 
-import { selectors } from '../../../redux/modules/publications';
+import { selectors } from '../../../../lib/redux/slices/publicationsSlice/thunks';
 import FlatListFilter from './FlatListFilter';
 
 const PublishersFilter = props => {

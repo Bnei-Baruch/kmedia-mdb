@@ -1,9 +1,9 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 import { Button, Popup } from 'semantic-ui-react';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import { useSelector } from 'react-redux';
-import { selectors as settings } from '../../../redux/modules/settings';
+import { selectors as settings } from '../../../../lib/redux/slices/settingsSlice/settingsSlice';
 
 const PlayByTextBtn = ({ handlePlay }) => {
 

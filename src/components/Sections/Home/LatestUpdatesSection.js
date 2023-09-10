@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 import moment from 'moment';
 import { isEqual } from 'lodash';
 import PropTypes from 'prop-types';
@@ -9,6 +9,10 @@ import * as shapes from '../../shapes';
 import Section from './Section';
 import LatestUpdatesCardList from './LatestUpdatesCardList';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
+import { useTranslation } from 'next-i18next';
+import { useSelector, shallowEqual } from 'react-redux';
+import { selectors } from '../../../../lib/redux/slices/homeSlice';
+import { selectors as mdb } from '../../../../lib/redux/slices/mdbSlice';
 
 const itemsByContentType = list => list.filter(x => !!x).reduce((acc, val) => {
   if (!acc[val.content_type]) {
@@ -30,9 +34,27 @@ const itemsByContentType = list => list.filter(x => !!x).reduce((acc, val) => {
   return acc;
 }, {});
 
-const LatestUpdatesSection = ({ latestItems = [], t }) => {
+const COLLECTION_CTS       = [
+  { ct: consts.CT_DAILY_LESSON, itemsPerPage: 2 },
+  { ct: consts.CT_WOMEN_LESSON, daysBack: 30 },
+  { ct: consts.CT_VIRTUAL_LESSON, daysBack: 30 },
+  { ct: consts.CT_LESSONS_SERIES }
+];
+const PROGRAMM_CTS         = [
+  { ct: consts.CT_VIDEO_PROGRAM_CHAPTER }
+];
+const LatestUpdatesSection = () => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
-  const itemsByCT          = itemsByContentType(latestItems);
+  const { t }              = useTranslation();
+
+  const latestUnitIDs = useSelector(state => selectors.getLatestUnits(state.home) || [], shallowEqual);
+  const latestUnits   = useSelector(state => latestUnitIDs.map(x => mdb.getDenormContentUnit(state.mdb, x)));
+  const latestCoIDs   = useSelector(state => selectors.getLatestCos(state.home) || [], shallowEqual);
+  const latestCos     = useSelector(state => latestCoIDs.map(x => mdb.getDenormCollection(state.mdb, x)));
+
+  const itemsByCT = useMemo(() => {
+    return itemsByContentType([...latestUnits, ...latestCos]);
+  }, [latestUnits.length, latestCos.length]);
 
   if (itemsByCT[consts.CT_DAILY_LESSON]) {
     itemsByCT[consts.CT_DAILY_LESSON] = itemsByCT[consts.CT_DAILY_LESSON].sort(
@@ -63,28 +85,61 @@ const LatestUpdatesSection = ({ latestItems = [], t }) => {
   return (
     <div className="homepage__thumbnails homepage__section">
       <Container className="padded horizontally">
-        <Section title={t('home.latest-updates.new-on-the-site')} className={'latestUpdateSection'} computer={13}>
+        <Section
+          title={t('home.latest-updates.new-on-the-site')}
+          className={'latestUpdateSection'}
+          computer={13}>
           <div className="homepage__section__latestUpdates">
-            <LatestUpdatesCardList t={t} title={t(`events.collection.playlist.lessons`)} itemsByCT={itemsByCT} maxItems={20} itemsPerRow={itemsPerRow} stackable={!isMobileDevice} cts={[
-              { ct: consts.CT_DAILY_LESSON, itemsPerPage: 2 },
-              { ct: consts.CT_WOMEN_LESSON, daysBack: 30 },
-              { ct: consts.CT_VIRTUAL_LESSON, daysBack: 30 },
-              { ct: consts.CT_LESSONS_SERIES }]} />
+            <LatestUpdatesCardList
+              title={t(`events.collection.playlist.lessons`)}
+              itemsByCT={itemsByCT}
+              maxItems={20}
+              itemsPerRow={itemsPerRow}
+              stackable={!isMobileDevice}
+              cts={COLLECTION_CTS}
+            />
 
-            <LatestUpdatesCardList t={t} title={t(`programs.header.text`)} itemsByCT={itemsByCT} maxItems={20} itemsPerRow={itemsPerRow} stackable={!isMobileDevice} cts={[
-              { ct: consts.CT_VIDEO_PROGRAM_CHAPTER }]} />
+            <LatestUpdatesCardList
+              title={t(`programs.header.text`)}
+              itemsByCT={itemsByCT}
+              maxItems={20}
+              itemsPerRow={itemsPerRow}
+              stackable={!isMobileDevice}
+              cts={PROGRAMM_CTS}
+            />
 
-            <LatestUpdatesCardList t={t} title={t(`programs.tabs.clips`)} itemsByCT={itemsByCT} maxItems={20} itemsPerRow={itemsPerRow} stackable={!isMobileDevice} cts={[
-              { ct: consts.CT_CLIP }]} />
+            <LatestUpdatesCardList
+              title={t(`programs.tabs.clips`)}
+              itemsByCT={itemsByCT}
+              maxItems={20}
+              itemsPerRow={itemsPerRow}
+              stackable={!isMobileDevice}
+              cts={[
+                { ct: consts.CT_CLIP }]}
+            />
 
-            <LatestUpdatesCardList t={t} title={t(`publications.header.text`)} itemsByCT={itemsByCT} maxItems={20} itemsPerRow={itemsPerRow} stackable={!isMobileDevice} cts={[
-              { ct: consts.CT_ARTICLE }]} />
+            <LatestUpdatesCardList
+              title={t(`publications.header.text`)}
+              itemsByCT={itemsByCT}
+              maxItems={20}
+              itemsPerRow={itemsPerRow}
+              stackable={!isMobileDevice}
+              cts={[
+                { ct: consts.CT_ARTICLE }]}
+            />
 
-            <LatestUpdatesCardList t={t} title={t(`nav.sidebar.events`)} itemsByCT={itemsByCT} maxItems={20} itemsPerRow={itemsPerRow} stackable={!isMobileDevice} cts={[
-              { ct: consts.CT_CONGRESS },
-              { ct: consts.CT_FRIENDS_GATHERING },
-              { ct: consts.CT_MEAL },
-              { ct: consts.CT_HOLIDAY }]} />
+            <LatestUpdatesCardList
+              title={t(`nav.sidebar.events`)}
+              itemsByCT={itemsByCT}
+              maxItems={20}
+              itemsPerRow={itemsPerRow}
+              stackable={!isMobileDevice}
+              cts={[
+                { ct: consts.CT_CONGRESS },
+                { ct: consts.CT_FRIENDS_GATHERING },
+                { ct: consts.CT_MEAL },
+                { ct: consts.CT_HOLIDAY }]}
+            />
           </div>
         </Section>
       </Container>
@@ -92,15 +147,4 @@ const LatestUpdatesSection = ({ latestItems = [], t }) => {
   );
 };
 
-LatestUpdatesSection.propTypes = {
-  latestUnits: PropTypes.arrayOf(shapes.ContentUnit),
-  t: PropTypes.func.isRequired,
-};
-
-const arePropsEqual = (prevProps, nextProps) => {
-  const prevIds = prevProps.latestUnits?.map(unit => unit.id);
-  const nextIds = nextProps.latestUnits?.map(unit => unit.id);
-  return isEqual(prevIds, nextIds);
-};
-
-export default React.memo(LatestUpdatesSection, arePropsEqual);
+export default LatestUpdatesSection;

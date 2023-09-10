@@ -3,9 +3,9 @@ import { call, put, select, takeLatest } from 'redux-saga/effects';
 import Api from '../helpers/Api';
 import { EVENT_TYPES } from '../helpers/consts';
 import { setTab } from './helpers/url';
-import { selectors as settings } from '../redux/modules/settings';
+import { selectors as settings } from '../../lib/redux/slices/settingsSlice/settingsSlice';
 import { actions, types } from '../redux/modules/events';
-import { actions as mdbActions } from '../redux/modules/mdb';
+import { actions as mdbActions } from '../../lib/redux/slices/mdbSlice/mdbSlice';
 
 export function* fetchAllEvents(action) {
   try {

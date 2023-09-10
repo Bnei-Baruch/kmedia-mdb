@@ -13,7 +13,7 @@ import { selectors as player, selectors } from '../../../redux/modules/player';
 import { ProgressCtrl } from './ProgressCtrl';
 import MediaTypeControlMobile from '../Settings/MediaTypeControlMobile';
 import { setMute } from '../../../pkg/jwpAdapter/adapter';
-import { withTranslation } from 'react-i18next';
+import { withTranslation } from 'next-i18next';
 
 const ControlsMobile = ({ fullscreenRef, t }) => {
   const mode    = useSelector(state => player.getOverMode(state.player));

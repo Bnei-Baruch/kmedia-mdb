@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withTranslation } from 'react-i18next';
+import { withTranslation } from 'next-i18next';
 import { connect } from 'react-redux';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { Button, Grid, Popup, Table, Divider } from 'semantic-ui-react';
@@ -24,8 +24,8 @@ import {
 } from '../../../../helpers/consts';
 import { selectSuitableLanguage } from '../../../../helpers/language';
 import { downloadLink } from '../../../../helpers/utils';
-import { selectors as settings } from '../../../../redux/modules/settings';
-import { selectors } from '../../../../redux/modules/publications';
+import { selectors as settings } from '../../../../../lib/redux/slices/settingsSlice/settingsSlice';
+import { selectors } from '../../../../../lib/redux/slices/publicationsSlice/thunks';
 import * as shapes from '../../../shapes';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import classNames from 'classnames';

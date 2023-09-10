@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 
 import { selectors, selectors as player } from '../../../redux/modules/player';
 import { Icon } from 'semantic-ui-react';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 import WebWrapTooltip from '../../shared/WebWrapTooltip';
 import { pause, play, getPosition } from '../../../pkg/jwpAdapter/adapter';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';

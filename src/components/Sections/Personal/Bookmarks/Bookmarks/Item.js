@@ -1,9 +1,9 @@
 import React from 'react';
-import { withTranslation } from 'react-i18next';
+import { withTranslation } from 'next-i18next';
 import { Icon, Image, Label, List } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
 
-import { selectors as mdb } from '../../../../../redux/modules/mdb';
+import { selectors as mdb } from '../../../../../../lib/redux/slices/mdbSlice/mdbSlice';
 import { selectors } from '../../../../../redux/modules/my';
 import { SectionLogo } from '../../../../../helpers/images';
 import { iconByContentTypeMap, MY_NAMESPACE_FOLDERS } from '../../../../../helpers/consts';
@@ -11,7 +11,7 @@ import { OFFSET_TEXT_SEPARATOR } from '../../../../../helpers/scrollToSearch/hel
 import { getMyItemKey } from '../../../../../helpers/my';
 import Link from '../../../../Language/MultiLanguageLink';
 import Actions from './Actions';
-import { selectors as sourcesSelectors, selectors as sources } from '../../../../../redux/modules/sources';
+import { selectors as sourcesSelectors, selectors as sources } from '../../../../../../lib/redux/slices/sourcesSlice/sourcesSlice';
 import { buildTitleByUnit, textPartLink } from '../../../../shared/ContentItem/helper';
 
 const BookmarksItem = ({ bookmark, t }) => {

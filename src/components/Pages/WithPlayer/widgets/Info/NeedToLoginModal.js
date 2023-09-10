@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Modal } from 'semantic-ui-react';
-import { selectors as settings } from '../../../../../redux/modules/settings';
+import { selectors as settings } from '../../../../../../lib/redux/slices/settingsSlice/settingsSlice';
 import { getLanguageDirection } from '../../../../../helpers/i18n-utils';
 import NeedToLogin from '../../../../Sections/Personal/NeedToLogin';
 

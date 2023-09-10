@@ -2,7 +2,7 @@ import path from 'path';
 import i18next from 'i18next';
 import i18nextBackend from 'i18next-fs-backend';
 
-import { options } from '../src/helpers/i18nnext';
+import { options } from '../i18n/i18nnext';
 
 i18next
   .use(i18nextBackend)

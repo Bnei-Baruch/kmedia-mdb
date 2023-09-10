@@ -1,17 +1,18 @@
 import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
-import { withTranslation } from 'react-i18next';
+import { withTranslation } from 'next-i18next';
 
 import { actions, selectors } from '../../../../../../redux/modules/recommended';
-import { selectors as tagsSelectors } from '../../../../../../redux/modules/tags';
-import { selectors as sourcesSelectors } from '../../../../../../redux/modules/sources';
+import { selectors as tagsSelectors } from '../../../../../../../lib/redux/slices/tagsSlice/tagsSlice';
+import { selectors as sourcesSelectors } from '../../../../../../../lib/redux/slices/sourcesSlice/sourcesSlice';
 import { selectors as playlist } from '../../../../../../redux/modules/playlist';
 import * as shapes from '../../../../../shapes';
 import WipErr from '../../../../../shared/WipErr/WipErr';
 import DisplayRecommended from './DisplayRecommended';
 import useRecommendedUnits from './UseRecommendedUnits';
-import { getSourcesCollections, isEmpty, usePrevious } from '../../../../../../helpers/utils';
+import { getSourcesCollections, isEmpty } from '../../../../../../helpers/utils';
+import { usePrevious } from '../../../../../../helpers/hooks';
 import { AB_RECOMMEND_EXPERIMENT, AB_RECOMMEND_NEW, AB_RECOMMEND_RANDOM } from '../../../../../../helpers/ab-testing';
 import { AbTestingContext } from '../../../../../../helpers/app-contexts';
 import Link from '../../../../../Language/MultiLanguageLink';
@@ -23,7 +24,7 @@ import {
   SGLP_LESSON_SERIES,
   SGLP_PRORGRAMS,
 } from '../../../../../../helpers/consts';
-import { selectors as mdb } from '../../../../../../redux/modules/mdb';
+import { selectors as mdb } from '../../../../../../../lib/redux/slices/mdbSlice/mdbSlice';
 
 // Number of items to try to recommend.
 const N = 12;

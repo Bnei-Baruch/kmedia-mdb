@@ -1,11 +1,11 @@
 import React, { useContext } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 import ContentItemContainer from '../../../shared/ContentItem/ContentItemContainer';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectors, actions } from '../../../../redux/modules/playlist';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import { Header, Button, Container } from 'semantic-ui-react';
-import { selectors as mdb } from '../../../../redux/modules/mdb';
+import { selectors as mdb } from '../../../../../lib/redux/slices/mdbSlice/mdbSlice';
 import { COLLECTION_DAILY_LESSONS } from '../../../../helpers/consts';
 
 const PLAYLIST_ITEM_HEIGHT        = 104;

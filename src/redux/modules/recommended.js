@@ -1,6 +1,5 @@
-import { createAction } from 'redux-actions';
+import { createAction, handleActions } from 'redux-actions';
 import { types as chronicles } from './chronicles';
-import { handleActions } from './settings';
 import { types as ssr } from './ssr';
 
 const FETCH_RECOMMENDED         = 'FETCH_RECOMMENDED';
@@ -101,7 +100,7 @@ const getManyRecommendedItems = (feedNames, state) => feedNames?.reduce((acc, fe
   return acc;
 }, {});
 const getSkipUids             = state => state.skipUids;
-const getViews                = (uid, state) => (state.views[uid] || -1);
+const getViews                = (uid, state) => (state?.views[uid] || -1);
 const getManyViews            = (uids, state) => uids?.map(uid => (state.views[uid] || -1));
 const getWatchingNow          = (uid, state) => (state.watchingNow[uid] || -1);
 const getManyWatchingNow      = (uids, state) => uids?.map(uid => (state.watchingNow[uid] || -1));

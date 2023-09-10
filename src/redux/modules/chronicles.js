@@ -1,5 +1,5 @@
 import { createAction, handleActions } from 'redux-actions';
-import { types as authTypes } from './auth';
+import { types as authTypes } from '../../../lib/redux/slices/authSlice/authSlice';
 import { types as playerTypes } from './player';
 
 const USER_INACTIVE         = 'USER_INACTIVE';
@@ -36,8 +36,8 @@ export const reducer = handleActions({
   'Search/AUTOCOMPLETE_SUCCESS': onAction,
   'Search/SEARCH_SUCCESS': onAction,
 
-  [authTypes.LOGIN_SUCCESS]: onAction,
-  [authTypes.LOGOUT_SUCCESS]: onAction,
+  //[authTypes.LOGIN_SUCCESS]: onAction,
+  //[authTypes.LOGOUT_SUCCESS]: onAction,
 
   [playerTypes.PLAYER_PLAY]: draft => ({ ...draft, event: 'player-play' }),
   [playerTypes.PLAYER_PAUSE]: draft => ({ ...draft, event: 'player-stop' }),

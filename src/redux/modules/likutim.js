@@ -1,5 +1,4 @@
-import { createAction } from 'redux-actions';
-import { handleActions } from './settings';
+import { createAction, handleActions } from 'redux-actions';
 import { types as ssr } from './ssr';
 
 const FETCH_LIKUTIM         = 'FETCH_LIKUTIM';

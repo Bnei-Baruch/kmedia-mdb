@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { withTranslation } from 'react-i18next';
+import { withTranslation } from 'next-i18next';
 import { Segment, Divider } from 'semantic-ui-react';
 
 import { selectSuitableLanguage } from '../../../../../../helpers/language';
 import * as shapes from '../../../../../shapes';
 import MediaHelper from '../../../../../../helpers/media';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectors as settings } from '../../../../../../redux/modules/settings';
+import { selectors as settings } from '../../../../../../../lib/redux/slices/settingsSlice/settingsSlice';
 import { selectors as assetsSelectors, actions as assetsActions } from '../../../../../../redux/modules/assets';
 import { INSERT_TYPE_SUMMARY } from '../../../../../../helpers/consts';
 import MenuLanguageSelector from '../../../../../../components/Language/Selector/MenuLanguageSelector';

@@ -1,11 +1,11 @@
 import React, { useContext, useEffect } from 'react';
-import { withTranslation } from 'react-i18next';
+import { withTranslation } from 'next-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Card, Container } from 'semantic-ui-react';
 
 import { actions, selectors } from '../../../../redux/modules/my';
-import { selectors as settings } from '../../../../redux/modules/settings';
+import { selectors as settings } from '../../../../../lib/redux/slices/settingsSlice/settingsSlice';
 import {
   MY_NAMESPACE_HISTORY,
   MY_NAMESPACE_REACTIONS,

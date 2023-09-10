@@ -3,10 +3,10 @@ import { all, call, put, select, takeEvery, takeLatest } from 'redux-saga/effect
 import Api from '../helpers/Api';
 import { getQuery, updateQuery as urlUpdateQuery } from './helpers/url';
 import { GenerateSearchId } from '../helpers/search';
-import { actions, selectors, types } from '../redux/modules/search';
-import { selectors as settings, types as settingsTypes } from '../redux/modules/settings';
-import { actions as mdbActions } from '../redux/modules/mdb';
-import { actions as postsActions } from '../redux/modules/publications';
+import { actions, selectors, types } from '../../lib/redux/slices/searchSlice/searchSlice';
+import { selectors as settings, types as settingsTypes } from '../../lib/redux/slices/settingsSlice/settingsSlice';
+import { actions as mdbActions } from '../../lib/redux/slices/mdbSlice/mdbSlice';
+import { actions as postsActions } from '../../lib/redux/slices/publicationsSlice/thunks';
 import { selectors as filterSelectors, actions as filterActions, types as filterTypes } from '../redux/modules/filters';
 import { selectors as lessonsSelectors, actions as lessonsActions } from '../redux/modules/lessons';
 import { fetchAllSeries } from './lessons';

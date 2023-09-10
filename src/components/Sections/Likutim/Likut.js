@@ -1,13 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useParams } from 'react-router-dom';
 import { Grid, Header, Image } from 'semantic-ui-react';
 import clsx from 'clsx';
 
 import { actions as assetsActions, selectors as assetsSelectors } from '../../../redux/modules/assets';
-import { selectors as siteSettings } from '../../../redux/modules/settings';
-import { actions, selectors, selectors as mdb } from '../../../redux/modules/mdb';
+import { selectors as siteSettings } from '../../../../lib/redux/slices/settingsSlice/settingsSlice';
+import { actions, selectors, selectors as mdb } from '../../../../lib/redux/slices/mdbSlice/mdbSlice';
 import { getLangPropertyDirection, getLanguageDirection } from '../../../helpers/i18n-utils';
 import { physicalFile, strCmp } from '../../../helpers/utils';
 import { SectionLogo } from '../../../helpers/images';

@@ -3,8 +3,8 @@ import moment from 'moment';
 
 import Api from '../helpers/Api';
 import { actions, types } from '../redux/modules/simpleMode';
-import { actions as mdbActions } from '../redux/modules/mdb';
-import { selectors as settings } from '../redux/modules/settings';
+import { actions as mdbActions } from '../../lib/redux/slices/mdbSlice/mdbSlice';
+import { selectors as settings } from '../../lib/redux/slices/settingsSlice/settingsSlice';
 
 export function* fetchForDate(action) {
   try {

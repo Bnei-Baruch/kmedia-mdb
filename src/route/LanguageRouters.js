@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Outlet, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectors, actions } from '../redux/modules/settings';
+import { selectors, actions } from '../../lib/redux/slices/settingsSlice/settingsSlice';
 import { LANG_UI_LANGUAGES } from '../helpers/consts';
 
 const LanguageRouter = () => {

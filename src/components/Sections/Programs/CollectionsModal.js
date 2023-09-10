@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { withTranslation } from 'react-i18next';
+import { withTranslation } from 'next-i18next';
 import { Button, Icon, Input, Modal, Table } from 'semantic-ui-react';
 import {
   CT_CLIP,
@@ -10,7 +10,7 @@ import {
   CT_VIDEO_PROGRAM_CHAPTER
 } from '../../../helpers/consts';
 
-import { selectors as settings } from '../../../redux/modules/settings';
+import { selectors as settings } from '../../../../lib/redux/slices/settingsSlice/settingsSlice';
 import CollectionItem from '../../FiltersAside/CollectionFilter/CollectionItem';
 
 const ITEMS_PER_ROW = 5;

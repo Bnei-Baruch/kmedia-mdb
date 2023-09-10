@@ -1,12 +1,12 @@
 import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
-import { withTranslation } from 'react-i18next';
+import { withTranslation } from 'next-i18next';
 import { Button, Modal, } from 'semantic-ui-react';
 
 import NeedToLogin from '../../Sections/Personal/NeedToLogin';
 import BookmarkForm from './BookmarkForm';
 import { useSelector } from 'react-redux';
-import { selectors as settings } from '../../../redux/modules/settings';
+import { selectors as settings } from '../../../../lib/redux/slices/settingsSlice/settingsSlice';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import AlertModal from '../AlertModal';
 

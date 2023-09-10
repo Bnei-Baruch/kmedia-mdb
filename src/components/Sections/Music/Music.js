@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { withTranslation, useTranslation } from 'react-i18next';
+import { withTranslation, useTranslation } from 'next-i18next';
 import { Container, Divider } from 'semantic-ui-react';
 
 import ResultsPageHeader from '../../Pagination/ResultsPageHeader';

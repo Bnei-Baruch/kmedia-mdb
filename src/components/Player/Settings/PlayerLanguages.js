@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { actions, selectors as player } from '../../../redux/modules/player';
 import { selectors as playlist } from '../../../redux/modules/playlist';
 import { actions as playlistActions, selectors as playlistSelectors } from '../../../redux/modules/playlist';
-import { withTranslation } from 'react-i18next';
+import { withTranslation } from 'next-i18next';
 import MenuLanguageSelector from '../../Language/Selector/MenuLanguageSelector';
 
 const PlayerLanguages = () => {

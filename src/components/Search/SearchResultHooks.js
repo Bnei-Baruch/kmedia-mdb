@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 import clsx from 'clsx';
 import { Button, Card, Container, Feed, Grid, Header, Icon, Image, List, Segment, } from 'semantic-ui-react';
 import { useSwipeable } from 'react-swipeable';
@@ -8,15 +8,15 @@ import { useSwipeable } from 'react-swipeable';
 import TwitterFeed from '../Sections/Publications/tabs/Twitter/Feed';
 import { ClientChroniclesContext, DeviceInfoContext } from '../../helpers/app-contexts';
 import { canonicalCollection, tracePath } from '../../helpers/utils';
-import { selectors as mdb } from '../../redux/modules/mdb';
+import { selectors as mdb } from '../../../lib/redux/slices/mdbSlice/mdbSlice';
 import { selectors as recommended } from '../../redux/modules/recommended';
 import { selectors as filterSelectors } from '../../redux/modules/filters';
-import { selectors as sourcesSelectors } from '../../redux/modules/sources';
-import { selectors as tagsSelectors } from '../../redux/modules/tags';
+import { selectors as sourcesSelectors } from '../../../lib/redux/slices/sourcesSlice/sourcesSlice';
+import { selectors as tagsSelectors } from '../../../lib/redux/slices/tagsSlice/tagsSlice';
 import { actions as listsActions, selectors as lists } from '../../redux/modules/lists';
 import { selectors as lessonsSelectors } from '../../redux/modules/lessons';
-import { actions as publicationActions, selectors as publicationSelectors } from '../../redux/modules/publications';
-import { selectors as settingsSelectors } from '../../redux/modules/settings';
+import { actions as publicationActions, selectors as publicationSelectors } from '../../../lib/redux/slices/publicationsSlice/thunks';
+import { selectors as settingsSelectors } from '../../../lib/redux/slices/settingsSlice/settingsSlice';
 
 import {
   CT_ARTICLE,

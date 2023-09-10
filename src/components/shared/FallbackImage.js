@@ -1,12 +1,12 @@
+'use client';
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Image } from 'semantic-ui-react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { knownFallbackImages, NoneFallbackImage, SectionThumbnailFallback } from '../../helpers/images';
-import { selectors, actions } from '../../redux/modules/fetchImage';
+import { selectors, imageFetch } from '../../../lib/redux/slices/imageSlice';
 import WipErr from './WipErr/WipErr';
-import { useTranslation } from 'react-i18next';
 
 const FallbackImage = props => {
   const {
@@ -15,32 +15,23 @@ const FallbackImage = props => {
           className,
           width         = 'auto',
           height        = 'auto',
-
           floated,
           ...rest
         } = props;
 
-  const { src: imageSource, wip, err } = useSelector(state => selectors.getBySrc(state.fetchImage, src));
+  const { src: imageSource, wip, err } = useSelector(state => selectors.getBySrc(state.image, src));
   const dispatch                       = useDispatch();
-  const { t }                          = useTranslation();
 
+  console.log('additional fetch: FallbackImage render', src, imageSource, wip, err);
   useEffect(() => {
     if (!imageSource && !wip && !err) {
-      dispatch(actions.fetch(src, fallbackImage));
+      console.log('additional fetch: FallbackImage effect', src, imageSource, wip, err);
+      dispatch(imageFetch({ src, fallbacks: fallbackImage }));
     }
   }, [fallbackImage, src, imageSource, wip, err]);
 
-  if (!imageSource || imageSource === NoneFallbackImage) {
-    /* There is no fallbacks and src was not found */
-    return null;
-  }
-  const wipErr = WipErr({ wip: (wip || !imageSource), err, t });
+  const wipErr = WipErr({ wip: (wip || !imageSource || imageSource === NoneFallbackImage), err });
   if (wipErr) return wipErr;
-
-  if (!imageSource || imageSource === NoneFallbackImage) {
-    /* There is no fallbacks and src was not found */
-    return null;
-  }
 
   if (knownFallbackImages.includes(imageSource)) {
     return (
@@ -79,4 +70,6 @@ FallbackImage.propTypes = {
   onError: PropTypes.func
 };
 
-export default FallbackImage;
+const areEqual = (prevProps, nextProps) => !nextProps.src || (prevProps.src === nextProps.src);
+
+export default React.memo(FallbackImage, areEqual);

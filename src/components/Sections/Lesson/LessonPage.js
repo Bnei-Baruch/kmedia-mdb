@@ -1,16 +1,16 @@
 import { isEqual } from 'lodash';
 import React, { useCallback, useEffect, useMemo } from 'react';
-import { withTranslation } from 'react-i18next';
+import { withTranslation } from 'next-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useParams } from 'react-router-dom';
 import { Container, Divider } from 'semantic-ui-react';
 
 import { PAGE_NS_LESSONS } from '../../../helpers/consts';
-import { usePrevious } from '../../../helpers/utils';
+import { usePrevious } from '../../../helpers/hooks';
 import { selectors as filters } from '../../../redux/modules/filters';
 import { actions, selectors as lists } from '../../../redux/modules/lists';
-import { selectors as mdb } from '../../../redux/modules/mdb';
-import { selectors as settings } from '../../../redux/modules/settings';
+import { selectors as mdb } from '../../../../lib/redux/slices/mdbSlice/mdbSlice';
+import { selectors as settings } from '../../../../lib/redux/slices/settingsSlice/settingsSlice';
 import FilterLabels from '../../FiltersAside/FilterLabels';
 import PageHeader from '../../Pages/Collection/Header';
 import Pagination from '../../Pagination/Pagination';

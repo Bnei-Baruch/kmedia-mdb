@@ -1,14 +1,14 @@
 import React, { useMemo, useState, useContext } from 'react';
 import PropTypes from 'prop-types';
-import { withTranslation } from 'react-i18next';
+import { withTranslation } from 'next-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Container, Grid, Header, Input, Label, Modal } from 'semantic-ui-react';
 import isEqual from 'react-fast-compare';
 
-import { selectors as sourcesSelectors } from '../../../redux/modules/sources';
-import { selectors as settings } from '../../../redux/modules/settings';
-import { selectors } from '../../../redux/modules/tags';
-import { actions } from '../../../redux/modules/mdb';
+import { selectors as sourcesSelectors } from '../../../../lib/redux/slices/sourcesSlice/sourcesSlice';
+import { selectors as settings } from '../../../../lib/redux/slices/settingsSlice/settingsSlice';
+import { selectors } from '../../../../lib/redux/slices/tagsSlice/tagsSlice';
+import { actions } from '../../../../lib/redux/slices/mdbSlice/mdbSlice';
 import { getTree } from '../../../helpers/topricTree';
 import NeedToLogin from '../../Sections/Personal/NeedToLogin';
 import AlertModal from '../AlertModal';

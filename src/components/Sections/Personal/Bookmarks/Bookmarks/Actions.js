@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { withTranslation } from 'react-i18next';
+import { withTranslation } from 'next-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Confirm, Dropdown, Modal } from 'semantic-ui-react';
 
 import { actions } from '../../../../../redux/modules/my';
 import { MY_NAMESPACE_BOOKMARKS } from '../../../../../helpers/consts';
 import BookmarkForm from '../../../../shared/SaveBookmark/BookmarkForm';
-import { selectors as settings } from '../../../../../redux/modules/settings';
+import { selectors as settings } from '../../../../../../lib/redux/slices/settingsSlice/settingsSlice';
 import { getLanguageDirection } from '../../../../../helpers/i18n-utils';
 import { getMyItemKey } from '../../../../../helpers/my';
 import { stopBubbling } from '../../../../../helpers/utils';

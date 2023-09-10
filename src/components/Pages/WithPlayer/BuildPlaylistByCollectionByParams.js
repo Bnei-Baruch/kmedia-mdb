@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { actions as mdbActions, selectors as mdb } from '../../../redux/modules/mdb';
+import { actions as mdbActions, selectors as mdb } from '../../../../lib/redux/slices/mdbSlice/mdbSlice';
 import BuildPlaylistByCollection from './BuildPlaylistByCollection';
 
 const BuildPlaylistByCollectionByParams = () => {

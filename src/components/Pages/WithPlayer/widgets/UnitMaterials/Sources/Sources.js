@@ -1,14 +1,14 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
-import { withTranslation } from 'react-i18next';
+import { withTranslation } from 'next-i18next';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { Divider, Dropdown, Menu, Segment } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 
-import { selectors } from '../../../../../../redux/modules/sources';
+import { selectors } from '../../../../../../../lib/redux/slices/sourcesSlice/sourcesSlice';
 import { actions as assetsActions, selectors as assetsSelectors } from '../../../../../../redux/modules/assets';
 import { isEmpty, physicalFile, tracePath } from '../../../../../../helpers/utils';
-import { selectors as settings } from '../../../../../../redux/modules/settings';
+import { selectors as settings } from '../../../../../../../lib/redux/slices/settingsSlice/settingsSlice';
 import { getLanguageName, selectSuitableLanguage } from '../../../../../../helpers/language';
 import { getLanguageDirection } from '../../../../../../helpers/i18n-utils';
 import { DeviceInfoContext } from '../../../../../../helpers/app-contexts';

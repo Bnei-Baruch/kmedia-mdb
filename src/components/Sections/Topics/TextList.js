@@ -1,10 +1,10 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { withTranslation } from 'react-i18next';
+import { withTranslation } from 'next-i18next';
 import { Container, Header } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 
-import { selectors } from '../../../redux/modules/tags';
+import { selectors } from '../../../../lib/redux/slices/tagsSlice/tagsSlice';
 import TextListTemplate from '../../shared/ContentItem/TextListTemplate';
 
 const TextList = ({ t }) => {

@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { withTranslation } from 'react-i18next';
+import { withTranslation } from 'next-i18next';
 import { Button, Confirm, Container, Header, Icon, Input } from 'semantic-ui-react';
 
 import { MY_NAMESPACE_PLAYLISTS } from '../../../../helpers/consts';
 import PlaylistPlayIcon from '../../../../images/icons/PlaylistPlay';
 import Link from '../../../Language/MultiLanguageLink';
 import { useSelector } from 'react-redux';
-import { selectors as settings } from '../../../../redux/modules/settings';
+import { selectors as settings } from '../../../../../lib/redux/slices/settingsSlice/settingsSlice';
 import { getLanguageDirection } from '../../../../helpers/i18n-utils';
 
 const PlaylistHeaderMobile = ({ confirmSuccess, save, playlist, t }) => {

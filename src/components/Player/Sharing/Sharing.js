@@ -7,7 +7,7 @@ import { selectors as player, actions } from '../../../redux/modules/player';
 import { PLAYER_OVER_MODES } from '../../../helpers/consts';
 import { Button } from 'semantic-ui-react';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 
 const Sharing = () => {
   const mode               = useSelector(state => player.getOverMode(state.player));

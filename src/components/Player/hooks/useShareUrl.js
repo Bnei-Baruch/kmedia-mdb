@@ -6,7 +6,7 @@ import { toHumanReadableTime } from '../../../helpers/time';
 import { selectors as player } from '../../../redux/modules/player';
 import { selectors as playlist } from '../../../redux/modules/playlist';
 import { splitPathByLanguage, getQuery } from '../../../helpers/url';
-import { selectors as settings } from '../../../redux/modules/settings';
+import { selectors as settings } from '../../../../lib/redux/slices/settingsSlice/settingsSlice';
 
 const useShareUrl = () => {
   const [shareUrl, setShareUrl] = useState('');

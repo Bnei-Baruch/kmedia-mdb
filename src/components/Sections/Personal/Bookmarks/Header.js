@@ -1,5 +1,5 @@
 import React from 'react';
-import { withTranslation } from 'react-i18next';
+import { withTranslation } from 'next-i18next';
 import { Grid, Header, Icon, Input } from 'semantic-ui-react';
 import { useDispatch, useSelector } from 'react-redux';
 

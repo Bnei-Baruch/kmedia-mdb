@@ -1,13 +1,13 @@
 import clsx from 'clsx';
 import React from 'react';
-import { withTranslation } from 'react-i18next';
+import { withTranslation } from 'next-i18next';
 import { useSelector } from 'react-redux';
 import { Header, List } from 'semantic-ui-react';
 
 import { COLLECTION_DAILY_LESSONS } from '../../../helpers/consts';
 import { canonicalLink } from '../../../helpers/links';
 import { isEmpty } from '../../../helpers/utils';
-import { selectors as mdb } from '../../../redux/modules/mdb';
+import { selectors as mdb } from '../../../../lib/redux/slices/mdbSlice/mdbSlice';
 import { selectors as recommended } from '../../../redux/modules/recommended';
 import Link from '../../Language/MultiLanguageLink';
 import TooltipIfNeed from '../../shared/TooltipIfNeed';

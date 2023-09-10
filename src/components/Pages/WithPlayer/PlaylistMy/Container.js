@@ -2,7 +2,7 @@ import React from 'react';
 import { Header } from 'semantic-ui-react';
 
 import Page from './Page';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 import useBuildMyPlaylist from './useBuildMyPlaylist';
 
 const PlaylistMyContainer = ({ playerContainer }) => {

@@ -1,11 +1,11 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 import { Container, Header } from 'semantic-ui-react';
 
 import ContentItemContainer from '../../shared/ContentItem/ContentItemContainer';
 import CollectionListTemplate from '../../shared/ContentItem/CollectionListTemplate';
 import { useSelector } from 'react-redux';
-import { selectors } from '../../../redux/modules/tags';
+import { selectors } from '../../../../lib/redux/slices/tagsSlice/tagsSlice';
 
 const VideoList = () => {
   const { t }                      = useTranslation();

@@ -14,8 +14,8 @@ import {
 import { isEmpty } from '../helpers/utils';
 import { filtersTransformer } from '../filters';
 import { selectors as filterSelectors } from '../redux/modules/filters';
-import { selectors as settingsSelectors } from '../redux/modules/settings';
-import { selectors as searchSelectors } from '../redux/modules/search';
+import { selectors as settingsSelectors } from '../../lib/redux/slices/settingsSlice/settingsSlice';
+import { selectors as searchSelectors } from '../../lib/redux/slices/searchSlice/searchSlice';
 import { actions, types } from '../redux/modules/filtersAside';
 
 const RESULT_NAME_BY_PARAM = {

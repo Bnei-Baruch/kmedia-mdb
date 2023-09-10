@@ -1,11 +1,11 @@
 import { takeEvery, select, put, call } from 'redux-saga/effects';
 import i18n from 'i18next';
 
-import { selectors as authSelectors } from '../redux/modules/auth';
-import { selectors as settings } from '../redux/modules/settings';
+import { selectors as authSelectors } from '../../lib/redux/slices/authSlice/authSlice';
+import { selectors as settings } from '../../lib/redux/slices/settingsSlice/settingsSlice';
 import { selectors as my, selectors } from '../redux/modules/my';
 import { types, actions, selectors as playlist } from '../redux/modules/playlist';
-import { selectors as mdb } from '../redux/modules/mdb';
+import { selectors as mdb } from '../../lib/redux/slices/mdbSlice/mdbSlice';
 import {
   MY_NAMESPACE_PLAYLISTS,
   MY_NAMESPACE_REACTIONS,

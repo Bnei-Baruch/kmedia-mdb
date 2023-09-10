@@ -4,7 +4,7 @@ import Api from '../helpers/Api';
 import { CT_LESSON_PART, PAGE_NS_LESSONS } from '../helpers/consts';
 import { isEmpty } from '../helpers/utils';
 import { actions, selectors, types as stats } from '../redux/modules/stats';
-import { types as tags } from '../redux/modules/tags';
+import { types as tags } from '../../lib/redux/slices/tagsSlice/tagsSlice';
 
 function* fetchCUStats(action) {
   const { namespace } = action.payload;
@@ -39,7 +39,7 @@ export function* callUnitsStats(args, namespace) {
 }
 
 function* watchFetchList() {
-  yield takeLatest([tags.FETCH_STATS], fetchCUStats);
+  //yield takeLatest([tags.FETCH_STATS], fetchCUStats);
   yield takeEvery([stats.FETCH_CU_STATS], fetchCUStats);
 }
 

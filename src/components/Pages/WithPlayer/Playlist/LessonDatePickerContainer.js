@@ -1,14 +1,14 @@
 import React, { useContext, useEffect } from 'react';
 import { useSelector, shallowEqual, useDispatch } from 'react-redux';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 import { Header, Icon } from 'semantic-ui-react';
 
-import { selectors as settings } from '../../../../redux/modules/settings';
+import { selectors as settings } from '../../../../../lib/redux/slices/settingsSlice/settingsSlice';
 import { getLanguageDirection } from '../../../../helpers/i18n-utils';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import Link from '../../../Language/MultiLanguageLink';
 import CollectionDatePicker from './LessonDatePicker';
-import { selectors as mdb, actions } from '../../../../redux/modules/mdb';
+import { selectors as mdb, actions } from '../../../../../lib/redux/slices/mdbSlice/mdbSlice';
 import { selectors } from '../../../../redux/modules/playlist';
 import moment from 'moment';
 import { DATE_FORMAT } from '../../../../helpers/consts';

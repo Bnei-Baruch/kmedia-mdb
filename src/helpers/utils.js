@@ -1,4 +1,3 @@
-import React, { useEffect, useRef } from 'react';
 import isEqual from 'react-fast-compare';
 import escapeRegExp from 'lodash/escapeRegExp';
 import isFunction from 'lodash/isFunction';
@@ -7,7 +6,6 @@ import 'moment-duration-format';
 
 import { CollectionsBreakdown } from './mdb';
 import { canonicalSectionByUnit } from './links';
-import * as consts from './consts';
 import {
   CT_ARTICLE,
   CT_CLIP,
@@ -21,7 +19,6 @@ import {
   CT_MEAL,
   CT_SONGS,
   CT_SPECIAL_LESSON,
-  CT_VIDEO_PROGRAM,
   CT_VIDEO_PROGRAM_CHAPTER,
   CT_VIRTUAL_LESSON,
   CT_WOMEN_LESSON,
@@ -33,12 +30,12 @@ import {
   LANG_ITALIAN,
   LANG_RUSSIAN,
   LANG_SPANISH,
-  LANG_TURKISH,
+  LANG_TURKISH
 } from './consts';
 
-const CDN_URL     = process.env.REACT_APP_CDN_URL;
-const CDN_HLS_URL = process.env.REACT_APP_CDN_HLS_URL;
-const PUBLIC_BASE = process.env.REACT_APP_PUBLIC_BASE;
+const CDN_URL     = process.env.NEXT_PUBLIC_CDN_URL;
+const CDN_HLS_URL = process.env.NEXT_PUBLIC_CDN_HLS_URL;
+const PUBLIC_BASE = process.env.NEXT_PUBLIC_PUBLIC_BASE;
 
 export const isEmpty = obj => {
   // null and undefined are "empty"
@@ -380,14 +377,6 @@ export const getSectionForTranslation = content_type => {
 export const noop = () => {
 };
 
-// Used in React hooks to remember previous props.
-export const usePrevious = value => {
-  const ref = useRef();
-  useEffect(() => {
-    ref.current = value;
-  });
-  return ref.current;
-};
 
 // Assigns properties from source to target, only if they exist in the what object.
 // what properties may have values of type:

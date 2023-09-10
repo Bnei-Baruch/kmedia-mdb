@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { withTranslation } from 'react-i18next';
+import { withTranslation } from 'next-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Icon, Menu, Modal } from 'semantic-ui-react';
 
-import { selectors } from '../../../../../redux/modules/auth';
+import { selectors } from '../../../../../../lib/redux/slices/authSlice/authSlice';
 import { actions, selectors as my } from '../../../../../redux/modules/my';
 import { selectors as playlist } from '../../../../../redux/modules/playlist';
 import { MY_NAMESPACE_REACTIONS, MY_REACTION_KINDS } from '../../../../../helpers/consts';
@@ -11,7 +11,7 @@ import { getMyItemKey } from '../../../../../helpers/my';
 import SubscribeBtn from '../../../../shared/SubscribeBtn';
 import * as shapes from '../../../../shapes';
 import NeedToLogin from '../../../../Sections/Personal/NeedToLogin';
-import { selectors as mdb } from '../../../../../redux/modules/mdb';
+import { selectors as mdb } from '../../../../../../lib/redux/slices/mdbSlice/mdbSlice';
 import { TaggingBtn } from './TaggingBtn';
 import { ToPlaylistBtn } from './ToPlaylistBtn';
 

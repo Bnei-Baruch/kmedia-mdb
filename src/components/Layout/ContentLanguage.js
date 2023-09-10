@@ -1,10 +1,10 @@
 import React, { useContext, useCallback } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 import { Dropdown, Menu } from 'semantic-ui-react';
 import { useNavigate, useLocation } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { actions, selectors as settings } from '../../redux/modules/settings';
+import { actions, selectors as settings } from '../../../lib/redux/slices/settingsSlice/settingsSlice';
 import { ALL_LANGUAGES, COOKIE_CONTENT_LANG, LANGUAGES, LANG_ORIGINAL } from '../../helpers/consts';
 import { setCookie } from '../../helpers/date';
 import { getToWithLanguage } from '../../helpers/url';

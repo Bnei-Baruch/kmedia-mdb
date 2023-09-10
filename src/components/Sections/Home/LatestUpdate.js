@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Card } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
-import { selectors as sources } from '../../../redux/modules/sources';
+import { selectors as sources } from '../../../../lib/redux/slices/sourcesSlice/sourcesSlice';
 import { canonicalLink, canonicalSectionByLink } from '../../../helpers/links';
 import * as shapes from '../../shapes';
 import Link from '../../Language/MultiLanguageLink';
@@ -25,10 +25,12 @@ import {
 import ContentItemContainer from '../../shared/ContentItem/ContentItemContainer';
 import { fromToLocalized } from '../../../helpers/date';
 import { getRandomLatestLesson } from './LatestDailyLesson';
+import { useTranslation } from 'next-i18next';
 
-const LatestUpdate = ({ item, t, label }) => {
+const LatestUpdate = ({ item, label }) => {
   const { content_type, name, film_date, name_in_collection, id, source_id, start_date, end_date, number } = item;
 
+  const { t }    = useTranslation();
   const to       = canonicalLink(item);
   let title      = name || `${t(`constants.content-types.${content_type}`)} ${t('lessons.list.number')} ${name_in_collection}`;
   let subheader  = [`${t('values.date', { date: item.film_date })} - ${label}`];
@@ -92,7 +94,6 @@ const LatestUpdate = ({ item, t, label }) => {
 LatestUpdate.propTypes = {
   item: PropTypes.oneOfType([shapes.ContentUnit, shapes.Collection]).isRequired,
   label: PropTypes.string,
-  t: PropTypes.func.isRequired,
 };
 
 export default LatestUpdate;

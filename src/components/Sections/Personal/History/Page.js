@@ -1,13 +1,13 @@
 import React, { useCallback, useContext, useEffect } from 'react';
-import { withTranslation } from 'react-i18next';
+import { withTranslation } from 'next-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Container, Grid, Header, Icon } from 'semantic-ui-react';
 import clsx from 'clsx';
 import moment from 'moment';
 
 import { actions, selectors } from '../../../../redux/modules/my';
-import { selectors as settings } from '../../../../redux/modules/settings';
-import { selectors as auth } from '../../../../redux/modules/auth';
+import { selectors as settings } from '../../../../../lib/redux/slices/settingsSlice/settingsSlice';
+import { selectors as auth } from '../../../../../lib/redux/slices/authSlice/authSlice';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import { MY_NAMESPACE_HISTORY } from '../../../../helpers/consts';
 import WipErr from '../../../shared/WipErr/WipErr';

@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { Button, GridColumn, GridRow, Popup } from 'semantic-ui-react';
-import { withTranslation } from 'react-i18next';
+import { withTranslation } from 'next-i18next';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { DeviceInfoContext } from '../../helpers/app-contexts';
 

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withTranslation } from 'react-i18next';
+import { withTranslation } from 'next-i18next';
 import { noop } from '../../../../helpers/utils';
 import { Accordion, Button, Header, Menu, Segment } from 'semantic-ui-react';
 

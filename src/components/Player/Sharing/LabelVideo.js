@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { selectors as player, selectors } from '../../../redux/modules/player';
 import { PLAYER_OVER_MODES, MT_VIDEO } from '../../../helpers/consts';
 import { selectors as playlist } from '../../../redux/modules/playlist';
-import { selectors as mdb } from '../../../redux/modules/mdb';
+import { selectors as mdb } from '../../../../lib/redux/slices/mdbSlice/mdbSlice';
 import { toHumanReadableTime } from '../../../helpers/time';
 import TagVideoLabelBtn from '../../Pages/WithPlayer/widgets/Info/TagVideoLabelBtn';
 import SavePlaylistItemBtn from '../../Pages/WithPlayer/widgets/Info/SavePlaylistItemBtn';

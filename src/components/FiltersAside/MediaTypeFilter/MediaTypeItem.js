@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { withTranslation } from 'react-i18next';
+import { withTranslation } from 'next-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Checkbox, List } from 'semantic-ui-react';
 import { FN_MEDIA_TYPE } from '../../../helpers/consts';

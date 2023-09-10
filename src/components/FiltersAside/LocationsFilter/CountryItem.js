@@ -6,7 +6,7 @@ import { isLanguageRtl } from '../../../helpers/i18n-utils';
 
 import { actions, selectors as filters } from '../../../redux/modules/filters';
 import { selectors as filtersAside } from '../../../redux/modules/filtersAside';
-import { selectors as settings } from '../../../redux/modules/settings';
+import { selectors as settings } from '../../../../lib/redux/slices/settingsSlice/settingsSlice';
 import CitiesModal from './CitiesModal';
 
 const CountryItem = ({ namespace, loc }) => {

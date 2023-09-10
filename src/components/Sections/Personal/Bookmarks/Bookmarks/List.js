@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { withTranslation } from 'react-i18next';
+import { withTranslation } from 'next-i18next';
 
 import { actions, selectors } from '../../../../../redux/modules/my';
 import { selectors as filters } from '../../../../../redux/modules/bookmarkFilter';
@@ -13,9 +13,9 @@ import WipErr from '../../../../shared/WipErr/WipErr';
 import NeedToLogin from '../../NeedToLogin';
 import { Header, List } from 'semantic-ui-react';
 import BookmarksItem from './Item';
-import { selectors as mdb } from '../../../../../redux/modules/mdb';
-import { selectors as sources } from '../../../../../redux/modules/sources';
-import { selectors as settings } from '../../../../../redux/modules/settings';
+import { selectors as mdb } from '../../../../../../lib/redux/slices/mdbSlice/mdbSlice';
+import { selectors as sources } from '../../../../../../lib/redux/slices/sourcesSlice/sourcesSlice';
+import { selectors as settings } from '../../../../../../lib/redux/slices/settingsSlice/settingsSlice';
 import { buildTitleByUnit } from '../../../../shared/ContentItem/helper';
 
 const BookmarkList = ({ t }) => {

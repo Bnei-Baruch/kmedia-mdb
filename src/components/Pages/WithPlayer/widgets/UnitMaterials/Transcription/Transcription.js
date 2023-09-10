@@ -1,5 +1,5 @@
 import React, { Component, useContext, useEffect, useState } from 'react';
-import { withTranslation } from 'react-i18next';
+import { withTranslation } from 'next-i18next';
 import { Menu, Segment } from 'semantic-ui-react';
 import isEqual from 'react-fast-compare';
 import PropTypes from 'prop-types';
@@ -9,7 +9,7 @@ import { useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { actions, selectors } from '../../../../../../redux/modules/assets';
-import { selectors as settings } from '../../../../../../redux/modules/settings';
+import { selectors as settings } from '../../../../../../../lib/redux/slices/settingsSlice/settingsSlice';
 
 import { CT_ARTICLE, CT_RESEARCH_MATERIAL, MT_TEXT, INSERT_TYPE_SUMMARY } from '../../../../../../helpers/consts';
 import { selectSuitableLanguage } from '../../../../../../helpers/language';

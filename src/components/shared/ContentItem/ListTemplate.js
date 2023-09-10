@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { NO_NAME } from '../../../helpers/consts';
 import { isLanguageRtl } from '../../../helpers/i18n-utils';
-import { selectors as settings } from '../../../redux/modules/settings';
+import { selectors as settings } from '../../../../lib/redux/slices/settingsSlice/settingsSlice';
 
 import Link from '../../Language/MultiLanguageLink';
 import * as shapes from '../../shapes';

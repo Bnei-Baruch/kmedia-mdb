@@ -3,8 +3,8 @@ import { call, put, select, takeLatest } from 'redux-saga/effects';
 import Api from '../helpers/Api';
 import { CT_LESSONS_SERIES, } from '../helpers/consts';
 import { actions, types } from '../redux/modules/lessons';
-import { actions as mdbActions } from '../redux/modules/mdb';
-import { selectors as settings } from '../redux/modules/settings';
+import { actions as mdbActions } from '../../lib/redux/slices/mdbSlice/mdbSlice';
+import { selectors as settings } from '../../lib/redux/slices/settingsSlice/settingsSlice';
 
 export function* fetchAllSeries(action) {
   try {

@@ -1,5 +1,5 @@
 import { createFilterDefinition } from './util';
-import { selectors as tags } from '../../redux/modules/tags';
+import { selectors as tags } from '../../../lib/redux/slices/tagsSlice/tagsSlice';
 
 const holidaysFilter = {
   name: 'holidays-filter',

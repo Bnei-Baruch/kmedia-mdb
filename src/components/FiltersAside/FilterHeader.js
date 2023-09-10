@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button, List } from 'semantic-ui-react';
-import { withTranslation } from 'react-i18next';
+import { withTranslation } from 'next-i18next';
 
 const FilterHeader = ({ filterName, t, children }) => {
   const [open, setOpen] = useState(true);

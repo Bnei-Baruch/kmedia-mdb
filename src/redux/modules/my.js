@@ -1,6 +1,4 @@
-import { createAction } from 'redux-actions';
-
-import { handleActions } from './settings';
+import { createAction, handleActions } from 'redux-actions';
 import { MY_NAMESPACE_PLAYLISTS, MY_NAMESPACE_REACTIONS, MY_NAMESPACES } from '../../helpers/consts';
 import { getMyItemKey } from '../../helpers/my';
 

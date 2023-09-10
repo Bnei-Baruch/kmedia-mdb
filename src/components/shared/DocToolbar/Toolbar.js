@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { withTranslation } from 'react-i18next';
+import { withTranslation } from 'next-i18next';
 import { Button, Header, Menu, Popup } from 'semantic-ui-react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';

@@ -11,7 +11,7 @@ import NeedToLogin from '../NeedToLogin';
 import ItemsContainer from './ItemsContainer';
 import { useDispatch, useSelector } from 'react-redux';
 import AlertModal from '../../../shared/AlertModal';
-import { withTranslation } from 'react-i18next';
+import { withTranslation } from 'next-i18next';
 import { withRouter } from '../../../../helpers/withRouterPatch';
 
 const Page = ({ t }) => {

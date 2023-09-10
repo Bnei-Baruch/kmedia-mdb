@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { withTranslation } from 'react-i18next';
+import { withTranslation } from 'next-i18next';
 import { useDispatch } from 'react-redux';
 import { Dropdown } from 'semantic-ui-react';
 

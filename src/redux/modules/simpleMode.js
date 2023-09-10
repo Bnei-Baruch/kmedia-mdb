@@ -1,6 +1,4 @@
-import { createAction } from 'redux-actions';
-
-import { handleActions, types as settings } from './settings';
+import { createAction, handleActions } from 'redux-actions';
 import { types as ssr } from './ssr';
 
 /* Types */
@@ -82,8 +80,8 @@ const onSSRPrepare = draft => {
 
 export const reducer = handleActions({
   [ssr.PREPARE]: onSSRPrepare,
-  [settings.SET_UI_LANGUAGE]: onSetLanguage,
-  [settings.SET_CONTENT_LANGUAGES]: onSetLanguage,
+  //[settings.SET_UI_LANGUAGE]: onSetLanguage,
+  //[settings.SET_CONTENT_LANGUAGES]: onSetLanguage,
 
   [FETCH_FOR_DATE]: setStatus,
   [FETCH_FOR_DATE_SUCCESS]: onFetchForDateSuccess,

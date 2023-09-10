@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { withTranslation } from 'react-i18next';
+import { withTranslation } from 'next-i18next';
 import { Button, Popup } from 'semantic-ui-react';
 import { SectionLogo } from '../../../helpers/images';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import { makeTagLinks } from '../../Pages/WithPlayer/widgets/Info/Info';
 import { useSelector } from 'react-redux';
-import { selectors as tagsSelectors } from '../../../redux/modules/tags';
+import { selectors as tagsSelectors } from '../../../../lib/redux/slices/tagsSlice/tagsSlice';
 import { textMarksPrefixByType } from '../../../helpers/scrollToSearch/helper';
 
 const idPrefix  = textMarksPrefixByType['label'];

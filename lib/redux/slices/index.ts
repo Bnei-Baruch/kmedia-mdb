@@ -1,0 +1,8 @@
+export * as homeSlice from './homeSlice/homeSlice'
+export * as publicationsSlice from './publicationsSlice/publicationsSlice'
+export * as settingsSlice from './settingsSlice/settingsSlice'
+export * as authSlice from './authSlice/authSlice'
+export * as mdbSlice from './mdbSlice/mdbSlice'
+export * as sourcesSlice from './sourcesSlice/sourcesSlice'
+export * as imageSlice from './imageSlice/imageSlice'
+export * as trimSlice from './trimSlice/trimSlice'

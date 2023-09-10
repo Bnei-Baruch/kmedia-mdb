@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Button, MenuItem, Popup } from 'semantic-ui-react';
 import SelectTopicsModal from '../SelectTopicsModal/SelectTopicsModal';
 import { SectionLogo } from '../../../helpers/images';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 
 const TagTextLabelBtn = ({ label }) => {
   const [open, setOpen] = useState(false);
