@@ -2,11 +2,11 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectors, actions } from '../../../../../lib/redux/slices/mdbSlice/mdbSlice';
 
-import { selectors as my } from '../../../../redux/modules/my';
+import { selectors as my } from '../../../../../lib/redux/slices/mySlice/mySlice';
 import { MY_NAMESPACE_HISTORY } from '../../../../helpers/consts';
 import { useNavigate } from 'react-router-dom';
 import { selectors as settings } from '../../../../../lib/redux/slices/settingsSlice/settingsSlice';
-import { getSavedTime } from '../../../Player/helper';
+import { getSavedTime } from '../../../../../lib/Player/helper';
 import moment from 'moment';
 import { getCuByCcuSkipPreparation, canonicalLink } from '../../../../helpers/links';
 

@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Checkbox, Icon, Input, List, Modal, Divider } from 'semantic-ui-react';
 
-import { actions, selectors } from '../../../../../redux/modules/my';
+import { actions, selectors } from '../../../../../../lib/redux/slices/mySlice/mySlice';
 import { selectors as settings } from '../../../../../../lib/redux/slices/settingsSlice/settingsSlice';
-import { selectors as playlist } from '../../../../../redux/modules/playlist';
-import { actions as playerActions } from '../../../../../redux/modules/player';
+import { selectors as playlist } from '../../../../../../lib/redux/slices/playlistSlice/playlistSlice';
+import { actions as playerActions } from '../../../../../../lib/redux/slices/playerSlice/playerSlice';
 import { MY_NAMESPACE_PLAYLIST_EDIT, MY_NAMESPACE_PLAYLISTS, PLAYER_OVER_MODES } from '../../../../../helpers/consts';
 import { getLanguageDirection } from '../../../../../helpers/i18n-utils';
 import { useTranslation } from 'next-i18next';

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Button, Input, List } from 'semantic-ui-react';
 
-import { actions } from '../../../../../redux/modules/my';
+import { actions } from '../../../../../../lib/redux/slices/mySlice/mySlice';
 import { MY_NAMESPACE_PLAYLIST_EDIT } from '../../../../../helpers/consts';
 import AlertModal from '../../../../shared/AlertModal';
 import { stopBubbling } from '../../../../../helpers/utils';

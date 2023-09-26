@@ -1,6 +1,6 @@
 import { createAction, handleActions } from 'redux-actions';
 import { types as authTypes } from '../../../lib/redux/slices/authSlice/authSlice';
-import { types as playerTypes } from './player';
+import { types as playerTypes } from '../../../lib/redux/slices/playerSlice/playerSlice';
 
 const USER_INACTIVE         = 'USER_INACTIVE';
 const PLAYER_PAUSE_ON_LEAVE = 'PLAYER_PAUSE_ON_LEAVE';

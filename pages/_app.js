@@ -1,12 +1,28 @@
 import React from 'react';
-import App from 'next/app';
 import { appWithTranslation } from 'next-i18next';
 import { wrapper } from '../lib/redux';
 import '../styles/global.scss';
 import Layout from './Layout';
-import { fetchSQData } from '../lib/redux/slices/sourcesSlice';
+import { Provider } from 'react-redux';
+import { Providers } from '../lib/providers';
 
+const KmediaApp = ({ Component, ...rest }) => {
+  const { store, props } = wrapper.useWrappedStore(rest);
+
+  //await store.dispatch(fetchSQData());
+  return (
+    <Provider store={store}>
+      <Providers>
+        <Layout>
+          <Component {...props.pageProps} />
+        </Layout>
+      </Providers>
+    </Provider>
+  );
+};
+/*
 class KmediaApp extends App {
+  //TODO: try to use getStaticProps
   static getInitialProps = wrapper.getInitialAppProps(store => async context => {
     await store.dispatch(fetchSQData());
 
@@ -26,5 +42,6 @@ class KmediaApp extends App {
     );
   }
 }
+*/
 
-export default appWithTranslation(wrapper.withRedux(KmediaApp));
+export default appWithTranslation(KmediaApp);

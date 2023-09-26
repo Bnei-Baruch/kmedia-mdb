@@ -8,7 +8,7 @@ import Info from '../widgets/Info/Info';
 import Recommended from '../widgets/Recommended/Main/Recommended';
 import PlaylistHeader from '../Playlist/PlaylistHeader';
 import PlaylistItems from './PlaylistItems';
-import { selectors as playlist } from '../../../../redux/modules/playlist';
+import { selectors as playlist } from '../../../../../lib/redux/slices/playlistSlice/playlistSlice';
 import WipErr from '../../../shared/WipErr/WipErr';
 import clsx from 'clsx';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';

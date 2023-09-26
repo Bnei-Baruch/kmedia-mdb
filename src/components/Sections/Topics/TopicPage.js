@@ -5,10 +5,10 @@ import { useTranslation } from 'next-i18next';
 import { Container, Divider, Header } from 'semantic-ui-react';
 
 import { actions, selectors } from '../../../../lib/redux/slices/tagsSlice/tagsSlice';
-import { actions as listsActions } from '../../../redux/modules/lists';
+import { actions as listsActions } from '../../../../lib/redux/slices/listSlice/listSlice';
 import { selectors as settings } from '../../../../lib/redux/slices/settingsSlice/settingsSlice';
 import Pagination from '../../Pagination/Pagination';
-import { selectors as filters } from '../../../redux/modules/filters';
+import { selectors as filters } from '../../../../lib/redux/slices/filterSlice/filterSlice';
 import { isEqual } from 'lodash';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import RenderPage from './RenderPage';

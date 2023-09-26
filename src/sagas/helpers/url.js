@@ -2,9 +2,9 @@ import { put, select } from 'redux-saga/effects';
 import { push, replace } from '@lagunovsky/redux-react-router';
 
 import { getQuery as urlGetQuery, stringify } from '../../helpers/url';
-import { selectors as filterSelectors } from '../../redux/modules/filters';
-import { selectors as listsSelectors } from '../../redux/modules/lists';
-import { filtersTransformer } from '../../filters';
+import { selectors as filterSelectors } from '../../../lib/redux/slices/filterSlice/filterSlice';
+import { selectors as listsSelectors } from '../../../lib/redux/slices/listSlice/listSlice';
+import { filtersTransformer } from '../../../lib/filters';
 
 export function* getQuery() {
   const router = yield select(state => state.router);

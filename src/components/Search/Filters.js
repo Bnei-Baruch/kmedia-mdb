@@ -3,18 +3,18 @@ import { useTranslation } from 'next-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Checkbox, Container, Header, List, Segment } from 'semantic-ui-react';
 
-import { actions, selectors } from '../../redux/modules/filtersAside';
+import { actions, selectors } from '../../../lib/redux/slices/filterSlice/filterStatsSlice';
 import { selectors as search, actions as searchActions } from '../../../lib/redux/slices/searchSlice/searchSlice';
 import { FN_SORT_BY_FILTER, FN_TOPICS_MULTI, FN_SOURCES_MULTI } from '../../helpers/consts';
 
 import FiltersHydrator from '../Filters/FiltersHydrator';
-import FilterHeader from '../FiltersAside/FilterHeader';
-import Language from '../FiltersAside/LanguageFilter/Language';
-import DateFilter from '../FiltersAside/DateFilter';
-import TagSourceFilter from '../FiltersAside/TopicsFilter/TagSourceFilter';
-import ContentType from '../FiltersAside/ContentTypeFilter/ContentType';
-import PersonFilter from '../FiltersAside/PersonFilter/Person';
-import OriginalLanguageFilter from '../FiltersAside/OriginalLanguageFilter/OriginalLanguage';
+import FilterHeader from '../../../lib/filters/FiltersAside/FilterHeader';
+import Language from '../../../lib/filters/FiltersAside/LanguageFilter/Language';
+import DateFilter from '../../../lib/filters/FiltersAside/DateFilter';
+import TagSourceFilter from '../../../lib/filters/FiltersAside/TopicsFilter/TagSourceFilter';
+import ContentType from '../../../lib/filters/FiltersAside/ContentTypeFilter/ContentType';
+import PersonFilter from '../../../lib/filters/FiltersAside/PersonFilter/Person';
+import OriginalLanguageFilter from '../../../lib/filters/FiltersAside/OriginalLanguageFilter/OriginalLanguage';
 
 const SORTS = ['relevance', 'newertoolder', 'oldertonewer'];
 
@@ -56,7 +56,7 @@ const Filters = ({ namespace }) => {
   const [isHydrated, setIsHydrated] = useState(false);
 
   const { t }        = useTranslation();
-  const { wip, err } = useSelector(state => selectors.getWipErr(state.filtersAside, namespace));
+  const { wip, err } = useSelector(state => selectors.getStatus(state.filterStats, namespace));
 
   const dispatch = useDispatch();
 

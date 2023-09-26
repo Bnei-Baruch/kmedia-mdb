@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { withTranslation } from 'next-i18next';
 
-import { actions, selectors } from '../../../../../redux/modules/my';
+import { actions, selectors } from '../../../../../../lib/redux/slices/mySlice/mySlice';
 import { selectors as filters } from '../../../../../redux/modules/bookmarkFilter';
 import {
   MY_BOOKMARK_FILTER_FOLDER_ID,

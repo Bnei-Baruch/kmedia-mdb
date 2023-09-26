@@ -1,6 +1,6 @@
 import { useTranslation } from 'next-i18next';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectors, actions } from '../../../../../redux/modules/player';
+import { selectors, actions } from '../../../../../../lib/redux/slices/playerSlice/playerSlice';
 import { stopBubbling } from '../../../../../helpers/utils';
 import { PLAYER_OVER_MODES } from '../../../../../helpers/consts';
 import { Button } from 'semantic-ui-react';

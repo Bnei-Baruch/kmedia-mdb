@@ -15,9 +15,9 @@ import {
   DeviceInfoContext,
   SessionInfoContext,
 } from '../../helpers/app-contexts';
-import InitKCEvents from '../../pkg/ksAdapter/InitKCEvents';
+import InitKCEvents from '../../../pkg/ksAdapter/InitKCEvents';
 import Layout from '../Layout/Layout';
-import PlayerContainer from '../Player/PlayerContainer';
+import PlayerContainer from '../../../lib/Player/PlayerContainer';
 
 const App = props => {
   const [isShareTextEnabled, setEnableShareText] = useState(false);

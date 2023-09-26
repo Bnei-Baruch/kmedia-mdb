@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Button, Confirm, Grid, Icon, Input } from 'semantic-ui-react';
 import clsx from 'clsx';
 
-import { actions } from '../../../../../redux/modules/my';
+import { actions } from '../../../../../../lib/redux/slices/mySlice/mySlice';
 import { MY_NAMESPACE_FOLDERS } from '../../../../../helpers/consts';
 import { getMyItemKey } from '../../../../../helpers/my';
 import { stopBubbling } from '../../../../../helpers/utils';

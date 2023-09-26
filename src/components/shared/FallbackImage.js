@@ -22,10 +22,8 @@ const FallbackImage = props => {
   const { src: imageSource, wip, err } = useSelector(state => selectors.getBySrc(state.image, src));
   const dispatch                       = useDispatch();
 
-  console.log('additional fetch: FallbackImage render', src, imageSource, wip, err);
   useEffect(() => {
     if (!imageSource && !wip && !err) {
-      console.log('additional fetch: FallbackImage effect', src, imageSource, wip, err);
       dispatch(imageFetch({ src, fallbacks: fallbackImage }));
     }
   }, [fallbackImage, src, imageSource, wip, err]);

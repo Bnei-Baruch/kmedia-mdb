@@ -5,21 +5,21 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Container, Header } from 'semantic-ui-react';
 import { FN_SOURCES_MULTI, FN_TOPICS_MULTI } from '../../../helpers/consts';
 
-import { selectors as filters } from '../../../redux/modules/filters';
-import { actions, selectors } from '../../../redux/modules/filtersAside';
+import { selectors as filters } from '../../../../lib/redux/slices/filterSlice/filterSlice';
+import { actions, selectors } from '../../../../lib/redux/slices/filterSlice/filterStatsSlice';
 import FiltersHydrator from '../../Filters/FiltersHydrator';
-import DateFilter from '../../FiltersAside/DateFilter';
-import Language from '../../FiltersAside/LanguageFilter/Language';
-import OriginalLanguageFilter from '../../FiltersAside/OriginalLanguageFilter/OriginalLanguage';
-import TagSourceFilter from '../../FiltersAside/TopicsFilter/TagSourceFilter';
+import DateFilter from '../../../../lib/filters/FiltersAside/DateFilter';
+import Language from '../../../../lib/filters/FiltersAside/LanguageFilter/Language';
+import OriginalLanguageFilter from '../../../../lib/filters/FiltersAside/OriginalLanguageFilter/OriginalLanguage';
+import TagSourceFilter from '../../../../lib/filters/FiltersAside/TopicsFilter/TagSourceFilter';
 import ContentTypeFilter from './ContentTypeFilter';
 
 const Filters = ({ namespace, baseParams }) => {
   const [isHydrated, setIsHydrated] = useState(false);
 
   const { t }        = useTranslation();
-  const isReady      = useSelector(state => selectors.isReady(state.filtersAside, namespace));
-  const { wip, err } = useSelector(state => selectors.getWipErr(state.filtersAside, namespace));
+  const isReady      = useSelector(state => selectors.isReady(state.filterStats, namespace));
+  const { wip, err } = useSelector(state => selectors.getStatus(state.filterStats, namespace));
   const selected     = useSelector(state => filters.getNotEmptyFilters(state.filters, namespace), isEqual);
   const prevSelRef   = useRef(-1);
 

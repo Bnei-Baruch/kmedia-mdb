@@ -6,12 +6,12 @@ import { Button, Checkbox, Icon, Input, List, Modal, Table } from 'semantic-ui-r
 import { CT_HOLIDAY, FN_COLLECTION_MULTI, FN_CONTENT_TYPE } from '../../../helpers/consts';
 import { getLanguageDirection, isLanguageRtl } from '../../../helpers/i18n-utils';
 import { isEmpty } from '../../../helpers/utils';
-import { actions, selectors as filters } from '../../../redux/modules/filters';
-import { selectors as filtersAside, selectors } from '../../../redux/modules/filtersAside';
+import { actions, selectors as filters } from '../../../../lib/redux/slices/filterSlice/filterSlice';
+import { selectors as filtersAside, selectors } from '../../../../lib/redux/slices/filterSlice/filterStatsSlice';
 import { selectors as mdb } from '../../../../lib/redux/slices/mdbSlice/mdbSlice';
 
 import { selectors as settings } from '../../../../lib/redux/slices/settingsSlice/settingsSlice';
-import CollectionItem from '../../FiltersAside/CollectionFilter/CollectionItem';
+import CollectionItem from '../../../../lib/filters/FiltersAside/CollectionFilter/CollectionItem';
 
 const ITEMS_PER_ROW = 5;
 const buildRowArr   = n => {
@@ -25,12 +25,12 @@ const Holidays = ({ namespace, t }) => {
   const [open, setOpen]   = useState(false);
 
   const uiDir               = useSelector(state => settings.getUIDir(state.settings));
-  const ids                 = useSelector(state => selectors.getTree(state.filtersAside, namespace, FN_COLLECTION_MULTI));
+  const ids                 = useSelector(state => selectors.getTree(state.filterStats, namespace, FN_COLLECTION_MULTI));
   const getById             = useSelector(state => mdb.nestedGetCollectionById(state.mdb));
-  const selectedCollections = useSelector(state => filters.getFilterByName(state.filters, namespace, FN_COLLECTION_MULTI)?.values || []);
-  const selectedCT          = useSelector(state => filters.getFilterByName(state.filters, namespace, FN_CONTENT_TYPE)?.values || []);
+  const selectedCollections = useSelector(state => filters.getFilterByName(state.filters, namespace, FN_COLLECTION_MULTI) || []);
+  const selectedCT          = useSelector(state => filters.getFilterByName(state.filters, namespace, FN_CONTENT_TYPE) || []);
 
-  const stat = useSelector(state => filtersAside.getStats(state.filtersAside, namespace, FN_CONTENT_TYPE)(CT_HOLIDAY));
+  const stat = useSelector(state => filtersAside.getStats(state.filterStats, namespace, FN_CONTENT_TYPE)(CT_HOLIDAY));
 
   const collections = useMemo(() => {
     const reg = new RegExp(query, 'i');
@@ -45,7 +45,7 @@ const Holidays = ({ namespace, t }) => {
   const dispatch = useDispatch();
 
   const handleSelect = (e, { value, checked }) => {
-    dispatch(actions.setFilterValueMulti(namespace, FN_COLLECTION_MULTI, []));
+    dispatch(filterSlice.actions.setFilterValues({ namespace, name: FN_COLLECTION_MULTI, values: [] }));
 
     checked ? dispatch(actions.setFilterValue(namespace, FN_CONTENT_TYPE, value)) :
       dispatch(actions.resetFilter(namespace, FN_CONTENT_TYPE));

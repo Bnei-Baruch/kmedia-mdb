@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 import { LANG_ENGLISH, LANG_HEBREW, LANG_RUSSIAN, LANG_SPANISH, LANG_UKRAINIAN } from '../../../../../helpers/consts';
 import { selectors as settings } from '../../../../../../lib/redux/slices/settingsSlice/settingsSlice';
-import { actions as filtersActions, selectors as filters } from '../../../../../redux/modules/filters';
+import { actions as filtersActions, selectors as filters } from '../../../../../../lib/redux/slices/filterSlice/filterSlice';
 import { actions, selectors } from '../../../../../../lib/redux/slices/publicationsSlice/thunks';
 import withPagination, { getPageFromLocation } from '../../../../Pagination/withPagination';
 import * as shapes from '../../../../shapes';

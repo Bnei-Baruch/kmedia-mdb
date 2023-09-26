@@ -6,7 +6,7 @@ import { stringify } from '../../helpers/url';
 
 import { parse } from 'qs';
 import { omit } from 'lodash/object';
-import { KC_SEARCH_KEY_SESSION, KC_SEARCH_KEYS } from '../../pkg/ksAdapter/adapter';
+import { KC_SEARCH_KEY_SESSION, KC_SEARCH_KEYS } from '../../../pkg/ksAdapter/adapter';
 
 /**
  * multiLanguageLinkCreator - an higher order component to create a link that allows navigating

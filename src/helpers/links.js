@@ -1,5 +1,5 @@
 import { canonicalCollection, isEmpty } from './utils';
-import { filtersTransformer } from '../filters/index';
+import { filtersTransformer } from '@/lib/filters/index';
 import { stringify as urlSearchStringify, stringify } from './url';
 
 import {

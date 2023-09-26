@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { useTranslation } from 'next-i18next';
 import ContentItemContainer from '../../../shared/ContentItem/ContentItemContainer';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectors, actions } from '../../../../redux/modules/playlist';
+import { selectors, actions } from '../../../../../lib/redux/slices/playlistSlice/playlistSlice';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import { Header, Button, Container } from 'semantic-ui-react';
 import { selectors as mdb } from '../../../../../lib/redux/slices/mdbSlice/mdbSlice';

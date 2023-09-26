@@ -10,10 +10,10 @@ import { ClientChroniclesContext, DeviceInfoContext } from '../../helpers/app-co
 import { canonicalCollection, tracePath } from '../../helpers/utils';
 import { selectors as mdb } from '../../../lib/redux/slices/mdbSlice/mdbSlice';
 import { selectors as recommended } from '../../redux/modules/recommended';
-import { selectors as filterSelectors } from '../../redux/modules/filters';
+import { selectors as filterSelectors } from '../../../lib/redux/slices/filterSlice/filterSlice';
 import { selectors as sourcesSelectors } from '../../../lib/redux/slices/sourcesSlice/sourcesSlice';
 import { selectors as tagsSelectors } from '../../../lib/redux/slices/tagsSlice/tagsSlice';
-import { actions as listsActions, selectors as lists } from '../../redux/modules/lists';
+import { actions as listsActions, selectors as lists } from '../../../lib/redux/slices/listSlice/listSlice';
 import { selectors as lessonsSelectors } from '../../redux/modules/lessons';
 import { actions as publicationActions, selectors as publicationSelectors } from '../../../lib/redux/slices/publicationsSlice/thunks';
 import { selectors as settingsSelectors } from '../../../lib/redux/slices/settingsSlice/settingsSlice';

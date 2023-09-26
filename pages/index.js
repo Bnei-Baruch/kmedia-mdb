@@ -16,6 +16,7 @@ import WipErr from '/src/components/shared/WipErr/WipErr';
 import HomePage from '../src/components/Sections/Home/HomePage';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { wrapper } from '../lib/redux';
+import { fetchSQData } from '../lib/redux/slices/sourcesSlice';
 
 const FETCH_TIMEOUT = 10 * 60 * 1000; // every 10 min
 
@@ -51,20 +52,18 @@ const HomePageContainer = () => {
   return <HomePage />;
 };
 
-export const getStaticProps = wrapper.getStaticProps(store => async ({ locale }) => {
-  await store.dispatch(fetchData());
-  await store.dispatch(fetchBanners());
+export const getServerSideProps = wrapper.getServerSideProps(store => async ({ locale }) => {
   const lang = locale ?? 'en';
 
-  const _blogs  = fetchSocialMedia('blog', fetchBlogList, [lang]);
-  const _tweets = fetchSocialMedia('tweet', fetchTweets, [lang]);
-  await Promise.all([_blogs, _tweets]);
+  await store.dispatch(fetchSQData());
+  const _data    = store.dispatch(fetchData());
+  const _banners = store.dispatch(fetchBanners());
+  const _blogs   = fetchSocialMedia('blog', fetchBlogList, [lang]);
+  const _tweets  = fetchSocialMedia('tweet', fetchTweets, [lang]);
+  await Promise.all([_data, _banners, _blogs, _tweets]);
 
   const _i18n = await serverSideTranslations(lang);
   return { props: { ..._i18n } };
 });
-/*
-export const getStaticProps       = async ({ locale }) => ({
-  props: { ...(await serverSideTranslations(locale ?? 'en')) },
-});*/
+
 export default HomePageContainer;

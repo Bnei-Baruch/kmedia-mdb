@@ -2,14 +2,14 @@ import React from 'react';
 import { withTranslation } from 'next-i18next';
 import { useSelector } from 'react-redux';
 import { CT_HOLIDAY, EVENT_PAGE_CTS, FN_CONTENT_TYPE } from '../../../helpers/consts';
-import { selectors } from '../../../redux/modules/filtersAside';
-import ContentTypeItem from '../../FiltersAside/ContentTypeFilter/ContentTypeItem';
-import FilterHeader from '../../FiltersAside/FilterHeader';
+import { selectors } from '../../../../lib/redux/slices/filterSlice/filterStatsSlice';
+import ContentTypeItem from '../../../../lib/filters/FiltersAside/ContentTypeFilter/ContentTypeItem';
+import FilterHeader from '../../../../lib/filters/FiltersAside/FilterHeader';
 import Holidays from './Holidays';
 
 const ContentTypesFilter = ({ namespace, t }) => {
   const items = useSelector(state => selectors
-    .getTree(state.filtersAside, namespace, FN_CONTENT_TYPE)
+    .getTree(state.filterStats, namespace, FN_CONTENT_TYPE)
     .filter(ct => EVENT_PAGE_CTS.includes(ct))
   );
 

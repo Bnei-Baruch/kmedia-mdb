@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import { Button, Card, Confirm, Header } from 'semantic-ui-react';
 
-import { actions } from '../../../../redux/modules/my';
+import { actions } from '../../../../../lib/redux/slices/mySlice/mySlice';
 import { selectors as mdb } from '../../../../../lib/redux/slices/mdbSlice/mdbSlice';
 import { actions as statsActions, selectors as stats } from '../../../../redux/modules/stats';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';

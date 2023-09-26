@@ -25,15 +25,15 @@ const OmniBox = ({ isHomePage = false, t }) => {
   const uiLang      = useSelector(state => settingsSelectors.getUILang(state.settings));
 
   const { isMobileDevice } = useContext(DeviceInfoContext);
-  const chronicles = useContext(ClientChroniclesContext);
+  const chronicles         = useContext(ClientChroniclesContext);
 
   const [autocompleteResults, setAutocompleteResults] = useState([]);
-  const [autocompleteId, setAutocompleteId] = useState('');
-  const [inputFocused, setInputFocused] = useState(!isMobileDevice);
-  const [userInteracted, setUserInteracted] = useState(false);
+  const [autocompleteId, setAutocompleteId]           = useState('');
+  const [inputFocused, setInputFocused]               = useState(!isMobileDevice);
+  const [userInteracted, setUserInteracted]           = useState(false);
 
   const dispatch = useDispatch();
-  const router = useRouter()
+  const router   = useRouter();
 
   useEffect(() => {
     if (suggestions) {
@@ -60,22 +60,22 @@ const OmniBox = ({ isHomePage = false, t }) => {
     if (e.keyCode === 13) {
       doSearch();
     }
-  }
+  };
 
   const inputChange = e => {
     setUserInteracted(true);
     setInputFocused(true);
     dispatch(actions.updateQuery({ query: e.target.value, autocomplete: true }));
-  }
+  };
 
   const onFocus = () => {
     setInputFocused(true);
-  }
+  };
 
   const onBlur = () => {
     setInputFocused(false);
     setUserInteracted(true);
-  }
+  };
 
   const handleResultSelect = (e, data) => {
     const { title } = data.result;
@@ -85,7 +85,7 @@ const OmniBox = ({ isHomePage = false, t }) => {
   };
 
   const handleFromInputChange = value => {
-    router.push(`/${ uiLang }/simple-mode?date=${ moment(value).format('YYYY-MM-DD') }`);
+    router.push(`/${uiLang}/simple-mode?date=${moment(value).format('YYYY-MM-DD')}`);
   };
 
   const renderInput = () => isHomePage ?
@@ -102,10 +102,10 @@ const OmniBox = ({ isHomePage = false, t }) => {
       style={{ width: '100%' }}
       type="text">
       <input />
-      <Button type='submit' className="searchButton" onClick={doSearch}>
+      <Button type="submit" className="searchButton" onClick={doSearch}>
         {/* fix isLanguageRtl for style below */}
-        {wip ? <Loader active size='tiny' style={{ position: 'relative', left: '0', marginLeft: '4px' }}/> :
-          <Icon name='search' size={isMobileDevice ? 'large' : null} />
+        {wip ? <Loader active size="tiny" style={{ position: 'relative', left: '0', marginLeft: '4px' }} /> :
+          <Icon name="search" size={isMobileDevice ? 'large' : null} />
         }
         {!isMobileDevice ? t('buttons.search').toUpperCase() : null}
       </Button>
@@ -121,7 +121,7 @@ const OmniBox = ({ isHomePage = false, t }) => {
       onFocus={onFocus}
       onBlur={onBlur}
     />;
-
+  return null;
   return <Search
     fluid
     className="search-omnibox"

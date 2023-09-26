@@ -1,28 +1,32 @@
 import React from 'react';
-//import DonationPopup from '../../src/components/Sections/Home/DonationPopup';
-import UAParser from 'ua-parser-js';
-import { Providers } from '../lib/providers';
+
 import Header from '../src/components/Layout/Header';
 import DownloadTrim from '../src/components/Share/DownloadTrim';
 import Footer from '../src/components/Layout/Footer';
 import DonationPopup from '../src/components/Sections/Home/DonationPopup';
+import { wrapper } from '../lib/redux';
+import { fetchSQData } from '../lib/redux/slices/sourcesSlice';
+
+export const getStaticProps = wrapper.getStaticProps(store => async ({ locale }) => {
+  const lang = locale ?? 'en';
+
+  await store.dispatch(fetchSQData());
+  return {};
+});
 
 const RootLayout = ({ children }) => {
-  const deviceInfo = new UAParser().getResult();
   return (
-    <Providers deviceInfo={deviceInfo}>
-      <div className="layout">
-        <Header />
-        <div className="layout__main">
-          <div className="layout__content">
-            <DownloadTrim />
-            {children}
-          </div>
-          <Footer />
+    <div className="layout">
+      <Header />
+      <div className="layout__main">
+        <div className="layout__content">
+          <DownloadTrim />
+          {children}
         </div>
-        <DonationPopup />
+        <Footer />
       </div>
-    </Providers>
+      <DonationPopup />
+    </div>
   );
 };
 

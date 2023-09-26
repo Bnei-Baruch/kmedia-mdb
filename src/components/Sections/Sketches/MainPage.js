@@ -8,12 +8,12 @@ import { Container, Divider, CardGroup } from 'semantic-ui-react';
 import { MT_IMAGE, PAGE_NS_SKETCHES, UNIT_LESSONS_TYPE, CT_VIDEO_PROGRAM_CHAPTER } from '../../../helpers/consts';
 import { usePrevious } from '../../../helpers/hooks';
 import { isEmpty } from '../../../helpers/utils';
-import { selectors as filters } from '../../../redux/modules/filters';
-import { actions, selectors as lists } from '../../../redux/modules/lists';
+import { selectors as filters } from '../../../../lib/redux/slices/filterSlice/filterSlice';
+import { actions, selectors as lists } from '../../../../lib/redux/slices/listSlice/listSlice';
 import { actions as assetsActions, selectors as assets } from '../../../redux/modules/assets';
 import { selectors as settings } from '../../../../lib/redux/slices/settingsSlice/settingsSlice';
 
-import FilterLabels from '../../FiltersAside/FilterLabels';
+import FilterLabels from '../../../../lib/filters/FiltersAside/FilterLabels';
 import Pagination from '../../Pagination/Pagination';
 import ResultsPageHeader from '../../Pagination/ResultsPageHeader';
 import { getPageFromLocation } from '../../Pagination/withPagination';

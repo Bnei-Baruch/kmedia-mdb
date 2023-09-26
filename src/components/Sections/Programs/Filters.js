@@ -5,23 +5,23 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Container, Header } from 'semantic-ui-react';
 
 import { COLLECTION_PROGRAMS_TYPE, FN_SOURCES_MULTI, FN_TOPICS_MULTI, PAGE_NS_PROGRAMS } from '../../../helpers/consts';
-import { selectors as filters } from '../../../redux/modules/filters';
-import { actions, selectors } from '../../../redux/modules/filtersAside';
-import { actions as prepareActions } from '../../../redux/modules/preparePage';
+import { selectors as filters } from '../../../../lib/redux/slices/filterSlice/filterSlice';
+import { actions, selectors } from '../../../../lib/redux/slices/filterSlice/filterStatsSlice';
+import { actions as prepareActions } from '../../../../lib/redux/slices/preparePageSlice/preparePageSlice';
 import { selectors as settings } from '../../../../lib/redux/slices/settingsSlice/settingsSlice';
 import FiltersHydrator from '../../Filters/FiltersHydrator';
-import DateFilter from '../../FiltersAside/DateFilter';
-import Language from '../../FiltersAside/LanguageFilter/Language';
-import MediaTypeFilter from '../../FiltersAside/MediaTypeFilter/MediaType';
-import OriginalLanguageFilter from '../../FiltersAside/OriginalLanguageFilter/OriginalLanguage';
-import TagSourceFilter from '../../FiltersAside/TopicsFilter/TagSourceFilter';
+import DateFilter from '../../../../lib/filters/FiltersAside/DateFilter';
+import Language from '../../../../lib/filters/FiltersAside/LanguageFilter/Language';
+import MediaTypeFilter from '../../../../lib/filters/FiltersAside/MediaTypeFilter/MediaType';
+import OriginalLanguageFilter from '../../../../lib/filters/FiltersAside/OriginalLanguageFilter/OriginalLanguage';
+import TagSourceFilter from '../../../../lib/filters/FiltersAside/TopicsFilter/TagSourceFilter';
 import ContentTypesFilter from './ContentTypesFilter';
 
 const Filters = ({ namespace, baseParams }) => {
   const { t } = useTranslation();
   const [isHydrated, setIsHydrated] = useState(false);
 
-  const isReady  = useSelector(state => selectors.isReady(state.filtersAside, namespace));
+  const isReady  = useSelector(state => selectors.isReady(state.filterStats, namespace));
   const selected = useSelector(state => filters.getNotEmptyFilters(state.filters, namespace), isEqual);
   const contentLanguages = useSelector(state => settings.getContentLanguages(state.settings));
   const prevSelRef = useRef(-1);

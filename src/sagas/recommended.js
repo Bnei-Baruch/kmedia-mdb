@@ -14,9 +14,9 @@ import { getSourcesCollections } from '../helpers/utils';
 import { actions, selectors as recommended, types } from '../redux/modules/recommended';
 import { selectors as settings } from '../../lib/redux/slices/settingsSlice/settingsSlice';
 import { selectors as sourcesSelectors } from '../../lib/redux/slices/sourcesSlice/sourcesSlice';
-import { fetchMissingCollections, fetchMissingUnits } from './mdb';
-import { types as playerTypes } from '../redux/modules/player';
-import { selectors as playlist } from '../redux/modules/playlist';
+import { fetchMissingCollections, fetchMissingUnits } from '../../lib/redux/slices/mdbSlice/thunks';
+import { types as playerTypes } from '../../lib/redux/slices/playerSlice/playerSlice';
+import { selectors as playlist } from '../../lib/redux/slices/playlistSlice/playlistSlice';
 
 const WATCHING_NOW_MIN = 50;
 const POPULAR_MIN      = 100;

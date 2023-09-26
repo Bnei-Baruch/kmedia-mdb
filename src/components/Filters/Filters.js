@@ -9,8 +9,8 @@ import isEqual from 'react-fast-compare';
 
 import { getDirectionProperty } from '../../helpers/i18n-utils';
 import { isEmpty } from '../../helpers/utils';
-import { filtersTransformer } from '../../filters/index';
-import { actions, selectors } from '../../redux/modules/filters';
+import { filtersTransformer } from '../../../lib/filters/index';
+import { actions, selectors } from '../../../lib/redux/slices/filterSlice/filterSlice';
 import { selectors as settings } from '../../../lib/redux/slices/settingsSlice/settingsSlice';
 import { selectors as mdb } from '../../../lib/redux/slices/mdbSlice/mdbSlice';
 import * as shapes from '../shapes';

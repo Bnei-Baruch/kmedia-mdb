@@ -8,7 +8,15 @@ import {
     settingsSlice,
     sourcesSlice,
     imageSlice,
-    trimSlice
+    trimSlice,
+    filterSlice,
+    listSlice,
+    asideSlice,
+    tagsSlice,
+    mySlice,
+    preparePageSlice,
+    playlistSlice,
+    playerSlice,
 } from './slices'
 
 export const reducer = {
@@ -21,4 +29,12 @@ export const reducer = {
     [sourcesSlice.sourcesSlice.name]: sourcesSlice.sourcesSlice.reducer,
     [imageSlice.imageSlice.name]: imageSlice.imageSlice.reducer,
     [trimSlice.trimSlice.name]: trimSlice.trimSlice.reducer,
+    [filterSlice.filterSlice.name]: filterSlice.filterSlice.reducer,
+    [listSlice.listSlice.name]: listSlice.listSlice.reducer,
+    [asideSlice.asideSlice.name]: asideSlice.asideSlice.reducer,
+    [tagsSlice.tagsSlice.name]: tagsSlice.tagsSlice.reducer,
+    [mySlice.mySlice.name]: mySlice.mySlice.reducer,
+    [preparePageSlice.preparePageSlice.name]: preparePageSlice.preparePageSlice.reducer,
+    [playlistSlice.playlistSlice.name]: playlistSlice.playlistSlice.reducer,
+    [playerSlice.playerSlice.name]: playerSlice.playerSlice.reducer,
 }

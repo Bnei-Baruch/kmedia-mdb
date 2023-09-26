@@ -5,9 +5,9 @@ import { CT_LIKUTIM } from '../helpers/consts';
 import { actions, types } from '../redux/modules/likutim';
 import { actions as mdbActions } from '../../lib/redux/slices/mdbSlice/mdbSlice';
 import { selectors as settings } from '../../lib/redux/slices/settingsSlice/settingsSlice';
-import { selectors as filterSelectors } from '../redux/modules/filters';
+import { selectors as filterSelectors } from '../../lib/redux/slices/filterSlice/filterSlice';
 import { callUnitsStats } from './stats';
-import { filtersTransformer } from '../filters';
+import { filtersTransformer } from '../../lib/filters';
 
 function* fetchLikutim() {
   try {

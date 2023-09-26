@@ -3,7 +3,7 @@ import { withTranslation } from 'next-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Segment, Divider, Button, Input, Grid, Icon, Header, Container } from 'semantic-ui-react';
 
-import { actions, selectors } from '../../../../../redux/modules/my';
+import { actions, selectors } from '../../../../../../lib/redux/slices/mySlice/mySlice';
 import { MY_BOOKMARK_FILTER_FOLDER_ID, MY_NAMESPACE_FOLDERS } from '../../../../../helpers/consts';
 import { DeviceInfoContext } from '../../../../../helpers/app-contexts';
 import { actions as filtersActions, selectors as filtersSelectors } from '../../../../../redux/modules/bookmarkFilter';

@@ -3,8 +3,8 @@ import Events from './../components/Sections/Events/MainPage';
 import ExcerptContainer from './../components/Sections/Excerpt/ExcerptContainer';
 import Help from './../components/Sections/Help/Help';
 import HomePage from '../../app/[lang]/Container';
-import LessonCollection from './../components/Sections/Lesson/LessonPage';
-import Lessons from '../../pages/lessons/MainPage';
+import LessonCollection from '../../pages/lessons/cu/[id]';
+import Lessons from '../../pages/lessons';
 import LibraryHomepage from './../components/Sections/Library/Homepage';
 import LibraryContainer from './../components/Sections/Library/LibraryContainer';
 import LibraryPerson from './../components/Sections/Library/LibraryPerson';
@@ -72,7 +72,7 @@ const useRoutes = playerContainer => ([
   { path: 'lessons/virtual/c/:id', component: <LessonCollection />, ssrData: ssrDataLoaders.lessonsCollectionPage },
   {
     path: 'lessons/virtual/cu/:id',
-    component: <PlaylistItemPageVirtual playerContainer={playerContainer} />,
+    component: <PlaylistItemPageVixrtual playerContainer={playerContainer} />,
     ssrData: ssrDataLoaders.cuPage
   },
   {

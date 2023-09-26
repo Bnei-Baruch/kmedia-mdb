@@ -18,12 +18,12 @@ import { getQuery, isDebMode } from '../../helpers/url';
 import { actions, selectors } from '../../../lib/redux/slices/searchSlice/searchSlice';
 import { selectors as mdbSelectors } from '../../../lib/redux/slices/mdbSlice/mdbSlice';
 import { selectors as settings } from '../../../lib/redux/slices/settingsSlice/settingsSlice';
-import { selectors as filterSelectors } from '../../redux/modules/filters';
+import { selectors as filterSelectors } from '../../../lib/redux/slices/filterSlice/filterSlice';
 import { selectors as sourcesSelectors } from '../../../lib/redux/slices/sourcesSlice/sourcesSlice';
 import { selectors as tagsSelectors } from '../../../lib/redux/slices/tagsSlice/tagsSlice';
 import { selectors as publicationSelectors } from '../../../lib/redux/slices/publicationsSlice/thunks';
 
-import { filtersTransformer } from '../../filters';
+import { filtersTransformer } from '../../../lib/filters';
 import WipErr from '../shared/WipErr/WipErr';
 import SectionFiltersWithMobile from '../shared/SectionFiltersWithMobile';
 import Pagination from '../Pagination/Pagination';
@@ -40,7 +40,7 @@ import {
 } from './SearchResultHooks';
 import DidYouMean from './DidYouMean';
 import Filters from './Filters';
-import FilterLabels from '../FiltersAside/FilterLabels';
+import FilterLabels from '../../../lib/filters/FiltersAside/FilterLabels';
 import ScoreDebug from './ScoreDebug';
 import Helmets from '../shared/Helmets';
 

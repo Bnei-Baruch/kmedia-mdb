@@ -23,7 +23,7 @@ import { ClientChroniclesContext, DeviceInfoContext } from '../../../../../helpe
 import DerivedUnits from './DerivedUnits';
 import Recommended from '../Recommended/Main/Recommended';
 import { useSelector } from 'react-redux';
-import { selectors } from '../../../../../redux/modules/playlist';
+import { selectors } from '../../../../../../lib/redux/slices/playlistSlice/playlistSlice';
 import { selectors as mdb } from '../../../../../../lib/redux/slices/mdbSlice/mdbSlice';
 import PlaylistItems from '../../Playlist/PlaylistItems';
 import PlaylistMyItems from '../../PlaylistMy/PlaylistItems';
@@ -52,7 +52,7 @@ const Materials = ({ t }) => {
   }
 
   const derivedTexts     = derivedTextUnits(unit);
-  const chroniclesAppend = chronicles ? chronicles.append.bind(chronicles) : noop;
+  const chroniclesAppend = /*chronicles ? chronicles.append.bind(chronicles) :*/ noop;
   const items            = [
     {
       name: 'transcription',

@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Button, Container, Grid, Popup } from 'semantic-ui-react';
 import clsx from 'clsx';
 
-import { actions, selectors } from '../../../../redux/modules/my';
+import { actions, selectors } from '../../../../../lib/redux/slices/mySlice/mySlice';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import { selectors as settings } from '../../../../../lib/redux/slices/settingsSlice/settingsSlice';
 import { selectors as auth } from '../../../../../lib/redux/slices/authSlice/authSlice';

@@ -5,17 +5,18 @@ import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import { DATE_FORMAT } from '../../../../helpers/consts';
 import { selectors as settings } from '../../../../../lib/redux/slices/settingsSlice/settingsSlice';
-import { actions, selectors } from '../../../../../lib/redux/slices/mdbSlice/mdbSlice';
-import { selectors as playlist } from '../../../../redux/modules/playlist';
+import { mdbSlice, selectors } from '../../../../../lib/redux/slices/mdbSlice';
+import { selectors as playlist } from '../../../../../lib/redux/slices/playlistSlice/playlistSlice';
 import ButtonDayPicker from '../../../Filters/components/Date/ButtonDayPicker';
 import { canonicalLink } from '../../../../helpers/links';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import { isEmpty } from '../../../../helpers/utils';
+import { useRouter } from 'next/router';
 
 const LessonDatePicker = ({ t }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
-  const navigate = useNavigate();
+  const router = useRouter();
   const uiLang = useSelector(state => settings.getUILang(state.settings));
 
   const { cId }      = useSelector(state => playlist.getInfo(state.playlist));
@@ -26,11 +27,11 @@ const LessonDatePicker = ({ t }) => {
   const dispatch = useDispatch();
   useEffect(() => {
     if (!isEmpty(dpCollection?.content_units) && collection.id !== dpCollection.id) {
-      const to = canonicalLink(dpCollection.content_units[0]);
-      navigate({ ...to, pathname: `/${uiLang}${to.pathname}` });
-      dispatch(actions.nullDatepickerCO());
+      const href = canonicalLink(dpCollection.content_units[0]);
+      router.push({ ...href, pathname: `/${uiLang}${href.pathname}` });
+      dispatch(mdbSlice.actions.nullDatepickerCO());
     }
-  }, [collection, dpCollection, uiLang, navigate, dispatch]);
+  }, [collection, dpCollection, uiLang, router, dispatch]);
 
   const fetchNextCO = date => {
     const filmDate = moment.utc(date);

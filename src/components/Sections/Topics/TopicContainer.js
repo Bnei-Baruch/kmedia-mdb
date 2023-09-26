@@ -12,7 +12,7 @@ import { getEscapedRegExp, isNotEmptyArray } from '../../../helpers/utils';
 import SectionHeader from '../../shared/SectionHeader';
 import Link from '../../Language/MultiLanguageLink';
 import { FN_TOPICS_MULTI, TOPICS_FOR_DISPLAY } from '../../../helpers/consts';
-import { actions, selectors as filtersAside } from '../../../redux/modules/filtersAside';
+import { actions, selectors as filtersAside } from '../../../../lib/redux/slices/filterSlice/filterStatsSlice';
 
 const namespace = 'topics';
 
@@ -97,7 +97,7 @@ const filterData = (byId, match, sortedRoots) => {
   subroot will be subtitle
   the rest will be a tree - List of Lists */
 const TopicContainer = ({ t }) => {
-  const statsById = useSelector(state => filtersAside.getStats(state.filtersAside, namespace, FN_TOPICS_MULTI));
+  const statsById = useSelector(state => filtersAside.getStats(state.filterStats, namespace, FN_TOPICS_MULTI));
   const roots     = useSelector(state => topicsSelectors.getDisplayRoots(state.tags), isEqual) || [];
   const byId      = useSelector(state => topicsSelectors.getTags(state.tags), isEqual);
 

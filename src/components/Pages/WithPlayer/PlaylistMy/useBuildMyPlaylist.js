@@ -2,8 +2,8 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useLocation } from 'react-router-dom';
 
-import { actions, selectors } from '../../../../redux/modules/playlist';
-import { getActivePartFromQuery } from '../../../../helpers/player';
+import { actions, selectors } from '../../../../../lib/redux/slices/playlistSlice/playlistSlice';
+import { getActivePartFromQuery } from '../../../../../lib/redux/slices/playlistSlice/helper';
 
 const useBuildMyPlaylist = () => {
   const { id }   = useParams();

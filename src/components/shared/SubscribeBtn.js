@@ -6,12 +6,12 @@ import { Button, Confirm, Modal } from 'semantic-ui-react';
 import { CT_SUBSCRIBE_BY_COLLECTION, CT_SUBSCRIBE_BY_TYPE, MY_NAMESPACE_SUBSCRIPTIONS } from '../../helpers/consts';
 import * as shapes from '../shapes';
 import { selectors } from '../../../lib/redux/slices/authSlice/authSlice';
-import { actions, selectors as myselector } from '../../redux/modules/my';
+import { actions, selectors as myselector } from '../../../lib/redux/slices/mySlice/mySlice';
 import AlertModal from './AlertModal';
 import NeedToLogin from '../Sections/Personal/NeedToLogin';
 import { getMyItemKey } from '../../helpers/my';
 import { selectors as settings } from '../../../lib/redux/slices/settingsSlice/settingsSlice';
-import { selectors as playlist } from '../../redux/modules/playlist';
+import { selectors as playlist } from '../../../lib/redux/slices/playlistSlice/playlistSlice';
 import { selectors as mdb } from '../../../lib/redux/slices/mdbSlice/mdbSlice';
 
 const SubscribeBtn = ({ t, collection }) => {

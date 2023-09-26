@@ -15,7 +15,7 @@ import { isLanguageRtl } from '../../../../../helpers/i18n-utils';
 import MediaDownloads from '../../../../Pages/WithPlayer/widgets/MediaDownloads';
 import WipErr from '../../../../shared/WipErr/WipErr';
 import Recommended from '../../../../Pages/WithPlayer/widgets/Recommended/Main/Recommended';
-import { getEmbedFromQuery } from '../../../../../helpers/player';
+import { getEmbedFromQuery } from '../../../../../../lib/redux/slices/playlistSlice/helper';
 import { ClientChroniclesContext } from '../../../../../helpers/app-contexts';
 import TagsByUnit from '../../../../shared/TagsByUnit';
 

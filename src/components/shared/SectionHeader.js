@@ -13,7 +13,9 @@ const SectionHeader = ({ section, t, submenuItems }) => {
 
   return (
     <div className="section-header">
+{/*
       <Helmets.Basic title={title} description={subText1} />
+*/}
       <Container className="padded">
         <Grid>
           <Grid.Row>

@@ -1,3 +1,4 @@
+'use client'
 import React, { useContext, useEffect } from 'react';
 import { useSelector, shallowEqual, useDispatch } from 'react-redux';
 import { useTranslation } from 'next-i18next';
@@ -8,11 +9,15 @@ import { getLanguageDirection } from '../../../../helpers/i18n-utils';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import Link from '../../../Language/MultiLanguageLink';
 import CollectionDatePicker from './LessonDatePicker';
-import { selectors as mdb, actions } from '../../../../../lib/redux/slices/mdbSlice/mdbSlice';
-import { selectors } from '../../../../redux/modules/playlist';
+import { selectors as mdb, mdbSlice } from '../../../../../lib/redux/slices/mdbSlice/mdbSlice';
+import { selectors } from '../../../../../lib/redux/slices/playlistSlice/playlistSlice';
 import moment from 'moment';
 import { DATE_FORMAT } from '../../../../helpers/consts';
 import { canonicalLink } from '../../../../helpers/links';
+import { fetchWindow, fetchUnit, fetchCollectionsByIDs } from '../../../../../lib/redux/slices/mdbSlice';
+import { wrapper } from '../../../../../lib/redux';
+import { buildPlaylist } from '../../../../../lib/redux/slices/playlistSlice/thunks';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 const getStartEndByFilmDate = d => {
   const filmDate = moment.utc(d);
@@ -22,7 +27,24 @@ const getStartEndByFilmDate = d => {
       end_date: filmDate.add(10, 'days').format(DATE_FORMAT)
     }
   );
-};
+};/*
+export const getServerSideProps = wrapper.getServerSideProps(store => async (context) => {
+  const lang = context.locale ?? 'en';
+  let cId    = context.query.c;
+  const cuId = context.params.id;
+/!*
+
+  const wipMap  = useSelector(state => mdb.getWip(state.mdb), shallowEqual);
+  const cWindow = useSelector(state => mdb.getWindow(state.mdb), shallowEqual);
+
+  const cId    = useSelector(state => selectors.getInfo(state.playlist).cId);
+  const denorm = useSelector(state => mdb.nestedGetDenormCollection(state.mdb));
+*!/
+
+  const { film_date }            = denorm(cId);
+  const { start_date, end_date } = getStartEndByFilmDate(film_date);
+  dispatch(fetchWindow({ id: cId, start_date, end_date }));
+});*/
 
 const LessonDatePickerContainer = () => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
@@ -41,7 +63,7 @@ const LessonDatePickerContainer = () => {
     if (curIndex < 1 && !wipMap.cWindow[cId] && cId !== cWindow.id) {
       const { film_date }            = denorm(cId);
       const { start_date, end_date } = getStartEndByFilmDate(film_date);
-      dispatch(actions.fetchWindow({ id: cId, start_date, end_date }));
+      dispatch(fetchWindow({ id: cId, start_date, end_date }));
     }
   }, [cId, cWindow, wipMap.cWindow, curIndex]);
 

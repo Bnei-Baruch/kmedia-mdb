@@ -1,8 +1,8 @@
 import { put, select, takeEvery } from 'redux-saga/effects';
 
 import { getQuery, pushQuery } from './helpers/url';
-import { actions as filterActions, selectors as filterSelectors, types as filterTypes } from '../redux/modules/filters';
-import { filtersTransformer } from '../filters';
+import { actions as filterActions, selectors as filterSelectors, types as filterTypes } from '../../lib/redux/slices/filterSlice/filterSlice';
+import { filtersTransformer } from '../../lib/filters';
 
 /*
  * When a filter value is changed, the query is also changed to match..

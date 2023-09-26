@@ -7,10 +7,10 @@ import { Container, Divider } from 'semantic-ui-react';
 
 import { CT_LIKUTIM, PAGE_NS_LIKUTIM, } from '../../../helpers/consts';
 import { usePrevious } from '../../../helpers/hooks';
-import { selectors as filters } from '../../../redux/modules/filters';
-import { actions, selectors as lists } from '../../../redux/modules/lists';
+import { selectors as filters } from '../../../../lib/redux/slices/filterSlice/filterSlice';
+import { actions, selectors as lists } from '../../../../lib/redux/slices/listSlice/listSlice';
 import { selectors as settings } from '../../../../lib/redux/slices/settingsSlice/settingsSlice';
-import FilterLabels from '../../FiltersAside/FilterLabels';
+import FilterLabels from '../../../../lib/filters/FiltersAside/FilterLabels';
 import Pagination from '../../Pagination/Pagination';
 import ResultsPageHeader from '../../Pagination/ResultsPageHeader';
 import { getPageFromLocation } from '../../Pagination/withPagination';

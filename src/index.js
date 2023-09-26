@@ -27,7 +27,7 @@ import App from './components/App/App';
 import UAParser from 'ua-parser-js';
 import ClientChronicles from './helpers/clientChronicles';
 import { CreateAbTesting } from './helpers/ab-testing';
-import { initKC } from './pkg/ksAdapter/adapter';
+import { initKC } from '../pkg/ksAdapter/adapter';
 import ErrorBoundary from './components/ErrorBoundary';
 import { HelmetProvider } from 'react-helmet-async';
 

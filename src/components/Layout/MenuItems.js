@@ -11,7 +11,7 @@ import DonateNow, { VirtualHomeButton } from './DonateNow';
 import FeedBurner from './FeedBurner';
 import { MY_NAMESPACE_BOOKMARKS } from '../../helpers/consts';
 import useIsLoggedIn from '../shared/useIsLoggedIn';
-import { login } from '../../pkg/ksAdapter/adapter';
+import { login } from '../../../pkg/ksAdapter/adapter';
 import { useTranslation } from 'next-i18next';
 import { Link } from 'next/link';
 
@@ -40,7 +40,7 @@ const MenuItems = ({ simple = false, visible = false, onItemClick = identity }) 
       as={Link}
       href={`/${x}`}
       className="sidebar-item"
-      activeClassName="active"
+      //activeClassName="active"
       content={t(`nav.sidebar.${x}`)}
       onClick={onItemClick}
     />
@@ -71,7 +71,7 @@ const MenuItems = ({ simple = false, visible = false, onItemClick = identity }) 
       as={NavLink}
       to={'/personal'}
       className="sidebar-item"
-      activeClassName="active"
+      //activeClassName="active"
       content={t('nav.sidebar.personal')}
       onClick={onItemClick}
     />
@@ -83,7 +83,7 @@ const MenuItems = ({ simple = false, visible = false, onItemClick = identity }) 
       as={NavLink}
       to={`/${MY_NAMESPACE_BOOKMARKS}`}
       className="sidebar-item"
-      activeClassName="active"
+      //activeClassName="active"
       content={t(`nav.sidebar.${MY_NAMESPACE_BOOKMARKS}`)}
       onClick={onItemClick}
     />
@@ -102,7 +102,7 @@ const MenuItems = ({ simple = false, visible = false, onItemClick = identity }) 
           content={t('nav.sidebar.old-site')}
         />
         <Menu.Item className="mobile-only">
-          <DonateNow />
+          {/*<DonateNow />*/}
           <VirtualHomeButton />
         </Menu.Item>
         <Menu.Item

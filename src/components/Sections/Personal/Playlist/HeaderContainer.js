@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { actions } from '../../../../redux/modules/my';
+import { actions } from '../../../../../lib/redux/slices/mySlice/mySlice';
 import { selectors as settings } from '../../../../../lib/redux/slices/settingsSlice/settingsSlice';
 import { MY_NAMESPACE_PLAYLISTS } from '../../../../helpers/consts';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';

@@ -4,7 +4,7 @@ import { Grid, Header, Icon, Input } from 'semantic-ui-react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { actions as filtersActions, selectors as filters } from '../../../../redux/modules/bookmarkFilter';
-import { selectors as my } from '../../../../redux/modules/my';
+import { selectors as my } from '../../../../../lib/redux/slices/mySlice/mySlice';
 import {
   MY_BOOKMARK_FILTER_FOLDER_ID,
   MY_BOOKMARK_FILTER_QUERY,

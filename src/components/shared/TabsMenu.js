@@ -4,6 +4,8 @@ import { useLocation } from 'react-router-dom';
 import { Menu, Ref } from 'semantic-ui-react';
 
 import { getQuery } from '../../helpers/url';
+import { useSearchParams } from 'next/navigation';
+import { startEndFromQuery } from '../../../lib/player/Controls/helper';
 
 const paramsFromLocation = location => {
   if (location.state && location.state.active)
@@ -16,8 +18,10 @@ const paramsFromLocation = location => {
 const activeFromDefault = items => (items.length > 0 ? items[0].name : null);
 
 const TabsMenu = ({ items = [], active = '' }) => {
-  const location                          = useLocation();
-  const { activeLocation, isHighLighted } = paramsFromLocation(location);
+
+  const query = useSearchParams();
+
+  const { activeTab: activeLocation = '', srchstart: isHighLighted } = startEndFromQuery(query);
 
   const computedActive = active
     || activeLocation

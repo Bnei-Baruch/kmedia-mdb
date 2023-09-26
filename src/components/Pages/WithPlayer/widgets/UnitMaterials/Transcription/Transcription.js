@@ -16,7 +16,7 @@ import { selectSuitableLanguage } from '../../../../../../helpers/language';
 import { getLanguageDirection } from '../../../../../../helpers/i18n-utils';
 import { DeviceInfoContext, SessionInfoContext } from '../../../../../../helpers/app-contexts';
 import { physicalFile } from '../../../../../../helpers/utils';
-import { getActivePartFromQuery } from '../../../../../../helpers/player';
+import { getActivePartFromQuery } from '../../../../../../../lib/redux/slices/playlistSlice/helper';
 import MediaHelper from '../../../../../../helpers/media';
 import { getQuery } from '../../../../../../helpers/url';
 import ScrollToSearch from '../../../../../shared/DocToolbar/ScrollToSearch';
@@ -25,6 +25,7 @@ import WipErr from '../../../../../shared/WipErr/WipErr';
 import * as shapes from '../../../../../shapes';
 import MenuLanguageSelector from '../../../../../Language/Selector/MenuLanguageSelector';
 import UnitBar from '../UnitBar';
+import { useSearchParams } from 'next/navigation';
 
 const getUnitDerivedArticle = (unit, type) => {
   // suitable for having either derived articles or research materials only
@@ -67,7 +68,7 @@ const selectFile = (textFiles, language) => {
 };
 
 const Transcription = ({ unit, t, type, activeTab }) => {
-  const location         = useLocation();
+  const query = useSearchParams();
   const doc2htmlById     = useSelector(state => selectors.getDoc2htmlById(state.assets));
   const uiLang           = useSelector(state => settings.getUILang(state.settings));
   const contentLanguages = useSelector(state => settings.getContentLanguages(state.settings));
@@ -77,7 +78,7 @@ const Transcription = ({ unit, t, type, activeTab }) => {
 
   const textFiles = getTextFiles(unit, type);
   const transcriptLanguages = uniq(textFiles.map(x => x.language));
-  const { selectedFileId } = getQuery(location);
+  const { selectedFileId } = query;
   const fileFromLocation = textFiles.find(f => f.id === selectedFileId);
   const selectedFile = fileFromLocation || selectFile(textFiles, selectedLanguage);
 
@@ -155,7 +156,7 @@ const Transcription = ({ unit, t, type, activeTab }) => {
   }
 
   const prepareContent = data => {
-    const ap                = getActivePartFromQuery(location);
+    const ap                = getActivePartFromQuery(query);
     const selectedFileProps = selectedFile ? `&selectedFileId=${selectedFile.id}` : '';
     const urlParams         = `activeTab=${activeTab}${selectedFileProps}${!ap ? '' : `&ap=${ap}`}`;
     const direction         = getLanguageDirection(selectedLanguage);
@@ -243,6 +244,7 @@ const Transcription = ({ unit, t, type, activeTab }) => {
     </div>
   );
 }
+/*
 
 class OldTranscription extends Component {
   static contextType = DeviceInfoContext;
@@ -523,6 +525,7 @@ class OldTranscription extends Component {
     return null;
   }
 }
+*/
 
 
 Transcription.propTypes = {

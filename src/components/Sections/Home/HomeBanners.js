@@ -10,9 +10,11 @@ const HomeBanners = () => {
       <Container className="padded horizontally">
         <Grid centered>
           <Grid.Row>
-            <LatestDailyLesson />
             <Grid.Column computer={6} tablet={7} mobile={16}>
-              <LatestLessonBanner />
+              <LatestDailyLesson />
+            </Grid.Column>
+            <Grid.Column computer={6} tablet={7} mobile={16}>
+             {/* <LatestLessonBanner />*/}
             </Grid.Column>
           </Grid.Row>
         </Grid>

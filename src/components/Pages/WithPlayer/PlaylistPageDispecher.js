@@ -11,13 +11,13 @@ import BuildPlaylistByUnit from './BuildPlaylistByUnit';
 import PlaylistPage from './Playlist/PlaylistPage';
 import BuildPlaylistByCollectionByParams from './BuildPlaylistByCollectionByParams';
 import { useSelector } from 'react-redux';
-import { selectors as playlist } from '../../../redux/modules/playlist';
+import { selectors as playlist } from '../../../../lib/redux/slices/playlistSlice/playlistSlice';
 import SingleMediaPage from './SingleMedia/SingleMediaPage';
 import { useTranslation } from 'next-i18next';
 import WipErr from '../../shared/WipErr/WipErr';
 import { Icon } from 'semantic-ui-react';
 import { useLocation } from 'react-router-dom';
-import { getEmbedFromQuery } from '../../../helpers/player';
+import { getEmbedFromQuery } from '../../../../lib/redux/slices/playlistSlice/helper';
 
 export const PlaylistItemPageSeries = ({ playerContainer }) => {
   const builder = <BuildPlaylistByUnit cts={[CT_LESSONS_SERIES]} />;

@@ -10,12 +10,13 @@ import { cuPartNameByCCUType } from '../../../../helpers/utils';
 import { fromToLocalized } from '../../../../helpers/date';
 import PlaylistPlayIcon from '../../../../images/icons/PlaylistPlay';
 import { selectors as mdb } from '../../../../../lib/redux/slices/mdbSlice/mdbSlice';
-import { selectors } from '../../../../redux/modules/playlist';
+import { selectors } from '../../../../../lib/redux/slices/playlistSlice/playlistSlice';
 import LessonDatePickerContainer from './LessonDatePickerContainer';
 
 const PlaylistHeader = () => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
-  const { t }              = useTranslation();
+
+  const { t } = useTranslation();
 
   const { cId, cuId, name } = useSelector(state => selectors.getInfo(state.playlist));
   const unit                = useSelector(state => mdb.getDenormContentUnit(state.mdb, cuId));

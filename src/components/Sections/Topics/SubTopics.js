@@ -1,15 +1,15 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { selectors } from '../../../redux/modules/filtersAside';
+import { selectors } from '../../../../lib/redux/slices/filterSlice/filterStatsSlice';
 import { FN_TOPICS_MULTI } from '../../../helpers/consts';
 import { selectors as tags } from '../../../../lib/redux/slices/tagsSlice/tagsSlice';
-import TagSourceItem from '../../FiltersAside/TopicsFilter/TagSourceItem';
-import TagSourceItemModal from '../../FiltersAside/TopicsFilter/TagSourceItemModal';
+import TagSourceItem from '../../../../lib/filters/FiltersAside/TopicsFilter/TagSourceItem';
+import TagSourceItemModal from '../../../../lib/filters/FiltersAside/TopicsFilter/TagSourceItemModal';
 import { useTranslation } from 'next-i18next';
-import { selectors as filters } from '../../../redux/modules/filters';
-import FilterHeader from '../../FiltersAside/FilterHeader';
+import { selectors as filters } from '../../../../lib/redux/slices/filterSlice/filterSlice';
+import FilterHeader from '../../../../lib/filters/FiltersAside/FilterHeader';
 import { Button, Input } from 'semantic-ui-react';
-import RenderAsList from '../../FiltersAside/TopicsFilter/RenderAsList';
+import RenderAsList from '../../../../lib/filters/FiltersAside/TopicsFilter/RenderAsList';
 
 const MAX_SHOWED_ITEMS  = 10;
 const getItemsRecursive = (rootID, getById, base) => {
@@ -37,9 +37,9 @@ const SubTopics = ({ namespace, rootID }) => {
   const getTagById      = useSelector(state => tags.getTagById(state.tags));
   const getPathTags     = useSelector(state => tags.getPathByID(state.tags));
   const roots           = useSelector(state => tags.getRoots(state.tags));
-  const baseItems       = useSelector(state => selectors.getTree(state.filtersAside, namespace, FN_TOPICS_MULTI));
+  const baseItems       = useSelector(state => selectors.getTree(state.filterStats, namespace, FN_TOPICS_MULTI));
   const selectedFilters = useSelector(state => filters.getFilterByName(state.filters, namespace, FN_TOPICS_MULTI));
-  const selected        = useMemo(() => selectedFilters?.values || [], [selectedFilters]);
+  const selected        = useMemo(() => selectedFilters || [], [selectedFilters]);
 
   const root  = getTagById(rootID);
   const items = useMemo(() => getItemsRecursive(rootID, getTagById, baseItems) || [], [rootID, getTagById, baseItems]);

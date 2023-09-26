@@ -1,23 +1,23 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { actions, selectors } from '../../../redux/modules/filtersAside';
+import { actions, selectors } from '../../../../lib/redux/slices/filterSlice/filterStatsSlice';
 import { isEqual } from 'lodash';
 import { useTranslation } from 'next-i18next';
 import { Container, Header } from 'semantic-ui-react';
 
 import { FN_SOURCES_MULTI, FN_TOPICS_MULTI } from '../../../helpers/consts';
-import { selectors as filters } from '../../../redux/modules/filters';
+import { selectors as filters } from '../../../../lib/redux/slices/filterSlice/filterSlice';
 import FiltersHydrator from '../../Filters/FiltersHydrator';
-import Language from '../../FiltersAside/LanguageFilter/Language';
-import DateFilter from '../../FiltersAside/DateFilter';
-import TagSourceFilter from '../../FiltersAside/TopicsFilter/TagSourceFilter';
+import Language from '../../../../lib/filters/FiltersAside/LanguageFilter/Language';
+import DateFilter from '../../../../lib/filters/FiltersAside/DateFilter';
+import TagSourceFilter from '../../../../lib/filters/FiltersAside/TopicsFilter/TagSourceFilter';
 
 const Filters = ({ namespace, baseParams }) => {
   const [isHydrated, setIsHydrated] = useState(false);
 
   const { t }        = useTranslation();
-  const isReady      = useSelector(state => selectors.isReady(state.filtersAside, namespace));
-  const { wip, err } = useSelector(state => selectors.getWipErr(state.filtersAside, namespace));
+  const isReady      = useSelector(state => selectors.isReady(state.filterStats, namespace));
+  const { wip, err } = useSelector(state => selectors.getStatus(state.filterStats, namespace));
   const selected     = useSelector(state => filters.getNotEmptyFilters(state.filters, namespace), isEqual);
   const prevSelRef   = useRef(-1);
 

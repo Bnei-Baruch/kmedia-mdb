@@ -1,7 +1,7 @@
 import React from 'react';
 import ContentItemContainer from '../../../shared/ContentItem/ContentItemContainer';
 import { useSelector } from 'react-redux';
-import { selectors } from '../../../../redux/modules/playlist';
+import { selectors } from '../../../../../lib/redux/slices/playlistSlice/playlistSlice';
 import { MY_NAMESPACE_PLAYLISTS } from '../../../../helpers/consts';
 import { selectors as settings } from '../../../../../lib/redux/slices/settingsSlice/settingsSlice';
 import { stringify } from '../../../../helpers/url';

@@ -3,7 +3,7 @@ import { withTranslation } from 'next-i18next';
 import { useDispatch } from 'react-redux';
 import { Dropdown } from 'semantic-ui-react';
 
-import { actions } from '../../../../redux/modules/my';
+import { actions } from '../../../../../lib/redux/slices/mySlice/mySlice';
 import { MY_NAMESPACE_REACTIONS } from '../../../../helpers/consts';
 import PlaylistInfo from '../../../Pages/WithPlayer/widgets/Info/SavePlaylistItemBtn';
 import { getMyItemKey } from '../../../../helpers/my';

@@ -6,7 +6,7 @@ import { Button, Divider, Header } from 'semantic-ui-react';
 import { selectors } from '../../../../lib/redux/slices/authSlice/authSlice';
 import { selectors as settings } from '../../../../lib/redux/slices/settingsSlice/settingsSlice';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
-import { login } from '../../../pkg/ksAdapter/adapter';
+import { login } from '../../../../pkg/ksAdapter/adapter';
 
 const ShowNeedToLogin = withTranslation()(
   ({ t }) => {

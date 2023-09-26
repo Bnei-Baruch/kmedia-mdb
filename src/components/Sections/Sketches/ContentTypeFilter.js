@@ -3,13 +3,13 @@ import { useSelector } from 'react-redux';
 
 import { FN_CONTENT_TYPE } from '../../../helpers/consts';
 import { isEmpty } from '../../../helpers/utils';
-import { selectors } from '../../../redux/modules/filtersAside';
-import FilterHeader from '../../FiltersAside/FilterHeader';
+import { selectors } from '../../../../lib/redux/slices/filterSlice/filterStatsSlice';
+import FilterHeader from '../../../../lib/filters/FiltersAside/FilterHeader';
 import { SKETCHES_SHOWED_CTS } from './MainPage';
-import ContentTypeItem from '../../FiltersAside/ContentTypeFilter/ContentTypeItem';
+import ContentTypeItem from '../../../../lib/filters/FiltersAside/ContentTypeFilter/ContentTypeItem';
 
 const ContentTypeFilter = ({ namespace }) => {
-  const fetchedCTs = useSelector(state => selectors.getTree(state.filtersAside, namespace, FN_CONTENT_TYPE));
+  const fetchedCTs = useSelector(state => selectors.getTree(state.filterStats, namespace, FN_CONTENT_TYPE));
 
   const items = fetchedCTs.filter(ct => SKETCHES_SHOWED_CTS.includes(ct));
 

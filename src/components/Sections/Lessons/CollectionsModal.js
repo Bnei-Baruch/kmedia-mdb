@@ -1,16 +1,19 @@
 import clsx from 'clsx';
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import { withTranslation } from 'next-i18next';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Button, Checkbox, Icon, Input, List, Modal, Table } from 'semantic-ui-react';
 
 import { CT_VIRTUAL_LESSON, CT_VIRTUAL_LESSONS, FN_COLLECTION_MULTI, FN_CONTENT_TYPE } from '../../../helpers/consts';
 import { isEmpty } from '../../../helpers/utils';
-import { actions, selectors as filters } from '../../../redux/modules/filters';
-import { selectors as filtersAside, selectors } from '../../../redux/modules/filtersAside';
+import { selectors as filtersAside, selectors } from '../../../../lib/redux/slices/filterSlice/filterStatsSlice';
 import { selectors as mdb } from '../../../../lib/redux/slices/mdbSlice/mdbSlice';
 import { selectors as settings } from '../../../../lib/redux/slices/settingsSlice/settingsSlice';
-import CollectionItem from '../../FiltersAside/CollectionFilter/CollectionItem';
+import { updateFiltersSearchParams } from '../../../../lib/filters/helper';
+import { useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/router';
+import { definitionsByName } from '../../../../lib/filters/transformer';
+import CollectionItem from '../../../../lib/filters/components/CollectionFilter/CollectionItem';
 
 const ITEMS_PER_ROW = 5;
 const buildRowArr   = n => {
@@ -23,19 +26,18 @@ const CollectionsModal = ({ ct, namespace, t }) => {
   const [open, setOpen]   = useState(false);
   const [query, setQuery] = useState('');
 
-  const uiDir             = useSelector(state => settings.getUIDir(state.settings));
-  const ids               = useSelector(state => selectors.getTree(state.filtersAside, namespace, FN_COLLECTION_MULTI));
-  const getById           = useSelector(state => mdb.nestedGetCollectionById(state.mdb));
-  const stat              = useSelector(state => filtersAside.getStats(state.filtersAside, namespace, FN_CONTENT_TYPE)(ct));
-  const selectedFilters   = useSelector(state => filters.getFilterByName(state.filters, namespace, FN_COLLECTION_MULTI));
-  const selected          = useMemo(() => selectedFilters?.values || [], [selectedFilters]);
-  const selectedCTFilters = useSelector(state => filters.getFilterByName(state.filters, namespace, FN_CONTENT_TYPE));
-  const selectedCT        = useMemo(() => selectedCTFilters?.values || [], [selectedCTFilters]);
+  const uiDir   = useSelector(state => settings.getUIDir(state.settings));
+  const ids     = useSelector(state => selectors.getTree(state.filterStats, namespace, FN_COLLECTION_MULTI));
+  const getById = useSelector(state => mdb.nestedGetCollectionById(state.mdb));
+  const stat    = useSelector(state => filtersAside.getStats(state.filterStats, namespace, FN_CONTENT_TYPE)(ct));
 
-  const itemsMemo = useMemo(() => ids.map(getById).filter(x => !!x), [ids, getById]);
-  const items     = (itemsMemo.sort((a, b) => a.name === b.name ? 0 : a.name > b.name ? 1 : -1))
-    .filter(x => x.content_type === CT_VIRTUAL_LESSONS);
+  const searchParams = useSearchParams();
+  const router       = useRouter();
+  const selected     = searchParams.getAll(definitionsByName[FN_COLLECTION_MULTI].queryKey);
+  const selectedCT   = searchParams.getAll(definitionsByName[FN_CONTENT_TYPE].queryKey);
 
+  const itemsMemo = ids.map(getById).filter(x => x?.content_type === CT_VIRTUAL_LESSONS);
+  const items     = (itemsMemo.sort((a, b) => a.name === b.name ? 0 : a.name > b.name ? 1 : -1));
 
   const reg         = new RegExp(query, 'i');
   const collections = items.filter(x => !query || (x.name && reg.test(x.name)));
@@ -44,18 +46,11 @@ const CollectionsModal = ({ ct, namespace, t }) => {
 
   const toggleOpen = () => setOpen(!open);
 
-  const dispatch     = useDispatch();
   const handleSelect = (e, { checked }) => {
-    const val = [...selectedCT].filter(x => x !== ct);
-    if (checked) {
-      val.push(ct);
-    }
-
-    dispatch(actions.setFilterValueMulti(namespace, FN_COLLECTION_MULTI, null));
-    dispatch(actions.setFilterValueMulti(namespace, FN_CONTENT_TYPE, val));
+    const query = updateFiltersSearchParams(ct, checked, FN_CONTENT_TYPE, searchParams);
+    router.push({ query });
   };
-
-  const renderRow = (x, i) => (
+  const renderRow    = (x, i) => (
     <Table.Row key={i} verticalAlign="top">
       {collections.slice(i * ITEMS_PER_ROW, (i + 1) * ITEMS_PER_ROW).map(renderItem)}
     </Table.Row>

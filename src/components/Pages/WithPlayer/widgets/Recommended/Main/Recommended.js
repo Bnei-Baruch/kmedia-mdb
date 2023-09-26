@@ -6,7 +6,7 @@ import { withTranslation } from 'next-i18next';
 import { actions, selectors } from '../../../../../../redux/modules/recommended';
 import { selectors as tagsSelectors } from '../../../../../../../lib/redux/slices/tagsSlice/tagsSlice';
 import { selectors as sourcesSelectors } from '../../../../../../../lib/redux/slices/sourcesSlice/sourcesSlice';
-import { selectors as playlist } from '../../../../../../redux/modules/playlist';
+import { selectors as playlist } from '../../../../../../../lib/redux/slices/playlistSlice/playlistSlice';
 import * as shapes from '../../../../../shapes';
 import WipErr from '../../../../../shared/WipErr/WipErr';
 import DisplayRecommended from './DisplayRecommended';

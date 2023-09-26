@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { MY_NAMESPACE_LABELS, MY_NAMESPACE_PLAYLIST_EDIT, MY_NAMESPACE_PLAYLISTS } from './consts';
-import { kcUpdateToken } from '../pkg/ksAdapter/adapter';
+import { kcUpdateToken } from '@/pkg/ksAdapter/adapter';
 
 const API_BACKEND             = process.env.NEXT_PUBLIC_API_BACKEND;
 const ASSETS_BACKEND          = process.env.NEXT_PUBLIC_ASSETS_BACKEND;
@@ -72,7 +72,7 @@ export class Requests {
   };
 
   static makeParams = params => (
-    `${Object.entries(params)
+    Object.entries(params)
       .filter(([_, v]) => v !== undefined && v !== null)
       .map(pair => {
         const key   = pair[0];
@@ -86,7 +86,7 @@ export class Requests {
       })
       //can happen if parameter value is empty array
       .filter(p => p !== '')
-      .join('&')}`
+      .join('&').toString()
   );
 
   static imaginary = (action, params) => {

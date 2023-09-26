@@ -14,11 +14,11 @@ import {
   PAGE_NS_EVENTS,
 } from '../../../helpers/consts';
 import { usePrevious } from '../../../helpers/hooks';
-import { selectors as filters } from '../../../redux/modules/filters';
-import { actions, selectors as lists } from '../../../redux/modules/lists';
-import { actions as prepareActions } from '../../../redux/modules/preparePage';
+import { selectors as filters } from '../../../../lib/redux/slices/filterSlice/filterSlice';
+import { actions, selectors as lists } from '../../../../lib/redux/slices/listSlice/listSlice';
+import { actions as prepareActions } from '../../../../lib/redux/slices/preparePageSlice/preparePageSlice';
 import { selectors as settings } from '../../../../lib/redux/slices/settingsSlice/settingsSlice';
-import FilterLabels from '../../FiltersAside/FilterLabels';
+import FilterLabels from '../../../../lib/filters/FiltersAside/FilterLabels';
 import Pagination from '../../Pagination/Pagination';
 import ResultsPageHeader from '../../Pagination/ResultsPageHeader';
 import { getPageFromLocation } from '../../Pagination/withPagination';

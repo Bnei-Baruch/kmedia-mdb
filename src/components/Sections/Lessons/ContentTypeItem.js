@@ -1,26 +1,30 @@
+'use client';
+
 import React from 'react';
 import { withTranslation } from 'next-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Checkbox, List } from 'semantic-ui-react';
 
 import { CT_LESSONS, FN_CONTENT_TYPE } from '../../../helpers/consts';
-import { actions, selectors as filters } from '../../../redux/modules/filters';
-import { selectors as filtersAside } from '../../../redux/modules/filtersAside';
+import { filterSlice, selectors as filters } from '../../../../lib/redux/slices/filterSlice/filterSlice';
+import { selectors as filtersAside } from '../../../../lib/redux/slices/filterSlice/filterStatsSlice';
+import filtersTransformer, { definitionsByName, filterValuesToQueryValues } from '../../../../lib/filters/transformer';
+import { useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/router';
+import { isEmpty } from '../../../helpers/utils';
+import { updateFiltersSearchParams } from '../../../../lib/filters/helper';
 
 const ContentTypeItem = ({ namespace, id, isSelChild = false, t }) => {
   const isLesson = CT_LESSONS.includes(id);
-  const selected = useSelector(state => filters.getFilterByName(state.filters, namespace, FN_CONTENT_TYPE)?.values || []);
-  const stat     = useSelector(state => filtersAside.getStats(state.filtersAside, namespace, FN_CONTENT_TYPE)(id));
 
-  const dispatch = useDispatch();
+  const selected = useSelector(state => filters.getFilterByName(state.filters, namespace, FN_CONTENT_TYPE) || []);
+  const stat     = useSelector(state => filtersAside.getStats(state.filterStats, namespace, FN_CONTENT_TYPE)(id));
 
+  const searchParams = useSearchParams();
+  const router       = useRouter();
   const handleSelect = (e, { checked }) => {
-    const val = [...selected].filter(x => x !== id).filter(x => !isLesson || !CT_LESSONS.includes(x));
-    if (checked) {
-      val.push(id);
-    }
-
-    dispatch(actions.setFilterValueMulti(namespace, FN_CONTENT_TYPE, val));
+    const query = updateFiltersSearchParams(id, checked, FN_CONTENT_TYPE, searchParams);
+    router.push({ query });
   };
 
   const isSel = isLesson ? selected.some(id => CT_LESSONS.includes(id)) : selected.includes(id);

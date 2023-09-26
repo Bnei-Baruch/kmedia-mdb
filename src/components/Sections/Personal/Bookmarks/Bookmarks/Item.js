@@ -4,7 +4,7 @@ import { Icon, Image, Label, List } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
 
 import { selectors as mdb } from '../../../../../../lib/redux/slices/mdbSlice/mdbSlice';
-import { selectors } from '../../../../../redux/modules/my';
+import { selectors } from '../../../../../../lib/redux/slices/mySlice/mySlice';
 import { SectionLogo } from '../../../../../helpers/images';
 import { iconByContentTypeMap, MY_NAMESPACE_FOLDERS } from '../../../../../helpers/consts';
 import { OFFSET_TEXT_SEPARATOR } from '../../../../../helpers/scrollToSearch/helper';

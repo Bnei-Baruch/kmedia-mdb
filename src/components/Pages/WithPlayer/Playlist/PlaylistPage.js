@@ -2,21 +2,12 @@ import React, { useContext } from 'react';
 import clsx from 'clsx';
 
 import { Grid, Container, Divider } from 'semantic-ui-react';
-import PlaylistHeader from './PlaylistHeader';
 import Info from '../widgets/Info/Info';
-import Materials from '../widgets/UnitMaterials/Materials';
 import PlaylistItems from './PlaylistItems';
-import Recommended from '../widgets/Recommended/Main/Recommended';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
-import { getEmbedFromQuery } from '../../../../helpers/player';
-import { useLocation } from 'react-router-dom';
 
 const PlaylistPage = ({ playerContainer }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
-  const location           = useLocation();
-  const embed              = getEmbedFromQuery(location);
-
-  if (embed) return playerContainer;
 
   const computerWidth = !isMobileDevice ? 10 : 16;
 
@@ -28,12 +19,12 @@ const PlaylistPage = ({ playerContainer }) => {
         computer={computerWidth}
         className={clsx({ 'is-fitted': isMobileDevice })}>
         <div id="avbox_playlist">
-          <PlaylistHeader />
+         {/* <PlaylistHeader />*/}
         </div>
         {playerContainer}
         <Container id="unit_container">
           <Info />
-          <Materials />
+          {/*<Materials />*/}
         </Container>
       </Grid.Column>
       {
@@ -41,7 +32,7 @@ const PlaylistPage = ({ playerContainer }) => {
           <Grid.Column width={6}>
             <PlaylistItems />
             <Divider hidden />
-            <Recommended filterOutUnits={[]} />
+           {/* <Recommended filterOutUnits={[]} />*/}
           </Grid.Column>
         )
       }

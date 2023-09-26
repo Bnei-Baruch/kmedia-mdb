@@ -83,7 +83,7 @@ const onRecommended = draft => draft.wip = true;
 export const reducer = handleActions({
   [ssr.PREPARE]: onSSRPrepare,
   [PLAYER_PLAY_WITH_UID]: onPlayerPlay,
-  [chronicles.USER_INACTIVE]: onUserInactive,
+  //[chronicles.USER_INACTIVE]: onUserInactive,
 
   [FETCH_RECOMMENDED]: onRecommended,
   [FETCH_RECOMMENDED_SUCCESS]: onSuccess,

@@ -4,8 +4,8 @@ import { withTranslation } from 'next-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Popup } from 'semantic-ui-react';
 
-import { selectors as player } from '../../redux/modules/player';
-import { selectors as playlist } from '../../redux/modules/playlist';
+import { selectors as player } from '../../../lib/redux/slices/playerSlice/playerSlice';
+import { selectors as playlist } from '../../../lib/redux/slices/playlistSlice/playlistSlice';
 import { trimSlice } from '../../../lib/redux/slices/trimSlice';
 import { ClientChroniclesContext } from '../../helpers/app-contexts';
 import { toHumanReadableTime } from '../../helpers/time';

@@ -7,11 +7,11 @@ import { actions, selectors, types } from '../../lib/redux/slices/searchSlice/se
 import { selectors as settings, types as settingsTypes } from '../../lib/redux/slices/settingsSlice/settingsSlice';
 import { actions as mdbActions } from '../../lib/redux/slices/mdbSlice/mdbSlice';
 import { actions as postsActions } from '../../lib/redux/slices/publicationsSlice/thunks';
-import { selectors as filterSelectors, actions as filterActions, types as filterTypes } from '../redux/modules/filters';
+import { selectors as filterSelectors, actions as filterActions, types as filterTypes } from '../../lib/redux/slices/filterSlice/filterSlice';
 import { selectors as lessonsSelectors, actions as lessonsActions } from '../redux/modules/lessons';
 import { fetchAllSeries } from './lessons';
 import { fetchViewsByUIDs } from './recommended';
-import { filtersTransformer } from '../filters';
+import { filtersTransformer } from '../../lib/filters';
 import { push } from '@lagunovsky/redux-react-router';
 
 // TODO: Use debounce after redux-saga updated.

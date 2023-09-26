@@ -10,7 +10,7 @@ import { selectors as settings } from '../../../../lib/redux/slices/settingsSlic
 import Filters from './Filters';
 import VideoList from './VideoList';
 import TextList from './TextList';
-import FilterLabels from '../../FiltersAside/FilterLabels';
+import FilterLabels from '../../../../lib/filters/FiltersAside/FilterLabels';
 import HelmetsBasic from '../../shared/Helmets/Basic';
 import { getBreadCrumbSection } from './helper';
 

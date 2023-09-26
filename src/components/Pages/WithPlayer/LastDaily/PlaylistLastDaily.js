@@ -6,7 +6,7 @@ import { publicFile } from '../../../../helpers/utils';
 import PlaylistPage from '../Playlist/PlaylistPage';
 import BuildPlaylistLastDaily from './BuildPlaylistLastDaily';
 import { useSelector } from 'react-redux';
-import { selectors as playlist } from '../../../../redux/modules/playlist';
+import { selectors as playlist } from '../../../../../lib/redux/slices/playlistSlice/playlistSlice';
 import WipErr from '../../../shared/WipErr/WipErr';
 
 const PlaylistLastDaily = ({ playerContainer }) => {

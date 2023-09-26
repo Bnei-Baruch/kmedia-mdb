@@ -1,14 +1,18 @@
 import React, { useContext, useState, useRef, useEffect } from 'react';
 import clsx from 'clsx';
 import { useTranslation } from 'next-i18next';
-import { Icon, Menu, Segment, Header } from 'semantic-ui-react';
-import Link from '/src/components/Language/MultiLanguageLink';
+import { Icon, Menu, Segment, Header, Ref } from 'semantic-ui-react';
+import  Link  from 'next/link';
 import WrappedOmniBox from '/src/components/Search/OmniBox';
 //import GAPageView from '/src/components/Layout/GAPageView/GAPageView';
 //import MenuItems from '/src/components/Layout/MenuItems';
 import { ClientChroniclesContext, DeviceInfoContext } from '/src/helpers/app-contexts';
 import MenuItems from './MenuItems';
 import { Logo } from '../../images';
+import Headroom from 'react-headroom';
+import DonateNow, { VirtualHomeButton } from './DonateNow';
+import HandleLanguages from './HandleLanguages';
+import Login from './Login';
 
 const WrappedOmniBoxWithChronicles = () => {
   const chronicles = useContext(ClientChroniclesContext);
@@ -91,7 +95,7 @@ const MainLayout = () => {
   return (
     <>
       {/* <GAPageView />*/}
-      {/* <div className="headroom-z-index-802">
+      <div className="headroom-z-index-802">
         <Headroom>
           <div className="layout__header">
             <Menu inverted borderless size="huge" color="blue">
@@ -105,10 +109,10 @@ const MainLayout = () => {
                   {sideBarIcon}
                 </Menu.Item>
               </div>
-              <Menu.Item className="logo" header as={Link} to="/">
-                <Logo width="40" height="40" />
-                <Header inverted as="h1" content={t('nav.top.header')} />
-              </Menu.Item>
+                <Menu.Item className="logo" header as={Link} href="/lessons">
+                  <Logo width="40" height="40" />
+                  <Header inverted as="h1" content={t('nav.top.header')} />
+                </Menu.Item>
               <Menu.Item className={isMobileDevice ? 'layout__search mobile-hidden' : 'layout__search layout__search_max_width'}>
                 {
                   showSearch && <WrappedOmniBoxWithChronicles />
@@ -129,22 +133,21 @@ const MainLayout = () => {
                 {
                   !isMobileDevice && (
                     <Menu.Item position="right">
-                      <DonateNow />
-                      <VirtualHomeButton />
+                      {/*<DonateNow />*/}
+                      {/*<VirtualHomeButton />*/}
                     </Menu.Item>
                   )
                 }
                 <Menu.Item position="right">
-                  <Login />
+                  {/*<Login />*/}
                 </Menu.Item>
-                <TopMost />
+                {/*<TopMost />*/}
               </Menu.Menu>
             </Menu>
           </div>
           {isShowHeaderSearch && <RenderHeaderSearch t={t} ref={headerSearchElement} />}
         </Headroom>
       </div>
-      */}
 
       <div
         className={clsx('layout__sidebar', { 'is-active': sidebarActive })}
@@ -161,10 +164,10 @@ const MainLayout = () => {
               {sideBarIcon}
             </Menu.Item>
           </div>
-          {/*<Menu.Item className="logo mobile-hidden" header as={Link} to="/" onClick={closeSidebar}>
+          <Menu.Item className="logo mobile-hidden" header as={Link} href="/" onClick={closeSidebar}>
             <Logo />
             <Header inverted as="h1" content={t('nav.top.header')} />
-          </Menu.Item>*/}
+          </Menu.Item>
         </Menu>
         <div className="layout__sidebar-menu">
           <MenuItems simple onItemClick={closeSidebar} />

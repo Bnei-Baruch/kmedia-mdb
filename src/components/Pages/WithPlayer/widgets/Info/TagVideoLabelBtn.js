@@ -4,7 +4,7 @@ import { Button, MenuItem } from 'semantic-ui-react';
 import SelectTopicsModal from '../../../../shared/SelectTopicsModal/SelectTopicsModal';
 import { useTranslation } from 'next-i18next';
 import { useDispatch } from 'react-redux';
-import { actions } from '../../../../../redux/modules/player';
+import { actions } from '../../../../../../lib/redux/slices/playerSlice/playerSlice';
 import { PLAYER_OVER_MODES } from '../../../../../helpers/consts';
 
 const TagVideoLabelBtn = ({ label, onClose }) => {

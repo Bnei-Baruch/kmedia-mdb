@@ -1,3 +1,5 @@
+import {playerSlice} from "@/lib/redux/slices/playerSlice/playerSlice";
+
 export * as homeSlice from './homeSlice/homeSlice'
 export * as publicationsSlice from './publicationsSlice/publicationsSlice'
 export * as settingsSlice from './settingsSlice/settingsSlice'
@@ -6,3 +8,11 @@ export * as mdbSlice from './mdbSlice/mdbSlice'
 export * as sourcesSlice from './sourcesSlice/sourcesSlice'
 export * as imageSlice from './imageSlice/imageSlice'
 export * as trimSlice from './trimSlice/trimSlice'
+export * as filterSlice from './filterSlice/filterSlice'
+export * as listSlice from './listSlice/listSlice'
+export * as asideSlice from './filterSlice/filterStatsSlice'
+export * as tagsSlice from './tagsSlice/tagsSlice'
+export * as mySlice from './mySlice/mySlice'
+export * as preparePageSlice from './preparePageSlice/preparePageSlice'
+export * as playlistSlice from './playlistSlice/playlistSlice'
+export * as playerSlice from './playerSlice/playerSlice'

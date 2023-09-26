@@ -4,15 +4,15 @@ import { useSelector } from 'react-redux';
 
 import { CT_VIRTUAL_LESSON, FN_CONTENT_TYPE, FN_SHOW_LESSON_AS_UNITS, PAGE_NS_LESSONS } from '../../../helpers/consts';
 import { isEmpty } from '../../../helpers/utils';
-import { selectors as filters } from '../../../redux/modules/filters';
-import { selectors } from '../../../redux/modules/filtersAside';
-import FilterHeader from '../../FiltersAside/FilterHeader';
+import { selectors as filters } from '../../../../lib/redux/slices/filterSlice/filterSlice';
+import { selectors } from '../../../../lib/redux/slices/filterSlice/filterStatsSlice';
+import FilterHeader from '../../../../lib/filters/components/FilterHeader';
 import CollectionsModal from './CollectionsModal';
 import ContentTypeItem from './ContentTypeItem';
-import { LESSON_AS_COLLECTION, LESSON_AS_UNIT } from '../../../../pages/lessons/MainPage';
+import { LESSON_AS_COLLECTION, LESSON_AS_UNIT } from '../../../../pages/lessons';
 
 const ContentTypeFilter = ({ namespace }) => {
-  const fetchedCTs = useSelector(state => selectors.getTree(state.filtersAside, namespace, FN_CONTENT_TYPE));
+  const fetchedCTs = useSelector(state => selectors.getTree(state.filterStats, namespace, FN_CONTENT_TYPE));
   const selected   = useSelector(state => filters.getNotEmptyFilters(state.filters, PAGE_NS_LESSONS), isEqual);
 
   const items = useMemo(() => {

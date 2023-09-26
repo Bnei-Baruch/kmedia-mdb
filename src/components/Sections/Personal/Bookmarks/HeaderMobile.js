@@ -9,7 +9,7 @@ import {
   MY_NAMESPACE_FOLDERS
 } from '../../../../helpers/consts';
 import { actions as filtersActions, selectors as filters } from '../../../../redux/modules/bookmarkFilter';
-import { selectors as my } from '../../../../redux/modules/my';
+import { selectors as my } from '../../../../../lib/redux/slices/mySlice/mySlice';
 import { getMyItemKey } from '../../../../helpers/my';
 import FolderList from './Folders/List';
 import { getLanguageDirection } from '../../../../helpers/i18n-utils';

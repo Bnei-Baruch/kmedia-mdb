@@ -7,7 +7,7 @@ import { DeviceInfoContext } from '../../../../../helpers/app-contexts';
 import { useTranslation } from 'next-i18next';
 import TagVideoLabelBtn from './TagVideoLabelBtn';
 import { ADD_PLAYLIST_ITEM_MODES } from './SavePlaylistItemBtn';
-import { actions as playerActions } from '../../../../../redux/modules/player';
+import { actions as playerActions } from '../../../../../../lib/redux/slices/playerSlice/playerSlice';
 import { PLAYER_OVER_MODES } from '../../../../../helpers/consts';
 
 const SaveAsLabel = ({ label, setModalMode }) => {

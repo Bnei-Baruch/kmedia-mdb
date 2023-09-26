@@ -4,8 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Button, Icon, Menu, Modal } from 'semantic-ui-react';
 
 import { selectors } from '../../../../../../lib/redux/slices/authSlice/authSlice';
-import { actions, selectors as my } from '../../../../../redux/modules/my';
-import { selectors as playlist } from '../../../../../redux/modules/playlist';
+import { mySlice, selectors as my } from '../../../../../../lib/redux/slices/mySlice/mySlice';
+import { selectors as playlist } from '../../../../../../lib/redux/slices/playlistSlice/playlistSlice';
 import { MY_NAMESPACE_REACTIONS, MY_REACTION_KINDS } from '../../../../../helpers/consts';
 import { getMyItemKey } from '../../../../../helpers/my';
 import SubscribeBtn from '../../../../shared/SubscribeBtn';
@@ -14,6 +14,7 @@ import NeedToLogin from '../../../../Sections/Personal/NeedToLogin';
 import { selectors as mdb } from '../../../../../../lib/redux/slices/mdbSlice/mdbSlice';
 import { TaggingBtn } from './TaggingBtn';
 import { ToPlaylistBtn } from './ToPlaylistBtn';
+import { fetchMy, removeMy, reactionsCount } from '../../../../../../lib/redux/slices/mySlice/thunks';
 
 const PersonalInfo = ({ collection }) => {
   const [isNeedLogin, setIsNeedLogin] = useState();
@@ -28,31 +29,31 @@ const PersonalInfo = ({ collection }) => {
 
   const { key } = getMyItemKey(MY_NAMESPACE_REACTIONS, likeParams);
 
-  const user           = useSelector(state => selectors.getUser(state.auth));
-  const reactionsCount = useSelector(state => my.getReactionsCount(state.my, key));
-  const reaction       = useSelector(state => my.getItemByKey(state.my, MY_NAMESPACE_REACTIONS, key));
-  const deleted        = useSelector(state => my.getDeleted(state.my, MY_NAMESPACE_REACTIONS));
+  const user             = useSelector(state => selectors.getUser(state.auth));
+  const reactionsCounter = useSelector(state => my.getReactionsCount(state.my, key));
+  const reaction         = useSelector(state => my.getItemByKey(state.my, MY_NAMESPACE_REACTIONS, key));
+  const deleted          = useSelector(state => my.getDeleted(state.my, MY_NAMESPACE_REACTIONS));
 
   const dispatch = useDispatch();
   useEffect(() => {
     if (key && !reaction) {
-      dispatch(actions.fetch(MY_NAMESPACE_REACTIONS, { addToList: false, ...likeParams }));
+      dispatch(fetchMy({ namespace: MY_NAMESPACE_REACTIONS, addToList: false, ...likeParams }));
     }
 
-    dispatch(actions.reactionsCount({ 'uids': [id], type: content_type }));
+    dispatch(reactionsCount({ 'uids': [id], type: content_type }));
   }, [dispatch, key]);
 
   useEffect(() => {
-    deleted && dispatch(actions.setDeleted(MY_NAMESPACE_REACTIONS, false));
+    deleted && dispatch(mySlice.actions.setDeleted(MY_NAMESPACE_REACTIONS, false));
   }, [deleted, dispatch]);
 
   const toggleReaction = l => {
     if (!user)
       return setIsNeedLogin(true);
     if (l)
-      dispatch(actions.remove(MY_NAMESPACE_REACTIONS, { ...likeParams, key }));
+      dispatch(removeMy(MY_NAMESPACE_REACTIONS, { ...likeParams, key }));
     else
-      dispatch(actions.add(MY_NAMESPACE_REACTIONS, likeParams));
+      dispatch(addMy(MY_NAMESPACE_REACTIONS, likeParams));
     return null;
   };
 
@@ -79,14 +80,14 @@ const PersonalInfo = ({ collection }) => {
             onClick={() => toggleReaction(reaction)}
           >
             <Icon name={`heart${!reaction ? ' outline' : ''}`} className="margin-right-4 margin-left-4" />
-            <span>{reactionsCount}</span>
+            <span>{reactionsCounter}</span>
           </Button>
         </Menu.Item>
         <Menu.Item>
           <ToPlaylistBtn />
         </Menu.Item>
         <Menu.Item>
-          <SubscribeBtn collection={collection} />
+          {/*<SubscribeBtn collection={collection} />*/}
         </Menu.Item>
       </Menu>
     </>

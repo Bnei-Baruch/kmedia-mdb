@@ -14,7 +14,7 @@ import {
 } from 'semantic-ui-react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { actions, selectors } from '../../../redux/modules/my';
+import { actions, selectors } from '../../../../lib/redux/slices/mySlice/mySlice';
 import { MY_NAMESPACE_BOOKMARKS, MY_NAMESPACE_FOLDERS } from '../../../helpers/consts';
 import { getMyItemKey } from '../../../helpers/my';
 import NeedToLogin from '../../Sections/Personal/NeedToLogin';

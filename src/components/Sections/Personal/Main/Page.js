@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { actions, selectors } from '../../../../redux/modules/my';
+import { actions, selectors } from '../../../../../lib/redux/slices/mySlice/mySlice';
 import {
   MY_NAMESPACE_HISTORY,
   MY_NAMESPACE_REACTIONS,

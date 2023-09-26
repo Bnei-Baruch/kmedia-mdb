@@ -17,7 +17,7 @@ import PersonalInfo from './PersonalInfo';
 import { selectors as recommended } from '../../../../../redux/modules/recommended';
 import UnitLogo from '../../../../shared/Logo/UnitLogo';
 import { selectors as mdb } from '../../../../../../lib/redux/slices/mdbSlice/mdbSlice';
-import { selectors } from '../../../../../redux/modules/playlist';
+import { selectors } from '../../../../../../lib/redux/slices/playlistSlice/playlistSlice';
 import TagsByUnit from '../../../../shared/TagsByUnit';
 
 export const makeTagLinks = (tags = [], getTagById) =>

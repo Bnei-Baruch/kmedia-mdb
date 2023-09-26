@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { actions, selectors } from '../../../redux/modules/playlist';
+import { actions, selectors } from '../../../../lib/redux/slices/playlistSlice/playlistSlice';
 import { selectors as mdb } from '../../../../lib/redux/slices/mdbSlice/mdbSlice';
 import Helmets from '../../shared/Helmets';
 

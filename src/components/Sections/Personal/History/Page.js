@@ -5,7 +5,7 @@ import { Container, Grid, Header, Icon } from 'semantic-ui-react';
 import clsx from 'clsx';
 import moment from 'moment';
 
-import { actions, selectors } from '../../../../redux/modules/my';
+import { actions, selectors } from '../../../../../lib/redux/slices/mySlice/mySlice';
 import { selectors as settings } from '../../../../../lib/redux/slices/settingsSlice/settingsSlice';
 import { selectors as auth } from '../../../../../lib/redux/slices/authSlice/authSlice';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';

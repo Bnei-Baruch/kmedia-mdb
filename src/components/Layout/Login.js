@@ -8,7 +8,7 @@ import { selectors } from '../../../lib/redux/slices/authSlice/authSlice';
 import { selectors as settings } from '../../../lib/redux/slices/settingsSlice/settingsSlice';
 import { DeviceInfoContext } from '../../helpers/app-contexts';
 import Link from '../Language/MultiLanguageLink';
-import { login, logout } from '../../pkg/ksAdapter/adapter';
+import { login, logout } from '../../../pkg/ksAdapter/adapter';
 import useIsLoggedIn from '../shared/useIsLoggedIn';
 
 const Login = ({ t }) => {
