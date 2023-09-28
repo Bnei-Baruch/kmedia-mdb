@@ -24,6 +24,7 @@ const Player = () => {
   }, []);
 
   const onLoadHandler = () => {
+    console.log('onLoadHandler')
     dispatch(playerSlice.actions.playerLoaded());
   };
 
@@ -33,10 +34,6 @@ const Player = () => {
       <Ref innerRef={ref}>
         <div id={JWPLAYER_ID}></div>
       </Ref>
-      <Script
-        src="https://cdn.jwplayer.com/libraries/mxNkRalL.js"
-        onLoad={onLoadHandler}
-      />
     </>
   );
 };

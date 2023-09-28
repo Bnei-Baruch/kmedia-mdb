@@ -5,6 +5,8 @@ import { Grid, Container, Divider } from 'semantic-ui-react';
 import Info from '../widgets/Info/Info';
 import PlaylistItems from './PlaylistItems';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
+import PlaylistHeader from './PlaylistHeader';
+import Materials from '../widgets/UnitMaterials/Materials';
 
 const PlaylistPage = ({ playerContainer }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
@@ -19,12 +21,12 @@ const PlaylistPage = ({ playerContainer }) => {
         computer={computerWidth}
         className={clsx({ 'is-fitted': isMobileDevice })}>
         <div id="avbox_playlist">
-         {/* <PlaylistHeader />*/}
+          <PlaylistHeader />
         </div>
         {playerContainer}
         <Container id="unit_container">
           <Info />
-          {/*<Materials />*/}
+          <Materials />
         </Container>
       </Grid.Column>
       {

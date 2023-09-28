@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Modal, Button, TextArea, Confirm, Form, Icon } from 'semantic-ui-react';
 import { getLanguageDirection } from '../../helpers/i18n-utils';
 import { useDispatch, useSelector } from 'react-redux';
-import { actions } from '../../redux/modules/myNotes';
+import { actions } from '../../../lib/redux/slices/mySlice/myNotesSlice';
 import moment, { now } from 'moment/moment';
 import { useTranslation } from 'next-i18next';
 import { selectors as settings } from '../../../lib/redux/slices/settingsSlice/settingsSlice';

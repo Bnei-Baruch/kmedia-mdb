@@ -5,7 +5,7 @@ import { useLocation, useParams } from 'react-router-dom';
 import { Grid, Header, Image } from 'semantic-ui-react';
 import clsx from 'clsx';
 
-import { actions as assetsActions, selectors as assetsSelectors } from '../../../redux/modules/assets';
+import { actions as assetsActions, selectors as assetsSelectors } from '../../../../lib/redux/slices/assetSlice/assetSlice';
 import { selectors as siteSettings } from '../../../../lib/redux/slices/settingsSlice/settingsSlice';
 import { actions, selectors, selectors as mdb } from '../../../../lib/redux/slices/mdbSlice/mdbSlice';
 import { getLangPropertyDirection, getLanguageDirection } from '../../../helpers/i18n-utils';

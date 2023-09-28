@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { Card } from 'semantic-ui-react';
 import { canonicalLink } from '../../../helpers/links';
 import { selectors as mdb } from '../../../../lib/redux/slices/mdbSlice/mdbSlice';
-import { selectors as assets } from '../../../redux/modules/assets';
+import { selectors as assets } from '../../../../lib/redux/slices/assetSlice/assetSlice';
 import MediaHelper from '../../../helpers/media';
 import { isEmpty } from '../../../helpers/utils';
 import Link from '../../Language/MultiLanguageLink';

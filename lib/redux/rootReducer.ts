@@ -17,7 +17,9 @@ import {
     preparePageSlice,
     playlistSlice,
     playerSlice,
+    assetSlice
 } from './slices'
+import {myNotesSlice} from "@/lib/redux/slices/mySlice/myNotesSlice";
 
 export const reducer = {
     [homeSlice.homeSlice.name]: homeSlice.homeSlice.reducer,
@@ -34,7 +36,9 @@ export const reducer = {
     [asideSlice.asideSlice.name]: asideSlice.asideSlice.reducer,
     [tagsSlice.tagsSlice.name]: tagsSlice.tagsSlice.reducer,
     [mySlice.mySlice.name]: mySlice.mySlice.reducer,
+    [myNotesSlice.name]: myNotesSlice.reducer,
     [preparePageSlice.preparePageSlice.name]: preparePageSlice.preparePageSlice.reducer,
     [playlistSlice.playlistSlice.name]: playlistSlice.playlistSlice.reducer,
     [playerSlice.playerSlice.name]: playerSlice.playerSlice.reducer,
+    [assetSlice.assetSlice.name]: assetSlice.assetSlice.reducer,
 }

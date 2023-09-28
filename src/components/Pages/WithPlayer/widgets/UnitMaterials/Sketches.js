@@ -9,7 +9,7 @@ import { Button, Container, Segment } from 'semantic-ui-react';
 import { selectSuitableLanguage } from '../../../../../helpers/language';
 import { isLanguageRtl } from '../../../../../helpers/i18n-utils';
 import { isEmpty, strCmp } from '../../../../../helpers/utils';
-import { actions, selectors } from '../../../../../redux/modules/assets';
+import { actions, selectors } from '../../../../../../lib/redux/slices/assetSlice/assetSlice';
 import { selectors as settings } from '../../../../../../lib/redux/slices/settingsSlice/settingsSlice';
 import * as shapes from '../../../../shapes';
 import WipErr from '../../../../shared/WipErr/WipErr';

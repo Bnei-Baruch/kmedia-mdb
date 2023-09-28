@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { useLocation } from 'react-router-dom';
 
 import { DeviceInfoContext, SessionInfoContext } from '../../../helpers/app-contexts';
 import { SCROLL_SEARCH_ID } from '../../../helpers/consts';
@@ -10,19 +9,19 @@ import {
   DOM_ROOT_ID,
   prepareScrollToSearch
 } from '../../../helpers/scrollToSearch/helper';
-import { getQuery } from '../../../helpers/url';
 import LabelMark from './LabelMark';
 import Toolbar from './Toolbar';
 import { useNotes } from './useNotes';
 import { useLabels } from './useLabels';
 import NoteMark from './NoteMark';
 import { useSelector } from 'react-redux';
-import { selectors as assets } from '../../../redux/modules/assets';
+import { selectors as assets } from '../../../../lib/redux/slices/assetSlice/assetSlice';
 import { seek, setPip } from '../../../../pkg/jwpAdapter/adapter';
+import { useSearchParams } from 'next/navigation';
 
 const ScrollToSearch = ({ source, label, data, language, urlParams = '', pathname }) => {
-  const { enableShareText: { isShareTextEnabled, setEnableShareText } } = useContext(SessionInfoContext);
-  const { isMobileDevice }                                              = useContext(DeviceInfoContext);
+  const { enableShareText: { isShareTextEnabled, setEnableShareText } = false } = useContext(SessionInfoContext);
+  const { isMobileDevice }                                                      = useContext(DeviceInfoContext);
 
   const [searchUrl, setSearchUrl]     = useState();
   const [barPosition, setBarPosition] = useState({});
@@ -38,8 +37,8 @@ const ScrollToSearch = ({ source, label, data, language, urlParams = '', pathnam
   const { labels, offsets }             = useLabels(content_unit, language);
 
   const timeCodeByPos                        = useSelector(state => assets.getTimeCode(state.assets));
-  const location                             = useLocation();
-  const { srchstart, srchend, highlightAll } = getQuery(location);
+  const query                                = useSearchParams();
+  const { srchstart, srchend, highlightAll } = query;
   const search                               = useMemo(() => ({ srchstart, srchend }), [srchstart, srchend]);
 
   const dir = getLanguageDirection(language);

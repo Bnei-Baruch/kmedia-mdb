@@ -6,7 +6,7 @@ import { Segment } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 
 import { selectors as settings } from '../../../../lib/redux/slices/settingsSlice/settingsSlice';
-import { actions, selectors } from '../../../redux/modules/assets';
+import { actions, selectors } from '../../../../lib/redux/slices/assetSlice/assetSlice';
 import { getLanguageName, selectSuitableLanguage } from '../../../helpers/language';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import { physicalFile } from '../../../helpers/utils';

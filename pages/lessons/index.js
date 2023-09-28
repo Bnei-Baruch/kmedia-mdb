@@ -56,7 +56,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async (con
   const pageNo   = context.query.page_no || 1;
   const pageSize = settings.getPageSize(state.settings);
 
-  await store.dispatch(fetchSectionList({ namespace, pageNo, pageSize, withViews: true}));
+  await store.dispatch(fetchSectionList({ namespace, pageNo, pageSize, withViews: true, ...FILTER_PARAMS}));
   const _data = lists.getNamespaceState(store.getState().lists, PAGE_NS_LESSONS);
   const _i18n = await serverSideTranslations(lang);
   return { props: { ..._i18n, pageNo, pageSize, filters, ..._data } };

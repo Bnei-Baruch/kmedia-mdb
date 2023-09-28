@@ -11,7 +11,7 @@ import TagTextLabelBtn from './TagTextLabelBtn';
 import AddNoteBtn from './AddNoteBtn';
 import PlayByTextBtn from './PlayByTextBtn';
 import { useSelector } from 'react-redux';
-import { selectors as assets } from '../../../redux/modules/assets';
+import { selectors as assets } from '../../../../lib/redux/slices/assetSlice/assetSlice';
 
 const DocToolbar = ({ t, url, text, source, label, position, setPinned, isPinned, playByText }) => {
   const [open, setOpen] = useState(!!url);

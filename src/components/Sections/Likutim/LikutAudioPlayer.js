@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import AudioPlayer from '../../shared/AudioPlayer';
-import { actions, selectors } from '../../../redux/modules/assets';
+import { actions, selectors } from '../../../../lib/redux/slices/assetSlice/assetSlice';
 import { assetUrl } from '../../../helpers/Api';
 
 const LikutAudioPlayer = ({ file, id, lang }) => {

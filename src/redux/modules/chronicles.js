@@ -1,6 +1,6 @@
 import { createAction, handleActions } from 'redux-actions';
 import { types as authTypes } from '../../../lib/redux/slices/authSlice/authSlice';
-import { types as playerTypes } from '../../../lib/redux/slices/playerSlice/playerSlice';
+import { types as playerTypes, playerSlice } from '../../../lib/redux/slices/playerSlice/playerSlice';
 
 const USER_INACTIVE         = 'USER_INACTIVE';
 const PLAYER_PAUSE_ON_LEAVE = 'PLAYER_PAUSE_ON_LEAVE';
@@ -39,11 +39,11 @@ export const reducer = handleActions({
   //[authTypes.LOGIN_SUCCESS]: onAction,
   //[authTypes.LOGOUT_SUCCESS]: onAction,
 
-  [playerTypes.PLAYER_PLAY]: draft => ({ ...draft, event: 'player-play' }),
-  [playerTypes.PLAYER_PAUSE]: draft => ({ ...draft, event: 'player-stop' }),
-  [playerTypes.PLAYER_REMOVE]: draft => ({ ...draft, event: 'player-stop' }),
+  [playerSlice.actions.playerPlay.type]: draft => ({ ...draft, event: 'player-play' }),
+  [playerSlice.actions.playerPause.type]: draft => ({ ...draft, event: 'player-stop' }),
+  [playerSlice.actions.playerRemove.type]: draft => ({ ...draft, event: 'player-stop' }),
   [PLAYER_PAUSE_ON_LEAVE]: draft => ({ ...draft, event: 'player-stop' }),
-  [playerTypes.PLAYER_TOGGLE_MUTE]: draft => ({ ...draft, event: 'mute-unmute' }),
+  [playerSlice.actions.playerToggleMute.type]: draft => ({ ...draft, event: 'mute-unmute' }),
 
 }, initialState);
 

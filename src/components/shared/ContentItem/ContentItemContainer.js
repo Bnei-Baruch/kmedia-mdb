@@ -3,7 +3,7 @@ import { withTranslation } from 'next-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { selectors, actions } from '../../../../lib/redux/slices/mdbSlice/mdbSlice';
+import { selectors, actions } from '../../../../lib/redux/slices/mdbSlice';
 import { selectors as recommended } from '../../../redux/modules/recommended';
 import { selectors as sources } from '../../../../lib/redux/slices/sourcesSlice/sourcesSlice';
 import { selectors as tags } from '../../../../lib/redux/slices/tagsSlice/tagsSlice';

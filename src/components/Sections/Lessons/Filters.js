@@ -21,48 +21,48 @@ const Filters = ({ namespace, baseParams }) => {
 
   const { wip, err, needRefresh, isReady } = useSelector(state => selectors.getStatus(state.filterStats, namespace));
 
-  const dispatch = useDispatch();
-  useEffect(() => {
-    if (!isReady && !wip && !err) {
-      dispatch(fetchPreparePage({ namespace, content_type: [CT_VIRTUAL_LESSONS] }));
-    }
-  }, [isReady, wip, err]);
+   const dispatch = useDispatch();
+   useEffect(() => {
+     if (!isReady && !wip && !err) {
+       dispatch(fetchPreparePage({ namespace, content_type: [CT_VIRTUAL_LESSONS] }));
+     }
+   }, [isReady, wip, err]);
 
-  useEffect(() => {
-    if (!isReady && !wip && !err) {
-      const _args = {
-        namespace,
-        isPrepare: true,
-        countC: true,
-        params: {
-          ...baseParams,
-          with_collections: true,
-          with_persons: true,
-          with_media: true,
-          with_original_languages: true,
-        }
-      };
-      dispatch(fetchStat(_args));
-    }
-  }, [isReady, baseParams, wip, err, namespace, dispatch]);
+   useEffect(() => {
+     if (!isReady && !wip && !err) {
+       const _args = {
+         namespace,
+         isPrepare: true,
+         countC: true,
+         params: {
+           ...baseParams,
+           with_collections: true,
+           with_persons: true,
+           with_media: true,
+           with_original_languages: true,
+         }
+       };
+       dispatch(fetchStat(_args));
+     }
+   }, [isReady, baseParams, wip, err, namespace, dispatch]);
 
-  useEffect(() => {
-    if (isReady && needRefresh) {
-      const _args = {
-        namespace,
-        isPrepare: false,
-        countC: true,
-        params: {
-          ...baseParams,
-          with_collections: true,
-          with_persons: true,
-          with_media: true,
-          with_original_languages: true,
-        }
-      };
-      dispatch(fetchStat(_args));
-    }
-  }, [isReady, needRefresh, baseParams, namespace, dispatch]);
+   useEffect(() => {
+     if (isReady && needRefresh) {
+       const _args = {
+         namespace,
+         isPrepare: false,
+         countC: true,
+         params: {
+           ...baseParams,
+           with_collections: true,
+           with_persons: true,
+           with_media: true,
+           with_original_languages: true,
+         }
+       };
+       dispatch(fetchStat(_args));
+     }
+   }, [isReady, needRefresh, baseParams, namespace, dispatch]);
 
   return (
     <Container className="padded">

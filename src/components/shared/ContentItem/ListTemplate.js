@@ -6,10 +6,9 @@ import { useSelector } from 'react-redux';
 
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { NO_NAME } from '../../../helpers/consts';
-import { isLanguageRtl } from '../../../helpers/i18n-utils';
 import { selectors as settings } from '../../../../lib/redux/slices/settingsSlice/settingsSlice';
 
-import Link from '../../Language/MultiLanguageLink';
+import Link from 'next/link';
 import * as shapes from '../../shapes';
 import { imageWidthBySize } from './helper';
 import UnitLogoWithDuration from '../UnitLogoWithDuration';
@@ -97,7 +96,7 @@ const ListTemplate = (
       <Container
         id={unit?.id}
         as={Link}
-        to={link}
+        href={link}
         key={(unit && unit.id) || (source && source.id) || (tag && tag.id)}
         className={clsx('cu_item cu_item_list no-thumbnail', { [size]: !!size, selected })}
       >

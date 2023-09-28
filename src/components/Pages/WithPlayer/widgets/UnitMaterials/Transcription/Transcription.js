@@ -1,14 +1,12 @@
-import React, { Component, useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { withTranslation } from 'next-i18next';
 import { Menu, Segment } from 'semantic-ui-react';
-import isEqual from 'react-fast-compare';
 import PropTypes from 'prop-types';
 import uniq from 'lodash/uniq';
 import clsx from 'clsx';
-import { useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { actions, selectors } from '../../../../../../redux/modules/assets';
+import { assetSlice, selectors, doc2Html } from '../../../../../../../lib/redux/slices/assetSlice';
 import { selectors as settings } from '../../../../../../../lib/redux/slices/settingsSlice/settingsSlice';
 
 import { CT_ARTICLE, CT_RESEARCH_MATERIAL, MT_TEXT, INSERT_TYPE_SUMMARY } from '../../../../../../helpers/consts';
@@ -18,7 +16,6 @@ import { DeviceInfoContext, SessionInfoContext } from '../../../../../../helpers
 import { physicalFile } from '../../../../../../helpers/utils';
 import { getActivePartFromQuery } from '../../../../../../../lib/redux/slices/playlistSlice/helper';
 import MediaHelper from '../../../../../../helpers/media';
-import { getQuery } from '../../../../../../helpers/url';
 import ScrollToSearch from '../../../../../shared/DocToolbar/ScrollToSearch';
 import Download from '../../../../../shared/Download/Download';
 import WipErr from '../../../../../shared/WipErr/WipErr';
@@ -40,7 +37,7 @@ const getUnitDerivedArticle = (unit, type) => {
 
   return units.map(x => x.files)
     .reduce((acc, files) => [...acc, ...files], []);
-}
+};
 
 const getTextFiles = (unit, type) => {
   if (!unit || !Array.isArray(unit.files)) {
@@ -68,22 +65,22 @@ const selectFile = (textFiles, language) => {
 };
 
 const Transcription = ({ unit, t, type, activeTab }) => {
-  const query = useSearchParams();
+  const query            = useSearchParams();
   const doc2htmlById     = useSelector(state => selectors.getDoc2htmlById(state.assets));
   const uiLang           = useSelector(state => settings.getUILang(state.settings));
   const contentLanguages = useSelector(state => settings.getContentLanguages(state.settings));
 
   const [selectedLanguage, setSelectedLanguage] = useState('');
-  const [viewSettings, setViewSettings] = useState({});
+  const [viewSettings, setViewSettings]         = useState({});
 
-  const textFiles = getTextFiles(unit, type);
+  const textFiles           = getTextFiles(unit, type);
   const transcriptLanguages = uniq(textFiles.map(x => x.language));
-  const { selectedFileId } = query;
-  const fileFromLocation = textFiles.find(f => f.id === selectedFileId);
-  const selectedFile = fileFromLocation || selectFile(textFiles, selectedLanguage);
+  const { selectedFileId }  = query;
+  const fileFromLocation    = textFiles.find(f => f.id === selectedFileId);
+  const selectedFile        = fileFromLocation || selectFile(textFiles, selectedLanguage);
 
   const { isMobileDevice } = useContext(DeviceInfoContext);
-  const { enableShareText: { isShareTextEnabled, setEnableShareText } } = useContext(SessionInfoContext);
+  //const { enableShareText: { isShareTextEnabled, setEnableShareText } } = useContext(SessionInfoContext);
 
   const dispatch = useDispatch();
 
@@ -97,13 +94,13 @@ const Transcription = ({ unit, t, type, activeTab }) => {
     const { data } = doc2htmlById[selectedFile.id] || {};
     if (!data) {
       // Load from redux.
-      dispatch(actions.doc2html(selectedFile.id))
+      dispatch(doc2Html(selectedFile.id));
     }
-  //}, [selectedFile]);
+    //}, [selectedFile]);
   }, [selectedFile?.id]);
 
   useEffect(() => {
-    let newLanguage = selectSuitableLanguage(contentLanguages, transcriptLanguages, unit.original_language)
+    let newLanguage = selectSuitableLanguage(contentLanguages, transcriptLanguages, unit.original_language);
     if (textFiles.length === 0) {
       newLanguage = undefined;
     }
@@ -112,15 +109,10 @@ const Transcription = ({ unit, t, type, activeTab }) => {
       newLanguage = selectedLanguage;
     }
     setSelectedLanguage(newLanguage);
-  // }, [unit, type, contentLanguages]);
+    // }, [unit, type, contentLanguages]);
   }, []);
 
-  if (!selectedFile) {
-    const text = type || 'transcription';
-    return <Segment basic>{t(`materials.${text}.no-content`)}</Segment>;
-  }
-
-  const { id, name, mimetype } = selectedFile;
+  const { id, name, mimetype } = selectedFile || false;
   const { data, wip, err }     = doc2htmlById[id] || {};
 
   const fileCU = unit.files?.some(f => f.id === id);
@@ -129,6 +121,10 @@ const Transcription = ({ unit, t, type, activeTab }) => {
 
   if (wipErr) {
     return wipErr;
+  }
+  if (!selectedFile) {
+    const text = type || 'transcription';
+    return <Segment basic>{t(`materials.${text}.no-content`)}</Segment>;
   }
 
   if (!data) {
@@ -153,7 +149,7 @@ const Transcription = ({ unit, t, type, activeTab }) => {
           </option>)
       }
     </select>;
-  }
+  };
 
   const prepareContent = data => {
     const ap                = getActivePartFromQuery(query);
@@ -243,7 +239,7 @@ const Transcription = ({ unit, t, type, activeTab }) => {
       {content}
     </div>
   );
-}
+};
 /*
 
 class OldTranscription extends Component {
@@ -526,7 +522,6 @@ class OldTranscription extends Component {
   }
 }
 */
-
 
 Transcription.propTypes = {
   unit: shapes.ContentUnit,

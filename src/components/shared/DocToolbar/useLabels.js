@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { selectors as mdb, actions } from '../../../../lib/redux/slices/mdbSlice/mdbSlice';
 import { OFFSET_TEXT_SEPARATOR } from '../../../helpers/scrollToSearch/helper';
 import { buildOffsets } from './helper';
+import { fetchLabels } from '../../../../lib/redux/slices/mdbSlice';
 
 export const useLabels = (content_unit, language) => {
   const ids    = useSelector(state => mdb.getLabelsByCU(state.mdb, content_unit)) || [];
@@ -16,7 +17,7 @@ export const useLabels = (content_unit, language) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(actions.fetchLabels({ content_unit, language }));
+    dispatch(fetchLabels({ content_unit, language }));
   }, [content_unit, language]);
 
   const offsets = buildOffsets(labels);

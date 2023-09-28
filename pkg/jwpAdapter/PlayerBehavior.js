@@ -2,9 +2,8 @@ import { useEffect, useContext, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { findPlayedFile } from '../../lib/player/helper';
-import { actions } from '../../lib/redux/slices/playerSlice/playerSlice';
-import { selectors as playlist } from '../../lib/redux/slices/playlistSlice/playlistSlice';
-import { selectors as player } from '../../lib/redux/slices/playerSlice/playerSlice';
+import { actions, playerSlice } from '../../lib/redux/slices/playerSlice/playerSlice';
+import { selectors as playlist, playlistSlice } from '../../lib/redux/slices/playlistSlice/playlistSlice';
 import { load, setup, init, isPlayerReady } from './adapter';
 import { DeviceInfoContext } from '../../src/helpers/app-contexts';
 
@@ -13,15 +12,15 @@ const PlayerBehavior = () => {
 
   const { deviceInfo } = useContext(DeviceInfoContext);
 
-  const item       = useSelector(state => playlist.getPlayed(state.playlist));
-  const info       = useSelector(state => playlist.getInfo(state.playlist));
-  const { loaded } = useSelector(state => player.isReady(state.player));
+  const item = useSelector(state => playlist.getPlayed(state.playlist));
+  const info = useSelector(state => playlist.getInfo(state.playlist));
 
   const file = useMemo(() => findPlayedFile(item, info), [item, info]);
   // Init jwplayer by element id.
   useEffect(() => {
-    if (!loaded || !file?.src) return;
+    if (!file?.src) return;
 
+    console.log('PlayerBehavior effect', window.jwplayer);
     const playlistItem = {
       file: file.src,
       image: file.image,
@@ -48,8 +47,8 @@ const PlayerBehavior = () => {
       load([playlistItem]);
     }
 
-    dispatch(actions.setFile(file));
-  }, [file, loaded, dispatch, deviceInfo]);
+    dispatch(playerSlice.actions.setFile(file));
+  }, [file, dispatch, deviceInfo]);
 
   return null;
 };

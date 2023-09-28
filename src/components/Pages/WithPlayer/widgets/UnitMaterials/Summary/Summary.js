@@ -8,7 +8,7 @@ import * as shapes from '../../../../../shapes';
 import MediaHelper from '../../../../../../helpers/media';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectors as settings } from '../../../../../../../lib/redux/slices/settingsSlice/settingsSlice';
-import { selectors as assetsSelectors, actions as assetsActions } from '../../../../../../redux/modules/assets';
+import { selectors as assetsSelectors, actions as assetsActions } from '../../../../../../../lib/redux/slices/assetSlice/assetSlice';
 import { INSERT_TYPE_SUMMARY } from '../../../../../../helpers/consts';
 import MenuLanguageSelector from '../../../../../../components/Language/Selector/MenuLanguageSelector';
 

@@ -1,4 +1,4 @@
-import { PLAYER_ACTIONS_BY_EVENT, actions } from '../../lib/redux/slices/playerSlice/playerSlice';
+import { PLAYER_ACTIONS_BY_EVENT, actions, playerSlice } from '../../lib/redux/slices/playerSlice/playerSlice';
 import { JWPLAYER_ID, VS_NAMES } from '../../src/helpers/consts';
 import { noop } from '../../src/helpers/utils';
 import isFunction from 'lodash/isFunction';
@@ -92,20 +92,20 @@ const PLAYER_EVENTS = [
 export const init   = (dispatch, deviceInfo) => {
   const player = window.jwplayer();
   //for debug, catch all jwplayer events
-  /*player.on('all', (name, e) => {
+  player.on('player all', (name, e) => {
     if (!['bufferChange', 'time'].includes(name)) {
       console.log('bag: jwplayer all events', name, e);
     }
-  });*/
+  });
 
   player.on('error', e => {
     console.error(e);
-    dispatch(actions.setLoaded(true));
+    dispatch(playerSlice.actions.setLoaded(true));
   });
 
   player.on('warning', e => {
     console.error(e);
-    dispatch(actions.setLoaded(true));
+    dispatch(playerSlice.actions.setLoaded(true));
   });
 
   player.on('remove', () => player.off('all'));
@@ -116,7 +116,7 @@ export const init   = (dispatch, deviceInfo) => {
     }
   });
 
-  dispatch(actions.setIsMuted(localStorage.getItem(LOCALSTORAGE_MUTE) === 'true'));
+  dispatch(playerSlice.actions.setIsMuted(localStorage.getItem(LOCALSTORAGE_MUTE) === 'true'));
   PLAYER_EVENTS.forEach(name => {
     const action = PLAYER_ACTIONS_BY_EVENT[name];
     if (!action) {

@@ -11,7 +11,7 @@ import { sagas as lists } from '../../lib/redux/slices/listSlice/thunks';
 import { sagas as tags } from '../../lib/redux/slices/tagsSlice/thunks';
 import { sagas as settings } from './settings';
 import { sagas as search } from './search';
-import { sagas as assets } from './assets';
+import { sagas as assets } from '../../lib/redux/slices/assetSlice/thunks';
 //import { sagas as home } from '../../lib/redux/slices/homeSlice/home';
 import { sagas as stats } from './stats';
 import { sagas as simpleMode } from './simpleMode';

@@ -30,7 +30,7 @@ import MediaHelper from './../helpers/media';
 import { getQuery } from '../helpers/url';
 import { canonicalCollection, isEmpty } from '../helpers/utils';
 import { selectSuitableLanguage } from '../helpers/language';
-import { actions as assetsActions, selectors as assetsSelectors } from './../redux/modules/assets';
+import { actions as assetsActions, selectors as assetsSelectors } from '../../lib/redux/slices/assetSlice/assetSlice';
 import { actions as eventsActions } from './../redux/modules/events';
 import { actions as filtersActions } from '../../lib/redux/slices/filterSlice/filterSlice';
 import { actions as homeActions } from '../../lib/redux/slices/homeSlice/home';
@@ -44,7 +44,7 @@ import { selectors as settingsSelectors } from '../../lib/redux/slices/settingsS
 import { actions as simpleModeActions } from './../redux/modules/simpleMode';
 import { selectors as sourcesSelectors } from '../../lib/redux/slices/sourcesSlice/sourcesSlice';
 import { actions as tagsActions } from '../../lib/redux/slices/tagsSlice/tagsSlice';
-import * as assetsSagas from './../sagas/assets';
+import * as assetsSagas from '../../lib/redux/slices/assetSlice/thunks';
 import * as eventsSagas from './../sagas/events';
 import * as filtersSagas from './../sagas/filters';
 import * as mdbSagas from '../../lib/redux/slices/mdbSlice/thunks';

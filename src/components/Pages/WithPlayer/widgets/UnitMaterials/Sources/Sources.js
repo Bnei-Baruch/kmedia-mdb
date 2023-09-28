@@ -5,8 +5,8 @@ import { Divider, Dropdown, Menu, Segment } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 
-import { selectors } from '../../../../../../../lib/redux/slices/sourcesSlice/sourcesSlice';
-import { actions as assetsActions, selectors as assetsSelectors } from '../../../../../../redux/modules/assets';
+import { selectors } from '../../../../../../../lib/redux/slices/sourcesSlice';
+import { assetSlice, selectors as assetsSelectors } from '../../../../../../../lib/redux/slices/assetSlice/assetSlice';
 import { isEmpty, physicalFile, tracePath } from '../../../../../../helpers/utils';
 import { selectors as settings } from '../../../../../../../lib/redux/slices/settingsSlice/settingsSlice';
 import { getLanguageName, selectSuitableLanguage } from '../../../../../../helpers/language';
@@ -21,6 +21,7 @@ import Download from '../../../../../shared/Download/Download';
 import * as shapes from '../../../../../shapes';
 import UnitBar from '../UnitBar';
 import MenuLanguageSelector from '../../../../../Language/Selector/MenuLanguageSelector';
+import { doc2Html } from '../../../../../../../lib/redux/slices/assetSlice';
 
 const isValidLikut = unit =>
   unit.content_type === CT_LIKUTIM
@@ -64,21 +65,21 @@ const Sources = ({ unit, t }) => {
   const doc2htmlById     = useSelector(state => assetsSelectors.getDoc2htmlById(state.assets));
   const dispatch         = useDispatch();
 
-  const [fetched, setFetched]               = useState(null);
-  const [isLikutim, setIsLikutim]           = useState(false);
-  const [selectedUnitId, setSelectedUnitId] = useState(null);
-  const [pdf, setPdf]                       = useState(null);
-  const [file, setFile]                     = useState(null);
-  const [mp3, setMp3]                       = useState(null);
-  const [setting, setSettings]              = useState({});
-  const [sourceLanguages, setSourceLanguages] = useState([]);
+  const [fetched, setFetched]                               = useState(null);
+  const [isLikutim, setIsLikutim]                           = useState(false);
+  const [selectedUnitId, setSelectedUnitId]                 = useState(null);
+  const [pdf, setPdf]                                       = useState(null);
+  const [file, setFile]                                     = useState(null);
+  const [mp3, setMp3]                                       = useState(null);
+  const [setting, setSettings]                              = useState({});
+  const [sourceLanguages, setSourceLanguages]               = useState([]);
   const [selectedSourceLanguage, setSelectedSourceLanguage] = useState('');
 
   // get files data for all sources
   useEffect(() => {
     (unit.sources || [])
       .filter(s => isEmpty(indexById[s]))
-      .forEach(s => dispatch(assetsActions.sourceIndex(s)));
+      .forEach(s => dispatch(assetSlice.actions.sourceIndex(s)));
   }, [dispatch, indexById, unit.sources]);
 
   const sourcesDropDownOptions = useMemo(() => {
@@ -140,8 +141,8 @@ const Sources = ({ unit, t }) => {
     let file;
     if (isLikutim) {
       const files = getLikutimFiles(unit, selectedUnitId).filter(f => f.language === selectedSourceLanguage);
-      file = files.find(f => f.type === MT_TEXT);
-      const mp3 = files.find(f => f.type === MT_AUDIO);
+      file        = files.find(f => f.type === MT_TEXT);
+      const mp3   = files.find(f => f.type === MT_AUDIO);
       setMp3(mp3);
     } else {
       const langFiles = indexById[selectedUnitId]?.data?.[selectedSourceLanguage];
@@ -176,7 +177,7 @@ const Sources = ({ unit, t }) => {
       return;
     }
 
-    dispatch(assetsActions.doc2html(file.id));
+    dispatch(doc2Html(file.id));
     setFetched(newFetch);
   }, [dispatch, fetched, file, selectedSourceLanguage, selectedUnitId]);
 
@@ -239,8 +240,8 @@ const Sources = ({ unit, t }) => {
 
   const downloadProps = getDownloadProps(pdf, file);
 
-  const unitData = indexById[selectedUnitId] && indexById[selectedUnitId].data;
-  const menuOptionText = (language) => getLanguageName(language) + (unitData && unitData[language] && unitData[language].mp3 ? ' \uD83D\uDD0A' : '')
+  const unitData       = indexById[selectedUnitId] && indexById[selectedUnitId].data;
+  const menuOptionText = (language) => getLanguageName(language) + (unitData && unitData[language] && unitData[language].mp3 ? ' \uD83D\uDD0A' : '');
 
   return (
     <div
@@ -254,7 +255,7 @@ const Sources = ({ unit, t }) => {
       <Menu
         stackable
         secondary
-        floated='right'
+        floated="right"
         className={
           clsx({
             'no-margin-top': isMobileDevice,
@@ -265,17 +266,17 @@ const Sources = ({ unit, t }) => {
       >
         {
           sourcesDropDownOptions.length > 1 &&
-            <Menu.Item>
-              <Dropdown
-                fluid={isMobileDevice}
-                selection
-                value={selectedUnitId}
-                options={sourcesDropDownOptions}
-                selectOnBlur={false}
-                selectOnNavigation={false}
-                onChange={handleSourceChanged}
-              />
-            </Menu.Item>
+          <Menu.Item>
+            <Dropdown
+              fluid={isMobileDevice}
+              selection
+              value={selectedUnitId}
+              options={sourcesDropDownOptions}
+              selectOnBlur={false}
+              selectOnNavigation={false}
+              onChange={handleSourceChanged}
+            />
+          </Menu.Item>
         }
         <Menu.Item fitted>
           {
@@ -291,7 +292,7 @@ const Sources = ({ unit, t }) => {
               </div>
             )
           }
-          { <Download {...downloadProps} /> }
+          {<Download {...downloadProps} />}
           <UnitBar
             handleSettings={setSettings}
             fontSize={setting.fontSize}
@@ -301,7 +302,7 @@ const Sources = ({ unit, t }) => {
         </Menu.Item>
         {
           mp3 &&
-          <Menu.Item fitted='horizontally'>
+          <Menu.Item fitted="horizontally">
             <AudioPlayer file={mp3} />
           </Menu.Item>
         }

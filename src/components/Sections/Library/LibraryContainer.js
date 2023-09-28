@@ -9,7 +9,7 @@ import { Button, Container, Grid, Header, Input, Ref, Segment } from 'semantic-u
 import Headroom from 'react-headroom';
 
 import { isEmpty } from '../../../helpers/utils';
-import { actions as assetsActions, selectors as assets } from '../../../redux/modules/assets';
+import { actions as assetsActions, selectors as assets } from '../../../../lib/redux/slices/assetSlice/assetSlice';
 import { actions as sourceActions, selectors as sources } from '../../../../lib/redux/slices/sourcesSlice/sourcesSlice';
 import { selectors as settings } from '../../../../lib/redux/slices/settingsSlice/settingsSlice';
 import { actions as mdbActions, selectors as mdb } from '../../../../lib/redux/slices/mdbSlice/mdbSlice';

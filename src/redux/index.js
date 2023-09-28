@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { reducer as assets } from './modules/assets';
+import { reducer as assets } from '../../lib/redux/slices/assetSlice/assetSlice';
 import { createRouterReducer as connectRouter } from '@lagunovsky/redux-react-router';
 import { reducer as auth } from '../../lib/redux/slices/authSlice/authSlice';
 import { reducer as bookmarkFilter } from './modules/bookmarkFilter';
@@ -24,7 +24,7 @@ import { reducer as simpleMode } from './modules/simpleMode';
 import { reducer as sources } from '../../lib/redux/slices/sourcesSlice/sourcesSlice';
 import { reducer as stats } from './modules/stats';
 import { reducer as tags } from '../../lib/redux/slices/tagsSlice/tagsSlice';
-import { reducer as notes } from './modules/myNotes';
+import { reducer as notes } from '../../lib/redux/slices/mySlice/myNotesSlice';
 import { reducer as trim } from '../../lib/redux/slices/trimSlice/trimSlice';
 import { reducer as fetchImage } from '../../lib/redux/slices/imageSlice/imageSlice';
 

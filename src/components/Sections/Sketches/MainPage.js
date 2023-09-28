@@ -10,7 +10,7 @@ import { usePrevious } from '../../../helpers/hooks';
 import { isEmpty } from '../../../helpers/utils';
 import { selectors as filters } from '../../../../lib/redux/slices/filterSlice/filterSlice';
 import { actions, selectors as lists } from '../../../../lib/redux/slices/listSlice/listSlice';
-import { actions as assetsActions, selectors as assets } from '../../../redux/modules/assets';
+import { actions as assetsActions, selectors as assets } from '../../../../lib/redux/slices/assetSlice/assetSlice';
 import { selectors as settings } from '../../../../lib/redux/slices/settingsSlice/settingsSlice';
 
 import FilterLabels from '../../../../lib/filters/FiltersAside/FilterLabels';

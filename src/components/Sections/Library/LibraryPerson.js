@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import { Container, Grid, Segment } from 'semantic-ui-react';
 import { withTranslation } from 'next-i18next';
 
-import { actions, selectors } from '../../../redux/modules/assets';
+import { actions, selectors } from '../../../../lib/redux/slices/assetSlice/assetSlice';
 import { selectors as settings } from '../../../../lib/redux/slices/settingsSlice/settingsSlice';
 import WipErr from '../../shared/WipErr/WipErr';
 import { cmsUrl, Requests } from '../../../helpers/Api';

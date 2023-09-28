@@ -5,6 +5,7 @@ import '../styles/global.scss';
 import Layout from './Layout';
 import { Provider } from 'react-redux';
 import { Providers } from '../lib/providers';
+import Script from 'next/script';
 
 const KmediaApp = ({ Component, ...rest }) => {
   const { store, props } = wrapper.useWrappedStore(rest);

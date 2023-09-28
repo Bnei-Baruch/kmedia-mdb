@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { selectors, actions } from '../../../redux/modules/myNotes';
+import { selectors, myNotesSlice } from '../../../../lib/redux/slices/mySlice/myNotesSlice';
 import { buildOffsets } from './helper';
+import { fetchNotes } from '../../../../lib/redux/slices/mySlice/thunks';
 
 export const useNotes = (subject_uid, language) => {
   const ids   = useSelector(state => selectors.getList(state.notes));
@@ -13,7 +14,7 @@ export const useNotes = (subject_uid, language) => {
 
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(actions.fetch({ subject_uid, language }));
+    dispatch(fetchNotes({ subject_uid, language }));
   }, [subject_uid, language]);
 
   const offsets = buildOffsets(notes);

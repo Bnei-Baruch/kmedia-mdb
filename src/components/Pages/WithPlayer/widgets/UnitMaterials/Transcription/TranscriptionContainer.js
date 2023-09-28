@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { actions, selectors } from '../../../../../../redux/modules/assets';
+import { actions, selectors } from '../../../../../../../lib/redux/slices/assetSlice/assetSlice';
 import { selectors as settings } from '../../../../../../../lib/redux/slices/settingsSlice/settingsSlice';
 import * as shapes from '../../../../../shapes';
 import Transcription from './Transcription';

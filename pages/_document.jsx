@@ -1,5 +1,7 @@
 import Document, { Html, Head, Main, NextScript } from 'next/document';
 import i18nextConfig from '../next-i18next.config';
+import Script from 'next/script';
+import React from 'react';
 
 class MyDocument extends Document {
   render() {
@@ -20,6 +22,7 @@ class MyDocument extends Document {
         </Head>
         <body>
         <Main />
+        <Script src="https://cdn.jwplayer.com/libraries/mxNkRalL.js" strategy="beforeInteractive" />
         <NextScript />
         </body>
       </Html>
