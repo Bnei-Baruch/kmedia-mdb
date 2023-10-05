@@ -185,7 +185,7 @@ const onFetchBlogPostFailure = (draft, payload) => {
   draft.blog.errPost = payload;
 };
 
-const onSetLanguage = draft => {
+const onSetLanguage = (draft, payload) => {
   draft.publishers.byID = {};
   draft.collections     = {};
 
@@ -212,7 +212,7 @@ const onSSRPrepare = draft => {
 
 export const reducer = handleActions({
   [ssr.PREPARE]: onSSRPrepare,
-  [settings.SET_LANGUAGE]: onSetLanguage,
+  [settings.SET_UI_LANGUAGE]: onSetLanguage,
 
   [SET_PAGE]: onSetPage,
   [RECEIVE_PUBLISHERS]: onReceivePublishers,

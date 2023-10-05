@@ -614,8 +614,12 @@ const onCountCUSuccess = (state, action) => {
 
 export const reducer = handleActions({
   [ssr.PREPARE]: onSSRPrepare,
-  [settings.SET_LANGUAGE]: freshStore,
-
+  [settings.SET_UI_LANGUAGE]: (state, action) => {
+    return freshStore();
+  },
+  [settings.SET_CONTENT_LANGUAGES]: (state, action) => {
+    return freshStore();
+  },
   [FETCH_UNIT]: setStatus,
   [FETCH_UNIT_SUCCESS]: (state, action) => (
     setStatus(onReceiveContentUnits(state, { payload: [action.payload.data] }), action)

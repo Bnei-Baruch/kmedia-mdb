@@ -18,19 +18,19 @@ import TagSourceFilter from '../../FiltersAside/TopicsFilter/TagSourceFilter';
 import ContentTypesFilter from './ContentTypesFilter';
 
 const Filters = ({ namespace, baseParams }) => {
+  const { t } = useTranslation();
   const [isHydrated, setIsHydrated] = useState(false);
 
-  const { t }      = useTranslation();
-  const isReady    = useSelector(state => selectors.isReady(state.filtersAside, namespace));
-  const selected   = useSelector(state => filters.getNotEmptyFilters(state.filters, namespace), isEqual);
-  const language   = useSelector(state => settings.getLanguage(state.settings));
+  const isReady  = useSelector(state => selectors.isReady(state.filtersAside, namespace));
+  const selected = useSelector(state => filters.getNotEmptyFilters(state.filters, namespace), isEqual);
+  const contentLanguages = useSelector(state => settings.getContentLanguages(state.settings));
   const prevSelRef = useRef(-1);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(prepareActions.fetchCollections(PAGE_NS_PROGRAMS, { content_type: COLLECTION_PROGRAMS_TYPE }));
-  }, [language, dispatch]);
+  }, [contentLanguages, dispatch]);
 
   useEffect(() => {
     if (!isReady) {

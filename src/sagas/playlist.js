@@ -12,14 +12,16 @@ import {
   IsCollectionContentType,
   MY_NAMESPACE_HISTORY
 } from '../helpers/consts';
+import { selectSuitableLanguage } from '../helpers/language';
 import { canonicalCollection } from '../helpers/utils';
 import { getMyItemKey } from '../helpers/my';
 import {
+  calcAvailableLanguages,
   getActivePartFromQuery,
-  getMediaTypeFromQuery,
-  playlist as playlistBuilder,
   getLanguageFromQuery,
-  playableItem
+  getMediaTypeFromQuery,
+  playableItem,
+  playlist as playlistBuilder,
 } from '../helpers/player';
 import { assetUrl } from '../helpers/Api';
 import { fetchCollection, fetchUnit, fetchUnitsByIDs, fetchLabels } from './mdb';
@@ -39,10 +41,15 @@ function* build(action) {
     yield call(fetchCollection, { payload: cId });
   }
 
-  const siteLang    = yield select(state => settings.getLanguage(state.settings));
-  const contentLang = yield select(state => settings.getContentLanguage(state.settings));
-  const mediaType   = getMediaTypeFromQuery(location);
-  const language    = getLanguageFromQuery(location, contentLang || siteLang);
+  let cu = yield select(state => mdb.getDenormContentUnit(state.mdb, cuId));
+  if (!cu || !cu.files) {
+    yield call(fetchUnit, { payload: cuId });
+    cu = yield select(state => mdb.getDenormContentUnit(state.mdb, cuId));
+  }
+
+  const contentLanguages = yield select(state => settings.getContentLanguages(state.settings));
+  const mediaType = getMediaTypeFromQuery(location);
+  const language = getLanguageFromQuery(location) || selectSuitableLanguage(contentLanguages, calcAvailableLanguages(cu), cu.original_language);
 
   const c    = yield select(state => mdb.getDenormCollection(state.mdb, cId));
   const data = playlistBuilder(c);
@@ -101,11 +108,11 @@ function* singleMediaBuild(action) {
 
   const c = canonicalCollection(cu) || false;
 
-  const siteLang    = yield select(state => settings.getLanguage(state.settings));
-  const contentLang = yield select(state => settings.getContentLanguage(state.settings));
+  const contentLanguages = yield select(state => settings.getContentLanguages(state.settings));
 
   const mediaType   = getMediaTypeFromQuery(location);
-  const language    = getLanguageFromQuery(location, contentLang || siteLang);
+  // DONT COMMIT: This should also take into account files languages, not just content languages.
+  const language    = getLanguageFromQuery(location) || selectSuitableLanguage(contentLanguages, calcAvailableLanguages(cu), cu.original_language);
   const preImageUrl = !!c ? assetUrl(`logos/collections/${c.id}.jpg`) : null;
   const item        = playableItem(cu, preImageUrl);
 
@@ -132,12 +139,10 @@ function* myPlaylistBuild(action) {
     })
   ).filter(x => !!x)) || [];
 
-  const siteLang    = yield select(state => settings.getLanguage(state.settings));
-  const contentLang = yield select(state => settings.getContentLanguage(state.settings));
+  const contentLanguages = yield select(state => settings.getContentLanguages(state.settings));
 
   const { location } = yield select(state => state.router);
   const mediaType    = getMediaTypeFromQuery(location);
-  const language     = getLanguageFromQuery(location, contentLang || siteLang);
   const ap           = getActivePartFromQuery(location);
   const items        = content_units
     .map(cu => playableItem(cu))
@@ -145,6 +150,9 @@ function* myPlaylistBuild(action) {
     .map((x, i) => ({ ...x, id: `${x.id}_${i}`, cuId: x.id, ap: i }));
   const { cuId, id } = items[ap] || items[0];
   const baseLink     = `/${MY_NAMESPACE_PLAYLISTS}/${pId}`;
+
+  const cu           = items.find(item => item?.id === cuId);
+  const language     = getLanguageFromQuery(location) || selectSuitableLanguage(contentLanguages, calcAvailableLanguages(cu), cu.original_language);
 
   yield put(actions.buildSuccess({ items, id, cuId, name, language, mediaType, pId, baseLink, isMy: true }));
 

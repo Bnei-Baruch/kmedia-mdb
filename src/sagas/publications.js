@@ -15,11 +15,13 @@ export function* fetchTweets(action) {
   const filters = yield select(state => filterSelectors.getFilters(state.filters, 'publications-twitter'));
   const params  = filtersTransformer.toApiParams(filters) || {};
   try {
-    const language = yield select(state => settings.getLanguage(state.settings));
+    const uiLang = yield select(state => settings.getUILang(state.settings));
+    const contentLanguages = yield select(state => settings.getContentLanguages(state.settings));
     const args     = {
       ...action.payload,
       ...params,
-      language,
+      ui_language: uiLang,
+      content_languages: contentLanguages,
     };
 
     const { data } = yield call(Api.tweets, args);
@@ -33,11 +35,13 @@ export function* fetchBlogList(action) {
   const filters = yield select(state => filterSelectors.getFilters(state.filters, 'publications-blog'));
   const params  = filtersTransformer.toApiParams(filters) || {};
   try {
-    const language = yield select(state => settings.getLanguage(state.settings));
+    const uiLang = yield select(state => settings.getUILang(state.settings));
+    const contentLanguages = yield select(state => settings.getContentLanguages(state.settings));
     const args     = {
       ...action.payload,
       ...params,
-      language,
+      ui_language: uiLang,
+      content_languages: contentLanguages,
     };
 
     const { data } = yield call(Api.posts, args);
@@ -69,9 +73,11 @@ function* fetchArticlesList(action) {
       return;
     }
 
-    const language = yield select(state => settings.getLanguage(state.settings));
+    const uiLang = yield select(state => settings.getUILang(state.settings));
+    const contentLanguages = yield select(state => settings.getContentLanguages(state.settings));
     const { data } = yield call(Api.collections, {
-      language,
+      ui_language: uiLang,
+      content_languages: contentLanguages,
       content_type: CT_ARTICLES,
       pageNo: 1,
       pageSize: 1000,

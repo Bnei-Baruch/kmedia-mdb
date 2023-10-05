@@ -15,14 +15,14 @@ const PlaylistHeaderContainer = ({ playlist }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const navigate           = useNavigate();
   const dispatch           = useDispatch();
-  const language           = useSelector(state => settings.getLanguage(state.settings));
+  const uiLang             = useSelector(state => settings.getUILang(state.settings));
   const { key }            = getMyItemKey(MY_NAMESPACE_PLAYLISTS, playlist);
 
   const save = name => dispatch(actions.edit(MY_NAMESPACE_PLAYLISTS, { id: playlist.id, name }));
 
   const confirmSuccess = () => {
     dispatch(actions.remove(MY_NAMESPACE_PLAYLISTS, { id: playlist.id, key }));
-    navigate({ pathname: `/${language}/personal` });
+    navigate({ pathname: `/${uiLang}/personal` });
   };
 
   if (!playlist) return null;

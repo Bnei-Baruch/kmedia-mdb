@@ -34,7 +34,7 @@ const DateFilter = ({ t, namespace }) => {
 
   const selected = useSelector(state => filters.getFilterByName(state.filters, namespace, FN_DATE_FILTER));
 
-  const language = useSelector(state => settings.getLanguage(state.settings));
+  const uiLang = useSelector(state => settings.getUILang(state.settings));
 
   const stats = useSelector(state => filtersAside.getMultipleStats(state.filtersAside, namespace, FN_DATE_FILTER)(datePresets));
 
@@ -115,7 +115,7 @@ const DateFilter = ({ t, namespace }) => {
     setShowDay(!showDay);
   };
 
-  const iconName      = `caret ${isLanguageRtl(language) ? 'left' : 'right'}`;
+  const iconName      = `caret ${isLanguageRtl(uiLang) ? 'left' : 'right'}`;
   const renderContent = () => (
     <Segment.Group className="filter-popup__wrapper">
       {
@@ -147,7 +147,7 @@ const DateFilter = ({ t, namespace }) => {
             <FastDayPicker
               label={null}
               value={from}
-              language={language}
+              language={uiLang}
               onDayChange={handleDayInputChange}
             />
           </Accordion.Content>
@@ -164,14 +164,14 @@ const DateFilter = ({ t, namespace }) => {
             <FastDayPicker
               label={t('filters.date-filter.start')}
               value={from}
-              language={language}
+              language={uiLang}
               onDayChange={handleFromInputChange}
             />
             <br />
             <FastDayPicker
               label={t('filters.date-filter.end')}
               value={to}
-              language={language}
+              language={uiLang}
               onDayChange={handleToInputChange}
             />
           </Accordion.Content>

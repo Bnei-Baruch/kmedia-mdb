@@ -17,7 +17,7 @@ import { hydrateRoot } from 'react-dom/client';
 import ReactGA from 'react-ga';
 import { createBrowserHistory } from 'history';
 
-import { DEFAULT_LANGUAGE, LANG_UKRAINIAN, KC_BOT_USER_NAME } from './helpers/consts';
+import { DEFAULT_UI_LANGUAGE, LANG_UKRAINIAN, KC_BOT_USER_NAME } from './helpers/consts';
 import i18n from './helpers/i18nnext';
 import createStore from './redux/createStore';
 import { actions as mdb } from './redux/modules/mdb';
@@ -44,7 +44,7 @@ function hydrateApp(kcInfo) {
   const i18nData = window.__i18n || {};
 
   // Initialize moment global locale to default language
-  const language = i18nData.initialLanguage ?? DEFAULT_LANGUAGE;
+  const language = i18nData.initialLanguage ?? DEFAULT_UI_LANGUAGE;
   moment.locale(language === LANG_UKRAINIAN ? 'uk' : language);
 
   const deviceInfo       = new UAParser().getResult();
@@ -72,7 +72,9 @@ function hydrateApp(kcInfo) {
   hydrateRoot(el, component);
   // We ask for semi-quasi static data here since
   // we strip it from SSR to save initial network bandwidth
-  store.dispatch(mdb.fetchSQData());
+  console.log('hydrateApp fetchSQData');
+  console.log('skipping fetchSQData, waiting for language set....');
+  //store.dispatch(mdb.fetchSQData());
 }
 
 if (window.__isAuthApp) {

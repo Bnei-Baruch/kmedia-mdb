@@ -5,7 +5,6 @@ import { useSelector } from 'react-redux';
 import { Button, Icon, Modal, Table } from 'semantic-ui-react';
 
 import { FN_LOCATIONS } from '../../../helpers/consts';
-import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import { isEmpty } from '../../../helpers/utils';
 import { selectors } from '../../../redux/modules/filtersAside';
 import { selectors as settings } from '../../../redux/modules/settings';
@@ -23,8 +22,7 @@ const CitiesModal = ({ county, namespace, open, onClose, t }) => {
 
   const items = useSelector(state => selectors.citiesByCountry(state.filtersAside, namespace, FN_LOCATIONS)(county));
 
-  const language = useSelector(state => settings.getLanguage(state.settings));
-  const dir      = getLanguageDirection(language);
+  const uiDir = useSelector(state => settings.getUIDir(state.settings));
 
   if (isEmpty(items)) return null;
 
@@ -49,8 +47,8 @@ const CitiesModal = ({ county, namespace, open, onClose, t }) => {
   return (
     <Modal
       open={open}
-      className={clsx('filters_aside_tree_modal', { [dir]: true })}
-      dir={dir}
+      className={clsx('filters_aside_tree_modal', { [uiDir]: true })}
+      dir={uiDir}
       onClose={onClose}
       closeIcon={<Icon name="times circle outline" />}
     >

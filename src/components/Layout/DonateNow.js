@@ -7,11 +7,11 @@ import { useSelector } from 'react-redux';
 import { selectors as settings } from '../../redux/modules/settings';
 
 export const VirtualHomeButton = () => {
-  const language = useSelector(state => settings.getLanguage(state.settings));
-  const { t }    = useTranslation();
+  const uiLang = useSelector(state => settings.getUILang(state.settings));
+  const { t }  = useTranslation();
   return DButton({
     content: t('home.virtual-home'),
-    href: `https://kli.one/?bbref_internal=kmedia&bbref_lang=${language}&lang=${language}`,
+    href: `https://kli.one/?bbref_internal=kmedia&bbref_lang=${uiLang}&lang=${uiLang}`,
     icon: 'globe',
     className: 'vh-button'
   });
@@ -48,10 +48,10 @@ const getDonateLinkDetails = language => {
 };
 
 const DonateNow = () => {
-  const language = useSelector(state => settings.getLanguage(state.settings));
+  const uiLang = useSelector(state => settings.getUILang(state.settings));
   const { t }    = useTranslation();
 
-  const { linkLang, utmTerm } = getDonateLinkDetails(language);
+  const { linkLang, utmTerm } = getDonateLinkDetails(uiLang);
   const link                  = `https://www.kab1.com/${linkLang}?utm_source=kabbalah_media&utm_medium=button&utm_campaign=donations&utm_id=donations&utm_term=${utmTerm}&utm_content=header_button_donate`;
   return DButton({ content: t('home.donate'), href: link, icon: 'heart', className: 'donate-button' });
 };

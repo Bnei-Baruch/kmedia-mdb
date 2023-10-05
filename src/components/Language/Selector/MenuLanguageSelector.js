@@ -1,61 +1,61 @@
-import React, { useContext } from 'react';
-import { Dropdown } from 'semantic-ui-react';
-import classNames from 'classnames';
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { withTranslation } from 'react-i18next';
+import { Checkbox, Grid, Dropdown, Label, Modal } from 'semantic-ui-react';
 import { noop } from '../../../helpers/utils';
 import { getOptions } from '../../../helpers/language';
-import { LANG_HEBREW, LANGUAGES } from '../../../helpers/consts';
-import { DeviceInfoContext } from '../../../helpers/app-contexts';
+import { ALL_LANGUAGES, LANGUAGES } from '../../../helpers/consts';
+import { selectors as settings } from '../../../redux/modules/settings';
 
-const DesktopLanguageSelector = (value, fluid, options, handleSelect, blink) => (
-  <Dropdown item text={LANGUAGES[value].name} fluid={fluid}>
-    <Dropdown.Menu>
-      {
-        options.map(lang =>
-          <Dropdown.Item
-            key={lang.value}
-            language={`${lang.value}`}
-            active={lang.value === value}
-            onClick={e => handleSelect(e, lang)}
-            className={classNames('dropdown-language-selector', { blink: !!blink })}
-          >
-            {lang.text}
-          </Dropdown.Item>
-        )
-      }
-    </Dropdown.Menu>
-  </Dropdown>
-);
-
-const MobileLanguageSelector = (value, fluid, options, handleSelect) => (
-  <select
-    className="dropdown-container"
-    value={value}
-    onChange={e => handleSelect(e, e.currentTarget)}
-  >
-    {
-      options.map(x =>
-        <option key={`opt-${x.value}`} value={x.value}>
-          {x.name}
-        </option>)
+const applyChecked = (language, checked, selected, isAny) => {
+  if (isAny) {
+    if (checked) {
+      return [language];
     }
-  </select>
-);
+    return [];
+  }
 
-const MenuLanguageSelector = (props) => {
-  const {
-          languages           = [],
-          defaultValue: value = LANG_HEBREW,
-          blink,
-          onSelect            = noop,
-          fluid               = true
-        } = props;
+  const newSelected = selected.filter(selectedLang => selectedLang  !== language);
+  if (checked) {
+    newSelected.push(language);
+  }
 
-  const { isMobileDevice } = useContext(DeviceInfoContext);
-  const handleSelect       = (e, data) => onSelect(e, data.value);
-  const options            = getOptions({ languages });
-  return isMobileDevice ?
-    MobileLanguageSelector(value, fluid, options, handleSelect) :
-    DesktopLanguageSelector(value, fluid, options, handleSelect, blink);
+  return newSelected;
+}
+
+const applyAll = () => {
+  return ALL_LANGUAGES;
+}
+
+const LanguageSelector = (selected, options, onLanguageChange, isAny, multiSelect, optionText, upward) => {
+  const onChange = (selected) => {
+    onLanguageChange(selected);
+  };
+  const finalOptions = isAny ? [{text: 'Any', value: 'any'}] : options;
+  return (
+    <Dropdown
+      selection
+      upward={upward}
+      multiple={multiSelect}
+      value={multiSelect ? (isAny ? ['any'] : selected) : selected}
+      onChange={(event, data) => onChange(data.value)}
+      options={options}
+    />
+  );
+}
+
+const MenuLanguageSelector = ({ languages = [], selected = [], onLanguageChange = noop, multiSelect = true, optionText = null, upward = false}) => {
+  const contentLanguages = useSelector(state => settings.getContentLanguages(state.settings));
+  const onLanguageChangeInternal = selected => {
+    onLanguageChange(selected);
+  };
+
+  const validLanguages = languages.filter(lang => contentLanguages.includes(lang));
+  const otherLanguages = languages.filter(lang => !contentLanguages.includes(lang));
+  const options = getOptions({ languages: validLanguages }).concat([{className: 'language-selection-divider disabled'}]).concat(getOptions({ languages: otherLanguages}));
+  // Special case when all laguages are selected, e.g., show content with any language.
+  const isAny = languages === selected;
+  return LanguageSelector(selected, options, onLanguageChangeInternal, isAny, multiSelect, optionText, upward);
 };
 
 export default MenuLanguageSelector;

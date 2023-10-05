@@ -9,11 +9,14 @@ import { actions as mdbActions } from '../redux/modules/mdb';
 
 export function* fetchAllEvents(action) {
   try {
-    const language = yield select(state => settings.getLanguage(state.settings));
+    const uiLang = yield select(state => settings.getUILang(state.settings));
+    const contentLanguages = yield select(state => settings.getContentLanguages(state.settings));
+
     const { data } = yield call(Api.collections, {
       ...action.payload,
       contentTypes: EVENT_TYPES,
-      language,
+      ui_language: uiLang,
+      content_languages: contentLanguages,
       pageNo: 1,
       pageSize: 1000, // NOTE: we need to get all events, and the endpoint lets us fetch only with pagination,
       with_units: false,

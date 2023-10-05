@@ -10,15 +10,15 @@ import 'moment/locale/de';
 import 'moment/locale/tr';
 import 'moment/locale/cs';
 
-import { DEFAULT_LANGUAGE } from './consts';
+import { DEFAULT_UI_LANGUAGE } from './consts';
 
 const LOCALES_BACKEND = process.env.REACT_APP_LOCALES_BACKEND;
 
 export const options = {
   load: 'languageOnly',
-  fallbackLng: DEFAULT_LANGUAGE,
+  fallbackLng: DEFAULT_UI_LANGUAGE,
 
-  // have a common namespace used around the full app
+  // Have a common namespace used around the full app.
   ns: ['common'],
   defaultNS: 'common',
 

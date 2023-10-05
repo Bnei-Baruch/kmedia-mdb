@@ -7,7 +7,6 @@ import { selectors as settings } from '../../../../../redux/modules/settings';
 import { selectors as playlist } from '../../../../../redux/modules/playlist';
 import { actions as playerActions } from '../../../../../redux/modules/player';
 import { MY_NAMESPACE_PLAYLIST_EDIT, MY_NAMESPACE_PLAYLISTS, PLAYER_OVER_MODES } from '../../../../../helpers/consts';
-import { getLanguageDirection } from '../../../../../helpers/i18n-utils';
 import { useTranslation } from 'react-i18next';
 import { selectors as mdb } from '../../../../../redux/modules/mdb';
 import AddPlaylistForm from './AddPlaylistForm';
@@ -23,11 +22,9 @@ const SaveAsPlaylistItem = ({ setModalMode, label }) => {
   const { cuId }  = useSelector(state => playlist.getInfo(state.playlist));
   const unit      = useSelector(state => mdb.getDenormContentUnit(state.mdb, cuId));
   const playlists = useSelector(state => selectors.getList(state.my, MY_NAMESPACE_PLAYLIST_EDIT));
-  const language  = useSelector(state => settings.getLanguage(state.settings));
+  const uiDir     = useSelector(state => settings.getUIDir(state.settings));
 
   const [name, setName] = useState(unit.name);
-
-  const dir = getLanguageDirection(language);
 
   useEffect(() => {
     dispatch(actions.fetch(MY_NAMESPACE_PLAYLIST_EDIT, { 'exist_cu': cuId, order_by: 'id DESC' }));
@@ -85,7 +82,7 @@ const SaveAsPlaylistItem = ({ setModalMode, label }) => {
         open={true}
         onClose={handleCancel}
         size={'tiny'}
-        dir={dir}
+        dir={uiDir}
       >
         <Modal.Header>{t('personal.addToPlaylist')}</Modal.Header>
         <Modal.Content>

@@ -50,10 +50,15 @@ function* fetchList(action) {
     args               = { ...args, ...filterParams };
   }
 
-  const language = yield select(state => settings.getLanguage(state.settings));
+  const uiLang = yield select(state => settings.getUILang(state.settings));
+  const contentLanguages = yield select(state => settings.getContentLanguages(state.settings));
 
   try {
-    const { data } = yield call(Api.units, { ...args, language });
+    const { data } = yield call(Api.units, {
+      ...args,
+      ui_language: uiLang, 
+      content_languages: contentLanguages,
+    });
 
     if (Array.isArray(data.content_units)) {
       yield put(mdbActions.receiveContentUnits(data.content_units));
@@ -90,10 +95,16 @@ function* fetchSectionList(action) {
   if (namespace === PAGE_NS_LESSONS) patchLessonFilters(filters);
   const filterParams = filtersTransformer.toApiParams(filters) || {};
 
-  const language = yield select(state => settings.getLanguage(state.settings));
+  const uiLang = yield select(state => settings.getUILang(state.settings));
+  const contentLanguages = yield select(state => settings.getContentLanguages(state.settings));
 
   try {
-    const { data } = yield call(endpointByNamespace[namespace], { ...args, ...filterParams, language });
+    const { data } = yield call(endpointByNamespace[namespace], {
+      ...args,
+      ...filterParams, 
+      ui_language: uiLang, 
+      content_languages: contentLanguages,
+    });
     if (!data.items && data.content_units) {
       data.items = [...data.content_units];
     }

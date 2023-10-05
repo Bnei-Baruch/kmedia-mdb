@@ -7,12 +7,12 @@ import { withTranslation } from 'react-i18next';
 import { Container, Icon, Label, Menu, Popup } from 'semantic-ui-react';
 import isEqual from 'react-fast-compare';
 
-import { getLanguageDirection } from '../../helpers/i18n-utils';
+import { getDirectionProperty } from '../../helpers/i18n-utils';
 import { isEmpty } from '../../helpers/utils';
 import { filtersTransformer } from '../../filters/index';
 import { actions, selectors } from '../../redux/modules/filters';
-import { selectors as mdb } from '../../redux/modules/mdb';
 import { selectors as settings } from '../../redux/modules/settings';
+import { selectors as mdb } from '../../redux/modules/mdb';
 import * as shapes from '../shapes';
 import FiltersHydrator from './FiltersHydrator';
 import { DeviceInfoContext } from '../../helpers/app-contexts';
@@ -33,8 +33,7 @@ class Filters extends Component {
     setFilterValue: PropTypes.func.isRequired,
     resetFilter: PropTypes.func.isRequired,
     filtersData: PropTypes.objectOf(PropTypes.object).isRequired,
-    language: PropTypes.string.isRequired,
-    contentLanguage: PropTypes.string.isRequired,
+    uiDir: PropTypes.string.isRequired,
     t: PropTypes.func.isRequired,
     sqDataWipErr: PropTypes.bool,
     letters: PropTypes.arrayOf(PropTypes.string),
@@ -51,13 +50,11 @@ class Filters extends Component {
   };
 
   shouldComponentUpdate(nextProps, nextState) {
-    const { namespace, language, contentLanguage, filters, rightItems, filtersData, sqDataWipErr, letters } = this.props;
+    const { namespace, filters, rightItems, filtersData, sqDataWipErr, letters } = this.props;
     const { activeFilter } = this.state;
 
     return (activeFilter !== nextState.activeFilter
       || namespace !== nextProps.namespace
-      || language !== nextProps.language
-      || contentLanguage !== nextProps.contentLanguage
       || sqDataWipErr !== nextProps.sqDataWipErr
       || !isEqual(filters, nextProps.filters)
       || !isEqual(rightItems, nextProps.rightItems)
@@ -90,13 +87,12 @@ class Filters extends Component {
   };
 
   renderFilters = store => {
-    const { filters, namespace, t, filtersData, language, contentLanguage } = this.props;
-    const { activeFilter }                                                  = this.state;
-    const { isMobileDevice }                                                = this.context;
+    const { filters, namespace, t, filtersData, uiDir } = this.props;
+    const { activeFilter }                              = this.state;
+    const { isMobileDevice }                            = this.context;
 
-    const langDir    = getLanguageDirection(language);
     const popupStyle = {
-      direction: langDir,
+      direction: uiDir,
     };
 
     return filters.map(item => {
@@ -160,21 +156,19 @@ class Filters extends Component {
             </Menu.Item>
           )}
           on="click"
-          position={`bottom ${langDir === 'ltr' ? 'left' : 'right'}`}
+          position={`bottom ${getDirectionProperty(uiDir)}`}
           open={isActive}
           onClose={this.handlePopupClose}
           onOpen={() => this.handlePopupOpen(name)}
           style={popupStyle}
           closeOnDocumentClick={false}
           content={
-            <div className={`filter-popup__content ${langDir}`}>
+            <div className={`filter-popup__content ${uiDir}`}>
               <FilterComponent
                 namespace={namespace}
                 value={value}
                 onCancel={this.handlePopupClose}
                 onApply={x => this.handleApply(name, x)}
-                language={language}
-                contentLanguage={contentLanguage}
               />
             </div>
           }
@@ -225,8 +219,7 @@ class Filters extends Component {
 export default connect(
   (state, ownProps) => ({
     filtersData: selectors.getNSFilters(state.filters, ownProps.namespace),
-    language: settings.getLanguage(state.settings),
-    contentLanguage: settings.getContentLanguage(state.settings),
+    uiDir: settings.getUIDir(state.settings),
 
     // DO NOT REMOVE, this triggers a necessary re-render for filter tags
     sqDataWipErr: mdb.getSQDataWipErr(state.mdb),

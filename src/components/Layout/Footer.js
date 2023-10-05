@@ -2,12 +2,12 @@ import React, { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Container, Grid, Header, Button } from 'semantic-ui-react';
-import { getRSSLinkByLang } from '../../helpers/utils';
+import { getRSSLinkByLangs } from '../../helpers/utils';
 import { selectors as settings } from '../../redux/modules/settings';
 import { DeviceInfoContext } from '../../helpers/app-contexts';
 
 const Footer = () => {
-  const language           = useSelector(state => settings.getLanguage(state.settings));
+  const contentLanguages   = useSelector(state => settings.getContentLanguages(state.settings));
   const year               = new Date().getFullYear();
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const { t }              = useTranslation();
@@ -45,7 +45,7 @@ const Footer = () => {
                 basic
                 inverted
                 floated={isMobileDevice ? 'left' : 'right'}
-                href={getRSSLinkByLang(language)} />
+                href={getRSSLinkByLangs(contentLanguages)} />
             </Grid.Column>
           </Grid.Row>
         </Grid>

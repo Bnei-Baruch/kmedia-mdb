@@ -99,7 +99,6 @@ const UnitListPage = props => {
       pageNo,
       total,
       pageSize,
-      language,
       t,
       onPageChange,
       onFiltersChanged,
@@ -130,7 +129,6 @@ const UnitListPage = props => {
           pageNo={pageNo}
           pageSize={pageSize}
           total={total}
-          language={language}
           onChange={onPageChange}
         />
       </Container>
@@ -164,7 +162,6 @@ UnitListPage.propTypes = {
   pageNo: PropTypes.number.isRequired,
   total: PropTypes.number.isRequired,
   pageSize: PropTypes.number.isRequired,
-  language: PropTypes.string.isRequired,
   t: PropTypes.func.isRequired,
   onPageChange: PropTypes.func.isRequired,
   onFiltersChanged: PropTypes.func.isRequired,

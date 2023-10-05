@@ -1,7 +1,12 @@
 import qs from 'qs';
 import { parse as cookieParse } from 'cookie';
 
-import { COOKIE_UI_LANG, DEFAULT_LANGUAGE, LANG_UI_LANGUAGES, LANGUAGES } from './consts';
+import {
+  COOKIE_UI_LANG,
+  DEFAULT_UI_LANGUAGE,
+  LANGUAGES,
+  LANG_UI_LANGUAGES,
+} from './consts';
 
 export const parse = str => qs.parse(str);
 
@@ -34,7 +39,8 @@ export const splitPathByLanguage = path => {
 
 export const isSocialUserAgent = userAgent => /facebook|facebot/i.test(userAgent);
 
-export const getLanguageFromPath = (path, headers, userAgent) => {
+export const getUILangFromPath = (path, headers, userAgent) => {
+  console.log('getUILangFromPath', path);
   let { language } = splitPathByLanguage(path);
   if (!language && isSocialUserAgent(userAgent)) {
     language = parse(path).shareLang;
@@ -50,7 +56,7 @@ export const getLanguageFromPath = (path, headers, userAgent) => {
   language      = cookies[COOKIE_UI_LANG];
   // Only existing languages...
   if (language !== undefined && LANG_UI_LANGUAGES.includes(language)) {
-    console.log(`language: ${language}, redirect: ${language !== DEFAULT_LANGUAGE}`);
+    console.log(`language: ${language}, redirect: ${language !== DEFAULT_UI_LANGUAGE}`);
     return { language, redirect: true };
   }
 
@@ -68,8 +74,8 @@ export const getLanguageFromPath = (path, headers, userAgent) => {
     }
   }
 
-  // English
-  return { language: DEFAULT_LANGUAGE, redirect: true };
+  // Default
+  return { language: DEFAULT_UI_LANGUAGE, redirect: true };
 };
 
 export const prefixWithLanguage = (path, location, toLanguage) => {
@@ -120,7 +126,6 @@ export const updateQuery = (navigate, location, updater) => {
 export const isDebMode = location => getQuery(location).deb || false;
 
 export const getToWithLanguage = (navigateTo, location, language, contentLanguage) => {
-
   if (typeof navigateTo === 'string') {
     return prefixWithLanguage(navigateTo, location, language);
   }
@@ -129,7 +134,8 @@ export const getToWithLanguage = (navigateTo, location, language, contentLanguag
     navigateTo = { ...location };
   }
 
-  // we're changing 'search' in case contentLanguage was supplied
+  // We're changing 'search' in case contentLanguage was supplied
+  // DON'T COMMI: NOT CLEAR WHAT THAT IS...
   if (contentLanguage) {
     const q           = getQuery(navigateTo);
     q.language        = contentLanguage;

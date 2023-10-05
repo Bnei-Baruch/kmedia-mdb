@@ -22,12 +22,12 @@ import { getMyItemKey } from '../../../../helpers/my';
 
 const ItemsContainer = ({ pageSize = 8, pageNo = 1, t, namespace, withSeeAll }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
-  const language           = useSelector(state => settings.getLanguage(state.settings));
+  const uiLang             = useSelector(state => settings.getUILang(state.settings));
   const dispatch           = useDispatch();
 
   useEffect(() => {
     dispatch(actions.fetch(namespace, { page_no: pageNo, page_size: pageSize }));
-  }, [dispatch, pageNo, pageSize, language, namespace]);
+  }, [dispatch, pageNo, pageSize, uiLang, namespace]);
 
   const items = useSelector(state => selectors.getList(state.my, namespace));
   const err   = useSelector(state => selectors.getErr(state.my, namespace));
@@ -35,7 +35,7 @@ const ItemsContainer = ({ pageSize = 8, pageNo = 1, t, namespace, withSeeAll }) 
 
   if (wip || err) return WipErr({ wip, err, t });
   if (items.length === 0)
-    return <ItemTemplate namespace={namespace} children={[]} t={t} language={language} />;;
+    return <ItemTemplate namespace={namespace} children={[]} t={t} />;;
   let children = null;
 
   switch (namespace) {
@@ -62,13 +62,13 @@ const ItemsContainer = ({ pageSize = 8, pageNo = 1, t, namespace, withSeeAll }) 
     case MY_NAMESPACE_PLAYLISTS:
       children = items.map(x => {
         const { key } = getMyItemKey(namespace, x);
-        return <PlaylistItem item={x} key={key} language={language} t={t} asList={isMobileDevice} />;
+        return <PlaylistItem item={x} key={key} t={t} asList={isMobileDevice} />;
       });
       break;
     case MY_NAMESPACE_SUBSCRIPTIONS:
       children = items.map(x => {
         const { key } = getMyItemKey(namespace, x);
-        return <SubscriptionsItem item={x} key={key} t={t} language={language} />;
+        return <SubscriptionsItem item={x} key={key} t={t} />;
       }
       );
       break;
@@ -82,7 +82,7 @@ const ItemsContainer = ({ pageSize = 8, pageNo = 1, t, namespace, withSeeAll }) 
     children = <Card.Group doubling itemsPerRow={4} stackable className="cu_items">{children}</Card.Group>;
   }
 
-  return <ItemTemplate namespace={namespace} children={children} t={t} withSeeAll={withSeeAll} language={language} />;
+  return <ItemTemplate namespace={namespace} children={children} t={t} withSeeAll={withSeeAll} />;
 };
 
 ItemsContainer.propTypes = {

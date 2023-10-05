@@ -79,6 +79,7 @@ const onFetchAllSeriesSuccess = (draft, payload, type) => {
 };
 
 const onSetLanguage = draft => {
+  console.log('lessons onSetLanguage');
   draft.seriesIDs = [];
   draft.seriesLoaded = false;
 };
@@ -91,7 +92,7 @@ const onSSRPrepare = draft => {
 
 export const reducer = handleActions({
   [ssr.PREPARE]: onSSRPrepare,
-  [settings.SET_LANGUAGE]: onSetLanguage,
+  [settings.SET_CONTENT_LANGUAGES]: onSetLanguage,
 
   [FETCH_ALL_SERIES]: setStatus,
   [FETCH_ALL_SERIES_SUCCESS]: onFetchAllSeriesSuccess,

@@ -26,13 +26,13 @@ const BookmarkList = ({ t }) => {
   const getPathByID = useSelector(state => sources.getPathByID(state.sources));
   const query       = useSelector(state => filters.getByKey(state.bookmarkFilter, MY_BOOKMARK_FILTER_QUERY));
   const denormCU    = useSelector(state => mdb.nestedGetDenormContentUnit(state.mdb));
-  const language    = useSelector(state => settings.getLanguage(state.settings));
+  const uiLang      = useSelector(state => settings.getUILang(state.settings));
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(actions.fetch(MY_NAMESPACE_BOOKMARKS, { folder_id }));
-  }, [folder_id, language, dispatch]);
+  }, [folder_id, uiLang, dispatch]);
 
   const needToLogin = NeedToLogin({ t });
 

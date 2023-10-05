@@ -4,7 +4,6 @@ import { useSelector } from 'react-redux';
 import { Button } from 'semantic-ui-react';
 
 import { selectors as settings } from '../../../redux/modules/settings';
-import { isLanguageRtl } from '../../../helpers/i18n-utils';
 import LibrarySettings from './LibrarySettings';
 import Share from './Share';
 import BookmarkButton from '../../shared/SaveBookmark/BookmarkButton';
@@ -22,9 +21,8 @@ const LibraryBar = (
     label
   }
 ) => {
-  const language = useSelector(state => settings.getLanguage(state.settings));
-  const isRtl    = isLanguageRtl(language);
-  const position = isRtl ? 'left' : 'right';
+  const uiDir = useSelector(state => settings.getUIDir(state.settings));
+  const position = uiDir === 'rtl' ? 'left' : 'right';
 
   const print = () => window.print();
 

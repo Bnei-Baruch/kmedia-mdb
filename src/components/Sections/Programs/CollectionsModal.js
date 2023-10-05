@@ -11,7 +11,6 @@ import {
 } from '../../../helpers/consts';
 
 import { selectors as settings } from '../../../redux/modules/settings';
-import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import CollectionItem from '../../FiltersAside/CollectionFilter/CollectionItem';
 
 const ITEMS_PER_ROW = 5;
@@ -31,8 +30,7 @@ export const cCtByUnitCt = {
 const CollectionsModal = ({ namespace, items, selectedCT, onClose, t }) => {
   const [query, setQuery] = useState('');
 
-  const language = useSelector(state => settings.getLanguage(state.settings));
-  const dir      = getLanguageDirection(language);
+  const uiDir = useSelector(state => settings.getUIDir(state.settings));
 
   const reg         = new RegExp(query, 'i');
   const collections = items.filter(x => !query || (x.name && reg.test(x.name)));
@@ -65,9 +63,9 @@ const CollectionsModal = ({ namespace, items, selectedCT, onClose, t }) => {
   return (
     <Modal
       open={!!selectedCT}
-      dir={dir}
+      dir={uiDir}
       onClose={handleClose}
-      className={clsx('filters_aside_tree_modal', { [dir]: true })}
+      className={clsx('filters_aside_tree_modal', { [uiDir]: true })}
       closeIcon={<Icon name="times circle outline" />}
       size="fullscreen"
     >

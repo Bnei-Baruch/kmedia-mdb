@@ -841,8 +841,14 @@
   },
   "languages": {
     "language": "שפה",
-    "website_language": "שפת האתר",
-    "content_language": "שפת תוכן"
+    "ui_language": "שפת ממשק:",
+    "content_languages": "שפות תוכן",
+    "add_languages": "להוסיף שפה...",
+    "show_all_content": "תציג כל התוכן",
+    "show_all_content_explanation": "התוכן יוצג בשפות אחרות גם כן.",
+    "url_language_prefix": "אתה משתמש בשפת ממשק {{lang}} מהלינק, תלחץ ",
+    "url_language_here": "כאן",
+    "url_language_suffix": " בשביל להשתמש בשפות שלך."
   },
   "share-text": {
     "message-title": "Read this fragment",

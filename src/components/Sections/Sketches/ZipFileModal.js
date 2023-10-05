@@ -3,7 +3,6 @@ import { withTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Modal, Button } from 'semantic-ui-react';
 import { selectors as assets } from '../../../redux/modules/assets';
-import { isLanguageRtl, getLanguageDirection } from '../../../helpers/i18n-utils';
 import { selectors as settings } from '../../../redux/modules/settings';
 import ImageGallery from 'react-image-gallery';
 import FallbackImage from '../../shared/FallbackImage';
@@ -14,7 +13,7 @@ const ZipFileModal = ({ id, path }) => {
   const [open, setOpen] = useState(false);
 
   const getZipById = useSelector(state => assets.nestedGetZipById(state.assets));
-  const language   = useSelector(state => settings.getLanguage(state.settings));
+  const uiDir      = useSelector(state => settings.getUIDir(state.settings));
   const ref        = useRef();
 
   const { data: { uniq, full } } = getZipById(id);
@@ -71,13 +70,13 @@ const ZipFileModal = ({ id, path }) => {
         onClose={() => setOpen(false)}
         closeIcon
       >
-        <Modal.Content dir={getLanguageDirection(language)}>
+        <Modal.Content dir={uiDir}>
           <ImageGallery
             startIndex={items.length - 1}
             ref={ref}
             lazyLoad
             showFullscreenButton
-            isRTL={isLanguageRtl(language)}
+            isRTL={uiDir === 'rtl'}
             items={items}
             thumbnailPosition="top"
             showPlayButton={false}

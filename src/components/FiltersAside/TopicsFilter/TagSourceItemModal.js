@@ -5,7 +5,6 @@ import { useSelector } from 'react-redux';
 import { Button, Icon, Input, Modal, Table } from 'semantic-ui-react';
 
 import { FN_TOPICS_MULTI } from '../../../helpers/consts';
-import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import { isEmpty } from '../../../helpers/utils';
 import { selectors as settings } from '../../../redux/modules/settings';
 import TagSourceItem from './TagSourceItem';
@@ -31,7 +30,7 @@ const TagSourceItemModal = props => {
 
   const [query, setQuery] = useState('');
 
-  const language = useSelector(state => settings.getLanguage(state.settings));
+  const uiDir = useSelector(state => settings.getUIDir(state.settings));
 
   if (!parent || !parent.children) return null;
 
@@ -42,7 +41,6 @@ const TagSourceItemModal = props => {
     onClose();
   };
 
-  const dir   = getLanguageDirection(language);
   const isTag = filterName === FN_TOPICS_MULTI;
   const field = isTag ? 'label' : 'name';
 
@@ -80,8 +78,8 @@ const TagSourceItemModal = props => {
   return (
     <Modal
       open={open}
-      className={clsx('filters_aside_tree_modal', { [dir]: true })}
-      dir={dir}
+      className={clsx('filters_aside_tree_modal', { [uiDir]: true })}
+      dir={uiDir}
       onClose={handleClose}
       closeIcon={<Icon name="times circle outline" />}
     >

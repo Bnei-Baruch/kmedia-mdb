@@ -12,7 +12,6 @@ import NeedToLogin from '../Sections/Personal/NeedToLogin';
 import { getMyItemKey } from '../../helpers/my';
 import { selectors as settings } from '../../redux/modules/settings';
 import { selectors as playlist } from '../../redux/modules/playlist';
-import { getLanguageDirection } from '../../helpers/i18n-utils';
 import { selectors as mdb } from '../../redux/modules/mdb';
 
 const SubscribeBtn = ({ t, collection }) => {
@@ -37,9 +36,8 @@ const SubscribeBtn = ({ t, collection }) => {
   }), [subsByCO, subsByType, id]);
   const { key }   = getMyItemKey(MY_NAMESPACE_SUBSCRIPTIONS, subParams);
 
-  const sub      = useSelector(state => myselector.getItemByKey(state.my, MY_NAMESPACE_SUBSCRIPTIONS, key));
-  const language = useSelector(state => settings.getLanguage(state.settings));
-  const dir      = getLanguageDirection(language);
+  const sub = useSelector(state => myselector.getItemByKey(state.my, MY_NAMESPACE_SUBSCRIPTIONS, key));
+  const dir = useSelector(state => settings.getUIDir(state.settings));
 
   let title;
   if (subsByCO) {

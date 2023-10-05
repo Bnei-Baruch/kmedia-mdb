@@ -459,6 +459,10 @@
   }
 }
 
+.publications-twitter {
+  max-width: 550px !important;
+}
+
 .tweet {
   margin-bottom: 1.5rem !important;
 
@@ -819,7 +823,7 @@
 
   .controller {
     display: flex;
-    align-items: baseline;
+    align-items: center;
 
     h4 {
       margin: 0 6px 0 0;
@@ -1275,6 +1279,74 @@
   }
 }
 
+.language-trigger {
+  cursor: pointer;
+}
+
+.language-close {
+  position: absolute;
+  top: 0.3em;
+  right: 0.3em;
+}
+
+.language-item {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.2em;
+  margin-bottom: 0.2em;
+  & .disabled {
+    opacity: .5;
+    color: #000;
+  }
+}
+
+.language-first-item {
+  border-top: 0 !important;
+  margin-right: 0.4em;
+}
+
+.language-first-item .dropdown.icon {
+  font-size: 1.5em !important;
+}
+
+.language-url {
+  color: red;
+  max-width: 16em;
+}
+
+.language-not-celled {
+  padding-top: 1em !important;
+  border-bottom: 0 !important;
+  display: flex !important;
+  justify-content: center;
+}
+
+.language-ui {
+  display: flex;
+  justify-content: space-around;
+}
+
+.content-languages-title {
+  text-align: center;
+  margin-top: 0.5em;
+}
+
+.ui.selection.dropdown .menu>.item.language-selection-divider {
+  background-color: black !important;
+  height: 2px !important;
+  padding: 0 !important;
+}
+
+.language-subtext {
+  font-size: 0.8em;
+  max-width: 19em;
+
+  &.disabled {
+    opacity: .5;
+    color: #000;
+  }
+}
+
 .handle-language-header {
   &.title {
     display: flex;
@@ -1390,7 +1462,7 @@
 }
 
 .ui.flowing.popup {
-  z-index: 10000;
+  z-index: 1899;
 }
 
 .ui.accordion.menu .item .title>.dropdown.icon {
