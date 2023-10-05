@@ -1,6 +1,6 @@
-import { PLAYER_ACTIONS_BY_EVENT, actions, playerSlice } from '../../lib/redux/slices/playerSlice/playerSlice';
-import { JWPLAYER_ID, VS_NAMES } from '../../src/helpers/consts';
-import { noop } from '../../src/helpers/utils';
+import { PLAYER_ACTIONS_BY_EVENT, playerSlice } from '@/lib/redux/slices/playerSlice/playerSlice';
+import { JWPLAYER_ID, VS_NAMES } from '@/src/helpers/consts';
+import { noop } from '@/src/helpers/utils';
 import isFunction from 'lodash/isFunction';
 
 export const LOCALSTORAGE_MUTE    = 'jwplayer.mute';

@@ -1,8 +1,9 @@
 import { Button } from 'semantic-ui-react';
-import Link from '../Language/MultiLanguageLink';
 import React from 'react';
-import { isEmpty } from '../../helpers/utils';
 import { useSelector } from 'react-redux';
+import Link from 'next/link';
+
+import { isEmpty } from '../../helpers/utils';
 import { selectors as mdb } from '../../../lib/redux/slices/mdbSlice/mdbSlice';
 import { selectors as tags } from '../../../lib/redux/slices/tagsSlice/tagsSlice';
 
@@ -24,7 +25,7 @@ const TagsByUnit = ({ id }) => {
         names
           .map((tag, index) =>
             <Button key={`${tag.id}${index}`} basic compact size="small">
-              <Link to={`/topics/${tag.id}`}>{tag.label}</Link>
+              <Link href={`/topics/${tag.id}`}>{tag.label}</Link>
             </Button>
           )
       }

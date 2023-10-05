@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import clsx from 'clsx';
 
 import { selectors } from '../../../../../../../lib/redux/slices/sourcesSlice';
-import { assetSlice, selectors as assetsSelectors } from '../../../../../../../lib/redux/slices/assetSlice/assetSlice';
+import { selectors as assetsSelectors } from '../../../../../../../lib/redux/slices/assetSlice/assetSlice';
 import { isEmpty, physicalFile, tracePath } from '../../../../../../helpers/utils';
 import { selectors as settings } from '../../../../../../../lib/redux/slices/settingsSlice/settingsSlice';
 import { getLanguageName, selectSuitableLanguage } from '../../../../../../helpers/language';
@@ -21,7 +21,7 @@ import Download from '../../../../../shared/Download/Download';
 import * as shapes from '../../../../../shapes';
 import UnitBar from '../UnitBar';
 import MenuLanguageSelector from '../../../../../Language/Selector/MenuLanguageSelector';
-import { doc2Html } from '../../../../../../../lib/redux/slices/assetSlice';
+import { doc2Html, sourceIndex } from '../../../../../../../lib/redux/slices/assetSlice';
 
 const isValidLikut = unit =>
   unit.content_type === CT_LIKUTIM
@@ -79,7 +79,7 @@ const Sources = ({ unit, t }) => {
   useEffect(() => {
     (unit.sources || [])
       .filter(s => isEmpty(indexById[s]))
-      .forEach(s => dispatch(assetSlice.actions.sourceIndex(s)));
+      .forEach(s => dispatch(sourceIndex(s)));
   }, [dispatch, indexById, unit.sources]);
 
   const sourcesDropDownOptions = useMemo(() => {

@@ -21,7 +21,7 @@
  *
  */
 
-import React from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { Icon, Menu } from 'semantic-ui-react';
 import clsx from 'clsx';
@@ -30,6 +30,8 @@ import { useSelector } from 'react-redux';
 import { noop } from '../../helpers/utils';
 import { isLanguageRtl } from '../../helpers/i18n-utils';
 import { selectors as settings } from '../../../lib/redux/slices/settingsSlice/settingsSlice';
+import { useRouter } from 'next/router';
+import { useSearchParams, usePathname } from 'next/navigation';
 
 const TITLES = {
   first: <Icon name="angle double left" />,
@@ -76,10 +78,14 @@ const renderPage = (content, value, key, disabled, onChange, active = false, exC
   );
 };
 
-const Pagination = ({ pageSize, total = 0, pageNo = 1, windowSize = 6, titles = TITLES, onChange = noop }) => {
-  const uiLang = useSelector(state => settings.getUILang(state.settings));
-  const isRTL = isLanguageRtl(uiLang);
+const Pagination = ({ pageSize = 20, total = 0, windowSize = 6, titles = TITLES }) => {
+  const uiLang       = useSelector(state => settings.getUILang(state.settings));
+  const isRTL        = isLanguageRtl(uiLang);
+  const router       = useRouter();
+  const searchParams = useSearchParams();
+  const pathname     = usePathname();
 
+  const pageNo                   = Number.parseInt(searchParams.get('page_no') || 1);
   const { current, totalBlocks } = calcBlocks({ total, pageSize, pageNo });
   const vr                       = visibleRange(current, totalBlocks, windowSize);
   if (vr.length === 0) {
@@ -89,6 +95,12 @@ const Pagination = ({ pageSize, total = 0, pageNo = 1, windowSize = 6, titles = 
   const title        = getTitle(titles);
   const prevDisabled = current === 1;
   const nextDisabled = current === totalBlocks;
+
+  const onChange = _pageNo => {
+    let _params = new URLSearchParams(searchParams.toString());
+    _params.set('page_no', _pageNo);
+    router.push(`${pathname}?${_params}`);
+  };
 
   return (
     <Menu icon compact className="pagination-menu" color="blue" size="tiny">
@@ -110,8 +122,6 @@ const Pagination = ({ pageSize, total = 0, pageNo = 1, windowSize = 6, titles = 
 Pagination.propTypes = {
   pageSize: PropTypes.number.isRequired,
   total: PropTypes.number,
-  pageNo: PropTypes.number,
-  onChange: PropTypes.func,
   windowSize: PropTypes.number,
   titles: PropTypes.shape({
     first: PropTypes.node,

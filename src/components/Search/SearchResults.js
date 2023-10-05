@@ -40,7 +40,7 @@ import {
 } from './SearchResultHooks';
 import DidYouMean from './DidYouMean';
 import Filters from './Filters';
-import FilterLabels from '../../../lib/filters/FiltersAside/FilterLabels';
+import FilterLabels from '../../../lib/filters/components/FilterLabels';
 import ScoreDebug from './ScoreDebug';
 import Helmets from '../shared/Helmets';
 

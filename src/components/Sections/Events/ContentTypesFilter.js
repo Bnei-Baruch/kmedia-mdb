@@ -3,9 +3,9 @@ import { withTranslation } from 'next-i18next';
 import { useSelector } from 'react-redux';
 import { CT_HOLIDAY, EVENT_PAGE_CTS, FN_CONTENT_TYPE } from '../../../helpers/consts';
 import { selectors } from '../../../../lib/redux/slices/filterSlice/filterStatsSlice';
-import ContentTypeItem from '../../../../lib/filters/FiltersAside/ContentTypeFilter/ContentTypeItem';
-import FilterHeader from '../../../../lib/filters/FiltersAside/FilterHeader';
 import Holidays from './Holidays';
+import FilterHeader from '../../../../lib/filters/components/FilterHeader';
+import ContentTypeItem from '../../../../lib/filters/components/ContentTypeFilter/ContentTypeItem';
 
 const ContentTypesFilter = ({ namespace, t }) => {
   const items = useSelector(state => selectors

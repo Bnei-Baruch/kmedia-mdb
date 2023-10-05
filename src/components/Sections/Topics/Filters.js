@@ -7,10 +7,10 @@ import { actions, selectors } from '../../../../lib/redux/slices/filterSlice/fil
 import FiltersHydrator from '../../Filters/FiltersHydrator';
 import { FN_SOURCES_MULTI } from '../../../helpers/consts';
 import { selectors as filters } from '../../../../lib/redux/slices/filterSlice/filterSlice';
-import DateFilter from '../../../../lib/filters/FiltersAside/DateFilter';
-import Language from '../../../../lib/filters/FiltersAside/LanguageFilter/Language';
-import ContentType from '../../../../lib/filters/FiltersAside/ContentTypeFilter/ContentType';
-import TagSourceFilter from '../../../../lib/filters/FiltersAside/TopicsFilter/TagSourceFilter';
+import DateFilter from '../../../../lib/filters/components/DateFilter';
+import Language from '../../../../lib/filters/components/LanguageFilter/Language';
+import ContentType from '../../../../lib/filters/components/ContentTypeFilter/ContentType';
+import TagSourceFilter from '../../../../lib/filters/components/TopicsFilter/TagSourceFilter';
 import SubTopics from './SubTopics';
 
 const Filters = ({ namespace, baseParams }) => {

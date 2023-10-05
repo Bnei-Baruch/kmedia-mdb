@@ -13,7 +13,7 @@ import { actions, selectors as lists } from '../../../../lib/redux/slices/listSl
 import { actions as assetsActions, selectors as assets } from '../../../../lib/redux/slices/assetSlice/assetSlice';
 import { selectors as settings } from '../../../../lib/redux/slices/settingsSlice/settingsSlice';
 
-import FilterLabels from '../../../../lib/filters/FiltersAside/FilterLabels';
+import FilterLabels from '../../../../lib/filters/components/FilterLabels';
 import Pagination from '../../Pagination/Pagination';
 import ResultsPageHeader from '../../Pagination/ResultsPageHeader';
 import { getPageFromLocation } from '../../Pagination/withPagination';

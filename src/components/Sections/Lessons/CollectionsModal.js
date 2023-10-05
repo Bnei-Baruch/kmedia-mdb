@@ -48,8 +48,9 @@ const CollectionsModal = ({ ct, namespace, t }) => {
 
   const handleSelect = (e, { checked }) => {
     const query = updateFiltersSearchParams(ct, checked, FN_CONTENT_TYPE, searchParams);
-    router.push({ query });
+    router.push({ query }, undefined, { scroll: false });
   };
+
   const renderRow    = (x, i) => (
     <Table.Row key={i} verticalAlign="top">
       {collections.slice(i * ITEMS_PER_ROW, (i + 1) * ITEMS_PER_ROW).map(renderItem)}

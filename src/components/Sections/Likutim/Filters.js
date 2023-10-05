@@ -7,10 +7,10 @@ import { FN_TOPICS_MULTI } from '../../../helpers/consts';
 import { selectors as filters } from '../../../../lib/redux/slices/filterSlice/filterSlice';
 import { actions, selectors } from '../../../../lib/redux/slices/filterSlice/filterStatsSlice';
 import FiltersHydrator from '../../Filters/FiltersHydrator';
-import CuNameFilter from '../../../../lib/filters/FiltersAside/CuNameFilter';
-import DateFilter from '../../../../lib/filters/FiltersAside/DateFilter';
-import Language from '../../../../lib/filters/FiltersAside/LanguageFilter/Language';
-import TagSourceFilter from '../../../../lib/filters/FiltersAside/TopicsFilter/TagSourceFilter';
+import CuNameFilter from '../../../../lib/filters/components/CuNameFilter';
+import DateFilter from '../../../../lib/filters/components/DateFilter';
+import Language from '../../../../lib/filters/components/LanguageFilter/Language';
+import TagSourceFilter from '../../../../lib/filters/components/TopicsFilter/TagSourceFilter';
 
 const Filters = ({ namespace, baseParams }) => {
   const [isHydrated, setIsHydrated] = useState(false);

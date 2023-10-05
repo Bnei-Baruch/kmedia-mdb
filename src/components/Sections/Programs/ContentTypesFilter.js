@@ -9,7 +9,7 @@ import { FN_COLLECTION_MULTI, FN_CONTENT_TYPE, UNIT_PROGRAMS_TYPE } from '../../
 import { withTranslation } from 'next-i18next';
 import { selectors as mdb } from '../../../../lib/redux/slices/mdbSlice/mdbSlice';
 import { selectors as settings } from '../../../../lib/redux/slices/settingsSlice/settingsSlice';
-import FilterHeader from '../../../../lib/filters/FiltersAside/FilterHeader';
+import FilterHeader from '../../../../lib/filters/components/FilterHeader';
 import CollectionsModal, { cCtByUnitCt } from './CollectionsModal';
 
 const ContentTypesFilter = ({ namespace, t }) => {
@@ -19,7 +19,7 @@ const ContentTypesFilter = ({ namespace, t }) => {
   const uiDir               = useSelector(state => settings.getUIDir(state.settings));
   const ids                 = useSelector(state => selectors.getTree(state.filterStats, namespace, FN_COLLECTION_MULTI));
   const getById             = useSelector(state => mdb.nestedGetCollectionById(state.mdb));
-  const selectedCollections = useSelector(state => filters.getFilterByName(state.filters, namespace, FN_COLLECTION_MULTI));
+  const selectedCollections = useSelector(state => filters.getFilterByName(state.filters, namespace, FN_COLLECTION_MULTI)) || [];
   const indeterminateCT     = useMemo(() => cCtByUnitCt[getById(selectedCollections[0])?.content_type], [selectedCollections, getById]);
 
   const itemsMemo = useMemo(() => ids.map(getById).filter(x => !!x), [ids, getById]);

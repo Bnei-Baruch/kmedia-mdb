@@ -8,13 +8,13 @@ import { selectors as search, actions as searchActions } from '../../../lib/redu
 import { FN_SORT_BY_FILTER, FN_TOPICS_MULTI, FN_SOURCES_MULTI } from '../../helpers/consts';
 
 import FiltersHydrator from '../Filters/FiltersHydrator';
-import FilterHeader from '../../../lib/filters/FiltersAside/FilterHeader';
-import Language from '../../../lib/filters/FiltersAside/LanguageFilter/Language';
-import DateFilter from '../../../lib/filters/FiltersAside/DateFilter';
-import TagSourceFilter from '../../../lib/filters/FiltersAside/TopicsFilter/TagSourceFilter';
-import ContentType from '../../../lib/filters/FiltersAside/ContentTypeFilter/ContentType';
-import PersonFilter from '../../../lib/filters/FiltersAside/PersonFilter/Person';
-import OriginalLanguageFilter from '../../../lib/filters/FiltersAside/OriginalLanguageFilter/OriginalLanguage';
+import FilterHeader from '../../../lib/filters/components/FilterHeader';
+import Language from '../../../lib/filters/components/LanguageFilter/Language';
+import DateFilter from '../../../lib/filters/components/DateFilter';
+import TagSourceFilter from '../../../lib/filters/components/TopicsFilter/TagSourceFilter';
+import ContentType from '../../../lib/filters/components/ContentTypeFilter/ContentType';
+import PersonFilter from '../../../lib/filters/components/PersonFilter/Person';
+import OriginalLanguageFilter from '../../../lib/filters/components/OriginalLanguageFilter/OriginalLanguage';
 
 const SORTS = ['relevance', 'newertoolder', 'oldertonewer'];
 

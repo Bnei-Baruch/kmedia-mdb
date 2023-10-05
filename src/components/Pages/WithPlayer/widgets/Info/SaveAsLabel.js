@@ -7,7 +7,7 @@ import { DeviceInfoContext } from '../../../../../helpers/app-contexts';
 import { useTranslation } from 'next-i18next';
 import TagVideoLabelBtn from './TagVideoLabelBtn';
 import { ADD_PLAYLIST_ITEM_MODES } from './SavePlaylistItemBtn';
-import { actions as playerActions } from '../../../../../../lib/redux/slices/playerSlice/playerSlice';
+import { actions as playerActions, playerSlice } from '../../../../../../lib/redux/slices/playerSlice/playerSlice';
 import { PLAYER_OVER_MODES } from '../../../../../helpers/consts';
 
 const SaveAsLabel = ({ label, setModalMode }) => {
@@ -23,7 +23,7 @@ const SaveAsLabel = ({ label, setModalMode }) => {
   const handleClose = () => {
     setModalMode(ADD_PLAYLIST_ITEM_MODES.none);
     setConfirm(false);
-    dispatch(playerActions.setOverMode(PLAYER_OVER_MODES.none));
+    dispatch(playerSlice.actions.setOverMode(PLAYER_OVER_MODES.none));
   };
 
   return (

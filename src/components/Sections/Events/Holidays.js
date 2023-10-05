@@ -4,14 +4,13 @@ import { withTranslation } from 'next-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Checkbox, Icon, Input, List, Modal, Table } from 'semantic-ui-react';
 import { CT_HOLIDAY, FN_COLLECTION_MULTI, FN_CONTENT_TYPE } from '../../../helpers/consts';
-import { getLanguageDirection, isLanguageRtl } from '../../../helpers/i18n-utils';
 import { isEmpty } from '../../../helpers/utils';
 import { actions, selectors as filters } from '../../../../lib/redux/slices/filterSlice/filterSlice';
 import { selectors as filtersAside, selectors } from '../../../../lib/redux/slices/filterSlice/filterStatsSlice';
 import { selectors as mdb } from '../../../../lib/redux/slices/mdbSlice/mdbSlice';
 
 import { selectors as settings } from '../../../../lib/redux/slices/settingsSlice/settingsSlice';
-import CollectionItem from '../../../../lib/filters/FiltersAside/CollectionFilter/CollectionItem';
+import CollectionItem from '../../../../lib/filters/components/CollectionFilter/CollectionItem';
 
 const ITEMS_PER_ROW = 5;
 const buildRowArr   = n => {

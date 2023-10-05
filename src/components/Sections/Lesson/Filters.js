@@ -8,9 +8,9 @@ import { Container, Header } from 'semantic-ui-react';
 import { FN_SOURCES_MULTI, FN_TOPICS_MULTI } from '../../../helpers/consts';
 import { selectors as filters } from '../../../../lib/redux/slices/filterSlice/filterSlice';
 import FiltersHydrator from '../../Filters/FiltersHydrator';
-import Language from '../../../../lib/filters/FiltersAside/LanguageFilter/Language';
-import DateFilter from '../../../../lib/filters/FiltersAside/DateFilter';
-import TagSourceFilter from '../../../../lib/filters/FiltersAside/TopicsFilter/TagSourceFilter';
+import Language from '../../../../lib/filters/components/LanguageFilter/Language';
+import DateFilter from '../../../../lib/filters/components/DateFilter';
+import TagSourceFilter from '../../../../lib/filters/components/TopicsFilter/TagSourceFilter';
 
 const Filters = ({ namespace, baseParams }) => {
   const [isHydrated, setIsHydrated] = useState(false);

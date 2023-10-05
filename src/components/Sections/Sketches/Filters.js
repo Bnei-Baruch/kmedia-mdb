@@ -8,10 +8,10 @@ import { FN_SOURCES_MULTI, FN_TOPICS_MULTI } from '../../../helpers/consts';
 import { selectors as filters } from '../../../../lib/redux/slices/filterSlice/filterSlice';
 import { actions, selectors } from '../../../../lib/redux/slices/filterSlice/filterStatsSlice';
 import FiltersHydrator from '../../Filters/FiltersHydrator';
-import DateFilter from '../../../../lib/filters/FiltersAside/DateFilter';
-import Language from '../../../../lib/filters/FiltersAside/LanguageFilter/Language';
-import OriginalLanguageFilter from '../../../../lib/filters/FiltersAside/OriginalLanguageFilter/OriginalLanguage';
-import TagSourceFilter from '../../../../lib/filters/FiltersAside/TopicsFilter/TagSourceFilter';
+import DateFilter from '../../../../lib/filters/components/DateFilter';
+import Language from '../../../../lib/filters/components/LanguageFilter/Language';
+import OriginalLanguageFilter from '../../../../lib/filters/components/OriginalLanguageFilter/OriginalLanguage';
+import TagSourceFilter from '../../../../lib/filters/components/TopicsFilter/TagSourceFilter';
 import ContentTypeFilter from './ContentTypeFilter';
 
 const Filters = ({ namespace, baseParams }) => {

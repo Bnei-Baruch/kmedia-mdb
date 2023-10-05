@@ -4,7 +4,7 @@ import { wrapper } from '../../../lib/redux';
 import { actions as mdbActions } from '../../../lib/redux/slices/mdbSlice/mdbSlice';
 import { COLLECTION_DAILY_LESSONS, CT_VIRTUAL_LESSONS } from '../../../src/helpers/consts';
 import { actions } from '../../../lib/redux/slices/playlistSlice/playlistSlice';
-import { fetchUnit, fetchCollection, fetchCollectionsByIDs } from '../../../lib/redux/slices/mdbSlice';
+import { fetchUnit, fetchCollection, fetchCollections, fetchSQData } from '../../../lib/redux/slices/mdbSlice';
 import { buildPlaylist } from '../../../lib/redux/slices/playlistSlice/thunks';
 import PlaylistPage from '../../../src/components/Pages/WithPlayer/Playlist/PlaylistPage';
 import PlayerContainer from '../../../lib/Player/PlayerContainer';
@@ -12,6 +12,7 @@ import PlayerContainer from '../../../lib/Player/PlayerContainer';
 const cts                       = [...COLLECTION_DAILY_LESSONS, CT_VIRTUAL_LESSONS];
 export const getServerSideProps = wrapper.getServerSideProps(store => async (context) => {
   const lang = context.locale ?? 'en';
+  await store.dispatch(fetchSQData());
   let cId    = context.query.c;
   const cuId = context.params.id;
   if (!cId) {
@@ -30,9 +31,7 @@ const PlayerPage = ({ embed }) => {
 
   if (embed) return playerContainer;
   return (
-    <PlaylistPage
-      playerContainer={playerContainer}
-    />
+    <PlaylistPage playerContainer={playerContainer} />
   );
 };
 export default PlayerPage;

@@ -20,7 +20,7 @@ import WipErr from '../../../../src/components/shared/WipErr/WipErr';
 import Filters from '../../../../src/components/Sections/Lesson/Filters';
 import ItemOfList from '../../../../src/components/Sections/Lesson/ItemOfList';
 import { wrapper } from '../../../../lib/redux';
-import { fetchSQData } from '../../../../lib/redux/slices/sourcesSlice';
+import { fetchSQData } from '../../../../lib/redux/slices/mdbSlice';
 import { filtersTransformer } from '../../../../lib/filters';
 import { fetchSectionList } from '../../../../lib/redux/slices/listSlice/thunks';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
@@ -30,7 +30,6 @@ import FilterLabels from '../../../../lib/filters/components/FilterLabels';
 export const getServerSideProps = wrapper.getServerSideProps(store => async (context) => {
   const lang      = context.locale ?? 'en';
   const namespace = PAGE_NS_LESSONS;
-  await store.dispatch(fetchSQData());
 
   const filters = filtersTransformer.fromQueryParams(context.query);
   store.dispatch(filterSlice.actions.hydrateNamespace({ namespace, filters }));

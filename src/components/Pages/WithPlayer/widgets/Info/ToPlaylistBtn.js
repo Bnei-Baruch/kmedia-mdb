@@ -1,6 +1,6 @@
 import { useTranslation } from 'next-i18next';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectors, actions } from '../../../../../../lib/redux/slices/playerSlice/playerSlice';
+import { selectors, actions, playerSlice } from '../../../../../../lib/redux/slices/playerSlice/playerSlice';
 import { stopBubbling } from '../../../../../helpers/utils';
 import { PLAYER_OVER_MODES } from '../../../../../helpers/consts';
 import { Button } from 'semantic-ui-react';
@@ -16,7 +16,7 @@ export const ToPlaylistBtn = () => {
   const handleOpen = e => {
     stopBubbling(e);
     const newMode = (mode === PLAYER_OVER_MODES.playlist) ? PLAYER_OVER_MODES.none : PLAYER_OVER_MODES.playlist;
-    dispatch(actions.setOverMode(newMode));
+    dispatch(playerSlice.actions.setOverMode(newMode));
   };
 
   return (

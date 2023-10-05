@@ -806,3 +806,5 @@ export const PLAYER_OVER_MODES = {
 };
 
 export const KC_BOT_USER_NAME = '@__||bot||__@';
+
+export const MAX_PAGE_SIZE = 1000

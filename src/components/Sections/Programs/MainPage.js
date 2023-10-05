@@ -11,7 +11,7 @@ import { actions, selectors as lists } from '../../../../lib/redux/slices/listSl
 
 import { actions as prepareActions } from '../../../../lib/redux/slices/preparePageSlice/preparePageSlice';
 import { selectors as settings } from '../../../../lib/redux/slices/settingsSlice/settingsSlice';
-import FilterLabels from '../../../../lib/filters/FiltersAside/FilterLabels';
+import FilterLabels from '../../../../lib/filters/components/FilterLabels';
 import Pagination from '../../Pagination/Pagination';
 import ResultsPageHeader from '../../Pagination/ResultsPageHeader';
 import { getPageFromLocation } from '../../Pagination/withPagination';
@@ -21,7 +21,7 @@ import WipErr from '../../shared/WipErr/WipErr';
 import Filters from './Filters';
 import ItemOfList from './ItemOfList';
 
-const FILTER_PARAMS = { content_type: [...COLLECTION_PROGRAMS_TYPE, ...UNIT_PROGRAMS_TYPE] };
+
 
 const MainPage = () => {
   const { items, total, wip, err } = useSelector(state => lists.getNamespaceState(state.lists, PAGE_NS_PROGRAMS)) || {};

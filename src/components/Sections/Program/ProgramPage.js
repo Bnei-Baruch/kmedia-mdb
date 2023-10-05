@@ -12,7 +12,7 @@ import { actions, selectors as lists } from '../../../../lib/redux/slices/listSl
 
 import { selectors as mdb } from '../../../../lib/redux/slices/mdbSlice/mdbSlice';
 import { selectors as settings } from '../../../../lib/redux/slices/settingsSlice/settingsSlice';
-import FilterLabels from '../../../../lib/filters/FiltersAside/FilterLabels';
+import FilterLabels from '../../../../lib/filters/components/FilterLabels';
 import PageHeader from '../../Pages/Collection/Header';
 import Pagination from '../../Pagination/Pagination';
 import ResultsPageHeader from '../../Pagination/ResultsPageHeader';

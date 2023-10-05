@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import moment from 'moment/moment';
 import { withTranslation } from 'next-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -7,16 +7,13 @@ import { Button, Popup } from 'semantic-ui-react';
 import { selectors as player } from '../../../lib/redux/slices/playerSlice/playerSlice';
 import { selectors as playlist } from '../../../lib/redux/slices/playlistSlice/playlistSlice';
 import { trimSlice } from '../../../lib/redux/slices/trimSlice';
-import { ClientChroniclesContext } from '../../helpers/app-contexts';
-import { toHumanReadableTime } from '../../helpers/time';
-import { noop } from '../../helpers/utils';
 import { MT_VIDEO, LANGUAGES } from '../../helpers/consts';
 
 const TrimBtn = ({ t }) => {
   const [open, setOpen] = useState(false);
 
-  const chronicles       = useContext(ClientChroniclesContext);
-  const chroniclesAppend = chronicles ? chronicles.append.bind(chronicles) : noop;
+  //const chronicles       = useContext(ClientChroniclesContext);
+  //const chroniclesAppend = chronicles ? chronicles.append.bind(chronicles) : noop;
 
   const { start, end: _end }             = useSelector(state => player.getShareStartEnd(state.player));
   const file                             = useSelector(state => player.getFile(state.player));
@@ -42,12 +39,12 @@ const TrimBtn = ({ t }) => {
       (mediaType === MT_VIDEO) && (params.video = quality.toLowerCase());
     }
     dispatch(trimSlice.actions.trim(params));
-    chroniclesAppend('download', {
+    /*chroniclesAppend('download', {
       url: file.src,
       uid: file.id,
       sstart: toHumanReadableTime(start),
       send: toHumanReadableTime(end)
-    });
+    });*/
   };
 
   return (

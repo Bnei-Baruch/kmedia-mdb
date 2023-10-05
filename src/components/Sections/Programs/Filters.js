@@ -1,66 +1,67 @@
-import { isEqual } from 'lodash';
-import React, { useEffect, useState, useRef } from 'react';
+'use client';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'next-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Container, Header } from 'semantic-ui-react';
 
 import { COLLECTION_PROGRAMS_TYPE, FN_SOURCES_MULTI, FN_TOPICS_MULTI, PAGE_NS_PROGRAMS } from '../../../helpers/consts';
-import { selectors as filters } from '../../../../lib/redux/slices/filterSlice/filterSlice';
-import { actions, selectors } from '../../../../lib/redux/slices/filterSlice/filterStatsSlice';
-import { actions as prepareActions } from '../../../../lib/redux/slices/preparePageSlice/preparePageSlice';
-import { selectors as settings } from '../../../../lib/redux/slices/settingsSlice/settingsSlice';
-import FiltersHydrator from '../../Filters/FiltersHydrator';
-import DateFilter from '../../../../lib/filters/FiltersAside/DateFilter';
-import Language from '../../../../lib/filters/FiltersAside/LanguageFilter/Language';
-import MediaTypeFilter from '../../../../lib/filters/FiltersAside/MediaTypeFilter/MediaType';
-import OriginalLanguageFilter from '../../../../lib/filters/FiltersAside/OriginalLanguageFilter/OriginalLanguage';
-import TagSourceFilter from '../../../../lib/filters/FiltersAside/TopicsFilter/TagSourceFilter';
+import { selectors } from '../../../../lib/redux/slices/filterSlice/filterStatsSlice';
+import DateFilter from '../../../../lib/filters/components/DateFilter';
+import Language from '../../../../lib/filters/components/LanguageFilter/Language';
+import MediaTypeFilter from '../../../../lib/filters/components/MediaTypeFilter/MediaType';
+import OriginalLanguageFilter from '../../../../lib/filters/components/OriginalLanguageFilter/OriginalLanguage';
+import TagSourceFilter from '../../../../lib/filters/components/TopicsFilter/TagSourceFilter';
 import ContentTypesFilter from './ContentTypesFilter';
+import { fetchPreparePage } from '../../../../lib/redux/slices/preparePageSlice/thunks';
+import { fetchStats } from '../../../../lib/redux/slices/filterSlice/thunks';
 
 const Filters = ({ namespace, baseParams }) => {
   const { t } = useTranslation();
-  const [isHydrated, setIsHydrated] = useState(false);
 
-  const isReady  = useSelector(state => selectors.isReady(state.filterStats, namespace));
-  const selected = useSelector(state => filters.getNotEmptyFilters(state.filters, namespace), isEqual);
-  const contentLanguages = useSelector(state => settings.getContentLanguages(state.settings));
-  const prevSelRef = useRef(-1);
+  const { wip, err, needRefresh, isReady } = useSelector(state => selectors.getStatus(state.filterStats, namespace));
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(prepareActions.fetchCollections(PAGE_NS_PROGRAMS, { content_type: COLLECTION_PROGRAMS_TYPE }));
-  }, [contentLanguages, dispatch]);
+    if (!isReady && !wip && !err) {
+      dispatch(fetchPreparePage({ namespace: PAGE_NS_PROGRAMS, content_type: COLLECTION_PROGRAMS_TYPE }));
+    }
+  }, [isReady, wip, err, dispatch]);
 
   useEffect(() => {
-    if (!isReady) {
-      dispatch(actions.fetchStats(namespace, {
-        ...baseParams,
-        with_media: true,
-        with_original_languages: true,
-        with_collections: true,
-      }, { isPrepare: true }));
+    if (!isReady && !wip && !err) {
+      const _args = {
+        namespace,
+        isPrepare: true,
+        params: {
+          ...baseParams,
+          with_media: true,
+          with_original_languages: true,
+          with_collections: true,
+        }
+      };
+      dispatch(fetchStats(_args));
     }
-  }, [dispatch, isReady, baseParams]);
+  }, [isReady, baseParams, wip, err, namespace, dispatch]);
 
-  const selLen = selected.reduce((acc, x) => acc + x.values.length, 0);
   useEffect(() => {
-    if (isHydrated && isReady && prevSelRef.current !== selLen) {
-      dispatch(actions.fetchStats(namespace, {
-        ...baseParams,
-        with_media: true,
-        with_original_languages: true,
-        with_collections: true,
-      }, { isPrepare: false }));
-      prevSelRef.current = selLen;
+    if (isReady && needRefresh) {
+      const _args = {
+        namespace,
+        isPrepare: false,
+        params: {
+          ...baseParams,
+          with_media: true,
+          with_original_languages: true,
+          with_collections: true,
+        }
+      };
+      dispatch(fetchStats(_args));
     }
-  }, [dispatch, isHydrated, isReady, namespace, baseParams, selLen]);
-
-  const handleOnHydrated = () => setIsHydrated(true);
+  }, [isReady, needRefresh, baseParams, namespace, dispatch]);
 
   return (
     <Container className="padded">
-      <FiltersHydrator namespace={namespace} onHydrated={handleOnHydrated} />
       <Header as="h3" content={t('filters.aside-filter.filters-title')} />
       <ContentTypesFilter namespace={namespace} />
       <TagSourceFilter namespace={namespace} filterName={FN_TOPICS_MULTI} />

@@ -2,11 +2,12 @@ import React, { useContext } from 'react';
 import { useTranslation } from 'next-i18next';
 import ContentItemContainer from '../../../shared/ContentItem/ContentItemContainer';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectors, actions } from '../../../../../lib/redux/slices/playlistSlice/playlistSlice';
+import { selectors, playlistSlice } from '../../../../../lib/redux/slices/playlistSlice/playlistSlice';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import { Header, Button, Container } from 'semantic-ui-react';
 import { selectors as mdb } from '../../../../../lib/redux/slices/mdbSlice/mdbSlice';
 import { COLLECTION_DAILY_LESSONS } from '../../../../helpers/consts';
+import { fetchShowData } from '../../../../../lib/redux/slices/playlistSlice/thunks';
 
 const PLAYLIST_ITEM_HEIGHT        = 104;
 const PLAYLIST_ITEM_HEIGHT_MOBILE = 128;
@@ -22,13 +23,13 @@ const PlaylistItems               = () => {
   const title                  = COLLECTION_DAILY_LESSONS.includes(content_type) ? t('constants.content-types.DAILY_LESSON') : name;
 
   const dispatch       = useDispatch();
-  const handleLoadMore = dir => dispatch(actions.fetchShowData(dir));
+  const handleLoadMore = dir => dispatch(fetchShowData(dir));
   const handleScroll   = e => {
     if (timer !== null) clearTimeout(timer);
     timer = setTimeout(function () {
       const h   = isMobileDevice ? PLAYLIST_ITEM_HEIGHT_MOBILE : PLAYLIST_ITEM_HEIGHT;
       const idx = from + Math.max(0, Math.round(e.target.scrollTop / h));
-      dispatch(actions.showImages(idx));
+      dispatch(playlistSlice.actions.showImages(idx));
     }, 150);
   };
 

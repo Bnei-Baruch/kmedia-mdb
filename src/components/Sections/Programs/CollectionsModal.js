@@ -11,7 +11,7 @@ import {
 } from '../../../helpers/consts';
 
 import { selectors as settings } from '../../../../lib/redux/slices/settingsSlice/settingsSlice';
-import CollectionItem from '../../../../lib/filters/FiltersAside/CollectionFilter/CollectionItem';
+import CollectionItem from '../../../../lib/filters/components/CollectionFilter/CollectionItem';
 
 const ITEMS_PER_ROW = 5;
 const buildRowArr   = n => {

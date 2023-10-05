@@ -5,12 +5,10 @@ import '../styles/global.scss';
 import Layout from './Layout';
 import { Provider } from 'react-redux';
 import { Providers } from '../lib/providers';
-import Script from 'next/script';
+import { fetchSQData } from '../lib/redux/slices/mdbSlice';
 
 const KmediaApp = ({ Component, ...rest }) => {
   const { store, props } = wrapper.useWrappedStore(rest);
-
-  //await store.dispatch(fetchSQData());
   return (
     <Provider store={store}>
       <Providers>
@@ -21,28 +19,10 @@ const KmediaApp = ({ Component, ...rest }) => {
     </Provider>
   );
 };
-/*
-class KmediaApp extends App {
-  //TODO: try to use getStaticProps
-  static getInitialProps = wrapper.getInitialAppProps(store => async context => {
-    await store.dispatch(fetchSQData());
 
-    return {
-      // https://nextjs.org/docs/advanced-features/custom-app#caveats
-      pageProps: { ...(await App.getInitialProps(context)).pageProps },
-    };
-  });
-
-  render() {
-    const { Component, pageProps } = this.props;
-
-    return (
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
-    );
-  }
-}
-*/
+KmediaApp.getInitialProps = wrapper.getInitialAppProps(store => async ({ locale }) => {
+  await store.dispatch(fetchSQData());
+  return {};
+});
 
 export default appWithTranslation(KmediaApp);

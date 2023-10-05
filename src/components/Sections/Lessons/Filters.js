@@ -4,7 +4,7 @@ import { useTranslation } from 'next-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Container, Header } from 'semantic-ui-react';
 import { FN_SOURCES_MULTI, FN_TOPICS_MULTI, CT_VIRTUAL_LESSONS } from '../../../helpers/consts';
-import { fetchStat } from '../../../../lib/redux/slices/filterSlice/thunks';
+import { fetchStats } from '../../../../lib/redux/slices/filterSlice/thunks';
 import DateFilter from '../../../../lib/filters/components/DateFilter';
 import Language from '../../../../lib/filters/components/LanguageFilter/Language';
 import MediaTypeFilter from '../../../../lib/filters/components/MediaTypeFilter/MediaType';
@@ -42,7 +42,7 @@ const Filters = ({ namespace, baseParams }) => {
            with_original_languages: true,
          }
        };
-       dispatch(fetchStat(_args));
+       dispatch(fetchStats(_args));
      }
    }, [isReady, baseParams, wip, err, namespace, dispatch]);
 
@@ -60,7 +60,7 @@ const Filters = ({ namespace, baseParams }) => {
            with_original_languages: true,
          }
        };
-       dispatch(fetchStat(_args));
+       dispatch(fetchStats(_args));
      }
    }, [isReady, needRefresh, baseParams, namespace, dispatch]);
 

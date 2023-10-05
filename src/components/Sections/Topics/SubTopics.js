@@ -3,13 +3,13 @@ import { useSelector } from 'react-redux';
 import { selectors } from '../../../../lib/redux/slices/filterSlice/filterStatsSlice';
 import { FN_TOPICS_MULTI } from '../../../helpers/consts';
 import { selectors as tags } from '../../../../lib/redux/slices/tagsSlice/tagsSlice';
-import TagSourceItem from '../../../../lib/filters/FiltersAside/TopicsFilter/TagSourceItem';
-import TagSourceItemModal from '../../../../lib/filters/FiltersAside/TopicsFilter/TagSourceItemModal';
+import TagSourceItem from '../../../../lib/filters/components/TopicsFilter/TagSourceItem';
+import TagSourceItemModal from '../../../../lib/filters/components/TopicsFilter/TagSourceItemModal';
 import { useTranslation } from 'next-i18next';
 import { selectors as filters } from '../../../../lib/redux/slices/filterSlice/filterSlice';
-import FilterHeader from '../../../../lib/filters/FiltersAside/FilterHeader';
+import FilterHeader from '../../../../lib/filters/components/FilterHeader';
 import { Button, Input } from 'semantic-ui-react';
-import RenderAsList from '../../../../lib/filters/FiltersAside/TopicsFilter/RenderAsList';
+import RenderAsList from '../../../../lib/filters/components/TopicsFilter/RenderAsList';
 
 const MAX_SHOWED_ITEMS  = 10;
 const getItemsRecursive = (rootID, getById, base) => {

@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Checkbox, Icon, Input, List, Modal, Divider } from 'semantic-ui-react';
 
-import { actions, selectors } from '../../../../../../lib/redux/slices/mySlice/mySlice';
+import { mySlice, selectors } from '../../../../../../lib/redux/slices/mySlice/mySlice';
 import { selectors as settings } from '../../../../../../lib/redux/slices/settingsSlice/settingsSlice';
 import { selectors as playlist } from '../../../../../../lib/redux/slices/playlistSlice/playlistSlice';
-import { actions as playerActions } from '../../../../../../lib/redux/slices/playerSlice/playerSlice';
+import { playerSlice } from '../../../../../../lib/redux/slices/playerSlice/playerSlice';
 import { MY_NAMESPACE_PLAYLIST_EDIT, MY_NAMESPACE_PLAYLISTS, PLAYER_OVER_MODES } from '../../../../../helpers/consts';
 import { getLanguageDirection } from '../../../../../helpers/i18n-utils';
 import { useTranslation } from 'next-i18next';
@@ -30,7 +30,7 @@ const SaveAsPlaylistItem = ({ setModalMode, label }) => {
   const dir = getLanguageDirection(language);
 
   useEffect(() => {
-    dispatch(actions.fetch(MY_NAMESPACE_PLAYLIST_EDIT, { 'exist_cu': cuId, order_by: 'id DESC' }));
+    dispatch(mySlice.actions.fetch(MY_NAMESPACE_PLAYLIST_EDIT, { 'exist_cu': cuId, order_by: 'id DESC' }));
   }, []);
 
   const handleChange = (checked, p) => {
@@ -46,13 +46,13 @@ const SaveAsPlaylistItem = ({ setModalMode, label }) => {
   const handleCancel = () => {
     setIsNew(false);
     setModalMode(ADD_PLAYLIST_ITEM_MODES.none);
-    dispatch(playerActions.setOverMode(PLAYER_OVER_MODES.none));
+    dispatch(playerSlice.actions.setOverMode(PLAYER_OVER_MODES.none));
   };
 
   const handleSave = () => {
     const { properties } = label;
 
-    selected.forEach(p => dispatch(actions.add(MY_NAMESPACE_PLAYLISTS, {
+    selected.forEach(p => dispatch(mySlice.actions.add(MY_NAMESPACE_PLAYLISTS, {
       id: p.id,
       items: [{ position: -1, content_unit_uid: cuId, name, properties }],
       changeItems: true

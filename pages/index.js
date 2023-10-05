@@ -16,7 +16,7 @@ import WipErr from '/src/components/shared/WipErr/WipErr';
 import HomePage from '../src/components/Sections/Home/HomePage';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { wrapper } from '../lib/redux';
-import { fetchSQData } from '../lib/redux/slices/sourcesSlice';
+import { fetchSQData } from '../lib/redux/slices/mdbSlice';
 
 const FETCH_TIMEOUT = 10 * 60 * 1000; // every 10 min
 
