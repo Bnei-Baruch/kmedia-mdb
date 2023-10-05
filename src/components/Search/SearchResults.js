@@ -106,7 +106,6 @@ const SearchResults = ({ t }) => {
 
   const pageNo   = useSelector(state => selectors.getPageNo(state.search));
   const pageSize = useSelector(state => settings.getPageSize(state.settings));
-  const language = useSelector(state => settings.getLanguage(state.settings));
 
   const location = useLocation();
   const dispatch = useDispatch();
@@ -258,7 +257,6 @@ const SearchResults = ({ t }) => {
             pageNo={pageNo}
             pageSize={pageSize}
             total={totalForPagination}
-            language={language}
             onChange={handlePageChange}
           />}
         </Container>

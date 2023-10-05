@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Breadcrumb, Button, Container, Divider, Modal } from 'semantic-ui-react';
-import { getLanguageDirection, isLanguageRtl } from '../../../helpers/i18n-utils';
 
 import { selectors } from '../../../redux/modules/tags';
 import { selectors as settings } from '../../../redux/modules/settings';
@@ -21,15 +20,14 @@ const RenderPageMobile = () => {
   const [openFilters, setOpenFilters] = useState(false);
 
   const getPathByID = useSelector(state => selectors.getPathByID(state.tags));
-  const language    = useSelector(state => settings.getLanguage(state.settings));
-  const dir         = getLanguageDirection(language);
+  const uiDir       = useSelector(state => settings.getUIDir(state.settings));
 
   const tagPath = getPathByID(id);
 
   // create breadCrumb sections from tagPath
   const breadCrumbSections = [{ id: '', label: t('nav.sidebar.topics') }, ...tagPath].map(getBreadCrumbSection);
 
-  const breadCrumbIcon = `${isLanguageRtl(language) ? 'left' : 'right'} angle`;
+  const breadCrumbIcon = `${uiDir === 'rtl' ? 'left' : 'right'} angle`;
   const closeFilters   = () => setOpenFilters(false);
   return (
     <>
@@ -37,8 +35,8 @@ const RenderPageMobile = () => {
         closeIcon
         open={openFilters}
         onClose={closeFilters}
-        dir={dir}
-        className={dir}
+        dir={uiDir}
+        className={uiDir}
       >
         <Modal.Content className="filters-aside-wrapper" scrolling>
           <Filters

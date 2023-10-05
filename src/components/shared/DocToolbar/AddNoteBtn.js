@@ -2,16 +2,14 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Popup } from 'semantic-ui-react';
 import NoteModal from '../NoteModal';
-import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import { useSelector } from 'react-redux';
 import { selectors as settings } from '../../../redux/modules/settings';
 
 const AddNoteBtn = ({ properties, toggleToolbar }) => {
   const [open, setOpen] = useState(false);
 
-  const { t }    = useTranslation();
-  const language = useSelector(state => settings.getLanguage(state.settings));
-  const dir      = getLanguageDirection(language);
+  const { t } = useTranslation();
+  const uiDir = useSelector(state => settings.getUIDir(state.settings));
 
   const handleOpen       = () => setOpen(true);
   const handleToggleOpen = (o) => {
@@ -24,7 +22,7 @@ const AddNoteBtn = ({ properties, toggleToolbar }) => {
       {open && <NoteModal toggleOpen={handleToggleOpen} note={properties} />}
       <Popup
         content={t('messages.add-new-note')}
-        dir={dir}
+        dir={uiDir}
         trigger={
           <Button
             circular

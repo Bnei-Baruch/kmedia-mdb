@@ -109,24 +109,24 @@ const texts = [
 ];
 
 const HelpPage = () => {
-  let language = useSelector(state => settings.getLanguage(state.settings));
+  let uiLang = useSelector(state => settings.getUILang(state.settings));
 
-  switch (language) {
+  switch (uiLang) {
     case LANG_HEBREW:
-      language = LANG_HEBREW;
+      uiLang = LANG_HEBREW;
       break;
     // case LANG_UKRAINIAN:
     case LANG_RUSSIAN:
-      language = LANG_RUSSIAN;
+      uiLang = LANG_RUSSIAN;
       break;
     default:
-      language = LANG_ENGLISH;
+      uiLang = LANG_ENGLISH;
       break;
   }
 
   let c    = clips;
   let txts = texts;
-  if (language !== LANG_HEBREW) {
+  if (uiLang !== LANG_HEBREW) {
     c = [...clips];
     c.splice(4, 1); // remove 4-2 in other langs
     txts = [...texts];
@@ -144,7 +144,7 @@ const HelpPage = () => {
               <Grid.Column key={x}>
                 <Card fluid>
                   <Card.Content>
-                    <Card.Header>{txts[i].title[language]}</Card.Header>
+                    <Card.Header>{txts[i].title[uiLang]}</Card.Header>
                   </Card.Content>
                   <Card.Content>
                     <div>
@@ -153,14 +153,14 @@ const HelpPage = () => {
                         playsInline
                         preload="metadata"
                         type="video/mp4"
-                        src={assetUrl(`help/${language}/clip${x}.mp4`)}
-                        poster={assetUrl(`help/${language}/clip${x}.jpg`)}
+                        src={assetUrl(`help/${uiLang}/clip${x}.mp4`)}
+                        poster={assetUrl(`help/${uiLang}/clip${x}.jpg`)}
                         style={{ width: '100%', height: 'auto' }}
                       />
                     </div>
                   </Card.Content>
                   <Card.Content>
-                    {txts[i].description[language]}
+                    {txts[i].description[uiLang]}
                   </Card.Content>
                 </Card>
               </Grid.Column>

@@ -14,6 +14,8 @@ import {
   CT_VIRTUAL_LESSON,
   CT_VIRTUAL_LESSONS,
   CT_WOMEN_LESSON,
+  DEFAULT_CONTENT_LANGUAGE,
+  LANG_ENGLISH,
   LANG_HEBREW,
   LANG_RUSSIAN,
   LANG_SPANISH,
@@ -27,6 +29,7 @@ import {
 import MediaHelper from './../helpers/media';
 import { getQuery } from '../helpers/url';
 import { canonicalCollection, isEmpty } from '../helpers/utils';
+import { selectSuitableLanguage } from '../helpers/language';
 import { actions as assetsActions, selectors as assetsSelectors } from './../redux/modules/assets';
 import { actions as eventsActions } from './../redux/modules/events';
 import { actions as filtersActions } from './../redux/modules/filters';
@@ -168,9 +171,9 @@ export const programsPage = (store, match) => {
 export const simpleMode = (store, match) => {
   const query        = getQuery(match.parsedURL);
   const date         = (query.date && moment(query.date).isValid()) ? moment(query.date, 'YYYY-MM-DD').format('YYYY-MM-DD') : moment().format('YYYY-MM-DD');
-  const { language } = match.params;
 
-  store.dispatch(simpleModeActions.fetchForDate({ date, language }));
+  console.log('routesSSRData, simpleMode', date);
+  store.dispatch(simpleModeActions.fetchForDate({ date }));
   return Promise.resolve(null);
 };
 
@@ -229,7 +232,6 @@ export const libraryPage = async (store, match, show_console = false) => {
     store.sagaMiddleWare.run(mdbSagas.fetchUnit, mdbActions.fetchUnit(sourceID)).done,
   ])
     .then(() => {
-      show_console && console.log('serverRender: libraryPage mdb data was fetched');
       const state    = store.getState();
       const { data } = assetsSelectors.getSourceIndexById(state.assets)[sourceID];
       if (!data) {
@@ -239,10 +241,10 @@ export const libraryPage = async (store, match, show_console = false) => {
       let language      = null;
       const location    = state?.router.location ?? {};
       const query       = getQuery(location);
-      const contentLang = query.language || settingsSelectors.getContentLanguage(state.settings);
+      const uiLang    = query.language || settingsSelectors.getUILang(state.settings);
       const languages   = [...Object.keys(data)];
       if (languages.length > 0) {
-        language = languages.indexOf(contentLang) === -1 ? languages[0] : contentLang;
+        language = languages.indexOf(uiLang) === -1 ? languages[0] : uiLang;
       }
 
       if (data[language]) {
@@ -250,22 +252,30 @@ export const libraryPage = async (store, match, show_console = false) => {
           return; // no need to fetch pdf. we don't do that on SSR
         }
         const { id } = getLibraryContentFile(data[language], sourceID);
-        show_console && console.log('serverRender: libraryPage before fetch doc2html', id);
         store.dispatch(assetsActions.doc2html(id));
-        show_console && console.log('serverRender: libraryPage before fetch labels', sourceID, contentLang);
-        store.dispatch(mdbActions.fetchLabels({ content_unit: sourceID, language: contentLang }));
+        store.dispatch(mdbActions.fetchLabels({ content_unit: sourceID, language: uiLang }));
       }
     });
 };
+
+const TWEETER_USERTNAMES_BY_LANG = new Map([
+  [LANG_HEBREW, 'laitman_co_il'],
+  [LANG_UKRAINIAN, 'Michael_Laitman'],
+  [LANG_RUSSIAN, 'Michael_Laitman'],
+  [LANG_SPANISH, 'laitman_es'],
+  [LANG_ENGLISH, 'laitman'],
+]);
 
 export const likutPage = async (store, match, show_console = false) => {
   const { id } = match.params;
   return store.sagaMiddleWare.run(mdbSagas.fetchUnit, mdbActions.fetchUnit(id)).done
     .then(() => {
-      const state    = store.getState();
-      const language = settingsSelectors.getContentLanguage(state.settings);
-      const likut    = mdbSelectors.getDenormContentUnit(state.mdb, id);
-      const file     = selectLikutFile(likut?.files, language);
+      const state            = store.getState();
+      const contentLanguages = settingsSelectors.getContentLanguages(state.settings);
+      const likut            = mdbSelectors.getDenormContentUnit(state.mdb, id);
+      const likutimLanguages = ((likut && likut.files) || []).map(f => f.language);
+      const defaultLanguage = selectSuitableLanguage(contentLanguages, likutimLanguages, LANG_HEBREW);
+      const file             = selectLikutFile(likut?.files, defaultLanguage);
       store.dispatch(assetsActions.doc2html(file?.id));
     });
 };
@@ -281,28 +291,12 @@ export const tweetsListPage = (store, match) => {
   const state = store.getState();
 
   const pageSize = settingsSelectors.getPageSize(state.settings);
-  const language = settingsSelectors.getLanguage(state.settings);
-
-  // extraFetchParams
-  let extraFetchParams;
-  switch (language) {
-    case LANG_HEBREW:
-      extraFetchParams = { username: 'laitman_co_il' };
-      break;
-    case LANG_UKRAINIAN:
-    case LANG_RUSSIAN:
-      extraFetchParams = { username: 'Michael_Laitman' };
-      break;
-    case LANG_SPANISH:
-      extraFetchParams = { username: 'laitman_es' };
-      break;
-    default:
-      extraFetchParams = { username: 'laitman' };
-      break;
-  }
-
+  const contentLanguages = settingsSelectors.getContentLanguages(state.settings);
+  // Array of usernames.
+  const username = Array.from(new Set(contentLanguages.map(contentLanguage =>
+    TWEETER_USERTNAMES_BY_LANG.get(contentLanguage) || TWEETER_USERTNAMES_BY_LANG.get(DEFAULT_CONTENT_LANGUAGE))));
   // dispatch fetchData
-  store.dispatch(publicationsActions.fetchTweets('publications-twitter', page, { ...extraFetchParams, pageSize }));
+  store.dispatch(publicationsActions.fetchTweets('publications-twitter', page, { username, pageSize }));
 
   return Promise.resolve(null);
 };
@@ -315,6 +309,14 @@ export const topicsPage = (store, match) => {
   ]);
 };
 
+const BLOG_BY_LANG = new Map([
+  [LANG_HEBREW, 'laitman-co-il'],
+  [LANG_UKRAINIAN, 'laitman-ru'],
+  [LANG_RUSSIAN, 'laitman-ru'],
+  [LANG_SPANISH, 'laitman-es'],
+  [LANG_ENGLISH, 'laitman-com'],
+]);
+
 export const blogListPage = (store, match) => {
   // hydrate filters
   store.dispatch(filtersActions.hydrateFilters('publications-blog'));
@@ -326,28 +328,13 @@ export const blogListPage = (store, match) => {
   const state = store.getState();
 
   const pageSize = settingsSelectors.getPageSize(state.settings);
-  const language = settingsSelectors.getLanguage(state.settings);
-
-  // extraFetchParams
-  let extraFetchParams;
-  switch (language) {
-    case LANG_HEBREW:
-      extraFetchParams = { blog: 'laitman-co-il' };
-      break;
-    case LANG_UKRAINIAN:
-    case LANG_RUSSIAN:
-      extraFetchParams = { blog: 'laitman-ru' };
-      break;
-    case LANG_SPANISH:
-      extraFetchParams = { blog: 'laitman-es' };
-      break;
-    default:
-      extraFetchParams = { blog: 'laitman-com' };
-      break;
-  }
+  const contentLanguages = settingsSelectors.getContentLanguages(state.settings);
+  // Array of blogs.
+  const blog = Array.from(new Set(contentLanguages.map(contentLanguage =>
+    BLOG_BY_LANG.get(contentLanguage) || BLOG_BY_LANG.get(DEFAULT_CONTENT_LANGUAGE))));
 
   // dispatch fetchData
-  store.dispatch(publicationsActions.fetchBlogList('publications-blog', page, { ...extraFetchParams, pageSize }));
+  store.dispatch(publicationsActions.fetchBlogList('publications-blog', page, { blog, pageSize }));
 
   return Promise.resolve(null);
 };
@@ -380,7 +367,7 @@ export const articleCUPage = (store, match) => {
       const state = store.getState();
 
       let language = null;
-      const uiLang = settingsSelectors.getLanguage(state.settings);
+      const uiLang = settingsSelectors.getUILang(state.settings);
 
       const unit = mdbSelectors.getDenormContentUnit(state.mdb, cuID);
       if (!unit) {

@@ -24,7 +24,6 @@ const BlogPage = ({
   total,
   pageSize,
   namespace,
-  language,
   t,
   onPageChange,
   onFiltersChanged,
@@ -36,7 +35,7 @@ const BlogPage = ({
         <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} />
         {
           items.length > 0
-            ? <Feed items={items} language={language} />
+            ? <Feed items={items} />
             : null
         }
       </Container>
@@ -46,7 +45,6 @@ const BlogPage = ({
           pageNo={pageNo}
           pageSize={pageSize}
           total={total}
-          language={language}
           onChange={onPageChange}
         />
       </Container>
@@ -76,7 +74,6 @@ BlogPage.propTypes = {
   pageNo: PropTypes.number.isRequired,
   total: PropTypes.number.isRequired,
   pageSize: PropTypes.number.isRequired,
-  language: PropTypes.string.isRequired,
   t: PropTypes.func.isRequired,
   onPageChange: PropTypes.func.isRequired,
   onFiltersChanged: PropTypes.func.isRequired,

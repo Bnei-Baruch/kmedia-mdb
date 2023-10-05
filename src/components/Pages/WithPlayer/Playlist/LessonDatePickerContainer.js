@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import { Header, Icon } from 'semantic-ui-react';
 
 import { selectors as settings } from '../../../../redux/modules/settings';
-import { getLanguageDirection } from '../../../../helpers/i18n-utils';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import Link from '../../../Language/MultiLanguageLink';
 import CollectionDatePicker from './LessonDatePicker';
@@ -31,10 +30,9 @@ const LessonDatePickerContainer = () => {
   const wipMap  = useSelector(state => mdb.getWip(state.mdb), shallowEqual);
   const cWindow = useSelector(state => mdb.getWindow(state.mdb), shallowEqual);
 
-  const cId      = useSelector(state => selectors.getInfo(state.playlist).cId);
-  const denorm   = useSelector(state => mdb.nestedGetDenormCollection(state.mdb));
-  const language = useSelector(state => settings.getLanguage(state.settings));
-  const langDir  = getLanguageDirection(language);
+  const cId    = useSelector(state => selectors.getInfo(state.playlist).cId);
+  const denorm = useSelector(state => mdb.nestedGetDenormCollection(state.mdb));
+  const uiDir  = useSelector(state => settings.getUIDir(state.settings));
 
   const dispatch = useDispatch();
   const curIndex = cWindow?.data?.indexOf(cId) ?? -1;
@@ -46,7 +44,7 @@ const LessonDatePickerContainer = () => {
     }
   }, [cId, cWindow, wipMap.cWindow, curIndex]);
 
-  const isLtr          = langDir === 'ltr';
+  const isLtr          = uiDir === 'ltr';
   const prevCollection = curIndex >= 0 && curIndex < cWindow.data.length - 1 ? denorm(cWindow.data[curIndex + 1]) : null;
   const nextCollection = curIndex > 0 ? denorm(cWindow.data[curIndex - 1]) : null;
 

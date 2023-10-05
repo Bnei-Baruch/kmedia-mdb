@@ -22,7 +22,6 @@ export class UnitListContainer extends withPagination {
     pageNo: PropTypes.number.isRequired,
     total: PropTypes.number.isRequired,
     pageSize: PropTypes.number.isRequired,
-    language: PropTypes.string.isRequired,
     isFiltersHydrated: PropTypes.bool,
     fetchList: PropTypes.func.isRequired,
     setPage: PropTypes.func.isRequired,
@@ -102,7 +101,7 @@ export class UnitListContainer extends withPagination {
   }
 
   render() {
-    const { namespace, items, wip, err, pageNo, total, pageSize, language, renderUnit, location } = this.props;
+    const { namespace, items, wip, err, pageNo, total, pageSize, renderUnit, location } = this.props;
 
     return (
       <Page
@@ -113,7 +112,6 @@ export class UnitListContainer extends withPagination {
         pageNo={pageNo}
         total={total}
         pageSize={pageSize}
-        language={language}
         renderUnit={renderUnit}
         onPageChange={this.handlePageChanged}
         onFiltersChanged={this.handleFiltersChanged}
@@ -135,7 +133,6 @@ export const mapState = (state, ownProps) => {
     pageNo: nsState.pageNo,
     total: nsState.total,
     pageSize: settings.getPageSize(state.settings),
-    language: settings.getLanguage(state.settings),
     isFiltersHydrated: filters.getIsHydrated(state.filters, namespace),
   };
 };

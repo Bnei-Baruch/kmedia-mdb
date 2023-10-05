@@ -21,10 +21,10 @@ const TopicPage = () => {
   const { t }              = useTranslation();
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
-  const getPathByID = useSelector(state => selectors.getPathByID(state.tags));
-  const getTags     = useSelector(state => selectors.getTags(state.tags));
-  const language    = useSelector(state => settings.getLanguage(state.settings));
-  const selected    = useSelector(state => filters.getNotEmptyFilters(state.filters, `topics_${id}`), isEqual);
+  const getPathByID      = useSelector(state => selectors.getPathByID(state.tags));
+  const getTags          = useSelector(state => selectors.getTags(state.tags));
+  const contentLanguages = useSelector(state => settings.getContentLanguages(state.settings));
+  const selected         = useSelector(state => filters.getNotEmptyFilters(state.filters, `topics_${id}`), isEqual);
 
   const { mediaTotal, textTotal } = useSelector(state => selectors.getItems(state.tags));
   const total                     = Math.max(mediaTotal, textTotal);
@@ -40,7 +40,7 @@ const TopicPage = () => {
   useEffect(() => {
     const page_no = pageNo > 1 ? pageNo : 1;
     dispatch(actions.fetchDashboard({ tag: id, page_size: pageSize, page_no }));
-  }, [id, language, dispatch, pageNo, pageSize, selected]);
+  }, [id, contentLanguages, dispatch, pageNo, pageSize, selected]);
 
   if (!getPathByID) {
     const tag = getTags ? getTags[id] : null;
@@ -68,7 +68,6 @@ const TopicPage = () => {
             pageNo={pageNo}
             pageSize={pageSize}
             total={total}
-            language={language}
             onChange={handleSetPage}
           />
         }

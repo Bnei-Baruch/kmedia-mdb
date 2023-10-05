@@ -2,11 +2,14 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Container, Header, Popup, Ref } from 'semantic-ui-react';
+import { useSelector } from 'react-redux';
+
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { NO_NAME } from '../../../helpers/consts';
-import { getLanguageDirection } from '../../../helpers/i18n-utils';
-import Link from '../../Language/MultiLanguageLink';
+import { isLanguageRtl } from '../../../helpers/i18n-utils';
+import { selectors as settings } from '../../../redux/modules/settings';
 
+import Link from '../../Language/MultiLanguageLink';
 import * as shapes from '../../shapes';
 import { imageWidthBySize } from './helper';
 import UnitLogoWithDuration from '../UnitLogoWithDuration';
@@ -18,7 +21,6 @@ const ListTemplate = (
     unit,
     source,
     tag,
-    language,
     withCUInfo,
     withCCUInfo,
     link,
@@ -33,12 +35,11 @@ const ListTemplate = (
     showImg
   }
 ) => {
-
   const itemRef = useRef(null);
 
   const handleItemRef = r => itemRef.current = r;
 
-  const dir                = getLanguageDirection(language);
+  const dir = useSelector(state => settings.getUIDir(state.settings));
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
   const [isNeedTooltip, setIsNeedTooltip] = useState(null);
@@ -131,7 +132,6 @@ ListTemplate.propTypes = {
   unit: shapes.ContentUnit,
   source: shapes.Source,
   tag: shapes.Topic,
-  language: PropTypes.string.isRequired,
   link: PropTypes.any.isRequired,
   withCCUInfo: PropTypes.bool,
   ccu: shapes.Collection,

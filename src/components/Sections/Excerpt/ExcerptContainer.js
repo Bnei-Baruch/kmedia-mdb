@@ -4,7 +4,10 @@ import { Container, Header } from 'semantic-ui-react';
 
 import { selectors as settings } from '../../../redux/modules/settings';
 import excerpts from './excerpts';
-import { DEFAULT_LANGUAGE } from '../../../helpers/consts';
+import { DEFAULT_CONTENT_LANGUAGE } from '../../../helpers/consts';
+import MenuLanguageSelector from '../../../components/Language/Selector/MenuLanguageSelector';
+import { selectors as siteSettings } from '../../../redux/modules/settings';
+import { selectSuitableLanguage } from '../../../helpers/language';
 
 const renderer = ({ minutes, seconds, completed }) => {
   if (completed) {
@@ -13,12 +16,12 @@ const renderer = ({ minutes, seconds, completed }) => {
 
   minutes = minutes > 10 ? minutes : `0${minutes}`;
   seconds = seconds > 10 ? seconds : `0${seconds}`;
-  return <span style={{ direction: 'ltr', 'font-size': '3em' }}>{minutes}:{seconds}</span>;
+  return <span style={{ direction: 'ltr', fontSize: '3em' }}>{minutes}:{seconds}</span>;
 
 };
 
 const chooseExcerpt = language => {
-  const items = excerpts[language] || excerpts[DEFAULT_LANGUAGE];
+  const items = excerpts[language] || excerpts[DEFAULT_CONTENT_LANGUAGE];
   return items[Math.floor(Math.random() * items.length)];
 };
 
@@ -55,18 +58,29 @@ const Countdown = ({ finalDate }) => {
 };
 
 const ExcerptContainer = () => {
-  const language                  = useSelector(state => settings.getLanguage(state.settings));
-  const [excerpt, setExcerpt]     = useState(chooseExcerpt(language));
+  const excerptsLanguages = Object.keys(excerpts);
+  const contentLanguages = useSelector(state => siteSettings.getContentLanguages(state.settings));
+  const defaultLanguage = selectSuitableLanguage(excerptsLanguages, excerptsLanguages, DEFAULT_CONTENT_LANGUAGE);
+  const [selectedLanguage, setSelectedLanguage] = useState(defaultLanguage);
+
+  const [excerpt, setExcerpt]     = useState(chooseExcerpt(selectedLanguage));
   const [finalDate, setFinalDate] = useState(nowPlus5min());
 
   useEffect(() => {
-    setExcerpt(chooseExcerpt(language));
+    setExcerpt(chooseExcerpt(selectedLanguage));
     setFinalDate(nowPlus5min());
-  }, [language]);
+  }, [selectedLanguage]);
+
+  const handleLanguageChanged = (selectedLanguage) => setSelectedLanguage(selectedLanguage);
 
   return (
-    <div style={{ 'padding': '20px', 'text-align': 'justify' }}>
-      <br />
+    <div style={{ padding: '20px', textAlign: 'justify' }}>
+      <MenuLanguageSelector
+        languages={excerptsLanguages}
+        selected={selectedLanguage}
+        onLanguageChange={handleLanguageChanged}
+        multiSelect={false}
+      />
       <Header as="h1" textAlign="center" color="green" size="huge">
         <Countdown finalDate={finalDate} />
       </Header>

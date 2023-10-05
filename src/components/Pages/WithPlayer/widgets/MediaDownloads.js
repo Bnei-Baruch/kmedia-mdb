@@ -47,8 +47,8 @@ class MediaDownloads extends Component {
   static propTypes = {
     unit: shapes.ContentUnit,
     publisherById: PropTypes.objectOf(shapes.Publisher).isRequired,
-    language: PropTypes.string.isRequired,
-    contentLanguage: PropTypes.string.isRequired,
+    uiLang: PropTypes.string.isRequired,
+    contentLanguages: PropTypes.arrayOf(PropTypes.string).isRequired,
     t: PropTypes.func.isRequired,
     displayDivider: PropTypes.bool,
     chroniclesAppend: PropTypes.func.isRequired,
@@ -66,16 +66,16 @@ class MediaDownloads extends Component {
   }
 
   static getDerivedStateFromProps(props, state) {
-    const { unit = {}, contentLanguage, language: uiLanguage } = props;
+    const { unit = {}, contentLanguages, uiLang } = props;
     const { unit: stateUnit, isCopyPopupOpen = {} }            = state;
 
     if (stateUnit && isEqual(stateUnit, unit)) {
       // only language changed
-      if (state.uiLanguage !== uiLanguage
-        || state.contentLanguage !== contentLanguage) {
-        const language = selectSuitableLanguage(contentLanguage, uiLanguage, state.languages);
-        if (state.language !== language) {
-          return { ...state, language };
+      if (state.uiLang !== uiLang
+        || state.contentLanguages !== contentLanguages) {
+        const selectedLanguage = selectSuitableLanguage(contentLanguages, state.availableLanguages, unit.original_language);
+        if (state.selectedLanguage !== selectedLanguage ) {
+          return { ...state, selectedLanguage };
         }
       }
 
@@ -84,16 +84,16 @@ class MediaDownloads extends Component {
     }
 
     // no unit or a different unit - create new state
-    const groups        = MediaDownloads.getFilesByLanguage(unit.files, contentLanguage, uiLanguage);
-    const languages     = [...groups.keys()];
-    const language      = selectSuitableLanguage(contentLanguage, uiLanguage, languages);
-    const derivedGroups = MediaDownloads.getDerivedFilesByContentType(unit.derived_units, contentLanguage, uiLanguage);
+    const groups = MediaDownloads.getFilesByLanguage(unit.files, contentLanguages, unit.original_language);
+    const availableLanguages = [...groups.keys()];
+    const selectedLanguage = selectSuitableLanguage(contentLanguages, availableLanguages, unit.original_language);
+    const derivedGroups = MediaDownloads.getDerivedFilesByContentType(unit.derived_units, contentLanguages, unit.original_language);
 
-    return { groups, derivedGroups, isCopyPopupOpen, languages, language, uiLanguage, contentLanguage, unit };
+    return { groups, derivedGroups, isCopyPopupOpen, availableLanguages, selectedLanguage, uiLang, contentLanguages, unit };
 
   }
 
-  static getFilesByLanguage = (files = [], contentLanguage, uiLanguage) => {
+  static getFilesByLanguage = (files = [], contentLanguages, originalLanguage) => {
     const groups = new Map();
 
     // keep track of image files. These are a special case.
@@ -140,7 +140,7 @@ class MediaDownloads extends Component {
 
     // fill in images fallback into every language
     if (images.length > 0) {
-      const fallbackImage = MediaDownloads.fallbackImage(images, contentLanguage, uiLanguage);
+      const fallbackImage = MediaDownloads.fallbackImage(images, contentLanguages, originalLanguage);
       groups.forEach(byType => {
         if (!byType.has(MT_IMAGE)) {
           byType.set(MT_IMAGE, fallbackImage);
@@ -151,14 +151,14 @@ class MediaDownloads extends Component {
     return groups;
   };
 
-  static fallbackImage = (images, contentLanguage, uiLanguage) => {
+  static fallbackImage = (images, contentLanguages, originalLanguage) => {
     const imageLanguages = images.map(image => image.language);
-    const language       = selectSuitableLanguage(contentLanguage, uiLanguage, imageLanguages);
+    const imageSelectedLanguage = selectSuitableLanguage(contentLanguages, imageLanguages, originalLanguage);
 
-    return [images.find(image => image.language === language)];
+    return [images.find(image => image.language === imageSelectedLanguage)];
   };
 
-  static getDerivedFilesByContentType = (units, contentLanguage, uiLanguage) => {
+  static getDerivedFilesByContentType = (units, contentLanguages, originalLanguage) => {
     const allByCT = Object.values(units || {})
       .reduce((acc, val) => {
         acc[val.content_type] = (acc[val.content_type] || []).concat((val.files || []).map(x => ({ ...x, cu: val })));
@@ -167,7 +167,7 @@ class MediaDownloads extends Component {
 
     return Object.entries(allByCT).reduce((acc, val) => {
       const [ct, files] = val;
-      acc[ct]           = MediaDownloads.getFilesByLanguage(files, contentLanguage, uiLanguage);
+      acc[ct]           = MediaDownloads.getFilesByLanguage(files, contentLanguages, originalLanguage);
       return acc;
     }, {});
   };
@@ -187,20 +187,20 @@ class MediaDownloads extends Component {
   };
 
   shouldComponentUpdate(nextProps, nextState) {
-    const { unit, contentLanguage, language: uiLanguage } = nextProps;
+    const { unit, contentLanguages, uiLang } = nextProps;
     const { props, state }                                = this;
 
     return !(
-      state.language === nextState.language
-      && uiLanguage === props.language
-      && contentLanguage === props.contentLanguage
+      state.selectedLanguage === nextState.selectedLanguage
+      && uiLang === props.uiLang
+      && contentLanguages === props.contentLanguages
       && isEqual(unit, props.unit)
       && isEqual(state.isCopyPopupOpen, nextState.isCopyPopupOpen)
     );
   }
 
-  handleChangeLanguage = (e, language) => {
-    this.setState({ language });
+  handleChangeLanguage = (selectedLanguage) => {
+    this.setState({ selectedLanguage });
   };
 
   handleCopied = url => {
@@ -264,10 +264,10 @@ class MediaDownloads extends Component {
 
   render() {
     const { t, publisherById, unit, displayDivider }     = this.props;
-    const { language, languages, groups, derivedGroups } = this.state;
+    const { selectedLanguage, availableLanguages, groups, derivedGroups } = this.state;
     const { isMobileDevice }                             = this.context;
 
-    const byType = groups.get(language) || new Map();
+    const byType = groups.get(selectedLanguage) || new Map();
 
     let typeOverrides = MediaDownloads.getI18nTypeOverridesKey(unit);
     if (typeOverrides) {
@@ -275,21 +275,21 @@ class MediaDownloads extends Component {
     }
 
     const rows        = this.getRows(byType, t, typeOverrides);
-    const derivedRows = this.getDerivedRows(derivedGroups, language, t, typeOverrides, publisherById);
+    const derivedRows = this.getDerivedRows(derivedGroups, selectedLanguage, t, typeOverrides, publisherById);
 
     return (
       <div className="media-downloads content__aside-unit">
-        {languages.length > 1 ?
+        {availableLanguages.length > 1 ?
           <Grid container padded={false} columns={isMobileDevice ? 1 : 2} className={classNames({ 'padding_r_l_0': !isMobileDevice })}>
             {!isMobileDevice &&
               <Grid.Column width={12}>
               </Grid.Column>}
             <Grid.Column width={isMobileDevice ? 16 : 4} textAlign={'right'} className={classNames({ 'padding_r_l_0': !isMobileDevice })}>
               <MenuLanguageSelector
-                languages={languages}
-                defaultValue={language}
-                onSelect={this.handleChangeLanguage}
-                fluid={false}
+                languages={availableLanguages}
+                selected={selectedLanguage}
+                onLanguageChange={this.handleChangeLanguage}
+                multiSelect={false}
               />
             </Grid.Column>
           </Grid>
@@ -306,19 +306,19 @@ class MediaDownloads extends Component {
     );
   }
 
-  getDerivedRows = (derivedGroups, language, t, typeOverrides, publisherById) => {
+  getDerivedRows = (derivedGroups, selectedLanguage, t, typeOverrides, publisherById) => {
     const kiteiMakor              = derivedGroups[CT_KITEI_MAKOR];
-    const kiteiMakorByType        = (kiteiMakor && kiteiMakor.get(language)) ?? new Map();
+    const kiteiMakorByType        = (kiteiMakor && kiteiMakor.get(selectedLanguage)) ?? new Map();
     const likutim                 = derivedGroups[CT_LIKUTIM];
-    const likutimByType           = (likutim && likutim.get(language)) ?? new Map();
+    const likutimByType           = (likutim && likutim.get(selectedLanguage)) ?? new Map();
     const leloMikud               = derivedGroups[CT_LELO_MIKUD];
-    const leloMikudByType         = (leloMikud && leloMikud.get(language)) ?? new Map();
+    const leloMikudByType         = (leloMikud && leloMikud.get(selectedLanguage)) ?? new Map();
     const publications            = derivedGroups[CT_PUBLICATION];
-    const publicationsByType      = (publications && publications.get(language)) ?? new Map();
+    const publicationsByType      = (publications && publications.get(selectedLanguage)) ?? new Map();
     const articles                = derivedGroups[CT_ARTICLE];
-    const articlesByType          = (articles && articles.get(language)) ?? new Map();
+    const articlesByType          = (articles && articles.get(selectedLanguage)) ?? new Map();
     const researchMaterials       = derivedGroups[CT_RESEARCH_MATERIAL];
-    const researchMaterialsByType = (researchMaterials && researchMaterials.get(language)) ?? new Map();
+    const researchMaterialsByType = (researchMaterials && researchMaterials.get(selectedLanguage)) ?? new Map();
 
     let derivedRows = [];
     if (kiteiMakorByType.size > 0) {
@@ -406,7 +406,7 @@ class MediaDownloads extends Component {
 export default connect(state => (
   {
     publisherById: selectors.getPublisherById(state.publications),
-    language: settings.getLanguage(state.settings),
-    contentLanguage: settings.getContentLanguage(state.settings),
+    uiLang: settings.getUILang(state.settings),
+    contentLanguages: settings.getContentLanguages(state.settings),
   })
 )(withTranslation()(MediaDownloads));

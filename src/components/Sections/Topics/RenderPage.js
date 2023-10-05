@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Breadcrumb, Container, Divider, Grid } from 'semantic-ui-react';
-import { isLanguageRtl } from '../../../helpers/i18n-utils';
 
 import { selectors } from '../../../redux/modules/tags';
 import { selectors as settings } from '../../../redux/modules/settings';
@@ -19,15 +18,16 @@ const RenderPage = () => {
   const { t }  = useTranslation();
 
   const getPathByID = useSelector(state => selectors.getPathByID(state.tags));
-  const language    = useSelector(state => settings.getLanguage(state.settings));
+  const uiDir       = useSelector(state => settings.getUIDir(state.settings));
 
   const tagPath = getPathByID(id);
 
   // create breadCrumb sections from tagPath
   const breadCrumbSections = [{ id: '', label: t('nav.sidebar.topics') }, ...tagPath].map(getBreadCrumbSection);
 
-  const breadCrumbIcon = `${isLanguageRtl(language) ? 'left' : 'right'} angle`;
+  const breadCrumbIcon = `${uiDir === 'rtl' ? 'left' : 'right'} angle`;
   const baseParams     = useMemo(() => ({ tag: id }), [id]);
+
   return (
     <>
       <HelmetsBasic title={breadCrumbSections[breadCrumbSections.length - 1]?.content} />

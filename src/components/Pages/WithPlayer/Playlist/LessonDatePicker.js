@@ -16,7 +16,7 @@ const LessonDatePicker = ({ t }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
   const navigate = useNavigate();
-  const language = useSelector(state => settings.getLanguage(state.settings));
+  const uiLang = useSelector(state => settings.getUILang(state.settings));
 
   const { cId }      = useSelector(state => playlist.getInfo(state.playlist));
   const collection   = useSelector(state => selectors.getDenormCollectionWUnits(state.mdb, cId)) || false;
@@ -27,10 +27,10 @@ const LessonDatePicker = ({ t }) => {
   useEffect(() => {
     if (!isEmpty(dpCollection?.content_units) && collection.id !== dpCollection.id) {
       const to = canonicalLink(dpCollection.content_units[0]);
-      navigate({ ...to, pathname: `/${language}${to.pathname}` });
+      navigate({ ...to, pathname: `/${uiLang}${to.pathname}` });
       dispatch(actions.nullDatepickerCO());
     }
-  }, [collection, dpCollection, language, navigate, dispatch]);
+  }, [collection, dpCollection, uiLang, navigate, dispatch]);
 
   const fetchNextCO = date => {
     const filmDate = moment.utc(date);
@@ -43,7 +43,7 @@ const LessonDatePicker = ({ t }) => {
   return (
     <ButtonDayPicker
       label={isMobileDevice ? collection.film_date : t('values.date', { date: collection.film_date })}
-      language={language}
+      uiLang={uiLang}
       onDayChange={fetchNextCO}
       value={new Date(collection.film_date)}
       withLabel={true}

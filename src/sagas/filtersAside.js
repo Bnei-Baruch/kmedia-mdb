@@ -176,16 +176,21 @@ export function* fetchLanguageStat(params, namespace, dataL = {}, isPrepare, cou
 }
 
 export function* fetchElasticStat(action) {
-  const filters         = yield select(state => filterSelectors.getFilters(state.filters, 'search'));
-  const apiParams       = filtersTransformer.toApiParams(filters);
-  const filterKeyValues = Object.entries(apiParams).map(([v, k]) => `${v}:${k}`).join(' ');
-  const filterParams    = filterKeyValues ? ` ${filterKeyValues}` : '';
-  const language        = yield select(state => settingsSelectors.getLanguage(state.settings));
-  const query           = yield select(state => searchSelectors.getQuery(state.search));
-  const q               = query.trim() ? `${query.trim()}${filterParams}` : filterParams;
+  const filters          = yield select(state => filterSelectors.getFilters(state.filters, 'search'));
+  const apiParams        = filtersTransformer.toApiParams(filters);
+  const filterKeyValues  = Object.entries(apiParams).map(([v, k]) => `${v}:${k}`).join(' ');
+  const filterParams     = filterKeyValues ? ` ${filterKeyValues}` : '';
+  const uiLang           = yield select(state => settingsSelectors.getUILang(state.settings));
+  const contentLanguages = yield select(state => settingsSelectors.getContentLanguages(state.settings));
+  const query            = yield select(state => searchSelectors.getQuery(state.search));
+  const q                = query.trim() ? `${query.trim()}${filterParams}` : filterParams;
 
   try {
-    const { data } = yield call(Api.elasticStats, { q, language });
+    const { data } = yield call(Api.elasticStats, {
+      q,
+      ui_language: uiLang,
+      content_languages: contentLanguages,
+    });
 
     yield put(actions.fetchElasticStatsSuccess({ data, namespace: 'search' }));
   } catch (err) {

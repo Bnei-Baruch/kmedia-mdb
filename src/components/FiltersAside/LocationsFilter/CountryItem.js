@@ -21,7 +21,7 @@ const CountryItem = ({ namespace, loc }) => {
   const getStat         = useSelector(state => filtersAside.getStats(state.filtersAside, namespace, FN_LOCATIONS));
   const stat            = getStat(id);
 
-  const language = useSelector(state => settings.getLanguage(state.settings));
+  const uiDir = useSelector(state => settings.getUIDir(state.settings));
   const dispatch = useDispatch();
 
   const handleSelect = (e, { checked }) => {
@@ -52,7 +52,7 @@ const CountryItem = ({ namespace, loc }) => {
           basic
           color="blue"
           className="clear_button no-shadow"
-          icon={`caret ${isLanguageRtl(language) ? 'left' : 'right'}`}
+          icon={`caret ${uiDir === 'rtl' ? 'left' : 'right'}`}
           onClick={toggleOpen}
           size="medium"
           disabled={stat === 0}

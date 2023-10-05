@@ -6,7 +6,8 @@ import {
   CT_LESSON_PART,
   EVENT_PREPARATION_TAG,
   EVENT_TYPES,
-  LANG_ENGLISH,
+  DEFAULT_LANGUAGE,
+  DEFAULT_LANGUAGES,
   MT_AUDIO,
   MT_VIDEO,
   VS_DEFAULT,
@@ -41,7 +42,7 @@ const calcAvailableMediaTypes = (unit, language) => {
   }, new Set()));
 };
 
-const calcAvailableLanguages = unit => {
+export const calcAvailableLanguages = unit => {
   if (!unit || !Array.isArray(unit.files)) {
     return [];
   }
@@ -177,10 +178,9 @@ export const getMediaTypeFromQuery = location => {
   return [MT_VIDEO, MT_AUDIO].includes(mt) ? mt : restorePreferredMediaType();
 };
 
-export const getLanguageFromQuery = (location, fallbackLanguage = LANG_ENGLISH) => {
+export const getLanguageFromQuery = (location) => {
   const query    = getQuery(location);
-  const language = query.shareLang || query.language || fallbackLanguage || LANG_ENGLISH;
-  return language.toLowerCase();
+  return query.shareLang || query.language || '';
 };
 
 export const getActivePartFromQuery = (location, def = 0) => {

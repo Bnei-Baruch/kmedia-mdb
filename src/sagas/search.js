@@ -25,11 +25,12 @@ function* autocomplete(action) {
     }
 
     yield delay(100);  // Debounce autocomplete.
-    const query          = yield select(state => selectors.getQuery(state.search));
-    const language       = yield select(state => settings.getLanguage(state.settings));
-    const autocompleteId = GenerateSearchId();
-    const request        = { q: query, language };
-    let suggestions      = null;
+    const query            = yield select(state => selectors.getQuery(state.search));
+    const uiLang           = yield select(state => settings.getUILang(state.settings));
+    const contentLanguages = yield select(state => settings.getContentLanguages(state.settings));
+    const autocompleteId   = GenerateSearchId();
+    const request          = { q: query, ui_language: uiLang, content_languages: contentLanguages };
+    let suggestions        = null;
     if (query) {
       const { data }      = yield call(Api.autocomplete, request);
       data.autocompleteId = autocompleteId;
@@ -88,9 +89,10 @@ export function* search(action) {
       }
     }
 
-    const language = yield select(state => settings.getLanguage(state.settings));
-    const sortBy   = yield select(state => selectors.getSortBy(state.search));
-    const deb      = yield select(state => selectors.getDeb(state.search));
+    const uiLang           = yield select(state => settings.getUILang(state.settings));
+    const contentLanguages = yield select(state => settings.getContentLanguages(state.settings));
+    const sortBy           = yield select(state => selectors.getSortBy(state.search));
+    const deb              = yield select(state => selectors.getDeb(state.search));
 
     // Redirect from home page.
     if (action.type === types.SEARCH && !action.payload) {
@@ -109,7 +111,8 @@ export function* search(action) {
     const request  = {
       q,
       sortBy,
-      language,
+      ui_language: uiLang,
+      content_languages: contentLanguages,
       deb,
       searchId,
       pageNo,
@@ -135,24 +138,26 @@ export function* search(action) {
         return;
       }
 
-      const lang     = yield select(state => settings.getLanguage(state.settings));
+      const uiLang           = yield select(state => settings.getUILang(state.settings));
+      const contentLanguages = yield select(state => settings.getContentLanguages(state.settings));
       const requests = [];
       if (cuIDsToFetch.length > 0) {
         requests.push(call(Api.units, {
           id: cuIDsToFetch,
           pageSize: cuIDsToFetch.length,
-          language: lang,
+          ui_language: uiLang,
+          content_languages: contentLanguages,
           with_files: true,
           with_derivations: true,
         }));
       }
 
       if (cIDsToFetch.length > 0) {
-        requests.push(call(Api.collections, { id: cIDsToFetch, pageSize: cIDsToFetch.length, language: lang }));
+        requests.push(call(Api.collections, { id: cIDsToFetch, pageSize: cIDsToFetch.length, ui_language: uiLang, content_languages: contentLanguages }));
       }
 
       if (postIDsToFetch.length > 0) {
-        requests.push(call(Api.posts, { id: postIDsToFetch, pageSize: postIDsToFetch.length, language: lang }));
+        requests.push(call(Api.posts, { id: postIDsToFetch, pageSize: postIDsToFetch.length, ui_language: uiLang, content_languages: contentLanguages }));
       }
 
       if (!seriesLoaded) {
@@ -242,10 +247,12 @@ function* watchQueryUpdate() {
 }
 
 function* watchSearch() {
+  // TODO: Will trigger search in every such value.
+  // Check that you are on search page for all, but the SEARCH action.
   yield takeLatest([
     filterTypes.SET_FILTER_VALUE,
     filterTypes.SET_FILTER_VALUE_MULTI,
-    settingsTypes.SET_LANGUAGE,
+    settingsTypes.SET_CONTENT_LANGUAGES,
     types.SEARCH,
     types.SET_DEB,
     types.SET_PAGE,

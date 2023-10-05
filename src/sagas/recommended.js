@@ -24,8 +24,8 @@ const POPULAR_MIN      = 100;
 export function* fetchRecommended(action) {
   const { id, content_type, tags, sources, collections, size, skip, variant } = action.payload;
   try {
-    const isLesson      = UNIT_LESSONS_TYPE.includes(content_type);
-    const language      = yield select(state => settings.getContentLanguage(state.settings));
+    const isLesson         = UNIT_LESSONS_TYPE.includes(content_type);
+    const contentLanguages = yield select(state => settings.getContentLanguages(state.settings));
     const [...skipUids] = yield select(state => recommended.getSkipUids(state.recommended));
     const skipSet       = new Set(skipUids);
     skip.forEach(uid => {
@@ -164,7 +164,7 @@ export function* fetchRecommended(action) {
 
     const requestData = Api.recommendedRequestData({
       uid: id,
-      languages: [language],
+      languages: contentLanguages,
       skipUids,
       size,
       specs,

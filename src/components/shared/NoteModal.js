@@ -12,8 +12,8 @@ const NoteModal = ({ note = false, open = true, toggleOpen }) => {
   const [confirm, setConfirm] = useState(false);
 
   const { t }       = useTranslation();
-  const defLanguage = useSelector(state => settings.getLanguage(state.settings));
-  const language    = note.properties?.language || defLanguage;
+  const uiLang      = useSelector(state => settings.getUILang(state.settings));
+  const language    = note.properties?.language || uiLang;
   const dir         = getLanguageDirection(language);
 
   const dispatch              = useDispatch();

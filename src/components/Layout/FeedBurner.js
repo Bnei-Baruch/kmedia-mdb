@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
-import { getRSSFeedByLang } from '../../helpers/utils';
+import { getRSSFeedByLangs } from '../../helpers/utils';
 import { Form } from 'semantic-ui-react';
+import { useSelector } from 'react-redux';
+import { selectors as settings } from '../../redux/modules/settings';
 
-const FeedBurner = ({ language, t }) => {
+const FeedBurner = ({ t }) => {
   const [email, setEmail] = useState('');
   const handleChange      = (e, { value }) => setEmail(value);
+  const contentLanguages         = useSelector(state => settings.getContentLanguages(state.settings));
 
   const subscribe = () => {
-    const uri = getRSSFeedByLang(language);
+    const uri = getRSSFeedByLangs(contentLanguages);
     window.open(
       `https://feedburner.google.com/fb/a/mailverify?uri=${uri}&email=${email}`,
       'popupwindow',
@@ -38,7 +41,6 @@ const FeedBurner = ({ language, t }) => {
 };
 
 FeedBurner.propTypes = {
-  language: PropTypes.string.isRequired,
   t: PropTypes.func.isRequired,
 };
 

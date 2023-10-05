@@ -22,16 +22,15 @@ class Sketches extends React.Component {
     t: PropTypes.func.isRequired,
     zipIndexById: PropTypes.objectOf(shapes.DataWipErr).isRequired,
     unzipList: PropTypes.func.isRequired,
-    uiLanguage: PropTypes.string.isRequired,
-    contentLanguage: PropTypes.string.isRequired,
+    contentLanguages: PropTypes.arrayOf(PropTypes.string).isRequired,
   };
 
   state = {
     zipFiles: null,
     zipFileId: null,
     imageFiles: null,
-    languages: null,
-    language: null,
+    filesLanguages: null,
+    selectedLanguage: null,
   };
 
   static getUnitSketchFiles = unit => {
@@ -48,15 +47,18 @@ class Sketches extends React.Component {
     return zipFiles;
   };
 
-  static getFilesLanguages = (zipFiles, contentLanguage, uiLanguage) => {
-    const languages = [...(new Set(zipFiles.map(file => file.language)))];
-    const language  = selectSuitableLanguage(contentLanguage, uiLanguage, languages);
-    return { languages, language };
+  static getFilesLanguages = (zipFiles, contentLanguages, originalLanguage) => {
+    const filesLanguages = zipFiles
+      .map(file => file.language)
+      .filter((v, i, a) => a.indexOf(v) === i);
+
+    const selectedLanguage = selectSuitableLanguage(contentLanguages, filesLanguages, originalLanguage);
+    return { filesLanguages, selectedLanguage };
   };
 
-  static filterZipFiles = (zipFiles, language, originalLanguage) => {
+  static filterZipFiles = (zipFiles, selectedLanguage, originalLanguage) => {
     // try filter by language
-    let files = zipFiles.filter(file => file.language === language);
+    let files = zipFiles.filter(file => file.language === selectedLanguage);
 
     // if no files by language - return original language files
     if (files.length === 0) {
@@ -75,19 +77,18 @@ class Sketches extends React.Component {
   static isZipOrImageFileType = file => file.type === 'image';
 
   isPropsChanged = prevProps => {
-    const { unit, zipIndexById, contentLanguage, uiLanguage } = this.props;
+    const { unit, zipIndexById, contentLanguages } = this.props;
 
-    return prevProps.contentLanguage !== contentLanguage
-      || prevProps.uiLanguage !== uiLanguage
+    return prevProps.contentLanguages !== contentLanguages
       || prevProps.unit.id !== unit.id
       || !isEqual(prevProps.zipIndexById, zipIndexById);
   };
 
   isStateChanged = prevState => {
-    const { zipFileId, language, imageFiles } = this.state;
+    const { zipFileId, selectedLanguage, imageFiles } = this.state;
 
     return prevState.zipFileId !== zipFileId
-      || prevState.language !== language
+      || prevState.selectedLanguage !== selectedLanguage
       || prevState.imageFiles !== imageFiles;
   };
 
@@ -103,19 +104,18 @@ class Sketches extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { unit, contentLanguage, uiLanguage } = this.props;
+    const { unit, contentLanguages } = this.props;
 
     if (prevProps.unit.id !== unit.id || !prevState.zipFiles) {
       // full reset
       this.processUnit();
-    } else if (prevProps.contentLanguage !== contentLanguage
-      || prevProps.uiLanguage !== uiLanguage) {
-      this.setStateByZipFiles(prevState.zipFiles, contentLanguage, uiLanguage, unit);
-    } else if (prevState.language !== this.state.language) {
-      const { zipFiles, language } = this.state;
+    } else if (prevProps.contentLanguages !== contentLanguages) {
+      this.setStateByZipFiles(prevState.zipFiles, contentLanguages, unit);
+    } else if (prevState.selectedLanguage !== this.state.selectedLanguage) {
+      const { zipFiles, selectedLanguage } = this.state;
 
       if (zipFiles && Array.isArray(zipFiles)) {
-        const itemState = this.getItemState(zipFiles, language, unit);
+        const itemState = this.getItemState(zipFiles, selectedLanguage, unit);
 
         this.setState({
           ...itemState,
@@ -125,25 +125,25 @@ class Sketches extends React.Component {
   }
 
   processUnit = () => {
-    const { unit, contentLanguage, uiLanguage } = this.props;
+    const { unit, contentLanguages } = this.props;
     const zipFiles                              = Sketches.getUnitSketchFiles(unit);
 
     if (zipFiles) {
-      this.setStateByZipFiles(zipFiles, contentLanguage, uiLanguage, unit);
+      this.setStateByZipFiles(zipFiles, contentLanguages, unit);
     } else {
       this.setState({ zipFileId: null, imageFiles: null });
     }
   };
 
-  setStateByZipFiles = (zipFiles, contentLanguage, uiLanguage, unit) => {
-    const { languages, language } = Sketches.getFilesLanguages(zipFiles, contentLanguage, uiLanguage);
-    const itemState               = this.getItemState(zipFiles, language, unit);
+  setStateByZipFiles = (zipFiles, contentLanguages, unit) => {
+    const { filesLanguages, selectedLanguage } = Sketches.getFilesLanguages(zipFiles, contentLanguages, unit.original_language);
+    const itemState               = this.getItemState(zipFiles, selectedLanguage, unit);
 
-    this.setState({ zipFiles, languages, language, ...itemState });
+    this.setState({ zipFiles, filesLanguages, selectedLanguage, ...itemState });
   };
 
-  getItemState = (zipFiles, language, unit) => {
-    const files = Sketches.filterZipFiles(zipFiles, language, unit.original_language);
+  getItemState = (zipFiles, selectedLanguage, unit) => {
+    const files = Sketches.filterZipFiles(zipFiles, selectedLanguage, unit.original_language);
     return this.getStateByFile(files);
   };
 
@@ -177,8 +177,8 @@ class Sketches extends React.Component {
     }
   };
 
-  handleLanguageChanged = (e, language) => {
-    this.setState({ language });
+  handleLanguageChanged = (selectedLanguage) => {
+    this.setState({ selectedLanguage });
     this._imageGallery.slideToIndex(0);
   };
 
@@ -220,8 +220,8 @@ class Sketches extends React.Component {
   );
 
   render() {
-    const { t, zipIndexById, uiLanguage }                = this.props;
-    const { zipFileId, languages, language, imageFiles } = this.state;
+    const { t, zipIndexById, uiDir }                = this.props;
+    const { zipFileId, filesLanguages, selectedLanguage, imageFiles } = this.state;
     const { wip, err, data }                             = zipIndexById[zipFileId] || {};
 
     const wipErr = WipErr({ wip, err, t });
@@ -250,14 +250,14 @@ class Sketches extends React.Component {
         return (
           <div>
             {
-              languages && languages.length > 1
+              filesLanguages && filesLanguages.length > 1
                 ? (
                   <Container fluid textAlign="right" className="padded">
                     <MenuLanguageSelector
-                      languages={languages}
-                      defaultValue={language}
-                      onSelect={this.handleLanguageChanged}
-                      fluid={false}
+                      languages={filesLanguages}
+                      selected={selectedLanguage}
+                      onLanguageChange={this.handleLanguageChanged}
+                      multiSelect={false}
                     />
                   </Container>
                 )
@@ -267,7 +267,7 @@ class Sketches extends React.Component {
               ref={i => this._imageGallery = i}
               lazyLoad
               showFullscreenButton
-              isRTL={isLanguageRtl(uiLanguage)}
+              isRTL={uiDir === 'rtl'}
               items={items}
               thumbnailPosition="top"
               showPlayButton={false}
@@ -294,8 +294,8 @@ class Sketches extends React.Component {
 
 const mapState = state => ({
   zipIndexById: selectors.getZipIndexById(state.assets),
-  uiLanguage: settings.getLanguage(state.settings),
-  contentLanguage: settings.getContentLanguage(state.settings),
+  uiDir: settings.getUIDir(state.settings),
+  contentLanguages: settings.getContentLanguages(state.settings),
 });
 
 const mapDispatch = dispatch => bindActionCreators({

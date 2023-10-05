@@ -29,7 +29,7 @@ const LessonPage = ({ t }) => {
   const collection = useSelector(state => mdb.getDenormCollection(state.mdb, cid));
 
   const { items, total, wip, err } = useSelector(state => lists.getNamespaceState(state.lists, namespace)) || {};
-  const language                   = useSelector(state => settings.getLanguage(state.settings));
+  const contentLanguages           = useSelector(state => settings.getContentLanguages(state.settings));
   const pageSize                   = useSelector(state => settings.getPageSize(state.settings));
   const selected                   = useSelector(state => filters.getNotEmptyFilters(state.filters, namespace), isEqual);
   const prevSel                    = usePrevious(selected);
@@ -47,7 +47,7 @@ const LessonPage = ({ t }) => {
     } else {
       dispatch(actions.fetchList(namespace, pageNo, { collection: cid, pageSize, withViews: true }));
     }
-  }, [language, pageNo, selected, cid]);
+  }, [contentLanguages, pageNo, selected, cid]);
 
   const wipErr = WipErr({ wip, err, t });
 
@@ -75,7 +75,6 @@ const LessonPage = ({ t }) => {
           pageNo={pageNo}
           pageSize={pageSize}
           total={total}
-          language={language}
           onChange={setPage}
         />}
       </Container>

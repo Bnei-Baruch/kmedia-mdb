@@ -1,9 +1,9 @@
-import { put, takeLatest } from 'redux-saga/effects';
+import { put, select, takeLatest } from 'redux-saga/effects';
 import moment from 'moment';
 
 import { LANG_UKRAINIAN } from '../helpers/consts';
 import { changeDirection, getCurrentDirection, getLanguageDirection } from '../helpers/i18n-utils';
-import { types } from '../redux/modules/settings';
+import { selectors as settings, types } from '../redux/modules/settings';
 import { actions as mdb } from '../redux/modules/mdb';
 import i18n from '../helpers/i18nnext';
 
@@ -16,23 +16,29 @@ function changeDirectionIfNeeded(language) {
   }
 }
 
-function* setLanguage(action) {
-  const language = action.payload;
+function* setLanguages(action) {
+  const uiLang = yield select(state => settings.getUILang(state.settings));
+  const newUILang = (action.type === types.SET_URL_LANGUAGE ? action.payload : action.payload.uiLang) || uiLang;
 
-  // TODO (edo): promisify callback and check for errors
-  i18n.changeLanguage(language);
+  i18n.changeLanguage(newUILang, err => {
+    if (err) {
+      console.log(`Error switching to ${newUILang}: ${err}`);
+    }
+  });
 
-  // change global moment.js locale
-  moment.locale(language === LANG_UKRAINIAN ? 'uk' : language);
+  // Change global moment.js locale
+  const newUILangUKFix = newUILang === LANG_UKRAINIAN ? 'uk' : newUILang;
+  moment.locale(newUILangUKFix);
 
-  // change page direction and fetch css
-  changeDirectionIfNeeded(language);
+  // Change page direction and fetch css
+  changeDirectionIfNeeded(newUILang);
 
+  // Reload sources tags and more to match required languages.
   yield put(mdb.fetchSQData());
 }
 
 function* watchSetLanguages() {
-  yield takeLatest([types.SET_LANGUAGE], setLanguage);
+  yield takeLatest([types.SET_UI_LANGUAGE, types.SET_URL_LANGUAGE], setLanguages);
 }
 
 export const sagas = [

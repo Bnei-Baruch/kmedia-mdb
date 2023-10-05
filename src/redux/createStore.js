@@ -22,24 +22,25 @@ export default function createStore(initialState, history) {
   const sagaMiddleWare        = createSagaMiddleware(sagaMiddlewareOptions);
   middlewares.push(sagaMiddleWare);
 
-  if (!isBrowser && !isProduction) {
-    // const logger = createLogger({
-    //   stateTransformer: () => {
-    //   },
-    //   actionTransformer: ({ type }) => ({ type }),
-    //   colors: {
-    //     title: () => false,
-    //     prevState: () => false,
-    //     action: () => false,
-    //     nextState: () => false,
-    //     error: () => false,
-    //   }
-    // });
-    //
-    // middlewares.push(logger);
-  }
+  //if (!isBrowser && !isProduction) {
+  // const logger = createLogger({
+  //   stateTransformer: () => {
+  //   },
+  //   actionTransformer: ({ type }) => ({ type }),
+  //   colors: {
+  //     title: () => false,
+  //     prevState: () => false,
+  //     action: () => false,
+  //     nextState: () => false,
+  //     error: () => false,
+  //   }
+  // });
+  //
+  // middlewares.push(logger);
+  //}
 
   //TODO David: need replace to @reduxjs/toolkit
+  console.log('createStore, reduxCreateStore, apply middleware');
   const store = reduxCreateStore(reducer(history), initialState, compose(
     applyMiddleware(...middlewares),
     devToolsStoreEnhancer()

@@ -754,8 +754,14 @@
   },
   "languages": {
     "language": "Language",
-    "website_language": "Website Language",
-    "content_language": "Content language"
+    "ui_language": "UI Language:",
+    "content_languages": "Content Languages",
+    "add_languages": "Add language...",
+    "show_all_content": "Show all content",
+    "show_all_content_explanation": "You will see content in other languages too.",
+    "url_language_prefix": "You are using {{lang}} from URL, click ",
+    "url_language_here": "here",
+    "url_language_suffix": " to use your languages."
   },
   "share-text": {
     "message-title": "Read this fragment",

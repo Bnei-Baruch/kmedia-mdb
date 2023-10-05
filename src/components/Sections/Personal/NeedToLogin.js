@@ -5,18 +5,15 @@ import { Button, Divider, Header } from 'semantic-ui-react';
 
 import { selectors } from '../../../redux/modules/auth';
 import { selectors as settings } from '../../../redux/modules/settings';
-import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import { login } from '../../../pkg/ksAdapter/adapter';
 
 const ShowNeedToLogin = withTranslation()(
   ({ t }) => {
-    const language = useSelector(state => settings.getLanguage(state.settings));
-
-    const dir = getLanguageDirection(language);
+    const uiDir = useSelector(state => settings.getUIDir(state.settings));
 
     return (
       <div className="need_to_login">
-        <div dir={dir}>
+        <div dir={uiDir}>
           <Header as="h1" content={t('nav.sidebar.personal')} className="weight-normal" />
           <Header as="h2" content={t('personal.needToLogin')} className="weight-normal" />
           <Divider hidden />

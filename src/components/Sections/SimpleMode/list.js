@@ -11,7 +11,7 @@ import { selectors as mdb } from '../../../redux/modules/mdb';
 import { isEmpty } from '../../../helpers/utils';
 import { SectionLogo } from '../../../helpers/images';
 
-const SimpleModeList = ({ language, t, renderUnit }) => {
+const SimpleModeList = ({ filesLanguages, t, renderUnit }) => {
   const wip = useSelector(state => selectors.getWip(state.simpleMode));
   const err = useSelector(state => selectors.getError(state.simpleMode));
   const reduxItems = useSelector(state => selectors.getItems(state.simpleMode));
@@ -39,14 +39,14 @@ const SimpleModeList = ({ language, t, renderUnit }) => {
               {t('simple-mode.today-lessons')}
             </h2>
             <List size="large">
-              {lessons.map(x => renderUnit(x, language, t))}
+              {lessons.map(x => renderUnit(x, filesLanguages, t))}
             </List>
           </div>
       }
       {
         others.length > 0 &&
           <List size="large">
-            {renderUnit(others, language, t)}
+            {renderUnit(others, filesLanguages, t)}
           </List>
       }
     </div>
@@ -54,7 +54,7 @@ const SimpleModeList = ({ language, t, renderUnit }) => {
 };
 
 SimpleModeList.propTypes = {
-  language: PropTypes.string.isRequired,
+  filesLanguages: PropTypes.arrayOf(PropTypes.string).isRequired,
   t: PropTypes.func.isRequired,
   renderUnit: PropTypes.func.isRequired,
 };

@@ -7,10 +7,10 @@ import PropTypes from 'prop-types';
 
 import { selectors as settings } from '../../../redux/modules/settings';
 import { actions, selectors } from '../../../redux/modules/assets';
-import { selectSuitableLanguage } from '../../../helpers/language';
+import { getLanguageName, selectSuitableLanguage } from '../../../helpers/language';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import { physicalFile } from '../../../helpers/utils';
-import { updateQuery } from '../../../helpers/url';
+import { getQuery, updateQuery } from '../../../helpers/url';
 import PDF, { isTaas, startsFrom } from '../../shared/PDF/PDF';
 import ScrollToSearch from '../../shared/DocToolbar/ScrollToSearch';
 import Download from '../../shared/Download/Download';
@@ -19,7 +19,7 @@ import AudioPlayer from '../../shared/AudioPlayer';
 import MenuLanguageSelector from '../../Language/Selector/MenuLanguageSelector';
 import { getPageFromLocation } from '../../Pagination/withPagination';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
-import { CT_SOURCE } from '../../../helpers/consts';
+import { CT_SOURCE, LANG_HEBREW } from '../../../helpers/consts';
 
 export const checkRabashGroupArticles = source => {
   if (/^gr-/.test(source)) { // Rabash Group Articles
@@ -71,22 +71,29 @@ const Library = ({ data, source, downloadAllowed }) => {
   const { t }              = useTranslation();
 
   const doc2htmlById    = useSelector(state => selectors.getDoc2htmlById(state.assets));
-  const uiLanguage      = useSelector(state => settings.getLanguage(state.settings));
-  const contentLanguage = useSelector(state => settings.getContentLanguage(state.settings, location));
+  const contentLanguages = useSelector(state => settings.getContentLanguages(state.settings, location));
 
   const [pageNumber, setPageNumber] = useState(getPageFromLocation(location));
 
-  const languages = data ? Object.keys(data) : [];
-  const _language = selectSuitableLanguage(contentLanguage, uiLanguage, languages);
+  const query = getQuery(location);
+  let desiredLanguages = contentLanguages.slice();
+  if (query && query.source_language) {
+    desiredLanguages = [query.source_language];
+  }
+
+  const sourceLanguages = data ? Object.keys(data) : [];
+  const _language = selectSuitableLanguage(desiredLanguages, sourceLanguages, LANG_HEBREW);
   const dispatch  = useDispatch();
 
-  const [language, setLanguage] = useState(_language);
+  const [selectedSourceLanguage, setSelectedSourceLanguage] = useState('');
 
   useEffect(() => {
-    source && setLanguage(selectSuitableLanguage(contentLanguage, uiLanguage, languages));
-  }, [source, _language]);
+    if (!selectedSourceLanguage && !!desiredLanguages.length) {
+      setSelectedSourceLanguage(selectSuitableLanguage(desiredLanguages, sourceLanguages, LANG_HEBREW));
+    }
+  }, [desiredLanguages.join(','), sourceLanguages.slice().sort().join(',')]);
 
-  const file    = getLibraryContentFile(data?.[language], source);
+  const file    = getLibraryContentFile(data?.[selectedSourceLanguage], source);
   const fetched = !!doc2htmlById[file.id]?.data;
   useEffect(() => {
     if (file.id && !fetched)
@@ -105,25 +112,28 @@ const Library = ({ data, source, downloadAllowed }) => {
     }));
   };
 
-  const handleLanguageChanged = (e, language) => {
-    updateQuery(navigate, location, query => ({ ...query, language }));
-    setLanguage(language);
+  const handleLanguageChanged = (selected) => {
+    updateQuery(navigate, location, query => ({ ...query, source_language: selected }));
+    if (!!sourceLanguages.length) {
+      setSelectedSourceLanguage(selected);
+    }
   };
 
   const getAudioPlayer = () => {
-    const { mp3 } = data[language] || {};
+    const { mp3 } = data[selectedSourceLanguage] || {};
     return mp3 ? <AudioPlayer file={mp3} /> : null;
   };
 
-  const getLanguageBar      = () => {
-    const languageBar = languages.length > 0 &&
+  const getLanguageBar = () => {
+    const languageBar = sourceLanguages.length > 0 &&
       <div className="library-language-container">
         {!isMobileDevice && getAudioPlayer()}
         <MenuLanguageSelector
-          languages={languages}
-          defaultValue={language}
-          onSelect={handleLanguageChanged}
-          fluid={false}
+          languages={sourceLanguages}
+          selected={selectedSourceLanguage}
+          onLanguageChange={handleLanguageChanged}
+          multiSelect={false}
+          optionText={(language) => getLanguageName(language) + (data && data[language] && data[language].mp3 ? ' \uD83D\uDD0A' : '')}
         />
         {isMobileDevice && getAudioPlayer()}
       </div>;
@@ -132,6 +142,7 @@ const Library = ({ data, source, downloadAllowed }) => {
   };
   const languageBar         = getLanguageBar();
   const content             = (file.isPDF || !file) ? file : { ...file, ...doc2htmlById[file.id] };
+
   const getContentToDisplay = () => {
     const { wip, err, data: contentData, isPDF, url } = content;
 
@@ -152,16 +163,16 @@ const Library = ({ data, source, downloadAllowed }) => {
         />
       );
     } else if (contentData) {
-      const direction = getLanguageDirection(language);
+      const direction = getLanguageDirection(selectedSourceLanguage);
 
       return (
         <div
           style={{ direction, textAlign: (direction === 'ltr' ? 'left' : 'right') }}>
           <ScrollToSearch
             data={contentData}
-            language={language}
-            source={{ language, ...buildBookmarkSource(source) }}
-            label={{ language, ...buildLabelData(source) }}
+            language={selectedSourceLanguage}
+            source={{ selectedSourceLanguage, ...buildBookmarkSource(source) }}
+            label={{ selectedSourceLanguage, ...buildLabelData(source) }}
           />
         </div>
       );

@@ -19,7 +19,7 @@ const renderTwitters = (tweets, limitLength) => {
   const length = limitLength || tweets.length;
 
   return (
-    <Feed>
+    <Feed className="publications-twitter">
       {
         tweets.slice(0, length).map(item => <TwitterFeed twitter={item} key={item.twitter_id} />)
       }
@@ -36,7 +36,6 @@ const TwitterPage = ({
   total,
   pageSize,
   namespace,
-  language,
   t,
   onPageChange,
   onFiltersChanged,
@@ -58,7 +57,6 @@ const TwitterPage = ({
           pageNo={pageNo}
           pageSize={pageSize}
           total={total}
-          language={language}
           onChange={onPageChange}
         />
       </Container>
@@ -87,7 +85,6 @@ TwitterPage.propTypes = {
   pageNo: PropTypes.number.isRequired,
   total: PropTypes.number.isRequired,
   pageSize: PropTypes.number.isRequired,
-  language: PropTypes.string.isRequired,
   t: PropTypes.func.isRequired,
   onPageChange: PropTypes.func.isRequired,
   onFiltersChanged: PropTypes.func.isRequired,

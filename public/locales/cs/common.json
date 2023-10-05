@@ -13,6 +13,8 @@
       "books": "Knihy",
       "topics": "Témata",
       "publications": "Publikace",
+      "not-found": "",
+      "publications": "",
       "music": "Music",
       "simple-mode": "Downloads",
       "photos": "Fotky",
@@ -21,6 +23,7 @@
       "project-status": "Stav projektu",
       "help": "Pomoc",
       "old-site": "Stará stránka",
+      "podcast": "Podcast",
       "subscribe": "Subscribe For Updates",
       "bookmarks": "Bookmarks",
       "sketches": "Sketches"
@@ -48,7 +51,8 @@
         "LAST_30_DAYS": "Posledních 30 dní",
         "LAST_MONTH": "Poslední měsíc",
         "THIS_MONTH": "Tento měsíc",
-        "CUSTOM_RANGE": "Vlastní rozsah"
+        "CUSTOM_RANGE": "Vlastní rozsah",
+        "CUSTOM_DAY": "Pick a Date"
       },
       "start": "Začátek",
       "end": "Konec"
@@ -97,7 +101,8 @@
       "programs": "Programy",
       "events": "Setkání a Události",
       "publications": "Publikace",
-      "sources": "Zdroje"
+      "sources": "Zdroje",
+      "posts": "Blog"
     },
     "aside-filter": {
       "filters-title": "Filter by interests",
@@ -110,7 +115,8 @@
       "person-filter": "Author",
       "original-language-filter": "Original Language",
       "locations-filter": "Location",
-      "free-text": "Free Text"
+      "free-text": "Free Text",
+      "sort-by-filter": "Sort by"
     },
     "media-types": {
       "audio" : "Audio",
@@ -142,7 +148,8 @@
       "KITEI_MAKOR": "Zdrojové materiály",
       "LIKUTIM": "Assorted Excerpts",
       "SOURCE": "Knihovna",
-      "PICNIC": "Piknik"
+      "PICNIC": "Piknik",
+      "R_TWEET": "Tweets"
     }
   },
   "buttons": {
@@ -379,6 +386,7 @@
       "women": "Ženské lekce",
       "children": "Dětské lekce",
       "series": "Vybrané studijní série",
+      "series": "Seltudy Series",
       "seriesTree": {
         "byTopics": "By Topics",
         "bySourcesOf": "By Sources Of"
@@ -456,7 +464,8 @@
   "publications": {
     "header": {
       "text": "Publikace",
-      "subtext": "Články o aktuálních událostech, kultuře, populární vědě, vztazích a dalších, představené z jedinečné perspektivy moudrosti Kabaly"
+      "subtext": "Články o aktuálních událostech, kultuře, populární vědě, vztazích a dalších, představené z jedinečné perspektivy moudrosti Kabaly",
+      "subtext2": "The content is based on talks given by Dr. Michael Laitman and is written and edited by his students."
     },
     "tabs": {
       "articles": "Články",
@@ -551,7 +560,8 @@
     },
     "transcription": {
       "header": "Přepis",
-      "no-transcription": "Přepis chybí"
+      "no-transcription": "Přepis chybí",
+      "no-content": "Transcription is missing"
     },
     "sources": {
       "header": "Zdroje",
@@ -622,7 +632,9 @@
     "derived-title": "Odvozená média",
     "type-labels": {
       "video": "Hlavní Video",
+      "video-simple": "Video",
       "audio": "Hlavní Audio",
+      "audio-simple": "Audio",
       "text": "Přepis Textů",
       "image": "Obrázky"
     },
@@ -734,7 +746,8 @@
       "LESSONS_SERIES": "Seltudy Series",
       "KTAIM_NIVCHARIM": "Selected Highlights",
       "sources": "Zdroje",
-      "SOURCE": "Zdroje"
+      "SOURCE": "Zdroje",
+      "downloads": "Downloads"
     },
     "media-types": {
       "video": "Video",
@@ -751,8 +764,11 @@
   },
   "languages": {
     "language": "Language",
-    "website_language": "Website Language",
-    "content_language": "Content language"
+    "ui_language": "UI Language:",
+    "content_languages": "Content Languages",
+    "add_languages": "Add language...",
+    "show_all_content": "Show all content",
+    "show_all_content_explanation": "You will see content in other languages too."
   },
   "share-text": {
     "message-title": "Přečtěte si tento fragment",
@@ -763,11 +779,11 @@
     "unpin": "Expand",
     "share-button": "Sdílet fragment",
     "bookmark-button": "Save Bookmark",
-    "tag-button": "Tag Text",
     "share-button-alt": "Share Link",
     "link-button-alt": "Copy link to selected text",
     "copy-button-alt": "Copy text",
     "bookmark-button-alt": "Create a bookmark and save it in the personal area",
+    "tag-button": "Tag Text",
     "tag-button-alt": "Tag the selected text in the Topics section",
     "docbar-title": "You have selected an excerpt from the text, what would you like to do?",
     "play-from-text": "Play the chosen excerpt",

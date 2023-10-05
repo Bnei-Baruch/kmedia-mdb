@@ -6,6 +6,7 @@ import { Divider, Feed, Image } from 'semantic-ui-react';
 import { isEmpty } from '../../../../../helpers/utils';
 import * as shapes from '../../../../shapes';
 import twitterAvatar from '../../../../../images/ml_twitter_avatar.jpeg';
+import { getTwitterLanguage, isLanguageRtl } from '../../../../../helpers/i18n-utils';
 
 const screenNames = {
   Michael_Laitman: 'Михаэль Лайтман',
@@ -116,6 +117,10 @@ const TwitterFeed = ({ snippetVersion = false, withDivider = true, twitter = nul
     return null;
   }
 
+  const language = getTwitterLanguage(twitter.username);
+  const isRtl    = isLanguageRtl(language);
+  const position = isRtl ? 'right' : 'left';
+
   const { username, twitter_id: tID, created_at: ts, raw } = twitter;
   const mts                                                = moment(ts);
   const screenName                                         = screenNames[username];
@@ -158,7 +163,7 @@ const TwitterFeed = ({ snippetVersion = false, withDivider = true, twitter = nul
                 : null
             }
           </Feed.Summary>
-          <Feed.Extra text>
+          <Feed.Extra text style={{textAlign: position, direction: isRtl ? 'rtl' : 'ltr'}}>
             <div dangerouslySetInnerHTML={{ __html: prepare(raw, highlight) }} />
             {
               snippetVersion

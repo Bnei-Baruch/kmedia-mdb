@@ -9,7 +9,7 @@ import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { LANG_ENGLISH, LANG_HEBREW, LANG_RUSSIAN, LANG_SPANISH, KC_BOT_USER_NAME } from '../../../helpers/consts';
 import { getQuery } from '../../../helpers/url';
 import banner from '../../../images/DonationBanner.jpg';
-import { getLanguageDirection, isLanguageRtl } from '../../../helpers/i18n-utils';
+import { isLanguageRtl } from '../../../helpers/i18n-utils';
 import { selectors as settings } from '../../../redux/modules/settings';
 import { selectors } from '../../../redux/modules/auth';
 
@@ -37,22 +37,22 @@ function DonationPopup({ t }) {
   };
 
   const location = useLocation();
-  const language = useSelector(state => settings.getLanguage(state.settings));
+  const contentLanguages = useSelector(state => settings.getContentLanguages(state.settings));
+  const uiLang = useSelector(state => settings.getUILang(state.settings));
+  const uiDir = useSelector(state => settings.getUIDir(state.settings));
+  const isRTL = isLanguageRtl(uiLang);
 
   const [open, setOpen]    = React.useState(shouldOpen());
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
-  const isRTL   = isLanguageRtl(language);
-  const langDir = getLanguageDirection(language);
-
-  const { linkLang, utmTerm } = getDonateLinkDetails(language);
+  const { linkLang, utmTerm } = getDonateLinkDetails(contentLanguages);
   const link                  = `https://www.kab1.com/${linkLang}?utm_source=kabbalah_media&utm_medium=popup&utm_campaign=donations&utm_id=donations&utm_term=${utmTerm}&utm_content=popup_link_donate`;
 
   return (
     <Modal
       closeIcon
       className={clsx('donationPopup', { 'rtl': isRTL })}
-      dir={langDir}
+      dir={uiDir}
       centered={!isMobileDevice}
       size="large"
       dimmer="inverted"
@@ -92,19 +92,16 @@ function DonationPopup({ t }) {
   );
 }
 
-const getDonateLinkDetails = language => {
-  switch (language) {
-    case LANG_HEBREW:
-      return { linkLang: '', utmTerm: 'heb' };
-    case LANG_ENGLISH:
-      return { linkLang: 'en', utmTerm: 'eng' };
-    case LANG_RUSSIAN:
-      return { linkLang: 'ru', utmTerm: 'rus' };
-    case LANG_SPANISH:
-      return { linkLang: 'es', utmTerm: 'spa' };
-    default:
-      return { linkLang: 'en', utmTerm: 'other_lang' };
-  }
+const DONATION_LINKS_DETAILS = new Map([
+  [LANG_HEBREW, { linkLang: '', utmTerm: 'heb' }],
+  [LANG_ENGLISH, { linkLang: 'en', utmTerm: 'eng' }],
+  [LANG_RUSSIAN, { linkLang: 'ru', utmTerm: 'rus' }],
+  [LANG_SPANISH, { linkLang: 'es', utmTerm: 'spa' }],
+]);
+
+const getDonateLinkDetails = contentLanguages => {
+  const language = contentLanguages.find(language => DONATION_LINKS_DETAILS.has(language));
+  return (language && DONATION_LINKS_DETAILS.get(language)) || { linkLang: 'en', utmTerm: 'other_lang' };
 };
 
 DonationPopup.propTypes = { t: PropTypes.func.isRequired };

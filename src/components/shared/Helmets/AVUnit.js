@@ -10,7 +10,9 @@ import { useSelector } from 'react-redux';
 import { selectors as settings } from '../../../redux/modules/settings';
 import { selectors as mdb } from '../../../redux/modules/mdb';
 
-const AVUnitWithDep = ({ unit, language }) => {
+const AVUnitWithDep = ({ unit }) => {
+  const contentLanguages = useSelector(state => settings.getContentLanguages(state.settings));
+
   // if unit.description doesn't exist, use the collection description
   let { description } = unit;
   if (isEmpty(description)) {
@@ -23,11 +25,13 @@ const AVUnitWithDep = ({ unit, language }) => {
   const videoDate = moment.utc(unit.film_date).toDate();
 
   const videoFiles = unit.files
-    .filter(file => (file.type === 'video' && file.language === language))
+    .filter(file => (file.type === 'video' && contentLanguages.includes(file.language)))
+    // Order files by content language.
+    .sort((a, b) => contentLanguages.indexOf(a.language) - contentLanguages.indexOf(b.language))
     .map(file => ({
       ...file,
       ...getVideoRes(file.video_size, videoDate),
-      url: physicalFile(file, true)
+      url: physicalFile(file, true),
     }));
 
   return (
@@ -54,10 +58,9 @@ const AVUnitMemo = React.memo(AVUnitWithDep, areEqual);
 
 const AVUnit = ({ id }) => {
   const unit     = useSelector(state => mdb.getDenormContentUnit(state.mdb, id));
-  const language = useSelector(state => settings.getLanguage(state.settings));
-  if (!unit || !unit.files || !language) {
+  if (!unit || !unit.files) {
     return null;
   }
-  return <AVUnitMemo unit={unit} language={language} />;
+  return <AVUnitMemo unit={unit} />;
 };
 export default AVUnit;

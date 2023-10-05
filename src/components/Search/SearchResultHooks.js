@@ -560,7 +560,8 @@ export const SearchResultTweets = ({ source }) => {
   const wipError           = WipErr({ wip, err, t });
   const items              = useSelector(state => twitterMapFromState(state, source));
   const { isMobileDevice } = useContext(DeviceInfoContext);
-  const language           = useSelector(state => settingsSelectors.getLanguage(state.settings));
+  const uiLang             = useSelector(state => settingsSelectors.getUILang(state.settings));
+  const uiDir             = useSelector(state => settingsSelectors.getUIDir(state.settings));
 
   const [pageNo, setPageNo] = useState(0);
   const pageSize            = isMobileDevice ? 1 : 3;
@@ -587,10 +588,9 @@ export const SearchResultTweets = ({ source }) => {
   const onScrollRight = () => onScrollChange(pageNo + 1);
   const onScrollLeft  = () => onScrollChange(pageNo - 1);
 
-  const isRTL                  = isLanguageRtl(language);
   const swipeHandlers          = useSwipeable({
-    onSwipedLeft: isRTL ? onScrollRight : onScrollLeft,
-    onSwipedRight: isRTL ? onScrollLeft : onScrollRight
+    onSwipedLeft: uiDir === 'rtl' ? onScrollRight : onScrollLeft,
+    onSwipedRight: uiDir === 'rtl' ? onScrollLeft : onScrollRight
   });
   const renderItem             = ({ twitter, highlight }) => (
     <Card key={twitter.twitter_id} className="bg_hover_grey home-twitter" raised>
@@ -614,7 +614,7 @@ export const SearchResultTweets = ({ source }) => {
   };
 
   const renderScrollRight = () => {
-    const dir = isLanguageRtl(language) ? 'right' : 'left';
+    const dir = uiDir === 'rtl' ? 'right' : 'left';
     return pageNo === 0 ? null : (
       <Button
         icon={`chevron ${dir}`}
@@ -630,7 +630,7 @@ export const SearchResultTweets = ({ source }) => {
 
   const renderScrollLeft = () => {
     const numberOfPages = Math.round(ids.length / pageSize);
-    const dir           = isLanguageRtl(language) ? 'left' : 'right';
+    const dir           = uiDir === 'rtl' ? 'left' : 'right';
 
     return (pageNo >= numberOfPages - 1) ? null : (
       <Button
@@ -651,7 +651,7 @@ export const SearchResultTweets = ({ source }) => {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <Header as="h2" color="blue">{t('home.twitter-title')}</Header>
           <div textAlign={isMobileDevice ? 'left' : 'right'} className="no-padding  no-border">
-            <a href={`/${language}/publications/twitter`}>{t('home.all-tweets')}</a>
+            <a href={`/${uiLang}/publications/twitter`}>{t('home.all-tweets')}</a>
           </div>
         </div>
         {wipError}

@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import { selectors, actions } from '../../../redux/modules/mdb';
-import { selectors as settings } from '../../../redux/modules/settings';
 import { selectors as recommended } from '../../../redux/modules/recommended';
 import { selectors as sources } from '../../../redux/modules/sources';
 import { selectors as tags } from '../../../redux/modules/tags';
@@ -42,7 +41,6 @@ const TagItemContainerHook = (
 ) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const tag                = useSelector(state => tags.getTagById(state.tags)(id));
-  const language           = useSelector(state => settings.getLanguage(state.settings));
   const views              = useSelector(state => recommended.getViews(id, state.recommended));
 
   if (!tag) return null;
@@ -55,7 +53,6 @@ const TagItemContainerHook = (
 
   const props = {
     tag,
-    language,
     link: link || canonicalLink({ id: tag.id, content_type: CT_TAG }),
     withCUInfo: false,
     withCCUInfo: withInfo,
@@ -83,7 +80,6 @@ const SourceItemContainerHook = (
 ) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const source             = useSelector(state => sources.getSourceById(state.sources)(id));
-  const language           = useSelector(state => settings.getLanguage(state.settings));
   const views              = useSelector(state => recommended.getViews(id, state.recommended));
 
   if (!source) return null;
@@ -96,7 +92,6 @@ const SourceItemContainerHook = (
 
   const props = {
     source,
-    language,
     link: link || canonicalLink({ id: source.id, content_type: CT_SOURCE }),
     withCUInfo: false,
     withCCUInfo: withInfo,
@@ -131,7 +126,6 @@ const ContentItemContainer = (
 ) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const unit               = useSelector(state => selectors.getDenormContentUnit(state.mdb, id));
-  const language           = useSelector(state => settings.getLanguage(state.settings));
   const views              = useSelector(state => recommended.getViews(id, state.recommended));
   const ccu                = useSelector(state => selectors.getDenormCollection(state.mdb, ccuId)) || canonicalCollection(unit);
   const denormLabel        = useSelector(state => selectors.getDenormLabel(state.mdb));
@@ -181,7 +175,6 @@ const ContentItemContainer = (
 
   const props = {
     unit,
-    language,
     link,
     withCUInfo,
     withCCUInfo,

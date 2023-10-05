@@ -23,12 +23,13 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { noop } from '../../helpers/utils';
 import { Icon, Menu } from 'semantic-ui-react';
 import clsx from 'clsx';
+import { useSelector } from 'react-redux';
 
-import { DEFAULT_LANGUAGE } from '../../helpers/consts';
+import { noop } from '../../helpers/utils';
 import { isLanguageRtl } from '../../helpers/i18n-utils';
+import { selectors as settings } from '../../redux/modules/settings';
 
 const TITLES = {
   first: <Icon name="angle double left" />,
@@ -75,14 +76,15 @@ const renderPage = (content, value, key, disabled, onChange, active = false, exC
   );
 };
 
-const Pagination = ({ pageSize, total = 0, pageNo = 1, windowSize = 6, language = DEFAULT_LANGUAGE, titles = TITLES, onChange = noop }) => {
+const Pagination = ({ pageSize, total = 0, pageNo = 1, windowSize = 6, titles = TITLES, onChange = noop }) => {
+  const uiLang = useSelector(state => settings.getUILang(state.settings));
+  const isRTL = isLanguageRtl(uiLang);
+
   const { current, totalBlocks } = calcBlocks({ total, pageSize, pageNo });
   const vr                       = visibleRange(current, totalBlocks, windowSize);
   if (vr.length === 0) {
     return null;
   }
-
-  const isRTL = isLanguageRtl(language);
 
   const title        = getTitle(titles);
   const prevDisabled = current === 1;
@@ -109,7 +111,6 @@ Pagination.propTypes = {
   pageSize: PropTypes.number.isRequired,
   total: PropTypes.number,
   pageNo: PropTypes.number,
-  language: PropTypes.string,
   onChange: PropTypes.func,
   windowSize: PropTypes.number,
   titles: PropTypes.shape({

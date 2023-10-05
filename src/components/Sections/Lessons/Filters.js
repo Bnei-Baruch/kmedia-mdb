@@ -21,22 +21,28 @@ import ContentTypeFilter from './ContentTypeFilter';
 const Filters = ({ namespace, baseParams }) => {
   const [isHydrated, setIsHydrated] = useState(false);
 
-  const { t }        = useTranslation();
-  const language     = useSelector(state => settings.getLanguage(state.settings));
-  const isReady      = useSelector(state => selectors.isReady(state.filtersAside, namespace));
-  const { wip, err } = useSelector(state => selectors.getWipErr(state.filtersAside, namespace));
-  const selected     = useSelector(state => filters.getNotEmptyFilters(state.filters, namespace), isEqual);
+  const { t } = useTranslation();
+  const uiLang           = useSelector(state => settings.getUILang(state.settings));
+  const contentLanguages = useSelector(state => settings.getContentLanguages(state.settings));
+  const isReady          = useSelector(state => selectors.isReady(state.filtersAside, namespace));
+  const { wip, err }     = useSelector(state => selectors.getWipErr(state.filtersAside, namespace));
+  const selected         = useSelector(state => filters.getNotEmptyFilters(state.filters, namespace), isEqual);
   const prevSelRef   = useRef(-1);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (!isReady && !wip && !err) {
+      // DON'T COMMIT, why filters should load collections for virtual lessons for lessons page?!
+      console.log('fetch collections');
       dispatch(prepareActions.fetchCollections(PAGE_NS_LESSONS, { content_type: [CT_VIRTUAL_LESSONS] }));
     }
-  }, [language, dispatch, isReady, wip, err]);
+  // DON'T COMMIT, seems very wrong to dispatch event based on uiLang and content languages change
+  // Seems like SAGA is the right place for this, though, in Saga we don't know which page we are.
+  }, [uiLang, contentLanguages, dispatch, isReady, wip, err]);
 
   useEffect(() => {
+    console.log('fetch stats hydrated', isReady, wip, err, !isReady && !wip && !err ? 'FETCHING' : '');
     if (!isReady && !wip && !err) {
       dispatch(actions.fetchStats(namespace, {
         ...baseParams,

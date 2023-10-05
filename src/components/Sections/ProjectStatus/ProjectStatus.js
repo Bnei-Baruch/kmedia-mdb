@@ -6,9 +6,9 @@ import { LANG_HEBREW, LANG_RUSSIAN, LANG_UKRAINIAN } from '../../../helpers/cons
 import { selectors as settings } from '../../../redux/modules/settings';
 
 const ProjectStatus = () => {
-  const language = useSelector(state => settings.getLanguage(state.settings));
+  const uiLang = useSelector(state => settings.getUILang(state.settings));
 
-  switch (language) {
+  switch (uiLang) {
     case LANG_HEBREW:
       return (
         <Segment>
