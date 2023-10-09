@@ -8,7 +8,7 @@ import { selectors as settings } from '../../../../../../redux/modules/settings'
 import * as shapes from '../../../../../shapes';
 import Transcription from './Transcription';
 
-// DON'T MERGE, NO NEED FOR CONTAINER HERE!!!
+// TODO: Merge with transcriptio, no need for container.
 const TranscriptionContainer = ({ unit, type = null, activeTab = 'transcription' }) => {
   return <Transcription unit={unit} type={type} activeTab={activeTab} />;
 };

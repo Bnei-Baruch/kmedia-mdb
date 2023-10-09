@@ -551,13 +551,13 @@
     },
     "transcription": {
       "header": "Transcription",
-      "no-content": "Transcription is missing"
+      "no-content": "Transcription is missing for your language"
     },
     "sources": {
       "header": "Sources",
       "no-sources": "No sources",
       "no-source": "Please select source",
-      "no-source-available": "No source is ready for display"
+      "no-source-available": "No source is available for your language"
     },
     "sketches": {
       "header": "Sketches"

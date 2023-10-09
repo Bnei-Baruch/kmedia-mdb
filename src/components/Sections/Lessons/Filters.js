@@ -33,12 +33,8 @@ const Filters = ({ namespace, baseParams }) => {
 
   useEffect(() => {
     if (!isReady && !wip && !err) {
-      // DON'T COMMIT, why filters should load collections for virtual lessons for lessons page?!
-      console.log('fetch collections');
       dispatch(prepareActions.fetchCollections(PAGE_NS_LESSONS, { content_type: [CT_VIRTUAL_LESSONS] }));
     }
-  // DON'T COMMIT, seems very wrong to dispatch event based on uiLang and content languages change
-  // Seems like SAGA is the right place for this, though, in Saga we don't know which page we are.
   }, [uiLang, contentLanguages, dispatch, isReady, wip, err]);
 
   useEffect(() => {

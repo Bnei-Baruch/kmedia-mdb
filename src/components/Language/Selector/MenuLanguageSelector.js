@@ -52,7 +52,7 @@ const MenuLanguageSelector = ({ languages = [], selected = [], onLanguageChange 
 
   const validLanguages = languages.filter(lang => contentLanguages.includes(lang));
   const otherLanguages = languages.filter(lang => !contentLanguages.includes(lang));
-  const options = getOptions({ languages: validLanguages }).concat([{className: 'language-selection-divider disabled'}]).concat(getOptions({ languages: otherLanguages}));
+  const options = getOptions({ languages: validLanguages }).concat([{value: 'divider', className: 'language-selection-divider disabled'}]).concat(getOptions({ languages: otherLanguages}));
   // Special case when all laguages are selected, e.g., show content with any language.
   const isAny = languages === selected;
   return LanguageSelector(selected, options, onLanguageChangeInternal, isAny, multiSelect, optionText, upward);

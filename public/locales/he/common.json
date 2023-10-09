@@ -550,13 +550,13 @@
     },
     "transcription": {
       "header": "תמליל",
-      "no-content": "חסר תמליל"
+      "no-content": "חסר תמליל בשפה שלך"
     },
     "sources": {
       "header": "מקורות לשיעור",
       "no-sources": "אין מקורות",
       "no-source": "בחר מקור",
-      "no-source-available": "אף מקור לא מוכן לתצוגה"
+      "no-source-available": "אין מקור בשפה שלך"
     },
     "sketches": {
       "header": "שרטוטים"

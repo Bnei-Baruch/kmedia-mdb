@@ -73,8 +73,7 @@ function hydrateApp(kcInfo) {
   // We ask for semi-quasi static data here since
   // we strip it from SSR to save initial network bandwidth
   console.log('hydrateApp fetchSQData');
-  console.log('skipping fetchSQData, waiting for language set....');
-  //store.dispatch(mdb.fetchSQData());
+  store.dispatch(mdb.fetchSQData());
 }
 
 if (window.__isAuthApp) {
