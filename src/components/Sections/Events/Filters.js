@@ -1,45 +1,47 @@
-import React, { useEffect, useState, useRef } from 'react';
+'use client';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'next-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Container, Header } from 'semantic-ui-react';
 import { FN_SOURCES_MULTI, FN_TOPICS_MULTI } from '../../../helpers/consts';
-
-import { selectors as filters } from '../../../../lib/redux/slices/filterSlice/filterSlice';
-import { actions, selectors } from '../../../../lib/redux/slices/filterSlice/filterStatsSlice';
-import FiltersHydrator from '../../Filters/FiltersHydrator';
+import { selectors } from '../../../../lib/redux/slices/filterSlice/filterStatsSlice';
 import DateFilter from '../../../../lib/filters/components/DateFilter';
 import Language from '../../../../lib/filters/components/LanguageFilter/Language';
 import Locations from '../../../../lib/filters/components/LocationsFilter/Locations';
 import OriginalLanguageFilter from '../../../../lib/filters/components/OriginalLanguageFilter/OriginalLanguage';
 import TagSourceFilter from '../../../../lib/filters/components/TopicsFilter/TagSourceFilter';
 import ContentTypesFilter from './ContentTypesFilter';
+import { fetchStats } from '../../../../lib/redux/slices/filterSlice/thunks';
 
 const Filters = ({ namespace, baseParams }) => {
-  const { t }        = useTranslation();
-  const isReady      = useSelector(state => selectors.isReady(state.filterStats, namespace));
-  const { wip, err } = useSelector(state => selectors.getStatus(state.filterStats, namespace));
-  const selected     = useSelector(state => filters.getNotEmptyFilters(state.filters, namespace));
-  const prevSelRef   = useRef(-1);
+  const { t }                              = useTranslation();
+  const { wip, err, needRefresh, isReady } = useSelector(state => selectors.getStatus(state.filterStats, namespace));
+
 
   const dispatch = useDispatch();
   useEffect(() => {
     if (!isReady && !wip && !err) {
-      dispatch(actions.fetchStats(namespace,
-        { ...baseParams, with_original_languages: true, with_locations: true, with_collections: true, },
-        { isPrepare: true, countC: true }));
+      const _args = {
+        namespace,
+        isPrepare: true,
+        countC: true,
+        params: { ...baseParams, with_original_languages: true, with_locations: true, with_collections: true, },
+      };
+      dispatch(fetchStats(_args));
     }
   }, [dispatch, isReady]);
 
-  const selLen = selected.reduce((acc, x) => acc + x.values.length, 0);
   useEffect(() => {
-    if (isReady && prevSelRef.current !== selLen) {
-      dispatch(actions.fetchStats(namespace,
-        { ...baseParams, with_original_languages: true, with_locations: true, with_collections: true, },
-        { isPrepare: false, countC: true }
-      ));
-      prevSelRef.current = selLen;
+    if (isReady && needRefresh) {
+      const _args = {
+        namespace,
+        isPrepare: false,
+        countC: true,
+        params: { ...baseParams, with_original_languages: true, with_locations: true, with_collections: true, },
+      };
+      dispatch(fetchStats(_args));
     }
-  }, [dispatch, isReady, baseParams, selLen]);
+  }, [dispatch, isReady, baseParams, needRefresh]);
 
   return (
     <Container className="padded">

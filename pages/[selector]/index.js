@@ -19,6 +19,7 @@ import FilterByNamespace from './FilterByNamespace';
 import { baseParamsByNamespace } from './helper';
 import ItemByNamespace from './ItemByNamespace';
 import { fetchSQData } from '../../lib/redux/slices/mdbSlice';
+import { filterStats } from '../../lib/redux/slices/filterSlice/filterStatsSlice';
 
 export const getServerSideProps = wrapper.getServerSideProps(store => async (context) => {
   const lang      = context.locale ?? DEFAULT_CONTENT_LANGUAGE;

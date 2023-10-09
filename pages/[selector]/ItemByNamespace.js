@@ -3,11 +3,12 @@ import {
   PAGE_NS_PROGRAMS,
   PAGE_NS_EVENTS,
   COLLECTION_DAILY_LESSONS,
-  COLLECTION_LESSONS_TYPE, UNIT_LESSONS_TYPE, EVENT_TYPES, CT_MEAL, CT_FRIENDS_GATHERING
+  COLLECTION_LESSONS_TYPE,
+  UNIT_LESSONS_TYPE,
+  EVENT_TYPES,
+  CT_MEAL,
+  CT_FRIENDS_GATHERING
 } from '../../src/helpers/consts';
-import FiltersLessons from '../../src/components/Sections/Lessons/Filters';
-import FiltersPrograms from '../../src/components/Sections/Programs/Filters';
-import FiltersEvents from '../../src/components/Sections/Events/Filters';
 import React from 'react';
 import DailyLessonItem from '../../src/components/Sections/Lessons/DailyLessonItem';
 import CollectionItem from '../../src/components/Sections/Lessons/Collectiontem';
@@ -38,9 +39,9 @@ export default function ItemByNamespace({ namespace, item }) {
     const { content_type, id } = item;
     switch (true) {
       case EVENT_TYPES.includes(content_type):
-        return <CollectionItem id={id} key={i} />;
+        return <CollectionItem id={id} key={id} />;
       case [CT_MEAL, CT_FRIENDS_GATHERING].includes(content_type):
-        return <UnitItem id={id} key={i} />;
+        return <UnitItem id={id} key={id} />;
       default:
         return null;
     }

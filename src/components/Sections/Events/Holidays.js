@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Button, Checkbox, Icon, Input, List, Modal, Table } from 'semantic-ui-react';
 import { CT_HOLIDAY, FN_COLLECTION_MULTI, FN_CONTENT_TYPE } from '../../../helpers/consts';
 import { isEmpty } from '../../../helpers/utils';
-import { actions, selectors as filters } from '../../../../lib/redux/slices/filterSlice/filterSlice';
+import { selectors as filters, filterSlice } from '../../../../lib/redux/slices/filterSlice/filterSlice';
 import { selectors as filtersAside, selectors } from '../../../../lib/redux/slices/filterSlice/filterStatsSlice';
 import { selectors as mdb } from '../../../../lib/redux/slices/mdbSlice/mdbSlice';
 
