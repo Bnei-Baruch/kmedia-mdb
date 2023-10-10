@@ -858,7 +858,7 @@
   "languages": {
     "language": "Язык",
     "ui_language": "Язык интерфейса:",
-    "content_languages": "Языки контена",
+    "content_languages": "Языки контента",
     "add_languages": "Добавить язык...",
     "show_all_content": "Показать весь контент",
     "show_all_content_explanation": "Контент будет также показан и на других языках.",
