@@ -4,11 +4,12 @@ import { selectors, actions } from '../../../../redux/modules/mdb';
 
 import { selectors as my } from '../../../../redux/modules/my';
 import { MY_NAMESPACE_HISTORY } from '../../../../helpers/consts';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { selectors as settings } from '../../../../redux/modules/settings';
 import { getSavedTime } from '../../../Player/helper';
 import moment from 'moment';
 import { getCuByCcuSkipPreparation, canonicalLink } from '../../../../helpers/links';
+import { getEmbedFromQuery } from '../../../../helpers/player';
 
 const BuildPlaylistLastDaily = () => {
   const lastLessonId = useSelector(state => selectors.getLastLessonId(state.mdb));
@@ -18,6 +19,8 @@ const BuildPlaylistLastDaily = () => {
   const denormCU     = useSelector(state => selectors.nestedGetDenormContentUnit(state.mdb));
   const historyItems = useSelector(state => my.getList(state.my, MY_NAMESPACE_HISTORY));
   const navigate     = useNavigate();
+  const location     = useLocation();
+  const embed        = getEmbedFromQuery(location);
   const uiLang       = useSelector(state => settings.getUILang(state.settings));
 
   const dispatch = useDispatch();
@@ -44,8 +47,9 @@ const BuildPlaylistLastDaily = () => {
 
     const cuId = sorted[0]?.id || getCuByCcuSkipPreparation(ccu);
     const to   = canonicalLink(denormCU(cuId), null, ccu);
+    if (embed) to.search = 'embed=1';
     navigate({ ...to, pathname: `/${uiLang}${to.pathname}` }, { replace: true });
-  }, [ccu, historyItems, navigate]);
+  }, [ccu, historyItems, navigate, embed]);
 
   return null;
 };
