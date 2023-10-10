@@ -1,0 +1,842 @@
+{
+  "nav": {
+    "top": {
+      "header": "كابالا ميديا"
+    },
+    "sidebar": {
+      "personal": "الملف الشخصي",
+      "lessons": "دروس ومحاضرات",
+      "programs": "برامج ومقاطع",
+      "sources": "مكتبة الكابالا",
+      "likutim": "سجلات",
+      "events": "مؤتمرات وأحداث",
+      "books": "كتب",
+      "topics": "مواضيع",
+      "topic": "موضوع",
+      "not-found": "غير موجود",
+      "publications": "منشورات",
+      "music": "موسيقى",
+      "simple-mode": "تنزيلات",
+      "photos": "صور",
+      "design": "تصميم",
+      "design2": "تخطيط",
+      "project-status": "حالة المشروع",
+      "help": "مساعدة",
+      "old-site": "الموقع القديم",
+      "podcast": "بودكاست",
+      "subscribe": "إشتراك وتحديثات",
+      "bookmarks": "إشارات مرجعية",
+      "sketches": "رسومات"
+    },
+    "footer": {
+      "copyright": "حقوق الطبع والنشر © 2003-{{year}}",
+      "rights": "بني باروخ – جمعية الكابالا لعام، جميع الحقوق محفوظة",
+      "bottomTextStart": "كابالا ميديا هو الأرشيف الرسمي لمعهد بني بروخ كابالا للتعليم والبحث -",
+      "bottomTextLink": "https://www.kabbalah.info",
+      "bottomTextEnd": "- يتم تحديثه بانتظام بإصدارات قابلة للعرض والتنزيل من درس الكابالا اليومي مع الكابالا الدكتور مايكل لايتمان بتنسيقات الفيديو والصوت، بالإضافة إلى دروس بني باروخ الكابالا الأخرى والمحاضرات والبرامج التلفزيونية والموسيقى ومقاطع الفيديو والكتب والنصوص. يمكن تصفح أرشيف وسائط الكابالا عن طريق البحث عن الكلمات الرئيسية أو العبارات الرئيسية والتقويم واللغة ونوع المحتوى ونوع الوسائط والكتالوجات. قم بوضع إشارة مرجعية على الصفحة الرئيسية لكابالا ميديا لتتمكن من الوصول بسرعة وسهولة إلى أحدث مواد الكابالا في الوقت الحالي."
+    }
+  },
+  "filters": {
+    "by": "مفلترة بواسطة",
+    "filters": "فلاتر",
+    "hideFilters": "فلاتر مخفية",
+    "all": "الجميع",
+    "date-filter": {
+      "label": "تاريخ",
+      "selectTitle": "إختر نطاق تاريخ",
+      "presets": {
+        "TODAY": "اليوم",
+        "YESTERDAY": "الامس",
+        "LAST_7_DAYS": "أخر 7 أيام",
+        "LAST_30_DAYS": "أخر 30 يوم",
+        "LAST_MONTH": "الشهر السابق",
+        "THIS_MONTH": "هذا الشهر",
+        "CUSTOM_RANGE": "نطاق مخصص",
+        "CUSTOM_DAY": "اختر تاريخًا"
+      },
+      "start": "بداية",
+      "end": "نهاية"
+    },
+    "language-filter": {
+      "label": "لغة",
+      "all": "أي لغة"
+    },
+    "sources-filter": {
+      "label": "مصادر",
+      "all": "كل المصادر"
+    },
+    "topics-filter": {
+      "label": "مواضيع",
+      "all": "كل المواضيع"
+    },
+    "publishers-filter": {
+      "label": "الناشرين"
+    },
+    "programs-filter": {
+      "label": "النوع / البرنامج",
+      "all": "كل البرامج",
+      "recently-updated": "تم تحديثه مؤخرا",
+      "last-updated": "آخر تحديث بتاريخ"
+    },
+    "locations-filter": {
+      "label": "المواقع",
+      "all": "كل المواقع"
+    },
+    "holidays-filter": {
+      "label": "العطل",
+      "all": "جميع العطل"
+    },
+    "years-filter": {
+      "label": "سنة",
+      "placeholder": "إختر سنة"
+    },
+    "collections-filter": {
+      "label": "المجموعات",
+      "all": "جميع المجموعات"
+    },
+    "sections-filter": {
+      "label": "القسم",
+      "all": "الكل",
+      "lessons": "دروس ومحاضرات",
+      "programs": "برامج ومقاطع",
+      "events": "المؤتمرات والاحداث",
+      "publications": "المنشورات",
+      "sources": "مصادر الكابالا",
+      "posts": "المدونة"
+    },
+    "aside-filter": {
+      "filters-title": "التصفية حسب الاهتمامات",
+      "sources-filter-multi": "علماء الكابالا",
+      "topics-filter-multi": "المواضيع",
+      "content-type-filter": "قسك",
+      "language-filter": "لغة",
+      "date-filter": "تاريخ",
+      "media-type-filter": "وسائط",
+      "person-filter": "مؤلف",
+      "original-language-filter": "اللغة الاصلية",
+      "locations-filter": "الموقع",
+      "free-text": "نص حر",
+      "sort-by-filter": "الفرز حسب"
+    },
+    "media-types": {
+      "audio": "صوت",
+      "video": "فيديو",
+      "text": "النص",
+      "image": "رسم"
+    },
+    "content-types": {
+      "CONGRESS": "مؤتمرات",
+      "HOLIDAY": "عطل",
+      "UNITY_DAY": "أيام وحدة",
+      "FRIENDS_GATHERING": "تجمعات الأصدقاء",
+      "MEAL": "وجبات",
+      "EVENT_PART": "Misc",
+      "LESSON_PART": "الدروس اليومية",
+      "DAILY_LESSON": "الدروس اليومية",
+      "VIRTUAL_LESSON": "ندوات عبر الإنترنت",
+      "LECTURE": "محاضرات",
+      "WOMEN_LESSON": "دروس نساء",
+      "CHILDREN_LESSON": "دروس أطفال",
+      "LESSONS_SERIES": "سلسلة دراسية",
+      "LECTURE_SERIES": "سلسلة محاضرات",
+      "CLIP": "مقاطع",
+      "VIDEO_PROGRAM_CHAPTER": "البرامج",
+      "ARTICLE": "مقالات",
+      "PUBLICATION": "النشر",
+      "BLOG_POST": "المدونة",
+      "TRAINING": "التدريب",
+      "KITEI_MAKOR": "مواد المصادر",
+      "LIKUTIM": "مقتطفات متنوعة",
+      "SOURCE": "مكتبة الكابالا",
+      "PICNIC": "نزهه",
+      "R_TWEET": "تغريدات"
+    }
+  },
+  "buttons": {
+    "apply": "تطبيق",
+    "cancel": "إلغاء",
+    "close": "إغلاق",
+    "audio": "صوت",
+    "video": "فيديو",
+    "more": "أكثر",
+    "copy-link": "نسخ الرابط",
+    "search": "بحث",
+    "previous-lesson": "إلى الدرس السابق",
+    "next-lesson": "إلى الدرس التالي",
+    "previous-article": "المقال السابقة",
+    "next-article": "المقالة التالية",
+    "copy": "نسخ",
+    "view-all": "عرض الكل",
+    "save": "حفظ",
+    "remove": "إزالة",
+    "edit": "تعديل"
+  },
+  "player": {
+    "messages": {
+      "edit-help": "اسحب المؤشرات لمشاركة جزء من الفيديو"
+    },
+    "buttons": {
+      "edit-back": "العودة إلى التشغيل",
+      "tap-to-unmute": "انقر لإلغاء كتم الصوت"
+    },
+    "error": {
+      "loading": "خطأ في تحميل الملف."
+    },
+    "header": {
+      "series-by-topic": "سلسلة دروس حول الموضوع:"
+    },
+    "download": {
+      "icon-hover-text": "قم بتنزيل المقتطف الذي حددته",
+      "download-button": "تنزيل",
+      "copyButton": "نسخ الرابط"
+    },
+    "settings": {
+      "playback": "تشغيل مرة أخرى",
+      "playback-speed": "السرعة",
+      "quality": "الجودة",
+      "language": "اللغة",
+      "audio": "صوت",
+      "video": "فيديو",
+      "normal": "عادي",
+      "audio-only-on": "تشغيل الصوت فقط",
+      "audio-only-off": "الصوت فقط معطل",
+      "subtitles": "العناوين الفرعية"
+    },
+    "share": {
+      "title": "شاهد هذا الفيديو",
+      "start-position": "أنقر للبدأ",
+      "end-position": "انقر للإنهاء",
+      "embedded": "تضمين",
+      "reset-to-full": "إعادة تعيين إلى كامل",
+      "download-file": "تحميل مقتطف"
+    },
+    "controls": {
+      "pause": "توقف",
+      "play": "تشغيل",
+      "mute": "كتم",
+      "share": "مشاركة",
+      "settings": "إعدادات",
+      "rewind": "إرجاع {{seek}} ثانية",
+      "skip": "تخطي {{seek}} ثانية",
+      "next-video": "الفيديو التالي",
+      "prev-video": "الفيديو السابق",
+      "fullscreen": "تكبير الشاشة",
+      "fullscreen-exit": "الخروج من ملء الشاشة"
+    }
+  },
+  "playlist": {
+    "title-by-type": {
+      "DAILY_LESSON": "أجزاء من الدرس",
+      "SPECIAL_LESSON": "أجزاء من الدرس",
+      "CONGRESS": "أجزاء من الحدث",
+      "HOLIDAY": "أجزاء من العطلة",
+      "PICNIC": "أجزاء من الحدث",
+      "UNITY_DAY": "أجزاء من الحدث",
+      "LESSONS_SERIES": "أجزاء من المجموعة",
+      "SONGS": "قائمة تشغيل الموسيقى"
+    },
+    "shuffle": "قائمة تشغيل عشوائية"
+  },
+  "messages": {
+    "loading": "جار التحميل",
+    "loading-subtext": "تمسك بقوة",
+    "server-error": "خطأ سيرفر",
+    "not-found": "أُووبس!",
+    "not-found-subtext": "يبدو أننا لا نستطيع العثور على ما تبحث عنه",
+    "no-files": "لا ملفات",
+    "no-playable-files": "لا توجد ملفات قابلة للتشغيل",
+    "no-results": "لا نتائج",
+    "pagination-results": "نتائج {{start}} - {{end}} من {{total}}",
+    "link-copied-to-clipboard": "الرابط نسخ!",
+    "text-copied-to-clipboard": "النص نسح!",
+    "unknown": "مجهول",
+    "unsupported-media-format": "صيغة غير مدعومة.",
+    "error-loading-file": "خطأ في تحميل الملف.",
+    "fallback-language": "المحتوى غير موجود باللغة المطلوبة، لقد تم تحديد لغة افتراضية.",
+    "fallback-to-audio": "لم يتم العثور على فيديو، يستخدم الصوت.",
+    "fallback-to-video": "لم يتم العثور صوت، يستخدام الفيديو.",
+    "source-content-not-found": "لم يتم العثور على محتويات المصدر",
+    "no-images": "لم يتم العثور على الرسومات",
+    "new": "خبر",
+    "trim-expiration": "* سيكون الرابط متاحا للتحميل لمدة 7 أيام فقط",
+    "trimmed-title": "ملفاتك جاهزة",
+    "trimmed-title-wip": "نحن نجهز لك الملف",
+    "trimmed-content-wip": "بضع دقائق...",
+    "add-new-note": "قم بتدوين الملاحظات والأشياء التي سمعتها خلال الدروس أو أي شيء مهم يجب الاحتفاظ به للمستقبل...",
+    "confirm-remove-note": "هل أنت متأكد أنك تريد حذف الملاحظة؟"
+  },
+  "search": {
+    "header": {
+      "text": "نتائح البحث",
+      "subtext": ""
+    },
+    "topNote": {
+      "tip": "نصيحة",
+      "first": "إبحث عن النتائج باللغة {{language}}.",
+      "second": "يمكنك اختيار لغات محتوى أخرى"
+    },
+    "didYouMean": "هل تعني:",
+    "showAll": "عرض الكل",
+    "lessons": "الدروس",
+    "programs": "البرامج",
+    "sortby": "ترتيب حسب",
+    "sorts": {
+      "relevance": "ذو صلة",
+      "newertoolder": "الأحدث إلى الأقدم",
+      "oldertonewer": "الأقدم إلى الأحدث"
+    },
+    "results": {
+      "empty-query": "لم يتم تقديم مصطلح البحث. الرجاء استخدام المربع أعلاه للبحث.",
+      "no-results": "بحثك عن <1><0>{{query}}</0></1> لم يعثر على أية نتائج."
+    },
+    "result": {
+      "description": "ملخص",
+      "transcript": "النص",
+      "content": "المحتوى"
+    },
+    "intent-types": {
+      "lessons": "دروس صباحية يومية",
+      "programs": "برامج"
+    },
+    "intent-prefix": {
+      "lessons-topic": "دروس في الموضوع:",
+      "lessons-source": "الدروس حسب المصدر:",
+      "programs-topic": "البرامج في الموضوع:",
+      "programs-source": "البرامج حسب المصدر:"
+    }
+  },
+  "home": {
+    "header": {
+      "text": "كابالا ميديا",
+      "subtext": "أكبر مصدر للكابالا في العالم. دروس الكابالا مع الدكتور مايكل لايتمان، ومصادر الكابالا الأصلية القابلة للتنزيل بما في ذلك الزوهار، وبرامج تتناول موضوع الكابالا حول العلاقات والصحة والتعليم والاقتصاد والمجتمع."
+    },
+    "search": "اكتشف حكمة الكابالا",
+    "sections": "أقسام الأرشيف",
+    "updates": "آخر التحديثات",
+    "social": "راف لايتمان في الشبكات الاجتماعية",
+    "blog-title": "مدونة راف لايتمان",
+    "twitter-title": "تغريدات",
+    "all-posts": "جميع منشورات المدونة",
+    "all-tweets": "جميع التغريدات",
+    "read-more-posts": "قراءة المزيد من المنشورات",
+    "read-more-tweets": "قراءة المزيد من التغريدات",
+    "last-lesson": "آخر درس يومي",
+    "donate": "تبرع الآن",
+    "virtual-home": "المنزل الافتراضي",
+    "promoted": {
+      "header": "مؤتمر نيو جيرسي",
+      "subheader": "23-26 May 2019"
+    },
+    "latest-updates": {
+      "new-on-the-site": "جديد عن الموقع"
+    },
+    "donate-modal": "<p>أصدقائي الأعزاء,</p> <p>قبل أن تقوم بالتمرير أكثر وتستمتع بالمحتويات الأصلية على الموقع، نود أن ندعوك لتصبح شريكًا لنا في مؤسسة النشر جمعية  \"بني بروخ - كابالا لعام\".</p> <p>لقد قمنا حتى الآن بتوزيع كميات غير مسبوقة من المواد القيمة والفريدة من نوعها في جميع أنحاء العالم، وكل ذلك بفضلكم، آلاف المتطوعين المخلصين.</p> <p>ولكن هذا ليس كافيًا. يومًا بعد يوم يقع العالم في أزمة أكثر حدة في جميع مجالات الحياة، ويحتاج إلى محتوى لا يمكن إلا لمنظمتنا تقديمه؛ محتوى يوضح أهمية التواصل بين الأشخاص ويقربهم من حل كافة الأزمات.</p> <p>ولهذا السبب، ندعوكم الآن، أكثر من أي وقت مضى، للتبرع ماليًا والمشاركة في زيادة نشر المحتوى الخاص بنا للإنسانية.</p> <p>وبهذه الطريقة، يستطيع كل واحد منا أن يحقق حلم الكاباليين في نشر حكمة الكابالا بين الجماهير وسكب نور الثقة على العالم، كما كتب صاحب السلم: \"فقط من خلال نشر حكمة الكابالا سنكافأ بالخلاص الكامل.\"</p> <p>وبهذه المناسبة نود أن نشكر الأصدقاء الذين تبرعوا ويواصلون التبرع بشكل منتظم، و نشكر مقدمًا كل من ينضم الآن لمساهمتك المهمة في نشر حكمة الكابالا.</p> <p><b>إدارة مؤسسة \"بني بروخ - كابالا لعام\".</b></p>"
+  },
+  "events": {
+    "header": {
+      "text": "مؤتمرات وأحداث",
+      "subtext": "اليوم، حكمة الكابالا موجودة بالفعل في كل مكان في العالم. في هذا القسم ستتمكن من رؤية الأحداث والمؤتمرات والاجتماعات الخاصة لمؤسسة \"كابالا لعام\" في إسرائيل والخارج"
+    },
+    "tabs": {
+      "conventions": "مؤتمرات",
+      "holidays": "عطل",
+      "unity-days": "أيام وحدة",
+      "friends-gatherings": "مجالس الأصدقاء",
+      "meals": "وجبات"
+    },
+    "list": {
+      "item_from": "العنصر من:"
+    },
+    "ALL_EVENTS": "جميع الأحداث",
+    "no-matches": "لم يتم العثور على أحداث مطابقة",
+    "unit": {
+      "recommended": {
+        "same-collection": {
+          "title": "أجزاء أخرى من نفس الحدث"
+        }
+      }
+    },
+    "collection": {
+      "playlist": {
+        "preparation": "التحضير",
+        "lessons": "الدروس",
+        "other_parts": "أجزاء الحدث الأخرى",
+        "appendices": "الملاحق"
+      }
+    }
+  },
+  "lessons": {
+    "header": {
+      "text": "محاضرات ودروس",
+      "subtext": "دروس ومحاضرات الدكتور مايكل ليتمان. دروس افتراضية ومحاضرات للنساء وتسجيلات فريدة للحاخام باروخ أشلاج (RABASH) والمزيد."
+    },
+    "tabs": {
+      "daily": "الدروس اليومية",
+      "virtual": "ندوات عبر الإنترنت",
+      "lectures": "محاضرات",
+      "women": "دروس نساء",
+      "rabash": "دروس راباش",
+      "children": "دروس أطفال",
+      "series": "سلسلة الدراسة الذاتية",
+      "seriesTree": {
+        "byTopics": "بالمواضيع",
+        "bySourcesOf": "بمصادر لـ"
+      }
+    },
+    "list": {
+      "related": "متعلق بـ:",
+      "number": "#",
+      "nameByNum_1": "صباح",
+      "nameByNum_2": "بعد الظهر",
+      "nameByNum_3": "مساء",
+      "nameByNum_4": "مساء 2",
+      "item_from": "العنصر من:"
+    },
+    "unit": {
+      "recommended": {
+        "same-collection": {
+          "title": "عناصر أخرى من نفس السلسلة"
+        }
+      }
+    },
+    "unit-lesson-part": {
+      "recommended": {
+        "same-collection": {
+          "title": "أجزاء أخرى من نفس الدرس",
+          "item-title": "الجزء {{name}}"
+        }
+      }
+    },
+    "last": {
+      "title": "درس الكابالا اليومي - محدث",
+      "description": "اختصار محدث لأحدث الدروس اليومية"
+    }
+  },
+  "likutim": {
+    "header": {
+      "text": "مقتطفات متنوعة",
+      "subtext": "ستجد في هذا القسم مقتطفات من كتابات أعظم الكابالا الذين نتعلمهم خلال دروس الكابالا اليومية مع الدكتور مايكل لايتمان. تتعلق المقتطفات بالعمل الروحي وبنية العوالم العليا."
+    },
+    "item-header": "مقتطفات من المصادر:"
+  },
+  "programs": {
+    "header": {
+      "text": "البرامج والمقاطع",
+      "subtext": "ستجد هنا مجموعة غنية ومتنوعة من البرامج التي تشمل: محادثات رائعة حول معنى الحياة، الأحداث الجارية، برامج لجميع أفراد الأسرة، مقاطع والمزيد."
+    },
+    "tabs": {
+      "main": "برامج",
+      "clips": "مقاطع"
+    },
+    "genres": {
+      "documentary": "وثائقي",
+      "late-night": "وقت متأخر من الليل",
+      "news": "أخبار",
+      "talk-show": "برنامج حواري",
+      "educational": "تعليمية",
+      "children": "أطفال",
+      "movies": "أفلام",
+      "other": "أخر"
+    },
+    "list": {
+      "episode_from": "حلقة من:",
+      "item_of": "عنصر من:",
+      "show_all": "إلى كل الحلقات"
+    },
+    "unit": {
+      "recommended": {
+        "same-collection": {
+          "title": "أجزاء أخرى من نفس البرنامج",
+          "item-title": "الحلقة {{name}}"
+        }
+      }
+    }
+  },
+  "publications": {
+    "header": {
+      "text": "منشورات",
+      "subtext": "مقالات عن الأحداث الجارية، والثقافة، والعلوم الشعبية، والعلاقات، وأكثر من ذلك، مقدمة من منظور فريد لحكمة الكابالا",
+      "subtext2": "يعتمد المحتوى على المحادثات التي ألقاها الدكتور مايكل لايتمان ويتم كتابتها وتحريرها من قبل طلابه."
+    },
+    "tabs": {
+      "articles": "مقالات",
+      "twitter": "تويتير",
+      "blog": "مدونة",
+      "audio-blog": "مدونة الصوت"
+    },
+    "list": {
+      "item_from": "عنصر من:"
+    },
+    "unit": {
+      "recommended": {
+        "same-collection": {
+          "title": "مقالات منشورة أخرى في هذه المجموعة"
+        }
+      }
+    },
+    "read-more": "أقرأ المزيد"
+  },
+  "music": {
+    "header": {
+      "text": "موسيقى",
+      "subtext": ""
+    }
+  },
+  "simple-mode": {
+    "header": {
+      "text": "تنزيلات",
+      "subtext": "جميع الوسائط ليوم معين"
+    },
+    "today-button": "اليوم",
+    "total-media-for-date": "كل الوسائط لتاريخ ",
+    "media-language": "لغة الوسائط:",
+    "no-files-found-for-lang": "لا توجد ملفات للغة التي حددتها.",
+    "try-different-language": "حاول اختيار ",
+    "language-click": "لغه مختلفه.",
+    "no-files-found-for-date": "لا توجد ملفات لهذا التاريخ",
+    "date": "التاريخ:",
+    "prev": "السابق.",
+    "next": "التالي",
+    "choose-date": "إتختر تاريخ",
+    "today-lessons": "دروس الكابالا اليومية"
+  },
+  "help": {
+    "header": {
+      "text": "مساعدة",
+      "subtext": "ستجد في هذا القسم دروس فيديو وأفضل الممارسات حول كيفية استخدام الموقع"
+    }
+  },
+  "sketches": {
+    "header": {
+      "text": "رسومات",
+      "subtext": ""
+    }
+  },
+  "pages": {
+    "collection": {
+      "items": {
+        "programs-collection": "حلقة/حلقات",
+        "lessons-collection": "بند/بنود",
+        "publications-collection": "مقال/مقالات",
+        "event": "بند/بنود"
+      }
+    },
+    "unit": {
+      "info": {
+        "sources": "مصادر الكابالا",
+        "topics": "مواضيع",
+        "collections": "متعلق ب",
+        "study-series": "لجميع دروس المجموعة",
+        "episode": "حلقة {{name}}",
+        "episodes": "{{name}} حلقات",
+        "lesson-episode": "{{name}} الجزء",
+        "lesson-episodes": "أجزاء {{name}}",
+        "series-episode": "{{name}} الدرس",
+        "series-episodes": "دروس {{name}}",
+        "song": "أغنية {{name}}",
+        "views": "{{views}} مشاهدة"
+      },
+      "recommended": {
+        "same-collection": {
+          "title": "بند آخر من نفس المجموعة",
+          "item-title": "البند {{name}}"
+        }
+      }
+    }
+  },
+  "materials": {
+    "summary": {
+      "header": "ملخص",
+      "no-summary": "الملخص مفقود"
+    },
+    "transcription": {
+      "header": "النص",
+      "no-content": "النص مفقود"
+    },
+    "sources": {
+      "header": "المصادر",
+      "no-sources": "لا مصادر",
+      "no-source": "الرجاء تحديد المصدر",
+      "no-source-available": "لا يوجد مصدر جاهز للعرض"
+    },
+    "sketches": {
+      "header": "رسومات"
+    },
+    "articles": {
+      "header": "مقالات",
+      "no-content": "لا مقالات"
+    },
+    "research": {
+      "header": "مواد البحث",
+      "no-content": "لا توجد مواد بحثية"
+    },
+    "derived-units": {
+      "header": "أبرز المختارات"
+    },
+    "recommended": {
+      "same-topic": "مستحسن للموضوع",
+      "same-collection": "الفصول الموصى بها من",
+      "any-topic": "أي موضوع",
+      "default": "موصى به لك",
+      "popular": "الأكثر مشاهدة",
+      "watching-now": "يشاهد الان",
+      "views": "مشاهدة",
+      "last": "الفصل الاخير",
+      "next": "الفصل التالي",
+      "prev": "الفصل السابق",
+      "rand": "محتوى عشوائي",
+      "more": "أكثر",
+      "less": "أقل",
+      "new": "فصل جديد",
+      "same-source": "نفس المصدر"
+    },
+    "playlist": {
+      "header": "التالي"
+    }
+  },
+  "sources-library": {
+    "header": {
+      "text": "مكتبة الكابالا",
+      "subtext": "مجموعة من أهم النصوص الأصلية لدراسة الكابالا، والتي كتبها أعظم علماء الكابالا."
+    },
+    "no-source": "الرجاء تحديد المصدر",
+    "toc": "جدول المحتويات",
+    "az": "أ ي",
+    "default": "الافتراضي",
+    "filter": "فرز...",
+    "share-title": "إقرأ هذه المقالة",
+    "group-articles": "مقالات المجموعة",
+    "play-audio-file": "قم بتشغيل الملف الصوتي"
+  },
+  "topics": {
+    "header": {
+      "text": "المواضيع",
+      "subtext": "مجموعة من كافة العناصر لموضوع محدد."
+    },
+    "show-more": "أعرض المزيد",
+    "show-less": "أعرض أقل",
+    "texts-title": "مصادر الكابالا والنصوص والمنشورات"
+  },
+  "media-downloads": {
+    "title": "تنزيلات",
+    "derived-title": "الوسائط المشتقة",
+    "type-labels": {
+      "video": "الفيديو الرئيسي",
+      "video-simple": "فيديو",
+      "audio": "الصوت الرئيسي",
+      "audio-simple": "صوت",
+      "text": "Transcription Text",
+      "image": "صور"
+    },
+    "lesson": {
+      "type-labels": {
+        "video": "فيديو الدرس",
+        "video-simple": "فيديو",
+        "audio": "صوت الدرس",
+        "audio-simple": "صوت",
+        "text": "نص الدرس",
+        "image": "رسومات",
+        "lelo-mikud": "لا توجد مجموعة فوكس",
+        "text-research-material": "مواد البحث"
+      }
+    },
+    "program": {
+      "type-labels": {
+        "video": "فيديو البرنامج",
+        "video-simple": "فيديو",
+        "audio": "صوت البرنامج",
+        "audio-simple": "صوت",
+        "text": "نص البرنامج",
+        "image": "رسومات",
+        "text-article": "مقال من البرنامج",
+        "text-research-material": "مواد البحث"
+      }
+    },
+    "publication": {
+      "type-labels": {
+        "video": "فيديو",
+        "video-simple": "فيديو",
+        "audio": "صوت",
+        "audio-simple": "صوت",
+        "text": "نص المقال",
+        "image": "لقطات"
+      }
+    }
+  },
+  "constants": {
+    "languages": {
+      "he": "العبرية",
+      "en": "الانجليزية",
+      "ru": "الروسية",
+      "es": "الإسبانية",
+      "it": "الإيطالية",
+      "de": "الألمانية",
+      "nl": "الهولندية",
+      "fr": "الفرنسية",
+      "pt": "البرتغالية",
+      "tr": "التركية",
+      "pl": "بولندية",
+      "ar": "العربية",
+      "hu": "الهنغارية",
+      "fi": "الفنلندية",
+      "lt": "الليتوانيه",
+      "ja": "اليابانية",
+      "bg": "البلغارية",
+      "ka": "الجورجية",
+      "no": "النرويجية",
+      "sv": "السويدية",
+      "hr": "الكرواتية",
+      "zh": "الصينية",
+      "fa": "فارسية",
+      "ro": "الرومانية",
+      "hi": "هندية",
+      "ua": "الأوكرانية",
+      "mk": "المقدونية",
+      "sl": "سلوفينية",
+      "lv": "لاتفيا",
+      "sk": "سلوفاكية",
+      "cs": "التشيكية",
+      "am": "الأمهرية"
+    },
+    "content-types": {
+      "DAILY_LESSON": "الدرس اليومي",
+      "SPECIAL_LESSON": "درس خاص",
+      "FRIENDS_GATHERINGS": "مجالس الاصدقاء",
+      "CONGRESS": "مؤتمرات",
+      "VIDEO_PROGRAM": "برنامج",
+      "LECTURE_SERIES": "سلسلة محاضرات",
+      "CHILDREN_LESSONS": "دروس أطفال",
+      "WOMEN_LESSONS": "دروس النساء",
+      "VIRTUAL_LESSONS": "ندوات عبر الإنترنت",
+      "MEALS": "وجبات",
+      "HOLIDAY": "عطل",
+      "PICNIC": "نزهة",
+      "UNITY_DAY": "يوم وحدة",
+      "CLIPS": "مقاطع",
+      "ARTICLES": "مقالات",
+      "LESSON_PART": "درس",
+      "LECTURE": "محاضرة",
+      "CHILDREN_LESSON": "درس للأطفال",
+      "WOMEN_LESSON": "درس نساء",
+      "VIRTUAL_LESSON": "درس إفتراضي",
+      "FRIENDS_GATHERING": "إختماع اصدقاء",
+      "MEAL": "وجبة",
+      "VIDEO_PROGRAM_CHAPTER": "فصل البرنامج",
+      "FULL_LESSON": "درس كامل",
+      "ARTICLE": "مقال",
+      "UNKNOWN": "مجهول",
+      "EVENT_PART": "جزء الحدث",
+      "CLIP": "مقطع",
+      "TRAINING": "تدريب",
+      "KITEI_MAKOR": "مصادر المواد",
+      "LIKUTIM": "المجموعات",
+      "PUBLICATION": "النشر",
+      "LELO_MIKUD": "عدّل - لا توجد مجموعة تركيز",
+      "BLOG_POST": "منشور مدونة",
+      "LESSONS_SERIES": "سلسلة دراسية",
+      "KTAIM_NIVCHARIM": "أبرز المختارات",
+      "sources": "مصادر الكابالا",
+      "SOURCE": "مصادر الكابال",
+      "downloads": "تنزيلات"
+    },
+    "media-types": {
+      "video": "فيديو",
+      "audio": "صوت",
+      "image": "صورة",
+      "text": "نص",
+      "sheet": "ورقة",
+      "banner": "لافتة",
+      "presentation": "عرض تقديمي"
+    }
+  },
+  "values": {
+    "date": "{{date, ll}}"
+  },
+  "languages": {
+    "language": "لغة",
+    "website_language": "لغة الموقع",
+    "content_language": "لغة المحتوى"
+  },
+  "share-text": {
+    "message-title": "اقرأ هذا الجزء",
+    "copy-link": "أنسخ الرابط",
+    "copy-text": "أنسخ النص",
+    "disable-share": "إلغاء",
+    "pin": "طي",
+    "unpin": "توسيع",
+    "share-button": "مشاركة الرابط",
+    "bookmark-button": "حفظ الإشارة المرجعية",
+    "share-button-alt": "مشاركة الرابط",
+    "link-button-alt": "انسخ الرابط إلى النص المحدد",
+    "copy-button-alt": "نسخ النص",
+    "bookmark-button-alt": "قم بإنشاء إشارة مرجعية واحفظها في المنطقة الشخصية",
+    "tag-button": "علّم النص",
+    "tag-button-alt": "ضع علامة على النص المحدد في قسم المواضيع",
+    "docbar-title": "لقد قمت باختيار مقتطف من النص، ماذا تريد أن تفعل؟",
+    "play-from-text": "قم بتشغيل المقطع المختار"
+  },
+  "personal": {
+    "subsNewUnits": "حلقات جديدة",
+    "unsubscribe": "إلغاء الاشتراك",
+    "subscribe": "إشتراك",
+    "unsubscribeSuccessful": "تمت إزالة الاشتراك",
+    "subscribeSuccessful": "تمت إضافة الاشتراك",
+    "newPlaylistSuccessful": "تم إنشاء قائمة تشغيل {{name}} جديدة .",
+    "addToPlaylistSuccessful": "إضيف إلى قائمة التشغيل{{name}}",
+    "history": "التاريخ",
+    "reactions": "مقاطع الفيديو التي أعجبتني",
+    "playlists": "قوائم التشغيل",
+    "playlist": "قائمة التشغيل \"{{name}}\"",
+    "playlistNoResult": "لا توجد مقاطع فيديو في قائمة التشغيل هذه",
+    "subscriptions": "الاشتراكات",
+    "playAll": "تشغيل الجميع",
+    "addToPlaylist": "حفظ إلى...",
+    "newPlaylistName": "اسم قائمة التشغيل الجديدة",
+    "newPlaylist": "إنشاء قائمة تشغيل جديدة",
+    "editPlaylist": "تعديل قائمة التشغيل",
+    "removedSuccessfully": "تمت الإزالة بنجاح",
+    "removeHistory": "أزل من التاريخ",
+    "removeLike": "إزالة من مقاطع الفيديو التي أعجبتني",
+    "removeFromPlaylist": "إزالة من قائمة التشغيل",
+    "confirmRemovePlaylist": "هل أنت متأكد من رغبتك في حذف قائمة التشغيل {{name}}؟\nملاحظة: يعد حذف قوائم التشغيل إجراءً دائمًا ولا يمكن التراجع عنه.",
+    "confirmUnsubscribe": "إلغاء الاشتراك من {{name}}؟",
+    "videosOnList": "فيديو",
+    "login": "تسجيل الدخول",
+    "logout": "تسجيل الخروج",
+    "needToLogin": "سجل الدخول لتسجيل الإعجاب بمقاطع الفيديو وحفظها والاشتراك فيها",
+    "account": "حسابي",
+    "no_playlists": "ليس لديك قوائم تشغيل، يرجى إنشاء واحدة",
+    "no_reactions": "ليس لديك مقاطع فيديو أعجبتك",
+    "no_history": "ابدأ بمشاهدة الفيديوهات التي سيتم عرضها هنا",
+    "no_subscriptions": "ليس لديك اشتراكات بعد، اشترك لرؤيتها هنا",
+    "bookmark": {
+      "title": "الإشارات المرجعية",
+      "name": "الاسم",
+      "saveBookmark": "حفظ الإشارة المرجعية",
+      "editBookmark": "تعديل الإشارة المرجعية",
+      "removeBookmark": "إزالة الإشارة المرجعية",
+      "searchBookmarks": "بحث في الإشارة المرجعية",
+      "searchFolders": "بحث في المجلدات",
+      "folders": "مجلدات",
+      "newFolder": "مجلد جديد",
+      "allFolders": "الجميع",
+      "filterByFolder": "بحث في",
+      "bookmarkUpdated": "تم تحديث الإشارة المرجعية بنجاح!",
+      "bookmarkCreated": "تم إنشاء الإشارة المرجعية بنجاح!",
+      "confirmRemoveBookmark": "هل أنت متأكد أنك تريد حذف الإشارة المرجعية {{name}}؟",
+      "confirmRemoveFolder": "هل أنت متأكد من رغبتك في حذف المجلد {{name}}؟",
+      "haveNo": "ليس لديك أي إشارات مرجعية حتى الآن"
+    },
+    "label": {
+      "tagging": "علامة",
+      "createdBy": "علمة بواسطة {{author}}",
+      "name": "عنوان المقتطف",
+      "infoAddTag": "قم بتعيين موضوعات للمقتطف الذي حددته وانقر فوق الزر \"علامة\" الموجود أسفل الصفحة:",
+      "header": "وضع علامات على المقتطفات في قسم المواضيع",
+      "search": "أدخل موضوع",
+      "ending": "إنهاء",
+      "contentCreate": "هل تريد أن يرى الجميع المقتطف الذي حددته؟\nضع علامة عليه في قسم المواضيع بالموقع",
+      "labelCreated": "تم وضع علامة على المقتطف بنجاح. يمكنك العثور عليه في قسم المواضيع ضمن المواضيع التي قمت بوضع علامة عليها"
+    }
+  }
+}
