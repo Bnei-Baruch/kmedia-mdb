@@ -242,7 +242,7 @@ class TOC extends Component {
     if (isEmpty(children)) { // Leaf
       const item   = this.leaf(sourceId, title);
       const result = { as: 'span', title: item, key: `lib-leaf-${sourceId}` };
-      return [result];
+      return result;
     }
 
     const hasNoGrandsons = children.reduce((acc, curr) => acc && isEmpty(getSourceById(curr).children), true);
@@ -261,11 +261,15 @@ class TOC extends Component {
         key: `lib-leaf-${leafId}`
       }));
     } else {
-      panels = this.subToc(children, path.slice(1)).map(({ content, title: name }, index) => ({
-        title: name,
-        content,
-        key: `root-${index}-${title}`
-      }));
+      panels = this.subToc(children, path.slice(1)).reduce((acc, _item, index) => {
+        if (_item.key?.startsWith('lib-leaf')) {
+          acc.push(_item);
+        } else {
+          const { content, title: name } = _item;
+          acc.push({ title: name, content, key: `root-${index}-${title}` });
+        }
+        return acc;
+      }, []);
     }
 
     if (firstLevel) {
