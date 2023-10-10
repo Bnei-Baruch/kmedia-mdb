@@ -566,13 +566,13 @@
     },
     "transcription": {
       "header": "Стенограмма",
-      "no-content": "Нет стенограммы"
+      "no-content": "Нет стенограммы на вашем языке"
     },
     "sources": {
       "header": "Источники",
       "no-sources": "Нет источника",
       "no-source": "Выберите источник",
-      "no-source-available": "Источник не найден"
+      "no-source-available": "Нет источника на вашем языке"
     },
     "sketches": {
       "header": "Чертежи"

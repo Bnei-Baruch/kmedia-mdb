@@ -67,14 +67,14 @@ const Download = props => {
   }
 
   return ReactDOM.createPortal(
-    <Button compact size="small" icon="download" onClick={() => downloadAsset(path, mimeType, downloadAllowed, filename)}>{children}</Button>,
+    <Button compact size="small" icon="download" disabled={!path} onClick={() => downloadAsset(path, mimeType, downloadAllowed, filename)}>{children}</Button>,
     mountPoint,
   );
 };
 
 Download.propTypes = {
   path: PropTypes.string,
-  mimeType: PropTypes.string.isRequired,
+  mimeType: PropTypes.string,
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node

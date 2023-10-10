@@ -178,7 +178,7 @@ export const SearchResultCU = ({ cu, highlight = {}, clickData, hideContent = fa
     iconByContentType(cu.content_type, t, to) : <UnitLogoWithDuration unit={cu} width={144} />;
 
   const props = {
-    key: cu.id,
+    id: cu.id,
     title: titleFromHighlight(highlight, cu.name),
     link: to,
     logo,
@@ -210,7 +210,7 @@ export const SearchResultPost = ({ id, post, highlight, clickData }) => {
   const link          = canonicalLink({ id, content_type: 'POST' }, mediaLanguage);
 
   const props = {
-    key: id,
+    id,
     title: titleFromHighlight(highlight, post.title),
     link,
     logo: iconByContentType(CT_BLOG_POST, t, link),
@@ -239,7 +239,7 @@ export const SearchResultCollection = ({ c, highlight, clickData }) => {
     <div style={{ minWidth: 144 }}><UnitLogo collectionId={c.id} width={144} /></div>;
 
   const props = {
-    key: c.id,
+    id: c.id,
     title: titleFromHighlight(highlight, c.name),
     link: to,
     logo,
@@ -265,7 +265,7 @@ export const SearchResultSource = ({ id, title, highlight, clickData }) => {
   const to            = canonicalLink({ id, content_type: 'SOURCE' }, mediaLanguage);
 
   const props = {
-    key: id,
+    id: id,
     title: titleFromHighlight(highlight, title),
     link: to,
     logo: iconByContentType('sources', t, to),
@@ -290,7 +290,7 @@ export const SearchResultLandingPage = ({ landingPage, filterValues, clickData }
   const subText           = t(SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_SUBTEXT[landingPage]);
 
   const props = {
-    key: landingPage,
+    id: landingPage,
     title: `${t(linkTitle)} ${valuesTitleSuffix}`,
     link: to,
     logo: iconByContentType(SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_CONTENT_TYPE[landingPage], t, to),
@@ -301,9 +301,9 @@ export const SearchResultLandingPage = ({ landingPage, filterValues, clickData }
   return <SearchResultOneItem {...props} />;
 };
 
-export const SearchResultOneItem = (
-  {
-    key,
+export const SearchResultOneItem = (props) => {
+  const {
+    id,
     title,
     link,
     logo,
@@ -315,8 +315,7 @@ export const SearchResultOneItem = (
     collectionTitle,
     collectionLink,
     click,
-  }
-) => {
+  } = props;
   const { t } = useTranslation();
 
   const description = [];
@@ -327,7 +326,7 @@ export const SearchResultOneItem = (
   !!views && views > 0 && description.push(t('pages.unit.info.views', { views }));
 
   return (
-    <List.Item key={key} className="media_item">
+    <List.Item key={id} className="media_item">
       <div className="media_item__logo">{logo}</div>
       <div className="media_item__content">
         <TooltipIfNeed text={title} Component={Header} as={Link} to={link} onClick={() => click(link)} content={title} />
