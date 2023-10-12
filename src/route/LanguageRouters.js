@@ -3,6 +3,7 @@ import { Outlet, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectors, actions } from '../redux/modules/settings';
 import { LANG_UI_LANGUAGES } from '../helpers/consts';
+import { updateHtmlLang } from '../helpers/language';
 
 const LanguageRouter = () => {
   const { lang: urlLang } = useParams();
@@ -15,9 +16,11 @@ const LanguageRouter = () => {
     if (urlLang && LANG_UI_LANGUAGES.includes(urlLang)) {
       if (urlLang === uiLang && origUrlLang !== '') {
         // Clear URL language it is the same as UI language.
+        updateHtmlLang(uiLang);
         dispatch(actions.setUrlLanguage(''));
       } else if (origUrlLang !== urlLang && urlLang !== uiLang) {
         // Set URL language.
+        updateHtmlLang(urlLang);
         dispatch(actions.setUrlLanguage(urlLang));
       }
     }
