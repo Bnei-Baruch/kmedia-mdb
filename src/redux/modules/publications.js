@@ -212,7 +212,7 @@ const onSSRPrepare = draft => {
 
 export const reducer = handleActions({
   [ssr.PREPARE]: onSSRPrepare,
-  [settings.SET_UI_LANGUAGE]: onSetLanguage,
+  [settings.SET_CONTENT_LANGUAGES]: onSetLanguage,
 
   [SET_PAGE]: onSetPage,
   [RECEIVE_PUBLISHERS]: onReceivePublishers,
