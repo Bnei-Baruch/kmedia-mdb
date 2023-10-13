@@ -614,9 +614,6 @@ const onCountCUSuccess = (state, action) => {
 
 export const reducer = handleActions({
   [ssr.PREPARE]: onSSRPrepare,
-  [settings.SET_UI_LANGUAGE]: (state, action) => {
-    return freshStore();
-  },
   [settings.SET_CONTENT_LANGUAGES]: (state, action) => {
     return freshStore();
   },

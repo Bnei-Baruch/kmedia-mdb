@@ -19,7 +19,7 @@ export const selectSuitableLanguage = (contentLanguages, languages = [], origina
     return originalLanguage;
   }
 
-  // Choose existing language 
+  // Choose existing language
   const contentLanguage = contentLanguages.find(language => languages.includes(language));
   if (contentLanguage) {
     return contentLanguage;
@@ -29,13 +29,19 @@ export const selectSuitableLanguage = (contentLanguages, languages = [], origina
   return defaultReturnLanguage;
 };
 
-export const getLanguageName = (language) => {
+export const getLanguageName = language => {
   const option = LANGUAGE_OPTIONS.find(x => x.value === language);
-  return option && option.name || ''
+  return (option && option.name) || '';
 };
 
 export const getOptions = ({ languages }) =>
   LANGUAGE_OPTIONS
     .filter(x => languages.includes(x.value))
     .map(x => ({ ...x, text: x.name }));
+
+export const updateHtmlLang = lang => {
+  if (document) {
+    document.documentElement.setAttribute('lang', lang);
+  }
+};
 
