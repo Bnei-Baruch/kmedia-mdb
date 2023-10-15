@@ -5,8 +5,10 @@ import { CT_BLOG_POST } from '../../../../../helpers/consts';
 import * as renderUnitHelper from '../../../../../helpers/renderUnitHelper';
 import UnitList from '../../../../Pages/UnitListAsTable/Container';
 
-const renderUnit = (unit, t) =>
-  (
+const renderUnit = (unit, t) => {
+  if (!unit) return null;
+
+  return (
     <Table.Row key={unit.id} verticalAlign="top" className="no-thumbnail">
       <Table.Cell collapsing singleLine>
         {renderUnitHelper.renderUnitFilmDate(unit, t)}
@@ -17,6 +19,7 @@ const renderUnit = (unit, t) =>
       </Table.Cell>
     </Table.Row>
   );
+};
 
 const AudioBlogList = () =>
   <UnitList
@@ -25,4 +28,5 @@ const AudioBlogList = () =>
     extraFetchParams={{ content_type: CT_BLOG_POST }}
     renderUnit={renderUnit}
   />;
+
 export default AudioBlogList;

@@ -6,6 +6,7 @@ import { Button, Checkbox, Dropdown, Icon, List, Popup } from 'semantic-ui-react
 
 import { ALL_LANGUAGES, LANGUAGES, LANG_UI_LANGUAGES } from '../../helpers/consts';
 import { DeviceInfoContext } from '../../helpers/app-contexts';
+import { updateHtmlLang } from '../../helpers/language';
 
 import { selectors as settings, actions } from '../../redux/modules/settings';
 import Link from '../Language/MultiLanguageLink';
@@ -23,6 +24,7 @@ const HandleLanguages = ({ t }) => {
   const dispatch         = useDispatch();
 
   const uiLanguageSelected = language => {
+    updateHtmlLang(language);
     dispatch(actions.setUILanguage({ uiLang: language }));
   };
 
