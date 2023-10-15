@@ -9,7 +9,7 @@ import LibraryHomepage from '../../pages/sources';
 import LibraryContainer from '../../pages/sources/[id]';
 import LibraryPerson from './../components/Sections/Library/LibraryPerson';
 import Likut from './../components/Sections/Likutim/Likut';
-import LikutimMain from './../components/Sections/Likutim/MainPage';
+import LikutimMain from '../../pages/likutim';
 import Music from './../components/Sections/Music/Music';
 import BookmarksPage from './../components/Sections/Personal/Bookmarks/Page';
 import HistoryPage from './../components/Sections/Personal/History/Page';

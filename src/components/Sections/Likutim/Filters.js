@@ -1,47 +1,37 @@
-import React, { useEffect, useState, useRef } from 'react';
+'use client';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'next-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Container, Header } from 'semantic-ui-react';
-import { FN_TOPICS_MULTI } from '../../../helpers/consts';
 
-import { selectors as filters } from '../../../../lib/redux/slices/filterSlice/filterSlice';
-import { actions, selectors } from '../../../../lib/redux/slices/filterSlice/filterStatsSlice';
-import FiltersHydrator from '../../Filters/FiltersHydrator';
+import { FN_TOPICS_MULTI } from '../../../helpers/consts';
+import { selectors } from '../../../../lib/redux/slices/filterSlice/filterStatsSlice';
 import CuNameFilter from '../../../../lib/filters/components/CuNameFilter';
 import DateFilter from '../../../../lib/filters/components/DateFilter';
 import Language from '../../../../lib/filters/components/LanguageFilter/Language';
 import TagSourceFilter from '../../../../lib/filters/components/TopicsFilter/TagSourceFilter';
+import { fetchStats } from '../../../../lib/redux/slices/filterSlice/thunks';
 
 const Filters = ({ namespace, baseParams }) => {
-  const [isHydrated, setIsHydrated] = useState(false);
-
-  const { t }        = useTranslation();
-  const isReady      = useSelector(state => selectors.isReady(state.filterStats, namespace));
-  const { wip, err } = useSelector(state => selectors.getStatus(state.filterStats, namespace));
-  const selected     = useSelector(state => filters.getNotEmptyFilters(state.filters, namespace));
-  const prevSelRef   = useRef(-1);
+  const { t }                              = useTranslation();
+  const { wip, err, needRefresh, isReady } = useSelector(state => selectors.getStatus(state.filterStats, namespace));
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (!isReady && !wip && !err) {
-      dispatch(actions.fetchStats(namespace, baseParams, { isPrepare: true, }));
+      dispatch(fetchStats({ namespace, isPrepare: true, params: baseParams }));
     }
   }, [dispatch, isReady, baseParams]);
 
-  const selLen = selected.reduce((acc, x) => acc + x.values.length, 0);
   useEffect(() => {
-    if (isHydrated && isReady && prevSelRef.current !== selLen) {
-      dispatch(actions.fetchStats(namespace, baseParams, { isPrepare: false, }));
-      prevSelRef.current = selLen;
+    if (isReady && needRefresh) {
+      dispatch(fetchStats({ namespace, isPrepare: false, params: baseParams }));
     }
-  }, [dispatch, isHydrated, isReady, selLen, baseParams, namespace]);
-
-  const handleOnHydrated = () => setIsHydrated(true);
+  }, [dispatch, isReady, baseParams, needRefresh]);
 
   return (
     <Container className="padded">
-      <FiltersHydrator namespace={namespace} onHydrated={handleOnHydrated} />
       <Header as="h3" content={t('filters.aside-filter.filters-title')} />
       <CuNameFilter namespace={namespace} />
       <TagSourceFilter namespace={namespace} filterName={FN_TOPICS_MULTI} />
