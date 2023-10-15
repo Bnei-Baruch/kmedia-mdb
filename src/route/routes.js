@@ -5,8 +5,8 @@ import Help from './../components/Sections/Help/Help';
 import HomePage from '../../app/[lang]/Container';
 import LessonCollection from '../../pages/___lessons/cu/[id]';
 import Lessons from '../../pages/___lessons';
-import LibraryHomepage from './../components/Sections/Library/Homepage';
-import LibraryContainer from './../components/Sections/Library/LibraryContainer';
+import LibraryHomepage from '../../pages/sources';
+import LibraryContainer from '../../pages/sources/[id]';
 import LibraryPerson from './../components/Sections/Library/LibraryPerson';
 import Likut from './../components/Sections/Likutim/Likut';
 import LikutimMain from './../components/Sections/Likutim/MainPage';
@@ -40,8 +40,7 @@ import {
   PlaylistItemPageEvent,
   PlaylistCollectionPage,
   PlaylistItemPageSeries,
-  PlaylistItemPageProgram,
-  PlaylistItemPageVirtual
+  PlaylistItemPageProgram
 } from '../components/Pages/WithPlayer/PlaylistPageDispecher';
 
 import * as ssrDataLoaders from './routesSSRData';

@@ -22,7 +22,7 @@ const firstLeafId = (id, getSourceById) => {
     return id;
   }
 
-  return firstLeafId(children[0]);
+  return firstLeafId(children[0], getSourceById);
 };
 
 export const getServerSideProps = wrapper.getServerSideProps(store => async (context) => {

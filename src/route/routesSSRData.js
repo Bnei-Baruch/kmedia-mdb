@@ -228,7 +228,7 @@ export const libraryPage = async (store, match, show_console = false) => {
   }
   show_console && console.log('serverRender: libraryPage source was found', sourceID);
   return Promise.all([
-    store.sagaMiddleWare.run(assetsSagas.sourceIndex, assetsActions.sourceIndex(sourceID)).done,
+    store.sagaMiddleWare.run(assetsSagas.fetchSource, assetsActions.sourceIndex(sourceID)).done,
     store.sagaMiddleWare.run(mdbSagas.fetchUnit, mdbActions.fetchUnit(sourceID)).done,
   ])
     .then(() => {

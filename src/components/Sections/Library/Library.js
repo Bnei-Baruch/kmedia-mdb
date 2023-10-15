@@ -24,7 +24,7 @@ const Library = ({ id }) => {
   const { t }                          = useTranslation();
 
   const doc2htmlById  = useSelector(state => assets.getDoc2htmlById(state.assets));
-  const { data = {} } = useSelector(state => assets.getSourceIndexById(state.assets)[id]);
+  const { data = {} } = useSelector(state => assets.getSourceIndexById(state.assets)[id]) || false;
   const fileLanguage  = useSelector(state => textFile.getLanguage(state.textFile));
 
   const sourceLanguages = Object.keys(data);

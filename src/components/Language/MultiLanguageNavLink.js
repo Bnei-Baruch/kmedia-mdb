@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'next/link';
+import Link from 'next/link';
 
 /**
  * Use this component instead of react-router-dom's NavLink to keep the current language in the destination route
