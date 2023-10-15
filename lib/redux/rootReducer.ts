@@ -17,7 +17,8 @@ import {
     preparePageSlice,
     playlistSlice,
     playerSlice,
-    assetSlice
+    assetSlice,
+    textFileSlice
 } from './slices'
 import {myNotesSlice} from "@/lib/redux/slices/mySlice/myNotesSlice";
 
@@ -41,4 +42,5 @@ export const reducer = {
     [playlistSlice.playlistSlice.name]: playlistSlice.playlistSlice.reducer,
     [playerSlice.playerSlice.name]: playerSlice.playerSlice.reducer,
     [assetSlice.assetSlice.name]: assetSlice.assetSlice.reducer,
+    [textFileSlice.textFileSlice.name]: textFileSlice.textFileSlice.reducer,
 }

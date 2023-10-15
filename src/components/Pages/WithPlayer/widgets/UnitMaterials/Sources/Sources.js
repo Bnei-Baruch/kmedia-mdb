@@ -21,7 +21,7 @@ import Download from '../../../../../shared/Download/Download';
 import * as shapes from '../../../../../shapes';
 import UnitBar from '../UnitBar';
 import MenuLanguageSelector from '../../../../../Language/Selector/MenuLanguageSelector';
-import { doc2Html, sourceIndex } from '../../../../../../../lib/redux/slices/assetSlice';
+import { doc2Html, fetchSource } from '../../../../../../../lib/redux/slices/assetSlice';
 
 const isValidLikut = unit =>
   unit.content_type === CT_LIKUTIM
@@ -79,7 +79,7 @@ const Sources = ({ unit, t }) => {
   useEffect(() => {
     (unit.sources || [])
       .filter(s => isEmpty(indexById[s]))
-      .forEach(s => dispatch(sourceIndex(s)));
+      .forEach(s => dispatch(fetchSource(s)));
   }, [dispatch, indexById, unit.sources]);
 
   const sourcesDropDownOptions = useMemo(() => {

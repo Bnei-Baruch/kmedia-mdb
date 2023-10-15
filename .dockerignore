@@ -27,7 +27,7 @@ cc-test-reporter
 .circleci
 circle.yml
 semantic.json
-.env
+___.env
 
 # App
 assets

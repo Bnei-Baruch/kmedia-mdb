@@ -438,7 +438,7 @@ class LibraryContainer extends Component {
 
       content = (
         <Library
-          source={sourceId}
+          id={sourceId}
           data={data}
           downloadAllowed={downloadAllowed}
         />

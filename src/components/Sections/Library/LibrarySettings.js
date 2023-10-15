@@ -1,39 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import { Button, Icon, Menu, Popup } from 'semantic-ui-react';
+import { useDispatch } from 'react-redux';
+import { textFileSlice } from '../../../../lib/redux/slices/textFileSlice/textFileSlice';
 
-const getItem = () => (JSON.parse(localStorage.getItem('library-settings')) || {});
-
-const setItem = value => localStorage.setItem('library-settings', JSON.stringify(value));
-
-const LibrarySettings = ({ handleSettings, fontSize }) => {
+const LibrarySettings = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const dispatch            = useDispatch();
 
+  //TODO david not sure that need it
   useEffect(() => {
-    const savedState = getItem();
-    handleSettings(savedState);
-
     window.addEventListener('resize', () => setIsOpen(false));
-
     return () => {
       window.removeEventListener('resize', () => setIsOpen(false));
-    }
-  }, [handleSettings]);
+    };
+  }, []);
 
-  const handleNewSettings = newSettings => {
-    const savedState         = getItem();
-    const settings           = { ...savedState, ...newSettings };
-    setItem(settings);
-    handleSettings(settings);
-  };
-
-  const handleFontSize = amount => {
-    if ((amount > 0 && fontSize >= 8) || (amount < 0 && fontSize <= -3)) {
-      return;
-    }
-
-    handleNewSettings({ fontSize: fontSize + amount });
-  };
+  const handleFontSize = x => dispatch(textFileSlice.actions.setFontSize(x));
+  const handleFontType = x => dispatch(textFileSlice.actions.setFontType(x));
+  const handleTheme    = x => dispatch(textFileSlice.actions.setTheme(x));
 
   return (
     <Popup
@@ -62,26 +46,21 @@ const LibrarySettings = ({ handleSettings, fontSize }) => {
           <Menu.Item
             className="is-serif"
             name="Serif"
-            onClick={() => handleNewSettings({ fontType: 'serif' })}
+            onClick={() => handleFontType('serif')}
           />
-          <Menu.Item name="Sans-serif" onClick={() => handleNewSettings({ fontType: 'sans-serif' })} />
+          <Menu.Item name="Sans-serif" onClick={() => handleFontType('sans-serif')} />
         </Menu>
         <Menu fluid widths={3}>
           <Menu.Item
             name="Light"
-            onClick={() => handleNewSettings({ theme: 'light' })}
+            onClick={() => handleTheme('light')}
           />
-          <Menu.Item name="Dark" onClick={() => handleNewSettings({ theme: 'dark' })} />
-          <Menu.Item name="Sepia" onClick={() => handleNewSettings({ theme: 'sepia' })} />
+          <Menu.Item name="Dark" onClick={() => handleTheme('dark')} />
+          <Menu.Item name="Sepia" onClick={() => handleTheme('sepia')} />
         </Menu>
       </Popup.Content>
     </Popup>
   );
-}
-
-LibrarySettings.propTypes = {
-  handleSettings: PropTypes.func.isRequired,
-  fontSize: PropTypes.number.isRequired,
 };
 
 export default LibrarySettings;

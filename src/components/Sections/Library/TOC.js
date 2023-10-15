@@ -1,13 +1,17 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, { useEffect, useRef, useContext } from 'react';
 import { Accordion, Ref, Sticky } from 'semantic-ui-react';
-import isEqual from 'react-fast-compare';
 import clsx from 'clsx';
 
-import { noop, getEscapedRegExp, isEmpty } from '../../../helpers/utils';
+import { getEscapedRegExp, isEmpty } from '../../../helpers/utils';
 import { BS_SHAMATI, RH_ARTICLES, RH_RECORDS, } from '../../../helpers/consts';
 import { isLanguageRtl } from '../../../helpers/i18n-utils';
-import { Reference } from '../../shapes';
+import { useSelector } from 'react-redux';
+import { selectors as sources } from '../../../../lib/redux/slices/sourcesSlice';
+import { getFullPath, parentIdByPath } from './helper';
+import { selectors as settings } from '../../../../lib/redux/slices/settingsSlice';
+import { useRouter } from 'next/router';
+import { selectors } from '../../../../lib/redux/slices/textFileSlice/textFileSlice';
+import { DeviceInfoContext } from '../../../helpers/app-contexts';
 
 const titleKey = id => `title-${id}`;
 
@@ -120,83 +124,36 @@ const filterSources = (path, match) => {
   }, []);
 };
 
-class TOC extends Component {
-  static propTypes = {
-    fullPath: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      name: PropTypes.string,
-      full_name: PropTypes.string,
-      children: PropTypes.arrayOf(PropTypes.string),
-    })).isRequired,
-    rootId: PropTypes.string.isRequired,
-    contextRef: Reference,
-    getSourceById: PropTypes.func.isRequired,
-    apply: PropTypes.func.isRequired,
-    uiLang: PropTypes.string.isRequired,
-    active: PropTypes.bool,
-    match: PropTypes.string.isRequired,
-    matchApplied: PropTypes.func,
-  };
+const TOC = ({ id }) => {
+  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const uiLang             = useSelector(state => settings.getUILang(state.settings));
+  const getSourceById      = useSelector(state => sources.getSourceById(state.sources));
+  const getPathByID        = useSelector(state => sources.getPathByID(state.sources));
+  const match              = useSelector(state => selectors.getMatch(state.textFile));
+  const tocIsActive        = useSelector(state => selectors.getTocIsActive(state.textFile));
 
-  static defaultProps = {
-    contextRef: null,
-    matchApplied: noop,
-    active: true
-  };
+  const contextRef = useRef();
+  const router     = useRouter();
 
-  state = {
-    activeId: null,
-  };
+  const active      = !isMobileDevice || tocIsActive;
+  const fullPath    = getFullPath(id, getPathByID);
+  const activeIndex = getIndex(fullPath[0], fullPath[1]);
+  const activeId    = fullPath[fullPath.length - 1].id;
+  const rootId      = parentIdByPath(fullPath);
 
-  static getDerivedStateFromProps(nextProps, state) {
-    const { fullPath }                = nextProps;
-    const { activeId: stateActiveID } = state;
-    const activeId                    = fullPath[fullPath.length - 1].id;
-    if (activeId !== stateActiveID) {
-      return { activeId };
-    }
-
-    return null;
-  }
-
-  shouldComponentUpdate(nextProps) {
-    const { rootId, match, fullPath, active } = this.props;
-    return (
-      rootId !== nextProps.rootId
-      || match !== nextProps.match
-      || !isEqual(fullPath, nextProps.fullPath)
-      || (!this.props.contextRef && nextProps.contextRef)
-      || active !== nextProps.active
-    );
-  }
-
-  componentDidUpdate() {
-    // make actual TOC content proper height
-    const el = document.querySelector('.source__toc > div:nth-child(2)');
-    if (el) {
-      let { stickyOffset } = this.props;
-      if (isNaN(stickyOffset)) {
-        stickyOffset = 0;
-      }
-
-      el.style.height = `calc(100vh - ${stickyOffset}px)`;
-    }
-
-    const { activeId } = this.state;
+  useEffect(() => {
     scrollToActive(activeId);
-  }
+  }, [activeId]);
 
-  subToc = (subTree, path) => (
-    subTree.map(sourceId => (this.toc(sourceId, path)))
+  const subToc           = (subTree, path) => (
+    subTree.map(sourceId => (toc(sourceId, path)))
   );
-
-  leaf = (id, title, match) => {
-    const { activeId } = this.state;
-    const props        = {
+  const leaf             = (id, title) => {
+    const props = {
       id: titleKey(id),
       key: titleKey(id),
       active: id === activeId,
-      onClick: e => this.selectSourceById(id, e),
+      onClick: e => selectSourceById(id, e),
     };
 
     const realTitle = isEmpty(match)
@@ -204,11 +161,9 @@ class TOC extends Component {
       : <span dangerouslySetInnerHTML={{ __html: title }} />;
     return <Accordion.Title {...props}>{realTitle}</Accordion.Title>;
   };
-
-  getLeafTitle = (leafId, sourceId) => {
-    const { getSourceById, uiLang } = this.props;
-    const isRTL                       = isLanguageRtl(uiLang);
-    const { name, number, year }      = getSourceById(leafId);
+  const getLeafTitle     = (leafId, sourceId) => {
+    const isRTL                  = isLanguageRtl(uiLang);
+    const { name, number, year } = getSourceById(leafId);
 
     let leafTitle;
     switch (sourceId) {
@@ -230,17 +185,15 @@ class TOC extends Component {
 
     return leafTitle;
   };
-
-  toc = (sourceId, path, firstLevel = false) => {
+  const toc              = (sourceId, path, firstLevel = false) => {
     // 1. Element that has children is CONTAINER
     // 2. Element that has NO children is NOT CONTAINER (though really it may be an empty container)
     // 3. If all children of the first level element are NOT CONTAINERS, than it is also NOT CONTAINER
 
-    const { getSourceById }         = this.props;
     const { name: title, children } = getSourceById(sourceId);
 
     if (isEmpty(children)) { // Leaf
-      const item   = this.leaf(sourceId, title);
+      const item   = leaf(sourceId, title);
       const result = { as: 'span', title: item, key: `lib-leaf-${sourceId}` };
       return [result];
     }
@@ -249,19 +202,18 @@ class TOC extends Component {
     let panels;
     if (hasNoGrandsons) {
       const tree = children.reduce((acc, leafId) => {
-        const leafTitle = this.getLeafTitle(leafId, sourceId);
+        const leafTitle = getLeafTitle(leafId, sourceId);
 
         acc.push({ leafId, leafTitle });
         return acc;
       }, []);
 
-      const { match } = this.props;
-      panels          = filterSources(tree, match).map(({ leafId, leafTitle, }) => ({
-        title: this.leaf(leafId, leafTitle, match),
+      panels = filterSources(tree, match).map(({ leafId, leafTitle, }) => ({
+        title: leaf(leafId, leafTitle),
         key: `lib-leaf-${leafId}`
       }));
     } else {
-      panels = this.subToc(children, path.slice(1)).map(({ content, title: name }, index) => ({
+      panels = subToc(children, path.slice(1)).map(({ content, title: name }, index) => ({
         title: name,
         content,
         key: `root-${index}-${title}`
@@ -287,48 +239,32 @@ class TOC extends Component {
       }
     };
   };
-
-  selectSourceById = (id, e) => {
-    const { apply, matchApplied } = this.props;
+  const selectSourceById = (id, e) => {
     e.preventDefault();
-    apply(`sources/${id}`);
-    matchApplied();
-    this.setState({ activeId: id });
+    router.push(`${id}`);
   };
 
-  handleAccordionContext = ref => {
-    this.accordionContext = ref;
-  };
-
-  render() {
-    const { fullPath, rootId, contextRef, active } = this.props;
-
-    const activeIndex = getIndex(fullPath[1], fullPath[2]);
-
-    if (activeIndex === -1) {
-      return null;
-    }
-
-    const path = fullPath.slice(1); // Remove first element (i.e. kabbalist)
-    const toc  = this.toc(rootId, path, true);
-
-    return (
-      <Sticky
-        context={contextRef}
-        className={clsx({
-          'source__toc': true,
-          'mobile-hidden': !active,
-          'tablet-hidden': !active,
-        })}
-        active={active}
-      >
-        <Ref innerRef={this.handleAccordionContext}>
-          <Accordion fluid panels={toc} defaultActiveIndex={activeIndex} onTitleClick={handleTitleClick} />
-        </Ref>
-      </Sticky>
-    );
-  }
-}
+  return (
+    <Sticky
+      context={contextRef}
+      className={clsx({
+        'source__toc': true,
+        'mobile-hidden': !active,
+        'tablet-hidden': !active,
+      })}
+      active={active}
+    >
+      <Ref innerRef={contextRef}>
+        <Accordion
+          fluid
+          panels={toc(rootId, fullPath, true)}
+          defaultActiveIndex={activeIndex}
+          onTitleClick={handleTitleClick}
+        />
+      </Ref>
+    </Sticky>
+  );
+};
 
 export default TOC;
 // four wide computer sixteen wide mobile sixteen wide tablet column
