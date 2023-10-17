@@ -9,7 +9,7 @@ import { selectors } from '../../../../lib/redux/slices/filterSlice/filterStatsS
 import FilterHeader from '../../../../lib/filters/components/FilterHeader';
 import CollectionsModal from './CollectionsModal';
 import ContentTypeItem from './ContentTypeItem';
-import { LESSON_AS_UNIT, LESSON_AS_COLLECTION } from '../../../../pages/___lessons';
+import { LESSON_AS_UNIT, LESSON_AS_COLLECTION } from '../../../../pages/[selector]/helper';
 
 const ContentTypeFilter = ({ namespace }) => {
   const fetchedCTs = useSelector(state => selectors.getTree(state.filterStats, namespace, FN_CONTENT_TYPE));

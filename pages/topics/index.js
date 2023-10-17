@@ -1,18 +1,20 @@
-import React, { Fragment, useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-import { withTranslation } from 'next-i18next';
+import React, { Fragment, useState } from 'react';
+import { useTranslation } from 'next-i18next';
 import produce from 'immer';
 import debounce from 'lodash/debounce';
 import isEqual from 'react-fast-compare';
-import { useDispatch, useSelector } from 'react-redux';
-
+import { useSelector } from 'react-redux';
 import { Button, Container, Divider, Grid, Header, Input, List } from 'semantic-ui-react';
-import { selectors as topicsSelectors } from '../../../../lib/redux/slices/tagsSlice/tagsSlice';
-import { getEscapedRegExp, isNotEmptyArray } from '../../../helpers/utils';
-import SectionHeader from '../../shared/SectionHeader';
-import Link from '../../Language/MultiLanguageLink';
-import { FN_TOPICS_MULTI, TOPICS_FOR_DISPLAY } from '../../../helpers/consts';
-import { actions, selectors as filtersAside } from '../../../../lib/redux/slices/filterSlice/filterStatsSlice';
+import Link from 'next/link';
+
+import { selectors as topicsSelectors } from '../../lib/redux/slices/tagsSlice/tagsSlice';
+import { getEscapedRegExp, isNotEmptyArray } from '../../src/helpers/utils';
+import SectionHeader from '../../src/components/shared/SectionHeader';
+import { FN_TOPICS_MULTI, TOPICS_FOR_DISPLAY, DEFAULT_CONTENT_LANGUAGE } from '../../src/helpers/consts';
+import { selectors as filtersAside } from '../../lib/redux/slices/filterSlice/filterStatsSlice';
+import { wrapper } from '../../lib/redux';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { fetchStats } from '../../lib/redux/slices/filterSlice/thunks';
 
 const namespace = 'topics';
 
@@ -93,22 +95,23 @@ const filterData = (byId, match, sortedRoots) => {
   return [filteredById, filteredRoots];
 };
 
-/* root will be main title
-  subroot will be subtitle
-  the rest will be a tree - List of Lists */
-const TopicContainer = ({ t }) => {
+export const getServerSideProps = wrapper.getServerSideProps(store => async (context) => {
+  const lang = context.locale ?? DEFAULT_CONTENT_LANGUAGE;
+
+  await store.dispatch(fetchStats({ namespace, isPrepare: true, countC: true, countL: true, params: {} }));
+
+  const _i18n = await serverSideTranslations(lang);
+  return { props: { ..._i18n } };
+});
+
+const TopicsPage = () => {
+  const { t }     = useTranslation();
   const statsById = useSelector(state => filtersAside.getStats(state.filterStats, namespace, FN_TOPICS_MULTI));
   const roots     = useSelector(state => topicsSelectors.getDisplayRoots(state.tags), isEqual) || [];
   const byId      = useSelector(state => topicsSelectors.getTags(state.tags), isEqual);
 
   const [match, setMatch]                 = useState('');
   const [expandedNodes, setExpandedNodes] = useState(new Set());
-
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(actions.fetchStats(namespace, {}, { isPrepare: true, countC: true, countL: true }));
-  }, [dispatch]);
 
   const handleFilterChange = debounce((e, data) => {
     setMatch(data.value);
@@ -153,12 +156,14 @@ const TopicContainer = ({ t }) => {
 
   const renderLeaf = (node, withStats) => {
     const { id, label } = node;
-    const s = withStats ? statsById(id) : null;
+    const s             = withStats ? statsById(id) : null;
 
-    return <Link to={`/topics/${id}`}>
-      {label}
-      {s ? ` (${s})` : ''}
-    </Link>;
+    return (
+      <Link href={`/topics/${id}`}>
+        {label}
+        {s ? ` (${s})` : ''}
+      </Link>
+    );
   };
 
   const renderChildren = node => {
@@ -185,18 +190,18 @@ const TopicContainer = ({ t }) => {
         </List>
         {
           showExpandButton &&
-            <Button
-              basic
-              icon={expanded ? 'minus' : 'plus'}
-              className={`topics__button ${showExpandButton ? '' : 'hide-button'}`}
-              size="mini"
-              content={t(`topics.show-${expanded ? 'less' : 'more'}`)}
-              onClick={() => handleShowMoreClick(id)}
-            />
+          <Button
+            basic
+            icon={expanded ? 'minus' : 'plus'}
+            className={`topics__button ${showExpandButton ? '' : 'hide-button'}`}
+            size="mini"
+            content={t(`topics.show-${expanded ? 'less' : 'more'}`)}
+            onClick={() => handleShowMoreClick(id)}
+          />
         }
       </>
-    )
-  }
+    );
+  };
 
   const renderSubTopic = node => {
     const { id, children } = node;
@@ -205,13 +210,13 @@ const TopicContainer = ({ t }) => {
       isNotEmptyArray(children)
         ? (
           <div key={id}>
-            { renderLeaf(node, true) }
-            { renderChildren(node) }
+            {renderLeaf(node, true)}
+            {renderChildren(node)}
           </div>
         )
         : renderLeaf(node, true)
-    )
-  }
+    );
+  };
 
   const renderTopicCard = node => {
     if (!node) {
@@ -229,7 +234,7 @@ const TopicContainer = ({ t }) => {
                 <Header as="h4" className="topics__subtitle">
                   {renderLeaf(node)}
                 </Header>
-                { renderChildren(node) }
+                {renderChildren(node)}
               </div>
             )
             : renderLeaf(node, true)
@@ -283,8 +288,4 @@ const TopicContainer = ({ t }) => {
   );
 };
 
-TopicContainer.propTypes = {
-  t: PropTypes.func.isRequired,
-};
-
-export default withTranslation()(TopicContainer);
+export default TopicsPage;

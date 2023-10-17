@@ -23,8 +23,8 @@ import ArticleCollection from './../components/Sections/Publications/tabs/Articl
 import ArticlePage from './../components/Sections/Publications/tabs/Articles/Unit';
 import BlogPost from './../components/Sections/Publications/tabs/Blog/Post/Container';
 import SimpleModeContainer from './../components/Sections/SimpleMode/Container';
-import Topics from './../components/Sections/Topics/TopicContainer';
-import Topic from './../components/Sections/Topics/TopicPage';
+import Topics from '../../pages/topics';
+import Topic from '../../pages/topics/[id]';
 import {
   MY_NAMESPACE_HISTORY,
   MY_NAMESPACE_REACTIONS,
