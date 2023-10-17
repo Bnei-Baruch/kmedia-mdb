@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
-import { withTranslation } from 'next-i18next';
+import { withTranslation, useTranslation } from 'next-i18next';
 import { Button, Modal, } from 'semantic-ui-react';
 
 import NeedToLogin from '../../Sections/Personal/NeedToLogin';
@@ -10,9 +10,10 @@ import { selectors as settings } from '../../../../lib/redux/slices/settingsSlic
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import AlertModal from '../AlertModal';
 
-const BookmarkButton = ({ t, source }) => {
+const BookmarkButton = () => {
   const [open, setOpen]         = useState();
   const [alertMsg, setAlertMsg] = useState();
+  const { t }                   = useTranslation();
   const needToLogin             = NeedToLogin({ t });
 
   const { isMobileDevice } = useContext(DeviceInfoContext);
@@ -46,7 +47,7 @@ const BookmarkButton = ({ t, source }) => {
       >
         <Modal.Header content={t('personal.bookmark.saveBookmark')} />
         {
-          !needToLogin ? <BookmarkForm onClose={handleClose} source={source} /> :
+          !needToLogin ? <BookmarkForm onClose={handleClose} /> :
             <Modal.Content content={needToLogin} />
         }
       </Modal>
@@ -54,9 +55,4 @@ const BookmarkButton = ({ t, source }) => {
   );
 };
 
-BookmarkButton.propTypes = {
-  t: PropTypes.func.isRequired,
-  source: PropTypes.object.isRequired,
-};
-
-export default withTranslation()(BookmarkButton);
+export default BookmarkButton;

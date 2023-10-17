@@ -2,7 +2,7 @@ import React from 'react';
 
 import { isEmpty } from '../../src/helpers/utils';
 import { wrapper } from '../../lib/redux';
-import { DEFAULT_CONTENT_LANGUAGE } from '../../src/helpers/consts';
+import { DEFAULT_CONTENT_LANGUAGE, CT_SOURCE } from '../../src/helpers/consts';
 import { selectors as assets } from '../../lib/redux/slices/assetSlice/assetSlice';
 import { selectors as sources } from '../../lib/redux/slices/sourcesSlice/sourcesSlice';
 import { fetchSQData, fetchLabels } from '../../lib/redux/slices/mdbSlice';
@@ -12,7 +12,7 @@ import { getLibraryContentFile } from '../../src/components/Sections/Library/hel
 import Library from '../../src/components/Sections/Library/Library';
 import LibraryLayout from '../../src/components/Sections/Library/LibraryLayout';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import SourceHeader from '../../src/components/Sections/Library/SourceHeader';
+import HeaderSource from '../../src/components/Sections/Library/HeaderSource';
 import { textFileSlice } from '../../lib/redux/slices/textFileSlice/textFileSlice';
 import { Ref } from 'semantic-ui-react';
 
@@ -33,30 +33,29 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async (con
   const getSourceById = sources.getSourceById(store.getState().sources);
   const id            = firstLeafId(context.params.id, getSourceById);
   await store.dispatch(fetchSource(id));
-
   const _fileLang = context.query.source_language || context.query.language || lang;
-  const { data }  = assets.getSourceIndexById(store.getState().assets)[id];
-  const language  = Object.keys(data).find(x => x === _fileLang) || Object.keys(data)[0];
 
+  const { data } = assets.getSourceIndexById(store.getState().assets)[id];
+  const language = Object.keys(data).find(x => x === _fileLang) || Object.keys(data)[0];
   // no need to fetch pdf. we don't do that on SSR
+
+  store.dispatch(textFileSlice.actions.setSubjectInfo({ id, language, type:CT_SOURCE }));
   if (!(data[language].pdf && isTaas(id))) {
     const { id: fileId } = getLibraryContentFile(data[language], id);
     const _doc2Html      = store.dispatch(doc2Html(fileId));
     const _fetchLabels   = store.dispatch(fetchLabels({ content_unit: id, language: language }));
-    store.dispatch(textFileSlice.actions.setLanguage(language));
     await Promise.all([_doc2Html, _fetchLabels]);
   }
 
   const _i18n = await serverSideTranslations(lang);
-  return { props: { ..._i18n, id } };
+  return { props: { ..._i18n } };
 });
 
-export default function LibraryPage({ id }) {
+export default function LibraryPage() {
   return (
     <LibraryLayout
-      id={id}
-      header={<SourceHeader id={id} />}
-      content={<Library id={id} />}
+      header={<HeaderSource />}
+      content={<Library />}
     />
   );
 };

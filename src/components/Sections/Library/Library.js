@@ -10,19 +10,20 @@ import { selectors as assets } from '../../../../lib/redux/slices/assetSlice/ass
 import { getLanguageName } from '../../../helpers/language';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import PDF, { startsFrom } from '../../shared/PDF/PDF';
-import ScrollToSearch from '../../shared/DocToolbar/ScrollToSearch';
+import ScrollToSearch from '../../../helpers/scrollToSearch/ScrollToSearch';
 import Download from '../../shared/Download/Download';
 import WipErr from '../../shared/WipErr/WipErr';
 import AudioPlayer from '../../shared/AudioPlayer';
 import MenuLanguageSelector from '../../Language/Selector/MenuLanguageSelector';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { getLibraryContentFile, buildBookmarkSource, buildLabelData } from './helper';
-import { selectors as textFile } from '../../../../lib/redux/slices/textFileSlice/textFileSlice';
+import { selectors as textFile, selectors } from '../../../../lib/redux/slices/textFileSlice/textFileSlice';
 
-const Library = ({ id }) => {
+const Library = () => {
   const { isMobileDevice, deviceInfo } = useContext(DeviceInfoContext);
   const { t }                          = useTranslation();
 
+  const id            = useSelector(state => selectors.getSubjectInfo(state.textFile).id);
   const doc2htmlById  = useSelector(state => assets.getDoc2htmlById(state.assets));
   const { data = {} } = useSelector(state => assets.getSourceIndexById(state.assets)[id]) || false;
   const fileLanguage  = useSelector(state => textFile.getLanguage(state.textFile));
@@ -94,12 +95,7 @@ const Library = ({ id }) => {
       return (
         <div
           style={{ direction, textAlign: (direction === 'ltr' ? 'left' : 'right') }}>
-          <ScrollToSearch
-            data={contentData}
-            language={fileLanguage}
-            source={{ selectedSourceLanguage: fileLanguage, ...buildBookmarkSource(id) }}
-            label={{ selectedSourceLanguage: fileLanguage, ...buildLabelData(id) }}
-          />
+          <ScrollToSearch fileId={file.id} />
         </div>
       );
     }

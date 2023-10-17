@@ -124,13 +124,14 @@ const filterSources = (path, match) => {
   }, []);
 };
 
-const TOC = ({ id }) => {
+const TOC = () => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const uiLang             = useSelector(state => settings.getUILang(state.settings));
   const getSourceById      = useSelector(state => sources.getSourceById(state.sources));
   const getPathByID        = useSelector(state => sources.getPathByID(state.sources));
   const match              = useSelector(state => selectors.getMatch(state.textFile));
   const tocIsActive        = useSelector(state => selectors.getTocIsActive(state.textFile));
+  const id                 = useSelector(state => selectors.getSubjectInfo(state.textFile).id);
 
   const contextRef = useRef();
   const router     = useRouter();

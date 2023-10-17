@@ -1,41 +1,47 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { withTranslation } from 'next-i18next';
+import { withTranslation, useTranslation } from 'next-i18next';
 import {
   Button,
-  Checkbox, Container,
+  Checkbox,
+  Container,
   Header,
   Icon,
   Input,
-  List, Modal,
+  List,
+  Modal,
   ModalActions,
   ModalContent,
   Segment
 } from 'semantic-ui-react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { actions, selectors } from '../../../../lib/redux/slices/mySlice/mySlice';
+import { selectors } from '../../../../lib/redux/slices/mySlice/mySlice';
+import { selectors as textFile } from '../../../../lib/redux/slices/textFileSlice/textFileSlice';
 import { MY_NAMESPACE_BOOKMARKS, MY_NAMESPACE_FOLDERS } from '../../../helpers/consts';
 import { getMyItemKey } from '../../../helpers/my';
 import NeedToLogin from '../../Sections/Personal/NeedToLogin';
+import { fetchMy, addMy, editMy } from '../../../../lib/redux/slices/mySlice/thunks';
 
-const BookmarkForm = ({ t, onClose, source, bookmarkId }) => {
-  const [name, setName] = useState();
-  const [selected, setSelected] = useState(null);
+const BookmarkForm = ({ onClose, bookmarkId }) => {
+  const [name, setName]             = useState();
+  const [selected, setSelected]     = useState(null);
   const [editFolder, setEditFolder] = useState(false);
-  const [query, setQuery] = useState();
-  const [isEdit, setIsEdit] = useState();
+  const [query, setQuery]           = useState();
+  const [isEdit, setIsEdit]         = useState();
 
-  const { key } = getMyItemKey(MY_NAMESPACE_BOOKMARKS, { id: bookmarkId });
+  const { t }    = useTranslation();
+  const { key }  = getMyItemKey(MY_NAMESPACE_BOOKMARKS, { id: bookmarkId });
+  const source   = useSelector(state => textFile.getBookmarkInfo(state.textFile));
   const bookmark = useSelector(state => selectors.getItemByKey(state.my, MY_NAMESPACE_BOOKMARKS, key));
-  const items = useSelector(state => selectors.getList(state.my, MY_NAMESPACE_FOLDERS)).filter(x => !query || x.name.toLowerCase().includes(query));
-  const saved = items.filter(f => bookmark?.folder_ids?.includes(f.id)).map(f => f.id);
+  const items    = useSelector(state => selectors.getList(state.my, MY_NAMESPACE_FOLDERS)).filter(x => !query || x.name.toLowerCase().includes(query));
+  const saved    = items.filter(f => bookmark?.folder_ids?.includes(f.id)).map(f => f.id);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (items.length === 0)
-      dispatch(actions.fetch(MY_NAMESPACE_FOLDERS, { 'order_by': 'id DESC' }));
+      dispatch(fetchMy(MY_NAMESPACE_FOLDERS, { 'order_by': 'id DESC' }));
     // eslint-disable-next-line  react-hooks/exhaustive-deps
   }, [dispatch]);
 
@@ -57,7 +63,7 @@ const BookmarkForm = ({ t, onClose, source, bookmarkId }) => {
 
   const needToLogin = NeedToLogin({ t });
   if (needToLogin) {
-    return (<Modal.Content>{needToLogin}</Modal.Content>)
+    return (<Modal.Content>{needToLogin}</Modal.Content>);
   }
 
   const changeName = (e, { value }) => setName(value);
@@ -65,17 +71,18 @@ const BookmarkForm = ({ t, onClose, source, bookmarkId }) => {
   const handleSave = () => !bookmark ? create() : update();
 
   const create = () => {
-    const params = { name, ...source };
+    const params = { name, ...source, namespace: MY_NAMESPACE_BOOKMARKS };
 
     if (selected.length > 0)
       params.folder_ids = selected;
 
-    dispatch(actions.add(MY_NAMESPACE_BOOKMARKS, params));
+    dispatch(addMy(params));
     onClose(null, null, true);
   };
 
   const update = () => {
-    dispatch(actions.edit(MY_NAMESPACE_BOOKMARKS, { id: bookmarkId, name, folder_ids: selected }));
+    const _params = { namespace: MY_NAMESPACE_BOOKMARKS, id: bookmarkId, name, folder_ids: selected };
+    dispatch(editMy(_params));
     onClose(null, null, true);
   };
 
@@ -99,7 +106,8 @@ const BookmarkForm = ({ t, onClose, source, bookmarkId }) => {
   };
 
   const handleSaveFolder = e => {
-    dispatch(actions.add(MY_NAMESPACE_FOLDERS, { name: e.target.value || t('personal.bookmark.newFolder') }));
+    const _params = { namespace: MY_NAMESPACE_FOLDERS, name: e.target.value || t('personal.bookmark.newFolder') };
+    dispatch(addMy(_params));
     setEditFolder(false);
   };
 
@@ -119,7 +127,7 @@ const BookmarkForm = ({ t, onClose, source, bookmarkId }) => {
     <React.Fragment>
       <ModalContent className="padded no-padding-top">
         <div>
-          <Header as="h4" content={t('personal.bookmark.name')} className="display-iblock font-normal"/>
+          <Header as="h4" content={t('personal.bookmark.name')} className="display-iblock font-normal" />
           <Input
             onChange={changeName}
             defaultValue={name}
@@ -130,7 +138,7 @@ const BookmarkForm = ({ t, onClose, source, bookmarkId }) => {
             autoFocus
           />
         </div>
-        <Header as="h4" content={t('personal.bookmark.folders')} className="font-normal"/>
+        <Header as="h4" content={t('personal.bookmark.folders')} className="font-normal" />
         <Segment>
           <Input
             icon
@@ -139,8 +147,8 @@ const BookmarkForm = ({ t, onClose, source, bookmarkId }) => {
             onChange={handleSearchChange}
             className="bookmark_search"
           >
-            <input/>
-            <Icon name="search"/>
+            <input />
+            <Icon name="search" />
           </Input>
           <Container className="folders_list">
             {
@@ -160,7 +168,7 @@ const BookmarkForm = ({ t, onClose, source, bookmarkId }) => {
                     }}
                   />
                   <Button
-                    icon='check'
+                    icon="check"
                     basic
                     compact
                     className="no-shadow no-border"
@@ -203,9 +211,7 @@ const BookmarkForm = ({ t, onClose, source, bookmarkId }) => {
 };
 
 BookmarkForm.propTypes = {
-  t: PropTypes.func.isRequired,
-  source: PropTypes.object,
   bookmarkId: PropTypes.number
 };
 
-export default withTranslation()(BookmarkForm);
+export default BookmarkForm;

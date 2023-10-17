@@ -8,7 +8,7 @@ import TOC from './TOC';
 import { selectors, textFileSlice } from '../../../../lib/redux/slices/textFileSlice/textFileSlice';
 import NexPrev from './NexPrev';
 
-const LibraryLayout = ({ id, header, content }) => {
+const LibraryLayout = ({ header, content }) => {
   const { theme, fontType, fontSize } = useSelector(state => selectors.getSettings(state.textFile));
   const tocIsActive                   = useSelector(state => selectors.getTocIsActive(state.textFile));
   const isReadable                    = useSelector(state => selectors.getIsReadable(state.textFile));
@@ -42,7 +42,7 @@ const LibraryLayout = ({ id, header, content }) => {
                 computer={4}
                 onClick={handleTocIsActive}
               >
-                <TOC id={id} />
+                <TOC />
               </Grid.Column>
               <Grid.Column
                 mobile={16}
@@ -58,7 +58,7 @@ const LibraryLayout = ({ id, header, content }) => {
                   style={{ minHeight: `calc(100vh - 14px)` }}
                 >
                   {content}
-                  <NexPrev id={id} />
+                  <NexPrev />
                 </div>
               </Grid.Column>
             </Grid.Row>

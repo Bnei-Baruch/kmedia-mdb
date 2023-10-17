@@ -8,7 +8,7 @@ import Lessons from '../../pages/___lessons';
 import LibraryHomepage from '../../pages/sources';
 import LibraryContainer from '../../pages/sources/[id]';
 import LibraryPerson from './../components/Sections/Library/LibraryPerson';
-import Likut from './../components/Sections/Likutim/Likut';
+import Id from '../../pages/likutim/[id]';
 import LikutimMain from '../../pages/likutim';
 import Music from './../components/Sections/Music/Music';
 import BookmarksPage from './../components/Sections/Personal/Bookmarks/Page';
@@ -156,7 +156,7 @@ const useRoutes = playerContainer => ([
   { path: 'simple-mode', component: <SimpleModeContainer />, ssrData: ssrDataLoaders.simpleMode },
   { path: 'excerpt', component: <ExcerptContainer /> },
   { path: 'likutim', component: <LikutimMain /> },
-  { path: 'likutim/:id', component: <Likut />, ssrData: ssrDataLoaders.likutPage },
+  { path: 'likutim/:id', component: <Id />, ssrData: ssrDataLoaders.likutPage },
   { path: 'sketches', component: <Sketches />, ssrData: ssrDataLoaders.programsPage },
 ]);
 

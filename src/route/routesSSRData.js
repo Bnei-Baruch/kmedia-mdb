@@ -53,7 +53,7 @@ import * as publicationsSagas from '../../lib/redux/slices/publicationsSlice/thu
 import * as searchSagas from './../sagas/search';
 import * as tagsSagas from '../../lib/redux/slices/tagsSlice/thunks';
 import { getLibraryContentFile } from '../components/Sections/Library/Library';
-import { selectLikutFile } from '../components/Sections/Likutim/Likut';
+import { selectLikutFile } from '../../pages/likutim/[id]';
 
 export const home = store => {
   store.dispatch(homeActions.fetchData(true));

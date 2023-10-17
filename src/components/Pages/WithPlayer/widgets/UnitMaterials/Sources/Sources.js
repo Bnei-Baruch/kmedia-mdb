@@ -16,7 +16,7 @@ import { CT_LIKUTIM, CT_SOURCE, MT_TEXT, MT_AUDIO } from '../../../../../../help
 import { getSourceErrorSplash, wipLoadingSplash } from '../../../../../shared/WipErr/WipErr';
 import AudioPlayer from '../../../../../shared/AudioPlayer';
 import PDF, { isTaas, startsFrom } from '../../../../../shared/PDF/PDF';
-import ScrollToSearch from '../../../../../shared/DocToolbar/ScrollToSearch';
+import ScrollToSearch from '../../../../../../helpers/scrollToSearch/ScrollToSearch';
 import Download from '../../../../../shared/Download/Download';
 import * as shapes from '../../../../../shapes';
 import UnitBar from '../UnitBar';

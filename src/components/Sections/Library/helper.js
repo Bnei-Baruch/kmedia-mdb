@@ -17,37 +17,7 @@ export const getFullPath = (sourceId, getPathByID) => {
   return path;
 };
 
-export const checkRabashGroupArticles = source => {
-  if (/^gr-/.test(source)) { // Rabash Group Articles
-    const result = /^gr-(.+)/.exec(source);
-    return { uid: result[1], isGr: true };
-  }
 
-  return { uid: source, isGr: false };
-};
-
-export const buildBookmarkSource = source => {
-  const { uid, isGr } = checkRabashGroupArticles(source);
-  const s             = {
-    subject_uid: uid,
-    subject_type: CT_SOURCE
-  };
-  if (isGr) {
-    s.properties = { uid_prefix: 'gr-' };
-  }
-
-  return s;
-};
-
-export const buildLabelData        = source => {
-  const { uid, isGr } = checkRabashGroupArticles(source);
-  const s             = { content_unit: uid };
-  if (isGr) {
-    s.properties = { uid_prefix: 'gr-' };
-  }
-
-  return s;
-};
 export const getLibraryContentFile = (data = {}, sourceId) => {
   const { pdf, docx, doc } = data;
   if (pdf && isTaas(sourceId))

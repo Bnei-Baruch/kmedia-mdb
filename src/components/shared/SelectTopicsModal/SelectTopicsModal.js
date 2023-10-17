@@ -1,35 +1,36 @@
 import React, { useMemo, useState, useContext } from 'react';
 import PropTypes from 'prop-types';
-import { withTranslation } from 'next-i18next';
+import { useTranslation } from 'next-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Container, Grid, Header, Input, Label, Modal } from 'semantic-ui-react';
 import isEqual from 'react-fast-compare';
 
-import { selectors as sourcesSelectors } from '../../../../lib/redux/slices/sourcesSlice/sourcesSlice';
-import { selectors as settings } from '../../../../lib/redux/slices/settingsSlice/settingsSlice';
-import { selectors } from '../../../../lib/redux/slices/tagsSlice/tagsSlice';
-import { actions } from '../../../../lib/redux/slices/mdbSlice/mdbSlice';
+import { Button, Container, Grid, Header, Input, Label, Modal } from 'semantic-ui-react';
+import { selectors } from '../../../../lib/redux/slices/tagsSlice';
+import { selectors as textFile } from '../../../../lib/redux/slices/textFileSlice/textFileSlice';
 import { getTree } from '../../../helpers/topricTree';
 import NeedToLogin from '../../Sections/Personal/NeedToLogin';
 import AlertModal from '../AlertModal';
 import TopicBranch from './TopicBranch';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
+import { getLanguageDirection } from '../../../helpers/i18n-utils';
+import { createLabel } from '../../../../lib/redux/slices/mdbSlice';
 
-const SelectTopicsModal = ({ t, open, onClose, label, trigger }) => {
+const SelectTopicsModal = ({ open, onClose, trigger }) => {
   const [selected, setSelected] = useState([]);
   const [match, setMatch]       = useState('');
   const [name, setName]         = useState('');
   const [alertMsg, setAlertMsg] = useState();
 
   const { isMobileDevice } = useContext(DeviceInfoContext);
+  const { t }              = useTranslation();
 
-  const areSourcesLoaded = useSelector(state => sourcesSelectors.areSourcesLoaded(state.sources));
-  const roots            = useSelector(state => selectors.getDisplayRoots(state.tags), isEqual) || [];
-  const getTagById       = useSelector(state => selectors.getTagById(state.tags));
-  const tree             = useMemo(() => getTree(roots, getTagById, null, t)[0], [roots, getTagById, t]);
+  const roots      = useSelector(state => selectors.getDisplayRoots(state.tags), isEqual) || [];
+  const getTagById = useSelector(state => selectors.getTagById(state.tags));
+  const tree       = useMemo(() => getTree(roots, getTagById, null, t)[0], [roots, getTagById, t]);
 
-  const language = useSelector(state => settings.getUILang(state.settings));
-  const dir      = useSelector(state => settings.getUIDir(state.settings));
+  const label    = useSelector(state => textFile.getLabelInfo(state.textFile));
+  const language = useSelector(state => textFile.getLanguage(state.textFile));
+  const dir      = getLanguageDirection(language);
 
   const dispatch = useDispatch();
 
@@ -46,7 +47,7 @@ const SelectTopicsModal = ({ t, open, onClose, label, trigger }) => {
       media_type
     };
 
-    dispatch(actions.createLabel(params));
+    dispatch(createLabel(params));
   };
 
   const clear = () => {
@@ -141,7 +142,7 @@ const SelectTopicsModal = ({ t, open, onClose, label, trigger }) => {
                       <Grid columns={isMobileDevice ? 1 : tree.children.length}>
                         <Grid.Row>
                           {
-                            areSourcesLoaded && tree.children.map(renderColumn)
+                            tree.children.map(renderColumn)
                           }
                         </Grid.Row>
                       </Grid>
@@ -169,9 +170,8 @@ const SelectTopicsModal = ({ t, open, onClose, label, trigger }) => {
 };
 
 SelectTopicsModal.propTypes = {
-  t: PropTypes.func.isRequired,
   open: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
 };
 
-export default withTranslation()(SelectTopicsModal);
+export default SelectTopicsModal;

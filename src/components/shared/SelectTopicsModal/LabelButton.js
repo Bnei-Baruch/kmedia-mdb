@@ -6,16 +6,15 @@ import { Button, Popup, } from 'semantic-ui-react';
 import { SectionLogo } from '../../../helpers/images';
 import SelectTopicsModal from './SelectTopicsModal';
 
-const LabelButton = ({ label }) => {
+const LabelButton = () => {
   const [open, setOpen] = useState();
   const { t }           = useTranslation();
 
   const handleOpen  = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  return !label ? null : (
+  return (
     <SelectTopicsModal
-      label={label}
       open={open}
       onClose={handleClose}
       trigger={

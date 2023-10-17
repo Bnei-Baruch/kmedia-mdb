@@ -1,19 +1,20 @@
-import { Header, Container, Grid, Button } from 'semantic-ui-react';
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { Header, Container, Grid, Button } from 'semantic-ui-react';
+import Headroom from 'react-headroom';
+import { useTranslation } from 'next-i18next';
+
 import { selectors as sources } from '../../../../lib/redux/slices/sourcesSlice';
 import FilterSource from './FilterSource';
 import SortingOrder from './SortingOrder';
 import SourceHeaderTitle from './HeaderTitle';
 import LibraryBar from './LibraryBar';
 import { buildBookmarkSource, buildLabelData, parentIdByPath } from './helper';
-import Headroom from 'react-headroom';
-import { textFileSlice } from '../../../../lib/redux/slices/textFileSlice/textFileSlice';
-import { useTranslation } from 'next-i18next';
+import { textFileSlice, selectors } from '../../../../lib/redux/slices/textFileSlice/textFileSlice';
 import { selectors as settings } from '../../../../lib/redux/slices/settingsSlice';
 
-const SourceHeader = ({ id }) => {
-  const source   = useSelector(state => sources.getSourceById(state.sources)(id));
+const HeaderSource = () => {
+  const id       = useSelector(state => selectors.getSubjectInfo(state.textFile).id);
   const uiLang   = useSelector(state => settings.getUILang(state.settings));
   const path     = useSelector(state => sources.getPathByID(state.sources)(id));
   const parentId = parentIdByPath(path);
@@ -46,12 +47,7 @@ const SourceHeader = ({ id }) => {
               </Grid.Column>
               <Grid.Column mobile={16} tablet={16} computer={12} className="source__content-header">
                 <SourceHeaderTitle id={id} parentId={parentId} />
-                <LibraryBar
-                  // DON'T MERGE BEFORE FIXING THIS
-                  // Not sure why contentLanguage is being used here at all!
-                  source={{ language: uiLang, ...buildBookmarkSource(id) }}
-                  label={{ language: uiLang, ...buildLabelData(id) }}
-                />
+                <LibraryBar/>
               </Grid.Column>
             </Grid.Row>
           </Grid>
@@ -61,4 +57,4 @@ const SourceHeader = ({ id }) => {
   );
 };
 
-export default SourceHeader;
+export default HeaderSource;

@@ -1,20 +1,24 @@
 import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
-import { withTranslation } from 'next-i18next';
+import { withTranslation, useTranslation } from 'next-i18next';
 import { Button, Confirm, MenuItem, Modal, Popup } from 'semantic-ui-react';
 import BookmarkForm from '../SaveBookmark/BookmarkForm';
 import { useSelector } from 'react-redux';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { selectors as settings } from '../../../../lib/redux/slices/settingsSlice/settingsSlice';
 import SelectTopicsModal from '../SelectTopicsModal/SelectTopicsModal';
+import { selectors as textFile } from '../../../../lib/redux/slices/textFileSlice/textFileSlice';
 
-const BookmarkBtn = ({ t, source, label, close }) => {
+const BookmarkBtn = ({ close }) => {
   const [open, setOpen]       = useState(false);
   const [confirm, setConfirm] = useState(false);
   const [openTag, setOpenTag] = useState(false);
 
   const { isMobileDevice } = useContext(DeviceInfoContext);
-  const dir = useSelector(state => settings.getUIDir(state.settings));
+
+  const { t } = useTranslation();
+  const dir   = useSelector(state => settings.getUIDir(state.settings));
+  const label = useSelector(state => textFile.getLabelInfo(state.textFile));
 
   const handleOpen = () => {
     setOpen(true);
@@ -87,7 +91,7 @@ const BookmarkBtn = ({ t, source, label, close }) => {
         className="bookmark_modal"
       >
         <Modal.Header content={t('personal.bookmark.saveBookmark')} />
-        {<BookmarkForm onClose={handleClose} source={source} />}
+        {<BookmarkForm onClose={handleClose} />}
       </Modal>
     </>
   );

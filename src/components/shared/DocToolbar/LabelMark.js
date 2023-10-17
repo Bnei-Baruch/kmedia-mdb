@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { withTranslation } from 'next-i18next';
+import { withTranslation, useTranslation } from 'next-i18next';
 import { Button, Popup } from 'semantic-ui-react';
 import { SectionLogo } from '../../../helpers/images';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
@@ -10,7 +10,8 @@ import { selectors as tagsSelectors } from '../../../../lib/redux/slices/tagsSli
 import { textMarksPrefixByType } from '../../../helpers/scrollToSearch/helper';
 
 const idPrefix  = textMarksPrefixByType['label'];
-const LabelMark = ({ label, offset, t }) => {
+const LabelMark = ({ label, offset }) => {
+  const { t }               = useTranslation();
   const [top, setTop]       = useState(0);
   const [bottom, setBottom] = useState(0);
 
@@ -68,9 +69,8 @@ const LabelMark = ({ label, offset, t }) => {
 };
 
 LabelMark.propTypes = {
-  t: PropTypes.func.isRequired,
   offset: PropTypes.object,
   label: PropTypes.object,
 };
 
-export default withTranslation()(LabelMark);
+export default LabelMark;

@@ -18,7 +18,7 @@ import { filtersTransformer } from '../../lib/filters';
 import { fetchList } from '../../lib/redux/slices/listSlice/thunks';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-const FILTER_PARAMS = { content_type: [CT_LIKUTIM] };
+export const FILTER_PARAMS = { content_type: [CT_LIKUTIM] };
 
 export const getServerSideProps = wrapper.getServerSideProps(store => async (context) => {
   const lang      = context.locale ?? DEFAULT_CONTENT_LANGUAGE;

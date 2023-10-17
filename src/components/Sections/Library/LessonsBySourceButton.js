@@ -4,13 +4,16 @@ import { useTranslation } from 'next-i18next';
 import { Button, Popup, } from 'semantic-ui-react';
 
 import { SectionLogo } from '../../../helpers/images';
-import Link from '../../Language/MultiLanguageLink';
 import { stringify } from '../../../helpers/url';
 import { CT_SOURCE } from '../../../helpers/consts';
+import Link from 'next/link';
+import { useSelector } from 'react-redux';
+import { selectors } from '../../../../lib/redux/slices/textFileSlice/textFileSlice';
 
-const LessonsBySourceButton = ({ source }) => {
-  const { t } = useTranslation();
-  if (source.subject_type !== CT_SOURCE)
+const LessonsBySourceButton = () => {
+  const { t }        = useTranslation();
+  const { id, type } = useSelector(state => selectors.getSubjectInfo(state.textFile));
+  if (type !== CT_SOURCE)
     return null;
 
   return (
@@ -19,7 +22,7 @@ const LessonsBySourceButton = ({ source }) => {
       trigger={
         <Button
           as={Link}
-          to={{ pathname: '/lessons', search: stringify({ 'sources': source.subject_uid }) }}
+          href={{ pathname: '/lessons', query: stringify({ 'sources': id }) }}
           compact
           size="small"
           icon={<SectionLogo name="lessons" color="grey" />}
@@ -28,7 +31,5 @@ const LessonsBySourceButton = ({ source }) => {
     />
   );
 };
-
-LessonsBySourceButton.propTypes = { source: PropTypes.object.isRequired };
 
 export default LessonsBySourceButton;

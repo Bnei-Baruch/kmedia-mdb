@@ -9,6 +9,7 @@ import { getFullPath } from './helper';
 import { useTranslation } from 'next-i18next';
 import { selectors as settings } from '../../../../lib/redux/slices/settingsSlice';
 import Link from 'next/link';
+import { selectors } from '../../../../lib/redux/slices/textFileSlice/textFileSlice';
 
 const getNextPrevDetails = (isNext, uiDir, t) => {
   const title         = isNext ? t('buttons.next-article') : t('buttons.previous-article');
@@ -46,7 +47,8 @@ const NextPrevBtn = ({ sourceChld = [], index, isNext }) => {
   );
 };
 
-const NextPrev = ({ id }) => {
+const NextPrev = () => {
+  const id          = useSelector(state => selectors.getSubjectInfo(state.textFile).id);
   const getPathByID = useSelector(state => sources.getPathByID(state.sources));
 
   if (isTaas(id)) {

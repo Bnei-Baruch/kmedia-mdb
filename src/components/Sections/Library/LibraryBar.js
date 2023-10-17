@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Button } from 'semantic-ui-react';
 
 import { selectors as settings } from '../../../../lib/redux/slices/settingsSlice/settingsSlice';
@@ -9,37 +9,41 @@ import Share from './Share';
 import BookmarkButton from '../../shared/SaveBookmark/BookmarkButton';
 import LabelButton from '../../shared/SelectTopicsModal/LabelButton';
 import LessonsBySourceButton from './LessonsBySourceButton';
+import { selectors as textFile, textFileSlice } from '../../../../lib/redux/slices/textFileSlice/textFileSlice';
 
-const LibraryBar = (
-  {
-    fontSize = 0,
-    isReadable = false,
-    handleIsReadable,
-    handleSettings,
-    handleTocIsActive = null,
-    source,
-    label
-  }
-) => {
-  const uiDir = useSelector(state => settings.getUIDir(state.settings));
+const LibraryBar = () => {
+  const uiDir    = useSelector(state => settings.getUIDir(state.settings));
   const position = uiDir === 'rtl' ? 'left' : 'right';
 
-  const print = () => window.print();
+  const isReadable = useSelector(state => textFile.getIsReadable(state.textFile));
+  const dispatch   = useDispatch();
+
+  const print             = () => window.print();
+  const handleTocIsActive = () => dispatch(textFileSlice.actions.setTocIsActive());
+  const handleIsReadable  = () => dispatch(textFileSlice.actions.setReadable());
 
   return (
     <div className="source__header-toolbar">
-      <LessonsBySourceButton source={source} />
-      <BookmarkButton source={source} />
-      <LabelButton label={label} />
+      <LessonsBySourceButton />
+      <BookmarkButton />
+      <LabelButton />
       <Button compact size="small" className="mobile-hidden" icon="print" onClick={print} />
       {/* a portal is used to put the download button here in this div */}
       <div id="download-button" />
-      <LibrarySettings fontSize={fontSize} handleSettings={handleSettings} />
-      <Button compact size="small" icon={isReadable ? 'compress' : 'expand'} onClick={handleIsReadable} />
-      {handleTocIsActive &&
-        <Button compact size="small" icon="list layout" onClick={handleTocIsActive}
-                className="computer-hidden large-screen-hidden widescreen-hidden" />
-      }
+      <LibrarySettings />
+      <Button
+        compact
+        size="small"
+        icon={isReadable ? 'compress' : 'expand'}
+        onClick={handleIsReadable}
+      />
+      <Button
+        compact size="small"
+        icon="list layout"
+        onClick={handleTocIsActive}
+        className="computer-hidden large-screen-hidden widescreen-hidden"
+      />
+
       <Share position={position} />
     </div>
   );
