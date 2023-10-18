@@ -13,9 +13,8 @@ import FilterLabels from '../../../../lib/filters/components/FilterLabels';
 import HelmetsBasic from '../../shared/Helmets/Basic';
 import { getBreadCrumbSection } from './helper';
 
-const RenderPageMobile = () => {
-  const { id } = useParams();
-  const { t }  = useTranslation();
+const RenderPageMobile = ({ id }) => {
+  const { t } = useTranslation();
 
   const [openFilters, setOpenFilters] = useState(false);
 

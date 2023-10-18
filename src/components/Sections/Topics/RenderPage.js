@@ -14,8 +14,7 @@ import FilterLabels from '../../../../lib/filters/components/FilterLabels';
 import HelmetsBasic from '../../shared/Helmets/Basic';
 import { getBreadCrumbSection } from './helper';
 
-const RenderPage = () => {
-  const { id } = useParams();
+const RenderPage = ({id}) => {
   const { t }  = useTranslation();
 
   const getPathByID = useSelector(state => selectors.getPathByID(state.tags));
@@ -31,13 +30,17 @@ const RenderPage = () => {
 
   return (
     <>
-      <HelmetsBasic title={breadCrumbSections[breadCrumbSections.length - 1]?.content} />
+      {/*<HelmetsBasic title={breadCrumbSections[breadCrumbSections.length - 1]?.content} />*/}
       <Container className="padded topics" fluid>
-        <Breadcrumb icon={breadCrumbIcon} sections={breadCrumbSections} size="huge" />
+        <Breadcrumb
+          icon={breadCrumbIcon}
+          sections={breadCrumbSections}
+          size="huge"
+        />
         <Divider />
         <Grid divided>
           <Grid.Column width="4" className="filters-aside-wrapper">
-            <Filters
+             <Filters
               namespace={`topics_${id}`}
               baseParams={baseParams}
             />

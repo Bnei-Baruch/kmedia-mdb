@@ -1,7 +1,7 @@
 import React from 'react';
 import { Container, Divider } from 'semantic-ui-react';
 
-import { PAGE_NS_LESSONS, PAGE_NS_PROGRAMS, PAGE_NS_EVENTS, DEFAULT_CONTENT_LANGUAGE } from '../../src/helpers/consts';
+import { DEFAULT_CONTENT_LANGUAGE } from '../../src/helpers/consts';
 import { filterSlice } from '../../lib/redux/slices/filterSlice/filterSlice';
 import { selectors as lists } from '../../lib/redux/slices/listSlice/listSlice';
 import { selectors as settings } from '../../lib/redux/slices/settingsSlice/settingsSlice';
@@ -19,7 +19,6 @@ import FilterByNamespace from './FilterByNamespace';
 import { baseParamsByNamespace } from './helper';
 import ItemByNamespace from './ItemByNamespace';
 import { fetchSQData } from '../../lib/redux/slices/mdbSlice';
-import { filterStats } from '../../lib/redux/slices/filterSlice/filterStatsSlice';
 
 export const getServerSideProps = wrapper.getServerSideProps(store => async (context) => {
   const lang      = context.locale ?? DEFAULT_CONTENT_LANGUAGE;
