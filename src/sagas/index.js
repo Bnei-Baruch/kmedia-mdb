@@ -16,7 +16,7 @@ import { sagas as assets } from '../../lib/redux/slices/assetSlice/thunks';
 import { sagas as stats } from './stats';
 import { sagas as simpleMode } from '../../lib/redux/slices/simpleMode/thunks';
 import { sagas as recommended } from './recommended';
-import { sagas as music } from './music';
+import { sagas as music } from '../../lib/redux/slices/musicSlice/thunks';
 import { sagas as my } from '../../lib/redux/slices/mySlice/thunks';
 import { sagas as notes } from './myNotes';
 import { sagas as likutim } from './likutim';

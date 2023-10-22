@@ -138,7 +138,7 @@ class Api {
   );
 
   static collections = ({ pageNo: page_no, pageSize: page_size, ...rest }) => (
-    Requests.get(`collections?${Requests.makeParams({ page_no, page_size, content_type, ...rest })}`)
+    Requests.get(`collections?${Requests.makeParams({ page_no, page_size, ...rest })}`)
   );
 
   static units = ({ pageNo: page_no, pageSize: page_size, ...rest }) => (

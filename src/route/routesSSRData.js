@@ -36,7 +36,7 @@ import { actions as filtersActions } from '../../lib/redux/slices/filterSlice/fi
 import { actions as homeActions } from '../../lib/redux/slices/homeSlice/home';
 import { actions as listsActions } from '../../lib/redux/slices/listSlice/listSlice';
 import { actions as mdbActions, selectors as mdbSelectors } from '../../lib/redux/slices/mdbSlice/mdbSlice';
-import { actions as musicActions } from './../redux/modules/music';
+import { actions as musicActions } from '../../lib/redux/slices/musicSlice/musicSlice';
 import { actions as prepareActions } from '../../lib/redux/slices/preparePageSlice/preparePageSlice';
 import { actions as publicationsActions } from '../../lib/redux/slices/publicationsSlice/thunks';
 import { actions as searchActions } from '../../lib/redux/slices/searchSlice/searchSlice';
@@ -48,7 +48,7 @@ import * as assetsSagas from '../../lib/redux/slices/assetSlice/thunks';
 import * as eventsSagas from './../sagas/events';
 import * as filtersSagas from './../sagas/filters';
 import * as mdbSagas from '../../lib/redux/slices/mdbSlice/thunks';
-import * as musicSagas from './../sagas/music';
+import * as musicSagas from '../../lib/redux/slices/musicSlice/thunks';
 import * as publicationsSagas from '../../lib/redux/slices/publicationsSlice/thunks';
 import * as searchSagas from './../sagas/search';
 import * as tagsSagas from '../../lib/redux/slices/tagsSlice/thunks';

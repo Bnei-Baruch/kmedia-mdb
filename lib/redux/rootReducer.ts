@@ -22,6 +22,7 @@ import {
 } from './slices'
 import {myNotesSlice} from "@/lib/redux/slices/mySlice/myNotesSlice";
 import {simpleModeSlice} from "@/lib/redux/slices/simpleMode/simpleModeSlice";
+import {musicSlice} from "@/lib/redux/slices/musicSlice/musicSlice";
 
 export const reducer = {
     [homeSlice.homeSlice.name]: homeSlice.homeSlice.reducer,
@@ -45,4 +46,5 @@ export const reducer = {
     [assetSlice.assetSlice.name]: assetSlice.assetSlice.reducer,
     [textFileSlice.textFileSlice.name]: textFileSlice.textFileSlice.reducer,
     [simpleModeSlice.name]: simpleModeSlice.reducer,
+    [musicSlice.name]: musicSlice.reducer,
 }

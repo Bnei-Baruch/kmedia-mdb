@@ -11,7 +11,7 @@ import { reducer as lessons } from './modules/lessons';
 import { reducer as likutim } from './modules/likutim';
 import { reducer as lists } from '../../lib/redux/slices/listSlice/listSlice';
 import { reducer as mdb } from '../../lib/redux/slices/mdbSlice/mdbSlice';
-import { reducer as music } from './modules/music';
+import { reducer as music } from '../../lib/redux/slices/musicSlice/musicSlice';
 import { reducer as my } from '../../lib/redux/slices/mySlice/mySlice';
 import { reducer as player } from '../../lib/redux/slices/playerSlice/playerSlice';
 import { reducer as playlist } from '../../lib/redux/slices/playlistSlice/playlistSlice';
