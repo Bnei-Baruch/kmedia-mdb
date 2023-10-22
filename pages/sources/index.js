@@ -19,21 +19,17 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async (con
 
 const SourcesPage = ({ roots }) => {
 
-  return (
-    <div>
+  return (<div>
       <SectionHeader section="sources-library" />
       <Divider fitted />
       <Container className="padded">
         <Table basic="very" className="index-list sources__authors">
           <Table.Body>
-            {
-              roots.map(id => (<Kabbalist key={id} id={id} />))
-            }
+            {roots.map(id => (<Kabbalist key={id} id={id} />))}
           </Table.Body>
         </Table>
       </Container>
-    </div>
-  );
+    </div>);
 };
 
 export default SourcesPage;

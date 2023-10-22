@@ -20,7 +20,7 @@ import { reducer as publications } from '../../lib/redux/slices/publicationsSlic
 import { reducer as recommended } from './modules/recommended';
 import { reducer as search } from '../../lib/redux/slices/searchSlice/searchSlice';
 import { reducer as settings } from '../../lib/redux/slices/settingsSlice/settingsSlice';
-import { reducer as simpleMode } from './modules/simpleMode';
+import { reducer as simpleMode } from '../../lib/redux/slices/simpleMode/simpleModeSlice';
 import { reducer as sources } from '../../lib/redux/slices/sourcesSlice/sourcesSlice';
 import { reducer as stats } from './modules/stats';
 import { reducer as tags } from '../../lib/redux/slices/tagsSlice/tagsSlice';

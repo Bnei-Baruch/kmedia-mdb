@@ -41,7 +41,7 @@ import { actions as prepareActions } from '../../lib/redux/slices/preparePageSli
 import { actions as publicationsActions } from '../../lib/redux/slices/publicationsSlice/thunks';
 import { actions as searchActions } from '../../lib/redux/slices/searchSlice/searchSlice';
 import { selectors as settingsSelectors } from '../../lib/redux/slices/settingsSlice/settingsSlice';
-import { actions as simpleModeActions } from './../redux/modules/simpleMode';
+import { actions as simpleModeActions } from '../../lib/redux/slices/simpleMode/simpleModeSlice';
 import { selectors as sourcesSelectors } from '../../lib/redux/slices/sourcesSlice/sourcesSlice';
 import { actions as tagsActions } from '../../lib/redux/slices/tagsSlice/tagsSlice';
 import * as assetsSagas from '../../lib/redux/slices/assetSlice/thunks';

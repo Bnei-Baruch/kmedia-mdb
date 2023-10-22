@@ -14,7 +14,7 @@ import { sagas as search } from './search';
 import { sagas as assets } from '../../lib/redux/slices/assetSlice/thunks';
 //import { sagas as home } from '../../lib/redux/slices/homeSlice/home';
 import { sagas as stats } from './stats';
-import { sagas as simpleMode } from './simpleMode';
+import { sagas as simpleMode } from '../../lib/redux/slices/simpleMode/thunks';
 import { sagas as recommended } from './recommended';
 import { sagas as music } from './music';
 import { sagas as my } from '../../lib/redux/slices/mySlice/thunks';

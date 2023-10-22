@@ -23,9 +23,9 @@ import {
 import { canonicalLink } from '../../../helpers/links';
 import { canonicalCollection, isEmpty, downloadLink } from '../../../helpers/utils';
 import { formatTime } from '../../../helpers/time';
-import Link from '../../Language/MultiLanguageLink';
 import { SectionLogo } from '../../../helpers/images';
 import { sizeByQuality } from '../../Pages/WithPlayer/widgets/helper';
+import Link from 'next/link';
 
 const CT_DAILY_LESSON_I18N_KEY = `constants.content-types.${CT_DAILY_LESSON}`;
 
@@ -181,16 +181,16 @@ const renderUnits = (units, contentLanguages, t, helpChooseLang, chroniclesAppen
       title = (
         <List.Header className="unit-header">
           <div className="margin-bottom-4">
-            <Link className="unit-link" to={to}>{ccu?.name || NO_NAME}</Link>
+            <Link className="unit-link" href={to}>{ccu?.name || NO_NAME}</Link>
             <span className="duration">{description.join('  |  ')}</span>
           </div>
-          <Link className="unit-link" to={to}>{unit.name || NO_NAME}</Link>
+          <Link className="unit-link" href={to}>{unit.name || NO_NAME}</Link>
         </List.Header>
       );
     } else {
       title = (
         <List.Header className="unit-header">
-          <Link className="unit-link" to={to}>{unit.name || NO_NAME}</Link>
+          <Link className="unit-link" href={to}>{unit.name || NO_NAME}</Link>
           {
             duration && <span className="duration">{duration}</span>
           }
@@ -238,7 +238,7 @@ export const renderCollection = (collection, contentLanguages, t, helpChooseLang
     <Card fluid key={id}>
       <Card.Content className={number ? 'gray-header' : ''}>
         <Card.Header className="unit-header">
-          <Link to={canonicalLink(collection)}>
+          <Link href={canonicalLink(collection)}>
             {`${t(CT_DAILY_LESSON_I18N_KEY)}${number ? ` (${t(`lessons.list.nameByNum_${number}`)})` : ''}`}
           </Link>
         </Card.Header>

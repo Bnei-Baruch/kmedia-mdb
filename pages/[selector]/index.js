@@ -41,7 +41,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async (con
   }));
   const _data = lists.getNamespaceState(store.getState().lists, namespace);
   const _i18n = await serverSideTranslations(lang);
-  return { props: { ..._i18n, pageSize, filters, namespace, ..._data } };
+  return { props: { ..._i18n, pageSize, namespace, ..._data } };
 });
 /*
 

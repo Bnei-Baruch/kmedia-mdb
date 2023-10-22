@@ -22,7 +22,7 @@ import Publications from './../components/Sections/Publications/MainPage';
 import ArticleCollection from './../components/Sections/Publications/tabs/Articles/Collection';
 import ArticlePage from './../components/Sections/Publications/tabs/Articles/Unit';
 import BlogPost from './../components/Sections/Publications/tabs/Blog/Post/Container';
-import SimpleModeContainer from './../components/Sections/SimpleMode/Container';
+import SimpleModePage from '../../pages/simple-mode';
 import Topics from '../../pages/topics';
 import Topic from '../../pages/topics/[id]';
 import {
@@ -153,7 +153,7 @@ const useRoutes = playerContainer => ([
   { path: 'persons/:id', component: <LibraryPerson />, ssrData: ssrDataLoaders.libraryPage },
   { path: 'search', component: <SearchResults />, ssrData: ssrDataLoaders.searchPage },
   { path: 'help', component: <Help /> },
-  { path: 'simple-mode', component: <SimpleModeContainer />, ssrData: ssrDataLoaders.simpleMode },
+  { path: 'simple-mode', component: <SimpleModePage />, ssrData: ssrDataLoaders.simpleMode },
   { path: 'excerpt', component: <ExcerptContainer /> },
   { path: 'likutim', component: <LikutimMain /> },
   { path: 'likutim/:id', component: <Id />, ssrData: ssrDataLoaders.likutPage },
