@@ -9,9 +9,10 @@ import * as middleware from './middleware';
 import serverRender from './renderer';
 
 const CRA_CLIENT_PORT = process.env.CRA_CLIENT_PORT || 3000;
+const CRA_CLIENT_HOST = process.env.CRA_CLIENT_HOST || 'localhost';
 
 function handler(req, res, next) {
-  http.get(`http://localhost:${CRA_CLIENT_PORT}/index.html`, result => {
+  http.get(`http://${CRA_CLIENT_HOST}:${CRA_CLIENT_PORT}/index.html`, result => {
     result.setEncoding('utf8');
     let htmlData = '';
     result.on('data', chunk => {
@@ -46,7 +47,7 @@ router.use('/assets', express.static(
 
 // proxy other static assets to create-react-app dev server
 router.use(['**/*.*', '/static', '/sockjs-node'], createProxyMiddleware({
-  target: `http://localhost:${CRA_CLIENT_PORT}`,
+  target: `http://${CRA_CLIENT_HOST}:${CRA_CLIENT_PORT}`,
   changeOrigin: true,
   ws: true
 }));
