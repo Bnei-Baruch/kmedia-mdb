@@ -16,7 +16,7 @@ import { TaggingBtn } from './TaggingBtn';
 import { ToPlaylistBtn } from './ToPlaylistBtn';
 import { fetchMy, removeMy, reactionsCount } from '../../../../../../lib/redux/slices/mySlice/thunks';
 
-const PersonalInfo = ({ collection }) => {
+const PersonalInfo = () => {
   const [isNeedLogin, setIsNeedLogin] = useState();
 
   const { cuId }             = useSelector(state => playlist.getInfo(state.playlist));

@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Container, Header, Popup, Ref } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
+import Link from 'next/link';
 
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { NO_NAME } from '../../../helpers/consts';
 import { selectors as settings } from '../../../../lib/redux/slices/settingsSlice/settingsSlice';
 
-import Link from 'next/link';
 import * as shapes from '../../shapes';
 import { imageWidthBySize } from './helper';
 import UnitLogoWithDuration from '../UnitLogoWithDuration';
@@ -38,7 +38,7 @@ const ListTemplate = (
 
   const handleItemRef = r => itemRef.current = r;
 
-  const dir = useSelector(state => settings.getUIDir(state.settings));
+  const dir                = useSelector(state => settings.getUIDir(state.settings));
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
   const [isNeedTooltip, setIsNeedTooltip] = useState(null);

@@ -184,7 +184,7 @@ export const canonicalLink = (entity, mediaLang, ccu) => {
     }
 
     if (content_type === CT_SONGS) {
-      return { pathname: `/music/${id}/cu/${entity.id}`, query: {} };
+      return { pathname: `/music/cu/${entity.id}`, query: ccu ? { c: id } : {} };
     }
   }
 

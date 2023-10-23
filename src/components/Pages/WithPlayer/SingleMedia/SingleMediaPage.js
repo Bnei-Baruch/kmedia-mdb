@@ -11,45 +11,37 @@ import Materials from '../widgets/UnitMaterials/Materials';
 
 const SingleMediaPage = ({ playerContainer }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
-  const location           = useLocation();
-
-  const embed = getEmbedFromQuery(location);
-
-  if (embed) return playerContainer;
-
-  const computerWidth = !isMobileDevice ? 10 : 16;
-  return (
-    <>
-      <Grid padded={!isMobileDevice} className="avbox">
-        <Grid.Column
-          mobile={16}
-          tablet={computerWidth}
-          computer={computerWidth}
-          className={clsx({ 'is-fitted': isMobileDevice })}>
-          <Grid.Row>
-            <Grid.Column>
-              {playerContainer}
-            </Grid.Column>
-          </Grid.Row>
-          <Grid.Row>
-            <Grid.Column>
-              <Container className="unit_container">
-                <Info />
-                <Materials />
-              </Container>
-            </Grid.Column>
-          </Grid.Row>
-        </Grid.Column>
-        {
-          !isMobileDevice && (
-            <Grid.Column mobile={16} tablet={6} computer={6}>
-              <Recommended />
-            </Grid.Column>
-          )
-        }
-      </Grid>
-    </>
-  );
+  const computerWidth      = !isMobileDevice ? 10 : 16;
+  return (<>
+    <Grid padded={!isMobileDevice} className="avbox">
+      <Grid.Column
+        mobile={16}
+        tablet={computerWidth}
+        computer={computerWidth}
+        className={clsx({ 'is-fitted': isMobileDevice })}>
+        <Grid.Row>
+          <Grid.Column>
+            {playerContainer}
+          </Grid.Column>
+        </Grid.Row>
+        <Grid.Row>
+          <Grid.Column>
+            <Container className="unit_container">
+              <Info />
+              <Materials />
+            </Container>
+          </Grid.Column>
+        </Grid.Row>
+      </Grid.Column>
+      {
+        !isMobileDevice && (
+          <Grid.Column mobile={16} tablet={6} computer={6}>
+            {/*<Recommended />*/}
+          </Grid.Column>
+        )
+      }
+    </Grid>
+  </>);
 };
 
 export default SingleMediaPage;

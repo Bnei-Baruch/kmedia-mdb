@@ -9,12 +9,13 @@ import { selectors } from '../../../../lib/redux/slices/musicSlice/musicSlice';
 import { selectors as mdb } from '../../../../lib/redux/slices/mdbSlice';
 
 const MusicItem = ({ id }) => {
-  const c = useSelector(state => mdb.getDenormCollection(state.mdb, id));
+  const c  = useSelector(state => mdb.getDenormCollection(state.mdb, id));
+  const cu = c.content_units[0];
 
   return (
     <Table.Row className="no-thumbnail" verticalAlign="top" key={id}>
       <Table.Cell>
-        <Link className="index__title" href={canonicalLink(c)}>
+        <Link className="index__title" href={canonicalLink(cu, null, c)}>
           {c.name || NO_NAME}
         </Link>
       </Table.Cell>

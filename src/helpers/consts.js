@@ -16,6 +16,7 @@ export const CT_CLIPS              = 'CLIPS';
 export const CT_ARTICLES           = 'ARTICLES';
 export const CT_LESSONS_SERIES     = 'LESSONS_SERIES';
 export const CT_SONGS              = 'SONGS';
+export const CT_SONG               = 'SONG';
 export const CT_TAG                = 'TAG';
 
 export const CT_COLLECTIONS = [
@@ -85,6 +86,7 @@ export const CT_UNITS = [
   CT_RESEARCH_MATERIAL,
   CT_KTAIM_NIVCHARIM,
   CT_LIKUTIM,
+  CT_SONG
 ];
 
 export const INSERT_TYPE_SUMMARY = 'summary';
@@ -763,12 +765,12 @@ export const FN_MEDIA_TYPE         = 'media-type-filter';
 export const FN_LOCATIONS          = 'locations-filter';
 export const FN_FREE_TEXT          = 'free-text';
 export const FN_SORT_BY_FILTER     = 'sort-by-filter';
-export const FN_SOURCES_MULTI    = 'sources-filter-multi';
-export const FN_TOPICS_MULTI     = 'topics-filter-multi';
-export const FN_COLLECTION_MULTI = 'collections-filter-multi';
-export const FN_HOLIDAYS         = 'holidays-filter';
-export const FN_PROGRAMS         = 'programs-filter';
-export const FN_YEARS         = 'years-filter';
+export const FN_SOURCES_MULTI      = 'sources-filter-multi';
+export const FN_TOPICS_MULTI       = 'topics-filter-multi';
+export const FN_COLLECTION_MULTI   = 'collections-filter-multi';
+export const FN_HOLIDAYS           = 'holidays-filter';
+export const FN_PROGRAMS           = 'programs-filter';
+export const FN_YEARS              = 'years-filter';
 export const FN_PUBLISHERS         = 'publishers-filter';
 
 export const SEARCH_INTENT_FILTER_NAMES = {
@@ -776,12 +778,12 @@ export const SEARCH_INTENT_FILTER_NAMES = {
   [SEARCH_INTENT_INDEX_SOURCE]: FN_SOURCES_MULTI,
 };
 
-export const PAGE_NS_TOPICS   = 'topic';
-export const PAGE_NS_PROGRAMS = 'programs';
-export const PAGE_NS_LESSONS  = 'lessons';
-export const PAGE_NS_EVENTS   = 'events';
-export const PAGE_NS_LIKUTIM  = 'likutim';
-export const PAGE_NS_SKETCHES = 'sketches';
+export const PAGE_NS_TOPICS      = 'topic';
+export const PAGE_NS_PROGRAMS    = 'programs';
+export const PAGE_NS_LESSONS     = 'lessons';
+export const PAGE_NS_EVENTS      = 'events';
+export const PAGE_NS_LIKUTIM     = 'likutim';
+export const PAGE_NS_SKETCHES    = 'sketches';
 export const PAGE_NS_SIMPLE_MODE = 'simpleMode';
 
 export const ALL_PAGE_NS = [PAGE_NS_LESSONS, PAGE_NS_TOPICS, PAGE_NS_PROGRAMS, PAGE_NS_EVENTS, PAGE_NS_LIKUTIM];
@@ -808,4 +810,4 @@ export const PLAYER_OVER_MODES = {
 
 export const KC_BOT_USER_NAME = '@__||bot||__@';
 
-export const MAX_PAGE_SIZE = 1000
+export const MAX_PAGE_SIZE = 1000;

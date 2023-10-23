@@ -12,13 +12,13 @@ import {
 } from '../../../../../helpers/consts';
 import { canonicalLink } from '../../../../../helpers/links';
 import { cuPartNameByCCUType, intersperse } from '../../../../../helpers/utils';
-import Link from '../../../../Language/MultiLanguageLink';
 import PersonalInfo from './PersonalInfo';
 import { selectors as recommended } from '../../../../../redux/modules/recommended';
 import UnitLogo from '../../../../shared/Logo/UnitLogo';
 import { selectors as mdb } from '../../../../../../lib/redux/slices/mdbSlice/mdbSlice';
 import { selectors } from '../../../../../../lib/redux/slices/playlistSlice/playlistSlice';
 import TagsByUnit from '../../../../shared/TagsByUnit';
+import Link from 'next/link';
 
 export const makeTagLinks = (tags = [], getTagById) =>
   Array.from(intersperse(
@@ -28,7 +28,7 @@ export const makeTagLinks = (tags = [], getTagById) =>
         return '';
       }
 
-      return <Link key={id} to={`/topics/${id}`}>
+      return <Link key={id} href={`/topics/${id}`}>
         <Button basic size="tiny" className="link_to_cu">
           {label}
         </Button>
@@ -41,11 +41,11 @@ const makeCollectionsLinks = (collections = {}, t, currentCollection) => {
 
   const noSSeries = Array.from(intersperse(
     colValues.filter(c => c.content_type !== CT_LESSONS_SERIES).map(x =>
-      <Link key={x.id} to={canonicalLink(x)}>{x.name}</Link>), ', '));
+      <Link key={x.id} href={canonicalLink(x)}>{x.name}</Link>), ', '));
 
   const sSeries = Array.from(intersperse(
     colValues.filter(c => c.content_type === CT_LESSONS_SERIES).map(x =>
-      <Link key={x.id} to={canonicalLink(x)}>{x.name}</Link>), ', '));
+      <Link key={x.id} href={canonicalLink(x)}>{x.name}</Link>), ', '));
   return { noSSeries, sSeries };
 };
 
@@ -72,7 +72,7 @@ const Info = ({ t }) => {
   const currentCollection            = useSelector(state => mdb.getDenormCollection(state.mdb, cId));
   const unit                         = useSelector(state => mdb.getDenormContentUnit(state.mdb, cuId));
 
-  const { id, name, film_date: filmDate, collections, content_type: ct, cIDs } = unit || {};
+  const { id, name, film_date: filmDate, collections = {}, content_type: ct, cIDs } = unit || {};
 
   const views = useSelector(state => recommended.getViews(id, state.recommended));
 

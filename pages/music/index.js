@@ -5,15 +5,10 @@ import { Container, Divider } from 'semantic-ui-react';
 import ResultsPageHeader from '../../src/components/Pagination/ResultsPageHeader';
 import SectionHeader from '../../src/components/shared/SectionHeader';
 import { selectors } from '../../lib/redux/slices/musicSlice/musicSlice';
-import List from '../../src/components/Sections/Music/List';
+import MusicList from '../../src/components/Sections/Music/List';
 import { wrapper } from '../../lib/redux';
-import { DEFAULT_CONTENT_LANGUAGE, FN_DATE_FILTER, PAGE_NS_SIMPLE_MODE } from '../../src/helpers/consts';
+import { DEFAULT_CONTENT_LANGUAGE } from '../../src/helpers/consts';
 import { fetchSQData } from '../../lib/redux/slices/mdbSlice';
-import { filtersTransformer } from '../../lib/filters';
-import moment from 'moment/moment';
-import { definitionsByName } from '../../lib/filters/transformer';
-import { filterSlice } from '../../lib/redux/slices/filterSlice/filterSlice';
-import { fetchSimpleMode } from '../../lib/redux/slices/simpleMode/thunks';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { fetchMusic } from '../../lib/redux/slices/musicSlice/thunks';
 
@@ -38,7 +33,7 @@ const MusicPage = () => {
       <Container className="padded">
         <ResultsPageHeader pageNo={1} pageSize={1000} total={total} />
         <Divider fitted />
-        <List />
+        <MusicList />
       </Container>
     </>
   );
