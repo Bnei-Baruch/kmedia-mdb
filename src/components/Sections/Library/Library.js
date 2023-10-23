@@ -19,7 +19,7 @@ import AudioPlayer from '../../shared/AudioPlayer';
 import MenuLanguageSelector from '../../Language/Selector/MenuLanguageSelector';
 import { getPageFromLocation } from '../../Pagination/withPagination';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
-import { CT_SOURCE, LANG_HEBREW } from '../../../helpers/consts';
+import { CT_SOURCE, DEFAULT_CONTENT_LANGUAGE, LANG_HEBREW } from '../../../helpers/consts';
 
 export const checkRabashGroupArticles = source => {
   if (/^gr-/.test(source)) { // Rabash Group Articles
@@ -52,6 +52,7 @@ export const buildLabelData        = source => {
 
   return s;
 };
+
 export const getLibraryContentFile = (data = {}, sourceId) => {
   const { pdf, docx, doc } = data;
   if (pdf && isTaas(sourceId))
@@ -82,7 +83,8 @@ const Library = ({ data, source, downloadAllowed }) => {
   }
 
   const sourceLanguages = data ? Object.keys(data) : [];
-  const suitableLanguage = selectSuitableLanguage(desiredLanguages, sourceLanguages, LANG_HEBREW);
+  const suitableLanguage = selectSuitableLanguage(
+    desiredLanguages, sourceLanguages, LANG_HEBREW, /*defaultReturnLanguage=*/DEFAULT_CONTENT_LANGUAGE, /*mustReturnSomething*/true);
   const [selectedSourceLanguage, setSelectedSourceLanguage] = useState('');
   const finalLanguage = selectedSourceLanguage || suitableLanguage;
 
@@ -93,7 +95,7 @@ const Library = ({ data, source, downloadAllowed }) => {
   useEffect(() => {
     if (file.id && !fetched)
       dispatch(actions.doc2html(file.id));
-  }, [file.id, fetched]);
+  }, [file.id, fetched, dispatch]);
 
   if (!data) {
     return <Segment basic>&nbsp;</Segment>;
@@ -107,7 +109,7 @@ const Library = ({ data, source, downloadAllowed }) => {
     }));
   };
 
-  const handleLanguageChanged = (selected) => {
+  const handleLanguageChanged = selected => {
     updateQuery(navigate, location, query => ({ ...query, source_language: selected }));
     if (!!sourceLanguages.length) {
       setSelectedSourceLanguage(selected);
@@ -128,15 +130,16 @@ const Library = ({ data, source, downloadAllowed }) => {
           selected={finalLanguage}
           onLanguageChange={handleLanguageChanged}
           multiSelect={false}
-          optionText={(language) => getLanguageName(language) + (data && data[language] && data[language].mp3 ? ' \uD83D\uDD0A' : '')}
+          optionText={language => getLanguageName(language) + (data && data[language] && data[language].mp3 ? ' \uD83D\uDD0A' : '')}
         />
         {isMobileDevice && getAudioPlayer()}
       </div>;
 
     return languageBar;
   };
-  const languageBar         = getLanguageBar();
-  const content             = (file.isPDF || !file) ? file : { ...file, ...doc2htmlById[file.id] };
+
+  const languageBar = getLanguageBar();
+  const content = (file.isPDF || !file) ? file : { ...file, ...doc2htmlById[file.id] };
 
   const getContentToDisplay = () => {
     const { wip, err, data: contentData, isPDF, url } = content;
