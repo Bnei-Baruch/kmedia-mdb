@@ -42,7 +42,6 @@ class LibraryContainer extends Component {
 
   static propTypes = {
     sourceId: PropTypes.string.isRequired,
-    unit: shapes.ContentUnit,
     indexMap: PropTypes.objectOf(shapes.DataWipErr),
     uiLang: PropTypes.string.isRequired,
     uiDir: PropTypes.string.isRequired,
@@ -450,14 +449,13 @@ class LibraryContainer extends Component {
 
   render() {
     const {
-        sourceId,
-        getSourceById,
-        getPathByID,
-        uiLang,
-        t,
-        push,
-        areSourcesLoaded,
-        unit,
+      sourceId,
+      getSourceById,
+      getPathByID,
+      uiLang,
+      t,
+      push,
+      areSourcesLoaded,
     } = this.props;
 
     if (!areSourcesLoaded)
@@ -577,7 +575,6 @@ class LibraryContainer extends Component {
 export default withTranslation()(withRouter(connect(
   (state, ownProps) => ({
     sourceId: ownProps.params?.id,
-    unit: mdb.getDenormContentUnit(state.mdb, ownProps.params?.id),
     indexMap: assets.getSourceIndexById(state.assets),
     uiLang: settings.getUILang(state.settings),
     uiDir: settings.getUIDir(state.settings),
