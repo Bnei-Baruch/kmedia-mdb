@@ -1,14 +1,16 @@
-/* Core */
+/*
+/!* Core *!/
 import { createAsyncThunk } from '@reduxjs/toolkit'
 
-/* Instruments */
+/!* Instruments *!/
 import type { ReduxState, ReduxDispatch } from './store'
 
-/**
+/!**
  * ? A utility function to create a typed Async Thunk Actions.
- */
+ *!/
 export const createAppAsyncThunk = createAsyncThunk.withTypes<{
   state: ReduxState
   dispatch: ReduxDispatch
   rejectValue: string
 }>()
+*/

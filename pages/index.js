@@ -1,5 +1,4 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 
 import { useInterval } from '/src/helpers/timer';
 import {
@@ -10,9 +9,8 @@ import {
   LANG_UKRAINIAN,
   DEFAULT_CONTENT_LANGUAGE,
 } from '/src/helpers/consts';
-import { selectors, fetchData, fetchBanners } from '/lib/redux/slices/homeSlice';
+import { fetchHome, fetchBanners } from '/lib/redux/slices/homeSlice';
 import { fetchBlogList, fetchTweets } from '/lib/redux/slices/publicationsSlice';
-import WipErr from '/src/components/shared/WipErr/WipErr';
 import HomePage from '../src/components/Sections/Home/HomePage';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { wrapper } from '../lib/redux';
@@ -46,17 +44,11 @@ const fetchSocialMedia = async (type, fetchFn, contentLanguages) => {
   });
 };
 
-const HomePageContainer = () => {
-  useInterval(() => fetchData(false), FETCH_TIMEOUT);
-
-  return <HomePage />;
-};
-
 export const getServerSideProps = wrapper.getServerSideProps(store => async ({ locale }) => {
   const lang = locale ?? 'en';
 
   await store.dispatch(fetchSQData());
-  const _data    = store.dispatch(fetchData());
+  const _data    = store.dispatch(fetchHome());
   const _banners = store.dispatch(fetchBanners());
   const _blogs   = fetchSocialMedia('blog', fetchBlogList, [lang]);
   const _tweets  = fetchSocialMedia('tweet', fetchTweets, [lang]);
@@ -65,5 +57,10 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async ({ l
   const _i18n = await serverSideTranslations(lang);
   return { props: { ..._i18n } };
 });
+const HomePageContainer         = () => {
+  useInterval(() => fetchHome(false), FETCH_TIMEOUT);
+
+  return <HomePage />;
+};
 
 export default HomePageContainer;

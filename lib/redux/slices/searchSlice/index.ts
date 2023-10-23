@@ -1,2 +1,1 @@
-export * from './tagsSlice'
-export * from './thunks'
+export * from './searchSlice'
