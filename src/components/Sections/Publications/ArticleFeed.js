@@ -1,11 +1,13 @@
 import React from 'react';
 import { Table } from 'semantic-ui-react';
+import * as renderUnitHelper from '../../../helpers/renderUnitHelper';
+import { useSelector } from 'react-redux';
+import { selectors as mdb } from '../../../../lib/redux/slices/mdbSlice';
+import { useTranslation } from 'next-i18next';
 
-import { CT_ARTICLE } from '../../../../../helpers/consts';
-import * as renderUnitHelper from '../../../../../helpers/renderUnitHelper';
-import UnitList from '../../../../Pages/UnitListAsTable/Container';
-
-const renderUnit = (unit, t) => {
+const ArticleFeed = ({ id }) => {
+  const { t }        = useTranslation();
+  const unit         = useSelector(state => mdb.getDenormContentUnit(state.mdb, id));
   const breakdown    = renderUnitHelper.getUnitCollectionsBreakdown(unit);
   const articles     = breakdown.getArticles();
   const relatedItems = articles.map(renderUnitHelper.renderUnitNameAsListItem);
@@ -23,12 +25,4 @@ const renderUnit = (unit, t) => {
     </Table.Row>
   );
 };
-
-const ArticlesList = () =>
-  <UnitList
-    key="publications-articles"
-    namespace="publications-articles"
-    extraFetchParams={{ content_type: CT_ARTICLE }}
-    renderUnit={renderUnit}
-  />;
-export default ArticlesList;
+export default ArticleFeed;

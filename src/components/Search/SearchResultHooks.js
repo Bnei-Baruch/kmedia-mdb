@@ -5,7 +5,7 @@ import clsx from 'clsx';
 import { Button, Card, Container, Feed, Grid, Header, Icon, Image, List, Segment, } from 'semantic-ui-react';
 import { useSwipeable } from 'react-swipeable';
 
-import TwitterFeed from '../Sections/Publications/tabs/Twitter/Feed';
+import TwitterFeed from '../Sections/Publications/TwitterFeed';
 import { ClientChroniclesContext, DeviceInfoContext } from '../../helpers/app-contexts';
 import { canonicalCollection, tracePath } from '../../helpers/utils';
 import { selectors as mdb } from '../../../lib/redux/slices/mdbSlice/mdbSlice';

@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Divider, Feed, Image } from 'semantic-ui-react';
 
-import { isEmpty } from '../../../../../helpers/utils';
-import * as shapes from '../../../../shapes';
-import twitterAvatar from '../../../../../images/ml_twitter_avatar.jpeg';
-import { getTwitterLanguage, isLanguageRtl } from '../../../../../helpers/i18n-utils';
+import { isEmpty } from '../../../helpers/utils';
+import * as shapes from '../../shapes';
+import twitterAvatar from '../../../images/ml_twitter_avatar.jpeg';
+import { getTwitterLanguage, isLanguageRtl } from '../../../helpers/i18n-utils';
 
 const screenNames = {
   Michael_Laitman: 'Михаэль Лайтман',

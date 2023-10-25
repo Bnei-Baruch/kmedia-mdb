@@ -5,19 +5,19 @@ import { useLocation, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Container, Grid, Header } from 'semantic-ui-react';
 
-import { actions, selectors } from '../../../../../../lib/redux/slices/mdbSlice/mdbSlice';
-import { selectors as settings } from '../../../../../../lib/redux/slices/settingsSlice/settingsSlice';
-import Helmets from '../../../../shared/Helmets/index';
+import { actions, selectors } from '../../../../../lib/redux/slices/mdbSlice/mdbSlice';
+import { selectors as settings } from '../../../../../lib/redux/slices/settingsSlice/settingsSlice';
+import Helmets from '../../../shared/Helmets';
 import TranscriptionContainer
-  from '../../../../Pages/WithPlayer/widgets/UnitMaterials/Transcription/TranscriptionContainer';
-import Share from '../../../Library/Share';
-import { isLanguageRtl } from '../../../../../helpers/i18n-utils';
-import MediaDownloads from '../../../../Pages/WithPlayer/widgets/MediaDownloads';
-import WipErr from '../../../../shared/WipErr/WipErr';
-import Recommended from '../../../../Pages/WithPlayer/widgets/Recommended/Main/Recommended';
-import { getEmbedFromQuery } from '../../../../../../lib/redux/slices/playlistSlice/helper';
-import { ClientChroniclesContext } from '../../../../../helpers/app-contexts';
-import TagsByUnit from '../../../../shared/TagsByUnit';
+  from '../../../Pages/WithPlayer/widgets/UnitMaterials/Transcription/TranscriptionContainer';
+import Share from '../../Library/Share';
+import { isLanguageRtl } from '../../../../helpers/i18n-utils';
+import MediaDownloads from '../../../Pages/WithPlayer/widgets/MediaDownloads';
+import WipErr from '../../../shared/WipErr/WipErr';
+import Recommended from '../../../Pages/WithPlayer/widgets/Recommended/Main/Recommended';
+import { getEmbedFromQuery } from '../../../../../lib/redux/slices/playlistSlice/helper';
+import { ClientChroniclesContext } from '../../../../helpers/app-contexts';
+import TagsByUnit from '../../../shared/TagsByUnit';
 
 const renderHeader = (unit, t, uiDir) => {
   const position = uiDir === 'rtl' ? 'right' : 'left';

@@ -66,7 +66,9 @@ export const getLangPropertyDirection = language => getDirectionProperty(getLang
 
 export const getLanguageLocale = language => LANGUAGES[language].locale;
 
-export const getLanguageLocaleWORegion = language => LANGUAGES[language].locale.substring(0, 2);
+export const getLanguageLocaleWORegion = language => {
+  return LANGUAGES[language].locale.substring(0, 2);
+}
 
 export const getBlogLanguage = (name) => {
   const blog = BLOGS.find(blog => blog.name === name);

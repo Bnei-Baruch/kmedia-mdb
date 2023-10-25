@@ -1,12 +1,12 @@
 import { Grid, Feed, Container } from 'semantic-ui-react';
-import BlogFeed from '../Publications/tabs/Blog/Feed';
 import React from 'react';
 import { useTranslation } from 'next-i18next';
 import { isEmpty } from '../../../helpers/utils';
-import TwitterFeed from '../Publications/tabs/Twitter/Feed';
+import TwitterFeed from '../Publications/TwitterFeed';
 import Section from './Section';
 import { useSelector } from 'react-redux';
 import { selectors as publications } from '../../../../lib/redux/slices/publicationsSlice';
+import BlogFeed from './BlogFeed';
 
 const LatestSocial = () => {
   const { t } = useTranslation();
@@ -32,7 +32,9 @@ const LatestSocial = () => {
                     <div className="titles">
                       <h4>{t('home.blog-title')}</h4>
                     </div>
-                    <BlogFeed snippetVersion items={latestBlogPosts} limitLength={4} />
+                    {
+                      latestBlogPosts.slice(0, length).map(item => (<BlogFeed item={item} />))
+                    }
                     <div className="read-more-bottom">
                       <a href={`/${uiLang}/publications/blog`}>{t('home.read-more-posts')}</a>
                     </div>

@@ -1,9 +1,9 @@
 import React from 'react';
 import { Table } from 'semantic-ui-react';
 
-import { CT_BLOG_POST } from '../../../../../helpers/consts';
-import * as renderUnitHelper from '../../../../../helpers/renderUnitHelper';
-import UnitList from '../../../../Pages/UnitListAsTable/Container';
+import { CT_BLOG_POST } from '../../../../helpers/consts';
+import * as renderUnitHelper from '../../../../helpers/renderUnitHelper';
+import UnitList from '../../../Pages/UnitListAsTable/Container';
 
 const renderUnit = (unit, t) =>
   (

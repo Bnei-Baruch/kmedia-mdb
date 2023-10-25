@@ -1,8 +1,8 @@
 import React from 'react';
 import { Table } from 'semantic-ui-react';
 
-import * as renderUnitHelper from '../../../../../helpers/renderUnitHelper';
-import Collection from '../../../../Pages/Collection/Container';
+import * as renderUnitHelper from '../../../../helpers/renderUnitHelper';
+import Collection from '../../../Pages/Collection/Container';
 
 const PublicationCollection = () => <Collection namespace="publications-collection" renderUnit={renderUnit} />;
 

@@ -1,3 +1,4 @@
+'use client';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'next-i18next';
@@ -30,6 +31,11 @@ class DateFilter extends Component {
     }
   };
 
+  constructor(props, context) {
+    super(props, context);
+    this.state = DateFilter.convertToStateObject(props);
+  }
+
   static convertToStateObject = props => {
     const { value } = props;
     if (!value) {
@@ -46,11 +52,6 @@ class DateFilter extends Component {
       showDay: preset === CUSTOM_DAY,
     });
   };
-
-  constructor(props, context) {
-    super(props, context);
-    this.state = DateFilter.convertToStateObject(props);
-  }
 
   componentDidUpdate(prevProps) {
     if (this.props.value && this.props.value !== prevProps.value) {

@@ -1,19 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withTranslation } from 'next-i18next';
+import { withTranslation, useTranslation } from 'next-i18next';
 import { Container, Grid, Header, Menu } from 'semantic-ui-react';
 
 import Helmets from './Helmets';
 import i18next from 'i18next';
 
-const SectionHeader = ({ section, t, submenuItems }) => {
-  const title   = t(`${section}.header.text`);
+const SectionHeader = ({ section, submenuItems }) => {
+  const { t }    = useTranslation();
+  const title    = t(`${section}.header.text`);
   const subText1 = t(`${section}.header.subtext`);
   const subText2 = i18next.exists(`${section}.header.subtext2`) ? t(`${section}.header.subtext2`) : '';
 
   return (
     <div className="section-header">
-{/*
+      {/*
       <Helmets.Basic title={title} description={subText1} />
 */}
       <Container className="padded">
@@ -27,15 +28,15 @@ const SectionHeader = ({ section, t, submenuItems }) => {
                   </span>
                   {
                     subText1 &&
-                      <Header.Subheader className="section-header__subtitle">
-                        {subText1}
-                      </Header.Subheader>
+                    <Header.Subheader className="section-header__subtitle">
+                      {subText1}
+                    </Header.Subheader>
                   }
                   {
                     subText2 &&
-                      <Header.Subheader className="section-header__subtitle2">
-                        {subText2}
-                      </Header.Subheader>
+                    <Header.Subheader className="section-header__subtitle2">
+                      {subText2}
+                    </Header.Subheader>
                   }
                 </Header.Content>
               </Header>
@@ -43,13 +44,13 @@ const SectionHeader = ({ section, t, submenuItems }) => {
           </Grid.Row>
           {
             Array.isArray(submenuItems) && submenuItems.length > 0 &&
-              <Grid.Row>
-                <Grid.Column>
-                  <Menu tabular className="section-header__menu" size="huge">
-                    {submenuItems}
-                  </Menu>
-                </Grid.Column>
-              </Grid.Row>
+            <Grid.Row>
+              <Grid.Column>
+                <Menu tabular className="section-header__menu" size="huge">
+                  {submenuItems}
+                </Menu>
+              </Grid.Column>
+            </Grid.Row>
           }
         </Grid>
       </Container>
@@ -59,8 +60,7 @@ const SectionHeader = ({ section, t, submenuItems }) => {
 
 SectionHeader.propTypes = {
   section: PropTypes.string.isRequired,
-  submenuItems: PropTypes.arrayOf(PropTypes.node),
-  t: PropTypes.func.isRequired,
+  submenuItems: PropTypes.arrayOf(PropTypes.node)
 };
 
-export default withTranslation()(SectionHeader);
+export default SectionHeader;

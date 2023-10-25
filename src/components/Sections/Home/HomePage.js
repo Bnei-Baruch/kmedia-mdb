@@ -1,13 +1,7 @@
-import React, { useContext } from 'react';
-import { Container, Feed, Grid } from 'semantic-ui-react';
+import React from 'react';
+import { Container } from 'semantic-ui-react';
 import SearchBar from './SearchBar';
-import Topic from './Topic';
-import Section from './Section';
 import LatestUpdatesSection from './LatestUpdatesSection';
-import BlogFeed from '../Publications/tabs/Blog/Feed';
-import TwitterFeed from '../Publications/tabs/Twitter/Feed';
-import { DeviceInfoContext } from '../../../helpers/app-contexts';
-import { useTranslation } from 'next-i18next';
 import HomeBanners from './HomeBanners';
 import LatestSocial from './LatestSocial';
 import HomeSections from './HomeSections';

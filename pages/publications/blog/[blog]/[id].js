@@ -1,36 +1,36 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import moment from 'moment';
-import { withTranslation } from 'next-i18next';
+
+import { getBlogLanguage, isLanguageRtl } from '../../../../src/helpers/i18n-utils';
+import moment from 'moment/moment';
+import Helmets from '../../../../src/components/shared/Helmets';
 import { Container, Grid, Header } from 'semantic-ui-react';
+import Share from '../../../../src/components/Sections/Library/Share';
+import { wrapper } from '../../../../lib/redux';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { DEFAULT_CONTENT_LANGUAGE } from '../../../../src/helpers/consts';
+import Api from '../../../../src/helpers/Api';
 
-import * as shapes from '../../../../../shapes';
-import Helmets from '../../../../../shared/Helmets/index';
-import WipErr from '../../../../../shared/WipErr/WipErr';
-import Share from '../../../../Library/Share';
-import { getBlogLanguage, isLanguageRtl } from '../../../../../../helpers/i18n-utils';
+export const getServerSideProps = wrapper.getServerSideProps(store => async (context) => {
+  const lang         = context.locale ?? DEFAULT_CONTENT_LANGUAGE;
+  const { blog, id } = context.params;
 
-export const BlogPostPage = ({ post = null, wip = false, err = null, t }) => {
-  const wipErr = WipErr({ wip, err, t });
-  if (wipErr) {
-    return wipErr;
-  }
+  const { data } = await Api.post(blog, id);
 
-  if (!post) {
-    return null;
-  }
+  const _i18n = await serverSideTranslations(lang);
+  return { props: { ..._i18n, ...data } };
+});
 
-  const language = getBlogLanguage(post.blog);
-  const { url, title, content, created_at: ts } = post;
-  const mts                                     = moment(ts);
-  const pHtml                                   = content.replace(/href="\/publications\/blog\//gi, `href="/${language}/publications/blog/`);
+const BlogPostPage = ({ url, title, content, created_at: ts, blog }) => {
+  const language = getBlogLanguage(blog);
+  const mts      = moment(ts);
+  const pHtml    = content.replace(/href="\/publications\/blog\//gi, `href="/${language}/publications/blog/`);
 
   const isRtl    = isLanguageRtl(language);
   const position = isRtl ? 'right' : 'left';
 
   return (
     <div className="blog-post">
-      <Helmets.NoIndex />
+      {/*<Helmets.NoIndex />*/}
       <div className="section-header">
         <Container className="padded">
           <Grid>
@@ -71,11 +71,4 @@ export const BlogPostPage = ({ post = null, wip = false, err = null, t }) => {
   );
 };
 
-BlogPostPage.propTypes = {
-  post: shapes.BlogPost,
-  wip: shapes.WIP,
-  err: shapes.Error,
-  t: PropTypes.func.isRequired,
-};
-
-export default withTranslation()(BlogPostPage);
+export default BlogPostPage;
