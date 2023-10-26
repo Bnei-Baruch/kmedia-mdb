@@ -53,7 +53,7 @@ import * as publicationsSagas from '../../lib/redux/slices/publicationsSlice/thu
 import * as searchSagas from './../sagas/search';
 import * as tagsSagas from '../../lib/redux/slices/tagsSlice/thunks';
 import { getLibraryContentFile } from '../components/Sections/Library/Library';
-import { selectLikutFile } from '../../pages/likutim/[id]';
+import { selectTextFile } from '../../pages/likutim/[id]';
 
 export const home = store => {
   store.dispatch(homeActions.fetchData(true));
@@ -275,7 +275,7 @@ export const likutPage = async (store, match, show_console = false) => {
       const likut            = mdbSelectors.getDenormContentUnit(state.mdb, id);
       const likutimLanguages = ((likut && likut.files) || []).map(f => f.language);
       const defaultLanguage = selectSuitableLanguage(contentLanguages, likutimLanguages, LANG_HEBREW);
-      const file             = selectLikutFile(likut?.files, defaultLanguage);
+      const file             = selectTextFile(likut?.files, defaultLanguage);
       store.dispatch(assetsActions.doc2html(file?.id));
     });
 };

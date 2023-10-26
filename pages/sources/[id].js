@@ -14,7 +14,6 @@ import LibraryLayout from '../../src/components/Sections/Library/LibraryLayout';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import HeaderSource from '../../src/components/Sections/Library/HeaderSource';
 import { textFileSlice } from '../../lib/redux/slices/textFileSlice/textFileSlice';
-import { Ref } from 'semantic-ui-react';
 
 const firstLeafId = (id, getSourceById) => {
   const { children = [] } = getSourceById(id) || false;
@@ -35,15 +34,15 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async (con
   await store.dispatch(fetchSource(id));
   const _fileLang = context.query.source_language || context.query.language || lang;
 
-  const { data } = assets.getSourceIndexById(store.getState().assets)[id];
-  const language = Object.keys(data).find(x => x === _fileLang) || Object.keys(data)[0];
+  const { data }       = assets.getSourceIndexById(store.getState().assets)[id];
+  const language       = Object.keys(data).find(x => x === _fileLang) || Object.keys(data)[0];
+  const { id: fileId } = getLibraryContentFile(data[language], id);
+  store.dispatch(textFileSlice.actions.setSubjectInfo({ id, language, type: CT_SOURCE, fileId }));
+  
   // no need to fetch pdf. we don't do that on SSR
-
-  store.dispatch(textFileSlice.actions.setSubjectInfo({ id, language, type:CT_SOURCE }));
   if (!(data[language].pdf && isTaas(id))) {
-    const { id: fileId } = getLibraryContentFile(data[language], id);
-    const _doc2Html      = store.dispatch(doc2Html(fileId));
-    const _fetchLabels   = store.dispatch(fetchLabels({ content_unit: id, language: language }));
+    const _doc2Html    = store.dispatch(doc2Html(fileId));
+    const _fetchLabels = store.dispatch(fetchLabels({ content_unit: id, language: language }));
     await Promise.all([_doc2Html, _fetchLabels]);
   }
 

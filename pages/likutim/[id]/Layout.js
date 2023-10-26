@@ -73,7 +73,6 @@ const LikutLayout = ({ fileId, children }) => {
                 <Header.Subheader>{t('values.date', { date: film_date })}</Header.Subheader>
               </Header.Content>
             </Header>
-            toolbar
             <Grid className="likut__toolbar" columns={2} stackable>
               <Grid.Column>
                 <TagsByUnit id={id} />

@@ -2,8 +2,8 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
-import { actions, selectors as mdb } from '../../../../lib/redux/slices/mdbSlice/mdbSlice';
-import { actions as statsActions } from '../../../redux/modules/stats';
+import { actions, selectors as mdb } from '../../../../../lib/redux/slices/mdbSlice/mdbSlice';
+import { actions as statsActions } from '../../../../redux/modules/stats';
 import Page from './Page';
 
 const CollectionContainer = ({ namespace, renderUnit, id }) => {

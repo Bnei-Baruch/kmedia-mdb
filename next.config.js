@@ -9,6 +9,15 @@ const nextConfig = {
       join(__dirname, 'styles'),
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: '/publications',
+        destination: '/publications/blog',
+        permanent: true,
+      },
+    ]
+  },
 };
 
 module.exports = nextConfig;

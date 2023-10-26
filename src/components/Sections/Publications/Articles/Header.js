@@ -3,15 +3,15 @@ import PropTypes from 'prop-types';
 import { withTranslation } from 'next-i18next';
 import { Button, Container, Grid, Header } from 'semantic-ui-react';
 
-import { assetUrl } from '../../../helpers/Api';
-import * as shapes from '../../shapes';
-import CollectionLogo from '../../shared/Logo/CollectionLogo';
-import Helmets from '../../shared/Helmets';
-import { getRSSLinkByTopic } from '../../../helpers/utils';
+import { assetUrl } from '../../../../helpers/Api';
+import * as shapes from '../../../shapes';
+import CollectionLogo from '../../../shared/Logo/CollectionLogo';
+import Helmets from '../../../shared/Helmets';
+import { getRSSLinkByTopic } from '../../../../helpers/utils';
 import { useSelector } from 'react-redux';
-import { selectors as settings } from '../../../../lib/redux/slices/settingsSlice/settingsSlice';
+import { selectors as settings } from '../../../../../lib/redux/slices/settingsSlice/settingsSlice';
 import ShareForm from './ShareForm';
-import SubscribeBtn from '../../shared/SubscribeBtn';
+import SubscribeBtn from '../../../shared/SubscribeBtn';
 
 const CollectionPageHeader = ({ collection = null, namespace, title = namespace, t }) => {
   const contentLanguages = useSelector(state => settings.getContentLanguages(state.settings));
@@ -22,8 +22,10 @@ const CollectionPageHeader = ({ collection = null, namespace, title = namespace,
 
   return (
     <div className="collection-header">
+{/*
       <Helmets.Basic title={collection.name} description={collection.description} />
       <Helmets.Image unitOrUrl={assetUrl(`logos/collections/${collection.id}.jpg`)} />
+*/}
 
       <Container className="padded">
         <Grid>

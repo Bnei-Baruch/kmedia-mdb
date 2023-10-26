@@ -10,8 +10,8 @@ import { doc2Html } from '../../../lib/redux/slices/assetSlice';
 import { textFileSlice } from '../../../lib/redux/slices/textFileSlice/textFileSlice';
 import LikutLayout from './Layout';
 
-const DEFAULT_LANGUAGES      = [LANG_ENGLISH, LANG_HEBREW];
-export const selectLikutFile = (files, language, idx = 0) => {
+const DEFAULT_LANGUAGES     = [LANG_ENGLISH, LANG_HEBREW];
+export const selectTextFile = (files, language, idx = 0) => {
   if (!files) return null;
 
   let file = files.find(x => x.language === language && x.type === MT_TEXT);
@@ -20,7 +20,7 @@ export const selectLikutFile = (files, language, idx = 0) => {
     file = files.find(x => x.type === MT_TEXT);
     return file;
   }
-  return selectLikutFile(files, DEFAULT_LANGUAGES[idx], idx++);
+  return selectTextFile(files, DEFAULT_LANGUAGES[idx], idx++);
 };
 
 export const getServerSideProps = wrapper.getServerSideProps(store => async (context) => {
@@ -35,11 +35,11 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async (con
   const cu       = mdb.getDenormContentUnit(store.getState().mdb, id);
   const language = selectSuitableLanguage(_langs, cu.files.map(f => f.language));
 
-  store.dispatch(textFileSlice.actions.setSubjectInfo({ id, language, type: CT_LIKUTIM }));
-
   const { id: fileId } = cu.files.find(f => f.language === language);
-  const _doc2Html      = store.dispatch(doc2Html(fileId));
-  const _fetchLabels   = store.dispatch(fetchLabels({ content_unit: id, language: language }));
+  store.dispatch(textFileSlice.actions.setSubjectInfo({ id, language, type: CT_LIKUTIM, fileId }));
+
+  const _doc2Html    = store.dispatch(doc2Html(fileId));
+  const _fetchLabels = store.dispatch(fetchLabels({ content_unit: id, language: language }));
   await Promise.all([_doc2Html, _fetchLabels]);
 
   const _i18n = await serverSideTranslations(lang);
@@ -49,7 +49,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async (con
 const LikutPage = ({ fileId }) => {
   return (
     <LikutLayout fileId={fileId}>
-      <ScrollToSearch fileId={fileId} />
+      <ScrollToSearch />
     </LikutLayout>
   );
 };

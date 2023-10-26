@@ -14,9 +14,9 @@ import NoteMark from '../../components/shared/DocToolbar/NoteMark';
 import { getLanguageDirection } from '../i18n-utils';
 import { DeviceInfoContext } from '../app-contexts';
 
-const ScrollToSearch = ({ fileId, urlParams = '', pathname }) => {
+const ScrollToSearch = ({ urlParams = '', pathname }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
-  const { id, language }   = useSelector(state => textFile.getSubjectInfo(state.textFile));
+  const { id, language, fileId }   = useSelector(state => textFile.getSubjectInfo(state.textFile));
 
   const { notes, offsets: noteOffsets }   = useNotes(id, language);
   const { labels, offsets: labelOffsets } = useLabels(id, language);

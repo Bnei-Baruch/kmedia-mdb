@@ -9,8 +9,8 @@ import { formatDuration } from '../../../helpers/utils';
 import { selectors as settings } from '../../../../lib/redux/slices/settingsSlice/settingsSlice';
 
 import UnitLogo from '../Logo/UnitLogo';
-import Link from '../../Language/MultiLanguageLink';
 import { UnitProgress } from './UnitProgress';
+import Link from 'next/link';
 
 const CardTemplate = ({ unit, withCCUInfo, link, ccu, description, children, playTime }) => {
   const dir = useSelector(state => settings.getUIDir(state.settings));
@@ -30,7 +30,7 @@ const CardTemplate = ({ unit, withCCUInfo, link, ccu, description, children, pla
   const trimText = (title, len = 150) => title.length < len ? title : `${title.substr(0, title.lastIndexOf(' ', len))}...`;
 
   return (
-    <Card raised className="cu_item" as={Link} to={link}>
+    <Card raised className="cu_item" as={Link} href={link}>
       <div className="cu_item_img">
         <UnitLogo unitId={unit.id} width={700} />
         <Container className="cu_item_img_info" textAlign="right">

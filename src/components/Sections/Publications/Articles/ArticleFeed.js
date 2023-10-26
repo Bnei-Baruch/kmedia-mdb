@@ -1,13 +1,13 @@
-import React from 'react';
 import { Table } from 'semantic-ui-react';
-import * as renderUnitHelper from '../../../helpers/renderUnitHelper';
+import * as renderUnitHelper from '../../../../helpers/renderUnitHelper';
+import React from 'react';
 import { useSelector } from 'react-redux';
-import { selectors as mdb } from '../../../../lib/redux/slices/mdbSlice';
+import { selectors as mdb } from '../../../../../lib/redux/slices/mdbSlice';
 import { useTranslation } from 'next-i18next';
 
 const ArticleFeed = ({ id }) => {
-  const { t }        = useTranslation();
-  const unit         = useSelector(state => mdb.getDenormContentUnit(state.mdb, id));
+  const { t } = useTranslation();
+  const unit  = useSelector(state => mdb.getDenormContentUnit(state.mdb, id));
   const breakdown    = renderUnitHelper.getUnitCollectionsBreakdown(unit);
   const articles     = breakdown.getArticles();
   const relatedItems = articles.map(renderUnitHelper.renderUnitNameAsListItem);
@@ -25,4 +25,5 @@ const ArticleFeed = ({ id }) => {
     </Table.Row>
   );
 };
+
 export default ArticleFeed;

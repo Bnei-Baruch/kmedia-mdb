@@ -6,13 +6,14 @@ import { Button, Confirm, Modal } from 'semantic-ui-react';
 import { CT_SUBSCRIBE_BY_COLLECTION, CT_SUBSCRIBE_BY_TYPE, MY_NAMESPACE_SUBSCRIPTIONS } from '../../helpers/consts';
 import * as shapes from '../shapes';
 import { selectors } from '../../../lib/redux/slices/authSlice/authSlice';
-import { actions, selectors as myselector } from '../../../lib/redux/slices/mySlice/mySlice';
+import { selectors as myselector } from '../../../lib/redux/slices/mySlice/mySlice';
 import AlertModal from './AlertModal';
 import NeedToLogin from '../Sections/Personal/NeedToLogin';
 import { getMyItemKey } from '../../helpers/my';
 import { selectors as settings } from '../../../lib/redux/slices/settingsSlice/settingsSlice';
 import { selectors as playlist } from '../../../lib/redux/slices/playlistSlice/playlistSlice';
 import { selectors as mdb } from '../../../lib/redux/slices/mdbSlice/mdbSlice';
+import { removeMy, addMy, fetchMy } from '../../../lib/redux/slices/mySlice/thunks';
 
 const SubscribeBtn = ({ t, collection }) => {
   const [alertMsg, setAlertMsg]       = useState();
@@ -48,7 +49,7 @@ const SubscribeBtn = ({ t, collection }) => {
 
   useEffect(() => {
     if (!sub && (subsByType || subsByCO)) {
-      dispatch(actions.fetch(MY_NAMESPACE_SUBSCRIPTIONS, { addToList: false, ...subParams }));
+      dispatch(fetchMy(MY_NAMESPACE_SUBSCRIPTIONS, { addToList: false, ...subParams }));
     }
   }, [dispatch, key, sub, subsByType, subsByCO, subParams]);
 
@@ -59,7 +60,7 @@ const SubscribeBtn = ({ t, collection }) => {
     if (s) {
       setConfirm(true);
     } else {
-      dispatch(actions.add(MY_NAMESPACE_SUBSCRIPTIONS, subParams));
+      dispatch(addMy(MY_NAMESPACE_SUBSCRIPTIONS, subParams));
       msg = t('personal.subscribeSuccessful');
     }
 
@@ -72,7 +73,7 @@ const SubscribeBtn = ({ t, collection }) => {
   const handleConfirmCancel = () => setConfirm(false);
 
   const handleConfirmSuccess = () => {
-    dispatch(actions.remove(MY_NAMESPACE_SUBSCRIPTIONS, { id: sub.id, key }));
+    dispatch(removeMy(MY_NAMESPACE_SUBSCRIPTIONS, { id: sub.id, key }));
     setConfirm(false);
   };
 

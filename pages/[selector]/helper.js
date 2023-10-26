@@ -11,7 +11,9 @@ import {
   PAGE_NS_LESSONS,
   PAGE_NS_PROGRAMS,
   PAGE_NS_EVENTS,
-  FN_SHOW_LESSON_AS_UNITS
+  FN_SHOW_LESSON_AS_UNITS,
+  PAGE_NS_ARTICLES,
+  CT_ARTICLE
 } from '../../src/helpers/consts';
 import { isEmpty } from '../../src/helpers/utils';
 
@@ -32,6 +34,8 @@ export const baseParamsByNamespace = (namespace, filters = {}) => {
       return PROGRAMS_PARAMS;
     case PAGE_NS_EVENTS:
       return EVENTS_PARAMS;
+    case PAGE_NS_ARTICLES:
+      return { content_type: CT_ARTICLE };
     default:
       return {};
   }

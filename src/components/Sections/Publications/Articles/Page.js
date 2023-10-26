@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'next-i18next';
 
-import * as shapes from '../../shapes';
-import WipErr from '../../shared/WipErr/WipErr';
-import UnitList from '../UnitList/Container';
+import * as shapes from '../../../shapes';
+import WipErr from '../../../shared/WipErr/WipErr';
+import UnitList from '../../../Pages/UnitList/Container';
 import PageHeader from './Header';
 
 const CollectionPage = ({ collection = null, wip = false, err = null, namespace, t }) => {

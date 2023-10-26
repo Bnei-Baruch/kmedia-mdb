@@ -95,7 +95,7 @@ const Library = () => {
       return (
         <div
           style={{ direction, textAlign: (direction === 'ltr' ? 'left' : 'right') }}>
-          <ScrollToSearch fileId={file.id} />
+          <ScrollToSearch />
         </div>
       );
     }

@@ -5,8 +5,8 @@ import { NO_NAME } from './consts';
 import { CollectionsBreakdown } from './mdb';
 import { canonicalLink } from './links';
 import { ellipsize } from './strings';
-import Link from '../components/Language/MultiLanguageLink';
 import UnitLogo from '../components/shared/Logo/UnitLogo';
+import Link from 'next/link';
 
 export const commonRenderUnitForClips = (unit, t) => {
   const breakdown = getUnitCollectionsBreakdown(unit);
@@ -40,22 +40,22 @@ export const renderUnitFilmDate = (unit, t) => {
 };
 
 export const renderUnitNameAsListItem = (unit, ccu) =>
-  unit && <List.Item key={unit.id} as={Link} to={canonicalLink(unit, null, ccu)}>
+  unit && <List.Item key={unit.id} as={Link} href={canonicalLink(unit, null, ccu)}>
     {unit.name || NO_NAME}
   </List.Item>
 
 export const renderUnitNameLink = (unit, className='index__title', ccu) =>
-  unit && <Link className={className} to={canonicalLink(unit, null, ccu)}>
+  unit && <Link className={className} href={canonicalLink(unit, null, ccu)}>
     {unit.name || NO_NAME}
   </Link>
 
 export const renderUnitLogo = (unit, fallbackImg) =>
-  unit && <Link to={canonicalLink(unit)}>
+  unit && <Link href={canonicalLink(unit)}>
     <UnitLogo className="index__thumbnail" unitId={unit.id} fallbackImg={fallbackImg} />
   </Link>
 
 export const renderUnitCollectionLogo = (unit, fallbackImg, collectionId) =>
-  unit && <Link to={canonicalLink(unit)}>
+  unit && <Link href={canonicalLink(unit)}>
     <UnitLogo
       className="index__thumbnail"
       unitId={unit.id}
