@@ -108,7 +108,7 @@ const texts = [
   },
 ];
 
-export const getServerSideProps = wrapper.getServerSideProps(store => async (context) => {
+export const getStaticProps = wrapper.getStaticProps(store => async (context) => {
   let uiLang = context.locale ?? DEFAULT_CONTENT_LANGUAGE;
   switch (uiLang) {
     case LANG_HEBREW:
