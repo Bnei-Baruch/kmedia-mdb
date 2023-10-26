@@ -16,11 +16,10 @@ import { fetchPreparePage } from '../../../../lib/redux/slices/preparePageSlice/
 import { fetchStats } from '../../../../lib/redux/slices/filterSlice/thunks';
 
 const Filters = ({ namespace, baseParams }) => {
-  const { t } = useTranslation();
+  const { t }    = useTranslation();
+  const dispatch = useDispatch();
 
   const { wip, err, needRefresh, isReady } = useSelector(state => selectors.getStatus(state.filterStats, namespace));
-
-  const dispatch = useDispatch();
 
   useEffect(() => {
     if (!isReady && !wip && !err) {

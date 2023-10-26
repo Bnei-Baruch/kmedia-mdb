@@ -32,7 +32,7 @@ import {
   MY_NAMESPACE_BOOKMARKS,
   PAGE_NS_PROGRAMS
 } from '../helpers/consts';
-import Sketches from './../components/Sections/Sketches/MainPage';
+import Sketches from '../../pages/sketches';
 import SearchResults from './../components/Search/SearchResults';
 import PlaylistLastDaily from './../components/Pages/WithPlayer/LastDaily/PlaylistLastDaily';
 import {

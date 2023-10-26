@@ -13,43 +13,44 @@ import Language from '../../../../lib/filters/components/LanguageFilter/Language
 import OriginalLanguageFilter from '../../../../lib/filters/components/OriginalLanguageFilter/OriginalLanguage';
 import TagSourceFilter from '../../../../lib/filters/components/TopicsFilter/TagSourceFilter';
 import ContentTypeFilter from './ContentTypeFilter';
+import { fetchStats } from '../../../../lib/redux/slices/filterSlice/thunks';
 
 const Filters = ({ namespace, baseParams }) => {
-  const [isHydrated, setIsHydrated] = useState(false);
-
-  const { t }        = useTranslation();
-  const isReady      = useSelector(state => selectors.isReady(state.filterStats, namespace));
-  const { wip, err } = useSelector(state => selectors.getStatus(state.filterStats, namespace));
-  const selected     = useSelector(state => filters.getNotEmptyFilters(state.filters, namespace), isEqual);
-  const prevSelRef   = useRef(-1);
-
+  const { t }    = useTranslation();
   const dispatch = useDispatch();
-  const _isReady = !isReady && !wip && !err;
-  useEffect(() => {
-    if (_isReady) {
-      dispatch(actions.fetchStats(namespace,
-        { ...baseParams, with_original_languages: true },
-        { isPrepare: true }
-      ));
-    }
-  }, [namespace, _isReady, baseParams, dispatch]);
 
-  const selLen = selected.reduce((acc, x) => acc + x.values.length, 0);
-  useEffect(() => {
-    if (isHydrated && isReady && prevSelRef.current !== selLen) {
-      dispatch(actions.fetchStats(namespace,
-        { ...baseParams, with_original_languages: true },
-        { isPrepare: false }
-      ));
-      prevSelRef.current = selLen;
-    }
-  }, [isHydrated, isReady, selLen, baseParams, namespace, dispatch]);
+  const { wip, err, needRefresh, isReady } = useSelector(state => selectors.getStatus(state.filterStats, namespace));
 
-  const handleOnHydrated = () => setIsHydrated(true);
+  useEffect(() => {
+    if (!isReady && !wip && !err) {
+      const _args = {
+        namespace,
+        isPrepare: true,
+        params: {
+          ...baseParams,
+          with_original_languages: true,
+        }
+      };
+      dispatch(fetchStats(_args));
+    }
+  }, [isReady, baseParams, wip, err, namespace, dispatch]);
+
+  useEffect(() => {
+    if (isReady && needRefresh) {
+      const _args = {
+        namespace,
+        isPrepare: false,
+        params: {
+          ...baseParams,
+          with_original_languages: true,
+        }
+      };
+      dispatch(fetchStats(_args));
+    }
+  }, [isReady, needRefresh, baseParams, namespace, dispatch]);
 
   return (
     <Container className="padded">
-      <FiltersHydrator namespace={namespace} onHydrated={handleOnHydrated} />
       <Header as="h3" content={t('filters.aside-filter.filters-title')} />
       <ContentTypeFilter namespace={namespace} />
       <TagSourceFilter namespace={namespace} filterName={FN_SOURCES_MULTI} />

@@ -5,7 +5,7 @@ import { FN_CONTENT_TYPE } from '../../../helpers/consts';
 import { isEmpty } from '../../../helpers/utils';
 import { selectors } from '../../../../lib/redux/slices/filterSlice/filterStatsSlice';
 import FilterHeader from '../../../../lib/filters/components/FilterHeader';
-import { SKETCHES_SHOWED_CTS } from './MainPage';
+import { SKETCHES_SHOWED_CTS } from '../../../../pages/sketches';
 import ContentTypeItem from '../../../../lib/filters/components/ContentTypeFilter/ContentTypeItem';
 
 const ContentTypeFilter = ({ namespace }) => {
