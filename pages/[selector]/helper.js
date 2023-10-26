@@ -13,7 +13,7 @@ import {
   PAGE_NS_EVENTS,
   FN_SHOW_LESSON_AS_UNITS,
   PAGE_NS_ARTICLES,
-  CT_ARTICLE
+  CT_ARTICLE, CT_BLOG_POST, PAGE_NS_AUDIO_BLOG
 } from '../../src/helpers/consts';
 import { isEmpty } from '../../src/helpers/utils';
 
@@ -36,6 +36,8 @@ export const baseParamsByNamespace = (namespace, filters = {}) => {
       return EVENTS_PARAMS;
     case PAGE_NS_ARTICLES:
       return { content_type: CT_ARTICLE };
+    case PAGE_NS_AUDIO_BLOG:
+      return { content_type: CT_BLOG_POST };
     default:
       return {};
   }
