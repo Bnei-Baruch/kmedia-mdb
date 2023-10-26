@@ -1,11 +1,11 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import { Card, Container, Divider, Grid } from 'semantic-ui-react';
 
-import { LANG_ENGLISH, LANG_HEBREW, LANG_RUSSIAN } from '../../../helpers/consts';
-import { assetUrl } from '../../../helpers/Api';
-import { selectors as settings } from '../../../../lib/redux/slices/settingsSlice/settingsSlice';
-import SectionHeader from '../../shared/SectionHeader';
+import { LANG_ENGLISH, LANG_HEBREW, LANG_RUSSIAN, DEFAULT_CONTENT_LANGUAGE } from '../src/helpers/consts';
+import { assetUrl } from '../src/helpers/Api';
+import SectionHeader from '../src/components/shared/SectionHeader';
+import { wrapper } from '../lib/redux';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 const clips = ['1', '2', '3', '4-1', '4-2', '5', '6', '7'];
 
@@ -108,9 +108,8 @@ const texts = [
   },
 ];
 
-const HelpPage = () => {
-  let uiLang = useSelector(state => settings.getUILang(state.settings));
-
+export const getServerSideProps = wrapper.getServerSideProps(store => async (context) => {
+  let uiLang = context.locale ?? DEFAULT_CONTENT_LANGUAGE;
   switch (uiLang) {
     case LANG_HEBREW:
       uiLang = LANG_HEBREW;
@@ -132,6 +131,12 @@ const HelpPage = () => {
     txts = [...texts];
     txts.splice(4, 1); // remove 4-2 in other langs
   }
+
+  const _i18n = await serverSideTranslations(uiLang);
+  return { props: { ..._i18n, c, txts, uiLang } };
+});
+
+const HelpPage = ({ uiLang, c, txts }) => {
 
   return (
     <div>
