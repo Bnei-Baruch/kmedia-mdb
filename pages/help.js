@@ -9,7 +9,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 const clips = ['1', '2', '3', '4-1', '4-2', '5', '6', '7'];
 
-const texts = [
+const texts                 = [
   {
     title: {
       [LANG_HEBREW]: 'דף הבית',
@@ -107,21 +107,19 @@ const texts = [
     },
   },
 ];
-
-export const getStaticProps = wrapper.getStaticProps(store => async (context) => {
-  let uiLang = context.locale ?? DEFAULT_CONTENT_LANGUAGE;
+const fixLang               = (uiLang) => {
   switch (uiLang) {
     case LANG_HEBREW:
-      uiLang = LANG_HEBREW;
-      break;
+      return LANG_HEBREW;
     // case LANG_UKRAINIAN:
     case LANG_RUSSIAN:
-      uiLang = LANG_RUSSIAN;
-      break;
+      return LANG_RUSSIAN;
     default:
-      uiLang = LANG_ENGLISH;
-      break;
+      return DEFAULT_CONTENT_LANGUAGE;
   }
+};
+export const getStaticProps = wrapper.getStaticProps(store => async (context) => {
+  const uiLang = fixLang(context.locale);
 
   let c    = clips;
   let txts = texts;

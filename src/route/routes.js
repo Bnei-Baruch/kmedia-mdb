@@ -7,7 +7,7 @@ import LessonCollection from '../../pages/___lessons/cu/[id]';
 import Lessons from '../../pages/___lessons';
 import LibraryHomepage from '../../pages/sources';
 import LibraryContainer from '../../pages/sources/[id]';
-import LibraryPerson from './../components/Sections/Library/LibraryPerson';
+import LibraryPerson from '../../pages/persons/[id]';
 import Id from '../../pages/likutim/[id]';
 import LikutimMain from '../../pages/likutim';
 import Music from '../../pages/music';
