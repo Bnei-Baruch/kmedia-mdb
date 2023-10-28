@@ -5,7 +5,7 @@ import { selectors as my } from '../../../lib/redux/slices/mySlice/mySlice';
 import { MY_NAMESPACE_HISTORY } from '../../helpers/consts';
 import { formatDuration } from '../../helpers/utils';
 import UnitLogo from './Logo/UnitLogo';
-import { getSavedTime } from '../../../lib/Player/helper';
+import { getSavedTime } from '../../../lib/player/helper';
 import { UnitProgress } from './ContentItem/UnitProgress';
 
 export const getLogoUnit = (content_units, historyItems) => {
