@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { PLAYER_MODE } from '../../lib/Player/constants';
+import { PLAYER_MODE } from '../../lib/player/constants';
 
 export const WIP    = PropTypes.bool;
 export const WipMap = PropTypes.objectOf(PropTypes.oneOfType([WIP, PropTypes.objectOf(WIP)]));
