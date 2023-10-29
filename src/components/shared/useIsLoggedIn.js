@@ -6,7 +6,7 @@ const useIsLoggedIn = () => {
   const [loggedIn, setLoggedIn] = useState(false);
   const user                    = useSelector(state => selectors.getUser(state.auth));
 
-  //we cant use user === true because of SSR
+  // We can't use user === true because of SSR.
   useEffect(() => {
     setLoggedIn(!!user);
   }, [user]);
