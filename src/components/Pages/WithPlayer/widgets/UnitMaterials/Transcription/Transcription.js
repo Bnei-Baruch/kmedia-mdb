@@ -28,7 +28,7 @@ import UnitBar from '../UnitBar';
 
 const getUnitDerivedArticle = (unit, type) => {
   // Suitable for having either derived articles or research materials only
-  const ct = type === 'articles' ? CT_ARTICLE : CT_RESEARCH_MATERIAL;
+  const ct    = type === 'articles' ? CT_ARTICLE : CT_RESEARCH_MATERIAL;
   const units = Object.values(unit.derived_units || {})
     .filter(x => x.content_type === ct
       && (x.files || []).some(f => f.type === MT_TEXT));
@@ -39,7 +39,7 @@ const getUnitDerivedArticle = (unit, type) => {
 
   return units.map(x => x.files)
     .reduce((acc, files) => [...acc, ...files], []);
-}
+};
 
 const getTextFiles = (unit, type) => {
   if (!unit || !Array.isArray(unit.files)) {
@@ -73,19 +73,19 @@ const Transcription = ({ unit, t, type, activeTab }) => {
   const contentLanguages = useSelector(state => settings.getContentLanguages(state.settings));
 
   const [selectedLanguage, setSelectedLanguage] = useState('');
-  const textFiles = getTextFiles(unit, type);
-  const transcriptLanguages = uniq(textFiles.map(x => x.language));
-  const suitableLanguage = selectSuitableLanguage(contentLanguages, transcriptLanguages, unit.original_language, /*defaultReturnLanguage=*/ '')
-  const finalLanguage = selectedLanguage || suitableLanguage;
+  const textFiles                               = getTextFiles(unit, type);
+  const transcriptLanguages                     = uniq(textFiles.map(x => x.language));
+  const suitableLanguage                        = selectSuitableLanguage(contentLanguages, transcriptLanguages, unit.original_language, /*defaultReturnLanguage=*/ '');
+  const finalLanguage                           = selectedLanguage || suitableLanguage;
 
   const [viewSettings, setViewSettings] = useState({});
 
-  const { selectedFileId } = getQuery(location);
-  const fileFromLocation = textFiles.find(f => f.id === selectedFileId);
+  const { selectedFileId }                              = getQuery(location);
+  const fileFromLocation                                = textFiles.find(f => f.id === selectedFileId);
   const [selectedFileOverride, setSelectedFileOverride] = useState(null);
-  const selectedFile = selectedFileOverride || fileFromLocation || selectFile(textFiles, finalLanguage) || {};
+  const selectedFile                                    = selectedFileOverride || fileFromLocation || selectFile(textFiles, finalLanguage) || {};
 
-  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const { isMobileDevice }                                              = useContext(DeviceInfoContext);
   const { enableShareText: { isShareTextEnabled, setEnableShareText } } = useContext(SessionInfoContext);
 
   const dispatch = useDispatch();
@@ -98,9 +98,10 @@ const Transcription = ({ unit, t, type, activeTab }) => {
     const { data } = doc2htmlById[selectedFile.id] || {};
     if (!data) {
       // Load from redux.
-      dispatch(actions.doc2html(selectedFile.id))
+      dispatch(actions.doc2html(selectedFile.id));
+      dispatch(actions.fetchTimeCode(unit.id, selectedFile.language));
     }
-  }, [selectedFile?.id]);
+  }, [selectedFile?.id, unit.id, selectedFile?.language]);
 
   const getSelectFiles = (file, textFiles) => {
     if (!textFiles)
@@ -120,12 +121,10 @@ const Transcription = ({ unit, t, type, activeTab }) => {
           </option>)
       }
     </select>;
-  }
+  };
 
-  const getFileCU = (id, unit) => 
-    (id && Object.values(unit.derived_units || {}).
-      concat([unit]).
-      find(x => x.files?.some(f => f.id === id))) || null;
+  const getFileCU = (id, unit) =>
+    (id && Object.values(unit.derived_units || {}).concat([unit]).find(x => x.files?.some(f => f.id === id))) || null;
 
   const prepareContent = file => {
     if (!file || !file.id) {
@@ -179,10 +178,10 @@ const Transcription = ({ unit, t, type, activeTab }) => {
   };
 
   const { id, name, mimetype } = selectedFile;
-  const { data } = (id && doc2htmlById[id]) || {};
-  const fileCU = getFileCU(id, unit);
-  const content = prepareContent(selectedFile);
-  const url = id && physicalFile(selectedFile, true) || '';
+  const { data }               = (id && doc2htmlById[id]) || {};
+  const fileCU                 = getFileCU(id, unit);
+  const content                = prepareContent(selectedFile);
+  const url                    = id && physicalFile(selectedFile, true) || '';
 
   const { theme = 'light', fontType, fontSize = 0 } = viewSettings || {};
 
@@ -236,8 +235,7 @@ const Transcription = ({ unit, t, type, activeTab }) => {
       {content}
     </div>
   );
-}
-
+};
 
 Transcription.propTypes = {
   unit: shapes.ContentUnit,
