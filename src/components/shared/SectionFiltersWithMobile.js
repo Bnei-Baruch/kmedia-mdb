@@ -32,8 +32,6 @@ const SectionFiltersWithMobile = ({ filters, children, namespace }) => {
 
   const renderMobile = () => (
     <Container fluid>
-      {/*additional hydrate for mobile cause of modal */}
-      <FiltersHydrator namespace={namespace} />
       <Container className="padded" fluid>
         <Button
           basic

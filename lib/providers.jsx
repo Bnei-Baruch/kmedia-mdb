@@ -26,10 +26,10 @@ export const Providers = ({ children }) => {
       {/*<InitKCEvents />*/}
       {/* <ClientChroniclesContext.Provider value={clientChronicles}>
         <AbTestingContext.Provider value={abTesting}>*/}
-      <DeviceInfoContext.Provider value={deviceInfoContext}>
-        {/*<ChroniclesActions />*/}
-        {children}
-      </DeviceInfoContext.Provider>
+        <DeviceInfoContext.Provider value={deviceInfoContext}>
+          {/*<ChroniclesActions />*/}
+          {children}
+        </DeviceInfoContext.Provider>
       {/* </AbTestingContext.Provider>
       </ClientChroniclesContext.Provider>*/}
     </>

@@ -33,7 +33,7 @@ import {
   PAGE_NS_PROGRAMS
 } from '../helpers/consts';
 import Sketches from '../../pages/sketches';
-import SearchResults from './../components/Search/SearchResults';
+import SearchResults from '../../pages/search';
 import PlaylistLastDaily from './../components/Pages/WithPlayer/LastDaily/PlaylistLastDaily';
 import {
   PlaylistItemPageLesson,

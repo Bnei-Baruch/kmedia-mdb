@@ -50,7 +50,7 @@ import * as filtersSagas from './../sagas/filters';
 import * as mdbSagas from '../../lib/redux/slices/mdbSlice/thunks';
 import * as musicSagas from '../../lib/redux/slices/musicSlice/thunks';
 import * as publicationsSagas from '../../lib/redux/slices/publicationsSlice/thunks';
-import * as searchSagas from './../sagas/search';
+import * as searchSagas from '../../lib/redux/slices/searchSlice/thunks';
 import * as tagsSagas from '../../lib/redux/slices/tagsSlice/thunks';
 import { getLibraryContentFile } from '../components/Sections/Library/Library';
 import { selectTextFile } from '../../pages/likutim/[id]';

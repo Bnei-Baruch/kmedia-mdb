@@ -15,7 +15,10 @@ import { selectors as sourcesSelectors } from '../../../lib/redux/slices/sources
 import { selectors as tagsSelectors } from '../../../lib/redux/slices/tagsSlice/tagsSlice';
 import { actions as listsActions, selectors as lists } from '../../../lib/redux/slices/listSlice/listSlice';
 import { selectors as lessonsSelectors } from '../../redux/modules/lessons';
-import { actions as publicationActions, selectors as publicationSelectors } from '../../../lib/redux/slices/publicationsSlice/thunks';
+import {
+  actions as publicationActions,
+  selectors as publicationSelectors
+} from '../../../lib/redux/slices/publicationsSlice/thunks';
 import { selectors as settingsSelectors } from '../../../lib/redux/slices/settingsSlice/settingsSlice';
 
 import {
@@ -40,11 +43,11 @@ import { isLanguageRtl } from '../../helpers/i18n-utils';
 import { SectionLogo } from '../../helpers/images';
 import { canonicalLink, landingPageSectionLink, intentSectionLink } from '../../helpers/links';
 import { stringify } from '../../helpers/url';
-import Link from '../Language/MultiLanguageLink';
 import TooltipIfNeed from '../shared/TooltipIfNeed';
 import UnitLogoWithDuration from '../shared/UnitLogoWithDuration';
 import UnitLogo from '../shared/Logo/UnitLogo';
 import WipErr from '../shared/WipErr/WipErr';
+import Link from 'next/link';
 
 const PATH_SEPARATOR                 = ' > ';
 const MIN_NECESSARY_WORDS_FOR_SEARCH = 4;
@@ -107,7 +110,7 @@ const highlightWrapToLink = (__html, index, to) => {
     key={`highlightLink_${index}`}
     //onClick={() => this.logClick(...logLinkParams)}
     className={'hover-under-line'}
-    to={{ ...to, search: [to.search, stringify(search)].filter(x => !!x).join('&') }}>
+    href={{ ...to, search: [to.search, stringify(search)].filter(x => !!x).join('&') }}>
     <span dangerouslySetInnerHTML={{ __html: `...${__html}...` }} />
   </Link>);
 };
@@ -150,7 +153,7 @@ const iconByContentType = (type, t, to) => {
     return content;
 
   return (
-    <Link to={to}>
+    <Link href={to}>
       {content}
     </Link>
   );
@@ -255,8 +258,8 @@ export const SearchResultCollection = ({ c, highlight, clickData }) => {
 
 export const SearchResultSource = ({ id, title, highlight, clickData }) => {
   const { t }      = useTranslation();
-  const views      = useSelector(state => recommended.getViews(id, state.recommended));
-  const chronicles = useContext(ClientChroniclesContext);
+  const views      = [];//useSelector(state => recommended.getViews(id, state.recommended));
+  const chronicles = {};//useContext(ClientChroniclesContext);
   const dispatch   = useDispatch();
 
   // If filter used for specific language, make sure the link will redirect to that language.
@@ -330,12 +333,12 @@ export const SearchResultOneItem = (
     <List.Item key={key} className="media_item">
       <div className="media_item__logo">{logo}</div>
       <div className="media_item__content">
-        <TooltipIfNeed text={title} Component={Header} as={Link} to={link} onClick={() => click(link)} content={title} />
+        <TooltipIfNeed text={title} Component={Header} as={Link} href={link} onClick={() => click(link)} content={title} />
         {content && (<TooltipIfNeed text={content} Component={Container} content={content} />)}
         <div className={clsx('description', { 'is_single': !(description?.length > 1) })}>
           {description.map((d, i) => (<span key={i}>{d}</span>))}
           {collectionLink && (<span className="opacity_1">
-            <Link as={'a'} to={collectionLink} onClick={() => click(collectionLink)}>
+            <Link as={'a'} href={collectionLink} onClick={() => click(collectionLink)}>
               {/* ARTICLES should have different text, then "To all episodes..." should be "To all articles..." */}
               {t('programs.list.show_all')}
             </Link>
@@ -455,7 +458,7 @@ export const SearchResultManyItems = (
         }
         <Container textAlign={'right'} className="no-border padded" fluid>
           <Icon name="tasks" size="small" style={{ display: 'inline' }} />
-          <Link to={link} onClick={() => click(link)}><span>{`${t('search.showAll')} ${parts} ${t(`search.${resultsType}`)}`}</span></Link>
+          <Link href={link} onClick={() => click(link)}><span>{`${t('search.showAll')} ${parts} ${t(`search.${resultsType}`)}`}</span></Link>
         </Container>
       </List.Content>
     </List.Item>
@@ -477,12 +480,12 @@ const getLowestLevelSeries = (series, rootId) => {
 const renderSerie = (s, click, link, t) =>
   (
     <Button basic size="tiny" className="link_to_cu" key={s.id}
-            as={Link} to={link}
+            as={Link} href={link}
             onClick={() => click(link)}
             style={{ minWidth: '290px', marginBottom: '0.5em', display: 'flex', justifyContent: 'space-between' }}>
       {s.name}
       &nbsp;
-      <Link key={s.id} to={link} onClick={() => click(link)}>
+      <Link key={s.id} href={link} onClick={() => click(link)}>
         <span className="margin-right-8 margin-left-8">
           <Icon name="tasks" size="small" style={{ display: 'inline-block' }} />
           {`${t('search.showAll')} ${s.cuIDs.length} ${t('pages.collection.items.lessons-collection')}`}
@@ -561,7 +564,7 @@ export const SearchResultTweets = ({ source }) => {
   const items              = useSelector(state => twitterMapFromState(state, source));
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const uiLang             = useSelector(state => settingsSelectors.getUILang(state.settings));
-  const uiDir             = useSelector(state => settingsSelectors.getUIDir(state.settings));
+  const uiDir              = useSelector(state => settingsSelectors.getUIDir(state.settings));
 
   const [pageNo, setPageNo] = useState(0);
   const pageSize            = isMobileDevice ? 1 : 3;

@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Icon, Input, Loader, Search } from 'semantic-ui-react';
-import { withTranslation } from 'next-i18next';
+import { useTranslation } from 'next-i18next';
 import moment from 'moment';
 
 import ButtonDayPicker from '../Filters/components/Date/ButtonDayPicker';
@@ -9,7 +9,7 @@ import { ClientChroniclesContext, DeviceInfoContext } from '../../helpers/app-co
 import { SuggestionsHelper } from '../../helpers/search';
 import { isLanguageRtl } from '../../helpers/i18n-utils';
 
-import { actions, selectors } from '../../../lib/redux/slices/searchSlice/searchSlice';
+import { selectors } from '../../../lib/redux/slices/searchSlice';
 import { selectors as settingsSelectors } from '../../../lib/redux/slices/settingsSlice/settingsSlice';
 import { useRouter } from 'next/router';
 
@@ -18,7 +18,8 @@ const makeResult = (uiLang, result) => ({
   className: isLanguageRtl(uiLang) ? 'search-result-rtl' : '',
 });
 
-const OmniBox = ({ isHomePage = false, t }) => {
+const OmniBox = ({ isHomePage = false }) => {
+  const { t }       = useTranslation();
   const query       = useSelector(state => selectors.getQuery(state.search));
   const suggestions = useSelector(state => selectors.getSuggestions(state.search));
   const wip         = useSelector(state => selectors.getAutocompleteWip(state.search));
@@ -45,15 +46,17 @@ const OmniBox = ({ isHomePage = false, t }) => {
       setAutocompleteId('');
     }
   }, [suggestions, uiLang]);
+/*
 
   useEffect(() => {
     dispatch(actions.hydrateUrl());
   }, [dispatch]);
+*/
 
   const doSearch = () => {
     setUserInteracted(true);
     setInputFocused(false);
-    dispatch(actions.search());
+    //dispatch(actions.search());
   };
 
   const keyDown = e => {
@@ -65,7 +68,7 @@ const OmniBox = ({ isHomePage = false, t }) => {
   const inputChange = e => {
     setUserInteracted(true);
     setInputFocused(true);
-    dispatch(actions.updateQuery({ query: e.target.value, autocomplete: true }));
+   // dispatch(actions.updateQuery({ query: e.target.value, autocomplete: true }));
   };
 
   const onFocus = () => {
@@ -80,7 +83,7 @@ const OmniBox = ({ isHomePage = false, t }) => {
   const handleResultSelect = (e, data) => {
     const { title } = data.result;
     chronicles.autocompleteSelected(title, autocompleteId);
-    dispatch(actions.updateQuery({ query: title, autocomplete: false }));
+   // dispatch(actions.updateQuery({ query: title, autocomplete: false }));
     doSearch();
   };
 
@@ -121,7 +124,6 @@ const OmniBox = ({ isHomePage = false, t }) => {
       onFocus={onFocus}
       onBlur={onBlur}
     />;
-  return null;
   return <Search
     fluid
     className="search-omnibox"
@@ -137,4 +139,4 @@ const OmniBox = ({ isHomePage = false, t }) => {
   />;
 };
 
-export default withTranslation()(OmniBox);
+export default OmniBox;

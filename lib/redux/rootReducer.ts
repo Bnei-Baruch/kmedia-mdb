@@ -1,28 +1,28 @@
-import {reducer as search} from "./slices/searchSlice/searchSlice"
 /* Instruments */
 import {
+    assetSlice,
     authSlice,
+    filterSlice,
+    filterStats,
     homeSlice,
+    imageSlice,
+    listSlice,
     mdbSlice,
+    mySlice,
+    playerSlice,
+    playlistSlice,
+    preparePageSlice,
     publicationsSlice,
     settingsSlice,
     sourcesSlice,
-    imageSlice,
-    trimSlice,
-    filterSlice,
-    listSlice,
-    filterStats,
     tagsSlice,
-    mySlice,
-    preparePageSlice,
-    playlistSlice,
-    playerSlice,
-    assetSlice,
-    textFileSlice
+    textFileSlice,
+    trimSlice
 } from './slices'
 import {myNotesSlice} from "@/lib/redux/slices/mySlice/myNotesSlice";
 import {simpleModeSlice} from "@/lib/redux/slices/simpleMode/simpleModeSlice";
 import {musicSlice} from "@/lib/redux/slices/musicSlice/musicSlice";
+import {searchSlice} from "@/lib/redux/slices/searchSlice";
 
 export const reducer = {
     [homeSlice.homeSlice.name]: homeSlice.homeSlice.reducer,
@@ -30,7 +30,7 @@ export const reducer = {
     [settingsSlice.settingsSlice.name]: settingsSlice.settingsSlice.reducer,
     [authSlice.authSlice.name]: authSlice.authSlice.reducer,
     [mdbSlice.mdbSlice.name]: mdbSlice.mdbSlice.reducer,
-    search,
+    [searchSlice.name]: searchSlice.reducer,
     [sourcesSlice.sourcesSlice.name]: sourcesSlice.sourcesSlice.reducer,
     [imageSlice.imageSlice.name]: imageSlice.imageSlice.reducer,
     [trimSlice.trimSlice.name]: trimSlice.trimSlice.reducer,

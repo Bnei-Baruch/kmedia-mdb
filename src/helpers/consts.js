@@ -789,6 +789,7 @@ export const PAGE_NS_BLOG        = 'blog';
 export const PAGE_NS_TWITTER     = 'twitter';
 export const PAGE_NS_ARTICLES    = 'articles';
 export const PAGE_NS_AUDIO_BLOG  = 'audio-blog';
+export const PAGE_NS_SEARCH      = 'search';
 
 export const ALL_PAGE_NS = [PAGE_NS_LESSONS, PAGE_NS_TOPICS, PAGE_NS_PROGRAMS, PAGE_NS_EVENTS, PAGE_NS_LIKUTIM];
 
