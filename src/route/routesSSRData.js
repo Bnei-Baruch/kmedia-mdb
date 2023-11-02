@@ -44,7 +44,7 @@ import { selectors as settingsSelectors } from '../../lib/redux/slices/settingsS
 import { actions as simpleModeActions } from '../../lib/redux/slices/simpleMode/simpleModeSlice';
 import { selectors as sourcesSelectors } from '../../lib/redux/slices/sourcesSlice/sourcesSlice';
 import { actions as tagsActions } from '../../lib/redux/slices/tagsSlice/tagsSlice';
-import * as assetsSagas from '../../lib/redux/slices/assetSlice/thunks';
+import * as assetsSagas from '../../app/api/assets';
 import * as eventsSagas from './../sagas/events';
 import * as filtersSagas from './../sagas/filters';
 import * as mdbSagas from '../../lib/redux/slices/mdbSlice/thunks';
@@ -53,7 +53,7 @@ import * as publicationsSagas from '../../lib/redux/slices/publicationsSlice/thu
 import * as searchSagas from '../../lib/redux/slices/searchSlice/thunks';
 import * as tagsSagas from '../../lib/redux/slices/tagsSlice/thunks';
 import { getLibraryContentFile } from '../components/Sections/Library/Library';
-import { selectTextFile } from '../../pages/likutim/[id]';
+import { selectTextFile } from '../../app/[lng]/likutim/[id]';
 
 export const home = store => {
   store.dispatch(homeActions.fetchData(true));

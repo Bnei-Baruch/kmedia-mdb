@@ -21,7 +21,6 @@ import TranscriptionContainer from './Transcription/TranscriptionContainer';
 import { isEmpty, noop } from '../../../../../helpers/utils';
 import { ClientChroniclesContext, DeviceInfoContext } from '../../../../../helpers/app-contexts';
 import DerivedUnits from './DerivedUnits';
-import Recommended from '../Recommended/Main/Recommended';
 import { useSelector } from 'react-redux';
 import { selectors } from '../../../../../../lib/redux/slices/playlistSlice/playlistSlice';
 import { selectors as mdb } from '../../../../../../lib/redux/slices/mdbSlice/mdbSlice';
@@ -89,7 +88,7 @@ const Materials = ({ t }) => {
       ? {
         name: 'recommended',
         label: t('materials.recommended.default'),
-        component: <Recommended unit={unit} displayTitle={false} />
+        component: null/*<Recommended unit={unit} displayTitle={false} />*/
       }
       : {
         name: 'playlist',

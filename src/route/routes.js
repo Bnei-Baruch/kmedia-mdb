@@ -1,16 +1,16 @@
 import React from 'react';
 import Events from './../components/Sections/Events/MainPage';
 import ExcerptContainer from './../components/Sections/Excerpt/ExcerptContainer';
-import Help from '../../pages/help';
-import HomePage from '../../app/[lang]/Container';
-import LessonCollection from '../../pages/___lessons/cu/[id]';
-import Lessons from '../../pages/___lessons';
-import LibraryHomepage from '../../pages/sources';
-import LibraryContainer from '../../pages/sources/[id]';
-import LibraryPerson from '../../pages/persons/[id]';
-import Id from '../../pages/likutim/[id]';
-import LikutimMain from '../../pages/likutim';
-import Music from '../../pages/music';
+import Help from '../../app/[lng]/help/page';
+import HomePage from '../../_app/[lang]/Container';
+import LessonCollection from '../../app/___lessons/cu/[id]';
+import Lessons from '../../app/___lessons';
+import LibraryHomepage from '../../app/[lng]/sources';
+import LibraryContainer from '../../app/[lng]/sources/[id]';
+import LibraryPerson from '../../app/[lng]/persons/[id]/page';
+import Id from '../../app/[lng]/likutim/[id]';
+import LikutimMain from '../../app/[lng]/likutim';
+import Music from '../../app/[lng]/music';
 import BookmarksPage from './../components/Sections/Personal/Bookmarks/Page';
 import HistoryPage from './../components/Sections/Personal/History/Page';
 import Main from './../components/Sections/Personal/Main/Page';
@@ -19,12 +19,12 @@ import ReactionPage from './../components/Sections/Personal/Reaction/Page';
 import Program from './../components/Sections/Program/ProgramPage';
 import Programs from './../components/Sections/Programs/MainPage';
 import Publications from './../components/Sections/Publications/MainPage';
-import ArticleCollection from '../../pages/publications/articles/c/[id]';
-import ArticlePage from '../../pages/publications/articles/cu/[id]';
-import BlogPost from '../../pages/publications/blog/[blog]/[id]';
-import SimpleModePage from '../../pages/simple-mode';
-import Topics from '../../pages/topics';
-import Topic from '../../pages/topics/[id]';
+import ArticleCollection from '../../app/[lng]/publications/articles/c/[id]';
+import ArticlePage from '../../app/[lng]/publications/articles/cu/[id]';
+import BlogPost from '../../app/[lng]/publications/blog/[blog]/[id]';
+import SimpleModePage from '../../app/[lng]/simple-mode';
+import Topics from '../../app/[lng]/topics';
+import Topic from '../../app/[lng]/topics/[id]';
 import {
   MY_NAMESPACE_HISTORY,
   MY_NAMESPACE_REACTIONS,
@@ -32,8 +32,8 @@ import {
   MY_NAMESPACE_BOOKMARKS,
   PAGE_NS_PROGRAMS
 } from '../helpers/consts';
-import Sketches from '../../pages/sketches';
-import SearchResults from '../../pages/search';
+import Sketches from '../../app/[lng]/sketches';
+import SearchResults from '../../app/[lng]/search';
 import PlaylistLastDaily from './../components/Pages/WithPlayer/LastDaily/PlaylistLastDaily';
 import {
   PlaylistItemPageLesson,

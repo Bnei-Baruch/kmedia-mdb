@@ -1,8 +1,6 @@
 const { join } = require('path');
-const { i18n } = require('./next-i18next.config.js');
 
 const nextConfig = {
-  i18n,
   reactStrictMode: true,
   sassOptions: {
     includePaths: [
@@ -16,8 +14,12 @@ const nextConfig = {
         destination: '/publications/blog',
         permanent: true,
       },
-    ]
+    ];
   },
+  experimental: {
+    // Required:
+    appDir: true
+  }
 };
 
 module.exports = nextConfig;

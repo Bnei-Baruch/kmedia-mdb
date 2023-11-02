@@ -1,7 +1,6 @@
 'use client';
 import React, { useContext, useEffect } from 'react';
 import { useSelector, shallowEqual, useDispatch } from 'react-redux';
-import { useTranslation } from 'next-i18next';
 import { Header, Icon } from 'semantic-ui-react';
 
 import { selectors as settings } from '../../../../../lib/redux/slices/settingsSlice/settingsSlice';
@@ -14,6 +13,7 @@ import moment from 'moment';
 import { DATE_FORMAT } from '../../../../helpers/consts';
 import { canonicalLink } from '../../../../helpers/links';
 import { fetchWindow } from '../../../../../lib/redux/slices/mdbSlice';
+import { useTranslation } from '../../../../../app/i18n';
 
 const getStartEndByFilmDate     = d => {
   const filmDate = moment.utc(d);
@@ -37,15 +37,15 @@ const LessonDatePickerContainer = () => {
 
   const dispatch = useDispatch();
   const curIndex = cWindow?.data?.indexOf(cId) ?? -1;
-/*
-  useEffect(() => {
-    if (curIndex < 1 && !wipMap.cWindow[cId] && cId !== cWindow.id) {
-      const { film_date }            = denorm(cId);
-      const { start_date, end_date } = getStartEndByFilmDate(film_date);
-      dispatch(fetchWindow({ id: cId, start_date, end_date }));
-    }
-  }, [cId, cWindow, wipMap.cWindow, curIndex]);
-*/
+  /*
+    useEffect(() => {
+      if (curIndex < 1 && !wipMap.cWindow[cId] && cId !== cWindow.id) {
+        const { film_date }            = denorm(cId);
+        const { start_date, end_date } = getStartEndByFilmDate(film_date);
+        dispatch(fetchWindow({ id: cId, start_date, end_date }));
+      }
+    }, [cId, cWindow, wipMap.cWindow, curIndex]);
+  */
 
   const isLtr          = uiDir === 'ltr';
   const prevCollection = curIndex >= 0 && curIndex < cWindow.data.length - 1 ? denorm(cWindow.data[curIndex + 1]) : null;
@@ -60,7 +60,7 @@ const LessonDatePickerContainer = () => {
       {
         !!prevTo && (
           <Link
-            to={prevTo}
+            href={prevTo}
             className="avbox__playlist-prev-button"
             title={t('buttons.previous-lesson')}
           >
@@ -68,7 +68,7 @@ const LessonDatePickerContainer = () => {
           </Link>
         )
       }
-      <CollectionDatePicker />
+      {/*<CollectionDatePicker />*/}
       {
         !nextTo ? (
           <span className="avbox__playlist-next-button">

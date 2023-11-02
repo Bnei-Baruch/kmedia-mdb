@@ -1,4 +1,4 @@
-import { sortRootsPosition } from '../../pages/topics';
+import { sortRootsPosition } from '../../app/[lng]/topics';
 
 export const getTree = (roots, getTagById, cuStats, t) => {
   const sorted = sortRootsPosition(roots);

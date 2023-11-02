@@ -1,7 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Icon, Input, Loader, Search } from 'semantic-ui-react';
-import { useTranslation } from 'next-i18next';
 import moment from 'moment';
 
 import ButtonDayPicker from '../Filters/components/Date/ButtonDayPicker';
@@ -11,7 +10,8 @@ import { isLanguageRtl } from '../../helpers/i18n-utils';
 
 import { selectors } from '../../../lib/redux/slices/searchSlice';
 import { selectors as settingsSelectors } from '../../../lib/redux/slices/settingsSlice/settingsSlice';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
+import { useTranslation } from '../../../app/i18n/client';
 
 const makeResult = (uiLang, result) => ({
   ...result,
@@ -19,11 +19,11 @@ const makeResult = (uiLang, result) => ({
 });
 
 const OmniBox = ({ isHomePage = false }) => {
-  const { t }       = useTranslation();
   const query       = useSelector(state => selectors.getQuery(state.search));
   const suggestions = useSelector(state => selectors.getSuggestions(state.search));
   const wip         = useSelector(state => selectors.getAutocompleteWip(state.search));
   const uiLang      = useSelector(state => settingsSelectors.getUILang(state.settings));
+  const { t }       = useTranslation(uiLang);
 
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const chronicles         = useContext(ClientChroniclesContext);

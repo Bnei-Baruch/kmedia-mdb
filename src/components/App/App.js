@@ -16,7 +16,7 @@ import {
   SessionInfoContext,
 } from '../../helpers/app-contexts';
 import InitKCEvents from '../../../pkg/ksAdapter/InitKCEvents';
-import Layout from '../Layout/Layout';
+import Layout from '../../../app/[lng]/components/Layout';
 import PlayerContainer from '../../../lib/Player/PlayerContainer';
 
 const App = props => {

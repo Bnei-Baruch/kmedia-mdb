@@ -1,12 +1,12 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { Button, Container, Divider, Grid, GridColumn, GridRow, Header, Segment } from 'semantic-ui-react';
+import { Button, Container, Divider, Grid, GridColumn, GridRow, Header, Segment } from '/lib/SUI';
 import { useSelector } from 'react-redux';
-import { useTranslation } from 'next-i18next';
 import { selectors } from '../../../lib/redux/slices/trimSlice';
 import { Splash } from '../shared/Splash/Splash';
 import DownloadTrimItem from './DownloadTrimItem';
 import clsx from 'clsx';
+import { useTranslation } from '../../../app/i18n/client';
 
 const DownloadTrim = () => {
   const { t } = useTranslation();

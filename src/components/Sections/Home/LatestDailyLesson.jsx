@@ -28,7 +28,7 @@ const LatestDailyLesson = () => {
   useEffect(() => setImage(getRandomLatestLesson()), []);
 
   return (
-    <Link href="/pages/___lessons/daily/latest">
+    <Link href="/Users/davgur/WebstormProjects/kmedia-mdb/app/___lessons/daily/latest">
       <div className="thumbnail">
         {/*<Image fluid src={imageSrc} className="thumbnail__image" width={512} />*/}
         <Header as="h2" className="thumbnail__header">

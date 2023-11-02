@@ -5,7 +5,6 @@ import { Container, Grid, Divider } from 'semantic-ui-react';
 
 import Materials from '../widgets/UnitMaterials/Materials';
 import Info from '../widgets/Info/Info';
-import Recommended from '../widgets/Recommended/Main/Recommended';
 import PlaylistHeader from '../Playlist/PlaylistHeader';
 import PlaylistItems from './PlaylistItems';
 import { selectors as playlist } from '../../../../../lib/redux/slices/playlistSlice/playlistSlice';
@@ -41,7 +40,7 @@ const PlaylistMyPage = ({ playerContainer, t }) => {
           <Grid.Column width={6}>
             <PlaylistItems />
             <Divider hidden />
-            <Recommended filterOutUnits={[]} />
+            {/*<Recommended filterOutUnits={[]} />*/}
           </Grid.Column>
         )
       }

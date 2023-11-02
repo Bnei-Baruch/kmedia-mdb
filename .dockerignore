@@ -31,7 +31,7 @@ ___.env
 
 # App
 assets
-help
+app/[lng]/help/help
 node_modules
 semantic
 testcafe

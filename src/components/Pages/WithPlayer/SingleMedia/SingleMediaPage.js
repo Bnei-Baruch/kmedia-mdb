@@ -1,10 +1,6 @@
 import React, { useContext } from 'react';
 import { Grid, Container } from 'semantic-ui-react';
 import clsx from 'clsx';
-import { useLocation } from 'react-router-dom';
-
-import Recommended from '../widgets/Recommended/Main/Recommended';
-import { getEmbedFromQuery } from '../../../../../lib/redux/slices/playlistSlice/helper';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import Info from '../widgets/Info/Info';
 import Materials from '../widgets/UnitMaterials/Materials';

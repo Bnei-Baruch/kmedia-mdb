@@ -1,14 +1,15 @@
 import React, { useState, useContext } from 'react';
 import { Button, GridColumn, GridRow, Popup } from 'semantic-ui-react';
-import { withTranslation } from 'next-i18next';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { DeviceInfoContext } from '../../helpers/app-contexts';
+import { useTranslation } from '../../../app/i18n/client';
 
-const DownloadTrimItem = ({ item, pos, t }) => {
+const DownloadTrimItem = ({ item, pos }) => {
   const [open, setOpen] = useState(false);
 
   const { link, download, name } = item;
   const { isMobileDevice }       = useContext(DeviceInfoContext);
+  const { t }                    = useTranslation();
   return (
     <GridRow key={`file_${pos}`}>
       <GridColumn width={isMobileDevice ? 11 : 13}>
@@ -52,4 +53,4 @@ const DownloadTrimItem = ({ item, pos, t }) => {
   );
 };
 
-export default withTranslation()(DownloadTrimItem);
+export default DownloadTrimItem;

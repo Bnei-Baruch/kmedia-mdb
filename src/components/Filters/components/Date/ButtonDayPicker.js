@@ -15,7 +15,6 @@ import YearMonthForm from './YearMonthForm';
 import { selectors as settings } from '../../../../../lib/redux/slices/settingsSlice/settingsSlice';
 
 import DayPicker from 'react-day-picker';
-import { withTranslation } from 'next-i18next';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import clsx from 'clsx';
 
@@ -279,4 +278,4 @@ class ButtonDayPicker extends Component {
 export default connect(state => ({
   uiLang: settings.getUILang(state.settings),
   uiDir: settings.getUIDir(state.settings),
-}))(withTranslation()(ButtonDayPicker));
+}))(ButtonDayPicker);

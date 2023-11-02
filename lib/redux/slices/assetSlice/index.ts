@@ -1,2 +1,2 @@
 export * from './assetSlice'
-export * from './thunks'
+export * from '../../../../app/api/assets'
