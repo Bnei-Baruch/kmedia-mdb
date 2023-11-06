@@ -4,7 +4,7 @@ import { wrapper } from '../../../../../lib/redux';
 import { DEFAULT_CONTENT_LANGUAGE, PAGE_NS_ARTICLES } from '../../../../../src/helpers/consts';
 import { selectors as mdb, fetchCollection } from '../../../../../lib/redux/slices/mdbSlice';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import ContentItem from '../../../../../src/components/shared/ContentItem/ContentItemContainer';
+import ContentItem from '../../../../components/ContentItem/ContentItem';
 import Pagination from '../../../../../src/components/Pagination/Pagination';
 import { useSelector } from 'react-redux';
 import { selectors as settings } from '../../../../../lib/redux/slices/settingsSlice';

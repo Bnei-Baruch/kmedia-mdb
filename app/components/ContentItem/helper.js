@@ -7,10 +7,10 @@ import {
   CT_SOURCE,
   CT_SPECIAL_LESSON,
   UNIT_VIDEOS_TYPE
-} from '../../../helpers/consts';
-import { canonicalCollection, cuPartNameByCCUType } from '../../../helpers/utils';
-import { canonicalLink } from '../../../helpers/links';
-import { stringify } from '../../../helpers/url';
+} from '../../../src/helpers/consts';
+import { canonicalCollection, cuPartNameByCCUType } from '../../../src/helpers/utils';
+import { canonicalLink } from '../../../src/helpers/links';
+import { stringify } from '../../../src/helpers/url';
 
 export const imageWidthBySize = {
   'tiny': 120,

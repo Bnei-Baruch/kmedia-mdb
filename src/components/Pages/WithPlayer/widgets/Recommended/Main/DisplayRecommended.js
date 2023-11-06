@@ -7,10 +7,10 @@ import * as shapes from '../../../../../shapes';
 import { canonicalCollection, isEmpty } from '../../../../../../helpers/utils';
 import Link from '../../../../../Language/MultiLanguageLink';
 import { canonicalLink } from '../../../../../../helpers/links';
-import ContentItemContainer, {
+import ContentItem, {
   SourceItemContainer,
   TagItemContainer
-} from '../../../../../shared/ContentItem/ContentItemContainer';
+} from '../../../../../../../app/components/ContentItem/ContentItem';
 import { ClientChroniclesContext } from '../../../../../../helpers/app-contexts';
 import { selectors } from '../../../../../../redux/modules/recommended';
 import { IsCollectionContentType, IsUnitContentType } from '../../../../../../helpers/consts';
@@ -116,7 +116,7 @@ const RecommendedPlaylist = ({ recommendForUnit, units, selected, t, chronicles,
                 onClick={() => chronicles.recommendSelected(unit.id)}
               >
                 {unit.content_type && IsCollectionContentType(unit.content_type) ?
-                  <ContentItemContainer
+                  <ContentItem
                     id={(unit.cuIDs && unit.cuIDs.length && unit.cuIDs[0]) || ''}
                     ccuId={unit.id}
                     key={unit.id}
@@ -127,7 +127,7 @@ const RecommendedPlaylist = ({ recommendForUnit, units, selected, t, chronicles,
                     label={unitLabels[index]}
                     size={'small'} />
                   : (unit.content_type && IsUnitContentType(unit.content_type) ?
-                    <ContentItemContainer
+                    <ContentItem
                       id={unit.id}
                       key={unit.id}
                       asList

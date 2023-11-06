@@ -1,3 +1,4 @@
+/*
 import React from 'react';
 
 import { useInterval } from '/src/helpers/timer';
@@ -11,7 +12,7 @@ import {
 } from '/src/helpers/consts';
 import { fetchHome, fetchBanners } from '/lib/redux/slices/homeSlice';
 import { fetchBlogList, fetchTweets } from '/lib/redux/slices/publicationsSlice';
-import HomePage from '../../src/components/Sections/Home/HomePage';
+import HomePage from './home/components/HomePage';
 import { fetchSQData } from '../../lib/redux/slices/mdbSlice';
 
 const FETCH_TIMEOUT = 10 * 60 * 1000; // every 10 min
@@ -62,3 +63,31 @@ const HomePageContainer         = () => {
 };
 
 export default HomePageContainer;
+*/
+import React from 'react';
+import { Container } from '/lib/SUI';
+//import SearchBar from './home/components/SearchBar';
+import HomeBanners from './home/components/HomeBanners';
+import SearchBar from './home/components/SearchBar';
+import HomeSections from './home/components/HomeSections';
+import LatestUpdatesSection from './home/components/LatestUpdatesSection';
+
+const HomePage = ({ params: { lng }}) => {
+  return (
+    <div className="homepage">
+      {/*<Helmets.Basic title={t('home.header.text')} description={t('home.header.subtext')} />*/}
+      <div className="homepage__header homepage__section">
+        <Container className="padded horizontally">
+          <SearchBar lng={lng} />
+        </Container>
+      </div>
+      <HomeBanners />
+      <HomeSections lng={lng} />
+      <LatestUpdatesSection lng={lng} />
+      {/*
+      <LatestSocial />*/}
+    </div>
+  );
+};
+
+export default HomePage;

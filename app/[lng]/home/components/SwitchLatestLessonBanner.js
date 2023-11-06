@@ -1,18 +1,13 @@
+'use client';
 import React, { useState } from 'react';
-import { useInterval } from '../../../helpers/timer';
-import { useSelector } from 'react-redux';
+import { useInterval } from '../../../../src/helpers/timer';
 import Promoted from './Promoted';
-import { homeSlice } from '../../../../lib/redux';
 
 const SWITCH_BANNERS_TIMEOUT = 5 * 1000; // every 5 sec
 
-const LatestLessonBanner = () => {
-
-  const banners = useSelector(state => homeSlice.selectors.getBanner(state.home));
-
+const SwitchLatestLessonBanner = ({ banners }) => {
   const [idx, setIdx] = useState(0);
-
-  const len = banners?.data.length;
+  const len           = banners?.data.length;
 
   useInterval(() => {
     if (len > 0) {
@@ -26,5 +21,4 @@ const LatestLessonBanner = () => {
 
   return <Promoted banner={banners.data[idx]} />;
 };
-
-export default LatestLessonBanner;
+export default SwitchLatestLessonBanner;

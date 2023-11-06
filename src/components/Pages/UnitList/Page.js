@@ -8,7 +8,7 @@ import Pagination from '../../Pagination/Pagination';
 import Filters from '../../Filters/Filters';
 import filterComponents from '../../Filters/components';
 import WipErr from '../../shared/WipErr/WipErr';
-import ContentItem from '../../shared/ContentItem/ContentItemContainer';
+import ContentItem from '../../../../app/components/ContentItem/ContentItem';
 
 const filters = {
   'lessons-daily': [

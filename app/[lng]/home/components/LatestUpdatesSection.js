@@ -1,18 +1,14 @@
-import React, { useContext, useMemo } from 'react';
+import React from 'react';
 import moment from 'moment';
-import { isEqual } from 'lodash';
-import PropTypes from 'prop-types';
-import { Container } from 'semantic-ui-react';
+import { Container } from '/lib/SUI';
 
-import * as consts from '../../../helpers/consts';
-import * as shapes from '../../shapes';
+import * as consts from '../../../../src/helpers/consts';
 import Section from './Section';
 import LatestUpdatesCardList from './LatestUpdatesCardList';
-import { DeviceInfoContext } from '../../../helpers/app-contexts';
-import { useTranslation } from 'next-i18next';
-import { useSelector, shallowEqual } from 'react-redux';
-import { selectors } from '../../../../lib/redux/slices/homeSlice';
-import { selectors as mdb } from '../../../../lib/redux/slices/mdbSlice';
+import { useTranslation } from '../../../i18n';
+import { fetchHome } from '../../../api/home';
+import { useCookies } from 'react-cookie';
+import { cookies } from 'next/headers';
 
 const itemsByContentType = list => list.filter(x => !!x).reduce((acc, val) => {
   if (!acc[val.content_type]) {
@@ -43,18 +39,19 @@ const COLLECTION_CTS       = [
 const PROGRAMM_CTS         = [
   { ct: consts.CT_VIDEO_PROGRAM_CHAPTER }
 ];
-const LatestUpdatesSection = () => {
-  const { isMobileDevice } = useContext(DeviceInfoContext);
-  const { t }              = useTranslation();
+const LatestUpdatesSection = async ({ lng }) => {
+  const { isMobileDevice } = false;//useContext(DeviceInfoContext);
+  const { t }              = await useTranslation(lng);
 
-  const latestUnitIDs = useSelector(state => selectors.getLatestUnits(state.home) || [], shallowEqual);
-  const latestUnits   = useSelector(state => latestUnitIDs.map(x => mdb.getDenormContentUnit(state.mdb, x)));
-  const latestCoIDs   = useSelector(state => selectors.getLatestCos(state.home) || [], shallowEqual);
-  const latestCos     = useSelector(state => latestCoIDs.map(x => mdb.getDenormCollection(state.mdb, x)));
+  const cookieStore = cookies();
+  const clng        = cookieStore.get('clng')?.value.split(',');
 
-  const itemsByCT = useMemo(() => {
-    return itemsByContentType([...latestUnits, ...latestCos]);
-  }, [latestUnits.length, latestCos.length]);
+  const { latest_daily_lesson: latestDaily, latest_cos: latestCos, latest_units: latestUnits } = await fetchHome({
+    ui_language: lng,
+    content_languages: clng
+  });
+
+  const itemsByCT = itemsByContentType([...latestUnits, latestDaily, ...latestCos]);
 
   if (itemsByCT[consts.CT_DAILY_LESSON]) {
     itemsByCT[consts.CT_DAILY_LESSON] = itemsByCT[consts.CT_DAILY_LESSON].sort(
@@ -97,6 +94,7 @@ const LatestUpdatesSection = () => {
               itemsPerRow={itemsPerRow}
               stackable={!isMobileDevice}
               cts={COLLECTION_CTS}
+              lng={lng}
             />
 
             <LatestUpdatesCardList
@@ -106,6 +104,7 @@ const LatestUpdatesSection = () => {
               itemsPerRow={itemsPerRow}
               stackable={!isMobileDevice}
               cts={PROGRAMM_CTS}
+              lng={lng}
             />
 
             <LatestUpdatesCardList
@@ -114,8 +113,8 @@ const LatestUpdatesSection = () => {
               maxItems={20}
               itemsPerRow={itemsPerRow}
               stackable={!isMobileDevice}
-              cts={[
-                { ct: consts.CT_CLIP }]}
+              cts={[{ ct: consts.CT_CLIP }]}
+              lng={lng}
             />
 
             <LatestUpdatesCardList
@@ -124,8 +123,8 @@ const LatestUpdatesSection = () => {
               maxItems={20}
               itemsPerRow={itemsPerRow}
               stackable={!isMobileDevice}
-              cts={[
-                { ct: consts.CT_ARTICLE }]}
+              cts={[{ ct: consts.CT_ARTICLE }]}
+              lng={lng}
             />
 
             <LatestUpdatesCardList
@@ -139,6 +138,7 @@ const LatestUpdatesSection = () => {
                 { ct: consts.CT_FRIENDS_GATHERING },
                 { ct: consts.CT_MEAL },
                 { ct: consts.CT_HOLIDAY }]}
+              lng={lng}
             />
           </div>
         </Section>

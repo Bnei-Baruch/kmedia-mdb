@@ -4,11 +4,11 @@ import { useTranslation } from 'next-i18next';
 import { Button, Grid, Header, Image, Modal } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
 import clsx from 'clsx';
-import { DeviceInfoContext } from '../../../helpers/app-contexts';
-import { LANG_ENGLISH, LANG_HEBREW, LANG_RUSSIAN, LANG_SPANISH, KC_BOT_USER_NAME } from '../../../helpers/consts';
+import { DeviceInfoContext } from '../../../../src/helpers/app-contexts';
+import { LANG_ENGLISH, LANG_HEBREW, LANG_RUSSIAN, LANG_SPANISH, KC_BOT_USER_NAME } from '../../../../src/helpers/consts';
 import { useSearchParams } from 'next/navigation';
-import banner from '../../../images/DonationBanner.jpg';
-import { isLanguageRtl } from '../../../helpers/i18n-utils';
+import banner from '../../../../src/images/DonationBanner.jpg';
+import { isLanguageRtl } from '../../../../src/helpers/i18n-utils';
 import { selectors as settings } from '../../../../lib/redux/slices/settingsSlice/settingsSlice';
 import { selectors } from '../../../../lib/redux/slices/authSlice/authSlice';
 

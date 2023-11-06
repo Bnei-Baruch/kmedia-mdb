@@ -1,3 +1,4 @@
+'use client';
 import React, { useState, useContext, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Icon, Input, Loader, Search } from 'semantic-ui-react';
@@ -46,12 +47,12 @@ const OmniBox = ({ isHomePage = false }) => {
       setAutocompleteId('');
     }
   }, [suggestions, uiLang]);
-/*
+  /*
 
-  useEffect(() => {
-    dispatch(actions.hydrateUrl());
-  }, [dispatch]);
-*/
+    useEffect(() => {
+      dispatch(actions.hydrateUrl());
+    }, [dispatch]);
+  */
 
   const doSearch = () => {
     setUserInteracted(true);
@@ -68,7 +69,7 @@ const OmniBox = ({ isHomePage = false }) => {
   const inputChange = e => {
     setUserInteracted(true);
     setInputFocused(true);
-   // dispatch(actions.updateQuery({ query: e.target.value, autocomplete: true }));
+    // dispatch(actions.updateQuery({ query: e.target.value, autocomplete: true }));
   };
 
   const onFocus = () => {
@@ -83,7 +84,7 @@ const OmniBox = ({ isHomePage = false }) => {
   const handleResultSelect = (e, data) => {
     const { title } = data.result;
     chronicles.autocompleteSelected(title, autocompleteId);
-   // dispatch(actions.updateQuery({ query: title, autocomplete: false }));
+    // dispatch(actions.updateQuery({ query: title, autocomplete: false }));
     doSearch();
   };
 

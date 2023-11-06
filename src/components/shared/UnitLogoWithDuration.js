@@ -6,7 +6,7 @@ import { MY_NAMESPACE_HISTORY } from '../../helpers/consts';
 import { formatDuration } from '../../helpers/utils';
 import UnitLogo from './Logo/UnitLogo';
 import { getSavedTime } from '../../../lib/player/helper';
-import { UnitProgress } from './ContentItem/UnitProgress';
+import { UnitProgress } from '../../../app/components/ContentItem/UnitProgress';
 
 export const getLogoUnit = (content_units, historyItems) => {
   if (!content_units)

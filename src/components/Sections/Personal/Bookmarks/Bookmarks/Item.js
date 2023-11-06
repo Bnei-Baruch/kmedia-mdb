@@ -12,7 +12,7 @@ import { getMyItemKey } from '../../../../../helpers/my';
 import Link from '../../../../Language/MultiLanguageLink';
 import Actions from './Actions';
 import { selectors as sourcesSelectors, selectors as sources } from '../../../../../../lib/redux/slices/sourcesSlice/sourcesSlice';
-import { buildTitleByUnit, textPartLink } from '../../../../shared/ContentItem/helper';
+import { buildTitleByUnit, textPartLink } from '../../../../../../app/components/ContentItem/helper';
 
 const BookmarksItem = ({ bookmark, t }) => {
   const { properties, folder_ids = [], name, subject_uid } = bookmark;

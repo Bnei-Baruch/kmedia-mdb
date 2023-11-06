@@ -2,8 +2,8 @@ import React from 'react';
 import { useTranslation } from 'next-i18next';
 import { Container, Header } from 'semantic-ui-react';
 
-import ContentItemContainer from '../../shared/ContentItem/ContentItemContainer';
-import CollectionListTemplate from '../../shared/ContentItem/CollectionListTemplate';
+import ContentItem from '../../../../app/components/ContentItem/ContentItem';
+import CollectionListTemplate from '../../../../app/components/ContentItem/CollectionListTemplate';
 import { useSelector } from 'react-redux';
 import { selectors } from '../../../../lib/redux/slices/tagsSlice/tagsSlice';
 
@@ -20,11 +20,11 @@ const VideoList = () => {
       {
         items?.map((x, i) => {
           if (x.lID) {
-            return <ContentItemContainer id={x.cuID} size="small" lID={x.lID} asList={true} key={i} />;
+            return <ContentItem id={x.cuID} size="small" lID={x.lID} asList={true} key={i} />;
           }
           if (x.cID)
             return <CollectionListTemplate cID={x.cID} size="small" key={i} />;
-          return <ContentItemContainer id={x.cuID} size="small" asList={true} key={i} />;
+          return <ContentItem id={x.cuID} size="small" asList={true} key={i} />;
         })
       }
     </Container>

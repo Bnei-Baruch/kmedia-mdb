@@ -5,7 +5,7 @@ import { Container, Header } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 
 import { selectors } from '../../../../lib/redux/slices/tagsSlice/tagsSlice';
-import TextListTemplate from '../../shared/ContentItem/TextListTemplate';
+import TextListTemplate from '../../../../app/components/ContentItem/TextListTemplate';
 
 const TextList = ({ t }) => {
 

@@ -5,11 +5,11 @@ import { withTranslation } from 'next-i18next';
 import { useSelector } from 'react-redux';
 
 import { Container, Header, Image, List } from 'semantic-ui-react';
-import { iconByContentTypeMap } from '../../../helpers/consts';
-import { SectionLogo } from '../../../helpers/images';
-import { selectors as mdb } from '../../../../lib/redux/slices/mdbSlice/mdbSlice';
-import { selectors as sources } from '../../../../lib/redux/slices/sourcesSlice/sourcesSlice';
-import Link from '../../Language/MultiLanguageLink';
+import { iconByContentTypeMap } from '../../../src/helpers/consts';
+import { SectionLogo } from '../../../src/helpers/images';
+import { selectors as mdb } from '../../../lib/redux/slices/mdbSlice/mdbSlice';
+import { selectors as sources } from '../../../lib/redux/slices/sourcesSlice/sourcesSlice';
+import Link from '../../../src/components/Language/MultiLanguageLink';
 import { buildTextItemInfo, textPartLink } from './helper';
 
 const TextListTemplate = ({ cuID, lID, t }) => {

@@ -1,8 +1,8 @@
 import { Grid, Feed, Container } from 'semantic-ui-react';
 import React from 'react';
 import { useTranslation } from 'next-i18next';
-import { isEmpty } from '../../../helpers/utils';
-import TwitterFeed from '../Publications/TwitterFeed';
+import { isEmpty } from '../../../../src/helpers/utils';
+import TwitterFeed from '../../../../src/components/Sections/Publications/TwitterFeed';
 import Section from './Section';
 import { useSelector } from 'react-redux';
 import { selectors as publications } from '../../../../lib/redux/slices/publicationsSlice';

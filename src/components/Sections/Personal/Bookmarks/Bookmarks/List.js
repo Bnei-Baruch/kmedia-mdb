@@ -16,7 +16,7 @@ import BookmarksItem from './Item';
 import { selectors as mdb } from '../../../../../../lib/redux/slices/mdbSlice/mdbSlice';
 import { selectors as sources } from '../../../../../../lib/redux/slices/sourcesSlice/sourcesSlice';
 import { selectors as settings } from '../../../../../../lib/redux/slices/settingsSlice/settingsSlice';
-import { buildTitleByUnit } from '../../../../shared/ContentItem/helper';
+import { buildTitleByUnit } from '../../../../../../app/components/ContentItem/helper';
 
 const BookmarkList = ({ t }) => {
   let items         = useSelector(state => selectors.getList(state.my, MY_NAMESPACE_BOOKMARKS));

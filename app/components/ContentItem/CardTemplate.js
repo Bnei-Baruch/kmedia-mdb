@@ -1,19 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Container, Card, Header, Popup, Divider } from 'semantic-ui-react';
+import { Container, Card, Header, Popup, Divider, CardMeta, CardDescription, CardContent } from '/lib/SUI';
 import { useSelector } from 'react-redux';
 
-import * as shapes from '../../shapes';
-import { NO_NAME } from '../../../helpers/consts';
-import { formatDuration } from '../../../helpers/utils';
-import { selectors as settings } from '../../../../lib/redux/slices/settingsSlice/settingsSlice';
+import * as shapes from '../../../src/components/shapes';
+import { NO_NAME } from '../../../src/helpers/consts';
+import { formatDuration } from '../../../src/helpers/utils';
+import { selectors as settings } from '../../../lib/redux/slices/settingsSlice/settingsSlice';
 
-import UnitLogo from '../Logo/UnitLogo';
+import UnitLogo from '../../../src/components/shared/Logo/UnitLogo';
 import { UnitProgress } from './UnitProgress';
 import Link from 'next/link';
 
 const CardTemplate = ({ unit, withCCUInfo, link, ccu, description, children, playTime }) => {
-  const dir = useSelector(state => settings.getUIDir(state.settings));
+  const dir = 'ltr';//useSelector(state => settings.getUIDir(state.settings));
 
   const coInfo = ccu && withCCUInfo ? (
     <div className="cu_item_info_co">
@@ -39,13 +39,13 @@ const CardTemplate = ({ unit, withCCUInfo, link, ccu, description, children, pla
           <UnitProgress unit={unit} playTime={playTime} />
         </Container>
       </div>
-      <Card.Content>
-        <Card.Description content={trimText(unit.name)} />
-      </Card.Content>
-      <Card.Meta className={`cu_info_description ${dir}`}>
+      <CardContent>
+        <CardDescription content={trimText(unit.name)} />
+      </CardContent>
+      <CardMeta className={`cu_info_description ${dir}`}>
         {description.map((d, i) => (<span key={i}>{d}</span>))}
-      </Card.Meta>
-      {children ? <Card.Content extra textAlign="right">{children}</Card.Content> : null}
+      </CardMeta>
+      {children ? <CardContent extra textAlign="right">{children}</CardContent> : null}
     </Card>
   );
 };

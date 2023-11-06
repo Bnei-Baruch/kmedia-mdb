@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { useTranslation } from 'next-i18next';
-import ContentItemContainer from '../../../shared/ContentItem/ContentItemContainer';
+import ContentItem from '../../../../../app/components/ContentItem/ContentItem';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectors, playlistSlice } from '../../../../../lib/redux/slices/playlistSlice/playlistSlice';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
@@ -62,7 +62,7 @@ const PlaylistItems               = () => {
             return null;
           const selected = id === cuId;
           return (
-            <ContentItemContainer
+            <ContentItem
               key={id}
               id={id}
               ccuId={cId}

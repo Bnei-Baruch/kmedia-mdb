@@ -11,7 +11,7 @@ import { selectors as settings } from '../../../../../lib/redux/slices/settingsS
 import { selectors as auth } from '../../../../../lib/redux/slices/authSlice/authSlice';
 import { MY_NAMESPACE_PLAYLISTS } from '../../../../helpers/consts';
 import WipErr from '../../../shared/WipErr/WipErr';
-import ContentItemContainer from '../../../shared/ContentItem/ContentItemContainer';
+import ContentItem from '../../../../../app/components/ContentItem/ContentItem';
 import AlertModal from '../../../shared/AlertModal';
 import PlaylistHeaderContainer from './HeaderContainer';
 import NeedToLogin from '../NeedToLogin';
@@ -76,7 +76,7 @@ const Page = ({ t }) => {
     const search                                 = stringify({ ...properties, ap: i });
 
     return (
-      <ContentItemContainer
+      <ContentItem
         id={content_unit_uid}
         key={i}
         link={{ pathname, search }}
@@ -111,7 +111,7 @@ const Page = ({ t }) => {
             onClick={() => changeItemPosition(i, false)}
           />
         </div>
-      </ContentItemContainer>
+      </ContentItem>
     );
   };
 

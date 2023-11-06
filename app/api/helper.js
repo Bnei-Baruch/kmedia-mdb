@@ -1,14 +1,6 @@
-const IMAGINARY_INTERNAL_HOST = process.env.NEXT_PUBLIC_IMAGINARY_INTERNAL_HOST || 'localhost';
 
-import { cmsUrl, Requests, backendUrl, imaginaryUrl, assetUrl } from '../../src/helpers/Api';
+import { cmsUrl, Requests, backendUrl, assetUrl } from '@/src/helpers/Api';
 
-export const imaginary = (params) => {
-  if (!params.url.startsWith('http')) {
-    params.url = `http://${IMAGINARY_INTERNAL_HOST}${params.url}`;
-  }
-
-  return `${imaginaryUrl('thumbnail')}?${Requests.makeParams(params)}`;
-};
 export const sqdata    = async (params) => await fetchWithParams(backendUrl('sqdata'), params);
 
 export const getCMS = async (item, { id, ...params }) => {
@@ -33,7 +25,7 @@ export const fetchWithParams = async (url, params) => {
   return res.json();
 };
 
-const makeParams = params => (
+export const makeParams = params => (
   Object.entries(params)
     .filter(([_, v]) => v !== undefined && v !== null)
     .map(pair => {

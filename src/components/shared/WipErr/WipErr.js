@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import * as shapes from '../../shapes';
 import { formatError } from '../../../helpers/utils';
 import { ErrorSplash, FrownSplash, LoadingSplash } from '../Splash/Splash';
-import { useTranslation } from 'next-i18next';
+import { useTranslation } from '../../../../app/i18n/client';
 
 const errorStatusNotFound = err => err.response?.status === 404;
 

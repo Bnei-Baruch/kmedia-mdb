@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import useRoutes from './routes';
-import HomePage from '../components/Sections/Home/HomePage';
+import HomePage from '../../app/[lng]/home/components/HomePage';
 import LanguageRouter from './LanguageRouters';
 
 const KmediaRouters = ({ playerContainer }) => {

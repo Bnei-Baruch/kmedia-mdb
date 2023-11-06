@@ -1,5 +1,5 @@
 import React from 'react';
-import ContentItemContainer from '../../../shared/ContentItem/ContentItemContainer';
+import ContentItem from '../../../../../app/components/ContentItem/ContentItem';
 import { useSelector } from 'react-redux';
 import { selectors } from '../../../../../lib/redux/slices/playlistSlice/playlistSlice';
 import { MY_NAMESPACE_PLAYLISTS } from '../../../../helpers/consts';
@@ -22,7 +22,7 @@ const PlaylistItems = () => {
 
           const search = stringify({ ...properties, ap });
           return (
-            <ContentItemContainer
+            <ContentItem
               key={_id}
               id={cuId}
               size="small"

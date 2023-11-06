@@ -14,7 +14,7 @@ import {
 } from '../../../../helpers/consts';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import WipErr from '../../../shared/WipErr/WipErr';
-import ContentItem from '../../../shared/ContentItem/ContentItemContainer';
+import ContentItem from '../../../../../app/components/ContentItem/ContentItem';
 import { PlaylistItem } from './PlaylistItem';
 import { SubscriptionsItem } from './SubscriptionsItem';
 import ItemTemplate from './ItemTemplate';

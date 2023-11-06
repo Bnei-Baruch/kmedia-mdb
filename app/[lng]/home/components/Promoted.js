@@ -1,9 +1,9 @@
 import React from 'react';
 import { Header, Image } from 'semantic-ui-react';
 
-import Link from '../../Language/MultiLanguageLink';
-import { cmsUrl, Requests } from '../../../helpers/Api';
-import { publicFile } from '../../../helpers/utils';
+import { cmsUrl, Requests } from '../../../../src/helpers/Api';
+import { publicFile } from '../../../../src/helpers/utils';
+import Link from 'next/link';
 
 const renderHeader = (header, subHeader) => {
   if (!header) {
@@ -52,14 +52,12 @@ const Promoted = ({ banner }) => {
 
   return (
     <div className="thumbnail">
-      <Lnk to={link}>
+      <Lnk href={link}>
         <Image fluid src={src} className="thumbnail__image" />
         {renderHeader(header, subHeader)}
       </Lnk>
     </div>
   );
 };
-
-Promoted.propTypes = {};
 
 export default Promoted;

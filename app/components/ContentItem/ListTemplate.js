@@ -1,3 +1,4 @@
+'use client';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import React, { useContext, useEffect, useRef, useState } from 'react';
@@ -5,14 +6,14 @@ import { Container, Header, Popup, Ref } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
 import Link from 'next/link';
 
-import { DeviceInfoContext } from '../../../helpers/app-contexts';
-import { NO_NAME } from '../../../helpers/consts';
-import { selectors as settings } from '../../../../lib/redux/slices/settingsSlice/settingsSlice';
+import { DeviceInfoContext } from '../../../src/helpers/app-contexts';
+import { NO_NAME } from '../../../src/helpers/consts';
+import { selectors as settings } from '../../../lib/redux/slices/settingsSlice/settingsSlice';
 
-import * as shapes from '../../shapes';
+import * as shapes from '../../../src/components/shapes';
 import { imageWidthBySize } from './helper';
-import UnitLogoWithDuration from '../UnitLogoWithDuration';
-import UnitLogo from '../Logo/UnitLogo';
+import UnitLogoWithDuration from '../../../src/components/shared/UnitLogoWithDuration';
+import UnitLogo from '../../../src/components/shared/Logo/UnitLogo';
 import { UnitProgress } from './UnitProgress';
 
 const ListTemplate = (

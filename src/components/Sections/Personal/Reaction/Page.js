@@ -10,7 +10,7 @@ import { selectors as settings } from '../../../../../lib/redux/slices/settingsS
 import { selectors as auth } from '../../../../../lib/redux/slices/authSlice/authSlice';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import { getPageFromLocation } from '../../../Pagination/withPagination';
-import ContentItemContainer from '../../../shared/ContentItem/ContentItemContainer';
+import ContentItem from '../../../../../app/components/ContentItem/ContentItem';
 import WipErr from '../../../shared/WipErr/WipErr';
 import AlertModal from '../../../shared/AlertModal';
 import Pagination from '../../../Pagination/Pagination';
@@ -83,9 +83,9 @@ const Page      = ({ location, t }) => {
               <Container className="padded">
                 {items.map((x, i) =>
                   (
-                    <ContentItemContainer id={x.subject_uid} asList={true} key={i}>
+                    <ContentItem id={x.subject_uid} asList={true} key={i}>
                       <ReactionActions cuId={x.subject_uid} reaction={x} />
-                    </ContentItemContainer>
+                    </ContentItem>
                   )
                 )}
               </Container>

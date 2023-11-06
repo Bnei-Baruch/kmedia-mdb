@@ -8,7 +8,7 @@ import { selectors as assets } from '../../../../lib/redux/slices/assetSlice/ass
 import MediaHelper from '../../../helpers/media';
 import { isEmpty } from '../../../helpers/utils';
 import Link from '../../Language/MultiLanguageLink';
-import { buildTextItemInfo } from '../../shared/ContentItem/helper';
+import { buildTextItemInfo } from '../../../../app/components/ContentItem/helper';
 import { selectors as sources } from '../../../../lib/redux/slices/sourcesSlice/sourcesSlice';
 import { selectors as settings } from '../../../../lib/redux/slices/settingsSlice/settingsSlice';
 import GalleryModal from './ZipFileModal';

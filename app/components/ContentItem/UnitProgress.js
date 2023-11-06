@@ -1,5 +1,5 @@
 import React from 'react';
-import { Progress } from 'semantic-ui-react';
+import { Progress } from '/lib/SUI';
 
 export const UnitProgress = ({ unit, playTime }) => {
   if (!unit || !playTime) return null;

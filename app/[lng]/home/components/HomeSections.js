@@ -1,10 +1,10 @@
-import React, { useContext } from 'react';
-import { Container, Grid } from 'semantic-ui-react';
-import { useTranslation } from 'next-i18next';
+import React from 'react';
+import { Container, Grid, GridColumn, GridRow } from '/lib/SUI';
 
 import Section from './Section';
+//import Topic from './Topic';
+import { useTranslation } from '../../../i18n';
 import Topic from './Topic';
-import { DeviceInfoContext } from '../../../helpers/app-contexts';
 
 const _SECTIONS = [
   { name: 'lessons', className: 'topIcon' },
@@ -17,9 +17,9 @@ const _SECTIONS = [
   { name: 'simple-mode', className: '' }
 ];
 
-const HomeSections = () => {
-  const { isMobileDevice } = useContext(DeviceInfoContext);
-  const { t }              = useTranslation();
+const HomeSections = async ({ lng }) => {
+  const { isMobileDevice } = false; //useContext(DeviceInfoContext) ;
+  const { t }              = await useTranslation(lng);
 
   const iconSize = isMobileDevice ? 50 : 100;
   const fontSize = isMobileDevice ? 'small' : 'large';
@@ -29,10 +29,10 @@ const HomeSections = () => {
       <Container className="padded horizontally">
         <Section title={t('home.sections')}>
           <Grid columns="equal" centered className="homepage__iconsrow">
-            <Grid.Row className="activeSectionsIcons">
+            <GridRow className="activeSectionsIcons">
               {
                 _SECTIONS.map((x) => (
-                    <Grid.Column
+                    <GridColumn
                       key={x.name}
                       width={4}
                       textAlign="center"
@@ -46,11 +46,11 @@ const HomeSections = () => {
                         height={iconSize}
                         fontSize={fontSize}
                       />
-                    </Grid.Column>
+                    </GridColumn>
                   )
                 )
               }
-            </Grid.Row>
+            </GridRow>
           </Grid>
         </Section>
       </Container>

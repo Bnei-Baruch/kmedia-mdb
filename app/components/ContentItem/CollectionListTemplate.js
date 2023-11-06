@@ -2,16 +2,16 @@ import React, { useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Container, Header } from 'semantic-ui-react';
 import clsx from 'clsx';
-import { DeviceInfoContext } from '../../../helpers/app-contexts';
-import UnitLogo from '../Logo/UnitLogo';
-import Link from '../../Language/MultiLanguageLink';
+import { DeviceInfoContext } from '../../../src/helpers/app-contexts';
+import UnitLogo from '../../../src/components/shared/Logo/UnitLogo';
+import Link from '../../../src/components/Language/MultiLanguageLink';
 import { withTranslation } from 'next-i18next';
-import { canonicalLink } from '../../../helpers/links';
+import { canonicalLink } from '../../../src/helpers/links';
 import { useDispatch, useSelector } from 'react-redux';
-import { actions, selectors } from '../../../../lib/redux/slices/mdbSlice/mdbSlice';
+import { actions, selectors } from '../../../lib/redux/slices/mdbSlice/mdbSlice';
 import { imageWidthBySize } from './helper';
-import { assetUrl } from '../../../helpers/Api';
-import { fromToLocalized } from '../../../helpers/date';
+import { assetUrl } from '../../../src/helpers/Api';
+import { fromToLocalized } from '../../../src/helpers/date';
 
 const CollectionListTemplate = ({ cID, size = 'big', t }) => {
   const c = useSelector(state => selectors.getDenormCollection(state.mdb, cID));
