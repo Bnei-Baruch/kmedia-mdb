@@ -41,7 +41,7 @@ const BehaviorStartPlay = () => {
     const autostart = !!(wasPlayedRef.current || isSingleMedia);
 
     const { current_time: offset } = getSavedTime(cuId, historyItem);
-    if (!isNaN(offset) && offset > 0 && (offset + 10 < duration)) {
+    if (!isNaN(offset) && offset > 0 && duration > 10 * 60 && (offset + 10 < duration)) {
       seek(offset);
     } else if (autostart) {
       play();
