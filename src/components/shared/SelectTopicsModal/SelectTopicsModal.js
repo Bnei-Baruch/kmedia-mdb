@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useContext } from 'react';
+import React, { useMemo, useState, useContext, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -26,7 +26,7 @@ const SelectTopicsModal = ({ t, open, onClose, label, trigger }) => {
   const areSourcesLoaded = useSelector(state => sourcesSelectors.areSourcesLoaded(state.sources));
   const roots            = useSelector(state => selectors.getDisplayRoots(state.tags), isEqual) || [];
   const getTagById       = useSelector(state => selectors.getTagById(state.tags));
-  const tree             = useMemo(() => getTree(roots, getTagById, null, t)[0], [roots, getTagById, t]);
+  const tree             = useMemo(() => getTree(roots, getTagById, null, match, t)[0], [roots, getTagById, match, t]);
 
   const language = useSelector(state => settings.getUILang(state.settings));
   const dir      = useSelector(state => settings.getUIDir(state.settings));
@@ -62,17 +62,22 @@ const SelectTopicsModal = ({ t, open, onClose, label, trigger }) => {
         content={col.text}
         className="topic_row_title topics__title"
       />
-      {
-        col.children?.map(r => (
-          <TopicBranch
-            key={r.value}
-            match={match}
-            root={r}
-            selected={selected}
-            setSelected={setSelected}
-          />
-        ))
-      }
+      <Container className="padded">
+        {
+          col.children?.filter(ch => ch.matched).map(ch => (
+            <Grid.Column key={ch.value} className="topics_card">
+              <Header as="h3" className="topics_title">
+                {ch.text}
+              </Header>
+              <TopicBranch
+                leafs={ch.children}
+                selected={selected}
+                setSelected={handleSetSelected}
+              />
+            </Grid.Column>
+          ))
+        }
+      </Container>
     </Grid.Column>
   );
 
@@ -90,6 +95,8 @@ const SelectTopicsModal = ({ t, open, onClose, label, trigger }) => {
     onClose();
     clear();
   };
+
+  const handleSetSelected = useCallback((sel) => setSelected(sel), []);
 
   const needToLogin = NeedToLogin({ t });
 

@@ -1,19 +1,17 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { withTranslation } from 'react-i18next';
+import { withTranslation, useTranslation } from 'react-i18next';
 import { Button, Checkbox, Container, Grid, Header, List } from 'semantic-ui-react';
 
 import { getEscapedRegExp } from '../../../helpers/utils';
 
 const ITEMS_NUMBER = 5;
 
-const TopicBranch = ({ root, match, selected, setSelected, t }) => {
-  const [showAll, setShowAll] = useState();
-  const regExp                = getEscapedRegExp(match);
-  const { text, value }       = root;
+const TopicBranch = ({ leafs, selected, setSelected }) => {
+  const { t }                 = useTranslation();
+  const [showAll, setShowAll] = useState(false);
 
-  const children = (text && regExp.test(text)) ? root.children
-    : root.children.filter(({ text }) => text && regExp.test(text));
+  const children = leafs.filter(x => x.matched);
 
   if (!children?.length > 0) return null;
 
@@ -32,7 +30,7 @@ const TopicBranch = ({ root, match, selected, setSelected, t }) => {
       return null;
     }
 
-    const { text, value } = node;
+    const { text, value, children: leafs } = node;
 
     return (
       <List.Item key={value}>
@@ -41,16 +39,18 @@ const TopicBranch = ({ root, match, selected, setSelected, t }) => {
           onChange={(e, { checked }) => handleChange(checked, value)}
           label={text}
         />
+        <TopicBranch
+          setSelected={setSelected}
+          selected={selected}
+          leafs={leafs}
+        />
       </List.Item>
     );
   };
 
   return (
-    <Grid.Column key={value} className="topics_card">
-      <Header as="h3" className="topics_title">
-        {text}
-      </Header>
-      <Container className="padded">
+    <>
+      <Container className="padded no-padding-top no-padding-bottom">
         <List className="topics__list">
           {
             (showAll ? children : children.slice(0, ITEMS_NUMBER)).map(renderNode)
@@ -68,16 +68,14 @@ const TopicBranch = ({ root, match, selected, setSelected, t }) => {
           )
         }
       </Container>
-    </Grid.Column>
+    </>
   );
 };
 
 TopicBranch.propTypes = {
-  t: PropTypes.func.isRequired,
-  root: PropTypes.object.isRequired,
-  match: PropTypes.string,
+  leafs: PropTypes.arrayOf(PropTypes.object).isRequired,
   selected: PropTypes.arrayOf(PropTypes.string),
   setSelected: PropTypes.func.isRequired
 };
 
-export default withTranslation()(TopicBranch);
+export default TopicBranch;
