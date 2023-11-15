@@ -115,7 +115,7 @@ const Likut                  = () => {
   const bookmarkSource     = { subject_uid: unit.id, subject_type: unit.content_type, language: uiLang };
   const labelSource        = { content_unit: unit.id, language: uiLang };
 
-  const mp3File = files.find(f => f.language === selectedLanguage && f.type === MT_AUDIO);
+  const mp3File = files.find(f => f.language === finalLanguage && f.type === MT_AUDIO);
   const title = `${t('likutim.item-header')} ${name}`;
 
   return (
