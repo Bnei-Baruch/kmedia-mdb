@@ -61,6 +61,7 @@ const Download = props => {
   if (!ready) {
     return null;
   }
+
   const mountPoint = document.getElementById('download-button');
   if (mountPoint === null) {
     return null;

@@ -217,6 +217,7 @@ const onFetchPersonFailure = (draft, payload) => {
   draft.person.wip = false;
   draft.person.err = payload;
 };
+
 const onFetchTimeCode      = draft => {
   draft.timeCode = new Map();
 };
@@ -227,18 +228,22 @@ const onFetchTimeCodeSuccess = (draft, payload) => {
     const { index, timeCode: tc } = payload[idx];
     timeCode.set(index, tc);
   }
+
   draft.timeCode = timeCode;
 };
 
 const onMerge        = (state, { id, lang }) => {
   state.mergedStatus[buildKey(id, lang)] = 'wip';
 };
+
 const onMergeSuccess = (state, { id, lang, status = 'ok' }) => {
   state.mergedStatus[buildKey(id, lang)] = status;
 };
+
 const onMergeFailure = (state, { id, lang, status = 'none' }) => {
   state.mergedStatus[buildKey(id, lang)] = status;
 };
+
 const buildKey       = (uid, lang) => `${uid}_${lang}`;
 export const reducer = handleActions({
   [ssr.PREPARE]: onSSRPrepare,
@@ -288,10 +293,9 @@ const recursiveFindPrevTimeByPos = (pos, state) => {
   if (state.timeCode.has(pos)) return state.timeCode.get(pos);
   return recursiveFindPrevTimeByPos(pos - 1, state);
 };
+
 const hasTimeCode                = state => state.timeCode?.size > 0;
-const getMergeStatus             = state => (id, lang) => {
-  return state.mergedStatus[buildKey(id, lang)];
-};
+const getMergeStatus             = state => (id, lang) => state.mergedStatus[buildKey(id, lang)];
 
 export const selectors = {
   getZipIndexById,

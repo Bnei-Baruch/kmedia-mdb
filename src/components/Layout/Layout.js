@@ -231,7 +231,9 @@ class Layout extends Component {
         </div>
         <div
           className={clsx('layout__sidebar', { 'is-active': sidebarActive })}
-          ref={el => { this.sidebarElement = el; }}
+          ref={el => {
+            this.sidebarElement = el;
+          }}
         >
           <Menu inverted size="huge" color="blue">
             <div ref={menuButtonElement2}>

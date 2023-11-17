@@ -265,7 +265,7 @@ export const SearchResultSource = ({ id, title, highlight, clickData }) => {
   const to            = canonicalLink({ id, content_type: 'SOURCE' }, mediaLanguage);
 
   const props = {
-    id: id,
+    id,
     title: titleFromHighlight(highlight, title),
     link: to,
     logo: iconByContentType('sources', t, to),
@@ -301,7 +301,7 @@ export const SearchResultLandingPage = ({ landingPage, filterValues, clickData }
   return <SearchResultOneItem {...props} />;
 };
 
-export const SearchResultOneItem = (props) => {
+export const SearchResultOneItem = props => {
   const {
     id,
     title,
@@ -476,9 +476,9 @@ const getLowestLevelSeries = (series, rootId) => {
 const renderSerie = (s, click, link, t) =>
   (
     <Button basic size="tiny" className="link_to_cu" key={s.id}
-            as={Link} to={link}
-            onClick={() => click(link)}
-            style={{ minWidth: '290px', marginBottom: '0.5em', display: 'flex', justifyContent: 'space-between' }}>
+      as={Link} to={link}
+      onClick={() => click(link)}
+      style={{ minWidth: '290px', marginBottom: '0.5em', display: 'flex', justifyContent: 'space-between' }}>
       {s.name}
       &nbsp;
       <Link key={s.id} to={link} onClick={() => click(link)}>
@@ -518,7 +518,7 @@ export const SearchResultSeries = ({ id, type, mdbUid, clickData }) => {
   collections.unshift(s.collections.find(c => c.id === mdbUid));
 
   const wipError      = WipErr({ wip: wipL || wipS || collections.some(c => !c), err: null, t });
-// If filter used for specific language, make sure the link will redirect to that language.
+  // If filter used for specific language, make sure the link will redirect to that language.
   const mediaLanguage = getMediaLanguage(filters);
 
   return (

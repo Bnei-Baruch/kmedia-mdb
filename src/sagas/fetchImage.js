@@ -27,6 +27,7 @@ function* bufferFetch({ payload }) {
       yield fetch(p);
     }
   }
+
   buffer.run = false;
 }
 
@@ -42,6 +43,7 @@ function* fetch(payload) {
       img = arr[i];
       break;
     }
+
     try {
       img = yield call(tryFetch, arr[i]);
       if (img) break;
@@ -49,11 +51,13 @@ function* fetch(payload) {
       console.log(src, e);
     }
   }
+
   if (img) {
     yield put(actions.fetchSuccess({ src, img }));
   } else {
     yield put(actions.fetchFailure({ src, err: 'cant load image' }));
   }
+
   buffer.wip = false;
 }
 

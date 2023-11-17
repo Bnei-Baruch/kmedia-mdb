@@ -71,7 +71,7 @@ const ExcerptContainer = () => {
     setFinalDate(nowPlus5min());
   }, [selectedLanguage]);
 
-  const handleLanguageChanged = (selectedLanguage) => setSelectedLanguage(selectedLanguage);
+  const handleLanguageChanged = selectedLanguage => setSelectedLanguage(selectedLanguage);
 
   return (
     <div style={{ padding: '20px', textAlign: 'justify' }}>

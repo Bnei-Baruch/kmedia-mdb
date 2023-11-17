@@ -56,7 +56,7 @@ const PlaylistHeader = () => {
     }
     if (source_id && getPath) {
       const path         = getPath(source_id);
-      const nameFromPath = path[0]?.name ? path[0].name + ' - ' : '';
+      const nameFromPath = path[0]?.name ? `${path[0].name  } - ` : '';
       return `${t('player.header.series-by-topic')} ${nameFromPath}${name}`;
     }
 

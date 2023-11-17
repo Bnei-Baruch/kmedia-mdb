@@ -134,10 +134,10 @@ function* myPlaylistBuild(action) {
     yield fetchMyReactions() : yield fetchMyPlaylist(pId);
 
   const content_units = yield select(state => data?.map(x => ({
-      ...mdb.getDenormContentUnit(state.mdb, x.content_unit_uid),
-      name: x.name,
-      properties: x.properties
-    })
+    ...mdb.getDenormContentUnit(state.mdb, x.content_unit_uid),
+    name: x.name,
+    properties: x.properties
+  })
   ).filter(x => !!x)) || [];
 
   const contentLanguages = yield select(state => settings.getContentLanguages(state.settings));

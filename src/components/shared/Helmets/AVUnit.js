@@ -61,6 +61,8 @@ const AVUnit = ({ id }) => {
   if (!unit || !unit.files) {
     return null;
   }
+
   return <AVUnitMemo unit={unit} />;
 };
+
 export default AVUnit;

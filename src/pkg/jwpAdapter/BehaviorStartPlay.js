@@ -46,12 +46,14 @@ const BehaviorStartPlay = () => {
     } else if (autostart) {
       play();
     }
+
     if (!autostart) {
       setTimeout(() => {
         pause();
         dispatch(actions.setLoaded(true));
       }, 0);
     }
+
     wasPlayedRef.current = true;
   }, [_isReady, isClip, cuId, duration, historyItem, isSingleMedia, fetched, dispatch]);
 

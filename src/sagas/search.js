@@ -63,7 +63,7 @@ export function* search(action) {
     const filters         = yield select(state => filterSelectors.getFilters(state.filters, 'search'));
     const params          = filtersTransformer.toApiParams(filters);
     const filterKeyValues = Object.entries(params).map(([v, k]) => `${v}:${k}`).join(' ');
-    let filterParams      = filterKeyValues ? ` ${filterKeyValues}` : '';
+    const filterParams      = filterKeyValues ? ` ${filterKeyValues}` : '';
 
     // Clear pagination and filters.
     if (prevQuery !== '' && prevQuery !== query && (pageNo !== 1 || !!filterParams)) {

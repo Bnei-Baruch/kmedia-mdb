@@ -10,17 +10,17 @@ const PlayByTextBtn = ({ handlePlay }) => {
   const uiDir = useSelector(state => settings.getUIDir(state.settings));
 
   return (
-      <Popup
-        content={t('share-text.play-from-text')}
-        dir={uiDir}
-        trigger={
-          <Button
-            circular
-            onClick={handlePlay}
-            icon="play"
-          />
-        }
-      />
+    <Popup
+      content={t('share-text.play-from-text')}
+      dir={uiDir}
+      trigger={
+        <Button
+          circular
+          onClick={handlePlay}
+          icon="play"
+        />
+      }
+    />
   );
 };
 

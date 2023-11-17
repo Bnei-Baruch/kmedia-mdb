@@ -226,6 +226,7 @@ export const libraryPage = async (store, match, show_console = false) => {
     const getSourceById = sourcesSelectors.getSourceById(sourcesState);
     sourceID            = firstLeafId(sourceID, getSourceById);
   }
+
   show_console && console.log('serverRender: libraryPage source was found', sourceID);
   return Promise.all([
     store.sagaMiddleWare.run(assetsSagas.sourceIndex, assetsActions.sourceIndex(sourceID)).done,
@@ -251,6 +252,7 @@ export const libraryPage = async (store, match, show_console = false) => {
         if (data[language].pdf && isTaas(sourceID)) {
           return; // no need to fetch pdf. we don't do that on SSR
         }
+
         const { id } = getLibraryContentFile(data[language], sourceID);
         store.dispatch(assetsActions.doc2html(id));
         store.dispatch(mdbActions.fetchLabels({ content_unit: sourceID, language: uiLang }));

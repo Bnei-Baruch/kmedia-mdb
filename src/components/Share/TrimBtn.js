@@ -41,6 +41,7 @@ const TrimBtn = ({ t }) => {
       params.audio    = lang3.toLowerCase();
       (mediaType === MT_VIDEO) && (params.video = quality.toLowerCase());
     }
+
     dispatch(actions.trim(params));
     chroniclesAppend('download', {
       url: file.src,

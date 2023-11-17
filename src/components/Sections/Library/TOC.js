@@ -268,6 +268,7 @@ class TOC extends Component {
           const { content, title: name } = _item;
           acc.push({ title: name, content, key: `root-${index}-${title}` });
         }
+
         return acc;
       }, []);
     }

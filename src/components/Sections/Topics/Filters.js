@@ -30,7 +30,7 @@ const Filters = ({ namespace, baseParams }) => {
   }, [isReady, baseParams, namespace, dispatch]);
 
   const needFetch = isHydrated && isReady;
-  const selectedSignature = selected.slice().sort((a, b) => a.name.localeCompare(b.name)).reduce((acc, f) => acc + `-${f.name}|${f.values.slice().sort().join('_')}`, '');
+  const selectedSignature = selected.slice().sort((a, b) => a.name.localeCompare(b.name)).reduce((acc, f) => `${acc  }-${f.name}|${f.values.slice().sort().join('_')}`, '');
   useEffect(() => {
     console.log('fetchStats needFetch', needFetch, selected, baseParams, namespace, isHydrated, isReady);
     if (needFetch && prevSelRef.current !== selectedSignature) {

@@ -80,6 +80,7 @@ class BlogContainer extends withPagination {
     if (!blogs.length) {
       blogs.push('laitman-com');
     }
+
     return { blog: blogs };
   }
 

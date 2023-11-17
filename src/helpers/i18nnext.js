@@ -10,43 +10,43 @@ import 'moment/locale/de';
 import 'moment/locale/tr';
 import 'moment/locale/cs';
 
-import {DEFAULT_UI_LANGUAGE} from './consts';
+import { DEFAULT_UI_LANGUAGE } from './consts';
 
 const LOCALES_BACKEND = process.env.REACT_APP_LOCALES_BACKEND;
 
 export const options = {
-    load: 'languageOnly',
-    fallbackLng: DEFAULT_UI_LANGUAGE,
+  load: 'languageOnly',
+  fallbackLng: DEFAULT_UI_LANGUAGE,
 
-    // Have a common namespace used around the full app.
-    ns: ['common'],
-    defaultNS: 'common',
+  // Have a common namespace used around the full app.
+  ns: ['common'],
+  defaultNS: 'common',
 
-    debug: false,
+  debug: false,
 
-    interpolation: {
-        escapeValue: false, // not needed for react!!
-        format: (value, format) => (
-            // Our beloved backend is using UTC so we do it here as well
-            moment.utc(value).format(format)
-        ),
-    },
+  interpolation: {
+    escapeValue: false, // not needed for react!!
+    format: (value, format) => (
+      // Our beloved backend is using UTC so we do it here as well
+      moment.utc(value).format(format)
+    ),
+  },
 };
 
 // instance for client side
 i18n
-    .use(backend)
-    .init({
-        ...options,
-        backend: {
-            loadPath: `${LOCALES_BACKEND}locales/{{lng}}/{{ns}}.json`,
-            crossDomain: true
-        },
+  .use(backend)
+  .init({
+    ...options,
+    backend: {
+      loadPath: `${LOCALES_BACKEND}locales/{{lng}}/{{ns}}.json`,
+      crossDomain: true
+    },
 
-        react: {
-            wait: true, // globally set to wait for loaded translations in withTranslation hoc
-            useSuspense: true,
-        },
-    });
+    react: {
+      wait: true, // globally set to wait for loaded translations in withTranslation hoc
+      useSuspense: true,
+    },
+  });
 
 export default i18n;

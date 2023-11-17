@@ -81,6 +81,7 @@ const PlayerContainer      = () => {
       runTimeout(dispatch);
     }
   };
+
   const hideControls = () => {
     clearTimeout(timeout);
     runTimeout(dispatch);
@@ -92,6 +93,7 @@ const PlayerContainer      = () => {
     if (mode === PLAYER_OVER_MODES.none) {
       dispatch(actions.setOverMode(PLAYER_OVER_MODES.active));
     }
+
     if (mode !== PLAYER_OVER_MODES.active) return;
 
     if (e.target.className.indexOf('icon') !== -1 || e.target.tagName === 'LABEL') {

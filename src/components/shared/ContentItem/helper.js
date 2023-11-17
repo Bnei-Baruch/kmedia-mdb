@@ -24,7 +24,7 @@ export const textPartLink = (properties, cu) => {
 
   const { uid_prefix, ...urlParams } = properties;
 
-  let link = canonicalLink({ ...cu, id: `${uid_prefix || ''}${cu.id}` });
+  const link = canonicalLink({ ...cu, id: `${uid_prefix || ''}${cu.id}` });
   if (!urlParams?.activeTab && UNIT_VIDEOS_TYPE.includes(cu.content_type)) {
     urlParams.activeTab = 'transcription';
   }

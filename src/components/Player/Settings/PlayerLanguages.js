@@ -20,7 +20,7 @@ const PlayerLanguages = () => {
     language = languages[0];
   }
 
-  const handleSelect = (lang) => {
+  const handleSelect = lang => {
     dispatch(playlistActions.setLanguage(lang));
   }
 

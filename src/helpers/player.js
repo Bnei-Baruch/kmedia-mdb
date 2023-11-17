@@ -24,9 +24,7 @@ export const persistPreferredMediaType = value => localStorage.setItem('@@kmedia
 
 const isPlayable = file => MediaHelper.IsMp4(file) || MediaHelper.IsMp3(file);
 
-const findHLS = files => files.find(f => {
-  return f.video_size === VS_HLS && f.hls_languages && f.video_qualities;
-});
+const findHLS = files => files.find(f => f.video_size === VS_HLS && f.hls_languages && f.video_qualities);
 
 const calcAvailableMediaTypes = (unit, language) => {
   if (!unit || !Array.isArray(unit.files)) {
@@ -59,7 +57,7 @@ export const playableItem = (unit, preImageUrl) => {
     preImageUrl = assetUrl(`api/thumbnail/${unit.id}`);
   }
 
-  let resp = {
+  const resp = {
     id: unit.id,
     name: unit.name,
     properties: unit.properties,
@@ -178,7 +176,7 @@ export const getMediaTypeFromQuery = location => {
   return [MT_VIDEO, MT_AUDIO].includes(mt) ? mt : restorePreferredMediaType();
 };
 
-export const getLanguageFromQuery = (location) => {
+export const getLanguageFromQuery = location => {
   const query    = getQuery(location);
   return query.shareLang || query.language || '';
 };

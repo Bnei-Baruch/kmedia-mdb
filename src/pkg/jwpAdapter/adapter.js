@@ -6,9 +6,7 @@ export const LOCALSTORAGE_MUTE    = 'jwplayer.mute';
 export const LOCALSTORAGE_QUALITY = 'jwplayer.qualityLabel';
 export const getQualitiesFromLS   = () => {
   const lsKey = localStorage.getItem(LOCALSTORAGE_QUALITY);
-  const pair  = Object.entries(VS_NAMES).find(([k, v]) => {
-    return lsKey === v;
-  });
+  const pair  = Object.entries(VS_NAMES).find(([k, v]) => lsKey === v);
   return pair?.[0];
 };
 

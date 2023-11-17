@@ -36,7 +36,7 @@ const ItemTemplate    = ({ children, namespace, t, withSeeAll = false }) => {
   let icon        = null;
   if ([MY_NAMESPACE_PLAYLISTS, MY_NAMESPACE_SUBSCRIPTIONS].includes(namespace)) {
     icon        = iconByNamespace[namespace];
-    marginClass = uiDir === "rtl" ? ' margin-right-8' : ' margin-left-8';
+    marginClass = uiDir === 'rtl' ? ' margin-right-8' : ' margin-left-8';
   } else {
     icon = <Icon name={iconByNamespace[namespace]} />;
   }

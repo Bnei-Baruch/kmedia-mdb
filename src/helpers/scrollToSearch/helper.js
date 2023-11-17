@@ -255,6 +255,7 @@ const findOffsetOfDOMNode = (node, offset) => {
       .length;
     return { offset, wordOffset };
   }
+
   return findOffsetOfDOMNode(parent, offset);
 };
 

@@ -33,6 +33,7 @@ export const selectLikutFile = (files, language, idx = 0) => {
     file = files.find(x => x.type === MT_TEXT);
     return file;
   }
+
   return selectLikutFile(files, DEFAULT_LANGUAGES[idx], idx++);
 };
 
@@ -74,7 +75,7 @@ const Likut                  = () => {
     setIsReadable(!isReadable);
   };
 
-  const handleLanguageChanged = (language) => setSelectedLanguage(language);
+  const handleLanguageChanged = language => setSelectedLanguage(language);
 
   const dispatch = useDispatch();
 

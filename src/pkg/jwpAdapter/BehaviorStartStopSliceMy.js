@@ -37,6 +37,7 @@ const BehaviorStartStopSliceMy = () => {
       if (link) navigate(link);
       else pause();
     };
+
     seek(start);
     jwp.on('time', checkStopTime);
     return () => jwp.off('time', checkStopTime);

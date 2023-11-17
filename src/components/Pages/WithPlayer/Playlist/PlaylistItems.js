@@ -25,7 +25,7 @@ const PlaylistItems               = () => {
   const handleLoadMore = dir => dispatch(actions.fetchShowData(dir));
   const handleScroll   = e => {
     if (timer !== null) clearTimeout(timer);
-    timer = setTimeout(function () {
+    timer = setTimeout(() => {
       const h   = isMobileDevice ? PLAYLIST_ITEM_HEIGHT_MOBILE : PLAYLIST_ITEM_HEIGHT;
       const idx = from + Math.max(0, Math.round(e.target.scrollTop / h));
       dispatch(actions.showImages(idx));

@@ -17,38 +17,37 @@ export const ADD_PLAYLIST_ITEM_MODES = {
 const reducer = (state, action) => ({ ...state, ...action });
 
 const SavePlaylistItemBtn = ({ label }) => {
-        const { t } = useTranslation();
+  const { t } = useTranslation();
 
-        const user = useSelector(state => auth.getUser(state.auth));
+  const user = useSelector(state => auth.getUser(state.auth));
 
-        const [state, dispatchReact] = useReducer(reducer, { mode: ADD_PLAYLIST_ITEM_MODES.none });
+  const [state, dispatchReact] = useReducer(reducer, { mode: ADD_PLAYLIST_ITEM_MODES.none });
 
-        const handleOpen = () => dispatchReact({ mode: ADD_PLAYLIST_ITEM_MODES.playlist });
+  const handleOpen = () => dispatchReact({ mode: ADD_PLAYLIST_ITEM_MODES.playlist });
 
-        const handleOpenAs = mode => dispatchReact({ mode });
+  const handleOpenAs = mode => dispatchReact({ mode });
 
-        let modal = '';
-        if (!user)
-          modal = <NeedToLoginModal />;
+  let modal = '';
+  if (!user)
+    modal = <NeedToLoginModal />;
 
-        if (state?.mode === ADD_PLAYLIST_ITEM_MODES.playlist)
-          modal = <SaveAsPlaylistItem setModalMode={handleOpenAs} label={label} />;
+  if (state?.mode === ADD_PLAYLIST_ITEM_MODES.playlist)
+    modal = <SaveAsPlaylistItem setModalMode={handleOpenAs} label={label} />;
 
-        if (state?.mode === ADD_PLAYLIST_ITEM_MODES.label)
-          modal = <SaveAsLabel label={label} setModalMode={handleOpenAs} />;
+  if (state?.mode === ADD_PLAYLIST_ITEM_MODES.label)
+    modal = <SaveAsLabel label={label} setModalMode={handleOpenAs} />;
 
-        return (
-          <>
-            {modal}
-            <Button
-              primary
-              content={t('buttons.save')}
-              onClick={handleOpen}
-              className="uppercase"
-            />
-          </>
-        );
-      }
-;
+  return (
+    <>
+      {modal}
+      <Button
+        primary
+        content={t('buttons.save')}
+        onClick={handleOpen}
+        className="uppercase"
+      />
+    </>
+  );
+};
 
 export default SavePlaylistItemBtn;

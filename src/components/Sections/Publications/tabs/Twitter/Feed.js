@@ -163,7 +163,7 @@ const TwitterFeed = ({ snippetVersion = false, withDivider = true, twitter = nul
                 : null
             }
           </Feed.Summary>
-          <Feed.Extra text style={{textAlign: position, direction: isRtl ? 'rtl' : 'ltr'}}>
+          <Feed.Extra text style={{ textAlign: position, direction: isRtl ? 'rtl' : 'ltr' }}>
             <div dangerouslySetInnerHTML={{ __html: prepare(raw, highlight) }} />
             {
               snippetVersion

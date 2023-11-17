@@ -51,6 +51,7 @@ const onSSRPrepare   = state => {
     state.err = state.err.toString();
   }
 };
+
 export const reducer = handleActions({
   [ssr.PREPARE]: onSSRPrepare,
 

@@ -232,7 +232,7 @@ async function serverRenderAuthorised(req, res, next, htmlData, uiLang, bot) {
               // console.log(require('util').inspect(store.getState(), { showHidden: true, depth: 2 }));
               const storeData    = store.getState();
               const storeDataStr = serialize(storeData);
-              show_console && console.log('serverRender: redux data before return', storeData);
+              show_console && console.log('serverRender: redux data before return', storeData.auth);
               const rootDiv = `
                 <div id="root" class="${direction}" style="direction: ${direction}">${markup}</div>
                 <script>

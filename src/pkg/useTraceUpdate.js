@@ -7,11 +7,13 @@ const useTraceUpdate = (props, prefix) => {
       if (prev.current[k] !== v) {
         ps[k] = [prev.current[k], v];
       }
+
       return ps;
     }, {});
     if (Object.keys(changedProps).length > 0) {
       console.log(`Changed props - ${prefix}:`, changedProps);
     }
+
     prev.current = props;
   });
 };
