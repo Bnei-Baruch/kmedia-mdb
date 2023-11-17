@@ -1,5 +1,4 @@
-import { all, call, put, select, takeLatest } from 'redux-saga/effects';
-import { takeEvery } from 'redux-saga';
+import { all, call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
 import { AB_RECOMMEND_NEW, AB_RECOMMEND_RANDOM } from '../helpers/ab-testing';
 
 import Api from '../helpers/Api';

@@ -91,10 +91,11 @@ function serverRenderSSOAuth(req, res, next, htmlData) {
     </div>
     <script>window.__isAuthApp = true;</script>
     `;
-  const html    = htmlData.replace(/<div id="root"><\/div>/, rootDiv);
+  // TODO GHSILIN const html    = htmlData.replace(/<div id="root"><\/div>/, rootDiv);
 
   show_console && console.log('serverRender: AuthApp server render');
-  res.send(html);
+  // TODO GHSILIN res.send(html);
+  res.send(htmlData);
 }
 
 async function serverRenderAuthorised(req, res, next, htmlData, uiLang, bot) {
@@ -207,7 +208,7 @@ async function serverRenderAuthorised(req, res, next, htmlData, uiLang, bot) {
 
             const { helmet } = helmetContext;
             hrend            = process.hrtime(hrstart);
-            show_console && console.log('serverRender:  Helmet.renderStatic %ds %dms', hrend[0], hrend[1] / 1000000);
+            show_console && console.log('serverRender: Helmet.renderStatic %ds %dms', hrend[0], hrend[1] / 1000000);
 
             if (context.url) {
               // Somewhere a `<Redirect>` was rendered.
@@ -231,7 +232,7 @@ async function serverRenderAuthorised(req, res, next, htmlData, uiLang, bot) {
               // console.log(require('util').inspect(store.getState(), { showHidden: true, depth: 2 }));
               const storeData    = store.getState();
               const storeDataStr = serialize(storeData);
-              show_console && console.log('serverRender: redux data before return', storeData.auth);
+              show_console && console.log('serverRender: redux data before return', storeData);
               const rootDiv = `
                 <div id="root" class="${direction}" style="direction: ${direction}">${markup}</div>
                 <script>
