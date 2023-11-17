@@ -23,6 +23,7 @@ import { ClientChroniclesContext, DeviceInfoContext } from '../../../../../helpe
 import DerivedUnits from './DerivedUnits';
 import Recommended from '../Recommended/Main/Recommended';
 import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import { selectors } from '../../../../../redux/modules/playlist';
 import { selectors as mdb } from '../../../../../redux/modules/mdb';
 import PlaylistItems from '../../Playlist/PlaylistItems';
@@ -44,8 +45,9 @@ const Materials = ({ t }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const chronicles         = useContext(ClientChroniclesContext);
 
+  const { id: paramsId }              = useParams();
   const { cuId, isSingleMedia, isMy } = useSelector(state => selectors.getInfo(state.playlist));
-  const unit                          = useSelector(state => mdb.getDenormContentUnit(state.mdb, cuId));
+  const unit                          = useSelector(state => mdb.getDenormContentUnit(state.mdb, cuId || paramsId));
 
   if (!unit) {
     return null;

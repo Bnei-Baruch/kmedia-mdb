@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
 import { Header } from 'semantic-ui-react';
 import clsx from 'clsx';
 import { selectors as sources } from '../../../../redux/modules/sources';
@@ -12,18 +13,24 @@ import PlaylistPlayIcon from '../../../../images/icons/PlaylistPlay';
 import { selectors as mdb } from '../../../../redux/modules/mdb';
 import { selectors } from '../../../../redux/modules/playlist';
 import LessonDatePickerContainer from './LessonDatePickerContainer';
+import { canonicalCollection } from '../../../../helpers/utils';
 
 const PlaylistHeader = () => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const { t }              = useTranslation();
 
   const { cId, cuId, name } = useSelector(state => selectors.getInfo(state.playlist));
-  const unit                = useSelector(state => mdb.getDenormContentUnit(state.mdb, cuId));
-  const collection          = useSelector(state => mdb.getDenormCollection(state.mdb, cId));
+  const { id: paramsId }    = useParams();
+  const unit                = useSelector(state => mdb.getDenormContentUnit(state.mdb, cuId || paramsId));
+  const c                   = canonicalCollection(unit);
+  const collection          = useSelector(state => mdb.getDenormCollection(state.mdb, cId || (c && c.id) || paramsId));
   const getPath             = useSelector(state => sources.getPathByID(state.sources));
 
-  const { content_type, number, film_date, start_date, end_date, tag_id, source_id, likutim_id } = collection || false;
+  if (!unit) {
+    return null;
+  }
 
+  const { content_type, number, film_date, start_date, end_date, tag_id, source_id, likutim_id } = collection || false;
   const isLesson = COLLECTION_DAILY_LESSONS.includes(content_type);
 
   const getTitle = () => {

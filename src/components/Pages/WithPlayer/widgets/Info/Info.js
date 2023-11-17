@@ -2,6 +2,7 @@ import React from 'react';
 import { withTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Button, Header, List } from 'semantic-ui-react';
+import { useParams } from 'react-router-dom';
 
 import {
   CT_CONGRESS,
@@ -19,6 +20,7 @@ import UnitLogo from '../../../../shared/Logo/UnitLogo';
 import { selectors as mdb } from '../../../../../redux/modules/mdb';
 import { selectors } from '../../../../../redux/modules/playlist';
 import TagsByUnit from '../../../../shared/TagsByUnit';
+import { canonicalCollection } from '../../../../../helpers/utils';
 
 export const makeTagLinks = (tags = [], getTagById) =>
   Array.from(intersperse(
@@ -69,12 +71,18 @@ const getEpisodeInfo = (ct, cIDs, currentCollection, filmDate, t) => {
 
 const Info = ({ t }) => {
   const { cId, cuId, isSingleMedia } = useSelector(state => selectors.getInfo(state.playlist));
-  const currentCollection            = useSelector(state => mdb.getDenormCollection(state.mdb, cId));
-  const unit                         = useSelector(state => mdb.getDenormContentUnit(state.mdb, cuId));
+  const { id: paramsId }             = useParams();
+  const unit                         = useSelector(state => mdb.getDenormContentUnit(state.mdb, cuId || paramsId));
+  const c                            = canonicalCollection(unit);
+  const currentCollection            = useSelector(state => mdb.getDenormCollection(state.mdb, cId || (c && c.id)));
 
   const { id, name, film_date: filmDate, collections = [], content_type: ct, cIDs } = unit || {};
 
   const views = useSelector(state => recommended.getViews(id, state.recommended));
+
+  if (!unit) {
+    return null;
+  }
 
   const { noSSeries, sSeries } = makeCollectionsLinks(collections, t, isSingleMedia ? null : currentCollection);
   const isMultiLessons         = Object.values(collections).some(col => col.content_type === CT_LESSONS_SERIES || col.content_type === CT_CONGRESS);

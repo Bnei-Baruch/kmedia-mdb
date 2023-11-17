@@ -12,13 +12,28 @@ import { selectors as assetsSelectors, doc2html } from '../../../../../../redux/
 import { INSERT_TYPE_SUMMARY } from '../../../../../../helpers/consts';
 import MenuLanguageSelector from '../../../../../../components/Language/Selector/MenuLanguageSelector';
 
-const Summary = ({ unit, t }) => {
+export const getSummaryLanguages = unit =>
+  (unit && unit.files &&
+    unit.files.filter(f =>
+      MediaHelper.IsText(f) && !MediaHelper.IsPDF(f) && f.insert_type === INSERT_TYPE_SUMMARY)
+      .map(f => f.language)) || [];
 
+export const getFile = (unit, lang) => {
+  if (!unit || !Array.isArray(unit.files)) {
+    return null;
+  }
+
+  return unit.files?.filter(f => f.language === lang)
+    .filter(f => MediaHelper.IsText(f) && !MediaHelper.IsPDF(f))
+    .find(f => f.insert_type === INSERT_TYPE_SUMMARY);
+};
+
+const Summary = ({ unit, t }) => {
   const contentLanguages = useSelector(state => settings.getContentLanguages(state.settings));
   const doc2htmlById     = useSelector(state => assetsSelectors.getDoc2htmlById(state.assets));
   const dispatch         = useDispatch();
 
-  const summaryLanguages = (unit && unit.files && unit.files.filter(f => MediaHelper.IsText(f) && !MediaHelper.IsPDF(f) && f.insert_type === INSERT_TYPE_SUMMARY).map(f => f.language)) || [];
+  const summaryLanguages = getSummaryLanguages(unit);
   const defaultLanguage = selectSuitableLanguage(contentLanguages, summaryLanguages, unit.original_language);
   const [selectedLanguage, setSelectedLanguage] = useState(defaultLanguage);
 
@@ -26,21 +41,11 @@ const Summary = ({ unit, t }) => {
     ? (<div dangerouslySetInnerHTML={{ __html: unit.description }} />)
     : t('materials.summary.no-summary');
 
-  const getFile = lang => {
-    if (!unit || !Array.isArray(unit.files)) {
-      return null;
-    }
-
-    return unit.files?.filter(f => f.language === lang)
-      .filter(f => MediaHelper.IsText(f) && !MediaHelper.IsPDF(f))
-      .find(f => f.insert_type === INSERT_TYPE_SUMMARY);
-  };
-
-  const file = getFile(selectedLanguage);
+  const file = getFile(unit, selectedLanguage);
   const [selectedFileId, setSelectedFileId] = useState((file && file.id) || null);
 
   const handleLanguageChanged = selectedLanguage => {
-    const file = getFile(selectedLanguage);
+    const file = getFile(unit, selectedLanguage);
     setSelectedFileId((file && file.id) || null);
     setSelectedLanguage(selectedLanguage);
   }
@@ -49,7 +54,7 @@ const Summary = ({ unit, t }) => {
     if (file) {
       dispatch(doc2html(selectedFileId));
     }
-  }, [dispatch, selectedFileId]);
+  }, [file, dispatch, selectedFileId]);
 
   const { data } = doc2htmlById[file?.id] || false;
   return (

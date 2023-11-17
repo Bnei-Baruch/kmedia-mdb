@@ -7,6 +7,7 @@ import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import { Header, Button, Container } from 'semantic-ui-react';
 import { selectors as mdb } from '../../../../redux/modules/mdb';
 import { COLLECTION_DAILY_LESSONS } from '../../../../helpers/consts';
+import WipErr from '../../../shared/WipErr/WipErr';
 
 const PLAYLIST_ITEM_HEIGHT        = 104;
 const PLAYLIST_ITEM_HEIGHT_MOBILE = 128;
@@ -15,13 +16,15 @@ const PlaylistItems               = () => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const { t }              = useTranslation();
 
-  const { cId, cuId }          = useSelector(state => selectors.getInfo(state.playlist));
+  const { cId, cuId, isReady }          = useSelector(state => selectors.getInfo(state.playlist));
   const { from, to }           = useSelector(state => selectors.getFetched(state.playlist));
   const items                  = useSelector(state => selectors.getPlaylist(state.playlist));
   const { name, content_type } = useSelector(state => mdb.getDenormCollection(state.mdb, cId)) || false;
   const title                  = COLLECTION_DAILY_LESSONS.includes(content_type) ? t('constants.content-types.DAILY_LESSON') : name;
-
   const dispatch       = useDispatch();
+
+  if (!isReady) return WipErr({ wip: !isReady, t });
+
   const handleLoadMore = dir => dispatch(actions.fetchShowData(dir));
   const handleScroll   = e => {
     if (timer !== null) clearTimeout(timer);
