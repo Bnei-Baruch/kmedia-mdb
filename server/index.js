@@ -18,11 +18,11 @@ require('@babel/register')({
     '@babel/plugin-syntax-dynamic-import',
     'dynamic-import-node',
     'jaybe-react-loadable/babel',
-    '@babel/plugin-proposal-class-properties',
-    '@babel/plugin-proposal-export-namespace-from',
+    '@babel/plugin-transform-optional-chaining',
+    '@babel/plugin-transform-class-properties',
+    '@babel/plugin-transform-nullish-coalescing-operator',
+    '@babel/plugin-transform-export-namespace-from',
     '@babel/plugin-proposal-throw-expressions',
-    '@babel/plugin-proposal-optional-chaining',
-    '@babel/plugin-proposal-nullish-coalescing-operator',
   ],
 });
 
