@@ -185,10 +185,11 @@ const Transcription = ({ unit, t, type, activeTab }) => {
 
   const { theme = 'light', fontType, fontSize = 0 } = viewSettings || {};
 
-  const handleLanguageChanged = (newLanguage) => {
+  const handleLanguageChanged = newLanguage => {
     if (newLanguage === finalLanguage) {
       return;
     }
+
     setSelectedLanguage(newLanguage);
   };
 

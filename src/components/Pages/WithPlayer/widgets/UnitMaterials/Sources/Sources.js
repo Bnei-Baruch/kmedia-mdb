@@ -225,7 +225,7 @@ const Sources = ({ unit, t }) => {
 
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
-  const handleLanguageChanged = (lang) => setSelectedSourceLanguage(lang);
+  const handleLanguageChanged = lang => setSelectedSourceLanguage(lang);
   const handleSourceChanged   = (e, data) => setSelectedUnitId(data.value);
 
   if (sourcesDropDownOptions.length === 0) {
@@ -237,7 +237,7 @@ const Sources = ({ unit, t }) => {
   const downloadProps = getDownloadProps(pdf, file);
 
   const unitData = indexById[selectedUnitId] && indexById[selectedUnitId].data;
-  const menuOptionText = (language) => getLanguageName(language) + (unitData && unitData[language] && unitData[language].mp3 ? ' \uD83D\uDD0A' : '')
+  const menuOptionText = language => getLanguageName(language) + (unitData && unitData[language] && unitData[language].mp3 ? ' \uD83D\uDD0A' : '')
 
   return (
     <div

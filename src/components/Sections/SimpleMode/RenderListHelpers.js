@@ -112,6 +112,7 @@ const prepareHlsFiles = ({ files = [], content_type }) => {
         acc.push(f);
       });
     }
+
     return acc;
   }, []);
   return resp;
@@ -131,31 +132,29 @@ const unitDerivedFiles = (unit, type, keyFilter, mimeFilter) => {
 
 // REFACTOR THIS TO COMMON LIBRARY
 // SHOULD CONFIDER ORIGINAL LANGUAGE TOO!
-const bestFileByContentLanguages = (files, contentLanguages, originalLanguage) => {
-  return files
-    .filter(file => contentLanguages.includes(file.language))
-    .sort((a, b) => {
-      const media = sortMediaFiles(a, b);
-      if (media !== 0) {
-        return media;
+const bestFileByContentLanguages = (files, contentLanguages, originalLanguage) => files
+  .filter(file => contentLanguages.includes(file.language))
+  .sort((a, b) => {
+    const media = sortMediaFiles(a, b);
+    if (media !== 0) {
+      return media;
+    }
+
+    const lang = contentLanguages.indexOf(a.language) - contentLanguages.indexOf(b.language)
+    if (lang !== 0) {
+      if (a.language === originalLanguage) {
+        return -1;
       }
 
-      const lang = contentLanguages.indexOf(a.language) - contentLanguages.indexOf(b.language)
-      if (lang !== 0) {
-        if (a.language === originalLanguage) {
-          return -1;
-        }
-
-        if (b.language === originalLanguage) {
-          return 1;
-        }
-
-        return lang;
+      if (b.language === originalLanguage) {
+        return 1;
       }
 
-      return 0;
-    }).filter((file, index, files) => index === 0 || sortMediaFiles(files[index-1], files[index]) !== 0);
-}
+      return lang;
+    }
+
+    return 0;
+  }).filter((file, index, files) => index === 0 || sortMediaFiles(files[index-1], files[index]) !== 0)
 
 const renderUnits = (units, contentLanguages, t, helpChooseLang, chroniclesAppend) => (
   units.filter(unit => unit).map((unit, index, unitsArray) => {

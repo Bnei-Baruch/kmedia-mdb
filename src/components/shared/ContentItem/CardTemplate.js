@@ -31,6 +31,7 @@ const CardTemplate = ({ unit, withCCUInfo, link, ccu, description, children, pla
     if (!title) {
       return '';
     }
+
     return title.length < len ? title : `${title.substr(0, title.lastIndexOf(' ', len))}...`;
   }
 

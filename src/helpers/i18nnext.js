@@ -45,6 +45,7 @@ i18n
 
     react: {
       wait: true, // globally set to wait for loaded translations in withTranslation hoc
+      useSuspense: true,
     },
   });
 

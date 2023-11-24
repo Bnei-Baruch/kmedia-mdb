@@ -22,6 +22,7 @@ const VideoList = () => {
           if (x.lID) {
             return <ContentItemContainer id={x.cuID} size="small" lID={x.lID} asList={true} key={i} />;
           }
+
           if (x.cID)
             return <CollectionListTemplate cID={x.cID} size="small" key={i} />;
           return <ContentItemContainer id={x.cuID} size="small" asList={true} key={i} />;

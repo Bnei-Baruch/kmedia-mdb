@@ -181,6 +181,7 @@ export const physicalFile = (file, ext = false) => {
   if (file.is_hls || file.video_size === VS_HLS) {
     return `${CDN_HLS_URL}${file.id}.m3u8`;
   }
+
   let suffix = '';
   if (ext) {
     suffix = `.${filenameExtension(file.name)}`;
@@ -188,6 +189,7 @@ export const physicalFile = (file, ext = false) => {
 
   return `${CDN_URL}${file.id}${suffix}`;
 };
+
 export const downloadLink = (file, ext = false) => {
   if (file.is_hls) {
     const { lang3 } = LANGUAGES[file.language];
@@ -431,6 +433,7 @@ export const partialAssign       = (target, source, what = true) => {
   console.error('Unexpected what for partialAssign:', what);
   return {};
 };
+
 export const cuPartNameByCCUType = ct => {
   const prefix = 'pages.unit.info.';
 

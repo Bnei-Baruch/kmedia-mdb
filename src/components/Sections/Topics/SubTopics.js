@@ -61,13 +61,13 @@ const SubTopics = ({ namespace, rootID }) => {
       {
         children.slice(0, MAX_SHOWED_ITEMS)
           .map(r => <TagSourceItem
-              id={r}
-              namespace={namespace}
-              baseItems={items}
-              filterName={FN_TOPICS_MULTI}
-              deep={0}
-              key={r}
-            />
+            id={r}
+            namespace={namespace}
+            baseItems={items}
+            filterName={FN_TOPICS_MULTI}
+            deep={0}
+            key={r}
+          />
           )
       }
       {

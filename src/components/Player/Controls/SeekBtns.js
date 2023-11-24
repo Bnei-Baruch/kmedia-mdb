@@ -21,6 +21,7 @@ export const SeekBackwardBtn = withTranslation()(({ t }) => {
     handleSeek(-1 * seek);
     ctx.showControls();
   };
+
   return (
     <WebWrapTooltip
       content={t('player.controls.rewind', { seek })}
@@ -41,6 +42,7 @@ export const SeekForwardBtn = withTranslation()(({ t }) => {
     handleSeek(seek);
     ctx.showControls();
   };
+
   return (
     <WebWrapTooltip
       content={t('player.controls.skip', { seek })}

@@ -24,11 +24,9 @@ const applyChecked = (language, checked, selected, isAny) => {
   return newSelected;
 }
 
-const applyAll = () => {
-  return ALL_LANGUAGES;
-}
+const applyAll = () => ALL_LANGUAGES
 
-const MenuLanguageSelector = ({ languages = [], selected = [], onLanguageChange = noop, multiSelect = true, optionText = null, upward = false}) => {
+const MenuLanguageSelector = ({ languages = [], selected = [], onLanguageChange = noop, multiSelect = true, optionText = null, upward = false }) => {
   const uiDir = useSelector(state => settings.getUIDir(state.settings));
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const contentLanguages = useSelector(state => settings.getContentLanguages(state.settings));
@@ -38,22 +36,22 @@ const MenuLanguageSelector = ({ languages = [], selected = [], onLanguageChange 
 
   const validLanguages = languages.filter(lang => contentLanguages.includes(lang));
   const otherLanguages = languages.filter(lang => !contentLanguages.includes(lang));
-  const dividerArray = !isMobileDevice || multiSelect ? [{value: 'divider', className: 'language-selection-divider disabled'}] : [];
+  const dividerArray = !isMobileDevice || multiSelect ? [{ value: 'divider', className: 'language-selection-divider disabled' }] : [];
   const options = getOptions({ languages: validLanguages }).concat(dividerArray).concat(getOptions({ languages: otherLanguages }));
   // Special case when all laguages are selected, e.g., show content with any language.
   const isAny = languages === selected;
 
-  const finalOptions = isAny ? [{text: 'Any', value: 'any'}] : options;
+  const finalOptions = isAny ? [{ text: 'Any', value: 'any' }] : options;
   const value = multiSelect ? (isAny ? ['any'] : selected) : selected;
 
   if (isMobileDevice && !multiSelect) {
     return (
       <select
-          className="language-mobile-select"
-          style={{direction: uiDir}}
-          value={value}
-          onChange={(event) => onChange(event.target.value)}>
-          { options.map(x => <option key={`opt-${x.value}`} value={x.value}>{x.name}</option>) }
+        className="language-mobile-select"
+        style={{ direction: uiDir }}
+        value={value}
+        onChange={event => onChange(event.target.value)}>
+        { options.map(x => <option key={`opt-${x.value}`} value={x.value}>{x.name}</option>) }
       </select>
     );
   }

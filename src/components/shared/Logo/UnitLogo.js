@@ -33,16 +33,16 @@ const makeImaginary = (cuId, cId, width, height) => {
 
 const UnitLogo = props => {
   const {
-          unitId       = null,
-          collectionId = null,
-          sourceId     = null,
-          width        = 120,
-          height,
-          className    = '',
-          fallbackImg  = 'default',
-          showImg      = true,
-          ...rest
-        } = props;
+    unitId       = null,
+    collectionId = null,
+    sourceId     = null,
+    width        = 120,
+    height,
+    className    = '',
+    fallbackImg  = 'default',
+    showImg      = true,
+    ...rest
+  } = props;
 
   const sourcePath = useSelector(state => sources.getPathByID(state.sources)(sourceId));
 

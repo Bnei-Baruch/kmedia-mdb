@@ -68,12 +68,12 @@ export const getLanguageLocale = language => LANGUAGES[language].locale;
 
 export const getLanguageLocaleWORegion = language => LANGUAGES[language].locale.substring(0, 2);
 
-export const getBlogLanguage = (name) => {
+export const getBlogLanguage = name => {
   const blog = BLOGS.find(blog => blog.name === name);
   return blog && blog.language || null;
 }
 
-export const getTwitterLanguage = (username) => {
+export const getTwitterLanguage = username => {
   const twitter = TWITTER_USERNAMES.find(twitter => twitter.username === username);
   return twitter  && twitter.language || null;
 }

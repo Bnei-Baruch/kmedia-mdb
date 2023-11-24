@@ -10,15 +10,15 @@ import { useTranslation } from 'react-i18next';
 
 const FallbackImage = props => {
   const {
-          src,
-          fallbackImage = ['default'],
-          className,
-          width         = 'auto',
-          height        = 'auto',
+    src,
+    fallbackImage = ['default'],
+    className,
+    width         = 'auto',
+    height        = 'auto',
 
-          floated,
-          ...rest
-        } = props;
+    floated,
+    ...rest
+  } = props;
 
   const { src: imageSource, wip, err } = useSelector(state => selectors.getBySrc(state.fetchImage, src));
   const dispatch                       = useDispatch();
@@ -34,6 +34,7 @@ const FallbackImage = props => {
     /* There is no fallbacks and src was not found */
     return null;
   }
+
   const wipErr = WipErr({ wip: (wip || !imageSource), err, t });
   if (wipErr) return wipErr;
 

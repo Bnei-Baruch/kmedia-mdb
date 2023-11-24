@@ -81,6 +81,7 @@ class TwitterContainer extends withPagination {
     if (!usernames.length) {
       usernames.push('laitman');
     }
+
     return { username: usernames };
   }
 

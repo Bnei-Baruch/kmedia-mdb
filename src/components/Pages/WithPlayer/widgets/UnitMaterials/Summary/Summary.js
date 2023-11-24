@@ -26,7 +26,7 @@ const Summary = ({ unit, t }) => {
     ? (<div dangerouslySetInnerHTML={{ __html: unit.description }} />)
     : t('materials.summary.no-summary');
 
-  const getFile = (lang) => {
+  const getFile = lang => {
     if (!unit || !Array.isArray(unit.files)) {
       return null;
     }
@@ -39,7 +39,7 @@ const Summary = ({ unit, t }) => {
   const file = getFile(selectedLanguage);
   const [selectedFileId, setSelectedFileId] = useState((file && file.id) || null);
 
-  const handleLanguageChanged = (selectedLanguage) => {
+  const handleLanguageChanged = selectedLanguage => {
     const file = getFile(selectedLanguage);
     setSelectedFileId((file && file.id) || null);
     setSelectedLanguage(selectedLanguage);

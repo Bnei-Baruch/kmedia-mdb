@@ -20,17 +20,15 @@ const SubsControl = () => {
       <Header size="tiny">{t('player.settings.subtitles')}</Header>
       <Button.Group size="mini" inverted>
         {
-          ['off', ...subtitles.map(x => x.language)].map(l => {
-            return (
-              <Button
-                inverted
-                content={l}
-                onClick={() => handleSetSubtitlesLang(l)}
-                active={l === subsLanguage}
-                key={l}
-              />
-            );
-          })
+          ['off', ...subtitles.map(x => x.language)].map(l => (
+            <Button
+              inverted
+              content={l}
+              onClick={() => handleSetSubtitlesLang(l)}
+              active={l === subsLanguage}
+              key={l}
+            />
+          ))
         }
       </Button.Group>
     </div>

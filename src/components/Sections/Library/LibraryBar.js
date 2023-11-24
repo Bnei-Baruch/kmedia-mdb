@@ -38,7 +38,7 @@ const LibraryBar = (
       <Button compact size="small" icon={isReadable ? 'compress' : 'expand'} onClick={handleIsReadable} />
       {handleTocIsActive &&
         <Button compact size="small" icon="list layout" onClick={handleTocIsActive}
-                className="computer-hidden large-screen-hidden widescreen-hidden" />
+          className="computer-hidden large-screen-hidden widescreen-hidden" />
       }
       <Share position={position} />
     </div>

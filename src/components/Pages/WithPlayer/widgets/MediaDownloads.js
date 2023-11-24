@@ -74,7 +74,7 @@ class MediaDownloads extends Component {
       if (state.uiLang !== uiLang
         || state.contentLanguages !== contentLanguages) {
         const selectedLanguage = selectSuitableLanguage(contentLanguages, state.availableLanguages, unit.original_language);
-        if (state.selectedLanguage !== selectedLanguage ) {
+        if (state.selectedLanguage !== selectedLanguage) {
           return { ...state, selectedLanguage };
         }
       }
@@ -106,7 +106,7 @@ class MediaDownloads extends Component {
     const hls = files.find(f => f.video_size === 'HLS' && f.hls_languages && f.video_qualities);
     hls?.hls_languages.forEach(l => {
       const byType = new Map();
-      byType.set(MT_AUDIO, [{ ...hls, type: MT_AUDIO, language: l, name: 'audio.mp3', video_size: null}]);
+      byType.set(MT_AUDIO, [{ ...hls, type: MT_AUDIO, language: l, name: 'audio.mp3', video_size: null }]);
       const videos = hls.video_qualities.map(q => ({
         ...hls,
         type: MT_VIDEO,
@@ -199,7 +199,7 @@ class MediaDownloads extends Component {
     );
   }
 
-  handleChangeLanguage = (selectedLanguage) => {
+  handleChangeLanguage = selectedLanguage => {
     this.setState({ selectedLanguage });
   };
 

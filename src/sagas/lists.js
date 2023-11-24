@@ -56,7 +56,7 @@ function* fetchList(action) {
   try {
     const { data } = yield call(Api.units, {
       ...args,
-      ui_language: uiLang, 
+      ui_language: uiLang,
       content_languages: contentLanguages,
     });
 
@@ -101,8 +101,8 @@ function* fetchSectionList(action) {
   try {
     const { data } = yield call(endpointByNamespace[namespace], {
       ...args,
-      ...filterParams, 
-      ui_language: uiLang, 
+      ...filterParams,
+      ui_language: uiLang,
       content_languages: contentLanguages,
     });
     if (!data.items && data.content_units) {

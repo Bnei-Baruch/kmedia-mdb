@@ -23,6 +23,7 @@ const PlayPauseBg = () => {
     const pos = getPosition();
     isPlay ? pause() : isIPhone ? play().seek(pos).play() : play()?.play();
   };
+
   const handleMouseMove = () => ctx.showControls();
 
   return (

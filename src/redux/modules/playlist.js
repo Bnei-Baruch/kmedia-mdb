@@ -87,7 +87,7 @@ const onBuildSuccess = (draft, payload) => {
     language = curItem.languages[0];
   }
 
-  let quality     = draft.info.quality;
+  let { quality } = draft.info;
   const qualities = curItem?.isHLS ? curItem.qualities : curItem?.qualityByLang?.[language] || [];
   if (!quality && qualities) {
     const idx = qualities.findIndex(x => {
@@ -96,6 +96,7 @@ const onBuildSuccess = (draft, payload) => {
     });
     quality   = qualities[idx];
   }
+
   if (!quality) quality = VS_DEFAULT;
   const playlist = items.map(({ id }) => ({ id }));
   const selIndex = playlist.findIndex(x => x.id === (cuId || id));
@@ -129,12 +130,14 @@ const onUpdateMediaType      = (draft, payload) => {
     draft.itemById[draft.info.id].id = `${item?.file.id}_${draft.info.mediaType}`;
   }
 };
+
 const onShowImages           = (draft, idx) => {
   draft.playlist.forEach((x, i) => {
     if (x.showImg) return;
     x.showImg = i > idx - 2 && i < idx + SHOWED_PLAYLIST_ITEMS;
   });
 };
+
 const onFetchShowDataSuccess = (draft, { items, fetched }) => {
   items.forEach(x => {
     draft.itemById[x.id] = x;
@@ -145,6 +148,7 @@ const onFetchShowDataSuccess = (draft, { items, fetched }) => {
       x.fetched = true;
   });
 };
+
 export const reducer         = handleActions({
   [PLAYLIST_BUILD]: onBuild,
   [SINGLE_MEDIA_BUILD]: onBuild,
@@ -175,16 +179,17 @@ const getNextId    = state => {
   const idx = curIdx + 1;
   return state.playlist[idx]?.id;
 };
+
 const getPrevId    = state => {
   const curIdx = state.playlist.findIndex(x => x.id === state.info.id);
   if (1 > curIdx) return false;
   const idx = curIdx - 1;
   return state.playlist[idx]?.id;
 };
+
 const getIndexById = (state, id) => state.playlist.findIndex(x => x.id === id);
-const getItemById  = state => id => {
-  return state.itemById[id] || false;
-};
+const getItemById  = state => id => state.itemById[id] || false;
+
 const getFetched   = state => state.fetched;
 
 export const selectors = {

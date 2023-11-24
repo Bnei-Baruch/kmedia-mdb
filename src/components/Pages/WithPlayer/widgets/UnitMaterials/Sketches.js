@@ -177,7 +177,7 @@ class Sketches extends React.Component {
     }
   };
 
-  handleLanguageChanged = (selectedLanguage) => {
+  handleLanguageChanged = selectedLanguage => {
     this.setState({ selectedLanguage });
     this._imageGallery.slideToIndex(0);
   };

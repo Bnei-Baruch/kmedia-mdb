@@ -14,6 +14,7 @@ const usePlaylistItemLink = id => {
   if (baseLink) {
     return { pathname: baseLink, search: stringify({ ...properties, ap }) };
   }
+
   if (!cu) return false;
   return canonicalLink(cu, null, ccu);
 };

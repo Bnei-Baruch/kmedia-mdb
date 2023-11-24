@@ -12,7 +12,7 @@ const AddNoteBtn = ({ properties, toggleToolbar }) => {
   const uiDir = useSelector(state => settings.getUIDir(state.settings));
 
   const handleOpen       = () => setOpen(true);
-  const handleToggleOpen = (o) => {
+  const handleToggleOpen = o => {
     setOpen(o);
     toggleToolbar(o);
   };

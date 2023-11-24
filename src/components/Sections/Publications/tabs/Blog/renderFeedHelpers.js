@@ -13,7 +13,7 @@ export const renderBlogItemForHomepage = (item, uiLang, t) => {
   const pHtml = `<span class="date">${mts.format('lll')} - </span>${content.replace(/href="\/publications\/blog\//gi, `href="/${uiLang}/publications/blog/`)}<section>...</section></section>`;
 
   return (
-    <div key={url} className="post" style={{direction: dir}}>
+    <div key={url} className="post" style={{ direction: dir }}>
       <Header color="blue">
         <a className="remove-indent" href={internalUrl} dangerouslySetInnerHTML={{ __html: title }} />
       </Header>
@@ -33,7 +33,7 @@ export const renderBlogItemForPublications = (item, uiLang) => {
   const pHtml = content.replace(/href="\/publications\/blog\//gi, `href="/${uiLang}/publications/blog/`);
 
   return (
-    <div key={url} className="post" style={{direction: dir}}>
+    <div key={url} className="post" style={{ direction: dir }}>
       <Header>
         <div dangerouslySetInnerHTML={{ __html: title }} />
         <Header.Subheader>

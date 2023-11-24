@@ -123,9 +123,8 @@ export const reducer = handleActions({
 
 /* Selectors */
 const getList = state => state.ids;
-const getById = (state, id) => {
-  return state.byId[id];
-};
+const getById = (state, id) => state.byId[id];
+
 const getWIP  = state => state.wip;
 const getErr  = state => state.errors;
 

@@ -803,4 +803,4 @@ export const PLAYER_OVER_MODES = {
   none: null,
 };
 
-export const KC_BOT_USER_NAME = "@__||bot||__@"
+export const KC_BOT_USER_NAME = '@__||bot||__@'

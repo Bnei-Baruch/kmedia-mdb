@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
+import { createSelector } from 'reselect';
 import { withTranslation } from 'react-i18next';
 
 import { useInterval } from '../../../helpers/timer';
@@ -22,19 +23,19 @@ import HomePage from './HomePage';
 const FETCH_TIMEOUT = 10 * 60 * 1000; // every 10 min
 
 const TWITTER_BY_LANG = new Map([
-  [LANG_HEBREW,    { username: 'laitman_co_il' }],
+  [LANG_HEBREW, { username: 'laitman_co_il' }],
   [LANG_UKRAINIAN, { username: 'Michael_Laitman' }],
-  [LANG_RUSSIAN,   { username: 'Michael_Laitman' }],
-  [LANG_SPANISH,   { username: 'laitman_es' }],
-  [LANG_ENGLISH,   { username: 'laitman' }],
+  [LANG_RUSSIAN, { username: 'Michael_Laitman' }],
+  [LANG_SPANISH, { username: 'laitman_es' }],
+  [LANG_ENGLISH, { username: 'laitman' }],
 ]);
 
 const BLOG_BY_LANG = new Map([
-  [LANG_HEBREW,    { blog: 'laitman-co-il' }],
+  [LANG_HEBREW, { blog: 'laitman-co-il' }],
   [LANG_UKRAINIAN, { blog: 'laitman-ru' }],
-  [LANG_RUSSIAN,   { blog: 'laitman-ru' }],
-  [LANG_SPANISH,   { blog: 'laitman-es' }],
-  [LANG_ENGLISH,   { blog: 'laitman-com' }],
+  [LANG_RUSSIAN, { blog: 'laitman-ru' }],
+  [LANG_SPANISH, { blog: 'laitman-es' }],
+  [LANG_ENGLISH, { blog: 'laitman-com' }],
 ]);
 
 const chooseSocialMediaByLanguage = (contentLanguages, socialMediaOptions) =>
@@ -47,39 +48,56 @@ const fetchSocialMedia = (type, fetchFn, contentLanguages) => {
   });
 };
 
-const latestLessonIDFn   = state => selectors.getLatestLesson(state.home);
-const latestLessonFn     = latestLessonID => state => latestLessonID ? mdb.getCollectionById(state.mdb, latestLessonID) : null;
-const latestUnitIDsFn    = state => selectors.getLatestUnits(state.home);
-const latestUnitsFn      = latestUnitIDs => state => Array.isArray(latestUnitIDs) ? latestUnitIDs.map(x => mdb.getDenormContentUnit(state.mdb, x)) : [];
-const latestBlogPostsFn  = state => publications.getBlogPosts(state.publications);
-const latestTweetsFn     = state => publications.getTweets(state.publications);
-const contentLanguagesFn = state => settings.getContentLanguages(state.settings);
-const wipFn              = state => selectors.getWip(state.home);
-const errFn              = state => selectors.getError(state.home);
+const getHome = state => state.home;
+const getPublications = state => state.publications;
+const getSettings = state => state.settings;
+const getMDB = state => state.mdb;
+const getLatestLessonID = (_, latestLessonID) => latestLessonID;
+const getLatestUnitIDs = (_, latestUnitIDs) => latestUnitIDs;
+const getLatestCoIDs = (_, latestCoIDs) => latestCoIDs;
+
+const latestLessonIDFn = createSelector([getHome], home => selectors.getLatestLesson(home));
+const latestLessonFn = createSelector(getMDB, getLatestLessonID,
+  (m, latestLessonID) => latestLessonID ? mdb.getCollectionById(m, latestLessonID) : null
+);
+const latestUnitIDsFn = createSelector([getHome], home => selectors.getLatestUnits(home));
+const latestUnitsFn = createSelector(getMDB, getLatestUnitIDs,
+  (m, latestUnitIDs) => Array.isArray(latestUnitIDs) ? latestUnitIDs.map(x => mdb.getDenormContentUnit(m, x)) : []
+);
+const latestBlogPostsFn = createSelector([getPublications], pubs => publications.getBlogPosts(pubs));
+const latestTweetsFn = createSelector([getPublications], pubs => publications.getTweets(pubs));
+const contentLanguagesFn = createSelector([getSettings], s => settings.getContentLanguages(s));
+const uiLangFn = createSelector([getSettings], s => settings.getUILang(s));
+const wipFn = createSelector([getHome], home => selectors.getWip(home));
+const errFn = createSelector([getHome], home => selectors.getError(home));
+const latestCoIDsFn = createSelector([getHome], home => selectors.getLatestCos(home));
+const latestCosFn = createSelector(getMDB, getLatestCoIDs,
+  (m, latestCoIDs) => latestCoIDs.map(x => mdb.getDenormCollection(m, x))
+);
 
 const HomePageContainer = ({ t }) => {
-  const dispatch  = useDispatch();
+  const dispatch = useDispatch();
   const fetchData = useCallback(flag => dispatch(actions.fetchData(flag)), [dispatch]);
 
   const latestLessonID = useSelector(latestLessonIDFn);
-  const latestLesson   = useSelector(latestLessonFn(latestLessonID));
+  const latestLesson = useSelector(state => latestLessonFn(state, latestLessonID));
 
   const latestUnitIDs = useSelector(latestUnitIDsFn);
-  const latestUnits   = useSelector(latestUnitsFn(latestUnitIDs));
-  const latestCoIDs   = useSelector(state => selectors.getLatestCos(state.home)) || [];
-  const latestCos     = useSelector(state => latestCoIDs.map(x => mdb.getDenormCollection(state.mdb, x)));
+  const latestUnits = useSelector(state => latestUnitsFn(state, latestUnitIDs));
+  const latestCoIDs = useSelector(latestCoIDsFn) || [];
+  const latestCos = useSelector(state => latestCosFn(state, latestCoIDs));
 
-  const fetchBlogList   = useCallback((type, id, options) => dispatch(publicationsActions.fetchBlogList(type, id, options)), [dispatch]);
+  const fetchBlogList = useCallback((type, id, options) => dispatch(publicationsActions.fetchBlogList(type, id, options)), [dispatch]);
   const latestBlogPosts = useSelector(latestBlogPostsFn);
 
   const fetchTweetsList = useCallback((type, id, options) => dispatch(publicationsActions.fetchTweets(type, id, options)), [dispatch]);
-  const latestTweets    = useSelector(latestTweetsFn);
+  const latestTweets = useSelector(latestTweetsFn);
 
-  const fetchBanners     = useCallback(contentLanguages => dispatch(actions.fetchBanners(contentLanguages)), [dispatch]);
-  const uiLang           = useSelector(state => settings.getUILang(state.settings));
+  const fetchBanners = useCallback(contentLanguages => dispatch(actions.fetchBanners(contentLanguages)), [dispatch]);
+  const uiLang = useSelector(uiLangFn);
   const contentLanguages = useSelector(contentLanguagesFn);
-  const wip              = useSelector(wipFn);
-  const err              = useSelector(errFn);
+  const wip = useSelector(wipFn);
+  const err = useSelector(errFn);
 
   useEffect(() => {
     console.log('re-fetch');

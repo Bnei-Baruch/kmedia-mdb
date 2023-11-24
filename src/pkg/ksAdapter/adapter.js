@@ -100,6 +100,7 @@ const renewToken           = retry => {
     renewRetry(retry, err);
   });
 };
+
 export const kcUpdateToken = () => keycloak
   .updateToken(70)
   .then(ok => {
