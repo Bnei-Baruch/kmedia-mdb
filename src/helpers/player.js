@@ -12,7 +12,7 @@ import {
   MT_VIDEO,
   VS_DEFAULT,
   VS_HLS,
-  MT_SUBTITLES,
+  MT_SUBTITLES
 } from './consts';
 import { getQuery } from './url';
 import MediaHelper from './media';
@@ -58,25 +58,25 @@ export const playableItem = (unit, preImageUrl) => {
   }
 
   const resp = {
-    id: unit.id,
-    name: unit.name,
-    properties: unit.properties,
+    id           : unit.id,
+    name         : unit.name,
+    properties   : unit.properties,
     preImageUrl,
-    mtByLang: {},
+    mtByLang     : {},
     qualityByLang: {}
   };
   if (!unit?.files) return resp;
 
   const subtitles = unit.files.filter(f => f.type === MT_SUBTITLES).map(f => ({
-    src: physicalFile(f),
+    src     : physicalFile(f),
     language: f.language
   })) || [];
   const hls       = findHLS(unit.files);
   if (hls) {
     return {
       ...resp,
-      file: { ...hls, src: physicalFile(hls, true) },
-      isHLS: true,
+      file     : { ...hls, src: physicalFile(hls, true) },
+      isHLS    : true,
       languages: hls.hls_languages,
       qualities: hls.video_qualities,
       subtitles
@@ -107,7 +107,7 @@ export const playableItem = (unit, preImageUrl) => {
     filesByLang,
     qualityByLang,
     files,
-    subtitles,
+    subtitles
   };
 };
 
@@ -170,14 +170,19 @@ export const playlist = collection => {
 
 //query utilities
 export const getMediaTypeFromQuery = location => {
-  const query = getQuery(location || window?.location);
-  const mt    = (query.mediaType || '').toLowerCase();
+  const query   = getQuery(location || window?.location);
+  let mediaType = query?.mediaType || '';
+  if (Array.isArray(mediaType)) {
+    mediaType = mediaType.pop();
+  }
+
+  const mt = mediaType.toLowerCase();
 
   return [MT_VIDEO, MT_AUDIO].includes(mt) ? mt : restorePreferredMediaType();
 };
 
 export const getLanguageFromQuery = location => {
-  const query    = getQuery(location);
+  const query = getQuery(location);
   return query.shareLang || query.language || '';
 };
 

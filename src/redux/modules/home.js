@@ -117,7 +117,7 @@ const onFetchBannersSuccess = (draft, payload) => {
 const onFetchBannersFailure = (draft, payload) => {
   draft.banners.wip  = false;
   draft.banners.data = {};
-  draft.banners.err  = payload;
+  draft.banners.err  = payload.message;
 };
 
 const onSSRPrepare = draft => {

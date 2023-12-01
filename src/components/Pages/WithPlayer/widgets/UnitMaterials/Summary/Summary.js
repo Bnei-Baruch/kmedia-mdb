@@ -8,7 +8,7 @@ import * as shapes from '../../../../../shapes';
 import MediaHelper from '../../../../../../helpers/media';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectors as settings } from '../../../../../../redux/modules/settings';
-import { selectors as assetsSelectors, actions as assetsActions } from '../../../../../../redux/modules/assets';
+import { selectors as assetsSelectors, doc2html } from '../../../../../../redux/modules/assets';
 import { INSERT_TYPE_SUMMARY } from '../../../../../../helpers/consts';
 import MenuLanguageSelector from '../../../../../../components/Language/Selector/MenuLanguageSelector';
 
@@ -47,7 +47,7 @@ const Summary = ({ unit, t }) => {
 
   useEffect(() => {
     if (file) {
-      dispatch(assetsActions.doc2html(selectedFileId));
+      dispatch(doc2html(selectedFileId));
     }
   }, [dispatch, selectedFileId]);
 

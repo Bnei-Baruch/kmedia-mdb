@@ -8,7 +8,7 @@ import clsx from 'clsx';
 import { useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { actions, selectors } from '../../../../../../redux/modules/assets';
+import { doc2html, fetchTimeCode, selectors } from '../../../../../../redux/modules/assets';
 import { selectors as settings } from '../../../../../../redux/modules/settings';
 
 import { CT_ARTICLE, CT_RESEARCH_MATERIAL, MT_TEXT, INSERT_TYPE_SUMMARY } from '../../../../../../helpers/consts';
@@ -98,8 +98,8 @@ const Transcription = ({ unit, t, type, activeTab }) => {
     const { data } = doc2htmlById[selectedFile.id] || {};
     if (!data) {
       // Load from redux.
-      dispatch(actions.doc2html(selectedFile.id));
-      dispatch(actions.fetchTimeCode(unit.id, selectedFile.language));
+      dispatch(doc2html(selectedFile.id));
+      dispatch(fetchTimeCode(unit.id, selectedFile.language));
     }
   }, [selectedFile?.id, unit.id, selectedFile?.language]);
 
