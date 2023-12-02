@@ -24,13 +24,13 @@ import {
   PAGE_NS_LESSONS,
   PAGE_NS_PROGRAMS,
   RABASH_PERSON_UID,
-  UNIT_PROGRAMS_TYPE,
+  UNIT_PROGRAMS_TYPE
 } from '../helpers/consts';
 import MediaHelper from './../helpers/media';
 import { getQuery } from '../helpers/url';
 import { canonicalCollection, isEmpty } from '../helpers/utils';
 import { selectSuitableLanguage } from '../helpers/language';
-import { actions as assetsActions, selectors as assetsSelectors } from './../redux/modules/assets';
+import { doc2html, sourceIndex, selectors as assetsSelectors } from './../redux/modules/assets';
 import { actions as eventsActions } from './../redux/modules/events';
 import { actions as filtersActions } from './../redux/modules/filters';
 import { actions as homeActions } from './../redux/modules/home';
@@ -169,8 +169,8 @@ export const programsPage = (store, match) => {
 };
 
 export const simpleMode = (store, match) => {
-  const query        = getQuery(match.parsedURL);
-  const date         = (query.date && moment(query.date).isValid()) ? moment(query.date, 'YYYY-MM-DD').format('YYYY-MM-DD') : moment().format('YYYY-MM-DD');
+  const query = getQuery(match.parsedURL);
+  const date  = (query.date && moment(query.date).isValid()) ? moment(query.date, 'YYYY-MM-DD').format('YYYY-MM-DD') : moment().format('YYYY-MM-DD');
 
   console.log('routesSSRData, simpleMode', date);
   store.dispatch(simpleModeActions.fetchForDate({ date }));
@@ -189,7 +189,7 @@ export const lessonsCollectionPage = (store, match) => {
 
 export const searchPage = store => (Promise.all([
   store.sagaMiddleWare.run(searchSagas.hydrateUrl).done,
-  store.sagaMiddleWare.run(filtersSagas.hydrateFilters, filtersActions.hydrateFilters('search')).done,
+  store.sagaMiddleWare.run(filtersSagas.hydrateFilters, filtersActions.hydrateFilters('search')).done
 ]).then(() => store.dispatch(searchActions.search())));
 
 function sleep(ms) {
@@ -229,8 +229,8 @@ export const libraryPage = async (store, match, show_console = false) => {
 
   show_console && console.log('serverRender: libraryPage source was found', sourceID);
   return Promise.all([
-    store.sagaMiddleWare.run(assetsSagas.sourceIndex, assetsActions.sourceIndex(sourceID)).done,
-    store.sagaMiddleWare.run(mdbSagas.fetchUnit, mdbActions.fetchUnit(sourceID)).done,
+    store.sagaMiddleWare.run(assetsSagas.sourceIndex, sourceIndex(sourceID)).done,
+    store.sagaMiddleWare.run(mdbSagas.fetchUnit, mdbActions.fetchUnit(sourceID)).done
   ])
     .then(() => {
       const state    = store.getState();
@@ -239,11 +239,11 @@ export const libraryPage = async (store, match, show_console = false) => {
         return;
       }
 
-      let language      = null;
-      const location    = state?.router.location ?? {};
-      const query       = getQuery(location);
+      let language    = null;
+      const location  = state?.router.location ?? {};
+      const query     = getQuery(location);
       const uiLang    = query.language || settingsSelectors.getUILang(state.settings);
-      const languages   = [...Object.keys(data)];
+      const languages = [...Object.keys(data)];
       if (languages.length > 0) {
         language = languages.indexOf(uiLang) === -1 ? languages[0] : uiLang;
       }
@@ -254,7 +254,7 @@ export const libraryPage = async (store, match, show_console = false) => {
         }
 
         const { id } = getLibraryContentFile(data[language], sourceID);
-        store.dispatch(assetsActions.doc2html(id));
+        store.dispatch(doc2html(id));
         store.dispatch(mdbActions.fetchLabels({ content_unit: sourceID, language: uiLang }));
       }
     });
@@ -265,7 +265,7 @@ const TWEETER_USERTNAMES_BY_LANG = new Map([
   [LANG_UKRAINIAN, 'Michael_Laitman'],
   [LANG_RUSSIAN, 'Michael_Laitman'],
   [LANG_SPANISH, 'laitman_es'],
-  [LANG_ENGLISH, 'laitman'],
+  [LANG_ENGLISH, 'laitman']
 ]);
 
 export const likutPage = async (store, match, show_console = false) => {
@@ -276,9 +276,9 @@ export const likutPage = async (store, match, show_console = false) => {
       const contentLanguages = settingsSelectors.getContentLanguages(state.settings);
       const likut            = mdbSelectors.getDenormContentUnit(state.mdb, id);
       const likutimLanguages = ((likut && likut.files) || []).map(f => f.language);
-      const defaultLanguage = selectSuitableLanguage(contentLanguages, likutimLanguages, LANG_HEBREW);
+      const defaultLanguage  = selectSuitableLanguage(contentLanguages, likutimLanguages, LANG_HEBREW);
       const file             = selectLikutFile(likut?.files, defaultLanguage);
-      store.dispatch(assetsActions.doc2html(file?.id));
+      store.dispatch(doc2html(file?.id));
     });
 };
 
@@ -292,10 +292,10 @@ export const tweetsListPage = (store, match) => {
 
   const state = store.getState();
 
-  const pageSize = settingsSelectors.getPageSize(state.settings);
+  const pageSize         = settingsSelectors.getPageSize(state.settings);
   const contentLanguages = settingsSelectors.getContentLanguages(state.settings);
   // Array of usernames.
-  const username = Array.from(new Set(contentLanguages.map(contentLanguage =>
+  const username         = Array.from(new Set(contentLanguages.map(contentLanguage =>
     TWEETER_USERTNAMES_BY_LANG.get(contentLanguage) || TWEETER_USERTNAMES_BY_LANG.get(DEFAULT_CONTENT_LANGUAGE))));
   // dispatch fetchData
   store.dispatch(publicationsActions.fetchTweets('publications-twitter', page, { username, pageSize }));
@@ -306,7 +306,7 @@ export const tweetsListPage = (store, match) => {
 export const topicsPage = (store, match) => {
   const tagID = match.params.id;
   return Promise.all([
-    store.sagaMiddleWare.run(tagsSagas.fetchDashboard, tagsActions.fetchDashboard(tagID)).done,
+    store.sagaMiddleWare.run(tagsSagas.fetchDashboard, tagsActions.fetchDashboard(tagID)).done
     // store.sagaMiddleWare.run(tagsSagas.fetchTags, tagsActions.fetchTags).done
   ]);
 };
@@ -316,7 +316,7 @@ const BLOG_BY_LANG = new Map([
   [LANG_UKRAINIAN, 'laitman-ru'],
   [LANG_RUSSIAN, 'laitman-ru'],
   [LANG_SPANISH, 'laitman-es'],
-  [LANG_ENGLISH, 'laitman-com'],
+  [LANG_ENGLISH, 'laitman-com']
 ]);
 
 export const blogListPage = (store, match) => {
@@ -329,10 +329,10 @@ export const blogListPage = (store, match) => {
 
   const state = store.getState();
 
-  const pageSize = settingsSelectors.getPageSize(state.settings);
+  const pageSize         = settingsSelectors.getPageSize(state.settings);
   const contentLanguages = settingsSelectors.getContentLanguages(state.settings);
   // Array of blogs.
-  const blog = Array.from(new Set(contentLanguages.map(contentLanguage =>
+  const blog             = Array.from(new Set(contentLanguages.map(contentLanguage =>
     BLOG_BY_LANG.get(contentLanguage) || BLOG_BY_LANG.get(DEFAULT_CONTENT_LANGUAGE))));
 
   // dispatch fetchData
@@ -384,7 +384,7 @@ export const articleCUPage = (store, match) => {
 
       if (language) {
         const selected = textFiles.find(x => x.language === language) || textFiles[0];
-        store.dispatch(assetsActions.doc2html(selected.id));
+        store.dispatch(doc2html(selected.id));
       }
 
       const c = canonicalCollection(unit);

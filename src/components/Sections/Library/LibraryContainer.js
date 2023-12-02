@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
-import { bindActionCreators } from 'redux';
+import { bindActionCreators } from '@reduxjs/toolkit';
 import { connect } from 'react-redux';
 import { push as routerPush, replace as routerReplace } from '@lagunovsky/redux-react-router';
 import { withTranslation } from 'react-i18next';
@@ -9,7 +9,7 @@ import { Button, Container, Grid, Header, Input, Ref, Segment } from 'semantic-u
 import Headroom from 'react-headroom';
 
 import { isEmpty } from '../../../helpers/utils';
-import { actions as assetsActions, selectors as assets } from '../../../redux/modules/assets';
+import { sourceIndex, selectors as assets } from '../../../redux/modules/assets';
 import { actions as sourceActions, selectors as sources } from '../../../redux/modules/sources';
 import { selectors as settings } from '../../../redux/modules/settings';
 import { actions as mdbActions, selectors as mdb } from '../../../redux/modules/mdb';
@@ -588,7 +588,7 @@ export default withTranslation()(withRouter(connect(
   }),
   dispatch => bindActionCreators({
     fetchUnit: mdbActions.fetchUnit,
-    fetchIndex: assetsActions.sourceIndex,
+    fetchIndex: sourceIndex,
     sourcesSortBy: sourceActions.sourcesSortBy,
     push: routerPush,
     replace: routerReplace,

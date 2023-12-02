@@ -6,7 +6,7 @@ import { Segment } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 
 import { selectors as settings } from '../../../redux/modules/settings';
-import { actions, selectors } from '../../../redux/modules/assets';
+import { doc2html, selectors } from '../../../redux/modules/assets';
 import { getLanguageName, selectSuitableLanguage } from '../../../helpers/language';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import { physicalFile } from '../../../helpers/utils';
@@ -94,7 +94,7 @@ const Library = ({ data, source, downloadAllowed }) => {
   const fetched = !!doc2htmlById[file.id]?.data;
   useEffect(() => {
     if (file.id && !fetched)
-      dispatch(actions.doc2html(file.id));
+      dispatch(doc2html(file.id));
   }, [file.id, fetched, dispatch]);
 
   if (!data) {

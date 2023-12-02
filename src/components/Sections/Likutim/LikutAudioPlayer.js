@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import AudioPlayer from '../../shared/AudioPlayer';
-import { actions, selectors } from '../../../redux/modules/assets';
+import { mergeKiteiMakor, selectors } from '../../../redux/modules/assets';
 import { assetUrl } from '../../../helpers/Api';
 
 const LikutAudioPlayer = ({ file, id, lang }) => {
@@ -11,7 +11,7 @@ const LikutAudioPlayer = ({ file, id, lang }) => {
 
   useEffect(() => {
     if (!file && !status) {
-      dispatch(actions.mergeKiteiMAkor({ id, lang }));
+      dispatch(mergeKiteiMakor({ id, lang }));
     }
   }, [file, id, lang, status]);
 

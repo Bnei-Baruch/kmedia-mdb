@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
-import { bindActionCreators } from 'redux';
+import { bindActionCreators } from '@reduxjs/toolkit';
 import { connect } from 'react-redux';
 import isEqual from 'react-fast-compare';
 import ImageGallery from 'react-image-gallery';
@@ -9,7 +9,7 @@ import { Button, Container, Segment } from 'semantic-ui-react';
 import { selectSuitableLanguage } from '../../../../../helpers/language';
 import { isLanguageRtl } from '../../../../../helpers/i18n-utils';
 import { isEmpty, strCmp } from '../../../../../helpers/utils';
-import { actions, selectors } from '../../../../../redux/modules/assets';
+import { unzipList, selectors } from '../../../../../redux/modules/assets';
 import { selectors as settings } from '../../../../../redux/modules/settings';
 import * as shapes from '../../../../shapes';
 import WipErr from '../../../../shared/WipErr/WipErr';
@@ -299,7 +299,7 @@ const mapState = state => ({
 });
 
 const mapDispatch = dispatch => bindActionCreators({
-  unzipList: actions.unzipList
+  unzipList
 }, dispatch);
 
 export default connect(mapState, mapDispatch)(withTranslation()(Sketches));

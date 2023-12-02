@@ -1,4 +1,4 @@
-import { createAction } from 'redux-actions';
+import { createAction } from '@reduxjs/toolkit';
 
 const PREPARE = 'SSR/PREPARE';
 const HYDRATE = 'SSR/HYDRATE';

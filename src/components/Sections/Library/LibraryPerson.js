@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import { Container, Grid, Segment } from 'semantic-ui-react';
 import { withTranslation } from 'react-i18next';
 
-import { actions, selectors } from '../../../redux/modules/assets';
+import { fetchPerson, selectors } from '../../../redux/modules/assets';
 import { selectors as settings } from '../../../redux/modules/settings';
 import WipErr from '../../shared/WipErr/WipErr';
 import { cmsUrl, Requests } from '../../../helpers/Api';
@@ -46,7 +46,7 @@ const LibraryPerson = ({ t }) => {
 
   useEffect(
     () => {
-      dispatch(actions.fetchPerson({ sourceId, contentLanguages }));
+      dispatch(fetchPerson({ sourceId, contentLanguages }));
     },
     [sourceId, contentLanguages, dispatch]
   );

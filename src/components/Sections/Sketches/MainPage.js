@@ -9,7 +9,7 @@ import { MT_IMAGE, PAGE_NS_SKETCHES, UNIT_LESSONS_TYPE, CT_VIDEO_PROGRAM_CHAPTER
 import { usePrevious, isEmpty } from '../../../helpers/utils';
 import { selectors as filters } from '../../../redux/modules/filters';
 import { actions, selectors as lists } from '../../../redux/modules/lists';
-import { actions as assetsActions, selectors as assets } from '../../../redux/modules/assets';
+import { unzipList, selectors as assets } from '../../../redux/modules/assets';
 import { selectors as settings } from '../../../redux/modules/settings';
 
 import FilterLabels from '../../FiltersAside/FilterLabels';
@@ -67,7 +67,7 @@ const MainPage = ({ t }) => {
 
   useEffect(() => {
     if (!wipAll && zipIdsForFetch?.length > 0) {
-      dispatch(assetsActions.unzipList(zipIdsForFetch));
+      dispatch(unzipList(zipIdsForFetch));
     }
   }, [dispatch, zipIdsForFetch, wipAll]);
 

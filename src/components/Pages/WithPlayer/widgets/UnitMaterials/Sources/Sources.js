@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import clsx from 'clsx';
 
 import { selectors } from '../../../../../../redux/modules/sources';
-import { actions as assetsActions, selectors as assetsSelectors } from '../../../../../../redux/modules/assets';
+import { sourceIndex, doc2html, selectors as assetsSelectors } from '../../../../../../redux/modules/assets';
 import { isEmpty, physicalFile, tracePath } from '../../../../../../helpers/utils';
 import { selectors as settings } from '../../../../../../redux/modules/settings';
 import { getLanguageName, selectSuitableLanguage } from '../../../../../../helpers/language';
@@ -77,7 +77,7 @@ const Sources = ({ unit, t }) => {
   useEffect(() => {
     (unit.sources || [])
       .filter(s => isEmpty(indexById[s]))
-      .forEach(s => dispatch(assetsActions.sourceIndex(s)));
+      .forEach(s => dispatch(sourceIndex(s)));
   }, [dispatch, indexById, unit.sources]);
 
   const sourcesDropDownOptions = useMemo(() => {
@@ -175,7 +175,7 @@ const Sources = ({ unit, t }) => {
       return;
     }
 
-    dispatch(assetsActions.doc2html(file.id));
+    dispatch(doc2html(file.id));
     setFetched(newFetch);
   }, [dispatch, fetched, file, selectedSourceLanguage, selectedUnitId]);
 

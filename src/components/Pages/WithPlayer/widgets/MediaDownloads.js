@@ -141,7 +141,7 @@ class MediaDownloads extends Component {
     // fill in images fallback into every language
     if (images.length > 0) {
       const fallbackImage = MediaDownloads.fallbackImage(images, contentLanguages, originalLanguage);
-      groups.forEach(byType => {
+      fallbackImage && groups.forEach(byType => {
         if (!byType.has(MT_IMAGE)) {
           byType.set(MT_IMAGE, fallbackImage);
         }
@@ -155,7 +155,7 @@ class MediaDownloads extends Component {
     const imageLanguages = images.map(image => image.language);
     const imageSelectedLanguage = selectSuitableLanguage(contentLanguages, imageLanguages, originalLanguage);
 
-    return [images.find(image => image.language === imageSelectedLanguage)];
+    return [images.find(image => image.language === imageSelectedLanguage) || images.find(image => image.language === originalLanguage)];
   };
 
   static getDerivedFilesByContentType = (units, contentLanguages, originalLanguage) => {
@@ -386,6 +386,8 @@ class MediaDownloads extends Component {
       ];
     } else {
       rows = MEDIA_ORDER.reduce((acc, val) => {
+        console.log('=================> val', val);
+        console.log('=================> byType.get(val)', byType.get(val));
         const baseLabel = t(`media-downloads.${typeOverrides}type-labels.${val}`);
         const files     = (byType.get(val) || []).map(file => {
           let label = baseLabel;

@@ -1,10 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useLocation } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
 
-import { actions, selectors } from '../../../../../../redux/modules/assets';
-import { selectors as settings } from '../../../../../../redux/modules/settings';
 import * as shapes from '../../../../../shapes';
 import Transcription from './Transcription';
 

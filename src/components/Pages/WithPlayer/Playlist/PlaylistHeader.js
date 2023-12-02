@@ -54,6 +54,7 @@ const PlaylistHeader = () => {
     if (likutim_id?.length > 0) {
       return `${t('likutim.item-header')} ${name}`;
     }
+
     if (source_id && getPath) {
       const path         = getPath(source_id);
       const nameFromPath = path[0]?.name ? `${path[0].name  } - ` : '';
