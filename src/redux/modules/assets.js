@@ -86,8 +86,9 @@ const onSSRPrepare = (state, action) => {
 };
 
 const assetsSlice = createSlice({
-  name         : 'assets',
+  name: 'assets',
   initialState,
+
   reducers     : {
     unzip       : (state, action) => onFetchById(state, action),
     unzipSuccess: {

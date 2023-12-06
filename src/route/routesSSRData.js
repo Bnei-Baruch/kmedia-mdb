@@ -30,7 +30,7 @@ import MediaHelper from './../helpers/media';
 import { getQuery } from '../helpers/url';
 import { canonicalCollection, isEmpty } from '../helpers/utils';
 import { selectSuitableLanguage } from '../helpers/language';
-import { doc2html, sourceIndex, selectors as assetsSelectors } from './../redux/modules/assets';
+import { doc2html, sourceIndex, sourceIndexSuccess } from '../redux/modules/assets';
 import { actions as eventsActions } from './../redux/modules/events';
 import { actions as filtersActions } from './../redux/modules/filters';
 import { actions as homeActions } from './../redux/modules/home';
@@ -40,11 +40,10 @@ import { actions as musicActions } from './../redux/modules/music';
 import { actions as prepareActions } from './../redux/modules/preparePage';
 import { actions as publicationsActions } from './../redux/modules/publications';
 import { actions as searchActions } from './../redux/modules/search';
-import { selectors as settingsSelectors } from './../redux/modules/settings';
+import { selectors as settings, selectors as settingsSelectors } from './../redux/modules/settings';
 import { actions as simpleModeActions } from './../redux/modules/simpleMode';
 import { selectors as sourcesSelectors } from './../redux/modules/sources';
 import { actions as tagsActions } from './../redux/modules/tags';
-import * as assetsSagas from './../sagas/assets';
 import * as eventsSagas from './../sagas/events';
 import * as filtersSagas from './../sagas/filters';
 import * as mdbSagas from './../sagas/mdb';
@@ -54,6 +53,8 @@ import * as searchSagas from './../sagas/search';
 import * as tagsSagas from './../sagas/tags';
 import { getLibraryContentFile } from '../components/Sections/Library/Library';
 import { selectLikutFile } from '../components/Sections/Likutim/Likut';
+import Api from '../helpers/Api';
+import { cuFilesToData, getSourceIndexId } from '../sagas/helpers/utils';
 
 export const home = store => {
   store.dispatch(homeActions.fetchData(true));
@@ -205,20 +206,25 @@ function firstLeafId(sourceId, getSourceById) {
   return firstLeafId(children[0], getSourceById);
 }
 
-export const libraryPage = async (store, match, show_console = false) => {
+const ensureIsLoaded = async (state, selector) => {
   // This is a rather ugly, timeout, sleep, loop.
   // We wait for sources to be loaded so we could
   // determine the firstLeafID for redirection.
   // Fix for AR-356
   let timeout = 5000;
-  show_console && console.log('serverRender: libraryPage before fetch sources');
-  while (timeout && !sourcesSelectors.areSourcesLoaded(store.getState().sources)) {
+  while (timeout && !selector(state)) {
     timeout -= 10;
     // eslint-disable-next-line no-await-in-loop
     await sleep(10);
   }
+};
 
-  const sourcesState = store.getState().sources;
+export const libraryPage = async (store, match, show_console = false) => {
+  const state        = store.getState();
+  const sourcesState = state.sources;
+
+  show_console && console.log('serverRender: libraryPage before fetch sources');
+  await ensureIsLoaded(sourcesState, sourcesSelectors.areSourcesLoaded);
 
   show_console && console.log('serverRender: libraryPage sources was fetched', match.params.id, Object.keys(sourcesState.byId).length);
   let sourceID = match.params.id;
@@ -228,21 +234,31 @@ export const libraryPage = async (store, match, show_console = false) => {
   }
 
   show_console && console.log('serverRender: libraryPage source was found', sourceID);
+  const sourceIndexAction  = sourceIndex(sourceID);
+  const id                 = getSourceIndexId(sourceIndexAction);
+  const sourceIndexPromise = new Promise(resolve => {
+    Api.unit({ id })
+      .then(cu => resolve(cuFilesToData(cu.data)));
+  });
+
   return Promise.all([
-    store.sagaMiddleWare.run(assetsSagas.sourceIndex, sourceIndex(sourceID)).done,
+    // we need sourceIndex in then() part, but it's impossible to wait when it will be added to redux
+    sourceIndexPromise,
     store.sagaMiddleWare.run(mdbSagas.fetchUnit, mdbActions.fetchUnit(sourceID)).done
   ])
-    .then(() => {
-      const state    = store.getState();
-      const { data } = assetsSelectors.getSourceIndexById(state.assets)[sourceID];
+    .then(values => {
+      const data = values[0];
       if (!data) {
         return;
       }
 
+      // add it to redux
+      store.dispatch(sourceIndexSuccess(sourceIndexAction.type, { id: sourceIndexAction.payload, data }));
+
       let language    = null;
       const location  = state?.router.location ?? {};
       const query     = getQuery(location);
-      const uiLang    = query.language || settingsSelectors.getUILang(state.settings);
+      const uiLang    = query.language || settings.getUILang(state.settings);
       const languages = [...Object.keys(data)];
       if (languages.length > 0) {
         language = languages.indexOf(uiLang) === -1 ? languages[0] : uiLang;
