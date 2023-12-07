@@ -19,13 +19,14 @@ import {
   mergeKiteiMakorSuccess,
   mergeKiteiMakorFailure
 } from '../redux/modules/assets';
+import { cuFilesToData, getSourceIndexId } from './helpers/utils';
 
 function* unzip(action) {
   const id = action.payload;
 
   try {
     const { data } = yield call(Api.getAsset, `api/unzip/${id}`);
-    const payload = { id, data };
+    const payload  = { id, data };
     yield put(unzipSuccess(action.type, payload));
   } catch (err) {
     const payload = { id, err };
@@ -38,7 +39,7 @@ function* unzipList(action) {
 
   try {
     const { data } = yield call(Api.getUnzipUIDs, { path: 'api/unzip_uids', ids });
-    const payload = { ids, data };
+    const payload  = { ids, data };
     yield put(unzipListSuccess(action.type, payload));
   } catch (err) {
     const payload = { ids, err };
@@ -51,7 +52,7 @@ function* doc2Html(action) {
 
   try {
     const { data } = yield call(Api.getAsset, `api/doc2html/${id}`);
-    const payload = { id, data };
+    const payload  = { id, data };
     yield put(doc2htmlSuccess(action.type, payload));
   } catch (err) {
     const payload = { id, err };
@@ -61,12 +62,7 @@ function* doc2Html(action) {
 
 export function* sourceIndex(action) {
   try {
-    let id = action.payload;
-    if (/^gr-/.test(id)) { // Rabash Group Articles
-      const result = /^gr-(.+)/.exec(id);
-      id           = result[1];
-    }
-
+    const id      = getSourceIndexId(action);
     const cu      = yield call(Api.unit, { id });
     const payload = { id: action.payload, data: cuFilesToData(cu.data) };
     yield put(sourceIndexSuccess(action.type, payload));
@@ -141,18 +137,6 @@ function* watchFetchAsset() {
 
 function* watchFetchPerson() {
   yield takeLatest([types['assets/fetchPerson']], fetchPerson);
-}
-
-function cuFilesToData(cu) {
-  return !cu.files ? {} : cu.files.reduce((acc, f) => {
-    const { language, name } = f;
-    if (!acc[language])
-      acc[language] = {};
-
-    const ext          = name.split('.').slice(-1);
-    acc[language][ext] = f;
-    return acc;
-  }, {});
 }
 
 function* watchFetchTimeCode() {

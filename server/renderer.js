@@ -17,7 +17,7 @@ import {
   COOKIE_SHOW_ALL_CONTENT,
   LANG_UI_LANGUAGES,
   LANG_UKRAINIAN,
-  KC_BOT_USER_NAME,
+  KC_BOT_USER_NAME
 } from '../src/helpers/consts';
 import { getLanguageLocaleWORegion, getLanguageDirection } from '../src/helpers/i18n-utils';
 import { getUILangFromPath } from '../src/helpers/url';
@@ -88,29 +88,29 @@ async function serverRenderAuthorised(req, res, next, htmlData, uiLang, bot) {
     }
 
     const history = createMemoryHistory({
-      initialEntries: [req.originalUrl],
+      initialEntries: [req.originalUrl]
     });
 
     const cookies = cookieParse(req.headers.cookie || '');
 
     const deviceInfo = new UAParser(req.get('user-agent')).getResult();
 
-    let cookieUILang = cookies[COOKIE_UI_LANG] || uiLang;
+    let cookieUILang           = cookies[COOKIE_UI_LANG] || uiLang;
     let cookieContentLanguages = cookies[COOKIE_CONTENT_LANGS] || [uiLang];
-    if (typeof cookieContentLanguages === 'string' || cookieContentLanguages  instanceof String) {
+    if (typeof cookieContentLanguages === 'string' || cookieContentLanguages instanceof String) {
       cookieContentLanguages = cookieContentLanguages.split(',');
     }
 
     const initialState = {
       settings: {
         ...settingsInitialState,
-        showAllContent: cookies[COOKIE_SHOW_ALL_CONTENT] === 'true' || false,
-      },
+        showAllContent: cookies[COOKIE_SHOW_ALL_CONTENT] === 'true' || false
+      }
     };
     // Update settings store with languages info.
     show_console && console.log('onSetUILang', cookieUILang, cookieContentLanguages, cookies[COOKIE_UI_LANG], uiLang);
-    onSetUILanguage(initialState.settings, {uiLang: cookieUILang});
-    onSetContentLanguages(initialState.settings, {contentLanguages: cookieContentLanguages});
+    onSetUILanguage(initialState.settings, { uiLang: cookieUILang });
+    onSetContentLanguages(initialState.settings, { contentLanguages: cookieContentLanguages });
     if (uiLang !== cookieUILang) {
       onSetUrlLanguage(initialState.settings, uiLang);
     }
@@ -120,6 +120,7 @@ async function serverRenderAuthorised(req, res, next, htmlData, uiLang, bot) {
     }
 
     const store = createStore(initialState, history);
+
     // Dispatching languages change updates tags and sources.
     store.dispatch(settings.setUILanguage({ uiLang: cookieUILang }));
     store.dispatch(settings.setContentLanguages({ contentLanguages: cookieContentLanguages }));
@@ -128,7 +129,7 @@ async function serverRenderAuthorised(req, res, next, htmlData, uiLang, bot) {
       req,
       data: {},
       head: [],
-      i18n: i18nServer,
+      i18n: i18nServer
     };
 
     const routes  = useRoutes(<></>).map(r => ({ ...r, path: `${uiLang}/${r.path}` }));
@@ -195,11 +196,11 @@ async function serverRenderAuthorised(req, res, next, htmlData, uiLang, bot) {
 
               const i18nData = serialize(
                 {
-                  initialLanguage: context.i18n.language,
+                  initialLanguage : context.i18n.language,
                   initialI18nStore: pick(context.i18n.services.resourceStore.data, [
                     context.i18n.language,
-                    context.i18n.options.fallbackLng,
-                  ]),
+                    context.i18n.options.fallbackLng
+                  ])
                 }
               );
 
