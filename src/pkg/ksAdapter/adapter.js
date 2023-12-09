@@ -1,6 +1,12 @@
 import Keycloak from 'keycloak-js';
 
-export const KC_API = process.env.REACT_KC_API_URL || 'https://accounts.kab.info/auth';
+// This file used loaded in SSR and in client side too.
+// Try load the constants from process and in client expect them in window global object.
+export const KC_API_URL = process.env.REACT_KC_API_URL || (typeof window !== 'undefined' && window.KC_API_URL) || 'https://accounts.kab.info/auth';
+export const KC_REALM = process.env.REACT_KC_REALM || (typeof window !== 'undefined' && window.KC_REALM) || 'main';
+export const KC_CLIENT_ID = process.env.REACT_KC_CLIENT_ID || (typeof window !== 'undefined' && window.KC_CLIENT_ID) || 'kmedia-public';
+
+export const KC_API_WITH_REALM = `${KC_API_URL}/realms/${KC_REALM}`;
 
 export const KC_SEARCH_KEY_SESSION = 'session_state';
 export const KC_SEARCH_KEY_STATE   = 'state';
@@ -42,9 +48,7 @@ export const initKC = async () => {
   };
   document.cookie = 'authorised=true;max-age=10';
   const resp      = { user: null, token: null };
-  console.log('BEFORE keycloak.init');
   return keycloak.init(options).then(ok => {
-    console.log('keycloak.init THEN OK!');
     if (!ok) {
       return resp;
     }
@@ -54,7 +58,6 @@ export const initKC = async () => {
     resp.token          = keycloak.token;
     return resp;
   }).catch(error => {
-    console.log('keycloak.init CATCH');
     console.error(error);
     return resp;
   });
@@ -71,7 +74,11 @@ const updateToken = token => {
 };
 
 const userManagerConfig = {
-  url: KC_API, realm: 'main', clientId: 'kmedia-public', scope: 'profile', enableLogging: true
+  url: KC_API_URL,
+  realm: KC_REALM,
+  clientId: KC_CLIENT_ID,
+  scope: 'profile',
+  enableLogging: true,
 };
 const keycloak          = typeof window !== 'undefined' ? new Keycloak(userManagerConfig) : {};
 
@@ -109,7 +116,7 @@ export const kcUpdateToken = () => keycloak
   });
 
 const healthCheckKC = async () => {
-  const health = await fetch(`${KC_API}/realms/main/protocol/openid-connect/certs`);
+  const health = await fetch(`${KC_API_WITH_REALM}/protocol/openid-connect/certs`);
   if (!health.ok) {
     throw Error('keycloak server is down');
   }

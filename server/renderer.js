@@ -37,7 +37,25 @@ const helmetContext = {};
 // eslint-disable-next-line no-unused-vars
 const DoNotRemove = localStorage; // DO NOT REMOVE - the import above does all the work
 
-const BASE_URL   = process.env.REACT_APP_BASE_URL;
+const BASE_URL     = process.env.REACT_APP_BASE_URL;
+const KC_API_URL   = process.env.REACT_KC_API_URL;
+const KC_REALM     = process.env.REACT_KC_REALM;
+const KC_CLIENT_ID = process.env.REACT_KC_CLIENT_ID;
+
+const windowEnvVariables = () => {
+  const vars = [];
+  if (KC_API_URL) {
+    vars.push(`window.KC_API_URL = '${KC_API_URL}';`);
+  }
+  if (KC_REALM) {
+    vars.push(`window.KC_REALM = '${KC_REALM}';`);
+  }
+  if (KC_CLIENT_ID) {
+    vars.push(`window.KC_CLIENT_ID = '${KC_CLIENT_ID}';`);
+  }
+  return vars.join('');
+};
+
 let show_console = false;
 export default function serverRender(req, res, next, htmlData) {
   if (req.originalUrl.includes('anonymous')) return;
@@ -70,7 +88,16 @@ export default function serverRender(req, res, next, htmlData) {
 
 function serverRenderSSOAuth(req, res, next, htmlData) {
   show_console && console.log('serverRender: AuthApp server render');
-  res.send(htmlData);
+  const rootDiv = `
+    <div id="root"></div>
+    <script>
+      ${windowEnvVariables()}
+    </script>
+  `;
+
+  const html = htmlData
+    .replace(/<div id="root"><\/div>/, rootDiv);
+  res.send(html);
 }
 
 async function serverRenderAuthorised(req, res, next, htmlData, uiLang, bot) {
@@ -215,6 +242,7 @@ async function serverRenderAuthorised(req, res, next, htmlData, uiLang, bot) {
                   window.__botKCInfo = ${storeData.auth?.user?.name === KC_BOT_USER_NAME ? serialize(storeData.auth) : false};
                   window.__data = ${storeDataStr};
                   window.__i18n = ${i18nData};
+                  ${windowEnvVariables()}
                 </script>
                 `;
 
