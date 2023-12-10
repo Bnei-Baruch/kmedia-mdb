@@ -1,4 +1,4 @@
-import { createAction } from 'redux-actions';
+import { createAction } from '@reduxjs/toolkit';
 import { types as chronicles } from './chronicles';
 import { handleActions } from './settings';
 import { types as ssr } from './ssr';

@@ -4,15 +4,11 @@ import { types as ssr } from './ssr';
 
 /* Types */
 
-// const SET_TAB = 'Events/SET_TAB';
-
 const FETCH_MUSIC         = 'FETCH_MUSIC';
 const FETCH_MUSIC_SUCCESS = 'FETCH_MUSIC_SUCCESS';
 const FETCH_MUSIC_FAILURE = 'FETCH_MUSIC_FAILURE';
 
 export const types = {
-  // SET_TAB,
-
   FETCH_MUSIC,
   FETCH_MUSIC_SUCCESS,
   FETCH_MUSIC_FAILURE,
@@ -20,15 +16,11 @@ export const types = {
 
 /* Actions */
 
-// const setTab = createAction(SET_TAB);
-
 const fetchMusic        = createAction(FETCH_MUSIC);
 const fetchMusicSuccess = createAction(FETCH_MUSIC_SUCCESS);
 const fetchMusicFailure = createAction(FETCH_MUSIC_FAILURE);
 
 export const actions = {
-  // setTab,
-
   fetchMusic,
   fetchMusicSuccess,
   fetchMusicFailure,

@@ -8,7 +8,7 @@ import Link from '../../Language/MultiLanguageLink';
 import { withTranslation } from 'react-i18next';
 import { canonicalLink } from '../../../helpers/links';
 import { useDispatch, useSelector } from 'react-redux';
-import { actions, selectors } from '../../../redux/modules/mdb';
+import { actions as mdbActions, selectors } from '../../../redux/modules/mdb';
 import { imageWidthBySize } from './helper';
 import { assetUrl } from '../../../helpers/Api';
 import { fromToLocalized } from '../../../helpers/date';
@@ -19,7 +19,7 @@ const CollectionListTemplate = ({ cID, size = 'big', t }) => {
   const dispatch = useDispatch();
   useEffect(() => {
     if (!c) {
-      dispatch(actions.fetchCollection(cID));
+      dispatch(mdbActions.fetchCollection(cID));
     }
   }, [cID, c, dispatch]);
 
@@ -40,14 +40,14 @@ const CollectionListTemplate = ({ cID, size = 'big', t }) => {
     >
       <div>
         <div className="cu_item_img" style={{ width }}>
-          <UnitLogo collectionId={cID} width={width} fallbackImg={cuId && assetUrl(`api/thumbnail/${cuId}`)} />
+          <UnitLogo collectionId={cID} width={width} fallbackImg={cuId && assetUrl(`api/thumbnail/${cuId}`)}/>
         </div>
       </div>
       <div className="cu_item_info">
 
         <Header as={size === 'big' || isMobileDevice ? 'h5' : 'h3'} className="cu_item_name">
-          <Header.Content content={c.name} />
-          <Header.Subheader content={t(`constants.content-types.${c.content_type}`)} />
+          <Header.Content content={c.name}/>
+          <Header.Subheader content={t(`constants.content-types.${c.content_type}`)}/>
         </Header>
         <div className={`cu_info_description text_ellipsis`}>
           {description.map((d, i) => (<span key={i}>{d}</span>))}

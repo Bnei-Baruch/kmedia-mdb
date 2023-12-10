@@ -20,7 +20,6 @@ import { createBrowserHistory } from 'history';
 import { DEFAULT_UI_LANGUAGE, LANG_UKRAINIAN, KC_BOT_USER_NAME } from './helpers/consts';
 import i18n from './helpers/i18nnext';
 import createStore from './redux/createStore';
-import { actions as mdb } from './redux/modules/mdb';
 import { actions as ssr } from './redux/modules/ssr';
 import App from './components/App/App';
 import UAParser from 'ua-parser-js';
@@ -29,6 +28,7 @@ import { CreateAbTesting } from './helpers/ab-testing';
 import { initKC } from './pkg/ksAdapter/adapter';
 import ErrorBoundary from './components/ErrorBoundary';
 import { HelmetProvider } from 'react-helmet-async';
+import { actions as mdbActions } from './redux/modules/mdb';
 
 function hydrateApp(kcInfo) {
 
@@ -73,7 +73,7 @@ function hydrateApp(kcInfo) {
   // We ask for semi-quasi static data here since
   // we strip it from SSR to save initial network bandwidth
   console.log('hydrateApp fetchSQData');
-  store.dispatch(mdb.fetchSQData());
+  store.dispatch(mdbActions.fetchSQData());
 }
 
 if (window.__isAuthApp) {

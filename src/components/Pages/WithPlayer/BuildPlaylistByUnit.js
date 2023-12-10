@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useSearchParams } from 'react-router-dom';
 
 import { actions, selectors } from '../../../redux/modules/playlist';
-import { selectors as mdb, actions as mdbActions } from '../../../redux/modules/mdb';
+import { actions as mdbActions, selectors as mdb } from '../../../redux/modules/mdb';
 import Helmets from '../../shared/Helmets';
 
 const BuildPlaylistByUnit = ({ cts }) => {
@@ -41,7 +41,7 @@ const BuildPlaylistByUnit = ({ cts }) => {
     }
   }, [cId, id, prevCuId, wip, fetched]);
 
-  return <Helmets.AVUnit id={id} />;
+  return <Helmets.AVUnit id={id}/>;
 };
 
 export default BuildPlaylistByUnit;

@@ -5,7 +5,7 @@ import { useLocation, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Container, Grid, Header } from 'semantic-ui-react';
 
-import { actions, selectors } from '../../../../../redux/modules/mdb';
+import { actions as mdbActions, selectors } from '../../../../../redux/modules/mdb';
 import { selectors as settings } from '../../../../../redux/modules/settings';
 import Helmets from '../../../../shared/Helmets/index';
 import TranscriptionContainer
@@ -48,9 +48,9 @@ const renderHeader = (unit, t, uiDir) => {
                 {t('values.date', { date: unit.film_date })}
               </Header>
               <span className="share-publication">
-                <Share position={position} />
+                <Share position={position}/>
               </span>
-              <TagsByUnit id={unit.id} />
+              <TagsByUnit id={unit.id}/>
             </Grid.Column>
           </Grid.Row>
         </Grid>
@@ -61,8 +61,8 @@ const renderHeader = (unit, t, uiDir) => {
 
 const renderHelmet = unit => (
   <Fragment>
-    <Helmets.NoIndex />
-    <Helmets.ArticleUnit unit={unit} />
+    <Helmets.NoIndex/>
+    <Helmets.ArticleUnit unit={unit}/>
   </Fragment>
 );
 
@@ -70,12 +70,12 @@ const renderArticle = (unit, chroniclesAppend) => (
   <Grid padded>
     <Grid.Row>
       <Grid.Column>
-        <TranscriptionContainer unit={unit} />
+        <TranscriptionContainer unit={unit}/>
       </Grid.Column>
     </Grid.Row>
     <Grid.Row>
       <Grid.Column>
-        <MediaDownloads unit={unit} displayDivider={true} chroniclesAppend={chroniclesAppend} />
+        <MediaDownloads unit={unit} displayDivider={true} chroniclesAppend={chroniclesAppend}/>
       </Grid.Column>
     </Grid.Row>
   </Grid>
@@ -98,7 +98,7 @@ const ArticlePage = ({ t }) => {
       return;
     }
 
-    dispatch(actions.fetchUnit(id));
+    dispatch(mdbActions.fetchUnit(id));
   }, [dispatch, err, id, unit, wip]);
 
   const wipErr = WipErr({ wip, err, t });
@@ -131,7 +131,7 @@ const ArticlePage = ({ t }) => {
                 </Grid.Row>
               </Grid.Column>
               <Grid.Column mobile={16} tablet={6} computer={6}>
-                <Recommended unit={unit} />
+                <Recommended unit={unit}/>
               </Grid.Column>
             </Grid.Row>
           </Grid>
@@ -143,7 +143,7 @@ const ArticlePage = ({ t }) => {
 };
 
 ArticlePage.propTypes = {
-  t: PropTypes.func.isRequired,
+  t: PropTypes.func.isRequired
 };
 
 export default withTranslation()(ArticlePage);

@@ -8,7 +8,7 @@ import * as shapes from '../../../../../shapes';
 import MediaHelper from '../../../../../../helpers/media';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectors as settings } from '../../../../../../redux/modules/settings';
-import { selectors as assetsSelectors, doc2html } from '../../../../../../redux/modules/assets';
+import { selectors as assetsSelectors, actions as assetsActions } from '../../../../../../redux/modules/assets';
 import { INSERT_TYPE_SUMMARY } from '../../../../../../helpers/consts';
 import MenuLanguageSelector from '../../../../../../components/Language/Selector/MenuLanguageSelector';
 
@@ -38,7 +38,7 @@ const Summary = ({ unit, t }) => {
   const [selectedLanguage, setSelectedLanguage] = useState(defaultLanguage);
 
   const description = unit.description
-    ? (<div dangerouslySetInnerHTML={{ __html: unit.description }} />)
+    ? (<div dangerouslySetInnerHTML={{ __html: unit.description }}/>)
     : t('materials.summary.no-summary');
 
   const file = getFile(unit, selectedLanguage);
@@ -48,11 +48,11 @@ const Summary = ({ unit, t }) => {
     const file = getFile(unit, selectedLanguage);
     setSelectedFileId((file && file.id) || null);
     setSelectedLanguage(selectedLanguage);
-  }
+  };
 
   useEffect(() => {
     if (file) {
-      dispatch(doc2html(selectedFileId));
+      dispatch(assetsActions.doc2html(selectedFileId));
     }
   }, [file, dispatch, selectedFileId]);
 
@@ -71,7 +71,7 @@ const Summary = ({ unit, t }) => {
       {
         data ? (
           <>
-            <Divider />
+            <Divider/>
             <div dangerouslySetInnerHTML={{ __html: data }}></div>
           </>
         ) : null
@@ -83,7 +83,7 @@ const Summary = ({ unit, t }) => {
 
 Summary.propTypes = {
   unit: shapes.ContentUnit.isRequired,
-  t: PropTypes.func.isRequired,
+  t   : PropTypes.func.isRequired
 };
 
 export default withTranslation()(Summary);

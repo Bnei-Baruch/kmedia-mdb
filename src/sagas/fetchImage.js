@@ -46,9 +46,11 @@ function* fetch(payload) {
 
     try {
       img = yield call(tryFetch, arr[i]);
-      if (img) break;
+      if (img) {
+        break;
+      }
     } catch (e) {
-      console.log(src, e);
+      console.log('fetchImage catch', src, e);
     }
   }
 
@@ -69,12 +71,11 @@ async function tryFetch(src) {
 
     displayImage.src = src;
   });
-  const res     = await promise;
-  return res;
+  return await promise;
 }
 
 function* watchTrim() {
-  yield takeEvery([types.FETCH], bufferFetch);
+  yield takeEvery([types['image/fetch']], bufferFetch);
 }
 
-export const sagas = [watchTrim,];
+export const sagas = [watchTrim];

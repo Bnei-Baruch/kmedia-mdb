@@ -310,7 +310,7 @@ function* watchFetchViews() {
 }
 
 function* watchPlayerPlayWithUidProxy() {
-  yield takeEvery(playerTypes.PLAYER_PLAY, playerPlayWithUidProxy);
+  yield takeEvery(playerTypes['player/playerPlay'], playerPlayWithUidProxy);
 }
 
 export const sagas = [

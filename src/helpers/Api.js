@@ -16,7 +16,7 @@ const MDB_REST_API_URL        = process.env.REACT_APP_MDB_REST_API_URL || `${API
 export const backendUrl               = path => `${API_BACKEND}${path}`;
 export const assetUrl                 = path => `${ASSETS_BACKEND}${path}`;
 export const cmsUrl                   = path => `${CMS_BACKEND}${path}`;
-export const cLogoUrl                 = path => `${cmsUrl(`images/logos/${  path}`)}`;
+export const cLogoUrl                 = path => `${cmsUrl(`images/logos/${path}`)}`;
 export const imaginaryUrl             = path => `${IMAGINARY_URL}${path}`;
 export const feedUrl                  = path => `${API_FEED}${path}`;
 export const chroniclesUrl            = path => `${CHRONICLES_BACKEND}${path}`;
@@ -25,7 +25,13 @@ export const chroniclesBackendEnabled = CHRONICLES_BACKEND !== undefined;
 export class Requests {
   static encode = encodeURIComponent;
 
-  static get = path => axios(backendUrl(path));
+  static get = async path => {
+    try {
+      return await axios.get(backendUrl(path));
+    } catch ({ response }) {
+      return response;
+    }
+  };
 
   static getAsset = path => axios(assetUrl(path));
 
@@ -162,9 +168,9 @@ class Api {
     q,
     ui_language,
     content_languages,
-    pageNo: page_no,
+    pageNo  : page_no,
     pageSize: page_size,
-    sortBy: sort_by,
+    sortBy  : sort_by,
     deb,
     searchId: search_id
   }) => (
@@ -193,34 +199,34 @@ class Api {
       uid,
       languages,
       skipUids: skip_uids,
-      size: more_items,
+      size    : more_items,
       spec,
       specs,
       watchingNowMin: watching_now_min,
-      popularMin: popular_min
+      popularMin    : popular_min
     }
   ) => ({
     more_items,
     'current_feed': [],
-    'options': {
+    'options'     : {
       'recommend': {
-        uid,
+        uid
       },
       languages,
       skip_uids,
       spec,
       specs,
       watching_now_min,
-      popular_min,
+      popular_min
     }
   });
 
   static recommended = requestData => {
     const config = {
-      method: 'post',
-      url: feedUrl('recommend'),
+      method : 'post',
+      url    : feedUrl('recommend'),
       headers: { 'Content-Type': 'application/json' },
-      data: JSON.stringify(requestData),
+      data   : JSON.stringify(requestData)
     };
 
     return axios(config);
@@ -228,10 +234,10 @@ class Api {
 
   static views = uids => {
     const config = {
-      method: 'post',
-      url: feedUrl('views'),
+      method : 'post',
+      url    : feedUrl('views'),
       headers: { 'Content-Type': 'application/json' },
-      data: JSON.stringify({ uids }),
+      data   : JSON.stringify({ uids })
     };
 
     return axios(config);
@@ -239,10 +245,10 @@ class Api {
 
   static watchingNow = uids => {
     const config = {
-      method: 'post',
-      url: feedUrl('watchingnow'),
+      method : 'post',
+      url    : feedUrl('watchingnow'),
       headers: { 'Content-Type': 'application/json' },
-      data: JSON.stringify({ uids }),
+      data   : JSON.stringify({ uids })
     };
 
     return axios(config);
@@ -298,7 +304,7 @@ class Api {
   };
 
   static postLanguages = (data, token) => Requests.auth(data, `${PERSONAL_API_BACKEND}settings`, token, 'POST');
-  static getLanguages = token => Requests.auth({}, `${PERSONAL_API_BACKEND}languages`, token, 'GET');
+  static getLanguages  = token => Requests.auth({}, `${PERSONAL_API_BACKEND}languages`, token, 'GET');
 
   static reactionsCount = params => {
     const url    = `${PERSONAL_API_BACKEND}reaction_count?${Requests.makeParams(params)}`;

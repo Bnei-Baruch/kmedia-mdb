@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
-import { bindActionCreators } from '@reduxjs/toolkit';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import isEqual from 'react-fast-compare';
 import ImageGallery from 'react-image-gallery';
@@ -9,7 +9,7 @@ import { Button, Container, Segment } from 'semantic-ui-react';
 import { selectSuitableLanguage } from '../../../../../helpers/language';
 import { isLanguageRtl } from '../../../../../helpers/i18n-utils';
 import { isEmpty, strCmp } from '../../../../../helpers/utils';
-import { unzipList, selectors } from '../../../../../redux/modules/assets';
+import { actions as assetsActions, selectors } from '../../../../../redux/modules/assets';
 import { selectors as settings } from '../../../../../redux/modules/settings';
 import * as shapes from '../../../../shapes';
 import WipErr from '../../../../shared/WipErr/WipErr';
@@ -18,19 +18,19 @@ import { imageGalleryItem, isZipFile } from './helper';
 
 class Sketches extends React.Component {
   static propTypes = {
-    unit: shapes.ContentUnit.isRequired,
-    t: PropTypes.func.isRequired,
-    zipIndexById: PropTypes.objectOf(shapes.DataWipErr).isRequired,
-    unzipList: PropTypes.func.isRequired,
-    contentLanguages: PropTypes.arrayOf(PropTypes.string).isRequired,
+    unit            : shapes.ContentUnit.isRequired,
+    t               : PropTypes.func.isRequired,
+    zipIndexById    : PropTypes.objectOf(shapes.DataWipErr).isRequired,
+    unzipList       : PropTypes.func.isRequired,
+    contentLanguages: PropTypes.arrayOf(PropTypes.string).isRequired
   };
 
   state = {
-    zipFiles: null,
-    zipFileId: null,
-    imageFiles: null,
-    filesLanguages: null,
-    selectedLanguage: null,
+    zipFiles        : null,
+    zipFileId       : null,
+    imageFiles      : null,
+    filesLanguages  : null,
+    selectedLanguage: null
   };
 
   static getUnitSketchFiles = unit => {
@@ -118,7 +118,7 @@ class Sketches extends React.Component {
         const itemState = this.getItemState(zipFiles, selectedLanguage, unit);
 
         this.setState({
-          ...itemState,
+          ...itemState
         });
       }
     }
@@ -126,7 +126,7 @@ class Sketches extends React.Component {
 
   processUnit = () => {
     const { unit, contentLanguages } = this.props;
-    const zipFiles                              = Sketches.getUnitSketchFiles(unit);
+    const zipFiles                   = Sketches.getUnitSketchFiles(unit);
 
     if (zipFiles) {
       this.setStateByZipFiles(zipFiles, contentLanguages, unit);
@@ -137,7 +137,7 @@ class Sketches extends React.Component {
 
   setStateByZipFiles = (zipFiles, contentLanguages, unit) => {
     const { filesLanguages, selectedLanguage } = Sketches.getFilesLanguages(zipFiles, contentLanguages, unit.original_language);
-    const itemState               = this.getItemState(zipFiles, selectedLanguage, unit);
+    const itemState                            = this.getItemState(zipFiles, selectedLanguage, unit);
 
     this.setState({ zipFiles, filesLanguages, selectedLanguage, ...itemState });
   };
@@ -220,9 +220,9 @@ class Sketches extends React.Component {
   );
 
   render() {
-    const { t, zipIndexById, uiDir }                = this.props;
+    const { t, zipIndexById, uiDir }                                  = this.props;
     const { zipFileId, filesLanguages, selectedLanguage, imageFiles } = this.state;
-    const { wip, err, data }                             = zipIndexById[zipFileId] || {};
+    const { wip, err, data }                                          = zipIndexById[zipFileId] || {};
 
     const wipErr = WipErr({ wip, err, t });
     if (wipErr) {
@@ -293,13 +293,13 @@ class Sketches extends React.Component {
 }
 
 const mapState = state => ({
-  zipIndexById: selectors.getZipIndexById(state.assets),
-  uiDir: settings.getUIDir(state.settings),
-  contentLanguages: settings.getContentLanguages(state.settings),
+  zipIndexById    : selectors.getZipIndexById(state.assets),
+  uiDir           : settings.getUIDir(state.settings),
+  contentLanguages: settings.getContentLanguages(state.settings)
 });
 
 const mapDispatch = dispatch => bindActionCreators({
-  unzipList
+  unzipList: assetsActions.unzipList
 }, dispatch);
 
 export default connect(mapState, mapDispatch)(withTranslation()(Sketches));

@@ -3,7 +3,7 @@ import { call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
 import { actions, types } from '../redux/modules/my';
 import Api from '../helpers/Api';
 import { selectors as authSelectors } from '../redux/modules/auth';
-import { actions as mdbActions, selectors as mdbSelectors } from '../redux/modules/mdb';
+import { actions as mbdActions, selectors as mdbSelectors } from '../redux/modules/mdb';
 import {
   IsCollectionContentType,
   MY_NAMESPACE_BOOKMARKS,
@@ -34,7 +34,7 @@ export function* fetch(action) {
 
   let with_derivations = false;
 
-  const uiLang = yield select(state => settings.getUILang(state.settings));
+  const uiLang           = yield select(state => settings.getUILang(state.settings));
   const contentLanguages = yield select(state => settings.getContentLanguages(state.settings));
   try {
     const { data } = yield call(Api.my, namespace, params, token);
@@ -76,24 +76,24 @@ export function* fetch(action) {
     co_uids = yield select(state => mdbSelectors.skipFetchedCO(state.mdb, co_uids));
     if (cu_uids.length > 0) {
       const { data: { content_units } } = yield call(Api.units, {
-        id: cu_uids,
-        pageSize: cu_uids.length,
+        id               : cu_uids,
+        pageSize         : cu_uids.length,
         with_files,
         with_derivations,
-        ui_language: uiLang,
-        content_languages: contentLanguages,
+        ui_language      : uiLang,
+        content_languages: contentLanguages
       });
-      yield put(mdbActions.receiveContentUnits(content_units));
+      yield put(mbdActions.receiveContentUnits(content_units));
     }
 
     if (co_uids.length > 0) {
       const { data: { collections } } = yield call(Api.collections, {
-        id: co_uids,
-        pageSize: co_uids.length,
-        ui_language: uiLang,
-        content_languages: contentLanguages,
+        id               : co_uids,
+        pageSize         : co_uids.length,
+        ui_language      : uiLang,
+        content_languages: contentLanguages
       });
-      yield put(mdbActions.receiveCollections(collections));
+      yield put(mbdActions.receiveCollections(collections));
     }
 
     yield put(actions.fetchSuccess({ namespace, addToList, ...data }));
@@ -113,7 +113,7 @@ export function* fetchOne(action) {
   if (!token) return;
   const { namespace, ...params } = action.payload;
   if (!params?.id) return;
-  const uiLang = yield select(state => settings.getUILang(state.settings));
+  const uiLang           = yield select(state => settings.getUILang(state.settings));
   const contentLanguages = yield select(state => settings.getContentLanguages(state.settings));
   try {
     const { data } = yield call(Api.my, namespace, params, token);
@@ -128,13 +128,13 @@ export function* fetchOne(action) {
 
     if (cu_uids.length > 0) {
       const { data: { content_units } } = yield call(Api.units, {
-        id: cu_uids,
-        pageSize: cu_uids.length,
-        with_files: true,
-        ui_language: uiLang,
-        content_languages: contentLanguages,
+        id               : cu_uids,
+        pageSize         : cu_uids.length,
+        with_files       : true,
+        ui_language      : uiLang,
+        content_languages: contentLanguages
       });
-      yield put(mdbActions.receiveContentUnits(content_units));
+      yield put(mbdActions.receiveContentUnits(content_units));
     }
 
     yield put(actions.fetchOneSuccess({ namespace, item: data }));
@@ -228,5 +228,5 @@ export const sagas = [
   watchAdd,
   watchEdit,
   watchRemove,
-  watchReactionsCount,
+  watchReactionsCount
 ];

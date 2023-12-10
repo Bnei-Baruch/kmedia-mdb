@@ -1,131 +1,71 @@
-import { createAction } from 'redux-actions';
-import { handleActions } from './settings';
 import { PLAYER_OVER_MODES } from '../../helpers/consts';
+import { createSlice } from '@reduxjs/toolkit';
 
-const PLAYER_READY          = 'Player/READY';
-const PLAYER_METADATA_READY = 'Player/PLAYER_METADATA_READY';
-const PLAYER_REMOVE         = 'Player/REMOVE';
-const PLAYER_PLAY           = 'Player/PLAY';
-const PLAYER_BUFFER         = 'Player/BUFFER';
-const PLAYER_PAUSE          = 'Player/PAUSE';
-const PLAYER_RATE           = 'Player/RATE';
-const PLAYER_RESIZE         = 'Player/RESIZE';
-const PLAYER_TOGGLE_MUTE    = 'Player/TOGGLE_MUTE';
-const PLAYER_COMPLETE       = 'Player/COMPLETE';
-
-const PLAYER_SET_FILE          = 'Player/SET_FILE';
-const PLAYER_SET_OVER_MODE     = 'Player/SET_OVER_MODE';
-const PLAYER_SET_IS_FULLSCREEN = 'Player/SET_IS_FULLSCREEN';
-const PLAYER_SET_LOADED        = 'Player/SET_LOADED';
-const SET_KEYBOARD_COEF        = 'Player/SET_KEYBOARD_COEF';
-
-const SET_SHARE_START_END = 'Player/SET_SHARE_START_END';
-const SET_IS_MUTED        = 'Player/SET_IS_MUTED';
-
-export const types = {
-  PLAYER_PLAY,
-  PLAYER_PAUSE,
-  PLAYER_TOGGLE_MUTE,
-  PLAYER_REMOVE,
-  PLAYER_COMPLETE
-};
-
-// Actions
-const playerReady         = createAction(PLAYER_READY);
-const playerMetadataReady = createAction(PLAYER_METADATA_READY);
-const playerRemove        = createAction(PLAYER_REMOVE);
-const setFile             = createAction(PLAYER_SET_FILE);
-
-const playerPlay       = createAction(PLAYER_PLAY);
-const playerBuffer     = createAction(PLAYER_BUFFER);
-const playerPause      = createAction(PLAYER_PAUSE);
-const playerRate       = createAction(PLAYER_RATE);
-const playerResize     = createAction(PLAYER_RESIZE);
-const playerToggleMute = createAction(PLAYER_TOGGLE_MUTE);
-const playerComplete   = createAction(PLAYER_COMPLETE);
-
-const setOverMode     = createAction(PLAYER_SET_OVER_MODE);
-const setFullScreen   = createAction(PLAYER_SET_IS_FULLSCREEN);
-const setLoaded       = createAction(PLAYER_SET_LOADED);
-const setKeyboardCoef = createAction(SET_KEYBOARD_COEF);
-
-const setShareStartEnd = createAction(SET_SHARE_START_END);
-const setIsMuted       = createAction(SET_IS_MUTED);
-
-export const actions = {
-  setFile,
-  setOverMode,
-  setShareStartEnd,
-  setFullScreen,
-  setLoaded,
-  setKeyboardCoef,
-
-  playerPlay,
-  playerPause,
-  setIsMuted
-};
-
-/* Reducer */
 const initialState = {
-  overMode: PLAYER_OVER_MODES.firstTime,
-  ready: false,
+  overMode     : PLAYER_OVER_MODES.firstTime,
+  ready        : false,
   metadataReady: false,
-  file: null,
+  file         : null,
   shareStartEnd: { start: null, end: null },
-  isFullScreen: false,
-  keyboardCoef: 1
+  isFullScreen : false,
+  keyboardCoef : 1
 };
 
-const onRemove = draft => {
-  draft.overMode      = PLAYER_OVER_MODES.firstTime;
-  draft.ready         = false;
-  draft.played        = false;
-  draft.loaded        = false;
-  draft.metadataReady = false;
-};
+const playerSlice = createSlice({
+  name: 'player',
+  initialState,
 
-const onSetMode = (draft, payload) => {
-  draft.overMode = payload;
-};
+  reducers: {
+    playerReady        : state => void (state.ready = true),
+    playerMetadataReady: state => void (state.metadataReady = true),
+    playerRemove       : state => {
+      state.overMode      = PLAYER_OVER_MODES.firstTime;
+      state.ready         = false;
+      state.played        = false;
+      state.loaded        = false;
+      state.metadataReady = false;
+    },
+    setFile            : (state, { payload }) => {
+      //fix preload bug
+      if (state.file?.id !== payload.id) {
+        state.played = false;
+        state.loaded = false;
+      }
 
-const onSetFile = (draft, payload) => {
-  //fix preload bug
-  if (draft.file?.id !== payload.id) {
-    draft.played = false;
-    draft.loaded = false;
+      state.file = payload;
+    },
+
+    playerPlay      : (state, { payload }) => {
+      state.played = payload.newstate === 'playing';
+      state.loaded = true;
+      if (state.overMode === PLAYER_OVER_MODES.firstTime)
+        state.overMode = PLAYER_OVER_MODES.active;
+    },
+    playerBuffer    : state => void (state.loaded = false),
+    playerPause     : state => void (state.played = false),
+    playerRate      : (state, { payload }) => void (state.rate = payload.playbackRate),
+    playerResize    : (state, { payload }) => void (state.width = payload.width),
+    playerToggleMute: (state, { payload }) => void (state.isMuted = payload.mute),
+    playerComplete  : () => {
+    },
+
+    setOverMode    : (state, { payload }) => void (state.overMode = payload),
+    setFullscreen  : (state, { payload }) => void (state.isFullScreen = payload),
+    setLoaded      : (state, { payload }) => void (state.loaded = payload),
+    setKeyboardCoef: (state, { payload }) => void (state.keyboardCoef = payload),
+
+    setShareStartEnd: (state, { payload }) => void (state.shareStartEnd = payload),
+    setIsMuted      : (state, { payload }) => void (state.isMuted = payload)
   }
+});
 
-  draft.file = payload;
-};
+export default playerSlice.reducer;
 
-const onPlay = (draft, payload) => {
-  draft.played = payload.newstate === 'playing';
-  draft.loaded = true;
-  if (draft.overMode === PLAYER_OVER_MODES.firstTime)
-    draft.overMode = PLAYER_OVER_MODES.active;
-};
+export const { actions } = playerSlice;
 
-export const reducer = handleActions({
-  [PLAYER_READY]: draft => draft.ready = true,
-  [PLAYER_METADATA_READY]: draft => draft.metadataReady = true,
-  [PLAYER_REMOVE]: onRemove,
-  [PLAYER_SET_FILE]: onSetFile,
-
-  [PLAYER_PLAY]: onPlay,
-  [PLAYER_PAUSE]: draft => draft.played = false,
-  [PLAYER_BUFFER]: draft => draft.loaded = false,
-  [PLAYER_RATE]: (draft, payload) => draft.rate = payload.playbackRate,
-  [PLAYER_RESIZE]: (draft, payload) => draft.width = payload.width,
-  [PLAYER_TOGGLE_MUTE]: (draft, payload) => draft.isMuted = payload.mute,
-  [SET_KEYBOARD_COEF]: (draft, payload) => draft.keyboardCoef = payload,
-
-  [PLAYER_SET_OVER_MODE]: onSetMode,
-  [PLAYER_SET_IS_FULLSCREEN]: (draft, payload) => draft.isFullScreen = payload,
-  [PLAYER_SET_LOADED]: (draft, payload) => draft.loaded = payload,
-
-  [SET_SHARE_START_END]: (draft, payload) => draft.shareStartEnd = payload,
-  [SET_IS_MUTED]: (draft, payload) => draft.isMuted = payload,
-}, initialState);
+export const types = Object.fromEntries(new Map(
+  Object.values(playerSlice.actions).map(a => [a.type, a.type])
+));
 
 const isReady          = state => state.ready;
 const isMetadataReady  = state => state.metadataReady && state.ready;
@@ -156,20 +96,20 @@ export const selectors = {
 };
 
 export const PLAYER_ACTIONS_BY_EVENT = {
-  'ready': playerReady,
-  'playlistItem': playerReady,
-  'remove': playerRemove,
-  'destroyPlugin': playerRemove,
+  'ready'        : playerSlice.actions.playerReady,
+  'playlistItem' : playerSlice.actions.playerReady,
+  'remove'       : playerSlice.actions.playerRemove,
+  'destroyPlugin': playerSlice.actions.playerRemove,
 
-  'initSafari': playerReady,
-  'bufferFull': playerMetadataReady,
+  'initSafari': playerSlice.actions.playerReady,
+  'bufferFull': playerSlice.actions.playerMetadataReady,
 
-  'buffer': playerBuffer,
-  'play': playerPlay,
-  'pause': playerPause,
-  'complete': playerComplete,
+  'buffer'  : playerSlice.actions.playerBuffer,
+  'play'    : playerSlice.actions.playerPlay,
+  'pause'   : playerSlice.actions.playerPause,
+  'complete': playerSlice.actions.playerComplete,
 
-  'playbackRateChanged': playerRate,
-  'mute': playerToggleMute,
-  'resize': playerResize,
+  'playbackRateChanged': playerSlice.actions.playerRate,
+  'mute'               : playerSlice.actions.playerToggleMute,
+  'resize'             : playerSlice.actions.playerResize
 };

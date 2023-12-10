@@ -9,7 +9,7 @@ import { MT_IMAGE, PAGE_NS_SKETCHES, UNIT_LESSONS_TYPE, CT_VIDEO_PROGRAM_CHAPTER
 import { usePrevious, isEmpty } from '../../../helpers/utils';
 import { selectors as filters } from '../../../redux/modules/filters';
 import { actions, selectors as lists } from '../../../redux/modules/lists';
-import { unzipList, selectors as assets } from '../../../redux/modules/assets';
+import { actions as assetsActions, selectors as assets } from '../../../redux/modules/assets';
 import { selectors as settings } from '../../../redux/modules/settings';
 
 import FilterLabels from '../../FiltersAside/FilterLabels';
@@ -26,9 +26,9 @@ import { isZipFile } from '../../Pages/WithPlayer/widgets/UnitMaterials/helper';
 export const SKETCHES_SHOWED_CTS = [...UNIT_LESSONS_TYPE, CT_VIDEO_PROGRAM_CHAPTER];
 const FILTER_PARAMS              = {
   content_type: SKETCHES_SHOWED_CTS,
-  media_type: MT_IMAGE,
-  withViews: false,
-  with_files: true,
+  media_type  : MT_IMAGE,
+  withViews   : false,
+  with_files  : true
 };
 
 const MainPage = ({ t }) => {
@@ -67,12 +67,12 @@ const MainPage = ({ t }) => {
 
   useEffect(() => {
     if (!wipAll && zipIdsForFetch?.length > 0) {
-      dispatch(unzipList(zipIdsForFetch));
+      dispatch(assetsActions.unzipList(zipIdsForFetch));
     }
   }, [dispatch, zipIdsForFetch, wipAll]);
 
   return (<>
-    <SectionHeader section="sketches" />
+    <SectionHeader section="sketches"/>
     <SectionFiltersWithMobile
       namespace={PAGE_NS_SKETCHES}
       filters={
@@ -82,15 +82,15 @@ const MainPage = ({ t }) => {
         />
       }
     >
-      <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} />
-      <FilterLabels namespace={PAGE_NS_SKETCHES} />
+      <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize}/>
+      <FilterLabels namespace={PAGE_NS_SKETCHES}/>
       <CardGroup itemsPerRow={4} doubling stackable>
         {
-          cus?.map(({ id }) => <UnitItem id={id} key={id} />)
+          cus?.map(({ id }) => <UnitItem id={id} key={id}/>)
         }
       </CardGroup>
 
-      <Divider fitted />
+      <Divider fitted/>
       <Container className="padded pagination-wrapper" textAlign="center">
         {total > 0 && <Pagination
           pageNo={pageNo}

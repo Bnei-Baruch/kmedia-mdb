@@ -47,7 +47,7 @@ const sortTree = root => {
 
 const sortSources = items => {
   items.forEach(i => {
-    // We not going to sort the upper level [i.e. 'kabbalists'],
+    // We're not going to sort the upper level [i.e. 'kabbalists'],
     // especially if it doesn't have children
     if (!i.children) {
       return;
@@ -133,14 +133,18 @@ const setRabash = (sources, uiLang) => {
   });
 };
 
+export const setById = (sources, uiLang) => {
+  setRabash(sources, uiLang);
+  return prepareById(sources);
+};
+
 export const reducer = handleActions({
   [settings.SET_UI_LANGUAGE]: onChangeLanguage,
 
   [RECEIVE_SOURCES]: (state, action) => {
     const { sources, uiLang } = action.payload;
-    setRabash(sources, uiLang);
 
-    const [byId, byIdAZ] = prepareById(sources);
+    const [byId, byIdAZ] = setById(sources, uiLang);
 
     return {
       ...state,

@@ -1,4 +1,4 @@
-import { createAction } from 'redux-actions';
+import { createAction } from '@reduxjs/toolkit';
 import produce, { setAutoFreeze } from 'immer';
 
 import {

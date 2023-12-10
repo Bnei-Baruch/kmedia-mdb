@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import clsx from 'clsx';
 
 import { selectors } from '../../../../../../redux/modules/sources';
-import { sourceIndex, doc2html, selectors as assetsSelectors } from '../../../../../../redux/modules/assets';
+import { actions as assetsActions, selectors as assetsSelectors } from '../../../../../../redux/modules/assets';
 import { isEmpty, physicalFile, tracePath } from '../../../../../../helpers/utils';
 import { selectors as settings } from '../../../../../../redux/modules/settings';
 import { getLanguageName, selectSuitableLanguage } from '../../../../../../helpers/language';
@@ -63,21 +63,21 @@ const Sources = ({ unit, t }) => {
   const doc2htmlById     = useSelector(state => assetsSelectors.getDoc2htmlById(state.assets));
   const dispatch         = useDispatch();
 
-  const [fetched, setFetched]               = useState(null);
-  const [isLikutim, setIsLikutim]           = useState(false);
-  const [selectedUnitId, setSelectedUnitId] = useState(null);
-  const [pdf, setPdf]                       = useState(null);
-  const [file, setFile]                     = useState(null);
-  const [mp3, setMp3]                       = useState(null);
-  const [setting, setSettings]              = useState({});
-  const [sourceLanguages, setSourceLanguages] = useState([]);
+  const [fetched, setFetched]                               = useState(null);
+  const [isLikutim, setIsLikutim]                           = useState(false);
+  const [selectedUnitId, setSelectedUnitId]                 = useState(null);
+  const [pdf, setPdf]                                       = useState(null);
+  const [file, setFile]                                     = useState(null);
+  const [mp3, setMp3]                                       = useState(null);
+  const [setting, setSettings]                              = useState({});
+  const [sourceLanguages, setSourceLanguages]               = useState([]);
   const [selectedSourceLanguage, setSelectedSourceLanguage] = useState('');
 
   // get files data for all sources
   useEffect(() => {
     (unit.sources || [])
       .filter(s => isEmpty(indexById[s]))
-      .forEach(s => dispatch(sourceIndex(s)));
+      .forEach(s => dispatch(assetsActions.sourceIndex(s)));
   }, [dispatch, indexById, unit.sources]);
 
   const sourcesDropDownOptions = useMemo(() => {
@@ -85,17 +85,17 @@ const Sources = ({ unit, t }) => {
       .map(getSourceById)
       .filter(x => !!x)
       .map(x => ({
-        value: x.id,
-        text: tracePath(x, getSourceById).map(y => y.name).join(' > '),
-        disabled: indexById[x.id] && !indexById[x.id].data && !indexById[x.id].wip,
+        value   : x.id,
+        text    : tracePath(x, getSourceById).map(y => y.name).join(' > '),
+        disabled: indexById[x.id] && !indexById[x.id].data && !indexById[x.id].wip
       }));
 
     const likutimOptions = getLikutimUnits(unit)
       .map(x => ({
-        value: x.id,
-        text: t(`constants.content-types.${x.content_type}`),
-        type: x.content_type,
-        disabled: false,
+        value   : x.id,
+        text    : t(`constants.content-types.${x.content_type}`),
+        type    : x.content_type,
+        disabled: false
       })) || [];
 
     return [...sourceOptions, ...likutimOptions];
@@ -139,8 +139,8 @@ const Sources = ({ unit, t }) => {
     let file;
     if (isLikutim) {
       const files = getLikutimFiles(unit, selectedUnitId).filter(f => f.language === selectedSourceLanguage);
-      file = files.find(f => f.type === MT_TEXT);
-      const mp3 = files.find(f => f.type === MT_AUDIO);
+      file        = files.find(f => f.type === MT_TEXT);
+      const mp3   = files.find(f => f.type === MT_AUDIO);
       setMp3(mp3);
     } else {
       const langFiles = indexById[selectedUnitId]?.data?.[selectedSourceLanguage];
@@ -175,7 +175,7 @@ const Sources = ({ unit, t }) => {
       return;
     }
 
-    dispatch(doc2html(file.id));
+    dispatch(assetsActions.doc2html(file.id));
     setFetched(newFetch);
   }, [dispatch, fetched, file, selectedSourceLanguage, selectedUnitId]);
 
@@ -184,7 +184,7 @@ const Sources = ({ unit, t }) => {
 
   const getContents = () => {
     if (pdf) {
-      return <PDF pdfFile={physicalFile(pdf)} pageNumber={1} startsFrom={startsFrom(selectedUnitId)} />;
+      return <PDF pdfFile={physicalFile(pdf)} pageNumber={1} startsFrom={startsFrom(selectedUnitId)}/>;
     } else if (file?.id && doc2htmlById[file.id]) {
       return getFileContents();
     }
@@ -213,7 +213,7 @@ const Sources = ({ unit, t }) => {
             language={selectedSourceLanguage}
             pathname={`/${selectedSourceLanguage}/${isLikutim ? 'likutim' : 'sources'}/${selectedUnitId}`}
             source={{
-              subject_uid: selectedUnitId,
+              subject_uid : selectedUnitId,
               subject_type: isLikutim ? CT_LIKUTIM : CT_SOURCE
             }}
             label={{ content_unit: selectedUnitId }}
@@ -236,43 +236,43 @@ const Sources = ({ unit, t }) => {
 
   const downloadProps = getDownloadProps(pdf, file);
 
-  const unitData = indexById[selectedUnitId] && indexById[selectedUnitId].data;
-  const menuOptionText = language => getLanguageName(language) + (unitData && unitData[language] && unitData[language].mp3 ? ' \uD83D\uDD0A' : '')
+  const unitData       = indexById[selectedUnitId] && indexById[selectedUnitId].data;
+  const menuOptionText = language => getLanguageName(language) + (unitData && unitData[language] && unitData[language].mp3 ? ' \uD83D\uDD0A' : '');
 
   return (
     <div
       className={clsx({
-        source: true,
-        [`is-${setting.theme}`]: true,
-        [`is-${setting.fontType}`]: true,
-        [`size${setting.fontSize}`]: true,
+        source                     : true,
+        [`is-${setting.theme}`]    : true,
+        [`is-${setting.fontType}`] : true,
+        [`size${setting.fontSize}`]: true
       })}
     >
       <Menu
         stackable
         secondary
-        floated='right'
+        floated="right"
         className={
           clsx({
-            'no-margin-top': isMobileDevice,
-            'no_print': true,
-            'justify_content_end': true,
+            'no-margin-top'      : isMobileDevice,
+            'no_print'           : true,
+            'justify_content_end': true
           })
         }
       >
         {
           sourcesDropDownOptions.length > 1 &&
-            <Menu.Item>
-              <Dropdown
-                fluid={isMobileDevice}
-                selection
-                value={selectedUnitId}
-                options={sourcesDropDownOptions}
-                selectOnBlur={false}
-                selectOnNavigation={false}
-                onChange={handleSourceChanged}
-              />
-            </Menu.Item>
+          <Menu.Item>
+            <Dropdown
+              fluid={isMobileDevice}
+              selection
+              value={selectedUnitId}
+              options={sourcesDropDownOptions}
+              selectOnBlur={false}
+              selectOnNavigation={false}
+              onChange={handleSourceChanged}
+            />
+          </Menu.Item>
         }
         <Menu.Item fitted>
           <div className="display-iblock margin-right-8 margin-left-8">
@@ -284,7 +284,7 @@ const Sources = ({ unit, t }) => {
               optionText={menuOptionText}
             />
           </div>
-          <Download {...downloadProps} disabled={disabled} />
+          <Download {...downloadProps} disabled={disabled}/>
           <UnitBar
             disabled={disabled}
             handleSettings={setSettings}
@@ -295,12 +295,12 @@ const Sources = ({ unit, t }) => {
         </Menu.Item>
         {
           mp3 &&
-          <Menu.Item fitted='horizontally'>
-            <AudioPlayer file={mp3} />
+          <Menu.Item fitted="horizontally">
+            <AudioPlayer file={mp3}/>
           </Menu.Item>
         }
       </Menu>
-      <Divider hidden fitted className="clear" />
+      <Divider hidden fitted className="clear"/>
       {getContents()}
     </div>
   );
@@ -308,7 +308,7 @@ const Sources = ({ unit, t }) => {
 
 Sources.propTypes = {
   unit: shapes.ContentUnit.isRequired,
-  t: PropTypes.func.isRequired,
+  t   : PropTypes.func.isRequired
 };
 
 export default withTranslation()(Sources);

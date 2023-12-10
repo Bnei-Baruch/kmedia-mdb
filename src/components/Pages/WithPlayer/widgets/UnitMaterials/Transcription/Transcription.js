@@ -7,7 +7,7 @@ import clsx from 'clsx';
 import { useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { doc2html, fetchTimeCode, selectors } from '../../../../../../redux/modules/assets';
+import { actions as assetsActions, selectors } from '../../../../../../redux/modules/assets';
 import { selectors as settings } from '../../../../../../redux/modules/settings';
 
 import { CT_ARTICLE, CT_RESEARCH_MATERIAL, MT_TEXT, INSERT_TYPE_SUMMARY } from '../../../../../../helpers/consts';
@@ -95,8 +95,8 @@ const Transcription = ({ unit, t, type, activeTab }) => {
     const { data } = doc2htmlById[selectedFile.id] || {};
     if (!data) {
       // Load from redux.
-      dispatch(doc2html(selectedFile.id));
-      dispatch(fetchTimeCode(unit.id, selectedFile.language));
+      dispatch(assetsActions.doc2html(selectedFile.id));
+      dispatch(assetsActions.fetchTimeCode(unit.id, selectedFile.language));
     }
   }, [dispatch, doc2htmlById, selectedFile?.id, unit.id, selectedFile?.language]);
 
@@ -163,9 +163,9 @@ const Transcription = ({ unit, t, type, activeTab }) => {
             language={finalLanguage}
             urlParams={urlParams}
             source={{
-              subject_uid: unit.id,
+              subject_uid : unit.id,
               subject_type: unit.content_type,
-              properties: { activeTab }
+              properties  : { activeTab }
             }}
             label={activeTab !== 'research' ? { content_unit: fileCU && fileCU.id } : null}
           />
@@ -192,10 +192,10 @@ const Transcription = ({ unit, t, type, activeTab }) => {
   return (
     <div
       className={clsx({
-        source: true,
-        [`is-${theme}`]: true,
-        [`is-${fontType}`]: true,
-        [`size${fontSize}`]: true,
+        source             : true,
+        [`is-${theme}`]    : true,
+        [`is-${fontType}`] : true,
+        [`size${fontSize}`]: true
       })}
     >
       <Menu
@@ -204,8 +204,8 @@ const Transcription = ({ unit, t, type, activeTab }) => {
         fluid
         className={
           clsx({
-            'no-margin-top': isMobileDevice,
-            'no_print': true,
+            'no-margin-top'      : isMobileDevice,
+            'no_print'           : true,
             'justify_content_end': true
           })
         }
@@ -219,7 +219,7 @@ const Transcription = ({ unit, t, type, activeTab }) => {
           />
         </Menu.Item>
         <Menu.Item>
-          <Download path={url} mimeType={mimetype} downloadAllowed={true} filename={name} />
+          <Download path={url} mimeType={mimetype} downloadAllowed={true} filename={name}/>
           <UnitBar
             disabled={!url}
             handleSettings={setViewSettings}
@@ -235,10 +235,10 @@ const Transcription = ({ unit, t, type, activeTab }) => {
 };
 
 Transcription.propTypes = {
-  unit: shapes.ContentUnit,
-  t: PropTypes.func.isRequired,
-  type: PropTypes.string,
-  activeTab: PropTypes.string,
+  unit     : shapes.ContentUnit,
+  t        : PropTypes.func.isRequired,
+  type     : PropTypes.string,
+  activeTab: PropTypes.string
 };
 
 export default withTranslation()(Transcription);
