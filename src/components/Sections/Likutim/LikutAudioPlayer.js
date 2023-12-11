@@ -13,7 +13,7 @@ const LikutAudioPlayer = ({ file, id, lang }) => {
     if (!file && !status) {
       dispatch(mergeKiteiMakor({ id, lang }));
     }
-  }, [file, id, lang, status]);
+  }, [file, id, lang, status, dispatch]);
 
   if (!file && status !== 'ok') return null;
 

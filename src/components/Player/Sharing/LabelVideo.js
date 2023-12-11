@@ -2,7 +2,7 @@ import React from 'react';
 import StartEnd from './StartEnd';
 import { useSelector } from 'react-redux';
 import { selectors as player, selectors } from '../../../redux/modules/player';
-import { PLAYER_OVER_MODES, MT_VIDEO } from '../../../helpers/consts';
+import { PLAYER_OVER_MODES } from '../../../helpers/consts';
 import { selectors as playlist } from '../../../redux/modules/playlist';
 import { selectors as mdb } from '../../../redux/modules/mdb';
 import { toHumanReadableTime } from '../../../helpers/time';

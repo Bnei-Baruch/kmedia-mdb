@@ -14,7 +14,7 @@ export const useNotes = (subject_uid, language) => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(actions.fetch({ subject_uid, language }));
-  }, [subject_uid, language]);
+  }, [subject_uid, language, dispatch]);
 
   const offsets = buildOffsets(notes);
 

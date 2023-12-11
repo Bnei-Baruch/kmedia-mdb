@@ -14,7 +14,7 @@ const BuildSingleMediaPlaylist = () => {
     if (!wip && id !== cuId) {
       dispatch(actions.singleMediaBuild(id));
     }
-  }, [cuId, id, wip]);
+  }, [cuId, id, wip, dispatch]);
 
   return <Helmets.AVUnit id={id} />;
 };

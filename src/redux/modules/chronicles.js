@@ -48,9 +48,11 @@ export const reducer = handleActions({
 }, initialState);
 
 const getLastAction = state => state.lastAction;
+const getActionsCount = state => state.actionsCount;
 const getEvent      = state => state.event;
 
 export const selectors = {
   getLastAction,
+  getActionsCount,
   getEvent
 };

@@ -5,7 +5,6 @@ import { selectors as player } from '../../redux/modules/player';
 import ControlsWeb from './Controls/ControlsWeb';
 import Settings from './Settings/Settings';
 import Sharing from './Sharing/Sharing';
-import AudioBg from './AudioBg';
 import Preloader from './Controls/Preloader';
 import LabelVideo from './Sharing/LabelVideo';
 

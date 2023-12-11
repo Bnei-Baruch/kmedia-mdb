@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
 import { actions, selectors } from '../../../../../../redux/modules/publications';
-import { selectors as settings } from '../../../../../../redux/modules/settings';
 import Page from './Page';
 
 const BlogPostContainer = () => {

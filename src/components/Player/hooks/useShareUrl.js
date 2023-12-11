@@ -16,7 +16,7 @@ const useShareUrl = () => {
   const { language, mediaType } = useSelector(state => playlist.getInfo(state.playlist));
 
   useEffect(() => {
-    const { protocol, hostname, port, pathname, search } = window.location;
+    const { protocol, hostname, port, pathname } = window.location;
 
     const { path } = splitPathByLanguage(pathname);
 

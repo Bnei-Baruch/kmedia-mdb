@@ -20,7 +20,7 @@ const FiltersHydrator = ({ namespace, onHydrated }) => {
       dispatch(actions.hydrateFilters(namespace));
       hydrated.current = true;
     }
-  }, [dispatch, hydrated.current, isHydrated, namespace]);
+  }, [dispatch, hydrated.current, isHydrated, namespace, onHydrated]);
 
   return null;
 };

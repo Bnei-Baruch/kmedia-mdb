@@ -28,7 +28,7 @@ const FallbackImage = props => {
     if (!imageSource && !wip && !err) {
       dispatch(actions.fetch(src, fallbackImage));
     }
-  }, [fallbackImage, src, imageSource, wip, err]);
+  }, [fallbackImage, src, imageSource, wip, err, dispatch]);
 
   if (!imageSource || imageSource === NoneFallbackImage) {
     /* There is no fallbacks and src was not found */

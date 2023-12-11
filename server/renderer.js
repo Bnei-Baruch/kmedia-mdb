@@ -47,12 +47,15 @@ const windowEnvVariables = () => {
   if (KC_API_URL) {
     vars.push(`window.KC_API_URL = '${KC_API_URL}';`);
   }
+
   if (KC_REALM) {
     vars.push(`window.KC_REALM = '${KC_REALM}';`);
   }
+
   if (KC_CLIENT_ID) {
     vars.push(`window.KC_CLIENT_ID = '${KC_CLIENT_ID}';`);
   }
+
   return vars.join('');
 };
 
@@ -122,7 +125,7 @@ async function serverRenderAuthorised(req, res, next, htmlData, uiLang, bot) {
 
     const deviceInfo = new UAParser(req.get('user-agent')).getResult();
 
-    let cookieUILang           = cookies[COOKIE_UI_LANG] || uiLang;
+    const cookieUILang           = cookies[COOKIE_UI_LANG] || uiLang;
     let cookieContentLanguages = cookies[COOKIE_CONTENT_LANGS] || [uiLang];
     if (typeof cookieContentLanguages === 'string' || cookieContentLanguages instanceof String) {
       cookieContentLanguages = cookieContentLanguages.split(',');
@@ -165,11 +168,11 @@ async function serverRenderAuthorised(req, res, next, htmlData, uiLang, bot) {
 
     let hrstart    = process.hrtime();
     const promises = branch.map(({ route, params }) => {
-        show_console && console.log('serverRender: libraryPage source was found', route.ssrData?.name);
-        return route.ssrData
-          ? route.ssrData(store, { params, parsedURL: new URL(req.originalUrl, 'https://example.com') }, show_console)
-          : Promise.resolve(null);
-      }
+      show_console && console.log('serverRender: libraryPage source was found', route.ssrData?.name);
+      return route.ssrData
+        ? route.ssrData(store, { params, parsedURL: new URL(req.originalUrl, 'https://example.com') }, show_console)
+        : Promise.resolve(null);
+    }
     );
     let hrend      = process.hrtime(hrstart);
 
@@ -260,6 +263,7 @@ async function serverRenderAuthorised(req, res, next, htmlData, uiLang, bot) {
               if (context.code) {
                 res.status(context.code);
               }
+
               res.send(html);
             }
           })

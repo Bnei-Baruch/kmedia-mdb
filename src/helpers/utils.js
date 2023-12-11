@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import isEqual from 'react-fast-compare';
 import escapeRegExp from 'lodash/escapeRegExp';
 import isFunction from 'lodash/isFunction';
@@ -7,7 +7,6 @@ import 'moment-duration-format';
 
 import { CollectionsBreakdown } from './mdb';
 import { canonicalSectionByUnit } from './links';
-import * as consts from './consts';
 import {
   CT_ARTICLE,
   CT_CLIP,
@@ -21,7 +20,6 @@ import {
   CT_MEAL,
   CT_SONGS,
   CT_SPECIAL_LESSON,
-  CT_VIDEO_PROGRAM,
   CT_VIDEO_PROGRAM_CHAPTER,
   CT_VIRTUAL_LESSON,
   CT_WOMEN_LESSON,
@@ -33,7 +31,7 @@ import {
   LANG_ITALIAN,
   LANG_RUSSIAN,
   LANG_SPANISH,
-  LANG_TURKISH,
+  LANG_TURKISH
 } from './consts';
 
 const CDN_URL     = process.env.REACT_APP_CDN_URL;

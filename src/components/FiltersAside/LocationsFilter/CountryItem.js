@@ -2,7 +2,6 @@ import React, { useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Checkbox, List } from 'semantic-ui-react';
 import { FN_LOCATIONS } from '../../../helpers/consts';
-import { isLanguageRtl } from '../../../helpers/i18n-utils';
 
 import { actions, selectors as filters } from '../../../redux/modules/filters';
 import { selectors as filtersAside } from '../../../redux/modules/filtersAside';

@@ -11,7 +11,6 @@ import Helmets from '../../../../shared/Helmets/index';
 import TranscriptionContainer
   from '../../../../Pages/WithPlayer/widgets/UnitMaterials/Transcription/TranscriptionContainer';
 import Share from '../../../Library/Share';
-import { isLanguageRtl } from '../../../../../helpers/i18n-utils';
 import MediaDownloads from '../../../../Pages/WithPlayer/widgets/MediaDownloads';
 import WipErr from '../../../../shared/WipErr/WipErr';
 import Recommended from '../../../../Pages/WithPlayer/widgets/Recommended/Main/Recommended';

@@ -188,8 +188,6 @@ export const canonicalLink = (entity, mediaLang, ccu) => {
     }
   }
 
-  const mediaLangSuffix = mediaLang ? `?language=${mediaLang}` : '';
-
   // unit based on type
   const prefix   = mediaPrefix.get(entity.content_type);
   const search   = mediaLang ? `language=${mediaLang}` : '';

@@ -1,7 +1,6 @@
-import React, { Component, useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { withTranslation } from 'react-i18next';
 import { Menu, Segment } from 'semantic-ui-react';
-import isEqual from 'react-fast-compare';
 import PropTypes from 'prop-types';
 import uniq from 'lodash/uniq';
 import clsx from 'clsx';
@@ -14,7 +13,7 @@ import { selectors as settings } from '../../../../../../redux/modules/settings'
 import { CT_ARTICLE, CT_RESEARCH_MATERIAL, MT_TEXT, INSERT_TYPE_SUMMARY } from '../../../../../../helpers/consts';
 import { selectSuitableLanguage } from '../../../../../../helpers/language';
 import { getLanguageDirection } from '../../../../../../helpers/i18n-utils';
-import { DeviceInfoContext, SessionInfoContext } from '../../../../../../helpers/app-contexts';
+import { DeviceInfoContext } from '../../../../../../helpers/app-contexts';
 import { physicalFile } from '../../../../../../helpers/utils';
 import { getActivePartFromQuery } from '../../../../../../helpers/player';
 import MediaHelper from '../../../../../../helpers/media';
@@ -69,7 +68,6 @@ const selectFile = (textFiles, language) => {
 const Transcription = ({ unit, t, type, activeTab }) => {
   const location         = useLocation();
   const doc2htmlById     = useSelector(state => selectors.getDoc2htmlById(state.assets));
-  const uiLang           = useSelector(state => settings.getUILang(state.settings));
   const contentLanguages = useSelector(state => settings.getContentLanguages(state.settings));
 
   const [selectedLanguage, setSelectedLanguage] = useState('');
@@ -85,8 +83,7 @@ const Transcription = ({ unit, t, type, activeTab }) => {
   const [selectedFileOverride, setSelectedFileOverride] = useState(null);
   const selectedFile                                    = selectedFileOverride || fileFromLocation || selectFile(textFiles, finalLanguage) || {};
 
-  const { isMobileDevice }                                              = useContext(DeviceInfoContext);
-  const { enableShareText: { isShareTextEnabled, setEnableShareText } } = useContext(SessionInfoContext);
+  const { isMobileDevice } = useContext(DeviceInfoContext);
 
   const dispatch = useDispatch();
 
@@ -132,8 +129,8 @@ const Transcription = ({ unit, t, type, activeTab }) => {
       return <Segment basic>{t(`materials.${text}.no-content`)}</Segment>;
     }
 
-    const { id, name, mimetype } = file;
-    const { data, wip, err }     = doc2htmlById[id] || {};
+    const { id }             = file;
+    const { data, wip, err } = doc2htmlById[id] || {};
 
     const fileCU = getFileCU(id, unit);
 
@@ -178,10 +175,9 @@ const Transcription = ({ unit, t, type, activeTab }) => {
   };
 
   const { id, name, mimetype } = selectedFile;
-  const { data }               = (id && doc2htmlById[id]) || {};
   const fileCU                 = getFileCU(id, unit);
   const content                = prepareContent(selectedFile);
-  const url                    = id && physicalFile(selectedFile, true) || '';
+  const url                    = id ? physicalFile(selectedFile, true) : '';
 
   const { theme = 'light', fontType, fontSize = 0 } = viewSettings || {};
 

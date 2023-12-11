@@ -7,12 +7,10 @@ import { useSwipeable } from 'react-swipeable';
 
 import TwitterFeed from '../Sections/Publications/tabs/Twitter/Feed';
 import { ClientChroniclesContext, DeviceInfoContext } from '../../helpers/app-contexts';
-import { canonicalCollection, tracePath } from '../../helpers/utils';
+import { canonicalCollection } from '../../helpers/utils';
 import { selectors as mdb } from '../../redux/modules/mdb';
 import { selectors as recommended } from '../../redux/modules/recommended';
 import { selectors as filterSelectors } from '../../redux/modules/filters';
-import { selectors as sourcesSelectors } from '../../redux/modules/sources';
-import { selectors as tagsSelectors } from '../../redux/modules/tags';
 import { actions as listsActions, selectors as lists } from '../../redux/modules/lists';
 import { selectors as lessonsSelectors } from '../../redux/modules/lessons';
 import { actions as publicationActions, selectors as publicationSelectors } from '../../redux/modules/publications';
@@ -36,7 +34,6 @@ import {
   SEARCH_INTENT_SECTIONS,
   iconByContentTypeMap,
 } from '../../helpers/consts';
-import { isLanguageRtl } from '../../helpers/i18n-utils';
 import { SectionLogo } from '../../helpers/images';
 import { canonicalLink, landingPageSectionLink, intentSectionLink } from '../../helpers/links';
 import { stringify } from '../../helpers/url';
@@ -303,19 +300,19 @@ export const SearchResultLandingPage = ({ landingPage, filterValues, clickData }
 
 export const SearchResultOneItem = props => {
   const {
-    id,
-    title,
-    link,
-    logo,
-    content,
-    part,
-    parts,
-    date,
-    views,
-    collectionTitle,
-    collectionLink,
-    click,
-  } = props;
+          id,
+          title,
+          link,
+          logo,
+          content,
+          part,
+          parts,
+          date,
+          views,
+          collectionTitle,
+          collectionLink,
+          click,
+        }     = props;
   const { t } = useTranslation();
 
   const description = [];
@@ -373,32 +370,24 @@ export const SearchResultIntent = ({ id, name, type, index, clickData }) => {
   // MAP items to SearchResultOneItem
   const cuItems                    = useSelector(state => (items || []).map(x => mdb.getDenormContentUnit(state.mdb, x)));
 
-  const getTagById    = useSelector(state => tagsSelectors.getTagById(state.tags));
-  const getSourceById = useSelector(state => sourcesSelectors.getSourceById(state.sources));
-
   const section    = SEARCH_INTENT_SECTIONS[type];
   const intentType = SEARCH_INTENT_NAMES[index];
   const filterName = SEARCH_INTENT_FILTER_NAMES[index];
 
   const logo        = <SectionLogo name={type} height="50" width="50" />;
-  const getById     = getFilterById(getTagById, getSourceById, index);
   const link        = intentSectionLink(section, [{ name: filterName, values: [id] }]);
   const description = t(`search.intent-prefix.${section}-${intentType.toLowerCase()}`);
 
   let resultsType = '';
-  const path      = tracePath(getById(id), getById);
-  let display     = '';
   switch (index) {
     case SEARCH_INTENT_INDEX_TOPIC:
-      display     = path[path.length - 1].label;
       resultsType = SEARCH_INTENT_HIT_TYPE_PROGRAMS;
       break;
     case SEARCH_INTENT_INDEX_SOURCE:
-      display     = path.map(y => y.name).join(' > ');
       resultsType = SEARCH_INTENT_HIT_TYPE_LESSONS;
       break;
     default:
-      display = name;
+      break;
   }
 
   const props = {
@@ -476,9 +465,9 @@ const getLowestLevelSeries = (series, rootId) => {
 const renderSerie = (s, click, link, t) =>
   (
     <Button basic size="tiny" className="link_to_cu" key={s.id}
-      as={Link} to={link}
-      onClick={() => click(link)}
-      style={{ minWidth: '290px', marginBottom: '0.5em', display: 'flex', justifyContent: 'space-between' }}>
+            as={Link} to={link}
+            onClick={() => click(link)}
+            style={{ minWidth: '290px', marginBottom: '0.5em', display: 'flex', justifyContent: 'space-between' }}>
       {s.name}
       &nbsp;
       <Link key={s.id} to={link} onClick={() => click(link)}>
@@ -560,7 +549,7 @@ export const SearchResultTweets = ({ source }) => {
   const items              = useSelector(state => twitterMapFromState(state, source));
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const uiLang             = useSelector(state => settingsSelectors.getUILang(state.settings));
-  const uiDir             = useSelector(state => settingsSelectors.getUIDir(state.settings));
+  const uiDir              = useSelector(state => settingsSelectors.getUIDir(state.settings));
 
   const [pageNo, setPageNo] = useState(0);
   const pageSize            = isMobileDevice ? 1 : 3;

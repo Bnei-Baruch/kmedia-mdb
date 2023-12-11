@@ -102,7 +102,7 @@ class BlogContainer extends withPagination {
   }
 
   render() {
-    const { items, wip, err, pageNo, total, pageSize, language, namespace, location } = this.props;
+    const { items, wip, err, pageNo, total, pageSize, namespace, location } = this.props;
 
     return (
       <Page

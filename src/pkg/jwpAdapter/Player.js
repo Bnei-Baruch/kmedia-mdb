@@ -14,7 +14,7 @@ const Player = () => {
   useEffect(() => () => {
     dispatch(chroniclesActions.pauseOnLeave());
     remove();
-  }, []);
+  }, [dispatch]);
   return (
     <>
       <PlayerBehaviorBuilder />

@@ -21,7 +21,7 @@ const CuName = ({ namespace }) => {
 
     return () => clearTimeout(timer);
 
-  }, [dispatch, temporaryName]);
+  }, [dispatch, temporaryName, namespace]);
 
   useEffect(() => {
     setTemporaryName(name);

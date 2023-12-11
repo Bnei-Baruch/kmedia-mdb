@@ -17,7 +17,7 @@ const BuildPlaylistByCollectionByParams = () => {
     if (!wip && !fetched) {
       dispatch(mdbActions.fetchCollection(id));
     }
-  }, [wip, fetched, id]);
+  }, [fetched, id, wip, dispatch]);
 
   return <BuildPlaylistByCollection cuId={cuId} id={id} />;
 };

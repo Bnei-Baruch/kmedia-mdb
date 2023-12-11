@@ -28,7 +28,8 @@ const RenderAsTree = ({ namespace, filterName, baseItems }) => {
   const getPath = isTag ? getPathTags : getPathSources;
   const roots   = isTag ? rootsTags : rootsSources;
 
-  const items = useMemo(() => treeItems(baseItems, getPath), [baseItems, areSourcesLoaded, getPath]);
+  const items = useMemo(() => treeItems(baseItems, getPath), [baseItems, getPath]);
+  if (!areSourcesLoaded) return null;
 
   return (
     <>

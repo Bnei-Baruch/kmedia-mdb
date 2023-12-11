@@ -10,7 +10,7 @@ const useBuildMyPlaylist = () => {
   const location = useLocation();
 
   const { pId, id: itemId, wip } = useSelector(state => selectors.getInfo(state.playlist));
-  const items                  = useSelector(state => selectors.getPlaylist(state.playlist));
+  const items                    = useSelector(state => selectors.getPlaylist(state.playlist));
 
   const dispatch = useDispatch();
 
@@ -18,7 +18,7 @@ const useBuildMyPlaylist = () => {
     if (id !== pId && !wip) {
       dispatch(actions.myPlaylistBuild(id));
     }
-  }, [id, pId, wip]);
+  }, [id, pId, wip, dispatch]);
 
   useEffect(() => {
     if (itemId) {
@@ -29,7 +29,7 @@ const useBuildMyPlaylist = () => {
         _id && dispatch(actions.select({ cuId: _id.split('_')[0], id: _id }));
       }
     }
-  }, [items, itemId, location]);
+  }, [items, itemId, location, dispatch]);
 
   return items.length === 0;
 };

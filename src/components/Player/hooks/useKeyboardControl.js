@@ -70,7 +70,7 @@ export const useKeyboardControl = runTimeout => {
 
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [mode]);
+  }, [mode, dispatch, runTimeout]);
 
   useEffect(() => {
     const handleKeyUp = e => {
@@ -84,7 +84,7 @@ export const useKeyboardControl = runTimeout => {
 
     document.addEventListener('keyup', handleKeyUp);
     return () => document.removeEventListener('keyup', handleKeyUp);
-  }, [mode]);
+  }, [mode, dispatch]);
 
   return null;
 };

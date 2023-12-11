@@ -19,7 +19,7 @@ const BuildPlaylistByCollection = ({ cuId, id }) => {
     } else if (cuId && prevCuId !== cuId) {
       dispatch(actions.select({ cuId, id: cuId }));
     }
-  }, [id, cuId, wip, fetched]);
+  }, [id, cuId, prevCId, prevCuId, fetched, wip, dispatch]);
 
   return <Helmets.AVUnit id={cuId} />;
 };

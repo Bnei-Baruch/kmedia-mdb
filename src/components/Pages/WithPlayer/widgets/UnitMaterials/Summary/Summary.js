@@ -18,8 +18,8 @@ const Summary = ({ unit, t }) => {
   const doc2htmlById     = useSelector(state => assetsSelectors.getDoc2htmlById(state.assets));
   const dispatch         = useDispatch();
 
-  const summaryLanguages = (unit && unit.files && unit.files.filter(f => MediaHelper.IsText(f) && !MediaHelper.IsPDF(f) && f.insert_type === INSERT_TYPE_SUMMARY).map(f => f.language)) || [];
-  const defaultLanguage = selectSuitableLanguage(contentLanguages, summaryLanguages, unit.original_language);
+  const summaryLanguages                        = (unit && unit.files && unit.files.filter(f => MediaHelper.IsText(f) && !MediaHelper.IsPDF(f) && f.insert_type === INSERT_TYPE_SUMMARY).map(f => f.language)) || [];
+  const defaultLanguage                         = selectSuitableLanguage(contentLanguages, summaryLanguages, unit.original_language);
   const [selectedLanguage, setSelectedLanguage] = useState(defaultLanguage);
 
   const description = unit.description
@@ -36,20 +36,20 @@ const Summary = ({ unit, t }) => {
       .find(f => f.insert_type === INSERT_TYPE_SUMMARY);
   };
 
-  const file = getFile(selectedLanguage);
+  const file                                = getFile(selectedLanguage);
   const [selectedFileId, setSelectedFileId] = useState((file && file.id) || null);
 
   const handleLanguageChanged = selectedLanguage => {
     const file = getFile(selectedLanguage);
     setSelectedFileId((file && file.id) || null);
     setSelectedLanguage(selectedLanguage);
-  }
+  };
 
   useEffect(() => {
     if (file) {
       dispatch(doc2html(selectedFileId));
     }
-  }, [dispatch, selectedFileId]);
+  }, [file, dispatch, selectedFileId]);
 
   const { data } = doc2htmlById[file?.id] || false;
   return (

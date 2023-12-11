@@ -47,7 +47,7 @@ export const VolumeKnob = ({ onChangePosition }) => {
     };
 
     return removeListeners;
-  }, [isReady, activated]);
+  }, [isReady, activated, handleMove]);
 
   return (
     <Popup

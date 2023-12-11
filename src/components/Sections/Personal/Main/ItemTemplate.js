@@ -10,7 +10,6 @@ import {
   MY_NAMESPACE_PLAYLISTS,
   MY_NAMESPACE_SUBSCRIPTIONS
 } from '../../../../helpers/consts';
-import { isLanguageRtl } from '../../../../helpers/i18n-utils';
 import Link from '../../../Language/MultiLanguageLink';
 import PlaylistPlayIcon from '../../../../images/icons/PlaylistPlay';
 import SubscriptionsIcon from '../../../../images/icons/Subscriptions';

@@ -6,7 +6,6 @@ import { useSelector } from 'react-redux';
 
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { NO_NAME } from '../../../helpers/consts';
-import { isLanguageRtl } from '../../../helpers/i18n-utils';
 import { selectors as settings } from '../../../redux/modules/settings';
 
 import Link from '../../Language/MultiLanguageLink';
@@ -39,7 +38,7 @@ const ListTemplate = (
 
   const handleItemRef = r => itemRef.current = r;
 
-  const dir = useSelector(state => settings.getUIDir(state.settings));
+  const dir                = useSelector(state => settings.getUIDir(state.settings));
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
   const [isNeedTooltip, setIsNeedTooltip] = useState(null);
