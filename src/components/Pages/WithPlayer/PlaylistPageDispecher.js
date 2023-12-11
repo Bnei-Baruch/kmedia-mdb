@@ -65,7 +65,7 @@ const PageSwitcher = ({ playerContainer }) => {
   const { t }                      = useTranslation();
   const { isReady, isSingleMedia } = useSelector(state => playlist.getInfo(state.playlist));
   const location                   = useLocation();
-  const embed                      = getEmbedFromQuery(location);
+  const { embed }                      = getEmbedFromQuery(location);
 
   if (!isReady)
     return embed ? null : WipErr({ wip: !isReady, t });

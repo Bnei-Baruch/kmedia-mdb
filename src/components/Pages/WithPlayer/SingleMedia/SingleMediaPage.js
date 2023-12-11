@@ -13,7 +13,7 @@ const SingleMediaPage = ({ playerContainer }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const location           = useLocation();
 
-  const embed = getEmbedFromQuery(location);
+  const { embed } = getEmbedFromQuery(location);
 
   if (embed) return playerContainer;
 

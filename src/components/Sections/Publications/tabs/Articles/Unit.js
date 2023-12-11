@@ -112,7 +112,7 @@ const ArticlePage = ({ t }) => {
 
   const chroniclesAppend = chronicles ? chronicles.append.bind(chronicles) : () => null;
 
-  const embed = getEmbedFromQuery(location);
+  const { embed } = getEmbedFromQuery(location);
   return !embed
     ? (
       <>

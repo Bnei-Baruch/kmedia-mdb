@@ -8,15 +8,19 @@ import { useTranslation } from 'react-i18next';
 import usePlaylistItemLink from '../hooks/usePlaylistItemLink';
 import WebWrapTooltip from '../../shared/WebWrapTooltip';
 import { useLocation } from 'react-router-dom';
-import { getEmbedFromQuery } from '../../../helpers/player';
+import { getEmbedFromQuery, EMBED_TYPE_PLAYER, EMBED_TYPE_PLAYLIST } from '../../../helpers/player';
 
 export const PrevBtn = () => {
   const id       = useSelector(state => selectors.getPrevId(state.playlist));
   const { t }    = useTranslation();
   const location = useLocation();
   const to       = usePlaylistItemLink(id);
+  const { type } = getEmbedFromQuery(location);
 
-  if (getEmbedFromQuery(location) || !to) return null;
+  if (type === EMBED_TYPE_PLAYER || !to) return null;
+  if (type === EMBED_TYPE_PLAYLIST) {
+    to.search = 'embed=2';
+  }
 
   return (
     <WebWrapTooltip
@@ -39,8 +43,12 @@ export const NextBtn = () => {
   const { t }    = useTranslation();
   const location = useLocation();
   const to       = usePlaylistItemLink(id);
+  const { type } = getEmbedFromQuery(location);
 
-  if (getEmbedFromQuery(location) || !to) return null;
+  if (type === EMBED_TYPE_PLAYER || !to) return null;
+  if (type === EMBED_TYPE_PLAYLIST) {
+    to.search = 'embed=2';
+  }
 
   return (
     <WebWrapTooltip
