@@ -300,19 +300,19 @@ export const SearchResultLandingPage = ({ landingPage, filterValues, clickData }
 
 export const SearchResultOneItem = props => {
   const {
-          id,
-          title,
-          link,
-          logo,
-          content,
-          part,
-          parts,
-          date,
-          views,
-          collectionTitle,
-          collectionLink,
-          click,
-        }     = props;
+    id,
+    title,
+    link,
+    logo,
+    content,
+    part,
+    parts,
+    date,
+    views,
+    collectionTitle,
+    collectionLink,
+    click,
+  }     = props;
   const { t } = useTranslation();
 
   const description = [];
@@ -465,9 +465,9 @@ const getLowestLevelSeries = (series, rootId) => {
 const renderSerie = (s, click, link, t) =>
   (
     <Button basic size="tiny" className="link_to_cu" key={s.id}
-            as={Link} to={link}
-            onClick={() => click(link)}
-            style={{ minWidth: '290px', marginBottom: '0.5em', display: 'flex', justifyContent: 'space-between' }}>
+      as={Link} to={link}
+      onClick={() => click(link)}
+      style={{ minWidth: '290px', marginBottom: '0.5em', display: 'flex', justifyContent: 'space-between' }}>
       {s.name}
       &nbsp;
       <Link key={s.id} to={link} onClick={() => click(link)}>
