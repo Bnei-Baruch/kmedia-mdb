@@ -59,6 +59,7 @@ const LessonDatePickerContainer = () => {
     if (prevTo) prevTo.search = 'embed=2';
     if (nextTo) nextTo.search = 'embed=2';
   }
+
   return (
     <Header.Subheader
       className={isMobileDevice ? '' : isLtr ? 'float-right' : 'float-left'}

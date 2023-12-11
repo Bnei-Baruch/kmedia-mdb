@@ -32,6 +32,7 @@ const LessonDatePicker = ({ t }) => {
     if (type === EMBED_TYPE_PLAYLIST) {
       to.search = 'embed=2';
     }
+
     navigate({ ...to, pathname: `/${uiLang}${to.pathname}` });
     dispatch(actions.nullDatepickerCO());
   }
