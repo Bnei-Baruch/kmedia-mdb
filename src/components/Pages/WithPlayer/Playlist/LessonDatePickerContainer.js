@@ -30,11 +30,12 @@ const LessonDatePickerContainer = () => {
   const wipMap  = useSelector(state => mdb.getWip(state.mdb), shallowEqual);
   const cWindow = useSelector(state => mdb.getWindow(state.mdb), shallowEqual);
 
-  const cId    = useSelector(state => selectors.getInfo(state.playlist).cId);
+  const { isReady, cId } = useSelector(state => selectors.getInfo(state.playlist));
   const denorm = useSelector(state => mdb.nestedGetDenormCollection(state.mdb));
   const uiDir  = useSelector(state => settings.getUIDir(state.settings));
 
   const dispatch = useDispatch();
+
   const curIndex = cWindow?.data?.indexOf(cId) ?? -1;
   useEffect(() => {
     if (curIndex < 1 && !wipMap.cWindow[cId] && cId !== cWindow.id) {
@@ -43,6 +44,10 @@ const LessonDatePickerContainer = () => {
       dispatch(actions.fetchWindow({ id: cId, start_date, end_date }));
     }
   }, [cId, cWindow, wipMap.cWindow, curIndex]);
+
+  if (!isReady) {
+    return null;
+  }
 
   const isLtr          = uiDir === 'ltr';
   const prevCollection = curIndex >= 0 && curIndex < cWindow.data.length - 1 ? denorm(cWindow.data[curIndex + 1]) : null;
