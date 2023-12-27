@@ -1,0 +1,293 @@
+$serif-family: 'Georgia, ' Times New Roman ', Times, serif';
+
+.text_layout {
+  position: relative;
+
+  .text__content-wrapper {
+    display: flex;
+    flex-basis: max-content;
+    flex-wrap: nowrap;
+    justify-content: center;
+    margin-top: 1em;
+
+    .text__content {
+      max-width: $max-readble-width;
+    }
+  }
+
+  .text_align_to_text {
+    width: $max-readble-width;
+    margin: 0 auto;
+    transform: translate(-30px, 0);
+  }
+}
+
+.is-dark {
+  background: $black !important;
+  color: $white !important;
+}
+
+.is-sepia {
+  background: $sepia-bg !important;
+  color: $sepia-text !important;
+}
+
+.is-serif {
+  font-family: $serif-family;
+}
+
+.ui.sepia.label,
+.ui.sepia.labels .label {
+  background-color: $sepia-bg !important;
+  border-color: $sepia-bg !important;
+}
+
+.sources-settings {
+  padding: 0 !important;
+
+  .icon {
+    margin: 0 !important;
+  }
+
+  .menu {
+    background: none;
+    border: 0 !important;
+    border-radius: 0;
+    box-shadow: none !important;
+    margin: 0 !important;
+    white-space: nowrap;
+
+    + .menu {
+      border-top: 1px solid rgba(34, 36, 38, .1) !important;
+    }
+
+    &.ui.item .item {
+      padding-left: 1em !important;
+      padding-right: 1em !important;
+    }
+  }
+}
+
+
+.font_settings {
+  font-size: 16px;
+
+  * {
+    line-height: 1.65;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
+    line-height: 1.28571429em;
+
+    .is-serif & {
+      font-family: $serif-family;
+    }
+
+  }
+
+  p {
+    margin-bottom: 1.2em;
+  }
+
+  ul,
+  ol {
+    p {
+      text-indent: 0;
+    }
+  }
+
+  h1 {
+    font-size: 2em;
+  }
+
+  h2 {
+    font-size: 1.71428571em;
+  }
+
+  h3 {
+    font-size: 1.28571429em;
+  }
+
+  h4 {
+    font-size: 1.07142857em;
+  }
+
+  h5 {
+    font-size: 1em;
+  }
+}
+
+.stick_toolbar {
+  position: sticky;
+  top: 0;
+  background: $white;
+  z-index: 1;
+
+  &.stick_toolbar_pinned {
+    top: $main-menu-height;
+    transition: all 0.2s ease-in-out 0s;
+  }
+
+  &.stick_toolbar_unpinned {
+    &.stick_toolbar_fixed {
+      transform: none;
+    }
+
+    transform: translate3d(0px, -60px, 0px);
+    transition: all 0.2s ease-in-out 0s;
+  }
+
+  .is-mobile & {
+    top: auto;
+    bottom: 0;
+  }
+}
+
+.flex_basis_150 {
+  flex-basis: 150px;
+}
+
+.text_toolbar {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: nowrap;
+  border-top: 1px solid $midWhite;
+  border-bottom: 1px solid $midWhite;
+  height: $toc-toolbar-height;
+
+
+  .toc_trigger {
+    justify-self: flex-start;
+    align-self: center;
+    background: none;
+    flex-wrap: nowrap;
+  }
+
+  &__buttons {
+    max-width: $max-readble-width;
+    border-right: 1px solid $midWhite;
+    border-left: 1px solid $midWhite;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-around;
+    align-content: center;
+    margin: 0 auto;
+    padding: 0 1em;
+    flex-grow: 3;
+    flex-basis: max-content;
+
+    &.text_selected {
+      flex-grow: 0;
+    }
+
+    .divider {
+      display: block;
+      border-left: 1px solid $midWhite;
+      align-self: center;
+      height: 24px;
+      margin: 0 6px;
+    }
+
+    .button {
+      font-size: 0.5rem;
+      padding: 3px !important;
+      background: none;
+      margin: 0 8px;
+    }
+
+    .dropdown .button {
+      height: 100%;
+    }
+  }
+}
+
+.text_toolbar__breadcrumb {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: center;
+  color: $midGrey;
+  padding: 1em;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+
+  & > div:last-child {
+    color: $text-color;
+  }
+
+  .divider {
+    font-size: 16px;
+    padding: 0 .5em;
+
+  }
+
+  a {
+    color: $midGrey;
+    text-decoration: underline;
+  }
+}
+
+
+.text_page__audio {
+  margin-top: 1em;
+
+  audio {
+    height: 25px;
+    top: 7px;
+
+    @include mobile {
+      width: -webkit-fill-available;
+    }
+  }
+
+  .text_page__audio_btn {
+    display: flex;
+    cursor: pointer;
+    color: $blue;
+    flex-wrap: nowrap;
+    align-items: center;
+
+    span:last-child {
+      padding: 0 .5em;
+    }
+
+  }
+}
+
+
+.share-bar {
+  .social-buttons {
+    align-items: center;
+    background: rgba($black, .8);
+    border-radius: calc(36px / 2 + .5rem);
+    display: flex;
+    margin: auto 0 1rem;
+    padding: .5rem .25rem;
+
+    .SocialMediaShareButton {
+      cursor: pointer;
+      margin: 0 .25rem;
+    }
+  }
+
+  .share-bar__message {
+    display: block;
+
+    .content {
+      max-width: 340px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+
+      @include small-mobile {
+        max-width: 200px;
+      }
+    }
+  }
+}

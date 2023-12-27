@@ -1,0 +1,34 @@
+import { put, takeEvery, select, call } from 'redux-saga/effects';
+import { actions, types } from '../redux/modules/textPage';
+import { selectors as mdb } from '../redux/modules/mdb';
+import { selectSuitableLanguage } from '../helpers/language';
+import { LANG_HEBREW, DEFAULT_CONTENT_LANGUAGE } from '../helpers/consts';
+import { selectors as settings } from '../redux/modules/settings';
+import { cuToSubject, selectTextFile, checkRabashGroupArticles } from '../components/Pages/WithText/helper';
+import { fetchUnit } from './mdb';
+
+export function* fetchSubject(action) {
+  const { uid: id, isGr } = checkRabashGroupArticles(action.payload);
+
+  try {
+    yield call(fetchUnit, { payload: id });
+    const cu               = yield select(state => mdb.getDenormContentUnit(state.mdb, id));
+    const subject          = cuToSubject(cu);
+    const contentLanguages = yield select(state => settings.getContentLanguages(state.settings));
+    const language         = selectSuitableLanguage(contentLanguages, subject.languages, LANG_HEBREW, DEFAULT_CONTENT_LANGUAGE, true);
+
+    const file = selectTextFile(subject.files, id, language);
+    yield put(actions.fetchSubjectSuccess({ subject, file, isGr }));
+  } catch (err) {
+    yield put(actions.fetchSubjectFailure(err));
+  }
+}
+
+function* watchFetchSubject() {
+  yield takeEvery([types.FETCH_SUBJECT], fetchSubject);
+}
+
+export const sagas = [
+  watchFetchSubject,
+];
+

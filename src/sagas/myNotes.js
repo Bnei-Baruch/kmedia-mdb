@@ -25,7 +25,7 @@ function* add(action) {
   const params    = action.payload;
   try {
     const { data } = yield call(Api.myNotes, params, token, 'POST');
-    yield put(actions.addSuccess({ namespace, item: data }));
+    yield put(actions.addServerSuccess({ namespace, item: data }));
   } catch (err) {
     console.log(err);
   }
@@ -38,7 +38,7 @@ function* edit(action) {
   const params    = action.payload;
   try {
     const { data } = yield call(Api.myNotes, params, token, 'PUT');
-    yield put(actions.editSuccess({ namespace, item: data, changeItems: action.payload.changeItems }));
+    yield put(actions.editServerSuccess({ namespace, item: data, changeItems: action.payload.changeItems }));
   } catch (err) {
     console.log(err);
   }
@@ -51,7 +51,7 @@ function* remove(action) {
   const { id } = action.payload;
   try {
     yield call(Api.myNotes, { id }, token, 'DELETE');
-    yield put(actions.removeSuccess(id));
+    yield put(actions.removeServerSuccess(id));
   } catch (err) {
     console.log(err);
   }
@@ -63,15 +63,15 @@ function* watchFetch() {
 }
 
 function* watchAdd() {
-  yield takeEvery(types.ADD, add);
+  yield takeEvery(types.ADD_SERVER, add);
 }
 
 function* watchEdit() {
-  yield takeEvery(types.EDIT, edit);
+  yield takeEvery(types.EDIT_SERVER, edit);
 }
 
 function* watchRemove() {
-  yield takeEvery(types.REMOVE, remove);
+  yield takeEvery(types.REMOVE_SERVER, remove);
 }
 
 export const sagas = [

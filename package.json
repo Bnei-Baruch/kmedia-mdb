@@ -154,6 +154,7 @@
     "serialize-javascript": "^6.0.1",
     "ua-parser-js": "^1.0.34",
     "ulid": "^2.3.0",
+    "util": "^0.12.5",
     "warning": "^4.0.3",
     "worker-loader": "^3.0.8"
   },

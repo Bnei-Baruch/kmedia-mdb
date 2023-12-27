@@ -1,0 +1,153 @@
+
+.position_relative {
+  position: relative;
+}
+
+
+.display-inline {
+  display: inline;
+}
+
+.display-block {
+  display: block !important;
+}
+
+.display-iblock {
+  display: inline-block !important;
+}
+
+
+.min-height-200 {
+  min-height: 200px;
+}
+
+
+.float-left {
+  float: left
+}
+
+.float-right {
+  float: right;
+}
+
+.clear {
+  clear: both;
+}
+
+
+.no-padding {
+  padding: 0 !important;
+}
+
+.padding_r_l_0 {
+  padding-right: 0 !important;
+  padding-left: 0 !important;
+}
+
+.no-margin-top {
+  margin-top: 0 !important;
+}
+
+.no-margin-bottom {
+  margin-bottom: 0 !important;
+}
+
+.no-margin {
+  margin: 0 !important;
+}
+
+.no-border {
+  border: 0 none !important;
+}
+
+.no-shadow {
+  box-shadow: none !important;
+}
+
+.margin-top-8 {
+  margin-top: 8px !important;
+}
+
+.margin-right-4 {
+  margin-right: 4px !important;
+}
+
+.margin-left-4 {
+  margin-left: 4px !important;
+}
+
+.margin-right-8 {
+  margin-right: 8px !important;
+}
+
+.margin-left-8 {
+  margin-left: 8px !important;
+}
+
+.margin-bottom-4 {
+  margin-bottom: 4px !important;
+}
+
+.padding-top_1em {
+  padding-top: 1em;
+}
+
+.uppercase {
+  text-transform: uppercase;
+}
+
+
+.flex_column {
+  flex-direction: column;
+  align-items: start;
+}
+
+
+.transparent {
+  opacity: 0;
+}
+
+.no-background {
+  background-color: transparent !important;
+}
+
+.justify_content_end {
+  justify-content: flex-end
+}
+
+.background_grey {
+  background-color: $darkWhite;
+}
+
+.no-padding-bottom {
+  padding-bottom: 0 !important;
+}
+
+.no-padding-top {
+  padding-top: 0 !important;
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+
+.flex_nowrap {
+  flex-wrap: nowrap !important;
+}
+
+.text_ellipsis {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  width: 100%;
+  white-space: nowrap;
+  display: inline-block;
+}
+
+
+.align-right {
+  float: right;
+}
+
+.align-left {
+  float: left
+}

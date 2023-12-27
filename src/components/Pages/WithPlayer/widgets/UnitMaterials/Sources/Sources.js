@@ -16,7 +16,7 @@ import { CT_LIKUTIM, CT_SOURCE, MT_TEXT, MT_AUDIO } from '../../../../../../help
 import { getSourceErrorSplash, wipLoadingSplash } from '../../../../../shared/WipErr/WipErr';
 import AudioPlayer from '../../../../../shared/AudioPlayer';
 import PDF, { isTaas, startsFrom } from '../../../../../shared/PDF/PDF';
-import ScrollToSearch from '../../../../../shared/DocToolbar/ScrollToSearch';
+import TextContentWeb from '../../../../WithText/Content/TextContentWeb';
 import Download from '../../../../../shared/Download/Download';
 import * as shapes from '../../../../../shapes';
 import UnitBar from '../UnitBar';
@@ -208,7 +208,7 @@ const Sources = ({ unit, t }) => {
           className="font_settings doc2html"
           style={{ direction }}
         >
-          <ScrollToSearch
+          <TextContentWeb
             data={data}
             language={selectedSourceLanguage}
             pathname={`/${selectedSourceLanguage}/${isLikutim ? 'likutim' : 'sources'}/${selectedUnitId}`}

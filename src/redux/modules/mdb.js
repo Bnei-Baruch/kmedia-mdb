@@ -5,6 +5,7 @@ import { createAction, handleActions } from 'redux-actions';
 import MediaHelper from '../../helpers/media';
 import { types as settings } from './settings';
 import { types as ssr } from './ssr';
+import { isEmpty } from '../../helpers/utils';
 
 /* Types */
 
@@ -413,7 +414,7 @@ const onReceiveCollections = (state, action) => {
     if (y.content_units) {
 
       y.ccuNames = y.ccuNames || {};
-      y.cuIDs = y.content_units.filter(cu => !!cu).map(cu => {
+      y.cuIDs    = y.content_units.filter(cu => !!cu).map(cu => {
         const ccuName     = cu.name_in_collection;
         y.ccuNames[cu.id] = ccuName;
 
@@ -524,7 +525,7 @@ const onReceiveContentUnits = (state, action) => {
 
 const onReceiveLabels = (state, action) => {
   const labels = action.payload;
-  if (labels.length === 0) {
+  if (isEmpty(labels)) {
     return state;
   }
 
@@ -741,6 +742,7 @@ const getDenormCollectionWUnits = (state, id) => {
   return c;
 };
 
+const getLabelById   = state => state.labelById;
 const getDenormLabel = state => id => state.labelById[id];
 
 const getCountCu = (state, namespace) => state.countCU[namespace];
@@ -780,5 +782,6 @@ export const selectors = {
   skipFetchedCO,
   getLabelsByCU,
   getDenormLabel,
+  getLabelById,
   getPersonById,
 };

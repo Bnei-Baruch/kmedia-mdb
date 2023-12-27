@@ -2,7 +2,6 @@ import uniq from 'lodash/uniq';
 import moment from 'moment';
 import { getPageFromLocation } from '../components/Pagination/withPagination';
 import { tabs as pulicationsTabs } from '../components/Sections/Publications/MainPage';
-import { isTaas } from '../components/shared/PDF/PDF';
 
 import {
   COLLECTION_PROGRAMS_TYPE,
@@ -29,8 +28,7 @@ import {
 import MediaHelper from './../helpers/media';
 import { getQuery } from '../helpers/url';
 import { canonicalCollection, isEmpty } from '../helpers/utils';
-import { selectSuitableLanguage } from '../helpers/language';
-import { actions as assetsActions, selectors as assetsSelectors } from './../redux/modules/assets';
+import { actions as assetsActions } from './../redux/modules/assets';
 import { actions as eventsActions } from './../redux/modules/events';
 import { actions as filtersActions } from './../redux/modules/filters';
 import { actions as homeActions } from './../redux/modules/home';
@@ -44,7 +42,8 @@ import { selectors as settingsSelectors } from './../redux/modules/settings';
 import { actions as simpleModeActions } from './../redux/modules/simpleMode';
 import { selectors as sourcesSelectors } from './../redux/modules/sources';
 import { actions as tagsActions } from './../redux/modules/tags';
-import * as assetsSagas from './../sagas/assets';
+import { selectors as textPage, actions as textPageActions } from './../redux/modules/textPage';
+import * as textPageSagas from './../sagas/textPage';
 import * as eventsSagas from './../sagas/events';
 import * as filtersSagas from './../sagas/filters';
 import * as mdbSagas from './../sagas/mdb';
@@ -52,8 +51,7 @@ import * as musicSagas from './../sagas/music';
 import * as publicationsSagas from './../sagas/publications';
 import * as searchSagas from './../sagas/search';
 import * as tagsSagas from './../sagas/tags';
-import { getLibraryContentFile } from '../components/Sections/Library/Library';
-import { selectLikutFile } from '../components/Sections/Likutim/Likut';
+import { firstLeafId } from '../components/Pages/WithText/helper';
 
 export const home = store => {
   store.dispatch(homeActions.fetchData(true));
@@ -169,8 +167,8 @@ export const programsPage = (store, match) => {
 };
 
 export const simpleMode = (store, match) => {
-  const query        = getQuery(match.parsedURL);
-  const date         = (query.date && moment(query.date).isValid()) ? moment(query.date, 'YYYY-MM-DD').format('YYYY-MM-DD') : moment().format('YYYY-MM-DD');
+  const query = getQuery(match.parsedURL);
+  const date  = (query.date && moment(query.date).isValid()) ? moment(query.date, 'YYYY-MM-DD').format('YYYY-MM-DD') : moment().format('YYYY-MM-DD');
 
   console.log('routesSSRData, simpleMode', date);
   store.dispatch(simpleModeActions.fetchForDate({ date }));
@@ -196,16 +194,7 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-function firstLeafId(sourceId, getSourceById) {
-  const { children } = getSourceById(sourceId) || { children: [] };
-  if (isEmpty(children)) {
-    return sourceId;
-  }
-
-  return firstLeafId(children[0], getSourceById);
-}
-
-export const libraryPage = async (store, match, show_console = false) => {
+export const libraryPage = async (store, match, show_console = true) => {
   // This is a rather ugly, timeout, sleep, loop.
   // We wait for sources to be loaded so we could
   // determine the firstLeafID for redirection.
@@ -228,34 +217,16 @@ export const libraryPage = async (store, match, show_console = false) => {
   }
 
   show_console && console.log('serverRender: libraryPage source was found', sourceID);
-  return Promise.all([
-    store.sagaMiddleWare.run(assetsSagas.sourceIndex, assetsActions.sourceIndex(sourceID)).done,
-    store.sagaMiddleWare.run(mdbSagas.fetchUnit, mdbActions.fetchUnit(sourceID)).done,
-  ])
+  return store.sagaMiddleWare
+    .run(textPageSagas.fetchSubject, textPageActions.fetchSubject(sourceID))
+    .done
     .then(() => {
-      const state    = store.getState();
-      const { data } = assetsSelectors.getSourceIndexById(state.assets)[sourceID];
-      if (!data) {
-        return;
-      }
+      const state = store.getState();
+      const file  = textPage.getFile(state.textPage) || {};
 
-      let language      = null;
-      const location    = state?.router.location ?? {};
-      const query       = getQuery(location);
-      const uiLang    = query.language || settingsSelectors.getUILang(state.settings);
-      const languages   = [...Object.keys(data)];
-      if (languages.length > 0) {
-        language = languages.indexOf(uiLang) === -1 ? languages[0] : uiLang;
-      }
-
-      if (data[language]) {
-        if (data[language].pdf && isTaas(sourceID)) {
-          return; // no need to fetch pdf. we don't do that on SSR
-        }
-
-        const { id } = getLibraryContentFile(data[language], sourceID);
-        store.dispatch(assetsActions.doc2html(id));
-        store.dispatch(mdbActions.fetchLabels({ content_unit: sourceID, language: uiLang }));
+      if(!file.isPdf) {
+        store.dispatch(assetsActions.doc2html(file.id));
+        store.dispatch(mdbActions.fetchLabels({ content_unit: sourceID, language: file.language }));
       }
     });
 };
@@ -270,15 +241,20 @@ const TWEETER_USERTNAMES_BY_LANG = new Map([
 
 export const likutPage = async (store, match, show_console = false) => {
   const { id } = match.params;
-  return store.sagaMiddleWare.run(mdbSagas.fetchUnit, mdbActions.fetchUnit(id)).done
+  return store.sagaMiddleWare
+    .run(textPageSagas.fetchSubject, textPageActions.fetchSubject(id))
+    .done
     .then(() => {
-      const state            = store.getState();
-      const contentLanguages = settingsSelectors.getContentLanguages(state.settings);
-      const likut            = mdbSelectors.getDenormContentUnit(state.mdb, id);
-      const likutimLanguages = ((likut && likut.files) || []).map(f => f.language);
-      const defaultLanguage = selectSuitableLanguage(contentLanguages, likutimLanguages, LANG_HEBREW);
-      const file             = selectLikutFile(likut?.files, defaultLanguage);
-      store.dispatch(assetsActions.doc2html(file?.id));
+      const state = store.getState();
+      //const { data } = assetsSelectors.getSourceIndexById(state.assets)[sourceID];
+      const file  = textPage.getFile(state.textPage) || {};
+
+      const location = state?.router.location ?? {};
+      const query    = getQuery(location);
+      const uiLang   = query.language || settingsSelectors.getUILang(state.settings);
+
+      store.dispatch(assetsActions.doc2html(file.id));
+      store.dispatch(mdbActions.fetchLabels({ content_unit: id, language: uiLang }));
     });
 };
 
@@ -292,10 +268,10 @@ export const tweetsListPage = (store, match) => {
 
   const state = store.getState();
 
-  const pageSize = settingsSelectors.getPageSize(state.settings);
+  const pageSize         = settingsSelectors.getPageSize(state.settings);
   const contentLanguages = settingsSelectors.getContentLanguages(state.settings);
   // Array of usernames.
-  const username = Array.from(new Set(contentLanguages.map(contentLanguage =>
+  const username         = Array.from(new Set(contentLanguages.map(contentLanguage =>
     TWEETER_USERTNAMES_BY_LANG.get(contentLanguage) || TWEETER_USERTNAMES_BY_LANG.get(DEFAULT_CONTENT_LANGUAGE))));
   // dispatch fetchData
   store.dispatch(publicationsActions.fetchTweets('publications-twitter', page, { username, pageSize }));
@@ -329,10 +305,10 @@ export const blogListPage = (store, match) => {
 
   const state = store.getState();
 
-  const pageSize = settingsSelectors.getPageSize(state.settings);
+  const pageSize         = settingsSelectors.getPageSize(state.settings);
   const contentLanguages = settingsSelectors.getContentLanguages(state.settings);
   // Array of blogs.
-  const blog = Array.from(new Set(contentLanguages.map(contentLanguage =>
+  const blog             = Array.from(new Set(contentLanguages.map(contentLanguage =>
     BLOG_BY_LANG.get(contentLanguage) || BLOG_BY_LANG.get(DEFAULT_CONTENT_LANGUAGE))));
 
   // dispatch fetchData

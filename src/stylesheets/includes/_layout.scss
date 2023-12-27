@@ -1,6 +1,9 @@
 $sidebar-width: 300px;
 $main-menu-height: 60px;
 $secondary-header-height: 10px;
+$max-readble-width: 700px;
+$toc-toolbar-height: 60px;
+$breadcrumb-height: 48px;
 
 body {
   overflow-y: scroll;
@@ -132,7 +135,7 @@ body {
 
 .logo {
   flex: 0 1 auto !important;
-  padding: 0!important;
+  padding: 0 !important;
 
   img {
     display: inline-block !important;
@@ -294,31 +297,75 @@ body {
       background: #fc6719 !important;
       color: white !important;
       font-size: .92857143rem !important;
+
       i {
-        margin-left:6px !important;
+        margin-left: 6px !important;
         margin-right: 0px !important;
         float: right;
       }
     }
   }
+
   i.close.icon {
     color: #000;
   }
+
   .popupHeader {
-    height:2em;
+    height: 2em;
   }
 }
 
-.donationPopup.rtl  {
+.donationPopup.rtl {
   .donate-button {
     &.ui.button,
     &.ui.button:hover,
     &.ui.button:focus {
       i {
-        margin-left:0px !important;
+        margin-left: 0px !important;
         margin-right: 6px !important;
         float: left !important;
       }
+    }
+  }
+}
+
+.headroom-z-index-801 .headroom {
+  z-index: 801 !important;
+}
+
+.headroom-z-index-802 .headroom {
+  z-index: 802 !important;
+}
+
+.layout__content {
+  .headroom--pinned {
+    transform: translateY($main-menu-height) !important;
+  }
+}
+
+.ltr {
+  .layout__content {
+    .headroom--pinned {
+      @include tablet-mobile {
+        margin-left: 0;
+        width: 100%;
+      }
+
+      margin-left: $sidebar-width;
+    }
+  }
+}
+
+.rtl {
+  .layout__content {
+    .headroom--pinned {
+      @include tablet-mobile {
+        margin-right: 0;
+        width: 100%;
+      }
+
+      margin-right: $sidebar-width;
+      margin-left: 0;
     }
   }
 }

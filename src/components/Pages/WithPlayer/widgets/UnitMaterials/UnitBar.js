@@ -2,7 +2,7 @@ import React from 'react';
 import { Button } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 
-import LibrarySettings from '../../../../Sections/Library/LibrarySettings';
+import LibrarySettings from '../../../WithText/DocToolbar/LibrarySettings';
 import BookmarkButton from '../../../../shared/SaveBookmark/BookmarkButton';
 import LabelButton from '../../../../shared/SelectTopicsModal/LabelButton';
 

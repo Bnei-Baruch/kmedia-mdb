@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { withTranslation } from 'react-i18next';
+import { withTranslation, useTranslation } from 'react-i18next';
 import {
   Button,
   Checkbox, Container,
@@ -15,21 +15,24 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 
 import { actions, selectors } from '../../../redux/modules/my';
+import { selectors as textPage } from '../../../redux/modules/textPage';
 import { MY_NAMESPACE_BOOKMARKS, MY_NAMESPACE_FOLDERS } from '../../../helpers/consts';
 import { getMyItemKey } from '../../../helpers/my';
 import NeedToLogin from '../../Sections/Personal/NeedToLogin';
 
-const BookmarkForm = ({ t, onClose, source, bookmarkId }) => {
-  const [name, setName] = useState();
-  const [selected, setSelected] = useState(null);
+const BookmarkForm = ({ onClose, bookmarkId, properties = {} }) => {
+  const { t }                       = useTranslation();
+  const [name, setName]             = useState();
+  const [selected, setSelected]     = useState(null);
   const [editFolder, setEditFolder] = useState(false);
-  const [query, setQuery] = useState();
-  const [isEdit, setIsEdit] = useState();
+  const [query, setQuery]           = useState();
+  const [isEdit, setIsEdit]         = useState();
 
-  const { key } = getMyItemKey(MY_NAMESPACE_BOOKMARKS, { id: bookmarkId });
+  const subject  = useSelector(state => textPage.getSubject(state.textPage));
+  const { key }  = getMyItemKey(MY_NAMESPACE_BOOKMARKS, { id: bookmarkId });
   const bookmark = useSelector(state => selectors.getItemByKey(state.my, MY_NAMESPACE_BOOKMARKS, key));
-  const items = useSelector(state => selectors.getList(state.my, MY_NAMESPACE_FOLDERS)).filter(x => !query || x.name.toLowerCase().includes(query));
-  const saved = items.filter(f => bookmark?.folder_ids?.includes(f.id)).map(f => f.id);
+  const items    = useSelector(state => selectors.getList(state.my, MY_NAMESPACE_FOLDERS)).filter(x => !query || x.name.toLowerCase().includes(query));
+  const saved    = items.filter(f => bookmark?.folder_ids?.includes(f.id)).map(f => f.id);
 
   const dispatch = useDispatch();
 
@@ -52,12 +55,12 @@ const BookmarkForm = ({ t, onClose, source, bookmarkId }) => {
     setName(bookmark?.name);
   }, [bookmark?.name]);
 
-  if (!source && !bookmark)
+  if (!subject && !bookmark)
     return null;
 
   const needToLogin = NeedToLogin({ t });
   if (needToLogin) {
-    return (<Modal.Content>{needToLogin}</Modal.Content>)
+    return (<Modal.Content>{needToLogin}</Modal.Content>);
   }
 
   const changeName = (e, { value }) => setName(value);
@@ -65,7 +68,12 @@ const BookmarkForm = ({ t, onClose, source, bookmarkId }) => {
   const handleSave = () => !bookmark ? create() : update();
 
   const create = () => {
-    const params = { name, ...source };
+    const params = {
+      name,
+      subject_uid: subject.id,
+      subject_type: subject.type,
+      properties: { ...subject.properties, ...properties }
+    };
 
     if (selected.length > 0)
       params.folder_ids = selected;
@@ -119,7 +127,7 @@ const BookmarkForm = ({ t, onClose, source, bookmarkId }) => {
     <React.Fragment>
       <ModalContent className="padded no-padding-top">
         <div>
-          <Header as="h4" content={t('personal.bookmark.name')} className="display-iblock font-normal"/>
+          <Header as="h4" content={t('personal.bookmark.name')} className="display-iblock font-normal" />
           <Input
             onChange={changeName}
             defaultValue={name}
@@ -130,7 +138,7 @@ const BookmarkForm = ({ t, onClose, source, bookmarkId }) => {
             autoFocus
           />
         </div>
-        <Header as="h4" content={t('personal.bookmark.folders')} className="font-normal"/>
+        <Header as="h4" content={t('personal.bookmark.folders')} className="font-normal" />
         <Segment>
           <Input
             icon
@@ -139,8 +147,8 @@ const BookmarkForm = ({ t, onClose, source, bookmarkId }) => {
             onChange={handleSearchChange}
             className="bookmark_search"
           >
-            <input/>
-            <Icon name="search"/>
+            <input />
+            <Icon name="search" />
           </Input>
           <Container className="folders_list">
             {
@@ -160,7 +168,7 @@ const BookmarkForm = ({ t, onClose, source, bookmarkId }) => {
                     }}
                   />
                   <Button
-                    icon='check'
+                    icon="check"
                     basic
                     compact
                     className="no-shadow no-border"
@@ -202,10 +210,4 @@ const BookmarkForm = ({ t, onClose, source, bookmarkId }) => {
   );
 };
 
-BookmarkForm.propTypes = {
-  t: PropTypes.func.isRequired,
-  source: PropTypes.object,
-  bookmarkId: PropTypes.number
-};
-
-export default withTranslation()(BookmarkForm);
+export default BookmarkForm;

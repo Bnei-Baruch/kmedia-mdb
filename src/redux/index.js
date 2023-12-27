@@ -28,6 +28,7 @@ import { reducer as tags } from './modules/tags';
 import { reducer as notes } from './modules/myNotes';
 import { reducer as trim } from './modules/trim';
 import { reducer as fetchImage } from './modules/fetchImage';
+import { reducer as textPage } from './modules/textPage';
 
 const reducers = history => combineReducers({
   router: connectRouter(history),
@@ -58,7 +59,8 @@ const reducers = history => combineReducers({
   trim,
   player,
   playlist,
-  fetchImage
+  fetchImage,
+  textPage
 });
 
 export default reducers;

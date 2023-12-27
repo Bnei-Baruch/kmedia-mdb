@@ -19,7 +19,7 @@ import { physicalFile } from '../../../../../../helpers/utils';
 import { getActivePartFromQuery } from '../../../../../../helpers/player';
 import MediaHelper from '../../../../../../helpers/media';
 import { getQuery } from '../../../../../../helpers/url';
-import ScrollToSearch from '../../../../../shared/DocToolbar/ScrollToSearch';
+import TextContentWeb from '../../../../WithText/Content/TextContentWeb';
 import Download from '../../../../../shared/Download/Download';
 import WipErr from '../../../../../shared/WipErr/WipErr';
 import * as shapes from '../../../../../shapes';
@@ -161,7 +161,7 @@ const Transcription = ({ unit, t, type, activeTab }) => {
           className="font_settings doc2html"
           style={{ direction, textAlign: (direction === 'ltr' ? 'left' : 'right') }}
         >
-          <ScrollToSearch
+          <TextContentWeb
             data={data}
             language={finalLanguage}
             urlParams={urlParams}

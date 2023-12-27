@@ -36,21 +36,6 @@ function* doc2Html(action) {
   }
 }
 
-export function* sourceIndex(action) {
-  try {
-    let id = action.payload;
-    if (/^gr-/.test(id)) { // Rabash Group Articles
-      const result = /^gr-(.+)/.exec(id);
-      id           = result[1];
-    }
-
-    const cu = yield call(Api.unit, { id });
-    yield put(actions.sourceIndexSuccess(action.payload, cuFilesToData(cu.data)));
-  } catch (err) {
-    yield put(actions.sourceIndexFailure(action.payload, err));
-  }
-}
-
 export function* fetchAsset(action) {
   try {
     const { data } = yield call(Api.getAsset, action.payload);
@@ -84,13 +69,13 @@ function* fetchTimeCode(action) {
 }
 
 function* mergeKiteiMakor(action) {
-  const { id, lang } = action.payload;
+  const { id, language } = action.payload;
 
   try {
-    const { data } = yield call(Api.getAsset, `api/km_audio/build/${id}?language=${lang}`);
-    yield put(actions.mergeKiteiMAkorSuccess({ id, lang, status: data }));
+    const { data } = yield call(Api.getAsset, `api/km_audio/build/${id}?language=${language}`);
+    yield put(actions.mergeKiteiMAkorSuccess({ id, language, status: data }));
   } catch (e) {
-    yield put(actions.mergeKiteiMAkorFailure({ id, lang, status: e }));
+    yield put(actions.mergeKiteiMAkorFailure({ id, language, status: e }));
   }
 }
 
@@ -106,28 +91,12 @@ function* watchDoc2Html() {
   yield takeLatest([types.DOC2HTML], doc2Html);
 }
 
-function* watchSourceIndex() {
-  yield takeEvery([types.SOURCE_INDEX], sourceIndex);
-}
-
 function* watchFetchAsset() {
   yield takeLatest([types.FETCH_ASSET], fetchAsset);
 }
 
 function* watchFetchPerson() {
   yield takeLatest([types.FETCH_PERSON], fetchPerson);
-}
-
-function cuFilesToData(cu) {
-  return !cu.files ? {} : cu.files.reduce((acc, f) => {
-    const { language, name } = f;
-    if (!acc[language])
-      acc[language] = {};
-
-    const ext          = name.split('.').slice(-1);
-    acc[language][ext] = f;
-    return acc;
-  }, {});
 }
 
 function* watchFetchTimeCode() {
@@ -142,7 +111,6 @@ export const sagas = [
   watchUnzip,
   watchUnzipList,
   watchDoc2Html,
-  watchSourceIndex,
   watchFetchAsset,
   watchFetchPerson,
   watchFetchTimeCode,

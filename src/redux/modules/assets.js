@@ -48,6 +48,7 @@ export const types = {
   FETCH_PERSON,
   FETCH_TIME_CODE,
   MERGE_KITEI_MAKOR,
+  MERGE_KITEI_MAKOR_SUCCESS,
 };
 
 /* Actions */
@@ -232,16 +233,16 @@ const onFetchTimeCodeSuccess = (draft, payload) => {
   draft.timeCode = timeCode;
 };
 
-const onMerge        = (state, { id, lang }) => {
-  state.mergedStatus[buildKey(id, lang)] = 'wip';
+const onMerge        = (state, { id, language }) => {
+  state.mergedStatus[buildKey(id, language)] = 'wip';
 };
 
-const onMergeSuccess = (state, { id, lang, status = 'ok' }) => {
-  state.mergedStatus[buildKey(id, lang)] = status;
+const onMergeSuccess = (state, { id, language, status = 'ok' }) => {
+  state.mergedStatus[buildKey(id, language)] = status;
 };
 
-const onMergeFailure = (state, { id, lang, status = 'none' }) => {
-  state.mergedStatus[buildKey(id, lang)] = status;
+const onMergeFailure = (state, { id, language, status = 'none' }) => {
+  state.mergedStatus[buildKey(id, language)] = status;
 };
 
 const buildKey       = (uid, lang) => `${uid}_${lang}`;
