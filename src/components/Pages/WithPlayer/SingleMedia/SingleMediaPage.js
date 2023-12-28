@@ -2,20 +2,26 @@ import React, { useContext } from 'react';
 import { Grid, Container } from 'semantic-ui-react';
 import clsx from 'clsx';
 import { useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 
+import { selectors as playlist } from '../../../../redux/modules/playlist';
 import Recommended from '../widgets/Recommended/Main/Recommended';
 import { getEmbedFromQuery } from '../../../../helpers/player';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import Info from '../widgets/Info/Info';
 import Materials from '../widgets/UnitMaterials/Materials';
+import WipErr from '../../../shared/WipErr/WipErr';
 
 const SingleMediaPage = ({ playerContainer }) => {
+  const { t }              = useTranslation();
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const location           = useLocation();
-
-  const embed = getEmbedFromQuery(location);
+  const embed              = getEmbedFromQuery(location);
+  const { isReady }        = useSelector(state => playlist.getInfo(state.playlist));
 
   if (embed) return playerContainer;
+  if (!isReady) return WipErr({ wip: !isReady, t });
 
   const computerWidth = !isMobileDevice ? 10 : 16;
   return (

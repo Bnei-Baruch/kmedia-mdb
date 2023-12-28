@@ -3,14 +3,18 @@ import moment from 'moment';
 import { getPageFromLocation } from '../components/Pagination/withPagination';
 import { tabs as pulicationsTabs } from '../components/Sections/Publications/MainPage';
 import { isTaas } from '../components/shared/PDF/PDF';
+import { getTextFiles as transcriptGetTextFiles, selectFile as transcriptSelectFile } from '../components/Pages/WithPlayer/widgets/UnitMaterials/Transcription/Transcription';
+import { getFile as summaryGetFile, getSummaryLanguages } from '../components/Pages/WithPlayer/widgets/UnitMaterials/Summary/Summary';
 
 import {
   COLLECTION_PROGRAMS_TYPE,
   CT_ARTICLE,
+  CT_CLIP,
   CT_FRIENDS_GATHERING,
   CT_LECTURE,
   CT_LESSON_PART,
   CT_MEAL,
+  CT_VIDEO_PROGRAM_CHAPTER,
   CT_VIRTUAL_LESSON,
   CT_VIRTUAL_LESSONS,
   CT_WOMEN_LESSON,
@@ -72,7 +76,50 @@ export const cuPage = (store, match) => {
       const state = store.getState();
 
       const unit = mdbSelectors.getDenormContentUnit(state.mdb, cuID);
-      const c    = canonicalCollection(unit);
+
+      let activeTab = 'transcription';
+      if ([CT_VIDEO_PROGRAM_CHAPTER, CT_VIRTUAL_LESSON, CT_CLIP].includes(unit.content_type)) {
+        activeTab = 'summary';
+      }
+
+      if (match && match.parsedURL && match.parsedURL.searchParams) {
+        for (const [key, value] of match.parsedURL.searchParams) {
+          if (key === 'activeTab') {
+            activeTab = value;
+            break;
+          }
+        }
+      }
+
+      // Select transcript file by language.
+      const contentLanguages = settingsSelectors.getContentLanguages(state.settings);
+      console.log('contentLanguages', contentLanguages);
+      let file = null;
+      switch (activeTab) {
+        case 'transcription':
+        case 'research':
+        case 'articles':
+          const textFiles = transcriptGetTextFiles(unit, activeTab === 'transcription' ? '' : activeTab);
+          const transcriptLanguages = uniq(textFiles.map(x => x.language));
+          const transcriptLanguage = selectSuitableLanguage(contentLanguages, transcriptLanguages, unit.original_language, /*defaultReturnLanguage=*/ '');
+          file = transcriptSelectFile(textFiles, transcriptLanguage);
+          break;
+        case 'summary':
+          const summaryLanguages = getSummaryLanguages(unit);
+          const summaryLanguage = selectSuitableLanguage(contentLanguages, summaryLanguages, unit.original_language);
+          file = summaryGetFile(unit, summaryLanguage);
+          break;
+        default:
+          console.warn('Unsupported active tab', activeTab);
+          break;
+      }
+
+      if (file && file.id) {
+        // Load html.
+        store.dispatch(doc2html(file.id));
+      }
+
+      const c = canonicalCollection(unit);
       if (c) {
         store.dispatch(mdbActions.fetchCollection(c.id));
       }
@@ -173,7 +220,6 @@ export const simpleMode = (store, match) => {
   const query = getQuery(match.parsedURL);
   const date  = (query.date && moment(query.date).isValid()) ? moment(query.date, 'YYYY-MM-DD').format('YYYY-MM-DD') : moment().format('YYYY-MM-DD');
 
-  console.log('routesSSRData, simpleMode', date);
   store.dispatch(simpleModeActions.fetchForDate({ date }));
   return Promise.resolve(null);
 };
