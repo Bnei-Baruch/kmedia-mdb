@@ -9,7 +9,7 @@ import * as shapes from '../../../../../shapes';
 import Transcription from './Transcription';
 
 // TODO: Merge with transcriptio, no need for container.
-const TranscriptionContainer = ({ unit, type = null, activeTab = 'transcription' }) => <Transcription unit={unit} type={type} activeTab={activeTab} />;
+const TranscriptionContainer = ({ unit, type = null, activeTab = 'transcription' }) => <div>old</div>;
 
 TranscriptionContainer.propTypes = {
   unit: shapes.ContentUnit.isRequired,

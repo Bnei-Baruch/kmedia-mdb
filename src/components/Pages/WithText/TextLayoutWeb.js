@@ -17,7 +17,7 @@ import { physicalFile } from '../../../helpers/utils';
 
 let lastScrollTop = 0;
 
-const TextLayoutWeb = ({ toolbar = null, toc = null, prevNext = null, breadcrumb = null }) => {
+const TextLayoutWeb = ({ toolbar = null, toc = null, prevNext = null, breadcrumb = null, propId }) => {
   const scrollDir = useSelector(state => textPage.getScrollDir(state.textPage));
   const subject   = useSelector(state => textPage.getSubject(state.textPage));
   const hasSel    = !!useSelector(state => textPage.getUrlInfo(state.textPage)).select;
@@ -25,7 +25,7 @@ const TextLayoutWeb = ({ toolbar = null, toc = null, prevNext = null, breadcrumb
   const scanInfo  = useSelector(state => textPage.getScanInfo(state.textPage));
 
   useInitTextUrl();
-  useTextSubject();
+  useTextSubject(propId);
   useInitTextSettings();
 
   const dispatch = useDispatch();

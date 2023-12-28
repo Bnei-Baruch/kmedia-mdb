@@ -6,9 +6,12 @@ import { actions, selectors as textPage } from '../../../../redux/modules/textPa
 import { useDispatch, useSelector } from 'react-redux';
 
 const ToggleScanBtn = () => {
-  const { on }   = useSelector(state => textPage.getScanInfo(state.textPage));
-  const dispatch = useDispatch();
-  const handle   = () => dispatch(actions.toggleScan());
+  const { on, file } = useSelector(state => textPage.getScanInfo(state.textPage));
+  const dispatch     = useDispatch();
+
+  if (!file) return null;
+
+  const handle = () => dispatch(actions.toggleScan());
 
   return (
     <Button

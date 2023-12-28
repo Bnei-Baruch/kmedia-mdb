@@ -5,8 +5,10 @@ import { useParams } from 'react-router-dom';
 import { selectors as sourcesSelectors, selectors } from '../../../../redux/modules/sources';
 import { firstLeafId } from '../helper';
 
-export const useTextSubject = () => {
-  let { id }          = useParams();
+export const useTextSubject = ({ propId }) => {
+  let { id } = useParams();
+  id         = propId || id;
+
   const subjectId     = useSelector(state => textPage.getSubject(state.textPage).id);
   const { wip, err }  = useSelector(state => textPage.getWipErr(state.textPage));
   const getSourceById = useSelector(state => selectors.getSourceById(state.sources));

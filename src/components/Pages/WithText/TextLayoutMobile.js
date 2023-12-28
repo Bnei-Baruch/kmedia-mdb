@@ -6,9 +6,9 @@ import { useInitTextUrl } from './hooks/useInitTextUrl';
 import TextContentMobile from './Content/TextContentMobile';
 import { useInitTextSettings } from './hooks/useInitTextSettings';
 
-const TextLayoutMobile = ({ toolbar = null, toc = null, nextPrev: prevNext = null }) => {
+const TextLayoutMobile = ({ toolbar = null, toc = null, nextPrev: prevNext = null, propId }) => {
   useInitTextUrl();
-  useTextSubject();
+  useTextSubject(propId);
   useInitTextSettings();
 
   const wipErr = useTextContent();
