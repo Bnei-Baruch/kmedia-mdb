@@ -40,4 +40,5 @@ const BreadcrumbTextPage = () => {
     </div>
   );
 };
+
 export default BreadcrumbTextPage;

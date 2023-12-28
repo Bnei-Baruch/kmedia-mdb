@@ -73,7 +73,7 @@ const BookmarkBtn = () => {
                 icon={
                   <span className="material-symbols-outlined">
                   bookmark
-                </span>
+                  </span>
                 }
                 onClick={handleOpen}
               />

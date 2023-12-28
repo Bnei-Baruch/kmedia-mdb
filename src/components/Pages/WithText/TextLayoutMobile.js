@@ -27,4 +27,5 @@ const TextLayoutMobile = ({ toolbar = null, toc = null, nextPrev: prevNext = nul
     </Container>
   );
 };
+
 export default TextLayoutMobile;

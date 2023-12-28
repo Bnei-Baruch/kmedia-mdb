@@ -22,6 +22,7 @@ const TextLayoutWeb = ({ toolbar = null, toc = null, prevNext = null, breadcrumb
   const subject   = useSelector(state => textPage.getSubject(state.textPage));
   const hasSel    = !!useSelector(state => textPage.getUrlInfo(state.textPage)).select;
   const file      = useSelector(state => textPage.getFile(state.textPage));
+  const scanInfo  = useSelector(state => textPage.getScanInfo(state.textPage));
 
   useInitTextUrl();
   useTextSubject();
@@ -30,7 +31,7 @@ const TextLayoutWeb = ({ toolbar = null, toc = null, prevNext = null, breadcrumb
   const dispatch = useDispatch();
   useEffect(() => {
     const handleScroll = () => {
-      let st = window.pageYOffset || document.documentElement.scrollTop;
+      const st = window.pageYOffset || document.documentElement.scrollTop;
       if (st < 120) {
         dispatch(actions.setScrollDir(0));
       } else if (st > lastScrollTop) {
@@ -38,6 +39,7 @@ const TextLayoutWeb = ({ toolbar = null, toc = null, prevNext = null, breadcrumb
       } else if (st + 5 < lastScrollTop) {
         dispatch(actions.setScrollDir(-1));
       }
+
       lastScrollTop = st <= 0 ? 0 : st;
     };
 
@@ -48,6 +50,13 @@ const TextLayoutWeb = ({ toolbar = null, toc = null, prevNext = null, breadcrumb
 
   const wipErr = useTextContent();
   if (wipErr) return wipErr;
+
+  let pdf;
+  if (file.isPdf) {
+    pdf = file;
+  } else if (scanInfo.on) {
+    pdf = scanInfo.file;
+  }
 
   return (
     <div className="is-web text_layout">
@@ -63,12 +72,14 @@ const TextLayoutWeb = ({ toolbar = null, toc = null, prevNext = null, breadcrumb
         {toolbar}
       </div>
       {
-        file.isPdf ? (
-          <PDF
-            pdfFile={physicalFile(file)}
-            pageNumber={1}
-            startsFrom={startsFrom(subject.id)}
-          />
+        !!pdf ? (
+          <div className="text_align_to_text">
+            <PDF
+              pdfFile={physicalFile(pdf)}
+              pageNumber={1}
+              startsFrom={startsFrom(subject.id) || 1}
+            />
+          </div>
         ) : (
           <>
             <div className="text_align_to_text">
@@ -86,4 +97,5 @@ const TextLayoutWeb = ({ toolbar = null, toc = null, prevNext = null, breadcrumb
     </div>
   );
 };
+
 export default TextLayoutWeb;

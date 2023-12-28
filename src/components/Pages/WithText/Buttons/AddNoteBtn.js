@@ -38,7 +38,7 @@ const AddNoteBtn = () => {
           icon={
             <span className="material-symbols-outlined">
                 add_comment
-              </span>
+            </span>
           }
         />
       }

@@ -23,6 +23,7 @@ const NoteContent = () => {
   const handleChange = (e, { value }) => {
     dispatch(actions.setSelected({ ...note, content: value }));
   };
+
   const isEdit       = status === NOTE_STATUS.edit || status === NOTE_STATUS.editModal;
 
   return (

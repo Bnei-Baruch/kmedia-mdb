@@ -25,4 +25,5 @@ const TocControl = () => {
 
   );
 };
+
 export default TocControl;

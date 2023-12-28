@@ -23,6 +23,7 @@ const PrevNextBtns = () => {
   if (len < 2) {
     return null;
   }
+
   const index = getIndex(fullPath[len - 2], fullPath[len - 1]);
   if (index === -1) {
     return null;
@@ -61,6 +62,7 @@ const PrevBtn = ({ id }) => {
     />
   );
 };
+
 const NextBtn = ({ id }) => {
   const { t } = useTranslation();
 
@@ -82,4 +84,5 @@ const NextBtn = ({ id }) => {
     />
   );
 };
+
 export default PrevNextBtns;

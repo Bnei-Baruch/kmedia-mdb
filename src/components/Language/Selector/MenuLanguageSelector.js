@@ -13,6 +13,7 @@ const applyChecked = (language, checked, selected, isAny) => {
     if (checked) {
       return [language];
     }
+
     return [];
   }
 

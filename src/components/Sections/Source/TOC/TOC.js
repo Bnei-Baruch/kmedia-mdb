@@ -289,6 +289,7 @@ const TOC = () => {
     </div>
   );
 };
+
 export default TOC;
 // four wide computer sixteen wide mobile sixteen wide tablet column
 // four wide computer sixteen wide mobile sixteen wide tablet column widescreen-only large-screen-only computer-only

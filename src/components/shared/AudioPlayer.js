@@ -10,9 +10,7 @@ const AudioPlayer = ({ url }) => {
 
   const _url = useSelector(state => textPage.getMP3(state.textPage));
 
-  useEffect(() => {
-    return () => setPlaying(false);
-  }, []);
+  useEffect(() => () => setPlaying(false), []);
 
   const src = url || _url;
   if (!src) return null;
@@ -34,11 +32,12 @@ const AudioPlayer = ({ url }) => {
             </span>
             <span className="material-symbols-outlined">
                 volume_up
-              </span>
+            </span>
           </div>
         )
       }
     </div>
   );
 };
+
 export default AudioPlayer;

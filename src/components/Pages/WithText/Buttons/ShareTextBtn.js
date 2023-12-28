@@ -61,9 +61,10 @@ const ShareTextBtn = ({ position }) => {
       onClose={() => setIsPopupOpen(false)}
       onOpen={() => {
         const _url = new URL(url);
-        for (let key in properties) {
+        for (const key in properties) {
           _url.searchParams.set(key, properties[key]);
         }
+
         setUrlWithParams(_url.toString());
         setIsPopupOpen(true);
       }}

@@ -14,6 +14,7 @@ const SearchOnPageBtn = () => {
     window.getSelection().empty();
     window.getSelection().addRange(res[0]);*/
   };
+
   return (
     <Popup
       trigger={

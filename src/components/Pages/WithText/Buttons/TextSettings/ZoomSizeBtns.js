@@ -10,6 +10,7 @@ const ZoomSizeBtns = () => {
     dispatch(actions.setZoomSize('up'));
     stopBubbling(e);
   };
+
   const handleSetMinus = e => {
     dispatch(actions.setZoomSize('down'));
     stopBubbling(e);

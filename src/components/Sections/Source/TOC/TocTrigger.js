@@ -22,4 +22,5 @@ const TocTrigger = () => {
     />
   );
 };
+
 export default TocTrigger;

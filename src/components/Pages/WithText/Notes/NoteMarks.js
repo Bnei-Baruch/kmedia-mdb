@@ -21,6 +21,7 @@ const NoteMarks = ({ parentTop }) => {
         key          = top;
         _byLine[key] = [];
       }
+
       _byLine[key] = [..._byLine[key], nId];
     });
     setByLine(_byLine);

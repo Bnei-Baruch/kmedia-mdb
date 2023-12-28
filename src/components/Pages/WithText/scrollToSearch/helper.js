@@ -274,6 +274,7 @@ export const urlParamFromSelect = () => {
   if (sel.isCollapsed) {
     return {};
   }
+
   const root = document.getElementById(DOM_ROOT_ID);
   if (!root || !sel.containsNode(root, true)) {
     return {};
@@ -283,11 +284,13 @@ export const urlParamFromSelect = () => {
   if (!root.contains(range.endContainer)) {
     range.setEnd(root.lastChild, root.lastChild.childNodes.length);
   }
+
   if (!root.contains(range.startContainer)) {
     range.setStart(root.firstChild, 0);
   }
-  let sOffset = range.startOffset + countOffset(range.startContainer);
-  let eOffset = range.endOffset + countOffset(range.endContainer);
+
+  const sOffset = range.startOffset + countOffset(range.startContainer);
+  const eOffset = range.endOffset + countOffset(range.endContainer);
 
   const sWordOffset = countWordOffset(sOffset, root.textContent);
 
@@ -302,7 +305,7 @@ export const urlParamFromSelect = () => {
   return { query, wordOffset: sWordOffset };
 };
 
-const countOffset = (node) => {
+const countOffset = node => {
   let offset = 0;
   for (; !!node.previousSibling?.textContent;) {
     if (node.id === DOM_ROOT_ID) break;
@@ -313,13 +316,11 @@ const countOffset = (node) => {
   return offset;
 };
 
-const countWordOffset = (offset, text) => {
-  return text.slice(0, offset)
-    .replace(/\r?\n|\r{1,}/g, ' ')
-    .split(' ')
-    .filter(x => !!x)
-    .length;
-};
+const countWordOffset = (offset, text) => text.slice(0, offset)
+  .replace(/\r?\n|\r{1,}/g, ' ')
+  .split(' ')
+  .filter(x => !!x)
+  .length;
 
 const wholeStartWord = (text, offset) => {
   if (offset === 0 || KEEP_LETTERS_WITH_SPACE_RE.test(text[offset - 1]))

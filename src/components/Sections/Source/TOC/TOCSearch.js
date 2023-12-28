@@ -15,6 +15,7 @@ const TocSearch = () => {
       search('');
     }
   };
+
   const search              = m => dispatch(actions.setTocMatch(m));
   const sortBy              = () => dispatch(actions.setTocSortBy());
 
@@ -49,4 +50,5 @@ const TocSearch = () => {
 
   );
 };
+
 export default TocSearch;

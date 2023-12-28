@@ -23,6 +23,7 @@ const NoteConfirmRemove = () => {
   const handleRemove = () => {
     dispatch(actions.removeServer(note.id));
   };
+
   const handleCancel = () => {
     dispatch(actions.setStatus(NOTE_STATUS.edit));
   };

@@ -100,15 +100,15 @@ const initialState = {
   scrollDir: 0,
   match: '',
   subject: {},
-  linkInfo: {},
   wipErr: {
     wip: false, err: null
   },
   urlInfo: {},
-  tocInfo: { sortByAZ: true }
+  tocInfo: { sortByAZ: true },
+  scanInfo: { on: false }
 };
 
-const onZoomSize       = (state, payload) => {
+const onZoomSize = (state, payload) => {
   let size = state.settings.zoomSize || 1;
   if (payload === 'up') {
     size = size + .2;
@@ -124,14 +124,17 @@ const onZoomSize       = (state, payload) => {
   state.settings.zoomSize = size;
   updateLocalStorage(state);
 };
-const onFontType       = (state, payload) => {
+
+const onFontType = (state, payload) => {
   state.settings.fontType = payload;
   updateLocalStorage(state);
 };
-const onTheme          = (state, payload) => {
+
+const onTheme = (state, payload) => {
   state.settings.theme = payload;
   updateLocalStorage(state);
 };
+
 const onReadable       = (state, payload) => void (state.isReadable = payload ?? !state.isReadable);
 const onTocIsActive    = (state, payload) => void (state.tocIsActive = payload ?? !state.tocIsActive);
 const onChangeLanguage = (state, payload) => {
@@ -140,35 +143,30 @@ const onChangeLanguage = (state, payload) => {
 
   state.urlInfo.url = buildUrl(state);
 };
-const onToggleScan     = state => {
-  if (!state.isScan) {
-    state.file = state.subject.files.find(f => f.insert_type === 'source-scan');
-    console.log(state.file);
-  } else {
-    onChangeLanguage(state, state.file.language);
-  }
-};
 
-const onFetchSubject        = (state, payload) => {
+const onFetchSubject = (state, payload) => {
   state.wip        = true;
   state.err        = null;
   state.subject.id = payload;
 };
+
 const onFetchSubjectSuccess = (state, payload) => {
   const { subject, file, isGr } = payload;
 
-  subject.properties = isGr ? { uid_prefix: 'gr-' } : {};
-  state.subject      = subject;
-  state.wipErr       = { wip: false, err: null };
-  state.file         = file;
-  state.mp3          = selectMP3(subject.files, file.language);
-
-  state.urlInfo.url = buildUrl(state);
+  subject.properties  = isGr ? { uid_prefix: 'gr-' } : {};
+  state.subject       = subject;
+  state.wipErr        = { wip: false, err: null };
+  state.file          = file;
+  state.mp3           = selectMP3(subject.files, file.language);
+  state.scanInfo.file = subject.files.find(f => f.insert_type === 'source-scan');
+  state.urlInfo.url   = buildUrl(state);
 };
+
 const onFetchSubjectFailure = (state, payload) => {
   state.wipErr = { wip: false, err: payload };
 };
-const onReceiveLikutMP3     = state => {
+
+const onReceiveLikutMP3 = state => {
   state.mp3 = assetUrl(`api/km_audio/file/${state.file.id}?language=${state.file.language}`);
 };
 
@@ -188,7 +186,7 @@ export const reducer = handleActions({
   [SET_SCROLL_DIR]: (state, payload) => state.scrollDir = payload,
   [SET_SIDE_OFFSET]: (state, payload) => state.sideOffset = payload,
   [TOGGLE_TEXT_ONLY]: (state, payload) => state.textOnly = payload ?? !state.textOnly,
-  [TOGGLE_SCAN]: onToggleScan,
+  [TOGGLE_SCAN]: state => state.scanInfo.on = !state.scanInfo.on,
 
   [FETCH_SUBJECT]: onFetchSubject,
   [FETCH_SUBJECT_SUCCESS]: onFetchSubjectSuccess,
@@ -213,8 +211,8 @@ const getExpandNotes  = state => state.expandNotes;
 const getIsFullscreen = state => state.isFullscreen;
 const getScrollDir    = state => state.scrollDir;
 const getSideOffset   = state => state.sideOffset;
-const getTextOnly     = state => state.textOnly;
-const getIsScan       = state => state.isScan;
+const getTextOnly = state => state.textOnly;
+const getScanInfo = state => state.scanInfo;
 
 export const selectors = {
   getSettings,
@@ -232,5 +230,5 @@ export const selectors = {
   getScrollDir,
   getSideOffset,
   getTextOnly,
-  getIsScan,
+  getScanInfo,
 };

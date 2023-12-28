@@ -2,19 +2,19 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Icon, Menu, Popup, Search } from 'semantic-ui-react';
 import debounce from 'lodash/debounce';
-import { actions } from '../../../../redux/modules/textPage';
-import { useDispatch } from 'react-redux';
+import { actions, selectors as textPage } from '../../../../redux/modules/textPage';
+import { useDispatch, useSelector } from 'react-redux';
 
 const ToggleScanBtn = () => {
-
+  const { on }   = useSelector(state => textPage.getScanInfo(state.textPage));
   const dispatch = useDispatch();
-  const handle   = () => {
-    dispatch(actions.toggleScan());
-  };
+  const handle   = () => dispatch(actions.toggleScan());
+
   return (
     <Button
       compact
       size="small"
+      active={on}
       onClick={handle}
       icon={<span className="material-symbols-outlined">image</span>}
     />

@@ -224,7 +224,7 @@ export const libraryPage = async (store, match, show_console = true) => {
       const state = store.getState();
       const file  = textPage.getFile(state.textPage) || {};
 
-      if(!file.isPdf) {
+      if (!file.isPdf) {
         store.dispatch(assetsActions.doc2html(file.id));
         store.dispatch(mdbActions.fetchLabels({ content_unit: sourceID, language: file.language }));
       }

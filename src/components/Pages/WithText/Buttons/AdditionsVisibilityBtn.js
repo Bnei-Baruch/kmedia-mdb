@@ -9,6 +9,7 @@ const AdditionsVisibilityBtn = () => {
   const handle   = () => {
     dispatch(actions.toggleTextOnly());
   };
+
   return (
     <Button
       compact
