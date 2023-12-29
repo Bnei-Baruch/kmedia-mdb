@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import { selectors as sourcesSelectors, selectors } from '../../../../redux/modules/sources';
 import { firstLeafId } from '../helper';
 
-export const useTextSubject = (propId) => {
+export const useTextSubject = propId => {
   let { id } = useParams();
   id         = propId || id;
 

@@ -6,9 +6,11 @@ import { Dropdown } from 'semantic-ui-react';
 import TextLayoutWeb from '../../../../WithText/TextLayoutWeb';
 import { selectors as mdb } from '../../../../../../redux/modules/mdb';
 import { MT_TEXT, CT_LIKUTIM, CT_SOURCE } from '../../../../../../helpers/consts';
+import SourceToolbarMobile from '../../../../../Sections/Source/SourceToolbarMobile';
+import SourceToolbarWeb from '../../../../../Sections/Source/SourceToolbarWeb';
 
-const Transcription = () => {
-  let { id } = useParams();
+const SourceTab = () => {
+  const { id } = useParams();
 
   const pageCu = useSelector(state => mdb.getDenormContentUnit(state.mdb, id));
   const cus    = Object.values(pageCu.derived_units)
@@ -18,8 +20,9 @@ const Transcription = () => {
   const [cuId, setCuId] = useState(cus[0]?.id);
   const handleSelectCu  = (e, { value }) => setCuId(value);
 
+  const toolbar = <SourceToolbarWeb />;
   return (
-    <div>
+    <div className="source_tab">
       <Dropdown
         compact
         inline
@@ -28,9 +31,9 @@ const Transcription = () => {
         value={cuId}
         onChange={handleSelectCu}
       />
-      <TextLayoutWeb propId={cuId} />
+      <TextLayoutWeb propId={cuId} toolbar={toolbar} />
     </div>
   );
 };
 
-export default Transcription;
+export default SourceTab;

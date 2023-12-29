@@ -14,10 +14,9 @@ import {
 import * as shapes from '../../../../shapes';
 import TabsMenu from '../../../../shared/TabsMenu';
 import Summary from './Summary/Summary';
-import Sources from './Sources/Sources';
+import SourceTab from './Sources/SourceTab';
 import Sketches from './Sketches';
 import MediaDownloads from '../MediaDownloads';
-import TranscriptionContainer from './Transcription/TranscriptionContainer';
 import { isEmpty, noop } from '../../../../../helpers/utils';
 import { ClientChroniclesContext, DeviceInfoContext } from '../../../../../helpers/app-contexts';
 import DerivedUnits from './DerivedUnits';
@@ -27,6 +26,9 @@ import { selectors } from '../../../../../redux/modules/playlist';
 import { selectors as mdb } from '../../../../../redux/modules/mdb';
 import PlaylistItems from '../../Playlist/PlaylistItems';
 import PlaylistMyItems from '../../PlaylistMy/PlaylistItems';
+import TranscriptionTab from './Transcription/TranscriptionTab';
+import ArticleTab from './Article/ArticleTab';
+import ResearchTab from './Research/ResearchTab';
 
 const derivedTextUnits = unit => {
   const types    = {};
@@ -57,12 +59,12 @@ const Materials = ({ t }) => {
     {
       name: 'transcription',
       label: t('materials.transcription.header'),
-      component: <TranscriptionContainer unit={unit} key="transcription" />
+      component: <TranscriptionTab />
     },
     (![CT_CLIP, CT_VIDEO_PROGRAM_CHAPTER].includes(unit.content_type)) && {
       name: 'sources',
       label: t('materials.sources.header'),
-      component: <Sources unit={unit} />
+      component: <SourceTab unit={unit} />
     },
     {
       name: 'sketches',
@@ -104,7 +106,7 @@ const Materials = ({ t }) => {
     items.push({
       name: 'articles',
       label: t('materials.articles.header'),
-      component: <TranscriptionContainer unit={unit} key="articles" type="articles" activeTab="articles" />
+      component: <ArticleTab />
     });
   }
 
@@ -112,7 +114,7 @@ const Materials = ({ t }) => {
     items.push({
       name: 'research',
       label: t('materials.research.header'),
-      component: <TranscriptionContainer unit={unit} key="research" type="research" activeTab="research" />
+      component: <ResearchTab />
     });
   }
 

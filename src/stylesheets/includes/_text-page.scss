@@ -68,7 +68,6 @@ $serif-family: 'Georgia, ' Times New Roman ', Times, serif';
   }
 }
 
-
 .font_settings {
   font-size: 16px;
 
@@ -203,9 +202,16 @@ $serif-family: 'Georgia, ' Times New Roman ', Times, serif';
     .dropdown .button {
       height: 100%;
     }
+
+    .transition_tab &, .source_tab & {
+      border: none;
+    }
   }
 }
 
+.transition_tab, .source_tab{
+  background: $white;
+}
 .text_toolbar__breadcrumb {
   display: flex;
   flex-wrap: nowrap;

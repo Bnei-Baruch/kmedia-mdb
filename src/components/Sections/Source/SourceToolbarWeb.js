@@ -17,13 +17,13 @@ import PrintBtn from '../../Pages/WithText/Buttons/PrintBtn';
 import { useSelector } from 'react-redux';
 import { selectors as textPage } from '../../../redux/modules/textPage';
 import clsx from 'clsx';
+import PlayByTextBtn from '../../Pages/WithText/Buttons/PlayByTextBtn';
 
 const SourceToolbarWeb = () => {
   const hasSel = !!useSelector(state => textPage.getUrlInfo(state.textPage)).select;
 
   return (
     <div className="text_toolbar">
-      <TocTrigger />
       <div className={clsx('text_toolbar__buttons', { 'text_selected': hasSel })}>
         {
           !hasSel && (
@@ -34,6 +34,9 @@ const SourceToolbarWeb = () => {
             </>
           )
         }
+        {
+          hasSel && <PlayByTextBtn />
+        }
         <TagTextBtn />
         <BookmarkBtn />
         <AddNoteBtn />
@@ -42,23 +45,15 @@ const SourceToolbarWeb = () => {
           !hasSel && (
             <>
               <div className="divider" />
-
               <SearchOnPageBtn />
               <ExpandAllNotesBtn />
-              <DownloadTextBtn />
               <PrintBtn />
+              <DownloadTextBtn />
               <AdditionsVisibilityBtn />
-              <div className="divider" />
-              <LinkToLessonsBtn />
-              <ToggleScanBtn />
-              <div className="divider" />
-              <FullscreenTextBtn />
-
             </>
           )
         }
       </div>
-      <div className="flex_basis_150">&nbsp;</div>
     </div>
   );
 };

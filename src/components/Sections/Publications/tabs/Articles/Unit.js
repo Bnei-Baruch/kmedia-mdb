@@ -8,16 +8,14 @@ import { Container, Grid, Header } from 'semantic-ui-react';
 import { actions, selectors } from '../../../../../redux/modules/mdb';
 import { selectors as settings } from '../../../../../redux/modules/settings';
 import Helmets from '../../../../shared/Helmets/index';
-import TranscriptionContainer
-  from '../../../../Pages/WithPlayer/widgets/UnitMaterials/Transcription/TranscriptionContainer';
 import Share from '../../../../Pages/WithText/Buttons/ShareTextBtn';
-import { isLanguageRtl } from '../../../../../helpers/i18n-utils';
 import MediaDownloads from '../../../../Pages/WithPlayer/widgets/MediaDownloads';
 import WipErr from '../../../../shared/WipErr/WipErr';
 import Recommended from '../../../../Pages/WithPlayer/widgets/Recommended/Main/Recommended';
 import { getEmbedFromQuery } from '../../../../../helpers/player';
 import { ClientChroniclesContext } from '../../../../../helpers/app-contexts';
 import TagsByUnit from '../../../../shared/TagsByUnit';
+import ArticleTab from '../../../../Pages/WithPlayer/widgets/UnitMaterials/Article/ArticleTab';
 
 const renderHeader = (unit, t, uiDir) => {
   const position = uiDir === 'rtl' ? 'right' : 'left';
@@ -70,7 +68,7 @@ const renderArticle = (unit, chroniclesAppend) => (
   <Grid padded>
     <Grid.Row>
       <Grid.Column>
-        <TranscriptionContainer unit={unit} />
+        <ArticleTab unit={unit} />
       </Grid.Column>
     </Grid.Row>
     <Grid.Row>
