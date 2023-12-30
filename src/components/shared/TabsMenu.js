@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import { Menu, Ref } from 'semantic-ui-react';
 
 import { getQuery } from '../../helpers/url';
@@ -48,13 +48,13 @@ const TabsMenu = ({ items = [], active = '' }) => {
               return (
                 <Menu.Item
                   key={name}
+                  as={Link}
+                  to={`?activeTab=${name}`}
                   name={name}
                   className={`tab-${name}`}
                   active={internalActive === name}
                   onClick={handleActiveChange}
-                >
-                  {label}
-                </Menu.Item>
+                >{label}</Menu.Item>
               );
             })
           }
