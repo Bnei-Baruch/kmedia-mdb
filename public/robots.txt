@@ -27,3 +27,7 @@ Disallow: /it/personal*
 Disallow: /ru/personal*
 Disallow: /tr/personal*
 Disallow: /ua/personal*
+
+# Don't index backend
+Disallow: /backend/*
+
