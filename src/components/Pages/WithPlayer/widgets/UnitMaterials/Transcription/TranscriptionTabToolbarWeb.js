@@ -15,6 +15,7 @@ import PrintBtn from '../../../../WithText/Buttons/PrintBtn';
 import { useSelector } from 'react-redux';
 import { selectors as textPage } from '../../../../../../redux/modules/textPage';
 import clsx from 'clsx';
+import PlayByTextBtn from '../../../../WithText/Buttons/PlayByTextBtn';
 
 const TranscriptionTabToolbarWeb = () => {
   const hasSel = !!useSelector(state => textPage.getUrlInfo(state.textPage)).select;
@@ -44,13 +45,10 @@ const TranscriptionTabToolbarWeb = () => {
               <DownloadTextBtn />
               <PrintBtn />
               <AdditionsVisibilityBtn />
-              <div className="divider" />
-              <LinkToLessonsBtn />
-              <div className="divider" />
-              <FullscreenTextBtn />
             </>
           )
         }
+        <PlayByTextBtn />
       </div>
     </div>
   );

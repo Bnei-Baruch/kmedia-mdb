@@ -5,6 +5,7 @@ import { getQuery } from '../../../../helpers/url';
 import { useSelector } from 'react-redux';
 import { selectors as assets } from '../../../../redux/modules/assets';
 import { selectors as textPage } from '../../../../redux/modules/textPage';
+import { getLanguageDirection } from '../../../../helpers/i18n-utils';
 
 const ContentHtml = ({ labels = [], notes = [] }) => {
   const { language, id } = useSelector(state => textPage.getFile(state.textPage));
@@ -23,8 +24,10 @@ const ContentHtml = ({ labels = [], notes = [] }) => {
       [...labels, ...notes]);
   }, [srchstart, srchend, getDoc2htmlById, id, labels, notes]);
 
+  const dir = getLanguageDirection(language);
+
   return (
-    <div className={`${language}_styles`}>
+    <div className={`${language}_styles`} dir={dir}>
       <div id={DOM_ROOT_ID} dangerouslySetInnerHTML={{ __html }} />
     </div>
   );

@@ -118,14 +118,15 @@
     transition: all 0.2s ease-in-out 0s;
     border: 1px solid $midWhite;
 
-
     width: 360px;
     transform: translate3d(0, 0, 0);
-
 
     &.source__toc_active {
       transform: translate3d(360px, 0, 0);
       transition: all 0.2s ease-in-out 0s;
+      .ltr &{
+        transform: translate3d(-360px, 0, 0);
+      }
     }
 
     &.source__toc_scroll_up {

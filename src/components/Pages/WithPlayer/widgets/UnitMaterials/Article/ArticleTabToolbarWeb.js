@@ -44,10 +44,6 @@ const ArticleTabToolbarWeb = () => {
               <DownloadTextBtn />
               <PrintBtn />
               <AdditionsVisibilityBtn />
-              <div className="divider" />
-              <LinkToLessonsBtn />
-              <div className="divider" />
-              <FullscreenTextBtn />
             </>
           )
         }

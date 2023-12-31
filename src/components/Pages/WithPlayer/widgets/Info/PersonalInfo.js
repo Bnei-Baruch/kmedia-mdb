@@ -69,7 +69,7 @@ const PersonalInfo = ({ collection }) => {
           <NeedToLogin />
         </Modal.Content>
       </Modal>
-      <Menu secondary className="personal_info">
+      <Menu secondary className="personal_info no_print">
         <Menu.Item>
           <TaggingBtn />
         </Menu.Item>

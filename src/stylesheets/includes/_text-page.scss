@@ -203,15 +203,16 @@ $serif-family: 'Georgia, ' Times New Roman ', Times, serif';
       height: 100%;
     }
 
-    .transition_tab &, .source_tab & {
+    .player_page_tab & {
       border: none;
     }
   }
 }
 
-.transition_tab, .source_tab{
+.player_page_tab {
   background: $white;
 }
+
 .text_toolbar__breadcrumb {
   display: flex;
   flex-wrap: nowrap;

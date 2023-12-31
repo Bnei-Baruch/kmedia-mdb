@@ -42,10 +42,13 @@ const TextContentWeb = () => {
   };
 
   return (
-    <div className={`text__content-wrapper is-${theme} is-${fontType}`} style={{ zoom: zoomSize }}>
+    <div
+      className={`text__content-wrapper is-${theme} is-${fontType}`}
+      style={{ zoom: zoomSize }}
+    >
       {
         !textOnly && (
-          <div className="text__content-markers">
+          <div className="text__content-markers no_print">
             <NoteMarks parentTop={parentTop} />
             <LabelMarks labels={labels} offsets={offsets} />
           </div>

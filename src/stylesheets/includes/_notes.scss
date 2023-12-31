@@ -11,7 +11,6 @@
     width: 40px;
     height: 100%;
 
-
     .note_mark {
       position: absolute;
       width: 30px;
@@ -63,9 +62,19 @@
   left: -370px;
   z-index: 1;
 
+  .ltr & {
+    left: auto;
+    right: -380px;
+  }
+
   &.note_list_out {
     left: auto;
     right: -380px;
+
+    .ltr & {
+      right: auto;
+      left: -380px;
+    }
   }
 }
 

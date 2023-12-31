@@ -13,7 +13,7 @@ import clsx from 'clsx';
 
 const POPOVER_CONFIRMATION_TIMEOUT = 2500;
 
-const ShareTextBtn = ({ position }) => {
+const ShareTextBtn = () => {
   const { t }                         = useTranslation();
   const { isMobileDevice }            = useContext(DeviceInfoContext);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -83,7 +83,7 @@ const ShareTextBtn = ({ position }) => {
         <Popup // link was copied message popup
           open={isCopyOpen}
           content={t('messages.link-copied-to-clipboard')}
-          position={`bottom ${position}`}
+          position={`bottom left`}
           trigger={
             (
               <CopyToClipboard text={urlWithParams} onCopy={handleCopied}>

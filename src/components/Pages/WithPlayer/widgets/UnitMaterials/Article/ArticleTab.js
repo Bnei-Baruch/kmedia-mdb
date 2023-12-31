@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useParams } from 'react-router-dom';
 
 import TextLayoutWeb from '../../../../WithText/TextLayoutWeb';
 import ArticleTabToolbarWeb from './ArticleTabToolbarWeb';
 import { useSelector } from 'react-redux';
 import { selectors as mdb } from '../../../../../../redux/modules/mdb';
-import { CT_LIKUTIM, CT_SOURCE, MT_TEXT, CT_ARTICLE } from '../../../../../../helpers/consts';
+import { CT_ARTICLE } from '../../../../../../helpers/consts';
+import { DeviceInfoContext } from '../../../../../../helpers/app-contexts';
+import ArticleTabToolbarMobile from './ArticleTabToolbarMobile';
 
 const ArticleTab = () => {
   const { id } = useParams();
@@ -15,10 +17,11 @@ const ArticleTab = () => {
 
   if (!cu) return null;
 
-  const toolbar = <ArticleTabToolbarWeb />;
+  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const toolbar            = isMobileDevice ? <ArticleTabToolbarMobile /> : <ArticleTabToolbarWeb />;
 
   return (
-    <div className="transition_tab">
+    <div className="player_page_tab">
       <TextLayoutWeb propId={cu.id} toolbar={toolbar} />
     </div>
   );

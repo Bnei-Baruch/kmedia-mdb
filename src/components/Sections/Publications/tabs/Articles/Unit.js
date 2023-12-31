@@ -1,6 +1,4 @@
 import React, { Fragment, useContext, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { withTranslation } from 'react-i18next';
 import { useLocation, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Container, Grid, Header } from 'semantic-ui-react';
@@ -13,9 +11,12 @@ import MediaDownloads from '../../../../Pages/WithPlayer/widgets/MediaDownloads'
 import WipErr from '../../../../shared/WipErr/WipErr';
 import Recommended from '../../../../Pages/WithPlayer/widgets/Recommended/Main/Recommended';
 import { getEmbedFromQuery } from '../../../../../helpers/player';
-import { ClientChroniclesContext } from '../../../../../helpers/app-contexts';
+import { ClientChroniclesContext, DeviceInfoContext } from '../../../../../helpers/app-contexts';
 import TagsByUnit from '../../../../shared/TagsByUnit';
-import ArticleTab from '../../../../Pages/WithPlayer/widgets/UnitMaterials/Article/ArticleTab';
+import TextLayoutWeb from '../../../../Pages/WithText/TextLayoutWeb';
+import ArticleToolbarMobile from './ArticleToolbarMobile';
+import ArticleToolbarWeb from './ArticleToolbarWeb';
+import { useTranslation } from 'react-i18next';
 
 const renderHeader = (unit, t, uiDir) => {
   const position = uiDir === 'rtl' ? 'right' : 'left';
@@ -64,25 +65,13 @@ const renderHelmet = unit => (
   </Fragment>
 );
 
-const renderArticle = (unit, chroniclesAppend) => (
-  <Grid padded>
-    <Grid.Row>
-      <Grid.Column>
-        <ArticleTab unit={unit} />
-      </Grid.Column>
-    </Grid.Row>
-    <Grid.Row>
-      <Grid.Column>
-        <MediaDownloads unit={unit} displayDivider={true} chroniclesAppend={chroniclesAppend} />
-      </Grid.Column>
-    </Grid.Row>
-  </Grid>
-);
+const ArticlePage = () => {
+  const { id }   = useParams();
+  const location = useLocation();
+  const { t }    = useTranslation();
 
-const ArticlePage = ({ t }) => {
-  const location   = useLocation();
-  const { id }     = useParams();
-  const chronicles = useContext(ClientChroniclesContext);
+  const chronicles         = useContext(ClientChroniclesContext);
+  const { isMobileDevice } = useContext(DeviceInfoContext);
 
   const uiDir = useSelector(state => settings.getUIDir(state.settings));
   const unit  = useSelector(state => selectors.getDenormContentUnit(state.mdb, id));
@@ -111,6 +100,9 @@ const ArticlePage = ({ t }) => {
   const chroniclesAppend = chronicles ? chronicles.append.bind(chronicles) : () => null;
 
   const embed = getEmbedFromQuery(location);
+
+  const toolbar = isMobileDevice ? <ArticleToolbarMobile /> : <ArticleToolbarWeb />;
+
   return !embed
     ? (
       <>
@@ -124,7 +116,18 @@ const ArticlePage = ({ t }) => {
                 </Grid.Row>
                 <Grid.Row>
                   <Grid.Column>
-                    {renderArticle(unit, chroniclesAppend)}
+                    <Grid padded>
+                      <Grid.Row>
+                        <Grid.Column>
+                          <TextLayoutWeb toolbar={toolbar} />
+                        </Grid.Column>
+                      </Grid.Row>
+                      <Grid.Row>
+                        <Grid.Column>
+                          <MediaDownloads unit={unit} displayDivider={true} chroniclesAppend={chroniclesAppend} />
+                        </Grid.Column>
+                      </Grid.Row>
+                    </Grid>
                   </Grid.Column>
                 </Grid.Row>
               </Grid.Column>
@@ -140,8 +143,4 @@ const ArticlePage = ({ t }) => {
     );
 };
 
-ArticlePage.propTypes = {
-  t: PropTypes.func.isRequired,
-};
-
-export default withTranslation()(ArticlePage);
+export default ArticlePage;

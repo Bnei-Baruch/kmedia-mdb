@@ -15,7 +15,7 @@ export function* fetchSubject(action) {
     const cu               = yield select(state => mdb.getDenormContentUnit(state.mdb, id));
     const subject          = cuToSubject(cu);
     const contentLanguages = yield select(state => settings.getContentLanguages(state.settings));
-    const language         = selectSuitableLanguage(contentLanguages, subject.languages, LANG_HEBREW, DEFAULT_CONTENT_LANGUAGE, true);
+    const language         = selectSuitableLanguage(contentLanguages, subject.languages, cu.original_language);
 
     const file = selectTextFile(subject.files, id, language);
     yield put(actions.fetchSubjectSuccess({ subject, file, isGr }));

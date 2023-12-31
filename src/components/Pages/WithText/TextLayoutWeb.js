@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import TextContentWeb from './Content/TextContentWeb';
 import { useTextSubject } from './hooks/useTextSubject';
 import { useTextContent } from './Content/useTextContent';
@@ -17,7 +17,18 @@ import { physicalFile } from '../../../helpers/utils';
 
 let lastScrollTop = 0;
 
-const TextLayoutWeb = ({ toolbar = null, toc = null, prevNext = null, breadcrumb = null, propId }) => {
+const TextLayoutWeb = (props) => {
+  const {
+          toolbar    = null,
+          toc        = null,
+          prevNext   = null,
+          breadcrumb = null,
+          propId,
+          playerPage = false,
+        } = props;
+
+  const ref = useRef();
+
   const scrollDir = useSelector(state => textPage.getScrollDir(state.textPage));
   const subject   = useSelector(state => textPage.getSubject(state.textPage));
   const hasSel    = !!useSelector(state => textPage.getUrlInfo(state.textPage)).select;
@@ -32,7 +43,7 @@ const TextLayoutWeb = ({ toolbar = null, toc = null, prevNext = null, breadcrumb
   useEffect(() => {
     const handleScroll = () => {
       const st = window.pageYOffset || document.documentElement.scrollTop;
-      if (st < 120) {
+      if (st < ref.current?.offsetTop) {
         dispatch(actions.setScrollDir(0));
       } else if (st > lastScrollTop) {
         dispatch(actions.setScrollDir(1));
@@ -46,7 +57,7 @@ const TextLayoutWeb = ({ toolbar = null, toc = null, prevNext = null, breadcrumb
     window.addEventListener('scroll', handleScroll);
 
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [ref.current]);
 
   const wipErr = useTextContent();
   if (wipErr) return wipErr;
@@ -59,7 +70,7 @@ const TextLayoutWeb = ({ toolbar = null, toc = null, prevNext = null, breadcrumb
   }
 
   return (
-    <div className="is-web text_layout">
+    <div className="is-web text_layout" ref={ref}>
       {breadcrumb}
       {toc}
       <div className={
@@ -82,10 +93,14 @@ const TextLayoutWeb = ({ toolbar = null, toc = null, prevNext = null, breadcrumb
           </div>
         ) : (
           <>
-            <div className="text_align_to_text">
-              <TagsByUnit id={subject.id}></TagsByUnit>
-              <AudioPlayer />
-            </div>
+            {
+              !playerPage && (
+                <div className="text_align_to_text">
+                  <TagsByUnit id={subject.id}></TagsByUnit>
+                  <AudioPlayer />
+                </div>
+              )
+            }
             <TextContentWeb />
             <NoteItemSticky />
             <NoteItemModal />

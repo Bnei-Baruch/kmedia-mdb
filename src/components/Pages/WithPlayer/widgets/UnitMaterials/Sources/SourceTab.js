@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { Dropdown } from 'semantic-ui-react';
@@ -8,6 +8,11 @@ import { selectors as mdb } from '../../../../../../redux/modules/mdb';
 import { MT_TEXT, CT_LIKUTIM, CT_SOURCE } from '../../../../../../helpers/consts';
 import SourceToolbarMobile from '../../../../../Sections/Source/SourceToolbarMobile';
 import SourceToolbarWeb from '../../../../../Sections/Source/SourceToolbarWeb';
+import TranscriptionTabToolbarMobile from '../Transcription/TranscriptionTabToolbarMobile';
+import TranscriptionTabToolbarWeb from '../Transcription/TranscriptionTabToolbarWeb';
+import { DeviceInfoContext } from '../../../../../../helpers/app-contexts';
+import SourceTabToolbarMobile from './SourceTabToolbarMobile';
+import SourceTabToolbarWeb from './SourceTabToolbarWeb';
 
 const SourceTab = () => {
   const { id } = useParams();
@@ -20,9 +25,10 @@ const SourceTab = () => {
   const [cuId, setCuId] = useState(cus[0]?.id);
   const handleSelectCu  = (e, { value }) => setCuId(value);
 
-  const toolbar = <SourceToolbarWeb />;
+  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const toolbar            = isMobileDevice ? <SourceTabToolbarMobile /> : <SourceTabToolbarWeb />;
   return (
-    <div className="source_tab">
+    <div className="player_page_tab">
       <Dropdown
         compact
         inline
