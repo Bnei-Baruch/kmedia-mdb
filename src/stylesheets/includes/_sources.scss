@@ -117,14 +117,31 @@
     z-index: 2;
     transition: all 0.2s ease-in-out 0s;
     border: 1px solid $midWhite;
-
     width: 360px;
     transform: translate3d(0, 0, 0);
+
+    .is-dark & {
+      background: $dark-bg !important;
+      color: $dark-text !important;
+
+      .ui.accordion .title:not(.ui) {
+        color: $dark-text !important;
+      }
+    }
+    .is-sepia & {
+      background: $sepia-bg !important;
+      color: $sepia-text !important;
+
+      .ui.accordion .title:not(.ui) {
+        color: $sepia-text !important;
+      }
+    }
 
     &.source__toc_active {
       transform: translate3d(360px, 0, 0);
       transition: all 0.2s ease-in-out 0s;
-      .ltr &{
+
+      .ltr & {
         transform: translate3d(-360px, 0, 0);
       }
     }

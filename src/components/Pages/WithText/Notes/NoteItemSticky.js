@@ -7,6 +7,7 @@ import { selectors, NOTE_STATUS } from '../../../../redux/modules/myNotes';
 import NoteCopyBtn from './Buttons/NoteCopyBtn';
 import NoteInModalBtn from './Buttons/NoteInModalBtn';
 import NoteContent from './NoteContent';
+import NoteCloseBtn from './Buttons/NoteCloseBtn';
 
 const NoteItemSticky = () => {
   const note   = useSelector(state => selectors.getSelected(state.notes));
@@ -18,6 +19,7 @@ const NoteItemSticky = () => {
     <div className="note_item note_item_sticky">
       <div className="note_info">
         <div className="note_buttons">
+          <NoteCloseBtn />
           <NoteInModalBtn />
           <NoteEditBtn />
           <NoteCopyBtn text={note.content} />

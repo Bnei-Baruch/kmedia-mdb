@@ -44,11 +44,11 @@ const LikutToolbarWeb = () => {
               <DownloadTextBtn />
               <PrintBtn />
               <AdditionsVisibilityBtn />
-              <div className="divider" />
-              <FullscreenTextBtn />
             </>
           )
         }
+        <div className="divider" />
+        <FullscreenTextBtn />
       </div>
     </div>
   );

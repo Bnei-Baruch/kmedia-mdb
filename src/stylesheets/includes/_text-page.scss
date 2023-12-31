@@ -8,7 +8,7 @@ $serif-family: 'Georgia, ' Times New Roman ', Times, serif';
     flex-basis: max-content;
     flex-wrap: nowrap;
     justify-content: center;
-    margin-top: 1em;
+    padding: 0 1em;
 
     .text__content {
       max-width: $max-readble-width;
@@ -20,21 +20,62 @@ $serif-family: 'Georgia, ' Times New Roman ', Times, serif';
     margin: 0 auto;
     transform: translate(-30px, 0);
   }
+
+  .toc_trigger {
+    justify-self: flex-start;
+    align-self: center;
+    background: none;
+    flex-wrap: nowrap;
+    font-size: 18px;
+    white-space: nowrap;
+  }
+
+  &.is-dark {
+    background: $dark-bg !important;
+    color: $dark-text !important;
+
+    .material-symbols-outlined {
+      color: $dark-text !important;
+    }
+
+    .toc_trigger {
+      background: $dark-bg !important;
+      color: $dark-text !important;
+    }
+
+    .button {
+      &:hover, &:focus, &.active, &.active:focus {
+        color: $dark-text !important;
+        background-color: $dark-hover !important;
+      }
+    }
+  }
+
+  &.is-sepia {
+    background: $sepia-bg !important;
+    color: $sepia-text !important;
+
+    .material-symbols-outlined {
+      color: $sepia-text !important;
+    }
+
+    .toc_trigger {
+      background: $sepia-bg !important;
+      color: $sepia-text !important;
+    }
+
+    .button {
+      &:hover, &:focus, &.active, &.active:focus {
+        color: $sepia-text !important;
+      }
+    }
+  }
+
+  &.is-serif {
+    font-family: $serif-family;
+  }
 }
 
-.is-dark {
-  background: #010101 !important;
-  color: #767676 !important;
-}
-
-.is-sepia {
-  background: $sepia-bg !important;
-  color: $sepia-text !important;
-}
-
-.is-serif {
-  font-family: $serif-family;
-}
 
 .ui.sepia.label,
 .ui.sepia.labels .label {
@@ -69,7 +110,7 @@ $serif-family: 'Georgia, ' Times New Roman ', Times, serif';
 }
 
 .font_settings {
-  font-size: 16px;
+  font-size: 20px;
 
   * {
     line-height: 1.65;
@@ -126,6 +167,14 @@ $serif-family: 'Georgia, ' Times New Roman ', Times, serif';
   background: $white;
   z-index: 1;
 
+  .is-dark & {
+    background: $dark-bg !important;
+  }
+
+  .is-sepia & {
+    background: $sepia-bg !important;
+  }
+
   &.stick_toolbar_pinned {
     top: $main-menu-height;
     transition: all 0.2s ease-in-out 0s;
@@ -158,14 +207,8 @@ $serif-family: 'Georgia, ' Times New Roman ', Times, serif';
   border-top: 1px solid $midWhite;
   border-bottom: 1px solid $midWhite;
   height: $toc-toolbar-height;
+  padding: 0 1em;
 
-
-  .toc_trigger {
-    justify-self: flex-start;
-    align-self: center;
-    background: none;
-    flex-wrap: nowrap;
-  }
 
   &__buttons {
     max-width: $max-readble-width;

@@ -104,7 +104,7 @@
 
         .material-symbols-outlined {
           font-size: 22px;
-          color: rgba(0, 0, 0, 0.54);
+          color: rgba(0, 0, 0, 0.54) !important;
         }
       }
     }
@@ -117,7 +117,8 @@
   .note_content {
     margin: 8px;
     font-size: 16px;
-    line-height: 16px;
+    line-height: 20px;
+    color: $black;
 
     &_short {
       display: -webkit-box;
@@ -129,6 +130,7 @@
     textarea {
       width: 100%;
       min-height: 250px;
+      padding: .5em;
     }
   }
 

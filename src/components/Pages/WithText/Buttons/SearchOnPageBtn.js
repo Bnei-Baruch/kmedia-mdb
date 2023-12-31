@@ -8,6 +8,7 @@ import { DOM_ROOT_ID } from '../scrollToSearch/helper';
 const SearchOnPageBtn = () => {
   const [isOpen, setIsOpen] = useState(false);
   const handleSearchChange  = (e, { value }) => {
+    window.getSelection().removeAllRanges()
     window.find(value)
     /*const res = searchOnPage(value, document.getElementById(DOM_ROOT_ID));
     if (res.length === 0) return;

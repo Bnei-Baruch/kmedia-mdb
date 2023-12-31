@@ -7,18 +7,14 @@ import { actions } from '../../../../redux/modules/textPage';
 const TocTrigger = () => {
   const { t }             = useTranslation();
   const dispatch          = useDispatch();
-  const handleTocIsActive = () =>     dispatch(actions.setTocIsActive());
+  const handleTocIsActive = () => dispatch(actions.setTocIsActive());
 
   return (
     <Button
-      compact
-      basic
-      size="small"
-      floated
       className="toc_trigger clear_button flex_basis_150"
       icon="list layout"
       onClick={handleTocIsActive}
-      content={t('source.toc_trigger')}
+      content={t('sources-library.toc')}
     />
   );
 };

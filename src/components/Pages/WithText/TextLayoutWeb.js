@@ -4,7 +4,7 @@ import { useTextSubject } from './hooks/useTextSubject';
 import { useTextContent } from './Content/useTextContent';
 import { useInitTextUrl } from './hooks/useInitTextUrl';
 import clsx from 'clsx';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import { selectors as textPage, actions } from '../../../redux/modules/textPage';
 import { useInitTextSettings } from './hooks/useInitTextSettings';
 import NoteItemSticky from './Notes/NoteItemSticky';
@@ -17,7 +17,7 @@ import { physicalFile } from '../../../helpers/utils';
 
 let lastScrollTop = 0;
 
-const TextLayoutWeb = (props) => {
+const TextLayoutWeb = props => {
   const {
           toolbar    = null,
           toc        = null,
@@ -34,6 +34,7 @@ const TextLayoutWeb = (props) => {
   const hasSel    = !!useSelector(state => textPage.getUrlInfo(state.textPage)).select;
   const file      = useSelector(state => textPage.getFile(state.textPage));
   const scanInfo  = useSelector(state => textPage.getScanInfo(state.textPage));
+  const { theme } = useSelector(state => textPage.getSettings(state.textPage));
 
   useInitTextUrl();
   useTextSubject(propId);
@@ -70,7 +71,7 @@ const TextLayoutWeb = (props) => {
   }
 
   return (
-    <div className="is-web text_layout" ref={ref}>
+    <div className={`is-web text_layout  is-${theme}`} ref={ref}>
       {breadcrumb}
       {toc}
       <div className={
@@ -95,7 +96,7 @@ const TextLayoutWeb = (props) => {
           <>
             {
               !playerPage && (
-                <div className="text_align_to_text">
+                <div className="text_align_to_text margin-bottom-1em">
                   <TagsByUnit id={subject.id}></TagsByUnit>
                   <AudioPlayer />
                 </div>

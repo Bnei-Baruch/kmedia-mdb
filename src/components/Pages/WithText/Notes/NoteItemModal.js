@@ -11,6 +11,7 @@ import NoteCancelBtn from './Buttons/NoteCancelBtn';
 import NoteSaveBtn from './Buttons/NoteSaveBtn';
 import NoteContent from './NoteContent';
 import NoteInModalBtn from './Buttons/NoteInModalBtn';
+import NoteCloseBtn from './Buttons/NoteCloseBtn';
 
 const NoteItemSticky = () => {
   const note   = useSelector(state => selectors.getSelected(state.notes));
@@ -31,6 +32,7 @@ const NoteItemSticky = () => {
       <Modal.Content>
         <div className="note_info">
           <div className="note_buttons">
+            <NoteCloseBtn />
             <NoteInModalBtn />
             <NoteEditBtn />
             <NoteCopyBtn text={note.content} />

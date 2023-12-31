@@ -12,7 +12,7 @@ import LabelMarks from '../Labels/LabelMarks';
 const TextContentWeb = () => {
   const [parentTop, setParentTop] = useState(0);
 
-  const { fontType, theme, zoomSize } = useSelector(state => textPage.getSettings(state.textPage), shallowEqual);
+  const { fontType, zoomSize } = useSelector(state => textPage.getSettings(state.textPage), shallowEqual);
   const textOnly                      = useSelector(state => textPage.getTextOnly(state.textPage));
 
   const notes               = useNotes();
@@ -43,7 +43,7 @@ const TextContentWeb = () => {
 
   return (
     <div
-      className={`text__content-wrapper is-${theme} is-${fontType}`}
+      className={`text__content-wrapper is-${fontType}`}
       style={{ zoom: zoomSize }}
     >
       {

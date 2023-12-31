@@ -50,12 +50,11 @@ const SourceToolbarWeb = () => {
               <div className="divider" />
               <LinkToLessonsBtn />
               <ToggleScanBtn />
-              <div className="divider" />
-              <FullscreenTextBtn />
-
             </>
           )
         }
+        <div className="divider" />
+        <FullscreenTextBtn />
       </div>
       <div className="flex_basis_150">&nbsp;</div>
     </div>
