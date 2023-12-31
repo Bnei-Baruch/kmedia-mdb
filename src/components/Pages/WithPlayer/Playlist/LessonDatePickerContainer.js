@@ -31,8 +31,8 @@ const LessonDatePickerContainer = () => {
   const cWindow = useSelector(state => mdb.getWindow(state.mdb), shallowEqual);
 
   const { isReady, cId } = useSelector(state => selectors.getInfo(state.playlist));
-  const denorm = useSelector(state => mdb.nestedGetDenormCollection(state.mdb));
-  const uiDir  = useSelector(state => settings.getUIDir(state.settings));
+  const denorm           = useSelector(state => mdb.nestedGetDenormCollection(state.mdb));
+  const uiDir            = useSelector(state => settings.getUIDir(state.settings));
 
   const dispatch = useDispatch();
 

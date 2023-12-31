@@ -77,7 +77,7 @@ const onFetchListFailure = (state, action) => {
   }));
 };
 
-const onSSRPrepare = (state, action) => {
+const onSSRPrepare = state => {
   state.zipIndexById    = mapValues(state.zipIndexById, x => ({ ...x, err: x.err ? x.err.toString() : x.err }));
   state.doc2htmlById    = mapValues(state.doc2htmlById, x => ({ ...x, err: x.err ? x.err.toString() : x.err }));
   state.sourceIndexById = mapValues(state.sourceIndexById, x => ({ ...x, err: x.err ? x.err.toString() : x.err }));

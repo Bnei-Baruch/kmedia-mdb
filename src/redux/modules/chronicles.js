@@ -3,9 +3,9 @@ import { actions as recommended } from './recommended';
 import { actions as search } from './search';
 import { actions as player } from './player';
 
-const onAction = (state, { payload }) => {
+const onAction = (state, action) => {
   state.actionsCount = state.actionsCount + 1;
-  state.lastAction   = payload;
+  state.lastAction   = action;
 };
 
 const chronicles = createSlice({

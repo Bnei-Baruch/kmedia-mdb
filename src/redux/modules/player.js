@@ -46,8 +46,7 @@ const playerSlice = createSlice({
     playerRate      : (state, { payload }) => void (state.rate = payload.playbackRate),
     playerResize    : (state, { payload }) => void (state.width = payload.width),
     playerToggleMute: (state, { payload }) => void (state.isMuted = payload.mute),
-    playerComplete  : () => {
-    },
+    playerComplete  : () => void ({}),
 
     setOverMode    : (state, { payload }) => void (state.overMode = payload),
     setFullscreen  : (state, { payload }) => void (state.isFullScreen = payload),

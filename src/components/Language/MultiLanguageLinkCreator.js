@@ -10,7 +10,7 @@ import { omit } from 'lodash/object';
 import { KC_SEARCH_KEY_SESSION, KC_SEARCH_KEYS } from '../../pkg/ksAdapter/adapter';
 
 /**
- * multiLanguageLinkCreator - an higher order component to create a link that allows navigating
+ * multiLanguageLinkCreator - a higher order component to create a link that allows navigating
  * while keeping the current active language in the url, or changing to a new language on navigation.
  *
  * The wrapped component will keep most of the react-router-dom Link interface, with the following changes:

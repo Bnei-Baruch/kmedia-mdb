@@ -7,33 +7,33 @@ import sagaMonitor from '../sagas/helpers/sagaMonitor';
 
 import createMultiLanguageRouterMiddleware from './middleware/multiLanguageRouterMiddleware';
 import { createRouterReducer as connectRouter } from '@lagunovsky/redux-react-router';
-import { reducer as settings } from './modules/settings';
-import { reducer as preparePage } from './modules/preparePage';
+import settings from './modules/settings';
+import preparePage from './modules/preparePage';
 import events from './modules/events';
 import lessons from './modules/lessons';
-import { reducer as publications } from './modules/publications';
+import publications from './modules/publications';
 import filters from './modules/filters';
-import { reducer as filtersAside } from './modules/filtersAside';
+import filtersAside from './modules/filtersAside';
 import lists from './modules/lists';
-import { reducer as sources } from './modules/sources';
-import { reducer as tags } from './modules/tags';
+import sources from './modules/sources';
+import tags from './modules/tags';
 import mdb from './modules/mdb';
-import { reducer as search } from './modules/search';
+import search from './modules/search';
 import assets from './modules/assets';
 import home from './modules/home';
-import { reducer as stats } from './modules/stats';
-import { reducer as simpleMode } from './modules/simpleMode';
-import { reducer as recommended } from './modules/recommended';
+import stats from './modules/stats';
+import simpleMode from './modules/simpleMode';
+import recommended from './modules/recommended';
 import chronicles from './modules/chronicles';
-import { reducer as music } from './modules/music';
+import music from './modules/music';
 import auth from './modules/auth';
-import { reducer as my } from './modules/my';
-import { reducer as notes } from './modules/myNotes';
-import { reducer as likutim } from './modules/likutim';
+import my from './modules/my';
+import myNotes from './modules/myNotes';
+import likutim from './modules/likutim';
 import bookmarkFilter from './modules/bookmarkFilter';
-import { reducer as trim } from './modules/trim';
+import trim from './modules/trim';
 import player from './modules/player';
-import { reducer as playlist } from './modules/playlist';
+import playlist from './modules/playlist';
 import fetchImage from './modules/fetchImage';
 
 const isProduction = process.env.NODE_ENV === 'production';
@@ -82,7 +82,7 @@ const setupReducers = history => ({
   music,
   auth,
   my,
-  notes,
+  myNotes,
   likutim,
   bookmarkFilter,
   trim,

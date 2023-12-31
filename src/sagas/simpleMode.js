@@ -38,7 +38,7 @@ export function* fetchForDate(action) {
 }
 
 function* watchFetchForDate() {
-  yield takeLatest([types.FETCH_FOR_DATE], fetchForDate);
+  yield takeLatest(types['simpleMode/fetchForDate'], fetchForDate);
 }
 
 export const sagas = [

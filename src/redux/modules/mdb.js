@@ -257,13 +257,6 @@ const onFetchWindow = (state, action) => {
   };
 };
 
-const onFetchDatepickerCO = (state, action) => {
-  const { collections } = action.payload;
-  state.datepickerCO    = minBy(collections, a => a.number)?.id;
-};
-
-const onNullDatepickerCO = state => state.datepickerCO = null;
-
 const onSSRPrepare = state => {
   state.wip                = freshStore().wip;
   state.errors.units       = mapValues(state.errors.units, x => (x ? x.toString() : x));
@@ -298,11 +291,9 @@ const mdbSlice = createSlice({
       state.errors.units[action.payload.id]  = null;
       state.fetched.units[action.payload.id] = true;
     },
-    fetchUnitFailure: {
-      reducer: (state, action) => {
-        state.wip.units[action.payload.id]    = false;
-        state.errors.units[action.payload.id] = action.payload.err;
-      }
+    fetchUnitFailure: (state, action) => {
+      state.wip.units[action.payload.id]    = false;
+      state.errors.units[action.payload.id] = action.payload.err;
     },
 
     fetchUnitsByIDs       : (state, action) => {
@@ -332,27 +323,23 @@ const mdbSlice = createSlice({
       state.collections ||= {};
       state.collections[action.payload] = true;
     },
-    fetchCollectionSuccess      : {
-      reducer: (state, action) => {
-        onReceiveCollections(state, [action.payload.data]);
-        state.wip.collections[action.payload.id]     = false;
-        state.errors.collections[action.payload.id]  = null;
-        state.fetched.collections[action.payload.id] = true;
-      }
+    fetchCollectionSuccess      : (state, action) => {
+      onReceiveCollections(state, [action.payload.data]);
+      state.wip.collections[action.payload.id]     = false;
+      state.errors.collections[action.payload.id]  = null;
+      state.fetched.collections[action.payload.id] = true;
     },
     fetchCollectionFailure      : (state, action) => {
       state.wip.collections[action.payload.id]    = false;
       state.errors.collections[action.payload.id] = action.payload.err;
     },
-    fetchCollectionsByIDsFailure: {
-      reducer: (state, action) => {
-        const collections        = action.payload.id?.reduce((acc, id) => ({
-          wip   : { ...acc.wip, [id]: false },
-          errors: { ...acc.errors, [id]: action.payload.err }
-        }), { wip: {}, errors: {} });
-        state.wip.collections    = { ...state.wip.collections, ...collections.wip };
-        state.errors.collections = { ...state.errors.collections, ...collections.errors };
-      }
+    fetchCollectionsByIDsFailure: (state, action) => {
+      const collections        = action.payload.id?.reduce((acc, id) => ({
+        wip   : { ...acc.wip, [id]: false },
+        errors: { ...acc.errors, [id]: action.payload.err }
+      }), { wip: {}, errors: {} });
+      state.wip.collections    = { ...state.wip.collections, ...collections.wip };
+      state.errors.collections = { ...state.errors.collections, ...collections.errors };
     },
 
     fetchLatestLesson       : state => void (state.wip.lastLesson = true),
@@ -365,45 +352,39 @@ const mdbSlice = createSlice({
       state.errors.collections[data.id]  = null;
       state.fetched.collections[data.id] = true;
     },
-    fetchLatestLessonFailure: {
-      reducer: (state, action) => {
-        state.wip.lastLesson    = false;
-        state.errors.lastLesson = action.payload.err;
-      }
+    fetchLatestLessonFailure: (state, action) => {
+      state.wip.lastLesson    = false;
+      state.errors.lastLesson = action.payload.err;
     },
 
     fetchWindow       : (state, action) => {
       state.wip.cWindow ||= {};
       state.wip.cWindow[action.payload.id] = true;
     },
-    fetchWindowSuccess: {
-      reducer: (state, action) => {
-        onReceiveCollections(state, action.payload.data?.collections);
-        onFetchWindow(state, action);
-        state.wip.cWindow[action.payload.id]    = false;
-        state.errors.cWindow[action.payload.id] = null;
-      }
+    fetchWindowSuccess: (state, action) => {
+      onReceiveCollections(state, action.payload.data?.collections);
+      onFetchWindow(state, action);
+      state.wip.cWindow[action.payload.id]    = false;
+      state.errors.cWindow[action.payload.id] = null;
     },
-    fetchWindowFailure: {
-      reducer: (state, action) => {
-        state.wip.cWindow    = false;
-        state.errors.cWindow = action.payload.err;
-      }
+    fetchWindowFailure: (state, action) => {
+      state.wip.cWindow    = false;
+      state.errors.cWindow = action.payload.err;
     },
 
-    fetchDatepickerCO       : () => void ({}),
-    fetchDatepickerCOSuccess: (state, action) => {
-      onReceiveCollections(state, action.payload.collections);
-      onFetchDatepickerCO(state, action);
+    fetchDatepickerCO       : state => void (state.wip.datepickerCO = true),
+    fetchDatepickerCOSuccess: (state, { payload: { data: { collections } } }) => {
+      onReceiveCollections(state, collections);
+      state.datepickerCO        = minBy(collections, a => a.number)?.id;
       state.wip.datepickerCO    = false;
       state.errors.datepickerCO = null;
     },
     fetchDatepickerCOFailure: (state, action) => {
-      onNullDatepickerCO(state);
+      state.datepickerCO        = null;
       state.wip.datepickerCO    = false;
       state.errors.datepickerCO = action.payload.err;
     },
-    nullDatepickerCO        : () => void ({}),
+    nullDatepickerCO        : state => void (state.datepickerCO = null),
 
     fetchSQData       : state => void (state.wip.sqData = true),
     fetchSQDataSuccess: state => {
@@ -411,7 +392,7 @@ const mdbSlice = createSlice({
       state.errors.sqData = null;
     },
     fetchSQDataFailure: {
-      prepare: (id, err) => void ({ payload: { id, err } }),
+      prepare: (id, err) => ({ payload: { id, err } }),
       reducer: (state, action) => {
         const { payload = { id: 0 } }  = action;
         state.wip.units[payload.id]    = false;

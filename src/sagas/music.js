@@ -27,7 +27,7 @@ export function* fetchMusic(action) {
 }
 
 function* watchFetchMusic() {
-  yield takeLatest(types.FETCH_MUSIC, fetchMusic);
+  yield takeLatest(types['music/fetchMusic'], fetchMusic);
 }
 
 export const sagas = [watchFetchMusic];

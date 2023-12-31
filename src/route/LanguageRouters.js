@@ -17,11 +17,11 @@ const LanguageRouter = () => {
       if (urlLang === uiLang && origUrlLang !== '') {
         // Clear URL language it is the same as UI language.
         updateHtmlLang(uiLang);
-        dispatch(actions.setUrlLanguage(''));
+        dispatch(actions.setURLLanguage(''));
       } else if (origUrlLang !== urlLang && urlLang !== uiLang) {
         // Set URL language.
         updateHtmlLang(urlLang);
-        dispatch(actions.setUrlLanguage(urlLang));
+        dispatch(actions.setURLLanguage(urlLang));
       }
     }
   }, [origUrlLang, urlLang, uiLang, dispatch]);

@@ -33,7 +33,7 @@ function* fetchLikutim() {
 }
 
 function* watchFetchLikutim() {
-  yield takeLatest(types.FETCH_LIKUTIM, fetchLikutim);
+  yield takeLatest(types['likutim/fetchLikutim'], fetchLikutim);
 }
 
 export const sagas = [watchFetchLikutim];

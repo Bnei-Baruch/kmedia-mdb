@@ -194,31 +194,31 @@ function* reactionsCount(action) {
 
 //Watches
 function* watchSetPage() {
-  yield takeLatest(types.SET_PAGE, updatePageInQuery);
+  yield takeLatest(types['my/setPage'], updatePageInQuery);
 }
 
 function* watchFetch() {
-  yield takeEvery(types.FETCH, fetch);
+  yield takeEvery(types['my/fetch'], fetch);
 }
 
 function* watchFetchOne() {
-  yield takeEvery(types.FETCH_ONE, fetchOne);
+  yield takeEvery(types['my/fetchOne'], fetchOne);
 }
 
 function* watchAdd() {
-  yield takeEvery(types.ADD, add);
+  yield takeEvery(types['my/add'], add);
 }
 
 function* watchEdit() {
-  yield takeEvery(types.EDIT, edit);
+  yield takeEvery(types['my/edit'], edit);
 }
 
 function* watchRemove() {
-  yield takeEvery(types.REMOVE, remove);
+  yield takeEvery(types['my/remove'], remove);
 }
 
 function* watchReactionsCount() {
-  yield takeEvery(types.REACTION_COUNT, reactionsCount);
+  yield takeEvery(types['my/reactionsCount'], reactionsCount);
 }
 
 export const sagas = [

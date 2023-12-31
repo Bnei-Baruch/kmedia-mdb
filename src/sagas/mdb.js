@@ -54,9 +54,9 @@ export function* fetchUnitsByIDs(action) {
 export function* fetchCollectionsByIDs(action) {
   const { id } = action.payload;
   try {
-    const uiLang           = yield select(state => settings.getUILang(state.settings));
-    const contentLanguages = yield select(state => settings.getContentLanguages(state.settings));
-    const result           = yield call(Api.collections, {
+    const uiLang                       = yield select(state => settings.getUILang(state.settings));
+    const contentLanguages             = yield select(state => settings.getContentLanguages(state.settings));
+    const result                       = yield call(Api.collections, {
       ...action.payload,
       ui_language      : uiLang,
       content_languages: contentLanguages,
@@ -77,14 +77,20 @@ export function* fetchCollectionsByIDs(action) {
 export function* fetchCollection(action) {
   const id = action.payload;
   try {
-    const uiLang           = yield select(state => settings.getUILang(state.settings));
-    const contentLanguages = yield select(state => settings.getContentLanguages(state.settings));
-    const { data }         = yield call(Api.collection, {
+    const uiLang                       = yield select(state => settings.getUILang(state.settings));
+    const contentLanguages             = yield select(state => settings.getContentLanguages(state.settings));
+    const result                       = yield call(Api.collection, {
       id,
       ui_language      : uiLang,
       content_languages: contentLanguages
     });
-    yield put(mdbActions.fetchCollectionSuccess({ id, data }));
+    const { data, status, statusText } = result;
+    if (status >= 400) {
+      const err = `${status} ${statusText}`;
+      yield put(mdbActions.fetchCollectionFailure({ id, err }));
+    } else {
+      yield put(mdbActions.fetchCollectionSuccess({ id, data }));
+    }
   } catch (err) {
     yield put(mdbActions.fetchCollectionFailure({ id, err }));
   }
@@ -103,8 +109,14 @@ export function* fetchWindow(action) {
       with_units       : true
     };
 
-    const { data } = yield call(Api.collections, args);
-    yield put(mdbActions.fetchWindowSuccess({ id, data }));
+    const result                       = yield call(Api.collections, args);
+    const { data, status, statusText } = result;
+    if (status >= 400) {
+      const err = `${status} ${statusText}`;
+      yield put(mdbActions.fetchWindowFailure({ id, err }));
+    } else {
+      yield put(mdbActions.fetchWindowSuccess({ id, data }));
+    }
   } catch (err) {
     yield put(mdbActions.fetchWindowFailure({ id, err }));
   }
@@ -112,17 +124,23 @@ export function* fetchWindow(action) {
 
 export function* fetchDatepickerCO(action) {
   try {
-    const uiLang           = yield select(state => settings.getUILang(state.settings));
-    const contentLanguages = yield select(state => settings.getContentLanguages(state.settings));
-    const args             = {
+    const uiLang                       = yield select(state => settings.getUILang(state.settings));
+    const contentLanguages             = yield select(state => settings.getContentLanguages(state.settings));
+    const args                         = {
       ...action.payload,
       ui_language      : uiLang,
       content_languages: contentLanguages,
       content_type     : [CT_DAILY_LESSON, CT_SPECIAL_LESSON],
       with_units       : true
     };
-    const { data }         = yield call(Api.collections, args);
-    yield put(mdbActions.fetchDatepickerCOSuccess({ collections: data }));
+    const result                       = yield call(Api.collections, args);
+    const { data, status, statusText } = result;
+    if (status >= 400) {
+      const err = `${status} ${statusText}`;
+      yield put(mdbActions.fetchDatepickerCOFailure(err));
+    } else {
+      yield put(mdbActions.fetchDatepickerCOSuccess({ data }));
+    }
   } catch (err) {
     yield put(mdbActions.fetchDatepickerCOFailure(err));
   }

@@ -95,12 +95,12 @@ export function* search(action) {
     const deb              = yield select(state => selectors.getDeb(state.search));
 
     // Redirect from home page.
-    if (action.type === types.SEARCH && !action.payload) {
+    if (action.type === types['search/search'] && !action.payload) {
       yield put(push({ pathname: 'search' }));
       yield* urlUpdateQuery(q => Object.assign(q, { q: query }));
     }
 
-    const q = query.trim() ? `${query.trim()}${filterParams}` : filterParams;
+    const q = query?.trim() ? `${query.trim()}${filterParams}` : filterParams;
     if (!q) {
       // If no query nor filters, silently fail the request, don't sent request to backend.
       yield put(actions.searchFailure(null));
@@ -192,7 +192,7 @@ export function* search(action) {
   }
 }
 
-// Propogate URL search params to redux.
+// Propagate URL search params to redux.
 export function* hydrateUrl() {
   const urlQuery                       = yield* getQuery();
   const { q, page = '1', deb = false } = urlQuery;
@@ -242,8 +242,8 @@ function* updateSortByInQuery(action) {
 }
 
 function* watchQueryUpdate() {
-  yield takeEvery(types.UPDATE_QUERY, updateUrl);
-  yield takeLatest(types.UPDATE_QUERY, autocomplete);
+  yield takeEvery(types['search/updateQuery'], updateUrl);
+  yield takeLatest(types['search/updateQuery'], autocomplete);
 }
 
 function* watchSearch() {
@@ -252,24 +252,24 @@ function* watchSearch() {
   yield takeLatest([
     filterTypes['filters/setFilterValue'],
     filterTypes['filters/setFilterValueMulti'],
-    settingsTypes.SET_CONTENT_LANGUAGES,
-    types.SEARCH,
-    types.SET_DEB,
-    types.SET_PAGE,
-    types.SET_SORT_BY
+    settingsTypes['settings/setContentLanguages'],
+    types['search/search'],
+    types['search/setDeb'],
+    types['search/setPage'],
+    types['search/setSortBy']
   ], search);
 }
 
 function* watchSetPage() {
-  yield takeLatest(types.SET_PAGE, updatePageInQuery);
+  yield takeLatest(types['search/setPage'], updatePageInQuery);
 }
 
 function* watchSetSortBy() {
-  yield takeLatest(types.SET_SORT_BY, updateSortByInQuery);
+  yield takeLatest(types['search/setSortBy'], updateSortByInQuery);
 }
 
 function* watchHydrateUrl() {
-  yield takeLatest(types.HYDRATE_URL, hydrateUrl);
+  yield takeLatest(types['search/hydrateUrl'], hydrateUrl);
 }
 
 export const sagas = [

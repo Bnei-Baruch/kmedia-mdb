@@ -1,4 +1,5 @@
-import { createAction } from 'redux-actions';
+import { createSlice } from '@reduxjs/toolkit';
+
 import {
   FN_COLLECTION_MULTI,
   FN_CONTENT_TYPE,
@@ -12,18 +13,16 @@ import {
   FN_TOPICS_MULTI
 } from '../../helpers/consts';
 
-import { handleActions } from './settings';
-
 const fieldNameByFilter = {
-  [FN_SOURCES_MULTI]: 'sources',
-  [FN_TOPICS_MULTI]: 'tags',
-  [FN_CONTENT_TYPE]: 'content_types',
-  [FN_DATE_FILTER]: 'dates',
-  [FN_LANGUAGES]: 'languages',
-  [FN_COLLECTION_MULTI]: 'collections',
-  [FN_PERSON]: 'persons',
-  [FN_MEDIA_TYPE]: 'media_types',
-  [FN_ORIGINAL_LANGUAGES]: 'original_languages',
+  [FN_SOURCES_MULTI]     : 'sources',
+  [FN_TOPICS_MULTI]      : 'tags',
+  [FN_CONTENT_TYPE]      : 'content_types',
+  [FN_DATE_FILTER]       : 'dates',
+  [FN_LANGUAGES]         : 'languages',
+  [FN_COLLECTION_MULTI]  : 'collections',
+  [FN_PERSON]            : 'persons',
+  [FN_MEDIA_TYPE]        : 'media_types',
+  [FN_ORIGINAL_LANGUAGES]: 'original_languages'
 };
 
 const FILTER_NAMES = [
@@ -37,68 +36,9 @@ const FILTER_NAMES = [
   FN_ORIGINAL_LANGUAGES,
   FN_LANGUAGES
 ];
-/* Types */
 
-const FETCH_STATS               = 'Filters_aside/FETCH_STATS';
-const FETCH_STATS_FAILURE       = 'Filters_aside/FETCH_STATS_FAILURE';
-const FETCH_STATS_SUCCESS       = 'Filters_aside/FETCH_STATS_SUCCESS';
-const RECEIVE_SINGLE_TYPE_STATS = 'Filters_aside/RECEIVE_SINGLE_TYPE_STATS';
-const RECEIVE_LOCATIONS_STATS   = 'Filters_aside/RECEIVE_LOCATIONS_STATS';
-
-const FETCH_ELASTIC_STATS         = 'Filters_aside/FETCH_ELASTIC_STATS';
-const FETCH_ELASTIC_STATS_FAILURE = 'Filters_aside/FETCH_ELASTIC_STATS_FAILURE';
-const FETCH_ELASTIC_STATS_SUCCESS = 'Filters_aside/FETCH_ELASTIC_STATS_SUCCESS';
-
-export const types = {
-  FETCH_STATS,
-  FETCH_STATS_FAILURE,
-  FETCH_STATS_SUCCESS,
-  FETCH_ELASTIC_STATS,
-  FETCH_ELASTIC_STATS_FAILURE,
-  FETCH_ELASTIC_STATS_SUCCESS,
-};
-
-/* Actions */
-
-const fetchStats             = createAction(FETCH_STATS, (namespace, params, options = {}) => ({
-  namespace,
-  params,
-  options
-}));
-const fetchStatsSuccess      = createAction(FETCH_STATS_SUCCESS);
-const receiveSingleTypeStats = createAction(RECEIVE_SINGLE_TYPE_STATS);
-const fetchStatsFailure      = createAction(FETCH_STATS_FAILURE);
-const receiveLocationsStats  = createAction(RECEIVE_LOCATIONS_STATS);
-
-const fetchElasticStats        = createAction(FETCH_ELASTIC_STATS, namespace => ({ namespace }));
-const fetchElasticStatsSuccess = createAction(FETCH_ELASTIC_STATS_SUCCESS);
-const fetchElasticStatsFailure = createAction(FETCH_ELASTIC_STATS_FAILURE);
-
-export const actions = {
-  fetchElasticStats,
-  fetchElasticStatsFailure,
-  fetchElasticStatsSuccess,
-  fetchStats,
-  fetchStatsFailure,
-  fetchStatsSuccess,
-  receiveLocationsStats,
-  receiveSingleTypeStats,
-};
-
-/* Reducer */
-
-const initialState = {};
-
-const onFetchStats = (draft, { namespace }) => {
-  const ns         = draft[namespace] || {};
-  ns.wip           = true;
-  ns.err           = null;
-  draft[namespace] = ns;
-  return draft;
-};
-
-const onFetchStatsSuccess = (draft, { dataCU, dataC, dataL, namespace, isPrepare }) => {
-  const ns = draft[namespace] || FILTER_NAMES.reduce((acc, fn) => {
+const onFetchStatsSuccess = (state, { payload: { dataCU, dataC, dataL, namespace, isPrepare } }) => {
+  const ns = state[namespace] || FILTER_NAMES.reduce((acc, fn) => {
     acc[fn] = {};
     return acc;
   }, {});
@@ -130,12 +70,11 @@ const onFetchStatsSuccess = (draft, { dataCU, dataC, dataL, namespace, isPrepare
     ns[fn] = acc;
   });
 
-  draft[namespace] = { ...ns, wip: false, err: null, isReady: true };
-  return draft;
+  state[namespace] = { ...ns, wip: false, err: null, isReady: true };
 };
 
-const onFetchElasticStatsSuccess = (draft, { data, namespace }) => {
-  const ns = draft[namespace] || FILTER_NAMES.reduce((acc, fn) => {
+const onFetchElasticStatsSuccess = (state, { payload: { data, namespace } }) => {
+  const ns = state[namespace] || FILTER_NAMES.reduce((acc, fn) => {
     acc[fn] = {};
     return acc;
   }, {});
@@ -156,12 +95,11 @@ const onFetchElasticStatsSuccess = (draft, { data, namespace }) => {
     ns[fn] = acc;
   });
 
-  draft[namespace] = { ...ns, wip: false, err: null, isReady: true };
-  return draft;
+  state[namespace] = { ...ns, wip: false, err: null, isReady: true };
 };
 
-const onReceiveSingleTypeStats = (draft, { dataCU = {}, dataC = {}, dataL = {}, namespace, isPrepare, fn }) => {
-  const statsByFN = draft[namespace]?.[fn] || { byId: {}, tree: [] };
+const onReceiveSingleTypeStats = (status, { payload: { dataCU = {}, dataC = {}, dataL = {}, namespace, isPrepare, fn } }) => {
+  const statsByFN = status[namespace]?.[fn] || { byId: {}, tree: [] };
 
   if (isPrepare) {
     [...Object.keys({ ...dataCU, ...dataC, ...dataL })]
@@ -182,12 +120,11 @@ const onReceiveSingleTypeStats = (draft, { dataCU = {}, dataC = {}, dataL = {}, 
     });
   }
 
-  draft[namespace] = { ...draft[namespace], [fn]: statsByFN };
-  return draft;
+  status[namespace] = { ...status[namespace], [fn]: statsByFN };
 };
 
-const onReceiveLocationsStats = (draft, { locations, namespace, isPrepare }) => {
-  const stats = draft[namespace]?.[FN_LOCATIONS] || { byId: {}, citiesByCountry: {}, tree: [] };
+const onReceiveLocationsStats = (status, { payload: { locations, namespace, isPrepare } }) => {
+  const stats = status[namespace]?.[FN_LOCATIONS] || { byId: {}, citiesByCountry: {}, tree: [] };
 
   if (isPrepare && locations) {
     Object.values(locations)
@@ -213,31 +150,57 @@ const onReceiveLocationsStats = (draft, { locations, namespace, isPrepare }) => 
     stats.byId[k] = c;
   }
 
-  draft[namespace] = { ...draft[namespace], [FN_LOCATIONS]: stats };
-  return draft;
+  status[namespace] = { ...status[namespace], [FN_LOCATIONS]: stats };
 };
 
-const onFetchStatsFailure = (draft, ns, err) => {
-  draft[ns].wip = false;
-  draft[ns].err = err;
-  return draft;
-};
+const filtersAsideSlice = createSlice({
+  name        : 'filters_aside',
+  initialState: {},
 
-const onFetchElasticStatsFailure = (draft, ns, err) => {
-  draft[ns].wip = false;
-  draft[ns].err = err;
-  return draft;
-};
+  reducers: {
+    fetchElasticStats       : {
+      prepare: namespace => ({ payload: { namespace } }),
+      reducer: () => void ({})
+    },
+    fetchElasticStatsSuccess: onFetchElasticStatsSuccess,
+    fetchElasticStatsFailure: {
+      prepare: (namespace, err) => ({ payload: { namespace, err } }),
+      reducer: (state, { payload: { namespace, err } }) => {
+        state[namespace].wip = false;
+        state[namespace].err = err;
+      }
+    },
 
-export const reducer = handleActions({
-  [FETCH_ELASTIC_STATS_FAILURE]: onFetchElasticStatsFailure,
-  [FETCH_ELASTIC_STATS_SUCCESS]: onFetchElasticStatsSuccess,
-  [FETCH_STATS]: onFetchStats,
-  [FETCH_STATS_FAILURE]: onFetchStatsFailure,
-  [FETCH_STATS_SUCCESS]: onFetchStatsSuccess,
-  [RECEIVE_LOCATIONS_STATS]: onReceiveLocationsStats,
-  [RECEIVE_SINGLE_TYPE_STATS]: onReceiveSingleTypeStats,
-}, initialState);
+    fetchStats       : {
+      prepare: (namespace, params, options = {}) => ({ payload: { namespace, params, options } }),
+      reducer: (state, { payload: { namespace } }) => {
+        const ns         = state[namespace] || {};
+        ns.wip           = true;
+        ns.err           = null;
+        state[namespace] = ns;
+      }
+    },
+    fetchStatsSuccess: onFetchStatsSuccess,
+    fetchStatsFailure: {
+      prepare: (namespace, err) => ({ payload: { namespace, err } }),
+      reducer: (state, { payload: { namespace, err } }) => {
+        state[namespace].wip = false;
+        state[namespace].err = err;
+      }
+    },
+
+    receiveLocationsStats : onReceiveLocationsStats,
+    receiveSingleTypeStats: onReceiveSingleTypeStats
+  }
+});
+
+export default filtersAsideSlice.reducer;
+
+export const { actions } = filtersAsideSlice;
+
+export const types = Object.fromEntries(new Map(
+  Object.values(filtersAsideSlice.actions).map(a => [a.type, a.type])
+));
 
 /* Selectors */
 const citiesByCountry  = (state, ns) => id => state[ns]?.[FN_LOCATIONS]?.citiesByCountry[id] || [];
@@ -253,5 +216,5 @@ export const selectors = {
   getTree,
   isReady,
   getWipErr,
-  citiesByCountry,
+  citiesByCountry
 };

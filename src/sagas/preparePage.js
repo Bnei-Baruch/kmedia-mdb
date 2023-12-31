@@ -29,7 +29,7 @@ function* fetchCollectionsList(action) {
 }
 
 function* watchFetchCollections() {
-  yield takeLatest(types.FETCH_COLLECTIONS, fetchCollectionsList);
+  yield takeLatest(types['preparePage/fetchCollections'], fetchCollectionsList);
 }
 
 export const sagas = [

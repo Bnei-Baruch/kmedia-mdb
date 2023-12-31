@@ -18,7 +18,7 @@ function changeDirectionIfNeeded(language) {
 
 function* setLanguages(action) {
   const uiLang    = yield select(state => settings.getUILang(state.settings));
-  const newUILang = (action.type === types.SET_URL_LANGUAGE ? action.payload : action.payload.uiLang) || uiLang;
+  const newUILang = (action.type === types['settings/setURLLanguage'] ? action.payload : action.payload.uiLang) || uiLang;
 
   i18n.changeLanguage(newUILang, err => {
     if (err) {
@@ -38,7 +38,7 @@ function* setLanguages(action) {
 }
 
 function* watchSetLanguages() {
-  yield takeLatest([types.SET_UI_LANGUAGE, types.SET_URL_LANGUAGE], setLanguages);
+  yield takeLatest([types['settings/setUILanguage'], types['settings/setURLLanguage']], setLanguages);
 }
 
 export const sagas = [

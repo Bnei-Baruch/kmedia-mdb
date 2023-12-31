@@ -46,6 +46,7 @@ export function* fetchBlogList(action) {
 
     const { data } = yield call(Api.posts, args);
     yield put(actions.fetchBlogListSuccess(data));
+    yield put(actions.fetchBlogListFailure('err'));
   } catch (err) {
     yield put(actions.fetchBlogListFailure(err));
   }
@@ -104,23 +105,23 @@ function* watchFetchArticleList() {
 }
 
 function* watchFetchTweets() {
-  yield takeLatest([types.FETCH_TWEETS], fetchTweets);
+  yield takeLatest(types['publications/fetchTweets'], fetchTweets);
 }
 
 function* watchFetchBlogList() {
-  yield takeLatest([types.FETCH_BLOG_LIST], fetchBlogList);
+  yield takeLatest(types['publications/fetchBlogList'], fetchBlogList);
 }
 
 function* watchFetchBlogPost() {
-  yield takeLatest([types.FETCH_BLOG_POST], fetchBlogPost);
+  yield takeLatest(types['publications/fetchBlogPost'], fetchBlogPost);
 }
 
 function* watchSetTab() {
-  yield takeLatest(types.SET_TAB, setTab);
+  yield takeLatest(types['publications/setTab'], setTab);
 }
 
 function* watchSetPage() {
-  yield takeLatest(types.SET_PAGE, updatePageInQuery);
+  yield takeLatest(types['publications/setPage'], updatePageInQuery);
 }
 
 export const sagas = [
