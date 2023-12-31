@@ -11,13 +11,13 @@ import ArticleTabToolbarMobile from './ArticleTabToolbarMobile';
 
 const ArticleTab = () => {
   const { id } = useParams();
+  const { isMobileDevice } = useContext(DeviceInfoContext);
 
   const pageCu = useSelector(state => mdb.getDenormContentUnit(state.mdb, id));
   const cu     = Object.values(pageCu.derived_units).find(x => x.content_type === CT_ARTICLE);
 
   if (!cu) return null;
 
-  const { isMobileDevice } = useContext(DeviceInfoContext);
   const toolbar            = isMobileDevice ? <ArticleTabToolbarMobile /> : <ArticleTabToolbarWeb />;
 
   return (
