@@ -12,13 +12,14 @@ import ResearchTabToolbarMobile from './ResearchTabToolbarMobile';
 const ResearchTab = () => {
   const { id } = useParams();
 
+  const { isMobileDevice } = useContext(DeviceInfoContext);
+
   const pageCu = useSelector(state => mdb.getDenormContentUnit(state.mdb, id));
   const cu     = Object.values(pageCu.derived_units).find(x => x.content_type === CT_RESEARCH_MATERIAL);
 
   if (!cu) return null;
 
-  const { isMobileDevice } = useContext(DeviceInfoContext);
-  const toolbar            = isMobileDevice ? <ResearchTabToolbarMobile /> : <ResearchTabToolbarWeb />;
+  const toolbar = isMobileDevice ? <ResearchTabToolbarMobile /> : <ResearchTabToolbarWeb />;
 
   return (
     <div className="player_page_tab">
