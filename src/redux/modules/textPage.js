@@ -38,6 +38,7 @@ const SET_SCROLL_DIR          = 'text/SET_SCROLL_DIR';
 const SET_SIDE_OFFSET         = 'text/SET_SIDE_OFFSET';
 const TOGGLE_TEXT_ONLY        = 'text/TOGGLE_TEXT_ONLY';
 const TOGGLE_SCAN             = 'text/TOGGLE_SCAN';
+const SET_IS_SEARCH           = 'text/SET_IS_SEARCH';
 
 const FETCH_SUBJECT         = 'text/FETCH_SUBJECT';
 const FETCH_SUBJECT_SUCCESS = 'text/FETCH_SUBJECT_SUCCESS';
@@ -64,6 +65,7 @@ const setScrollDir   = createAction(SET_SCROLL_DIR);
 const setSideOffset  = createAction(SET_SIDE_OFFSET);
 const toggleTextOnly = createAction(TOGGLE_TEXT_ONLY);
 const toggleScan     = createAction(TOGGLE_SCAN);
+const setIsSearch    = createAction(SET_IS_SEARCH);
 
 const fetchSubject        = createAction(FETCH_SUBJECT);
 const fetchSubjectSuccess = createAction(FETCH_SUBJECT_SUCCESS);
@@ -86,6 +88,7 @@ export const actions = {
   setSideOffset,
   toggleTextOnly,
   toggleScan,
+  setIsSearch,
 
   fetchSubject,
   fetchSubjectSuccess,
@@ -187,6 +190,7 @@ export const reducer = handleActions({
   [SET_SIDE_OFFSET]: (state, payload) => state.sideOffset = payload,
   [TOGGLE_TEXT_ONLY]: (state, payload) => state.textOnly = payload ?? !state.textOnly,
   [TOGGLE_SCAN]: state => state.scanInfo.on = !state.scanInfo.on,
+  [SET_IS_SEARCH]: state => state.isSearch = !state.isSearch,
 
   [FETCH_SUBJECT]: onFetchSubject,
   [FETCH_SUBJECT_SUCCESS]: onFetchSubjectSuccess,
@@ -211,8 +215,9 @@ const getExpandNotes  = state => state.expandNotes;
 const getIsFullscreen = state => state.isFullscreen;
 const getScrollDir    = state => state.scrollDir;
 const getSideOffset   = state => state.sideOffset;
-const getTextOnly = state => state.textOnly;
+const getTextOnly     = state => state.textOnly;
 const getScanInfo = state => state.scanInfo;
+const getIsSearch = state => state.isSearch;
 
 export const selectors = {
   getSettings,
@@ -231,4 +236,5 @@ export const selectors = {
   getSideOffset,
   getTextOnly,
   getScanInfo,
+  getIsSearch,
 };

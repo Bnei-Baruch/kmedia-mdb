@@ -8,7 +8,7 @@ import { makeTagLinks } from '../../WithPlayer/widgets/Info/Info';
 import { useSelector } from 'react-redux';
 import { selectors as tagsSelectors } from '../../../../redux/modules/tags';
 import { textMarksPrefixByType } from '../scrollToSearch/helper';
-import { selectByPrefixAndId } from '../helper';
+import { highlightByPrefixAndId, clearHighlightByStyle } from '../helper';
 
 const idPrefix  = textMarksPrefixByType['label'];
 const LabelMark = ({ label, offset }) => {
@@ -44,7 +44,7 @@ const LabelMark = ({ label, offset }) => {
 
   const tagLinks = makeTagLinks(tags, getTagById);
 
-  const handleOpen = () => selectByPrefixAndId(idPrefix, id);
+  const handleOpen = () => highlightByPrefixAndId(idPrefix, id);
 
   return (
     <div className="label_mark" style={{ top, height: bottom - top + 20, left: `${offset.x * 5}px` }}>
@@ -56,6 +56,7 @@ const LabelMark = ({ label, offset }) => {
         }
         inverted
         onOpen={handleOpen}
+        onClose={() => clearHighlightByStyle()}
         on="click"
         position={`right center`}
         className="label_mark_popup"

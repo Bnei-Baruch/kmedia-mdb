@@ -1,16 +1,12 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
-import PropTypes from 'prop-types';
-import { Button, Label, Popup } from 'semantic-ui-react';
+import { Button, Label } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
 import { selectors } from '../../../../redux/modules/myNotes';
 import { selectors as textPage } from '../../../../redux/modules/textPage';
 import NoteItemInList from './NoteItemInList';
-import { stopBubbling, noop } from '../../../../helpers/utils';
-import { textMarksPrefixByType } from '../scrollToSearch/helper';
-import { selectByPrefixAndId } from '../helper';
 import clsx from 'clsx';
+import { useNodeHighlight } from './useNodeHighlight';
 
-const idPrefixes = textMarksPrefixByType.note;
 const NotesByPos = ({ pos, ids }) => {
   const [open, setOpen]   = useState(true);
   const [isOut, setIsOut] = useState(true);
@@ -23,9 +19,9 @@ const NotesByPos = ({ pos, ids }) => {
   const ref = useRef();
 
   const notes = useMemo(() => ids
-    .map(id => getById[id])
-    .map(n => ({ type: 'note', ...n }))
-  , [getById, ids]);
+      .map(id => getById[id])
+      .map(n => ({ type: 'note', ...n }))
+    , [getById, ids]);
 
   useEffect(() => {
     const handleClose = e => {
@@ -46,12 +42,7 @@ const NotesByPos = ({ pos, ids }) => {
     setIsOut(370 * zoomSize < offset);
   }, [zoomSize, offset]);
 
-  const handleToggle = () => {
-    setOpen(!open);
-    if (!open) {
-      selectByPrefixAndId(idPrefixes, ids[0]);
-    }
-  };
+  const handleToggle = () => setOpen(!open);
 
   return (
     <div className="note_mark" style={{ top: `${pos}px` }} ref={ref}>

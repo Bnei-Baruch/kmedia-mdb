@@ -7,8 +7,6 @@ import NoteRemoveBtn from './Buttons/NoteRemoveBtn';
 import { useSelector } from 'react-redux';
 import { selectors, NOTE_STATUS } from '../../../../redux/modules/myNotes';
 import NoteCopyBtn from './Buttons/NoteCopyBtn';
-import NoteCancelBtn from './Buttons/NoteCancelBtn';
-import NoteSaveBtn from './Buttons/NoteSaveBtn';
 import NoteContent from './NoteContent';
 import NoteInModalBtn from './Buttons/NoteInModalBtn';
 import NoteCloseBtn from './Buttons/NoteCloseBtn';

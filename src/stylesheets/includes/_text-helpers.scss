@@ -1,6 +1,7 @@
 @use "sass:math";
 
 @import 'rtl/text-helpers';
+
 .uppercase {
   text-transform: uppercase !important;
 }
@@ -55,3 +56,13 @@ blockquote {
   }
 }
 
+::highlight(selected_marker) {
+  background-color: rgba(255, 219, 0, 0.4);
+}
+
+::highlight(selected_search) {
+  background-color: rgba(255, 128, 2, 0.8);
+}
+::highlight(found_search) {
+  background-color: rgba(255, 128, 2, 0.4);
+}

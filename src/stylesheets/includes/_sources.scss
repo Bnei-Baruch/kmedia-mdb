@@ -118,7 +118,11 @@
     transition: all 0.2s ease-in-out 0s;
     border: 1px solid $midWhite;
     width: 360px;
-    transform: translate3d(0, 0, 0);
+    transform: translate3d(-360px, 0, 0);
+
+    .rtl & {
+      transform: translate3d(360px, 0, 0);
+    }
 
     .is-dark & {
       background: $dark-bg !important;
@@ -128,6 +132,7 @@
         color: $dark-text !important;
       }
     }
+
     .is-sepia & {
       background: $sepia-bg !important;
       color: $sepia-text !important;
@@ -138,12 +143,8 @@
     }
 
     &.source__toc_active {
-      transform: translate3d(360px, 0, 0);
       transition: all 0.2s ease-in-out 0s;
-
-      .ltr & {
-        transform: translate3d(-360px, 0, 0);
-      }
+      transform: translate3d(0, 0, 0);
     }
 
     &.source__toc_scroll_up {
@@ -152,7 +153,7 @@
     }
 
     &.source__toc_scroll_down {
-      height: calc(100VH - $main-menu-height);
+      height: calc(100VH - $main-menu-height - 48px);
     }
 
     .source__toc_scroll {

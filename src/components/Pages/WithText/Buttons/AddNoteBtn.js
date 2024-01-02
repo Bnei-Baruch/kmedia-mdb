@@ -5,6 +5,7 @@ import { useSelector, useDispatch, batch } from 'react-redux';
 import { selectors as settings } from '../../../../redux/modules/settings';
 import { selectors as textPage } from '../../../../redux/modules/textPage';
 import { actions, NOTE_STATUS } from '../../../../redux/modules/myNotes';
+import { addHighlightByRanges } from '../helper';
 
 const AddNoteBtn = () => {
   const { t }                  = useTranslation();
@@ -25,6 +26,9 @@ const AddNoteBtn = () => {
     batch(() => {
       dispatch(actions.setStatus(NOTE_STATUS.edit));
       dispatch(actions.setSelected(note));
+
+      addHighlightByRanges([window.getSelection().getRangeAt(0)]);
+      window.getSelection().removeAllRanges();
     });
   };
 

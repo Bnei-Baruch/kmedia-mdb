@@ -165,7 +165,7 @@ $serif-family: 'Georgia, ' Times New Roman ', Times, serif';
   position: sticky;
   top: 0;
   background: $white;
-  z-index: 1;
+  z-index: 2;
 
   .is-dark & {
     background: $dark-bg !important;
@@ -174,6 +174,8 @@ $serif-family: 'Georgia, ' Times New Roman ', Times, serif';
   .is-sepia & {
     background: $sepia-bg !important;
   }
+
+  transform: translate3d(0px, 0, 0px);
 
   &.stick_toolbar_pinned {
     top: $main-menu-height;
@@ -185,7 +187,7 @@ $serif-family: 'Georgia, ' Times New Roman ', Times, serif';
       transform: none;
     }
 
-    transform: translate3d(0px, -60px, 0px);
+    transform: translate3d(0px, -108px, 0px);
     transition: all 0.2s ease-in-out 0s;
   }
 
@@ -283,7 +285,6 @@ $serif-family: 'Georgia, ' Times New Roman ', Times, serif';
   }
 }
 
-
 .text_page__audio {
   margin-top: 1em;
 
@@ -309,7 +310,6 @@ $serif-family: 'Georgia, ' Times New Roman ', Times, serif';
 
   }
 }
-
 
 .share-bar {
   .social-buttons {
@@ -339,5 +339,25 @@ $serif-family: 'Georgia, ' Times New Roman ', Times, serif';
         max-width: 200px;
       }
     }
+  }
+}
+
+.text__search_on_page {
+  width: $max-readble-width;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-content: center;
+  box-shadow: 0 3px 6px $grey;
+  border-radius: 4px;
+  line-height: 40px;
+
+  .input {
+    flex-grow: 3;
+  }
+
+  & > span {
+    margin: 0 8px;
   }
 }

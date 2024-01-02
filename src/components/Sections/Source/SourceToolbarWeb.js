@@ -38,11 +38,11 @@ const SourceToolbarWeb = () => {
         <BookmarkBtn />
         <AddNoteBtn />
         <ShareTextBtn />
+        <div className="divider" />
+        <SearchOnPageBtn />
         {
           !hasSel && (
             <>
-              <div className="divider" />
-              <SearchOnPageBtn />
               <ExpandAllNotesBtn />
               <PrintBtn />
               <DownloadTextBtn />

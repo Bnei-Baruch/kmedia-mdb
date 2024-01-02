@@ -3,12 +3,14 @@ import { textMarksPrefixByType } from '../scrollToSearch/helper';
 import { useSelector } from 'react-redux';
 import { selectors } from '../../../../redux/modules/myNotes';
 import NotesByPos from './NotesByPos';
-import { isEmpty } from '../../../../helpers/utils';
+import { useNodeHighlight } from './useNodeHighlight';
 
 const idPrefix  = textMarksPrefixByType.note.start;
 const NoteMarks = ({ parentTop }) => {
   const [byLine, setByLine] = useState({});
   const ids                 = useSelector(state => selectors.getList(state.notes));
+
+  useNodeHighlight();
 
   useEffect(() => {
     const _byLine = {};

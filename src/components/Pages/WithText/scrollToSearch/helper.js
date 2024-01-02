@@ -4,7 +4,6 @@ import { RenderHighlightAll } from './RenderHighlightAll';
 import { RenderHighlightBorder } from './RenderHighlightBorder';
 import { RenderHighlightSingleString } from './RenderHighlightSingleString';
 import { RenderNoSearch } from './RenderNoSearch';
-import { actions } from '../../../../redux/modules/textPage';
 
 /* eslint-disable  no-useless-escape */
 export const KEEP_LETTERS_RE            = /[".,\/#!$%\^&\*;:{}=\-_`~()\[\]‘’”“]/g;

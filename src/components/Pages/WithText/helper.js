@@ -1,7 +1,7 @@
 import MediaHelper from '../../../helpers/media';
 import { physicalFile, isEmpty } from '../../../helpers/utils';
 import { isTaas } from '../../shared/PDF/PDF';
-import { OFFSET_TEXT_SEPARATOR } from './scrollToSearch/helper';
+import { OFFSET_TEXT_SEPARATOR, DOM_ROOT_ID } from './scrollToSearch/helper';
 
 //it's not mus be accurate number (average number letters per line)
 const LETTERS_ON_LINE = 20;
@@ -70,7 +70,7 @@ export const firstLeafId = (sourceId, getSourceById) => {
   return firstLeafId(children[0], getSourceById);
 };
 
-export const selectByPrefixAndId = (prefixes, id) => {
+export const highlightByPrefixAndId = (prefixes, id, style) => {
   const elStart = document.getElementById(`${prefixes.start}${id}`);
   const elEnd   = document.getElementById(`${prefixes.end}${id}`);
 
@@ -79,8 +79,27 @@ export const selectByPrefixAndId = (prefixes, id) => {
   const r = new Range();
   r.setStart(elStart, 0);
   r.setEnd(elEnd, 0);
-  window.getSelection().removeAllRanges();
-  window.getSelection().addRange(r);
+  addHighlightByRanges([r], style);
+};
+
+export const addHighlightByRanges = (ranges, style = 'selected_marker') => {
+  ranges = ranges.filter(x => !!x);
+
+  if (!CSS.highlights.has(style)) {
+    const highlight = new window.Highlight(...ranges);
+    CSS.highlights.set(style, highlight);
+  } else {
+    let _highlights = CSS.highlights.get(style);
+    ranges.forEach(r => _highlights.add(r));
+  }
+};
+
+export const clearHighlightByStyle = (style = 'selected_marker') => {
+  CSS.highlights.has(style) && CSS.highlights.get(style).clear();
+};
+
+export const deleteHighlightByRange = (range, style = 'selected_marker') => {
+  CSS.highlights.has(style) && CSS.highlights.get(style).delete(range);
 };
 
 export const buildOffsets = markers => markers.map(({ properties: { srchstart, srchend } = {}, id }) => {
@@ -101,3 +120,58 @@ export const buildOffsets = markers => markers.map(({ properties: { srchstart, s
   acc[l.id] = { x, y };
   return acc;
 }, {});
+
+export const prepareTextNodes = (root) => {
+  const textNodes = [];
+
+  const treeWalker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+
+  let offset = 0;
+  let node   = treeWalker.nextNode();
+  while (node) {
+    textNodes.push({ node, offset });
+    offset += node.textContent.length;
+    node = treeWalker.nextNode();
+  }
+  return textNodes;
+};
+export const searchOnPage     = (str) => {
+  const root = document.getElementById(DOM_ROOT_ID);
+  if (!root) return [];
+
+  const textNodes = prepareTextNodes(root);
+
+  const reg     = new RegExp(str.split(' ').map(word => `(${word})`).join('(.{0,5})'), 'sg');
+  const matches = Array.from(root.textContent.matchAll(reg), m => m);
+
+  const resp = [];
+  matches.forEach(m => {
+    let start, end;
+    const range     = new Range();
+    const endOffset = m.index + m[0].length;
+
+    for (let i = 0; i < textNodes.length; i++) {
+      const current = textNodes[i];
+      if (!start && (current.offset > m.index || (textNodes.length - 1) === i)) {
+        start      = true;
+        let idx    = Math.max(0, i - 1);
+        idx        = textNodes.length - 1 === i ? i : idx;
+        const prev = textNodes[idx];
+        range.setStart(prev.node, m.index - prev.offset);
+      }
+
+      if (!end && (current.offset > endOffset || (textNodes.length - 1) === i)) {
+        end        = true;
+        const idx  = textNodes.length - 1 === i ? i : i - 1;
+        const prev = textNodes[idx];
+        range.setEnd(prev.node, endOffset - prev.offset);
+      }
+
+      if (start && end) break;
+    }
+
+    resp.push(range);
+  });
+
+  return resp;
+};

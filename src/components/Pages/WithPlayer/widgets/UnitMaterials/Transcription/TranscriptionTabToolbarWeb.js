@@ -36,11 +36,11 @@ const TranscriptionTabToolbarWeb = () => {
         <BookmarkBtn />
         <AddNoteBtn />
         <ShareTextBtn />
+        <div className="divider" />
+        <SearchOnPageBtn />
         {
           !hasSel && (
             <>
-              <div className="divider" />
-              <SearchOnPageBtn />
               <ExpandAllNotesBtn />
               <DownloadTextBtn />
               <PrintBtn />

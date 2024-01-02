@@ -14,18 +14,20 @@ import TagsByUnit from '../../shared/TagsByUnit';
 import AudioPlayer from '../../shared/AudioPlayer';
 import PDF, { startsFrom } from '../../shared/PDF/PDF';
 import { physicalFile } from '../../../helpers/utils';
+import SearchOnPageBtn from './Buttons/SearchOnPageBtn';
+import SearchOnPageBar from './SearchOnPageBar';
 
 let lastScrollTop = 0;
 
 const TextLayoutWeb = props => {
   const {
-    toolbar    = null,
-    toc        = null,
-    prevNext   = null,
-    breadcrumb = null,
-    propId,
-    playerPage = false,
-  } = props;
+          toolbar    = null,
+          toc        = null,
+          prevNext   = null,
+          breadcrumb = null,
+          propId,
+          playerPage = false,
+        } = props;
 
   const ref = useRef();
 
@@ -44,7 +46,7 @@ const TextLayoutWeb = props => {
   useEffect(() => {
     const handleScroll = () => {
       const st = window.pageYOffset || document.documentElement.scrollTop;
-      if (st < ref.current?.offsetTop) {
+      if (st < ref.current?.offsetTop + 60) {
         dispatch(actions.setScrollDir(0));
       } else if (st > lastScrollTop) {
         dispatch(actions.setScrollDir(1));
@@ -60,9 +62,6 @@ const TextLayoutWeb = props => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [ref.current]);
 
-  const wipErr = useTextContent();
-  if (wipErr) return wipErr;
-
   let pdf;
   if (file.isPdf) {
     pdf = file;
@@ -72,7 +71,6 @@ const TextLayoutWeb = props => {
 
   return (
     <div className={`is-web text_layout  is-${theme}`} ref={ref}>
-      {breadcrumb}
       {toc}
       <div className={
         clsx('stick_toolbar no_print', {
@@ -81,7 +79,9 @@ const TextLayoutWeb = props => {
           'stick_toolbar_fixed': hasSel,
         })
       }>
+        {breadcrumb}
         {toolbar}
+        <SearchOnPageBar />
       </div>
       {
         !!pdf ? (

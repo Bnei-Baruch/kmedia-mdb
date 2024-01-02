@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import { selectors as assets } from '../../../../redux/modules/assets';
 import { selectors as textPage } from '../../../../redux/modules/textPage';
 import { getLanguageDirection } from '../../../../helpers/i18n-utils';
+import { useTextContent } from './useTextContent';
 
 const ContentHtml = ({ labels = [], notes = [] }) => {
   const { language, id } = useSelector(state => textPage.getFile(state.textPage));
@@ -23,6 +24,9 @@ const ContentHtml = ({ labels = [], notes = [] }) => {
       highlightAll === 'true',
       [...labels, ...notes]);
   }, [srchstart, srchend, getDoc2htmlById, id, labels, notes]);
+
+  const wipErr = useTextContent();
+  if (wipErr) return wipErr;
 
   const dir = getLanguageDirection(language);
 
