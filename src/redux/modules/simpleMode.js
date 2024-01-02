@@ -16,12 +16,10 @@ const simpleModeSlice = createSlice({
 
   reducers     : {
     fetchForDate         : state => {
-      console.log('onFetchForDate');
       state.wip = true;
       state.err = null;
     },
     fetchForDateSuccess: (state, { payload }) => {
-      console.log('onFetchForDateSuccess simpleMode', payload);
       state.items         = {};
       state.items.lessons = (payload.lessons || []).map(x => x.id);
       state.items.others  = (payload.others || []).map(x => x.id);
@@ -29,7 +27,6 @@ const simpleModeSlice = createSlice({
       state.err           = null;
     },
     fetchForDateFailure: (state, { payload }) => {
-      console.log('onFetchForDateFailure simpleMode', payload);
       state.wip = false;
       state.err = payload;
     }
@@ -42,12 +39,10 @@ const simpleModeSlice = createSlice({
         }
       })
       .addCase(settingsActions.setContentLanguages, state => {
-        console.log('setContentLanguages simpleMode');
         state.items.lessons = [];
         state.items.others  = [];
       })
       .addCase(settingsActions.setUILanguage, state => {
-        console.log('setUILanguage simpleMode');
         state.items.lessons = [];
         state.items.others  = [];
       });

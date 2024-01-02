@@ -117,7 +117,7 @@
     "i18next-fs-backend": "^2.1.1",
     "i18next-http-backend": "^2.2.0",
     "ignore-styles": "^5.0.1",
-    "immer": "^9.0.19",
+    "immer": "^10.0.3",
     "invariant": "^2.2.4",
     "iphone-inline-video": "^2.2.2",
     "jaybe-react-loadable": "^5.6.0",

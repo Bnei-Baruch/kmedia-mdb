@@ -8,20 +8,20 @@ import { getQualitiesFromLS } from '../../pkg/jwpAdapter/adapter';
 
 export const SHOWED_PLAYLIST_ITEMS = 7;
 
-const onBuildSuccess = (status, payload) => {
+const onBuildSuccess = (state, payload) => {
   const { cuId, id: _id, items, fetched = {}, ...info } = payload;
 
   const id     = _id || cuId;
-  let language = status.info.language || payload.language || DEFAULT_CONTENT_LANGUAGE;
+  let language = state.info.language || payload.language || DEFAULT_CONTENT_LANGUAGE;
 
   //use curId - fix for my playlists
-  status.itemById = items.reduce((acc, x, ap) => ({ ...acc, [x.id]: x, ap }), {});
-  const curItem   = status.itemById?.[id];
+  state.itemById = items.reduce((acc, x, ap) => ({ ...acc, [x.id]: x, ap }), {});
+  const curItem  = state.itemById?.[id];
   if (curItem && !curItem.isHLS && (curItem.languages && !curItem.languages.includes(language))) {
     language = curItem.languages[0];
   }
 
-  let { quality } = status.info;
+  let { quality } = state.info;
   const qualities = curItem?.isHLS ? curItem.qualities : curItem?.qualityByLang?.[language] || [];
   if (!quality && qualities) {
     const idx = qualities.findIndex(x => {
@@ -34,46 +34,46 @@ const onBuildSuccess = (status, payload) => {
   if (!quality) quality = VS_DEFAULT;
   const playlist  = items.map(({ id }) => ({ id }));
   const selIndex  = playlist.findIndex(x => x.id === (cuId || id));
-  status.playlist = playlist.map((x, i) => {
+  state.playlist  = playlist.map((x, i) => {
     const showImg = i > selIndex - 2 && i < selIndex + SHOWED_PLAYLIST_ITEMS;
     const f       = i >= fetched.from && i <= fetched.to;
     return { ...x, showImg, fetched: f };
   });
-  status.info     = { ...info, cuId, id, language, subsLanguage: language, quality, isReady: true, wip: false };
-  status.fetched  = fetched;
+  state.info      = { ...info, cuId, id, language, subsLanguage: language, quality, isReady: true, wip: false };
+  state.fetched   = fetched;
 };
 
-const onComplete = status => {
-  const idx     = status.playlist.findIndex(x => x.id === status.info.id);
-  const lastIdx = status.playlist.length - 1;
+const onComplete = state => {
+  const idx     = state.playlist.findIndex(x => x.id === state.info.id);
+  const lastIdx = state.playlist.length - 1;
   if (idx === lastIdx) return;
-  const nextId = status.playlist[(idx < lastIdx) ? idx + 1 : lastIdx]?.id;
+  const nextId = state.playlist[(idx < lastIdx) ? idx + 1 : lastIdx]?.id;
   saveTimeOnLocalstorage(1, nextId);
-  status.info.nextUnitId = nextId;
+  state.info.nextUnitId = nextId;
 };
 
-const onUpdateMediaType = (status, payload) => {
-  status.info.mediaType = payload;
+const onUpdateMediaType = (state, payload) => {
+  state.info.mediaType = payload;
 
-  const item = status.itemById[status.info.id] || false;
+  const item = state.itemById[state.info.id] || false;
   if (item.isHLS) {
-    status.itemById[status.info.id].id = `${item?.file.id}_${status.info.mediaType}`;
+    state.itemById[state.info.id].id = `${item?.file.id}_${state.info.mediaType}`;
   }
 };
 
-const onShowImages = (status, idx) => {
-  status.playlist.forEach((x, i) => {
+const onShowImages = (state, idx) => {
+  state.playlist.forEach((x, i) => {
     if (x.showImg) return;
     x.showImg = i > idx - 2 && i < idx + SHOWED_PLAYLIST_ITEMS;
   });
 };
 
-const onFetchShowDataSuccess = (status, { items, fetched }) => {
+const onFetchShowDataSuccess = (state, { items, fetched }) => {
   items.forEach(x => {
-    status.itemById[x.id] = x;
+    state.itemById[x.id] = x;
   });
-  status.fetched = fetched;
-  status.playlist.forEach((x, i) => {
+  state.fetched = fetched;
+  state.playlist.forEach((x, i) => {
     if (i > fetched.from && i < fetched.to)
       x.fetched = true;
   });

@@ -30,7 +30,7 @@ const getAllVisibleById = (byId, expandedNodes) => {
     Object.keys(draft).forEach(key => {
       const { id, parent_id } = draft[key];
 
-      // make node visible when its parent is in expandedNodes and its index less then visible items count
+      // make node visible when its parent is in expandedNodes and its index less than visible items count
       const visible = parent_id
         ? expandedNodes.has(parent_id) || draft[parent_id].children.indexOf(id) < visibleItemsCount
         : true;

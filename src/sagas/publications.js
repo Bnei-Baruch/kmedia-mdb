@@ -46,7 +46,6 @@ export function* fetchBlogList(action) {
 
     const { data } = yield call(Api.posts, args);
     yield put(actions.fetchBlogListSuccess(data));
-    yield put(actions.fetchBlogListFailure('err'));
   } catch (err) {
     yield put(actions.fetchBlogListFailure(err));
   }
