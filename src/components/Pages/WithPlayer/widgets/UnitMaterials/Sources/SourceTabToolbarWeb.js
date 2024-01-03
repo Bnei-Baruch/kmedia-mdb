@@ -7,8 +7,6 @@ import SearchOnPageBtn from '../../../../WithText/Buttons/SearchOnPageBtn';
 import ExpandAllNotesBtn from '../../../../WithText/Buttons/ExpandAllNotesBtn';
 import DownloadTextBtn from '../../../../WithText/Buttons/DownloadTextBtn';
 import AdditionsVisibilityBtn from '../../../../WithText/Buttons/AdditionsVisibilityBtn';
-import LinkToLessonsBtn from '../../../../WithText/Buttons/LinkToLessonsBtn';
-import FullscreenTextBtn from '../../../../WithText/Buttons/FullscreenTextBtn';
 import ShareTextBtn from '../../../../WithText/Buttons/ShareTextBtn';
 import TagTextBtn from '../../../../WithText/Buttons/TagTextBtn';
 import PrintBtn from '../../../../WithText/Buttons/PrintBtn';
@@ -35,11 +33,11 @@ const SourceTabToolbarWeb = () => {
         <BookmarkBtn />
         <AddNoteBtn />
         <ShareTextBtn />
-        <div className="divider" />
-        <SearchOnPageBtn />
         {
           !hasSel && (
             <>
+              <div className="divider" />
+              <SearchOnPageBtn />
               <ExpandAllNotesBtn />
               <DownloadTextBtn />
               <PrintBtn />

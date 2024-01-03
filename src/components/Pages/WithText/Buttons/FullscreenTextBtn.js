@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
 import { Button } from 'semantic-ui-react';
 import { useDispatch, useSelector } from 'react-redux';
-import { actions, selectors } from '../../../../redux/modules/textPage';
+import { actions, selectors, selectors as textPage } from '../../../../redux/modules/textPage';
 import fscreen from 'fscreen';
 
 const FullscreenTextBtn = () => {
   const isFullscreen = useSelector(state => selectors.getIsFullscreen(state.textPage));
+  const hasSel       = !!useSelector(state => textPage.getUrlInfo(state.textPage)).select;
   const dispatch     = useDispatch();
 
   useEffect(() => {
@@ -19,6 +20,8 @@ const FullscreenTextBtn = () => {
       fscreen.removeEventListener('fullscreenchange', handleFS, false);
     };
   }, []);
+
+  if (hasSel) return null;
 
   const handleFullscreen = () => {
     fscreen.fullscreenElement && fscreen.exitFullscreen();

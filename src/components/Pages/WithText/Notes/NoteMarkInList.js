@@ -8,7 +8,7 @@ import { actions } from '../../../../redux/modules/myNotes';
 import NoteCopyBtn from './Buttons/NoteCopyBtn';
 import NoteInModalBtn from './Buttons/NoteInModalBtn';
 
-const NoteItemInList = ({ note }) => {
+const NoteMarkInList = ({ note }) => {
   const dispatch = useDispatch();
   const dir      = getLanguageDirection(note.language);
 
@@ -34,4 +34,4 @@ const NoteItemInList = ({ note }) => {
   );
 };
 
-export default NoteItemInList;
+export default NoteMarkInList;

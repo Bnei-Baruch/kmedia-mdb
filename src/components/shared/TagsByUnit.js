@@ -41,6 +41,17 @@ const TagsByUnit = ({ id }) => {
 
   return (
     <div className="unit-tags-bar">
+      {
+        showArrow > 0 && (
+          <Button
+            basic
+            color="blue"
+            className="clear_button"
+            onClick={scrollLeft}
+            icon={<span className="material-symbols-outlined">chevron_right</span>}
+          />
+        )
+      }
       <div className="unit-tags-bar_tags" onScroll={handleScroll} ref={ref}>
         {
           names
@@ -51,17 +62,6 @@ const TagsByUnit = ({ id }) => {
             )
         }
       </div>
-      {
-        showArrow > 1 && (
-          <Button
-            basic
-            color="blue"
-            className="clear_button"
-            onClick={scrollLeft}
-            icon={<span className="material-symbols-outlined">chevron_right</span>}
-          />
-        )
-      }
       {
         showArrow > 0 && (
           <Button

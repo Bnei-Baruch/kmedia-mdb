@@ -38,11 +38,11 @@ const SourceToolbarWeb = () => {
         <BookmarkBtn />
         <AddNoteBtn />
         <ShareTextBtn />
-        <div className="divider" />
-        <SearchOnPageBtn />
         {
           !hasSel && (
             <>
+              <div className="divider" />
+              <SearchOnPageBtn />
               <ExpandAllNotesBtn />
               <PrintBtn />
               <DownloadTextBtn />
@@ -50,10 +50,10 @@ const SourceToolbarWeb = () => {
               <div className="divider" />
               <LinkToLessonsBtn />
               <ToggleScanBtn />
+              <div className="divider" />
             </>
           )
         }
-        <div className="divider" />
         <FullscreenTextBtn />
       </div>
       <div className="flex_basis_150">&nbsp;</div>

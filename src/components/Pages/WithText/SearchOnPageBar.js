@@ -1,8 +1,8 @@
 import React, { useState, useRef } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Button, Input } from 'semantic-ui-react';
 import debounce from 'lodash/debounce';
 import { searchOnPage, deleteHighlightByRange, clearHighlightByStyle, addHighlightByRanges } from './helper';
-import { useSelector, useDispatch } from 'react-redux';
 import { selectors as textPage, actions } from '../../../redux/modules/textPage';
 
 const SearchOnPageBar = () => {
@@ -15,13 +15,12 @@ const SearchOnPageBar = () => {
 
   if (!isSearch) return null;
 
-  const handleClose = () => {
+  const handleClose  = () => {
     dispatch(actions.setIsSearch());
     clearing();
     setVal('');
     setIndex(-1);
   };
-
   const handleChange = debounce((e, { value }) => {
     clearing();
     value = value.trim();
@@ -30,7 +29,6 @@ const SearchOnPageBar = () => {
     if (value.length > 0)
       search(value);
   }, 500);
-  const handleSearch = () => search();
   const search       = (value = val) => {
     const str = value.trim();
     if (str.length === 0) return;
@@ -43,16 +41,14 @@ const SearchOnPageBar = () => {
     ref.current = res;
     scrollByDir(0, 0);
   };
-
-  const clearing = () => {
+  const clearing     = () => {
     ref.current = [];
     clearHighlightByStyle('found_search');
     clearHighlightByStyle('selected_search');
   };
-
-  const handleNext  = () => scrollByDir();
-  const handlePrev  = () => scrollByDir(-1);
-  const scrollByDir = (dir = 1, idx = index) => {
+  const handleNext   = () => scrollByDir();
+  const handlePrev   = () => scrollByDir(-1);
+  const scrollByDir  = (dir = 1, idx = index) => {
     const _index = idx + dir;
     if (idx >= 0) {
       deleteHighlightByRange(ref.current[idx], 'selected_search');
@@ -95,13 +91,6 @@ const SearchOnPageBar = () => {
         disabled={!ref.current || (index === ref.current.length - 1)}
         icon={<span className="material-symbols-outlined">keyboard_arrow_down</span>}
         onClick={handleNext}
-      />
-      <Button
-        basic
-        disabled={!val}
-        className="clear_button"
-        icon={<span className="material-symbols-outlined">search</span>}
-        onClick={handleSearch}
       />
       <Button
         basic

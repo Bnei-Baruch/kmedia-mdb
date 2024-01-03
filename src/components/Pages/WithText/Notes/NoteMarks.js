@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { selectors } from '../../../../redux/modules/myNotes';
 import NotesByPos from './NotesByPos';
 import { useNodeHighlight } from './useNodeHighlight';
+import NotesAllPage from './NotesAllPage';
 
 const idPrefix  = textMarksPrefixByType.note.start;
 const NoteMarks = ({ parentTop }) => {
@@ -31,6 +32,7 @@ const NoteMarks = ({ parentTop }) => {
 
   return (
     <div className="note_marks">
+      <NotesAllPage />
       {
         Object.entries(byLine).map(([key, ids]) => <NotesByPos key={key} ids={ids} pos={key} />)
       }

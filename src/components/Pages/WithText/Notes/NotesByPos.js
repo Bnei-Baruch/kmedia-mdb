@@ -3,7 +3,7 @@ import { Button, Label } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
 import { selectors } from '../../../../redux/modules/myNotes';
 import { selectors as textPage } from '../../../../redux/modules/textPage';
-import NoteItemInList from './NoteItemInList';
+import NoteMarkInList from './NoteMarkInList';
 import clsx from 'clsx';
 import { useNodeHighlight } from './useNodeHighlight';
 
@@ -59,7 +59,7 @@ const NotesByPos = ({ pos, ids }) => {
       {
         open && (
           <div className={clsx('note_list', { 'note_list_out': isOut })}>
-            {notes.map(n => <NoteItemInList note={n} key={n.id} />)}
+            {notes.map(n => <NoteMarkInList note={n} key={n.id} />)}
           </div>
         )
       }
