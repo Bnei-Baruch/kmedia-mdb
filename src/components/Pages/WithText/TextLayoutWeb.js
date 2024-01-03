@@ -21,13 +21,13 @@ let lastScrollTop = 0;
 
 const TextLayoutWeb = props => {
   const {
-          toolbar    = null,
-          toc        = null,
-          prevNext   = null,
-          breadcrumb = null,
-          propId,
-          playerPage = false,
-        } = props;
+    toolbar    = null,
+    toc        = null,
+    prevNext   = null,
+    breadcrumb = null,
+    propId,
+    playerPage = false,
+  } = props;
 
   const ref = useRef();
 

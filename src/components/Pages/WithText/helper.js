@@ -89,7 +89,7 @@ export const addHighlightByRanges = (ranges, style = 'selected_marker') => {
     const highlight = new window.Highlight(...ranges);
     CSS.highlights.set(style, highlight);
   } else {
-    let _highlights = CSS.highlights.get(style);
+    const _highlights = CSS.highlights.get(style);
     ranges.forEach(r => _highlights.add(r));
   }
 };
@@ -121,7 +121,7 @@ export const buildOffsets = markers => markers.map(({ properties: { srchstart, s
   return acc;
 }, {});
 
-export const prepareTextNodes = (root) => {
+export const prepareTextNodes = root => {
   const textNodes = [];
 
   const treeWalker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
@@ -133,15 +133,17 @@ export const prepareTextNodes = (root) => {
     offset += node.textContent.length;
     node = treeWalker.nextNode();
   }
+
   return textNodes;
 };
-export const searchOnPage     = (str) => {
+
+export const searchOnPage = str => {
   const root = document.getElementById(DOM_ROOT_ID);
   if (!root) return [];
 
   const textNodes = prepareTextNodes(root);
 
-  const reg     = new RegExp(str.split(' ').map(word => `(${word})`).join('(.{0,5})'), 'sg');
+  const reg     = new RegExp(str.split(' ').map(word => `(${word})`).join('(.{0,5})'), 'sgi');
   const matches = Array.from(root.textContent.matchAll(reg), m => m);
 
   const resp = [];
@@ -153,17 +155,22 @@ export const searchOnPage     = (str) => {
     for (let i = 0; i < textNodes.length; i++) {
       const current = textNodes[i];
       if (!start && (current.offset > m.index || (textNodes.length - 1) === i)) {
-        start      = true;
-        let idx    = Math.max(0, i - 1);
-        idx        = textNodes.length - 1 === i ? i : idx;
-        const prev = textNodes[idx];
+        start   = true;
+        let idx = Math.max(0, i - 1);
+        idx     = textNodes.length - 1 === i ? i : idx;
+
+        const prev = getPrevNode(idx, textNodes);
+        if (!prev) continue;
+
         range.setStart(prev.node, m.index - prev.offset);
       }
 
       if (!end && (current.offset > endOffset || (textNodes.length - 1) === i)) {
         end        = true;
         const idx  = textNodes.length - 1 === i ? i : i - 1;
-        const prev = textNodes[idx];
+        const prev = getPrevNode(idx, textNodes);
+        if (!prev) continue;
+
         range.setEnd(prev.node, endOffset - prev.offset);
       }
 
@@ -174,4 +181,15 @@ export const searchOnPage     = (str) => {
   });
 
   return resp;
+};
+
+const getPrevNode = (idx, textNodes) => {
+  if (idx < 0)
+    return null;
+
+  const prev = textNodes[idx];
+  if (prev.node.length < 2) {
+    return getPrevNode(idx - 1, textNodes);
+  }
+  return prev;
 };

@@ -7,9 +7,9 @@ import { selectors as textPage, actions } from '../../../redux/modules/textPage'
 
 const SearchOnPageBar = () => {
   const [val, setVal]     = useState('');
-  const [index, setIndex] = useState(0);
+  const [index, setIndex] = useState(-1);
 
-  const ref      = useRef();
+  const ref      = useRef([]);
   const dispatch = useDispatch();
   const isSearch = useSelector(state => textPage.getIsSearch(state.textPage));
 
@@ -17,40 +17,53 @@ const SearchOnPageBar = () => {
 
   const handleClose = () => {
     dispatch(actions.setIsSearch());
-    clearHighlightByStyle('found_search');
-    clearHighlightByStyle('selected_search');
+    clearing();
+    setVal('');
+    setIndex(-1);
   };
 
   const handleChange = debounce((e, { value }) => {
+    clearing();
+    value = value.trim();
     setVal(value);
 
-    search(value);
+    if (value.length > 0)
+      search(value);
   }, 500);
   const handleSearch = () => search();
   const search       = (value = val) => {
-    ref.current = [];
-    setIndex(0);
-    clearHighlightByStyle('found_search');
-
     const str = value.trim();
     if (str.length === 0) return;
 
     const res = searchOnPage(str);
 
-    if (res.length === 0) return;
+    if (res.length === 0)
+      return;
     addHighlightByRanges(res, 'found_search');
     ref.current = res;
-    scrollByDir();
+    scrollByDir(0, 0);
   };
-  const handleNext   = () => scrollByDir();
-  const handlePrev   = () => scrollByDir(-1);
-  const scrollByDir  = (dir = 1) => {
-    const _index = index + dir;
-    if (index > 0) {
-      deleteHighlightByRange(ref.current[index - 1], 'selected_search');
-      addHighlightByRanges([ref.current[index - 1]], 'found_search');
+
+  const clearing = () => {
+    ref.current = [];
+    clearHighlightByStyle('found_search');
+    clearHighlightByStyle('selected_search');
+  };
+
+  const handleNext  = () => scrollByDir();
+  const handlePrev  = () => scrollByDir(-1);
+  const scrollByDir = (dir = 1, idx = index) => {
+    const _index = idx + dir;
+    if (idx >= 0) {
+      deleteHighlightByRange(ref.current[idx], 'selected_search');
+      addHighlightByRanges([ref.current[idx]], 'found_search');
     }
-    const range = ref.current[_index - 1];
+
+    const range = ref.current[_index];
+    if (!range) {
+      console.error('not found next range by index', _index);
+      return;
+    }
     addHighlightByRanges([range], 'selected_search');
     const el   = range.startContainer.parentElement;
     const rect = el.getBoundingClientRect();
@@ -66,7 +79,7 @@ const SearchOnPageBar = () => {
         onChange={handleChange}
       />
       {
-        ref.current && (<span>{index} / {ref.current.length}</span>)
+        (ref.current && index >= 0) && (<span>{index + 1} / {ref.current.length}</span>)
       }
       <Button
         basic
@@ -78,7 +91,7 @@ const SearchOnPageBar = () => {
       <Button
         basic
         className="clear_button"
-        disabled={!ref.current || index === ref.current.length}
+        disabled={!ref.current || (index === ref.current.length - 1)}
         icon={<span className="material-symbols-outlined">keyboard_arrow_down</span>}
         onClick={handleNext}
       />
