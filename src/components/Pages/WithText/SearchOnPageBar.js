@@ -21,6 +21,7 @@ const SearchOnPageBar = () => {
     setVal('');
     setIndex(-1);
   };
+
   const handleChange = debounce((e, { value }) => {
     clearing();
     value = value.trim();
@@ -41,11 +42,13 @@ const SearchOnPageBar = () => {
     ref.current = res;
     scrollByDir(0, 0);
   };
+
   const clearing     = () => {
     ref.current = [];
     clearHighlightByStyle('found_search');
     clearHighlightByStyle('selected_search');
   };
+
   const handleNext   = () => scrollByDir();
   const handlePrev   = () => scrollByDir(-1);
   const scrollByDir  = (dir = 1, idx = index) => {
