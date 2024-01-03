@@ -165,7 +165,7 @@ export default class ClientChronicles {
   // Handles custom redux actions to append events on them.
   // Note: Have to add the relevant actions to redux/modules/chronicles.js for this to work.
   onAction(action) {
-    if (action.type === recommendedTypes.FETCH_RECOMMENDED_SUCCESS) {
+    if (action.type === recommendedTypes['recommended/fetchRecommendedSuccess']) {
       const { feeds, requestData } = action.payload;
       if (feeds && Object.keys(feeds).length) {
         const recommendations = Object.fromEntries(Object.entries(action.payload.feeds).map(
@@ -174,7 +174,7 @@ export default class ClientChronicles {
       }
     }
 
-    if (action.type === searchTypes.SEARCH_SUCCESS) {
+    if (action.type === searchTypes['search/searchSuccess']) {
       const { searchResults, searchRequest } = action.payload;
       const reducedResults                   = partialAssign({}, searchResults, {
         language: true,
@@ -204,7 +204,7 @@ export default class ClientChronicles {
       this.append('search', appendData);
     }
 
-    if (action.type === searchTypes.AUTOCOMPLETE_SUCCESS) {
+    if (action.type === searchTypes['search/autocompleteSuccess']) {
       const { suggestions, request } = action.payload;
       const reducedSuggestions       = partialAssign({}, suggestions, {
         suggest: {
@@ -234,11 +234,11 @@ export default class ClientChronicles {
       this.append('autocomplete', appendData);
     }
 
-    if (action.type === authTypes.UPDATE_TOKEN) {
+    if (action.type === authTypes['auth/updateToken']) {
       this.keycloakId = action.payload;
     }
 
-    if (action.type === authTypes.UPDATE_USER && !action.payload) {
+    if (action.type === authTypes['auth/updateUser'] && !action.payload) {
       this.keycloakId = null;
     }
   }

@@ -3,32 +3,32 @@ import moment from 'moment';
 
 import Api from '../helpers/Api';
 import { actions, types } from '../redux/modules/simpleMode';
-import { actions as mdbActions } from '../redux/modules/mdb';
+import { actions as mbdActions } from '../redux/modules/mdb';
 import { selectors as settings } from '../redux/modules/settings';
 
 export function* fetchForDate(action) {
   try {
-    const { date } = action.payload;
-    const formattedDate = moment(date).format('YYYY-MM-DD')
+    const { date }      = action.payload;
+    const formattedDate = moment(date).format('YYYY-MM-DD');
 
     const uiLang           = yield select(state => settings.getUILang(state.settings));
     const contentLanguages = yield select(state => settings.getContentLanguages(state.settings));
 
     const args = {
-      startDate: formattedDate,
-      endDate: formattedDate,
-      ui_language: uiLang,
-      content_languages: contentLanguages,
+      startDate        : formattedDate,
+      endDate          : formattedDate,
+      ui_language      : uiLang,
+      content_languages: contentLanguages
     };
 
     const { data } = yield call(Api.simpleMode, args);
 
     if (Array.isArray(data.lessons) && data.lessons.length > 0) {
-      yield put(mdbActions.receiveCollections(data.lessons));
+      yield put(mbdActions.receiveCollections(data.lessons));
     }
 
     if (Array.isArray(data.others) && data.others.length > 0) {
-      yield put(mdbActions.receiveContentUnits(data.others));
+      yield put(mbdActions.receiveContentUnits(data.others));
     }
 
     yield put(actions.fetchForDateSuccess(data));
@@ -38,9 +38,9 @@ export function* fetchForDate(action) {
 }
 
 function* watchFetchForDate() {
-  yield takeLatest([types.FETCH_FOR_DATE], fetchForDate);
+  yield takeLatest(types['simpleMode/fetchForDate'], fetchForDate);
 }
 
 export const sagas = [
-  watchFetchForDate,
+  watchFetchForDate
 ];

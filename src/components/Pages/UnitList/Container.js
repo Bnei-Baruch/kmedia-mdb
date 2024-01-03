@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { bindActionCreators } from '@reduxjs/toolkit';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import { selectors as settings } from '../../../redux/modules/settings';

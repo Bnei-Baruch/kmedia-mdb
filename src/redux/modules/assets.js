@@ -77,7 +77,7 @@ const onFetchListFailure = (state, action) => {
   }));
 };
 
-const onSSRPrepare = (state, action) => {
+const onSSRPrepare = state => {
   state.zipIndexById    = mapValues(state.zipIndexById, x => ({ ...x, err: x.err ? x.err.toString() : x.err }));
   state.doc2htmlById    = mapValues(state.doc2htmlById, x => ({ ...x, err: x.err ? x.err.toString() : x.err }));
   state.sourceIndexById = mapValues(state.sourceIndexById, x => ({ ...x, err: x.err ? x.err.toString() : x.err }));
@@ -224,33 +224,7 @@ const getActionKey = type => {
 
 export default assetsSlice.reducer;
 
-/* eslint-disable indent */
-export const {
-               unzip,
-               unzipSuccess,
-               unzipFailure,
-               unzipList,
-               unzipListSuccess,
-               unzipListFailure,
-               doc2html,
-               doc2htmlSuccess,
-               doc2htmlFailure,
-               sourceIndex,
-               sourceIndexSuccess,
-               sourceIndexFailure,
-               fetchAsset,
-               fetchAssetSuccess,
-               fetchAssetFailure,
-               fetchPerson,
-               fetchPersonSuccess,
-               fetchPersonFailure,
-               fetchTimeCode,
-               fetchTimeCodeSuccess,
-               mergeKiteiMakor,
-               mergeKiteiMakorSuccess,
-               mergeKiteiMakorFailure
-             } = assetsSlice.actions;
-/* eslint-enable */
+export const { actions } = assetsSlice;
 
 export const types = Object.fromEntries(new Map(
   Object.values(assetsSlice.actions).map(a => [a.type, a.type])

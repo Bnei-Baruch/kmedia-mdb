@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
-import { bindActionCreators } from '@reduxjs/toolkit';
+import { bindActionCreators } from 'redux';
 import { connect, ReactReduxContext } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import { Container, Icon, Label, Menu, Popup } from 'semantic-ui-react';

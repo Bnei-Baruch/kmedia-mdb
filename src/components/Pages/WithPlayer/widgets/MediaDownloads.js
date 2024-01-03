@@ -386,8 +386,6 @@ class MediaDownloads extends Component {
       ];
     } else {
       rows = MEDIA_ORDER.reduce((acc, val) => {
-        console.log('=================> val', val);
-        console.log('=================> byType.get(val)', byType.get(val));
         const baseLabel = t(`media-downloads.${typeOverrides}type-labels.${val}`);
         const files     = (byType.get(val) || []).map(file => {
           let label = baseLabel;

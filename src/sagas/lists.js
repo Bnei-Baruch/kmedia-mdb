@@ -19,7 +19,7 @@ import { isEmpty } from '../helpers/utils';
 import { selectors as filterSelectors } from '../redux/modules/filters';
 
 import { actions, types } from '../redux/modules/lists';
-import { actions as mdbActions, selectors as mdb } from '../redux/modules/mdb';
+import { actions as mbdActions, selectors as mdb } from '../redux/modules/mdb';
 import { selectors as settings } from '../redux/modules/settings';
 import { getQuery, pushQuery } from './helpers/url';
 import { fetchCollectionsByIDs, fetchUnitsByIDs } from './mdb';
@@ -27,8 +27,8 @@ import { fetch as fetchMy } from './my';
 import { fetchViewsByUIDs } from './recommended';
 
 const endpointByNamespace = {
-  [PAGE_NS_LESSONS]: Api.lessons,
-  [PAGE_NS_EVENTS]: Api.events,
+  [PAGE_NS_LESSONS] : Api.lessons,
+  [PAGE_NS_EVENTS]  : Api.events,
   [PAGE_NS_SKETCHES]: Api.units
 };
 
@@ -50,18 +50,18 @@ function* fetchList(action) {
     args               = { ...args, ...filterParams };
   }
 
-  const uiLang = yield select(state => settings.getUILang(state.settings));
+  const uiLang           = yield select(state => settings.getUILang(state.settings));
   const contentLanguages = yield select(state => settings.getContentLanguages(state.settings));
 
   try {
     const { data } = yield call(Api.units, {
       ...args,
-      ui_language: uiLang,
-      content_languages: contentLanguages,
+      ui_language      : uiLang,
+      content_languages: contentLanguages
     });
 
     if (Array.isArray(data.content_units)) {
-      yield put(mdbActions.receiveContentUnits(data.content_units));
+      yield put(mbdActions.receiveContentUnits(data.content_units));
     }
 
     if (withViews) {
@@ -95,15 +95,15 @@ function* fetchSectionList(action) {
   if (namespace === PAGE_NS_LESSONS) patchLessonFilters(filters);
   const filterParams = filtersTransformer.toApiParams(filters) || {};
 
-  const uiLang = yield select(state => settings.getUILang(state.settings));
+  const uiLang           = yield select(state => settings.getUILang(state.settings));
   const contentLanguages = yield select(state => settings.getContentLanguages(state.settings));
 
   try {
     const { data } = yield call(endpointByNamespace[namespace], {
       ...args,
       ...filterParams,
-      ui_language: uiLang,
-      content_languages: contentLanguages,
+      ui_language      : uiLang,
+      content_languages: contentLanguages
     });
     if (!data.items && data.content_units) {
       data.items = [...data.content_units];
@@ -120,7 +120,7 @@ function* fetchSectionList(action) {
     }
 
     if (!isEmpty(data.content_units)) {
-      yield put(mdbActions.fetchUnitsByIDsSuccess(data.content_units));
+      yield put(mbdActions.fetchUnitsByIDsSuccess({ data: data.content_units }));
     }
 
     yield put(actions.fetchSectionListSuccess(namespace, data));
@@ -129,7 +129,7 @@ function* fetchSectionList(action) {
     if (!isEmpty(cIDs)) {
       yield call(fetchCollectionsByIDs, { payload: { id: cIDs } });
       const denormCcu = yield select(state => mdb.nestedGetDenormCollection(state.mdb));
-      cIDs.map(denormCcu).map(x => x.cuIDs).flat().forEach(id => {
+      cIDs.map(denormCcu).filter(Boolean).map(x => x.cuIDs).flat().forEach(id => {
         cu_uids.push(id);
       });
     }
@@ -159,15 +159,15 @@ function* updatePageInQuery(action) {
 }
 
 function* watchFetchList() {
-  yield takeEvery(types.FETCH_LIST, fetchList);
+  yield takeEvery(types['lists/fetchList'], fetchList);
 }
 
 function* watchFetchSectionList() {
-  yield takeEvery(types.FETCH_SECTION_LIST, fetchSectionList);
+  yield takeEvery(types['lists/fetchSectionList'], fetchSectionList);
 }
 
 function* watchSetPage() {
-  yield takeLatest(types.SET_PAGE, updatePageInQuery);
+  yield takeLatest(types['lists/setPage'], updatePageInQuery);
 }
 
 export const sagas = [watchFetchList, watchFetchSectionList, watchSetPage];

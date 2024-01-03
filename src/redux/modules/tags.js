@@ -1,136 +1,77 @@
-import { createAction } from 'redux-actions';
+import { createSlice } from '@reduxjs/toolkit';
 
 import { tracePath } from '../../helpers/utils';
 import { TOPICS_FOR_DISPLAY } from '../../helpers/consts';
-import { handleActions, types as settings } from './settings';
-import { types as ssr } from './ssr';
+import { buildById } from '../../helpers/utils';
+import { actions as settings } from './settings';
+import { actions as ssrActions } from './ssr';
 
-/* Types */
-
-const RECEIVE_TAGS = 'Tags/RECEIVE_TAGS';
-
-const FETCH_DASHBOARD         = 'Tags/FETCH_DASHBOARD';
-const FETCH_DASHBOARD_SUCCESS = 'Tags/FETCH_DASHBOARD_SUCCESS';
-const FETCH_DASHBOARD_FAILURE = 'Tags/FETCH_DASHBOARD_FAILURE';
-const FETCH_STATS             = 'Tags/FETCH_STATS';
-const FETCH_STATS_SUCCESS     = 'Tags/FETCH_STATS_SUCCESS';
-const FETCH_STATS_FAILURE     = 'Tags/FETCH_STATS_FAILURE';
-
-export const types = {
-  RECEIVE_TAGS,
-  FETCH_DASHBOARD,
-  FETCH_DASHBOARD_SUCCESS,
-  FETCH_DASHBOARD_FAILURE,
-  FETCH_STATS,
-  FETCH_STATS_SUCCESS,
-  FETCH_STATS_FAILURE
+const onReceiveTags = (state, { payload }) => {
+  state.byId         = buildById(payload);
+  state.roots        = payload.map(x => x.id);
+  state.displayRoots = state.roots.filter(x => TOPICS_FOR_DISPLAY.indexOf(x) !== -1);
+  state.loaded       = true;
 };
 
-/* Actions */
+const tagsSlice = createSlice({
+  name        : 'tags',
+  initialState: {
+    wip      : false,
+    error    : null,
+    dashboard: { items: [], mediaTotal: 0, textTotal: 0 },
+    loaded   : false
+  },
 
-const receiveTags = createAction(RECEIVE_TAGS);
+  reducers     : {
+    receiveTags: onReceiveTags,
 
-const fetchDashboard        = createAction(FETCH_DASHBOARD);
-const fetchDashboardSuccess = createAction(FETCH_DASHBOARD_SUCCESS);
-const fetchDashboardFailure = createAction(FETCH_DASHBOARD_FAILURE, (id, err) => ({ id, err }));
-const fetchStats            = createAction(FETCH_STATS, (namespace, contentTypes) => ({ namespace, contentTypes }));
-const fetchStatsSuccess     = createAction(FETCH_STATS_SUCCESS);
-const fetchStatsFailure     = createAction(FETCH_STATS_FAILURE);
+    fetchDashboard       : state => void (state.wip = true),
+    fetchDashboardSuccess: (state, { payload: { items = [], mediaTotal, textTotal } }) => {
+      state.wip       = false;
+      state.error     = null;
+      state.dashboard = { items, mediaTotal, textTotal };
+    },
+    fetchDashboardFailure: {
+      prepare: (id, err) => ({ payload: { id, err } }),
+      reducer: (state, { payload: { id, err } }) => {
+        state.wip   = false;
+        state.error = err;
+      }
+    },
 
-export const actions = {
-  receiveTags,
-  fetchDashboard,
-  fetchDashboardSuccess,
-  fetchDashboardFailure,
-  fetchStats,
-  fetchStatsSuccess,
-  fetchStatsFailure
-};
+    fetchStats       : {
+      prepare: (namespace, contentTypes) => ({ payload: { namespace, contentTypes } }),
+      reducer: () => void ({})
+    },
+    fetchStatsSuccess: () => void ({}),
+    fetchStatsFailure: () => void ({})
+  },
+  extraReducers: builder => {
+    builder
+      .addCase(ssrActions.prepare, state => {
+        state.wip       = false;
+        state.loaded    = false;
+        state.dashboard = { items: [], mediaTotal: 0, textTotal: 0 };
 
-/* Reducer */
-
-const initialState = {
-  wip: false,
-  error: null,
-  dashboard: { items: [], mediaTotal: 0, textTotal: 0 },
-  loaded: false,
-};
-
-const buildById = items => {
-  const byId = {};
-
-  // We BFS the tree, extracting each item by it's ID
-  // and normalizing it's children
-  let s = [...items];
-  while (s.length > 0) {
-    const node = s.pop();
-    if (node.children) {
-      s = s.concat(node.children);
-    }
-
-    byId[node.id] = {
-      ...node,
-      children: node.children ? node.children.map(x => x.id) : [],
-    };
+        if (state.error) {
+          state.error = state.error.toString();
+        }
+      })
+      .addCase(settings.setUILanguage, state => {
+        state.loaded = false;
+        state.wip    = false;
+        state.err    = null;
+      });
   }
+});
 
-  return byId;
-};
+export default tagsSlice.reducer;
 
-const onSSRPrepare = draft => {
-  draft.wip       = false;
-  draft.loaded    = false;
-  draft.dashboard = { items: [], mediaTotal: 0, textTotal: 0 };
+export const { actions } = tagsSlice;
 
-  if (draft.error) {
-    draft.error = draft.error.toString();
-  }
-};
-
-const onReceiveTags = (draft, payload) => {
-  const byId = buildById(payload);
-
-  const roots        = payload.map(x => x.id);
-  const displayRoots = roots.filter(x => TOPICS_FOR_DISPLAY.indexOf(x) !== -1);
-
-  draft.byId         = byId;
-  draft.roots        = roots;
-  draft.displayRoots = displayRoots;
-  draft.loaded       = true;
-};
-
-const onDashboard = draft => {
-  draft.wip = true;
-};
-
-const onDashboardSuccess = (draft, { items = [], mediaTotal, textTotal }) => {
-  draft.wip       = false;
-  draft.error     = null;
-  draft.dashboard = { items, mediaTotal, textTotal };
-};
-
-const onSetLanguage = draft => {
-  draft.loaded = false;
-  draft.wip    = false;
-  draft.err    = null;
-};
-
-const onFetchDashboardFailure = (draft, payload) => {
-  draft.wip   = false;
-  draft.error = payload.err;
-};
-
-export const reducer = handleActions({
-  [ssr.PREPARE]: onSSRPrepare,
-  [settings.SET_UI_LANGUAGE]: onSetLanguage,
-
-  [FETCH_DASHBOARD]: onDashboard,
-  [FETCH_DASHBOARD_SUCCESS]: onDashboardSuccess,
-  [FETCH_DASHBOARD_FAILURE]: onFetchDashboardFailure,
-
-  [RECEIVE_TAGS]: onReceiveTags
-
-}, initialState);
+export const types = Object.fromEntries(new Map(
+  Object.values(tagsSlice.actions).map(a => [a.type, a.type])
+));
 
 /* Selectors */
 
@@ -138,15 +79,15 @@ const areTagsLoaded   = state => state.loaded;
 const getTags         = state => state.byId;
 const getRoots        = state => state.roots;
 const getDisplayRoots = state => state.displayRoots;
-const getTagById      = state => id => state.byId[id];
+const getTagById      = state => id => state?.byId[id];
 const getPath         = state => source => tracePath(source, getTagById(state));
 const getPathByID     = state => {
   const _byId = getTagById(state);
   return id => tracePath(_byId(id), _byId);
 };
 
-const getWip          = state => state.wip;
-const getError        = state => state.error;
+const getWip   = state => state.wip;
+const getError = state => state.error;
 
 const getItems = state => state.dashboard || {};
 

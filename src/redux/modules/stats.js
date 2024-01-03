@@ -1,87 +1,51 @@
-import { createAction } from 'redux-actions';
+import { createSlice } from '@reduxjs/toolkit';
 
-import { handleActions } from './settings';
+const statsSlice = createSlice({
+  name        : 'stats',
+  initialState: {
+    cuStats: {}
+  },
 
-/* Types */
-
-const FETCH_CU_STATS         = 'Stats/FETCH_CU_STATS';
-const FETCH_CU_STATS_SUCCESS = 'Stats/FETCH_CU_STATS_SUCCESS';
-const FETCH_CU_STATS_FAILURE = 'Stats/FETCH_CU_STATS_FAILURE';
-const CLEAR_CU_STATS         = 'Stats/CLEAR_CU_STATS';
-
-export const types = {
-  FETCH_CU_STATS,
-  FETCH_CU_STATS_SUCCESS,
-  FETCH_CU_STATS_FAILURE,
-  CLEAR_CU_STATS
-};
-
-/* Actions */
-
-const fetchCUStats        = createAction(FETCH_CU_STATS, (namespace, params = {}) => ({ namespace, ...params }));
-const fetchCUStatsSuccess = createAction(FETCH_CU_STATS_SUCCESS, (namespace, data) => ({ namespace, data }));
-const fetchCUStatsFailure = createAction(FETCH_CU_STATS_FAILURE, (namespace, err) => ({ namespace, err }));
-const clearCUStats        = createAction(CLEAR_CU_STATS, namespace => ({ namespace }));
-export const actions      = {
-  fetchCUStats,
-  fetchCUStatsSuccess,
-  fetchCUStatsFailure,
-  clearCUStats
-};
-
-/* Reducer */
-
-const initialState = {
-  cuStats: {},
-};
-
-const onCURequest = (state, action) => ({
-  ...state,
-  cuStats: {
-    ...state.cuStats,
-    [action.namespace]: {
-      ...(state.cuStats[action.namespace] || {}),
-      wip: true,
-    }
+  reducers: {
+    fetchCUStats       : {
+      prepare: (namespace, params = {}) => ({ payload: { namespace, ...params } }),
+      reducer: (state, { payload: { namespace } }) => {
+        state.cuStats[namespace] ||= {};
+        state.cuStats[namespace].wip = true;
+      }
+    },
+    fetchCUStatsSuccess: {
+      prepare: (namespace, data) => ({ payload: { namespace, data } }),
+      reducer: (state, { payload: { namespace, data } }) => {
+        state.cuStats[namespace] ||= {};
+        state.cuStats[namespace].wip  = false;
+        state.cuStats[namespace].data = data;
+      }
+    },
+    fetchCUStatsFailure: {
+      prepare: (namespace, err) => ({ payload: { namespace, err } }),
+      reducer: (state, { payload: { namespace, err } }) => {
+        state.cuStats[namespace] ||= {};
+        state.cuStats[namespace].wip = false;
+        state.cuStats[namespace].err = err;
+      }
+    },
+    clearCUStats       : (state, { payload: { namespace } }) => void (state.cuStats[namespace] ||= {})
   }
 });
 
-const onCUFailure = (state, action) => ({
-  ...state,
-  cuStats: {
-    ...state.cuStats,
-    [action.payload.namespace]: {
-      ...(state.cuStats[action.payload.namespace] || {}),
-      wip: false,
-      err: action.payload.err,
-    }
-  }
-});
+export default statsSlice.reducer;
 
-const onCUSuccess = (draft, payload) => {
-  if (draft.cuStats[payload.namespace] === undefined) {
-    draft.cuStats[payload.namespace] = {};
-  }
+export const { actions } = statsSlice;
 
-  draft.cuStats[payload.namespace].wip  = false;
-  draft.cuStats[payload.namespace].data = payload.data;
-};
-
-const onClearCUStats = (draft, payload) => {
-  draft.cuStats[payload.namespace] = {};
-};
-
-export const reducer = handleActions({
-  [FETCH_CU_STATS]: onCURequest,
-  [FETCH_CU_STATS_SUCCESS]: onCUSuccess,
-  [FETCH_CU_STATS_FAILURE]: onCUFailure,
-  [CLEAR_CU_STATS]: onClearCUStats,
-}, initialState);
+export const types = Object.fromEntries(new Map(
+  Object.values(statsSlice.actions).map(a => [a.type, a.type])
+));
 
 /* Selectors */
 
 const getCUStats = (state, namespace) => state.cuStats[namespace] || {};
 
 export const selectors = {
-  getCUStats,
+  getCUStats
 };

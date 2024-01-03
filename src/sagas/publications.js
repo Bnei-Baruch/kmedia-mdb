@@ -7,21 +7,21 @@ import { actions, selectors, types } from '../redux/modules/publications';
 import { types as listTypes } from '../redux/modules/lists';
 import { filtersTransformer } from '../filters';
 import { selectors as filterSelectors } from '../redux/modules/filters';
-import { actions as mdbActions } from '../redux/modules/mdb';
 import { setTab, updateQuery } from './helpers/url';
 import { isEmpty } from '../helpers/utils';
+import { actions as mbdActions } from '../redux/modules/mdb';
 
 export function* fetchTweets(action) {
   const filters = yield select(state => filterSelectors.getFilters(state.filters, 'publications-twitter'));
   const params  = filtersTransformer.toApiParams(filters) || {};
   try {
-    const uiLang = yield select(state => settings.getUILang(state.settings));
+    const uiLang           = yield select(state => settings.getUILang(state.settings));
     const contentLanguages = yield select(state => settings.getContentLanguages(state.settings));
-    const args     = {
+    const args             = {
       ...action.payload,
       ...params,
-      ui_language: uiLang,
-      content_languages: contentLanguages,
+      ui_language      : uiLang,
+      content_languages: contentLanguages
     };
 
     const { data } = yield call(Api.tweets, args);
@@ -35,13 +35,13 @@ export function* fetchBlogList(action) {
   const filters = yield select(state => filterSelectors.getFilters(state.filters, 'publications-blog'));
   const params  = filtersTransformer.toApiParams(filters) || {};
   try {
-    const uiLang = yield select(state => settings.getUILang(state.settings));
+    const uiLang           = yield select(state => settings.getUILang(state.settings));
     const contentLanguages = yield select(state => settings.getContentLanguages(state.settings));
-    const args     = {
+    const args             = {
       ...action.payload,
       ...params,
-      ui_language: uiLang,
-      content_languages: contentLanguages,
+      ui_language      : uiLang,
+      content_languages: contentLanguages
     };
 
     const { data } = yield call(Api.posts, args);
@@ -73,19 +73,19 @@ function* fetchArticlesList(action) {
       return;
     }
 
-    const uiLang = yield select(state => settings.getUILang(state.settings));
+    const uiLang           = yield select(state => settings.getUILang(state.settings));
     const contentLanguages = yield select(state => settings.getContentLanguages(state.settings));
-    const { data } = yield call(Api.collections, {
-      ui_language: uiLang,
+    const { data }         = yield call(Api.collections, {
+      ui_language      : uiLang,
       content_languages: contentLanguages,
-      content_type: CT_ARTICLES,
-      pageNo: 1,
-      pageSize: 1000,
-      with_units: false,
+      content_type     : CT_ARTICLES,
+      pageNo           : 1,
+      pageSize         : 1000,
+      with_units       : false
     });
 
     if (Array.isArray(data.collections)) {
-      yield put(mdbActions.receiveCollections(data.collections));
+      yield put(mbdActions.receiveCollections(data.collections));
       yield put(actions.fetchCollections(data.collections));
     }
   } catch (err) {
@@ -100,27 +100,27 @@ function* updatePageInQuery(action) {
 }
 
 function* watchFetchArticleList() {
-  yield takeLatest(listTypes.FETCH_LIST, fetchArticlesList);
+  yield takeLatest(listTypes['lists/fetchList'], fetchArticlesList);
 }
 
 function* watchFetchTweets() {
-  yield takeLatest([types.FETCH_TWEETS], fetchTweets);
+  yield takeLatest(types['publications/fetchTweets'], fetchTweets);
 }
 
 function* watchFetchBlogList() {
-  yield takeLatest([types.FETCH_BLOG_LIST], fetchBlogList);
+  yield takeLatest(types['publications/fetchBlogList'], fetchBlogList);
 }
 
 function* watchFetchBlogPost() {
-  yield takeLatest([types.FETCH_BLOG_POST], fetchBlogPost);
+  yield takeLatest(types['publications/fetchBlogPost'], fetchBlogPost);
 }
 
 function* watchSetTab() {
-  yield takeLatest(types.SET_TAB, setTab);
+  yield takeLatest(types['publications/setTab'], setTab);
 }
 
 function* watchSetPage() {
-  yield takeLatest(types.SET_PAGE, updatePageInQuery);
+  yield takeLatest(types['publications/setPage'], updatePageInQuery);
 }
 
 export const sagas = [
@@ -129,5 +129,5 @@ export const sagas = [
   watchFetchBlogList,
   watchFetchBlogPost,
   watchSetTab,
-  watchSetPage,
+  watchSetPage
 ];

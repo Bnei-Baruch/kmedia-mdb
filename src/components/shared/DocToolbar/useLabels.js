@@ -1,8 +1,7 @@
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { selectors as mdb, actions } from '../../../redux/modules/mdb';
-import { OFFSET_TEXT_SEPARATOR } from '../../../helpers/scrollToSearch/helper';
+import { actions as mdbActions, selectors as mdb } from '../../../redux/modules/mdb';
 import { buildOffsets } from './helper';
 
 export const useLabels = (content_unit, language) => {
@@ -16,7 +15,7 @@ export const useLabels = (content_unit, language) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(actions.fetchLabels({ content_unit, language }));
+    dispatch(mdbActions.fetchLabels({ content_unit, language }));
   }, [content_unit, language]);
 
   const offsets = buildOffsets(labels);

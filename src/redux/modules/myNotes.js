@@ -1,136 +1,85 @@
-import { createAction } from 'redux-actions';
+import { createSlice } from '@reduxjs/toolkit';
 
-import { handleActions } from './settings';
+const myNotesService = createSlice({
+  name        : 'myNotes',
+  initialState: {
+    ids   : [],
+    byId  : {},
+    wip   : false,
+    errors: null
+  },
 
-/* Types */
-const FETCH         = 'MyNotes/FETCH';
-const FETCH_SUCCESS = 'MyNotes/FETCH_SUCCESS';
-const FETCH_FAILURE = 'MyNotes/FETCH_FAILURE';
+  reducers: {
+    fetch         : state => {
+      state.wip    = true;
+      state.errors = false;
+      state.ids    = [];
+      state.byId   = {};
+    },
+    fetchSuccess  : (state, { payload: { items } }) => {
+      state.wip    = false;
+      state.errors = false;
 
-const ADD         = 'MyNotes/ADD';
-const ADD_SUCCESS = 'MyNotes/ADD_SUCCESS';
+      state.ids  = [];
+      state.byId = {};
+      Object.values(items).forEach(x => {
+        state.ids.push(x.id);
+        state.byId[x.id] = x;
+      });
+    },
+    onFetchFailure: state => {
+      state.wip    = false;
+      state.errors = true;
+    },
 
-const EDIT         = 'MyNotes/EDIT';
-const EDIT_SUCCESS = 'MyNotes/EDIT_SUCCESS';
+    add          : {
+      prepare: (content, properties) => ({ payload: { content, ...properties } }),
+      reducer: () => void ({})
+    },
+    addSuccess   : (state, { payload: { item } }) => {
+      state.byId[item.id] = item;
+      state.ids           = [item.id, ...state.ids];
+      state.wip           = false;
+      state.errors        = false;
+    },
+    edit         : {
+      prepare: (content, id) => ({ payload: { content, id } }),
+      reducer: () => void ({})
+    },
+    editSuccess  : (state, { payload: { item } }) => {
+      state.byId[item.id] = item;
+      state.wip           = false;
+      state.errors        = false;
+    },
+    remove       : () => void ({}),
+    removeSuccess: (state, { payload: { id } }) => {
+      state.ids      = state.ids.filter(k => k !== id);
+      state.byId[id] = null;
+      state.deleted  = true;
+      state.wip      = false;
+      state.errors   = false;
+    }
+  }
+});
 
-const REMOVE         = 'MyNotes/REMOVE';
-const REMOVE_SUCCESS = 'MyNotes/REMOVE_SUCCESS';
+export default myNotesService.reducer;
 
-export const types = {
-  FETCH,
-  FETCH_SUCCESS,
-  FETCH_FAILURE,
+export const { actions } = myNotesService;
 
-  ADD,
-  ADD_SUCCESS,
-
-  EDIT,
-  EDIT_SUCCESS,
-
-  REMOVE,
-  REMOVE_SUCCESS,
-};
-
-/* Actions */
-
-const fetch         = createAction(FETCH);
-const fetchSuccess  = createAction(FETCH_SUCCESS);
-const fetchFailure  = createAction(FETCH_FAILURE);
-const add           = createAction(ADD, (content, properties) => ({ content, ...properties }));
-const addSuccess    = createAction(ADD_SUCCESS);
-const edit          = createAction(EDIT, (content, id) => ({ content, id }));
-const editSuccess   = createAction(EDIT_SUCCESS);
-const remove        = createAction(REMOVE);
-const removeSuccess = createAction(REMOVE_SUCCESS);
-
-export const actions = {
-  fetch,
-  fetchSuccess,
-  fetchFailure,
-
-  add,
-  addSuccess,
-
-  edit,
-  editSuccess,
-
-  remove,
-  removeSuccess,
-};
-
-/* Reducer */
-const initialNamespaces = {
-  ids: [],
-  byId: {},
-  wip: false,
-  errors: null
-};
-
-const onFetch = draft => {
-  draft.wip    = true;
-  draft.errors = false;
-  draft.ids    = [];
-  draft.byId   = {};
-};
-
-const onFetchSuccess = (draft, { items }) => {
-  draft.wip    = false;
-  draft.errors = false;
-
-  draft.ids  = [];
-  draft.byId = {};
-  Object.values(items).forEach(x => {
-    draft.ids.push(x.id);
-    draft.byId[x.id] = x;
-  });
-};
-
-const onFetchFailure = draft => {
-  draft.wip    = false;
-  draft.errors = true;
-};
-
-const onAddSuccess = (draft, { item }) => {
-  draft.byId[item.id] = item;
-  draft.ids           = [item.id, ...draft.ids];
-  draft.wip           = false;
-  draft.errors        = false;
-};
-
-const onEditSuccess = (draft, { item }) => {
-  draft.byId[item.id] = item;
-  draft.wip           = false;
-  draft.errors        = false;
-};
-
-const onRemoveSuccess = (draft, id) => {
-  draft.ids      = draft.ids.filter(k => k !== id);
-  draft.byId[id] = null;
-  draft.deleted  = true;
-  draft.wip      = false;
-  draft.errors   = false;
-};
-
-export const reducer = handleActions({
-  [FETCH]: onFetch,
-  [FETCH_SUCCESS]: onFetchSuccess,
-  [FETCH_FAILURE]: onFetchFailure,
-
-  [ADD_SUCCESS]: onAddSuccess,
-  [EDIT_SUCCESS]: onEditSuccess,
-  [REMOVE_SUCCESS]: onRemoveSuccess,
-}, initialNamespaces);
+export const types = Object.fromEntries(new Map(
+  Object.values(myNotesService.actions).map(a => [a.type, a.type])
+));
 
 /* Selectors */
-const getList = state => state.ids;
+const getList = state => state?.ids || [];
 const getById = (state, id) => state.byId[id];
 
-const getWIP  = state => state.wip;
-const getErr  = state => state.errors;
+const getWIP = state => state.wip;
+const getErr = state => state.errors;
 
 export const selectors = {
   getList,
   getById,
   getWIP,
-  getErr,
+  getErr
 };

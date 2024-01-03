@@ -59,19 +59,19 @@ function* remove(action) {
 
 //Watches
 function* watchFetch() {
-  yield takeEvery(types.FETCH, fetch);
+  yield takeEvery(types['myNotes/fetch'], fetch);
 }
 
 function* watchAdd() {
-  yield takeEvery(types.ADD, add);
+  yield takeEvery(types['myNotes/add'], add);
 }
 
 function* watchEdit() {
-  yield takeEvery(types.EDIT, edit);
+  yield takeEvery(['myNotes/edit'], edit);
 }
 
 function* watchRemove() {
-  yield takeEvery(types.REMOVE, remove);
+  yield takeEvery(types['myNotes/remove'], remove);
 }
 
 export const sagas = [
