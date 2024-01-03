@@ -33,8 +33,6 @@ const FullscreenTextBtn = () => {
   const icon = !isFullscreen ? 'fullscreen' : 'fullscreen_exit';
   return (
     <Button
-      compact
-      size="small"
       onClick={handleFullscreen}
       icon={
         <span className="material-symbols-outlined">

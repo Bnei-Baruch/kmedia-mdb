@@ -19,11 +19,7 @@ const LinkToLessonsBtn = () => {
     <Button
       as={Link}
       to={{ pathname: '/lessons', search: stringify({ [linkByCT[subject.type]]: subject.id }) }}
-      icon={
-        <span className="material-symbols-outlined">
-          subscriptions
-        </span>
-      }
+      icon={<span className="material-symbols-outlined">subscriptions</span>}
     />
   );
 };

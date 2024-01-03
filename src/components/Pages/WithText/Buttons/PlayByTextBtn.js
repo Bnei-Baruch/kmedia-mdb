@@ -24,7 +24,6 @@ const PlayByTextBtn = ({ handlePlay }) => {
       content={t('share-text.play-from-text')}
       trigger={
         <Button
-          className="clear_button"
           onClick={handlePlay}
           icon={<span className="material-symbols-outlined">play_arrow</span>}
         />

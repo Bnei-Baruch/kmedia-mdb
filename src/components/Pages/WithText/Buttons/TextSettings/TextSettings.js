@@ -10,11 +10,8 @@ const TextSettings = () => {
   return (
     <Popup
       trigger={
-        <Button icon={
-          <span className="material-symbols-outlined">
-            text_fields
-          </span>
-        }
+        <Button
+          icon={<span className="material-symbols-outlined">text_fields</span>}
         />
       }
       on="click"

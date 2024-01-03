@@ -12,15 +12,9 @@ const AdditionsVisibilityBtn = () => {
 
   return (
     <Button
-      compact
-      size="small"
       onClick={handle}
       active={textOnly}
-      icon={
-        <span className="material-symbols-outlined">
-          visibility_off
-        </span>
-      }
+      icon={<span className="material-symbols-outlined">visibility_off</span>}
     />
   );
 };

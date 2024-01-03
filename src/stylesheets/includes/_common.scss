@@ -87,6 +87,7 @@
 .margin-bottom-4 {
   margin-bottom: 4px !important;
 }
+
 .margin-bottom-1em {
   margin-bottom: 1em !important;
 }
@@ -153,4 +154,17 @@
 
 .align-left {
   float: left
+}
+
+
+.clear_button.ui.basic.button {
+  padding: 0;
+  box-shadow: none !important;
+
+  &:hover,
+  &:active,
+  &:focus {
+    background: none !important;
+    box-shadow: none !important;
+  }
 }

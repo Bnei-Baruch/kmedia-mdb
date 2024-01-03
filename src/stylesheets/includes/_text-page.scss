@@ -44,7 +44,7 @@ $serif-family: 'Georgia, ' Times New Roman ', Times, serif';
     }
 
     .button {
-      &:hover, &:focus, &.active, &.active:focus {
+      &:hover, &.active {
         color: $dark-text !important;
         background-color: $dark-hover !important;
       }
@@ -65,8 +65,9 @@ $serif-family: 'Georgia, ' Times New Roman ', Times, serif';
     }
 
     .button {
-      &:hover, &:focus, &.active, &.active:focus {
+      &:hover, &.active {
         color: $sepia-text !important;
+        background-color: $dark-hover !important;
       }
     }
   }
@@ -242,6 +243,14 @@ $serif-family: 'Georgia, ' Times New Roman ', Times, serif';
       padding: 3px !important;
       background: none;
       margin: 0 8px;
+
+      &:focus {
+        background: none;
+      }
+
+      &.active {
+        background: $active !important;
+      }
     }
 
     .dropdown .button {
@@ -271,6 +280,14 @@ $serif-family: 'Georgia, ' Times New Roman ', Times, serif';
 
   & > div:last-child {
     color: $text-color;
+
+    .is-dark & {
+      color: $dark-text !important;
+    }
+
+    .is-sepia & {
+      color: $sepia-text !important;
+    }
   }
 
   .divider {

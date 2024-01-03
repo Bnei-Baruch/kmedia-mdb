@@ -10,8 +10,6 @@ const SearchOnPageBtn = () => {
   const handle   = () => dispatch(actions.setIsSearch());
   return (
     <Button
-      compact
-      size="small"
       active={isSearch}
       onClick={handle}
       icon={<span className="material-symbols-outlined">search</span>}

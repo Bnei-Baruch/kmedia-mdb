@@ -15,8 +15,6 @@ const ExpandAllNotesBtn = () => {
 
   return (
     <Button
-      compact
-      size="small"
       onClick={toggleNotes}
       active={expandAll}
       icon={<span className="material-symbols-outlined">comment</span>}

@@ -15,8 +15,6 @@ const ToggleScanBtn = () => {
 
   return (
     <Button
-      compact
-      size="small"
       active={on}
       onClick={handle}
       icon={<span className="material-symbols-outlined">image</span>}

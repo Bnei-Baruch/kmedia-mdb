@@ -10,12 +10,10 @@ const NotesAllPage = () => {
   const id      = useSelector(state => textPage.getSubject(state.textPage).id);
   const ids     = useSelector(state => selectors.getList(state.notes));
   const getById = useSelector(state => selectors.getById(state.notes, id));
-  const _ids    = useMemo(() => {
-    return ids
-      .map(id => getById[id])
-      .filter(({ properties: p }) => !p || (!p.srchstart && !p.srchend))
-      .map(n => n.id);
-  }, [getById, ids]);
+  const _ids    = useMemo(() => ids
+    .map(id => getById[id])
+    .filter(({ properties: p }) => !p || (!p.srchstart && !p.srchend))
+    .map(n => n.id), [getById, ids]);
 
   if (_ids.length === 0) return null;
 

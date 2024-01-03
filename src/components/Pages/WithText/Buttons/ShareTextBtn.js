@@ -51,10 +51,7 @@ const ShareTextBtn = () => {
       hideOnScroll
       trigger={
         <Button
-          size="small"
-          icon={
-            <span className="material-symbols-outlined">share</span>
-          }
+          icon={<span className="material-symbols-outlined">share</span>}
         />
       }
       open={isPopupOpen}
