@@ -191,5 +191,6 @@ const getPrevNode = (idx, textNodes) => {
   if (prev.node.length < 2) {
     return getPrevNode(idx - 1, textNodes);
   }
+
   return prev;
 };

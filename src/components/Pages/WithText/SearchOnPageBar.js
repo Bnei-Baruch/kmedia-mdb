@@ -64,6 +64,7 @@ const SearchOnPageBar = () => {
       console.error('not found next range by index', _index);
       return;
     }
+
     addHighlightByRanges([range], 'selected_search');
     const el   = range.startContainer.parentElement;
     const rect = el.getBoundingClientRect();
