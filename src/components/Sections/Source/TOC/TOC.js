@@ -134,6 +134,7 @@ const TOC = () => {
   const tocIsActive   = useSelector(state => textPage.getTocIsActive(state.textPage));
   const scrollDir     = useSelector(state => textPage.getScrollDir(state.textPage));
   const id            = useSelector(state => textPage.getSubject(state.textPage).id);
+  const hasSel        = !!useSelector(state => textPage.getUrlInfo(state.textPage)).select;
 
   const fullPath                = getFullPath(id, getPathByID);
   const rootId                  = properParentId(fullPath);
@@ -270,6 +271,7 @@ const TOC = () => {
         {
           'source__toc_active': tocIsActive,
           'source__toc_scroll_up': scrollDir === 1,
+          'source__toc_selected': hasSel,
         }
       )
     }>

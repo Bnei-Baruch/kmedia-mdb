@@ -18,7 +18,7 @@ export const useTextContent = () => {
   }, [id, needFetch]);
 
   useEffect(() => {
-    needFetch && dispatch(textActions.setUrlPath(id, language));
+    needFetch && dispatch(textActions.setUrlPath());
   }, [id, language]);
 
   const wipErr = WipErr({ wip: wip || !id, err, t });

@@ -15,9 +15,12 @@ const BreadcrumbTextPage = () => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const subject            = useSelector(state => textPage.getSubject(state.textPage));
   const fullPath           = useSelector(state => sources.getPathByID(state.sources)(subject.id));
-  const current            = fullPath.pop();
+  const hasSel             = !!useSelector(state => textPage.getUrlInfo(state.textPage)).select;
+  const uiLang             = useSelector(state => settings.getUILang(state.settings));
 
-  const uiLang  = useSelector(state => settings.getUILang(state.settings));
+  if (hasSel) return null;
+  const current = fullPath.pop();
+
   const divider = (
     <span className="material-symbols-outlined divider">
       {isLanguageRtl(uiLang) ? 'chevron_left' : 'chevron_right'}

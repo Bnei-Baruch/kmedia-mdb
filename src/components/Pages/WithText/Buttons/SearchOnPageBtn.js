@@ -4,10 +4,14 @@ import { useSelector, useDispatch } from 'react-redux';
 import { selectors as textPage, actions } from '../../../../redux/modules/textPage';
 
 const SearchOnPageBtn = () => {
-  const isSearch = useSelector(state => textPage.getIsSearch(state.textPage));
+  const isSearch  = useSelector(state => textPage.getIsSearch(state.textPage));
+  const { isPdf } = useSelector(state => textPage.getFile(state.textPage));
 
   const dispatch = useDispatch();
-  const handle   = () => dispatch(actions.setIsSearch());
+
+  if (isPdf) return null;
+
+  const handle = () => dispatch(actions.setIsSearch());
   return (
     <Button
       active={isSearch}

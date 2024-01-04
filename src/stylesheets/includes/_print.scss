@@ -1,4 +1,3 @@
-
 @media print {
   .source__toc,
   .layout__header,
@@ -42,5 +41,8 @@
   p {
     margin: 0 !important;
     text-indent: 20px;
+  }
+  .pdfWrapper {
+    width: 700px !important;
   }
 }

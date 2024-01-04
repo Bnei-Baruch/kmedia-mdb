@@ -182,7 +182,9 @@ export const reducer = handleActions({
   [SET_TOC_SORT_BY]: state => state.tocInfo.sortByAZ = !state.tocInfo.sortByAZ,
   [SET_TOC_MATCH]: (state, payload) => state.tocInfo.match = payload,
   [CHANGE_SUBJECT_LANGUAGE]: onChangeLanguage,
-  [SET_URL_PATH]: (state, payload) => state.urlInfo.url = payload ?? buildUrl(state),
+  [SET_URL_PATH]: (state, payload) => {
+    state.urlInfo.url = payload ?? buildUrl(state);
+  },
   [SET_URL_SELECT]: (state, payload) => state.urlInfo.select = payload || null,
   [EXPAND_NOTES]: state => state.expandNotes = !state.expandNotes,
   [SET_FULLSCREEN]: (state, payload) => state.isFullscreen = payload ?? !state.isFullscreen,
@@ -209,7 +211,6 @@ const getSubject      = state => state.subject;
 const getWipErr       = state => state.wipErr;
 const getFile         = state => state.file;
 const getUrlInfo      = state => state.urlInfo;
-const getUrl          = state => state.urlInfo.url;
 const getMP3          = state => state.mp3;
 const getExpandNotes  = state => state.expandNotes;
 const getIsFullscreen = state => state.isFullscreen;
@@ -228,7 +229,6 @@ export const selectors = {
   getWipErr,
   getFile,
   getUrlInfo,
-  getUrl,
   getMP3,
   getExpandNotes,
   getIsFullscreen,

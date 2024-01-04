@@ -12,6 +12,10 @@ $serif-family: 'Georgia, ' Times New Roman ', Times, serif';
 
     .text__content {
       max-width: $max-readble-width;
+
+      &.text_pdf {
+        min-width: calc(100% - 100px);
+      }
     }
   }
 
@@ -376,5 +380,16 @@ $serif-family: 'Georgia, ' Times New Roman ', Times, serif';
 
   & > span {
     margin: 0 8px;
+  }
+}
+
+.is-dark {
+  .theme_pdf {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-color: white;
+    mix-blend-mode: difference;
+    z-index: 1;
   }
 }

@@ -36,13 +36,6 @@ class PDF extends Component {
     };
   }
 
-  componentDidMount() {
-    this.setDivSize();
-    window.addEventListener('resize', this.throttledSetDivSize);
-    const { pdfFile } = this.props;
-    this.setState({ pdfFile });
-  }
-
   static getDerivedStateFromProps(nextProps, state) {
     const { pdfFile } = state;
     if (pdfFile !== nextProps.pdfFile) {
@@ -54,6 +47,13 @@ class PDF extends Component {
     }
 
     return null;
+  }
+
+  componentDidMount() {
+    this.setDivSize();
+    window.addEventListener('resize', this.throttledSetDivSize);
+    const { pdfFile } = this.props;
+    this.setState({ pdfFile });
   }
 
   componentWillUnmount() {
@@ -103,7 +103,8 @@ class PDF extends Component {
             setPage={this.setPage}
           />
         </Container>
-        <div style={{ direction: 'ltr' }}>
+        <div style={{ direction: 'ltr' }} className="position_relative">
+          <div className="theme_pdf"></div>
           <Document
             file={pdfFile}
             onLoadSuccess={this.onDocumentLoadSuccess}
