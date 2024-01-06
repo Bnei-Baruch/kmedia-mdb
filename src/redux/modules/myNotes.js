@@ -71,7 +71,7 @@ export const types = Object.fromEntries(new Map(
 ));
 
 /* Selectors */
-const getList = state => state?.ids || [];
+const getList = state => state.ids || [];
 const getById = (state, id) => state.byId[id];
 
 const getWIP = state => state.wip;

@@ -5,16 +5,16 @@ import { selectors, actions } from '../../../redux/modules/myNotes';
 import { buildOffsets } from './helper';
 
 export const useNotes = (subject_uid, language) => {
-  const ids   = useSelector(state => selectors.getList(state.notes));
+  const ids   = useSelector(state => selectors.getList(state.myNotes));
   const notes = useSelector(state => ids
-    .map(id => selectors.getById(state.notes, id))
+    .map(id => selectors.getById(state.myNotes, id))
     .map(n => ({ type: 'note', ...n }))
   ) || [];
 
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(actions.fetch({ subject_uid, language }));
-  }, [subject_uid, language]);
+  }, [subject_uid, language, dispatch]);
 
   const offsets = buildOffsets(notes);
 
