@@ -52,7 +52,7 @@ const myNotesService = createSlice({
       state.errors        = false;
     },
     remove       : () => void ({}),
-    removeSuccess: (state, { payload: { id } }) => {
+    removeSuccess: (state, { payload: id }) => {
       state.ids      = state.ids.filter(k => k !== id);
       state.byId[id] = null;
       state.deleted  = true;
