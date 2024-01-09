@@ -35,19 +35,14 @@ const Summary = ({ unit, t }) => {
 
   const summaryLanguages = getSummaryLanguages(unit);
   const defaultLanguage = selectSuitableLanguage(contentLanguages, summaryLanguages, unit.original_language);
-  const [selectedLanguage, setSelectedLanguage] = useState(defaultLanguage);
+  const [selectedLanguage, setSelectedLanguage] = useState('');
+  const finalLanguage = selectedLanguage || defaultLanguage;
 
-  const description = unit.description
-    ? (<div dangerouslySetInnerHTML={{ __html: unit.description }}/>)
-    : t('materials.summary.no-summary');
+  const file = getFile(unit, finalLanguage);
+  const selectedFileId = (file && file.id) || null;
 
-  const file = getFile(unit, selectedLanguage);
-  const [selectedFileId, setSelectedFileId] = useState((file && file.id) || null);
-
-  const handleLanguageChanged = selectedLanguage => {
-    const file = getFile(unit, selectedLanguage);
-    setSelectedFileId((file && file.id) || null);
-    setSelectedLanguage(selectedLanguage);
+  const handleLanguageChanged = language => {
+    setSelectedLanguage(language);
   };
 
   useEffect(() => {
@@ -57,13 +52,17 @@ const Summary = ({ unit, t }) => {
   }, [file, dispatch, selectedFileId]);
 
   const { data } = doc2htmlById[file?.id] || false;
+  const description = unit.description
+    ? (<div dangerouslySetInnerHTML={{ __html: unit.description }}/>)
+    : (data ? '' : t('materials.summary.no-summary'));
+
   return (
     <Segment basic>
       {description}
       {summaryLanguages.length <= 1 ? null :
         <MenuLanguageSelector
           languages={summaryLanguages}
-          selected={selectedLanguage}
+          selected={finalLanguage}
           onLanguageChange={handleLanguageChanged}
           multiSelect={false}
         />
