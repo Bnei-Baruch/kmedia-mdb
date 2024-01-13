@@ -4,6 +4,7 @@ import { withTranslation } from 'react-i18next';
 
 import {
   CT_ARTICLE,
+  CT_LESSONS,
   CT_RESEARCH_MATERIAL,
   CT_VIDEO_PROGRAM_CHAPTER,
   CT_VIRTUAL_LESSON,
@@ -78,7 +79,7 @@ const Materials = ({ t }) => {
     }
   ];
 
-  if ([CT_VIDEO_PROGRAM_CHAPTER, CT_VIRTUAL_LESSON, CT_CLIP].includes(unit.content_type)) {
+  if ([...CT_LESSONS, CT_VIDEO_PROGRAM_CHAPTER, CT_VIRTUAL_LESSON, CT_CLIP].includes(unit.content_type)) {
     items.unshift({
       name: 'summary',
       label: t('materials.summary.header'),

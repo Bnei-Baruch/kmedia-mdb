@@ -3,6 +3,7 @@ import { withTranslation } from 'react-i18next';
 import { Menu, Segment } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import uniq from 'lodash/uniq';
+import cloneDeep from 'lodash/cloneDeep';
 import clsx from 'clsx';
 import { useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -28,9 +29,9 @@ import UnitBar from '../UnitBar';
 const getUnitDerivedArticle = (unit, type) => {
   // Suitable for having either derived articles or research materials only
   const ct    = type === 'articles' ? CT_ARTICLE : CT_RESEARCH_MATERIAL;
-  const units = Object.values(unit.derived_units || {})
+  const units = cloneDeep(Object.values(unit.derived_units || {})
     .filter(x => x.content_type === ct
-      && (x.files || []).some(f => f.type === MT_TEXT));
+      && (x.files || []).some(f => f.type === MT_TEXT)));
 
   units.forEach(unit => {
     unit.files.forEach(file => file.title = unit.name);

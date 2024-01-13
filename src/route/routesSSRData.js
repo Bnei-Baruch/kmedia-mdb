@@ -13,6 +13,7 @@ import {
   CT_FRIENDS_GATHERING,
   CT_LECTURE,
   CT_LESSON_PART,
+  CT_LESSONS,
   CT_MEAL,
   CT_VIDEO_PROGRAM_CHAPTER,
   CT_VIRTUAL_LESSON,
@@ -78,7 +79,7 @@ export const cuPage = (store, match) => {
       const unit = mdbSelectors.getDenormContentUnit(state.mdb, cuID);
 
       let activeTab = 'transcription';
-      if ([CT_VIDEO_PROGRAM_CHAPTER, CT_VIRTUAL_LESSON, CT_CLIP].includes(unit.content_type)) {
+      if ([...CT_LESSONS, CT_VIDEO_PROGRAM_CHAPTER, CT_VIRTUAL_LESSON, CT_CLIP].includes(unit.content_type)) {
         activeTab = 'summary';
       }
 
