@@ -6,16 +6,14 @@ import { OFFSET_TEXT_SEPARATOR, DOM_ROOT_ID } from './scrollToSearch/helper';
 //it's not mus be accurate number (average number letters per line)
 const LETTERS_ON_LINE = 20;
 
-export function cuToSubject(cu) {
+export function cuToSubject(cu, fileFilter = () => true) {
   const { id, files, content_type: type } = cu;
   const subject                           = { id, type, languages: [], files: [] };
   files.filter(f => MediaHelper.IsText(f) || MediaHelper.IsAudio(f))
     .forEach(f => {
-      subject.languages.push(f.language);
       const isPdf = MediaHelper.IsPDF(f);
       const ext   = f.name.split('.').slice(-1)[0];
-
-      const file = {
+      const file  = {
         ext,
         isPdf,
         url: physicalFile(f, !isPdf),
@@ -25,15 +23,20 @@ export function cuToSubject(cu) {
         type: f.type,
         insert_type: f.insert_type
       };
-      subject.files.push(file);
+
+      if (fileFilter(file)) {
+        subject.languages.push(f.language);
+        subject.files.push(file);
+      }
     });
   return subject;
 }
 
-export const selectTextFile = (files, id, language) => {
+export const selectTextFile = (files, id, language, fileFilter = () => true) => {
   const _isTaas            = isTaas(id);
   const { pdf, docx, doc } = files
     .filter(f => MediaHelper.IsText(f))
+    .filter(fileFilter)
     .filter(f => f.language === language)
     .reduce((acc, f) => {
       if (f.isPdf && _isTaas)

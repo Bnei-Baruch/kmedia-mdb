@@ -12,20 +12,23 @@ import NoteItemModal from './Notes/NoteItemModal';
 import TagsByUnit from '../../shared/TagsByUnit';
 import AudioPlayer from '../../shared/AudioPlayer';
 import SearchOnPageBar from './SearchOnPageBar';
+import WipErr from '../../shared/WipErr/WipErr';
+import { useTranslation } from 'react-i18next';
 
 let lastScrollTop = 0;
 
 const TextLayoutWeb = props => {
   const {
-    toolbar    = null,
-    toc        = null,
-    prevNext   = null,
-    breadcrumb = null,
-    propId,
-    playerPage = false,
-  } = props;
+          toolbar    = null,
+          toc        = null,
+          prevNext   = null,
+          breadcrumb = null,
+          propId,
+          playerPage = false,
+        } = props;
 
-  const ref = useRef();
+  const ref   = useRef();
+  const { t } = useTranslation();
 
   const scrollDir = useSelector(state => textPage.getScrollDir(state.textPage));
   const subject   = useSelector(state => textPage.getSubject(state.textPage));
@@ -33,7 +36,7 @@ const TextLayoutWeb = props => {
   const { theme } = useSelector(state => textPage.getSettings(state.textPage));
 
   useInitTextUrl();
-  useTextSubject(propId);
+  const wip = useTextSubject(propId);
   useInitTextSettings();
 
   const dispatch = useDispatch();
@@ -55,6 +58,9 @@ const TextLayoutWeb = props => {
 
     return () => window.removeEventListener('scroll', handleScroll);
   }, [ref.current]);
+
+  const wipErr = WipErr({ wip, err: null, t });
+  if (wipErr) return wipErr;
 
   return (
     <div className={`is-web text_layout  is-${theme}`} ref={ref}>

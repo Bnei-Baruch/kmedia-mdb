@@ -9,7 +9,7 @@ import ContentHtml from './ContentHtml';
 import { useLabels } from '../hooks/useLabels';
 import LabelMarks from '../Labels/LabelMarks';
 import PDF, { startsFrom } from '../../../shared/PDF/PDF';
-import { physicalFile } from '../../../../helpers/utils';
+import { physicalFile, isEmpty } from '../../../../helpers/utils';
 import clsx from 'clsx';
 
 const TextContentWeb = () => {
@@ -48,7 +48,9 @@ const TextContentWeb = () => {
   };
 
   let pdf;
-  if (file.isPdf) {
+  if (isEmpty(file)) {
+    return null;
+  } else if (file.isPdf) {
     pdf = file;
   } else if (scanInfo.on) {
     pdf = scanInfo.file;

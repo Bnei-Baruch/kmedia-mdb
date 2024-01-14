@@ -43,6 +43,7 @@ const SET_IS_SEARCH           = 'text/SET_IS_SEARCH';
 const FETCH_SUBJECT         = 'text/FETCH_SUBJECT';
 const FETCH_SUBJECT_SUCCESS = 'text/FETCH_SUBJECT_SUCCESS';
 const FETCH_SUBJECT_FAILURE = 'text/FETCH_SUBJECT_FAILURE';
+const SET_FILE_FILTER       = 'text/SET_FILE_FILTER';
 
 export const types = {
   FETCH_SUBJECT
@@ -70,6 +71,7 @@ const setIsSearch    = createAction(SET_IS_SEARCH);
 const fetchSubject        = createAction(FETCH_SUBJECT);
 const fetchSubjectSuccess = createAction(FETCH_SUBJECT_SUCCESS);
 const fetchSubjectFailure = createAction(FETCH_SUBJECT_FAILURE);
+const setFileFilter       = createAction(SET_FILE_FILTER);
 
 export const actions = {
   setZoomSize,
@@ -93,6 +95,7 @@ export const actions = {
   fetchSubject,
   fetchSubjectSuccess,
   fetchSubjectFailure,
+  setFileFilter,
 };
 
 /* Reducer */
@@ -198,6 +201,7 @@ export const reducer = handleActions({
   [FETCH_SUBJECT_SUCCESS]: onFetchSubjectSuccess,
   [FETCH_SUBJECT_FAILURE]: onFetchSubjectFailure,
 
+  [SET_FILE_FILTER]: (state, payload) => void (state.fileFilter = payload),
   [assetsTypes.MERGE_KITEI_MAKOR_SUCCESS]: onReceiveLikutMP3
 
 }, initialState);
@@ -209,7 +213,7 @@ const getTocIsActive  = state => state.tocIsActive;
 const getTocInfo      = state => state.tocInfo;
 const getSubject      = state => state.subject;
 const getWipErr       = state => state.wipErr;
-const getFile         = state => state.file;
+const getFile         = state => state.file ?? {};
 const getUrlInfo      = state => state.urlInfo;
 const getMP3          = state => state.mp3;
 const getExpandNotes  = state => state.expandNotes;
@@ -217,8 +221,9 @@ const getIsFullscreen = state => state.isFullscreen;
 const getScrollDir    = state => state.scrollDir;
 const getSideOffset   = state => state.sideOffset;
 const getTextOnly     = state => state.textOnly;
-const getScanInfo = state => state.scanInfo;
-const getIsSearch = state => state.isSearch;
+const getScanInfo     = state => state.scanInfo;
+const getIsSearch     = state => state.isSearch;
+const getFileFilter   = state => state.fileFilter;
 
 export const selectors = {
   getSettings,
@@ -237,4 +242,5 @@ export const selectors = {
   getTextOnly,
   getScanInfo,
   getIsSearch,
+  getFileFilter,
 };

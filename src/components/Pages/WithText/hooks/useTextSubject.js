@@ -7,7 +7,7 @@ import { firstLeafId } from '../helper';
 
 export const useTextSubject = propId => {
   let { id } = useParams();
-  id         = propId || id;
+  id         = propId ?? id;
 
   const subjectId     = useSelector(state => textPage.getSubject(state.textPage).id);
   const { wip, err }  = useSelector(state => textPage.getWipErr(state.textPage));
@@ -21,6 +21,6 @@ export const useTextSubject = propId => {
     needFetch && dispatch(actions.fetchSubject(id));
   }, [id, needFetch]);
 
-  return null;
+  return subjectId !== id || wip;
 };
 
