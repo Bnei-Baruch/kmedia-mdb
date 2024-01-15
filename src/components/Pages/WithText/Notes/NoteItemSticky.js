@@ -10,8 +10,8 @@ import NoteContent from './NoteContent';
 import NoteCloseBtn from './Buttons/NoteCloseBtn';
 
 const NoteItemSticky = () => {
-  const note   = useSelector(state => selectors.getSelected(state.notes));
-  const status = useSelector(state => selectors.getStatus(state.notes));
+  const note   = useSelector(state => selectors.getSelected(state.myNotes));
+  const status = useSelector(state => selectors.getStatus(state.myNotes));
 
   if (!note || (status !== NOTE_STATUS.none && status !== NOTE_STATUS.edit)) return null;
 

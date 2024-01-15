@@ -8,7 +8,7 @@ import { highlightByPrefixAndId, clearHighlightByStyle } from '../helper';
 const idPrefixes = textMarksPrefixByType.note;
 
 export const useNodeHighlight = () => {
-  const node = useSelector(state => myNotes.getSelected(state.notes)) || false;
+  const node = useSelector(state => myNotes.getSelected(state.myNotes)) || false;
 
   useEffect(() => {
     if (!node) {

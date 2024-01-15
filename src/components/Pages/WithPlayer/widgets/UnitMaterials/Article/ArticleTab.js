@@ -16,7 +16,10 @@ const ArticleTab = () => {
   const pageCu = useSelector(state => mdb.getDenormContentUnit(state.mdb, id));
   const cu     = Object.values(pageCu.derived_units).find(x => x.content_type === CT_ARTICLE);
 
-  if (!cu) return null;
+  if (!cu) {
+    console.log('not ssr text bug: ArticleTab no cu')
+    return null;
+  }
 
   const toolbar            = isMobileDevice ? <ArticleTabToolbarMobile /> : <ArticleTabToolbarWeb />;
 

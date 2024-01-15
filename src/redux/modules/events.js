@@ -1,83 +1,52 @@
-import { createAction } from 'redux-actions';
+import { createSlice } from '@reduxjs/toolkit';
 import groupBy from 'lodash/groupBy';
 import mapValues from 'lodash/mapValues';
 
 import { isEmpty } from '../../helpers/utils';
-import { handleActions, types as settings } from './settings';
-import { types as ssr } from './ssr';
+import { actions as settingsActions } from './settings';
+import { actions as ssrActions } from './ssr';
 import { selectors as mdb } from './mdb';
 
-/* Types */
-
-const SET_TAB = 'Events/SET_TAB';
-
-const FETCH_ALL_EVENTS         = 'Events/FETCH_ALL_EVENTS';
-const FETCH_ALL_EVENTS_SUCCESS = 'Events/FETCH_ALL_EVENTS_SUCCESS';
-const FETCH_ALL_EVENTS_FAILURE = 'Events/FETCH_ALL_EVENTS_FAILURE';
-
-export const types = {
-  SET_TAB,
-
-  FETCH_ALL_EVENTS,
-  FETCH_ALL_EVENTS_SUCCESS,
-  FETCH_ALL_EVENTS_FAILURE,
-};
-
-/* Actions */
-
-const setTab = createAction(SET_TAB);
-
-const fetchAllEvents        = createAction(FETCH_ALL_EVENTS);
-const fetchAllEventsSuccess = createAction(FETCH_ALL_EVENTS_SUCCESS);
-const fetchAllEventsFailure = createAction(FETCH_ALL_EVENTS_FAILURE);
-
-export const actions = {
-  setTab,
-
-  fetchAllEvents,
-  fetchAllEventsSuccess,
-  fetchAllEventsFailure,
-};
-
-/* Reducer */
-
-const initialState = {
-  wip: false,
-  err: null,
-  eventsByType: {},
-};
-
-const onSuccess = (draft, payload) => {
-  draft.wip          = false;
-  draft.err          = null;
-  draft.eventsByType = mapValues(groupBy(payload.collections, x => x.content_type), x => x.map(y => y.id));
-};
-
-const onSetLanguage = draft => {
-  draft.eventsByType = {};
-};
-
-const onFailure = (draft, payload) => {
-  draft.wip = false;
-  draft.err = payload;
-};
-
-const onSSRPrepare = draft => {
-  if (draft.err) {
-    draft.err = draft.err.toString();
-  }
-};
-
-export const reducer = handleActions({
-  [ssr.PREPARE]: onSSRPrepare,
-  [settings.SET_CONTENT_LANGUAGES]: onSetLanguage,
-
-  [FETCH_ALL_EVENTS]: draft => {
-    draft.wip = true;
+const eventsSlice = createSlice({
+  name        : 'events',
+  initialState: {
+    wip         : false,
+    err         : null,
+    eventsByType: {}
   },
-  [FETCH_ALL_EVENTS_SUCCESS]: onSuccess,
-  [FETCH_ALL_EVENTS_FAILURE]: onFailure,
-}, initialState);
+
+  reducers     : {
+    setTab: () => ({}),
+
+    fetchAllEvents       : state => void (state.wip = true),
+    fetchAllEventsSuccess: (state, { payload }) => {
+      state.wip          = false;
+      state.err          = null;
+      state.eventsByType = mapValues(groupBy(payload.collections, x => x.content_type), x => x.map(y => y.id));
+    },
+    fetchAllEventsFailure: (state, { payload }) => {
+      state.wip = false;
+      state.err = payload;
+    }
+  },
+  extraReducers: builder => {
+    builder
+      .addCase(ssrActions.prepare, state => {
+        if (state.err) {
+          state.err = state.err.toString();
+        }
+      })
+      .addCase(settingsActions.setContentLanguages, state => void (state.eventsByType = {}));
+  }
+});
+
+export default eventsSlice.reducer;
+
+export const { actions } = eventsSlice;
+
+export const types = Object.fromEntries(new Map(
+  Object.values(eventsSlice.actions).map(a => [a.type, a.type])
+));
 
 /* Selectors */
 
@@ -95,9 +64,9 @@ const makeHolidaysPredicate = values => x => isEmpty(values)
   || values.some(v => x.holiday_id === v[0]);
 
 const predicateMap = {
-  'years-filter': makeYearsPredicate,
+  'years-filter'    : makeYearsPredicate,
   'locations-filter': makeLocationsPredicate,
-  'holidays-filter': makeHolidaysPredicate,
+  'holidays-filter' : makeHolidaysPredicate
 };
 
 const getFilteredData = (state, type, filtersState, mdbState) => {
@@ -117,5 +86,5 @@ export const selectors = {
   getWip,
   getError,
   getEventsByType,
-  getFilteredData,
+  getFilteredData
 };

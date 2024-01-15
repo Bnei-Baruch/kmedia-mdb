@@ -7,12 +7,12 @@ import { useTranslation } from 'react-i18next';
 
 export const useTextContent = () => {
   const { id, language, isPdf }   = useSelector(state => textPage.getFile(state.textPage)) || false;
-  const { wip, err, data } = useSelector(state => assets.getDoc2htmlById(state.assets)[id] || false);
+  const { wip, err, data } = useSelector(state => assets.getDoc2htmlById(state.assets))[id] || false;
 
   const dispatch = useDispatch();
   const { t }    = useTranslation();
-
   const needFetch = !isPdf && !wip && !err && !data;
+  console.log('not ssr text bug: useTextContent render', needFetch)
   useEffect(() => {
     needFetch && dispatch(actions.doc2html(id));
   }, [id, needFetch]);
@@ -21,6 +21,8 @@ export const useTextContent = () => {
     needFetch && dispatch(textActions.setUrlPath());
   }, [id, language]);
 
+
+  console.log('not ssr text bug: useTextContent render wip || !id', wip || !id)
   const wipErr = WipErr({ wip: wip || !id, err, t });
   return wipErr;
 };

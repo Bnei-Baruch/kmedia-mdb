@@ -12,8 +12,8 @@ import NoteInModalBtn from './Buttons/NoteInModalBtn';
 import NoteCloseBtn from './Buttons/NoteCloseBtn';
 
 const NoteItemSticky = () => {
-  const note   = useSelector(state => selectors.getSelected(state.notes));
-  const status = useSelector(state => selectors.getStatus(state.notes));
+  const note   = useSelector(state => selectors.getSelected(state.myNotes));
+  const status = useSelector(state => selectors.getStatus(state.myNotes));
 
   if (!note || (status !== NOTE_STATUS.editModal && status !== NOTE_STATUS.modal)) return null;
 

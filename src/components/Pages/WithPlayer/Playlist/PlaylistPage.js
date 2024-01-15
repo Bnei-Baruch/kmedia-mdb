@@ -10,15 +10,20 @@ import Recommended from '../widgets/Recommended/Main/Recommended';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import { getEmbedFromQuery } from '../../../../helpers/player';
 import { useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { selectors as playlist } from '../../../../redux/modules/playlist';
 
 const PlaylistPage = ({ playerContainer }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const location           = useLocation();
   const embed              = getEmbedFromQuery(location);
+  const { isReady } = useSelector(state => playlist.getInfo(state.playlist));
 
   if (embed) return playerContainer;
 
   const computerWidth = !isMobileDevice ? 10 : 16;
+
+  console.log('not ssr text bug: PlaylistPage render')
 
   return (
     <Grid padded={!isMobileDevice} className="avbox">
@@ -30,7 +35,7 @@ const PlaylistPage = ({ playerContainer }) => {
         <div id="avbox_playlist">
           <PlaylistHeader />
         </div>
-        {playerContainer}
+        {isReady && playerContainer}
         <Container id="unit_container">
           <Info />
           <Materials />
@@ -39,9 +44,9 @@ const PlaylistPage = ({ playerContainer }) => {
       {
         !isMobileDevice && (
           <Grid.Column width={6}>
-            <PlaylistItems />
+            {isReady && <PlaylistItems />}
             <Divider hidden />
-            <Recommended filterOutUnits={[]} />
+            {isReady && <Recommended filterOutUnits={[]} />}
           </Grid.Column>
         )
       }

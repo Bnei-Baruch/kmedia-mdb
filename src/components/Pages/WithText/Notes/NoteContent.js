@@ -13,8 +13,8 @@ import NoteCancelBtn from './Buttons/NoteCancelBtn';
 import NoteSaveBtn from './Buttons/NoteSaveBtn';
 
 const NoteContent = () => {
-  const note   = useSelector(state => selectors.getSelected(state.notes));
-  const status = useSelector(state => selectors.getStatus(state.notes));
+  const note   = useSelector(state => selectors.getSelected(state.myNotes));
+  const status = useSelector(state => selectors.getStatus(state.myNotes));
 
   const dispatch = useDispatch();
 

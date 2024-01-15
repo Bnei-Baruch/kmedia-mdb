@@ -11,7 +11,7 @@ const NotesByPos = ({ pos, ids }) => {
   const [open, setOpen]   = useState(true);
   const [isOut, setIsOut] = useState(true);
 
-  const getById      = useSelector(state => selectors.getById(state.notes));
+  const getById      = useSelector(state => selectors.getById(state.myNotes));
   const expandAll    = useSelector(state => textPage.getExpandNotes(state.textPage));
   const { zoomSize } = useSelector(state => textPage.getSettings(state.textPage));
   const offset       = useSelector(state => textPage.getSideOffset(state.textPage));

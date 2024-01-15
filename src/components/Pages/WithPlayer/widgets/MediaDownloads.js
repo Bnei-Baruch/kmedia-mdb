@@ -141,7 +141,7 @@ class MediaDownloads extends Component {
     // fill in images fallback into every language
     if (images.length > 0) {
       const fallbackImage = MediaDownloads.fallbackImage(images, contentLanguages, originalLanguage);
-      groups.forEach(byType => {
+      fallbackImage && groups.forEach(byType => {
         if (!byType.has(MT_IMAGE)) {
           byType.set(MT_IMAGE, fallbackImage);
         }
@@ -155,7 +155,7 @@ class MediaDownloads extends Component {
     const imageLanguages = images.map(image => image.language);
     const imageSelectedLanguage = selectSuitableLanguage(contentLanguages, imageLanguages, originalLanguage);
 
-    return [images.find(image => image.language === imageSelectedLanguage)];
+    return [images.find(image => image.language === imageSelectedLanguage) || images.find(image => image.language === originalLanguage)];
   };
 
   static getDerivedFilesByContentType = (units, contentLanguages, originalLanguage) => {

@@ -2,28 +2,37 @@
 
 User-agent: *
 
+Allow: /$
+Allow: /he/$
+Allow: /en/$
+Allow: /ru/$
+Allow: /es/$
+Allow: /ar/$
+Allow: /de/$
+Allow: /ua/$
+Allow: /it/$
+Allow: /tr/$
+Allow: /cs/$
+Allow: /bg/$
+Allow: /*/publications/*
+Allow: /*/lessons/*
+Allow: /*/programs/*
+Allow: /*/events/*
+Allow: /*/music/*
+Allow: /*/sources/*
+Allow: /*/topics/*
+Allow: /*/persons/*
+Allow: /*/simple-mode/*
+Allow: /*/likutim/*
+Allow: /*/sketches/*
+
+# Don't index backend
+Disallow: /backend/*
+
 # Prevent duplicate content of blogs
-Disallow: /publications/blog/*
-Disallow: /cs/publications/blog/*
-Disallow: /de/publications/blog/*
-Disallow: /en/publications/blog/*
-Disallow: /es/publications/blog/*
-Disallow: /he/publications/blog/*
-Disallow: /it/publications/blog/*
-Disallow: /ru/publications/blog/*
-Disallow: /tr/publications/blog/*
-Disallow: /ua/publications/blog/*
+Disallow: /*/publications/blog/*
 
 # No need to scan personalized content
 Disallow: /feed_api/*
-Disallow: /backend/my/*
-Disallow: /personal*
-Disallow: /cs/personal*
-Disallow: /de/personal*
-Disallow: /en/personal*
-Disallow: /es/personal*
-Disallow: /he/personal*
-Disallow: /it/personal*
-Disallow: /ru/personal*
-Disallow: /tr/personal*
-Disallow: /ua/personal*
+Disallow: /*personal*
+

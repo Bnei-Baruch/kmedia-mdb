@@ -19,7 +19,7 @@ const BuildPlaylistByCollectionByParams = () => {
     }
   }, [wip, fetched, id]);
 
-  return <BuildPlaylistByCollection cuId={cuId} id={id} />;
+  return <BuildPlaylistByCollection cuId={cuId} id={id}/>;
 };
 
 export default BuildPlaylistByCollectionByParams;

@@ -1,58 +1,33 @@
-import { createAction } from 'redux-actions';
+import { createSlice } from '@reduxjs/toolkit';
 
-import { handleActions } from './settings';
+const trimSlice = createSlice({
+  name: 'trim',
+  initialState: {
+    list: [],
+    wips: [],
+    errors: []
+  },
 
-const TRIM         = 'Trim/TRIM';
-const TRIM_SUCCESS = 'Trim/TRIM_SUCCESS';
-const TRIM_FAILURE = 'Trim/TRIM_FAILURE';
+  reducers: {
+    trim: state => void (state.wips.push(state.wips.length)),
+    trimSuccess: (state, { payload: { download, link } }) => {
+      state.list.push({ download, link, name: link.split('/').slice(-1)[0] });
+      state.wips.pop();
+    },
+    trimFailure:(state, { payload }) => {
+      state.errors.push(payload);
+      state.wips.pop();
+    }
+  }
+})
 
-export const types = {
-  TRIM,
-  TRIM_SUCCESS,
-  TRIM_FAILURE,
-};
+export default trimSlice.reducer;
 
-/* Actions */
-const trim        = createAction(TRIM);
-const trimSuccess = createAction(TRIM_SUCCESS);
-const trimFailure = createAction(TRIM_FAILURE);
+export const { actions } = trimSlice;
 
-export const actions = {
-  trim,
-  trimSuccess,
-  trimFailure,
-};
-
-/* Reducer */
-
-const initialState = {
-  list: [],
-  wips: [],
-  errors: []
-};
-
-const onTrim = draft => {
-  draft.wips.push(draft.wips.length);
-  return draft;
-};
-
-const onTrimSuccess = (draft, { download, link }) => {
-  draft.list.push({ download, link, name: link.split('/').slice(-1)[0] });
-  draft.wips.pop();
-  return draft;
-};
-
-const onTrimFailure = (draft, payload) => {
-  draft.errors.push(payload);
-  draft.wips.pop();
-  return draft;
-};
-
-export const reducer = handleActions({
-  [TRIM]: onTrim,
-  [TRIM_SUCCESS]: onTrimSuccess,
-  [TRIM_FAILURE]: onTrimFailure,
-}, initialState);
+export const types = Object.fromEntries(new Map(
+  Object.values(trimSlice.actions).map(a => [a.type, a.type])
+));
 
 /* Selectors */
 const getList   = state => state.list;

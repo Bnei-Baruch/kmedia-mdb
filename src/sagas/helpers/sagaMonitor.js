@@ -28,7 +28,6 @@ export default function createSagaMonitor(
     }
 
     return Date.now();
-
   };
 
   const effectsById = {};

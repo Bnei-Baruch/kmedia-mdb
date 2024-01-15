@@ -24,8 +24,11 @@ const ContentHtml = ({ labels = [], notes = [] }) => {
       highlightAll === 'true',
       [...labels, ...notes]);
   }, [srchstart, srchend, getDoc2htmlById, id, labels, notes]);
-
+  
   const wipErr = useTextContent();
+
+  console.log('not ssr text bug: ContentHtml render', wipErr);
+
   if (wipErr) return wipErr;
 
   const dir = getLanguageDirection(language);

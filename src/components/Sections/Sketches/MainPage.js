@@ -26,9 +26,9 @@ import { isZipFile } from '../../Pages/WithPlayer/widgets/UnitMaterials/helper';
 export const SKETCHES_SHOWED_CTS = [...UNIT_LESSONS_TYPE, CT_VIDEO_PROGRAM_CHAPTER];
 const FILTER_PARAMS              = {
   content_type: SKETCHES_SHOWED_CTS,
-  media_type: MT_IMAGE,
-  withViews: false,
-  with_files: true,
+  media_type  : MT_IMAGE,
+  withViews   : false,
+  with_files  : true
 };
 
 const MainPage = ({ t }) => {
@@ -72,7 +72,7 @@ const MainPage = ({ t }) => {
   }, [dispatch, zipIdsForFetch, wipAll]);
 
   return (<>
-    <SectionHeader section="sketches" />
+    <SectionHeader section="sketches"/>
     <SectionFiltersWithMobile
       namespace={PAGE_NS_SKETCHES}
       filters={
@@ -82,15 +82,15 @@ const MainPage = ({ t }) => {
         />
       }
     >
-      <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} />
-      <FilterLabels namespace={PAGE_NS_SKETCHES} />
+      <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize}/>
+      <FilterLabels namespace={PAGE_NS_SKETCHES}/>
       <CardGroup itemsPerRow={4} doubling stackable>
         {
-          cus?.map(({ id }) => <UnitItem id={id} key={id} />)
+          cus?.map(({ id }) => <UnitItem id={id} key={id}/>)
         }
       </CardGroup>
 
-      <Divider fitted />
+      <Divider fitted/>
       <Container className="padded pagination-wrapper" textAlign="center">
         {total > 0 && <Pagination
           pageNo={pageNo}

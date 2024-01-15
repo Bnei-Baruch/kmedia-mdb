@@ -5,7 +5,7 @@ import { actions, NOTE_STATUS, selectors } from '../../../../../redux/modules/my
 import { useTranslation } from 'react-i18next';
 
 const NoteSaveBtn = () => {
-  const note     = useSelector(state => selectors.getSelected(state.notes));
+  const note     = useSelector(state => selectors.getSelected(state.myNotes));
   const dispatch = useDispatch();
   const { t }    = useTranslation();
 

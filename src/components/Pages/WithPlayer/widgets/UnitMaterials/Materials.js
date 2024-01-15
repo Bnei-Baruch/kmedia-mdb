@@ -4,6 +4,7 @@ import { withTranslation } from 'react-i18next';
 
 import {
   CT_ARTICLE,
+  CT_LESSONS,
   CT_RESEARCH_MATERIAL,
   CT_VIDEO_PROGRAM_CHAPTER,
   CT_VIRTUAL_LESSON,
@@ -22,6 +23,7 @@ import { ClientChroniclesContext, DeviceInfoContext } from '../../../../../helpe
 import DerivedUnits from './DerivedUnits';
 import Recommended from '../Recommended/Main/Recommended';
 import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import { selectors } from '../../../../../redux/modules/playlist';
 import { selectors as mdb } from '../../../../../redux/modules/mdb';
 import PlaylistItems from '../../Playlist/PlaylistItems';
@@ -46,10 +48,13 @@ const Materials = ({ t }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const chronicles         = useContext(ClientChroniclesContext);
 
+  const { id: paramsId }              = useParams();
   const { cuId, isSingleMedia, isMy } = useSelector(state => selectors.getInfo(state.playlist));
-  const unit                          = useSelector(state => mdb.getDenormContentUnit(state.mdb, cuId));
+  const unit                          = useSelector(state => mdb.getDenormContentUnit(state.mdb, cuId || paramsId));
 
+  console.log('not ssr text bug: Materials render')
   if (!unit) {
+    console.log('not ssr text bug: Materials no unit')
     return null;
   }
 
@@ -64,12 +69,12 @@ const Materials = ({ t }) => {
     (![CT_CLIP, CT_VIDEO_PROGRAM_CHAPTER].includes(unit.content_type)) && {
       name: 'sources',
       label: t('materials.sources.header'),
-      component: <SourceTab unit={unit} />
+      component: <SourceTab />
     },
     {
       name: 'sketches',
       label: t('materials.sketches.header'),
-      component: <Sketches unit={unit} />,
+      component: <Sketches />,
     },
     {
       name: 'downloads',
@@ -78,11 +83,11 @@ const Materials = ({ t }) => {
     }
   ];
 
-  if ([CT_VIDEO_PROGRAM_CHAPTER, CT_VIRTUAL_LESSON, CT_CLIP].includes(unit.content_type)) {
+  if ([...CT_LESSONS, CT_VIDEO_PROGRAM_CHAPTER, CT_VIRTUAL_LESSON, CT_CLIP].includes(unit.content_type)) {
     items.unshift({
       name: 'summary',
       label: t('materials.summary.header'),
-      component: <Summary unit={unit} />,
+      component: <Summary />,
     });
   }
 

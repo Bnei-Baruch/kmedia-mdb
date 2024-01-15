@@ -1,16 +1,19 @@
 import { call, put, takeEvery, takeLatest } from 'redux-saga/effects';
 
 import Api from '../helpers/Api';
-import { actions, types } from '../redux/modules/assets';
+import { types, actions } from '../redux/modules/assets';
+import { cuFilesToData, getSourceIndexId } from './helpers/utils';
 
 function* unzip(action) {
   const id = action.payload;
 
   try {
     const { data } = yield call(Api.getAsset, `api/unzip/${id}`);
-    yield put(actions.unzipSuccess(id, data));
+    const payload  = { id, data };
+    yield put(actions.unzipSuccess(action.type, payload));
   } catch (err) {
-    yield put(actions.unzipFailure(id, err));
+    const payload = { id, err };
+    yield put(actions.unzipFailure(action.type, payload));
   }
 }
 
@@ -19,22 +22,38 @@ function* unzipList(action) {
 
   try {
     const { data } = yield call(Api.getUnzipUIDs, { path: 'api/unzip_uids', ids });
-    yield put(actions.unzipListSuccess(data));
+    const payload  = { ids, data };
+    yield put(actions.unzipListSuccess(action.type, payload));
   } catch (err) {
-    yield put(actions.unzipListFailure(ids, err));
+    const payload = { ids, err };
+    yield put(actions.unzipListFailure(action.type, payload));
   }
 }
 
-function* doc2Html(action) {
+export function* doc2Html(action) {
   const id = action.payload;
 
   try {
     const { data } = yield call(Api.getAsset, `api/doc2html/${id}`);
-    yield put(actions.doc2htmlSuccess(id, data));
+    const payload  = { id, data };
+    yield put(actions.doc2htmlSuccess(action.type, payload));
   } catch (err) {
-    yield put(actions.doc2htmlFailure(id, err));
+    const payload = { id, err };
+    yield put(actions.doc2htmlFailure(action.type, payload));
   }
 }
+/*
+export function* sourceIndex(action) {
+  try {
+    const id      = getSourceIndexId(action);
+    const cu      = yield call(Api.unit, { id });
+    const payload = { id: action.payload, data: cuFilesToData(cu.data) };
+    yield put(actions.sourceIndexSuccess(action.type, payload));
+  } catch (err) {
+    const payload = { id: action.payload, err };
+    yield put(actions.sourceIndexFailure(action.type, payload));
+  }
+}*/
 
 export function* fetchAsset(action) {
   try {
@@ -49,7 +68,7 @@ export function* fetchPerson(action) {
   try {
     const { data } = yield call(Api.getCMS, 'person', {
       contentLanguages: action.payload.contentLanguages,
-      id: action.payload.sourceId,
+      id              : action.payload.sourceId
     });
     yield put(actions.fetchPersonSuccess(data));
   } catch (err) {
@@ -73,38 +92,42 @@ function* mergeKiteiMakor(action) {
 
   try {
     const { data } = yield call(Api.getAsset, `api/km_audio/build/${id}?language=${language}`);
-    yield put(actions.mergeKiteiMAkorSuccess({ id, language, status: data }));
+    yield put(actions.mergeKiteiMakorSuccess({ id, language, status: data }));
   } catch (e) {
-    yield put(actions.mergeKiteiMAkorFailure({ id, language, status: e }));
+    yield put(actions.mergeKiteiMakorFailure({ id, language, status: e }));
   }
 }
 
 function* watchUnzip() {
-  yield takeLatest(types.UNZIP, unzip);
+  yield takeLatest(types['assets/unzip'], unzip);
 }
 
 function* watchUnzipList() {
-  yield takeLatest(types.UNZIP_LIST, unzipList);
+  yield takeLatest(types['assets/unzipList'], unzipList);
 }
 
 function* watchDoc2Html() {
-  yield takeLatest([types.DOC2HTML], doc2Html);
+  yield takeLatest([types['assets/doc2html']], doc2Html);
 }
 
+/*function* watchSourceIndex() {
+  yield takeEvery([types['assets/sourceIndex']], sourceIndex);
+}*/
+
 function* watchFetchAsset() {
-  yield takeLatest([types.FETCH_ASSET], fetchAsset);
+  yield takeLatest([types['assets/fetchAsset']], fetchAsset);
 }
 
 function* watchFetchPerson() {
-  yield takeLatest([types.FETCH_PERSON], fetchPerson);
+  yield takeLatest([types['assets/fetchPerson']], fetchPerson);
 }
 
 function* watchFetchTimeCode() {
-  yield takeLatest([types.FETCH_TIME_CODE], fetchTimeCode);
+  yield takeLatest([types['assets/fetchTimeCode']], fetchTimeCode);
 }
 
 function* watchMergeKiteiMakor() {
-  yield takeLatest(types.MERGE_KITEI_MAKOR, mergeKiteiMakor);
+  yield takeLatest(types['assets/mergeKiteiMakor'], mergeKiteiMakor);
 }
 
 export const sagas = [
@@ -114,5 +137,5 @@ export const sagas = [
   watchFetchAsset,
   watchFetchPerson,
   watchFetchTimeCode,
-  watchMergeKiteiMakor,
+  watchMergeKiteiMakor
 ];

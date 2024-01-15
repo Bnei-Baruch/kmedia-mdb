@@ -1,144 +1,118 @@
-import { createAction } from 'redux-actions';
-
-import { handleActions, types as settings } from './settings';
-import { types as ssr } from './ssr';
+import { createSlice } from '@reduxjs/toolkit';
+import { actions as settingsActions } from './settings';
+import { actions as ssrActions } from './ssr';
 import isEqual from 'react-fast-compare';
-
-/* Types */
-const FETCH_DATA           = 'Home/FETCH_DATA';
-const FETCH_DATA_SUCCESS   = 'Home/FETCH_DATA_SUCCESS';
-const FETCH_DATA_FAILURE   = 'Home/FETCH_DATA_FAILURE';
-const FETCH_BANNER         = 'Home/FETCH_BANNER';
-const FETCH_BANNER_SUCCESS = 'Home/FETCH_BANNER_SUCCESS';
-const FETCH_BANNER_FAILURE = 'Home/FETCH_BANNER_FAILURE';
-
-export const types = {
-  FETCH_DATA,
-  FETCH_DATA_SUCCESS,
-  FETCH_DATA_FAILURE,
-  FETCH_BANNER,
-  FETCH_BANNER_SUCCESS,
-  FETCH_BANNER_FAILURE,
-};
-
-/* Actions */
-
-const fetchData           = createAction(FETCH_DATA);
-const fetchDataSuccess    = createAction(FETCH_DATA_SUCCESS);
-const fetchDataFailure    = createAction(FETCH_DATA_FAILURE);
-const fetchBanners        = createAction(FETCH_BANNER);
-const fetchBannersSuccess = createAction(FETCH_BANNER_SUCCESS);
-const fetchBannersFailure = createAction(FETCH_BANNER_FAILURE);
-
-export const actions = {
-  fetchData,
-  fetchDataSuccess,
-  fetchDataFailure,
-  fetchBanners,
-  fetchBannersSuccess,
-  fetchBannersFailure,
-};
-
-/* Reducer */
 
 const initialState = {
   latestLesson: null,
-  latestUnits: null,
-  banners: {
+  latestUnits : null,
+  banners     : {
     data: {},
-    wip: false,
-    err: null,
+    wip : false,
+    err : null
   },
-  wip: false,
-  err: null,
+  wip         : false,
+  err         : null
 };
 
-const onSetLanguages = draft => {
-  draft.latestLesson = null;
-  draft.latestUnits  = null;
-  draft.banners      = {
+const onSetLanguages = state => {
+  state.latestLesson = null;
+  state.latestUnits  = null;
+  state.banners      = {
     data: {},
-    wip: false,
-    err: null,
+    wip : false,
+    err : null
   };
-  draft.wip          = false;
-  draft.err          = null;
+  state.wip          = false;
+  state.err          = null;
 };
 
-const onData = (draft, payload) => {
-  if (payload) {
-    draft.wip = true;
-  }
-};
-
-const onDataSuccess = (draft, payload) => {
+const onDataSuccess = (state, { payload }) => {
   const { id }      = payload.latest_daily_lesson;
   const latestUnits = payload.latest_units.map(x => x.id);
   const latestCos   = payload.latest_cos.map(x => x.id);
 
-  if (draft.latestLesson !== id || !isEqual(draft.latestLesson, latestUnits) || !isEqual(draft.latestCos, latestCos)) {
-    draft.wip          = false;
-    draft.err          = null;
-    draft.latestLesson = id;
-    draft.latestUnits  = latestUnits;
-    draft.latestCos    = latestCos;
+  if (state.latestLesson !== id || !isEqual(state.latestLesson, latestUnits) || !isEqual(state.latestCos, latestCos)) {
+    state.wip          = false;
+    state.err          = null;
+    state.latestLesson = id;
+    state.latestUnits  = latestUnits;
+    state.latestCos    = latestCos;
   }
 
-  return draft;
+  return state;
 };
 
-const onDataFailure = (draft, payload) => {
-  draft.wip  = false;
-  draft.data = null;
-  draft.err  = payload;
+const onDataFailure = (state, { payload }) => {
+  state.wip  = false;
+  state.data = null;
+  state.err  = payload;
 };
 
-const onFetchBanners = draft => {
-  draft.banners.wip  = true;
-  draft.banners.data = {
+const onFetchBanners = state => {
+  state.banners.wip  = true;
+  state.banners.data = {
     data: {},
-    wip: false,
-    err: null,
+    wip : false,
+    err : null
   };
 };
 
-const onFetchBannersSuccess = (draft, payload) => {
+const onFetchBannersSuccess = (state, { payload }) => {
   if (payload.length === 0) {
     // empty result
-    onFetchBannersFailure(draft, payload);
+    onFetchBannersFailure(state, { payload });
     return;
   }
 
-  draft.banners.wip  = false;
-  draft.banners.err  = null;
-  draft.banners.data = payload;
+  state.banners.wip  = false;
+  state.banners.err  = null;
+  state.banners.data = payload;
 };
 
-const onFetchBannersFailure = (draft, payload) => {
-  draft.banners.wip  = false;
-  draft.banners.data = {};
-  draft.banners.err  = payload;
+const onFetchBannersFailure = (state, { payload }) => {
+  state.banners.wip  = false;
+  state.banners.data = {};
+  state.banners.err  = payload.message;
 };
 
-const onSSRPrepare = draft => {
-  if (draft.err) {
-    draft.err = draft.err.toString();
+const onSSRPrepare = state => {
+  if (state.err) {
+    state.err = state.err.toString();
   }
 };
 
-export const reducer = handleActions({
-  [ssr.PREPARE]: onSSRPrepare,
+const homeSlice = createSlice({
+  name: 'home',
+  initialState,
 
-  [settings.SET_CONTENT_LANGUAGES]: onSetLanguages,
+  reducers     : {
+    fetchData       : (state, action) => {
+      if (action.payload) {
+        state.wip = true;
+      }
+    },
+    fetchDataSuccess: onDataSuccess,
+    fetchDataFailure: onDataFailure,
 
-  [FETCH_DATA]: onData,
-  [FETCH_DATA_SUCCESS]: onDataSuccess,
-  [FETCH_DATA_FAILURE]: onDataFailure,
+    fetchBanners       : onFetchBanners,
+    fetchBannersSuccess: onFetchBannersSuccess,
+    fetchBannersFailure: onFetchBannersFailure
+  },
+  extraReducers: builder => {
+    builder
+      .addCase(ssrActions.prepare, onSSRPrepare)
+      .addCase(settingsActions.setContentLanguages, onSetLanguages);
+  }
+});
 
-  [FETCH_BANNER]: onFetchBanners,
-  [FETCH_BANNER_SUCCESS]: onFetchBannersSuccess,
-  [FETCH_BANNER_FAILURE]: onFetchBannersFailure,
-}, initialState);
+export default homeSlice.reducer;
+
+export const { actions } = homeSlice;
+
+export const types = Object.fromEntries(new Map(
+  Object.values(homeSlice.actions).map(a => [a.type, a.type])
+));
 
 /* Selectors */
 
@@ -155,5 +129,5 @@ export const selectors = {
   getLatestCos,
   getBanner,
   getWip,
-  getError,
+  getError
 };

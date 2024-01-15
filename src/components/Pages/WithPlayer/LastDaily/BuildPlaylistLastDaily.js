@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectors, actions } from '../../../../redux/modules/mdb';
+import { actions as mdbActions, selectors } from '../../../../redux/modules/mdb';
 
 import { selectors as my } from '../../../../redux/modules/my';
 import { MY_NAMESPACE_HISTORY } from '../../../../helpers/consts';
@@ -27,7 +27,7 @@ const BuildPlaylistLastDaily = () => {
 
   useEffect(() => {
     if (!wip && !err && !lastLessonId) {
-      dispatch(actions.fetchLatestLesson());
+      dispatch(mdbActions.fetchLatestLesson());
     }
   }, [lastLessonId, wip, err, dispatch]);
 

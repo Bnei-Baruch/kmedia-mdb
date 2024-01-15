@@ -9,7 +9,7 @@ import NotesAllPage from './NotesAllPage';
 const idPrefix  = textMarksPrefixByType.note.start;
 const NoteMarks = ({ parentTop }) => {
   const [byLine, setByLine] = useState({});
-  const ids                 = useSelector(state => selectors.getList(state.notes));
+  const ids                 = useSelector(state => selectors.getList(state.myNotes));
 
   useNodeHighlight();
 

@@ -12,7 +12,7 @@ export function* fetchDashboard(action) {
   const { tag: id } = action.payload;
 
   try {
-    const uiLang = yield select(state => settings.getUILang(state.settings));
+    const uiLang           = yield select(state => settings.getUILang(state.settings));
     const contentLanguages = yield select(state => settings.getContentLanguages(state.settings));
 
     const filters      = yield select(state => filterSelectors.getFilters(state.filters, `topics_${id}`));
@@ -21,8 +21,8 @@ export function* fetchDashboard(action) {
     const { data } = yield call(Api.tagDashboard, {
       ...action.payload,
       ...filterParams,
-      ui_language: uiLang,
-      content_languages: contentLanguages,
+      ui_language      : uiLang,
+      content_languages: contentLanguages
     });
 
     const { items, media_total, text_total } = data;
@@ -31,9 +31,9 @@ export function* fetchDashboard(action) {
     const cIDs     = items.map(x => x.collection_id).filter(x => !!x);
     const labelIDs = items.map(x => x.label_id).filter(x => !!x);
     const list     = items.map(({ content_unit_id, label_id, collection_id, is_text }) => ({
-      cuID: content_unit_id,
-      cID: collection_id,
-      lID: label_id,
+      cuID  : content_unit_id,
+      cID   : collection_id,
+      lID   : label_id,
       isText: is_text
     }));
 
@@ -53,7 +53,7 @@ export function* fetchDashboard(action) {
 }
 
 function* watchFetchDashboard() {
-  yield takeLatest(types.FETCH_DASHBOARD, fetchDashboard);
+  yield takeLatest(types['tags/fetchDashboard'], fetchDashboard);
 }
 
 export const sagas = [

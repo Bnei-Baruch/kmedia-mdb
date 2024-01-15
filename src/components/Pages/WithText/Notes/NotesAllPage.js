@@ -8,8 +8,8 @@ import { selectors as textPage } from '../../../../redux/modules/textPage';
 
 const NotesAllPage = () => {
   const id      = useSelector(state => textPage.getSubject(state.textPage).id);
-  const ids     = useSelector(state => selectors.getList(state.notes));
-  const getById = useSelector(state => selectors.getById(state.notes, id));
+  const ids     = useSelector(state => selectors.getList(state.myNotes));
+  const getById = useSelector(state => selectors.getById(state.myNotes, id));
   const _ids    = useMemo(() => ids
     .map(id => getById[id])
     .filter(({ properties: p }) => !p || (!p.srchstart && !p.srchend))

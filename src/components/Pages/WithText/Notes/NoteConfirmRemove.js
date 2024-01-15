@@ -7,8 +7,8 @@ import { selectors, actions, NOTE_STATUS } from '../../../../redux/modules/myNot
 
 const NoteConfirmRemove = () => {
   const { t }  = useTranslation();
-  const note   = useSelector(state => selectors.getSelected(state.notes));
-  const status = useSelector(state => selectors.getStatus(state.notes));
+  const note   = useSelector(state => selectors.getSelected(state.myNotes));
+  const status = useSelector(state => selectors.getStatus(state.myNotes));
 
   const dispatch = useDispatch();
 

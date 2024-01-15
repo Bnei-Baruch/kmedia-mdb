@@ -1,123 +1,74 @@
-import { createAction } from 'redux-actions';
+import { createSlice } from '@reduxjs/toolkit';
 
-import { handleActions } from './settings';
-import { types as ssr } from './ssr';
-
-/* Types */
-const AUTOCOMPLETE_FAILURE = 'Search/AUTOCOMPLETE_FAILURE';
-const AUTOCOMPLETE_SUCCESS = 'Search/AUTOCOMPLETE_SUCCESS';
-const HYDRATE_URL          = 'Search/HYDRATE_URL';
-const SEARCH               = 'Search/SEARCH';
-const SEARCH_FAILURE       = 'Search/SEARCH_FAILURE';
-const SEARCH_SUCCESS       = 'Search/SEARCH_SUCCESS';
-const SET_DEB              = 'Search/SET_DEB';
-const SET_PAGE             = 'Search/SET_PAGE';
-const SET_SORT_BY          = 'Search/SET_SORT_BY';
-const SET_WIP              = 'Search/SET_WIP';
-const UPDATE_QUERY         = 'Search/UPDATE_QUERY';
-
-export const types = {
-  AUTOCOMPLETE_FAILURE,
-  AUTOCOMPLETE_SUCCESS,
-  HYDRATE_URL,
-  SEARCH,
-  SEARCH_FAILURE,
-  SEARCH_SUCCESS,
-  SET_DEB,
-  SET_PAGE,
-  SET_SORT_BY,
-  SET_WIP,
-  UPDATE_QUERY,
-};
-
-/* Actions */
-const autocompleteFailure = createAction(AUTOCOMPLETE_FAILURE);
-const autocompleteSuccess = createAction(AUTOCOMPLETE_SUCCESS);
-const hydrateUrl          = createAction(HYDRATE_URL);
-const search              = createAction(SEARCH);
-const searchFailure       = createAction(SEARCH_FAILURE);
-const searchSuccess       = createAction(SEARCH_SUCCESS);
-const setDeb              = createAction(SET_DEB);
-const setPage             = createAction(SET_PAGE);
-const setSortBy           = createAction(SET_SORT_BY);
-const setWip              = createAction(SET_WIP);
-const updateQuery         = createAction(UPDATE_QUERY);
-
-export const actions = {
-  autocompleteFailure,
-  autocompleteSuccess,
-  hydrateUrl,
-  search,
-  searchFailure,
-  searchSuccess,
-  setDeb,
-  setPage,
-  setSortBy,
-  setWip,
-  updateQuery,
-};
-
-/* Reducer */
+import { actions as ssrActions } from './ssr';
 
 const initialState = {
-  suggestions: {},
-  q: '',
-  prevQuery: '',
+  suggestions     : {},
+  q               : '',
+  prevQuery       : '',
   prevFilterParams: '',
-  queryResult: {},
-  pageNo: 1,
-  sortBy: 'relevance',
-  deb: false,
-  wip: false,
-  autocompleteWip: false,
-  error: null,
+  queryResult     : {},
+  pageNo          : 1,
+  sortBy          : 'relevance',
+  deb             : false,
+  wip             : false,
+  autocompleteWip : false,
+  error           : null
 };
 
-const onSSRPrepare = draft => {
-  if (draft.error) {
-    draft.error = draft.error.toString();
+const searchSlice    = createSlice({
+  name: 'search',
+  initialState,
+
+  reducers     : {
+    autocompleteSuccess: (state, { payload: { suggestions } }) => {
+      state.suggestions     = suggestions;
+      state.autocompleteWip = false;
+    },
+    autocompleteFailure: state => {
+      state.suggestions     = null;
+      state.autocompleteWip = false;
+    },
+    setWip             : state => {
+      state.wip = true;
+    },
+    search             : () => void ({}),
+    searchSuccess      : (state, { payload }) => {
+      state.wip              = false;
+      state.error            = null;
+      state.queryResult      = payload.searchResults;
+      state.prevFilterParams = payload.filterParams;
+      state.prevQuery        = payload.query;
+    },
+    searchFailure      : (state, payload) => {
+      state.wip   = false;
+      state.error = payload;
+    },
+    hydrateUrl         : () => ({}),
+    setPage            : (state, { payload }) => void (state.pageNo = payload),
+    setSortBy          : (state, { payload }) => void (state.sortBy = payload),
+    updateQuery        : (state, { payload }) => {
+      state.autocompleteWip = payload.autocomplete;
+      state.q               = payload.query;
+    },
+    setDeb             : (state, { payload }) => void (state.deb = payload)
+  },
+  extraReducers: builder => {
+    builder.addCase(ssrActions.prepare, state => {
+      if (state.error) {
+        state.error = state.error.toString();
+      }
+    });
   }
-};
+});
 
-export const reducer = handleActions({
-  [ssr.PREPARE]: onSSRPrepare,
+export default searchSlice.reducer;
 
-  [AUTOCOMPLETE_SUCCESS]: (draft, payload) => {
-    draft.suggestions = payload.suggestions;
-    draft.autocompleteWip = false;
-  },
-  [AUTOCOMPLETE_FAILURE]: draft => {
-    draft.suggestions = null;
-    draft.autocompleteWip = false;
-  },
-  [SET_WIP]: (draft, payload) => {
-    draft.wip = true;
-  },
-  [SEARCH_SUCCESS]: (draft, payload) => {
-    draft.wip              = false;
-    draft.error            = null;
-    draft.queryResult      = payload.searchResults;
-    draft.prevFilterParams = payload.filterParams;
-    draft.prevQuery        = payload.query;
-  },
-  [SEARCH_FAILURE]: (draft, payload) => {
-    draft.wip   = false;
-    draft.error = payload;
-  },
-  [SET_PAGE]: (draft, payload) => {
-    draft.pageNo = payload;
-  },
-  [SET_SORT_BY]: (draft, payload) => {
-    draft.sortBy = payload;
-  },
-  [UPDATE_QUERY]: (draft, payload) => {
-    draft.autocompleteWip = payload.autocomplete;
-    draft.q = payload.query;
-  },
-  [SET_DEB]: (draft, payload) => {
-    draft.deb = payload;
-  },
-}, initialState);
+export const { actions } = searchSlice;
+
+export const types = Object.fromEntries(new Map(
+  Object.values(searchSlice.actions).map(a => [a.type, a.type])
+));
 
 /* Selectors */
 const getAutocompleteWip  = state => state.autocompleteWip;
@@ -143,5 +94,5 @@ export const selectors = {
   getQueryResult,
   getSortBy,
   getSuggestions,
-  getWip,
+  getWip
 };

@@ -1,97 +1,59 @@
-import { createAction } from 'redux-actions';
-import { types as chronicles } from './chronicles';
-import { handleActions } from './settings';
-import { types as ssr } from './ssr';
+import { createSlice } from '@reduxjs/toolkit';
+import { actions as chronicles } from './chronicles';
+import { actions as ssrActions } from './ssr';
 
-const FETCH_RECOMMENDED         = 'FETCH_RECOMMENDED';
-const FETCH_RECOMMENDED_SUCCESS = 'FETCH_RECOMMENDED_SUCCESS';
-const FETCH_RECOMMENDED_FAILURE = 'FETCH_RECOMMENDED_FAILURE';
-const FETCH_VIEWS               = 'FETCH_VIEWS';
-const RECEIVE_VIEWS             = 'RECEIVE_VIEWS';
-const RECEIVE_WATCHING_NOW      = 'RECEIVE_WATCHING_NOW';
-const PLAYER_PLAY_WITH_UID      = 'PLAYER_PLAY_WITH_UID';
+const recommendedSlice = createSlice({
+  name        : 'recommended',
+  initialState: {
+    wip        : false,
+    err        : null,
+    feeds      : {},
+    skipUids   : [],
+    views      : {},
+    watchingNow: {}
+  },
 
-export const types = {
-  FETCH_RECOMMENDED,
-  FETCH_RECOMMENDED_SUCCESS,
-  FETCH_RECOMMENDED_FAILURE,
-  FETCH_VIEWS,
-  RECEIVE_VIEWS,
-  RECEIVE_WATCHING_NOW,
-};
+  reducers     : {
+    fetchRecommended       : state => void (state.wip = true),
+    fetchRecommendedSuccess: (state, { payload: { feeds } }) => {
+      state.wip   = false;
+      state.err   = null;
+      state.feeds = feeds;
+    },
+    fetchRecommendedFailure: (state, payload) => {
+      state.wip   = false;
+      state.err   = payload;
+      state.feeds = {};
+    },
 
-// Actions
-const fetchRecommended        = createAction(FETCH_RECOMMENDED);
-const fetchRecommendedSuccess = createAction(FETCH_RECOMMENDED_SUCCESS);
-const fetchRecommendedFailure = createAction(FETCH_RECOMMENDED_FAILURE);
-const receiveViews            = createAction(RECEIVE_VIEWS);
-const fetchViews              = createAction(FETCH_VIEWS);
-const receiveWatchingNow      = createAction(RECEIVE_WATCHING_NOW);
-const playerPlayWithUid       = createAction(PLAYER_PLAY_WITH_UID);
+    playerPlayWithUid: (state, { payload }) => {
+      if (payload && !state.skipUids.includes(payload)) {
+        state.skipUids.push(payload);
+      }
+    },
 
-export const actions = {
-  fetchRecommended,
-  fetchRecommendedSuccess,
-  fetchRecommendedFailure,
-  receiveViews,
-  fetchViews,
-  receiveWatchingNow,
-  playerPlayWithUid,
-};
-
-/* Reducer */
-const initialState = {
-  wip: false,
-  err: null,
-  feeds: {},
-  skipUids: [],
-  views: {},
-  watchingNow: {},
-};
-
-const onSuccess = (draft, payload) => {
-  draft.wip   = false;
-  draft.err   = null;
-  draft.feeds = payload.feeds;
-};
-
-const onFailure = (draft, payload) => {
-  draft.wip   = false;
-  draft.err   = payload;
-  draft.feeds = {};
-};
-
-const onSSRPrepare = draft => {
-  if (draft.err) {
-    draft.err = draft.err.toString();
+    fetchViews        : () => void ({}),
+    receiveViews      : (state, { payload }) => void (state.views = { ...state.views, ...payload }),
+    receiveWatchingNow: (state, { payload }) => void (state.watchingNow = { ...state.watchingNow, ...payload })
+  },
+  extraReducers: builder => {
+    builder
+      .addCase(ssrActions.prepare, state => {
+        if (state.err) {
+          state.err = state.err.toString();
+        }
+      })
+      .addCase(chronicles.userInactive, state => void (state.skipUids.length = 0));
   }
-};
+});
 
-const onPlayerPlay = (draft, payload) => {
-  if (payload && !draft.skipUids.includes(payload)) {
-    draft.skipUids.push(payload);
-  }
-};
+export default recommendedSlice.reducer;
 
-const onUserInactive = draft => draft.skipUids.length = 0;
+export const { actions } = recommendedSlice;
 
-const onReceiveViews = (draft, payload) => draft.views = { ...draft.views, ...payload };
-
-const onReceiveWatchingNow = (draft, payload) => draft.watchingNow = { ...draft.watchingNow, ...payload };
-
-const onRecommended = draft => draft.wip = true;
-
-export const reducer = handleActions({
-  [ssr.PREPARE]: onSSRPrepare,
-  [PLAYER_PLAY_WITH_UID]: onPlayerPlay,
-  [chronicles.USER_INACTIVE]: onUserInactive,
-
-  [FETCH_RECOMMENDED]: onRecommended,
-  [FETCH_RECOMMENDED_SUCCESS]: onSuccess,
-  [FETCH_RECOMMENDED_FAILURE]: onFailure,
-  [RECEIVE_VIEWS]: onReceiveViews,
-  [RECEIVE_WATCHING_NOW]: onReceiveWatchingNow,
-}, initialState);
+export const types = Object.fromEntries(new Map(
+  Object.values(recommendedSlice.actions).map(a => [a.type, a.type])
+));
 
 const getWip                  = state => state.wip;
 const getError                = state => state.err;
@@ -115,5 +77,5 @@ export const selectors = {
   getViews,
   getManyViews,
   getWatchingNow,
-  getManyWatchingNow,
+  getManyWatchingNow
 };

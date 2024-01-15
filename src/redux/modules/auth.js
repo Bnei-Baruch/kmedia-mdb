@@ -1,39 +1,32 @@
-import { createAction } from 'redux-actions';
-import { handleActions } from './settings';
+import { createSlice } from '@reduxjs/toolkit';
 
-/* Types */
-const UPDATE_USER  = 'Auth/UPDATE_USER';
-const UPDATE_TOKEN = 'Auth/UPDATE_TOKEN';
+const authSlice = createSlice({
+  name        : 'auth',
+  initialState: { user: undefined, token: null },
 
-export const types = { UPDATE_TOKEN, UPDATE_USER };
-
-/* Reducer */
-const initialState = { user: undefined, token: null };
-
-const onUpdateUser  = (draft, payload) => {
-  draft.user = payload;
-  if (!payload) {
-    draft.token = null;
+  reducers: {
+    updateUser : (state, { payload }) => {
+      state.user = payload;
+      if (!payload) {
+        state.token = null;
+      }
+    },
+    updateToken: (state, { payload }) => {
+      state.token = payload;
+      if (!payload) {
+        state.user = null;
+      }
+    }
   }
-};
+});
 
-const onUpdateToken = (draft, payload) => {
-  draft.token = payload;
-  if (!payload) {
-    draft.user = null;
-  }
-};
+export default authSlice.reducer;
 
-export const reducer = handleActions({
-  [UPDATE_USER]: onUpdateUser,
-  [UPDATE_TOKEN]: onUpdateToken,
-}, initialState);
+export const { actions } = authSlice;
 
-/* Actions */
-const updateUser  = createAction(UPDATE_USER);
-const updateToken = createAction(UPDATE_TOKEN);
-
-export const actions = { updateUser, updateToken };
+export const types = Object.fromEntries(new Map(
+  Object.values(authSlice.actions).map(a => [a.type, a.type])
+));
 
 /* Selectors */
 const getUser          = state => state.user;

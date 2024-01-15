@@ -14,6 +14,7 @@ import NeedToLogin from '../../Sections/Personal/NeedToLogin';
 import AlertModal from '../AlertModal';
 import TopicBranch from './TopicBranch';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
+import { actions as mdbActions } from '../../../redux/modules/mdb';
 
 const SelectTopicsModal = ({ open, onClose, label, trigger }) => {
   const { t } = useTranslation();
@@ -47,7 +48,7 @@ const SelectTopicsModal = ({ open, onClose, label, trigger }) => {
       media_type
     };
 
-    dispatch(actions.createLabel(params));
+    dispatch(mdbActions.createLabel(params));
   };
 
   const clear = () => {
@@ -96,7 +97,7 @@ const SelectTopicsModal = ({ open, onClose, label, trigger }) => {
 
   return (
     <>
-      <AlertModal message={alertMsg} open={!!alertMsg} onClose={clear} dir={dir} />
+      <AlertModal message={alertMsg} open={!!alertMsg} onClose={clear} dir={dir}/>
       <Modal
         open={open}
         onClose={onClose}
@@ -105,7 +106,7 @@ const SelectTopicsModal = ({ open, onClose, label, trigger }) => {
         trigger={trigger}
         dir={dir}
       >
-        <Modal.Header content={t('personal.label.header')} className="no-border" />
+        <Modal.Header content={t('personal.label.header')} className="no-border"/>
         {
           !!needToLogin ?
             (
@@ -125,11 +126,11 @@ const SelectTopicsModal = ({ open, onClose, label, trigger }) => {
                       basic
                       className="no-border"
                     />
-                    <input autoFocus />
+                    <input autoFocus/>
                   </Input>
                 </Modal.Content>
                 <Modal.Content style={{ paddingTop: 0, paddingBottom: 0 }}>
-                  <Container as="h4" className="font-normal" content={t('personal.label.infoAddTag')} />
+                  <Container as="h4" className="font-normal" content={t('personal.label.infoAddTag')}/>
                   <Input
                     className="search-omnibox"
                     placeholder={t('personal.label.search')}

@@ -13,11 +13,6 @@ import BuildPlaylistByCollectionByParams from './BuildPlaylistByCollectionByPara
 import { useSelector } from 'react-redux';
 import { selectors as playlist } from '../../../redux/modules/playlist';
 import SingleMediaPage from './SingleMedia/SingleMediaPage';
-import { useTranslation } from 'react-i18next';
-import WipErr from '../../shared/WipErr/WipErr';
-import { Icon } from 'semantic-ui-react';
-import { useLocation } from 'react-router-dom';
-import { getEmbedFromQuery } from '../../../helpers/player';
 
 export const PlaylistItemPageSeries = ({ playerContainer }) => {
   const builder = <BuildPlaylistByUnit cts={[CT_LESSONS_SERIES]} />;
@@ -29,15 +24,12 @@ export const PlaylistItemPageVirtual = ({ playerContainer }) => {
   return <Decorator builder={builder} playerContainer={playerContainer} />;
 };
 
-export const PlaylistItemPageLesson = ({ playerContainer }) => {
-  const { isReady } = useSelector(state => playlist.getInfo(state.playlist));
-  return (
-    <>
-      {<BuildPlaylistByUnit cts={[...COLLECTION_DAILY_LESSONS, CT_VIRTUAL_LESSONS]} />}
-      {isReady ? <PlaylistPage playerContainer={playerContainer} /> : <Icon name="circle notch" color="blue" loading />}
-    </>
-  );
-};
+export const PlaylistItemPageLesson = ({ playerContainer }) => (
+  <>
+    {<BuildPlaylistByUnit cts={[...COLLECTION_DAILY_LESSONS, CT_VIRTUAL_LESSONS]} />}
+    <PlaylistPage playerContainer={playerContainer} />
+  </>
+);
 
 export const PlaylistItemPageEvent = ({ playerContainer }) => {
   const builder = <BuildPlaylistByUnit cts={EVENT_TYPES} />;
@@ -62,13 +54,7 @@ const Decorator = ({ builder, playerContainer }) => (
 );
 
 const PageSwitcher = ({ playerContainer }) => {
-  const { t }                      = useTranslation();
-  const { isReady, isSingleMedia } = useSelector(state => playlist.getInfo(state.playlist));
-  const location                   = useLocation();
-  const embed                      = getEmbedFromQuery(location);
-
-  if (!isReady)
-    return embed ? null : WipErr({ wip: !isReady, t });
+  const { isSingleMedia } = useSelector(state => playlist.getInfo(state.playlist));
 
   if (isSingleMedia)
     return <SingleMediaPage playerContainer={playerContainer} />;

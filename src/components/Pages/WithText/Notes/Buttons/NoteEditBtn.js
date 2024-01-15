@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { actions, NOTE_STATUS, selectors } from '../../../../../redux/modules/myNotes';
 
 const NoteEditBtn = () => {
-  const status   = useSelector(state => selectors.getStatus(state.notes));
+  const status   = useSelector(state => selectors.getStatus(state.myNotes));
   const dispatch = useDispatch();
 
   const active = status === NOTE_STATUS.editModal || status === NOTE_STATUS.edit;

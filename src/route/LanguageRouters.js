@@ -12,16 +12,16 @@ const LanguageRouter = () => {
   const dispatch          = useDispatch();
 
   useEffect(() => {
-    console.log('LanguageRouters', origUrlLang, urlLang, uiLang)
+    console.log('LanguageRouters', { origUrlLang, urlLang, uiLang })
     if (urlLang && LANG_UI_LANGUAGES.includes(urlLang)) {
       if (urlLang === uiLang && origUrlLang !== '') {
         // Clear URL language it is the same as UI language.
         updateHtmlLang(uiLang);
-        dispatch(actions.setUrlLanguage(''));
+        dispatch(actions.setURLLanguage(''));
       } else if (origUrlLang !== urlLang && urlLang !== uiLang) {
         // Set URL language.
         updateHtmlLang(urlLang);
-        dispatch(actions.setUrlLanguage(urlLang));
+        dispatch(actions.setURLLanguage(urlLang));
       }
     }
   }, [origUrlLang, urlLang, uiLang, dispatch]);
