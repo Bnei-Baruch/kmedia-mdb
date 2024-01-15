@@ -204,7 +204,11 @@ export const types = Object.fromEntries(new Map(
 
 /* Selectors */
 const citiesByCountry  = (state, ns) => id => state[ns]?.[FN_LOCATIONS]?.citiesByCountry[id] || [];
-const getMultipleStats = (state, ns, fn) => ids => ids.map(id => getStats(state, ns, fn)(id));
+const getMultipleStats = (state, ns, fn) => ids => {
+  const func = getStats(state, ns, fn);
+  return ids.map(id => func(id))
+};
+
 const getStats         = (state, ns, fn) => id => state[ns]?.[fn]?.byId[id] || 0;
 const getTree          = (state, ns, fn) => state[ns]?.[fn]?.tree || [];
 const getWipErr        = (state, ns) => ({ wip: state[ns]?.wip || false, err: state[ns]?.err || null });

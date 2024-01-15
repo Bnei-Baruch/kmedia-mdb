@@ -17,8 +17,8 @@ import { useNotes } from './useNotes';
 import { useLabels } from './useLabels';
 import NoteMark from './NoteMark';
 import { useSelector } from 'react-redux';
-import { selectors as assets } from '../../../redux/modules/assets';
 import { seek, setPip } from '../../../pkg/jwpAdapter/adapter';
+import { assetsGetTimeCodeSelector } from '../../../redux/selectors';
 
 const ScrollToSearch = ({ source, label, data, language, urlParams = '', pathname }) => {
   const { enableShareText: { isShareTextEnabled, setEnableShareText } } = useContext(SessionInfoContext);
@@ -37,7 +37,7 @@ const ScrollToSearch = ({ source, label, data, language, urlParams = '', pathnam
   const { notes, offsets: noteOffsets } = useNotes(content_unit, language);
   const { labels, offsets }             = useLabels(content_unit, language);
 
-  const timeCodeByPos                        = useSelector(state => assets.getTimeCode(state.assets));
+  const timeCodeByPos                        = useSelector(assetsGetTimeCodeSelector);
   const location                             = useLocation();
   const { srchstart, srchend, highlightAll } = getQuery(location);
   const search                               = useMemo(() => ({ srchstart, srchend }), [srchstart, srchend]);
@@ -136,12 +136,12 @@ const ScrollToSearch = ({ source, label, data, language, urlParams = '', pathnam
         {renderShareBar()}
         <div className={`label_bar ${dir}`}>
           {
-            labels.map(l => <LabelMark label={l} offset={offsets[l.id]} key={l.id} />)
+            labels.map(l => <LabelMark label={l} offset={offsets[l.id]} key={l.id}/>)
           }
         </div>
         <div className={`notes_bar ${dir}`}>
           {
-            !isMobileDevice && notes.map((n, i) => <NoteMark note={n} key={n.id} offset={noteOffsets[n.id]} />)
+            !isMobileDevice && notes.map((n, i) => <NoteMark note={n} key={n.id} offset={noteOffsets[n.id]}/>)
           }
         </div>
         <div
@@ -155,7 +155,7 @@ const ScrollToSearch = ({ source, label, data, language, urlParams = '', pathnam
 };
 
 ScrollToSearch.propTypes = {
-  data: PropTypes.any,
+  data: PropTypes.any
 };
 
 export default ScrollToSearch;

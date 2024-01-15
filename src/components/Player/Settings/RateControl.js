@@ -3,14 +3,14 @@ import { Button, Header } from 'semantic-ui-react';
 import { withTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
-import { selectors } from '../../../redux/modules/player';
 import { setPlaybackRate } from '../../../pkg/jwpAdapter/adapter';
+import { playerGetFileSelector, playerGetRateSelector } from '../../../redux/selectors';
 
 const PLAYER_SPEEDS = [0.75, 1, 1.25, 1.5, 2];
 
 const RateControl = ({ t }) => {
-  const rate = useSelector(state => selectors.getRate(state.player));
-  const file = useSelector(state => selectors.getFile(state.player));
+  const rate = useSelector(playerGetRateSelector);
+  const file = useSelector(playerGetFileSelector);
 
   if (!file) return null;
 

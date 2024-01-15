@@ -6,13 +6,14 @@ import { Container, Divider } from 'semantic-ui-react';
 import ResultsPageHeader from '../../Pagination/ResultsPageHeader';
 import SectionHeader from '../../shared/SectionHeader';
 import WipErr from '../../shared/WipErr/WipErr';
-import { selectors, actions } from '../../../redux/modules/music';
+import { actions } from '../../../redux/modules/music';
 import List from './List';
+import { musicGetDataSelector, musicGetErrorSelector, musicGetWipSelector } from '../../../redux/selectors';
 
 const Music = () => {
-  const wip                         = useSelector(state => selectors.getWip(state.music));
-  const err                         = useSelector(state => selectors.getError(state.music));
-  const items                       = useSelector(state => selectors.getMusicData(state.music));
+  const wip                         = useSelector(musicGetWipSelector);
+  const err                         = useSelector(musicGetErrorSelector);
+  const items                       = useSelector(musicGetDataSelector);
   const [dataLoaded, setDataLoaded] = useState(false);
 
   const dispatch = useDispatch();
@@ -28,16 +29,16 @@ const Music = () => {
 
   const content = WipErr({ wip, err, t }) || (
     <Container className="padded">
-      <ResultsPageHeader pageNo={1} pageSize={1000} total={items.length || 0} />
-      <Divider fitted />
-      <List items={items} />
+      <ResultsPageHeader pageNo={1} pageSize={1000} total={items.length || 0}/>
+      <Divider fitted/>
+      <List items={items}/>
     </Container>
   );
 
   return (
     <>
-      <SectionHeader section="music" />
-      <Divider fitted />
+      <SectionHeader section="music"/>
+      <Divider fitted/>
       {content}
     </>
   );

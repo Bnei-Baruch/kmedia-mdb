@@ -60,6 +60,7 @@ import { getLibraryContentFile } from '../components/Sections/Library/Library';
 import { selectLikutFile } from '../components/Sections/Likutim/Likut';
 import Api from '../helpers/Api';
 import { cuFilesToData, getSourceIndexId } from '../sagas/helpers/utils';
+import { mdbGetDenormContentUnitSelector } from '../redux/selectors';
 
 export const home = store => {
   store.dispatch(homeActions.fetchData(true));
@@ -76,7 +77,7 @@ export const cuPage = (store, match) => {
     .then(() => {
       const state = store.getState();
 
-      const unit = mdbSelectors.getDenormContentUnit(state.mdb, cuID);
+      const unit = mdbGetDenormContentUnitSelector(state, cuID);
 
       let activeTab = 'transcription';
       if ([...CT_LESSONS, CT_VIDEO_PROGRAM_CHAPTER, CT_VIRTUAL_LESSON, CT_CLIP].includes(unit.content_type)) {
@@ -335,7 +336,7 @@ export const likutPage = async (store, match, show_console = false) => {
     .then(() => {
       const state            = store.getState();
       const contentLanguages = settingsSelectors.getContentLanguages(state.settings);
-      const likut            = mdbSelectors.getDenormContentUnit(state.mdb, id);
+      const likut            = mdbGetDenormContentUnitSelector(state, id);
       const likutimLanguages = ((likut && likut.files) || []).map(f => f.language);
       const defaultLanguage  = selectSuitableLanguage(contentLanguages, likutimLanguages, LANG_HEBREW);
       const file             = selectLikutFile(likut?.files, defaultLanguage);
@@ -432,7 +433,7 @@ export const articleCUPage = (store, match) => {
       let language = null;
       const uiLang = settingsSelectors.getUILang(state.settings);
 
-      const unit = mdbSelectors.getDenormContentUnit(state.mdb, cuID);
+      const unit = mdbGetDenormContentUnitSelector(state, cuID);
       if (!unit) {
         return;
       }

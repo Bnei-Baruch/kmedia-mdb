@@ -7,10 +7,10 @@ import { selectSuitableLanguage } from '../../../../../../helpers/language';
 import * as shapes from '../../../../../shapes';
 import MediaHelper from '../../../../../../helpers/media';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectors as settings } from '../../../../../../redux/modules/settings';
-import { selectors as assetsSelectors, actions as assetsActions } from '../../../../../../redux/modules/assets';
+import { actions as assetsActions } from '../../../../../../redux/modules/assets';
 import { INSERT_TYPE_SUMMARY } from '../../../../../../helpers/consts';
 import MenuLanguageSelector from '../../../../../../components/Language/Selector/MenuLanguageSelector';
+import { settingsGetContentLanguagesSelector, assetsGetDoc2htmlByIdSelector } from '../../../../../../redux/selectors';
 
 export const getSummaryLanguages = unit =>
   (unit && unit.files &&
@@ -29,17 +29,16 @@ export const getFile = (unit, lang) => {
 };
 
 const Summary = ({ unit, t }) => {
-  const contentLanguages = useSelector(state => settings.getContentLanguages(state.settings));
-  const doc2htmlById     = useSelector(state => assetsSelectors.getDoc2htmlById(state.assets));
+  const contentLanguages = useSelector(settingsGetContentLanguagesSelector);
+  const doc2htmlById     = useSelector(assetsGetDoc2htmlByIdSelector);
   const dispatch         = useDispatch();
 
-  const summaryLanguages = getSummaryLanguages(unit);
-  const defaultLanguage = selectSuitableLanguage(contentLanguages, summaryLanguages, unit.original_language);
+  const summaryLanguages                        = getSummaryLanguages(unit);
+  const defaultLanguage                         = selectSuitableLanguage(contentLanguages, summaryLanguages, unit.original_language);
   const [selectedLanguage, setSelectedLanguage] = useState('');
-  const finalLanguage = selectedLanguage || defaultLanguage;
-
-  const file = getFile(unit, finalLanguage);
-  const selectedFileId = (file && file.id) || null;
+  const finalLanguage                           = selectedLanguage || defaultLanguage;
+  const file                                    = getFile(unit, finalLanguage);
+  const selectedFileId                          = file?.id || null;
 
   const handleLanguageChanged = language => {
     setSelectedLanguage(language);
@@ -51,7 +50,7 @@ const Summary = ({ unit, t }) => {
     }
   }, [file, dispatch, selectedFileId]);
 
-  const { data } = doc2htmlById[file?.id] || false;
+  const { data }    = doc2htmlById[file?.id] || false;
   const description = unit.description
     ? (<div dangerouslySetInnerHTML={{ __html: unit.description }}/>)
     : (data ? '' : t('materials.summary.no-summary'));

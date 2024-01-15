@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Popup, Ref } from 'semantic-ui-react';
 
-import { selectors as settings } from '../../redux/modules/settings';
+import { settingsGetUIDirSelector } from '../../redux/selectors';
 
 /**
  *
@@ -20,7 +20,7 @@ const TooltipIfNeed = props => {
 
   const ref = useRef();
 
-  const dir = useSelector(state => settings.getUIDir(state.settings));
+  const dir = useSelector(settingsGetUIDirSelector);
 
   useEffect(() => {
     if (ref.current && (ref.current.scrollHeight > ref.current.clientHeight)) {
@@ -30,7 +30,7 @@ const TooltipIfNeed = props => {
 
   const content = (
     <Ref innerRef={ref}>
-      <Component {...propz} className="line_clamp_2_lines" />
+      <Component {...propz} className="line_clamp_2_lines"/>
     </Ref>
   );
 

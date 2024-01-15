@@ -3,18 +3,18 @@ import { useSelector } from 'react-redux';
 import { Container, Divider, Table } from 'semantic-ui-react';
 
 import { isEmpty } from '../../../helpers/utils';
-import { selectors as sources } from '../../../redux/modules/sources';
 import SectionHeader from '../../shared/SectionHeader';
 import Kabbalist from './Kabbalist';
+import { sourcesGetRootsSelector, sourcesGetSourceByIdSelector } from '../../../redux/selectors';
 
 const Homepage = () => {
-  const roots         = useSelector(state => sources.getRoots(state.sources));
-  const getSourceById = useSelector(state => sources.getSourceById(state.sources));
+  const roots         = useSelector(sourcesGetRootsSelector);
+  const getSourceById = useSelector(sourcesGetSourceByIdSelector);
 
   return (
     <div>
-      <SectionHeader section="sources-library" />
-      <Divider fitted />
+      <SectionHeader section="sources-library"/>
+      <Divider fitted/>
       <Container className="padded">
         <Table basic="very" className="index-list sources__authors">
           <Table.Body>
@@ -28,7 +28,7 @@ const Homepage = () => {
                     author={author}
                     getSourceById={getSourceById}
                     portraitIdx={r}
-                  />
+                  />;
               })
             }
           </Table.Body>

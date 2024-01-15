@@ -10,21 +10,20 @@ import {
   MY_NAMESPACE_PLAYLISTS,
   MY_NAMESPACE_SUBSCRIPTIONS
 } from '../../../../helpers/consts';
-import { isLanguageRtl } from '../../../../helpers/i18n-utils';
 import Link from '../../../Language/MultiLanguageLink';
 import PlaylistPlayIcon from '../../../../images/icons/PlaylistPlay';
 import SubscriptionsIcon from '../../../../images/icons/Subscriptions';
-import { selectors as settings } from '../../../../redux/modules/settings';
+import { settingsGetUIDirSelector } from '../../../../redux/selectors';
 
 const iconByNamespace = {
-  [MY_NAMESPACE_REACTIONS]: 'heart outline',
-  [MY_NAMESPACE_HISTORY]: 'history',
-  [MY_NAMESPACE_SUBSCRIPTIONS]: <SubscriptionsIcon className="playlist_icon" />,
-  [MY_NAMESPACE_PLAYLISTS]: <PlaylistPlayIcon className="playlist_icon" />,
+  [MY_NAMESPACE_REACTIONS]    : 'heart outline',
+  [MY_NAMESPACE_HISTORY]      : 'history',
+  [MY_NAMESPACE_SUBSCRIPTIONS]: <SubscriptionsIcon className="playlist_icon"/>,
+  [MY_NAMESPACE_PLAYLISTS]    : <PlaylistPlayIcon className="playlist_icon"/>
 };
 
-const ItemTemplate    = ({ children, namespace, t, withSeeAll = false }) => {
-  const uiDir = useSelector(state => settings.getUIDir(state.settings));
+const ItemTemplate = ({ children, namespace, t, withSeeAll = false }) => {
+  const uiDir = useSelector(settingsGetUIDirSelector);
 
   const seeAll = withSeeAll ? (
     <Grid.Column textAlign={'right'}>
@@ -38,7 +37,7 @@ const ItemTemplate    = ({ children, namespace, t, withSeeAll = false }) => {
     icon        = iconByNamespace[namespace];
     marginClass = uiDir === 'rtl' ? ' margin-right-8' : ' margin-left-8';
   } else {
-    icon = <Icon name={iconByNamespace[namespace]} />;
+    icon = <Icon name={iconByNamespace[namespace]}/>;
   }
 
   return (
@@ -69,7 +68,7 @@ const ItemTemplate    = ({ children, namespace, t, withSeeAll = false }) => {
 
 ItemTemplate.propTypes = {
   items: PropTypes.arrayOf(shapes.ContentUnit),
-  t: PropTypes.func.isRequired
+  t    : PropTypes.func.isRequired
 };
 
 export default ItemTemplate;

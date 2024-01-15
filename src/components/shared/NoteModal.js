@@ -5,26 +5,26 @@ import { useDispatch, useSelector } from 'react-redux';
 import { actions } from '../../redux/modules/myNotes';
 import moment, { now } from 'moment/moment';
 import { useTranslation } from 'react-i18next';
-import { selectors as settings } from '../../redux/modules/settings';
+import { settingsGetUILangSelector } from '../../redux/selectors';
 
 const NoteModal = ({ note = false, open = true, toggleOpen }) => {
   const [content, setContent] = useState(note.content || '');
   const [confirm, setConfirm] = useState(false);
 
-  const { t }       = useTranslation();
-  const uiLang      = useSelector(state => settings.getUILang(state.settings));
-  const language    = note.properties?.language || uiLang;
-  const dir         = getLanguageDirection(language);
+  const { t }    = useTranslation();
+  const uiLang   = useSelector(settingsGetUILangSelector);
+  const language = note.properties?.language || uiLang;
+  const dir      = getLanguageDirection(language);
 
-  const dispatch              = useDispatch();
-  const handleSave            = () => {
+  const dispatch   = useDispatch();
+  const handleSave = () => {
     !note.id ? dispatch(actions.add(content, { ...note, language })) : dispatch(actions.edit(content, note.id));
     toggleOpen(false);
   };
 
-  const handleOnClose         = () => toggleOpen(false);
-  const handleOnChange        = (e, { value }) => setContent(value);
-  const handleRemove          = () => {
+  const handleOnClose  = () => toggleOpen(false);
+  const handleOnChange = (e, { value }) => setContent(value);
+  const handleRemove   = () => {
     if (!note) {
       handleOnClose();
       return;
@@ -39,7 +39,7 @@ const NoteModal = ({ note = false, open = true, toggleOpen }) => {
     setConfirm(false);
   };
 
-  const handleCancelConfirm   = () => {
+  const handleCancelConfirm = () => {
     setConfirm(false);
   };
 
@@ -86,7 +86,7 @@ const NoteModal = ({ note = false, open = true, toggleOpen }) => {
               note ? (
                 <>
                   {t('buttons.remove')}
-                  <Icon name="trash alternate outline" />
+                  <Icon name="trash alternate outline"/>
                 </>
               ) : t('buttons.cancel')
             }

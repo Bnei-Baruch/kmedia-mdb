@@ -11,11 +11,10 @@ import {
 } from '../helpers/consts';
 import { getSourcesCollections } from '../helpers/utils';
 import { actions, selectors as recommended, types } from '../redux/modules/recommended';
-import { selectors as settings } from '../redux/modules/settings';
 import { selectors as sourcesSelectors } from '../redux/modules/sources';
 import { fetchMissingCollections, fetchMissingUnits } from './mdb';
 import { types as playerTypes } from '../redux/modules/player';
-import { selectors as playlist } from '../redux/modules/playlist';
+import { playlistGetInfoSelector, recommendedGetViewsSelector, settingsGetContentLanguagesSelector } from '../redux/selectors';
 
 const WATCHING_NOW_MIN = 50;
 const POPULAR_MIN      = 100;
@@ -24,7 +23,7 @@ export function* fetchRecommended(action) {
   const { id, content_type, tags, sources, collections, size, skip, variant } = action.payload;
   try {
     const isLesson         = UNIT_LESSONS_TYPE.includes(content_type);
-    const contentLanguages = yield select(state => settings.getContentLanguages(state.settings));
+    const contentLanguages = yield select(settingsGetContentLanguagesSelector);
     const [...skipUids]    = yield select(state => recommended.getSkipUids(state.recommended));
     const skipSet          = new Set(skipUids);
     skip.forEach(uid => {
@@ -267,7 +266,7 @@ function* fetchViews(action) {
 }
 
 export function* fetchViewsByUIDs(uids) {
-  uids = yield select(state => uids.filter(uid => recommended.getViews(uid, state.recommended) === -1));
+  uids = yield select(state => uids.filter(uid => recommendedGetViewsSelector(state, uid) === -1));
   if (uids.length > 0) {
     try {
       const { data } = yield call(Api.views, uids);
@@ -285,7 +284,7 @@ export function* fetchViewsByUIDs(uids) {
 }
 
 export function* fetchWatchingNow(uids) {
-  uids = yield select(state => uids.filter(uid => recommended.getWatchingNow(uid, state.recommended) === -1));
+  uids = yield select(state => uids.filter(uid => recommended.getWatchingNow(state.recommended, uid) === -1));
   if (uids.length > 0) {
     const { data } = yield call(Api.watchingNow, uids);
     const views    = uids.reduce((acc, uid, i) => {
@@ -297,7 +296,7 @@ export function* fetchWatchingNow(uids) {
 }
 
 function* playerPlayWithUidProxy() {
-  const { cuId } = yield select(state => playlist.getInfo(state.playlist));
+  const { cuId } = yield select(playlistGetInfoSelector);
   yield put(actions.playerPlayWithUid(cuId));
 }
 

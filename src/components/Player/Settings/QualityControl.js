@@ -3,17 +3,17 @@ import { Button, Header } from 'semantic-ui-react';
 import { withTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { selectors as playlist, actions as playlistActions } from '../../../redux/modules/playlist';
-import { selectors } from '../../../redux/modules/player';
+import { actions as playlistActions } from '../../../redux/modules/playlist';
 import { MT_AUDIO, VS_NAMES } from '../../../helpers/consts';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
+import { playerGetFileSelector, playlistGetInfoSelector, playlistGetPlayedSelector } from '../../../redux/selectors';
 
 const QualityControl = ({ t }) => {
   const { deviceInfo } = useContext(DeviceInfoContext);
 
-  const playedItem            = useSelector(state => playlist.getPlayed(state.playlist));
-  const { quality, language } = useSelector(state => playlist.getInfo(state.playlist));
-  const { type }              = useSelector(state => selectors.getFile(state.player));
+  const playedItem            = useSelector(playlistGetPlayedSelector);
+  const { quality, language } = useSelector(playlistGetInfoSelector);
+  const { type }              = useSelector(playerGetFileSelector);
 
   const dispatch = useDispatch();
 

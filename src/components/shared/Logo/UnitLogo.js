@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { assetUrl, Requests, cLogoUrl } from '../../../helpers/Api';
 import FallbackImage from '../FallbackImage';
 
-import { selectors as sources } from '../../../redux/modules/sources';
+import { sourcesGetPathByIDSelector } from '../../../redux/selectors';
 
 import portraitBS from '../../../images/portrait_bs.png';
 import portraitRB from '../../../images/portrait_rb.png';
@@ -15,7 +15,7 @@ const portraits = { bs: portraitBS, rb: portraitRB, ml: portraitML };
 
 const makeImaginary = (cuId, cId, width, height) => {
   if (cuId) {
-    const src = Requests.imaginary('thumbnail', { url: assetUrl(`api/thumbnail/${cuId}`), width, stripmeta: true, });
+    const src = Requests.imaginary('thumbnail', { url: assetUrl(`api/thumbnail/${cuId}`), width, stripmeta: true });
     return { src, fallbacks: [] };
   }
 
@@ -32,19 +32,20 @@ const makeImaginary = (cuId, cId, width, height) => {
 };
 
 const UnitLogo = props => {
-  const {
-    unitId       = null,
-    collectionId = null,
-    sourceId     = null,
-    width        = 120,
-    height,
-    className    = '',
-    fallbackImg  = 'default',
-    showImg      = true,
-    ...rest
-  } = props;
+  const
+    {
+      unitId       = null,
+      collectionId = null,
+      sourceId     = null,
+      width        = 120,
+      height,
+      className    = '',
+      fallbackImg  = 'default',
+      showImg      = true,
+      ...rest
+    } = props;
 
-  const sourcePath = useSelector(state => sources.getPathByID(state.sources)(sourceId));
+  const sourcePath = useSelector(sourcesGetPathByIDSelector)(sourceId);
 
   const { src, fallbacks } = showImg ?
     makeImaginary(unitId, collectionId, width, height)
@@ -67,11 +68,11 @@ const UnitLogo = props => {
 };
 
 UnitLogo.propTypes = {
-  unitId: PropTypes.string,
+  unitId      : PropTypes.string,
   collectionId: PropTypes.string,
-  width: PropTypes.number,
-  className: PropTypes.string,
-  fallbackImg: PropTypes.any,
+  width       : PropTypes.number,
+  className   : PropTypes.string,
+  fallbackImg : PropTypes.any
 };
 
 export default UnitLogo;

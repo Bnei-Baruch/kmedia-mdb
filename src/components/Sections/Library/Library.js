@@ -5,8 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { Segment } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 
-import { selectors as settings } from '../../../redux/modules/settings';
-import { actions as assetsActions, selectors } from '../../../redux/modules/assets';
+import { actions as assetsActions } from '../../../redux/modules/assets';
 import { getLanguageName, selectSuitableLanguage } from '../../../helpers/language';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import { physicalFile } from '../../../helpers/utils';
@@ -20,6 +19,7 @@ import MenuLanguageSelector from '../../Language/Selector/MenuLanguageSelector';
 import { getPageFromLocation } from '../../Pagination/withPagination';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { CT_SOURCE, DEFAULT_CONTENT_LANGUAGE, LANG_HEBREW } from '../../../helpers/consts';
+import { settingsGetContentLanguagesSelector, assetsGetDoc2htmlByIdSelector } from '../../../redux/selectors';
 
 export const checkRabashGroupArticles = source => {
   if (/^gr-/.test(source)) { // Rabash Group Articles
@@ -71,8 +71,8 @@ const Library = ({ data, source, downloadAllowed }) => {
   const navigate           = useNavigate();
   const { t }              = useTranslation();
 
-  const doc2htmlById     = useSelector(state => selectors.getDoc2htmlById(state.assets));
-  const contentLanguages = useSelector(state => settings.getContentLanguages(state.settings, location));
+  const doc2htmlById     = useSelector(assetsGetDoc2htmlByIdSelector);
+  const contentLanguages = useSelector(state => settingsGetContentLanguagesSelector(state, location));
 
   const [pageNumber, setPageNumber] = useState(getPageFromLocation(location));
 

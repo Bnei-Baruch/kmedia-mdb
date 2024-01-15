@@ -15,6 +15,7 @@ import * as shapes from '../../../../shapes';
 import WipErr from '../../../../shared/WipErr/WipErr';
 import MenuLanguageSelector from '../../../../Language/Selector/MenuLanguageSelector';
 import { imageGalleryItem, isZipFile } from './helper';
+import { settingsGetContentLanguagesSelector } from '../../../../../redux/selectors';
 
 class Sketches extends React.Component {
   static propTypes = {
@@ -295,7 +296,7 @@ class Sketches extends React.Component {
 const mapState = state => ({
   zipIndexById    : selectors.getZipIndexById(state.assets),
   uiDir           : settings.getUIDir(state.settings),
-  contentLanguages: settings.getContentLanguages(state.settings)
+  contentLanguages: settingsGetContentLanguagesSelector(state)
 });
 
 const mapDispatch = dispatch => bindActionCreators({

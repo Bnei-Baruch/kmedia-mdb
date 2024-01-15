@@ -1,27 +1,34 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { actions as mdbActions, selectors } from '../../../../redux/modules/mdb';
+import { actions as mdbActions } from '../../../../redux/modules/mdb';
 
-import { selectors as my } from '../../../../redux/modules/my';
 import { MY_NAMESPACE_HISTORY } from '../../../../helpers/consts';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { selectors as settings } from '../../../../redux/modules/settings';
 import { getSavedTime } from '../../../Player/helper';
 import moment from 'moment';
 import { getCuByCcuSkipPreparation, canonicalLink } from '../../../../helpers/links';
 import { getEmbedFromQuery } from '../../../../helpers/player';
+import {
+  mdbGetDenormCollectionSelector,
+  mdbGetErrorsSelector,
+  mdbGetLastLessonIdSelector,
+  myGetListSelector,
+  settingsGetUILangSelector,
+  mdbGetWipFn,
+  mdbNestedGetDenormContentUnitSelector
+} from '../../../../redux/selectors';
 
 const BuildPlaylistLastDaily = () => {
-  const lastLessonId = useSelector(state => selectors.getLastLessonId(state.mdb));
-  const wip          = useSelector(state => selectors.getWip(state.mdb).lastLesson);
-  const err          = useSelector(state => selectors.getErrors(state.mdb).lastLesson);
-  const ccu          = useSelector(state => selectors.getDenormCollection(state.mdb, lastLessonId)) || false;
-  const denormCU     = useSelector(state => selectors.nestedGetDenormContentUnit(state.mdb));
-  const historyItems = useSelector(state => my.getList(state.my, MY_NAMESPACE_HISTORY));
+  const lastLessonId = useSelector(mdbGetLastLessonIdSelector);
+  const wip          = useSelector(mdbGetWipFn).lastLesson;
+  const err          = useSelector(mdbGetErrorsSelector).lastLesson;
+  const ccu          = useSelector(state => mdbGetDenormCollectionSelector(state, lastLessonId)) || false;
+  const denormCU     = useSelector(mdbNestedGetDenormContentUnitSelector);
+  const historyItems = useSelector(state => myGetListSelector(state, MY_NAMESPACE_HISTORY));
   const navigate     = useNavigate();
   const location     = useLocation();
   const embed        = getEmbedFromQuery(location);
-  const uiLang       = useSelector(state => settings.getUILang(state.settings));
+  const uiLang       = useSelector(settingsGetUILangSelector);
 
   const dispatch = useDispatch();
 
@@ -36,7 +43,7 @@ const BuildPlaylistLastDaily = () => {
       return;
 
     const sorted = ccu.cuIDs.map(id => {
-      const ht                          = historyItems.find(x => x.content_unit_uid === id);
+      const ht = historyItems.find(x => x.content_unit_uid === id);
       const { current_time: timestamp } = getSavedTime(id, ht);
       return { id, timestamp };
     }).filter(x => !!x.timestamp).sort((a, b) => {

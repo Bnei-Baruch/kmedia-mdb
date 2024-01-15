@@ -20,11 +20,11 @@ import { selectors as filterSelectors } from '../redux/modules/filters';
 
 import { actions, types } from '../redux/modules/lists';
 import { actions as mbdActions, selectors as mdb } from '../redux/modules/mdb';
-import { selectors as settings } from '../redux/modules/settings';
 import { getQuery, pushQuery } from './helpers/url';
 import { fetchCollectionsByIDs, fetchUnitsByIDs } from './mdb';
 import { fetch as fetchMy } from './my';
 import { fetchViewsByUIDs } from './recommended';
+import { settingsGetContentLanguagesSelector, settingsGetUILangSelector } from '../redux/selectors';
 
 const endpointByNamespace = {
   [PAGE_NS_LESSONS] : Api.lessons,
@@ -50,8 +50,8 @@ function* fetchList(action) {
     args               = { ...args, ...filterParams };
   }
 
-  const uiLang           = yield select(state => settings.getUILang(state.settings));
-  const contentLanguages = yield select(state => settings.getContentLanguages(state.settings));
+  const uiLang           = yield select(settingsGetUILangSelector);
+  const contentLanguages = yield select(settingsGetContentLanguagesSelector);
 
   try {
     const { data } = yield call(Api.units, {
@@ -95,8 +95,8 @@ function* fetchSectionList(action) {
   if (namespace === PAGE_NS_LESSONS) patchLessonFilters(filters);
   const filterParams = filtersTransformer.toApiParams(filters) || {};
 
-  const uiLang           = yield select(state => settings.getUILang(state.settings));
-  const contentLanguages = yield select(state => settings.getContentLanguages(state.settings));
+  const uiLang           = yield select(settingsGetUILangSelector);
+  const contentLanguages = yield select(settingsGetContentLanguagesSelector);
 
   try {
     const { data } = yield call(endpointByNamespace[namespace], {

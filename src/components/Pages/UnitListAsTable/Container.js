@@ -6,37 +6,37 @@ import { connect } from 'react-redux';
 import { selectors as settings } from '../../../redux/modules/settings';
 import { actions as filtersActions, selectors as filters } from '../../../redux/modules/filters';
 import { actions as listsActions, selectors as lists } from '../../../redux/modules/lists';
-import { selectors as mdb } from '../../../redux/modules/mdb';
 import withPagination, { getPageFromLocation } from '../../Pagination/withPagination';
 import * as shapes from '../../shapes';
 import Page from './Page';
 import { withRouter } from '../../../helpers/withRouterPatch';
+import { mdbGetDenormContentUnitSelector, settingsGetContentLanguagesSelector } from '../../../redux/selectors';
 
 export class UnitListContainer extends withPagination {
   static propTypes = {
-    namespace: PropTypes.string.isRequired,
-    location: shapes.HistoryLocation.isRequired,
-    items: PropTypes.arrayOf(shapes.ContentUnit),
-    wip: shapes.WIP,
-    err: shapes.Error,
-    pageNo: PropTypes.number.isRequired,
-    total: PropTypes.number.isRequired,
-    pageSize: PropTypes.number.isRequired,
-    contentLanguages: PropTypes.arrayOf(PropTypes.string).isRequired,
+    namespace        : PropTypes.string.isRequired,
+    location         : shapes.HistoryLocation.isRequired,
+    items            : PropTypes.arrayOf(shapes.ContentUnit),
+    wip              : shapes.WIP,
+    err              : shapes.Error,
+    pageNo           : PropTypes.number.isRequired,
+    total            : PropTypes.number.isRequired,
+    pageSize         : PropTypes.number.isRequired,
+    contentLanguages : PropTypes.arrayOf(PropTypes.string).isRequired,
     isFiltersHydrated: PropTypes.bool,
-    fetchList: PropTypes.func.isRequired,
-    setPage: PropTypes.func.isRequired,
-    extraFetchParams: PropTypes.object,
-    renderUnit: PropTypes.func.isRequired,
-    resetNamespace: PropTypes.func.isRequired
+    fetchList        : PropTypes.func.isRequired,
+    setPage          : PropTypes.func.isRequired,
+    extraFetchParams : PropTypes.object,
+    renderUnit       : PropTypes.func.isRequired,
+    resetNamespace   : PropTypes.func.isRequired
   };
 
   static defaultProps = {
-    items: [],
-    wip: false,
-    err: null,
+    items            : [],
+    wip              : false,
+    err              : null,
     isFiltersHydrated: false,
-    extraFetchParams: {},
+    extraFetchParams : {}
   };
 
   constructor(props) {
@@ -128,23 +128,23 @@ export const mapState = (state, ownProps) => {
 
   return {
     namespace,
-    items: (nsState.items || []).map(x => mdb.getDenormContentUnit(state.mdb, x)),
-    wip: nsState.wip,
-    err: nsState.err,
-    pageNo: nsState.pageNo,
-    total: nsState.total,
-    pageSize: settings.getPageSize(state.settings),
-    contentLanguages: settings.getContentLanguages(state.settings),
-    isFiltersHydrated: filters.getIsHydrated(state.filters, namespace),
+    items            : (nsState.items || []).map(x => mdbGetDenormContentUnitSelector(state, x)),
+    wip              : nsState.wip,
+    err              : nsState.err,
+    pageNo           : nsState.pageNo,
+    total            : nsState.total,
+    pageSize         : settings.getPageSize(state.settings),
+    contentLanguages : settingsGetContentLanguagesSelector(state),
+    isFiltersHydrated: filters.getIsHydrated(state.filters, namespace)
   };
 };
 
 export const mapDispatch = dispatch => (
   bindActionCreators({
-    fetchList: listsActions.fetchList,
-    setPage: listsActions.setPage,
+    fetchList     : listsActions.fetchList,
+    setPage       : listsActions.setPage,
     resetNamespace: filtersActions.resetNamespace,
-    hydrateFilters: filtersActions.hydrateFilters,
+    hydrateFilters: filtersActions.hydrateFilters
   }, dispatch)
 );
 

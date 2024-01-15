@@ -14,22 +14,23 @@ import {
 } from 'semantic-ui-react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { actions, selectors } from '../../../redux/modules/my';
+import { actions } from '../../../redux/modules/my';
 import { MY_NAMESPACE_BOOKMARKS, MY_NAMESPACE_FOLDERS } from '../../../helpers/consts';
 import { getMyItemKey } from '../../../helpers/my';
 import NeedToLogin from '../../Sections/Personal/NeedToLogin';
+import { myGetListSelector, myGetItemByKeySelector } from '../../../redux/selectors';
 
 const BookmarkForm = ({ t, onClose, source, bookmarkId }) => {
-  const [name, setName] = useState();
-  const [selected, setSelected] = useState(null);
+  const [name, setName]             = useState();
+  const [selected, setSelected]     = useState(null);
   const [editFolder, setEditFolder] = useState(false);
-  const [query, setQuery] = useState();
-  const [isEdit, setIsEdit] = useState();
+  const [query, setQuery]           = useState();
+  const [isEdit, setIsEdit]         = useState();
 
-  const { key } = getMyItemKey(MY_NAMESPACE_BOOKMARKS, { id: bookmarkId });
-  const bookmark = useSelector(state => selectors.getItemByKey(state.my, MY_NAMESPACE_BOOKMARKS, key));
-  const items = useSelector(state => selectors.getList(state.my, MY_NAMESPACE_FOLDERS)).filter(x => !query || x.name.toLowerCase().includes(query));
-  const saved = items.filter(f => bookmark?.folder_ids?.includes(f.id)).map(f => f.id);
+  const { key }  = getMyItemKey(MY_NAMESPACE_BOOKMARKS, { id: bookmarkId });
+  const bookmark = useSelector(state => myGetItemByKeySelector(state, MY_NAMESPACE_BOOKMARKS, key));
+  const items    = useSelector(state => myGetListSelector(state, MY_NAMESPACE_FOLDERS)).filter(x => !query || x.name.toLowerCase().includes(query));
+  const saved    = items.filter(f => bookmark?.folder_ids?.includes(f.id)).map(f => f.id);
 
   const dispatch = useDispatch();
 
@@ -57,7 +58,7 @@ const BookmarkForm = ({ t, onClose, source, bookmarkId }) => {
 
   const needToLogin = NeedToLogin({ t });
   if (needToLogin) {
-    return (<Modal.Content>{needToLogin}</Modal.Content>)
+    return (<Modal.Content>{needToLogin}</Modal.Content>);
   }
 
   const changeName = (e, { value }) => setName(value);
@@ -160,7 +161,7 @@ const BookmarkForm = ({ t, onClose, source, bookmarkId }) => {
                     }}
                   />
                   <Button
-                    icon='check'
+                    icon="check"
                     basic
                     compact
                     className="no-shadow no-border"
@@ -203,8 +204,8 @@ const BookmarkForm = ({ t, onClose, source, bookmarkId }) => {
 };
 
 BookmarkForm.propTypes = {
-  t: PropTypes.func.isRequired,
-  source: PropTypes.object,
+  t         : PropTypes.func.isRequired,
+  source    : PropTypes.object,
   bookmarkId: PropTypes.number
 };
 

@@ -11,12 +11,12 @@ import TagTextLabelBtn from './TagTextLabelBtn';
 import AddNoteBtn from './AddNoteBtn';
 import PlayByTextBtn from './PlayByTextBtn';
 import { useSelector } from 'react-redux';
-import { selectors as assets } from '../../../redux/modules/assets';
+import { assetsHasTimeCodeSelector } from '../../../redux/selectors';
 
 const DocToolbar = ({ t, url, text, source, label, position, setPinned, isPinned, playByText }) => {
   const [open, setOpen] = useState(!!url);
 
-  const hasTimeCode = useSelector(state => assets.hasTimeCode(state.assets));
+  const hasTimeCode = useSelector(assetsHasTimeCodeSelector);
   const contextRef  = useRef();
 
   const handleToggle     = () => setOpen(!open);
@@ -56,8 +56,8 @@ const DocToolbar = ({ t, url, text, source, label, position, setPinned, isPinned
         {
           isPinned && (
             <>
-              <AddNoteBtn properties={source} toggleToolbar={handleToggle} />
-              {hasTimeCode && <PlayByTextBtn handlePlay={handlePlayByText} />}
+              <AddNoteBtn properties={source} toggleToolbar={handleToggle}/>
+              {hasTimeCode && <PlayByTextBtn handlePlay={handlePlayByText}/>}
             </>
           )
         }
@@ -74,11 +74,11 @@ const DocToolbar = ({ t, url, text, source, label, position, setPinned, isPinned
                 </Header.Content>
               </Header>
               <Menu inverted borderless>
-                <ShareBtn url={url} />
-                <CopyLinkBtn text={url} />
-                <CopyTextBtn text={text} />
-                {source && <BookmarkBtn source={source} label={label} close={handleToggle} />}
-                {label && <TagTextLabelBtn label={label} close={handleToggle} />}
+                <ShareBtn url={url}/>
+                <CopyLinkBtn text={url}/>
+                <CopyTextBtn text={text}/>
+                {source && <BookmarkBtn source={source} label={label} close={handleToggle}/>}
+                {label && <TagTextLabelBtn label={label} close={handleToggle}/>}
               </Menu>
             </>
           )
@@ -89,11 +89,11 @@ const DocToolbar = ({ t, url, text, source, label, position, setPinned, isPinned
 };
 
 DocToolbar.propTypes = {
-  t: PropTypes.func.isRequired,
-  url: PropTypes.string.isRequired,
+  t        : PropTypes.func.isRequired,
+  url      : PropTypes.string.isRequired,
   setPinned: PropTypes.func,
-  isPinned: PropTypes.bool,
-  query: PropTypes.object,
+  isPinned : PropTypes.bool,
+  query    : PropTypes.object
 };
 
 export default withTranslation()(DocToolbar);

@@ -8,7 +8,7 @@ import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import Link from '../../../Language/MultiLanguageLink';
 import PlaylistPlayIcon from '../../../../images/icons/PlaylistPlay';
 import { useSelector } from 'react-redux';
-import { selectors as settings } from '../../../../redux/modules/settings';
+import { settingsGetUIDirSelector } from '../../../../redux/selectors';
 
 const PlaylistHeader = ({ confirmSuccess, save, playlist, t }) => {
   const [isEditName, setIsEditName] = useState();
@@ -16,7 +16,7 @@ const PlaylistHeader = ({ confirmSuccess, save, playlist, t }) => {
   const [confirm, setConfirm]       = useState();
 
   const { isMobileDevice } = useContext(DeviceInfoContext);
-  const uiDir              = useSelector(state => settings.getUIDir(state.settings));
+  const uiDir              = useSelector(settingsGetUIDirSelector);
 
   const handleChangeName = (e, { value }) => setName(value);
 
@@ -36,9 +36,9 @@ const PlaylistHeader = ({ confirmSuccess, save, playlist, t }) => {
 
   const nameTag = isEditName ? (
     <>
-      <Input type="text" value={name} onChange={handleChangeName} maxLength={30} />
-      <Button content={t('buttons.save')} onClick={handleSave} className="margin-right-8 margin-left-8 uppercase" />
-      <Button content={t('buttons.cancel')} onClick={toggleEditName} />
+      <Input type="text" value={name} onChange={handleChangeName} maxLength={30}/>
+      <Button content={t('buttons.save')} onClick={handleSave} className="margin-right-8 margin-left-8 uppercase"/>
+      <Button content={t('buttons.cancel')} onClick={toggleEditName}/>
     </>
   ) : playlist.name;
 
@@ -46,7 +46,7 @@ const PlaylistHeader = ({ confirmSuccess, save, playlist, t }) => {
     <Container className="padded background_grey">
       <div className="summary-container align_items_center">
         <Header as={isMobileDevice ? 'h3' : 'h2'} className="my_header">
-          <PlaylistPlayIcon className="playlist_icon" />
+          <PlaylistPlayIcon className="playlist_icon"/>
           {nameTag}
           <Header.Subheader className="display-iblock margin-right-8 margin-left-8">
             {`${playlist.total_items} ${t('pages.collection.items.programs-collection')}`}
@@ -54,7 +54,7 @@ const PlaylistHeader = ({ confirmSuccess, save, playlist, t }) => {
         </Header>
         <div>
           <Button basic onClick={toggleEditName} className="clear_button">
-            <Icon name={'edit outline'} size="large" />
+            <Icon name={'edit outline'} size="large"/>
           </Button>
           <Confirm
             size="tiny"
@@ -67,14 +67,14 @@ const PlaylistHeader = ({ confirmSuccess, save, playlist, t }) => {
             dir={uiDir}
           />
           <Button basic onClick={remove} className="clear_button">
-            <Icon name={'trash alternate outline'} size="large" />
+            <Icon name={'trash alternate outline'} size="large"/>
           </Button>
         </div>
       </div>
       {
         (playlist.total_items > 0) && (<Link to={`/${MY_NAMESPACE_PLAYLISTS}/${playlist.id}`}>
           <Button basic className="clear_button">
-            <Icon name={'play circle outline'} className="margin-left-8 margin-right-8" size="big" />
+            <Icon name={'play circle outline'} className="margin-left-8 margin-right-8" size="big"/>
             {t('personal.playAll')}
           </Button>
         </Link>)
@@ -84,9 +84,9 @@ const PlaylistHeader = ({ confirmSuccess, save, playlist, t }) => {
 };
 
 PlaylistHeader.propTypes = {
-  playlist: PropTypes.object.isRequired,
+  playlist      : PropTypes.object.isRequired,
   confirmSuccess: PropTypes.func,
-  save: PropTypes.func
+  save          : PropTypes.func
 };
 
 export default withTranslation()(PlaylistHeader);

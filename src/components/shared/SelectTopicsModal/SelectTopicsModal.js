@@ -5,15 +5,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Button, Container, Grid, Header, Input, Label, Modal } from 'semantic-ui-react';
 import isEqual from 'react-fast-compare';
 
-import { selectors as sourcesSelectors } from '../../../redux/modules/sources';
-import { selectors as settings } from '../../../redux/modules/settings';
-import { selectors } from '../../../redux/modules/tags';
-import { getTree } from '../../../helpers/topricTree';
+import { getTree } from '../../../helpers/topicTree';
 import NeedToLogin from '../../Sections/Personal/NeedToLogin';
 import AlertModal from '../AlertModal';
 import TopicBranch from './TopicBranch';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { actions as mdbActions } from '../../../redux/modules/mdb';
+import { sourcesAreLoadedSelector, tagsGetDisplayRootsSelector, tagsGetTagByIdSelector, settingsGetUIDirSelector, settingsGetUILangSelector } from '../../../redux/selectors';
 
 const SelectTopicsModal = ({ t, open, onClose, label, trigger }) => {
   const [selected, setSelected] = useState([]);
@@ -23,13 +21,13 @@ const SelectTopicsModal = ({ t, open, onClose, label, trigger }) => {
 
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
-  const areSourcesLoaded = useSelector(state => sourcesSelectors.areSourcesLoaded(state.sources));
-  const roots            = useSelector(state => selectors.getDisplayRoots(state.tags), isEqual) || [];
-  const getTagById       = useSelector(state => selectors.getTagById(state.tags));
+  const areSourcesLoaded = useSelector(sourcesAreLoadedSelector);
+  const roots            = useSelector(tagsGetDisplayRootsSelector, isEqual) || [];
+  const getTagById       = useSelector(tagsGetTagByIdSelector);
   const tree             = useMemo(() => getTree(roots, getTagById, null, t)[0], [roots, getTagById, t]);
 
-  const language = useSelector(state => settings.getUILang(state.settings));
-  const dir      = useSelector(state => settings.getUIDir(state.settings));
+  const language = useSelector(settingsGetUILangSelector);
+  const dir      = useSelector(settingsGetUIDirSelector);
 
   const dispatch = useDispatch();
 

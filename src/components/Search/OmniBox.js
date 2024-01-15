@@ -10,27 +10,27 @@ import { ClientChroniclesContext, DeviceInfoContext } from '../../helpers/app-co
 import { SuggestionsHelper } from '../../helpers/search';
 import { isLanguageRtl } from '../../helpers/i18n-utils';
 
-import { actions, selectors } from '../../redux/modules/search';
-import { selectors as settingsSelectors } from '../../redux/modules/settings';
+import { actions } from '../../redux/modules/search';
+import { searchGetAutocompleteWipSelector, searchGetQuerySelector, searchGetSuggestionsSelector, settingsGetUILangSelector } from '../../redux/selectors';
 
 const makeResult = (uiLang, result) => ({
   ...result,
-  className: isLanguageRtl(uiLang) ? 'search-result-rtl' : '',
+  className: isLanguageRtl(uiLang) ? 'search-result-rtl' : ''
 });
 
 const OmniBox = ({ isHomePage = false, t }) => {
-  const query       = useSelector(state => selectors.getQuery(state.search));
-  const suggestions = useSelector(state => selectors.getSuggestions(state.search));
-  const wip         = useSelector(state => selectors.getAutocompleteWip(state.search));
-  const uiLang      = useSelector(state => settingsSelectors.getUILang(state.settings));
+  const query       = useSelector(searchGetQuerySelector);
+  const suggestions = useSelector(searchGetSuggestionsSelector);
+  const wip         = useSelector(searchGetAutocompleteWipSelector);
+  const uiLang      = useSelector(settingsGetUILangSelector);
 
   const { isMobileDevice } = useContext(DeviceInfoContext);
-  const chronicles = useContext(ClientChroniclesContext);
+  const chronicles         = useContext(ClientChroniclesContext);
 
   const [autocompleteResults, setAutocompleteResults] = useState([]);
-  const [autocompleteId, setAutocompleteId] = useState('');
-  const [inputFocused, setInputFocused] = useState(!isMobileDevice);
-  const [userInteracted, setUserInteracted] = useState(false);
+  const [autocompleteId, setAutocompleteId]           = useState('');
+  const [inputFocused, setInputFocused]               = useState(!isMobileDevice);
+  const [userInteracted, setUserInteracted]           = useState(false);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -60,22 +60,22 @@ const OmniBox = ({ isHomePage = false, t }) => {
     if (e.keyCode === 13) {
       doSearch();
     }
-  }
+  };
 
   const inputChange = e => {
     setUserInteracted(true);
     setInputFocused(true);
     dispatch(actions.updateQuery({ query: e.target.value, autocomplete: true }));
-  }
+  };
 
   const onFocus = () => {
     setInputFocused(true);
-  }
+  };
 
   const onBlur = () => {
     setInputFocused(false);
     setUserInteracted(true);
-  }
+  };
 
   const handleResultSelect = (e, data) => {
     const { title } = data.result;
@@ -85,7 +85,7 @@ const OmniBox = ({ isHomePage = false, t }) => {
   };
 
   const handleFromInputChange = value => {
-    navigate(`/${ uiLang }/simple-mode?date=${ moment(value).format('YYYY-MM-DD') }`);
+    navigate(`/${uiLang}/simple-mode?date=${moment(value).format('YYYY-MM-DD')}`);
   };
 
   const renderInput = () => isHomePage ?
@@ -101,17 +101,17 @@ const OmniBox = ({ isHomePage = false, t }) => {
       placeholder={`${t('buttons.search')}...`}
       style={{ width: '100%' }}
       type="text">
-      <input />
-      <Button type='submit' className="searchButton" onClick={doSearch}>
+      <input/>
+      <Button type="submit" className="searchButton" onClick={doSearch}>
         {/* fix isLanguageRtl for style below */}
-        {wip ? <Loader active size='tiny' style={{ position: 'relative', left: '0', marginLeft: '4px' }}/> :
-          <Icon name='search' size={isMobileDevice ? 'large' : null} />
+        {wip ? <Loader active size="tiny" style={{ position: 'relative', left: '0', marginLeft: '4px' }}/> :
+          <Icon name="search" size={isMobileDevice ? 'large' : null}/>
         }
         {!isMobileDevice ? t('buttons.search').toUpperCase() : null}
       </Button>
       <ButtonDayPicker
         label={t('filters.date-filter.presets.CUSTOM_DAY')}
-        onDayChange={handleFromInputChange} />
+        onDayChange={handleFromInputChange}/>
 
     </Input> :
     <Input
@@ -130,7 +130,7 @@ const OmniBox = ({ isHomePage = false, t }) => {
     open={userInteracted && inputFocused && !!autocompleteResults.length}
     value={query}
     input={renderInput()}
-    icon={<Icon link name="search" onClick={doSearch} />}
+    icon={<Icon link name="search" onClick={doSearch}/>}
     showNoResults={false}
     loading={wip}
     onResultSelect={handleResultSelect}

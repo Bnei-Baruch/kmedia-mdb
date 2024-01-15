@@ -8,14 +8,14 @@ import { actions } from '../../../../../redux/modules/my';
 import { MY_NAMESPACE_FOLDERS } from '../../../../../helpers/consts';
 import { getMyItemKey } from '../../../../../helpers/my';
 import { stopBubbling } from '../../../../../helpers/utils';
-import { selectors as settings } from '../../../../../redux/modules/settings';
+import { settingsGetUIDirSelector } from '../../../../../redux/selectors';
 
 const FolderItem = ({ folder, selectedId, selectFolder, t }) => {
   const [edit, setEdit]       = useState();
   const [name, setName]       = useState();
   const [confirm, setConfirm] = useState();
 
-  const uiDir = useSelector(state => settings.getUIDir(state.settings));
+  const uiDir = useSelector(settingsGetUIDirSelector);
 
   const { id }  = folder;
   const { key } = getMyItemKey(MY_NAMESPACE_FOLDERS, folder);
@@ -67,7 +67,7 @@ const FolderItem = ({ folder, selectedId, selectFolder, t }) => {
         className={clsx({ 'nowrap': edit })}
         verticalAlign={'middle'}
       >
-        {!edit && <Icon name="folder outline" />}
+        {!edit && <Icon name="folder outline"/>}
         {
           !edit ? folder.name : (
             <Input
@@ -95,7 +95,7 @@ const FolderItem = ({ folder, selectedId, selectFolder, t }) => {
               edit ?
                 (
                   <Button
-                    icon='check'
+                    icon="check"
                     basic
                     compact
                     onClick={handleUpdateFolder}
@@ -104,7 +104,7 @@ const FolderItem = ({ folder, selectedId, selectFolder, t }) => {
                 ) :
                 (
                   <Button
-                    icon='pencil'
+                    icon="pencil"
                     basic
                     compact
                     className="no-shadow"
@@ -116,7 +116,7 @@ const FolderItem = ({ folder, selectedId, selectFolder, t }) => {
               basic
               compact
               className="no-shadow"
-              icon='trash alternate outline'
+              icon="trash alternate outline"
               onClick={toggleConfirm}
             />
 

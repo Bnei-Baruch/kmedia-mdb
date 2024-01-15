@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
-import { selectors as settings } from '../../../../../redux/modules/settings';
 import * as shapes from '../../../../shapes';
 import { renderBlogItemForHomepage, renderBlogItemForPublications } from './renderFeedHelpers';
+import { settingsGetUILangSelector } from '../../../../../redux/selectors';
 
 const BlogFeed = ({ items = [], snippetVersion = false, limitLength = null, t }) => {
-  const uiLang = useSelector(state => settings.getUILang(state.settings));
+  const uiLang = useSelector(settingsGetUILangSelector);
   const length = limitLength || items.length;
 
   return (
@@ -23,10 +23,10 @@ const BlogFeed = ({ items = [], snippetVersion = false, limitLength = null, t })
 };
 
 BlogFeed.propTypes = {
-  items: PropTypes.arrayOf(shapes.BlogPost),
+  items         : PropTypes.arrayOf(shapes.BlogPost),
   snippetVersion: PropTypes.bool,
-  limitLength: PropTypes.number,
-  t: PropTypes.func.isRequired,
+  limitLength   : PropTypes.number,
+  t             : PropTypes.func.isRequired
 };
 
 export default withTranslation()(BlogFeed);

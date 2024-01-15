@@ -3,11 +3,11 @@ import { call, put, takeLatest, select } from 'redux-saga/effects';
 import Api from '../helpers/Api';
 import { CT_LIKUTIM } from '../helpers/consts';
 import { actions, types } from '../redux/modules/likutim';
-import { selectors as settings } from '../redux/modules/settings';
 import { selectors as filterSelectors } from '../redux/modules/filters';
 import { callUnitsStats } from './stats';
 import { filtersTransformer } from '../filters';
 import { actions as mbdActions } from '../redux/modules/mdb';
+import { settingsGetContentLanguagesSelector, settingsGetUILangSelector } from '../redux/selectors';
 
 function* fetchLikutim() {
   try {
@@ -16,8 +16,8 @@ function* fetchLikutim() {
     const filterParams = filtersTransformer.toApiParams(filters) || {};
 
     const pageSize         = 10000;
-    const uiLang           = yield select(state => settings.getUILang(state.settings));
-    const contentLanguages = yield select(state => settings.getContentLanguages(state.settings));
+    const uiLang           = yield select(settingsGetUILangSelector);
+    const contentLanguages = yield select(settingsGetContentLanguagesSelector);
     const { data }         = yield call(Api.units, { content_type: CT_LIKUTIM, language: uiLang, pageSize, ...filterParams });
 
     if (Array.isArray(data.content_units)) {

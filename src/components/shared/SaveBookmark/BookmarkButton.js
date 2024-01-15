@@ -1,14 +1,14 @@
 import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
-import { Button, Modal, } from 'semantic-ui-react';
+import { Button, Modal } from 'semantic-ui-react';
 
 import NeedToLogin from '../../Sections/Personal/NeedToLogin';
 import BookmarkForm from './BookmarkForm';
 import { useSelector } from 'react-redux';
-import { selectors as settings } from '../../../redux/modules/settings';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import AlertModal from '../AlertModal';
+import { settingsGetUIDirSelector } from '../../../redux/selectors';
 
 const BookmarkButton = ({ t, source, disabled }) => {
   const [open, setOpen]         = useState();
@@ -16,7 +16,7 @@ const BookmarkButton = ({ t, source, disabled }) => {
   const needToLogin             = NeedToLogin({ t });
 
   const { isMobileDevice } = useContext(DeviceInfoContext);
-  const dir                = useSelector(state => settings.getUIDir(state.settings));
+  const dir                = useSelector(settingsGetUIDirSelector);
 
   const handleOpen  = () => setOpen(true);
   const handleClose = (e, el, isCreated) => {
@@ -28,7 +28,7 @@ const BookmarkButton = ({ t, source, disabled }) => {
 
   return (
     <>
-      <AlertModal message={alertMsg} open={!!alertMsg} onClose={handleAlertClose} />
+      <AlertModal message={alertMsg} open={!!alertMsg} onClose={handleAlertClose}/>
       <Modal
         trigger={
           <Button
@@ -45,10 +45,10 @@ const BookmarkButton = ({ t, source, disabled }) => {
         dir={dir}
         className="bookmark_modal"
       >
-        <Modal.Header content={t('personal.bookmark.saveBookmark')} />
+        <Modal.Header content={t('personal.bookmark.saveBookmark')}/>
         {
-          !needToLogin ? <BookmarkForm onClose={handleClose} source={source} /> :
-            <Modal.Content content={needToLogin} />
+          !needToLogin ? <BookmarkForm onClose={handleClose} source={source}/> :
+            <Modal.Content content={needToLogin}/>
         }
       </Modal>
     </>
@@ -56,8 +56,8 @@ const BookmarkButton = ({ t, source, disabled }) => {
 };
 
 BookmarkButton.propTypes = {
-  t: PropTypes.func.isRequired,
-  source: PropTypes.object.isRequired,
+  t     : PropTypes.func.isRequired,
+  source: PropTypes.object.isRequired
 };
 
 export default withTranslation()(BookmarkButton);

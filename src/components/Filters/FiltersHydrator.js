@@ -1,11 +1,11 @@
 import { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectors, actions } from '../../redux/modules/filters';
+import { actions } from '../../redux/modules/filters';
+import { filtersGetIsHydratedSelector } from '../../redux/selectors';
 
 const FiltersHydrator = ({ namespace, onHydrated }) => {
-
-  const isHydrated = useSelector(state => selectors.getIsHydrated(state.filters, namespace));
+  const isHydrated = useSelector(state => filtersGetIsHydratedSelector(state, namespace));
   const hydrated   = useRef(false);
 
   const dispatch = useDispatch();
@@ -26,8 +26,8 @@ const FiltersHydrator = ({ namespace, onHydrated }) => {
 };
 
 FiltersHydrator.propTypes = {
-  namespace: PropTypes.string.isRequired,
-  onHydrated: PropTypes.func,
+  namespace : PropTypes.string.isRequired,
+  onHydrated: PropTypes.func
 };
 
 export default FiltersHydrator;

@@ -5,10 +5,8 @@ import { Divider, Dropdown, Menu, Segment } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 
-import { selectors } from '../../../../../../redux/modules/sources';
-import { actions as assetsActions, selectors as assetsSelectors } from '../../../../../../redux/modules/assets';
+import { actions as assetsActions } from '../../../../../../redux/modules/assets';
 import { isEmpty, physicalFile, tracePath } from '../../../../../../helpers/utils';
-import { selectors as settings } from '../../../../../../redux/modules/settings';
 import { getLanguageName, selectSuitableLanguage } from '../../../../../../helpers/language';
 import { getLanguageDirection } from '../../../../../../helpers/i18n-utils';
 import { DeviceInfoContext } from '../../../../../../helpers/app-contexts';
@@ -21,6 +19,7 @@ import Download from '../../../../../shared/Download/Download';
 import * as shapes from '../../../../../shapes';
 import UnitBar from '../UnitBar';
 import MenuLanguageSelector from '../../../../../Language/Selector/MenuLanguageSelector';
+import { settingsGetContentLanguagesSelector, assetsGetDoc2htmlByIdSelector, sourcesGetSourceByIdSelector, assetsGetSourceIndexByIdSelector } from '../../../../../../redux/selectors';
 
 const isValidLikut = unit =>
   unit.content_type === CT_LIKUTIM
@@ -57,10 +56,10 @@ const getDownloadProps = (pdf, file) => {
 };
 
 const Sources = ({ unit, t }) => {
-  const getSourceById    = useSelector(state => selectors.getSourceById(state.sources), shallowEqual);
-  const indexById        = useSelector(state => assetsSelectors.getSourceIndexById(state.assets), shallowEqual);
-  const contentLanguages = useSelector(state => settings.getContentLanguages(state.settings));
-  const doc2htmlById     = useSelector(state => assetsSelectors.getDoc2htmlById(state.assets));
+  const getSourceById    = useSelector(sourcesGetSourceByIdSelector, shallowEqual);
+  const indexById        = useSelector(assetsGetSourceIndexByIdSelector, shallowEqual);
+  const contentLanguages = useSelector(settingsGetContentLanguagesSelector);
+  const doc2htmlById     = useSelector(assetsGetDoc2htmlByIdSelector);
   const dispatch         = useDispatch();
 
   const [fetched, setFetched]                               = useState(null);

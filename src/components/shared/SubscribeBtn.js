@@ -5,14 +5,11 @@ import { Button, Confirm, Modal } from 'semantic-ui-react';
 
 import { CT_SUBSCRIBE_BY_COLLECTION, CT_SUBSCRIBE_BY_TYPE, MY_NAMESPACE_SUBSCRIPTIONS } from '../../helpers/consts';
 import * as shapes from '../shapes';
-import { selectors } from '../../redux/modules/auth';
-import { actions, selectors as myselector } from '../../redux/modules/my';
+import { actions } from '../../redux/modules/my';
 import AlertModal from './AlertModal';
 import NeedToLogin from '../Sections/Personal/NeedToLogin';
 import { getMyItemKey } from '../../helpers/my';
-import { selectors as settings } from '../../redux/modules/settings';
-import { selectors as playlist } from '../../redux/modules/playlist';
-import { selectors as mdb } from '../../redux/modules/mdb';
+import { mdbGetDenormContentUnitSelector, playlistGetInfoSelector, myGetItemByKeySelector, settingsGetUIDirSelector, authGetUserSelector } from '../../redux/selectors';
 
 const SubscribeBtn = ({ t, collection }) => {
   const [alertMsg, setAlertMsg]       = useState();
@@ -20,24 +17,24 @@ const SubscribeBtn = ({ t, collection }) => {
   const [isNeedLogin, setIsNeedLogin] = useState();
 
   const dispatch = useDispatch();
-  const user     = useSelector(state => selectors.getUser(state.auth));
+  const user     = useSelector(authGetUserSelector);
 
-  const { cuId }                                = useSelector(state => playlist.getInfo(state.playlist));
-  const { collections, content_type: type, id } = useSelector(state => mdb.getDenormContentUnit(state.mdb, cuId)) || {};
+  const { cuId }                                = useSelector(playlistGetInfoSelector);
+  const { collections, content_type: type, id } = useSelector(state => mdbGetDenormContentUnitSelector(state, cuId)) || {};
 
   const subsByType = CT_SUBSCRIBE_BY_TYPE.includes(type) ? type : null;
   const cId        = collection?.id || (collections && Object.values(collections)[0]?.id);
 
   const subsByCO  = !type || CT_SUBSCRIBE_BY_COLLECTION.includes(type) ? cId : null;
   const subParams = useMemo(() => ({
-    'collection_uid': subsByCO,
-    'content_type': subsByType,
+    'collection_uid'  : subsByCO,
+    'content_type'    : subsByType,
     'content_unit_uid': id
   }), [subsByCO, subsByType, id]);
   const { key }   = getMyItemKey(MY_NAMESPACE_SUBSCRIPTIONS, subParams);
 
-  const sub = useSelector(state => myselector.getItemByKey(state.my, MY_NAMESPACE_SUBSCRIPTIONS, key));
-  const dir = useSelector(state => settings.getUIDir(state.settings));
+  const sub = useSelector(state => myGetItemByKeySelector(state, MY_NAMESPACE_SUBSCRIPTIONS, key));
+  const dir = useSelector(settingsGetUIDirSelector);
 
   let title;
   if (subsByCO) {
@@ -87,10 +84,10 @@ const SubscribeBtn = ({ t, collection }) => {
         onOpen={() => setIsNeedLogin(true)}
       >
         <Modal.Content>
-          <NeedToLogin />
+          <NeedToLogin/>
         </Modal.Content>
       </Modal>
-      <AlertModal message={alertMsg} open={!!alertMsg} onClose={onAlertCloseHandler} />
+      <AlertModal message={alertMsg} open={!!alertMsg} onClose={onAlertCloseHandler}/>
       <Confirm
         size="tiny"
         open={confirm}
@@ -115,8 +112,8 @@ const SubscribeBtn = ({ t, collection }) => {
 };
 
 SubscribeBtn.propTypes = {
-  unit: shapes.ContentUnit,
-  collection: shapes.Collection,
+  unit      : shapes.ContentUnit,
+  collection: shapes.Collection
 
 };
 

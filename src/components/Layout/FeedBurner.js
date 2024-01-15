@@ -4,12 +4,12 @@ import { withTranslation } from 'react-i18next';
 import { getRSSFeedByLangs } from '../../helpers/utils';
 import { Form } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
-import { selectors as settings } from '../../redux/modules/settings';
+import { settingsGetContentLanguagesSelector } from '../../redux/selectors';
 
 const FeedBurner = ({ t }) => {
   const [email, setEmail] = useState('');
   const handleChange      = (e, { value }) => setEmail(value);
-  const contentLanguages         = useSelector(state => settings.getContentLanguages(state.settings));
+  const contentLanguages  = useSelector(settingsGetContentLanguagesSelector);
 
   const subscribe = () => {
     const uri = getRSSFeedByLangs(contentLanguages);
@@ -24,14 +24,14 @@ const FeedBurner = ({ t }) => {
     <Form>
       <Form.Input
         action={{
-          title: t('nav.sidebar.subscribe'),
-          onClick: subscribe,
-          icon: 'mail',
-          compact: true,
+          title   : t('nav.sidebar.subscribe'),
+          onClick : subscribe,
+          icon    : 'mail',
+          compact : true,
           disabled: !email
         }}
         onChange={handleChange}
-        name='email'
+        name="email"
         className={'right action'}
         placeholder={t('nav.sidebar.subscribe')}
         value={email}
@@ -41,7 +41,7 @@ const FeedBurner = ({ t }) => {
 };
 
 FeedBurner.propTypes = {
-  t: PropTypes.func.isRequired,
+  t: PropTypes.func.isRequired
 };
 
 export default withTranslation()(FeedBurner);

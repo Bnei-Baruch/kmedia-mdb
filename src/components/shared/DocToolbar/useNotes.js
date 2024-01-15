@@ -1,13 +1,14 @@
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { selectors, actions } from '../../../redux/modules/myNotes';
+import { actions } from '../../../redux/modules/myNotes';
 import { buildOffsets } from './helper';
+import { myNotesGetByIdSelector, myNotesGetListSelector } from '../../../redux/selectors';
 
 export const useNotes = (subject_uid, language) => {
-  const ids   = useSelector(state => selectors.getList(state.myNotes));
+  const ids   = useSelector(myNotesGetListSelector);
   const notes = useSelector(state => ids
-    .map(id => selectors.getById(state.myNotes, id))
+    .map(id => myNotesGetByIdSelector(state, id))
     .map(n => ({ type: 'note', ...n }))
   ) || [];
 

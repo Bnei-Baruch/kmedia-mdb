@@ -3,10 +3,7 @@ import { withTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { actions as mdbActions, selectors } from '../../../redux/modules/mdb';
-import { selectors as recommended } from '../../../redux/modules/recommended';
-import { selectors as sources } from '../../../redux/modules/sources';
-import { selectors as tags } from '../../../redux/modules/tags';
+import { actions as mdbActions } from '../../../redux/modules/mdb';
 import {
   CT_CLIPS,
   CT_CONGRESS,
@@ -23,6 +20,7 @@ import { canonicalLink } from '../../../helpers/links';
 import ListTemplate from './ListTemplate';
 import CardTemplate from './CardTemplate';
 import { stringify } from '../../../helpers/url';
+import { mdbGetDenormCollectionSelector, mdbGetDenormContentUnitSelector, mdbGetDenormLabelSelector, sourcesGetSourceByIdSelector, tagsGetTagByIdSelector, recommendedGetViewsSelector } from '../../../redux/selectors';
 
 const NOT_LESSONS_COLLECTIONS = [CT_VIDEO_PROGRAM, CT_VIRTUAL_LESSONS, CT_CLIPS];
 
@@ -40,8 +38,8 @@ const TagItemContainerHook = (
   }
 ) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
-  const tag                = useSelector(state => tags.getTagById(state.tags)(id));
-  const views              = useSelector(state => recommended.getViews(id, state.recommended));
+  const tag                = useSelector(tagsGetTagByIdSelector(id));
+  const views              = useSelector(state => recommendedGetViewsSelector(state, id));
 
   if (!tag) return null;
   if (withInfo === undefined) {
@@ -79,8 +77,8 @@ const SourceItemContainerHook = (
   }
 ) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
-  const source             = useSelector(state => sources.getSourceById(state.sources)(id));
-  const views              = useSelector(state => recommended.getViews(id, state.recommended));
+  const source             = useSelector(state => sourcesGetSourceByIdSelector(state))(id);
+  const views              = useSelector(state => recommendedGetViewsSelector(state, id));
 
   if (!source) return null;
   if (withInfo === undefined) {
@@ -125,10 +123,10 @@ const ContentItemContainer = (
   }
 ) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
-  const unit               = useSelector(state => selectors.getDenormContentUnit(state.mdb, id));
-  const views              = useSelector(state => recommended.getViews(id, state.recommended));
-  const ccu                = useSelector(state => selectors.getDenormCollection(state.mdb, ccuId)) || canonicalCollection(unit);
-  const denormLabel        = useSelector(state => selectors.getDenormLabel(state.mdb));
+  const unit               = useSelector(state => mdbGetDenormContentUnitSelector(state, id));
+  const views              = useSelector(state => recommendedGetViewsSelector(state, id));
+  const ccu                = useSelector(state => mdbGetDenormCollectionSelector(state, ccuId)) || canonicalCollection(unit);
+  const denormLabel        = useSelector(mdbGetDenormLabelSelector);
 
   const dispatch = useDispatch();
   useEffect(() => {

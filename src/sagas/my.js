@@ -13,8 +13,8 @@ import {
   MY_NAMESPACE_SUBSCRIPTIONS
 } from '../helpers/consts';
 import { updateQuery } from './helpers/url';
-import { selectors as settings } from '../redux/modules/settings';
 import { fetchViewsByUIDs } from './recommended';
+import { settingsGetContentLanguagesSelector, settingsGetUILangSelector } from '../redux/selectors';
 
 function* updatePageInQuery(action) {
   const { pageNo } = action.payload;
@@ -34,8 +34,8 @@ export function* fetch(action) {
 
   let with_derivations = false;
 
-  const uiLang           = yield select(state => settings.getUILang(state.settings));
-  const contentLanguages = yield select(state => settings.getContentLanguages(state.settings));
+  const uiLang           = yield select(settingsGetUILangSelector);
+  const contentLanguages = yield select(settingsGetContentLanguagesSelector);
   try {
     const { data } = yield call(Api.my, namespace, params, token);
     if (!data?.items) {
@@ -113,8 +113,8 @@ export function* fetchOne(action) {
   if (!token) return;
   const { namespace, ...params } = action.payload;
   if (!params?.id) return;
-  const uiLang           = yield select(state => settings.getUILang(state.settings));
-  const contentLanguages = yield select(state => settings.getContentLanguages(state.settings));
+  const uiLang           = yield select(settingsGetUILangSelector);
+  const contentLanguages = yield select(settingsGetContentLanguagesSelector);
   try {
     const { data } = yield call(Api.my, namespace, params, token);
 

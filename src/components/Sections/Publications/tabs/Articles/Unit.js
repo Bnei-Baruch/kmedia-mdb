@@ -5,19 +5,18 @@ import { useLocation, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Container, Grid, Header } from 'semantic-ui-react';
 
-import { actions as mdbActions, selectors } from '../../../../../redux/modules/mdb';
-import { selectors as settings } from '../../../../../redux/modules/settings';
+import { actions as mdbActions } from '../../../../../redux/modules/mdb';
 import Helmets from '../../../../shared/Helmets/index';
 import TranscriptionContainer
   from '../../../../Pages/WithPlayer/widgets/UnitMaterials/Transcription/TranscriptionContainer';
 import Share from '../../../Library/Share';
-import { isLanguageRtl } from '../../../../../helpers/i18n-utils';
 import MediaDownloads from '../../../../Pages/WithPlayer/widgets/MediaDownloads';
 import WipErr from '../../../../shared/WipErr/WipErr';
 import Recommended from '../../../../Pages/WithPlayer/widgets/Recommended/Main/Recommended';
 import { getEmbedFromQuery } from '../../../../../helpers/player';
 import { ClientChroniclesContext } from '../../../../../helpers/app-contexts';
 import TagsByUnit from '../../../../shared/TagsByUnit';
+import { mdbGetDenormContentUnitSelector, mdbGetErrorsSelector, settingsGetUIDirSelector, mdbGetWipFn } from '../../../../../redux/selectors';
 
 const renderHeader = (unit, t, uiDir) => {
   const position = uiDir === 'rtl' ? 'right' : 'left';
@@ -86,10 +85,10 @@ const ArticlePage = ({ t }) => {
   const { id }     = useParams();
   const chronicles = useContext(ClientChroniclesContext);
 
-  const uiDir = useSelector(state => settings.getUIDir(state.settings));
-  const unit  = useSelector(state => selectors.getDenormContentUnit(state.mdb, id));
-  const wip   = useSelector(state => selectors.getWip(state.mdb).units[id]);
-  const err   = useSelector(state => selectors.getErrors(state.mdb).units[id]);
+  const uiDir = useSelector(settingsGetUIDirSelector);
+  const unit  = useSelector(state => mdbGetDenormContentUnitSelector(state, id));
+  const wip   = useSelector(mdbGetWipFn).units[id];
+  const err   = useSelector(mdbGetErrorsSelector).units[id];
 
   const dispatch = useDispatch();
 

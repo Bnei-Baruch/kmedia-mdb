@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import { useInterval } from '../../../helpers/timer';
 import { useSelector } from 'react-redux';
 import Promoted from './Promoted';
-import { selectors } from '../../../redux/modules/home';
+import { homeGetBannerSelector } from '../../../redux/selectors';
 
 const SWITCH_BANNERS_TIMEOUT = 5 * 1000; // every 5 sec
 
 const LatestLessonBanner = () => {
 
-  const banners = useSelector(state => selectors.getBanner(state.home));
+  const banners = useSelector(homeGetBannerSelector);
 
   const [idx, setIdx] = useState(0);
 
@@ -24,7 +24,7 @@ const LatestLessonBanner = () => {
 
   if (!banner) return null;
 
-  return <Promoted banner={banners.data[idx]} />;
+  return <Promoted banner={banners.data[idx]}/>;
 };
 
 export default LatestLessonBanner;

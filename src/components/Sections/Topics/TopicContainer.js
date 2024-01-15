@@ -7,12 +7,12 @@ import isEqual from 'react-fast-compare';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Button, Container, Divider, Grid, Header, Input, List } from 'semantic-ui-react';
-import { selectors as topicsSelectors } from '../../../redux/modules/tags';
 import { getEscapedRegExp, isNotEmptyArray } from '../../../helpers/utils';
 import SectionHeader from '../../shared/SectionHeader';
 import Link from '../../Language/MultiLanguageLink';
 import { FN_TOPICS_MULTI, TOPICS_FOR_DISPLAY } from '../../../helpers/consts';
-import { actions, selectors as filtersAside } from '../../../redux/modules/filtersAside';
+import { actions } from '../../../redux/modules/filtersAside';
+import { tagsGetDisplayRootsSelector, filtersAsideGetStatsSelector, tagsGetTagsSelector } from '../../../redux/selectors';
 
 const namespace = 'topics';
 
@@ -93,13 +93,13 @@ const filterData = (byId, match, sortedRoots) => {
   return [filteredById, filteredRoots];
 };
 
-/* root will be main title
-  subroot will be subtitle
+/* root will become main title
+  subroot will become subtitle
   the rest will be a tree - List of Lists */
 const TopicContainer = ({ t }) => {
-  const statsById = useSelector(state => filtersAside.getStats(state.filtersAside, namespace, FN_TOPICS_MULTI));
-  const roots     = useSelector(state => topicsSelectors.getDisplayRoots(state.tags), isEqual) || [];
-  const byId      = useSelector(state => topicsSelectors.getTags(state.tags), isEqual);
+  const statsById = useSelector(state => filtersAsideGetStatsSelector(state, namespace, FN_TOPICS_MULTI));
+  const roots     = useSelector(tagsGetDisplayRootsSelector, isEqual) || [];
+  const byId      = useSelector(tagsGetTagsSelector, isEqual);
 
   const [match, setMatch]                 = useState('');
   const [expandedNodes, setExpandedNodes] = useState(new Set());
@@ -153,7 +153,7 @@ const TopicContainer = ({ t }) => {
 
   const renderLeaf = (node, withStats) => {
     const { id, label } = node;
-    const s = withStats ? statsById(id) : null;
+    const s             = withStats ? statsById(id) : null;
 
     return <Link to={`/topics/${id}`}>
       {label}
@@ -185,18 +185,18 @@ const TopicContainer = ({ t }) => {
         </List>
         {
           showExpandButton &&
-            <Button
-              basic
-              icon={expanded ? 'minus' : 'plus'}
-              className={`topics__button ${showExpandButton ? '' : 'hide-button'}`}
-              size="mini"
-              content={t(`topics.show-${expanded ? 'less' : 'more'}`)}
-              onClick={() => handleShowMoreClick(id)}
-            />
+          <Button
+            basic
+            icon={expanded ? 'minus' : 'plus'}
+            className={`topics__button ${showExpandButton ? '' : 'hide-button'}`}
+            size="mini"
+            content={t(`topics.show-${expanded ? 'less' : 'more'}`)}
+            onClick={() => handleShowMoreClick(id)}
+          />
         }
       </>
-    )
-  }
+    );
+  };
 
   const renderSubTopic = node => {
     const { id, children } = node;
@@ -205,13 +205,13 @@ const TopicContainer = ({ t }) => {
       isNotEmptyArray(children)
         ? (
           <div key={id}>
-            { renderLeaf(node, true) }
-            { renderChildren(node) }
+            {renderLeaf(node, true)}
+            {renderChildren(node)}
           </div>
         )
         : renderLeaf(node, true)
-    )
-  }
+    );
+  };
 
   const renderTopicCard = node => {
     if (!node) {
@@ -229,7 +229,7 @@ const TopicContainer = ({ t }) => {
                 <Header as="h4" className="topics__subtitle">
                   {renderLeaf(node)}
                 </Header>
-                { renderChildren(node) }
+                {renderChildren(node)}
               </div>
             )
             : renderLeaf(node, true)
@@ -259,8 +259,8 @@ const TopicContainer = ({ t }) => {
 
   return (
     <>
-      <SectionHeader section="topics" />
-      <Divider fitted />
+      <SectionHeader section="topics"/>
+      <Divider fitted/>
       <Container className="padded">
         <Input
           fluid
@@ -284,7 +284,7 @@ const TopicContainer = ({ t }) => {
 };
 
 TopicContainer.propTypes = {
-  t: PropTypes.func.isRequired,
+  t: PropTypes.func.isRequired
 };
 
 export default withTranslation()(TopicContainer);

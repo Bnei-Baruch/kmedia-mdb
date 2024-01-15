@@ -4,8 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Card, Container } from 'semantic-ui-react';
 
-import { actions, selectors } from '../../../../redux/modules/my';
-import { selectors as settings } from '../../../../redux/modules/settings';
+import { actions } from '../../../../redux/modules/my';
 import {
   MY_NAMESPACE_HISTORY,
   MY_NAMESPACE_REACTIONS,
@@ -19,30 +18,32 @@ import { PlaylistItem } from './PlaylistItem';
 import { SubscriptionsItem } from './SubscriptionsItem';
 import ItemTemplate from './ItemTemplate';
 import { getMyItemKey } from '../../../../helpers/my';
+import { myGetListSelector, myGetErrSelector, myGetWipSelector, settingsGetUILangSelector } from '../../../../redux/selectors';
 
 const ItemsContainer = ({ pageSize = 8, pageNo = 1, t, namespace, withSeeAll }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
-  const uiLang             = useSelector(state => settings.getUILang(state.settings));
+  const uiLang             = useSelector(settingsGetUILangSelector);
   const dispatch           = useDispatch();
 
   useEffect(() => {
     dispatch(actions.fetch(namespace, { page_no: pageNo, page_size: pageSize }));
   }, [dispatch, pageNo, pageSize, uiLang, namespace]);
 
-  const items = useSelector(state => selectors.getList(state.my, namespace));
-  const err   = useSelector(state => selectors.getErr(state.my, namespace));
-  const wip   = useSelector(state => selectors.getWIP(state.my, namespace));
+  const items = useSelector(state => myGetListSelector(state, namespace));
+  const err   = useSelector(state => myGetErrSelector(state, namespace));
+  const wip   = useSelector(state => myGetWipSelector(state, namespace));
 
   if (wip || err) return WipErr({ wip, err, t });
   if (items.length === 0)
-    return <ItemTemplate namespace={namespace} children={[]} t={t} />;;
+    return <ItemTemplate namespace={namespace} children={[]} t={t}/>;
+
   let children = null;
 
   switch (namespace) {
     case MY_NAMESPACE_REACTIONS:
       children = items.map(x => {
         const { key } = getMyItemKey(namespace, x);
-        return <ContentItem id={x.subject_uid} key={key} asList={isMobileDevice} />;
+        return <ContentItem id={x.subject_uid} key={key} asList={isMobileDevice}/>;
       });
       break;
     case MY_NAMESPACE_HISTORY:
@@ -55,21 +56,21 @@ const ItemsContainer = ({ pageSize = 8, pageNo = 1, t, namespace, withSeeAll }) 
             playTime={x.data.current_time}
             asList={isMobileDevice}
           />;
-        }
-        )
+        })
       );
       break;
     case MY_NAMESPACE_PLAYLISTS:
       children = items.map(x => {
         const { key } = getMyItemKey(namespace, x);
-        return <PlaylistItem item={x} key={key} t={t} asList={isMobileDevice} />;
+        return <PlaylistItem item={x} key={key} t={t} asList={isMobileDevice}/>;
       });
       break;
     case MY_NAMESPACE_SUBSCRIPTIONS:
-      children = items.map(x => {
-        const { key } = getMyItemKey(namespace, x);
-        return <SubscriptionsItem item={x} key={key} t={t} />;
-      }
+      children = items.map(
+        x => {
+          const { key } = getMyItemKey(namespace, x);
+          return <SubscriptionsItem item={x} key={key} t={t}/>;
+        }
       );
       break;
     default:
@@ -77,18 +78,18 @@ const ItemsContainer = ({ pageSize = 8, pageNo = 1, t, namespace, withSeeAll }) 
   }
 
   if (isMobileDevice && [MY_NAMESPACE_PLAYLISTS, MY_NAMESPACE_REACTIONS, MY_NAMESPACE_HISTORY].includes(namespace)) {
-    children = items?.length > 0 ? <Container className="padded" children={children} /> : null;
+    children = items?.length > 0 ? <Container className="padded" children={children}/> : null;
   } else {
     children = <Card.Group doubling itemsPerRow={4} stackable className="cu_items">{children}</Card.Group>;
   }
 
-  return <ItemTemplate namespace={namespace} children={children} t={t} withSeeAll={withSeeAll} />;
+  return <ItemTemplate namespace={namespace} children={children} t={t} withSeeAll={withSeeAll}/>;
 };
 
 ItemsContainer.propTypes = {
   namespace: PropTypes.string.isRequired,
-  pageSize: PropTypes.number,
-  pageNo: PropTypes.number,
+  pageSize : PropTypes.number,
+  pageNo   : PropTypes.number
 };
 
 export default withTranslation()(ItemsContainer);

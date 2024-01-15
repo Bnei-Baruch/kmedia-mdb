@@ -4,15 +4,15 @@ import moment from 'moment';
 import Api from '../helpers/Api';
 import { actions, types } from '../redux/modules/simpleMode';
 import { actions as mbdActions } from '../redux/modules/mdb';
-import { selectors as settings } from '../redux/modules/settings';
+import { settingsGetContentLanguagesSelector, settingsGetUILangSelector } from '../redux/selectors';
 
 export function* fetchForDate(action) {
   try {
     const { date }      = action.payload;
     const formattedDate = moment(date).format('YYYY-MM-DD');
 
-    const uiLang           = yield select(state => settings.getUILang(state.settings));
-    const contentLanguages = yield select(state => settings.getContentLanguages(state.settings));
+    const uiLang           = yield select(settingsGetUILangSelector);
+    const contentLanguages = yield select(settingsGetContentLanguagesSelector);
 
     const args = {
       startDate        : formattedDate,

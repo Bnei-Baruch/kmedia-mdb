@@ -2,8 +2,8 @@ import { call, put, select, takeLatest } from 'redux-saga/effects';
 
 import Api from '../helpers/Api';
 import { actions, selectors, types } from '../redux/modules/preparePage';
-import { selectors as settings } from '../redux/modules/settings';
 import { actions as mbdActions } from '../redux/modules/mdb';
+import { settingsGetContentLanguagesSelector, settingsGetUILangSelector } from '../redux/selectors';
 
 const DEF_PARAMS = { pageNo: 1, pageSize: 1000, with_units: false };
 
@@ -15,8 +15,8 @@ function* fetchCollectionsList(action) {
 
     if (wasFetched) return;
 
-    const uiLang           = yield select(state => settings.getUILang(state.settings));
-    const contentLanguages = yield select(state => settings.getContentLanguages(state.settings));
+    const uiLang           = yield select(settingsGetUILangSelector);
+    const contentLanguages = yield select(settingsGetContentLanguagesSelector);
     const { data }         = yield call(Api.collections, { ...DEF_PARAMS, ui_language: uiLang, content_languages: contentLanguages, ...params });
 
     if (Array.isArray(data.collections)) {
