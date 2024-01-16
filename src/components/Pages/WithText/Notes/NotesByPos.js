@@ -5,13 +5,12 @@ import { selectors } from '../../../../redux/modules/myNotes';
 import { selectors as textPage } from '../../../../redux/modules/textPage';
 import NoteMarkInList from './NoteMarkInList';
 import clsx from 'clsx';
-import { useNodeHighlight } from './useNodeHighlight';
 
 const NotesByPos = ({ pos, ids }) => {
   const [open, setOpen]   = useState(true);
   const [isOut, setIsOut] = useState(true);
 
-  const getById      = useSelector(state => selectors.getById(state.myNotes));
+  const byId         = useSelector(state => selectors.getById(state.myNotes));
   const expandAll    = useSelector(state => textPage.getExpandNotes(state.textPage));
   const { zoomSize } = useSelector(state => textPage.getSettings(state.textPage));
   const offset       = useSelector(state => textPage.getSideOffset(state.textPage));
@@ -19,9 +18,9 @@ const NotesByPos = ({ pos, ids }) => {
   const ref = useRef();
 
   const notes = useMemo(() => ids
-    .map(id => getById[id])
-    .map(n => ({ type: 'note', ...n }))
-  , [getById, ids]);
+      .map(id => byId[id])
+      .map(n => ({ type: 'note', ...n }))
+    , [byId, ids]);
 
   useEffect(() => {
     const handleClose = e => {

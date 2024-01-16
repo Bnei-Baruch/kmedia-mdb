@@ -27,8 +27,6 @@ const ContentHtml = ({ labels = [], notes = [] }) => {
   
   const wipErr = useTextContent();
 
-  console.log('not ssr text bug: ContentHtml render', wipErr);
-
   if (wipErr) return wipErr;
 
   const dir = getLanguageDirection(language);

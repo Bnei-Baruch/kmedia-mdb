@@ -10,18 +10,15 @@ import { DeviceInfoContext } from '../../../../../../helpers/app-contexts';
 import ArticleTabToolbarMobile from './ArticleTabToolbarMobile';
 
 const ArticleTab = () => {
-  const { id } = useParams();
+  const { id }             = useParams();
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
   const pageCu = useSelector(state => mdb.getDenormContentUnit(state.mdb, id));
   const cu     = Object.values(pageCu.derived_units).find(x => x.content_type === CT_ARTICLE);
 
-  if (!cu) {
-    console.log('not ssr text bug: ArticleTab no cu')
-    return null;
-  }
+  if (!cu) return null;
 
-  const toolbar            = isMobileDevice ? <ArticleTabToolbarMobile /> : <ArticleTabToolbarWeb />;
+  const toolbar = isMobileDevice ? <ArticleTabToolbarMobile /> : <ArticleTabToolbarWeb />;
 
   return (
     <div className="player_page_tab">

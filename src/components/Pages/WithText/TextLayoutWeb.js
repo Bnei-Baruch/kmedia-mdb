@@ -39,7 +39,6 @@ const TextLayoutWeb = props => {
   const wip = useTextSubject(propId);
   useInitTextSettings();
 
-  console.log('not ssr text bug: TextLayoutWeb render', wip)
   const dispatch = useDispatch();
   useEffect(() => {
     const handleScroll = () => {

@@ -23,8 +23,6 @@ const PlaylistPage = ({ playerContainer }) => {
 
   const computerWidth = !isMobileDevice ? 10 : 16;
 
-  console.log('not ssr text bug: PlaylistPage render')
-
   return (
     <Grid padded={!isMobileDevice} className="avbox">
       <Grid.Column

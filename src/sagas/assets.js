@@ -1,8 +1,7 @@
-import { call, put, takeEvery, takeLatest } from 'redux-saga/effects';
+import { call, put, takeLatest } from 'redux-saga/effects';
 
 import Api from '../helpers/Api';
 import { types, actions } from '../redux/modules/assets';
-import { cuFilesToData, getSourceIndexId } from './helpers/utils';
 
 function* unzip(action) {
   const id = action.payload;

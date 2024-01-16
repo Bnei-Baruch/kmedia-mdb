@@ -67,11 +67,11 @@ const myNotesService = createSlice({
     },
     remove: () => void ({}),
     removeSuccess: (state, { payload: { id } }) => {
-      state.ids      = state.ids.filter(k => k !== id);
-      state.byId[id] = null;
-      state.deleted  = true;
-      state.wip      = false;
-      state.errors   = false;
+      state.ids        = state.ids.filter(k => k !== id);
+      state.byId[id]   = null;
+      state.deleted    = true;
+      state.wip        = false;
+      state.errors     = false;
       state.selected   = null;
       state.noteStatus = NOTE_STATUS.none;
     },
@@ -90,10 +90,10 @@ export const types = Object.fromEntries(new Map(
 
 /* Selectors */
 const getList = state => state.ids || [];
-const getById = (state, id) => state.byId[id];
+const getById = state => state.byId;
 
-const getWIP = state => state.wip;
-const getErr = state => state.errors;
+const getWIP      = state => state.wip;
+const getErr      = state => state.errors;
 const getStatus   = state => state.noteStatus;
 const getSelected = state => state.selected;
 

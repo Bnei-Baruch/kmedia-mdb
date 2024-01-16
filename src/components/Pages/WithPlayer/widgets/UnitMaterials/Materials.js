@@ -52,11 +52,7 @@ const Materials = ({ t }) => {
   const { cuId, isSingleMedia, isMy } = useSelector(state => selectors.getInfo(state.playlist));
   const unit                          = useSelector(state => mdb.getDenormContentUnit(state.mdb, cuId || paramsId));
 
-  console.log('not ssr text bug: Materials render')
-  if (!unit) {
-    console.log('not ssr text bug: Materials no unit')
-    return null;
-  }
+  if (!unit) return null;
 
   const derivedTexts     = derivedTextUnits(unit);
   const chroniclesAppend = chronicles ? chronicles.append.bind(chronicles) : noop;

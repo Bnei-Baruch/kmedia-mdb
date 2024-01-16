@@ -77,7 +77,7 @@ export const cuPage = async (store, match) => {
   await store.sagaMiddleWare.run(mdbSagas.fetchUnit, mdbActions.fetchUnit(cuID)).done;
 
   const state = store.getState();
-  const unit = mdbSelectors.getDenormContentUnit(state.mdb, cuID);
+  const unit  = mdbSelectors.getDenormContentUnit(state.mdb, cuID);
 
   let activeTab = 'transcription';
   if ([...CT_LESSONS, CT_VIDEO_PROGRAM_CHAPTER, CT_VIRTUAL_LESSON, CT_CLIP].includes(unit.content_type)) {
@@ -126,7 +126,6 @@ export const cuPage = async (store, match) => {
 
   if (file && file.id) {
     await store.sagaMiddleWare.run(assetsSagas.doc2Html, assetsActions.doc2html(file.id)).done;
-    //store.dispatch(assetsActions.doc2html(file.id));
   }
   const c = canonicalCollection(unit);
   if (c) {
@@ -290,18 +289,13 @@ export const libraryPage = async (store, match, show_console = false) => {
   sourceID     = firstLeafId(sourceID, sourcesList, uiLang);
   show_console && console.log('serverRender: libraryPage source was found', sourceID);
 
-  return store.sagaMiddleWare
-    .run(textPageActions.fetchSubject, textPageActions.fetchSubject(sourceID))
-    .done
-    .then(() => {
-      const state = store.getState();
-      const file  = textPage.getFile(state.textPage) || {};
+  await store.sagaMiddleWare.run(textPageSagas.fetchSubject, textPageActions.fetchSubject(sourceID)).done;
+  const file = textPage.getFile(store.getState().textPage) || {};
 
-      if (!file.isPdf) {
-        store.dispatch(assetsActions.doc2html(file.id));
-        store.dispatch(mdbActions.fetchLabels({ content_unit: sourceID, language: file.language }));
-      }
-    });
+  if (!file.isPdf) {
+    await store.sagaMiddleWare.run(assetsSagas.doc2Html, assetsActions.doc2html(file.id)).done;
+    store.dispatch(mdbActions.fetchLabels({ content_unit: sourceID, language: file.language }));
+  }
 
   /*
     const sourceIndexPromise = new Promise(resolve => {
