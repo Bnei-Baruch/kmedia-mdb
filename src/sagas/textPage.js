@@ -11,10 +11,11 @@ export function* fetchSubject(action) {
   const { uid: id, isGr } = checkRabashGroupArticles(action.payload);
 
   try {
-    let fetched = yield select(state => mdb.getFullUnitFetched(state.mdb, id))[id];
+    const fetched = yield select(state => mdb.getFullUnitFetched(state.mdb, id))[id];
     if (!fetched) {
       yield call(fetchUnit, { payload: id });
     }
+
     const cu               = yield select(state => mdb.getDenormContentUnit(state.mdb, id));
     const fileFilter       = yield select(state => textPage.getFileFilter(state.textPage));
     const subject          = cuToSubject(cu, fileFilter);

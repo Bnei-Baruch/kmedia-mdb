@@ -5,8 +5,8 @@ import { selectors, actions } from '../../../../redux/modules/myNotes';
 import { selectors as textPage } from '../../../../redux/modules/textPage';
 
 export const useNotes = () => {
-  const id       = useSelector(state => textPage.getSubject(state.textPage)).id;
-  const language = useSelector(state => textPage.getFile(state.textPage)).language;
+  const { id } = useSelector(state => textPage.getSubject(state.textPage));
+  const { language } = useSelector(state => textPage.getFile(state.textPage));
   const ids      = useSelector(state => selectors.getList(state.myNotes));
   const byId     = useSelector(state => selectors.getById(state.myNotes));
   const notes    = useMemo(() => ids.map(id => byId[id]).map(n => ({ type: 'note', ...n })), [byId, ids]);

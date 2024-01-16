@@ -24,7 +24,7 @@ const ContentHtml = ({ labels = [], notes = [] }) => {
       highlightAll === 'true',
       [...labels, ...notes]);
   }, [srchstart, srchend, getDoc2htmlById, id, labels, notes]);
-  
+
   const wipErr = useTextContent();
 
   if (wipErr) return wipErr;

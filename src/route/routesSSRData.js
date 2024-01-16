@@ -127,10 +127,12 @@ export const cuPage = async (store, match) => {
   if (file && file.id) {
     await store.sagaMiddleWare.run(assetsSagas.doc2Html, assetsActions.doc2html(file.id)).done;
   }
+
   const c = canonicalCollection(unit);
   if (c) {
     store.dispatch(mdbActions.fetchCollection(c.id));
   }
+
   return true;
 };
 

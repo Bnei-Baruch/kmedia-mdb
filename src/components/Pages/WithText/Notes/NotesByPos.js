@@ -18,9 +18,9 @@ const NotesByPos = ({ pos, ids }) => {
   const ref = useRef();
 
   const notes = useMemo(() => ids
-      .map(id => byId[id])
-      .map(n => ({ type: 'note', ...n }))
-    , [byId, ids]);
+    .map(id => byId[id])
+    .map(n => ({ type: 'note', ...n }))
+  , [byId, ids]);
 
   useEffect(() => {
     const handleClose = e => {
