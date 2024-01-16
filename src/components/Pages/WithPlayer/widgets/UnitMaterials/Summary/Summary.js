@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useTransition } from 'react';
 import { Segment, Divider } from 'semantic-ui-react';
 
 import { selectSuitableLanguage } from '../../../../../../helpers/language';
@@ -12,6 +12,7 @@ import { useParams } from 'react-router-dom';
 
 const Summary = () => {
   const { id } = useParams();
+  const { t }  = useTransition();
 
   const unit             = useSelector(state => mdb.getDenormContentUnit(state.mdb, id));
   const contentLanguages = useSelector(state => settings.getContentLanguages(state.settings));
