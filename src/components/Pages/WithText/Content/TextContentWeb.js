@@ -29,6 +29,7 @@ const TextContentWeb = () => {
     const handleSelectionChange = debounce((e, x) => {
       const { query, wordOffset } = urlParamFromSelect();
       dispatch(actions.setUrlSelect(query));
+      dispatch(actions.setWordOffset(wordOffset));
     }, 300);
 
     document.addEventListener('selectionchange', handleSelectionChange);

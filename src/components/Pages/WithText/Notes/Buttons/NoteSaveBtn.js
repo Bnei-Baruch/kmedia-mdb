@@ -11,9 +11,9 @@ const NoteSaveBtn = () => {
 
   const handleSave = () => {
     if (!note.id) {
-      dispatch(actions.addServer(note.content, note));
+      dispatch(actions.add(note.content, note));
     } else {
-      dispatch(actions.editServer(note.content, note.id));
+      dispatch(actions.edit(note.content, note.id));
     }
   };
 

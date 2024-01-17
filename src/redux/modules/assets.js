@@ -4,21 +4,21 @@ import mapValues from 'lodash/mapValues';
 import { actions as ssrActions } from './ssr';
 
 const initialState = {
-  zipIndexById   : {},
-  doc2htmlById   : {},
+  zipIndexById: {},
+  doc2htmlById: {},
   sourceIndexById: {},
-  asset          : {
+  asset: {
     data: null,
-    wip : false,
-    err : null
+    wip: false,
+    err: null
   },
-  person         : {
+  person: {
     data: null,
-    wip : false,
-    err : null
+    wip: false,
+    err: null
   },
-  timeCode       : {},
-  mergedStatus   : {}
+  timeCode: {},
+  mergedStatus: {}
 };
 
 const buildKey = (uid, lang) => `${uid}_${lang}`;
@@ -89,8 +89,8 @@ const assetsSlice = createSlice({
   name: 'assets',
   initialState,
 
-  reducers     : {
-    unzip       : (state, action) => onFetchById(state, action),
+  reducers: {
+    unzip: (state, action) => onFetchById(state, action),
     unzipSuccess: {
       prepare,
       reducer: (state, action) => onFetchByIdSuccess(state, action)
@@ -100,7 +100,7 @@ const assetsSlice = createSlice({
       reducer: (state, action) => onFetchByIdFailure(state, action)
     },
 
-    unzipList       : (state, action) => onFetchList(state, action),
+    unzipList: (state, action) => onFetchList(state, action),
     unzipListSuccess: {
       prepare,
       reducer: (state, action) => onFetchListSuccess(state, action)
@@ -110,7 +110,7 @@ const assetsSlice = createSlice({
       reducer: (state, action) => onFetchListFailure(state, action)
     },
 
-    doc2html       : (state, action) => onFetchById(state, action),
+    doc2html: (state, action) => onFetchById(state, action),
     doc2htmlSuccess: {
       prepare,
       reducer: (state, action) => onFetchByIdSuccess(state, action)
@@ -120,7 +120,7 @@ const assetsSlice = createSlice({
       reducer: (state, action) => onFetchByIdFailure(state, action)
     },
 
-    sourceIndex       : (state, action) => onFetchById(state, action),
+    sourceIndex: (state, action) => onFetchById(state, action),
     sourceIndexSuccess: {
       prepare,
       reducer: (state, action) => onFetchByIdSuccess(state, action)
@@ -130,7 +130,7 @@ const assetsSlice = createSlice({
       reducer: (state, action) => onFetchByIdFailure(state, action)
     },
 
-    fetchAsset       : (state, _) => state.asset.wip = true,
+    fetchAsset: (state, _) => state.asset.wip = true,
     fetchAssetSuccess: (state, action) => {
       state.asset.data = action.payload;
       state.asset.wip  = false;
@@ -141,7 +141,7 @@ const assetsSlice = createSlice({
       state.asset.err = action.payload;
     },
 
-    fetchPerson       : (state, _) => state.person.wip = true,
+    fetchPerson: (state, _) => state.person.wip = true,
     fetchPersonSuccess: (state, action) => {
       state.person.data = action.payload;
       state.person.wip  = false;
@@ -151,48 +151,28 @@ const assetsSlice = createSlice({
       state.person.wip = false;
       state.person.err = action.payload;
     },
-
-    fetchTimeCode       : (state, _) => {
-      state.timeCode = {};
+    fetchTimeCode: {
+      prepare: (uid, language) => ({ payload: { uid, language } }),
+      reducer: void (state => state.timeCode = {})
     },
-    fetchTimeCodeSuccess: (state, action) => {
-      const { payload } = action;
-      state.timeCode    = {};
+    fetchTimeCodeSuccess: (state, { payload }) => {
+      state.timeCode = {};
       for (const idx in payload) {
         const { index, timeCode: tc } = payload[idx];
         state.timeCode[index]         = tc;
       }
     },
-
-    mergeKiteiMakor       : {
-      prepare: (id, language) => {
-        const payload = { id, language };
-        return { payload };
-      },
-      reducer: (state, action) => {
-        const { id, language }                     = action.payload;
-        state.mergedStatus[buildKey(id, language)] = 'wip';
-      }
+    mergeKiteiMakor: (state, { payload }) => {
+      const { id, language }                     = payload;
+      state.mergedStatus[buildKey(id, language)] = 'wip';
     },
-    mergeKiteiMakorSuccess: {
-      prepare: (id, language, status = 'ok') => {
-        const payload = { id, language, status };
-        return { payload };
-      },
-      reducer: (state, action) => {
-        const { id, language, status }             = action.payload;
-        state.mergedStatus[buildKey(id, language)] = status;
-      }
+    mergeKiteiMakorSuccess: (state, { payload }) => {
+      const { id, language, status = 'ok' }      = payload;
+      state.mergedStatus[buildKey(id, language)] = status;
     },
-    mergeKiteiMakorFailure: {
-      prepare: (id, language, status = 'none') => {
-        const payload = { id, language, status };
-        return { payload };
-      },
-      reducer: (state, action) => {
-        const { id, language, status }             = action.payload;
-        state.mergedStatus[buildKey(id, language)] = status;
-      }
+    mergeKiteiMakorFailure: (state, { payload }) => {
+      const { id, language, status = 'none' }    = payload;
+      state.mergedStatus[buildKey(id, language)] = status;
     }
   },
   extraReducers: builder => {
@@ -240,12 +220,12 @@ const getAsset                   = state => state.asset;
 const getPerson                  = state => state.person;
 const getTimeCode                = state => pos => recursiveFindPrevTimeByPos(pos, state);
 const recursiveFindPrevTimeByPos = (pos, state) => {
-  if (pos === 0 || state.timeCode.size === 0) return 0;
-  if (state.timeCode.has(pos)) return state.timeCode.get(pos);
+  if (!pos || pos < 0 || !state.timeCode) return 0;
+  if (state.timeCode[pos]) return state.timeCode[pos];
   return recursiveFindPrevTimeByPos(pos - 1, state);
 };
 
-const hasTimeCode    = state => state.timeCode?.size > 0;
+const hasTimeCode    = state => Object.keys(state.timeCode).length > 0;
 const getMergeStatus = state => (id, language) => state.mergedStatus[buildKey(id, language)];
 
 export const selectors = {

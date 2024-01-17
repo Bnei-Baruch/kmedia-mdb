@@ -1,4 +1,7 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
+import clsx from 'clsx';
+
 import AddNoteBtn from '../../../../WithText/Buttons/AddNoteBtn';
 import LanguageTextBtn from '../../../../WithText/Buttons/LanguageTextBtn';
 import TextSettings from '../../../../WithText/Buttons/TextSettings/TextSettings';
@@ -7,14 +10,10 @@ import SearchOnPageBtn from '../../../../WithText/Buttons/SearchOnPageBtn';
 import ExpandAllNotesBtn from '../../../../WithText/Buttons/ExpandAllNotesBtn';
 import DownloadTextBtn from '../../../../WithText/Buttons/DownloadTextBtn';
 import AdditionsVisibilityBtn from '../../../../WithText/Buttons/AdditionsVisibilityBtn';
-import LinkToLessonsBtn from '../../../../WithText/Buttons/LinkToLessonsBtn';
-import FullscreenTextBtn from '../../../../WithText/Buttons/FullscreenTextBtn';
 import ShareTextBtn from '../../../../WithText/Buttons/ShareTextBtn';
 import TagTextBtn from '../../../../WithText/Buttons/TagTextBtn';
 import PrintBtn from '../../../../WithText/Buttons/PrintBtn';
-import { useSelector } from 'react-redux';
 import { selectors as textPage } from '../../../../../../redux/modules/textPage';
-import clsx from 'clsx';
 import PlayByTextBtn from '../../../../WithText/Buttons/PlayByTextBtn';
 
 const TranscriptionTabToolbarWeb = () => {
@@ -36,11 +35,11 @@ const TranscriptionTabToolbarWeb = () => {
         <BookmarkBtn />
         <AddNoteBtn />
         <ShareTextBtn />
-        <div className="divider" />
-        <SearchOnPageBtn />
         {
           !hasSel && (
             <>
+              <div className="divider" />
+              <SearchOnPageBtn />
               <ExpandAllNotesBtn />
               <DownloadTextBtn />
               <PrintBtn />

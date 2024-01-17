@@ -9,10 +9,11 @@ import { selectors as assetsSelectors, actions as assetsActions } from '../../..
 import MenuLanguageSelector from '../../../../../../components/Language/Selector/MenuLanguageSelector';
 import { getSummaryLanguages, getFile } from './helper';
 import { useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const Summary = () => {
   const { id } = useParams();
-  const { t }  = useTransition();
+  const { t }  = useTranslation();
 
   const unit             = useSelector(state => mdb.getDenormContentUnit(state.mdb, id));
   const contentLanguages = useSelector(state => settings.getContentLanguages(state.settings));

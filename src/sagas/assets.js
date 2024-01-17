@@ -41,18 +41,6 @@ export function* doc2Html(action) {
     yield put(actions.doc2htmlFailure(action.type, payload));
   }
 }
-/*
-export function* sourceIndex(action) {
-  try {
-    const id      = getSourceIndexId(action);
-    const cu      = yield call(Api.unit, { id });
-    const payload = { id: action.payload, data: cuFilesToData(cu.data) };
-    yield put(actions.sourceIndexSuccess(action.type, payload));
-  } catch (err) {
-    const payload = { id: action.payload, err };
-    yield put(actions.sourceIndexFailure(action.type, payload));
-  }
-}*/
 
 export function* fetchAsset(action) {
   try {
@@ -67,7 +55,7 @@ export function* fetchPerson(action) {
   try {
     const { data } = yield call(Api.getCMS, 'person', {
       contentLanguages: action.payload.contentLanguages,
-      id              : action.payload.sourceId
+      id: action.payload.sourceId
     });
     yield put(actions.fetchPersonSuccess(data));
   } catch (err) {
@@ -91,9 +79,9 @@ function* mergeKiteiMakor(action) {
 
   try {
     const { data } = yield call(Api.getAsset, `api/km_audio/build/${id}?language=${language}`);
-    yield put(actions.mergeKiteiMakorSuccess({ id, language, status: data }));
+    yield put(actions.mergeKiteiMakorSuccess({ id, language, status: data.status }));
   } catch (e) {
-    yield put(actions.mergeKiteiMakorFailure({ id, language, status: e }));
+    yield put(actions.mergeKiteiMakorFailure({ id, language, status: e.message }));
   }
 }
 
@@ -108,10 +96,6 @@ function* watchUnzipList() {
 function* watchDoc2Html() {
   yield takeLatest([types['assets/doc2html']], doc2Html);
 }
-
-/*function* watchSourceIndex() {
-  yield takeEvery([types['assets/sourceIndex']], sourceIndex);
-}*/
 
 function* watchFetchAsset() {
   yield takeLatest([types['assets/fetchAsset']], fetchAsset);

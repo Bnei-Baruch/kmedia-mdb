@@ -1,12 +1,11 @@
 import React, { useContext, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
 import TextLayoutWeb from '../../../../WithText/TextLayoutWeb';
 import TranscriptionTabToolbarWeb from './TranscriptionTabToolbarWeb';
 import { DeviceInfoContext } from '../../../../../../helpers/app-contexts';
 import TranscriptionTabToolbarMobile from './TranscriptionTabToolbarMobile';
 import { actions } from '../../../../../../redux/modules/textPage';
-import { useDispatch } from 'react-redux';
 
 const TranscriptionTab = () => {
   const { isMobileDevice } = useContext(DeviceInfoContext);

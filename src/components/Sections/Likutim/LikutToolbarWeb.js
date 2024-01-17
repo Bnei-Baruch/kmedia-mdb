@@ -35,20 +35,20 @@ const LikutToolbarWeb = () => {
         <BookmarkBtn />
         <AddNoteBtn />
         <ShareTextBtn />
-        <div className="divider" />
-        <SearchOnPageBtn />
         {
           !hasSel && (
             <>
+              <div className="divider" />
+              <SearchOnPageBtn />
               <ExpandAllNotesBtn />
               <DownloadTextBtn />
               <PrintBtn />
               <AdditionsVisibilityBtn />
+              <div className="divider" />
+              <FullscreenTextBtn />
             </>
           )
         }
-        <div className="divider" />
-        <FullscreenTextBtn />
       </div>
     </div>
   );

@@ -71,6 +71,7 @@ const textPageSlice = createSlice({
     },
     setUrlPath: (state, { payload }) => void (state.urlInfo.url = payload ?? buildUrl(state)),
     setUrlSelect: (state, { payload }) => void (state.urlInfo.select = payload || null),
+    setWordOffset: (state, { payload }) => void (state.wordOffset = payload),
     expandNotes: state => void (state.expandNotes = !state.expandNotes),
     setFullscreen: (state, { payload }) => void (state.isFullscreen = payload ?? !state.isFullscreen),
     setScrollDir: (state, { payload }) => void (state.scrollDir = payload),
@@ -95,14 +96,15 @@ const textPageSlice = createSlice({
       state.urlInfo.url   = buildUrl(state);
     },
     fetchSubjectFailure: (state, { payload }) => void (state.wipErr = { wip: false, err: payload }),
-    setFileFilter: (state, { payload }) => void (state.fileFilter = payload),
-    extraReducers: builder => {
-      builder
-        .addCase(
-          assetsActions.mergeKiteiMakorSuccess,
-          state => void (state.mp3 = assetUrl(`api/km_audio/file/${state.file.id}?language=${state.file.language}`))
-        );
-    }
+    setFileFilter: (state, { payload }) => void (state.fileFilter = payload)
+  },
+  extraReducers: builder => {
+    builder
+      .addCase(
+        assetsActions.mergeKiteiMakorSuccess,
+        state => void (state.mp3 = assetUrl(`api/km_audio/file/${state.subject.id}?language=${state.file.language}`))
+      )
+    ;
   }
 });
 
@@ -121,8 +123,9 @@ const getTocIsActive  = state => state.tocIsActive;
 const getTocInfo      = state => state.tocInfo;
 const getSubject      = state => state.subject;
 const getWipErr       = state => state.wipErr;
-const getFile         = state => state.file ?? {};
+const getFile         = state => state.file;
 const getUrlInfo      = state => state.urlInfo;
+const getWordOffset   = state => state.wordOffset || 0;
 const getMP3          = state => state.mp3;
 const getExpandNotes  = state => state.expandNotes;
 const getIsFullscreen = state => state.isFullscreen;
@@ -142,6 +145,7 @@ export const selectors = {
   getWipErr,
   getFile,
   getUrlInfo,
+  getWordOffset,
   getMP3,
   getExpandNotes,
   getIsFullscreen,

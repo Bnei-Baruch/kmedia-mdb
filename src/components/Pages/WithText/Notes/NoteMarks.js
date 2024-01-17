@@ -18,7 +18,7 @@ const NoteMarks = ({ parentTop }) => {
     ids.map(nId => {
       const el = document.getElementById(`${idPrefix}${nId}`);
       if (!el) return;
-      const top = el.getBoundingClientRect().top - window.scrollY - parentTop;
+      const top = Math.round(el.getBoundingClientRect().top - window.scrollY - parentTop);
       let key   = Object.keys(_byLine).find(k => Math.abs(k - top) < 20);
       if (!key) {
         key          = top;

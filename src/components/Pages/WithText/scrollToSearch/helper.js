@@ -287,11 +287,8 @@ export const urlParamFromSelect = () => {
   if (!root.contains(range.startContainer)) {
     range.setStart(root.firstChild, 0);
   }
-
-  const sOffset = range.startOffset + countOffset(range.startContainer);
-  const eOffset = range.endOffset + countOffset(range.endContainer);
-
-  const sWordOffset = countWordOffset(sOffset, root.textContent);
+  const { offset: sOffset, wordOffset: sWordOffset } = findOffsetOfDOMNode(range.startContainer, range.startOffset);
+  const { offset: eOffset }                          = findOffsetOfDOMNode(range.endContainer, range.endOffset);
 
   const rangeStr = range.toString();
   const sStart   = rangeStr.split(' ').slice(0, MIN_NUMBER_WORDS_IN_LINK).join(' ');

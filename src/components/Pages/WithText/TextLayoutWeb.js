@@ -14,24 +14,26 @@ import AudioPlayer from '../../shared/AudioPlayer';
 import SearchOnPageBar from './SearchOnPageBar';
 import WipErr from '../../shared/WipErr/WipErr';
 import { useTranslation } from 'react-i18next';
+import { isEmpty } from '../../../helpers/utils';
 
 let lastScrollTop = 0;
 
 const TextLayoutWeb = props => {
   const {
-    toolbar    = null,
-    toc        = null,
-    prevNext   = null,
-    breadcrumb = null,
-    propId,
-    playerPage = false,
-  } = props;
+          toolbar    = null,
+          toc        = null,
+          prevNext   = null,
+          breadcrumb = null,
+          propId,
+          playerPage = false,
+        } = props;
 
   const ref   = useRef();
   const { t } = useTranslation();
 
   const scrollDir = useSelector(state => textPage.getScrollDir(state.textPage));
   const subject   = useSelector(state => textPage.getSubject(state.textPage));
+  const file      = useSelector(state => textPage.getFile(state.textPage));
   const hasSel    = !!useSelector(state => textPage.getUrlInfo(state.textPage)).select;
   const { theme } = useSelector(state => textPage.getSettings(state.textPage));
 
@@ -61,6 +63,8 @@ const TextLayoutWeb = props => {
 
   const wipErr = WipErr({ wip, err: null, t });
   if (wipErr) return wipErr;
+
+  if (isEmpty(file)) return <h1>Not found</h1>;
 
   return (
     <div className={`is-web text_layout  is-${theme}`} ref={ref}>
