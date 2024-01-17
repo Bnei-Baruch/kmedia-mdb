@@ -19,7 +19,7 @@ $serif-family: 'Georgia, ' Times New Roman ', Times, serif';
     }
   }
 
-  .text_align_to_text {
+  &.is-web .text_align_to_text {
     width: $max-readble-width;
     margin: 0 auto;
     transform: translate(-30px, 0);

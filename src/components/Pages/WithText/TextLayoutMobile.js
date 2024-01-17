@@ -14,13 +14,13 @@ import { useTranslation } from 'react-i18next';
 
 const TextLayoutMobile = props => {
   const {
-          toolbar    = null,
-          toc        = null,
-          prevNext   = null,
-          breadcrumb = null,
-          propId,
-          playerPage = false,
-        } = props;
+    toolbar    = null,
+    toc        = null,
+    prevNext   = null,
+    breadcrumb = null,
+    propId,
+    playerPage = false,
+  } = props;
 
   const ref   = useRef();
   const { t } = useTranslation();
@@ -59,7 +59,6 @@ const TextLayoutMobile = props => {
         {prevNext}
       </Container>
       {toc}
-      {prevNext}
       {(!playerPage) && getToolbar()}
     </div>
   );
