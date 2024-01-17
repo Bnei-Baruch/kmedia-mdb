@@ -103,8 +103,7 @@ const textPageSlice = createSlice({
       .addCase(
         assetsActions.mergeKiteiMakorSuccess,
         state => void (state.mp3 = assetUrl(`api/km_audio/file/${state.subject.id}?language=${state.file.language}`))
-      )
-    ;
+      );
   }
 });
 

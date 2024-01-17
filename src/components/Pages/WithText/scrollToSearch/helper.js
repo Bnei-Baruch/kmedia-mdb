@@ -287,6 +287,7 @@ export const urlParamFromSelect = () => {
   if (!root.contains(range.startContainer)) {
     range.setStart(root.firstChild, 0);
   }
+
   const { offset: sOffset, wordOffset: sWordOffset } = findOffsetOfDOMNode(range.startContainer, range.startOffset);
   const { offset: eOffset }                          = findOffsetOfDOMNode(range.endContainer, range.endOffset);
 
