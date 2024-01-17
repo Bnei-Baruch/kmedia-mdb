@@ -1,6 +1,6 @@
 import React from 'react';
 import AddNoteBtn from '../../Pages/WithText/Buttons/AddNoteBtn';
-import TocTrigger from './TOC/TocTrigger';
+import TocToggleBtn from './TOC/TocToggleBtn';
 import LanguageTextBtn from '../../Pages/WithText/Buttons/LanguageTextBtn';
 import TextSettings from '../../Pages/WithText/Buttons/TextSettings/TextSettings';
 import BookmarkBtn from '../../Pages/WithText/Buttons/BookmarkBtn';
@@ -23,7 +23,7 @@ const SourceToolbarWeb = () => {
 
   return (
     <div className="text_toolbar">
-      <TocTrigger />
+      <TocToggleBtn />
       <div className={clsx('text_toolbar__buttons', { 'text_selected': hasSel })}>
         {
           !hasSel && (

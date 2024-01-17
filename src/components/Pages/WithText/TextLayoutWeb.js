@@ -1,10 +1,10 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import TextContentWeb from './Content/TextContentWeb';
 import { useTextSubject } from './hooks/useTextSubject';
 import { useInitTextUrl } from './hooks/useInitTextUrl';
 import clsx from 'clsx';
-import { useSelector, useDispatch } from 'react-redux';
-import { selectors as textPage, actions } from '../../../redux/modules/textPage';
+import { useSelector } from 'react-redux';
+import { selectors as textPage } from '../../../redux/modules/textPage';
 import { useInitTextSettings } from './hooks/useInitTextSettings';
 import NoteItemSticky from './Notes/NoteItemSticky';
 import NoteConfirmRemove from './Notes/NoteConfirmRemove';
@@ -15,18 +15,17 @@ import SearchOnPageBar from './SearchOnPageBar';
 import WipErr from '../../shared/WipErr/WipErr';
 import { useTranslation } from 'react-i18next';
 import { isEmpty } from '../../../helpers/utils';
-
-let lastScrollTop = 0;
+import { useScrollBehavior } from './hooks/useScrollBehavior';
 
 const TextLayoutWeb = props => {
   const {
-    toolbar    = null,
-    toc        = null,
-    prevNext   = null,
-    breadcrumb = null,
-    propId,
-    playerPage = false,
-  } = props;
+          toolbar    = null,
+          toc        = null,
+          prevNext   = null,
+          breadcrumb = null,
+          propId,
+          playerPage = false,
+        } = props;
 
   const ref   = useRef();
   const { t } = useTranslation();
@@ -40,26 +39,7 @@ const TextLayoutWeb = props => {
   useInitTextUrl();
   const wip = useTextSubject(propId);
   useInitTextSettings();
-
-  const dispatch = useDispatch();
-  useEffect(() => {
-    const handleScroll = () => {
-      const st = window.pageYOffset || document.documentElement.scrollTop;
-      if (st < ref.current?.offsetTop + 60) {
-        dispatch(actions.setScrollDir(0));
-      } else if (st > lastScrollTop) {
-        dispatch(actions.setScrollDir(1));
-      } else if (st + 5 < lastScrollTop) {
-        dispatch(actions.setScrollDir(-1));
-      }
-
-      lastScrollTop = st <= 0 ? 0 : st;
-    };
-
-    window.addEventListener('scroll', handleScroll);
-
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [ref.current]);
+  useScrollBehavior(ref);
 
   const wipErr = WipErr({ wip, err: null, t });
   if (wipErr) return wipErr;
@@ -67,7 +47,7 @@ const TextLayoutWeb = props => {
   if (isEmpty(file)) return <h1>Not found</h1>;
 
   return (
-    <div className={`is-web text_layout  is-${theme}`} ref={ref}>
+    <div className={`is-web text_layout is-${theme}`} ref={ref}>
       {toc}
       <div className={
         clsx('stick_toolbar no_print', {

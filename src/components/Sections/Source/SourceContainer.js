@@ -9,26 +9,26 @@ import BreadcrumbTextPage from '../../Pages/WithText/BreadcrumbTextPage';
 import PrevNextBtns from './PrevNextBtns';
 
 const SourceContainer = () => {
-
   const { isMobileDevice } = useContext(DeviceInfoContext);
-  const toc                = <TOC />;
-  const toolbar            = isMobileDevice ? <SourceToolbarMobile /> : <SourceToolbarWeb />;
-  const breadcrumb         = <BreadcrumbTextPage />;
-  const prevNext           = <PrevNextBtns />;
 
+  const toc        = <TOC />;
+  const toolbar    = isMobileDevice ? <SourceToolbarMobile /> : <SourceToolbarWeb />;
+  const breadcrumb = <BreadcrumbTextPage />;
+  const prevNext   = <PrevNextBtns />;
 
   return isMobileDevice ? (
     <TextLayoutMobile
       toc={toc}
       toolbar={toolbar}
       prevNext={prevNext}
+      breadcrumb={breadcrumb}
     />
   ) : (
     <TextLayoutWeb
-      breadcrumb={breadcrumb}
       toc={toc}
       toolbar={toolbar}
       prevNext={prevNext}
+      breadcrumb={breadcrumb}
     />
   );
 };

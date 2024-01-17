@@ -192,11 +192,11 @@ $serif-family: 'Georgia, ' Times New Roman ', Times, serif';
       transform: none;
     }
 
-    transform: translate3d(0px, -108px, 0px);
+    transform: translate3d(0px, 60px, 0px);
     transition: all 0.2s ease-in-out 0s;
   }
 
-  .is-mobile & {
+  &.stick_bottom {
     top: auto;
     bottom: 0;
   }
@@ -263,6 +263,13 @@ $serif-family: 'Georgia, ' Times New Roman ', Times, serif';
 
     .player_page_tab & {
       border: none;
+    }
+  }
+
+  &__dropdown {
+    .button {
+      margin: 0 !important;
+      padding: 0 !important;
     }
   }
 }
@@ -373,6 +380,10 @@ $serif-family: 'Georgia, ' Times New Roman ', Times, serif';
   box-shadow: 0 3px 6px $grey;
   border-radius: 4px;
   line-height: 40px;
+
+  .is-mobile & {
+    width: auto;
+  }
 
   .input {
     flex-grow: 3;

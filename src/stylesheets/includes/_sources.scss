@@ -154,7 +154,6 @@
       &.source__toc_scroll_up {
         height: 100VH;
         transition: height 0.2s ease-in-out 0s;
-
       }
 
       &.source__toc_scroll_down {
@@ -169,12 +168,39 @@
         overflow: hidden auto;
         height: calc(100% - 130px);
       }
+
+      @include mobile {
+        width: auto;
+        position: fixed;
+        top: $main-menu-height + 48px;
+        height: calc(100VH - $main-menu-height - 48px);
+        bottom: auto;
+        transform: translate3d(-100%, 0, 0);
+
+        .rtl & {
+          transform: translate3d(100%, 0, 0);
+        }
+        &.source__toc_scroll_up {
+          top: 0;
+          height: 100VH;
+          transition: height 0.2s ease-in-out 0s;
+        }
+
+        &.source__toc_scroll_down {
+          top: $main-menu-height;
+          height: calc(100VH - $main-menu-height);
+        }
+      }
     }
 
     .title {
       &.active {
         font-weight: bold;
       }
+    }
+
+    &.source__toc_active {
+      transform: translate3d(0, 0, 0) !important;
     }
   }
 

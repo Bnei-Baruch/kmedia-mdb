@@ -271,6 +271,7 @@ const TOC = () => {
         {
           'source__toc_active': tocIsActive,
           'source__toc_scroll_up': scrollDir === 1,
+          'source__toc_scroll_down': scrollDir === -1,
           'source__toc_selected': hasSel,
         }
       )
