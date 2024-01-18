@@ -142,9 +142,9 @@ class Sketches extends React.Component {
 
   setStateByZipFiles = (zipFiles, contentLanguages, unit) => {
     const {
-            filesLanguages,
-            selectedLanguage
-          }         = Sketches.getFilesLanguages(zipFiles, contentLanguages, unit.original_language);
+      filesLanguages,
+      selectedLanguage
+    }         = Sketches.getFilesLanguages(zipFiles, contentLanguages, unit.original_language);
     const itemState = this.getItemState(zipFiles, selectedLanguage, unit);
 
     this.setState({ zipFiles, filesLanguages, selectedLanguage, ...itemState });
