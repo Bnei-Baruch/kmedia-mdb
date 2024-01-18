@@ -6,9 +6,6 @@ import { Container, Grid, Header } from 'semantic-ui-react';
 import { actions as mdbActions } from '../../../../../redux/modules/mdb';
 import Helmets from '../../../../shared/Helmets/index';
 import Share from '../../../../Pages/WithText/Buttons/ShareTextBtn';
-import TranscriptionContainer
-  from '../../../../Pages/WithPlayer/widgets/UnitMaterials/Transcription/TranscriptionContainer';
-import Share from '../../../Library/Share';
 import MediaDownloads from '../../../../Pages/WithPlayer/widgets/MediaDownloads';
 import WipErr from '../../../../shared/WipErr/WipErr';
 import Recommended from '../../../../Pages/WithPlayer/widgets/Recommended/Main/Recommended';
@@ -19,7 +16,12 @@ import TextLayoutWeb from '../../../../Pages/WithText/TextLayoutWeb';
 import ArticleToolbarMobile from './ArticleToolbarMobile';
 import ArticleToolbarWeb from './ArticleToolbarWeb';
 import { useTranslation } from 'react-i18next';
-import { mdbGetDenormContentUnitSelector, mdbGetErrorsSelector, settingsGetUIDirSelector, mdbGetWipFn } from '../../../../../redux/selectors';
+import {
+  mdbGetDenormContentUnitSelector,
+  mdbGetErrorsSelector,
+  settingsGetUIDirSelector,
+  mdbGetWipFn
+} from '../../../../../redux/selectors';
 
 const renderHeader = (unit, t, uiDir) => {
   const position = uiDir === 'rtl' ? 'right' : 'left';
@@ -50,9 +52,9 @@ const renderHeader = (unit, t, uiDir) => {
                 {t('values.date', { date: unit.film_date })}
               </Header>
               <span className="share-publication">
-                <Share position={position}/>
+                <Share position={position} />
               </span>
-              <TagsByUnit id={unit.id}/>
+              <TagsByUnit id={unit.id} />
             </Grid.Column>
           </Grid.Row>
         </Grid>
@@ -63,8 +65,8 @@ const renderHeader = (unit, t, uiDir) => {
 
 const renderHelmet = unit => (
   <Fragment>
-    <Helmets.NoIndex/>
-    <Helmets.ArticleUnit unit={unit}/>
+    <Helmets.NoIndex />
+    <Helmets.ArticleUnit unit={unit} />
   </Fragment>
 );
 
@@ -135,7 +137,7 @@ const ArticlePage = () => {
                 </Grid.Row>
               </Grid.Column>
               <Grid.Column mobile={16} tablet={6} computer={6}>
-                <Recommended unit={unit}/>
+                <Recommended unit={unit} />
               </Grid.Column>
             </Grid.Row>
           </Grid>

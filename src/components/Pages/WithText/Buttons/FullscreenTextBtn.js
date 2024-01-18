@@ -3,10 +3,11 @@ import { Button } from 'semantic-ui-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { actions, selectors, selectors as textPage } from '../../../../redux/modules/textPage';
 import fscreen from 'fscreen';
+import { textPageGetUrlInfoSelector, textPageGetIsFullscreenSelector } from '../../../../redux/selectors';
 
 const FullscreenTextBtn = () => {
-  const isFullscreen = useSelector(state => selectors.getIsFullscreen(state.textPage));
-  const hasSel       = !!useSelector(state => textPage.getUrlInfo(state.textPage)).select;
+  const isFullscreen = useSelector(textPageGetIsFullscreenSelector);
+  const hasSel       = !!useSelector(textPageGetUrlInfoSelector).select;
   const dispatch     = useDispatch();
 
   useEffect(() => {

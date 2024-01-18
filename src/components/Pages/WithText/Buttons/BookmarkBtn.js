@@ -7,11 +7,12 @@ import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import { selectors as settings } from '../../../../redux/modules/settings';
 import SelectTopicsModal from '../../../shared/SelectTopicsModal/SelectTopicsModal';
 import { selectors as textPage } from '../../../../redux/modules/textPage';
+import { textPageGetUrlInfoSelector } from '../../../../redux/selectors';
 
 const BookmarkBtn = () => {
   const { isMobileDevice }     = useContext(DeviceInfoContext);
   const dir                    = useSelector(state => settings.getUIDir(state.settings));
-  const { select: properties } = useSelector(state => textPage.getUrlInfo(state.textPage));
+  const { select: properties } = useSelector(textPageGetUrlInfoSelector);
   const { t }                  = useTranslation();
 
   const [open, setOpen]         = useState(false);

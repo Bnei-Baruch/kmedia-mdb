@@ -7,9 +7,10 @@ import { selectors as assets } from '../../../../redux/modules/assets';
 import { selectors as textPage } from '../../../../redux/modules/textPage';
 import { getLanguageDirection } from '../../../../helpers/i18n-utils';
 import { useTextContent } from './useTextContent';
+import { textPageGetFileSelector } from '../../../../redux/selectors';
 
 const ContentHtml = ({ labels = [], notes = [] }) => {
-  const { language, id } = useSelector(state => textPage.getFile(state.textPage));
+  const { language, id } = useSelector(textPageGetFileSelector);
   const getDoc2htmlById  = useSelector(state => assets.getDoc2htmlById(state.assets));
 
   const location = useLocation();

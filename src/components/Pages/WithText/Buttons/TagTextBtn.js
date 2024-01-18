@@ -6,13 +6,18 @@ import { SectionLogo } from '../../../../helpers/images';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { selectors as textPage } from '../../../../redux/modules/textPage';
+import {
+  textPageGetSubjectSelector,
+  textPageGetFileSelector,
+  textPageGetUrlInfoSelector
+} from '../../../../redux/selectors';
 
 const TagTextBtn = () => {
   const { t } = useTranslation();
 
-  const { select: properties } = useSelector(state => textPage.getUrlInfo(state.textPage));
-  const { language }           = useSelector(state => textPage.getFile(state.textPage));
-  const subject                = useSelector(state => textPage.getSubject(state.textPage));
+  const { select: properties } = useSelector(textPageGetUrlInfoSelector);
+  const { language }           = useSelector(textPageGetFileSelector);
+  const subject                = useSelector(textPageGetSubjectSelector);
 
   const [urlProps, setUrlProps] = useState(properties);
   const [open, setOpen]         = useState(false);

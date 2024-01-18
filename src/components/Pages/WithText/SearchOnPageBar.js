@@ -3,7 +3,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Button, Input } from 'semantic-ui-react';
 import debounce from 'lodash/debounce';
 import { searchOnPage, deleteHighlightByRange, clearHighlightByStyle, addHighlightByRanges } from './helper';
-import { selectors as textPage, actions } from '../../../redux/modules/textPage';
+import { actions } from '../../../redux/modules/textPage';
+import { textPageGetIsSearchSelector } from '../../../redux/selectors';
 
 const SearchOnPageBar = () => {
   const [val, setVal]     = useState('');
@@ -11,11 +12,11 @@ const SearchOnPageBar = () => {
 
   const ref      = useRef([]);
   const dispatch = useDispatch();
-  const isSearch = useSelector(state => textPage.getIsSearch(state.textPage));
+  const isSearch = useSelector(textPageGetIsSearchSelector);
 
   if (!isSearch) return null;
 
-  const handleClose  = () => {
+  const handleClose = () => {
     dispatch(actions.setIsSearch());
     clearing();
     setVal('');
@@ -43,15 +44,15 @@ const SearchOnPageBar = () => {
     scrollByDir(0, 0);
   };
 
-  const clearing     = () => {
+  const clearing = () => {
     ref.current = [];
     clearHighlightByStyle('found_search');
     clearHighlightByStyle('selected_search');
   };
 
-  const handleNext   = () => scrollByDir();
-  const handlePrev   = () => scrollByDir(-1);
-  const scrollByDir  = (dir = 1, idx = index) => {
+  const handleNext  = () => scrollByDir();
+  const handlePrev  = () => scrollByDir(-1);
+  const scrollByDir = (dir = 1, idx = index) => {
     const _index = idx + dir;
     if (idx >= 0) {
       deleteHighlightByRange(ref.current[idx], 'selected_search');

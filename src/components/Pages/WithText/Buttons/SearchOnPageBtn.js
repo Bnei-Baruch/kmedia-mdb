@@ -1,11 +1,12 @@
 import React from 'react';
 import { Button } from 'semantic-ui-react';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectors as textPage, actions } from '../../../../redux/modules/textPage';
+import { actions } from '../../../../redux/modules/textPage';
+import { textPageGetFileSelector, textPageGetIsSearchSelector } from '../../../../redux/selectors';
 
 const SearchOnPageBtn = () => {
-  const isSearch  = useSelector(state => textPage.getIsSearch(state.textPage));
-  const { isPdf } = useSelector(state => textPage.getFile(state.textPage));
+  const isSearch  = useSelector(textPageGetIsSearchSelector);
+  const { isPdf } = useSelector(textPageGetFileSelector);
 
   const dispatch = useDispatch();
 

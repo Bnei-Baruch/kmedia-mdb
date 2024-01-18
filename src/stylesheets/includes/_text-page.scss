@@ -1,4 +1,6 @@
 $serif-family: 'Georgia, ' Times New Roman ', Times, serif';
+$text-bar-height: 60px;
+$breadcrumb-height: 48px;
 
 .text_layout {
   position: relative;
@@ -136,7 +138,8 @@ $serif-family: 'Georgia, ' Times New Roman ', Times, serif';
 
   p {
     margin-bottom: 1.2em;
-    &:last-child{
+
+    &:last-child {
       margin-bottom: 0;
     }
   }
@@ -195,8 +198,13 @@ $serif-family: 'Georgia, ' Times New Roman ', Times, serif';
       transform: none;
     }
 
-    transform: translate3d(0px, 60px, 0px);
+    transform: translate3d(0px, calc(-1 * ($text-bar-height + $breadcrumb-height)), 0px);
     transition: all 0.2s ease-in-out 0s;
+
+    &.stick_toolbar_no_breadcrumb {
+      transform: translate3d(0px, -$text-bar-height, 0px);
+
+    }
   }
 
   &.stick_bottom {
@@ -374,7 +382,7 @@ $serif-family: 'Georgia, ' Times New Roman ', Times, serif';
 }
 
 .text__search_on_page {
-  width: $max-readble-width;
+  max-width: $max-readble-width;
   margin: 0 auto;
   display: flex;
   flex-wrap: nowrap;

@@ -1,19 +1,25 @@
-import React, { useState, useRef, useContext, useEffect } from 'react';
-import { Accordion, Ref, Sidebar } from 'semantic-ui-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { Accordion, Ref } from 'semantic-ui-react';
 
 import { getEscapedRegExp, isEmpty } from '../../../../helpers/utils';
 import { BS_SHAMATI, RH_ARTICLES, RH_RECORDS, } from '../../../../helpers/consts';
 import { isLanguageRtl } from '../../../../helpers/i18n-utils';
 import { useSelector } from 'react-redux';
-import { selectors, selectors as sources } from '../../../../redux/modules/sources';
-import { selectors as settings } from '../../../../redux/modules/settings';
-import { selectors as textPage } from '../../../../redux/modules/textPage';
 import { properParentId, getFullPath } from './helper';
 import { useNavigate } from 'react-router-dom';
-import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import TOCSearch from './TOCSearch';
 import TOCControl from './TOCControl';
 import clsx from 'clsx';
+import {
+  textPageGetTocIsActiveSelector,
+  textPageGetTocInfoSelector,
+  textPageGetSubjectSelector,
+  textPageGetUrlInfoSelector,
+  textPageGetScrollDirSelector,
+  settingsGetUILangSelector,
+  sourcesGetSourceByIdSelector,
+  sourcesGetPathByIDSelector
+} from '../../../../redux/selectors';
 
 const titleKey = id => `title-${id}`;
 
@@ -127,14 +133,14 @@ const filterSources = (path, match) => {
 };
 
 const TOC = () => {
-  const getPathByID   = useSelector(state => sources.getPathByID(state.sources));
-  const getSourceById = useSelector(state => selectors.getSourceById(state.sources));
-  const uiLang        = useSelector(state => settings.getUILang(state.settings));
-  const { match }     = useSelector(state => textPage.getTocInfo(state.textPage));
-  const tocIsActive   = useSelector(state => textPage.getTocIsActive(state.textPage));
-  const scrollDir     = useSelector(state => textPage.getScrollDir(state.textPage));
-  const id            = useSelector(state => textPage.getSubject(state.textPage).id);
-  const hasSel        = !!useSelector(state => textPage.getUrlInfo(state.textPage)).select;
+  const getPathByID   = useSelector(sourcesGetPathByIDSelector);
+  const getSourceById = useSelector(sourcesGetSourceByIdSelector);
+  const uiLang        = useSelector(settingsGetUILangSelector);
+  const { match }     = useSelector(textPageGetTocInfoSelector);
+  const tocIsActive   = useSelector(textPageGetTocIsActiveSelector);
+  const scrollDir     = useSelector(textPageGetScrollDirSelector);
+  const { id }        = useSelector(textPageGetSubjectSelector);
+  const hasSel        = !!useSelector(textPageGetUrlInfoSelector).select;
 
   const fullPath                = getFullPath(id, getPathByID);
   const rootId                  = properParentId(fullPath);

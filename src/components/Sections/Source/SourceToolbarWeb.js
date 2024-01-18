@@ -17,9 +17,10 @@ import PrintBtn from '../../Pages/WithText/Buttons/PrintBtn';
 import { useSelector } from 'react-redux';
 import { selectors as textPage } from '../../../redux/modules/textPage';
 import clsx from 'clsx';
+import { textPageGetUrlInfoSelector } from '../../../redux/selectors';
 
 const SourceToolbarWeb = () => {
-  const hasSel = !!useSelector(state => textPage.getUrlInfo(state.textPage)).select;
+  const hasSel = !!useSelector(textPageGetUrlInfoSelector).select;
 
   return (
     <div className="text_toolbar">

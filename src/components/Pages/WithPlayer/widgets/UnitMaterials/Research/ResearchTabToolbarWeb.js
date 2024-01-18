@@ -1,4 +1,7 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
+import clsx from 'clsx';
+
 import AddNoteBtn from '../../../../WithText/Buttons/AddNoteBtn';
 import LanguageTextBtn from '../../../../WithText/Buttons/LanguageTextBtn';
 import TextSettings from '../../../../WithText/Buttons/TextSettings/TextSettings';
@@ -10,12 +13,10 @@ import AdditionsVisibilityBtn from '../../../../WithText/Buttons/AdditionsVisibi
 import ShareTextBtn from '../../../../WithText/Buttons/ShareTextBtn';
 import TagTextBtn from '../../../../WithText/Buttons/TagTextBtn';
 import PrintBtn from '../../../../WithText/Buttons/PrintBtn';
-import { useSelector } from 'react-redux';
-import { selectors as textPage } from '../../../../../../redux/modules/textPage';
-import clsx from 'clsx';
+import { textPageGetUrlInfoSelector } from '../../../../../../redux/selectors';
 
 const ResearchTabToolbarWeb = () => {
-  const hasSel = !!useSelector(state => textPage.getUrlInfo(state.textPage)).select;
+  const hasSel = !!useSelector(textPageGetUrlInfoSelector).select;
 
   return (
     <div className="text_toolbar">

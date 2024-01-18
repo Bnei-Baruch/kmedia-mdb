@@ -5,13 +5,14 @@ import { stringify } from '../../../../helpers/url';
 import { useSelector } from 'react-redux';
 import { selectors as textPage } from '../../../../redux/modules/textPage';
 import { CT_SOURCE, CT_LIKUTIM } from '../../../../helpers/consts';
+import { textPageGetSubjectSelector } from '../../../../redux/selectors';
 
 const linkByCT         = {
   [CT_SOURCE]: 'sources',
   [CT_LIKUTIM]: 'likutim',
 };
 const LinkToLessonsBtn = () => {
-  const subject = useSelector(state => textPage.getSubject(state.textPage));
+  const subject = useSelector(textPageGetSubjectSelector);
 
   if (!subject) return null;
 

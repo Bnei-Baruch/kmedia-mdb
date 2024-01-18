@@ -11,6 +11,7 @@ import { selectors as textPage } from '../../../redux/modules/textPage';
 import { useScrollBehavior } from './hooks/useScrollBehavior';
 import WipErr from '../../shared/WipErr/WipErr';
 import { useTranslation } from 'react-i18next';
+import { textPageGetSettings, textPageGetScrollDirSelector } from '../../../redux/selectors';
 
 const TextLayoutMobile = props => {
   const {
@@ -25,8 +26,8 @@ const TextLayoutMobile = props => {
   const ref   = useRef();
   const { t } = useTranslation();
 
-  const { theme } = useSelector(state => textPage.getSettings(state.textPage));
-  const scrollDir = useSelector(state => textPage.getScrollDir(state.textPage));
+  const { theme } = useSelector(textPageGetSettings);
+  const scrollDir = useSelector(textPageGetScrollDirSelector);
 
   useInitTextUrl();
   const wip = useTextSubject(propId);

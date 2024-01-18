@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { Button, Icon, Menu, Popup, Search } from 'semantic-ui-react';
-import debounce from 'lodash/debounce';
-import { actions, selectors as textPage } from '../../../../redux/modules/textPage';
+import React from 'react';
+import { Button } from 'semantic-ui-react';
+import { actions } from '../../../../redux/modules/textPage';
 import { useDispatch, useSelector } from 'react-redux';
+import { textPageGetScanInfoSelector } from '../../../../redux/selectors';
 
 const ToggleScanBtn = () => {
-  const { on, file } = useSelector(state => textPage.getScanInfo(state.textPage));
+  const { on, file } = useSelector(textPageGetScanInfoSelector);
   const dispatch     = useDispatch();
 
   if (!file) return null;

@@ -5,11 +5,16 @@ import { useSelector, useDispatch } from 'react-redux';
 import { actions, selectors as assets } from '../../../../redux/modules/assets';
 import { selectors as textPage } from '../../../../redux/modules/textPage';
 import { seek, setPip } from '../../../../pkg/jwpAdapter/adapter';
+import {
+  textPageGetSubjectSelector,
+  textPageGetFileSelector,
+  textPageGetWordOffsetSelector
+} from '../../../../redux/selectors';
 
 const PlayByTextBtn = () => {
-  const { id }        = useSelector(state => textPage.getSubject(state.textPage));
-  const { language }  = useSelector(state => textPage.getFile(state.textPage));
-  const wordOffset    = useSelector(state => textPage.getWordOffset(state.textPage));
+  const { id }        = useSelector(textPageGetSubjectSelector);
+  const { language }  = useSelector(textPageGetFileSelector);
+  const wordOffset    = useSelector(textPageGetWordOffsetSelector);
   const hasTimeCode   = useSelector(state => assets.hasTimeCode(state.assets));
   const timeCodeByPos = useSelector(state => assets.getTimeCode(state.assets));
 

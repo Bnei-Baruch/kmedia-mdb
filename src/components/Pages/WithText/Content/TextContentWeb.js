@@ -11,15 +11,21 @@ import LabelMarks from '../Labels/LabelMarks';
 import PDF, { startsFrom } from '../../../shared/PDF/PDF';
 import { physicalFile, isEmpty } from '../../../../helpers/utils';
 import clsx from 'clsx';
+import {
+  textPageGetSettings,
+  textPageGetSubjectSelector,
+  textPageGetFileSelector,
+  textPageGetTextOnlySelector, textPageGetScanInfoSelector
+} from '../../../../redux/selectors';
 
 const TextContentWeb = () => {
   const [parentTop, setParentTop] = useState(0);
 
-  const { fontType, zoomSize } = useSelector(state => textPage.getSettings(state.textPage), shallowEqual);
-  const textOnly               = useSelector(state => textPage.getTextOnly(state.textPage));
-  const subject                = useSelector(state => textPage.getSubject(state.textPage));
-  const file                   = useSelector(state => textPage.getFile(state.textPage));
-  const scanInfo               = useSelector(state => textPage.getScanInfo(state.textPage));
+  const { fontType, zoomSize } = useSelector(textPageGetSettings);
+  const textOnly               = useSelector(textPageGetTextOnlySelector);
+  const subject                = useSelector(textPageGetSubjectSelector);
+  const file                   = useSelector(textPageGetFileSelector);
+  const scanInfo               = useSelector(textPageGetScanInfoSelector);
 
   const notes               = useNotes();
   const { labels, offsets } = useLabels();

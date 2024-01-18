@@ -10,6 +10,7 @@ import useStateWithCallback from '../../../../helpers/use-state-with-callback';
 import { useSelector } from 'react-redux';
 import { selectors as textPage } from '../../../../redux/modules/textPage';
 import clsx from 'clsx';
+import { textPageGetUrlInfoSelector } from '../../../../redux/selectors';
 
 const POPOVER_CONFIRMATION_TIMEOUT = 2500;
 
@@ -23,7 +24,7 @@ const ShareTextBtn = () => {
     }
   });
 
-  const { select: properties, url } = useSelector(state => textPage.getUrlInfo(state.textPage));
+  const { select: properties, url } = useSelector(textPageGetUrlInfoSelector);
 
   const [urlWithParams, setUrlWithParams] = useState(url);
 

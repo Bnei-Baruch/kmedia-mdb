@@ -1,19 +1,19 @@
 import React, { useContext } from 'react';
 import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 import TextLayoutWeb from '../../../../WithText/TextLayoutWeb';
 import ArticleTabToolbarWeb from './ArticleTabToolbarWeb';
-import { useSelector } from 'react-redux';
-import { selectors as mdb } from '../../../../../../redux/modules/mdb';
 import { CT_ARTICLE } from '../../../../../../helpers/consts';
 import { DeviceInfoContext } from '../../../../../../helpers/app-contexts';
 import ArticleTabToolbarMobile from './ArticleTabToolbarMobile';
+import { mdbGetDenormContentUnitSelector } from '../../../../../../redux/selectors';
 
 const ArticleTab = () => {
   const { id }             = useParams();
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
-  const pageCu = useSelector(state => mdb.getDenormContentUnit(state.mdb, id));
+  const pageCu = useSelector(state => mdbGetDenormContentUnitSelector(state, id));
   const cu     = Object.values(pageCu.derived_units).find(x => x.content_type === CT_ARTICLE);
 
   if (!cu) return null;

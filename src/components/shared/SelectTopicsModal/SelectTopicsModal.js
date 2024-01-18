@@ -1,6 +1,5 @@
 import React, { useMemo, useState, useContext } from 'react';
-import PropTypes from 'prop-types';
-import { withTranslation, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Container, Grid, Header, Input, Label, Modal } from 'semantic-ui-react';
 import isEqual from 'react-fast-compare';
@@ -12,7 +11,6 @@ import TopicBranch from './TopicBranch';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { actions as mdbActions } from '../../../redux/modules/mdb';
 import {
-  sourcesAreLoadedSelector,
   tagsGetDisplayRootsSelector,
   tagsGetTagByIdSelector,
   settingsGetUIDirSelector,

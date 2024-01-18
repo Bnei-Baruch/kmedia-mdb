@@ -1,25 +1,28 @@
 import { put, takeEvery, select, call } from 'redux-saga/effects';
-import { actions, types, selectors as textPage } from '../redux/modules/textPage';
-import { selectors as mdb } from '../redux/modules/mdb';
+import { actions, types } from '../redux/modules/textPage';
 import { selectSuitableLanguage } from '../helpers/language';
-import { LANG_HEBREW, DEFAULT_CONTENT_LANGUAGE } from '../helpers/consts';
-import { selectors as settings } from '../redux/modules/settings';
 import { cuToSubject, selectTextFile, checkRabashGroupArticles } from '../components/Pages/WithText/helper';
 import { fetchUnit } from './mdb';
+import {
+  mdbGetDenormContentUnitSelector,
+  settingsGetContentLanguagesSelector,
+  mdbGetFullUnitFetchedSelector,
+  textPageGetFileFilterSelector
+} from '../redux/selectors';
 
 export function* fetchSubject(action) {
   const { uid: id, isGr } = checkRabashGroupArticles(action.payload);
 
   try {
-    const fetched = yield select(state => mdb.getFullUnitFetched(state.mdb, id))[id];
+    const fetched = yield select(mdbGetFullUnitFetchedSelector)[id];
     if (!fetched) {
       yield call(fetchUnit, { payload: id });
     }
 
-    const cu               = yield select(state => mdb.getDenormContentUnit(state.mdb, id));
-    const fileFilter       = yield select(state => textPage.getFileFilter(state.textPage));
+    const cu               = yield select(state => mdbGetDenormContentUnitSelector(state, id));
+    const fileFilter       = yield select(textPageGetFileFilterSelector);
     const subject          = cuToSubject(cu, fileFilter);
-    const contentLanguages = yield select(state => settings.getContentLanguages(state.settings));
+    const contentLanguages = yield select(settingsGetContentLanguagesSelector);
     const language         = selectSuitableLanguage(contentLanguages, subject.languages, cu.original_language);
 
     const file = selectTextFile(subject.files, id, language, fileFilter);

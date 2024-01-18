@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-import { withTranslation, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { Button, Popup } from 'semantic-ui-react';
 import { SectionLogo } from '../../../../helpers/images';
 import { getLanguageDirection } from '../../../../helpers/i18n-utils';
@@ -8,7 +7,7 @@ import { makeTagLinks } from '../../WithPlayer/widgets/Info/Info';
 import { useSelector } from 'react-redux';
 import { textMarksPrefixByType } from '../scrollToSearch/helper';
 import { highlightByPrefixAndId, clearHighlightByStyle } from '../helper';
-import { tagsGetTagByIdSelector } from '../../../redux/selectors';
+import { tagsGetTagByIdSelector } from '../../../../redux/selectors';
 
 const idPrefix  = textMarksPrefixByType['label'];
 const LabelMark = ({ label, offset }) => {
@@ -51,7 +50,7 @@ const LabelMark = ({ label, offset }) => {
       <Popup
         trigger={
           <Button basic className="clear_button" style={{ marginTop: `${offset.y * 20}px` }}>
-            <SectionLogo name="topics" width="25" height="25"/>
+            <SectionLogo name="topics" width="25" height="25" />
           </Button>
         }
         inverted

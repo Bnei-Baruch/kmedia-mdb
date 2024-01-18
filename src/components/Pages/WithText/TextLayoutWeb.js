@@ -16,6 +16,12 @@ import WipErr from '../../shared/WipErr/WipErr';
 import { useTranslation } from 'react-i18next';
 import { isEmpty } from '../../../helpers/utils';
 import { useScrollBehavior } from './hooks/useScrollBehavior';
+import {
+  textPageGetSettings,
+  textPageGetSubjectSelector,
+  textPageGetFileSelector,
+  textPageGetUrlInfoSelector, textPageGetScrollDirSelector
+} from '../../../redux/selectors';
 
 const TextLayoutWeb = props => {
   const {
@@ -30,11 +36,11 @@ const TextLayoutWeb = props => {
   const ref   = useRef();
   const { t } = useTranslation();
 
-  const scrollDir = useSelector(state => textPage.getScrollDir(state.textPage));
-  const subject   = useSelector(state => textPage.getSubject(state.textPage));
-  const file      = useSelector(state => textPage.getFile(state.textPage));
-  const hasSel    = !!useSelector(state => textPage.getUrlInfo(state.textPage)).select;
-  const { theme } = useSelector(state => textPage.getSettings(state.textPage));
+  const scrollDir = useSelector(textPageGetScrollDirSelector);
+  const subject   = useSelector(textPageGetSubjectSelector);
+  const file      = useSelector(textPageGetFileSelector);
+  const hasSel    = !!useSelector(textPageGetUrlInfoSelector).select;
+  const { theme } = useSelector(textPageGetSettings);
 
   useInitTextUrl();
   const wip = useTextSubject(propId);
@@ -54,6 +60,7 @@ const TextLayoutWeb = props => {
           'stick_toolbar_unpinned': scrollDir === 1,
           'stick_toolbar_pinned': scrollDir === -1,
           'stick_toolbar_fixed': hasSel,
+          'stick_toolbar_no_breadcrumb': !breadcrumb
         })
       }>
         {breadcrumb}

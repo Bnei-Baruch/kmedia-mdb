@@ -3,10 +3,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Dropdown, Button } from 'semantic-ui-react';
 import { getOptions } from '../../../../helpers/language';
 import { selectors as textPage, actions } from '../../../../redux/modules/textPage';
+import { textPageGetSubjectSelector, textPageGetFileSelector } from '../../../../redux/selectors';
 
 const LanguageTextBtn = () => {
-  const { language }  = useSelector(state => textPage.getFile(state.textPage));
-  const { languages } = useSelector(state => textPage.getSubject(state.textPage));
+  const { language }  = useSelector(textPageGetFileSelector);
+  const { languages } = useSelector(textPageGetSubjectSelector);
 
   const dispatch = useDispatch();
   const onChange = selected => {

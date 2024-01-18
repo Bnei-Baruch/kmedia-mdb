@@ -3,11 +3,12 @@ import { Button, Input } from 'semantic-ui-react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { actions, selectors as textPage } from '../../../../redux/modules/textPage';
+import { textPageGetTocInfoSelector } from '../../../../redux/selectors';
 
 const TocSearch = () => {
   const { t } = useTranslation();
 
-  const { match, sortByAZ } = useSelector(state => textPage.getTocInfo(state.textPage));
+  const { match, sortByAZ } = useSelector(textPageGetTocInfoSelector);
   const dispatch            = useDispatch();
   const handleChange        = (e, data) => search(data.value);
   const handleKeyDown       = e => {

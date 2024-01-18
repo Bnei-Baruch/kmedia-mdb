@@ -1,22 +1,24 @@
 import React, { useContext } from 'react';
-import { Container, Breadcrumb, Icon } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
-import { selectors as textPage } from '../../../redux/modules/textPage';
-import { selectors as sources } from '../../../redux/modules/sources';
 import { useTranslation } from 'react-i18next';
 import Link from '../../Language/MultiLanguageLink';
-import { selectors as settings } from '../../../redux/modules/settings';
 import { isLanguageRtl } from '../../../helpers/i18n-utils';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
+import {
+  textPageGetSubjectSelector,
+  textPageGetUrlInfoSelector,
+  sourcesGetPathByIDSelector,
+  settingsGetUILangSelector
+} from '../../../redux/selectors';
 
 const BreadcrumbTextPage = () => {
   const { t } = useTranslation();
 
   const { isMobileDevice } = useContext(DeviceInfoContext);
-  const subject            = useSelector(state => textPage.getSubject(state.textPage));
-  const fullPath           = useSelector(state => sources.getPathByID(state.sources)(subject.id));
-  const hasSel             = !!useSelector(state => textPage.getUrlInfo(state.textPage)).select;
-  const uiLang             = useSelector(state => settings.getUILang(state.settings));
+  const subject            = useSelector(textPageGetSubjectSelector);
+  const fullPath           = useSelector(sourcesGetPathByIDSelector)(subject.id);
+  const hasSel             = !!useSelector(textPageGetUrlInfoSelector).select;
+  const uiLang             = useSelector(settingsGetUILangSelector);
 
   if (hasSel) return null;
   const current = fullPath.pop();

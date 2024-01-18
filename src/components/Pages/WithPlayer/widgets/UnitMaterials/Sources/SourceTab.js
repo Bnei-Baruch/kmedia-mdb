@@ -4,19 +4,18 @@ import { useSelector } from 'react-redux';
 import { Dropdown } from 'semantic-ui-react';
 
 import TextLayoutWeb from '../../../../WithText/TextLayoutWeb';
-import { selectors as mdb } from '../../../../../../redux/modules/mdb';
-import { selectors as sources } from '../../../../../../redux/modules/sources';
+import { isEmpty } from '../../../../../../helpers/utils';
 import { MT_TEXT, CT_LIKUTIM, CT_SOURCE } from '../../../../../../helpers/consts';
 import { DeviceInfoContext } from '../../../../../../helpers/app-contexts';
 import SourceTabToolbarMobile from './SourceTabToolbarMobile';
 import SourceTabToolbarWeb from './SourceTabToolbarWeb';
-import { isEmpty } from '../../../../../../helpers/utils';
+import { mdbGetDenormContentUnitSelector, sourcesGetSourceByIdSelector } from '../../../../../../redux/selectors';
 
 const SourceTab = () => {
   const { id } = useParams();
 
-  const pageCu        = useSelector(state => mdb.getDenormContentUnit(state.mdb, id));
-  const getSourceById = useSelector(state => sources.getSourceById(state.sources));
+  const pageCu        = useSelector(state => mdbGetDenormContentUnitSelector(state, id));
+  const getSourceById = useSelector(state => sourcesGetSourceByIdSelector(state));
 
   const dCus = Object.values(pageCu.derived_units)
     .filter(x => [CT_LIKUTIM, CT_SOURCE].includes(x.content_type))

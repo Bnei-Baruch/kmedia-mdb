@@ -13,11 +13,11 @@ import AdditionsVisibilityBtn from '../../../../WithText/Buttons/AdditionsVisibi
 import ShareTextBtn from '../../../../WithText/Buttons/ShareTextBtn';
 import TagTextBtn from '../../../../WithText/Buttons/TagTextBtn';
 import PrintBtn from '../../../../WithText/Buttons/PrintBtn';
-import { selectors as textPage } from '../../../../../../redux/modules/textPage';
 import PlayByTextBtn from '../../../../WithText/Buttons/PlayByTextBtn';
+import { textPageGetUrlInfoSelector } from '../../../../../../redux/selectors';
 
 const TranscriptionTabToolbarWeb = () => {
-  const hasSel = !!useSelector(state => textPage.getUrlInfo(state.textPage)).select;
+  const hasSel = !!useSelector(textPageGetUrlInfoSelector).select;
 
   return (
     <div className="text_toolbar">

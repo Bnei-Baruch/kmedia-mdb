@@ -3,12 +3,13 @@ import { useTranslation } from 'react-i18next';
 import { Button } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
 import { selectors as textPage } from '../../redux/modules/textPage';
+import { textPageGetMP3Selector } from '../../redux/selectors';
 
 const AudioPlayer = ({ url }) => {
   const { t }                 = useTranslation();
   const [playing, setPlaying] = useState(false);
 
-  const _url = useSelector(state => textPage.getMP3(state.textPage));
+  const _url = useSelector(textPageGetMP3Selector);
 
   useEffect(() => () => setPlaying(false), []);
 

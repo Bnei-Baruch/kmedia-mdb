@@ -4,10 +4,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import { selectors as mdb, actions } from '../../../../redux/modules/mdb';
 import { buildOffsets } from '../helper';
 import { selectors as textPage } from '../../../../redux/modules/textPage';
+import { textPageGetSubjectSelector, textPageGetFileSelector } from '../../../../redux/selectors';
 
 export const useLabels = () => {
-  const { id }       = useSelector(state => textPage.getSubject(state.textPage));
-  const { language } = useSelector(state => textPage.getFile(state.textPage));
+  const { id }       = useSelector(textPageGetSubjectSelector);
+  const { language } = useSelector(textPageGetFileSelector);
   const ids          = useSelector(state => mdb.getLabelsByCU(state.mdb, id)) || [];
   const byId         = useSelector(state => mdb.getLabelById(state.mdb));
   const labels       = useMemo(() => ids.map(_id => byId[_id])

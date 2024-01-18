@@ -4,9 +4,10 @@ import { physicalFile } from '../../../../helpers/utils';
 import { useSelector } from 'react-redux';
 import { selectors as textPage } from '../../../../redux/modules/textPage';
 import { downloadAsset } from '../../../shared/Download/Download';
+import { textPageGetFileSelector } from '../../../../redux/selectors';
 
 const DownloadTextBtn = () => {
-  const file = useSelector(state => textPage.getFile(state.textPage));
+  const file = useSelector(textPageGetFileSelector);
 
   const handleDownload = () => {
     const { mimetype: mimeType, name: filename } = file;

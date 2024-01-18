@@ -9,9 +9,10 @@ import { Button } from 'semantic-ui-react';
 import Link from '../../Language/MultiLanguageLink';
 import { getIndex } from './TOC/TOC';
 import { useTranslation } from 'react-i18next';
+import { textPageGetSubjectSelector } from '../../../redux/selectors';
 
 const PrevNextBtns = () => {
-  const { id }      = useSelector(state => textPage.getSubject(state.textPage));
+  const { id }      = useSelector(textPageGetSubjectSelector);
   const getPathByID = useSelector(state => sources.getPathByID(state.sources));
 
   if (isTaas(id)) {

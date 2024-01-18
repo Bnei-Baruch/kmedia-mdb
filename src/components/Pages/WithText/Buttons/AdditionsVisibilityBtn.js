@@ -1,10 +1,11 @@
 import React from 'react';
 import { Button } from 'semantic-ui-react';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectors as textPage, actions } from '../../../../redux/modules/textPage';
+import { actions } from '../../../../redux/modules/textPage';
+import { textPageGetTextOnlySelector } from '../../../../redux/selectors';
 
 const AdditionsVisibilityBtn = () => {
-  const textOnly = useSelector(state => textPage.getTextOnly(state.textPage));
+  const textOnly = useSelector(textPageGetTextOnlySelector);
   const dispatch = useDispatch();
   const handle   = () => {
     dispatch(actions.toggleTextOnly());

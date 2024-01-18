@@ -15,22 +15,26 @@ import * as shapes from '../../../../shapes';
 import WipErr from '../../../../shared/WipErr/WipErr';
 import MenuLanguageSelector from '../../../../Language/Selector/MenuLanguageSelector';
 import { imageGalleryItem, isZipFile } from './helper';
-import { settingsGetContentLanguagesSelector } from '../../../../../redux/selectors';
+import {
+  settingsGetContentLanguagesSelector,
+  settingsGetUIDirSelector,
+  assetsNestedGetZipByIdSelector
+} from '../../../../../redux/selectors';
 
 class Sketches extends React.Component {
   static propTypes = {
-    unit            : shapes.ContentUnit.isRequired,
-    t               : PropTypes.func.isRequired,
-    zipIndexById    : PropTypes.objectOf(shapes.DataWipErr).isRequired,
-    unzipList       : PropTypes.func.isRequired,
+    unit: shapes.ContentUnit.isRequired,
+    t: PropTypes.func.isRequired,
+    zipIndexById: PropTypes.objectOf(shapes.DataWipErr).isRequired,
+    unzipList: PropTypes.func.isRequired,
     contentLanguages: PropTypes.arrayOf(PropTypes.string).isRequired
   };
 
   state = {
-    zipFiles        : null,
-    zipFileId       : null,
-    imageFiles      : null,
-    filesLanguages  : null,
+    zipFiles: null,
+    zipFileId: null,
+    imageFiles: null,
+    filesLanguages: null,
     selectedLanguage: null
   };
 
@@ -137,8 +141,11 @@ class Sketches extends React.Component {
   };
 
   setStateByZipFiles = (zipFiles, contentLanguages, unit) => {
-    const { filesLanguages, selectedLanguage } = Sketches.getFilesLanguages(zipFiles, contentLanguages, unit.original_language);
-    const itemState                            = this.getItemState(zipFiles, selectedLanguage, unit);
+    const {
+            filesLanguages,
+            selectedLanguage
+          }         = Sketches.getFilesLanguages(zipFiles, contentLanguages, unit.original_language);
+    const itemState = this.getItemState(zipFiles, selectedLanguage, unit);
 
     this.setState({ zipFiles, filesLanguages, selectedLanguage, ...itemState });
   };
@@ -294,8 +301,8 @@ class Sketches extends React.Component {
 }
 
 const mapState = state => ({
-  zipIndexById    : selectors.getZipIndexById(state.assets),
-  uiDir           : settings.getUIDir(state.settings),
+  zipIndexById: assetsNestedGetZipByIdSelector(state),
+  uiDir: settingsGetUIDirSelector(state),
   contentLanguages: settingsGetContentLanguagesSelector(state)
 });
 

@@ -22,7 +22,6 @@ const textPageSlice = createSlice({
   name: 'textPage',
   initialState: {
     settings: {},
-    isReadable: false,
     tocIsActive: false,
     scrollDir: 0,
     match: '',
@@ -59,7 +58,6 @@ const textPageSlice = createSlice({
       state.settings.theme = payload;
       updateLocalStorage(state);
     },
-    setReadable: (state, { payload }) => void (state.isReadable = payload ?? !state.isReadable),
     setTocIsActive: (state, { payload }) => void (state.tocIsActive = payload ?? !state.tocIsActive),
     setTocMatch: (state, { payload }) => void (state.tocInfo.match = payload),
     setTocSortBy: state => void (state.tocInfo.sortByAZ = !state.tocInfo.sortByAZ),
@@ -117,7 +115,6 @@ export const types = Object.fromEntries(new Map(
 
 /* Selectors */
 const getSettings     = state => state.settings;
-const getReadable     = state => state.readable;
 const getTocIsActive  = state => state.tocIsActive;
 const getTocInfo      = state => state.tocInfo;
 const getSubject      = state => state.subject;
@@ -137,7 +134,6 @@ const getFileFilter   = state => state.fileFilter;
 
 export const selectors = {
   getSettings,
-  getReadable,
   getTocIsActive,
   getTocInfo,
   getSubject,

@@ -4,10 +4,11 @@ import { useSelector } from 'react-redux';
 import { selectors as textPage } from '../../../../redux/modules/textPage';
 import TagsByUnit from '../../../shared/TagsByUnit';
 import AudioPlayer from '../../../shared/AudioPlayer';
+import { textPageGetSettings, textPageGetSubjectSelector } from '../../../../redux/selectors';
 
 const TextContentMobile = () => {
-  const { fontType, theme, zoomSize } = useSelector(state => textPage.getSettings(state.textPage));
-  const subject                       = useSelector(state => textPage.getSubject(state.textPage));
+  const { fontType, theme, zoomSize } = useSelector(textPageGetSettings);
+  const subject                       = useSelector(textPageGetSubjectSelector);
 
   return (
     <div className={`is-${theme} is-${fontType}`} style={{ zoom: zoomSize }}>
