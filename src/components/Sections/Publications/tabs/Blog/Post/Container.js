@@ -2,16 +2,16 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
-import { actions, selectors } from '../../../../../../redux/modules/publications';
-import { selectors as settings } from '../../../../../../redux/modules/settings';
+import { actions } from '../../../../../../redux/modules/publications';
 import Page from './Page';
+import { publicationsGetBlogErrorSelector, publicationsGetBlogPostSelector, publicationsGetBlogWipSelector } from '../../../../../../redux/selectors';
 
 const BlogPostContainer = () => {
-  const wip      = useSelector(state => selectors.getBlogWipPost(state.publications));
-  const err      = useSelector(state => selectors.getBlogErrorPost(state.publications));
+  const wip = useSelector(publicationsGetBlogWipSelector);
+  const err = useSelector(publicationsGetBlogErrorSelector);
 
   const { blog, id } = useParams();
-  const post         = useSelector(state => selectors.getBlogPost(state.publications, blog, id));
+  const post         = useSelector(state => publicationsGetBlogPostSelector(state, blog, id));
 
   const dispatch = useDispatch();
 

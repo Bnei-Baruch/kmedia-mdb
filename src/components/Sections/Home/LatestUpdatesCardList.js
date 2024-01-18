@@ -9,30 +9,32 @@ import { getSectionForTranslation } from '../../../helpers/utils';
 import clsx from 'clsx';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { useSelector } from 'react-redux';
-import { selectors as settings } from '../../../redux/modules/settings';
+import { settingsGetUIDirSelector } from '../../../redux/selectors';
 
-const LatestUpdatesCardList = ({
-  t,
-  title,
-  maxItems,
-  cts,
-  itemsByCT,
-  itemsPerRow = 4,
-  itemsCount = 4,
-  stackable = true
-}) => {
-  const { isMobileDevice } = useContext(DeviceInfoContext);
-  const [pageNo, setPageNo] = useState(0);
-  const [pageStart, setPageStart] = useState(0);
+const LatestUpdatesCardList = (
+  {
+    t,
+    title,
+    maxItems,
+    cts,
+    itemsByCT,
+    itemsPerRow = 4,
+    itemsCount = 4,
+    stackable = true
+  }
+) => {
+  const { isMobileDevice }          = useContext(DeviceInfoContext);
+  const [pageNo, setPageNo]         = useState(0);
+  const [pageStart, setPageStart]   = useState(0);
   const [cardsArray, setCardsArray] = useState([]);
-  const uiDir = useSelector(state => settings.getUIDir(state.settings));
+  const uiDir                       = useSelector(settingsGetUIDirSelector);
 
   const onScrollRight = () => onScrollChange(pageNo + 1);
 
   const onScrollLeft = () => onScrollChange(pageNo - 1);
 
   const getLatestUpdate = item =>
-    <LatestUpdate key={item.id} item={item} label={t(getSectionForTranslation(item.content_type))} t={t} />;
+    <LatestUpdate key={item.id} item={item} label={t(getSectionForTranslation(item.content_type))} t={t}/>;
 
   const initCardsArray = () => {
     // arrange cards by type in criss cross order
@@ -79,7 +81,7 @@ const LatestUpdatesCardList = ({
   };
 
   const swipeHandlers = useSwipeable({
-    onSwipedLeft: uiDir === 'rtl' ? onScrollRight : onScrollLeft,
+    onSwipedLeft : uiDir === 'rtl' ? onScrollRight : onScrollLeft,
     onSwipedRight: uiDir === 'rtl' ? onScrollLeft : onScrollRight
   });
 
@@ -117,7 +119,7 @@ const LatestUpdatesCardList = ({
 
   const cardsRow = (
     <Card.Group className={clsx({
-      'latestUpdatesCardGroup': !isMobileDevice,
+      'latestUpdatesCardGroup'      : !isMobileDevice,
       'latestUpdatesCardGroupMobile': isMobileDevice
     })} itemsPerRow={itemsPerRow} stackable={stackable}>
       {getPageCardArray()}
@@ -143,9 +145,9 @@ const LatestUpdatesCardList = ({
 };
 
 LatestUpdatesCardList.propTypes = {
-  t: PropTypes.func.isRequired,
-  title: PropTypes.string,
-  cts: PropTypes.array,
+  t        : PropTypes.func.isRequired,
+  title    : PropTypes.string,
+  cts      : PropTypes.array,
   itemsByCT: PropTypes.any
 };
 

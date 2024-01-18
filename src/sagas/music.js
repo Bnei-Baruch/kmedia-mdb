@@ -2,14 +2,14 @@ import { call, put, select, takeLatest } from 'redux-saga/effects';
 
 import Api from '../helpers/Api';
 import { CT_SONGS } from '../helpers/consts';
-import { selectors as settings } from '../redux/modules/settings';
 import { actions, types } from '../redux/modules/music';
 import { actions as mbdActions } from '../redux/modules/mdb';
+import { settingsGetContentLanguagesSelector, settingsGetUILangSelector } from '../redux/selectors';
 
 export function* fetchMusic(action) {
   try {
-    const uiLang           = yield select(state => settings.getUILang(state.settings));
-    const contentLanguages = yield select(state => settings.getContentLanguages(state.settings));
+    const uiLang           = yield select(settingsGetUILangSelector);
+    const contentLanguages = yield select(settingsGetContentLanguagesSelector);
     const { data }         = yield call(Api.collections, {
       content_type     : CT_SONGS,
       ui_language      : uiLang,

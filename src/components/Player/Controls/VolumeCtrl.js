@@ -3,11 +3,11 @@ import { Icon } from 'semantic-ui-react';
 import { useSelector, shallowEqual } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 
-import { selectors as player } from '../../../redux/modules/player';
 import { VolumeKnob } from './VolumeKnob';
 import WebWrapTooltip from '../../shared/WebWrapTooltip';
 import { useSubscribeVolume } from '../../../pkg/jwpAdapter';
 import { setMute, setVolume } from '../../../pkg/jwpAdapter/adapter';
+import { playerGetPlayerWidthSelector, playerIsMutedSelector } from '../../../redux/selectors';
 
 const VolumeCtrl = ({ t }) => {
   const widthRef = useRef({});
@@ -15,9 +15,9 @@ const VolumeCtrl = ({ t }) => {
   const [left, setLeft]   = useState();
   const [right, setRight] = useState();
 
-  const isMuted = useSelector(state => player.isMuted(state.player));
+  const isMuted = useSelector(playerIsMutedSelector);
   //recount position on resize
-  const width   = useSelector(state => player.getPlayerWidth(state.player), shallowEqual);
+  const width   = useSelector(playerGetPlayerWidthSelector, shallowEqual);
   const volume  = useSubscribeVolume();
 
   const icon = isMuted ? 'off' : volume < 40 ? 'down' : 'up';
@@ -46,7 +46,7 @@ const VolumeCtrl = ({ t }) => {
         content={t('player.controls.mute')}
         trigger={
           <div className="controls__volume-icon" onClick={handleMute}>
-            <Icon fitted name={`volume ${icon}`} />
+            <Icon fitted name={`volume ${icon}`}/>
           </div>
         }
       />
@@ -60,7 +60,7 @@ const VolumeCtrl = ({ t }) => {
             style={{ width: `${isMuted ? 0 : volume}%` }}
             className="slider__value"
           ></div>
-          <VolumeKnob onChangePosition={onChangePosition} />
+          <VolumeKnob onChangePosition={onChangePosition}/>
         </div>
       </div>
     </div>

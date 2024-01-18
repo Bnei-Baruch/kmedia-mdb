@@ -3,10 +3,16 @@ import { Segment, Divider } from 'semantic-ui-react';
 
 import { selectSuitableLanguage } from '../../../../../../helpers/language';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectors as settings } from '../../../../../../redux/modules/settings';
-import { selectors as mdb } from '../../../../../../redux/modules/mdb';
-import { selectors as assetsSelectors, actions as assetsActions } from '../../../../../../redux/modules/assets';
+import { actions as assetsActions } from '../../../../../../redux/modules/assets';
+import { INSERT_TYPE_SUMMARY } from '../../../../../../helpers/consts';
 import MenuLanguageSelector from '../../../../../../components/Language/Selector/MenuLanguageSelector';
+import { settingsGetContentLanguagesSelector, assetsGetDoc2htmlByIdSelector } from '../../../../../../redux/selectors';
+
+export const getSummaryLanguages = unit =>
+  (unit && unit.files &&
+    unit.files.filter(f =>
+      MediaHelper.IsText(f) && !MediaHelper.IsPDF(f) && f.insert_type === INSERT_TYPE_SUMMARY)
+      .map(f => f.language)) || [];
 import { getSummaryLanguages, getFile } from './helper';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -15,18 +21,20 @@ const Summary = () => {
   const { id } = useParams();
   const { t }  = useTranslation();
 
+  const contentLanguages = useSelector(settingsGetContentLanguagesSelector);
+  const doc2htmlById     = useSelector(assetsGetDoc2htmlByIdSelector);
   const unit             = useSelector(state => mdb.getDenormContentUnit(state.mdb, id));
-  const contentLanguages = useSelector(state => settings.getContentLanguages(state.settings));
-  const doc2htmlById     = useSelector(state => assetsSelectors.getDoc2htmlById(state.assets));
-  const dispatch         = useDispatch();
+
+  const dispatch = useDispatch();
 
   const summaryLanguages                        = getSummaryLanguages(unit);
   const defaultLanguage                         = selectSuitableLanguage(contentLanguages, summaryLanguages, unit.original_language);
   const [selectedLanguage, setSelectedLanguage] = useState('');
   const finalLanguage                           = selectedLanguage || defaultLanguage;
 
+  const finalLanguage  = selectedLanguage || defaultLanguage;
   const file           = getFile(unit, finalLanguage);
-  const selectedFileId = (file && file.id) || null;
+  const selectedFileId = file?.id || null;
 
   const handleLanguageChanged = language => {
     setSelectedLanguage(language);

@@ -5,16 +5,19 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Button, Container, Grid, Header, Input, Label, Modal } from 'semantic-ui-react';
 import isEqual from 'react-fast-compare';
 
-import { selectors as sourcesSelectors } from '../../../redux/modules/sources';
-import { selectors as settings } from '../../../redux/modules/settings';
-import { selectors } from '../../../redux/modules/tags';
-import { actions } from '../../../redux/modules/mdb';
 import { getTree } from '../../../helpers/topicTree';
 import NeedToLogin from '../../Sections/Personal/NeedToLogin';
 import AlertModal from '../AlertModal';
 import TopicBranch from './TopicBranch';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { actions as mdbActions } from '../../../redux/modules/mdb';
+import {
+  sourcesAreLoadedSelector,
+  tagsGetDisplayRootsSelector,
+  tagsGetTagByIdSelector,
+  settingsGetUIDirSelector,
+  settingsGetUILangSelector
+} from '../../../redux/selectors';
 
 const SelectTopicsModal = ({ open, onClose, label, trigger }) => {
   const { t } = useTranslation();
@@ -26,12 +29,12 @@ const SelectTopicsModal = ({ open, onClose, label, trigger }) => {
 
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
-  const roots      = useSelector(state => selectors.getDisplayRoots(state.tags), isEqual) || [];
-  const getTagById = useSelector(state => selectors.getTagById(state.tags));
-  const tree       = useMemo(() => getTree(roots, getTagById, null, t)[0], [roots, getTagById, t]);
+  const roots = useSelector(tagsGetDisplayRootsSelector, isEqual) || [];
+  const getTagById = useSelector(tagsGetTagByIdSelector);
+  const tree = useMemo(() => getTree(roots, getTagById, null, t)[0], [roots, getTagById, t]);
 
-  const language = useSelector(state => settings.getUILang(state.settings));
-  const dir      = useSelector(state => settings.getUIDir(state.settings));
+  const language = useSelector(settingsGetUILangSelector);
+  const dir      = useSelector(settingsGetUIDirSelector);
 
   const dispatch = useDispatch();
 
@@ -97,7 +100,7 @@ const SelectTopicsModal = ({ open, onClose, label, trigger }) => {
 
   return (
     <>
-      <AlertModal message={alertMsg} open={!!alertMsg} onClose={clear} dir={dir}/>
+      <AlertModal message={alertMsg} open={!!alertMsg} onClose={clear} dir={dir} />
       <Modal
         open={open}
         onClose={onClose}
@@ -106,7 +109,7 @@ const SelectTopicsModal = ({ open, onClose, label, trigger }) => {
         trigger={trigger}
         dir={dir}
       >
-        <Modal.Header content={t('personal.label.header')} className="no-border"/>
+        <Modal.Header content={t('personal.label.header')} className="no-border" />
         {
           !!needToLogin ?
             (
@@ -126,11 +129,11 @@ const SelectTopicsModal = ({ open, onClose, label, trigger }) => {
                       basic
                       className="no-border"
                     />
-                    <input autoFocus/>
+                    <input autoFocus />
                   </Input>
                 </Modal.Content>
                 <Modal.Content style={{ paddingTop: 0, paddingBottom: 0 }}>
-                  <Container as="h4" className="font-normal" content={t('personal.label.infoAddTag')}/>
+                  <Container as="h4" className="font-normal" content={t('personal.label.infoAddTag')} />
                   <Input
                     className="search-omnibox"
                     placeholder={t('personal.label.search')}

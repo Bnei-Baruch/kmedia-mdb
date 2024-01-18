@@ -3,10 +3,12 @@ import { useLocation, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Container, Grid, Header } from 'semantic-ui-react';
 
-import { actions as mdbActions, selectors } from '../../../../../redux/modules/mdb';
-import { selectors as settings } from '../../../../../redux/modules/settings';
+import { actions as mdbActions } from '../../../../../redux/modules/mdb';
 import Helmets from '../../../../shared/Helmets/index';
 import Share from '../../../../Pages/WithText/Buttons/ShareTextBtn';
+import TranscriptionContainer
+  from '../../../../Pages/WithPlayer/widgets/UnitMaterials/Transcription/TranscriptionContainer';
+import Share from '../../../Library/Share';
 import MediaDownloads from '../../../../Pages/WithPlayer/widgets/MediaDownloads';
 import WipErr from '../../../../shared/WipErr/WipErr';
 import Recommended from '../../../../Pages/WithPlayer/widgets/Recommended/Main/Recommended';
@@ -17,6 +19,7 @@ import TextLayoutWeb from '../../../../Pages/WithText/TextLayoutWeb';
 import ArticleToolbarMobile from './ArticleToolbarMobile';
 import ArticleToolbarWeb from './ArticleToolbarWeb';
 import { useTranslation } from 'react-i18next';
+import { mdbGetDenormContentUnitSelector, mdbGetErrorsSelector, settingsGetUIDirSelector, mdbGetWipFn } from '../../../../../redux/selectors';
 
 const renderHeader = (unit, t, uiDir) => {
   const position = uiDir === 'rtl' ? 'right' : 'left';
@@ -73,10 +76,10 @@ const ArticlePage = () => {
   const chronicles         = useContext(ClientChroniclesContext);
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
-  const uiDir = useSelector(state => settings.getUIDir(state.settings));
-  const unit  = useSelector(state => selectors.getDenormContentUnit(state.mdb, id));
-  const wip   = useSelector(state => selectors.getWip(state.mdb).units[id]);
-  const err   = useSelector(state => selectors.getErrors(state.mdb).units[id]);
+  const uiDir = useSelector(settingsGetUIDirSelector);
+  const unit  = useSelector(state => mdbGetDenormContentUnitSelector(state, id));
+  const wip   = useSelector(mdbGetWipFn).units[id];
+  const err   = useSelector(mdbGetErrorsSelector).units[id];
 
   const dispatch = useDispatch();
 

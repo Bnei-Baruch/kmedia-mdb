@@ -11,6 +11,7 @@ import withPagination, { getPageFromLocation } from '../../../../Pagination/with
 import * as shapes from '../../../../shapes';
 import Page from './Page';
 import { withRouter } from '../../../../../helpers/withRouterPatch';
+import { settingsGetContentLanguagesSelector } from '../../../../../redux/selectors';
 
 class TwitterContainer extends withPagination {
   static propTypes = {
@@ -129,7 +130,7 @@ export const mapState = (state, ownProps) => ({
   err: selectors.getTweetsError(state.publications),
   pageNo: selectors.getTweetsPageNo(state.publications),
   pageSize: settings.getPageSize(state.settings),
-  contentLanguages: settings.getContentLanguages(state.settings),
+  contentLanguages: settingsGetContentLanguagesSelector(state),
   isFiltersHydrated: filters.getIsHydrated(state.filters, ownProps.namespace),
 });
 

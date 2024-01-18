@@ -11,53 +11,53 @@ import BuildPlaylistByUnit from './BuildPlaylistByUnit';
 import PlaylistPage from './Playlist/PlaylistPage';
 import BuildPlaylistByCollectionByParams from './BuildPlaylistByCollectionByParams';
 import { useSelector } from 'react-redux';
-import { selectors as playlist } from '../../../redux/modules/playlist';
 import SingleMediaPage from './SingleMedia/SingleMediaPage';
+import { playlistGetInfoSelector } from '../../../redux/selectors';
 
 export const PlaylistItemPageSeries = ({ playerContainer }) => {
-  const builder = <BuildPlaylistByUnit cts={[CT_LESSONS_SERIES]} />;
-  return <Decorator builder={builder} playerContainer={playerContainer} />;
+  const builder = <BuildPlaylistByUnit cts={[CT_LESSONS_SERIES]}/>;
+  return <Decorator builder={builder} playerContainer={playerContainer}/>;
 };
 
 export const PlaylistItemPageVirtual = ({ playerContainer }) => {
-  const builder = <BuildPlaylistByUnit cts={[CT_VIRTUAL_LESSONS]} />;
-  return <Decorator builder={builder} playerContainer={playerContainer} />;
+  const builder = <BuildPlaylistByUnit cts={[CT_VIRTUAL_LESSONS]}/>;
+  return <Decorator builder={builder} playerContainer={playerContainer}/>;
 };
 
 export const PlaylistItemPageLesson = ({ playerContainer }) => (
   <>
-    {<BuildPlaylistByUnit cts={[...COLLECTION_DAILY_LESSONS, CT_VIRTUAL_LESSONS]} />}
-    <PlaylistPage playerContainer={playerContainer} />
+    {<BuildPlaylistByUnit cts={[...COLLECTION_DAILY_LESSONS, CT_VIRTUAL_LESSONS]}/>}
+    <PlaylistPage playerContainer={playerContainer}/>
   </>
 );
 
 export const PlaylistItemPageEvent = ({ playerContainer }) => {
-  const builder = <BuildPlaylistByUnit cts={EVENT_TYPES} />;
-  return <Decorator builder={builder} playerContainer={playerContainer} />;
+  const builder = <BuildPlaylistByUnit cts={EVENT_TYPES}/>;
+  return <Decorator builder={builder} playerContainer={playerContainer}/>;
 };
 
 export const PlaylistItemPageProgram = ({ playerContainer }) => {
-  const builder = <BuildPlaylistByUnit cts={COLLECTION_PROGRAMS_TYPE} />;
-  return <Decorator builder={builder} playerContainer={playerContainer} />;
+  const builder = <BuildPlaylistByUnit cts={COLLECTION_PROGRAMS_TYPE}/>;
+  return <Decorator builder={builder} playerContainer={playerContainer}/>;
 };
 
 export const PlaylistCollectionPage = ({ playerContainer }) => {
-  const builder = <BuildPlaylistByCollectionByParams />;
-  return <Decorator builder={builder} playerContainer={playerContainer} />;
+  const builder = <BuildPlaylistByCollectionByParams/>;
+  return <Decorator builder={builder} playerContainer={playerContainer}/>;
 };
 
 const Decorator = ({ builder, playerContainer }) => (
   <>
     {builder}
-    <PageSwitcher playerContainer={playerContainer} />
+    <PageSwitcher playerContainer={playerContainer}/>
   </>
 );
 
 const PageSwitcher = ({ playerContainer }) => {
-  const { isSingleMedia } = useSelector(state => playlist.getInfo(state.playlist));
+  const { isSingleMedia } = useSelector(playlistGetInfoSelector);
 
   if (isSingleMedia)
-    return <SingleMediaPage playerContainer={playerContainer} />;
+    return <SingleMediaPage playerContainer={playerContainer}/>;
 
-  return <PlaylistPage playerContainer={playerContainer} />;
+  return <PlaylistPage playerContainer={playerContainer}/>;
 };

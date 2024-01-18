@@ -1,16 +1,15 @@
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
-import { selectors as playlist } from '../../redux/modules/playlist';
-import { selectors as player } from '../../redux/modules/player';
 import { noop } from '../../helpers/utils';
 import { isPlayerReady } from './adapter';
+import { playerGetFileSelector, playlistGetInfoSelector } from '../../redux/selectors';
 
 const useSubscribeBuffer = () => {
   const [buffPos, setBuffPos] = useState(0);
 
-  const file     = useSelector(state => player.getFile(state.player));
-  const { cuId } = useSelector(state => playlist.getInfo(state.playlist));
+  const file     = useSelector(playerGetFileSelector);
+  const { cuId } = useSelector(playlistGetInfoSelector);
 
   const isReady = isPlayerReady();
   useEffect(() => {

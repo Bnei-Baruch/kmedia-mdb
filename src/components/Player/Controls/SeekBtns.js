@@ -5,8 +5,8 @@ import { useSelector } from 'react-redux';
 
 import WebWrapTooltip from '../../shared/WebWrapTooltip';
 import { getPosition, seek } from '../../../pkg/jwpAdapter/adapter';
-import { selectors as player } from '../../../redux/modules/player';
 import { PlayerContext } from '../PlayerContainer';
+import { playerGetKeyboardCoefSelector } from '../../../redux/selectors';
 
 const NORMAL_SEEK = 5;
 const handleSeek  = pos => {
@@ -16,7 +16,7 @@ const handleSeek  = pos => {
 
 export const SeekBackwardBtn = withTranslation()(({ t }) => {
   const ctx                = useContext(PlayerContext);
-  const seek               = NORMAL_SEEK * useSelector(state => player.getKeyboardCoef(state.player));
+  const seek               = NORMAL_SEEK * useSelector(playerGetKeyboardCoefSelector);
   const handleSeekBackward = () => {
     handleSeek(-1 * seek);
     ctx.showControls();
@@ -28,7 +28,7 @@ export const SeekBackwardBtn = withTranslation()(({ t }) => {
       closeOnTriggerClick={false}
       trigger={
         <div className="controls__rewind" onClick={handleSeekBackward}>
-          <Icon fitted size="big" name="undo" />
+          <Icon fitted size="big" name="undo"/>
         </div>
       }
     />
@@ -37,7 +37,7 @@ export const SeekBackwardBtn = withTranslation()(({ t }) => {
 
 export const SeekForwardBtn = withTranslation()(({ t }) => {
   const ctx               = useContext(PlayerContext);
-  const seek              = NORMAL_SEEK * useSelector(state => player.getKeyboardCoef(state.player));
+  const seek              = NORMAL_SEEK * useSelector(playerGetKeyboardCoefSelector);
   const handleSeekForward = () => {
     handleSeek(seek);
     ctx.showControls();
@@ -49,7 +49,7 @@ export const SeekForwardBtn = withTranslation()(({ t }) => {
       closeOnTriggerClick={false}
       trigger={
         <div className="controls__forward" onClick={handleSeekForward}>
-          <Icon fitted size="big" name="redo" />
+          <Icon fitted size="big" name="redo"/>
         </div>
       }
     />

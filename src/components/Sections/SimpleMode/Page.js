@@ -8,7 +8,6 @@ import { withTranslation } from 'react-i18next';
 import { Button, Card, Divider, Grid, Input } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
 
-import { selectors as settings } from '../../../redux/modules/settings';
 import { ALL_LANGUAGES } from '../../../helpers/consts';
 import { today } from '../../../helpers/date';
 import SectionHeader from '../../shared/SectionHeader';
@@ -16,6 +15,7 @@ import YearMonthForm from '../../Filters/components/Date/YearMonthForm';
 import SimpleModeList from './list';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import MenuLanguageSelector from '../../Language/Selector/MenuLanguageSelector';
+import { settingsGetUILangSelector } from '../../../redux/selectors';
 
 const changeDay = (amount, selectedDate, onDayClick) => {
   const newDate = moment(selectedDate).add(amount, 'd').toDate();
@@ -26,7 +26,7 @@ const getNavBarElement = (props, uiLang, onDayClick) => {
   const { month, localeUtils } = props;
   return (
     <div className="DayPicker-Month">
-      <Navbar {...props} className="FastDayPicker-DayPicker-NavButton" />
+      <Navbar {...props} className="FastDayPicker-DayPicker-NavButton"/>
       <YearMonthForm
         date={month}
         uiLang={uiLang}
@@ -78,27 +78,29 @@ const isToday = selectedDate => moment().isSame(moment(selectedDate), 'date');
 const LocaleDateFormat = moment.localeData().longDateFormat('L');
 const ToDay            = today().toDate();
 
-const SimpleModePage = ({
-  selectedDate = new Date(),
-  t,
-  filesLanguages,
-  blinkLangSelect,
-  onLanguageChange,
-  renderUnit,
-  onDayClick,
-}) => {
-  const uiLang = useSelector(state => settings.getUILang(state.settings));
+const SimpleModePage = (
+  {
+    selectedDate = new Date(),
+    t,
+    filesLanguages,
+    blinkLangSelect,
+    onLanguageChange,
+    renderUnit,
+    onDayClick
+  }
+) => {
+  const uiLang = useSelector(settingsGetUILangSelector);
 
   const [isClient, setIsClient] = useState(false);
   const [data, setData]         = useState({
-    selected: ToDay,
+    selected              : ToDay,
     selectedDate,
-    selectedToString: moment(ToDay).format('YYYY-MM-DD'),
+    selectedToString      : moment(ToDay).format('YYYY-MM-DD'),
     selectedInLocaleFormat: moment(ToDay).format(LocaleDateFormat),
-    dateFormat: 'MMM DD, YYYY',
-    DayPickerModifiers: {
-      selected: selectedDate,
-    },
+    dateFormat            : 'MMM DD, YYYY',
+    DayPickerModifiers    : {
+      selected: selectedDate
+    }
   });
 
   const nativeDateInput                = useRef(null);
@@ -114,12 +116,12 @@ const SimpleModePage = ({
       setData({
         selected,
         selectedDate,
-        selectedToString: moment(selected).format('YYYY-MM-DD'),
+        selectedToString      : moment(selected).format('YYYY-MM-DD'),
         selectedInLocaleFormat: moment(selected).format(LocaleDateFormat),
-        dateFormat: uiLang === 'en' ? 'MMM DD, YYYY' : 'DD MMM, YYYY',
-        DayPickerModifiers: {
-          selected: selectedDate,
-        },
+        dateFormat            : uiLang === 'en' ? 'MMM DD, YYYY' : 'DD MMM, YYYY',
+        DayPickerModifiers    : {
+          selected: selectedDate
+        }
       });
     }
   }, [selectedDate, uiLang, isClient]);
@@ -144,13 +146,13 @@ const SimpleModePage = ({
         captionElement={() => null}
         navbarElement={props => getNavBarElement(props, uiLang, onDayClick)}
       />
-      <Button className="inline-button" onClick={() => onDayClick(new Date())} content={t('simple-mode.today-button')} />
+      <Button className="inline-button" onClick={() => onDayClick(new Date())} content={t('simple-mode.today-button')}/>
     </Card>;
 
   return (
     <div>
-      <SectionHeader section="simple-mode" />
-      <Divider fitted />
+      <SectionHeader section="simple-mode"/>
+      <Divider fitted/>
       <Grid padded container>
         <Grid.Row className="no-padding-top">
           <Grid.Column mobile={16} computer={12} tablet={16}>
@@ -179,7 +181,7 @@ const SimpleModePage = ({
                 />
               </div>
             </div>
-            <SimpleModeList filesLanguages={filesLanguages} renderUnit={renderUnit} />
+            <SimpleModeList filesLanguages={filesLanguages} renderUnit={renderUnit}/>
           </Grid.Column>
           <Grid.Column only="tablet computer" tablet={16} computer={4}>
             <div className="stick-calendar">
@@ -198,13 +200,13 @@ const SimpleModePage = ({
 };
 
 SimpleModePage.propTypes = {
-  selectedDate: PropTypes.objectOf(Date),
-  filesLanguages: PropTypes.arrayOf(PropTypes.string).isRequired,
-  t: PropTypes.func.isRequired,
-  renderUnit: PropTypes.func.isRequired,
-  onDayClick: PropTypes.func.isRequired,
+  selectedDate    : PropTypes.objectOf(Date),
+  filesLanguages  : PropTypes.arrayOf(PropTypes.string).isRequired,
+  t               : PropTypes.func.isRequired,
+  renderUnit      : PropTypes.func.isRequired,
+  onDayClick      : PropTypes.func.isRequired,
   onLanguageChange: PropTypes.func.isRequired,
-  blinkLangSelect: PropTypes.bool.isRequired,
+  blinkLangSelect : PropTypes.bool.isRequired
 };
 
 export default withTranslation()(SimpleModePage);

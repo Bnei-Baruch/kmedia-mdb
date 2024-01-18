@@ -3,22 +3,21 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { startEndFromQuery } from '../../components/Player/Controls/helper';
-import { selectors as player } from '../../redux/modules/player';
-import { selectors as playlist, selectors } from '../../redux/modules/playlist';
 import { seek, pause } from './adapter';
 import { noop } from '../../helpers/utils';
 import { stringify } from '../../helpers/url';
+import { playlistGetItemByIdSelector, playlistGetNextIdSelector, playlistGetPlayedSelector, playerIsMetadataReadySelector, playerIsReadySelector } from '../../redux/selectors';
 
 const BehaviorStartStopSliceMy = () => {
   const location       = useLocation();
   const { start, end } = startEndFromQuery(location);
 
-  const isReady         = useSelector(state => player.isReady(state.player));
-  const isMetadataReady = useSelector(state => player.isMetadataReady(state.player));
-  const isHLS           = useSelector(state => playlist.getPlayed(state.playlist)?.isHLS);
-  const id              = useSelector(state => selectors.getNextId(state.playlist));
+  const isReady         = useSelector(playerIsReadySelector);
+  const isMetadataReady = useSelector(playerIsMetadataReadySelector);
+  const isHLS           = useSelector(playlistGetPlayedSelector)?.isHLS;
+  const id              = useSelector(playlistGetNextIdSelector);
 
-  const { properties, ap } = useSelector(state => selectors.getItemById(state.playlist)(id));
+  const { properties, ap } = useSelector(playlistGetItemByIdSelector)(id);
 
   const link     = id ? { search: stringify({ ...properties, ap }) } : null;
   const navigate = useNavigate();

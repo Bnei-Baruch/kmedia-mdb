@@ -2,7 +2,6 @@ import { takeEvery, select, put, call } from 'redux-saga/effects';
 import i18n from 'i18next';
 
 import { selectors as authSelectors } from '../redux/modules/auth';
-import { selectors as settings } from '../redux/modules/settings';
 import { selectors as my, selectors } from '../redux/modules/my';
 import { types, actions, selectors as playlist } from '../redux/modules/playlist';
 import { selectors as mdb } from '../redux/modules/mdb';
@@ -27,6 +26,7 @@ import { assetUrl } from '../helpers/Api';
 import { fetchCollection, fetchUnit, fetchUnitsByIDs, fetchLabels } from './mdb';
 import { fetchViewsByUIDs } from './recommended';
 import { fetchOne, fetch as fetchMy } from './my';
+import { mdbGetDenormContentUnitSelector, settingsGetContentLanguagesSelector } from '../redux/selectors';
 
 const ONE_FETCH_SIZE = 50;
 
@@ -47,13 +47,13 @@ function* build(action) {
     cuId = data.items[getActivePartFromQuery(location)]?.id;
   }
 
-  let cu = yield select(state => mdb.getDenormContentUnit(state.mdb, cuId));
+  let cu = yield select(state => mdbGetDenormContentUnitSelector(state, cuId));
   if (!cu || !cu.files) {
     yield call(fetchUnit, { payload: cuId });
-    cu = yield select(state => mdb.getDenormContentUnit(state.mdb, cuId));
+    cu = yield select(state => mdbGetDenormContentUnitSelector(state, cuId));
   }
 
-  const contentLanguages = yield select(state => settings.getContentLanguages(state.settings));
+  const contentLanguages = yield select(settingsGetContentLanguagesSelector);
   const mediaType        = getMediaTypeFromQuery(location);
   const language         = getLanguageFromQuery(location) || selectSuitableLanguage(contentLanguages, calcAvailableLanguages(cu), (cu && cu.original_language) || '');
 
@@ -101,15 +101,15 @@ function* singleMediaBuild(action) {
 
   const { location } = yield select(state => state.router);
 
-  let cu = yield select(state => mdb.getDenormContentUnit(state.mdb, cuId));
+  let cu = yield select(state => mdbGetDenormContentUnitSelector(state, cuId));
   if (!cu || !cu.files) {
     yield call(fetchUnit, { payload: cuId });
-    cu = yield select(state => mdb.getDenormContentUnit(state.mdb, cuId));
+    cu = yield select(state => mdbGetDenormContentUnitSelector(state, cuId));
   }
 
   const c = canonicalCollection(cu) || false;
 
-  const contentLanguages = yield select(state => settings.getContentLanguages(state.settings));
+  const contentLanguages = yield select(settingsGetContentLanguagesSelector);
 
   const mediaType   = getMediaTypeFromQuery(location);
   // DONT COMMIT: This should also take into account files languages, not just content languages.
@@ -135,13 +135,13 @@ function* myPlaylistBuild(action) {
 
   const content_units = yield select(state => data?.map(x =>
     ({
-      ...mdb.getDenormContentUnit(state.mdb, x.content_unit_uid),
+      ...mdbGetDenormContentUnitSelector(state, x.content_unit_uid),
       name      : x.name,
       properties: x.properties
     })
   ).filter(x => !!x)) || [];
 
-  const contentLanguages = yield select(state => settings.getContentLanguages(state.settings));
+  const contentLanguages = yield select(settingsGetContentLanguagesSelector);
 
   const { location } = yield select(state => state.router);
   const mediaType    = getMediaTypeFromQuery(location);

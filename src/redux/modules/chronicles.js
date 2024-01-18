@@ -42,10 +42,12 @@ export const types = Object.fromEntries(new Map(
   Object.values(chronicles.actions).map(a => [a.type, a.type])
 ));
 
-const getLastAction = state => state.lastAction;
-const getEvent      = state => state.event;
+const getLastAction   = state => state.lastAction;
+const getActionsCount = state => state.actionsCount;
+const getEvent        = state => state.event;
 
 export const selectors = {
   getLastAction,
-  getEvent
+  getEvent,
+  getActionsCount
 };

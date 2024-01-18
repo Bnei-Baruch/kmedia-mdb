@@ -62,6 +62,8 @@ import * as assetsSagas from './../sagas/assets';
 import * as textPageSagas from './../sagas/textPage';
 import Api from '../helpers/Api';
 import { actions as textPageActions, selectors as textPage } from '../redux/modules/textPage';
+import { cuFilesToData, getSourceIndexId } from '../sagas/helpers/utils';
+import { mdbGetDenormContentUnitSelector } from '../redux/selectors';
 
 export const home = store => {
   store.dispatch(homeActions.fetchData(true));
@@ -77,7 +79,8 @@ export const cuPage = async (store, match) => {
   await store.sagaMiddleWare.run(mdbSagas.fetchUnit, mdbActions.fetchUnit(cuID)).done;
 
   const state = store.getState();
-  const unit  = mdbSelectors.getDenormContentUnit(state.mdb, cuID);
+
+      const unit = mdbGetDenormContentUnitSelector(state, cuID);
 
   let activeTab = 'transcription';
   if ([...CT_LESSONS, CT_VIDEO_PROGRAM_CHAPTER, CT_VIRTUAL_LESSON, CT_CLIP].includes(unit.content_type)) {
@@ -298,43 +301,6 @@ export const libraryPage = async (store, match, show_console = false) => {
     await store.sagaMiddleWare.run(assetsSagas.doc2Html, assetsActions.doc2html(file.id)).done;
     store.dispatch(mdbActions.fetchLabels({ content_unit: sourceID, language: file.language }));
   }
-
-  /*
-    const sourceIndexPromise = new Promise(resolve => {
-      Api.unit({ id })
-        .then(cu => resolve(cuFilesToData(cu.data)));
-    });
-    return Promise.all([
-      // we need sourceIndex in then() part, but it's impossible to wait when it will be added to redux
-      sourceIndexPromise,
-      store.sagaMiddleWare.run(mdbSagas.fetchUnit, mdbActions.fetchUnit(sourceID)).done
-    ])
-      .then(values => {
-        const data = values[0];
-        if (!data) {
-          return;
-        }
-
-        // add it to redux
-        store.dispatch(assetsActions.sourceIndexSuccess(sourceIndexAction.type, { id: sourceIndexAction.payload, data }));
-
-        let language    = null;
-        const languages = [...Object.keys(data)];
-        if (languages.length > 0) {
-          language = languages.indexOf(uiLang) === -1 ? languages[0] : uiLang;
-        }
-
-        if (data[language]) {
-          if (data[language].pdf && isTaas(sourceID)) {
-            return; // no need to fetch pdf. we don't do that on SSR
-          }
-
-          const { id } = getLibraryContentFile(data[language], sourceID);
-          store.dispatch(assetsActions.doc2html(id));
-          store.dispatch(mdbActions.fetchLabels({ content_unit: sourceID, language: uiLang }));
-        }
-      });
-      */
 };
 
 const TWEETER_USERTNAMES_BY_LANG = new Map([
@@ -352,7 +318,6 @@ export const likutPage = async (store, match, show_console = false) => {
     .done
     .then(() => {
       const state = store.getState();
-      //const { data } = assetsSelectors.getSourceIndexById(state.assets)[sourceID];
       const file  = textPage.getFile(state.textPage) || {};
 
       const location = state?.router.location ?? {};
@@ -453,7 +418,7 @@ export const articleCUPage = (store, match) => {
       let language = null;
       const uiLang = settingsSelectors.getUILang(state.settings);
 
-      const unit = mdbSelectors.getDenormContentUnit(state.mdb, cuID);
+      const unit = mdbGetDenormContentUnitSelector(state, cuID);
       if (!unit) {
         return;
       }

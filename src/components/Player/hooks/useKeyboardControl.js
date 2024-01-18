@@ -1,12 +1,13 @@
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { selectors as player, actions } from '../../../redux/modules/player';
+import { actions } from '../../../redux/modules/player';
 import { PLAYER_OVER_MODES } from '../../../helpers/consts';
 import { seek, getPosition, setVolume, getVolume, togglePlay, getDuration } from '../../../pkg/jwpAdapter/adapter';
+import { playerGetOverModeSelector } from '../../../redux/selectors';
 
 export const useKeyboardControl = runTimeout => {
-  const mode = useSelector(state => player.getOverMode(state.player));
+  const mode = useSelector(playerGetOverModeSelector);
 
   const dispatch = useDispatch();
 

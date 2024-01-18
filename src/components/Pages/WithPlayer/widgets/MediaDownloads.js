@@ -31,6 +31,7 @@ import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import classNames from 'classnames';
 import MenuLanguageSelector from '../../../Language/Selector/MenuLanguageSelector';
 import { sizeByQuality } from './helper';
+import { settingsGetContentLanguagesSelector } from '../../../../redux/selectors';
 
 const MEDIA_ORDER = [
   MT_VIDEO,
@@ -407,6 +408,6 @@ export default connect(state => (
   {
     publisherById: selectors.getPublisherById(state.publications),
     uiLang: settings.getUILang(state.settings),
-    contentLanguages: settings.getContentLanguages(state.settings),
+    contentLanguages: settingsGetContentLanguagesSelector(state),
   })
 )(withTranslation()(MediaDownloads));

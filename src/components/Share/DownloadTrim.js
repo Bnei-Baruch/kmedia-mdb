@@ -2,17 +2,17 @@ import React, { useEffect, useState } from 'react';
 import { Button, Container, Divider, Grid, GridColumn, GridRow, Header, Segment } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
 import { withTranslation } from 'react-i18next';
-import { selectors } from '../../redux/modules/trim';
 import { Splash } from '../shared/Splash/Splash';
 import DownloadTrimItem from './DownloadTrimItem';
 import clsx from 'clsx';
+import { trimGetListSelector, trimGetWipsSelector } from '../../redux/selectors';
 
 const DownloadTrim = ({ t }) => {
   const [open, setOpen]   = useState(true);
   const [isMin, setIsMin] = useState(false);
 
-  const list = useSelector(state => selectors.getList(state.trim));
-  const wips = useSelector(state => selectors.getWIPs(state.trim));
+  const list = useSelector(trimGetListSelector);
+  const wips = useSelector(trimGetWipsSelector);
 
   useEffect(() => {
     setOpen(true);
@@ -27,7 +27,7 @@ const DownloadTrim = ({ t }) => {
       <GridRow key={`wip_${i}`}>
         <GridColumn width={9} verticalAlign={'middle'}>
           {`${i}. ${t('messages.trimmed-content-wip')} `}
-          <Splash isLoading icon="circle notch" color="blue" width="20"  text=""/>
+          <Splash isLoading icon="circle notch" color="blue" width="20" text=""/>
         </GridColumn>
         <GridColumn>
         </GridColumn>
@@ -71,15 +71,15 @@ const DownloadTrim = ({ t }) => {
             <Container className="padded content">
               <Grid>
                 {
-                  list.map((item, i) => <DownloadTrimItem key={i} pos={i + 1} item={item} />)
+                  list.map((item, i) => <DownloadTrimItem key={i} pos={i + 1} item={item}/>)
                 }
                 {
                   wips.map(renderWip)
                 }
               </Grid>
             </Container>
-            <Container className="padded" content={t('messages.trim-expiration')} />
-            <Divider hidden />
+            <Container className="padded" content={t('messages.trim-expiration')}/>
+            <Divider hidden/>
           </>
         )
       }

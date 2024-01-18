@@ -6,9 +6,9 @@ import { SectionLogo } from '../../../../helpers/images';
 import { getLanguageDirection } from '../../../../helpers/i18n-utils';
 import { makeTagLinks } from '../../WithPlayer/widgets/Info/Info';
 import { useSelector } from 'react-redux';
-import { selectors as tagsSelectors } from '../../../../redux/modules/tags';
 import { textMarksPrefixByType } from '../scrollToSearch/helper';
 import { highlightByPrefixAndId, clearHighlightByStyle } from '../helper';
+import { tagsGetTagByIdSelector } from '../../../redux/selectors';
 
 const idPrefix  = textMarksPrefixByType['label'];
 const LabelMark = ({ label, offset }) => {
@@ -17,7 +17,7 @@ const LabelMark = ({ label, offset }) => {
   const [top, setTop]       = useState(0);
   const [bottom, setBottom] = useState(0);
 
-  const getTagById = useSelector(state => tagsSelectors.getTagById(state.tags));
+  const getTagById = useSelector(tagsGetTagByIdSelector);
 
   const { language, author, name, id, tags = [] } = label;
   useEffect(() => {
@@ -51,7 +51,7 @@ const LabelMark = ({ label, offset }) => {
       <Popup
         trigger={
           <Button basic className="clear_button" style={{ marginTop: `${offset.y * 20}px` }}>
-            <SectionLogo name="topics" width="25" height="25" />
+            <SectionLogo name="topics" width="25" height="25"/>
           </Button>
         }
         inverted

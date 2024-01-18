@@ -2,16 +2,17 @@ import React, { useEffect, useState } from 'react';
 import { Popup } from 'semantic-ui-react';
 import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 
-import { selectors as player, actions } from '../../../redux/modules/player';
+import { actions } from '../../../redux/modules/player';
 import { formatDuration, stopBubbling } from '../../../helpers/utils';
 import { useSubscribeSeekAndTime, useSubscribeBuffer } from '../../../pkg/jwpAdapter';
 import { getDuration, seek, isPlayerReady } from '../../../pkg/jwpAdapter/adapter';
 import { PLAYER_OVER_MODES } from '../../../helpers/consts';
+import { playerGetOverModeSelector } from '../../../redux/selectors';
 
 export const ProgressBar = ({ left, right }) => {
   const [activated, setActivated] = useState(false);
 
-  const mode          = useSelector(state => player.getOverMode(state.player), shallowEqual);
+  const mode          = useSelector(playerGetOverModeSelector, shallowEqual);
   const { pos, time } = useSubscribeSeekAndTime();
 
   const buffPos  = useSubscribeBuffer();

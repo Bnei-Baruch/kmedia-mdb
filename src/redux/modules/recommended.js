@@ -57,16 +57,16 @@ export const types = Object.fromEntries(new Map(
 
 const getWip                  = state => state.wip;
 const getError                = state => state.err;
-const getRecommendedItems     = (feedName, state) => (state.feeds[feedName] || []);
-const getManyRecommendedItems = (feedNames, state) => feedNames?.reduce((acc, feedName) => {
+const getRecommendedItems     = (state, feedName) => (state.feeds[feedName] || []);
+const getManyRecommendedItems = (state, feedNames) => feedNames?.reduce((acc, feedName) => {
   acc[feedName] = state.feeds[feedName] || [];
   return acc;
 }, {});
 const getSkipUids             = state => state.skipUids;
-const getViews                = (uid, state) => (state.views[uid] || -1);
-const getManyViews            = (uids, state) => uids?.map(uid => (state.views[uid] || -1));
-const getWatchingNow          = (uid, state) => (state.watchingNow[uid] || -1);
-const getManyWatchingNow      = (uids, state) => uids?.map(uid => (state.watchingNow[uid] || -1));
+const getViews                = (state, uid) => (state.views[uid] || -1);
+const getManyViews            = (state, uids) => uids?.map(uid => (state.views[uid] || -1));
+const getWatchingNow          = (state, uid) => (state.watchingNow[uid] || -1);
+const getManyWatchingNow      = (state, uids) => uids?.map(uid => (state.watchingNow[uid] || -1));
 
 export const selectors = {
   getWip,

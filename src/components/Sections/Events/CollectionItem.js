@@ -5,13 +5,13 @@ import { Header, List } from 'semantic-ui-react';
 
 import { fromToLocalized } from '../../../helpers/date';
 import { canonicalLink } from '../../../helpers/links';
-import { selectors as mdb } from '../../../redux/modules/mdb';
 import Link from '../../Language/MultiLanguageLink';
 import UnitLogoWithDuration from '../../shared/UnitLogoWithDuration';
+import { mdbGetDenormCollectionSelector } from '../../../redux/selectors';
 
 const CollectionItem = ({ id }) => {
   const { t } = useTranslation();
-  const c     = useSelector(state => mdb.getDenormCollection(state.mdb, id));
+  const c     = useSelector(state => mdbGetDenormCollectionSelector(state, id));
   if (!c?.content_units) return null;
 
   const { film_date, name, content_units: cus, start_date, end_date } = c;

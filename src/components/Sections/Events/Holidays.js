@@ -5,12 +5,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Button, Checkbox, Icon, Input, List, Modal, Table } from 'semantic-ui-react';
 import { CT_HOLIDAY, FN_COLLECTION_MULTI, FN_CONTENT_TYPE } from '../../../helpers/consts';
 import { isEmpty } from '../../../helpers/utils';
-import { actions, selectors as filters } from '../../../redux/modules/filters';
-import { selectors as filtersAside, selectors } from '../../../redux/modules/filtersAside';
-import { selectors as mdb } from '../../../redux/modules/mdb';
+import { actions } from '../../../redux/modules/filters';
 
-import { selectors as settings } from '../../../redux/modules/settings';
 import CollectionItem from '../../FiltersAside/CollectionFilter/CollectionItem';
+import { filtersAsideGetStatsSelector, filtersAsideGetTreeSelector, filtersGetFilterByNameSelector, settingsGetUIDirSelector, mdbNestedGetCollectionByIdSelector } from '../../../redux/selectors';
 
 const ITEMS_PER_ROW = 5;
 const buildRowArr   = n => {
@@ -23,13 +21,13 @@ const Holidays = ({ namespace, t }) => {
   const [query, setQuery] = useState('');
   const [open, setOpen]   = useState(false);
 
-  const uiDir               = useSelector(state => settings.getUIDir(state.settings));
-  const ids                 = useSelector(state => selectors.getTree(state.filtersAside, namespace, FN_COLLECTION_MULTI));
-  const getById             = useSelector(state => mdb.nestedGetCollectionById(state.mdb));
-  const selectedCollections = useSelector(state => filters.getFilterByName(state.filters, namespace, FN_COLLECTION_MULTI)?.values || []);
-  const selectedCT          = useSelector(state => filters.getFilterByName(state.filters, namespace, FN_CONTENT_TYPE)?.values || []);
+  const uiDir               = useSelector(settingsGetUIDirSelector);
+  const ids                 = useSelector(state => filtersAsideGetTreeSelector(state, namespace, FN_COLLECTION_MULTI));
+  const getById             = useSelector(state => mdbNestedGetCollectionByIdSelector(state));
+  const selectedCollections = useSelector(state => filtersGetFilterByNameSelector(state, namespace, FN_COLLECTION_MULTI))?.values || [];
+  const selectedCT          = useSelector(state => filtersGetFilterByNameSelector(state, namespace, FN_CONTENT_TYPE))?.values || [];
 
-  const stat = useSelector(state => filtersAside.getStats(state.filtersAside, namespace, FN_CONTENT_TYPE)(CT_HOLIDAY));
+  const stat = useSelector(state => filtersAsideGetStatsSelector(state, namespace, FN_CONTENT_TYPE))(CT_HOLIDAY);
 
   const collections = useMemo(() => {
     const reg = new RegExp(query, 'i');
@@ -64,11 +62,11 @@ const Holidays = ({ namespace, t }) => {
   );
 
   const renderItem = (item, i) => {
-    if (!item) return <Table.Cell key={i} />;
+    if (!item) return <Table.Cell key={i}/>;
 
     return (
       <Table.Cell className="tree_item_modal_content" key={item.id}>
-        <CollectionItem namespace={namespace} item={item} />
+        <CollectionItem namespace={namespace} item={item}/>
       </Table.Cell>
     );
   };
@@ -103,7 +101,7 @@ const Holidays = ({ namespace, t }) => {
         dir={uiDir}
         onClose={handleClose}
         className={clsx('filters_aside_tree_modal', { [uiDir]: true })}
-        closeIcon={<Icon name="times circle outline" />}
+        closeIcon={<Icon name="times circle outline"/>}
         size="fullscreen"
       >
         <Modal.Header className="no-border nowrap">
@@ -125,7 +123,7 @@ const Holidays = ({ namespace, t }) => {
           </Table>
         </Modal.Content>
         <Modal.Actions>
-          <Button primary content={t('buttons.close')} onClick={handleClose} />
+          <Button primary content={t('buttons.close')} onClick={handleClose}/>
         </Modal.Actions>
       </Modal>
     </List.Item>

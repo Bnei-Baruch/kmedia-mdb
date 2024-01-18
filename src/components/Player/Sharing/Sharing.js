@@ -3,14 +3,15 @@ import ShareBarPlayer from './ShareBarPlayer';
 import StartEnd from './StartEnd';
 import CopyShareUrl from './CopyShareUrl';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectors as player, actions } from '../../../redux/modules/player';
+import { actions } from '../../../redux/modules/player';
 import { PLAYER_OVER_MODES } from '../../../helpers/consts';
 import { Button } from 'semantic-ui-react';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { useTranslation } from 'react-i18next';
+import { playerGetOverModeSelector } from '../../../redux/selectors';
 
 const Sharing = () => {
-  const mode               = useSelector(state => player.getOverMode(state.player));
+  const mode               = useSelector(playerGetOverModeSelector);
   const { t }              = useTranslation();
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
@@ -26,14 +27,14 @@ const Sharing = () => {
         <div className="sharing__reset" onClick={handleSetFull}>
           {
             isMobileDevice ?
-              <Button size="small" icon="undo" />
-              : <Button size="small" content={t('player.share.reset-to-full')} />
+              <Button size="small" icon="undo"/>
+              : <Button size="small" content={t('player.share.reset-to-full')}/>
           }
         </div>
-      } />
+      }/>
       <div className="sharing__buttons">
-        <CopyShareUrl />
-        <ShareBarPlayer />
+        <CopyShareUrl/>
+        <ShareBarPlayer/>
       </div>
     </div>
   );

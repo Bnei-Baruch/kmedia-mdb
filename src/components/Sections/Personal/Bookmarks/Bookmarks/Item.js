@@ -3,25 +3,23 @@ import { withTranslation } from 'react-i18next';
 import { Icon, Image, Label, List } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
 
-import { selectors as mdb } from '../../../../../redux/modules/mdb';
-import { selectors } from '../../../../../redux/modules/my';
 import { SectionLogo } from '../../../../../helpers/images';
 import { iconByContentTypeMap, MY_NAMESPACE_FOLDERS } from '../../../../../helpers/consts';
 import { OFFSET_TEXT_SEPARATOR } from '../../../../Pages/WithText/scrollToSearch/helper';
 import { getMyItemKey } from '../../../../../helpers/my';
 import Link from '../../../../Language/MultiLanguageLink';
 import Actions from './Actions';
-import { selectors as sourcesSelectors, selectors as sources } from '../../../../../redux/modules/sources';
 import { buildTitleByUnit, textPartLink } from '../../../../shared/ContentItem/helper';
+import { sourcesAreLoadedSelector, mdbGetDenormContentUnitSelector, myGetItemByKeySelector, sourcesGetPathByIDSelector } from '../../../../../redux/selectors';
 
 const BookmarksItem = ({ bookmark, t }) => {
   const { properties, folder_ids = [], name, subject_uid } = bookmark;
 
-  const cu               = useSelector(state => mdb.getDenormContentUnit(state.mdb, subject_uid));
+  const cu               = useSelector(state => mdbGetDenormContentUnitSelector(state, subject_uid));
   const folderKeys       = folder_ids.map(id => getMyItemKey(MY_NAMESPACE_FOLDERS, { id }).key);
-  const folders          = useSelector(state => folderKeys.map(k => selectors.getItemByKey(state.my, MY_NAMESPACE_FOLDERS, k)).filter(x => !!x));
-  const getPathByID      = useSelector(state => sources.getPathByID(state.sources));
-  const areSourcesLoaded = useSelector(state => sourcesSelectors.areSourcesLoaded(state.sources));
+  const folders          = useSelector(state => folderKeys.map(k => myGetItemByKeySelector(state, MY_NAMESPACE_FOLDERS, k)).filter(x => !!x));
+  const getPathByID      = useSelector(sourcesGetPathByIDSelector);
+  const areSourcesLoaded = useSelector(sourcesAreLoadedSelector);
 
   if (!areSourcesLoaded || !cu)
     return null;
@@ -30,7 +28,7 @@ const BookmarksItem = ({ bookmark, t }) => {
 
   const renderFolder = f => (
     <Label key={f.id} basic>
-      <Icon name="folder outline" className="margin-left-4 margin-right-4" />
+      <Icon name="folder outline" className="margin-left-4 margin-right-4"/>
       {f.name}
     </Label>
   );
@@ -49,7 +47,7 @@ const BookmarksItem = ({ bookmark, t }) => {
       <List.Icon>
         <Link to={to}>
           <Image size="mini" verticalAlign="middle">
-            <SectionLogo name={icon} width="25" height="25" />
+            <SectionLogo name={icon} width="25" height="25"/>
           </Image>
         </Link>
       </List.Icon>
@@ -69,7 +67,7 @@ const BookmarksItem = ({ bookmark, t }) => {
         </List.Description>
       </List.Content>
       <List.Icon verticalAlign="top">
-        <Actions bookmark={bookmark} />
+        <Actions bookmark={bookmark}/>
       </List.Icon>
     </List.Item>
   );

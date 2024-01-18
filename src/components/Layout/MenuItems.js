@@ -5,7 +5,6 @@ import identity from 'lodash/identity';
 import { Button, Header, Menu, Sidebar } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
 
-import { selectors as settings } from '../../redux/modules/settings';
 import { getPodcastLinkByLangs, getRSSLinkByLangs } from '../../helpers/utils';
 import NavLink from '../Language/MultiLanguageNavLink';
 import DonateNow, { VirtualHomeButton } from './DonateNow';
@@ -13,6 +12,7 @@ import FeedBurner from './FeedBurner';
 import { MY_NAMESPACE_BOOKMARKS } from '../../helpers/consts';
 import useIsLoggedIn from '../shared/useIsLoggedIn';
 import { login } from '../../pkg/ksAdapter/adapter';
+import { settingsGetContentLanguagesSelector } from '../../redux/selectors';
 
 const ITEMS = [
   'lessons',
@@ -25,12 +25,12 @@ const ITEMS = [
   'music',
   'simple-mode',
   'sketches',
-  'help',
+  'help'
 ];
 
 const MenuItems = ({ simple = false, visible = false, t, onItemClick = identity }) => {
-  const contentLanguages = useSelector(state => settings.getContentLanguages(state.settings));
-  const loggedIn  = useIsLoggedIn();
+  const contentLanguages = useSelector(settingsGetContentLanguagesSelector);
+  const loggedIn         = useIsLoggedIn();
 
   const items = ITEMS.map(x => (
     <Menu.Item
@@ -47,8 +47,8 @@ const MenuItems = ({ simple = false, visible = false, t, onItemClick = identity 
   const personal = !loggedIn ? (
     <Menu.Item key={'personal'}>
       <Header as="h3" className="margin-bottom-4">
-        <Header.Content content={t('nav.sidebar.personal')} className="weight-normal" />
-        <Header.Subheader content={t('personal.needToLogin')} className="margin-left-4 margin-right-4" />
+        <Header.Content content={t('nav.sidebar.personal')} className="weight-normal"/>
+        <Header.Subheader content={t('personal.needToLogin')} className="margin-left-4 margin-right-4"/>
       </Header>
       <Button
         compact
@@ -100,8 +100,8 @@ const MenuItems = ({ simple = false, visible = false, t, onItemClick = identity 
           content={t('nav.sidebar.old-site')}
         />
         <Menu.Item className="mobile-only">
-          <DonateNow />
-          <VirtualHomeButton />
+          <DonateNow/>
+          <VirtualHomeButton/>
         </Menu.Item>
         <Menu.Item
           key="rss"
@@ -111,13 +111,13 @@ const MenuItems = ({ simple = false, visible = false, t, onItemClick = identity 
             icon="rss"
             size="mini"
             color="orange"
-            href={getRSSLinkByLangs(contentLanguages)} />
+            href={getRSSLinkByLangs(contentLanguages)}/>
           <span className="margin-right-8 margin-left-8">RSS</span>
           <Button
             icon="apple"
             size="mini"
             className="margin-left-8"
-            href={getPodcastLinkByLangs(contentLanguages)} />
+            href={getPodcastLinkByLangs(contentLanguages)}/>
           <span className="margin-right-8 margin-left-8">{t('nav.sidebar.podcast')}</span>
         </Menu.Item>
 
@@ -125,7 +125,7 @@ const MenuItems = ({ simple = false, visible = false, t, onItemClick = identity 
           key="feedBurner"
           className="sidebar-item"
         >
-          <FeedBurner />
+          <FeedBurner/>
         </Menu.Item>
       </Menu>
     );
@@ -141,15 +141,15 @@ const MenuItems = ({ simple = false, visible = false, t, onItemClick = identity 
 };
 
 MenuItems.propTypes = {
-  simple: PropTypes.bool,
-  visible: PropTypes.bool,
-  t: PropTypes.func.isRequired,
-  onItemClick: PropTypes.func,
+  simple     : PropTypes.bool,
+  visible    : PropTypes.bool,
+  t          : PropTypes.func.isRequired,
+  onItemClick: PropTypes.func
 };
 
 MenuItems.defaultProps = {
-  simple: false,
-  visible: false,
+  simple     : false,
+  visible    : false,
   onItemClick: identity
 };
 

@@ -1,14 +1,15 @@
 import React from 'react';
 import { Button, Header } from 'semantic-ui-react';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectors as playlist, actions } from '../../../redux/modules/playlist';
+import { actions } from '../../../redux/modules/playlist';
 import { useTranslation } from 'react-i18next';
 import { isEmpty } from '../../../helpers/utils';
+import { playlistGetInfoSelector, playlistGetPlayedSelector } from '../../../redux/selectors';
 
 const SubsControl = () => {
-  const { subtitles } = useSelector(state => playlist.getPlayed(state.playlist));
-  const subsLanguage  = useSelector(state => playlist.getInfo(state.playlist).subsLanguage);
-  const { t }         = useTranslation();
+  const { subtitles }    = useSelector(playlistGetPlayedSelector);
+  const { subsLanguage } = useSelector(playlistGetInfoSelector);
+  const { t }            = useTranslation();
 
   const dispatch = useDispatch();
 
