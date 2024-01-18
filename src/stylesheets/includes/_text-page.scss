@@ -136,6 +136,9 @@ $serif-family: 'Georgia, ' Times New Roman ', Times, serif';
 
   p {
     margin-bottom: 1.2em;
+    &:last-child{
+      margin-bottom: 0;
+    }
   }
 
   ul,
