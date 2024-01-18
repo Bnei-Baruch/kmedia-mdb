@@ -8,8 +8,7 @@ import clsx from 'clsx';
 import { useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { actions as assetsActions, selectors } from '../../../../../../redux/modules/assets';
-import { selectors as settings } from '../../../../../../redux/modules/settings';
+import { actions as assetsActions } from '../../../../../../redux/modules/assets';
 
 import { CT_ARTICLE, CT_RESEARCH_MATERIAL, MT_TEXT, INSERT_TYPE_SUMMARY } from '../../../../../../helpers/consts';
 import { selectSuitableLanguage } from '../../../../../../helpers/language';
@@ -25,6 +24,7 @@ import WipErr from '../../../../../shared/WipErr/WipErr';
 import * as shapes from '../../../../../shapes';
 import MenuLanguageSelector from '../../../../../Language/Selector/MenuLanguageSelector';
 import UnitBar from '../UnitBar';
+import { settingsGetContentLanguagesSelector, assetsGetDoc2htmlByIdSelector } from '../../../../../../redux/selectors';
 
 const getUnitDerivedArticle = (unit, type) => {
   // Suitable for having either derived articles or research materials only
@@ -68,8 +68,8 @@ export const selectFile = (textFiles, language) => {
 
 const Transcription = ({ unit, t, type, activeTab }) => {
   const location         = useLocation();
-  const doc2htmlById     = useSelector(state => selectors.getDoc2htmlById(state.assets));
-  const contentLanguages = useSelector(state => settings.getContentLanguages(state.settings));
+  const doc2htmlById     = useSelector(assetsGetDoc2htmlByIdSelector);
+  const contentLanguages = useSelector(settingsGetContentLanguagesSelector);
 
   const [selectedLanguage, setSelectedLanguage] = useState('');
   const textFiles                               = getTextFiles(unit, type);

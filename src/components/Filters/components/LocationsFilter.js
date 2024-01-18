@@ -8,9 +8,8 @@ import { useSelector } from 'react-redux';
 
 import { CT_CONGRESS } from '../../../helpers/consts';
 import { strCmp } from '../../../helpers/utils';
-import { selectors } from '../../../redux/modules/events';
-import { selectors as mdb } from '../../../redux/modules/mdb';
 import HierarchicalFilter from './HierarchicalFilter';
+import { mdbGetDenormCollectionArrSelector, eventsGetEventByTypeSelector } from '../../../redux/selectors';
 
 const cmpFn = (a, b) => strCmp(a.text, b.text);
 
@@ -21,7 +20,7 @@ const getTree = (congressEvents, t) => {
     const byCity = Object.entries(countBy(v, x => x.city || 'Unknown'));
     return {
       byCity,
-      count: v.length,
+      count: v.length
     };
   });
 
@@ -45,7 +44,7 @@ const getTree = (congressEvents, t) => {
   return [
     {
       value: 'root',
-      text: t('filters.locations-filter.all'),
+      text : t('filters.locations-filter.all'),
       count: congressEvents.length,
       children
     }
@@ -54,22 +53,22 @@ const getTree = (congressEvents, t) => {
 
 const buildNode = (id, count, t) => ({
   value: id,
-  text: t(`locations.${id.trim().toLowerCase().replace(/[\s_.]+/g, '-')}`, { defaultValue: id }),
-  count,
+  text : t(`locations.${id.trim().toLowerCase().replace(/[\s_.]+/g, '-')}`, { defaultValue: id }),
+  count
 });
 
 const LocationsFilter = props => {
-  const cIDs           = useSelector(state => selectors.getEventsByType(state.events)[CT_CONGRESS]);
-  const congressEvents = useSelector(state => (cIDs || []).map(x => mdb.getDenormCollection(state.mdb, x)).filter(c => !!c));
+  const cIDs           = useSelector(state => eventsGetEventByTypeSelector(state, CT_CONGRESS)) || [];
+  const congressEvents = useSelector(state => mdbGetDenormCollectionArrSelector(state, cIDs));
 
   const { t } = props;
   const tree  = useMemo(() => getTree(congressEvents, t), [congressEvents, t]);
 
-  return <HierarchicalFilter name="locations-filter" tree={tree} {...props} t={t} />;
+  return <HierarchicalFilter name="locations-filter" tree={tree} {...props} t={t}/>;
 };
 
 LocationsFilter.propTypes = {
-  t: PropTypes.func.isRequired,
+  t: PropTypes.func.isRequired
 };
 
 export default withTranslation()(LocationsFilter);

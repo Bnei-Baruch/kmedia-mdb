@@ -4,7 +4,7 @@ import Api from '../helpers/Api';
 import { getQuery, updateQuery as urlUpdateQuery } from './helpers/url';
 import { GenerateSearchId } from '../helpers/search';
 import { actions, selectors, types } from '../redux/modules/search';
-import { selectors as settings, types as settingsTypes } from '../redux/modules/settings';
+import { types as settingsTypes } from '../redux/modules/settings';
 import { actions as mbdActions } from '../redux/modules/mdb';
 import { actions as postsActions } from '../redux/modules/publications';
 import { selectors as filterSelectors, actions as filterActions, types as filterTypes } from '../redux/modules/filters';
@@ -13,6 +13,7 @@ import { fetchAllSeries } from './lessons';
 import { fetchViewsByUIDs } from './recommended';
 import { filtersTransformer } from '../filters';
 import { push } from '@lagunovsky/redux-react-router';
+import { settingsGetContentLanguagesSelector, settingsGetUILangSelector } from '../redux/selectors';
 
 // TODO: Use debounce after redux-saga updated.
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -26,8 +27,8 @@ function* autocomplete(action) {
 
     yield delay(100);  // Debounce autocomplete.
     const query            = yield select(state => selectors.getQuery(state.search));
-    const uiLang           = yield select(state => settings.getUILang(state.settings));
-    const contentLanguages = yield select(state => settings.getContentLanguages(state.settings));
+    const uiLang           = yield select(settingsGetUILangSelector);
+    const contentLanguages = yield select(settingsGetContentLanguagesSelector);
     const autocompleteId   = GenerateSearchId();
     const request          = { q: query, ui_language: uiLang, content_languages: contentLanguages };
     let suggestions        = null;
@@ -89,8 +90,8 @@ export function* search(action) {
       }
     }
 
-    const uiLang           = yield select(state => settings.getUILang(state.settings));
-    const contentLanguages = yield select(state => settings.getContentLanguages(state.settings));
+    const uiLang           = yield select(settingsGetUILangSelector);
+    const contentLanguages = yield select(settingsGetContentLanguagesSelector);
     const sortBy           = yield select(state => selectors.getSortBy(state.search));
     const deb              = yield select(state => selectors.getDeb(state.search));
 
@@ -138,8 +139,8 @@ export function* search(action) {
         return;
       }
 
-      const uiLang           = yield select(state => settings.getUILang(state.settings));
-      const contentLanguages = yield select(state => settings.getContentLanguages(state.settings));
+      const uiLang           = yield select(settingsGetUILangSelector);
+      const contentLanguages = yield select(settingsGetContentLanguagesSelector);
       const requests         = [];
       if (cuIDsToFetch.length > 0) {
         requests.push(call(Api.units, {

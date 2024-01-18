@@ -1,9 +1,9 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { selectors } from '../../../redux/modules/player';
+import { playerIsLoadedSelector } from '../../../redux/selectors';
 
 const Preloader = () => {
-  const loaded = useSelector(state => selectors.isLoaded(state.player));
+  const loaded = useSelector(playerIsLoadedSelector);
 
   if (loaded === true) return null;
 

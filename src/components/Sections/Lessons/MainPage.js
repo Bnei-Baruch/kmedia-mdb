@@ -19,9 +19,7 @@ import {
   UNIT_LESSONS_TYPE
 } from '../../../helpers/consts';
 import { isEmpty, usePrevious } from '../../../helpers/utils';
-import { selectors as filters } from '../../../redux/modules/filters';
-import { actions, selectors as lists } from '../../../redux/modules/lists';
-import { selectors as settings } from '../../../redux/modules/settings';
+import { actions } from '../../../redux/modules/lists';
 
 import FilterLabels from '../../FiltersAside/FilterLabels';
 import Pagination from '../../Pagination/Pagination';
@@ -34,6 +32,7 @@ import CollectionItem from './Collectiontem';
 import DailyLessonItem from './DailyLessonItem';
 import Filters from './Filters';
 import UnitItem from './UnitItem';
+import { settingsGetContentLanguagesSelector, listsGetNamespaceStateSelector, filtersGetNotEmptyFiltersSelector, settingsGetPageSizeSelector } from '../../../redux/selectors';
 
 const SHOWED_CT = [CT_VIRTUAL_LESSON, CT_WOMEN_LESSON, CT_LECTURE, CT_LESSONS_SERIES];
 
@@ -42,10 +41,10 @@ export const LESSON_AS_UNIT       = [CT_LESSON_PART, ...SHOWED_CT];
 const FILTER_PARAMS               = { content_type: LESSON_AS_UNIT };
 
 const MainPage = ({ t }) => {
-  const { items, total, wip, err } = useSelector(state => lists.getNamespaceState(state.lists, PAGE_NS_LESSONS)) || {};
-  const contentLanguages           = useSelector(state => settings.getContentLanguages(state.settings));
-  const pageSize                   = useSelector(state => settings.getPageSize(state.settings));
-  const selected                   = useSelector(state => filters.getNotEmptyFilters(state.filters, PAGE_NS_LESSONS), isEqual);
+  const { items, total, wip, err } = useSelector(state => listsGetNamespaceStateSelector(state, PAGE_NS_LESSONS)) || {};
+  const contentLanguages           = useSelector(settingsGetContentLanguagesSelector);
+  const pageSize                   = useSelector(settingsGetPageSizeSelector);
+  const selected                   = useSelector(state => filtersGetNotEmptyFiltersSelector(state, PAGE_NS_LESSONS), isEqual);
 
   const prevSel    = usePrevious(selected);
   const listParams = useMemo(() => selected.some(f => FN_SHOW_LESSON_AS_UNITS.includes(f.name) && !isEmpty(f.values))
@@ -71,30 +70,30 @@ const MainPage = ({ t }) => {
   }, [contentLanguages, dispatch, pageNo, selected, listParams]);
 
   const wipErr          = WipErr({ wip, err, t });
-  const filterComponent = <Filters namespace={PAGE_NS_LESSONS} baseParams={FILTER_PARAMS} />;
+  const filterComponent = <Filters namespace={PAGE_NS_LESSONS} baseParams={FILTER_PARAMS}/>;
 
   return (
     <>
-      <SectionHeader section="lessons" />
+      <SectionHeader section="lessons"/>
       <SectionFiltersWithMobile filters={filterComponent} namespace={PAGE_NS_LESSONS}>
-        <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} />
-        <FilterLabels namespace={PAGE_NS_LESSONS} />
+        <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize}/>
+        <FilterLabels namespace={PAGE_NS_LESSONS}/>
         {
           wipErr || items?.filter(({ id }) => !!id)
             .map(({ id, content_type }) => {
               switch (true) {
                 case COLLECTION_DAILY_LESSONS.includes(content_type):
-                  return <DailyLessonItem id={id} key={id} />;
+                  return <DailyLessonItem id={id} key={id}/>;
                 case COLLECTION_LESSONS_TYPE.includes(content_type):
-                  return <CollectionItem id={id} key={id} />;
+                  return <CollectionItem id={id} key={id}/>;
                 case UNIT_LESSONS_TYPE.includes(content_type):
-                  return <UnitItem id={id} key={id} />;
+                  return <UnitItem id={id} key={id}/>;
                 default:
                   return null;
               }
             })
         }
-        <Divider fitted />
+        <Divider fitted/>
         <Container className="padded pagination-wrapper" textAlign="center">
           {total > 0 && <Pagination
             pageNo={pageNo}

@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { Button } from 'semantic-ui-react';
 
-import { selectors as settings } from '../../../redux/modules/settings';
 import LibrarySettings from './LibrarySettings';
 import Share from './Share';
 import BookmarkButton from '../../shared/SaveBookmark/BookmarkButton';
 import LabelButton from '../../shared/SelectTopicsModal/LabelButton';
 import LessonsBySourceButton from './LessonsBySourceButton';
+import { settingsGetUIDirSelector } from '../../../redux/selectors';
 
 const LibraryBar = (
   {
@@ -21,38 +21,39 @@ const LibraryBar = (
     label
   }
 ) => {
-  const uiDir = useSelector(state => settings.getUIDir(state.settings));
+  const uiDir    = useSelector(settingsGetUIDirSelector);
   const position = uiDir === 'rtl' ? 'left' : 'right';
 
   const print = () => window.print();
 
   return (
     <div className="source__header-toolbar">
-      <LessonsBySourceButton source={source} />
-      <BookmarkButton source={source} />
-      <LabelButton label={label} />
-      <Button compact size="small" className="mobile-hidden" icon="print" onClick={print} />
+      <LessonsBySourceButton source={source}/>
+      <BookmarkButton source={source}/>
+      <LabelButton label={label}/>
+      <Button compact size="small" className="mobile-hidden" icon="print" onClick={print}/>
       {/* a portal is used to put the download button here in this div */}
-      <div id="download-button" />
-      <LibrarySettings fontSize={fontSize} handleSettings={handleSettings} />
-      <Button compact size="small" icon={isReadable ? 'compress' : 'expand'} onClick={handleIsReadable} />
+      <div id="download-button"/>
+      <LibrarySettings fontSize={fontSize} handleSettings={handleSettings}/>
+      <Button compact size="small" icon={isReadable ? 'compress' : 'expand'} onClick={handleIsReadable}/>
       {handleTocIsActive &&
-        <Button compact size="small" icon="list layout" onClick={handleTocIsActive}
-          className="computer-hidden large-screen-hidden widescreen-hidden" />
+        <Button
+          compact size="small" icon="list layout" onClick={handleTocIsActive}
+          className="computer-hidden large-screen-hidden widescreen-hidden"/>
       }
-      <Share position={position} />
+      <Share position={position}/>
     </div>
   );
 };
 
 LibraryBar.propTypes = {
-  handleIsReadable: PropTypes.func,
-  handleSettings: PropTypes.func,
+  handleIsReadable : PropTypes.func,
+  handleSettings   : PropTypes.func,
   handleTocIsActive: PropTypes.func,
-  isReadable: PropTypes.bool,
-  fontSize: PropTypes.number,
-  source: PropTypes.object,
-  label: PropTypes.object
+  isReadable       : PropTypes.bool,
+  fontSize         : PropTypes.number,
+  source           : PropTypes.object,
+  label            : PropTypes.object
 };
 
 export default LibraryBar;

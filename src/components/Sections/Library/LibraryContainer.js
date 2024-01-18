@@ -12,7 +12,7 @@ import { isEmpty } from '../../../helpers/utils';
 import { actions as assetsActions, selectors as assets } from '../../../redux/modules/assets';
 import { actions as sourceActions, selectors as sources } from '../../../redux/modules/sources';
 import { selectors as settings } from '../../../redux/modules/settings';
-import { actions as mdbActions, selectors as mdb } from '../../../redux/modules/mdb';
+import { actions as mdbActions } from '../../../redux/modules/mdb';
 import * as shapes from '../../shapes';
 import { getSourceErrorSplash } from '../../shared/WipErr/WipErr';
 import Helmets from '../../shared/Helmets';
@@ -25,6 +25,7 @@ import { getQuery } from '../../../helpers/url';
 import { SCROLL_SEARCH_ID } from '../../../helpers/consts';
 import { withRouter } from '../../../helpers/withRouterPatch';
 import TagsByUnit from '../../shared/TagsByUnit';
+import { mdbGetFullUnitFetchedSelector } from '../../../redux/selectors';
 
 const waitForRenderElement = async (attempts = 0) => {
   if (attempts > 10) return Promise.reject();
@@ -579,7 +580,7 @@ export default withTranslation()(withRouter(connect(
     indexMap        : assets.getSourceIndexById(state.assets),
     uiLang          : settings.getUILang(state.settings),
     uiDir           : settings.getUIDir(state.settings),
-    unitFetched     : mdb.getFullUnitFetched(state.mdb)[ownProps.params?.id],
+    unitFetched     : mdbGetFullUnitFetchedSelector[ownProps.params?.id],
     getSourceById   : sources.getSourceById(state.sources),
     getPathByID     : sources.getPathByID(state.sources),
     sortBy          : sources.sortBy(state.sources),

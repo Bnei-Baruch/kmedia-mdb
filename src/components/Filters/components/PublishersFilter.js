@@ -2,14 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 
-import { selectors } from '../../../redux/modules/publications';
 import FlatListFilter from './FlatListFilter';
+import { publicationsGetPublisherByIdSelector } from '../../../redux/selectors';
 
 const PublishersFilter = props => {
-  const publisherById = useSelector(state => selectors.getPublisherById(state.publications));
+  const publisherById = useSelector(publicationsGetPublisherByIdSelector);
   const options       = Object.values(publisherById).map(x => ({
-    text: x.name,
-    value: x.id,
+    text : x.name,
+    value: x.id
   }));
 
   return (
@@ -18,7 +18,7 @@ const PublishersFilter = props => {
 };
 
 PublishersFilter.propTypes = {
-  publisherById: PropTypes.objectOf(PropTypes.object),
+  publisherById: PropTypes.objectOf(PropTypes.object)
 };
 
 export default PublishersFilter;

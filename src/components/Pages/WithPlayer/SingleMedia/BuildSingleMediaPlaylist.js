@@ -3,11 +3,12 @@ import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 import Helmets from '../../../shared/Helmets';
-import { actions, selectors } from '../../../../redux/modules/playlist';
+import { actions } from '../../../../redux/modules/playlist';
+import { playlistGetInfoSelector } from '../../../../redux/selectors';
 
 const BuildSingleMediaPlaylist = () => {
   const { id }        = useParams();
-  const { cuId, wip } = useSelector(state => selectors.getInfo(state.playlist));
+  const { cuId, wip } = useSelector(playlistGetInfoSelector);
   const dispatch      = useDispatch();
 
   useEffect(() => {
@@ -16,7 +17,7 @@ const BuildSingleMediaPlaylist = () => {
     }
   }, [cuId, id, wip]);
 
-  return <Helmets.AVUnit id={id} />;
+  return <Helmets.AVUnit id={id}/>;
 };
 
 export default BuildSingleMediaPlaylist;

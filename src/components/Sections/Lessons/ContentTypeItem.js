@@ -4,13 +4,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Checkbox, List } from 'semantic-ui-react';
 
 import { CT_LESSONS, FN_CONTENT_TYPE } from '../../../helpers/consts';
-import { actions, selectors as filters } from '../../../redux/modules/filters';
-import { selectors as filtersAside } from '../../../redux/modules/filtersAside';
+import { actions } from '../../../redux/modules/filters';
+import { filtersAsideGetStatsSelector, filtersGetFilterByNameSelector } from '../../../redux/selectors';
 
 const ContentTypeItem = ({ namespace, id, isSelChild = false, t }) => {
   const isLesson = CT_LESSONS.includes(id);
-  const selected = useSelector(state => filters.getFilterByName(state.filters, namespace, FN_CONTENT_TYPE)?.values || []);
-  const stat     = useSelector(state => filtersAside.getStats(state.filtersAside, namespace, FN_CONTENT_TYPE)(id));
+  const selected = useSelector(state => filtersGetFilterByNameSelector(state, namespace, FN_CONTENT_TYPE))?.values || [];
+  const stat     = useSelector(state => filtersAsideGetStatsSelector(state, namespace, FN_CONTENT_TYPE))(id);
 
   const dispatch = useDispatch();
 

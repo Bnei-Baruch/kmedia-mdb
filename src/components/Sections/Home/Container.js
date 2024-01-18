@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
-import { createSelector } from '@reduxjs/toolkit';
 import { withTranslation } from 'react-i18next';
 
 import { useInterval } from '../../../helpers/timer';
@@ -11,14 +10,23 @@ import {
   LANG_RUSSIAN,
   LANG_SPANISH,
   LANG_UKRAINIAN,
-  DEFAULT_CONTENT_LANGUAGE,
+  DEFAULT_CONTENT_LANGUAGE
 } from '../../../helpers/consts';
-import { actions, selectors } from '../../../redux/modules/home';
-import { selectors as mdb } from '../../../redux/modules/mdb';
-import { actions as publicationsActions, selectors as publications } from '../../../redux/modules/publications';
-import { selectors as settings } from '../../../redux/modules/settings';
+import { actions } from '../../../redux/modules/home';
+import { actions as publicationsActions } from '../../../redux/modules/publications';
 import WipErr from '../../shared/WipErr/WipErr';
 import HomePage from './HomePage';
+import {
+  settingsGetContentLanguagesSelector,
+  homeErrSelector,
+  settingsGetUILangSelector,
+  homeWipSelector,
+  homeLatestLessonIDSelector,
+  homeLatestUnitIDsSelector,
+  mdbLatestLessonSelector,
+  mdbLatestUnitsSelector,
+  homeLatestCoIDsSelector, mdbLatestCosSelector, publicationsLatestBlogPostsSelector, publicationsLatestTweetsSelector
+} from '../../../redux/selectors';
 
 const FETCH_TIMEOUT = 10 * 60 * 1000; // every 10 min
 
@@ -27,7 +35,7 @@ const TWITTER_BY_LANG = new Map([
   [LANG_UKRAINIAN, { username: 'Michael_Laitman' }],
   [LANG_RUSSIAN, { username: 'Michael_Laitman' }],
   [LANG_SPANISH, { username: 'laitman_es' }],
-  [LANG_ENGLISH, { username: 'laitman' }],
+  [LANG_ENGLISH, { username: 'laitman' }]
 ]);
 
 const BLOG_BY_LANG = new Map([
@@ -35,7 +43,7 @@ const BLOG_BY_LANG = new Map([
   [LANG_UKRAINIAN, { blog: 'laitman-ru' }],
   [LANG_RUSSIAN, { blog: 'laitman-ru' }],
   [LANG_SPANISH, { blog: 'laitman-es' }],
-  [LANG_ENGLISH, { blog: 'laitman-com' }],
+  [LANG_ENGLISH, { blog: 'laitman-com' }]
 ]);
 
 const chooseSocialMediaByLanguage = (contentLanguages, socialMediaOptions) =>
@@ -44,60 +52,33 @@ const chooseSocialMediaByLanguage = (contentLanguages, socialMediaOptions) =>
 const fetchSocialMedia = (type, fetchFn, contentLanguages) => {
   fetchFn(`publications-${type}`, 1, {
     page_size: 4,
-    ...chooseSocialMediaByLanguage(contentLanguages, type === 'blog' ? BLOG_BY_LANG : TWITTER_BY_LANG),
+    ...chooseSocialMediaByLanguage(contentLanguages, type === 'blog' ? BLOG_BY_LANG : TWITTER_BY_LANG)
   });
 };
 
-const getHome = state => state.home;
-const getPublications = state => state.publications;
-const getSettings = state => state.settings;
-const getMDB = state => state.mdb;
-const getLatestLessonID = (_, latestLessonID) => latestLessonID;
-const getLatestUnitIDs = (_, latestUnitIDs) => latestUnitIDs;
-const getLatestCoIDs = (_, latestCoIDs) => latestCoIDs;
-
-const latestLessonIDFn = createSelector([getHome], home => selectors.getLatestLesson(home));
-const latestLessonFn = createSelector(getMDB, getLatestLessonID,
-  (m, latestLessonID) => latestLessonID ? mdb.getCollectionById(m, latestLessonID) : null
-);
-const latestUnitIDsFn = createSelector([getHome], home => selectors.getLatestUnits(home));
-const latestUnitsFn = createSelector(getMDB, getLatestUnitIDs,
-  (m, latestUnitIDs) => Array.isArray(latestUnitIDs) ? latestUnitIDs.map(x => mdb.getDenormContentUnit(m, x)) : []
-);
-const latestBlogPostsFn = createSelector([getPublications], pubs => publications.getBlogPosts(pubs));
-const latestTweetsFn = createSelector([getPublications], pubs => publications.getTweets(pubs));
-const contentLanguagesFn = createSelector([getSettings], s => settings.getContentLanguages(s));
-const uiLangFn = createSelector([getSettings], s => settings.getUILang(s));
-const wipFn = createSelector([getHome], home => selectors.getWip(home));
-const errFn = createSelector([getHome], home => selectors.getError(home));
-const latestCoIDsFn = createSelector([getHome], home => selectors.getLatestCos(home));
-const latestCosFn = createSelector(getMDB, getLatestCoIDs,
-  (m, latestCoIDs) => latestCoIDs.map(x => mdb.getDenormCollection(m, x))
-);
-
 const HomePageContainer = ({ t }) => {
-  const dispatch = useDispatch();
+  const dispatch  = useDispatch();
   const fetchData = useCallback(flag => dispatch(actions.fetchData(flag)), [dispatch]);
 
-  const latestLessonID = useSelector(latestLessonIDFn);
-  const latestLesson = useSelector(state => latestLessonFn(state, latestLessonID));
+  const latestLessonID = useSelector(homeLatestLessonIDSelector);
+  const latestLesson   = useSelector(state => mdbLatestLessonSelector(state, latestLessonID));
 
-  const latestUnitIDs = useSelector(latestUnitIDsFn);
-  const latestUnits = useSelector(state => latestUnitsFn(state, latestUnitIDs));
-  const latestCoIDs = useSelector(latestCoIDsFn) || [];
-  const latestCos = useSelector(state => latestCosFn(state, latestCoIDs));
+  const latestUnitIDs = useSelector(homeLatestUnitIDsSelector);
+  const latestUnits   = useSelector(state => mdbLatestUnitsSelector(state, latestUnitIDs));
+  const latestCoIDs   = useSelector(homeLatestCoIDsSelector) || [];
+  const latestCos     = useSelector(state => mdbLatestCosSelector(state, latestCoIDs));
 
-  const fetchBlogList = useCallback((type, id, options) => dispatch(publicationsActions.fetchBlogList(type, id, options)), [dispatch]);
-  const latestBlogPosts = useSelector(latestBlogPostsFn);
+  const fetchBlogList   = useCallback((type, id, options) => dispatch(publicationsActions.fetchBlogList(type, id, options)), [dispatch]);
+  const latestBlogPosts = useSelector(publicationsLatestBlogPostsSelector);
 
   const fetchTweetsList = useCallback((type, id, options) => dispatch(publicationsActions.fetchTweets(type, id, options)), [dispatch]);
-  const latestTweets = useSelector(latestTweetsFn);
+  const latestTweets    = useSelector(publicationsLatestTweetsSelector);
 
-  const fetchBanners = useCallback(contentLanguages => dispatch(actions.fetchBanners(contentLanguages)), [dispatch]);
-  const uiLang = useSelector(uiLangFn);
-  const contentLanguages = useSelector(contentLanguagesFn);
-  const wip = useSelector(wipFn);
-  const err = useSelector(errFn);
+  const fetchBanners     = useCallback(contentLanguages => dispatch(actions.fetchBanners(contentLanguages)), [dispatch]);
+  const uiLang           = useSelector(settingsGetUILangSelector);
+  const contentLanguages = useSelector(settingsGetContentLanguagesSelector);
+  const wip              = useSelector(homeWipSelector);
+  const err              = useSelector(homeErrSelector);
 
   useEffect(() => {
     console.log('re-fetch');

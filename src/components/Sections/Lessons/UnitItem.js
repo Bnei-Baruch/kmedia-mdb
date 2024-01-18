@@ -7,15 +7,14 @@ import { Header, List } from 'semantic-ui-react';
 import { COLLECTION_DAILY_LESSONS } from '../../../helpers/consts';
 import { canonicalLink } from '../../../helpers/links';
 import { isEmpty } from '../../../helpers/utils';
-import { selectors as mdb } from '../../../redux/modules/mdb';
-import { selectors as recommended } from '../../../redux/modules/recommended';
 import Link from '../../Language/MultiLanguageLink';
 import TooltipIfNeed from '../../shared/TooltipIfNeed';
 import UnitLogoWithDuration from '../../shared/UnitLogoWithDuration';
+import { mdbGetDenormContentUnitSelector, recommendedGetViewsSelector } from '../../../redux/selectors';
 
 const UnitItem = ({ id, t }) => {
-  const cu    = useSelector(state => mdb.getDenormContentUnit(state.mdb, id));
-  const views = useSelector(state => recommended.getViews(id, state.recommended));
+  const cu    = useSelector(state => mdbGetDenormContentUnitSelector(state, id));
+  const views = useSelector(state => recommendedGetViewsSelector(state, id));
 
   if (!cu) return null;
 
@@ -35,10 +34,10 @@ const UnitItem = ({ id, t }) => {
   return (
     <List.Item className="media_item">
       <Link to={link}>
-        <UnitLogoWithDuration unit={cu} />
+        <UnitLogoWithDuration unit={cu}/>
       </Link>
       <div className="media_item__content">
-        <TooltipIfNeed text={cu.name} Component={Header} as={Link} to={link} content={cu.name} />
+        <TooltipIfNeed text={cu.name} Component={Header} as={Link} to={link} content={cu.name}/>
         {
           !isEmpty(additionCCUs) && (
             <div className="additional_links">

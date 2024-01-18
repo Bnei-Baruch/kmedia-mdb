@@ -6,7 +6,7 @@ import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { noop } from '../../../helpers/utils';
 import { getOptions } from '../../../helpers/language';
 import { ALL_LANGUAGES, LANGUAGES } from '../../../helpers/consts';
-import { selectors as settings } from '../../../redux/modules/settings';
+import { settingsGetContentLanguagesSelector, settingsGetUIDirSelector } from '../../../redux/selectors';
 
 const applyChecked = (language, checked, selected, isAny) => {
   if (isAny) {
@@ -17,33 +17,33 @@ const applyChecked = (language, checked, selected, isAny) => {
     return [];
   }
 
-  const newSelected = selected.filter(selectedLang => selectedLang  !== language);
+  const newSelected = selected.filter(selectedLang => selectedLang !== language);
   if (checked) {
     newSelected.push(language);
   }
 
   return newSelected;
-}
+};
 
-const applyAll = () => ALL_LANGUAGES
+const applyAll = () => ALL_LANGUAGES;
 
 const MenuLanguageSelector = ({ languages = [], selected = [], onLanguageChange = noop, multiSelect = true, optionText = null, upward = false }) => {
-  const uiDir = useSelector(state => settings.getUIDir(state.settings));
+  const uiDir              = useSelector(settingsGetUIDirSelector);
   const { isMobileDevice } = useContext(DeviceInfoContext);
-  const contentLanguages = useSelector(state => settings.getContentLanguages(state.settings));
-  const onChange = selected => {
+  const contentLanguages   = useSelector(settingsGetContentLanguagesSelector);
+  const onChange           = selected => {
     onLanguageChange(selected);
   };
 
   const validLanguages = languages.filter(lang => contentLanguages.includes(lang));
   const otherLanguages = languages.filter(lang => !contentLanguages.includes(lang));
-  const dividerArray = !isMobileDevice || multiSelect ? [{ value: 'divider', className: 'language-selection-divider disabled' }] : [];
-  const options = getOptions({ languages: validLanguages }).concat(dividerArray).concat(getOptions({ languages: otherLanguages }));
+  const dividerArray   = !isMobileDevice || multiSelect ? [{ value: 'divider', className: 'language-selection-divider disabled' }] : [];
+  const options        = getOptions({ languages: validLanguages }).concat(dividerArray).concat(getOptions({ languages: otherLanguages }));
   // Special case when all laguages are selected, e.g., show content with any language.
-  const isAny = languages === selected;
+  const isAny          = languages === selected;
 
   const finalOptions = isAny ? [{ text: 'Any', value: 'any' }] : options;
-  const value = multiSelect ? (isAny ? ['any'] : selected) : selected;
+  const value        = multiSelect ? (isAny ? ['any'] : selected) : selected;
 
   if (isMobileDevice && !multiSelect) {
     return (
@@ -52,7 +52,7 @@ const MenuLanguageSelector = ({ languages = [], selected = [], onLanguageChange 
         style={{ direction: uiDir }}
         value={value}
         onChange={event => onChange(event.target.value)}>
-        { options.map(x => <option key={`opt-${x.value}`} value={x.value}>{x.name}</option>) }
+        {options.map(x => <option key={`opt-${x.value}`} value={x.value}>{x.name}</option>)}
       </select>
     );
   }

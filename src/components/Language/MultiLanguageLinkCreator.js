@@ -43,7 +43,7 @@ const multiLanguageLinkCreator = () => WrappedComponent => {
 
     // Clear keycloak hash params from url
     if (toWithLanguage?.hash && toWithLanguage.hash.indexOf(KC_SEARCH_KEY_SESSION) !== -1) {
-      const h             = toWithLanguage.hash.startsWith('#') ? toWithLanguage.hash.substr(1) : toWithLanguage.hash;
+      const h             = toWithLanguage.hash.startsWith('#') ? toWithLanguage.hash.substring(1) : toWithLanguage.hash;
       toWithLanguage.hash = stringify(omit(parse(h), KC_SEARCH_KEYS));
     }
 
@@ -51,12 +51,12 @@ const multiLanguageLinkCreator = () => WrappedComponent => {
   };
 
   MultiLanguageLinkHOC.propTypes = {
-    to: PropTypes.oneOfType([
+    to             : PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.object
     ]),
-    language: PropTypes.string, // language shorthand, for example: "ru"
-    contentLanguage: PropTypes.string, // language shorthand, for example: "ru"
+    language       : PropTypes.string, // language shorthand, for example: "ru"
+    contentLanguage: PropTypes.string // language shorthand, for example: "ru"
   };
   //TODO David: I dont see that we use any static methods on MultiLanguageLinkHOC (except propTypes)
   // so can we remove it?

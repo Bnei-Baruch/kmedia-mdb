@@ -1,21 +1,21 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectors as filtersAside } from '../../../redux/modules/filtersAside';
 import { withTranslation } from 'react-i18next';
 import { FN_CONTENT_TYPE } from '../../../helpers/consts';
 import ContentTypeItem from './ContentTypeItem';
 import { Checkbox, List } from 'semantic-ui-react';
-import { actions, selectors as filters } from '../../../redux/modules/filters';
+import { actions } from '../../../redux/modules/filters';
+import { filtersAsideGetStatsSelector, filtersAsideGetTreeSelector, filtersGetFilterByNameSelector } from '../../../redux/selectors';
 
 const ContentTypeItemGroup = ({ namespace, group, t }) => {
   const { cts, key } = group;
 
-  const selectedItems = useSelector(state => filtersAside.getTree(state.filtersAside, namespace, FN_CONTENT_TYPE));
+  const selectedItems = useSelector(state => filtersAsideGetTreeSelector(state, namespace, FN_CONTENT_TYPE));
   const items         = selectedItems.filter(ct => cts.includes(ct));
 
-  let selected    = useSelector(state => filters.getFilterByName(state.filters, namespace, FN_CONTENT_TYPE)?.values || []);
+  let selected    = useSelector(state => filtersGetFilterByNameSelector(state, namespace, FN_CONTENT_TYPE))?.values || [];
   selected        = selected.filter(ct => cts.includes(ct));
-  const statsById = useSelector(state => filtersAside.getStats(state.filtersAside, namespace, FN_CONTENT_TYPE));
+  const statsById = useSelector(state => filtersAsideGetStatsSelector(state, namespace, FN_CONTENT_TYPE));
   const stats     = cts.reduce((acc, x) => acc + statsById(x), 0);
 
   const dispatch = useDispatch();
@@ -50,7 +50,7 @@ const ContentTypeItemGroup = ({ namespace, group, t }) => {
               />
             </List.Content>
             <List>
-              {items.map(id => <ContentTypeItem namespace={namespace} id={id} key={id} />)}
+              {items.map(id => <ContentTypeItem namespace={namespace} id={id} key={id}/>)}
             </List>
           </List.Item>
         )

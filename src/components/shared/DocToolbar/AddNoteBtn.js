@@ -3,13 +3,13 @@ import { useTranslation } from 'react-i18next';
 import { Button, Popup } from 'semantic-ui-react';
 import NoteModal from '../NoteModal';
 import { useSelector } from 'react-redux';
-import { selectors as settings } from '../../../redux/modules/settings';
+import { settingsGetUIDirSelector } from '../../../redux/selectors';
 
 const AddNoteBtn = ({ properties, toggleToolbar }) => {
   const [open, setOpen] = useState(false);
 
   const { t } = useTranslation();
-  const uiDir = useSelector(state => settings.getUIDir(state.settings));
+  const uiDir = useSelector(settingsGetUIDirSelector);
 
   const handleOpen       = () => setOpen(true);
   const handleToggleOpen = o => {
@@ -19,7 +19,7 @@ const AddNoteBtn = ({ properties, toggleToolbar }) => {
 
   return (
     <>
-      {open && <NoteModal toggleOpen={handleToggleOpen} note={properties} />}
+      {open && <NoteModal toggleOpen={handleToggleOpen} note={properties}/>}
       <Popup
         content={t('messages.add-new-note')}
         dir={uiDir}

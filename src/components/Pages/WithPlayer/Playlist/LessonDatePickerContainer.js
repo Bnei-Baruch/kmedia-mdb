@@ -3,15 +3,14 @@ import { useSelector, shallowEqual, useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { Header, Icon } from 'semantic-ui-react';
 
-import { selectors as settings } from '../../../../redux/modules/settings';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import Link from '../../../Language/MultiLanguageLink';
 import CollectionDatePicker from './LessonDatePicker';
-import { actions as mdbActions, selectors as mdb } from '../../../../redux/modules/mdb';
-import { selectors } from '../../../../redux/modules/playlist';
+import { actions as mdbActions } from '../../../../redux/modules/mdb';
 import moment from 'moment';
 import { DATE_FORMAT } from '../../../../helpers/consts';
 import { canonicalLink } from '../../../../helpers/links';
+import { playlistGetInfoSelector, settingsGetUIDirSelector, mdbGetWindowSelector, mdbGetWipFn, mdbNestedGetDenormCollectionSelector } from '../../../../redux/selectors';
 
 const getStartEndByFilmDate = d => {
   const filmDate = moment.utc(d);
@@ -27,12 +26,12 @@ const LessonDatePickerContainer = () => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const { t }              = useTranslation();
 
-  const wipMap  = useSelector(state => mdb.getWip(state.mdb), shallowEqual);
-  const cWindow = useSelector(state => mdb.getWindow(state.mdb), shallowEqual);
+  const wipMap  = useSelector(mdbGetWipFn, shallowEqual);
+  const cWindow = useSelector(mdbGetWindowSelector, shallowEqual);
 
-  const { isReady, cId } = useSelector(state => selectors.getInfo(state.playlist));
-  const denorm           = useSelector(state => mdb.nestedGetDenormCollection(state.mdb));
-  const uiDir            = useSelector(state => settings.getUIDir(state.settings));
+  const { isReady, cId } = useSelector(playlistGetInfoSelector);
+  const denorm           = useSelector(mdbNestedGetDenormCollectionSelector);
+  const uiDir            = useSelector(settingsGetUIDirSelector);
 
   const dispatch = useDispatch();
 

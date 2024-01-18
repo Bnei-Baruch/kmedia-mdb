@@ -1,13 +1,12 @@
 import { useSelector } from 'react-redux';
-import { selectors as tags } from '../../../redux/modules/tags';
-import { selectors as sources } from '../../../redux/modules/sources';
 import React, { useMemo } from 'react';
 import { FN_TOPICS_MULTI } from '../../../helpers/consts';
 import TagSourceItem from './TagSourceItem';
+import { sourcesGetSourceByIdSelector, tagsGetTagByIdSelector } from '../../../redux/selectors';
 
 const RenderAsList = ({ namespace, filterName, baseItems, query }) => {
-  const getTagById    = useSelector(state => tags.getTagById(state.tags));
-  const getSourceById = useSelector(state => sources.getSourceById(state.sources));
+  const getTagById    = useSelector(tagsGetTagByIdSelector);
+  const getSourceById = useSelector(sourcesGetSourceByIdSelector);
 
   const isTag   = filterName === FN_TOPICS_MULTI;
   const getById = isTag ? getTagById : getSourceById;

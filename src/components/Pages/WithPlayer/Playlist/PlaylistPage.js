@@ -11,13 +11,13 @@ import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import { getEmbedFromQuery } from '../../../../helpers/player';
 import { useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { selectors as playlist } from '../../../../redux/modules/playlist';
+import { playlistGetInfoSelector } from '../../../../redux/selectors';
 
 const PlaylistPage = ({ playerContainer }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const location           = useLocation();
   const embed              = getEmbedFromQuery(location);
-  const { isReady } = useSelector(state => playlist.getInfo(state.playlist));
+  const { isReady }        = useSelector(playlistGetInfoSelector);
 
   if (embed) return playerContainer;
 
@@ -31,20 +31,20 @@ const PlaylistPage = ({ playerContainer }) => {
         computer={computerWidth}
         className={clsx({ 'is-fitted': isMobileDevice })}>
         <div id="avbox_playlist">
-          <PlaylistHeader />
+          <PlaylistHeader/>
         </div>
         {isReady && playerContainer}
         <Container id="unit_container">
-          <Info />
-          <Materials />
+          <Info/>
+          <Materials/>
         </Container>
       </Grid.Column>
       {
         !isMobileDevice && (
           <Grid.Column width={6}>
-            {isReady && <PlaylistItems />}
-            <Divider hidden />
-            {isReady && <Recommended filterOutUnits={[]} />}
+            {isReady && <PlaylistItems/>}
+            <Divider hidden/>
+            {isReady && <Recommended filterOutUnits={[]}/>}
           </Grid.Column>
         )
       }

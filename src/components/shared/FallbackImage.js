@@ -4,23 +4,25 @@ import { Image } from 'semantic-ui-react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { knownFallbackImages, NoneFallbackImage, SectionThumbnailFallback } from '../../helpers/images';
-import { selectors, actions } from '../../redux/modules/fetchImage';
+import { actions } from '../../redux/modules/fetchImage';
 import WipErr from './WipErr/WipErr';
 import { useTranslation } from 'react-i18next';
+import { fetchImageGetBySrcSelector } from '../../redux/selectors';
 
 const FallbackImage = props => {
-  const {
-    src,
-    fallbackImage = ['default'],
-    className,
-    width         = 'auto',
-    height        = 'auto',
+  const
+    {
+      src,
+      fallbackImage = ['default'],
+      className,
+      width         = 'auto',
+      height        = 'auto',
 
-    floated,
-    ...rest
-  } = props;
+      floated,
+      ...rest
+    } = props;
 
-  const { src: imageSource, wip, err } = useSelector(state => selectors.getBySrc(state.fetchImage, src));
+  const { src: imageSource, wip, err } = useSelector(state => fetchImageGetBySrcSelector(state, src));
   const dispatch                       = useDispatch();
   const { t }                          = useTranslation();
 
@@ -74,10 +76,10 @@ const FallbackImage = props => {
 };
 
 FallbackImage.propTypes = {
-  src: PropTypes.string,
+  src          : PropTypes.string,
   fallbackImage: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.element, PropTypes.array])),
-  onLoad: PropTypes.func,
-  onError: PropTypes.func
+  onLoad       : PropTypes.func,
+  onError      : PropTypes.func
 };
 
 export default FallbackImage;

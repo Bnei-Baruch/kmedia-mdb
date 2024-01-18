@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { Popup } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
 
-import { selectors as player } from '../../../redux/modules/player';
 import { useSubscribeVolume } from '../../../pkg/jwpAdapter';
 import { noop } from '../../../helpers/utils';
 import { isPlayerReady } from '../../../pkg/jwpAdapter/adapter';
+import { playerIsMutedSelector } from '../../../redux/selectors';
 
 export const VolumeKnob = ({ onChangePosition }) => {
   const [activated, setActivated] = useState(false);
-  const isMuted                   = useSelector(state => player.isMuted(state.player));
+  const isMuted                   = useSelector(playerIsMutedSelector);
   const volume                    = useSubscribeVolume();
 
   const isReady     = isPlayerReady();

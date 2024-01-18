@@ -3,9 +3,10 @@ import moment from 'moment';
 
 import { LANG_UKRAINIAN } from '../helpers/consts';
 import { changeDirection, getCurrentDirection, getLanguageDirection } from '../helpers/i18n-utils';
-import { selectors as settings, types } from '../redux/modules/settings';
+import { types } from '../redux/modules/settings';
 import { actions as mbdActions } from '../redux/modules/mdb';
 import i18n from '../helpers/i18nnext';
+import { settingsGetUILangSelector } from '../redux/selectors';
 
 function changeDirectionIfNeeded(language) {
   const currentDirection = getCurrentDirection() || 'ltr';
@@ -17,7 +18,7 @@ function changeDirectionIfNeeded(language) {
 }
 
 function* setLanguages(action) {
-  const uiLang    = yield select(state => settings.getUILang(state.settings));
+  const uiLang    = yield select(settingsGetUILangSelector);
   const newUILang = (action.type === types['settings/setURLLanguage'] ? action.payload : action.payload.uiLang) || uiLang;
 
   i18n.changeLanguage(newUILang, err => {

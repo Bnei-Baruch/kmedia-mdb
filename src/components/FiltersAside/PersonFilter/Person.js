@@ -3,19 +3,19 @@ import { withTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
 import { FN_PERSON } from '../../../helpers/consts';
-import { selectors } from '../../../redux/modules/filtersAside';
 import FilterHeader from '../FilterHeader';
 import PersonItem from './PersonItem';
+import { filtersAsideGetTreeSelector } from '../../../redux/selectors';
 
 const Person = ({ namespace, t }) => {
-  const items = useSelector(state => selectors.getTree(state.filtersAside, namespace, FN_PERSON));
+  const items = useSelector(state => filtersAsideGetTreeSelector(state, namespace, FN_PERSON));
 
   return (
     <FilterHeader
       filterName={FN_PERSON}
       children={
         <>
-          {items.map(id => <PersonItem namespace={namespace} id={id} key={id} />)}
+          {items.map(id => <PersonItem namespace={namespace} id={id} key={id}/>)}
         </>
       }
     />

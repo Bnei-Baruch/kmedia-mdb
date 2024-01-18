@@ -5,9 +5,8 @@ import { useParams } from 'react-router-dom';
 import { Grid, Header, Image } from 'semantic-ui-react';
 import clsx from 'clsx';
 
-import { actions as assetsActions, selectors as assetsSelectors } from '../../../redux/modules/assets';
-import { selectors as siteSettings } from '../../../redux/modules/settings';
-import { actions as mdbActions, selectors, selectors as mdb } from '../../../redux/modules/mdb';
+import { actions as assetsActions } from '../../../redux/modules/assets';
+import { actions as mdbActions } from '../../../redux/modules/mdb';
 import { getLangPropertyDirection, getLanguageDirection } from '../../../helpers/i18n-utils';
 import { physicalFile, strCmp } from '../../../helpers/utils';
 import { SectionLogo } from '../../../helpers/images';
@@ -23,6 +22,7 @@ import ScrollToSearch from '../../shared/DocToolbar/ScrollToSearch';
 import TagsByUnit from '../../shared/TagsByUnit';
 import LikutAudioPlayer from './LikutAudioPlayer';
 import Helmets from '../../shared/Helmets';
+import { settingsGetContentLanguagesSelector, mdbGetDenormContentUnitSelector, assetsGetDoc2htmlByIdSelector, mdbGetErrorsSelector, mdbGetFullUnitFetchedSelector, settingsGetUILangSelector, mdbGetWipFn } from '../../../redux/selectors';
 
 const DEFAULT_LANGUAGES      = [LANG_ENGLISH, LANG_HEBREW];
 export const selectLikutFile = (files, language, idx = 0) => {
@@ -43,13 +43,13 @@ const Likut = () => {
   const { id } = useParams();
   const { t }  = useTranslation();
 
-  const unit             = useSelector(state => selectors.getDenormContentUnit(state.mdb, id));
-  const fetched          = useSelector(state => mdb.getFullUnitFetched(state.mdb)[id]);
-  const wip              = useSelector(state => selectors.getWip(state.mdb).units[id]);
-  const err              = useSelector(state => selectors.getErrors(state.mdb).units[id]);
-  const uiLang           = useSelector(state => siteSettings.getUILang(state.settings));
-  const contentLanguages = useSelector(state => siteSettings.getContentLanguages(state.settings));
-  const doc2htmlById     = useSelector(state => assetsSelectors.getDoc2htmlById(state.assets));
+  const unit             = useSelector(state => mdbGetDenormContentUnitSelector(state, id));
+  const fetched          = useSelector(mdbGetFullUnitFetchedSelector)[id];
+  const wip              = useSelector(mdbGetWipFn).units[id];
+  const err              = useSelector(mdbGetErrorsSelector).units[id];
+  const uiLang           = useSelector(settingsGetUILangSelector);
+  const contentLanguages = useSelector(settingsGetContentLanguagesSelector);
+  const doc2htmlById     = useSelector(assetsGetDoc2htmlByIdSelector);
 
   const [isReadable, setIsReadable] = useState(false);
   const [settings, setSettings]     = useState(null);

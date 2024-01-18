@@ -5,11 +5,11 @@ import { useParams } from 'react-router-dom';
 import { Container, Grid, Segment } from 'semantic-ui-react';
 import { withTranslation } from 'react-i18next';
 
-import { actions as assetsActions, selectors } from '../../../redux/modules/assets';
-import { selectors as settings } from '../../../redux/modules/settings';
+import { actions as assetsActions } from '../../../redux/modules/assets';
 import WipErr from '../../shared/WipErr/WipErr';
 import { cmsUrl, Requests } from '../../../helpers/Api';
 import { publicFile } from '../../../helpers/utils';
+import { settingsGetContentLanguagesSelector, assetsGetPersonSelector } from '../../../redux/selectors';
 
 // Convert WP images to full URL+imaginary
 const convertImages = content => {
@@ -40,8 +40,8 @@ const convertImages = content => {
 
 const LibraryPerson = ({ t }) => {
   const { id: sourceId }            = useParams();
-  const contentLanguages            = useSelector(state => settings.getContentLanguages(state.settings));
-  const { wip, err, data: content } = useSelector(state => selectors.getPerson(state.assets));
+  const contentLanguages            = useSelector(settingsGetContentLanguagesSelector);
+  const { wip, err, data: content } = useSelector(assetsGetPersonSelector);
   const dispatch                    = useDispatch();
 
   useEffect(

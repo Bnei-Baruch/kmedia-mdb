@@ -3,13 +3,13 @@ import { useSelector } from 'react-redux';
 
 import { FN_CONTENT_TYPE } from '../../../helpers/consts';
 import { isEmpty } from '../../../helpers/utils';
-import { selectors } from '../../../redux/modules/filtersAside';
 import FilterHeader from '../../FiltersAside/FilterHeader';
 import { SKETCHES_SHOWED_CTS } from './MainPage';
 import ContentTypeItem from '../../FiltersAside/ContentTypeFilter/ContentTypeItem';
+import { filtersAsideGetTreeSelector } from '../../../redux/selectors';
 
 const ContentTypeFilter = ({ namespace }) => {
-  const fetchedCTs = useSelector(state => selectors.getTree(state.filtersAside, namespace, FN_CONTENT_TYPE));
+  const fetchedCTs = useSelector(state => filtersAsideGetTreeSelector(state, namespace, FN_CONTENT_TYPE));
 
   const items = fetchedCTs.filter(ct => SKETCHES_SHOWED_CTS.includes(ct));
 
@@ -20,7 +20,7 @@ const ContentTypeFilter = ({ namespace }) => {
       children={
         <>
           {
-            items.map(x => <ContentTypeItem namespace={namespace} id={x} key={x} />)
+            items.map(x => <ContentTypeItem namespace={namespace} id={x} key={x}/>)
           }
         </>
       }

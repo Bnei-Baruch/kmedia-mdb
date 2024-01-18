@@ -2,11 +2,12 @@ import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import AudioPlayer from '../../shared/AudioPlayer';
-import { actions as assetsActions, selectors } from '../../../redux/modules/assets';
+import { actions as assetsActions } from '../../../redux/modules/assets';
 import { assetUrl } from '../../../helpers/Api';
+import { assetsGetMergeStatusSelector } from '../../../redux/selectors';
 
 const LikutAudioPlayer = ({ file, id, lang }) => {
-  const status   = useSelector(state => selectors.getMergeStatus(state.assets)(id, lang));
+  const status   = useSelector(assetsGetMergeStatusSelector)(id, lang);
   const dispatch = useDispatch();
 
   useEffect(() => {

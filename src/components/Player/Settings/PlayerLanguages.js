@@ -1,28 +1,25 @@
 import React from 'react';
-import { Button, Icon, Menu } from 'semantic-ui-react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { actions, selectors as player } from '../../../redux/modules/player';
-import { selectors as playlist } from '../../../redux/modules/playlist';
-import { actions as playlistActions, selectors as playlistSelectors } from '../../../redux/modules/playlist';
-import { withTranslation } from 'react-i18next';
+import { actions as playlistActions } from '../../../redux/modules/playlist';
 import MenuLanguageSelector from '../../Language/Selector/MenuLanguageSelector';
+import { playerGetFileSelector, playlistGetInfoSelector, playlistGetPlayedSelector } from '../../../redux/selectors';
 
 const PlayerLanguages = () => {
-  const { languages = [], isHLS } = useSelector(state => playlist.getPlayed(state.playlist));
-  let { language }                = useSelector(state => playlist.getInfo(state.playlist));
-  const file                      = useSelector(state => player.getFile(state.player));
-  const dispatch           = useDispatch();
+  const { languages = [], isHLS } = useSelector(playlistGetPlayedSelector);
+  let { language }                = useSelector(playlistGetInfoSelector);
+  const file                      = useSelector(playerGetFileSelector);
+  const dispatch                  = useDispatch();
 
   if (!isHLS) {
-    language = file.language;
+    language = file;
   } else if (!languages.includes(language)) {
     language = languages[0];
   }
 
   const handleSelect = lang => {
     dispatch(playlistActions.setLanguage(lang));
-  }
+  };
 
   return (
     <div className="controls__language">

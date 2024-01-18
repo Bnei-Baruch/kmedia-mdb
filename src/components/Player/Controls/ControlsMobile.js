@@ -9,16 +9,16 @@ import PlayPauseBg from './PlayPauseBg';
 import { Timecode } from './Timecode';
 import CloseBtn from './CloseBtn';
 import { PLAYER_OVER_MODES } from '../../../helpers/consts';
-import { selectors as player, selectors } from '../../../redux/modules/player';
 import { ProgressCtrl } from './ProgressCtrl';
 import MediaTypeControlMobile from '../Settings/MediaTypeControlMobile';
 import { setMute } from '../../../pkg/jwpAdapter/adapter';
 import { withTranslation } from 'react-i18next';
+import { playerGetOverModeSelector, playerIsLoadedSelector, playerIsMutedSelector } from '../../../redux/selectors';
 
 const ControlsMobile = ({ fullscreenRef, t }) => {
-  const mode    = useSelector(state => player.getOverMode(state.player));
-  const isMuted = useSelector(state => player.isMuted(state.player));
-  const loaded  = useSelector(state => selectors.isLoaded(state.player));
+  const mode    = useSelector(playerGetOverModeSelector);
+  const isMuted = useSelector(playerIsMutedSelector);
+  const loaded  = useSelector(playerIsLoadedSelector);
 
   return (
     <>
@@ -27,11 +27,11 @@ const ControlsMobile = ({ fullscreenRef, t }) => {
           ([PLAYER_OVER_MODES.share, PLAYER_OVER_MODES.playlist, PLAYER_OVER_MODES.tagging].includes(mode)) ? (
             <div className="controls__bar">
               <div className="flex-spacer"></div>
-              <CloseBtn className="controls__close" />
+              <CloseBtn className="controls__close"/>
             </div>
           ) : (
             <div className="controls__bar">
-              <MediaTypeControlMobile />
+              <MediaTypeControlMobile/>
               <div className="flex-spacer"></div>
               {
                 isMuted && (
@@ -43,32 +43,32 @@ const ControlsMobile = ({ fullscreenRef, t }) => {
                   />
                 )
               }
-              <SettingsBtn />
-              <ShareBtn />
+              <SettingsBtn/>
+              <ShareBtn/>
             </div>
           )
         }
 
         <div className="controls__bar">
-          <PrevBtn />
+          <PrevBtn/>
           <div className="flex-spacer"></div>
           {loaded && (
             <>
-              <SeekBackwardBtn />
-              <PlayPauseBg />
-              <SeekForwardBtn />
+              <SeekBackwardBtn/>
+              <PlayPauseBg/>
+              <SeekForwardBtn/>
             </>
           )}
           <div className="flex-spacer"></div>
-          <NextBtn />
+          <NextBtn/>
         </div>
         <div className="controls__bar">
-          <Timecode />
+          <Timecode/>
           <div className="flex-spacer"></div>
-          <FullscreenBtn fullscreenRef={fullscreenRef} />
+          <FullscreenBtn fullscreenRef={fullscreenRef}/>
         </div>
       </div>
-      <ProgressCtrl />
+      <ProgressCtrl/>
     </>
   );
 };

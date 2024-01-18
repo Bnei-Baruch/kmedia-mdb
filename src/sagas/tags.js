@@ -2,18 +2,18 @@ import { all, call, put, select, takeLatest } from 'redux-saga/effects';
 
 import Api from '../helpers/Api';
 import { actions, types } from '../redux/modules/tags';
-import { selectors as settings } from '../redux/modules/settings';
 import { selectors as filterSelectors } from '../redux/modules/filters';
 import { filtersTransformer } from '../filters';
 import { fetchViewsByUIDs } from './recommended';
 import { fetchCollectionsByIDs, fetchLabels, fetchUnitsByIDs } from './mdb';
+import { settingsGetContentLanguagesSelector, settingsGetUILangSelector } from '../redux/selectors';
 
 export function* fetchDashboard(action) {
   const { tag: id } = action.payload;
 
   try {
-    const uiLang           = yield select(state => settings.getUILang(state.settings));
-    const contentLanguages = yield select(state => settings.getContentLanguages(state.settings));
+    const uiLang           = yield select(settingsGetUILangSelector);
+    const contentLanguages = yield select(settingsGetContentLanguagesSelector);
 
     const filters      = yield select(state => filterSelectors.getFilters(state.filters, `topics_${id}`));
     const filterParams = filtersTransformer.toApiParams(filters) || {};

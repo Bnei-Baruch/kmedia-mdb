@@ -7,10 +7,8 @@ import { Container, Divider, CardGroup } from 'semantic-ui-react';
 
 import { MT_IMAGE, PAGE_NS_SKETCHES, UNIT_LESSONS_TYPE, CT_VIDEO_PROGRAM_CHAPTER } from '../../../helpers/consts';
 import { usePrevious, isEmpty } from '../../../helpers/utils';
-import { selectors as filters } from '../../../redux/modules/filters';
-import { actions, selectors as lists } from '../../../redux/modules/lists';
-import { actions as assetsActions, selectors as assets } from '../../../redux/modules/assets';
-import { selectors as settings } from '../../../redux/modules/settings';
+import { actions } from '../../../redux/modules/lists';
+import { actions as assetsActions } from '../../../redux/modules/assets';
 
 import FilterLabels from '../../FiltersAside/FilterLabels';
 import Pagination from '../../Pagination/Pagination';
@@ -22,6 +20,7 @@ import Filters from './Filters';
 import UnitItem from './UnitItem';
 import MediaHelper from '../../../helpers/media';
 import { isZipFile } from '../../Pages/WithPlayer/widgets/UnitMaterials/helper';
+import { settingsGetContentLanguagesSelector, listsGetNamespaceStateSelector, filtersGetNotEmptyFiltersSelector, settingsGetPageSizeSelector, assetsNestedGetZipByIdSelector } from '../../../redux/selectors';
 
 export const SKETCHES_SHOWED_CTS = [...UNIT_LESSONS_TYPE, CT_VIDEO_PROGRAM_CHAPTER];
 const FILTER_PARAMS              = {
@@ -32,11 +31,11 @@ const FILTER_PARAMS              = {
 };
 
 const MainPage = ({ t }) => {
-  const { items: cus, total } = useSelector(state => lists.getNamespaceState(state.lists, PAGE_NS_SKETCHES)) || {};
-  const contentLanguages      = useSelector(state => settings.getContentLanguages(state.settings));
-  const pageSize              = useSelector(state => settings.getPageSize(state.settings));
-  const selected              = useSelector(state => filters.getNotEmptyFilters(state.filters, PAGE_NS_SKETCHES), isEqual);
-  const getZipById            = useSelector(state => assets.nestedGetZipById(state.assets));
+  const { items: cus, total } = useSelector(state => listsGetNamespaceStateSelector(state, PAGE_NS_SKETCHES)) || {};
+  const contentLanguages      = useSelector(settingsGetContentLanguagesSelector);
+  const pageSize              = useSelector(settingsGetPageSizeSelector);
+  const selected              = useSelector(state => filtersGetNotEmptyFiltersSelector(state, PAGE_NS_SKETCHES), isEqual);
+  const getZipById            = useSelector(assetsNestedGetZipByIdSelector);
 
   const prevSel = usePrevious(selected);
 

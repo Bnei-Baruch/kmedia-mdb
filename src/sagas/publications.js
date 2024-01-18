@@ -2,7 +2,6 @@ import { call, put, select, takeLatest } from 'redux-saga/effects';
 
 import Api from '../helpers/Api';
 import { CT_ARTICLES } from '../helpers/consts';
-import { selectors as settings } from '../redux/modules/settings';
 import { actions, selectors, types } from '../redux/modules/publications';
 import { types as listTypes } from '../redux/modules/lists';
 import { filtersTransformer } from '../filters';
@@ -10,13 +9,14 @@ import { selectors as filterSelectors } from '../redux/modules/filters';
 import { setTab, updateQuery } from './helpers/url';
 import { isEmpty } from '../helpers/utils';
 import { actions as mbdActions } from '../redux/modules/mdb';
+import { settingsGetContentLanguagesSelector, settingsGetUILangSelector } from '../redux/selectors';
 
 export function* fetchTweets(action) {
   const filters = yield select(state => filterSelectors.getFilters(state.filters, 'publications-twitter'));
   const params  = filtersTransformer.toApiParams(filters) || {};
   try {
-    const uiLang           = yield select(state => settings.getUILang(state.settings));
-    const contentLanguages = yield select(state => settings.getContentLanguages(state.settings));
+    const uiLang           = yield select(settingsGetUILangSelector);
+    const contentLanguages = yield select(settingsGetContentLanguagesSelector);
     const args             = {
       ...action.payload,
       ...params,
@@ -35,8 +35,8 @@ export function* fetchBlogList(action) {
   const filters = yield select(state => filterSelectors.getFilters(state.filters, 'publications-blog'));
   const params  = filtersTransformer.toApiParams(filters) || {};
   try {
-    const uiLang           = yield select(state => settings.getUILang(state.settings));
-    const contentLanguages = yield select(state => settings.getContentLanguages(state.settings));
+    const uiLang           = yield select(settingsGetUILangSelector);
+    const contentLanguages = yield select(settingsGetContentLanguagesSelector);
     const args             = {
       ...action.payload,
       ...params,
@@ -73,8 +73,8 @@ function* fetchArticlesList(action) {
       return;
     }
 
-    const uiLang           = yield select(state => settings.getUILang(state.settings));
-    const contentLanguages = yield select(state => settings.getContentLanguages(state.settings));
+    const uiLang           = yield select(settingsGetUILangSelector);
+    const contentLanguages = yield select(settingsGetContentLanguagesSelector);
     const { data }         = yield call(Api.collections, {
       ui_language      : uiLang,
       content_languages: contentLanguages,
