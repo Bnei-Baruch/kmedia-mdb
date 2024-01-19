@@ -7,10 +7,8 @@ import { Container, Divider, CardGroup } from 'semantic-ui-react';
 
 import { MT_IMAGE, PAGE_NS_SKETCHES, UNIT_LESSONS_TYPE, CT_VIDEO_PROGRAM_CHAPTER } from '../../../helpers/consts';
 import { usePrevious, isEmpty } from '../../../helpers/utils';
-import { selectors as filters } from '../../../redux/modules/filters';
-import { actions, selectors as lists } from '../../../redux/modules/lists';
-import { unzipList, selectors as assets } from '../../../redux/modules/assets';
-import { selectors as settings } from '../../../redux/modules/settings';
+import { actions } from '../../../redux/modules/lists';
+import { actions as assetsActions } from '../../../redux/modules/assets';
 
 import FilterLabels from '../../FiltersAside/FilterLabels';
 import Pagination from '../../Pagination/Pagination';
@@ -22,21 +20,22 @@ import Filters from './Filters';
 import UnitItem from './UnitItem';
 import MediaHelper from '../../../helpers/media';
 import { isZipFile } from '../../Pages/WithPlayer/widgets/UnitMaterials/helper';
+import { settingsGetContentLanguagesSelector, listsGetNamespaceStateSelector, filtersGetNotEmptyFiltersSelector, settingsGetPageSizeSelector, assetsNestedGetZipByIdSelector } from '../../../redux/selectors';
 
 export const SKETCHES_SHOWED_CTS = [...UNIT_LESSONS_TYPE, CT_VIDEO_PROGRAM_CHAPTER];
 const FILTER_PARAMS              = {
   content_type: SKETCHES_SHOWED_CTS,
-  media_type: MT_IMAGE,
-  withViews: false,
-  with_files: true,
+  media_type  : MT_IMAGE,
+  withViews   : false,
+  with_files  : true
 };
 
 const MainPage = ({ t }) => {
-  const { items: cus, total } = useSelector(state => lists.getNamespaceState(state.lists, PAGE_NS_SKETCHES)) || {};
-  const contentLanguages      = useSelector(state => settings.getContentLanguages(state.settings));
-  const pageSize              = useSelector(state => settings.getPageSize(state.settings));
-  const selected              = useSelector(state => filters.getNotEmptyFilters(state.filters, PAGE_NS_SKETCHES), isEqual);
-  const getZipById            = useSelector(state => assets.nestedGetZipById(state.assets));
+  const { items: cus, total } = useSelector(state => listsGetNamespaceStateSelector(state, PAGE_NS_SKETCHES)) || {};
+  const contentLanguages      = useSelector(settingsGetContentLanguagesSelector);
+  const pageSize              = useSelector(settingsGetPageSizeSelector);
+  const selected              = useSelector(state => filtersGetNotEmptyFiltersSelector(state, PAGE_NS_SKETCHES), isEqual);
+  const getZipById            = useSelector(assetsNestedGetZipByIdSelector);
 
   const prevSel = usePrevious(selected);
 
@@ -67,12 +66,12 @@ const MainPage = ({ t }) => {
 
   useEffect(() => {
     if (!wipAll && zipIdsForFetch?.length > 0) {
-      dispatch(unzipList(zipIdsForFetch));
+      dispatch(assetsActions.unzipList(zipIdsForFetch));
     }
   }, [dispatch, zipIdsForFetch, wipAll]);
 
   return (<>
-    <SectionHeader section="sketches" />
+    <SectionHeader section="sketches"/>
     <SectionFiltersWithMobile
       namespace={PAGE_NS_SKETCHES}
       filters={
@@ -82,15 +81,15 @@ const MainPage = ({ t }) => {
         />
       }
     >
-      <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} />
-      <FilterLabels namespace={PAGE_NS_SKETCHES} />
+      <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize}/>
+      <FilterLabels namespace={PAGE_NS_SKETCHES}/>
       <CardGroup itemsPerRow={4} doubling stackable>
         {
-          cus?.map(({ id }) => <UnitItem id={id} key={id} />)
+          cus?.map(({ id }) => <UnitItem id={id} key={id}/>)
         }
       </CardGroup>
 
-      <Divider fitted />
+      <Divider fitted/>
       <Container className="padded pagination-wrapper" textAlign="center">
         {total > 0 && <Pagination
           pageNo={pageNo}

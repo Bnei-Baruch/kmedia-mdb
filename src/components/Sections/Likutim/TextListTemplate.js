@@ -7,11 +7,11 @@ import { Container, Header, Image, List } from 'semantic-ui-react';
 import { iconByContentTypeMap } from '../../../helpers/consts';
 import { SectionLogo } from '../../../helpers/images';
 import { canonicalLink } from '../../../helpers/links';
-import { selectors as mdb } from '../../../redux/modules/mdb';
 import Link from '../../Language/MultiLanguageLink';
+import { mdbGetDenormContentUnitSelector } from '../../../redux/selectors';
 
 const TextListTemplate = ({ cuID, t }) => {
-  const cu = useSelector(state => mdb.getDenormContentUnit(state.mdb, cuID));
+  const cu = useSelector(state => mdbGetDenormContentUnitSelector(state, cuID));
 
   if (!cu) return null;
 
@@ -25,10 +25,10 @@ const TextListTemplate = ({ cuID, t }) => {
       className="text_item"
     >
       <Image verticalAlign="top">
-        <SectionLogo name={icon} height="60" width="60" />
+        <SectionLogo name={icon} height="60" width="60"/>
       </Image>
       <Container className="text_item__content">
-        <Header as={Link} to={to} content={name} />
+        <Header as={Link} to={to} content={name}/>
         <Container className="description is_single">
           <span>{t('values.date', { date: film_date })}</span>
         </Container>
@@ -38,7 +38,7 @@ const TextListTemplate = ({ cuID, t }) => {
 };
 
 TextListTemplate.propTypes = {
-  cuID: PropTypes.string,
+  cuID: PropTypes.string
 };
 
 export default withTranslation()(TextListTemplate);

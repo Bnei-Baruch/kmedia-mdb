@@ -4,15 +4,14 @@ import moment from 'moment';
 import { Button, Card, Confirm, Header } from 'semantic-ui-react';
 
 import { actions } from '../../../../redux/modules/my';
-import { selectors as mdb } from '../../../../redux/modules/mdb';
-import { actions as statsActions, selectors as stats } from '../../../../redux/modules/stats';
+import { actions as statsActions } from '../../../../redux/modules/stats';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import { MY_NAMESPACE_SUBSCRIPTIONS, SECTIONS_LINK_BY_CU_CONTENT_TYPE } from '../../../../helpers/consts';
 import { canonicalLink } from '../../../../helpers/links';
 import Link from '../../../Language/MultiLanguageLink';
 import UnitLogo from '../../../shared/Logo/UnitLogo';
 import { getMyItemKey } from '../../../../helpers/my';
-import { selectors as settings } from '../../../../redux/modules/settings';
+import { statsGetCUSelector, mdbGetDenormCollectionSelector, settingsGetUIDirSelector } from '../../../../redux/selectors';
 
 export const SubscriptionsItem = ({ item, t }) => {
   const [confirm, setConfirm] = useState();
@@ -21,10 +20,10 @@ export const SubscriptionsItem = ({ item, t }) => {
 
   const { key } = getMyItemKey(MY_NAMESPACE_SUBSCRIPTIONS, item);
 
-  const collection = useSelector(state => mdb.getDenormCollection(state.mdb, item.collection_uid));
-  const cuStats    = useSelector(state => stats.getCUStats(state.stats, key));
+  const collection = useSelector(state => mdbGetDenormCollectionSelector(state, item.collection_uid));
+  const cuStats    = useSelector(state => statsGetCUSelector(state, key));
 
-  const uiDir = useSelector(state => settings.getUIDir(state.settings));
+  const uiDir = useSelector(settingsGetUIDirSelector);
 
   const dispatch = useDispatch();
   const remove   = () => setConfirm(true);
@@ -44,7 +43,7 @@ export const SubscriptionsItem = ({ item, t }) => {
 
       const params = {
         start_date: start.format('YYYY-MM-DD'),
-        end_date: end.format('YYYY-MM-DD'),
+        end_date  : end.format('YYYY-MM-DD'),
         count_only: true
       };
       if (item.collection_uid) params.collection = [item.collection_uid];
@@ -56,13 +55,13 @@ export const SubscriptionsItem = ({ item, t }) => {
 
   let logo, title, to;
   if (item.collection_uid) {
-    logo  = <UnitLogo collectionId={collection?.id} width={isMobileDevice ? 300 : 700} />;
+    logo  = <UnitLogo collectionId={collection?.id} width={isMobileDevice ? 300 : 700}/>;
     title = collection?.name;
-    to  = canonicalLink(collection);
+    to    = canonicalLink(collection);
   } else {
-    logo  = <UnitLogo unitId={item.content_unit_uid} width={isMobileDevice ? 300 : 700} />;
+    logo  = <UnitLogo unitId={item.content_unit_uid} width={isMobileDevice ? 300 : 700}/>;
     title = t(`constants.content-types.${item.content_type}`);
-    to  = { pathname: `/${SECTIONS_LINK_BY_CU_CONTENT_TYPE[item.content_type]}` };
+    to    = { pathname: `/${SECTIONS_LINK_BY_CU_CONTENT_TYPE[item.content_type]}` };
   }
 
   return (
@@ -74,7 +73,7 @@ export const SubscriptionsItem = ({ item, t }) => {
             {title}
           </Link>
         </Header>
-        <Card.Meta content={`${t('personal.subsNewUnits')} - ${cuStats?.data?.total || 0}`} />
+        <Card.Meta content={`${t('personal.subsNewUnits')} - ${cuStats?.data?.total || 0}`}/>
       </Card.Content>
       <Card.Content extra textAlign="center">
         <Confirm

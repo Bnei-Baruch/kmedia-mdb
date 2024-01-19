@@ -81,6 +81,7 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
+    "@adobe/css-tools": "^4.3.2",
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@babel/plugin-proposal-throw-expressions": "^7.23.3",
     "@babel/plugin-syntax-dynamic-import": "^7.8.3",
@@ -116,7 +117,7 @@
     "i18next-fs-backend": "^2.1.1",
     "i18next-http-backend": "^2.2.0",
     "ignore-styles": "^5.0.1",
-    "immer": "^9.0.19",
+    "immer": "9.0.19",
     "invariant": "^2.2.4",
     "iphone-inline-video": "^2.2.2",
     "jaybe-react-loadable": "^5.6.0",

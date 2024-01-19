@@ -13,8 +13,6 @@ import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { isEqual } from 'lodash';
 import { useLocation } from 'react-router-dom';
 import { withTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
-import { selectors as settings } from '../../../redux/modules/settings';
 import HomeBanners from './HomeBanners';
 
 const renderBlogPosts = (latestBlogPosts, uiLang, t) =>

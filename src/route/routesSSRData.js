@@ -3,14 +3,19 @@ import moment from 'moment';
 import { getPageFromLocation } from '../components/Pagination/withPagination';
 import { tabs as pulicationsTabs } from '../components/Sections/Publications/MainPage';
 import { isTaas } from '../components/shared/PDF/PDF';
+import { getTextFiles as transcriptGetTextFiles, selectFile as transcriptSelectFile } from '../components/Pages/WithPlayer/widgets/UnitMaterials/Transcription/Transcription';
+import { getFile as summaryGetFile, getSummaryLanguages } from '../components/Pages/WithPlayer/widgets/UnitMaterials/Summary/Summary';
 
 import {
   COLLECTION_PROGRAMS_TYPE,
   CT_ARTICLE,
+  CT_CLIP,
   CT_FRIENDS_GATHERING,
   CT_LECTURE,
   CT_LESSON_PART,
+  CT_LESSONS,
   CT_MEAL,
+  CT_VIDEO_PROGRAM_CHAPTER,
   CT_VIRTUAL_LESSON,
   CT_VIRTUAL_LESSONS,
   CT_WOMEN_LESSON,
@@ -30,7 +35,7 @@ import MediaHelper from './../helpers/media';
 import { getQuery } from '../helpers/url';
 import { canonicalCollection, isEmpty } from '../helpers/utils';
 import { selectSuitableLanguage } from '../helpers/language';
-import { doc2html, sourceIndex, sourceIndexSuccess } from '../redux/modules/assets';
+import { actions as assetActions } from '../redux/modules/assets';
 import { actions as eventsActions } from './../redux/modules/events';
 import { actions as filtersActions } from './../redux/modules/filters';
 import { actions as homeActions } from './../redux/modules/home';
@@ -38,12 +43,12 @@ import { actions as listsActions } from './../redux/modules/lists';
 import { actions as mdbActions, selectors as mdbSelectors } from './../redux/modules/mdb';
 import { actions as musicActions } from './../redux/modules/music';
 import { actions as prepareActions } from './../redux/modules/preparePage';
-import { actions as publicationsActions } from './../redux/modules/publications';
+import { actions as publications, actions as publicationsActions } from './../redux/modules/publications';
 import { actions as searchActions } from './../redux/modules/search';
 import { selectors as settings, selectors as settingsSelectors } from './../redux/modules/settings';
 import { actions as simpleModeActions } from './../redux/modules/simpleMode';
-import { selectors as sourcesSelectors } from './../redux/modules/sources';
-import { actions as tagsActions } from './../redux/modules/tags';
+import { actions as sources, setById } from './../redux/modules/sources';
+import { actions as tags, actions as tagsActions } from './../redux/modules/tags';
 import * as eventsSagas from './../sagas/events';
 import * as filtersSagas from './../sagas/filters';
 import * as mdbSagas from './../sagas/mdb';
@@ -55,6 +60,7 @@ import { getLibraryContentFile } from '../components/Sections/Library/Library';
 import { selectLikutFile } from '../components/Sections/Likutim/Likut';
 import Api from '../helpers/Api';
 import { cuFilesToData, getSourceIndexId } from '../sagas/helpers/utils';
+import { mdbGetDenormContentUnitSelector } from '../redux/selectors';
 
 export const home = store => {
   store.dispatch(homeActions.fetchData(true));
@@ -71,8 +77,51 @@ export const cuPage = (store, match) => {
     .then(() => {
       const state = store.getState();
 
-      const unit = mdbSelectors.getDenormContentUnit(state.mdb, cuID);
-      const c    = canonicalCollection(unit);
+      const unit = mdbGetDenormContentUnitSelector(state, cuID);
+
+      let activeTab = 'transcription';
+      if ([...CT_LESSONS, CT_VIDEO_PROGRAM_CHAPTER, CT_VIRTUAL_LESSON, CT_CLIP].includes(unit.content_type)) {
+        activeTab = 'summary';
+      }
+
+      if (match && match.parsedURL && match.parsedURL.searchParams) {
+        for (const [key, value] of match.parsedURL.searchParams) {
+          if (key === 'activeTab') {
+            activeTab = value;
+            break;
+          }
+        }
+      }
+
+      // Select transcript file by language.
+      const contentLanguages = settingsSelectors.getContentLanguages(state.settings);
+      console.log('contentLanguages', contentLanguages);
+      let file = null;
+      switch (activeTab) {
+        case 'transcription':
+        case 'research':
+        case 'articles':
+          const textFiles = transcriptGetTextFiles(unit, activeTab === 'transcription' ? '' : activeTab);
+          const transcriptLanguages = uniq(textFiles.map(x => x.language));
+          const transcriptLanguage = selectSuitableLanguage(contentLanguages, transcriptLanguages, unit.original_language, /*defaultReturnLanguage=*/ '');
+          file = transcriptSelectFile(textFiles, transcriptLanguage);
+          break;
+        case 'summary':
+          const summaryLanguages = getSummaryLanguages(unit);
+          const summaryLanguage = selectSuitableLanguage(contentLanguages, summaryLanguages, unit.original_language);
+          file = summaryGetFile(unit, summaryLanguage);
+          break;
+        default:
+          console.warn('Unsupported active tab', activeTab);
+          break;
+      }
+
+      if (file && file.id) {
+        // Load html.
+        store.dispatch(assetActions.doc2html(file.id));
+      }
+
+      const c = canonicalCollection(unit);
       if (c) {
         store.dispatch(mdbActions.fetchCollection(c.id));
       }
@@ -173,7 +222,6 @@ export const simpleMode = (store, match) => {
   const query = getQuery(match.parsedURL);
   const date  = (query.date && moment(query.date).isValid()) ? moment(query.date, 'YYYY-MM-DD').format('YYYY-MM-DD') : moment().format('YYYY-MM-DD');
 
-  console.log('routesSSRData, simpleMode', date);
   store.dispatch(simpleModeActions.fetchForDate({ date }));
   return Promise.resolve(null);
 };
@@ -193,48 +241,49 @@ export const searchPage = store => (Promise.all([
   store.sagaMiddleWare.run(filtersSagas.hydrateFilters, filtersActions.hydrateFilters('search')).done
 ]).then(() => store.dispatch(searchActions.search())));
 
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-function firstLeafId(sourceId, getSourceById) {
-  const { children } = getSourceById(sourceId) || { children: [] };
+function firstLeafId(sourceId, sourcesList, uiLang) {
+  const byId         = setById(sourcesList, uiLang);
+  const { children } = byId[sourceId] || { children: [] };
   if (isEmpty(children)) {
     return sourceId;
   }
 
-  return firstLeafId(children[0], getSourceById);
+  return firstLeafId(children[0], sourcesList, uiLang);
 }
 
-const ensureIsLoaded = async (state, selector) => {
-  // This is a rather ugly, timeout, sleep, loop.
-  // We wait for sources to be loaded so we could
-  // determine the firstLeafID for redirection.
-  // Fix for AR-356
-  let timeout = 5000;
-  while (timeout && !selector(state)) {
-    timeout -= 10;
-    // eslint-disable-next-line no-await-in-loop
-    await sleep(10);
-  }
+const fetchSQData = async (store, uiLang, contentLanguages) => {
+  let sourcesList;
+  return await Api.sqdata({
+    ui_language      : uiLang,
+    content_languages: contentLanguages
+  }).then(({ data }) => {
+    sourcesList = data.sources;
+    store.dispatch(sources.receiveSources({ sources: sourcesList, uiLang }));
+    store.dispatch(tags.receiveTags(data.tags));
+    store.dispatch(publications.receivePublishers(data.publishers));
+    store.dispatch(mdbActions.receivePersons(data.persons));
+    store.dispatch(mdbActions.fetchSQDataSuccess());
+    return sourcesList;
+  }).catch(err => store.dispatch(mdbActions.fetchSQDataFailure(err)));
 };
 
 export const libraryPage = async (store, match, show_console = false) => {
-  const state        = store.getState();
-  const sourcesState = state.sources;
+  show_console = true;
 
+  const state            = store.getState();
+  const location         = state?.router.location ?? {};
+  const query            = getQuery(location);
+  const uiLang           = query.language || settings.getUILang(state.settings);
+  const contentLanguages = settingsSelectors.getContentLanguages(state.settings);
   show_console && console.log('serverRender: libraryPage before fetch sources');
-  await ensureIsLoaded(sourcesState, sourcesSelectors.areSourcesLoaded);
+  const sourcesList = await fetchSQData(store, uiLang, contentLanguages);
 
-  show_console && console.log('serverRender: libraryPage sources was fetched', match.params.id, Object.keys(sourcesState.byId).length);
+  show_console && console.log('serverRender: libraryPage sources was fetched', match.params.id, sourcesList.length);
   let sourceID = match.params.id;
-  if (sourcesSelectors.areSourcesLoaded(sourcesState)) {
-    const getSourceById = sourcesSelectors.getSourceById(sourcesState);
-    sourceID            = firstLeafId(sourceID, getSourceById);
-  }
-
+  sourceID     = firstLeafId(sourceID, sourcesList, uiLang);
   show_console && console.log('serverRender: libraryPage source was found', sourceID);
-  const sourceIndexAction  = sourceIndex(sourceID);
+
+  const sourceIndexAction  = assetActions.sourceIndex(sourceID);
   const id                 = getSourceIndexId(sourceIndexAction);
   const sourceIndexPromise = new Promise(resolve => {
     Api.unit({ id })
@@ -253,12 +302,9 @@ export const libraryPage = async (store, match, show_console = false) => {
       }
 
       // add it to redux
-      store.dispatch(sourceIndexSuccess(sourceIndexAction.type, { id: sourceIndexAction.payload, data }));
+      store.dispatch(assetActions.sourceIndexSuccess(sourceIndexAction.type, { id: sourceIndexAction.payload, data }));
 
       let language    = null;
-      const location  = state?.router.location ?? {};
-      const query     = getQuery(location);
-      const uiLang    = query.language || settings.getUILang(state.settings);
       const languages = [...Object.keys(data)];
       if (languages.length > 0) {
         language = languages.indexOf(uiLang) === -1 ? languages[0] : uiLang;
@@ -270,7 +316,7 @@ export const libraryPage = async (store, match, show_console = false) => {
         }
 
         const { id } = getLibraryContentFile(data[language], sourceID);
-        store.dispatch(doc2html(id));
+        store.dispatch(assetActions.doc2html(id));
         store.dispatch(mdbActions.fetchLabels({ content_unit: sourceID, language: uiLang }));
       }
     });
@@ -290,11 +336,11 @@ export const likutPage = async (store, match, show_console = false) => {
     .then(() => {
       const state            = store.getState();
       const contentLanguages = settingsSelectors.getContentLanguages(state.settings);
-      const likut            = mdbSelectors.getDenormContentUnit(state.mdb, id);
+      const likut            = mdbGetDenormContentUnitSelector(state, id);
       const likutimLanguages = ((likut && likut.files) || []).map(f => f.language);
       const defaultLanguage  = selectSuitableLanguage(contentLanguages, likutimLanguages, LANG_HEBREW);
       const file             = selectLikutFile(likut?.files, defaultLanguage);
-      store.dispatch(doc2html(file?.id));
+      store.dispatch(assetActions.doc2html(file?.id));
     });
 };
 
@@ -387,7 +433,7 @@ export const articleCUPage = (store, match) => {
       let language = null;
       const uiLang = settingsSelectors.getUILang(state.settings);
 
-      const unit = mdbSelectors.getDenormContentUnit(state.mdb, cuID);
+      const unit = mdbGetDenormContentUnitSelector(state, cuID);
       if (!unit) {
         return;
       }
@@ -400,7 +446,7 @@ export const articleCUPage = (store, match) => {
 
       if (language) {
         const selected = textFiles.find(x => x.language === language) || textFiles[0];
-        store.dispatch(doc2html(selected.id));
+        store.dispatch(assetActions.doc2html(selected.id));
       }
 
       const c = canonicalCollection(unit);

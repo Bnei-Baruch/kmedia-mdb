@@ -5,19 +5,18 @@ import { useLocation, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Container, Grid, Header } from 'semantic-ui-react';
 
-import { actions, selectors } from '../../../../../redux/modules/mdb';
-import { selectors as settings } from '../../../../../redux/modules/settings';
+import { actions as mdbActions } from '../../../../../redux/modules/mdb';
 import Helmets from '../../../../shared/Helmets/index';
 import TranscriptionContainer
   from '../../../../Pages/WithPlayer/widgets/UnitMaterials/Transcription/TranscriptionContainer';
 import Share from '../../../Library/Share';
-import { isLanguageRtl } from '../../../../../helpers/i18n-utils';
 import MediaDownloads from '../../../../Pages/WithPlayer/widgets/MediaDownloads';
 import WipErr from '../../../../shared/WipErr/WipErr';
 import Recommended from '../../../../Pages/WithPlayer/widgets/Recommended/Main/Recommended';
 import { getEmbedFromQuery } from '../../../../../helpers/player';
 import { ClientChroniclesContext } from '../../../../../helpers/app-contexts';
 import TagsByUnit from '../../../../shared/TagsByUnit';
+import { mdbGetDenormContentUnitSelector, mdbGetErrorsSelector, settingsGetUIDirSelector, mdbGetWipFn } from '../../../../../redux/selectors';
 
 const renderHeader = (unit, t, uiDir) => {
   const position = uiDir === 'rtl' ? 'right' : 'left';
@@ -48,9 +47,9 @@ const renderHeader = (unit, t, uiDir) => {
                 {t('values.date', { date: unit.film_date })}
               </Header>
               <span className="share-publication">
-                <Share position={position} />
+                <Share position={position}/>
               </span>
-              <TagsByUnit id={unit.id} />
+              <TagsByUnit id={unit.id}/>
             </Grid.Column>
           </Grid.Row>
         </Grid>
@@ -61,8 +60,8 @@ const renderHeader = (unit, t, uiDir) => {
 
 const renderHelmet = unit => (
   <Fragment>
-    <Helmets.NoIndex />
-    <Helmets.ArticleUnit unit={unit} />
+    <Helmets.NoIndex/>
+    <Helmets.ArticleUnit unit={unit}/>
   </Fragment>
 );
 
@@ -70,12 +69,12 @@ const renderArticle = (unit, chroniclesAppend) => (
   <Grid padded>
     <Grid.Row>
       <Grid.Column>
-        <TranscriptionContainer unit={unit} />
+        <TranscriptionContainer unit={unit}/>
       </Grid.Column>
     </Grid.Row>
     <Grid.Row>
       <Grid.Column>
-        <MediaDownloads unit={unit} displayDivider={true} chroniclesAppend={chroniclesAppend} />
+        <MediaDownloads unit={unit} displayDivider={true} chroniclesAppend={chroniclesAppend}/>
       </Grid.Column>
     </Grid.Row>
   </Grid>
@@ -86,10 +85,10 @@ const ArticlePage = ({ t }) => {
   const { id }     = useParams();
   const chronicles = useContext(ClientChroniclesContext);
 
-  const uiDir = useSelector(state => settings.getUIDir(state.settings));
-  const unit  = useSelector(state => selectors.getDenormContentUnit(state.mdb, id));
-  const wip   = useSelector(state => selectors.getWip(state.mdb).units[id]);
-  const err   = useSelector(state => selectors.getErrors(state.mdb).units[id]);
+  const uiDir = useSelector(settingsGetUIDirSelector);
+  const unit  = useSelector(state => mdbGetDenormContentUnitSelector(state, id));
+  const wip   = useSelector(mdbGetWipFn).units[id];
+  const err   = useSelector(mdbGetErrorsSelector).units[id];
 
   const dispatch = useDispatch();
 
@@ -98,7 +97,7 @@ const ArticlePage = ({ t }) => {
       return;
     }
 
-    dispatch(actions.fetchUnit(id));
+    dispatch(mdbActions.fetchUnit(id));
   }, [dispatch, err, id, unit, wip]);
 
   const wipErr = WipErr({ wip, err, t });
@@ -131,7 +130,7 @@ const ArticlePage = ({ t }) => {
                 </Grid.Row>
               </Grid.Column>
               <Grid.Column mobile={16} tablet={6} computer={6}>
-                <Recommended unit={unit} />
+                <Recommended unit={unit}/>
               </Grid.Column>
             </Grid.Row>
           </Grid>
@@ -143,7 +142,7 @@ const ArticlePage = ({ t }) => {
 };
 
 ArticlePage.propTypes = {
-  t: PropTypes.func.isRequired,
+  t: PropTypes.func.isRequired
 };
 
 export default withTranslation()(ArticlePage);

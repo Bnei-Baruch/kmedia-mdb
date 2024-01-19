@@ -1,56 +1,53 @@
-import { createAction, handleActions } from 'redux-actions';
-import { types as authTypes } from './auth';
-import { types as playerTypes } from './player';
+import { createSlice } from '@reduxjs/toolkit';
+import { actions as recommended } from './recommended';
+import { actions as search } from './search';
+import { actions as player } from './player';
 
-const USER_INACTIVE         = 'USER_INACTIVE';
-const PLAYER_PAUSE_ON_LEAVE = 'PLAYER_PAUSE_ON_LEAVE';
-
-export const types = {
-  USER_INACTIVE,
+const onAction = (state, action) => {
+  state.actionsCount = state.actionsCount + 1;
+  state.lastAction   = action;
 };
 
-// Actions
-const userInactive = createAction(USER_INACTIVE);
-const pauseOnLeave = createAction(PLAYER_PAUSE_ON_LEAVE);
+const chronicles = createSlice({
+  name        : 'chronicles',
+  initialState: {
+    actionsCount: 0,
+    lastAction  : null,
+    event       : null
+  },
 
-export const actions = {
-  userInactive,
-  pauseOnLeave
-};
+  reducers     : {
+    userInactive: () => ({}),
+    pauseOnLeave: state => void (state.event = 'player-stop')
+  },
+  extraReducers: builder => {
+    builder
+      .addCase(recommended.fetchRecommendedSuccess, onAction)
 
-/* Reducer */
-const initialState = {
-  actionsCount: 0,
-  lastAction: null,
-  event: null
-};
+      .addCase(search.autocompleteSuccess, onAction)
+      .addCase(search.searchSuccess, onAction)
 
-const onAction = (draft, payload) => {
-  draft.actionsCount = draft.actionsCount + 1;
-  draft.lastAction   = payload;
-  return draft;
-};
+      .addCase(player.playerPlay, state => void (state.event = 'player-play'))
+      .addCase(player.playerPause, state => void (state.event = 'player-stop'))
+      .addCase(player.playerRemove, state => void (state.event = 'player-stop'))
+      .addCase(player.playerToggleMute, state => void (state.event = 'mute-unmute'));
+  }
+});
 
-export const reducer = handleActions({
-  'FETCH_RECOMMENDED_SUCCESS': onAction,
-  'Search/AUTOCOMPLETE_SUCCESS': onAction,
-  'Search/SEARCH_SUCCESS': onAction,
+export default chronicles.reducer;
 
-  [authTypes.LOGIN_SUCCESS]: onAction,
-  [authTypes.LOGOUT_SUCCESS]: onAction,
+export const { actions } = chronicles;
 
-  [playerTypes.PLAYER_PLAY]: draft => ({ ...draft, event: 'player-play' }),
-  [playerTypes.PLAYER_PAUSE]: draft => ({ ...draft, event: 'player-stop' }),
-  [playerTypes.PLAYER_REMOVE]: draft => ({ ...draft, event: 'player-stop' }),
-  [PLAYER_PAUSE_ON_LEAVE]: draft => ({ ...draft, event: 'player-stop' }),
-  [playerTypes.PLAYER_TOGGLE_MUTE]: draft => ({ ...draft, event: 'mute-unmute' }),
+export const types = Object.fromEntries(new Map(
+  Object.values(chronicles.actions).map(a => [a.type, a.type])
+));
 
-}, initialState);
-
-const getLastAction = state => state.lastAction;
-const getEvent      = state => state.event;
+const getLastAction   = state => state.lastAction;
+const getActionsCount = state => state.actionsCount;
+const getEvent        = state => state.event;
 
 export const selectors = {
   getLastAction,
-  getEvent
+  getEvent,
+  getActionsCount
 };

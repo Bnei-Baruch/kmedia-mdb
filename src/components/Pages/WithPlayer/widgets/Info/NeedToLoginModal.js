@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Modal } from 'semantic-ui-react';
-import { selectors as settings } from '../../../../../redux/modules/settings';
 import NeedToLogin from '../../../../Sections/Personal/NeedToLogin';
+import { settingsGetUIDirSelector } from '../../../../../redux/selectors';
 
 const NeedToLoginModal = () => {
   const [open, setOpen] = useState(true);
-  const uiDir           = useSelector(state => settings.getUIDir(state.settings));
+  const uiDir           = useSelector(settingsGetUIDirSelector);
   const handleClose     = () => setOpen(false);
   return (
     <Modal
@@ -16,7 +16,7 @@ const NeedToLoginModal = () => {
       onClose={handleClose}
     >
       <Modal.Content>
-        <NeedToLogin />
+        <NeedToLogin/>
       </Modal.Content>
     </Modal>
   );

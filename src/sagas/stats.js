@@ -39,8 +39,8 @@ export function* callUnitsStats(args, namespace) {
 }
 
 function* watchFetchList() {
-  yield takeLatest([tags.FETCH_STATS], fetchCUStats);
-  yield takeEvery([stats.FETCH_CU_STATS], fetchCUStats);
+  yield takeLatest(tags['tags/fetchStats'], fetchCUStats);
+  yield takeEvery(stats['stats/fetchCUStats'], fetchCUStats);
 }
 
 export const sagas = [

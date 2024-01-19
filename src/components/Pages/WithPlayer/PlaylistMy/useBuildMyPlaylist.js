@@ -2,15 +2,16 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useLocation } from 'react-router-dom';
 
-import { actions, selectors } from '../../../../redux/modules/playlist';
+import { actions } from '../../../../redux/modules/playlist';
 import { getActivePartFromQuery } from '../../../../helpers/player';
+import { playlistGetInfoSelector, playlistGetPlaylistSelector } from '../../../../redux/selectors';
 
 const useBuildMyPlaylist = () => {
   const { id }   = useParams();
   const location = useLocation();
 
-  const { pId, id: itemId, wip } = useSelector(state => selectors.getInfo(state.playlist));
-  const items                  = useSelector(state => selectors.getPlaylist(state.playlist));
+  const { pId, id: itemId, wip } = useSelector(playlistGetInfoSelector);
+  const items                    = useSelector(playlistGetPlaylistSelector);
 
   const dispatch = useDispatch();
 

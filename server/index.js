@@ -27,7 +27,6 @@ require('@babel/register')({
 });
 
 require('dotenv').config();
-// console.log('env', process.env);
 
 const app = process.env.NODE_ENV === 'development'
   ? require('./app-dev')

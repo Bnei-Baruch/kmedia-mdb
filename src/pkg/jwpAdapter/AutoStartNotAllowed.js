@@ -1,10 +1,11 @@
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { selectors as player, actions } from '../../redux/modules/player';
+import { actions } from '../../redux/modules/player';
+import { playerIsReadySelector } from '../../redux/selectors';
 
 const AutoStartNotAllowed = () => {
-  const isReady = useSelector(state => player.isReady(state.player));
+  const isReady = useSelector(playerIsReadySelector);
 
   const dispatch = useDispatch();
   useEffect(() => {

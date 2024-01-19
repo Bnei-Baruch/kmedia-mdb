@@ -10,6 +10,7 @@ import { actions, selectors } from '../../../../../redux/modules/publications';
 import withPagination, { getPageFromLocation } from '../../../../Pagination/withPagination';
 import * as shapes from '../../../../shapes';
 import Page from './Page';
+import { settingsGetContentLanguagesSelector } from '../../../../../redux/selectors';
 
 class BlogContainer extends withPagination {
   static propTypes = {
@@ -128,7 +129,7 @@ export const mapState = (state, ownProps) => ({
   err: selectors.getBlogError(state.publications),
   pageNo: selectors.getBlogPageNo(state.publications),
   pageSize: settings.getPageSize(state.settings),
-  contentLanguages: settings.getContentLanguages(state.settings),
+  contentLanguages: settingsGetContentLanguagesSelector(state),
   isFiltersHydrated: filters.getIsHydrated(state.filters, ownProps.namespace),
 });
 

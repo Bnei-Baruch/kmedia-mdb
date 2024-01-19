@@ -7,10 +7,7 @@ import { Container, Divider } from 'semantic-ui-react';
 
 import { PAGE_NS_LESSONS } from '../../../helpers/consts';
 import { usePrevious } from '../../../helpers/utils';
-import { selectors as filters } from '../../../redux/modules/filters';
-import { actions, selectors as lists } from '../../../redux/modules/lists';
-import { selectors as mdb } from '../../../redux/modules/mdb';
-import { selectors as settings } from '../../../redux/modules/settings';
+import { actions } from '../../../redux/modules/lists';
 import FilterLabels from '../../FiltersAside/FilterLabels';
 import PageHeader from '../../Pages/Collection/Header';
 import Pagination from '../../Pagination/Pagination';
@@ -20,25 +17,32 @@ import SectionFiltersWithMobile from '../../shared/SectionFiltersWithMobile';
 import WipErr from '../../shared/WipErr/WipErr';
 import Filters from './Filters';
 import ItemOfList from './ItemOfList';
+import {
+  settingsGetContentLanguagesSelector,
+  mdbGetDenormCollectionSelector,
+  listsGetNamespaceStateSelector,
+  filtersGetNotEmptyFiltersSelector,
+  settingsGetPageSizeSelector
+} from '../../../redux/selectors';
 
 const LessonPage = ({ t }) => {
   const { id: cid } = useParams();
 
   const namespace = `${PAGE_NS_LESSONS}_${cid}`;
 
-  const collection = useSelector(state => mdb.getDenormCollection(state.mdb, cid));
+  const collection = useSelector(state => mdbGetDenormCollectionSelector(state, cid));
 
-  const { items, total, wip, err } = useSelector(state => lists.getNamespaceState(state.lists, namespace)) || {};
-  const contentLanguages           = useSelector(state => settings.getContentLanguages(state.settings));
-  const pageSize                   = useSelector(state => settings.getPageSize(state.settings));
-  const selected                   = useSelector(state => filters.getNotEmptyFilters(state.filters, namespace), isEqual);
+  const { items, total, wip, err } = useSelector(state => listsGetNamespaceStateSelector(state, namespace)) || {};
+  const contentLanguages           = useSelector(settingsGetContentLanguagesSelector);
+  const pageSize                   = useSelector(settingsGetPageSizeSelector);
+  const selected                   = useSelector(state => filtersGetNotEmptyFiltersSelector(state, namespace), isEqual);
   const prevSel                    = usePrevious(selected);
 
   const dispatch = useDispatch();
   const setPage  = useCallback(pageNo => dispatch(actions.setPage(namespace, pageNo)), [namespace, dispatch]);
 
-  const location   = useLocation();
-  const pageNo     = useMemo(() => getPageFromLocation(location) || 1, [location]);
+  const location = useLocation();
+  const pageNo = useMemo(() => getPageFromLocation(location) || 1, [location]);
   const baseParams = useMemo(() => ({ collection: [cid] }), [cid]);
 
   useEffect(() => {
@@ -52,7 +56,7 @@ const LessonPage = ({ t }) => {
   const wipErr = WipErr({ wip, err, t });
 
   return (<>
-    <PageHeader collection={collection} namespace={namespace} title="lessons-collection" />
+    <PageHeader collection={collection} namespace={namespace} title="lessons-collection"/>
 
     <SectionFiltersWithMobile
       namespace={namespace}
@@ -64,12 +68,12 @@ const LessonPage = ({ t }) => {
       }
     >
 
-      <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} />
-      <FilterLabels namespace={namespace} />
+      <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize}/>
+      <FilterLabels namespace={namespace}/>
       {
-        wipErr || items?.map((id, i) => <ItemOfList id={id} ccu={collection} key={i} />)
+        wipErr || items?.map((id, i) => <ItemOfList id={id} ccu={collection} key={i}/>)
       }
-      <Divider fitted />
+      <Divider fitted/>
       <Container className="padded pagination-wrapper" textAlign="center">
         {total > 0 && <Pagination
           pageNo={pageNo}

@@ -2,23 +2,23 @@ import React from 'react';
 import { withTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Button, Header, List } from 'semantic-ui-react';
+import { useParams } from 'react-router-dom';
 
 import {
   CT_CONGRESS,
   CT_DAILY_LESSON,
   CT_KTAIM_NIVCHARIM,
   CT_LESSONS_SERIES,
-  CT_SPECIAL_LESSON,
+  CT_SPECIAL_LESSON
 } from '../../../../../helpers/consts';
 import { canonicalLink } from '../../../../../helpers/links';
 import { cuPartNameByCCUType, intersperse } from '../../../../../helpers/utils';
 import Link from '../../../../Language/MultiLanguageLink';
 import PersonalInfo from './PersonalInfo';
-import { selectors as recommended } from '../../../../../redux/modules/recommended';
 import UnitLogo from '../../../../shared/Logo/UnitLogo';
-import { selectors as mdb } from '../../../../../redux/modules/mdb';
-import { selectors } from '../../../../../redux/modules/playlist';
 import TagsByUnit from '../../../../shared/TagsByUnit';
+import { canonicalCollection } from '../../../../../helpers/utils';
+import { mdbGetDenormCollectionSelector, mdbGetDenormContentUnitSelector, playlistGetInfoSelector, recommendedGetViewsSelector } from '../../../../../redux/selectors';
 
 export const makeTagLinks = (tags = [], getTagById) =>
   Array.from(intersperse(
@@ -37,7 +37,7 @@ export const makeTagLinks = (tags = [], getTagById) =>
 
 const makeCollectionsLinks = (collections = {}, t, currentCollection) => {
   // filter out the current collection
-  const colValues           = Object.values(collections).filter(c => ![CT_DAILY_LESSON, CT_SPECIAL_LESSON].includes(c.content_type));
+  const colValues = Object.values(collections).filter(c => ![CT_DAILY_LESSON, CT_SPECIAL_LESSON].includes(c.content_type));
 
   const noSSeries = Array.from(intersperse(
     colValues.filter(c => c.content_type !== CT_LESSONS_SERIES).map(x =>
@@ -68,13 +68,19 @@ const getEpisodeInfo = (ct, cIDs, currentCollection, filmDate, t) => {
 };
 
 const Info = ({ t }) => {
-  const { cId, cuId, isSingleMedia } = useSelector(state => selectors.getInfo(state.playlist));
-  const currentCollection            = useSelector(state => mdb.getDenormCollection(state.mdb, cId));
-  const unit                         = useSelector(state => mdb.getDenormContentUnit(state.mdb, cuId));
+  const { cId, cuId, isSingleMedia } = useSelector(playlistGetInfoSelector);
+  const { id: paramsId }             = useParams();
+  const unit                         = useSelector(state => mdbGetDenormContentUnitSelector(state, cuId || paramsId));
+  const c                            = canonicalCollection(unit);
+  const currentCollection            = useSelector(state => mdbGetDenormCollectionSelector(state, cId || (c && c.id)));
 
   const { id, name, film_date: filmDate, collections = [], content_type: ct, cIDs } = unit || {};
 
-  const views = useSelector(state => recommended.getViews(id, state.recommended));
+  const views = useSelector(state => recommendedGetViewsSelector(state, id));
+
+  if (!unit) {
+    return null;
+  }
 
   const { noSSeries, sSeries } = makeCollectionsLinks(collections, t, isSingleMedia ? null : currentCollection);
   const isMultiLessons         = Object.values(collections).some(col => col.content_type === CT_LESSONS_SERIES || col.content_type === CT_CONGRESS);
@@ -82,13 +88,13 @@ const Info = ({ t }) => {
   const ccu                    = Object.values(collections)[0];
   return (
     <>
-      <PersonalInfo collection={currentCollection} />
+      <PersonalInfo collection={currentCollection}/>
       <div className="unit-info">
         {
           !isMultiLessons && noSSeries.length > 0 && (
             <>
               <div className="unit-info__title">
-                <UnitLogo collectionId={ccu.id} circular fallbackImg="none" />
+                <UnitLogo collectionId={ccu.id} circular fallbackImg="none"/>
                 <List.Item className="unit-info__collections" key="collections">
                   {noSSeries}
                 </List.Item>
@@ -113,7 +119,7 @@ const Info = ({ t }) => {
         </div>
 
         <List>
-          <TagsByUnit id={id} />
+          <TagsByUnit id={id}/>
           {
             sSeries.length > 0 && (
               <List.Item key="co-links-series" className="margin-top-8">

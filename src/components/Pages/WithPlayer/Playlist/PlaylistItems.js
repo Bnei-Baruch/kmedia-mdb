@@ -2,11 +2,12 @@ import React, { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import ContentItemContainer from '../../../shared/ContentItem/ContentItemContainer';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectors, actions } from '../../../../redux/modules/playlist';
+import { actions } from '../../../../redux/modules/playlist';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import { Header, Button, Container } from 'semantic-ui-react';
-import { selectors as mdb } from '../../../../redux/modules/mdb';
 import { COLLECTION_DAILY_LESSONS } from '../../../../helpers/consts';
+import WipErr from '../../../shared/WipErr/WipErr';
+import { mdbGetDenormCollectionSelector, playlistGetFetchedSelector, playlistGetInfoSelector, playlistGetPlaylistSelector } from '../../../../redux/selectors';
 
 const PLAYLIST_ITEM_HEIGHT        = 104;
 const PLAYLIST_ITEM_HEIGHT_MOBILE = 128;
@@ -15,13 +16,15 @@ const PlaylistItems               = () => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const { t }              = useTranslation();
 
-  const { cId, cuId }          = useSelector(state => selectors.getInfo(state.playlist));
-  const { from, to }           = useSelector(state => selectors.getFetched(state.playlist));
-  const items                  = useSelector(state => selectors.getPlaylist(state.playlist));
-  const { name, content_type } = useSelector(state => mdb.getDenormCollection(state.mdb, cId)) || false;
+  const { cId, cuId, isReady } = useSelector(playlistGetInfoSelector);
+  const { from, to }           = useSelector(playlistGetFetchedSelector);
+  const items                  = useSelector(playlistGetPlaylistSelector);
+  const { name, content_type } = useSelector(state => mdbGetDenormCollectionSelector(state, cId)) || false;
   const title                  = COLLECTION_DAILY_LESSONS.includes(content_type) ? t('constants.content-types.DAILY_LESSON') : name;
+  const dispatch               = useDispatch();
 
-  const dispatch       = useDispatch();
+  if (!isReady) return WipErr({ wip: !isReady, t });
+
   const handleLoadMore = dir => dispatch(actions.fetchShowData(dir));
   const handleScroll   = e => {
     if (timer !== null) clearTimeout(timer);

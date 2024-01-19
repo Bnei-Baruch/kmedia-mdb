@@ -3,14 +3,13 @@ import { withTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Button } from 'semantic-ui-react';
 import { FN_LANGUAGES, POPULAR_LANGUAGES, ALL_LANGUAGES } from '../../../helpers/consts';
-import { selectors as filters } from '../../../redux/modules/filters';
-import { selectors } from '../../../redux/modules/filtersAside';
 import FilterHeader from '../FilterHeader';
 import LanguageItem from './LanguageItem';
+import { filtersAsideGetTreeSelector, filtersGetFilterByNameSelector } from '../../../redux/selectors';
 
 const Language = ({ namespace, t }) => {
-  const items           = useSelector(state => selectors.getTree(state.filtersAside, namespace, FN_LANGUAGES));
-  const selectedFilters = useSelector(state => filters.getFilterByName(state.filters, namespace, FN_LANGUAGES));
+  const items           = useSelector(state => filtersAsideGetTreeSelector(state, namespace, FN_LANGUAGES));
+  const selectedFilters = useSelector(state => filtersGetFilterByNameSelector(state, namespace, FN_LANGUAGES));
   const selected        = useMemo(() => selectedFilters?.values || [], [selectedFilters]);
 
   const [showAll, setShowAll] = useState(selected.filter(x => POPULAR_LANGUAGES.includes(x)).length > 0);
@@ -26,7 +25,7 @@ const Language = ({ namespace, t }) => {
         <>
           {
             items.filter(id => POPULAR_LANGUAGES.includes(id)).map(id =>
-              <LanguageItem namespace={namespace} id={id} key={id} />
+              <LanguageItem namespace={namespace} id={id} key={id}/>
             )
           }
           {
@@ -34,7 +33,7 @@ const Language = ({ namespace, t }) => {
               .filter(id => ALL_LANGUAGES.includes(id))
               .filter(id => !POPULAR_LANGUAGES.includes(id))
               .map(id =>
-                <LanguageItem namespace={namespace} id={id} key={id} />
+                <LanguageItem namespace={namespace} id={id} key={id}/>
               )
           }
 

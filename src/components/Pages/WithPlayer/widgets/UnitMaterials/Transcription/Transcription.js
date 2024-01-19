@@ -1,20 +1,19 @@
-import React, { Component, useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { withTranslation } from 'react-i18next';
 import { Menu, Segment } from 'semantic-ui-react';
-import isEqual from 'react-fast-compare';
 import PropTypes from 'prop-types';
 import uniq from 'lodash/uniq';
+import cloneDeep from 'lodash/cloneDeep';
 import clsx from 'clsx';
 import { useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { doc2html, fetchTimeCode, selectors } from '../../../../../../redux/modules/assets';
-import { selectors as settings } from '../../../../../../redux/modules/settings';
+import { actions as assetsActions } from '../../../../../../redux/modules/assets';
 
 import { CT_ARTICLE, CT_RESEARCH_MATERIAL, MT_TEXT, INSERT_TYPE_SUMMARY } from '../../../../../../helpers/consts';
 import { selectSuitableLanguage } from '../../../../../../helpers/language';
 import { getLanguageDirection } from '../../../../../../helpers/i18n-utils';
-import { DeviceInfoContext, SessionInfoContext } from '../../../../../../helpers/app-contexts';
+import { DeviceInfoContext } from '../../../../../../helpers/app-contexts';
 import { physicalFile } from '../../../../../../helpers/utils';
 import { getActivePartFromQuery } from '../../../../../../helpers/player';
 import MediaHelper from '../../../../../../helpers/media';
@@ -25,13 +24,14 @@ import WipErr from '../../../../../shared/WipErr/WipErr';
 import * as shapes from '../../../../../shapes';
 import MenuLanguageSelector from '../../../../../Language/Selector/MenuLanguageSelector';
 import UnitBar from '../UnitBar';
+import { settingsGetContentLanguagesSelector, assetsGetDoc2htmlByIdSelector } from '../../../../../../redux/selectors';
 
 const getUnitDerivedArticle = (unit, type) => {
   // Suitable for having either derived articles or research materials only
   const ct    = type === 'articles' ? CT_ARTICLE : CT_RESEARCH_MATERIAL;
-  const units = Object.values(unit.derived_units || {})
+  const units = cloneDeep(Object.values(unit.derived_units || {})
     .filter(x => x.content_type === ct
-      && (x.files || []).some(f => f.type === MT_TEXT));
+      && (x.files || []).some(f => f.type === MT_TEXT)));
 
   units.forEach(unit => {
     unit.files.forEach(file => file.title = unit.name);
@@ -41,7 +41,7 @@ const getUnitDerivedArticle = (unit, type) => {
     .reduce((acc, files) => [...acc, ...files], []);
 };
 
-const getTextFiles = (unit, type) => {
+export const getTextFiles = (unit, type) => {
   if (!unit || !Array.isArray(unit.files)) {
     return [];
   }
@@ -54,7 +54,7 @@ const getTextFiles = (unit, type) => {
   return getUnitDerivedArticle(unit, type);
 };
 
-const selectFile = (textFiles, language) => {
+export const selectFile = (textFiles, language) => {
   const selectedFiles = textFiles.filter(x => x.language === language);
 
   if (selectedFiles.length <= 1) {
@@ -68,9 +68,8 @@ const selectFile = (textFiles, language) => {
 
 const Transcription = ({ unit, t, type, activeTab }) => {
   const location         = useLocation();
-  const doc2htmlById     = useSelector(state => selectors.getDoc2htmlById(state.assets));
-  const uiLang           = useSelector(state => settings.getUILang(state.settings));
-  const contentLanguages = useSelector(state => settings.getContentLanguages(state.settings));
+  const doc2htmlById     = useSelector(assetsGetDoc2htmlByIdSelector);
+  const contentLanguages = useSelector(settingsGetContentLanguagesSelector);
 
   const [selectedLanguage, setSelectedLanguage] = useState('');
   const textFiles                               = getTextFiles(unit, type);
@@ -85,8 +84,7 @@ const Transcription = ({ unit, t, type, activeTab }) => {
   const [selectedFileOverride, setSelectedFileOverride] = useState(null);
   const selectedFile                                    = selectedFileOverride || fileFromLocation || selectFile(textFiles, finalLanguage) || {};
 
-  const { isMobileDevice }                                              = useContext(DeviceInfoContext);
-  const { enableShareText: { isShareTextEnabled, setEnableShareText } } = useContext(SessionInfoContext);
+  const { isMobileDevice } = useContext(DeviceInfoContext);
 
   const dispatch = useDispatch();
 
@@ -98,10 +96,10 @@ const Transcription = ({ unit, t, type, activeTab }) => {
     const { data } = doc2htmlById[selectedFile.id] || {};
     if (!data) {
       // Load from redux.
-      dispatch(doc2html(selectedFile.id));
-      dispatch(fetchTimeCode(unit.id, selectedFile.language));
+      dispatch(assetsActions.doc2html(selectedFile.id));
+      dispatch(assetsActions.fetchTimeCode(unit.id, selectedFile.language));
     }
-  }, [selectedFile?.id, unit.id, selectedFile?.language]);
+  }, [dispatch, doc2htmlById, selectedFile?.id, unit.id, selectedFile?.language]);
 
   const getSelectFiles = (file, textFiles) => {
     if (!textFiles)
@@ -132,8 +130,8 @@ const Transcription = ({ unit, t, type, activeTab }) => {
       return <Segment basic>{t(`materials.${text}.no-content`)}</Segment>;
     }
 
-    const { id, name, mimetype } = file;
-    const { data, wip, err }     = doc2htmlById[id] || {};
+    const { id }             = file;
+    const { data, wip, err } = doc2htmlById[id] || {};
 
     const fileCU = getFileCU(id, unit);
 
@@ -166,9 +164,9 @@ const Transcription = ({ unit, t, type, activeTab }) => {
             language={finalLanguage}
             urlParams={urlParams}
             source={{
-              subject_uid: unit.id,
+              subject_uid : unit.id,
               subject_type: unit.content_type,
-              properties: { activeTab }
+              properties  : { activeTab }
             }}
             label={activeTab !== 'research' ? { content_unit: fileCU && fileCU.id } : null}
           />
@@ -178,10 +176,9 @@ const Transcription = ({ unit, t, type, activeTab }) => {
   };
 
   const { id, name, mimetype } = selectedFile;
-  const { data }               = (id && doc2htmlById[id]) || {};
   const fileCU                 = getFileCU(id, unit);
   const content                = prepareContent(selectedFile);
-  const url                    = id && physicalFile(selectedFile, true) || '';
+  const url                    = (id && physicalFile(selectedFile, true)) || '';
 
   const { theme = 'light', fontType, fontSize = 0 } = viewSettings || {};
 
@@ -196,10 +193,10 @@ const Transcription = ({ unit, t, type, activeTab }) => {
   return (
     <div
       className={clsx({
-        source: true,
-        [`is-${theme}`]: true,
-        [`is-${fontType}`]: true,
-        [`size${fontSize}`]: true,
+        source             : true,
+        [`is-${theme}`]    : true,
+        [`is-${fontType}`] : true,
+        [`size${fontSize}`]: true
       })}
     >
       <Menu
@@ -208,8 +205,8 @@ const Transcription = ({ unit, t, type, activeTab }) => {
         fluid
         className={
           clsx({
-            'no-margin-top': isMobileDevice,
-            'no_print': true,
+            'no-margin-top'      : isMobileDevice,
+            'no_print'           : true,
             'justify_content_end': true
           })
         }
@@ -223,7 +220,7 @@ const Transcription = ({ unit, t, type, activeTab }) => {
           />
         </Menu.Item>
         <Menu.Item>
-          <Download path={url} mimeType={mimetype} downloadAllowed={true} filename={name} />
+          <Download path={url} mimeType={mimetype} downloadAllowed={true} filename={name}/>
           <UnitBar
             disabled={!url}
             handleSettings={setViewSettings}
@@ -239,10 +236,10 @@ const Transcription = ({ unit, t, type, activeTab }) => {
 };
 
 Transcription.propTypes = {
-  unit: shapes.ContentUnit,
-  t: PropTypes.func.isRequired,
-  type: PropTypes.string,
-  activeTab: PropTypes.string,
+  unit     : shapes.ContentUnit,
+  t        : PropTypes.func.isRequired,
+  type     : PropTypes.string,
+  activeTab: PropTypes.string
 };
 
 export default withTranslation()(Transcription);

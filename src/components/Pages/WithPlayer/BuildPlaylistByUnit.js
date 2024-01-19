@@ -2,20 +2,21 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useSearchParams } from 'react-router-dom';
 
-import { actions, selectors } from '../../../redux/modules/playlist';
-import { selectors as mdb, actions as mdbActions } from '../../../redux/modules/mdb';
+import { actions } from '../../../redux/modules/playlist';
+import { actions as mdbActions } from '../../../redux/modules/mdb';
 import Helmets from '../../shared/Helmets';
+import { mdbGetErrorsSelector, mdbGetFullUnitFetchedSelector, playlistGetInfoSelector, mdbGetWipFn, mdbGetDenormContentUnitSelector } from '../../../redux/selectors';
 
 const BuildPlaylistByUnit = ({ cts }) => {
   const { id }         = useParams();
   const [searchParams] = useSearchParams();
 
-  const { id: prevCuId, cId: prevCId, wip } = useSelector(state => selectors.getInfo(state.playlist));
+  const { id: prevCuId, cId: prevCId, wip } = useSelector(playlistGetInfoSelector);
 
-  const unit    = useSelector(state => mdb.getDenormContentUnit(state.mdb, id));
-  const fetched = useSelector(state => mdb.getFullUnitFetched(state.mdb))[id];
-  const wipCU   = useSelector(state => mdb.getWip(state.mdb).units)[id];
-  const errCU   = useSelector(state => mdb.getErrors(state.mdb).units)[id];
+  const unit    = useSelector(state => mdbGetDenormContentUnitSelector(state, id));
+  const fetched = useSelector(mdbGetFullUnitFetchedSelector)[id];
+  const wipCU   = useSelector(mdbGetWipFn).units[id];
+  const errCU   = useSelector(mdbGetErrorsSelector).units[id];
 
   const cs          = unit && Object.values(unit.collections) || [];
   const { id: cId } = cs.find(c => c.id === (searchParams.get('c') || prevCId))
@@ -41,7 +42,7 @@ const BuildPlaylistByUnit = ({ cts }) => {
     }
   }, [cId, id, prevCuId, wip, fetched]);
 
-  return <Helmets.AVUnit id={id} />;
+  return <Helmets.AVUnit id={id}/>;
 };
 
 export default BuildPlaylistByUnit;

@@ -1,36 +1,41 @@
-import { createAction } from 'redux-actions';
+import { createSlice } from '@reduxjs/toolkit';
 
-import { handleActions } from './settings';
+const imageSlice = createSlice({
+  name        : 'image',
+  initialState: { bySrc: {} },
 
-const FETCH         = 'Image/FETCH';
-const FETCH_SUCCESS = 'Image/FETCH_SUCCESS';
-const FETCH_FAILURE = 'Image/FETCH_FAILURE';
-const START_WIP     = 'Image/START_WIP';
+  reducers: {
+    fetch       : {
+      prepare: (src, fallbacks) => ({ payload: { src, fallbacks } }),
+      reducer: (state, { payload: { src, fallbacks = ['default'] } }) => {
+        state.bySrc[src] ||= {};
+        state.bySrc[src].fallbacks = fallbacks;
+        state.bySrc[src].err       = false;
+      }
+    },
+    fetchSuccess: (state, { payload: { src, img } }) => {
+      state.bySrc[src] ||= {};
+      state.bySrc[src] = { wip: false, err: false, src: img };
+    },
+    fetchFailure: (state, { payload: { src, err } }) => {
+      state.bySrc[src] ||= {};
+      state.bySrc[src] = { wip: false, err, src: state.bySrc[src].fallbacks[0] };
+    },
 
-export const types = { FETCH };
+    startWIP: (state, { payload: src }) => {
+      state.bySrc[src] ||= {};
+      state.bySrc[src].wip = true;
+    }
+  }
+});
 
-/* Actions */
-const fetch        = createAction(FETCH, (src, fallbacks) => ({ src, fallbacks }));
-const fetchSuccess = createAction(FETCH_SUCCESS);
-const fetchFailure = createAction(FETCH_FAILURE);
-const startWIP     = createAction(START_WIP);
+export default imageSlice.reducer;
 
-export const actions = { fetch, fetchSuccess, fetchFailure, startWIP };
+export const { actions } = imageSlice;
 
-/* Reducer */
-
-const initialState = { bySrc: {}, };
-
-const onFetch        = (draft, { src }) => draft.bySrc[src] = { ...draft.bySrc[src], err: false };
-const onFetchSuccess = (draft, { src, img }) => draft.bySrc[src] = { wip: false, err: false, src: img };
-const onFetchFailure = (draft, { src, err }) => draft.bySrc[src] = { wip: false, err, src: 'default' };
-const onStartWIP     = (draft, src) => draft.bySrc[src].wip = true;
-export const reducer = handleActions({
-  [FETCH]: onFetch,
-  [FETCH_SUCCESS]: onFetchSuccess,
-  [FETCH_FAILURE]: onFetchFailure,
-  [START_WIP]: onStartWIP,
-}, initialState);
+export const types = Object.fromEntries(new Map(
+  Object.values(imageSlice.actions).map(a => [a.type, a.type])
+));
 
 /* Selectors */
 const getBySrc = (state, src) => state.bySrc[src] || false;

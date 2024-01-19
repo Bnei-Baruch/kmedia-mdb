@@ -6,10 +6,9 @@ import { Button, Icon, Modal, Table } from 'semantic-ui-react';
 
 import { FN_LOCATIONS } from '../../../helpers/consts';
 import { isEmpty } from '../../../helpers/utils';
-import { selectors } from '../../../redux/modules/filtersAside';
-import { selectors as settings } from '../../../redux/modules/settings';
 import CityItem from './CityItem';
 import { getTitle } from './helper';
+import { filtersAsideCitiesByCountrySelector, settingsGetUIDirSelector } from '../../../redux/selectors';
 
 const ITEMS_PER_ROW = 3;
 const buildRowArr   = n => {
@@ -18,11 +17,11 @@ const buildRowArr   = n => {
   return Array(len).fill(0);
 };
 
-const CitiesModal = ({ county, namespace, open, onClose, t }) => {
+const CitiesModal = ({ country, namespace, open, onClose, t }) => {
 
-  const items = useSelector(state => selectors.citiesByCountry(state.filtersAside, namespace, FN_LOCATIONS)(county));
+  const items = useSelector(state => filtersAsideCitiesByCountrySelector(state, namespace, FN_LOCATIONS))(country);
 
-  const uiDir = useSelector(state => settings.getUIDir(state.settings));
+  const uiDir = useSelector(settingsGetUIDirSelector);
 
   if (isEmpty(items)) return null;
 
@@ -33,11 +32,11 @@ const CitiesModal = ({ county, namespace, open, onClose, t }) => {
   );
 
   const renderItem = (item, i) => {
-    if (!item) return <Table.Cell key={i} />;
+    if (!item) return <Table.Cell key={i}/>;
 
     return (
       <Table.Cell className="tree_item_modal_content" key={i}>
-        <CityItem namespace={namespace} id={item} county={county} />
+        <CityItem namespace={namespace} id={item} country={country}/>
       </Table.Cell>
     );
   };
@@ -50,10 +49,10 @@ const CitiesModal = ({ county, namespace, open, onClose, t }) => {
       className={clsx('filters_aside_tree_modal', { [uiDir]: true })}
       dir={uiDir}
       onClose={onClose}
-      closeIcon={<Icon name="times circle outline" />}
+      closeIcon={<Icon name="times circle outline"/>}
     >
       <Modal.Header className="no-border nowrap">
-        {getTitle(county, t)}
+        {getTitle(country, t)}
       </Modal.Header>
       <Modal.Content scrolling>
         <Table collapsing celled={false} basic>
@@ -65,7 +64,7 @@ const CitiesModal = ({ county, namespace, open, onClose, t }) => {
         </Table>
       </Modal.Content>
       <Modal.Actions>
-        <Button primary content={t('buttons.close')} onClick={onClose} />
+        <Button primary content={t('buttons.close')} onClick={onClose}/>
       </Modal.Actions>
     </Modal>
   );

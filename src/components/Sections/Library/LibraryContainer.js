@@ -9,10 +9,10 @@ import { Button, Container, Grid, Header, Input, Ref, Segment } from 'semantic-u
 import Headroom from 'react-headroom';
 
 import { isEmpty } from '../../../helpers/utils';
-import { sourceIndex, selectors as assets } from '../../../redux/modules/assets';
+import { actions as assetsActions, selectors as assets } from '../../../redux/modules/assets';
 import { actions as sourceActions, selectors as sources } from '../../../redux/modules/sources';
 import { selectors as settings } from '../../../redux/modules/settings';
-import { actions as mdbActions, selectors as mdb } from '../../../redux/modules/mdb';
+import { actions as mdbActions } from '../../../redux/modules/mdb';
 import * as shapes from '../../shapes';
 import { getSourceErrorSplash } from '../../shared/WipErr/WipErr';
 import Helmets from '../../shared/Helmets';
@@ -25,6 +25,7 @@ import { getQuery } from '../../../helpers/url';
 import { SCROLL_SEARCH_ID } from '../../../helpers/consts';
 import { withRouter } from '../../../helpers/withRouterPatch';
 import TagsByUnit from '../../shared/TagsByUnit';
+import { mdbGetFullUnitFetchedSelector } from '../../../redux/selectors';
 
 const waitForRenderElement = async (attempts = 0) => {
   if (attempts > 10) return Promise.reject();
@@ -41,43 +42,43 @@ class LibraryContainer extends Component {
   static contextType = DeviceInfoContext;
 
   static propTypes = {
-    sourceId: PropTypes.string.isRequired,
-    indexMap: PropTypes.objectOf(shapes.DataWipErr),
-    uiLang: PropTypes.string.isRequired,
-    uiDir: PropTypes.string.isRequired,
-    fetchUnit: PropTypes.func.isRequired,
-    fetchIndex: PropTypes.func.isRequired,
-    sourcesSortBy: PropTypes.func.isRequired,
-    getSourceById: PropTypes.func.isRequired,
-    getPathByID: PropTypes.func,
-    sortBy: PropTypes.string.isRequired,
-    NotToSort: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
-    NotToFilter: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
+    sourceId        : PropTypes.string.isRequired,
+    indexMap        : PropTypes.objectOf(shapes.DataWipErr),
+    uiLang          : PropTypes.string.isRequired,
+    uiDir           : PropTypes.string.isRequired,
+    fetchUnit       : PropTypes.func.isRequired,
+    fetchIndex      : PropTypes.func.isRequired,
+    sourcesSortBy   : PropTypes.func.isRequired,
+    getSourceById   : PropTypes.func.isRequired,
+    getPathByID     : PropTypes.func,
+    sortBy          : PropTypes.string.isRequired,
+    NotToSort       : PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
+    NotToFilter     : PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
     areSourcesLoaded: PropTypes.bool,
-    t: PropTypes.func.isRequired,
-    push: PropTypes.func.isRequired,
-    replace: PropTypes.func.isRequired,
-    navigate: PropTypes.func.isRequired,
+    t               : PropTypes.func.isRequired,
+    push            : PropTypes.func.isRequired,
+    replace         : PropTypes.func.isRequired,
+    navigate        : PropTypes.func.isRequired
   };
 
   static defaultProps = {
-    indexMap: {
+    indexMap        : {
       data: null,
-      wip: false,
-      err: null,
+      wip : false,
+      err : null
     },
     areSourcesLoaded: false,
-    getPathByID: undefined,
+    getPathByID     : undefined
   };
 
   state = {
-    lastLoadedId: null,
-    isReadable: false,
-    tocIsActive: false,
-    fontSize: 0,
-    theme: 'light',
-    match: '',
-    scrollTopPosition: 0,
+    lastLoadedId     : null,
+    isReadable       : false,
+    tocIsActive      : false,
+    fontSize         : 0,
+    theme            : 'light',
+    match            : '',
+    scrollTopPosition: 0
   };
 
   static getFullPath = (sourceId, getPathByID) => {
@@ -152,12 +153,12 @@ class LibraryContainer extends Component {
         icon={icon}
         labelPosition={labelPosition}
         content={title}
-        title={source.name} />
+        title={source.name}/>
     );
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    const { sourceId, indexMap, uiLang, sortBy, areSourcesLoaded }                    = this.props;
+    const { sourceId, indexMap, uiLang, sortBy, areSourcesLoaded }                                       = this.props;
     const { lastLoadedId, isReadable, fontSize, fontType, theme, tocIsActive, match, scrollTopPosition } = this.state;
 
     const equalProps = sourceId === nextProps.sourceId
@@ -323,7 +324,7 @@ class LibraryContainer extends Component {
     const properParentSource = getSourceById(properParentId);
 
     if (!source || !properParentSource) {
-      return <div />;
+      return <div/>;
     }
 
     const { name: parentName, description, parent_id: parentId } = properParentSource;
@@ -345,9 +346,9 @@ class LibraryContainer extends Component {
 
     return (
       <Header size="small">
-        <Helmets.Basic title={`${sourceName} - ${parentName} - ${kabName}`} description={description} />
+        <Helmets.Basic title={`${sourceName} - ${parentName} - ${kabName}`} description={description}/>
         <Ref innerRef={this.handleContentHeaderRef}>
-          <div />
+          <div/>
         </Ref>
         <Header.Subheader>
           <small style={{ width: `${contentHeaderWidth}px` }}>
@@ -448,15 +449,16 @@ class LibraryContainer extends Component {
   };
 
   render() {
-    const {
-      sourceId,
-      getSourceById,
-      getPathByID,
-      uiLang,
-      t,
-      push,
-      areSourcesLoaded,
-    } = this.props;
+    const
+      {
+        sourceId,
+        getSourceById,
+        getPathByID,
+        uiLang,
+        t,
+        push,
+        areSourcesLoaded
+      } = this.props;
 
     if (!areSourcesLoaded)
       return null;
@@ -475,11 +477,11 @@ class LibraryContainer extends Component {
         ref={this.handleContentArticleRef}
         className={clsx({
           'headroom-z-index-801': true,
-          source: true,
-          'is-readable': isReadable,
-          'toc--is-active': tocIsActive,
-          [`is-${theme}`]: true,
-          [`is-${fontType}`]: true,
+          source                : true,
+          'is-readable'         : isReadable,
+          'toc--is-active'      : tocIsActive,
+          [`is-${theme}`]       : true,
+          [`is-${fontType}`]    : true
         })}
       >
         <Headroom>
@@ -506,7 +508,7 @@ class LibraryContainer extends Component {
                   <Grid.Column mobile={16} tablet={16} computer={12} className="source__content-header">
                     <div className="source__header-title">
                       {this.header(sourceId, parentId)}
-                      <TagsByUnit id={sourceId} />
+                      <TagsByUnit id={sourceId}/>
                     </div>
                     <LibraryBar
                       handleSettings={this.handleSettings}
@@ -551,7 +553,7 @@ class LibraryContainer extends Component {
                 computer={12}
                 className={clsx({
                   'source__content-wrapper font_settings-wrapper': true,
-                  [`size${fontSize}`]: true,
+                  [`size${fontSize}`]                            : true
                 })}
               >
                 <Ref innerRef={this.handleContextRef}>
@@ -574,23 +576,23 @@ class LibraryContainer extends Component {
 
 export default withTranslation()(withRouter(connect(
   (state, ownProps) => ({
-    sourceId: ownProps.params?.id,
-    indexMap: assets.getSourceIndexById(state.assets),
-    uiLang: settings.getUILang(state.settings),
-    uiDir: settings.getUIDir(state.settings),
-    unitFetched: mdb.getFullUnitFetched(state.mdb)[ownProps.params?.id],
-    getSourceById: sources.getSourceById(state.sources),
-    getPathByID: sources.getPathByID(state.sources),
-    sortBy: sources.sortBy(state.sources),
+    sourceId        : ownProps.params?.id,
+    indexMap        : assets.getSourceIndexById(state.assets),
+    uiLang          : settings.getUILang(state.settings),
+    uiDir           : settings.getUIDir(state.settings),
+    unitFetched     : mdbGetFullUnitFetchedSelector[ownProps.params?.id],
+    getSourceById   : sources.getSourceById(state.sources),
+    getPathByID     : sources.getPathByID(state.sources),
+    sortBy          : sources.sortBy(state.sources),
     areSourcesLoaded: sources.areSourcesLoaded(state.sources),
-    NotToSort: sources.NotToSort,
-    NotToFilter: sources.NotToFilter,
+    NotToSort       : sources.NotToSort,
+    NotToFilter     : sources.NotToFilter
   }),
   dispatch => bindActionCreators({
-    fetchUnit: mdbActions.fetchUnit,
-    fetchIndex: sourceIndex,
+    fetchUnit    : mdbActions.fetchUnit,
+    fetchIndex   : assetsActions.sourceIndex,
     sourcesSortBy: sourceActions.sourcesSortBy,
-    push: routerPush,
-    replace: routerReplace,
+    push         : routerPush,
+    replace      : routerReplace
   }, dispatch)
 )(LibraryContainer)));

@@ -1,14 +1,14 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { actions, selectors } from '../../../redux/modules/playlist';
-import { selectors as mdb } from '../../../redux/modules/mdb';
+import { actions } from '../../../redux/modules/playlist';
 import Helmets from '../../shared/Helmets';
+import { mdbGetFullCollectionFetchedSelector, playlistGetInfoSelector } from '../../../redux/selectors';
 
 const BuildPlaylistByCollection = ({ cuId, id }) => {
-  const { cuId: prevCuId, cId: prevCId, wip } = useSelector(state => selectors.getInfo(state.playlist));
+  const { cuId: prevCuId, cId: prevCId, wip } = useSelector(playlistGetInfoSelector);
 
-  const fetched  = useSelector(state => mdb.getFullCollectionFetched(state.mdb))?.[id];
+  const fetched  = useSelector(mdbGetFullCollectionFetchedSelector)?.[id];
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -21,7 +21,7 @@ const BuildPlaylistByCollection = ({ cuId, id }) => {
     }
   }, [id, cuId, wip, fetched]);
 
-  return <Helmets.AVUnit id={cuId} />;
+  return <Helmets.AVUnit id={cuId}/>;
 };
 
 export default BuildPlaylistByCollection;

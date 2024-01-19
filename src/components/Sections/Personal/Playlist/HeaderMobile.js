@@ -7,14 +7,14 @@ import { MY_NAMESPACE_PLAYLISTS } from '../../../../helpers/consts';
 import PlaylistPlayIcon from '../../../../images/icons/PlaylistPlay';
 import Link from '../../../Language/MultiLanguageLink';
 import { useSelector } from 'react-redux';
-import { selectors as settings } from '../../../../redux/modules/settings';
+import { settingsGetUIDirSelector } from '../../../../redux/selectors';
 
 const PlaylistHeaderMobile = ({ confirmSuccess, save, playlist, t }) => {
   const [isEditName, setIsEditName] = useState();
   const [name, setName]             = useState();
   const [confirm, setConfirm]       = useState();
 
-  const uiDir = useSelector(state => settings.getUIDir(state.settings));
+  const uiDir = useSelector(settingsGetUIDirSelector);
 
   const handleChangeName = (e, { value }) => setName(value);
 
@@ -34,7 +34,7 @@ const PlaylistHeaderMobile = ({ confirmSuccess, save, playlist, t }) => {
 
   const nameTag = isEditName ? (
     <Header.Subheader>
-      <Input type="text" value={name} onChange={handleChangeName} maxLength={30} />
+      <Input type="text" value={name} onChange={handleChangeName} maxLength={30}/>
       <Button
         color="green"
         icon="check"
@@ -51,7 +51,7 @@ const PlaylistHeaderMobile = ({ confirmSuccess, save, playlist, t }) => {
   return (
     <Container className="padded background_grey">
       <Header as={'h2'} className="my_header my_playlist_header">
-        <PlaylistPlayIcon className="playlist_icon" />
+        <PlaylistPlayIcon className="playlist_icon"/>
         {nameTag}
         <Header.Subheader>
           {`${playlist.total_items} ${t('pages.collection.items.programs-collection')}`}
@@ -60,7 +60,7 @@ const PlaylistHeaderMobile = ({ confirmSuccess, save, playlist, t }) => {
       <div className="summary-container">
         <div>
           <Button basic onClick={toggleEditName} className="clear_button  margin-right-8 margin-left-8">
-            <Icon name={'edit outline'} size="large" />
+            <Icon name={'edit outline'} size="large"/>
           </Button>
           <Confirm
             size="tiny"
@@ -73,7 +73,7 @@ const PlaylistHeaderMobile = ({ confirmSuccess, save, playlist, t }) => {
             dir={uiDir}
           />
           <Button basic onClick={remove} className="clear_button">
-            <Icon name={'trash alternate outline'} size="large" />
+            <Icon name={'trash alternate outline'} size="large"/>
           </Button>
         </div>
         {
@@ -94,9 +94,9 @@ const PlaylistHeaderMobile = ({ confirmSuccess, save, playlist, t }) => {
 };
 
 PlaylistHeaderMobile.propTypes = {
-  playlist: PropTypes.object.isRequired,
+  playlist      : PropTypes.object.isRequired,
   confirmSuccess: PropTypes.func,
-  save: PropTypes.func
+  save          : PropTypes.func
 };
 
 export default withTranslation()(PlaylistHeaderMobile);

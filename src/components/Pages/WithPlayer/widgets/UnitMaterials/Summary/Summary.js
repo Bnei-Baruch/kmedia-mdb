@@ -7,58 +7,61 @@ import { selectSuitableLanguage } from '../../../../../../helpers/language';
 import * as shapes from '../../../../../shapes';
 import MediaHelper from '../../../../../../helpers/media';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectors as settings } from '../../../../../../redux/modules/settings';
-import { selectors as assetsSelectors, doc2html } from '../../../../../../redux/modules/assets';
+import { actions as assetsActions } from '../../../../../../redux/modules/assets';
 import { INSERT_TYPE_SUMMARY } from '../../../../../../helpers/consts';
 import MenuLanguageSelector from '../../../../../../components/Language/Selector/MenuLanguageSelector';
+import { settingsGetContentLanguagesSelector, assetsGetDoc2htmlByIdSelector } from '../../../../../../redux/selectors';
+
+export const getSummaryLanguages = unit =>
+  (unit && unit.files &&
+    unit.files.filter(f =>
+      MediaHelper.IsText(f) && !MediaHelper.IsPDF(f) && f.insert_type === INSERT_TYPE_SUMMARY)
+      .map(f => f.language)) || [];
+
+export const getFile = (unit, lang) => {
+  if (!unit || !Array.isArray(unit.files)) {
+    return null;
+  }
+
+  return unit.files?.filter(f => f.language === lang)
+    .filter(f => MediaHelper.IsText(f) && !MediaHelper.IsPDF(f))
+    .find(f => f.insert_type === INSERT_TYPE_SUMMARY);
+};
 
 const Summary = ({ unit, t }) => {
-
-  const contentLanguages = useSelector(state => settings.getContentLanguages(state.settings));
-  const doc2htmlById     = useSelector(state => assetsSelectors.getDoc2htmlById(state.assets));
+  const contentLanguages = useSelector(settingsGetContentLanguagesSelector);
+  const doc2htmlById     = useSelector(assetsGetDoc2htmlByIdSelector);
   const dispatch         = useDispatch();
 
-  const summaryLanguages = (unit && unit.files && unit.files.filter(f => MediaHelper.IsText(f) && !MediaHelper.IsPDF(f) && f.insert_type === INSERT_TYPE_SUMMARY).map(f => f.language)) || [];
-  const defaultLanguage = selectSuitableLanguage(contentLanguages, summaryLanguages, unit.original_language);
-  const [selectedLanguage, setSelectedLanguage] = useState(defaultLanguage);
+  const summaryLanguages                        = getSummaryLanguages(unit);
+  const defaultLanguage                         = selectSuitableLanguage(contentLanguages, summaryLanguages, unit.original_language);
+  const [selectedLanguage, setSelectedLanguage] = useState('');
+  const finalLanguage                           = selectedLanguage || defaultLanguage;
+  const file                                    = getFile(unit, finalLanguage);
+  const selectedFileId                          = file?.id || null;
 
-  const description = unit.description
-    ? (<div dangerouslySetInnerHTML={{ __html: unit.description }} />)
-    : t('materials.summary.no-summary');
-
-  const getFile = lang => {
-    if (!unit || !Array.isArray(unit.files)) {
-      return null;
-    }
-
-    return unit.files?.filter(f => f.language === lang)
-      .filter(f => MediaHelper.IsText(f) && !MediaHelper.IsPDF(f))
-      .find(f => f.insert_type === INSERT_TYPE_SUMMARY);
+  const handleLanguageChanged = language => {
+    setSelectedLanguage(language);
   };
-
-  const file = getFile(selectedLanguage);
-  const [selectedFileId, setSelectedFileId] = useState((file && file.id) || null);
-
-  const handleLanguageChanged = selectedLanguage => {
-    const file = getFile(selectedLanguage);
-    setSelectedFileId((file && file.id) || null);
-    setSelectedLanguage(selectedLanguage);
-  }
 
   useEffect(() => {
     if (file) {
-      dispatch(doc2html(selectedFileId));
+      dispatch(assetsActions.doc2html(selectedFileId));
     }
-  }, [dispatch, selectedFileId]);
+  }, [file, dispatch, selectedFileId]);
 
-  const { data } = doc2htmlById[file?.id] || false;
+  const { data }    = doc2htmlById[file?.id] || false;
+  const description = unit.description
+    ? (<div dangerouslySetInnerHTML={{ __html: unit.description }}/>)
+    : (data ? '' : t('materials.summary.no-summary'));
+
   return (
     <Segment basic>
       {description}
       {summaryLanguages.length <= 1 ? null :
         <MenuLanguageSelector
           languages={summaryLanguages}
-          selected={selectedLanguage}
+          selected={finalLanguage}
           onLanguageChange={handleLanguageChanged}
           multiSelect={false}
         />
@@ -66,7 +69,7 @@ const Summary = ({ unit, t }) => {
       {
         data ? (
           <>
-            <Divider />
+            <Divider/>
             <div dangerouslySetInnerHTML={{ __html: data }}></div>
           </>
         ) : null
@@ -78,7 +81,7 @@ const Summary = ({ unit, t }) => {
 
 Summary.propTypes = {
   unit: shapes.ContentUnit.isRequired,
-  t: PropTypes.func.isRequired,
+  t   : PropTypes.func.isRequired
 };
 
 export default withTranslation()(Summary);

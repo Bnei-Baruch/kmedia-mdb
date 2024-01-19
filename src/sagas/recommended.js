@@ -11,11 +11,10 @@ import {
 } from '../helpers/consts';
 import { getSourcesCollections } from '../helpers/utils';
 import { actions, selectors as recommended, types } from '../redux/modules/recommended';
-import { selectors as settings } from '../redux/modules/settings';
 import { selectors as sourcesSelectors } from '../redux/modules/sources';
 import { fetchMissingCollections, fetchMissingUnits } from './mdb';
 import { types as playerTypes } from '../redux/modules/player';
-import { selectors as playlist } from '../redux/modules/playlist';
+import { playlistGetInfoSelector, recommendedGetViewsSelector, settingsGetContentLanguagesSelector } from '../redux/selectors';
 
 const WATCHING_NOW_MIN = 50;
 const POPULAR_MIN      = 100;
@@ -24,9 +23,9 @@ export function* fetchRecommended(action) {
   const { id, content_type, tags, sources, collections, size, skip, variant } = action.payload;
   try {
     const isLesson         = UNIT_LESSONS_TYPE.includes(content_type);
-    const contentLanguages = yield select(state => settings.getContentLanguages(state.settings));
-    const [...skipUids] = yield select(state => recommended.getSkipUids(state.recommended));
-    const skipSet       = new Set(skipUids);
+    const contentLanguages = yield select(settingsGetContentLanguagesSelector);
+    const [...skipUids]    = yield select(state => recommended.getSkipUids(state.recommended));
+    const skipSet          = new Set(skipUids);
     skip.forEach(uid => {
       if (!skipSet.has(uid)) {
         skipUids.push(uid);
@@ -39,9 +38,9 @@ export function* fetchRecommended(action) {
     if (variant === AB_RECOMMEND_NEW) {
       // Random Programs
       specs.push({
-        'name': 'DataContentUnitsSuggester',
-        'filters': [{ 'filter_selector': 1, 'args': ['VIDEO_PROGRAM'] }],
-        'order_selector': 3,
+        'name'          : 'DataContentUnitsSuggester',
+        'filters'       : [{ 'filter_selector': 1, 'args': ['VIDEO_PROGRAM'] }],
+        'order_selector': 3
       });
       if (isLesson) {
         sources.forEach(source => {
@@ -49,23 +48,23 @@ export function* fetchRecommended(action) {
           specs.push({
             'name': 'RoundRobinSuggester', 'specs': [
               {
-                'name': 'DataContentUnitsSuggester',
-                'filters': [{
+                'name'          : 'DataContentUnitsSuggester',
+                'filters'       : [{
                   'filter_selector': 3 /* Sources */,
-                  'args': [source]
+                  'args'           : [source]
                 }, { 'filter_selector': 8 /* WatchingNowFilter */ }],
                 'order_selector': 5  // WatchingNow
               },
               {
-                'name': 'DataContentUnitsSuggester',
-                'filters': [{ 'filter_selector': 3 /* Sources */, 'args': [source] }],
+                'name'          : 'DataContentUnitsSuggester',
+                'filters'       : [{ 'filter_selector': 3 /* Sources */, 'args': [source] }],
                 'order_selector': 3  // Random
               },
               {
-                'name': 'DataContentUnitsSuggester',
-                'filters': [{ 'filter_selector': 3 /* Sources */, 'args': [source] }],
+                'name'          : 'DataContentUnitsSuggester',
+                'filters'       : [{ 'filter_selector': 3 /* Sources */, 'args': [source] }],
                 'order_selector': 0  // Last
-              },
+              }
             ]
           });
         });
@@ -77,23 +76,23 @@ export function* fetchRecommended(action) {
           specs.push({
             'name': 'RoundRobinSuggester', 'specs': [
               {
-                'name': 'DataContentUnitsSuggester',
-                'filters': [{
+                'name'          : 'DataContentUnitsSuggester',
+                'filters'       : [{
                   'filter_selector': 3 /* Sources */,
-                  'args': sourcesCollection.children
+                  'args'           : sourcesCollection.children
                 }, { 'filter_selector': 8 /* WatchingNowFilter */ }],
                 'order_selector': 5  // WatchingNow
               },
               {
-                'name': 'DataContentUnitsSuggester',
-                'filters': [{ 'filter_selector': 3 /* Sources */, 'args': sourcesCollection.children }],
+                'name'          : 'DataContentUnitsSuggester',
+                'filters'       : [{ 'filter_selector': 3 /* Sources */, 'args': sourcesCollection.children }],
                 'order_selector': 3  // Random
               },
               {
-                'name': 'DataContentUnitsSuggester',
-                'filters': [{ 'filter_selector': 3 /* Sources */, 'args': sourcesCollection.children }],
+                'name'          : 'DataContentUnitsSuggester',
+                'filters'       : [{ 'filter_selector': 3 /* Sources */, 'args': sourcesCollection.children }],
                 'order_selector': 0  // Last
-              },
+              }
             ]
           });
         });
@@ -103,23 +102,23 @@ export function* fetchRecommended(action) {
           specs.push({
             'name': 'RoundRobinSuggester', 'specs': [
               {
-                'name': 'DataContentUnitsSuggester',
-                'filters': [{
+                'name'          : 'DataContentUnitsSuggester',
+                'filters'       : [{
                   'filter_selector': 2 /* Tags */,
-                  'args': [tag]
+                  'args'           : [tag]
                 }, { 'filter_selector': 8 /* WatchingNowFilter */ }],
                 'order_selector': 5  // WatchingNow
               },
               {
-                'name': 'DataContentUnitsSuggester',
-                'filters': [{ 'filter_selector': 2 /* Tags */, 'args': [tag] }],
+                'name'          : 'DataContentUnitsSuggester',
+                'filters'       : [{ 'filter_selector': 2 /* Tags */, 'args': [tag] }],
                 'order_selector': 0  // Random
               },
               {
-                'name': 'DataContentUnitsSuggester',
-                'filters': [{ 'filter_selector': 2 /* Tags */, 'args': [tag] }],
+                'name'          : 'DataContentUnitsSuggester',
+                'filters'       : [{ 'filter_selector': 2 /* Tags */, 'args': [tag] }],
                 'order_selector': 0  // Last
-              },
+              }
             ]
           });
         });
@@ -128,23 +127,23 @@ export function* fetchRecommended(action) {
           specs.push({
             'name': 'RoundRobinSuggester', 'specs': [
               {
-                'name': 'DataContentUnitsSuggester',
-                'filters': [{
+                'name'          : 'DataContentUnitsSuggester',
+                'filters'       : [{
                   'filter_selector': 4 /* Collections */,
-                  'args': [collection.id]
+                  'args'           : [collection.id]
                 }, { 'filter_selector': 8 /* WatchingNowFilter */ }],
                 'order_selector': 5  // WatchingNow
               },
               {
-                'name': 'DataContentUnitsSuggester',
-                'filters': [{ 'filter_selector': 4 /* Collections */, 'args': [collection.id] }],
+                'name'          : 'DataContentUnitsSuggester',
+                'filters'       : [{ 'filter_selector': 4 /* Collections */, 'args': [collection.id] }],
                 'order_selector': 3  // Random
               },
               {
-                'name': 'DataContentUnitsSuggester',
-                'filters': [{ 'filter_selector': 4 /* Collections */, 'args': [collection.id] }],
+                'name'          : 'DataContentUnitsSuggester',
+                'filters'       : [{ 'filter_selector': 4 /* Collections */, 'args': [collection.id] }],
                 'order_selector': 0  // Last
-              },
+              }
             ]
           });
         });
@@ -152,8 +151,8 @@ export function* fetchRecommended(action) {
     } else if (variant === AB_RECOMMEND_RANDOM) {
       // Random Units
       specs.push({
-        'name': 'DataContentUnitsSuggester',
-        'order_selector': 3,
+        'name'          : 'DataContentUnitsSuggester',
+        'order_selector': 3
       });
     }
 
@@ -162,13 +161,13 @@ export function* fetchRecommended(action) {
     }
 
     const requestData = Api.recommendedRequestData({
-      uid: id,
-      languages: contentLanguages,
+      uid           : id,
+      languages     : contentLanguages,
       skipUids,
       size,
       specs,
       watchingNowMin: WATCHING_NOW_MIN,
-      popularMin: POPULAR_MIN,
+      popularMin    : POPULAR_MIN
     });
     const { data }    = yield call(Api.recommended, requestData);
 
@@ -179,7 +178,7 @@ export function* fetchRecommended(action) {
         /*{ content_type: CT_SOURCE, uid: 'qMUUn22b' },*/     // Shamati
         { content_type: CT_TAG, uid: 'sxxboapw' },            // Faith Above Reason
         { content_type: CT_LESSONS_SERIES, uid: 'dbPOMK0R' }, // Amuna lemala mahadaat 2021
-        { content_type: CT_LESSONS_SERIES, uid: 'ReQUUOtN' }, // Ptiha - 2019
+        { content_type: CT_LESSONS_SERIES, uid: 'ReQUUOtN' } // Ptiha - 2019
         /*{ content_type: CT_SOURCE, uid: 'grRABASH' },*/     // Group articles.
       ]);
     }
@@ -195,7 +194,7 @@ export function* fetchRecommended(action) {
           .flat()
           .filter(item => item && IsCollectionContentType(item.content_type))
           .map(x => x.uid)
-        ),
+        )
       ];
       const viewUids  = new Set();
       for (let i = 0; i < data.feeds.length; ++i) {
@@ -267,7 +266,7 @@ function* fetchViews(action) {
 }
 
 export function* fetchViewsByUIDs(uids) {
-  uids = yield select(state => uids.filter(uid => recommended.getViews(uid, state.recommended) === -1));
+  uids = yield select(state => uids.filter(uid => recommendedGetViewsSelector(state, uid) === -1));
   if (uids.length > 0) {
     try {
       const { data } = yield call(Api.views, uids);
@@ -285,7 +284,7 @@ export function* fetchViewsByUIDs(uids) {
 }
 
 export function* fetchWatchingNow(uids) {
-  uids = yield select(state => uids.filter(uid => recommended.getWatchingNow(uid, state.recommended) === -1));
+  uids = yield select(state => uids.filter(uid => recommended.getWatchingNow(state.recommended, uid) === -1));
   if (uids.length > 0) {
     const { data } = yield call(Api.watchingNow, uids);
     const views    = uids.reduce((acc, uid, i) => {
@@ -297,20 +296,20 @@ export function* fetchWatchingNow(uids) {
 }
 
 function* playerPlayWithUidProxy() {
-  const { cuId } = yield select(state => playlist.getInfo(state.playlist));
+  const { cuId } = yield select(playlistGetInfoSelector);
   yield put(actions.playerPlayWithUid(cuId));
 }
 
 function* watchFetchRecommended() {
-  yield takeLatest(types.FETCH_RECOMMENDED, fetchRecommended);
+  yield takeLatest(types['recommended/fetchRecommended'], fetchRecommended);
 }
 
 function* watchFetchViews() {
-  yield takeLatest(types.FETCH_VIEWS, fetchViews);
+  yield takeLatest(types['recommended/fetchViews'], fetchViews);
 }
 
 function* watchPlayerPlayWithUidProxy() {
-  yield takeEvery(playerTypes.PLAYER_PLAY, playerPlayWithUidProxy);
+  yield takeEvery(playerTypes['player/playerPlay'], playerPlayWithUidProxy);
 }
 
 export const sagas = [

@@ -3,16 +3,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Checkbox, List } from 'semantic-ui-react';
 
 import { FN_PERSON } from '../../../helpers/consts';
-import { actions, selectors as filters } from '../../../redux/modules/filters';
-import { selectors as filtersAside } from '../../../redux/modules/filtersAside';
-import { selectors as mdb } from '../../../redux/modules/mdb';
+import { actions } from '../../../redux/modules/filters';
+import { filtersAsideGetStatsSelector, filtersGetFilterByNameSelector, mdbGetPersonByIdSelector } from '../../../redux/selectors';
 
 const PersonItem = ({ namespace, id }) => {
-  const selectedFilters = useSelector(state => filters.getFilterByName(state.filters, namespace, FN_PERSON));
+  const selectedFilters = useSelector(state => filtersGetFilterByNameSelector(state, namespace, FN_PERSON));
   const selected        = useMemo(() => selectedFilters?.values || [], [selectedFilters]);
 
-  const stat   = useSelector(state => filtersAside.getStats(state.filtersAside, namespace, FN_PERSON)(id));
-  const person = useSelector(state => mdb.getPersonById(state.mdb)(id));
+  const stat   = useSelector(state => filtersAsideGetStatsSelector(state, namespace, FN_PERSON)(id));
+  const person = useSelector(mdbGetPersonByIdSelector)(id);
 
   const dispatch     = useDispatch();
   const handleSelect = (e, { checked }) => {

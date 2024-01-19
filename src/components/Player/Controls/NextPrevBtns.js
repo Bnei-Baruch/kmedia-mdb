@@ -2,16 +2,16 @@ import React from 'react';
 import { Icon } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
 
-import { selectors } from '../../../redux/modules/playlist';
 import Link from '../../Language/MultiLanguageLink';
 import { useTranslation } from 'react-i18next';
 import usePlaylistItemLink from '../hooks/usePlaylistItemLink';
 import WebWrapTooltip from '../../shared/WebWrapTooltip';
 import { useLocation } from 'react-router-dom';
+import { playlistGetNextIdSelector, playlistGetPrevIdSelector } from '../../../redux/selectors';
 import { getEmbedFromQuery, EMBED_TYPE_PLAYER, EMBED_TYPE_PLAYLIST } from '../../../helpers/player';
 
 export const PrevBtn = () => {
-  const id       = useSelector(state => selectors.getPrevId(state.playlist));
+  const id       = useSelector(playlistGetPrevIdSelector);
   const { t }    = useTranslation();
   const location = useLocation();
   const to       = usePlaylistItemLink(id);
@@ -32,14 +32,14 @@ export const PrevBtn = () => {
           className="controls__prev"
           to={to}
         >
-          <Icon fitted size="big" name="backward" />
+          <Icon fitted size="big" name="backward"/>
         </Link>
-      } />
+      }/>
   );
 };
 
 export const NextBtn = () => {
-  const id       = useSelector(state => selectors.getNextId(state.playlist));
+  const id       = useSelector(playlistGetNextIdSelector);
   const { t }    = useTranslation();
   const location = useLocation();
   const to       = usePlaylistItemLink(id);
@@ -60,7 +60,7 @@ export const NextBtn = () => {
           className="controls__next"
           to={to}
         >
-          <Icon fitted size="big" name="forward" />
+          <Icon fitted size="big" name="forward"/>
         </Link>
       }
     />

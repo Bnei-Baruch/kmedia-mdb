@@ -17,18 +17,16 @@ import {
   FN_TOPICS_MULTI,
   LANGUAGES
 } from '../../helpers/consts';
-import { actions, selectors as filters } from '../../redux/modules/filters';
-import { selectors as mdbSelectors } from '../../redux/modules/mdb';
-import { selectors as sources } from '../../redux/modules/sources';
-import { selectors as tags } from '../../redux/modules/tags';
+import { actions } from '../../redux/modules/filters';
 import { getTitle } from './LocationsFilter/helper';
+import { filtersGetFiltersSelector, mdbGetPersonByIdSelector, sourcesGetSourceByIdSelector, tagsGetTagByIdSelector, mdbNestedGetCollectionByIdSelector } from '../../redux/selectors';
 
 const FilterLabels = ({ namespace, t }) => {
-  const list          = useSelector(state => filters.getFilters(state.filters, namespace)) || [];
-  const getSourceById = useSelector(state => sources.getSourceById(state.sources));
-  const getTagById    = useSelector(state => tags.getTagById(state.tags));
-  const getCById      = useSelector(state => mdbSelectors.nestedGetCollectionById(state.mdb));
-  const getPersonById = useSelector(state => mdbSelectors.getPersonById(state.mdb));
+  const list          = useSelector(state => filtersGetFiltersSelector(state, namespace)) || [];
+  const getSourceById = useSelector(sourcesGetSourceByIdSelector);
+  const getTagById    = useSelector(tagsGetTagByIdSelector);
+  const getCById      = useSelector(mdbNestedGetCollectionByIdSelector);
+  const getPersonById = useSelector(mdbGetPersonByIdSelector);
 
   const dispatch = useDispatch();
 
@@ -56,7 +54,7 @@ const FilterLabels = ({ namespace, t }) => {
       case FN_LOCATIONS:
         return getTitle(val, t);
       case FN_FREE_TEXT:
-        return `${t('filters.aside-filter.free-text')}: ${val}`
+        return `${t('filters.aside-filter.free-text')}: ${val}`;
       default:
         return null;
     }
@@ -80,7 +78,7 @@ const FilterLabels = ({ namespace, t }) => {
       {
         titleByFilterType(name, val)
       }
-      <Icon name="times circle outline" size="large" inverted circular onClick={() => onRemove(name, val)} />
+      <Icon name="times circle outline" size="large" inverted circular onClick={() => onRemove(name, val)}/>
     </Label>
   );
 

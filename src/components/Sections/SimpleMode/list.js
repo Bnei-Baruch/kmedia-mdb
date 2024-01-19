@@ -6,17 +6,16 @@ import { useSelector } from 'react-redux';
 
 import WipErr from '../../shared/WipErr/WipErr';
 import { FrownSplash } from '../../shared/Splash/Splash';
-import { selectors } from '../../../redux/modules/simpleMode';
-import { selectors as mdb } from '../../../redux/modules/mdb';
 import { isEmpty } from '../../../helpers/utils';
 import { SectionLogo } from '../../../helpers/images';
+import { mdbGetDenormCollectionWUnitsSelector, mdbGetDenormContentUnitSelector, simpleModeGetItemsSelector, simpleModeGetErrorSelector, simpleModeGetWipSelector } from '../../../redux/selectors';
 
 const SimpleModeList = ({ filesLanguages, t, renderUnit }) => {
-  const wip = useSelector(state => selectors.getWip(state.simpleMode));
-  const err = useSelector(state => selectors.getError(state.simpleMode));
-  const reduxItems = useSelector(state => selectors.getItems(state.simpleMode));
-  const lessons = useSelector(state => reduxItems.lessons.map(x => mdb.getDenormCollectionWUnits(state.mdb, x)).filter(x => !isEmpty(x)));
-  const others = useSelector(state => reduxItems.others.map(x => mdb.getDenormContentUnit(state.mdb, x)).filter(x => !isEmpty(x)));
+  const wip        = useSelector(simpleModeGetWipSelector);
+  const err        = useSelector(simpleModeGetErrorSelector);
+  const reduxItems = useSelector(simpleModeGetItemsSelector);
+  const lessons    = useSelector(state => reduxItems.lessons.map(x => mdbGetDenormCollectionWUnitsSelector(state, x)).filter(x => !isEmpty(x)));
+  const others     = useSelector(state => reduxItems.others.map(x => mdbGetDenormContentUnitSelector(state, x)).filter(x => !isEmpty(x)));
 
   const wipErr = WipErr({ wip, err, t });
   if (wipErr) {
@@ -24,30 +23,30 @@ const SimpleModeList = ({ filesLanguages, t, renderUnit }) => {
   }
 
   if (lessons.length === 0 && others.length === 0) {
-    return <FrownSplash text={t('simple-mode.no-files-found-for-date')} />;
+    return <FrownSplash text={t('simple-mode.no-files-found-for-date')}/>;
   }
 
   return (
     <div>
       {
         lessons.length > 0 &&
-          <div>
-            <h2>
-              <Image className="simple-mode-type-icon">
-                <SectionLogo name='lessons' />
-              </Image>
-              {t('simple-mode.today-lessons')}
-            </h2>
-            <List size="large">
-              {lessons.map(x => renderUnit(x, filesLanguages, t))}
-            </List>
-          </div>
+        <div>
+          <h2>
+            <Image className="simple-mode-type-icon">
+              <SectionLogo name="lessons"/>
+            </Image>
+            {t('simple-mode.today-lessons')}
+          </h2>
+          <List size="large">
+            {lessons.map(x => renderUnit(x, filesLanguages, t))}
+          </List>
+        </div>
       }
       {
         others.length > 0 &&
-          <List size="large">
-            {renderUnit(others, filesLanguages, t)}
-          </List>
+        <List size="large">
+          {renderUnit(others, filesLanguages, t)}
+        </List>
       }
     </div>
   );
@@ -55,8 +54,8 @@ const SimpleModeList = ({ filesLanguages, t, renderUnit }) => {
 
 SimpleModeList.propTypes = {
   filesLanguages: PropTypes.arrayOf(PropTypes.string).isRequired,
-  t: PropTypes.func.isRequired,
-  renderUnit: PropTypes.func.isRequired,
+  t             : PropTypes.func.isRequired,
+  renderUnit    : PropTypes.func.isRequired
 };
 
 export default withTranslation()(SimpleModeList);

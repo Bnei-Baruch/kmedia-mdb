@@ -1,13 +1,13 @@
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { selectors as mdb, actions } from '../../../redux/modules/mdb';
-import { OFFSET_TEXT_SEPARATOR } from '../../../helpers/scrollToSearch/helper';
+import { actions as mdbActions } from '../../../redux/modules/mdb';
 import { buildOffsets } from './helper';
+import { mdbGetDenormLabelSelector, mdbGetLabelsByCUSelector } from '../../../redux/selectors';
 
 export const useLabels = (content_unit, language) => {
-  const ids    = useSelector(state => mdb.getLabelsByCU(state.mdb, content_unit)) || [];
-  const denorm = useSelector(state => mdb.getDenormLabel(state.mdb));
+  const ids    = useSelector(state => mdbGetLabelsByCUSelector(state, content_unit)) || [];
+  const denorm = useSelector(mdbGetDenormLabelSelector);
   const labels = ids
     .map(denorm)
     .filter(l => (l.properties?.srchstart || l.properties?.srchend))
@@ -16,7 +16,7 @@ export const useLabels = (content_unit, language) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(actions.fetchLabels({ content_unit, language }));
+    dispatch(mdbActions.fetchLabels({ content_unit, language }));
   }, [content_unit, language]);
 
   const offsets = buildOffsets(labels);

@@ -31,6 +31,7 @@ import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import classNames from 'classnames';
 import MenuLanguageSelector from '../../../Language/Selector/MenuLanguageSelector';
 import { sizeByQuality } from './helper';
+import { settingsGetContentLanguagesSelector } from '../../../../redux/selectors';
 
 const MEDIA_ORDER = [
   MT_VIDEO,
@@ -386,8 +387,6 @@ class MediaDownloads extends Component {
       ];
     } else {
       rows = MEDIA_ORDER.reduce((acc, val) => {
-        console.log('=================> val', val);
-        console.log('=================> byType.get(val)', byType.get(val));
         const baseLabel = t(`media-downloads.${typeOverrides}type-labels.${val}`);
         const files     = (byType.get(val) || []).map(file => {
           let label = baseLabel;
@@ -409,6 +408,6 @@ export default connect(state => (
   {
     publisherById: selectors.getPublisherById(state.publications),
     uiLang: settings.getUILang(state.settings),
-    contentLanguages: settings.getContentLanguages(state.settings),
+    contentLanguages: settingsGetContentLanguagesSelector(state),
   })
 )(withTranslation()(MediaDownloads));

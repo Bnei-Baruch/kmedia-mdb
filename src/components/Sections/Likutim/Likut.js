@@ -5,9 +5,8 @@ import { useParams } from 'react-router-dom';
 import { Grid, Header, Image } from 'semantic-ui-react';
 import clsx from 'clsx';
 
-import { doc2html, selectors as assetsSelectors } from '../../../redux/modules/assets';
-import { selectors as siteSettings } from '../../../redux/modules/settings';
-import { actions, selectors, selectors as mdb } from '../../../redux/modules/mdb';
+import { actions as assetsActions } from '../../../redux/modules/assets';
+import { actions as mdbActions } from '../../../redux/modules/mdb';
 import { getLangPropertyDirection, getLanguageDirection } from '../../../helpers/i18n-utils';
 import { physicalFile, strCmp } from '../../../helpers/utils';
 import { SectionLogo } from '../../../helpers/images';
@@ -23,6 +22,7 @@ import ScrollToSearch from '../../shared/DocToolbar/ScrollToSearch';
 import TagsByUnit from '../../shared/TagsByUnit';
 import LikutAudioPlayer from './LikutAudioPlayer';
 import Helmets from '../../shared/Helmets';
+import { settingsGetContentLanguagesSelector, mdbGetDenormContentUnitSelector, assetsGetDoc2htmlByIdSelector, mdbGetErrorsSelector, mdbGetFullUnitFetchedSelector, settingsGetUILangSelector, mdbGetWipFn } from '../../../redux/selectors';
 
 const DEFAULT_LANGUAGES      = [LANG_ENGLISH, LANG_HEBREW];
 export const selectLikutFile = (files, language, idx = 0) => {
@@ -39,25 +39,25 @@ export const selectLikutFile = (files, language, idx = 0) => {
 };
 
 // Expected unit of type Likutim.
-const Likut                  = () => {
+const Likut = () => {
   const { id } = useParams();
   const { t }  = useTranslation();
 
-  const unit            = useSelector(state => selectors.getDenormContentUnit(state.mdb, id));
-  const fetched         = useSelector(state => mdb.getFullUnitFetched(state.mdb)[id]);
-  const wip             = useSelector(state => selectors.getWip(state.mdb).units[id]);
-  const err             = useSelector(state => selectors.getErrors(state.mdb).units[id]);
-  const uiLang           = useSelector(state => siteSettings.getUILang(state.settings));
-  const contentLanguages = useSelector(state => siteSettings.getContentLanguages(state.settings));
-  const doc2htmlById    = useSelector(state => assetsSelectors.getDoc2htmlById(state.assets));
+  const unit             = useSelector(state => mdbGetDenormContentUnitSelector(state, id));
+  const fetched          = useSelector(mdbGetFullUnitFetchedSelector)[id];
+  const wip              = useSelector(mdbGetWipFn).units[id];
+  const err              = useSelector(mdbGetErrorsSelector).units[id];
+  const uiLang           = useSelector(settingsGetUILangSelector);
+  const contentLanguages = useSelector(settingsGetContentLanguagesSelector);
+  const doc2htmlById     = useSelector(assetsGetDoc2htmlByIdSelector);
 
-  const [isReadable, setIsReadable]               = useState(false);
-  const [settings, setSettings]                   = useState(null);
+  const [isReadable, setIsReadable] = useState(false);
+  const [settings, setSettings]     = useState(null);
 
-  const likutimLanguages = ((unit && unit.files) || []).map(f => f.language);
-  const defaultLanguage = selectSuitableLanguage(contentLanguages, likutimLanguages, LANG_HEBREW);
+  const likutimLanguages                          = ((unit && unit.files) || []).map(f => f.language);
+  const defaultLanguage                           = selectSuitableLanguage(contentLanguages, likutimLanguages, LANG_HEBREW);
   const [selectedLanguage, setSelectedLanguage]   = useState('');
-  const finalLanguage = selectedLanguage || defaultLanguage;
+  const finalLanguage                             = selectedLanguage || defaultLanguage;
   const [scrollTopPosition, setScrollTopPosition] = useState(0);
   const [scrollingElement, setScrollingElement]   = useState(null);
   const articleRef                                = useRef();
@@ -81,7 +81,7 @@ const Likut                  = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    (!fetched) && dispatch(actions.fetchUnit(id));
+    (!fetched) && dispatch(mdbActions.fetchUnit(id));
   }, [dispatch, id, fetched]);
 
   const file      = selectLikutFile(unit?.files, finalLanguage);
@@ -89,7 +89,7 @@ const Likut                  = () => {
   const needFetch = !doc2htmlById[file?.id];
   useEffect(() => {
     if (file?.id && needFetch) {
-      dispatch(doc2html(file.id));
+      dispatch(assetsActions.doc2html(file.id));
     }
   }, [dispatch, file?.id, needFetch]);
 
@@ -117,22 +117,22 @@ const Likut                  = () => {
   const labelSource        = { content_unit: unit.id, language: uiLang };
 
   const mp3File = files.find(f => f.language === finalLanguage && f.type === MT_AUDIO);
-  const title = `${t('likutim.item-header')} ${name}`;
+  const title   = `${t('likutim.item-header')} ${name}`;
 
   return (
     <div
       ref={articleRef}
       className={clsx('source likutim', {
-        'is-readable': isReadable,
-        [`is-${theme}`]: true,
-        [`is-${fontType}`]: true,
-        [`size${fontSize}`]: true,
+        'is-readable'      : isReadable,
+        [`is-${theme}`]    : true,
+        [`is-${fontType}`] : true,
+        [`size${fontSize}`]: true
       })}>
       <Grid padded>
         <Grid.Column mobile={16} tablet={16 - relatedLessonsSize} computer={16 - relatedLessonsSize}>
           <div className="section-header likut">
             <Header as="h2" className="topics__title-font">
-              <Helmets.Basic title={title} />
+              <Helmets.Basic title={title}/>
               <Header.Content>
                 {title}
                 <Header.Subheader>{t('values.date', { date: film_date })}</Header.Subheader>
@@ -141,7 +141,7 @@ const Likut                  = () => {
             {/* toolbar */}
             <Grid className="likut__toolbar" columns={2} stackable>
               <Grid.Column>
-                <TagsByUnit id={id} />
+                <TagsByUnit id={id}/>
               </Grid.Column>
               <Grid.Column>
                 <div className="source__header-toolbar">
@@ -178,7 +178,7 @@ const Likut                  = () => {
             </Grid>
           </div>
           <div className="likut__audio">
-            <LikutAudioPlayer file={mp3File} id={id} lang={lang} />
+            <LikutAudioPlayer file={mp3File} id={id} lang={lang}/>
           </div>
 
           {/* content */}
@@ -209,7 +209,7 @@ const Likut                  = () => {
               <Grid.Row>
                 <Header icon textAlign={gridDirection} as="h3">
                   <Image size="big" verticalAlign="middle">
-                    <SectionLogo name="lessons" />
+                    <SectionLogo name="lessons"/>
                   </Image>
                   {`${t(`search.intent-prefix.lessons-topic`)}  ${name}`}
                 </Header>

@@ -4,7 +4,6 @@ import { Header, Icon } from 'semantic-ui-react';
 
 export const Splash = props => {
   const { text, subtext = null, icon, color = 'black', isLoading = false, item = null } = props;
-
   return (
     <div className="splash">
       <Header icon as="h2" textAlign="center">

@@ -5,8 +5,8 @@ import { Button, Confirm, MenuItem, Modal, Popup } from 'semantic-ui-react';
 import BookmarkForm from '../SaveBookmark/BookmarkForm';
 import { useSelector } from 'react-redux';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
-import { selectors as settings } from '../../../redux/modules/settings';
 import SelectTopicsModal from '../SelectTopicsModal/SelectTopicsModal';
+import { settingsGetUIDirSelector } from '../../../redux/selectors';
 
 const BookmarkBtn = ({ t, source, label, close }) => {
   const [open, setOpen]       = useState(false);
@@ -14,7 +14,7 @@ const BookmarkBtn = ({ t, source, label, close }) => {
   const [openTag, setOpenTag] = useState(false);
 
   const { isMobileDevice } = useContext(DeviceInfoContext);
-  const dir = useSelector(state => settings.getUIDir(state.settings));
+  const dir                = useSelector(settingsGetUIDirSelector);
 
   const handleOpen = () => {
     setOpen(true);
@@ -74,7 +74,7 @@ const BookmarkBtn = ({ t, source, label, close }) => {
             content={t('share-text.bookmark-button-alt')}
             trigger={
               <MenuItem onClick={handleOpen}>
-                <Button circular icon="bookmark" />
+                <Button circular icon="bookmark"/>
                 {t('share-text.bookmark-button')}
               </MenuItem>
             }
@@ -86,18 +86,18 @@ const BookmarkBtn = ({ t, source, label, close }) => {
         dir={dir}
         className="bookmark_modal"
       >
-        <Modal.Header content={t('personal.bookmark.saveBookmark')} />
-        {<BookmarkForm onClose={handleClose} source={source} />}
+        <Modal.Header content={t('personal.bookmark.saveBookmark')}/>
+        {<BookmarkForm onClose={handleClose} source={source}/>}
       </Modal>
     </>
   );
 };
 
 BookmarkBtn.propTypes = {
-  t: PropTypes.func.isRequired,
-  query: PropTypes.object,
+  t     : PropTypes.func.isRequired,
+  query : PropTypes.object,
   source: PropTypes.object,
-  label: PropTypes.object,
+  label : PropTypes.object
 };
 
 export default withTranslation()(BookmarkBtn);

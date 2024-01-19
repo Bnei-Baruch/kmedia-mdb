@@ -5,8 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { Segment } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 
-import { selectors as settings } from '../../../redux/modules/settings';
-import { doc2html, selectors } from '../../../redux/modules/assets';
+import { actions as assetsActions } from '../../../redux/modules/assets';
 import { getLanguageName, selectSuitableLanguage } from '../../../helpers/language';
 import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import { physicalFile } from '../../../helpers/utils';
@@ -20,6 +19,7 @@ import MenuLanguageSelector from '../../Language/Selector/MenuLanguageSelector';
 import { getPageFromLocation } from '../../Pagination/withPagination';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { CT_SOURCE, DEFAULT_CONTENT_LANGUAGE, LANG_HEBREW } from '../../../helpers/consts';
+import { settingsGetContentLanguagesSelector, assetsGetDoc2htmlByIdSelector } from '../../../redux/selectors';
 
 export const checkRabashGroupArticles = source => {
   if (/^gr-/.test(source)) { // Rabash Group Articles
@@ -33,7 +33,7 @@ export const checkRabashGroupArticles = source => {
 export const buildBookmarkSource = source => {
   const { uid, isGr } = checkRabashGroupArticles(source);
   const s             = {
-    subject_uid: uid,
+    subject_uid : uid,
     subject_type: CT_SOURCE
   };
   if (isGr) {
@@ -43,7 +43,7 @@ export const buildBookmarkSource = source => {
   return s;
 };
 
-export const buildLabelData        = source => {
+export const buildLabelData = source => {
   const { uid, isGr } = checkRabashGroupArticles(source);
   const s             = { content_unit: uid };
   if (isGr) {
@@ -71,30 +71,30 @@ const Library = ({ data, source, downloadAllowed }) => {
   const navigate           = useNavigate();
   const { t }              = useTranslation();
 
-  const doc2htmlById    = useSelector(state => selectors.getDoc2htmlById(state.assets));
-  const contentLanguages = useSelector(state => settings.getContentLanguages(state.settings, location));
+  const doc2htmlById     = useSelector(assetsGetDoc2htmlByIdSelector);
+  const contentLanguages = useSelector(state => settingsGetContentLanguagesSelector(state, location));
 
   const [pageNumber, setPageNumber] = useState(getPageFromLocation(location));
 
-  const query = getQuery(location);
+  const query          = getQuery(location);
   let desiredLanguages = contentLanguages.slice();
   if (query && query.source_language) {
     desiredLanguages = [query.source_language];
   }
 
-  const sourceLanguages = data ? Object.keys(data) : [];
-  const suitableLanguage = selectSuitableLanguage(
+  const sourceLanguages                                     = data ? Object.keys(data) : [];
+  const suitableLanguage                                    = selectSuitableLanguage(
     desiredLanguages, sourceLanguages, LANG_HEBREW, /*defaultReturnLanguage=*/DEFAULT_CONTENT_LANGUAGE, /*mustReturnSomething*/true);
   const [selectedSourceLanguage, setSelectedSourceLanguage] = useState('');
-  const finalLanguage = selectedSourceLanguage || suitableLanguage;
+  const finalLanguage                                       = selectedSourceLanguage || suitableLanguage;
 
-  const dispatch  = useDispatch();
+  const dispatch = useDispatch();
 
   const file    = getLibraryContentFile(data?.[finalLanguage], source);
   const fetched = !!doc2htmlById[file.id]?.data;
   useEffect(() => {
     if (file.id && !fetched)
-      dispatch(doc2html(file.id));
+      dispatch(assetsActions.doc2html(file.id));
   }, [file.id, fetched, dispatch]);
 
   if (!data) {
@@ -105,7 +105,7 @@ const Library = ({ data, source, downloadAllowed }) => {
     setPageNumber(pageNumber);
     updateQuery(navigate, location, query => ({
       ...query,
-      page: pageNumber,
+      page: pageNumber
     }));
   };
 
@@ -118,7 +118,7 @@ const Library = ({ data, source, downloadAllowed }) => {
 
   const getAudioPlayer = () => {
     const { mp3 } = data[finalLanguage] || {};
-    return mp3 ? <AudioPlayer file={mp3} /> : null;
+    return mp3 ? <AudioPlayer file={mp3}/> : null;
   };
 
   const getLanguageBar = () => {
@@ -139,7 +139,7 @@ const Library = ({ data, source, downloadAllowed }) => {
   };
 
   const languageBar = getLanguageBar();
-  const content = (file.isPDF || !file) ? file : { ...file, ...doc2htmlById[file.id] };
+  const content     = (file.isPDF || !file) ? file : { ...file, ...doc2htmlById[file.id] };
 
   const getContentToDisplay = () => {
     const { wip, err, data: contentData, isPDF, url } = content;
@@ -193,16 +193,16 @@ const Library = ({ data, source, downloadAllowed }) => {
   return (
     <div>
       {languageBar}
-      <Download path={content.url} mimeType={mimeType} downloadAllowed={downloadAllowed} filename={content.name} />
+      <Download path={content.url} mimeType={mimeType} downloadAllowed={downloadAllowed} filename={content.name}/>
       {contentsToDisplay}
     </div>
   );
 };
 
 Library.propTypes = {
-  source: PropTypes.string,
-  data: PropTypes.any,
-  downloadAllowed: PropTypes.bool.isRequired,
+  source         : PropTypes.string,
+  data           : PropTypes.any,
+  downloadAllowed: PropTypes.bool.isRequired
 };
 
 export default Library;

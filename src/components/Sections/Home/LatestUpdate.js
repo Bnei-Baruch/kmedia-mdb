@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Card } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
-import { selectors as sources } from '../../../redux/modules/sources';
 import { canonicalLink, canonicalSectionByLink } from '../../../helpers/links';
 import * as shapes from '../../shapes';
 import Link from '../../Language/MultiLanguageLink';
@@ -25,6 +24,7 @@ import {
 import ContentItemContainer from '../../shared/ContentItem/ContentItemContainer';
 import { fromToLocalized } from '../../../helpers/date';
 import { getRandomLatestLesson } from './LatestDailyLesson';
+import { sourcesGetPathByIDSelector } from '../../../redux/selectors';
 
 const LatestUpdate = ({ item, t, label }) => {
   const { content_type, name, film_date, name_in_collection, id, source_id, start_date, end_date, number } = item;
@@ -34,7 +34,7 @@ const LatestUpdate = ({ item, t, label }) => {
   let subheader  = [`${t('values.date', { date: item.film_date })} - ${label}`];
   let authorName = '';
 
-  const getPathByID = useSelector(state => sources.getPathByID(state.sources));
+  const getPathByID = useSelector(sourcesGetPathByIDSelector);
 
   if (content_type === CT_LESSONS_SERIES && source_id) {
     authorName = getPathByID(source_id)?.[0]?.name;
@@ -47,7 +47,7 @@ const LatestUpdate = ({ item, t, label }) => {
     case CT_VIDEO_PROGRAM_CHAPTER:
     case CT_CLIP:
     case CT_VIRTUAL_LESSON:
-      return <ContentItemContainer id={id} noViews />;
+      return <ContentItemContainer id={id} noViews/>;
     case CT_DAILY_LESSON:
       title     = t(`constants.content-types.${content_type}`);
       subheader = [`${t('values.date', { date: film_date })}${number && ` (${t(`lessons.list.nameByNum_${number}`)})`}`];
@@ -77,10 +77,10 @@ const LatestUpdate = ({ item, t, label }) => {
   return (
     <Card raised className="cu_item" as={Link} to={to}>
       <div className="cu_item_img">
-        <UnitLogo unitId={id} width={250} fallbackImg={canonicalSection} />
+        <UnitLogo unitId={id} width={250} fallbackImg={canonicalSection}/>
       </div>
       <Card.Content>
-        <Card.Description content={title} className="bold-font" />
+        <Card.Description content={title} className="bold-font"/>
       </Card.Content>
       <Card.Meta className={'cu_info_description'}>
         {subheader.map((d, i) => (<span key={i}>{d}</span>))}
@@ -90,9 +90,9 @@ const LatestUpdate = ({ item, t, label }) => {
 };
 
 LatestUpdate.propTypes = {
-  item: PropTypes.oneOfType([shapes.ContentUnit, shapes.Collection]).isRequired,
+  item : PropTypes.oneOfType([shapes.ContentUnit, shapes.Collection]).isRequired,
   label: PropTypes.string,
-  t: PropTypes.func.isRequired,
+  t    : PropTypes.func.isRequired
 };
 
 export default LatestUpdate;

@@ -6,24 +6,24 @@ import { chroniclesUrl, chroniclesBackendEnabled } from './Api';
 import { noop, partialAssign } from './utils';
 
 import { actions } from '../redux/modules/chronicles';
-import { selectors as settings } from '../redux/modules/settings';
 import { types as recommendedTypes } from '../redux/modules/recommended';
 import { types as searchTypes } from '../redux/modules/search';
 import { types as authTypes } from '../redux/modules/auth';
 import { ClientChroniclesContext } from './app-contexts';
+import { chroniclesGetActionCountSelector, settingsGetContentLanguagesSelector, chroniclesGetLastActionSelector, settingsGetUILangSelector } from '../redux/selectors';
 
 // An array of DOM events that should be interpreted as user activity.
 const ACTIVITY_EVENTS = ['mousedown', 'mousemove', 'keydown', 'scroll', 'touchstart'];
 
 const FLOWS = [
-  { start: 'page-enter',               end: 'page-leave',                 subFlows: ['recommend', 'search', 'autocomplete', 'user-inactive', 'download'] },
-  { start: 'unit-page-enter',          end: 'unit-page-leave',            subFlows: ['player-play', 'recommend', 'search', 'autocomplete', 'user-inactive', 'download'] },
-  { start: 'collection-page-enter',    end: 'collection-page-leave',      subFlows: ['collection-unit-selected', 'recommend', 'search', 'autocomplete', 'user-inactive', 'download'] },
+  { start: 'page-enter', end: 'page-leave', subFlows: ['recommend', 'search', 'autocomplete', 'user-inactive', 'download'] },
+  { start: 'unit-page-enter', end: 'unit-page-leave', subFlows: ['player-play', 'recommend', 'search', 'autocomplete', 'user-inactive', 'download'] },
+  { start: 'collection-page-enter', end: 'collection-page-leave', subFlows: ['collection-unit-selected', 'recommend', 'search', 'autocomplete', 'user-inactive', 'download'] },
   { start: 'collection-unit-selected', end: 'collection-unit-unselected', subFlows: ['player-play', 'user-inactive'] },
   { start: 'player-play', end: 'player-stop', subFlows: ['mute-unmute', 'user-inactive'] },
   { start: 'recommend', end: '', subFlows: ['recommend-selected'] },
   { start: 'search', end: '', subFlows: ['search-selected'] },
-  { start: 'autocomplete', end: '', subFlows: ['autocomplete-selected'] },
+  { start: 'autocomplete', end: '', subFlows: ['autocomplete-selected'] }
 ];
 
 const PREV_HREF_EVENTS = ['page-leave', 'unit-page-leave', 'collection-page-leave', 'recommend-selected', 'search-selected'];
@@ -146,7 +146,7 @@ export default class ClientChronicles {
       }
     });
 
-    this.uiLanguage      = '';
+    this.uiLanguage       = '';
     this.contentLanguages = [];
   }
 
@@ -165,7 +165,7 @@ export default class ClientChronicles {
   // Handles custom redux actions to append events on them.
   // Note: Have to add the relevant actions to redux/modules/chronicles.js for this to work.
   onAction(action) {
-    if (action.type === recommendedTypes.FETCH_RECOMMENDED_SUCCESS) {
+    if (action.type === recommendedTypes['recommended/fetchRecommendedSuccess']) {
       const { feeds, requestData } = action.payload;
       if (feeds && Object.keys(feeds).length) {
         const recommendations = Object.fromEntries(Object.entries(action.payload.feeds).map(
@@ -174,71 +174,71 @@ export default class ClientChronicles {
       }
     }
 
-    if (action.type === searchTypes.SEARCH_SUCCESS) {
+    if (action.type === searchTypes['search/searchSuccess']) {
       const { searchResults, searchRequest } = action.payload;
       const reducedResults                   = partialAssign({}, searchResults, {
-        language: true,
+        language     : true,
         search_result: {
-          hits: {
-            hits: { // This is an array.
-              _index: true,
-              _type: true,
+          hits     : {
+            hits     : { // This is an array.
+              _index : true,
+              _type  : true,
               _source: {
-                mdb_uid: true,
-                result_type: true,
+                mdb_uid      : true,
+                result_type  : true,
                 filter_values: true,
-                landing_page: true,
+                landing_page : true
               },
-              _score: true,
+              _score : true
             },
             max_score: true,
-            total: true,
+            total    : true
           },
-          searchId: true,
+          searchId : true,
           timed_out: true,
-          took: true,
+          took     : true
         },
-        typo_suggest: true,
+        typo_suggest : true
       });
       const appendData                       = { search_results: reducedResults, search_request: searchRequest };
       this.append('search', appendData);
     }
 
-    if (action.type === searchTypes.AUTOCOMPLETE_SUCCESS) {
+    if (action.type === searchTypes['search/autocompleteSuccess']) {
       const { suggestions, request } = action.payload;
       const reducedSuggestions       = partialAssign({}, suggestions, {
-        suggest: {
-          title_suggest: { // This is an array.
+        suggest  : {
+          title_suggest           : { // This is an array.
             options: {  // This is an array.
-              text: true,
+              text   : true,
               _source: {
                 result_type: true,
-                mdb_uid: true,
-              },
+                mdb_uid    : true
+              }
             }
           },
           'title_suggest.language': { // This is an array.
             options: {  // This is an array.
-              text: true,
+              text   : true,
               _source: {
                 result_type: true,
-                mdb_uid: true,
-              },
+                mdb_uid    : true
+              }
             }
-          },
+          }
         },
         timed_out: true,
-        took: true,
+        took     : true
       });
       const appendData               = { suggestions: reducedSuggestions, request };
       this.append('autocomplete', appendData);
     }
 
-    if (action.type === authTypes.UPDATE_TOKEN) {
+    if (action.type === authTypes['auth/updateToken']) {
       this.keycloakId = action.payload;
     }
 
-    if (action.type === authTypes.UPDATE_USER && !action.payload) {
+    if (action.type === authTypes['auth/updateUser'] && !action.payload) {
       this.keycloakId = null;
     }
   }
@@ -257,7 +257,7 @@ export default class ClientChronicles {
 
   appendPage(suffix, sync = false) {
     const data = {
-      pathname: this.currentPathname,
+      pathname: this.currentPathname
     };
 
     let prefix = 'collection-';
@@ -374,12 +374,12 @@ export default class ClientChronicles {
 
     const append = {
       client_session_id: this.sessionId,
-      namespace: this.namespace,
-      client_event_id: eventId,
+      namespace        : this.namespace,
+      client_event_id  : eventId,
       client_event_type: eventType,
-      client_flow_id: flowId,
-      client_flow_type: flowType,
-      data,
+      client_flow_id   : flowId,
+      client_flow_type : flowType,
+      data
     };
 
     if (this.keycloakId) {
@@ -400,10 +400,10 @@ export default class ClientChronicles {
 // Have to add the relevant actions to redux/modules/chronicles.js for this to work.
 export const ChroniclesActions = () => {
   const clientChronicles = useContext(ClientChroniclesContext);
-  const action           = useSelector(state => state.chronicles.lastAction);
-  const actionsCount     = useSelector(state => state.chronicles.actionsCount);
-  const uiLanguage       = useSelector(state => settings.getUILang(state.settings));
-  const contentLanguages = useSelector(state => settings.getContentLanguages(state.settings));
+  const action           = useSelector(chroniclesGetLastActionSelector);
+  const actionsCount     = useSelector(chroniclesGetActionCountSelector);
+  const uiLanguage       = useSelector(settingsGetUILangSelector);
+  const contentLanguages = useSelector(settingsGetContentLanguagesSelector);
   if (clientChronicles) {
     clientChronicles.uiLanguage       = uiLanguage;
     clientChronicles.contentLanguages = contentLanguages;

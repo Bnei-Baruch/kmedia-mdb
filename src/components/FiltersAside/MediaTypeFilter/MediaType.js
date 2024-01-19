@@ -1,13 +1,13 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { FN_MEDIA_TYPE } from '../../../helpers/consts';
-import { selectors } from '../../../redux/modules/filtersAside';
 import FilterHeader from '../FilterHeader';
 import MediaTypeItem from './MediaTypeItem';
+import { filtersAsideGetTreeSelector } from '../../../redux/selectors';
 
 const MT_FOR_SHOW = ['image', 'video', 'text', 'image'];
 const MediaType   = ({ namespace }) => {
-  const items = useSelector(state => selectors.getTree(state.filtersAside, namespace, FN_MEDIA_TYPE));
+  const items = useSelector(state => filtersAsideGetTreeSelector(state, namespace, FN_MEDIA_TYPE));
 
   if (!(items?.length > 0)) return null;
 
@@ -18,7 +18,7 @@ const MediaType   = ({ namespace }) => {
         <>
           {
             items.filter(x => MT_FOR_SHOW.includes(x)).map(id =>
-              <MediaTypeItem namespace={namespace} id={id} key={id} />
+              <MediaTypeItem namespace={namespace} id={id} key={id}/>
             )
           }
         </>

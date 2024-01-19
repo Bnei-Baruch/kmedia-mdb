@@ -1,14 +1,14 @@
 import React, { useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
-import { selectors as playlist } from '../../../redux/modules/playlist';
 import { formatDuration } from '../../../helpers/utils';
 import { saveTimeOnLocalstorage } from './helper';
 import { useSubscribeSeekAndTime } from '../../../pkg/jwpAdapter';
 import { getDuration } from '../../../pkg/jwpAdapter/adapter';
+import { playlistGetInfoSelector } from '../../../redux/selectors';
 
 export const Timecode = () => {
   const duration = getDuration();
-  const cuId     = useSelector(state => playlist.getInfo(state.playlist).cuId);
+  const { cuId } = useSelector(playlistGetInfoSelector);
 
   const { time } = useSubscribeSeekAndTime();
   const timeRef  = useRef(time);
@@ -20,7 +20,6 @@ export const Timecode = () => {
   }, [time, cuId]);
 
   return (
-
     <div className="controls__timecode">
       <span className="current-timecode">
         {formatDuration(time)}

@@ -2,17 +2,17 @@ import React, { useRef, useState } from 'react';
 import { withTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Modal, Button } from 'semantic-ui-react';
-import { selectors as settings } from '../../../redux/modules/settings';
 import ImageGallery from 'react-image-gallery';
 import FallbackImage from '../../shared/FallbackImage';
 import { imageGalleryItem } from '../../Pages/WithPlayer/widgets/UnitMaterials/helper';
+import { settingsGetUIDirSelector } from '../../../redux/selectors';
 
 const ImageFileModal = ({ file }) => {
   const [open, setOpen] = useState(false);
 
-  const ref    = useRef();
-  const uiDir  = useSelector(state => settings.getUIDir(state.settings));
-  const items  = [file].map(imageGalleryItem);
+  const ref   = useRef();
+  const uiDir = useSelector(settingsGetUIDirSelector);
+  const items = [file].map(imageGalleryItem);
 
   const renderFullscreenButton = (onClick, isFullscreen) => (
     <Button
