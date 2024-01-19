@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { withTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,7 +9,7 @@ import ButtonDayPicker from '../../../Filters/components/Date/ButtonDayPicker';
 import { canonicalLink } from '../../../../helpers/links';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import { isEmpty } from '../../../../helpers/utils';
-import { getEmbedFromQuery, EMBED_TYPE_PLAYER, EMBED_TYPE_PLAYLIST } from '../../../../helpers/player';
+import { getEmbedFromQuery, EMBED_TYPE_PLAYLIST } from '../../../../helpers/player';
 import {
   mdbGetDatepickerCOSelector,
   mdbGetDenormCollectionWUnitsSelector,
@@ -38,12 +38,13 @@ const LessonDatePicker = ({ t }) => {
     }
 
     navigate({ ...to, pathname: `/${uiLang}${to.pathname}` });
-    dispatch(actions.nullDatepickerCO());
+    dispatch(mdbActions.nullDatepickerCO());
   }
 
   if (!isReady) {
     return null;
   }
+
   const fetchNextCO = date => {
     const filmDate = moment.utc(date);
     dispatch(mdbActions.fetchDatepickerCO({
