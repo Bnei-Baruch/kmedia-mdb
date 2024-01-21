@@ -9,9 +9,9 @@ const FONT_SANS_SERIF = 'sans-serif';
 const btns            = [FONT_SERIF, FONT_SANS_SERIF];
 
 const FontTypeBtn = () => {
-  const { fontType }  = useSelector(textPageGetSettings);
-  const dispatch  = useDispatch();
-  const handleSet = d => dispatch(actions.setFontType(d));
+  const { fontType } = useSelector(textPageGetSettings);
+  const dispatch     = useDispatch();
+  const handleSet    = d => dispatch(actions.setFontType(d));
 
   return (
     <>

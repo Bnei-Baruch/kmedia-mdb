@@ -10,9 +10,9 @@ export const useTextSubject = propId => {
   let { id } = useParams();
   id         = propId ?? id;
 
-  const { id: subjectId }     = useSelector(textPageGetSubjectSelector);
-  const { wip, err }  = useSelector(textPageGetWipErrSelector);
-  const getSourceById = useSelector(state => selectors.getSourceById(state.sources));
+  const { id: subjectId } = useSelector(textPageGetSubjectSelector);
+  const { wip, err }      = useSelector(textPageGetWipErrSelector);
+  const getSourceById     = useSelector(state => selectors.getSourceById(state.sources));
 
   const dispatch = useDispatch();
 

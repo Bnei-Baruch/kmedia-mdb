@@ -11,7 +11,7 @@ const THEME_SEPIA = 'sepia';
 const btns = [THEME_DARK, THEME_LIGHT, THEME_SEPIA];
 
 const ThemeBtn = () => {
-  const { theme }          = useSelector(textPageGetSettings);
+  const { theme }      = useSelector(textPageGetSettings);
   const dispatch       = useDispatch();
   const handleSetTheme = d => dispatch(actions.setTheme(d));
 

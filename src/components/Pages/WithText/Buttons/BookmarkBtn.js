@@ -9,12 +9,12 @@ import SelectTopicsModal from '../../../shared/SelectTopicsModal/SelectTopicsMod
 import { textPageGetUrlInfoSelector } from '../../../../redux/selectors';
 
 const BookmarkBtn = () => {
-  const { isMobileDevice }     = useContext(DeviceInfoContext);
-  const { t }                  = useTranslation();
-  const dir                    = useSelector(state => settings.getUIDir(state.settings));
+  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const { t }              = useTranslation();
+  const dir                = useSelector(state => settings.getUIDir(state.settings));
   const { select, search } = useSelector(textPageGetUrlInfoSelector);
 
-  const properties = { ...select, ...search }
+  const properties = { ...select, ...search };
 
   const [open, setOpen]         = useState(false);
   const [confirm, setConfirm]   = useState(false);

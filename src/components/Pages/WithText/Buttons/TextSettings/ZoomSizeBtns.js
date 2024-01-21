@@ -5,8 +5,8 @@ import { actions } from '../../../../../redux/modules/textPage';
 import { stopBubbling } from '../../../../../helpers/utils';
 
 const ZoomSizeBtns = () => {
-  const dispatch       = useDispatch();
-  const handleSetPlus  = e => {
+  const dispatch      = useDispatch();
+  const handleSetPlus = e => {
     dispatch(actions.setZoomSize('up'));
     stopBubbling(e);
   };

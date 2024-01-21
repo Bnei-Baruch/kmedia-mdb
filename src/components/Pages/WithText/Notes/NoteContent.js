@@ -18,7 +18,7 @@ const NoteContent = () => {
     dispatch(actions.setSelected({ ...note, content: value }));
   };
 
-  const isEdit       = status === NOTE_STATUS.edit || status === NOTE_STATUS.editModal;
+  const isEdit = status === NOTE_STATUS.edit || status === NOTE_STATUS.editModal;
 
   return (
     <div className="note_content" dir={dir}>
