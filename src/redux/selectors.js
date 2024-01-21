@@ -262,7 +262,7 @@ export const textPageGetTocIsActiveSelector  = createSelector([getTextPage], t =
 export const textPageGetTocInfoSelector      = createSelector([getTextPage], t => textPageSel.getTocInfo(t));
 export const textPageGetSubjectSelector      = createSelector([getTextPage], t => textPageSel.getSubject(t));
 export const textPageGetWipErrSelector       = createSelector([getTextPage], t => textPageSel.getWipErr(t));
-export const textPageGetFileSelector         = createSelector([getTextPage], t => textPageSel.getFile(t));
+export const textPageGetFileSelector         = createSelector([getTextPage], t => textPageSel.getFile(t) || false);
 export const textPageGetUrlInfoSelector      = createSelector([getTextPage], t => textPageSel.getUrlInfo(t));
 export const textPageGetWordOffsetSelector   = createSelector([getTextPage], t => textPageSel.getWordOffset(t));
 export const textPageGetMP3Selector          = createSelector([getTextPage], t => textPageSel.getMP3(t));

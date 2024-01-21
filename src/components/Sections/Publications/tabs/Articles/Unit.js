@@ -2,6 +2,7 @@ import React, { Fragment, useContext, useEffect } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Container, Grid, Header } from 'semantic-ui-react';
+import { useTranslation } from 'react-i18next';
 
 import { actions as mdbActions } from '../../../../../redux/modules/mdb';
 import Helmets from '../../../../shared/Helmets/index';
@@ -15,7 +16,6 @@ import TagsByUnit from '../../../../shared/TagsByUnit';
 import TextLayoutWeb from '../../../../Pages/WithText/TextLayoutWeb';
 import ArticleToolbarMobile from './ArticleToolbarMobile';
 import ArticleToolbarWeb from './ArticleToolbarWeb';
-import { useTranslation } from 'react-i18next';
 import {
   mdbGetDenormContentUnitSelector,
   mdbGetErrorsSelector,
@@ -23,41 +23,30 @@ import {
   mdbGetWipFn
 } from '../../../../../redux/selectors';
 
-const renderHeader = (unit, t, uiDir) => {
-  const position = uiDir === 'rtl' ? 'right' : 'left';
+const renderHeader = (unit, t) => {
   const subText2 = t(`publications.header.subtext2`);
 
   return (
     <div className="section-header">
       <Container className="padded">
-        <Grid>
-          <Grid.Row>
-            <Grid.Column>
-              <Header as="h1">
-                <Header.Content>
-                  {unit.name}
-                  {
-                    unit.description &&
-                    <Header.Subheader>{unit.description}</Header.Subheader>
-                  }
-                  {
-                    subText2 &&
-                    <Header.Subheader className="section-header__subtitle2">
-                      {subText2}
-                    </Header.Subheader>
-                  }
-                </Header.Content>
-              </Header>
-              <Header as="h4" color="grey" className="display-inline">
-                {t('values.date', { date: unit.film_date })}
-              </Header>
-              <span className="share-publication">
-                <Share position={position} />
-              </span>
-              <TagsByUnit id={unit.id} />
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
+        <Header as="h1">
+          <Header.Content>
+            {unit.name}
+            {
+              unit.description &&
+              <Header.Subheader>{unit.description}</Header.Subheader>
+            }
+            {
+              subText2 &&
+              <Header.Subheader className="section-header__subtitle2">
+                {subText2}
+              </Header.Subheader>
+            }
+          </Header.Content>
+        </Header>
+        <Header as="h4" color="grey" className="display-inline">
+          {t('values.date', { date: unit.film_date })}
+        </Header>
       </Container>
     </div>
   );

@@ -14,13 +14,13 @@ import { textPageGetSettings, textPageGetScrollDirSelector } from '../../../redu
 
 const TextLayoutMobile = props => {
   const {
-    toolbar    = null,
-    toc        = null,
-    prevNext   = null,
-    breadcrumb = null,
-    propId,
-    playerPage = false,
-  } = props;
+          toolbar    = null,
+          toc        = null,
+          prevNext   = null,
+          breadcrumb = null,
+          propId,
+          playerPage = false,
+        } = props;
 
   const ref   = useRef();
   const { t } = useTranslation();
@@ -42,16 +42,17 @@ const TextLayoutMobile = props => {
         clsx('stick_toolbar no_print', {
           'stick_toolbar_unpinned': scrollDir === 1,
           'stick_toolbar_pinned': scrollDir === -1,
+          'stick_toolbar_on_end': scrollDir === 2,
           'stick_bottom': !playerPage
         })
       }>
+      <SearchOnPageBar />
       {toolbar}
     </div>
   );
 
   return (
     <div className={`is-mobile text_layout is-${theme}`} ref={ref}>
-      <SearchOnPageBar />
       {breadcrumb}
       {playerPage && getToolbar()}
       <Container className="padded">

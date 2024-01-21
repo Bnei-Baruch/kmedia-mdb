@@ -8,16 +8,14 @@ import SearchOnPageBtn from '../../Pages/WithText/Buttons/SearchOnPageBtn';
 import DownloadTextBtn from '../../Pages/WithText/Buttons/DownloadTextBtn';
 import ShareTextBtn from '../../Pages/WithText/Buttons/ShareTextBtn';
 import LinkToLessonsBtn from '../../Pages/WithText/Buttons/LinkToLessonsBtn';
+import BookmarkBtn from '../../Pages/WithText/Buttons/BookmarkBtn';
 
 const SourceToolbarMobile = () => (
   <div className="text_toolbar is-mobile">
-    <TocToggleBtn />
     <div className="text_toolbar__buttons">
+      <TocToggleBtn />
       <LanguageTextBtn />
       <TextSettings />
-      <div className="divider" />
-      <ShareTextBtn />
-      <div className="divider" />
       <SearchOnPageBtn />
       <Dropdown
         item
@@ -28,10 +26,16 @@ const SourceToolbarMobile = () => (
       >
         <Dropdown.Menu>
           <Dropdown.Item>
+            <BookmarkBtn />
+          </Dropdown.Item>
+          <Dropdown.Item>
             <LinkToLessonsBtn />
           </Dropdown.Item>
           <Dropdown.Item>
             <DownloadTextBtn />
+          </Dropdown.Item>
+          <Dropdown.Item>
+            <ShareTextBtn />
           </Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>

@@ -9,8 +9,11 @@ export const useScrollBehavior = ref => {
   useEffect(() => {
     const handleScroll = () => {
       const st = window.pageYOffset || document.documentElement.scrollTop;
+
       if (st < ref.current?.offsetTop + 60) {
         dispatch(actions.setScrollDir(0));
+      } else if (st + document.documentElement.offsetHeight >= ref.current?.scrollHeight - 60) {
+        dispatch(actions.setScrollDir(2));
       } else if (st > lastScrollTop) {
         dispatch(actions.setScrollDir(1));
       } else if (st + 5 < lastScrollTop) {

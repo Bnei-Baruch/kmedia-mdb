@@ -170,7 +170,7 @@
       }
 
       @include mobile {
-        width: auto;
+        width: 100%;
         position: fixed;
         top: $main-menu-height + 48px;
         height: calc(100VH - $main-menu-height - 48px);
@@ -180,7 +180,7 @@
         .rtl & {
           transform: translate3d(100%, 0, 0);
         }
-        &.source__toc_scroll_up {
+        &.source__toc_scroll_up, &.source__toc_scroll_end {
           top: 0;
           height: 100VH;
           transition: height 0.2s ease-in-out 0s;

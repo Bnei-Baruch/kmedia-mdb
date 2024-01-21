@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectors as textPage } from '../../../redux/modules/textPage';
 import { selectors, actions } from '../../../redux/modules/assets';
 import { textPageGetSubjectSelector, textPageGetFileSelector, textPageGetMP3Selector } from '../../../redux/selectors';
 

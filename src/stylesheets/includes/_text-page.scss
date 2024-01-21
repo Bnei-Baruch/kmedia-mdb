@@ -210,6 +210,13 @@ $breadcrumb-height: 48px;
   &.stick_bottom {
     top: auto;
     bottom: 0;
+
+    &.stick_toolbar_unpinned {
+      transform: translate3d(0px, $text-bar-height, 0px);
+    }
+    &.stick_toolbar_on_end{
+      transform: none;
+    }
   }
 }
 
@@ -226,6 +233,15 @@ $breadcrumb-height: 48px;
   border-bottom: 1px solid $midWhite;
   height: $toc-toolbar-height;
   padding: 0 1em;
+
+  &.is-mobile {
+    padding: 0;
+
+    .text_toolbar__buttons {
+      border-right: none;
+      border-left: none;
+    }
+  }
 
 
   &__buttons {
@@ -254,7 +270,7 @@ $breadcrumb-height: 48px;
     }
 
     .button {
-      font-size: 0.5rem;
+      font-size: 18px;
       padding: 3px !important;
       background: none;
       margin: 0 8px;
@@ -405,7 +421,7 @@ $breadcrumb-height: 48px;
   line-height: 40px;
 
   .is-mobile & {
-    width: auto;
+    width: 100%;
   }
 
   .input {
