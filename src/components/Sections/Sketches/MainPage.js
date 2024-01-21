@@ -20,17 +20,23 @@ import Filters from './Filters';
 import UnitItem from './UnitItem';
 import MediaHelper from '../../../helpers/media';
 import { isZipFile } from '../../Pages/WithPlayer/widgets/UnitMaterials/helper';
-import { settingsGetContentLanguagesSelector, listsGetNamespaceStateSelector, filtersGetNotEmptyFiltersSelector, settingsGetPageSizeSelector, assetsNestedGetZipByIdSelector } from '../../../redux/selectors';
+import {
+  settingsGetContentLanguagesSelector,
+  listsGetNamespaceStateSelector,
+  filtersGetNotEmptyFiltersSelector,
+  settingsGetPageSizeSelector,
+  assetsNestedGetZipByIdSelector
+} from '../../../redux/selectors';
 
 export const SKETCHES_SHOWED_CTS = [...UNIT_LESSONS_TYPE, CT_VIDEO_PROGRAM_CHAPTER];
 const FILTER_PARAMS              = {
   content_type: SKETCHES_SHOWED_CTS,
-  media_type  : MT_IMAGE,
-  withViews   : false,
-  with_files  : true
+  media_type: MT_IMAGE,
+  withViews: false,
+  with_files: true
 };
 
-const MainPage = ({ t }) => {
+const MainPage = () => {
   const { items: cus, total } = useSelector(state => listsGetNamespaceStateSelector(state, PAGE_NS_SKETCHES)) || {};
   const contentLanguages      = useSelector(settingsGetContentLanguagesSelector);
   const pageSize              = useSelector(settingsGetPageSizeSelector);
@@ -50,7 +56,7 @@ const MainPage = ({ t }) => {
     .filter(x => MediaHelper.IsImage(x) && isZipFile(x))
     .map(x => x.id)
     .filter(id => {
-      const x             = getZipById(id) || false;
+      const x = getZipById(id) || false;
       const { wip, data } = x;
       if (wip) wipAll = true;
       return !wip && isEmpty(data);
@@ -71,7 +77,7 @@ const MainPage = ({ t }) => {
   }, [dispatch, zipIdsForFetch, wipAll]);
 
   return (<>
-    <SectionHeader section="sketches"/>
+    <SectionHeader section="sketches" />
     <SectionFiltersWithMobile
       namespace={PAGE_NS_SKETCHES}
       filters={
@@ -81,15 +87,15 @@ const MainPage = ({ t }) => {
         />
       }
     >
-      <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize}/>
-      <FilterLabels namespace={PAGE_NS_SKETCHES}/>
+      <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} />
+      <FilterLabels namespace={PAGE_NS_SKETCHES} />
       <CardGroup itemsPerRow={4} doubling stackable>
         {
-          cus?.map(({ id }) => <UnitItem id={id} key={id}/>)
+          cus?.map(({ id }) => <UnitItem id={id} key={id} />)
         }
       </CardGroup>
 
-      <Divider fitted/>
+      <Divider fitted />
       <Container className="padded pagination-wrapper" textAlign="center">
         {total > 0 && <Pagination
           pageNo={pageNo}
@@ -102,4 +108,4 @@ const MainPage = ({ t }) => {
   </>);
 };
 
-export default withTranslation()(MainPage);
+export default MainPage;

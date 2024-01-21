@@ -14,13 +14,13 @@ import { textPageGetSettings, textPageGetScrollDirSelector } from '../../../redu
 
 const TextLayoutMobile = props => {
   const {
-          toolbar    = null,
-          toc        = null,
-          prevNext   = null,
-          breadcrumb = null,
-          propId,
-          playerPage = false,
-        } = props;
+    toolbar    = null,
+    toc        = null,
+    prevNext   = null,
+    breadcrumb = null,
+    propId,
+    playerPage = false,
+  } = props;
 
   const ref   = useRef();
   const { t } = useTranslation();
