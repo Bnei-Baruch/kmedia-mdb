@@ -24,10 +24,10 @@ const convertImages = content => {
       }
 
       const src = Requests.imaginary('resize', {
-        url      : imageFile,
-        width    : 160,
-        height   : 200,
-        nocrop   : false,
+        url: imageFile,
+        width: 160,
+        height: 200,
+        nocrop: false,
         stripmeta: true
       });
 
@@ -44,11 +44,14 @@ const LibraryPerson = ({ t }) => {
   const { wip, err, data: content } = useSelector(assetsGetPersonSelector);
   const dispatch                    = useDispatch();
 
+  const _needFetch = !wip && !err && !content;
   useEffect(
     () => {
-      dispatch(assetsActions.fetchPerson({ sourceId, contentLanguages }));
+      if (_needFetch) {
+        dispatch(assetsActions.fetchPerson({ sourceId, contentLanguages }));
+      }
     },
-    [sourceId, contentLanguages, dispatch]
+    [sourceId, contentLanguages, _needFetch, dispatch]
   );
 
   const wipErr = WipErr({ wip, err, t });
@@ -65,7 +68,7 @@ const LibraryPerson = ({ t }) => {
       <Grid>
         <Grid.Row>
           <Grid.Column>
-            <div className="readble-width" dangerouslySetInnerHTML={{ __html: convertImages(content) }}/>
+            <div className="readble-width" dangerouslySetInnerHTML={{ __html: convertImages(content) }} />
           </Grid.Column>
         </Grid.Row>
       </Grid>
