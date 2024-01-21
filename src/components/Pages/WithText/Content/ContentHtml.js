@@ -4,7 +4,6 @@ import { DOM_ROOT_ID, prepareScrollToSearch } from '../scrollToSearch/helper';
 import { getQuery } from '../../../../helpers/url';
 import { useSelector } from 'react-redux';
 import { selectors as assets } from '../../../../redux/modules/assets';
-import { selectors as textPage } from '../../../../redux/modules/textPage';
 import { getLanguageDirection } from '../../../../helpers/i18n-utils';
 import { useTextContent } from './useTextContent';
 import { textPageGetFileSelector } from '../../../../redux/selectors';

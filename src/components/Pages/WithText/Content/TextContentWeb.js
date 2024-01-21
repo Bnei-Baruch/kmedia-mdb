@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { urlParamFromSelect } from '../scrollToSearch/helper';
 import { useNotes } from '../Notes/useNotes';
-import { useDispatch, useSelector, shallowEqual, batch } from 'react-redux';
-import { actions, selectors as textPage } from '../../../../redux/modules/textPage';
+import { useDispatch, useSelector, batch } from 'react-redux';
+import { actions } from '../../../../redux/modules/textPage';
 import NoteMarks from '../Notes/NoteMarks';
 import debounce from 'lodash/debounce';
 import ContentHtml from './ContentHtml';
@@ -15,7 +15,8 @@ import {
   textPageGetSettings,
   textPageGetSubjectSelector,
   textPageGetFileSelector,
-  textPageGetTextOnlySelector, textPageGetScanInfoSelector
+  textPageGetTextOnlySelector,
+  textPageGetScanInfoSelector
 } from '../../../../redux/selectors';
 
 const TextContentWeb = () => {

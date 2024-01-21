@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from 'semantic-ui-react';
 import { useDispatch, useSelector } from 'react-redux';
-import { actions, selectors as textPage } from '../../../../redux/modules/textPage';
+import { actions } from '../../../../redux/modules/textPage';
 import { stopBubbling } from '../../../../helpers/utils';
 import { textPageGetExpandNotesSelector } from '../../../../redux/selectors';
 

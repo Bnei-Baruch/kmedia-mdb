@@ -1,6 +1,5 @@
-import React, { useContext, useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-import { withTranslation, useTranslation } from 'react-i18next';
+import React, { useContext, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { Button, Message, Popup, } from 'semantic-ui-react';
 
@@ -8,8 +7,6 @@ import ShareBar from '../../../Share/ShareBar';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import useStateWithCallback from '../../../../helpers/use-state-with-callback';
 import { useSelector } from 'react-redux';
-import { selectors as textPage } from '../../../../redux/modules/textPage';
-import clsx from 'clsx';
 import { textPageGetUrlInfoSelector } from '../../../../redux/selectors';
 
 const POPOVER_CONFIRMATION_TIMEOUT = 2500;
@@ -24,7 +21,9 @@ const ShareTextBtn = () => {
     }
   });
 
-  const { select: properties, url } = useSelector(textPageGetUrlInfoSelector);
+  const { select, search, url } = useSelector(textPageGetUrlInfoSelector);
+
+  const properties = { ...select, ...search };
 
   const [urlWithParams, setUrlWithParams] = useState(url);
 

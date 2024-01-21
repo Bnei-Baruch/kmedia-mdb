@@ -1,11 +1,8 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import { Button, MenuItem, Popup } from 'semantic-ui-react';
 import SelectTopicsModal from '../../../shared/SelectTopicsModal/SelectTopicsModal';
-import { SectionLogo } from '../../../../helpers/images';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { selectors as textPage } from '../../../../redux/modules/textPage';
 import {
   textPageGetSubjectSelector,
   textPageGetFileSelector,
@@ -15,10 +12,11 @@ import {
 const TagTextBtn = () => {
   const { t } = useTranslation();
 
-  const { select: properties } = useSelector(textPageGetUrlInfoSelector);
-  const { language }           = useSelector(textPageGetFileSelector);
-  const subject                = useSelector(textPageGetSubjectSelector);
+  const { select, search } = useSelector(textPageGetUrlInfoSelector);
+  const { language }       = useSelector(textPageGetFileSelector);
+  const subject            = useSelector(textPageGetSubjectSelector);
 
+  const properties              = { ...select, ...search };
   const [urlProps, setUrlProps] = useState(properties);
   const [open, setOpen]         = useState(false);
 

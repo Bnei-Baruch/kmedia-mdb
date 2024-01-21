@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import { Button, Popup } from 'semantic-ui-react';
 import { useSelector, useDispatch } from 'react-redux';
 import { actions, selectors as assets } from '../../../../redux/modules/assets';
-import { selectors as textPage } from '../../../../redux/modules/textPage';
 import { seek, setPip } from '../../../../pkg/jwpAdapter/adapter';
 import {
   textPageGetSubjectSelector,

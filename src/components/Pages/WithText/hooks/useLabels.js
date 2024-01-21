@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { selectors as mdb, actions } from '../../../../redux/modules/mdb';
 import { buildOffsets } from '../helper';
-import { selectors as textPage } from '../../../../redux/modules/textPage';
 import { textPageGetSubjectSelector, textPageGetFileSelector } from '../../../../redux/selectors';
 
 export const useLabels = () => {

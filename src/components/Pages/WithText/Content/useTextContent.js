@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectors as textPage, actions as textActions } from '../../../../redux/modules/textPage';
+import { actions as textActions } from '../../../../redux/modules/textPage';
 import { selectors as assets, actions } from '../../../../redux/modules/assets';
 import WipErr from '../../../shared/WipErr/WipErr';
 import { useTranslation } from 'react-i18next';
@@ -19,7 +19,7 @@ export const useTextContent = () => {
   }, [id, needFetch]);
 
   useEffect(() => {
-    needFetch && dispatch(textActions.setUrlPath());
+    needFetch && dispatch(textActions.setUrlInfo());
   }, [id, language]);
 
   const wipErr = WipErr({ wip: wip || !id, err, t });

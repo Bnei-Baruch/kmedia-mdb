@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 
 import TextLayoutWeb from '../../../../WithText/TextLayoutWeb';
@@ -8,14 +8,21 @@ import { CT_RESEARCH_MATERIAL } from '../../../../../../helpers/consts';
 import { DeviceInfoContext } from '../../../../../../helpers/app-contexts';
 import ResearchTabToolbarMobile from './ResearchTabToolbarMobile';
 import { mdbGetDenormContentUnitSelector } from '../../../../../../redux/selectors';
+import { canonicalLink } from '../../../../../../helpers/links';
+import { useInitTextUrl } from '../../../../WithText/hooks/useInitTextUrl';
 
 const ResearchTab = () => {
   const { id } = useParams();
 
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
-  const pageCu = useSelector(state => mdbGetDenormContentUnitSelector(state.mdb, id));
+  const pageCu = useSelector(state => mdbGetDenormContentUnitSelector(state, id));
   const cu     = Object.values(pageCu.derived_units).find(x => x.content_type === CT_RESEARCH_MATERIAL);
+
+  const pathname = canonicalLink(cu).pathname.slice(1);
+
+  const linkMemo = useMemo(() => ({ pathname, search: { activeTab: 'research' } }), [pathname]);
+  useInitTextUrl(linkMemo);
 
   if (!cu) return null;
 

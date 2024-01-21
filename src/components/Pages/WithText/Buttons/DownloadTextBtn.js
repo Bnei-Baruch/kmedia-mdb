@@ -2,7 +2,6 @@ import React from 'react';
 import { Button } from 'semantic-ui-react';
 import { physicalFile } from '../../../../helpers/utils';
 import { useSelector } from 'react-redux';
-import { selectors as textPage } from '../../../../redux/modules/textPage';
 import { downloadAsset } from '../../../shared/Download/Download';
 import { textPageGetFileSelector } from '../../../../redux/selectors';
 

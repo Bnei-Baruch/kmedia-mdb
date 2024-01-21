@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from 'semantic-ui-react';
-import { useDispatch, batch, useSelector } from 'react-redux';
-import { actions, NOTE_STATUS, selectors } from '../../../../../redux/modules/myNotes';
+import { useDispatch, useSelector } from 'react-redux';
+import { actions, selectors } from '../../../../../redux/modules/myNotes';
 import { useTranslation } from 'react-i18next';
 
 const NoteSaveBtn = () => {

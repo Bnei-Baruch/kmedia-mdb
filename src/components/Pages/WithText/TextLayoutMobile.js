@@ -7,7 +7,6 @@ import { useInitTextSettings } from './hooks/useInitTextSettings';
 import clsx from 'clsx';
 import SearchOnPageBar from './SearchOnPageBar';
 import { useSelector } from 'react-redux';
-import { selectors as textPage } from '../../../redux/modules/textPage';
 import { useScrollBehavior } from './hooks/useScrollBehavior';
 import WipErr from '../../shared/WipErr/WipErr';
 import { useTranslation } from 'react-i18next';

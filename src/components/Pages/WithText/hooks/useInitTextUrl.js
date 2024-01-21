@@ -1,16 +1,19 @@
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectors as textPage, actions } from '../../../../redux/modules/textPage';
-import { useParams } from 'react-router-dom';
+
+import { actions } from '../../../../redux/modules/textPage';
 import { textPageGetUrlInfoSelector } from '../../../../redux/selectors';
 
-export const useInitTextUrl = () => {
+export const useInitTextUrl = (urlProps) => {
   const { url }  = useSelector(textPageGetUrlInfoSelector);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    !url && dispatch(actions.setUrlPath());
-  }, [url]);
+    !url && dispatch(actions.setUrlInfo(urlProps));
+    return () => {
+      dispatch(actions.setUrlInfo(urlProps));
+    };
+  }, [url, urlProps]);
 
   return null;
 };

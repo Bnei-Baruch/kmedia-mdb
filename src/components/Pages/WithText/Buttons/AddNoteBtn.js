@@ -13,13 +13,14 @@ import {
 } from '../../../../redux/selectors';
 
 const AddNoteBtn = () => {
-  const { t }                  = useTranslation();
-  const uiDir                  = useSelector(settingsGetUIDirSelector);
-  const { select: properties } = useSelector(textPageGetUrlInfoSelector);
-  const { id: subject_uid }    = useSelector(textPageGetSubjectSelector);
-  const { language }           = useSelector(textPageGetFileSelector);
+  const { t }               = useTranslation();
+  const uiDir               = useSelector(settingsGetUIDirSelector);
+  const { select, search }  = useSelector(textPageGetUrlInfoSelector);
+  const { id: subject_uid } = useSelector(textPageGetSubjectSelector);
+  const { language }        = useSelector(textPageGetFileSelector);
 
-  const dispatch = useDispatch();
+  const properties = { ...select, ...search };
+  const dispatch   = useDispatch();
 
   const handleOpen = () => {
     const note = {

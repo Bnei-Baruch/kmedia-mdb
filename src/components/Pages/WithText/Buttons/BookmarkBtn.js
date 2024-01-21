@@ -6,14 +6,15 @@ import { useSelector } from 'react-redux';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import { selectors as settings } from '../../../../redux/modules/settings';
 import SelectTopicsModal from '../../../shared/SelectTopicsModal/SelectTopicsModal';
-import { selectors as textPage } from '../../../../redux/modules/textPage';
 import { textPageGetUrlInfoSelector } from '../../../../redux/selectors';
 
 const BookmarkBtn = () => {
   const { isMobileDevice }     = useContext(DeviceInfoContext);
-  const dir                    = useSelector(state => settings.getUIDir(state.settings));
-  const { select: properties } = useSelector(textPageGetUrlInfoSelector);
   const { t }                  = useTranslation();
+  const dir                    = useSelector(state => settings.getUIDir(state.settings));
+  const { select, search } = useSelector(textPageGetUrlInfoSelector);
+
+  const properties = {...select, ...search}
 
   const [open, setOpen]         = useState(false);
   const [confirm, setConfirm]   = useState(false);

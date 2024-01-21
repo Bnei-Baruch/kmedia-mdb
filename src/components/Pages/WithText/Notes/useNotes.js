@@ -2,7 +2,6 @@ import { useEffect, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { selectors, actions } from '../../../../redux/modules/myNotes';
-import { selectors as textPage } from '../../../../redux/modules/textPage';
 import { textPageGetSubjectSelector, textPageGetFileSelector } from '../../../../redux/selectors';
 
 export const useNotes = () => {

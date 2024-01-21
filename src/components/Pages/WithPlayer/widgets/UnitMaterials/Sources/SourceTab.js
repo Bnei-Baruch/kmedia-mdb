@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { Dropdown } from 'semantic-ui-react';
@@ -10,6 +10,8 @@ import { DeviceInfoContext } from '../../../../../../helpers/app-contexts';
 import SourceTabToolbarMobile from './SourceTabToolbarMobile';
 import SourceTabToolbarWeb from './SourceTabToolbarWeb';
 import { mdbGetDenormContentUnitSelector, sourcesGetSourceByIdSelector } from '../../../../../../redux/selectors';
+import { canonicalLink } from '../../../../../../helpers/links';
+import { useInitTextUrl } from '../../../../WithText/hooks/useInitTextUrl';
 
 const SourceTab = () => {
   const { id } = useParams();
@@ -24,6 +26,12 @@ const SourceTab = () => {
   const cus  = [...dCus, ...sCus];
 
   const [cuId, setCuId] = useState(cus[0]?.id);
+
+  const cu       = useSelector(state => mdbGetDenormContentUnitSelector(state, cuId));
+  const pathname = canonicalLink(cu).pathname.slice(1);
+
+  const linkMemo = useMemo(() => ({ pathname, search: {} }), [pathname]);
+  useInitTextUrl(linkMemo);
 
   const handleSelectCu = (e, { value }) => setCuId(value);
 

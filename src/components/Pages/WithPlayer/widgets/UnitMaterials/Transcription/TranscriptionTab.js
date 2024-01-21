@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 
 import TextLayoutWeb from '../../../../WithText/TextLayoutWeb';
@@ -6,9 +6,13 @@ import TranscriptionTabToolbarWeb from './TranscriptionTabToolbarWeb';
 import { DeviceInfoContext } from '../../../../../../helpers/app-contexts';
 import TranscriptionTabToolbarMobile from './TranscriptionTabToolbarMobile';
 import { actions } from '../../../../../../redux/modules/textPage';
+import { useInitTextUrl } from '../../../../WithText/hooks/useInitTextUrl';
 
 const TranscriptionTab = () => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
+
+  const linkMemo = useMemo(() => ({ pathname: null, search: { activeTab: 'transcription' } }), []);
+  useInitTextUrl(linkMemo);
 
   const dispatch = useDispatch();
 

@@ -1,7 +1,6 @@
 import React from 'react';
 import ContentHtml from './ContentHtml';
 import { useSelector } from 'react-redux';
-import { selectors as textPage } from '../../../../redux/modules/textPage';
 import TagsByUnit from '../../../shared/TagsByUnit';
 import AudioPlayer from '../../../shared/AudioPlayer';
 import { textPageGetSettings, textPageGetSubjectSelector } from '../../../../redux/selectors';

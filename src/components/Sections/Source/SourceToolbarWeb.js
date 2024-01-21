@@ -1,4 +1,7 @@
 import React from 'react';
+import clsx from 'clsx';
+import { useSelector } from 'react-redux';
+
 import AddNoteBtn from '../../Pages/WithText/Buttons/AddNoteBtn';
 import TocToggleBtn from './TOC/TocToggleBtn';
 import LanguageTextBtn from '../../Pages/WithText/Buttons/LanguageTextBtn';
@@ -14,9 +17,6 @@ import FullscreenTextBtn from '../../Pages/WithText/Buttons/FullscreenTextBtn';
 import ShareTextBtn from '../../Pages/WithText/Buttons/ShareTextBtn';
 import TagTextBtn from '../../Pages/WithText/Buttons/TagTextBtn';
 import PrintBtn from '../../Pages/WithText/Buttons/PrintBtn';
-import { useSelector } from 'react-redux';
-import { selectors as textPage } from '../../../redux/modules/textPage';
-import clsx from 'clsx';
 import { textPageGetUrlInfoSelector } from '../../../redux/selectors';
 
 const SourceToolbarWeb = () => {

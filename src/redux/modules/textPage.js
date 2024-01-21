@@ -2,20 +2,20 @@ import { actions as assetsActions } from './assets';
 import { selectTextFile, selectMP3 } from '../../components/Pages/WithText/helper';
 import { assetUrl } from '../../helpers/Api';
 import { createSlice } from '@reduxjs/toolkit';
+import { getPathnameWithHost } from '../../helpers/url';
 
 const updateLocalStorage = state => {
   const settings = { ...state.settings };
   localStorage.setItem('library-settings', JSON.stringify(settings));
 };
 
-const buildUrl = state => {
+const buildUrl = (state, pathname) => {
+  if (state.urlInfo.isCustom) return state.urlInfo.url;
   if (typeof window === 'undefined') return '';
+  pathname = pathname || window.location.pathname.slice(4);
 
-  const { protocol, hostname, port, pathname } = window.location;
-
-  const _pathname = !state.file ? pathname : `${state.file.language}/${pathname.slice(4)}`;
-  return `${protocol}//${hostname}${port ? `:${port}` : ''}/${_pathname}`;
-
+  const _pathname = !state.file ? pathname : `${state.file.language}/${pathname}`;
+  return getPathnameWithHost(_pathname);
 };
 
 const textPageSlice = createSlice({
@@ -67,7 +67,16 @@ const textPageSlice = createSlice({
 
       state.urlInfo.url = buildUrl(state);
     },
-    setUrlPath: (state, { payload }) => void (state.urlInfo.url = payload ?? buildUrl(state)),
+    setUrlInfo: (state, { payload }) => {
+      if (!payload) {
+        state.urlInfo.url      = buildUrl(state);
+        state.urlInfo.isCastom = false;
+      } else {
+        state.urlInfo.url      = buildUrl(state, payload.pathname);
+        state.urlInfo.search   = payload.search;
+        state.urlInfo.isCastom = true;
+      }
+    },
     setUrlSelect: (state, { payload }) => void (state.urlInfo.select = payload || null),
     setWordOffset: (state, { payload }) => void (state.wordOffset = payload),
     expandNotes: state => void (state.expandNotes = !state.expandNotes),

@@ -3,7 +3,6 @@ import { Button } from 'semantic-ui-react';
 import Link from '../../../Language/MultiLanguageLink';
 import { stringify } from '../../../../helpers/url';
 import { useSelector } from 'react-redux';
-import { selectors as textPage } from '../../../../redux/modules/textPage';
 import { CT_SOURCE, CT_LIKUTIM } from '../../../../helpers/consts';
 import { textPageGetSubjectSelector } from '../../../../redux/selectors';
 

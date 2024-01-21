@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
@@ -8,6 +8,8 @@ import { CT_ARTICLE } from '../../../../../../helpers/consts';
 import { DeviceInfoContext } from '../../../../../../helpers/app-contexts';
 import ArticleTabToolbarMobile from './ArticleTabToolbarMobile';
 import { mdbGetDenormContentUnitSelector } from '../../../../../../redux/selectors';
+import { useInitTextUrl } from '../../../../WithText/hooks/useInitTextUrl';
+import { canonicalLink } from '../../../../../../helpers/links';
 
 const ArticleTab = () => {
   const { id }             = useParams();
@@ -15,6 +17,10 @@ const ArticleTab = () => {
 
   const pageCu = useSelector(state => mdbGetDenormContentUnitSelector(state, id));
   const cu     = Object.values(pageCu.derived_units).find(x => x.content_type === CT_ARTICLE);
+
+  const pathname = canonicalLink(cu).pathname.slice(1);
+  const linkMemo = useMemo(() => ({ pathname, search: {} }), [pathname]);
+  useInitTextUrl(linkMemo);
 
   if (!cu) return null;
 

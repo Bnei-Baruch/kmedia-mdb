@@ -1,14 +1,13 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { Button, Label } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
-import { selectors } from '../../../../redux/modules/myNotes';
-import { selectors as textPage } from '../../../../redux/modules/textPage';
 import NoteMarkInList from './NoteMarkInList';
 import clsx from 'clsx';
 import {
   textPageGetSettings,
   textPageGetExpandNotesSelector,
-  myNotesGetByIdSelector, textPageGetSideOffsetSelector
+  myNotesGetByIdSelector,
+  textPageGetSideOffsetSelector
 } from '../../../../redux/selectors';
 
 const NotesByPos = ({ pos, ids }) => {

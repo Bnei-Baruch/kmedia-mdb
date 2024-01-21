@@ -2,7 +2,6 @@ import React from 'react';
 import { Button } from 'semantic-ui-react';
 import { useDispatch, batch } from 'react-redux';
 import { actions, NOTE_STATUS } from '../../../../../redux/modules/myNotes';
-import { useTranslation } from 'react-i18next';
 
 const NoteCloseBtn = () => {
   const dispatch = useDispatch();

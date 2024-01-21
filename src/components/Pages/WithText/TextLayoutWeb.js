@@ -4,7 +4,6 @@ import { useTextSubject } from './hooks/useTextSubject';
 import { useInitTextUrl } from './hooks/useInitTextUrl';
 import clsx from 'clsx';
 import { useSelector } from 'react-redux';
-import { selectors as textPage } from '../../../redux/modules/textPage';
 import { useInitTextSettings } from './hooks/useInitTextSettings';
 import NoteItemSticky from './Notes/NoteItemSticky';
 import NoteConfirmRemove from './Notes/NoteConfirmRemove';
@@ -20,7 +19,8 @@ import {
   textPageGetSettings,
   textPageGetSubjectSelector,
   textPageGetFileSelector,
-  textPageGetUrlInfoSelector, textPageGetScrollDirSelector
+  textPageGetUrlInfoSelector,
+  textPageGetScrollDirSelector
 } from '../../../redux/selectors';
 
 const TextLayoutWeb = props => {

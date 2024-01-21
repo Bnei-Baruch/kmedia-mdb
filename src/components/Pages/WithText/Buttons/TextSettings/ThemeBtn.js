@@ -1,7 +1,7 @@
 import React from 'react';
-import { Icon, Menu } from 'semantic-ui-react';
+import { Menu } from 'semantic-ui-react';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectors, actions } from '../../../../../redux/modules/textPage';
+import { actions } from '../../../../../redux/modules/textPage';
 import { textPageGetSettings } from '../../../../../redux/selectors';
 
 const THEME_LIGHT = 'light';

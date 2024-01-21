@@ -2,7 +2,7 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Dropdown, Button } from 'semantic-ui-react';
 import { getOptions } from '../../../../helpers/language';
-import { selectors as textPage, actions } from '../../../../redux/modules/textPage';
+import { actions } from '../../../../redux/modules/textPage';
 import { textPageGetSubjectSelector, textPageGetFileSelector } from '../../../../redux/selectors';
 
 const LanguageTextBtn = () => {

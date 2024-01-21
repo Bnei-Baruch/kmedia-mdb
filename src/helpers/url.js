@@ -23,7 +23,7 @@ const ensureStartsWithSlash = str => str && (str[0] === '/' ? str : `/${str}`);
 
 export const splitPathByLanguage = path => {
   const pathWithSlash = ensureStartsWithSlash(path);
-  const parts = pathWithSlash.split('/');
+  const parts         = pathWithSlash.split('/');
 
   if (LANGUAGES[parts[1]]) {
     return {
@@ -53,7 +53,7 @@ export const getUILangFromPath = (path, headers, userAgent) => {
 
   // UI lang is set in cookie - redirect 302 to /:lang/...
   const cookies = cookieParse(headers.cookie || '');
-  language = cookies[COOKIE_UI_LANG];
+  language      = cookies[COOKIE_UI_LANG];
   // Only existing languages...
   if (language !== undefined && LANG_UI_LANGUAGES.includes(language)) {
     console.log(`language: ${language}, redirect: ${language !== DEFAULT_UI_LANGUAGE}`);
@@ -85,7 +85,7 @@ export const prefixWithLanguage = (path, location, toLanguage) => {
   }
 
   const { language: languagePrefix, path: pathSuffix } = splitPathByLanguage(path);
-  const { language: currentPathLangPrefix } = splitPathByLanguage(location.pathname);
+  const { language: currentPathLangPrefix }            = splitPathByLanguage(location.pathname);
 
   // priority: language from args > language from link path > language from current path
   const language = toLanguage || languagePrefix || currentPathLangPrefix || '';
@@ -137,8 +137,8 @@ export const getToWithLanguage = (navigateTo, location, language, contentLanguag
   // We're changing 'search' in case contentLanguage was supplied
   // DON'T COMMI: NOT CLEAR WHAT THAT IS...
   if (contentLanguage) {
-    const q = getQuery(navigateTo);
-    q.language = contentLanguage;
+    const q           = getQuery(navigateTo);
+    q.language        = contentLanguage;
     navigateTo.search = `?${stringify(q)}`;
   }
 
@@ -146,4 +146,11 @@ export const getToWithLanguage = (navigateTo, location, language, contentLanguag
     ...navigateTo,
     pathname: prefixWithLanguage(navigateTo.pathname, location, language)
   };
+};
+
+export const getPathnameWithHost = (pathname) => {
+  if (typeof window === 'undefined')
+    return '';
+  const { protocol, hostname, port } = window.location;
+  return `${protocol}//${hostname}${port ? `:${port}` : ''}/${pathname}`;
 };

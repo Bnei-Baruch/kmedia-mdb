@@ -1,9 +1,6 @@
 import { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { selectors as textPage, actions } from '../../../../redux/modules/textPage';
-import { useParams } from 'react-router-dom';
-import { selectors as sourcesSelectors, selectors } from '../../../../redux/modules/sources';
-import { firstLeafId } from '../helper';
+import { useDispatch } from 'react-redux';
+import { actions } from '../../../../redux/modules/textPage';
 
 let lastScrollTop              = 0;
 export const useScrollBehavior = ref => {

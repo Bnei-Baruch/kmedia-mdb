@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Button } from 'semantic-ui-react';
 import { useDispatch, useSelector } from 'react-redux';
-import { actions, selectors, selectors as textPage } from '../../../../redux/modules/textPage';
+import { actions } from '../../../../redux/modules/textPage';
 import fscreen from 'fscreen';
 import { textPageGetUrlInfoSelector, textPageGetIsFullscreenSelector } from '../../../../redux/selectors';
 
