@@ -148,7 +148,7 @@ export const getToWithLanguage = (navigateTo, location, language, contentLanguag
   };
 };
 
-export const getPathnameWithHost = (pathname) => {
+export const getPathnameWithHost = pathname => {
   if (typeof window === 'undefined')
     return '';
   const { protocol, hostname, port } = window.location;

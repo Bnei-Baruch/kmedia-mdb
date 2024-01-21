@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { actions } from '../../../../redux/modules/textPage';
 import { textPageGetUrlInfoSelector } from '../../../../redux/selectors';
 
-export const useInitTextUrl = (urlProps) => {
+export const useInitTextUrl = urlProps => {
   const { url }  = useSelector(textPageGetUrlInfoSelector);
   const dispatch = useDispatch();
 
