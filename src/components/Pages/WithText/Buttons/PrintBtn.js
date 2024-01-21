@@ -7,6 +7,7 @@ const PrintBtn = () => {
     <Button
       icon={<span className="material-symbols-outlined">print</span>}
       onClick={handlePrint}
+      className="computer-only"
     />
   );
 };

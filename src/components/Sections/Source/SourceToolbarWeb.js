@@ -18,6 +18,7 @@ import ShareTextBtn from '../../Pages/WithText/Buttons/ShareTextBtn';
 import TagTextBtn from '../../Pages/WithText/Buttons/TagTextBtn';
 import PrintBtn from '../../Pages/WithText/Buttons/PrintBtn';
 import { textPageGetUrlInfoSelector } from '../../../redux/selectors';
+import { Dropdown, Container, Button } from 'semantic-ui-react';
 
 const SourceToolbarWeb = () => {
   const hasSel = !!useSelector(textPageGetUrlInfoSelector).select;
@@ -44,18 +45,63 @@ const SourceToolbarWeb = () => {
             <>
               <div className="divider" />
               <SearchOnPageBtn />
-              <ExpandAllNotesBtn />
-              <PrintBtn />
-              <DownloadTextBtn />
-              <AdditionsVisibilityBtn />
-              <div className="divider" />
-              <LinkToLessonsBtn />
-              <ToggleScanBtn />
-              <div className="divider" />
+              <div className="computer-only">
+                <ExpandAllNotesBtn />
+              </div>
+              <div className="computer-only">
+                <PrintBtn />
+              </div>
+              <div className="computer-only">
+                <DownloadTextBtn />
+              </div>
+              <div className="computer-only">
+                <AdditionsVisibilityBtn />
+              </div>
+              <div className="divider computer-only" />
+
+              <div className="computer-only">
+                <LinkToLessonsBtn />
+              </div>
+              <div className="computer-only">
+                <ToggleScanBtn />
+              </div>
+              <div className="divider computer-only" />
             </>
           )
         }
         <FullscreenTextBtn />
+        <Dropdown
+          item
+          icon={null}
+          trigger={
+            (
+              <Button
+                circular
+                icon={<span className="material-symbols-outlined">more_vert</span>}
+              />
+            )
+          }
+          pointing="top right"
+          className="text_toolbar__dropdown"
+        >
+          <Dropdown.Menu>
+            <Dropdown.Item>
+              <ExpandAllNotesBtn />
+            </Dropdown.Item>
+            <Dropdown.Item>
+              <DownloadTextBtn />
+            </Dropdown.Item>
+            <Dropdown.Item>
+              <AdditionsVisibilityBtn />
+            </Dropdown.Item>
+            <Dropdown.Item>
+              <LinkToLessonsBtn />
+            </Dropdown.Item>
+            <Dropdown.Item>
+              <ToggleScanBtn />
+            </Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown>
       </div>
       <div className="flex_basis_150">&nbsp;</div>
     </div>
