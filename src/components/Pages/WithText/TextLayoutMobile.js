@@ -24,8 +24,8 @@ const TextLayoutMobile = props => {
           toc        = null,
           prevNext   = null,
           breadcrumb = null,
-          propId,
           playerPage = false,
+          id,
         } = props;
 
   const ref   = useRef();
@@ -36,7 +36,7 @@ const TextLayoutMobile = props => {
   const subject   = useSelector(textPageGetSubjectSelector);
 
   useInitTextUrl();
-  const wip = useTextSubject(propId);
+  const wip = useTextSubject(id);
   useInitTextSettings();
   useScrollBehavior(ref);
 

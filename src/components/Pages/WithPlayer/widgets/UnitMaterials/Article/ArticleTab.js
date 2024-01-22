@@ -31,9 +31,9 @@ const ArticleTab = () => {
     <div className="player_page_tab">
       {
         isMobileDevice ? (
-          <TextLayoutMobile toolbar={toolbar} playerPage={true} />
+          <TextLayoutMobile toolbar={toolbar} playerPage={true} id={cu.id} />
         ) : (
-          <TextLayoutWeb toolbar={toolbar} playerPage={true} />
+          <TextLayoutWeb toolbar={toolbar} playerPage={true} id={cu.id} />
         )
       }
     </div>

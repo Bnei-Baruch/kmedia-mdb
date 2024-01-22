@@ -25,13 +25,13 @@ import {
 
 const TextLayoutWeb = props => {
   const {
-    toolbar    = null,
-    toc        = null,
-    prevNext   = null,
-    breadcrumb = null,
-    propId,
-    playerPage = false,
-  } = props;
+          toolbar    = null,
+          toc        = null,
+          prevNext   = null,
+          breadcrumb = null,
+          playerPage = false,
+          id
+        } = props;
 
   const ref   = useRef();
   const { t } = useTranslation();
@@ -43,7 +43,7 @@ const TextLayoutWeb = props => {
   const { theme } = useSelector(textPageGetSettings);
 
   useInitTextUrl();
-  const wip = useTextSubject(propId);
+  const wip = useTextSubject(id);
   useInitTextSettings();
   useScrollBehavior(ref);
 
