@@ -195,15 +195,13 @@ $breadcrumb-height: 48px;
 
   &.stick_toolbar_unpinned {
     &.stick_toolbar_fixed {
-      transform: none;
+      transform: none !important;
     }
 
     transform: translate3d(0px, calc(-1 * ($text-bar-height + $breadcrumb-height)), 0px);
-    transition: all 0.2s ease-in-out 0s;
 
     &.stick_toolbar_no_breadcrumb {
       transform: translate3d(0px, -$text-bar-height, 0px);
-
     }
   }
 
@@ -214,7 +212,8 @@ $breadcrumb-height: 48px;
     &.stick_toolbar_unpinned {
       transform: translate3d(0px, $text-bar-height, 0px);
     }
-    &.stick_toolbar_on_end{
+
+    &.stick_toolbar_on_end {
       transform: none;
     }
   }
@@ -291,7 +290,8 @@ $breadcrumb-height: 48px;
       @include tablet-mobile {
         display: block;
       }
-      .material-symbols-outlined{
+
+      .material-symbols-outlined {
         min-width: 32px;
       }
     }

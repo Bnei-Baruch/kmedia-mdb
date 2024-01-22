@@ -57,7 +57,7 @@ const TextLayoutWeb = props => {
       {toc}
       <div className={
         clsx('stick_toolbar no_print', {
-          'stick_toolbar_unpinned': scrollDir === 1,
+          'stick_toolbar_unpinned': scrollDir === 1 || scrollDir === 2,
           'stick_toolbar_pinned': scrollDir === -1,
           'stick_toolbar_fixed': hasSel,
           'stick_toolbar_no_breadcrumb': !breadcrumb
