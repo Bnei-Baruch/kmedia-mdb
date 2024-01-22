@@ -9,6 +9,7 @@ import DownloadTextBtn from '../../Pages/WithText/Buttons/DownloadTextBtn';
 import ShareTextBtn from '../../Pages/WithText/Buttons/ShareTextBtn';
 import LinkToLessonsBtn from '../../Pages/WithText/Buttons/LinkToLessonsBtn';
 import BookmarkBtn from '../../Pages/WithText/Buttons/BookmarkBtn';
+import ShareTextModalBtn from '../../Pages/WithText/Buttons/ShareTextModalBtn';
 
 const SourceToolbarMobile = () => (
   <div className="text_toolbar is-mobile">
@@ -35,7 +36,7 @@ const SourceToolbarMobile = () => (
             <DownloadTextBtn />
           </Dropdown.Item>
           <Dropdown.Item>
-            <ShareTextBtn />
+            <ShareTextModalBtn />
           </Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
