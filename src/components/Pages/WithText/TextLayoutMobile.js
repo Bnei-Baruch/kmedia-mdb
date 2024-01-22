@@ -10,23 +10,30 @@ import { useSelector } from 'react-redux';
 import { useScrollBehavior } from './hooks/useScrollBehavior';
 import WipErr from '../../shared/WipErr/WipErr';
 import { useTranslation } from 'react-i18next';
-import { textPageGetSettings, textPageGetScrollDirSelector } from '../../../redux/selectors';
+import {
+  textPageGetSettings,
+  textPageGetScrollDirSelector,
+  textPageGetSubjectSelector
+} from '../../../redux/selectors';
+import TagsByUnit from '../../shared/TagsByUnit';
+import AudioPlayer from '../../shared/AudioPlayer';
 
 const TextLayoutMobile = props => {
   const {
-    toolbar    = null,
-    toc        = null,
-    prevNext   = null,
-    breadcrumb = null,
-    propId,
-    playerPage = false,
-  } = props;
+          toolbar    = null,
+          toc        = null,
+          prevNext   = null,
+          breadcrumb = null,
+          propId,
+          playerPage = false,
+        } = props;
 
   const ref   = useRef();
   const { t } = useTranslation();
 
   const { theme } = useSelector(textPageGetSettings);
   const scrollDir = useSelector(textPageGetScrollDirSelector);
+  const subject   = useSelector(textPageGetSubjectSelector);
 
   useInitTextUrl();
   const wip = useTextSubject(propId);
@@ -56,6 +63,14 @@ const TextLayoutMobile = props => {
       {breadcrumb}
       {playerPage && getToolbar()}
       <Container className="padded">
+        {
+          !playerPage && (
+            <div className="text_align_to_text margin-bottom-1em">
+              <TagsByUnit id={subject.id}></TagsByUnit>
+              <AudioPlayer />
+            </div>
+          )
+        }
         <TextContentMobile />
         {prevNext}
       </Container>
