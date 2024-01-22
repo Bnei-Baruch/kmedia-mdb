@@ -12,6 +12,7 @@ import SourceTabToolbarWeb from './SourceTabToolbarWeb';
 import { mdbGetDenormContentUnitSelector, sourcesGetSourceByIdSelector } from '../../../../../../redux/selectors';
 import { canonicalLink } from '../../../../../../helpers/links';
 import { useInitTextUrl } from '../../../../WithText/hooks/useInitTextUrl';
+import TextLayoutMobile from '../../../../WithText/TextLayoutMobile';
 
 const SourceTab = () => {
   const { id } = useParams();
@@ -52,7 +53,13 @@ const SourceTab = () => {
         value={cuId}
         onChange={handleSelectCu}
       />
-      <TextLayoutWeb propId={cuId} toolbar={toolbar} />
+      {
+        isMobileDevice ? (
+          <TextLayoutMobile toolbar={toolbar} playerPage={true} />
+        ) : (
+          <TextLayoutWeb toolbar={toolbar} playerPage={true} />
+        )
+      }
     </div>
   );
 };

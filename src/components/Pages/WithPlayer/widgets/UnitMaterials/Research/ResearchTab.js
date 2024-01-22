@@ -10,6 +10,7 @@ import ResearchTabToolbarMobile from './ResearchTabToolbarMobile';
 import { mdbGetDenormContentUnitSelector } from '../../../../../../redux/selectors';
 import { canonicalLink } from '../../../../../../helpers/links';
 import { useInitTextUrl } from '../../../../WithText/hooks/useInitTextUrl';
+import TextLayoutMobile from '../../../../WithText/TextLayoutMobile';
 
 const ResearchTab = () => {
   const { id } = useParams();
@@ -30,7 +31,13 @@ const ResearchTab = () => {
 
   return (
     <div className="player_page_tab">
-      <TextLayoutWeb propId={cu.id} toolbar={toolbar} playerPage={true} />
+      {
+        isMobileDevice ? (
+          <TextLayoutMobile toolbar={toolbar} playerPage={true} />
+        ) : (
+          <TextLayoutWeb toolbar={toolbar} playerPage={true} />
+        )
+      }
     </div>
   );
 };

@@ -7,6 +7,7 @@ import { DeviceInfoContext } from '../../../../../../helpers/app-contexts';
 import TranscriptionTabToolbarMobile from './TranscriptionTabToolbarMobile';
 import { actions } from '../../../../../../redux/modules/textPage';
 import { useInitTextUrl } from '../../../../WithText/hooks/useInitTextUrl';
+import TextLayoutMobile from '../../../../WithText/TextLayoutMobile';
 
 const TranscriptionTab = () => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
@@ -24,7 +25,13 @@ const TranscriptionTab = () => {
   const toolbar = isMobileDevice ? <TranscriptionTabToolbarMobile /> : <TranscriptionTabToolbarWeb />;
   return (
     <div className="player_page_tab">
-      <TextLayoutWeb toolbar={toolbar} playerPage={true} />
+      {
+        isMobileDevice ? (
+          <TextLayoutMobile toolbar={toolbar} playerPage={true} />
+        ) : (
+          <TextLayoutWeb toolbar={toolbar} playerPage={true} />
+        )
+      }
     </div>
   );
 };

@@ -22,6 +22,7 @@ import {
   settingsGetUIDirSelector,
   mdbGetWipFn
 } from '../../../../../redux/selectors';
+import TextLayoutMobile from '../../../../Pages/WithText/TextLayoutMobile';
 
 const renderHeader = (unit, t) => {
   const subText2 = t(`publications.header.subtext2`);
@@ -113,7 +114,13 @@ const ArticlePage = () => {
                     <Grid padded>
                       <Grid.Row>
                         <Grid.Column>
-                          <TextLayoutWeb toolbar={toolbar} />
+                          {
+                            isMobileDevice ? (
+                              <TextLayoutMobile toolbar={toolbar} playerPage={true} />
+                            ) : (
+                              <TextLayoutWeb toolbar={toolbar} playerPage={true} />
+                            )
+                          }
                         </Grid.Column>
                       </Grid.Row>
                       <Grid.Row>
