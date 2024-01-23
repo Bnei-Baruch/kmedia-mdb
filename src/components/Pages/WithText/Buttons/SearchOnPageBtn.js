@@ -3,8 +3,11 @@ import { Button, Popup } from 'semantic-ui-react';
 import { useSelector, useDispatch } from 'react-redux';
 import { actions } from '../../../../redux/modules/textPage';
 import { textPageGetFileSelector, textPageGetIsSearchSelector } from '../../../../redux/selectors';
+import { useTranslation } from 'react-i18next';
 
 const SearchOnPageBtn = () => {
+  const { t }    = useTranslation();
+
   const isSearch  = useSelector(textPageGetIsSearchSelector);
   const { isPdf } = useSelector(textPageGetFileSelector);
 

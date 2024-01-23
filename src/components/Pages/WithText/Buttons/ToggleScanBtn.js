@@ -3,10 +3,13 @@ import { Button, Popup } from 'semantic-ui-react';
 import { actions } from '../../../../redux/modules/textPage';
 import { useDispatch, useSelector } from 'react-redux';
 import { textPageGetScanInfoSelector } from '../../../../redux/selectors';
+import { useTranslation } from 'react-i18next';
 
 const ToggleScanBtn = () => {
+  const { t }    = useTranslation();
+  const dispatch = useDispatch();
+
   const { on, file } = useSelector(textPageGetScanInfoSelector);
-  const dispatch     = useDispatch();
 
   if (!file) return null;
 

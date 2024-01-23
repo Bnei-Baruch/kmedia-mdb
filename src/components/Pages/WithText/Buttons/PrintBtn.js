@@ -1,8 +1,12 @@
 import { Button, Popup } from 'semantic-ui-react';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 const PrintBtn = () => {
+  const { t }    = useTranslation();
+
   const handlePrint = () => window.print();
+
   return (
     <Popup
       on="hover"
