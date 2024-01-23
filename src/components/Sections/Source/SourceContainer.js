@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import TOC from './TOC/TOC';
 import TextLayoutWeb from '../../Pages/WithText/TextLayoutWeb';
 import SourceToolbarWeb from './SourceToolbarWeb';
@@ -10,7 +10,6 @@ import PrevNextBtns from './PrevNextBtns';
 import { useSelector } from 'react-redux';
 import { sourcesGetSourceByIdSelector } from '../../../redux/selectors';
 import { useNavigate, useParams } from 'react-router-dom';
-import { isEmpty } from '../../../helpers/utils';
 
 const SourceContainer = () => {
   const { id }             = useParams();
@@ -19,9 +18,12 @@ const SourceContainer = () => {
 
   const source = useSelector(sourcesGetSourceByIdSelector)(id);
 
-  if (!isEmpty(source?.children)) {
-    navigate(`../sources/${source.children[0]}`);
-  }
+  const childId = source.children?.[0];
+  console.log('reload parent SourceContainer', childId, id);
+  //TODO: David use https://reactrouter.com/en/main/route/loader
+  useEffect(() => {
+    childId && navigate(`../sources/${childId}`, { replace: true });
+  }, [childId]);
 
   const toc        = <TOC />;
   const toolbar    = isMobileDevice ? <SourceToolbarMobile /> : <SourceToolbarWeb />;
@@ -30,6 +32,7 @@ const SourceContainer = () => {
 
   return isMobileDevice ? (
     <TextLayoutMobile
+      id={childId || id}
       toc={toc}
       toolbar={toolbar}
       prevNext={prevNext}
@@ -37,6 +40,7 @@ const SourceContainer = () => {
     />
   ) : (
     <TextLayoutWeb
+      id={childId || id}
       toc={toc}
       toolbar={toolbar}
       prevNext={prevNext}
