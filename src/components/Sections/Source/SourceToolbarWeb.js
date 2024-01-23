@@ -18,7 +18,7 @@ import ShareTextBtn from '../../Pages/WithText/Buttons/ShareTextBtn';
 import TagTextBtn from '../../Pages/WithText/Buttons/TagTextBtn';
 import PrintBtn from '../../Pages/WithText/Buttons/PrintBtn';
 import { textPageGetUrlInfoSelector } from '../../../redux/selectors';
-import { Dropdown, Container, Button } from 'semantic-ui-react';
+import { Dropdown, Button } from 'semantic-ui-react';
 
 const SourceToolbarWeb = () => {
   const hasSel = !!useSelector(textPageGetUrlInfoSelector).select;

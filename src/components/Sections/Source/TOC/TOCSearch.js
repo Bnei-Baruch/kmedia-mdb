@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Input } from 'semantic-ui-react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { actions, selectors as textPage } from '../../../../redux/modules/textPage';
+import { actions } from '../../../../redux/modules/textPage';
 import { textPageGetTocInfoSelector } from '../../../../redux/selectors';
 
 const TocSearch = () => {
@@ -17,8 +17,8 @@ const TocSearch = () => {
     }
   };
 
-  const search              = m => dispatch(actions.setTocMatch(m));
-  const sortBy              = () => dispatch(actions.setTocSortBy());
+  const search = m => dispatch(actions.setTocMatch(m));
+  const sortBy = () => dispatch(actions.setTocSortBy());
 
   return (
     <div className="source__toc_filter">

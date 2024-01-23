@@ -1,6 +1,5 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { selectors as textPage } from '../../../redux/modules/textPage';
 import { isTaas } from '../../shared/PDF/PDF';
 import { getFullPath } from './TOC/helper';
 import { selectors as sources, selectors } from '../../../redux/modules/sources';
