@@ -13,7 +13,7 @@ const SearchOnPageBtn = () => {
   if (isPdf) return null;
 
   const handle = () => dispatch(actions.setIsSearch());
-  
+
   return (
     <Popup
       on="hover"
