@@ -1,13 +1,21 @@
-import { Button } from 'semantic-ui-react';
+import { Button, Popup } from 'semantic-ui-react';
 import React from 'react';
 
 const PrintBtn = () => {
   const handlePrint = () => window.print();
   return (
-    <Button
-      icon={<span className="material-symbols-outlined">print</span>}
-      onClick={handlePrint}
-      className="computer-only"
+    <Popup
+      on="hover"
+      content={t('page-with-text.buttons.print')}
+      trigger={
+        (
+          <Button
+            icon={<span className="material-symbols-outlined">print</span>}
+            onClick={handlePrint}
+            className="computer-only"
+          />
+        )
+      }
     />
   );
 };

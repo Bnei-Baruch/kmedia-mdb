@@ -50,8 +50,10 @@ const ShareTextModalBtn = () => {
       flowing
       hideOnScroll
       trigger={
-        <Button
-          icon={<span className="material-symbols-outlined">share</span>}
+        <Popup
+          on="hover"
+          content={t('page-with-text.buttons.scan')}
+          trigger={<Button icon={<span className="material-symbols-outlined">share</span>} />}
         />
       }
       open={isPopupOpen}

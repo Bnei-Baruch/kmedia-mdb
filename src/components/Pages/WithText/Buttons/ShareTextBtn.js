@@ -80,7 +80,6 @@ const ShareTextBtn = () => {
         <Popup // link was copied message popup
           open={isCopyOpen}
           content={t('messages.link-copied-to-clipboard')}
-          position={`bottom left`}
           trigger={
             (
               <CopyToClipboard text={urlWithParams} onCopy={handleCopied}>

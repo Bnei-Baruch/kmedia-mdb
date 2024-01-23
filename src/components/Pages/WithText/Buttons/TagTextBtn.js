@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, MenuItem, Popup } from 'semantic-ui-react';
+import { Button, Popup } from 'semantic-ui-react';
 import SelectTopicsModal from '../../../shared/SelectTopicsModal/SelectTopicsModal';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -45,15 +45,13 @@ const TagTextBtn = () => {
       onClose={handleClose}
       trigger={
         <Popup
-          content={t('share-text.tag-button-alt')}
+          on="hover"
+          content={t('page-with-text.buttons.tag')}
           trigger={
-            <MenuItem>
-              <Button
-                icon={<span className="material-symbols-outlined">tag</span>}
-                onClick={handleOpen}
-              />
-              {/*{t('share-text.tag-button')}*/}
-            </MenuItem>
+            <Button
+              icon={<span className="material-symbols-outlined">tag</span>}
+              onClick={handleOpen}
+            />
           }
         />
       }

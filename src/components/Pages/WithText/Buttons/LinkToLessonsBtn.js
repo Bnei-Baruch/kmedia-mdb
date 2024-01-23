@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from 'semantic-ui-react';
+import { Button, Popup } from 'semantic-ui-react';
 import Link from '../../../Language/MultiLanguageLink';
 import { stringify } from '../../../../helpers/url';
 import { useSelector } from 'react-redux';
@@ -16,10 +16,18 @@ const LinkToLessonsBtn = () => {
   if (!subject) return null;
 
   return (
-    <Button
-      as={Link}
-      to={{ pathname: '/lessons', search: stringify({ [linkByCT[subject.type]]: subject.id }) }}
-      icon={<span className="material-symbols-outlined">subscriptions</span>}
+    <Popup
+      on="hover"
+      content={t('page-with-text.buttons.lessons')}
+      trigger={
+        (
+          <Button
+            as={Link}
+            to={{ pathname: '/lessons', search: stringify({ [linkByCT[subject.type]]: subject.id }) }}
+            icon={<span className="material-symbols-outlined">subscriptions</span>}
+          />
+        )
+      }
     />
   );
 };

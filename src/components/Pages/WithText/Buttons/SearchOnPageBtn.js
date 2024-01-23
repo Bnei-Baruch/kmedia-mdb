@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from 'semantic-ui-react';
+import { Button, Popup } from 'semantic-ui-react';
 import { useSelector, useDispatch } from 'react-redux';
 import { actions } from '../../../../redux/modules/textPage';
 import { textPageGetFileSelector, textPageGetIsSearchSelector } from '../../../../redux/selectors';
@@ -13,11 +13,20 @@ const SearchOnPageBtn = () => {
   if (isPdf) return null;
 
   const handle = () => dispatch(actions.setIsSearch());
+  
   return (
-    <Button
-      active={isSearch}
-      onClick={handle}
-      icon={<span className="material-symbols-outlined">search</span>}
+    <Popup
+      on="hover"
+      content={t('page-with-text.buttons.search')}
+      trigger={
+        (
+          <Button
+            active={isSearch}
+            onClick={handle}
+            icon={<span className="material-symbols-outlined">search</span>}
+          />
+        )
+      }
     />
   );
 };

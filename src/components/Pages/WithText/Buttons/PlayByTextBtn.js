@@ -34,7 +34,8 @@ const PlayByTextBtn = () => {
 
   return (
     <Popup
-      content={t('share-text.play-from-text')}
+      on="hover"
+      content={t('page-with-text.buttons.play-by-text')}
       trigger={
         <Button
           onClick={handlePlay}
