@@ -17,13 +17,13 @@ import PlayByTextBtn from '../../../../WithText/Buttons/PlayByTextBtn';
 import { textPageGetUrlInfoSelector } from '../../../../../../redux/selectors';
 
 const TranscriptionTabToolbarWeb = () => {
-  const hasSel = !!useSelector(textPageGetUrlInfoSelector).select;
+  const hasNoSel = !useSelector(textPageGetUrlInfoSelector).select;
 
   return (
     <div className="text_toolbar">
-      <div className={clsx('text_toolbar__buttons', { 'text_selected': hasSel })}>
+      <div className={clsx('text_toolbar__buttons', { 'text_selected': !hasNoSel })}>
         {
-          !hasSel && (
+          hasNoSel && (
             <>
               <TextSettings />
               <LanguageTextBtn />
@@ -36,7 +36,7 @@ const TranscriptionTabToolbarWeb = () => {
         <AddNoteBtn />
         <ShareTextBtn />
         {
-          !hasSel && (
+          hasNoSel && (
             <>
               <div className="divider" />
               <SearchOnPageBtn />

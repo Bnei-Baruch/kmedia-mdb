@@ -22,6 +22,7 @@ import {
   textPageGetUrlInfoSelector,
   textPageGetScrollDirSelector
 } from '../../../redux/selectors';
+import NotFound from '../../shared/NotFound';
 
 const TextLayoutWeb = props => {
   const {
@@ -50,7 +51,7 @@ const TextLayoutWeb = props => {
   const wipErr = WipErr({ wip, err: null, t });
   if (wipErr) return wipErr;
 
-  if (isEmpty(file)) return <h1>Not found</h1>;
+  if (isEmpty(file)) return <NotFound />;
 
   return (
     <div className={`is-web text_layout is-${theme}`} ref={ref}>

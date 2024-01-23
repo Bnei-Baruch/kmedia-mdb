@@ -11,18 +11,17 @@ import ShareTextBtn from '../../../../Pages/WithText/Buttons/ShareTextBtn';
 import TagTextBtn from '../../../../Pages/WithText/Buttons/TagTextBtn';
 import PrintBtn from '../../../../Pages/WithText/Buttons/PrintBtn';
 import { useSelector } from 'react-redux';
-import { selectors as textPage } from '../../../../Pages/../../redux/modules/textPage';
 import clsx from 'clsx';
 import { textPageGetUrlInfoSelector } from '../../../../../redux/selectors';
 
 const ArticleToolbarWeb = () => {
-  const hasSel = !!useSelector(textPageGetUrlInfoSelector).select;
+  const hasNoSel = !useSelector(textPageGetUrlInfoSelector).select;
 
   return (
     <div className="text_toolbar">
-      <div className={clsx('text_toolbar__buttons', { 'text_selected': hasSel })}>
+      <div className={clsx('text_toolbar__buttons', { 'text_selected': !hasNoSel })}>
         {
-          !hasSel && (
+          hasNoSel && (
             <>
               <TextSettings />
               <LanguageTextBtn />
@@ -37,7 +36,7 @@ const ArticleToolbarWeb = () => {
         <div className="divider" />
         <SearchOnPageBtn />
         {
-          !hasSel && (
+          hasNoSel && (
             <>
               <ExpandAllNotesBtn />
               <DownloadTextBtn />

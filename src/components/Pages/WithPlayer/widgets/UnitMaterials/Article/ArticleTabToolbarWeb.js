@@ -16,13 +16,13 @@ import PrintBtn from '../../../../WithText/Buttons/PrintBtn';
 import { textPageGetUrlInfoSelector } from '../../../../../../redux/selectors';
 
 const ArticleTabToolbarWeb = () => {
-  const hasSel = !!useSelector(textPageGetUrlInfoSelector).select;
+  const hasNoSel = !useSelector(textPageGetUrlInfoSelector).select;
 
   return (
     <div className="text_toolbar">
-      <div className={clsx('text_toolbar__buttons', { 'text_selected': hasSel })}>
+      <div className={clsx('text_toolbar__buttons', { 'text_selected': hasNoSel })}>
         {
-          !hasSel && (
+          hasNoSel && (
             <>
               <TextSettings />
               <LanguageTextBtn />
@@ -35,7 +35,7 @@ const ArticleTabToolbarWeb = () => {
         <AddNoteBtn />
         <ShareTextBtn />
         {
-          !hasSel && (
+          hasNoSel && (
             <>
               <div className="divider" />
               <SearchOnPageBtn />

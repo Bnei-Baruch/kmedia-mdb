@@ -18,13 +18,13 @@ import clsx from 'clsx';
 import { textPageGetUrlInfoSelector } from '../../../redux/selectors';
 
 const LikutToolbarWeb = () => {
-  const hasSel = !!useSelector(textPageGetUrlInfoSelector).select;
+  const hasNoSel = !useSelector(textPageGetUrlInfoSelector).select;
 
   return (
     <div className="text_toolbar">
-      <div className={clsx('text_toolbar__buttons', { 'text_selected': hasSel })}>
+      <div className={clsx('text_toolbar__buttons', { 'text_selected': hasNoSel })}>
         {
-          !hasSel && (
+          hasNoSel && (
             <>
               <TextSettings />
               <LanguageTextBtn />
@@ -37,7 +37,7 @@ const LikutToolbarWeb = () => {
         <AddNoteBtn />
         <ShareTextBtn />
         {
-          !hasSel && (
+          hasNoSel && (
             <>
               <div className="divider" />
               <SearchOnPageBtn />

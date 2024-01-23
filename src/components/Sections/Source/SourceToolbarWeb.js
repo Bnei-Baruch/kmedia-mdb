@@ -21,14 +21,14 @@ import { textPageGetUrlInfoSelector } from '../../../redux/selectors';
 import { Dropdown, Button } from 'semantic-ui-react';
 
 const SourceToolbarWeb = () => {
-  const hasSel = !!useSelector(textPageGetUrlInfoSelector).select;
+  const hasNoSel = !useSelector(textPageGetUrlInfoSelector).select;
 
   return (
     <div className="text_toolbar">
       <TocToggleBtn />
-      <div className={clsx('text_toolbar__buttons', { 'text_selected': hasSel })}>
+      <div className={clsx('text_toolbar__buttons', { 'text_selected': !hasNoSel })}>
         {
-          !hasSel && (
+          hasNoSel && (
             <>
               <TextSettings />
               <LanguageTextBtn />
@@ -41,7 +41,7 @@ const SourceToolbarWeb = () => {
         <AddNoteBtn />
         <ShareTextBtn />
         {
-          !hasSel && (
+          hasNoSel && (
             <>
               <div className="divider" />
               <SearchOnPageBtn />
