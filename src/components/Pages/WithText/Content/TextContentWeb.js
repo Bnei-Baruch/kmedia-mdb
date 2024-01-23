@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { urlParamFromSelect } from '../scrollToSearch/helper';
 import { useNotes } from '../Notes/useNotes';
-import { useDispatch, useSelector, batch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { actions } from '../../../../redux/modules/textPage';
 import NoteMarks from '../Notes/NoteMarks';
 import debounce from 'lodash/debounce';
@@ -48,11 +48,10 @@ const TextContentWeb = () => {
 
   const handleDataRef = r => {
     if (!r) return;
-    batch(() => {
-      const rect = r.getBoundingClientRect();
-      setParentTop(rect.top - window.scrollY);
-      dispatch(actions.setSideOffset(rect.left));
-    });
+
+    const rect = r.getBoundingClientRect();
+    setParentTop(rect.top - window.scrollY);
+    dispatch(actions.setSideOffset(rect.left));
   };
 
   let pdf;

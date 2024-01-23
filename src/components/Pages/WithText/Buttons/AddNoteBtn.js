@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Popup } from 'semantic-ui-react';
-import { useSelector, useDispatch, batch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { actions, NOTE_STATUS } from '../../../../redux/modules/myNotes';
 import { addHighlightByRanges } from '../helper';
@@ -29,13 +29,14 @@ const AddNoteBtn = () => {
       language,
       properties,
     };
-    batch(() => {
-      dispatch(actions.setStatus(NOTE_STATUS.edit));
-      dispatch(actions.setSelected(note));
 
+    dispatch(actions.setStatus(NOTE_STATUS.edit));
+    dispatch(actions.setSelected(note));
+    const _sel = window.getSelection();
+    if (!_sel.isCollapsed) {
       addHighlightByRanges([window.getSelection().getRangeAt(0)]);
       window.getSelection().removeAllRanges();
-    });
+    }
   };
 
   return (
