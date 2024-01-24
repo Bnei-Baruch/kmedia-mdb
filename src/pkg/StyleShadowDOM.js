@@ -13,7 +13,7 @@ const StyleShadowDOM = () => {
       const host   = document.getElementsByTagName('us-button');
       const shadow = host?.[0]?.shadowRoot;
 
-      const sheet  =  new CSSStyleSheet;
+      const sheet  =  new CSSStyleSheet();
       const _style = isLtr ? '{transform: rotate(-90deg); bottom: 140px; right: 0; left: auto;}'
         : '{transform: rotate(90deg); bottom: 0; left: 0; right: auto;}';
       sheet.replaceSync(`#appRoot ${_style} `);
