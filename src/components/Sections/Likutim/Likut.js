@@ -8,13 +8,13 @@ import LikutToolbarWeb from './LikutToolbarWeb';
 
 const LikutContainer = () => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
-  const toolbar            = isMobileDevice ? <LikutToolbarMobile /> : <LikutToolbarWeb />;
+
   usePrepareLikutAudio();
 
   return isMobileDevice ? (
-    <TextLayoutMobile toolbar={toolbar} />
+    <TextLayoutMobile toolbar={<LikutToolbarMobile />} />
   ) : (
-    <TextLayoutWeb toolbar={toolbar} />
+    <TextLayoutWeb toolbar={<LikutToolbarWeb />} />
   );
 };
 

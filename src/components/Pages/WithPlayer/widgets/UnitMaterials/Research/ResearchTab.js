@@ -11,6 +11,7 @@ import { mdbGetDenormContentUnitSelector } from '../../../../../../redux/selecto
 import { canonicalLink } from '../../../../../../helpers/links';
 import { useInitTextUrl } from '../../../../WithText/hooks/useInitTextUrl';
 import TextLayoutMobile from '../../../../WithText/TextLayoutMobile';
+import NotFound from '../../../../../shared/NotFound';
 
 const ResearchTab = () => {
   const { id } = useParams();
@@ -25,17 +26,15 @@ const ResearchTab = () => {
   const linkMemo = useMemo(() => ({ pathname, search: { activeTab: 'research' } }), [pathname]);
   useInitTextUrl(linkMemo);
 
-  if (!cu) return null;
-
-  const toolbar = isMobileDevice ? <ResearchTabToolbarMobile /> : <ResearchTabToolbarWeb />;
+  if (!cu) return <NotFound />;
 
   return (
     <div className="player_page_tab">
       {
         isMobileDevice ? (
-          <TextLayoutMobile toolbar={toolbar} playerPage={true} id={cu.id} />
+          <TextLayoutMobile toolbar={<ResearchTabToolbarMobile />} playerPage={true} id={cu.id} />
         ) : (
-          <TextLayoutWeb toolbar={toolbar} playerPage={true} id={cu.id} />
+          <TextLayoutWeb toolbar={<ResearchTabToolbarWeb />} playerPage={true} id={cu.id} />
         )
       }
     </div>

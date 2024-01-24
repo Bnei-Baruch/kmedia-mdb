@@ -13,6 +13,7 @@ import { mdbGetDenormContentUnitSelector, sourcesGetSourceByIdSelector } from '.
 import { canonicalLink } from '../../../../../../helpers/links';
 import { useInitTextUrl } from '../../../../WithText/hooks/useInitTextUrl';
 import TextLayoutMobile from '../../../../WithText/TextLayoutMobile';
+import NotFound from '../../../../../shared/NotFound';
 
 const SourceTab = () => {
   const { id } = useParams();
@@ -37,11 +38,8 @@ const SourceTab = () => {
   const handleSelectCu = (e, { value }) => setCuId(value);
 
   const { isMobileDevice } = useContext(DeviceInfoContext);
-  const toolbar            = isMobileDevice ? <SourceTabToolbarMobile /> : <SourceTabToolbarWeb />;
 
-  if (isEmpty(cus)) {
-    return <h1>Not found</h1>;
-  }
+  if (isEmpty(cus)) return <NotFound />;
 
   return (
     <div className="player_page_tab">
@@ -55,9 +53,9 @@ const SourceTab = () => {
       />
       {
         isMobileDevice ? (
-          <TextLayoutMobile toolbar={toolbar} playerPage={true} id={cu.id} />
+          <TextLayoutMobile toolbar={<SourceTabToolbarMobile />} playerPage={true} id={cu.id} />
         ) : (
-          <TextLayoutWeb toolbar={toolbar} playerPage={true} id={cu.id} />
+          <TextLayoutWeb toolbar={<SourceTabToolbarWeb />} playerPage={true} id={cu.id} />
         )
       }
     </div>

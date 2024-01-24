@@ -19,14 +19,13 @@ const SourceContainer = () => {
   const source = useSelector(sourcesGetSourceByIdSelector)(id);
 
   const childId = source.children?.[0];
-  console.log('reload parent SourceContainer', childId, id);
+  
   //TODO: David use https://reactrouter.com/en/main/route/loader
   useEffect(() => {
     childId && navigate(`../sources/${childId}`, { replace: true });
   }, [childId]);
 
   const toc        = <TOC />;
-  const toolbar    = isMobileDevice ? <SourceToolbarMobile /> : <SourceToolbarWeb />;
   const breadcrumb = <BreadcrumbTextPage />;
   const prevNext   = <PrevNextBtns />;
 
@@ -34,7 +33,7 @@ const SourceContainer = () => {
     <TextLayoutMobile
       id={childId || id}
       toc={toc}
-      toolbar={toolbar}
+      toolbar={<SourceToolbarMobile />}
       prevNext={prevNext}
       breadcrumb={breadcrumb}
     />
@@ -42,7 +41,7 @@ const SourceContainer = () => {
     <TextLayoutWeb
       id={childId || id}
       toc={toc}
-      toolbar={toolbar}
+      toolbar={<SourceToolbarWeb />}
       prevNext={prevNext}
       breadcrumb={breadcrumb}
     />

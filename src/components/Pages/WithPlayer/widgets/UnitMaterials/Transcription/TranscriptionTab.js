@@ -22,14 +22,13 @@ const TranscriptionTab = () => {
     return () => dispatch(actions.setFileFilter());
   }, []);
 
-  const toolbar = isMobileDevice ? <TranscriptionTabToolbarMobile /> : <TranscriptionTabToolbarWeb />;
   return (
     <div className="player_page_tab">
       {
         isMobileDevice ? (
-          <TextLayoutMobile toolbar={toolbar} playerPage={true} />
+          <TextLayoutMobile toolbar={<TranscriptionTabToolbarMobile />} playerPage={true} />
         ) : (
-          <TextLayoutWeb toolbar={toolbar} playerPage={true} />
+          <TextLayoutWeb toolbar={<TranscriptionTabToolbarWeb />} playerPage={true} />
         )
       }
     </div>
