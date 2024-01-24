@@ -23,6 +23,7 @@ import {
   textPageGetScrollDirSelector
 } from '../../../redux/selectors';
 import NotFound from '../../shared/NotFound';
+import ScrollToTopBtn from './Buttons/ScrollToTopBtn';
 
 const TextLayoutWeb = props => {
   const {
@@ -82,6 +83,7 @@ const TextLayoutWeb = props => {
       <NoteItemSticky />
       <NoteItemModal />
       <NoteConfirmRemove />
+      <ScrollToTopBtn />
     </div>
   );
 };

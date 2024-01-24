@@ -14,7 +14,7 @@ export const useScrollBehavior = ref => {
 
       if (st < ref.current?.offsetTop + 60) {
         dispatch(actions.setScrollDir(0));
-      } else if (isMobileDevice && (st + document.documentElement.offsetHeight >= ref.current?.scrollHeight)) {
+      } else if (st + document.documentElement.offsetHeight >= ref.current?.scrollHeight) {
         dispatch(actions.setScrollDir(2));
       } else if (st > lastScrollTop) {
         dispatch(actions.setScrollDir(1));

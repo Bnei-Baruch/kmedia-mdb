@@ -81,6 +81,17 @@ $breadcrumb-height: 48px;
   &.is-serif {
     font-family: $serif-family;
   }
+
+  .text__scroll-top {
+    position: absolute;
+    bottom: 1em;
+    left: 1em;
+
+    .rtl & {
+      left: auto;
+      right: 1em;
+    }
+  }
 }
 
 
