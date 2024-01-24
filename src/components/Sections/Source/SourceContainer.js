@@ -19,7 +19,7 @@ const SourceContainer = () => {
   const source = useSelector(sourcesGetSourceByIdSelector)(id);
 
   const childId = source.children?.[0];
-  
+
   //TODO: David use https://reactrouter.com/en/main/route/loader
   useEffect(() => {
     childId && navigate(`../sources/${childId}`, { replace: true });
