@@ -24,13 +24,13 @@ const SourceTabTOC = ({ cus, onClick }) => {
       <div>
         {
           cus.map(cu => (
-              <div
-                onClick={() => handleClick(cu.id)}
-                className={clsx('player_page_source_toc_item', { 'active': cu.id === id })}
-              >
-                {cu.name}
-              </div>
-            )
+            <div
+              onClick={() => handleClick(cu.id)}
+              className={clsx('player_page_source_toc_item', { 'active': cu.id === id })}
+            >
+              {cu.name}
+            </div>
+          )
           )
         }
       </div>

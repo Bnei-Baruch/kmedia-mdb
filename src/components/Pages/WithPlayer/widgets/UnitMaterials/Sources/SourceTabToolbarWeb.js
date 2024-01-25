@@ -16,7 +16,7 @@ import PrintBtn from '../../../../WithText/Buttons/PrintBtn';
 import { textPageGetUrlInfoSelector } from '../../../../../../redux/selectors';
 import TocToggleBtn from '../../../../../Sections/Source/TOC/TocToggleBtn';
 
-const SourceTabToolbarWeb = ({needTOC}) => {
+const SourceTabToolbarWeb = ({ needTOC }) => {
   const hasNoSel = !useSelector(textPageGetUrlInfoSelector).select;
 
   return (

@@ -35,7 +35,7 @@ const SourceTab = () => {
   const linkMemo = useMemo(() => ({ pathname, search: {} }), [pathname]);
   useInitTextUrl(linkMemo);
 
-  const handleSelectCu = useCallback((id) => setCuId(id), [setCuId]);
+  const handleSelectCu = useCallback(id => setCuId(id), [setCuId]);
 
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
