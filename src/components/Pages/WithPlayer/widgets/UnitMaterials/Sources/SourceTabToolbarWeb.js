@@ -14,8 +14,9 @@ import ShareTextBtn from '../../../../WithText/Buttons/ShareTextBtn';
 import TagTextBtn from '../../../../WithText/Buttons/TagTextBtn';
 import PrintBtn from '../../../../WithText/Buttons/PrintBtn';
 import { textPageGetUrlInfoSelector } from '../../../../../../redux/selectors';
+import TocToggleBtn from '../../../../../Sections/Source/TOC/TocToggleBtn';
 
-const SourceTabToolbarWeb = () => {
+const SourceTabToolbarWeb = ({needTOC}) => {
   const hasNoSel = !useSelector(textPageGetUrlInfoSelector).select;
 
   return (
@@ -24,6 +25,7 @@ const SourceTabToolbarWeb = () => {
         {
           hasNoSel && (
             <>
+              {needTOC && <TocToggleBtn />}
               <TextSettings />
               <LanguageTextBtn />
               <div className="divider" />

@@ -1,4 +1,3 @@
-$serif-family: 'Georgia, ' Times New Roman ', Times, serif';
 $text-bar-height: 60px;
 $breadcrumb-height: 48px;
 
@@ -78,8 +77,8 @@ $breadcrumb-height: 48px;
     }
   }
 
-  &.is-serif {
-    font-family: $serif-family;
+  & .is-serif {
+    font-family: Georgia, 'Times New Roman ', Times, serif;
   }
 
   .text__scroll-top {
@@ -140,11 +139,6 @@ $breadcrumb-height: 48px;
   h4,
   h5 {
     line-height: 1.28571429em;
-
-    .is-serif & {
-      font-family: $serif-family;
-    }
-
   }
 
   p {
@@ -452,5 +446,35 @@ $breadcrumb-height: 48px;
     background-color: white;
     mix-blend-mode: difference;
     z-index: 1;
+  }
+}
+
+.player_page_source_toc {
+  position: absolute;
+  max-width: 250px;
+  padding: 8px;
+  background: $white;
+  z-index: 3;
+  transform: translate3d(-110%, 0, 0);
+  min-height: 300px;
+  border: 1px solid $midWhite;
+
+  &.active {
+    transform: translate3d(0, 0, 0);
+    transition: height 0.2s ease-in-out 0s;
+  }
+
+  .player_page_source_toc_item {
+    cursor: pointer;
+    padding: 1em;
+    border-bottom: 1px solid $midWhite;
+
+    &.active {
+      color: $blue;
+    }
+
+    &:last-child {
+      border-bottom: none;
+    }
   }
 }

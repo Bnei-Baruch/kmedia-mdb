@@ -202,6 +202,11 @@
     &.source__toc_active {
       transform: translate3d(0, 0, 0) !important;
     }
+
+    .player_page_tab & {
+      position: absolute;
+      height: 100%;
+    }
   }
 
   &__toc_filter {

@@ -7,10 +7,12 @@ import BookmarkBtn from '../../../../WithText/Buttons/BookmarkBtn';
 import SearchOnPageBtn from '../../../../WithText/Buttons/SearchOnPageBtn';
 import DownloadTextBtn from '../../../../WithText/Buttons/DownloadTextBtn';
 import ShareTextBtn from '../../../../WithText/Buttons/ShareTextBtn';
+import TocToggleBtn from '../../../../../Sections/Source/TOC/TocToggleBtn';
 
-const SourceTabToolbarMobile = () => (
+const SourceTabToolbarMobile = ({ needTOC }) => (
   <div className="text_toolbar is-mobile">
     <div className="text_toolbar__buttons">
+      {needTOC && <TocToggleBtn />}
       <LanguageTextBtn />
       <TextSettings />
       <div className="divider" />
