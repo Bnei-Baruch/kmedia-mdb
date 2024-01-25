@@ -706,6 +706,7 @@ video {
         &:focus {
           border: white solid 1px;
         }
+
         &.active {
           border: white solid 1px;
         }
@@ -1202,4 +1203,20 @@ video {
   font: inherit;
   color: inherit;
   cursor: pointer;
+}
+
+.personal_info {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 8px;
+
+  & > .item {
+    margin: 0;
+    padding: 0 0.5em;
+    line-height: 26px;
+  }
+
+  .icon.heart {
+    font-size: 1.3em
+  }
 }

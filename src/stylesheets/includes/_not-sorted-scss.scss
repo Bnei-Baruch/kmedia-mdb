@@ -1587,25 +1587,6 @@
   }
 }
 
-.ui.menu.personal_info {
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: 0;
-
-  @include mobile {
-    margin-top: 0;
-  }
-
-  & > .item {
-    margin: 0;
-    padding: 0 0.5em;
-  }
-
-  .icon.heart {
-    font-size: 1.3em
-  }
-}
-
 .need_to_login {
   height: 60VH;
   display: flex;
