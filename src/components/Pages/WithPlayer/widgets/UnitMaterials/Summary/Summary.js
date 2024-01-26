@@ -8,9 +8,25 @@ import * as shapes from '../../../../../shapes';
 import MediaHelper from '../../../../../../helpers/media';
 import { useSelector, useDispatch } from 'react-redux';
 import { actions as assetsActions } from '../../../../../../redux/modules/assets';
-import { INSERT_TYPE_SUMMARY } from '../../../../../../helpers/consts';
+import {
+  CT_CLIP,
+  CT_LESSONS,
+  CT_VIDEO_PROGRAM_CHAPTER,
+  CT_VIRTUAL_LESSON,
+  INSERT_TYPE_SUMMARY
+} from '../../../../../../helpers/consts';
 import MenuLanguageSelector from '../../../../../../components/Language/Selector/MenuLanguageSelector';
 import { settingsGetContentLanguagesSelector, assetsGetDoc2htmlByIdSelector } from '../../../../../../redux/selectors';
+
+export const showSummaryTab = (unit, contentLanguages) => {
+  const summaryLanguages = getSummaryLanguages(unit);
+  const summaryLanguage = selectSuitableLanguage(contentLanguages, summaryLanguages, unit.original_language,
+    /*defaultReturnLanguage=*/ '');
+
+  // We should show Summary tab for specific list of content types, and if description exist or summary file.
+  return [...CT_LESSONS, CT_VIDEO_PROGRAM_CHAPTER, CT_VIRTUAL_LESSON, CT_CLIP].includes(unit.content_type) &&
+    (!!unit.description || !!summaryLanguage);
+};
 
 export const getSummaryLanguages = unit =>
   (unit && unit.files &&
@@ -69,7 +85,7 @@ const Summary = ({ unit, t }) => {
       {
         data ? (
           <>
-            <Divider/>
+            {!!description && <Divider/>}
             <div dangerouslySetInnerHTML={{ __html: data }}></div>
           </>
         ) : null

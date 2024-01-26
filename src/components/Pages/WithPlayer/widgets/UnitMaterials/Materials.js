@@ -4,17 +4,15 @@ import { withTranslation } from 'react-i18next';
 
 import {
   CT_ARTICLE,
-  CT_LESSONS,
   CT_RESEARCH_MATERIAL,
   CT_VIDEO_PROGRAM_CHAPTER,
-  CT_VIRTUAL_LESSON,
   CT_CLIP,
   DERIVED_UNITS_CONTENT_TYPE,
   MT_TEXT
 } from '../../../../../helpers/consts';
 import * as shapes from '../../../../shapes';
 import TabsMenu from '../../../../shared/TabsMenu';
-import Summary from './Summary/Summary';
+import Summary, { showSummaryTab } from './Summary/Summary';
 import Sources from './Sources/Sources';
 import Sketches from './Sketches';
 import MediaDownloads from '../MediaDownloads';
@@ -27,7 +25,7 @@ import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import PlaylistItems from '../../Playlist/PlaylistItems';
 import PlaylistMyItems from '../../PlaylistMy/PlaylistItems';
-import { mdbGetDenormContentUnitSelector, playlistGetInfoSelector } from '../../../../../redux/selectors';
+import { mdbGetDenormContentUnitSelector, playlistGetInfoSelector, settingsGetContentLanguagesSelector } from '../../../../../redux/selectors';
 
 const derivedTextUnits = unit => {
   const types    = {};
@@ -48,6 +46,7 @@ const Materials = ({ t }) => {
   const { id: paramsId }              = useParams();
   const { cuId, isSingleMedia, isMy } = useSelector(playlistGetInfoSelector);
   const unit                          = useSelector(state => mdbGetDenormContentUnitSelector(state, cuId || paramsId));
+  const contentLanguages              = useSelector(settingsGetContentLanguagesSelector);
 
   if (!unit) {
     return null;
@@ -78,7 +77,7 @@ const Materials = ({ t }) => {
     }
   ];
 
-  if ([...CT_LESSONS, CT_VIDEO_PROGRAM_CHAPTER, CT_VIRTUAL_LESSON, CT_CLIP].includes(unit.content_type)) {
+  if (showSummaryTab(unit, contentLanguages)) {
     items.unshift({
       name     : 'summary',
       label    : t('materials.summary.header'),
