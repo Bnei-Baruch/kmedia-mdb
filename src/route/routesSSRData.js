@@ -4,18 +4,15 @@ import { getPageFromLocation } from '../components/Pagination/withPagination';
 import { tabs as pulicationsTabs } from '../components/Sections/Publications/MainPage';
 import { isTaas } from '../components/shared/PDF/PDF';
 import { getTextFiles as transcriptGetTextFiles, selectFile as transcriptSelectFile } from '../components/Pages/WithPlayer/widgets/UnitMaterials/Transcription/Transcription';
-import { getFile as summaryGetFile, getSummaryLanguages } from '../components/Pages/WithPlayer/widgets/UnitMaterials/Summary/Summary';
+import { getFile as summaryGetFile, getSummaryLanguages, showSummaryTab } from '../components/Pages/WithPlayer/widgets/UnitMaterials/Summary/Summary';
 
 import {
   COLLECTION_PROGRAMS_TYPE,
   CT_ARTICLE,
-  CT_CLIP,
   CT_FRIENDS_GATHERING,
   CT_LECTURE,
   CT_LESSON_PART,
-  CT_LESSONS,
   CT_MEAL,
-  CT_VIDEO_PROGRAM_CHAPTER,
   CT_VIRTUAL_LESSON,
   CT_VIRTUAL_LESSONS,
   CT_WOMEN_LESSON,
@@ -80,7 +77,9 @@ export const cuPage = (store, match) => {
       const unit = mdbGetDenormContentUnitSelector(state, cuID);
 
       let activeTab = 'transcription';
-      if ([...CT_LESSONS, CT_VIDEO_PROGRAM_CHAPTER, CT_VIRTUAL_LESSON, CT_CLIP].includes(unit.content_type)) {
+
+      const contentLanguages = settingsSelectors.getContentLanguages(state.settings);
+      if (showSummaryTab(unit, contentLanguages)) {
         activeTab = 'summary';
       }
 
@@ -94,8 +93,6 @@ export const cuPage = (store, match) => {
       }
 
       // Select transcript file by language.
-      const contentLanguages = settingsSelectors.getContentLanguages(state.settings);
-      console.log('contentLanguages', contentLanguages);
       let file = null;
       switch (activeTab) {
         case 'transcription':
