@@ -39,7 +39,7 @@ function* watchFetchData() {
 }
 
 function* watchFetchBanner() {
-  yield takeLatest([types['home/fetchBanner']], fetchBanner);
+  yield takeLatest([types['home/fetchBanners']], fetchBanner);
 }
 
 export const sagas = [
