@@ -52,16 +52,16 @@ const Kabbalist = ({ author: { name, full_name: fullName, children: volumes, id 
                 {
                   volumes
                     ? volumes.map(x => {
-                        const { id: _id, name, description } = getSourceById(x);
-                        return (
-                          <List.Item key={_id} onClick={handleClick}>
-                            <NavLink to={`/sources/${_id}`}>
-                              {name}
-                              {description ? ` - ${description}` : ''}
-                            </NavLink>
-                          </List.Item>
-                        );
-                      }
+                      const { id: _id, name, description } = getSourceById(x);
+                      return (
+                        <List.Item key={_id} onClick={handleClick}>
+                          <NavLink to={`/sources/${_id}`}>
+                            {name}
+                            {description ? ` - ${description}` : ''}
+                          </NavLink>
+                        </List.Item>
+                      );
+                    }
                     ) : null
                 }
               </List>
