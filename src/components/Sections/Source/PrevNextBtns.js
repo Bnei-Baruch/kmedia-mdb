@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { isTaas } from '../../shared/PDF/PDF';
-import { getFullPath } from './TOC/helper';
+import { getFullPath } from './helper';
 import { selectors as sources, selectors } from '../../../redux/modules/sources';
 import { selectors as settings } from '../../../redux/modules/settings';
 import { Button } from 'semantic-ui-react';

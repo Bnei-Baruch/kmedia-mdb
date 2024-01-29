@@ -5,7 +5,7 @@ import { getEscapedRegExp, isEmpty } from '../../../../helpers/utils';
 import { BS_SHAMATI, RH_ARTICLES, RH_RECORDS, } from '../../../../helpers/consts';
 import { isLanguageRtl } from '../../../../helpers/i18n-utils';
 import { useSelector } from 'react-redux';
-import { properParentId, getFullPath } from './helper';
+import { properParentId, getFullPath } from '../helper';
 import { useNavigate } from 'react-router-dom';
 import TOCSearch from './TOCSearch';
 import TOCControl from './TOCControl';

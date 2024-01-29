@@ -6,13 +6,11 @@ import { useTranslation } from 'react-i18next';
 
 import { actions as mdbActions } from '../../../../../redux/modules/mdb';
 import Helmets from '../../../../shared/Helmets/index';
-import Share from '../../../../Pages/WithText/Buttons/ShareTextBtn';
 import MediaDownloads from '../../../../Pages/WithPlayer/widgets/MediaDownloads';
 import WipErr from '../../../../shared/WipErr/WipErr';
 import Recommended from '../../../../Pages/WithPlayer/widgets/Recommended/Main/Recommended';
 import { getEmbedFromQuery } from '../../../../../helpers/player';
 import { ClientChroniclesContext, DeviceInfoContext } from '../../../../../helpers/app-contexts';
-import TagsByUnit from '../../../../shared/TagsByUnit';
 import TextLayoutWeb from '../../../../Pages/WithText/TextLayoutWeb';
 import ArticleToolbarMobile from './ArticleToolbarMobile';
 import ArticleToolbarWeb from './ArticleToolbarWeb';

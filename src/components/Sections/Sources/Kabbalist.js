@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { Header, Image, List, Table } from 'semantic-ui-react';
+import { useDispatch } from 'react-redux';
 
 import * as shapes from '../../shapes';
 import NavLink from '../../Language/MultiLanguageNavLink';
 import portraitBS from '../../../images/portrait_bs.png';
 import portraitRB from '../../../images/portrait_rb.png';
 import portraitML from '../../../images/portrait_ml.png';
+import { actions } from '../../../redux/modules/textPage';
 
 const portraits = { bs: portraitBS, rb: portraitRB, ml: portraitML };
 
@@ -19,27 +21,9 @@ const mapLinks = {
   rh: 'rashbi',
 };
 
-const renderBook = book => {
-  const { id, name, description } = book;
-  return (
-    <List.Item key={id}>
-      <NavLink to={{
-        pathname: `/sources/${id}`,
-        state: {
-          tocIsActive: true,
-        },
-      }}
-      >
-        {name}
-        {description ? ` - ${description}` : ''}
-      </NavLink>
-    </List.Item>
-  );
-};
-
 const Kabbalist = ({ author: { name, full_name: fullName, children: volumes, id }, getSourceById, portraitIdx }) => {
-
   const [portrait, setPortrait] = useState();
+  const dispatch                = useDispatch();
   useEffect(() => {
     setPortrait(portraits[portraitIdx]);
   }, [portraitIdx]);
@@ -49,7 +33,8 @@ const Kabbalist = ({ author: { name, full_name: fullName, children: volumes, id 
     displayName += ` (${name})`;
   }
 
-  const kabbalist = mapLinks[id];
+  const kabbalist   = mapLinks[id];
+  const handleClick = () => dispatch(actions.setTocIsActive(true));
 
   return (
     <Table.Row verticalAlign="top" className={clsx({ author: true, 'author--image': !!portrait })}>
@@ -66,8 +51,18 @@ const Kabbalist = ({ author: { name, full_name: fullName, children: volumes, id 
               <List bulleted>
                 {
                   volumes
-                    ? volumes.map(x => (renderBook(getSourceById(x))))
-                    : null
+                    ? volumes.map(x => {
+                        const { id: _id, name, description } = getSourceById(x);
+                        return (
+                          <List.Item key={_id} onClick={handleClick}>
+                            <NavLink to={`/sources/${_id}`}>
+                              {name}
+                              {description ? ` - ${description}` : ''}
+                            </NavLink>
+                          </List.Item>
+                        );
+                      }
+                    ) : null
                 }
               </List>
             </div>
