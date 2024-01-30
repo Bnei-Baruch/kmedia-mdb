@@ -37,14 +37,14 @@ const textPageSlice = createSlice({
     setZoomSize: (state, { payload }) => {
       let size = state.settings.zoomSize || 1;
       if (payload === 'up') {
-        size = size + .2;
+        size = size + 1;
       } else if (payload === 'down') {
-        size = size - .2;
+        size = size - 1;
       } else {
         size = payload;
       }
 
-      size = Math.min(4, size);
+      size = Math.min(8, size);
       size = Math.max(1, size);
 
       state.settings.zoomSize = size;

@@ -23,7 +23,7 @@ const SourceContainer = () => {
   const getPathById   = useSelector(sourcesGetPathByIDSelector);
   const source        = getSourceById(id) || false;
   const path          = getFullPath(id, getPathById);
-  const parent        = path[1];
+  const parent        = path[1] || false;
   const root          = getSourceById(parent.parent_id);
 
   const childId = source.children?.[0];
