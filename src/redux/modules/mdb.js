@@ -58,7 +58,7 @@ const stripOldFiles = unit => {
   const sMap = groupBy(files, x => `${x.language}_${x.type}`.toLowerCase());
 
   // filter old files which have been converted
-  unit.files = Object.values(sMap).reduce((acc, val) => {
+  const nFiles = Object.values(sMap).reduce((acc, val) => {
     // not interesting - only video files have been converted.
     if (val.length < 2 || !MediaHelper.IsVideo(val[0])) {
       return acc.concat(val);
@@ -71,14 +71,9 @@ const stripOldFiles = unit => {
     }
 
     return acc.concat(val);
-  }, []).map(f => {
-    if (!f.duration) {
-      f.duration = unit.duration;
-    }
-    return f;
-  });
+  }, []).map(f => f.duration ? f : { ...f, duration: unit.duration });
 
-  return unit;
+  return { ...unit, files: nFiles };
 };
 
 const normalizeLinkedUnits = (linkedUnits, type, parentId, state) => {
@@ -105,24 +100,30 @@ const onReceiveCollections = (state, items = []) => {
     return;
   }
 
-  items.forEach(x => {
-    // normalize content units
-    if (x.content_units) {
+  const cById = { ...state.cById };
+  let cuById  = { ...state.cuById };
 
-      x.ccuNames = x.ccuNames || {};
-      x.cuIDs    = x.content_units.filter(cu => !!cu).map(cu => {
+  items.forEach(x => {
+    // make a copy of incoming data since we're about to mutate it
+    const y = { ...x };
+
+    // normalize content units
+    if (y.content_units) {
+
+      y.ccuNames = y.ccuNames || {};
+      y.cuIDs    = y.content_units.filter(cu => !!cu).map(cu => {
         const ccuName     = cu.name_in_collection;
-        x.ccuNames[cu.id] = ccuName;
+        y.ccuNames[cu.id] = ccuName;
 
         // make a copy of content unit and set this collection ccuName
         const updatedCU = { ...cu, ...state.cuById[cu.id] };
-        updatedCU.cIDs  = { ...updatedCU.cIDs, [`${x.id}____${ccuName || ''}`]: x.id };
+        updatedCU.cIDs  = { ...updatedCU.cIDs, [`${y.id}____${ccuName || ''}`]: y.id };
 
         // normalize derived content units
         if (cu.derived_units) {
           const { ids, updatedCuById } = normalizeLinkedUnits(cu.derived_units, 'derived_units', cu.id, state);
           updatedCU.dduIDs             = ids;
-          state.cuById.updatedCuById   = updatedCuById;
+          cuById                       = { ...cuById, ...updatedCuById };
           delete updatedCU.derived_units;
         }
 
@@ -130,7 +131,7 @@ const onReceiveCollections = (state, items = []) => {
         if (cu.source_units) {
           const { ids, updatedCuById } = normalizeLinkedUnits(cu.source_units, 'source_units', cu.id, state);
           updatedCU.sduIDs             = ids;
-          state.cuById.updatedCuById   = updatedCuById;
+          cuById                       = { ...cuById, ...updatedCuById };
           delete updatedCU.source_units;
         }
 
@@ -138,16 +139,19 @@ const onReceiveCollections = (state, items = []) => {
         // as it might be overridden by successive calls from different collections
         delete updatedCU.name_in_collection;
 
-        state.cuById[cu.id] = stripOldFiles(updatedCU);
+        cuById[cu.id] = stripOldFiles(updatedCU);
 
         return cu.id;
       });
-      delete x.content_units;
+      delete y.content_units;
     }
 
     // update collection in store
-    state.cById[x.id] = x;
+    cById[y.id] = { ...state.cById[y.id], ...y };
   });
+
+  state.cById  = cById;
+  state.cuById = cuById;
 };
 
 const onReceiveContentUnits = (state, items = []) => {
@@ -155,52 +159,58 @@ const onReceiveContentUnits = (state, items = []) => {
     return;
   }
 
+  const cById = { ...state.cById };
+  let cuById  = { ...state.cuById };
   items.forEach(x => {
+    // make a copy of incoming data since we're about to mutate it
+    const y = { ...x };
+
     // normalize collections
-    if (x.collections) {
-      x.cIDs = Object.entries(x.collections).reduce((acc, val) => {
+    if (y.collections) {
+      y.cIDs = Object.entries(y.collections).reduce((acc, val) => {
         const [k, v]         = val;
         const [cID, ccuName] = k.split('____');
 
         // make a copy of collection and set this unit ccuName
-        const updatedC = { ...v, ...state.cById[v.id] };
+        const updatedC = { ...v, ...cById[v.id] };
         if (updatedC.cuIDs) {
-          if (updatedC.cuIDs.findIndex(z => z === x.id) === -1) {
-            updatedC.cuIDs = [...updatedC.cuIDs, x.id];
+          if (updatedC.cuIDs.findIndex(z => z === y.id) === -1) {
+            updatedC.cuIDs = [...updatedC.cuIDs, y.id];
           }
         } else {
-          updatedC.cuIDs = [x.id];
+          updatedC.cuIDs = [y.id];
         }
 
-        updatedC.ccuNames ||= {};
-        updatedC.ccuNames[x.id] = ccuName;
-        state.cById ||= {};
-        state.cById[v.id]       = updatedC;
+        updatedC.ccuNames = { ...updatedC.ccuNames, [y.id]: ccuName };
+        cById[v.id]       = updatedC;
 
         acc[k] = cID;
         return acc;
       }, {});
-      delete x.collections;
+      delete y.collections;
     }
 
     // normalize derived content units
-    if (x.derived_units) {
-      const { ids, updatedCuById } = normalizeLinkedUnits(x.derived_units, 'derived_units', x.id, state);
-      x.dduIDs                     = ids;
-      state.cuById.updatedCuById   = updatedCuById;
-      delete x.derived_units;
+    if (y.derived_units) {
+      const { ids, updatedCuById } = normalizeLinkedUnits(y.derived_units, 'derived_units', y.id, state);
+      y.dduIDs                     = ids;
+      cuById                       = { ...cuById, ...updatedCuById };
+      delete y.derived_units;
     }
 
     // normalize source content units
-    if (x.source_units) {
-      const { ids, updatedCuById } = normalizeLinkedUnits(x.source_units, 'source_units', x.id, state);
-      x.sduIDs                     = ids;
-      state.cuById.updatedCuById   = updatedCuById;
-      delete x.source_units;
+    if (y.source_units) {
+      const { ids, updatedCuById } = normalizeLinkedUnits(y.source_units, 'source_units', y.id, state);
+      y.sduIDs                     = ids;
+      cuById                       = { ...cuById, ...updatedCuById };
+      delete y.source_units;
     }
 
-    state.cuById[x.id] = stripOldFiles(x);
+    cuById[y.id] = stripOldFiles({ ...state.cuById[y.id], ...y });
   });
+
+  state.cById  = cById;
+  state.cuById = cuById;
 };
 
 const onReceiveLabels = (state, action) => {
@@ -209,16 +219,19 @@ const onReceiveLabels = (state, action) => {
     return;
   }
 
+  const labelsByCU = { ...state.labelsByCU };
+  const labelById  = { ...state.labelById };
   for (const i in labels) {
     const { content_unit, id } = labels[i];
 
-    state.labelById[id] = labels[i];
-    if (!state.labelsByCU[content_unit]?.includes(id)) {
-      state.labelsByCU ||= [];
-      state.labelsByCU[content_unit] ||= [];
-      state.labelsByCU[content_unit].push(id);
+    labelById[id] = labels[i];
+    if (!labelsByCU[content_unit]?.includes(id)) {
+      labelsByCU[content_unit] = [...(labelsByCU[content_unit] || []), id];
     }
   }
+
+  state.labelsByCU = labelsByCU;
+  state.labelById  = labelById;
 };
 
 const onReceivePersons = (state, action) => {
