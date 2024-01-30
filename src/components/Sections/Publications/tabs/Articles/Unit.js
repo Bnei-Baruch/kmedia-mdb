@@ -131,7 +131,7 @@ const ArticlePage = () => {
                 </Grid.Row>
               </Grid.Column>
               <Grid.Column mobile={16} tablet={6} computer={6}>
-                <Recommended unit={unit} />
+                <Recommended cuId={unit.id} />
               </Grid.Column>
             </Grid.Row>
           </Grid>

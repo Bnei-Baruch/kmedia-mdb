@@ -17,7 +17,7 @@ $breadcrumb-height: 48px;
       &.text_pdf {
         min-width: calc(100% - 100px);
 
-        #pdfWrapper {
+        #pdfWrapper.pdf_loaded {
           width: fit-content;
           margin: 0 auto;
         }

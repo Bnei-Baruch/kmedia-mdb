@@ -9,6 +9,7 @@ import { Document, Page, pdfjs } from 'react-pdf';
 import { BS_TAAS_PARTS, BS_TAAS_PARTS_PARTS_ONLY } from '../../../helpers/consts';
 import PDFMenu from './PDFMenu';
 import { ErrorSplash, LoadingSplash } from '../Splash/Splash';
+import clsx from 'clsx';
 
 export const isTaas     = source => (BS_TAAS_PARTS[source] !== undefined) || (BS_TAAS_PARTS_PARTS_ONLY[source] !== undefined);
 export const startsFrom = source => BS_TAAS_PARTS[source];
@@ -33,6 +34,7 @@ class PDF extends Component {
       pageNumber: props.pageNumber,
       numPages: null,
       width: null,
+      isReady: false
     };
   }
 
@@ -71,7 +73,7 @@ class PDF extends Component {
       pageNo = startsFrom;
     }
 
-    this.setState({ numPages, pageNumber: pageNo });
+    this.setState({ numPages, pageNumber: pageNo, isReady: true });
     pageNumberHandler(pageNo);
   };
 
@@ -89,12 +91,12 @@ class PDF extends Component {
   throttledSetDivSize = () => throttle(this.setDivSize, 500);
 
   render() {
-    const { numPages, pageNumber, width } = this.state;
-    const { pdfFile, startsFrom, t }      = this.props;
-    pdfjs.GlobalWorkerOptions.workerSrc   = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+    const { numPages, pageNumber, width, isReady } = this.state;
+    const { pdfFile, startsFrom, t }               = this.props;
+    pdfjs.GlobalWorkerOptions.workerSrc            = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
     return (
-      <div id="pdfWrapper" style={{ marginTop: '10px' }}>
+      <div id="pdfWrapper" className={clsx({ 'pdf_loaded': isReady })} style={{ marginTop: '10px' }}>
         <Container fluid textAlign="center">
           <PDFMenu
             numPages={numPages}
@@ -104,7 +106,7 @@ class PDF extends Component {
           />
         </Container>
         <div style={{ direction: 'ltr' }} className="position_relative">
-          <div className="theme_pdf"></div>
+          {isReady && <div className="theme_pdf"></div>}
           <Document
             file={pdfFile}
             onLoadSuccess={this.onDocumentLoadSuccess}

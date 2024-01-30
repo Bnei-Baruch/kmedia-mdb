@@ -91,7 +91,7 @@ const Materials = ({ t }) => {
       ? {
         name: 'recommended',
         label: t('materials.recommended.default'),
-        component: <Recommended unit={unit} displayTitle={false} />
+        component: <Recommended cuId={unit.id} displayTitle={false} />
       }
       : {
         name: 'playlist',

@@ -77,7 +77,7 @@ const makeCollectionLink = (collection, t) => {
   return <Link key={collection.id} to={canonicalLink(collection)}>{display}</Link>;
 };
 
-const Recommended = ({ t, filterOutUnits = [], displayTitle = true }) => {
+const Recommended = ({ t, filterOutUnits = [], displayTitle = true, cuId }) => {
   const abTesting                                         = useContext(AbTestingContext);
   const [unitId, setUnitId]                               = useState(null);
   const [unitContentType, setUnitContentType]             = useState(null);
@@ -89,7 +89,6 @@ const Recommended = ({ t, filterOutUnits = [], displayTitle = true }) => {
 
   const activeVariant = (abTesting && abTesting.getVariant(AB_RECOMMEND_EXPERIMENT)) || '';
 
-  const { cuId }      = useSelector(playlistGetInfoSelector);
   const unit          = useSelector(state => mdbGetDenormContentUnitSelector(state, cuId));
   const wip           = useSelector(recommendedGetWipFn);
   const err           = useSelector(recommendedGetErrorSelector);

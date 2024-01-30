@@ -18,6 +18,7 @@ const PlaylistPage = ({ playerContainer }) => {
   const location           = useLocation();
   const embed              = getEmbedFromQuery(location);
   const { isReady }        = useSelector(playlistGetInfoSelector);
+  const { cuId }      = useSelector(playlistGetInfoSelector);
 
   if (embed) return playerContainer;
 
@@ -44,7 +45,7 @@ const PlaylistPage = ({ playerContainer }) => {
           <Grid.Column width={6}>
             {isReady && <PlaylistItems/>}
             <Divider hidden/>
-            {isReady && <Recommended filterOutUnits={[]}/>}
+            {isReady && <Recommended cuId={cuId} filterOutUnits={[]}/>}
           </Grid.Column>
         )
       }
