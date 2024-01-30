@@ -24,7 +24,6 @@ import { selectors as musicSel } from './modules/music';
 import { selectors as bookmarkFilterSel } from './modules/bookmarkFilter';
 import { selectors as simpleModeSel } from './modules/simpleMode';
 import { selectors as trimSel } from './modules/trim';
-import { selectors as fetchImageSel } from './modules/fetchImage';
 import { selectors as myNotesSel } from './modules/myNotes';
 
 // Select part of state (first parameter)
@@ -52,7 +51,6 @@ const getMusic          = state => state.music;
 const getBookmarkFilter = state => state.bookmarkFilter;
 const getSimpleMode     = state => state.simpleMode;
 const getTrim           = state => state.trim;
-const getFetchImage     = state => state.fetchImage;
 const getMyNotes        = state => state.myNotes;
 
 // Select additional parameters
@@ -245,9 +243,6 @@ export const simpleModeGetErrorSelector = createSelector([getSimpleMode], s => s
 // trim
 export const trimGetListSelector = createSelector([getTrim], t => trimSel.getList(t));
 export const trimGetWipsSelector = createSelector([getTrim], t => trimSel.getWIPs(t));
-
-// fetchImage
-export const fetchImageGetBySrcSelector = createSelector(getFetchImage, _2, (i, src) => fetchImageSel.getBySrc(i, src));
 
 // myNotes
 export const myNotesGetListSelector = createSelector([getMyNotes], n => myNotesSel.getList(n));

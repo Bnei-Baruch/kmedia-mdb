@@ -23,18 +23,18 @@ import PublicationsFallbackIcon from '../images/fallbacks/PublicationsFallback';
 import ImagePlaceholder from '../images/Image';
 
 const sectionLogo = {
-  lessons: DailyLessonsIcon,
-  programs: ProgramsIcon,
-  lectures: LecturesIcon,
-  sources: SourcesIcon,
-  events: EventsIcon,
-  publications: PublicationsIcon,
-  downloads: DownloadIcon,
-  info: InfoIcon,
+  lessons      : DailyLessonsIcon,
+  programs     : ProgramsIcon,
+  lectures     : LecturesIcon,
+  sources      : SourcesIcon,
+  events       : EventsIcon,
+  publications : PublicationsIcon,
+  downloads    : DownloadIcon,
+  info         : InfoIcon,
   'simple-mode': SimpleModeIcon,
-  likutim: LikutimIcon,
-  topics: TopicsIcon,
-  label: LabelIcon
+  likutim      : LikutimIcon,
+  topics       : TopicsIcon,
+  label        : LabelIcon
 };
 
 export const SectionLogo = ({ name, ...props }) => {
@@ -46,22 +46,12 @@ export const SectionLogo = ({ name, ...props }) => {
   return <Logo {...props} />;
 };
 
-export const NoneFallbackImage = 'none';
-
-const sectionThumbnailFallback = {
-  lessons: DailyLessonsFallbackIcon,
-  programs: ProgramsFallbackIcon,
-  lectures: LecturesFallbackIcon,
-  sources: SourcesFallbackIcon,
-  events: EventsFallbackIcon,
-  publications: PublicationsFallbackIcon,
-  default: ImagePlaceholder,
-  [NoneFallbackImage]: null,
-};
-
-export const knownFallbackImages = ['lessons', 'programs', 'lectures', 'sources', 'events', 'publications', 'default', NoneFallbackImage];
-
-export const SectionThumbnailFallback = ({ name, circular, ...props }) => {
-  const Fallback = sectionThumbnailFallback[name];
-  return <Fallback {...props} width="100%" height="100%" />;
+export const sectionThumbnailFallback = {
+  lessons            : DailyLessonsFallbackIcon,
+  programs           : ProgramsFallbackIcon,
+  lectures           : LecturesFallbackIcon,
+  sources            : SourcesFallbackIcon,
+  events             : EventsFallbackIcon,
+  publications       : PublicationsFallbackIcon,
+  default            : ImagePlaceholder,
 };

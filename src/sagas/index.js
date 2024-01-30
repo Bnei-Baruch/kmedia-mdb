@@ -22,7 +22,6 @@ import { sagas as myNotes } from './myNotes';
 import { sagas as likutim } from './likutim';
 import { sagas as trim } from './trim';
 import { sagas as playlist } from './playlist';
-import { sagas as fetchImage } from './fetchImage';
 
 const allSagas = [
   ...mdb,
@@ -48,7 +47,6 @@ const allSagas = [
   ...likutim,
   ...trim,
   ...playlist,
-  ...fetchImage
 ];
 
 export function* rootSaga() {

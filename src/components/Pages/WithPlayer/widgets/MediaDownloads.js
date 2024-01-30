@@ -120,7 +120,7 @@ class MediaDownloads extends Component {
       groups.set(l, byType);
     });
 
-    files.filter(f => 
+    files.filter(f =>
       // Keep non video/audio/hls files.
       !(hls && [MT_VIDEO, MT_AUDIO].includes(f.type))
       // And skip summary files for download.

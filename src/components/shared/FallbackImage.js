@@ -1,13 +1,8 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { Image } from 'semantic-ui-react';
-import { useSelector, useDispatch } from 'react-redux';
 
-import { knownFallbackImages, NoneFallbackImage, SectionThumbnailFallback } from '../../helpers/images';
-import { actions } from '../../redux/modules/fetchImage';
-import WipErr from './WipErr/WipErr';
-import { useTranslation } from 'react-i18next';
-import { fetchImageGetBySrcSelector } from '../../redux/selectors';
+import { sectionThumbnailFallback } from '../../helpers/images';
+import clsx from 'clsx';
 
 const FallbackImage = props => {
   const
@@ -22,57 +17,42 @@ const FallbackImage = props => {
       ...rest
     } = props;
 
-  const { src: imageSource, wip, err } = useSelector(state => fetchImageGetBySrcSelector(state, src));
-  const dispatch                       = useDispatch();
-  const { t }                          = useTranslation();
-
-  useEffect(() => {
-    if (!imageSource && !wip && !err) {
-      dispatch(actions.fetch(src, fallbackImage));
-    }
-  }, [fallbackImage, src, imageSource, wip, err]);
-
-  if (!imageSource || imageSource === NoneFallbackImage) {
+  if (!src && (fallbackImage.length === 0 || !sectionThumbnailFallback[fallbackImage[0]])) {
     /* There is no fallbacks and src was not found */
     return null;
   }
 
-  const wipErr = WipErr({ wip: (wip || !imageSource), err, t });
-  if (wipErr) return wipErr;
-
-  if (!imageSource || imageSource === NoneFallbackImage) {
-    /* There is no fallbacks and src was not found */
-    return null;
-  }
-
-  if (knownFallbackImages.includes(imageSource)) {
-    return (
-      <div className={`${className} ${floated && 'floated'} ${floated}`} style={{ maxWidth: width }}>
-        <SectionThumbnailFallback name={imageSource} width={width} height={height} {...rest} />
-      </div>);
-  }
-
+  let styleImg = clsx({ float: floated }), styleDiv  = {};
   if (width && rest.force16x9) {
-    return (
-      <div style={{ width, height: width * 9 / 16, overflow: 'hidden' }}>
-        <Image
-          className={className}
-          style={{ top: 'calc(-50%)', width: '100%' }}
-          floated={floated}
-          src={imageSource}
-          {...rest}
-        />
-      </div>
-    );
+    styleDiv = clsx({
+      width,
+      height  : width * 9 / 16,
+      overflow: 'hidden'
+    });
+    styleImg = clsx({
+      top  : 'calc(-50%)',
+      width: '100%',
+      float: floated
+    });
   }
+
+  const svgFn = sectionThumbnailFallback[fallbackImage[0]];
+  const svg   = svgFn ? svgFn({
+    name  : { src },
+    width : { width },
+    height: { height },
+    ...rest
+  }) : '';
 
   return (
-    <Image
-      className={className}
-      floated={floated}
-      src={imageSource}
-      {...rest}
-    />);
+    <div style={{ ...styleDiv }}>
+      <picture>
+        <source srcSet={src} className={className} style={{ ...styleImg }} {...rest}/>
+        <div className={`${className} ${floated && 'floated'} ${floated}`} style={{ maxWidth: width }}>
+          {svg}
+        </div>
+      </picture>
+    </div>);
 };
 
 FallbackImage.propTypes = {
