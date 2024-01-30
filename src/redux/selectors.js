@@ -99,7 +99,7 @@ export const mdbGetLastLessonIdSelector              = createSelector([getMDB], 
 export const mdbGetDatepickerCOSelector              = createSelector([getMDB], m => mdbSel.getDatepickerCO(m));
 export const mdbNestedGetDenormContentUnitSelector   = createSelector([getMDB], m => mdbSel.nestedGetDenormContentUnit(m));
 export const mdbNestedDenormCollectionWUnitsSelector = createSelector([getMDB], m => mdbSel.nestedGetDenormContentUnit(m));
-export const mdbGetDenormCollectionWUnitsSelector    = createSelector([getMDB], m => mdbSel.nestedDenormCollectionWUnits(m));
+export const mdbGetDenormCollectionWUnitsSelector    = createSelector(getMDB, _2, (m, id) => mdbSel.getDenormCollectionWUnits(m, id));
 export const mdbGetDenormContentUnitSelector         = createSelector(getMDB, _2, (m, id) => mdbSel.getDenormContentUnit(m, id));
 export const mdbGetDenormLabelSelector               = createSelector([getMDB], m => mdbSel.getDenormLabel(m));
 export const mdbGetLabelsByCUSelector                = createSelector(getMDB, _2, (m, id) => mdbSel.getLabelsByCU(m, id));
