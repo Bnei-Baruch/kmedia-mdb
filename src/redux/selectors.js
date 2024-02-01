@@ -227,7 +227,7 @@ export const listsGetNamespaceStateSelector = createSelector(getLists, _2, (l, n
 
 // lessons
 export const lessonsGetSeriesBySourceIdSelector = createSelector(getLessons, getMDB, getSources, (l, m, s) => lessonsSel.getSerieBySourceId(l, m, s));
-export const lessonsGetSeriesByTagIdSelector    = createSelector(getLessons, getMDB, getSources, (l, m, s) => lessonsSel.getSerieByTagId(l, m, s));
+export const lessonsGetSeriesByTagIdSelector    = createSelector(getLessons, getMDB, getTags, (l, m, t) => lessonsSel.getSerieByTagId(l, m, t));
 export const lessonsGetWipSelector              = createSelector([getLessons], l => lessonsSel.getWip(l));
 
 // music
