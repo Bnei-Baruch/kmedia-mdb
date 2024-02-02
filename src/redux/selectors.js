@@ -75,6 +75,7 @@ export const settingsGetPageSizeSelector         = createSelector([getSettings],
 export const homeLatestCoIDsSelector    = createSelector([getHome], home => homeSel.getLatestCos(home));
 export const homeLatestUnitIDsSelector  = createSelector([getHome], home => homeSel.getLatestUnits(home));
 export const homeLatestLessonIDSelector = createSelector([getHome], home => homeSel.getLatestLesson(home));
+export const homeFetchTimestampSelector = createSelector([getHome], home => homeSel.getFetchTimestamp(home));
 export const homeGetBannerSelector      = createSelector([getHome], home => homeSel.getBanner(home));
 export const homeWipSelector            = createSelector([getHome], home => homeSel.getWip(home));
 export const homeErrSelector            = createSelector([getHome], home => homeSel.getError(home));

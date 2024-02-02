@@ -17,15 +17,19 @@ import { actions as publicationsActions } from '../../../redux/modules/publicati
 import WipErr from '../../shared/WipErr/WipErr';
 import HomePage from './HomePage';
 import {
-  settingsGetContentLanguagesSelector,
   homeErrSelector,
-  settingsGetUILangSelector,
-  homeWipSelector,
+  homeFetchTimestampSelector,
+  homeLatestCoIDsSelector,
   homeLatestLessonIDSelector,
   homeLatestUnitIDsSelector,
+  homeWipSelector,
+  mdbLatestCosSelector,
   mdbLatestLessonSelector,
   mdbLatestUnitsSelector,
-  homeLatestCoIDsSelector, mdbLatestCosSelector, publicationsLatestBlogPostsSelector, publicationsLatestTweetsSelector
+  publicationsLatestBlogPostsSelector,
+  publicationsLatestTweetsSelector,
+  settingsGetContentLanguagesSelector,
+  settingsGetUILangSelector
 } from '../../../redux/selectors';
 
 const FETCH_TIMEOUT = 10 * 60 * 1000; // every 10 min
@@ -49,7 +53,7 @@ const BLOG_BY_LANG = new Map([
 const chooseSocialMediaByLanguage = (contentLanguages, socialMediaOptions) =>
   socialMediaOptions.get(contentLanguages.find(language => socialMediaOptions.has(language)) || DEFAULT_CONTENT_LANGUAGE);
 
-const fetchSocialMedia = (type, fetchFn, contentLanguages) => {
+export const fetchSocialMedia = (type, fetchFn, contentLanguages) => {
   fetchFn(`publications-${type}`, 1, {
     page_size: 4,
     ...chooseSocialMediaByLanguage(contentLanguages, type === 'blog' ? BLOG_BY_LANG : TWITTER_BY_LANG)
@@ -59,6 +63,8 @@ const fetchSocialMedia = (type, fetchFn, contentLanguages) => {
 const HomePageContainer = ({ t }) => {
   const dispatch  = useDispatch();
   const fetchData = useCallback(flag => dispatch(actions.fetchData(flag)), [dispatch]);
+
+  const fetchTimestamp = useSelector(homeFetchTimestampSelector);
 
   const latestLessonID = useSelector(homeLatestLessonIDSelector);
   const latestLesson   = useSelector(state => mdbLatestLessonSelector(state, latestLessonID));
@@ -81,12 +87,16 @@ const HomePageContainer = ({ t }) => {
   const err              = useSelector(homeErrSelector);
 
   useEffect(() => {
-    console.log('re-fetch');
-    fetchData(true);
-    fetchSocialMedia('blog', fetchBlogList, contentLanguages);
-    fetchSocialMedia('tweet', fetchTweetsList, contentLanguages);
-    fetchBanners(contentLanguages);
-  }, [contentLanguages, fetchBanners, fetchBlogList, fetchData, fetchTweetsList]);
+    const now = Date.now();
+    console.log('re-fetch', fetchTimestamp, now, FETCH_TIMEOUT);
+    if (!fetchTimestamp || now - fetchTimestamp > FETCH_TIMEOUT) {
+      console.log('Fetching!');
+      fetchData(true);
+      fetchSocialMedia('blog', fetchBlogList, contentLanguages);
+      fetchSocialMedia('tweet', fetchTweetsList, contentLanguages);
+      fetchBanners(contentLanguages);
+    }
+  }, [fetchTimestamp, contentLanguages, fetchBanners, fetchBlogList, fetchData, fetchTweetsList]);
 
   useInterval(() => fetchData(false), FETCH_TIMEOUT);
 

@@ -55,12 +55,20 @@ import * as searchSagas from './../sagas/search';
 import * as tagsSagas from './../sagas/tags';
 import { getLibraryContentFile } from '../components/Sections/Library/Library';
 import { selectLikutFile } from '../components/Sections/Likutim/Likut';
+import { fetchSocialMedia } from '../components/Sections/Home/Container';
 import Api from '../helpers/Api';
 import { cuFilesToData, getSourceIndexId } from '../sagas/helpers/utils';
 import { mdbGetDenormContentUnitSelector } from '../redux/selectors';
 
 export const home = store => {
+  const state = store.getState();
+  const contentLanguages = settingsSelectors.getContentLanguages(state.settings);
+
   store.dispatch(homeActions.fetchData(true));
+  fetchSocialMedia('blog', (type, id, options) => store.dispatch(publicationsActions.fetchBlogList(type, id, options)), contentLanguages);
+  fetchSocialMedia('tweet', (type, id, options) => store.dispatch(publicationsActions.fetchTweets(type, id, options)), contentLanguages);
+  store.dispatch(homeActions.fetchBanners(contentLanguages));
+
   return Promise.resolve(null);
 };
 
