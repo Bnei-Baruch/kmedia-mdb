@@ -32,7 +32,6 @@ logs/
 public/assets/cms/**
 mdb.dump.*.sql
 node_modules/
-.yarnrc.yml
 .pnp.*
 .yarn/*
 !.yarn/patches
