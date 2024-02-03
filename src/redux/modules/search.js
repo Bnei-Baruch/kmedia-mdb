@@ -16,7 +16,7 @@ const initialState = {
   error           : null
 };
 
-const searchSlice    = createSlice({
+const searchSlice = createSlice({
   name: 'search',
   initialState,
 
@@ -40,9 +40,12 @@ const searchSlice    = createSlice({
       state.prevFilterParams = payload.filterParams;
       state.prevQuery        = payload.query;
     },
-    searchFailure      : (state, payload) => {
-      state.wip   = false;
-      state.error = payload;
+    searchFailure      : {
+      prepare: err => ({ err }),
+      reducer: (state, payload) => {
+        state.wip   = false;
+        state.error = payload;
+      }
     },
     hydrateUrl         : () => ({}),
     setPage            : (state, { payload }) => void (state.pageNo = payload),
