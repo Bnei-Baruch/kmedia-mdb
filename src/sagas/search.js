@@ -103,7 +103,7 @@ export function* search(action) {
     const deb              = yield select(searchGetDebSelector);
 
     // Redirect from home page.
-    if (action.type === types['search/search'] && !action.payload) {
+    if (action && action.type === types['search/search'] && !action.payload) {
       yield put(push({ pathname: 'search' }));
       yield* urlUpdateQuery(q => Object.assign(q, { q: query }));
     }
