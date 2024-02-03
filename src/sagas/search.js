@@ -13,7 +13,14 @@ import { fetchAllSeries } from './lessons';
 import { fetchViewsByUIDs } from './recommended';
 import { filtersTransformer } from '../filters';
 import { push } from '@lagunovsky/redux-react-router';
-import { settingsGetContentLanguagesSelector, settingsGetUILangSelector } from '../redux/selectors';
+import {
+  filtersGetFiltersSelector, lessonsGetSeriesLoaded, searchGetDebSelector,
+  searchGetPageNoSelector, searchGetPrevFilterParamsSelector,
+  searchGetPrevQuerySelector,
+  searchGetQuerySelector, searchGetSortBySelector,
+  settingsGetContentLanguagesSelector,
+  settingsGetUILangSelector
+} from '../redux/selectors';
 
 // TODO: Use debounce after redux-saga updated.
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -56,12 +63,12 @@ function getIdsForFetch(hits, types) {
 
 export function* search(action) {
   try {
-    const query     = yield select(state => selectors.getQuery(state.search));
-    const prevQuery = yield select(state => selectors.getPrevQuery(state.search));
-    let pageNo      = yield select(state => selectors.getPageNo(state.search));
+    const query     = yield select(searchGetQuerySelector);
+    const prevQuery = yield select(searchGetPrevQuerySelector);
+    let pageNo      = yield select(searchGetPageNoSelector);
 
     // Prepare filters values.
-    const filters         = yield select(state => filterSelectors.getFilters(state.filters, 'search'));
+    const filters         = yield select(state => filtersGetFiltersSelector(state, 'search'));
     const params          = filtersTransformer.toApiParams(filters);
     const filterKeyValues = Object.entries(params).map(([v, k]) => `${v}:${k}`).join(' ');
     const filterParams    = filterKeyValues ? ` ${filterKeyValues}` : '';
@@ -82,8 +89,8 @@ export function* search(action) {
       }
     }
 
-    if (action.type === filterTypes['filters/setFilterValueMulti']) {
-      const prevFilterParams = yield select(state => selectors.getPrevFilterParams(state.search));
+    if (action && action.type === filterTypes['filters/setFilterValueMulti']) {
+      const prevFilterParams = yield select(searchGetPrevFilterParamsSelector);
       if (filterParams === prevFilterParams) {
         // Don't search if filters have not changed.
         return;
@@ -92,8 +99,8 @@ export function* search(action) {
 
     const uiLang           = yield select(settingsGetUILangSelector);
     const contentLanguages = yield select(settingsGetContentLanguagesSelector);
-    const sortBy           = yield select(state => selectors.getSortBy(state.search));
-    const deb              = yield select(state => selectors.getDeb(state.search));
+    const sortBy           = yield select(searchGetSortBySelector);
+    const deb              = yield select(searchGetDebSelector);
 
     // Redirect from home page.
     if (action.type === types['search/search'] && !action.payload) {
@@ -132,7 +139,7 @@ export function* search(action) {
       const cIDsToFetch    = getIdsForFetch(data.search_result.hits.hits, ['collections']);
       const cuIDsToFetch   = getIdsForFetch(data.search_result.hits.hits, ['units', 'sources']);
       const postIDsToFetch = getIdsForFetch(data.search_result.hits.hits, ['posts']);
-      const seriesLoaded   = yield select(state => lessonsSelectors.getSeriesLoaded(state.lessons));
+      const seriesLoaded   = yield select(lessonsGetSeriesLoaded);
 
       if (cuIDsToFetch.length === 0 && cIDsToFetch.length === 0 && postIDsToFetch.length === 0 && seriesLoaded) {
         yield put(actions.searchSuccess({ searchResults: data, searchRequest: request, filterParams, query }));
@@ -198,9 +205,9 @@ export function* hydrateUrl() {
   const urlQuery                       = yield* getQuery();
   const { q, page = '1', deb = false } = urlQuery;
 
-  const reduxQuery  = yield select(state => selectors.getQuery(state.search));
-  const reduxPageNo = yield select(state => selectors.getPageNo(state.search));
-  const reduxDeb    = yield select(state => selectors.getDeb(state.search));
+  const reduxQuery  = yield select(searchGetQuerySelector);
+  const reduxPageNo = yield select(searchGetPageNoSelector);
+  const reduxDeb    = yield select(searchGetDebSelector);
   if (deb !== reduxDeb) {
     yield put(actions.setDeb(deb));
   }
@@ -226,7 +233,7 @@ export function* updateUrl(action) {
   const urlQuery = yield* getQuery();
   const { q }    = urlQuery;
 
-  const reduxQuery = yield select(state => selectors.getQuery(state.search));
+  const reduxQuery = yield select(searchGetQuerySelector);
   if (reduxQuery && reduxQuery !== q) {
     yield* urlUpdateQuery(query => Object.assign(query, { q: reduxQuery }));
   }
