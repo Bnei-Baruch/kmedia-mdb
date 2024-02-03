@@ -41,10 +41,10 @@ const searchSlice = createSlice({
       state.prevQuery        = payload.query;
     },
     searchFailure      : {
-      prepare: err => ({ err }),
+      prepare: ({ payload }) => ({ error: payload }),
       reducer: (state, payload) => {
         state.wip   = false;
-        state.error = payload;
+        state.error = payload?.error;
       }
     },
     hydrateUrl         : () => ({}),
