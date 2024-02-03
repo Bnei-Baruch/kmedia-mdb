@@ -2,9 +2,9 @@ import Keycloak from 'keycloak-js';
 
 // This file used loaded in SSR and in client side too.
 // Try load the constants from process and in client expect them in window global object.
-export const KC_API_URL = process.env.REACT_KC_API_URL || (typeof window !== 'undefined' && window.KC_API_URL) || 'https://accounts.kab.info/auth';
-export const KC_REALM = process.env.REACT_KC_REALM || (typeof window !== 'undefined' && window.KC_REALM) || 'main';
-export const KC_CLIENT_ID = process.env.REACT_KC_CLIENT_ID || (typeof window !== 'undefined' && window.KC_CLIENT_ID) || 'kmedia-public';
+const KC_API_URL   = process.env.REACT_KC_API_URL || (typeof window !== 'undefined' && window.KC_API_URL) || 'https://accounts.kab.info/auth';
+const KC_REALM     = process.env.REACT_KC_REALM || (typeof window !== 'undefined' && window.KC_REALM) || 'main';
+const KC_CLIENT_ID = process.env.REACT_KC_CLIENT_ID || (typeof window !== 'undefined' && window.KC_CLIENT_ID) || 'kmedia-public';
 
 export const KC_API_WITH_REALM = `${KC_API_URL}/realms/${KC_REALM}`;
 
@@ -41,10 +41,10 @@ export const initKC = async () => {
 
   const options   = {
     checkLoginIframe: false,
-    flow: 'standard',
-    pkceMethod: 'S256',
-    enableLogging: true,
-    onLoad: 'check-sso',
+    flow            : 'standard',
+    pkceMethod      : 'S256',
+    enableLogging   : true,
+    onLoad          : 'check-sso'
   };
   document.cookie = 'authorised=true;max-age=10';
   const resp      = { user: null, token: null };
@@ -74,11 +74,11 @@ const updateToken = token => {
 };
 
 const userManagerConfig = {
-  url: KC_API_URL,
-  realm: KC_REALM,
-  clientId: KC_CLIENT_ID,
-  scope: 'profile',
-  enableLogging: true,
+  url          : KC_API_URL,
+  realm        : KC_REALM,
+  clientId     : KC_CLIENT_ID,
+  scope        : 'profile',
+  enableLogging: true
 };
 const keycloak          = typeof window !== 'undefined' ? new Keycloak(userManagerConfig) : {};
 
@@ -95,7 +95,7 @@ const renewRetry = (retry, err) => {
   }
 };
 
-const renewToken           = retry => {
+const renewToken = retry => {
   retry++;
   keycloak.updateToken(70).then(refreshed => {
     if (refreshed) {
