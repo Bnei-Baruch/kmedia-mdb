@@ -4,27 +4,30 @@ import { actions as ssrActions } from './ssr';
 import isEqual from 'react-fast-compare';
 
 const initialState = {
-  latestLesson: null,
-  latestUnits : null,
-  banners     : {
+  latestLesson    : null,
+  latestUnits     : null,
+  latestCos       : null,
+  fetchedTimestamp: null,
+  banners         : {
     data: {},
     wip : false,
     err : null
   },
-  wip         : false,
-  err         : null
+  wip             : false,
+  err             : null
 };
 
 const onSetLanguages = state => {
-  state.latestLesson = null;
-  state.latestUnits  = null;
-  state.banners      = {
+  state.latestLesson     = null;
+  state.latestUnits      = null;
+  state.fetchedTimestamp = null;
+  state.banners          = {
     data: {},
     wip : false,
     err : null
   };
-  state.wip          = false;
-  state.err          = null;
+  state.wip              = false;
+  state.err              = null;
 };
 
 const onDataSuccess = (state, { payload }) => {
@@ -33,11 +36,12 @@ const onDataSuccess = (state, { payload }) => {
   const latestCos   = payload.latest_cos.map(x => x.id);
 
   if (state.latestLesson !== id || !isEqual(state.latestLesson, latestUnits) || !isEqual(state.latestCos, latestCos)) {
-    state.wip          = false;
-    state.err          = null;
-    state.latestLesson = id;
-    state.latestUnits  = latestUnits;
-    state.latestCos    = latestCos;
+    state.wip            = false;
+    state.err            = null;
+    state.latestLesson   = id;
+    state.latestUnits    = latestUnits;
+    state.latestCos      = latestCos;
+    state.fetchedTimestamp = Date.now();
   }
 
   return state;
@@ -116,17 +120,19 @@ export const types = Object.fromEntries(new Map(
 
 /* Selectors */
 
-const getLatestLesson = state => state.latestLesson;
-const getLatestUnits  = state => state.latestUnits;
-const getLatestCos    = state => state.latestCos;
-const getBanner       = state => state.banners;
-const getWip          = state => state.wip;
-const getError        = state => state.err;
+const getLatestLesson   = state => state.latestLesson;
+const getLatestUnits    = state => state.latestUnits;
+const getLatestCos      = state => state.latestCos;
+const getFetchTimestamp = state => state.fetchedTimestamp;
+const getBanner         = state => state.banners;
+const getWip            = state => state.wip;
+const getError          = state => state.err;
 
 export const selectors = {
   getLatestLesson,
   getLatestUnits,
   getLatestCos,
+  getFetchTimestamp,
   getBanner,
   getWip,
   getError
