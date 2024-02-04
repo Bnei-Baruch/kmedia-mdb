@@ -4,12 +4,9 @@ import { getPageFromLocation } from '../components/Pagination/withPagination';
 import { tabs as publicationsTabs } from '../components/Sections/Publications/MainPage';
 import {
   getFile as summaryGetFile,
+  showSummaryTab,
   getSummaryLanguages
 } from '../components/Pages/WithPlayer/widgets/UnitMaterials/Summary/helper';
-import { tabs as pulicationsTabs } from '../components/Sections/Publications/MainPage';
-import { isTaas } from '../components/shared/PDF/PDF';
-import { getTextFiles as transcriptGetTextFiles, selectFile as transcriptSelectFile } from '../components/Pages/WithPlayer/widgets/UnitMaterials/Transcription/Transcription';
-import { getFile as summaryGetFile, getSummaryLanguages, showSummaryTab } from '../components/Pages/WithPlayer/widgets/UnitMaterials/Summary/Summary';
 
 import {
   COLLECTION_PROGRAMS_TYPE,
@@ -62,8 +59,6 @@ import * as searchSagas from './../sagas/search';
 import * as tagsSagas from './../sagas/tags';
 import * as assetsSagas from './../sagas/assets';
 import * as textPageSagas from './../sagas/textPage';
-import { getLibraryContentFile } from '../components/Sections/Library/Library';
-import { selectLikutFile } from '../components/Sections/Likutim/Likut';
 import { fetchSocialMedia } from '../components/Sections/Home/Container';
 import Api from '../helpers/Api';
 import {
@@ -77,8 +72,8 @@ import {
 } from '../redux/selectors';
 
 export const home = store => {
-  const state = store.getState();
-  const contentLanguages = settingsSelectors.getContentLanguages(state.settings);
+  const state            = store.getState();
+  const contentLanguages = settingsGetContentLanguagesSelector(state);
 
   store.dispatch(homeActions.fetchData(true));
   fetchSocialMedia('blog', (type, id, options) => store.dispatch(publicationsActions.fetchBlogList(type, id, options)), contentLanguages);
@@ -102,8 +97,8 @@ export const cuPage = async (store, match) => {
 
   let activeTab = 'transcription';
 
-      const contentLanguages = settingsSelectors.getContentLanguages(state.settings);
-      if (showSummaryTab(unit, contentLanguages)) {
+  const contentLanguages = settingsGetContentLanguagesSelector(state);
+  if (showSummaryTab(unit, contentLanguages)) {
     activeTab = 'summary';
   }
 
@@ -117,9 +112,8 @@ export const cuPage = async (store, match) => {
   }
 
   // Select transcript file by language.
-  const contentLanguages = settingsGetContentLanguagesSelector(state);
-  let { id }             = unit;
-  let file = null;
+  let { id } = unit;
+  let file   = null;
 
   switch (activeTab) {
     case 'transcription':

@@ -1,6 +1,8 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 
 import {
   CT_ARTICLE,
@@ -12,7 +14,8 @@ import {
 } from '../../../../../helpers/consts';
 import * as shapes from '../../../../shapes';
 import TabsMenu from '../../../../shared/TabsMenu';
-import Summary, { showSummaryTab } from './Summary/Summary';
+import Summary from './Summary/Summary';
+import { showSummaryTab } from './Summary/helper';
 import SourceTab from './Sources/SourceTab';
 import Sketches from './Sketches';
 import MediaDownloads from '../MediaDownloads';
@@ -20,11 +23,13 @@ import { isEmpty, noop } from '../../../../../helpers/utils';
 import { ClientChroniclesContext, DeviceInfoContext } from '../../../../../helpers/app-contexts';
 import DerivedUnits from './DerivedUnits';
 import Recommended from '../Recommended/Main/Recommended';
-import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
 import PlaylistItems from '../../Playlist/PlaylistItems';
 import PlaylistMyItems from '../../PlaylistMy/PlaylistItems';
-import { mdbGetDenormContentUnitSelector, playlistGetInfoSelector, settingsGetContentLanguagesSelector } from '../../../../../redux/selectors';
+import {
+  mdbGetDenormContentUnitSelector,
+  playlistGetInfoSelector,
+  settingsGetContentLanguagesSelector
+} from '../../../../../redux/selectors';
 import TranscriptionTab from './Transcription/TranscriptionTab';
 import ArticleTab from './Article/ArticleTab';
 import ResearchTab from './Research/ResearchTab';
