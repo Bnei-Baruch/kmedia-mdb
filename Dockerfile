@@ -66,7 +66,6 @@ COPY --from=build /app .
 ENV NODE_ENV=production \
     REACT_APP_BASE_URL=${public_base} \
     REACT_APP_API_BACKEND=http://nginx/backend/ \
-    REACT_APP_CMS_BACKEND=${public_base}cms/ \
     REACT_APP_ASSETS_BACKEND=${public_base}assets/ \
     REACT_APP_IMAGINARY_URL=${public_base}imaginary/ \
     REACT_APP_IMAGINARY_INTERNAL_HOST=nginx \
