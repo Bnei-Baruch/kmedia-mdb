@@ -7,6 +7,7 @@ import SearchOnPageBtn from '../../Pages/WithText/Buttons/SearchOnPageBtn';
 import DownloadTextBtn from '../../Pages/WithText/Buttons/DownloadTextBtn';
 import BookmarkBtn from '../../Pages/WithText/Buttons/BookmarkBtn';
 import ShareTextModalBtn from '../../Pages/WithText/Buttons/ShareTextModalBtn';
+import LessonsByLikutBtn from './LessonsByLikutBtn';
 
 const LikutToolbarMobile = () => (
   <div className="text_toolbar is-mobile">
@@ -14,6 +15,7 @@ const LikutToolbarMobile = () => (
       <LanguageTextBtn />
       <TextSettings />
       <SearchOnPageBtn />
+      <LessonsByLikutBtn />
       <Dropdown
         item
         icon={null}

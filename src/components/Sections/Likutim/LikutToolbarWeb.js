@@ -16,6 +16,7 @@ import TagTextBtn from '../../Pages/WithText/Buttons/TagTextBtn';
 import PrintBtn from '../../Pages/WithText/Buttons/PrintBtn';
 import FullscreenTextBtn from '../../Pages/WithText/Buttons/FullscreenTextBtn';
 import { textPageGetUrlInfoSelector } from '../../../redux/selectors';
+import LessonsByLikutBtn from './LessonsByLikutBtn';
 
 const LikutToolbarWeb = () => {
   const hasNoSel = !useSelector(textPageGetUrlInfoSelector).select;
@@ -54,6 +55,7 @@ const LikutToolbarWeb = () => {
                 <AdditionsVisibilityBtn />
               </div>
               <div className="divider computer-only" />
+              <LessonsByLikutBtn />
             </>
           )
         }
