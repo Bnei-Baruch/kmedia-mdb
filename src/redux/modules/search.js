@@ -43,7 +43,8 @@ const searchSlice = createSlice({
     searchFailure      : {
       prepare: ({ payload }) => ({ error: payload }),
       reducer: (state, payload) => {
-        state.wip   = false;
+        state.wip = false;
+        console.error('=====> searchFailure: ', payload?.error);
         state.error = payload?.error;
       }
     },
