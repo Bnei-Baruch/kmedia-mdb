@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 import TextLayoutWeb from '../../../../WithText/TextLayoutWeb';
-import { isEmpty } from '../../../../../../helpers/utils';
 import { MT_TEXT, CT_LIKUTIM, CT_SOURCE } from '../../../../../../helpers/consts';
 import { DeviceInfoContext } from '../../../../../../helpers/app-contexts';
 import SourceTabToolbarMobile from './SourceTabToolbarMobile';
@@ -39,7 +38,7 @@ const SourceTab = () => {
 
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
-  if (isEmpty(cus)) return <NotFound />;
+  if (!cu) return <NotFound />;
 
   const toc = <SourceTabTOC cus={cus} onClick={handleSelectCu} />;
   return (
