@@ -16,7 +16,10 @@ const ArticleToolbarMobile = () => (
       <Dropdown
         item
         icon={null}
-        trigger={(<span className="material-symbols-outlined">more_vert</span>)}>
+        trigger={(<span className="material-symbols-outlined">more_vert</span>)}
+        pointing="top right"
+        className="text_toolbar__dropdown"
+      >
         <Dropdown.Menu>
           <Dropdown.Item>
             <BookmarkBtn />

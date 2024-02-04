@@ -5,17 +5,14 @@ import LanguageTextBtn from '../../../../WithText/Buttons/LanguageTextBtn';
 import TextSettings from '../../../../WithText/Buttons/TextSettings/TextSettings';
 import SearchOnPageBtn from '../../../../WithText/Buttons/SearchOnPageBtn';
 import DownloadTextBtn from '../../../../WithText/Buttons/DownloadTextBtn';
-import ShareTextBtn from '../../../../WithText/Buttons/ShareTextBtn';
 import BookmarkBtn from '../../../../WithText/Buttons/BookmarkBtn';
+import ShareTextModalBtn from '../../../../WithText/Buttons/ShareTextModalBtn';
 
 const ArticleTabToolbarMobile = () => (
   <div className="text_toolbar is-mobile">
     <div className="text_toolbar__buttons">
       <LanguageTextBtn />
       <TextSettings />
-      <div className="divider" />
-      <ShareTextBtn />
-      <div className="divider" />
       <SearchOnPageBtn />
       <Dropdown
         item
@@ -26,10 +23,13 @@ const ArticleTabToolbarMobile = () => (
       >
         <Dropdown.Menu>
           <Dropdown.Item>
+            <BookmarkBtn />
+          </Dropdown.Item>
+          <Dropdown.Item>
             <DownloadTextBtn />
           </Dropdown.Item>
           <Dropdown.Item>
-            <BookmarkBtn />
+            <ShareTextModalBtn />
           </Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>

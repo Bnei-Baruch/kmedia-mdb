@@ -1,6 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import clsx from 'clsx';
+import { Dropdown, Button } from 'semantic-ui-react';
 
 import AddNoteBtn from '../../../../WithText/Buttons/AddNoteBtn';
 import LanguageTextBtn from '../../../../WithText/Buttons/LanguageTextBtn';
@@ -40,14 +41,51 @@ const TranscriptionTabToolbarWeb = () => {
             <>
               <div className="divider" />
               <SearchOnPageBtn />
-              <ExpandAllNotesBtn />
-              <DownloadTextBtn />
-              <PrintBtn />
-              <AdditionsVisibilityBtn />
+              <div className="computer-only">
+                <ExpandAllNotesBtn />
+              </div>
+              <div className="computer-only">
+                <PrintBtn />
+              </div>
+              <div className="computer-only">
+                <DownloadTextBtn />
+              </div>
+              <div className="computer-only">
+                <AdditionsVisibilityBtn />
+              </div>
+              <div className="divider computer-only" />
             </>
           )
         }
-        <PlayByTextBtn />
+        <div className="computer-only">
+          <PlayByTextBtn />
+        </div>
+        <Dropdown
+          item
+          icon={null}
+          trigger={
+            (
+              <Button
+                circular
+                icon={<span className="material-symbols-outlined">more_vert</span>}
+              />
+            )
+          }
+          pointing="top right"
+          className="text_toolbar__dropdown"
+        >
+          <Dropdown.Menu>
+            <Dropdown.Item>
+              <ExpandAllNotesBtn />
+            </Dropdown.Item>
+            <Dropdown.Item>
+              <DownloadTextBtn />
+            </Dropdown.Item>
+            <Dropdown.Item>
+              <AdditionsVisibilityBtn />
+            </Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown>
       </div>
     </div>
   );

@@ -1,6 +1,7 @@
 import React from 'react';
 import clsx from 'clsx';
 import { useSelector } from 'react-redux';
+import { Dropdown, Button } from 'semantic-ui-react';
 
 import AddNoteBtn from '../../Pages/WithText/Buttons/AddNoteBtn';
 import TocToggleBtn from './TOC/TocToggleBtn';
@@ -18,7 +19,6 @@ import ShareTextBtn from '../../Pages/WithText/Buttons/ShareTextBtn';
 import TagTextBtn from '../../Pages/WithText/Buttons/TagTextBtn';
 import PrintBtn from '../../Pages/WithText/Buttons/PrintBtn';
 import { textPageGetUrlInfoSelector } from '../../../redux/selectors';
-import { Dropdown, Button } from 'semantic-ui-react';
 
 const SourceToolbarWeb = () => {
   const hasNoSel = !useSelector(textPageGetUrlInfoSelector).select;

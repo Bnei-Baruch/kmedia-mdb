@@ -1,13 +1,13 @@
 import React from 'react';
 import { Dropdown } from 'semantic-ui-react';
 
+import TocToggleBtn from '../../../../../Sections/Source/TOC/TocToggleBtn';
 import LanguageTextBtn from '../../../../WithText/Buttons/LanguageTextBtn';
 import TextSettings from '../../../../WithText/Buttons/TextSettings/TextSettings';
-import BookmarkBtn from '../../../../WithText/Buttons/BookmarkBtn';
 import SearchOnPageBtn from '../../../../WithText/Buttons/SearchOnPageBtn';
 import DownloadTextBtn from '../../../../WithText/Buttons/DownloadTextBtn';
-import ShareTextBtn from '../../../../WithText/Buttons/ShareTextBtn';
-import TocToggleBtn from '../../../../../Sections/Source/TOC/TocToggleBtn';
+import BookmarkBtn from '../../../../WithText/Buttons/BookmarkBtn';
+import ShareTextModalBtn from '../../../../WithText/Buttons/ShareTextModalBtn';
 
 const SourceTabToolbarMobile = ({ needTOC }) => (
   <div className="text_toolbar is-mobile">
@@ -15,9 +15,6 @@ const SourceTabToolbarMobile = ({ needTOC }) => (
       {needTOC && <TocToggleBtn />}
       <LanguageTextBtn />
       <TextSettings />
-      <div className="divider" />
-      <ShareTextBtn />
-      <div className="divider" />
       <SearchOnPageBtn />
       <Dropdown
         item
@@ -28,10 +25,13 @@ const SourceTabToolbarMobile = ({ needTOC }) => (
       >
         <Dropdown.Menu>
           <Dropdown.Item>
+            <BookmarkBtn />
+          </Dropdown.Item>
+          <Dropdown.Item>
             <DownloadTextBtn />
           </Dropdown.Item>
           <Dropdown.Item>
-            <BookmarkBtn />
+            <ShareTextModalBtn />
           </Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
