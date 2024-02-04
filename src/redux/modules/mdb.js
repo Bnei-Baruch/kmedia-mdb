@@ -72,7 +72,13 @@ const stripOldFiles = unit => {
     }
 
     return acc.concat(val);
-  }, []).map(f => f.duration ? f : { ...f, duration: unit.duration });
+  }, []).map(f => {
+    if (!f.duration) {
+      f.duration = unit.duration;
+    }
+
+    return f;
+  });
 
   return { ...unit, files: nFiles };
 };
