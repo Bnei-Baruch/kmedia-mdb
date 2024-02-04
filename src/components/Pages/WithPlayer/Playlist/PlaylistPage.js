@@ -26,7 +26,7 @@ const PlaylistPage = ({ playerContainer }) => {
         <div id="avbox_playlist">
           <PlaylistHeader />
         </div>
-        {playerContainer}
+        {isReady && playerContainer}
       </Container>
     );
   }
