@@ -1,30 +1,47 @@
 import React from 'react';
 import { NavLink as BaseNavLink } from 'react-router-dom';
-import multiLanguageLinkCreator from './MultiLanguageLinkCreator';
+import { useLocation } from 'react-router';
+import { getToWithLanguage } from '../../helpers/url';
 
 /**
  * Use this component instead of react-router-dom's NavLink to keep the current language in the destination route
  */
 
 const NavLink = React.forwardRef(
-  ({ activeClassName, activeStyle, ...props }, ref) => (
-    <BaseNavLink
+  (
+    {
+      activeClassName,
+      activeStyle,
+      to = undefined,
+      language = '',
+      contentLanguage = undefined,
+      staticContext,
+      className = undefined,
+      style = undefined,
+      ...rest
+    }, ref
+  ) => {
+    const location       = useLocation();
+    const toWithLanguage = getToWithLanguage(to, location, language, contentLanguage);
+
+    return <BaseNavLink
       ref={ref}
-      {...props}
+      {...rest}
+      to={toWithLanguage}
       className={({ isActive }) =>
         [
-          props.className,
-          isActive ? activeClassName : null,
+          className,
+          isActive ? activeClassName : null
         ]
           .filter(Boolean)
           .join(' ')
       }
       style={({ isActive }) => ({
-        ...props.style,
-        ...(isActive ? activeStyle : null),
+        ...style,
+        ...(isActive ? activeStyle : null)
       })}
-    />
-  )
+    />;
+  }
 );
 
-export default multiLanguageLinkCreator()(NavLink);
+export default NavLink;
