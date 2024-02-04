@@ -520,9 +520,13 @@ export const SearchResultSeries = ({ id, type, mdbUid, clickData }) => {
   }
 
   const collections = s.collections.filter(c => c.id !== mdbUid);
-  collections.unshift(s.collections.find(c => c.id === mdbUid));
+  const found = s.collections.find(c => c.id === mdbUid);
+  if (found) {
+    collections.unshift(found);
+  }
 
   const wipError      = WipErr({ wip: wipL || wipS || collections.some(c => !c), err: null, t });
+
   // If filter used for specific language, make sure the link will redirect to that language.
   const mediaLanguage = getMediaLanguage(filters);
 
@@ -537,13 +541,15 @@ export const SearchResultSeries = ({ id, type, mdbUid, clickData }) => {
           </Header>
         </div>
         {wipError}
-        {!wipError && (<Grid columns="equal">
-          <Grid.Row>
-            <div style={{ display: 'flex', flexWrap: 'wrap', marginRight: '1em', paddingTop: '1em' }}>
-              {collections.map(c => renderSerie(c, click, canonicalLink(c, mediaLanguage), t))}
-            </div>
-          </Grid.Row>
-        </Grid>)}
+        {!wipError && (
+          <Grid columns="equal">
+            <Grid.Row>
+              <div style={{ display: 'flex', flexWrap: 'wrap', marginRight: '1em', paddingTop: '1em' }}>
+                {collections.map(c => renderSerie(c, click, canonicalLink(c, mediaLanguage), t))}
+              </div>
+            </Grid.Row>
+          </Grid>
+        )}
       </List.Content>
     </List.Item>
   );
