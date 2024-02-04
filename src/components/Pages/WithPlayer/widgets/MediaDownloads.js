@@ -16,6 +16,7 @@ import {
   CT_PUBLICATION,
   CT_RESEARCH_MATERIAL,
   CT_VIDEO_PROGRAM_CHAPTER,
+  INSERT_TYPE_SUMMARY,
   MT_AUDIO,
   MT_IMAGE,
   MT_TEXT,
@@ -119,7 +120,12 @@ class MediaDownloads extends Component {
       groups.set(l, byType);
     });
 
-    files.filter(f => !(hls && [MT_VIDEO, MT_AUDIO].includes(f.type))).forEach(file => {
+    files.filter(f =>
+      // Keep non video/audio/hls files.
+      !(hls && [MT_VIDEO, MT_AUDIO].includes(f.type))
+      // And skip summary files for download.
+      && f.insert_type !== INSERT_TYPE_SUMMARY
+    ).forEach(file => {
       if (!groups.has(file.language)) {
         groups.set(file.language, new Map());
       }
