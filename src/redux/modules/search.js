@@ -44,7 +44,6 @@ const searchSlice = createSlice({
       prepare: ({ payload }) => ({ error: payload }),
       reducer: (state, payload) => {
         state.wip = false;
-        console.error('=====> searchFailure: ', payload?.error);
         state.error = payload?.error;
       }
     },
