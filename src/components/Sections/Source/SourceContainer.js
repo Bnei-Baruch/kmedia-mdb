@@ -23,7 +23,7 @@ const SourceContainer = () => {
   const getPathById   = useSelector(sourcesGetPathByIDSelector);
   const source        = getSourceById(id) || false;
   const path          = getFullPath(id, getPathById);
-  const parent        = path[1] || false;
+  const parent        = path[1];
   const root          = getSourceById(parent.parent_id);
 
   const childId = source.children?.[0];
@@ -31,7 +31,7 @@ const SourceContainer = () => {
   //TODO: David use https://reactrouter.com/en/main/route/loader
   useEffect(() => {
     childId && navigate(`../sources/${childId}`, { replace: true });
-  }, [childId]);
+  }, [childId, navigate]);
 
   const toc        = <TOC />;
   const breadcrumb = <BreadcrumbTextPage />;
@@ -39,8 +39,8 @@ const SourceContainer = () => {
 
   return <>
     <Helmets.Basic
-      title={`${source.name} - ${parent.name} - ${root.name}`}
-      description={parent.description}
+      title={`${source.name} - ${parent?.name} - ${root?.name}`}
+      description={parent?.description}
     />
     {
       isMobileDevice ? (

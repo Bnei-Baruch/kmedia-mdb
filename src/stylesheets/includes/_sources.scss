@@ -144,7 +144,7 @@
 
     &.source__toc_active {
       transition: all 0.2s ease-in-out 0s;
-      transform: translate3d(0, 0, 0);
+      transform: translate3d(0, 0, 0) !important;
 
 
       &.source__toc_selected {
@@ -191,16 +191,22 @@
           height: calc(100VH - $main-menu-height);
         }
       }
+
+      .is-dark & .source__toc_scroll {
+        &::-webkit-scrollbar-thumb {
+          background: $grey;
+        }
+
+        &::-webkit-scrollbar-track {
+          background: $midWhite;
+        }
+      }
     }
 
     .title {
       &.active {
         font-weight: bold;
       }
-    }
-
-    &.source__toc_active {
-      transform: translate3d(0, 0, 0) !important;
     }
 
     .player_page_tab & {
