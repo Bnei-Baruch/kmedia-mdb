@@ -41,10 +41,10 @@ export const initKC = async () => {
 
   const options   = {
     checkLoginIframe: false,
-    flow            : 'standard',
-    pkceMethod      : 'S256',
-    enableLogging   : true,
-    onLoad          : 'check-sso'
+    flow: 'standard',
+    pkceMethod: 'S256',
+    enableLogging: true,
+    onLoad: 'check-sso'
   };
   document.cookie = 'authorised=true;max-age=10';
   const resp      = { user: null, token: null };
@@ -74,10 +74,10 @@ const updateToken = token => {
 };
 
 const userManagerConfig = {
-  url          : KC_API_URL,
-  realm        : KC_REALM,
-  clientId     : KC_CLIENT_ID,
-  scope        : 'profile',
+  url: KC_API_URL,
+  realm: KC_REALM,
+  clientId: KC_CLIENT_ID,
+  scope: 'profile',
   enableLogging: true
 };
 const keycloak          = typeof window !== 'undefined' ? new Keycloak(userManagerConfig) : {};
@@ -116,7 +116,16 @@ export const kcUpdateToken = () => keycloak
   });
 
 const healthCheckKC = async () => {
-  const health = await fetch(`${KC_API_WITH_REALM}/protocol/openid-connect/certs`);
+  const health = await fetch(`${KC_API_WITH_REALM}/protocol/openid-connect/certs`, { cache: 'no-store' })
+    .then((resp) => {
+      if (resp.status >= 400) {
+        throw new Error('keycloak server return bad response');
+      }
+      return resp;
+    })
+    .catch(err => {
+      console.log(err.response.data);
+    });
   if (!health.ok) {
     throw Error('keycloak server is down');
   }
