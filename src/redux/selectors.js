@@ -77,6 +77,7 @@ export const settingsGetPageSizeSelector         = createSelector([getSettings],
 export const homeLatestCoIDsSelector    = createSelector([getHome], home => homeSel.getLatestCos(home));
 export const homeLatestUnitIDsSelector  = createSelector([getHome], home => homeSel.getLatestUnits(home));
 export const homeLatestLessonIDSelector = createSelector([getHome], home => homeSel.getLatestLesson(home));
+export const homeFetchTimestampSelector = createSelector([getHome], home => homeSel.getFetchTimestamp(home));
 export const homeGetBannerSelector      = createSelector([getHome], home => homeSel.getBanner(home));
 export const homeWipSelector            = createSelector([getHome], home => homeSel.getWip(home));
 export const homeErrSelector            = createSelector([getHome], home => homeSel.getError(home));
@@ -101,7 +102,7 @@ export const mdbGetLastLessonIdSelector              = createSelector([getMDB], 
 export const mdbGetDatepickerCOSelector              = createSelector([getMDB], m => mdbSel.getDatepickerCO(m));
 export const mdbNestedGetDenormContentUnitSelector   = createSelector([getMDB], m => mdbSel.nestedGetDenormContentUnit(m));
 export const mdbNestedDenormCollectionWUnitsSelector = createSelector([getMDB], m => mdbSel.nestedGetDenormContentUnit(m));
-export const mdbGetDenormCollectionWUnitsSelector    = createSelector([getMDB], m => mdbSel.nestedDenormCollectionWUnits(m));
+export const mdbGetDenormCollectionWUnitsSelector    = createSelector(getMDB, _2, (m, id) => mdbSel.getDenormCollectionWUnits(m, id));
 export const mdbGetDenormContentUnitSelector         = createSelector(getMDB, _2, (m, id) => mdbSel.getDenormContentUnit(m, id));
 export const mdbGetDenormLabelSelector               = createSelector([getMDB], m => mdbSel.getDenormLabel(m));
 export const mdbGetLabelsByCUSelector                = createSelector(getMDB, _2, (m, id) => mdbSel.getLabelsByCU(m, id));
@@ -214,22 +215,26 @@ export const chroniclesGetLastActionSelector  = createSelector([getChronicles], 
 export const chroniclesGetActionCountSelector = createSelector([getChronicles], c => chroniclesSel.getActionsCount(c));
 
 // search
-export const searchGetSortBySelector          = createSelector(getSearch, _2, (s, ns) => searchSel.getSortBy(s, ns));
-export const searchGetQuerySelector           = createSelector([getSearch], s => searchSel.getQuery(s));
-export const searchGetSuggestionsSelector     = createSelector([getSearch], s => searchSel.getSuggestions(s));
-export const searchGetAutocompleteWipSelector = createSelector([getSearch], s => searchSel.getAutocompleteWip(s));
-export const searchGetQueryResultSelector     = createSelector([getSearch], s => searchSel.getQueryResult(s));
-export const searchGetWipSelector             = createSelector([getSearch], s => searchSel.getWip(s));
-export const searchGetErrorSelector           = createSelector([getSearch], s => searchSel.getError(s));
-export const searchGetPageNoSelector          = createSelector([getSearch], s => searchSel.getPageNo(s));
+export const searchGetSortBySelector           = createSelector(getSearch, _2, (s, ns) => searchSel.getSortBy(s, ns));
+export const searchGetQuerySelector            = createSelector([getSearch], s => searchSel.getQuery(s));
+export const searchGetDebSelector              = createSelector([getSearch], s => searchSel.getDeb(s));
+export const searchGetPrevQuerySelector        = createSelector([getSearch], s => searchSel.getPrevQuery(s));
+export const searchGetSuggestionsSelector      = createSelector([getSearch], s => searchSel.getSuggestions(s));
+export const searchGetAutocompleteWipSelector  = createSelector([getSearch], s => searchSel.getAutocompleteWip(s));
+export const searchGetQueryResultSelector      = createSelector([getSearch], s => searchSel.getQueryResult(s));
+export const searchGetWipSelector              = createSelector([getSearch], s => searchSel.getWip(s));
+export const searchGetErrorSelector            = createSelector([getSearch], s => searchSel.getError(s));
+export const searchGetPageNoSelector           = createSelector([getSearch], s => searchSel.getPageNo(s));
+export const searchGetPrevFilterParamsSelector = createSelector([getSearch], s => searchSel.getPrevFilterParams(s));
 
 // lists
 export const listsGetNamespaceStateSelector = createSelector(getLists, _2, (l, ns) => listsSel.getNamespaceState(l, ns));
 
 // lessons
 export const lessonsGetSeriesBySourceIdSelector = createSelector(getLessons, getMDB, getSources, (l, m, s) => lessonsSel.getSerieBySourceId(l, m, s));
-export const lessonsGetSeriesByTagIdSelector    = createSelector(getLessons, getMDB, getSources, (l, m, s) => lessonsSel.getSerieByTagId(l, m, s));
+export const lessonsGetSeriesByTagIdSelector    = createSelector(getLessons, getMDB, getTags, (l, m, t) => lessonsSel.getSerieByTagId(l, m, t));
 export const lessonsGetWipSelector              = createSelector([getLessons], l => lessonsSel.getWip(l));
+export const lessonsGetSeriesLoaded             = createSelector([getLessons], l => lessonsSel.getSeriesLoaded(l));
 
 // music
 export const musicGetWipSelector   = createSelector([getMusic], m => musicSel.getWip(m));
