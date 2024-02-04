@@ -41,7 +41,7 @@ const ResearchTabToolbarWeb = () => {
               <div className="divider" />
               <SearchOnPageBtn />
               <div className="computer-only">
-              <ExpandAllNotesBtn />
+                <ExpandAllNotesBtn />
               </div>
               <div className="computer-only">
                 <PrintBtn />
