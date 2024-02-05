@@ -17,10 +17,11 @@ const TocToggleBtn = () => {
 
   return (
     <Button
+      basic
       className={clsx('toc_trigger clear_button', { 'flex_basis_150': !isMobileDevice })}
-      icon="list layout"
+      icon={<span className="material-symbols-outlined">view_list</span>}
       onClick={handleTocIsActive}
-      content={content}
+      content={<span>{content}</span>}
     />
   );
 };

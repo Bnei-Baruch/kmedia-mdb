@@ -1,10 +1,10 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useContext } from 'react';
 import { Accordion, Ref } from 'semantic-ui-react';
 
 import { getEscapedRegExp, isEmpty } from '../../../../helpers/utils';
 import { BS_SHAMATI, RH_ARTICLES, RH_RECORDS, } from '../../../../helpers/consts';
 import { isLanguageRtl } from '../../../../helpers/i18n-utils';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { properParentId, getFullPath } from '../helper';
 import { useNavigate } from 'react-router-dom';
 import TOCSearch from './TOCSearch';
@@ -20,6 +20,8 @@ import {
   sourcesGetSourceByIdSelector,
   sourcesGetPathByIDSelector
 } from '../../../../redux/selectors';
+import { actions } from '../../../../redux/modules/textPage';
+import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 
 const titleKey = id => `title-${id}`;
 
@@ -133,20 +135,22 @@ const filterSources = (path, match) => {
 };
 
 const TOC = () => {
-  const getPathByID   = useSelector(sourcesGetPathByIDSelector);
-  const getSourceById = useSelector(sourcesGetSourceByIdSelector);
-  const uiLang        = useSelector(settingsGetUILangSelector);
-  const { match }     = useSelector(textPageGetTocInfoSelector);
-  const tocIsActive   = useSelector(textPageGetTocIsActiveSelector);
-  const scrollDir     = useSelector(textPageGetScrollDirSelector);
-  const { id }        = useSelector(textPageGetSubjectSelector);
-  const hasSel        = !!useSelector(textPageGetUrlInfoSelector).select;
+  const getPathByID        = useSelector(sourcesGetPathByIDSelector);
+  const getSourceById      = useSelector(sourcesGetSourceByIdSelector);
+  const uiLang             = useSelector(settingsGetUILangSelector);
+  const { match }          = useSelector(textPageGetTocInfoSelector);
+  const tocIsActive        = useSelector(textPageGetTocIsActiveSelector);
+  const scrollDir          = useSelector(textPageGetScrollDirSelector);
+  const { id }             = useSelector(textPageGetSubjectSelector);
+  const hasSel             = !!useSelector(textPageGetUrlInfoSelector).select;
+  const { isMobileDevice } = useContext(DeviceInfoContext);
 
   const fullPath                = getFullPath(id, getPathByID);
   const rootId                  = properParentId(fullPath);
   const [activeId, setActiveId] = useState(fullPath[fullPath.length - 1].id);
   const accordionContext        = useRef();
   const navigate                = useNavigate();
+  const dispatch                = useDispatch();
 
   const activeIndex = getIndex(fullPath[1], fullPath[2]);
 
@@ -264,6 +268,7 @@ const TOC = () => {
 
   const selectSourceById = (id, e) => {
     e.preventDefault();
+    isMobileDevice && dispatch(actions.setTocIsActive(false));
     navigate(`../sources/${id}`);
     setActiveId(id);
   };

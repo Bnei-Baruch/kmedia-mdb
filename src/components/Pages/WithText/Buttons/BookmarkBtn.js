@@ -78,11 +78,7 @@ const BookmarkBtn = () => {
             content={t('share-text.bookmark-button-alt')}
             trigger={
               <Button
-                icon={
-                  <span className="material-symbols-outlined">
-                  bookmark
-                  </span>
-                }
+                icon={<span className="material-symbols-outlined">bookmark</span>}
                 onClick={handleOpen}
               />
             }

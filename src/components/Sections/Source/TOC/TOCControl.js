@@ -14,11 +14,7 @@ const TocControl = () => {
       <Button
         basic
         className="source__toc_close clear_button"
-        icon={
-          <span className="material-symbols-outlined">
-            close
-          </span>
-        }
+        icon={<span className="material-symbols-outlined">close</span>}
         onClick={handleClose}
       />
     </div>

@@ -37,6 +37,11 @@ $breadcrumb-height: 48px;
     flex-wrap: nowrap;
     font-size: 18px;
     white-space: nowrap;
+    display: flex;
+    align-items: center;
+    span{
+      padding: 0 2px;
+    }
   }
 
   &.is-dark {
