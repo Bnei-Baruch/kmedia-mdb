@@ -433,3 +433,12 @@
     }
   }
 }*/
+
+.layout::-webkit-scrollbar-thumb {
+  background: red !important;
+}
+
+.layout::-webkit-scrollbar-track {
+  background: green !important;
+}
+

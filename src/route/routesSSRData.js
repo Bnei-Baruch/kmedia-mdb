@@ -47,7 +47,7 @@ import { actions as publicationsActions } from './../redux/modules/publications'
 import { actions as searchActions } from './../redux/modules/search';
 import { selectors as settings } from './../redux/modules/settings';
 import { actions as simpleModeActions } from './../redux/modules/simpleMode';
-import { actions as sources, setById } from './../redux/modules/sources';
+import { actions as sources } from './../redux/modules/sources';
 import { actions as tagsActions } from './../redux/modules/tags';
 import { actions as textPageActions } from '../redux/modules/textPage';
 import * as eventsSagas from './../sagas/events';
@@ -68,7 +68,8 @@ import {
   settingsGetUILangSelector,
   settingsGetPageSizeSelector,
   mdbGetCollectionByIdSelector,
-  mdbGetLastLessonIdSelector
+  mdbGetLastLessonIdSelector,
+  sourcesGetSourceByIdSelector
 } from '../redux/selectors';
 
 export const home = store => {
@@ -266,14 +267,13 @@ export const searchPage = store => (Promise.all([
   store.sagaMiddleWare.run(filtersSagas.hydrateFilters, filtersActions.hydrateFilters('search')).done
 ]).then(() => store.dispatch(searchActions.search())));
 
-function firstLeafId(sourceId, sourcesList, uiLang) {
-  const byId         = setById(sourcesList, uiLang);
-  const { children } = byId[sourceId] || { children: [] };
-  if (isEmpty(children)) {
+function firstLeafId(sourceId, state) {
+  const source = sourcesGetSourceByIdSelector(state)(sourceId);
+  if (isEmpty(source?.children)) {
     return sourceId;
   }
 
-  return firstLeafId(children[0], sourcesList, uiLang);
+  return firstLeafId(source.children[0], state);
 }
 
 const fetchSQData = async (store, uiLang, contentLanguages) => {
@@ -301,11 +301,10 @@ export const libraryPage = async (store, match, show_console = false) => {
   const uiLang           = query.language || settings.getUILang(state.settings);
   const contentLanguages = settingsGetContentLanguagesSelector(state);
   show_console && console.log('serverRender: libraryPage before fetch sources');
-  const sourcesList = await fetchSQData(store, uiLang, contentLanguages);
+  await fetchSQData(store, uiLang, contentLanguages);
 
-  show_console && console.log('serverRender: libraryPage sources was fetched', match.params.id, sourcesList.length);
-  let sourceID = match.params.id;
-  sourceID     = firstLeafId(sourceID, sourcesList, uiLang);
+  show_console && console.log('serverRender: libraryPage sources was fetched', match.params.id);
+  const sourceID = firstLeafId(match.params.id, store.getState());
   show_console && console.log('serverRender: libraryPage source was found', sourceID);
 
   await store.sagaMiddleWare.run(textPageSagas.fetchSubject, textPageActions.fetchSubject(sourceID)).done;
