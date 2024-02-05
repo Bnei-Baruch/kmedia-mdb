@@ -8,7 +8,6 @@ import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import useStateWithCallback from '../../../../helpers/use-state-with-callback';
 import { useSelector } from 'react-redux';
 import { textPageGetUrlInfoSelector } from '../../../../redux/selectors';
-import TooltipForWeb from '../../../shared/TooltipForWeb';
 
 const POPOVER_CONFIRMATION_TIMEOUT = 2500;
 
@@ -50,17 +49,7 @@ const ShareTextModalBtn = () => {
       on="click"
       flowing
       hideOnScroll
-      trigger={
-        <TooltipForWeb
-          text={t('page-with-text.buttons.scan')}
-          trigger={
-            <Button
-              icon={<span className="material-symbols-outlined">tag</span>}
-              onClick={handleOpen}
-            />
-          }
-        />
-      }
+      trigger={<Button icon={<span className="material-symbols-outlined">share</span>} />}
       open={isPopupOpen}
       onClose={() => setIsPopupOpen(false)}
       onOpen={() => {
