@@ -4,6 +4,7 @@ import { actions } from '../../../../redux/modules/textPage';
 import { useDispatch, useSelector } from 'react-redux';
 import { textPageGetScanInfoSelector } from '../../../../redux/selectors';
 import { useTranslation } from 'react-i18next';
+import TooltipForWeb from '../../../shared/TooltipForWeb';
 
 const ToggleScanBtn = () => {
   const { t }    = useTranslation();
@@ -16,9 +17,8 @@ const ToggleScanBtn = () => {
   const handle = () => dispatch(actions.toggleScan());
 
   return (
-    <Popup
-      on="hover"
-      content={t('page-with-text.buttons.scan')}
+    <TooltipForWeb
+      text={t('page-with-text.buttons.scan')}
       trigger={
         (
           <Button

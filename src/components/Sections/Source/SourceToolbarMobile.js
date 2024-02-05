@@ -9,6 +9,7 @@ import DownloadTextBtn from '../../Pages/WithText/Buttons/DownloadTextBtn';
 import LinkToLessonsBtn from '../../Pages/WithText/Buttons/LinkToLessonsBtn';
 import BookmarkBtn from '../../Pages/WithText/Buttons/BookmarkBtn';
 import ShareTextModalBtn from '../../Pages/WithText/Buttons/ShareTextModalBtn';
+import MoreOptionsBtn from '../../Pages/WithText/Buttons/MoreOptionsBtn';
 
 const SourceToolbarMobile = () => (
   <div className="text_toolbar is-mobile">
@@ -20,7 +21,7 @@ const SourceToolbarMobile = () => (
       <Dropdown
         item
         icon={null}
-        trigger={(<span className="material-symbols-outlined">more_vert</span>)}
+        trigger={<MoreOptionsBtn />}
         pointing="top right"
         className="text_toolbar__dropdown"
       >

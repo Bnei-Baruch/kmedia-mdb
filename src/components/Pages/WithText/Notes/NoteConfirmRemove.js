@@ -17,7 +17,7 @@ const NoteConfirmRemove = () => {
   const dir = getLanguageDirection(note.language);
 
   const handleRemove = () => {
-    dispatch(actions.removeServer(note.id));
+    dispatch(actions.remove(note.id));
   };
 
   const handleCancel = () => {

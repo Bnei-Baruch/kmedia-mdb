@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { actions } from '../../../../redux/modules/textPage';
 import fscreen from 'fscreen';
 import { textPageGetUrlInfoSelector, textPageGetIsFullscreenSelector } from '../../../../redux/selectors';
+import TooltipForWeb from '../../../shared/TooltipForWeb';
 
 const FullscreenTextBtn = () => {
   const isFullscreen = useSelector(textPageGetIsFullscreenSelector);
@@ -20,25 +21,34 @@ const FullscreenTextBtn = () => {
       fscreen.fullscreenElement && fscreen.exitFullscreen();
       fscreen.removeEventListener('fullscreenchange', handleFS, false);
     };
-  }, []);
+  }, [dispatch]);
 
   if (hasSel) return null;
 
-  const handleFullscreen = () => {
+  const toggleFullscreen = () => {
     fscreen.fullscreenElement && fscreen.exitFullscreen();
     if (!isFullscreen) {
       fscreen.requestFullscreen(document.documentElement);
     }
   };
 
-  const icon = !isFullscreen ? 'fullscreen' : 'fullscreen_exit';
+  let icon, tooltip;
+  if (isFullscreen) {
+    icon    = 'fullscreen_exit';
+    tooltip = 'fullscreen-off';
+  } else {
+    icon    = 'fullscreen';
+    tooltip = 'fullscreen-on';
+  }
+
   return (
-    <Button
-      onClick={handleFullscreen}
-      icon={
-        <span className="material-symbols-outlined">
-          {icon}
-        </span>
+    <TooltipForWeb
+      text={tooltip}
+      trigger={
+        <Button
+          onClick={toggleFullscreen}
+          icon={<span className="material-symbols-outlined">{icon}</span>}
+        />
       }
     />
   );

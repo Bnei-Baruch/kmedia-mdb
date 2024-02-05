@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Popup } from 'semantic-ui-react';
+import { Button } from 'semantic-ui-react';
 import SelectTopicsModal from '../../../shared/SelectTopicsModal/SelectTopicsModal';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -8,6 +8,7 @@ import {
   textPageGetFileSelector,
   textPageGetUrlInfoSelector
 } from '../../../../redux/selectors';
+import TooltipForWeb from '../../../shared/TooltipForWeb';
 
 const TagTextBtn = () => {
   const { t } = useTranslation();
@@ -44,9 +45,8 @@ const TagTextBtn = () => {
       open={open}
       onClose={handleClose}
       trigger={
-        <Popup
-          on="hover"
-          content={t('page-with-text.buttons.tag')}
+        <TooltipForWeb
+          text={t('page-with-text.buttons.tag')}
           trigger={
             <Button
               icon={<span className="material-symbols-outlined">tag</span>}

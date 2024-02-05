@@ -1,12 +1,16 @@
 import React from 'react';
 import { Button } from 'semantic-ui-react';
-import { physicalFile } from '../../../../helpers/utils';
 import { useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
+
+import { physicalFile } from '../../../../helpers/utils';
 import { downloadAsset } from '../../../shared/Download/Download';
 import { textPageGetFileSelector } from '../../../../redux/selectors';
+import TooltipForWeb from '../../../shared/TooltipForWeb';
 
 const DownloadTextBtn = () => {
-  const file = useSelector(textPageGetFileSelector);
+  const { t } = useTranslation();
+  const file  = useSelector(textPageGetFileSelector);
 
   const handleDownload = () => {
     const { mimetype: mimeType, name: filename } = file;
@@ -16,12 +20,15 @@ const DownloadTextBtn = () => {
   };
 
   return (
-    <div>
-      <Button
-        onClick={handleDownload}
-        icon={<span className="material-symbols-outlined">download</span>}
-      />
-    </div>
+    <TooltipForWeb
+      text={t('page-with-text.buttons.download')}
+      trigger={
+        <Button
+          onClick={handleDownload}
+          icon={<span className="material-symbols-outlined">download</span>}
+        />
+      }
+    />
   );
 };
 

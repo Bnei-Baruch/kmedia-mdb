@@ -14,7 +14,7 @@ export const usePrepareLikutAudio = () => {
     if (!url && !status && id) {
       dispatch(actions.mergeKiteiMakor({ id, language }));
     }
-  }, [url, id, language, status]);
+  }, [url, id, language, status, dispatch]);
 
   return null;
 };

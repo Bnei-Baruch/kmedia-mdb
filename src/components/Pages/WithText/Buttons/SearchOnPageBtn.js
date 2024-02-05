@@ -1,12 +1,13 @@
 import React from 'react';
-import { Button, Popup } from 'semantic-ui-react';
+import { Button } from 'semantic-ui-react';
 import { useSelector, useDispatch } from 'react-redux';
 import { actions } from '../../../../redux/modules/textPage';
 import { textPageGetFileSelector, textPageGetIsSearchSelector } from '../../../../redux/selectors';
 import { useTranslation } from 'react-i18next';
+import TooltipForWeb from '../../../shared/TooltipForWeb';
 
 const SearchOnPageBtn = () => {
-  const { t }    = useTranslation();
+  const { t } = useTranslation();
 
   const isSearch  = useSelector(textPageGetIsSearchSelector);
   const { isPdf } = useSelector(textPageGetFileSelector);
@@ -18,17 +19,14 @@ const SearchOnPageBtn = () => {
   const handle = () => dispatch(actions.setIsSearch());
 
   return (
-    <Popup
-      on="hover"
-      content={t('page-with-text.buttons.search')}
+    <TooltipForWeb
+      text={t('page-with-text.buttons.search')}
       trigger={
-        (
-          <Button
-            active={isSearch}
-            onClick={handle}
-            icon={<span className="material-symbols-outlined">search</span>}
-          />
-        )
+        <Button
+          active={isSearch}
+          onClick={handle}
+          icon={<span className="material-symbols-outlined">search</span>}
+        />
       }
     />
   );

@@ -49,11 +49,7 @@ const ShareTextBtn = () => {
       on="click"
       flowing
       hideOnScroll
-      trigger={
-        <Button
-          icon={<span className="material-symbols-outlined">share</span>}
-        />
-      }
+      trigger={<Button icon={<span className="material-symbols-outlined">share</span>} />}
       open={isPopupOpen}
       onClose={() => setIsPopupOpen(false)}
       onOpen={() => {

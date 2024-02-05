@@ -7,6 +7,7 @@ import SearchOnPageBtn from '../../../../WithText/Buttons/SearchOnPageBtn';
 import DownloadTextBtn from '../../../../WithText/Buttons/DownloadTextBtn';
 import BookmarkBtn from '../../../../WithText/Buttons/BookmarkBtn';
 import ShareTextModalBtn from '../../../../WithText/Buttons/ShareTextModalBtn';
+import MoreOptionsBtn from '../../../../WithText/Buttons/MoreOptionsBtn';
 
 const ResearchTabToolbarMobile = () => (
   <div className="text_toolbar is-mobile">
@@ -17,7 +18,7 @@ const ResearchTabToolbarMobile = () => (
       <Dropdown
         item
         icon={null}
-        trigger={(<span className="material-symbols-outlined">more_vert</span>)}
+        trigger={<MoreOptionsBtn />}
         pointing="top right"
         className="text_toolbar__dropdown"
       >

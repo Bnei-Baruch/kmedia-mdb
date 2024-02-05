@@ -9,6 +9,7 @@ import { UNIT_LESSONS_TYPE } from '../../../helpers/consts';
 import { strCmp } from '../../../helpers/utils';
 import { canonicalLink } from '../../../helpers/links';
 import Link from '../../Language/MultiLanguageLink';
+import TooltipForWeb from '../../shared/TooltipForWeb';
 
 const LessonsByLikutBtn = () => {
   const { id } = useParams();
@@ -21,14 +22,15 @@ const LessonsByLikutBtn = () => {
     .filter(u => UNIT_LESSONS_TYPE.includes(u.content_type))
     .sort((u1, u2) => strCmp(u2.film_date, u1.film_date));
 
+  const trigger = <TooltipForWeb
+    trigger={<Button icon={<span className="material-symbols-outlined">subscriptions</span>} />}
+    text={`${t(`search.intent-prefix.lessons-topic`)}  ${unit?.name}`}
+  />;
+
   return (
     <Dropdown
       item
-      trigger={
-        <Button
-          icon={<span className="material-symbols-outlined">subscriptions</span>}
-        />
-      }
+      trigger={trigger}
       icon={null}
     >
       <Dropdown.Menu>

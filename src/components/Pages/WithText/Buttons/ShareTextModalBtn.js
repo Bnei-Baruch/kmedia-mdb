@@ -8,6 +8,7 @@ import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import useStateWithCallback from '../../../../helpers/use-state-with-callback';
 import { useSelector } from 'react-redux';
 import { textPageGetUrlInfoSelector } from '../../../../redux/selectors';
+import TooltipForWeb from '../../../shared/TooltipForWeb';
 
 const POPOVER_CONFIRMATION_TIMEOUT = 2500;
 
@@ -50,10 +51,14 @@ const ShareTextModalBtn = () => {
       flowing
       hideOnScroll
       trigger={
-        <Popup
-          on="hover"
-          content={t('page-with-text.buttons.scan')}
-          trigger={<Button icon={<span className="material-symbols-outlined">share</span>} />}
+        <TooltipForWeb
+          text={t('page-with-text.buttons.scan')}
+          trigger={
+            <Button
+              icon={<span className="material-symbols-outlined">tag</span>}
+              onClick={handleOpen}
+            />
+          }
         />
       }
       open={isPopupOpen}

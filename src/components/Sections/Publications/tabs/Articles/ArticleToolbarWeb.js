@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import clsx from 'clsx';
-import { Dropdown, Button } from 'semantic-ui-react';
+import { Dropdown } from 'semantic-ui-react';
 
 import AddNoteBtn from '../../../../Pages/WithText/Buttons/AddNoteBtn';
 import LanguageTextBtn from '../../../../Pages/WithText/Buttons/LanguageTextBtn';
@@ -17,6 +17,7 @@ import PrintBtn from '../../../../Pages/WithText/Buttons/PrintBtn';
 import { textPageGetUrlInfoSelector } from '../../../../../redux/selectors';
 import LinkToLessonsBtn from '../../../../Pages/WithText/Buttons/LinkToLessonsBtn';
 import FullscreenTextBtn from '../../../../Pages/WithText/Buttons/FullscreenTextBtn';
+import MoreOptionsBtn from '../../../../Pages/WithText/Buttons/MoreOptionsBtn';
 
 const ArticleToolbarWeb = () => {
   const hasNoSel = !useSelector(textPageGetUrlInfoSelector).select;
@@ -67,14 +68,7 @@ const ArticleToolbarWeb = () => {
         <Dropdown
           item
           icon={null}
-          trigger={
-            (
-              <Button
-                circular
-                icon={<span className="material-symbols-outlined">more_vert</span>}
-              />
-            )
-          }
+          trigger={<MoreOptionsBtn />}
           pointing="top right"
           className="text_toolbar__dropdown"
         >

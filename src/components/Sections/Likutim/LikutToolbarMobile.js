@@ -8,6 +8,7 @@ import DownloadTextBtn from '../../Pages/WithText/Buttons/DownloadTextBtn';
 import BookmarkBtn from '../../Pages/WithText/Buttons/BookmarkBtn';
 import ShareTextModalBtn from '../../Pages/WithText/Buttons/ShareTextModalBtn';
 import LessonsByLikutBtn from './LessonsByLikutBtn';
+import MoreOptionsBtn from '../../Pages/WithText/Buttons/MoreOptionsBtn';
 
 const LikutToolbarMobile = () => (
   <div className="text_toolbar is-mobile">
@@ -19,7 +20,7 @@ const LikutToolbarMobile = () => (
       <Dropdown
         item
         icon={null}
-        trigger={(<span className="material-symbols-outlined">more_vert</span>)}
+        trigger={<MoreOptionsBtn />}
         pointing="top right"
         className="text_toolbar__dropdown"
       >

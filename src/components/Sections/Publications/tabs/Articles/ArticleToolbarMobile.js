@@ -6,6 +6,7 @@ import SearchOnPageBtn from '../../../../Pages/WithText/Buttons/SearchOnPageBtn'
 import DownloadTextBtn from '../../../../Pages/WithText/Buttons/DownloadTextBtn';
 import ShareTextBtn from '../../../../Pages/WithText/Buttons/ShareTextBtn';
 import { Dropdown } from 'semantic-ui-react';
+import MoreOptionsBtn from '../../../../Pages/WithText/Buttons/MoreOptionsBtn';
 
 const ArticleToolbarMobile = () => (
   <div className="text_toolbar is-mobile">
@@ -16,7 +17,7 @@ const ArticleToolbarMobile = () => (
       <Dropdown
         item
         icon={null}
-        trigger={(<span className="material-symbols-outlined">more_vert</span>)}
+        trigger={<MoreOptionsBtn />}
         pointing="top right"
         className="text_toolbar__dropdown"
       >

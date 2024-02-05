@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Menu, Popup } from 'semantic-ui-react';
+
 import ZoomSizeBtns from './ZoomSizeBtns';
 import FontTypeBtn from './FontTypeBtn';
 import ThemeBtn from './ThemeBtn';
@@ -9,11 +10,7 @@ const TextSettings = () => {
 
   return (
     <Popup
-      trigger={
-        <Button
-          icon={<span className="material-symbols-outlined">text_fields</span>}
-        />
-      }
+      trigger={<Button icon={<span className="material-symbols-outlined">text_fields</span>} />}
       on="click"
       position="bottom right"
       className="sources-settings"

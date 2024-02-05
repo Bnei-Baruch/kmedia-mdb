@@ -1,7 +1,7 @@
 import React from 'react';
 import clsx from 'clsx';
 import { useSelector } from 'react-redux';
-import { Dropdown, Button } from 'semantic-ui-react';
+import { Dropdown } from 'semantic-ui-react';
 
 import AddNoteBtn from '../../Pages/WithText/Buttons/AddNoteBtn';
 import LanguageTextBtn from '../../Pages/WithText/Buttons/LanguageTextBtn';
@@ -17,6 +17,7 @@ import PrintBtn from '../../Pages/WithText/Buttons/PrintBtn';
 import FullscreenTextBtn from '../../Pages/WithText/Buttons/FullscreenTextBtn';
 import { textPageGetUrlInfoSelector } from '../../../redux/selectors';
 import LessonsByLikutBtn from './LessonsByLikutBtn';
+import MoreOptionsBtn from '../../Pages/WithText/Buttons/MoreOptionsBtn';
 
 const LikutToolbarWeb = () => {
   const hasNoSel = !useSelector(textPageGetUrlInfoSelector).select;
@@ -63,14 +64,7 @@ const LikutToolbarWeb = () => {
         <Dropdown
           item
           icon={null}
-          trigger={
-            (
-              <Button
-                circular
-                icon={<span className="material-symbols-outlined">more_vert</span>}
-              />
-            )
-          }
+          trigger={<MoreOptionsBtn />}
           pointing="top right"
           className="text_toolbar__dropdown"
         >

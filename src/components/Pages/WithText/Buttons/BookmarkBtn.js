@@ -7,6 +7,7 @@ import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import { selectors as settings } from '../../../../redux/modules/settings';
 import SelectTopicsModal from '../../../shared/SelectTopicsModal/SelectTopicsModal';
 import { textPageGetUrlInfoSelector } from '../../../../redux/selectors';
+import TooltipForWeb from '../../../shared/TooltipForWeb';
 
 const BookmarkBtn = () => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
@@ -55,10 +56,15 @@ const BookmarkBtn = () => {
             open={openTag}
             onClose={handleCloseTag}
             trigger={
-              <Button
-                color="green"
-                content={t('personal.label.tagging')}
-                onClick={() => setOpenTag(true)}
+              <TooltipForWeb
+                text={t('page-with-text.buttons.add-bookmark')}
+                trigger={
+                  <Button
+                    color="green"
+                    content={t('personal.label.tagging')}
+                    onClick={() => setOpenTag(true)}
+                  />
+                }
               />
             }
           />

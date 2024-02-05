@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Popup } from 'semantic-ui-react';
+import { Button } from 'semantic-ui-react';
 import { useSelector, useDispatch } from 'react-redux';
+
 import { actions, selectors as assets } from '../../../../redux/modules/assets';
 import { seek, setPip } from '../../../../pkg/jwpAdapter/adapter';
 import {
@@ -9,6 +10,7 @@ import {
   textPageGetFileSelector,
   textPageGetWordOffsetSelector
 } from '../../../../redux/selectors';
+import TooltipForWeb from '../../../shared/TooltipForWeb';
 
 const PlayByTextBtn = () => {
   const { id }        = useSelector(textPageGetSubjectSelector);
@@ -22,7 +24,7 @@ const PlayByTextBtn = () => {
 
   useEffect(() => {
     dispatch(actions.fetchTimeCode(id, language));
-  }, [id, language]);
+  }, [id, language, dispatch]);
 
   if (!hasTimeCode) return null;
 
@@ -33,9 +35,8 @@ const PlayByTextBtn = () => {
   };
 
   return (
-    <Popup
-      on="hover"
-      content={t('page-with-text.buttons.play-by-text')}
+    <TooltipForWeb
+      text={t('page-with-text.buttons.play-by-text')}
       trigger={
         <Button
           onClick={handlePlay}
