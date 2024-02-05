@@ -14,8 +14,8 @@ const StyleShadowDOM = () => {
       const shadow = host?.[0]?.shadowRoot;
 
       const sheet  =  new CSSStyleSheet();
-      const _style = isLtr ? '{transform: rotate(-90deg); bottom: 140px; right: 0; left: auto;}'
-        : '{transform: rotate(90deg); bottom: 0; left: 0; right: auto;}';
+      const _style = isLtr ? '{transform: rotate(-90deg); bottom: 200px; right: 0; left: auto;}'
+        : '{transform: rotate(90deg); bottom: 60px; left: 0; right: auto;}';
       sheet.replaceSync(`#appRoot ${_style} `);
       shadow.adoptedStyleSheets.push(sheet);
     }

@@ -28,7 +28,6 @@ $breadcrumb-height: 48px;
   &.is-web .text_align_to_text {
     width: $max-readble-width;
     margin: 0 auto;
-    transform: translate(-30px, 0);
   }
 
   .toc_trigger {
@@ -106,29 +105,16 @@ $breadcrumb-height: 48px;
 
 
 .zoom-size {
-
   &_1 {
     zoom: 1;
-
-    &.is-pdf {
-      zoom: .65;
-    }
   }
 
   &_2 {
     zoom: 1.2;
-
-    &.is-pdf {
-      zoom: .7;
-    }
   }
 
   &_3 {
     zoom: 1.4;
-
-    &.is-pdf {
-      zoom: .75;
-    }
   }
 
   &_4 {
@@ -316,6 +302,12 @@ $breadcrumb-height: 48px;
     .text_toolbar__buttons {
       border-right: none;
       border-left: none;
+
+      .button {
+        &:focus, &:active, &:hover {
+          background: none !important;
+        }
+      }
     }
   }
 
@@ -351,7 +343,7 @@ $breadcrumb-height: 48px;
       background: none;
       margin: 0 8px;
 
-      &:focus {
+      &:focus, &:active {
         background: none;
       }
 
@@ -551,7 +543,7 @@ $breadcrumb-height: 48px;
   }
 }
 
-.text__language_popup > .menu{
+.text__language_popup > .menu {
   max-height: 70VH;
   overflow: auto;
 }

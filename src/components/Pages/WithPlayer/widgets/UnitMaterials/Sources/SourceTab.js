@@ -20,42 +20,42 @@ const SourceTab = () => {
   const pageCu        = useSelector(state => mdbGetDenormContentUnitSelector(state, id));
   const getSourceById = useSelector(state => sourcesGetSourceByIdSelector(state));
 
-  const dCus = Object.values(pageCu.derived_units)
+  const dCus    = Object.values(pageCu.derived_units)
     .filter(x => [CT_LIKUTIM, CT_SOURCE].includes(x.content_type))
     .filter(x => (x.files || []).some(f => f.type === MT_TEXT)) || [];
-  const sCus = Object.values(pageCu?.sources || {}).map(getSourceById);
-  const cus  = [...dCus, ...sCus];
+  const sources = Object.values(pageCu?.sources || {}).map(getSourceById).map(x => ({ ...x, type: CT_SOURCE }));
 
-  const [cuId, setCuId] = useState(cus[0]?.id);
+  const subjects                  = [...sources, ...dCus];
+  const subject                   = subjects[0];
+  const [subjectId, setSubjectId] = useState(subject?.id);
 
-  const cu       = useSelector(state => mdbGetDenormContentUnitSelector(state, cuId));
-  const pathname = canonicalLink(cu).pathname.slice(1);
+  const pathname = canonicalLink(subject).pathname.slice(1);
 
   const linkMemo = useMemo(() => ({ pathname, search: {} }), [pathname]);
   useInitTextUrl(linkMemo);
 
-  const handleSelectCu = useCallback(id => setCuId(id), [setCuId]);
+  const handleSelectCu = useCallback(id => setSubjectId(id), [setSubjectId]);
 
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
-  if (!cu) return <NotFound />;
+  if (!subject) return <NotFound />;
 
-  const toc = <SourceTabTOC cus={cus} onClick={handleSelectCu} />;
+  const toc = <SourceTabTOC cus={subjects} onClick={handleSelectCu} />;
   return (
     <div className="player_page_tab">
       {
         isMobileDevice ? (
           <TextLayoutMobile
-            id={cu.id}
+            id={subjectId}
             toc={toc}
-            toolbar={<SourceTabToolbarMobile needTOC={cus.length > 1} />}
+            toolbar={<SourceTabToolbarMobile needTOC={subjects.length > 1} />}
             playerPage={true}
           />
         ) : (
           <TextLayoutWeb
-            id={cu.id}
+            id={subjectId}
             toc={toc}
-            toolbar={<SourceTabToolbarWeb needTOC={cus.length > 1} />}
+            toolbar={<SourceTabToolbarWeb needTOC={subjects.length > 1} />}
             playerPage={true}
           />
         )
