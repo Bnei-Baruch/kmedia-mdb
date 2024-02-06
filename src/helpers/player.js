@@ -199,8 +199,8 @@ const EMBED_TYPE = {
 };
 
 export const EMBED_INDEX_BY_TYPE = {
-  EMBED_TYPE_PLAYER: 1,
-  EMBED_TYPE_PLAYLIST: 2
+  [EMBED_TYPE_PLAYER]: 1,
+  [EMBED_TYPE_PLAYLIST]: 2
 };
 
 export const getEmbedFromQuery = location => {
