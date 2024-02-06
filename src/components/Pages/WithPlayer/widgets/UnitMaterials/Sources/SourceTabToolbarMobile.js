@@ -17,6 +17,7 @@ const SourceTabToolbarMobile = ({ needTOC }) => (
       <LanguageTextBtn />
       <TextSettings />
       <SearchOnPageBtn />
+      <BookmarkBtn />
       <Dropdown
         item
         icon={null}
@@ -25,9 +26,6 @@ const SourceTabToolbarMobile = ({ needTOC }) => (
         className="text_toolbar__dropdown"
       >
         <Dropdown.Menu>
-          <Dropdown.Item>
-            <BookmarkBtn />
-          </Dropdown.Item>
           <Dropdown.Item>
             <DownloadTextBtn />
           </Dropdown.Item>
