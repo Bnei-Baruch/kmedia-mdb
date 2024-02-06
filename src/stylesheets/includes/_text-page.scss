@@ -302,6 +302,14 @@ $breadcrumb-height: 48px;
   height: $toc-toolbar-height;
   padding: 0 1em;
 
+  .is-sepia & {
+    border-color: $sepia-stroke;
+  }
+
+  .is-dark & {
+    border-color: $dark-stroke;
+  }
+
   &.is-mobile {
     padding: 0;
 
@@ -339,6 +347,14 @@ $breadcrumb-height: 48px;
       align-self: center;
       height: 24px;
       margin: 0 6px;
+
+      .is-sepia & {
+        border-color: $sepia-stroke;
+      }
+
+      .is-dark & {
+        border-color: $dark-stroke;
+      }
     }
 
     .button {
@@ -527,6 +543,15 @@ $breadcrumb-height: 48px;
   min-height: 300px;
   border: 1px solid $stroke-gray;
 
+
+  .is-sepia & {
+    border-color: $sepia-stroke;
+  }
+
+  .is-dark & {
+    border-color: $dark-stroke;
+  }
+
   &.active {
     transform: translate3d(0, 0, 0);
     transition: height 0.2s ease-in-out 0s;
@@ -536,6 +561,15 @@ $breadcrumb-height: 48px;
     cursor: pointer;
     padding: 1em;
     border-bottom: 1px solid $stroke-gray;
+
+
+    .is-sepia & {
+      border-color: $sepia-stroke;
+    }
+
+    .is-dark & {
+      border-color: $dark-stroke;
+    }
 
     &.active {
       color: $blue;
@@ -552,7 +586,6 @@ $breadcrumb-height: 48px;
   overflow: auto;
 }
 
-
 .text__theme-btn {
   &_dark {
     background: $dark-bg !important;
@@ -561,6 +594,6 @@ $breadcrumb-height: 48px;
 
   &_sepia {
     background: $sepia-bg !important;
-    color: $sepia-text !important ;
+    color: $sepia-text !important;
   }
 }

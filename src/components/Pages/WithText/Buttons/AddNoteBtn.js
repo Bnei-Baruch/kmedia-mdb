@@ -40,7 +40,7 @@ const AddNoteBtn = () => {
 
   return (
     <TooltipForWeb
-      text={t('messages.add-new-note')}
+      text={t('page-with-text.buttons.add-new-note')}
       trigger={
         <Button
           onClick={handleOpen}

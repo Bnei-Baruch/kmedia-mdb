@@ -20,10 +20,12 @@ $active: #c2c1c1;
 
 $sepia-bg: #f4ecd8;
 $sepia-text: #5B4636;
+$sepia-stroke: #EFECEB;
 
 $dark-bg: #010101;
 $dark-text: #D4D4D4;
 $dark-hover: #767676;
+$dark-stroke: rgba(242, 242, 242, .3);
 
 $text-color: #212121;
 
@@ -34,20 +36,20 @@ $darkWhite: #f3f4f5;
 $midWhite: #dcddde;
 $white: #fff;
 $text-colors: (
-  red: $red,
-  orange: $orange,
-  yellow: #b58105, // Yellow text is difficult to read
-  olive: #8abc1e, // Olive is difficult to read
-  green: #1ebc30, // Green is difficult to read
-  teal: #10a3a3, // Teal text is difficult to read
-  blue: $blue,
-  violet: $violet,
-  purple: $purple,
-  pink: $pink,
-  brown: $brown,
-  grey: $grey,
-  black: $black,
-  white: $white
+        red: $red,
+        orange: $orange,
+        yellow: #b58105, // Yellow text is difficult to read
+        olive: #8abc1e, // Olive is difficult to read
+        green: #1ebc30, // Green is difficult to read
+        teal: #10a3a3, // Teal text is difficult to read
+        blue: $blue,
+        violet: $violet,
+        purple: $purple,
+        pink: $pink,
+        brown: $brown,
+        grey: $grey,
+        black: $black,
+        white: $white
 );
 
 @each $colorname, $colorvalue in $text-colors {

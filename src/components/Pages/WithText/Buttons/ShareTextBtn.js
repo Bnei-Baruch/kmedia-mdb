@@ -8,12 +8,14 @@ import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import useStateWithCallback from '../../../../helpers/use-state-with-callback';
 import { useSelector } from 'react-redux';
 import { textPageGetUrlInfoSelector } from '../../../../redux/selectors';
+import TooltipForWeb from '../../../shared/TooltipForWeb';
 
 const POPOVER_CONFIRMATION_TIMEOUT = 2500;
 
 const ShareTextBtn = () => {
-  const { t }                         = useTranslation();
-  const { isMobileDevice }            = useContext(DeviceInfoContext);
+  const { t }              = useTranslation();
+  const { isMobileDevice } = useContext(DeviceInfoContext);
+
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isCopyOpen, setIsCopyOpen]   = useStateWithCallback(false, isCopyOpen => {
     if (isCopyOpen) {
@@ -49,7 +51,14 @@ const ShareTextBtn = () => {
       on="click"
       flowing
       hideOnScroll
-      trigger={<Button icon={<span className="material-symbols-outlined">share</span>} />}
+      trigger={
+        <div>
+          <TooltipForWeb
+            text={t('page-with-text.buttons.share')}
+            trigger={<Button icon={<span className="material-symbols-outlined">share</span>} />}
+          />
+        </div>
+      }
       open={isPopupOpen}
       onClose={() => setIsPopupOpen(false)}
       onOpen={() => {
