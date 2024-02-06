@@ -17,8 +17,9 @@ const SingleMediaPage = ({ playerContainer }) => {
   const { t }              = useTranslation();
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const location           = useLocation();
-  const embed              = getEmbedFromQuery(location);
-  const { isReady }        = useSelector(playlistGetInfoSelector);
+
+  const { embed }   = getEmbedFromQuery(location);
+  const { isReady } = useSelector(playlistGetInfoSelector);
   const { cuId }      = useSelector(playlistGetInfoSelector);
 
   if (embed) return playerContainer;
@@ -41,8 +42,8 @@ const SingleMediaPage = ({ playerContainer }) => {
           <Grid.Row>
             <Grid.Column>
               <Container className="unit_container">
-                <Info/>
-                <Materials/>
+                <Info />
+                <Materials />
               </Container>
             </Grid.Column>
           </Grid.Row>

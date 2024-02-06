@@ -86,7 +86,7 @@ export const ShareBtn = () => {
   const { t }    = useTranslation();
   const location = useLocation();
 
-  if (getEmbedFromQuery(location)) return null;
+  if (getEmbedFromQuery(location).embed) return null;
 
   const handleOpen = e => {
     stopBubbling(e);

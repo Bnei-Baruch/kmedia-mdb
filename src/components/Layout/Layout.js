@@ -71,7 +71,7 @@ class Layout extends Component {
     this.state = {
       sidebarActive: false,
       isShowHeaderSearch: false,
-      embed: getEmbedFromQuery(location),
+      embed: getEmbedFromQuery(location).embed,
     };
   }
 
