@@ -58,25 +58,25 @@ export const playableItem = (unit, preImageUrl) => {
   }
 
   const resp = {
-    id           : unit.id,
-    name         : unit.name,
-    properties   : unit.properties,
+    id: unit.id,
+    name: unit.name,
+    properties: unit.properties,
     preImageUrl,
-    mtByLang     : {},
+    mtByLang: {},
     qualityByLang: {}
   };
   if (!unit?.files) return resp;
 
   const subtitles = unit.files.filter(f => f.type === MT_SUBTITLES).map(f => ({
-    src     : physicalFile(f),
+    src: physicalFile(f),
     language: f.language
   })) || [];
   const hls       = findHLS(unit.files);
   if (hls) {
     return {
       ...resp,
-      file     : { ...hls, src: physicalFile(hls, true) },
-      isHLS    : true,
+      file: { ...hls, src: physicalFile(hls, true) },
+      isHLS: true,
       languages: hls.hls_languages,
       qualities: hls.video_qualities,
       subtitles
@@ -192,7 +192,14 @@ export const getActivePartFromQuery = (location, def = 0) => {
   return Number.isNaN(p) || p < 0 ? def : p;
 };
 
-export const getEmbedFromQuery = location => {
+export const EMBED_TYPE_PLAYER   = 'player';
+export const EMBED_TYPE_PLAYLIST = 'playlist';
+const EMBED_TYPE                 = {
+  '1': EMBED_TYPE_PLAYER,
+  '2': EMBED_TYPE_PLAYLIST
+};
+export const getEmbedFromQuery   = location => {
   const query = getQuery(location);
-  return query.embed === '1';
+  const type  = EMBED_TYPE[query.embed];
+  return { embed: !!type, type };
 };

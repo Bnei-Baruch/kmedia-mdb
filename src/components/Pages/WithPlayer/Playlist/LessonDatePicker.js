@@ -1,5 +1,5 @@
-import React, { useContext, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useContext } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { withTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
@@ -9,13 +9,21 @@ import ButtonDayPicker from '../../../Filters/components/Date/ButtonDayPicker';
 import { canonicalLink } from '../../../../helpers/links';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import { isEmpty } from '../../../../helpers/utils';
-import { mdbGetDatepickerCOSelector, mdbGetDenormCollectionWUnitsSelector, playlistGetInfoSelector, settingsGetUILangSelector } from '../../../../redux/selectors';
+import { getEmbedFromQuery, EMBED_TYPE_PLAYLIST } from '../../../../helpers/player';
+import {
+  mdbGetDatepickerCOSelector,
+  mdbGetDenormCollectionWUnitsSelector,
+  playlistGetInfoSelector,
+  settingsGetUILangSelector
+} from '../../../../redux/selectors';
 
 const LessonDatePicker = ({ t }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
   const navigate = useNavigate();
   const uiLang   = useSelector(settingsGetUILangSelector);
+  const location = useLocation();
+  const { type } = getEmbedFromQuery(location);
 
   const { isReady, cId } = useSelector(playlistGetInfoSelector);
   const collection       = useSelector(state => mdbGetDenormCollectionWUnitsSelector(state, cId)) || false;
@@ -23,13 +31,15 @@ const LessonDatePicker = ({ t }) => {
   const dpCollection     = useSelector(state => mdbGetDenormCollectionWUnitsSelector(state, dpId)) || false;
 
   const dispatch = useDispatch();
-  useEffect(() => {
-    if (isReady && !isEmpty(dpCollection?.content_units) && collection.id !== dpCollection.id) {
-      const to = canonicalLink(dpCollection.content_units[0]);
-      navigate({ ...to, pathname: `/${uiLang}${to.pathname}` });
-      dispatch(mdbActions.nullDatepickerCO());
+  if (!isEmpty(dpCollection?.content_units) && collection.id !== dpCollection.id) {
+    const to = canonicalLink(dpCollection.content_units[0]);
+    if (type === EMBED_TYPE_PLAYLIST) {
+      to.search = 'embed=2';
     }
-  }, [isReady, collection, dpCollection, uiLang, navigate, dispatch]);
+
+    navigate({ ...to, pathname: `/${uiLang}${to.pathname}` });
+    dispatch(mdbActions.nullDatepickerCO());
+  }
 
   if (!isReady) {
     return null;

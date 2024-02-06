@@ -17,8 +17,9 @@ const SingleMediaPage = ({ playerContainer }) => {
   const { t }              = useTranslation();
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const location           = useLocation();
-  const embed              = getEmbedFromQuery(location);
-  const { isReady }        = useSelector(playlistGetInfoSelector);
+
+  const { embed }   = getEmbedFromQuery(location);
+  const { isReady } = useSelector(playlistGetInfoSelector);
 
   if (embed) return playerContainer;
   if (!isReady) return WipErr({ wip: !isReady, t });
@@ -40,8 +41,8 @@ const SingleMediaPage = ({ playerContainer }) => {
           <Grid.Row>
             <Grid.Column>
               <Container className="unit_container">
-                <Info/>
-                <Materials/>
+                <Info />
+                <Materials />
               </Container>
             </Grid.Column>
           </Grid.Row>
@@ -49,7 +50,7 @@ const SingleMediaPage = ({ playerContainer }) => {
         {
           !isMobileDevice && (
             <Grid.Column mobile={16} tablet={6} computer={6}>
-              <Recommended/>
+              <Recommended />
             </Grid.Column>
           )
         }
