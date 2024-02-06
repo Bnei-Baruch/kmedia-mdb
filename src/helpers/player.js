@@ -6,8 +6,6 @@ import {
   CT_LESSON_PART,
   EVENT_PREPARATION_TAG,
   EVENT_TYPES,
-  DEFAULT_LANGUAGE,
-  DEFAULT_LANGUAGES,
   MT_AUDIO,
   MT_VIDEO,
   VS_DEFAULT,
@@ -194,11 +192,18 @@ export const getActivePartFromQuery = (location, def = 0) => {
 
 export const EMBED_TYPE_PLAYER   = 'player';
 export const EMBED_TYPE_PLAYLIST = 'playlist';
-const EMBED_TYPE                 = {
+
+const EMBED_TYPE = {
   '1': EMBED_TYPE_PLAYER,
   '2': EMBED_TYPE_PLAYLIST
 };
-export const getEmbedFromQuery   = location => {
+
+export const EMBED_INDEX_BY_TYPE = {
+  EMBED_TYPE_PLAYER: 1,
+  EMBED_TYPE_PLAYLIST: 2
+};
+
+export const getEmbedFromQuery = location => {
   const query = getQuery(location);
   const type  = EMBED_TYPE[query.embed];
   return { embed: !!type, type };
