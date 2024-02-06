@@ -4913,14 +4913,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:^1.6.5":
-  version: 1.6.5
-  resolution: "axios@npm:1.6.5"
+"axios-cache-interceptor@npm:^1.5.1":
+  version: 1.5.1
+  resolution: "axios-cache-interceptor@npm:1.5.1"
+  dependencies:
+    cache-parser: "npm:1.2.4"
+    fast-defer: "npm:1.1.8"
+    object-code: "npm:1.3.2"
+  peerDependencies:
+    axios: ^1
+  checksum: 10c0/bf8afe51affc17f71bb7509cf8b6a37cabdfec24374aeb05912c5b332f8374deedd36824f832a8a2da2e97ead32aca0ebd0b3534bfd22e08732e8f2f01cdeb14
+  languageName: node
+  linkType: hard
+
+"axios@npm:^1.6.7":
+  version: 1.6.7
+  resolution: "axios@npm:1.6.7"
   dependencies:
     follow-redirects: "npm:^1.15.4"
     form-data: "npm:^4.0.0"
     proxy-from-env: "npm:^1.1.0"
-  checksum: 10c0/aeb9acf87590d8aa67946072ced38e01ca71f5dfe043782c0ccea667e5dd5c45830c08afac9be3d7c894f09684b8ab2a458f497d197b73621233bcf202d9d468
+  checksum: 10c0/131bf8e62eee48ca4bd84e6101f211961bf6a21a33b95e5dfb3983d5a2fe50d9fffde0b57668d7ce6f65063d3dc10f2212cbcb554f75cfca99da1c73b210358d
   languageName: node
   linkType: hard
 
@@ -5520,6 +5533,13 @@ __metadata:
     union-value: "npm:^1.0.0"
     unset-value: "npm:^1.0.0"
   checksum: 10c0/a7142e25c73f767fa520957dcd179b900b86eac63b8cfeaa3b2a35e18c9ca5968aa4e2d2bed7a3e7efd10f13be404344cfab3a4156217e71f9bdb95940bb9c8c
+  languageName: node
+  linkType: hard
+
+"cache-parser@npm:1.2.4":
+  version: 1.2.4
+  resolution: "cache-parser@npm:1.2.4"
+  checksum: 10c0/5f9ee096b3cd42224208aae8bb82f4dc63b9a49f6d92898973854dc2e63fef281ef658932ea9c0b9c15ba0ff18f51a43a007624f1ef60820b06047488f1125fb
   languageName: node
   linkType: hard
 
@@ -8528,6 +8548,13 @@ __metadata:
   version: 3.1.3
   resolution: "fast-deep-equal@npm:3.1.3"
   checksum: 10c0/40dedc862eb8992c54579c66d914635afbec43350afbbe991235fdcb4e3a8d5af1b23ae7e79bef7d4882d0ecee06c3197488026998fb19f72dc95acff1d1b1d0
+  languageName: node
+  linkType: hard
+
+"fast-defer@npm:1.1.8":
+  version: 1.1.8
+  resolution: "fast-defer@npm:1.1.8"
+  checksum: 10c0/4537cf81ce3e1505adba01dfe232231271162c8365427b360e0e86c8e4bf65f08d9e6ced1bd063fbafb48376f2ff152d1cad3cb25237126492921a15ce203e88
   languageName: node
   linkType: hard
 
@@ -12396,7 +12423,8 @@ __metadata:
     "@testing-library/react": "npm:^14.1.2"
     "@wojtekmaj/enzyme-adapter-react-17": "npm:^0.8.0"
     autoprefixer: "npm:^10.4.17"
-    axios: "npm:^1.6.5"
+    axios: "npm:^1.6.7"
+    axios-cache-interceptor: "npm:^1.5.1"
     babel-plugin-dynamic-import-node: "npm:^2.3.3"
     babel-plugin-lodash: "npm:^3.3.4"
     babel-plugin-module-resolver: "npm:^5.0.0"
@@ -13745,6 +13773,13 @@ __metadata:
   version: 4.1.1
   resolution: "object-assign@npm:4.1.1"
   checksum: 10c0/1f4df9945120325d041ccf7b86f31e8bcc14e73d29171e37a7903050e96b81323784ec59f93f102ec635bcf6fa8034ba3ea0a8c7e69fa202b87ae3b6cec5a414
+  languageName: node
+  linkType: hard
+
+"object-code@npm:1.3.2":
+  version: 1.3.2
+  resolution: "object-code@npm:1.3.2"
+  checksum: 10c0/4b8f3b96b17d456bb9a3226bbe38c2ea20d54e3d88cb53a8bc6d9d752709257f7b8b53a2a0cb4ac1dd6993b92b3dce166b5c762aaf4f40598932783b60989b25
   languageName: node
   linkType: hard
 

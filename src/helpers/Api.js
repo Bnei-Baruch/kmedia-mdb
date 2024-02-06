@@ -1,4 +1,5 @@
-import axios from 'axios';
+import Axios from 'axios';
+import { buildMemoryStorage, setupCache } from 'axios-cache-interceptor/dev'
 import { MY_NAMESPACE_LABELS, MY_NAMESPACE_PLAYLIST_EDIT, MY_NAMESPACE_PLAYLISTS } from './consts';
 import { kcUpdateToken } from '../pkg/ksAdapter/adapter';
 
@@ -21,6 +22,42 @@ export const imaginaryUrl             = path => `${IMAGINARY_URL}${path}`;
 export const feedUrl                  = path => `${API_FEED}${path}`;
 export const chroniclesUrl            = path => `${CHRONICLES_BACKEND}${path}`;
 export const chroniclesBackendEnabled = CHRONICLES_BACKEND !== undefined;
+
+// Add a request interceptor
+Axios.interceptors.request.use(config => {
+  // Do something before request is sent
+  console.log('REQUEST', config.url);
+  return config;
+}, error => {
+  // Do something with request error
+  console.log('REQUEST ERROR', error);
+  return Promise.reject(error);
+});
+
+//if (false && typeof windows === 'undefined') {
+console.log('Setting axios cache.');
+const axios = setupCache(Axios, (typeof window === 'undefined') ? {
+  debug: console.log,
+  storage: buildMemoryStorage(
+    /* cloneData */ true,
+    /* cleanupInterval */ 5 * 60 * 1000,  // 5 min.
+    /* maxEntries */ false
+  )
+} : {});
+//}
+
+// Add a response interceptor
+axios.interceptors.response.use(response => {
+  // Any status code that lie within the range of 2xx cause this function to trigger
+  // Do something with response data
+  console.log('RESPONSE', response.config.url);
+  return response;
+}, error => {
+  // Any status codes that falls outside the range of 2xx cause this function to trigger
+  // Do something with response error
+  console.log('RESPONSE ERROR', error);
+  return Promise.reject(error);
+});
 
 export class Requests {
   static encode = encodeURIComponent;
