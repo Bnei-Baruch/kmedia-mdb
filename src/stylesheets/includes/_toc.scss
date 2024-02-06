@@ -1,0 +1,161 @@
+.toc {
+  background: $white;
+  padding: 1em;
+  position: fixed;
+  height: calc(100VH - $main-menu-height - $breadcrumb-height);
+  bottom: 0;
+  z-index: 3;
+  transition: all 0.2s ease-in-out 0s;
+  border: 1px solid $stroke-gray;
+  width: 360px;
+  transform: translate3d(-360px, 0, 0);
+
+  .rtl & {
+    transform: translate3d(360px, 0, 0);
+  }
+
+  .is-dark & {
+    background: $dark-bg !important;
+    color: $dark-text !important;
+    border-color: $dark-stroke;
+
+    .ui.accordion .title:not(.ui) {
+      color: $dark-text !important;
+    }
+  }
+
+  .is-sepia & {
+    background: $sepia-bg !important;
+    color: $sepia-text !important;
+    border-color: $sepia-stroke;
+
+    .ui.accordion .title:not(.ui) {
+      color: $sepia-text !important;
+    }
+  }
+
+  &.toc_active {
+    transition: all 0.2s ease-in-out 0s;
+    transform: translate3d(0, 0, 0) !important;
+
+
+    &.toc_selected {
+      height: calc(100VH - $main-menu-height);
+    }
+
+    &.toc_scroll_up {
+      height: 100VH;
+      transition: height 0.2s ease-in-out 0s;
+    }
+
+    &.toc_scroll_down {
+      height: calc(100VH - $main-menu-height - 48px);
+
+      &.toc_selected {
+        height: calc(100VH - $main-menu-height);
+      }
+    }
+
+    .toc_scroll {
+      overflow: hidden auto;
+      height: calc(100% - 130px);
+    }
+
+    @include mobile {
+      width: 100%;
+      position: fixed;
+      top: $main-menu-height + 48px;
+      height: calc(100VH - $main-menu-height - 48px);
+      bottom: auto;
+      transform: translate3d(-100%, 0, 0);
+
+      .rtl & {
+        transform: translate3d(100%, 0, 0);
+      }
+      &.toc_scroll_up, &.toc_scroll_end {
+        top: 0;
+        height: 100VH;
+        transition: height 0.2s ease-in-out 0s;
+      }
+
+      &.toc_scroll_down {
+        top: $main-menu-height;
+        height: calc(100VH - $main-menu-height);
+      }
+    }
+
+    .is-dark & .toc_scroll {
+      &::-webkit-scrollbar-thumb {
+        background: $grey;
+      }
+
+      &::-webkit-scrollbar-track {
+        background: $midWhite;
+      }
+    }
+  }
+
+  .accordion {
+    .accordion {
+      margin: 0;
+    }
+
+    .title {
+      display: flex;
+      flex-wrap: nowrap;
+
+      .material-symbols-outlined {
+        color: #005697;
+      }
+
+      &.active {
+        font-weight: bold;
+
+        .material-symbols-outlined {
+          transform: rotate(-90deg);
+        }
+      }
+    }
+
+    .active.content {
+      padding: 0 !important;
+      margin-right: 10px;
+
+
+      .accordion {
+        border-right: 2px solid #2185D0;
+        padding-right: 1em !important;
+      }
+    }
+  }
+
+  .player_page_tab & {
+    position: absolute;
+    height: 100%;
+  }
+}
+
+.toc_filter {
+  display: flex;
+  flex-wrap: nowrap;
+  margin-bottom: 1em;
+
+  .toc_search {
+    width: 100%;
+  }
+
+  .toc_sort_btn {
+    padding: 8px;
+  }
+
+  .divider {
+    width: 1em
+  }
+}
+
+.toc_control {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  margin-bottom: 1.5em;
+}

@@ -515,6 +515,20 @@ $breadcrumb-height: 48px;
     flex-grow: 3;
   }
 
+  .ui.input > input {
+    &, &:active, &:focus {
+      background: transparent;
+
+      .is-dark & {
+        color: $dark-text;
+      }
+
+      .is-sepia & {
+        color: $sepia-text;
+      }
+    }
+  }
+
   & > span {
     margin: 0 8px;
   }

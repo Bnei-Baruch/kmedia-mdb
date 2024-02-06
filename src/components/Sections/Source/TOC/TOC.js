@@ -252,7 +252,10 @@ const TOC = () => {
 
     const activeIndex = getIndex(path[0], path[1]);
     return {
-      title,
+      title: {
+        content: title,
+        icon: <span className="material-symbols-outlined">chevron_left</span>
+      },
       content: {
         content: (
           <Accordion.Accordion
@@ -278,19 +281,19 @@ const TOC = () => {
 
   return (
     <div className={
-      clsx('source__toc no_print',
+      clsx('toc no_print',
         {
-          'source__toc_active': tocIsActive,
-          'source__toc_scroll_up': scrollDir === 1,
-          'source__toc_scroll_down': scrollDir === -1,
-          'source__toc_scroll_end': scrollDir === 2,
-          'source__toc_selected': hasSel,
+          'toc_active': tocIsActive,
+          'toc_scroll_up': scrollDir === 1,
+          'toc_scroll_down': scrollDir === -1,
+          'toc_scroll_end': scrollDir === 2,
+          'toc_selected': hasSel,
         }
       )
     }>
       <TOCControl />
       <TOCSearch />
-      <div className="source__toc_scroll">
+      <div className="toc_scroll">
         <Ref innerRef={accordionContext}>
           <Accordion
             fluid
