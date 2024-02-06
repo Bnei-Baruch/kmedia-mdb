@@ -14,6 +14,7 @@ const ArticleToolbarMobile = () => (
       <LanguageTextBtn />
       <TextSettings />
       <SearchOnPageBtn />
+      <BookmarkBtn />
       <Dropdown
         item
         icon={null}
@@ -22,9 +23,6 @@ const ArticleToolbarMobile = () => (
         className="text_toolbar__dropdown"
       >
         <Dropdown.Menu>
-          <Dropdown.Item>
-            <BookmarkBtn />
-          </Dropdown.Item>
           <Dropdown.Item>
             <ShareTextBtn />
           </Dropdown.Item>

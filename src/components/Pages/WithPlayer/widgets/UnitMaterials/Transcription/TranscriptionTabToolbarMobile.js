@@ -15,6 +15,7 @@ const TranscriptionTabToolbarMobile = () => (
       <LanguageTextBtn />
       <TextSettings />
       <SearchOnPageBtn />
+      <BookmarkBtn />
       <Dropdown
         item
         icon={null}
@@ -23,9 +24,6 @@ const TranscriptionTabToolbarMobile = () => (
         className="text_toolbar__dropdown"
       >
         <Dropdown.Menu>
-          <Dropdown.Item>
-            <BookmarkBtn />
-          </Dropdown.Item>
           <Dropdown.Item>
             <DownloadTextBtn />
           </Dropdown.Item>
