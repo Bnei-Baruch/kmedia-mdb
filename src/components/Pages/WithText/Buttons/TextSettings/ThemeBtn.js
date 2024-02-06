@@ -22,6 +22,7 @@ const ThemeBtn = () => {
           <Menu.Item
             key={d}
             onClick={() => handleSetTheme(d)}
+            className={`text__theme-btn_${d}`}
             active={d === theme}
             content={d}
           />

@@ -39,7 +39,8 @@ $breadcrumb-height: 48px;
     white-space: nowrap;
     display: flex;
     align-items: center;
-    span{
+
+    span {
       padding: 0 2px;
     }
   }
@@ -296,8 +297,8 @@ $breadcrumb-height: 48px;
   justify-content: flex-start;
   align-items: center;
   flex-wrap: nowrap;
-  border-top: 1px solid $midWhite;
-  border-bottom: 1px solid $midWhite;
+  border-top: 1px solid $stroke-gray;
+  border-bottom: 1px solid $stroke-gray;
   height: $toc-toolbar-height;
   padding: 0 1em;
 
@@ -319,8 +320,6 @@ $breadcrumb-height: 48px;
 
   &__buttons {
     max-width: $max-readble-width;
-    border-right: 1px solid $midWhite;
-    border-left: 1px solid $midWhite;
     display: flex;
     flex-wrap: nowrap;
     justify-content: space-around;
@@ -336,7 +335,7 @@ $breadcrumb-height: 48px;
 
     .divider {
       display: block;
-      border-left: 1px solid $midWhite;
+      border-left: 1px solid $stroke-gray;
       align-self: center;
       height: 24px;
       margin: 0 6px;
@@ -526,7 +525,7 @@ $breadcrumb-height: 48px;
   z-index: 3;
   transform: translate3d(-110%, 0, 0);
   min-height: 300px;
-  border: 1px solid $midWhite;
+  border: 1px solid $stroke-gray;
 
   &.active {
     transform: translate3d(0, 0, 0);
@@ -536,7 +535,7 @@ $breadcrumb-height: 48px;
   .player_page_source_toc_item {
     cursor: pointer;
     padding: 1em;
-    border-bottom: 1px solid $midWhite;
+    border-bottom: 1px solid $stroke-gray;
 
     &.active {
       color: $blue;
@@ -551,4 +550,17 @@ $breadcrumb-height: 48px;
 .text__language_popup > .menu {
   max-height: 70VH;
   overflow: auto;
+}
+
+
+.text__theme-btn {
+  &_dark {
+    background: $dark-bg !important;
+    color: $dark-text !important;
+  }
+
+  &_sepia {
+    background: $sepia-bg !important;
+    color: $sepia-text !important ;
+  }
 }

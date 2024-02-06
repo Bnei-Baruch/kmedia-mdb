@@ -32,7 +32,7 @@
         padding: 4px !important;
         min-height: 22px;
         min-width: 22px;
-        border: 1px solid $white;
+        border: 1px solid $stroke-gray;
         font-size: 13px;
       }
     }
@@ -94,6 +94,7 @@
     flex-wrap: nowrap;
     align-items: center;
     color: #767676;
+    margin: 0 8px;
 
     .note_buttons {
       display: flex;
@@ -101,11 +102,13 @@
       opacity: 0;
 
       .button {
-        padding: 0 8px !important;
+        margin-right: 10px;
         background: none;
+        &:first-child{
+          margin-right: 0;
+        }
 
         .material-symbols-outlined {
-          font-size: 22px;
           color: rgba(0, 0, 0, 0.54) !important;
         }
       }
@@ -133,6 +136,7 @@
       width: 100%;
       min-height: 250px;
       padding: .5em;
+      outline: none;
     }
   }
 
@@ -140,6 +144,10 @@
     margin-top: 1em;
     display: flex;
     justify-content: flex-end;
+    > .button:last-child{
+      margin-right: 0;
+      margin-left: 0;
+    }
   }
 
   &.note_item_sticky {
