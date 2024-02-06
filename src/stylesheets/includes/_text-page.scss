@@ -46,43 +46,41 @@ $breadcrumb-height: 48px;
   }
 
   &.is-dark {
-    background: $dark-bg !important;
-    color: $dark-text !important;
+    background: $dark-bg;
+    color: $dark-text;
 
     .material-symbols-outlined {
-      color: $dark-text !important;
+      color: $dark-text;
     }
 
-    .toc_trigger {
-      background: $dark-bg !important;
+    .toc_trigger, .toc_trigger:hover {
       color: $dark-text !important;
     }
 
     .button {
       &:hover, &.active {
-        color: $dark-text !important;
-        background-color: $dark-hover !important;
+        color: $dark-text;
+        background-color: $dark-hover;
       }
     }
   }
 
   &.is-sepia {
-    background: $sepia-bg !important;
-    color: $sepia-text !important;
+    background: $sepia-bg;
+    color: $sepia-text;
 
     .material-symbols-outlined {
-      color: $sepia-text !important;
+      color: $sepia-text;
     }
 
-    .toc_trigger {
-      background: $sepia-bg !important;
+    .toc_trigger, .toc_trigger:hover {
       color: $sepia-text !important;
     }
 
     .button {
       &:hover, &.active {
-        color: $sepia-text !important;
-        background-color: $dark-hover !important;
+        color: $sepia-text;
+        background-color: $dark-hover;
       }
     }
   }

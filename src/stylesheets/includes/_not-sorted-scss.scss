@@ -1361,38 +1361,6 @@
   margin: 0 5px;
 }
 
-.unit-tags-bar {
-  display: flex;
-  overflow: hidden;
-  margin-top: 1em;
-
-
-  .unit-tags-bar_tags {
-    scrollbar-gutter: stable;
-    overflow-y: hidden;
-    overflow-x: scroll;
-    white-space: nowrap;
-    scroll-snap-type: x mandatory;
-
-    &::-webkit-scrollbar {
-      display: none;
-    }
-
-
-    .button {
-      border: 1px solid $blue;
-      box-shadow: none;
-      scroll-snap-align: start;
-      padding: 4px 8px;
-      margin: 0 4px;
-    }
-  }
-
-  & > button {
-
-  }
-}
-
 
 //search on the page
 .scroll-to-search {

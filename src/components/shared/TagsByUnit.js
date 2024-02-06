@@ -9,8 +9,10 @@ import {
   mdbGetLabelsByCUSelector,
   tagsGetTagByIdSelector
 } from '../../redux/selectors';
+import { useTranslation } from 'react-i18next';
 
 const TagsByUnit = ({ id }) => {
+  const { t }                     = useTranslation();
   const [showArrow, setShowArrow] = useState(0);
 
   const unit       = useSelector(state => mdbGetDenormContentUnitSelector(state, id));
@@ -45,6 +47,7 @@ const TagsByUnit = ({ id }) => {
 
   return (
     <div className="unit-tags-bar">
+      <div className="unit-tags-title">{t('messages.unit-tags')}</div>
       {
         showArrow > 0 && (
           <Button
@@ -60,7 +63,7 @@ const TagsByUnit = ({ id }) => {
         {
           names
             .map((tag, index) =>
-              <Button key={`${tag.id}${index}`} basic compact size="small">
+              <Button key={`${tag.id}${index}`} className="unit-tag-item">
                 <Link to={`/topics/${tag.id}`}>{tag.label}</Link>
               </Button>
             )
