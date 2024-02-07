@@ -18,6 +18,7 @@ export const useTextSubject = propId => {
 
   id              = firstLeafId(id, getSourceById);
   const needFetch = subjectId !== id && !wip && !err;
+
   useEffect(() => {
     needFetch && dispatch(actions.fetchSubject(id));
   }, [id, needFetch]);

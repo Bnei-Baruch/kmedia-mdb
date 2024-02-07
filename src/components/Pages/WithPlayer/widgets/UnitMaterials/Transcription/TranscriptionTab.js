@@ -26,7 +26,7 @@ const TranscriptionTab = () => {
     <div className="player_page_tab">
       {
         isMobileDevice ? (
-          <TextLayoutMobile toolbar={<TranscriptionTabToolbarMobile />} playerPage={true} />
+          <TextLayoutMobile toolbar={<TranscriptionTabToolbarMobile  />} playerPage={true} />
         ) : (
           <TextLayoutWeb toolbar={<TranscriptionTabToolbarWeb />} playerPage={true} />
         )
