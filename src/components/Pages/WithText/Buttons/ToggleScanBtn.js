@@ -1,13 +1,12 @@
 import React from 'react';
-import { Button, Popup } from 'semantic-ui-react';
-import { actions } from '../../../../redux/modules/textPage';
+import { Button } from 'semantic-ui-react';
 import { useDispatch, useSelector } from 'react-redux';
+
+import { actions } from '../../../../redux/modules/textPage';
 import { textPageGetScanInfoSelector } from '../../../../redux/selectors';
-import { useTranslation } from 'react-i18next';
-import TooltipForWeb from '../../../shared/TooltipForWeb';
+import ToolbarBtnTooltip from './ToolbarBtnTooltip';
 
 const ToggleScanBtn = () => {
-  const { t }    = useTranslation();
   const dispatch = useDispatch();
 
   const { on, file } = useSelector(textPageGetScanInfoSelector);
@@ -17,8 +16,8 @@ const ToggleScanBtn = () => {
   const handle = () => dispatch(actions.toggleScan());
 
   return (
-    <TooltipForWeb
-      text={t('page-with-text.buttons.scan')}
+    <ToolbarBtnTooltip
+      textKey={on ? 'scan-off' : 'scan-on'}
       trigger={
         (
           <Button

@@ -4,21 +4,14 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { getOptions } from '../../../../helpers/language';
 import { actions } from '../../../../redux/modules/textPage';
-import {
-  textPageGetSubjectSelector,
-  textPageGetFileSelector,
-  settingsGetUIDirSelector
-} from '../../../../redux/selectors';
-import TooltipForWeb from '../../../shared/TooltipForWeb';
-import { useTranslation } from 'react-i18next';
+import { textPageGetSubjectSelector, textPageGetFileSelector } from '../../../../redux/selectors';
+import ToolbarBtnTooltip from './ToolbarBtnTooltip';
 
 const LanguageTextBtn = () => {
-  const { t }    = useTranslation();
   const dispatch = useDispatch();
 
   const { language }  = useSelector(textPageGetFileSelector);
   const { languages } = useSelector(textPageGetSubjectSelector);
-  const uiDir = useSelector(settingsGetUIDirSelector);
 
   const onChange = selected => {
     dispatch(actions.changeLanguage(selected));
@@ -28,8 +21,8 @@ const LanguageTextBtn = () => {
   return (
     <Dropdown
       trigger={
-        <TooltipForWeb
-          text={t('page-with-text.buttons.scan')}
+        <ToolbarBtnTooltip
+          textKey="languages"
           trigger={<Button icon={(<span className="material-symbols-outlined">Translate</span>)} />}
         />
       }

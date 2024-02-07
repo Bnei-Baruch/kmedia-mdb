@@ -1,5 +1,4 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import { Button } from 'semantic-ui-react';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -10,10 +9,9 @@ import {
   textPageGetFileSelector,
   textPageGetUrlInfoSelector
 } from '../../../../redux/selectors';
-import TooltipForWeb from '../../../shared/TooltipForWeb';
+import ToolbarBtnTooltip from './ToolbarBtnTooltip';
 
-const AddNoteBtn = () => {
-  const { t }               = useTranslation();
+const AddCommentBtn = () => {
   const { select, search }  = useSelector(textPageGetUrlInfoSelector);
   const { id: subject_uid } = useSelector(textPageGetSubjectSelector);
   const { language }        = useSelector(textPageGetFileSelector);
@@ -39,8 +37,8 @@ const AddNoteBtn = () => {
   };
 
   return (
-    <TooltipForWeb
-      text={t('page-with-text.buttons.add-new-note')}
+    <ToolbarBtnTooltip
+      textKey="add-comment"
       trigger={
         <Button
           onClick={handleOpen}
@@ -51,4 +49,4 @@ const AddNoteBtn = () => {
   );
 };
 
-export default AddNoteBtn;
+export default AddCommentBtn;

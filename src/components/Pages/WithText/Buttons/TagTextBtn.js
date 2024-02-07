@@ -1,18 +1,16 @@
 import React, { useState } from 'react';
 import { Button } from 'semantic-ui-react';
-import SelectTopicsModal from '../../../shared/SelectTopicsModal/SelectTopicsModal';
-import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
+
+import SelectTopicsModal from '../../../shared/SelectTopicsModal/SelectTopicsModal';
 import {
   textPageGetSubjectSelector,
   textPageGetFileSelector,
   textPageGetUrlInfoSelector
 } from '../../../../redux/selectors';
-import TooltipForWeb from '../../../shared/TooltipForWeb';
+import ToolbarBtnTooltip from './ToolbarBtnTooltip';
 
 const TagTextBtn = () => {
-  const { t } = useTranslation();
-
   const { select, search } = useSelector(textPageGetUrlInfoSelector);
   const { language }       = useSelector(textPageGetFileSelector);
   const subject            = useSelector(textPageGetSubjectSelector);
@@ -45,8 +43,8 @@ const TagTextBtn = () => {
       open={open}
       onClose={handleClose}
       trigger={
-        <TooltipForWeb
-          text={t('page-with-text.buttons.tag')}
+        <ToolbarBtnTooltip
+          textKey="add-tag"
           trigger={
             <Button
               icon={<span className="material-symbols-outlined">tag</span>}

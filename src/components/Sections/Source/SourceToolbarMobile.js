@@ -7,7 +7,7 @@ import TextSettings from '../../Pages/WithText/Buttons/TextSettings/TextSettings
 import SearchOnPageBtn from '../../Pages/WithText/Buttons/SearchOnPageBtn';
 import DownloadTextBtn from '../../Pages/WithText/Buttons/DownloadTextBtn';
 import LinkToLessonsBtn from '../../Pages/WithText/Buttons/LinkToLessonsBtn';
-import BookmarkBtn from '../../Pages/WithText/Buttons/BookmarkBtn';
+import AddBookmarkBtn from '../../Pages/WithText/Buttons/AddBookmarkBtn';
 import ShareTextModalBtn from '../../Pages/WithText/Buttons/ShareTextModalBtn';
 import MoreOptionsBtn from '../../Pages/WithText/Buttons/MoreOptionsBtn';
 
@@ -27,7 +27,7 @@ const SourceToolbarMobile = () => (
       >
         <Dropdown.Menu>
           <Dropdown.Item>
-            <BookmarkBtn />
+            <AddBookmarkBtn />
           </Dropdown.Item>
           <Dropdown.Item>
             <LinkToLessonsBtn />
