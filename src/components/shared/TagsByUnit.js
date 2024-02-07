@@ -47,7 +47,7 @@ const TagsByUnit = ({ id }) => {
 
   return (
     <div className="unit-tags-bar">
-      <div className="unit-tags-title">{t('messages.unit-tags')}</div>
+      <div className="unit-tags-title">{t('messages.unit-tags')}:</div>
       {
         showArrow > 0 && (
           <Button

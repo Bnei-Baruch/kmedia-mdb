@@ -1,4 +1,4 @@
-import React, { useState, useContext, useMemo, useCallback } from 'react';
+import React, { useState, useContext, useMemo, useCallback, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
@@ -15,7 +15,8 @@ import NotFound from '../../../../../shared/NotFound';
 import SourceTabTOC from './SourceTabTOC';
 
 const SourceTab = () => {
-  const { id } = useParams();
+  const { id }             = useParams();
+  const { isMobileDevice } = useContext(DeviceInfoContext);
 
   const pageCu        = useSelector(state => mdbGetDenormContentUnitSelector(state, id));
   const getSourceById = useSelector(state => sourcesGetSourceByIdSelector(state));
@@ -36,7 +37,9 @@ const SourceTab = () => {
 
   const handleSelectCu = useCallback(id => setSubjectId(id), [setSubjectId]);
 
-  const { isMobileDevice } = useContext(DeviceInfoContext);
+  useEffect(() => {
+    setSubjectId(subject?.id);
+  }, [subject?.id]);
 
   if (!subject) return <NotFound />;
 
