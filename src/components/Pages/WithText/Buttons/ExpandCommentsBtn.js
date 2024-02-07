@@ -1,15 +1,13 @@
 import React from 'react';
 import { Button } from 'semantic-ui-react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useTranslation } from 'react-i18next';
 
 import { actions } from '../../../../redux/modules/textPage';
 import { stopBubbling } from '../../../../helpers/utils';
 import { textPageGetExpandNotesSelector } from '../../../../redux/selectors';
-import TooltipForWeb from '../../../shared/TooltipForWeb';
+import ToolbarBtnTooltip from './ToolbarBtnTooltip';
 
-const ExpandAllNotesBtn = () => {
-  const { t }     = useTranslation();
+const ExpandCommentsBtn = () => {
   const expandAll = useSelector(textPageGetExpandNotesSelector);
   const dispatch  = useDispatch();
 
@@ -19,8 +17,8 @@ const ExpandAllNotesBtn = () => {
   };
 
   return (
-    <TooltipForWeb
-      text={t(`page-with-text.buttons.${expandAll ? 'collapse' : 'expand'}`)}
+    <ToolbarBtnTooltip
+      textKey={expandAll ? 'collapse-comments' : 'expand-comments'}
       trigger={
         <Button
           onClick={toggleNotes}
@@ -32,4 +30,4 @@ const ExpandAllNotesBtn = () => {
   );
 };
 
-export default ExpandAllNotesBtn;
+export default ExpandCommentsBtn;

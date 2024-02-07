@@ -845,5 +845,46 @@
       "contentCreate": "Want everyone to see the excerpt you marked?\nTag it in the site's topics section",
       "labelCreated": "The excerpt has been successfully tagged. You can find it in the topics section under the topics you tagged"
     }
+  },
+  "page-with-text": {
+    "buttons": {
+      "web": {
+        "lessons": "To all lessons on the article",
+        "text-settings": "Change text formatting",
+        "languages": "Change language",
+        "play-by-text": "New! Play a video clip",
+        "add-tag": "Add tagging",
+        "add-bookmark": "Add to bookmarks",
+        "add-comment": "Add a comment in the text",
+        "share": "Share",
+        "search": "Search on the page",
+        "expand-comments": "Show all comments",
+        "collapse-comments": "Hide all comments",
+        "download": "Download",
+        "print": "Print",
+        "fullscreen-on": "Full screen",
+
+        "fullscreen-off": "Fullscreen Off",
+        "hide-additions": "Hide non text",
+        "show-additions": "Show non text",
+        "scan-on": "scan-on",
+        "scan-off": "scan-off",
+        "more-buttons": "More"
+      },
+      "mobile": {
+        "lessons": "Lessons",
+        "text-settings": "Text",
+        "languages": "Language",
+        "add-bookmark": "Save",
+        "share": "Share",
+        "search": "Search",
+        "download": "Download",
+        "fullscreen-on": "Full screen",
+
+        "fullscreen-off": "Fullscreen On",
+        "more-buttons": "More",
+        "toc": "toc"
+      }
+    }
   }
 }

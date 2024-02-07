@@ -3,8 +3,9 @@ import { Button } from 'semantic-ui-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { actions } from '../../../../redux/modules/textPage';
 import fscreen from 'fscreen';
+
 import { textPageGetUrlInfoSelector, textPageGetIsFullscreenSelector } from '../../../../redux/selectors';
-import TooltipForWeb from '../../../shared/TooltipForWeb';
+import ToolbarBtnTooltip from './ToolbarBtnTooltip';
 
 const FullscreenTextBtn = () => {
   const isFullscreen = useSelector(textPageGetIsFullscreenSelector);
@@ -42,8 +43,8 @@ const FullscreenTextBtn = () => {
   }
 
   return (
-    <TooltipForWeb
-      text={tooltip}
+    <ToolbarBtnTooltip
+      textKey={tooltip}
       trigger={
         <Button
           onClick={toggleFullscreen}

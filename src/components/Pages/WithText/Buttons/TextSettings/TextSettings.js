@@ -4,19 +4,17 @@ import { Button, Menu, Popup } from 'semantic-ui-react';
 import ZoomSizeBtns from './ZoomSizeBtns';
 import FontTypeBtn from './FontTypeBtn';
 import ThemeBtn from './ThemeBtn';
-import TooltipForWeb from '../../../../shared/TooltipForWeb';
-import { useTranslation } from 'react-i18next';
+import ToolbarBtnTooltip from '../ToolbarBtnTooltip';
 
 const TextSettings = () => {
-  const { t }               = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
 
   return (
     <Popup
       trigger={
         <div>
-          <TooltipForWeb
-            text={t('messages.text-settings')}
+          <ToolbarBtnTooltip
+            textKey="text-settings"
             trigger={<Button icon={<span className="material-symbols-outlined">text_fields</span>} />}
           />
         </div>

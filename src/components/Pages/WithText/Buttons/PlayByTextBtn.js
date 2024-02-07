@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
 import { Button } from 'semantic-ui-react';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -10,7 +9,7 @@ import {
   textPageGetFileSelector,
   textPageGetWordOffsetSelector
 } from '../../../../redux/selectors';
-import TooltipForWeb from '../../../shared/TooltipForWeb';
+import ToolbarBtnTooltip from './ToolbarBtnTooltip';
 
 const PlayByTextBtn = () => {
   const { id }        = useSelector(textPageGetSubjectSelector);
@@ -19,7 +18,6 @@ const PlayByTextBtn = () => {
   const hasTimeCode   = useSelector(state => assets.hasTimeCode(state.assets));
   const timeCodeByPos = useSelector(state => assets.getTimeCode(state.assets));
 
-  const { t }    = useTranslation();
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -35,8 +33,8 @@ const PlayByTextBtn = () => {
   };
 
   return (
-    <TooltipForWeb
-      text={t('page-with-text.buttons.play-by-text')}
+    <ToolbarBtnTooltip
+      textKey="play-by-text"
       trigger={
         <Button
           onClick={handlePlay}

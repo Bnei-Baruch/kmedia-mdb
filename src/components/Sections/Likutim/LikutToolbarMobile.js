@@ -5,7 +5,7 @@ import LanguageTextBtn from '../../Pages/WithText/Buttons/LanguageTextBtn';
 import TextSettings from '../../Pages/WithText/Buttons/TextSettings/TextSettings';
 import SearchOnPageBtn from '../../Pages/WithText/Buttons/SearchOnPageBtn';
 import DownloadTextBtn from '../../Pages/WithText/Buttons/DownloadTextBtn';
-import BookmarkBtn from '../../Pages/WithText/Buttons/BookmarkBtn';
+import AddBookmarkBtn from '../../Pages/WithText/Buttons/AddBookmarkBtn';
 import ShareTextModalBtn from '../../Pages/WithText/Buttons/ShareTextModalBtn';
 import LessonsByLikutBtn from './LessonsByLikutBtn';
 import MoreOptionsBtn from '../../Pages/WithText/Buttons/MoreOptionsBtn';
@@ -26,7 +26,7 @@ const LikutToolbarMobile = () => (
       >
         <Dropdown.Menu>
           <Dropdown.Item>
-            <BookmarkBtn />
+            <AddBookmarkBtn />
           </Dropdown.Item>
           <Dropdown.Item>
             <DownloadTextBtn />

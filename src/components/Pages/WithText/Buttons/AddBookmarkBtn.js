@@ -1,15 +1,16 @@
 import React, { useContext, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Confirm, Modal, Popup } from 'semantic-ui-react';
-import BookmarkForm from '../../../shared/SaveBookmark/BookmarkForm';
+import { Button, Confirm, Modal } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
+
+import BookmarkForm from '../../../shared/SaveBookmark/BookmarkForm';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import { selectors as settings } from '../../../../redux/modules/settings';
 import SelectTopicsModal from '../../../shared/SelectTopicsModal/SelectTopicsModal';
 import { textPageGetUrlInfoSelector } from '../../../../redux/selectors';
-import TooltipForWeb from '../../../shared/TooltipForWeb';
+import ToolbarBtnTooltip from './ToolbarBtnTooltip';
 
-const BookmarkBtn = () => {
+const AddBookmarkBtn = () => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const { t }              = useTranslation();
   const dir                = useSelector(state => settings.getUIDir(state.settings));
@@ -56,15 +57,10 @@ const BookmarkBtn = () => {
             open={openTag}
             onClose={handleCloseTag}
             trigger={
-              <TooltipForWeb
-                text={t('page-with-text.buttons.add-bookmark')}
-                trigger={
-                  <Button
-                    color="green"
-                    content={t('personal.label.tagging')}
-                    onClick={() => setOpenTag(true)}
-                  />
-                }
+              <Button
+                color="green"
+                content={t('personal.label.tagging')}
+                onClick={() => setOpenTag(true)}
               />
             }
           />
@@ -74,8 +70,8 @@ const BookmarkBtn = () => {
       />
       <Modal
         trigger={
-          <Popup
-            content={t('share-text.bookmark-button-alt')}
+          <ToolbarBtnTooltip
+            textKey="add-bookmark"
             trigger={
               <Button
                 icon={<span className="material-symbols-outlined">bookmark</span>}
@@ -97,4 +93,4 @@ const BookmarkBtn = () => {
   );
 };
 
-export default BookmarkBtn;
+export default AddBookmarkBtn;

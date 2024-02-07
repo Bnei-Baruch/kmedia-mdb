@@ -1,11 +1,12 @@
 import React from 'react';
+import { Dropdown } from 'semantic-ui-react';
+
 import LanguageTextBtn from '../../../../Pages/WithText/Buttons/LanguageTextBtn';
 import TextSettings from '../../../../Pages/WithText/Buttons/TextSettings/TextSettings';
-import BookmarkBtn from '../../../../Pages/WithText/Buttons/BookmarkBtn';
+import AddBookmarkBtn from '../../../../Pages/WithText/Buttons/AddBookmarkBtn';
 import SearchOnPageBtn from '../../../../Pages/WithText/Buttons/SearchOnPageBtn';
 import DownloadTextBtn from '../../../../Pages/WithText/Buttons/DownloadTextBtn';
 import ShareTextBtn from '../../../../Pages/WithText/Buttons/ShareTextBtn';
-import { Dropdown } from 'semantic-ui-react';
 import MoreOptionsBtn from '../../../../Pages/WithText/Buttons/MoreOptionsBtn';
 
 const ArticleToolbarMobile = () => (
@@ -14,7 +15,7 @@ const ArticleToolbarMobile = () => (
       <LanguageTextBtn />
       <TextSettings />
       <SearchOnPageBtn />
-      <BookmarkBtn />
+      <AddBookmarkBtn />
       <Dropdown
         item
         icon={null}

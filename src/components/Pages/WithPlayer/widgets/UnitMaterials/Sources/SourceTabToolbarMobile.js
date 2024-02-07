@@ -6,7 +6,7 @@ import LanguageTextBtn from '../../../../WithText/Buttons/LanguageTextBtn';
 import TextSettings from '../../../../WithText/Buttons/TextSettings/TextSettings';
 import SearchOnPageBtn from '../../../../WithText/Buttons/SearchOnPageBtn';
 import DownloadTextBtn from '../../../../WithText/Buttons/DownloadTextBtn';
-import BookmarkBtn from '../../../../WithText/Buttons/BookmarkBtn';
+import AddBookmarkBtn from '../../../../WithText/Buttons/AddBookmarkBtn';
 import ShareTextModalBtn from '../../../../WithText/Buttons/ShareTextModalBtn';
 import MoreOptionsBtn from '../../../../WithText/Buttons/MoreOptionsBtn';
 
@@ -17,7 +17,7 @@ const SourceTabToolbarMobile = ({ needTOC }) => (
       <LanguageTextBtn />
       <TextSettings />
       <SearchOnPageBtn />
-      <BookmarkBtn />
+      <AddBookmarkBtn />
       <Dropdown
         item
         icon={null}

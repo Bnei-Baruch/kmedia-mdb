@@ -2,12 +2,14 @@ import React, { useContext, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { Button, Message, Popup, Modal, } from 'semantic-ui-react';
+import { useSelector } from 'react-redux';
 
 import ShareBar from '../../../Share/ShareBar';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import useStateWithCallback from '../../../../helpers/use-state-with-callback';
-import { useSelector } from 'react-redux';
+
 import { textPageGetUrlInfoSelector } from '../../../../redux/selectors';
+import ToolbarBtnTooltip from './ToolbarBtnTooltip';
 
 const POPOVER_CONFIRMATION_TIMEOUT = 2500;
 
@@ -49,7 +51,12 @@ const ShareTextModalBtn = () => {
       on="click"
       flowing
       hideOnScroll
-      trigger={<Button icon={<span className="material-symbols-outlined">share</span>} />}
+      trigger={
+        <ToolbarBtnTooltip
+          textKey="share"
+          trigger={<Button icon={<span className="material-symbols-outlined">share</span>} />}
+        />
+      }
       open={isPopupOpen}
       onClose={() => setIsPopupOpen(false)}
       onOpen={() => {

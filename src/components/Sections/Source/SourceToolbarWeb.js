@@ -3,13 +3,13 @@ import clsx from 'clsx';
 import { useSelector } from 'react-redux';
 import { Dropdown } from 'semantic-ui-react';
 
-import AddNoteBtn from '../../Pages/WithText/Buttons/AddNoteBtn';
+import AddCommentBtn from '../../Pages/WithText/Buttons/AddCommentBtn';
 import TocToggleBtn from './TOC/TocToggleBtn';
 import LanguageTextBtn from '../../Pages/WithText/Buttons/LanguageTextBtn';
 import TextSettings from '../../Pages/WithText/Buttons/TextSettings/TextSettings';
-import BookmarkBtn from '../../Pages/WithText/Buttons/BookmarkBtn';
+import AddBookmarkBtn from '../../Pages/WithText/Buttons/AddBookmarkBtn';
 import SearchOnPageBtn from '../../Pages/WithText/Buttons/SearchOnPageBtn';
-import ExpandAllNotesBtn from '../../Pages/WithText/Buttons/ExpandAllNotesBtn';
+import ExpandCommentsBtn from '../../Pages/WithText/Buttons/ExpandCommentsBtn';
 import DownloadTextBtn from '../../Pages/WithText/Buttons/DownloadTextBtn';
 import AdditionsVisibilityBtn from '../../Pages/WithText/Buttons/AdditionsVisibilityBtn';
 import LinkToLessonsBtn from '../../Pages/WithText/Buttons/LinkToLessonsBtn';
@@ -38,8 +38,8 @@ const SourceToolbarWeb = () => {
           )
         }
         <TagTextBtn />
-        <BookmarkBtn />
-        <AddNoteBtn />
+        <AddBookmarkBtn />
+        <AddCommentBtn />
         <ShareTextBtn />
         {
           hasNoSel && (
@@ -47,7 +47,7 @@ const SourceToolbarWeb = () => {
               <div className="divider" />
               <SearchOnPageBtn />
               <div className="computer-only">
-                <ExpandAllNotesBtn />
+                <ExpandCommentsBtn />
               </div>
               <div className="computer-only">
                 <PrintBtn />
@@ -80,7 +80,7 @@ const SourceToolbarWeb = () => {
         >
           <Dropdown.Menu>
             <Dropdown.Item>
-              <ExpandAllNotesBtn />
+              <ExpandCommentsBtn />
             </Dropdown.Item>
             <Dropdown.Item>
               <DownloadTextBtn />

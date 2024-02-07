@@ -370,32 +370,33 @@ $breadcrumb-height: 48px;
       }
     }
 
-    .text_toolbar__dropdown {
-      line-height: 1em;
-      min-width: 1em;
-      display: none;
-      @include tablet-mobile {
-        display: block;
-      }
-
-      .material-symbols-outlined {
-        min-width: 32px;
-      }
-    }
-
-    .dropdown .button {
-      height: 100%;
-    }
-
     .player_page_tab & {
       border: none;
+    }
+
+    .text_toolbar_btn_with_text {
+      text-align: center;
     }
   }
 
   &__dropdown {
-    .button {
-      margin: 0 !important;
-      padding: 0 !important;
+    display: none;
+    @include tablet-mobile {
+      display: block;
+    }
+
+    & > .menu {
+      line-height: 1em;
+      min-width: 1em;
+
+      .button {
+        margin: 0 !important;
+        padding: 0 !important;
+
+        .material-symbols-outlined {
+          min-width: 32px;
+        }
+      }
     }
   }
 }
