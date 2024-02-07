@@ -20,7 +20,7 @@ const SourceTabTOC = ({ cus, onClick }) => {
 
   return (
     <div className={clsx('player_page_source_toc no_print', { 'active': tocIsActive })}>
-      <TocToggleBtn />
+      <TocToggleBtn withText={false} />
       <div>
         {
           cus.map(cu => (

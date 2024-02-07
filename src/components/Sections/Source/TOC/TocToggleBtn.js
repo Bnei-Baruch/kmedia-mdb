@@ -8,7 +8,7 @@ import { actions } from '../../../../redux/modules/textPage';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import ToolbarBtnTooltip from '../../../Pages/WithText/Buttons/ToolbarBtnTooltip';
 
-const TocToggleBtn = () => {
+const TocToggleBtn = ({ withText = true }) => {
   const { t }              = useTranslation();
   const dispatch           = useDispatch();
   const { isMobileDevice } = useContext(DeviceInfoContext);
@@ -16,17 +16,14 @@ const TocToggleBtn = () => {
   const handleTocIsActive = () => dispatch(actions.setTocIsActive());
 
   if (isMobileDevice) {
-    return (
-      <ToolbarBtnTooltip
-        textKey="toc"
-        trigger={
-          <Button
-            icon={<span className="material-symbols-outlined">view_list</span>}
-            onClick={handleTocIsActive}
-          />
-        }
-      />
-    );
+    const trigger = <Button
+      basic
+      className="clear_button"
+      icon={<span className="material-symbols-outlined">view_list</span>}
+      onClick={handleTocIsActive}
+    />;
+
+    return (withText ? <ToolbarBtnTooltip textKey="toc" trigger={trigger} /> : trigger);
   }
 
   return (
