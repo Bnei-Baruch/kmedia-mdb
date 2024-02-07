@@ -42,6 +42,7 @@ const ShareTextModalBtn = () => {
       timeout = null;
     }
   };
+
   const handleOpen        = () => {
     const _url = new URL(url);
     for (const key in properties) {
