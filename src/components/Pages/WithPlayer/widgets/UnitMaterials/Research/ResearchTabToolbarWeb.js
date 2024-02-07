@@ -53,7 +53,6 @@ const ResearchTabToolbarWeb = () => {
               <div className="computer-only">
                 <AdditionsVisibilityBtn />
               </div>
-              <div className="divider computer-only" />
             </>
           )
         }
