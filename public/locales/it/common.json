@@ -118,10 +118,10 @@
       "free-text": "Free Text"
     },
     "media-types": {
-      "audio" : "Audio",
-      "video" : "Video",
-      "text" : "Transcription",
-      "image" : "Sketch"
+      "audio": "Audio",
+      "video": "Video",
+      "text": "Transcription",
+      "image": "Sketch"
     },
     "content-types": {
       "CONGRESS": "Convegni",
@@ -410,7 +410,7 @@
       "description": "An up to date shortcut to the latest Daily Lesson"
     }
   },
-  "likutim":{
+  "likutim": {
     "header": {
       "text": "Excerpts from Kabbalistic Sources",
       "subtext": "Excerpts from the Sources on various subjects"
@@ -588,7 +588,7 @@
       "new": "New",
       "same-source": "Same source"
     },
-    "playlist":{
+    "playlist": {
       "header": "Up Next"
     }
   },
@@ -926,6 +926,42 @@
       "ending": "Finish",
       "contentCreate": "Want everyone to see the excerpt you marked?\nTag it in the site's topics section",
       "labelCreated": "The excerpt has been successfully tagged. You can find it in the topics section under the topics you tagged"
+    }
+  },
+  "page-with-text": {
+    "buttons": {
+      "web": {
+        "lessons": "To all lessons on the article",
+        "text-settings": "Change text formatting",
+        "languages": "Change language",
+        "play-by-text": "New! Play a video clip",
+        "add-tag": "Add tagging",
+        "add-bookmark": "Add to bookmarks",
+        "add-comment": "Add a comment in the text",
+        "share": "Share",
+        "search": "Search on the page",
+        "expand-comments": "Show all comments",
+        "collapse-comments": "Hide all comments",
+        "download": "Download",
+        "print": "Print",
+        "fullscreen-on": "Full screen",
+        "fullscreen-off": "Exit full screen",
+        "hide-additions": "Hide all remarks",
+        "show-additions": "Show all remarks",
+        "scan-on": "scan-on",
+        "more-buttons": "More"
+      },
+      "mobile": {
+        "lessons": "Lessons",
+        "text-settings": "Text",
+        "languages": "Language",
+        "add-bookmark": "Save",
+        "share": "Share",
+        "search": "Search",
+        "download": "Download",
+        "more-buttons": "More",
+        "toc": "Content"
+      }
     }
   }
 }
