@@ -42,9 +42,17 @@ const ShareTextModalBtn = () => {
       timeout = null;
     }
   };
+  const handleOpen        = () => {
+    const _url = new URL(url);
+    for (const key in properties) {
+      _url.searchParams.set(key, properties[key]);
+    }
+
+    setUrlWithParams(_url.toString());
+    setIsPopupOpen(true);
+  };
 
   const buttonSize = isMobileDevice ? 'tiny' : 'small';
-
   return (
     <Modal // share bar popup
       className="share-bar"
@@ -54,20 +62,17 @@ const ShareTextModalBtn = () => {
       trigger={
         <ToolbarBtnTooltip
           textKey="share"
-          trigger={<Button icon={<span className="material-symbols-outlined">share</span>} />}
+          trigger={
+            <Button
+              onClick={handleOpen}
+              icon={<span className="material-symbols-outlined">share</span>}
+            />
+          }
         />
       }
       open={isPopupOpen}
       onClose={() => setIsPopupOpen(false)}
-      onOpen={() => {
-        const _url = new URL(url);
-        for (const key in properties) {
-          _url.searchParams.set(key, properties[key]);
-        }
-
-        setUrlWithParams(_url.toString());
-        setIsPopupOpen(true);
-      }}
+      onOpen={handleOpen}
     >
       <Modal.Content>
         <ShareBar

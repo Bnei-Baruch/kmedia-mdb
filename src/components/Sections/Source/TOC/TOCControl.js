@@ -10,7 +10,7 @@ const TocControl = () => {
 
   return (
     <div className="source__toc_control">
-      <TocToggleBtn />
+      <TocToggleBtn withText={false} />
       <Button
         basic
         className="source__toc_close clear_button"
