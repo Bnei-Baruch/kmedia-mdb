@@ -30,8 +30,7 @@ const textPageSlice = createSlice({
       wip: false, err: null
     },
     urlInfo: {},
-    tocInfo: { sortByAZ: true },
-    scanInfo: { on: false }
+    tocInfo: { sortByAZ: true }
   },
   reducers: {
     setZoomSize: (state, { payload }) => {
@@ -84,7 +83,6 @@ const textPageSlice = createSlice({
     setScrollDir: (state, { payload }) => void (state.scrollDir = payload),
     setSideOffset: (state, { payload }) => void (state.sideOffset = payload),
     toggleTextOnly: (state, { payload }) => void (state.textOnly = payload ?? !state.textOnly),
-    toggleScan: state => void (state.scanInfo.on = !state.scanInfo.on),
     setIsSearch: state => void (state.isSearch = !state.isSearch),
     fetchSubject: (state, { payload }) => {
       state.wip        = true;
@@ -94,13 +92,13 @@ const textPageSlice = createSlice({
     fetchSubjectSuccess: (state, { payload }) => {
       const { subject, file, isGr } = payload;
 
-      subject.properties  = isGr ? { uid_prefix: 'gr-' } : {};
-      state.subject       = subject;
-      state.wipErr        = { wip: false, err: null };
-      state.file          = file;
-      state.mp3           = selectMP3(subject.files, file.language);
-      state.scanInfo.file = subject.files.find(f => f.insert_type === 'source-scan');
-      state.urlInfo.url   = buildUrl(state);
+      subject.properties = isGr ? { uid_prefix: 'gr-' } : {};
+      state.subject      = subject;
+      state.wipErr       = { wip: false, err: null };
+      state.file         = file;
+      state.mp3          = selectMP3(subject.files, file.language);
+      state.scanFile     = subject.files.find(f => f.insert_type === 'source-scan');
+      state.urlInfo.url  = buildUrl(state);
     },
     fetchSubjectFailure: (state, { payload }) => void (state.wipErr = { wip: false, err: payload }),
     setFileFilter: (state, { payload }) => void (state.fileFilter = payload)
@@ -137,7 +135,7 @@ const getIsFullscreen = state => state.isFullscreen;
 const getScrollDir    = state => state.scrollDir;
 const getSideOffset   = state => state.sideOffset;
 const getTextOnly     = state => state.textOnly;
-const getScanInfo     = state => state.scanInfo;
+const getScanFile     = state => state.scanFile;
 const getIsSearch     = state => state.isSearch;
 const getFileFilter   = state => state.fileFilter;
 
@@ -156,7 +154,7 @@ export const selectors = {
   getScrollDir,
   getSideOffset,
   getTextOnly,
-  getScanInfo,
+  getScanFile,
   getIsSearch,
   getFileFilter,
 };

@@ -275,7 +275,7 @@ export const textPageGetExpandNotesSelector  = createSelector([getTextPage], t =
 export const textPageGetIsFullscreenSelector = createSelector([getTextPage], t => textPageSel.getIsFullscreen(t));
 export const textPageGetScrollDirSelector    = createSelector([getTextPage], t => textPageSel.getScrollDir(t));
 export const textPageGetSideOffsetSelector   = createSelector([getTextPage], t => textPageSel.getSideOffset(t));
-export const textPageGetTextOnlySelector     = createSelector([getTextPage], t => textPageSel.getTextOnly(t));
-export const textPageGetScanInfoSelector     = createSelector([getTextPage], t => textPageSel.getScanInfo(t));
-export const textPageGetIsSearchSelector     = createSelector([getTextPage], t => textPageSel.getIsSearch(t));
+export const textPageGetTextOnlySelector = createSelector([getTextPage], t => textPageSel.getTextOnly(t));
+export const textPageGetScanFileSelector = createSelector([getTextPage], t => textPageSel.getScanFile(t));
+export const textPageGetIsSearchSelector = createSelector([getTextPage], t => textPageSel.getIsSearch(t));
 export const textPageGetFileFilterSelector   = createSelector([getTextPage], t => textPageSel.getFileFilter(t));
