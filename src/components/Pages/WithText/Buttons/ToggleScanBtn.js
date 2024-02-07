@@ -1,33 +1,39 @@
 import React from 'react';
-import { Button } from 'semantic-ui-react';
-import { useDispatch, useSelector } from 'react-redux';
-
-import { actions } from '../../../../redux/modules/textPage';
-import { textPageGetScanInfoSelector } from '../../../../redux/selectors';
+import { Button, Modal, Icon } from 'semantic-ui-react';
+import { useSelector } from 'react-redux';
+import { textPageGetScanFileSelector } from '../../../../redux/selectors';
 import ToolbarBtnTooltip from './ToolbarBtnTooltip';
+import PDF from '../../../shared/PDF/PDF';
+import { physicalFile } from '../../../../helpers/utils';
 
 const ToggleScanBtn = () => {
-  const dispatch = useDispatch();
 
-  const { on, file } = useSelector(textPageGetScanInfoSelector);
+  const file = useSelector(textPageGetScanFileSelector);
 
   if (!file) return null;
 
-  const handle = () => dispatch(actions.toggleScan());
-
+  const trigger = (
+    <div>
+      <ToolbarBtnTooltip
+        textKey="scan"
+        trigger={<Button icon={<span className="material-symbols-outlined">image</span>} />}
+      />
+    </div>
+  );
   return (
-    <ToolbarBtnTooltip
-      textKey={on ? 'scan-off' : 'scan-on'}
-      trigger={
-        (
-          <Button
-            active={on}
-            onClick={handle}
-            icon={<span className="material-symbols-outlined">image</span>}
-          />
-        )
-      }
-    />
+    <Modal
+      size="large"
+      trigger={trigger}
+      closeIcon={<Icon name="times circle outline" />}
+    >
+      <Modal.Content>
+        <PDF
+          pdfFile={physicalFile(file)}
+          pageNumber={1}
+          startsFrom={1}
+        />
+      </Modal.Content>
+    </Modal>
   );
 };
 

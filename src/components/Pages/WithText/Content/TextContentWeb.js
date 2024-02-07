@@ -15,8 +15,7 @@ import {
   textPageGetSettings,
   textPageGetSubjectSelector,
   textPageGetFileSelector,
-  textPageGetTextOnlySelector,
-  textPageGetScanInfoSelector
+  textPageGetTextOnlySelector
 } from '../../../../redux/selectors';
 
 const TextContentWeb = () => {
@@ -26,7 +25,6 @@ const TextContentWeb = () => {
   const textOnly               = useSelector(textPageGetTextOnlySelector);
   const subject                = useSelector(textPageGetSubjectSelector);
   const file                   = useSelector(textPageGetFileSelector);
-  const scanInfo               = useSelector(textPageGetScanInfoSelector);
 
   const notes               = useNotes();
   const { labels, offsets } = useLabels();
@@ -59,8 +57,6 @@ const TextContentWeb = () => {
     return null;
   } else if (file.isPdf) {
     pdf = file;
-  } else if (scanInfo.on) {
-    pdf = scanInfo.file;
   }
 
   return (
