@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { URL } from 'url';
 import ReactDOMServer from 'react-dom/server';
 import { matchRoutes } from 'react-router-dom';
@@ -193,12 +193,14 @@ async function serverRenderAuthorised(req, res, next, htmlData, uiLang, bot) {
               <React.StrictMode>
                 <ErrorBoundary>
                   <HelmetProvider context={helmetContext}>
-                    <App
-                      i18n={context.i18n}
-                      store={store}
-                      history={history}
-                      deviceInfo={deviceInfo}
-                    />
+										<Suspense fallback="">
+											<App
+												i18n={context.i18n}
+												store={store}
+												history={history}
+												deviceInfo={deviceInfo}
+											/>
+										</Suspense>
                   </HelmetProvider>
                 </ErrorBoundary>
               </React.StrictMode>
