@@ -380,9 +380,9 @@ $breadcrumb-height: 48px;
   }
 
   &__dropdown {
-    display: none;
+    display: none !important;
     @include tablet-mobile {
-      display: block;
+      display: block !important;
     }
 
     & > .menu {
