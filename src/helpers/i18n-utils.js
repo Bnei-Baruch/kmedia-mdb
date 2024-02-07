@@ -1,4 +1,4 @@
-import { BLOGS, DEFAULT_UI_DIR, LANGUAGES, TWITTER_USERNAMES } from './consts';
+import { BLOGS, DEFAULT_UI_DIR, DEFAULT_UI_LANGUAGE, LANGUAGES, TWITTER_USERNAMES } from './consts';
 
 export const getCurrentDirection = () => {
   if (typeof window === 'undefined') {
@@ -64,16 +64,16 @@ export const getDirectionProperty = dir => dir === 'rtl' ? 'right' : 'left';
 
 export const getLangPropertyDirection = language => getDirectionProperty(getLanguageDirection(language));
 
-export const getLanguageLocale = language => LANGUAGES[language].locale;
+export const getLanguageLocale = language => (LANGUAGES[language] || LANGUAGES[DEFAULT_UI_LANGUAGE]).locale;
 
-export const getLanguageLocaleWORegion = language => LANGUAGES[language].locale.substring(0, 2);
+export const getLanguageLocaleWORegion = language => getLanguageLocale(language).substring(0, 2);
 
 export const getBlogLanguage = name => {
   const blog = BLOGS.find(blog => blog.name === name);
-  return blog && blog.language || null;
-}
+  return (blog && blog.language) || null;
+};
 
 export const getTwitterLanguage = username => {
   const twitter = TWITTER_USERNAMES.find(twitter => twitter.username === username);
-  return twitter  && twitter.language || null;
-}
+  return (twitter && twitter.language) || null;
+};
