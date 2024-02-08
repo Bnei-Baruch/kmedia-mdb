@@ -21,7 +21,7 @@ const buildUrl = (state, pathname) => {
 const textPageSlice = createSlice({
   name: 'textPage',
   initialState: {
-    settings: {},
+    settings: { zoomSize: 2 },
     tocIsActive: false,
     scrollDir: 0,
     match: '',
@@ -43,8 +43,8 @@ const textPageSlice = createSlice({
         size = payload;
       }
 
-      size = Math.min(8, size);
-      size = Math.max(1, size);
+      size = Math.min(10, size);
+      size = Math.max(0, size);
 
       state.settings.zoomSize = size;
       updateLocalStorage(state);
