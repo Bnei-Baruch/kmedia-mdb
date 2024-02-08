@@ -605,7 +605,8 @@
     "default": "За замовчуванням",
     "filter": "Фiльтр...",
     "share-title": "Читайте статтю",
-    "play-audio-file": "Відтворіть аудіофайл"
+    "play-audio-file": "Відтворіть аудіофайл",
+    "play-source": "Listen to this article"
   },
   "topics": {
     "header": {
@@ -949,7 +950,7 @@
         "fullscreen-off": "Exit full screen",
         "hide-additions": "Hide all remarks",
         "show-additions": "Show all remarks",
-        "scan-on": "scan-on",
+        "scan": "Scan of the original text",
         "more-buttons": "More"
       },
       "mobile": {

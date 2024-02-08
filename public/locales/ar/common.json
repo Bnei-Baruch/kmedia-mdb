@@ -607,7 +607,8 @@
     "filter": "فرز...",
     "share-title": "إقرأ هذه المقالة",
     "group-articles": "مقالات المجموعة",
-    "play-audio-file": "قم بتشغيل الملف الصوتي"
+    "play-audio-file": "قم بتشغيل الملف الصوتي",
+    "play-source": "Listen to this article"
   },
   "topics": {
     "header": {
@@ -860,7 +861,7 @@
         "fullscreen-off": "Exit full screen",
         "hide-additions": "Hide all remarks",
         "show-additions": "Show all remarks",
-        "scan-on": "scan-on",
+        "scan": "Scan of the original text",
         "more-buttons": "More"
       },
       "mobile": {

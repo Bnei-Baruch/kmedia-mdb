@@ -606,7 +606,8 @@
     "filter": "סנן...",
     "share-title": "קרא את המאמר",
     "group-articles": "מאמרי החברה",
-    "play-audio-file": "להפעלת קובץ אודיו"
+    "play-audio-file": "להפעלת קובץ אודיו",
+    "play-source": "להשמעת המאמר"
   },
   "topics": {
     "header": {
@@ -954,7 +955,7 @@
         "fullscreen-off": "יציאה ממסך מלא",
         "hide-additions": "להסתיר הערות",
         "show-additions": "להראות הערות",
-        "scan-on": "scan",
+        "scan": "סריקה של הטקסט המקורי",
         "more-buttons": "עוד"
       },
       "mobile": {

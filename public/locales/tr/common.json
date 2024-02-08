@@ -605,7 +605,8 @@
     "filter": "Filtre...",
     "share-title": "Bu makaleyi okuyun",
     "group-articles": "Group Articles",
-    "play-audio-file": "Ses dosyasını çal"
+    "play-audio-file": "Ses dosyasını çal",
+    "play-source": "Listen to this article"
   },
   "topics": {
     "header": {
@@ -861,7 +862,7 @@
         "fullscreen-off": "Exit full screen",
         "hide-additions": "Hide all remarks",
         "show-additions": "Show all remarks",
-        "scan-on": "scan-on",
+        "scan": "Scan of the original text",
         "more-buttons": "More"
       },
       "mobile": {

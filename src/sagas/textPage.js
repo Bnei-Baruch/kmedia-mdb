@@ -29,6 +29,7 @@ export function* fetchSubject(action) {
     if (!prefereLanguage && typeof window !== 'undefined') {
       prefereLanguage = getQuery(window.location).source_language;
     }
+
     prefereLanguage = prefereLanguage || cu.original_language;
 
     const language = selectSuitableLanguage(contentLanguages, subject.languages, prefereLanguage);

@@ -604,7 +604,8 @@
     "filter": "Filter...",
     "share-title": "Read this article",
     "group-articles": "Group Articles",
-    "play-audio-file": "Riproduci il file audio"
+    "play-audio-file": "Riproduci il file audio",
+    "play-source": "Listen to this article"
   },
   "topics": {
     "header": {
@@ -948,7 +949,7 @@
         "fullscreen-off": "Exit full screen",
         "hide-additions": "Hide all remarks",
         "show-additions": "Show all remarks",
-        "scan-on": "scan-on",
+        "scan": "Scan of the original text",
         "more-buttons": "More"
       },
       "mobile": {
