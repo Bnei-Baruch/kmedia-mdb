@@ -60,7 +60,7 @@ const TextContentWeb = () => {
   }
 
   return (
-    <div className={clsx(`text__content-wrapper is-${fontType} zoom-size_${zoomSize}`, { 'is-pdf': !!pdf })}>
+    <div className={clsx(`text__content-wrapper is-${fontType} zoom_size_${zoomSize}`, { 'is-pdf': !!pdf })}>
       {
         !textOnly && (
           <div className="text__content-markers no_print">
