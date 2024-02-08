@@ -65,7 +65,7 @@ const TextLayoutMobile = props => {
       <Container className="padded">
         {
           !playerPage && (
-            <div className="text_align_to_text margin-bottom-1em">
+            <div className="text_align_to_text">
               <TagsByUnit id={subject.id}></TagsByUnit>
               <AudioPlayer />
             </div>
