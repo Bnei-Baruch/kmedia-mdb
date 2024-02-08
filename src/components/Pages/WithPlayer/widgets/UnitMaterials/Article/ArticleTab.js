@@ -24,7 +24,7 @@ const ArticleTab = () => {
   const linkMemo = useMemo(() => ({ pathname, search: {} }), [pathname]);
   useInitTextUrl(linkMemo);
 
-  if (!cu) return <NotFound />;
+  if (!cu) return <NotFound  textKey="materials.articles.no-content"/>;
 
   return (
     <div className="player_page_tab">

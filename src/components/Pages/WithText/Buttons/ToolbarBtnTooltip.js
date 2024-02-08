@@ -35,7 +35,7 @@ const ToolbarBtnTooltip = ({ textKey, trigger }) => {
 };
 
 ToolbarBtnTooltip.propTypes = {
-  trigger: PropTypes.elementType.isRequired,
+  //trigger: PropTypes.elementType.isRequired,
   textKey: PropTypes.string.isRequired,
 };
 export default ToolbarBtnTooltip;

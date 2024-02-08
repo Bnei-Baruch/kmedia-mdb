@@ -29,13 +29,13 @@ import { DeviceInfoContext } from '../../../helpers/app-contexts';
 
 const TextLayoutWeb = props => {
   const {
-    toolbar    = null,
-    toc        = null,
-    prevNext   = null,
-    breadcrumb = null,
-    playerPage = false,
-    id
-  } = props;
+          toolbar    = null,
+          toc        = null,
+          prevNext   = null,
+          breadcrumb = null,
+          playerPage = false,
+          id
+        } = props;
 
   const ref   = useRef();
   const { t } = useTranslation();
@@ -48,15 +48,16 @@ const TextLayoutWeb = props => {
   const textOnly           = useSelector(textPageGetTextOnlySelector);
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
-  useInitTextUrl();
   const wip = useTextSubject(id);
   useInitTextSettings();
   useScrollBehavior(ref);
+  useInitTextUrl(null, !playerPage);
 
   const wipErr = WipErr({ wip, err: null, t });
   if (wipErr) return wipErr;
 
-  if (isEmpty(file)) return <NotFound />;
+  if (isEmpty(file))
+    return <NotFound textKey={playerPage && 'materials.transcription.no-content'} />;
 
   return (
     <div className={`is-web text_layout is-${theme}`} ref={ref}>

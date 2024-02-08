@@ -6,9 +6,9 @@ import { physicalFile } from '../../../../helpers/utils';
 import PDF, { startsFrom } from '../../../shared/PDF/PDF';
 
 const TextContentMobile = () => {
-  const { fontType, theme, zoomSize } = useSelector(textPageGetSettings);
-  const file                          = useSelector(textPageGetFileSelector);
-  const subject                       = useSelector(textPageGetSubjectSelector);
+  const { fontType, zoomSize } = useSelector(textPageGetSettings);
+  const file                   = useSelector(textPageGetFileSelector);
+  const subject                = useSelector(textPageGetSubjectSelector);
 
   const { isPdf } = file;
   if (isPdf === undefined) {
@@ -16,8 +16,8 @@ const TextContentMobile = () => {
   }
 
   return (
-    <div className={`is-${theme} is-${fontType}`}>
-      <div className={`font_settings text__content  zoom_size_${isPdf ? '1' : zoomSize}`}>
+    <div className={`is-${fontType} zoom_size_${zoomSize}`}>
+      <div className="font_settings text__content">
         {
           !isPdf ? (
             <div className="position_relative">

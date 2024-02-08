@@ -35,7 +35,6 @@ const TextLayoutMobile = props => {
   const scrollDir = useSelector(textPageGetScrollDirSelector);
   const subject   = useSelector(textPageGetSubjectSelector);
 
-  useInitTextUrl();
   const wip = useTextSubject(id);
   useInitTextSettings();
   useScrollBehavior(ref);

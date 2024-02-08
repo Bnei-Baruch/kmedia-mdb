@@ -9,9 +9,10 @@ import {
   mdbGetFullUnitFetchedSelector,
   textPageGetFileFilterSelector
 } from '../redux/selectors';
+import { getQuery } from '../helpers/url';
 
 export function* fetchSubject(action) {
-  const { uid: id, isGr } = checkRabashGroupArticles(action.payload);
+  const { uid: id, isGr } = checkRabashGroupArticles(action.payload.id);
 
   try {
     const fetched = yield select(mdbGetFullUnitFetchedSelector)[id];
@@ -23,7 +24,14 @@ export function* fetchSubject(action) {
     const fileFilter       = yield select(textPageGetFileFilterSelector);
     const subject          = cuToSubject(cu, fileFilter);
     const contentLanguages = yield select(settingsGetContentLanguagesSelector);
-    const language         = selectSuitableLanguage(contentLanguages, subject.languages, cu.original_language);
+
+    let prefereLanguage = action.payload.source_language;
+    if (!prefereLanguage && typeof window !== 'undefined') {
+      prefereLanguage = getQuery(window.location).source_language;
+    }
+    prefereLanguage = prefereLanguage || cu.original_language;
+
+    const language = selectSuitableLanguage(contentLanguages, subject.languages, prefereLanguage);
 
     const file = selectTextFile(subject.files, id, language, fileFilter);
     yield put(actions.fetchSubjectSuccess({ subject, file, isGr }));
