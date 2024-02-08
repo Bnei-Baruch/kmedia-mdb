@@ -41,7 +41,7 @@ const SourceTab = () => {
     setSubjectId(subject?.id);
   }, [subject?.id]);
 
-  if (!subject) return <NotFound />;
+  if (!subject) return <NotFound  textKey="materials.sources.no-sources"/>;
 
   const toc = <SourceTabTOC cus={subjects} onClick={handleSelectCu} />;
   return (

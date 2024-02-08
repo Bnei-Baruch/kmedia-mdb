@@ -299,6 +299,7 @@ export const libraryPage = async (store, match, show_console = false) => {
   const location         = state?.router.location ?? {};
   const query            = getQuery(location);
   const uiLang           = query.language || settings.getUILang(state.settings);
+  const sourceLanguage   = query.source_language;
   const contentLanguages = settingsGetContentLanguagesSelector(state);
   show_console && console.log('serverRender: libraryPage before fetch sources');
   await fetchSQData(store, uiLang, contentLanguages);
@@ -307,7 +308,7 @@ export const libraryPage = async (store, match, show_console = false) => {
   const sourceID = firstLeafId(match.params.id, store.getState());
   show_console && console.log('serverRender: libraryPage source was found', sourceID);
 
-  await store.sagaMiddleWare.run(textPageSagas.fetchSubject, textPageActions.fetchSubject(sourceID)).done;
+  await store.sagaMiddleWare.run(textPageSagas.fetchSubject, textPageActions.fetchSubject(sourceID, sourceLanguage)).done;
   const file = textPageGetFileSelector(store.getState()) || {};
 
   if (!file.isPdf) {
@@ -326,16 +327,18 @@ const TWEETER_USERTNAMES_BY_LANG = new Map([
 
 export const likutPage = async (store, match, show_console = false) => {
   const { id } = match.params;
+
+  const location       = store.getState()?.router.location ?? {};
+  const query          = getQuery(location);
+  const sourceLanguage = query.source_language;
+
   return store.sagaMiddleWare
-    .run(textPageSagas.fetchSubject, textPageActions.fetchSubject(id))
+    .run(textPageSagas.fetchSubject, textPageActions.fetchSubject(id, sourceLanguage))
     .done
     .then(() => {
-      const state = store.getState();
-      const file  = textPageGetFileSelector(state) || {};
-
-      const location = state?.router.location ?? {};
-      const query    = getQuery(location);
-      const uiLang   = query.language || settingsGetUILangSelector(state);
+      const state  = store.getState();
+      const uiLang = query.language || settingsGetUILangSelector(state);
+      const file   = textPageGetFileSelector(state) || {};
 
       store.dispatch(assetsActions.doc2html(file.id));
       store.dispatch(mdbActions.fetchLabels({ content_unit: id, language: uiLang }));

@@ -16,12 +16,14 @@ const TocToggleBtn = ({ withText = true }) => {
   const handleTocIsActive = () => dispatch(actions.setTocIsActive());
 
   if (isMobileDevice) {
-    const trigger = <Button
-      basic
-      className="clear_button"
-      icon={<span className="material-symbols-outlined">view_list</span>}
-      onClick={handleTocIsActive}
-    />;
+    const trigger = (
+      <Button
+        basic
+        className="clear_button"
+        icon={<span className="material-symbols-outlined">view_list</span>}
+        onClick={handleTocIsActive}
+      />
+    );
 
     return (withText ? <ToolbarBtnTooltip textKey="toc" trigger={trigger} /> : trigger);
   }

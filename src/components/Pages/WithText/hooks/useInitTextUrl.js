@@ -1,19 +1,20 @@
 import { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import { actions } from '../../../../redux/modules/textPage';
-import { textPageGetUrlInfoSelector } from '../../../../redux/selectors';
 
-export const useInitTextUrl = urlProps => {
-  const { url }  = useSelector(textPageGetUrlInfoSelector);
+export const useInitTextUrl = (urlProps, clearUrlProps) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    !url && dispatch(actions.setUrlInfo(urlProps));
-    return () => {
+    if (clearUrlProps) {
+      console.log('share bug: useInitTextUrl clear');
+      dispatch(actions.setUrlInfo());
+    } else if (urlProps) {
+      console.log('share bug: useInitTextUrl', urlProps);
       dispatch(actions.setUrlInfo(urlProps));
-    };
-  }, [url, urlProps]);
+    }
+  }, [urlProps, clearUrlProps]);
 
   return null;
 };

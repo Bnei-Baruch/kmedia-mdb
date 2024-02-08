@@ -10,6 +10,9 @@ const updateLocalStorage = state => {
 };
 
 const buildUrl = (state, pathname) => {
+  if (state.file)
+    state.urlInfo.search.source_language = state.file.language;
+
   if (state.urlInfo.isCustom) return state.urlInfo.url;
   if (typeof window === 'undefined') return '';
   pathname = pathname || window.location.pathname.slice(4);
@@ -63,13 +66,15 @@ const textPageSlice = createSlice({
     changeLanguage: (state, { payload }) => {
       state.file = selectTextFile(state.subject.files, state.subject.id, payload);
       state.mp3  = selectMP3(state.subject.files, payload);
-
-      state.urlInfo.url = buildUrl(state);
+      if (!state.urlInfo.isCastom) {
+        state.urlInfo.url = buildUrl(state);
+      }
     },
     setUrlInfo: (state, { payload }) => {
       if (!payload) {
         state.urlInfo.url      = buildUrl(state);
         state.urlInfo.isCastom = false;
+        state.urlInfo.search   = {};
       } else {
         state.urlInfo.url      = buildUrl(state, payload.pathname);
         state.urlInfo.search   = payload.search;
@@ -84,10 +89,13 @@ const textPageSlice = createSlice({
     setSideOffset: (state, { payload }) => void (state.sideOffset = payload),
     toggleTextOnly: (state, { payload }) => void (state.textOnly = payload ?? !state.textOnly),
     setIsSearch: state => void (state.isSearch = !state.isSearch),
-    fetchSubject: (state, { payload }) => {
-      state.wip        = true;
-      state.err        = null;
-      state.subject.id = payload;
+    fetchSubject: {
+      prepare: (id, source_language) => ({ payload: { id, source_language } }),
+      reducer: (state, { payload }) => {
+        state.wip        = true;
+        state.err        = null;
+        state.subject.id = payload.id;
+      }
     },
     fetchSubjectSuccess: (state, { payload }) => {
       const { subject, file, isGr } = payload;
@@ -98,7 +106,9 @@ const textPageSlice = createSlice({
       state.file         = file;
       state.mp3          = selectMP3(subject.files, file.language);
       state.scanFile     = subject.files.find(f => f.insert_type === 'source-scan');
-      state.urlInfo.url  = buildUrl(state);
+      if (!state.urlInfo.isCastom) {
+        state.urlInfo.url = buildUrl(state);
+      }
     },
     fetchSubjectFailure: (state, { payload }) => void (state.wipErr = { wip: false, err: payload }),
     setFileFilter: (state, { payload }) => void (state.fileFilter = payload)

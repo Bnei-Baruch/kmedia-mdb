@@ -18,10 +18,6 @@ export const useTextContent = () => {
     needFetch && dispatch(actions.doc2html(id));
   }, [id, needFetch]);
 
-  useEffect(() => {
-    needFetch && dispatch(textActions.setUrlInfo());
-  }, [id, language]);
-
   const wipErr = WipErr({ wip: wip || !id, err, t });
   return wipErr;
 };

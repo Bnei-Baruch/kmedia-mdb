@@ -26,7 +26,7 @@ const ResearchTab = () => {
   const linkMemo = useMemo(() => ({ pathname, search: { activeTab: 'research' } }), [pathname]);
   useInitTextUrl(linkMemo);
 
-  if (!cu) return <NotFound />;
+  if (!cu) return <NotFound textKey="materials.research.no-content"/>;
 
   return (
     <div className="player_page_tab">
