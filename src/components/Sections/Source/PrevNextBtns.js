@@ -1,18 +1,27 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useSelector } from 'react-redux';
 import { isTaas } from '../../shared/PDF/PDF';
 import { getFullPath } from './helper';
-import { selectors as sources, selectors } from '../../../redux/modules/sources';
+import { selectors } from '../../../redux/modules/sources';
 import { selectors as settings } from '../../../redux/modules/settings';
 import { Button } from 'semantic-ui-react';
 import Link from '../../Language/MultiLanguageLink';
 import { getIndex } from './TOC/TOC';
 import { useTranslation } from 'react-i18next';
-import { textPageGetSubjectSelector } from '../../../redux/selectors';
+import {
+  textPageGetSubjectSelector,
+  textPageGetTextOnlySelector,
+  sourcesGetPathByIDSelector
+} from '../../../redux/selectors';
+import clsx from 'clsx';
+import { DeviceInfoContext } from '../../../helpers/app-contexts';
 
 const PrevNextBtns = () => {
+  const { isMobileDevice } = useContext(DeviceInfoContext);
+
   const { id }      = useSelector(textPageGetSubjectSelector);
-  const getPathByID = useSelector(state => sources.getPathByID(state.sources));
+  const textOnly    = useSelector(textPageGetTextOnlySelector);
+  const getPathByID = useSelector(sourcesGetPathByIDSelector);
 
   if (isTaas(id)) {
     return null;
@@ -34,7 +43,10 @@ const PrevNextBtns = () => {
   const nextId       = children[index + 1];
 
   return (
-    <div className="source_prev_next text_align_to_text">
+    <div className={clsx('source_prev_next', {
+      'text_align_to_text': (!isMobileDevice),
+      'text_align_to_text_text_only': textOnly && (!isMobileDevice)
+    })}>
       {prevId && <PrevBtn id={prevId} />}
       <span />
       {nextId && <NextBtn id={nextId} />}

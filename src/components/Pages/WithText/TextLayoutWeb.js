@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useContext } from 'react';
 import TextContentWeb from './Content/TextContentWeb';
 import { useTextSubject } from './hooks/useTextSubject';
 import { useInitTextUrl } from './hooks/useInitTextUrl';
@@ -20,29 +20,33 @@ import {
   textPageGetSubjectSelector,
   textPageGetFileSelector,
   textPageGetUrlInfoSelector,
-  textPageGetScrollDirSelector
+  textPageGetScrollDirSelector,
+  textPageGetTextOnlySelector
 } from '../../../redux/selectors';
 import NotFound from '../../shared/NotFound';
 import ScrollToTopBtn from './Buttons/ScrollToTopBtn';
+import { DeviceInfoContext } from '../../../helpers/app-contexts';
 
 const TextLayoutWeb = props => {
   const {
-    toolbar    = null,
-    toc        = null,
-    prevNext   = null,
-    breadcrumb = null,
-    playerPage = false,
-    id
-  } = props;
+          toolbar    = null,
+          toc        = null,
+          prevNext   = null,
+          breadcrumb = null,
+          playerPage = false,
+          id
+        } = props;
 
   const ref   = useRef();
   const { t } = useTranslation();
 
-  const scrollDir = useSelector(textPageGetScrollDirSelector);
-  const subject   = useSelector(textPageGetSubjectSelector);
-  const file      = useSelector(textPageGetFileSelector);
-  const hasSel    = !!useSelector(textPageGetUrlInfoSelector).select;
-  const { theme } = useSelector(textPageGetSettings);
+  const scrollDir          = useSelector(textPageGetScrollDirSelector);
+  const subject            = useSelector(textPageGetSubjectSelector);
+  const file               = useSelector(textPageGetFileSelector);
+  const hasSel             = !!useSelector(textPageGetUrlInfoSelector).select;
+  const { theme }          = useSelector(textPageGetSettings);
+  const textOnly           = useSelector(textPageGetTextOnlySelector);
+  const { isMobileDevice } = useContext(DeviceInfoContext);
 
   useInitTextUrl();
   const wip = useTextSubject(id);
@@ -71,7 +75,10 @@ const TextLayoutWeb = props => {
       </div>
       {
         !playerPage && (
-          <div className="text_align_to_text margin-bottom-1em">
+          <div className={clsx({
+            'text_align_to_text': (!isMobileDevice),
+            'text_align_to_text_text_only': textOnly && (!isMobileDevice)
+          })}>
             <TagsByUnit id={subject.id}></TagsByUnit>
             <AudioPlayer />
           </div>
