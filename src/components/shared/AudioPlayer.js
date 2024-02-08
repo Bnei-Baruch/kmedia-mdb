@@ -1,21 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
-import { selectors as textPage } from '../../redux/modules/textPage';
-import { textPageGetMP3Selector } from '../../redux/selectors';
+import { textPageGetMP3Selector, textPageGetFileSelector } from '../../redux/selectors';
+import { CT_SOURCE } from '../../helpers/consts';
 
 const AudioPlayer = ({ url }) => {
   const { t }                 = useTranslation();
   const [playing, setPlaying] = useState(false);
 
-  const _url = useSelector(textPageGetMP3Selector);
+  const _url     = useSelector(textPageGetMP3Selector);
+  const { type } = useSelector(textPageGetFileSelector);
 
   useEffect(() => () => setPlaying(false), []);
 
   const src = url || _url;
   if (!src) return null;
   const play = () => setPlaying(true);
+
+  const titleKey = type === CT_SOURCE ? 'sources-library.play-audio-file' : 'sources-library.play-source';
+
   return (
     <div className="text_page__audio no_print">
       {
@@ -29,7 +32,7 @@ const AudioPlayer = ({ url }) => {
         ) : (
           <div className="text_page__audio_btn" onClick={play}>
             <span>
-              {t('sources-library.play-audio-file')}
+              {t(titleKey)}
             </span>
             <span className="material-symbols-outlined">
                 volume_up

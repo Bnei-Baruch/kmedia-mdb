@@ -607,7 +607,8 @@
     "filter": "Филтър...",
     "share-title": "Прочетете тази статия",
     "group-articles": "Група статии",
-    "play-audio-file": "Възпроизвеждане на аудио файла"
+    "play-audio-file": "Възпроизвеждане на аудио файла",
+    "play-source": "Listen to this article"
   },
   "topics": {
     "header": {

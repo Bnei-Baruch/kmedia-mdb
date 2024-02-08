@@ -622,7 +622,8 @@
     "filter": "Фильтр...",
     "share-title": "Читайте статью",
     "group-articles": "Статьи о группе",
-    "play-audio-file": "Воспроизвести аудиофайл"
+    "play-audio-file": "Воспроизвести аудиофайл",
+    "play-source": "Послушат эту статью"
   },
   "topics": {
     "header": {
@@ -970,7 +971,7 @@
         "fullscreen-off": "Выйти из полноэкранного режима",
         "hide-additions": "Скрыть все комментарии",
         "show-additions": "Показать все комментарии",
-        "scan-on": "scan-on",
+        "scan": "Скан оригинального текста",
         "more-buttons": "Ещё"
       },
       "mobile": {
