@@ -38,6 +38,7 @@ const TextLayoutMobile = props => {
   const wip = useTextSubject(id);
   useInitTextSettings();
   useScrollBehavior(ref);
+  useInitTextUrl(null, !playerPage);
 
   const wipErr = WipErr({ wip, err: null, t });
   if (wipErr) return wipErr;
@@ -64,7 +65,7 @@ const TextLayoutMobile = props => {
       <Container className="padded">
         {
           !playerPage && (
-            <div className="text_align_to_text">
+            <div className="text_align_to_text text_align_to_text_text_only">
               <TagsByUnit id={subject.id}></TagsByUnit>
               <AudioPlayer />
             </div>
