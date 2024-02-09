@@ -58,7 +58,7 @@ const onFetchBlogListSuccess = (state, { payload: { total, posts } }) => {
   blog.err   = null;
 };
 
-const onFetchBlogPostSuccess = (state, payload) => {
+const onFetchBlogPostSuccess = (state, { payload }) => {
   const { blog, wp_id: id } = payload;
 
   state.blog.byID[`${blog}${id}`] = payload;

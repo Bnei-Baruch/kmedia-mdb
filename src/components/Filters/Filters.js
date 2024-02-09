@@ -34,6 +34,7 @@ class Filters extends Component {
     resetFilter   : PropTypes.func.isRequired,
     filtersData   : PropTypes.objectOf(PropTypes.object).isRequired,
     uiDir         : PropTypes.string.isRequired,
+    uiLang        : PropTypes.string.isRequired,
     t             : PropTypes.func.isRequired,
     sqDataWipErr  : PropTypes.bool,
     letters       : PropTypes.arrayOf(PropTypes.string),
@@ -87,9 +88,9 @@ class Filters extends Component {
   };
 
   renderFilters = store => {
-    const { filters, namespace, t, filtersData, uiDir } = this.props;
-    const { activeFilter }                              = this.state;
-    const { isMobileDevice }                            = this.context;
+    const { filters, namespace, t, filtersData, uiDir, uiLang } = this.props;
+    const { activeFilter }                                      = this.state;
+    const { isMobileDevice }                                    = this.context;
 
     const popupStyle = {
       direction: uiDir
@@ -169,6 +170,7 @@ class Filters extends Component {
                 value={value}
                 onCancel={this.handlePopupClose}
                 onApply={x => this.handleApply(name, x)}
+                language={uiLang}
               />
             </div>
           }
@@ -220,6 +222,7 @@ export default connect(
   (state, ownProps) => ({
     filtersData: selectors.getNSFilters(state.filters, ownProps.namespace),
     uiDir      : settings.getUIDir(state.settings),
+    uiLang     : settings.getUILang(state.settings),
 
     // DO NOT REMOVE, this triggers a necessary re-render for filter tags
     sqDataWipErr: mdb.getSQDataWipErr(state.mdb)

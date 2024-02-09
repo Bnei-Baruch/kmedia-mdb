@@ -10,6 +10,8 @@ import { actions as mdbActions } from '../../../../redux/modules/mdb';
 import moment from 'moment';
 import { DATE_FORMAT } from '../../../../helpers/consts';
 import { canonicalLink } from '../../../../helpers/links';
+import { useLocation } from 'react-router-dom';
+import { getEmbedFromQuery, EMBED_TYPE_PLAYLIST } from '../../../../helpers/player';
 import { playlistGetInfoSelector, settingsGetUIDirSelector, mdbGetWindowSelector, mdbGetWipFn, mdbNestedGetDenormCollectionSelector } from '../../../../redux/selectors';
 
 const getStartEndByFilmDate = d => {
@@ -33,6 +35,9 @@ const LessonDatePickerContainer = () => {
   const denorm           = useSelector(mdbNestedGetDenormCollectionSelector);
   const uiDir            = useSelector(settingsGetUIDirSelector);
 
+  const location = useLocation();
+  const { type } = getEmbedFromQuery(location);
+
   const dispatch = useDispatch();
 
   const curIndex = cWindow?.data?.indexOf(cId) ?? -1;
@@ -54,6 +59,11 @@ const LessonDatePickerContainer = () => {
 
   const prevTo = prevCollection ? canonicalLink(prevCollection) : null;
   const nextTo = nextCollection ? canonicalLink(nextCollection) : null;
+  if (type === EMBED_TYPE_PLAYLIST) {
+    if (prevTo) prevTo.search = 'embed=2';
+    if (nextTo) nextTo.search = 'embed=2';
+  }
+
   return (
     <Header.Subheader
       className={isMobileDevice ? '' : isLtr ? 'float-right' : 'float-left'}
