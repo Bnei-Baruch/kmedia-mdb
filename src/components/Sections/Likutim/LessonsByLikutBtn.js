@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 import { mdbGetDenormContentUnitSelector } from '../../../redux/selectors';
 import { UNIT_LESSONS_TYPE } from '../../../helpers/consts';
-import { strCmp } from '../../../helpers/utils';
+import { strCmp, isEmpty } from '../../../helpers/utils';
 import { canonicalLink } from '../../../helpers/links';
 import Link from '../../Language/MultiLanguageLink';
 import ToolbarBtnTooltip from '../../Pages/WithText/Buttons/ToolbarBtnTooltip';
@@ -23,8 +23,13 @@ const LessonsByLikutBtn = () => {
     .sort((u1, u2) => strCmp(u2.film_date, u1.film_date));
 
   const trigger = <ToolbarBtnTooltip
-    trigger={<Button icon={<span className="material-symbols-outlined">subscriptions</span>} />}
-    text={`${t(`search.intent-prefix.lessons-topic`)}  ${unit?.name}`}
+    trigger={
+      <Button
+        disabled={isEmpty(lessons)}
+        icon={<span className="material-symbols-outlined">subscriptions</span>}
+      />
+    }
+    textKey="lessons"
   />;
 
   return (
