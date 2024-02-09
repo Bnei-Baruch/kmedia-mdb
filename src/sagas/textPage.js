@@ -32,7 +32,7 @@ export function* fetchSubject(action) {
 
     prefereLanguage = prefereLanguage || cu.original_language;
 
-    const language = selectSuitableLanguage(contentLanguages, subject.languages, prefereLanguage);
+    const language = selectSuitableLanguage([...contentLanguages, prefereLanguage], subject.languages, prefereLanguage);
 
     const file = selectTextFile(subject.files, id, language, fileFilter);
     yield put(actions.fetchSubjectSuccess({ subject, file, isGr }));

@@ -30,13 +30,22 @@ $breadcrumb-height: 48px;
     width: $max-readble-width;
     transform: translate3d(-30px, 0, 0px);
     margin: 0 auto 1em;
+
+    .ltr & {
+      transform: translate3d(30px, 0, 0px);
+    }
+
     @media only screen and (max-width: $max-readble-width - 1) {
       padding: 0 1em;
       transform: translate3d(-60px, 0, 0px);
+
+      .ltr & {
+        transform: translate3d(60px, 0, 0px);
+      }
     }
 
     &.text_align_to_text_text_only {
-      transform: none;
+      transform: none !important;
     }
   }
 
