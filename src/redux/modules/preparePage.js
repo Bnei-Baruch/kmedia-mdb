@@ -35,6 +35,10 @@ const preparePageSlice = createSlice({
           state[ns].collectionsFetched = false;
         }
       });
+  },
+
+  selectors: {
+    wasFetchedByNS: (state, ns) => state[ns]?.collectionsFetched
   }
 });
 
@@ -46,10 +50,4 @@ export const types = Object.fromEntries(new Map(
   Object.values(preparePageSlice.actions).map(a => [a.type, a.type])
 ));
 
-/* Selectors */
-
-const wasFetchedByNS = (state, ns) => state[ns]?.collectionsFetched;
-
-export const selectors = {
-  wasFetchedByNS
-};
+export const selectors = preparePageSlice.getSelectors();

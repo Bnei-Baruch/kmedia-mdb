@@ -32,15 +32,15 @@ const onBuildSuccess = (state, payload) => {
   }
 
   if (!quality) quality = VS_DEFAULT;
-  const playlist  = items.map(({ id }) => ({ id }));
-  const selIndex  = playlist.findIndex(x => x.id === (cuId || id));
-  state.playlist  = playlist.map((x, i) => {
+  const playlist = items.map(({ id }) => ({ id }));
+  const selIndex = playlist.findIndex(x => x.id === (cuId || id));
+  state.playlist = playlist.map((x, i) => {
     const showImg = i > selIndex - 2 && i < selIndex + SHOWED_PLAYLIST_ITEMS;
     const f       = i >= fetched.from && i <= fetched.to;
     return { ...x, showImg, fetched: f };
   });
-  state.info      = { ...info, cuId, id, language, subsLanguage: language, quality, isReady: true, wip: false };
-  state.fetched   = fetched;
+  state.info     = { ...info, cuId, id, language, subsLanguage: language, quality, isReady: true, wip: false };
+  state.fetched  = fetched;
 };
 
 const onComplete = state => {
@@ -116,6 +116,27 @@ const playlistSlice = createSlice(
       builder
         .addCase(settingsActions.setContentLanguages, state => void (state.info = { isReady: false }))
         .addCase(playerActions.playerComplete, onComplete);
+    },
+
+    selectors: {
+      getPlaylist : state => state.playlist,
+      getPlayed   : state => state.itemById[state.info.id] || false,
+      getInfo     : state => state.info,
+      getIndexById: (state, id) => state.playlist.findIndex(x => x.id === id),
+      getItemById : state => id => state.itemById[id] || false,
+      getFetched  : state => state.fetched,
+      getNextId   : state => {
+        const curIdx = state.playlist.findIndex(x => x.id === state.info.id);
+        if (state.playlist.length <= curIdx) return false;
+        const idx = curIdx + 1;
+        return state.playlist[idx]?.id;
+      },
+      getPrevId   : state => {
+        const curIdx = state.playlist.findIndex(x => x.id === state.info.id);
+        if (1 > curIdx) return false;
+        const idx = curIdx - 1;
+        return state.playlist[idx]?.id;
+      }
     }
   }
 );
@@ -128,35 +149,4 @@ export const types = Object.fromEntries(new Map(
   Object.values(playlistSlice.actions).map(a => [a.type, a.type])
 ));
 
-const getPlaylist = state => state.playlist;
-const getPlayed   = state => state.itemById[state.info.id] || false;
-const getInfo     = state => state.info;
-const getNextId   = state => {
-  const curIdx = state.playlist.findIndex(x => x.id === state.info.id);
-  if (state.playlist.length <= curIdx) return false;
-  const idx = curIdx + 1;
-  return state.playlist[idx]?.id;
-};
-
-const getPrevId = state => {
-  const curIdx = state.playlist.findIndex(x => x.id === state.info.id);
-  if (1 > curIdx) return false;
-  const idx = curIdx - 1;
-  return state.playlist[idx]?.id;
-};
-
-const getIndexById = (state, id) => state.playlist.findIndex(x => x.id === id);
-const getItemById  = state => id => state.itemById[id] || false;
-
-const getFetched = state => state.fetched;
-
-export const selectors = {
-  getPlaylist,
-  getPlayed,
-  getInfo,
-  getNextId,
-  getPrevId,
-  getIndexById,
-  getItemById,
-  getFetched
-};
+export const selectors = playlistSlice.getSelectors();

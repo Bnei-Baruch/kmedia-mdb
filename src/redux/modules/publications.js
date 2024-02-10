@@ -144,6 +144,27 @@ const publicationsSlice = createSlice({
     builder
       .addCase(ssrActions.prepare, onSSRPrepare)
       .addCase(settingsActions.setContentLanguages, onSetLanguage);
+  },
+
+  selectors: {
+    getPublisherById: state => state.publishers.byID,
+    getCollections  : state => state.collections,
+
+    getTwitter     : (state, id) => state.twitter.byID[id],
+    getTweets      : state => state.twitter.tweets,
+    getTweetsTotal : state => state.twitter.total,
+    getTweetsPageNo: state => state.twitter.pageNo,
+    getTweetsWip   : state => state.twitter.wip,
+    getTweetsError : state => state.twitter.err,
+
+    getBlogPost     : (state, blog, id) => state.blog.byID[`${blog}${id}`],
+    getBlogPosts    : state => state.blog.posts.map(x => state.blog.byID[x]),
+    getBlogTotal    : state => state.blog.total,
+    getBlogPageNo   : state => state.blog.pageNo,
+    getBlogWip      : state => state.blog.wip,
+    getBlogError    : state => state.blog.err,
+    getBlogWipPost  : state => state.blog.wipPost,
+    getBlogErrorPost: state => state.blog.errPost
   }
 });
 
@@ -155,44 +176,4 @@ export const types = Object.fromEntries(new Map(
   Object.values(publicationsSlice.actions).map(a => [a.type, a.type])
 ));
 
-/* Selectors */
-
-const getPublisherById = state => state.publishers.byID;
-const getCollections   = state => state.collections;
-
-const getTwitter      = (state, id) => state.twitter.byID[id];
-const getTweets       = state => state.twitter.tweets;
-const getTweetsTotal  = state => state.twitter.total;
-const getTweetsPageNo = state => state.twitter.pageNo;
-const getTweetsWip    = state => state.twitter.wip;
-const getTweetsError  = state => state.twitter.err;
-
-const getBlogPost      = (state, blog, id) => state.blog.byID[`${blog}${id}`];
-const getBlogPosts     = state => state.blog.posts.map(x => state.blog.byID[x]);
-const getBlogTotal     = state => state.blog.total;
-const getBlogPageNo    = state => state.blog.pageNo;
-const getBlogWip       = state => state.blog.wip;
-const getBlogError     = state => state.blog.err;
-const getBlogWipPost   = state => state.blog.wipPost;
-const getBlogErrorPost = state => state.blog.errPost;
-
-export const selectors = {
-  getPublisherById,
-  getCollections,
-
-  getTwitter,
-  getTweets,
-  getTweetsTotal,
-  getTweetsPageNo,
-  getTweetsWip,
-  getTweetsError,
-
-  getBlogPost,
-  getBlogPosts,
-  getBlogTotal,
-  getBlogPageNo,
-  getBlogWip,
-  getBlogError,
-  getBlogWipPost,
-  getBlogErrorPost
-};
+export const selectors = publicationsSlice.getSelectors();

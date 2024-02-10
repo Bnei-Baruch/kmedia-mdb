@@ -1,25 +1,31 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const trimSlice = createSlice({
-  name: 'trim',
+  name        : 'trim',
   initialState: {
-    list: [],
-    wips: [],
+    list  : [],
+    wips  : [],
     errors: []
   },
 
   reducers: {
-    trim: state => void (state.wips.push(state.wips.length)),
+    trim       : state => void (state.wips.push(state.wips.length)),
     trimSuccess: (state, { payload: { download, link } }) => {
       state.list.push({ download, link, name: link.split('/').slice(-1)[0] });
       state.wips.pop();
     },
-    trimFailure:(state, { payload }) => {
+    trimFailure: (state, { payload }) => {
       state.errors.push(payload);
       state.wips.pop();
     }
+  },
+
+  selectors: {
+    getList  : state => state.list,
+    getWIPs  : state => state.wips,
+    getErrors: state => state.errors
   }
-})
+});
 
 export default trimSlice.reducer;
 
@@ -29,13 +35,4 @@ export const types = Object.fromEntries(new Map(
   Object.values(trimSlice.actions).map(a => [a.type, a.type])
 ));
 
-/* Selectors */
-const getList   = state => state.list;
-const getWIPs   = state => state.wips;
-const getErrors = state => state.errors;
-
-export const selectors = {
-  getList,
-  getWIPs,
-  getErrors,
-};
+export const selectors = trimSlice.getSelectors();

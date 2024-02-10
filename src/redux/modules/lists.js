@@ -79,6 +79,10 @@ const listsSlice = createSlice({
     builder
       .addCase(ssrActions.prepare, onSSRPrepare)
       .addCase(settingsAction.setContentLanguages, onSetLanguage);
+  },
+
+  selectors: {
+    getNamespaceState: (state, namespace) => state[namespace] || defaultNSvalue
   }
 });
 
@@ -90,10 +94,4 @@ export const types = Object.fromEntries(new Map(
   Object.values(listsSlice.actions).map(a => [a.type, a.type])
 ));
 
-/* Selectors */
-
-const getNamespaceState = (state, namespace) => state[namespace] || defaultNSvalue;
-
-export const selectors = {
-  getNamespaceState
-};
+export const selectors = listsSlice.getSelectors();

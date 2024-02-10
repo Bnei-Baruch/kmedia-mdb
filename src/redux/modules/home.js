@@ -36,11 +36,11 @@ const onDataSuccess = (state, { payload }) => {
   const latestCos   = payload.latest_cos.map(x => x.id);
 
   if (state.latestLesson !== id || !isEqual(state.latestLesson, latestUnits) || !isEqual(state.latestCos, latestCos)) {
-    state.wip            = false;
-    state.err            = null;
-    state.latestLesson   = id;
-    state.latestUnits    = latestUnits;
-    state.latestCos      = latestCos;
+    state.wip              = false;
+    state.err              = null;
+    state.latestLesson     = id;
+    state.latestUnits      = latestUnits;
+    state.latestCos        = latestCos;
     state.fetchedTimestamp = Date.now();
   }
 
@@ -107,6 +107,16 @@ const homeSlice = createSlice({
     builder
       .addCase(ssrActions.prepare, onSSRPrepare)
       .addCase(settingsActions.setContentLanguages, onSetLanguages);
+  },
+
+  selectors: {
+    getLatestLesson  : state => state.latestLesson,
+    getLatestUnits   : state => state.latestUnits,
+    getLatestCos     : state => state.latestCos,
+    getFetchTimestamp: state => state.fetchedTimestamp,
+    getBanner        : state => state.banners,
+    getWip           : state => state.wip,
+    getError         : state => state.err
   }
 });
 
@@ -118,22 +128,4 @@ export const types = Object.fromEntries(new Map(
   Object.values(homeSlice.actions).map(a => [a.type, a.type])
 ));
 
-/* Selectors */
-
-const getLatestLesson   = state => state.latestLesson;
-const getLatestUnits    = state => state.latestUnits;
-const getLatestCos      = state => state.latestCos;
-const getFetchTimestamp = state => state.fetchedTimestamp;
-const getBanner         = state => state.banners;
-const getWip            = state => state.wip;
-const getError          = state => state.err;
-
-export const selectors = {
-  getLatestLesson,
-  getLatestUnits,
-  getLatestCos,
-  getFetchTimestamp,
-  getBanner,
-  getWip,
-  getError
-};
+export const selectors = homeSlice.getSelectors();
