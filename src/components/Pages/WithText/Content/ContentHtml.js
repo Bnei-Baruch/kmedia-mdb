@@ -1,16 +1,16 @@
 import React, { useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+
 import { DOM_ROOT_ID, prepareScrollToSearch } from '../scrollToSearch/helper';
 import { getQuery } from '../../../../helpers/url';
-import { useSelector } from 'react-redux';
-import { selectors as assets } from '../../../../redux/modules/assets';
 import { getLanguageDirection } from '../../../../helpers/i18n-utils';
 import { useTextContent } from './useTextContent';
-import { textPageGetFileSelector } from '../../../../redux/selectors';
+import { textPageGetFileSelector, assetsGetDoc2htmlByIdSelector } from '../../../../redux/selectors';
 
 const ContentHtml = ({ labels = [], notes = [] }) => {
   const { language, id } = useSelector(textPageGetFileSelector);
-  const getDoc2htmlById  = useSelector(state => assets.getDoc2htmlById(state.assets));
+  const getDoc2htmlById  = useSelector(assetsGetDoc2htmlByIdSelector);
 
   const location = useLocation();
 

@@ -269,7 +269,7 @@ export const isSelectionForward = sel => {
 };
 
 export const urlParamFromSelect = () => {
-  const sel = window.getSelection();
+  const sel  = window.getSelection();
   if (sel.isCollapsed) {
     return {};
   }
@@ -322,11 +322,18 @@ const countWordOffset = (offset, text) => text.slice(0, offset)
 const wholeStartWord = (text, offset) => {
   if (offset === 0 || KEEP_LETTERS_WITH_SPACE_RE.test(text[offset - 1]))
     return '';
-  return text.slice(0, offset).split(KEEP_LETTERS_WITH_SPACE_RE).slice(-1);
+  return text
+    .replace(/\r?\n|\r{1,}/g, ' ')
+    .slice(0, offset)
+    .split(KEEP_LETTERS_WITH_SPACE_RE)
+    .slice(-1);
 };
 
 const wholeEndWord = (text, offset) => {
   if (offset === 0 || KEEP_LETTERS_WITH_SPACE_RE.test(text[offset]))
     return '';
-  return text.slice(offset).split(KEEP_LETTERS_WITH_SPACE_RE)[0];
+  return text
+    .replace(/\r?\n|\r{1,}/g, ' ')
+    .slice(offset)
+    .split(KEEP_LETTERS_WITH_SPACE_RE)[0];
 };

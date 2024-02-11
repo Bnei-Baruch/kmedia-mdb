@@ -1,11 +1,11 @@
 import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
-import { selectors } from '../../../../redux/modules/myNotes';
 import NotesByPos from './NotesByPos';
+import { myNotesGetByIdSelector, myNotesGetListSelector } from '../../../../redux/selectors';
 
 const NotesAllPage = () => {
-  const ids  = useSelector(state => selectors.getList(state.myNotes));
-  const byId = useSelector(state => selectors.getById(state.myNotes));
+  const ids  = useSelector(myNotesGetListSelector);
+  const byId = useSelector(myNotesGetByIdSelector);
   const _ids = useMemo(() => ids
     .map(id => byId[id])
     .filter(({ properties: p }) => !p || (!p.srchstart && !p.srchend))

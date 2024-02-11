@@ -3,13 +3,14 @@ import { TextArea } from 'semantic-ui-react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { getLanguageDirection } from '../../../../helpers/i18n-utils';
-import { selectors, actions, NOTE_STATUS } from '../../../../redux/modules/myNotes';
+import { actions, NOTE_STATUS } from '../../../../redux/modules/myNotes';
 import NoteCancelBtn from './Buttons/NoteCancelBtn';
 import NoteSaveBtn from './Buttons/NoteSaveBtn';
+import { myNotesGetSelectedSelector, myNotesGetStatusSelector } from '../../../../redux/selectors';
 
 const NoteContent = () => {
-  const note   = useSelector(state => selectors.getSelected(state.myNotes));
-  const status = useSelector(state => selectors.getStatus(state.myNotes));
+  const note   = useSelector(myNotesGetSelectedSelector);
+  const status = useSelector(myNotesGetStatusSelector);
 
   const dispatch = useDispatch();
 

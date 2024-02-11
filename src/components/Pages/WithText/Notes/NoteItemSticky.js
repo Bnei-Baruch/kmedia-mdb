@@ -8,10 +8,11 @@ import NoteCopyBtn from './Buttons/NoteCopyBtn';
 import NoteInModalBtn from './Buttons/NoteInModalBtn';
 import NoteContent from './NoteContent';
 import NoteCloseBtn from './Buttons/NoteCloseBtn';
+import { myNotesGetSelectedSelector, myNotesGetStatusSelector } from '../../../../redux/selectors';
 
 const NoteItemSticky = () => {
-  const note   = useSelector(state => selectors.getSelected(state.myNotes));
-  const status = useSelector(state => selectors.getStatus(state.myNotes));
+  const note   = useSelector(myNotesGetSelectedSelector);
+  const status = useSelector(myNotesGetStatusSelector);
 
   if (!note || (status !== NOTE_STATUS.none && status !== NOTE_STATUS.edit)) return null;
 
