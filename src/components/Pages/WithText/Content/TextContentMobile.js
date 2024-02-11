@@ -1,9 +1,11 @@
 import React from 'react';
-import ContentHtml from './ContentHtml';
 import { useSelector } from 'react-redux';
+
+import ContentHtml from './ContentHtml';
 import { textPageGetSettings, textPageGetSubjectSelector, textPageGetFileSelector } from '../../../../redux/selectors';
 import { physicalFile } from '../../../../helpers/utils';
-import PDF, { startsFrom } from '../../../shared/PDF/PDF';
+import PDF from '../../../shared/PDF/PDF';
+import { startsFrom } from '../../../shared/PDF/helper';
 
 const TextContentMobile = () => {
   const { fontType, zoomSize } = useSelector(textPageGetSettings);
@@ -26,7 +28,6 @@ const TextContentMobile = () => {
           ) : (
             <PDF
               pdfFile={physicalFile(file)}
-              pageNumber={1}
               startsFrom={startsFrom(subject.id) || 1}
             />
           )

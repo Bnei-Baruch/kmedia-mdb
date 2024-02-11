@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react';
+import debounce from 'lodash/debounce';
+import { useDispatch, useSelector } from 'react-redux';
+import clsx from 'clsx';
+
 import { urlParamFromSelect } from '../scrollToSearch/helper';
 import { useNotes } from '../Notes/useNotes';
-import { useDispatch, useSelector } from 'react-redux';
 import { actions } from '../../../../redux/modules/textPage';
 import NoteMarks from '../Notes/NoteMarks';
-import debounce from 'lodash/debounce';
 import ContentHtml from './ContentHtml';
 import { useLabels } from '../hooks/useLabels';
 import LabelMarks from '../Labels/LabelMarks';
-import PDF, { startsFrom } from '../../../shared/PDF/PDF';
+import PDF from '../../../shared/PDF/PDF';
+import { startsFrom } from '../../../shared/PDF/helper';
 import { physicalFile, isEmpty } from '../../../../helpers/utils';
-import clsx from 'clsx';
 import {
   textPageGetSettings,
   textPageGetSubjectSelector,
@@ -60,7 +62,7 @@ const TextContentWeb = () => {
   }
 
   return (
-    <div className={clsx(`text__content-wrapper is-${fontType} zoom_size_${zoomSize}`, { 'is-pdf': !!pdf })}>
+    <div className={`text__content-wrapper is-${fontType} zoom_size_${zoomSize}`}>
       {
         !textOnly && (
           <div className="text__content-markers no_print">
@@ -74,7 +76,6 @@ const TextContentWeb = () => {
           !!pdf ? (
             <PDF
               pdfFile={physicalFile(pdf)}
-              pageNumber={1}
               startsFrom={startsFrom(subject.id) || 1}
             />
           ) : (

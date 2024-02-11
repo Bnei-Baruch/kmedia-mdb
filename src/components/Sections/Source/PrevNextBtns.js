@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { useSelector } from 'react-redux';
-import { isTaas } from '../../shared/PDF/PDF';
+import { isTaas } from '../../shared/PDF/helper';
 import { getFullPath } from './helper';
 import { selectors } from '../../../redux/modules/sources';
 import { selectors as settings } from '../../../redux/modules/settings';
