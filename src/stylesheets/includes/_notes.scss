@@ -132,6 +132,7 @@
     font-size: 16px;
     line-height: 20px;
     color: $black;
+    white-space: pre-line;
 
     &_short {
       display: -webkit-box;
