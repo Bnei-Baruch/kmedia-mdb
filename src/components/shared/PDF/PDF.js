@@ -40,6 +40,7 @@ const PDF = ({ pdfFile, startsFrom }) => {
     } else {
       pageNo = startsFrom;
     }
+
     setPage(pageNo);
     setNumPages(_numPages);
   };
