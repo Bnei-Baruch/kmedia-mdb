@@ -113,18 +113,33 @@
 
         .material-symbols-outlined {
           transform: rotate(-90deg);
+
+          .ltr & {
+            transform: rotate(90deg);
+          }
         }
       }
     }
 
     .active.content {
-      padding: 0 !important;
+      padding: 0;
       margin-right: 10px;
 
+      .ltr & {
+        margin-right: 0;
+        margin-left: 10px;
+      }
+    }
 
-      .accordion {
-        border-right: 2px solid #2185D0;
-        padding-right: 1em !important;
+    &.toc_last_level {
+      border-right: 2px solid #2185D0;
+      padding-right: 2em;
+
+      .ltr & {
+        border-right: none;
+        padding-right: 0;
+        border-left: 2px solid #2185D0;
+        padding-left: 2em;
       }
     }
   }
