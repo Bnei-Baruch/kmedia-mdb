@@ -1,11 +1,12 @@
 import React from 'react';
 import { Button } from 'semantic-ui-react';
 import { useDispatch, useSelector } from 'react-redux';
-import { actions, NOTE_STATUS, selectors } from '../../../../../redux/modules/myNotes';
+import { actions, NOTE_STATUS } from '../../../../../redux/modules/myNotes';
+import { myNotesGetStatusSelector } from '../../../../../redux/selectors';
 
 const NoteInModalBtn = () => {
   const dispatch = useDispatch();
-  const status   = useSelector(state => selectors.getStatus(state.myNotes));
+  const status   = useSelector(myNotesGetStatusSelector);
 
   const active = status === NOTE_STATUS.editModal || status === NOTE_STATUS.modal;
   const handle = () => {

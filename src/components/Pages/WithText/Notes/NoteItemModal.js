@@ -2,18 +2,20 @@ import React from 'react';
 import { Modal } from 'semantic-ui-react';
 import { getLanguageDirection } from '../../../../helpers/i18n-utils';
 import moment from 'moment/moment';
+import { useSelector } from 'react-redux';
+
 import NoteEditBtn from './Buttons/NoteEditBtn';
 import NoteRemoveBtn from './Buttons/NoteRemoveBtn';
-import { useSelector } from 'react-redux';
-import { selectors, NOTE_STATUS } from '../../../../redux/modules/myNotes';
+import { NOTE_STATUS } from '../../../../redux/modules/myNotes';
 import NoteCopyBtn from './Buttons/NoteCopyBtn';
 import NoteContent from './NoteContent';
 import NoteInModalBtn from './Buttons/NoteInModalBtn';
 import NoteCloseBtn from './Buttons/NoteCloseBtn';
+import { myNotesGetSelectedSelector, myNotesGetStatusSelector } from '../../../../redux/selectors';
 
 const NoteItemSticky = () => {
-  const note   = useSelector(state => selectors.getSelected(state.myNotes));
-  const status = useSelector(state => selectors.getStatus(state.myNotes));
+  const note   = useSelector(myNotesGetSelectedSelector);
+  const status = useSelector(myNotesGetStatusSelector);
 
   if (!note || (status !== NOTE_STATUS.editModal && status !== NOTE_STATUS.modal)) return null;
 

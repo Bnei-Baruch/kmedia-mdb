@@ -3,12 +3,13 @@ import { useTranslation } from 'react-i18next';
 import { Confirm } from 'semantic-ui-react';
 import { getLanguageDirection } from '../../../../helpers/i18n-utils';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectors, actions, NOTE_STATUS } from '../../../../redux/modules/myNotes';
+import { actions, NOTE_STATUS } from '../../../../redux/modules/myNotes';
+import { myNotesGetSelectedSelector, myNotesGetStatusSelector } from '../../../../redux/selectors';
 
 const NoteConfirmRemove = () => {
   const { t }  = useTranslation();
-  const note   = useSelector(state => selectors.getSelected(state.myNotes));
-  const status = useSelector(state => selectors.getStatus(state.myNotes));
+  const note   = useSelector(myNotesGetSelectedSelector);
+  const status = useSelector(myNotesGetStatusSelector);
 
   const dispatch = useDispatch();
 

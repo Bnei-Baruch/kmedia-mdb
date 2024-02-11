@@ -45,7 +45,7 @@ const SourceContainer = () => {
     {
       isMobileDevice ? (
         <TextLayoutMobile
-          id={childId || id}
+          id={childId}
           toc={toc}
           toolbar={<SourceToolbarMobile />}
           prevNext={prevNext}
@@ -53,7 +53,7 @@ const SourceContainer = () => {
         />
       ) : (
         <TextLayoutWeb
-          id={childId || id}
+          id={childId}
           toc={toc}
           toolbar={<SourceToolbarWeb />}
           prevNext={prevNext}

@@ -9,11 +9,11 @@ const TocControl = () => {
   const handleClose = () => dispatch(actions.setTocIsActive());
 
   return (
-    <div className="source__toc_control">
+    <div className="toc_control">
       <TocToggleBtn withText={false} />
       <Button
         basic
-        className="source__toc_close clear_button"
+        className="toc_close clear_button"
         icon={<span className="material-symbols-outlined">close</span>}
         onClick={handleClose}
       />

@@ -29,7 +29,6 @@ const ToggleScanBtn = () => {
       <Modal.Content>
         <PDF
           pdfFile={physicalFile(file)}
-          pageNumber={1}
           startsFrom={1}
         />
       </Modal.Content>

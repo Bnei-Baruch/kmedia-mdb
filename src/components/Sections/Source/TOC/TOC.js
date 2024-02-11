@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, useContext } from 'react';
 import { Accordion, Ref } from 'semantic-ui-react';
 
-import { getEscapedRegExp, isEmpty } from '../../../../helpers/utils';
+import { getEscapedRegExp, isEmpty, stopBubbling } from '../../../../helpers/utils';
 import { BS_SHAMATI, RH_ARTICLES, RH_RECORDS, } from '../../../../helpers/consts';
 import { isLanguageRtl } from '../../../../helpers/i18n-utils';
 import { useSelector, useDispatch } from 'react-redux';
@@ -18,7 +18,8 @@ import {
   textPageGetScrollDirSelector,
   settingsGetUILangSelector,
   sourcesGetSourceByIdSelector,
-  sourcesGetPathByIDSelector
+  sourcesGetPathByIDSelector,
+  settingsGetUIDirSelector
 } from '../../../../redux/selectors';
 import { actions } from '../../../../redux/modules/textPage';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
@@ -138,6 +139,7 @@ const TOC = () => {
   const getPathByID        = useSelector(sourcesGetPathByIDSelector);
   const getSourceById      = useSelector(sourcesGetSourceByIdSelector);
   const uiLang             = useSelector(settingsGetUILangSelector);
+  const uiDir              = useSelector(settingsGetUIDirSelector);
   const { match }          = useSelector(textPageGetTocInfoSelector);
   const tocIsActive        = useSelector(textPageGetTocIsActiveSelector);
   const scrollDir          = useSelector(textPageGetScrollDirSelector);
@@ -206,6 +208,7 @@ const TOC = () => {
     return leafTitle;
   };
 
+  const icon   = uiDir === 'ltr' ? 'chevron_right' : 'chevron_left';
   const getToc = (sourceId, path, firstLevel = false) => {
     // 1. Element that has children is CONTAINER
     // 2. Element that has NO children is NOT CONTAINER (though really it may be an empty container)
@@ -221,7 +224,9 @@ const TOC = () => {
 
     const hasNoGrandsons = children.reduce((acc, curr) => acc && isEmpty(getSourceById(curr).children), true);
     let panels;
+    let className        = '';
     if (hasNoGrandsons) {
+      className  = 'toc_last_level';
       const tree = children.reduce((acc, leafId) => {
         const leafTitle = getLeafTitle(leafId, sourceId);
 
@@ -252,10 +257,14 @@ const TOC = () => {
 
     const activeIndex = getIndex(path[0], path[1]);
     return {
-      title,
+      title: {
+        content: title,
+        icon: <span className="material-symbols-outlined">{icon}</span>
+      },
       content: {
         content: (
           <Accordion.Accordion
+            className={className}
             panels={panels}
             defaultActiveIndex={activeIndex}
             onTitleClick={handleTitleClick}
@@ -278,19 +287,19 @@ const TOC = () => {
 
   return (
     <div className={
-      clsx('source__toc no_print',
+      clsx('toc no_print',
         {
-          'source__toc_active': tocIsActive,
-          'source__toc_scroll_up': scrollDir === 1,
-          'source__toc_scroll_down': scrollDir === -1,
-          'source__toc_scroll_end': scrollDir === 2,
-          'source__toc_selected': hasSel,
+          'toc_active': tocIsActive,
+          'toc_scroll_up': scrollDir === 1,
+          'toc_scroll_down': scrollDir === -1,
+          'toc_scroll_end': scrollDir === 2,
+          'toc_selected': hasSel,
         }
       )
     }>
       <TOCControl />
       <TOCSearch />
-      <div className="source__toc_scroll">
+      <div className="toc_scroll">
         <Ref innerRef={accordionContext}>
           <Accordion
             fluid

@@ -21,12 +21,12 @@ const TocSearch = () => {
   const sortBy = () => dispatch(actions.setTocSortBy());
 
   return (
-    <div className="source__toc_filter">
+    <div className="toc_filter">
       <Input
         fluid
         size="mini"
         icon="search"
-        className="source__toc_search"
+        className="toc_search"
         placeholder={t('sources-library.filter')}
         value={match}
         onChange={handleChange}
@@ -35,16 +35,10 @@ const TocSearch = () => {
       <div className="divider"></div>
       <Button
         compact
-        size="small"
-        className="source__toc_sort_btn"
-        icon={
-          <span className="material-symbols-outlined">
-            sort_by_alpha
-          </span>
-        }
-        color={sortByAZ ? 'blue' : 'grey'}
+        basic
+        className="toc_sort_btn"
+        icon={<span className="material-symbols-outlined">sort_by_alpha</span>}
         active={sortByAZ}
-        basic={!sortByAZ}
         onClick={sortBy}
       />
     </div>

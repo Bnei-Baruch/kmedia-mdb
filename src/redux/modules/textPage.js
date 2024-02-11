@@ -1,5 +1,5 @@
 import { actions as assetsActions } from './assets';
-import { selectTextFile, selectMP3 } from '../../components/Pages/WithText/helper';
+import { selectTextFile, selectMP3, checkRabashGroupArticles } from '../../components/Pages/WithText/helper';
 import { assetUrl } from '../../helpers/Api';
 import { createSlice } from '@reduxjs/toolkit';
 import { getPathnameWithHost } from '../../helpers/url';
@@ -90,7 +90,10 @@ const textPageSlice = createSlice({
     toggleTextOnly: (state, { payload }) => void (state.textOnly = payload ?? !state.textOnly),
     setIsSearch: state => void (state.isSearch = !state.isSearch),
     fetchSubject: {
-      prepare: (id, source_language) => ({ payload: { id, source_language } }),
+      prepare: (_id, source_language) => {
+        const { uid: id, isGr } = checkRabashGroupArticles(_id);
+        return ({ payload: { id, source_language, isGr } });
+      },
       reducer: (state, { payload }) => {
         state.wip        = true;
         state.err        = null;

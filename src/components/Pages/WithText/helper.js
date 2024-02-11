@@ -1,6 +1,6 @@
 import MediaHelper from '../../../helpers/media';
 import { physicalFile, isEmpty } from '../../../helpers/utils';
-import { isTaas } from '../../shared/PDF/PDF';
+import { isTaas } from '../../shared/PDF/helper';
 import { OFFSET_TEXT_SEPARATOR, DOM_ROOT_ID } from './scrollToSearch/helper';
 
 //it's not mus be accurate number (average number letters per line)

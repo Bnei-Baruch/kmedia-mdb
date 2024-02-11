@@ -1,19 +1,20 @@
 import React, { useContext } from 'react';
 import { useSelector } from 'react-redux';
-import { isTaas } from '../../shared/PDF/PDF';
-import { getFullPath } from './helper';
-import { selectors } from '../../../redux/modules/sources';
-import { selectors as settings } from '../../../redux/modules/settings';
 import { Button } from 'semantic-ui-react';
+import { useTranslation } from 'react-i18next';
+import clsx from 'clsx';
+
+import { isTaas } from '../../shared/PDF/helper';
+import { getFullPath } from './helper';
 import Link from '../../Language/MultiLanguageLink';
 import { getIndex } from './TOC/TOC';
-import { useTranslation } from 'react-i18next';
 import {
   textPageGetSubjectSelector,
   textPageGetTextOnlySelector,
-  sourcesGetPathByIDSelector
+  sourcesGetPathByIDSelector,
+  settingsGetUIDirSelector,
+  sourcesGetSourceByIdSelector
 } from '../../../redux/selectors';
-import clsx from 'clsx';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 
 const PrevNextBtns = () => {
@@ -57,8 +58,8 @@ const PrevNextBtns = () => {
 const PrevBtn = ({ id }) => {
   const { t } = useTranslation();
 
-  const uiDir         = useSelector(state => settings.getUIDir(state.settings));
-  const getSourceById = useSelector(state => selectors.getSourceById(state.sources));
+  const uiDir         = useSelector(settingsGetUIDirSelector);
+  const getSourceById = useSelector(sourcesGetSourceByIdSelector);
   const icon          = (uiDir === 'ltr' ? 'backward' : 'forward');
 
   const source = getSourceById(id);
@@ -78,8 +79,8 @@ const PrevBtn = ({ id }) => {
 const NextBtn = ({ id }) => {
   const { t } = useTranslation();
 
-  const uiDir         = useSelector(state => settings.getUIDir(state.settings));
-  const getSourceById = useSelector(state => selectors.getSourceById(state.sources));
+  const uiDir         = useSelector(settingsGetUIDirSelector);
+  const getSourceById = useSelector(sourcesGetSourceByIdSelector);
   const icon          = (uiDir !== 'ltr' ? 'backward' : 'forward');
 
   const source = getSourceById(id);

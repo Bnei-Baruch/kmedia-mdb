@@ -1,7 +1,7 @@
 import { put, takeEvery, select, call } from 'redux-saga/effects';
 import { actions, types } from '../redux/modules/textPage';
 import { selectSuitableLanguage } from '../helpers/language';
-import { cuToSubject, selectTextFile, checkRabashGroupArticles } from '../components/Pages/WithText/helper';
+import { cuToSubject, selectTextFile } from '../components/Pages/WithText/helper';
 import { fetchUnit } from './mdb';
 import {
   mdbGetDenormContentUnitSelector,
@@ -12,7 +12,7 @@ import {
 import { getQuery } from '../helpers/url';
 
 export function* fetchSubject(action) {
-  const { uid: id, isGr } = checkRabashGroupArticles(action.payload.id);
+  const { id, isGr } = action.payload;
 
   try {
     const fetched = yield select(mdbGetFullUnitFetchedSelector)[id];

@@ -1,5 +1,6 @@
 import { createFilterDefinition } from './util';
 import { selectors } from '../../redux/modules/sources';
+import { sourcesGetSourceByIdSelector } from '../../redux/selectors';
 
 const breadCrumb = (x, index, lastIndex) => {
   if (index === lastIndex) {
@@ -20,7 +21,7 @@ const sourcesFilter = {
       return '';
     }
 
-    const getSourceById = selectors.getSourceById(getState().sources);
+    const getSourceById = sourcesGetSourceByIdSelector(getState());
     const path          = value.map(getSourceById);
 
     // Make sure we have all items.

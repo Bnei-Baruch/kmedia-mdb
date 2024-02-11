@@ -37,7 +37,7 @@ const myNotesService = createSlice({
         state.byId[x.id] = x;
       });
     },
-    onFetchFailure: state => {
+    fetchFailure: state => {
       state.wip    = false;
       state.errors = true;
     },

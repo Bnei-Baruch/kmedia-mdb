@@ -257,8 +257,10 @@ export const trimGetWipsSelector = createSelector([getTrim], t => trimSel.getWIP
 export const fetchImageGetBySrcSelector = createSelector(getFetchImage, _2, (i, src) => fetchImageSel.getBySrc(i, src));
 
 // myNotes
-export const myNotesGetListSelector = createSelector([getMyNotes], n => myNotesSel.getList(n));
-export const myNotesGetByIdSelector = createSelector(getMyNotes, _2, (n, id) => myNotesSel.getById(n, id));
+export const myNotesGetListSelector     = createSelector([getMyNotes], n => myNotesSel.getList(n));
+export const myNotesGetByIdSelector     = createSelector(getMyNotes, _2, (n, id) => myNotesSel.getById(n, id));
+export const myNotesGetSelectedSelector = createSelector([getMyNotes], n => myNotesSel.getSelected(n));
+export const myNotesGetStatusSelector   = createSelector([getMyNotes], n => myNotesSel.getStatus(n));
 
 //textPage
 
@@ -275,7 +277,7 @@ export const textPageGetExpandNotesSelector  = createSelector([getTextPage], t =
 export const textPageGetIsFullscreenSelector = createSelector([getTextPage], t => textPageSel.getIsFullscreen(t));
 export const textPageGetScrollDirSelector    = createSelector([getTextPage], t => textPageSel.getScrollDir(t));
 export const textPageGetSideOffsetSelector   = createSelector([getTextPage], t => textPageSel.getSideOffset(t));
-export const textPageGetTextOnlySelector = createSelector([getTextPage], t => textPageSel.getTextOnly(t));
-export const textPageGetScanFileSelector = createSelector([getTextPage], t => textPageSel.getScanFile(t));
-export const textPageGetIsSearchSelector = createSelector([getTextPage], t => textPageSel.getIsSearch(t));
+export const textPageGetTextOnlySelector     = createSelector([getTextPage], t => textPageSel.getTextOnly(t));
+export const textPageGetScanFileSelector     = createSelector([getTextPage], t => textPageSel.getScanFile(t));
+export const textPageGetIsSearchSelector     = createSelector([getTextPage], t => textPageSel.getIsSearch(t));
 export const textPageGetFileFilterSelector   = createSelector([getTextPage], t => textPageSel.getFileFilter(t));

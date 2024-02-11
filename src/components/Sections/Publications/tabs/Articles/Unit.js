@@ -91,8 +91,8 @@ const ArticlePage = () => {
   }
 
   const chroniclesAppend = chronicles ? chronicles.append.bind(chronicles) : () => null;
-  const { embed }        = getEmbedFromQuery(location);
   const toolbar          = isMobileDevice ? <ArticleToolbarMobile /> : <ArticleToolbarWeb />;
+  const { embed }        = getEmbedFromQuery(location);
 
   return !embed
     ? (
