@@ -34,9 +34,8 @@ export function cuToSubject(cu, fileFilter = () => true) {
 
 export const selectTextFile = (files, id, language, fileFilter = () => true) => {
   const _isTaas            = isTaas(id);
-  const { pdf, docx, doc } = files
-    .filter(f => MediaHelper.IsText(f))
-    .filter(fileFilter)
+  const _textFiles         = files.filter(f => MediaHelper.IsText(f)).filter(fileFilter);
+  const { pdf, docx, doc } = _textFiles
     .filter(f => f.language === language)
     .reduce((acc, f) => {
       if (f.isPdf && _isTaas)
@@ -47,7 +46,7 @@ export const selectTextFile = (files, id, language, fileFilter = () => true) => 
         acc.doc = f;
       return acc;
     }, {});
-  return pdf || docx || doc || {};
+  return pdf || docx || doc || _textFiles[0] || {};
 };
 
 export const selectMP3 = (files, language) => {

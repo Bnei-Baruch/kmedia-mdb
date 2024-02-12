@@ -2,6 +2,8 @@ import React, { useState, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button, Input } from 'semantic-ui-react';
 import debounce from 'lodash/debounce';
+import { useTranslation } from 'react-i18next';
+
 import { searchOnPage, deleteHighlightByRange, clearHighlightByStyle, addHighlightByRanges } from './helper';
 import { actions } from '../../../redux/modules/textPage';
 import { textPageGetIsSearchSelector } from '../../../redux/selectors';
@@ -12,6 +14,7 @@ const SearchOnPageBar = () => {
 
   const ref      = useRef([]);
   const dispatch = useDispatch();
+  const { t }    = useTranslation();
   const isSearch = useSelector(textPageGetIsSearchSelector);
 
   if (!isSearch) return null;
@@ -31,7 +34,8 @@ const SearchOnPageBar = () => {
     if (value.length > 0)
       search(value);
   }, 500);
-  const search       = (value = val) => {
+
+  const search = (value = val) => {
     const str = value.trim();
     if (str.length === 0) return;
 
@@ -76,7 +80,7 @@ const SearchOnPageBar = () => {
     <div className="text__search_on_page">
       <Input
         size="small"
-        placeholder="Search..."
+        placeholder={`${t('buttons.search')}...`}
         onChange={handleChange}
       />
       {
