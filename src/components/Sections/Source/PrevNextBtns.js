@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
 
 import { isTaas } from '../../shared/PDF/helper';
-import { getFullPath } from './helper';
+import { getFullPath, fixPrevNextZohar } from './helper';
 import Link from '../../Language/MultiLanguageLink';
 import { getIndex } from './TOC/TOC';
 import {
@@ -20,9 +20,10 @@ import { DeviceInfoContext } from '../../../helpers/app-contexts';
 const PrevNextBtns = () => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
-  const { id }      = useSelector(textPageGetSubjectSelector);
-  const textOnly    = useSelector(textPageGetTextOnlySelector);
-  const getPathByID = useSelector(sourcesGetPathByIDSelector);
+  const { id }        = useSelector(textPageGetSubjectSelector);
+  const textOnly      = useSelector(textPageGetTextOnlySelector);
+  const getPathByID   = useSelector(sourcesGetPathByIDSelector);
+  const getSourceById = useSelector(sourcesGetSourceByIdSelector);
 
   if (isTaas(id)) {
     return null;
@@ -40,8 +41,8 @@ const PrevNextBtns = () => {
   }
 
   const { children } = fullPath[len - 2];
-  const prevId       = children[index - 1];
-  const nextId       = children[index + 1];
+  const prevId       = children[index - 1] || fixPrevNextZohar(fullPath, getSourceById, -1);
+  const nextId       = children[index + 1] || fixPrevNextZohar(fullPath, getSourceById);
 
   return (
     <div className={clsx('source_prev_next', {

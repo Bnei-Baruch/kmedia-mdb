@@ -1,3 +1,6 @@
+import { RH_ZOHAR } from '../../../helpers/consts';
+import { getIndex } from './TOC/TOC';
+
 export const getFullPath = (sourceId, getPathByID) => {
   // Go to the root of this sourceId
   if (!getPathByID) {
@@ -14,3 +17,10 @@ export const getFullPath = (sourceId, getPathByID) => {
 };
 
 export const properParentId = path => (path[1].id);
+
+export const fixPrevNextZohar = (path, getSourceById, increment = 1) => {
+  if (path[1]?.id !== RH_ZOHAR) return null;
+  const parentIdx = getIndex(path[1], path[2]);
+  const newParent = getSourceById(path[1].children[parentIdx + increment]);
+  return newParent?.children[increment > 0 ? 0 : newParent.children.length - 1];
+};
