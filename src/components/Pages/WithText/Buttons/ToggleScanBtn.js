@@ -30,6 +30,7 @@ const ToggleScanBtn = () => {
         <PDF
           pdfFile={physicalFile(file)}
           startsFrom={1}
+          isTaas={false}
         />
       </Modal.Content>
     </Modal>

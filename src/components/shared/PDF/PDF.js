@@ -1,7 +1,6 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
-import { Container, } from 'semantic-ui-react';
 import { Document, Page, pdfjs } from 'react-pdf';
 
 import PDFMenu from './PDFMenu';
@@ -9,7 +8,7 @@ import { ErrorSplash, LoadingSplash } from '../Splash/Splash';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { getQuery, stringify } from '../../../helpers/url';
 
-const PDF = ({ pdfFile, startsFrom }) => {
+const PDF = ({ pdfFile, startsFrom, isTaas = true }) => {
   const [width, setWidth]       = useState();
   const [numPages, setNumPages] = useState();
 
@@ -19,6 +18,13 @@ const PDF = ({ pdfFile, startsFrom }) => {
   const location   = useLocation();
   const query      = getQuery(location);
   const pageNumber = Number(query.page) || 1;
+
+  const setPage = useCallback(page => {
+    navigate({
+      pathname: location.pathname,
+      search: stringify({ ...query, page }),
+    });
+  }, [location, navigate]);
 
   useEffect(() => {
     if (!ref.current) {
@@ -34,35 +40,21 @@ const PDF = ({ pdfFile, startsFrom }) => {
   }, [pdfFile, ref.current]);
 
   const onDocumentLoadSuccess = ({ numPages: _numPages }) => {
-    let pageNo;
-    if (pageNumber >= startsFrom && pageNumber <= (startsFrom + _numPages + -1)) {
-      pageNo = pageNumber;
-    } else {
-      pageNo = startsFrom;
-    }
-
-    setPage(pageNo);
     setNumPages(_numPages);
   };
 
-  const setPage = page => {
-    navigate({
-      pathname: location.pathname,
-      search: stringify({ ...query, page }),
-    });
-  };
-
   pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+
+  const menu = <PDFMenu
+    numPages={numPages}
+    pageNumber={pageNumber}
+    startsFrom={startsFrom}
+    setPage={setPage}
+    isTaas={isTaas}
+  />;
   return (
     <div ref={ref}>
-      <Container fluid textAlign="center">
-        <PDFMenu
-          numPages={numPages}
-          pageNumber={pageNumber}
-          startsFrom={startsFrom}
-          setPage={setPage}
-        />
-      </Container>
+      {menu}
       <div style={{ direction: 'ltr' }} className="position_relative">
         <div className="theme_pdf"></div>
         <Document
@@ -84,16 +76,8 @@ const PDF = ({ pdfFile, startsFrom }) => {
             )
           }
         </Document>
-
       </div>
-      <Container fluid textAlign="center">
-        <PDFMenu
-          numPages={numPages}
-          pageNumber={pageNumber}
-          startsFrom={startsFrom}
-          setPage={setPage}
-        />
-      </Container>
+      {menu}
     </div>
   );
 };

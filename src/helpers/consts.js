@@ -353,6 +353,7 @@ export const RH_ZOHAR    = 'AwGBQX2L';
 export const RH_ARTICLES = 'rQ6sIUZK';
 export const RH_RECORDS  = '2GAdavz0';
 
+export const BS_TAAS_LAST_PAGE = 2096;
 // This is exptected to be sorted by values
 export const BS_TAAS_PARTS = {
   '7scSATcZ': 1,
