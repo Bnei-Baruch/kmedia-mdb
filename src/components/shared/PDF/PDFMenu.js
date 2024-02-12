@@ -33,6 +33,7 @@ const PDFMenu = ({ pageNumber, startsFrom, numPages, setPage, isTaas }) => {
 
     handleSetPage(parsed);
   };
+
   const handleSetPage = page => {
     if (isTaas && (page > startsFrom + numPages - 1 || page < startsFrom)) {
       goOtherTassPart(page);

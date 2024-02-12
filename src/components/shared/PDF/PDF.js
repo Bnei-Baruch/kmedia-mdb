@@ -17,7 +17,7 @@ const PDF = ({ pdfFile, startsFrom, isTaas = true }) => {
   const navigate   = useNavigate();
   const location   = useLocation();
   const query      = getQuery(location);
-  const pageNumber = Number(query.page) || 1;
+  const pageNumber = Number(query.page) || startsFrom;
 
   const setPage = useCallback(page => {
     navigate({
@@ -52,6 +52,7 @@ const PDF = ({ pdfFile, startsFrom, isTaas = true }) => {
     setPage={setPage}
     isTaas={isTaas}
   />;
+
   return (
     <div ref={ref}>
       {menu}
@@ -68,7 +69,7 @@ const PDF = ({ pdfFile, startsFrom, isTaas = true }) => {
             (
               <Page
                 width={width}
-                pageNumber={pageNumber + (-startsFrom) + 1}
+                pageNumber={(pageNumber + (-startsFrom) + 1)}
                 renderAnnotations={false}
                 renderTextLayer={false}
                 renderMode="svg"
