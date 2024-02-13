@@ -672,7 +672,6 @@ $breadcrumb-height: 48px;
       border: none;
       outline: none;
       width: 100px;
-      text-align: right;
       padding: 0 4px;
       border-radius: 0;
       border-bottom: 2px solid #E5EEF5;
@@ -682,7 +681,7 @@ $breadcrumb-height: 48px;
         border-bottom: 2px solid #3376D6;
 
         &::placeholder {
-          color: transparent;
+          visibility: hidden;
         }
       }
 
