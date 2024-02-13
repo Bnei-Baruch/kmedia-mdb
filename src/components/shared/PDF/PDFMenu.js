@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { BS_TAAS_LAST_PAGE, BS_TAAS_PARTS } from '../../../helpers/consts';
+import { BS_TAAS_LAST_PAGE } from '../../../helpers/consts';
 import { useNavigate } from 'react-router-dom';
-import { stringify } from '../../../helpers/url';
 import { useTranslation } from 'react-i18next';
 import { Input, Button } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
 import { settingsGetUIDirSelector } from '../../../redux/selectors';
+import { goOtherTassPart } from './helper';
 
 const PDFMenu = ({ pageNumber, startsFrom, numPages, setPage, isTaas }) => {
   const navigate = useNavigate();
   const { t }    = useTranslation();
-  const uiDir    = useSelector(settingsGetUIDirSelector);
+
+  const uiDir = useSelector(settingsGetUIDirSelector);
 
   const [inputValue, setInputValue] = useState('');
 
@@ -36,7 +37,7 @@ const PDFMenu = ({ pageNumber, startsFrom, numPages, setPage, isTaas }) => {
 
   const handleSetPage = page => {
     if (isTaas && (page > startsFrom + numPages - 1 || page < startsFrom)) {
-      goOtherTassPart(page);
+      goOtherTassPart(page, page < startsFrom, navigate);
       return;
     }
 
@@ -44,17 +45,6 @@ const PDFMenu = ({ pageNumber, startsFrom, numPages, setPage, isTaas }) => {
   };
 
   const handleChange = ({ currentTarget: { value } }) => setInputValue(value);
-
-  const goOtherTassPart = page => {
-    const [uid] = Object
-      .entries(BS_TAAS_PARTS)
-      .reverse()
-      .find(x => x[1] <= page);
-    navigate({
-      pathname: `../sources/${uid}`,
-      search: stringify({ page }),
-    });
-  };
 
   const prevPage = () => handleSetPage(pageNumber - 1);
 
@@ -78,7 +68,8 @@ const PDFMenu = ({ pageNumber, startsFrom, numPages, setPage, isTaas }) => {
 
     return { validated: true, parsed };
   };
-  const isLtr         = uiDir === 'ltr';
+
+  const isLtr = uiDir === 'ltr';
   return (
     <div className="pdf_pagination">
       <Button onClick={prevPage} disabled={pageNumber < 2 || !numPages}>

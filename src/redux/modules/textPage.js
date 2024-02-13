@@ -23,6 +23,7 @@ const buildUrl         = (state, pathname) => {
   const _pathname = !state.file ? pathname : `${state.file.language}/${pathname}`;
   return getPathnameWithHost(_pathname);
 };
+
 const onChangeLanguage = (state, lang) => {
   if (isEmpty(state.subject?.files)) return;
 

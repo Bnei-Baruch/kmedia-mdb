@@ -7,6 +7,8 @@ import PDFMenu from './PDFMenu';
 import { ErrorSplash, LoadingSplash } from '../Splash/Splash';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { getQuery, stringify } from '../../../helpers/url';
+import { goOtherTassPart } from './helper';
+import { BS_TAAS_LAST_PAGE } from '../../../helpers/consts';
 
 const PDF = ({ pdfFile, startsFrom, isTaas = true }) => {
   const [width, setWidth]       = useState();
@@ -39,8 +41,18 @@ const PDF = ({ pdfFile, startsFrom, isTaas = true }) => {
     };
   }, [pdfFile, ref.current]);
 
-  const onDocumentLoadSuccess = ({ numPages: _numPages }) => {
-    setNumPages(_numPages);
+  const onDocumentLoadSuccess = ({ numPages: _numPages }) => setNumPages(_numPages);
+  const onDocumentLoadError   = () => {
+    const lastPage = isTaas ? BS_TAAS_LAST_PAGE : numPages;
+    const page     = location.state?.isGoPrev ? pageNumber - 1 : pageNumber + 1;
+    if (lastPage < page || page < 1) return;
+
+    if (isTaas && (page > startsFrom + numPages - 1 || page < startsFrom)) {
+      goOtherTassPart(page, location.state?.isGoPrev, navigate);
+      return;
+    }
+
+    setPage(page);
   };
 
   pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
@@ -68,6 +80,7 @@ const PDF = ({ pdfFile, startsFrom, isTaas = true }) => {
             numPages &&
             (
               <Page
+                onLoadError={onDocumentLoadError}
                 width={width}
                 pageNumber={(pageNumber + (-startsFrom) + 1)}
                 renderAnnotations={false}
