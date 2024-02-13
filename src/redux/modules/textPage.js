@@ -3,13 +3,16 @@ import { selectTextFile, selectMP3, checkRabashGroupArticles } from '../../compo
 import { assetUrl } from '../../helpers/Api';
 import { createSlice } from '@reduxjs/toolkit';
 import { getPathnameWithHost } from '../../helpers/url';
+import { actions as settingsActions } from './settings';
+import { isEmpty } from '../../helpers/utils';
+import { selectSuitableLanguage } from '../../helpers/language';
 
 const updateLocalStorage = state => {
   const settings = { ...state.settings };
   localStorage.setItem('library-settings', JSON.stringify(settings));
 };
 
-const buildUrl = (state, pathname) => {
+const buildUrl         = (state, pathname) => {
   if (state.file)
     state.urlInfo.search.source_language = state.file.language;
 
@@ -19,6 +22,15 @@ const buildUrl = (state, pathname) => {
 
   const _pathname = !state.file ? pathname : `${state.file.language}/${pathname}`;
   return getPathnameWithHost(_pathname);
+};
+const onChangeLanguage = (state, lang) => {
+  if (isEmpty(state.subject?.files)) return;
+
+  state.file = selectTextFile(state.subject.files, state.subject.id, lang);
+  state.mp3  = selectMP3(state.subject.files, lang);
+  if (!state.urlInfo.isCastom) {
+    state.urlInfo.url = buildUrl(state);
+  }
 };
 
 const textPageSlice = createSlice({
@@ -63,13 +75,7 @@ const textPageSlice = createSlice({
     setTocIsActive: (state, { payload }) => void (state.tocIsActive = payload ?? !state.tocIsActive),
     setTocMatch: (state, { payload }) => void (state.tocInfo.match = payload),
     setTocSortBy: state => void (state.tocInfo.sortByAZ = !state.tocInfo.sortByAZ),
-    changeLanguage: (state, { payload }) => {
-      state.file = selectTextFile(state.subject.files, state.subject.id, payload);
-      state.mp3  = selectMP3(state.subject.files, payload);
-      if (!state.urlInfo.isCastom) {
-        state.urlInfo.url = buildUrl(state);
-      }
-    },
+    changeLanguage: (state, { payload }) => onChangeLanguage(state, payload),
     setUrlInfo: (state, { payload }) => {
       if (!payload) {
         state.urlInfo.url      = buildUrl(state);
@@ -121,6 +127,13 @@ const textPageSlice = createSlice({
       .addCase(
         assetsActions.mergeKiteiMakorSuccess,
         state => void (state.mp3 = assetUrl(`api/km_audio/file/${state.subject.id}?language=${state.file.language}`))
+      )
+      .addCase(
+        settingsActions.setContentLanguages,
+        (state, { payload }) => {
+          const language = selectSuitableLanguage(payload.contentLanguages, state.subject.languages, state.subject.original_language);
+          onChangeLanguage(state, language);
+        }
       );
   }
 });

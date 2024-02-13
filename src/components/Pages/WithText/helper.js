@@ -7,8 +7,15 @@ import { OFFSET_TEXT_SEPARATOR, DOM_ROOT_ID } from './scrollToSearch/helper';
 const LETTERS_ON_LINE = 20;
 
 export function cuToSubject(cu, fileFilter = () => true) {
-  const { id, files, content_type: type } = cu;
-  const subject                           = { id, type, languages: [], files: [] };
+  const { id, files, content_type: type, original_language } = cu;
+
+  const subject = {
+    id,
+    type,
+    original_language,
+    languages: [],
+    files: []
+  };
   files.filter(f => MediaHelper.IsText(f) || MediaHelper.IsAudio(f))
     .forEach(f => {
       const isPdf = MediaHelper.IsPDF(f);

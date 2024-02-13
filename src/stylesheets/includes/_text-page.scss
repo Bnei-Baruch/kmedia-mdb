@@ -199,7 +199,7 @@ $breadcrumb-height: 48px;
   }
 }
 
-.font_settings {
+#roodNodeOfShareText {
   font-size: 20px;
 
   * {
@@ -631,11 +631,23 @@ $breadcrumb-height: 48px;
   max-width: 500px;
   margin: 0 auto;
 
+  .is-dark & {
+    border-color: $dark-stroke;
+  }
+
   & > .button {
     display: flex;
     align-items: center;
     font-size: 16px;
     padding: 0;
+    font-weight: normal;
+
+
+    .material-symbols-outlined {
+      .is-dark & {
+        color: #3376D6;
+      }
+    }
 
     &, &:hover, &:active, &:focus {
       color: #3376D6 !important;
@@ -646,29 +658,65 @@ $breadcrumb-height: 48px;
   .input_wrapper.ui.input {
     display: flex;
     flex-wrap: nowrap;
-    border-bottom: 2px solid #E5EEF5;
     align-items: center;
     font-size: 16px;
     justify-self: center;
 
+
+    &:focus {
+      border-color: #3376D6;
+    }
+
     & > input {
+      background: transparent;
       border: none;
       outline: none;
-      width: 50px;
+      width: 100px;
       text-align: right;
       padding: 0 4px;
+      border-radius: 0;
+      border-bottom: 2px solid #E5EEF5;
+      text-align: center;
+
+      &:focus {
+        border-bottom: 2px solid #3376D6;
+
+        &::placeholder {
+          color: transparent;
+        }
+      }
+
+      &, &::placeholder {
+        color: $black;
+
+        .is-dark & {
+          color: $dark-text;
+        }
+
+        .is-sepia & {
+          color: $sepia-text;
+        }
+      }
+
+      .is-dark & {
+        border-color: $dark-stroke;
+      }
+
+      .is-sepia & {
+        border-color: $sepia-stroke;
+      }
     }
 
     & > span, & > input {
       display: block;
       font-size: 16px;
       line-height: 36px;
-
     }
 
     .material-symbols-outlined {
       cursor: pointer;
-      font-size: 24px;
+      font-size: 25px;
+      color: #3376D6;
     }
   }
 }

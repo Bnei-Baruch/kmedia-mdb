@@ -12,12 +12,12 @@ const PDFMenu = ({ pageNumber, startsFrom, numPages, setPage, isTaas }) => {
   const { t }    = useTranslation();
   const uiDir    = useSelector(settingsGetUIDirSelector);
 
-  const [inputValue, setInputValue] = useState(pageNumber);
+  const [inputValue, setInputValue] = useState('');
 
   const lastPage = isTaas ? BS_TAAS_LAST_PAGE : numPages;
 
   useEffect(() => {
-    setInputValue(pageNumber);
+    setInputValue('');
   }, [pageNumber]);
 
   const onKeyDown = e => {
@@ -27,7 +27,7 @@ const PDFMenu = ({ pageNumber, startsFrom, numPages, setPage, isTaas }) => {
     }
   };
 
-  const handleSubmit  = () => {
+  const handleSubmit = () => {
     const { validated, parsed } = validateValue(inputValue);
     if (!validated) return;
 
@@ -78,11 +78,11 @@ const PDFMenu = ({ pageNumber, startsFrom, numPages, setPage, isTaas }) => {
 
     return { validated: true, parsed };
   };
-
+  const isLtr         = uiDir === 'ltr';
   return (
-    <div className="pdf_pagination" dir={uiDir}>
+    <div className="pdf_pagination">
       <Button onClick={prevPage} disabled={pageNumber < 2 || !numPages}>
-        <span className="material-symbols-outlined">chevron_right</span>
+        <span className="material-symbols-outlined">{`chevron_${isLtr ? 'left' : 'right'}`}</span>
         <span>{t('simple-mode.prev')}</span>
       </Button>
       <Input
@@ -90,11 +90,10 @@ const PDFMenu = ({ pageNumber, startsFrom, numPages, setPage, isTaas }) => {
         onChange={handleChange}
         onKeyDown={onKeyDown}
         className="input_wrapper"
-        dir="ltr"
+        placeholder={`${pageNumber}/${lastPage}`}
       >
-        <span onClick={handleSubmit} className="material-symbols-outlined">search</span>
         <input />
-        <span> / {lastPage}</span>
+        <span onClick={handleSubmit} className="material-symbols-outlined">search</span>
       </Input>
 
       <Button
@@ -102,7 +101,7 @@ const PDFMenu = ({ pageNumber, startsFrom, numPages, setPage, isTaas }) => {
         disabled={pageNumber >= lastPage || !numPages}
       >
         <span>{t('simple-mode.next')}</span>
-        <span className="material-symbols-outlined">chevron_left</span>
+        <span className="material-symbols-outlined">{`chevron_${isLtr ? 'right' : 'left'}`}</span>
       </Button>
     </div>
   );
