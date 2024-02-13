@@ -12,7 +12,7 @@ const updateLocalStorage = state => {
   localStorage.setItem('library-settings', JSON.stringify(settings));
 };
 
-const buildUrl         = (state, pathname) => {
+const buildUrl = (state, pathname) => {
   if (state.file)
     state.urlInfo.search.source_language = state.file.language;
 
@@ -45,7 +45,9 @@ const textPageSlice = createSlice({
     wipErr: {
       wip: false, err: null
     },
-    urlInfo: {},
+    urlInfo: {
+      search: {}
+    },
     tocInfo: { sortByAZ: true }
   },
   reducers: {
