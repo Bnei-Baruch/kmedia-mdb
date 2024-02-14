@@ -126,6 +126,9 @@ $breadcrumb-height: 48px;
   border-color: $sepia-bg !important;
 }
 
+.webkit_text_size {
+  -webkit-text-size-adjust: auto;
+}
 
 .zoom_size {
   &_0 {
