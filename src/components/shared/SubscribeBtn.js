@@ -103,7 +103,7 @@ const SubscribeBtn = ({ t, collection }) => {
         color={!sub ? 'blue' : 'grey'}
         onClick={() => subsUnsubs(sub)}
         content={t(`personal.${!sub ? 'subscribe' : 'unsubscribe'}`)}
-        className="uppercase  margin-right-4 margin-left-4"
+        className="uppercase"
         compact
         style={{ fontSize: '0.9em' }}
       />

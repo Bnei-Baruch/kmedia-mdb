@@ -262,7 +262,8 @@
     "trimmed-title-wip": "אנחנו מכינים את הקובץ בשבילך",
     "trimmed-content-wip": "כמה דקות...",
     "add-new-note": "רשמו הערות, דברים ששמעתם בשיעור או כל דבר שחשוב לכם לשמור לעתיד...",
-    "confirm-remove-note": "בחרת למחוק את ההערה. להמשיך?"
+    "confirm-remove-note": "בחרת למחוק את ההערה. להמשיך?",
+    "unit-tags": "תיוגים"
   },
   "search": {
     "header": {
@@ -605,7 +606,8 @@
     "filter": "סנן...",
     "share-title": "קרא את המאמר",
     "group-articles": "מאמרי החברה",
-    "play-audio-file": "להפעלת קובץ אודיו"
+    "play-audio-file": "להפעלת קובץ אודיו",
+    "play-source": "להשמעת המאמר"
   },
   "topics": {
     "header": {
@@ -931,6 +933,42 @@
       "ending": "סיים",
       "contentCreate": "רוצים שכולם יראו את הקטע שסימנתם?\nתייגו את הקטע במדור הנושאים של האתר",
       "labelCreated": "הקטע תוייג בהצלחה. תוכלו למצוא אותו במדור הנושאים תחת הנושאים שתייגתם"
+    }
+  },
+  "page-with-text": {
+    "buttons": {
+      "web": {
+        "lessons": "לכל השיעורים על המאמר",
+        "text-settings": "שנה עיצוב טקסט",
+        "languages": "שנה שפה",
+        "play-by-text": "חדש! הפעל קטע בוידאו",
+        "add-tag": "הוספת תיוג",
+        "add-bookmark": "הוספה לסימניות",
+        "add-comment": "הוספת הערה בטקסט",
+        "share": "שיתוף",
+        "search": "חיפוש בדף",
+        "expand-comments": "הצג את כל ההערות",
+        "collapse-comments": "הסתר את כל ההערות",
+        "download": "הורדה",
+        "print": "הדפסה",
+        "fullscreen-on": "מסך מלא",
+        "fullscreen-off": "יציאה ממסך מלא",
+        "hide-additions": "להסתיר הערות",
+        "show-additions": "להראות הערות",
+        "scan": "סריקה של הטקסט המקורי",
+        "more-buttons": "עוד"
+      },
+      "mobile": {
+        "lessons": "שיעורים",
+        "text-settings": "תצוגה",
+        "languages": "שפה",
+        "add-bookmark": "שמירה",
+        "share": "שיתוף",
+        "search": "חיפוש",
+        "download": "הורדה",
+        "more-buttons": "עוד",
+        "toc": "תוכן"
+      }
     }
   }
 }

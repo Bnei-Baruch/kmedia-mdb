@@ -35,7 +35,7 @@ const fileDownload = (data, path, mimeType, filename = path.split('/').slice(-1)
   window.URL.revokeObjectURL(blobURL);
 };
 
-const downloadAsset = (path, mimeType, downloadAllowed, name) => {
+export const downloadAsset = (path, mimeType, downloadAllowed, name) => {
   if (downloadAllowed) {
     axios({
       url: path,

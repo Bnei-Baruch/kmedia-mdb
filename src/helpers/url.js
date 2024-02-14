@@ -161,3 +161,10 @@ const getTo = (navigateTo, location, language, contentLanguage) => {
     pathname: prefixWithLanguage(navigateTo.pathname, location, language)
   };
 };
+
+export const getPathnameWithHost = pathname => {
+  if (typeof window === 'undefined')
+    return '';
+  const { protocol, hostname, port } = window.location;
+  return `${protocol}//${hostname}${port ? `:${port}` : ''}/${pathname}`;
+};

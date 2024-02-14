@@ -1,8 +1,7 @@
-import { call, put, takeEvery, takeLatest } from 'redux-saga/effects';
+import { call, put, takeLatest } from 'redux-saga/effects';
 
 import Api from '../helpers/Api';
 import { types, actions } from '../redux/modules/assets';
-import { cuFilesToData, getSourceIndexId } from './helpers/utils';
 
 function* unzip(action) {
   const id = action.payload;
@@ -30,7 +29,7 @@ function* unzipList(action) {
   }
 }
 
-function* doc2Html(action) {
+export function* doc2Html(action) {
   const id = action.payload;
 
   try {
@@ -40,18 +39,6 @@ function* doc2Html(action) {
   } catch (err) {
     const payload = { id, err };
     yield put(actions.doc2htmlFailure(action.type, payload));
-  }
-}
-
-export function* sourceIndex(action) {
-  try {
-    const id      = getSourceIndexId(action);
-    const cu      = yield call(Api.unit, { id });
-    const payload = { id: action.payload, data: cuFilesToData(cu.data) };
-    yield put(actions.sourceIndexSuccess(action.type, payload));
-  } catch (err) {
-    const payload = { id: action.payload, err };
-    yield put(actions.sourceIndexFailure(action.type, payload));
   }
 }
 
@@ -68,7 +55,7 @@ export function* fetchPerson(action) {
   try {
     const { data } = yield call(Api.getCMS, 'person', {
       contentLanguages: action.payload.contentLanguages,
-      id              : action.payload.sourceId
+      id: action.payload.sourceId
     });
     yield put(actions.fetchPersonSuccess(data));
   } catch (err) {
@@ -88,13 +75,13 @@ function* fetchTimeCode(action) {
 }
 
 function* mergeKiteiMakor(action) {
-  const { id, lang } = action.payload;
+  const { id, language } = action.payload;
 
   try {
-    const { data } = yield call(Api.getAsset, `api/km_audio/build/${id}?language=${lang}`);
-    yield put(actions.mergeKiteiMakorSuccess({ id, lang, status: data }));
+    const { data } = yield call(Api.getAsset, `api/km_audio/build/${id}?language=${language}`);
+    yield put(actions.mergeKiteiMakorSuccess({ id, language, status: data.status }));
   } catch (e) {
-    yield put(actions.mergeKiteiMakorFailure({ id, lang, status: e }));
+    yield put(actions.mergeKiteiMakorFailure({ id, language, status: e.message }));
   }
 }
 
@@ -108,10 +95,6 @@ function* watchUnzipList() {
 
 function* watchDoc2Html() {
   yield takeLatest([types['assets/doc2html']], doc2Html);
-}
-
-function* watchSourceIndex() {
-  yield takeEvery([types['assets/sourceIndex']], sourceIndex);
 }
 
 function* watchFetchAsset() {
@@ -134,7 +117,6 @@ export const sagas = [
   watchUnzip,
   watchUnzipList,
   watchDoc2Html,
-  watchSourceIndex,
   watchFetchAsset,
   watchFetchPerson,
   watchFetchTimeCode,

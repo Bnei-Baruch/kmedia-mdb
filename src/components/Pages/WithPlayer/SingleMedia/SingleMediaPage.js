@@ -20,6 +20,7 @@ const SingleMediaPage = ({ playerContainer }) => {
 
   const { embed }   = getEmbedFromQuery(location);
   const { isReady } = useSelector(playlistGetInfoSelector);
+  const { cuId }      = useSelector(playlistGetInfoSelector);
 
   if (embed) return playerContainer;
   if (!isReady) return WipErr({ wip: !isReady, t });
@@ -50,7 +51,7 @@ const SingleMediaPage = ({ playerContainer }) => {
         {
           !isMobileDevice && (
             <Grid.Column mobile={16} tablet={6} computer={6}>
-              <Recommended />
+              <Recommended cuId={cuId}/>
             </Grid.Column>
           )
         }

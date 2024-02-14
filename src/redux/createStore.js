@@ -35,6 +35,7 @@ import trim from './modules/trim';
 import player from './modules/player';
 import playlist from './modules/playlist';
 import fetchImage from './modules/fetchImage';
+import textPage from './modules/textPage';
 
 const isProduction = process.env.NODE_ENV === 'production';
 
@@ -88,7 +89,8 @@ const setupReducers = history => ({
   trim,
   player,
   playlist,
-  fetchImage
+  fetchImage,
+  textPage
 });
 
 export default function createStore(preloadedState, history) {

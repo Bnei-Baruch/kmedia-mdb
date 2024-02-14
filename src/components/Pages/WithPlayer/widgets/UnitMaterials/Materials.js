@@ -1,6 +1,8 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { withTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 
 import {
   CT_ARTICLE,
@@ -12,20 +14,25 @@ import {
 } from '../../../../../helpers/consts';
 import * as shapes from '../../../../shapes';
 import TabsMenu from '../../../../shared/TabsMenu';
-import Summary, { showSummaryTab } from './Summary/Summary';
-import Sources from './Sources/Sources';
+import Summary from './Summary/Summary';
+import { showSummaryTab } from './Summary/helper';
+import SourceTab from './Sources/SourceTab';
 import Sketches from './Sketches';
 import MediaDownloads from '../MediaDownloads';
-import TranscriptionContainer from './Transcription/TranscriptionContainer';
 import { isEmpty, noop } from '../../../../../helpers/utils';
 import { ClientChroniclesContext, DeviceInfoContext } from '../../../../../helpers/app-contexts';
 import DerivedUnits from './DerivedUnits';
 import Recommended from '../Recommended/Main/Recommended';
-import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
 import PlaylistItems from '../../Playlist/PlaylistItems';
 import PlaylistMyItems from '../../PlaylistMy/PlaylistItems';
-import { mdbGetDenormContentUnitSelector, playlistGetInfoSelector, settingsGetContentLanguagesSelector } from '../../../../../redux/selectors';
+import {
+  mdbGetDenormContentUnitSelector,
+  playlistGetInfoSelector,
+  settingsGetContentLanguagesSelector
+} from '../../../../../redux/selectors';
+import TranscriptionTab from './Transcription/TranscriptionTab';
+import ArticleTab from './Article/ArticleTab';
+import ResearchTab from './Research/ResearchTab';
 
 const derivedTextUnits = unit => {
   const types    = {};
@@ -48,54 +55,52 @@ const Materials = ({ t }) => {
   const unit                          = useSelector(state => mdbGetDenormContentUnitSelector(state, cuId || paramsId));
   const contentLanguages              = useSelector(settingsGetContentLanguagesSelector);
 
-  if (!unit) {
-    return null;
-  }
+  if (!unit) return null;
 
   const derivedTexts     = derivedTextUnits(unit);
   const chroniclesAppend = chronicles ? chronicles.append.bind(chronicles) : noop;
   const items            = [
     {
-      name     : 'transcription',
-      label    : t('materials.transcription.header'),
-      component: <TranscriptionContainer unit={unit} key="transcription"/>
+      name: 'transcription',
+      label: t('materials.transcription.header'),
+      component: <TranscriptionTab />
     },
     (![CT_CLIP, CT_VIDEO_PROGRAM_CHAPTER].includes(unit.content_type)) && {
-      name     : 'sources',
-      label    : t('materials.sources.header'),
-      component: <Sources unit={unit}/>
+      name: 'sources',
+      label: t('materials.sources.header'),
+      component: <SourceTab />
     },
     {
-      name     : 'sketches',
-      label    : t('materials.sketches.header'),
-      component: <Sketches unit={unit}/>
+      name: 'sketches',
+      label: t('materials.sketches.header'),
+      component: <Sketches unit={unit} />,
     },
     {
-      name     : 'downloads',
-      label    : t('media-downloads.title'),
-      component: <MediaDownloads unit={unit} chroniclesAppend={chroniclesAppend}/>
+      name: 'downloads',
+      label: t('media-downloads.title'),
+      component: <MediaDownloads unit={unit} chroniclesAppend={chroniclesAppend} />
     }
   ];
 
   if (showSummaryTab(unit, contentLanguages)) {
     items.unshift({
-      name     : 'summary',
-      label    : t('materials.summary.header'),
-      component: <Summary unit={unit}/>
+      name: 'summary',
+      label: t('materials.summary.header'),
+      component: <Summary />,
     });
   }
 
   if (isMobileDevice) {
     const item = isSingleMedia
       ? {
-        name     : 'recommended',
-        label    : t('materials.recommended.default'),
-        component: <Recommended unit={unit} displayTitle={false}/>
+        name: 'recommended',
+        label: t('materials.recommended.default'),
+        component: <Recommended cuId={unit.id} displayTitle={false} />
       }
       : {
-        name     : 'playlist',
-        label    : t('materials.playlist.header'),
-        component: isMy ? <PlaylistMyItems/> : <PlaylistItems/>
+        name: 'playlist',
+        label: t('materials.playlist.header'),
+        component: isMy ? <PlaylistMyItems /> : <PlaylistItems />
       };
 
     items.unshift(item);
@@ -103,17 +108,17 @@ const Materials = ({ t }) => {
 
   if (unit.content_type === CT_VIDEO_PROGRAM_CHAPTER && derivedTexts[CT_ARTICLE]) {
     items.push({
-      name     : 'articles',
-      label    : t('materials.articles.header'),
-      component: <TranscriptionContainer unit={unit} key="articles" type="articles" activeTab="articles"/>
+      name: 'articles',
+      label: t('materials.articles.header'),
+      component: <ArticleTab />
     });
   }
 
   if (unit.content_type === CT_VIDEO_PROGRAM_CHAPTER && derivedTexts[CT_RESEARCH_MATERIAL]) {
     items.push({
-      name     : 'research',
-      label    : t('materials.research.header'),
-      component: <TranscriptionContainer unit={unit} key="research" type="research" activeTab="research"/>
+      name: 'research',
+      label: t('materials.research.header'),
+      component: <ResearchTab />
     });
   }
 
@@ -121,19 +126,19 @@ const Materials = ({ t }) => {
     const selectedUnits = Object.values(unit.derived_units).filter(u => DERIVED_UNITS_CONTENT_TYPE.includes(u.content_type));
     if (selectedUnits.length > 0) {
       items.push({
-        name     : 'derived',
-        label    : t('materials.derived-units.header'),
-        component: <DerivedUnits selectedUnits={selectedUnits} key="derived" type="derived" t={t}/>
+        name: 'derived',
+        label: t('materials.derived-units.header'),
+        component: <DerivedUnits selectedUnits={selectedUnits} key="derived" type="derived" t={t} />
       });
     }
   }
 
-  return <TabsMenu items={items.filter(x => !!x)}/>;
+  return <TabsMenu items={items.filter(x => !!x)} />;
 };
 
 Materials.propTypes = {
   unit: shapes.ContentUnit,
-  t   : PropTypes.func.isRequired
+  t: PropTypes.func.isRequired
 };
 
 export default withTranslation()(Materials);

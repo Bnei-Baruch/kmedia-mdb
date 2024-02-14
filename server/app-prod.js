@@ -79,6 +79,7 @@ app.use(helmet({
       'img-src': [
         '\'self\'',
         'data:',
+        'blob:',
         '*.kbb1.com',
         'kabbalahmedia.info',
         '*.kabbalahmedia.info',

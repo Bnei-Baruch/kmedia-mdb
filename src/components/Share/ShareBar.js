@@ -1,5 +1,5 @@
 import React from 'react';
-import { withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import {
   EmailIcon,
   EmailShareButton,
@@ -22,8 +22,8 @@ const bsPixelsBySize = {
   big: 46,
 };
 
-const ShareBar = ({ url, t, }) => {
-
+const ShareBar = ({ url }) => {
+  const { t }    = useTranslation();
   const bsPixels = bsPixelsBySize.big;
   const title    = t('player.share.title');
 
@@ -52,4 +52,4 @@ const ShareBar = ({ url, t, }) => {
   );
 };
 
-export default withTranslation()(ShareBar);
+export default ShareBar;

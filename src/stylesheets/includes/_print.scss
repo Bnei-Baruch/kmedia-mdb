@@ -1,0 +1,47 @@
+@media print {
+  .layout__header,
+  .layout__sidebar,
+  .layout__footer,
+  .layout__secondary-header,
+  .anchors-language-selector,
+  .avbox__playlist-view,
+  .avbox__playlist-wrapper,
+  .avbox__playlist-wrapper,
+  .no_print,
+  .unit-info,
+  #avbox_playlist,
+  #us_report_button,
+  div:empty {
+    display: none !important;
+  }
+
+  .layout {
+    &__main {
+      padding: 0; // to remove existing padding
+    }
+
+    &__content {
+      margin: 10px !important;
+    }
+  }
+
+  .ui.container {
+    padding-top: 0 !important; // remove existing padding
+  }
+
+  div,
+  p,
+  ol,
+  ul {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  p {
+    margin: 0 !important;
+    text-indent: 20px;
+  }
+  .pdfWrapper {
+    width: 700px !important;
+  }
+}

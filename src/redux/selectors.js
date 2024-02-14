@@ -26,6 +26,7 @@ import { selectors as simpleModeSel } from './modules/simpleMode';
 import { selectors as trimSel } from './modules/trim';
 import { selectors as fetchImageSel } from './modules/fetchImage';
 import { selectors as myNotesSel } from './modules/myNotes';
+import { selectors as textPageSel } from './modules/textPage';
 
 // Select part of state (first parameter)
 export const getMDB     = state => state.mdb;
@@ -54,6 +55,7 @@ const getSimpleMode     = state => state.simpleMode;
 const getTrim           = state => state.trim;
 const getFetchImage     = state => state.fetchImage;
 const getMyNotes        = state => state.myNotes;
+const getTextPage       = state => state.textPage;
 
 // Select additional parameters
 const _2 = (_, param) => param;
@@ -255,5 +257,27 @@ export const trimGetWipsSelector = createSelector([getTrim], t => trimSel.getWIP
 export const fetchImageGetBySrcSelector = createSelector(getFetchImage, _2, (i, src) => fetchImageSel.getBySrc(i, src));
 
 // myNotes
-export const myNotesGetListSelector = createSelector([getMyNotes], n => myNotesSel.getList(n));
-export const myNotesGetByIdSelector = createSelector(getMyNotes, _2, (n, id) => myNotesSel.getById(n, id));
+export const myNotesGetListSelector     = createSelector([getMyNotes], n => myNotesSel.getList(n));
+export const myNotesGetByIdSelector     = createSelector(getMyNotes, _2, (n, id) => myNotesSel.getById(n, id));
+export const myNotesGetSelectedSelector = createSelector([getMyNotes], n => myNotesSel.getSelected(n));
+export const myNotesGetStatusSelector   = createSelector([getMyNotes], n => myNotesSel.getStatus(n));
+
+//textPage
+
+export const textPageGetSettings             = createSelector([getTextPage], t => textPageSel.getSettings(t));
+export const textPageGetTocIsActiveSelector  = createSelector([getTextPage], t => textPageSel.getTocIsActive(t));
+export const textPageGetTocInfoSelector      = createSelector([getTextPage], t => textPageSel.getTocInfo(t));
+export const textPageGetSubjectSelector      = createSelector([getTextPage], t => textPageSel.getSubject(t));
+export const textPageGetWipErrSelector       = createSelector([getTextPage], t => textPageSel.getWipErr(t));
+export const textPageGetFileSelector         = createSelector([getTextPage], t => textPageSel.getFile(t) || false);
+export const textPageGetUrlInfoSelector      = createSelector([getTextPage], t => textPageSel.getUrlInfo(t));
+export const textPageGetWordOffsetSelector   = createSelector([getTextPage], t => textPageSel.getWordOffset(t));
+export const textPageGetMP3Selector          = createSelector([getTextPage], t => textPageSel.getMP3(t));
+export const textPageGetExpandNotesSelector  = createSelector([getTextPage], t => textPageSel.getExpandNotes(t));
+export const textPageGetIsFullscreenSelector = createSelector([getTextPage], t => textPageSel.getIsFullscreen(t));
+export const textPageGetScrollDirSelector    = createSelector([getTextPage], t => textPageSel.getScrollDir(t));
+export const textPageGetSideOffsetSelector   = createSelector([getTextPage], t => textPageSel.getSideOffset(t));
+export const textPageGetTextOnlySelector     = createSelector([getTextPage], t => textPageSel.getTextOnly(t));
+export const textPageGetScanFileSelector     = createSelector([getTextPage], t => textPageSel.getScanFile(t));
+export const textPageGetIsSearchSelector     = createSelector([getTextPage], t => textPageSel.getIsSearch(t));
+export const textPageGetFileFilterSelector   = createSelector([getTextPage], t => textPageSel.getFileFilter(t));

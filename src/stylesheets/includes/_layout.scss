@@ -1,9 +1,26 @@
 $sidebar-width: 300px;
 $main-menu-height: 60px;
 $secondary-header-height: 10px;
+$max-readble-width: 700px;
+$toc-toolbar-height: 60px;
+$breadcrumb-height: 48px;
+
+@font-face {
+  font-family: 'AmiriArabic';
+  font-style: normal;
+  font-weight: 400;
+  src: url(https://fonts.gstatic.com/s/amiri/v27/J7aRnpd8CGxBHpUrtLMA7w.woff2) format('woff2');
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0898-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC;
+}
+
+
+:root {
+  scrollbar-color: #646464 #FFFFFF;
+}
 
 body {
   overflow-y: scroll;
+  font-family: AmiriArabic, Lato, 'Helvetica Neue', Arial, Helvetica, sans-serif;
 
   &.noscroll {
     overflow: hidden;
@@ -132,7 +149,7 @@ body {
 
 .logo {
   flex: 0 1 auto !important;
-  padding: 0!important;
+  padding: 0 !important;
 
   img {
     display: inline-block !important;
@@ -294,28 +311,31 @@ body {
       background: #fc6719 !important;
       color: white !important;
       font-size: .92857143rem !important;
+
       i {
-        margin-left:6px !important;
+        margin-left: 6px !important;
         margin-right: 0px !important;
         float: right;
       }
     }
   }
+
   i.close.icon {
     color: #000;
   }
+
   .popupHeader {
-    height:2em;
+    height: 2em;
   }
 }
 
-.donationPopup.rtl  {
+.donationPopup.rtl {
   .donate-button {
     &.ui.button,
     &.ui.button:hover,
     &.ui.button:focus {
       i {
-        margin-left:0px !important;
+        margin-left: 0px !important;
         margin-right: 6px !important;
         float: left !important;
       }
@@ -323,3 +343,43 @@ body {
   }
 }
 
+.headroom-z-index-801 .headroom {
+  z-index: 801 !important;
+}
+
+.headroom-z-index-802 .headroom {
+  z-index: 802 !important;
+}
+
+.layout__content {
+  .headroom--pinned {
+    transform: translateY($main-menu-height) !important;
+  }
+}
+
+.ltr {
+  .layout__content {
+    .headroom--pinned {
+      @include tablet-mobile {
+        margin-left: 0;
+        width: 100%;
+      }
+
+      margin-left: $sidebar-width;
+    }
+  }
+}
+
+.rtl {
+  .layout__content {
+    .headroom--pinned {
+      @include tablet-mobile {
+        margin-right: 0;
+        width: 100%;
+      }
+
+      margin-right: $sidebar-width;
+      margin-left: 0;
+    }
+  }
+}

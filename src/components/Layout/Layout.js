@@ -91,7 +91,7 @@ class Layout extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    const { location }                = this.props;
+    const { location }                          = this.props;
     const { sidebarActive, isShowHeaderSearch } = this.state;
 
     return (location.pathname !== nextProps.location.pathname
@@ -158,7 +158,7 @@ class Layout extends Component {
   };
 
   render() {
-    const { t, location, playerContainer }   = this.props;
+    const { t, location, playerContainer }             = this.props;
     const { sidebarActive, embed, isShowHeaderSearch } = this.state;
     const { isMobileDevice }                           = this.context;
 
@@ -167,7 +167,6 @@ class Layout extends Component {
     const sideBarIcon = sidebarActive
       ? <Icon size="large" name="x" />
       : <Icon name="sidebar" />;
-
 
     if (embed) {
       return (<KmediaRouters playerContainer={playerContainer} />);

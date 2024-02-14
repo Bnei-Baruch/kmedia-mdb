@@ -32,7 +32,7 @@ export const selectSuitableLanguage = (contentLanguages, languages = [], origina
 
   // Must return something, prefer major languages otherwise the first one.
   const something = POPULAR_LANGUAGES.concat(languages[0]);
-  return something.find(language =>  languages.includes(language));
+  return something.find(language => languages.includes(language));
 };
 
 export const getLanguageName = language => {
@@ -40,7 +40,7 @@ export const getLanguageName = language => {
   return (option && option.name) || '';
 };
 
-export const getOptions = ({ languages }) =>
+export const getOptions = ({ languages = [] }) =>
   LANGUAGE_OPTIONS
     .filter(x => languages.includes(x.value))
     .map(x => ({ ...x, text: x.name }));

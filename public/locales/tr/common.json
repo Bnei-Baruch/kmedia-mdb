@@ -118,10 +118,10 @@
       "free-text": "Free Text"
     },
     "media-types": {
-      "audio" : "Audio",
-      "video" : "Video",
-      "text" : "Transcription",
-      "image" : "Sketch"
+      "audio": "Audio",
+      "video": "Video",
+      "text": "Transcription",
+      "image": "Sketch"
     },
     "content-types": {
       "CONGRESS": "Kongreler",
@@ -261,7 +261,8 @@
     "trimmed-title-wip": "We prepare the file for you",
     "trimmed-content-wip": "A few minutes...",
     "add-new-note": "Write down notes, things you heard during lessons or anything important to keep for the future...",
-    "confirm-remove-note": "Are you sure you want to delete the note?"
+    "confirm-remove-note": "Are you sure you want to delete the note?",
+    "unit-tags": "Tags"
   },
   "search": {
     "header": {
@@ -604,7 +605,8 @@
     "filter": "Filtre...",
     "share-title": "Bu makaleyi okuyun",
     "group-articles": "Group Articles",
-    "play-audio-file": "Ses dosyasını çal"
+    "play-audio-file": "Ses dosyasını çal",
+    "play-source": "Listen to this article"
   },
   "topics": {
     "header": {
@@ -838,6 +840,42 @@
       "ending": "Finish",
       "contentCreate": "Want everyone to see the excerpt you marked?\nTag it in the site's topics section",
       "labelCreated": "The excerpt has been successfully tagged. You can find it in the topics section under the topics you tagged"
+    }
+  },
+  "page-with-text": {
+    "buttons": {
+      "web": {
+        "lessons": "To all lessons on the article",
+        "text-settings": "Change text formatting",
+        "languages": "Change language",
+        "play-by-text": "New! Play a video clip",
+        "add-tag": "Add tagging",
+        "add-bookmark": "Add to bookmarks",
+        "add-comment": "Add a comment in the text",
+        "share": "Share",
+        "search": "Search on the page",
+        "expand-comments": "Show all comments",
+        "collapse-comments": "Hide all comments",
+        "download": "Download",
+        "print": "Print",
+        "fullscreen-on": "Full screen",
+        "fullscreen-off": "Exit full screen",
+        "hide-additions": "Hide all remarks",
+        "show-additions": "Show all remarks",
+        "scan": "Scan of the original text",
+        "more-buttons": "More"
+      },
+      "mobile": {
+        "lessons": "Lessons",
+        "text-settings": "Text",
+        "languages": "Language",
+        "add-bookmark": "Save",
+        "share": "Share",
+        "search": "Search",
+        "download": "Download",
+        "more-buttons": "More",
+        "toc": "Content"
+      }
     }
   }
 }

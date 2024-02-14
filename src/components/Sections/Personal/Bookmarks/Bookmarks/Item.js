@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 
 import { SectionLogo } from '../../../../../helpers/images';
 import { iconByContentTypeMap, MY_NAMESPACE_FOLDERS } from '../../../../../helpers/consts';
-import { OFFSET_TEXT_SEPARATOR } from '../../../../../helpers/scrollToSearch/helper';
+import { OFFSET_TEXT_SEPARATOR } from '../../../../Pages/WithText/scrollToSearch/helper';
 import { getMyItemKey } from '../../../../../helpers/my';
 import Link from '../../../../Language/MultiLanguageLink';
 import Actions from './Actions';

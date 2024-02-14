@@ -7,7 +7,7 @@ import { Container, Grid, Header } from 'semantic-ui-react';
 import * as shapes from '../../../../../shapes';
 import Helmets from '../../../../../shared/Helmets/index';
 import WipErr from '../../../../../shared/WipErr/WipErr';
-import Share from '../../../../Library/Share';
+import Share from '../../../../../Pages/WithText/Buttons/ShareTextBtn';
 import { getBlogLanguage, isLanguageRtl } from '../../../../../../helpers/i18n-utils';
 
 export const BlogPostPage = ({ post = null, wip = false, err = null, t }) => {

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { withTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Icon, Menu, Modal } from 'semantic-ui-react';
+import { Button, Icon, Modal } from 'semantic-ui-react';
 
 import { actions } from '../../../../../redux/modules/my';
 import { MY_NAMESPACE_REACTIONS, MY_REACTION_KINDS } from '../../../../../helpers/consts';
@@ -16,7 +16,8 @@ import {
   mdbGetDenormContentUnitSelector,
   playlistGetInfoSelector,
   myGetReactionsCountSelector,
-  authGetUserSelector, myGetItemByKeySelector
+  authGetUserSelector,
+  myGetItemByKeySelector
 } from '../../../../../redux/selectors';
 
 const PersonalInfo = ({ collection }) => {
@@ -26,9 +27,9 @@ const PersonalInfo = ({ collection }) => {
   const cu                   = useSelector(state => mdbGetDenormContentUnitSelector(state, cuId));
   const { id, content_type } = cu || {};
   const likeParams           = {
-    kind        : MY_REACTION_KINDS.LIKE,
+    kind: MY_REACTION_KINDS.LIKE,
     subject_type: content_type,
-    subject_uid : id
+    subject_uid: id
   };
 
   const { key } = getMyItemKey(MY_NAMESPACE_REACTIONS, likeParams);
@@ -72,30 +73,30 @@ const PersonalInfo = ({ collection }) => {
         onOpen={() => setIsNeedLogin(true)}
       >
         <Modal.Content>
-          <NeedToLogin/>
+          <NeedToLogin />
         </Modal.Content>
       </Modal>
-      <Menu secondary className="personal_info">
-        <Menu.Item>
-          <TaggingBtn/>
-        </Menu.Item>
-        <Menu.Item>
+      <div className="personal_info no_print">
+        <div className="item">
+          <TaggingBtn />
+        </div>
+        <div className="item">
           <Button
             basic
             className="clear_button"
             onClick={() => toggleReaction(reaction)}
           >
-            <Icon name={`heart${!reaction ? ' outline' : ''}`} className="margin-right-4 margin-left-4"/>
+            <Icon name={`heart${!reaction ? ' outline' : ''}`} className="margin-right-4 margin-left-4" />
             <span>{reactionsCount}</span>
           </Button>
-        </Menu.Item>
-        <Menu.Item>
-          <ToPlaylistBtn/>
-        </Menu.Item>
-        <Menu.Item>
-          <SubscribeBtn collection={collection}/>
-        </Menu.Item>
-      </Menu>
+        </div>
+        <div className="item">
+          <ToPlaylistBtn />
+        </div>
+        <div className="item">
+          <SubscribeBtn collection={collection} />
+        </div>
+      </div>
     </>
   );
 };

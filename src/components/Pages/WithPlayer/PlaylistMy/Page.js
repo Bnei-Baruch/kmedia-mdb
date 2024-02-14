@@ -16,6 +16,7 @@ import { playlistGetInfoSelector } from '../../../../redux/selectors';
 const PlaylistMyPage = ({ playerContainer, t }) => {
   const { isReady }        = useSelector(playlistGetInfoSelector);
   const { isMobileDevice } = useContext(DeviceInfoContext);
+  const { cuId }      = useSelector(playlistGetInfoSelector);
   if (!isReady)
     return WipErr({ wip: !isReady, t });
 
@@ -41,7 +42,7 @@ const PlaylistMyPage = ({ playerContainer, t }) => {
           <Grid.Column width={6}>
             <PlaylistItems/>
             <Divider hidden/>
-            <Recommended filterOutUnits={[]}/>
+            <Recommended cuId={cuId} filterOutUnits={[]}/>
           </Grid.Column>
         )
       }

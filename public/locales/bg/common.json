@@ -263,7 +263,8 @@
     "trimmed-title-wip": "Подготвяме файла за вас",
     "trimmed-content-wip": "Няколко минути...",
     "add-new-note": "Записвайте си бележки, неща, които сте чули по време на уроците или нещо важно, което да запазите за в бъдеще...",
-    "confirm-remove-note": "Сигурни ли сте, че искате да изтриете бележката?"
+    "confirm-remove-note": "Сигурни ли сте, че искате да изтриете бележката?",
+    "unit-tags": "Tags"
   },
   "search": {
     "header": {
@@ -606,7 +607,8 @@
     "filter": "Филтър...",
     "share-title": "Прочетете тази статия",
     "group-articles": "Група статии",
-    "play-audio-file": "Възпроизвеждане на аудио файла"
+    "play-audio-file": "Възпроизвеждане на аудио файла",
+    "play-source": "Listen to this article"
   },
   "topics": {
     "header": {

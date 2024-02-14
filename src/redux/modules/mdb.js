@@ -6,6 +6,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import MediaHelper from '../../helpers/media';
 import { actions as settingsActions } from './settings';
 import { actions as ssrActions } from './ssr';
+import { isEmpty } from '../../helpers/utils';
 
 const freshStore = () => ({
   cById       : {},
@@ -221,7 +222,7 @@ const onReceiveContentUnits = (state, items = []) => {
 
 const onReceiveLabels = (state, action) => {
   const labels = action.payload;
-  if (labels.length === 0) {
+  if (isEmpty(labels)) {
     return;
   }
 
@@ -519,6 +520,7 @@ const getDenormCollectionWUnits = (state, id) => {
   return c;
 };
 
+const getLabelById   = state => state.labelById;
 const getDenormLabel = state => id => state.labelById[id];
 
 const getCountCu = (state, namespace) => state.countCU[namespace];
@@ -558,5 +560,6 @@ export const selectors = {
   skipFetchedCO,
   getLabelsByCU,
   getDenormLabel,
+  getLabelById,
   getPersonById
 };

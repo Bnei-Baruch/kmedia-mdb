@@ -13,9 +13,16 @@ import { settingsGetContentLanguagesSelector, settingsGetUILangSelector } from '
 export function* fetchUnit(action) {
   const id = action.payload;
   try {
-    const uiLang                       = yield select(settingsGetUILangSelector);
-    const contentLanguages             = yield select(settingsGetContentLanguagesSelector);
-    const result                       = yield call(Api.unit, { id, ui_language: uiLang, content_languages: contentLanguages });
+    const uiLang           = yield select(settingsGetUILangSelector);
+    const contentLanguages = yield select(settingsGetContentLanguagesSelector);
+
+    const result = yield call(Api.unit, {
+      id,
+      ui_language: uiLang,
+      content_languages: contentLanguages,
+      with_derivations: true
+    });
+
     const { data, status, statusText } = result;
     if (status >= 400) {
       const err = `${status} ${statusText}`;
@@ -35,9 +42,9 @@ export function* fetchUnitsByIDs(action) {
     const contentLanguages             = yield select(settingsGetContentLanguagesSelector);
     const result                       = yield call(Api.units, {
       ...action.payload,
-      ui_language      : uiLang,
+      ui_language: uiLang,
       content_languages: contentLanguages,
-      page_size        : id.length
+      page_size: id.length
     });
     const { data, status, statusText } = result;
     if (status >= 400) {
@@ -58,9 +65,9 @@ export function* fetchCollectionsByIDs(action) {
     const contentLanguages             = yield select(settingsGetContentLanguagesSelector);
     const result                       = yield call(Api.collections, {
       ...action.payload,
-      ui_language      : uiLang,
+      ui_language: uiLang,
       content_languages: contentLanguages,
-      page_size        : id.length
+      page_size: id.length
     });
     const { data, status, statusText } = result;
     if (status >= 400) {
@@ -81,7 +88,7 @@ export function* fetchCollection(action) {
     const contentLanguages             = yield select(settingsGetContentLanguagesSelector);
     const result                       = yield call(Api.collection, {
       id,
-      ui_language      : uiLang,
+      ui_language: uiLang,
       content_languages: contentLanguages
     });
     const { data, status, statusText } = result;
@@ -103,10 +110,10 @@ export function* fetchWindow(action) {
     const contentLanguages = yield select(settingsGetContentLanguagesSelector);
     const args             = {
       ...payload,
-      ui_language      : uiLang,
+      ui_language: uiLang,
       content_languages: contentLanguages,
-      content_type     : [CT_DAILY_LESSON, CT_SPECIAL_LESSON],
-      with_units       : true
+      content_type: [CT_DAILY_LESSON, CT_SPECIAL_LESSON],
+      with_units: true
     };
 
     const result                       = yield call(Api.collections, args);
@@ -128,10 +135,10 @@ export function* fetchDatepickerCO(action) {
     const contentLanguages             = yield select(settingsGetContentLanguagesSelector);
     const args                         = {
       ...action.payload,
-      ui_language      : uiLang,
+      ui_language: uiLang,
       content_languages: contentLanguages,
-      content_type     : [CT_DAILY_LESSON, CT_SPECIAL_LESSON],
-      with_units       : true
+      content_type: [CT_DAILY_LESSON, CT_SPECIAL_LESSON],
+      with_units: true
     };
     const result                       = yield call(Api.collections, args);
     const { data, status, statusText } = result;
@@ -151,7 +158,7 @@ export function* fetchLatestLesson() {
     const uiLang           = yield select(settingsGetUILangSelector);
     const contentLanguages = yield select(settingsGetContentLanguagesSelector);
     const { data }         = yield call(Api.latestLesson, {
-      ui_language      : uiLang,
+      ui_language: uiLang,
       content_languages: contentLanguages
     });
     const cu_uids          = data.content_units.map(cu => cu.id);
@@ -167,7 +174,7 @@ export function* fetchSQData() {
     const uiLang           = yield select(settingsGetUILangSelector);
     const contentLanguages = yield select(settingsGetContentLanguagesSelector);
     const { data }         = yield call(Api.sqdata, {
-      ui_language      : uiLang,
+      ui_language: uiLang,
       content_languages: contentLanguages
     });
     yield put(sources.receiveSources({ sources: data.sources, uiLang }));
@@ -200,8 +207,8 @@ function* createLabel(action) {
     const uiLang               = yield select(settingsGetUILangSelector);
     const contentLanguages     = yield select(settingsGetContentLanguagesSelector);
     const { data: { labels } } = yield call(Api.labels, {
-      id               : uid,
-      ui_language      : uiLang,
+      id: uid,
+      ui_language: uiLang,
       content_languages: contentLanguages
     });
     yield put(mdbActions.receiveLabels(labels));
@@ -216,7 +223,7 @@ export function* fetchLabels(action) {
     const contentLanguages = yield select(settingsGetContentLanguagesSelector);
     const params           = {
       ...action.payload,
-      ui_language      : uiLang,
+      ui_language: uiLang,
       content_languages: contentLanguages
     };
     const { data }         = yield call(Api.labels, params);
@@ -234,10 +241,10 @@ export function* fetchMissingUnits(uids) {
     const uiLang           = yield select(settingsGetUILangSelector);
     const contentLanguages = yield select(settingsGetContentLanguagesSelector);
     const { data }         = yield call(Api.units, {
-      id               : missingUnitIds,
-      ui_language      : uiLang,
+      id: missingUnitIds,
+      ui_language: uiLang,
       content_languages: contentLanguages,
-      pageSize         : missingUnitIds.length
+      pageSize: missingUnitIds.length
     });
     yield put(mdbActions.receiveContentUnits(data.content_units));
   }
@@ -250,10 +257,10 @@ export function* fetchMissingCollections(uids) {
     const uiLang           = yield select(settingsGetUILangSelector);
     const contentLanguages = yield select(settingsGetContentLanguagesSelector);
     const { data }         = yield call(Api.collections, {
-      id               : missingCollectionIds,
-      ui_language      : uiLang,
+      id: missingCollectionIds,
+      ui_language: uiLang,
       content_languages: contentLanguages,
-      pageSize         : missingCollectionIds.length
+      pageSize: missingCollectionIds.length
     });
     yield put(mdbActions.receiveCollections(data.collections));
   }
