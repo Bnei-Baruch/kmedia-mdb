@@ -75,7 +75,10 @@ const textPageSlice = createSlice({
       state.settings.theme = payload;
       updateLocalStorage(state);
     },
-    setTocIsActive: (state, { payload }) => void (state.tocIsActive = payload ?? !state.tocIsActive),
+    setTocIsActive: (state, { payload }) => {
+      state.tocInfo.match       = '';
+      state.tocIsActive = payload ?? !state.tocIsActive;
+    },
     setTocMatch: (state, { payload }) => void (state.tocInfo.match = payload),
     setTocSortBy: state => void (state.tocInfo.sortByAZ = !state.tocInfo.sortByAZ),
     changeLanguage: (state, { payload }) => onChangeLanguage(state, payload),

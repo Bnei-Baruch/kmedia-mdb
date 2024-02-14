@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, useContext } from 'react';
 import { Accordion, Ref } from 'semantic-ui-react';
 
-import { getEscapedRegExp, isEmpty, stopBubbling } from '../../../../helpers/utils';
+import { getEscapedRegExp, isEmpty } from '../../../../helpers/utils';
 import { BS_SHAMATI, RH_ARTICLES, RH_RECORDS, } from '../../../../helpers/consts';
 import { isLanguageRtl } from '../../../../helpers/i18n-utils';
 import { useSelector, useDispatch } from 'react-redux';
@@ -298,17 +298,25 @@ const TOC = () => {
       )
     }>
       <TOCControl />
-      <TOCSearch />
+      {
+        !isMobileDevice && <TOCSearch />
+      }
       <div className="toc_scroll">
-        <Ref innerRef={accordionContext}>
-          <Accordion
-            fluid
-            panels={toc}
-            defaultActiveIndex={activeIndex}
-            onTitleClick={handleTitleClick}
-          />
-        </Ref>
+        <div className="toc_scroll_align">
+          <Ref innerRef={accordionContext}>
+            <Accordion
+              fluid
+              panels={toc}
+              defaultActiveIndex={activeIndex}
+              onTitleClick={handleTitleClick}
+            />
+          </Ref>
+        </div>
       </div>
+
+      {
+        isMobileDevice && <TOCSearch />
+      }
     </div>
   );
 };

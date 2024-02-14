@@ -30,7 +30,7 @@ video {
 }
 
 //MOBILE
-.is-mobile {
+.player .is-mobile {
   position: relative;
   margin-bottom: 16px;
   height: auto;
@@ -572,7 +572,7 @@ video {
 }
 
 //WEB
-.is-web {
+.player .is-web {
   position: relative;
 
   &.is-video .controls {

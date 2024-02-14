@@ -22,6 +22,7 @@ const TocToggleBtn = ({ withText = true }) => {
         className="clear_button"
         icon={<span className="material-symbols-outlined">view_list</span>}
         onClick={handleTocIsActive}
+        content={withText ? '' : <span>{t('sources-library.toc')}</span>}
       />
     );
 

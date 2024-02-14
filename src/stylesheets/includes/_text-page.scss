@@ -311,7 +311,6 @@ $breadcrumb-height: 48px;
   flex-wrap: nowrap;
   border-top: 1px solid $stroke-gray;
   border-bottom: 1px solid $stroke-gray;
-  height: $toc-toolbar-height;
   padding: 0 1em;
 
   .is-sepia & {
@@ -371,7 +370,7 @@ $breadcrumb-height: 48px;
 
     .button {
       font-size: 18px;
-      padding: 3px !important;
+      padding: 3px 3px 0 !important;
       background: none;
       margin: 0 8px;
 
