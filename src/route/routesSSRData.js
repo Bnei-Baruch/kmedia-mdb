@@ -71,6 +71,7 @@ import {
   mdbGetLastLessonIdSelector,
   sourcesGetSourceByIdSelector
 } from '../redux/selectors';
+import { transcriptionFileFilter } from '../components/Pages/WithPlayer/widgets/UnitMaterials/Transcription/helper';
 
 export const home = store => {
   const state            = store.getState();
@@ -118,7 +119,7 @@ export const cuPage = async (store, match) => {
 
   switch (activeTab) {
     case 'transcription':
-      store.dispatch(textPageActions.setFileFilter(f => f.insert_type === 'tamlil'));
+      store.dispatch(textPageActions.setFileFilter(transcriptionFileFilter));
       await store.sagaMiddleWare.run(textPageSagas.fetchSubject, textPageActions.fetchSubject(id)).done;
       file = textPageGetFileSelector(store.getState());
       break;

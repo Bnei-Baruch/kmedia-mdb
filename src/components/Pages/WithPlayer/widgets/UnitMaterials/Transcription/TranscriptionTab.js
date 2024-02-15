@@ -8,6 +8,7 @@ import TranscriptionTabToolbarMobile from './TranscriptionTabToolbarMobile';
 import { actions } from '../../../../../../redux/modules/textPage';
 import { useInitTextUrl } from '../../../../WithText/hooks/useInitTextUrl';
 import TextLayoutMobile from '../../../../WithText/TextLayoutMobile';
+import { transcriptionFileFilter } from './helper';
 
 const TranscriptionTab = () => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
@@ -18,7 +19,7 @@ const TranscriptionTab = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(actions.setFileFilter(f => f.insert_type === 'tamlil'));
+    dispatch(actions.setFileFilter(transcriptionFileFilter));
     return () => dispatch(actions.setFileFilter());
   }, []);
 
@@ -26,7 +27,7 @@ const TranscriptionTab = () => {
     <div className="player_page_tab">
       {
         isMobileDevice ? (
-          <TextLayoutMobile toolbar={<TranscriptionTabToolbarMobile  />} playerPage={true} />
+          <TextLayoutMobile toolbar={<TranscriptionTabToolbarMobile />} playerPage={true} />
         ) : (
           <TextLayoutWeb toolbar={<TranscriptionTabToolbarWeb />} playerPage={true} />
         )

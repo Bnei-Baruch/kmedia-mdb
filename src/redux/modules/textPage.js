@@ -168,7 +168,7 @@ const getScrollDir    = state => state.scrollDir;
 const getSideOffset   = state => state.sideOffset;
 const getTextOnly     = state => state.textOnly;
 const getScanFile     = state => state.scanFile;
-const getIsSearch     = state => state.isSearch;
+const getIsSearch       = state => state.isSearch;
 const getFileFilter   = state => state.fileFilter;
 
 export const selectors = {
