@@ -11,7 +11,7 @@ const CollectionContainer = ({ namespace, renderUnit, id }) => {
   const { id: _id } = useParams();
   id ?? (id = _id);
 
-  const collection = useSelector(state => mdbGetCollectionByIdSelector(state, id));
+  const [collection] = useSelector(state => mdbGetCollectionByIdSelector(state, [id]));
   const wip        = useSelector(mdbGetWipFn);
   const errors     = useSelector(mdbGetErrorsSelector);
 
