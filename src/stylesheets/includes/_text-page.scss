@@ -311,6 +311,7 @@ $breadcrumb-height: 48px;
   flex-wrap: nowrap;
   border-top: 1px solid $stroke-gray;
   border-bottom: 1px solid $stroke-gray;
+  height: $toc-toolbar-height;
   padding: 0 1em;
 
   .is-sepia & {

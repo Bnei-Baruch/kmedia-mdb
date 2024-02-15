@@ -73,7 +73,7 @@
 
 
       .toc_scroll {
-        height: calc(100% - $toc-toolbar-height);
+        height: calc(100% - $toc-toolbar-height - 30px);
         margin-bottom: 10px;
       }
 
@@ -95,7 +95,7 @@
         transition: height 0.2s ease-in-out 0s;
 
         .toc_scroll {
-          height: calc(100% - $toc-toolbar-height);
+          height: calc(100% - $toc-toolbar-height - 30px);
         }
       }
     }
