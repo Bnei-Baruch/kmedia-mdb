@@ -7,12 +7,14 @@ import { getQuery } from '../../../../helpers/url';
 import { getLanguageDirection } from '../../../../helpers/i18n-utils';
 import { useTextContent } from './useTextContent';
 import { textPageGetFileSelector, assetsGetDoc2htmlByIdSelector } from '../../../../redux/selectors';
+import { useNotes } from '../Notes/useNotes';
 
-const ContentHtml = ({ labels = [], notes = [] }) => {
+const ContentHtml = ({ labels = [] }) => {
   const { language, id } = useSelector(textPageGetFileSelector);
   const getDoc2htmlById  = useSelector(assetsGetDoc2htmlByIdSelector);
 
   const location = useLocation();
+  const notes    = useNotes();
 
   const { srchstart, srchend, highlightAll } = getQuery(location);
 

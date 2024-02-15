@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import clsx from 'clsx';
 
 import { urlParamFromSelect } from '../scrollToSearch/helper';
-import { useNotes } from '../Notes/useNotes';
 import { actions } from '../../../../redux/modules/textPage';
 import NoteMarks from '../Notes/NoteMarks';
 import ContentHtml from './ContentHtml';
@@ -28,7 +27,6 @@ const TextContentWeb = () => {
   const subject                = useSelector(textPageGetSubjectSelector);
   const file                   = useSelector(textPageGetFileSelector);
 
-  const notes               = useNotes();
   const { labels, offsets } = useLabels();
 
   const dispatch = useDispatch();
@@ -80,7 +78,7 @@ const TextContentWeb = () => {
             />
           ) : (
             <div ref={handleDataRef} className="position_relative">
-              <ContentHtml labels={labels} notes={notes} />
+              <ContentHtml labels={labels} />
             </div>
           )
         }

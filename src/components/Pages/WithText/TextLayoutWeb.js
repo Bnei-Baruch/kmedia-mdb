@@ -26,16 +26,17 @@ import {
 import NotFound from '../../shared/NotFound';
 import ScrollToTopBtn from './Buttons/ScrollToTopBtn';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
+import { useFetchNotes } from './Notes/useFetchNotes';
 
 const TextLayoutWeb = props => {
   const {
-    toolbar    = null,
-    toc        = null,
-    prevNext   = null,
-    breadcrumb = null,
-    playerPage = false,
-    id
-  } = props;
+          toolbar    = null,
+          toc        = null,
+          prevNext   = null,
+          breadcrumb = null,
+          playerPage = false,
+          id
+        } = props;
 
   const ref   = useRef();
   const { t } = useTranslation();
@@ -52,6 +53,7 @@ const TextLayoutWeb = props => {
   useInitTextSettings();
   useScrollBehavior(ref);
   useInitTextUrl(null, !playerPage);
+  useFetchNotes();
 
   const wipErr = WipErr({ wip, err: null, t });
   if (wipErr) return wipErr;
