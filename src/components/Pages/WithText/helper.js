@@ -92,6 +92,7 @@ export const highlightByPrefixAndId = (prefixes, id, style) => {
 };
 
 export const addHighlightByRanges = (ranges, style = 'selected_marker') => {
+  if (!CSS?.highlights) return;
   ranges = ranges.filter(x => !!x);
 
   if (!CSS.highlights.has(style)) {
@@ -104,10 +105,12 @@ export const addHighlightByRanges = (ranges, style = 'selected_marker') => {
 };
 
 export const clearHighlightByStyle = (style = 'selected_marker') => {
+  if (!CSS?.highlights) return;
   CSS.highlights.has(style) && CSS.highlights.get(style).clear();
 };
 
 export const deleteHighlightByRange = (range, style = 'selected_marker') => {
+  if (!CSS?.highlights) return;
   CSS.highlights.has(style) && CSS.highlights.get(style).delete(range);
 };
 
