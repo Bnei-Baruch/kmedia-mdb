@@ -103,6 +103,7 @@ const textPageSlice = createSlice({
         state.urlInfo.url      = buildUrl(state, payload.pathname);
         state.urlInfo.isCastom = true;
       }
+
       state.urlInfo.search = buildUrlSearch(state, payload?.search);
     },
     setUrlSelect: (state, { payload }) => void (state.urlInfo.select = payload || null),
