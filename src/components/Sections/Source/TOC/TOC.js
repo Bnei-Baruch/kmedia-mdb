@@ -290,9 +290,8 @@ const TOC = () => {
       clsx('toc no_print',
         {
           'toc_active': tocIsActive,
-          'toc_scroll_up': scrollDir === 1,
+          'toc_scroll_up': scrollDir > 0,
           'toc_scroll_down': scrollDir === -1,
-          'toc_scroll_end': scrollDir === 2,
           'toc_selected': hasSel,
         }
       )
