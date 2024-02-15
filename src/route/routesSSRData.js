@@ -214,7 +214,7 @@ export const playlistCollectionPage = (store, match) => {
   const { id: cID, cuId } = match.params;
   return store.sagaMiddleWare.run(mdbSagas.fetchCollection, mdbActions.fetchCollection(cID)).done
     .then(() => {
-      const c = mdbGetCollectionByIdSelector(store.getState(), cID);
+      const [c] = mdbGetCollectionByIdSelector(store.getState(), [cID]);
       store.dispatch(mdbActions.fetchUnit(cuId || c?.cuIDs[0]));
     });
 };
@@ -223,7 +223,7 @@ export const latestLesson = store => (store.sagaMiddleWare.run(mdbSagas.fetchLat
   .then(() => {
     const state = store.getState();
     const cID   = mdbGetLastLessonIdSelector(state);
-    const c     = mdbGetCollectionByIdSelector(state, cID);
+    const [c]   = mdbGetCollectionByIdSelector(state, [cID]);
     store.dispatch(mdbActions.fetchUnit(c.cuIDs[0]));
   }));
 
