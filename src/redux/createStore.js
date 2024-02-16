@@ -40,7 +40,8 @@ import textPage from './modules/textPage';
 const isProduction = process.env.NODE_ENV === 'production';
 
 const sagaMiddleware = createSagaMiddleware(
-  isProduction ? {} : { sagaMonitor: sagaMonitor(), logger: console.log }
+  // isProduction ? {} : { sagaMonitor: sagaMonitor(), logger: console.log }
+  {}
 );
 
 const setupMiddleware = history => getDefaultMiddleware => {
@@ -53,9 +54,9 @@ const setupMiddleware = history => getDefaultMiddleware => {
     sagaMiddleware
   );
   // Conditionally add another middleware in dev
-  if (!isProduction) {
+  /*if (!isProduction) {
     middleware.push(logger);
-  }
+  }*/
 
   return middleware;
 };
@@ -100,7 +101,7 @@ export default function createStore(preloadedState, history) {
     reducer   : setupReducers(history),
     middleware: setupMiddleware(history),
     // Turn off devtools in prod, or pass options in dev
-    devTools: !isProduction
+    devTools: false, // !isProduction
   });
 
   // used server side
