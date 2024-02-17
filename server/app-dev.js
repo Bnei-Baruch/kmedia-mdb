@@ -27,8 +27,12 @@ function handler(req, res, next) {
 // initialize the application and create the routes
 const app = express();
 
-app.use(compression());
-app.use(resourceMonitorMiddleware);
+app.use(middleware.duration);
+// app.use(middleware.logAll);
+app.use(middleware.logErrors);
+app.use(middleware.errorHandler);
+// app.use(compression());
+// app.use(resourceMonitorMiddleware);
 
 const router = express.Router();
 
@@ -58,8 +62,5 @@ router.use('*', handler);
 
 // tell the app to use the above rules
 app.use(router);
-
-app.use(middleware.logErrors);
-app.use(middleware.errorHandler);
 
 module.exports = app;

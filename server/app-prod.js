@@ -19,6 +19,7 @@ const app = express();
 const router = express.Router();
 
 // middleware
+app.use(middleware.duration);
 // app.use(middleware.logAll);
 app.use(middleware.logErrors);
 app.use(middleware.errorHandler);
