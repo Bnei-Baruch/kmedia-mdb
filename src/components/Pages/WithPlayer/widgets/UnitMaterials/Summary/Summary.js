@@ -15,7 +15,7 @@ import { getFile, getSummaryLanguages } from './helper';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-const Summary = ({id}) => {
+const Summary = ({ id }) => {
   const { t }  = useTranslation();
 
   const contentLanguages = useSelector(settingsGetContentLanguagesSelector);

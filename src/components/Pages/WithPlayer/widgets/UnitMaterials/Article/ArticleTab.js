@@ -13,7 +13,7 @@ import { canonicalLink } from '../../../../../../helpers/links';
 import TextLayoutMobile from '../../../../WithText/TextLayoutMobile';
 import NotFound from '../../../../../shared/NotFound';
 
-const ArticleTab = ({id}) => {
+const ArticleTab = ({ id }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
   const pageCu = useSelector(state => mdbGetDenormContentUnitSelector(state, id));
