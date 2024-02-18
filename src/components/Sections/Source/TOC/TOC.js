@@ -252,7 +252,7 @@ const TOC = () => {
     }
 
     if (firstLevel) {
-      return { toc: panels, className: "toc_single_level" };
+      return { toc: panels, className: 'toc_single_level' };
     }
 
     const activeIndex = getIndex(path[0], path[1]);

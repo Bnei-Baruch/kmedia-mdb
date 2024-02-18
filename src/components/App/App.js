@@ -28,7 +28,7 @@ const App = props => {
   const sessionInfo       = { enableShareText: { isShareTextEnabled, setEnableShareText } };
   const deviceInfoContext = {
     deviceInfo,
-    isMobileDevice: deviceInfo.device?.type === 'mobile',
+    isMobileDevice: true,
     undefinedDevice: deviceInfo.device?.type === undefined,
     isIPhone: ['iPhone Simulator', 'iPhone'].includes(deviceInfo.device?.model)
   };
