@@ -13,9 +13,7 @@ import { useInitTextUrl } from '../../../../WithText/hooks/useInitTextUrl';
 import TextLayoutMobile from '../../../../WithText/TextLayoutMobile';
 import NotFound from '../../../../../shared/NotFound';
 
-const ResearchTab = () => {
-  const { id } = useParams();
-
+const ResearchTab = ({id}) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
   const pageCu = useSelector(state => mdbGetDenormContentUnitSelector(state, id));

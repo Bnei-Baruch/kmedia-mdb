@@ -63,12 +63,12 @@ const Materials = ({ t }) => {
     {
       name: 'transcription',
       label: t('materials.transcription.header'),
-      component: <TranscriptionTab />
+      component: <TranscriptionTab id={unit.id} />
     },
     (![CT_CLIP, CT_VIDEO_PROGRAM_CHAPTER].includes(unit.content_type)) && {
       name: 'sources',
       label: t('materials.sources.header'),
-      component: <SourceTab />
+      component: <SourceTab id={unit.id} />
     },
     {
       name: 'sketches',
@@ -86,7 +86,7 @@ const Materials = ({ t }) => {
     items.unshift({
       name: 'summary',
       label: t('materials.summary.header'),
-      component: <Summary />,
+      component: <Summary id={unit.id} />,
     });
   }
 
@@ -110,7 +110,7 @@ const Materials = ({ t }) => {
     items.push({
       name: 'articles',
       label: t('materials.articles.header'),
-      component: <ArticleTab />
+      component: <ArticleTab id={unit.id} />
     });
   }
 
@@ -118,7 +118,7 @@ const Materials = ({ t }) => {
     items.push({
       name: 'research',
       label: t('materials.research.header'),
-      component: <ResearchTab />
+      component: <ResearchTab id={unit.id} />
     });
   }
 

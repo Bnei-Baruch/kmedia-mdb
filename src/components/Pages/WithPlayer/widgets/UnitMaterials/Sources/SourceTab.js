@@ -14,8 +14,7 @@ import TextLayoutMobile from '../../../../WithText/TextLayoutMobile';
 import NotFound from '../../../../../shared/NotFound';
 import SourceTabTOC from './SourceTabTOC';
 
-const SourceTab = () => {
-  const { id }             = useParams();
+const SourceTab = ({id}) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
   const pageCu        = useSelector(state => mdbGetDenormContentUnitSelector(state, id));

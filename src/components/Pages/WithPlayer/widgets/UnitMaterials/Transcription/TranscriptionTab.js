@@ -10,7 +10,7 @@ import { useInitTextUrl } from '../../../../WithText/hooks/useInitTextUrl';
 import TextLayoutMobile from '../../../../WithText/TextLayoutMobile';
 import { transcriptionFileFilter } from './helper';
 
-const TranscriptionTab = () => {
+const TranscriptionTab = ({ id }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
   const linkMemo = useMemo(() => ({ pathname: null, search: { activeTab: 'transcription' } }), []);
@@ -27,9 +27,9 @@ const TranscriptionTab = () => {
     <div className="player_page_tab">
       {
         isMobileDevice ? (
-          <TextLayoutMobile toolbar={<TranscriptionTabToolbarMobile />} playerPage={true} />
+          <TextLayoutMobile id={id} toolbar={<TranscriptionTabToolbarMobile />} playerPage={true} />
         ) : (
-          <TextLayoutWeb toolbar={<TranscriptionTabToolbarWeb />} playerPage={true} />
+          <TextLayoutWeb id={id} toolbar={<TranscriptionTabToolbarWeb />} playerPage={true} />
         )
       }
     </div>

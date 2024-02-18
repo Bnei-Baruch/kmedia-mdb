@@ -20,7 +20,7 @@ import {
 } from '../../../../redux/selectors';
 import NotFound from '../../../shared/NotFound';
 
-const TextContentWeb = ({playerPage}) => {
+const TextContentWeb = ({ playerPage }) => {
   const [parentTop, setParentTop] = useState(0);
 
   const { fontType, zoomSize } = useSelector(textPageGetSettings);
@@ -45,7 +45,7 @@ const TextContentWeb = ({playerPage}) => {
     };
   }, []);
 
-  if(!file)
+  if (!file)
     return <NotFound textKey={playerPage && 'materials.transcription.no-content'} />
   const handleDataRef = r => {
     if (!r) return;
