@@ -7,7 +7,8 @@ import {
   mdbGetDenormContentUnitSelector,
   settingsGetContentLanguagesSelector,
   mdbGetFullUnitFetchedSelector,
-  textPageGetFileFilterSelector
+  textPageGetFileFilterSelector,
+  textPageGetFileSelector
 } from '../redux/selectors';
 import { getQuery } from '../helpers/url';
 
@@ -20,12 +21,13 @@ export function* fetchSubject(action) {
       yield call(fetchUnit, { payload: id });
     }
 
-    const cu               = yield select(state => mdbGetDenormContentUnitSelector(state, id));
-    const fileFilter       = yield select(textPageGetFileFilterSelector);
-    const subject          = cuToSubject(cu, fileFilter);
-    const contentLanguages = yield select(settingsGetContentLanguagesSelector);
+    const cu                      = yield select(state => mdbGetDenormContentUnitSelector(state, id));
+    const fileFilter              = yield select(textPageGetFileFilterSelector);
+    const { language: _language } = yield select(textPageGetFileSelector) || false;
+    const subject                 = cuToSubject(cu, fileFilter);
+    const contentLanguages        = yield select(settingsGetContentLanguagesSelector);
 
-    let prefereLanguage = action.payload.source_language;
+    let prefereLanguage = action.payload.source_language || _language;
     if (!prefereLanguage && typeof window !== 'undefined') {
       prefereLanguage = getQuery(window.location).source_language;
     }
