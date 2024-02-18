@@ -19,13 +19,9 @@ const ExpandCommentsBtn = () => {
   return (
     <ToolbarBtnTooltip
       textKey={expandAll ? 'collapse-comments' : 'expand-comments'}
-      trigger={
-        <Button
-          onClick={toggleNotes}
-          active={expandAll}
-          icon={<span className="material-symbols-outlined">comment</span>}
-        />
-      }
+      onClick={toggleNotes}
+      active={expandAll}
+      icon={<span className="material-symbols-outlined">comment</span>}
     />
   );
 };

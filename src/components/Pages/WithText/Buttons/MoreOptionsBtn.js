@@ -6,12 +6,8 @@ import ToolbarBtnTooltip from './ToolbarBtnTooltip';
 const MoreOptionsBtn = () => (
   <ToolbarBtnTooltip
     textKey="more-buttons"
-    trigger={
-      <Button
-        circular
-        icon={<span className="material-symbols-outlined">more_vert</span>}
-      />
-    }
+    circular
+    icon={<span className="material-symbols-outlined">more_vert</span>}
   />
 );
 

@@ -1,5 +1,4 @@
 import React from 'react';
-import { Button } from 'semantic-ui-react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { actions, NOTE_STATUS } from '../../../../redux/modules/myNotes';
@@ -7,7 +6,8 @@ import { addHighlightByRanges } from '../helper';
 import {
   textPageGetSubjectSelector,
   textPageGetFileSelector,
-  textPageGetUrlInfoSelector
+  textPageGetUrlInfoSelector,
+  myNotesGetStatusSelector
 } from '../../../../redux/selectors';
 import ToolbarBtnTooltip from './ToolbarBtnTooltip';
 
@@ -15,6 +15,7 @@ const AddCommentBtn = () => {
   const { select, search }  = useSelector(textPageGetUrlInfoSelector);
   const { id: subject_uid } = useSelector(textPageGetSubjectSelector);
   const { language }        = useSelector(textPageGetFileSelector);
+  const status              = useSelector(myNotesGetStatusSelector);
 
   const properties = { ...select, ...search };
   const dispatch   = useDispatch();
@@ -39,12 +40,9 @@ const AddCommentBtn = () => {
   return (
     <ToolbarBtnTooltip
       textKey="add-comment"
-      trigger={
-        <Button
-          onClick={handleOpen}
-          icon={<span className="material-symbols-outlined">add_comment</span>}
-        />
-      }
+      onClick={handleOpen}
+      active={status !== NOTE_STATUS.none}
+      icon={<span className="material-symbols-outlined">add_comment</span>}
     />
   );
 };

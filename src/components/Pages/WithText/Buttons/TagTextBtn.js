@@ -45,12 +45,8 @@ const TagTextBtn = () => {
       trigger={
         <ToolbarBtnTooltip
           textKey="add-tag"
-          trigger={
-            <Button
-              icon={<span className="material-symbols-outlined">tag</span>}
-              onClick={handleOpen}
-            />
-          }
+          icon={<span className="material-symbols-outlined">tag</span>}
+          onClick={handleOpen}
         />
       }
     />

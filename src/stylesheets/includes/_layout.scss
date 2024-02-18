@@ -18,9 +18,17 @@ $breadcrumb-height: 48px;
   scrollbar-color: #646464 #FFFFFF;
 }
 
+h1, h2, h3, h4, h5 {
+  font-family: AmiriArabic, "Assistant", Lato, 'Helvetica Neue', Arial, Helvetica, sans-serif;
+}
+
+.ui.accordion .title:not(.ui) {
+  font-family: AmiriArabic, "Assistant", Lato, 'Helvetica Neue', Arial, Helvetica, sans-serif;
+}
+
 body {
   overflow-y: scroll;
-  font-family: AmiriArabic, Lato, 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: AmiriArabic, "Assistant", Lato, 'Helvetica Neue', Arial, Helvetica, sans-serif;
 
   &.noscroll {
     overflow: hidden;

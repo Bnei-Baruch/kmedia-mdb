@@ -16,7 +16,7 @@ const ToggleScanBtn = () => {
     <div>
       <ToolbarBtnTooltip
         textKey="scan"
-        trigger={<Button icon={<span className="material-symbols-outlined">image</span>} />}
+        icon={<span className="material-symbols-outlined">image</span>}
       />
     </div>
   );

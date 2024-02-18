@@ -35,12 +35,8 @@ const PlayByTextBtn = () => {
   return (
     <ToolbarBtnTooltip
       textKey="play-by-text"
-      trigger={
-        <Button
-          onClick={handlePlay}
-          icon={<span className="material-symbols-outlined">play_arrow</span>}
-        />
-      }
+      onClick={handlePlay}
+      icon={<span className="material-symbols-outlined">play_arrow</span>}
     />
   );
 };

@@ -63,12 +63,8 @@ const ShareTextModalBtn = () => {
       trigger={
         <ToolbarBtnTooltip
           textKey="share"
-          trigger={
-            <Button
-              onClick={handleOpen}
-              icon={<span className="material-symbols-outlined">share</span>}
-            />
-          }
+          onClick={handleOpen}
+          icon={<span className="material-symbols-outlined">share</span>}
         />
       }
       open={isPopupOpen}

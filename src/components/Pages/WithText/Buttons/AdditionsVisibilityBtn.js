@@ -16,13 +16,9 @@ const AdditionsVisibilityBtn = () => {
   return (
     <ToolbarBtnTooltip
       textKey={textOnly ? 'hide-additions' : 'show-additions'}
-      trigger={
-        <Button
-          onClick={toggle}
-          active={textOnly}
-          icon={<span className="material-symbols-outlined">visibility_off</span>}
-        />
-      }
+      onClick={toggle}
+      active={textOnly}
+      icon={<span className="material-symbols-outlined">visibility_off</span>}
     />
   );
 };

@@ -1,13 +1,13 @@
 import React, { useContext } from 'react';
 import { useSelector } from 'react-redux';
-import { Popup } from 'semantic-ui-react';
+import { Popup, Button } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 
 import { settingsGetUIDirSelector } from '../../../../redux/selectors';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 
-const ToolbarBtnTooltip = ({ textKey, trigger }) => {
+const ToolbarBtnTooltip = ({ textKey, ...triggerProps }) => {
   const { t } = useTranslation();
 
   const { isMobileDevice } = useContext(DeviceInfoContext);
@@ -15,12 +15,15 @@ const ToolbarBtnTooltip = ({ textKey, trigger }) => {
 
   if (isMobileDevice) {
     return (
-      <div className="text_toolbar_btn_with_text">
-        {trigger}
-        <div>
-          {t(`page-with-text.buttons.mobile.${textKey}`)}
-        </div>
-      </div>
+      <Button
+        {...triggerProps}
+        className="text_toolbar_btn_with_text"
+        content={
+          <span className="title">
+            {t(`page-with-text.buttons.mobile.${textKey}`)}
+          </span>
+        }
+      />
     );
   }
 
@@ -29,7 +32,7 @@ const ToolbarBtnTooltip = ({ textKey, trigger }) => {
       on="hover"
       content={t(`page-with-text.buttons.web.${textKey}`)}
       dir={dir}
-      trigger={trigger}
+      trigger={<Button {...triggerProps} />}
     />
   );
 };

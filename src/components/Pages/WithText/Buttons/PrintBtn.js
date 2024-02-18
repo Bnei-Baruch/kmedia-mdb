@@ -10,13 +10,9 @@ const PrintBtn = () => {
   return (
     <ToolbarBtnTooltip
       textKey="print"
-      trigger={
-        <Button
-          icon={<span className="material-symbols-outlined">print</span>}
-          onClick={handlePrint}
-          className="computer-only"
-        />
-      }
+      icon={<span className="material-symbols-outlined">print</span>}
+      onClick={handlePrint}
+      className="computer-only"
     />
   );
 };

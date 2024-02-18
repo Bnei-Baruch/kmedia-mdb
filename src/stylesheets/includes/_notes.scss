@@ -20,27 +20,39 @@
       align-items: flex-end;
       justify-content: space-around;
 
-      .button {
+      & > .button {
         z-index: 1;
-      }
 
-      .label {
-        margin: 0 !important;
-        top: -6px;
-        left: auto;
-        right: -12px;
-        padding: 4px !important;
-        min-height: 22px;
-        min-width: 22px;
-        border: 1px solid $stroke-gray;
-        font-size: 13px;
+        .label {
+          margin: 0 !important;
+          top: -6px;
+          left: auto;
+          right: -12px;
+          padding: 4px !important;
+          min-height: 22px;
+          min-width: 22px;
+          border: 1px solid $light-stroke;
+          font-size: 13px;
 
-        .is-sepia & {
-          border-color: $sepia-stroke;
+          .is-sepia & {
+            border-color: $sepia-stroke;
+          }
+
+          .is-dark & {
+            border-color: $dark-stroke;
+          }
         }
 
-        .is-dark & {
-          border-color: $dark-stroke;
+        .material-symbols-outlined {
+          color: $light-text;
+
+          .is-sepia & {
+            color: $sepia-text;
+          }
+
+          .is-dark & {
+            color: $dark-text
+          }
         }
       }
     }

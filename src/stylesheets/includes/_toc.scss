@@ -158,6 +158,18 @@
         padding-left: 2em;
       }
     }
+
+    &.toc_single_level > .title {
+      border-bottom: 1px solid $light-stroke;
+
+      .is-dark & {
+        border-bottom-color: $dark-stroke;
+      }
+
+      .is-sepia & {
+        border-bottom-color: $sepia-stroke;
+      }
+    }
   }
 
   .player_page_tab & {
@@ -176,8 +188,25 @@
     bottom: 0;
   }
 
-  .toc_search {
+  .ui.input.toc_search {
     width: 100%;
+
+    > input {
+      border-color: $light-text;
+      background: none;
+
+      &:active {
+        background: none;
+      }
+
+      .is-dark & {
+        border-color: $dark-text;
+      }
+
+      .is-sepia & {
+        border-color: $sepia-text;
+      }
+    }
   }
 
   .toc_sort_btn {
@@ -198,5 +227,11 @@
   .button {
     display: flex;
     align-items: center;
+
+    .title {
+      font-size: 18px;
+      font-weight: 600;
+      margin: 0 5px;
+    }
   }
 }

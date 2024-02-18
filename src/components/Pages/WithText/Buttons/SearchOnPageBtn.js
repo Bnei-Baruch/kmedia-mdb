@@ -19,13 +19,9 @@ const SearchOnPageBtn = () => {
   return (
     <ToolbarBtnTooltip
       textKey="search"
-      trigger={
-        <Button
-          active={isSearch}
-          onClick={handle}
-          icon={<span className="material-symbols-outlined">search</span>}
-        />
-      }
+      active={isSearch}
+      onClick={handle}
+      icon={<span className="material-symbols-outlined">search</span>}
     />
   );
 };

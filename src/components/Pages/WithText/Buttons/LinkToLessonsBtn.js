@@ -20,13 +20,9 @@ const LinkToLessonsBtn = () => {
   return (
     <ToolbarBtnTooltip
       textKey="lessons"
-      trigger={
-        <Button
-          as={Link}
-          to={{ pathname: '/lessons', search: stringify({ [linkByCT[subject.type]]: subject.id }) }}
-          icon={<span className="material-symbols-outlined">subscriptions</span>}
-        />
-      }
+      as={Link}
+      to={{ pathname: '/lessons', search: stringify({ [linkByCT[subject.type]]: subject.id }) }}
+      icon={<span className="material-symbols-outlined">subscriptions</span>}
     />
   );
 };

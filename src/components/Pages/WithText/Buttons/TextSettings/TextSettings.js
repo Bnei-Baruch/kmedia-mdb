@@ -15,18 +15,21 @@ const TextSettings = () => {
         <div>
           <ToolbarBtnTooltip
             textKey="text-settings"
-            trigger={<Button icon={<span className="material-symbols-outlined">text_fields</span>} />}
+            active={isOpen}
+            icon={<span className="material-symbols-outlined">text_fields</span>}
           />
         </div>
       }
       on="click"
-      position="bottom right"
+      position="bottom center"
+      basic
       className="sources-settings"
       flowing
       hideOnScroll
       open={isOpen}
       onClose={() => setIsOpen(false)}
       onOpen={() => setIsOpen(true)}
+      offset={[0, 10]}
     >
       <Popup.Content>
         <Menu fluid widths={2}>

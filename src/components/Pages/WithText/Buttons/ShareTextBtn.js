@@ -55,7 +55,7 @@ const ShareTextBtn = () => {
         <div>
           <ToolbarBtnTooltip
             textKey="share"
-            trigger={<Button icon={<span className="material-symbols-outlined">share</span>} />}
+            icon={<span className="material-symbols-outlined">share</span>}
           />
         </div>
       }

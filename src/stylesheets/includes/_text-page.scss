@@ -3,17 +3,18 @@ $breadcrumb-height: 48px;
 
 .text_layout {
   position: relative;
+  font-size: 18px;
 
   .text__content-wrapper {
     display: flex;
     flex-basis: max-content;
     flex-wrap: nowrap;
     justify-content: center;
-    padding: 1.5em 1em;
 
     .text__content {
       max-width: $max-readble-width;
       word-break: break-word;
+      padding: 1.5em 1em 0;
 
       &.text_pdf {
         min-width: calc(100% - 100px);
@@ -26,10 +27,16 @@ $breadcrumb-height: 48px;
     }
   }
 
+  &.is-mobile {
+    .text__content {
+      padding: 1em 0;
+    }
+  }
+
   .text_align_to_text {
     width: $max-readble-width;
-    transform: translate3d(-30px, 0, 0px);
-    margin: 0 auto;
+    transform: translate3d(-45px, 0, 0px);
+    margin: 1.5em auto 0;
 
     .ltr & {
       transform: translate3d(30px, 0, 0px);
@@ -68,19 +75,8 @@ $breadcrumb-height: 48px;
     background: $dark-bg;
     color: $dark-text;
 
-    .material-symbols-outlined {
-      color: $dark-text;
-    }
-
     .toc_trigger, .toc_trigger:hover {
       color: $dark-text !important;
-    }
-
-    .button {
-      &:hover, &.active {
-        color: $dark-text;
-        background-color: $dark-hover;
-      }
     }
   }
 
@@ -88,19 +84,8 @@ $breadcrumb-height: 48px;
     background: $sepia-bg;
     color: $sepia-text;
 
-    .material-symbols-outlined {
-      color: $sepia-text;
-    }
-
     .toc_trigger, .toc_trigger:hover {
       color: $sepia-text !important;
-    }
-
-    .button {
-      &:hover, &.active {
-        color: $sepia-text;
-        background-color: $dark-hover;
-      }
     }
   }
 
@@ -190,6 +175,7 @@ $breadcrumb-height: 48px;
     box-shadow: none !important;
     margin: 0 !important;
     white-space: nowrap;
+    font-size: 20px;
 
     + .menu {
       border-top: 1px solid rgba(34, 36, 38, .1) !important;
@@ -198,6 +184,7 @@ $breadcrumb-height: 48px;
     &.ui.item .item {
       padding-left: 1em !important;
       padding-right: 1em !important;
+      text-transform: capitalize;
     }
   }
 }
@@ -328,12 +315,6 @@ $breadcrumb-height: 48px;
     .text_toolbar__buttons {
       border-right: none;
       border-left: none;
-
-      .button {
-        &:focus, &:active, &:hover {
-          background: none !important;
-        }
-      }
     }
   }
 
@@ -369,27 +350,70 @@ $breadcrumb-height: 48px;
       }
     }
 
+
     .button {
       font-size: 18px;
       padding: 3px 3px 0 !important;
       background: none;
       margin: 0 8px;
+      color: $light-text;
+      text-align: center;
 
-      &:focus, &:active {
+      &:focus, &:active, &:hover {
         background: none;
+        color: $light-text;
       }
 
       &.active {
-        background: $active !important;
+        background: none;
+        color: $light-active-text;
+
+        &:focus, &:active, &:hover {
+          background: none;
+          color: $light-active-text;
+        }
+      }
+
+      .title {
+        font-weight: normal;
+        display: block;
+      }
+
+      .is-dark & {
+        color: $dark-text;
+
+        &:hover {
+          color: $dark-text;
+        }
+
+        &.active {
+          color: $dark-active-text;
+
+          .material-symbols-outlined {
+            color: $dark-active-text;
+          }
+        }
+      }
+
+      .is-sepia & {
+        color: $sepia-text;
+
+        .material-symbols-outlined {
+          color: $sepia-text;
+        }
+
+        &.active {
+          color: $dark-active-text;
+
+          .material-symbols-outlined {
+            color: $dark-active-text;
+          }
+        }
       }
     }
 
     .player_page_tab & {
       border: none;
-    }
-
-    .text_toolbar_btn_with_text {
-      text-align: center;
     }
   }
 
@@ -406,6 +430,10 @@ $breadcrumb-height: 48px;
       .button {
         margin: 0 !important;
         padding: 0 !important;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
 
         .material-symbols-outlined {
           min-width: 32px;
@@ -432,6 +460,9 @@ $breadcrumb-height: 48px;
 
   & > div:last-child {
     color: $text-color;
+    font-weight: bold;
+    text-overflow: ellipsis;
+    overflow: hidden;
 
     .is-dark & {
       color: $dark-text !important;
@@ -449,13 +480,21 @@ $breadcrumb-height: 48px;
   }
 
   a {
-    color: $midGrey;
+    color: $text-color;
     text-decoration: underline;
+
+    .is-dark & {
+      color: $dark-text !important;
+    }
+
+    .is-sepia & {
+      color: $sepia-text !important;
+    }
   }
 }
 
 .text_page__audio {
-  margin-top: 1em;
+  margin-top: 2em;
 
   audio {
     height: 25px;
@@ -608,9 +647,22 @@ $breadcrumb-height: 48px;
   }
 }
 
-.text__language_popup > .menu {
-  max-height: 70VH;
+.ui.dropdown.text__language_popup .menu {
+  max-height: 60VH;
   overflow: auto;
+
+  & > .item {
+    padding: 1.5em 1em !important;
+    border-bottom: 1px solid $light-stroke;
+
+    .is-dark & {
+      border-bottom: 1px solid $dark-stroke;
+    }
+
+    .is-sepia & {
+      border-bottom: 1px solid $sepia-stroke;
+    }
+  }
 }
 
 .text__theme-btn {
@@ -648,12 +700,12 @@ $breadcrumb-height: 48px;
 
     .material-symbols-outlined {
       .is-dark & {
-        color: #3376D6;
+        color: $blue;
       }
     }
 
     &, &:hover, &:active, &:focus {
-      color: #3376D6 !important;
+      color: $blue !important;
       background: none !important;
     }
   }
@@ -667,7 +719,7 @@ $breadcrumb-height: 48px;
 
 
     &:focus {
-      border-color: #3376D6;
+      border-color: $blue;
     }
 
     & > input {
@@ -681,7 +733,7 @@ $breadcrumb-height: 48px;
       text-align: center;
 
       &:focus {
-        border-bottom: 2px solid #3376D6;
+        border-bottom: 2px solid $blue;
 
         &::placeholder {
           visibility: hidden;
@@ -718,7 +770,7 @@ $breadcrumb-height: 48px;
     .material-symbols-outlined {
       cursor: pointer;
       font-size: 25px;
-      color: #3376D6;
+      color: $blue;
     }
   }
 }

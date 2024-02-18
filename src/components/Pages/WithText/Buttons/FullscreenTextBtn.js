@@ -45,12 +45,8 @@ const FullscreenTextBtn = () => {
   return (
     <ToolbarBtnTooltip
       textKey={tooltip}
-      trigger={
-        <Button
-          onClick={toggleFullscreen}
-          icon={<span className="material-symbols-outlined">{icon}</span>}
-        />
-      }
+      onClick={toggleFullscreen}
+      icon={<span className="material-symbols-outlined">{icon}</span>}
     />
   );
 };
