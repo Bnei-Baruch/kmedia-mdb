@@ -12,7 +12,7 @@ const PlayerLanguages = () => {
   const dispatch                  = useDispatch();
 
   if (!isHLS) {
-    language = file;
+    language = file.language;
   } else if (!languages.includes(language)) {
     language = languages[0];
   }

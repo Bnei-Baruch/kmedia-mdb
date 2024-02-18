@@ -18,8 +18,9 @@ import {
   textPageGetFileSelector,
   textPageGetTextOnlySelector
 } from '../../../../redux/selectors';
+import NotFound from '../../../shared/NotFound';
 
-const TextContentWeb = () => {
+const TextContentWeb = ({playerPage}) => {
   const [parentTop, setParentTop] = useState(0);
 
   const { fontType, zoomSize } = useSelector(textPageGetSettings);
@@ -44,6 +45,8 @@ const TextContentWeb = () => {
     };
   }, []);
 
+  if(!file)
+    return <NotFound textKey={playerPage && 'materials.transcription.no-content'} />
   const handleDataRef = r => {
     if (!r) return;
 

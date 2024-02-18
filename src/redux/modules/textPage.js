@@ -6,6 +6,7 @@ import { getPathnameWithHost, getQuery } from '../../helpers/url';
 import { actions as settingsActions } from './settings';
 import { isEmpty } from '../../helpers/utils';
 import { selectSuitableLanguage } from '../../helpers/language';
+import { CT_SOURCE } from '../../helpers/consts';
 
 const updateLocalStorage = state => {
   const settings = { ...state.settings };
@@ -40,7 +41,7 @@ const buildUrlSearch = (state, search = {}) => {
 const onChangeLanguage = (state, lang) => {
   if (isEmpty(state.subject?.files)) return;
 
-  state.file = selectTextFile(state.subject.files, state.subject.id, lang);
+  state.file = selectTextFile(state.subject.files, state.subject.id, lang, state.subject.type === CT_SOURCE);
   state.mp3  = selectMP3(state.subject.files, lang);
   if (!state.urlInfo.isCastom) {
     state.urlInfo.url = buildUrl(state);
@@ -104,7 +105,7 @@ const textPageSlice = createSlice({
         state.urlInfo.isCastom = true;
       }
 
-      state.urlInfo.search = buildUrlSearch(state, payload?.search);
+      state.urlInfo.search = buildUrlSearch(state, { ...payload?.search });
     },
     setUrlSelect: (state, { payload }) => void (state.urlInfo.select = payload || null),
     setWordOffset: (state, { payload }) => void (state.wordOffset = payload),
@@ -122,6 +123,7 @@ const textPageSlice = createSlice({
       reducer: (state, { payload }) => {
         state.wip        = true;
         state.err        = null;
+        state.isSearch   = false;
         state.subject.id = payload.id;
       }
     },

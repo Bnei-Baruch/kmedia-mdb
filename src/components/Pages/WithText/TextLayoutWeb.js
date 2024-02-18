@@ -13,37 +13,33 @@ import AudioPlayer from '../../shared/AudioPlayer';
 import SearchOnPageBar from './SearchOnPageBar';
 import WipErr from '../../shared/WipErr/WipErr';
 import { useTranslation } from 'react-i18next';
-import { isEmpty } from '../../../helpers/utils';
 import { useScrollBehavior } from './hooks/useScrollBehavior';
 import {
   textPageGetSettings,
   textPageGetSubjectSelector,
-  textPageGetFileSelector,
   textPageGetUrlInfoSelector,
   textPageGetScrollDirSelector,
   textPageGetTextOnlySelector
 } from '../../../redux/selectors';
-import NotFound from '../../shared/NotFound';
 import ScrollToTopBtn from './Buttons/ScrollToTopBtn';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { useFetchNotes } from './Notes/useFetchNotes';
 
 const TextLayoutWeb = props => {
   const {
-    toolbar    = null,
-    toc        = null,
-    prevNext   = null,
-    breadcrumb = null,
-    playerPage = false,
-    id
-  } = props;
+          toolbar    = null,
+          toc        = null,
+          prevNext   = null,
+          breadcrumb = null,
+          playerPage = false,
+          id
+        } = props;
 
   const ref   = useRef();
   const { t } = useTranslation();
 
   const scrollDir          = useSelector(textPageGetScrollDirSelector);
   const subject            = useSelector(textPageGetSubjectSelector);
-  const file               = useSelector(textPageGetFileSelector);
   const hasSel             = !!useSelector(textPageGetUrlInfoSelector).select;
   const { theme }          = useSelector(textPageGetSettings);
   const textOnly           = useSelector(textPageGetTextOnlySelector);
@@ -57,9 +53,6 @@ const TextLayoutWeb = props => {
 
   const wipErr = WipErr({ wip, err: null, t });
   if (wipErr) return wipErr;
-
-  if (isEmpty(file))
-    return <NotFound textKey={playerPage && 'materials.transcription.no-content'} />;
 
   return (
     <div className={`is-web text_layout is-${theme}`} ref={ref}>
@@ -87,7 +80,7 @@ const TextLayoutWeb = props => {
           </div>
         )
       }
-      <TextContentWeb />
+      <TextContentWeb playerPage={playerPage} />
       {prevNext}
 
       <NoteItemSticky />

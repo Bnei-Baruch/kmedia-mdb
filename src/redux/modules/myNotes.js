@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { actions as textPageActions } from './textPage';
 
 export const NOTE_STATUS = {
   edit: 1,
@@ -77,6 +78,9 @@ const myNotesService = createSlice({
     },
     setSelected: (state, { payload }) => void (state.selected = payload),
     setStatus: (state, { payload }) => void (state.noteStatus = payload ?? NOTE_STATUS.none),
+  },
+  extraReducers: builder => {
+    builder.addCase(textPageActions.fetchSubject, state => void (state.noteStatus = NOTE_STATUS.none));
   }
 });
 

@@ -1,13 +1,17 @@
 import React, { useState } from 'react';
-import { Button, Menu, Popup } from 'semantic-ui-react';
+import { Menu, Popup } from 'semantic-ui-react';
 
 import ZoomSizeBtns from './ZoomSizeBtns';
 import FontTypeBtn from './FontTypeBtn';
 import ThemeBtn from './ThemeBtn';
 import ToolbarBtnTooltip from '../ToolbarBtnTooltip';
+import { textPageGetFileSelector } from '../../../../../redux/selectors';
+import { useSelector } from 'react-redux';
 
 const TextSettings = () => {
   const [isOpen, setIsOpen] = useState(false);
+
+  const noFile = !useSelector(textPageGetFileSelector);
 
   return (
     <Popup
@@ -30,6 +34,7 @@ const TextSettings = () => {
       onClose={() => setIsOpen(false)}
       onOpen={() => setIsOpen(true)}
       offset={[0, 10]}
+      disabled={noFile}
     >
       <Popup.Content>
         <Menu fluid widths={2}>

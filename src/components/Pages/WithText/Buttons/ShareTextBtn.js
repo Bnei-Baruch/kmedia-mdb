@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 import ShareBar from '../../../Share/ShareBar';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import useStateWithCallback from '../../../../helpers/use-state-with-callback';
-import { textPageGetUrlInfoSelector } from '../../../../redux/selectors';
+import { textPageGetUrlInfoSelector, textPageGetFileSelector } from '../../../../redux/selectors';
 import ToolbarBtnTooltip from './ToolbarBtnTooltip';
 
 const POPOVER_CONFIRMATION_TIMEOUT = 2500;
@@ -24,6 +24,7 @@ const ShareTextBtn = () => {
   });
 
   const { select, search, url } = useSelector(textPageGetUrlInfoSelector);
+  const noFile                  = !useSelector(textPageGetFileSelector);
 
   const properties = { ...select, ...search };
 
@@ -51,6 +52,7 @@ const ShareTextBtn = () => {
       on="click"
       flowing
       hideOnScroll
+      disabled={noFile}
       trigger={
         <div>
           <ToolbarBtnTooltip

@@ -4,20 +4,23 @@ import { Popup, Button } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 
-import { settingsGetUIDirSelector } from '../../../../redux/selectors';
+import { settingsGetUIDirSelector, textPageGetFileSelector } from '../../../../redux/selectors';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 
-const ToolbarBtnTooltip = ({ textKey, ...triggerProps }) => {
+const ToolbarBtnTooltip = ({ textKey, disabled, ...triggerProps }) => {
   const { t } = useTranslation();
 
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const dir                = useSelector(settingsGetUIDirSelector);
+  const noFile             = !useSelector(textPageGetFileSelector);
 
+  disabled = disabled ?? noFile;
   if (isMobileDevice) {
     return (
       <Button
         {...triggerProps}
         className="text_toolbar_btn_with_text"
+        disabled={disabled}
         content={
           <span className="title">
             {t(`page-with-text.buttons.mobile.${textKey}`)}
@@ -32,7 +35,8 @@ const ToolbarBtnTooltip = ({ textKey, ...triggerProps }) => {
       on="hover"
       content={t(`page-with-text.buttons.web.${textKey}`)}
       dir={dir}
-      trigger={<Button {...triggerProps} />}
+      disabled={disabled}
+      trigger={<Button {...triggerProps} disabled={disabled} />}
     />
   );
 };
