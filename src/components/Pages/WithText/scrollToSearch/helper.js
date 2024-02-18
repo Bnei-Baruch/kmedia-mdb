@@ -269,7 +269,7 @@ export const isSelectionForward = sel => {
 };
 
 export const urlParamFromSelect = () => {
-  const sel  = window.getSelection();
+  const sel = window.getSelection();
   if (sel.isCollapsed) {
     return {};
   }
@@ -291,9 +291,9 @@ export const urlParamFromSelect = () => {
   const { offset: sOffset, wordOffset: sWordOffset } = findOffsetOfDOMNode(range.startContainer, range.startOffset);
   const { offset: eOffset }                          = findOffsetOfDOMNode(range.endContainer, range.endOffset);
 
-  const rangeStr = range.toString();
-  const sStart   = rangeStr.split(' ').slice(0, MIN_NUMBER_WORDS_IN_LINK).join(' ');
-  const sEnd     = rangeStr.split(' ').slice(-1 * MIN_NUMBER_WORDS_IN_LINK).join(' ');
+  const rangeArr = range.toString().split(' ').filter(x => x !== '');
+  const sStart   = rangeArr.slice(0, MIN_NUMBER_WORDS_IN_LINK).join(' ');
+  const sEnd     = rangeArr.slice(-1 * MIN_NUMBER_WORDS_IN_LINK).join(' ');
 
   const query = {
     srchstart: sStart + OFFSET_TEXT_SEPARATOR + sOffset,
