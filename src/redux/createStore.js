@@ -38,9 +38,10 @@ import fetchImage from './modules/fetchImage';
 import textPage from './modules/textPage';
 
 const isProduction = process.env.NODE_ENV === 'production';
+const verboseDebug = false;
 
 const sagaMiddleware = createSagaMiddleware(
-  isProduction ? {} : { sagaMonitor: sagaMonitor(), logger: console.log }
+  verboseDebug ? { sagaMonitor: sagaMonitor(), logger: console.log } : {}
 );
 
 const setupMiddleware = history => getDefaultMiddleware => {
@@ -53,7 +54,7 @@ const setupMiddleware = history => getDefaultMiddleware => {
     sagaMiddleware
   );
   // Conditionally add another middleware in dev
-  if (!isProduction) {
+  if (verboseDebug) {
     middleware.push(logger);
   }
 
