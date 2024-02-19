@@ -1,8 +1,9 @@
 import http from 'http';
 import path from 'path';
 import express from 'express';
+//import compression from 'compression';
 import { createProxyMiddleware } from 'http-proxy-middleware';
-
+//import { resourceMonitorMiddleware } from 'express-watcher';
 import * as middleware from './middleware';
 import serverRender from './renderer';
 
