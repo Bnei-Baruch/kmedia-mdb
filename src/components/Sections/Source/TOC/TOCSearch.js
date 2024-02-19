@@ -3,15 +3,23 @@ import { Button, Input } from 'semantic-ui-react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { actions } from '../../../../redux/modules/textPage';
-import { textPageGetTocInfoSelector } from '../../../../redux/selectors';
+import {
+  textPageGetTocInfoSelector,
+  textPageGetSubjectSelector,
+  sourcesGetPathByIDSelector
+} from '../../../../redux/selectors';
+import { NotToSort } from '../../../../redux/modules/sources';
 
 const TocSearch = () => {
   const { t } = useTranslation();
 
   const { match, sortByAZ } = useSelector(textPageGetTocInfoSelector);
-  const dispatch            = useDispatch();
-  const handleChange        = (e, data) => search(data.value);
-  const handleKeyDown       = e => {
+  const { id }              = useSelector(textPageGetSubjectSelector);
+  const path                = useSelector(sourcesGetPathByIDSelector)(id);
+
+  const dispatch      = useDispatch();
+  const handleChange  = (e, data) => search(data.value);
+  const handleKeyDown = e => {
     if (e.keyCode === 27) { // Esc
       search('');
     }
@@ -32,15 +40,21 @@ const TocSearch = () => {
         onChange={handleChange}
         onKeyDown={handleKeyDown}
       />
-      <div className="divider"></div>
-      <Button
-        compact
-        basic
-        className="toc_sort_btn"
-        icon={<span className="material-symbols-outlined">sort_by_alpha</span>}
-        active={sortByAZ}
-        onClick={sortBy}
-      />
+      {
+        !NotToSort.includes(path[1]?.id) && (
+          <>
+            <div className="divider"></div>
+            <Button
+              compact
+              basic
+              className="toc_sort_btn"
+              icon={<span className="material-symbols-outlined">sort_by_alpha</span>}
+              active={sortByAZ}
+              onClick={sortBy}
+            />
+          </>
+        )
+      }
     </div>
 
   );

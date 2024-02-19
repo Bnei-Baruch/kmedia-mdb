@@ -1,5 +1,4 @@
 import React from 'react';
-import { Button } from 'semantic-ui-react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { actions } from '../../../../redux/modules/textPage';
@@ -16,13 +15,9 @@ const AdditionsVisibilityBtn = () => {
   return (
     <ToolbarBtnTooltip
       textKey={textOnly ? 'hide-additions' : 'show-additions'}
-      trigger={
-        <Button
-          onClick={toggle}
-          active={textOnly}
-          icon={<span className="material-symbols-outlined">visibility_off</span>}
-        />
-      }
+      onClick={toggle}
+      active={textOnly}
+      icon={<span className="material-symbols-outlined">visibility_off</span>}
     />
   );
 };

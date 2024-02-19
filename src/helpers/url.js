@@ -1,12 +1,7 @@
 import qs from 'qs';
 import { parse as cookieParse } from 'cookie';
 
-import {
-  COOKIE_UI_LANG,
-  DEFAULT_UI_LANGUAGE,
-  LANGUAGES,
-  LANG_UI_LANGUAGES
-} from './consts';
+import { COOKIE_UI_LANG, DEFAULT_UI_LANGUAGE, LANGUAGES, LANG_UI_LANGUAGES } from './consts';
 import { KC_SEARCH_KEY_SESSION, KC_SEARCH_KEYS } from '../pkg/ksAdapter/adapter';
 import { omit } from 'lodash/object';
 

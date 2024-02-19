@@ -39,7 +39,8 @@ import ScoreDebug from './ScoreDebug';
 import Helmets from '../shared/Helmets';
 import {
   sourcesAreLoadedSelector,
-  tagsAreLoadedSelector, publicationsGetBlogPostSelector,
+  tagsAreLoadedSelector,
+  publicationsGetBlogPostSelector,
   mdbGetDenormCollectionSelector,
   mdbGetDenormContentUnitSelector,
   filtersGetFiltersSelector,

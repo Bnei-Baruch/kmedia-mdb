@@ -5,7 +5,13 @@ import { ClientChroniclesContext } from '../../helpers/app-contexts';
 import { usePrevious } from '../../helpers/utils';
 import { getDuration, getMute } from '../../pkg/jwpAdapter/adapter';
 import { getSavedTime } from './helper';
-import { chroniclesGetEventSelector, playerGetFileSelector, playlistGetInfoSelector, playlistGetPlayedSelector, playerIsReadySelector } from '../../redux/selectors';
+import {
+  chroniclesGetEventSelector,
+  playerGetFileSelector,
+  playlistGetInfoSelector,
+  playlistGetPlayedSelector,
+  playerIsReadySelector
+} from '../../redux/selectors';
 
 const buildAppendData = (autoPlay, item, file) => {
   const { id: file_uid, language: file_language } = file || false;

@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { Container, Header } from 'semantic-ui-react';
 
 import excerpts from './excerpts';
 import { DEFAULT_CONTENT_LANGUAGE } from '../../../helpers/consts';
 import MenuLanguageSelector from '../../../components/Language/Selector/MenuLanguageSelector';
 import { selectSuitableLanguage } from '../../../helpers/language';
-import { settingsGetContentLanguagesSelector } from '../../../redux/selectors';
 
 const renderer = ({ minutes, seconds, completed }) => {
   if (completed) {
@@ -58,7 +56,6 @@ const Countdown = ({ finalDate }) => {
 
 const ExcerptContainer = () => {
   const excerptsLanguages                       = Object.keys(excerpts);
-  const contentLanguages                        = useSelector(settingsGetContentLanguagesSelector);
   const defaultLanguage                         = selectSuitableLanguage(excerptsLanguages, excerptsLanguages, DEFAULT_CONTENT_LANGUAGE);
   const [selectedLanguage, setSelectedLanguage] = useState(defaultLanguage);
 

@@ -8,7 +8,7 @@ const THEME_LIGHT = 'light';
 const THEME_DARK  = 'dark';
 const THEME_SEPIA = 'sepia';
 
-const btns = [THEME_DARK, THEME_LIGHT, THEME_SEPIA];
+const btns = [THEME_LIGHT, THEME_DARK, THEME_SEPIA];
 
 const ThemeBtn = () => {
   const { theme }      = useSelector(textPageGetSettings);

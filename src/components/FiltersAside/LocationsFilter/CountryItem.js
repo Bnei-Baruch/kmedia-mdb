@@ -2,11 +2,15 @@ import React, { useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Checkbox, List } from 'semantic-ui-react';
 import { FN_LOCATIONS } from '../../../helpers/consts';
-import { isLanguageRtl } from '../../../helpers/i18n-utils';
 
 import { actions } from '../../../redux/modules/filters';
 import CitiesModal from './CitiesModal';
-import { filtersAsideCitiesByCountrySelector, filtersAsideGetStatsSelector, filtersGetFilterByNameSelector, settingsGetUIDirSelector } from '../../../redux/selectors';
+import {
+  filtersAsideCitiesByCountrySelector,
+  filtersAsideGetStatsSelector,
+  filtersGetFilterByNameSelector,
+  settingsGetUIDirSelector
+} from '../../../redux/selectors';
 
 const CountryItem = ({ namespace, loc }) => {
 
@@ -59,7 +63,7 @@ const CountryItem = ({ namespace, loc }) => {
           <span className="stat">{`(${stat})`}</span>
         </List.Content>
       </List.Item>
-      <CitiesModal namespace={namespace} open={open} country={id} onClose={() => setOpen(false)}/>
+      <CitiesModal namespace={namespace} open={open} country={id} onClose={() => setOpen(false)} />
     </>
   );
 };

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Modal, Icon } from 'semantic-ui-react';
+import { Modal, Icon } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
 import { textPageGetScanFileSelector } from '../../../../redux/selectors';
 import ToolbarBtnTooltip from './ToolbarBtnTooltip';
@@ -16,7 +16,7 @@ const ToggleScanBtn = () => {
     <div>
       <ToolbarBtnTooltip
         textKey="scan"
-        trigger={<Button icon={<span className="material-symbols-outlined">image</span>} />}
+        icon={<span className="material-symbols-outlined">image</span>}
       />
     </div>
   );

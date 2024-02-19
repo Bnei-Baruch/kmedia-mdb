@@ -71,7 +71,7 @@ const TextLayoutMobile = props => {
             </div>
           )
         }
-        <TextContentMobile />
+        <TextContentMobile playerPage={playerPage} />
         {prevNext}
       </Container>
       {toc}

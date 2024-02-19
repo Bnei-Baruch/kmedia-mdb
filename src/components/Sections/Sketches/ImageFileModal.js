@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { Modal, Button } from 'semantic-ui-react';
 import ImageGallery from 'react-image-gallery';
 import FallbackImage from '../../shared/FallbackImage';
-import { imageGalleryItem } from '../../Pages/WithPlayer/widgets/UnitMaterials/helper';
+import { imageGalleryItem } from '../../Pages/WithPlayer/widgets/UnitMaterials/Sketches/helper';
 import { settingsGetUIDirSelector } from '../../../redux/selectors';
 
 const ImageFileModal = ({ file }) => {

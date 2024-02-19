@@ -1,11 +1,12 @@
-import React from 'react';
-import { Dropdown, Button } from 'semantic-ui-react';
+import React, { useState } from 'react';
+import { Dropdown } from 'semantic-ui-react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { getOptions } from '../../../../helpers/language';
 import { actions } from '../../../../redux/modules/textPage';
 import { textPageGetSubjectSelector, textPageGetFileSelector } from '../../../../redux/selectors';
 import ToolbarBtnTooltip from './ToolbarBtnTooltip';
+import { isEmpty } from '../../../../helpers/utils';
 
 const LanguageTextBtn = () => {
   const dispatch = useDispatch();
@@ -13,24 +14,31 @@ const LanguageTextBtn = () => {
   const { language }  = useSelector(textPageGetFileSelector);
   const { languages } = useSelector(textPageGetSubjectSelector);
 
-  const onChange = selected => {
-    dispatch(actions.changeLanguage(selected));
-  };
+  const [open, setOpen] = useState(false);
+
+  const onChange   = (event, { value }) => dispatch(actions.changeLanguage(value));
+  const toggleOpen = () => setOpen(!open);
 
   const options = getOptions({ languages });
+  const noLangs = isEmpty(options);
   return (
     <Dropdown
+      className="text__language_popup"
+      icon={null}
+      disabled={noLangs}
       trigger={
         <ToolbarBtnTooltip
           textKey="languages"
-          trigger={<Button icon={(<span className="material-symbols-outlined">Translate</span>)} />}
+          active={open}
+          icon={(<span className="material-symbols-outlined">Translate</span>)}
+          disabled={noLangs}
         />
       }
+      onClose={toggleOpen}
+      onOpen={toggleOpen}
       value={language}
-      onChange={(event, data) => onChange(data.value)}
+      onChange={onChange}
       options={options}
-      icon={null}
-      className="text__language_popup"
     />
   );
 };

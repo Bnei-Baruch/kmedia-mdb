@@ -11,7 +11,11 @@ import { canonicalLink } from '../../../../helpers/links';
 import Link from '../../../Language/MultiLanguageLink';
 import UnitLogo from '../../../shared/Logo/UnitLogo';
 import { getMyItemKey } from '../../../../helpers/my';
-import { statsGetCUSelector, mdbGetDenormCollectionSelector, settingsGetUIDirSelector } from '../../../../redux/selectors';
+import {
+  statsGetCUSelector,
+  mdbGetDenormCollectionSelector,
+  settingsGetUIDirSelector
+} from '../../../../redux/selectors';
 
 export const SubscriptionsItem = ({ item, t }) => {
   const [confirm, setConfirm] = useState();

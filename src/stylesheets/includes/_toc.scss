@@ -49,7 +49,7 @@
     }
 
     &.toc_scroll_down {
-      height: calc(100VH - $main-menu-height - 48px);
+      height: calc(100VH - $main-menu-height);
 
       &.toc_selected {
         height: calc(100VH - $main-menu-height);
@@ -59,28 +59,44 @@
     .toc_scroll {
       overflow: hidden auto;
       height: calc(100% - 130px);
+      position: relative;
     }
 
     @include mobile {
       width: 100%;
       position: fixed;
-      top: $main-menu-height + 48px;
-      height: calc(100VH - $main-menu-height - 48px);
+      top: $main-menu-height;
+      max-height: calc(100VH - $main-menu-height);
       bottom: auto;
       transform: translate3d(-100%, 0, 0);
+      height: 100%;
+
+
+      .toc_scroll {
+        height: calc(100% - $toc-toolbar-height - 30px);
+        margin-bottom: 10px;
+      }
+
+      .toc_scroll_align {
+        display: flex;
+        align-items: flex-end;
+        height: fit-content;
+        min-height: 100%;
+      }
 
       .rtl & {
         transform: translate3d(100%, 0, 0);
       }
-      &.toc_scroll_up, &.toc_scroll_end {
-        top: 0;
-        height: 100VH;
-        transition: height 0.2s ease-in-out 0s;
-      }
 
-      &.toc_scroll_down {
-        top: $main-menu-height;
-        height: calc(100VH - $main-menu-height);
+      &.toc_scroll_up, &.toc_scroll_down {
+        top: 0;
+        max-height: 100VH;
+        height: 100%;
+        transition: height 0.2s ease-in-out 0s;
+
+        .toc_scroll {
+          height: calc(100% - $toc-toolbar-height - 30px);
+        }
       }
     }
 
@@ -142,6 +158,18 @@
         padding-left: 2em;
       }
     }
+
+    &.toc_single_level > .title {
+      border-bottom: 1px solid $light-stroke;
+
+      .is-dark & {
+        border-bottom-color: $dark-stroke;
+      }
+
+      .is-sepia & {
+        border-bottom-color: $sepia-stroke;
+      }
+    }
   }
 
   .player_page_tab & {
@@ -155,8 +183,30 @@
   flex-wrap: nowrap;
   margin-bottom: 1em;
 
-  .toc_search {
+  .is-mobile & {
+    position: sticky;
+    bottom: 0;
+  }
+
+  .ui.input.toc_search {
     width: 100%;
+
+    > input {
+      border-color: $light-text;
+      background: none;
+
+      &:active {
+        background: none;
+      }
+
+      .is-dark & {
+        border-color: $dark-text;
+      }
+
+      .is-sepia & {
+        border-color: $sepia-text;
+      }
+    }
   }
 
   .toc_sort_btn {
@@ -173,4 +223,15 @@
   flex-wrap: nowrap;
   justify-content: space-between;
   margin-bottom: 1.5em;
+
+  .button {
+    display: flex;
+    align-items: center;
+
+    .title {
+      font-size: 18px;
+      font-weight: 600;
+      margin: 0 5px;
+    }
+  }
 }

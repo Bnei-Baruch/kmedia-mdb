@@ -1,5 +1,4 @@
 import { createFilterDefinition } from './util';
-import { selectors } from '../../redux/modules/sources';
 import { sourcesGetSourceByIdSelector } from '../../redux/selectors';
 
 const breadCrumb = (x, index, lastIndex) => {

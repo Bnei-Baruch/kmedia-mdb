@@ -10,7 +10,12 @@ import { types as recommendedTypes } from '../redux/modules/recommended';
 import { types as searchTypes } from '../redux/modules/search';
 import { types as authTypes } from '../redux/modules/auth';
 import { ClientChroniclesContext } from './app-contexts';
-import { chroniclesGetActionCountSelector, settingsGetContentLanguagesSelector, chroniclesGetLastActionSelector, settingsGetUILangSelector } from '../redux/selectors';
+import {
+  chroniclesGetActionCountSelector,
+  settingsGetContentLanguagesSelector,
+  chroniclesGetLastActionSelector,
+  settingsGetUILangSelector
+} from '../redux/selectors';
 
 // An array of DOM events that should be interpreted as user activity.
 const ACTIVITY_EVENTS = ['mousedown', 'mousemove', 'keydown', 'scroll', 'touchstart'];

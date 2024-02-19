@@ -2,10 +2,11 @@ import { actions as assetsActions } from './assets';
 import { selectTextFile, selectMP3, checkRabashGroupArticles } from '../../components/Pages/WithText/helper';
 import { assetUrl } from '../../helpers/Api';
 import { createSlice } from '@reduxjs/toolkit';
-import { getPathnameWithHost } from '../../helpers/url';
+import { getPathnameWithHost, getQuery } from '../../helpers/url';
 import { actions as settingsActions } from './settings';
 import { isEmpty } from '../../helpers/utils';
 import { selectSuitableLanguage } from '../../helpers/language';
+import { CT_SOURCE } from '../../helpers/consts';
 
 const updateLocalStorage = state => {
   const settings = { ...state.settings };
@@ -13,21 +14,34 @@ const updateLocalStorage = state => {
 };
 
 const buildUrl = (state, pathname) => {
-  if (state.file)
-    state.urlInfo.search.source_language = state.file.language;
+  if (state.urlInfo.isCustom)
+    return state.urlInfo.url;
 
-  if (state.urlInfo.isCustom) return state.urlInfo.url;
-  if (typeof window === 'undefined') return '';
-  pathname = pathname || window.location.pathname.slice(4);
+  if (typeof window === 'undefined')
+    return '';
 
+  pathname        = pathname || window.location.pathname.slice(4);
   const _pathname = !state.file ? pathname : `${state.file.language}/${pathname}`;
   return getPathnameWithHost(_pathname);
+};
+
+const buildUrlSearch = (state, search = {}) => {
+  if (state.file)
+    search.source_language = state.file.language;
+
+  if (typeof window === 'undefined') return '';
+
+  const q = getQuery(window.location);
+  if (q.page)
+    search.page = q.page;
+
+  return search;
 };
 
 const onChangeLanguage = (state, lang) => {
   if (isEmpty(state.subject?.files)) return;
 
-  state.file = selectTextFile(state.subject.files, state.subject.id, lang);
+  state.file = selectTextFile(state.subject.files, state.subject.id, lang, state.subject.type === CT_SOURCE);
   state.mp3  = selectMP3(state.subject.files, lang);
   if (!state.urlInfo.isCastom) {
     state.urlInfo.url = buildUrl(state);
@@ -52,7 +66,7 @@ const textPageSlice = createSlice({
   },
   reducers: {
     setZoomSize: (state, { payload }) => {
-      let size = state.settings.zoomSize || 1;
+      let size = state.settings.zoomSize || 2;
       if (payload === 'up') {
         size = size + 1;
       } else if (payload === 'down') {
@@ -75,7 +89,10 @@ const textPageSlice = createSlice({
       state.settings.theme = payload;
       updateLocalStorage(state);
     },
-    setTocIsActive: (state, { payload }) => void (state.tocIsActive = payload ?? !state.tocIsActive),
+    setTocIsActive: (state, { payload }) => {
+      state.tocInfo.match = '';
+      state.tocIsActive   = payload ?? !state.tocIsActive;
+    },
     setTocMatch: (state, { payload }) => void (state.tocInfo.match = payload),
     setTocSortBy: state => void (state.tocInfo.sortByAZ = !state.tocInfo.sortByAZ),
     changeLanguage: (state, { payload }) => onChangeLanguage(state, payload),
@@ -83,12 +100,12 @@ const textPageSlice = createSlice({
       if (!payload) {
         state.urlInfo.url      = buildUrl(state);
         state.urlInfo.isCastom = false;
-        state.urlInfo.search   = {};
       } else {
         state.urlInfo.url      = buildUrl(state, payload.pathname);
-        state.urlInfo.search   = payload.search;
         state.urlInfo.isCastom = true;
       }
+
+      state.urlInfo.search = buildUrlSearch(state, { ...payload?.search });
     },
     setUrlSelect: (state, { payload }) => void (state.urlInfo.select = payload || null),
     setWordOffset: (state, { payload }) => void (state.wordOffset = payload),
@@ -106,6 +123,7 @@ const textPageSlice = createSlice({
       reducer: (state, { payload }) => {
         state.wip        = true;
         state.err        = null;
+        state.isSearch   = false;
         state.subject.id = payload.id;
       }
     },

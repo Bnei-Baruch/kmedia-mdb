@@ -12,7 +12,13 @@ import { DATE_FORMAT } from '../../../../helpers/consts';
 import { canonicalLink } from '../../../../helpers/links';
 import { useLocation } from 'react-router-dom';
 import { getEmbedFromQuery, EMBED_TYPE_PLAYLIST } from '../../../../helpers/player';
-import { playlistGetInfoSelector, settingsGetUIDirSelector, mdbGetWindowSelector, mdbGetWipFn, mdbNestedGetDenormCollectionSelector } from '../../../../redux/selectors';
+import {
+  playlistGetInfoSelector,
+  settingsGetUIDirSelector,
+  mdbGetWindowSelector,
+  mdbGetWipFn,
+  mdbNestedGetDenormCollectionSelector
+} from '../../../../redux/selectors';
 
 const getStartEndByFilmDate = d => {
   const filmDate = moment.utc(d);

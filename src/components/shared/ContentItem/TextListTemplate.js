@@ -9,7 +9,12 @@ import { iconByContentTypeMap } from '../../../helpers/consts';
 import { SectionLogo } from '../../../helpers/images';
 import Link from '../../Language/MultiLanguageLink';
 import { buildTextItemInfo, textPartLink } from './helper';
-import { sourcesAreLoadedSelector, mdbGetDenormContentUnitSelector, mdbGetDenormLabelSelector, sourcesGetPathByIDSelector } from '../../../redux/selectors';
+import {
+  sourcesAreLoadedSelector,
+  mdbGetDenormContentUnitSelector,
+  mdbGetDenormLabelSelector,
+  sourcesGetPathByIDSelector
+} from '../../../redux/selectors';
 
 const TextListTemplate = ({ cuID, lID, t }) => {
   const cu               = useSelector(state => mdbGetDenormContentUnitSelector(state, cuID));

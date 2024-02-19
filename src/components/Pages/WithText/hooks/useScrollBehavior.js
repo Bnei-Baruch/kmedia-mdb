@@ -28,7 +28,7 @@ export const useScrollBehavior = ref => {
     window.addEventListener('scroll', handleScroll);
 
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [ref.current, isMobileDevice]);
+  }, [ref.current, isMobileDevice, dispatch]);
 
   return null;
 };

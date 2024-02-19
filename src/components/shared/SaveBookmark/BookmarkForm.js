@@ -1,20 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-import { withTranslation, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import {
   Button,
-  Checkbox, Container,
+  Checkbox,
+  Container,
   Header,
   Icon,
   Input,
-  List, Modal,
+  List,
+  Modal,
   ModalActions,
   ModalContent,
   Segment
 } from 'semantic-ui-react';
 import { useDispatch, useSelector } from 'react-redux';
-
-import { selectors as textPage } from '../../../redux/modules/textPage';
 import { actions } from '../../../redux/modules/my';
 import { MY_NAMESPACE_BOOKMARKS, MY_NAMESPACE_FOLDERS } from '../../../helpers/consts';
 import { getMyItemKey } from '../../../helpers/my';

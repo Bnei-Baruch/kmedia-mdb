@@ -1,5 +1,11 @@
 import { useSelector } from 'react-redux';
-import { mdbGetDenormCollectionSelector, mdbGetDenormContentUnitSelector, recommendedGetManyItemsSelector, sourcesGetSourceByIdSelector, tagsGetTagByIdSelector } from '../../../../../../redux/selectors';
+import {
+  mdbGetDenormCollectionSelector,
+  mdbGetDenormContentUnitSelector,
+  recommendedGetManyItemsSelector,
+  sourcesGetSourceByIdSelector,
+  tagsGetTagByIdSelector
+} from '../../../../../../redux/selectors';
 
 // A custom hook to get loaded recommended
 const useRecommendedUnits = feedNames => {

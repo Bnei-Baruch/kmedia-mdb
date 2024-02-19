@@ -19,7 +19,7 @@ export const useLabels = () => {
 
   useEffect(() => {
     dispatch(actions.fetchLabels({ content_unit: id, language }));
-  }, [id, language]);
+  }, [id, language, dispatch]);
 
   const offsets = buildOffsets(labels);
 

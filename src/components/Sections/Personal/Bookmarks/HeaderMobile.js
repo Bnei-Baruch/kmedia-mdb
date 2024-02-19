@@ -11,7 +11,11 @@ import {
 import { actions as filtersActions } from '../../../../redux/modules/bookmarkFilter';
 import { getMyItemKey } from '../../../../helpers/my';
 import FolderList from './Folders/List';
-import { bookmarkFilterGetByKeySelector, myGetItemByKeySelector, settingsGetUIDirSelector } from '../../../../redux/selectors';
+import {
+  bookmarkFilterGetByKeySelector,
+  myGetItemByKeySelector,
+  settingsGetUIDirSelector
+} from '../../../../redux/selectors';
 
 const BookmarkHeaderMobile = ({ t }) => {
   const [open, setOpen] = useState();

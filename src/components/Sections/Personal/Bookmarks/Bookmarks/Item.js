@@ -10,7 +10,12 @@ import { getMyItemKey } from '../../../../../helpers/my';
 import Link from '../../../../Language/MultiLanguageLink';
 import Actions from './Actions';
 import { buildTitleByUnit, textPartLink } from '../../../../shared/ContentItem/helper';
-import { sourcesAreLoadedSelector, mdbGetDenormContentUnitSelector, myGetItemByKeySelector, sourcesGetPathByIDSelector } from '../../../../../redux/selectors';
+import {
+  sourcesAreLoadedSelector,
+  mdbGetDenormContentUnitSelector,
+  myGetItemByKeySelector,
+  sourcesGetPathByIDSelector
+} from '../../../../../redux/selectors';
 
 const BookmarksItem = ({ bookmark, t }) => {
   const { properties, folder_ids = [], name, subject_uid } = bookmark;

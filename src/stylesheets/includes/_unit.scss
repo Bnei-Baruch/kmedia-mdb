@@ -95,7 +95,6 @@
 .unit-tags-bar {
   display: flex;
   overflow: hidden;
-  margin-top: 1em;
 
   .unit-tags-bar_tags {
     scrollbar-gutter: stable;
@@ -118,7 +117,7 @@
       font-weight: normal;
 
       a {
-        color: #3376D6;
+        color: $blue;
       }
 
       &:hover {
@@ -141,7 +140,7 @@
         background: rgba(51, 118, 214, 0.28);
 
         a {
-          color: #3376D6;
+          color: $blue;
         }
 
         &:hover {

@@ -12,7 +12,11 @@ import SectionHeader from '../../shared/SectionHeader';
 import Link from '../../Language/MultiLanguageLink';
 import { FN_TOPICS_MULTI, TOPICS_FOR_DISPLAY } from '../../../helpers/consts';
 import { actions } from '../../../redux/modules/filtersAside';
-import { tagsGetDisplayRootsSelector, filtersAsideGetStatsSelector, tagsGetTagsSelector } from '../../../redux/selectors';
+import {
+  tagsGetDisplayRootsSelector,
+  filtersAsideGetStatsSelector,
+  tagsGetTagsSelector
+} from '../../../redux/selectors';
 
 const namespace = 'topics';
 

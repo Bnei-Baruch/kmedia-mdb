@@ -6,12 +6,16 @@ import { Header } from 'semantic-ui-react';
 import clsx from 'clsx';
 import { COLLECTION_DAILY_LESSONS, CT_LESSONS_SERIES } from '../../../../helpers/consts';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
-import { cuPartNameByCCUType } from '../../../../helpers/utils';
+import { cuPartNameByCCUType, canonicalCollection } from '../../../../helpers/utils';
 import { fromToLocalized } from '../../../../helpers/date';
 import PlaylistPlayIcon from '../../../../images/icons/PlaylistPlay';
 import LessonDatePickerContainer from './LessonDatePickerContainer';
-import { canonicalCollection } from '../../../../helpers/utils';
-import { mdbGetDenormCollectionSelector, mdbGetDenormContentUnitSelector, playlistGetInfoSelector, sourcesGetPathByIDSelector } from '../../../../redux/selectors';
+import {
+  mdbGetDenormCollectionSelector,
+  mdbGetDenormContentUnitSelector,
+  playlistGetInfoSelector,
+  sourcesGetPathByIDSelector
+} from '../../../../redux/selectors';
 
 const PlaylistHeader = () => {
   const { isMobileDevice } = useContext(DeviceInfoContext);

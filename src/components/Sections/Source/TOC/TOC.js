@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, useContext } from 'react';
 import { Accordion, Ref } from 'semantic-ui-react';
 
-import { getEscapedRegExp, isEmpty, stopBubbling } from '../../../../helpers/utils';
+import { getEscapedRegExp, isEmpty } from '../../../../helpers/utils';
 import { BS_SHAMATI, RH_ARTICLES, RH_RECORDS, } from '../../../../helpers/consts';
 import { isLanguageRtl } from '../../../../helpers/i18n-utils';
 import { useSelector, useDispatch } from 'react-redux';
@@ -167,7 +167,7 @@ const TOC = () => {
   const isRTL = isLanguageRtl(uiLang);
 
   const subToc = (subTree, path) => (
-    subTree.map(sourceId => (getToc(sourceId, path)))
+    subTree.map(sourceId => (getToc(sourceId, path)?.toc))
   );
 
   const leaf = (id, title) => {
@@ -219,7 +219,7 @@ const TOC = () => {
     if (isEmpty(children)) { // Leaf
       const item   = leaf(sourceId, title);
       const result = { as: 'span', title: item, key: `lib-leaf-${sourceId}` };
-      return result;
+      return { toc: result };
     }
 
     const hasNoGrandsons = children.reduce((acc, curr) => acc && isEmpty(getSourceById(curr).children), true);
@@ -252,11 +252,11 @@ const TOC = () => {
     }
 
     if (firstLevel) {
-      return panels;
+      return { toc: panels, className: 'toc_single_level' };
     }
 
     const activeIndex = getIndex(path[0], path[1]);
-    return {
+    const toc         = {
       title: {
         content: title,
         icon: <span className="material-symbols-outlined">{icon}</span>
@@ -273,6 +273,7 @@ const TOC = () => {
         key: `lib-content-${sourceId}`,
       }
     };
+    return { toc };
   };
 
   const selectSourceById = (id, e) => {
@@ -282,33 +283,41 @@ const TOC = () => {
     setActiveId(id);
   };
 
-  const path = fullPath.slice(1); // Remove first element (i.e. kabbalist)
-  const toc  = getToc(rootId, path, true);
+  const path               = fullPath.slice(1); // Remove first element (i.e. kabbalist)
+  const { toc, className } = getToc(rootId, path, true);
 
   return (
     <div className={
       clsx('toc no_print',
         {
           'toc_active': tocIsActive,
-          'toc_scroll_up': scrollDir === 1,
+          'toc_scroll_up': scrollDir > 0,
           'toc_scroll_down': scrollDir === -1,
-          'toc_scroll_end': scrollDir === 2,
           'toc_selected': hasSel,
         }
       )
     }>
       <TOCControl />
-      <TOCSearch />
+      {
+        !isMobileDevice && <TOCSearch />
+      }
       <div className="toc_scroll">
-        <Ref innerRef={accordionContext}>
-          <Accordion
-            fluid
-            panels={toc}
-            defaultActiveIndex={activeIndex}
-            onTitleClick={handleTitleClick}
-          />
-        </Ref>
+        <div className="toc_scroll_align">
+          <Ref innerRef={accordionContext}>
+            <Accordion
+              fluid
+              panels={toc}
+              className={className}
+              defaultActiveIndex={activeIndex}
+              onTitleClick={handleTitleClick}
+            />
+          </Ref>
+        </div>
       </div>
+
+      {
+        isMobileDevice && <TOCSearch />
+      }
     </div>
   );
 };

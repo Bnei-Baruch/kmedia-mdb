@@ -1,6 +1,5 @@
 import { isEqual } from 'lodash';
 import React, { useCallback, useEffect, useMemo } from 'react';
-import { withTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router';
 import { Container, Divider, CardGroup } from 'semantic-ui-react';
@@ -19,7 +18,7 @@ import SectionHeader from '../../shared/SectionHeader';
 import Filters from './Filters';
 import UnitItem from './UnitItem';
 import MediaHelper from '../../../helpers/media';
-import { isZipFile } from '../../Pages/WithPlayer/widgets/UnitMaterials/helper';
+import { isZipFile } from '../../Pages/WithPlayer/widgets/UnitMaterials/Sketches/helper';
 import {
   settingsGetContentLanguagesSelector,
   listsGetNamespaceStateSelector,

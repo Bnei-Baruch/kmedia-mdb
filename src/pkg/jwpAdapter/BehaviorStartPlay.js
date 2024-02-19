@@ -7,7 +7,15 @@ import { useLocation } from 'react-router-dom';
 import { startEndFromQuery } from '../../components/Player/Controls/helper';
 import { getSavedTime } from '../../components/Player/helper';
 import { seek, play, pause } from './adapter';
-import { playerGetFileSelector, playlistGetInfoSelector, myGetListSelector, myGetInfoSelector, playlistGetPlayedSelector, playerIsMetadataReadySelector, playerIsReadySelector } from '../../redux/selectors';
+import {
+  playerGetFileSelector,
+  playlistGetInfoSelector,
+  myGetListSelector,
+  myGetInfoSelector,
+  playlistGetPlayedSelector,
+  playerIsMetadataReadySelector,
+  playerIsReadySelector
+} from '../../redux/selectors';
 
 const MIN_DURATION_FOR_USE_HISTORY_SEC = 15 * 60;
 const BehaviorStartPlay                = () => {

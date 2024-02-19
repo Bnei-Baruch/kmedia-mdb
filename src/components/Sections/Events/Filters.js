@@ -12,7 +12,11 @@ import Locations from '../../FiltersAside/LocationsFilter/Locations';
 import OriginalLanguageFilter from '../../FiltersAside/OriginalLanguageFilter/OriginalLanguage';
 import TagSourceFilter from '../../FiltersAside/TopicsFilter/TagSourceFilter';
 import ContentTypesFilter from './ContentTypesFilter';
-import { filtersAsideGetIsReadySelector, filtersGetNotEmptyFiltersSelector, filtersAsideGetWipErrSelector } from '../../../redux/selectors';
+import {
+  filtersAsideGetIsReadySelector,
+  filtersGetNotEmptyFiltersSelector,
+  filtersAsideGetWipErrSelector
+} from '../../../redux/selectors';
 
 const Filters = ({ namespace, baseParams }) => {
   const [isHydrated, setIsHydrated] = useState(false);

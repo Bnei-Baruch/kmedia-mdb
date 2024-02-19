@@ -1,5 +1,4 @@
 import React from 'react';
-import { Button } from 'semantic-ui-react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { actions } from '../../../../redux/modules/textPage';
@@ -19,13 +18,9 @@ const ExpandCommentsBtn = () => {
   return (
     <ToolbarBtnTooltip
       textKey={expandAll ? 'collapse-comments' : 'expand-comments'}
-      trigger={
-        <Button
-          onClick={toggleNotes}
-          active={expandAll}
-          icon={<span className="material-symbols-outlined">comment</span>}
-        />
-      }
+      onClick={toggleNotes}
+      active={expandAll}
+      icon={<span className="material-symbols-outlined">comment</span>}
     />
   );
 };

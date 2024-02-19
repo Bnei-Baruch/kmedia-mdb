@@ -18,7 +18,14 @@ import { FrownSplash } from '../../../shared/Splash/Splash';
 import { stopBubbling } from '../../../../helpers/utils';
 import { withRouter } from '../../../../helpers/withRouterPatch';
 import { stringify } from '../../../../helpers/url';
-import { myGetDeletedSelector, myGetErrSelector, myGetItemByKeySelector, myGetWipSelector, settingsGetUILangSelector, authGetUserSelector } from '../../../../redux/selectors';
+import {
+  myGetDeletedSelector,
+  myGetErrSelector,
+  myGetItemByKeySelector,
+  myGetWipSelector,
+  settingsGetUILangSelector,
+  authGetUserSelector
+} from '../../../../redux/selectors';
 
 const Page = ({ t }) => {
   const { id } = useParams();

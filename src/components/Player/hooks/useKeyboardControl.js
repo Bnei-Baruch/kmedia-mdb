@@ -85,7 +85,7 @@ export const useKeyboardControl = runTimeout => {
 
     document.addEventListener('keyup', handleKeyUp);
     return () => document.removeEventListener('keyup', handleKeyUp);
-  }, [mode]);
+  }, [mode, dispatch]);
 
   return null;
 };

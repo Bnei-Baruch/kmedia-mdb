@@ -10,7 +10,7 @@ export const useInitTextSettings = () => {
     zoomSize && dispatch(actions.setZoomSize(zoomSize));
     fontType && dispatch(actions.setFontType(fontType));
     theme && dispatch(actions.setTheme(theme));
-  }, []);
+  }, [dispatch]);
 
   return null;
 };

@@ -9,9 +9,15 @@ import Link from '../../Language/MultiLanguageLink';
 import { buildTextItemInfo } from '../../shared/ContentItem/helper';
 import GalleryModal from './ZipFileModal';
 import ImageFileModal from './ImageFileModal';
-import { isZipFile } from '../../Pages/WithPlayer/widgets/UnitMaterials/helper';
+import { isZipFile } from '../../Pages/WithPlayer/widgets/UnitMaterials/Sketches/helper';
 import { stringify } from '../../../helpers/url';
-import { settingsGetContentLanguagesSelector, mdbGetDenormContentUnitSelector, sourcesGetPathByIDSelector, settingsGetUIDirSelector, assetsNestedGetZipByIdSelector } from '../../../redux/selectors';
+import {
+  settingsGetContentLanguagesSelector,
+  mdbGetDenormContentUnitSelector,
+  sourcesGetPathByIDSelector,
+  settingsGetUIDirSelector,
+  assetsNestedGetZipByIdSelector
+} from '../../../redux/selectors';
 
 const findZipFile = (cu, contentLanguages) => {
   const zips = cu.files

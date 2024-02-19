@@ -7,7 +7,13 @@ import { useTranslation } from 'react-i18next';
 import FilterHeader from '../../FiltersAside/FilterHeader';
 import { Button, Input } from 'semantic-ui-react';
 import RenderAsList from '../../FiltersAside/TopicsFilter/RenderAsList';
-import { filtersAsideGetTreeSelector, filtersGetFilterByNameSelector, tagsGetPathByIDSelector, tagsGetRootsSelector, tagsGetTagByIdSelector } from '../../../redux/selectors';
+import {
+  filtersAsideGetTreeSelector,
+  filtersGetFilterByNameSelector,
+  tagsGetPathByIDSelector,
+  tagsGetRootsSelector,
+  tagsGetTagByIdSelector
+} from '../../../redux/selectors';
 
 const MAX_SHOWED_ITEMS  = 10;
 const getItemsRecursive = (rootID, getById, base) => {

@@ -5,7 +5,11 @@ import { useTranslation } from 'react-i18next';
 
 import { CT_HOLIDAY } from '../../../helpers/consts';
 import HierarchicalFilter from './HierarchicalFilter';
-import { mdbGetCollectionByIdSelector, eventsGetEventByTypeSelector, tagsGetTagByIdSelector } from '../../../redux/selectors';
+import {
+  mdbGetCollectionByIdSelector,
+  eventsGetEventByTypeSelector,
+  tagsGetTagByIdSelector
+} from '../../../redux/selectors';
 
 const getTree = (holidayEvents, getTagById, t) => {
   const counts = countBy(holidayEvents, x => x.holiday_id);

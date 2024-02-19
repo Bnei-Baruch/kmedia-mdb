@@ -1,5 +1,4 @@
 import React, { useContext, useMemo } from 'react';
-import { useParams } from 'react-router-dom';
 
 import TextLayoutWeb from '../../../../WithText/TextLayoutWeb';
 import ResearchTabToolbarWeb from './ResearchTabToolbarWeb';
@@ -13,9 +12,7 @@ import { useInitTextUrl } from '../../../../WithText/hooks/useInitTextUrl';
 import TextLayoutMobile from '../../../../WithText/TextLayoutMobile';
 import NotFound from '../../../../../shared/NotFound';
 
-const ResearchTab = () => {
-  const { id } = useParams();
-
+const ResearchTab = ({ id }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
   const pageCu = useSelector(state => mdbGetDenormContentUnitSelector(state, id));
@@ -26,7 +23,7 @@ const ResearchTab = () => {
   const linkMemo = useMemo(() => ({ pathname, search: { activeTab: 'research' } }), [pathname]);
   useInitTextUrl(linkMemo);
 
-  if (!cu) return <NotFound textKey="materials.research.no-content"/>;
+  if (!cu) return <NotFound textKey="materials.research.no-content" />;
 
   return (
     <div className="player_page_tab">

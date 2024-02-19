@@ -13,7 +13,11 @@ import ContentItemContainer, {
 } from '../../../../../shared/ContentItem/ContentItemContainer';
 import { ClientChroniclesContext } from '../../../../../../helpers/app-contexts';
 import { IsCollectionContentType, IsUnitContentType } from '../../../../../../helpers/consts';
-import { recommendedGetManyViewsSelector, recommendedGetManyWatchingNowSelector, recommendedGetItemsSelector } from '../../../../../../redux/selectors';
+import {
+  recommendedGetManyViewsSelector,
+  recommendedGetManyWatchingNowSelector,
+  recommendedGetItemsSelector
+} from '../../../../../../redux/selectors';
 
 const watchingNowToString = watchingNow => {
   if (watchingNow >= 1000) {

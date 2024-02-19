@@ -5,7 +5,12 @@ import { PLAYER_OVER_MODES } from '../../../helpers/consts';
 import { toHumanReadableTime } from '../../../helpers/time';
 import TagVideoLabelBtn from '../../Pages/WithPlayer/widgets/Info/TagVideoLabelBtn';
 import SavePlaylistItemBtn from '../../Pages/WithPlayer/widgets/Info/SavePlaylistItemBtn';
-import { mdbGetDenormContentUnitSelector, playlistGetInfoSelector, playerGetOverModeSelector, playerGetShareStartEndSelector } from '../../../redux/selectors';
+import {
+  mdbGetDenormContentUnitSelector,
+  playlistGetInfoSelector,
+  playerGetOverModeSelector,
+  playerGetShareStartEndSelector
+} from '../../../redux/selectors';
 
 const LabelVideo = () => {
   const mode     = useSelector(playerGetOverModeSelector);

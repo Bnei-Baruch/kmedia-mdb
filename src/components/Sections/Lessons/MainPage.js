@@ -32,7 +32,12 @@ import CollectionItem from './Collectiontem';
 import DailyLessonItem from './DailyLessonItem';
 import Filters from './Filters';
 import UnitItem from './UnitItem';
-import { settingsGetContentLanguagesSelector, listsGetNamespaceStateSelector, filtersGetNotEmptyFiltersSelector, settingsGetPageSizeSelector } from '../../../redux/selectors';
+import {
+  settingsGetContentLanguagesSelector,
+  listsGetNamespaceStateSelector,
+  filtersGetNotEmptyFiltersSelector,
+  settingsGetPageSizeSelector
+} from '../../../redux/selectors';
 
 const SHOWED_CT = [CT_VIRTUAL_LESSON, CT_WOMEN_LESSON, CT_LECTURE, CT_LESSONS_SERIES];
 

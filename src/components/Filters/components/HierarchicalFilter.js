@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import debounce from 'lodash/debounce';
-import { noop } from '../../../helpers/utils';
+import { noop, getEscapedRegExp, isEmpty } from '../../../helpers/utils';
 import scrollIntoView from 'scroll-into-view';
 import { Button, Header, Input, Menu, Segment } from 'semantic-ui-react';
-
-import { getEscapedRegExp, isEmpty } from '../../../helpers/utils';
 
 class HierarchicalFilter extends Component {
   static propTypes = {

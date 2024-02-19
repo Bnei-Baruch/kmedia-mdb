@@ -10,7 +10,11 @@ import FiltersHydrator from '../../Filters/FiltersHydrator';
 import Language from '../../FiltersAside/LanguageFilter/Language';
 import DateFilter from '../../FiltersAside/DateFilter';
 import TagSourceFilter from '../../FiltersAside/TopicsFilter/TagSourceFilter';
-import { filtersAsideGetIsReadySelector, filtersGetNotEmptyFiltersSelector, filtersAsideGetWipErrSelector } from '../../../redux/selectors';
+import {
+  filtersAsideGetIsReadySelector,
+  filtersGetNotEmptyFiltersSelector,
+  filtersAsideGetWipErrSelector
+} from '../../../redux/selectors';
 
 const Filters = ({ namespace, baseParams }) => {
   const [isHydrated, setIsHydrated] = useState(false);

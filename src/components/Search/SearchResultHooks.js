@@ -39,14 +39,20 @@ import UnitLogo from '../shared/Logo/UnitLogo';
 import WipErr from '../shared/WipErr/WipErr';
 import {
   mdbGetDenormContentUnitSelector,
-  filtersGetFiltersSelector, lessonsGetWipSelector,
+  filtersGetFiltersSelector,
+  lessonsGetWipSelector,
   listsGetNamespaceStateSelector,
   lessonsGetSeriesBySourceIdSelector,
   lessonsGetSeriesByTagIdSelector,
   sourcesGetSourceByIdSelector,
-  tagsGetTagByIdSelector, publicationsGetTweetsErrorSelector, publicationsGetTweetsWipSelector, settingsGetUILangSelector,
-  recommendedGetViewsSelector, settingsGetUIDirSelector,
-  mdbNestedDenormCollectionWUnitsSelector, publicationsGetTwitterSelector
+  tagsGetTagByIdSelector,
+  publicationsGetTweetsErrorSelector,
+  publicationsGetTweetsWipSelector,
+  settingsGetUILangSelector,
+  recommendedGetViewsSelector,
+  settingsGetUIDirSelector,
+  mdbNestedDenormCollectionWUnitsSelector,
+  publicationsGetTwitterSelector
 } from '../../redux/selectors';
 
 const PATH_SEPARATOR                 = ' > ';

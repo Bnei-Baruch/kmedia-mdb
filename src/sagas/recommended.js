@@ -14,7 +14,11 @@ import { actions, selectors as recommended, types } from '../redux/modules/recom
 import { selectors as sourcesSelectors } from '../redux/modules/sources';
 import { fetchMissingCollections, fetchMissingUnits } from './mdb';
 import { types as playerTypes } from '../redux/modules/player';
-import { playlistGetInfoSelector, recommendedGetViewsSelector, settingsGetContentLanguagesSelector } from '../redux/selectors';
+import {
+  playlistGetInfoSelector,
+  recommendedGetViewsSelector,
+  settingsGetContentLanguagesSelector
+} from '../redux/selectors';
 
 const WATCHING_NOW_MIN = 50;
 const POPULAR_MIN      = 100;

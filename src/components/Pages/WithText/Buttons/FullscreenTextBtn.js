@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { Button } from 'semantic-ui-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { actions } from '../../../../redux/modules/textPage';
 import fscreen from 'fscreen';
@@ -45,12 +44,8 @@ const FullscreenTextBtn = () => {
   return (
     <ToolbarBtnTooltip
       textKey={tooltip}
-      trigger={
-        <Button
-          onClick={toggleFullscreen}
-          icon={<span className="material-symbols-outlined">{icon}</span>}
-        />
-      }
+      onClick={toggleFullscreen}
+      icon={<span className="material-symbols-outlined">{icon}</span>}
     />
   );
 };

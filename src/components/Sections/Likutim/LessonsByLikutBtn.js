@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Dropdown, Button } from 'semantic-ui-react';
+import { Dropdown } from 'semantic-ui-react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -22,15 +22,13 @@ const LessonsByLikutBtn = () => {
     .filter(u => UNIT_LESSONS_TYPE.includes(u.content_type))
     .sort((u1, u2) => strCmp(u2.film_date, u1.film_date));
 
-  const trigger = <ToolbarBtnTooltip
-    trigger={
-      <Button
-        disabled={isEmpty(lessons)}
-        icon={<span className="material-symbols-outlined">subscriptions</span>}
-      />
-    }
-    textKey="lessons"
-  />;
+  const trigger = (
+    <ToolbarBtnTooltip
+      textKey="lessons"
+      disabled={isEmpty(lessons)}
+      icon={<span className="material-symbols-outlined">subscriptions</span>}
+    />
+  );
 
   return (
     <Dropdown

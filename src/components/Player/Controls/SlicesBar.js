@@ -3,7 +3,11 @@ import { useSelector, shallowEqual } from 'react-redux';
 
 import { timeToPercent } from './helper';
 import { PLAYER_OVER_MODES } from '../../../helpers/consts';
-import { playerGetFileSelector, playerGetOverModeSelector, playerGetShareStartEndSelector } from '../../../redux/selectors';
+import {
+  playerGetFileSelector,
+  playerGetOverModeSelector,
+  playerGetShareStartEndSelector
+} from '../../../redux/selectors';
 
 const htmlParamsByStartEnd = (duration, start, end) => {
   let width = 0;

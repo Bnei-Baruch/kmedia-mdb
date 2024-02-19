@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { Button } from 'semantic-ui-react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { actions, selectors as assets } from '../../../../redux/modules/assets';
@@ -35,12 +34,8 @@ const PlayByTextBtn = () => {
   return (
     <ToolbarBtnTooltip
       textKey="play-by-text"
-      trigger={
-        <Button
-          onClick={handlePlay}
-          icon={<span className="material-symbols-outlined">play_arrow</span>}
-        />
-      }
+      onClick={handlePlay}
+      icon={<span className="material-symbols-outlined">play_arrow</span>}
     />
   );
 };

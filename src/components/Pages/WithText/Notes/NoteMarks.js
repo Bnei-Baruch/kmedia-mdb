@@ -16,7 +16,7 @@ const NoteMarks = ({ parentTop }) => {
 
   useEffect(() => {
     const _byLine = {};
-    ids.map(nId => {
+    ids.forEach(nId => {
       const el = document.getElementById(`${idPrefix}${nId}`);
       if (!el) return;
       const top = Math.round(el.getBoundingClientRect().top - window.scrollY - parentTop);
@@ -29,7 +29,7 @@ const NoteMarks = ({ parentTop }) => {
       _byLine[key] = [..._byLine[key], nId];
     });
     setByLine(_byLine);
-  }, [ids]);
+  }, [ids, parentTop]);
 
   return (
     <div className="note_marks">

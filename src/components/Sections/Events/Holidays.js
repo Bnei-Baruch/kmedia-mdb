@@ -8,7 +8,13 @@ import { isEmpty } from '../../../helpers/utils';
 import { actions } from '../../../redux/modules/filters';
 
 import CollectionItem from '../../FiltersAside/CollectionFilter/CollectionItem';
-import { filtersAsideGetStatsSelector, filtersAsideGetTreeSelector, filtersGetFilterByNameSelector, settingsGetUIDirSelector, mdbNestedGetCollectionByIdSelector } from '../../../redux/selectors';
+import {
+  filtersAsideGetStatsSelector,
+  filtersAsideGetTreeSelector,
+  filtersGetFilterByNameSelector,
+  settingsGetUIDirSelector,
+  mdbNestedGetCollectionByIdSelector
+} from '../../../redux/selectors';
 
 const ITEMS_PER_ROW = 5;
 const buildRowArr   = n => {

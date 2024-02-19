@@ -1,5 +1,4 @@
 import React from 'react';
-import { Button } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
 
 import { physicalFile } from '../../../../helpers/utils';
@@ -20,12 +19,8 @@ const DownloadTextBtn = () => {
   return (
     <ToolbarBtnTooltip
       textKey="download"
-      trigger={
-        <Button
-          onClick={handleDownload}
-          icon={<span className="material-symbols-outlined">download</span>}
-        />
-      }
+      onClick={handleDownload}
+      icon={<span className="material-symbols-outlined">download</span>}
     />
   );
 };

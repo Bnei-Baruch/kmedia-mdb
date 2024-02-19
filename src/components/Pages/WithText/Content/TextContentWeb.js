@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import clsx from 'clsx';
 
 import { urlParamFromSelect } from '../scrollToSearch/helper';
-import { useNotes } from '../Notes/useNotes';
 import { actions } from '../../../../redux/modules/textPage';
 import NoteMarks from '../Notes/NoteMarks';
 import ContentHtml from './ContentHtml';
@@ -19,8 +18,9 @@ import {
   textPageGetFileSelector,
   textPageGetTextOnlySelector
 } from '../../../../redux/selectors';
+import NotFound from '../../../shared/NotFound';
 
-const TextContentWeb = () => {
+const TextContentWeb = ({ playerPage }) => {
   const [parentTop, setParentTop] = useState(0);
 
   const { fontType, zoomSize } = useSelector(textPageGetSettings);
@@ -28,7 +28,6 @@ const TextContentWeb = () => {
   const subject                = useSelector(textPageGetSubjectSelector);
   const file                   = useSelector(textPageGetFileSelector);
 
-  const notes               = useNotes();
   const { labels, offsets } = useLabels();
 
   const dispatch = useDispatch();
@@ -44,8 +43,10 @@ const TextContentWeb = () => {
       document.removeEventListener('selectionchange', handleSelectionChange);
       dispatch(actions.setUrlSelect());
     };
-  }, []);
+  }, [dispatch]);
 
+  if (!file)
+    return <NotFound textKey={playerPage && 'materials.transcription.no-content'} />;
   const handleDataRef = r => {
     if (!r) return;
 
@@ -62,7 +63,7 @@ const TextContentWeb = () => {
   }
 
   return (
-    <div className={`text__content-wrapper is-${fontType} zoom_size_${zoomSize}`}>
+    <div className={`text__content-wrapper is-${fontType} zoom_size_${!pdf ? zoomSize : 2}`}>
       {
         !textOnly && (
           <div className="text__content-markers no_print">
@@ -80,7 +81,7 @@ const TextContentWeb = () => {
             />
           ) : (
             <div ref={handleDataRef} className="position_relative">
-              <ContentHtml labels={labels} notes={notes} />
+              <ContentHtml labels={labels} />
             </div>
           )
         }

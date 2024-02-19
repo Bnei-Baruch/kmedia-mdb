@@ -5,15 +5,15 @@ import { strCmp, tracePath, buildById } from '../../helpers/utils';
 import { actions as settings } from './settings';
 
 const initialState = {
-  byId  : {},
+  byId: {},
   byIdAZ: {},
-  roots : [],
+  roots: [],
   loaded: false,
   sortBy: 'Book'
 };
 
-const NotToSort   = [BS_SHAMATI, BS_IGROT, BS_TAAS, RB_IGROT, MR_TORA, RH_ZOHAR, BS_ETZ_HAIM, 'grRABASH'];
-const NotToFilter = [BS_TAAS];
+export const NotToSort   = [BS_SHAMATI, BS_IGROT, BS_TAAS, RB_IGROT, MR_TORA, RH_ZOHAR, BS_ETZ_HAIM, 'grRABASH'];
+export const NotToFilter = [BS_TAAS];
 
 const sortTree = root => {
   if (root.children) {
@@ -81,10 +81,10 @@ const setRabash = (sources, uiLang) => {
     return { ...item, parent_id: 'grRABASH', id: `gr-${item.id}` };
   });
   rb.children.push({
-    id       : 'grRABASH',
+    id: 'grRABASH',
     parent_id: 'rb',
-    type     : 'COLLECTION',
-    name     : groupRabashTitle[uiLang] || groupRabashTitle['en'],
+    type: 'COLLECTION',
+    name: groupRabashTitle[uiLang] || groupRabashTitle['en'],
     children
   });
 };
@@ -98,7 +98,7 @@ const sourcesSlice = createSlice({
   name: 'sources',
   initialState,
 
-  reducers     : {
+  reducers: {
     receiveSources: (state, { payload: { sources, uiLang } }) => {
       const [byId, byIdAZ] = setById(sources, uiLang);
       state.byId           = byId;

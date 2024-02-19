@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Button } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
 
 import SelectTopicsModal from '../../../shared/SelectTopicsModal/SelectTopicsModal';
@@ -45,12 +44,8 @@ const TagTextBtn = () => {
       trigger={
         <ToolbarBtnTooltip
           textKey="add-tag"
-          trigger={
-            <Button
-              icon={<span className="material-symbols-outlined">tag</span>}
-              onClick={handleOpen}
-            />
-          }
+          icon={<span className="material-symbols-outlined">tag</span>}
+          onClick={handleOpen}
         />
       }
     />

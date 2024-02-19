@@ -1,5 +1,4 @@
 import React, { useState, useContext, useMemo, useCallback, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 import TextLayoutWeb from '../../../../WithText/TextLayoutWeb';
@@ -14,8 +13,7 @@ import TextLayoutMobile from '../../../../WithText/TextLayoutMobile';
 import NotFound from '../../../../../shared/NotFound';
 import SourceTabTOC from './SourceTabTOC';
 
-const SourceTab = () => {
-  const { id }             = useParams();
+const SourceTab = ({ id }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
   const pageCu        = useSelector(state => mdbGetDenormContentUnitSelector(state, id));
