@@ -58,7 +58,6 @@ const Countdown = ({ finalDate }) => {
 
 const ExcerptContainer = () => {
   const excerptsLanguages                       = Object.keys(excerpts);
-  const contentLanguages                        = useSelector(settingsGetContentLanguagesSelector);
   const defaultLanguage                         = selectSuitableLanguage(excerptsLanguages, excerptsLanguages, DEFAULT_CONTENT_LANGUAGE);
   const [selectedLanguage, setSelectedLanguage] = useState(defaultLanguage);
 

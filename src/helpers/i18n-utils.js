@@ -70,10 +70,10 @@ export const getLanguageLocaleWORegion = language => LANGUAGES[language].locale.
 
 export const getBlogLanguage = name => {
   const blog = BLOGS.find(blog => blog.name === name);
-  return blog && blog.language || null;
-}
+  return blog && (blog.language || null);
+};
 
 export const getTwitterLanguage = username => {
   const twitter = TWITTER_USERNAMES.find(twitter => twitter.username === username);
-  return twitter  && twitter.language || null;
-}
+  return twitter && (twitter.language || null);
+};

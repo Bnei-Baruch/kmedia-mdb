@@ -4,7 +4,6 @@ import ImageGallery from 'react-image-gallery';
 import { Button } from 'semantic-ui-react';
 import { settingsGetUIDirSelector } from '../../../../../../redux/selectors';
 
-let _imageGallery;
 const SketchesGallery = ({ items }) => {
   const uiDir = useSelector(settingsGetUIDirSelector);
 

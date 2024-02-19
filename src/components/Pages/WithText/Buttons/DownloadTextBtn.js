@@ -1,5 +1,4 @@
 import React from 'react';
-import { Button } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
 
 import { physicalFile } from '../../../../helpers/utils';

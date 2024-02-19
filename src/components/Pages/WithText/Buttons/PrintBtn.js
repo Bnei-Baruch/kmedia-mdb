@@ -1,4 +1,3 @@
-import { Button } from 'semantic-ui-react';
 import React from 'react';
 
 import ToolbarBtnTooltip from './ToolbarBtnTooltip';

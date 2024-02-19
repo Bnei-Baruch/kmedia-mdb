@@ -26,7 +26,7 @@ const PDF = ({ pdfFile, startsFrom, isTaas = true }) => {
       pathname: location.pathname,
       search: stringify({ ...query, page }),
     });
-  }, [location, navigate]);
+  }, [location, navigate, query]);
 
   useEffect(() => {
     if (!ref.current) {

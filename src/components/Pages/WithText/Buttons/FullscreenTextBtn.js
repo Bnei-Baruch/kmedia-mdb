@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { Button } from 'semantic-ui-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { actions } from '../../../../redux/modules/textPage';
 import fscreen from 'fscreen';

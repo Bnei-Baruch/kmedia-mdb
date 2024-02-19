@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -6,7 +6,13 @@ import { startEndFromQuery } from '../../components/Player/Controls/helper';
 import { seek, pause } from './adapter';
 import { noop } from '../../helpers/utils';
 import { stringify } from '../../helpers/url';
-import { playlistGetItemByIdSelector, playlistGetNextIdSelector, playlistGetPlayedSelector, playerIsMetadataReadySelector, playerIsReadySelector } from '../../redux/selectors';
+import {
+  playlistGetItemByIdSelector,
+  playlistGetNextIdSelector,
+  playlistGetPlayedSelector,
+  playerIsMetadataReadySelector,
+  playerIsReadySelector
+} from '../../redux/selectors';
 
 const BehaviorStartStopSliceMy = () => {
   const location       = useLocation();
@@ -19,7 +25,7 @@ const BehaviorStartStopSliceMy = () => {
 
   const { properties, ap } = useSelector(playlistGetItemByIdSelector)(id);
 
-  const link     = id ? { search: stringify({ ...properties, ap }) } : null;
+  const link     = useMemo(() => id ? { search: stringify({ ...properties, ap }) } : null, [id, properties, ap]);
   const navigate = useNavigate();
 
   const _isReady = isHLS ? isMetadataReady : isReady;

@@ -19,7 +19,7 @@ const useBuildMyPlaylist = () => {
     if (id !== pId && !wip) {
       dispatch(actions.myPlaylistBuild(id));
     }
-  }, [id, pId, wip]);
+  }, [id, pId, wip, dispatch]);
 
   useEffect(() => {
     if (itemId) {
@@ -30,7 +30,7 @@ const useBuildMyPlaylist = () => {
         _id && dispatch(actions.select({ cuId: _id.split('_')[0], id: _id }));
       }
     }
-  }, [items, itemId, location]);
+  }, [items, itemId, location, dispatch]);
 
   return items.length === 0;
 };

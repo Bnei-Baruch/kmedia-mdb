@@ -53,7 +53,7 @@ export const selectTextFile = (files, id, language, mustAny = false, fileFilter 
         acc.doc = f;
       return acc;
     }, {});
-  return pdf || docx || doc || mustAny && _textFiles[0];
+  return pdf || docx || doc || (mustAny && _textFiles[0]);
 };
 
 export const selectMP3 = (files, language) => {

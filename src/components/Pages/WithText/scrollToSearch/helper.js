@@ -313,12 +313,6 @@ const countOffset = node => {
   return offset;
 };
 
-const countWordOffset = (offset, text) => text.slice(0, offset)
-  .replace(/\r?\n|\r{1,}/g, ' ')
-  .split(' ')
-  .filter(x => !!x)
-  .length;
-
 const wholeStartWord = (text, offset) => {
   if (offset === 0 || KEEP_LETTERS_WITH_SPACE_RE.test(text[offset - 1]))
     return '';

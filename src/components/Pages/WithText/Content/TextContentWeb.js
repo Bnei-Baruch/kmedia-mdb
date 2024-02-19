@@ -43,7 +43,7 @@ const TextContentWeb = ({ playerPage }) => {
       document.removeEventListener('selectionchange', handleSelectionChange);
       dispatch(actions.setUrlSelect());
     };
-  }, []);
+  }, [dispatch]);
 
   if (!file)
     return <NotFound textKey={playerPage && 'materials.transcription.no-content'} />;

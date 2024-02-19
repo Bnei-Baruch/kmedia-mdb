@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Segment, Divider } from 'semantic-ui-react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 
 import { selectSuitableLanguage } from '../../../../../../helpers/language';
-import { useSelector, useDispatch } from 'react-redux';
 import { actions as assetsActions } from '../../../../../../redux/modules/assets';
 import MenuLanguageSelector from '../../../../../../components/Language/Selector/MenuLanguageSelector';
 import {
@@ -10,13 +11,10 @@ import {
   assetsGetDoc2htmlByIdSelector,
   mdbGetDenormContentUnitSelector
 } from '../../../../../../redux/selectors';
-
 import { getFile, getSummaryLanguages } from './helper';
-import { useParams } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
 
 const Summary = ({ id }) => {
-  const { t }  = useTranslation();
+  const { t } = useTranslation();
 
   const contentLanguages = useSelector(settingsGetContentLanguagesSelector);
   const doc2htmlById     = useSelector(assetsGetDoc2htmlByIdSelector);

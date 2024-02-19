@@ -1,5 +1,4 @@
 import React, { useContext, useMemo } from 'react';
-import { useParams } from 'react-router-dom';
 
 import TextLayoutWeb from '../../../../WithText/TextLayoutWeb';
 import ResearchTabToolbarWeb from './ResearchTabToolbarWeb';
@@ -24,7 +23,7 @@ const ResearchTab = ({ id }) => {
   const linkMemo = useMemo(() => ({ pathname, search: { activeTab: 'research' } }), [pathname]);
   useInitTextUrl(linkMemo);
 
-  if (!cu) return <NotFound textKey="materials.research.no-content"/>;
+  if (!cu) return <NotFound textKey="materials.research.no-content" />;
 
   return (
     <div className="player_page_tab">

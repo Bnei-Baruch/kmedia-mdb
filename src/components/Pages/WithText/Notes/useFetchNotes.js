@@ -11,7 +11,7 @@ export const useFetchNotes = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(actions.fetch({ subject_uid: subject.id, language }));
-  }, [subject.id, language]);
+  }, [subject.id, language, dispatch]);
 
   return null;
 };

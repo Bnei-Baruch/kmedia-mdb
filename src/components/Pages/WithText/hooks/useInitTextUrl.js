@@ -14,7 +14,7 @@ export const useInitTextUrl = (urlProps, clearUrlProps) => {
       console.log('share bug: useInitTextUrl', urlProps);
       dispatch(actions.setUrlInfo(urlProps));
     }
-  }, [urlProps, clearUrlProps]);
+  }, [urlProps, clearUrlProps, dispatch]);
 
   return null;
 };

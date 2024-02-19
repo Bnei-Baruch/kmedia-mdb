@@ -8,16 +8,21 @@ import { getQuery, stringify, updateQuery } from '../../helpers/url';
 import { canonicalLink } from '../../helpers/links';
 import { actions } from '../../redux/modules/player';
 import { startEndFromQuery } from './Controls/helper';
-import { playlistGetIndexByIdSelector, playlistGetInfoSelector, playerGetShareStartEndSelector, settingsGetUILangSelector, mdbNestedGetDenormCollectionSelector, mdbNestedGetDenormContentUnitSelector } from '../../redux/selectors';
+import {
+  playlistGetIndexByIdSelector,
+  playlistGetInfoSelector,
+  settingsGetUILangSelector,
+  mdbNestedGetDenormCollectionSelector,
+  mdbNestedGetDenormContentUnitSelector
+} from '../../redux/selectors';
 
 const UpdateLocation = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const dispatch                           = useDispatch();
-  const q                                  = getQuery(location);
-  const uiLang                             = useSelector(settingsGetUILangSelector);
-  const { start: prevStart, end: prevEnd } = useSelector(playerGetShareStartEndSelector);
+  const dispatch = useDispatch();
+  const q        = getQuery(location);
+  const uiLang   = useSelector(settingsGetUILangSelector);
 
   const { mediaType, nextUnitId, cId, cuId, baseLink } = useSelector(playlistGetInfoSelector);
 
@@ -29,7 +34,7 @@ const UpdateLocation = () => {
   useEffect(() => {
     const _q = startEndFromQuery(location);
     dispatch(actions.setShareStartEnd(_q));
-  }, [location, cuId]);
+  }, [location, cuId, dispatch]);
 
   useEffect(() => {
     if (mediaType && mediaType !== q.mediaType) {
@@ -54,7 +59,7 @@ const UpdateLocation = () => {
       navigate({ pathname: `/${uiLang}${to.pathname}`, search });
       dispatch(action.nullNextUnit());
     }
-  }, [nextUnitId, cId, search, uiLang, baseLink, navigate, denormUnit, denormCollectiont]);
+  }, [nextUnitId, cId, search, uiLang, baseLink, navigate, denormUnit, denormCollectiont, dispatch]);
 
   return null;
 };

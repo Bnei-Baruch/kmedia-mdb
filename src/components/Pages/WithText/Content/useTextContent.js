@@ -15,7 +15,7 @@ export const useTextContent = () => {
 
   useEffect(() => {
     needFetch && dispatch(actions.doc2html(id));
-  }, [id, needFetch]);
+  }, [id, needFetch, dispatch]);
 
   const wipErr = WipErr({ wip: wip || !id, err, t });
   return wipErr;

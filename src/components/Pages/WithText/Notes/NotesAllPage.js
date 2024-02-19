@@ -17,7 +17,7 @@ const NotesAllPage = () => {
     .map(id => byId[id])
     .filter(({ properties: p }) => !p || (!p.srchstart && !p.srchend))
     .filter(({ properties: p }) => !isPdf || (!p?.page || Number.parseInt(p.page, 10) === page))
-    .map(n => n.id), [byId, ids, page]);
+    .map(n => n.id), [byId, ids, page, isPdf]);
 
   if (_ids.length === 0) return null;
 

@@ -20,7 +20,7 @@ export const findPlayedFile = (item, info, lang, mt, q) => {
   mt   = mt || mediaType;
   q    = q || quality;
 
-  const { filesByLang, qualityByLang, mtByLang, languages } = item;
+  const { filesByLang, qualityByLang, mtByLang } = item;
 
   const byLang = filesByLang[lang];
 

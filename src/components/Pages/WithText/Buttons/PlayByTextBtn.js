@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { Button } from 'semantic-ui-react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { actions, selectors as assets } from '../../../../redux/modules/assets';

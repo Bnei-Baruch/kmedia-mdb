@@ -26,7 +26,7 @@ export const useTextSubject = propId => {
 
   useEffect(() => {
     needFetch && dispatch(actions.fetchSubject(id));
-  }, [id, needFetch]);
+  }, [id, needFetch, dispatch]);
 
   return subjectId !== fixedId || wip;
 };

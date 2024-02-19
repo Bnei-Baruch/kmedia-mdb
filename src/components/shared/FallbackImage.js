@@ -30,7 +30,7 @@ const FallbackImage = props => {
     if (!imageSource && !wip && !err) {
       dispatch(actions.fetch(src, fallbackImage));
     }
-  }, [fallbackImage, src, imageSource, wip, err]);
+  }, [fallbackImage, src, imageSource, wip, err, dispatch]);
 
   if (!imageSource || imageSource === NoneFallbackImage) {
     /* There is no fallbacks and src was not found */
@@ -76,10 +76,10 @@ const FallbackImage = props => {
 };
 
 FallbackImage.propTypes = {
-  src          : PropTypes.string,
+  src: PropTypes.string,
   fallbackImage: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.element, PropTypes.array])),
-  onLoad       : PropTypes.func,
-  onError      : PropTypes.func
+  onLoad: PropTypes.func,
+  onError: PropTypes.func
 };
 
 export default FallbackImage;

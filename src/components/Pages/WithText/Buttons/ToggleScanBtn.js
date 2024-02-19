@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Modal, Icon } from 'semantic-ui-react';
+import { Modal, Icon } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
 import { textPageGetScanFileSelector } from '../../../../redux/selectors';
 import ToolbarBtnTooltip from './ToolbarBtnTooltip';

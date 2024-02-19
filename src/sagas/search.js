@@ -7,17 +7,21 @@ import { actions, selectors, types } from '../redux/modules/search';
 import { types as settingsTypes } from '../redux/modules/settings';
 import { actions as mbdActions } from '../redux/modules/mdb';
 import { actions as postsActions } from '../redux/modules/publications';
-import { selectors as filterSelectors, actions as filterActions, types as filterTypes } from '../redux/modules/filters';
-import { selectors as lessonsSelectors, actions as lessonsActions } from '../redux/modules/lessons';
+import { actions as filterActions, types as filterTypes } from '../redux/modules/filters';
+import { actions as lessonsActions } from '../redux/modules/lessons';
 import { fetchAllSeries } from './lessons';
 import { fetchViewsByUIDs } from './recommended';
 import { filtersTransformer } from '../filters';
 import { push } from '@lagunovsky/redux-react-router';
 import {
-  filtersGetFiltersSelector, lessonsGetSeriesLoaded, searchGetDebSelector,
-  searchGetPageNoSelector, searchGetPrevFilterParamsSelector,
+  filtersGetFiltersSelector,
+  lessonsGetSeriesLoaded,
+  searchGetDebSelector,
+  searchGetPageNoSelector,
+  searchGetPrevFilterParamsSelector,
   searchGetPrevQuerySelector,
-  searchGetQuerySelector, searchGetSortBySelector,
+  searchGetQuerySelector,
+  searchGetSortBySelector,
   settingsGetContentLanguagesSelector,
   settingsGetUILangSelector
 } from '../redux/selectors';
@@ -119,12 +123,12 @@ export function* search(action) {
     const request  = {
       q,
       sortBy,
-      ui_language      : uiLang,
+      ui_language: uiLang,
       content_languages: contentLanguages,
       deb,
       searchId,
       pageNo,
-      pageSize         : 20
+      pageSize: 20
     };
 
     yield put(actions.setWip());
@@ -151,21 +155,31 @@ export function* search(action) {
       const requests         = [];
       if (cuIDsToFetch.length > 0) {
         requests.push(call(Api.units, {
-          id               : cuIDsToFetch,
-          pageSize         : cuIDsToFetch.length,
-          ui_language      : uiLang,
+          id: cuIDsToFetch,
+          pageSize: cuIDsToFetch.length,
+          ui_language: uiLang,
           content_languages: contentLanguages,
-          with_files       : true,
-          with_derivations : true
+          with_files: true,
+          with_derivations: true
         }));
       }
 
       if (cIDsToFetch.length > 0) {
-        requests.push(call(Api.collections, { id: cIDsToFetch, pageSize: cIDsToFetch.length, ui_language: uiLang, content_languages: contentLanguages }));
+        requests.push(call(Api.collections, {
+          id: cIDsToFetch,
+          pageSize: cIDsToFetch.length,
+          ui_language: uiLang,
+          content_languages: contentLanguages
+        }));
       }
 
       if (postIDsToFetch.length > 0) {
-        requests.push(call(Api.posts, { id: postIDsToFetch, pageSize: postIDsToFetch.length, ui_language: uiLang, content_languages: contentLanguages }));
+        requests.push(call(Api.posts, {
+          id: postIDsToFetch,
+          pageSize: postIDsToFetch.length,
+          ui_language: uiLang,
+          content_languages: contentLanguages
+        }));
       }
 
       if (!seriesLoaded) {

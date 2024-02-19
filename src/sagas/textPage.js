@@ -29,12 +29,12 @@ export function* fetchSubject(action) {
     const contentLanguages        = yield select(settingsGetContentLanguagesSelector);
 
     const isSource      = subject.type === CT_SOURCE;
-    let prefereLanguage = action.payload.source_language || isSource && _language;
+    let prefereLanguage = action.payload.source_language || (isSource && _language);
     if (!prefereLanguage && typeof window !== 'undefined') {
       prefereLanguage = getQuery(window.location).source_language;
     }
 
-    prefereLanguage = prefereLanguage || isSource && cu.original_language;
+    prefereLanguage = prefereLanguage || (isSource && cu.original_language);
 
     const language = selectSuitableLanguage([...contentLanguages, prefereLanguage], subject.languages, prefereLanguage);
 

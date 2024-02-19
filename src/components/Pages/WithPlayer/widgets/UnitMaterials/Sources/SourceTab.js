@@ -1,5 +1,4 @@
 import React, { useState, useContext, useMemo, useCallback, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 import TextLayoutWeb from '../../../../WithText/TextLayoutWeb';

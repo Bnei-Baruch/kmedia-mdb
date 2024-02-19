@@ -1,5 +1,4 @@
 import React, { useContext, useMemo } from 'react';
-import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 import TextLayoutWeb from '../../../../WithText/TextLayoutWeb';
@@ -23,7 +22,7 @@ const ArticleTab = ({ id }) => {
   const linkMemo = useMemo(() => ({ pathname, search: {} }), [pathname]);
   useInitTextUrl(linkMemo);
 
-  if (!cu) return <NotFound  textKey="materials.articles.no-content"/>;
+  if (!cu) return <NotFound textKey="materials.articles.no-content" />;
 
   return (
     <div className="player_page_tab">

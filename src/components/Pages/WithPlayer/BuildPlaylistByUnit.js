@@ -5,7 +5,13 @@ import { useParams, useSearchParams } from 'react-router-dom';
 import { actions } from '../../../redux/modules/playlist';
 import { actions as mdbActions } from '../../../redux/modules/mdb';
 import Helmets from '../../shared/Helmets';
-import { mdbGetErrorsSelector, mdbGetFullUnitFetchedSelector, playlistGetInfoSelector, mdbGetWipFn, mdbGetDenormContentUnitSelector } from '../../../redux/selectors';
+import {
+  mdbGetErrorsSelector,
+  mdbGetFullUnitFetchedSelector,
+  playlistGetInfoSelector,
+  mdbGetWipFn,
+  mdbGetDenormContentUnitSelector
+} from '../../../redux/selectors';
 
 const BuildPlaylistByUnit = ({ cts }) => {
   const { id }         = useParams();
@@ -18,7 +24,7 @@ const BuildPlaylistByUnit = ({ cts }) => {
   const wipCU   = useSelector(mdbGetWipFn).units[id];
   const errCU   = useSelector(mdbGetErrorsSelector).units[id];
 
-  const cs          = unit && Object.values(unit.collections) || [];
+  const cs          = (unit && Object.values(unit.collections)) || [];
   const { id: cId } = cs.find(c => c.id === (searchParams.get('c') || prevCId))
   || cs.find(c => cts.includes(c.content_type))
   || false;
@@ -40,9 +46,9 @@ const BuildPlaylistByUnit = ({ cts }) => {
     } else if (id && prevCuId !== id) {
       dispatch(actions.select({ id, cuId: id }));
     }
-  }, [cId, id, prevCuId, wip, fetched]);
+  }, [cId, id, prevCuId, wip, fetched, dispatch]);
 
-  return <Helmets.AVUnit id={id}/>;
+  return <Helmets.AVUnit id={id} />;
 };
 
 export default BuildPlaylistByUnit;
