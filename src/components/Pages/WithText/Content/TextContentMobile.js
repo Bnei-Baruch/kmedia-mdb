@@ -21,7 +21,7 @@ const TextContentMobile = ({ playerPage }) => {
     return null;
 
   return (
-    <div className={`is-${fontType} zoom_size_${zoomSize} webkit_text_size`}>
+    <div className={`is-${fontType} zoom_size_${isPdf ? 2 : zoomSize} webkit_text_size`}>
       <div className="font_settings text__content">
         {
           !isPdf ? (

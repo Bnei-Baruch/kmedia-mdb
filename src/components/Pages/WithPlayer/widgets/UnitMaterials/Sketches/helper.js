@@ -1,5 +1,5 @@
-import { assetUrl, Requests } from '../../../../../helpers/Api';
-import { physicalFile } from '../../../../../helpers/utils';
+import { assetUrl, Requests } from '../../../../../../helpers/Api';
+import { physicalFile } from '../../../../../../helpers/utils';
 
 // converts images from server format (path, size) to ImageGallery format
 export const imageGalleryItem = item => {

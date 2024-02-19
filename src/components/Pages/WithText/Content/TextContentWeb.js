@@ -46,7 +46,7 @@ const TextContentWeb = ({ playerPage }) => {
   }, []);
 
   if (!file)
-    return <NotFound textKey={playerPage && 'materials.transcription.no-content'} />
+    return <NotFound textKey={playerPage && 'materials.transcription.no-content'} />;
   const handleDataRef = r => {
     if (!r) return;
 
@@ -63,7 +63,7 @@ const TextContentWeb = ({ playerPage }) => {
   }
 
   return (
-    <div className={`text__content-wrapper is-${fontType} zoom_size_${zoomSize}`}>
+    <div className={`text__content-wrapper is-${fontType} zoom_size_${!pdf ? zoomSize : 2}`}>
       {
         !textOnly && (
           <div className="text__content-markers no_print">

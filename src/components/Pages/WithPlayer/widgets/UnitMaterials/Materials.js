@@ -17,7 +17,7 @@ import TabsMenu from '../../../../shared/TabsMenu';
 import Summary from './Summary/Summary';
 import { showSummaryTab } from './Summary/helper';
 import SourceTab from './Sources/SourceTab';
-import Sketches from './Sketches';
+import Sketches from './Sketches/Sketches';
 import MediaDownloads from '../MediaDownloads';
 import { isEmpty, noop } from '../../../../../helpers/utils';
 import { ClientChroniclesContext, DeviceInfoContext } from '../../../../../helpers/app-contexts';

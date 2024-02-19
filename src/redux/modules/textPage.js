@@ -66,7 +66,7 @@ const textPageSlice = createSlice({
   },
   reducers: {
     setZoomSize: (state, { payload }) => {
-      let size = state.settings.zoomSize || 1;
+      let size = state.settings.zoomSize || 2;
       if (payload === 'up') {
         size = size + 1;
       } else if (payload === 'down') {

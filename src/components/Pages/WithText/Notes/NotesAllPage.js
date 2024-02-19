@@ -15,8 +15,8 @@ const NotesAllPage = () => {
 
   const _ids = useMemo(() => ids
     .map(id => byId[id])
-    .filter(({ properties: p }) => !isPdf || (!p.page || Number.parseInt(p.page, 10) === page))
     .filter(({ properties: p }) => !p || (!p.srchstart && !p.srchend))
+    .filter(({ properties: p }) => !isPdf || (!p?.page || Number.parseInt(p.page, 10) === page))
     .map(n => n.id), [byId, ids, page]);
 
   if (_ids.length === 0) return null;

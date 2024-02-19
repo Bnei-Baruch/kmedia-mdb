@@ -57,7 +57,7 @@ const PlayerContainer      = () => {
   useEffect(() => {
     const handleFullscreenChange = () => {
       const isFull = fullscreenRef.current === document.fullscreenElement;
-      dispatch(actions.setFullScreen(isFull));
+      dispatch(actions.setFullscreen(isFull));
     };
 
     document.addEventListener('fullscreenchange', handleFullscreenChange);
