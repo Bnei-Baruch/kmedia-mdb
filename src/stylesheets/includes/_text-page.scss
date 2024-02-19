@@ -708,6 +708,10 @@ $breadcrumb-height: 48px;
       color: $blue !important;
       background: none !important;
     }
+
+    span {
+      min-height: 20px;
+    }
   }
 
   .input_wrapper.ui.input {
