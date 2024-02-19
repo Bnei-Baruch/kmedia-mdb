@@ -3,7 +3,12 @@ import ContentItemContainer from '../../../shared/ContentItem/ContentItemContain
 import { useSelector } from 'react-redux';
 import { MY_NAMESPACE_PLAYLISTS } from '../../../../helpers/consts';
 import { stringify } from '../../../../helpers/url';
-import { playlistGetInfoSelector, playlistGetItemByIdSelector, playlistGetPlaylistSelector, settingsGetUILangSelector } from '../../../../redux/selectors';
+import {
+  playlistGetInfoSelector,
+  playlistGetItemByIdSelector,
+  playlistGetPlaylistSelector,
+  settingsGetUILangSelector
+} from '../../../../redux/selectors';
 
 const PlaylistItems = () => {
   const items       = useSelector(playlistGetPlaylistSelector);

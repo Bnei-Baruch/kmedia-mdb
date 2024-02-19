@@ -1,6 +1,6 @@
 import { selectors as mdbSelectors } from '../../redux/modules/mdb';
 import { createFilterDefinition } from './util';
-import {  FN_COLLECTION_MULTI } from '../../helpers/consts';
+import { FN_COLLECTION_MULTI } from '../../helpers/consts';
 
 const collectionsFilterMulti = {
   name: FN_COLLECTION_MULTI,

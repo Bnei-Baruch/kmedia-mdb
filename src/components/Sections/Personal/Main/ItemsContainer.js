@@ -18,7 +18,12 @@ import { PlaylistItem } from './PlaylistItem';
 import { SubscriptionsItem } from './SubscriptionsItem';
 import ItemTemplate from './ItemTemplate';
 import { getMyItemKey } from '../../../../helpers/my';
-import { myGetListSelector, myGetErrSelector, myGetWipSelector, settingsGetUILangSelector } from '../../../../redux/selectors';
+import {
+  myGetListSelector,
+  myGetErrSelector,
+  myGetWipSelector,
+  settingsGetUILangSelector
+} from '../../../../redux/selectors';
 
 const ItemsContainer = ({ pageSize = 8, pageNo = 1, t, namespace, withSeeAll }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);

@@ -18,7 +18,13 @@ import SectionFiltersWithMobile from '../../shared/SectionFiltersWithMobile';
 import WipErr from '../../shared/WipErr/WipErr';
 import Filters from './Filters';
 import ItemOfList from './ItemOfList';
-import { settingsGetContentLanguagesSelector, mdbGetDenormCollectionSelector, listsGetNamespaceStateSelector, filtersGetNotEmptyFiltersSelector, settingsGetPageSizeSelector } from '../../../redux/selectors';
+import {
+  settingsGetContentLanguagesSelector,
+  mdbGetDenormCollectionSelector,
+  listsGetNamespaceStateSelector,
+  filtersGetNotEmptyFiltersSelector,
+  settingsGetPageSizeSelector
+} from '../../../redux/selectors';
 
 const ProgramPage = ({ t }) => {
   const { id: cid } = useParams();

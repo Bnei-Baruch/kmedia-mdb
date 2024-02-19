@@ -15,7 +15,13 @@ import OriginalLanguageFilter from '../../FiltersAside/OriginalLanguageFilter/Or
 import PersonFilter from '../../FiltersAside/PersonFilter/Person';
 import TagSourceFilter from '../../FiltersAside/TopicsFilter/TagSourceFilter';
 import ContentTypeFilter from './ContentTypeFilter';
-import { settingsGetContentLanguagesSelector, filtersAsideGetIsReadySelector, filtersGetNotEmptyFiltersSelector, settingsGetUILangSelector, filtersAsideGetWipErrSelector } from '../../../redux/selectors';
+import {
+  settingsGetContentLanguagesSelector,
+  filtersAsideGetIsReadySelector,
+  filtersGetNotEmptyFiltersSelector,
+  settingsGetUILangSelector,
+  filtersAsideGetWipErrSelector
+} from '../../../redux/selectors';
 
 const Filters = ({ namespace, baseParams }) => {
   const [isHydrated, setIsHydrated] = useState(false);

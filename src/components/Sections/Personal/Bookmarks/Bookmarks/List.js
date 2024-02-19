@@ -13,7 +13,15 @@ import NeedToLogin from '../../NeedToLogin';
 import { Header, List } from 'semantic-ui-react';
 import BookmarksItem from './Item';
 import { buildTitleByUnit } from '../../../../shared/ContentItem/helper';
-import { bookmarkFilterGetByKeySelector, myGetListSelector, myGetErrSelector, myGetWipSelector, sourcesGetPathByIDSelector, settingsGetUILangSelector, mdbNestedGetDenormContentUnitSelector } from '../../../../../redux/selectors';
+import {
+  bookmarkFilterGetByKeySelector,
+  myGetListSelector,
+  myGetErrSelector,
+  myGetWipSelector,
+  sourcesGetPathByIDSelector,
+  settingsGetUILangSelector,
+  mdbNestedGetDenormContentUnitSelector
+} from '../../../../../redux/selectors';
 
 const BookmarkList = ({ t }) => {
   let items         = useSelector(state => myGetListSelector(state, MY_NAMESPACE_BOOKMARKS));

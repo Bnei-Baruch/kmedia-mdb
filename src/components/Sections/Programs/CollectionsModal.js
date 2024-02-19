@@ -3,12 +3,7 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import { Button, Icon, Input, Modal, Table } from 'semantic-ui-react';
-import {
-  CT_CLIP,
-  CT_CLIPS,
-  CT_VIDEO_PROGRAM,
-  CT_VIDEO_PROGRAM_CHAPTER
-} from '../../../helpers/consts';
+import { CT_CLIP, CT_CLIPS, CT_VIDEO_PROGRAM, CT_VIDEO_PROGRAM_CHAPTER } from '../../../helpers/consts';
 
 import CollectionItem from '../../FiltersAside/CollectionFilter/CollectionItem';
 import { settingsGetUIDirSelector } from '../../../redux/selectors';

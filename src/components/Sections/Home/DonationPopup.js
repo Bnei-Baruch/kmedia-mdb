@@ -10,7 +10,12 @@ import { LANG_ENGLISH, LANG_HEBREW, LANG_RUSSIAN, LANG_SPANISH, KC_BOT_USER_NAME
 import { getQuery } from '../../../helpers/url';
 import banner from '../../../images/DonationBanner.jpg';
 import { isLanguageRtl } from '../../../helpers/i18n-utils';
-import { settingsGetContentLanguagesSelector, authGetUserSelector, settingsGetUIDirSelector, settingsGetUILangSelector } from '../../../redux/selectors';
+import {
+  settingsGetContentLanguagesSelector,
+  authGetUserSelector,
+  settingsGetUIDirSelector,
+  settingsGetUILangSelector
+} from '../../../redux/selectors';
 
 function DonationPopup({ t }) {
   const user       = useSelector(authGetUserSelector);

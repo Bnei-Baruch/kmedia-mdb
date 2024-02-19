@@ -7,7 +7,13 @@ import { FN_COLLECTION_MULTI, FN_CONTENT_TYPE, UNIT_PROGRAMS_TYPE } from '../../
 import { withTranslation } from 'react-i18next';
 import FilterHeader from '../../FiltersAside/FilterHeader';
 import CollectionsModal, { cCtByUnitCt } from './CollectionsModal';
-import { filtersAsideGetStatsSelector, filtersAsideGetTreeSelector, filtersGetFilterByNameSelector, settingsGetUIDirSelector, mdbNestedGetCollectionByIdSelector } from '../../../redux/selectors';
+import {
+  filtersAsideGetStatsSelector,
+  filtersAsideGetTreeSelector,
+  filtersGetFilterByNameSelector,
+  settingsGetUIDirSelector,
+  mdbNestedGetCollectionByIdSelector
+} from '../../../redux/selectors';
 
 const ContentTypesFilter = ({ namespace, t }) => {
 

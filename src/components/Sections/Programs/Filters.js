@@ -14,7 +14,11 @@ import MediaTypeFilter from '../../FiltersAside/MediaTypeFilter/MediaType';
 import OriginalLanguageFilter from '../../FiltersAside/OriginalLanguageFilter/OriginalLanguage';
 import TagSourceFilter from '../../FiltersAside/TopicsFilter/TagSourceFilter';
 import ContentTypesFilter from './ContentTypesFilter';
-import { settingsGetContentLanguagesSelector, filtersAsideGetIsReadySelector, filtersGetNotEmptyFiltersSelector } from '../../../redux/selectors';
+import {
+  settingsGetContentLanguagesSelector,
+  filtersAsideGetIsReadySelector,
+  filtersGetNotEmptyFiltersSelector
+} from '../../../redux/selectors';
 
 const Filters = ({ namespace, baseParams }) => {
   const { t }                       = useTranslation();

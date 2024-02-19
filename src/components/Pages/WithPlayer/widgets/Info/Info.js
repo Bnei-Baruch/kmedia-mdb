@@ -12,13 +12,17 @@ import {
   CT_SPECIAL_LESSON
 } from '../../../../../helpers/consts';
 import { canonicalLink } from '../../../../../helpers/links';
-import { cuPartNameByCCUType, intersperse } from '../../../../../helpers/utils';
+import { cuPartNameByCCUType, intersperse, canonicalCollection } from '../../../../../helpers/utils';
 import Link from '../../../../Language/MultiLanguageLink';
 import PersonalInfo from './PersonalInfo';
 import UnitLogo from '../../../../shared/Logo/UnitLogo';
 import TagsByUnit from '../../../../shared/TagsByUnit';
-import { canonicalCollection } from '../../../../../helpers/utils';
-import { mdbGetDenormCollectionSelector, mdbGetDenormContentUnitSelector, playlistGetInfoSelector, recommendedGetViewsSelector } from '../../../../../redux/selectors';
+import {
+  mdbGetDenormCollectionSelector,
+  mdbGetDenormContentUnitSelector,
+  playlistGetInfoSelector,
+  recommendedGetViewsSelector
+} from '../../../../../redux/selectors';
 
 export const makeTagLinks = (tags = [], getTagById) =>
   Array.from(intersperse(

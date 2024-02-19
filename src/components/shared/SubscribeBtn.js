@@ -9,7 +9,13 @@ import { actions } from '../../redux/modules/my';
 import AlertModal from './AlertModal';
 import NeedToLogin from '../Sections/Personal/NeedToLogin';
 import { getMyItemKey } from '../../helpers/my';
-import { mdbGetDenormContentUnitSelector, playlistGetInfoSelector, myGetItemByKeySelector, settingsGetUIDirSelector, authGetUserSelector } from '../../redux/selectors';
+import {
+  mdbGetDenormContentUnitSelector,
+  playlistGetInfoSelector,
+  myGetItemByKeySelector,
+  settingsGetUIDirSelector,
+  authGetUserSelector
+} from '../../redux/selectors';
 
 const SubscribeBtn = ({ t, collection }) => {
   const [alertMsg, setAlertMsg]       = useState();

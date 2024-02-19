@@ -26,7 +26,12 @@ import WipErr from '../../shared/WipErr/WipErr';
 import CollectionItem from './CollectionItem';
 import Filters from './Filters';
 import UnitItem from './UnitItem';
-import { settingsGetContentLanguagesSelector, listsGetNamespaceStateSelector, filtersGetNotEmptyFiltersSelector, settingsGetPageSizeSelector } from '../../../redux/selectors';
+import {
+  settingsGetContentLanguagesSelector,
+  listsGetNamespaceStateSelector,
+  filtersGetNotEmptyFiltersSelector,
+  settingsGetPageSizeSelector
+} from '../../../redux/selectors';
 
 const BASE_PARAMS = { content_type: EVENT_PAGE_CTS };
 

@@ -20,7 +20,14 @@ import { canonicalLink } from '../../../helpers/links';
 import ListTemplate from './ListTemplate';
 import CardTemplate from './CardTemplate';
 import { stringify } from '../../../helpers/url';
-import { mdbGetDenormCollectionSelector, mdbGetDenormContentUnitSelector, mdbGetDenormLabelSelector, sourcesGetSourceByIdSelector, tagsGetTagByIdSelector, recommendedGetViewsSelector } from '../../../redux/selectors';
+import {
+  mdbGetDenormCollectionSelector,
+  mdbGetDenormContentUnitSelector,
+  mdbGetDenormLabelSelector,
+  sourcesGetSourceByIdSelector,
+  tagsGetTagByIdSelector,
+  recommendedGetViewsSelector
+} from '../../../redux/selectors';
 
 const NOT_LESSONS_COLLECTIONS = [CT_VIDEO_PROGRAM, CT_VIRTUAL_LESSONS, CT_CLIPS];
 

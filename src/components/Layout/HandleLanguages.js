@@ -10,7 +10,13 @@ import { updateHtmlLang } from '../../helpers/language';
 
 import { actions } from '../../redux/modules/settings';
 import Link from '../Language/MultiLanguageLink';
-import { settingsGetContentLanguagesSelector, settingsGetShowAllContentSelector, settingsGetUIDirSelector, settingsGetUILangSelector, settingsGetUrlLangSelector } from '../../redux/selectors';
+import {
+  settingsGetContentLanguagesSelector,
+  settingsGetShowAllContentSelector,
+  settingsGetUIDirSelector,
+  settingsGetUILangSelector,
+  settingsGetUrlLangSelector
+} from '../../redux/selectors';
 
 const HandleLanguages = ({ t }) => {
   const [isActive, setIsActive] = useState(false);

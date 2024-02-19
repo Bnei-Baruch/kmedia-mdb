@@ -1,8 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { tracePath } from '../../helpers/utils';
+import { tracePath, buildById } from '../../helpers/utils';
 import { TOPICS_FOR_DISPLAY } from '../../helpers/consts';
-import { buildById } from '../../helpers/utils';
 import { actions as settings } from './settings';
 import { actions as ssrActions } from './ssr';
 

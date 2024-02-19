@@ -6,7 +6,11 @@ import { useTranslation } from 'react-i18next';
 import { formatTime } from '../../../helpers/time';
 import { actions } from '../../../redux/modules/player';
 import { getPosition } from '../../../pkg/jwpAdapter/adapter';
-import { playerGetFileSelector, playerGetShareStartEndSelector, settingsGetUIDirSelector } from '../../../redux/selectors';
+import {
+  playerGetFileSelector,
+  playerGetShareStartEndSelector,
+  settingsGetUIDirSelector
+} from '../../../redux/selectors';
 
 const StartEnd = ({ action }) => {
   const { t }              = useTranslation();

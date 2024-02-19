@@ -8,7 +8,12 @@ import { MY_NAMESPACE_PLAYLIST_EDIT, MY_NAMESPACE_PLAYLISTS, PLAYER_OVER_MODES }
 import { useTranslation } from 'react-i18next';
 import AddPlaylistForm from './AddPlaylistForm';
 import { ADD_PLAYLIST_ITEM_MODES } from './SavePlaylistItemBtn';
-import { mdbGetDenormContentUnitSelector, playlistGetInfoSelector, myGetListSelector, settingsGetUIDirSelector } from '../../../../../redux/selectors';
+import {
+  mdbGetDenormContentUnitSelector,
+  playlistGetInfoSelector,
+  myGetListSelector,
+  settingsGetUIDirSelector
+} from '../../../../../redux/selectors';
 
 const SaveAsPlaylistItem = ({ setModalMode, label }) => {
   const [selected, setSelected] = useState([]);

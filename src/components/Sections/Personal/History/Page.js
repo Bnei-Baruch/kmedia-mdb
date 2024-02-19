@@ -16,7 +16,16 @@ import Pagination from '../../../Pagination/Pagination';
 import Actions from './Actions';
 import NeedToLogin from '../NeedToLogin';
 import { withRouter } from '../../../../helpers/withRouterPatch';
-import { settingsGetContentLanguagesSelector, myGetDeletedSelector, myGetListSelector, myGetErrSelector, myGetPageNoSelector, myGetTotalSelector, myGetWipSelector, authGetUserSelector } from '../../../../redux/selectors';
+import {
+  settingsGetContentLanguagesSelector,
+  myGetDeletedSelector,
+  myGetListSelector,
+  myGetErrSelector,
+  myGetPageNoSelector,
+  myGetTotalSelector,
+  myGetWipSelector,
+  authGetUserSelector
+} from '../../../../redux/selectors';
 
 export const PAGE_SIZE = 20;
 

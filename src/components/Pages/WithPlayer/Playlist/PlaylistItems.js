@@ -7,7 +7,12 @@ import { DeviceInfoContext } from '../../../../helpers/app-contexts';
 import { Header, Button, Container } from 'semantic-ui-react';
 import { COLLECTION_DAILY_LESSONS } from '../../../../helpers/consts';
 import WipErr from '../../../shared/WipErr/WipErr';
-import { mdbGetDenormCollectionSelector, playlistGetFetchedSelector, playlistGetInfoSelector, playlistGetPlaylistSelector } from '../../../../redux/selectors';
+import {
+  mdbGetDenormCollectionSelector,
+  playlistGetFetchedSelector,
+  playlistGetInfoSelector,
+  playlistGetPlaylistSelector
+} from '../../../../redux/selectors';
 
 const PLAYLIST_ITEM_HEIGHT        = 104;
 const PLAYLIST_ITEM_HEIGHT_MOBILE = 128;

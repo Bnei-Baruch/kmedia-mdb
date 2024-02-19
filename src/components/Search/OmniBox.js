@@ -11,7 +11,12 @@ import { SuggestionsHelper } from '../../helpers/search';
 import { isLanguageRtl } from '../../helpers/i18n-utils';
 
 import { actions } from '../../redux/modules/search';
-import { searchGetAutocompleteWipSelector, searchGetQuerySelector, searchGetSuggestionsSelector, settingsGetUILangSelector } from '../../redux/selectors';
+import {
+  searchGetAutocompleteWipSelector,
+  searchGetQuerySelector,
+  searchGetSuggestionsSelector,
+  settingsGetUILangSelector
+} from '../../redux/selectors';
 
 const makeResult = (uiLang, result) => ({
   ...result,

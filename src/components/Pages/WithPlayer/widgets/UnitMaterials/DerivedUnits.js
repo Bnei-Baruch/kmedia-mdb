@@ -5,7 +5,6 @@ import { List, Table } from 'semantic-ui-react';
 import * as renderUnitHelper from '../../../../../helpers/renderUnitHelper';
 import * as shapes from '../../../../shapes';
 
-
 const renderUnit = (unit, t) => {
   const {
     clips,

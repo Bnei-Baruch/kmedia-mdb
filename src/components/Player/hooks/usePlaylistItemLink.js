@@ -1,7 +1,12 @@
 import { useSelector } from 'react-redux';
 import { canonicalLink } from '../../../helpers/links';
 import { stringify } from '../../../helpers/url';
-import { mdbGetDenormCollectionSelector, mdbGetDenormContentUnitSelector, playlistGetInfoSelector, playlistGetItemByIdSelector } from '../../../redux/selectors';
+import {
+  mdbGetDenormCollectionSelector,
+  mdbGetDenormContentUnitSelector,
+  playlistGetInfoSelector,
+  playlistGetItemByIdSelector
+} from '../../../redux/selectors';
 
 const usePlaylistItemLink = id => {
   const { cuId, id: _id, properties, ap } = useSelector(playlistGetItemByIdSelector)(id);
