@@ -7,15 +7,17 @@ import { useTranslation } from 'react-i18next';
 import { searchOnPage, deleteHighlightByRange, clearHighlightByStyle, addHighlightByRanges } from './helper';
 import { actions } from '../../../redux/modules/textPage';
 import { textPageGetIsSearchSelector } from '../../../redux/selectors';
+import { isEmpty } from '../../../helpers/utils';
 
 const SearchOnPageBar = () => {
   const [val, setVal]     = useState('');
   const [index, setIndex] = useState(-1);
 
-  const ref      = useRef([]);
-  const dispatch = useDispatch();
-  const { t }    = useTranslation();
-  const isSearch = useSelector(textPageGetIsSearchSelector);
+  const refResults = useRef([]);
+  const refInput   = useRef();
+  const dispatch   = useDispatch();
+  const { t }      = useTranslation();
+  const isSearch   = useSelector(textPageGetIsSearchSelector);
 
   if (!isSearch) return null;
 
@@ -44,12 +46,12 @@ const SearchOnPageBar = () => {
     if (res.length === 0)
       return;
     addHighlightByRanges(res, 'found_search');
-    ref.current = res;
+    refResults.current = res;
     scrollByDir(0, 0);
   };
 
   const clearing = () => {
-    ref.current = [];
+    refResults.current = [];
     clearHighlightByStyle('found_search');
     clearHighlightByStyle('selected_search');
   };
@@ -59,11 +61,11 @@ const SearchOnPageBar = () => {
   const scrollByDir = (dir = 1, idx = index) => {
     const _index = idx + dir;
     if (idx >= 0) {
-      deleteHighlightByRange(ref.current[idx], 'selected_search');
-      addHighlightByRanges([ref.current[idx]], 'found_search');
+      deleteHighlightByRange(refResults.current[idx], 'selected_search');
+      addHighlightByRanges([refResults.current[idx]], 'found_search');
     }
 
-    const range = ref.current[_index];
+    const range = refResults.current[_index];
     if (!range) {
       console.error('not found next range by index', _index);
       return;
@@ -74,37 +76,44 @@ const SearchOnPageBar = () => {
     const rect = el.getBoundingClientRect();
     window.scrollTo(0, rect.top + window.scrollY - 60);
     setIndex(_index);
+    refInput.current.focus();
   };
 
   return (
     <div className="text__search_on_page">
+      <Button
+        basic
+        className="clear_button text__search_on_page_close"
+        icon={null}
+        onClick={handleClose}
+        content={t('filters.date-filter.end')}
+      />
       <Input
-        size="small"
+        ref={refInput}
         placeholder={`${t('buttons.search')}...`}
         onChange={handleChange}
-      />
-      {
-        (ref.current && index >= 0) && (<span>{index + 1} / {ref.current.length}</span>)
-      }
+        autoFocus={true}
+      >
+        <input size={1} />
+        <div className="text__search_on_page_counter" dir="ltr">
+          {
+            (!isEmpty(refResults.current) && index >= 0) && (`${index + 1} / ${refResults.current.length}`)
+          }
+        </div>
+      </Input>
       <Button
         basic
         className="clear_button"
-        disabled={index === 0 || ref.current.length < 2}
+        disabled={index === 0 || refResults.current.length < 2}
         icon={<span className="material-symbols-outlined">keyboard_arrow_up</span>}
         onClick={handlePrev}
       />
       <Button
         basic
         className="clear_button"
-        disabled={!ref.current || (index === ref.current.length - 1)}
+        disabled={isEmpty(refResults.current) || (index === refResults.current.length - 1)}
         icon={<span className="material-symbols-outlined">keyboard_arrow_down</span>}
         onClick={handleNext}
-      />
-      <Button
-        basic
-        className="clear_button"
-        icon={<span className="material-symbols-outlined">close</span>}
-        onClick={handleClose}
       />
     </div>
   );

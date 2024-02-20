@@ -1,21 +1,14 @@
 import React from 'react';
-import { Button, Input } from 'semantic-ui-react';
+import { Input } from 'semantic-ui-react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { actions } from '../../../../redux/modules/textPage';
-import {
-  textPageGetTocInfoSelector,
-  textPageGetSubjectSelector,
-  sourcesGetPathByIDSelector
-} from '../../../../redux/selectors';
-import { NotToSort } from '../../../../redux/modules/sources';
+import { textPageGetTocInfoSelector } from '../../../../redux/selectors';
 
 const TocSearch = () => {
   const { t } = useTranslation();
 
-  const { match, sortByAZ } = useSelector(textPageGetTocInfoSelector);
-  const { id }              = useSelector(textPageGetSubjectSelector);
-  const path                = useSelector(sourcesGetPathByIDSelector)(id);
+  const { match } = useSelector(textPageGetTocInfoSelector);
 
   const dispatch      = useDispatch();
   const handleChange  = (e, data) => search(data.value);
@@ -26,35 +19,19 @@ const TocSearch = () => {
   };
 
   const search = m => dispatch(actions.setTocMatch(m));
-  const sortBy = () => dispatch(actions.setTocSortBy());
 
   return (
     <div className="toc_filter">
       <Input
         fluid
         size="mini"
-        icon="search"
+        icon={!match ? 'search' : null}
         className="toc_search"
-        placeholder={t('sources-library.filter')}
+        placeholder={`${t('buttons.search')}...`}
         value={match}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
       />
-      {
-        !NotToSort.includes(path[1]?.id) && (
-          <>
-            <div className="divider"></div>
-            <Button
-              compact
-              basic
-              className="toc_sort_btn"
-              icon={<span className="material-symbols-outlined">sort_by_alpha</span>}
-              active={sortByAZ}
-              onClick={sortBy}
-            />
-          </>
-        )
-      }
     </div>
 
   );

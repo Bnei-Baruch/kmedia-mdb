@@ -19,7 +19,8 @@ import {
   textPageGetSubjectSelector,
   textPageGetUrlInfoSelector,
   textPageGetScrollDirSelector,
-  textPageGetTextOnlySelector
+  textPageGetTextOnlySelector,
+  textPageGetIsSearchSelector
 } from '../../../redux/selectors';
 import ScrollToTopBtn from './Buttons/ScrollToTopBtn';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
@@ -27,13 +28,13 @@ import { useFetchNotes } from './Notes/useFetchNotes';
 
 const TextLayoutWeb = props => {
   const {
-    toolbar    = null,
-    toc        = null,
-    prevNext   = null,
-    breadcrumb = null,
-    playerPage = false,
-    id
-  } = props;
+          toolbar    = null,
+          toc        = null,
+          prevNext   = null,
+          breadcrumb = null,
+          playerPage = false,
+          id
+        } = props;
 
   const ref   = useRef();
   const { t } = useTranslation();
@@ -43,6 +44,7 @@ const TextLayoutWeb = props => {
   const hasSel             = !!useSelector(textPageGetUrlInfoSelector).select;
   const { theme }          = useSelector(textPageGetSettings);
   const textOnly           = useSelector(textPageGetTextOnlySelector);
+  const isSearch           = useSelector(textPageGetIsSearchSelector);
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
   const wip = useTextSubject(id);
@@ -54,21 +56,38 @@ const TextLayoutWeb = props => {
   const wipErr = WipErr({ wip, err: null, t });
   if (wipErr) return wipErr;
 
+  const renderToolbar = () => (
+    <div className={
+      clsx('stick_toolbar no_print', {
+        'stick_toolbar_unpinned': scrollDir === 1 || scrollDir === 2,
+        'stick_toolbar_pinned': scrollDir === -1,
+        'stick_toolbar_fixed': hasSel,
+        'stick_toolbar_no_breadcrumb': !breadcrumb
+      })
+    }>
+      {breadcrumb}
+      {toolbar}
+    </div>
+  );
+  const renderSearch  = () => (
+    <div className={
+      clsx('stick_toolbar no_print stick_toolbar_fixed', {
+        'stick_toolbar_unpinned': scrollDir !== -1,
+        'stick_toolbar_pinned': scrollDir === -1
+      })}>
+      <div className={
+        clsx('no-margin-top', {
+          'text_align_to_text': (!isMobileDevice),
+          'text_align_to_text_text_only': textOnly && (!isMobileDevice)
+        })}>
+        <SearchOnPageBar />
+      </div>
+    </div>
+  );
   return (
     <div className={`is-web text_layout is-${theme}`} ref={ref}>
       {toc}
-      <div className={
-        clsx('stick_toolbar no_print', {
-          'stick_toolbar_unpinned': scrollDir === 1 || scrollDir === 2,
-          'stick_toolbar_pinned': scrollDir === -1,
-          'stick_toolbar_fixed': hasSel,
-          'stick_toolbar_no_breadcrumb': !breadcrumb
-        })
-      }>
-        {breadcrumb}
-        {toolbar}
-        <SearchOnPageBar />
-      </div>
+      {!isSearch ? renderToolbar() : renderSearch()}
       {
         !playerPage && (
           <div className={clsx({

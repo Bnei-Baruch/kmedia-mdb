@@ -13,20 +13,21 @@ import { useTranslation } from 'react-i18next';
 import {
   textPageGetSettings,
   textPageGetScrollDirSelector,
-  textPageGetSubjectSelector
+  textPageGetSubjectSelector,
+  textPageGetIsSearchSelector
 } from '../../../redux/selectors';
 import TagsByUnit from '../../shared/TagsByUnit';
 import AudioPlayer from '../../shared/AudioPlayer';
 
 const TextLayoutMobile = props => {
   const {
-    toolbar    = null,
-    toc        = null,
-    prevNext   = null,
-    breadcrumb = null,
-    playerPage = false,
-    id,
-  } = props;
+          toolbar    = null,
+          toc        = null,
+          prevNext   = null,
+          breadcrumb = null,
+          playerPage = false,
+          id,
+        } = props;
 
   const ref   = useRef();
   const { t } = useTranslation();
@@ -34,6 +35,7 @@ const TextLayoutMobile = props => {
   const { theme } = useSelector(textPageGetSettings);
   const scrollDir = useSelector(textPageGetScrollDirSelector);
   const subject   = useSelector(textPageGetSubjectSelector);
+  const isSearch  = useSelector(textPageGetIsSearchSelector);
 
   const wip = useTextSubject(id);
   useInitTextSettings();
@@ -43,7 +45,7 @@ const TextLayoutMobile = props => {
   const wipErr = WipErr({ wip, err: null, t });
   if (wipErr) return wipErr;
 
-  const getToolbar = () => (
+  const renderToolbar = () => (
     <div
       className={
         clsx('stick_toolbar no_print', {
@@ -53,15 +55,26 @@ const TextLayoutMobile = props => {
           'stick_bottom': !playerPage
         })
       }>
-      <SearchOnPageBar />
       {toolbar}
     </div>
   );
 
+  const renderSearch = () => (
+    <div className={
+      clsx('stick_toolbar no_print stick_toolbar_fixed', {
+        'stick_toolbar_unpinned': scrollDir !== -1,
+        'stick_toolbar_pinned': scrollDir === -1,
+        'stick_bottom': !playerPage
+      })}>
+      <SearchOnPageBar />
+    </div>
+  );
+
+  const bar = isSearch ? renderSearch() : renderToolbar();
   return (
     <div className={`is-mobile text_layout is-${theme}`} ref={ref}>
       {breadcrumb}
-      {playerPage && getToolbar()}
+      {playerPage && bar}
       <Container className="padded">
         {
           !playerPage && (
@@ -75,7 +88,7 @@ const TextLayoutMobile = props => {
         {prevNext}
       </Container>
       {toc}
-      {(!playerPage) && getToolbar()}
+      {(!playerPage) && bar}
     </div>
   );
 };

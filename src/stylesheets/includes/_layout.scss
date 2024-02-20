@@ -18,11 +18,7 @@ $breadcrumb-height: 48px;
   scrollbar-color: #646464 #FFFFFF;
 }
 
-h1, h2, h3, h4, h5 {
-  font-family: AmiriArabic, "Assistant", Lato, 'Helvetica Neue', Arial, Helvetica, sans-serif;
-}
-
-.ui.accordion .title:not(.ui) {
+h1, h2, h3, h4, h5, .ui.accordion .title:not(.ui), .ui.button, .ui.input > input {
   font-family: AmiriArabic, "Assistant", Lato, 'Helvetica Neue', Arial, Helvetica, sans-serif;
 }
 
