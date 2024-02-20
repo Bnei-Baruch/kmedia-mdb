@@ -74,7 +74,11 @@ const SearchOnPageBar = () => {
     addHighlightByRanges([range], 'selected_search');
     const el   = range.startContainer.parentElement;
     const rect = el.getBoundingClientRect();
-    window.scrollTo(0, rect.top + window.scrollY - 60);
+    window.scrollTo({
+      top: rect.top + window.scrollY - 60,
+      left: 0,
+      behavior: 'instant',
+    });
     setIndex(_index);
     refInput.current.focus();
   };

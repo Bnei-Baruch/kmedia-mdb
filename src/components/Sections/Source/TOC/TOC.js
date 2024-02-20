@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useContext } from 'react';
-import { Accordion, Ref } from 'semantic-ui-react';
+import { Accordion } from 'semantic-ui-react';
 
 import { getEscapedRegExp, isEmpty } from '../../../../helpers/utils';
 import { BS_SHAMATI, RH_ARTICLES, RH_RECORDS, } from '../../../../helpers/consts';
@@ -150,7 +150,7 @@ const TOC = () => {
   const fullPath                = getFullPath(id, getPathByID);
   const rootId                  = properParentId(fullPath);
   const [activeId, setActiveId] = useState(fullPath[fullPath.length - 1].id);
-  const accordionContext        = useRef();
+  const scrollRef               = useRef();
   const navigate                = useNavigate();
   const dispatch                = useDispatch();
 
@@ -159,6 +159,10 @@ const TOC = () => {
   useEffect(() => {
     scrollToActive(id);
   }, [id]);
+
+  useEffect(() => {
+    match && scrollRef.current && scrollRef.current.scrollTo(0, scrollRef.current.scrollHeight + 60);
+  }, [match]);
 
   if (activeIndex === -1) {
     return null;
@@ -278,7 +282,9 @@ const TOC = () => {
 
   const selectSourceById = (id, e) => {
     e.preventDefault();
-    isMobileDevice && dispatch(actions.setTocIsActive(false));
+    if (document.body.clientWidth < 1201) {
+      dispatch(actions.setTocIsActive(false));
+    }
     navigate(`../sources/${id}`);
     setActiveId(id);
   };
@@ -301,17 +307,15 @@ const TOC = () => {
       {
         !isMobileDevice && <TOCSearch />
       }
-      <div className="toc_scroll">
+      <div className="toc_scroll" ref={scrollRef}>
         <div className="toc_scroll_align">
-          <Ref innerRef={accordionContext}>
-            <Accordion
-              fluid
-              panels={toc}
-              className={className}
-              defaultActiveIndex={activeIndex}
-              onTitleClick={handleTitleClick}
-            />
-          </Ref>
+          <Accordion
+            fluid
+            panels={toc}
+            className={className}
+            defaultActiveIndex={activeIndex}
+            onTitleClick={handleTitleClick}
+          />
         </div>
       </div>
 

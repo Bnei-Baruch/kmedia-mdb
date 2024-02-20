@@ -30,10 +30,12 @@ video {
 }
 
 //MOBILE
-.player .is-mobile {
-  position: relative;
-  margin-bottom: 16px;
-  height: auto;
+.is-mobile {
+  .player & {
+    position: relative;
+    margin-bottom: 16px;
+    height: auto;
+  }
 
   &.is-fullscreen {
     margin-bottom: 0;
@@ -572,8 +574,10 @@ video {
 }
 
 //WEB
-.player .is-web {
-  position: relative;
+.is-web {
+  .player & {
+    position: relative;
+  }
 
   &.is-video .controls {
     &__prev, &__rewind, &__forward, &__next, &__pause, &__bar {
