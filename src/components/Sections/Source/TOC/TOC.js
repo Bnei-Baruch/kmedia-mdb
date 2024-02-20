@@ -285,6 +285,7 @@ const TOC = () => {
     if (document.body.clientWidth < 1201) {
       dispatch(actions.setTocIsActive(false));
     }
+
     navigate(`../sources/${id}`);
     setActiveId(id);
   };
