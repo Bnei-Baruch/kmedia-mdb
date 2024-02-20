@@ -48,7 +48,7 @@ function* remove(action) {
   const token = yield select(state => authSelectors.getToken(state.auth));
   if (!token) return;
 
-  const { id } = action.payload;
+  const id = action.payload;
   try {
     yield call(Api.myNotes, { id }, token, 'DELETE');
     yield put(actions.removeSuccess(id));
