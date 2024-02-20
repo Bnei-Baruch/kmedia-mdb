@@ -56,10 +56,22 @@ const SearchOnPageBar = () => {
     clearHighlightByStyle('selected_search');
   };
 
-  const handleNext  = () => scrollByDir();
-  const handlePrev  = () => scrollByDir(-1);
-  const scrollByDir = (dir = 1, idx = index) => {
-    const _index = idx + dir;
+  const handleNext    = () => scrollByDir();
+  const handlePrev    = () => scrollByDir(-1);
+  const handleKeyDown = e => {
+    if (e.keyCode === 13) {
+      handleNext();
+    }
+  };
+  const scrollByDir   = (dir = 1, idx = index) => {
+    let _index = idx + dir;
+    if (idx === 0 && dir === -1) {
+      _index = refResults.current.length - 1;
+      dir    = 1;
+    } else if (idx === refResults.current.length - 1 && dir === 1) {
+      _index = 0;
+      dir    = -1;
+    }
     if (idx >= 0) {
       deleteHighlightByRange(refResults.current[idx], 'selected_search');
       addHighlightByRanges([refResults.current[idx]], 'found_search');
@@ -72,10 +84,11 @@ const SearchOnPageBar = () => {
     }
 
     addHighlightByRanges([range], 'selected_search');
-    const el   = range.startContainer.parentElement;
-    const rect = el.getBoundingClientRect();
+    const el          = range.startContainer.parentElement;
+    const rect        = el.getBoundingClientRect();
+    const _additionPx = dir < 0 ? 150 : 60;
     window.scrollTo({
-      top: rect.top + window.scrollY - 60,
+      top: rect.top + window.scrollY - _additionPx,
       left: 0,
       behavior: 'instant',
     });
@@ -83,6 +96,7 @@ const SearchOnPageBar = () => {
     refInput.current.focus();
   };
 
+  const noResults = isEmpty(refResults.current);
   return (
     <div className="text__search_on_page">
       <Button
@@ -97,25 +111,26 @@ const SearchOnPageBar = () => {
         placeholder={`${t('buttons.search')}...`}
         onChange={handleChange}
         autoFocus={true}
+        onKeyDown={handleKeyDown}
       >
         <input size={1} />
         <div className="text__search_on_page_counter" dir="ltr">
           {
-            (!isEmpty(refResults.current) && index >= 0) && (`${index + 1} / ${refResults.current.length}`)
+            (!noResults && index >= 0) && (`${index + 1} / ${refResults.current.length}`)
           }
         </div>
       </Input>
       <Button
         basic
         className="clear_button"
-        disabled={index === 0 || refResults.current.length < 2}
+        disabled={noResults}
         icon={<span className="material-symbols-outlined">keyboard_arrow_up</span>}
         onClick={handlePrev}
       />
       <Button
         basic
         className="clear_button"
-        disabled={isEmpty(refResults.current) || (index === refResults.current.length - 1)}
+        disabled={noResults}
         icon={<span className="material-symbols-outlined">keyboard_arrow_down</span>}
         onClick={handleNext}
       />

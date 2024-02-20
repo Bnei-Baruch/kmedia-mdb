@@ -648,11 +648,11 @@ $breadcrumb-height: 48px;
   & > .button {
     font-size: 18px;
 
-    .is-web .is-dark & {
+    .is-web.is-dark & {
       color: $dark-text !important;
     }
 
-    .is-web .is-sepia & {
+    .is-web.is-sepia & {
       color: $sepia-text !important;
     }
 
@@ -660,11 +660,11 @@ $breadcrumb-height: 48px;
       font-size: 35px;
 
 
-      .is-web .is-dark & {
+      .is-web.is-dark & {
         color: $dark-text;
       }
 
-      .is-web .is-sepia & {
+      .is-web.is-sepia & {
         color: $sepia-text;
       }
     }
