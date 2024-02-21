@@ -12,12 +12,15 @@ import { imageGalleryItem, isZipFile } from './helper';
 import { settingsGetContentLanguagesSelector, assetsNestedGetZipByIdSelector } from '../../../../../../redux/selectors';
 import SketchesGallery from './SketchesGallery';
 import NotFound from '../../../../../shared/NotFound';
+import MediaHelper from '../../../../../../helpers/media';
 
 const findFiles = (files = [], language) => {
-  const _files = files.filter(f => f.language === language);
+  const _files = files
+    .filter(MediaHelper.IsImage)
+    .filter(f => f.language === language);
 
   const zipId = _files.find(isZipFile)?.id;
-  const imgs  = _files.find(f => !isZipFile(f));
+  const imgs  = _files.filter(f => !isZipFile(f));
   return { zipId, imgs };
 };
 
