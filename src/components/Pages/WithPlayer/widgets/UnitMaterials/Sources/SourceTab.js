@@ -28,7 +28,7 @@ const SourceTab = ({ id }) => {
   const subject                   = subjects[0];
   const [subjectId, setSubjectId] = useState(subject?.id);
 
-  const pathname = canonicalLink(subject).pathname.slice(1);
+  const pathname = canonicalLink({ ...subject, content_type: subject.type }).pathname.slice(1);
 
   const linkMemo = useMemo(() => ({ pathname, search: {} }), [pathname]);
   useInitTextUrl(linkMemo);
@@ -39,7 +39,7 @@ const SourceTab = ({ id }) => {
     setSubjectId(subject?.id);
   }, [subject?.id]);
 
-  if (!subject) return <NotFound  textKey="materials.sources.no-sources"/>;
+  if (!subject) return <NotFound textKey="materials.sources.no-sources" />;
 
   const toc = <SourceTabTOC cus={subjects} onClick={handleSelectCu} />;
   return (
