@@ -67,14 +67,14 @@ const myNotesService = createSlice({
       state.noteStatus    = NOTE_STATUS.none;
     },
     remove: () => void ({}),
-    removeSuccess: (state, { payload: { id } }) => {
-      state.ids        = state.ids.filter(k => k !== id);
-      state.byId[id]   = null;
-      state.deleted    = true;
-      state.wip        = false;
-      state.errors     = false;
-      state.selected   = null;
-      state.noteStatus = NOTE_STATUS.none;
+    removeSuccess: (state, { payload }) => {
+      state.ids           = state.ids.filter(k => k !== payload);
+      state.byId[payload] = null;
+      state.deleted       = true;
+      state.wip           = false;
+      state.errors        = false;
+      state.selected      = null;
+      state.noteStatus    = NOTE_STATUS.none;
     },
     setSelected: (state, { payload }) => void (state.selected = payload),
     setStatus: (state, { payload }) => void (state.noteStatus = payload ?? NOTE_STATUS.none),

@@ -7,15 +7,17 @@ import { useTranslation } from 'react-i18next';
 import { searchOnPage, deleteHighlightByRange, clearHighlightByStyle, addHighlightByRanges } from './helper';
 import { actions } from '../../../redux/modules/textPage';
 import { textPageGetIsSearchSelector } from '../../../redux/selectors';
+import { isEmpty } from '../../../helpers/utils';
 
 const SearchOnPageBar = () => {
   const [val, setVal]     = useState('');
   const [index, setIndex] = useState(-1);
 
-  const ref      = useRef([]);
-  const dispatch = useDispatch();
-  const { t }    = useTranslation();
-  const isSearch = useSelector(textPageGetIsSearchSelector);
+  const refResults = useRef([]);
+  const refInput   = useRef();
+  const dispatch   = useDispatch();
+  const { t }      = useTranslation();
+  const isSearch   = useSelector(textPageGetIsSearchSelector);
 
   if (!isSearch) return null;
 
@@ -44,67 +46,95 @@ const SearchOnPageBar = () => {
     if (res.length === 0)
       return;
     addHighlightByRanges(res, 'found_search');
-    ref.current = res;
+    refResults.current = res;
     scrollByDir(0, 0);
   };
 
   const clearing = () => {
-    ref.current = [];
+    refResults.current = [];
     clearHighlightByStyle('found_search');
     clearHighlightByStyle('selected_search');
   };
 
-  const handleNext  = () => scrollByDir();
-  const handlePrev  = () => scrollByDir(-1);
-  const scrollByDir = (dir = 1, idx = index) => {
-    const _index = idx + dir;
-    if (idx >= 0) {
-      deleteHighlightByRange(ref.current[idx], 'selected_search');
-      addHighlightByRanges([ref.current[idx]], 'found_search');
+  const handleNext    = () => scrollByDir();
+  const handlePrev    = () => scrollByDir(-1);
+  const handleKeyDown = e => {
+    if (e.keyCode === 13) {
+      handleNext();
+    }
+  };
+
+  const scrollByDir   = (dir = 1, idx = index) => {
+    let _index = idx + dir;
+    if (idx === 0 && dir === -1) {
+      _index = refResults.current.length - 1;
+      dir    = 1;
+    } else if (idx === refResults.current.length - 1 && dir === 1) {
+      _index = 0;
+      dir    = -1;
     }
 
-    const range = ref.current[_index];
+    if (idx >= 0) {
+      deleteHighlightByRange(refResults.current[idx], 'selected_search');
+      addHighlightByRanges([refResults.current[idx]], 'found_search');
+    }
+
+    const range = refResults.current[_index];
     if (!range) {
       console.error('not found next range by index', _index);
       return;
     }
 
     addHighlightByRanges([range], 'selected_search');
-    const el   = range.startContainer.parentElement;
-    const rect = el.getBoundingClientRect();
-    window.scrollTo(0, rect.top + window.scrollY - 60);
+    const el          = range.startContainer.parentElement;
+    const rect        = el.getBoundingClientRect();
+    const _additionPx = dir < 0 ? 150 : 60;
+    window.scrollTo({
+      top: rect.top + window.scrollY - _additionPx,
+      left: 0,
+      behavior: 'instant',
+    });
     setIndex(_index);
+    refInput.current.focus();
   };
 
+  const noResults = isEmpty(refResults.current);
   return (
     <div className="text__search_on_page">
+      <Button
+        basic
+        className="clear_button text__search_on_page_close"
+        icon={null}
+        onClick={handleClose}
+        content={t('filters.date-filter.end')}
+      />
       <Input
-        size="small"
+        ref={refInput}
         placeholder={`${t('buttons.search')}...`}
         onChange={handleChange}
-      />
-      {
-        (ref.current && index >= 0) && (<span>{index + 1} / {ref.current.length}</span>)
-      }
+        autoFocus={true}
+        onKeyDown={handleKeyDown}
+      >
+        <input size={1} />
+        <div className="text__search_on_page_counter" dir="ltr">
+          {
+            (!noResults && index >= 0) && (`${index + 1} / ${refResults.current.length}`)
+          }
+        </div>
+      </Input>
       <Button
         basic
         className="clear_button"
-        disabled={index === 0 || ref.current.length < 2}
+        disabled={noResults}
         icon={<span className="material-symbols-outlined">keyboard_arrow_up</span>}
         onClick={handlePrev}
       />
       <Button
         basic
         className="clear_button"
-        disabled={!ref.current || (index === ref.current.length - 1)}
+        disabled={noResults}
         icon={<span className="material-symbols-outlined">keyboard_arrow_down</span>}
         onClick={handleNext}
-      />
-      <Button
-        basic
-        className="clear_button"
-        icon={<span className="material-symbols-outlined">close</span>}
-        onClick={handleClose}
       />
     </div>
   );

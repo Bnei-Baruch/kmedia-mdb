@@ -178,7 +178,11 @@ export const buildSearchLinkFromSelection = (language, pathname) => {
 
   const isForward = isSelectionForward(sel);
 
-  const words = sel.toString().replace(/\r?\n|\r{1,}/g, ' ').split(' ');
+  const words = sel
+    .toString()
+    .replace(/\r?\n|\r{1,}/g, ' ')
+    .split(' ')
+    .filter(x => x !== '');
   if (words.length < MIN_NUMBER_WORDS_IN_LINK * 2)
     return buildLinkForShortSelect(words, sel, isForward, language);
 
@@ -291,7 +295,11 @@ export const urlParamFromSelect = () => {
   const { offset: sOffset, wordOffset: sWordOffset } = findOffsetOfDOMNode(range.startContainer, range.startOffset);
   const { offset: eOffset }                          = findOffsetOfDOMNode(range.endContainer, range.endOffset);
 
-  const rangeArr = range.toString().split(' ').filter(x => x !== '');
+  const rangeArr = range
+    .toString()
+    .replace(KEEP_LETTERS_RE, ' ')
+    .split(' ')
+    .filter(x => x !== '');
   const sStart   = rangeArr.slice(0, MIN_NUMBER_WORDS_IN_LINK).join(' ');
   const sEnd     = rangeArr.slice(-1 * MIN_NUMBER_WORDS_IN_LINK).join(' ');
 

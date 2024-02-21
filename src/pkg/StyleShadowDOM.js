@@ -17,7 +17,7 @@ const StyleShadowDOM = () => {
       const _style = isLtr ? '{transform: rotate(-90deg); bottom: 200px; right: 0; left: auto;}'
         : '{transform: rotate(90deg); bottom: 60px; left: 0; right: auto;}';
       sheet.replaceSync(`#appRoot ${_style} `);
-      shadow.adoptedStyleSheets.push(sheet);
+      shadow?.adoptedStyleSheets.push(sheet);
     }
   }, [isLtr, isMobileDevice]);
   return null;

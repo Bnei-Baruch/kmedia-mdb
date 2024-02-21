@@ -13,7 +13,8 @@ import { useTranslation } from 'react-i18next';
 import {
   textPageGetSettings,
   textPageGetScrollDirSelector,
-  textPageGetSubjectSelector
+  textPageGetSubjectSelector,
+  textPageGetIsSearchSelector
 } from '../../../redux/selectors';
 import TagsByUnit from '../../shared/TagsByUnit';
 import AudioPlayer from '../../shared/AudioPlayer';
@@ -34,6 +35,7 @@ const TextLayoutMobile = props => {
   const { theme } = useSelector(textPageGetSettings);
   const scrollDir = useSelector(textPageGetScrollDirSelector);
   const subject   = useSelector(textPageGetSubjectSelector);
+  const isSearch  = useSelector(textPageGetIsSearchSelector);
 
   const wip = useTextSubject(id);
   useInitTextSettings();
@@ -43,7 +45,7 @@ const TextLayoutMobile = props => {
   const wipErr = WipErr({ wip, err: null, t });
   if (wipErr) return wipErr;
 
-  const getToolbar = () => (
+  const renderToolbar = () => (
     <div
       className={
         clsx('stick_toolbar no_print', {
@@ -53,29 +55,30 @@ const TextLayoutMobile = props => {
           'stick_bottom': !playerPage
         })
       }>
-      <SearchOnPageBar />
       {toolbar}
     </div>
   );
 
+  const renderSearch = () => (
+    <div className={'stick_toolbar no_print stick_toolbar_fixed stick_bottom'}>
+      <SearchOnPageBar />
+    </div>
+  );
+
+  const bar = isSearch ? renderSearch() : renderToolbar();
   return (
     <div className={`is-mobile text_layout is-${theme}`} ref={ref}>
       {breadcrumb}
-      {playerPage && getToolbar()}
+      {(playerPage && !isSearch) && renderToolbar()}
       <Container className="padded">
-        {
-          !playerPage && (
-            <div>
-              <TagsByUnit id={subject.id}></TagsByUnit>
-              <AudioPlayer />
-            </div>
-          )
-        }
+        <TagsByUnit id={subject.id}></TagsByUnit>
+        <AudioPlayer />
         <TextContentMobile playerPage={playerPage} />
         {prevNext}
       </Container>
       {toc}
-      {(!playerPage) && getToolbar()}
+      {isSearch && renderSearch()}
+      {(!playerPage && !isSearch) && renderToolbar()}
     </div>
   );
 };

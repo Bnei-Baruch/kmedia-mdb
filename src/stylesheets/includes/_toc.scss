@@ -65,17 +65,14 @@
     @include mobile {
       width: 100%;
       position: fixed;
-      top: $main-menu-height;
-      max-height: calc(100VH - $main-menu-height);
       bottom: auto;
       transform: translate3d(-100%, 0, 0);
       height: 100%;
+      min-height: 100VH;
+      z-index: 1000;
+      top: 0;
+      transition: height 0.2s ease-in-out 0s;
 
-
-      .toc_scroll {
-        height: calc(100% - $toc-toolbar-height - 30px);
-        margin-bottom: 10px;
-      }
 
       .toc_scroll_align {
         display: flex;
@@ -88,16 +85,6 @@
         transform: translate3d(100%, 0, 0);
       }
 
-      &.toc_scroll_up, &.toc_scroll_down {
-        top: 0;
-        max-height: 100VH;
-        height: 100%;
-        transition: height 0.2s ease-in-out 0s;
-
-        .toc_scroll {
-          height: calc(100% - $toc-toolbar-height - 30px);
-        }
-      }
     }
 
     .is-dark & .toc_scroll {
@@ -160,7 +147,8 @@
     }
 
     &.toc_single_level > .title {
-      border-bottom: 1px solid $light-stroke;
+      border-bottom: 1px solid rgba(0, 86, 151, 0.1);
+      padding: 16px 0;
 
       .is-dark & {
         border-bottom-color: $dark-stroke;
@@ -181,7 +169,16 @@
 .toc_filter {
   display: flex;
   flex-wrap: nowrap;
-  margin-bottom: 1em;
+  padding: 8px 0;
+  background: $white;
+
+  .is-dark & {
+    background: $dark-bg;
+  }
+
+  .is-sepia & {
+    background: $sepia-bg;
+  }
 
   .is-mobile & {
     position: sticky;
@@ -192,25 +189,58 @@
     width: 100%;
 
     > input {
-      border-color: $light-text;
+      border-color: $blue;
       background: none;
+      font-size: 18px;
+      padding: 8px;
 
       &:active {
         background: none;
       }
 
-      .is-dark & {
-        border-color: $dark-text;
+      &, &::placeholder {
+        color: $light-text;
       }
 
-      .is-sepia & {
-        border-color: $sepia-text;
+      .is-dark &, .is-dark &::placeholder {
+        color: $dark-text;
       }
+
+      .is-sepia &, .is-sepia &::placeholder {
+        color: $sepia-text;
+      }
+
+      &:focus {
+        border-color: $light-active-text;
+
+        &::placeholder {
+          visibility: hidden;
+        }
+      }
+    }
+
+    .icon {
+      color: $blue;
+      opacity: 1;
     }
   }
 
-  .toc_sort_btn {
+  .toc_sort_btn.ui.icon.button {
     padding: 8px;
+    background: none !important;
+    border: 1px solid $blue;
+
+    &.active {
+      border-color: $light-active-text;
+
+      .material-symbols-outlined {
+        color: $light-active-text;
+      }
+    }
+
+    .material-symbols-outlined {
+      color: $blue;
+    }
   }
 
   .divider {
@@ -232,6 +262,18 @@
       font-size: 18px;
       font-weight: 600;
       margin: 0 5px;
+    }
+  }
+
+  .button span {
+    color: $light-text;
+
+    .is-dark & {
+      color: $dark-text;
+    }
+
+    .is-sepia & {
+      color: $sepia-text;
     }
   }
 }

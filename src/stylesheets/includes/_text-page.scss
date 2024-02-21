@@ -54,6 +54,10 @@ $breadcrumb-height: 48px;
     &.text_align_to_text_text_only {
       transform: none !important;
     }
+
+    .stick_toolbar_search & {
+      margin-top: 0;
+    }
   }
 
   .toc_trigger {
@@ -67,7 +71,11 @@ $breadcrumb-height: 48px;
     align-items: center;
 
     span {
-      padding: 0 2px;
+      min-height: 20px;
+
+      &:last-child {
+        margin: 0 8px;
+      }
     }
   }
 
@@ -175,7 +183,7 @@ $breadcrumb-height: 48px;
     box-shadow: none !important;
     margin: 0 !important;
     white-space: nowrap;
-    font-size: 20px;
+    font-size: 16px;
 
     + .menu {
       border-top: 1px solid rgba(34, 36, 38, .1) !important;
@@ -557,34 +565,109 @@ $breadcrumb-height: 48px;
   flex-wrap: nowrap;
   justify-content: space-between;
   align-content: center;
-  box-shadow: 0 3px 6px $grey;
-  border-radius: 4px;
   line-height: 40px;
+  padding: 4px 0;
+  font-size: 18px;
+  background: $white;
+  box-shadow: 0 3px 6px $light-stroke;
+  border-radius: 4px;
+
+
+  .is-dark & {
+    box-shadow: 0 3px 6px $dark-stroke;
+    background: $dark-bg;
+  }
+
+  .is-sepia & {
+    box-shadow: 0 3px 6px $sepia-stroke;
+    background: $sepia-bg;
+  }
 
   .is-mobile & {
     width: 100%;
+    background: #C6C9CD !important;
+    border: none;
+    border-radius: 0;
   }
 
-  .input {
+  & > .ui.button, & > .ui.input {
+    margin: 0 8px;
+  }
+
+
+  .text__search_on_page_counter {
+    padding: 0 8px;
+    white-space: nowrap;
+  }
+
+  .ui.input {
     flex-grow: 3;
-  }
+    background: $white;
+    border-radius: 4px;
 
-  .ui.input > input {
-    &, &:active, &:focus {
-      background: transparent;
+    .is-mobile & {
+      background: $white !important;
+    }
 
-      .is-dark & {
-        color: $dark-text;
+    .is-dark & {
+      color: $dark-text;
+      background: $dark-bg;
+
+      .is-mobile & {
+        color: $dark-bg;
       }
+    }
 
-      .is-sepia & {
-        color: $sepia-text;
+    .is-sepia & {
+      color: $sepia-text;
+      background: $sepia-bg;
+
+      .is-mobile & {
+        color: $sepia-bg;
+      }
+    }
+
+
+    & > input {
+      &, &:active, &:focus {
+        border: none;
+        background: none;
+
+        .is-dark & {
+          color: $dark-text;
+        }
+
+        .is-sepia & {
+          color: $sepia-text;
+        }
       }
     }
   }
 
-  & > span {
-    margin: 0 8px;
+
+  & > .button {
+    font-size: 18px;
+
+    .is-web.is-dark & {
+      color: $dark-text !important;
+    }
+
+    .is-web.is-sepia & {
+      color: $sepia-text !important;
+    }
+
+    .material-symbols-outlined {
+      font-size: 35px;
+
+
+      .is-web.is-dark & {
+        color: $dark-text;
+      }
+
+      .is-web.is-sepia & {
+        color: $sepia-text;
+      }
+    }
   }
 }
 
@@ -650,10 +733,12 @@ $breadcrumb-height: 48px;
 .ui.dropdown.text__language_popup .menu {
   max-height: 60VH;
   overflow: auto;
+  margin: 10px 0;
 
   & > .item {
     padding: 1.5em 1em !important;
     border-bottom: 1px solid $light-stroke;
+    font-size: 16px;
 
     .is-dark & {
       border-bottom: 1px solid $dark-stroke;
