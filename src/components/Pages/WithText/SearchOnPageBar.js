@@ -63,6 +63,7 @@ const SearchOnPageBar = () => {
       handleNext();
     }
   };
+
   const scrollByDir   = (dir = 1, idx = index) => {
     let _index = idx + dir;
     if (idx === 0 && dir === -1) {
@@ -72,6 +73,7 @@ const SearchOnPageBar = () => {
       _index = 0;
       dir    = -1;
     }
+
     if (idx >= 0) {
       deleteHighlightByRange(refResults.current[idx], 'selected_search');
       addHighlightByRanges([refResults.current[idx]], 'found_search');
