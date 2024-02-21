@@ -10,7 +10,7 @@ import ShareTextBtn from '../../../../Pages/WithText/Buttons/ShareTextBtn';
 import MoreOptionsBtn from '../../../../Pages/WithText/Buttons/MoreOptionsBtn';
 
 const ArticleToolbarMobile = () => (
-  <div className="text_toolbar is-mobile">
+  <div className="text_toolbar">
     <div className="text_toolbar__buttons">
       <LanguageTextBtn />
       <TextSettings />

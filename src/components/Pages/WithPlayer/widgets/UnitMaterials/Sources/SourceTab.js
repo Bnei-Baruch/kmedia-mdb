@@ -22,13 +22,13 @@ const SourceTab = ({ id }) => {
   const dCus    = Object.values(pageCu.derived_units)
     .filter(x => [CT_LIKUTIM, CT_SOURCE].includes(x.content_type))
     .filter(x => (x.files || []).some(f => f.type === MT_TEXT)) || [];
-  const sources = Object.values(pageCu?.sources || {}).map(getSourceById).map(x => ({ ...x, type: CT_SOURCE }));
+  const sources = Object.values(pageCu?.sources || {}).map(getSourceById).map(x => ({ ...x, content_type: CT_SOURCE }));
 
   const subjects                  = [...sources, ...dCus];
   const subject                   = subjects[0];
   const [subjectId, setSubjectId] = useState(subject?.id);
 
-  const pathname = canonicalLink({ ...subject, content_type: subject.type }).pathname.slice(1);
+  const pathname = canonicalLink(subject).pathname.slice(1);
 
   const linkMemo = useMemo(() => ({ pathname, search: {} }), [pathname]);
   useInitTextUrl(linkMemo);

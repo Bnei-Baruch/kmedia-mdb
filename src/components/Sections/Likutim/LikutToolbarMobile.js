@@ -11,7 +11,7 @@ import LessonsByLikutBtn from './LessonsByLikutBtn';
 import MoreOptionsBtn from '../../Pages/WithText/Buttons/MoreOptionsBtn';
 
 const LikutToolbarMobile = () => (
-  <div className="text_toolbar is-mobile">
+  <div className="text_toolbar">
     <div className="text_toolbar__buttons">
       <LanguageTextBtn />
       <TextSettings />

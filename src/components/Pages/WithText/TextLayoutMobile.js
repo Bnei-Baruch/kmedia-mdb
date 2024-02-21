@@ -1,5 +1,4 @@
 import React, { useRef } from 'react';
-import { Container } from 'semantic-ui-react';
 import { useTextSubject } from './hooks/useTextSubject';
 import { useInitTextUrl } from './hooks/useInitTextUrl';
 import TextContentMobile from './Content/TextContentMobile';
@@ -21,13 +20,13 @@ import AudioPlayer from '../../shared/AudioPlayer';
 
 const TextLayoutMobile = props => {
   const {
-    toolbar    = null,
-    toc        = null,
-    prevNext   = null,
-    breadcrumb = null,
-    playerPage = false,
-    id,
-  } = props;
+          toolbar    = null,
+          toc        = null,
+          prevNext   = null,
+          breadcrumb = null,
+          playerPage = false,
+          id,
+        } = props;
 
   const ref   = useRef();
   const { t } = useTranslation();
@@ -65,20 +64,19 @@ const TextLayoutMobile = props => {
     </div>
   );
 
-  const bar = isSearch ? renderSearch() : renderToolbar();
   return (
     <div className={`is-mobile text_layout is-${theme}`} ref={ref}>
-      {breadcrumb}
       {(playerPage && !isSearch) && renderToolbar()}
-      <Container className="padded">
+      <div className="text_mobile_padding">
+        {breadcrumb}
         <TagsByUnit id={subject.id}></TagsByUnit>
         <AudioPlayer />
         <TextContentMobile playerPage={playerPage} />
         {prevNext}
-      </Container>
-      {toc}
+      </div>
       {isSearch && renderSearch()}
       {(!playerPage && !isSearch) && renderToolbar()}
+      {toc}
     </div>
   );
 };
