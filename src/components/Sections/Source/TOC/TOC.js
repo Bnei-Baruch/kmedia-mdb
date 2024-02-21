@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Accordion } from 'semantic-ui-react';
 
 import { getEscapedRegExp, isEmpty } from '../../../../helpers/utils';
@@ -150,7 +150,6 @@ const TOC = () => {
   const fullPath                = getFullPath(id, getPathByID);
   const rootId                  = properParentId(fullPath);
   const [activeId, setActiveId] = useState(fullPath[fullPath.length - 1].id);
-  const scrollRef               = useRef();
   const navigate                = useNavigate();
   const dispatch                = useDispatch();
 
@@ -159,10 +158,6 @@ const TOC = () => {
   useEffect(() => {
     scrollToActive(id);
   }, [id]);
-
-  useEffect(() => {
-    match && scrollRef.current && scrollRef.current.scrollTo(0, scrollRef.current.scrollHeight + 60);
-  }, [match]);
 
   if (activeIndex === -1) {
     return null;
@@ -308,7 +303,7 @@ const TOC = () => {
       {
         !isMobileDevice && <TOCSearch />
       }
-      <div className="toc_scroll" ref={scrollRef}>
+      <div className="toc_scroll">
         <div className="toc_scroll_align">
           <Accordion
             fluid
