@@ -180,12 +180,12 @@ body {
 }
 
 @media only screen and (min-width: $largeMonitorBreakpoint) {
-  .layout {
-    &__sidebar-toggle {
+  .layout:not(.is_fullscreen) {
+    .layout__sidebar-toggle {
       display: none !important;
     }
 
-    &__sidebar {
+    .layout__sidebar {
       top: $main-menu-height;
       transform: none;
 
@@ -198,11 +198,11 @@ body {
       }
     }
 
-    &__main {
+    .layout__main {
       margin-left: $sidebar-width;
     }
 
-    &__secondary-header {
+    .layout__secondary-header {
       left: $sidebar-width;
     }
   }

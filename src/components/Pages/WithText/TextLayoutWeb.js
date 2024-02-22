@@ -28,13 +28,13 @@ import { useFetchNotes } from './Notes/useFetchNotes';
 
 const TextLayoutWeb = props => {
   const {
-    toolbar    = null,
-    toc        = null,
-    prevNext   = null,
-    breadcrumb = null,
-    playerPage = false,
-    id
-  } = props;
+          toolbar    = null,
+          toc        = null,
+          prevNext   = null,
+          breadcrumb = null,
+          playerPage = false,
+          id
+        } = props;
 
   const ref   = useRef();
   const { t } = useTranslation();
@@ -89,17 +89,13 @@ const TextLayoutWeb = props => {
     <div className={`is-web text_layout is-${theme}`} ref={ref}>
       {toc}
       {!isSearch ? renderToolbar() : renderSearch()}
-      {
-        !playerPage && (
-          <div className={clsx({
-            'text_align_to_text': (!isMobileDevice),
-            'text_align_to_text_text_only': textOnly && (!isMobileDevice)
-          })}>
-            <TagsByUnit id={subject.id}></TagsByUnit>
-            <AudioPlayer />
-          </div>
-        )
-      }
+      <div className={clsx({
+        'text_align_to_text': (!isMobileDevice),
+        'text_align_to_text_text_only': textOnly && (!isMobileDevice)
+      })}>
+        <TagsByUnit id={subject.id}></TagsByUnit>
+        <AudioPlayer />
+      </div>
       <TextContentWeb playerPage={playerPage} />
       {prevNext}
 
