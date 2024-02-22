@@ -28,13 +28,13 @@ import { useFetchNotes } from './Notes/useFetchNotes';
 
 const TextLayoutWeb = props => {
   const {
-    toolbar    = null,
-    toc        = null,
-    prevNext   = null,
-    breadcrumb = null,
-    playerPage = false,
-    id
-  } = props;
+          toolbar    = null,
+          toc        = null,
+          prevNext   = null,
+          breadcrumb = null,
+          playerPage = false,
+          id
+        } = props;
 
   const ref   = useRef();
   const { t } = useTranslation();
@@ -61,8 +61,7 @@ const TextLayoutWeb = props => {
       clsx('stick_toolbar no_print', {
         'stick_toolbar_unpinned': scrollDir === 1 || scrollDir === 2,
         'stick_toolbar_pinned': scrollDir === -1,
-        'stick_toolbar_fixed': hasSel,
-        'with_breadcrumb': !!breadcrumb
+        'stick_toolbar_fixed': hasSel
       })
     }>
       {breadcrumb}
@@ -86,7 +85,7 @@ const TextLayoutWeb = props => {
   );
 
   return (
-    <div className={`is-web text_layout is-${theme}`} ref={ref}>
+    <div className={`is-web text_layout is-${theme}${!!breadcrumb ? ' with_breadcrumb' : ''}`} ref={ref}>
       {toc}
       {!isSearch ? renderToolbar() : renderSearch()}
       <div className={clsx({

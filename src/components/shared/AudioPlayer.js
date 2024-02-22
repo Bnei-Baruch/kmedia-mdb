@@ -30,13 +30,11 @@ const AudioPlayer = ({ url }) => {
             autoPlay={true}
           />
         ) : (
-          <div className="text_page__audio_btn" onClick={play}>
-            <span>
-              {t(titleKey)}
-            </span>
-            <span className="material-symbols-outlined">
-                volume_up
-            </span>
+          <div>
+            <div onClick={play} className="text_page__audio_btn">
+              <span>{t(titleKey)}</span>
+              <span className="material-symbols-outlined">volume_up</span>
+            </div>
           </div>
         )
       }

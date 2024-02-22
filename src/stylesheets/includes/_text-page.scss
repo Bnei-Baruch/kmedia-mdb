@@ -68,7 +68,7 @@
   position: relative;
   font-size: 18px;
 
-  &.is-web {
+  &.is-web:not(.with_breadcrumb) {
     padding-top: 1em;
   }
 
@@ -332,10 +332,10 @@
       transform: none !important;
     }
 
-    transform: translate3d(0px, calc(-1 * ($text-bar-height + $breadcrumb-height)), 0px);
+    transform: translate3d(0px, -$text-bar-height, 0px);
 
-    &.with_breadcrumb {
-      transform: translate3d(0px, -$text-bar-height, 0px);
+    .with_breadcrumb & {
+      transform: translate3d(0px, calc(-1 * ($text-bar-height + $breadcrumb-height)), 0px);
     }
   }
 
@@ -371,6 +371,12 @@
     box-shadow: 0px -2px -12px 0px #00000033;
   }
 
+
+  .is-web.with_breadcrumb & {
+    margin-top: 1em;
+  }
+
+
   .is-dark.is-mobile & {
     box-shadow: 0px -2px -12px 0px #FFFFFF99;
   }
@@ -381,10 +387,6 @@
 
   .is-dark.is-mobile .stick_bottom & {
     box-shadow: 0px -2px 12px 0px #FFFFFF50;
-  }
-
-  .is-web .with_breadcrumb &{
-    margin-top: 1em;
   }
 
 
@@ -484,7 +486,7 @@
   justify-content: flex-start;
   align-items: center;
   color: $midGrey;
-  padding: 0 1em;
+  padding: 1em 1em 0;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
@@ -543,10 +545,11 @@
 
   .text_page__audio_btn {
     display: flex;
-    cursor: pointer;
     color: $blue;
     flex-wrap: nowrap;
     align-items: center;
+    cursor: pointer;
+    width: fit-content;
 
     span:last-child {
       padding: 0 .5em;
