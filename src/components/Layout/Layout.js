@@ -77,7 +77,7 @@ const Layout = ({ playerContainer }) => {
                 <Header inverted as="h1" content={t('nav.top.header')} />
               </Menu.Item>
               <Menu.Item className={isMobileDevice ? 'layout__search mobile-hidden' : 'layout__search layout__search_max_width'}>
-                {!isNotHome && <OmniBox />}
+                {isNotHome && <OmniBox />}
               </Menu.Item>
               <Menu.Menu position="right" className="layout__header-buttons">
                 <Menu.Item className="no-margin">
