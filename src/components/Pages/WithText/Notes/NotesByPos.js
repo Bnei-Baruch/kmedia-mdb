@@ -26,9 +26,9 @@ const NotesByPos = ({ pos, ids }) => {
   useClickOutside(handleClose, [ref]);
 
   const notes = useMemo(() => ids
-      .map(id => byId[id])
-      .map(n => ({ type: 'note', ...n }))
-    , [byId, ids]);
+    .map(id => byId[id])
+    .map(n => ({ type: 'note', ...n }))
+  , [byId, ids]);
 
   useEffect(() => {
     setOpen(expandAll);
