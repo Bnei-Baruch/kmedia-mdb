@@ -405,21 +405,21 @@
       flex-grow: 0;
     }
 
-    /* .divider {
-       display: block;
-       border-left: 1px solid $stroke-gray;
-       align-self: center;
-       height: 24px;
-       margin: 0 6px;
+    .divider {
+      display: block;
+      border-left: 1px solid $stroke-gray;
+      align-self: center;
+      height: 24px;
+      margin: 0 6px;
 
-       .is-sepia & {
-         border-color: $sepia-stroke;
-       }
+      .is-sepia & {
+        border-color: $sepia-stroke;
+      }
 
-       .is-dark & {
-         border-color: $dark-stroke;
-       }
-     }*/
+      .is-dark & {
+        border-color: $dark-stroke;
+      }
+    }
 
 
     .button {
