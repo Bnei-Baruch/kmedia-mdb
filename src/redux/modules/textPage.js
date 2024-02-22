@@ -46,6 +46,10 @@ const onChangeLanguage = (state, lang) => {
   if (!state.urlInfo.isCastom) {
     state.urlInfo.url = buildUrl(state);
   }
+
+  const search         = state.urlInfo.isCastom ? state.urlInfo.search : {};
+  state.urlInfo.search = buildUrlSearch(state, search);
+
 };
 
 const textPageSlice = createSlice({
