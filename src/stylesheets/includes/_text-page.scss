@@ -68,7 +68,7 @@
   position: relative;
   font-size: 18px;
 
-  &.is-web{
+  &.is-web {
     padding-top: 1em;
   }
 
@@ -334,7 +334,7 @@
 
     transform: translate3d(0px, calc(-1 * ($text-bar-height + $breadcrumb-height)), 0px);
 
-    &.stick_toolbar_no_breadcrumb {
+    &.with_breadcrumb {
       transform: translate3d(0px, -$text-bar-height, 0px);
     }
   }
@@ -381,6 +381,10 @@
 
   .is-dark.is-mobile .stick_bottom & {
     box-shadow: 0px -2px 12px 0px #FFFFFF50;
+  }
+
+  .is-web .with_breadcrumb &{
+    margin-top: 1em;
   }
 
 
@@ -480,7 +484,7 @@
   justify-content: flex-start;
   align-items: center;
   color: $midGrey;
-  padding: 1em 1em 0;
+  padding: 0 1em;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
