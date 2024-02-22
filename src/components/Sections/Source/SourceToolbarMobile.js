@@ -12,7 +12,7 @@ import ShareTextModalBtn from '../../Pages/WithText/Buttons/ShareTextModalBtn';
 import MoreOptionsBtn from '../../Pages/WithText/Buttons/MoreOptionsBtn';
 
 const SourceToolbarMobile = () => (
-  <div className="text_toolbar is-mobile">
+  <div className="text_toolbar">
     <div className="text_toolbar__buttons">
       <TocToggleBtn />
       <LanguageTextBtn />

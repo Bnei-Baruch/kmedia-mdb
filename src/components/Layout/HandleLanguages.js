@@ -116,7 +116,9 @@ const HandleLanguages = ({ t }) => {
           <Link language={origUILang}>{t('languages.url_language_here')}</Link>
           {t('languages.url_language_suffix')}</div>}
         {<div className="language-ui">
-          <h4 className={!!urlLang ? 'disabled' : ''}>{t('languages.ui_language')}</h4>
+          <h4 className={`margin-left-4 margin-right-4 ${!!urlLang ? 'disabled' : ''}`}>
+            {t('languages.ui_language')}
+          </h4>
           <Dropdown disabled={!!urlLang} text={LANGUAGES[origUILang].name} item scrolling>
             <Dropdown.Menu>
               {

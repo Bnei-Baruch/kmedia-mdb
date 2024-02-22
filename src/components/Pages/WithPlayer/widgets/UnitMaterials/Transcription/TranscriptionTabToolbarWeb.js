@@ -64,7 +64,6 @@ const TranscriptionTabToolbarWeb = () => {
           item
           icon={null}
           trigger={<MoreOptionsBtn />}
-          pointing="top right"
           className="text_toolbar__dropdown"
         >
           <Dropdown.Menu>

@@ -26,7 +26,7 @@ export function* fetchSubject(action) {
     const fileFilter              = yield select(textPageGetFileFilterSelector);
     const { language: _language } = yield select(textPageGetFileSelector) || false;
     const subject                 = cuToSubject(cu, fileFilter);
-    const contentLanguages        = yield select(settingsGetContentLanguagesSelector);
+    const contentLanguages        = yield select(settingsGetContentLanguagesSelector, true);
 
     const isSource      = subject.type === CT_SOURCE;
     let prefereLanguage = action.payload.source_language || (isSource && _language);

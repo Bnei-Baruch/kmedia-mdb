@@ -127,7 +127,7 @@ const filterSources = (path, match) => {
   const reg          = new RegExp(escapedMatch, 'i');
   return path.reduce((acc, el) => {
     if (reg.test(el.leafTitle)) {
-      const name = el.leafTitle.replace(reg, '<em class="blue text">$&</em>');
+      const name = el.leafTitle.replace(reg, '<span class="blue text">$&</span>');
       acc.push({ leafId: el.leafId, leafTitle: name });
     }
 

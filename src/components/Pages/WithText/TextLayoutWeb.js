@@ -84,6 +84,7 @@ const TextLayoutWeb = props => {
       </div>
     </div>
   );
+
   return (
     <div className={`is-web text_layout is-${theme}`} ref={ref}>
       {toc}

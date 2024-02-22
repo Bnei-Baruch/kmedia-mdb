@@ -623,7 +623,7 @@
     "share-title": "Читайте статью",
     "group-articles": "Статьи о группе",
     "play-audio-file": "Воспроизвести аудиофайл",
-    "play-source": "Послушат эту статью"
+    "play-source": "Послушать эту статью"
   },
   "topics": {
     "header": {
@@ -983,7 +983,7 @@
         "search": "Поиск",
         "download": "Скачать",
         "more-buttons": "Ещё",
-        "toc": "Содержание"
+        "toc": "Контент"
       }
     }
   }

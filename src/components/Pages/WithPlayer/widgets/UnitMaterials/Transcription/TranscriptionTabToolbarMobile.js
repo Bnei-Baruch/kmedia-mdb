@@ -10,7 +10,7 @@ import ShareTextModalBtn from '../../../../WithText/Buttons/ShareTextModalBtn';
 import MoreOptionsBtn from '../../../../WithText/Buttons/MoreOptionsBtn';
 
 const TranscriptionTabToolbarMobile = () => (
-  <div className="text_toolbar is-mobile">
+  <div className="text_toolbar">
     <div className="text_toolbar__buttons">
       <LanguageTextBtn />
       <TextSettings />
@@ -20,7 +20,6 @@ const TranscriptionTabToolbarMobile = () => (
         item
         icon={null}
         trigger={<MoreOptionsBtn />}
-        pointing="top right"
         className="text_toolbar__dropdown"
       >
         <Dropdown.Menu>
