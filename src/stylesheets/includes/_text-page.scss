@@ -68,6 +68,10 @@
   position: relative;
   font-size: 18px;
 
+  &.is-web{
+    padding-top: 1em;
+  }
+
   .text__content-wrapper {
     display: flex;
     flex-basis: max-content;
@@ -360,10 +364,6 @@
   height: calc($text-bar-height - 10px);
   padding: 0 1em;
   @include theme_stroke;
-
-  .is-web & {
-    margin-top: 1em;
-  }
 
   .is-mobile & {
     height: $text-bar-height;

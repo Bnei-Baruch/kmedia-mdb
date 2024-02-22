@@ -13,18 +13,19 @@ const onReceiveTags = (state, { payload }) => {
 };
 
 const tagsSlice = createSlice({
-  name        : 'tags',
+  name: 'tags',
   initialState: {
-    wip      : false,
-    error    : null,
+    wip: false,
+    error: null,
     dashboard: { items: [], mediaTotal: 0, textTotal: 0 },
-    loaded   : false
+    loaded: false,
+    byId: {}
   },
 
-  reducers     : {
+  reducers: {
     receiveTags: onReceiveTags,
 
-    fetchDashboard       : state => void (state.wip = true),
+    fetchDashboard: state => void (state.wip = true),
     fetchDashboardSuccess: (state, { payload: { items = [], mediaTotal, textTotal } }) => {
       state.wip       = false;
       state.error     = null;
@@ -38,7 +39,7 @@ const tagsSlice = createSlice({
       }
     },
 
-    fetchStats       : {
+    fetchStats: {
       prepare: (namespace, contentTypes) => ({ payload: { namespace, contentTypes } }),
       reducer: () => void ({})
     },
