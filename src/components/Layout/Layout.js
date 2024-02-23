@@ -1,15 +1,11 @@
-import React, { Component, createRef, useContext } from 'react';
-import PropTypes from 'prop-types';
+import React, { useContext, useState, useRef } from 'react';
 import clsx from 'clsx';
-import { withTranslation, withSSR } from 'react-i18next';
+import { withSSR, useTranslation } from 'react-i18next';
 import { Header, Icon, Menu, Ref, Segment } from 'semantic-ui-react';
 import Headroom from 'react-headroom';
-
-import { ALL_LANGUAGES } from '../../helpers/consts';
 import { getEmbedFromQuery } from '../../helpers/player';
-import * as shapes from '../shapes';
 import Link from '../Language/MultiLanguageLink';
-import WrappedOmniBox from '../Search/OmniBox';
+import OmniBox from '../Search/OmniBox';
 import GAPageView from './GAPageView/GAPageView';
 import MenuItems from './MenuItems';
 import HandleLanguages from './HandleLanguages';
@@ -17,254 +13,144 @@ import Footer from './Footer';
 import TopMost from './TopMost';
 import DonateNow, { VirtualHomeButton } from './DonateNow';
 import Logo from '../../images/icons/Logo';
-import { ClientChroniclesContext, DeviceInfoContext } from '../../helpers/app-contexts';
+import { DeviceInfoContext } from '../../helpers/app-contexts';
 import Login from './Login';
 import KmediaRouters from '../../route/KmediaRouters';
-import { withRouter } from '../../helpers/withRouterPatch';
 import DonationPopup from '../Sections/Home/DonationPopup';
 import DownloadTrim from '../Share/DownloadTrim';
+import { useLocation, useMatch } from 'react-router-dom';
+import { useClickOutside } from '../shared/useClickOutside';
+import { useSelector } from 'react-redux';
+import { textPageGetIsFullscreenSelector } from '../../redux/selectors';
 
-const WrappedOmniBoxWithChronicles = ({ location }) => {
-  const chronicles = useContext(ClientChroniclesContext);
-  return <WrappedOmniBox location={location} chronicles={chronicles} />;
-};
+const Layout = ({ playerContainer }) => {
+  const toggleSidebarBtnRef = useRef();
+  const closeSidebarBtnRef  = useRef();
+  const toggleSearchBtnRef  = useRef();
+  const headerSearchRef     = useRef();
+  const sidebarRef          = useRef();
 
-const RenderHeaderSearch = React.forwardRef(({ t, location }, headerSearchElement) => (
-  <div ref={headerSearchElement}>
-    <Segment color="blue" inverted className="header_search">
-      <WrappedOmniBoxWithChronicles location={location} />
-    </Segment>
-  </div>
-));
+  const { t }    = useTranslation();
+  const location = useLocation();
+  const isNotHome   = !useMatch('/:lang');
 
-const shouldShowSearch = location => {
-  // we don't show the search on home page
-  const parts = location.pathname.split('/').filter(x => (x !== ''));
-  if (parts.length === 0) {
-    return false;
+  const { isMobileDevice } = useContext(DeviceInfoContext);
+  const isFullscreen       = useSelector(textPageGetIsFullscreenSelector);
+
+  const [sidebarActive, setSidebarActive] = useState(false);
+  const [isShowSearch, setIsShowSearch]   = useState(isMobileDevice && location.pathname.endsWith('search'));
+
+  const closeSidebar      = () => setSidebarActive(false);
+  const openHeaderSearch  = () => setIsShowSearch(true);
+  const closeHeaderSearch = () => setIsShowSearch(false);
+  useClickOutside(closeSidebar, [sidebarRef, toggleSidebarBtnRef, closeSidebarBtnRef]);
+  useClickOutside(closeHeaderSearch, [headerSearchRef, toggleSearchBtnRef]);
+
+  const { embed } = getEmbedFromQuery(location);
+
+  if (embed) {
+    return (<KmediaRouters playerContainer={playerContainer} />);
   }
 
-  if (parts.length === 1) {
-    return !ALL_LANGUAGES.includes(parts[0]);
-  }
+  const toggleSidebar = () => setSidebarActive(!sidebarActive);
+  const sideBarIcon   = sidebarActive ? <Icon size="large" name="x" /> : <Icon name="sidebar" />;
 
-  return true;
-};
-
-const menuButtonElement1      = createRef();
-const menuButtonElement2      = createRef();
-const showSearchButtonElement = createRef();
-const headerSearchElement     = createRef();
-
-class Layout extends Component {
-  static contextType = DeviceInfoContext;
-
-  static propTypes = {
-    location: shapes.HistoryLocation.isRequired,
-    t: PropTypes.func.isRequired,
-  };
-
-  constructor(props) {
-    super(props);
-    const { location } = props;
-
-    this.state = {
-      sidebarActive: false,
-      isShowHeaderSearch: false,
-      embed: getEmbedFromQuery(location).embed,
-    };
-  }
-
-  componentDidMount() {
-    document.addEventListener('click', this.clickOutside, true);
-    const { location }       = this.props;
-    const { isMobileDevice } = this.context;
-
-    const isShowHeaderSearch =
-            isMobileDevice
-            && location.pathname.endsWith('search');
-
-    // false is set in the constructor so no need to update
-    if (isShowHeaderSearch) {
-      this.setState({ isShowHeaderSearch });
-    }
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    const { location }                          = this.props;
-    const { sidebarActive, isShowHeaderSearch } = this.state;
-
-    return (location.pathname !== nextProps.location.pathname
-      || sidebarActive !== nextState.sidebarActive
-      || isShowHeaderSearch !== nextState.isShowHeaderSearch);
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener('click', this.clickOutside, true);
-  }
-
-  // i.e, main, header of footer.
-  clickOutside = e => {
-    if (this.isCloseSideBar(e)) {
-      this.closeSidebar();
-    }
-
-    if (this.isCloseHeaderSearch(e)) {
-      this.showHeaderSearch();
-    }
-  };
-
-  isCloseHeaderSearch = e => {
-    if (!this.state || !this.state.isShowHeaderSearch || e.target === headerSearchElement) {
-      return false;
-    }
-
-    if (headerSearchElement.current && headerSearchElement.current.contains(e.target)) {
-      return false;
-    }
-
-    const hasTarget = showSearchButtonElement.current && showSearchButtonElement.current.contains(e.target);
-    return !hasTarget;
-  };
-
-  isCloseSideBar = e => {
-    if (!this.state || !this.state.sidebarActive || e.target === this.sidebarElement) {
-      return false;
-    }
-
-    if (this.sidebarElement && this.sidebarElement.contains(e.target)) {
-      return false;
-    }
-
-    if (menuButtonElement1.current && menuButtonElement1.current.contains(e.target)) {
-      return false;
-    }
-
-    const hasTarget = menuButtonElement2.current && menuButtonElement2.current.contains(e.target);
-    return !hasTarget;
-  };
-
-  toggleSidebar = () => {
-    const { sidebarActive } = this.state;
-    this.setState({ sidebarActive: !sidebarActive });
-  };
-
-  // Required for handling outside sidebar on click outside sidebar,
-  closeSidebar = () => this.setState({ sidebarActive: false });
-
-  showHeaderSearch = () => {
-    const { isShowHeaderSearch } = this.state;
-    this.setState({ isShowHeaderSearch: !isShowHeaderSearch });
-  };
-
-  render() {
-    const { t, location, playerContainer }             = this.props;
-    const { sidebarActive, embed, isShowHeaderSearch } = this.state;
-    const { isMobileDevice }                           = this.context;
-
-    const showSearch = shouldShowSearch(location);
-
-    const sideBarIcon = sidebarActive
-      ? <Icon size="large" name="x" />
-      : <Icon name="sidebar" />;
-
-    if (embed) {
-      return (<KmediaRouters playerContainer={playerContainer} />);
-    }
-
-    return (
-      <div className="layout">
-        <GAPageView location={location} />
-        <div className="headroom-z-index-802">
-          <Headroom>
-            <div className="layout__header">
-              <Menu inverted borderless size="huge" color="blue">
-                <div ref={menuButtonElement1}>
-                  <Menu.Item
-                    icon
-                    as="a"
-                    className="layout__sidebar-toggle"
-                    onClick={this.toggleSidebar}
-                  >
-                    {sideBarIcon}
-                  </Menu.Item>
-                </div>
-                <Menu.Item className="logo" header as={Link} to="/">
-                  <Logo width="40" height="40" />
-                  <Header inverted as="h1" content={t('nav.top.header')} />
+  return (
+    <div className={clsx('layout', { 'is_fullscreen': isFullscreen && isNotHome })}>
+      <GAPageView location={location} />
+      <div className="headroom-z-index-802">
+        <Headroom>
+          <div className="layout__header">
+            <Menu inverted borderless size="huge" color="blue">
+              <div ref={toggleSidebarBtnRef}>
+                <Menu.Item
+                  icon
+                  as="a"
+                  className="layout__sidebar-toggle"
+                  onClick={toggleSidebar}
+                >
+                  {sideBarIcon}
                 </Menu.Item>
-                <Menu.Item className={isMobileDevice ? 'layout__search mobile-hidden' : 'layout__search layout__search_max_width'}>
-                  {
-                    showSearch && <WrappedOmniBoxWithChronicles location={location} />
-                  }
-                </Menu.Item>
-                <Menu.Menu position="right" className="layout__header-buttons">
-                  <Menu.Item className="no-margin">
-                    <HandleLanguages />
-                  </Menu.Item>
-                  {
-                    showSearch && isMobileDevice &&
-                    <Ref innerRef={showSearchButtonElement}>
-                      <Menu.Item as="a" position="right">
-                        <Icon name="search" className="no-margin" onClick={this.showHeaderSearch} />
-                      </Menu.Item>
-                    </Ref>
-                  }
-                  {
-                    !isMobileDevice && (
-                      <Menu.Item position="right">
-                        <DonateNow />
-                        <VirtualHomeButton />
-                      </Menu.Item>
-                    )
-                  }
-                  <Menu.Item position="right">
-                    <Login />
-                  </Menu.Item>
-                  <TopMost />
-                </Menu.Menu>
-              </Menu>
-            </div>
-            {isShowHeaderSearch && <RenderHeaderSearch t={t} location={location} ref={headerSearchElement} />}
-          </Headroom>
-        </div>
-        <div
-          className={clsx('layout__sidebar', { 'is-active': sidebarActive })}
-          ref={el => {
-            this.sidebarElement = el;
-          }}
-        >
-          <Menu inverted size="huge" color="blue">
-            <div ref={menuButtonElement2}>
-              <Menu.Item
-                icon
-                as="a"
-                className="layout__sidebar-toggle"
-                onClick={this.closeSidebar}
-              >
-                {sideBarIcon}
+              </div>
+              <Menu.Item className="logo" header as={Link} to="/">
+                <Logo width="40" height="40" />
+                <Header inverted as="h1" content={t('nav.top.header')} />
               </Menu.Item>
-            </div>
-            <Menu.Item className="logo mobile-hidden" header as={Link} to="/" onClick={this.closeSidebar}>
-              <Logo />
-              <Header inverted as="h1" content={t('nav.top.header')} />
-            </Menu.Item>
-          </Menu>
-          <div className="layout__sidebar-menu">
-            <MenuItems simple onItemClick={this.closeSidebar} />
+              <Menu.Item className={isMobileDevice ? 'layout__search mobile-hidden' : 'layout__search layout__search_max_width'}>
+                {isNotHome && <OmniBox />}
+              </Menu.Item>
+              <Menu.Menu position="right" className="layout__header-buttons">
+                <Menu.Item className="no-margin">
+                  <HandleLanguages />
+                </Menu.Item>
+                {
+                  isNotHome && isMobileDevice &&
+                  <Ref innerRef={toggleSearchBtnRef}>
+                    <Menu.Item as="a" position="right">
+                      <Icon name="search" className="no-margin" onClick={openHeaderSearch} />
+                    </Menu.Item>
+                  </Ref>
+                }
+                {
+                  !isMobileDevice && (
+                    <Menu.Item position="right">
+                      <DonateNow />
+                      <VirtualHomeButton />
+                    </Menu.Item>
+                  )
+                }
+                <Menu.Item position="right">
+                  <Login />
+                </Menu.Item>
+                <TopMost />
+              </Menu.Menu>
+            </Menu>
           </div>
-        </div>
-        <div className="layout__main">
-          <div className="layout__content">
-            <DownloadTrim />
-            <KmediaRouters playerContainer={playerContainer} />
-          </div>
-          <Footer />
-        </div>
-        <DonationPopup />
+          {
+            isShowSearch && (
+              <div ref={headerSearchRef}>
+                <Segment color="blue" inverted className="header_search">
+                  <OmniBox />
+                </Segment>
+              </div>
+            )
+          }
+        </Headroom>
       </div>
-    );
-  }
-}
+      <div
+        ref={sidebarRef}
+        className={clsx('layout__sidebar', { 'is-active': sidebarActive })}
+      >
+        <Menu inverted size="huge" color="blue">
+          <div ref={closeSidebarBtnRef}>
+            <Menu.Item
+              icon
+              as="a"
+              className="layout__sidebar-toggle"
+              onClick={closeSidebar}
+            >
+              {sideBarIcon}
+            </Menu.Item>
+          </div>
+          <Menu.Item className="logo mobile-hidden" header as={Link} to="/" onClick={closeSidebar}>
+            <Logo />
+            <Header inverted as="h1" content={t('nav.top.header')} />
+          </Menu.Item>
+        </Menu>
+        <div className="layout__sidebar-menu">
+          <MenuItems simple onItemClick={closeSidebar} />
+        </div>
+      </div>
+      <div className="layout__main">
+        <div className="layout__content">
+          <DownloadTrim />
+          <KmediaRouters playerContainer={playerContainer} />
+        </div>
+        <Footer />
+      </div>
+      <DonationPopup />
+    </div>
+  );
+};
 
-export default withSSR()(withTranslation()(withRouter(Layout)));
+export default withSSR()(Layout);

@@ -9,6 +9,7 @@ import {
   myNotesGetByIdSelector,
   textPageGetSideOffsetSelector
 } from '../../../../redux/selectors';
+import { useClickOutside } from '../../../shared/useClickOutside';
 
 const NotesByPos = ({ pos, ids }) => {
   const [open, setOpen]   = useState(true);
@@ -21,21 +22,13 @@ const NotesByPos = ({ pos, ids }) => {
 
   const ref = useRef();
 
+  const handleClose = () => setOpen(false);
+  useClickOutside(handleClose, [ref]);
+
   const notes = useMemo(() => ids
     .map(id => byId[id])
     .map(n => ({ type: 'note', ...n }))
   , [byId, ids]);
-
-  useEffect(() => {
-    const handleClose = e => {
-      if (!(ref.current.contains(e.target))) {
-        setOpen(false);
-      }
-    };
-
-    document.addEventListener('click', handleClose);
-    return () => document.removeEventListener('click', handleClose);
-  }, [ref.current]);
 
   useEffect(() => {
     setOpen(expandAll);

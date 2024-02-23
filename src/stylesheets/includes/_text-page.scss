@@ -68,6 +68,10 @@
   position: relative;
   font-size: 18px;
 
+  &.is-web:not(.with_breadcrumb) {
+    padding-top: 1em;
+  }
+
   .text__content-wrapper {
     display: flex;
     flex-basis: max-content;
@@ -328,10 +332,10 @@
       transform: none !important;
     }
 
-    transform: translate3d(0px, calc(-1 * ($text-bar-height + $breadcrumb-height)), 0px);
+    transform: translate3d(0px, -$text-bar-height, 0px);
 
-    &.stick_toolbar_no_breadcrumb {
-      transform: translate3d(0px, -$text-bar-height, 0px);
+    .with_breadcrumb & {
+      transform: translate3d(0px, calc(-1 * ($text-bar-height + $breadcrumb-height)), 0px);
     }
   }
 
@@ -361,15 +365,17 @@
   padding: 0 1em;
   @include theme_stroke;
 
-  .is-web & {
-    margin-top: 1em;
-  }
-
   .is-mobile & {
     height: $text-bar-height;
     padding: 0;
     box-shadow: 0px -2px -12px 0px #00000033;
   }
+
+
+  .is-web.with_breadcrumb & {
+    margin-top: 1em;
+  }
+
 
   .is-dark.is-mobile & {
     box-shadow: 0px -2px -12px 0px #FFFFFF99;
@@ -399,21 +405,21 @@
       flex-grow: 0;
     }
 
-    /* .divider {
-       display: block;
-       border-left: 1px solid $stroke-gray;
-       align-self: center;
-       height: 24px;
-       margin: 0 6px;
+    .divider {
+      display: block;
+      border-left: 1px solid $stroke-gray;
+      align-self: center;
+      height: 24px;
+      margin: 0 6px;
 
-       .is-sepia & {
-         border-color: $sepia-stroke;
-       }
+      .is-sepia & {
+        border-color: $sepia-stroke;
+      }
 
-       .is-dark & {
-         border-color: $dark-stroke;
-       }
-     }*/
+      .is-dark & {
+        border-color: $dark-stroke;
+      }
+    }
 
 
     .button {
@@ -539,10 +545,11 @@
 
   .text_page__audio_btn {
     display: flex;
-    cursor: pointer;
     color: $blue;
     flex-wrap: nowrap;
     align-items: center;
+    cursor: pointer;
+    width: fit-content;
 
     span:last-child {
       padding: 0 .5em;

@@ -61,8 +61,7 @@ const TextLayoutWeb = props => {
       clsx('stick_toolbar no_print', {
         'stick_toolbar_unpinned': scrollDir === 1 || scrollDir === 2,
         'stick_toolbar_pinned': scrollDir === -1,
-        'stick_toolbar_fixed': hasSel,
-        'stick_toolbar_no_breadcrumb': !breadcrumb
+        'stick_toolbar_fixed': hasSel
       })
     }>
       {breadcrumb}
@@ -86,20 +85,16 @@ const TextLayoutWeb = props => {
   );
 
   return (
-    <div className={`is-web text_layout is-${theme}`} ref={ref}>
+    <div className={`is-web text_layout is-${theme}${!breadcrumb ? '' : ' with_breadcrumb'}`} ref={ref}>
       {toc}
       {!isSearch ? renderToolbar() : renderSearch()}
-      {
-        !playerPage && (
-          <div className={clsx({
-            'text_align_to_text': (!isMobileDevice),
-            'text_align_to_text_text_only': textOnly && (!isMobileDevice)
-          })}>
-            <TagsByUnit id={subject.id}></TagsByUnit>
-            <AudioPlayer />
-          </div>
-        )
-      }
+      <div className={clsx({
+        'text_align_to_text': (!isMobileDevice),
+        'text_align_to_text_text_only': textOnly && (!isMobileDevice)
+      })}>
+        <TagsByUnit id={subject.id}></TagsByUnit>
+        <AudioPlayer />
+      </div>
       <TextContentWeb playerPage={playerPage} />
       {prevNext}
 

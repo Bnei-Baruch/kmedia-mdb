@@ -49,7 +49,7 @@
     }
 
     &.toc_scroll_down {
-      height: calc(100VH - $main-menu-height);
+      height: calc(100VH - $main-menu-height - $breadcrumb-height);
 
       &.toc_selected {
         height: calc(100VH - $main-menu-height);
