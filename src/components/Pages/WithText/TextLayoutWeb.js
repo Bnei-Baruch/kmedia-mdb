@@ -27,14 +27,15 @@ import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { useFetchNotes } from './Notes/useFetchNotes';
 
 const TextLayoutWeb = props => {
-  const {
-    toolbar    = null,
-    toc        = null,
-    prevNext   = null,
-    breadcrumb = null,
-    playerPage = false,
-    id
-  } = props;
+  const
+    {
+      toolbar    = null,
+      toc        = null,
+      prevNext   = null,
+      breadcrumb = null,
+      playerPage = false,
+      id
+    } = props;
 
   const ref   = useRef();
   const { t } = useTranslation();
@@ -42,7 +43,8 @@ const TextLayoutWeb = props => {
   const scrollDir          = useSelector(textPageGetScrollDirSelector);
   const subject            = useSelector(textPageGetSubjectSelector);
   const hasSel             = !!useSelector(textPageGetUrlInfoSelector).select;
-  const { theme }          = useSelector(textPageGetSettings);
+  const settings           = useSelector(textPageGetSettings) || { theme: {} };
+  const { theme }          = settings;
   const textOnly           = useSelector(textPageGetTextOnlySelector);
   const isSearch           = useSelector(textPageGetIsSearchSelector);
   const { isMobileDevice } = useContext(DeviceInfoContext);
@@ -60,8 +62,8 @@ const TextLayoutWeb = props => {
     <div className={
       clsx('stick_toolbar no_print', {
         'stick_toolbar_unpinned': scrollDir === 1 || scrollDir === 2,
-        'stick_toolbar_pinned': scrollDir === -1,
-        'stick_toolbar_fixed': hasSel
+        'stick_toolbar_pinned'  : scrollDir === -1,
+        'stick_toolbar_fixed'   : hasSel
       })
     }>
       {breadcrumb}
@@ -72,14 +74,14 @@ const TextLayoutWeb = props => {
     <div className={
       clsx('stick_toolbar no_print stick_toolbar_fixed', {
         'stick_toolbar_unpinned': scrollDir !== -1,
-        'stick_toolbar_pinned': scrollDir === -1
+        'stick_toolbar_pinned'  : scrollDir === -1
       })}>
       <div className={
         clsx('no-margin-top', {
-          'text_align_to_text': (!isMobileDevice),
+          'text_align_to_text'          : (!isMobileDevice),
           'text_align_to_text_text_only': textOnly && (!isMobileDevice)
         })}>
-        <SearchOnPageBar />
+        <SearchOnPageBar/>
       </div>
     </div>
   );
@@ -89,19 +91,19 @@ const TextLayoutWeb = props => {
       {toc}
       {!isSearch ? renderToolbar() : renderSearch()}
       <div className={clsx({
-        'text_align_to_text': (!isMobileDevice),
+        'text_align_to_text'          : (!isMobileDevice),
         'text_align_to_text_text_only': textOnly && (!isMobileDevice)
       })}>
         <TagsByUnit id={subject.id}></TagsByUnit>
-        <AudioPlayer />
+        <AudioPlayer/>
       </div>
-      <TextContentWeb playerPage={playerPage} />
+      <TextContentWeb playerPage={playerPage}/>
       {prevNext}
 
-      <NoteItemSticky />
-      <NoteItemModal />
-      <NoteConfirmRemove />
-      <ScrollToTopBtn />
+      <NoteItemSticky/>
+      <NoteItemModal/>
+      <NoteConfirmRemove/>
+      <ScrollToTopBtn/>
     </div>
   );
 };

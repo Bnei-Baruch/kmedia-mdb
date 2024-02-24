@@ -53,23 +53,24 @@ const onChangeLanguage = (state, lang) => {
 };
 
 const textPageSlice = createSlice({
-  name: 'textPage',
+  name        : 'textPage',
   initialState: {
-    settings: { zoomSize: 2 },
+    settings   : { zoomSize: 2 },
     tocIsActive: false,
-    scrollDir: 0,
-    match: '',
-    subject: {},
-    wipErr: {
+    scrollDir  : 0,
+    match      : '',
+    subject    : {},
+    wipErr     : {
       wip: false, err: null
     },
-    urlInfo: {
+    urlInfo    : {
       search: {}
     },
-    tocInfo: { sortByAZ: true }
+    tocInfo    : { sortByAZ: true }
   },
-  reducers: {
-    setZoomSize: (state, { payload }) => {
+
+  reducers     : {
+    setZoomSize        : (state, { payload }) => {
       let size = state.settings.zoomSize ?? 2;
       if (payload === 'up') {
         size = size + 1;
@@ -85,22 +86,22 @@ const textPageSlice = createSlice({
       state.settings.zoomSize = size;
       updateLocalStorage(state);
     },
-    setFontType: (state, { payload }) => {
+    setFontType        : (state, { payload }) => {
       state.settings.fontType = payload;
       updateLocalStorage(state);
     },
-    setTheme: (state, { payload }) => {
+    setTheme           : (state, { payload }) => {
       state.settings.theme = payload;
       updateLocalStorage(state);
     },
-    setTocIsActive: (state, { payload }) => {
+    setTocIsActive     : (state, { payload }) => {
       state.tocInfo.match = '';
       state.tocIsActive   = payload ?? !state.tocIsActive;
     },
-    setTocMatch: (state, { payload }) => void (state.tocInfo.match = payload),
-    setTocSortBy: state => void (state.tocInfo.sortByAZ = !state.tocInfo.sortByAZ),
-    changeLanguage: (state, { payload }) => onChangeLanguage(state, payload),
-    setUrlInfo: (state, { payload }) => {
+    setTocMatch        : (state, { payload }) => void (state.tocInfo.match = payload),
+    setTocSortBy       : state => void (state.tocInfo.sortByAZ = !state.tocInfo.sortByAZ),
+    changeLanguage     : (state, { payload }) => onChangeLanguage(state, payload),
+    setUrlInfo         : (state, { payload }) => {
       if (!payload) {
         state.urlInfo.url      = buildUrl(state);
         state.urlInfo.isCastom = false;
@@ -111,15 +112,15 @@ const textPageSlice = createSlice({
 
       state.urlInfo.search = buildUrlSearch(state, { ...payload?.search });
     },
-    setUrlSelect: (state, { payload }) => void (state.urlInfo.select = payload || null),
-    setWordOffset: (state, { payload }) => void (state.wordOffset = payload),
-    expandNotes: state => void (state.expandNotes = !state.expandNotes),
-    setFullscreen: (state, { payload }) => void (state.isFullscreen = payload ?? !state.isFullscreen),
-    setScrollDir: (state, { payload }) => void (state.scrollDir = payload),
-    setSideOffset: (state, { payload }) => void (state.sideOffset = payload),
-    toggleTextOnly: (state, { payload }) => void (state.textOnly = payload ?? !state.textOnly),
-    setIsSearch: state => void (state.isSearch = !state.isSearch),
-    fetchSubject: {
+    setUrlSelect       : (state, { payload }) => void (state.urlInfo.select = payload || null),
+    setWordOffset      : (state, { payload }) => void (state.wordOffset = payload),
+    expandNotes        : state => void (state.expandNotes = !state.expandNotes),
+    setFullscreen      : (state, { payload }) => void (state.isFullscreen = payload ?? !state.isFullscreen),
+    setScrollDir       : (state, { payload }) => void (state.scrollDir = payload),
+    setSideOffset      : (state, { payload }) => void (state.sideOffset = payload),
+    toggleTextOnly     : (state, { payload }) => void (state.textOnly = payload ?? !state.textOnly),
+    setIsSearch        : state => void (state.isSearch = !state.isSearch),
+    fetchSubject       : {
       prepare: (_id, source_language) => {
         const { uid: id, isGr } = checkRabashGroupArticles(_id);
         return ({ payload: { id, source_language, isGr } });
@@ -145,7 +146,7 @@ const textPageSlice = createSlice({
       }
     },
     fetchSubjectFailure: (state, { payload }) => void (state.wipErr = { wip: false, err: payload }),
-    setFileFilter: (state, { payload }) => void (state.fileFilter = payload)
+    setFileFilter      : (state, { payload }) => void (state.fileFilter = payload)
   },
   extraReducers: builder => {
     builder
@@ -160,6 +161,26 @@ const textPageSlice = createSlice({
           onChangeLanguage(state, language);
         }
       );
+  },
+
+  selectors: {
+    getSettings    : state => state.setting,
+    getTocIsActive : state => state.tocIsActive,
+    getTocInfo     : state => state.tocInfo,
+    getSubject     : state => state.subject,
+    getWipErr      : state => state.wipErr,
+    getFile        : state => state.file,
+    getUrlInfo     : state => state.urlInfo,
+    getWordOffset  : state => state.wordOffset || 0,
+    getMP3         : state => state.mp3,
+    getExpandNotes : state => state.expandNotes,
+    getIsFullscreen: state => state.isFullscreen,
+    getScrollDir   : state => state.scrollDir,
+    getSideOffset  : state => state.sideOffset,
+    getTextOnly    : state => state.textOnly,
+    getScanFile    : state => state.scanFile,
+    getIsSearch    : state => state.isSearch,
+    getFileFilter  : state => state.fileFilter
   }
 });
 
@@ -171,41 +192,4 @@ export const types = Object.fromEntries(new Map(
   Object.values(textPageSlice.actions).map(a => [a.type, a.type])
 ));
 
-/* Selectors */
-const getSettings     = state => state.settings;
-const getTocIsActive  = state => state.tocIsActive;
-const getTocInfo      = state => state.tocInfo;
-const getSubject      = state => state.subject;
-const getWipErr       = state => state.wipErr;
-const getFile         = state => state.file;
-const getUrlInfo      = state => state.urlInfo;
-const getWordOffset   = state => state.wordOffset || 0;
-const getMP3          = state => state.mp3;
-const getExpandNotes  = state => state.expandNotes;
-const getIsFullscreen = state => state.isFullscreen;
-const getScrollDir    = state => state.scrollDir;
-const getSideOffset   = state => state.sideOffset;
-const getTextOnly     = state => state.textOnly;
-const getScanFile     = state => state.scanFile;
-const getIsSearch     = state => state.isSearch;
-const getFileFilter   = state => state.fileFilter;
-
-export const selectors = {
-  getSettings,
-  getTocIsActive,
-  getTocInfo,
-  getSubject,
-  getWipErr,
-  getFile,
-  getUrlInfo,
-  getWordOffset,
-  getMP3,
-  getExpandNotes,
-  getIsFullscreen,
-  getScrollDir,
-  getSideOffset,
-  getTextOnly,
-  getScanFile,
-  getIsSearch,
-  getFileFilter,
-};
+export const selectors = textPageSlice.getSelectors();
