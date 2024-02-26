@@ -9,6 +9,7 @@ import AddBookmarkBtn from '../../Pages/WithText/Buttons/AddBookmarkBtn';
 import ShareTextModalBtn from '../../Pages/WithText/Buttons/ShareTextModalBtn';
 import LessonsByLikutBtn from './LessonsByLikutBtn';
 import MoreOptionsBtn from '../../Pages/WithText/Buttons/MoreOptionsBtn';
+import CopyLinkBtn from '../../Pages/WithText/Buttons/CopyLinkBtn';
 
 const LikutToolbarMobile = () => (
   <div className="text_toolbar">
@@ -33,6 +34,9 @@ const LikutToolbarMobile = () => (
           </Dropdown.Item>
           <Dropdown.Item>
             <ShareTextModalBtn />
+          </Dropdown.Item>
+          <Dropdown.Item>
+            <CopyLinkBtn />
           </Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>

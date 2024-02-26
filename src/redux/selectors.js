@@ -273,7 +273,6 @@ export const textPageGetFileSelector         = createSelector([getTextPage], t =
 export const textPageGetUrlInfoSelector      = createSelector([getTextPage], t => textPageSel.getUrlInfo(t));
 export const textPageGetWordOffsetSelector   = createSelector([getTextPage], t => textPageSel.getWordOffset(t));
 export const textPageGetMP3Selector          = createSelector([getTextPage], t => textPageSel.getMP3(t));
-export const textPageGetExpandNotesSelector  = createSelector([getTextPage], t => textPageSel.getExpandNotes(t));
 export const textPageGetIsFullscreenSelector = createSelector([getTextPage], t => textPageSel.getIsFullscreen(t));
 export const textPageGetScrollDirSelector    = createSelector([getTextPage], t => textPageSel.getScrollDir(t));
 export const textPageGetSideOffsetSelector   = createSelector([getTextPage], t => textPageSel.getSideOffset(t));

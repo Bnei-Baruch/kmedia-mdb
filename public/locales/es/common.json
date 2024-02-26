@@ -861,7 +861,8 @@
         "hide-additions": "Ocultar todos los comentarios",
         "show-additions": "Mostrar todos los comentarios",
         "scan": "Escaneado del texto original",
-        "more-buttons": "Más"
+        "more-buttons": "Más",
+        "copy-link": "Copiar enlace"
       },
       "mobile": {
         "lessons": "Lecciones",
@@ -872,7 +873,8 @@
         "search": "Buscar",
         "download": "Descargar",
         "more-buttons": "Más",
-        "toc": "Contenido"
+        "toc": "Contenido",
+        "copy-link": "Enlace"
       }
     }
   }

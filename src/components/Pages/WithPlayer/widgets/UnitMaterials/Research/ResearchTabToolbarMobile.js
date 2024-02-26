@@ -8,6 +8,7 @@ import DownloadTextBtn from '../../../../WithText/Buttons/DownloadTextBtn';
 import AddBookmarkBtn from '../../../../WithText/Buttons/AddBookmarkBtn';
 import ShareTextModalBtn from '../../../../WithText/Buttons/ShareTextModalBtn';
 import MoreOptionsBtn from '../../../../WithText/Buttons/MoreOptionsBtn';
+import CopyLinkBtn from '../../../../WithText/Buttons/CopyLinkBtn';
 
 const ResearchTabToolbarMobile = () => (
   <div className="text_toolbar">
@@ -29,6 +30,9 @@ const ResearchTabToolbarMobile = () => (
           </Dropdown.Item>
           <Dropdown.Item>
             <ShareTextModalBtn />
+          </Dropdown.Item>
+          <Dropdown.Item>
+            <CopyLinkBtn />
           </Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>

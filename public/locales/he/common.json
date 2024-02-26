@@ -956,7 +956,8 @@
         "hide-additions": "להסתיר הערות",
         "show-additions": "להראות הערות",
         "scan": "סריקה של הטקסט המקורי",
-        "more-buttons": "עוד"
+        "more-buttons": "עוד",
+        "copy-link": "העתק קישור"
       },
       "mobile": {
         "lessons": "שיעורים",
@@ -967,7 +968,8 @@
         "search": "חיפוש",
         "download": "הורדה",
         "more-buttons": "עוד",
-        "toc": "תוכן"
+        "toc": "תוכן",
+        "copy-link": "קישור"
       }
     }
   }

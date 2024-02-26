@@ -8,6 +8,7 @@ import SearchOnPageBtn from '../../../../Pages/WithText/Buttons/SearchOnPageBtn'
 import DownloadTextBtn from '../../../../Pages/WithText/Buttons/DownloadTextBtn';
 import ShareTextBtn from '../../../../Pages/WithText/Buttons/ShareTextBtn';
 import MoreOptionsBtn from '../../../../Pages/WithText/Buttons/MoreOptionsBtn';
+import CopyLinkBtn from '../../../../Pages/WithText/Buttons/CopyLinkBtn';
 
 const ArticleToolbarMobile = () => (
   <div className="text_toolbar">
@@ -25,10 +26,13 @@ const ArticleToolbarMobile = () => (
       >
         <Dropdown.Menu>
           <Dropdown.Item>
+            <DownloadTextBtn />
+          </Dropdown.Item>
+          <Dropdown.Item>
             <ShareTextBtn />
           </Dropdown.Item>
           <Dropdown.Item>
-            <DownloadTextBtn />
+            <CopyLinkBtn />
           </Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>

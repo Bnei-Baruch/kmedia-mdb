@@ -9,6 +9,7 @@ import DownloadTextBtn from '../../../../WithText/Buttons/DownloadTextBtn';
 import AddBookmarkBtn from '../../../../WithText/Buttons/AddBookmarkBtn';
 import ShareTextModalBtn from '../../../../WithText/Buttons/ShareTextModalBtn';
 import MoreOptionsBtn from '../../../../WithText/Buttons/MoreOptionsBtn';
+import CopyLinkBtn from '../../../../WithText/Buttons/CopyLinkBtn';
 
 const SourceTabToolbarMobile = ({ needTOC }) => (
   <div className="text_toolbar">
@@ -30,6 +31,9 @@ const SourceTabToolbarMobile = ({ needTOC }) => (
           </Dropdown.Item>
           <Dropdown.Item>
             <ShareTextModalBtn />
+          </Dropdown.Item>
+          <Dropdown.Item>
+            <CopyLinkBtn />
           </Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>

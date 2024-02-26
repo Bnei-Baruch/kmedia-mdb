@@ -113,7 +113,6 @@ const textPageSlice = createSlice({
     },
     setUrlSelect: (state, { payload }) => void (state.urlInfo.select = payload || null),
     setWordOffset: (state, { payload }) => void (state.wordOffset = payload),
-    expandNotes: state => void (state.expandNotes = !state.expandNotes),
     setFullscreen: (state, { payload }) => void (state.isFullscreen = payload ?? !state.isFullscreen),
     setScrollDir: (state, { payload }) => void (state.scrollDir = payload),
     setSideOffset: (state, { payload }) => void (state.sideOffset = payload),
@@ -181,7 +180,6 @@ const getFile         = state => state.file;
 const getUrlInfo      = state => state.urlInfo;
 const getWordOffset   = state => state.wordOffset || 0;
 const getMP3          = state => state.mp3;
-const getExpandNotes  = state => state.expandNotes;
 const getIsFullscreen = state => state.isFullscreen;
 const getScrollDir    = state => state.scrollDir;
 const getSideOffset   = state => state.sideOffset;
@@ -200,7 +198,6 @@ export const selectors = {
   getUrlInfo,
   getWordOffset,
   getMP3,
-  getExpandNotes,
   getIsFullscreen,
   getScrollDir,
   getSideOffset,

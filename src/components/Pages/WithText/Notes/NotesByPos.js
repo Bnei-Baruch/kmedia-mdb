@@ -1,22 +1,21 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { Button, Label } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
-import NoteMarkInList from './NoteMarkInList';
 import clsx from 'clsx';
+
+import NoteMarkInList from './NoteMarkInList';
 import {
   textPageGetSettings,
-  textPageGetExpandNotesSelector,
   myNotesGetByIdSelector,
   textPageGetSideOffsetSelector
 } from '../../../../redux/selectors';
 import { useClickOutside } from '../../../shared/useClickOutside';
 
 const NotesByPos = ({ pos, ids }) => {
-  const [open, setOpen]   = useState(true);
+  const [open, setOpen]   = useState(false);
   const [isOut, setIsOut] = useState(true);
 
   const byId         = useSelector(myNotesGetByIdSelector);
-  const expandAll    = useSelector(textPageGetExpandNotesSelector);
   const { zoomSize } = useSelector(textPageGetSettings);
   const offset       = useSelector(textPageGetSideOffsetSelector);
 
@@ -26,13 +25,9 @@ const NotesByPos = ({ pos, ids }) => {
   useClickOutside(handleClose, [ref]);
 
   const notes = useMemo(() => ids
-    .map(id => byId[id])
-    .map(n => ({ type: 'note', ...n }))
-  , [byId, ids]);
-
-  useEffect(() => {
-    setOpen(expandAll);
-  }, [expandAll]);
+      .map(id => byId[id])
+      .map(n => ({ type: 'note', ...n }))
+    , [byId, ids]);
 
   useEffect(() => {
     setIsOut(370 * zoomSize < offset);

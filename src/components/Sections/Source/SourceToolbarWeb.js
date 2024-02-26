@@ -9,7 +9,6 @@ import LanguageTextBtn from '../../Pages/WithText/Buttons/LanguageTextBtn';
 import TextSettings from '../../Pages/WithText/Buttons/TextSettings/TextSettings';
 import AddBookmarkBtn from '../../Pages/WithText/Buttons/AddBookmarkBtn';
 import SearchOnPageBtn from '../../Pages/WithText/Buttons/SearchOnPageBtn';
-import ExpandCommentsBtn from '../../Pages/WithText/Buttons/ExpandCommentsBtn';
 import DownloadTextBtn from '../../Pages/WithText/Buttons/DownloadTextBtn';
 import AdditionsVisibilityBtn from '../../Pages/WithText/Buttons/AdditionsVisibilityBtn';
 import LinkToLessonsBtn from '../../Pages/WithText/Buttons/LinkToLessonsBtn';
@@ -20,6 +19,7 @@ import TagTextBtn from '../../Pages/WithText/Buttons/TagTextBtn';
 import PrintBtn from '../../Pages/WithText/Buttons/PrintBtn';
 import { textPageGetUrlInfoSelector } from '../../../redux/selectors';
 import MoreOptionsBtn from '../../Pages/WithText/Buttons/MoreOptionsBtn';
+import CopyLinkBtn from '../../Pages/WithText/Buttons/CopyLinkBtn';
 
 const SourceToolbarWeb = () => {
   const hasNoSel = !useSelector(textPageGetUrlInfoSelector).select;
@@ -41,14 +41,12 @@ const SourceToolbarWeb = () => {
         <AddBookmarkBtn />
         <AddCommentBtn />
         <ShareTextBtn />
+        <CopyLinkBtn />
         {
           hasNoSel && (
             <>
               <div className="divider" />
               <SearchOnPageBtn />
-              <div className="computer-only">
-                <ExpandCommentsBtn />
-              </div>
               <div className="computer-only">
                 <PrintBtn />
               </div>
@@ -79,9 +77,6 @@ const SourceToolbarWeb = () => {
           className="text_toolbar__dropdown"
         >
           <Dropdown.Menu>
-            <Dropdown.Item>
-              <ExpandCommentsBtn />
-            </Dropdown.Item>
             <Dropdown.Item>
               <DownloadTextBtn />
             </Dropdown.Item>
