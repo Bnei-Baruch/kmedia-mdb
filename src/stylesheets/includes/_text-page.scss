@@ -440,6 +440,10 @@
         display: block;
         line-height: 20px;
         font-weight: 600;
+
+        .stick_toolbar_long_translation & {
+          font-size: 11px;
+        }
       }
     }
 
