@@ -29,13 +29,13 @@ import { Divider } from 'semantic-ui-react';
 
 const TextLayoutWeb = props => {
   const {
-          toolbar    = null,
-          toc        = null,
-          prevNext   = null,
-          breadcrumb = null,
-          playerPage = false,
-          id
-        } = props;
+    toolbar    = null,
+    toc        = null,
+    prevNext   = null,
+    breadcrumb = null,
+    playerPage = false,
+    id
+  } = props;
 
   const ref   = useRef();
   const { t } = useTranslation();
