@@ -3,24 +3,24 @@ import { createSlice } from '@reduxjs/toolkit';
 import { actions as ssrActions } from './ssr';
 
 const initialState = {
-  suggestions     : {},
-  q               : '',
-  prevQuery       : '',
+  suggestions: {},
+  q: '',
+  prevQuery: '',
   prevFilterParams: '',
-  queryResult     : {},
-  pageNo          : 1,
-  sortBy          : 'relevance',
-  deb             : false,
-  wip             : false,
-  autocompleteWip : false,
-  error           : null
+  queryResult: {},
+  pageNo: 1,
+  sortBy: 'relevance',
+  deb: false,
+  wip: false,
+  autocompleteWip: false,
+  error: null
 };
 
 const searchSlice = createSlice({
   name: 'search',
   initialState,
 
-  reducers     : {
+  reducers: {
     autocompleteSuccess: (state, { payload: { suggestions } }) => {
       state.suggestions     = suggestions;
       state.autocompleteWip = false;
@@ -29,32 +29,33 @@ const searchSlice = createSlice({
       state.suggestions     = null;
       state.autocompleteWip = false;
     },
-    setWip             : state => {
+    setWip: state => {
       state.wip = true;
     },
-    search             : () => void ({}),
-    searchSuccess      : (state, { payload }) => {
+    search: () => void ({}),
+    searchSuccess: (state, { payload }) => {
       state.wip              = false;
       state.error            = null;
       state.queryResult      = payload.searchResults;
       state.prevFilterParams = payload.filterParams;
       state.prevQuery        = payload.query;
+      state.pageNo           = payload.pageNo;
     },
-    searchFailure      : {
+    searchFailure: {
       prepare: ({ payload }) => ({ error: payload }),
       reducer: (state, payload) => {
-        state.wip = false;
+        state.wip   = false;
         state.error = payload?.error;
       }
     },
-    hydrateUrl         : () => ({}),
-    setPage            : (state, { payload }) => void (state.pageNo = payload),
-    setSortBy          : (state, { payload }) => void (state.sortBy = payload),
-    updateQuery        : (state, { payload }) => {
+    hydrateUrl: () => ({}),
+    setPage: (state, { payload }) => void (state.pageNo = payload),
+    setSortBy: (state, { payload }) => void (state.sortBy = payload),
+    updateQuery: (state, { payload }) => {
       state.autocompleteWip = payload.autocomplete;
       state.q               = payload.query;
     },
-    setDeb             : (state, { payload }) => void (state.deb = payload)
+    setDeb: (state, { payload }) => void (state.deb = payload)
   },
   extraReducers: builder => {
     builder.addCase(ssrActions.prepare, state => {
