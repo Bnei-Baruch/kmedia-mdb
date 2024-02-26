@@ -22,13 +22,13 @@ import { LANGUAGE_LONG_TRANSLATION } from '../../../helpers/consts';
 
 const TextLayoutMobile = props => {
   const {
-          toolbar    = null,
-          toc        = null,
-          prevNext   = null,
-          breadcrumb = null,
-          playerPage = false,
-          id,
-        } = props;
+    toolbar    = null,
+    toc        = null,
+    prevNext   = null,
+    breadcrumb = null,
+    playerPage = false,
+    id,
+  } = props;
 
   const ref   = useRef();
   const { t } = useTranslation();
