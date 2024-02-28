@@ -28,6 +28,12 @@ const likutimSlice = createSlice({
         state.err = state.err.toString();
       }
     });
+  },
+
+  selectors: {
+    getWip    : state => state.wip,
+    getError  : state => state.err,
+    getLikutim: state => state.likutim
   }
 });
 
@@ -39,14 +45,4 @@ export const types = Object.fromEntries(new Map(
   Object.values(likutimSlice.actions).map(a => [a.type, a.type])
 ));
 
-/* Selectors */
-
-const getWip     = state => state.wip;
-const getError   = state => state.err;
-const getLikutim = state => state.likutim;
-
-export const selectors = {
-  getWip,
-  getError,
-  getLikutim
-};
+export const selectors = likutimSlice.getSelectors();

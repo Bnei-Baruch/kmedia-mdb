@@ -55,6 +55,21 @@ const playerSlice = createSlice({
 
     setShareStartEnd: (state, { payload }) => void (state.shareStartEnd = payload),
     setIsMuted      : (state, { payload }) => void (state.isMuted = payload)
+  },
+
+  selectors: {
+    isReady         : state => state.ready,
+    isMetadataReady : state => state.metadataReady && state.ready,
+    isLoaded        : state => state.loaded,
+    isPlay          : state => state.played,
+    getFile         : state => state.file,
+    getOverMode     : state => state.overMode,
+    isFullScreen    : state => state.isFullScreen,
+    getRate         : state => state.rate || 1,
+    getShareStartEnd: state => state.shareStartEnd,
+    getPlayerWidth  : state => state.width,
+    isMuted         : state => state.isMuted,
+    getKeyboardCoef : state => state.keyboardCoef
   }
 });
 
@@ -66,33 +81,7 @@ export const types = Object.fromEntries(new Map(
   Object.values(playerSlice.actions).map(a => [a.type, a.type])
 ));
 
-const isReady          = state => state.ready;
-const isMetadataReady  = state => state.metadataReady && state.ready;
-const isLoaded         = state => state.loaded;
-const isPlay           = state => state.played;
-const getFile          = state => state.file;
-const getOverMode      = state => state.overMode;
-const isFullScreen     = state => state.isFullScreen;
-const getRate          = state => state.rate || 1;
-const getShareStartEnd = state => state.shareStartEnd;
-const getPlayerWidth   = state => state.width;
-const isMuted          = state => state.isMuted;
-const getKeyboardCoef  = state => state.keyboardCoef;
-
-export const selectors = {
-  isReady,
-  isMetadataReady,
-  isLoaded,
-  isPlay,
-  getFile,
-  getOverMode,
-  isFullScreen,
-  getRate,
-  getShareStartEnd,
-  getPlayerWidth,
-  isMuted,
-  getKeyboardCoef
-};
+export const selectors = playerSlice.getSelectors();
 
 export const PLAYER_ACTIONS_BY_EVENT = {
   'ready'        : playerSlice.actions.playerReady,

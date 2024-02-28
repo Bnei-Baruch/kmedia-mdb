@@ -94,6 +94,11 @@ export const setById = (sources, uiLang) => {
   return prepareById(sources);
 };
 
+const getSourceById = state => {
+  const _byId = state.sortBy === 'AZ' ? state.byIdAZ : state.byId;
+  return id => _byId[id];
+};
+
 const sourcesSlice = createSlice({
   name: 'sources',
   initialState,
@@ -113,6 +118,21 @@ const sourcesSlice = createSlice({
   extraReducers: builder => {
     builder
       .addCase(settings.setUILanguage, onChangeLanguage);
+  },
+
+  selectors: {
+    getSourceById,
+    sortBy          : state => state.sortBy,
+    areSourcesLoaded: state => state.loaded,
+    getRoots        : state => state.roots,
+    getPath         : state => {
+      const _byId = getSourceById(state);
+      return source => tracePath(source, _byId);
+    },
+    getPathByID     : state => {
+      const _byId = getSourceById(state);
+      return id => tracePath(_byId(id), _byId);
+    }
   }
 });
 
@@ -124,35 +144,5 @@ export const types = Object.fromEntries(new Map(
   Object.values(sourcesSlice.actions).map(a => [a.type, a.type])
 ));
 
-/* Selectors */
-
-const areSourcesLoaded = state => state.loaded;
-const getRoots         = state => state.roots;
-const getSourceById    = state => {
-  const _byId = state.sortBy === 'AZ' ? state.byIdAZ : state.byId;
-  return id => _byId[id];
-};
-
-const getPath = state => {
-  const _byId = getSourceById(state);
-  return source => tracePath(source, _byId);
-};
-
-const getPathByID = state => {
-  const _byId = getSourceById(state);
-  return id => tracePath(_byId(id), _byId);
-};
-
-const sortBy = state => state.sortBy;
-
-export const selectors = {
-  areSourcesLoaded,
-  getRoots,
-  getSourceById,
-  getPath,
-  getPathByID,
-  sortBy,
-  NotToSort,
-  NotToFilter
-};
+export const selectors = sourcesSlice.getSelectors();
 

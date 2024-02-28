@@ -63,6 +63,20 @@ const searchSlice = createSlice({
         state.error = state.error.toString();
       }
     });
+  },
+
+  selectors: {
+    getAutocompleteWip : state => state.autocompleteWip,
+    getDeb             : state => state.deb,
+    getError           : state => state.error,
+    getPageNo          : state => state.pageNo,
+    getPrevFilterParams: state => state.prevFilterParams,
+    getQuery           : state => state.q,
+    getPrevQuery       : state => state.prevQuery,
+    getQueryResult     : state => state.queryResult,
+    getSortBy          : state => state.sortBy,
+    getSuggestions     : state => state.suggestions,
+    getWip             : state => state.wip
   }
 });
 
@@ -74,29 +88,4 @@ export const types = Object.fromEntries(new Map(
   Object.values(searchSlice.actions).map(a => [a.type, a.type])
 ));
 
-/* Selectors */
-const getAutocompleteWip  = state => state.autocompleteWip;
-const getDeb              = state => state.deb;
-const getError            = state => state.error;
-const getPageNo           = state => state.pageNo;
-const getPrevFilterParams = state => state.prevFilterParams;
-const getQuery            = state => state.q;
-const getPrevQuery        = state => state.prevQuery;
-const getQueryResult      = state => state.queryResult;
-const getSortBy           = state => state.sortBy;
-const getSuggestions      = state => state.suggestions;
-const getWip              = state => state.wip;
-
-export const selectors = {
-  getAutocompleteWip,
-  getDeb,
-  getError,
-  getPageNo,
-  getPrevFilterParams,
-  getQuery,
-  getPrevQuery,
-  getQueryResult,
-  getSortBy,
-  getSuggestions,
-  getWip
-};
+export const selectors = searchSlice.getSelectors();

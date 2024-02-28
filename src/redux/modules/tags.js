@@ -12,6 +12,8 @@ const onReceiveTags = (state, { payload }) => {
   state.loaded       = true;
 };
 
+const getTagById = state => id => state?.byId[id];
+
 const tagsSlice = createSlice({
   name: 'tags',
   initialState: {
@@ -62,6 +64,22 @@ const tagsSlice = createSlice({
         state.wip    = false;
         state.err    = null;
       });
+  },
+
+  selectors: {
+    getTagById,
+    areTagsLoaded  : state => state.loaded,
+    getTags        : state => state.byId,
+    getRoots       : state => state.roots,
+    getDisplayRoots: state => state.displayRoots,
+    getPath        : state => source => tracePath(source, getTagById(state)),
+    getWip         : state => state.wip,
+    getError       : state => state.error,
+    getItems       : state => state.dashboard || {},
+    getPathByID    : state => {
+      const _byId = getTagById(state);
+      return id => tracePath(_byId(id), _byId);
+    }
   }
 });
 
@@ -73,34 +91,5 @@ export const types = Object.fromEntries(new Map(
   Object.values(tagsSlice.actions).map(a => [a.type, a.type])
 ));
 
-/* Selectors */
-
-const areTagsLoaded   = state => state.loaded;
-const getTags         = state => state.byId;
-const getRoots        = state => state.roots;
-const getDisplayRoots = state => state.displayRoots;
-const getTagById      = state => id => state?.byId[id];
-const getPath         = state => source => tracePath(source, getTagById(state));
-const getPathByID     = state => {
-  const _byId = getTagById(state);
-  return id => tracePath(_byId(id), _byId);
-};
-
-const getWip   = state => state.wip;
-const getError = state => state.error;
-
-const getItems = state => state.dashboard || {};
-
-export const selectors = {
-  areTagsLoaded,
-  getWip,
-  getError,
-  getTags,
-  getRoots,
-  getDisplayRoots,
-  getTagById,
-  getPath,
-  getPathByID,
-  getItems
-};
+export const selectors = tagsSlice.getSelectors();
 

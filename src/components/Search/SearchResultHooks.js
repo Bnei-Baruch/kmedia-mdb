@@ -479,7 +479,7 @@ const getLowestLevelSeries = (series, rootId) => {
     return root;
   }
 
-  if (!root) return series[series.length - 1];
+  if (!root || !root.id) return series[series.length - 1];
   return getLowestLevelSeries(series, root.id);
 };
 

@@ -31,6 +31,11 @@ const chronicles = createSlice({
       .addCase(player.playerPause, state => void (state.event = 'player-stop'))
       .addCase(player.playerRemove, state => void (state.event = 'player-stop'))
       .addCase(player.playerToggleMute, state => void (state.event = 'mute-unmute'));
+  },
+  selectors    : {
+    getLastAction  : state => state.lastAction,
+    getActionsCount: state => state.actionsCount,
+    getEvent       : state => state.event
   }
 });
 
@@ -42,12 +47,4 @@ export const types = Object.fromEntries(new Map(
   Object.values(chronicles.actions).map(a => [a.type, a.type])
 ));
 
-const getLastAction   = state => state.lastAction;
-const getActionsCount = state => state.actionsCount;
-const getEvent        = state => state.event;
-
-export const selectors = {
-  getLastAction,
-  getEvent,
-  getActionsCount
-};
+export const selectors = chronicles.getSelectors();

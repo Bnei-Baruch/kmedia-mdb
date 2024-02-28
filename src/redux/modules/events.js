@@ -37,6 +37,20 @@ const eventsSlice = createSlice({
         }
       })
       .addCase(settingsActions.setContentLanguages, state => void (state.eventsByType = {}));
+  },
+
+  selectors    : {
+    getWip         : state => state.wip,
+    getError       : state => state.err,
+    getEventsByType: state => state.eventsByType,
+    getFilteredData: (state, type, filtersState, mdbState) => {
+      const predicates = filtersState.map(x => predicateMap[x.name](x.values)) || [];
+
+      return (state.eventsByType[type] || []).filter(x => {
+        const collection = mdb.getCollectionById(mdbState, x);
+        return predicates.every(p => p(collection));
+      });
+    }
   }
 });
 
@@ -47,8 +61,6 @@ export const { actions } = eventsSlice;
 export const types = Object.fromEntries(new Map(
   Object.values(eventsSlice.actions).map(a => [a.type, a.type])
 ));
-
-/* Selectors */
 
 const makeYearsPredicate = values => x => isEmpty(values)
   || values.some(v => x.start_date.substring(0, 4) <= v && v <= x.end_date.substring(0, 4)
@@ -69,22 +81,4 @@ const predicateMap = {
   'holidays-filter' : makeHolidaysPredicate
 };
 
-const getFilteredData = (state, type, filtersState, mdbState) => {
-  const predicates = filtersState.map(x => predicateMap[x.name](x.values)) || [];
-
-  return (state.eventsByType[type] || []).filter(x => {
-    const collection = mdb.getCollectionById(mdbState, x);
-    return predicates.every(p => p(collection));
-  });
-};
-
-const getWip          = state => state.wip;
-const getError        = state => state.err;
-const getEventsByType = state => state.eventsByType;
-
-export const selectors = {
-  getWip,
-  getError,
-  getEventsByType,
-  getFilteredData
-};
+export const selectors = eventsSlice.getSelectors();

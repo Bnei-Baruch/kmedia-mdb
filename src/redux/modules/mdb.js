@@ -283,6 +283,68 @@ const onCountCUSuccess = (state, action) => {
   state.countCU[action.payload.namespace] = action.payload.total;
 };
 
+const getCollectionById = (state, id) => state.cById[id];
+
+const getErrors = state => state.errors;
+
+const getWip = state => state.wip;
+
+const getDenormCollection = (state, id) => {
+  let c = state.cById[id];
+  if (c && Array.isArray(c.cuIDs)) {
+    // make a fresh copy, so we won't mess up normalized storage
+    c = { ...c };
+
+    c.content_units = c.cuIDs.map(x => state.cuById[x]).filter(x => !!x);
+  }
+
+  return c;
+};
+
+const denormalizeObject = (byID, obj) => (
+  Object.entries(obj || {}).reduce((acc, val) => {
+    const [k, v] = val;
+    const c      = byID[v];
+    if (c) {
+      acc[k] = c;
+    }
+
+    return acc;
+  }, {})
+);
+
+const getDenormContentUnit = (state, id) => {
+  let cu = state.cuById[id];
+
+  if (cu) {
+    // make a fresh copy, so we won't mess up normalized storage
+    cu = { ...cu };
+
+    // denormalize collections
+    cu.collections = denormalizeObject(state.cById, cu.cIDs);
+
+    // denormalize derived units
+    cu.derived_units = denormalizeObject(state.cuById, cu.dduIDs);
+
+    // denormalize source units
+    cu.source_units = denormalizeObject(state.cuById, cu.sduIDs);
+  }
+
+  return cu;
+};
+
+const getDenormCollectionWUnits = (state, id) => {
+  let c = state.cById[id];
+  if (c && Array.isArray(c.cuIDs)) {
+    // make a fresh copy, so we won't mess up normalized storage
+    c = { ...c };
+
+    c.content_units = c.cuIDs.map(x => getDenormContentUnit(state, x)).filter(x => !!x);
+  }
+
+  return c;
+};
+
 const mdbSlice = createSlice({
   name        : 'mdb',
   initialState: freshStore(),
@@ -432,6 +494,38 @@ const mdbSlice = createSlice({
     builder
       .addCase(ssrActions.prepare, onSSRPrepare)
       .addCase(settingsActions.setContentLanguages, () => freshStore());
+  },
+
+  selectors: {
+    getCollectionById,
+    getWip,
+    getErrors,
+    nestedGetCollectionById     : state => id => getCollectionById(state, id),
+    getUnitById                 : (state, id) => state.cuById[id],
+    getLastLessonId             : state => state.lastLessonId,
+    getFullUnitFetched          : state => state.fetched.units,
+    getFullCollectionFetched    : state => state.fetched.collections,
+    getCollections              : state => state.items,
+    getWindow                   : state => state.cWindow,
+    getDatepickerCO             : state => state.datepickerCO,
+    getSQDataWipErr             : state => !(getWip(state).sqData || getErrors(state).sqData),
+    getDenormLabel              : state => id => state.labelById[id],
+    getCountCu                  : (state, namespace) => state.countCU[namespace],
+    skipFetchedCO               : (state, ids) => ids.filter(id => !getDenormCollection(state, id)),
+    getLabelsByCU               : (state, id) => state.labelsByCU[id],
+    getPersonById               : state => id => state.personById[id],
+    getLabelById                : state => state.labelById,
+    skipFetchedCU               : (state, ids, with_files) => ids.filter(id => {
+      const cu = getDenormContentUnit(state, id);
+      if (!with_files) return !cu;
+      return !cu?.files?.length;
+    }),
+    getDenormContentUnit,
+    getDenormCollection,
+    nestedGetDenormCollection   : state => id => getDenormCollection(state, id),
+    getDenormCollectionWUnits,
+    nestedGetDenormContentUnit  : state => id => getDenormContentUnit(state, id),
+    nestedDenormCollectionWUnits: state => id => getDenormCollectionWUnits(state, id)
   }
 });
 
@@ -443,123 +537,4 @@ export const types = Object.fromEntries(new Map(
   Object.values(mdbSlice.actions).map(a => [a.type, a.type])
 ));
 
-/* Selectors */
-
-const getCollectionById        = (state, id) => state.cById[id];
-const nestedGetCollectionById  = state => id => getCollectionById(state, id);
-const getUnitById              = (state, id) => state.cuById[id];
-const getLastLessonId          = state => state.lastLessonId;
-const getWip                   = state => state.wip;
-const getFullUnitFetched       = state => state.fetched.units;
-const getFullCollectionFetched = state => state.fetched.collections;
-const getErrors                = state => state.errors;
-const getCollections           = state => state.items;
-const getWindow                = state => state.cWindow;
-const getDatepickerCO          = state => state.datepickerCO;
-const getSQDataWipErr          = state => !(getWip(state).sqData || getErrors(state).sqData);
-
-const getDenormCollection = (state, id) => {
-  let c = state.cById[id];
-  if (c && Array.isArray(c.cuIDs)) {
-    // make a fresh copy, so we won't mess up normalized storage
-    c = { ...c };
-
-    c.content_units = c.cuIDs.map(x => state.cuById[x]).filter(x => !!x);
-  }
-
-  return c;
-};
-
-const nestedGetDenormCollection = state => id => getDenormCollection(state, id);
-
-const denormalizeObject = (byID, obj) => (
-  Object.entries(obj || {}).reduce((acc, val) => {
-    const [k, v] = val;
-    const c      = byID[v];
-    if (c) {
-      acc[k] = c;
-    }
-
-    return acc;
-  }, {})
-);
-
-const getDenormContentUnit = (state, id) => {
-  let cu = state.cuById[id];
-
-  if (cu) {
-    // make a fresh copy, so we won't mess up normalized storage
-    cu = { ...cu };
-
-    // denormalize collections
-    cu.collections = denormalizeObject(state.cById, cu.cIDs);
-
-    // denormalize derived units
-    cu.derived_units = denormalizeObject(state.cuById, cu.dduIDs);
-
-    // denormalize source units
-    cu.source_units = denormalizeObject(state.cuById, cu.sduIDs);
-  }
-
-  return cu;
-};
-
-const nestedGetDenormContentUnit = state => id => getDenormContentUnit(state, id);
-
-const nestedDenormCollectionWUnits = state => id => getDenormCollectionWUnits(state, id);
-
-const getDenormCollectionWUnits = (state, id) => {
-  let c = state.cById[id];
-  if (c && Array.isArray(c.cuIDs)) {
-    // make a fresh copy, so we won't mess up normalized storage
-    c = { ...c };
-
-    c.content_units = c.cuIDs.map(x => getDenormContentUnit(state, x)).filter(x => !!x);
-  }
-
-  return c;
-};
-
-const getLabelById   = state => state.labelById;
-const getDenormLabel = state => id => state.labelById[id];
-
-const getCountCu = (state, namespace) => state.countCU[namespace];
-
-const skipFetchedCU = (state, ids, with_files) => ids.filter(id => {
-  const cu = getDenormContentUnit(state, id);
-  if (!with_files) return !cu;
-  return !cu?.files?.length;
-});
-const skipFetchedCO = (state, ids) => ids.filter(id => !getDenormCollection(state, id));
-
-const getLabelsByCU = (state, id) => state.labelsByCU[id];
-
-const getPersonById = state => id => state.personById[id];
-
-export const selectors = {
-  getCollectionById,
-  nestedGetCollectionById,
-  getUnitById,
-  getWip,
-  getErrors,
-  getFullUnitFetched,
-  getFullCollectionFetched,
-  getDenormCollection,
-  nestedGetDenormCollection,
-  getDenormCollectionWUnits,
-  nestedDenormCollectionWUnits,
-  getDenormContentUnit,
-  nestedGetDenormContentUnit,
-  getLastLessonId,
-  getCollections,
-  getWindow,
-  getDatepickerCO,
-  getSQDataWipErr,
-  getCountCu,
-  skipFetchedCU,
-  skipFetchedCO,
-  getLabelsByCU,
-  getDenormLabel,
-  getLabelById,
-  getPersonById
-};
+export const selectors = mdbSlice.getSelectors();

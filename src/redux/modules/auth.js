@@ -17,6 +17,11 @@ const authSlice = createSlice({
         state.user = null;
       }
     }
+  },
+
+  selectors: {
+    getUser : state => state.user,
+    getToken: state => state.token
   }
 });
 
@@ -28,7 +33,4 @@ export const types = Object.fromEntries(new Map(
   Object.values(authSlice.actions).map(a => [a.type, a.type])
 ));
 
-/* Selectors */
-const getUser          = state => state.user;
-const getToken         = state => state.token;
-export const selectors = { getUser, getToken };
+export const selectors = authSlice.getSelectors();

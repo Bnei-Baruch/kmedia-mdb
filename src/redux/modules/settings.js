@@ -62,6 +62,25 @@ const settingsSlice = createSlice({
     setContentLanguages: (state, { payload }) => void (onSetContentLanguages(state, payload)),
     setShowAllContent  : (state, { payload }) => void (onSetShowAllContent(state, payload)),
     setPageSize        : (state, { payload }) => void (onSetPageSize(state, payload))
+  },
+
+  selectors: {
+    getUrlLang         : state => (state.urlLanguage.length && state.urlLanguage[0]) || '',
+    getUIDir           : state => !!state.urlLanguage.length ? getLanguageDirection(state.urlLanguage[0]) : state.uiDir,
+    getUILang          : (state, skipUrl) => !state.urlLanguage.length || skipUrl ? state.uiLang : state.urlLanguage[0],
+    getShowAllContent  : state => state.showAllContent,
+    getPageSize        : state => state.pageSize,
+    getContentLanguages: (state, skipFlags) => {
+      if (state.urlLanguage.length && !skipFlags) {
+        return state.urlLanguage;
+      }
+
+      if (state.showAllContent && !skipFlags) {
+        return ALL_LANGUAGES;
+      }
+
+      return state.contentLanguages;
+    }
   }
 });
 
@@ -73,29 +92,4 @@ export const types = Object.fromEntries(new Map(
   Object.values(settingsSlice.actions).map(a => [a.type, a.type])
 ));
 
-const getUrlLang          = state => (state.urlLanguage.length && state.urlLanguage[0]) || '';
-const getUIDir            = state => !!state.urlLanguage.length ? getLanguageDirection(state.urlLanguage[0]) : state.uiDir;
-const getUILang           = (state, skipUrl) => !state.urlLanguage.length || skipUrl ? state.uiLang : state.urlLanguage[0];
-const getContentLanguages = (state, skipFlags) => {
-  if (state.urlLanguage.length && !skipFlags) {
-    return state.urlLanguage;
-  }
-
-  if (state.showAllContent && !skipFlags) {
-    return ALL_LANGUAGES;
-  }
-
-  return state.contentLanguages;
-};
-
-const getShowAllContent = state => state.showAllContent;
-const getPageSize       = state => state.pageSize;
-
-export const selectors = {
-  getUrlLang,
-  getUIDir,
-  getUILang,
-  getContentLanguages,
-  getShowAllContent,
-  getPageSize
-};
+export const selectors = settingsSlice.getSelectors();
