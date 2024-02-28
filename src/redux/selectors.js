@@ -258,7 +258,7 @@ export const fetchImageGetBySrcSelector = createSelector(getFetchImage, _2, (i, 
 
 // myNotes
 export const myNotesGetListSelector     = createSelector([getMyNotes], n => myNotesSel.getList(n));
-export const myNotesGetByIdSelector     = createSelector(getMyNotes, _2, (n, id) => myNotesSel.getById(n, id));
+export const myNotesGetByIdSelector     = createSelector(getMyNotes, n => myNotesSel.getById(n));
 export const myNotesGetSelectedSelector = createSelector([getMyNotes], n => myNotesSel.getSelected(n));
 export const myNotesGetStatusSelector   = createSelector([getMyNotes], n => myNotesSel.getStatus(n));
 
@@ -278,5 +278,5 @@ export const textPageGetScrollDirSelector    = createSelector([getTextPage], t =
 export const textPageGetSideOffsetSelector   = createSelector([getTextPage], t => textPageSel.getSideOffset(t));
 export const textPageGetTextOnlySelector     = createSelector([getTextPage], t => textPageSel.getTextOnly(t));
 export const textPageGetScanFileSelector     = createSelector([getTextPage], t => textPageSel.getScanFile(t));
-export const textPageGetIsSearchSelector       = createSelector([getTextPage], t => textPageSel.getIsSearch(t));
+export const textPageGetIsSearchSelector     = createSelector([getTextPage], t => textPageSel.getIsSearch(t));
 export const textPageGetFileFilterSelector   = createSelector([getTextPage], t => textPageSel.getFileFilter(t));
