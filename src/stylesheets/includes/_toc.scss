@@ -76,15 +76,19 @@
 
       .toc_scroll_align {
         display: flex;
-        align-items: flex-end;
+        align-items: flex-start;
         height: fit-content;
         min-height: 100%;
+
+        .is-mobile & {
+          align-items: flex-end;
+        }
       }
+
 
       .rtl & {
         transform: translate3d(100%, 0, 0);
       }
-
     }
 
     .is-dark & .toc_scroll {
