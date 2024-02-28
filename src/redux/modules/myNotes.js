@@ -85,7 +85,7 @@ const myNotesService = createSlice({
 
   selectors: {
     getList    : state => state.ids || [],
-    getById    : (state, id) => state.byId[id],
+    getById    : state => state.byId,
     getWIP     : state => state.wip,
     getErr     : state => state.errors,
     getStatus  : state => state.noteStatus,

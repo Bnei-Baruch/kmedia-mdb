@@ -45,7 +45,7 @@ const TagItemContainerHook = (
   }
 ) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
-  const tag                = useSelector(tagsGetTagByIdSelector(id));
+  const tag                = useSelector(tagsGetTagByIdSelector)(id);
   const views              = useSelector(state => recommendedGetViewsSelector(state, id));
 
   if (!tag) return null;
