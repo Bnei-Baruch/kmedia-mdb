@@ -514,6 +514,7 @@ const mdbSlice = createSlice({
     skipFetchedCO               : (state, ids) => ids.filter(id => !getDenormCollection(state, id)),
     getLabelsByCU               : (state, id) => state.labelsByCU[id],
     getPersonById               : state => id => state.personById[id],
+    getLabelById                : state => state.labelById,
     skipFetchedCU               : (state, ids, with_files) => ids.filter(id => {
       const cu = getDenormContentUnit(state, id);
       if (!with_files) return !cu;

@@ -9,8 +9,7 @@ import { selectSuitableLanguage } from '../../helpers/language';
 import { CT_SOURCE } from '../../helpers/consts';
 
 const updateLocalStorage = state => {
-  const settings = { ...state.settings };
-  localStorage.setItem('library-settings', JSON.stringify(settings));
+  localStorage.setItem('library-settings', JSON.stringify(state.settings));
 };
 
 const buildUrl = (state, pathname) => {
@@ -164,7 +163,7 @@ const textPageSlice = createSlice({
   },
 
   selectors: {
-    getSettings    : state => state.setting,
+    getSettings    : state => state.settings,
     getTocIsActive : state => state.tocIsActive,
     getTocInfo     : state => state.tocInfo,
     getSubject     : state => state.subject,

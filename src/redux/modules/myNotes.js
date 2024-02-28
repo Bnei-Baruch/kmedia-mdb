@@ -66,7 +66,7 @@ const myNotesService = createSlice({
       state.selected      = null;
       state.noteStatus    = NOTE_STATUS.none;
     },
-    remove: () => void ({}),
+    remove       : () => void ({}),
     removeSuccess: (state, { payload }) => {
       state.ids           = state.ids.filter(k => k !== payload);
       state.byId[payload] = null;
@@ -76,18 +76,20 @@ const myNotesService = createSlice({
       state.selected      = null;
       state.noteStatus    = NOTE_STATUS.none;
     },
-    setSelected: (state, { payload }) => void (state.selected = payload),
-    setStatus: (state, { payload }) => void (state.noteStatus = payload ?? NOTE_STATUS.none),
+    setSelected  : (state, { payload }) => void (state.selected = payload),
+    setStatus    : (state, { payload }) => void (state.noteStatus = payload ?? NOTE_STATUS.none)
   },
   extraReducers: builder => {
     builder.addCase(textPageActions.fetchSubject, state => void (state.noteStatus = NOTE_STATUS.none));
   },
 
   selectors: {
-    getList: state => state.ids || [],
-    getById: (state, id) => state.byId[id],
-    getWIP : state => state.wip,
-    getErr : state => state.errors
+    getList    : state => state.ids || [],
+    getById    : (state, id) => state.byId[id],
+    getWIP     : state => state.wip,
+    getErr     : state => state.errors,
+    getStatus  : state => state.noteStatus,
+    getSelected: state => state.selected
   }
 });
 
