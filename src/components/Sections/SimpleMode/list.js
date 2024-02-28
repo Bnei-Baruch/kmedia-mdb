@@ -8,21 +8,38 @@ import WipErr from '../../shared/WipErr/WipErr';
 import { FrownSplash } from '../../shared/Splash/Splash';
 import { isEmpty } from '../../../helpers/utils';
 import { SectionLogo } from '../../../helpers/images';
-import { mdbGetDenormCollectionWUnitsSelector, mdbGetDenormContentUnitSelector, simpleModeGetItemsSelector, simpleModeGetErrorSelector, simpleModeGetWipSelector } from '../../../redux/selectors';
+import {
+  mdbGetDenormCollectionWUnitsSelector,
+  mdbGetDenormContentUnitSelector,
+  settingsGetUILangSelector
+} from '../../../redux/selectors';
+import { useSimpleModeQuery } from '../../../redux/api/simpleMode';
 
-const SimpleModeList = ({ filesLanguages, t, renderUnit }) => {
-  const wip        = useSelector(simpleModeGetWipSelector);
-  const err        = useSelector(simpleModeGetErrorSelector);
-  const reduxItems = useSelector(simpleModeGetItemsSelector);
-  const lessons    = useSelector(state => reduxItems.lessons.map(x => mdbGetDenormCollectionWUnitsSelector(state, x)).filter(x => !isEmpty(x)));
-  const others     = useSelector(state => reduxItems.others.map(x => mdbGetDenormContentUnitSelector(state, x)).filter(x => !isEmpty(x)));
+const SimpleModeList = ({ filesLanguages, t, renderUnit, selectedDate }) => {
 
-  const wipErr = WipErr({ wip, err, t });
+  const uiLanguage = useSelector(settingsGetUILangSelector);
+
+  const { isError, isLoading, isSuccess, error, data } = useSimpleModeQuery({
+    date: selectedDate,
+    uiLanguage,
+    filesLanguages
+  });
+
+  const dataLessons = isSuccess ? data.lessons : [];
+  const dataOthers  = isSuccess ? data.others : [];
+  const lessons     = useSelector(state => dataLessons.map(x => mdbGetDenormCollectionWUnitsSelector(state, x.id)).filter(x => !isEmpty(x)));
+  const others      = useSelector(state => dataOthers.map(x => mdbGetDenormContentUnitSelector(state, x.id)).filter(x => !isEmpty(x)));
+
+  const wipErr = WipErr({ isLoading, isError, t });
   if (wipErr) {
+    if (error) {
+      console.error('========> SimpleModeList', error);
+    }
+
     return wipErr;
   }
 
-  if (lessons.length === 0 && others.length === 0) {
+  if (!isSuccess || (lessons.length === 0 && others.length === 0)) {
     return <FrownSplash text={t('simple-mode.no-files-found-for-date')}/>;
   }
 
@@ -54,8 +71,9 @@ const SimpleModeList = ({ filesLanguages, t, renderUnit }) => {
 
 SimpleModeList.propTypes = {
   filesLanguages: PropTypes.arrayOf(PropTypes.string).isRequired,
-  t             : PropTypes.func.isRequired,
-  renderUnit    : PropTypes.func.isRequired
+  t: PropTypes.func.isRequired,
+  renderUnit: PropTypes.func.isRequired,
+  selectedDate: PropTypes.string.isRequired,
 };
 
 export default withTranslation()(SimpleModeList);
