@@ -1,19 +1,17 @@
 import React, { useContext, useEffect, useState } from 'react';
 import moment from 'moment';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { withTranslation } from 'react-i18next';
 
 import { getQuery, updateQuery } from '../../../helpers/url';
 import { isEmpty, noop } from '../../../helpers/utils';
-import { actions } from '../../../redux/modules/simpleMode';
 import Page from './Page';
 import { groupOtherMediaByType, renderCollection } from './RenderListHelpers';
 import { ClientChroniclesContext, DeviceInfoContext } from '../../../helpers/app-contexts';
-import { settingsGetContentLanguagesSelector, settingsGetUILangSelector } from '../../../redux/selectors';
+import { settingsGetContentLanguagesSelector } from '../../../redux/selectors';
 
 const SimpleModeContainer = () => {
-  const uiLang           = useSelector(settingsGetUILangSelector);
   const contentLanguages = useSelector(settingsGetContentLanguagesSelector);
 
   const { deviceInfo: { browser: { name: browserName } } } = useContext(DeviceInfoContext);
@@ -34,16 +32,9 @@ const SimpleModeContainer = () => {
     return newDate;
   });
 
-  const dispatch = useDispatch();
-
   useEffect(() => {
     setFilesLanguages(contentLanguages);
   }, [contentLanguages]);
-
-  useEffect(() => {
-    // We want to fetch again when uiLang or the date changed.
-    dispatch(actions.fetchForDate({ date: selectedDate }));
-  }, [dispatch, selectedDate, uiLang]);
 
   const handleDayClick = (selDate, { disabled } = {}) => {
     if (disabled) {
@@ -82,8 +73,8 @@ const SimpleModeContainer = () => {
   const pageProps = {
     selectedDate,
     filesLanguages,
-    renderUnit      : renderUnitOrCollection,
-    onDayClick      : handleDayClick,
+    renderUnit: renderUnitOrCollection,
+    onDayClick: handleDayClick,
     onLanguageChange: selected => setFilesLanguages(selected),
     blinkLangSelect
   };

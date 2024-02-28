@@ -16,6 +16,7 @@ import React from 'react';
 import { hydrateRoot } from 'react-dom/client';
 import ReactGA from 'react-ga';
 import { createBrowserHistory } from 'history';
+import { setupListeners } from '@reduxjs/toolkit/query';
 
 import { DEFAULT_UI_LANGUAGE, LANG_UKRAINIAN, KC_BOT_USER_NAME } from './helpers/consts';
 import i18n, { initializeI18n } from './helpers/i18nnext';
@@ -37,6 +38,10 @@ function hydrateApp(kcInfo) {
   const history = createBrowserHistory();
 
   const store = createStore({ ...window.__data, auth: kcInfo }, history);
+
+  // optional, but required for refetchOnFocus/refetchOnReconnect behaviors
+  // see `setupListeners` docs - takes an optional callback as the 2nd arg for customization
+  setupListeners(store.dispatch);
 
   store.dispatch(ssr.hydrate());
   // console.log('window.__data', window.__data);

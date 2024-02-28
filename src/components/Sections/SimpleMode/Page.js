@@ -181,7 +181,7 @@ const SimpleModePage = (
                 />
               </div>
             </div>
-            <SimpleModeList filesLanguages={filesLanguages} renderUnit={renderUnit}/>
+            <SimpleModeList filesLanguages={filesLanguages} renderUnit={renderUnit} selectedDate={selectedDate}/>
           </Grid.Column>
           <Grid.Column only="tablet computer" tablet={16} computer={4}>
             <div className="stick-calendar">
