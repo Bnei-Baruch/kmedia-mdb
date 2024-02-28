@@ -113,6 +113,8 @@ const onReactionsCountSuccess = (state, data) => {
   }
 };
 
+const getItemByKey = (state, namespace, key) => state[namespace].byKey[key];
+
 const mySlice = createSlice({
   name        : 'my',
   initialState: {
@@ -162,6 +164,24 @@ const mySlice = createSlice({
 
     reactionsCount       : () => void ({}),
     reactionsCountSuccess: (state, { payload }) => void (onReactionsCountSuccess(state, payload))
+  },
+
+  selectors: {
+    getList          : (state, namespace) => state[namespace]?.keys.map(key => getItemByKey(state, namespace, key)),
+    getItemByKey,
+    getWIP           : (state, namespace) => state[namespace]?.wip || false,
+    getErr           : (state, namespace) => state[namespace]?.errors || null,
+    getDeleted       : (state, namespace) => state[namespace].deleted,
+    getPageNo        : (state, namespace) => state[namespace].pageNo,
+    getTotal         : (state, namespace) => state[namespace].total,
+    getReactionsCount: (state, key) => state.reactionsCount[key],
+    getInfo          : (state, namespace) => (
+      {
+        err    : state[namespace]?.errors || null,
+        wip    : state[namespace]?.wip || false,
+        fetched: state[namespace]?.fetched || false
+      }
+    )
   }
 });
 
@@ -173,32 +193,4 @@ export const types = Object.fromEntries(new Map(
   Object.values(mySlice.actions).map(a => [a.type, a.type])
 ));
 
-/* Selectors */
-const getList      = (state, namespace) => state[namespace]?.keys.map(key => getItemByKey(state, namespace, key));
-const getItemByKey = (state, namespace, key) => state[namespace].byKey[key];
-
-const getWIP            = (state, namespace) => state[namespace]?.wip || false;
-const getErr            = (state, namespace) => state[namespace]?.errors || null;
-const getInfo           = (state, namespace) => (
-  {
-    err    : state[namespace]?.errors || null,
-    wip    : state[namespace]?.wip || false,
-    fetched: state[namespace]?.fetched || false
-  }
-);
-const getDeleted        = (state, namespace) => state[namespace].deleted;
-const getPageNo         = (state, namespace) => state[namespace].pageNo;
-const getTotal          = (state, namespace) => state[namespace].total;
-const getReactionsCount = (state, key) => state.reactionsCount[key];
-
-export const selectors = {
-  getList,
-  getItemByKey,
-  getWIP,
-  getErr,
-  getInfo,
-  getDeleted,
-  getPageNo,
-  getTotal,
-  getReactionsCount
-};
+export const selectors = mySlice.getSelectors();

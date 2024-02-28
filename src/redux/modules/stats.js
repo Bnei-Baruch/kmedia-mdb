@@ -31,6 +31,10 @@ const statsSlice = createSlice({
       }
     },
     clearCUStats       : (state, { payload: { namespace } }) => void (state.cuStats[namespace] ||= {})
+  },
+
+  selectors: {
+    getCUStats: (state, namespace) => state.cuStats[namespace] || {}
   }
 });
 
@@ -42,10 +46,4 @@ export const types = Object.fromEntries(new Map(
   Object.values(statsSlice.actions).map(a => [a.type, a.type])
 ));
 
-/* Selectors */
-
-const getCUStats = (state, namespace) => state.cuStats[namespace] || {};
-
-export const selectors = {
-  getCUStats
-};
+export const selectors = statsSlice.getSelectors();

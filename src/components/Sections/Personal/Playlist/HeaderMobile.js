@@ -59,7 +59,7 @@ const PlaylistHeaderMobile = ({ confirmSuccess, save, playlist, t }) => {
       </Header>
       <div className="summary-container">
         <div>
-          <Button basic onClick={toggleEditName} className="clear_button  margin-right-8 margin-left-8">
+          <Button basic onClick={toggleEditName} className="clear_button margin-right-8 margin-left-8">
             <Icon name={'edit outline'} size="large"/>
           </Button>
           <Confirm

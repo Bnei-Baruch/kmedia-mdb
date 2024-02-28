@@ -26,6 +26,10 @@ const imageSlice = createSlice({
       state.bySrc[src] ||= {};
       state.bySrc[src].wip = true;
     }
+  },
+
+  selectors: {
+    getBySrc: (state, src) => state.bySrc[src] || false
   }
 });
 
@@ -37,7 +41,5 @@ export const types = Object.fromEntries(new Map(
   Object.values(imageSlice.actions).map(a => [a.type, a.type])
 ));
 
-/* Selectors */
-const getBySrc = (state, src) => state.bySrc[src] || false;
+export const selectors = imageSlice.getSelectors();
 
-export const selectors = { getBySrc };

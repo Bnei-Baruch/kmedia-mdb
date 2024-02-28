@@ -44,6 +44,21 @@ const recommendedSlice = createSlice({
         }
       })
       .addCase(chronicles.userInactive, state => void (state.skipUids.length = 0));
+  },
+
+  selectors: {
+    getWip                 : state => state.wip,
+    getError               : state => state.err,
+    getRecommendedItems    : (state, feedName) => (state.feeds[feedName] || []),
+    getSkipUids            : state => state.skipUids,
+    getViews               : (state, uid) => (state.views[uid] || -1),
+    getManyViews           : (state, uids) => uids?.map(uid => (state.views[uid] || -1)),
+    getWatchingNow         : (state, uid) => (state.watchingNow[uid] || -1),
+    getManyWatchingNow     : (state, uids) => uids?.map(uid => (state.watchingNow[uid] || -1)),
+    getManyRecommendedItems: (state, feedNames) => feedNames?.reduce((acc, feedName) => {
+      acc[feedName] = state.feeds[feedName] || [];
+      return acc;
+    }, {})
   }
 });
 
@@ -55,27 +70,4 @@ export const types = Object.fromEntries(new Map(
   Object.values(recommendedSlice.actions).map(a => [a.type, a.type])
 ));
 
-const getWip                  = state => state.wip;
-const getError                = state => state.err;
-const getRecommendedItems     = (state, feedName) => (state.feeds[feedName] || []);
-const getManyRecommendedItems = (state, feedNames) => feedNames?.reduce((acc, feedName) => {
-  acc[feedName] = state.feeds[feedName] || [];
-  return acc;
-}, {});
-const getSkipUids             = state => state.skipUids;
-const getViews                = (state, uid) => (state.views[uid] || -1);
-const getManyViews            = (state, uids) => uids?.map(uid => (state.views[uid] || -1));
-const getWatchingNow          = (state, uid) => (state.watchingNow[uid] || -1);
-const getManyWatchingNow      = (state, uids) => uids?.map(uid => (state.watchingNow[uid] || -1));
-
-export const selectors = {
-  getWip,
-  getError,
-  getRecommendedItems,
-  getManyRecommendedItems,
-  getSkipUids,
-  getViews,
-  getManyViews,
-  getWatchingNow,
-  getManyWatchingNow
-};
+export const selectors = recommendedSlice.getSelectors();

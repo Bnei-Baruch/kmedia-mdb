@@ -28,6 +28,12 @@ const musicSlice = createSlice({
         state.err = state.err.toString();
       }
     }).addCase(settingsActions.setContentLanguages, status => void (status.musicData = []));
+  },
+
+  selectors: {
+    getWip      : state => state.wip,
+    getError    : state => state.err,
+    getMusicData: state => state.musicData
   }
 });
 
@@ -39,14 +45,4 @@ export const types = Object.fromEntries(new Map(
   Object.values(musicSlice.actions).map(a => [a.type, a.type])
 ));
 
-/* Selectors */
-
-const getWip       = state => state.wip;
-const getError     = state => state.err;
-const getMusicData = state => state.musicData;
-
-export const selectors = {
-  getWip,
-  getError,
-  getMusicData
-};
+export const selectors = musicSlice.getSelectors();

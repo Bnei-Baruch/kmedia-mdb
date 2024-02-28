@@ -10,6 +10,11 @@ const bookmarkFilterSlice = createSlice({
       reducer: (state, { payload: { key, value } }) => void (state[key] = value)
     },
     deleteFilter: (state, { payload: { key } }) => void (state[key] = null)
+  },
+
+  selectors: {
+    getAll  : state => state,
+    getByKey: (state, key) => state[key]
   }
 });
 
@@ -21,11 +26,4 @@ export const types = Object.fromEntries(new Map(
   Object.values(bookmarkFilterSlice.actions).map(a => [a.type, a.type])
 ));
 
-/* Selectors */
-const getAll   = state => state;
-const getByKey = (state, key) => state[key];
-
-export const selectors = {
-  getAll,
-  getByKey
-};
+export const selectors = bookmarkFilterSlice.getSelectors();

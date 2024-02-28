@@ -153,6 +153,8 @@ const onReceiveLocationsStats = (status, { payload: { locations, namespace, isPr
   status[namespace] = { ...status[namespace], [FN_LOCATIONS]: stats };
 };
 
+const getStats = (state, ns, fn) => id => state[ns]?.[fn]?.byId[id] || 0;
+
 const filtersAsideSlice = createSlice({
   name        : 'filters_aside',
   initialState: {},
@@ -191,6 +193,18 @@ const filtersAsideSlice = createSlice({
 
     receiveLocationsStats : onReceiveLocationsStats,
     receiveSingleTypeStats: onReceiveSingleTypeStats
+  },
+
+  selectors: {
+    getTree         : (state, ns, fn) => state[ns]?.[fn]?.tree || [],
+    getWipErr       : (state, ns) => ({ wip: state[ns]?.wip || false, err: state[ns]?.err || null }),
+    isReady         : (state, ns) => !!state[ns]?.isReady,
+    citiesByCountry : (state, ns) => id => state[ns]?.[FN_LOCATIONS]?.citiesByCountry[id] || [],
+    getMultipleStats: (state, ns, fn) => ids => {
+      const func = getStats(state, ns, fn);
+      return ids.map(id => func(id));
+    },
+    getStats
   }
 });
 
@@ -202,23 +216,4 @@ export const types = Object.fromEntries(new Map(
   Object.values(filtersAsideSlice.actions).map(a => [a.type, a.type])
 ));
 
-/* Selectors */
-const citiesByCountry  = (state, ns) => id => state[ns]?.[FN_LOCATIONS]?.citiesByCountry[id] || [];
-const getMultipleStats = (state, ns, fn) => ids => {
-  const func = getStats(state, ns, fn);
-  return ids.map(id => func(id))
-};
-
-const getStats         = (state, ns, fn) => id => state[ns]?.[fn]?.byId[id] || 0;
-const getTree          = (state, ns, fn) => state[ns]?.[fn]?.tree || [];
-const getWipErr        = (state, ns) => ({ wip: state[ns]?.wip || false, err: state[ns]?.err || null });
-const isReady          = (state, ns) => !!state[ns]?.isReady;
-
-export const selectors = {
-  getStats,
-  getMultipleStats,
-  getTree,
-  isReady,
-  getWipErr,
-  citiesByCountry
-};
+export const selectors = filtersAsideSlice.getSelectors();

@@ -20,6 +20,19 @@ const setFilterState = (state, namespace, name, newFilterStateReducer) => {
   }
 };
 
+const getFilters = (state, namespace) => {
+  const filters = state[namespace] ? state[namespace] : null;
+
+  if (!filters) {
+    return [];
+  }
+
+  return Object.keys(filters).map(name => ({
+    name,
+    ...filters[name]
+  }));
+};
+
 const filtersSlice = createSlice({
   name        : 'filters',
   initialState: {},
@@ -73,9 +86,9 @@ const filtersSlice = createSlice({
       prepare: (namespace, filters) => ({ payload: { namespace, filters } }),
       reducer: (state, action) => {
         const { payload: { namespace, filters } } = action;
-        const oldNamespace          = state[namespace] || {};
+        const oldNamespace                        = state[namespace] || {};
         state.isHydrated ||= {};
-        state.isHydrated[namespace] = true;
+        state.isHydrated[namespace]               = true;
 
         state[namespace] = {
           // ...oldNamespace,  If we're hydrating then we need a fresh state
@@ -104,6 +117,14 @@ const filtersSlice = createSlice({
         state.isHydrated[namespace] = false;
       }
     }
+  },
+
+  selectors: {
+    getNSFilters      : (state, namespace) => state[namespace] || {},
+    getFilterByName   : (state, namespace, name) => state[namespace]?.[name],
+    getNotEmptyFilters: (state, namespace) => getFilters(state, namespace).filter(x => !isEmpty(x?.values)),
+    getIsHydrated     : (state, namespace) => !!state.isHydrated && !!state.isHydrated[namespace],
+    getFilters
   }
 });
 
@@ -115,33 +136,4 @@ export const types = Object.fromEntries(new Map(
   Object.values(filtersSlice.actions).map(a => [a.type, a.type])
 ));
 
-/* Selectors */
-
-const getNSFilters = (state, namespace) => state[namespace] || {};
-
-const getFilterByName = (state, namespace, name) => state[namespace]?.[name];
-
-const getFilters = (state, namespace) => {
-  const filters = state[namespace] ? state[namespace] : null;
-
-  if (!filters) {
-    return [];
-  }
-
-  return Object.keys(filters).map(name => ({
-    name,
-    ...filters[name]
-  }));
-};
-
-const getNotEmptyFilters = (state, namespace) => getFilters(state, namespace).filter(x => !isEmpty(x?.values));
-
-const getIsHydrated = (state, namespace) => !!state.isHydrated && !!state.isHydrated[namespace];
-
-export const selectors = {
-  getNSFilters,
-  getFilters,
-  getNotEmptyFilters,
-  getIsHydrated,
-  getFilterByName
-};
+export const selectors = filtersSlice.getSelectors();

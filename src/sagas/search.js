@@ -80,7 +80,6 @@ export function* search(action) {
     // Clear pagination and filters.
     if (prevQuery !== '' && prevQuery !== query && (pageNo !== 1 || !!filterParams)) {
       if (pageNo !== 1) {
-        yield put(actions.setPage(1));
         yield* urlUpdateQuery(query => Object.assign(query, { page: 1 }));
         pageNo = 1;
       }
@@ -146,7 +145,7 @@ export function* search(action) {
       const seriesLoaded   = yield select(lessonsGetSeriesLoaded);
 
       if (cuIDsToFetch.length === 0 && cIDsToFetch.length === 0 && postIDsToFetch.length === 0 && seriesLoaded) {
-        yield put(actions.searchSuccess({ searchResults: data, searchRequest: request, filterParams, query }));
+        yield put(actions.searchSuccess({ searchResults: data, searchRequest: request, filterParams, query, pageNo }));
         return;
       }
 
@@ -208,7 +207,7 @@ export function* search(action) {
       }
     }
 
-    yield put(actions.searchSuccess({ searchResults: data, searchRequest: request, filterParams, query }));
+    yield put(actions.searchSuccess({ searchResults: data, searchRequest: request, filterParams, query, pageNo }));
   } catch (err) {
     yield put(actions.searchFailure(err));
   }

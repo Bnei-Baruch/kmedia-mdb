@@ -31,47 +31,6 @@ const onSSRPrepare = state => {
   }
 };
 
-const lessonsSlice = createSlice({
-  name: 'lessons',
-  initialState,
-
-  reducers     : {
-    setTab: () => ({}),
-
-    fetchAllSeries       : state => void (state.wip.series = true),
-    fetchAllSeriesSuccess: (state, { payload }) => {
-      payload.seriesIDs   = payload.collections.map(x => x.id);
-      state.wip.series    = false;
-      state.errors.series = null;
-      state.seriesLoaded  = true;
-    },
-    fetchAllSeriesFailure: (state, { payload }) => {
-      state.wip.series    = false;
-      state.errors.series = payload;
-    }
-  },
-  extraReducers: builder => {
-    builder
-      .addCase(ssrActions.prepare, onSSRPrepare)
-      .addCase(settingsActions.setContentLanguages, onSetLanguage);
-  }
-});
-
-export default lessonsSlice.reducer;
-
-export const { actions } = lessonsSlice;
-
-export const types = Object.fromEntries(new Map(
-  Object.values(lessonsSlice.actions).map(a => [a.type, a.type])
-));
-
-/* Selectors */
-
-const getWip          = state => state.wip;
-const getErrors       = state => state.errors;
-const getSeriesIDs    = state => state.seriesIDs;
-const getSeriesLoaded = state => state.seriesLoaded;
-
 const $$sortTree = node => {
   if (isEmpty(node)) {
     return [];
@@ -277,12 +236,48 @@ const getSerieByTagId = (state, mdbState, tagsState) => tId => {
   return { ...tag, collections };
 };
 
-export const selectors = {
-  getWip,
-  getErrors,
-  getSeriesIDs,
-  getSeriesLoaded,
-  getSeriesTree,
-  getSerieBySourceId,
-  getSerieByTagId
-};
+const lessonsSlice = createSlice({
+  name: 'lessons',
+  initialState,
+
+  reducers     : {
+    setTab: () => ({}),
+
+    fetchAllSeries       : state => void (state.wip.series = true),
+    fetchAllSeriesSuccess: (state, { payload }) => {
+      payload.seriesIDs   = payload.collections.map(x => x.id);
+      state.wip.series    = false;
+      state.errors.series = null;
+      state.seriesLoaded  = true;
+    },
+    fetchAllSeriesFailure: (state, { payload }) => {
+      state.wip.series    = false;
+      state.errors.series = payload;
+    }
+  },
+  extraReducers: builder => {
+    builder
+      .addCase(ssrActions.prepare, onSSRPrepare)
+      .addCase(settingsActions.setContentLanguages, onSetLanguage);
+  },
+
+  selectors: {
+    getWip         : state => state.wip,
+    getErrors      : state => state.errors,
+    getSeriesIDs   : state => state.seriesIDs,
+    getSeriesLoaded: state => state.seriesLoaded,
+    getSerieByTagId,
+    getSerieBySourceId,
+    getSeriesTree
+  }
+});
+
+export default lessonsSlice.reducer;
+
+export const { actions } = lessonsSlice;
+
+export const types = Object.fromEntries(new Map(
+  Object.values(lessonsSlice.actions).map(a => [a.type, a.type])
+));
+
+export const selectors = lessonsSlice.getSelectors();
