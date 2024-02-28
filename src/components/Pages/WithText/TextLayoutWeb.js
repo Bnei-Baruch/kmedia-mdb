@@ -28,15 +28,14 @@ import { useFetchNotes } from './Notes/useFetchNotes';
 import { TEXT_PAGE_ADDITIONS_MODS } from '../../../helpers/consts';
 
 const TextLayoutWeb = props => {
-  const
-    {
-      toolbar    = null,
-      toc        = null,
-      prevNext   = null,
-      breadcrumb = null,
-      playerPage = false,
-      id
-    } = props;
+  const {
+          toolbar    = null,
+          toc        = null,
+          prevNext   = null,
+          breadcrumb = null,
+          playerPage = false,
+          id
+        } = props;
 
   const ref   = useRef();
   const { t } = useTranslation();
@@ -44,9 +43,8 @@ const TextLayoutWeb = props => {
   const scrollDir          = useSelector(textPageGetScrollDirSelector);
   const subject            = useSelector(textPageGetSubjectSelector);
   const hasSel             = !!useSelector(textPageGetUrlInfoSelector).select;
-  const settings           = useSelector(textPageGetSettings) || { theme: {} };
-  const { theme }          = settings;
-  const textOnly           = useSelector(textPageGetTextOnlySelector);
+  const { theme }          = useSelector(textPageGetSettings);
+  const additionsMode      = useSelector(textPageGetAdditionsModeSelector);
   const isSearch           = useSelector(textPageGetIsSearchSelector);
   const { isMobileDevice } = useContext(DeviceInfoContext);
 

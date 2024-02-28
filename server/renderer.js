@@ -24,13 +24,20 @@ import { getUILangFromPath } from '../src/helpers/url';
 import { isEmpty } from '../src/helpers/utils';
 import createStore from '../src/redux/createStore';
 import { actions as ssr } from '../src/redux/modules/ssr';
-import { actions as settings, initialState as settingsInitialState, onSetUILanguage, onSetContentLanguages, onSetUrlLanguage } from '../src/redux/modules/settings';
+import {
+  actions as settings,
+  initialState as settingsInitialState,
+  onSetUILanguage,
+  onSetContentLanguages,
+  onSetUrlLanguage
+} from '../src/redux/modules/settings';
 import i18nnext from './i18nnext';
 import App from '../src/components/App/App';
 import moment from 'moment/moment';
 import { pick } from 'lodash/object';
 import { HelmetProvider } from 'react-helmet-async';
 import ErrorBoundary from '../src/components/ErrorBoundary';
+import { backendApi } from '../src/redux/api/backendApi';
 
 const helmetContext = {};
 
@@ -167,7 +174,13 @@ async function serverRenderAuthorised(req, res, next, htmlData, uiLang, bot) {
     const promises = branch.map(({ route, params }) => {
         show_console && console.log('serverRender: libraryPage source was found', route.ssrData?.name);
         return route.ssrData
-          ? route.ssrData(store, { params, parsedURL: new URL(req.originalUrl, 'https://example.com') }, show_console)
+          ? route.ssrData(store, {
+              params,
+              parsedURL: new URL(req.originalUrl, 'https://example.com'),
+              uiLang: cookieUILang,
+              contentLanguages: cookieContentLanguages,
+            },
+            show_console)
           : Promise.resolve(null);
       }
     );
@@ -175,6 +188,9 @@ async function serverRenderAuthorised(req, res, next, htmlData, uiLang, bot) {
 
     show_console && console.log('serverRender: fire ssrLoaders %ds %dms', hrend[0], hrend[1] / 1000000);
     hrstart = process.hrtime();
+    const rtkPromises = store.dispatch(backendApi.util.getRunningQueriesThunk());
+    show_console && console.log('serverRender: RTK promises', rtkPromises.length);
+    Promise.all(rtkPromises);
     show_console && console.log('serverRender: promises', promises.length);
     Promise.all(promises)
       .then(() => {
@@ -223,7 +239,7 @@ async function serverRenderAuthorised(req, res, next, htmlData, uiLang, bot) {
 
               const i18nData = serialize(
                 {
-                  initialLanguage : context.i18n.language,
+                  initialLanguage: context.i18n.language,
                   initialI18nStore: pick(context.i18n.services.resourceStore.data, [
                     context.i18n.language,
                     context.i18n.options.fallbackLng
