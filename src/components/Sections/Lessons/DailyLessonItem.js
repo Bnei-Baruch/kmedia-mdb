@@ -4,13 +4,13 @@ import { useSelector } from 'react-redux';
 import { Header, List } from 'semantic-ui-react';
 import { canonicalLink, getCuByCcuSkipPreparation } from '../../../helpers/links';
 
-import { selectors as mdb } from '../../../redux/modules/mdb';
 import Link from '../../Language/MultiLanguageLink';
 import UnitLogoWithDuration from '../../shared/UnitLogoWithDuration';
 import { CT_LESSON_PART } from '../../../helpers/consts';
+import { mdbGetDenormCollectionSelector } from '../../../redux/selectors';
 
 const DailyLessonItem = ({ id }) => {
-  const ccu   = useSelector(state => mdb.getDenormCollection(state.mdb, id));
+  const ccu   = useSelector(state => mdbGetDenormCollectionSelector(state, id));
   const { t } = useTranslation();
 
   const { number, film_date, content_units = [] } = ccu || {};
@@ -24,7 +24,7 @@ const DailyLessonItem = ({ id }) => {
   return (
     <List.Item key={id} className="media_item daily_lesson">
       <Link to={link} style={{ minWidth: '140px' }}>
-        <UnitLogoWithDuration unit={logoUnit} totalDuration={totalDuration} />
+        <UnitLogoWithDuration unit={logoUnit} totalDuration={totalDuration}/>
       </Link>
       <div className="media_item__content">
         <Header as={Link} to={canonicalLink(ccu)}>

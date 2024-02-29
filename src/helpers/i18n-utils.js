@@ -1,4 +1,4 @@
-import { LANGUAGES } from './consts';
+import { BLOGS, DEFAULT_UI_DIR, LANGUAGES, TWITTER_USERNAMES } from './consts';
 
 export const getCurrentDirection = () => {
   if (typeof window === 'undefined') {
@@ -37,9 +37,11 @@ export const changeDirection = direction => {
     const root = document.getElementById('root');
     root.setAttribute('style', `direction: ${direction};`);
     if (isRTL) {
+      root.classList.remove('ltr');
       root.classList.add('rtl');
     } else {
       root.classList.remove('rtl');
+      root.classList.add('ltr');
     }
   }
 
@@ -52,7 +54,7 @@ const rtlLngs = ['ar', 'shu', 'sqr', 'ssh', 'xaa', 'yhd', 'yud', 'aao', 'abh', '
 
 export const getLanguageDirection = language => {
   if (!language) {
-    return 'rtl';
+    return DEFAULT_UI_DIR;
   }
 
   return isLanguageRtl(language) ? 'rtl' : 'ltr';
@@ -60,8 +62,20 @@ export const getLanguageDirection = language => {
 
 export const isLanguageRtl = language => rtlLngs.indexOf(language) >= 0;
 
-export const getLangPropertyDirection = language => getLanguageDirection(language) === 'rtl' ? 'right' : 'left';
+export const getDirectionProperty = dir => dir === 'rtl' ? 'right' : 'left';
+
+export const getLangPropertyDirection = language => getDirectionProperty(getLanguageDirection(language));
 
 export const getLanguageLocale = language => LANGUAGES[language].locale;
 
 export const getLanguageLocaleWORegion = language => LANGUAGES[language].locale.substring(0, 2);
+
+export const getBlogLanguage = name => {
+  const blog = BLOGS.find(blog => blog.name === name);
+  return blog && (blog.language || null);
+};
+
+export const getTwitterLanguage = username => {
+  const twitter = TWITTER_USERNAMES.find(twitter => twitter.username === username);
+  return twitter && (twitter.language || null);
+};

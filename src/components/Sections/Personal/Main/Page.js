@@ -1,11 +1,11 @@
 import React from 'react';
 
-import { actions, selectors } from '../../../../redux/modules/my';
+import { actions } from '../../../../redux/modules/my';
 import {
   MY_NAMESPACE_HISTORY,
   MY_NAMESPACE_REACTIONS,
   MY_NAMESPACE_PLAYLISTS,
-  MY_NAMESPACE_SUBSCRIPTIONS,
+  MY_NAMESPACE_SUBSCRIPTIONS
 } from '../../../../helpers/consts';
 import NeedToLogin from '../NeedToLogin';
 import ItemsContainer from './ItemsContainer';
@@ -13,9 +13,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import AlertModal from '../../../shared/AlertModal';
 import { withTranslation } from 'react-i18next';
 import { withRouter } from '../../../../helpers/withRouterPatch';
+import { myGetDeletedSelector } from '../../../../redux/selectors';
 
 const Page = ({ t }) => {
-  const deletedPlaylist = useSelector(state => selectors.getDeleted(state.my, MY_NAMESPACE_PLAYLISTS));
+  const deletedPlaylist = useSelector(state => myGetDeletedSelector(state, MY_NAMESPACE_PLAYLISTS));
   const dispatch        = useDispatch();
 
   const needToLogin = NeedToLogin({ t });
@@ -25,12 +26,11 @@ const Page = ({ t }) => {
 
   return (
     <>
-      <AlertModal message={t('personal.removedSuccessfully')} open={deletedPlaylist} onClose={onAlertCloseHandler} />
-      <ItemsContainer namespace={MY_NAMESPACE_HISTORY} withSeeAll={true} />
-      <ItemsContainer namespace={MY_NAMESPACE_REACTIONS} withSeeAll={true} />
-      <ItemsContainer namespace={MY_NAMESPACE_PLAYLISTS} withSeeAll={false} />
-      <ItemsContainer namespace={MY_NAMESPACE_SUBSCRIPTIONS} withSeeAll={false} />
-
+      <AlertModal message={t('personal.removedSuccessfully')} open={deletedPlaylist} onClose={onAlertCloseHandler}/>
+      <ItemsContainer namespace={MY_NAMESPACE_HISTORY} withSeeAll={true}/>
+      <ItemsContainer namespace={MY_NAMESPACE_REACTIONS} withSeeAll={true}/>
+      <ItemsContainer namespace={MY_NAMESPACE_PLAYLISTS} withSeeAll={false}/>
+      <ItemsContainer namespace={MY_NAMESPACE_SUBSCRIPTIONS} withSeeAll={false}/>
     </>
   );
 };

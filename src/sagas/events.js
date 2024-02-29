@@ -3,20 +3,23 @@ import { call, put, select, takeLatest } from 'redux-saga/effects';
 import Api from '../helpers/Api';
 import { EVENT_TYPES } from '../helpers/consts';
 import { setTab } from './helpers/url';
-import { selectors as settings } from '../redux/modules/settings';
 import { actions, types } from '../redux/modules/events';
 import { actions as mdbActions } from '../redux/modules/mdb';
+import { settingsGetContentLanguagesSelector, settingsGetUILangSelector } from '../redux/selectors';
 
 export function* fetchAllEvents(action) {
   try {
-    const language = yield select(state => settings.getLanguage(state.settings));
+    const uiLang           = yield select(settingsGetUILangSelector);
+    const contentLanguages = yield select(settingsGetContentLanguagesSelector);
+
     const { data } = yield call(Api.collections, {
       ...action.payload,
-      contentTypes: EVENT_TYPES,
-      language,
-      pageNo: 1,
-      pageSize: 1000, // NOTE: we need to get all events, and the endpoint lets us fetch only with pagination,
-      with_units: false,
+      contentTypes     : EVENT_TYPES,
+      ui_language      : uiLang,
+      content_languages: contentLanguages,
+      pageNo           : 1,
+      pageSize         : 1000, // NOTE: we need to get all events, and the endpoint lets us fetch only with pagination,
+      with_units       : false
     });
     yield put(mdbActions.receiveCollections(data.collections));
     yield put(actions.fetchAllEventsSuccess(data));
@@ -26,14 +29,14 @@ export function* fetchAllEvents(action) {
 }
 
 function* watchFetchAllEvents() {
-  yield takeLatest(types.FETCH_ALL_EVENTS, fetchAllEvents);
+  yield takeLatest(types['events/fetchAllEvents'], fetchAllEvents);
 }
 
 function* watchSetTab() {
-  yield takeLatest(types.SET_TAB, setTab);
+  yield takeLatest(types['events/setTab'], setTab);
 }
 
 export const sagas = [
   watchFetchAllEvents,
-  watchSetTab,
+  watchSetTab
 ];

@@ -1,13 +1,17 @@
 import { useEffect, useContext } from 'react';
 import { useSelector } from 'react-redux';
 
-import { selectors as playlist } from '../../redux/modules/playlist';
-import { selectors as player } from '../../redux/modules/player';
-import { selectors as chrSelectors } from '../../redux/modules/chronicles';
 import { ClientChroniclesContext } from '../../helpers/app-contexts';
 import { usePrevious } from '../../helpers/utils';
 import { getDuration, getMute } from '../../pkg/jwpAdapter/adapter';
 import { getSavedTime } from './helper';
+import {
+  chroniclesGetEventSelector,
+  playerGetFileSelector,
+  playlistGetInfoSelector,
+  playlistGetPlayedSelector,
+  playerIsReadySelector
+} from '../../redux/selectors';
 
 const buildAppendData = (autoPlay, item, file) => {
   const { id: file_uid, language: file_language } = file || false;
@@ -17,22 +21,22 @@ const buildAppendData = (autoPlay, item, file) => {
     unit_uid,
     file_uid,
     file_language,
-    auto_play: autoPlay,
+    auto_play   : autoPlay,
     current_time: getSavedTime(unit_uid, null)?.current_time || 0,
-    duration: getDuration(),
-    was_muted: getMute(),
+    duration    : getDuration(),
+    was_muted   : getMute()
   };
 };
 
 const AppendChronicle = () => {
   const chronicles = useContext(ClientChroniclesContext);
 
-  const event                       = useSelector(state => chrSelectors.getEvent(state.chronicles));
-  const file                        = useSelector(state => player.getFile(state.player));
-  const item                        = useSelector(state => playlist.getPlayed(state.playlist));
-  const { isSingleMedia: autoPlay } = useSelector(state => playlist.getInfo(state.playlist));
+  const event                       = useSelector(chroniclesGetEventSelector);
+  const file                        = useSelector(playerGetFileSelector);
+  const item                        = useSelector(playlistGetPlayedSelector);
+  const { isSingleMedia: autoPlay } = useSelector(playlistGetInfoSelector);
   const prevEvent                   = usePrevious(event);
-  const isPlayerReady               = useSelector(state => player.isReady(state.player));
+  const isPlayerReady               = useSelector(playerIsReadySelector);
 
   useEffect(() => {
     if (isPlayerReady && event && event !== prevEvent) {

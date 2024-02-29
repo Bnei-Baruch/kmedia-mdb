@@ -12,8 +12,12 @@ import ContentItemContainer, {
   TagItemContainer
 } from '../../../../../shared/ContentItem/ContentItemContainer';
 import { ClientChroniclesContext } from '../../../../../../helpers/app-contexts';
-import { selectors } from '../../../../../../redux/modules/recommended';
 import { IsCollectionContentType, IsUnitContentType } from '../../../../../../helpers/consts';
+import {
+  recommendedGetManyViewsSelector,
+  recommendedGetManyWatchingNowSelector,
+  recommendedGetItemsSelector
+} from '../../../../../../redux/selectors';
 
 const watchingNowToString = watchingNow => {
   if (watchingNow >= 1000) {
@@ -32,11 +36,11 @@ const padOneZero = str => str.length === 1 ? `0${str}` : str;
 const RecommendedPlaylist = ({ recommendForUnit, units, selected, t, chronicles, viewLimit, feedName, showLabels }) => {
   const [expanded, setExpanded] = useState(false);
   const unitsToDisplay          = !expanded && viewLimit && !isEmpty(units) && viewLimit < units.length ? units.slice(0, viewLimit) : units || [];
-  const recommendedItems        = useSelector(state => selectors.getRecommendedItems(feedName, state.recommended)) || [];
+  const recommendedItems        = useSelector(state => recommendedGetItemsSelector(state, feedName)) || [];
   const suggesters              = new Map(recommendedItems.map(item => [item.uid, item.suggester]));
   const suggesterIncludes       = (uid, str) => (suggesters.get(uid) || '').includes(str);
-  const unitsViews              = useSelector(state => selectors.getManyViews(unitsToDisplay.map(unit => unit.id), state.recommended));
-  const unitsWatchingNow        = useSelector(state => selectors.getManyWatchingNow(unitsToDisplay.map(unit => unit.id), state.recommended));
+  const unitsViews              = useSelector(state => recommendedGetManyViewsSelector(state, unitsToDisplay));
+  const unitsWatchingNow        = useSelector(state => recommendedGetManyWatchingNowSelector(state, unitsToDisplay));
   const watchingNow             = (uid, index) => (suggesterIncludes(uid, 'WatchingNow') && unitsWatchingNow[index]) || -1;
   const twoDaysAgo              = new Date();
   twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
@@ -62,7 +66,8 @@ const RecommendedPlaylist = ({ recommendForUnit, units, selected, t, chronicles,
           <div className="recommend-label">
             <div>
               <small className="text">
-                <Popup content={`${watchingNow(unit.id, index)} ${t('materials.recommended.watching-now')}`}
+                <Popup
+                  content={`${watchingNow(unit.id, index)} ${t('materials.recommended.watching-now')}`}
                   trigger={
                     <span>{`${watchingNowToString(watchingNow(unit.id, index))} ${t('materials.recommended.watching-now')}`}</span>}
                 />
@@ -103,6 +108,52 @@ const RecommendedPlaylist = ({ recommendForUnit, units, selected, t, chronicles,
     return null;
   });
 
+  const collectionContent = (unit, index) => <ContentItemContainer
+    id={(unit.cuIDs && unit.cuIDs.length && unit.cuIDs[0]) || ''}
+    ccuId={unit.id}
+    key={unit.id}
+    link={canonicalLink(unit)}
+    withCUInfo={false}
+    withCCUInfo={true}
+    asList
+    label={unitLabels[index]}
+    size={'small'}/>;
+
+  const unitContent = (unit, index) => <ContentItemContainer
+    id={unit.id}
+    key={unit.id}
+    asList
+    label={unitLabels[index]}
+    size={'small'}/>;
+
+  /* TODO: Improve the distinction between source and topic. */
+  const sourceContent = (unit, index) => <SourceItemContainer
+    id={unit.id}
+    key={unit.id}
+    asList
+    label={unitLabels[index]}
+    size={'small'}/>;
+
+  const tagContent = (unit, index) => <TagItemContainer
+    id={unit.id}
+    key={unit.id}
+    asList
+    label={unitLabels[index]}
+    size={'small'}/>;
+
+  const content = (unit, index) => {
+    let f = tagContent;
+    if (unit.content_type && IsCollectionContentType(unit.content_type)) {
+      f = collectionContent;
+    } else if (unit.content_type && IsUnitContentType(unit.content_type)) {
+      f = unitContent;
+    } else if (unit.type) {
+      f = sourceContent;
+    }
+
+    return f(unit, index);
+  };
+
   return (
     <Container>
       <div className="avbox__playlist-view">
@@ -115,40 +166,7 @@ const RecommendedPlaylist = ({ recommendForUnit, units, selected, t, chronicles,
                 active={index === selected}
                 onClick={() => chronicles.recommendSelected(unit.id)}
               >
-                {unit.content_type && IsCollectionContentType(unit.content_type) ?
-                  <ContentItemContainer
-                    id={(unit.cuIDs && unit.cuIDs.length && unit.cuIDs[0]) || ''}
-                    ccuId={unit.id}
-                    key={unit.id}
-                    link={canonicalLink(unit)}
-                    withCUInfo={false}
-                    withCCUInfo={true}
-                    asList
-                    label={unitLabels[index]}
-                    size={'small'} />
-                  : (unit.content_type && IsUnitContentType(unit.content_type) ?
-                    <ContentItemContainer
-                      id={unit.id}
-                      key={unit.id}
-                      asList
-                      label={unitLabels[index]}
-                      size={'small'} /> :
-                    (unit.type ?  /* TODO: Improve the distinction between source and topic. */
-                      <SourceItemContainer
-                        id={unit.id}
-                        key={unit.id}
-                        asList
-                        label={unitLabels[index]}
-                        size={'small'} /> :
-                      <TagItemContainer
-                        id={unit.id}
-                        key={unit.id}
-                        asList
-                        label={unitLabels[index]}
-                        size={'small'} />
-                    )
-                  )
-                }
+                {content(unit)}
               </List.Item>
             ))
           }
@@ -163,7 +181,7 @@ const RecommendedPlaylist = ({ recommendForUnit, units, selected, t, chronicles,
               expanded ? t('materials.recommended.less') : t('materials.recommended.more')
             }
           </Link>
-        ) : <div className="recommend-more-placeholder" />
+        ) : <div className="recommend-more-placeholder"/>
       }
     </Container>
   );
@@ -188,8 +206,8 @@ const DisplayRecommended = (
   if (isEmpty(recommendedUnits)) return null;
   const props = {
     recommendForUnit: unit,
-    units: recommendedUnits,
-    selected: unitCollectionId,
+    units           : recommendedUnits,
+    selected        : unitCollectionId,
     t,
     chronicles,
     viewLimit,
@@ -198,17 +216,17 @@ const DisplayRecommended = (
   };
   return (
     <div className="avbox__playlist-wrapper">
-      {displayTitle && <Header as="h3" content={title} />}
+      {displayTitle && <Header as="h3" content={title}/>}
       {<RecommendedPlaylist {...props} />}
     </div>
   );
 };
 
 DisplayRecommended.propTypes = {
-  unit: shapes.EventItem.isRequired,
+  unit            : shapes.EventItem,
   recommendedUnits: PropTypes.arrayOf(shapes.EventItem),
-  t: PropTypes.func.isRequired,
-  displayTitle: PropTypes.bool
+  t               : PropTypes.func.isRequired,
+  displayTitle    : PropTypes.bool
 };
 
 const areEqual = (prevProps, nextProps) =>

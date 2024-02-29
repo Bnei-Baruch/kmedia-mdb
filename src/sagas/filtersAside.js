@@ -17,6 +17,7 @@ import { selectors as filterSelectors } from '../redux/modules/filters';
 import { selectors as settingsSelectors } from '../redux/modules/settings';
 import { selectors as searchSelectors } from '../redux/modules/search';
 import { actions, types } from '../redux/modules/filtersAside';
+import { settingsGetUILangSelector } from '../redux/selectors';
 
 const RESULT_NAME_BY_PARAM = {
   'tag': 'tags', 'source': 'sources', 'author': 'sources', 'content_type': 'content_types'
@@ -176,16 +177,21 @@ export function* fetchLanguageStat(params, namespace, dataL = {}, isPrepare, cou
 }
 
 export function* fetchElasticStat(action) {
-  const filters         = yield select(state => filterSelectors.getFilters(state.filters, 'search'));
-  const apiParams       = filtersTransformer.toApiParams(filters);
-  const filterKeyValues = Object.entries(apiParams).map(([v, k]) => `${v}:${k}`).join(' ');
-  const filterParams    = filterKeyValues ? ` ${filterKeyValues}` : '';
-  const language        = yield select(state => settingsSelectors.getLanguage(state.settings));
-  const query           = yield select(state => searchSelectors.getQuery(state.search));
-  const q               = query.trim() ? `${query.trim()}${filterParams}` : filterParams;
+  const filters          = yield select(state => filterSelectors.getFilters(state.filters, 'search'));
+  const apiParams        = filtersTransformer.toApiParams(filters);
+  const filterKeyValues  = Object.entries(apiParams).map(([v, k]) => `${v}:${k}`).join(' ');
+  const filterParams     = filterKeyValues ? ` ${filterKeyValues}` : '';
+  const uiLang           = yield select(settingsGetUILangSelector);
+  const contentLanguages = yield select(state => settingsSelectors.getContentLanguages(state.settings));
+  const query            = yield select(state => searchSelectors.getQuery(state.search));
+  const q                = query.trim() ? `${query.trim()}${filterParams}` : filterParams;
 
   try {
-    const { data } = yield call(Api.elasticStats, { q, language });
+    const { data } = yield call(Api.elasticStats, {
+      q,
+      ui_language: uiLang,
+      content_languages: contentLanguages,
+    });
 
     yield put(actions.fetchElasticStatsSuccess({ data, namespace: 'search' }));
   } catch (err) {
@@ -194,12 +200,12 @@ export function* fetchElasticStat(action) {
 }
 
 function* watchFetchStat() {
-  yield takeEvery(types.FETCH_STATS, fetchStat);
+  yield takeEvery(types['filters_aside/fetchStats'], fetchStat);
 }
 
 function* watchElasticFetchStat() {
   // TODO: Move search stats fetch parallel to search, not after.
-  yield takeLatest(types.FETCH_ELASTIC_STATS, fetchElasticStat);
+  yield takeLatest(types['filters_aside/fetchElasticStats'], fetchElasticStat);
 }
 
 export const sagas = [

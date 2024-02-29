@@ -3,114 +3,187 @@ import { call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
 import Api from '../helpers/Api';
 import { CT_DAILY_LESSON, CT_SPECIAL_LESSON, MY_NAMESPACE_HISTORY } from '../helpers/consts';
 import { selectors as authSelectors } from '../redux/modules/auth';
-import { actions, selectors as mdbSelectors, types } from '../redux/modules/mdb';
+import { actions as mdbActions, selectors as mdbSelectors, types } from '../redux/modules/mdb';
 import { actions as publications } from '../redux/modules/publications';
-import { selectors as settings } from '../redux/modules/settings';
 import { actions as sources } from '../redux/modules/sources';
 import { actions as tags } from '../redux/modules/tags';
 import { fetch as fetchMy } from './my';
+import { settingsGetContentLanguagesSelector, settingsGetUILangSelector } from '../redux/selectors';
 
 export function* fetchUnit(action) {
   const id = action.payload;
   try {
-    const language = yield select(state => settings.getLanguage(state.settings));
-    const { data } = yield call(Api.unit, { id, language });
-    yield put(actions.fetchUnitSuccess(id, data));
+    const uiLang           = yield select(settingsGetUILangSelector);
+    const contentLanguages = yield select(settingsGetContentLanguagesSelector);
+
+    const result = yield call(Api.unit, {
+      id,
+      ui_language: uiLang,
+      content_languages: contentLanguages,
+      with_derivations: true
+    });
+
+    const { data, status, statusText } = result;
+    if (status >= 400) {
+      const err = `${status} ${statusText}`;
+      yield put(mdbActions.fetchUnitFailure({ id, err }));
+    } else {
+      yield put(mdbActions.fetchUnitSuccess({ id, data }));
+    }
   } catch (err) {
-    yield put(actions.fetchUnitFailure(id, err));
+    yield put(mdbActions.fetchUnitFailure({ id, err }));
   }
 }
 
 export function* fetchUnitsByIDs(action) {
   const { id } = action.payload;
   try {
-    const language = yield select(state => settings.getLanguage(state.settings));
-    const { data } = yield call(Api.units, { ...action.payload, language, page_size: id.length });
-    yield put(actions.fetchUnitsByIDsSuccess(data.content_units));
+    const uiLang                       = yield select(settingsGetUILangSelector);
+    const contentLanguages             = yield select(settingsGetContentLanguagesSelector);
+    const result                       = yield call(Api.units, {
+      ...action.payload,
+      ui_language: uiLang,
+      content_languages: contentLanguages,
+      page_size: id.length
+    });
+    const { data, status, statusText } = result;
+    if (status >= 400) {
+      const err = `${status} ${statusText}`;
+      yield put(mdbActions.fetchUnitsByIDsFailure({ id, err }));
+    } else {
+      yield put(mdbActions.fetchUnitsByIDsSuccess({ data: data.content_units }));
+    }
   } catch (err) {
-    yield put(actions.fetchUnitsByIDsSuccess({ id, err }));
+    yield put(mdbActions.fetchUnitsByIDsFailure({ id, err }));
   }
 }
 
 export function* fetchCollectionsByIDs(action) {
   const { id } = action.payload;
   try {
-    const language = yield select(state => settings.getLanguage(state.settings));
-    const { data } = yield call(Api.collections, { ...action.payload, language, page_size: id.length });
-    yield put(actions.receiveCollections(data.collections));
+    const uiLang                       = yield select(settingsGetUILangSelector);
+    const contentLanguages             = yield select(settingsGetContentLanguagesSelector);
+    const result                       = yield call(Api.collections, {
+      ...action.payload,
+      ui_language: uiLang,
+      content_languages: contentLanguages,
+      page_size: id.length
+    });
+    const { data, status, statusText } = result;
+    if (status >= 400) {
+      const err = `${status} ${statusText}`;
+      yield put(mdbActions.fetchCollectionsByIDsFailure({ id, err }));
+    } else {
+      yield put(mdbActions.receiveCollections(data.collections));
+    }
   } catch (err) {
-    yield put(actions.fetchCollectionsByIDsFailure({ id, err }));
+    yield put(mdbActions.fetchCollectionsByIDsFailure({ id, err }));
   }
 }
 
 export function* fetchCollection(action) {
   const id = action.payload;
   try {
-    const language = yield select(state => settings.getLanguage(state.settings));
-    const { data } = yield call(Api.collection, { id, language });
-    yield put(actions.fetchCollectionSuccess(id, data));
+    const uiLang                       = yield select(settingsGetUILangSelector);
+    const contentLanguages             = yield select(settingsGetContentLanguagesSelector);
+    const result                       = yield call(Api.collection, {
+      id,
+      ui_language: uiLang,
+      content_languages: contentLanguages
+    });
+    const { data, status, statusText } = result;
+    if (status >= 400) {
+      const err = `${status} ${statusText}`;
+      yield put(mdbActions.fetchCollectionFailure({ id, err }));
+    } else {
+      yield put(mdbActions.fetchCollectionSuccess({ id, data }));
+    }
   } catch (err) {
-    yield put(actions.fetchCollectionFailure(id, err));
+    yield put(mdbActions.fetchCollectionFailure({ id, err }));
   }
 }
 
 export function* fetchWindow(action) {
   const { id, ...payload } = action.payload;
   try {
-    const language = yield select(state => settings.getLanguage(state.settings));
-    const args     = {
+    const uiLang           = yield select(settingsGetUILangSelector);
+    const contentLanguages = yield select(settingsGetContentLanguagesSelector);
+    const args             = {
       ...payload,
-      language,
+      ui_language: uiLang,
+      content_languages: contentLanguages,
       content_type: [CT_DAILY_LESSON, CT_SPECIAL_LESSON],
       with_units: true
     };
 
-    const { data } = yield call(Api.collections, args);
-    yield put(actions.fetchWindowSuccess(id, data));
+    const result                       = yield call(Api.collections, args);
+    const { data, status, statusText } = result;
+    if (status >= 400) {
+      const err = `${status} ${statusText}`;
+      yield put(mdbActions.fetchWindowFailure({ id, err }));
+    } else {
+      yield put(mdbActions.fetchWindowSuccess({ id, data }));
+    }
   } catch (err) {
-    yield put(actions.fetchWindowFailure(id, err));
+    yield put(mdbActions.fetchWindowFailure({ id, err }));
   }
 }
 
 export function* fetchDatepickerCO(action) {
   try {
-    const language = yield select(state => settings.getLanguage(state.settings));
-    const args     = {
+    const uiLang                       = yield select(settingsGetUILangSelector);
+    const contentLanguages             = yield select(settingsGetContentLanguagesSelector);
+    const args                         = {
       ...action.payload,
-      language,
+      ui_language: uiLang,
+      content_languages: contentLanguages,
       content_type: [CT_DAILY_LESSON, CT_SPECIAL_LESSON],
       with_units: true
     };
-    const { data } = yield call(Api.collections, args);
-    yield put(actions.fetchDatepickerCOSuccess(data));
+    const result                       = yield call(Api.collections, args);
+    const { data, status, statusText } = result;
+    if (status >= 400) {
+      const err = `${status} ${statusText}`;
+      yield put(mdbActions.fetchDatepickerCOFailure(err));
+    } else {
+      yield put(mdbActions.fetchDatepickerCOSuccess({ data }));
+    }
   } catch (err) {
-    yield put(actions.fetchDatepickerCOFailure(err));
+    yield put(mdbActions.fetchDatepickerCOFailure(err));
   }
 }
 
 export function* fetchLatestLesson() {
   try {
-    const language = yield select(state => settings.getLanguage(state.settings));
-    const { data } = yield call(Api.latestLesson, { language });
-    const cu_uids  = data.content_units.map(cu => cu.id);
+    const uiLang           = yield select(settingsGetUILangSelector);
+    const contentLanguages = yield select(settingsGetContentLanguagesSelector);
+    const { data }         = yield call(Api.latestLesson, {
+      ui_language: uiLang,
+      content_languages: contentLanguages
+    });
+    const cu_uids          = data.content_units.map(cu => cu.id);
     yield fetchMy({ payload: { namespace: MY_NAMESPACE_HISTORY, cu_uids, page_size: cu_uids.length } });
-    yield put(actions.fetchLatestLessonSuccess(data));
+    yield put(mdbActions.fetchLatestLessonSuccess({ id: cu_uids, data }));
   } catch (err) {
-    yield put(actions.fetchCollectionFailure(err.id, err));
+    yield put(mdbActions.fetchLatestLessonFailure(err));
   }
 }
 
 export function* fetchSQData() {
   try {
-    const language = yield select(state => settings.getLanguage(state.settings));
-    const { data } = yield call(Api.sqdata, { language });
-    yield put(sources.receiveSources({ sources: data.sources, language }));
+    const uiLang           = yield select(settingsGetUILangSelector);
+    const contentLanguages = yield select(settingsGetContentLanguagesSelector);
+    const { data }         = yield call(Api.sqdata, {
+      ui_language: uiLang,
+      content_languages: contentLanguages
+    });
+    yield put(sources.receiveSources({ sources: data.sources, uiLang }));
     yield put(tags.receiveTags(data.tags));
     yield put(publications.receivePublishers(data.publishers));
-    yield put(actions.receivePersons(data.persons));
-    yield put(actions.fetchSQDataSuccess());
+    yield put(mdbActions.receivePersons(data.persons));
+    yield put(mdbActions.fetchSQDataSuccess());
   } catch (err) {
-    yield put(actions.fetchSQDataFailure(err));
+    yield put(mdbActions.fetchSQDataFailure(err));
   }
 }
 
@@ -118,9 +191,9 @@ export function* countCU(action) {
   const { params, namespace } = action.payload;
   try {
     const { data: { total } } = yield call(Api.countCU, params);
-    yield put(actions.countCUSuccess(namespace, total));
+    yield put(mdbActions.countCUSuccess({ namespace, total }));
   } catch (err) {
-    yield put(actions.countCUFailure(err));
+    yield put(mdbActions.countCUFailure(err));
   }
 }
 
@@ -131,9 +204,14 @@ function* createLabel(action) {
 
     const { data: { uid } } = yield call(Api.mdbCreateLabel, action.payload, token);
 
-    const language             = yield select(state => settings.getLanguage(state.settings));
-    const { data: { labels } } = yield call(Api.labels, { id: uid, language });
-    yield put(actions.receiveLabels(labels));
+    const uiLang               = yield select(settingsGetUILangSelector);
+    const contentLanguages     = yield select(settingsGetContentLanguagesSelector);
+    const { data: { labels } } = yield call(Api.labels, {
+      id: uid,
+      ui_language: uiLang,
+      content_languages: contentLanguages
+    });
+    yield put(mdbActions.receiveLabels(labels));
   } catch (err) {
     console.log(err);
   }
@@ -141,11 +219,16 @@ function* createLabel(action) {
 
 export function* fetchLabels(action) {
   try {
-    const language = yield select(state => settings.getLanguage(state.settings));
-    const params   = { ...action.payload, language };
-    const { data } = yield call(Api.labels, params);
-    yield put(actions.receiveLabels(data.labels));
-    yield put(actions.fetchLabelsSuccess(data));
+    const uiLang           = yield select(settingsGetUILangSelector);
+    const contentLanguages = yield select(settingsGetContentLanguagesSelector);
+    const params           = {
+      ...action.payload,
+      ui_language: uiLang,
+      content_languages: contentLanguages
+    };
+    const { data }         = yield call(Api.labels, params);
+    yield put(mdbActions.receiveLabels(data.labels));
+    yield put(mdbActions.fetchLabelsSuccess(data));
   } catch (err) {
     console.error('fetchLabels errors', err);
   }
@@ -155,9 +238,15 @@ export function* fetchMissingUnits(uids) {
   const missingUnitIds = yield select(state => uids.filter(uid => !mdbSelectors.getUnitById(state.mdb, uid)));
 
   if (missingUnitIds.length > 0) {
-    const language = yield select(state => settings.getLanguage(state.settings));
-    const { data } = yield call(Api.units, { id: missingUnitIds, language, pageSize: missingUnitIds.length });
-    yield put(actions.receiveContentUnits(data.content_units));
+    const uiLang           = yield select(settingsGetUILangSelector);
+    const contentLanguages = yield select(settingsGetContentLanguagesSelector);
+    const { data }         = yield call(Api.units, {
+      id: missingUnitIds,
+      ui_language: uiLang,
+      content_languages: contentLanguages,
+      pageSize: missingUnitIds.length
+    });
+    yield put(mdbActions.receiveContentUnits(data.content_units));
   }
 }
 
@@ -165,52 +254,56 @@ export function* fetchMissingCollections(uids) {
   const missingCollectionIds = yield select(state => uids.filter(uid => !mdbSelectors.getCollectionById(state.mdb, uid)));
 
   if (missingCollectionIds.length > 0) {
-    const language = yield select(state => settings.getLanguage(state.settings));
-    const { data } = yield call(Api.collections, {
-      id: missingCollectionIds, language, pageSize: missingCollectionIds.length
+    const uiLang           = yield select(settingsGetUILangSelector);
+    const contentLanguages = yield select(settingsGetContentLanguagesSelector);
+    const { data }         = yield call(Api.collections, {
+      id: missingCollectionIds,
+      ui_language: uiLang,
+      content_languages: contentLanguages,
+      pageSize: missingCollectionIds.length
     });
-    yield put(actions.receiveCollections(data.collections));
+    yield put(mdbActions.receiveCollections(data.collections));
   }
 }
 
 function* watchFetchUnit() {
-  yield takeEvery(types.FETCH_UNIT, fetchUnit);
+  yield takeEvery(types['mdb/fetchUnit'], fetchUnit);
 }
 
 function* watchFetchUnitsByIDs() {
-  yield takeEvery(types.FETCH_UNITS_BY_IDS, fetchUnitsByIDs);
+  yield takeEvery(types['mdb/fetchUnitsByIDs'], fetchUnitsByIDs);
 }
 
 function* watchFetchCollection() {
-  yield takeEvery(types.FETCH_COLLECTION, fetchCollection);
+  yield takeEvery(types['mdb/fetchCollection'], fetchCollection);
 }
 
 function* watchFetchLatestLesson() {
-  yield takeEvery(types.FETCH_LATEST_LESSON, fetchLatestLesson);
+  yield takeEvery(types['mdb/fetchLatestLesson'], fetchLatestLesson);
 }
 
 function* watchFetchSQData() {
-  yield takeLatest(types.FETCH_SQDATA, fetchSQData);
+  yield takeLatest(types['mdb/fetchSQData'], fetchSQData);
 }
 
 function* watchFetchWindow() {
-  yield takeEvery(types.FETCH_WINDOW, fetchWindow);
+  yield takeEvery(types['mdb/fetchWindow'], fetchWindow);
 }
 
 function* watchFetchDatepickerCO() {
-  yield takeEvery(types.FETCH_DATEPICKER_CO, fetchDatepickerCO);
+  yield takeEvery(types['mdb/fetchDatepickerCO'], fetchDatepickerCO);
 }
 
 function* watchCountCU() {
-  yield takeEvery(types.COUNT_CU, countCU);
+  yield takeEvery(types['mdb/countCU'], countCU);
 }
 
 function* watchCreateLabel() {
-  yield takeEvery(types.CREATE_LABEL, createLabel);
+  yield takeEvery(types['mdb/createLabel'], createLabel);
 }
 
 function* watchFetchLabels() {
-  yield takeEvery(types.FETCH_LABELS, fetchLabels);
+  yield takeEvery(types['mdb/fetchLabels'], fetchLabels);
 }
 
 export const sagas = [watchFetchUnit, watchFetchUnitsByIDs, watchFetchCollection, watchFetchLatestLesson, watchFetchSQData, watchFetchWindow, watchFetchDatepickerCO, watchCountCU, watchCreateLabel, watchFetchLabels];

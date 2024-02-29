@@ -22,8 +22,9 @@ class withPagination extends React.Component {
   };
 
   UNSAFE_componentWillReceiveProps(nextProps) {
-    if (nextProps.language !== this.props.language
-      || nextProps.namespace !== this.props.namespace) {
+    const contentLanguages = (this.props.contentLanguages || []).slice().sort().join('-');
+    const nextContentLanguages = (nextProps.contentLanguages || []).slice().sort().join('-');
+    if (contentLanguages !== nextContentLanguages || nextProps.namespace !== this.props.namespace) {
       this.askForData(nextProps);
     }
 
@@ -39,7 +40,8 @@ class withPagination extends React.Component {
 
   askForData(props, page) {
     const { namespace, fetchList, pageNo, pageSize } = props;
-    fetchList(namespace, page || pageNo, { ...this.extraFetchParams(props), pageSize });
+    const params = { ...this.extraFetchParams(props), pageSize };
+    fetchList(namespace, page || pageNo, params);
   }
 
   extraFetchParams() {

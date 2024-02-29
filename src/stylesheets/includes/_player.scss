@@ -31,9 +31,11 @@ video {
 
 //MOBILE
 .is-mobile {
-  position: relative;
-  margin-bottom: 16px;
-  height: auto;
+  .player & {
+    position: relative;
+    margin-bottom: 16px;
+    height: auto;
+  }
 
   &.is-fullscreen {
     margin-bottom: 0;
@@ -573,7 +575,9 @@ video {
 
 //WEB
 .is-web {
-  position: relative;
+  .player & {
+    position: relative;
+  }
 
   &.is-video .controls {
     &__prev, &__rewind, &__forward, &__next, &__pause, &__bar {
@@ -689,7 +693,48 @@ video {
       .icon {
         line-height: 100%;
       }
+    }
 
+    &__language {
+      .ui.dropdown {
+        position: absolute;
+        bottom: 16px;
+        right: 16px;
+
+        background: #fff;
+        color: rgba(0, 0, 0, 0.8);
+        min-width: 9em;
+        white-space: nowrap;
+        font-size: .785rem;
+
+        &:focus {
+          border: white solid 1px;
+        }
+
+        &.active {
+          border: white solid 1px;
+        }
+
+        div.menu {
+          border: white solid 1px;
+
+          .item {
+            background: rgba(27, 28, 29, 0.9);
+            color: #fff;
+            font-size: .785rem;
+          }
+        }
+
+        div.menu .item.language-selection-divider {
+          background-color: #fff !important;
+        }
+
+        i {
+          top: 50%;
+          margin: unset;
+        }
+
+      }
     }
 
     &__volume {
@@ -801,6 +846,8 @@ video {
       + .settings__row {
         margin-top: 8px;
       }
+
+      height: 30px;
     }
 
     .header {
@@ -1160,4 +1207,20 @@ video {
   font: inherit;
   color: inherit;
   cursor: pointer;
+}
+
+.personal_info {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 8px;
+
+  & > .item {
+    margin: 0;
+    padding: 0 0.5em;
+    line-height: 26px;
+  }
+
+  .icon.heart {
+    font-size: 1.3em
+  }
 }

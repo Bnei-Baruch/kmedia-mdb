@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import clsx from 'clsx';
 import { Ref } from 'semantic-ui-react';
 
-import { selectors as player, selectors, actions } from '../../redux/modules/player';
+import { actions } from '../../redux/modules/player';
 import { PLAYER_OVER_MODES, MT_AUDIO } from '../../helpers/consts';
 import Player from '../../pkg/jwpAdapter/Player';
 import PlayerToolsWeb from './PlayerToolsWeb';
@@ -12,6 +12,7 @@ import AppendChronicle from './AppendChronicle';
 import { DeviceInfoContext } from '../../helpers/app-contexts';
 import UpdateLocation from './UpdateLocation';
 import { useKeyboardControl } from './hooks/useKeyboardControl';
+import { playerGetFileSelector, playerGetOverModeSelector, playerIsFullScreenSelector } from '../../redux/selectors';
 
 const HIDE_CONTROLS_TIMEOUT = 4000;
 
@@ -28,15 +29,15 @@ const runTimeout = dispatch => {
 };
 
 const CLASSES_BY_MODE = {
-  [PLAYER_OVER_MODES.settings]: 'is-settings',
+  [PLAYER_OVER_MODES.settings] : 'is-settings',
   [PLAYER_OVER_MODES.languages]: 'is-settings is-language',
-  [PLAYER_OVER_MODES.share]: 'is-sharing',
-  [PLAYER_OVER_MODES.tagging]: 'is-sharing is-tagging',
-  [PLAYER_OVER_MODES.playlist]: 'is-sharing is-tagging',
-  [PLAYER_OVER_MODES.active]: 'is-active',
-  [PLAYER_OVER_MODES.dragKnob]: 'is-active',
+  [PLAYER_OVER_MODES.share]    : 'is-sharing',
+  [PLAYER_OVER_MODES.tagging]  : 'is-sharing is-tagging',
+  [PLAYER_OVER_MODES.playlist] : 'is-sharing is-tagging',
+  [PLAYER_OVER_MODES.active]   : 'is-active',
+  [PLAYER_OVER_MODES.dragKnob] : 'is-active',
   [PLAYER_OVER_MODES.firstTime]: 'is-active is-first-time',
-  [PLAYER_OVER_MODES.none]: '',
+  [PLAYER_OVER_MODES.none]     : ''
 };
 
 export const PlayerContext = createContext(null);
@@ -45,9 +46,9 @@ const PlayerContainer      = () => {
 
   const fullscreenRef = useRef();
 
-  const mode         = useSelector(state => player.getOverMode(state.player));
-  const isFullScreen = useSelector(state => selectors.isFullScreen(state.player));
-  const { type }     = useSelector(state => selectors.getFile(state.player)) || false;
+  const mode         = useSelector(playerGetOverModeSelector);
+  const isFullScreen = useSelector(playerIsFullScreenSelector);
+  const { type }     = useSelector(playerGetFileSelector) || false;
   const isAudio      = type === MT_AUDIO;
 
   const dispatch = useDispatch();
@@ -56,7 +57,7 @@ const PlayerContainer      = () => {
   useEffect(() => {
     const handleFullscreenChange = () => {
       const isFull = fullscreenRef.current === document.fullscreenElement;
-      dispatch(actions.setFullScreen(isFull));
+      dispatch(actions.setFullscreen(isFull));
     };
 
     document.addEventListener('fullscreenchange', handleFullscreenChange);
@@ -81,6 +82,7 @@ const PlayerContainer      = () => {
       runTimeout(dispatch);
     }
   };
+
   const hideControls = () => {
     clearTimeout(timeout);
     runTimeout(dispatch);
@@ -92,6 +94,7 @@ const PlayerContainer      = () => {
     if (mode === PLAYER_OVER_MODES.none) {
       dispatch(actions.setOverMode(PLAYER_OVER_MODES.active));
     }
+
     if (mode !== PLAYER_OVER_MODES.active) return;
 
     if (e.target.className.indexOf('icon') !== -1 || e.target.tagName === 'LABEL') {
@@ -101,26 +104,26 @@ const PlayerContainer      = () => {
     }
   };
 
-  const playerComponent = <Player />;
+  const playerComponent = <Player/>;
   const classes         = [
     mode === PLAYER_OVER_MODES.none && isAudio ? CLASSES_BY_MODE[PLAYER_OVER_MODES.firstTime] : CLASSES_BY_MODE[mode],
     isMobileDevice ? 'is-mobile' : 'is-web',
-    { 'is-fullscreen': isFullScreen, 'is-video': !isAudio },
+    { 'is-fullscreen': isFullScreen, 'is-video': !isAudio }
 
   ];
 
   const content = (
     <div className="player" dir="ltr">
-      <AppendChronicle />
-      <UpdateLocation />
+      <AppendChronicle/>
+      <UpdateLocation/>
       <div className={clsx(...classes)}>
         {
           isMobileDevice ? (
-            <PlayerToolsMobile Player={playerComponent} fullscreenRef={fullscreenRef} />
+            <PlayerToolsMobile Player={playerComponent} fullscreenRef={fullscreenRef}/>
           ) : (
             <>
               {playerComponent}
-              <PlayerToolsWeb fullscreenRef={fullscreenRef} />
+              <PlayerToolsWeb fullscreenRef={fullscreenRef}/>
             </>
           )
         }

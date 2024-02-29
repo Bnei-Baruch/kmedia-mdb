@@ -1,14 +1,15 @@
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { actions as mdbActions, selectors as mdb } from '../../../redux/modules/mdb';
+import { actions as mdbActions } from '../../../redux/modules/mdb';
 import BuildPlaylistByCollection from './BuildPlaylistByCollection';
+import { mdbGetFullCollectionFetchedSelector, mdbGetWipFn } from '../../../redux/selectors';
 
 const BuildPlaylistByCollectionByParams = () => {
   const { id, cuId: routeCuId } = useParams();
 
-  const fetched = useSelector(state => mdb.getFullCollectionFetched(state.mdb)?.[id]);
-  const wip     = useSelector(state => mdb.getWip(state.mdb).collections[id]);
+  const fetched = useSelector(mdbGetFullCollectionFetchedSelector)?.[id];
+  const wip     = useSelector(mdbGetWipFn).collections[id];
   const cuId    = routeCuId;
 
   const dispatch = useDispatch();
@@ -17,9 +18,9 @@ const BuildPlaylistByCollectionByParams = () => {
     if (!wip && !fetched) {
       dispatch(mdbActions.fetchCollection(id));
     }
-  }, [wip, fetched, id]);
+  }, [wip, fetched, id, dispatch]);
 
-  return <BuildPlaylistByCollection cuId={cuId} id={id} />;
+  return <BuildPlaylistByCollection cuId={cuId} id={id}/>;
 };
 
 export default BuildPlaylistByCollectionByParams;

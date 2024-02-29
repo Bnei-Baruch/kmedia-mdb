@@ -17,11 +17,10 @@ import {
 import { FN_DATE_FILTER } from '../../helpers/consts';
 import FastDayPicker from '../Filters/components/Date/FastDayPicker';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectors as settings } from '../../redux/modules/settings';
-import { selectors as filtersAside } from '../../redux/modules/filtersAside';
-import { actions, selectors as filters } from '../../redux/modules/filters';
+import { actions } from '../../redux/modules/filters';
 import FilterHeader from './FilterHeader';
 import { isLanguageRtl } from '../../helpers/i18n-utils';
+import { filtersGetFilterByNameSelector, filtersAsideGetMultipleStatsSelector, settingsGetUILangSelector } from '../../redux/selectors';
 
 const ENABLED_STATS_NAMESPACE = ['search'];
 
@@ -32,11 +31,11 @@ const DateFilter = ({ t, namespace }) => {
   const [showRange, setShowRange] = useState(false);
   const [showDay, setShowDay]     = useState(false);
 
-  const selected = useSelector(state => filters.getFilterByName(state.filters, namespace, FN_DATE_FILTER));
+  const selected = useSelector(state => filtersGetFilterByNameSelector(state, namespace, FN_DATE_FILTER));
 
-  const language = useSelector(state => settings.getLanguage(state.settings));
+  const uiLang = useSelector(settingsGetUILangSelector);
 
-  const stats = useSelector(state => filtersAside.getMultipleStats(state.filtersAside, namespace, FN_DATE_FILTER)(datePresets));
+  const stats = useSelector(state => filtersAsideGetMultipleStatsSelector(state, namespace, FN_DATE_FILTER, datePresets));
 
   const dispatch = useDispatch();
 
@@ -115,23 +114,24 @@ const DateFilter = ({ t, namespace }) => {
     setShowDay(!showDay);
   };
 
-  const iconName      = `caret ${isLanguageRtl(language) ? 'left' : 'right'}`;
+  const iconName      = `caret ${isLanguageRtl(uiLang) ? 'left' : 'right'}`;
   const renderContent = () => (
     <Segment.Group className="filter-popup__wrapper">
       {
-        datePresets.map((x, i) => (
-          <List.Item key={`${FN_DATE_FILTER}_${i}`}>
-            <List.Content className="date-filter-presets">
-              <Checkbox
-                label={t(`filters.date-filter.presets.${x}`)}
-                checked={preset === x}
-                value={x}
-                onChange={handleDatePresetsChange}
-              />
-              {ENABLED_STATS_NAMESPACE.includes(namespace) && <span className="stat">{`(${stats[i]})`}</span>}
-            </List.Content>
-          </List.Item>
-        )
+        datePresets.map((x, i) =>
+          (
+            <List.Item key={`${FN_DATE_FILTER}_${i}`}>
+              <List.Content className="date-filter-presets">
+                <Checkbox
+                  label={t(`filters.date-filter.presets.${x}`)}
+                  checked={preset === x}
+                  value={x}
+                  onChange={handleDatePresetsChange}
+                />
+                {ENABLED_STATS_NAMESPACE.includes(namespace) && <span className="stat">{`(${stats[i]})`}</span>}
+              </List.Content>
+            </List.Item>
+          )
         )
       }
       <Accordion as={List} vertical="true" className="date-filter">
@@ -141,13 +141,13 @@ const DateFilter = ({ t, namespace }) => {
             onClick={toggleDay}
           >
             {t('filters.date-filter.presets.CUSTOM_DAY')}
-            <Icon color="blue" name={iconName} />
+            <Icon color="blue" name={iconName}/>
           </Accordion.Title>
           <Accordion.Content active={showDay}>
             <FastDayPicker
               label={null}
               value={from}
-              language={language}
+              language={uiLang}
               onDayChange={handleDayInputChange}
             />
           </Accordion.Content>
@@ -158,20 +158,20 @@ const DateFilter = ({ t, namespace }) => {
             onClick={toggleRange}
           >
             {t('filters.date-filter.presets.CUSTOM_RANGE')}
-            <Icon color="blue" name={iconName} />
+            <Icon color="blue" name={iconName}/>
           </Accordion.Title>
           <Accordion.Content active={showRange}>
             <FastDayPicker
               label={t('filters.date-filter.start')}
               value={from}
-              language={language}
+              language={uiLang}
               onDayChange={handleFromInputChange}
             />
-            <br />
+            <br/>
             <FastDayPicker
               label={t('filters.date-filter.end')}
               value={to}
-              language={language}
+              language={uiLang}
               onDayChange={handleToInputChange}
             />
           </Accordion.Content>
@@ -189,19 +189,19 @@ const DateFilter = ({ t, namespace }) => {
 };
 
 DateFilter.propTypes = {
-  value: PropTypes.shape({
-    from: PropTypes.objectOf(Date),
-    to: PropTypes.objectOf(Date),
+  value   : PropTypes.shape({
+    from  : PropTypes.objectOf(Date),
+    to    : PropTypes.objectOf(Date),
     preset: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
   }),
   onCancel: PropTypes.func,
-  onApply: PropTypes.func,
-  t: PropTypes.func.isRequired,
+  onApply : PropTypes.func,
+  t       : PropTypes.func.isRequired
 };
 
 DateFilter.defaultProps = {
   onApply: noop,
-  value: {
+  value  : {
     preset: TODAY,
     ...presetToRange[TODAY]()
   }

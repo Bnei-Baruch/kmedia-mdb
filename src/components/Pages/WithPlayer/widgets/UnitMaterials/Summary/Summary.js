@@ -1,51 +1,65 @@
-import React, { useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { withTranslation } from 'react-i18next';
+import React, { useEffect, useState } from 'react';
 import { Segment, Divider } from 'semantic-ui-react';
-
-import * as shapes from '../../../../../shapes';
-import MediaHelper from '../../../../../../helpers/media';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectors as settings } from '../../../../../../redux/modules/settings';
-import { selectors as assetsSelectors, actions as assetsActions } from '../../../../../../redux/modules/assets';
-import { INSERT_TYPE_SUMMARY } from '../../../../../../helpers/consts';
+import { useTranslation } from 'react-i18next';
 
-const Summary = ({ unit, t }) => {
+import { selectSuitableLanguage } from '../../../../../../helpers/language';
+import { actions as assetsActions } from '../../../../../../redux/modules/assets';
+import MenuLanguageSelector from '../../../../../../components/Language/Selector/MenuLanguageSelector';
+import {
+  settingsGetContentLanguagesSelector,
+  assetsGetDoc2htmlByIdSelector,
+  mdbGetDenormContentUnitSelector
+} from '../../../../../../redux/selectors';
+import { getFile, getSummaryLanguages } from './helper';
 
-  const language     = useSelector(state => settings.getLanguage(state.settings));
-  const doc2htmlById = useSelector(state => assetsSelectors.getDoc2htmlById(state.assets));
-  const dispatch     = useDispatch();
+const Summary = ({ id }) => {
+  const { t } = useTranslation();
 
-  const description = unit.description
-    ? (<div dangerouslySetInnerHTML={{ __html: unit.description }} />)
-    : t('materials.summary.no-summary');
+  const contentLanguages = useSelector(settingsGetContentLanguagesSelector);
+  const doc2htmlById     = useSelector(assetsGetDoc2htmlByIdSelector);
+  const unit             = useSelector(state => mdbGetDenormContentUnitSelector(state, id));
 
-  const getFile = () => {
-    if (!unit || !Array.isArray(unit.files)) {
-      return null;
-    }
+  const dispatch = useDispatch();
 
-    return unit.files?.filter(f => f.language === language)
-      .filter(f => MediaHelper.IsText(f) && !MediaHelper.IsPDF(f))
-      .find(f => f.insert_type === INSERT_TYPE_SUMMARY);
+  const summaryLanguages                        = getSummaryLanguages(unit);
+  const defaultLanguage                         = selectSuitableLanguage(contentLanguages, summaryLanguages, unit.original_language);
+  const [selectedLanguage, setSelectedLanguage] = useState('');
+
+  const finalLanguage  = selectedLanguage || defaultLanguage;
+  const file           = getFile(unit, finalLanguage);
+  const selectedFileId = file?.id || null;
+
+  const handleLanguageChanged = language => {
+    setSelectedLanguage(language);
   };
-
-  const file = getFile();
 
   useEffect(() => {
     if (file) {
-      dispatch(assetsActions.doc2html(file.id));
+      dispatch(assetsActions.doc2html(selectedFileId));
     }
-  }, [dispatch, file]);
+  }, [file, dispatch, selectedFileId]);
 
-  const { data } = doc2htmlById[file?.id] || false;
+  const { data }    = doc2htmlById[file?.id] || false;
+  const description = unit.description
+    ? (<div dangerouslySetInnerHTML={{ __html: unit.description }} />)
+    : (data ? '' : t('materials.summary.no-summary'));
+
   return (
     <Segment basic>
       {description}
+      {summaryLanguages.length <= 1 ? null :
+        <MenuLanguageSelector
+          languages={summaryLanguages}
+          selected={finalLanguage}
+          onLanguageChange={handleLanguageChanged}
+          multiSelect={false}
+        />
+      }
       {
         data ? (
           <>
-            <Divider />
+            {!!description && <Divider />}
             <div dangerouslySetInnerHTML={{ __html: data }}></div>
           </>
         ) : null
@@ -55,9 +69,4 @@ const Summary = ({ unit, t }) => {
   );
 };
 
-Summary.propTypes = {
-  unit: shapes.ContentUnit.isRequired,
-  t: PropTypes.func.isRequired,
-};
-
-export default withTranslation()(Summary);
+export default Summary;

@@ -272,7 +272,10 @@ export const AUDIO_BLOG_LANGUAGES = [
   LANG_ENGLISH
 ];
 
-export const DEFAULT_LANGUAGE = LANG_ENGLISH;
+export const DEFAULT_UI_LANGUAGE       = LANG_ENGLISH;
+export const DEFAULT_CONTENT_LANGUAGE  = LANG_ENGLISH;
+export const DEFAULT_CONTENT_LANGUAGES = [DEFAULT_CONTENT_LANGUAGE];
+export const DEFAULT_UI_DIR            = 'ltr';
 
 export const LANGUAGE_OPTIONS = ALL_LANGUAGES.map(x => LANGUAGES[x]);
 
@@ -350,6 +353,7 @@ export const RH_ZOHAR    = 'AwGBQX2L';
 export const RH_ARTICLES = 'rQ6sIUZK';
 export const RH_RECORDS  = '2GAdavz0';
 
+export const BS_TAAS_LAST_PAGE = 2096;
 // This is exptected to be sorted by values
 export const BS_TAAS_PARTS = {
   '7scSATcZ': 1,
@@ -496,9 +500,10 @@ export const BS_TAAS_PARTS_PARTS_ONLY = {
 // Persons
 export const RABASH_PERSON_UID = 'KxApZ4pI';
 
-export const COOKIE_UI_LANG      = 'archive_UIlang';
-export const COOKIE_CONTENT_LANG = 'archive_ContentLang';
-export const LANG_UI_LANGUAGES   = [LANG_HEBREW, LANG_ENGLISH, LANG_RUSSIAN, LANG_SPANISH, LANG_GERMAN, LANG_UKRAINIAN, LANG_ITALIAN, LANG_TURKISH, LANG_CZECH];
+export const COOKIE_UI_LANG          = 'archive_UIlang';
+export const COOKIE_CONTENT_LANGS    = 'archive_ContentLang';
+export const COOKIE_SHOW_ALL_CONTENT = 'archive_ShowAllContent';
+export const LANG_UI_LANGUAGES       = [LANG_HEBREW, LANG_ENGLISH, LANG_RUSSIAN, LANG_SPANISH, LANG_ARABIC, LANG_GERMAN, LANG_UKRAINIAN, LANG_ITALIAN, LANG_TURKISH, LANG_CZECH, LANG_BULGARIAN];
 
 // Search
 
@@ -632,13 +637,22 @@ export const BLOG_ID_LAITMAN_COM   = 2;
 export const BLOG_ID_LAITMAN_ES    = 3;
 export const BLOG_ID_LAITMAN_CO_IL = 4;
 export const BLOGS                 = [
-  { id: BLOG_ID_LAITMAN_RU, name: 'laitman-ru' },
-  { id: BLOG_ID_LAITMAN_COM, name: 'laitman-com' },
-  { id: BLOG_ID_LAITMAN_ES, name: 'laitman-es' },
-  { id: BLOG_ID_LAITMAN_CO_IL, name: 'laitman-co-il' }
+  { id: BLOG_ID_LAITMAN_RU, name: 'laitman-ru', language: LANG_RUSSIAN },
+  { id: BLOG_ID_LAITMAN_COM, name: 'laitman-com', language: LANG_ENGLISH },
+  { id: BLOG_ID_LAITMAN_ES, name: 'laitman-es', language: LANG_SPANISH },
+  { id: BLOG_ID_LAITMAN_CO_IL, name: 'laitman-co-il', language: LANG_HEBREW }
 ];
 
 export const SUGGEST_LIMIT = 10;
+
+// Twitter
+
+export const TWITTER_USERNAMES = [
+  { username: 'Michael_Laitman', language: LANG_RUSSIAN },
+  { username: 'laitman', language: LANG_ENGLISH },
+  { username: 'laitman_es', language: LANG_SPANISH },
+  { username: 'laitman_co_il', language: LANG_HEBREW }
+];
 
 // Search Intent constants (to be deprecated).
 
@@ -789,5 +803,6 @@ export const PLAYER_OVER_MODES = {
   dragKnob: 'drag-knob',
   firstTime: 'first-time',
   none: null,
-
 };
+
+export const KC_BOT_USER_NAME = '@__||bot||__@';

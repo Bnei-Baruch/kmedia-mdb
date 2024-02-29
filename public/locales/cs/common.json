@@ -13,6 +13,7 @@
       "books": "Knihy",
       "topics": "Témata",
       "publications": "Publikace",
+      "not-found": "",
       "music": "Music",
       "simple-mode": "Downloads",
       "photos": "Fotky",
@@ -21,6 +22,7 @@
       "project-status": "Stav projektu",
       "help": "Pomoc",
       "old-site": "Stará stránka",
+      "podcast": "Podcast",
       "subscribe": "Subscribe For Updates",
       "bookmarks": "Bookmarks",
       "sketches": "Sketches"
@@ -48,7 +50,8 @@
         "LAST_30_DAYS": "Posledních 30 dní",
         "LAST_MONTH": "Poslední měsíc",
         "THIS_MONTH": "Tento měsíc",
-        "CUSTOM_RANGE": "Vlastní rozsah"
+        "CUSTOM_RANGE": "Vlastní rozsah",
+        "CUSTOM_DAY": "Pick a Date"
       },
       "start": "Začátek",
       "end": "Konec"
@@ -97,7 +100,8 @@
       "programs": "Programy",
       "events": "Setkání a Události",
       "publications": "Publikace",
-      "sources": "Zdroje"
+      "sources": "Zdroje",
+      "posts": "Blog"
     },
     "aside-filter": {
       "filters-title": "Filter by interests",
@@ -110,13 +114,14 @@
       "person-filter": "Author",
       "original-language-filter": "Original Language",
       "locations-filter": "Location",
-      "free-text": "Free Text"
+      "free-text": "Free Text",
+      "sort-by-filter": "Sort by"
     },
     "media-types": {
-      "audio" : "Audio",
-      "video" : "Video",
-      "text" : "Transcription",
-      "image" : "Sketch"
+      "audio": "Audio",
+      "video": "Video",
+      "text": "Transcription",
+      "image": "Sketch"
     },
     "content-types": {
       "CONGRESS": "Congresy",
@@ -142,7 +147,8 @@
       "KITEI_MAKOR": "Zdrojové materiály",
       "LIKUTIM": "Assorted Excerpts",
       "SOURCE": "Knihovna",
-      "PICNIC": "Piknik"
+      "PICNIC": "Piknik",
+      "R_TWEET": "Tweets"
     }
   },
   "buttons": {
@@ -256,7 +262,8 @@
     "trimmed-title-wip": "We prepare the file for you",
     "trimmed-content-wip": "A few minutes...",
     "add-new-note": "Write down notes, things you heard during lessons or anything important to keep for the future...",
-    "confirm-remove-note": "Are you sure you want to delete the note?"
+    "confirm-remove-note": "Are you sure you want to delete the note?",
+    "unit-tags": "Tags"
   },
   "search": {
     "header": {
@@ -456,7 +463,8 @@
   "publications": {
     "header": {
       "text": "Publikace",
-      "subtext": "Články o aktuálních událostech, kultuře, populární vědě, vztazích a dalších, představené z jedinečné perspektivy moudrosti Kabaly"
+      "subtext": "Články o aktuálních událostech, kultuře, populární vědě, vztazích a dalších, představené z jedinečné perspektivy moudrosti Kabaly",
+      "subtext2": "The content is based on talks given by Dr. Michael Laitman and is written and edited by his students."
     },
     "tabs": {
       "articles": "Články",
@@ -551,7 +559,8 @@
     },
     "transcription": {
       "header": "Přepis",
-      "no-transcription": "Přepis chybí"
+      "no-transcription": "Přepis chybí",
+      "no-content": "Transcription is missing"
     },
     "sources": {
       "header": "Zdroje",
@@ -606,7 +615,8 @@
     "filter": "Filtr...",
     "share-title": "Read this article",
     "group-articles": "Group Articles",
-    "play-audio-file": "Přehrajte zvukový soubor"
+    "play-audio-file": "Přehrajte zvukový soubor",
+    "play-source": "Listen to this article"
   },
   "topics": {
     "header": {
@@ -622,7 +632,9 @@
     "derived-title": "Odvozená média",
     "type-labels": {
       "video": "Hlavní Video",
+      "video-simple": "Video",
       "audio": "Hlavní Audio",
+      "audio-simple": "Audio",
       "text": "Přepis Textů",
       "image": "Obrázky"
     },
@@ -734,7 +746,8 @@
       "LESSONS_SERIES": "Seltudy Series",
       "KTAIM_NIVCHARIM": "Selected Highlights",
       "sources": "Zdroje",
-      "SOURCE": "Zdroje"
+      "SOURCE": "Zdroje",
+      "downloads": "Downloads"
     },
     "media-types": {
       "video": "Video",
@@ -751,8 +764,11 @@
   },
   "languages": {
     "language": "Language",
-    "website_language": "Website Language",
-    "content_language": "Content language"
+    "ui_language": "UI Language:",
+    "content_languages": "Content Languages",
+    "add_languages": "Add language...",
+    "show_all_content": "Show all content",
+    "show_all_content_explanation": "You will see content in other languages too."
   },
   "share-text": {
     "message-title": "Přečtěte si tento fragment",
@@ -763,14 +779,15 @@
     "unpin": "Expand",
     "share-button": "Sdílet fragment",
     "bookmark-button": "Save Bookmark",
-    "tag-button": "Tag Text",
     "share-button-alt": "Share Link",
     "link-button-alt": "Copy link to selected text",
     "copy-button-alt": "Copy text",
     "bookmark-button-alt": "Create a bookmark and save it in the personal area",
+    "tag-button": "Tag Text",
     "tag-button-alt": "Tag the selected text in the Topics section",
     "docbar-title": "You have selected an excerpt from the text, what would you like to do?",
-    "play-from-text": "Play the chosen excerpt"
+    "play-from-text": "Play the chosen excerpt",
+    "lessons-by-source": "To all lessons on the article"
   },
   "personal": {
     "subsNewUnits": "new episodes",
@@ -834,6 +851,42 @@
       "ending": "Finish",
       "contentCreate": "Want everyone to see the excerpt you marked?\nTag it in the site's topics section",
       "labelCreated": "The excerpt has been successfully tagged. You can find it in the topics section under the topics you tagged"
+    }
+  },
+  "page-with-text": {
+    "buttons": {
+      "web": {
+        "lessons": "To all lessons on the article",
+        "text-settings": "Change text formatting",
+        "languages": "Change language",
+        "play-by-text": "New! Play a video clip",
+        "add-tag": "Add tagging",
+        "add-bookmark": "Add to bookmarks",
+        "add-comment": "Add a comment in the text",
+        "share": "Share",
+        "search": "Search on the page",
+        "expand-comments": "Show all comments",
+        "collapse-comments": "Hide all comments",
+        "download": "Download",
+        "print": "Print",
+        "fullscreen-on": "Full screen",
+        "fullscreen-off": "Exit full screen",
+        "hide-additions": "Hide all remarks",
+        "show-additions": "Show all remarks",
+        "scan": "Scan of the original text",
+        "more-buttons": "More"
+      },
+      "mobile": {
+        "lessons": "Lessons",
+        "text-settings": "Text",
+        "languages": "Language",
+        "add-bookmark": "Save",
+        "share": "Share",
+        "search": "Search",
+        "download": "Download",
+        "more-buttons": "More",
+        "toc": "Content"
+      }
     }
   }
 }

@@ -3,7 +3,7 @@ import { call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
 import { actions, types } from '../redux/modules/my';
 import Api from '../helpers/Api';
 import { selectors as authSelectors } from '../redux/modules/auth';
-import { actions as mdbActions, selectors as mdbSelectors } from '../redux/modules/mdb';
+import { actions as mbdActions, selectors as mdbSelectors } from '../redux/modules/mdb';
 import {
   IsCollectionContentType,
   MY_NAMESPACE_BOOKMARKS,
@@ -13,8 +13,8 @@ import {
   MY_NAMESPACE_SUBSCRIPTIONS
 } from '../helpers/consts';
 import { updateQuery } from './helpers/url';
-import { selectors as settings } from '../redux/modules/settings';
 import { fetchViewsByUIDs } from './recommended';
+import { settingsGetContentLanguagesSelector, settingsGetUILangSelector } from '../redux/selectors';
 
 function* updatePageInQuery(action) {
   const { pageNo } = action.payload;
@@ -34,7 +34,8 @@ export function* fetch(action) {
 
   let with_derivations = false;
 
-  const language = yield select(state => settings.getLanguage(state.settings));
+  const uiLang           = yield select(settingsGetUILangSelector);
+  const contentLanguages = yield select(settingsGetContentLanguagesSelector);
   try {
     const { data } = yield call(Api.my, namespace, params, token);
     if (!data?.items) {
@@ -75,22 +76,24 @@ export function* fetch(action) {
     co_uids = yield select(state => mdbSelectors.skipFetchedCO(state.mdb, co_uids));
     if (cu_uids.length > 0) {
       const { data: { content_units } } = yield call(Api.units, {
-        id: cu_uids,
-        pageSize: cu_uids.length,
+        id               : cu_uids,
+        pageSize         : cu_uids.length,
         with_files,
         with_derivations,
-        language
+        ui_language      : uiLang,
+        content_languages: contentLanguages
       });
-      yield put(mdbActions.receiveContentUnits(content_units));
+      yield put(mbdActions.receiveContentUnits(content_units));
     }
 
     if (co_uids.length > 0) {
       const { data: { collections } } = yield call(Api.collections, {
-        id: co_uids,
-        pageSize: co_uids.length,
-        language
+        id               : co_uids,
+        pageSize         : co_uids.length,
+        ui_language      : uiLang,
+        content_languages: contentLanguages
       });
-      yield put(mdbActions.receiveCollections(collections));
+      yield put(mbdActions.receiveCollections(collections));
     }
 
     yield put(actions.fetchSuccess({ namespace, addToList, ...data }));
@@ -110,7 +113,8 @@ export function* fetchOne(action) {
   if (!token) return;
   const { namespace, ...params } = action.payload;
   if (!params?.id) return;
-  const language = yield select(state => settings.getLanguage(state.settings));
+  const uiLang           = yield select(settingsGetUILangSelector);
+  const contentLanguages = yield select(settingsGetContentLanguagesSelector);
   try {
     const { data } = yield call(Api.my, namespace, params, token);
 
@@ -124,12 +128,13 @@ export function* fetchOne(action) {
 
     if (cu_uids.length > 0) {
       const { data: { content_units } } = yield call(Api.units, {
-        id: cu_uids,
-        pageSize: cu_uids.length,
-        with_files: true,
-        language,
+        id               : cu_uids,
+        pageSize         : cu_uids.length,
+        with_files       : true,
+        ui_language      : uiLang,
+        content_languages: contentLanguages
       });
-      yield put(mdbActions.receiveContentUnits(content_units));
+      yield put(mbdActions.receiveContentUnits(content_units));
     }
 
     yield put(actions.fetchOneSuccess({ namespace, item: data }));
@@ -189,31 +194,31 @@ function* reactionsCount(action) {
 
 //Watches
 function* watchSetPage() {
-  yield takeLatest(types.SET_PAGE, updatePageInQuery);
+  yield takeLatest(types['my/setPage'], updatePageInQuery);
 }
 
 function* watchFetch() {
-  yield takeEvery(types.FETCH, fetch);
+  yield takeEvery(types['my/fetch'], fetch);
 }
 
 function* watchFetchOne() {
-  yield takeEvery(types.FETCH_ONE, fetchOne);
+  yield takeEvery(types['my/fetchOne'], fetchOne);
 }
 
 function* watchAdd() {
-  yield takeEvery(types.ADD, add);
+  yield takeEvery(types['my/add'], add);
 }
 
 function* watchEdit() {
-  yield takeEvery(types.EDIT, edit);
+  yield takeEvery(types['my/edit'], edit);
 }
 
 function* watchRemove() {
-  yield takeEvery(types.REMOVE, remove);
+  yield takeEvery(types['my/remove'], remove);
 }
 
 function* watchReactionsCount() {
-  yield takeEvery(types.REACTION_COUNT, reactionsCount);
+  yield takeEvery(types['my/reactionsCount'], reactionsCount);
 }
 
 export const sagas = [
@@ -223,5 +228,5 @@ export const sagas = [
   watchAdd,
   watchEdit,
   watchRemove,
-  watchReactionsCount,
+  watchReactionsCount
 ];

@@ -2,22 +2,24 @@ import { call, put, select, takeLatest } from 'redux-saga/effects';
 
 import Api from '../helpers/Api';
 import { CT_SONGS } from '../helpers/consts';
-import { selectors as settings } from '../redux/modules/settings';
 import { actions, types } from '../redux/modules/music';
-import { actions as mdbActions } from '../redux/modules/mdb';
+import { actions as mbdActions } from '../redux/modules/mdb';
+import { settingsGetContentLanguagesSelector, settingsGetUILangSelector } from '../redux/selectors';
 
 export function* fetchMusic(action) {
   try {
-    const language = yield select(state => settings.getLanguage(state.settings));
-    const { data } = yield call(Api.collections, {
-      content_type: CT_SONGS,
-      language,
-      pageNo: 1,
-      pageSize: 1000, // NOTE: we need to get all data, and the endpoint lets us fetch only with pagination,
-      with_units: false,
+    const uiLang           = yield select(settingsGetUILangSelector);
+    const contentLanguages = yield select(settingsGetContentLanguagesSelector);
+    const { data }         = yield call(Api.collections, {
+      content_type     : CT_SONGS,
+      ui_language      : uiLang,
+      content_languages: contentLanguages,
+      pageNo           : 1,
+      pageSize         : 1000, // NOTE: we need to get all data, and the endpoint lets us fetch only with pagination,
+      with_units       : false
     });
 
-    yield put(mdbActions.receiveCollections(data.collections));
+    yield put(mbdActions.receiveCollections(data.collections));
     yield put(actions.fetchMusicSuccess(data.collections));
   } catch (err) {
     yield put(actions.fetchMusicFailure(err));
@@ -25,7 +27,7 @@ export function* fetchMusic(action) {
 }
 
 function* watchFetchMusic() {
-  yield takeLatest(types.FETCH_MUSIC, fetchMusic);
+  yield takeLatest(types['music/fetchMusic'], fetchMusic);
 }
 
 export const sagas = [watchFetchMusic];

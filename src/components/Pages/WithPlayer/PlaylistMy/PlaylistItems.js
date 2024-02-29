@@ -1,16 +1,20 @@
 import React from 'react';
 import ContentItemContainer from '../../../shared/ContentItem/ContentItemContainer';
 import { useSelector } from 'react-redux';
-import { selectors } from '../../../../redux/modules/playlist';
 import { MY_NAMESPACE_PLAYLISTS } from '../../../../helpers/consts';
-import { selectors as settings } from '../../../../redux/modules/settings';
 import { stringify } from '../../../../helpers/url';
+import {
+  playlistGetInfoSelector,
+  playlistGetItemByIdSelector,
+  playlistGetPlaylistSelector,
+  settingsGetUILangSelector
+} from '../../../../redux/selectors';
 
 const PlaylistItems = () => {
-  const language    = useSelector(state => settings.getLanguage(state.settings));
-  const items       = useSelector(state => selectors.getPlaylist(state.playlist));
-  const { id, pId } = useSelector(state => selectors.getInfo(state.playlist));
-  const itemById    = useSelector(state => selectors.getItemById(state.playlist));
+  const items       = useSelector(playlistGetPlaylistSelector);
+  const uiLang      = useSelector(settingsGetUILangSelector);
+  const { id, pId } = useSelector(playlistGetInfoSelector);
+  const itemById    = useSelector(playlistGetItemByIdSelector);
 
   return (
     <div id="avbox_playlist" className="avbox__playlist-view">
@@ -29,7 +33,7 @@ const PlaylistItems = () => {
               asList={true}
               selected={selected}
               name={name}
-              link={{ pathname: `/${language}/${MY_NAMESPACE_PLAYLISTS}/${pId}`, search }}
+              link={{ pathname: `/${uiLang}/${MY_NAMESPACE_PLAYLISTS}/${pId}`, search }}
               showImg={showImg}
             />
           );

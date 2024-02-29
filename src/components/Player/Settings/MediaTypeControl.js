@@ -3,13 +3,13 @@ import { Button, Header } from 'semantic-ui-react';
 import { useSelector, useDispatch } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 
-import { selectors } from '../../../redux/modules/player';
-import { actions as playlistActions, selectors as playlist } from '../../../redux/modules/playlist';
+import { actions as playlistActions } from '../../../redux/modules/playlist';
 import { MT_VIDEO, MT_AUDIO } from '../../../helpers/consts';
+import { playerGetFileSelector, playlistGetPlayedSelector } from '../../../redux/selectors';
 
 const MediaTypeControl = ({ t }) => {
-  const { type, language }  = useSelector(state => selectors.getFile(state.player));
-  const { isHLS, mtByLang } = useSelector(state => playlist.getPlayed(state.playlist));
+  const { type, language }  = useSelector(playerGetFileSelector);
+  const { isHLS, mtByLang } = useSelector(playlistGetPlayedSelector);
 
   const dispatch = useDispatch();
 

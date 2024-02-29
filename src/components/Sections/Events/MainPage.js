@@ -11,13 +11,11 @@ import {
   CT_MEAL,
   EVENT_PAGE_CTS,
   EVENT_TYPES,
-  PAGE_NS_EVENTS,
+  PAGE_NS_EVENTS
 } from '../../../helpers/consts';
 import { usePrevious } from '../../../helpers/utils';
-import { selectors as filters } from '../../../redux/modules/filters';
-import { actions, selectors as lists } from '../../../redux/modules/lists';
+import { actions } from '../../../redux/modules/lists';
 import { actions as prepareActions } from '../../../redux/modules/preparePage';
-import { selectors as settings } from '../../../redux/modules/settings';
 import FilterLabels from '../../FiltersAside/FilterLabels';
 import Pagination from '../../Pagination/Pagination';
 import ResultsPageHeader from '../../Pagination/ResultsPageHeader';
@@ -28,14 +26,20 @@ import WipErr from '../../shared/WipErr/WipErr';
 import CollectionItem from './CollectionItem';
 import Filters from './Filters';
 import UnitItem from './UnitItem';
+import {
+  settingsGetContentLanguagesSelector,
+  listsGetNamespaceStateSelector,
+  filtersGetNotEmptyFiltersSelector,
+  settingsGetPageSizeSelector
+} from '../../../redux/selectors';
 
 const BASE_PARAMS = { content_type: EVENT_PAGE_CTS };
 
 const MainPage = ({ t }) => {
-  const { items, total, wip, err } = useSelector(state => lists.getNamespaceState(state.lists, PAGE_NS_EVENTS)) || {};
-  const language                   = useSelector(state => settings.getLanguage(state.settings));
-  const pageSize                   = useSelector(state => settings.getPageSize(state.settings));
-  const selected                   = useSelector(state => filters.getNotEmptyFilters(state.filters, PAGE_NS_EVENTS), isEqual);
+  const { items, total, wip, err } = useSelector(state => listsGetNamespaceStateSelector(state, PAGE_NS_EVENTS)) || {};
+  const contentLanguages           = useSelector(settingsGetContentLanguagesSelector);
+  const pageSize                   = useSelector(settingsGetPageSizeSelector);
+  const selected                   = useSelector(state => filtersGetNotEmptyFiltersSelector(state, PAGE_NS_EVENTS), isEqual);
   const prevSel                    = usePrevious(selected);
 
   const location = useLocation();
@@ -46,7 +50,7 @@ const MainPage = ({ t }) => {
 
   useEffect(() => {
     dispatch(prepareActions.fetchCollections(PAGE_NS_EVENTS, { content_type: CT_HOLIDAY }));
-  }, [language, dispatch]);
+  }, [contentLanguages, dispatch]);
 
   useEffect(() => {
     if (pageNo !== 1 && !!prevSel && prevSel !== selected) {
@@ -55,11 +59,11 @@ const MainPage = ({ t }) => {
       dispatch(actions.fetchSectionList(PAGE_NS_EVENTS, pageNo, { pageSize, content_type: EVENT_PAGE_CTS }));
     }
 
-  }, [language, dispatch, pageNo, selected]);
+  }, [contentLanguages, dispatch, pageNo, selected]);
 
   const wipErr = WipErr({ wip, err, t });
   return (<>
-    <SectionHeader section="events" />
+    <SectionHeader section="events"/>
     <SectionFiltersWithMobile
       namespace={PAGE_NS_EVENTS}
       filters={
@@ -69,29 +73,29 @@ const MainPage = ({ t }) => {
         />
       }
     >
-      <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize} />
-      <FilterLabels namespace={PAGE_NS_EVENTS} />
+      <ResultsPageHeader pageNo={pageNo} total={total} pageSize={pageSize}/>
+      <FilterLabels namespace={PAGE_NS_EVENTS}/>
       {
-        wipErr || items?.map(({ id, content_type }, i) => {
-          switch (true) {
-            case EVENT_TYPES.includes(content_type):
-              return <CollectionItem id={id} key={i} />;
-            case [CT_MEAL, CT_FRIENDS_GATHERING].includes(content_type):
-              return <UnitItem id={id} key={i} />;
-            default:
-              return null;
+        wipErr || items?.map(
+          ({ id, content_type }, i) => {
+            switch (true) {
+              case EVENT_TYPES.includes(content_type):
+                return <CollectionItem id={id} key={i}/>;
+              case [CT_MEAL, CT_FRIENDS_GATHERING].includes(content_type):
+                return <UnitItem id={id} key={i}/>;
+              default:
+                return null;
+            }
           }
-        }
         )
       }
-      <Divider fitted />
+      <Divider fitted/>
       <Container className="padded pagination-wrapper" textAlign="center">
         {
           total > 0 && <Pagination
             pageNo={pageNo}
             pageSize={pageSize}
             total={total}
-            language={language}
             onChange={setPage}
           />
         }

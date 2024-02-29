@@ -4,17 +4,19 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { formatTime } from '../../../helpers/time';
-import { actions, selectors } from '../../../redux/modules/player';
+import { actions } from '../../../redux/modules/player';
 import { getPosition } from '../../../pkg/jwpAdapter/adapter';
-import { getLanguageDirection } from '../../../helpers/i18n-utils';
-import { selectors as settings } from '../../../redux/modules/settings';
+import {
+  playerGetFileSelector,
+  playerGetShareStartEndSelector,
+  settingsGetUIDirSelector
+} from '../../../redux/selectors';
 
 const StartEnd = ({ action }) => {
   const { t }              = useTranslation();
-  const { start = 0, end } = useSelector(state => selectors.getShareStartEnd(state.player));
-  const language           = useSelector(state => settings.getLanguage(state.settings));
-  const dir                = getLanguageDirection(language);
-  const { duration }       = useSelector(state => selectors.getFile(state.player));
+  const { start = 0, end } = useSelector(playerGetShareStartEndSelector);
+  const uiDir              = useSelector(settingsGetUIDirSelector);
+  const { duration }       = useSelector(playerGetFileSelector);
   const dispatch           = useDispatch();
 
   const handleSetStart = () => {
@@ -44,13 +46,13 @@ const StartEnd = ({ action }) => {
           type="text"
           action={{
             content: t('player.share.start-position'),
-            size: 'small',
+            size   : 'small',
             compact: true,
             onClick: handleSetStart
           }}
           placeholder={t('player.share.click-to-set')}
           value={formatTime(start)}
-          dir={dir}
+          dir={uiDir}
         />
         <Input
           size="mini"
@@ -60,13 +62,13 @@ const StartEnd = ({ action }) => {
           readOnly
           action={{
             content: t('player.share.end-position'),
-            size: 'small',
+            size   : 'small',
             compact: true,
             onClick: handleSetEnd
           }}
           placeholder={t('player.share.click-to-set')}
           value={fTimeEnd}
-          dir={dir}
+          dir={uiDir}
         />
       </div>
       {action}

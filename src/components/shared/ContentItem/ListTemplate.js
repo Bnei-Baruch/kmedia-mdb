@@ -2,23 +2,24 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Container, Header, Popup, Ref } from 'semantic-ui-react';
+import { useSelector } from 'react-redux';
+
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { NO_NAME } from '../../../helpers/consts';
-import { getLanguageDirection } from '../../../helpers/i18n-utils';
-import Link from '../../Language/MultiLanguageLink';
 
+import Link from '../../Language/MultiLanguageLink';
 import * as shapes from '../../shapes';
 import { imageWidthBySize } from './helper';
 import UnitLogoWithDuration from '../UnitLogoWithDuration';
 import UnitLogo from '../Logo/UnitLogo';
 import { UnitProgress } from './UnitProgress';
+import { settingsGetUIDirSelector } from '../../../redux/selectors';
 
 const ListTemplate = (
   {
     unit,
     source,
     tag,
-    language,
     withCUInfo,
     withCCUInfo,
     link,
@@ -33,12 +34,11 @@ const ListTemplate = (
     showImg
   }
 ) => {
-
   const itemRef = useRef(null);
 
   const handleItemRef = r => itemRef.current = r;
 
-  const dir                = getLanguageDirection(language);
+  const dir                = useSelector(settingsGetUIDirSelector);
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
   const [isNeedTooltip, setIsNeedTooltip] = useState(null);
@@ -74,7 +74,7 @@ const ListTemplate = (
         <Header
           as={size === 'big' || isMobileDevice ? 'h5' : 'h3'}
           className="cu_item_name"
-          content={_name} />
+          content={_name}/>
       </Ref>
     );
 
@@ -102,10 +102,10 @@ const ListTemplate = (
       >
         <div>
           {label ? <div className="cu_item_label">{label}</div> : null}
-          <UnitProgress unit={unit} playTime={playTime} />
+          <UnitProgress unit={unit} playTime={playTime}/>
           <div className="cu_item_img" style={{ width }}>
-            {withCUInfo ? <UnitLogoWithDuration unit={unit} sourceId={source?.id} width={width} showImg={showImg} /> :
-              <UnitLogo unitId={unit?.id} sourceId={source?.id} width={width} showImg={showImg} />}
+            {withCUInfo ? <UnitLogoWithDuration unit={unit} sourceId={source?.id} width={width} showImg={showImg}/> :
+              <UnitLogo unitId={unit?.id} sourceId={source?.id} width={width} showImg={showImg}/>}
           </div>
         </div>
         <div className={clsx('cu_item_info', { [dir]: true, 'with_actions': !!children })}>
@@ -128,15 +128,14 @@ const ListTemplate = (
 };
 
 ListTemplate.propTypes = {
-  unit: shapes.ContentUnit,
-  source: shapes.Source,
-  tag: shapes.Topic,
-  language: PropTypes.string.isRequired,
-  link: PropTypes.any.isRequired,
+  unit       : shapes.ContentUnit,
+  source     : shapes.Source,
+  tag        : shapes.Topic,
+  link       : PropTypes.any.isRequired,
   withCCUInfo: PropTypes.bool,
-  ccu: shapes.Collection,
+  ccu        : shapes.Collection,
   description: PropTypes.array,
-  position: PropTypes.number
+  position   : PropTypes.number
 };
 
 export default ListTemplate;

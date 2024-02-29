@@ -15,9 +15,9 @@ const MDB_REST_API_URL        = process.env.REACT_APP_MDB_REST_API_URL || `${API
 
 export const backendUrl               = path => `${API_BACKEND}${path}`;
 export const assetUrl                 = path => `${ASSETS_BACKEND}${path}`;
-export const cmsUrl       = path => `${CMS_BACKEND}${path}`;
-export const cLogoUrl     = path => `${cmsUrl('images/logos/' + path)}`;
-export const imaginaryUrl = path => `${IMAGINARY_URL}${path}`;
+export const cmsUrl                   = path => `${CMS_BACKEND}${path}`;
+export const cLogoUrl                 = path => `${cmsUrl(`images/logos/${path}`)}`;
+export const imaginaryUrl             = path => `${IMAGINARY_URL}${path}`;
 export const feedUrl                  = path => `${API_FEED}${path}`;
 export const chroniclesUrl            = path => `${CHRONICLES_BACKEND}${path}`;
 export const chroniclesBackendEnabled = CHRONICLES_BACKEND !== undefined;
@@ -25,7 +25,13 @@ export const chroniclesBackendEnabled = CHRONICLES_BACKEND !== undefined;
 export class Requests {
   static encode = encodeURIComponent;
 
-  static get = path => axios(backendUrl(path));
+  static get = async path => {
+    try {
+      return await axios.get(backendUrl(path));
+    } catch ({ response }) {
+      return response;
+    }
+  };
 
   static getAsset = path => axios(assetUrl(path));
 
@@ -33,10 +39,10 @@ export class Requests {
     let url;
     switch (item) {
       case 'banner':
-        url = `${cmsUrl('banners-list')}/${options.language}`;
+        url = `${cmsUrl('banners-list')}?${Requests.makeParams({ content_languages: options.contentLanguages })}`;
         break;
       case 'person':
-        url = `${cmsUrl('persons')}/${options.id}?language=${options.language}`;
+        url = `${cmsUrl('persons')}/${options.id}?${Requests.makeParams({ content_languages: options.contentLanguages })}`;
         break;
       default:
         return null;
@@ -64,6 +70,7 @@ export class Requests {
           return kcUpdateToken()
             .then(token => Requests.auth(params, url, token, method, false));
         }
+
         console.log('axios auth catch', err);
         return err;
       });
@@ -87,12 +94,6 @@ export class Requests {
       .join('&')}`
   );
 
-  static imaginaryRandom = (action, params, urlPattern) => {
-    const rand = Math.floor(Math.random() * Math.floor(31)) + 1;
-    params.url = assetUrl(urlPattern.replace(/%s/, rand));
-    return Requests.imaginary(action, params);
-  };
-
   static imaginary = (action, params) => {
     if (!params.url.startsWith('http')) {
       params.url = `http://${IMAGINARY_INTERNAL_HOST}${params.url}`;
@@ -103,15 +104,15 @@ export class Requests {
 }
 
 class Api {
-  static collection = ({ id, language }) => Requests.get(`collections/${id}?${Requests.makeParams({ language })}`);
+  static collection = ({ id, ui_language, content_languages }) => Requests.get(`collections/${id}?${Requests.makeParams({ ui_language, content_languages })}`);
 
-  static unit = ({ id, language }) => Requests.get(`content_units/${id}?${Requests.makeParams({ language })}`);
+  static unit = ({ id, ui_language, content_languages }) => Requests.get(`content_units/${id}?${Requests.makeParams({ ui_language, content_languages })}`);
 
-  static home = ({ language }) => Requests.get(`home?${Requests.makeParams({ language })}`);
+  static home = ({ ui_language, content_languages }) => Requests.get(`home?${Requests.makeParams({ ui_language, content_languages })}`);
 
-  static latestLesson = ({ language }) => Requests.get(`latestLesson?${Requests.makeParams({ language })}`);
+  static latestLesson = ({ ui_language, content_languages }) => Requests.get(`latestLesson?${Requests.makeParams({ ui_language, content_languages })}`);
 
-  static sqdata = ({ language }) => Requests.get(`sqdata?${Requests.makeParams({ language })}`);
+  static sqdata = ({ ui_language, content_languages }) => Requests.get(`sqdata?${Requests.makeParams({ ui_language, content_languages })}`);
 
   static lessons = ({ pageNo: page_no, pageSize: page_size, ...rest }) => (
     Requests.get(`lessons?${Requests.makeParams({ page_no, page_size, ...rest })}`)
@@ -141,8 +142,8 @@ class Api {
     Requests.get(`stats/label_class?${Requests.makeParams(rest)}`)
   );
 
-  static elasticStats = ({ q, language }) => (
-    Requests.get(`stats/search_class?${Requests.makeParams({ q, language })}`)
+  static elasticStats = ({ q, ui_language, content_languages }) => (
+    Requests.get(`stats/search_class?${Requests.makeParams({ q, ui_language, content_languages })}`)
   );
 
   static countCU = params => Requests.get(`count_cu?${Requests.makeParams(params)}`);
@@ -161,18 +162,19 @@ class Api {
 
   static tagDashboard = params => Requests.get(`tags/dashboard?${Requests.makeParams(params)}`);
 
-  static autocomplete = ({ q, language }) => Requests.get(`autocomplete?${Requests.makeParams({ q, language })}`);
+  static autocomplete = ({ q, ui_language, content_languages }) => Requests.get(`autocomplete?${Requests.makeParams({ q, ui_language, content_languages })}`);
 
   static search = ({
-                     q,
-                     language,
-                     pageNo: page_no,
-                     pageSize: page_size,
-                     sortBy: sort_by,
-                     deb,
-                     searchId: search_id
-                   }) => (
-    Requests.get(`search?${Requests.makeParams({ q, language, page_no, page_size, sort_by, deb, search_id })}`)
+    q,
+    ui_language,
+    content_languages,
+    pageNo  : page_no,
+    pageSize: page_size,
+    sortBy  : sort_by,
+    deb,
+    searchId: search_id
+  }) => (
+    Requests.get(`search?${Requests.makeParams({ q, ui_language, content_languages, page_no, page_size, sort_by, deb, search_id })}`)
   );
 
   static click = ({ mdbUid: mdb_uid, index, type, rank, searchId: search_id, deb }) => (
@@ -188,8 +190,8 @@ class Api {
 
   static getCMS = (item, options) => Requests.getCMS(item, options);
 
-  static simpleMode = ({ language, startDate: start_date, endDate: end_date }) => (
-    Requests.get(`simple?${Requests.makeParams({ language, start_date, end_date })}`)
+  static simpleMode = ({ ui_language, content_languages, startDate: start_date, endDate: end_date }) => (
+    Requests.get(`simple?${Requests.makeParams({ ui_language, content_languages, start_date, end_date })}`)
   );
 
   static recommendedRequestData = (
@@ -197,34 +199,34 @@ class Api {
       uid,
       languages,
       skipUids: skip_uids,
-      size: more_items,
+      size    : more_items,
       spec,
       specs,
       watchingNowMin: watching_now_min,
-      popularMin: popular_min
+      popularMin    : popular_min
     }
   ) => ({
     more_items,
     'current_feed': [],
-    'options': {
+    'options'     : {
       'recommend': {
-        uid,
+        uid
       },
       languages,
       skip_uids,
       spec,
       specs,
       watching_now_min,
-      popular_min,
+      popular_min
     }
   });
 
   static recommended = requestData => {
     const config = {
-      method: 'post',
-      url: feedUrl('recommend'),
+      method : 'post',
+      url    : feedUrl('recommend'),
       headers: { 'Content-Type': 'application/json' },
-      data: JSON.stringify(requestData),
+      data   : JSON.stringify(requestData)
     };
 
     return axios(config);
@@ -232,10 +234,10 @@ class Api {
 
   static views = uids => {
     const config = {
-      method: 'post',
-      url: feedUrl('views'),
+      method : 'post',
+      url    : feedUrl('views'),
       headers: { 'Content-Type': 'application/json' },
-      data: JSON.stringify({ uids }),
+      data   : JSON.stringify({ uids })
     };
 
     return axios(config);
@@ -243,10 +245,10 @@ class Api {
 
   static watchingNow = uids => {
     const config = {
-      method: 'post',
-      url: feedUrl('watchingnow'),
+      method : 'post',
+      url    : feedUrl('watchingnow'),
       headers: { 'Content-Type': 'application/json' },
-      data: JSON.stringify({ uids }),
+      data   : JSON.stringify({ uids })
     };
 
     return axios(config);
@@ -297,8 +299,12 @@ class Api {
       url = `${url}/${params.id}`;
       delete params.id;
     }
+
     return Requests.auth(params, url, token, method);
   };
+
+  static postLanguages = (data, token) => Requests.auth(data, `${PERSONAL_API_BACKEND}settings`, token, 'POST');
+  static getLanguages  = token => Requests.auth({}, `${PERSONAL_API_BACKEND}languages`, token, 'GET');
 
   static reactionsCount = params => {
     const url    = `${PERSONAL_API_BACKEND}reaction_count?${Requests.makeParams(params)}`;

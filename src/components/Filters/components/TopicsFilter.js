@@ -3,16 +3,15 @@ import { withTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
 import { isEmpty } from '../../../helpers/utils';
-import { selectors } from '../../../redux/modules/tags';
-import { selectors as stats } from '../../../redux/modules/stats';
 import HierarchicalFilter from './HierarchicalFilter';
-import { getTree } from '../../../helpers/topricTree';
+import { getTree } from '../../../helpers/topicTree';
+import { statsGetCUSelector, tagsGetRootsSelector, tagsGetTagByIdSelector } from '../../../redux/selectors';
 
 const TagsFilter = props => {
-  const roots      = useSelector(state => selectors.getRoots(state.tags));
-  const getTagById = useSelector(state => selectors.getTagById(state.tags));
+  const roots      = useSelector(tagsGetRootsSelector);
+  const getTagById = useSelector(tagsGetTagByIdSelector);
 
-  let cuStats = useSelector(state => stats.getCUStats(state.stats, props.namespace)) || { data: { tags: {} } };
+  let cuStats = useSelector(state => statsGetCUSelector(state, props.namespace)) || { data: { tags: {} } };
   cuStats     = isEmpty(cuStats) || isEmpty(cuStats.data) ? null : cuStats.data.tags;
 
   const { t } = props;

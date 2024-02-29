@@ -4,15 +4,27 @@ import Api from '../helpers/Api';
 import { getQuery, updateQuery as urlUpdateQuery } from './helpers/url';
 import { GenerateSearchId } from '../helpers/search';
 import { actions, selectors, types } from '../redux/modules/search';
-import { selectors as settings, types as settingsTypes } from '../redux/modules/settings';
-import { actions as mdbActions } from '../redux/modules/mdb';
+import { types as settingsTypes } from '../redux/modules/settings';
+import { actions as mbdActions } from '../redux/modules/mdb';
 import { actions as postsActions } from '../redux/modules/publications';
-import { selectors as filterSelectors, actions as filterActions, types as filterTypes } from '../redux/modules/filters';
-import { selectors as lessonsSelectors, actions as lessonsActions } from '../redux/modules/lessons';
+import { actions as filterActions, types as filterTypes } from '../redux/modules/filters';
+import { actions as lessonsActions } from '../redux/modules/lessons';
 import { fetchAllSeries } from './lessons';
 import { fetchViewsByUIDs } from './recommended';
 import { filtersTransformer } from '../filters';
 import { push } from '@lagunovsky/redux-react-router';
+import {
+  filtersGetFiltersSelector,
+  lessonsGetSeriesLoaded,
+  searchGetDebSelector,
+  searchGetPageNoSelector,
+  searchGetPrevFilterParamsSelector,
+  searchGetPrevQuerySelector,
+  searchGetQuerySelector,
+  searchGetSortBySelector,
+  settingsGetContentLanguagesSelector,
+  settingsGetUILangSelector
+} from '../redux/selectors';
 
 // TODO: Use debounce after redux-saga updated.
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -25,11 +37,12 @@ function* autocomplete(action) {
     }
 
     yield delay(100);  // Debounce autocomplete.
-    const query          = yield select(state => selectors.getQuery(state.search));
-    const language       = yield select(state => settings.getLanguage(state.settings));
-    const autocompleteId = GenerateSearchId();
-    const request        = { q: query, language };
-    let suggestions      = null;
+    const query            = yield select(state => selectors.getQuery(state.search));
+    const uiLang           = yield select(settingsGetUILangSelector);
+    const contentLanguages = yield select(settingsGetContentLanguagesSelector);
+    const autocompleteId   = GenerateSearchId();
+    const request          = { q: query, ui_language: uiLang, content_languages: contentLanguages };
+    let suggestions        = null;
     if (query) {
       const { data }      = yield call(Api.autocomplete, request);
       data.autocompleteId = autocompleteId;
@@ -54,20 +67,19 @@ function getIdsForFetch(hits, types) {
 
 export function* search(action) {
   try {
-    const query     = yield select(state => selectors.getQuery(state.search));
-    const prevQuery = yield select(state => selectors.getPrevQuery(state.search));
-    let pageNo      = yield select(state => selectors.getPageNo(state.search));
+    const query     = yield select(searchGetQuerySelector);
+    const prevQuery = yield select(searchGetPrevQuerySelector);
+    let pageNo      = yield select(searchGetPageNoSelector);
 
     // Prepare filters values.
-    const filters         = yield select(state => filterSelectors.getFilters(state.filters, 'search'));
+    const filters         = yield select(state => filtersGetFiltersSelector(state, 'search'));
     const params          = filtersTransformer.toApiParams(filters);
     const filterKeyValues = Object.entries(params).map(([v, k]) => `${v}:${k}`).join(' ');
-    let filterParams      = filterKeyValues ? ` ${filterKeyValues}` : '';
+    const filterParams    = filterKeyValues ? ` ${filterKeyValues}` : '';
 
     // Clear pagination and filters.
     if (prevQuery !== '' && prevQuery !== query && (pageNo !== 1 || !!filterParams)) {
       if (pageNo !== 1) {
-        yield put(actions.setPage(1));
         yield* urlUpdateQuery(query => Object.assign(query, { page: 1 }));
         pageNo = 1;
       }
@@ -80,25 +92,26 @@ export function* search(action) {
       }
     }
 
-    if (action.type === filterTypes.SET_FILTER_VALUE_MULTI) {
-      const prevFilterParams = yield select(state => selectors.getPrevFilterParams(state.search));
+    if (action && action.type === filterTypes['filters/setFilterValueMulti']) {
+      const prevFilterParams = yield select(searchGetPrevFilterParamsSelector);
       if (filterParams === prevFilterParams) {
         // Don't search if filters have not changed.
         return;
       }
     }
 
-    const language = yield select(state => settings.getLanguage(state.settings));
-    const sortBy   = yield select(state => selectors.getSortBy(state.search));
-    const deb      = yield select(state => selectors.getDeb(state.search));
+    const uiLang           = yield select(settingsGetUILangSelector);
+    const contentLanguages = yield select(settingsGetContentLanguagesSelector);
+    const sortBy           = yield select(searchGetSortBySelector);
+    const deb              = yield select(searchGetDebSelector);
 
     // Redirect from home page.
-    if (action.type === types.SEARCH && !action.payload) {
+    if (action && action.type === types['search/search'] && !action.payload) {
       yield put(push({ pathname: 'search' }));
       yield* urlUpdateQuery(q => Object.assign(q, { q: query }));
     }
 
-    const q = query.trim() ? `${query.trim()}${filterParams}` : filterParams;
+    const q = query?.trim() ? `${query.trim()}${filterParams}` : filterParams;
     if (!q) {
       // If no query nor filters, silently fail the request, don't sent request to backend.
       yield put(actions.searchFailure(null));
@@ -109,11 +122,12 @@ export function* search(action) {
     const request  = {
       q,
       sortBy,
-      language,
+      ui_language: uiLang,
+      content_languages: contentLanguages,
       deb,
       searchId,
       pageNo,
-      pageSize: 20,
+      pageSize: 20
     };
 
     yield put(actions.setWip());
@@ -128,31 +142,43 @@ export function* search(action) {
       const cIDsToFetch    = getIdsForFetch(data.search_result.hits.hits, ['collections']);
       const cuIDsToFetch   = getIdsForFetch(data.search_result.hits.hits, ['units', 'sources']);
       const postIDsToFetch = getIdsForFetch(data.search_result.hits.hits, ['posts']);
-      const seriesLoaded   = yield select(state => lessonsSelectors.getSeriesLoaded(state.lessons));
+      const seriesLoaded   = yield select(lessonsGetSeriesLoaded);
 
       if (cuIDsToFetch.length === 0 && cIDsToFetch.length === 0 && postIDsToFetch.length === 0 && seriesLoaded) {
-        yield put(actions.searchSuccess({ searchResults: data, searchRequest: request, filterParams, query }));
+        yield put(actions.searchSuccess({ searchResults: data, searchRequest: request, filterParams, query, pageNo }));
         return;
       }
 
-      const lang     = yield select(state => settings.getLanguage(state.settings));
-      const requests = [];
+      const uiLang           = yield select(settingsGetUILangSelector);
+      const contentLanguages = yield select(settingsGetContentLanguagesSelector);
+      const requests         = [];
       if (cuIDsToFetch.length > 0) {
         requests.push(call(Api.units, {
           id: cuIDsToFetch,
           pageSize: cuIDsToFetch.length,
-          language: lang,
+          ui_language: uiLang,
+          content_languages: contentLanguages,
           with_files: true,
-          with_derivations: true,
+          with_derivations: true
         }));
       }
 
       if (cIDsToFetch.length > 0) {
-        requests.push(call(Api.collections, { id: cIDsToFetch, pageSize: cIDsToFetch.length, language: lang }));
+        requests.push(call(Api.collections, {
+          id: cIDsToFetch,
+          pageSize: cIDsToFetch.length,
+          ui_language: uiLang,
+          content_languages: contentLanguages
+        }));
       }
 
       if (postIDsToFetch.length > 0) {
-        requests.push(call(Api.posts, { id: postIDsToFetch, pageSize: postIDsToFetch.length, language: lang }));
+        requests.push(call(Api.posts, {
+          id: postIDsToFetch,
+          pageSize: postIDsToFetch.length,
+          ui_language: uiLang,
+          content_languages: contentLanguages
+        }));
       }
 
       if (!seriesLoaded) {
@@ -167,12 +193,12 @@ export function* search(action) {
       const responses = yield all(requests);
       if (cuIDsToFetch.length > 0) {
         const respCU = responses.shift();
-        yield put(mdbActions.receiveContentUnits(respCU.data.content_units));
+        yield put(mbdActions.receiveContentUnits(respCU.data.content_units));
       }
 
       if (cIDsToFetch.length > 0) {
         const respC = responses.shift();
-        yield put(mdbActions.receiveCollections(respC.data.collections));
+        yield put(mbdActions.receiveCollections(respC.data.collections));
       }
 
       if (postIDsToFetch.length > 0) {
@@ -181,20 +207,20 @@ export function* search(action) {
       }
     }
 
-    yield put(actions.searchSuccess({ searchResults: data, searchRequest: request, filterParams, query }));
+    yield put(actions.searchSuccess({ searchResults: data, searchRequest: request, filterParams, query, pageNo }));
   } catch (err) {
     yield put(actions.searchFailure(err));
   }
 }
 
-// Propogate URL search params to redux.
+// Propagate URL search params to redux.
 export function* hydrateUrl() {
   const urlQuery                       = yield* getQuery();
   const { q, page = '1', deb = false } = urlQuery;
 
-  const reduxQuery  = yield select(state => selectors.getQuery(state.search));
-  const reduxPageNo = yield select(state => selectors.getPageNo(state.search));
-  const reduxDeb    = yield select(state => selectors.getDeb(state.search));
+  const reduxQuery  = yield select(searchGetQuerySelector);
+  const reduxPageNo = yield select(searchGetPageNoSelector);
+  const reduxDeb    = yield select(searchGetDebSelector);
   if (deb !== reduxDeb) {
     yield put(actions.setDeb(deb));
   }
@@ -220,7 +246,7 @@ export function* updateUrl(action) {
   const urlQuery = yield* getQuery();
   const { q }    = urlQuery;
 
-  const reduxQuery = yield select(state => selectors.getQuery(state.search));
+  const reduxQuery = yield select(searchGetQuerySelector);
   if (reduxQuery && reduxQuery !== q) {
     yield* urlUpdateQuery(query => Object.assign(query, { q: reduxQuery }));
   }
@@ -237,32 +263,34 @@ function* updateSortByInQuery(action) {
 }
 
 function* watchQueryUpdate() {
-  yield takeEvery(types.UPDATE_QUERY, updateUrl);
-  yield takeLatest(types.UPDATE_QUERY, autocomplete);
+  yield takeEvery(types['search/updateQuery'], updateUrl);
+  yield takeLatest(types['search/updateQuery'], autocomplete);
 }
 
 function* watchSearch() {
+  // TODO: Will trigger search in every such value.
+  // Check that you are on search page for all, but the SEARCH action.
   yield takeLatest([
-    filterTypes.SET_FILTER_VALUE,
-    filterTypes.SET_FILTER_VALUE_MULTI,
-    settingsTypes.SET_LANGUAGE,
-    types.SEARCH,
-    types.SET_DEB,
-    types.SET_PAGE,
-    types.SET_SORT_BY,
+    filterTypes['filters/setFilterValue'],
+    filterTypes['filters/setFilterValueMulti'],
+    settingsTypes['settings/setContentLanguages'],
+    types['search/search'],
+    types['search/setDeb'],
+    types['search/setPage'],
+    types['search/setSortBy']
   ], search);
 }
 
 function* watchSetPage() {
-  yield takeLatest(types.SET_PAGE, updatePageInQuery);
+  yield takeLatest(types['search/setPage'], updatePageInQuery);
 }
 
 function* watchSetSortBy() {
-  yield takeLatest(types.SET_SORT_BY, updateSortByInQuery);
+  yield takeLatest(types['search/setSortBy'], updateSortByInQuery);
 }
 
 function* watchHydrateUrl() {
-  yield takeLatest(types.HYDRATE_URL, hydrateUrl);
+  yield takeLatest(types['search/hydrateUrl'], hydrateUrl);
 }
 
 export const sagas = [
@@ -270,5 +298,5 @@ export const sagas = [
   watchQueryUpdate,
   watchSearch,
   watchSetPage,
-  watchSetSortBy,
+  watchSetSortBy
 ];

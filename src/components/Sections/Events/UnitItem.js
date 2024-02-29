@@ -4,12 +4,12 @@ import { useSelector } from 'react-redux';
 import { Header, List } from 'semantic-ui-react';
 import { canonicalLink } from '../../../helpers/links';
 import { isEmpty } from '../../../helpers/utils';
-import { selectors as mdb } from '../../../redux/modules/mdb';
 import Link from '../../Language/MultiLanguageLink';
 import UnitLogoWithDuration from '../../shared/UnitLogoWithDuration';
+import { mdbGetDenormContentUnitSelector } from '../../../redux/selectors';
 
 const UnitItem = ({ id, t }) => {
-  const cu = useSelector(state => mdb.getDenormContentUnit(state.mdb, id));
+  const cu = useSelector(state => mdbGetDenormContentUnitSelector(state, id));
   if (!cu) return null;
 
   const link        = canonicalLink(cu);
@@ -18,10 +18,10 @@ const UnitItem = ({ id, t }) => {
   return (
     <List.Item key={id} className="media_item">
       <Link to={link}>
-        <UnitLogoWithDuration unit={cu} />
+        <UnitLogoWithDuration unit={cu}/>
       </Link>
       <div className="media_item__content">
-        <Header content={cu.name} as={Link} to={link} />
+        <Header content={cu.name} as={Link} to={link}/>
         {
           !isEmpty(collections) && (
             <div className="additional_links">

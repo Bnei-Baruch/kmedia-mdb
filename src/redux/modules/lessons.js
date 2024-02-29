@@ -1,109 +1,35 @@
-import { createAction } from 'redux-actions';
+import { createSlice } from '@reduxjs/toolkit';
 
-import { isEmpty, isNotEmptyArray, strCmp, getEscapedRegExp } from '../../helpers/utils';
+import { getEscapedRegExp, isEmpty, isNotEmptyArray, strCmp } from '../../helpers/utils';
 import { SRC_VOLUME } from '../../helpers/consts';
 import { selectors as mdb } from './mdb';
-import { handleActions, types as settings } from './settings';
+import { actions as settingsActions } from './settings';
 import { selectors as sources } from './sources';
 import { selectors as tags } from './tags';
-import { types as ssr } from './ssr';
-
-/* Types */
-const SET_TAB = 'Lessons/SET_TAB';
-
-const FETCH_ALL_SERIES         = 'Lessons/FETCH_ALL_SERIES';
-const FETCH_ALL_SERIES_SUCCESS = 'Lessons/FETCH_ALL_SERIES_SUCCESS';
-const FETCH_ALL_SERIES_FAILURE = 'Lessons/FETCH_ALL_SERIES_FAILURE';
-
-export const types = {
-  SET_TAB,
-
-  FETCH_ALL_SERIES,
-  FETCH_ALL_SERIES_SUCCESS,
-  FETCH_ALL_SERIES_FAILURE,
-};
-
-/* Actions */
-const setTab = createAction(SET_TAB);
-
-const fetchAllSeries        = createAction(FETCH_ALL_SERIES);
-const fetchAllSeriesSuccess = createAction(FETCH_ALL_SERIES_SUCCESS);
-const fetchAllSeriesFailure = createAction(FETCH_ALL_SERIES_FAILURE);
-
-export const actions = {
-  setTab,
-
-  fetchAllSeries,
-  fetchAllSeriesSuccess,
-  fetchAllSeriesFailure,
-};
-
-/* Reducer */
+import { actions as ssrActions } from './ssr';
 
 const initialState = {
-  seriesIDs: [],
+  seriesIDs   : [],
   seriesLoaded: false,
-  wip: {
-    series: false,
+  wip         : {
+    series: false
   },
-  errors: {
-    series: null,
-  },
-};
-
-/**
- * Set the wip and errors part of the state
- */
-const setStatus = (draft, payload, type) => {
-  switch (type) {
-    case FETCH_ALL_SERIES:
-      draft.wip.series = true;
-      break;
-    case FETCH_ALL_SERIES_SUCCESS:
-      draft.wip.series    = false;
-      draft.errors.series = null;
-      draft.seriesLoaded = true;
-      break;
-    case FETCH_ALL_SERIES_FAILURE:
-      draft.wip.series    = false;
-      draft.errors.series = payload;
-      break;
-    default:
-      break;
+  errors      : {
+    series: null
   }
 };
 
-const onFetchAllSeriesSuccess = (draft, payload, type) => {
-  draft.seriesIDs = payload.collections.map(x => x.id);
-  setStatus(draft, payload, type);
+const onSetLanguage = state => {
+  console.log('lessons onSetLanguage');
+  state.seriesIDs    = [];
+  state.seriesLoaded = false;
 };
 
-const onSetLanguage = draft => {
-  draft.seriesIDs = [];
-  draft.seriesLoaded = false;
-};
-
-const onSSRPrepare = draft => {
-  if (draft.errors.series) {
-    draft.errors.series = draft.errors.series.toString();
+const onSSRPrepare = state => {
+  if (state.errors.series) {
+    state.errors.series = state.errors.series.toString();
   }
 };
-
-export const reducer = handleActions({
-  [ssr.PREPARE]: onSSRPrepare,
-  [settings.SET_LANGUAGE]: onSetLanguage,
-
-  [FETCH_ALL_SERIES]: setStatus,
-  [FETCH_ALL_SERIES_SUCCESS]: onFetchAllSeriesSuccess,
-  [FETCH_ALL_SERIES_FAILURE]: setStatus,
-}, initialState);
-
-/* Selectors */
-
-const getWip          = state => state.wip;
-const getErrors       = state => state.errors;
-const getSeriesIDs    = state => state.seriesIDs;
-const getSeriesLoaded = state => state.seriesLoaded;
 
 const $$sortTree = node => {
   if (isEmpty(node)) {
@@ -137,7 +63,7 @@ const $$sortTree = node => {
     name,
     parent_id,
     type,
-    children,
+    children
   };
 };
 
@@ -276,10 +202,9 @@ const getSeriesTree = (state, match) => {
 
     // don't display the long names like Rabbi Yehuda Leib Ashlag
     // but display full name of Rav - Michael Laitman, Ph.D
-    const displayName = full_name.includes(name)
+    return full_name.includes(name)
       ? full_name
       : name;
-    return displayName;
   };
 
   const fullTree = {};
@@ -311,12 +236,48 @@ const getSerieByTagId = (state, mdbState, tagsState) => tId => {
   return { ...tag, collections };
 };
 
-export const selectors = {
-  getWip,
-  getErrors,
-  getSeriesIDs,
-  getSeriesLoaded,
-  getSeriesTree,
-  getSerieBySourceId,
-  getSerieByTagId,
-};
+const lessonsSlice = createSlice({
+  name: 'lessons',
+  initialState,
+
+  reducers     : {
+    setTab: () => ({}),
+
+    fetchAllSeries       : state => void (state.wip.series = true),
+    fetchAllSeriesSuccess: (state, { payload }) => {
+      payload.seriesIDs   = payload.collections.map(x => x.id);
+      state.wip.series    = false;
+      state.errors.series = null;
+      state.seriesLoaded  = true;
+    },
+    fetchAllSeriesFailure: (state, { payload }) => {
+      state.wip.series    = false;
+      state.errors.series = payload;
+    }
+  },
+  extraReducers: builder => {
+    builder
+      .addCase(ssrActions.prepare, onSSRPrepare)
+      .addCase(settingsActions.setContentLanguages, onSetLanguage);
+  },
+
+  selectors: {
+    getWip         : state => state.wip,
+    getErrors      : state => state.errors,
+    getSeriesIDs   : state => state.seriesIDs,
+    getSeriesLoaded: state => state.seriesLoaded,
+    getSerieByTagId,
+    getSerieBySourceId,
+    getSeriesTree
+  }
+});
+
+export default lessonsSlice.reducer;
+
+export const { actions } = lessonsSlice;
+
+export const types = Object.fromEntries(new Map(
+  Object.values(lessonsSlice.actions).map(a => [a.type, a.type])
+));
+
+export const selectors = lessonsSlice.getSelectors();

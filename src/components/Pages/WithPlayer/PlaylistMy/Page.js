@@ -8,14 +8,15 @@ import Info from '../widgets/Info/Info';
 import Recommended from '../widgets/Recommended/Main/Recommended';
 import PlaylistHeader from '../Playlist/PlaylistHeader';
 import PlaylistItems from './PlaylistItems';
-import { selectors as playlist } from '../../../../redux/modules/playlist';
 import WipErr from '../../../shared/WipErr/WipErr';
 import clsx from 'clsx';
 import { DeviceInfoContext } from '../../../../helpers/app-contexts';
+import { playlistGetInfoSelector } from '../../../../redux/selectors';
 
 const PlaylistMyPage = ({ playerContainer, t }) => {
-  const isReady            = useSelector(state => playlist.getInfo(state.playlist).isReady);
+  const { isReady }        = useSelector(playlistGetInfoSelector);
   const { isMobileDevice } = useContext(DeviceInfoContext);
+  const { cuId }      = useSelector(playlistGetInfoSelector);
   if (!isReady)
     return WipErr({ wip: !isReady, t });
 
@@ -28,20 +29,20 @@ const PlaylistMyPage = ({ playerContainer, t }) => {
         computer={computerWidth}
         className={clsx({ 'is-fitted': isMobileDevice })}>
         <div id="avbox_playlist">
-          <PlaylistHeader />
+          <PlaylistHeader/>
         </div>
         {playerContainer}
         <Container id="unit_container">
-          <Info />
-          <Materials />
+          <Info/>
+          <Materials/>
         </Container>
       </Grid.Column>
       {
         !isMobileDevice && (
           <Grid.Column width={6}>
-            <PlaylistItems />
-            <Divider hidden />
-            <Recommended filterOutUnits={[]} />
+            <PlaylistItems/>
+            <Divider hidden/>
+            <Recommended cuId={cuId} filterOutUnits={[]}/>
           </Grid.Column>
         )
       }

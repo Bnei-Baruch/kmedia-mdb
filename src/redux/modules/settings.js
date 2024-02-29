@@ -1,79 +1,95 @@
-import { createAction } from 'redux-actions';
-import produce, { setAutoFreeze } from 'immer';
+import { createSlice } from '@reduxjs/toolkit';
 
-import { DEFAULT_LANGUAGE } from '../../helpers/consts';
-import { getQuery } from '../../helpers/url';
+import {
+  ALL_LANGUAGES,
+  COOKIE_CONTENT_LANGS,
+  COOKIE_SHOW_ALL_CONTENT,
+  COOKIE_UI_LANG,
+  DEFAULT_CONTENT_LANGUAGES,
+  DEFAULT_UI_LANGUAGE,
+  DEFAULT_UI_DIR
+} from '../../helpers/consts';
+import { getLanguageDirection } from '../../helpers/i18n-utils';
+import { setCookie } from '../../helpers/date';
 
-setAutoFreeze(process.env.NODE_ENV !== 'production')
-
-/* Helpers */
-
-export const handleActions = (actionsMap, defaultState) =>
-  (
-    state = defaultState,
-    { type, payload }
-  ) =>
-    produce(state, draft => {
-      const action = actionsMap[type];
-      action && action(draft, payload, type);
-    });
-
-/* Types */
-
-const SET_LANGUAGE         = 'Settings/SET_LANGUAGE';
-const SET_CONTENT_LANGUAGE = 'Settings/SET_CONTENT_LANGUAGE';
-const SET_PAGE_SIZE        = 'Settings/SET_PAGE_SIZE';
-
-export const types = {
-  SET_LANGUAGE,
-  SET_CONTENT_LANGUAGE,
-  SET_PAGE_SIZE,
-};
-
-/* Actions */
-
-const setLanguage        = createAction(SET_LANGUAGE);
-const setContentLanguage = createAction(SET_CONTENT_LANGUAGE);
-const setPageSize        = createAction(SET_PAGE_SIZE);
-
-export const actions = {
-  setLanguage,
-  setContentLanguage,
-  setPageSize,
-};
-
-/* Reducer */
 export const initialState = {
-  language: DEFAULT_LANGUAGE,
-  contentLanguage: DEFAULT_LANGUAGE,
-  pageSize: 20,
+  // Array is required for url language because we have to return
+  // the same array for contentLanguages without generating a new
+  // one each time. Otherwise, the component will re-render infinitely.
+  urlLanguage     : [],
+  uiLang          : DEFAULT_UI_LANGUAGE,
+  uiDir           : DEFAULT_UI_DIR,
+  contentLanguages: DEFAULT_CONTENT_LANGUAGES,
+  showAllContent  : false,
+  pageSize        : 20
 };
 
-const onSetLanguage = (draft, payload) => {
-  draft.language = payload;
+export const onSetUrlLanguage = (state, payload) => {
+  if (payload) {
+    state.urlLanguage = [payload];
+  } else if (state.urlLanguage.length > 0) {
+    state.urlLanguage.length = 0;
+  }
 };
 
-const onSetContentLanguage = (draft, payload) => {
-  draft.contentLanguage = payload;
+export const onSetUILanguage = (state, payload) => {
+  setCookie(COOKIE_UI_LANG, payload.uiLang);
+  state.uiLang = payload.uiLang;
+  state.uiDir  = getLanguageDirection(payload.uiLang);
 };
 
-const onSetPageSize = (draft, payload) => {
-  draft.pageSize = payload;
+export const onSetContentLanguages = (state, payload) => {
+  setCookie(COOKIE_CONTENT_LANGS, payload.contentLanguages);
+  state.contentLanguages = payload.contentLanguages;
 };
 
-export const reducer = handleActions({
-  [SET_LANGUAGE]: onSetLanguage,
-  [SET_CONTENT_LANGUAGE]: onSetContentLanguage,
-  [SET_PAGE_SIZE]: onSetPageSize,
-}, initialState);
-
-/* Selectors */
-const getLanguage        = state => state.language;
-const getContentLanguage = (state, location) => getQuery(location)?.language || state.contentLanguage || state.language;
-const getPageSize        = state => state.pageSize;
-
-export const selectors = {
-  getLanguage,
-  getContentLanguage,
-  getPageSize,
+const onSetShowAllContent = (state, payload) => {
+  setCookie(COOKIE_SHOW_ALL_CONTENT, payload);
+  state.showAllContent = payload;
 };
+
+const onSetPageSize = (state, payload) => {
+  state.pageSize = payload;
+};
+
+const settingsSlice = createSlice({
+  name: 'settings',
+  initialState,
+
+  reducers: {
+    setURLLanguage     : (state, { payload }) => void onSetUrlLanguage(state, payload),
+    setUILanguage      : (state, { payload }) => void (onSetUILanguage(state, payload)),
+    setContentLanguages: (state, { payload }) => void (onSetContentLanguages(state, payload)),
+    setShowAllContent  : (state, { payload }) => void (onSetShowAllContent(state, payload)),
+    setPageSize        : (state, { payload }) => void (onSetPageSize(state, payload))
+  },
+
+  selectors: {
+    getUrlLang         : state => (state.urlLanguage.length && state.urlLanguage[0]) || '',
+    getUIDir           : state => !!state.urlLanguage.length ? getLanguageDirection(state.urlLanguage[0]) : state.uiDir,
+    getUILang          : (state, skipUrl) => !state.urlLanguage.length || skipUrl ? state.uiLang : state.urlLanguage[0],
+    getShowAllContent  : state => state.showAllContent,
+    getPageSize        : state => state.pageSize,
+    getContentLanguages: (state, skipFlags) => {
+      if (state.urlLanguage.length && !skipFlags) {
+        return state.urlLanguage;
+      }
+
+      if (state.showAllContent && !skipFlags) {
+        return ALL_LANGUAGES;
+      }
+
+      return state.contentLanguages;
+    }
+  }
+});
+
+export default settingsSlice.reducer;
+
+export const { actions } = settingsSlice;
+
+export const types = Object.fromEntries(new Map(
+  Object.values(settingsSlice.actions).map(a => [a.type, a.type])
+));
+
+export const selectors = settingsSlice.getSelectors();

@@ -1,39 +1,53 @@
-import { DEFAULT_LANGUAGE, LANG_ENGLISH, LANGUAGE_OPTIONS } from './consts';
+import { DEFAULT_CONTENT_LANGUAGE, LANGUAGE_OPTIONS, POPULAR_LANGUAGES } from './consts';
 
 /**
- * Select language to use
- * @param contentLanguage -- preferable language for content
- * @param uiLanguage -- language of UI
- * @param languages -- languages we've got to choose from
- * @returns the most appropriate language
+ * Selects language to use.
+ * @param contentLanguage       -- Languages user knows
+ * @param languages             -- languages available for content we've got to choose from
+ * @param originalLanguage      -- prefered language
+ * @param defaultReturnLanguage -- if not empty, will return this language by default
+ * @returns the most appropriate language or empty string if nothing fits.
  */
-export const selectSuitableLanguage = (contentLanguage, uiLanguage, languages = []) => {
+export const selectSuitableLanguage = (contentLanguages, languages = [], originalLanguage = '', defaultReturnLanguage = DEFAULT_CONTENT_LANGUAGE, mustReturnSomething = false) => {
   if (languages.length === 0) {
-    // we don't have data for new UI language. Let's stay as we are.
-    return DEFAULT_LANGUAGE;
+    // Content not available for any language.
+    return defaultReturnLanguage;
   }
 
-  if (languages.includes(contentLanguage)) {
-    // Use content language [preferred one]
+  // Prefer original languages that user knows.
+  if (originalLanguage && contentLanguages.includes(originalLanguage) && languages.includes(originalLanguage)) {
+    return originalLanguage;
+  }
+
+  // Choose existing language
+  const contentLanguage = contentLanguages.find(language => languages.includes(language));
+  if (contentLanguage) {
     return contentLanguage;
   }
 
-  if (languages.includes(uiLanguage)) {
-    // Or UI language
-    return uiLanguage;
+  // Nothing fits.
+  if (!mustReturnSomething) {
+    return defaultReturnLanguage;
   }
 
-  if (languages.includes(LANG_ENGLISH)) {
-    // Or English
-    return LANG_ENGLISH;
-  }
-
-  // Or first available language
-  return languages[0];
+  // Must return something, prefer major languages otherwise the first one.
+  const something = POPULAR_LANGUAGES.concat(languages[0]);
+  return something.find(language => languages.includes(language));
 };
 
-export const getOptions = ({ languages }) =>
+export const getLanguageName = language => {
+  const option = LANGUAGE_OPTIONS.find(x => x.value === language);
+  return (option && option.name) || '';
+};
+
+export const getOptions = ({ languages = [] }) =>
   LANGUAGE_OPTIONS
     .filter(x => languages.includes(x.value))
     .map(x => ({ ...x, text: x.name }));
+
+export const updateHtmlLang = lang => {
+  if (document) {
+    document.documentElement.setAttribute('lang', lang);
+  }
+};
 

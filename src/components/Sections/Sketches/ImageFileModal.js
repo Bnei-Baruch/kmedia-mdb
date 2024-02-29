@@ -2,18 +2,17 @@ import React, { useRef, useState } from 'react';
 import { withTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Modal, Button } from 'semantic-ui-react';
-import { isLanguageRtl, getLanguageDirection } from '../../../helpers/i18n-utils';
-import { selectors as settings } from '../../../redux/modules/settings';
 import ImageGallery from 'react-image-gallery';
 import FallbackImage from '../../shared/FallbackImage';
-import { imageGalleryItem } from '../../Pages/WithPlayer/widgets/UnitMaterials/helper';
+import { imageGalleryItem } from '../../Pages/WithPlayer/widgets/UnitMaterials/Sketches/helper';
+import { settingsGetUIDirSelector } from '../../../redux/selectors';
 
 const ImageFileModal = ({ file }) => {
   const [open, setOpen] = useState(false);
 
-  const ref      = useRef();
-  const language = useSelector(state => settings.getLanguage(state.settings));
-  const items    = [file].map(imageGalleryItem);
+  const ref   = useRef();
+  const uiDir = useSelector(settingsGetUIDirSelector);
+  const items = [file].map(imageGalleryItem);
 
   const renderFullscreenButton = (onClick, isFullscreen) => (
     <Button
@@ -38,12 +37,12 @@ const ImageFileModal = ({ file }) => {
         onClose={() => setOpen(false)}
         closeIcon
       >
-        <Modal.Content dir={getLanguageDirection(language)}>
+        <Modal.Content dir={uiDir}>
           <ImageGallery
             ref={ref}
             lazyLoad
             showFullscreenButton
-            isRTL={isLanguageRtl(language)}
+            isRTL={uiDir === 'rtl'}
             items={items}
             thumbnailPosition="top"
             showPlayButton={false}

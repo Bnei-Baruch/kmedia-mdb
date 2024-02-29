@@ -3,46 +3,47 @@ import { withTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Card } from 'semantic-ui-react';
 import { canonicalLink } from '../../../helpers/links';
-import { selectors as mdb } from '../../../redux/modules/mdb';
-import { selectors as assets } from '../../../redux/modules/assets';
 import MediaHelper from '../../../helpers/media';
 import { isEmpty } from '../../../helpers/utils';
 import Link from '../../Language/MultiLanguageLink';
 import { buildTextItemInfo } from '../../shared/ContentItem/helper';
-import { selectors as sources } from '../../../redux/modules/sources';
-import { getLanguageDirection } from '../../../helpers/i18n-utils';
-import { selectors as settings } from '../../../redux/modules/settings';
 import GalleryModal from './ZipFileModal';
 import ImageFileModal from './ImageFileModal';
-import { isZipFile } from '../../Pages/WithPlayer/widgets/UnitMaterials/helper';
+import { isZipFile } from '../../Pages/WithPlayer/widgets/UnitMaterials/Sketches/helper';
 import { stringify } from '../../../helpers/url';
+import {
+  settingsGetContentLanguagesSelector,
+  mdbGetDenormContentUnitSelector,
+  sourcesGetPathByIDSelector,
+  settingsGetUIDirSelector,
+  assetsNestedGetZipByIdSelector
+} from '../../../redux/selectors';
 
-const findZipFile = (cu, language) => {
+const findZipFile = (cu, contentLanguages) => {
   const zips = cu.files
     .filter(x => MediaHelper.IsImage(x) && isZipFile(x));
-  // try filter by language
-  let files  = zips.filter(file => file.language === language);
 
-  // if no files by language - return original language files
-  if (files.length === 0) {
-    files = zips.filter(f => f.language === cu.original_language);
+  let files = [];
+  if (contentLanguages.includes(cu.original_language)) {
+    files = zips.filter(file => file.language === cu.original_language);
+  } else {
+    files = zips.filter(file => contentLanguages.includes(file.language));
   }
 
   return files[0] || zips[0];
 };
 
 const UnitItem = ({ id, t }) => {
-  const cu          = useSelector(state => mdb.getDenormContentUnit(state.mdb, id));
-  const getZipById  = useSelector(state => assets.nestedGetZipById(state.assets));
-  const getPathByID = useSelector(state => sources.getPathByID(state.sources));
-  const language    = useSelector(state => settings.getLanguage(state.settings));
+  const cu               = useSelector(state => mdbGetDenormContentUnitSelector(state, id));
+  const getZipById       = useSelector(assetsNestedGetZipByIdSelector);
+  const getPathByID      = useSelector(sourcesGetPathByIDSelector);
+  const uiDir            = useSelector(settingsGetUIDirSelector);
+  const contentLanguages = useSelector(settingsGetContentLanguagesSelector);
 
   if (!cu) return null;
 
-  const dir = getLanguageDirection(language);
-
   const imgs = cu.files.filter(x => MediaHelper.IsImage(x) && !isZipFile(x));
-  const zip  = findZipFile(cu, language);
+  const zip  = findZipFile(cu, contentLanguages);
   const uniq = zip ? getZipById(zip.id)?.data?.uniq.map(x => x.path) : [];
 
   if (isEmpty(uniq) && isEmpty(imgs)) return null;
@@ -56,11 +57,11 @@ const UnitItem = ({ id, t }) => {
       {
         imgs?.map(f => (
           <Card key={f.id}>
-            <ImageFileModal file={f} />
+            <ImageFileModal file={f}/>
             <Card.Content>
-              <Card.Description as={Link} to={to} content={cu.name} />
+              <Card.Description as={Link} to={to} content={cu.name}/>
             </Card.Content>
-            <Card.Meta className={`cu_info_description ${dir}`}>
+            <Card.Meta className={`cu_info_description ${uiDir}`}>
               {[title, ...description].map((d, i) => (<span key={i}>{d}</span>))}
             </Card.Meta>
           </Card>
@@ -69,12 +70,12 @@ const UnitItem = ({ id, t }) => {
       {
         uniq?.map(path => (
           <Card key={path}>
-            <GalleryModal id={zip.id} path={path} />
+            <GalleryModal id={zip.id} path={path}/>
             <Card.Content>
-              <Card.Description as={Link} to={to} content={cu.name} />
+              <Card.Description as={Link} to={to} content={cu.name}/>
             </Card.Content>
 
-            <Card.Meta className={`cu_info_description ${dir}`}>
+            <Card.Meta className={`cu_info_description ${uiDir}`}>
               {[title, ...description].map((d, i) => (<span key={i}>{d}</span>))}
             </Card.Meta>
           </Card>

@@ -6,12 +6,11 @@ import {
   CT_LESSON_PART,
   EVENT_PREPARATION_TAG,
   EVENT_TYPES,
-  LANG_ENGLISH,
   MT_AUDIO,
   MT_VIDEO,
   VS_DEFAULT,
   VS_HLS,
-  MT_SUBTITLES,
+  MT_SUBTITLES
 } from './consts';
 import { getQuery } from './url';
 import MediaHelper from './media';
@@ -23,9 +22,7 @@ export const persistPreferredMediaType = value => localStorage.setItem('@@kmedia
 
 const isPlayable = file => MediaHelper.IsMp4(file) || MediaHelper.IsMp3(file);
 
-const findHLS = files => files.find(f => {
-  return f.video_size === VS_HLS && f.hls_languages && f.video_qualities;
-});
+const findHLS = files => files.find(f => f.video_size === VS_HLS && f.hls_languages && f.video_qualities);
 
 const calcAvailableMediaTypes = (unit, language) => {
   if (!unit || !Array.isArray(unit.files)) {
@@ -41,7 +38,7 @@ const calcAvailableMediaTypes = (unit, language) => {
   }, new Set()));
 };
 
-const calcAvailableLanguages = unit => {
+export const calcAvailableLanguages = unit => {
   if (!unit || !Array.isArray(unit.files)) {
     return [];
   }
@@ -58,7 +55,7 @@ export const playableItem = (unit, preImageUrl) => {
     preImageUrl = assetUrl(`api/thumbnail/${unit.id}`);
   }
 
-  let resp = {
+  const resp = {
     id: unit.id,
     name: unit.name,
     properties: unit.properties,
@@ -108,7 +105,7 @@ export const playableItem = (unit, preImageUrl) => {
     filesByLang,
     qualityByLang,
     files,
-    subtitles,
+    subtitles
   };
 };
 
@@ -160,6 +157,7 @@ export const playlist = collection => {
       return acc.concat(v);
     }, []);
   } else {
+    units.sort((a, b) => new Date(b.film_date) - new Date(a.film_date));
     items = units.map(x => playableItem(x));
   }
 
@@ -170,16 +168,20 @@ export const playlist = collection => {
 
 //query utilities
 export const getMediaTypeFromQuery = location => {
-  const query = getQuery(location || window?.location);
-  const mt    = (query.mediaType || '').toLowerCase();
+  const query   = getQuery(location || window?.location);
+  let mediaType = query?.mediaType || '';
+  if (Array.isArray(mediaType)) {
+    mediaType = mediaType.pop();
+  }
+
+  const mt = mediaType.toLowerCase();
 
   return [MT_VIDEO, MT_AUDIO].includes(mt) ? mt : restorePreferredMediaType();
 };
 
-export const getLanguageFromQuery = (location, fallbackLanguage = LANG_ENGLISH) => {
-  const query    = getQuery(location);
-  const language = query.shareLang || query.language || fallbackLanguage || LANG_ENGLISH;
-  return language.toLowerCase();
+export const getLanguageFromQuery = location => {
+  const query = getQuery(location);
+  return query.shareLang || query.language || '';
 };
 
 export const getActivePartFromQuery = (location, def = 0) => {
@@ -188,7 +190,21 @@ export const getActivePartFromQuery = (location, def = 0) => {
   return Number.isNaN(p) || p < 0 ? def : p;
 };
 
+export const EMBED_TYPE_PLAYER   = 'player';
+export const EMBED_TYPE_PLAYLIST = 'playlist';
+
+const EMBED_TYPE = {
+  '1': EMBED_TYPE_PLAYER,
+  '2': EMBED_TYPE_PLAYLIST
+};
+
+export const EMBED_INDEX_BY_TYPE = {
+  [EMBED_TYPE_PLAYER]: 1,
+  [EMBED_TYPE_PLAYLIST]: 2
+};
+
 export const getEmbedFromQuery = location => {
   const query = getQuery(location);
-  return query.embed === '1';
+  const type  = EMBED_TYPE[query.embed];
+  return { embed: !!type, type };
 };

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
 import PropTypes from 'prop-types';
@@ -35,7 +35,7 @@ const fileDownload = (data, path, mimeType, filename = path.split('/').slice(-1)
   window.URL.revokeObjectURL(blobURL);
 };
 
-const downloadAsset = (path, mimeType, downloadAllowed, name) => {
+export const downloadAsset = (path, mimeType, downloadAllowed, name) => {
   if (downloadAllowed) {
     axios({
       url: path,
@@ -52,8 +52,13 @@ const downloadAsset = (path, mimeType, downloadAllowed, name) => {
 };
 
 const Download = props => {
+  const [ready, setReady]                                                                                     = useState(false);
   const { children = null, path = null, mimeType, downloadAllowed, filename = path?.split('/').slice(-1)[0] } = props;
-  if (path === null || typeof filename === 'undefined' || typeof document === 'undefined') {
+  useEffect(() => {
+    setReady(path !== null && typeof filename !== 'undefined' && typeof document !== 'undefined');
+  }, [path, filename]);
+
+  if (!ready) {
     return null;
   }
 
@@ -63,14 +68,14 @@ const Download = props => {
   }
 
   return ReactDOM.createPortal(
-    <Button compact size="small" icon="download" onClick={() => downloadAsset(path, mimeType, downloadAllowed, filename)}>{children}</Button>,
+    <Button compact size="small" icon="download" disabled={!path} onClick={() => downloadAsset(path, mimeType, downloadAllowed, filename)}>{children}</Button>,
     mountPoint,
   );
 };
 
 Download.propTypes = {
   path: PropTypes.string,
-  mimeType: PropTypes.string.isRequired,
+  mimeType: PropTypes.string,
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node

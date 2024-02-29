@@ -1,6 +1,12 @@
 import Keycloak from 'keycloak-js';
 
-export const KC_API = process.env.REACT_KC_API_URL || 'https://accounts.kab.info/auth';
+// This file used loaded in SSR and in client side too.
+// Try load the constants from process and in client expect them in window global object.
+const KC_API_URL   = process.env.REACT_KC_API_URL || (typeof window !== 'undefined' && window.KC_API_URL) || 'https://accounts.kab.info/auth';
+const KC_REALM     = process.env.REACT_KC_REALM || (typeof window !== 'undefined' && window.KC_REALM) || 'main';
+const KC_CLIENT_ID = process.env.REACT_KC_CLIENT_ID || (typeof window !== 'undefined' && window.KC_CLIENT_ID) || 'kmedia-public';
+
+export const KC_API_WITH_REALM = `${KC_API_URL}/realms/${KC_REALM}`;
 
 export const KC_SEARCH_KEY_SESSION = 'session_state';
 export const KC_SEARCH_KEY_STATE   = 'state';
@@ -34,7 +40,11 @@ export const initKC = async () => {
   }
 
   const options   = {
-    checkLoginIframe: false, flow: 'standard', pkceMethod: 'S256', enableLogging: true, onLoad: 'check-sso'
+    checkLoginIframe: false,
+    flow: 'standard',
+    pkceMethod: 'S256',
+    enableLogging: true,
+    onLoad: 'check-sso'
   };
   document.cookie = 'authorised=true;max-age=10';
   const resp      = { user: null, token: null };
@@ -64,7 +74,11 @@ const updateToken = token => {
 };
 
 const userManagerConfig = {
-  url: KC_API, realm: 'main', clientId: 'kmedia-public', scope: 'profile', enableLogging: true
+  url: KC_API_URL,
+  realm: KC_REALM,
+  clientId: KC_CLIENT_ID,
+  scope: 'profile',
+  enableLogging: true
 };
 const keycloak          = typeof window !== 'undefined' ? new Keycloak(userManagerConfig) : {};
 
@@ -81,7 +95,7 @@ const renewRetry = (retry, err) => {
   }
 };
 
-const renewToken           = retry => {
+const renewToken = retry => {
   retry++;
   keycloak.updateToken(70).then(refreshed => {
     if (refreshed) {
@@ -93,6 +107,7 @@ const renewToken           = retry => {
     renewRetry(retry, err);
   });
 };
+
 export const kcUpdateToken = () => keycloak
   .updateToken(70)
   .then(ok => {
@@ -101,7 +116,17 @@ export const kcUpdateToken = () => keycloak
   });
 
 const healthCheckKC = async () => {
-  const health = await fetch(`${KC_API}/realms/main/protocol/openid-connect/certs`);
+  const health = await fetch(`${KC_API_WITH_REALM}/protocol/openid-connect/certs`, { cache: 'no-store' })
+    .then(resp => {
+      if (resp.status >= 400) {
+        throw new Error('keycloak server return bad response');
+      }
+
+      return resp;
+    })
+    .catch(err => {
+      console.log(err.response.data);
+    });
   if (!health.ok) {
     throw Error('keycloak server is down');
   }

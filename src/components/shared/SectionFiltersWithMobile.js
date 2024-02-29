@@ -4,9 +4,8 @@ import { useSelector } from 'react-redux';
 import { Button, Container, Grid, Modal } from 'semantic-ui-react';
 
 import { DeviceInfoContext } from '../../helpers/app-contexts';
-import { getLanguageDirection } from '../../helpers/i18n-utils';
-import { selectors as settings } from '../../redux/modules/settings';
 import FiltersHydrator from '../Filters/FiltersHydrator';
+import { settingsGetUIDirSelector } from '../../redux/selectors';
 
 const SectionFiltersWithMobile = ({ filters, children, namespace }) => {
   const [openFilters, setOpenFilters] = useState(false);
@@ -14,8 +13,7 @@ const SectionFiltersWithMobile = ({ filters, children, namespace }) => {
 
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
-  const language = useSelector(state => settings.getLanguage(state.settings));
-  const dir      = getLanguageDirection(language);
+  const dir = useSelector(settingsGetUIDirSelector);
 
   const toggleFilters = () => setOpenFilters(!openFilters);
 
@@ -35,7 +33,7 @@ const SectionFiltersWithMobile = ({ filters, children, namespace }) => {
   const renderMobile = () => (
     <Container fluid>
       {/*additional hydrate for mobile cause of modal */}
-      <FiltersHydrator namespace={namespace} />
+      <FiltersHydrator namespace={namespace}/>
       <Container className="padded" fluid>
         <Button
           basic
@@ -57,7 +55,7 @@ const SectionFiltersWithMobile = ({ filters, children, namespace }) => {
           {filters}
         </Modal.Content>
         <Modal.Actions>
-          <Button primary content={t('buttons.close')} onClick={toggleFilters} />
+          <Button primary content={t('buttons.close')} onClick={toggleFilters}/>
         </Modal.Actions>
       </Modal>
     </Container>

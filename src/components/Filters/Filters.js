@@ -7,12 +7,12 @@ import { withTranslation } from 'react-i18next';
 import { Container, Icon, Label, Menu, Popup } from 'semantic-ui-react';
 import isEqual from 'react-fast-compare';
 
-import { getLanguageDirection } from '../../helpers/i18n-utils';
+import { getDirectionProperty } from '../../helpers/i18n-utils';
 import { isEmpty } from '../../helpers/utils';
 import { filtersTransformer } from '../../filters/index';
 import { actions, selectors } from '../../redux/modules/filters';
-import { selectors as mdb } from '../../redux/modules/mdb';
 import { selectors as settings } from '../../redux/modules/settings';
+import { selectors as mdb } from '../../redux/modules/mdb';
 import * as shapes from '../shapes';
 import FiltersHydrator from './FiltersHydrator';
 import { DeviceInfoContext } from '../../helpers/app-contexts';
@@ -23,41 +23,39 @@ class Filters extends Component {
   static contextType = DeviceInfoContext;
 
   static propTypes = {
-    namespace: PropTypes.string.isRequired,
-    filters: PropTypes.arrayOf(shapes.filterPropShape).isRequired,
-    rightItems: PropTypes.arrayOf(PropTypes.node),
-    onChange: PropTypes.func.isRequired,
-    onHydrated: PropTypes.func.isRequired,
-    onSearch: PropTypes.func,
-    onClear: PropTypes.func,
+    namespace     : PropTypes.string.isRequired,
+    filters       : PropTypes.arrayOf(shapes.filterPropShape).isRequired,
+    rightItems    : PropTypes.arrayOf(PropTypes.node),
+    onChange      : PropTypes.func.isRequired,
+    onHydrated    : PropTypes.func.isRequired,
+    onSearch      : PropTypes.func,
+    onClear       : PropTypes.func,
     setFilterValue: PropTypes.func.isRequired,
-    resetFilter: PropTypes.func.isRequired,
-    filtersData: PropTypes.objectOf(PropTypes.object).isRequired,
-    language: PropTypes.string.isRequired,
-    contentLanguage: PropTypes.string.isRequired,
-    t: PropTypes.func.isRequired,
-    sqDataWipErr: PropTypes.bool,
-    letters: PropTypes.arrayOf(PropTypes.string),
-    onLetterClick: PropTypes.func
+    resetFilter   : PropTypes.func.isRequired,
+    filtersData   : PropTypes.objectOf(PropTypes.object).isRequired,
+    uiDir         : PropTypes.string.isRequired,
+    uiLang        : PropTypes.string.isRequired,
+    t             : PropTypes.func.isRequired,
+    sqDataWipErr  : PropTypes.bool,
+    letters       : PropTypes.arrayOf(PropTypes.string),
+    onLetterClick : PropTypes.func
   };
 
   static defaultProps = {
-    rightItems: null,
+    rightItems: null
   };
 
   state = {
-    activeFilter: null,
+    activeFilter : null,
     searchClicked: false
   };
 
   shouldComponentUpdate(nextProps, nextState) {
-    const { namespace, language, contentLanguage, filters, rightItems, filtersData, sqDataWipErr, letters } = this.props;
-    const { activeFilter } = this.state;
+    const { namespace, filters, rightItems, filtersData, sqDataWipErr, letters } = this.props;
+    const { activeFilter }                                                       = this.state;
 
     return (activeFilter !== nextState.activeFilter
       || namespace !== nextProps.namespace
-      || language !== nextProps.language
-      || contentLanguage !== nextProps.contentLanguage
       || sqDataWipErr !== nextProps.sqDataWipErr
       || !isEqual(filters, nextProps.filters)
       || !isEqual(rightItems, nextProps.rightItems)
@@ -90,13 +88,12 @@ class Filters extends Component {
   };
 
   renderFilters = store => {
-    const { filters, namespace, t, filtersData, language, contentLanguage } = this.props;
-    const { activeFilter }                                                  = this.state;
-    const { isMobileDevice }                                                = this.context;
+    const { filters, namespace, t, filtersData, uiDir, uiLang } = this.props;
+    const { activeFilter }                                      = this.state;
+    const { isMobileDevice }                                    = this.context;
 
-    const langDir    = getLanguageDirection(language);
     const popupStyle = {
-      direction: langDir,
+      direction: uiDir
     };
 
     return filters.map(item => {
@@ -133,11 +130,11 @@ class Filters extends Component {
                   {t(`filters.${name}.label`)}
                 </small>
                 <span className="filter__state">
-                  <span className="filter__text" dangerouslySetInnerHTML={{ __html: label }} />
+                  <span className="filter__text" dangerouslySetInnerHTML={{ __html: label }}/>
                   {
                     isActive
-                      ? <Icon className="filter__fold-icon" name="dropdown" flipped="vertically" />
-                      : <Icon className="filter__fold-icon" name="dropdown" />
+                      ? <Icon className="filter__fold-icon" name="dropdown" flipped="vertically"/>
+                      : <Icon className="filter__fold-icon" name="dropdown"/>
                   }
                 </span>
               </div>
@@ -151,7 +148,7 @@ class Filters extends Component {
                         size="tiny"
                         onClick={e => this.handleResetFilter(e, name)}
                       >
-                        <Icon name="times" />
+                        <Icon name="times"/>
                       </Label>
                     </div>
                   )
@@ -160,21 +157,20 @@ class Filters extends Component {
             </Menu.Item>
           )}
           on="click"
-          position={`bottom ${langDir === 'ltr' ? 'left' : 'right'}`}
+          position={`bottom ${getDirectionProperty(uiDir)}`}
           open={isActive}
           onClose={this.handlePopupClose}
           onOpen={() => this.handlePopupOpen(name)}
           style={popupStyle}
           closeOnDocumentClick={false}
           content={
-            <div className={`filter-popup__content ${langDir}`}>
+            <div className={`filter-popup__content ${uiDir}`}>
               <FilterComponent
                 namespace={namespace}
                 value={value}
                 onCancel={this.handlePopupClose}
                 onApply={x => this.handleApply(name, x)}
-                language={language}
-                contentLanguage={contentLanguage}
+                language={uiLang}
               />
             </div>
           }
@@ -189,7 +185,7 @@ class Filters extends Component {
 
     return (
       <div className="filters">
-        <FiltersHydrator namespace={namespace} onHydrated={onHydrated} />
+        <FiltersHydrator namespace={namespace} onHydrated={onHydrated}/>
         <Container className="padded">
           <Menu className="filters__menu" stackable>
             <Menu.Item
@@ -202,15 +198,15 @@ class Filters extends Component {
             </ReactReduxContext.Consumer>
             {
               onSearch &&
-                 <Menu.Item>
-                   <SearchInput onSearch={onSearch} onClear={onClear} />
-                 </Menu.Item>
+              <Menu.Item>
+                <SearchInput onSearch={onSearch} onClear={onClear}/>
+              </Menu.Item>
             }
             {
               !isEmpty(letters) &&
-                 <Menu.Item className="alphabetFilter">
-                   <AlphabetFilter letters={letters} onLetterClick={onLetterClick}></AlphabetFilter>
-                 </Menu.Item>
+              <Menu.Item className="alphabetFilter">
+                <AlphabetFilter letters={letters} onLetterClick={onLetterClick}></AlphabetFilter>
+              </Menu.Item>
             }
             {
               rightItems && <Menu.Menu position="right">{rightItems}</Menu.Menu>
@@ -225,14 +221,14 @@ class Filters extends Component {
 export default connect(
   (state, ownProps) => ({
     filtersData: selectors.getNSFilters(state.filters, ownProps.namespace),
-    language: settings.getLanguage(state.settings),
-    contentLanguage: settings.getContentLanguage(state.settings),
+    uiDir      : settings.getUIDir(state.settings),
+    uiLang     : settings.getUILang(state.settings),
 
     // DO NOT REMOVE, this triggers a necessary re-render for filter tags
-    sqDataWipErr: mdb.getSQDataWipErr(state.mdb),
+    sqDataWipErr: mdb.getSQDataWipErr(state.mdb)
   }),
   dispatch => bindActionCreators({
     setFilterValue: actions.setFilterValue,
-    resetFilter: actions.resetFilter,
+    resetFilter   : actions.resetFilter
   }, dispatch)
 )(withTranslation()(Filters));

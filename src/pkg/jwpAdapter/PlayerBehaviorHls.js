@@ -1,13 +1,12 @@
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { selectors as playlist } from '../../redux/modules/playlist';
-import { selectors as player } from '../../redux/modules/player';
 import { VS_NAMES, LANGUAGES } from '../../helpers/consts';
+import { playlistGetInfoSelector, playerIsMetadataReadySelector } from '../../redux/selectors';
 
 const PlayerBehaviorHls = () => {
-  const isMetadataReady = useSelector(state => player.isMetadataReady(state.player));
+  const isMetadataReady = useSelector(playerIsMetadataReadySelector);
 
-  const { quality, language } = useSelector(state => playlist.getInfo(state.playlist));
+  const { quality, language } = useSelector(playlistGetInfoSelector);
 
   useEffect(() => {
     if (!isMetadataReady) return;

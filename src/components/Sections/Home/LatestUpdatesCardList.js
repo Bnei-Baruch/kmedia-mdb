@@ -6,36 +6,35 @@ import moment from 'moment';
 import { withTranslation } from 'react-i18next';
 import LatestUpdate from './LatestUpdate';
 import { getSectionForTranslation } from '../../../helpers/utils';
-import { isLanguageRtl } from '../../../helpers/i18n-utils';
 import clsx from 'clsx';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
+import { useSelector } from 'react-redux';
+import { settingsGetUIDirSelector } from '../../../redux/selectors';
 
-const LatestUpdatesCardList = ({
-  t,
-  language,
-  title,
-  maxItems,
-  cts,
-  itemsByCT,
-  itemsPerRow = 4,
-  itemsCount = 4,
-  stackable = true
-}) => {
-
-  const { isMobileDevice } = useContext(DeviceInfoContext);
-
-  const [pageNo, setPageNo] = useState(0);
-
-  const [pageStart, setPageStart] = useState(0);
-
+const LatestUpdatesCardList = (
+  {
+    t,
+    title,
+    maxItems,
+    cts,
+    itemsByCT,
+    itemsPerRow = 4,
+    itemsCount = 4,
+    stackable = true
+  }
+) => {
+  const { isMobileDevice }          = useContext(DeviceInfoContext);
+  const [pageNo, setPageNo]         = useState(0);
+  const [pageStart, setPageStart]   = useState(0);
   const [cardsArray, setCardsArray] = useState([]);
+  const uiDir                       = useSelector(settingsGetUIDirSelector);
 
   const onScrollRight = () => onScrollChange(pageNo + 1);
 
   const onScrollLeft = () => onScrollChange(pageNo - 1);
 
   const getLatestUpdate = item =>
-    <LatestUpdate key={item.id} item={item} label={t(getSectionForTranslation(item.content_type))} t={t} />;
+    <LatestUpdate key={item.id} item={item} label={t(getSectionForTranslation(item.content_type))} t={t}/>;
 
   const initCardsArray = () => {
     // arrange cards by type in criss cross order
@@ -81,14 +80,13 @@ const LatestUpdatesCardList = ({
     setPageStart(newPageStart);
   };
 
-  const isRTL         = isLanguageRtl(language);
   const swipeHandlers = useSwipeable({
-    onSwipedLeft: isRTL ? onScrollRight : onScrollLeft,
-    onSwipedRight: isRTL ? onScrollLeft : onScrollRight
+    onSwipedLeft : uiDir === 'rtl' ? onScrollRight : onScrollLeft,
+    onSwipedRight: uiDir === 'rtl' ? onScrollLeft : onScrollRight
   });
 
   const renderScrollRight = () => {
-    const dir = isLanguageRtl(language) ? 'right' : 'left';
+    const dir = uiDir === 'rtl' ? 'right' : 'left';
     return pageNo === 0 ? null : (
       <Button
         icon={`chevron ${dir}`}
@@ -102,7 +100,7 @@ const LatestUpdatesCardList = ({
   };
 
   const renderScrollLeft = () => {
-    const dir = isLanguageRtl(language) ? 'left' : 'right';
+    const dir = uiDir === 'rtl' ? 'left' : 'right';
     return (pageNo + 1) * itemsCount >= cardsArray.length ? null : (
       <Button
         icon={`chevron ${dir}`}
@@ -121,7 +119,7 @@ const LatestUpdatesCardList = ({
 
   const cardsRow = (
     <Card.Group className={clsx({
-      'latestUpdatesCardGroup': !isMobileDevice,
+      'latestUpdatesCardGroup'      : !isMobileDevice,
       'latestUpdatesCardGroupMobile': isMobileDevice
     })} itemsPerRow={itemsPerRow} stackable={stackable}>
       {getPageCardArray()}
@@ -147,10 +145,9 @@ const LatestUpdatesCardList = ({
 };
 
 LatestUpdatesCardList.propTypes = {
-  t: PropTypes.func.isRequired,
-  language: PropTypes.string,
-  title: PropTypes.string,
-  cts: PropTypes.array,
+  t        : PropTypes.func.isRequired,
+  title    : PropTypes.string,
+  cts      : PropTypes.array,
   itemsByCT: PropTypes.any
 };
 

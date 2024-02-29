@@ -1,5 +1,5 @@
 import { createFilterDefinition } from './util';
-import { selectors } from '../../redux/modules/publications';
+import { publicationsGetPublisherByIdSelector } from '../../redux/selectors';
 
 const publishersFilter = {
   name: 'publishers-filter',
@@ -10,7 +10,7 @@ const publishersFilter = {
       return '';
     }
 
-    const publisherById = selectors.getPublisherById(getState().publications);
+    const publisherById = publicationsGetPublisherByIdSelector(getState());
     const publisher     = publisherById[value];
     return publisher ? publisher.name : '';
   }

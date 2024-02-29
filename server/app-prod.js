@@ -19,6 +19,7 @@ const app = express();
 const router = express.Router();
 
 // middleware
+app.use(middleware.duration);
 // app.use(middleware.logAll);
 app.use(middleware.logErrors);
 app.use(middleware.errorHandler);
@@ -43,7 +44,10 @@ app.use(helmet({
         '*.youtube.com',
         '*.youtube-nocookie.com',
         '*.google-analytics.com',
-        'stats.g.doubleclick.net',
+        '*.analytics.google.com',
+        'analytics.google.com',
+        '*.googletagmanager.com',
+        '*.g.doubleclick.net',
         '*.kab.info',
         '*.kab.sh',
       ],
@@ -76,6 +80,7 @@ app.use(helmet({
       'img-src': [
         '\'self\'',
         'data:',
+        'blob:',
         '*.kbb1.com',
         'kabbalahmedia.info',
         '*.kabbalahmedia.info',
@@ -87,7 +92,11 @@ app.use(helmet({
         'laitman.es',
         'laitman.co.il',
         '*.google-analytics.com',
-        'stats.g.doubleclick.net',
+        '*.analytics.google.com',
+        '*.googletagmanager.com',
+        '*.g.doubleclick.net',
+        '*.google.co.il',
+        '*.google.com',
         '*.usersnap.com',
         '*.twimg.com',
         '*.jwpltx.com',
@@ -106,7 +115,6 @@ app.use(helmet({
       ],
       'frame-ancestors': ['*'],
       'object-src': ['*.youtube.com'],
-      'connect-src': ['www.google-analytics.com']
     },
     browserSniff: false       // we're not targeting really old browsers
   }

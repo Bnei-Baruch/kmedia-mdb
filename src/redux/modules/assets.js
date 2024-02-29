@@ -1,270 +1,231 @@
-import { createAction } from 'redux-actions';
+import { createSlice } from '@reduxjs/toolkit';
 import mapValues from 'lodash/mapValues';
 
-import { handleActions } from './settings';
-import { types as ssr } from './ssr';
-
-const UNZIP                   = 'Assets/UNZIP';
-const UNZIP_SUCCESS           = 'Assets/UNZIP_SUCCESS';
-const UNZIP_FAILURE           = 'Assets/UNZIP_FAILURE';
-const UNZIP_LIST              = 'Assets/UNZIP_LIST';
-const UNZIP_LIST_SUCCESS      = 'Assets/UNZIP_LIST_SUCCESS';
-const UNZIP_LIST_FAILURE      = 'Assets/UNZIP_LIST_FAILURE';
-const DOC2HTML                = 'Assets/DOC2HTML';
-const DOC2HTML_SUCCESS        = 'Assets/DOC2HTML_SUCCESS';
-const DOC2HTML_FAILURE        = 'Assets/DOC2HTML_FAILURE';
-const SOURCE_INDEX            = 'Assets/SOURCE_INDEX';
-const SOURCE_INDEX_SUCCESS    = 'Assets/SOURCE_INDEX_SUCCESS';
-const SOURCE_INDEX_FAILURE    = 'Assets/SOURCE_INDEX_FAILURE';
-const FETCH_ASSET             = 'Assets/FETCH_ASSET';
-const FETCH_ASSET_SUCCESS     = 'Assets/FETCH_ASSET_SUCCESS';
-const FETCH_ASSET_FAILURE     = 'Assets/FETCH_ASSET_FAILURE';
-const FETCH_PERSON            = 'Assets/FETCH_PERSON';
-const FETCH_PERSON_SUCCESS    = 'Assets/FETCH_PERSON_SUCCESS';
-const FETCH_PERSON_FAILURE    = 'Assets/FETCH_PERSON_FAILURE';
-const FETCH_TIME_CODE         = 'Assets/FETCH_TIME_CODE';
-const FETCH_TIME_CODE_SUCCESS = 'Assets/FETCH_TIME_CODE_SUCCESS';
-
-export const types = {
-  UNZIP,
-  UNZIP_SUCCESS,
-  UNZIP_FAILURE,
-  UNZIP_LIST,
-  DOC2HTML,
-  DOC2HTML_SUCCESS,
-  DOC2HTML_FAILURE,
-  SOURCE_INDEX,
-  SOURCE_INDEX_SUCCESS,
-  SOURCE_INDEX_FAILURE,
-  FETCH_ASSET,
-  FETCH_ASSET_SUCCESS,
-  FETCH_ASSET_FAILURE,
-  FETCH_PERSON,
-  FETCH_TIME_CODE,
-};
-
-/* Actions */
-
-const unzip                = createAction(UNZIP);
-const unzipSuccess         = createAction(UNZIP_SUCCESS, (id, data) => ({ id, data }));
-const unzipFailure         = createAction(UNZIP_FAILURE, (id, err) => ({ id, err }));
-const unzipList            = createAction(UNZIP_LIST);
-const unzipListSuccess     = createAction(UNZIP_LIST_SUCCESS);
-const unzipListFailure     = createAction(UNZIP_LIST_FAILURE);
-const doc2html             = createAction(DOC2HTML);
-const doc2htmlSuccess      = createAction(DOC2HTML_SUCCESS, (id, data) => ({ id, data }));
-const doc2htmlFailure      = createAction(DOC2HTML_FAILURE, (id, err) => ({ id, err }));
-const sourceIndex          = createAction(SOURCE_INDEX);
-const sourceIndexSuccess   = createAction(SOURCE_INDEX_SUCCESS, (id, data) => ({ id, data }));
-const sourceIndexFailure   = createAction(SOURCE_INDEX_FAILURE, (id, err) => ({ id, err }));
-const fetchAsset           = createAction(FETCH_ASSET);
-const fetchAssetSuccess    = createAction(FETCH_ASSET_SUCCESS);
-const fetchAssetFailure    = createAction(FETCH_ASSET_FAILURE);
-const fetchPerson          = createAction(FETCH_PERSON);
-const fetchPersonSuccess   = createAction(FETCH_PERSON_SUCCESS);
-const fetchPersonFailure   = createAction(FETCH_PERSON_FAILURE);
-const fetchTimeCode        = createAction(FETCH_TIME_CODE, (uid, language) => ({ uid, language }));
-const fetchTimeCodeSuccess = createAction(FETCH_TIME_CODE_SUCCESS);
-
-export const actions = {
-  unzip,
-  unzipSuccess,
-  unzipFailure,
-  unzipList,
-  unzipListSuccess,
-  unzipListFailure,
-  doc2html,
-  doc2htmlSuccess,
-  doc2htmlFailure,
-  sourceIndex,
-  sourceIndexSuccess,
-  sourceIndexFailure,
-  fetchAsset,
-  fetchAssetSuccess,
-  fetchAssetFailure,
-  fetchPerson,
-  fetchPersonSuccess,
-  fetchPersonFailure,
-  fetchTimeCode,
-  fetchTimeCodeSuccess,
-};
-
-/* Reducer */
+import { actions as ssrActions } from './ssr';
 
 const initialState = {
-  zipIndexById: {},
-  doc2htmlById: {},
+  zipIndexById   : {},
+  doc2htmlById   : {},
   sourceIndexById: {},
-  asset: {
+  asset          : {
     data: null,
-    wip: false,
-    err: null,
+    wip : false,
+    err : null
   },
-  person: {
+  person         : {
     data: null,
-    wip: false,
-    err: null,
+    wip : false,
+    err : null
   },
-  timeCode: new Map()
+  timeCode       : {},
+  mergedStatus   : {}
 };
 
-const onSSRPrepare = draft => {
-  draft.zipIndexById    = mapValues(draft.zipIndexById, x => ({ ...x, err: x.err ? x.err.toString() : x.err }));
-  draft.doc2htmlById    = mapValues(draft.doc2htmlById, x => ({ ...x, err: x.err ? x.err.toString() : x.err }));
-  draft.sourceIndexById = mapValues(draft.sourceIndexById, x => ({ ...x, err: x.err ? x.err.toString() : x.err }));
-  draft.asset.err       = draft.asset.err ? draft.asset.err.toString() : draft.asset.err;
-  draft.person.err      = draft.person.err ? draft.person.err.toString() : draft.person.err;
+const buildKey = (uid, lang) => `${uid}_${lang}`;
+
+const prepare = (type, payload) => {
+  const key = getActionKey(type);
+  return { payload, key };
 };
+
+const onFetchById = (state, action) => {
+  const { payload, type } = action;
+  const key               = getActionKey(type);
+  state[key][payload] ||= {};
+  state[key][payload].wip = true;
+};
+
+const onFetchByIdSuccess = (state, action) => {
+  const { payload, type } = action;
+  const { id, data }      = payload;
+  const key               = getActionKey(type);
+  state[key][id] ||= {};
+  state[key][id].data     = data;
+  state[key][id].wip      = false;
+};
+
+const onFetchByIdFailure = (state, action) => {
+  const { payload, type } = action;
+  const { id, err }       = payload;
+  const key               = getActionKey(type);
+  state[key][id] ||= {};
+  state[key][id].err      = err;
+  state[key][id].wip      = false;
+};
+
+const onFetchList = (state, action) => {
+  const { payload, type } = action;
+  payload.forEach(p => onFetchById(state, {
+    type,
+    payload: p
+  }));
+};
+
+const onFetchListSuccess = (state, action) => {
+  const { payload, type } = action;
+  (payload?.data || []).forEach(p => onFetchByIdSuccess(state, {
+    type,
+    payload: { id: p.uid, data: p }
+  }));
+};
+
+const onFetchListFailure = (state, action) => {
+  const { payload, type } = action;
+  payload.forEach(p => onFetchByIdFailure(state, {
+    type,
+    payload: { id: p.uid, err: p.err }
+  }));
+};
+
+const onSSRPrepare = state => {
+  state.zipIndexById    = mapValues(state.zipIndexById, x => ({ ...x, err: x.err ? x.err.toString() : x.err }));
+  state.doc2htmlById    = mapValues(state.doc2htmlById, x => ({ ...x, err: x.err ? x.err.toString() : x.err }));
+  state.sourceIndexById = mapValues(state.sourceIndexById, x => ({ ...x, err: x.err ? x.err.toString() : x.err }));
+  state.asset.err       = state.asset.err ? state.asset.err.toString() : state.asset.err;
+  state.person.err      = state.person.err ? state.person.err.toString() : state.person.err;
+};
+
+const recursiveFindPrevTimeByPos = (pos, state) => {
+  if (pos === 0 || state.timeCode.size === 0) return 0;
+  if (state.timeCode.has(pos)) return state.timeCode.get(pos);
+  return recursiveFindPrevTimeByPos(pos - 1, state);
+};
+
+const assetsSlice = createSlice({
+  name: 'assets',
+  initialState,
+
+  reducers     : {
+    unzip       : (state, action) => onFetchById(state, action),
+    unzipSuccess: {
+      prepare,
+      reducer: (state, action) => onFetchByIdSuccess(state, action)
+    },
+    unzipFailure: {
+      prepare,
+      reducer: (state, action) => onFetchByIdFailure(state, action)
+    },
+
+    unzipList       : (state, action) => onFetchList(state, action),
+    unzipListSuccess: {
+      prepare,
+      reducer: (state, action) => onFetchListSuccess(state, action)
+    },
+    unzipListFailure: {
+      prepare,
+      reducer: (state, action) => onFetchListFailure(state, action)
+    },
+
+    doc2html       : (state, action) => onFetchById(state, action),
+    doc2htmlSuccess: {
+      prepare,
+      reducer: (state, action) => onFetchByIdSuccess(state, action)
+    },
+    doc2htmlFailure: {
+      prepare,
+      reducer: (state, action) => onFetchByIdFailure(state, action)
+    },
+
+    sourceIndex       : (state, action) => onFetchById(state, action),
+    sourceIndexSuccess: {
+      prepare,
+      reducer: (state, action) => onFetchByIdSuccess(state, action)
+    },
+    sourceIndexFailure: {
+      prepare,
+      reducer: (state, action) => onFetchByIdFailure(state, action)
+    },
+
+    fetchAsset       : (state, _) => state.asset.wip = true,
+    fetchAssetSuccess: (state, action) => {
+      state.asset.data = action.payload;
+      state.asset.wip  = false;
+      state.asset.err  = null;
+    },
+    fetchAssetFailure: (state, action) => {
+      state.asset.wip = false;
+      state.asset.err = action.payload;
+    },
+
+    fetchPerson           : (state, _) => state.person.wip = true,
+    fetchPersonSuccess    : (state, action) => {
+      state.person.data = action.payload;
+      state.person.wip  = false;
+      state.person.err  = null;
+    },
+    fetchPersonFailure    : (state, action) => {
+      state.person.wip = false;
+      state.person.err = action.payload;
+    },
+    fetchTimeCode         : {
+      prepare: (uid, language) => ({ payload: { uid, language } }),
+      reducer: void (state => state.timeCode = {})
+    },
+    fetchTimeCodeSuccess  : (state, { payload }) => {
+      state.timeCode = {};
+      for (const idx in payload) {
+        const { index, timeCode: tc } = payload[idx];
+        state.timeCode[index]         = tc;
+      }
+    },
+    mergeKiteiMakor       : (state, { payload }) => {
+      const { id, language }                     = payload;
+      state.mergedStatus[buildKey(id, language)] = 'wip';
+    },
+    mergeKiteiMakorSuccess: (state, { payload }) => {
+      const { id, language, status = 'ok' }      = payload;
+      state.mergedStatus[buildKey(id, language)] = status;
+    },
+    mergeKiteiMakorFailure: (state, { payload }) => {
+      const { id, language, status = 'none' }    = payload;
+      state.mergedStatus[buildKey(id, language)] = status;
+    }
+  },
+  extraReducers: builder => {
+    builder.addCase(ssrActions.prepare, onSSRPrepare);
+  },
+
+  selectors: {
+    getZipIndexById   : state => state.zipIndexById,
+    nestedGetZipById  : state => id => state.zipIndexById[id],
+    getDoc2htmlById   : state => state.doc2htmlById,
+    getSourceIndexById: state => state.sourceIndexById,
+    getAsset          : state => state.asset,
+    getPerson         : state => state.person,
+    getTimeCode       : state => pos => recursiveFindPrevTimeByPos(pos, state),
+    hasTimeCode       : state => state.timeCode?.size > 0,
+    getMergeStatus    : state => (id, lang) => state.mergedStatus[buildKey(id, lang)]
+  }
+});
 
 const getActionKey = type => {
   switch (type) {
-    case UNZIP:
-    case UNZIP_SUCCESS:
-    case UNZIP_FAILURE:
-    case UNZIP_LIST:
-    case UNZIP_LIST_SUCCESS:
-    case UNZIP_LIST_FAILURE:
+    case 'assets/unzip':
+    case 'assets/unzipSuccess':
+    case 'assets/unzipFailrue':
+    case 'assets/unzipList':
+    case 'assets/unzipListSuccess':
+    case 'assets/unzipListFailure':
       return 'zipIndexById';
-    case DOC2HTML:
-    case DOC2HTML_SUCCESS:
-    case DOC2HTML_FAILURE:
+    case 'assets/doc2html':
+    case 'assets/doc2htmlSuccess':
+    case 'assets/doc2htmlFailure':
       return 'doc2htmlById';
-    case SOURCE_INDEX:
-    case SOURCE_INDEX_SUCCESS:
-    case SOURCE_INDEX_FAILURE:
+    case 'assets/sourceIndex':
+    case 'assets/sourceIndexSuccess':
+    case 'assets/sourceIndexFailure':
       return 'sourceIndexById';
     default:
       throw new Error(`Unknown action key: ${type}`);
   }
 };
 
-const onFetchById = (draft, payload, type) => {
-  const key               = getActionKey(type);
-  draft[key][payload]     = draft[key][payload] || {};
-  draft[key][payload].wip = true;
-};
+export default assetsSlice.reducer;
 
-const onFetchByIdSuccess = (draft, payload, type) => {
-  const key           = getActionKey(type);
-  const { id, data }  = payload;
-  draft[key][id]      = draft[key][id] || {};
-  draft[key][id].data = data;
-  draft[key][id].wip  = false;
-};
+export const { actions } = assetsSlice;
 
-const onFetchByIdFailure = (draft, payload, type) => {
-  const key          = getActionKey(type);
-  const { id, err }  = payload;
-  draft[key][id]     = draft[key][id] || {};
-  draft[key][id].err = err;
-  draft[key][id].wip = false;
-};
+export const types = Object.fromEntries(new Map(
+  Object.values(assetsSlice.actions).map(a => [a.type, a.type])
+));
 
-const onFetchList = (draft, payload, type) => {
-  payload.forEach(p => onFetchById(draft, p, type));
-};
-
-const onFetchListSuccess = (draft, payload, type) => {
-  payload.forEach(p => onFetchByIdSuccess(draft, { id: p.uid, data: p }, type));
-};
-
-const onFetchListFailure = (draft, payload, type) => payload.forEach(p => onFetchByIdFailure(draft, p, type));
-
-const onFetchAsset = draft => {
-  draft.asset.wip = true;
-};
-
-const onFetchAssetSuccess = (draft, payload) => {
-  draft.asset.data = payload;
-  draft.asset.wip  = false;
-  draft.asset.err  = null;
-};
-
-const onFetchAssetFailure = (draft, payload) => {
-  draft.asset.wip = false;
-  draft.asset.err = payload;
-};
-
-const onFetchPerson = draft => {
-  draft.person.wip = true;
-};
-
-const onFetchPersonSuccess = (draft, payload) => {
-  draft.person.wip  = false;
-  draft.person.err  = null;
-  draft.person.data = payload.content;
-};
-
-const onFetchPersonFailure = (draft, payload) => {
-  draft.person.wip = false;
-  draft.person.err = payload;
-};
-const onFetchTimeCode      = draft => {
-  draft.timeCode = new Map();
-};
-
-const onFetchTimeCodeSuccess = (draft, payload) => {
-  const timeCode = new Map();
-  for (const idx in payload) {
-    const { index, timeCode: tc } = payload[idx];
-    timeCode.set(index, tc);
-  }
-  draft.timeCode = timeCode;
-};
-
-export const reducer = handleActions({
-  [ssr.PREPARE]: onSSRPrepare,
-
-  [UNZIP]: onFetchById,
-  [UNZIP_SUCCESS]: onFetchByIdSuccess,
-  [UNZIP_FAILURE]: onFetchByIdFailure,
-  [UNZIP_LIST]: onFetchList,
-  [UNZIP_LIST_SUCCESS]: onFetchListSuccess,
-  [UNZIP_LIST_FAILURE]: onFetchListFailure,
-
-  [DOC2HTML]: onFetchById,
-  [DOC2HTML_SUCCESS]: onFetchByIdSuccess,
-  [DOC2HTML_FAILURE]: onFetchByIdFailure,
-
-  [SOURCE_INDEX]: onFetchById,
-  [SOURCE_INDEX_SUCCESS]: onFetchByIdSuccess,
-  [SOURCE_INDEX_FAILURE]: onFetchByIdFailure,
-
-  [FETCH_ASSET]: onFetchAsset,
-  [FETCH_ASSET_SUCCESS]: onFetchAssetSuccess,
-  [FETCH_ASSET_FAILURE]: onFetchAssetFailure,
-
-  [FETCH_PERSON]: onFetchPerson,
-  [FETCH_PERSON_SUCCESS]: onFetchPersonSuccess,
-  [FETCH_PERSON_FAILURE]: onFetchPersonFailure,
-
-  [FETCH_TIME_CODE]: onFetchTimeCode,
-  [FETCH_TIME_CODE_SUCCESS]: onFetchTimeCodeSuccess,
-}, initialState);
-
-/* Selectors */
-
-const getZipIndexById    = state => state.zipIndexById;
-const nestedGetZipById   = state => id => state.zipIndexById[id];
-const getDoc2htmlById    = state => state.doc2htmlById;
-const getSourceIndexById = state => state.sourceIndexById;
-const getAsset           = state => state.asset;
-const getPerson          = state => state.person;
-const getTimeCode        = state => pos => recursiveFindPrevTimeByPos(pos, state);
-const recursiveFindPrevTimeByPos  = (pos, state) => {
-  if (pos === 0 || state.timeCode.size === 0) return 0;
-  if (state.timeCode.has(pos)) return state.timeCode.get(pos);
-  return recursiveFindPrevTimeByPos(pos - 1, state);
-};
-const hasTimeCode        = state => state.timeCode?.size > 0;
-
-export const selectors = {
-  getZipIndexById,
-  nestedGetZipById,
-  getDoc2htmlById,
-  getSourceIndexById,
-  getAsset,
-  getPerson,
-  getTimeCode,
-  hasTimeCode,
-};
+export const selectors = assetsSlice.getSelectors();

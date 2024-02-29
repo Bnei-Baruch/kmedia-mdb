@@ -13,25 +13,23 @@ import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { isEqual } from 'lodash';
 import { useLocation } from 'react-router-dom';
 import { withTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
-import { selectors as settings } from '../../../redux/modules/settings';
 import HomeBanners from './HomeBanners';
 
-const renderBlogPosts = (latestBlogPosts, language, t) =>
+const renderBlogPosts = (latestBlogPosts, uiLang, t) =>
   latestBlogPosts.length
   && (
     <Grid.Column mobile={16} tablet={11} computer={11} className="home-blog-posts">
       <div className="titles">
         <h4>{t('home.blog-title')}</h4>
       </div>
-      <BlogFeed snippetVersion items={latestBlogPosts} language={language} limitLength={4} />
+      <BlogFeed snippetVersion items={latestBlogPosts} limitLength={4} />
       <div className="read-more-bottom">
-        <a href={`/${language}/publications/blog`}>{t('home.read-more-posts')}</a>
+        <a href={`/${uiLang}/publications/blog`}>{t('home.read-more-posts')}</a>
       </div>
     </Grid.Column>
   );
 
-const renderTweets = (latestTweets, language, t) =>
+const renderTweets = (latestTweets, uiLang, t) =>
   latestTweets.length
   && (
     <Grid.Column mobile={16} tablet={5} computer={5} className="home-twitter">
@@ -44,19 +42,19 @@ const renderTweets = (latestTweets, language, t) =>
         }
       </Feed>
       <div className="read-more-bottom">
-        <a href={`/${language}/publications/twitter`}>{t('home.read-more-tweets')}</a>
+        <a href={`/${uiLang}/publications/twitter`}>{t('home.read-more-tweets')}</a>
       </div>
     </Grid.Column>
   );
 
-const renderBlogPostsAndTweets = (latestBlogPosts, latestTweets, language, t) =>
+const renderBlogPostsAndTweets = (latestBlogPosts, latestTweets, uiLang, t) =>
   <div className="homepage__section home-social-section">
     <Container className="padded horizontally ">
       <Section title={t('home.social')} computer={13}>
         <Grid centered className="homepage__iconsrow socialBackground">
           <Grid.Row>
-            {renderBlogPosts(latestBlogPosts, language, t)}
-            {renderTweets(latestTweets, language, t)}
+            {renderBlogPosts(latestBlogPosts, uiLang, t)}
+            {renderTweets(latestTweets, uiLang, t)}
           </Grid.Row>
         </Grid>
       </Section>
@@ -107,6 +105,7 @@ const renderSearchBar = location =>
 
 const HomePage = (
   {
+    uiLang,
     latestItems = [],
     latestLesson = null,
     latestBlogPosts = [],
@@ -114,10 +113,8 @@ const HomePage = (
     t,
   }
 ) => {
-
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const location           = useLocation();
-  const language           = useSelector(state => settings.getLanguage(state.settings));
 
   return (
     <div className="homepage">
@@ -125,8 +122,8 @@ const HomePage = (
       {renderSearchBar(location)}
       <HomeBanners latestLesson={latestLesson} />
       {renderActiveSectionsGrid(t, isMobileDevice)}
-      <LatestUpdatesSection latestItems={latestItems} t={t} language={language} />
-      {renderBlogPostsAndTweets(latestBlogPosts, latestTweets, language, t)}
+      <LatestUpdatesSection latestItems={latestItems} t={t} />
+      {renderBlogPostsAndTweets(latestBlogPosts, latestTweets, uiLang, t)}
     </div>
   );
 };
@@ -140,7 +137,7 @@ HomePage.propTypes = {
 };
 
 const arePropsEqual = (prevProps, nextProps) =>
-  prevProps.language === nextProps.language &&
+  prevProps.uiLang === nextProps.uiLang &&
   isEqual(prevProps.latestLesson, nextProps.latestLesson) &&
   isEqual(prevProps.latestUnits, nextProps.latestUnits) &&
   isEqual(prevProps.latestBlogPosts, nextProps.latestBlogPosts) &&

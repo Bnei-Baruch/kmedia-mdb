@@ -1,13 +1,13 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { Checkbox, List } from 'semantic-ui-react';
 
-import { actions, selectors as filters } from '../../../redux/modules/filters';
-import { selectors as filtersAside } from '../../../redux/modules/filtersAside';
+import { actions } from '../../../redux/modules/filters';
 import { FN_LANGUAGES, LANGUAGES } from '../../../helpers/consts';
+import { filtersAsideGetStatsSelector, filtersGetFilterByNameSelector } from '../../../redux/selectors';
 
 const LanguageItem = ({ namespace, id }) => {
-  const selected = useSelector(state => filters.getFilterByName(state.filters, namespace, FN_LANGUAGES))?.values || [];
-  const stat     = useSelector(state => filtersAside.getStats(state.filtersAside, namespace, FN_LANGUAGES)(id));
+  const selected = useSelector(state => filtersGetFilterByNameSelector(state, namespace, FN_LANGUAGES))?.values || [];
+  const stat     = useSelector(state => filtersAsideGetStatsSelector(state, namespace, FN_LANGUAGES))(id);
 
   const dispatch = useDispatch();
 

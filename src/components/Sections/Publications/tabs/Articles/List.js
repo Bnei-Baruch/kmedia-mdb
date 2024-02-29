@@ -6,6 +6,8 @@ import * as renderUnitHelper from '../../../../../helpers/renderUnitHelper';
 import UnitList from '../../../../Pages/UnitListAsTable/Container';
 
 const renderUnit = (unit, t) => {
+  if (!unit) return null;
+
   const breakdown    = renderUnitHelper.getUnitCollectionsBreakdown(unit);
   const articles     = breakdown.getArticles();
   const relatedItems = articles.map(renderUnitHelper.renderUnitNameAsListItem);

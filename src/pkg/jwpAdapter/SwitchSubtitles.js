@@ -1,12 +1,11 @@
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
-import { selectors as player } from '../../redux/modules/player';
-import { selectors as playlist } from '../../redux/modules/playlist';
+import { playlistGetInfoSelector, playerIsReadySelector } from '../../redux/selectors';
 
 const SwitchSubtitles = () => {
-  const isReady      = useSelector(state => player.isReady(state.player));
-  const subsLanguage = useSelector(state => playlist.getInfo(state.playlist).subsLanguage);
+  const isReady          = useSelector(playerIsReadySelector);
+  const { subsLanguage } = useSelector(playlistGetInfoSelector);
 
   useEffect(() => {
     if (!isReady) return;

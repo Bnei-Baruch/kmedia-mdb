@@ -4,34 +4,40 @@ import { useParams, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Container, Divider, Header } from 'semantic-ui-react';
 
-import { actions, selectors } from '../../../redux/modules/tags';
+import { actions } from '../../../redux/modules/tags';
 import { actions as listsActions } from '../../../redux/modules/lists';
-import { selectors as settings } from '../../../redux/modules/settings';
 import Pagination from '../../Pagination/Pagination';
-import { selectors as filters } from '../../../redux/modules/filters';
 import { isEqual } from 'lodash';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import RenderPage from './RenderPage';
 import RenderPageMobile from './RenderPageMobile';
 import { getPageFromLocation } from '../../Pagination/withPagination';
 import { PAGE_NS_TOPICS } from '../../../helpers/consts';
+import {
+  settingsGetContentLanguagesSelector,
+  filtersGetNotEmptyFiltersSelector,
+  tagsGetPathByIDSelector,
+  tagsGetTagsSelector,
+  tagsGetItemsSelector,
+  settingsGetPageSizeSelector
+} from '../../../redux/selectors';
 
 const TopicPage = () => {
   const { id }             = useParams();
   const { t }              = useTranslation();
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
-  const getPathByID = useSelector(state => selectors.getPathByID(state.tags));
-  const getTags     = useSelector(state => selectors.getTags(state.tags));
-  const language    = useSelector(state => settings.getLanguage(state.settings));
-  const selected    = useSelector(state => filters.getNotEmptyFilters(state.filters, `topics_${id}`), isEqual);
+  const getPathByID      = useSelector(tagsGetPathByIDSelector);
+  const getTags          = useSelector(tagsGetTagsSelector);
+  const contentLanguages = useSelector(settingsGetContentLanguagesSelector);
+  const selected         = useSelector(state => filtersGetNotEmptyFiltersSelector(state, `topics_${id}`), isEqual);
 
-  const { mediaTotal, textTotal } = useSelector(state => selectors.getItems(state.tags));
+  const { mediaTotal, textTotal } = useSelector(tagsGetItemsSelector);
   const total                     = Math.max(mediaTotal, textTotal);
 
   const dispatch = useDispatch();
 
-  const pageSize = useSelector(state => settings.getPageSize(state.settings));
+  const pageSize = useSelector(settingsGetPageSizeSelector);
   const location = useLocation();
   const pageNo   = useMemo(() => getPageFromLocation(location) || 1, [location]);
 
@@ -40,7 +46,7 @@ const TopicPage = () => {
   useEffect(() => {
     const page_no = pageNo > 1 ? pageNo : 1;
     dispatch(actions.fetchDashboard({ tag: id, page_size: pageSize, page_no }));
-  }, [id, language, dispatch, pageNo, pageSize, selected]);
+  }, [id, contentLanguages, dispatch, pageNo, pageSize, selected]);
 
   if (!getPathByID) {
     const tag = getTags ? getTags[id] : null;
@@ -59,8 +65,8 @@ const TopicPage = () => {
 
   return (
     <>
-      {isMobileDevice ? <RenderPageMobile /> : <RenderPage />}
-      <Divider fitted />
+      {isMobileDevice ? <RenderPageMobile/> : <RenderPage/>}
+      <Divider fitted/>
       <Container className="padded pagination-wrapper" textAlign="center">
         {
           total > 0 &&
@@ -68,7 +74,6 @@ const TopicPage = () => {
             pageNo={pageNo}
             pageSize={pageSize}
             total={total}
-            language={language}
             onChange={handleSetPage}
           />
         }

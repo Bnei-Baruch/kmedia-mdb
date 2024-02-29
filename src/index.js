@@ -17,10 +17,9 @@ import { hydrateRoot } from 'react-dom/client';
 import ReactGA from 'react-ga';
 import { createBrowserHistory } from 'history';
 
-import { DEFAULT_LANGUAGE, LANG_UKRAINIAN } from './helpers/consts';
-import i18n from './helpers/i18nnext';
+import { DEFAULT_UI_LANGUAGE, LANG_UKRAINIAN, KC_BOT_USER_NAME } from './helpers/consts';
+import i18n, { initializeI18n } from './helpers/i18nnext';
 import createStore from './redux/createStore';
-import { actions as mdb } from './redux/modules/mdb';
 import { actions as ssr } from './redux/modules/ssr';
 import App from './components/App/App';
 import UAParser from 'ua-parser-js';
@@ -29,6 +28,7 @@ import { CreateAbTesting } from './helpers/ab-testing';
 import { initKC } from './pkg/ksAdapter/adapter';
 import ErrorBoundary from './components/ErrorBoundary';
 import { HelmetProvider } from 'react-helmet-async';
+import { actions as mdbActions } from './redux/modules/mdb';
 
 function hydrateApp(kcInfo) {
 
@@ -44,39 +44,44 @@ function hydrateApp(kcInfo) {
   const i18nData = window.__i18n || {};
 
   // Initialize moment global locale to default language
-  const language = i18nData.initialLanguage ?? DEFAULT_LANGUAGE;
+  const language = i18nData.initialLanguage ?? DEFAULT_UI_LANGUAGE;
   moment.locale(language === LANG_UKRAINIAN ? 'uk' : language);
 
-  const deviceInfo       = new UAParser().getResult();
-  const clientChronicles = new ClientChronicles(history, store);
-  const abTesting        = CreateAbTesting(clientChronicles.userId);
-  clientChronicles.setAbTesting(abTesting);
-  const component = (
-    <React.StrictMode>
-      <ErrorBoundary>
-        <HelmetProvider>
-          <App
-            i18n={i18n}
-            store={store}
-            history={history}
-            deviceInfo={deviceInfo}
-            clientChronicles={clientChronicles}
-            abTesting={abTesting}
-            i18nData={i18nData}
-          />
-        </HelmetProvider>
-      </ErrorBoundary>
-    </React.StrictMode>
-  );
-  const el        = document.getElementById('root');
-  hydrateRoot(el, component);
-  // We ask for semi-quasi static data here since
-  // we strip it from SSR to save initial network bandwidth
-  store.dispatch(mdb.fetchSQData());
+  initializeI18n().then(() => {
+    const deviceInfo       = new UAParser().getResult();
+    const clientChronicles = new ClientChronicles(history, store);
+    const abTesting        = CreateAbTesting(clientChronicles.userId);
+    clientChronicles.setAbTesting(abTesting);
+    const component = (
+      <React.StrictMode>
+        <ErrorBoundary>
+          <HelmetProvider>
+            <App
+              i18n={i18n}
+              store={store}
+              history={history}
+              deviceInfo={deviceInfo}
+              clientChronicles={clientChronicles}
+              abTesting={abTesting}
+              i18nData={i18nData}
+            />
+          </HelmetProvider>
+        </ErrorBoundary>
+      </React.StrictMode>
+    );
+    const el        = document.getElementById('root');
+    hydrateRoot(el, component);
+    // We ask for semi-quasi static data here since
+    // we strip it from SSR to save initial network bandwidth
+    console.log('hydrateApp fetchSQData');
+    store.dispatch(mdbActions.fetchSQData());
+  });
 }
 
 if (window.__isAuthApp) {
   initKC();
+} else if (window.__botKCInfo?.user?.name === KC_BOT_USER_NAME) {
+  hydrateApp(window.__botKCInfo);
 } else {
   initKC().then(info => hydrateApp(info));
 }

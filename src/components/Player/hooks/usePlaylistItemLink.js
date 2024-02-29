@@ -1,19 +1,23 @@
-import React from 'react';
 import { useSelector } from 'react-redux';
-import { selectors } from '../../../redux/modules/playlist';
-import { selectors as mdb } from '../../../redux/modules/mdb';
 import { canonicalLink } from '../../../helpers/links';
 import { stringify } from '../../../helpers/url';
+import {
+  mdbGetDenormCollectionSelector,
+  mdbGetDenormContentUnitSelector,
+  playlistGetInfoSelector,
+  playlistGetItemByIdSelector
+} from '../../../redux/selectors';
 
 const usePlaylistItemLink = id => {
-  const { cuId, id: _id, properties, ap } = useSelector(state => selectors.getItemById(state.playlist)(id));
-  const { baseLink, cId }                 = useSelector(state => selectors.getInfo(state.playlist));
-  const cu                                = useSelector(state => mdb.getDenormContentUnit(state.mdb, cuId || _id));
-  const ccu                               = useSelector(state => mdb.getDenormCollection(state.mdb, cId));
+  const { cuId, id: _id, properties, ap } = useSelector(playlistGetItemByIdSelector)(id);
+  const { baseLink, cId }                 = useSelector(playlistGetInfoSelector);
+  const cu                                = useSelector(state => mdbGetDenormContentUnitSelector(state, cuId || _id));
+  const ccu                               = useSelector(state => mdbGetDenormCollectionSelector(state, cId));
 
   if (baseLink) {
     return { pathname: baseLink, search: stringify({ ...properties, ap }) };
   }
+
   if (!cu) return false;
   return canonicalLink(cu, null, ccu);
 };

@@ -1,54 +1,51 @@
 import React, { useContext } from 'react';
-import { withTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 import { Dropdown } from 'semantic-ui-react';
-import classNames from 'classnames';
+
+import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { noop } from '../../../helpers/utils';
 import { getOptions } from '../../../helpers/language';
-import { LANG_HEBREW, LANGUAGES } from '../../../helpers/consts';
-import { DeviceInfoContext } from '../../../helpers/app-contexts';
+import { settingsGetContentLanguagesSelector, settingsGetUIDirSelector } from '../../../redux/selectors';
 
-const DesktopLanguageSelector = (value, fluid, options, handleSelect, blink) => (
-  <Dropdown item text={LANGUAGES[value].name} fluid={fluid}>
-    <Dropdown.Menu>
-      {
-        options.map(lang =>
-          <Dropdown.Item
-            key={lang.value}
-            language={`${lang}`}
-            active={lang.value === value}
-            onClick={e => handleSelect(e, lang)}
-            className={classNames('dropdown-language-selector', { blink: !!blink })}
-          >
-            {lang.text}
-          </Dropdown.Item>
-        )
-      }
-    </Dropdown.Menu>
-  </Dropdown>
-);
-
-const MobileLanguageSelector = (value, fluid, options, handleSelect) => (
-  <select
-    className="dropdown-container"
-    value={value}
-    onChange={e => handleSelect(e, e.currentTarget)}
-  >
-    {
-      options.map(x =>
-        <option key={`opt-${x.value}`} value={x.value}>
-          {x.name}
-        </option>)
-    }
-  </select>
-);
-
-const MenuLanguageSelector = ({ languages = [], defaultValue: value = LANG_HEBREW, blink, onSelect = noop, fluid = true }) => {
+const MenuLanguageSelector = ({ languages = [], selected = [], onLanguageChange = noop, multiSelect = true, optionText = null, upward = false }) => {
+  const uiDir              = useSelector(settingsGetUIDirSelector);
   const { isMobileDevice } = useContext(DeviceInfoContext);
-  const handleSelect = (e, data) => onSelect(e, data.value);
-  const options = getOptions({ languages });
-  return isMobileDevice ?
-    MobileLanguageSelector(value, fluid, options, handleSelect) :
-    DesktopLanguageSelector(value, fluid, options, handleSelect, blink);
+  const contentLanguages   = useSelector(settingsGetContentLanguagesSelector);
+  const onChange           = selected => {
+    onLanguageChange(selected);
+  };
+
+  const validLanguages = languages.filter(lang => contentLanguages.includes(lang));
+  const otherLanguages = languages.filter(lang => !contentLanguages.includes(lang));
+  const dividerArray   = !isMobileDevice || multiSelect ? [{ value: 'divider', className: 'language-selection-divider disabled' }] : [];
+  const options        = getOptions({ languages: validLanguages }).concat(dividerArray).concat(getOptions({ languages: otherLanguages }));
+  // Special case when all laguages are selected, e.g., show content with any language.
+  const isAny          = languages === selected;
+
+  const value        = multiSelect ? (isAny ? ['any'] : selected) : selected;
+
+  if (isMobileDevice && !multiSelect) {
+    return (
+      <select
+        className="language-mobile-select"
+        style={{ direction: uiDir }}
+        value={value}
+        onChange={event => onChange(event.target.value)}>
+        {options.map(x => <option key={`opt-${x.value}`} value={x.value}>{x.name}</option>)}
+      </select>
+    );
+  }
+
+  return (
+    <Dropdown
+      selection
+      upward={upward}
+      multiple={multiSelect}
+      value={value}
+      onChange={(event, data) => onChange(data.value)}
+      options={options}
+    />
+  );
 };
 
-export default withTranslation()(MenuLanguageSelector);
+export default MenuLanguageSelector;

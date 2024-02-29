@@ -9,12 +9,12 @@ import CollectionLogo from '../../shared/Logo/CollectionLogo';
 import Helmets from '../../shared/Helmets';
 import { getRSSLinkByTopic } from '../../../helpers/utils';
 import { useSelector } from 'react-redux';
-import { selectors as settings } from '../../../redux/modules/settings';
 import ShareForm from './ShareForm';
 import SubscribeBtn from '../../shared/SubscribeBtn';
+import { settingsGetContentLanguagesSelector } from '../../../redux/selectors';
 
 const CollectionPageHeader = ({ collection = null, namespace, title = namespace, t }) => {
-  const contentLanguage = useSelector(state => settings.getContentLanguage(state.settings));
+  const contentLanguages = useSelector(settingsGetContentLanguagesSelector);
 
   if (collection === null) {
     return <div className="collection-header" />;
@@ -44,7 +44,7 @@ const CollectionPageHeader = ({ collection = null, namespace, title = namespace,
                       size="mini"
                       color="orange"
                       compact={true}
-                      href={getRSSLinkByTopic(collection.id, contentLanguage)} />
+                      href={getRSSLinkByTopic(collection.id, contentLanguages)} />
                     <ShareForm collection={collection} />
                     <div className="margin-top-8 display-iblock">
                       <SubscribeBtn collection={collection} />

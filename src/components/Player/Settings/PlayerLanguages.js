@@ -1,46 +1,35 @@
 import React from 'react';
-import { Button, Icon, Menu } from 'semantic-ui-react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { LANGUAGE_OPTIONS, PLAYER_OVER_MODES, LANG_SLOVENIAN, LANGUAGES } from '../../../helpers/consts';
-import { actions as playlistActions, selectors as playlist } from '../../../redux/modules/playlist';
-import { actions } from '../../../redux/modules/player';
-import { useTranslation } from 'react-i18next';
+import { actions as playlistActions } from '../../../redux/modules/playlist';
+import MenuLanguageSelector from '../../Language/Selector/MenuLanguageSelector';
+import { playerGetFileSelector, playlistGetInfoSelector, playlistGetPlayedSelector } from '../../../redux/selectors';
 
-const PlayerLanguages = ({ language }) => {
-  const { languages = [] } = useSelector(state => playlist.getPlayed(state.playlist));
-  const dispatch           = useDispatch();
-  const { t }              = useTranslation();
+const PlayerLanguages = () => {
+  const { languages = [], isHLS } = useSelector(playlistGetPlayedSelector);
+  let { language }                = useSelector(playlistGetInfoSelector);
+  const file                      = useSelector(playerGetFileSelector);
+  const dispatch                  = useDispatch();
 
-  const handleSelect = (e, { name }) => dispatch(playlistActions.setLanguage(name));
+  if (!isHLS) {
+    language = file.language;
+  } else if (!languages.includes(language)) {
+    language = languages[0];
+  }
 
-  const handleCloseLangs = () => dispatch(actions.setOverMode(PLAYER_OVER_MODES.settings));
-  const langOptions      = [...LANGUAGE_OPTIONS, LANGUAGES[LANG_SLOVENIAN]];
+  const handleSelect = lang => {
+    dispatch(playlistActions.setLanguage(lang));
+  };
 
   return (
-    <div className="settings__pane">
-      <Button inverted fluid onClick={handleCloseLangs}>
-        <Icon name="left chevron" />
-        {t('player.settings.language')}
-      </Button>
-      <Menu secondary vertical inverted size="small" fluid>
-        {
-          langOptions
-            .filter(x => {
-              return languages.includes(x.value);
-            })
-            .map(x => (
-              <Menu.Item
-                link
-                name={x.value}
-                content={x.name}
-                active={language === x.value}
-                onClick={handleSelect}
-                key={x.value}
-              />
-            ))
-        }
-      </Menu>
+    <div className="controls__language">
+      <MenuLanguageSelector
+        languages={languages}
+        selected={language}
+        onLanguageChange={handleSelect}
+        multiSelect={false}
+        upward={true}
+      />
     </div>
   );
 };

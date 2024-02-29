@@ -6,11 +6,10 @@ import { Confirm, Dropdown, Modal } from 'semantic-ui-react';
 import { actions } from '../../../../../redux/modules/my';
 import { MY_NAMESPACE_BOOKMARKS } from '../../../../../helpers/consts';
 import BookmarkForm from '../../../../shared/SaveBookmark/BookmarkForm';
-import { selectors as settings } from '../../../../../redux/modules/settings';
-import { getLanguageDirection } from '../../../../../helpers/i18n-utils';
 import { getMyItemKey } from '../../../../../helpers/my';
 import { stopBubbling } from '../../../../../helpers/utils';
 import AlertModal from '../../../../shared/AlertModal';
+import { settingsGetUIDirSelector } from '../../../../../redux/selectors';
 
 const Actions = ({ bookmark, t }) => {
   const [open, setOpen]         = useState();
@@ -20,8 +19,7 @@ const Actions = ({ bookmark, t }) => {
 
   const dispatch = useDispatch();
 
-  const language = useSelector(state => settings.getLanguage(state.settings));
-  const dir      = getLanguageDirection(language);
+  const uiDir = useSelector(settingsGetUIDirSelector);
 
   const { key } = getMyItemKey(MY_NAMESPACE_BOOKMARKS, bookmark);
 
@@ -57,7 +55,7 @@ const Actions = ({ bookmark, t }) => {
 
   return (
     <>
-      <AlertModal message={alertMsg} open={!!alertMsg} onClose={handleAlertClose} />
+      <AlertModal message={alertMsg} open={!!alertMsg} onClose={handleAlertClose}/>
       <Confirm
         size="tiny"
         open={confirm}
@@ -66,7 +64,7 @@ const Actions = ({ bookmark, t }) => {
         cancelButton={t('buttons.cancel')}
         confirmButton={t('buttons.apply')}
         content={t('personal.bookmark.confirmRemoveBookmark', { name: bookmark.name })}
-        dir={dir}
+        dir={uiDir}
       />
       <Dropdown
         icon={{ name: 'ellipsis vertical', size: 'large', color: 'grey', className: 'margin-top-8' }}
@@ -87,11 +85,11 @@ const Actions = ({ bookmark, t }) => {
             open={openEdit}
             onClose={handleCloseEdit}
             size="tiny"
-            dir={dir}
+            dir={uiDir}
             className="bookmark_modal"
           >
-            <Modal.Header content={t('personal.bookmark.editBookmark')} />
-            <BookmarkForm onClose={handleCloseEdit} bookmarkId={bookmark.id} />
+            <Modal.Header content={t('personal.bookmark.editBookmark')}/>
+            <BookmarkForm onClose={handleCloseEdit} bookmarkId={bookmark.id}/>
           </Modal>
           <Dropdown.Item
             fitted="vertically"

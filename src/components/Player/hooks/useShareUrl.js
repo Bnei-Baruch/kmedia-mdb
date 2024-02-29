@@ -3,17 +3,16 @@ import { useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 import { toHumanReadableTime } from '../../../helpers/time';
-import { selectors as player } from '../../../redux/modules/player';
-import { selectors as playlist } from '../../../redux/modules/playlist';
 import { splitPathByLanguage, getQuery } from '../../../helpers/url';
+import { playlistGetInfoSelector, playerGetShareStartEndSelector } from '../../../redux/selectors';
 
 const useShareUrl = () => {
   const [shareUrl, setShareUrl] = useState('');
 
   const location = useLocation();
 
-  const { start, end }          = useSelector(state => player.getShareStartEnd(state.player));
-  const { mediaType, language } = useSelector(state => playlist.getInfo(state.playlist));
+  const { start, end }          = useSelector(playerGetShareStartEndSelector);
+  const { language, mediaType } = useSelector(playlistGetInfoSelector);
 
   useEffect(() => {
     const { protocol, hostname, port, pathname, search } = window.location;

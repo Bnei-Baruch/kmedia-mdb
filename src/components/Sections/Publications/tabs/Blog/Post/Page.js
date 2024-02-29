@@ -7,10 +7,10 @@ import { Container, Grid, Header } from 'semantic-ui-react';
 import * as shapes from '../../../../../shapes';
 import Helmets from '../../../../../shared/Helmets/index';
 import WipErr from '../../../../../shared/WipErr/WipErr';
-import Share from '../../../../Library/Share';
-import { isLanguageRtl } from '../../../../../../helpers/i18n-utils';
+import Share from '../../../../../Pages/WithText/Buttons/ShareTextBtn';
+import { getBlogLanguage, isLanguageRtl } from '../../../../../../helpers/i18n-utils';
 
-export const BlogPostPage = ({ post = null, wip = false, err = null, t, language }) => {
+export const BlogPostPage = ({ post = null, wip = false, err = null, t }) => {
   const wipErr = WipErr({ wip, err, t });
   if (wipErr) {
     return wipErr;
@@ -20,6 +20,7 @@ export const BlogPostPage = ({ post = null, wip = false, err = null, t, language
     return null;
   }
 
+  const language = getBlogLanguage(post.blog);
   const { url, title, content, created_at: ts } = post;
   const mts                                     = moment(ts);
   const pHtml                                   = content.replace(/href="\/publications\/blog\//gi, `href="/${language}/publications/blog/`);
@@ -74,7 +75,6 @@ BlogPostPage.propTypes = {
   post: shapes.BlogPost,
   wip: shapes.WIP,
   err: shapes.Error,
-  language: PropTypes.string.isRequired,
   t: PropTypes.func.isRequired,
 };
 

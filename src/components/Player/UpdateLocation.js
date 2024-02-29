@@ -2,35 +2,39 @@ import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { selectors as playlist, actions as action, selectors } from '../../redux/modules/playlist';
-import { selectors as mdb } from '../../redux/modules/mdb';
+import { actions as action } from '../../redux/modules/playlist';
 import { persistPreferredMediaType } from '../../helpers/player';
 import { getQuery, stringify, updateQuery } from '../../helpers/url';
 import { canonicalLink } from '../../helpers/links';
-import { selectors as settings } from '../../redux/modules/settings';
-import { actions, selectors as player } from '../../redux/modules/player';
+import { actions } from '../../redux/modules/player';
 import { startEndFromQuery } from './Controls/helper';
+import {
+  playlistGetIndexByIdSelector,
+  playlistGetInfoSelector,
+  settingsGetUILangSelector,
+  mdbNestedGetDenormCollectionSelector,
+  mdbNestedGetDenormContentUnitSelector
+} from '../../redux/selectors';
 
 const UpdateLocation = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const dispatch                           = useDispatch();
-  const q                                  = getQuery(location);
-  const uiLanguage                         = useSelector(state => settings.getLanguage(state.settings));
-  const { start: prevStart, end: prevEnd } = useSelector(state => player.getShareStartEnd(state.player));
+  const dispatch = useDispatch();
+  const q        = getQuery(location);
+  const uiLang   = useSelector(settingsGetUILangSelector);
 
-  const { mediaType, nextUnitId, cId, cuId, baseLink } = useSelector(state => playlist.getInfo(state.playlist));
+  const { mediaType, nextUnitId, cId, cuId, baseLink } = useSelector(playlistGetInfoSelector);
 
-  const denormUnit        = useSelector(state => mdb.nestedGetDenormContentUnit(state.mdb));
-  const denormCollectiont = useSelector(state => mdb.nestedGetDenormCollection(state.mdb));
-  const ap                = useSelector(state => selectors.getIndexById(state.playlist, nextUnitId));
+  const denormUnit        = useSelector(mdbNestedGetDenormContentUnitSelector);
+  const denormCollectiont = useSelector(mdbNestedGetDenormCollectionSelector);
+  const ap                = useSelector(state => playlistGetIndexByIdSelector(state, nextUnitId));
 
   //init redux start end from location
   useEffect(() => {
     const _q = startEndFromQuery(location);
     dispatch(actions.setShareStartEnd(_q));
-  }, [location, cuId]);
+  }, [location, cuId, dispatch]);
 
   useEffect(() => {
     if (mediaType && mediaType !== q.mediaType) {
@@ -52,10 +56,10 @@ const UpdateLocation = () => {
         to = canonicalLink(denormUnit(nextUnitId), null, denormCollectiont(cId));
       }
 
-      navigate({ pathname: `/${uiLanguage}${to.pathname}`, search });
+      navigate({ pathname: `/${uiLang}${to.pathname}`, search });
       dispatch(action.nullNextUnit());
     }
-  }, [nextUnitId, cId, search, uiLanguage, baseLink, navigate, denormUnit, denormCollectiont]);
+  }, [nextUnitId, cId, search, uiLang, baseLink, navigate, denormUnit, denormCollectiont, dispatch]);
 
   return null;
 };

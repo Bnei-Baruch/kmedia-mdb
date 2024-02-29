@@ -3,10 +3,7 @@ import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 
-import { actions, selectors } from '../../../../../../redux/modules/recommended';
-import { selectors as tagsSelectors } from '../../../../../../redux/modules/tags';
-import { selectors as sourcesSelectors } from '../../../../../../redux/modules/sources';
-import { selectors as playlist } from '../../../../../../redux/modules/playlist';
+import { actions } from '../../../../../../redux/modules/recommended';
 import * as shapes from '../../../../../shapes';
 import WipErr from '../../../../../shared/WipErr/WipErr';
 import DisplayRecommended from './DisplayRecommended';
@@ -21,9 +18,16 @@ import {
   CT_SPECIAL_LESSON,
   SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_TEXT,
   SGLP_LESSON_SERIES,
-  SGLP_PRORGRAMS,
+  SGLP_PRORGRAMS
 } from '../../../../../../helpers/consts';
-import { selectors as mdb } from '../../../../../../redux/modules/mdb';
+import {
+  mdbGetDenormContentUnitSelector,
+  recommendedGetErrorSelector,
+  sourcesGetPathByIDSelector,
+  sourcesGetSourceByIdSelector,
+  tagsGetTagByIdSelector,
+  recommendedGetWipFn
+} from '../../../../../../redux/selectors';
 
 // Number of items to try to recommend.
 const N = 12;
@@ -80,7 +84,7 @@ const makeCollectionLink = (collection, t) => {
   return <Link key={collection.id} to={canonicalLink(collection)}>{display}</Link>;
 };
 
-const Recommended = ({ t, filterOutUnits = [], displayTitle = true }) => {
+const Recommended = ({ t, filterOutUnits = [], displayTitle = true, cuId }) => {
   const abTesting                                         = useContext(AbTestingContext);
   const [unitId, setUnitId]                               = useState(null);
   const [unitContentType, setUnitContentType]             = useState(null);
@@ -92,13 +96,12 @@ const Recommended = ({ t, filterOutUnits = [], displayTitle = true }) => {
 
   const activeVariant = (abTesting && abTesting.getVariant(AB_RECOMMEND_EXPERIMENT)) || '';
 
-  const { cuId }      = useSelector(state => playlist.getInfo(state.playlist));
-  const unit          = useSelector(state => mdb.getDenormContentUnit(state.mdb, cuId));
-  const wip           = useSelector(state => selectors.getWip(state.recommended));
-  const err           = useSelector(state => selectors.getError(state.recommended));
-  const getTagById    = useSelector(state => tagsSelectors.getTagById(state.tags));
-  const getSourceById = useSelector(state => sourcesSelectors.getSourceById(state.sources));
-  const getPathById   = useSelector(state => sourcesSelectors.getPathByID(state.sources));
+  const unit          = useSelector(state => mdbGetDenormContentUnitSelector(state, cuId));
+  const wip           = useSelector(recommendedGetWipFn);
+  const err           = useSelector(recommendedGetErrorSelector);
+  const getTagById    = useSelector(tagsGetTagByIdSelector);
+  const getSourceById = useSelector(sourcesGetSourceByIdSelector);
+  const getPathById   = useSelector(sourcesGetPathByIDSelector);
 
   useEffect(() => {
     if (unit?.id && unit.id !== unitId) {
@@ -116,13 +119,13 @@ const Recommended = ({ t, filterOutUnits = [], displayTitle = true }) => {
     if (unit?.id && !err && !wip && prevUnitId !== unit.id) {
       dispatch(actions.fetchRecommended({
         id: unit.id,
-        content_type: unitContentType,
+        content_type: unitContentType || unit.content_type,
         tags: unitTags,
         sources: unitSources,
         collections: unitCollections,
         size: N,
         skip: filterOutUnits.map(x => x.id),
-        variant: activeVariant,
+        variant: activeVariant
       }));
     }
   }, [dispatch, err, wip, unitTags, unitCollections, filterOutUnits, prevUnitId, activeVariant, unitContentType, unitSources, unit]);

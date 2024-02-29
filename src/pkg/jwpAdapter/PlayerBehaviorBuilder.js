@@ -4,24 +4,24 @@ import BehaviorStartStopSlice from './BehaviorStartStopSlice';
 import BehaviorStartStopSliceMy from './BehaviorStartStopSliceMy';
 import { useSelector } from 'react-redux';
 import PlayerBehavior from './PlayerBehavior';
-import { selectors as playlist, selectors } from '../../redux/modules/playlist';
 import PlayerBehaviorHls from './PlayerBehaviorHls';
 import AutoStartNotAllowed from './AutoStartNotAllowed';
 import SwitchSubtitles from './SwitchSubtitles';
+import { playlistGetInfoSelector, playlistGetPlayedSelector } from '../../redux/selectors';
 
 const PlayerBehaviorBuilder = () => {
-  const isHLS = useSelector(state => playlist.getPlayed(state.playlist)?.isHLS);
-  const isMy  = useSelector(state => selectors.getInfo(state.playlist).isMy);
+  const isHLS = useSelector(playlistGetPlayedSelector)?.isHLS;
+  const { isMy }  = useSelector(playlistGetInfoSelector);
 
   return (
     <>
-      <AutoStartNotAllowed />
-      <PlayerBehavior />
-      <BehaviorStartPlay />
-      <BehaviorStartStopSlice />
-      <SwitchSubtitles />
-      {isMy ? <BehaviorStartStopSliceMy /> : <BehaviorStartStopSlice />}
-      {isHLS && <PlayerBehaviorHls />}
+      <AutoStartNotAllowed/>
+      <PlayerBehavior/>
+      <BehaviorStartPlay/>
+      <BehaviorStartStopSlice/>
+      <SwitchSubtitles/>
+      {isMy ? <BehaviorStartStopSliceMy/> : <BehaviorStartStopSlice/>}
+      {isHLS && <PlayerBehaviorHls/>}
     </>
   );
 };

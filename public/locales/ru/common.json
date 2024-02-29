@@ -119,10 +119,10 @@
       "sort-by-filter": "Сортировать по"
     },
     "media-types": {
-      "audio" : "Аудио",
-      "video" : "Видео ",
-      "text" : "Стенограмма",
-      "image" : "Чертеж"
+      "audio": "Аудио",
+      "video": "Видео ",
+      "text": "Стенограмма",
+      "image": "Чертеж"
     },
     "content-types": {
       "CONGRESS": "Конгрессы",
@@ -263,7 +263,8 @@
     "trimmed-title-wip": "Мы готовим для вас файл",
     "trimmed-content-wip": "Несколько минут...",
     "add-new-note": "Делайте заметки о том, что вы слышали в классе, или то, что важно для вас, чтобы сохранить на будущее...",
-    "confirm-remove-note": "Вы действительно хотите удалить?"
+    "confirm-remove-note": "Вы действительно хотите удалить?",
+    "unit-tags": "Теги"
   },
   "search": {
     "header": {
@@ -566,13 +567,13 @@
     },
     "transcription": {
       "header": "Стенограмма",
-      "no-content": "Нет стенограммы"
+      "no-content": "Нет стенограммы на вашем языке"
     },
     "sources": {
       "header": "Источники",
       "no-sources": "Нет источника",
       "no-source": "Выберите источник",
-      "no-source-available": "Источник не найден"
+      "no-source-available": "Нет источника на вашем языке"
     },
     "sketches": {
       "header": "Чертежи"
@@ -621,7 +622,8 @@
     "filter": "Фильтр...",
     "share-title": "Читайте статью",
     "group-articles": "Статьи о группе",
-    "play-audio-file": "Воспроизвести аудиофайл"
+    "play-audio-file": "Воспроизвести аудиофайл",
+    "play-source": "Послушать эту статью"
   },
   "topics": {
     "header": {
@@ -857,8 +859,14 @@
   },
   "languages": {
     "language": "Язык",
-    "website_language": "Язык сайта",
-    "content_language": "Язык контента"
+    "ui_language": "Язык интерфейса:",
+    "content_languages": "Языки контента",
+    "add_languages": "Добавить язык...",
+    "show_all_content": "Показать весь контент",
+    "show_all_content_explanation": "Контент будет также показан и на других языках.",
+    "url_language_prefix": "Вы исползуете {{lang}} из линка, нажмите ",
+    "url_language_here": "здесь",
+    "url_language_suffix": " чтобы использовать ваши языки."
   },
   "share-text": {
     "message-title": "Read this fragment",
@@ -876,7 +884,8 @@
     "bookmark-button-alt": "Создайте закладку и сохраните ее в личной зоне",
     "tag-button-alt": "Пометьте выделенный текст в разделе \"Темы\"",
     "docbar-title": "Вы выбрали отрывок из текста, что бы вы хотели сделать?",
-    "play-from-text": "Проиграть выбранный отрывок"
+    "play-from-text": "Проиграть выбранный отрывок",
+    "lessons-by-source": "Ко всем урокам по статье"
   },
   "personal": {
     "subsNewUnits": "новых эпизодов",
@@ -940,6 +949,42 @@
       "ending": "Готово",
       "contentCreate": "Хотите, чтобы все увидели отмеченный вами отрывок?\nОтметьте его в разделе темы",
       "labelCreated": "Отрывок был успешно помечен. Вы можете найти его в разделе тем под темами, которые вы отметили"
+    }
+  },
+  "page-with-text": {
+    "buttons": {
+      "web": {
+        "lessons": "Ко всем урокам по статье",
+        "text-settings": "Изменить форматирование текста",
+        "languages": "Изменить язык",
+        "play-by-text": "Новинка! Воспроизвести видеоклип",
+        "add-tag": "Добавление тегов",
+        "add-bookmark": "Добавить в закладки",
+        "add-comment": "Добавить комментарий в текст",
+        "share": "Поделиться",
+        "search": "Поиск на странице",
+        "expand-comments": "Показать все комментарии",
+        "collapse-comments": "Скрыть все комментарии",
+        "download": "Скачать",
+        "print": "Распечатать",
+        "fullscreen-on": "Полный экран",
+        "fullscreen-off": "Выйти из полноэкранного режима",
+        "hide-additions": "Скрыть все комментарии",
+        "show-additions": "Показать все комментарии",
+        "scan": "Скан оригинального текста",
+        "more-buttons": "Ещё"
+      },
+      "mobile": {
+        "lessons": "Уроки",
+        "text-settings": "Формат",
+        "languages": "Язык",
+        "add-bookmark": "Сохранить",
+        "share": "Поделиться",
+        "search": "Поиск",
+        "download": "Скачать",
+        "more-buttons": "Ещё",
+        "toc": "Контент"
+      }
     }
   }
 }

@@ -3,17 +3,15 @@ import React, { useState } from 'react';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import useShareUrl from '../hooks/useShareUrl';
 import { useSelector } from 'react-redux';
-import { selectors as settings } from '../../../redux/modules/settings';
-import { getLanguageDirection } from '../../../helpers/i18n-utils';
 import { withTranslation } from 'react-i18next';
 import { POPOVER_CONFIRMATION_TIMEOUT } from './helper';
+import { settingsGetUIDirSelector } from '../../../redux/selectors';
 
 let timeout;
 const CopyShareUrl = ({ t }) => {
   const [open, setOpen] = useState(false);
 
-  const language = useSelector(state => settings.getLanguage(state.settings));
-  const dir      = getLanguageDirection(language);
+  const uiDir = useSelector(settingsGetUIDirSelector);
 
   const handleCopied = () => {
     clearTimeout(timeout);
@@ -21,7 +19,7 @@ const CopyShareUrl = ({ t }) => {
     timeout = setTimeout(() => setOpen(false), POPOVER_CONFIRMATION_TIMEOUT);
   };
 
-  const shareUrl     = useShareUrl();
+  const shareUrl = useShareUrl();
 
   return (
     <Input
@@ -29,10 +27,10 @@ const CopyShareUrl = ({ t }) => {
       fluid
       value={shareUrl}
       action
-      dir={dir}
+      dir={uiDir}
       readOnly
     >
-      <input dir="ltr" />
+      <input dir="ltr"/>
       <Popup
         open={open}
         content={t('messages.link-copied-to-clipboard')}

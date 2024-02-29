@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import isEqual from 'react-fast-compare';
 import escapeRegExp from 'lodash/escapeRegExp';
 import isFunction from 'lodash/isFunction';
@@ -6,26 +6,33 @@ import moment from 'moment';
 import 'moment-duration-format';
 
 import { CollectionsBreakdown } from './mdb';
-import { canonicalSectionByLink, canonicalSectionByUnit } from './links';
-import * as consts from './consts';
+import { canonicalSectionByUnit } from './links';
 import {
+  CT_ARTICLE,
+  CT_CLIP,
   CT_CONGRESS,
   CT_DAILY_LESSON,
-  CT_FRIENDS_GATHERINGS,
+  CT_FRIENDS_GATHERING,
   CT_HOLIDAY,
+  CT_LECTURE_SERIES,
   CT_LESSONS_SERIES,
-  CT_MEALS,
-  CT_PICNIC,
-  CT_SPECIAL_LESSON,
-  CT_UNITY_DAY,
-  CT_VIDEO_PROGRAM,
-  CT_VIRTUAL_LESSONS,
-  CT_WOMEN_LESSONS,
+  CT_LESSON_PART,
+  CT_MEAL,
   CT_SONGS,
+  CT_SPECIAL_LESSON,
+  CT_VIDEO_PROGRAM_CHAPTER,
+  CT_VIRTUAL_LESSON,
+  CT_WOMEN_LESSON,
+  VS_HLS,
   LANGUAGES,
-  VS_HLS
+  LANG_ENGLISH,
+  LANG_GERMAN,
+  LANG_HEBREW,
+  LANG_ITALIAN,
+  LANG_RUSSIAN,
+  LANG_SPANISH,
+  LANG_TURKISH
 } from './consts';
-import { Requests } from './Api';
 
 const CDN_URL     = process.env.REACT_APP_CDN_URL;
 const CDN_HLS_URL = process.env.REACT_APP_CDN_HLS_URL;
@@ -172,6 +179,7 @@ export const physicalFile = (file, ext = false) => {
   if (file.is_hls || file.video_size === VS_HLS) {
     return `${CDN_HLS_URL}${file.id}.m3u8`;
   }
+
   let suffix = '';
   if (ext) {
     suffix = `.${filenameExtension(file.name)}`;
@@ -179,6 +187,7 @@ export const physicalFile = (file, ext = false) => {
 
   return `${CDN_URL}${file.id}${suffix}`;
 };
+
 export const downloadLink = (file, ext = false) => {
   if (file.is_hls) {
     const { lang3 } = LANGUAGES[file.language];
@@ -194,7 +203,7 @@ export const downloadLink = (file, ext = false) => {
 
 export const publicFile = relativePath => `${PUBLIC_BASE}${relativePath}`;
 
-export const canonicalCollection = unit => {
+export const canonicalCollectionImpl = unit => {
   if (!unit || isEmpty(unit.collections)) {
     return null;
   }
@@ -216,6 +225,11 @@ export const canonicalCollection = unit => {
   }
 
   return collections[0];
+};
+
+export const canonicalCollection = unit => {
+  const c = canonicalCollectionImpl(unit);
+  return c;
 };
 
 /**
@@ -271,35 +285,36 @@ export const getEscapedRegExp = term => {
   }
 };
 
-export const getRSSFeedByLang = language => {
-  switch (language) {
-    case consts.LANG_HEBREW:
-      return 'KabbalahVideoHeb';
-    case consts.LANG_RUSSIAN:
-      return 'KabbalahVideoRus';
-    case consts.LANG_SPANISH:
-      return 'kabbalah-archive/spa';
-    default:
-      return 'KabbalahVideoEng';
-  }
-};
-
-export const getRSSLinkByLang = language => `https://feeds.feedburner.com/${getRSSFeedByLang(language)}`;
-
-export const getRSSLinkByTopic = (topicId, language) => `https://kabbalahmedia.info/feeds/collections/${LANGUAGES[language].lang3}/${topicId}`;
-
-const podcastLinks = new Map([
-  [consts.LANG_HEBREW, 'קבלה-מדיה-mp3-kab-heb/id1109848638?l=iw'],
-  [consts.LANG_RUSSIAN, 'каббала-медиа-mp3-kab-rus/id1109845737?l=iw'],
-  [consts.LANG_TURKISH, 'kabala-günlük-dersler-mp3-kab-trk/id1106592672?l=iw'],
-  [consts.LANG_ITALIAN, 'kabbalah-media-mp3-kab-ita/id1109848953?l=iw'],
-  [consts.LANG_GERMAN, 'kabbalah-media-mp3-kab-ger/id1109848570?l=iw'],
-  [consts.LANG_SPANISH, 'kcabalá-media-mp3-kab-spa/id1109848764?l=iw'],
+const RSS_FEED_LANGUAGES = new Map([
+  [LANG_ENGLISH, 'KabbalahVideoEng'],
+  [LANG_HEBREW, 'KabbalahVideoHeb'],
+  [LANG_RUSSIAN, 'KabbalahVideoRus'],
+  [LANG_SPANISH, 'kabbalah-archive/spa']
 ]);
 
-export const getPodcastLinkByLang = language => {
-  const hash = podcastLinks.get(language) || 'kabbalah-media-mp3-kab-eng/id1109845884?l=iw';
-  return `https://podcasts.apple.com/il/podcast/${hash}`;
+// Finds the RSS feed by first matching content language.
+export const getRSSFeedByLangs = contentLanguages => {
+  const language = contentLanguages.find(language => RSS_FEED_LANGUAGES.has(language)) || LANG_ENGLISH;
+  return RSS_FEED_LANGUAGES.get(language);
+};
+
+export const getRSSLinkByLangs = contentLanguages => `https://feeds.feedburner.com/${getRSSFeedByLangs(contentLanguages)}`;
+
+export const getRSSLinkByTopic = (topicId, contentLanguages) => `https://kabbalahmedia.info/feeds/collections/${LANGUAGES[contentLanguages[0]].lang3}/${topicId}`;
+
+const PODCAST_LINKS = new Map([
+  [LANG_ENGLISH, 'kabbalah-media-mp3-kab-eng/id1109845884?l=iw'],
+  [LANG_GERMAN, 'kabbalah-media-mp3-kab-ger/id1109848570?l=iw'],
+  [LANG_HEBREW, 'קבלה-מדיה-mp3-kab-heb/id1109848638?l=iw'],
+  [LANG_ITALIAN, 'kabbalah-media-mp3-kab-ita/id1109848953?l=iw'],
+  [LANG_RUSSIAN, 'каббала-медиа-mp3-kab-rus/id1109845737?l=iw'],
+  [LANG_SPANISH, 'kcabalá-media-mp3-kab-spa/id1109848764?l=iw'],
+  [LANG_TURKISH, 'kabala-günlük-dersler-mp3-kab-trk/id1106592672?l=iw']
+]);
+
+export const getPodcastLinkByLangs = contentLanguages => {
+  const language = contentLanguages.find(language => PODCAST_LINKS.has(language)) || LANG_ENGLISH;
+  return `https://podcasts.apple.com/il/podcast/${PODCAST_LINKS.get(language)}`;
 };
 
 // Compare properties without functions
@@ -331,31 +346,31 @@ export const unitsBySection = units => units?.reduce((acc, u) => {
 // returns the value from common.json for translation
 export const getSectionForTranslation = content_type => {
   switch (content_type) {
-    case consts.CT_LESSON_PART:
+    case CT_LESSON_PART:
       return 'lessons.tabs.daily';
-    case consts.CT_LESSONS_SERIES:
+    case CT_LESSONS_SERIES:
       return 'lessons.tabs.series';
-    case consts.CT_LECTURE_SERIES:
+    case CT_LECTURE_SERIES:
       return 'lessons.tabs.series';
-    case consts.CT_DAILY_LESSON:
+    case CT_DAILY_LESSON:
       return 'lessons.tabs.daily';
-    case consts.CT_WOMEN_LESSON:
+    case CT_WOMEN_LESSON:
       return 'lessons.tabs.women';
-    case consts.CT_VIRTUAL_LESSON:
+    case CT_VIRTUAL_LESSON:
       return 'lessons.tabs.virtual';
-    case consts.CT_CONGRESS:
+    case CT_CONGRESS:
       return 'events.tabs.conventions';
-    case consts.CT_HOLIDAY:
+    case CT_HOLIDAY:
       return 'events.tabs.holidays';
-    case consts.CT_FRIENDS_GATHERING:
+    case CT_FRIENDS_GATHERING:
       return 'events.tabs.friends-gatherings';
-    case consts.CT_MEAL:
+    case CT_MEAL:
       return 'events.tabs.meals';
-    case consts.CT_ARTICLE:
+    case CT_ARTICLE:
       return 'publications.tabs.articles';
-    case consts.CT_VIDEO_PROGRAM_CHAPTER:
+    case CT_VIDEO_PROGRAM_CHAPTER:
       return 'programs.tabs.main';
-    case consts.CT_CLIP:
+    case CT_CLIP:
       return 'programs.tabs.clips';
     default:
       return '';
@@ -417,33 +432,6 @@ export const partialAssign = (target, source, what = true) => {
   return {};
 };
 
-export const imageByUnit = (unit, link) => {
-  // collections -- prepare random image
-  switch (unit.content_type) {
-    case CT_CONGRESS:
-    case CT_MEALS:
-    case CT_DAILY_LESSON:
-    case CT_SPECIAL_LESSON:
-    case CT_VIRTUAL_LESSONS:
-    case CT_WOMEN_LESSONS:
-    case CT_VIDEO_PROGRAM:
-    case CT_FRIENDS_GATHERINGS:
-    case CT_HOLIDAY:
-    case CT_PICNIC:
-    case CT_UNITY_DAY:
-    case CT_LESSONS_SERIES:
-      return Requests.imaginaryRandom('resize', {
-        width: 512,
-        height: 288,
-        nocrop: false,
-        stripmeta: true,
-      }, `lessons/latest_lesson_%s.jpg`);
-    default:
-      return canonicalSectionByLink(link);
-
-  }
-};
-
 export const cuPartNameByCCUType = ct => {
   const prefix = 'pages.unit.info.';
 
@@ -477,3 +465,24 @@ export const getSourcesCollections = (sources, getPathById) =>
 
       return acc;
     }, {})).filter(source => source && source.children && source.children.length);
+
+export const buildById = items => {
+  const byId = {};
+
+  // We BFS the tree, extracting each item by its ID
+  // and normalizing its children
+  let s = [...items];
+  while (s.length > 0) {
+    const node = s.pop();
+    if (node.children) {
+      s = s.concat(node.children);
+    }
+
+    byId[node.id] = {
+      ...node,
+      children: node.children ? node.children.map(x => x.id) : []
+    };
+  }
+
+  return byId;
+};
