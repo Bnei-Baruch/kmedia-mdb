@@ -4,21 +4,21 @@ import mapValues from 'lodash/mapValues';
 import { actions as ssrActions } from './ssr';
 
 const initialState = {
-  zipIndexById: {},
-  doc2htmlById: {},
+  zipIndexById   : {},
+  doc2htmlById   : {},
   sourceIndexById: {},
-  asset: {
+  asset          : {
     data: null,
-    wip: false,
-    err: null
+    wip : false,
+    err : null
   },
-  person: {
+  person         : {
     data: null,
-    wip: false,
-    err: null
+    wip : false,
+    err : null
   },
-  timeCode: {},
-  mergedStatus: {}
+  timeCode       : {},
+  mergedStatus   : {}
 };
 
 const buildKey = (uid, lang) => `${uid}_${lang}`;
@@ -85,12 +85,18 @@ const onSSRPrepare = state => {
   state.person.err      = state.person.err ? state.person.err.toString() : state.person.err;
 };
 
+const recursiveFindPrevTimeByPos = (pos, state) => {
+  if (pos === 0 || state.timeCode.size === 0) return 0;
+  if (state.timeCode.has(pos)) return state.timeCode.get(pos);
+  return recursiveFindPrevTimeByPos(pos - 1, state);
+};
+
 const assetsSlice = createSlice({
   name: 'assets',
   initialState,
 
-  reducers: {
-    unzip: (state, action) => onFetchById(state, action),
+  reducers     : {
+    unzip       : (state, action) => onFetchById(state, action),
     unzipSuccess: {
       prepare,
       reducer: (state, action) => onFetchByIdSuccess(state, action)
@@ -100,7 +106,7 @@ const assetsSlice = createSlice({
       reducer: (state, action) => onFetchByIdFailure(state, action)
     },
 
-    unzipList: (state, action) => onFetchList(state, action),
+    unzipList       : (state, action) => onFetchList(state, action),
     unzipListSuccess: {
       prepare,
       reducer: (state, action) => onFetchListSuccess(state, action)
@@ -110,7 +116,7 @@ const assetsSlice = createSlice({
       reducer: (state, action) => onFetchListFailure(state, action)
     },
 
-    doc2html: (state, action) => onFetchById(state, action),
+    doc2html       : (state, action) => onFetchById(state, action),
     doc2htmlSuccess: {
       prepare,
       reducer: (state, action) => onFetchByIdSuccess(state, action)
@@ -120,7 +126,7 @@ const assetsSlice = createSlice({
       reducer: (state, action) => onFetchByIdFailure(state, action)
     },
 
-    sourceIndex: (state, action) => onFetchById(state, action),
+    sourceIndex       : (state, action) => onFetchById(state, action),
     sourceIndexSuccess: {
       prepare,
       reducer: (state, action) => onFetchByIdSuccess(state, action)
@@ -130,7 +136,7 @@ const assetsSlice = createSlice({
       reducer: (state, action) => onFetchByIdFailure(state, action)
     },
 
-    fetchAsset: (state, _) => state.asset.wip = true,
+    fetchAsset       : (state, _) => state.asset.wip = true,
     fetchAssetSuccess: (state, action) => {
       state.asset.data = action.payload;
       state.asset.wip  = false;
@@ -141,28 +147,28 @@ const assetsSlice = createSlice({
       state.asset.err = action.payload;
     },
 
-    fetchPerson: (state, _) => state.person.wip = true,
-    fetchPersonSuccess: (state, action) => {
+    fetchPerson           : (state, _) => state.person.wip = true,
+    fetchPersonSuccess    : (state, action) => {
       state.person.data = action.payload;
       state.person.wip  = false;
       state.person.err  = null;
     },
-    fetchPersonFailure: (state, action) => {
+    fetchPersonFailure    : (state, action) => {
       state.person.wip = false;
       state.person.err = action.payload;
     },
-    fetchTimeCode: {
+    fetchTimeCode         : {
       prepare: (uid, language) => ({ payload: { uid, language } }),
       reducer: void (state => state.timeCode = {})
     },
-    fetchTimeCodeSuccess: (state, { payload }) => {
+    fetchTimeCodeSuccess  : (state, { payload }) => {
       state.timeCode = {};
       for (const idx in payload) {
         const { index, timeCode: tc } = payload[idx];
         state.timeCode[index]         = tc;
       }
     },
-    mergeKiteiMakor: (state, { payload }) => {
+    mergeKiteiMakor       : (state, { payload }) => {
       const { id, language }                     = payload;
       state.mergedStatus[buildKey(id, language)] = 'wip';
     },
@@ -177,6 +183,18 @@ const assetsSlice = createSlice({
   },
   extraReducers: builder => {
     builder.addCase(ssrActions.prepare, onSSRPrepare);
+  },
+
+  selectors: {
+    getZipIndexById   : state => state.zipIndexById,
+    nestedGetZipById  : state => id => state.zipIndexById[id],
+    getDoc2htmlById   : state => state.doc2htmlById,
+    getSourceIndexById: state => state.sourceIndexById,
+    getAsset          : state => state.asset,
+    getPerson         : state => state.person,
+    getTimeCode       : state => pos => recursiveFindPrevTimeByPos(pos, state),
+    hasTimeCode       : state => state.timeCode?.size > 0,
+    getMergeStatus    : state => (id, lang) => state.mergedStatus[buildKey(id, lang)]
   }
 });
 
@@ -210,32 +228,4 @@ export const types = Object.fromEntries(new Map(
   Object.values(assetsSlice.actions).map(a => [a.type, a.type])
 ));
 
-/* Selectors */
-
-const getZipIndexById            = state => state.zipIndexById;
-const nestedGetZipById           = state => id => state.zipIndexById[id];
-const getDoc2htmlById            = state => state.doc2htmlById;
-const getSourceIndexById         = state => state.sourceIndexById;
-const getAsset                   = state => state.asset;
-const getPerson                  = state => state.person;
-const getTimeCode                = state => pos => recursiveFindPrevTimeByPos(pos, state);
-const recursiveFindPrevTimeByPos = (pos, state) => {
-  if (!pos || pos < 0 || !state.timeCode) return 0;
-  if (state.timeCode[pos]) return state.timeCode[pos];
-  return recursiveFindPrevTimeByPos(pos - 1, state);
-};
-
-const hasTimeCode    = state => Object.keys(state.timeCode).length > 0;
-const getMergeStatus = state => (id, language) => state.mergedStatus[buildKey(id, language)];
-
-export const selectors = {
-  getZipIndexById,
-  nestedGetZipById,
-  getDoc2htmlById,
-  getSourceIndexById,
-  getAsset,
-  getPerson,
-  getTimeCode,
-  hasTimeCode,
-  getMergeStatus
-};
+export const selectors = assetsSlice.getSelectors();

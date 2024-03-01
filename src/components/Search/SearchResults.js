@@ -101,8 +101,8 @@ const cMapFromState = (state, results) => (
 );
 
 const SearchResults = ({ t }) => {
-  const queryResult   = useSelector(searchGetQueryResultSelector);
-  const searchResults = queryResult?.search_result;
+  const queryResult   = useSelector(searchGetQueryResultSelector) || false;
+  const searchResults = queryResult.search_result;
 
   const cMap    = useSelector(state => cMapFromState(state, searchResults));
   const cuMap   = useSelector(state => cuMapFromState(state, searchResults));

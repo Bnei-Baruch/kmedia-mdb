@@ -15,7 +15,7 @@ const simpleModeSlice = createSlice({
   },
 
   reducers     : {
-    fetchForDate         : state => {
+    fetchForDate       : state => {
       state.wip = true;
       state.err = null;
     },
@@ -46,6 +46,12 @@ const simpleModeSlice = createSlice({
         state.items.lessons = [];
         state.items.others  = [];
       });
+  },
+
+  selectors: {
+    getItems: state => state.items,
+    getWip  : state => state.wip,
+    getError: state => state.err
   }
 });
 
@@ -57,14 +63,4 @@ export const types = Object.fromEntries(new Map(
   Object.values(simpleModeSlice.actions).map(a => [a.type, a.type])
 ));
 
-/* Selectors */
-
-const getItems = state => state.items;
-const getWip   = state => state.wip;
-const getError = state => state.err;
-
-export const selectors = {
-  getItems,
-  getWip,
-  getError
-};
+export const selectors = simpleModeSlice.getSelectors();
