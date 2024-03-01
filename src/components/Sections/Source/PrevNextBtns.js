@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { useSelector } from 'react-redux';
-import { Button } from 'semantic-ui-react';
+import { Button, Icon } from 'semantic-ui-react';
 import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
 
@@ -21,10 +21,10 @@ import { DeviceInfoContext } from '../../../helpers/app-contexts';
 const PrevNextBtns = () => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
-  const { id }        = useSelector(textPageGetSubjectSelector);
-  const { isPdf }     = useSelector(textPageGetFileSelector);
-  const textOnly      = useSelector(textPageGetTextOnlySelector);
-  const getPathByID   = useSelector(sourcesGetPathByIDSelector);
+  const { id } = useSelector(textPageGetSubjectSelector);
+  const { isPdf } = useSelector(textPageGetFileSelector);
+  const textOnly = useSelector(textPageGetTextOnlySelector);
+  const getPathByID = useSelector(sourcesGetPathByIDSelector);
   const getSourceById = useSelector(sourcesGetSourceByIdSelector);
 
   if (isTaas(id) && isPdf) {
@@ -32,7 +32,7 @@ const PrevNextBtns = () => {
   }
 
   const fullPath = getFullPath(id, getPathByID);
-  const len      = fullPath.length;
+  const len = fullPath.length;
   if (len < 2) {
     return null;
   }
@@ -43,8 +43,8 @@ const PrevNextBtns = () => {
   }
 
   const { children } = fullPath[len - 2];
-  const prevId       = children[index - 1] || fixPrevNextZoharTaas(fullPath, getSourceById, -1);
-  const nextId       = children[index + 1] || fixPrevNextZoharTaas(fullPath, getSourceById);
+  const prevId = children[index - 1] || fixPrevNextZoharTaas(fullPath, getSourceById, -1);
+  const nextId = children[index + 1] || fixPrevNextZoharTaas(fullPath, getSourceById);
 
   return (
     <div className={clsx('source_prev_next', {
@@ -61,43 +61,51 @@ const PrevNextBtns = () => {
 const PrevBtn = ({ id }) => {
   const { t } = useTranslation();
 
-  const uiDir         = useSelector(settingsGetUIDirSelector);
+  const uiDir = useSelector(settingsGetUIDirSelector);
   const getSourceById = useSelector(sourcesGetSourceByIdSelector);
-  const icon          = (uiDir === 'ltr' ? 'backward' : 'forward');
+  const icon = (uiDir === 'ltr' ? 'backward' : 'forward');
 
   const source = getSourceById(id);
+
+  const Padding = uiDir !== 'ltr' ? '16px 24px 16px 32px' : '16px 32px 16px 24px'
   return (
-    <Button
+    <Button primary icon
       as={Link}
       to={`sources/${id}`}
-      size="mini"
-      icon={icon}
-      labelPosition="left"
-      content={t('buttons.previous-article')}
+      size="medium"
       title={source.name}
-    />
+      style={{ marginLeft: 0, padding: '0' }}>
+      <div style={{ display: 'flex', alignItems: 'center', fontWeight: '500', padding: Padding, fontSize: '16px' }}>
+        <Icon name={icon} style={{ marginRight: '8px', marginLeft: '8px' }} />
+        {t('buttons.previous-article')}
+      </div>
+    </Button>
   );
 };
 
 const NextBtn = ({ id }) => {
   const { t } = useTranslation();
 
-  const uiDir         = useSelector(settingsGetUIDirSelector);
+  const uiDir = useSelector(settingsGetUIDirSelector);
   const getSourceById = useSelector(sourcesGetSourceByIdSelector);
-  const icon          = (uiDir !== 'ltr' ? 'backward' : 'forward');
+  const icon = (uiDir !== 'ltr' ? 'backward' : 'forward');
 
   const source = getSourceById(id);
 
+  const Padding = uiDir !== 'ltr' ? '16px 32px 16px 24px' : '16px 24px 16px 32px'
+
   return (
-    <Button
+    <Button primary icon
       as={Link}
       to={`sources/${id}`}
-      size="mini"
-      icon={icon}
-      labelPosition="right"
-      content={t('buttons.next-article')}
+      size="medium"
       title={source.name}
-    />
+      style={{ marginLeft: 0, padding: '0' }}>
+      <div style={{ display: 'flex', alignItems: 'center', fontWeight: '500', padding: Padding, fontSize: '16px' }}>
+        {t('buttons.next-article')}
+        <Icon name={icon} className="custom-icon" style={{ marginLeft: '8px', marginRight: '8px' }} />
+      </div>
+    </Button>
   );
 };
 
