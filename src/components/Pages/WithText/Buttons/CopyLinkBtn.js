@@ -46,6 +46,7 @@ const CopyLinkBtn = () => {
         <CopyToClipboard text={urlWithParams} onCopy={handleCopied}>
           <ToolbarBtnTooltip
             textKey="copy-link"
+            className="text_mark_on_select_btn"
             disabled={noFile}
             icon={<span className="material-symbols-outlined">link</span>}
           />

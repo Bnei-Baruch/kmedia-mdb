@@ -1,6 +1,4 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
-import clsx from 'clsx';
 import { Dropdown } from 'semantic-ui-react';
 
 import AddCommentBtn from '../../../../WithText/Buttons/AddCommentBtn';
@@ -13,49 +11,34 @@ import AdditionsVisibilityBtn from '../../../../WithText/Buttons/AdditionsVisibi
 import ShareTextBtn from '../../../../WithText/Buttons/ShareTextBtn';
 import TagTextBtn from '../../../../WithText/Buttons/TagTextBtn';
 import PrintBtn from '../../../../WithText/Buttons/PrintBtn';
-import { textPageGetUrlInfoSelector } from '../../../../../../redux/selectors';
 import TocToggleBtn from '../../../../../Sections/Source/TOC/TocToggleBtn';
 import MoreOptionsBtn from '../../../../WithText/Buttons/MoreOptionsBtn';
 import CopyLinkBtn from '../../../../WithText/Buttons/CopyLinkBtn';
 
 const SourceTabToolbarWeb = ({ needTOC }) => {
-  const hasNoSel = !useSelector(textPageGetUrlInfoSelector).select;
-
   return (
     <div className="text_toolbar">
-      <div className={clsx('text_toolbar__buttons', { 'text_selected': !hasNoSel })}>
-        {
-          hasNoSel && (
-            <>
-              {needTOC && <TocToggleBtn />}
-              <TextSettings />
-              <LanguageTextBtn />
-              <div className="divider" />
-            </>
-          )
-        }
+      <div className="text_toolbar__buttons">
+        {needTOC && <TocToggleBtn />}
+        <TextSettings />
+        <LanguageTextBtn />
+        <div className="divider" />
         <TagTextBtn />
         <AddBookmarkBtn />
         <AddCommentBtn />
         <ShareTextBtn />
         <CopyLinkBtn />
-        {
-          hasNoSel && (
-            <>
-              <div className="divider" />
-              <SearchOnPageBtn />
-              <div className="computer-only">
-                <PrintBtn />
-              </div>
-              <div className="computer-only">
-                <DownloadTextBtn />
-              </div>
-              <div className="computer-only">
-                <AdditionsVisibilityBtn />
-              </div>
-            </>
-          )
-        }
+        <div className="divider" />
+        <SearchOnPageBtn />
+        <div className="computer-only">
+          <PrintBtn />
+        </div>
+        <div className="computer-only">
+          <DownloadTextBtn />
+        </div>
+        <div className="computer-only">
+          <AdditionsVisibilityBtn />
+        </div>
         <Dropdown
           item
           icon={null}

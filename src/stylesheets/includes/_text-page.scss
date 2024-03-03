@@ -402,12 +402,9 @@
     padding: 0 16px;
     flex-grow: 3;
     flex-basis: max-content;
-    .stick_toolbar_long_translation &{
-      padding: 0 8px;
-    }
 
-    &.text_selected {
-      flex-grow: 0;
+    .stick_toolbar_long_translation & {
+      padding: 0 8px;
     }
 
     .divider {
@@ -445,6 +442,10 @@
         .stick_toolbar_long_translation & {
           font-size: 15px;
         }
+      }
+
+      .text_selected &.text_mark_on_select_btn .material-symbols-outlined {
+        color: $blue;
       }
     }
 
@@ -862,3 +863,4 @@
     }
   }
 }
+

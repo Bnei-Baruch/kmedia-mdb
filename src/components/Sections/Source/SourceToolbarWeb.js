@@ -1,6 +1,4 @@
 import React from 'react';
-import clsx from 'clsx';
-import { useSelector } from 'react-redux';
 import { Dropdown } from 'semantic-ui-react';
 
 import AddCommentBtn from '../../Pages/WithText/Buttons/AddCommentBtn';
@@ -17,57 +15,42 @@ import FullscreenTextBtn from '../../Pages/WithText/Buttons/FullscreenTextBtn';
 import ShareTextBtn from '../../Pages/WithText/Buttons/ShareTextBtn';
 import TagTextBtn from '../../Pages/WithText/Buttons/TagTextBtn';
 import PrintBtn from '../../Pages/WithText/Buttons/PrintBtn';
-import { textPageGetUrlInfoSelector } from '../../../redux/selectors';
 import MoreOptionsBtn from '../../Pages/WithText/Buttons/MoreOptionsBtn';
 import CopyLinkBtn from '../../Pages/WithText/Buttons/CopyLinkBtn';
 
 const SourceToolbarWeb = () => {
-  const hasNoSel = !useSelector(textPageGetUrlInfoSelector).select;
-
   return (
     <div className="text_toolbar">
       <TocToggleBtn />
-      <div className={clsx('text_toolbar__buttons', { 'text_selected': !hasNoSel })}>
-        {
-          hasNoSel && (
-            <>
-              <TextSettings />
-              <LanguageTextBtn />
-              <div className="divider" />
-            </>
-          )
-        }
+      <div className="text_toolbar__buttons">
+        <TextSettings />
+        <LanguageTextBtn />
+        <div className="divider" />
         <TagTextBtn />
         <AddBookmarkBtn />
         <AddCommentBtn />
         <ShareTextBtn />
         <CopyLinkBtn />
-        {
-          hasNoSel && (
-            <>
-              <div className="divider" />
-              <SearchOnPageBtn />
-              <div className="computer-only">
-                <PrintBtn />
-              </div>
-              <div className="computer-only">
-                <DownloadTextBtn />
-              </div>
-              <div className="computer-only">
-                <AdditionsVisibilityBtn />
-              </div>
-              <div className="divider computer-only" />
+        <div className="divider" />
+        <SearchOnPageBtn />
+        <div className="computer-only">
+          <PrintBtn />
+        </div>
+        <div className="computer-only">
+          <DownloadTextBtn />
+        </div>
+        <div className="computer-only">
+          <AdditionsVisibilityBtn />
+        </div>
+        <div className="divider computer-only" />
 
-              <div className="computer-only">
-                <LinkToLessonsBtn />
-              </div>
-              <div className="computer-only">
-                <ToggleScanBtn />
-              </div>
-              <div className="divider computer-only" />
-            </>
-          )
-        }
+        <div className="computer-only">
+          <LinkToLessonsBtn />
+        </div>
+        <div className="computer-only">
+          <ToggleScanBtn />
+        </div>
+        <div className="divider computer-only" />
         <FullscreenTextBtn />
         <Dropdown
           item
