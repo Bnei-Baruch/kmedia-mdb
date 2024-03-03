@@ -4,7 +4,7 @@
   position: fixed;
   height: calc(100VH - $main-menu-height - $breadcrumb-height);
   bottom: 0;
-  z-index: 3;
+  z-index: 5;
   transition: all 0.2s ease-in-out 0s;
   border: 1px solid $stroke-gray;
   width: 360px;
