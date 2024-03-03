@@ -12,42 +12,40 @@ import ShareTextModalBtn from '../../Pages/WithText/Buttons/ShareTextModalBtn';
 import MoreOptionsBtn from '../../Pages/WithText/Buttons/MoreOptionsBtn';
 import CopyLinkBtn from '../../Pages/WithText/Buttons/CopyLinkBtn';
 
-const SourceToolbarMobile = () => {
-  return (
-    <div className="text_toolbar">
-      <div className="text_toolbar__buttons">
-        <TocToggleBtn />
-        <LanguageTextBtn />
-        <TextSettings />
-        <SearchOnPageBtn />
-        <Dropdown
-          item
-          icon={null}
-          trigger={<MoreOptionsBtn />}
-          className="text_toolbar__dropdown"
-          direction="left"
-        >
-          <Dropdown.Menu>
-            <Dropdown.Item>
-              <AddBookmarkBtn />
-            </Dropdown.Item>
-            <Dropdown.Item>
-              <LinkToLessonsBtn />
-            </Dropdown.Item>
-            <Dropdown.Item>
-              <DownloadTextBtn />
-            </Dropdown.Item>
-            <Dropdown.Item>
-              <ShareTextModalBtn />
-            </Dropdown.Item>
-            <Dropdown.Item>
-              <CopyLinkBtn />
-            </Dropdown.Item>
-          </Dropdown.Menu>
-        </Dropdown>
-      </div>
+const SourceToolbarMobile = () => (
+  <div className="text_toolbar">
+    <div className="text_toolbar__buttons">
+      <TocToggleBtn />
+      <LanguageTextBtn />
+      <TextSettings />
+      <SearchOnPageBtn />
+      <Dropdown
+        item
+        icon={null}
+        trigger={<MoreOptionsBtn />}
+        className="text_toolbar__dropdown"
+        direction="left"
+      >
+        <Dropdown.Menu>
+          <Dropdown.Item>
+            <AddBookmarkBtn />
+          </Dropdown.Item>
+          <Dropdown.Item>
+            <LinkToLessonsBtn />
+          </Dropdown.Item>
+          <Dropdown.Item>
+            <DownloadTextBtn />
+          </Dropdown.Item>
+          <Dropdown.Item>
+            <ShareTextModalBtn />
+          </Dropdown.Item>
+          <Dropdown.Item>
+            <CopyLinkBtn />
+          </Dropdown.Item>
+        </Dropdown.Menu>
+      </Dropdown>
     </div>
-  );
-};
+  </div>
+);
 
 export default SourceToolbarMobile;

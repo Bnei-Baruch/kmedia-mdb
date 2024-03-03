@@ -100,18 +100,16 @@ const LatestUpdatesCardList = (
     );
   };
 
-  const renderScrollLeft = () => {
-    return (pageNo + 1) * itemsCount >= cardsArray.length ? null : (
-      <Button
-        icon={`chevron ${leftRight}`}
-        basic
-        size="large"
-        onClick={onScrollRight}
-        className="scroll_intents left"
-        style={{ [leftRight]: '-45px' }}
-      />
-    );
-  };
+  const renderScrollLeft = () => (pageNo + 1) * itemsCount >= cardsArray.length ? null : (
+    <Button
+      icon={`chevron ${leftRight}`}
+      basic
+      size="large"
+      onClick={onScrollRight}
+      className="scroll_intents left"
+      style={{ [leftRight]: '-45px' }}
+    />
+  );
 
   useEffect(() => {
     initCardsArray();

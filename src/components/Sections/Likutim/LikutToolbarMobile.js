@@ -11,39 +11,37 @@ import LessonsByLikutBtn from './LessonsByLikutBtn';
 import MoreOptionsBtn from '../../Pages/WithText/Buttons/MoreOptionsBtn';
 import CopyLinkBtn from '../../Pages/WithText/Buttons/CopyLinkBtn';
 
-const LikutToolbarMobile = () => {
-  return (
-    <div className="text_toolbar">
-      <div className="text_toolbar__buttons">
-        <LanguageTextBtn />
-        <TextSettings />
-        <SearchOnPageBtn />
-        <LessonsByLikutBtn />
-        <Dropdown
-          item
-          icon={null}
-          trigger={<MoreOptionsBtn />}
-          className="text_toolbar__dropdown"
-          direction="left"
-        >
-          <Dropdown.Menu>
-            <Dropdown.Item>
-              <AddBookmarkBtn />
-            </Dropdown.Item>
-            <Dropdown.Item>
-              <DownloadTextBtn />
-            </Dropdown.Item>
-            <Dropdown.Item>
-              <ShareTextModalBtn />
-            </Dropdown.Item>
-            <Dropdown.Item>
-              <CopyLinkBtn />
-            </Dropdown.Item>
-          </Dropdown.Menu>
-        </Dropdown>
-      </div>
+const LikutToolbarMobile = () => (
+  <div className="text_toolbar">
+    <div className="text_toolbar__buttons">
+      <LanguageTextBtn />
+      <TextSettings />
+      <SearchOnPageBtn />
+      <LessonsByLikutBtn />
+      <Dropdown
+        item
+        icon={null}
+        trigger={<MoreOptionsBtn />}
+        className="text_toolbar__dropdown"
+        direction="left"
+      >
+        <Dropdown.Menu>
+          <Dropdown.Item>
+            <AddBookmarkBtn />
+          </Dropdown.Item>
+          <Dropdown.Item>
+            <DownloadTextBtn />
+          </Dropdown.Item>
+          <Dropdown.Item>
+            <ShareTextModalBtn />
+          </Dropdown.Item>
+          <Dropdown.Item>
+            <CopyLinkBtn />
+          </Dropdown.Item>
+        </Dropdown.Menu>
+      </Dropdown>
     </div>
-  );
-};
+  </div>
+);
 
 export default LikutToolbarMobile;
