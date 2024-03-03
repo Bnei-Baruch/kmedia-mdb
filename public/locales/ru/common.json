@@ -972,7 +972,8 @@
         "hide-additions": "Скрыть все комментарии",
         "show-additions": "Показать все комментарии",
         "scan": "Скан оригинального текста",
-        "more-buttons": "Ещё"
+        "more-buttons": "Ещё",
+        "copy-link": "Копировать ссылку"
       },
       "mobile": {
         "lessons": "Уроки",
@@ -983,7 +984,8 @@
         "search": "Поиск",
         "download": "Скачать",
         "more-buttons": "Ещё",
-        "toc": "Контент"
+        "toc": "Контент",
+        "copy-link": "Ссылка"
       }
     }
   }

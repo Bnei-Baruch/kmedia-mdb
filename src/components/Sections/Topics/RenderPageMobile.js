@@ -10,7 +10,11 @@ import TextList from './TextList';
 import FilterLabels from '../../FiltersAside/FilterLabels';
 import HelmetsBasic from '../../shared/Helmets/Basic';
 import { getBreadCrumbSection } from './helper';
-import { tagsGetPathByIDSelector, settingsGetUIDirSelector } from '../../../redux/selectors';
+import {
+  tagsGetPathByIDSelector,
+  settingsGetUIDirSelector,
+  settingsGetLeftRightByDirSelector
+} from '../../../redux/selectors';
 
 const RenderPageMobile = () => {
   const { id } = useParams();
@@ -20,13 +24,14 @@ const RenderPageMobile = () => {
 
   const getPathByID = useSelector(tagsGetPathByIDSelector);
   const uiDir       = useSelector(settingsGetUIDirSelector);
+  const leftRight   = useSelector(settingsGetLeftRightByDirSelector);
 
   const tagPath = getPathByID(id);
 
   // create breadCrumb sections from tagPath
   const breadCrumbSections = [{ id: '', label: t('nav.sidebar.topics') }, ...tagPath].map(getBreadCrumbSection);
 
-  const breadCrumbIcon = `${uiDir === 'rtl' ? 'left' : 'right'} angle`;
+  const breadCrumbIcon = `${leftRight} angle`;
   const closeFilters   = () => setOpenFilters(false);
   return (
     <>
@@ -44,17 +49,17 @@ const RenderPageMobile = () => {
           />
         </Modal.Content>
         <Modal.Actions>
-          <Button primary content={t('buttons.close')} onClick={closeFilters}/>
+          <Button primary content={t('buttons.close')} onClick={closeFilters} />
         </Modal.Actions>
       </Modal>
-      <HelmetsBasic title={breadCrumbSections[breadCrumbSections.length - 1]?.content}/>
+      <HelmetsBasic title={breadCrumbSections[breadCrumbSections.length - 1]?.content} />
       <Container className="padded topics">
-        <Breadcrumb icon={breadCrumbIcon} sections={breadCrumbSections} size="huge"/>
-        <Button className="" basic icon="filter" floated={'right'} onClick={() => setOpenFilters(true)}/>
-        <Divider/>
-        <FilterLabels namespace={`topics_${id}`}/>
-        <VideoList/>
-        <TextList/>
+        <Breadcrumb icon={breadCrumbIcon} sections={breadCrumbSections} size="huge" />
+        <Button className="" basic icon="filter" floated={'right'} onClick={() => setOpenFilters(true)} />
+        <Divider />
+        <FilterLabels namespace={`topics_${id}`} />
+        <VideoList />
+        <TextList />
       </Container>
     </>
   );

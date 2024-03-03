@@ -9,7 +9,7 @@ import {
   filtersAsideCitiesByCountrySelector,
   filtersAsideGetStatsSelector,
   filtersGetFilterByNameSelector,
-  settingsGetUIDirSelector
+  settingsGetLeftRightByDirSelector
 } from '../../../redux/selectors';
 
 const CountryItem = ({ namespace, loc }) => {
@@ -24,8 +24,8 @@ const CountryItem = ({ namespace, loc }) => {
   const getStat         = useSelector(state => filtersAsideGetStatsSelector(state, namespace, FN_LOCATIONS));
   const stat            = getStat(id);
 
-  const uiDir    = useSelector(settingsGetUIDirSelector);
-  const dispatch = useDispatch();
+  const leftRight = useSelector(settingsGetLeftRightByDirSelector);
+  const dispatch  = useDispatch();
 
   const handleSelect = (e, { checked }) => {
     const val = [...selected].filter(x => x !== id && !cities.includes(x));
@@ -55,7 +55,7 @@ const CountryItem = ({ namespace, loc }) => {
             basic
             color="blue"
             className="clear_button no-shadow"
-            icon={`caret ${uiDir === 'rtl' ? 'left' : 'right'}`}
+            icon={`caret ${leftRight}`}
             onClick={toggleOpen}
             size="medium"
             disabled={stat === 0}

@@ -72,6 +72,7 @@ const AddBookmarkBtn = () => {
         trigger={
           <ToolbarBtnTooltip
             textKey="add-bookmark"
+            className="text_mark_on_select_btn"
             icon={<span className="material-symbols-outlined">bookmark</span>}
             onClick={handleOpen}
           />

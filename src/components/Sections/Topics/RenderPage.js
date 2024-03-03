@@ -10,29 +10,29 @@ import TextList from './TextList';
 import FilterLabels from '../../FiltersAside/FilterLabels';
 import HelmetsBasic from '../../shared/Helmets/Basic';
 import { getBreadCrumbSection } from './helper';
-import { tagsGetPathByIDSelector, settingsGetUIDirSelector } from '../../../redux/selectors';
+import { tagsGetPathByIDSelector, settingsGetLeftRightByDirSelector } from '../../../redux/selectors';
 
 const RenderPage = () => {
   const { id } = useParams();
   const { t }  = useTranslation();
 
   const getPathByID = useSelector(tagsGetPathByIDSelector);
-  const uiDir       = useSelector(settingsGetUIDirSelector);
+  const leftRight   = useSelector(settingsGetLeftRightByDirSelector);
 
   const tagPath = getPathByID(id);
 
   // create breadCrumb sections from tagPath
   const breadCrumbSections = [{ id: '', label: t('nav.sidebar.topics') }, ...tagPath].map(getBreadCrumbSection);
 
-  const breadCrumbIcon = `${uiDir === 'rtl' ? 'left' : 'right'} angle`;
+  const breadCrumbIcon = `${leftRight} angle`;
   const baseParams     = useMemo(() => ({ tag: id }), [id]);
 
   return (
     <>
-      <HelmetsBasic title={breadCrumbSections[breadCrumbSections.length - 1]?.content}/>
+      <HelmetsBasic title={breadCrumbSections[breadCrumbSections.length - 1]?.content} />
       <Container className="padded topics" fluid>
-        <Breadcrumb icon={breadCrumbIcon} sections={breadCrumbSections} size="huge"/>
-        <Divider/>
+        <Breadcrumb icon={breadCrumbIcon} sections={breadCrumbSections} size="huge" />
+        <Divider />
         <Grid divided>
           <Grid.Column width="4" className="filters-aside-wrapper">
             <Filters
@@ -41,13 +41,13 @@ const RenderPage = () => {
             />
           </Grid.Column>
           <Grid.Column width="12">
-            <FilterLabels namespace={`topics_${id}`}/>
+            <FilterLabels namespace={`topics_${id}`} />
             <Grid>
               <Grid.Column width="10">
-                <VideoList/>
+                <VideoList />
               </Grid.Column>
               <Grid.Column width="6">
-                <TextList/>
+                <TextList />
               </Grid.Column>
             </Grid>
           </Grid.Column>

@@ -13,10 +13,12 @@ import {
   textPageGetSettings,
   textPageGetScrollDirSelector,
   textPageGetSubjectSelector,
-  textPageGetIsSearchSelector
+  textPageGetIsSearchSelector,
+  settingsGetUILangSelector
 } from '../../../redux/selectors';
 import TagsByUnit from '../../shared/TagsByUnit';
 import AudioPlayer from '../../shared/AudioPlayer';
+import { LANGUAGE_LONG_TRANSLATION } from '../../../helpers/consts';
 
 const TextLayoutMobile = props => {
   const {
@@ -31,10 +33,12 @@ const TextLayoutMobile = props => {
   const ref   = useRef();
   const { t } = useTranslation();
 
-  const { theme } = useSelector(textPageGetSettings);
-  const scrollDir = useSelector(textPageGetScrollDirSelector);
-  const subject   = useSelector(textPageGetSubjectSelector);
-  const isSearch  = useSelector(textPageGetIsSearchSelector);
+  const { theme }         = useSelector(textPageGetSettings);
+  const scrollDir         = useSelector(textPageGetScrollDirSelector);
+  const subject           = useSelector(textPageGetSubjectSelector);
+  const isSearch          = useSelector(textPageGetIsSearchSelector);
+  const uiLang            = useSelector(settingsGetUILangSelector);
+  const isLongTranslation = LANGUAGE_LONG_TRANSLATION.includes(uiLang);
 
   const wip = useTextSubject(id);
   useInitTextSettings();
@@ -51,7 +55,8 @@ const TextLayoutMobile = props => {
           'stick_toolbar_unpinned': scrollDir === 1,
           'stick_toolbar_pinned': scrollDir === -1,
           'stick_toolbar_on_end': scrollDir === 2,
-          'stick_bottom': !playerPage
+          'stick_bottom': !playerPage,
+          'stick_toolbar_long_translation': isLongTranslation,
         })
       }>
       {toolbar}
@@ -65,10 +70,26 @@ const TextLayoutMobile = props => {
   );
 
   return (
-    <div className={`is-mobile text_layout is-${theme}`} ref={ref}>
+    <div
+      ref={ref}
+      className={clsx(
+        `is-mobile text_layout is-${theme}`,
+        { 'stick_toolbar_long_translation': isLongTranslation }
+      )}
+    >
       {(playerPage && !isSearch) && renderToolbar()}
       <div className="text_mobile_padding">
-        {breadcrumb}
+
+        <div
+          className={
+            clsx('stick_toolbar no_print', {
+              'stick_toolbar_unpinned': scrollDir === 1,
+              'stick_toolbar_pinned': scrollDir === -1,
+              'stick_toolbar_on_end': scrollDir === 2,
+            })
+          }>
+          {breadcrumb}
+        </div>
         <TagsByUnit id={subject.id}></TagsByUnit>
         <AudioPlayer />
         <TextContentMobile playerPage={playerPage} />

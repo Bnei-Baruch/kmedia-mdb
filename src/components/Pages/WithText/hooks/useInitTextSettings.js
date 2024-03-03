@@ -6,8 +6,8 @@ export const useInitTextSettings = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const { fontType, theme, zoomSize } = JSON.parse(localStorage.getItem('library-settings')) || {};
-    zoomSize && dispatch(actions.setZoomSize(zoomSize));
+    const { fontType, theme, zoomSize, pdfZoom } = JSON.parse(localStorage.getItem('library-settings')) || {};
+    zoomSize && dispatch(actions.setZoomSize({ zoomSize, pdfZoom }));
     fontType && dispatch(actions.setFontType(fontType));
     theme && dispatch(actions.setTheme(theme));
   }, [dispatch]);
