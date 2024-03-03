@@ -712,6 +712,10 @@
   margin: 0 auto;
 }
 
+.is-dark .react-pdf__Document {
+  background: $white;
+}
+
 .player_page_source_toc {
   position: absolute;
   max-width: 250px;
