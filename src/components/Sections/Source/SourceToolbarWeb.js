@@ -18,66 +18,64 @@ import PrintBtn from '../../Pages/WithText/Buttons/PrintBtn';
 import MoreOptionsBtn from '../../Pages/WithText/Buttons/MoreOptionsBtn';
 import CopyLinkBtn from '../../Pages/WithText/Buttons/CopyLinkBtn';
 
-const SourceToolbarWeb = () => {
-  return (
-    <div className="text_toolbar">
-      <TocToggleBtn />
-      <div className="text_toolbar__buttons">
-        <TextSettings />
-        <LanguageTextBtn />
-        <div className="divider" />
-        <TagTextBtn />
-        <AddBookmarkBtn />
-        <AddCommentBtn />
-        <ShareTextBtn />
-        <CopyLinkBtn />
-        <div className="divider" />
-        <SearchOnPageBtn />
-        <div className="computer-only">
-          <PrintBtn />
-        </div>
-        <div className="computer-only">
-          <DownloadTextBtn />
-        </div>
-        <div className="computer-only">
-          <AdditionsVisibilityBtn />
-        </div>
-        <div className="divider computer-only" />
-
-        <div className="computer-only">
-          <LinkToLessonsBtn />
-        </div>
-        <div className="computer-only">
-          <ToggleScanBtn />
-        </div>
-        <div className="divider computer-only" />
-        <FullscreenTextBtn />
-        <Dropdown
-          item
-          icon={null}
-          trigger={<MoreOptionsBtn />}
-          pointing="top right"
-          className="text_toolbar__dropdown"
-        >
-          <Dropdown.Menu>
-            <Dropdown.Item>
-              <DownloadTextBtn />
-            </Dropdown.Item>
-            <Dropdown.Item>
-              <AdditionsVisibilityBtn />
-            </Dropdown.Item>
-            <Dropdown.Item>
-              <LinkToLessonsBtn />
-            </Dropdown.Item>
-            <Dropdown.Item>
-              <ToggleScanBtn />
-            </Dropdown.Item>
-          </Dropdown.Menu>
-        </Dropdown>
+const SourceToolbarWeb = () => (
+  <div className="text_toolbar">
+    <TocToggleBtn />
+    <div className="text_toolbar__buttons">
+      <TextSettings />
+      <LanguageTextBtn />
+      <div className="divider" />
+      <TagTextBtn />
+      <AddBookmarkBtn />
+      <AddCommentBtn />
+      <ShareTextBtn />
+      <CopyLinkBtn />
+      <div className="divider" />
+      <SearchOnPageBtn />
+      <div className="computer-only">
+        <PrintBtn />
       </div>
-      <div className="flex_basis_150">&nbsp;</div>
+      <div className="computer-only">
+        <DownloadTextBtn />
+      </div>
+      <div className="computer-only">
+        <AdditionsVisibilityBtn />
+      </div>
+      <div className="divider computer-only" />
+
+      <div className="computer-only">
+        <LinkToLessonsBtn />
+      </div>
+      <div className="computer-only">
+        <ToggleScanBtn />
+      </div>
+      <div className="divider computer-only" />
+      <FullscreenTextBtn />
+      <Dropdown
+        item
+        icon={null}
+        trigger={<MoreOptionsBtn />}
+        pointing="top right"
+        className="text_toolbar__dropdown"
+      >
+        <Dropdown.Menu>
+          <Dropdown.Item>
+            <DownloadTextBtn />
+          </Dropdown.Item>
+          <Dropdown.Item>
+            <AdditionsVisibilityBtn />
+          </Dropdown.Item>
+          <Dropdown.Item>
+            <LinkToLessonsBtn />
+          </Dropdown.Item>
+          <Dropdown.Item>
+            <ToggleScanBtn />
+          </Dropdown.Item>
+        </Dropdown.Menu>
+      </Dropdown>
     </div>
-  );
-};
+    <div className="flex_basis_150">&nbsp;</div>
+  </div>
+);
 
 export default SourceToolbarWeb;

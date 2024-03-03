@@ -15,48 +15,46 @@ import TocToggleBtn from '../../../../../Sections/Source/TOC/TocToggleBtn';
 import MoreOptionsBtn from '../../../../WithText/Buttons/MoreOptionsBtn';
 import CopyLinkBtn from '../../../../WithText/Buttons/CopyLinkBtn';
 
-const SourceTabToolbarWeb = ({ needTOC }) => {
-  return (
-    <div className="text_toolbar">
-      <div className="text_toolbar__buttons">
-        {needTOC && <TocToggleBtn />}
-        <TextSettings />
-        <LanguageTextBtn />
-        <div className="divider" />
-        <TagTextBtn />
-        <AddBookmarkBtn />
-        <AddCommentBtn />
-        <ShareTextBtn />
-        <CopyLinkBtn />
-        <div className="divider" />
-        <SearchOnPageBtn />
-        <div className="computer-only">
-          <PrintBtn />
-        </div>
-        <div className="computer-only">
-          <DownloadTextBtn />
-        </div>
-        <div className="computer-only">
-          <AdditionsVisibilityBtn />
-        </div>
-        <Dropdown
-          item
-          icon={null}
-          trigger={<MoreOptionsBtn />}
-          className="text_toolbar__dropdown"
-        >
-          <Dropdown.Menu>
-            <Dropdown.Item>
-              <DownloadTextBtn />
-            </Dropdown.Item>
-            <Dropdown.Item>
-              <AdditionsVisibilityBtn />
-            </Dropdown.Item>
-          </Dropdown.Menu>
-        </Dropdown>
+const SourceTabToolbarWeb = ({ needTOC }) => (
+  <div className="text_toolbar">
+    <div className="text_toolbar__buttons">
+      {needTOC && <TocToggleBtn />}
+      <TextSettings />
+      <LanguageTextBtn />
+      <div className="divider" />
+      <TagTextBtn />
+      <AddBookmarkBtn />
+      <AddCommentBtn />
+      <ShareTextBtn />
+      <CopyLinkBtn />
+      <div className="divider" />
+      <SearchOnPageBtn />
+      <div className="computer-only">
+        <PrintBtn />
       </div>
+      <div className="computer-only">
+        <DownloadTextBtn />
+      </div>
+      <div className="computer-only">
+        <AdditionsVisibilityBtn />
+      </div>
+      <Dropdown
+        item
+        icon={null}
+        trigger={<MoreOptionsBtn />}
+        className="text_toolbar__dropdown"
+      >
+        <Dropdown.Menu>
+          <Dropdown.Item>
+            <DownloadTextBtn />
+          </Dropdown.Item>
+          <Dropdown.Item>
+            <AdditionsVisibilityBtn />
+          </Dropdown.Item>
+        </Dropdown.Menu>
+      </Dropdown>
     </div>
-  );
-};
+  </div>
+);
 
 export default SourceTabToolbarWeb;

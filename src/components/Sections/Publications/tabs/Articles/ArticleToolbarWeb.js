@@ -16,58 +16,56 @@ import FullscreenTextBtn from '../../../../Pages/WithText/Buttons/FullscreenText
 import MoreOptionsBtn from '../../../../Pages/WithText/Buttons/MoreOptionsBtn';
 import CopyLinkBtn from '../../../../Pages/WithText/Buttons/CopyLinkBtn';
 
-const ArticleToolbarWeb = () => {
-  return (
-    <div className="text_toolbar">
-      <div className="text_toolbar__buttons">
-        <TextSettings />
-        <LanguageTextBtn />
-        <div className="divider" />
-        <TagTextBtn />
-        <AddBookmarkBtn />
-        <AddCommentBtn />
-        <ShareTextBtn />
-        <CopyLinkBtn />
-        <div className="divider" />
-        <SearchOnPageBtn />
-        <div className="computer-only">
-          <PrintBtn />
-        </div>
-        <div className="computer-only">
-          <DownloadTextBtn />
-        </div>
-        <div className="computer-only">
-          <AdditionsVisibilityBtn />
-        </div>
-        <div className="divider computer-only" />
-
-        <div className="computer-only">
-          <LinkToLessonsBtn />
-        </div>
-        <div className="divider computer-only" />
-        <FullscreenTextBtn />
-        <Dropdown
-          item
-          icon={null}
-          trigger={<MoreOptionsBtn />}
-          pointing="top right"
-          className="text_toolbar__dropdown"
-        >
-          <Dropdown.Menu>
-            <Dropdown.Item>
-              <DownloadTextBtn />
-            </Dropdown.Item>
-            <Dropdown.Item>
-              <AdditionsVisibilityBtn />
-            </Dropdown.Item>
-            <Dropdown.Item>
-              <LinkToLessonsBtn />
-            </Dropdown.Item>
-          </Dropdown.Menu>
-        </Dropdown>
+const ArticleToolbarWeb = () => (
+  <div className="text_toolbar">
+    <div className="text_toolbar__buttons">
+      <TextSettings />
+      <LanguageTextBtn />
+      <div className="divider" />
+      <TagTextBtn />
+      <AddBookmarkBtn />
+      <AddCommentBtn />
+      <ShareTextBtn />
+      <CopyLinkBtn />
+      <div className="divider" />
+      <SearchOnPageBtn />
+      <div className="computer-only">
+        <PrintBtn />
       </div>
+      <div className="computer-only">
+        <DownloadTextBtn />
+      </div>
+      <div className="computer-only">
+        <AdditionsVisibilityBtn />
+      </div>
+      <div className="divider computer-only" />
+
+      <div className="computer-only">
+        <LinkToLessonsBtn />
+      </div>
+      <div className="divider computer-only" />
+      <FullscreenTextBtn />
+      <Dropdown
+        item
+        icon={null}
+        trigger={<MoreOptionsBtn />}
+        pointing="top right"
+        className="text_toolbar__dropdown"
+      >
+        <Dropdown.Menu>
+          <Dropdown.Item>
+            <DownloadTextBtn />
+          </Dropdown.Item>
+          <Dropdown.Item>
+            <AdditionsVisibilityBtn />
+          </Dropdown.Item>
+          <Dropdown.Item>
+            <LinkToLessonsBtn />
+          </Dropdown.Item>
+        </Dropdown.Menu>
+      </Dropdown>
     </div>
-  );
-};
+  </div>
+);
 
 export default ArticleToolbarWeb;
