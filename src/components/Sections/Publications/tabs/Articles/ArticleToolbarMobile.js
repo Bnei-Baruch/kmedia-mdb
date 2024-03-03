@@ -10,34 +10,36 @@ import ShareTextBtn from '../../../../Pages/WithText/Buttons/ShareTextBtn';
 import MoreOptionsBtn from '../../../../Pages/WithText/Buttons/MoreOptionsBtn';
 import CopyLinkBtn from '../../../../Pages/WithText/Buttons/CopyLinkBtn';
 
-const ArticleToolbarMobile = () => (
-  <div className="text_toolbar">
-    <div className="text_toolbar__buttons">
-      <LanguageTextBtn />
-      <TextSettings />
-      <SearchOnPageBtn />
-      <AddBookmarkBtn />
-      <Dropdown
-        item
-        icon={null}
-        trigger={<MoreOptionsBtn />}
-        pointing="top right"
-        className="text_toolbar__dropdown"
-      >
-        <Dropdown.Menu>
-          <Dropdown.Item>
-            <DownloadTextBtn />
-          </Dropdown.Item>
-          <Dropdown.Item>
-            <ShareTextBtn />
-          </Dropdown.Item>
-          <Dropdown.Item>
-            <CopyLinkBtn />
-          </Dropdown.Item>
-        </Dropdown.Menu>
-      </Dropdown>
+const ArticleToolbarMobile = () => {
+  return (
+    <div className="text_toolbar">
+      <div className="text_toolbar__buttons">
+        <LanguageTextBtn />
+        <TextSettings />
+        <SearchOnPageBtn />
+        <AddBookmarkBtn />
+        <Dropdown
+          item
+          icon={null}
+          trigger={<MoreOptionsBtn />}
+          className="text_toolbar__dropdown"
+          direction="left"
+        >
+          <Dropdown.Menu>
+            <Dropdown.Item>
+              <DownloadTextBtn />
+            </Dropdown.Item>
+            <Dropdown.Item>
+              <ShareTextBtn />
+            </Dropdown.Item>
+            <Dropdown.Item>
+              <CopyLinkBtn />
+            </Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 export default ArticleToolbarMobile;

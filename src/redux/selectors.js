@@ -72,6 +72,8 @@ export const settingsGetUrlLangSelector          = createSelector(getSettings, s
 export const settingsGetUIDirSelector            = createSelector([getSettings], s => settingsSel.getUIDir(s));
 export const settingsGetShowAllContentSelector   = createSelector([getSettings], s => settingsSel.getShowAllContent(s));
 export const settingsGetPageSizeSelector         = createSelector([getSettings], s => settingsSel.getPageSize(s));
+export const settingsGetLeftRightByDirSelector   = createSelector([getSettings], s => settingsSel.getUIDir(s) === 'rtl' ? 'left' : 'right');
+export const settingsGetRightLeftByDirSelector   = createSelector([getSettings], s => settingsSel.getUIDir(s) !== 'rtl' ? 'left' : 'right');
 
 // home
 export const homeLatestCoIDsSelector    = createSelector([getHome], home => homeSel.getLatestCos(home));

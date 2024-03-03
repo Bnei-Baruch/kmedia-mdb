@@ -11,34 +11,38 @@ import ShareTextModalBtn from '../../../../WithText/Buttons/ShareTextModalBtn';
 import MoreOptionsBtn from '../../../../WithText/Buttons/MoreOptionsBtn';
 import CopyLinkBtn from '../../../../WithText/Buttons/CopyLinkBtn';
 
-const SourceTabToolbarMobile = ({ needTOC }) => (
-  <div className="text_toolbar">
-    <div className="text_toolbar__buttons">
-      {needTOC && <TocToggleBtn />}
-      <LanguageTextBtn />
-      <TextSettings />
-      <SearchOnPageBtn />
-      <AddBookmarkBtn />
-      <Dropdown
-        item
-        icon={null}
-        trigger={<MoreOptionsBtn />}
-        className="text_toolbar__dropdown"
-      >
-        <Dropdown.Menu>
-          <Dropdown.Item>
-            <DownloadTextBtn />
-          </Dropdown.Item>
-          <Dropdown.Item>
-            <ShareTextModalBtn />
-          </Dropdown.Item>
-          <Dropdown.Item>
-            <CopyLinkBtn />
-          </Dropdown.Item>
-        </Dropdown.Menu>
-      </Dropdown>
+const SourceTabToolbarMobile = ({ needTOC }) => {
+
+  return (
+    <div className="text_toolbar">
+      <div className="text_toolbar__buttons">
+        {needTOC && <TocToggleBtn />}
+        <LanguageTextBtn />
+        <TextSettings />
+        <SearchOnPageBtn />
+        <AddBookmarkBtn />
+        <Dropdown
+          item
+          icon={null}
+          trigger={<MoreOptionsBtn />}
+          className="text_toolbar__dropdown"
+          direction="left"
+        >
+          <Dropdown.Menu>
+            <Dropdown.Item>
+              <DownloadTextBtn />
+            </Dropdown.Item>
+            <Dropdown.Item>
+              <ShareTextModalBtn />
+            </Dropdown.Item>
+            <Dropdown.Item>
+              <CopyLinkBtn />
+            </Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 export default SourceTabToolbarMobile;

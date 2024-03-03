@@ -402,6 +402,9 @@
     padding: 0 16px;
     flex-grow: 3;
     flex-basis: max-content;
+    .stick_toolbar_long_translation &{
+      padding: 0 8px;
+    }
 
     &.text_selected {
       flex-grow: 0;
@@ -440,7 +443,7 @@
         font-weight: 600;
 
         .stick_toolbar_long_translation & {
-          font-size: 11px;
+          font-size: 15px;
         }
       }
     }

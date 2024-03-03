@@ -15,7 +15,8 @@ import {
   settingsGetShowAllContentSelector,
   settingsGetUIDirSelector,
   settingsGetUILangSelector,
-  settingsGetUrlLangSelector
+  settingsGetUrlLangSelector,
+  settingsGetLeftRightByDirSelector
 } from '../../redux/selectors';
 
 const HandleLanguages = ({ t }) => {
@@ -26,6 +27,7 @@ const HandleLanguages = ({ t }) => {
   const urlLang          = useSelector(settingsGetUrlLangSelector);
   const origUILang       = useSelector(state => settingsGetUILangSelector(state, true /* skipUrl */));
   const uiDir            = useSelector(settingsGetUIDirSelector);
+  const leftRight        = useSelector(settingsGetLeftRightByDirSelector);
   const contentLanguages = useSelector(state => settingsGetContentLanguagesSelector(state, true /* skipUrl */));
   const popupStyle       = { direction: uiDir };
   const dispatch         = useDispatch();
@@ -54,11 +56,11 @@ const HandleLanguages = ({ t }) => {
     <div onClick={handlePopup} ref={ref}>
       {
         isMobileDevice
-          ? <Icon size="big" name="language" className="no-margin"/>
+          ? <Icon size="big" name="language" className="no-margin" />
           : (
             <div className="language-trigger">
-              {urlLang && <Icon name="unlink"/>}
-              {!urlLang && <Icon name="sliders horizontal"/>}
+              {urlLang && <Icon name="unlink" />}
+              {!urlLang && <Icon name="sliders horizontal" />}
               {t('languages.language')}
             </div>
           )
@@ -92,7 +94,7 @@ const HandleLanguages = ({ t }) => {
         <div className={disabled ? 'disabled' : ''}>
           <div>{idx + 1}. {LANGUAGES[language].name}</div>
         </div>
-        <Icon disabled={!!urlLang || disabled} className="language-trigger" name="close" onClick={lang => removeLanguage(idx)}/>
+        <Icon disabled={!!urlLang || disabled} className="language-trigger" name="close" onClick={lang => removeLanguage(idx)} />
       </div>
     </List.Item>
   );
@@ -102,8 +104,8 @@ const HandleLanguages = ({ t }) => {
       id="handleLanguagesPopup"
       key="handleLangs"
       flowing
-      position={`bottom ${uiDir === 'rtl' ? 'left' : 'right'}`}
-      trigger={<Trigger/>}
+      position={`bottom ${leftRight}`}
+      trigger={<Trigger />}
       open={isActive}
       onOpen={handlePopup}
       onClose={handlePopup}
@@ -144,8 +146,9 @@ const HandleLanguages = ({ t }) => {
             <LanguagesDropdown
               disabled={!!urlLang}
               allLanguages={ALL_LANGUAGES}
-              trigger={<Button disabled={!!urlLang} basic color="grey" size="small">{t('languages.add_languages')}</Button>}
-              selected={lang => addLanguage(lang)}/>
+              trigger={
+                <Button disabled={!!urlLang} basic color="grey" size="small">{t('languages.add_languages')}</Button>}
+              selected={lang => addLanguage(lang)} />
           </List.Item>
         </List>
         <Checkbox
@@ -153,7 +156,7 @@ const HandleLanguages = ({ t }) => {
           label={t('languages.show_all_content')}
           disabled={!!urlLang}
           checked={showAllContent}
-          onChange={() => setShowAllContent()}/>
+          onChange={() => setShowAllContent()} />
         <div className="language-subtext">{t('languages.show_all_content_explanation')}</div>
       </Popup.Content>
     </Popup>

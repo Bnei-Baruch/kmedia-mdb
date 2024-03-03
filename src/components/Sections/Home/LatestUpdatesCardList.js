@@ -9,7 +9,7 @@ import { getSectionForTranslation } from '../../../helpers/utils';
 import clsx from 'clsx';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { useSelector } from 'react-redux';
-import { settingsGetUIDirSelector } from '../../../redux/selectors';
+import { settingsGetUIDirSelector, settingsGetLeftRightByDirSelector } from '../../../redux/selectors';
 
 const LatestUpdatesCardList = (
   {
@@ -28,13 +28,14 @@ const LatestUpdatesCardList = (
   const [pageStart, setPageStart]   = useState(0);
   const [cardsArray, setCardsArray] = useState([]);
   const uiDir                       = useSelector(settingsGetUIDirSelector);
+  const leftRight                   = useSelector(settingsGetLeftRightByDirSelector);
 
   const onScrollRight = () => onScrollChange(pageNo + 1);
 
   const onScrollLeft = () => onScrollChange(pageNo - 1);
 
   const getLatestUpdate = item =>
-    <LatestUpdate key={item.id} item={item} label={t(getSectionForTranslation(item.content_type))} t={t}/>;
+    <LatestUpdate key={item.id} item={item} label={t(getSectionForTranslation(item.content_type))} t={t} />;
 
   const initCardsArray = () => {
     // arrange cards by type in criss cross order
@@ -81,7 +82,7 @@ const LatestUpdatesCardList = (
   };
 
   const swipeHandlers = useSwipeable({
-    onSwipedLeft : uiDir === 'rtl' ? onScrollRight : onScrollLeft,
+    onSwipedLeft: uiDir === 'rtl' ? onScrollRight : onScrollLeft,
     onSwipedRight: uiDir === 'rtl' ? onScrollLeft : onScrollRight
   });
 
@@ -100,15 +101,14 @@ const LatestUpdatesCardList = (
   };
 
   const renderScrollLeft = () => {
-    const dir = uiDir === 'rtl' ? 'left' : 'right';
     return (pageNo + 1) * itemsCount >= cardsArray.length ? null : (
       <Button
-        icon={`chevron ${dir}`}
+        icon={`chevron ${leftRight}`}
         basic
         size="large"
         onClick={onScrollRight}
         className="scroll_intents left"
-        style={{ [dir]: '-45px' }}
+        style={{ [leftRight]: '-45px' }}
       />
     );
   };
@@ -119,7 +119,7 @@ const LatestUpdatesCardList = (
 
   const cardsRow = (
     <Card.Group className={clsx({
-      'latestUpdatesCardGroup'      : !isMobileDevice,
+      'latestUpdatesCardGroup': !isMobileDevice,
       'latestUpdatesCardGroupMobile': isMobileDevice
     })} itemsPerRow={itemsPerRow} stackable={stackable}>
       {getPageCardArray()}
@@ -145,9 +145,9 @@ const LatestUpdatesCardList = (
 };
 
 LatestUpdatesCardList.propTypes = {
-  t        : PropTypes.func.isRequired,
-  title    : PropTypes.string,
-  cts      : PropTypes.array,
+  t: PropTypes.func.isRequired,
+  title: PropTypes.string,
+  cts: PropTypes.array,
   itemsByCT: PropTypes.any
 };
 

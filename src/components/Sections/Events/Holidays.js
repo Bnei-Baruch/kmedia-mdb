@@ -13,7 +13,8 @@ import {
   filtersAsideGetTreeSelector,
   filtersGetFilterByNameSelector,
   settingsGetUIDirSelector,
-  mdbNestedGetCollectionByIdSelector
+  mdbNestedGetCollectionByIdSelector,
+  settingsGetLeftRightByDirSelector
 } from '../../../redux/selectors';
 
 const ITEMS_PER_ROW = 5;
@@ -28,6 +29,7 @@ const Holidays = ({ namespace, t }) => {
   const [open, setOpen]   = useState(false);
 
   const uiDir               = useSelector(settingsGetUIDirSelector);
+  const leftRight           = useSelector(settingsGetLeftRightByDirSelector);
   const ids                 = useSelector(state => filtersAsideGetTreeSelector(state, namespace, FN_COLLECTION_MULTI));
   const getById             = useSelector(state => mdbNestedGetCollectionByIdSelector(state));
   const selectedCollections = useSelector(state => filtersGetFilterByNameSelector(state, namespace, FN_COLLECTION_MULTI))?.values || [];
@@ -68,11 +70,11 @@ const Holidays = ({ namespace, t }) => {
   );
 
   const renderItem = (item, i) => {
-    if (!item) return <Table.Cell key={i}/>;
+    if (!item) return <Table.Cell key={i} />;
 
     return (
       <Table.Cell className="tree_item_modal_content" key={item.id}>
-        <CollectionItem namespace={namespace} item={item}/>
+        <CollectionItem namespace={namespace} item={item} />
       </Table.Cell>
     );
   };
@@ -95,7 +97,7 @@ const Holidays = ({ namespace, t }) => {
           basic
           color="blue"
           className="clear_button no-shadow"
-          icon={`caret ${uiDir === 'rtl' ? 'left' : 'right'}`}
+          icon={`caret ${leftRight}`}
           onClick={() => setOpen(true)}
           size="medium"
         />
@@ -107,7 +109,7 @@ const Holidays = ({ namespace, t }) => {
         dir={uiDir}
         onClose={handleClose}
         className={clsx('filters_aside_tree_modal', { [uiDir]: true })}
-        closeIcon={<Icon name="times circle outline"/>}
+        closeIcon={<Icon name="times circle outline" />}
         size="fullscreen"
       >
         <Modal.Header className="no-border nowrap">
@@ -129,7 +131,7 @@ const Holidays = ({ namespace, t }) => {
           </Table>
         </Modal.Content>
         <Modal.Actions>
-          <Button primary content={t('buttons.close')} onClick={handleClose}/>
+          <Button primary content={t('buttons.close')} onClick={handleClose} />
         </Modal.Actions>
       </Modal>
     </List.Item>

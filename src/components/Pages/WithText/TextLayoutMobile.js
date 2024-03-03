@@ -79,7 +79,17 @@ const TextLayoutMobile = props => {
     >
       {(playerPage && !isSearch) && renderToolbar()}
       <div className="text_mobile_padding">
-        {breadcrumb}
+
+        <div
+          className={
+            clsx('stick_toolbar no_print', {
+              'stick_toolbar_unpinned': scrollDir === 1,
+              'stick_toolbar_pinned': scrollDir === -1,
+              'stick_toolbar_on_end': scrollDir === 2,
+            })
+          }>
+          {breadcrumb}
+        </div>
         <TagsByUnit id={subject.id}></TagsByUnit>
         <AudioPlayer />
         <TextContentMobile playerPage={playerPage} />
