@@ -71,7 +71,7 @@ const textPageSlice = createSlice({
   reducers: {
     setZoomSize: (state, { payload }) => {
       let size = state.settings.zoomSize ?? 2;
-      if (state.file.isPdf) size = state.settings.pdfZoom ?? 1;
+      if (state.file?.isPdf) size = state.settings.pdfZoom ?? 1;
       const _coefficient = state.file.isPdf ? .02 : 1;
 
       if (payload === 'up') {
