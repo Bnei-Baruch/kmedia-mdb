@@ -9,10 +9,14 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { getQuery, stringify } from '../../../helpers/url';
 import { goOtherTassPart } from './helper';
 import { BS_TAAS_LAST_PAGE } from '../../../helpers/consts';
+import { useSelector } from 'react-redux';
+import { textPageGetSettings } from '../../../redux/selectors';
 
 const PDF = ({ pdfFile, startsFrom, isTaas = true }) => {
   const [width, setWidth]       = useState();
   const [numPages, setNumPages] = useState();
+
+  const { pdfZoom = 1 } = useSelector(textPageGetSettings);
 
   const ref        = useRef();
   const { t }      = useTranslation();
@@ -70,26 +74,28 @@ const PDF = ({ pdfFile, startsFrom, isTaas = true }) => {
       {menu}
       <div style={{ direction: 'ltr' }} className="position_relative">
         <div className="theme_pdf"></div>
-        <Document
-          file={pdfFile}
-          onLoadSuccess={onDocumentLoadSuccess}
-          error={<ErrorSplash text={t('messages.server-error')} subtext={t('messages.failed-to-load-pdf-file')} />}
-          loading={<LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />}
-        >
-          {
-            numPages &&
-            (
-              <Page
-                onLoadError={onDocumentLoadError}
-                width={width}
-                pageNumber={(pageNumber + (-startsFrom) + 1)}
-                renderAnnotations={false}
-                renderTextLayer={false}
-                renderMode="svg"
-              />
-            )
-          }
-        </Document>
+        <div style={{ 'zoom': pdfZoom }}>
+          <Document
+            file={pdfFile}
+            onLoadSuccess={onDocumentLoadSuccess}
+            error={<ErrorSplash text={t('messages.server-error')} subtext={t('messages.failed-to-load-pdf-file')} />}
+            loading={<LoadingSplash text={t('messages.loading')} subtext={t('messages.loading-subtext')} />}
+          >
+            {
+              numPages &&
+              (
+                <Page
+                  onLoadError={onDocumentLoadError}
+                  width={width}
+                  pageNumber={(pageNumber + (-startsFrom) + 1)}
+                  renderAnnotations={false}
+                  renderTextLayer={false}
+                  renderMode="svg"
+                />
+              )
+            }
+          </Document>
+        </div>
       </div>
       {menu}
     </div>

@@ -6,7 +6,6 @@ import { isLanguageRtl } from '../../../helpers/i18n-utils';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import {
   textPageGetSubjectSelector,
-  textPageGetUrlInfoSelector,
   sourcesGetPathByIDSelector,
   settingsGetUILangSelector
 } from '../../../redux/selectors';
@@ -17,10 +16,8 @@ const BreadcrumbTextPage = () => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const subject            = useSelector(textPageGetSubjectSelector);
   const fullPath           = useSelector(sourcesGetPathByIDSelector)(subject.id);
-  const hasSel             = !!useSelector(textPageGetUrlInfoSelector).select;
   const uiLang             = useSelector(settingsGetUILangSelector);
 
-  if (hasSel) return null;
   const current = fullPath.pop();
 
   const divider = (

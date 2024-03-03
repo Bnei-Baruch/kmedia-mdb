@@ -10,6 +10,7 @@ import LinkToLessonsBtn from '../../Pages/WithText/Buttons/LinkToLessonsBtn';
 import AddBookmarkBtn from '../../Pages/WithText/Buttons/AddBookmarkBtn';
 import ShareTextModalBtn from '../../Pages/WithText/Buttons/ShareTextModalBtn';
 import MoreOptionsBtn from '../../Pages/WithText/Buttons/MoreOptionsBtn';
+import CopyLinkBtn from '../../Pages/WithText/Buttons/CopyLinkBtn';
 
 const SourceToolbarMobile = () => (
   <div className="text_toolbar">
@@ -22,8 +23,8 @@ const SourceToolbarMobile = () => (
         item
         icon={null}
         trigger={<MoreOptionsBtn />}
-        pointing="top right"
         className="text_toolbar__dropdown"
+        direction="left"
       >
         <Dropdown.Menu>
           <Dropdown.Item>
@@ -37,6 +38,9 @@ const SourceToolbarMobile = () => (
           </Dropdown.Item>
           <Dropdown.Item>
             <ShareTextModalBtn />
+          </Dropdown.Item>
+          <Dropdown.Item>
+            <CopyLinkBtn />
           </Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>

@@ -14,7 +14,8 @@ import FolderList from './Folders/List';
 import {
   bookmarkFilterGetByKeySelector,
   myGetItemByKeySelector,
-  settingsGetUIDirSelector
+  settingsGetUIDirSelector,
+  settingsGetLeftRightByDirSelector
 } from '../../../../redux/selectors';
 
 const BookmarkHeaderMobile = ({ t }) => {
@@ -39,7 +40,8 @@ const BookmarkHeaderMobile = ({ t }) => {
 
   const placeholder = !folder ? t('personal.bookmark.searchBookmarks') : `${t('personal.bookmark.filterByFolder')}: ${folder.name}`;
 
-  const uiDir = useSelector(settingsGetUIDirSelector);
+  const uiDir     = useSelector(settingsGetUIDirSelector);
+  const leftRight = useSelector(settingsGetLeftRightByDirSelector);
 
   const trigger = (
     <Container>
@@ -51,10 +53,10 @@ const BookmarkHeaderMobile = ({ t }) => {
         color="blue"
         onClick={handleToggle}
       >
-        <Icon name="folder outline" color="grey"/>
+        <Icon name="folder outline" color="grey" />
         {t('personal.bookmark.folders')}
         <Icon
-          name={`caret ${uiDir === 'ltr' ? 'right' : 'left'}`}
+          name={`caret ${leftRight}`}
           className="margin-left-8 margin-right-8"
         />
       </Label>
@@ -89,7 +91,7 @@ const BookmarkHeaderMobile = ({ t }) => {
   return (
     <Container className="padded">
       <Header as={'h2'} className="my_header padding-top_1em">
-        <Icon name="bookmark outline" className="display-iblock"/>
+        <Icon name="bookmark outline" className="display-iblock" />
         {t('personal.bookmark.title')}
       </Header>
 
@@ -104,7 +106,7 @@ const BookmarkHeaderMobile = ({ t }) => {
         <Modal.Content>
           <Grid className="no-padding">
             <Grid.Row>
-              <FolderList close={handleToggle}/>
+              <FolderList close={handleToggle} />
             </Grid.Row>
           </Grid>
         </Modal.Content>

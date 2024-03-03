@@ -11,15 +11,15 @@ import {
   filtersAsideGetStatsSelector,
   filtersAsideGetTreeSelector,
   filtersGetFilterByNameSelector,
-  settingsGetUIDirSelector,
-  mdbNestedGetCollectionByIdSelector
+  mdbNestedGetCollectionByIdSelector,
+  settingsGetLeftRightByDirSelector
 } from '../../../redux/selectors';
 
 const ContentTypesFilter = ({ namespace, t }) => {
 
   const [selectedCT, setSelectedCT] = useState('');
 
-  const uiDir               = useSelector(settingsGetUIDirSelector);
+  const leftRight           = useSelector(settingsGetLeftRightByDirSelector);
   const ids                 = useSelector(state => filtersAsideGetTreeSelector(state, namespace, FN_COLLECTION_MULTI));
   const getById             = useSelector(mdbNestedGetCollectionByIdSelector);
   const selectedCollections = useSelector(state => filtersGetFilterByNameSelector(state, namespace, FN_COLLECTION_MULTI));
@@ -57,7 +57,7 @@ const ContentTypesFilter = ({ namespace, t }) => {
           basic
           color="blue"
           className="clear_button no-shadow"
-          icon={`caret ${uiDir === 'rtl' ? 'left' : 'right'}`}
+          icon={`caret ${leftRight}`}
           onClick={() => setSelectedCT(id)}
           size="medium"
         />

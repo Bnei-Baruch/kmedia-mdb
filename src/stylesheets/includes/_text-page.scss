@@ -317,7 +317,7 @@
 .stick_toolbar {
   position: sticky;
   top: 0;
-  z-index: 2;
+  z-index: 4;
   @include theme_bg;
 
   transform: translate3d(0px, 0, 0px);
@@ -328,8 +328,11 @@
   }
 
   &.stick_toolbar_unpinned {
+
+    transition: all 0.2s ease-in-out 0s;
+
     &.stick_toolbar_fixed {
-      transform: none !important;
+      transform: translate3d(0px, -1 * $breadcrumb-height, 0px) !important;
     }
 
     transform: translate3d(0px, -$text-bar-height, 0px);
@@ -371,12 +374,6 @@
     box-shadow: 0px -2px -12px 0px #00000033;
   }
 
-
-  .is-web.with_breadcrumb & {
-    margin-top: 1em;
-  }
-
-
   .is-dark.is-mobile & {
     box-shadow: 0px -2px -12px 0px #FFFFFF99;
   }
@@ -401,8 +398,8 @@
     flex-grow: 3;
     flex-basis: max-content;
 
-    &.text_selected {
-      flex-grow: 0;
+    .stick_toolbar_long_translation & {
+      padding: 0 8px;
     }
 
     .divider {
@@ -436,6 +433,14 @@
         display: block;
         line-height: 20px;
         font-weight: 600;
+
+        .stick_toolbar_long_translation & {
+          font-size: 15px;
+        }
+      }
+
+      .text_selected &.text_mark_on_select_btn .material-symbols-outlined {
+        color: $blue;
       }
     }
 
@@ -486,7 +491,7 @@
   justify-content: flex-start;
   align-items: center;
   color: $midGrey;
-  padding: 1em 1em 0;
+  padding: 1em;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
@@ -700,6 +705,14 @@
   }
 }
 
+.react-pdf__Page__svg {
+  margin: 0 auto;
+}
+
+.is-dark .react-pdf__Document {
+  background: $white;
+}
+
 .player_page_source_toc {
   position: absolute;
   max-width: 250px;
@@ -845,3 +858,4 @@
     }
   }
 }
+

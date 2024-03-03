@@ -1,13 +1,12 @@
 import { SCROLL_SEARCH_ID } from '../../../../helpers/consts';
-import { stringify } from '../../../../helpers/url';
 import { RenderHighlightAll } from './RenderHighlightAll';
 import { RenderHighlightBorder } from './RenderHighlightBorder';
 import { RenderHighlightSingleString } from './RenderHighlightSingleString';
 import { RenderNoSearch } from './RenderNoSearch';
 
 /* eslint-disable  no-useless-escape */
-export const KEEP_LETTERS_RE            = /[".,\/#!$%\^&\*;:{}=\-_`~()\[\]‘’”“]/g;
-export const KEEP_LETTERS_WITH_SPACE_RE = /[".,\/#!$%\^&\*;:{}=\-_`~()\[\]\s‘’”“]/g;
+export const KEEP_LETTERS_RE = /[".,\/#!$%\^&\*;:{}=\-_`~()\[\]‘’”“]/g;
+export const SPACES_RE       = new RegExp('\r?\n+|\n+|\r+|&nbsp;+', 'gi');
 
 export const OFFSET_TEXT_SEPARATOR = ':$:';
 const MIN_NUMBER_WORDS_IN_LINK     = 5;
@@ -48,33 +47,6 @@ export const prepareScrollToSearch = (
 export const getPositionInHtml = (pos, tags) => tags
   .filter(t => t.noHtmlPos <= pos && !t.isAdded)
   .reduce((acc, t) => acc + t.str.length, pos);
-
-export const filterTagsByBorder = (from, to, tags) => {
-  const result = [];
-  let diff     = 0;
-  for (const p of tags) {
-    diff += p.str.length;
-
-    const tagEndP = p.pos + p.str.length;
-    const startP  = from + diff;
-    const endP    = to + diff;
-
-    if (tagEndP >= endP) {
-      continue;
-    }
-
-    to = endP;
-
-    if (tagEndP <= startP) {
-      from = startP;
-      continue;
-    }
-
-    result.push(p);
-  }
-
-  return { tagsPositionInner: result, from, to };
-};
 
 export const textToHtml = (source, from, to, allTags, isBold = true) => {
   let currentPos = from;
@@ -165,84 +137,7 @@ export const insertAdded = (html, allTags, from, to) => {
 /***
  * help functions for build link
  */
-export const DOM_ROOT_ID                  = 'roodNodeOfShareText';
-export const buildSearchLinkFromSelection = (language, pathname) => {
-  if (!window?.getSelection) {
-    return { url: null };
-  }
-
-  const sel = window.getSelection();
-  if (sel.isCollapsed || !sel.anchorNode || !sel.focusNode) {
-    return { url: null };
-  }
-
-  const isForward = isSelectionForward(sel);
-
-  const words = sel
-    .toString()
-    .replace(/\r?\n|\r{1,}/g, ' ')
-    .split(' ')
-    .filter(x => x !== '');
-  if (words.length < MIN_NUMBER_WORDS_IN_LINK * 2)
-    return buildLinkForShortSelect(words, sel, isForward, language);
-
-  pathname = pathname || window.location.pathname;
-
-  const { protocol, hostname, port } = window.location;
-  const sStart                       = words.slice(0, MIN_NUMBER_WORDS_IN_LINK).join(' ');
-  const sEnd                         = words.slice(-1 * MIN_NUMBER_WORDS_IN_LINK).join(' ');
-
-  const start = isForward ? { node: sel.anchorNode, offset: sel.anchorOffset }
-    : { node: sel.focusNode, offset: sel.focusOffset };
-
-  const end = isForward ? { node: sel.focusNode, offset: sel.focusOffset }
-    : { node: sel.anchorNode, offset: sel.anchorOffset };
-
-  const { offset: sOffset, wordOffset } = findOffsetOfDOMNode(start.node, start.offset);
-  const { offset: eOffset }             = findOffsetOfDOMNode(end.node, end.offset);
-
-  if (sOffset === null || eOffset === null)
-    return { url: null, text: null };
-
-  const query = {
-    srchstart: wholeStartWord(start.node.textContent, start.offset) + sStart + OFFSET_TEXT_SEPARATOR + sOffset,
-    srchend: sEnd + wholeEndWord(end.node.textContent, end.offset) + OFFSET_TEXT_SEPARATOR + eOffset
-  };
-
-  if (language) {
-    query.language = language;
-  }
-
-  const url = `${protocol}//${hostname}${port ? `:${port}` : ''}${pathname}?${stringify(query)}`;
-
-  const element = sel.focusNode.nodeName.includes('text') ? sel.focusNode.parentElement : sel.focusNode;
-  return { url, text: sel.toString(), query, element, wordOffset };
-};
-
-const buildLinkForShortSelect = (words, sel, isForward, language) => {
-
-  const { protocol, hostname, port, pathname } = window.location;
-
-  const { node, offset } = isForward ? { node: sel.anchorNode, offset: sel.anchorOffset }
-    : { node: sel.focusNode, offset: sel.focusOffset };
-
-  const { offset: fullOffset, wordOffset } = findOffsetOfDOMNode(node, offset);
-
-  if (fullOffset === null)
-    return { url: null, text: null };
-
-  const query = {
-    srchstart: wholeStartWord(node.textContent, offset) + words.join(' ') + OFFSET_TEXT_SEPARATOR + fullOffset,
-  };
-
-  if (language) {
-    query.language = language;
-  }
-
-  const url     = `${protocol}//${hostname}${port ? `:${port}` : ''}${pathname}?${stringify(query)}`;
-  const element = sel.focusNode.nodeName.includes('text') ? sel.focusNode.parentElement : sel.focusNode;
-  return { url, text: sel.toString(), query, element, wordOffset };
-};
+export const DOM_ROOT_ID = 'roodNodeOfShareText';
 
 const findOffsetOfDOMNode = (node, offset) => {
   offset += countOffset(node);
@@ -253,23 +148,13 @@ const findOffsetOfDOMNode = (node, offset) => {
     const wordOffset = parent
       .textContent
       .slice(0, offset)
-      .replace(/\r?\n|\r{1,}/g, ' ')
-      .split(' ')
-      .filter(x => !!x)
+      .replace(SPACES_RE, ' ')
+      .replace(/\s+/gi, ' ')
       .length;
     return { offset, wordOffset };
   }
 
   return findOffsetOfDOMNode(parent, offset);
-};
-
-export const isSelectionForward = sel => {
-  const range = document.createRange();
-  range.setStart(sel.anchorNode, sel.anchorOffset);
-  range.setEnd(sel.focusNode, sel.focusOffset);
-  const res = !range.collapsed;
-  range.detach();
-  return res;
 };
 
 export const urlParamFromSelect = () => {
@@ -298,8 +183,9 @@ export const urlParamFromSelect = () => {
   const rangeArr = range
     .toString()
     .replace(KEEP_LETTERS_RE, ' ')
-    .split(' ')
-    .filter(x => x !== '');
+    .replace(SPACES_RE, ' ')
+    .replace(/\s+/gi, ' ')
+    .split(' ');
   const sStart   = rangeArr.slice(0, MIN_NUMBER_WORDS_IN_LINK).join(' ');
   const sEnd     = rangeArr.slice(-1 * MIN_NUMBER_WORDS_IN_LINK).join(' ');
 
@@ -319,23 +205,4 @@ const countOffset = node => {
   }
 
   return offset;
-};
-
-const wholeStartWord = (text, offset) => {
-  if (offset === 0 || KEEP_LETTERS_WITH_SPACE_RE.test(text[offset - 1]))
-    return '';
-  return text
-    .replace(/\r?\n|\r{1,}/g, ' ')
-    .slice(0, offset)
-    .split(KEEP_LETTERS_WITH_SPACE_RE)
-    .slice(-1);
-};
-
-const wholeEndWord = (text, offset) => {
-  if (offset === 0 || KEEP_LETTERS_WITH_SPACE_RE.test(text[offset]))
-    return '';
-  return text
-    .replace(/\r?\n|\r{1,}/g, ' ')
-    .slice(offset)
-    .split(KEEP_LETTERS_WITH_SPACE_RE)[0];
 };

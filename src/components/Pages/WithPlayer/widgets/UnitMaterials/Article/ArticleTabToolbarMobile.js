@@ -8,6 +8,7 @@ import DownloadTextBtn from '../../../../WithText/Buttons/DownloadTextBtn';
 import AddBookmarkBtn from '../../../../WithText/Buttons/AddBookmarkBtn';
 import ShareTextModalBtn from '../../../../WithText/Buttons/ShareTextModalBtn';
 import MoreOptionsBtn from '../../../../WithText/Buttons/MoreOptionsBtn';
+import CopyLinkBtn from '../../../../WithText/Buttons/CopyLinkBtn';
 
 const ArticleTabToolbarMobile = () => (
   <div className="text_toolbar">
@@ -20,8 +21,8 @@ const ArticleTabToolbarMobile = () => (
         item
         icon={null}
         trigger={<MoreOptionsBtn />}
-        pointing="top right"
         className="text_toolbar__dropdown"
+        direction="left"
       >
         <Dropdown.Menu>
           <Dropdown.Item>
@@ -29,6 +30,9 @@ const ArticleTabToolbarMobile = () => (
           </Dropdown.Item>
           <Dropdown.Item>
             <ShareTextModalBtn />
+          </Dropdown.Item>
+          <Dropdown.Item>
+            <CopyLinkBtn />
           </Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>

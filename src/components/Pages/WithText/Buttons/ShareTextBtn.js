@@ -57,6 +57,7 @@ const ShareTextBtn = () => {
         <div>
           <ToolbarBtnTooltip
             textKey="share"
+            className="text_mark_on_select_btn"
             icon={<span className="material-symbols-outlined">share</span>}
           />
         </div>

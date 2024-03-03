@@ -6,7 +6,16 @@ import { FN_TOPICS_MULTI } from '../../../helpers/consts';
 import React, { useMemo, useState } from 'react';
 import clsx from 'clsx';
 import TagSourceItemModal from './TagSourceItemModal';
-import { filtersAsideGetStatsSelector, filtersGetFilterByNameSelector, filtersAsideGetMultipleStatsSelector, sourcesGetPathByIDSelector, tagsGetPathByIDSelector, sourcesGetSourceByIdSelector, tagsGetTagByIdSelector, settingsGetUIDirSelector } from '../../../redux/selectors';
+import {
+  filtersAsideGetStatsSelector,
+  filtersGetFilterByNameSelector,
+  filtersAsideGetMultipleStatsSelector,
+  sourcesGetPathByIDSelector,
+  tagsGetPathByIDSelector,
+  sourcesGetSourceByIdSelector,
+  tagsGetTagByIdSelector,
+  settingsGetLeftRightByDirSelector
+} from '../../../redux/selectors';
 
 const TagSourceItem = props => {
   const { namespace, id, baseItems, filterName, deep, defaultSel = false } = props;
@@ -21,7 +30,7 @@ const TagSourceItem = props => {
   const getPathSources = useSelector(sourcesGetPathByIDSelector);
   const getTagById     = useSelector(tagsGetTagByIdSelector);
   const getPathTags    = useSelector(tagsGetPathByIDSelector);
-  const uiDir          = useSelector(settingsGetUIDirSelector);
+  const leftRight      = useSelector(settingsGetLeftRightByDirSelector);
 
   const isTag = filterName === FN_TOPICS_MULTI;
 
@@ -64,7 +73,7 @@ const TagSourceItem = props => {
     <List>
       {
         childrenIDs.filter(r => baseItems.includes(r))
-          .map(x => (<TagSourceItem {...props} id={x} deep={deep - 1} defaultSel={isSelected} key={x}/>)
+          .map(x => (<TagSourceItem {...props} id={x} deep={deep - 1} defaultSel={isSelected} key={x} />)
           )
       }
 
@@ -90,7 +99,7 @@ const TagSourceItem = props => {
               basic
               color="blue"
               className="clear_button no-shadow"
-              icon={`caret ${uiDir === 'rtl' ? 'left' : 'right'}`}
+              icon={`caret ${leftRight}`}
               onClick={toggleOpen}
               size="medium"
               disabled={finalStat === 0}

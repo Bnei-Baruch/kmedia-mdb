@@ -52,7 +52,8 @@ import {
   recommendedGetViewsSelector,
   settingsGetUIDirSelector,
   mdbNestedDenormCollectionWUnitsSelector,
-  publicationsGetTwitterSelector
+  publicationsGetTwitterSelector,
+  settingsGetLeftRightByDirSelector
 } from '../../redux/selectors';
 
 const PATH_SEPARATOR                 = ' > ';
@@ -72,7 +73,7 @@ const titleFromHighlight = (highlight, defVal) => {
     title += ` / ${titleArr.join(PATH_SEPARATOR)}`;
   }
 
-  return <span dangerouslySetInnerHTML={{ __html: title }}/>;
+  return <span dangerouslySetInnerHTML={{ __html: title }} />;
 };
 
 // Helper function to get the frist prop in hightlights obj and apply htmlFunc on it.
@@ -84,7 +85,7 @@ const snippetFromHighlight = (highlight, props) => {
   }
 
   const __html = `...${highlight[prop].join('.....')}...`;
-  return <span dangerouslySetInnerHTML={{ __html }}/>;
+  return <span dangerouslySetInnerHTML={{ __html }} />;
 };
 
 const clearStringForLink = str => str.replace(/(\r?\n|\r){1,}/g, ' ').replace(/<.+?>/gi, '');
@@ -107,8 +108,8 @@ const highlightWrapToLink = (__html, index, to) => {
   const searchArr = clearStringForLink(__html).split(' ');
 
   const search = {
-    srchstart   : searchArr.slice(0, MIN_NECESSARY_WORDS_FOR_SEARCH).join(' '),
-    srchend     : searchArr.slice(-1 * MIN_NECESSARY_WORDS_FOR_SEARCH).join(' '),
+    srchstart: searchArr.slice(0, MIN_NECESSARY_WORDS_FOR_SEARCH).join(' '),
+    srchend: searchArr.slice(-1 * MIN_NECESSARY_WORDS_FOR_SEARCH).join(' '),
     highlightAll: true
   };
 
@@ -117,7 +118,7 @@ const highlightWrapToLink = (__html, index, to) => {
     //onClick={() => this.logClick(...logLinkParams)}
     className={'hover-under-line'}
     to={{ ...to, search: [to.search, stringify(search)].filter(x => !!x).join('&') }}>
-    <span dangerouslySetInnerHTML={{ __html: `...${__html}...` }}/>
+    <span dangerouslySetInnerHTML={{ __html: `...${__html}...` }} />
   </Link>);
 };
 
@@ -151,7 +152,7 @@ const renderSnippet = (to, highlight, defaultDescription, t) => {
 const iconByContentType = (type, t, to) => {
   const icon    = iconByContentTypeMap.get(type) || null;
   const content = <div className="icon">
-    <SectionLogo name={icon} width="70" height="70"/>
+    <SectionLogo name={icon} width="70" height="70" />
     <span>{t(`constants.content-types.${type}`)}</span>
   </div>;
 
@@ -184,18 +185,18 @@ export const SearchResultCU = ({ cu, highlight = {}, clickData, hideContent = fa
   // const collectionLink = canonicalLink(ccu, mediaLanguage);
 
   const logo = cu.content_type === CT_ARTICLE ?
-    iconByContentType(cu.content_type, t, to) : <UnitLogoWithDuration unit={cu} width={144}/>;
+    iconByContentType(cu.content_type, t, to) : <UnitLogoWithDuration unit={cu} width={144} />;
 
   const props = {
-    id     : cu.id,
-    title  : titleFromHighlight(highlight, cu.name),
-    link   : to,
+    id: cu.id,
+    title: titleFromHighlight(highlight, cu.name),
+    link: to,
     logo,
     content: hideContent ? '' : renderSnippet(to, highlight, cu.description, t),
-    part   : onlyViewsAndDate ? undefined : Number(ccu.ccuNames?.[cu.id]),
+    part: onlyViewsAndDate ? undefined : Number(ccu.ccuNames?.[cu.id]),
     // Does not work for articles (should load canonical collection with cuIDs => after redirect into and back the count is correct)
     // parts: ccu?.cuIDs?.length,
-    date           : cu.film_date,
+    date: cu.film_date,
     views,
     collectionTitle: onlyViewsAndDate ? undefined : ccu.name,
     // collectionLink,
@@ -220,14 +221,14 @@ export const SearchResultPost = ({ id, post, highlight, clickData }) => {
 
   const props = {
     id,
-    title  : titleFromHighlight(highlight, post.title),
+    title: titleFromHighlight(highlight, post.title),
     link,
-    logo   : iconByContentType(CT_BLOG_POST, t, link),
+    logo: iconByContentType(CT_BLOG_POST, t, link),
     content: renderSnippet(null /* No highlight links for posts. */, highlight, post.content, t),
-    date   : post.created_at || '',
+    date: post.created_at || '',
     views,
     t,
-    click  : searchResultClick(chronicles, dispatch, clickData)
+    click: searchResultClick(chronicles, dispatch, clickData)
   };
 
   return <SearchResultOneItem {...props} />;
@@ -245,18 +246,18 @@ export const SearchResultCollection = ({ c, highlight, clickData }) => {
   const to            = canonicalLink(c, mediaLanguage);
 
   const logo = c.content_type !== CT_VIDEO_PROGRAM ? iconByContentType(c.content_type, t, to) :
-    <div style={{ minWidth: 144 }}><UnitLogo collectionId={c.id} width={144}/></div>;
+    <div style={{ minWidth: 144 }}><UnitLogo collectionId={c.id} width={144} /></div>;
 
   const props = {
-    id     : c.id,
-    title  : titleFromHighlight(highlight, c.name),
-    link   : to,
+    id: c.id,
+    title: titleFromHighlight(highlight, c.name),
+    link: to,
     logo,
     content: renderSnippet(to, highlight, c.description, t),
-    parts  : c.content_units.length,
+    parts: c.content_units.length,
     views,
     t,
-    click  : searchResultClick(chronicles, dispatch, clickData)
+    click: searchResultClick(chronicles, dispatch, clickData)
   };
 
   return <SearchResultOneItem {...props} />;
@@ -275,13 +276,13 @@ export const SearchResultSource = ({ id, title, highlight, clickData }) => {
 
   const props = {
     id,
-    title  : titleFromHighlight(highlight, title),
-    link   : to,
-    logo   : iconByContentType('sources', t, to),
+    title: titleFromHighlight(highlight, title),
+    link: to,
+    logo: iconByContentType('sources', t, to),
     content: renderSnippet(to, highlight, null /* No default description */, t),
     views,
     t,
-    click  : searchResultClick(chronicles, dispatch, clickData)
+    click: searchResultClick(chronicles, dispatch, clickData)
   };
 
   return <SearchResultOneItem {...props} />;
@@ -299,12 +300,12 @@ export const SearchResultLandingPage = ({ landingPage, filterValues, clickData }
   const subText           = t(SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_SUBTEXT[landingPage]);
 
   const props = {
-    id     : landingPage,
-    title  : `${t(linkTitle)} ${valuesTitleSuffix}`,
-    link   : to,
-    logo   : iconByContentType(SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_CONTENT_TYPE[landingPage], t, to),
+    id: landingPage,
+    title: `${t(linkTitle)} ${valuesTitleSuffix}`,
+    link: to,
+    logo: iconByContentType(SEARCH_GRAMMAR_LANDING_PAGES_SECTIONS_CONTENT_TYPE[landingPage], t, to),
     content: renderSnippet(to, null /* No highlights for landing pages. */, subText, t),
-    click  : searchResultClick(chronicles, dispatch, clickData)
+    click: searchResultClick(chronicles, dispatch, clickData)
   };
 
   return <SearchResultOneItem {...props} />;
@@ -339,8 +340,8 @@ export const SearchResultOneItem = props => {
     <List.Item key={id} className="media_item">
       <div className="media_item__logo">{logo}</div>
       <div className="media_item__content">
-        <TooltipIfNeed text={title} Component={Header} as={Link} to={link} onClick={() => click(link)} content={title}/>
-        {content && (<TooltipIfNeed text={content} Component={Container} content={content}/>)}
+        <TooltipIfNeed text={title} Component={Header} as={Link} to={link} onClick={() => click(link)} content={title} />
+        {content && (<TooltipIfNeed text={content} Component={Container} content={content} />)}
         <div className={clsx('description', { 'is_single': !(description?.length > 1) })}>
           {description.map((d, i) => (<span key={i}>{d}</span>))}
           {collectionLink && (<span className="opacity_1">
@@ -373,8 +374,8 @@ export const SearchResultIntent = ({ id, name, type, index, clickData }) => {
   const dispatch   = useDispatch();
   useEffect(() => {
     const params = {
-      content_type                                             : type,
-      page_size                                                : 3,
+      content_type: type,
+      page_size: 3,
       [index === SEARCH_INTENT_INDEX_SOURCE ? 'source' : 'tag']: id
     };
     dispatch(listsActions.fetchList(namespace, 1, params));
@@ -390,7 +391,7 @@ export const SearchResultIntent = ({ id, name, type, index, clickData }) => {
   const intentType = SEARCH_INTENT_NAMES[index];
   const filterName = SEARCH_INTENT_FILTER_NAMES[index];
 
-  const logo        = <SectionLogo name={type} height="50" width="50"/>;
+  const logo        = <SectionLogo name={type} height="50" width="50" />;
   const getById     = getFilterById(getTagById, getSourceById, index);
   const link        = intentSectionLink(section, [{ name: filterName, values: [id] }]);
   const description = t(`search.intent-prefix.${section}-${intentType.toLowerCase()}`);
@@ -418,7 +419,7 @@ export const SearchResultIntent = ({ id, name, type, index, clickData }) => {
     description,
     wip,
     err,
-    items: cuItems.map(cu => cu && <SearchResultCU cu={cu} hideContent={true} onlyViewsAndDate={true}/>),
+    items: cuItems.map(cu => cu && <SearchResultCU cu={cu} hideContent={true} onlyViewsAndDate={true} />),
     parts: total,
     click: searchResultClick(chronicles, dispatch, clickData)
   };
@@ -463,7 +464,7 @@ export const SearchResultManyItems = (
           </Grid>)
         }
         <Container textAlign={'right'} className="no-border padded" fluid>
-          <Icon name="tasks" size="small" style={{ display: 'inline' }}/>
+          <Icon name="tasks" size="small" style={{ display: 'inline' }} />
           <Link to={link} onClick={() => click(link)}><span>{`${t('search.showAll')} ${parts} ${t(`search.${resultsType}`)}`}</span></Link>
         </Container>
       </List.Content>
@@ -494,7 +495,7 @@ const renderSerie = (s, click, link, t) =>
       &nbsp;
       <Link key={s.id} to={link} onClick={() => click(link)}>
         <span className="margin-right-8 margin-left-8">
-          <Icon name="tasks" size="small" style={{ display: 'inline-block' }}/>
+          <Icon name="tasks" size="small" style={{ display: 'inline-block' }} />
           {`${t('search.showAll')} ${s.cuIDs.length} ${t('pages.collection.items.lessons-collection')}`}
         </span>
       </Link>
@@ -511,7 +512,7 @@ export const SearchResultSeries = ({ id, type, mdbUid, clickData }) => {
   const filters                      = useSelector(state => filtersGetFiltersSelector(state, 'search'));
 
   const click                            = searchResultClick(chronicles, dispatch, clickData);
-  const logo                             = <SectionLogo name={'lessons'} height="50" width="50"/>;
+  const logo                             = <SectionLogo name={'lessons'} height="50" width="50" />;
   const { lectures: wipL, series: wipS } = useSelector(lessonsGetWipSelector);
   const isByTag                          = type === SEARCH_INTENT_HIT_TYPE_SERIES_BY_TAG;
   const getSerie                         = isByTag ? getSerieByTag : getSerieBySource;
@@ -521,17 +522,17 @@ export const SearchResultSeries = ({ id, type, mdbUid, clickData }) => {
   if (s.collections.length === 1) {
     const c = nestedDenormCollectionWUnits(s.collections[0].id);
     return (
-      <SearchResultCollection c={c} clickData={clickData}/>
+      <SearchResultCollection c={c} clickData={clickData} />
     );
   }
 
   const collections = s.collections.filter(c => c.id !== mdbUid);
-  const found = s.collections.find(c => c.id === mdbUid);
+  const found       = s.collections.find(c => c.id === mdbUid);
   if (found) {
     collections.unshift(found);
   }
 
-  const wipError      = WipErr({ wip: wipL || wipS || collections.some(c => !c), err: null, t });
+  const wipError = WipErr({ wip: wipL || wipS || collections.some(c => !c), err: null, t });
 
   // If filter used for specific language, make sure the link will redirect to that language.
   const mediaLanguage = getMediaLanguage(filters);
@@ -578,6 +579,7 @@ export const SearchResultTweets = ({ source }) => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
   const uiLang             = useSelector(settingsGetUILangSelector);
   const uiDir              = useSelector(settingsGetUIDirSelector);
+  const leftRight          = useSelector(settingsGetLeftRightByDirSelector);
 
   const [pageNo, setPageNo] = useState(0);
   const pageSize            = isMobileDevice ? 1 : 3;
@@ -605,14 +607,14 @@ export const SearchResultTweets = ({ source }) => {
   const onScrollLeft  = () => onScrollChange(pageNo - 1);
 
   const swipeHandlers          = useSwipeable({
-    onSwipedLeft : uiDir === 'rtl' ? onScrollRight : onScrollLeft,
+    onSwipedLeft: uiDir === 'rtl' ? onScrollRight : onScrollLeft,
     onSwipedRight: uiDir === 'rtl' ? onScrollLeft : onScrollRight
   });
   const renderItem             = ({ twitter, highlight }) => (
     <Card key={twitter.twitter_id} className="bg_hover_grey home-twitter" raised>
       <Card.Content>
         <Feed className="min-height-200">
-          <TwitterFeed snippetVersion withDivider={false} twitter={twitter} highlight={highlight && highlight[0]}/>
+          <TwitterFeed snippetVersion withDivider={false} twitter={twitter} highlight={highlight && highlight[0]} />
         </Feed>
       </Card.Content>
     </Card>
@@ -622,7 +624,7 @@ export const SearchResultTweets = ({ source }) => {
     const pages         = new Array(numberOfPages).fill('a');
     const content       = pages.map((p, i) => (
       <Button onClick={() => onScrollChange(i)} key={i} icon className="bg_transparent">
-        <Icon name={pageNo === i ? 'circle thin' : 'circle outline'} color="blue" size="small"/>
+        <Icon name={pageNo === i ? 'circle thin' : 'circle outline'} color="blue" size="small" />
       </Button>
     ));
 
@@ -646,17 +648,16 @@ export const SearchResultTweets = ({ source }) => {
 
   const renderScrollLeft = () => {
     const numberOfPages = Math.round(ids.length / pageSize);
-    const dir           = uiDir === 'rtl' ? 'left' : 'right';
 
     return (pageNo >= numberOfPages - 1) ? null : (
       <Button
-        icon={`chevron ${dir}`}
+        icon={`chevron ${leftRight}`}
         circular
         basic
         size="large"
         onClick={onScrollRight}
         className="scroll_tweets"
-        style={{ [dir]: '5px' }}
+        style={{ [leftRight]: '5px' }}
       />
     );
   };

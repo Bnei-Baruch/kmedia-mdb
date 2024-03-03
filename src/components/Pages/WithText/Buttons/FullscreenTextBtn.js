@@ -3,12 +3,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { actions } from '../../../../redux/modules/textPage';
 import fscreen from 'fscreen';
 
-import { textPageGetUrlInfoSelector, textPageGetIsFullscreenSelector } from '../../../../redux/selectors';
+import { textPageGetIsFullscreenSelector } from '../../../../redux/selectors';
 import ToolbarBtnTooltip from './ToolbarBtnTooltip';
 
 const FullscreenTextBtn = () => {
   const isFullscreen = useSelector(textPageGetIsFullscreenSelector);
-  const hasSel       = !!useSelector(textPageGetUrlInfoSelector).select;
   const dispatch     = useDispatch();
 
   useEffect(() => {
@@ -22,8 +21,6 @@ const FullscreenTextBtn = () => {
       fscreen.removeEventListener('fullscreenchange', handleFS, false);
     };
   }, [dispatch]);
-
-  if (hasSel) return null;
 
   const toggleFullscreen = () => {
     fscreen.fullscreenElement && fscreen.exitFullscreen();

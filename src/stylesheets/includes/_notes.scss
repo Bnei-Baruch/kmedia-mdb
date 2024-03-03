@@ -10,6 +10,7 @@
   .note_marks {
     width: 40px;
     height: 100%;
+    z-index: 3;
 
     .note_mark {
       position: absolute;
@@ -176,7 +177,7 @@
     position: fixed;
     bottom: 0;
     width: 400px;
-    z-index: 2;
+    z-index: 4;
 
     .note_buttons {
       opacity: 1;

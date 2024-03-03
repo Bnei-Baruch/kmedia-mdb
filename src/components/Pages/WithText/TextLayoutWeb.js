@@ -25,6 +25,7 @@ import {
 import ScrollToTopBtn from './Buttons/ScrollToTopBtn';
 import { DeviceInfoContext } from '../../../helpers/app-contexts';
 import { useFetchNotes } from './Notes/useFetchNotes';
+import { Divider } from 'semantic-ui-react';
 
 const TextLayoutWeb = props => {
   const {
@@ -61,7 +62,8 @@ const TextLayoutWeb = props => {
       clsx('stick_toolbar no_print', {
         'stick_toolbar_unpinned': scrollDir === 1 || scrollDir === 2,
         'stick_toolbar_pinned': scrollDir === -1,
-        'stick_toolbar_fixed': hasSel
+        'stick_toolbar_fixed': hasSel,
+        'text_selected': hasSel
       })
     }>
       {breadcrumb}
