@@ -1,5 +1,4 @@
-import { call, put, select } from 'redux-saga/effects';
-import { takeEvery } from 'redux-saga';
+import { call, put, select, takeLatest } from 'redux-saga/effects';
 
 import Api from '../helpers/Api';
 import { CT_LIKUTIM } from '../helpers/consts';
@@ -31,14 +30,14 @@ function* fetchLikutimByTag(action) {
     const { data: { content_units } } = yield call(Api.units, params);
 
     yield put(mdbActions.receiveContentUnits(content_units));
-    yield put(actions.fetchLikutimByTagsSuccess({ content_units, key }));
+    yield put(actions.fetchByTagSuccess({ content_units, key }));
   } catch (err) {
-    yield put(actions.fetchLikutimByTagsFailure({ err, key }));
+    yield put(actions.fetchByTagFailure({ err, key }));
   }
 }
 
 function* watchFetchLikutimByTagSuccess() {
-  yield takeEvery(types.FETCH_LIKUTIM_BY_TAGS, fetchLikutimByTag);
+  yield takeLatest(types['likutim/fetchByTag'], fetchLikutimByTag);
 }
 
 export const sagas = [watchFetchLikutimByTagSuccess];

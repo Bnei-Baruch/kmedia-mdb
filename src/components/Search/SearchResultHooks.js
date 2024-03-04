@@ -295,7 +295,7 @@ export const SearchResultLikut  = ({ cu, title, highlight, clickData }) => {
   const dispatch   = useDispatch();
 
   // If filter used for specific language, make sure the link will redirect to that language.
-  const filters       = useSelector(state => filterSelectors.getFilters(state.filters, 'search'));
+  const filters       = useSelector(state => filtersGetFiltersSelector(state, 'search'));
   const mediaLanguage = getMediaLanguage(filters);
   const to            = canonicalLink(cu, mediaLanguage);
 
