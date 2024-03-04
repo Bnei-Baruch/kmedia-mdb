@@ -11,7 +11,7 @@ export const usePrepareLikutAudio = () => {
 
   const dispatch = useDispatch();
   useEffect(() => {
-    if (!url && !status && id) {
+    if (!url && !status && id && language) {
       dispatch(actions.mergeKiteiMakor({ id, language }));
     }
   }, [url, id, language, status, dispatch]);

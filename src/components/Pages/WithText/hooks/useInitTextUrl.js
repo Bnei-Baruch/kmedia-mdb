@@ -8,10 +8,8 @@ export const useInitTextUrl = (urlProps, clearUrlProps) => {
 
   useEffect(() => {
     if (clearUrlProps) {
-      console.log('share bug: useInitTextUrl clear');
       dispatch(actions.setUrlInfo());
     } else if (urlProps) {
-      console.log('share bug: useInitTextUrl', urlProps);
       dispatch(actions.setUrlInfo(urlProps));
     }
   }, [urlProps, clearUrlProps, dispatch]);

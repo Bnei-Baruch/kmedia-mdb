@@ -72,6 +72,8 @@ export const settingsGetUrlLangSelector          = createSelector(getSettings, s
 export const settingsGetUIDirSelector            = createSelector([getSettings], s => settingsSel.getUIDir(s));
 export const settingsGetShowAllContentSelector   = createSelector([getSettings], s => settingsSel.getShowAllContent(s));
 export const settingsGetPageSizeSelector         = createSelector([getSettings], s => settingsSel.getPageSize(s));
+export const settingsGetLeftRightByDirSelector   = createSelector([getSettings], s => settingsSel.getUIDir(s) === 'rtl' ? 'left' : 'right');
+export const settingsGetRightLeftByDirSelector   = createSelector([getSettings], s => settingsSel.getUIDir(s) !== 'rtl' ? 'left' : 'right');
 
 // home
 export const homeLatestCoIDsSelector    = createSelector([getHome], home => homeSel.getLatestCos(home));
@@ -273,7 +275,6 @@ export const textPageGetFileSelector         = createSelector([getTextPage], t =
 export const textPageGetUrlInfoSelector      = createSelector([getTextPage], t => textPageSel.getUrlInfo(t));
 export const textPageGetWordOffsetSelector   = createSelector([getTextPage], t => textPageSel.getWordOffset(t));
 export const textPageGetMP3Selector          = createSelector([getTextPage], t => textPageSel.getMP3(t));
-export const textPageGetExpandNotesSelector  = createSelector([getTextPage], t => textPageSel.getExpandNotes(t));
 export const textPageGetIsFullscreenSelector = createSelector([getTextPage], t => textPageSel.getIsFullscreen(t));
 export const textPageGetScrollDirSelector    = createSelector([getTextPage], t => textPageSel.getScrollDir(t));
 export const textPageGetSideOffsetSelector   = createSelector([getTextPage], t => textPageSel.getSideOffset(t));

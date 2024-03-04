@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Accordion } from 'semantic-ui-react';
 
-import { getEscapedRegExp, isEmpty } from '../../../../helpers/utils';
+import { getEscapedRegExp, isEmpty, noop } from '../../../../helpers/utils';
 import { BS_SHAMATI, RH_ARTICLES, RH_RECORDS, } from '../../../../helpers/consts';
 import { isLanguageRtl } from '../../../../helpers/i18n-utils';
 import { useSelector, useDispatch } from 'react-redux';
@@ -153,11 +153,20 @@ const TOC = () => {
   const navigate                = useNavigate();
   const dispatch                = useDispatch();
 
+  const [tocScrollHeight, setTocScrollHeight] = useState(0);
+
   const activeIndex = getIndex(fullPath[1], fullPath[2]);
 
   useEffect(() => {
-    scrollToActive(id);
-  }, [id]);
+    tocIsActive && scrollToActive(id);
+  }, [id, tocIsActive]);
+
+  useEffect(() => {
+    if (!isMobileDevice) return noop;
+    const handleResize = () => setTocScrollHeight(window.visualViewport?.height - 130);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [isMobileDevice]);
 
   if (activeIndex === -1) {
     return null;
@@ -288,6 +297,7 @@ const TOC = () => {
   const path               = fullPath.slice(1); // Remove first element (i.e. kabbalist)
   const { toc, className } = getToc(rootId, path, true);
 
+  const tocScrollStyle = tocScrollHeight && isMobileDevice ? { 'height': tocScrollHeight } : {};
   return (
     <div className={
       clsx('toc no_print',
@@ -303,7 +313,7 @@ const TOC = () => {
       {
         !isMobileDevice && <TOCSearch />
       }
-      <div className="toc_scroll">
+      <div className="toc_scroll" style={tocScrollStyle}>
         <div className="toc_scroll_align">
           <Accordion
             fluid

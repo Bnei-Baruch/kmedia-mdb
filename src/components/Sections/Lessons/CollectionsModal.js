@@ -13,7 +13,8 @@ import {
   filtersAsideGetTreeSelector,
   filtersGetFilterByNameSelector,
   settingsGetUIDirSelector,
-  mdbNestedGetCollectionByIdSelector
+  mdbNestedGetCollectionByIdSelector,
+  settingsGetLeftRightByDirSelector
 } from '../../../redux/selectors';
 
 const ITEMS_PER_ROW = 5;
@@ -28,6 +29,7 @@ const CollectionsModal = ({ ct, namespace, t }) => {
   const [query, setQuery] = useState('');
 
   const uiDir             = useSelector(settingsGetUIDirSelector);
+  const leftRight         = useSelector(settingsGetLeftRightByDirSelector);
   const ids               = useSelector(state => filtersAsideGetTreeSelector(state, namespace, FN_COLLECTION_MULTI));
   const getById           = useSelector(mdbNestedGetCollectionByIdSelector);
   const stat              = useSelector(state => filtersAsideGetStatsSelector(state, namespace, FN_CONTENT_TYPE))(ct);
@@ -65,11 +67,11 @@ const CollectionsModal = ({ ct, namespace, t }) => {
   );
 
   const renderItem = (item, i) => {
-    if (!item) return <Table.Cell key={i}/>;
+    if (!item) return <Table.Cell key={i} />;
 
     return (
       <Table.Cell className="tree_item_modal_content" key={item.id}>
-        <CollectionItem namespace={namespace} item={item}/>
+        <CollectionItem namespace={namespace} item={item} />
       </Table.Cell>
     );
   };
@@ -93,7 +95,7 @@ const CollectionsModal = ({ ct, namespace, t }) => {
           basic
           color="blue"
           className="clear_button no-shadow"
-          icon={`caret ${uiDir === 'rtl' ? 'left' : 'right'}`}
+          icon={`caret ${leftRight}`}
           onClick={toggleOpen}
           size="medium"
           disabled={stat === 0}
@@ -104,7 +106,7 @@ const CollectionsModal = ({ ct, namespace, t }) => {
         dir={uiDir}
         onClose={toggleOpen}
         className={clsx('filters_aside_tree_modal', { [uiDir]: true })}
-        closeIcon={<Icon name="times circle outline"/>}
+        closeIcon={<Icon name="times circle outline" />}
         size="fullscreen"
       >
         <Modal.Header className="no-border nowrap">
@@ -126,7 +128,7 @@ const CollectionsModal = ({ ct, namespace, t }) => {
           </Table>
         </Modal.Content>
         <Modal.Actions>
-          <Button primary content={t('buttons.close')} onClick={toggleOpen}/>
+          <Button primary content={t('buttons.close')} onClick={toggleOpen} />
         </Modal.Actions>
       </Modal>
     </>

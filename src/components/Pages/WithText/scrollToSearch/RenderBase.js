@@ -1,12 +1,12 @@
-import { KEEP_LETTERS_RE, OFFSET_TEXT_SEPARATOR, textMarksPrefixByType } from './helper';
+import { KEEP_LETTERS_RE, OFFSET_TEXT_SEPARATOR, textMarksPrefixByType, SPACES_RE } from './helper';
 
 export class RenderBase {
   tagPositions = [];
 
   constructor(data, start, end) {
-    this.source = data.replace(/\r?\n|\r{1,}|\s{2,}|&nbsp;{1,}/g, ' ');
-    this.start  = start;
-    this.end    = end;
+    this.source = data.replace(SPACES_RE, ' ').replace(/\s+/gi, ' ');
+    this.start  = start?.replace(SPACES_RE, ' ').replace(/\s+/gi, ' ');
+    this.end    = end?.replace(SPACES_RE, ' ').replace(/\s+/gi, ' ');
   }
 
   build(textMarks) {

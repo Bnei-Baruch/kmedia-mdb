@@ -858,7 +858,8 @@
         "hide-additions": "Hide all remarks",
         "show-additions": "Show all remarks",
         "scan": "Scan of the original text",
-        "more-buttons": "More"
+        "more-buttons": "More",
+        "copy-link": "Link kopieren"
       },
       "mobile": {
         "lessons": "Lessons",
@@ -869,7 +870,8 @@
         "search": "Search",
         "download": "Download",
         "more-buttons": "More",
-        "toc": "Content"
+        "toc": "Content",
+        "copy-link": "Link"
       }
     }
   }

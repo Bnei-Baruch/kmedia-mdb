@@ -40,6 +40,7 @@ const AddCommentBtn = () => {
   return (
     <ToolbarBtnTooltip
       textKey="add-comment"
+      className="text_mark_on_select_btn"
       onClick={handleOpen}
       active={status !== NOTE_STATUS.none}
       icon={<span className="material-symbols-outlined">add_comment</span>}

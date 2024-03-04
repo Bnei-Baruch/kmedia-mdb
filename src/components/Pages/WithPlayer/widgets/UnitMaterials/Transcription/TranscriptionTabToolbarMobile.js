@@ -8,6 +8,7 @@ import DownloadTextBtn from '../../../../WithText/Buttons/DownloadTextBtn';
 import AddBookmarkBtn from '../../../../WithText/Buttons/AddBookmarkBtn';
 import ShareTextModalBtn from '../../../../WithText/Buttons/ShareTextModalBtn';
 import MoreOptionsBtn from '../../../../WithText/Buttons/MoreOptionsBtn';
+import CopyLinkBtn from '../../../../WithText/Buttons/CopyLinkBtn';
 
 const TranscriptionTabToolbarMobile = () => (
   <div className="text_toolbar">
@@ -21,6 +22,7 @@ const TranscriptionTabToolbarMobile = () => (
         icon={null}
         trigger={<MoreOptionsBtn />}
         className="text_toolbar__dropdown"
+        direction="left"
       >
         <Dropdown.Menu>
           <Dropdown.Item>
@@ -28,6 +30,9 @@ const TranscriptionTabToolbarMobile = () => (
           </Dropdown.Item>
           <Dropdown.Item>
             <ShareTextModalBtn />
+          </Dropdown.Item>
+          <Dropdown.Item>
+            <CopyLinkBtn />
           </Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
