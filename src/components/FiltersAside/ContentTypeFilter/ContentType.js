@@ -16,7 +16,7 @@ import ContentTypeItemGroup from './ContentTypeItemGroup';
 import { filtersAsideGetTreeSelector } from '../../../redux/selectors';
 
 UNIT_PUBLICATIONS_TYPE,
-  CT_LIKUTIM;
+CT_LIKUTIM;
 
 const groupByName = {
   sources     : { cts: [CT_SOURCE], key: 'sources', order: 1 },

@@ -55,22 +55,20 @@ export const SearchResultLikutimByTag = ({ hit }) => {
           <Grid.Row>
             {
               items?.filter(x => !!x)
-                .filter((x, i) => {
-                  return isMore || i < MIN_SHOWED;
-                })
+                .filter((x, i) => isMore || i < MIN_SHOWED)
                 .flatMap(id => denormCU(id))
                 .map(item => (
-                    <Grid.Column key={item.id} className="likutim_item_of_list">
-                      <List.Item className="media_item">
-                        <div className="media_item__content">
-                          <Header as={Link} to={canonicalLink(item)} content={item.name} />
-                          <span className="description">
-                            {t('values.date', { date: item.film_date })}
-                          </span>
-                        </div>
-                      </List.Item>
-                    </Grid.Column>
-                  )
+                  <Grid.Column key={item.id} className="likutim_item_of_list">
+                    <List.Item className="media_item">
+                      <div className="media_item__content">
+                        <Header as={Link} to={canonicalLink(item)} content={item.name} />
+                        <span className="description">
+                          {t('values.date', { date: item.film_date })}
+                        </span>
+                      </div>
+                    </List.Item>
+                  </Grid.Column>
+                )
                 )
             }
           </Grid.Row>

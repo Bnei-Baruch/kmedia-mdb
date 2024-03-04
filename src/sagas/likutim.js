@@ -17,6 +17,7 @@ function* fetchLikutimByTag(action) {
     yield put(actions.fetchLikutimByTagsSuccess({ content_units: [], key }));
     return;
   }
+
   try {
     const params = {
       content_type: CT_LIKUTIM,

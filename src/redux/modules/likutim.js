@@ -32,10 +32,12 @@ const onSSRPrepare   = state => {
     state.err = JSON.stringify(state.err);
   }
 };
+
 const onByKey        = (state, key) => {
   state.err[key] = null;
   state.wip[key] = true;
 };
+
 const onByKeySuccess = (state, { content_units, key }) => {
   for (const cu of content_units) {
     cu.tags.forEach(id => {
@@ -45,9 +47,11 @@ const onByKeySuccess = (state, { content_units, key }) => {
       state.byKey[key] = [...ids, cu.id];
     });
   }
+
   console.log('likutim onByKeySuccess', key);
   state.wip[key] = false;
 };
+
 const onByKeyFailure = (state, { err, key }) => {
   state.err[key] = err;
   state.wip[key] = false;
