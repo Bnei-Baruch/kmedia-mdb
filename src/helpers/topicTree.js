@@ -22,7 +22,7 @@ const buildNode = (id, getTagById, cuStats, match = '') => {
 
   const children = leafs ? leafs.map(x => buildNode(x, getTagById, cuStats, match)) : [];
   const regExp   = getEscapedRegExp(match);
-  const matched  = !match || label && regExp.test(label) || children.some(x => x.matched);
+  const matched  = !match || (label && regExp.test(label)) || children.some(x => x.matched);
 
   return {
     value: id,

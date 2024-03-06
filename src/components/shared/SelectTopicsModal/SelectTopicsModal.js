@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useContext } from 'react';
+import React, { useMemo, useState, useContext, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   settingsGetUIDirSelector,
@@ -6,32 +6,40 @@ import {
   tagsGetDisplayRootsSelector,
   tagsGetTagByIdSelector
 } from '../../../redux/selectors';
+import { useSelector, useDispatch } from 'react-redux';
+import { Header, Grid, Modal, Container, Input, Label, Button } from 'semantic-ui-react';
+import { DeviceInfoContext } from '../../../helpers/app-contexts';
+import { getTree } from '../../../helpers/topicTree';
+import { actions } from '../../../redux/modules/mdb';
+import AlertModal from '../AlertModal';
+import NeedToLogin from '../../Sections/Personal/NeedToLogin';
+import TopicBranch from './TopicBranch';
 
-const SelectTopicsModal = ({open, onClose, label, trigger}) => {
-  const {t} = useTranslation();
+const SelectTopicsModal = ({ open, onClose, label, trigger }) => {
+  const { t } = useTranslation();
 
   const [selected, setSelected] = useState([]);
-  const [match, setMatch] = useState('');
-  const [name, setName] = useState('');
+  const [match, setMatch]       = useState('');
+  const [name, setName]         = useState('');
   const [alertMsg, setAlertMsg] = useState();
 
-  const {isMobileDevice} = useContext(DeviceInfoContext);
+  const { isMobileDevice } = useContext(DeviceInfoContext);
 
-  const roots = useSelector(tagsGetDisplayRootsSelector, isEqual) || [];
+  const roots      = useSelector(tagsGetDisplayRootsSelector);
   const getTagById = useSelector(tagsGetTagByIdSelector);
-  const tree = useMemo(() => getTree(roots, getTagById, null, match, t)[0], [roots, getTagById, match, t]);
+  const tree       = useMemo(() => getTree(roots, getTagById, null, match, t)[0], [roots, getTagById, match, t]);
 
   const language = useSelector(settingsGetUILangSelector);
-  const dir = useSelector(settingsGetUIDirSelector);
+  const dir      = useSelector(settingsGetUIDirSelector);
 
   const dispatch = useDispatch();
 
   const create = () => {
-    const {content_unit, properties, language: l = language, media_type = 'text'} = label;
+    const { content_unit, properties, language: l = language, media_type = 'text' } = label;
 
     const params = {
       i18n: {
-        [l]: {name, language: l}
+        [l]: { name, language: l }
       },
       tags: selected,
       content_unit,
@@ -39,7 +47,7 @@ const SelectTopicsModal = ({open, onClose, label, trigger}) => {
       media_type
     };
 
-    dispatch(mdbActions.createLabel(params));
+    dispatch(actions.createLabel(params));
   };
 
   const clear = () => {
@@ -89,9 +97,9 @@ const SelectTopicsModal = ({open, onClose, label, trigger}) => {
     clear();
   };
 
-  const handleSetSelected = useCallback((sel) => setSelected(sel), []);
+  const handleSetSelected = useCallback(sel => setSelected(sel), []);
 
-  const needToLogin = NeedToLogin({t});
+  const needToLogin = NeedToLogin({ t });
 
   return (
     <>
@@ -111,7 +119,7 @@ const SelectTopicsModal = ({open, onClose, label, trigger}) => {
               <Modal.Content>{needToLogin}</Modal.Content>
             ) : (
               <>
-                <Modal.Content style={{paddingTop: 0}}>
+                <Modal.Content style={{ paddingTop: 0 }}>
                   <Input
                     defaultValue={name}
                     onChange={handleSetName}
@@ -127,7 +135,7 @@ const SelectTopicsModal = ({open, onClose, label, trigger}) => {
                     <input autoFocus/>
                   </Input>
                 </Modal.Content>
-                <Modal.Content style={{paddingTop: 0, paddingBottom: 0}}>
+                <Modal.Content style={{ paddingTop: 0, paddingBottom: 0 }}>
                   <Container as="h4" className="font-normal" content={t('personal.label.infoAddTag')}/>
                   <Input
                     className="search-omnibox"

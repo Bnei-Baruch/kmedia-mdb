@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { withTranslation, useTranslation } from 'react-i18next';
-import { Button, Checkbox, Container, Grid, Header, List } from 'semantic-ui-react';
-
-import { getEscapedRegExp } from '../../../helpers/utils';
+import { useTranslation } from 'react-i18next';
+import { Button, Checkbox, Container, List } from 'semantic-ui-react';
 
 const ITEMS_NUMBER = 5;
 
