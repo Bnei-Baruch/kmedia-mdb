@@ -42,7 +42,7 @@ export function* fetchDashboard(action) {
     requests.push(fetchUnitsByIDs({ payload: { id: cuIDs } }));
 
     requests.push(fetchCollectionsByIDs({ payload: { id: cIDs } }));
-    requests.push(fetchLabels({ payload: { id: labelIDs } }));
+    requests.push(fetchLabels({ id: labelIDs }));
     requests.push(fetchViewsByUIDs(items.filter(x => !x.is_text).map(x => x.content_unit_id)));
     yield all(requests);
 

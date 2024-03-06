@@ -32,6 +32,7 @@ const TagTextBtn = () => {
     language,
     content_unit: subject.id,
     properties: {
+      language,
       ...subject.properties,
       ...urlProps
     }

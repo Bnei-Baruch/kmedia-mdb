@@ -482,13 +482,10 @@ const mdbSlice = createSlice({
     receiveCollections : (state, action) => onReceiveCollections(state, action.payload),
     receiveContentUnits: (state, action) => onReceiveContentUnits(state, action.payload),
 
-    receiveLabels: onReceiveLabels,
-
     receivePersons: onReceivePersons,
 
-    createLabel       : () => void ({}),
-    fetchLabels       : () => void ({}),
-    fetchLabelsSuccess: () => void ({})
+    createLabel  : () => void ({}),
+    receiveLabels: onReceiveLabels,
   },
   extraReducers: builder => {
     builder
