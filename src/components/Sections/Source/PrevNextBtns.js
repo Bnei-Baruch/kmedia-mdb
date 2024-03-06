@@ -21,11 +21,11 @@ import { DeviceInfoContext } from '../../../helpers/app-contexts';
 const PrevNextBtns = () => {
   const { isMobileDevice } = useContext(DeviceInfoContext);
 
-  const { id } = useSelector(textPageGetSubjectSelector);
-  const { isPdf } = useSelector(textPageGetFileSelector);
-  const textOnly = useSelector(textPageGetTextOnlySelector);
-  const getPathByID = useSelector(sourcesGetPathByIDSelector);
-  const getSourceById = useSelector(sourcesGetSourceByIdSelector);
+  const { id }         = useSelector(textPageGetSubjectSelector);
+  const { isPdf }      = useSelector(textPageGetFileSelector);
+  const textOnly       = useSelector(textPageGetTextOnlySelector);
+  const getPathByID    = useSelector(sourcesGetPathByIDSelector);
+  const getSourceById  = useSelector(sourcesGetSourceByIdSelector);
 
   if (isTaas(id) && isPdf) {
     return null;
@@ -63,20 +63,24 @@ const PrevBtn = ({ id }) => {
 
   const uiDir = useSelector(settingsGetUIDirSelector);
   const getSourceById = useSelector(sourcesGetSourceByIdSelector);
-  const icon = (uiDir === 'ltr' ? 'backward' : 'forward');
+  const icon = uiDir === 'ltr' ? 'chevron left' : 'chevron right';
 
   const source = getSourceById(id);
 
-  const Padding = uiDir !== 'ltr' ? '16px 24px 16px 32px' : '16px 32px 16px 24px'
+  const arrowSide= uiDir === 'ltr'? 'left' : 'right';
+  const btnContentClassName = `btn-content prev ${arrowSide}`;
+
   return (
-    <Button primary icon
-      as={Link}
-      to={`sources/${id}`}
-      size="medium"
-      title={source.name}
-      style={{ marginLeft: 0, padding: '0' }}>
-      <div style={{ display: 'flex', alignItems: 'center', fontWeight: '500', padding: Padding, fontSize: '16px' }}>
-        <Icon name={icon} style={{ marginRight: '8px', marginLeft: '8px' }} />
+    <Button 
+      primary icon 
+      as={Link} 
+      to={`sources/${id}`} 
+      size="medium" 
+      title={source.name} 
+      className="prev-next-btn"
+    >
+      <div className={btnContentClassName}>
+        <Icon name={icon} className="prev-next-btn-icon" />
         {t('buttons.previous-article')}
       </div>
     </Button>
@@ -88,22 +92,25 @@ const NextBtn = ({ id }) => {
 
   const uiDir = useSelector(settingsGetUIDirSelector);
   const getSourceById = useSelector(sourcesGetSourceByIdSelector);
-  const icon = (uiDir !== 'ltr' ? 'backward' : 'forward');
+  const icon = uiDir !== 'ltr' ? 'chevron left' : 'chevron right';
 
   const source = getSourceById(id);
+  const arrowSide= uiDir === 'ltr'? 'right' : 'left';
+  const btnContentClassName = `btn-content next ${arrowSide}`;
 
-  const Padding = uiDir !== 'ltr' ? '16px 32px 16px 24px' : '16px 24px 16px 32px'
 
   return (
-    <Button primary icon
-      as={Link}
-      to={`sources/${id}`}
-      size="medium"
-      title={source.name}
-      style={{ marginLeft: 0, padding: '0' }}>
-      <div style={{ display: 'flex', alignItems: 'center', fontWeight: '500', padding: Padding, fontSize: '16px' }}>
+    <Button 
+      primary icon 
+      as={Link} 
+      to={`sources/${id}`} 
+      size="medium" 
+      title={source.name} 
+      className="prev-next-btn"
+    >
+      <div className={btnContentClassName}>
         {t('buttons.next-article')}
-        <Icon name={icon} className="custom-icon" style={{ marginLeft: '8px', marginRight: '8px' }} />
+        <Icon name={icon} className="prev-next-btn-icon" />
       </div>
     </Button>
   );
